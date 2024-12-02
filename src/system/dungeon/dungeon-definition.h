@@ -65,7 +65,8 @@ struct feat_prob {
 /* A structure for the != dungeon types */
 enum class TerrainCharacteristics;
 class MonraceDefinition;
-struct dungeon_type {
+class DungeonDefinition {
+public:
     DUNGEON_IDX idx{};
 
     std::string name; /* Name */
@@ -127,6 +128,3 @@ struct dungeon_type {
     short convert_terrain_id(short terrain_id) const;
     bool is_open(short terrain_id) const;
 };
-
-extern std::vector<DEPTH> max_dlv;
-extern std::vector<dungeon_type> dungeons_info;

@@ -45,7 +45,7 @@
 #include "room/cave-filler.h"
 #include "room/door-definition.h"
 #include "room/lake-types.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"

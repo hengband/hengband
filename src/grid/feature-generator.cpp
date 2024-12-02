@@ -11,8 +11,8 @@
 #include "grid/feature-flag-types.h"
 #include "room/lake-types.h"
 #include "room/rooms-builder.h"
-#include "system/dungeon-data-definition.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-data-definition.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -23,7 +23,7 @@
  * @param d_ref ダンジョンへの参照
  * @return briefで定義した個数
  */
-static int calc_cavern_terrains(const dungeon_type &d_ref)
+static int calc_cavern_terrains(const DungeonDefinition &d_ref)
 {
     auto count = 0;
     if (d_ref.flags.has(DungeonFeatureType::LAKE_WATER)) {
@@ -45,7 +45,7 @@ static int calc_cavern_terrains(const dungeon_type &d_ref)
     return count;
 }
 
-static bool decide_cavern(const FloorType &floor_ref, const dungeon_type &dungeon_ref, const DungeonData &dd_ref)
+static bool decide_cavern(const FloorType &floor_ref, const DungeonDefinition &dungeon_ref, const DungeonData &dd_ref)
 {
     constexpr auto can_become_cavern = 20;
     auto should_build_cavern = floor_ref.dun_level > can_become_cavern;
@@ -60,7 +60,7 @@ static bool decide_cavern(const FloorType &floor_ref, const dungeon_type &dungeo
 /*!
  * @brief フロアに破壊地形、洞窟、湖、溶岩、森林等を配置する.
  */
-void gen_caverns_and_lakes(PlayerType *player_ptr, dungeon_type *dungeon_ptr, DungeonData *dd_ptr)
+void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_ptr, DungeonData *dd_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     constexpr auto chance_destroyed = 18;

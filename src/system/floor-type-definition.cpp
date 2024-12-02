@@ -7,7 +7,8 @@
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
 #include "system/enums/grid-count-kind.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
@@ -60,7 +61,7 @@ void FloorType::reset_dungeon_index()
     this->set_dungeon_index(0);
 }
 
-dungeon_type &FloorType::get_dungeon_definition() const
+DungeonDefinition &FloorType::get_dungeon_definition() const
 {
     return dungeons_info[this->dungeon_idx];
 }

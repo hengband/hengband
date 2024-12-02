@@ -10,7 +10,7 @@
 #include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-race-info.h"

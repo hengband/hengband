@@ -2442,9 +2442,6 @@
     <ClCompile Include="..\..\src\system\floor-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\dungeon-info.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -2523,9 +2520,6 @@
     <ClCompile Include="..\..\src\timed-effect\player-protection.cpp">
       <Filter>timed-effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\dungeon-data-definition.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\system\baseitem\baseitem-definition.cpp">
       <Filter>system\baseitem</Filter>
     </ClCompile>
@@ -2537,6 +2531,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\system\services\baseitem-monrace-service.cpp">
       <Filter>system\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-definition.cpp">
+      <Filter>system\dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-data-definition.cpp">
+      <Filter>system\dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-record.cpp">
+      <Filter>system\dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-list.cpp">
+      <Filter>system\dungeon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4502,9 +4508,6 @@
     <ClInclude Include="..\..\src\room\room-generator.h">
       <Filter>room</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\dungeon-data-definition.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\room\treasure-deployment.h">
       <Filter>room</Filter>
     </ClInclude>
@@ -5373,9 +5376,6 @@
     <ClInclude Include="..\..\src\system\spell-info-list.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\dungeon-info.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\system\terrain-type-definition.h">
       <Filter>system</Filter>
     </ClInclude>
@@ -5495,6 +5495,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\services\baseitem-monrace-service.h">
       <Filter>system\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-definition.h">
+      <Filter>system\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-data-definition.h">
+      <Filter>system\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-record.h">
+      <Filter>system\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-list.h">
+      <Filter>system\dungeon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -5774,6 +5786,9 @@
     </Filter>
     <Filter Include="system\services">
       <UniqueIdentifier>{0f6862b2-2ab3-4d92-abc2-09a28f3a17b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\dungeon">
+      <UniqueIdentifier>{1894220d-5f9a-4d37-b853-abc0076e56bc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

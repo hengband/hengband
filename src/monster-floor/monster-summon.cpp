@@ -12,7 +12,7 @@
 #include "monster/monster-util.h"
 #include "mspell/summon-checker.h"
 #include "spell/summon-types.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"

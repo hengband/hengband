@@ -5,7 +5,7 @@
 #include "player/digestion-processor.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-specific-bolt.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"

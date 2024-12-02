@@ -9,7 +9,9 @@
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/dungeon-record.h"
 #include "system/item-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
@@ -135,7 +137,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         }
     } else if (category == "DUNGEON") {
         DUNGEON_IDX d_idx;
-        dungeon_type *d_ptr;
+        DungeonDefinition *d_ptr;
         const auto dungeons_size = static_cast<short>(dungeons_info.size());
         const auto &d_idx_str = tokens[1];
         while (true) {

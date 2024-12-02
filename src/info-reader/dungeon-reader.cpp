@@ -6,7 +6,8 @@
 #include "info-reader/race-info-tokens-table.h"
 #include "io/tokenizer.h"
 #include "main/angband-headers.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
 #include "system/monster-race-info.h"
 #include "system/terrain-type-definition.h"
 #include "util/string-processor.h"
@@ -20,7 +21,7 @@
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_dungeon_flag(dungeon_type *d_ptr, std::string_view what)
+static bool grab_one_dungeon_flag(DungeonDefinition *d_ptr, std::string_view what)
 {
     if (EnumClassFlagGroup<DungeonFeatureType>::grab_one_flag(d_ptr->flags, dungeon_flags, what)) {
         return true;
@@ -37,7 +38,7 @@ static bool grab_one_dungeon_flag(dungeon_type *d_ptr, std::string_view what)
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view what)
+static bool grab_one_basic_monster_flag(DungeonDefinition *d_ptr, std::string_view what)
 {
     if (EnumClassFlagGroup<MonsterResistanceType>::grab_one_flag(d_ptr->mon_resistance_flags, r_info_flagsr, what)) {
         return true;
@@ -97,7 +98,7 @@ static bool grab_one_basic_monster_flag(dungeon_type *d_ptr, std::string_view wh
  * @param what 参照元の文字列ポインタ
  * @return 見つけたらtrue
  */
-static bool grab_one_spell_monster_flag(dungeon_type *d_ptr, std::string_view what)
+static bool grab_one_spell_monster_flag(DungeonDefinition *d_ptr, std::string_view what)
 {
     if (EnumClassFlagGroup<MonsterAbilityType>::grab_one_flag(d_ptr->mon_ability_flags, r_info_ability_flags, what)) {
         return true;
@@ -115,7 +116,7 @@ static bool grab_one_spell_monster_flag(dungeon_type *d_ptr, std::string_view wh
  */
 errr parse_dungeons_info(std::string_view buf, angband_header *)
 {
-    static dungeon_type *d_ptr = nullptr;
+    static DungeonDefinition *d_ptr = nullptr;
     const auto &tokens = str_split(buf, ':', false);
     const auto &terrains = TerrainList::get_instance();
 

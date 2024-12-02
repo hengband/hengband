@@ -1,4 +1,4 @@
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "dungeon/dungeon-flag-mask.h"
 #include "grid/feature-action-flags.h"
 #include "grid/feature.h"
@@ -16,17 +16,7 @@ enum conversion_type {
     CONVERT_TYPE_STREAM2 = 6,
 };
 
-/*
- * The dungeon arrays
- */
-std::vector<dungeon_type> dungeons_info;
-
-/*
- * Maximum number of dungeon in DungeonDefinitions.txt
- */
-std::vector<DEPTH> max_dlv;
-
-bool dungeon_type::has_river_flag() const
+bool DungeonDefinition::has_river_flag() const
 {
     return this->flags.has_any_of(DF_RIVER_MASK);
 }
@@ -35,22 +25,22 @@ bool dungeon_type::has_river_flag() const
  * @brief ダンジョンが地下ダンジョンかを判定する
  * @return 地下ダンジョンならtrue、地上 (荒野)ならfalse
  */
-bool dungeon_type::is_dungeon() const
+bool DungeonDefinition::is_dungeon() const
 {
     return this->idx > 0;
 }
 
-bool dungeon_type::has_guardian() const
+bool DungeonDefinition::has_guardian() const
 {
     return this->final_guardian != MonraceId::PLAYER;
 }
 
-MonraceDefinition &dungeon_type::get_guardian()
+MonraceDefinition &DungeonDefinition::get_guardian()
 {
     return MonraceList::get_instance().get_monrace(this->final_guardian);
 }
 
-const MonraceDefinition &dungeon_type::get_guardian() const
+const MonraceDefinition &DungeonDefinition::get_guardian() const
 {
     return MonraceList::get_instance().get_monrace(this->final_guardian);
 }
@@ -61,7 +51,7 @@ const MonraceDefinition &dungeon_type::get_guardian() const
  * @param action 地形特性
  * @return 新しい地形ID
  */
-short dungeon_type::convert_terrain_id(short terrain_id, TerrainCharacteristics action) const
+short DungeonDefinition::convert_terrain_id(short terrain_id, TerrainCharacteristics action) const
 {
     const auto &terrain = TerrainList::get_instance().get_terrain(terrain_id);
     for (auto i = 0; i < MAX_FEAT_STATES; i++) {
@@ -78,7 +68,7 @@ short dungeon_type::convert_terrain_id(short terrain_id, TerrainCharacteristics 
     return has_action_flag ? this->convert_terrain_id(terrain.destroyed) : terrain_id;
 }
 
-short dungeon_type::convert_terrain_id(short terrain_id) const
+short DungeonDefinition::convert_terrain_id(short terrain_id) const
 {
     const auto &terrain = TerrainList::get_instance().get_terrain(terrain_id);
     if (terrain.flags.has_not(TerrainCharacteristics::CONVERT)) {
@@ -111,7 +101,7 @@ short dungeon_type::convert_terrain_id(short terrain_id) const
  * @return 開いているか否か
  * @details 上流で地形側の判定と併せて判定すること
  */
-bool dungeon_type::is_open(short terrain_id) const
+bool DungeonDefinition::is_open(short terrain_id) const
 {
     return terrain_id != this->convert_terrain_id(terrain_id, TerrainCharacteristics::CLOSE);
 }

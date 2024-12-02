@@ -1,4 +1,4 @@
-#include "system/dungeon-data-definition.h"
+#include "system/dungeon/dungeon-data-definition.h"
 #include "floor/floor-base-definitions.h"
 
 DungeonData::DungeonData()

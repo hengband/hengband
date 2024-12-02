@@ -10,7 +10,7 @@
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster/monster-info.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/monster-entity.h"
