@@ -4,6 +4,7 @@
 #include "game-option/birth-options.h"
 #include "monster/monster-timed-effects.h"
 #include "object-enchant/item-apply-magic.h"
+#include "system/alloc-entries.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -17,6 +18,7 @@
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
+#include "util/probability-table.h"
 #include "world/world-object.h"
 
 FloorType::FloorType()
@@ -287,7 +289,7 @@ ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
         item = ItemEntity(*bi_key);
     } else {
         const auto level = this->object_level <= 0 ? 1 : this->object_level;
-        item = ItemEntity(get_obj_index(this, level, AM_GOLD));
+        item = ItemEntity(this->get_obj_index(level, AM_GOLD));
     }
 
     const auto base = item.get_baseitem_cost();
@@ -308,6 +310,70 @@ std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
     }
 
     return ArtifactList::get_instance().try_make_instant_artifact(this->object_level);
+}
+
+/*!
+ * @brief アイテム生成テーブルからベースアイテムIDを取得する
+ * @param level 生成基準階層
+ * @param mode 生成モード
+ * @return 選ばれたベースアイテムID
+ */
+short FloorType::get_obj_index(int level, uint32_t mode) const
+{
+    if (level > MAX_DEPTH - 1) {
+        level = MAX_DEPTH - 1;
+    }
+
+    if ((level > 0) && this->get_dungeon_definition().flags.has_not(DungeonFeatureType::BEGINNER)) {
+        if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
+            level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
+        }
+    }
+
+    // 候補の確率テーブル生成
+    const auto &table = BaseitemAllocationTable::get_instance();
+    ProbabilityTable<int> prob_table;
+    for (size_t i = 0; i < table.size(); i++) {
+        const auto &entry = table.get_entry(i);
+        if (entry.level > level) {
+            break;
+        }
+
+        if (any_bits(mode, AM_FORBID_CHEST) && entry.is_chest()) {
+            continue;
+        }
+
+        if (any_bits(mode, AM_GOLD) && !entry.is_gold()) {
+            continue;
+        }
+
+        if (none_bits(mode, AM_GOLD) && entry.is_gold()) {
+            continue;
+        }
+
+        prob_table.entry_item(i, entry.prob2);
+    }
+
+    // 候補なし
+    if (prob_table.empty()) {
+        return 0;
+    }
+
+    // 40%で1回、50%で2回、10%で3回抽選し、その中で一番レベルが高いアイテムを選択する
+    int n = 1;
+
+    const int p = randint0(100);
+    if (p < 60) {
+        n++;
+    }
+    if (p < 10) {
+        n++;
+    }
+
+    std::vector<int> result;
+    ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, n);
+    const auto it = std::max_element(result.begin(), result.end(), [&table](int a, int b) { return table.order_level(a, b); });
+    return table.get_entry(*it).index;
 }
 
 /*!

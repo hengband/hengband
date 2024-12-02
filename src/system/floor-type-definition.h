@@ -112,6 +112,7 @@ public:
 
     ItemEntity make_gold(std::optional<BaseitemKey> bi_key = std::nullopt) const;
     std::optional<ItemEntity> try_make_instant_artifact() const;
+    short get_obj_index(int level, uint32_t mode) const;
 
     void reset_mproc();
     void reset_mproc_max();
