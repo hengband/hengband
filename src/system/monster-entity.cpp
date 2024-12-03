@@ -6,6 +6,7 @@
 #include "monster/monster-status.h"
 #include "system/angband-system.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/term-color-types.h"

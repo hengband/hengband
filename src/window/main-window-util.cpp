@@ -10,6 +10,7 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"

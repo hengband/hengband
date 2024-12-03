@@ -15,6 +15,7 @@
 #include "monster/monster-update.h"
 #include "system/angband-system.h"
 #include "system/floor-type-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"

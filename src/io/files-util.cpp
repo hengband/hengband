@@ -17,6 +17,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/uid-checker.h"
 #include "system/angband-exceptions.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

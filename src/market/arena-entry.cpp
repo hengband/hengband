@@ -10,6 +10,7 @@
 #include "sv-definition/sv-wand-types.h"
 #include "system/baseitem/baseitem-key.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #ifndef JP
 #include <sstream>

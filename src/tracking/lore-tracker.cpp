@@ -5,7 +5,7 @@
  */
 
 #include "tracking/lore-tracker.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-list.h"
 #include "system/redrawing-flags-updater.h"
 
 LoreTracker LoreTracker::instance{};

@@ -2547,6 +2547,9 @@
     <ClCompile Include="..\..\src\system\monrace\monrace-allocation.cpp">
       <Filter>system\monrace</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\monrace\monrace-list.cpp">
+      <Filter>system\monrace</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5512,6 +5515,9 @@
       <Filter>system\baseitem</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\monrace\monrace-allocation.h">
+      <Filter>system\monrace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\monrace\monrace-list.h">
       <Filter>system\monrace</Filter>
     </ClInclude>
   </ItemGroup>

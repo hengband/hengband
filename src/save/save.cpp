@@ -37,7 +37,7 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/enum-converter.h"

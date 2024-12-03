@@ -4,6 +4,7 @@
 #include "game-option/game-play-options.h"
 #include "io/input-key-acceptor.h"
 #include "lore/lore-util.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"

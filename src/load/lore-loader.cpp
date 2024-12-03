@@ -5,6 +5,7 @@
 #include "load/old/load-v1-5-0.h"
 #include "load/savedata-old-flag-types.h"
 #include "system/angband.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"

@@ -1,6 +1,7 @@
 #include "save/lore-writer.h"
 #include "load/old/monster-flag-types-savefile50.h"
 #include "save/save-util.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "util/bit-flags-calculator.h"
 

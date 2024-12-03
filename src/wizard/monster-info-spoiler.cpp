@@ -1,6 +1,7 @@
 #include "wizard/monster-info-spoiler.h"
 #include "io/files-util.h"
 #include "system/angband-system.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"

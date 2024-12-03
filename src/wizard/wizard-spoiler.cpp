@@ -22,6 +22,7 @@
 #include "spell/spells-util.h"
 #include "system/angband-system.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

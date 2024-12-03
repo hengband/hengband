@@ -7,6 +7,7 @@
 #include "locale/japanese.h"
 #include "main/angband-headers.h"
 #include "player-ability/player-ability-types.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "term/gameterm.h"
 #include "util/enum-converter.h"

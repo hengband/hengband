@@ -19,11 +19,8 @@
 #include "util/dice.h"
 #include "util/flag-group.h"
 #include "view/display-symbol.h"
-#include <map>
-#include <set>
 #include <string>
 #include <string_view>
-#include <tuple>
 #include <vector>
 
 /*! モンスターが1ターンに攻撃する最大回数 (射撃を含む) / The maximum number of times a monster can attack in a turn (including SHOOT) */
@@ -36,11 +33,34 @@ enum class RaceBlowMethodType;
 enum class MonsterSex;
 enum class RaceBlowMethodType;
 
+class DropArtifact {
+public:
+    DropArtifact(FixedArtifactId fa_id, int chance);
+    FixedArtifactId fa_id;
+    int chance; //!< ドロップ確率 (%)
+};
+
 class MonsterBlow {
 public:
     RaceBlowMethodType method{};
     RaceBlowEffectType effect{};
     Dice damage_dice;
+};
+
+class MonraceDefinition;
+class Reinforce {
+public:
+    Reinforce(MonraceId monrace_id, Dice dice);
+    MonraceId get_monrace_id() const;
+    bool is_valid() const;
+    const MonraceDefinition &get_monrace() const;
+    std::string get_dice_as_string() const;
+    int roll_dice() const;
+    int roll_max_dice() const;
+
+private:
+    MonraceId monrace_id;
+    Dice dice;
 };
 
 /*!
@@ -50,8 +70,6 @@ public:
  * MonraceInfo (max_num/cur_num/floor_id/defeat_level/defeat_time 他、思い出以外でゲームデータ依存の数値類)
  */
 enum class GridFlow : int;
-class DropArtifact;
-class Reinforce;
 class MonraceDefinition {
 public:
     MonraceDefinition();
@@ -165,83 +183,4 @@ private:
     MonsterSex sex{}; //!< 性別 / Sex
 
     const std::string &decide_horror_message() const;
-};
-
-class DropArtifact {
-public:
-    DropArtifact(FixedArtifactId fa_id, int chance);
-    FixedArtifactId fa_id;
-    int chance; //!< ドロップ確率 (%)
-};
-
-class Reinforce {
-public:
-    Reinforce(MonraceId monrace_id, Dice dice);
-    MonraceId get_monrace_id() const;
-    bool is_valid() const;
-    const MonraceDefinition &get_monrace() const;
-    std::string get_dice_as_string() const;
-    int roll_dice() const;
-    int roll_max_dice() const;
-
-private:
-    MonraceId monrace_id;
-    Dice dice;
-};
-
-extern std::map<MonraceId, MonraceDefinition> monraces_info;
-
-class MonraceList {
-public:
-    MonraceList(MonraceList &&) = delete;
-    MonraceList(const MonraceList &) = delete;
-    MonraceList &operator=(const MonraceList &) = delete;
-    MonraceList &operator=(MonraceList &&) = delete;
-
-    static bool is_valid(MonraceId monrace_id);
-    static const std::map<MonraceId, std::set<MonraceId>> &get_unified_uniques();
-    static MonraceList &get_instance();
-    static MonraceId empty_id();
-    static bool is_tsuchinoko(MonraceId monrace_id);
-    std::map<MonraceId, MonraceDefinition>::iterator begin();
-    std::map<MonraceId, MonraceDefinition>::const_iterator begin() const;
-    std::map<MonraceId, MonraceDefinition>::iterator end();
-    std::map<MonraceId, MonraceDefinition>::const_iterator end() const;
-    std::map<MonraceId, MonraceDefinition>::reverse_iterator rbegin();
-    std::map<MonraceId, MonraceDefinition>::const_reverse_iterator rbegin() const;
-    std::map<MonraceId, MonraceDefinition>::reverse_iterator rend();
-    std::map<MonraceId, MonraceDefinition>::const_reverse_iterator rend() const;
-    size_t size() const;
-    MonraceDefinition &emplace(MonraceId monrace_id);
-    std::map<MonraceId, MonraceDefinition> &get_raw_map();
-    MonraceDefinition &get_monrace(MonraceId monrace_id);
-    const MonraceDefinition &get_monrace(MonraceId monrace_id) const;
-    const std::vector<MonraceId> &get_valid_monrace_ids() const;
-    const std::vector<std::pair<MonraceId, const MonraceDefinition *>> &get_sorted_monraces() const;
-    bool can_unify_separate(const MonraceId r_idx) const;
-    void kill_unified_unique(const MonraceId r_idx);
-    bool is_selectable(const MonraceId r_idx) const;
-    void defeat_separated_uniques();
-    bool is_unified(const MonraceId r_idx) const;
-    bool exists_separates(const MonraceId r_idx) const;
-    bool is_separated(const MonraceId r_idx) const;
-    bool can_select_separate(const MonraceId morace_id, const int hp, const int maxhp) const;
-    bool order(MonraceId id1, MonraceId id2, bool is_detailed = false) const;
-    bool order_level(MonraceId id1, MonraceId id2) const;
-    bool order_level_unique(MonraceId id1, MonraceId id2) const;
-    MonraceId pick_id_at_random() const;
-    const MonraceDefinition &pick_monrace_at_random() const;
-    int calc_defeat_count() const;
-
-    void reset_current_numbers();
-    void reset_all_visuals();
-    std::optional<std::string> probe_lore(MonraceId monrace_id);
-    void kill_unique_monster(MonraceId monrace_id);
-
-private:
-    MonraceList() = default;
-
-    static MonraceList instance;
-
-    const static std::map<MonraceId, std::set<MonraceId>> unified_uniques;
 };

@@ -953,6 +953,7 @@ hengband_SOURCES = \
 	system/enums/grid-count-kind.h \
 	\
 	system/monrace/monrace-allocation.cpp system/monrace/monrace-allocation.h \
+	system/monrace/monrace-list.cpp system/monrace/monrace-list.h \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
 	\

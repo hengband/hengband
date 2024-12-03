@@ -28,6 +28,7 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "term/term-color-types.h"
 #include "tracking/baseitem-tracker.h"

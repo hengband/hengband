@@ -7,6 +7,7 @@
 #include "knowledge/knowledge-uniques.h"
 #include "core/show-file.h"
 #include "io-dump/dump-util.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "term/z-form.h"
