@@ -21,16 +21,16 @@ store_type *st_ptr = nullptr;
  */
 void store_item_increase(short i_idx, int item_num)
 {
-    auto &item = st_ptr->stock[i_idx];
-    auto cnt = item->number + item_num;
+    auto &item = *st_ptr->stock[i_idx];
+    auto cnt = item.number + item_num;
     if (cnt > 255) {
         cnt = 255;
     } else if (cnt < 0) {
         cnt = 0;
     }
 
-    item_num = cnt - item->number;
-    item->number += item_num;
+    item_num = cnt - item.number;
+    item.number += item_num;
 }
 
 /*!
@@ -39,8 +39,8 @@ void store_item_increase(short i_idx, int item_num)
  */
 void store_item_optimize(short i_idx)
 {
-    const auto &item = st_ptr->stock[i_idx];
-    if (!item->is_valid() || (item->number != 0)) {
+    const auto &item = *st_ptr->stock[i_idx];
+    if (!item.is_valid() || (item.number != 0)) {
         return;
     }
 
@@ -84,12 +84,12 @@ std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr)
 {
     auto list = std::vector<short>();
     for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
-        auto &item = st_ptr->stock[i];
-        if ((item.get() == j_ptr) || (item->bi_id != j_ptr->bi_id) || !item->is_wand_staff()) {
+        auto &item = *st_ptr->stock[i];
+        if ((&item == j_ptr) || (item.bi_id != j_ptr->bi_id) || !item.is_wand_staff()) {
             continue;
         }
 
-        list.push_back(item->pval);
+        list.push_back(item.pval);
     }
 
     return list;
@@ -166,9 +166,9 @@ int store_carry(ItemEntity *o_ptr)
     o_ptr->inscription.reset();
     o_ptr->feeling = FEEL_NONE;
     for (auto slot = 0; slot < st_ptr->stock_num; slot++) {
-        auto &item = st_ptr->stock[slot];
-        if (item->is_similar_for_store(*o_ptr)) {
-            store_object_absorb(*item, *o_ptr);
+        auto &item = *st_ptr->stock[slot];
+        if (item.is_similar_for_store(*o_ptr)) {
+            store_object_absorb(item, *o_ptr);
             return slot;
         }
     }

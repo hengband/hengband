@@ -113,8 +113,8 @@ int store_check_num(const ItemEntity *o_ptr, StoreSaleType store_num)
         }
 
         for (auto i = 0; i < st_ptr->stock_num; i++) {
-            auto &item = st_ptr->stock[i];
-            if (!item->is_similar(*o_ptr)) {
+            auto &item = *st_ptr->stock[i];
+            if (!item.is_similar(*o_ptr)) {
                 continue;
             }
 
@@ -132,8 +132,8 @@ int store_check_num(const ItemEntity *o_ptr, StoreSaleType store_num)
         }
     } else {
         for (auto i = 0; i < st_ptr->stock_num; i++) {
-            auto &item = st_ptr->stock[i];
-            if (item->is_similar_for_store(*o_ptr)) {
+            auto &item = *st_ptr->stock[i];
+            if (item.is_similar_for_store(*o_ptr)) {
                 return -1;
             }
         }
@@ -227,15 +227,15 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     const auto item_num = *item_num_opt + store_top;
-    auto &item = st_ptr->stock[item_num];
-    if (!item->is_fully_known()) {
+    auto &item = *st_ptr->stock[item_num];
+    if (!item.is_fully_known()) {
         msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
         return;
     }
 
-    const auto item_name = describe_flavor(player_ptr, *item, 0);
+    const auto item_name = describe_flavor(player_ptr, item, 0);
     msg_format(_("%sを調べている...", "Examining %s..."), item_name.data());
-    if (!screen_object(player_ptr, *item, SCROBJ_FORCE_DETAIL)) {
+    if (!screen_object(player_ptr, item, SCROBJ_FORCE_DETAIL)) {
         msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
     }
 }
@@ -285,13 +285,13 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
     st_ptr->good_buy = 0;
     st_ptr->bad_buy = 0;
     for (auto i = 0; i < st_ptr->stock_num; i++) {
-        auto &item = st_ptr->stock[i];
-        if (item->is_fixed_or_random_artifact()) {
+        auto &item = *st_ptr->stock[i];
+        if (item.is_fixed_or_random_artifact()) {
             continue;
         }
 
-        item->discount = 50;
-        item->inscription.emplace(_("売出中", "on sale"));
+        item.discount = 50;
+        item.inscription.emplace(_("売出中", "on sale"));
     }
 }
 
@@ -399,9 +399,9 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
         for (INVENTORY_IDX j = st_ptr->stock_num - 1; j >= 0; j--) {
-            auto &item = st_ptr->stock[j];
-            if (black_market_crap(player_ptr, *item)) {
-                store_item_increase(j, 0 - item->number);
+            auto &item = *st_ptr->stock[j];
+            if (black_market_crap(player_ptr, item)) {
+                store_item_increase(j, 0 - item.number);
                 store_item_optimize(j);
             }
         }

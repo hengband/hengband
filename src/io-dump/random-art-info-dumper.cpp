@@ -92,14 +92,14 @@ void spoil_random_artifact(PlayerType *player_ptr)
 
             const auto *store_ptr = &towns_info[1].stores[StoreSaleType::HOME];
             for (int i = 0; i < store_ptr->stock_num; i++) {
-                auto &item = store_ptr->stock[i];
-                spoil_random_artifact_aux(player_ptr, *item, tval, ofs);
+                auto &item = *store_ptr->stock[i];
+                spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
 
             store_ptr = &towns_info[1].stores[StoreSaleType::MUSEUM];
             for (int i = 0; i < store_ptr->stock_num; i++) {
-                auto &item = store_ptr->stock[i];
-                spoil_random_artifact_aux(player_ptr, *item, tval, ofs);
+                auto &item = *store_ptr->stock[i];
+                spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
         }
     }

@@ -256,13 +256,13 @@ static void home_aware(PlayerType *player_ptr)
     for (size_t i = 1; i < towns_info.size(); i++) {
         auto *store_ptr = &towns_info[i].stores[StoreSaleType::HOME];
         for (auto j = 0; j < store_ptr->stock_num; j++) {
-            auto &item = store_ptr->stock[j];
-            if (!item->is_valid()) {
+            auto &item = *store_ptr->stock[j];
+            if (!item.is_valid()) {
                 continue;
             }
 
-            object_aware(player_ptr, *item);
-            item->mark_as_known();
+            object_aware(player_ptr, item);
+            item.mark_as_known();
         }
     }
 }
@@ -311,10 +311,10 @@ static void show_dead_home_items(PlayerType *player_ptr)
         for (int i = 0, k = 0; i < store_ptr->stock_num; k++) {
             term_clear();
             for (int j = 0; (j < 12) && (i < store_ptr->stock_num); j++, i++) {
-                const auto &item = store_ptr->stock[i];
+                const auto &item = *store_ptr->stock[i];
                 prt(format("%c) ", I2A(j)), j + 2, 4);
-                const auto item_name = describe_flavor(player_ptr, *item, 0);
-                c_put_str(tval_to_attr[enum2i(item->bi_key.tval())], item_name, j + 2, 7);
+                const auto item_name = describe_flavor(player_ptr, item, 0);
+                c_put_str(tval_to_attr[enum2i(item.bi_key.tval())], item_name, j + 2, 7);
             }
 
             prt(format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k + 1), 0, 0);

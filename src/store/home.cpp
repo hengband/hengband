@@ -35,9 +35,9 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
     }
 
     for (int slot = 0; slot < st_ptr->stock_num; slot++) {
-        auto &item_store = st_ptr->stock[slot];
-        if (item_store->is_similar(*o_ptr)) {
-            item_store->absorb(*o_ptr);
+        auto &item_store = *st_ptr->stock[slot];
+        if (item_store.is_similar(*o_ptr)) {
+            item_store.absorb(*o_ptr);
             if (store_num != StoreSaleType::HOME) {
                 stack_force_notes = old_stack_force_notes;
                 stack_force_costs = old_stack_force_costs;
@@ -100,23 +100,23 @@ static bool exe_combine_store_items(ItemEntity &item1, ItemEntity &item2, const 
 static bool sweep_reorder_store_item(ItemEntity &item, const int i)
 {
     for (auto j = 0; j < i; j++) {
-        const auto &item_store = st_ptr->stock[j];
-        if (!item_store->is_valid()) {
+        auto &item_store = *st_ptr->stock[j];
+        if (!item_store.is_valid()) {
             continue;
         }
 
-        const auto max_num = item_store->is_similar_part(item);
-        if (max_num == 0 || item_store->number >= max_num) {
+        const auto max_num = item_store.is_similar_part(item);
+        if (max_num == 0 || item_store.number >= max_num) {
             continue;
         }
 
-        if (exe_combine_store_items(item, *item_store, max_num, i)) {
+        if (exe_combine_store_items(item, item_store, max_num, i)) {
             return true;
         }
 
-        ITEM_NUMBER old_num = item.number;
-        ITEM_NUMBER remain = item_store->number + item.number - max_num;
-        item_store->absorb(item);
+        const auto old_num = item.number;
+        const auto remain = item_store.number + item.number - max_num;
+        item_store.absorb(item);
         item.number = remain;
         const auto tval = item.bi_key.tval();
         if (tval == ItemKindType::ROD) {
@@ -171,12 +171,12 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
     while (combined) {
         combined = false;
         for (auto i = st_ptr->stock_num - 1; i > 0; i--) {
-            auto &item = st_ptr->stock[i];
-            if (!item->is_valid()) {
+            auto &item = *st_ptr->stock[i];
+            if (!item.is_valid()) {
                 continue;
             }
 
-            combined |= sweep_reorder_store_item(*item, i);
+            combined |= sweep_reorder_store_item(item, i);
         }
 
         flag |= combined;

@@ -260,12 +260,12 @@ static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType
     char where[32];
     strcpy(where, _("家", "H "));
     for (int i = 0; i < store_ptr->stock_num; i++) {
-        const auto &item = store_ptr->stock[i];
-        if (!check_item_knowledge(*item, tval)) {
+        const auto &item = *store_ptr->stock[i];
+        if (!check_item_knowledge(item, tval)) {
             continue;
         }
 
-        do_cmd_knowledge_inventory_aux(player_ptr, fff, *item, where);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, where);
         add_res_label(label_number, fff);
     }
 }
