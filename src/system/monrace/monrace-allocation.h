@@ -1,9 +1,7 @@
 /*
- * @brief
- * @author
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- * 2002/01/12 mogami
- * 2021/10/02 Hourier
+ * @brief モンスター種族の確率分布及び選択処理定義
+ * @author Robert A. Koeneke, James E. Wilson, Ben Harrison, mogami, Hourier
+ * @date 1983, 1990, 1997, 2002/01/12, 2024/12/03
  */
 
 #pragma once

@@ -916,7 +916,6 @@ hengband_SOURCES = \
 	sv-definition/sv-wand-types.h sv-definition/sv-weapon-types.h \
 	sv-definition/sv-other-types.h \
 	\
-	system/alloc-entries.cpp system/alloc-entries.h \
 	system/angband.h \
 	system/angband-exceptions.h \
 	system/angband-system.h system/angband-system.cpp \
@@ -952,6 +951,8 @@ hengband_SOURCES = \
 	system/enums/grid-flow.h \
 	system/enums/monrace/monrace-id.h \
 	system/enums/grid-count-kind.h \
+	\
+	system/monrace/monrace-allocation.cpp system/monrace/monrace-allocation.h \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
 	\
