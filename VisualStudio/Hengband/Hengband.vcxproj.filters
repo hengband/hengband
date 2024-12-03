@@ -1211,9 +1211,6 @@
     <ClCompile Include="..\..\src\util\buffer-shaper.cpp">
       <Filter>util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\alloc-entries.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell-realm\spells-song.cpp">
       <Filter>spell-realm</Filter>
     </ClCompile>
@@ -2543,6 +2540,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\system\dungeon\dungeon-list.cpp">
       <Filter>system\dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-allocation.cpp">
+      <Filter>system\baseitem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\monrace\monrace-allocation.cpp">
+      <Filter>system\monrace</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3958,9 +3961,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\locale\language-switcher.h">
       <Filter>locale</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\system\alloc-entries.h">
-      <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell-realm\spells-song.h">
       <Filter>spell-realm</Filter>
@@ -5508,6 +5508,12 @@
     <ClInclude Include="..\..\src\system\dungeon\dungeon-list.h">
       <Filter>system\dungeon</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-allocation.h">
+      <Filter>system\baseitem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\monrace\monrace-allocation.h">
+      <Filter>system\monrace</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5789,6 +5795,9 @@
     </Filter>
     <Filter Include="system\dungeon">
       <UniqueIdentifier>{1894220d-5f9a-4d37-b853-abc0076e56bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\monrace">
+      <UniqueIdentifier>{aeee8301-7122-495a-938a-9425333f0414}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

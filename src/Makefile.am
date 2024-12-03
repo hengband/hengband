@@ -916,7 +916,6 @@ hengband_SOURCES = \
 	sv-definition/sv-wand-types.h sv-definition/sv-weapon-types.h \
 	sv-definition/sv-other-types.h \
 	\
-	system/alloc-entries.cpp system/alloc-entries.h \
 	system/angband.h \
 	system/angband-exceptions.h \
 	system/angband-system.h system/angband-system.cpp \
@@ -938,6 +937,7 @@ hengband_SOURCES = \
 	system/terrain-type-definition.cpp system/terrain-type-definition.h \
 	system/gamevalue.h \
 	\
+	system/baseitem/baseitem-allocation.cpp system/baseitem/baseitem-allocation.h \
 	system/baseitem/baseitem-definition.cpp system/baseitem/baseitem-definition.h \
 	system/baseitem/baseitem-key.cpp system/baseitem/baseitem-key.h \
 	system/baseitem/baseitem-list.cpp system/baseitem/baseitem-list.h \
@@ -951,6 +951,8 @@ hengband_SOURCES = \
 	system/enums/grid-flow.h \
 	system/enums/monrace/monrace-id.h \
 	system/enums/grid-count-kind.h \
+	\
+	system/monrace/monrace-allocation.cpp system/monrace/monrace-allocation.h \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
 	\

@@ -324,6 +324,7 @@
     <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp" />
     <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp" />
     <ClCompile Include="..\..\src\system\angband-system.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-allocation.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-data-definition.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-key.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-list.cpp" />
@@ -658,7 +659,7 @@
     <ClCompile Include="..\..\src\window\main-window-stat-poster.cpp" />
     <ClCompile Include="..\..\src\window\main-window-util.cpp" />
     <ClCompile Include="..\..\src\mspell\monster-power-table.cpp" />
-    <ClCompile Include="..\..\src\system\alloc-entries.cpp" />
+    <ClCompile Include="..\..\src\system\monrace\monrace-allocation.cpp" />
     <ClCompile Include="..\..\src\term\screen-processor.cpp" />
     <ClCompile Include="..\..\src\util\buffer-shaper.cpp" />
     <ClCompile Include="..\..\src\lore\combat-types-setter.cpp" />
@@ -1431,9 +1432,10 @@
     <ClInclude Include="..\..\src\store\purchase-order.h" />
     <ClInclude Include="..\..\src\store\sell-order.h" />
     <ClInclude Include="..\..\src\store\service-checker.h" />
-    <ClInclude Include="..\..\src\system\alloc-entries.h" />
+    <ClInclude Include="..\..\src\system\monrace\monrace-allocation.h" />
     <ClInclude Include="..\..\src\system\angband-exceptions.h" />
     <ClInclude Include="..\..\src\system\angband-system.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-allocation.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-key.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-list.h" />
     <ClInclude Include="..\..\src\system\dungeon\dungeon-list.h" />
