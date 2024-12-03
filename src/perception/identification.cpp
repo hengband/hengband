@@ -17,7 +17,7 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "util/buffer-shaper.h"

@@ -15,7 +15,7 @@
 #include "player-base/player-class.h"
 #include "status/buff-setter.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "term/screen-processor.h"
 #include "tracking/lore-tracker.h"
 #include "view/display-messages.h"

@@ -10,7 +10,7 @@
 #include "perception/object-perception.h"
 #include "player/player-realm.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 
 static int get_item_sort_rank(const ItemEntity &item)

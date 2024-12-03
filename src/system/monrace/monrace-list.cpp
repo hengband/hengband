@@ -6,7 +6,7 @@
 
 #include "system/monrace/monrace-list.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/lore-tracker.h"
 #include "util/probability-table.h"

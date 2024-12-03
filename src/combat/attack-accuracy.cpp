@@ -12,8 +12,8 @@
 #include "specific-object/death-scythe.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

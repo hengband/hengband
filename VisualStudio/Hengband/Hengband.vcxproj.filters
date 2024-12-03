@@ -2451,9 +2451,6 @@
     <ClCompile Include="..\..\src\item-info\flavor-initializer.cpp">
       <Filter>item-info</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\monster-race-info.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -2548,6 +2545,9 @@
       <Filter>system\monrace</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\system\monrace\monrace-list.cpp">
+      <Filter>system\monrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\monrace\monrace-definition.cpp">
       <Filter>system\monrace</Filter>
     </ClCompile>
   </ItemGroup>
@@ -3901,9 +3901,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\class-types.h">
       <Filter>player-info</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\system\monster-race-info.h">
-      <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-types.h">
       <Filter>realm</Filter>
@@ -5518,6 +5515,9 @@
       <Filter>system\monrace</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\monrace\monrace-list.h">
+      <Filter>system\monrace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\monrace\monrace-definition.h">
       <Filter>system\monrace</Filter>
     </ClInclude>
   </ItemGroup>

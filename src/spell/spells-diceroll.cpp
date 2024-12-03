@@ -8,8 +8,8 @@
 #include "player/player-status-table.h"
 #include "room/rooms-builder.h"
 #include "system/floor-type-definition.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
 /*!

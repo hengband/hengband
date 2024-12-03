@@ -9,7 +9,7 @@
 #include "load/old/load-v1-5-0.h"
 #include "save/floor-writer.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"

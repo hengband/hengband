@@ -7,7 +7,7 @@
 #include "monster/monster-list.h"
 #include "system/floor-type-definition.h"
 #include "system/grid-type-definition.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

@@ -929,7 +929,6 @@ hengband_SOURCES = \
 	system/inner-game-data.cpp system/inner-game-data.h \
 	system/item-entity.cpp system/item-entity.h \
 	system/monster-entity.cpp system/monster-entity.h \
-	system/monster-race-info.cpp system/monster-race-info.h \
 	system/player-type-definition.cpp system/player-type-definition.h \
 	system/redrawing-flags-updater.cpp system/redrawing-flags-updater.h \
 	system/spell-info-list.cpp system/spell-info-list.h \
@@ -953,6 +952,7 @@ hengband_SOURCES = \
 	system/enums/grid-count-kind.h \
 	\
 	system/monrace/monrace-allocation.cpp system/monrace/monrace-allocation.h \
+	system/monrace/monrace-definition.cpp system/monrace/monrace-definition.h \
 	system/monrace/monrace-list.cpp system/monrace/monrace-list.h \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \

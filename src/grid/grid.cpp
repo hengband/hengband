@@ -48,7 +48,6 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain-type-definition.h"

@@ -38,9 +38,9 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

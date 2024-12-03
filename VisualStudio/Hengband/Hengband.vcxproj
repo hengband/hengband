@@ -622,7 +622,7 @@
     <ClCompile Include="..\..\src\system\angband-version.cpp" />
     <ClCompile Include="..\..\src\system\monster-entity.cpp" />
     <ClCompile Include="..\..\src\system\item-entity.cpp" />
-    <ClCompile Include="..\..\src\system\monster-race-info.cpp" />
+    <ClCompile Include="..\..\src\system\monrace\monrace-definition.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\services\baseitem-monrace-service.cpp" />
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp" />
@@ -1615,7 +1615,7 @@
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\system\building-type-definition.h" />
     <ClInclude Include="..\..\src\system\enums\game-option-page.h" />
-    <ClInclude Include="..\..\src\system\monster-race-info.h" />
+    <ClInclude Include="..\..\src\system\monrace\monrace-definition.h" />
     <ClInclude Include="..\..\src\system\item-entity.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />

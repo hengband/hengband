@@ -3,7 +3,7 @@
 #include "lore/lore-util.h"
 #include "monster-race/race-brightness-mask.h"
 #include "player-base/player-class.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"

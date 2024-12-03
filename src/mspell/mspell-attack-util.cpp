@@ -1,7 +1,7 @@
 #include "mspell/mspell-attack-util.h"
 #include "system/floor-type-definition.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
 msa_type::msa_type(PlayerType *player_ptr, MONSTER_IDX m_idx)

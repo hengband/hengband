@@ -5,7 +5,6 @@
  */
 
 #include "tracking/health-bar-tracker.h"
-#include "system/monster-race-info.h"
 #include "system/redrawing-flags-updater.h"
 
 HealthBarTracker HealthBarTracker::instance{};

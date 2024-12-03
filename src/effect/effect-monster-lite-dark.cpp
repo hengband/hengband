@@ -2,7 +2,7 @@
 #include "effect/effect-monster-util.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster/monster-info.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 
 ProcessResult effect_monster_lite_weak(PlayerType *player_ptr, EffectMonster *em_ptr)

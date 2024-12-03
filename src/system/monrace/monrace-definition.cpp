@@ -1,4 +1,4 @@
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "game-option/cheat-options.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-resistance-mask.h"
