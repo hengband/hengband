@@ -12,6 +12,7 @@
 #include "game-option/option-flags.h"
 #include "game-option/option-types-table.h"
 #include "system/alloc-entries.h"
+#include "system/baseitem/baseitem-allocation.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"

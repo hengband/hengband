@@ -324,6 +324,7 @@
     <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp" />
     <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp" />
     <ClCompile Include="..\..\src\system\angband-system.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-allocation.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-data-definition.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-key.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-list.cpp" />
@@ -1434,6 +1435,7 @@
     <ClInclude Include="..\..\src\system\alloc-entries.h" />
     <ClInclude Include="..\..\src\system\angband-exceptions.h" />
     <ClInclude Include="..\..\src\system\angband-system.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-allocation.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-key.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-list.h" />
     <ClInclude Include="..\..\src\system\dungeon\dungeon-list.h" />
