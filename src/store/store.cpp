@@ -322,7 +322,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
         DEPTH level;
         if (store_num == StoreSaleType::BLACK) {
             level = 25 + randint0(25);
-            bi_id = get_obj_index(player_ptr->current_floor_ptr, level, 0x00000000);
+            bi_id = player_ptr->current_floor_ptr->select_baseitem_id(level, 0x00000000);
             if (bi_id == 0) {
                 continue;
             }

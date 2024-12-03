@@ -1,13 +1,11 @@
 #include "world/world-object.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "object-enchant/item-apply-magic.h"
-#include "system/alloc-entries.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
-#include "util/probability-table.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <iterator>
@@ -44,81 +42,4 @@ OBJECT_IDX o_pop(FloorType *floor_ptr)
     }
 
     return 0;
-}
-
-/*!
- * @brief オブジェクト生成テーブルからアイテムを取得する /
- * Choose an object kind that seems "appropriate" to the given level
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param level 生成階
- * @return 選ばれたオブジェクトベースID
- * @details
- * This function uses the "prob2" field of the "object allocation table",\n
- * and various local information, to calculate the "prob3" field of the\n
- * same table, which is then used to choose an "appropriate" object, in\n
- * a relatively efficient manner.\n
- *\n
- * It is (slightly) more likely to acquire an object of the given level\n
- * than one of a lower level.  This is done by choosing several objects\n
- * appropriate to the given level and keeping the "hardest" one.\n
- *\n
- * Note that if no objects are "appropriate", then this function will\n
- * fail, and return zero, but this should *almost* never happen.\n
- */
-OBJECT_IDX get_obj_index(const FloorType *floor_ptr, DEPTH level, BIT_FLAGS mode)
-{
-    if (level > MAX_DEPTH - 1) {
-        level = MAX_DEPTH - 1;
-    }
-
-    if ((level > 0) && floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::BEGINNER)) {
-        if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
-            level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
-        }
-    }
-
-    // 候補の確率テーブル生成
-    const auto &table = BaseitemAllocationTable::get_instance();
-    ProbabilityTable<int> prob_table;
-    for (size_t i = 0; i < table.size(); i++) {
-        const auto &entry = table.get_entry(i);
-        if (entry.level > level) {
-            break;
-        }
-
-        if (any_bits(mode, AM_FORBID_CHEST) && entry.is_chest()) {
-            continue;
-        }
-
-        if (any_bits(mode, AM_GOLD) && !entry.is_gold()) {
-            continue;
-        }
-
-        if (none_bits(mode, AM_GOLD) && entry.is_gold()) {
-            continue;
-        }
-
-        prob_table.entry_item(i, entry.prob2);
-    }
-
-    // 候補なし
-    if (prob_table.empty()) {
-        return 0;
-    }
-
-    // 40%で1回、50%で2回、10%で3回抽選し、その中で一番レベルが高いアイテムを選択する
-    int n = 1;
-
-    const int p = randint0(100);
-    if (p < 60) {
-        n++;
-    }
-    if (p < 10) {
-        n++;
-    }
-
-    std::vector<int> result;
-    ProbabilityTable<int>::lottery(std::back_inserter(result), prob_table, n);
-    const auto it = std::max_element(result.begin(), result.end(), [&table](int a, int b) { return table.order_level(a, b); });
-    return table.get_entry(*it).index;
 }

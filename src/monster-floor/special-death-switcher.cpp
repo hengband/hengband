@@ -138,9 +138,9 @@ static void on_dead_raal(PlayerType *player_ptr, MonsterDeath *md_ptr)
     auto *q_ptr = &forge;
     q_ptr->wipe();
     if ((floor_ptr->dun_level > 49) && one_in_(5)) {
-        get_obj_index_hook = kind_is_good_book;
+        select_baseitem_id_hook = kind_is_good_book;
     } else {
-        get_obj_index_hook = kind_is_book;
+        select_baseitem_id_hook = kind_is_book;
     }
 
     (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
@@ -312,22 +312,22 @@ static bool make_equipment(PlayerType *player_ptr, ItemEntity *q_ptr, const BIT_
  * @brief 死亡時ドロップとしてランダムアーティファクトのみを生成する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
- * @param object_hook_pf アイテム種別指定、特になければnullptrで良い
+ * @param hook_pf アイテム種別指定、特になければnullptrで良い
  * @return なし
  * @details
  * 最初のアイテム生成でいきなり☆が生成された場合を除き、中途半端な☆ (例：呪われている)は生成しない.
  * このルーチンで★は生成されないので、★生成フラグのキャンセルも不要
  */
-static void on_dead_random_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr, bool (*object_hook_pf)(short bi_id))
+static void on_dead_random_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr, bool (*hook_pf)(short bi_id))
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
-    auto is_object_hook_null = object_hook_pf == nullptr;
+    auto is_object_hook_null = hook_pf == nullptr;
     auto drop_mode = md_ptr->mo_mode | AM_NO_FIXED_ART;
     while (true) {
         // make_object() の中でアイテム種別をキャンセルしている
         // よってこのwhileループ中へ入れないと、引数で指定していない種別のアイテムが選ばれる可能性がある
-        get_obj_index_hook = object_hook_pf;
+        select_baseitem_id_hook = hook_pf;
         if (!make_equipment(player_ptr, q_ptr, drop_mode, is_object_hook_null)) {
             continue;
         }
@@ -372,7 +372,7 @@ static void drop_specific_item_on_dead(PlayerType *player_ptr, MonsterDeath *md_
     ItemEntity forge;
     auto *q_ptr = &forge;
     q_ptr->wipe();
-    get_obj_index_hook = object_hook_pf;
+    select_baseitem_id_hook = object_hook_pf;
     (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
     (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
 }

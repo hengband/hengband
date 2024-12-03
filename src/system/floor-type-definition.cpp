@@ -4,6 +4,7 @@
 #include "game-option/birth-options.h"
 #include "monster/monster-timed-effects.h"
 #include "object-enchant/item-apply-magic.h"
+#include "system/alloc-entries.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -287,7 +288,7 @@ ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
         item = ItemEntity(*bi_key);
     } else {
         const auto level = this->object_level <= 0 ? 1 : this->object_level;
-        item = ItemEntity(get_obj_index(this, level, AM_GOLD));
+        item = ItemEntity(this->select_baseitem_id(level, AM_GOLD));
     }
 
     const auto base = item.get_baseitem_cost();
@@ -303,11 +304,34 @@ ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
  */
 std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 {
-    if (!this->is_in_underground() || (get_obj_index_hook != nullptr)) {
+    if (!this->is_in_underground() || (select_baseitem_id_hook != nullptr)) {
         return std::nullopt;
     }
 
     return ArtifactList::get_instance().try_make_instant_artifact(this->object_level);
+}
+
+/*!
+ * @brief アイテム生成テーブルからベースアイテムIDを取得する
+ * @param level_initial 生成基準階層 (天界や地獄の階層もそのまま渡ってくる)
+ * @param mode 生成モード
+ * @return 選ばれたベースアイテムID
+ */
+short FloorType::select_baseitem_id(int level_initial, uint32_t mode) const
+{
+    auto level = level_initial;
+    if (level > MAX_DEPTH - 1) {
+        level = MAX_DEPTH - 1;
+    }
+
+    if ((level > 0) && this->get_dungeon_definition().flags.has_not(DungeonFeatureType::BEGINNER)) {
+        if (one_in_(CHANCE_BASEITEM_LEVEL_BOOST)) {
+            level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
+        }
+    }
+
+    const auto &table = BaseitemAllocationTable::get_instance();
+    return table.draw_lottery(level, mode, decide_selection_count());
 }
 
 /*!
@@ -379,4 +403,25 @@ void FloorType::remove_mproc(short m_idx, MonsterTimedEffect mte)
     if (mproc_idx >= 0) {
         this->mproc_list[mte][*mproc_idx] = this->mproc_list[mte][--this->mproc_max[mte]];
     }
+}
+
+/*!
+ * @brief アイテムの抽選回数をランダムに決定する
+ * @return 抽選回数
+ * @details 40 % で1回、50 % で2回、10 % で3回.
+ * モンスターも同一ルーチンだが将来に亘って同一である保証はないので、アイテムはアイテムで定義する
+ */
+int FloorType::decide_selection_count()
+{
+    auto count = 1;
+    const auto p = randint0(100);
+    if (p < 60) {
+        count++;
+    }
+
+    if (p < 10) {
+        count++;
+    }
+
+    return count;
 }

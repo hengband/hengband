@@ -29,4 +29,4 @@ init_flags_type init_flags; //!< @todo このグローバル変数何とかし�
 /*!
  * Function hook to restrict "get_obj_index_prep()" function
  */
-bool (*get_obj_index_hook)(short bi_id);
+bool (*select_baseitem_id_hook)(short bi_id);

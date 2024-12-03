@@ -29,4 +29,4 @@ extern concptr ANGBAND_SYS;
 extern concptr ANGBAND_KEYBOARD;
 extern concptr ANGBAND_GRAF;
 
-extern bool (*get_obj_index_hook)(short bi_id);
+extern bool (*select_baseitem_id_hook)(short bi_id);

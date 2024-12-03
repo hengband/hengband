@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "util/probability-table.h"
 #include <vector>
 
 enum class MonraceId : short;
@@ -93,6 +94,7 @@ public:
     size_t size() const;
     const BaseitemAllocationEntry &get_entry(int index) const;
     BaseitemAllocationEntry &get_entry(int index);
+    short draw_lottery(int level, uint32_t mode, int count) const;
     bool order_level(int index1, int index2) const;
 
     void prepare_allocation();
@@ -101,4 +103,6 @@ private:
     static BaseitemAllocationTable instance;
     BaseitemAllocationTable() = default;
     std::vector<BaseitemAllocationEntry> entries;
+
+    ProbabilityTable<int> make_table(int level, uint32_t mode) const;
 };
