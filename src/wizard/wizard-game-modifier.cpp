@@ -45,7 +45,7 @@ constexpr std::array wizard_game_modifier_menu_table = {
 /*!
  * @brief ゲーム設定コマンドの一覧を表示する
  */
-void display_wizard_game_modifier_menu()
+static void display_wizard_game_modifier_menu()
 {
     for (auto y = 1U; y <= wizard_game_modifier_menu_table.size(); y++) {
         term_erase(14, y, 64);
