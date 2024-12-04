@@ -922,7 +922,6 @@ hengband_SOURCES = \
 	system/angband-version.cpp system/angband-version.h \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
-	system/floor-type-definition.cpp system/floor-type-definition.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
@@ -950,6 +949,8 @@ hengband_SOURCES = \
 	system/enums/grid-flow.h \
 	system/enums/monrace/monrace-id.h \
 	system/enums/grid-count-kind.h \
+	\
+	system/floor/floor-info.cpp system/floor/floor-info.h \
 	\
 	system/monrace/monrace-allocation.cpp system/monrace/monrace-allocation.h \
 	system/monrace/monrace-definition.cpp system/monrace/monrace-definition.h \

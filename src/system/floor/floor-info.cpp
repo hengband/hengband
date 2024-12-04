@@ -1,4 +1,4 @@
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "dungeon/quest.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"

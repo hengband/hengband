@@ -31,7 +31,7 @@
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"

@@ -25,7 +25,7 @@
 #include "player/player-status.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
-#include "system/floor-type-definition.h" // @todo 相互参照、将来的に削除する.
+#include "system/floor/floor-info.h" // @todo 相互参照、将来的に削除する.
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"

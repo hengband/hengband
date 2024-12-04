@@ -4,7 +4,7 @@
 #include "player-info/class-info.h"
 #include "player/player-realm.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"

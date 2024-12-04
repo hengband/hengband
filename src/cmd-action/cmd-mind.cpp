@@ -43,7 +43,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"

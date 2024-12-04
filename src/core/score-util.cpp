@@ -1,6 +1,6 @@
 #include "core/score-util.h"
 #include "system/dungeon/dungeon-record.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"

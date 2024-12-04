@@ -9,7 +9,7 @@
 #include "object-enchant/trg-types.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"

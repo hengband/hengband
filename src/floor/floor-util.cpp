@@ -17,7 +17,7 @@
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"

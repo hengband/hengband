@@ -10,7 +10,7 @@
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"

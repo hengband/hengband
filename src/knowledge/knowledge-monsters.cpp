@@ -22,7 +22,7 @@
 #include "monster/monster-status.h"
 #include "monster/smart-learn-types.h"
 #include "pet/pet-util.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"

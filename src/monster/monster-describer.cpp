@@ -5,7 +5,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "system/angband-system.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"

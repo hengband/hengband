@@ -14,7 +14,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/summon-types.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"

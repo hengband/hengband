@@ -14,7 +14,7 @@
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 
 class FloorList final {
 public:

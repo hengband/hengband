@@ -33,7 +33,7 @@
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "system/angband-system.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"

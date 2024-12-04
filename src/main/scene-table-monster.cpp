@@ -6,7 +6,7 @@
 #include "main/scene-table-monster.h"
 #include "dungeon/quest.h"
 #include "main/music-definitions-table.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"

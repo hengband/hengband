@@ -14,7 +14,7 @@
 #include "market/building-util.h"
 #include "player-base/player-class.h"
 #include "status/buff-setter.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "term/screen-processor.h"
 #include "tracking/lore-tracker.h"

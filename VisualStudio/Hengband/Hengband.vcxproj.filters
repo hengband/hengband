@@ -2436,9 +2436,6 @@
     <ClCompile Include="..\..\src\system\spell-info-list.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\floor-type-definition.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -2549,6 +2546,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\system\monrace\monrace-definition.cpp">
       <Filter>system\monrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\floor\floor-definition.cpp">
+      <Filter>system\floor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4385,9 +4385,6 @@
     <ClInclude Include="..\..\src\floor\floor-base-definitions.h">
       <Filter>floor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\floor-type-definition.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h">
       <Filter>dungeon</Filter>
     </ClInclude>
@@ -5520,6 +5517,9 @@
     <ClInclude Include="..\..\src\system\monrace\monrace-definition.h">
       <Filter>system\monrace</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\floor\floor-definition.h">
+      <Filter>system\floor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5804,6 +5804,9 @@
     </Filter>
     <Filter Include="system\monrace">
       <UniqueIdentifier>{aeee8301-7122-495a-938a-9425333f0414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\floor">
+      <UniqueIdentifier>{b3a079dd-fd7e-41d6-8dcd-667b977c7ec1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

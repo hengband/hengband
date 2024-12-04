@@ -14,7 +14,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "util/int-char-converter.h"
 

@@ -36,7 +36,7 @@
 #include "status/element-resistance.h"
 #include "store/rumor.h"
 #include "sv-definition/sv-scroll-types.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"

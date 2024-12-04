@@ -36,7 +36,7 @@
 #include "status/shape-changer.h"
 #include "status/sight-setter.h"
 #include "sv-definition/sv-staff-types.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "util/dice.h"
 #include "view/display-messages.h"

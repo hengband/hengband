@@ -30,7 +30,7 @@
 #include "player/player-move.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"

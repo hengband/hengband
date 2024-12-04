@@ -18,7 +18,7 @@
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
 #include "status/element-resistance.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

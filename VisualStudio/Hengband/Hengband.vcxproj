@@ -333,7 +333,7 @@
     <ClCompile Include="..\..\src\system\inner-game-data.cpp" />
     <ClCompile Include="..\..\src\system\monrace\monrace-list.cpp" />
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
-    <ClCompile Include="..\..\src\system\floor-type-definition.cpp" />
+    <ClCompile Include="..\..\src\system\floor\floor-info.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
     <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
@@ -1447,7 +1447,7 @@
     <ClInclude Include="..\..\src\system\monrace\monrace-list.h" />
     <ClInclude Include="..\..\src\system\redrawing-flags-updater.h" />
     <ClInclude Include="..\..\src\system\dungeon\dungeon-data-definition.h" />
-    <ClInclude Include="..\..\src\system\floor-type-definition.h" />
+    <ClInclude Include="..\..\src\system\floor\floor-info.h" />
     <ClInclude Include="..\..\src\system\grid-type-definition.h" />
     <ClInclude Include="..\..\src\system\player-type-definition.h" />
     <ClInclude Include="..\..\src\system\services\baseitem-monrace-service.h" />

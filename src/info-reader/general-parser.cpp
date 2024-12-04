@@ -15,7 +15,7 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/system-variables.h"
 #include "system/terrain-type-definition.h"
 #include "util/angband-files.h"

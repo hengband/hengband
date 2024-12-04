@@ -55,7 +55,7 @@
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
 #include "system/enums/game-option-page.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"

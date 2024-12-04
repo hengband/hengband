@@ -26,7 +26,7 @@
 #include "store/store-util.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-scroll-types.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"

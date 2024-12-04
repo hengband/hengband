@@ -80,7 +80,7 @@
 #include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"

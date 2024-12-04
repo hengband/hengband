@@ -22,7 +22,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-status.h"
 #include "status/experience.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"

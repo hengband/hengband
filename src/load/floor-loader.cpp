@@ -21,7 +21,7 @@
 #include "save/floor-writer.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"

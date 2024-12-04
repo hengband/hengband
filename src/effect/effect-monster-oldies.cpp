@@ -7,7 +7,7 @@
 #include "monster/monster-status.h"
 #include "monster/monster-util.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"

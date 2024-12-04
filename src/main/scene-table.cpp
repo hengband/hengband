@@ -6,7 +6,7 @@
 #include "main/scene-table.h"
 #include "main/scene-table-floor.h"
 #include "main/scene-table-monster.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "term/z-term.h"
 
 int interrupt_scene_type;

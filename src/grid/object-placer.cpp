@@ -3,7 +3,7 @@
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "system/artifact-type-definition.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"

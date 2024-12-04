@@ -12,7 +12,7 @@
 #include "player/player-status.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-record.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"

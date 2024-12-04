@@ -4,7 +4,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "system/dungeon/dungeon-definition.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"

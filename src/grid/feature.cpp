@@ -10,7 +10,7 @@
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
 #include "system/dungeon/dungeon-definition.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h" // @todo 相互依存している. 後で何とかする.
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"

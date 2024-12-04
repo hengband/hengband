@@ -4,7 +4,7 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"

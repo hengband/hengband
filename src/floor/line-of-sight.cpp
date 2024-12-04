@@ -1,6 +1,6 @@
 #include "floor/line-of-sight.h"
 #include "floor/cave.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 
 /*!
