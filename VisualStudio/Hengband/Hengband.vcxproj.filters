@@ -2499,9 +2499,6 @@
     <ClCompile Include="..\..\src\market\melee-arena.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-list.cpp">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-timed-effects.cpp">
       <Filter>monster</Filter>
     </ClCompile>
@@ -2548,6 +2545,9 @@
       <Filter>system\monrace</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\system\floor\floor-definition.cpp">
+      <Filter>system\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\floor\floor-list.cpp">
       <Filter>system\floor</Filter>
     </ClCompile>
   </ItemGroup>
@@ -5460,9 +5460,6 @@
     <ClInclude Include="..\..\src\market\melee-arena.h">
       <Filter>market</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\floor\floor-list.h">
-      <Filter>floor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\save\monster-entity-writer.h">
       <Filter>save</Filter>
     </ClInclude>
@@ -5518,6 +5515,9 @@
       <Filter>system\monrace</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\floor\floor-definition.h">
+      <Filter>system\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\floor\floor-list.h">
       <Filter>system\floor</Filter>
     </ClInclude>
   </ItemGroup>
