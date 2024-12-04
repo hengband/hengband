@@ -12,4 +12,7 @@ enum class StoreSaleType : int;
 struct town_type {
     std::string name;
     std::map<StoreSaleType, store_type> stores;
+
+    store_type &get_store(StoreSaleType sst);
+    const store_type &get_store(StoreSaleType sst) const;
 };

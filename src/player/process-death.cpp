@@ -255,9 +255,9 @@ static void inventory_aware(PlayerType *player_ptr)
 static void home_aware(PlayerType *player_ptr)
 {
     for (size_t i = 1; i < towns_info.size(); i++) {
-        auto *store_ptr = &towns_info[i].stores[StoreSaleType::HOME];
-        for (auto j = 0; j < store_ptr->stock_num; j++) {
-            auto &item = *store_ptr->stock[j];
+        const auto &store = towns_info[i].get_store(StoreSaleType::HOME);
+        for (auto j = 0; j < store.stock_num; j++) {
+            auto &item = *store.stock[j];
             if (!item.is_valid()) {
                 continue;
             }
@@ -304,15 +304,15 @@ static bool show_dead_player_items(PlayerType *player_ptr)
 static void show_dead_home_items(PlayerType *player_ptr)
 {
     for (size_t l = 1; l < towns_info.size(); l++) {
-        const auto *store_ptr = &towns_info[l].stores[StoreSaleType::HOME];
-        if (store_ptr->stock_num == 0) {
+        const auto &store = towns_info[l].get_store(StoreSaleType::HOME);
+        if (store.stock_num == 0) {
             continue;
         }
 
-        for (int i = 0, k = 0; i < store_ptr->stock_num; k++) {
+        for (int i = 0, k = 0; i < store.stock_num; k++) {
             term_clear();
-            for (int j = 0; (j < 12) && (i < store_ptr->stock_num); j++, i++) {
-                const auto &item = *store_ptr->stock[i];
+            for (int j = 0; (j < 12) && (i < store.stock_num); j++, i++) {
+                const auto &item = *store.stock[i];
                 prt(format("%c) ", I2A(j)), j + 2, 4);
                 const auto item_name = describe_flavor(player_ptr, item, 0);
                 c_put_str(tval_to_attr[enum2i(item.bi_key.tval())], item_name, j + 2, 7);

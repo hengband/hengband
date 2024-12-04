@@ -35,7 +35,7 @@ bool black_market_crap(PlayerType *player_ptr, const ItemEntity &item)
             continue;
         }
 
-        const auto &store = towns_info[player_ptr->town_num].stores[sst];
+        const auto &store = towns_info[player_ptr->town_num].get_store(sst);
         for (auto j = 0; j < store.stock_num; j++) {
             if (item.bi_id == store.stock[j]->bi_id) {
                 return true;

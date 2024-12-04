@@ -254,7 +254,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    st_ptr = &towns_info[player_ptr->town_num].stores[store_num];
+    st_ptr = &towns_info[player_ptr->town_num].get_store(store_num);
     int j = st_ptr->owner;
     while (true) {
         st_ptr->owner = (byte)randint0(owner_num);
@@ -270,7 +270,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
                 continue;
             }
 
-            if (st_ptr->owner == towns_info[i].stores[store_num].owner) {
+            if (st_ptr->owner == towns_info[i].get_store(store_num).owner) {
                 break;
             }
         }
@@ -395,7 +395,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
         return;
     }
 
-    st_ptr = &towns_info[town_num].stores[store_num];
+    st_ptr = &towns_info[town_num].get_store(store_num);
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
@@ -469,7 +469,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
 void store_init(int town_num, StoreSaleType store_num)
 {
     int owner_num = owners.at(store_num).size();
-    st_ptr = &towns_info[town_num].stores[store_num];
+    st_ptr = &towns_info[town_num].get_store(store_num);
     const int towns_size = towns_info.size();
     while (true) {
         st_ptr->owner = (byte)randint0(owner_num);
@@ -483,7 +483,7 @@ void store_init(int town_num, StoreSaleType store_num)
             if (i == town_num) {
                 continue;
             }
-            if (st_ptr->owner == towns_info[i].stores[store_num].owner) {
+            if (st_ptr->owner == towns_info[i].get_store(store_num).owner) {
                 break;
             }
         }

@@ -54,30 +54,30 @@ void init_towns()
     for (auto i = 1; i < town_numbers; i++) {
         auto &town = towns_info[i];
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            auto *store_ptr = &town.stores[sst];
+            auto &store = town.stores[sst];
             if ((i > 1) && (sst == StoreSaleType::MUSEUM || sst == StoreSaleType::HOME)) {
                 continue;
             }
 
-            store_ptr->stock_size = store_get_stock_max(sst);
+            store.stock_size = store_get_stock_max(sst);
             std::vector<std::unique_ptr<ItemEntity>> stock;
-            for (auto j = 0; j < store_ptr->stock_size; j++) {
+            for (auto j = 0; j < store.stock_size; j++) {
                 stock.push_back(std::make_unique<ItemEntity>());
             }
 
-            store_ptr->stock = std::move(stock);
+            store.stock = std::move(stock);
             if ((sst == StoreSaleType::BLACK) || (sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM)) {
                 continue;
             }
 
             for (const auto &bi_key : store_regular_sale_table.at(sst)) {
                 const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
-                store_ptr->regular.push_back(bi_id);
+                store.regular.push_back(bi_id);
             }
 
             for (const auto &bi_key : store_sale_table.at(sst)) {
                 const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
-                store_ptr->table.push_back(bi_id);
+                store.table.push_back(bi_id);
             }
         }
     }

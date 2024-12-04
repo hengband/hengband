@@ -218,7 +218,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_u16b(tmp16u);
     for (size_t i = 1; i < towns_info.size(); i++) {
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            wr_store(&towns_info[i].stores[sst]);
+            wr_store(&towns_info[i].get_store(sst));
         }
     }
 

@@ -536,37 +536,35 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
  */
 static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
 {
-    const auto *store_ptr = &towns_info[1].stores[StoreSaleType::HOME];
-    if (store_ptr->stock_num) {
+    const auto &home = towns_info[1].get_store(StoreSaleType::HOME);
+    if (home.stock_num) {
         fprintf(fff, _("  [我が家のアイテム]\n", "  [Home Inventory]\n"));
         auto page = 1;
-        for (auto i = 0; i < store_ptr->stock_num; i++) {
+        for (auto i = 0; i < home.stock_num; i++) {
             if ((i % 12) == 0) {
                 fprintf(fff, _("\n ( %d ページ )\n", "\n ( page %d )\n"), page++);
             }
 
-            const auto item_name = describe_flavor(player_ptr, *store_ptr->stock[i], 0);
+            const auto item_name = describe_flavor(player_ptr, *home.stock[i], 0);
             fprintf(fff, "%c) %s\n", I2A(i % 12), item_name.data());
         }
 
         fprintf(fff, "\n\n");
     }
 
-    store_ptr = &towns_info[1].stores[StoreSaleType::MUSEUM];
-
-    if (store_ptr->stock_num == 0) {
+    const auto &museum = towns_info[1].get_store(StoreSaleType::MUSEUM);
+    if (museum.stock_num == 0) {
         return;
     }
 
     fprintf(fff, _("  [博物館のアイテム]\n", "  [Museum]\n"));
-
     auto page = 1;
-    for (auto i = 0; i < store_ptr->stock_num; i++) {
+    for (auto i = 0; i < museum.stock_num; i++) {
         if ((i % 12) == 0) {
             fprintf(fff, _("\n ( %d ページ )\n", "\n ( page %d )\n"), page++);
         }
 
-        const auto item_name = describe_flavor(player_ptr, *store_ptr->stock[i], 0);
+        const auto item_name = describe_flavor(player_ptr, *museum.stock[i], 0);
         fprintf(fff, "%c) %s\n", I2A(i % 12), item_name.data());
     }
 

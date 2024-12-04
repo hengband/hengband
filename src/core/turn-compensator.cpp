@@ -53,18 +53,18 @@ void prevent_turn_overflow(PlayerType *player_ptr)
 
     for (size_t i = 1; i < towns_info.size(); i++) {
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            auto *store_ptr = &towns_info[i].stores[sst];
-            if (store_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS) {
-                store_ptr->last_visit -= rollback_turns;
-                if (store_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) {
-                    store_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
+            auto &store = towns_info[i].get_store(sst);
+            if (store.last_visit > -10L * TURNS_PER_TICK * STORE_TICKS) {
+                store.last_visit -= rollback_turns;
+                if (store.last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) {
+                    store.last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
                 }
             }
 
-            if (store_ptr->store_open) {
-                store_ptr->store_open -= rollback_turns;
-                if (store_ptr->store_open < 1) {
-                    store_ptr->store_open = 1;
+            if (store.store_open) {
+                store.store_open -= rollback_turns;
+                if (store.store_open < 1) {
+                    store.store_open = 1;
                 }
             }
         }
