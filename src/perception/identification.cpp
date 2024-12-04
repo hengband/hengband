@@ -264,6 +264,10 @@ bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mod
         info[i++] = _("それは非常に強く敵を攻撃することができる。", "It can hit your foes strongly.");
     }
 
+    if (flags.has(TR_SUPERCRITICAL)) {
+        info[i++] = _("それは当たりが良い際に更に大きなダメージを与える。", "It does extra damage when critical hit.");
+    }
+
     if (flags.has(TR_KILL_DRAGON)) {
         info[i++] = _("それはドラゴンにとっての天敵である。", "It is a great bane of dragons.");
     } else if (flags.has(TR_SLAY_DRAGON)) {

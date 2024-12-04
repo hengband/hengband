@@ -171,6 +171,10 @@ PRICE flag_cost(const ItemEntity *o_ptr, int plusses)
         tmp_cost += 2500;
         count++;
     }
+    if (flags.has(TR_SUPERCRITICAL)) {
+        tmp_cost += 2500;
+        count++;
+    }
     if (flags.has(TR_EARTHQUAKE)) {
         tmp_cost += 2500;
         count++;

@@ -31,6 +31,10 @@ static void set_weapon_bless_info(self_info_type *self_ptr)
         self_ptr->info_list.emplace_back(_("あなたの武器は強力な一撃を放てる。", "Your weapon hits your foes strongly."));
     }
 
+    if (self_ptr->flags.has(TR_SUPERCRITICAL)) {
+        self_ptr->info_list.emplace_back(_("あなたの武器は手ごたえ良く当たった際の心地がとても良い。", "Your weapon is very comfortable when hits your foes critically."));
+    }
+
     if (self_ptr->flags.has(TR_VAMPIRIC)) {
         self_ptr->info_list.emplace_back(_("あなたの武器は敵から生命力を吸収する。", "Your weapon drains life from your foes."));
     }

@@ -311,9 +311,7 @@ static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *
         return true;
     }
 
-    auto flags = attacker_flags;
-    reset_bits(flags, FLAG_CAUSE_INVEN_MAIN_HAND | FLAG_CAUSE_INVEN_SUB_HAND);
-    return flags != 0;
+    return does_equip_has_flag_except_weapon(attacker_flags);
 }
 
 /*!
@@ -337,8 +335,9 @@ static void process_weapon_attack(PlayerType *player_ptr, player_attack_type *pa
     }
 
     auto do_impact = does_weapon_has_flag(player_ptr->impact, pa_ptr);
+    auto do_supercritical = does_weapon_has_flag(player_ptr->supercritical, pa_ptr);
     if ((o_ptr->bi_key != BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO)) {
-        pa_ptr->attack_damage = critical_norm(player_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, player_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_impact);
+        pa_ptr->attack_damage = critical_norm(player_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, player_ptr->to_h[pa_ptr->hand], pa_ptr->mode, do_supercritical, do_impact);
     }
 
     pa_ptr->drain_result = pa_ptr->attack_damage;

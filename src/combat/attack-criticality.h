@@ -8,6 +8,7 @@
 
 struct player_attack_type;
 class PlayerType;
-std::tuple<int, concptr, sound_type> apply_critical_norm_damage(int k, int base_dam, int mult = 1);
-int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, combat_options mode, bool impact = false);
+std::string make_critical_message(std::string_view msg, bool supercritical);
+std::tuple<int, std::string, sound_type> apply_critical_norm_damage(int k, int base_dam, bool supercritical, int mult = 1);
+int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, combat_options mode, bool supercritical = false, bool impact = false);
 void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr);

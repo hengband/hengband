@@ -311,6 +311,7 @@ static void update_bonuses(PlayerType *player_ptr)
     player_ptr->regenerate = has_regenerate(player_ptr);
     update_curses(player_ptr);
     player_ptr->impact = has_impact(player_ptr);
+    player_ptr->supercritical = has_supercritical(player_ptr);
     player_ptr->earthquake = has_earthquake(player_ptr);
     update_extra_blows(player_ptr);
 

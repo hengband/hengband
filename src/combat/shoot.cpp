@@ -40,10 +40,12 @@
 #include "object/object-mark-types.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player-info/equipment-info.h"
 #include "player-info/sniper-data-type.h"
 #include "player-status/player-energy.h"
 #include "player/player-personality-types.h"
 #include "player/player-skill.h"
+#include "player/player-status-flags.h"
 #include "player/player-status-table.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"
@@ -453,6 +455,17 @@ static MULTIPLY calc_shot_damage_with_slay(
 }
 
 /*!
+ * @brief 手にしている装備品がフラグを持つか判定
+ * @param attacker_flags 装備状況で集計されたフラグ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return 持つならtrue、持たないならfalse
+ */
+static bool does_bow_has_flag(BIT_FLAGS &attacker_flags)
+{
+    return any_bits(attacker_flags, FLAG_CAUSE_INVEN_BOW);
+}
+
+/*!
  * @brief 射撃処理実行
  * @param i_idx 射撃するオブジェクトの所持ID
  * @param bow_ptr 射撃武器のオブジェクト参照ポインタ
@@ -796,7 +809,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         attribute_flags = shot_attribute(player_ptr, j_ptr, q_ptr, snipe_type);
                         /* Apply special damage */
                         tdam = calc_shot_damage_with_slay(player_ptr, j_ptr, q_ptr, tdam, m_ptr, snipe_type);
-                        tdam = critical_shot(player_ptr, q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
+                        auto supercritical = does_bow_has_flag(player_ptr->supercritical); // 防具にこのフラグを適用させるには現状の倍率のままだと強すぎるため弓のみとする
+                        tdam = critical_shot(player_ptr, q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam, supercritical);
 
                         /* No negative damage */
                         if (tdam < 0) {
@@ -1051,7 +1065,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, MonsterEntity *m_ptr, int
  * @param dam 現在算出中のダメージ値
  * @return クリティカル修正が入ったダメージ値
  */
-int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam)
+int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam, bool supercritical)
 {
     const auto &item = player_ptr->inventory_list[INVEN_BOW];
     const auto bonus = player_ptr->to_h_b + plus_ammo;
@@ -1091,14 +1105,14 @@ int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus
 
     const auto k = weight * randint1(500);
     if (k < 900) {
-        msg_print(_("手ごたえがあった！", "It was a good hit!"));
-        dam += (dam / 2);
+        msg_print(make_critical_message(_("手ごたえがあった！", "It was a good hit!"), supercritical));
+        dam += (dam * (supercritical ? 3 : 1) / 2);
     } else if (k < 1350) {
-        msg_print(_("かなりの手ごたえがあった！", "It was a great hit!"));
-        dam *= 2;
+        msg_print(make_critical_message(_("かなりの手ごたえがあった！", "It was a great hit!"), supercritical));
+        dam *= (supercritical ? 3 : 2);
     } else {
-        msg_print(_("会心の一撃だ！", "It was a superb hit!"));
-        dam *= 3;
+        msg_print(make_critical_message(_("会心の一撃だ！", "It was a superb hit!"), supercritical));
+        dam *= (supercritical ? 4 : 3);
     }
 
     return dam;
@@ -1198,7 +1212,7 @@ int calc_expect_crit_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, 
  * @param mult 期待値計算時のdam倍率
  * @return ダメージ期待値
  */
-int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, bool dokubari, bool impact, int mult)
+int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, bool dokubari, bool supercritical, bool impact, int mult)
 {
     if (dokubari) {
         return dam;
@@ -1210,11 +1224,11 @@ int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, i
     }
 
     // 通常ダメージdam、武器重量weightでクリティカルが発生した時のクリティカルダメージ期待値
-    auto calc_weight_expect_dam = [](int dam, WEIGHT weight, int mult) {
+    auto calc_weight_expect_dam = [](int dam, WEIGHT weight, bool supercritical, int mult) {
         int sum = 0;
         for (int d = 1; d <= 650; ++d) {
             int k = weight + d;
-            sum += std::get<0>(apply_critical_norm_damage(k, dam, mult));
+            sum += std::get<0>(apply_critical_norm_damage(k, dam, supercritical, mult));
         }
         return sum / 650;
     };
@@ -1223,11 +1237,11 @@ int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, i
 
     if (impact) {
         for (int d = 1; d <= 650; ++d) {
-            num += calc_weight_expect_dam(dam, weight + d, mult);
+            num += calc_weight_expect_dam(dam, weight + d, supercritical, mult);
         }
         num /= 650;
     } else {
-        num += calc_weight_expect_dam(dam, weight, mult);
+        num += calc_weight_expect_dam(dam, weight, supercritical, mult);
     }
 
     int pow = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) ? 4444 : 5000;
@@ -1282,6 +1296,7 @@ uint32_t calc_expect_dice(
 {
     auto flags = o_ptr->get_flags_known();
     bool impact = player_ptr->impact != 0;
+    auto supercritical = player_ptr->supercritical != 0;
 
     int vorpal_mult = 1;
     int vorpal_div = 1;
@@ -1303,7 +1318,7 @@ uint32_t calc_expect_dice(
     is_force &= player_ptr->csp > (o_ptr->damage_dice.maxroll() / 5);
 
     dam = calc_slaydam(dam, 1, 1, is_force);
-    dam = calc_expect_crit(player_ptr, o_ptr->weight, o_ptr->to_h, dam, to_h, false, impact);
+    dam = calc_expect_crit(player_ptr, o_ptr->weight, o_ptr->to_h, dam, to_h, false, supercritical, impact);
     dam = calc_slaydam(dam, vorpal_mult, vorpal_div, false);
     return dam;
 }
@@ -1325,10 +1340,10 @@ uint32_t calc_expect_dice(
  * @return ダメージ期待値
  */
 uint32_t calc_expect_dice(
-    PlayerType *player_ptr, uint32_t dam, int mult, int div, bool force, WEIGHT weight, int plus, int16_t meichuu, bool dokubari, bool impact, int vorpal_mult, int vorpal_div)
+    PlayerType *player_ptr, uint32_t dam, int mult, int div, bool force, WEIGHT weight, int plus, int16_t meichuu, bool dokubari, bool supercritical, bool impact, int vorpal_mult, int vorpal_div)
 {
     dam = calc_slaydam(dam, mult, div, force);
-    dam = calc_expect_crit(player_ptr, weight, plus, dam, meichuu, dokubari, impact);
+    dam = calc_expect_crit(player_ptr, weight, plus, dam, meichuu, dokubari, supercritical, impact);
     dam = calc_slaydam(dam, vorpal_mult, vorpal_div, false);
     return dam;
 }

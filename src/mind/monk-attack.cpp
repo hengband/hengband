@@ -19,6 +19,7 @@
 #include "monster/monster-status.h"
 #include "player-attack/player-attack.h"
 #include "player-base/player-class.h"
+#include "player-info/equipment-info.h"
 #include "player-info/monk-data-type.h"
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
@@ -259,7 +260,8 @@ void process_monk_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
     int stun_effect = 0;
     int special_effect = process_monk_additional_effect(pa_ptr, &stun_effect);
     WEIGHT weight = calc_monk_attack_weight(player_ptr);
-    pa_ptr->attack_damage = critical_norm(player_ptr, player_ptr->lev * weight, min_level, pa_ptr->attack_damage, player_ptr->to_h[0], HISSATSU_NONE);
+    auto supercritical = does_equip_has_flag_except_weapon(player_ptr->supercritical);
+    pa_ptr->attack_damage = critical_norm(player_ptr, player_ptr->lev * weight, min_level, pa_ptr->attack_damage, player_ptr->to_h[0], HISSATSU_NONE, supercritical);
     process_attack_vital_spot(player_ptr, pa_ptr, &stun_effect, &resist_stun, special_effect);
     print_stun_effect(player_ptr, pa_ptr, stun_effect, resist_stun);
 }

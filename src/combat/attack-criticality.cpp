@@ -12,6 +12,21 @@
 #include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
+#include <sstream>
+
+/*!
+ * @brief 指定したメッセージに超会心などのメッセージを加える
+ *
+ * @param msg 会心のメッセージ
+ * @param supercritical 超会心があるか
+ * @return 超会心などのメッセージを加えたクリティカル時のダメージメッセージ
+ */
+std::string make_critical_message(std::string_view msg, bool supercritical)
+{
+    std::stringstream result;
+    result << msg << (supercritical ? _("とても良い当て心地だ！", "And you got feeling of more brutality!") : "");
+    return result.str();
+}
 
 /*!
  * @brief クリティカルダメージを適用する
@@ -19,23 +34,24 @@
  * @param k クリティカルの強度を決定する値
  * @param base_dam クリティカル適用前のダメージ
  * @param mult 期待値計算時のdam倍率
+ * @param supercritical 超会心の能力を持っているかどうか
  * @return クリティカルを適用したダメージと、クリティカル発生時に表示するメッセージと、クリティカル効果音のタプルを返す
  */
-std::tuple<int, concptr, sound_type> apply_critical_norm_damage(int k, int base_dam, int mult)
+std::tuple<int, std::string, sound_type> apply_critical_norm_damage(int k, int base_dam, bool supercritical, int mult)
 {
     if (k < 400) {
-        return { 2 * base_dam + 5 * mult, _("手ごたえがあった！", "It was a good hit!"), SOUND_GOOD_HIT };
+        return std::make_tuple((supercritical ? 3 : 2) * base_dam + (supercritical ? 10 : 5) * mult, make_critical_message(_("手ごたえがあった！", "It was a good hit!"), supercritical), SOUND_GOOD_HIT);
     }
     if (k < 700) {
-        return { 2 * base_dam + 10 * mult, _("かなりの手ごたえがあった！", "It was a great hit!"), SOUND_GREAT_HIT };
+        return std::make_tuple((supercritical ? 3 : 2) * base_dam + (supercritical ? 15 : 10) * mult, make_critical_message(_("かなりの手ごたえがあった！", "It was a great hit!"), supercritical), SOUND_GREAT_HIT);
     }
     if (k < 900) {
-        return { 3 * base_dam + 15 * mult, _("会心の一撃だ！", "It was a superb hit!"), SOUND_SUPERB_HIT };
+        return std::make_tuple((supercritical ? 4 : 3) * base_dam + (supercritical ? 20 : 15) * mult, make_critical_message(_("会心の一撃だ！", "It was a superb hit!"), supercritical), SOUND_SUPERB_HIT);
     }
     if (k < 1300) {
-        return { 3 * base_dam + 20 * mult, _("最高の会心の一撃だ！", "It was a *GREAT* hit!"), SOUND_STAR_GREAT_HIT };
+        return std::make_tuple((supercritical ? 4 : 3) * base_dam + (supercritical ? 25 : 20) * mult, make_critical_message(_("最高の会心の一撃だ！", "It was a *GREAT* hit!"), supercritical), SOUND_STAR_GREAT_HIT);
     }
-    return { ((7 * base_dam) / 2) + 25 * mult, _("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!"), SOUND_STAR_SUPERB_HIT };
+    return std::make_tuple((((supercritical ? 9 : 7) * base_dam) / 2) + (supercritical ? 30 : 25) * mult, make_critical_message(_("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!"), supercritical), SOUND_STAR_SUPERB_HIT);
 }
 
 /*!
@@ -48,7 +64,7 @@ std::tuple<int, concptr, sound_type> apply_critical_norm_damage(int k, int base_
  * @param mode オプションフラグ
  * @return クリティカル修正が入ったダメージ値
  */
-int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, combat_options mode, bool impact)
+int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int16_t meichuu, combat_options mode, bool supercritical, bool impact)
 {
     /* Extract "blow" power */
     int i = (weight + (meichuu * 3 + plus * 5) + player_ptr->skill_thn);
@@ -71,7 +87,7 @@ int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int1
         k += randint1(650);
     }
 
-    auto [critical_dam, msg, battle_sound] = apply_critical_norm_damage(k, dam);
+    auto [critical_dam, msg, battle_sound] = apply_critical_norm_damage(k, dam, supercritical);
     sound(battle_sound);
     msg_print(msg);
     return critical_dam;

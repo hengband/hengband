@@ -114,7 +114,8 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     sound(SOUND_HIT);
     msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name.data(), atk_desc);
 
-    auto k = critical_norm(player_ptr, n_weight, bonus, dice.roll(), (int16_t)bonus, HISSATSU_NONE);
+    auto supercritical = does_equip_has_flag_except_weapon(player_ptr->supercritical);
+    auto k = critical_norm(player_ptr, n_weight, bonus, dice.roll(), (int16_t)bonus, HISSATSU_NONE, supercritical);
     k += player_ptr->to_d_m;
     if (k < 0) {
         k = 0;

@@ -450,6 +450,8 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
         return check_equipment_flags(player_ptr, tr_flag);
     case TR_IMPACT:
         return has_impact(player_ptr);
+    case TR_SUPERCRITICAL:
+        return has_supercritical(player_ptr);
     case TR_VUL_ACID:
         return has_vuln_acid(player_ptr);
     case TR_VUL_COLD:
@@ -1149,6 +1151,11 @@ void update_curses(PlayerType *player_ptr)
 BIT_FLAGS has_impact(PlayerType *player_ptr)
 {
     return common_cause_flags(player_ptr, TR_IMPACT);
+}
+
+BIT_FLAGS has_supercritical(PlayerType *player_ptr)
+{
+    return common_cause_flags(player_ptr, TR_SUPERCRITICAL);
 }
 
 BIT_FLAGS has_earthquake(PlayerType *player_ptr)
