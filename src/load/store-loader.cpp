@@ -58,32 +58,24 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemE
 }
 
 /*!
- * @brief 店舗情報を読み込む / Read a store
+ * @brief 店舗情報を読み込む
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param town_number 街ID
+ * @param town_number_initial 街ID (v0.3.3以降)
  * @param store_number 店舗ID
- * @return エラーID
  */
-static void rd_store(PlayerType *player_ptr, int town_number, StoreSaleType store_number)
+static void rd_store(PlayerType *player_ptr, int town_number_initial, StoreSaleType store_number)
 {
-    store_type *store_ptr;
-    auto sort = false;
-    if (h_older_than(0, 3, 3) && (store_number == StoreSaleType::HOME)) {
-        store_ptr = &towns_info[1].get_store(store_number);
-        if (store_ptr->stock_num) {
-            sort = true;
-        }
-    } else {
-        store_ptr = &towns_info[town_number].get_store(store_number);
-    }
-
-    store_ptr->store_open = rd_s32b();
-    store_ptr->insult_cur = rd_s16b();
-    store_ptr->owner = rd_byte();
+    const auto is_old_version = h_older_than(0, 3, 3) && (store_number == StoreSaleType::HOME);
+    const auto town_number = is_old_version ? 1 : town_number_initial;
+    auto &store = towns_info[town_number].get_store(store_number);
+    auto sort = is_old_version && (store.stock_num > 0);
+    store.store_open = rd_s32b();
+    store.insult_cur = rd_s16b();
+    store.owner = rd_byte();
 
     if (auto num = owners.at(store_number).size();
-        num <= store_ptr->owner) {
-        store_ptr->owner %= num;
+        num <= store.owner) {
+        store.owner %= num;
     }
 
     int16_t inven_num;
@@ -93,24 +85,24 @@ static void rd_store(PlayerType *player_ptr, int town_number, StoreSaleType stor
         inven_num = rd_s16b();
     }
 
-    store_ptr->good_buy = rd_s16b();
-    store_ptr->bad_buy = rd_s16b();
-    store_ptr->last_visit = rd_s32b();
+    store.good_buy = rd_s16b();
+    store.bad_buy = rd_s16b();
+    store.last_visit = rd_s32b();
 
     auto item_loader = ItemLoaderFactory::create_loader();
     for (int j = 0; j < inven_num; j++) {
         ItemEntity item;
         item_loader->rd_item(&item);
         auto stock_max = store_get_stock_max(store_number);
-        if (store_ptr->stock_num >= stock_max) {
+        if (store.stock_num >= stock_max) {
             continue;
         }
 
         if (sort) {
-            home_carry_load(player_ptr, store_ptr, &item);
+            home_carry_load(player_ptr, &store, &item);
         } else {
-            int k = store_ptr->stock_num++;
-            *store_ptr->stock[k] = item;
+            int k = store.stock_num++;
+            *store.stock[k] = item;
         }
     }
 }

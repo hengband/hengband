@@ -54,7 +54,7 @@ void init_towns()
     for (auto i = 1; i < town_numbers; i++) {
         auto &town = towns_info[i];
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            auto &store = town.stores[sst];
+            auto &store = town.emplace(sst);
             if ((i > 1) && (sst == StoreSaleType::MUSEUM || sst == StoreSaleType::HOME)) {
                 continue;
             }
