@@ -5,6 +5,7 @@
 #include "store/store.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/inner-game-data.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"

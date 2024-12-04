@@ -36,6 +36,7 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"

@@ -28,6 +28,7 @@
 #include "system/enums/grid-flow.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"

@@ -2547,7 +2547,10 @@
     <ClCompile Include="..\..\src\system\floor\floor-list.cpp">
       <Filter>system\floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\floor\town-definition.cpp">
+    <ClCompile Include="..\..\src\system\floor\town-info.cpp">
+      <Filter>system\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\floor\town-list.cpp">
       <Filter>system\floor</Filter>
     </ClCompile>
   </ItemGroup>
@@ -5517,7 +5520,10 @@
     <ClInclude Include="..\..\src\system\floor\floor-list.h">
       <Filter>system\floor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\floor\town-definition.h">
+    <ClInclude Include="..\..\src\system\floor\town-info.h">
+      <Filter>system\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\floor\town-list.h">
       <Filter>system\floor</Filter>
     </ClInclude>
   </ItemGroup>

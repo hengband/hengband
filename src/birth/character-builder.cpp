@@ -36,6 +36,7 @@
 #include "store/store-owners.h"
 #include "store/store.h"
 #include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"

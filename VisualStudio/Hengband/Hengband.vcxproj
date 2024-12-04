@@ -330,6 +330,7 @@
     <ClCompile Include="..\..\src\system\baseitem\baseitem-list.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-list.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-record.cpp" />
+    <ClCompile Include="..\..\src\system\floor\town-list.cpp" />
     <ClCompile Include="..\..\src\system\inner-game-data.cpp" />
     <ClCompile Include="..\..\src\system\monrace\monrace-list.cpp" />
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
@@ -1433,6 +1434,7 @@
     <ClInclude Include="..\..\src\store\purchase-order.h" />
     <ClInclude Include="..\..\src\store\sell-order.h" />
     <ClInclude Include="..\..\src\store\service-checker.h" />
+    <ClInclude Include="..\..\src\system\floor\town-list.h" />
     <ClInclude Include="..\..\src\system\monrace\monrace-allocation.h" />
     <ClInclude Include="..\..\src\system\angband-exceptions.h" />
     <ClInclude Include="..\..\src\system\angband-system.h" />
