@@ -1,7 +1,7 @@
 #include "store/black-market.h"
-#include "floor/floor-town.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
+#include "system/floor/town-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 

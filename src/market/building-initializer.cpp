@@ -1,5 +1,4 @@
 #include "market/building-initializer.h"
-#include "floor/floor-town.h"
 #include "io/files-util.h"
 #include "player-info/class-types.h"
 #include "realm/realm-types.h"
@@ -11,6 +10,7 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
+#include "system/floor/town-info.h"
 #include "system/item-entity.h"
 #include "util/angband-files.h"
 #include <filesystem>

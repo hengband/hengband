@@ -356,9 +356,6 @@
     <ClCompile Include="..\..\src\floor\floor-streams.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-town.cpp">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object\object-broken.cpp">
       <Filter>object</Filter>
     </ClCompile>
@@ -2550,6 +2547,9 @@
     <ClCompile Include="..\..\src\system\floor\floor-list.cpp">
       <Filter>system\floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\floor\town-definition.cpp">
+      <Filter>system\floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2931,9 +2931,6 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-streams.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor\floor-town.h">
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-broken.h">
@@ -5518,6 +5515,9 @@
       <Filter>system\floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\floor\floor-list.h">
+      <Filter>system\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\floor\town-definition.h">
       <Filter>system\floor</Filter>
     </ClInclude>
   </ItemGroup>

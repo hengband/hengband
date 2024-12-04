@@ -892,7 +892,7 @@
     <ClCompile Include="..\..\src\floor\floor-events.cpp" />
     <ClCompile Include="..\..\src\floor\floor-generator.cpp" />
     <ClCompile Include="..\..\src\floor\floor-save.cpp" />
-    <ClCompile Include="..\..\src\floor\floor-town.cpp" />
+    <ClCompile Include="..\..\src\system\floor\town-info.cpp" />
     <ClCompile Include="..\..\src\floor\geometry.cpp" />
     <ClCompile Include="..\..\src\birth\history.cpp" />
     <ClCompile Include="..\..\src\monster\horror-descriptions.cpp" />
@@ -1983,7 +1983,7 @@
     <ClInclude Include="..\..\src\floor\floor-events.h" />
     <ClInclude Include="..\..\src\floor\floor-generator.h" />
     <ClInclude Include="..\..\src\floor\floor-save.h" />
-    <ClInclude Include="..\..\src\floor\floor-town.h" />
+    <ClInclude Include="..\..\src\system\floor\town-info.h" />
     <ClInclude Include="..\..\src\system\gamevalue.h" />
     <ClInclude Include="..\..\src\floor\geometry.h" />
     <ClInclude Include="..\..\src\grid\grid.h" />
