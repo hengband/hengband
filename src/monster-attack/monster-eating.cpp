@@ -115,16 +115,16 @@ static void move_item_to_monster(PlayerType *player_ptr, MonsterAttackPlayer *mo
         return;
     }
 
-    auto *j_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
-    j_ptr->copy_from(monap_ptr->o_ptr);
-    j_ptr->number = 1;
+    auto &item = player_ptr->current_floor_ptr->o_list[o_idx];
+    item = monap_ptr->o_ptr->clone();
+    item.number = 1;
     if (monap_ptr->o_ptr->is_wand_rod()) {
-        j_ptr->pval = monap_ptr->o_ptr->pval / monap_ptr->o_ptr->number;
-        monap_ptr->o_ptr->pval -= j_ptr->pval;
+        item.pval = monap_ptr->o_ptr->pval / monap_ptr->o_ptr->number;
+        monap_ptr->o_ptr->pval -= item.pval;
     }
 
-    j_ptr->marked.clear().set(OmType::TOUCHED);
-    j_ptr->held_m_idx = monap_ptr->m_idx;
+    item.marked.clear().set(OmType::TOUCHED);
+    item.held_m_idx = monap_ptr->m_idx;
     monap_ptr->m_ptr->hold_o_idx_list.add(player_ptr->current_floor_ptr, o_idx);
 }
 

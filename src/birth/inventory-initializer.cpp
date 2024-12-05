@@ -57,14 +57,14 @@ void wield_all(PlayerType *player_ptr)
         if (slot == INVEN_LITE) {
             continue;
         }
-        if (player_ptr->inventory_list[slot].is_valid()) {
+
+        auto &wield_slot_item = player_ptr->inventory_list[slot];
+        if (wield_slot_item.is_valid()) {
             continue;
         }
 
-        ItemEntity *i_ptr;
-        i_ptr = &ObjectType_body;
-        i_ptr->copy_from(o_ptr);
-        i_ptr->number = 1;
+        wield_slot_item = o_ptr->clone();
+        wield_slot_item.number = 1;
 
         if (i_idx >= 0) {
             inven_item_increase(player_ptr, i_idx, -1);
@@ -74,8 +74,6 @@ void wield_all(PlayerType *player_ptr)
             floor_item_optimize(player_ptr, 0 - i_idx);
         }
 
-        o_ptr = &player_ptr->inventory_list[slot];
-        o_ptr->copy_from(i_ptr);
         player_ptr->equip_cnt++;
     }
 }

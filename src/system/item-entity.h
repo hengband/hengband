@@ -81,7 +81,7 @@ public:
     RandomArtifactBias artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 
     void wipe();
-    void copy_from(const ItemEntity *j_ptr);
+    ItemEntity clone() const;
     void generate(const BaseitemKey &new_bi_key);
     void generate(short new_bi_id);
     bool is(ItemKindType tval) const;

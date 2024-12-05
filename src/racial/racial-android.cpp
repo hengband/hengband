@@ -65,8 +65,6 @@ void calc_android_exp(PlayerType *player_ptr)
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        ItemEntity forge;
-        auto *q_ptr = &forge;
         uint32_t value, exp;
         DEPTH level = std::max(o_ptr->get_baseitem_level() - 8, 1);
 
@@ -76,11 +74,6 @@ void calc_android_exp(PlayerType *player_ptr)
         if (!o_ptr->is_valid()) {
             continue;
         }
-
-        q_ptr->wipe();
-        q_ptr->copy_from(o_ptr);
-        q_ptr->discount = 0;
-        q_ptr->curse_flags.clear();
 
         if (o_ptr->is_fixed_artifact()) {
             const auto &artifact = o_ptr->get_fixed_artifact();
@@ -113,7 +106,12 @@ void calc_android_exp(PlayerType *player_ptr)
             level = std::max(level, (level + std::max(fake_level - 8, 5)) / 2 + 3);
         }
 
-        value = object_value_real(q_ptr);
+        // 装備品の割引や呪いはアンドロイドの経験値計算に影響しない
+        auto item = o_ptr->clone();
+        item.discount = 0;
+        item.curse_flags.clear();
+
+        value = object_value_real(&item);
         if (value <= 0) {
             continue;
         }

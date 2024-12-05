@@ -66,33 +66,23 @@ void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
-    ItemEntity forge;
-    ItemEntity *q_ptr;
     if (!in_bounds(floor_ptr, y, x) || !cave_drop_bold(floor_ptr, y, x) || !g_ptr->o_idx_list.empty()) {
-        return;
-    }
-
-    q_ptr = &forge;
-    q_ptr->wipe();
-    if (!make_object(player_ptr, q_ptr, mode)) {
         return;
     }
 
     OBJECT_IDX o_idx = o_pop(floor_ptr);
     if (o_idx == 0) {
-        if (q_ptr->is_fixed_artifact()) {
-            q_ptr->get_fixed_artifact().is_generated = false;
-        }
-
         return;
     }
 
-    ItemEntity *o_ptr;
-    o_ptr = &floor_ptr->o_list[o_idx];
-    o_ptr->copy_from(q_ptr);
+    auto &item = floor_ptr->o_list[o_idx];
+    item.wipe();
+    if (!make_object(player_ptr, &item, mode)) {
+        return;
+    }
 
-    o_ptr->iy = y;
-    o_ptr->ix = x;
+    item.iy = y;
+    item.ix = x;
     g_ptr->o_idx_list.add(floor_ptr, o_idx);
 
     note_spot(player_ptr, y, x);

@@ -66,11 +66,11 @@ void ItemEntity::wipe()
 
 /*!
  * @brief アイテムを複製する
- * @param j_ptr 複製元アイテムへの参照ポインタ
+ * @return 複製したアイテム
  */
-void ItemEntity::copy_from(const ItemEntity *j_ptr)
+ItemEntity ItemEntity::clone() const
 {
-    *this = *j_ptr;
+    return *this;
 }
 
 void ItemEntity::generate(const BaseitemKey &new_bi_key)

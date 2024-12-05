@@ -16,6 +16,7 @@
 #include "util/object-sort.h"
 #include "view/display-messages.h"
 #include "view/object-describer.h"
+#include <algorithm>
 
 void vary_item(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num)
 {
@@ -240,46 +241,19 @@ void combine_pack(PlayerType *player_ptr)
  */
 void reorder_pack(PlayerType *player_ptr)
 {
-    int i, j, k;
-    ItemEntity forge;
-    ItemEntity *q_ptr;
-    ItemEntity *o_ptr;
-    bool flag = false;
+    const auto comp = [player_ptr](const auto &item1, const auto &item2) {
+        return object_sort_comp(player_ptr, item1, item2);
+    };
 
-    for (i = 0; i < INVEN_PACK; i++) {
-        if ((i == INVEN_PACK) && (player_ptr->inven_cnt == INVEN_PACK)) {
-            break;
-        }
+    auto first = &player_ptr->inventory_list[0];
+    auto last = &player_ptr->inventory_list[player_ptr->inven_cnt];
 
-        o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->is_valid()) {
-            continue;
-        }
-
-        for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(player_ptr, *o_ptr, player_ptr->inventory_list[j])) {
-                break;
-            }
-        }
-
-        if (j >= i) {
-            continue;
-        }
-
-        flag = true;
-        q_ptr = &forge;
-        q_ptr->copy_from(&player_ptr->inventory_list[i]);
-        for (k = i; k > j; k--) {
-            (&player_ptr->inventory_list[k])->copy_from(&player_ptr->inventory_list[k - 1]);
-        }
-
-        (&player_ptr->inventory_list[j])->copy_from(q_ptr);
-        RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::INVENTORY);
+    if (std::is_sorted(first, last, comp)) {
+        return;
     }
 
-    if (flag) {
-        msg_print(_("ザックの中のアイテムを並べ直した。", "You reorder some items in your pack."));
-    }
+    std::stable_sort(first, last, comp);
+    msg_print(_("ザックの中のアイテムを並べ直した。", "You reorder some items in your pack."));
 }
 
 /*!
@@ -290,7 +264,7 @@ void reorder_pack(PlayerType *player_ptr)
  */
 int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    INVENTORY_IDX i, j, k;
+    INVENTORY_IDX i, j;
     INVENTORY_IDX n = -1;
 
     ItemEntity *j_ptr;
@@ -334,14 +308,10 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
 
         i = j;
-        for (k = n; k >= i; k--) {
-            (&player_ptr->inventory_list[k + 1])->copy_from(&player_ptr->inventory_list[k]);
-        }
-
-        (&player_ptr->inventory_list[i])->wipe();
+        std::rotate(&player_ptr->inventory_list[i], &player_ptr->inventory_list[n + 1], &player_ptr->inventory_list[n + 2]);
     }
 
-    (&player_ptr->inventory_list[i])->copy_from(o_ptr);
+    player_ptr->inventory_list[i] = o_ptr->clone();
     j_ptr = &player_ptr->inventory_list[i];
     j_ptr->held_m_idx = 0;
     j_ptr->iy = j_ptr->ix = 0;

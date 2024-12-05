@@ -505,7 +505,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     }
 
     if (!done) {
-        (&floor_ptr->o_list[o_idx])->copy_from(j_ptr);
+        floor_ptr->o_list[o_idx] = j_ptr->clone();
         j_ptr = &floor_ptr->o_list[o_idx];
         j_ptr->iy = by;
         j_ptr->ix = bx;
