@@ -12,7 +12,8 @@
 #include "system/building-type-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor-type-definition.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/screen-processor.h"
@@ -44,7 +45,7 @@ constexpr std::array wizard_game_modifier_menu_table = {
 /*!
  * @brief ゲーム設定コマンドの一覧を表示する
  */
-void display_wizard_game_modifier_menu()
+static void display_wizard_game_modifier_menu()
 {
     for (auto y = 1U; y <= wizard_game_modifier_menu_table.size(); y++) {
         term_erase(14, y, 64);

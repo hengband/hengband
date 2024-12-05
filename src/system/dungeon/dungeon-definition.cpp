@@ -3,7 +3,7 @@
 #include "grid/feature-action-flags.h"
 #include "grid/feature.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-list.h"
 #include "system/terrain-type-definition.h"
 
 enum conversion_type {

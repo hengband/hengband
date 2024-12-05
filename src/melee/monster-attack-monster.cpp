@@ -18,6 +18,7 @@
 #include "melee/melee-switcher.h"
 #include "melee/melee-util.h"
 #include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster/monster-describer.h"
@@ -28,8 +29,8 @@
 #include "spell-realm/spells-hex.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor-type-definition.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/health-bar-tracker.h"
@@ -292,7 +293,7 @@ static void explode_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param mam_ptr モンスター乱闘構造体への参照ポインタ
  */
-void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
+static void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     const auto *m_ptr = mam_ptr->m_ptr;
     auto *r_ptr = &m_ptr->get_monrace();

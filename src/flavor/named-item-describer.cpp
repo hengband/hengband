@@ -19,7 +19,7 @@
 #ifdef JP
 #else
 #include "object/tval-types.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #endif
 #include <sstream>
 

@@ -8,7 +8,8 @@
 #include "locale/language-switcher.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-key.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "term/z-form.h"
 #include "util/enum-converter.h"
 #include <map>

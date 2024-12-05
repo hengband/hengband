@@ -3,7 +3,8 @@
 #include "locale/language-switcher.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-sex.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 

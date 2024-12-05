@@ -28,7 +28,8 @@
 #include "system/floor-type-definition.h" // @todo 相互参照、将来的に削除する.
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"

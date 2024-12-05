@@ -14,7 +14,7 @@
 #include "system/dungeon/dungeon-record.h"
 #include "system/floor-type-definition.h"
 #include "system/inner-game-data.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"

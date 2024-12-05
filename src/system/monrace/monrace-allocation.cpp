@@ -5,7 +5,8 @@
  */
 
 #include "system/monrace/monrace-allocation.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 
 MonraceAllocationEntry::MonraceAllocationEntry(MonraceId index, int level, short prob1, short prob2)
     : index(index)

@@ -8,7 +8,7 @@
 #include "main/angband-headers.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/terrain-type-definition.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
