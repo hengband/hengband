@@ -744,13 +744,11 @@ void wiz_modify_item(PlayerType *player_ptr)
 
     screen_save();
 
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    q_ptr->copy_from(o_ptr);
+    auto modified_item = o_ptr->clone();
     auto changed = false;
     constexpr auto prompt = "[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ";
     while (true) {
-        wiz_display_item(player_ptr, q_ptr);
+        wiz_display_item(player_ptr, &modified_item);
         const auto command = input_command(prompt);
         if (!command) {
             changed = false;
@@ -763,19 +761,19 @@ void wiz_modify_item(PlayerType *player_ptr)
         }
 
         if (command == 's' || command == 'S') {
-            wiz_statistics(player_ptr, q_ptr);
+            wiz_statistics(player_ptr, &modified_item);
         }
 
         if (command == 'r' || command == 'R') {
-            wiz_reroll_item(player_ptr, q_ptr);
+            wiz_reroll_item(player_ptr, &modified_item);
         }
 
         if (command == 't' || command == 'T') {
-            wiz_tweak_item(player_ptr, q_ptr);
+            wiz_tweak_item(player_ptr, &modified_item);
         }
 
         if (command == 'q' || command == 'Q') {
-            wiz_quantity_item(q_ptr);
+            wiz_quantity_item(&modified_item);
         }
     }
 
@@ -783,7 +781,7 @@ void wiz_modify_item(PlayerType *player_ptr)
     if (changed) {
         msg_print("Changes accepted.");
 
-        o_ptr->copy_from(q_ptr);
+        *o_ptr = std::move(modified_item);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags_srf = {
             StatusRecalculatingFlag::BONUS,

@@ -57,20 +57,19 @@ qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xm
  * @brief フロアの所定のマスにオブジェクトを配置する
  * Place the object j_ptr to a grid
  * @param floor_ptr 現在フロアへの参照ポインタ
- * @param j_ptr オブジェクト構造体の参照ポインタ
+ * @param item アイテムの参照
  * @param y 配置先Y座標
  * @param x 配置先X座標
  * @return エラーコード
  */
-static void drop_here(FloorType *floor_ptr, ItemEntity *j_ptr, POSITION y, POSITION x)
+static void drop_here(FloorType *floor_ptr, ItemEntity &&item, POSITION y, POSITION x)
 {
     OBJECT_IDX o_idx = o_pop(floor_ptr);
-    ItemEntity *o_ptr;
-    o_ptr = &floor_ptr->o_list[o_idx];
-    o_ptr->copy_from(j_ptr);
-    o_ptr->iy = y;
-    o_ptr->ix = x;
-    o_ptr->held_m_idx = 0;
+    auto &dropped_item = floor_ptr->o_list[o_idx];
+    dropped_item = std::move(item);
+    dropped_item.iy = y;
+    dropped_item.ix = x;
+    dropped_item.held_m_idx = 0;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     g_ptr->o_idx_list.add(floor_ptr, o_idx);
 }
@@ -87,7 +86,7 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
     }
 
     ItemEntity item({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
-    drop_here(player_ptr->current_floor_ptr, &item, *qtwg_ptr->y, *qtwg_ptr->x);
+    drop_here(player_ptr->current_floor_ptr, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
 static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
@@ -178,7 +177,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             }
 
             ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
-            drop_here(&floor, &item, *qtwg_ptr->y, *qtwg_ptr->x);
+            drop_here(&floor, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
         }
 
         generate_artifact(player_ptr, qtwg_ptr, letter[idx].artifact);

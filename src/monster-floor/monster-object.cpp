@@ -215,16 +215,11 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
 void monster_drop_carried_objects(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
     for (auto it = m_ptr->hold_o_idx_list.begin(); it != m_ptr->hold_o_idx_list.end();) {
-        ItemEntity forge;
-        ItemEntity *o_ptr;
-        ItemEntity *q_ptr;
         const OBJECT_IDX this_o_idx = *it++;
-        o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-        q_ptr = &forge;
-        q_ptr->copy_from(o_ptr);
-        q_ptr->held_m_idx = 0;
+        auto drop_item = player_ptr->current_floor_ptr->o_list[this_o_idx].clone();
+        drop_item.held_m_idx = 0;
         delete_object_idx(player_ptr, this_o_idx);
-        (void)drop_near(player_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);
+        (void)drop_near(player_ptr, &drop_item, -1, m_ptr->fy, m_ptr->fx);
     }
 
     m_ptr->hold_o_idx_list.clear();

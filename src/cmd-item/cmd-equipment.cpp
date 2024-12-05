@@ -51,6 +51,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
+#include <utility>
 
 /*!
  * @brief 装備時にアイテムを呪う処理
@@ -129,8 +130,6 @@ void do_cmd_equip(PlayerType *player_ptr)
  */
 void do_cmd_wield(PlayerType *player_ptr)
 {
-    ItemEntity forge;
-    ItemEntity *q_ptr;
     concptr act;
     OBJECT_IDX need_switch_wielding = 0;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
@@ -256,14 +255,10 @@ void do_cmd_wield(PlayerType *player_ptr)
 
     sound(SOUND_WIELD);
     if (need_switch_wielding && !player_ptr->inventory_list[need_switch_wielding].is_cursed()) {
-        ItemEntity *slot_o_ptr = &player_ptr->inventory_list[slot];
-        ItemEntity *switch_o_ptr = &player_ptr->inventory_list[need_switch_wielding];
-        ItemEntity object_tmp;
-        ItemEntity *otmp_ptr = &object_tmp;
-        const auto item_name = describe_flavor(player_ptr, *switch_o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        otmp_ptr->copy_from(switch_o_ptr);
-        switch_o_ptr->copy_from(slot_o_ptr);
-        slot_o_ptr->copy_from(otmp_ptr);
+        auto &slot_item = player_ptr->inventory_list[slot];
+        auto &switch_item = player_ptr->inventory_list[need_switch_wielding];
+        const auto item_name = describe_flavor(player_ptr, switch_item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+        std::swap(switch_item, slot_item);
         msg_format(_("%sを%sに構えなおした。", "You wield %s at %s hand."), item_name.data(),
             (slot == INVEN_MAIN_HAND) ? (left_hander ? _("左手", "left") : _("右手", "right")) : (left_hander ? _("右手", "right") : _("左手", "left")));
         slot = need_switch_wielding;
@@ -276,9 +271,8 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    q_ptr = &forge;
-    q_ptr->copy_from(o_ptr);
-    q_ptr->number = 1;
+    auto item = o_ptr->clone();
+    item.number = 1;
     if (i_idx >= 0) {
         inven_item_increase(player_ptr, i_idx, -1);
         inven_item_optimize(player_ptr, i_idx);
@@ -287,13 +281,13 @@ void do_cmd_wield(PlayerType *player_ptr)
         floor_item_optimize(player_ptr, 0 - i_idx);
     }
 
-    o_ptr = &player_ptr->inventory_list[slot];
-    if (o_ptr->is_valid()) {
+    auto &wield_slot_item = player_ptr->inventory_list[slot];
+    if (wield_slot_item.is_valid()) {
         (void)inven_takeoff(player_ptr, slot, 255);
     }
 
-    o_ptr->copy_from(q_ptr);
-    o_ptr->marked.set(OmType::TOUCHED);
+    wield_slot_item = std::move(item);
+    wield_slot_item.marked.set(OmType::TOUCHED);
     player_ptr->equip_cnt++;
 
 #define STR_WIELD_HAND_RIGHT _("%s(%c)を右手に装備した。", "You are wielding %s (%c) in your right hand.")
@@ -302,7 +296,7 @@ void do_cmd_wield(PlayerType *player_ptr)
 
     switch (slot) {
     case INVEN_MAIN_HAND:
-        if (o_ptr->allow_two_hands_wielding() && (empty_hands(player_ptr, false) == EMPTY_HAND_SUB) && can_two_hands_wielding(player_ptr)) {
+        if (wield_slot_item.allow_two_hands_wielding() && (empty_hands(player_ptr, false) == EMPTY_HAND_SUB) && can_two_hands_wielding(player_ptr)) {
             act = STR_WIELD_HANDS_TWO;
         } else {
             act = (left_hander ? STR_WIELD_HAND_LEFT : STR_WIELD_HAND_RIGHT);
@@ -310,7 +304,7 @@ void do_cmd_wield(PlayerType *player_ptr)
 
         break;
     case INVEN_SUB_HAND:
-        if (o_ptr->allow_two_hands_wielding() && (empty_hands(player_ptr, false) == EMPTY_HAND_MAIN) && can_two_hands_wielding(player_ptr)) {
+        if (wield_slot_item.allow_two_hands_wielding() && (empty_hands(player_ptr, false) == EMPTY_HAND_MAIN) && can_two_hands_wielding(player_ptr)) {
             act = STR_WIELD_HANDS_TWO;
         } else {
             act = (left_hander ? STR_WIELD_HAND_RIGHT : STR_WIELD_HAND_LEFT);
@@ -328,16 +322,16 @@ void do_cmd_wield(PlayerType *player_ptr)
         break;
     }
 
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
+    const auto item_name = describe_flavor(player_ptr, wield_slot_item, 0);
     msg_format(act, item_name.data(), index_to_label(slot));
-    if (o_ptr->is_cursed()) {
+    if (wield_slot_item.is_cursed()) {
         msg_print(_("うわ！ すさまじく冷たい！", "Oops! It feels deathly cold!"));
         chg_virtue(player_ptr, Virtue::HARMONY, -1);
-        o_ptr->ident |= (IDENT_SENSE);
+        wield_slot_item.ident |= (IDENT_SENSE);
     }
 
-    do_curse_on_equip(slot, *o_ptr, player_ptr);
-    if (o_ptr->is_specific_artifact(FixedArtifactId::STONEMASK)) {
+    do_curse_on_equip(slot, wield_slot_item, player_ptr);
+    if (wield_slot_item.is_specific_artifact(FixedArtifactId::STONEMASK)) {
         auto is_specific_race = pr.equals(PlayerRaceType::VAMPIRE);
         is_specific_race |= pr.equals(PlayerRaceType::ANDROID);
         if (!is_specific_race) {

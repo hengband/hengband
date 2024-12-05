@@ -297,7 +297,6 @@ static void list_weapon(PlayerType *player_ptr, const ItemEntity &item, TERM_LEN
 PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 {
     ItemEntity *o_ptr[2]{};
-    ItemEntity orig_weapon;
     TERM_LEN row = 2;
     TERM_LEN wid = 38, mgn = 2;
     auto &world = AngbandWorld::get_instance();
@@ -309,7 +308,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
     screen_save();
     clear_bldg(0, 22);
     auto *i_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
-    (&orig_weapon)->copy_from(i_ptr);
+    auto orig_weapon = i_ptr->clone();
 
     constexpr auto first_q = _("第一の武器は？", "What is your first weapon? ");
     constexpr auto first_s = _("比べるものがありません。", "You have nothing to compare.");
@@ -331,7 +330,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
         for (int i = 0; i < n; i++) {
             int col = (wid * i + mgn);
             if (o_ptr[i] != i_ptr) {
-                i_ptr->copy_from(o_ptr[i]);
+                *i_ptr = o_ptr[i]->clone();
             }
 
             rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -339,7 +338,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 
             list_weapon(player_ptr, *o_ptr[i], row, col);
             compare_weapon_aux(player_ptr, o_ptr[i], col, row + 8);
-            i_ptr->copy_from(&orig_weapon);
+            *i_ptr = orig_weapon.clone();
         }
 
         rfu.set_flag(StatusRecalculatingFlag::BONUS);

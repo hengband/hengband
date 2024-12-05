@@ -67,15 +67,12 @@ bool eat_magic(PlayerType *player_ptr, int power)
                 o_ptr->pval--;
 
                 if ((tval == ItemKindType::STAFF) && (i_idx >= 0) && (o_ptr->number > 1)) {
-                    ItemEntity forge;
-                    ItemEntity *q_ptr;
-                    q_ptr = &forge;
-                    q_ptr->copy_from(o_ptr);
+                    auto eat_item = o_ptr->clone();
 
-                    q_ptr->number = 1;
+                    eat_item.number = 1;
                     o_ptr->pval++;
                     o_ptr->number--;
-                    i_idx = store_item_to_inventory(player_ptr, q_ptr);
+                    i_idx = store_item_to_inventory(player_ptr, &eat_item);
 
                     msg_print(_("杖をまとめなおした。", "You unstack your staff."));
                 }

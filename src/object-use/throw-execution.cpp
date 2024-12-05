@@ -102,7 +102,7 @@ bool ObjectThrowEntity::check_can_throw()
 
 void ObjectThrowEntity::calc_throw_range()
 {
-    this->q_ptr->copy_from(this->o_ptr);
+    *this->q_ptr = this->o_ptr->clone();
     this->obj_flags = this->q_ptr->get_flags();
     torch_flags(this->q_ptr, this->obj_flags);
     distribute_charges(this->o_ptr, this->q_ptr, 1);
@@ -304,7 +304,7 @@ void ObjectThrowEntity::process_boomerang_back()
         }
 
         this->o_ptr = &player_ptr->inventory_list[this->i_idx];
-        this->o_ptr->copy_from(this->q_ptr);
+        *this->o_ptr = this->q_ptr->clone();
         this->player_ptr->equip_cnt++;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags = {

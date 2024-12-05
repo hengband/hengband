@@ -136,13 +136,11 @@ void ObjectUseEntity::execute()
 
     o_ptr->pval--;
     if ((this->i_idx >= 0) && (o_ptr->number > 1)) {
-        ItemEntity forge;
-        auto *q_ptr = &forge;
-        q_ptr->copy_from(o_ptr);
-        q_ptr->number = 1;
+        auto used_item = o_ptr->clone();
+        used_item.number = 1;
         o_ptr->pval++;
         o_ptr->number--;
-        this->i_idx = store_item_to_inventory(this->player_ptr, q_ptr);
+        this->i_idx = store_item_to_inventory(this->player_ptr, &used_item);
         msg_print(_("杖をまとめなおした。", "You unstack your staff."));
     }
 
