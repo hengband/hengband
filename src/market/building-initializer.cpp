@@ -50,7 +50,7 @@ void init_towns()
 {
     const auto &baseitems = BaseitemList::get_instance();
     const auto town_numbers = count_town_numbers();
-    towns_info = std::vector<town_type>(town_numbers);
+    towns_info = std::vector<TownInfo>(town_numbers);
     for (auto i = 1; i < town_numbers; i++) {
         auto &town = towns_info[i];
         for (auto sst : STORE_SALE_TYPE_LIST) {

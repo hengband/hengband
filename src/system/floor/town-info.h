@@ -9,8 +9,10 @@
  * stores and buildings
  */
 enum class StoreSaleType : int;
-struct town_type {
+class TownInfo {
 public:
+    TownInfo() = default;
+
     std::string name;
 
     store_type &get_store(StoreSaleType sst);
