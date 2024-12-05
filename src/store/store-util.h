@@ -27,12 +27,13 @@ constexpr auto STORE_SALE_TYPE_LIST = EnumRange(StoreSaleType::GENERAL, StoreSal
 /*!
  * @brief 店舗の情報構造体
  */
-struct store_type {
-    store_type() = default;
-    store_type(const store_type &) = delete;
-    store_type(store_type &&) = delete;
-    store_type &operator=(const store_type &) = delete;
-    store_type &operator=(store_type &&) = delete;
+class Store {
+public:
+    Store() = default;
+    Store(const Store &) = delete;
+    Store(Store &&) = delete;
+    Store &operator=(const Store &) = delete;
+    Store &operator=(Store &&) = delete;
 
     uint8_t type{}; //!< Store type
     uint8_t owner{}; //!< Owner index
@@ -49,7 +50,7 @@ struct store_type {
     std::vector<std::unique_ptr<ItemEntity>> stock{}; //!< Stock -- Actual stock items
 };
 
-extern store_type *st_ptr;
+extern Store *st_ptr;
 
 class PlayerType;
 void store_delete();

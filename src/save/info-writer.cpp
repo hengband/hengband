@@ -19,7 +19,7 @@
  * @brief セーブデータに店舗情報を書き込む / Write a "store" record
  * @param store_ptr 店舗情報の参照ポインタ
  */
-void wr_store(store_type *store_ptr)
+void wr_store(Store *store_ptr)
 {
     wr_u32b(store_ptr->store_open);
     wr_s16b(store_ptr->insult_cur);
