@@ -402,7 +402,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
         for (INVENTORY_IDX j = st_ptr->stock_num - 1; j >= 0; j--) {
             auto &item = *st_ptr->stock[j];
             if (black_market_crap(player_ptr, item)) {
-                store_item_increase(j, 0 - item.number);
+                st_ptr->increase_item(j, 0 - item.number);
                 store_item_optimize(j);
             }
         }

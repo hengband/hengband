@@ -19,9 +19,9 @@ Store *st_ptr = nullptr;
  * @param i_idx 増やしたいアイテムのインベントリID
  * @param num 増やしたい数
  */
-void store_item_increase(short i_idx, int item_num)
+void Store::increase_item(short i_idx, int item_num)
 {
-    auto &item = *st_ptr->stock[i_idx];
+    auto &item = *this->stock[i_idx];
     auto cnt = item.number + item_num;
     if (cnt > 255) {
         cnt = 255;
@@ -70,7 +70,7 @@ void store_delete()
         st_ptr->stock[what]->pval -= num * st_ptr->stock[what]->pval / st_ptr->stock[what]->number;
     }
 
-    store_item_increase(what, -num);
+    st_ptr->increase_item(what, -num);
     store_item_optimize(what);
 }
 
