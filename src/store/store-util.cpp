@@ -35,20 +35,19 @@ void Store::increase_item(short i_idx, int item_num)
 
 /*!
  * @brief 店舗のオブジェクト数を削除する
- * @param i_idx 削除したいアイテムのID
+ * @param i_idx 削除したいアイテムのインデックス
  */
-void store_item_optimize(short i_idx)
+void Store::optimize_item(short i_idx)
 {
-    const auto &item = *st_ptr->stock[i_idx];
+    const auto &item = *this->stock[i_idx];
     if (!item.is_valid() || (item.number != 0)) {
         return;
     }
 
-    const auto begin = st_ptr->stock.begin();
-    std::rotate(begin + i_idx, begin + i_idx + 1, begin + st_ptr->stock_num);
-
-    st_ptr->stock_num--;
-    st_ptr->stock[st_ptr->stock_num]->wipe();
+    const auto begin = this->stock.begin();
+    std::rotate(begin + i_idx, begin + i_idx + 1, begin + this->stock_num);
+    this->stock_num--;
+    this->stock[this->stock_num]->wipe();
 }
 
 /*!
@@ -71,7 +70,7 @@ void store_delete()
     }
 
     st_ptr->increase_item(what, -num);
-    store_item_optimize(what);
+    st_ptr->optimize_item(what);
 }
 
 /*!

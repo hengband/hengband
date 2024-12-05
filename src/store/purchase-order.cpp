@@ -103,7 +103,7 @@ static void take_item_from_home(PlayerType *player_ptr, ItemEntity &item_home, I
 
     const auto stock_num = st_ptr->stock_num;
     st_ptr->increase_item(i_idx, -amt);
-    store_item_optimize(i_idx);
+    st_ptr->optimize_item(i_idx);
 
     const auto combined_or_reordered = combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
     if (stock_num == st_ptr->stock_num) {
@@ -307,6 +307,6 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
 
     i = st_ptr->stock_num;
     st_ptr->increase_item(item_num, -amt);
-    store_item_optimize(item_num);
+    st_ptr->optimize_item(item_num);
     switch_store_stock(player_ptr, i, item_num, store_num);
 }
