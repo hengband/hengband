@@ -159,7 +159,7 @@ void do_poly_self(PlayerType *player_ptr)
         }
 
         do {
-            new_race = (PlayerRaceType)randint0(MAX_RACES);
+            new_race = randnum0<PlayerRaceType>(MAX_RACES);
         } while (pr.equals(new_race) || (new_race == PlayerRaceType::ANDROID));
 
         change_race(player_ptr, new_race, effect_msg.data());

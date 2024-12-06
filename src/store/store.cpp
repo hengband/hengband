@@ -257,7 +257,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
     st_ptr = &towns_info[player_ptr->town_num].get_store(store_num);
     int j = st_ptr->owner;
     while (true) {
-        st_ptr->owner = (byte)randint0(owner_num);
+        st_ptr->owner = randnum0<uint8_t>(owner_num);
 
         if (j == st_ptr->owner) {
             continue;
@@ -472,7 +472,7 @@ void store_init(int town_num, StoreSaleType store_num)
     st_ptr = &towns_info[town_num].get_store(store_num);
     const int towns_size = towns_info.size();
     while (true) {
-        st_ptr->owner = (byte)randint0(owner_num);
+        st_ptr->owner = randnum0<uint8_t>(owner_num);
 
         if (owner_num <= towns_size) {
             break;

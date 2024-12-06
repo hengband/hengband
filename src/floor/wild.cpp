@@ -273,10 +273,10 @@ static void generate_wilderness_area(FloorType *floor_ptr, int terrain, uint32_t
         }
     }
 
-    floor_ptr->grid_array[1][1].feat = (int16_t)randint0(table_size);
-    floor_ptr->grid_array[MAX_HGT - 2][1].feat = (int16_t)randint0(table_size);
-    floor_ptr->grid_array[1][MAX_WID - 2].feat = (int16_t)randint0(table_size);
-    floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = (int16_t)randint0(table_size);
+    floor_ptr->grid_array[1][1].feat = randnum0<short>(table_size);
+    floor_ptr->grid_array[MAX_HGT - 2][1].feat = randnum0<short>(table_size);
+    floor_ptr->grid_array[1][MAX_WID - 2].feat = randnum0<short>(table_size);
+    floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = randnum0<short>(table_size);
     if (corner) {
         floor_ptr->grid_array[1][1].feat = terrain_table[terrain][floor_ptr->grid_array[1][1].feat];
         floor_ptr->grid_array[MAX_HGT - 2][1].feat = terrain_table[terrain][floor_ptr->grid_array[MAX_HGT - 2][1].feat];

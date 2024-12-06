@@ -79,7 +79,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_byte(H_VER_PATCH);
     wr_byte(H_VER_EXTRA);
 
-    byte tmp8u = (byte)Rand_external(256);
+    auto tmp8u = static_cast<uint8_t>(Rand_external(256));
     wr_byte(tmp8u);
     v_stamp = 0L;
     x_stamp = 0L;

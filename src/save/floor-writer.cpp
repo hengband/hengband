@@ -227,7 +227,7 @@ static bool save_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
 
-    byte tmp8u = (byte)randint0(256);
+    auto tmp8u = randnum0<uint8_t>(256);
     save_xor_byte = 0;
     wr_byte(tmp8u);
 

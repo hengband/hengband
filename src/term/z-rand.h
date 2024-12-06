@@ -43,7 +43,7 @@ T randnum0(U initial_max)
     requires(std::is_integral_v<T> || std::is_enum_v<T>) && (std::is_integral_v<U> || std::is_enum_v<U>)
 {
     const auto max = static_cast<int>(initial_max);
-    return max > 0 ? static_cast<T>(rand_range(0, max - 1)) : -static_cast<T>(rand_range(0, -max - 1));
+    return static_cast<T>(max > 0 ? rand_range(0, max - 1) : -rand_range(0, -max - 1));
 }
 
 template <typename T>

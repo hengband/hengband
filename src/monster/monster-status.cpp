@@ -131,7 +131,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
             break;
         }
 
-        auto notice = (uint32_t)randint0(1024);
+        auto notice = randnum0<uint32_t>(1024);
 
         /* Nightmare monsters are more alert */
         if (ironman_nightmare) {
