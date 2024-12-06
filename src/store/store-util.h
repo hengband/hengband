@@ -51,11 +51,10 @@ public:
 
     void increase_item(short i_idx, int item_num);
     void optimize_item(short i_idx);
+    void delete_item();
 };
 
 extern Store *st_ptr;
 
-class PlayerType;
-void store_delete();
 std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr);
 int store_carry(ItemEntity *o_ptr);

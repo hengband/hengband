@@ -53,10 +53,10 @@ void Store::optimize_item(short i_idx)
 /*!
  * @brief 店舗の品揃え変化のためにアイテムを削除する
  */
-void store_delete()
+void Store::delete_item()
 {
-    const auto what = randnum0<short>(st_ptr->stock_num);
-    int num = st_ptr->stock[what]->number;
+    const auto what = randnum0<short>(this->stock_num);
+    auto num = this->stock[what]->number;
     if (one_in_(2)) {
         num = (num + 1) / 2;
     }
@@ -65,12 +65,12 @@ void store_delete()
         num = 1;
     }
 
-    if (st_ptr->stock[what]->is_wand_rod()) {
-        st_ptr->stock[what]->pval -= num * st_ptr->stock[what]->pval / st_ptr->stock[what]->number;
+    if (this->stock[what]->is_wand_rod()) {
+        this->stock[what]->pval -= num * this->stock[what]->pval / this->stock[what]->number;
     }
 
-    st_ptr->increase_item(what, -num);
-    st_ptr->optimize_item(what);
+    this->increase_item(what, -num);
+    this->optimize_item(what);
 }
 
 /*!

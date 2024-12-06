@@ -426,7 +426,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
     }
 
     while (st_ptr->stock_num > j) {
-        store_delete();
+        st_ptr->delete_item();
     }
 
     remain = STORE_MAX_KEEP - st_ptr->stock_num;
