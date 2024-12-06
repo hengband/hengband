@@ -341,7 +341,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
             continue;
         }
 
-        const auto pvals = store_same_magic_device_pvals(&item);
+        const auto pvals = st_ptr->collect_same_magic_device_pvals(item);
         if (pvals.size() >= 2) {
             auto pval = rand_choice(pvals);
             item.pval = pval;

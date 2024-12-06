@@ -79,16 +79,16 @@ void Store::delete_item()
  * @return plavリスト(充填数)
  * @details 回数の違う杖と魔法棒がスロットを圧迫するのでスロット数制限をかける
  */
-std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr)
+std::vector<short> Store::collect_same_magic_device_pvals(ItemEntity &item)
 {
-    auto list = std::vector<short>();
-    for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
-        auto &item = *st_ptr->stock[i];
-        if ((&item == j_ptr) || (item.bi_id != j_ptr->bi_id) || !item.is_wand_staff()) {
+    std::vector<short> list;
+    for (short i = 0; i < this->stock_num; i++) {
+        auto &item_store = *this->stock[i];
+        if ((&item_store == &item) || (item_store.bi_id != item.bi_id) || !item_store.is_wand_staff()) {
             continue;
         }
 
-        list.push_back(item.pval);
+        list.push_back(item_store.pval);
     }
 
     return list;
