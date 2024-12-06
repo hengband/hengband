@@ -52,7 +52,7 @@ static void init_gf_colors()
 void init_other(PlayerType *player_ptr)
 {
     auto &floor_data = FloorList::get_instance();
-    auto *floor_ptr = &floor_data.get_floor(0);
+    auto *floor_ptr = &floor_data.get_floor();
     player_ptr->current_floor_ptr = floor_ptr; // TODO:本当はこんなところで初期化したくない ← FloorTypeの方で初期化するべき？
 
     max_dlv.assign(dungeons_info.size(), {});
