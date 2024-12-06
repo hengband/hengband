@@ -245,14 +245,18 @@ void reorder_pack(PlayerType *player_ptr)
         return object_sort_comp(player_ptr, item1, item2);
     };
 
+    const auto sort_count = std::min(enum2i(INVEN_PACK), player_ptr->inven_cnt);
+
     auto first = &player_ptr->inventory_list[0];
-    auto last = &player_ptr->inventory_list[player_ptr->inven_cnt];
+    auto last = &player_ptr->inventory_list[sort_count];
 
     if (std::is_sorted(first, last, comp)) {
         return;
     }
 
     std::stable_sort(first, last, comp);
+    RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::INVENTORY);
+
     msg_print(_("ザックの中のアイテムを並べ直した。", "You reorder some items in your pack."));
 }
 
