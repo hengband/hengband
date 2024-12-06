@@ -4,7 +4,6 @@
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/item-entity.h"
-#include "system/player-type-definition.h"
 
 /*!
  * @brief ブラックマーケット用の無価値品の排除判定
@@ -12,7 +11,7 @@
  * @param item 判定したいアイテムへの参照
  * @return ブラックマーケットにとって無価値な品ならばTRUEを返す
  */
-bool black_market_crap(PlayerType *player_ptr, const ItemEntity &item)
+bool black_market_crap(int town_num, const ItemEntity &item)
 {
     if (item.is_ego()) {
         return false;
@@ -30,12 +29,13 @@ bool black_market_crap(PlayerType *player_ptr, const ItemEntity &item)
         return false;
     }
 
+    const auto &town = towns_info[town_num];
     for (auto sst : STORE_SALE_TYPE_LIST) {
-        if (sst == StoreSaleType::HOME || sst == StoreSaleType::MUSEUM) {
+        if ((sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM)) {
             continue;
         }
 
-        const auto &store = towns_info[player_ptr->town_num].get_store(sst);
+        const auto &store = town.get_store(sst);
         for (auto j = 0; j < store.stock_num; j++) {
             if (item.bi_id == store.stock[j]->bi_id) {
                 return true;

@@ -151,40 +151,40 @@ static bool store_item_sort_comp(const ItemEntity &item1, const ItemEntity &item
 
 /*!
  * @brief 店舗にオブジェクトを加える
- * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
- * @return 収めた先の商品インデックス、但し無価値アイテムは店頭に並べない.
+ * @param item 加えたいオブジェクトの構造体参照ポインタ
+ * @return 収めた先の商品インデックス. 但し無価値アイテムはnullopt (店頭に並べない)
  */
-int store_carry(ItemEntity *o_ptr)
+std::optional<int> Store::carry(ItemEntity &item)
 {
-    const auto value = o_ptr->calc_price();
+    const auto value = item.calc_price();
     if (value <= 0) {
-        return -1;
+        return std::nullopt;
     }
 
-    o_ptr->ident |= IDENT_FULL_KNOWN;
-    o_ptr->inscription.reset();
-    o_ptr->feeling = FEEL_NONE;
-    for (auto slot = 0; slot < st_ptr->stock_num; slot++) {
-        auto &item = *st_ptr->stock[slot];
-        if (item.is_similar_for_store(*o_ptr)) {
-            store_object_absorb(item, *o_ptr);
+    item.ident |= IDENT_FULL_KNOWN;
+    item.inscription.reset();
+    item.feeling = FEEL_NONE;
+    for (auto slot = 0; slot < this->stock_num; slot++) {
+        auto &item_store = *this->stock[slot];
+        if (item_store.is_similar_for_store(item)) {
+            store_object_absorb(item_store, item);
             return slot;
         }
     }
 
-    if (st_ptr->stock_num >= st_ptr->stock_size) {
-        return -1;
+    if (this->stock_num >= this->stock_size) {
+        return std::nullopt;
     }
 
-    const auto first = st_ptr->stock.begin();
-    const auto last = first + st_ptr->stock_num;
+    const auto first = this->stock.begin();
+    const auto last = first + this->stock_num;
     const auto slot_it = std::find_if(first, last,
-        [&](const auto &item) { return store_item_sort_comp(*o_ptr, *item); });
+        [&](const auto &item_store) { return store_item_sort_comp(item, *item_store); });
     const auto slot = std::distance(first, slot_it);
 
     std::rotate(first + slot, last, last + 1);
 
-    st_ptr->stock_num++;
-    *st_ptr->stock[slot] = o_ptr->clone();
+    this->stock_num++;
+    *this->stock[slot] = item.clone();
     return slot;
 }

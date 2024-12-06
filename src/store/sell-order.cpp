@@ -31,6 +31,8 @@
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -183,9 +185,10 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             }
 
             inven_item_optimize(player_ptr, i_idx);
-            int item_pos = store_carry(&sold_item);
-            if (item_pos >= 0) {
-                store_top = (item_pos / store_bottom) * store_bottom;
+            auto &store = towns_info[player_ptr->town_num].get_store(store_num);
+            const auto item_pos = store.carry(sold_item);
+            if (item_pos) {
+                store_top = (*item_pos / store_bottom) * store_bottom;
                 display_store_inventory(player_ptr, store_num);
             }
         }
