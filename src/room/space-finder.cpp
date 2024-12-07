@@ -33,12 +33,12 @@ static bool get_is_floor(FloorType *floor_ptr, const Pos2D &pos)
  */
 static void set_floor(PlayerType *player_ptr, const Pos2D &pos)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!in_bounds(&floor, pos.y, pos.x)) {
         return;
     }
 
-    auto &grid = floor_ptr->get_grid(pos);
+    const auto &grid = floor.get_grid(pos);
     if (grid.is_room()) {
         return;
     }
@@ -56,12 +56,12 @@ static void set_floor(PlayerType *player_ptr, const Pos2D &pos)
  */
 static void check_room_boundary(PlayerType *player_ptr, const Pos2D &pos1, const Pos2D &pos2)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     auto count = 0;
-    auto old_is_floor = get_is_floor(floor_ptr, { pos1.y, pos1.x - 1 });
+    auto old_is_floor = get_is_floor(&floor, { pos1.y, pos1.x - 1 });
     bool new_is_floor;
     for (auto x = pos1.x; x <= pos2.x; x++) {
-        new_is_floor = get_is_floor(floor_ptr, { pos1.y - 1, x });
+        new_is_floor = get_is_floor(&floor, { pos1.y - 1, x });
         if (new_is_floor != old_is_floor) {
             count++;
         }
@@ -70,7 +70,7 @@ static void check_room_boundary(PlayerType *player_ptr, const Pos2D &pos1, const
     }
 
     for (auto y = pos1.y; y <= pos2.y; y++) {
-        new_is_floor = get_is_floor(floor_ptr, { y, pos2.x + 1 });
+        new_is_floor = get_is_floor(&floor, { y, pos2.x + 1 });
         if (new_is_floor != old_is_floor) {
             count++;
         }
@@ -79,7 +79,7 @@ static void check_room_boundary(PlayerType *player_ptr, const Pos2D &pos1, const
     }
 
     for (auto x = pos2.x; x >= pos1.x; x--) {
-        new_is_floor = get_is_floor(floor_ptr, { pos2.y + 1, x });
+        new_is_floor = get_is_floor(&floor, { pos2.y + 1, x });
         if (new_is_floor != old_is_floor) {
             count++;
         }
@@ -88,7 +88,7 @@ static void check_room_boundary(PlayerType *player_ptr, const Pos2D &pos1, const
     }
 
     for (auto y = pos2.y; y >= pos1.y; y--) {
-        new_is_floor = get_is_floor(floor_ptr, { y, pos1.x - 1 });
+        new_is_floor = get_is_floor(&floor, { y, pos1.x - 1 });
         if (new_is_floor != old_is_floor) {
             count++;
         }
