@@ -21,12 +21,13 @@
  */
 void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
+    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
-    auto &grid = floor.grid_array[y][x];
-    if (!in_bounds(&floor, y, x)) {
+    auto &grid = floor.get_grid(pos);
+    if (!in_bounds(&floor, pos.y, pos.x)) {
         return;
     }
-    if (!cave_drop_bold(&floor, y, x)) {
+    if (!cave_drop_bold(&floor, pos.y, pos.x)) {
         return;
     }
     if (!grid.o_idx_list.empty()) {
@@ -39,14 +40,13 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
         return;
     }
 
-    auto &item_pop = floor.o_list[o_idx];
-    item_pop = std::move(item);
-    item_pop.iy = y;
-    item_pop.ix = x;
+    item.iy = pos.y;
+    item.ix = pos.x;
+    floor.o_list[o_idx] = std::move(item);
     grid.o_idx_list.add(&floor, o_idx);
 
-    note_spot(player_ptr, y, x);
-    lite_spot(player_ptr, y, x);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
 }
 
 /*!

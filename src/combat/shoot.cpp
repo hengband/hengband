@@ -72,7 +72,7 @@
  * @param arrow_ptr 矢弾のオブジェクト構造体参照ポインタ
  * @return スナイパーの射撃属性、弓矢の属性を考慮する。デフォルトはGF_PLAYER_SHOOT。
  */
-AttributeFlags shot_attribute(PlayerType *player_ptr, ItemEntity *bow_ptr, ItemEntity *arrow_ptr, SPELL_IDX snipe_type)
+static AttributeFlags shot_attribute(PlayerType *player_ptr, ItemEntity *bow_ptr, ItemEntity *arrow_ptr, SPELL_IDX snipe_type)
 {
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_SHOOT);
