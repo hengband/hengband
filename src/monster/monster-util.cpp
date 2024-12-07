@@ -50,16 +50,16 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
 }
 
 /*!
- * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
- * @param floor_ptr フロアへの参照ポインタ
+ * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする
+ * @param dungeon ダンジョンへの参照
+ * @param floor_level 生成階層
  * @param monrace_id チェックするモンスター種族ID
  * @param summon_specific_type summon_specific() によるものの場合、召喚種別を指定する
  * @param is_chameleon_polymorph カメレオンの変身の場合、true
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonraceId monrace_id, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
+static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_level, MonraceId monrace_id, bool has_summon_specific_type, bool is_chameleon_polymorph)
 {
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     if (dungeon.flags.has(DungeonFeatureType::CHAMELEON)) {
         if (is_chameleon_polymorph) {
@@ -93,7 +93,7 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonraceId mo
     }
 
     if (dungeon.flags.has(DungeonFeatureType::BEGINNER)) {
-        if (monrace.level > floor_ptr->dun_level) {
+        if (monrace.level > floor_level) {
             return false;
         }
     }
@@ -102,7 +102,7 @@ static bool restrict_monster_to_dungeon(const FloorType *floor_ptr, MonraceId mo
         return true;
     }
 
-    if (summon_specific_type && dungeon.flags.has_not(DungeonFeatureType::CHAMELEON)) {
+    if (has_summon_specific_type && dungeon.flags.has_not(DungeonFeatureType::CHAMELEON)) {
         return true;
     }
 
@@ -234,6 +234,7 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
     // モンスター生成テーブルの各要素について重みを修正する。
     const auto &system = AngbandSystem::get_instance();
     auto &table = MonraceAllocationTable::get_instance();
+    const auto &dungeon = floor.get_dungeon_definition();
     for (auto &entry : table) {
         const auto monrace_id = entry.index;
 
@@ -273,13 +274,12 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             //   * フェイズアウト状態でない
             //   * 1階かそれより深いところにいる
             //   * ランダムクエスト中でない
-            const bool in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
-            const bool cond = !system.is_phase_out() && floor.dun_level > 0 && !in_random_quest;
-
-            if (cond && !restrict_monster_to_dungeon(&floor, monrace_id, summon_specific_type, is_chameleon_polymorph)) {
+            const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+            const auto cond = !system.is_phase_out() && dungeon_level > 0 && !in_random_quest;
+            if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, summon_specific_type.has_value(), is_chameleon_polymorph)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
-                const int numer = entry.prob2 * floor.get_dungeon_definition().special_div;
+                const int numer = entry.prob2 * dungeon.special_div;
                 const int q = numer / 64;
                 const int r = numer % 64;
                 entry.prob2 = (PROB)(randint0(64) < r ? q + 1 : q);
