@@ -47,7 +47,6 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
-#include "world/world-object.h"
 #include "world/world.h"
 
 /* Old hidden trap flag */
@@ -713,7 +712,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
     auto item_loader = ItemLoaderFactory::create_loader();
     for (int i = 1; i < limit; i++) {
-        OBJECT_IDX o_idx = o_pop(&floor);
+        auto o_idx = floor.pop_empty_index_item();
         if (i != o_idx) {
             load_note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
             return 152;

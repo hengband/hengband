@@ -121,6 +121,7 @@ public:
     void remove_mproc(short m_idx, MonsterTimedEffect mte);
 
     short pop_empty_index_monster();
+    short pop_empty_index_item();
 
 private:
     static int decide_selection_count();

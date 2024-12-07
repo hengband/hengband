@@ -19,7 +19,6 @@
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
-#include "world/world-object.h"
 #include "world/world.h"
 
 FloorType::FloorType()
@@ -434,6 +433,35 @@ short FloorType::pop_empty_index_monster()
 
     if (AngbandWorld::get_instance().character_dungeon) {
         THROW_EXCEPTION(std::runtime_error, _("モンスターが多すぎる！", "Too many monsters!"));
+    }
+
+    return 0;
+}
+
+/*!
+ * @brief アイテム配列から空きを取得する
+ * @return 使われていないアイテムのフロア内インデックス
+ */
+short FloorType::pop_empty_index_item()
+{
+    if (this->o_max < MAX_FLOOR_ITEMS) {
+        const auto i = this->o_max;
+        this->o_max++;
+        this->o_cnt++;
+        return i;
+    }
+
+    for (short i = 1; i < this->o_max; i++) {
+        if (this->o_list[i].is_valid()) {
+            continue;
+        }
+
+        this->o_cnt++;
+        return i;
+    }
+
+    if (AngbandWorld::get_instance().character_dungeon) {
+        THROW_EXCEPTION(std::runtime_error, _("アイテムが多すぎる！", "Too many items!"));
     }
 
     return 0;

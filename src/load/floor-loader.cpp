@@ -29,7 +29,6 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/finalizer.h"
-#include "world/world-object.h"
 
 /*!
  * @brief 保存されたフロアを読み込む / Read the saved floor
@@ -170,7 +169,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     auto item_loader = ItemLoaderFactory::create_loader();
     for (int i = 1; i < limit; i++) {
-        auto o_idx = o_pop(&floor);
+        auto o_idx = floor.pop_empty_index_item();
         if (i != o_idx) {
             return 152;
         }

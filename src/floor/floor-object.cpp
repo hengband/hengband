@@ -39,7 +39,6 @@
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
-#include "world/world-object.h"
 #include "world/world.h"
 
 /*!
@@ -484,7 +483,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     }
 
     if (!done) {
-        o_idx = o_pop(floor_ptr);
+        o_idx = floor_ptr->pop_empty_index_item();
     }
 
     if (!done && !o_idx) {

@@ -7,7 +7,6 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
-#include "world/world-object.h"
 
 /*!
  * @brief フロアの指定位置に生成階に応じた財宝オブジェクトの生成を行う。
@@ -35,7 +34,7 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     auto item = floor.make_gold();
-    const auto o_idx = o_pop(&floor);
+    const auto o_idx = floor.pop_empty_index_item();
     if (o_idx == 0) {
         return;
     }
@@ -70,7 +69,7 @@ void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode
         return;
     }
 
-    OBJECT_IDX o_idx = o_pop(floor_ptr);
+    const auto o_idx = floor_ptr->pop_empty_index_item();
     if (o_idx == 0) {
         return;
     }

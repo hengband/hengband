@@ -64,7 +64,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
-#include "world/world-object.h"
 
 /*!
  * @brief 矢弾の属性を定義する
@@ -933,7 +932,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
         if (stick_to) {
             MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
             auto *m_ptr = &floor_ptr->m_list[m_idx];
-            OBJECT_IDX o_idx = o_pop(floor_ptr);
+            const auto o_idx = floor_ptr->pop_empty_index_item();
 
             if (!o_idx) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), item_name.data());

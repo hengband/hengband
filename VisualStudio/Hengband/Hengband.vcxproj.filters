@@ -770,9 +770,6 @@
     <ClCompile Include="..\..\src\cmd-building\cmd-inn.cpp">
       <Filter>cmd-building</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\world\world-object.cpp">
-      <Filter>world</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\object-boost.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
@@ -3370,9 +3367,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-building\cmd-inn.h">
       <Filter>cmd-building</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\world\world-object.h">
-      <Filter>world</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sv-definition\sv-armor-types.h">
       <Filter>sv-definition</Filter>

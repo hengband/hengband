@@ -36,7 +36,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "window/main-window-util.h"
-#include "world/world-object.h"
 #include "world/world.h"
 
 // PARSE_ERROR_MAXが既にあり扱い辛いのでここでconst宣言.
@@ -64,7 +63,7 @@ qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xm
  */
 static void drop_here(FloorType *floor_ptr, ItemEntity &&item, POSITION y, POSITION x)
 {
-    OBJECT_IDX o_idx = o_pop(floor_ptr);
+    const auto o_idx = floor_ptr->pop_empty_index_item();
     auto &dropped_item = floor_ptr->o_list[o_idx];
     dropped_item = std::move(item);
     dropped_item.iy = y;

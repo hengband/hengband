@@ -31,7 +31,6 @@
 #include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include "world/world-object.h"
 
 void process_eat_gold(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
@@ -137,7 +136,6 @@ static void move_item_to_monster(PlayerType *player_ptr, MonsterAttackPlayer *mo
 void process_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     for (int i = 0; i < 10; i++) {
-        OBJECT_IDX o_idx;
         auto i_idx = randnum0<short>(INVEN_PACK);
         monap_ptr->o_ptr = &player_ptr->inventory_list[i_idx];
         if (!monap_ptr->o_ptr->is_valid()) {
@@ -155,7 +153,7 @@ void process_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         msg_format("%sour %s (%c) was stolen!", ((monap_ptr->o_ptr->number > 1) ? "One of y" : "Y"), item_name.data(), index_to_label(i_idx));
 #endif
         chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
-        o_idx = o_pop(player_ptr->current_floor_ptr);
+        const auto o_idx = player_ptr->current_floor_ptr->pop_empty_index_item();
         move_item_to_monster(player_ptr, monap_ptr, o_idx);
         inven_item_increase(player_ptr, i_idx, -1);
         inven_item_optimize(player_ptr, i_idx);
