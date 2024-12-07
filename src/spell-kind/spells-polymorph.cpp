@@ -82,7 +82,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    MonsterEntity back_m = *m_ptr;
+    const auto back_m = m_ptr->clone();
     new_r_idx = select_polymorph_monrace_id(player_ptr, old_r_idx);
     if (new_r_idx == old_r_idx) {
         return false;
@@ -114,7 +114,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     } else {
         m_idx = place_specific_monster(player_ptr, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN));
         if (m_idx) {
-            floor_ptr->m_list[*m_idx] = back_m;
+            floor_ptr->m_list[*m_idx] = back_m.clone();
             floor_ptr->reset_mproc();
         } else {
             preserve_hold_objects = false;

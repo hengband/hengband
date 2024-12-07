@@ -378,7 +378,9 @@ void clear_cave(PlayerType *player_ptr)
     floor_ptr->o_cnt = 0;
 
     MonraceList::get_instance().reset_current_numbers();
-    std::fill_n(floor_ptr->m_list.begin(), floor_ptr->m_max, MonsterEntity{});
+    for (auto &monster : floor_ptr->m_list) {
+        monster.wipe();
+    }
     floor_ptr->m_max = 1;
     floor_ptr->m_cnt = 0;
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {

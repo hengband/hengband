@@ -94,7 +94,7 @@ MonsterDamageProcessor::MonsterDamageProcessor(PlayerType *player_ptr, MONSTER_I
 bool MonsterDamageProcessor::mon_take_hit(std::string_view note)
 {
     auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    const MonsterEntity exp_mon = monster;
+    const auto exp_mon = monster.clone();
     auto exp_dam = (monster.hp > this->dam) ? this->dam : monster.hp;
     this->get_exp_from_mon(exp_mon, exp_dam);
     if (this->genocide_chaos_patron()) {
