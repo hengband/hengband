@@ -33,14 +33,14 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
         return;
     }
 
-    const auto item = floor.make_gold();
+    auto item = floor.make_gold();
     const auto o_idx = o_pop(&floor);
     if (o_idx == 0) {
         return;
     }
 
     auto &item_pop = floor.o_list[o_idx];
-    item_pop = item;
+    item_pop = std::move(item);
     item_pop.iy = y;
     item_pop.ix = x;
     grid.o_idx_list.add(&floor, o_idx);

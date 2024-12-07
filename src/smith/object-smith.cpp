@@ -345,7 +345,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
     const auto is_fixed_or_random_artifact = o_ptr->is_fixed_or_random_artifact();
 
     // アイテムをエッセンス抽出後の状態にする
-    const ItemEntity old_o = *o_ptr;
+    const ItemEntity old_o = o_ptr->clone();
     o_ptr->generate(o_ptr->bi_id);
     o_ptr->iy = old_o.iy;
     o_ptr->ix = old_o.ix;

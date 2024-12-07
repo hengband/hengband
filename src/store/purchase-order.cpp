@@ -198,7 +198,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     const short item_num = *item_num_opt + store_top;
     auto &item_store = *st_ptr->stock[item_num];
     auto amt = 1;
-    ItemEntity item = item_store;
+    auto item = item_store.clone();
 
     /*
      * If a rod or wand, allocate total maximum timeouts or charges
@@ -223,7 +223,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         }
     }
 
-    item = item_store;
+    item = item_store.clone();
 
     /*
      * If a rod or wand, allocate total maximum timeouts or charges

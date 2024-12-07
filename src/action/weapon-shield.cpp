@@ -39,7 +39,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         }
 
         auto &item_main_hand = player_ptr->inventory_list[INVEN_MAIN_HAND];
-        item_main_hand = item_sub_hand;
+        item_main_hand = item_sub_hand.clone();
         inven_item_increase(player_ptr, INVEN_SUB_HAND, -item_sub_hand.number);
         inven_item_optimize(player_ptr, INVEN_SUB_HAND);
         if (item_main_hand.allow_two_hands_wielding() && can_two_hands_wielding(player_ptr)) {
@@ -73,7 +73,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     }
 
     auto &item_sub_hand = player_ptr->inventory_list[INVEN_SUB_HAND];
-    item_sub_hand = item_main_hand;
+    item_sub_hand = item_main_hand.clone();
     inven_item_increase(player_ptr, INVEN_MAIN_HAND, -item_main_hand.number);
     inven_item_optimize(player_ptr, INVEN_MAIN_HAND);
     msg_format(_("%sを持ち替えた。", "You shifted %s to your other hand."), item_name.data());

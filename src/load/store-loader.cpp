@@ -53,7 +53,7 @@ static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemE
     std::rotate(first + slot, last, last + 1);
 
     store_ptr->stock_num++;
-    *store_ptr->stock[slot] = *o_ptr;
+    *store_ptr->stock[slot] = o_ptr->clone();
     chg_virtue(player_ptr, Virtue::SACRIFICE, -1);
 }
 
@@ -102,7 +102,7 @@ static void rd_store(PlayerType *player_ptr, int town_number_initial, StoreSaleT
             home_carry_load(player_ptr, &store, &item);
         } else {
             int k = store.stock_num++;
-            *store.stock[k] = item;
+            *store.stock[k] = std::move(item);
         }
     }
 }

@@ -77,7 +77,7 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
     std::rotate(first + slot, last, last + 1);
 
     st_ptr->stock_num++;
-    *st_ptr->stock[slot] = *o_ptr;
+    *st_ptr->stock[slot] = o_ptr->clone();
     chg_virtue(player_ptr, Virtue::SACRIFICE, -1);
     (void)combine_and_reorder_home(player_ptr, store_num);
     return slot;

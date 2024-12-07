@@ -38,6 +38,9 @@ public:
     ItemEntity();
     ItemEntity(short bi_id);
     ItemEntity(const BaseitemKey &bi_key);
+    ItemEntity(ItemEntity &&) = default;
+    ItemEntity &operator=(ItemEntity &&) = default;
+
     short bi_id{}; /*!< ベースアイテムID (0は、不具合調査用の無効アイテム または 何も装備していない箇所のアイテム であることを示す) */
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
@@ -176,6 +179,9 @@ public:
     void absorb(ItemEntity &other);
 
 private:
+    ItemEntity(const ItemEntity &) = default;
+    ItemEntity &operator=(const ItemEntity &) = default;
+
     int get_baseitem_price() const;
     int calc_figurine_value() const;
     int calc_capture_value() const;

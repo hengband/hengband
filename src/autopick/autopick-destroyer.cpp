@@ -155,7 +155,7 @@ void auto_destroy_item(PlayerType *player_ptr, ItemEntity *o_ptr, int autopick_i
         return;
     }
 
-    autopick_last_destroyed_object = *o_ptr;
+    autopick_last_destroyed_object = o_ptr->clone();
     o_ptr->marked.set(OmType::AUTODESTROY);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::AUTO_DESTRUCTION);
 }

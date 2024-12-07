@@ -190,7 +190,7 @@ static void process_destroy_magic_book(PlayerType *player_ptr, const ItemEntity 
 
 static void exe_destroy_item(PlayerType *player_ptr, ItemEntity &destroying_item, short i_idx, int amount)
 {
-    ItemEntity destroyed_item = destroying_item;
+    auto destroyed_item = destroying_item.clone();
     destroyed_item.number = amount;
     const auto item_name = describe_flavor(player_ptr, destroyed_item, 0);
     msg_format(_("%sを壊した。", "You destroy %s."), item_name.data());

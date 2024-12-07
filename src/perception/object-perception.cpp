@@ -37,8 +37,6 @@ void object_aware(PlayerType *player_ptr, const ItemEntity &item)
     }
 
     // playrecordに識別したアイテムを記録
-    ItemEntity item_record = item;
-    item_record.number = 1;
-    const auto item_name = describe_flavor(player_ptr, item_record, OD_NAME_ONLY);
+    const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY | OD_OMIT_PREFIX);
     exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::FOUND, 0, item_name);
 }

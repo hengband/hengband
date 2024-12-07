@@ -173,7 +173,7 @@ void do_cmd_store(PlayerType *player_ptr)
                 leave_store = true;
             } else {
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
-                ItemEntity item = item_inventory;
+                auto item = item_inventory.clone();
                 const auto item_name = describe_flavor(player_ptr, item, 0);
                 msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
                 vary_item(player_ptr, i_idx, -255);
