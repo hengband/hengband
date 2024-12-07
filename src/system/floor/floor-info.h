@@ -120,6 +120,8 @@ public:
     void add_mproc(short m_idx, MonsterTimedEffect mte);
     void remove_mproc(short m_idx, MonsterTimedEffect mte);
 
+    short pop_empty_index_monster();
+
 private:
     static int decide_selection_count();
 };

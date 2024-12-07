@@ -273,7 +273,8 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
         reset_bits(mode, PM_KAGE);
     }
 
-    grid.m_idx = m_pop(&floor);
+    const auto m_idx = floor.pop_empty_index_monster();
+    grid.m_idx = m_idx;
     if (!grid.has_monster()) {
         return std::nullopt;
     }

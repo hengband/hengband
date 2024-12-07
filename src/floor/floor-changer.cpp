@@ -79,7 +79,7 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     if (current_monster == 0) {
-        MONSTER_IDX m_idx = m_pop(floor_ptr);
+        const auto m_idx = floor_ptr->pop_empty_index_monster();
         player_ptr->riding = m_idx;
         if (m_idx) {
             *cy = player_ptr->y;
@@ -104,7 +104,8 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
         }
     }
 
-    return (d == 6) ? 0 : m_pop(floor_ptr);
+    const auto m_idx = floor_ptr->pop_empty_index_monster();
+    return (d == 6) ? 0 : m_idx;
 }
 
 static MonraceDefinition &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
