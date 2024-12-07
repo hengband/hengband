@@ -2,7 +2,7 @@
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "melee/melee-switcher.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"

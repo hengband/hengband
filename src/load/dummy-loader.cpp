@@ -3,7 +3,7 @@
 #include "load/load-util.h"
 #include "load/monster/monster-loader-factory.h"
 #include "load/old/monster-loader-savefile50.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 

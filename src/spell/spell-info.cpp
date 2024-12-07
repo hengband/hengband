@@ -9,7 +9,7 @@
 #include "player/player-status.h"
 #include "realm/realm-types.h"
 #include "spell/spells-execution.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"

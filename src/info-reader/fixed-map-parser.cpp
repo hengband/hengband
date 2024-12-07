@@ -19,7 +19,7 @@
 #include "player/player-realm.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"

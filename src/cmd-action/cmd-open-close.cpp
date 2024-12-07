@@ -21,7 +21,7 @@
 #include "status/action-setter.h"
 #include "status/experience.h"
 #include "system/enums/grid-count-kind.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"

@@ -1,12 +1,13 @@
 #include "store/home.h"
 #include "avatar/avatar.h"
-#include "floor/floor-town.h"
 #include "game-option/birth-options.h"
 #include "game-option/game-play-options.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
 #include "store/store-util.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/object-sort.h"
@@ -160,7 +161,7 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
     auto old_stack_force_notes = stack_force_notes;
     auto old_stack_force_costs = stack_force_costs;
     auto *old_st_ptr = st_ptr;
-    st_ptr = &towns_info[1].stores[store_num];
+    st_ptr = &towns_info[1].get_store(store_num);
     auto flag = false;
     if (store_num != StoreSaleType::HOME) {
         stack_force_notes = false;

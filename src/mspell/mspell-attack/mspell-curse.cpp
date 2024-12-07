@@ -9,7 +9,7 @@
 #include "mspell/mspell-data.h"
 #include "mspell/mspell-result.h"
 #include "mspell/mspell-util.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 

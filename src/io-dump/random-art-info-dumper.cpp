@@ -1,9 +1,10 @@
 #include "io-dump/random-art-info-dumper.h"
-#include "floor/floor-town.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "perception/object-perception.h"
 #include "store/store-util.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -90,15 +91,15 @@ void spoil_random_artifact(PlayerType *player_ptr)
                 spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
 
-            const auto *store_ptr = &towns_info[1].stores[StoreSaleType::HOME];
-            for (int i = 0; i < store_ptr->stock_num; i++) {
-                auto &item = *store_ptr->stock[i];
+            const auto &home = towns_info[1].get_store(StoreSaleType::HOME);
+            for (int i = 0; i < home.stock_num; i++) {
+                auto &item = *home.stock[i];
                 spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
 
-            store_ptr = &towns_info[1].stores[StoreSaleType::MUSEUM];
-            for (int i = 0; i < store_ptr->stock_num; i++) {
-                auto &item = *store_ptr->stock[i];
+            const auto &museum = towns_info[1].get_store(StoreSaleType::MUSEUM);
+            for (int i = 0; i < museum.stock_num; i++) {
+                auto &item = *museum.stock[i];
                 spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
         }

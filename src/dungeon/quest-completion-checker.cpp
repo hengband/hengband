@@ -10,7 +10,7 @@
 #include "monster/monster-info.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"

@@ -1,10 +1,11 @@
 #include "core/turn-compensator.h"
-#include "floor/floor-town.h"
 #include "player-info/race-types.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/inner-game-data.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -52,18 +53,18 @@ void prevent_turn_overflow(PlayerType *player_ptr)
 
     for (size_t i = 1; i < towns_info.size(); i++) {
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            auto *store_ptr = &towns_info[i].stores[sst];
-            if (store_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS) {
-                store_ptr->last_visit -= rollback_turns;
-                if (store_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) {
-                    store_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
+            auto &store = towns_info[i].get_store(sst);
+            if (store.last_visit > -10L * TURNS_PER_TICK * STORE_TICKS) {
+                store.last_visit -= rollback_turns;
+                if (store.last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) {
+                    store.last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
                 }
             }
 
-            if (store_ptr->store_open) {
-                store_ptr->store_open -= rollback_turns;
-                if (store_ptr->store_open < 1) {
-                    store_ptr->store_open = 1;
+            if (store.store_open) {
+                store.store_open -= rollback_turns;
+                if (store.store_open < 1) {
+                    store.store_open = 1;
                 }
             }
         }

@@ -14,7 +14,6 @@
 #include "save/save.h"
 #include "core/object-compressor.h"
 #include "dungeon/quest.h"
-#include "floor/floor-town.h"
 #include "floor/wild.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
@@ -35,7 +34,9 @@
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
@@ -217,7 +218,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_u16b(tmp16u);
     for (size_t i = 1; i < towns_info.size(); i++) {
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            wr_store(&towns_info[i].stores[sst]);
+            wr_store(&towns_info[i].get_store(sst));
         }
     }
 

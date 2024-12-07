@@ -18,7 +18,7 @@
 #include "monster/smart-learn-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-mark-types.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"

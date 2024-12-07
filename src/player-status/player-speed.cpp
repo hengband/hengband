@@ -21,7 +21,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-types.h"
 #include "spell-realm/spells-hex.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"

@@ -214,13 +214,11 @@ hengband_SOURCES = \
 	floor/floor-generator-util.h \
 	floor/floor-generator.cpp floor/floor-generator.h \
 	floor/floor-leaver.cpp floor/floor-leaver.h \
-	floor/floor-list.cpp floor/floor-list.h \
 	floor/floor-mode-changer.cpp floor/floor-mode-changer.h \
 	floor/floor-object.cpp floor/floor-object.h \
 	floor/floor-save.cpp floor/floor-save.h \
 	floor/floor-save-util.cpp floor/floor-save-util.h \
 	floor/floor-streams.cpp floor/floor-streams.h \
-	floor/floor-town.h floor/floor-town.cpp \
 	floor/floor-util.cpp floor/floor-util.h \
 	floor/geometry.cpp floor/geometry.h \
 	floor/line-of-sight.cpp floor/line-of-sight.h \
@@ -922,7 +920,6 @@ hengband_SOURCES = \
 	system/angband-version.cpp system/angband-version.h \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
-	system/floor-type-definition.cpp system/floor-type-definition.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
@@ -950,6 +947,11 @@ hengband_SOURCES = \
 	system/enums/grid-flow.h \
 	system/enums/monrace/monrace-id.h \
 	system/enums/grid-count-kind.h \
+	\
+	system/floor/floor-info.cpp system/floor/floor-info.h \
+	system/floor/floor-list.cpp system/floor/floor-list.h \
+	system/floor/town-info.cpp system/floor/town-info.h \
+	system/floor/town-list.cpp system/floor/town-list.h \
 	\
 	system/monrace/monrace-allocation.cpp system/monrace/monrace-allocation.h \
 	system/monrace/monrace-definition.cpp system/monrace/monrace-definition.h \

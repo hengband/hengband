@@ -2,7 +2,7 @@
 #include "monster/monster-describer.h"
 #include "pet/pet-fall-off.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"

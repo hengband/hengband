@@ -17,7 +17,7 @@
 #include "io/uid-checker.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"

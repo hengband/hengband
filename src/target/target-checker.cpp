@@ -16,7 +16,7 @@
 #include "game-option/map-screen-options.h"
 #include "io/cursor.h"
 #include "io/screen-util.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"

@@ -8,7 +8,7 @@
 #include "main/music-definitions-table.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
 

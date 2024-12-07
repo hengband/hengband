@@ -4,7 +4,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "monster/monster-status.h"
 #include "player-info/equipment-info.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"

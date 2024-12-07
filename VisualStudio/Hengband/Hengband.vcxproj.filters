@@ -356,9 +356,6 @@
     <ClCompile Include="..\..\src\floor\floor-streams.cpp">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-town.cpp">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object\object-broken.cpp">
       <Filter>object</Filter>
     </ClCompile>
@@ -2436,9 +2433,6 @@
     <ClCompile Include="..\..\src\system\spell-info-list.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\floor-type-definition.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\system\terrain-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -2502,9 +2496,6 @@
     <ClCompile Include="..\..\src\market\melee-arena.cpp">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\floor-list.cpp">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-timed-effects.cpp">
       <Filter>monster</Filter>
     </ClCompile>
@@ -2549,6 +2540,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\system\monrace\monrace-definition.cpp">
       <Filter>system\monrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\floor\floor-definition.cpp">
+      <Filter>system\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\floor\floor-list.cpp">
+      <Filter>system\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\floor\town-info.cpp">
+      <Filter>system\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\floor\town-list.cpp">
+      <Filter>system\floor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2931,9 +2934,6 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-streams.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor\floor-town.h">
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-broken.h">
@@ -4385,9 +4385,6 @@
     <ClInclude Include="..\..\src\floor\floor-base-definitions.h">
       <Filter>floor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\floor-type-definition.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h">
       <Filter>dungeon</Filter>
     </ClInclude>
@@ -5463,9 +5460,6 @@
     <ClInclude Include="..\..\src\market\melee-arena.h">
       <Filter>market</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\floor\floor-list.h">
-      <Filter>floor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\save\monster-entity-writer.h">
       <Filter>save</Filter>
     </ClInclude>
@@ -5519,6 +5513,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\monrace\monrace-definition.h">
       <Filter>system\monrace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\floor\floor-definition.h">
+      <Filter>system\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\floor\floor-list.h">
+      <Filter>system\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\floor\town-info.h">
+      <Filter>system\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\floor\town-list.h">
+      <Filter>system\floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -5804,6 +5810,9 @@
     </Filter>
     <Filter Include="system\monrace">
       <UniqueIdentifier>{aeee8301-7122-495a-938a-9425333f0414}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\floor">
+      <UniqueIdentifier>{b3a079dd-fd7e-41d6-8dcd-667b977c7ec1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

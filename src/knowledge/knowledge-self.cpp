@@ -9,7 +9,6 @@
 #include "birth/birth-explanations-table.h"
 #include "core/show-file.h"
 #include "flavor/flavor-describer.h"
-#include "floor/floor-town.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io-dump/dump-util.h"
 #include "player-info/alignment.h"
@@ -19,6 +18,8 @@
 #include "player/player-status-table.h"
 #include "player/race-info-table.h"
 #include "store/store-util.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -197,7 +198,7 @@ void do_cmd_knowledge_home(PlayerType *player_ptr)
     }
 
     constexpr auto home_inventory = _("我が家のアイテム", "Home Inventory");
-    const auto &store = towns_info[1].stores[StoreSaleType::HOME];
+    const auto &store = towns_info[1].get_store(StoreSaleType::HOME);
     if (store.stock_num == 0) {
         angband_fclose(fff);
         FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, home_inventory);

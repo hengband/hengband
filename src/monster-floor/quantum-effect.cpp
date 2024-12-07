@@ -10,7 +10,7 @@
 #include "mspell/assign-monster-spell.h"
 #include "mspell/mspell-result.h"
 #include "spell-kind/spells-teleport.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"

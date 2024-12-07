@@ -3,7 +3,7 @@
 #include "game-option/cheat-types.h"
 #include "io/write-diary.h"
 #include "system/angband-exceptions.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include <array>

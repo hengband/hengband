@@ -5,7 +5,7 @@
 #include "grid/feature-flag-types.h"
 #include "spell-class/spells-mirror-master.h"
 #include "system/angband-system.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"

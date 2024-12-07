@@ -272,7 +272,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
-    <ClCompile Include="..\..\src\floor\floor-list.cpp" />
+    <ClCompile Include="..\..\src\system\floor\floor-list.cpp" />
     <ClCompile Include="..\..\src\item-info\flavor-initializer.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-base.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-factory.cpp" />
@@ -330,10 +330,11 @@
     <ClCompile Include="..\..\src\system\baseitem\baseitem-list.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-list.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-record.cpp" />
+    <ClCompile Include="..\..\src\system\floor\town-list.cpp" />
     <ClCompile Include="..\..\src\system\inner-game-data.cpp" />
     <ClCompile Include="..\..\src\system\monrace\monrace-list.cpp" />
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
-    <ClCompile Include="..\..\src\system\floor-type-definition.cpp" />
+    <ClCompile Include="..\..\src\system\floor\floor-info.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
     <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
@@ -892,7 +893,7 @@
     <ClCompile Include="..\..\src\floor\floor-events.cpp" />
     <ClCompile Include="..\..\src\floor\floor-generator.cpp" />
     <ClCompile Include="..\..\src\floor\floor-save.cpp" />
-    <ClCompile Include="..\..\src\floor\floor-town.cpp" />
+    <ClCompile Include="..\..\src\system\floor\town-info.cpp" />
     <ClCompile Include="..\..\src\floor\geometry.cpp" />
     <ClCompile Include="..\..\src\birth\history.cpp" />
     <ClCompile Include="..\..\src\monster\horror-descriptions.cpp" />
@@ -992,7 +993,7 @@
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\external-lib\include-json.h" />
     <ClInclude Include="..\..\src\external-lib\json.hpp" />
-    <ClInclude Include="..\..\src\floor\floor-list.h" />
+    <ClInclude Include="..\..\src\system\floor\floor-list.h" />
     <ClInclude Include="..\..\src\item-info\flavor-initializer.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-version-types.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-base.h" />
@@ -1433,6 +1434,7 @@
     <ClInclude Include="..\..\src\store\purchase-order.h" />
     <ClInclude Include="..\..\src\store\sell-order.h" />
     <ClInclude Include="..\..\src\store\service-checker.h" />
+    <ClInclude Include="..\..\src\system\floor\town-list.h" />
     <ClInclude Include="..\..\src\system\monrace\monrace-allocation.h" />
     <ClInclude Include="..\..\src\system\angband-exceptions.h" />
     <ClInclude Include="..\..\src\system\angband-system.h" />
@@ -1447,7 +1449,7 @@
     <ClInclude Include="..\..\src\system\monrace\monrace-list.h" />
     <ClInclude Include="..\..\src\system\redrawing-flags-updater.h" />
     <ClInclude Include="..\..\src\system\dungeon\dungeon-data-definition.h" />
-    <ClInclude Include="..\..\src\system\floor-type-definition.h" />
+    <ClInclude Include="..\..\src\system\floor\floor-info.h" />
     <ClInclude Include="..\..\src\system\grid-type-definition.h" />
     <ClInclude Include="..\..\src\system\player-type-definition.h" />
     <ClInclude Include="..\..\src\system\services\baseitem-monrace-service.h" />
@@ -1983,7 +1985,7 @@
     <ClInclude Include="..\..\src\floor\floor-events.h" />
     <ClInclude Include="..\..\src\floor\floor-generator.h" />
     <ClInclude Include="..\..\src\floor\floor-save.h" />
-    <ClInclude Include="..\..\src\floor\floor-town.h" />
+    <ClInclude Include="..\..\src\system\floor\town-info.h" />
     <ClInclude Include="..\..\src\system\gamevalue.h" />
     <ClInclude Include="..\..\src\floor\geometry.h" />
     <ClInclude Include="..\..\src\grid\grid.h" />

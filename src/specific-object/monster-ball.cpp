@@ -10,7 +10,7 @@
 #include "pet/pet-util.h"
 #include "racial/racial-android.h"
 #include "spell-kind/spells-launcher.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
