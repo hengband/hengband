@@ -28,7 +28,7 @@
  * Also note that it may not correctly "adapt" to "knowledge" bacoming
  * known, the player may have to pick stuff up and drop it again.
  */
-static void home_carry_load(PlayerType *player_ptr, store_type *store_ptr, ItemEntity *o_ptr)
+static void home_carry_load(PlayerType *player_ptr, Store *store_ptr, ItemEntity *o_ptr)
 {
     for (auto i = 0; i < store_ptr->stock_num; i++) {
         auto &item = *store_ptr->stock[i];

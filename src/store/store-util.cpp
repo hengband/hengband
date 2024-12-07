@@ -12,7 +12,7 @@
 #include "system/item-entity.h"
 #include <algorithm>
 
-store_type *st_ptr = nullptr;
+Store *st_ptr = nullptr;
 
 /*!
  * @brief 店舗のオブジェクト数を増やす

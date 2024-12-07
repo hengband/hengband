@@ -9,14 +9,16 @@
  * stores and buildings
  */
 enum class StoreSaleType : int;
-struct town_type {
+class TownInfo {
 public:
+    TownInfo() = default;
+
     std::string name;
 
-    store_type &get_store(StoreSaleType sst);
-    const store_type &get_store(StoreSaleType sst) const;
-    store_type &emplace(StoreSaleType sst);
+    Store &get_store(StoreSaleType sst);
+    const Store &get_store(StoreSaleType sst) const;
+    Store &emplace(StoreSaleType sst);
 
 private:
-    std::map<StoreSaleType, store_type> stores;
+    std::map<StoreSaleType, Store> stores;
 };
