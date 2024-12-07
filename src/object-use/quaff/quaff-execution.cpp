@@ -122,8 +122,7 @@ bool ObjectQuaffEntity::can_quaff()
 
 ItemEntity ObjectQuaffEntity::copy_object(const INVENTORY_IDX i_idx)
 {
-    auto *tmp_o_ptr = ref_item(this->player_ptr, i_idx);
-    ItemEntity o_val = *tmp_o_ptr;
+    auto o_val = ref_item(this->player_ptr, i_idx)->clone();
     o_val.number = 1;
     return o_val;
 }

@@ -583,7 +583,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
         return false;
     }
 
-    ItemEntity item = *o_ptr;
+    auto item = o_ptr->clone();
     inven_item_increase(player_ptr, slot, (0 - o_ptr->number));
     inven_item_optimize(player_ptr, slot);
 

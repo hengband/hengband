@@ -186,6 +186,6 @@ int store_carry(ItemEntity *o_ptr)
     std::rotate(first + slot, last, last + 1);
 
     st_ptr->stock_num++;
-    *st_ptr->stock[slot] = *o_ptr;
+    *st_ptr->stock[slot] = o_ptr->clone();
     return slot;
 }
