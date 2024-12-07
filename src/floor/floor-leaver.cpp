@@ -48,7 +48,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     } else {
-        party_mon[0] = *m_ptr;
+        party_mon[0] = m_ptr->clone();
         delete_monster_idx(player_ptr, player_ptr->riding);
     }
 }
@@ -90,7 +90,7 @@ static void sweep_preserving_pet(PlayerType *player_ptr)
             continue;
         }
 
-        party_mon[party_monster_num] = player_ptr->current_floor_ptr->m_list[i];
+        party_mon[party_monster_num] = player_ptr->current_floor_ptr->m_list[i].clone();
         party_monster_num++;
         delete_monster_idx(player_ptr, i);
     }

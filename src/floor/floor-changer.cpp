@@ -112,7 +112,7 @@ static MonraceDefinition &set_pet_params(PlayerType *player_ptr, const int curre
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
     m_ptr->r_idx = party_mon[current_monster].r_idx;
-    *m_ptr = party_mon[current_monster];
+    *m_ptr = party_mon[current_monster].clone();
     m_ptr->fy = cy;
     m_ptr->fx = cx;
     m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
@@ -165,7 +165,9 @@ static void place_pet(PlayerType *player_ptr)
         }
     }
 
-    std::fill(std::begin(party_mon), std::end(party_mon), MonsterEntity{});
+    for (auto &monster : party_mon) {
+        monster.wipe();
+    }
 }
 
 /*!

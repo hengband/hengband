@@ -45,6 +45,16 @@ bool MonsterEntity::check_sub_alignments(const byte sub_align1, const byte sub_a
     return this_good;
 }
 
+void MonsterEntity::wipe()
+{
+    *this = {};
+}
+
+MonsterEntity MonsterEntity::clone() const
+{
+    return *this;
+}
+
 bool MonsterEntity::is_friendly() const
 {
     return this->mflag2.has(MonsterConstantFlagType::FRIENDLY);
