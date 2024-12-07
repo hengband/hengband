@@ -221,13 +221,12 @@ bool build_type16(PlayerType *player_ptr, DungeonData *dd_ptr)
         return false;
     }
 
-    int yval;
-    int xval;
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, town_hgt + 4, town_wid + 4)) {
+    const auto center = find_space(player_ptr, dd_ptr, town_hgt + 4, town_wid + 4);
+    if (!center) {
         return false;
     }
 
-    const Pos2D pos(yval - (town_hgt / 2), xval - (town_wid / 2));
+    const Pos2D pos(center->y - (town_hgt / 2), center->x - (town_wid / 2));
     const Pos2DVec vec_top_left(town_hgt / 3, town_wid / 3);
     const auto top_left = pos + vec_top_left;
     const Pos2DVec vec_bottom_right(town_hgt * 2 / 3, town_wid * 2 / 3);

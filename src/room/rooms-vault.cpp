@@ -916,9 +916,8 @@ bool build_type10(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto xsize = randint1(22) + 22;
     const auto ysize = randint1(11) + 11;
-    int y;
-    int x;
-    if (!find_space(player_ptr, dd_ptr, &y, &x, ysize + 1, xsize + 1)) {
+    const auto center = find_space(player_ptr, dd_ptr, ysize + 1, xsize + 1);
+    if (!center) {
         return false;
     }
 
@@ -930,34 +929,34 @@ bool build_type10(PlayerType *player_ptr, DungeonData *dd_ptr)
     switch (vault_type) {
     case 1:
     case 9:
-        build_bubble_vault(player_ptr, { y, x }, { ysize, xsize });
+        build_bubble_vault(player_ptr, *center, { ysize, xsize });
         break;
     case 2:
     case 10:
-        build_room_vault(player_ptr, x, y, xsize, ysize);
+        build_room_vault(player_ptr, center->x, center->y, xsize, ysize);
         break;
     case 3:
     case 11:
-        build_cave_vault(player_ptr, x, y, xsize, ysize);
+        build_cave_vault(player_ptr, center->x, center->y, xsize, ysize);
         break;
     case 4:
     case 12:
-        build_maze_vault(player_ptr, x, y, xsize, ysize, true);
+        build_maze_vault(player_ptr, center->x, center->y, xsize, ysize, true);
         break;
     case 5:
     case 13:
-        build_mini_c_vault(player_ptr, x, y, xsize, ysize);
+        build_mini_c_vault(player_ptr, center->x, center->y, xsize, ysize);
         break;
     case 6:
     case 14:
-        build_castle_vault(player_ptr, x, y, xsize, ysize);
+        build_castle_vault(player_ptr, center->x, center->y, xsize, ysize);
         break;
     case 7:
     case 15:
-        build_target_vault(player_ptr, x, y, xsize, ysize);
+        build_target_vault(player_ptr, center->x, center->y, xsize, ysize);
         break;
     case 8:
-        build_elemental_vault(player_ptr, x, y, xsize, ysize);
+        build_elemental_vault(player_ptr, center->x, center->y, xsize, ysize);
         break;
     default:
         return false;
@@ -1007,14 +1006,12 @@ bool build_fixed_room(PlayerType *player_ptr, DungeonData *dd_ptr, int typ, bool
      */
     const auto xsize = more_space ? std::abs(x) + 2 : std::abs(x);
     const auto ysize = more_space ? std::abs(y) + 2 : std::abs(y);
-    /* Find and reserve some space in the dungeon.  Get center of room. */
-    int yval;
-    int xval;
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize, xsize)) {
+    const auto center = find_space(player_ptr, dd_ptr, ysize, xsize);
+    if (!center) {
         return false;
     }
 
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, _("固定部屋(%s)を生成しました。", "Fixed room (%s)."), vault.name.data());
-    build_vault(player_ptr, yval, xval, vault.hgt, vault.wid, vault.text.data(), x_offset, y_offset, num_transformation);
+    build_vault(player_ptr, center->y, center->x, vault.hgt, vault.wid, vault.text.data(), x_offset, y_offset, num_transformation);
     return true;
 }

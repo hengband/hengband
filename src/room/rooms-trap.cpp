@@ -30,10 +30,8 @@ bool build_type14(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto xsize = room_seed_x1 + room_seed_x2 + 1;
     const auto ysize = room_seed_y1 + room_seed_y2 + 1;
 
-    /* Find and reserve some space in the dungeon.  Get center of room. */
-    int yval;
-    int xval;
-    if (!find_space(player_ptr, dd_ptr, &yval, &xval, ysize + 2, xsize + 2)) {
+    const auto center = find_space(player_ptr, dd_ptr, ysize + 2, xsize + 2);
+    if (!center) {
         return false;
     }
 
@@ -42,10 +40,10 @@ bool build_type14(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto light = ((floor.dun_level <= randint1(25)) && floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Get corner values */
-    const auto y1 = yval - ysize / 2;
-    const auto x1 = xval - xsize / 2;
-    const auto y2 = yval + (ysize - 1) / 2;
-    const auto x2 = xval + (xsize - 1) / 2;
+    const auto y1 = center->y - ysize / 2;
+    const auto x1 = center->x - xsize / 2;
+    const auto y2 = center->y + (ysize - 1) / 2;
+    const auto x2 = center->x + (xsize - 1) / 2;
 
     /* Place a full floor under the room */
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
@@ -71,8 +69,8 @@ bool build_type14(PlayerType *player_ptr, DungeonData *dd_ptr)
     }
 
     const auto trap = floor.dun_level < 30 + randint1(30) ? feat_trap_piranha : feat_trap_armageddon;
-    const auto trap_y = rand_spread(yval, ysize / 4);
-    const auto trap_x = rand_spread(xval, xsize / 4);
+    const auto trap_y = rand_spread(center->y, ysize / 4);
+    const auto trap_x = rand_spread(center->x, xsize / 4);
     auto &grid = floor.get_grid({ trap_y, trap_x });
     grid.mimic = grid.feat;
     grid.feat = trap;

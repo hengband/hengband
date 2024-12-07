@@ -182,12 +182,12 @@ static bool find_space_aux(DungeonData *dd_ptr, const Pos2D &max_block_size, con
  * Return TRUE and values for the center of the room if all went well.\n
  * Otherwise, return FALSE.\n
  */
-bool find_space(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width)
+std::optional<Pos2D> find_space(PlayerType *player_ptr, DungeonData *dd_ptr, int height, int width)
 {
     const auto blocks_high = 1 + ((height - 1) / BLOCK_HGT);
     const auto blocks_wide = 1 + ((width - 1) / BLOCK_WID);
     if ((dd_ptr->row_rooms < blocks_high) || (dd_ptr->col_rooms < blocks_wide)) {
-        return false;
+        return std::nullopt;
     }
 
     auto candidates = 0;
@@ -201,7 +201,7 @@ bool find_space(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y, POSITI
     }
 
     if (candidates == 0) {
-        return false;
+        return std::nullopt;
     }
 
     auto block_y = 0;
@@ -228,9 +228,7 @@ bool find_space(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y, POSITI
     const auto bx1 = block_x;
     const auto by2 = block_y + blocks_high;
     const auto bx2 = block_x + blocks_wide;
-    *y = ((by1 + by2) * BLOCK_HGT) / 2;
-    *x = ((bx1 + bx2) * BLOCK_WID) / 2;
-    const Pos2D pos(*y, *x);
+    const Pos2D pos(((by1 + by2) * BLOCK_HGT) / 2, ((bx1 + bx2) * BLOCK_WID) / 2);
     if (dd_ptr->cent_n < dd_ptr->centers.size()) {
         dd_ptr->centers[dd_ptr->cent_n] = pos;
         dd_ptr->cent_n++;
@@ -246,6 +244,8 @@ bool find_space(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y, POSITI
         }
     }
 
-    check_room_boundary(player_ptr, { *y - height / 2 - 1, *x - width / 2 - 1 }, { *y + (height - 1) / 2 + 1, *x + (width - 1) / 2 + 1 });
-    return true;
+    const Pos2D pos1(pos.y - height / 2 - 1, pos.x - width / 2 - 1);
+    const Pos2D pos2(pos.y + (height - 1) / 2 + 1, pos.x + (width - 1) / 2 + 1);
+    check_room_boundary(player_ptr, pos1, pos2);
+    return pos;
 }
