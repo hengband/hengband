@@ -169,15 +169,15 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     auto item_loader = ItemLoaderFactory::create_loader();
     for (int i = 1; i < limit; i++) {
-        auto o_idx = floor.pop_empty_index_item();
-        if (i != o_idx) {
+        const auto item_idx = floor.pop_empty_index_item();
+        if (i != item_idx) {
             return 152;
         }
 
-        auto &item = floor.o_list[o_idx];
+        auto &item = floor.o_list[item_idx];
         item_loader->rd_item(&item);
-        auto &list = get_o_idx_list_contains(&floor, o_idx);
-        list.add(&floor, o_idx, item.stack_idx);
+        auto &list = get_o_idx_list_contains(&floor, item_idx);
+        list.add(&floor, item_idx, item.stack_idx);
     }
 
     limit = rd_u16b();

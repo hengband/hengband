@@ -712,16 +712,16 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
     auto item_loader = ItemLoaderFactory::create_loader();
     for (int i = 1; i < limit; i++) {
-        auto o_idx = floor.pop_empty_index_item();
-        if (i != o_idx) {
-            load_note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
+        const auto item_idx = floor.pop_empty_index_item();
+        if (i != item_idx) {
+            load_note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, item_idx));
             return 152;
         }
 
-        auto &item = floor.o_list[o_idx];
+        auto &item = floor.o_list[item_idx];
         item_loader->rd_item(&item);
-        auto &list = get_o_idx_list_contains(&floor, o_idx);
-        list.add(&floor, o_idx);
+        auto &list = get_o_idx_list_contains(&floor, item_idx);
+        list.add(&floor, item_idx);
     }
 
     limit = rd_u16b();
