@@ -1,5 +1,4 @@
 #pragma once
 
 class ItemEntity;
-class PlayerType;
-bool black_market_crap(PlayerType *player_ptr, const ItemEntity &item);
+bool black_market_crap(int town_num, const ItemEntity &item);

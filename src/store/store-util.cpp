@@ -19,9 +19,9 @@ Store *st_ptr = nullptr;
  * @param i_idx 増やしたいアイテムのインベントリID
  * @param num 増やしたい数
  */
-void store_item_increase(short i_idx, int item_num)
+void Store::increase_item(short i_idx, int item_num)
 {
-    auto &item = *st_ptr->stock[i_idx];
+    auto &item = *this->stock[i_idx];
     auto cnt = item.number + item_num;
     if (cnt > 255) {
         cnt = 255;
@@ -35,29 +35,28 @@ void store_item_increase(short i_idx, int item_num)
 
 /*!
  * @brief 店舗のオブジェクト数を削除する
- * @param i_idx 削除したいアイテムのID
+ * @param i_idx 削除したいアイテムのインデックス
  */
-void store_item_optimize(short i_idx)
+void Store::optimize_item(short i_idx)
 {
-    const auto &item = *st_ptr->stock[i_idx];
+    const auto &item = *this->stock[i_idx];
     if (!item.is_valid() || (item.number != 0)) {
         return;
     }
 
-    const auto begin = st_ptr->stock.begin();
-    std::rotate(begin + i_idx, begin + i_idx + 1, begin + st_ptr->stock_num);
-
-    st_ptr->stock_num--;
-    st_ptr->stock[st_ptr->stock_num]->wipe();
+    const auto begin = this->stock.begin();
+    std::rotate(begin + i_idx, begin + i_idx + 1, begin + this->stock_num);
+    this->stock_num--;
+    this->stock[this->stock_num]->wipe();
 }
 
 /*!
  * @brief 店舗の品揃え変化のためにアイテムを削除する
  */
-void store_delete()
+void Store::delete_item()
 {
-    const auto what = randnum0<short>(st_ptr->stock_num);
-    int num = st_ptr->stock[what]->number;
+    const auto what = randnum0<short>(this->stock_num);
+    auto num = this->stock[what]->number;
     if (one_in_(2)) {
         num = (num + 1) / 2;
     }
@@ -66,12 +65,12 @@ void store_delete()
         num = 1;
     }
 
-    if (st_ptr->stock[what]->is_wand_rod()) {
-        st_ptr->stock[what]->pval -= num * st_ptr->stock[what]->pval / st_ptr->stock[what]->number;
+    if (this->stock[what]->is_wand_rod()) {
+        this->stock[what]->pval -= num * this->stock[what]->pval / this->stock[what]->number;
     }
 
-    store_item_increase(what, -num);
-    store_item_optimize(what);
+    this->increase_item(what, -num);
+    this->optimize_item(what);
 }
 
 /*!
@@ -80,16 +79,16 @@ void store_delete()
  * @return plavリスト(充填数)
  * @details 回数の違う杖と魔法棒がスロットを圧迫するのでスロット数制限をかける
  */
-std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr)
+std::vector<short> Store::collect_same_magic_device_pvals(ItemEntity &item)
 {
-    auto list = std::vector<short>();
-    for (INVENTORY_IDX i = 0; i < st_ptr->stock_num; i++) {
-        auto &item = *st_ptr->stock[i];
-        if ((&item == j_ptr) || (item.bi_id != j_ptr->bi_id) || !item.is_wand_staff()) {
+    std::vector<short> list;
+    for (short i = 0; i < this->stock_num; i++) {
+        auto &item_store = *this->stock[i];
+        if ((&item_store == &item) || (item_store.bi_id != item.bi_id) || !item_store.is_wand_staff()) {
             continue;
         }
 
-        list.push_back(item.pval);
+        list.push_back(item_store.pval);
     }
 
     return list;
@@ -152,40 +151,40 @@ static bool store_item_sort_comp(const ItemEntity &item1, const ItemEntity &item
 
 /*!
  * @brief 店舗にオブジェクトを加える
- * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
- * @return 収めた先の商品インデックス、但し無価値アイテムは店頭に並べない.
+ * @param item 加えたいオブジェクトの構造体参照ポインタ
+ * @return 収めた先の商品インデックス. 但し無価値アイテムはnullopt (店頭に並べない)
  */
-int store_carry(ItemEntity *o_ptr)
+std::optional<int> Store::carry(ItemEntity &item)
 {
-    const auto value = o_ptr->calc_price();
+    const auto value = item.calc_price();
     if (value <= 0) {
-        return -1;
+        return std::nullopt;
     }
 
-    o_ptr->ident |= IDENT_FULL_KNOWN;
-    o_ptr->inscription.reset();
-    o_ptr->feeling = FEEL_NONE;
-    for (auto slot = 0; slot < st_ptr->stock_num; slot++) {
-        auto &item = *st_ptr->stock[slot];
-        if (item.is_similar_for_store(*o_ptr)) {
-            store_object_absorb(item, *o_ptr);
+    item.ident |= IDENT_FULL_KNOWN;
+    item.inscription.reset();
+    item.feeling = FEEL_NONE;
+    for (auto slot = 0; slot < this->stock_num; slot++) {
+        auto &item_store = *this->stock[slot];
+        if (item_store.is_similar_for_store(item)) {
+            store_object_absorb(item_store, item);
             return slot;
         }
     }
 
-    if (st_ptr->stock_num >= st_ptr->stock_size) {
-        return -1;
+    if (this->stock_num >= this->stock_size) {
+        return std::nullopt;
     }
 
-    const auto first = st_ptr->stock.begin();
-    const auto last = first + st_ptr->stock_num;
+    const auto first = this->stock.begin();
+    const auto last = first + this->stock_num;
     const auto slot_it = std::find_if(first, last,
-        [&](const auto &item) { return store_item_sort_comp(*o_ptr, *item); });
+        [&](const auto &item_store) { return store_item_sort_comp(item, *item_store); });
     const auto slot = std::distance(first, slot_it);
 
     std::rotate(first + slot, last, last + 1);
 
-    st_ptr->stock_num++;
-    *st_ptr->stock[slot] = o_ptr->clone();
+    this->stock_num++;
+    *this->stock[slot] = item.clone();
     return slot;
 }

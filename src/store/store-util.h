@@ -4,6 +4,7 @@
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include <memory>
+#include <optional>
 #include <vector>
 
 constexpr DEPTH STORE_OBJ_STD_LEVEL = 5; //!< 通常店舗の標準階層レベル / Magic Level for normal stores
@@ -48,13 +49,12 @@ public:
     short stock_num{}; //!< Stock -- Number of entries
     short stock_size{}; //!< @todo vectorのサイズを取れば良くなったので後ほど削除する.
     std::vector<std::unique_ptr<ItemEntity>> stock{}; //!< Stock -- Actual stock items
+
+    void increase_item(short i_idx, int item_num);
+    void optimize_item(short i_idx);
+    void delete_item();
+    std::vector<short> collect_same_magic_device_pvals(ItemEntity &item);
+    std::optional<int> carry(ItemEntity &item);
 };
 
 extern Store *st_ptr;
-
-class PlayerType;
-void store_delete();
-std::vector<short> store_same_magic_device_pvals(ItemEntity *j_ptr);
-void store_item_increase(short i_idx, int item_num);
-void store_item_optimize(short i_idx);
-int store_carry(ItemEntity *o_ptr);
