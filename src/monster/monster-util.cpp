@@ -216,12 +216,11 @@ monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSI
  * @param restrict_to_dungeon 現在プレイヤーのいるダンジョンの制約を適用するか
  * @param summon_specific_type summon_specific によるものの場合、召喚種別を指定する
  * @param is_chameleon_polymorph カメレオンの変身の場合、true
- * @return 常に 0
  *
  * モンスター生成テーブル alloc_race_table の各要素の基本重み prob1 を指定条件
  * に従って変更し、結果を prob2 に書き込む。
  */
-static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
+static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto dungeon_level = floor.dun_level;
@@ -304,13 +303,11 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
     if (cheat_hear) {
         msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)%d "), mon_num, lev_min, lev_max, prob2_total);
     }
-
-    return 0;
 }
 
 /*!
  * @brief モンスター生成テーブルの重み修正
- * @param player_ptr
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param hook1 生成制約関数1 (nullptr の場合、制約なし)
  * @param hook2 生成制約関数2 (nullptr の場合、制約なし)
  * @param summon_specific_type summon_specific によるものの場合、召喚種別を指定する
@@ -318,31 +315,30 @@ static errr do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
  *
  * get_mon_num() を呼ぶ前に get_mon_num_prep() 系関数のいずれかを呼ぶこと。
  */
-errr get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, std::optional<summon_type> summon_specific_type)
+void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, std::optional<summon_type> summon_specific_type)
 {
-    return do_get_mon_num_prep(player_ptr, hook1, hook2, true, summon_specific_type, false);
+    do_get_mon_num_prep(player_ptr, hook1, hook2, true, summon_specific_type, false);
 }
 
 /*!
  * @brief モンスター生成テーブルの重み修正(カメレオン変身専用)
- * @return 常に 0
- *
- * get_mon_num() を呼ぶ前に get_mon_num_prep 系関数のいずれかを呼ぶこと。
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param hook 生成制約関数 (nullptr の場合、制約なし)
+ * @details get_mon_num() を呼ぶ前に get_mon_num_prep 系関数のいずれかを呼ぶこと。
  */
-errr get_mon_num_prep_chameleon(PlayerType *player_ptr, const monsterrace_hook_type &hook)
+void get_mon_num_prep_chameleon(PlayerType *player_ptr, const monsterrace_hook_type &hook)
 {
-    return do_get_mon_num_prep(player_ptr, hook, nullptr, true, std::nullopt, true);
+    do_get_mon_num_prep(player_ptr, hook, nullptr, true, std::nullopt, true);
 }
 
 /*!
  * @brief モンスター生成テーブルの重み修正(賞金首選定用)
- * @return 常に 0
- *
- * get_mon_num() を呼ぶ前に get_mon_num_prep 系関数のいずれかを呼ぶこと。
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details get_mon_num() を呼ぶ前に get_mon_num_prep 系関数のいずれかを呼ぶこと。
  */
-errr get_mon_num_prep_bounty(PlayerType *player_ptr)
+void get_mon_num_prep_bounty(PlayerType *player_ptr)
 {
-    return do_get_mon_num_prep(player_ptr, nullptr, nullptr, false, std::nullopt, false);
+    do_get_mon_num_prep(player_ptr, nullptr, nullptr, false, std::nullopt, false);
 }
 
 bool is_player(MONSTER_IDX m_idx)
