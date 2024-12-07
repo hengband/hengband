@@ -140,8 +140,8 @@ static bool switch_misc_bias(ItemEntity *o_ptr)
 static void invest_misc_hit_dice(ItemEntity *o_ptr)
 {
     o_ptr->art_flags.set(TR_SHOW_MODS);
-    HIT_PROB bonus_h = 4 + (HIT_PROB)randint1(11);
-    int bonus_d = 4 + (int)randint1(11);
+    short bonus_h = 4 + randnum1<short>(11);
+    auto bonus_d = 4 + randint1(11);
     const auto is_weapon = o_ptr->is_melee_weapon();
     const auto tval = o_ptr->bi_key.tval();
     if (!is_weapon && (tval != ItemKindType::GLOVES) && (tval != ItemKindType::RING)) {

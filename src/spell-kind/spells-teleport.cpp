@@ -498,8 +498,8 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
     const auto &world = AngbandWorld::get_instance();
     while (true) {
         while (true) {
-            y = (POSITION)rand_spread(ny, dis);
-            x = (POSITION)rand_spread(nx, dis);
+            y = rand_spread(ny, dis);
+            x = rand_spread(nx, dis);
             if (in_bounds(player_ptr->current_floor_ptr, y, x)) {
                 break;
             }

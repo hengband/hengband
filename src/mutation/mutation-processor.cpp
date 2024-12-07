@@ -257,7 +257,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         if (!player_ptr->current_floor_ptr->is_in_underground() && player_ptr->town_num) {
             StoreSaleType sst;
             do {
-                sst = i2enum<StoreSaleType>(randint0(MAX_STORES));
+                sst = randnum0<StoreSaleType>(MAX_STORES);
             } while ((sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM));
 
             msg_print(_("店の主人が丘に向かって走っている！", "You see one of the shopkeepers running for the hills!"));

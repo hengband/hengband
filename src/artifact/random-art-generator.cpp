@@ -306,8 +306,8 @@ static void invest_negative_modified_value(ItemEntity *o_ptr)
             break;
         }
 
-        o_ptr->to_d -= (int)randint0(3);
-        o_ptr->to_h -= (HIT_PROB)randint0(3);
+        o_ptr->to_d -= randint0(3);
+        o_ptr->to_h -= randnum0<short>(3);
     }
 
     while ((o_ptr->to_d + o_ptr->to_h) > 10) {
@@ -315,8 +315,8 @@ static void invest_negative_modified_value(ItemEntity *o_ptr)
             break;
         }
 
-        o_ptr->to_d -= (int)randint0(3);
-        o_ptr->to_h -= (HIT_PROB)randint0(3);
+        o_ptr->to_d -= randint0(3);
+        o_ptr->to_h -= randnum0<short>(3);
     }
 }
 

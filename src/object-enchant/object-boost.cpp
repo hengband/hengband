@@ -351,7 +351,7 @@ void one_activation(ItemEntity *o_ptr)
     RandomArtActType type = RandomArtActType::NONE;
     PERCENTAGE chance = 0;
     while (randint1(100) >= chance) {
-        type = i2enum<RandomArtActType>(randint1(enum2i(RandomArtActType::MAX) - 1));
+        type = randnum1<RandomArtActType>(enum2i(RandomArtActType::MAX) - 1);
         switch (type) {
         case RandomArtActType::SUNLIGHT:
         case RandomArtActType::BO_MISS_1:

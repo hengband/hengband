@@ -530,7 +530,7 @@ static bool display_auto_roller(PlayerType *player_ptr, chara_limit_type chara_l
 
         get_extra(player_ptr, true);
         get_money(player_ptr);
-        player_ptr->chaos_patron = (int16_t)randint0(MAX_PATRON);
+        player_ptr->chaos_patron = randnum0<short>(MAX_PATRON);
 
         char c;
         if (!display_auto_roller_result(player_ptr, prev, &c)) {
