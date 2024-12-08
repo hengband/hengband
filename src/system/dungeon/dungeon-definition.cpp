@@ -1,10 +1,10 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "dungeon/dungeon-flag-mask.h"
-#include "grid/feature-action-flags.h"
 #include "grid/feature.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-list.h"
 #include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-actions-table.h"
 
 enum conversion_type {
     CONVERT_TYPE_FLOOR = 0,

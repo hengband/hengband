@@ -246,7 +246,6 @@ hengband_SOURCES = \
 	game-option/text-display-options.cpp game-option/text-display-options.h \
 	\
 	grid/door.cpp grid/door.h \
-	grid/feature-action-flags.cpp grid/feature-action-flags.h \
 	grid/feature-generator.cpp grid/feature-generator.h \
 	grid/feature.cpp grid/feature.h \
 	grid/grid.cpp grid/grid.h \
@@ -959,6 +958,8 @@ hengband_SOURCES = \
 	system/monrace/monrace-list.cpp system/monrace/monrace-list.h \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
+	\
+	system/terrain/terrain-actions-table.cpp system/terrain/terrain-actions-table.h \
 	\
 	target/grid-selector.cpp target/grid-selector.h \
 	target/projection-path-calculator.cpp target/projection-path-calculator.h \

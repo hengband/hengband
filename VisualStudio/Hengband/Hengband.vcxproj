@@ -336,7 +336,7 @@
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
     <ClCompile Include="..\..\src\system\floor\floor-info.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
-    <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
+    <ClCompile Include="..\..\src\system\terrain\terrain-actions-table.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
     <ClCompile Include="..\..\src\main-win\graphics-win.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-term.cpp" />
@@ -1105,7 +1105,7 @@
     <ClInclude Include="..\..\src\action\movement-execution.h" />
     <ClInclude Include="..\..\src\core\score-util.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-mask.h" />
-    <ClInclude Include="..\..\src\grid\feature-action-flags.h" />
+    <ClInclude Include="..\..\src\system\terrain\terrain-actions-table.h" />
     <ClInclude Include="..\..\src\main-win\commandline-win.h" />
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
     <ClInclude Include="..\..\src\main-win\main-win-term.h" />

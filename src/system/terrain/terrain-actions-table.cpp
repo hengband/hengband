@@ -1,4 +1,4 @@
-#include "grid/feature-action-flags.h"
+#include "system/terrain/terrain-actions-table.h"
 
 /*!
  * @brief 地形状態フラグテーブル /
