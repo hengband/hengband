@@ -958,7 +958,6 @@ hengband_SOURCES = \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
 	\
-	system/terrain/terrain-actions-table.cpp system/terrain/terrain-actions-table.h \
 	system/terrain/terrain-definition.cpp system/terrain/terrain-definition.h \
 	\
 	target/grid-selector.cpp target/grid-selector.h \

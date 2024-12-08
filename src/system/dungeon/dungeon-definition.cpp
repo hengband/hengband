@@ -3,7 +3,6 @@
 #include "grid/feature.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-list.h"
-#include "system/terrain/terrain-actions-table.h"
 #include "system/terrain/terrain-definition.h"
 
 enum conversion_type {
@@ -64,7 +63,7 @@ short DungeonDefinition::convert_terrain_id(short terrain_id, TerrainCharacteris
         return terrain_id;
     }
 
-    const auto has_action_flag = TerrainActionFlagChecker::has(action, TerrainAction::DESTROY);
+    const auto has_action_flag = TerrainType::has(action, TerrainAction::DESTROY);
     return has_action_flag ? this->convert_terrain_id(terrain.destroyed) : terrain_id;
 }
 

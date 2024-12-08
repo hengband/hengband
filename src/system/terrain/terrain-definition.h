@@ -20,6 +20,13 @@ constexpr auto F_LIT_NS_BEGIN = 1; /* Nonstandard */
 
 const std::map<int, DisplaySymbol> DEFAULT_SYMBOLS = { { F_LIT_STANDARD, {} }, { F_LIT_LITE, {} }, { F_LIT_DARK, {} } };
 
+enum class TerrainAction {
+    DESTROY = 1,
+    NO_DROP = 2,
+    CRASH_GLASS = 3,
+    MAX,
+};
+
 /*!
  * @brief 地形状態変化指定構造体
  */
@@ -52,6 +59,8 @@ public:
     FEAT_POWER power{}; /*!< 地形強度 */
     std::map<int, DisplaySymbol> symbol_definitions; //!< デフォルトの地形シンボル (色/文字).
     std::map<int, DisplaySymbol> symbol_configs; //!< 設定変更後の地形シンボル (色/文字).
+
+    static bool has(TerrainCharacteristics tc, TerrainAction ta);
 
     bool is_permanent_wall() const;
     bool is_open() const;

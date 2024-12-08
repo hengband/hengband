@@ -6,12 +6,37 @@
 
 #include "system/terrain/terrain-definition.h"
 #include "grid/lighting-colors-table.h"
+#include "system/enums/terrain/terrain-characteristics.h"
+#include "util/flag-group.h"
 #include <algorithm>
+#include <unordered_map>
+
+namespace {
+const std::unordered_map<TerrainCharacteristics, EnumClassFlagGroup<TerrainAction>> TERRAIN_ACTIONS_TABLE = {
+    { TerrainCharacteristics::BASH, { TerrainAction::CRASH_GLASS } },
+    { TerrainCharacteristics::DISARM, { TerrainAction::DESTROY } },
+    { TerrainCharacteristics::TUNNEL, { TerrainAction::DESTROY, TerrainAction::CRASH_GLASS } },
+    { TerrainCharacteristics::HURT_ROCK, { TerrainAction::DESTROY, TerrainAction::CRASH_GLASS } },
+    { TerrainCharacteristics::HURT_DISI, { TerrainAction::DESTROY, TerrainAction::NO_DROP, TerrainAction::CRASH_GLASS } },
+};
+}
 
 TerrainType::TerrainType()
     : symbol_definitions(DEFAULT_SYMBOLS)
     , symbol_configs(DEFAULT_SYMBOLS)
 {
+}
+
+bool TerrainType::has(TerrainCharacteristics tc, TerrainAction ta)
+{
+    static const auto begin = TERRAIN_ACTIONS_TABLE.begin();
+    static const auto end = TERRAIN_ACTIONS_TABLE.end();
+    const auto action = std::find_if(begin, end, [tc](const auto &x) { return x.first == tc; });
+    if (action == end) {
+        return false;
+    }
+
+    return action->second.has(ta);
 }
 
 bool TerrainType::is_permanent_wall() const
