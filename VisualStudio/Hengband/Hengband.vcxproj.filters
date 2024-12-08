@@ -5454,9 +5454,6 @@
     <ClInclude Include="..\..\src\save\monster-entity-writer.h">
       <Filter>save</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\enums\game-option-page.h">
-      <Filter>system\enums</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\system\enums\grid-flow.h">
       <Filter>system\enums</Filter>
     </ClInclude>
@@ -5522,6 +5519,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\enums\terrain\terrain-characteristics.h">
       <Filter>system\enums\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game-option\game-option-page.h">
+      <Filter>game-option</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

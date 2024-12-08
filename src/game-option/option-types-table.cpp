@@ -3,6 +3,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
+#include "game-option/game-option-page.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
@@ -10,7 +11,6 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "locale/language-switcher.h"
-#include "system/enums/game-option-page.h"
 #include <utility>
 
 GameOption::GameOption(bool *value, bool norm, uint8_t set, uint8_t bits, std::string &&text, std::string &&description, const std::optional<GameOptionPage> &page)

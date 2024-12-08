@@ -233,6 +233,7 @@ hengband_SOURCES = \
 	game-option/cheat-options.cpp game-option/cheat-options.h \
 	game-option/cheat-types.h \
 	game-option/disturbance-options.cpp game-option/disturbance-options.h \
+	game-option/game-option-page.h \
 	game-option/game-play-options.cpp game-option/game-play-options.h \
 	game-option/input-options.cpp game-option/input-options.h \
 	game-option/keymap-directory-getter.cpp game-option/keymap-directory-getter.h \
@@ -942,7 +943,6 @@ hengband_SOURCES = \
 	system/dungeon/dungeon-list.cpp system/dungeon/dungeon-list.h \
 	system/dungeon/dungeon-record.cpp system/dungeon/dungeon-record.h \
 	\
-	system/enums/game-option-page.h \
 	system/enums/grid-flow.h \
 	system/enums/grid-count-kind.h \
 	system/enums/monrace/monrace-id.h \

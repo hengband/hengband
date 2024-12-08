@@ -1617,7 +1617,7 @@
     <ClInclude Include="..\..\src\object\item-use-flags.h" />
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\system\building-type-definition.h" />
-    <ClInclude Include="..\..\src\system\enums\game-option-page.h" />
+    <ClInclude Include="..\..\src\game-option\game-option-page.h" />
     <ClInclude Include="..\..\src\system\monrace\monrace-definition.h" />
     <ClInclude Include="..\..\src\system\item-entity.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
