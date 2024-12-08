@@ -136,11 +136,11 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
         return;
     }
 
-    int type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                   ? DOOR_CURTAIN
-                   : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+    auto type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+                    ? DOOR_CURTAIN
+                    : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
-    int tmp = randint0(1000);
+    auto tmp = randint0(1000);
     const auto &terrains = TerrainList::get_instance();
     const auto terrain_none = terrains.get_terrain_id(TerrainTag::NONE);
     auto terrain_id = terrain_none;
@@ -187,15 +187,16 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
  */
 void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_DOORS)) {
-        place_bold(player_ptr, y, x, GB_FLOOR);
+    const Pos2D pos(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_DOORS)) {
+        place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
         return;
     }
 
     const auto &terrains = TerrainList::get_instance();
     const auto terrain_none = terrains.get_terrain_id(TerrainTag::NONE);
-    int tmp = randint0(400);
+    auto tmp = randint0(400);
     auto terrain_id = terrain_none;
     if (tmp < 300) {
         terrain_id = feat_door[type].closed;
@@ -206,10 +207,10 @@ void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
     }
 
     if (terrain_id == terrain_none) {
-        place_bold(player_ptr, y, x, GB_FLOOR);
+        place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
         return;
     }
 
-    cave_set_feat(player_ptr, y, x, terrain_id);
-    floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+    cave_set_feat(player_ptr, pos.y, pos.x, terrain_id);
+    floor.get_grid(pos).info &= ~(CAVE_MASK);
 }
