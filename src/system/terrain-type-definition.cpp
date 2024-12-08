@@ -181,3 +181,17 @@ void TerrainList::shrink_to_fit()
 {
     this->terrains.shrink_to_fit();
 }
+
+/*!
+ * @brief 地形タグからIDを得る
+ * @param tag タグ文字列のオフセット
+ * @return 地形ID。該当がないならstd::nullopt
+ */
+std::optional<short> TerrainList::search_real_terrain(std::string_view tag) const
+{
+    if (tag.empty()) {
+        return std::nullopt;
+    }
+
+    return this->get_terrain_id_by_tag(tag);
+}

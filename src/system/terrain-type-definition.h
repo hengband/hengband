@@ -88,6 +88,7 @@ public:
     bool empty() const;
     void resize(size_t new_size);
     void shrink_to_fit();
+    std::optional<short> search_real_terrain(std::string_view tag) const;
 
 private:
     TerrainList() = default;
