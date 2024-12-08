@@ -45,7 +45,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"

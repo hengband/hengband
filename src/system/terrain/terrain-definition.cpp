@@ -4,7 +4,7 @@
  * @date 2022/10/15
  */
 
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "grid/lighting-colors-table.h"
 #include <algorithm>
 

@@ -14,7 +14,7 @@
 #include "system/baseitem/baseitem-key.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"

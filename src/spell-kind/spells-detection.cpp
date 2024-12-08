@@ -23,7 +23,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "tracking/lore-tracker.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"

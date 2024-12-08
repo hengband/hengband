@@ -5,7 +5,7 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 
 /*!
  * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists

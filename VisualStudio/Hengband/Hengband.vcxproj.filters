@@ -2427,9 +2427,6 @@
     <ClCompile Include="..\..\src\system\spell-info-list.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\terrain-type-definition.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
@@ -2548,6 +2545,9 @@
       <Filter>system\floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\system\terrain\terrain-actions-table.cpp">
+      <Filter>system\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\terrain\terrain-definition.cpp">
       <Filter>system\terrain</Filter>
     </ClCompile>
   </ItemGroup>
@@ -5361,9 +5361,6 @@
     <ClInclude Include="..\..\src\system\spell-info-list.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\terrain-type-definition.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-brightness-flags.h">
       <Filter>monster-race</Filter>
     </ClInclude>
@@ -5521,6 +5518,9 @@
       <Filter>game-option</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\terrain\terrain-actions-table.h">
+      <Filter>system\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\terrain\terrain-definition.h">
       <Filter>system\terrain</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
-#include "system/terrain-type-definition.h"
+#include "view/display-symbol.h"
 #include <map>
 #include <string>
 #include <vector>

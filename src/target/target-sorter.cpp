@@ -8,7 +8,7 @@
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 
 TargetSorter::TargetSorter(const Pos2D &p_pos)
     : p_pos(p_pos)

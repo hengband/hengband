@@ -20,7 +20,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "term/term-color-types.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"

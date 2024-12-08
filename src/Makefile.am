@@ -929,7 +929,6 @@ hengband_SOURCES = \
 	system/redrawing-flags-updater.cpp system/redrawing-flags-updater.h \
 	system/spell-info-list.cpp system/spell-info-list.h \
 	system/system-variables.cpp system/system-variables.h \
-	system/terrain-type-definition.cpp system/terrain-type-definition.h \
 	system/gamevalue.h \
 	\
 	system/baseitem/baseitem-allocation.cpp system/baseitem/baseitem-allocation.h \
@@ -960,6 +959,7 @@ hengband_SOURCES = \
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
 	\
 	system/terrain/terrain-actions-table.cpp system/terrain/terrain-actions-table.h \
+	system/terrain/terrain-definition.cpp system/terrain/terrain-definition.h \
 	\
 	target/grid-selector.cpp target/grid-selector.h \
 	target/projection-path-calculator.cpp target/projection-path-calculator.h \

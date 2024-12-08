@@ -3,8 +3,8 @@
 #include "grid/feature.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-list.h"
-#include "system/terrain-type-definition.h"
 #include "system/terrain/terrain-actions-table.h"
+#include "system/terrain/terrain-definition.h"
 
 enum conversion_type {
     CONVERT_TYPE_FLOOR = 0,

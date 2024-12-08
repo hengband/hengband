@@ -28,7 +28,7 @@
 #include "store/store.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "term/screen-processor.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
