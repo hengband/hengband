@@ -407,19 +407,3 @@ void init_feat_variables()
 
     init_wilderness_terrains();
 }
-
-/*!
- * @brief 地形情報の各種タグからIDへ変換して結果を収める
- * @param head ヘッダ構造体
- */
-void retouch_terrains_info()
-{
-    auto &terrains = TerrainList::get_instance();
-    for (auto &terrain : terrains) {
-        terrain.mimic = terrains.search_real_terrain(terrain.mimic_tag).value_or(terrain.mimic);
-        terrain.destroyed = terrains.search_real_terrain(terrain.destroyed_tag).value_or(terrain.destroyed);
-        for (auto &ts : terrain.state) {
-            ts.result = terrains.search_real_terrain(ts.result_tag).value_or(ts.result);
-        }
-    }
-}

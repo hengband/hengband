@@ -183,6 +183,20 @@ void TerrainList::shrink_to_fit()
 }
 
 /*!
+ * @brief 地形情報の各種タグからIDへ変換して結果を収める
+ */
+void TerrainList::retouch()
+{
+    for (auto &terrain : this->terrains) {
+        terrain.mimic = this->search_real_terrain(terrain.mimic_tag).value_or(terrain.mimic);
+        terrain.destroyed = this->search_real_terrain(terrain.destroyed_tag).value_or(terrain.destroyed);
+        for (auto &ts : terrain.state) {
+            ts.result = this->search_real_terrain(ts.result_tag).value_or(ts.result);
+        }
+    }
+}
+
+/*!
  * @brief 地形タグからIDを得る
  * @param tag タグ文字列のオフセット
  * @return 地形ID。該当がないならstd::nullopt
