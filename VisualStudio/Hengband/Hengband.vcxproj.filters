@@ -2541,7 +2541,7 @@
     <ClCompile Include="..\..\src\system\monrace\monrace-definition.cpp">
       <Filter>system\monrace</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\floor\floor-definition.cpp">
+    <ClCompile Include="..\..\src\system\floor\floor-info.cpp">
       <Filter>system\floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\system\floor\floor-list.cpp">
@@ -5514,7 +5514,7 @@
     <ClInclude Include="..\..\src\system\monrace\monrace-definition.h">
       <Filter>system\monrace</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\floor\floor-definition.h">
+    <ClInclude Include="..\..\src\system\floor\floor-info.h">
       <Filter>system\floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\floor\floor-list.h">
