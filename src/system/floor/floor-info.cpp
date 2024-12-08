@@ -2,6 +2,7 @@
 #include "dungeon/quest.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
+#include "locale/language-switcher.h"
 #include "monster/monster-timed-effects.h"
 #include "object-enchant/item-apply-magic.h"
 #include "system/angband-system.h"
@@ -18,7 +19,7 @@
 #include "system/terrain-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
-#include "world/world-object.h"
+#include "world/world.h"
 
 FloorType::FloorType()
     : grid_array(MAX_HGT, std::vector<Grid>(MAX_WID))
@@ -403,6 +404,67 @@ void FloorType::remove_mproc(short m_idx, MonsterTimedEffect mte)
     if (mproc_idx >= 0) {
         this->mproc_list[mte][*mproc_idx] = this->mproc_list[mte][--this->mproc_max[mte]];
     }
+}
+
+/*!
+ * @brief モンスター配列の空きを探す
+ * @return 使われていないモンスターのフロア内インデックス
+ */
+short FloorType::pop_empty_index_monster()
+{
+    /* Normal allocation */
+    if (this->m_max < MAX_FLOOR_MONSTERS) {
+        const auto i = this->m_max;
+        this->m_max++;
+        this->m_cnt++;
+        return i;
+    }
+
+    /* Recycle dead monsters */
+    for (short i = 1; i < this->m_max; i++) {
+        const auto &monster = this->m_list[i];
+        if (monster.is_valid()) {
+            continue;
+        }
+
+        this->m_cnt++;
+        return i;
+    }
+
+    if (AngbandWorld::get_instance().character_dungeon) {
+        THROW_EXCEPTION(std::runtime_error, _("モンスターが多すぎる！", "Too many monsters!"));
+    }
+
+    return 0;
+}
+
+/*!
+ * @brief アイテム配列から空きを取得する
+ * @return 使われていないアイテムのフロア内インデックス
+ */
+short FloorType::pop_empty_index_item()
+{
+    if (this->o_max < MAX_FLOOR_ITEMS) {
+        const auto i = this->o_max;
+        this->o_max++;
+        this->o_cnt++;
+        return i;
+    }
+
+    for (short i = 1; i < this->o_max; i++) {
+        if (this->o_list[i].is_valid()) {
+            continue;
+        }
+
+        this->o_cnt++;
+        return i;
+    }
+
+    if (AngbandWorld::get_instance().character_dungeon) {
+        THROW_EXCEPTION(std::runtime_error, _("アイテムが多すぎる！", "Too many items!"));
+    }
+
+    return 0;
 }
 
 /*!

@@ -1818,7 +1818,6 @@
     <ClCompile Include="..\..\src\wizard\wizard-spells.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-special-process.cpp" />
-    <ClCompile Include="..\..\src\world\world-object.cpp" />
     <ClCompile Include="..\..\src\world\world.cpp" />
     <ClCompile Include="..\..\src\world\world-movement-processor.cpp" />
     <ClCompile Include="..\..\src\world\world-turn-processor.cpp" />
@@ -1901,7 +1900,6 @@
     <ClInclude Include="..\..\src\wizard\wizard-messages.h" />
     <ClInclude Include="..\..\src\wizard\wizard-player-modifier.h" />
     <ClInclude Include="..\..\src\wizard\wizard-spells.h" />
-    <ClInclude Include="..\..\src\world\world-object.h" />
     <ClInclude Include="..\..\src\locale\english.h" />
     <ClInclude Include="..\..\src\monster\horror-descriptions.h" />
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />

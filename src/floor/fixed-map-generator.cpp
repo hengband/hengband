@@ -36,7 +36,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "window/main-window-util.h"
-#include "world/world-object.h"
 #include "world/world.h"
 
 // PARSE_ERROR_MAXが既にあり扱い辛いのでここでconst宣言.
@@ -56,22 +55,22 @@ qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xm
 /*!
  * @brief フロアの所定のマスにオブジェクトを配置する
  * Place the object j_ptr to a grid
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor 現在フロアへの参照
  * @param item アイテムの参照
  * @param y 配置先Y座標
  * @param x 配置先X座標
  * @return エラーコード
  */
-static void drop_here(FloorType *floor_ptr, ItemEntity &&item, POSITION y, POSITION x)
+static void drop_here(FloorType &floor, ItemEntity &&item, POSITION y, POSITION x)
 {
-    OBJECT_IDX o_idx = o_pop(floor_ptr);
-    auto &dropped_item = floor_ptr->o_list[o_idx];
+    const auto item_idx = floor.pop_empty_index_item();
+    auto &dropped_item = floor.o_list[item_idx];
     dropped_item = std::move(item);
     dropped_item.iy = y;
     dropped_item.ix = x;
     dropped_item.held_m_idx = 0;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    g_ptr->o_idx_list.add(floor_ptr, o_idx);
+    auto *g_ptr = &floor.grid_array[y][x];
+    g_ptr->o_idx_list.add(&floor, item_idx);
 }
 
 static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const FixedArtifactId a_idx)
@@ -86,7 +85,7 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
     }
 
     ItemEntity item({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
-    drop_here(player_ptr->current_floor_ptr, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
+    drop_here(*player_ptr->current_floor_ptr, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
 static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
@@ -177,7 +176,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             }
 
             ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
-            drop_here(&floor, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
+            drop_here(floor, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
         }
 
         generate_artifact(player_ptr, qtwg_ptr, letter[idx].artifact);
