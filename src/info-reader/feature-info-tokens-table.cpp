@@ -1,4 +1,11 @@
+/*!
+ * @brief 地形特性トークン辞書実装
+ * @author Hourier
+ * @date 2024/12/08
+ */
+
 #include "info-reader/feature-info-tokens-table.h"
+#include "system/enums/terrain/terrain-tag.h"
 
 /*!
  * @brief 地形属性トークンの定義 / Feature info flags
@@ -120,4 +127,8 @@ const std::unordered_map<std::string_view, TerrainCharacteristics> f_info_flags 
     { "TELEPORTABLE", TerrainCharacteristics::TELEPORTABLE },
     { "CONVERT", TerrainCharacteristics::CONVERT },
     { "GLASS", TerrainCharacteristics::GLASS },
+};
+
+const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
+    { "NONE", TerrainTag::NONE },
 };
