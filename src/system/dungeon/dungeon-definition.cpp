@@ -4,6 +4,7 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-list.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 
 enum conversion_type {
     CONVERT_TYPE_FLOOR = 0,

@@ -2547,6 +2547,9 @@
     <ClCompile Include="..\..\src\system\terrain\terrain-definition.cpp">
       <Filter>system\terrain</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\terrain\terrain-list.cpp">
+      <Filter>system\terrain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5515,6 +5518,9 @@
       <Filter>game-option</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\terrain\terrain-definition.h">
+      <Filter>system\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\terrain\terrain-list.h">
       <Filter>system\terrain</Filter>
     </ClInclude>
   </ItemGroup>

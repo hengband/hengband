@@ -21,6 +21,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"

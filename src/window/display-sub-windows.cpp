@@ -33,6 +33,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "target/target-preparation.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"

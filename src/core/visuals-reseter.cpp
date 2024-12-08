@@ -6,6 +6,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 
 /*!
  * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists
