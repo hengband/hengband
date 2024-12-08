@@ -5,7 +5,6 @@
  */
 
 #include "system/terrain-type-definition.h"
-#include "grid/feature.h" // 暫定、is_ascii_graphics() は別ファイルに移す.
 #include "grid/lighting-colors-table.h"
 #include <algorithm>
 
@@ -56,7 +55,7 @@ bool TerrainType::is_trap() const
 void TerrainType::reset_lighting(bool is_config)
 {
     auto &symbols = is_config ? this->symbol_configs : this->symbol_definitions;
-    if (is_ascii_graphics(symbols[F_LIT_STANDARD].color)) {
+    if (symbols[F_LIT_STANDARD].is_ascii_graphics()) {
         this->reset_lighting_ascii(symbols);
         return;
     }

@@ -104,14 +104,6 @@ FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;
 FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 
-/*
- * Not using graphical tiles for this feature?
- */
-bool is_ascii_graphics(char x)
-{
-    return (x & 0x80) == 0;
-}
-
 FEAT_IDX feat_locked_door_random(int door_type)
 {
     const auto &door = feat_door[door_type];
