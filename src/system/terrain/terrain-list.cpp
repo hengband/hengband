@@ -5,6 +5,7 @@
  */
 
 #include "system/terrain/terrain-list.h"
+#include "info-reader/feature-info-tokens-table.h"
 #include "system/terrain/terrain-definition.h"
 #include <algorithm>
 
@@ -23,6 +24,21 @@ TerrainType &TerrainList::get_terrain(short terrain_id)
 const TerrainType &TerrainList::get_terrain(short terrain_id) const
 {
     return this->terrains.at(terrain_id);
+}
+
+TerrainType &TerrainList::get_terrain(TerrainTag tag)
+{
+    return this->terrains.at(this->tags.at(tag));
+}
+
+const TerrainType &TerrainList::get_terrain(TerrainTag tag) const
+{
+    return this->terrains.at(this->tags.at(tag));
+}
+
+short TerrainList::get_terrain_id(TerrainTag tag) const
+{
+    return this->tags.at(tag);
 }
 
 /*!
@@ -116,6 +132,11 @@ void TerrainList::retouch()
             ts.result = this->search_real_terrain(ts.result_tag).value_or(ts.result);
         }
     }
+}
+
+void TerrainList::emplace_tag(std::string_view tag)
+{
+    this->tags.emplace(terrain_tags.at(tag), this->get_terrain_id_by_tag(tag));
 }
 
 /*!

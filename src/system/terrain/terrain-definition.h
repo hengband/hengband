@@ -39,6 +39,7 @@ public:
 /*!
  * @brief 地形情報の構造体
  */
+enum class TerrainTag;
 class TerrainType {
 public:
     TerrainType();
@@ -46,6 +47,12 @@ public:
     std::string name; /*!< 地形名 */
     std::string text; /*!< 地形説明 */
     std::string tag; /*!< 地形特性タグ */
+
+    /*!
+     * @brief 地形特性タグ (enum class版)
+     * @todo string型のtagが不要になったら削除する
+     */
+    TerrainTag tag_enum{};
     std::string mimic_tag;
     std::string destroyed_tag;
     FEAT_IDX mimic{}; /*!< 未確定時の外形地形ID / Feature to mimic */

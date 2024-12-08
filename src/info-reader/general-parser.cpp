@@ -1,7 +1,6 @@
 #include "info-reader/general-parser.h"
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
-#include "grid/feature.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
@@ -15,6 +14,7 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/system-variables.h"
 #include "system/terrain/terrain-definition.h"
@@ -24,6 +24,16 @@
 #include <string>
 
 dungeon_grid letter[255];
+
+void dungeon_grid::set_terrain_id(TerrainTag tag)
+{
+    this->feature = TerrainList::get_instance().get_terrain_id(tag);
+}
+
+void dungeon_grid::set_trap_id(TerrainTag tag)
+{
+    this->trap = TerrainList::get_instance().get_terrain_id(tag);
+}
 
 /*!
  * @brief パース関数に基づいてデータファイルからデータを読み取る /
@@ -98,18 +108,17 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
         return PARSE_ERROR_GENERIC;
     }
 
+    const auto &terrains = TerrainList::get_instance();
     int index = zz[0][0];
-    letter[index].feature = feat_none;
+    letter[index].set_terrain_id(TerrainTag::NONE);
     letter[index].monster = 0;
     letter[index].object = 0;
     letter[index].ego = EgoType::NONE;
     letter[index].artifact = FixedArtifactId::NONE;
-    letter[index].trap = feat_none;
+    letter[index].set_trap_id(TerrainTag::NONE);
     letter[index].cave_info = 0;
     letter[index].special = 0;
     letter[index].random = RANDOM_NONE;
-
-    const auto &terrains = TerrainList::get_instance();
 
     switch (num) {
     case 9:

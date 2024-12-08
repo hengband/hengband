@@ -7,6 +7,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "grid/lighting-colors-table.h"
 #include "system/enums/terrain/terrain-characteristics.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "util/flag-group.h"
 #include <algorithm>
 #include <unordered_map>

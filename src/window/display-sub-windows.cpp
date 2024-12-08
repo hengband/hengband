@@ -4,7 +4,6 @@
 #include "game-option/option-flags.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
-#include "grid/feature.h"
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-util.h"
 #include "locale/japanese.h"
@@ -27,6 +26,7 @@
 #include "player/player-status.h"
 #include "spell/spells-execution.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -465,7 +465,7 @@ static void display_dungeon(PlayerType *player_ptr)
             const auto pos_y = y - player_ptr->y + game_term->hgt / 2 - 1;
             const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
             if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
-                const auto &terrain = TerrainList::get_instance().get_terrain(feat_none);
+                const auto &terrain = TerrainList::get_instance().get_terrain(TerrainTag::NONE);
                 const auto &symbol_foreground = terrain.symbol_configs.at(F_LIT_STANDARD);
                 term_queue_char(pos_x, pos_y, { symbol_foreground, {} });
                 continue;
