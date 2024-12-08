@@ -1454,6 +1454,7 @@
     <ClInclude Include="..\..\src\system\player-type-definition.h" />
     <ClInclude Include="..\..\src\system\services\baseitem-monrace-service.h" />
     <ClInclude Include="..\..\src\system\terrain-type-definition.h" />
+    <ClInclude Include="..\..\src\system\enums\terrain\terrain-tag.h" />
     <ClInclude Include="..\..\src\target\grid-selector.h" />
     <ClInclude Include="..\..\src\target\projection-path-calculator.h" />
     <ClInclude Include="..\..\src\target\target-describer.h" />
