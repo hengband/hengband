@@ -64,7 +64,7 @@ short DungeonDefinition::convert_terrain_id(short terrain_id, TerrainCharacteris
         return terrain_id;
     }
 
-    const auto has_action_flag = any_bits(terrain_action_flags[enum2i(action)], FAF_DESTROY);
+    const auto has_action_flag = TerrainActionFlagChecker::has(action, TerrainAction::DESTROY);
     return has_action_flag ? this->convert_terrain_id(terrain.destroyed) : terrain_id;
 }
 
