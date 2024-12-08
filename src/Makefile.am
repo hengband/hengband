@@ -246,7 +246,6 @@ hengband_SOURCES = \
 	\
 	grid/door.cpp grid/door.h \
 	grid/feature-action-flags.cpp grid/feature-action-flags.h \
-	grid/feature-flag-types.h \
 	grid/feature-generator.cpp grid/feature-generator.h \
 	grid/feature.cpp grid/feature.h \
 	grid/grid.cpp grid/grid.h \
@@ -947,6 +946,7 @@ hengband_SOURCES = \
 	system/enums/grid-flow.h \
 	system/enums/grid-count-kind.h \
 	system/enums/monrace/monrace-id.h \
+	system/enums/terrain/terrain-characteristics.h \
 	system/enums/terrain/terrain-tag.h \
 	\
 	system/floor/floor-info.cpp system/floor/floor-info.h \

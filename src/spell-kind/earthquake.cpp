@@ -7,7 +7,6 @@
 #include "floor/geometry.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
-#include "grid/feature-flag-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/stair.h"

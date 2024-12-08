@@ -10,7 +10,6 @@
 #include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
-#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"

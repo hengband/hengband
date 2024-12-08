@@ -5,6 +5,7 @@
  */
 
 #include "info-reader/feature-info-tokens-table.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-tag.h"
 
 /*!

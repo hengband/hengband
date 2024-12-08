@@ -1,7 +1,7 @@
 #pragma once
 
-#include "grid/feature-flag-types.h"
 #include "system/angband.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "util/flag-group.h"
 #include "view/display-symbol.h"
 #include <map>

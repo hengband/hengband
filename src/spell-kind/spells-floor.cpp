@@ -22,7 +22,6 @@
 #include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature-flag-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"

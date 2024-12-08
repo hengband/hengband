@@ -1201,7 +1201,7 @@
     <ClInclude Include="..\..\src\game-option\special-options.h" />
     <ClInclude Include="..\..\src\game-option\text-display-options.h" />
     <ClInclude Include="..\..\src\grid\door.h" />
-    <ClInclude Include="..\..\src\grid\feature-flag-types.h" />
+    <ClInclude Include="..\..\src\system\enums\terrain\terrain-characteristics.h" />
     <ClInclude Include="..\..\src\grid\feature-generator.h" />
     <ClInclude Include="..\..\src\grid\object-placer.h" />
     <ClInclude Include="..\..\src\grid\lighting-colors-table.h" />
