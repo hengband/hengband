@@ -458,9 +458,9 @@ static int16_t sweep_footing_items(PlayerType *player_ptr, GridExamination *ge_p
 
 static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::QUEST_ENTER)) {
-        const auto old_quest = floor_ptr->quest_number;
+        const auto old_quest = floor.quest_number;
         const auto &quests = QuestList::get_instance();
         const auto quest_id = i2enum<QuestId>(ge_ptr->g_ptr->special);
         const auto &quest = quests.get_quest(quest_id);
@@ -468,14 +468,14 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
 
         quest_text_lines.clear();
 
-        floor_ptr->quest_number = quest_id;
+        floor.quest_number = quest_id;
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-        floor_ptr->quest_number = old_quest;
+        floor.quest_number = old_quest;
         return format(fmt, quest.name.data(), quest.level);
     }
 
-    if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor_ptr->inside_arena) {
+    if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::BLDG) && !floor.inside_arena) {
         return buildings[ge_ptr->terrain_ptr->subtype].name;
     }
 

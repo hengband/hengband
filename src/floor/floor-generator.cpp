@@ -62,56 +62,61 @@
  * @brief 闘技場用のアリーナ地形を作成する / Builds the on_defeat_arena_monster after it is entered -KMW-
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void build_arena(PlayerType *player_ptr, POSITION *start_y, POSITION *start_x)
+static Pos2D build_arena(PlayerType *player_ptr)
 {
-    POSITION yval = SCREEN_HGT / 2;
-    POSITION xval = SCREEN_WID / 2;
-    POSITION y_height = yval - 10;
-    POSITION y_depth = yval + 10;
-    POSITION x_left = xval - 32;
-    POSITION x_right = xval + 32;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (POSITION i = y_height; i <= y_height + 5; i++) {
-        for (POSITION j = x_left; j <= x_right; j++) {
-            place_bold(player_ptr, i, j, GB_EXTRA_PERM);
-            floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
+    const auto yval = SCREEN_HGT / 2;
+    const auto xval = SCREEN_WID / 2;
+    const auto y_height = yval - 10;
+    const auto y_depth = yval + 10;
+    const auto x_left = xval - 32;
+    const auto x_right = xval + 32;
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto y = y_height; y <= y_height + 5; y++) {
+        for (auto x = x_left; x <= x_right; x++) {
+            const Pos2D pos(y, x);
+            place_bold(player_ptr, pos.y, pos.x, GB_EXTRA_PERM);
+            floor.get_grid(pos).info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
 
-    for (POSITION i = y_depth; i >= y_depth - 5; i--) {
-        for (POSITION j = x_left; j <= x_right; j++) {
-            place_bold(player_ptr, i, j, GB_EXTRA_PERM);
-            floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
+    for (auto y = y_depth; y >= y_depth - 5; y--) {
+        for (auto x = x_left; x <= x_right; x++) {
+            const Pos2D pos(y, x);
+            place_bold(player_ptr, pos.y, pos.x, GB_EXTRA_PERM);
+            floor.get_grid(pos).info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
 
-    for (POSITION j = x_left; j <= x_left + 17; j++) {
-        for (POSITION i = y_height; i <= y_depth; i++) {
-            place_bold(player_ptr, i, j, GB_EXTRA_PERM);
-            floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
+    for (auto x = x_left; x <= x_left + 17; x++) {
+        for (auto y = y_height; y <= y_depth; y++) {
+            const Pos2D pos(y, x);
+            place_bold(player_ptr, pos.y, pos.x, GB_EXTRA_PERM);
+            floor.get_grid(pos).info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
 
-    for (POSITION j = x_right; j >= x_right - 17; j--) {
-        for (POSITION i = y_height; i <= y_depth; i++) {
-            place_bold(player_ptr, i, j, GB_EXTRA_PERM);
-            floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
+    for (auto x = x_right; x >= x_right - 17; x--) {
+        for (auto y = y_height; y <= y_depth; y++) {
+            const Pos2D pos(y, x);
+            place_bold(player_ptr, pos.y, pos.x, GB_EXTRA_PERM);
+            floor.get_grid(pos).info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
 
     place_bold(player_ptr, y_height + 6, x_left + 18, GB_EXTRA_PERM);
-    floor_ptr->grid_array[y_height + 6][x_left + 18].info |= CAVE_GLOW | CAVE_MARK;
+    floor.get_grid({ y_height + 6, x_left + 18 }).info |= CAVE_GLOW | CAVE_MARK;
     place_bold(player_ptr, y_depth - 6, x_left + 18, GB_EXTRA_PERM);
-    floor_ptr->grid_array[y_depth - 6][x_left + 18].info |= CAVE_GLOW | CAVE_MARK;
+    floor.get_grid({ y_depth - 6, x_left + 18 }).info |= CAVE_GLOW | CAVE_MARK;
     place_bold(player_ptr, y_height + 6, x_right - 18, GB_EXTRA_PERM);
-    floor_ptr->grid_array[y_height + 6][x_right - 18].info |= CAVE_GLOW | CAVE_MARK;
+    floor.get_grid({ y_height + 6, x_right - 18 }).info |= CAVE_GLOW | CAVE_MARK;
     place_bold(player_ptr, y_depth - 6, x_right - 18, GB_EXTRA_PERM);
-    floor_ptr->grid_array[y_depth - 6][x_right - 18].info |= CAVE_GLOW | CAVE_MARK;
+    floor.get_grid({ y_depth - 6, x_right - 18 }).info |= CAVE_GLOW | CAVE_MARK;
 
-    *start_y = y_height + 5;
-    *start_x = xval;
-    floor_ptr->grid_array[*start_y][*start_x].feat = TerrainList::get_instance().get_terrain_id_by_tag("ARENA_GATE");
-    floor_ptr->grid_array[*start_y][*start_x].info |= CAVE_GLOW | CAVE_MARK;
+    const Pos2D pos(y_height + 5, xval);
+    auto &grid = floor.get_grid(pos);
+    grid.feat = TerrainList::get_instance().get_terrain_id_by_tag("ARENA_GATE");
+    grid.info |= CAVE_GLOW | CAVE_MARK;
+    return pos;
 }
 
 /*!
@@ -132,16 +137,14 @@ static void generate_challenge_arena(PlayerType *player_ptr)
         }
     }
 
-    int y;
-    int x;
-    for (y = 1; y < SCREEN_HGT - 1; y++) {
-        for (x = 1; x < SCREEN_WID - 1; x++) {
+    for (auto y = 1; y < SCREEN_HGT - 1; y++) {
+        for (auto x = 1; x < SCREEN_WID - 1; x++) {
             floor.get_grid({ y, x }).set_terrain_id(TerrainTag::FLOOR);
         }
     }
 
-    build_arena(player_ptr, &y, &x);
-    player_place(player_ptr, y, x);
+    const auto pos = build_arena(player_ptr);
+    player_place(player_ptr, pos.y, pos.x);
     auto &entries = ArenaEntryList::get_instance();
     const auto &monrace = entries.get_monrace();
     if (place_specific_monster(player_ptr, player_ptr->y + 5, player_ptr->x, monrace.idx, PM_NO_KAGE | PM_NO_PET)) {
@@ -157,65 +160,66 @@ static void generate_challenge_arena(PlayerType *player_ptr)
  * @brief モンスター闘技場のフロア生成 / Builds the on_defeat_arena_monster after it is entered -KMW-
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static void build_battle(PlayerType *player_ptr, POSITION *y, POSITION *x)
+static Pos2D build_battle(PlayerType *player_ptr)
 {
-    POSITION yval = SCREEN_HGT / 2;
-    POSITION xval = SCREEN_WID / 2;
-    POSITION y_height = yval - 10;
-    POSITION y_depth = yval + 10;
-    POSITION x_left = xval - 32;
-    POSITION x_right = xval + 32;
-
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (int i = y_height; i <= y_height + 5; i++) {
-        for (int j = x_left; j <= x_right; j++) {
-            place_bold(player_ptr, i, j, GB_EXTRA_PERM);
-            floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
+    const auto yval = SCREEN_HGT / 2;
+    const auto xval = SCREEN_WID / 2;
+    const auto y_height = yval - 10;
+    const auto y_depth = yval + 10;
+    const auto x_left = xval - 32;
+    const auto x_right = xval + 32;
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto y = y_height; y <= y_height + 5; y++) {
+        for (auto x = x_left; x <= x_right; x++) {
+            const Pos2D pos(y, x);
+            place_bold(player_ptr, pos.y, pos.x, GB_EXTRA_PERM);
+            floor.get_grid(pos).info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
 
-    for (int i = y_depth; i >= y_depth - 3; i--) {
-        for (int j = x_left; j <= x_right; j++) {
-            place_bold(player_ptr, i, j, GB_EXTRA_PERM);
-            floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
+    for (auto y = y_depth; y >= y_depth - 3; y--) {
+        for (auto x = x_left; x <= x_right; x++) {
+            const Pos2D pos(y, x);
+            place_bold(player_ptr, pos.y, pos.x, GB_EXTRA_PERM);
+            floor.get_grid(pos).info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
 
-    for (int j = x_left; j <= x_left + 17; j++) {
-        for (int i = y_height; i <= y_depth; i++) {
-            place_bold(player_ptr, i, j, GB_EXTRA_PERM);
-            floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
+    for (auto x = x_left; x <= x_left + 17; x++) {
+        for (auto y = y_height; y <= y_depth; y++) {
+            const Pos2D pos(y, x);
+            place_bold(player_ptr, pos.y, pos.x, GB_EXTRA_PERM);
+            floor.get_grid(pos).info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
 
-    for (int j = x_right; j >= x_right - 17; j--) {
-        for (int i = y_height; i <= y_depth; i++) {
-            place_bold(player_ptr, i, j, GB_EXTRA_PERM);
-            floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
+    for (auto x = x_right; x >= x_right - 17; x--) {
+        for (auto y = y_height; y <= y_depth; y++) {
+            const Pos2D pos(y, x);
+            place_bold(player_ptr, pos.y, pos.x, GB_EXTRA_PERM);
+            floor.get_grid(pos).info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
 
     place_bold(player_ptr, y_height + 6, x_left + 18, GB_EXTRA_PERM);
-    floor_ptr->grid_array[y_height + 6][x_left + 18].info |= CAVE_GLOW | CAVE_MARK;
+    floor.get_grid({ y_height + 6, x_left + 18 }).info |= CAVE_GLOW | CAVE_MARK;
     place_bold(player_ptr, y_depth - 4, x_left + 18, GB_EXTRA_PERM);
-    floor_ptr->grid_array[y_depth - 4][x_left + 18].info |= CAVE_GLOW | CAVE_MARK;
+    floor.get_grid({ y_depth - 4, x_left + 18 }).info |= CAVE_GLOW | CAVE_MARK;
     place_bold(player_ptr, y_height + 6, x_right - 18, GB_EXTRA_PERM);
-    floor_ptr->grid_array[y_height + 6][x_right - 18].info |= CAVE_GLOW | CAVE_MARK;
+    floor.get_grid({ y_height + 6, x_right - 18 }).info |= CAVE_GLOW | CAVE_MARK;
     place_bold(player_ptr, y_depth - 4, x_right - 18, GB_EXTRA_PERM);
-    floor_ptr->grid_array[y_depth - 4][x_right - 18].info |= CAVE_GLOW | CAVE_MARK;
+    floor.get_grid({ y_depth - 4, x_right - 18 }).info |= CAVE_GLOW | CAVE_MARK;
 
-    for (int i = y_height + 1; i <= y_height + 5; i++) {
-        for (int j = x_left + 20 + 2 * (y_height + 5 - i); j <= x_right - 20 - 2 * (y_height + 5 - i); j++) {
-            floor_ptr->grid_array[i][j].feat = feat_permanent_glass_wall;
+    for (auto y = y_height + 1; y <= y_height + 5; y++) {
+        for (auto x = x_left + 20 + 2 * (y_height + 5 - y); x <= x_right - 20 - 2 * (y_height + 5 - y); x++) {
+            floor.get_grid({ y, x }).feat = feat_permanent_glass_wall;
         }
     }
 
-    POSITION last_y = y_height + 1;
-    POSITION last_x = xval;
-    floor_ptr->grid_array[last_y][last_x].feat = TerrainList::get_instance().get_terrain_id_by_tag("BUILDING_3");
-    floor_ptr->grid_array[last_y][last_x].info |= CAVE_GLOW | CAVE_MARK;
-    *y = last_y;
-    *x = last_x;
+    const Pos2D pos(y_height + 1, xval);
+    floor.get_grid(pos).feat = TerrainList::get_instance().get_terrain_id_by_tag("BUILDING_3");
+    floor.get_grid(pos).info |= CAVE_GLOW | CAVE_MARK;
+    return pos;
 }
 
 /*!
@@ -223,43 +227,42 @@ static void build_battle(PlayerType *player_ptr, POSITION *y, POSITION *x)
  */
 static void generate_gambling_arena(PlayerType *player_ptr)
 {
-    POSITION y, x;
-    POSITION qy = 0;
-    POSITION qx = 0;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (y = 0; y < MAX_HGT; y++) {
-        for (x = 0; x < MAX_WID; x++) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto y = 0; y < MAX_HGT; y++) {
+        for (auto x = 0; x < MAX_WID; x++) {
+            const Pos2D pos(y, x);
             place_bold(player_ptr, y, x, GB_SOLID_PERM);
-            floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
+            floor.get_grid(pos).info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
 
-    for (y = qy + 1; y < qy + SCREEN_HGT - 1; y++) {
-        for (x = qx + 1; x < qx + SCREEN_WID - 1; x++) {
-            floor_ptr->grid_array[y][x].set_terrain_id(TerrainTag::FLOOR);
+    Pos2D pos_arena(1, 1);
+    for (; pos_arena.y < SCREEN_HGT - 1; pos_arena.y++) {
+        for (; pos_arena.x < SCREEN_WID - 1; pos_arena.x++) {
+            floor.get_grid(pos_arena).set_terrain_id(TerrainTag::FLOOR);
         }
     }
 
-    build_battle(player_ptr, &y, &x);
-    player_place(player_ptr, y, x);
+    const auto pos = build_battle(player_ptr);
+    player_place(player_ptr, pos.y, pos.x);
     const auto &melee_arena = MeleeArena::get_instance();
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
         const auto &gladiator = melee_arena.get_gladiator(i);
-        const Pos2D pos(player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4);
+        const Pos2D m_pos(player_ptr->y + 8 + (i / 2) * 4, player_ptr->x - 2 + (i % 2) * 4);
         constexpr auto mode = PM_NO_KAGE | PM_NO_PET;
-        const auto m_idx = place_specific_monster(player_ptr, pos.y, pos.x, gladiator.monrace_id, mode);
+        const auto m_idx = place_specific_monster(player_ptr, m_pos.y, m_pos.x, gladiator.monrace_id, mode);
         if (m_idx > 0) {
-            floor_ptr->m_list[*m_idx].set_friendly();
+            floor.m_list[*m_idx].set_friendly();
         }
     }
 
-    for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        auto *m_ptr = &floor_ptr->m_list[i];
-        if (!m_ptr->is_valid()) {
+    for (short i = 1; i < floor.m_max; i++) {
+        auto &monster = floor.m_list[i];
+        if (!monster.is_valid()) {
             continue;
         }
 
-        m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
+        monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
         update_monster(player_ptr, i, false);
     }
 }
