@@ -38,6 +38,7 @@
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
@@ -46,6 +47,7 @@
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
@@ -342,13 +344,13 @@ static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool i
     if (!is_corner && !wilderness[y][x].town) {
         //!< @todo make the road a bit more interresting.
         if (wilderness[y][x].road) {
-            floor_ptr->grid_array[MAX_HGT / 2][MAX_WID / 2].feat = feat_floor;
+            floor_ptr->grid_array[MAX_HGT / 2][MAX_WID / 2].set_terrain_id(TerrainTag::FLOOR);
             POSITION x1, y1;
             if (wilderness[y - 1][x].road) {
                 /* North road */
                 for (y1 = 1; y1 < MAX_HGT / 2; y1++) {
                     x1 = MAX_WID / 2;
-                    floor_ptr->grid_array[y1][x1].feat = feat_floor;
+                    floor_ptr->grid_array[y1][x1].set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
@@ -356,7 +358,7 @@ static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool i
                 /* North road */
                 for (y1 = MAX_HGT / 2; y1 < MAX_HGT - 1; y1++) {
                     x1 = MAX_WID / 2;
-                    floor_ptr->grid_array[y1][x1].feat = feat_floor;
+                    floor_ptr->grid_array[y1][x1].set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
@@ -364,7 +366,7 @@ static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool i
                 /* East road */
                 for (x1 = MAX_WID / 2; x1 < MAX_WID - 1; x1++) {
                     y1 = MAX_HGT / 2;
-                    floor_ptr->grid_array[y1][x1].feat = feat_floor;
+                    floor_ptr->grid_array[y1][x1].set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
@@ -372,7 +374,7 @@ static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool i
                 /* West road */
                 for (x1 = 1; x1 < MAX_WID / 2; x1++) {
                     y1 = MAX_HGT / 2;
-                    floor_ptr->grid_array[y1][x1].feat = feat_floor;
+                    floor_ptr->grid_array[y1][x1].set_terrain_id(TerrainTag::FLOOR);
                 }
             }
         }
@@ -632,7 +634,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
             }
 
             if (wilderness[j][i].road) {
-                floor_ptr->grid_array[j][i].feat = feat_floor;
+                floor_ptr->grid_array[j][i].set_terrain_id(TerrainTag::FLOOR);
                 floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
                 continue;
             }
@@ -865,23 +867,25 @@ static void init_terrain_table(int terrain, int16_t feat_global, concptr fmt, ..
  */
 void init_wilderness_terrains(void)
 {
+    const auto &terrains = TerrainList::get_instance();
+    const auto terrain_floor = terrains.get_terrain_id(TerrainTag::FLOOR);
     init_terrain_table(TERRAIN_EDGE, feat_permanent, "a", feat_permanent, MAX_FEAT_IN_TERRAIN);
-    init_terrain_table(TERRAIN_TOWN, feat_town, "a", feat_floor, MAX_FEAT_IN_TERRAIN);
+    init_terrain_table(TERRAIN_TOWN, feat_town, "a", terrain_floor, MAX_FEAT_IN_TERRAIN);
     init_terrain_table(TERRAIN_DEEP_WATER, feat_deep_water, "ab", feat_deep_water, 12, feat_shallow_water, MAX_FEAT_IN_TERRAIN - 12);
-    init_terrain_table(TERRAIN_SHALLOW_WATER, feat_shallow_water, "abcde", feat_deep_water, 3, feat_shallow_water, 12, feat_floor, 1, feat_dirt, 1, feat_grass,
+    init_terrain_table(TERRAIN_SHALLOW_WATER, feat_shallow_water, "abcde", feat_deep_water, 3, feat_shallow_water, 12, terrain_floor, 1, feat_dirt, 1, feat_grass,
         MAX_FEAT_IN_TERRAIN - 17);
     init_terrain_table(TERRAIN_SWAMP, feat_swamp, "abcdef", feat_dirt, 2, feat_grass, 3, feat_tree, 1, feat_brake, 1, feat_shallow_water, 4, feat_swamp,
         MAX_FEAT_IN_TERRAIN - 11);
     init_terrain_table(
-        TERRAIN_DIRT, feat_dirt, "abcdef", feat_floor, 3, feat_dirt, 10, feat_flower, 1, feat_brake, 1, feat_grass, 1, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
+        TERRAIN_DIRT, feat_dirt, "abcdef", terrain_floor, 3, feat_dirt, 10, feat_flower, 1, feat_brake, 1, feat_grass, 1, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
     init_terrain_table(
-        TERRAIN_GRASS, feat_grass, "abcdef", feat_floor, 2, feat_dirt, 2, feat_grass, 9, feat_flower, 1, feat_brake, 2, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_TREES, feat_tree, "abcde", feat_floor, 2, feat_dirt, 1, feat_tree, 11, feat_brake, 2, feat_grass, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_DESERT, feat_dirt, "abc", feat_floor, 2, feat_dirt, 13, feat_grass, MAX_FEAT_IN_TERRAIN - 15);
+        TERRAIN_GRASS, feat_grass, "abcdef", terrain_floor, 2, feat_dirt, 2, feat_grass, 9, feat_flower, 1, feat_brake, 2, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
+    init_terrain_table(TERRAIN_TREES, feat_tree, "abcde", terrain_floor, 2, feat_dirt, 1, feat_tree, 11, feat_brake, 2, feat_grass, MAX_FEAT_IN_TERRAIN - 16);
+    init_terrain_table(TERRAIN_DESERT, feat_dirt, "abc", terrain_floor, 2, feat_dirt, 13, feat_grass, MAX_FEAT_IN_TERRAIN - 15);
     init_terrain_table(TERRAIN_SHALLOW_LAVA, feat_shallow_lava, "abc", feat_shallow_lava, 14, feat_deep_lava, 3, feat_mountain, MAX_FEAT_IN_TERRAIN - 17);
     init_terrain_table(
         TERRAIN_DEEP_LAVA, feat_deep_lava, "abcd", feat_dirt, 3, feat_shallow_lava, 3, feat_deep_lava, 10, feat_mountain, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_MOUNTAIN, feat_mountain, "abcdef", feat_floor, 1, feat_brake, 1, feat_grass, 2, feat_dirt, 2, feat_tree, 2, feat_mountain,
+    init_terrain_table(TERRAIN_MOUNTAIN, feat_mountain, "abcdef", terrain_floor, 1, feat_brake, 1, feat_grass, 2, feat_dirt, 2, feat_tree, 2, feat_mountain,
         MAX_FEAT_IN_TERRAIN - 8);
 }
 

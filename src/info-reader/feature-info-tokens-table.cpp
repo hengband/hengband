@@ -132,4 +132,5 @@ const std::unordered_map<std::string_view, TerrainCharacteristics> f_info_flags 
 
 const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
     { "NONE", TerrainTag::NONE },
+    { "FLOOR", TerrainTag::FLOOR },
 };

@@ -23,9 +23,6 @@
 
 /*** Terrain feature variables ***/
 
-/* Floor */
-FEAT_IDX feat_floor;
-
 /* Objects */
 FEAT_IDX feat_rune_protection;
 FEAT_IDX feat_rune_explosion;

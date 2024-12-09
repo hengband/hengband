@@ -8,7 +8,6 @@
 #include "floor/geometry.h"
 #include "floor/object-scanner.h"
 #include "game-option/input-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/cursor.h"
@@ -76,6 +75,7 @@ public:
     TerrainType *terrain_ptr = nullptr;
     std::string name = "";
 
+    bool matches_terrain(TerrainTag tag) const;
     void set_terrain_id(TerrainTag tag);
 };
 
@@ -88,6 +88,11 @@ GridExamination::GridExamination(FloorType &floor, POSITION y, POSITION x, targe
     this->g_ptr = &floor.grid_array[y][x];
     this->m_ptr = &floor.m_list[this->g_ptr->m_idx];
     this->next_o_idx = 0;
+}
+
+bool GridExamination::matches_terrain(TerrainTag tag) const
+{
+    return this->feat == TerrainList::get_instance().get_terrain_id(tag);
 }
 
 void GridExamination::set_terrain_id(TerrainTag tag)
@@ -483,7 +488,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
         return towns_info[ge_ptr->g_ptr->special].name;
     }
 
-    if (AngbandWorld::get_instance().is_wild_mode() && (ge_ptr->feat == feat_floor)) {
+    if (AngbandWorld::get_instance().is_wild_mode() && (ge_ptr->matches_terrain(TerrainTag::FLOOR))) {
         return _("道", "road");
     }
 
