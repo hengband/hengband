@@ -55,7 +55,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
             if (g_ptr->has_monster() && floor_ptr->m_list[g_ptr->m_idx].ml) {
                 symbol_pair = map_info(player_ptr, pos_path);
                 auto &symbol_foreground = symbol_pair.symbol_foreground;
-                if (!is_ascii_graphics(symbol_foreground.color)) {
+                if (!symbol_foreground.is_ascii_graphics()) {
                     symbol_foreground.color = default_color;
                 } else if ((symbol_foreground.character == '.') && ((symbol_foreground.color == TERM_WHITE) || (symbol_foreground.color == TERM_L_WHITE))) {
                     symbol_foreground.color = default_color;

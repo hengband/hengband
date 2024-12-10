@@ -39,6 +39,11 @@ public:
     {
         return this->character != '\0';
     }
+
+    bool is_ascii_graphics() const
+    {
+        return this->color < 0x80;
+    }
 };
 
 class DisplaySymbolPair {

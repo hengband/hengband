@@ -42,6 +42,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <fstream>
+#include <functional>
 #include <string>
 #include <string_view>
 #include <sys/stat.h>
@@ -50,8 +51,6 @@
 #endif
 
 namespace {
-
-using Retoucher = void (*)();
 
 /// @note clang-formatによるconceptの整形が安定していないので抑制しておく
 // clang-format off
@@ -84,7 +83,7 @@ static void init_header(angband_header *head)
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename InfoType>
-static void init_info(std::string_view filename, angband_header &head, InfoType &info, Parser parser, Retoucher retouch = nullptr)
+static void init_info(std::string_view filename, angband_header &head, InfoType &info, Parser parser, std::function<void()> retouch = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
@@ -222,9 +221,8 @@ void init_terrains_info()
 {
     init_header(&terrains_header);
     auto *parser = parse_terrains_info;
-    auto *retoucher = retouch_terrains_info;
     auto &terrains = TerrainList::get_instance();
-    init_info("TerrainDefinitions.txt", terrains_header, terrains, parser, retoucher);
+    init_info("TerrainDefinitions.txt", terrains_header, terrains, parser, [&terrains] { terrains.retouch(); });
 }
 
 /*!

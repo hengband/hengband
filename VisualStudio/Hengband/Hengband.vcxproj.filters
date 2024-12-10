@@ -5520,6 +5520,9 @@
     <ClInclude Include="..\..\src\system\floor\town-list.h">
       <Filter>system\floor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\terrain\terrain-tag.h">
+      <Filter>system\enums\terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5807,6 +5810,9 @@
     </Filter>
     <Filter Include="system\floor">
       <UniqueIdentifier>{b3a079dd-fd7e-41d6-8dcd-667b977c7ec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\enums\terrain">
+      <UniqueIdentifier>{3ceaf1e1-713b-4cfe-979d-e0ecd9949bfc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

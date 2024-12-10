@@ -945,8 +945,9 @@ hengband_SOURCES = \
 	\
 	system/enums/game-option-page.h \
 	system/enums/grid-flow.h \
-	system/enums/monrace/monrace-id.h \
 	system/enums/grid-count-kind.h \
+	system/enums/monrace/monrace-id.h \
+	system/enums/terrain/terrain-tag.h \
 	\
 	system/floor/floor-info.cpp system/floor/floor-info.h \
 	system/floor/floor-list.cpp system/floor/floor-list.h \

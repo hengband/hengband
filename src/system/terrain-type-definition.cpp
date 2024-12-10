@@ -5,7 +5,6 @@
  */
 
 #include "system/terrain-type-definition.h"
-#include "grid/feature.h" // 暫定、is_ascii_graphics() は別ファイルに移す.
 #include "grid/lighting-colors-table.h"
 #include <algorithm>
 
@@ -56,7 +55,7 @@ bool TerrainType::is_trap() const
 void TerrainType::reset_lighting(bool is_config)
 {
     auto &symbols = is_config ? this->symbol_configs : this->symbol_definitions;
-    if (is_ascii_graphics(symbols[F_LIT_STANDARD].color)) {
+    if (symbols[F_LIT_STANDARD].is_ascii_graphics()) {
         this->reset_lighting_ascii(symbols);
         return;
     }
@@ -181,4 +180,32 @@ void TerrainList::resize(size_t new_size)
 void TerrainList::shrink_to_fit()
 {
     this->terrains.shrink_to_fit();
+}
+
+/*!
+ * @brief 地形情報の各種タグからIDへ変換して結果を収める
+ */
+void TerrainList::retouch()
+{
+    for (auto &terrain : this->terrains) {
+        terrain.mimic = this->search_real_terrain(terrain.mimic_tag).value_or(terrain.mimic);
+        terrain.destroyed = this->search_real_terrain(terrain.destroyed_tag).value_or(terrain.destroyed);
+        for (auto &ts : terrain.state) {
+            ts.result = this->search_real_terrain(ts.result_tag).value_or(ts.result);
+        }
+    }
+}
+
+/*!
+ * @brief 地形タグからIDを得る
+ * @param tag タグ文字列のオフセット
+ * @return 地形ID。該当がないならstd::nullopt
+ */
+std::optional<short> TerrainList::search_real_terrain(std::string_view tag) const
+{
+    if (tag.empty()) {
+        return std::nullopt;
+    }
+
+    return this->get_terrain_id_by_tag(tag);
 }
