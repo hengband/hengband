@@ -50,16 +50,18 @@ bool create_rune_protection_one(PlayerType *player_ptr)
  */
 bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!cave_clean_bold(floor_ptr, y, x)) {
+    const Pos2D pos(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (!cave_clean_bold(&floor, pos.y, pos.x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
-    floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
-    floor_ptr->grid_array[y][x].mimic = feat_rune_explosion;
-    note_spot(player_ptr, y, x);
-    lite_spot(player_ptr, y, x);
+    auto &grid = floor.get_grid(pos);
+    grid.info |= CAVE_OBJECT;
+    grid.set_mimic_terrain_id(TerrainTag::RUNE_EXPLOSION);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
     return true;
 }
 
