@@ -24,7 +24,6 @@
 /*** Terrain feature variables ***/
 
 /* Objects */
-FEAT_IDX feat_rune_protection;
 FEAT_IDX feat_rune_explosion;
 FEAT_IDX feat_mirror;
 

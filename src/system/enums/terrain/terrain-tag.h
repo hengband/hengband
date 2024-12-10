@@ -9,4 +9,5 @@
 enum class TerrainTag {
     NONE,
     FLOOR,
+    RUNE_PROTECTION,
 };

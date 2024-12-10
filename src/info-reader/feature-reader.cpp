@@ -302,7 +302,6 @@ void init_feat_variables()
         terrains.emplace_tag(tag.first);
     }
 
-    feat_rune_protection = terrains.get_terrain_id_by_tag("RUNE_PROTECTION");
     feat_rune_explosion = terrains.get_terrain_id_by_tag("RUNE_EXPLOSION");
     feat_mirror = terrains.get_terrain_id_by_tag("MIRROR");
 

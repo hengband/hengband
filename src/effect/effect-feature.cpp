@@ -18,6 +18,7 @@
 #include "spell-class/spells-mirror-master.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -295,7 +296,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             break;
         }
         grid.info |= CAVE_OBJECT;
-        grid.mimic = feat_rune_protection;
+        grid.set_mimic_terrain_id(TerrainTag::RUNE_PROTECTION);
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
         break;
