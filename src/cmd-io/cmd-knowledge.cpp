@@ -14,7 +14,7 @@
 #include "knowledge/knowledge-uniques.h"
 #include "main/sound-of-music.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"

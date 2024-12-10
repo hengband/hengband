@@ -3,7 +3,7 @@
 #include "room/door-definition.h"
 #include "system/angband-system.h"
 #include "system/enums/grid-flow.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 
 Grid::Grid()

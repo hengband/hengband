@@ -1,10 +1,10 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "dungeon/dungeon-flag-mask.h"
-#include "grid/feature-action-flags.h"
 #include "grid/feature.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-list.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-actions-table.h"
+#include "system/terrain/terrain-definition.h"
 
 enum conversion_type {
     CONVERT_TYPE_FLOOR = 0,
@@ -64,7 +64,7 @@ short DungeonDefinition::convert_terrain_id(short terrain_id, TerrainCharacteris
         return terrain_id;
     }
 
-    const auto has_action_flag = any_bits(terrain_action_flags[enum2i(action)], FAF_DESTROY);
+    const auto has_action_flag = TerrainActionFlagChecker::has(action, TerrainAction::DESTROY);
     return has_action_flag ? this->convert_terrain_id(terrain.destroyed) : terrain_id;
 }
 

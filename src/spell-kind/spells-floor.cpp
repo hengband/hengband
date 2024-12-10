@@ -22,7 +22,6 @@
 #include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature-flag-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"
@@ -49,7 +48,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

@@ -72,5 +72,3 @@ enum class TerrainCharacteristics {
     GLASS = 112, /*!< ガラス製の地形である */
     MAX,
 };
-
-constexpr auto FF_FLAG_MAX = enum2i(TerrainCharacteristics::MAX);

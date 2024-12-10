@@ -5,7 +5,6 @@
  * @details PlayerRaceからPlayerClassへの依存はあるが、逆は依存させないこと.
  */
 #include "player-base/player-race.h"
-#include "grid/feature-flag-types.h"
 #include "player-base/player-class.h"
 #include "player-info/mimic-info-table.h"
 #include "player/race-info-table.h"
@@ -13,7 +12,7 @@
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 
 /*!

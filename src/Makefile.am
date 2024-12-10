@@ -233,6 +233,7 @@ hengband_SOURCES = \
 	game-option/cheat-options.cpp game-option/cheat-options.h \
 	game-option/cheat-types.h \
 	game-option/disturbance-options.cpp game-option/disturbance-options.h \
+	game-option/game-option-page.h \
 	game-option/game-play-options.cpp game-option/game-play-options.h \
 	game-option/input-options.cpp game-option/input-options.h \
 	game-option/keymap-directory-getter.cpp game-option/keymap-directory-getter.h \
@@ -245,8 +246,6 @@ hengband_SOURCES = \
 	game-option/text-display-options.cpp game-option/text-display-options.h \
 	\
 	grid/door.cpp grid/door.h \
-	grid/feature-action-flags.cpp grid/feature-action-flags.h \
-	grid/feature-flag-types.h \
 	grid/feature-generator.cpp grid/feature-generator.h \
 	grid/feature.cpp grid/feature.h \
 	grid/grid.cpp grid/grid.h \
@@ -930,7 +929,6 @@ hengband_SOURCES = \
 	system/redrawing-flags-updater.cpp system/redrawing-flags-updater.h \
 	system/spell-info-list.cpp system/spell-info-list.h \
 	system/system-variables.cpp system/system-variables.h \
-	system/terrain-type-definition.cpp system/terrain-type-definition.h \
 	system/gamevalue.h \
 	\
 	system/baseitem/baseitem-allocation.cpp system/baseitem/baseitem-allocation.h \
@@ -943,10 +941,10 @@ hengband_SOURCES = \
 	system/dungeon/dungeon-list.cpp system/dungeon/dungeon-list.h \
 	system/dungeon/dungeon-record.cpp system/dungeon/dungeon-record.h \
 	\
-	system/enums/game-option-page.h \
 	system/enums/grid-flow.h \
 	system/enums/grid-count-kind.h \
 	system/enums/monrace/monrace-id.h \
+	system/enums/terrain/terrain-characteristics.h \
 	system/enums/terrain/terrain-tag.h \
 	\
 	system/floor/floor-info.cpp system/floor/floor-info.h \
@@ -959,6 +957,9 @@ hengband_SOURCES = \
 	system/monrace/monrace-list.cpp system/monrace/monrace-list.h \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
+	\
+	system/terrain/terrain-actions-table.cpp system/terrain/terrain-actions-table.h \
+	system/terrain/terrain-definition.cpp system/terrain/terrain-definition.h \
 	\
 	target/grid-selector.cpp target/grid-selector.h \
 	target/projection-path-calculator.cpp target/projection-path-calculator.h \

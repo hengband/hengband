@@ -2187,9 +2187,6 @@
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\feature-action-flags.cpp">
-      <Filter>grid</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\avatar\avatar-changer.cpp">
       <Filter>avatar</Filter>
     </ClCompile>
@@ -2430,9 +2427,6 @@
     <ClCompile Include="..\..\src\system\spell-info-list.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\terrain-type-definition.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster-race\race-brightness-mask.cpp">
       <Filter>monster-race</Filter>
     </ClCompile>
@@ -2549,6 +2543,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\system\floor\town-list.cpp">
       <Filter>system\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\terrain\terrain-actions-table.cpp">
+      <Filter>system\terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\terrain\terrain-definition.cpp">
+      <Filter>system\terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4265,9 +4265,6 @@
     <ClInclude Include="..\..\src\cmd-action\cmd-others.h">
       <Filter>cmd-action</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\grid\feature-flag-types.h">
-      <Filter>grid</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\action\run-execution.h">
       <Filter>action</Filter>
     </ClInclude>
@@ -5016,9 +5013,6 @@
     <ClInclude Include="..\..\src\system\grid-type-definition.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\grid\feature-action-flags.h">
-      <Filter>grid</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-damage.h">
       <Filter>monster</Filter>
     </ClInclude>
@@ -5367,9 +5361,6 @@
     <ClInclude Include="..\..\src\system\spell-info-list.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\terrain-type-definition.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-race\race-brightness-flags.h">
       <Filter>monster-race</Filter>
     </ClInclude>
@@ -5457,9 +5448,6 @@
     <ClInclude Include="..\..\src\save\monster-entity-writer.h">
       <Filter>save</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\enums\game-option-page.h">
-      <Filter>system\enums</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\system\enums\grid-flow.h">
       <Filter>system\enums</Filter>
     </ClInclude>
@@ -5522,6 +5510,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\enums\terrain\terrain-tag.h">
       <Filter>system\enums\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\terrain\terrain-characteristics.h">
+      <Filter>system\enums\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game-option\game-option-page.h">
+      <Filter>game-option</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\terrain\terrain-actions-table.h">
+      <Filter>system\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\terrain\terrain-definition.h">
+      <Filter>system\terrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -5813,6 +5813,9 @@
     </Filter>
     <Filter Include="system\enums\terrain">
       <UniqueIdentifier>{3ceaf1e1-713b-4cfe-979d-e0ecd9949bfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\terrain">
+      <UniqueIdentifier>{3a15d903-e2ff-488d-a3c8-7bf69fad0f43}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

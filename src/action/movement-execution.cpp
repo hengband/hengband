@@ -39,7 +39,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"

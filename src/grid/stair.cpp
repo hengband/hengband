@@ -9,7 +9,7 @@
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 
 /*!
  * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location

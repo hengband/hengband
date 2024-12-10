@@ -7,7 +7,6 @@
 #include "floor/geometry.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
-#include "grid/feature-flag-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/stair.h"
@@ -32,7 +31,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 

@@ -336,7 +336,7 @@
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
     <ClCompile Include="..\..\src\system\floor\floor-info.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
-    <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
+    <ClCompile Include="..\..\src\system\terrain\terrain-actions-table.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
     <ClCompile Include="..\..\src\main-win\graphics-win.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-term.cpp" />
@@ -626,7 +626,7 @@
     <ClCompile Include="..\..\src\system\monrace\monrace-definition.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
     <ClCompile Include="..\..\src\system\services\baseitem-monrace-service.cpp" />
-    <ClCompile Include="..\..\src\system\terrain-type-definition.cpp" />
+    <ClCompile Include="..\..\src\system\terrain\terrain-definition.cpp" />
     <ClCompile Include="..\..\src\target\grid-selector.cpp" />
     <ClCompile Include="..\..\src\target\projection-path-calculator.cpp" />
     <ClCompile Include="..\..\src\target\target-describer.cpp" />
@@ -1105,7 +1105,7 @@
     <ClInclude Include="..\..\src\action\movement-execution.h" />
     <ClInclude Include="..\..\src\core\score-util.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-mask.h" />
-    <ClInclude Include="..\..\src\grid\feature-action-flags.h" />
+    <ClInclude Include="..\..\src\system\terrain\terrain-actions-table.h" />
     <ClInclude Include="..\..\src\main-win\commandline-win.h" />
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
     <ClInclude Include="..\..\src\main-win\main-win-term.h" />
@@ -1201,7 +1201,7 @@
     <ClInclude Include="..\..\src\game-option\special-options.h" />
     <ClInclude Include="..\..\src\game-option\text-display-options.h" />
     <ClInclude Include="..\..\src\grid\door.h" />
-    <ClInclude Include="..\..\src\grid\feature-flag-types.h" />
+    <ClInclude Include="..\..\src\system\enums\terrain\terrain-characteristics.h" />
     <ClInclude Include="..\..\src\grid\feature-generator.h" />
     <ClInclude Include="..\..\src\grid\object-placer.h" />
     <ClInclude Include="..\..\src\grid\lighting-colors-table.h" />
@@ -1453,7 +1453,7 @@
     <ClInclude Include="..\..\src\system\grid-type-definition.h" />
     <ClInclude Include="..\..\src\system\player-type-definition.h" />
     <ClInclude Include="..\..\src\system\services\baseitem-monrace-service.h" />
-    <ClInclude Include="..\..\src\system\terrain-type-definition.h" />
+    <ClInclude Include="..\..\src\system\terrain\terrain-definition.h" />
     <ClInclude Include="..\..\src\system\enums\terrain\terrain-tag.h" />
     <ClInclude Include="..\..\src\target\grid-selector.h" />
     <ClInclude Include="..\..\src\target\projection-path-calculator.h" />
@@ -1617,7 +1617,7 @@
     <ClInclude Include="..\..\src\object\item-use-flags.h" />
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\system\building-type-definition.h" />
-    <ClInclude Include="..\..\src\system\enums\game-option-page.h" />
+    <ClInclude Include="..\..\src\game-option\game-option-page.h" />
     <ClInclude Include="..\..\src\system\monrace\monrace-definition.h" />
     <ClInclude Include="..\..\src\system\item-entity.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />

@@ -17,7 +17,7 @@
 #include "system/building-type-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/system-variables.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include <string>
