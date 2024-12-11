@@ -32,6 +32,7 @@
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -39,6 +40,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -340,10 +342,13 @@ static void set_stairs(PlayerType *player_ptr)
     auto &grid = floor.grid_array[player_ptr->y][player_ptr->x];
     const auto &fcms = FloorChangeModesStore::get_instace();
     const auto &dungeon = floor.get_dungeon_definition();
+    const auto &terrains = TerrainList::get_instance();
     if (fcms->has(FloorChangeMode::UP) && !inside_quest(floor.get_quest_id())) {
         grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
     } else if (fcms->has(FloorChangeMode::DOWN) && !ironman_downward) {
-        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
+        const auto terrain_up_stair = terrains.get_terrain_id(TerrainTag::UP_STAIR);
+        const auto terrain_id = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(terrain_up_stair, TerrainCharacteristics::SHAFT) : terrain_up_stair;
+        grid.set_terrain_id(terrain_id);
     }
 
     grid.mimic = 0;

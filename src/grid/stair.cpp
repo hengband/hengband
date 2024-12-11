@@ -5,11 +5,13 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 
 /*!
  * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
@@ -51,9 +53,13 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
         }
     }
 
+    const auto &terrains = TerrainList::get_instance();
     if (up_stairs) {
-        set_cave_feat(&floor, y, x, feat_up_stair);
-    } else if (down_stairs) {
+        set_cave_feat(&floor, y, x, terrains.get_terrain_id(TerrainTag::UP_STAIR));
+        return;
+    }
+    
+    if (down_stairs) {
         set_cave_feat(&floor, y, x, feat_down_stair);
     }
 }

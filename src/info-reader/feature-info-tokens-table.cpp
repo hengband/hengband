@@ -136,4 +136,5 @@ const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
     { "RUNE_PROTECTION", TerrainTag::RUNE_PROTECTION },
     { "RUNE_EXPLOSION", TerrainTag::RUNE_EXPLOSION },
     { "MIRROR", TerrainTag::MIRROR },
+    { "UP_STAIR", TerrainTag::UP_STAIR },
 };

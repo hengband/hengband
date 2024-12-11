@@ -21,6 +21,7 @@
 #include "save/floor-writer.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -155,7 +156,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
                         g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
                     }
                 } else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) && (floor.quest_number == i2enum<QuestId>(OLD_QUEST_WATER_CAVE))) {
-                    g_ptr->feat = feat_up_stair;
+                    g_ptr->set_terrain_id(TerrainTag::UP_STAIR);
                     g_ptr->special = 0;
                 }
             }

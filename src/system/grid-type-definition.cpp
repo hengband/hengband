@@ -217,6 +217,11 @@ void Grid::add_info(int grid_info)
     this->info |= grid_info;
 }
 
+void Grid::set_terrain_id(short terrain_id)
+{
+    this->feat = terrain_id;
+}
+
 void Grid::set_terrain_id(TerrainTag tag)
 {
     this->feat = TerrainList::get_instance().get_terrain_id(tag);

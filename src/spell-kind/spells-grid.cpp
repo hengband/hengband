@@ -15,6 +15,7 @@
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -150,10 +151,14 @@ void stair_creation(PlayerType *player_ptr)
     saved_floor_type *dest_sf_ptr;
     dest_sf_ptr = get_sf_ptr(dest_floor_id);
     const auto &dungeon = floor.get_dungeon_definition();
+    const auto &terrains = TerrainList::get_instance();
     if (up) {
-        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor.dun_level - 2)) ? dungeon.convert_terrain_id(feat_up_stair, TerrainCharacteristics::SHAFT)
-                                                                                         : feat_up_stair);
+        const auto is_shallow = dest_sf_ptr->dun_level <= floor.dun_level - 2;
+        const auto terrain_up_stair = terrains.get_terrain_id(TerrainTag::UP_STAIR);
+        const auto should_convert = (dest_sf_ptr->last_visit > 0) && is_shallow;
+        const auto converted_terrain_id = dungeon.convert_terrain_id(terrain_up_stair, TerrainCharacteristics::SHAFT);
+        const auto terrain_id = should_convert ? converted_terrain_id : terrain_up_stair;
+        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x, terrain_id);
     } else {
         cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
             (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor.dun_level + 2)) ? dungeon.convert_terrain_id(feat_down_stair, TerrainCharacteristics::SHAFT)
