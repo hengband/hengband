@@ -302,8 +302,6 @@ void init_feat_variables()
         terrains.emplace_tag(tag.first);
     }
 
-    feat_mirror = terrains.get_terrain_id_by_tag("MIRROR");
-
     feat_door[DOOR_DOOR].open = terrains.get_terrain_id_by_tag("OPEN_DOOR");
     feat_door[DOOR_DOOR].broken = terrains.get_terrain_id_by_tag("BROKEN_DOOR");
     feat_door[DOOR_DOOR].closed = terrains.get_terrain_id_by_tag("CLOSED_DOOR");

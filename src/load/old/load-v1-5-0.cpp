@@ -670,7 +670,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
                 /* Old CAVE_IN_MIRROR flag */
                 if (grid.info & CAVE_OBJECT) {
-                    grid.mimic = feat_mirror;
+                    grid.set_mimic_terrain_id(TerrainTag::MIRROR);
                 } else if ((grid.feat == OLD_FEAT_RUNE_EXPLOSION) || (grid.feat == OLD_FEAT_RUNE_PROTECTION)) {
                     grid.info |= CAVE_OBJECT;
                     grid.mimic = grid.feat;

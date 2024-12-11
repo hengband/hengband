@@ -28,6 +28,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
@@ -136,7 +137,7 @@ bool SpellsMirrorMaster::place_mirror()
     /* Create a mirror */
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     set_bits(g_ptr->info, CAVE_OBJECT);
-    g_ptr->mimic = feat_mirror;
+    g_ptr->set_mimic_terrain_id(TerrainTag::MIRROR);
 
     /* Turn on the light */
     set_bits(g_ptr->info, CAVE_GLOW);

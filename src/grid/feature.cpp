@@ -23,9 +23,6 @@
 
 /*** Terrain feature variables ***/
 
-/* Objects */
-FEAT_IDX feat_mirror;
-
 /* Stairs */
 FEAT_IDX feat_up_stair;
 FEAT_IDX feat_down_stair;
