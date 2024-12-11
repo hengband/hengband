@@ -345,7 +345,6 @@ void init_feat_variables()
     feat_door[DOOR_CURTAIN].num_jammed = 1;
 
     /* Stairs */
-    feat_down_stair = terrains.get_terrain_id_by_tag("DOWN_STAIR");
     feat_entrance = terrains.get_terrain_id_by_tag("ENTRANCE");
 
     /* Normal traps */

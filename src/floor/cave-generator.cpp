@@ -13,7 +13,6 @@
 #include "game-option/game-play-options.h"
 #include "grid/door.h"
 #include "grid/feature-generator.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
@@ -200,7 +199,7 @@ static bool make_one_floor(PlayerType *player_ptr, DungeonData *dd_ptr, DungeonD
 
     make_doors(player_ptr, dd_ptr, dt_ptr);
     const auto &terrains = TerrainList::get_instance();
-    if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(3, 4), 3)) {
+    if (!alloc_stairs(player_ptr, terrains.get_terrain_id(TerrainTag::DOWN_STAIR), rand_range(3, 4), 3)) {
         dd_ptr->why = _("下り階段生成に失敗", "Failed to generate down stairs.");
         return false;
     }
@@ -219,7 +218,7 @@ static bool switch_making_floor(PlayerType *player_ptr, DungeonData *dd_ptr, Dun
         const auto &floor = *player_ptr->current_floor_ptr;
         build_maze_vault(player_ptr, { floor.width / 2 - 1, floor.height / 2 - 1 }, { floor.width - 4, floor.height - 4 }, false);
         const auto &terrains = TerrainList::get_instance();
-        if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) {
+        if (!alloc_stairs(player_ptr, terrains.get_terrain_id(TerrainTag::DOWN_STAIR), rand_range(2, 3), 3)) {
             dd_ptr->why = _("迷宮ダンジョンの下り階段生成に失敗", "Failed to alloc up stairs in maze dungeon.");
             return false;
         }

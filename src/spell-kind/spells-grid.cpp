@@ -152,9 +152,12 @@ void stair_creation(PlayerType *player_ptr)
         const auto terrain_id = should_convert ? converted_terrain_id : terrain_up_stair;
         cave_set_feat(player_ptr, player_ptr->y, player_ptr->x, terrain_id);
     } else {
-        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor.dun_level + 2)) ? dungeon.convert_terrain_id(feat_down_stair, TerrainCharacteristics::SHAFT)
-                                                                                         : feat_down_stair);
+        const auto is_deep = dest_sf_ptr->dun_level >= floor.dun_level + 2;
+        const auto terrain_down_stair = terrains.get_terrain_id(TerrainTag::DOWN_STAIR);
+        const auto should_convert = (dest_sf_ptr->last_visit > 0) && is_deep;
+        const auto converted_terrain_id = dungeon.convert_terrain_id(terrain_down_stair, TerrainCharacteristics::SHAFT);
+        const auto terrain_id = should_convert ? converted_terrain_id : terrain_down_stair;
+        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x, terrain_id);
     }
 
     floor.get_grid(player_ptr->get_position()).special = dest_floor_id;

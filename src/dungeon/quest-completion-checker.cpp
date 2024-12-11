@@ -10,6 +10,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
 #include "system/enums/terrain/terrain-characteristics.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -17,6 +18,8 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -239,7 +242,7 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
     }
 
     msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
-    cave_set_feat(this->player_ptr, y, x, feat_down_stair);
+    cave_set_feat(this->player_ptr, y, x, TerrainList::get_instance().get_terrain_id(TerrainTag::DOWN_STAIR));
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
     return Pos2D(y, x);
 }

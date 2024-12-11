@@ -2,7 +2,6 @@
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "game-option/birth-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -49,9 +48,9 @@ void place_random_stairs(PlayerType *player_ptr, const Pos2D &pos)
         set_cave_feat(&floor, pos.y, pos.x, terrains.get_terrain_id(TerrainTag::UP_STAIR));
         return;
     }
-    
+
     if (down_stairs) {
-        set_cave_feat(&floor, pos.y, pos.x, feat_down_stair);
+        set_cave_feat(&floor, pos.y, pos.x, terrains.get_terrain_id(TerrainTag::DOWN_STAIR));
     }
 }
 

@@ -344,10 +344,14 @@ static void set_stairs(PlayerType *player_ptr)
     const auto &dungeon = floor.get_dungeon_definition();
     const auto &terrains = TerrainList::get_instance();
     if (fcms->has(FloorChangeMode::UP) && !inside_quest(floor.get_quest_id())) {
-        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
+        const auto terrain_down_stair = terrains.get_terrain_id(TerrainTag::DOWN_STAIR);
+        const auto converted_terrain_id = dungeon.convert_terrain_id(terrain_down_stair, TerrainCharacteristics::SHAFT);
+        const auto terrain_id = fcms->has(FloorChangeMode::SHAFT) ? converted_terrain_id : terrain_down_stair;
+        grid.set_terrain_id(terrain_id);
     } else if (fcms->has(FloorChangeMode::DOWN) && !ironman_downward) {
         const auto terrain_up_stair = terrains.get_terrain_id(TerrainTag::UP_STAIR);
-        const auto terrain_id = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(terrain_up_stair, TerrainCharacteristics::SHAFT) : terrain_up_stair;
+        const auto converted_terrain_id = dungeon.convert_terrain_id(terrain_up_stair, TerrainCharacteristics::SHAFT);
+        const auto terrain_id = fcms->has(FloorChangeMode::SHAFT) ? converted_terrain_id : terrain_up_stair;
         grid.set_terrain_id(terrain_id);
     }
 
