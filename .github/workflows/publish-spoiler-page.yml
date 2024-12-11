@@ -39,7 +39,7 @@ jobs:
         run: nkf -w --in-place ~/.angband/Hengband/*.txt
 
       - name: Upload spoilers
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: spoiler-files
           path: ~/.angband/Hengband/*.txt
