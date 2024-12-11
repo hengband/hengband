@@ -72,17 +72,9 @@ bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void stair_creation(PlayerType *player_ptr)
 {
-    bool up = true;
-    if (ironman_downward) {
-        up = false;
-    }
-
-    bool down = true;
+    auto up = !ironman_downward;
     auto &floor = *player_ptr->current_floor_ptr;
-    if (inside_quest(floor.get_quest_id()) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth)) {
-        down = false;
-    }
-
+    auto down = !inside_quest(floor.get_quest_id()) && (floor.dun_level < floor.get_dungeon_definition().maxdepth);
     if (!floor.dun_level || (!up && !down) || (floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) || floor.inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         msg_print(_("効果がありません！", "There is no effect!"));
         return;
@@ -94,8 +86,7 @@ void stair_creation(PlayerType *player_ptr)
     }
 
     delete_all_items_from_floor(player_ptr, player_ptr->y, player_ptr->x);
-    saved_floor_type *sf_ptr;
-    sf_ptr = get_sf_ptr(player_ptr->floor_id);
+    auto *sf_ptr = get_sf_ptr(player_ptr->floor_id);
     if (!sf_ptr) {
         player_ptr->floor_id = get_unused_floor_id(player_ptr);
         sf_ptr = get_sf_ptr(player_ptr->floor_id);
@@ -109,7 +100,7 @@ void stair_creation(PlayerType *player_ptr)
         }
     }
 
-    FLOOR_IDX dest_floor_id = 0;
+    short dest_floor_id = 0;
     if (up) {
         if (sf_ptr->upper_floor_id) {
             dest_floor_id = sf_ptr->upper_floor_id;
@@ -121,21 +112,23 @@ void stair_creation(PlayerType *player_ptr)
     }
 
     if (dest_floor_id) {
-        for (POSITION y = 0; y < floor.height; y++) {
-            for (POSITION x = 0; x < floor.width; x++) {
-                auto *g_ptr = &floor.grid_array[y][x];
-                if (!g_ptr->special) {
+        for (auto y = 0; y < floor.height; y++) {
+            for (auto x = 0; x < floor.width; x++) {
+                auto &grid = floor.get_grid({ y, x });
+                if (!grid.special) {
                     continue;
                 }
-                if (feat_uses_special(g_ptr->feat)) {
+
+                if (feat_uses_special(grid.feat)) {
                     continue;
                 }
-                if (g_ptr->special != dest_floor_id) {
+
+                if (grid.special != dest_floor_id) {
                     continue;
                 }
 
                 /* Remove old stairs */
-                g_ptr->special = 0;
+                grid.special = 0;
                 cave_set_feat(player_ptr, y, x, rand_choice(feat_ground_type));
             }
         }
@@ -148,8 +141,7 @@ void stair_creation(PlayerType *player_ptr)
         }
     }
 
-    saved_floor_type *dest_sf_ptr;
-    dest_sf_ptr = get_sf_ptr(dest_floor_id);
+    const auto *dest_sf_ptr = get_sf_ptr(dest_floor_id);
     const auto &dungeon = floor.get_dungeon_definition();
     const auto &terrains = TerrainList::get_instance();
     if (up) {
@@ -165,5 +157,5 @@ void stair_creation(PlayerType *player_ptr)
                                                                                          : feat_down_stair);
     }
 
-    floor.grid_array[player_ptr->y][player_ptr->x].special = dest_floor_id;
+    floor.get_grid(player_ptr->get_position()).special = dest_floor_id;
 }

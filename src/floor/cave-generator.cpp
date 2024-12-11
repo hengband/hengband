@@ -73,11 +73,11 @@ static void check_arena_floor(PlayerType *player_ptr, DungeonData *dd_ptr)
 
 static void place_cave_contents(PlayerType *player_ptr, DungeonData *dd_ptr, DungeonDefinition *d_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->dun_level == 1) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.dun_level == 1) {
         constexpr auto density_moss = 2;
         while (one_in_(density_moss)) {
-            place_trees(player_ptr, randint1(floor_ptr->width - 2), randint1(floor_ptr->height - 2));
+            place_trees(player_ptr, { randint1(floor.width - 2), randint1(floor.height - 2) });
         }
     }
 
@@ -85,8 +85,8 @@ static void place_cave_contents(PlayerType *player_ptr, DungeonData *dd_ptr, Dun
         destroy_level(player_ptr);
     }
 
-    if (d_ptr->has_river_flag() && one_in_(3) && (randint1(floor_ptr->dun_level) > 5)) {
-        add_river(floor_ptr, dd_ptr);
+    if (d_ptr->has_river_flag() && one_in_(3) && (randint1(floor.dun_level) > 5)) {
+        add_river(&floor, dd_ptr);
     }
 
     for (size_t i = 0; i < dd_ptr->cent_n; i++) {
@@ -181,10 +181,9 @@ static void make_only_tunnel_points(FloorType *floor_ptr, DungeonData *dd_ptr)
 
 static bool make_one_floor(PlayerType *player_ptr, DungeonData *dd_ptr, DungeonDefinition *d_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-
-    if (floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_ROOM)) {
-        make_only_tunnel_points(floor_ptr, dd_ptr);
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_ROOM)) {
+        make_only_tunnel_points(&floor, dd_ptr);
     } else {
         if (!generate_rooms(player_ptr, dd_ptr)) {
             dd_ptr->why = _("部屋群の生成に失敗", "Failed to generate rooms");

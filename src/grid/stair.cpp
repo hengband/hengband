@@ -14,33 +14,24 @@
 #include "system/terrain/terrain-list.h"
 
 /*!
- * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
+ * @brief 所定の位置に上り階段か下り階段を配置する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 配置を試みたいマスのY座標
- * @param x 配置を試みたいマスのX座標
+ * @param pos 配置を試みたいマスの座標
  */
-void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
+void place_random_stairs(PlayerType *player_ptr, const Pos2D &pos)
 {
-    bool up_stairs = true;
-    bool down_stairs = true;
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto *g_ptr = &floor.grid_array[y][x];
-    if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty()) {
+    const auto &grid = floor.get_grid(pos);
+    if (!grid.is_floor() || !grid.o_idx_list.empty()) {
         return;
     }
 
-    if (!floor.dun_level) {
-        up_stairs = false;
-    }
-
+    auto up_stairs = floor.is_in_underground();
     if (ironman_downward) {
         up_stairs = false;
     }
 
-    if (floor.dun_level >= floor.get_dungeon_definition().maxdepth) {
-        down_stairs = false;
-    }
-
+    auto down_stairs = floor.dun_level < floor.get_dungeon_definition().maxdepth;
     if (inside_quest(floor.get_quest_id()) && (floor.dun_level > 1)) {
         down_stairs = false;
     }
@@ -55,12 +46,12 @@ void place_random_stairs(PlayerType *player_ptr, POSITION y, POSITION x)
 
     const auto &terrains = TerrainList::get_instance();
     if (up_stairs) {
-        set_cave_feat(&floor, y, x, terrains.get_terrain_id(TerrainTag::UP_STAIR));
+        set_cave_feat(&floor, pos.y, pos.x, terrains.get_terrain_id(TerrainTag::UP_STAIR));
         return;
     }
     
     if (down_stairs) {
-        set_cave_feat(&floor, y, x, feat_down_stair);
+        set_cave_feat(&floor, pos.y, pos.x, feat_down_stair);
     }
 }
 
