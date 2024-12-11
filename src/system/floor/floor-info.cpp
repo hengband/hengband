@@ -18,7 +18,6 @@
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/terrain/terrain-definition.h"
-#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 #include "world/world.h"
@@ -521,15 +520,19 @@ void FloorType::place_random_stairs(const Pos2D &pos)
         }
     }
 
-    const auto &terrains = TerrainList::get_instance();
     if (up_stairs) {
-        this->set_terrain_id(pos, terrains.get_terrain_id(TerrainTag::UP_STAIR));
+        this->set_terrain_id(pos, TerrainTag::UP_STAIR);
         return;
     }
 
     if (down_stairs) {
-        this->set_terrain_id(pos, terrains.get_terrain_id(TerrainTag::DOWN_STAIR));
+        this->set_terrain_id(pos, TerrainTag::DOWN_STAIR);
     }
+}
+
+void FloorType::set_terrain_id(const Pos2D &pos, TerrainTag tag)
+{
+    this->get_grid(pos).set_terrain_id(tag);
 }
 
 void FloorType::set_terrain_id(const Pos2D &pos, short terrain_id)
