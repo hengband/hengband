@@ -26,6 +26,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/grid-flow.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
@@ -36,6 +37,7 @@
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -73,6 +75,8 @@ public:
     FEAT_IDX feat = 0;
     TerrainType *terrain_ptr = nullptr;
     std::string name = "";
+
+    void set_terrain_id(TerrainTag tag);
 };
 
 GridExamination::GridExamination(FloorType &floor, POSITION y, POSITION x, target_type mode, concptr info)
@@ -84,6 +88,11 @@ GridExamination::GridExamination(FloorType &floor, POSITION y, POSITION x, targe
     this->g_ptr = &floor.grid_array[y][x];
     this->m_ptr = &floor.m_list[this->g_ptr->m_idx];
     this->next_o_idx = 0;
+}
+
+void GridExamination::set_terrain_id(TerrainTag tag)
+{
+    this->feat = TerrainList::get_instance().get_terrain_id(tag);
 }
 }
 
@@ -551,7 +560,7 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
 
     ge_ptr->feat = ge_ptr->g_ptr->get_feat_mimic();
     if (!ge_ptr->g_ptr->is_mark() && !player_can_see_bold(player_ptr, y, x)) {
-        ge_ptr->feat = feat_none;
+        ge_ptr->set_terrain_id(TerrainTag::NONE);
     }
 
     ge_ptr->terrain_ptr = &TerrainList::get_instance().get_terrain(ge_ptr->feat);

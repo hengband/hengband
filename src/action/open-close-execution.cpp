@@ -28,6 +28,7 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"

@@ -6,12 +6,38 @@
 
 #include "system/terrain/terrain-definition.h"
 #include "grid/lighting-colors-table.h"
+#include "system/enums/terrain/terrain-characteristics.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "util/flag-group.h"
 #include <algorithm>
+#include <unordered_map>
+
+namespace {
+const std::unordered_map<TerrainCharacteristics, EnumClassFlagGroup<TerrainAction>> TERRAIN_ACTIONS_TABLE = {
+    { TerrainCharacteristics::BASH, { TerrainAction::CRASH_GLASS } },
+    { TerrainCharacteristics::DISARM, { TerrainAction::DESTROY } },
+    { TerrainCharacteristics::TUNNEL, { TerrainAction::DESTROY, TerrainAction::CRASH_GLASS } },
+    { TerrainCharacteristics::HURT_ROCK, { TerrainAction::DESTROY, TerrainAction::CRASH_GLASS } },
+    { TerrainCharacteristics::HURT_DISI, { TerrainAction::DESTROY, TerrainAction::NO_DROP, TerrainAction::CRASH_GLASS } },
+};
+}
 
 TerrainType::TerrainType()
     : symbol_definitions(DEFAULT_SYMBOLS)
     , symbol_configs(DEFAULT_SYMBOLS)
 {
+}
+
+bool TerrainType::has(TerrainCharacteristics tc, TerrainAction ta)
+{
+    static const auto begin = TERRAIN_ACTIONS_TABLE.begin();
+    static const auto end = TERRAIN_ACTIONS_TABLE.end();
+    const auto action = std::find_if(begin, end, [tc](const auto &x) { return x.first == tc; });
+    if (action == end) {
+        return false;
+    }
+
+    return action->second.has(ta);
 }
 
 bool TerrainType::is_permanent_wall() const
@@ -84,128 +110,4 @@ void TerrainType::reset_lighting_graphics(std::map<int, DisplaySymbol> &symbols)
 
     symbols[F_LIT_LITE].character = character_standard + 2;
     symbols[F_LIT_DARK].character = character_standard + 1;
-}
-
-TerrainList TerrainList::instance{};
-
-TerrainList &TerrainList::get_instance()
-{
-    return instance;
-}
-
-TerrainType &TerrainList::get_terrain(short terrain_id)
-{
-    return this->terrains.at(terrain_id);
-}
-
-const TerrainType &TerrainList::get_terrain(short terrain_id) const
-{
-    return this->terrains.at(terrain_id);
-}
-
-/*!
- * @brief 地形タグからIDを得る
- * @param tag タグ文字列
- * @throw std::runtime_error 未定義のタグが指定された
- * @return 地形タグに対応するID
- */
-short TerrainList::get_terrain_id_by_tag(std::string_view tag) const
-{
-    const auto it = std::find_if(this->terrains.begin(), this->terrains.end(),
-        [tag](const auto &terrain) {
-            return terrain.tag == tag;
-        });
-    if (it == this->terrains.end()) {
-        THROW_EXCEPTION(std::runtime_error, format(_("未定義のタグ '%s'。", "%s is undefined."), tag.data()));
-    }
-
-    return static_cast<short>(std::distance(this->terrains.begin(), it));
-}
-
-std::vector<TerrainType>::iterator TerrainList::begin()
-{
-    return this->terrains.begin();
-}
-
-std::vector<TerrainType>::const_iterator TerrainList::begin() const
-{
-    return this->terrains.cbegin();
-}
-
-std::vector<TerrainType>::reverse_iterator TerrainList::rbegin()
-{
-    return this->terrains.rbegin();
-}
-
-std::vector<TerrainType>::const_reverse_iterator TerrainList::rbegin() const
-{
-    return this->terrains.crbegin();
-}
-
-std::vector<TerrainType>::iterator TerrainList::end()
-{
-    return this->terrains.end();
-}
-
-std::vector<TerrainType>::const_iterator TerrainList::end() const
-{
-    return this->terrains.cend();
-}
-
-std::vector<TerrainType>::reverse_iterator TerrainList::rend()
-{
-    return this->terrains.rend();
-}
-
-std::vector<TerrainType>::const_reverse_iterator TerrainList::rend() const
-{
-    return this->terrains.crend();
-}
-
-size_t TerrainList::size() const
-{
-    return this->terrains.size();
-}
-
-bool TerrainList::empty() const
-{
-    return this->terrains.empty();
-}
-
-void TerrainList::resize(size_t new_size)
-{
-    this->terrains.resize(new_size);
-}
-
-void TerrainList::shrink_to_fit()
-{
-    this->terrains.shrink_to_fit();
-}
-
-/*!
- * @brief 地形情報の各種タグからIDへ変換して結果を収める
- */
-void TerrainList::retouch()
-{
-    for (auto &terrain : this->terrains) {
-        terrain.mimic = this->search_real_terrain(terrain.mimic_tag).value_or(terrain.mimic);
-        terrain.destroyed = this->search_real_terrain(terrain.destroyed_tag).value_or(terrain.destroyed);
-        for (auto &ts : terrain.state) {
-            ts.result = this->search_real_terrain(ts.result_tag).value_or(ts.result);
-        }
-    }
-}
-
-/*!
- * @brief 地形タグからIDを得る
- * @param tag タグ文字列のオフセット
- * @return 地形ID。該当がないならstd::nullopt
- */
-std::optional<short> TerrainList::search_real_terrain(std::string_view tag) const
-{
-    if (tag.empty()) {
-        return std::nullopt;
-    }
-
-    return this->get_terrain_id_by_tag(tag);
 }

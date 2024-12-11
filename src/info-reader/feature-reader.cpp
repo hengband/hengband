@@ -9,6 +9,7 @@
 #include "main/angband-headers.h"
 #include "room/door-definition.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -84,7 +85,17 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         const auto s = static_cast<short>(i);
         auto &terrain = terrains.get_terrain(s);
         terrain.idx = s;
-        terrain.tag = tokens[2];
+        const auto &tag = tokens[2];
+        terrain.tag = tag;
+
+        //!< @todo 後でif文は消す.
+        static const auto tag_begin = terrain_tags.begin();
+        static const auto tag_end = terrain_tags.end();
+        const auto tag_enum = std::find_if(tag_begin, tag_end, [&tag](const auto &x) { return x.first == tag; });
+        if (tag_enum != tag_end) {
+            terrain.tag_enum = tag_enum->second;
+        }
+
         terrain.mimic = s;
         terrain.destroyed = s;
         for (auto j = 0; j < MAX_FEAT_STATES; j++) {
@@ -286,8 +297,10 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
  */
 void init_feat_variables()
 {
-    const auto &terrains = TerrainList::get_instance();
-    feat_none = terrains.get_terrain_id_by_tag("NONE");
+    auto &terrains = TerrainList::get_instance();
+    for (const auto &tag : terrain_tags) {
+        terrains.emplace_tag(tag.first);
+    }
 
     feat_floor = terrains.get_terrain_id_by_tag("FLOOR");
     feat_rune_protection = terrains.get_terrain_id_by_tag("RUNE_PROTECTION");

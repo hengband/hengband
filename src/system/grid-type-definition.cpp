@@ -4,6 +4,7 @@
 #include "system/angband-system.h"
 #include "system/enums/grid-flow.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 
 Grid::Grid()

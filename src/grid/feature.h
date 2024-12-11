@@ -5,7 +5,6 @@
 #include <vector>
 
 /*** Terrain feature variables ***/
-extern FEAT_IDX feat_none;
 extern FEAT_IDX feat_floor;
 extern FEAT_IDX feat_rune_protection;
 extern FEAT_IDX feat_rune_explosion;

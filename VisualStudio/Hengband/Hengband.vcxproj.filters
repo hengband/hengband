@@ -2544,10 +2544,10 @@
     <ClCompile Include="..\..\src\system\floor\town-list.cpp">
       <Filter>system\floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\terrain\terrain-actions-table.cpp">
+    <ClCompile Include="..\..\src\system\terrain\terrain-definition.cpp">
       <Filter>system\terrain</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\system\terrain\terrain-definition.cpp">
+    <ClCompile Include="..\..\src\system\terrain\terrain-list.cpp">
       <Filter>system\terrain</Filter>
     </ClCompile>
   </ItemGroup>
@@ -5517,10 +5517,10 @@
     <ClInclude Include="..\..\src\game-option\game-option-page.h">
       <Filter>game-option</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\terrain\terrain-actions-table.h">
+    <ClInclude Include="..\..\src\system\terrain\terrain-definition.h">
       <Filter>system\terrain</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\terrain\terrain-definition.h">
+    <ClInclude Include="..\..\src\system\terrain\terrain-list.h">
       <Filter>system\terrain</Filter>
     </ClInclude>
   </ItemGroup>
