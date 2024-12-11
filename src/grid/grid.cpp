@@ -1019,11 +1019,6 @@ void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type g
     place_grid(player_ptr, g_ptr, gb_type);
 }
 
-void set_cave_feat(FloorType *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx)
-{
-    floor_ptr->grid_array[y][x].feat = feature_idx;
-}
-
 /*!
  * @brief マス構造体のspecial要素を利用する地形かどうかを判定する.
  */

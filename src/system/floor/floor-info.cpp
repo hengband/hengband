@@ -2,7 +2,6 @@
 #include "dungeon/quest.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
-#include "grid/grid.h"
 #include "locale/language-switcher.h"
 #include "monster/monster-timed-effects.h"
 #include "object-enchant/item-apply-magic.h"
@@ -524,13 +523,18 @@ void FloorType::place_random_stairs(const Pos2D &pos)
 
     const auto &terrains = TerrainList::get_instance();
     if (up_stairs) {
-        set_cave_feat(this, pos.y, pos.x, terrains.get_terrain_id(TerrainTag::UP_STAIR));
+        this->set_terrain_id(pos, terrains.get_terrain_id(TerrainTag::UP_STAIR));
         return;
     }
 
     if (down_stairs) {
-        set_cave_feat(this, pos.y, pos.x, terrains.get_terrain_id(TerrainTag::DOWN_STAIR));
+        this->set_terrain_id(pos, terrains.get_terrain_id(TerrainTag::DOWN_STAIR));
     }
+}
+
+void FloorType::set_terrain_id(const Pos2D &pos, short terrain_id)
+{
+    this->get_grid(pos).set_terrain_id(terrain_id);
 }
 
 /*!

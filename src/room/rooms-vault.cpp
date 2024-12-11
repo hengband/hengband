@@ -335,8 +335,6 @@ static void build_vault(
 
             /* Lay down a floor */
             place_grid(player_ptr, &grid, GB_FLOOR);
-
-            /* Remove any mimic */
             grid.mimic = 0;
 
             /* Part of a vault */
@@ -344,58 +342,40 @@ static void build_vault(
 
             /* Analyze the grid */
             switch (*t) {
-                /* Granite wall (outer) */
             case '%':
                 place_grid(player_ptr, &grid, GB_OUTER_NOPERM);
                 break;
-
-                /* Granite wall (inner) */
             case '#':
                 place_grid(player_ptr, &grid, GB_INNER);
                 break;
-
-                /* Glass wall (inner) */
             case '$':
                 place_grid(player_ptr, &grid, GB_INNER);
                 grid.feat = feat_glass_wall;
                 break;
-
-                /* Permanent wall (inner) */
             case 'X':
                 place_grid(player_ptr, &grid, GB_INNER_PERM);
                 break;
-
-                /* Permanent glass wall (inner) */
             case 'Y':
                 place_grid(player_ptr, &grid, GB_INNER_PERM);
                 grid.feat = feat_permanent_glass_wall;
                 break;
-
-                /* Treasure/trap */
             case '*':
                 if (evaluate_percent(75)) {
                     place_object(player_ptr, pos.y, pos.x, 0L);
                 } else {
                     place_trap(&floor, pos.y, pos.x);
                 }
-                break;
 
-                /* Treasure */
+                break;
             case '[':
                 place_object(player_ptr, pos.y, pos.x, 0L);
                 break;
-
-                /* Tree */
             case ':':
                 grid.feat = feat_tree;
                 break;
-
-                /* Secret doors */
             case '+':
                 place_secret_door(player_ptr, pos.y, pos.x, DOOR_DEFAULT);
                 break;
-
-                /* Secret glass doors */
             case '-':
                 place_secret_door(player_ptr, pos.y, pos.x, DOOR_GLASS_DOOR);
                 if (floor.is_closed_door(pos)) {
@@ -403,105 +383,77 @@ static void build_vault(
                 }
 
                 break;
-
-                /* Curtains */
             case '\'':
                 place_secret_door(player_ptr, pos.y, pos.x, DOOR_CURTAIN);
                 break;
-
-                /* Trap */
             case '^':
                 place_trap(&floor, pos.y, pos.x);
                 break;
-
-                /* Black market in a dungeon */
             case 'S':
-                set_cave_feat(&floor, pos.y, pos.x, feat_black_market);
+                floor.set_terrain_id(pos, feat_black_market);
                 store_init(VALID_TOWNS, StoreSaleType::BLACK);
                 break;
-
-                /* The Pattern */
             case 'p':
-                set_cave_feat(&floor, pos.y, pos.x, feat_pattern_start);
+                floor.set_terrain_id(pos, feat_pattern_start);
                 break;
-
             case 'a':
-                set_cave_feat(&floor, pos.y, pos.x, feat_pattern_1);
+                floor.set_terrain_id(pos, feat_pattern_1);
                 break;
-
             case 'b':
-                set_cave_feat(&floor, pos.y, pos.x, feat_pattern_2);
+                floor.set_terrain_id(pos, feat_pattern_2);
                 break;
-
             case 'c':
-                set_cave_feat(&floor, pos.y, pos.x, feat_pattern_3);
+                floor.set_terrain_id(pos, feat_pattern_3);
                 break;
-
             case 'd':
-                set_cave_feat(&floor, pos.y, pos.x, feat_pattern_4);
+                floor.set_terrain_id(pos, feat_pattern_4);
                 break;
-
             case 'P':
-                set_cave_feat(&floor, pos.y, pos.x, feat_pattern_end);
+                floor.set_terrain_id(pos, feat_pattern_end);
                 break;
-
             case 'B':
-                set_cave_feat(&floor, pos.y, pos.x, feat_pattern_exit);
+                floor.set_terrain_id(pos, feat_pattern_exit);
                 break;
-
             case 'A':
-                /* Reward for Pattern walk */
                 floor.object_level = floor.base_level + 12;
                 place_object(player_ptr, pos.y, pos.x, AM_GOOD | AM_GREAT);
                 floor.object_level = floor.base_level;
                 break;
-
             case '~':
-                set_cave_feat(&floor, pos.y, pos.x, feat_shallow_water);
+                floor.set_terrain_id(pos, feat_shallow_water);
                 break;
-
             case '=':
-                set_cave_feat(&floor, pos.y, pos.x, feat_deep_water);
+                floor.set_terrain_id(pos, feat_deep_water);
                 break;
-
             case 'v':
-                set_cave_feat(&floor, pos.y, pos.x, feat_shallow_lava);
+                floor.set_terrain_id(pos, feat_shallow_lava);
                 break;
-
             case 'w':
-                set_cave_feat(&floor, pos.y, pos.x, feat_deep_lava);
+                floor.set_terrain_id(pos, feat_deep_lava);
                 break;
-
             case 'f':
-                set_cave_feat(&floor, pos.y, pos.x, feat_shallow_acid_puddle);
+                floor.set_terrain_id(pos, feat_shallow_acid_puddle);
                 break;
-
             case 'F':
-                set_cave_feat(&floor, pos.y, pos.x, feat_deep_acid_puddle);
+                floor.set_terrain_id(pos, feat_deep_acid_puddle);
                 break;
-
             case 'g':
-                set_cave_feat(&floor, pos.y, pos.x, feat_shallow_poisonous_puddle);
+                floor.set_terrain_id(pos, feat_shallow_poisonous_puddle);
                 break;
-
             case 'G':
-                set_cave_feat(&floor, pos.y, pos.x, feat_deep_poisonous_puddle);
+                floor.set_terrain_id(pos, feat_deep_poisonous_puddle);
                 break;
-
             case 'h':
-                set_cave_feat(&floor, pos.y, pos.x, feat_cold_zone);
+                floor.set_terrain_id(pos, feat_cold_zone);
                 break;
-
             case 'H':
-                set_cave_feat(&floor, pos.y, pos.x, feat_heavy_cold_zone);
+                floor.set_terrain_id(pos, feat_heavy_cold_zone);
                 break;
-
             case 'i':
-                set_cave_feat(&floor, pos.y, pos.x, feat_electrical_zone);
+                floor.set_terrain_id(pos, feat_electrical_zone);
                 break;
-
             case 'I':
-                set_cave_feat(&floor, pos.y, pos.x, feat_heavy_electrical_zone);
+                floor.set_terrain_id(pos, feat_heavy_electrical_zone);
                 break;
             }
         }
