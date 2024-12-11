@@ -123,6 +123,7 @@ public:
     short pop_empty_index_monster();
     short pop_empty_index_item();
     bool is_grid_changeable(const Pos2D &pos) const;
+    void place_random_stairs(const Pos2D &pos);
 
 private:
     static int decide_selection_count();

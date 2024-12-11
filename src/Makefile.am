@@ -251,7 +251,6 @@ hengband_SOURCES = \
 	grid/grid.cpp grid/grid.h \
 	grid/lighting-colors-table.cpp grid/lighting-colors-table.h \
 	grid/object-placer.cpp grid/object-placer.h \
-	grid/stair.cpp grid/stair.h \
 	grid/trap.cpp grid/trap.h \
 	\
 	hpmp/hp-mp-processor.cpp hpmp/hp-mp-processor.h \

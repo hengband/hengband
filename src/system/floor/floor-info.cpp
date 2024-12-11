@@ -2,6 +2,7 @@
 #include "dungeon/quest.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
+#include "grid/grid.h"
 #include "locale/language-switcher.h"
 #include "monster/monster-timed-effects.h"
 #include "object-enchant/item-apply-magic.h"
@@ -12,11 +13,13 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/grid-count-kind.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 #include "world/world.h"
@@ -488,6 +491,46 @@ bool FloorType::is_grid_changeable(const Pos2D &pos) const
     }
 
     return true;
+}
+
+/*!
+ * @brief 所定の位置に上り階段か下り階段を配置する
+ * @param pos 配置を試みたいマスの座標
+ */
+void FloorType::place_random_stairs(const Pos2D &pos)
+{
+    const auto &grid = this->get_grid(pos);
+    if (!grid.is_floor() || !grid.o_idx_list.empty()) {
+        return;
+    }
+
+    auto up_stairs = this->is_in_underground();
+    if (ironman_downward) {
+        up_stairs = false;
+    }
+
+    auto down_stairs = this->dun_level < this->get_dungeon_definition().maxdepth;
+    if (inside_quest(this->get_quest_id()) && (this->dun_level > 1)) {
+        down_stairs = false;
+    }
+
+    if (down_stairs && up_stairs) {
+        if (one_in_(2)) {
+            up_stairs = false;
+        } else {
+            down_stairs = false;
+        }
+    }
+
+    const auto &terrains = TerrainList::get_instance();
+    if (up_stairs) {
+        set_cave_feat(this, pos.y, pos.x, terrains.get_terrain_id(TerrainTag::UP_STAIR));
+        return;
+    }
+
+    if (down_stairs) {
+        set_cave_feat(this, pos.y, pos.x, terrains.get_terrain_id(TerrainTag::DOWN_STAIR));
+    }
 }
 
 /*!

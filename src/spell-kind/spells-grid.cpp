@@ -7,7 +7,6 @@
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/stair.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-tag.h"

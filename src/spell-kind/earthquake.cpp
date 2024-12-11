@@ -9,7 +9,6 @@
 #include "game-option/text-display-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/stair.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"

@@ -4,7 +4,6 @@
 #include "grid/door.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
-#include "grid/stair.h"
 #include "grid/trap.h"
 #include "room/door-definition.h"
 #include "room/rooms-builder.h"
@@ -611,14 +610,10 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Monsters to guard the "treasure" */
         vault_monsters(player_ptr, center->y, center->x, randint1(3) + 2);
 
-        /* Object (80%) */
         if (evaluate_percent(80)) {
             place_object(player_ptr, center->y, center->x, 0L);
-        }
-
-        /* Stairs (20%) */
-        else {
-            place_random_stairs(player_ptr, *center);
+        } else {
+            player_ptr->current_floor_ptr->place_random_stairs(*center);
         }
 
         /* Traps to protect the treasure */
