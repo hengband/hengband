@@ -19,7 +19,6 @@
 #include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/cursor.h"
 #include "io/screen-util.h"
@@ -122,30 +121,24 @@ bool SpellsMirrorMaster::mirror_tunnel()
 
 /*!
  * @brief 鏡設置処理
- * @return 実際に設置が行われた場合TRUEを返す
+ * @return 設置に成功したらnullopt、失敗したらエラーメッセージ
  */
-bool SpellsMirrorMaster::place_mirror()
+std::optional<std::string> SpellsMirrorMaster::place_mirror()
 {
-    auto y = this->player_ptr->y;
-    auto x = this->player_ptr->x;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (!cave_clean_bold(floor_ptr, y, x)) {
-        msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
-        return false;
+    const auto p_pos = this->player_ptr->get_position();
+    auto &floor = *this->player_ptr->current_floor_ptr;
+    if (!cave_clean_bold(&floor, p_pos.y, p_pos.x)) {
+        return _("床上のアイテムが呪文を跳ね返した。", "The object resists the spell.");
     }
 
-    /* Create a mirror */
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    set_bits(g_ptr->info, CAVE_OBJECT);
-    g_ptr->set_mimic_terrain_id(TerrainTag::MIRROR);
+    auto &grid = floor.get_grid(p_pos);
+    set_bits(grid.info, CAVE_OBJECT | CAVE_GLOW);
+    grid.set_mimic_terrain_id(TerrainTag::MIRROR);
 
-    /* Turn on the light */
-    set_bits(g_ptr->info, CAVE_GLOW);
-
-    note_spot(this->player_ptr, y, x);
-    lite_spot(this->player_ptr, y, x);
-    update_local_illumination(this->player_ptr, y, x);
-    return true;
+    note_spot(this->player_ptr, p_pos.y, p_pos.x);
+    lite_spot(this->player_ptr, p_pos.y, p_pos.x);
+    update_local_illumination(this->player_ptr, p_pos.y, p_pos.x);
+    return std::nullopt;
 }
 
 /*!

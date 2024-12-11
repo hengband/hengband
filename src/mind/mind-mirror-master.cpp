@@ -395,7 +395,10 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
         break;
     case MindMirrorMasterType::MAKE_MIRROR:
         if (number_of_mirrors(player_ptr->current_floor_ptr) < 4 + plev / 10) {
-            SpellsMirrorMaster(player_ptr).place_mirror();
+            const auto error = SpellsMirrorMaster(player_ptr).place_mirror();
+            if (error) {
+                msg_print(*error);
+            }
         } else {
             msg_format(_("これ以上鏡は制御できない！", "There are too many mirrors to control!"));
         }
