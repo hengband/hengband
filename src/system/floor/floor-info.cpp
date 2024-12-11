@@ -468,6 +468,29 @@ short FloorType::pop_empty_index_item()
 }
 
 /*!
+ * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos 指定座標
+ * @return 永久地形でなく、かつ該当のマスにアーティファクトが存在しないならばtrue、永久地形かアーティファクトが存在するならばfalse。
+ */
+bool FloorType::is_grid_changeable(const Pos2D &pos) const
+{
+    const auto &grid = this->get_grid(pos);
+    if (grid.cave_has_flag(TerrainCharacteristics::PERMANENT)) {
+        return false;
+    }
+
+    for (const auto this_o_idx : grid.o_idx_list) {
+        const auto &item = this->o_list[this_o_idx];
+        if (item.is_fixed_or_random_artifact()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/*!
  * @brief アイテムの抽選回数をランダムに決定する
  * @return 抽選回数
  * @details 40 % で1回、50 % で2回、10 % で3回.

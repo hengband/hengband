@@ -53,30 +53,3 @@ void place_random_stairs(PlayerType *player_ptr, const Pos2D &pos)
         set_cave_feat(&floor, pos.y, pos.x, terrains.get_terrain_id(TerrainTag::DOWN_STAIR));
     }
 }
-
-/*!
- * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。 / Determine if a given location may be "destroyed"
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param y y座標
- * @param x x座標
- * @return 各種の変更が可能ならTRUEを返す。
- * @details
- * 条件は永久地形でなく、なおかつ該当のマスにアーティファクトが存在しないか、である。英語の旧コメントに反して＊破壊＊の抑止判定には現在使われていない。
- */
-bool cave_valid_bold(FloorType *floor_ptr, POSITION y, POSITION x)
-{
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (g_ptr->cave_has_flag(TerrainCharacteristics::PERMANENT)) {
-        return false;
-    }
-
-    for (const auto this_o_idx : g_ptr->o_idx_list) {
-        ItemEntity *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        if (o_ptr->is_fixed_or_random_artifact()) {
-            return false;
-        }
-    }
-
-    return true;
-}
