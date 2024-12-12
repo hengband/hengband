@@ -14,18 +14,20 @@
 #include "system/player-type-definition.h"
 #include "world/world.h"
 
-static void rd_hengband_dungeons(void)
+static void rd_hengband_dungeons()
 {
-    auto max = rd_byte();
+    const auto &dungeons = DungeonList::get_instance();
+    const auto max = rd_byte();
     for (auto i = 0U; i < max; i++) {
         auto tmp16s = rd_s16b();
-        if (i >= dungeons_info.size()) {
+        if (i >= dungeons.size()) {
             continue;
         }
 
         max_dlv[i] = tmp16s;
-        if (max_dlv[i] > dungeons_info[i].maxdepth) {
-            max_dlv[i] = dungeons_info[i].maxdepth;
+        const auto &dungeon = dungeons.get_dungeon(i);
+        if (max_dlv[i] > dungeon.maxdepth) {
+            max_dlv[i] = dungeon.maxdepth;
         }
     }
 }

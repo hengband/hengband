@@ -7,11 +7,8 @@
 #pragma once
 
 #include <map>
-#include <vector>
 
 class DungeonDefinition;
-extern std::vector<DungeonDefinition> dungeons_info;
-
 class DungeonList {
 public:
     DungeonList(DungeonList &&) = delete;

@@ -301,9 +301,8 @@ static void generate_fixed_floor(PlayerType *player_ptr)
  */
 static std::optional<std::string> level_gen(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto d_idx = floor_ptr->dungeon_idx;
-    const auto &dungeon = dungeons_info[d_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     constexpr auto chance_small_floor = 3;
     auto is_small_level = always_small_levels || ironman_small_levels;
     is_small_level |= one_in_(chance_small_floor) && small_levels;
@@ -331,18 +330,18 @@ static std::optional<std::string> level_gen(PlayerType *player_ptr)
             }
         }
 
-        floor_ptr->height = level_height * SCREEN_HGT;
-        floor_ptr->width = level_width * SCREEN_WID;
-        panel_row_min = floor_ptr->height;
-        panel_col_min = floor_ptr->width;
+        floor.height = level_height * SCREEN_HGT;
+        floor.width = level_width * SCREEN_WID;
+        panel_row_min = floor.height;
+        panel_col_min = floor.width;
 
         msg_format_wizard(
-            player_ptr, CHEAT_DUNGEON, _("小さなフロア: X:%d, Y:%d", "A 'small' dungeon level: X:%d, Y:%d."), floor_ptr->width, floor_ptr->height);
+            player_ptr, CHEAT_DUNGEON, _("小さなフロア: X:%d, Y:%d", "A 'small' dungeon level: X:%d, Y:%d."), floor.width, floor.height);
     } else {
-        floor_ptr->height = MAX_HGT;
-        floor_ptr->width = MAX_WID;
-        panel_row_min = floor_ptr->height;
-        panel_col_min = floor_ptr->width;
+        floor.height = MAX_HGT;
+        floor.width = MAX_WID;
+        panel_row_min = floor.height;
+        panel_col_min = floor.width;
     }
 
     return cave_gen(player_ptr);

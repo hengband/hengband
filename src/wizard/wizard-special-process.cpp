@@ -487,7 +487,7 @@ static std::optional<int> select_debugging_dungeon(int initial_dungeon_id)
  */
 static std::optional<int> select_debugging_floor(const FloorType &floor, int dungeon_id)
 {
-    const auto &dungeon = dungeons_info[dungeon_id];
+    const auto &dungeon = DungeonList::get_instance().get_dungeon(dungeon_id);
     const auto max_depth = dungeon.maxdepth;
     const auto min_depth = dungeon.mindepth;
     const auto is_current_dungeon = floor.dungeon_idx == dungeon_id;

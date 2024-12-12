@@ -65,7 +65,7 @@ void FloorType::reset_dungeon_index()
 
 DungeonDefinition &FloorType::get_dungeon_definition() const
 {
-    return dungeons_info[this->dungeon_idx];
+    return DungeonList::get_instance().get_dungeon(this->dungeon_idx);
 }
 
 /*!

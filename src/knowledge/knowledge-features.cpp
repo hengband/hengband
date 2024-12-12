@@ -364,13 +364,13 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    for (const auto &dungeon : dungeons_info) {
+    for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
         auto is_conquered = false;
         if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
             continue;
         }
 
-        if (!max_dlv[dungeon.idx]) {
+        if (!max_dlv[dungeon_id]) {
             continue;
         }
 
@@ -378,11 +378,11 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
             if (dungeon.get_guardian().max_num == 0) {
                 is_conquered = true;
             }
-        } else if (max_dlv[dungeon.idx] == dungeon.maxdepth) {
+        } else if (max_dlv[dungeon_id] == dungeon.maxdepth) {
             is_conquered = true;
         }
 
-        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), is_conquered ? '!' : ' ', dungeon.name.data(), (int)max_dlv[dungeon.idx]);
+        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), is_conquered ? '!' : ' ', dungeon.name.data(), (int)max_dlv[dungeon_id]);
     }
 
     angband_fclose(fff);
