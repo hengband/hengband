@@ -121,9 +121,9 @@ static void set_floor_and_wall_aux(int16_t feat_type[100], const std::array<feat
  * / Fill the arrays of floors and walls in the good proportions
  * @param type ダンジョンID
  */
-void set_floor_and_wall(DUNGEON_IDX type)
+void set_floor_and_wall(int type)
 {
-    DUNGEON_IDX cur_type = 255;
+    auto cur_type = 255;
     if (cur_type == type) {
         return;
     }

@@ -47,7 +47,7 @@ class ItemEntity;
 class FloorType {
 public:
     FloorType();
-    short dungeon_idx = 0;
+    int dungeon_idx = 0;
     std::vector<std::vector<Grid>> grid_array;
     DEPTH dun_level = 0; /*!< 現在の実ダンジョン階層 base_level の参照元となる / Current dungeon level */
     DEPTH base_level = 0; /*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */
@@ -94,7 +94,7 @@ public:
     const Grid &get_grid(const Pos2D pos) const;
     bool is_in_underground() const;
     bool is_in_quest() const;
-    void set_dungeon_index(short dungeon_idx_); /*!< @todo 後でenum class にする */
+    void set_dungeon_index(int dungeon_idx_); /*!< @todo 後でenum class にする */
     void reset_dungeon_index();
     DungeonDefinition &get_dungeon_definition() const;
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;

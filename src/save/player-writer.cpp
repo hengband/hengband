@@ -185,7 +185,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->blessed);
     wr_s16b(player_ptr->tim_invis);
     wr_s16b(player_ptr->word_recall);
-    wr_s16b(player_ptr->recall_dungeon);
+    wr_s16b(static_cast<int16_t>(player_ptr->recall_dungeon));
     wr_s16b(player_ptr->alter_reality);
     wr_s16b(player_ptr->see_infra);
     wr_s16b(player_ptr->tim_infra);

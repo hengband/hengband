@@ -147,7 +147,7 @@ public:
 
     TIME_EFFECT word_recall{}; /* Word of recall counter */
     TIME_EFFECT alter_reality{}; /* Alter reality counter */
-    DUNGEON_IDX recall_dungeon{}; /* Dungeon set to be recalled */
+    int recall_dungeon{}; /* Dungeon set to be recalled */
 
     ENERGY energy_need{}; /* Energy needed for next move */
     ENERGY enchant_energy_need{}; /* Energy needed for next upkeep effect	 */

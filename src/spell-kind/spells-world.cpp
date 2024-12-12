@@ -362,9 +362,9 @@ void reserve_alter_reality(PlayerType *player_ptr, TIME_EFFECT turns)
  * @param x コンソールX座標
  * @return 選択されたダンジョンID
  */
-static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
+static int choose_dungeon(concptr note, POSITION y, POSITION x)
 {
-    DUNGEON_IDX select_dungeon;
+    int select_dungeon;
     if (lite_town || vanilla_town || ironman_downward) {
         if (max_dlv[DUNGEON_ANGBAND]) {
             return DUNGEON_ANGBAND;
@@ -375,7 +375,7 @@ static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
         }
     }
 
-    std::vector<DUNGEON_IDX> dun;
+    std::vector<int> dun;
 
     screen_save();
     for (const auto &dungeon : dungeons_info) {
@@ -463,11 +463,11 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
     }
 
     if (!floor.is_in_underground()) {
-        DUNGEON_IDX select_dungeon;
-        select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
-        if (!select_dungeon) {
+        const auto select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
+        if (select_dungeon == 0) {
             return false;
         }
+
         player_ptr->recall_dungeon = select_dungeon;
     }
 
@@ -479,8 +479,8 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
 
 bool free_level_recall(PlayerType *player_ptr)
 {
-    DUNGEON_IDX select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
-    if (!select_dungeon) {
+    const auto select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
+    if (select_dungeon == 0) {
         return false;
     }
 

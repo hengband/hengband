@@ -80,7 +80,6 @@ typedef int16_t FEAT_IDX; /*!< ゲーム中の地形ID型を定義 */
 typedef int16_t FLOOR_IDX; /*!< ゲーム中のフロアID型を定義 */
 
 typedef int16_t MONSTER_IDX; /*!< ゲーム中のモンスター個体ID型を定義 */
-typedef int16_t DUNGEON_IDX; /*!< ゲーム中のダンジョンID型を定義 */
 typedef int16_t EGO_IDX; /*!< アイテムエゴのID型を定義 */
 typedef int16_t QUEST_IDX; /*!< ゲーム中のクエストID型を定義 */
 

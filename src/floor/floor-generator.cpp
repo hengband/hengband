@@ -302,7 +302,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
 static std::optional<std::string> level_gen(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    DUNGEON_IDX d_idx = floor_ptr->dungeon_idx;
+    const auto d_idx = floor_ptr->dungeon_idx;
     const auto &dungeon = dungeons_info[d_idx];
     constexpr auto chance_small_floor = 3;
     auto is_small_level = always_small_levels || ironman_small_levels;

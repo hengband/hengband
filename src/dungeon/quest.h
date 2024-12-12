@@ -119,7 +119,7 @@ public:
     MONSTER_NUMBER num_mon = 0; /*!< QuestKindTypeがKILL_NUMBER時の目標撃破数 number of monsters on level */
 
     BIT_FLAGS flags = 0; /*!< クエストに関するフラグビット / quest flags */
-    DUNGEON_IDX dungeon = 0; /*!< クエスト対象のダンジョンID / quest dungeon */
+    int dungeon = 0; /*!< クエスト対象のダンジョンID / quest dungeon */
 
     PLAYER_LEVEL complev = 0; /*!< クリア時プレイヤーレベル / player level (complete) */
     REAL_TIME comptime = 0; /*!< クリア時ゲーム時間 /  quest clear time*/

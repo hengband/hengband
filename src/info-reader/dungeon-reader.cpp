@@ -137,7 +137,7 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
 
         error_idx = i;
         d_ptr = &dungeons_info[i];
-        d_ptr->idx = static_cast<DUNGEON_IDX>(i);
+        d_ptr->idx = i;
 #ifdef JP
         d_ptr->name = tokens[2];
 #endif

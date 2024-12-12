@@ -53,7 +53,7 @@ bool FloorType::is_in_quest() const
     return this->quest_number != QuestId::NONE;
 }
 
-void FloorType::set_dungeon_index(short dungeon_idx_)
+void FloorType::set_dungeon_index(int dungeon_idx_)
 {
     this->dungeon_idx = dungeon_idx_;
 }
