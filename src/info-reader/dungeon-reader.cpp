@@ -121,8 +121,8 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
     const auto &tokens = str_split(buf, ':', false);
     const auto &terrains = TerrainList::get_instance();
 
+    // N:index:name_ja
     if (tokens[0] == "N") {
-        // N:index:name_ja
         if (tokens.size() < 3 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -131,6 +131,7 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
+
         if (i >= static_cast<int>(dungeons_info.size())) {
             dungeons_info.resize(i + 1);
         }
@@ -141,19 +142,27 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
 #ifdef JP
         d_ptr->name = tokens[2];
 #endif
-    } else if (!d_ptr) {
+        return PARSE_ERROR_NONE;
+    }
+
+    if (!d_ptr) {
         return PARSE_ERROR_MISSING_RECORD_HEADER;
-    } else if (tokens[0] == "E") {
-        // E:name_en
+    }
+
+    // E:name_en
+    if (tokens[0] == "E") {
 #ifndef JP
         if (tokens.size() < 2 || tokens[1].size() == 0) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
         d_ptr->name = tokens[1];
 #endif
-    } else if (tokens[0] == "D") {
-        // D:text_ja
-        // D:$text_en
+        return PARSE_ERROR_NONE;
+    }
+
+    // D:text_ja
+    // D:$text_en
+    if (tokens[0] == "D") {
         if (tokens.size() < 2 || buf.length() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -161,23 +170,29 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
         if (buf[2] == '$') {
             return PARSE_ERROR_NONE;
         }
+
         d_ptr->text.append(buf.substr(2));
 #else
         if (buf[2] != '$') {
             return PARSE_ERROR_NONE;
         }
+
         if (buf.length() == 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
+
         append_english_text(d_ptr->text, buf.substr(3));
 #endif
-    } else if (tokens[0] == "W") {
-        // W:min_level:max_level:(1):mode:(2):(3):(4):(5):prob_pit:prob_nest
-        // (1)minimum player level (unused)
-        // (2)minimum level of allocating monster
-        // (3)maximum probability of level boost of allocation monster
-        // (4)maximum probability of dropping good objects
-        // (5)maximum probability of dropping great objects
+        return PARSE_ERROR_NONE;
+    }
+
+    // W:min_level:max_level:(1):mode:(2):(3):(4):(5):prob_pit:prob_nest
+    // (1)minimum player level (unused)
+    // (2)minimum level of allocating monster
+    // (3)maximum probability of level boost of allocation monster
+    // (4)maximum probability of dropping good objects
+    // (5)maximum probability of dropping great objects
+    if (tokens[0] == "W") {
         if (tokens.size() < 11) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -192,16 +207,22 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
         info_set_value(d_ptr->obj_great, tokens[8]);
         info_set_value(d_ptr->pit, tokens[9], 16);
         info_set_value(d_ptr->nest, tokens[10], 16);
-    } else if (tokens[0] == "P") {
-        // P:wild_y:wild_x
+        return PARSE_ERROR_NONE;
+    }
+
+    // P:wild_y:wild_x
+    if (tokens[0] == "P") {
         if (tokens.size() < 3) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
         info_set_value(d_ptr->dy, tokens[1]);
         info_set_value(d_ptr->dx, tokens[2]);
-    } else if (tokens[0] == "L") {
-        // L:floor_1:prob_1:floor_2:prob_2:floor_3:prob_3:tunnel_prob
+        return PARSE_ERROR_NONE;
+    }
+
+    // L:floor_1:prob_1:floor_2:prob_2:floor_3:prob_3:tunnel_prob
+    if (tokens[0] == "L") {
         if (tokens.size() < DUNGEON_FEAT_PROB_NUM * 2 + 2) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -220,8 +241,11 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
 
         auto tunnel_idx = DUNGEON_FEAT_PROB_NUM * 2 + 1;
         info_set_value(d_ptr->tunnel_percent, tokens[tunnel_idx]);
-    } else if (tokens[0] == "A") {
-        // A:wall_1:prob_1:wall_2:prob_2:wall_3:prob_3:outer_wall:inner_wall:stream_1:stream_2
+        return PARSE_ERROR_NONE;
+    }
+
+    // A:wall_1:prob_1:wall_2:prob_2:wall_3:prob_3:outer_wall:inner_wall:stream_1:stream_2
+    if (tokens[0] == "A") {
         if (tokens.size() < DUNGEON_FEAT_PROB_NUM * 2 + 5) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -244,11 +268,14 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
             d_ptr->inner_wall = terrains.get_terrain_id_by_tag(tags[1]);
             d_ptr->stream1 = terrains.get_terrain_id_by_tag(tags[2]);
             d_ptr->stream2 = terrains.get_terrain_id_by_tag(tags[3]);
+            return PARSE_ERROR_NONE;
         } catch (const std::exception &) {
             return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
         }
-    } else if (tokens[0] == "F") {
-        // F:flags
+    }
+
+    // F:flags
+    if (tokens[0] == "F") {
         if (tokens.size() < 2) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -283,19 +310,26 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
                 return PARSE_ERROR_INVALID_FLAG;
             }
         }
-    } else if (tokens[0] == "M") {
-        // M:monsterflags
+
+        return PARSE_ERROR_NONE;
+    }
+
+    // M:Monster flags
+    if (tokens[0] == "M") {
         if (tokens[1] == "X") {
             if (tokens.size() < 3) {
                 return PARSE_ERROR_TOO_FEW_ARGUMENTS;
             }
+
             uint32_t sex;
             if (!info_grab_one_const(sex, r_info_sex, tokens[2])) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
+
             d_ptr->mon_sex = static_cast<MonsterSex>(sex);
             return 0;
         }
+
         if (tokens.size() < 2) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -316,15 +350,19 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
                 return PARSE_ERROR_INVALID_FLAG;
             }
         }
-    } else if (tokens[0] == "S") {
-        // S: flags
+
+        return PARSE_ERROR_NONE;
+    }
+
+    // S: flags
+    if (tokens[0] == "S") {
         if (tokens.size() < 2) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
         const auto &flags = str_split(tokens[1], '|', true);
         for (const auto &f : flags) {
-            if (f.size() == 0) {
+            if (f.empty()) {
                 continue;
             }
 
@@ -333,18 +371,19 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
                 if (s_tokens[0] != "1") {
                     return PARSE_ERROR_GENERIC;
                 }
-                continue; //!< MonsterRaceDefinitions.txtからのコピペ対策
+
+                continue; //!< @details MonsterRaceDefinitions.jsonc からのコピペ対策
             }
 
             if (!grab_one_spell_monster_flag(d_ptr, f)) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
         }
-    } else {
-        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+
+        return PARSE_ERROR_NONE;
     }
 
-    return 0;
+    return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 }
 
 /*!
