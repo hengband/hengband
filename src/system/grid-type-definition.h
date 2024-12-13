@@ -40,8 +40,9 @@
 // clang-format on
 
 enum class GridFlow : int;
-class TerrainType;
 enum class TerrainCharacteristics;
+enum class TerrainTag;
+class TerrainType;
 class Grid {
 public:
     Grid();
@@ -97,4 +98,6 @@ public:
     const TerrainType &get_terrain_mimic_raw() const;
     void place_closed_curtain();
     void add_info(int grid_info);
+    void set_terrain_id(TerrainTag tag);
+    void set_mimic_terrain_id(TerrainTag tag);
 };

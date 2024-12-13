@@ -216,3 +216,13 @@ void Grid::add_info(int grid_info)
 {
     this->info |= grid_info;
 }
+
+void Grid::set_terrain_id(TerrainTag tag)
+{
+    this->feat = TerrainList::get_instance().get_terrain_id(tag);
+}
+
+void Grid::set_mimic_terrain_id(TerrainTag tag)
+{
+    this->mimic = TerrainList::get_instance().get_terrain_id(tag);
+}

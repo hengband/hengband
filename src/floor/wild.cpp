@@ -38,6 +38,7 @@
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
@@ -46,6 +47,7 @@
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
@@ -313,14 +315,15 @@ static void generate_wilderness_area(FloorType *floor_ptr, int terrain, uint32_t
  * @param is_border 広域マップの辺部分としての生成ならばTRUE
  * @param is_corner 広域マップの角部分としての生成ならばTRUE
  */
-static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool is_border, bool is_corner)
+static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_border, bool is_corner)
 {
-    player_ptr->town_num = wilderness[y][x].town;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->base_level = wilderness[y][x].level;
-    floor_ptr->dun_level = 0;
-    floor_ptr->monster_level = floor_ptr->base_level;
-    floor_ptr->object_level = floor_ptr->base_level;
+    const auto &wilderness_grid = wilderness[pos.y][pos.x];
+    player_ptr->town_num = wilderness_grid.town;
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.base_level = wilderness_grid.level;
+    floor.dun_level = 0;
+    floor.monster_level = floor.base_level;
+    floor.object_level = floor.base_level;
     if (player_ptr->town_num) {
         init_buildings();
         if (is_border || is_corner) {
@@ -334,53 +337,53 @@ static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool i
             player_ptr->visit |= (1UL << (player_ptr->town_num - 1));
         }
     } else {
-        int terrain = wilderness[y][x].terrain;
-        uint32_t seed = wilderness[y][x].seed;
-        generate_wilderness_area(floor_ptr, terrain, seed, is_corner);
+        int terrain = wilderness_grid.terrain;
+        uint32_t seed = wilderness_grid.seed;
+        generate_wilderness_area(&floor, terrain, seed, is_corner);
     }
 
-    if (!is_corner && !wilderness[y][x].town) {
+    if (!is_corner && (wilderness_grid.town == 0)) {
         //!< @todo make the road a bit more interresting.
-        if (wilderness[y][x].road) {
-            floor_ptr->grid_array[MAX_HGT / 2][MAX_WID / 2].feat = feat_floor;
-            POSITION x1, y1;
-            if (wilderness[y - 1][x].road) {
+        if (wilderness_grid.road) {
+            floor.get_grid({ MAX_HGT / 2, MAX_WID / 2 }).set_terrain_id(TerrainTag::FLOOR);
+            if (wilderness[pos.y - 1][pos.x].road) {
                 /* North road */
-                for (y1 = 1; y1 < MAX_HGT / 2; y1++) {
-                    x1 = MAX_WID / 2;
-                    floor_ptr->grid_array[y1][x1].feat = feat_floor;
+                for (auto y = 1; y < MAX_HGT / 2; y++) {
+                    const Pos2D pos_road(y, MAX_WID / 2);
+                    floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
-            if (wilderness[y + 1][x].road) {
+            if (wilderness[pos.y + 1][pos.x].road) {
                 /* North road */
-                for (y1 = MAX_HGT / 2; y1 < MAX_HGT - 1; y1++) {
-                    x1 = MAX_WID / 2;
-                    floor_ptr->grid_array[y1][x1].feat = feat_floor;
+                for (auto y = MAX_HGT / 2; y < MAX_HGT - 1; y++) {
+                    const Pos2D pos_road(y, MAX_WID / 2);
+                    floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
-            if (wilderness[y][x + 1].road) {
+            if (wilderness[pos.y][pos.x + 1].road) {
                 /* East road */
-                for (x1 = MAX_WID / 2; x1 < MAX_WID - 1; x1++) {
-                    y1 = MAX_HGT / 2;
-                    floor_ptr->grid_array[y1][x1].feat = feat_floor;
+                for (auto x = MAX_WID / 2; x < MAX_WID - 1; x++) {
+                    const Pos2D pos_road(MAX_HGT / 2, x);
+                    floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
-            if (wilderness[y][x - 1].road) {
+            if (wilderness[pos.y][pos.x - 1].road) {
                 /* West road */
-                for (x1 = 1; x1 < MAX_WID / 2; x1++) {
-                    y1 = MAX_HGT / 2;
-                    floor_ptr->grid_array[y1][x1].feat = feat_floor;
+                for (auto x = 1; x < MAX_WID / 2; x++) {
+                    const Pos2D pos_road(MAX_HGT / 2, x);
+                    floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
         }
     }
 
-    bool is_winner = wilderness[y][x].entrance > 0;
-    is_winner &= (wilderness[y][x].town == 0);
-    bool is_wild_winner = dungeons_info[wilderness[y][x].entrance].flags.has_not(DungeonFeatureType::WINNER);
+    const auto entrance = wilderness_grid.entrance;
+    auto is_winner = entrance > 0;
+    is_winner &= (wilderness_grid.town == 0);
+    auto is_wild_winner = dungeons_info[entrance].flags.has_not(DungeonFeatureType::WINNER);
     is_winner &= ((AngbandWorld::get_instance().total_winner != 0) || is_wild_winner);
     if (!is_winner) {
         return;
@@ -388,12 +391,11 @@ static void generate_area(PlayerType *player_ptr, POSITION y, POSITION x, bool i
 
     auto &system = AngbandSystem::get_instance();
     const Xoshiro128StarStar rng_backup = system.get_rng();
-    Xoshiro128StarStar wilderness_rng(wilderness[y][x].seed);
+    Xoshiro128StarStar wilderness_rng(wilderness_grid.seed);
     system.set_rng(wilderness_rng);
-    int dy = rand_range(6, floor_ptr->height - 6);
-    int dx = rand_range(6, floor_ptr->width - 6);
-    floor_ptr->grid_array[dy][dx].feat = feat_entrance;
-    floor_ptr->grid_array[dy][dx].special = wilderness[y][x].entrance;
+    const Pos2D pos_entrance(rand_range(6, floor.height - 6), rand_range(6, floor.width - 6));
+    floor.get_grid(pos_entrance).feat = feat_entrance;
+    floor.get_grid(pos_entrance).special = wilderness_grid.entrance;
     system.set_rng(rng_backup);
 }
 
@@ -439,47 +441,47 @@ void wilderness_gen(PlayerType *player_ptr)
     get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
 
     /* North border */
-    generate_area(player_ptr, wild_y - 1, wild_x, true, false);
-    for (int i = 1; i < MAX_WID - 1; i++) {
-        border.top[i] = floor.grid_array[MAX_HGT - 2][i].feat;
+    generate_area(player_ptr, { wild_y - 1, wild_x }, true, false);
+    for (auto i = 1; i < MAX_WID - 1; i++) {
+        border.top[i] = floor.get_grid({ MAX_HGT - 2, i }).feat;
     }
 
     /* South border */
-    generate_area(player_ptr, wild_y + 1, wild_x, true, false);
-    for (int i = 1; i < MAX_WID - 1; i++) {
-        border.bottom[i] = floor.grid_array[1][i].feat;
+    generate_area(player_ptr, { wild_y + 1, wild_x }, true, false);
+    for (auto i = 1; i < MAX_WID - 1; i++) {
+        border.bottom[i] = floor.get_grid({ 1, i }).feat;
     }
 
     /* West border */
-    generate_area(player_ptr, wild_y, wild_x - 1, true, false);
-    for (int i = 1; i < MAX_HGT - 1; i++) {
-        border.left[i] = floor.grid_array[i][MAX_WID - 2].feat;
+    generate_area(player_ptr, { wild_y, wild_x - 1 }, true, false);
+    for (auto i = 1; i < MAX_HGT - 1; i++) {
+        border.left[i] = floor.get_grid({ i, MAX_WID - 2 }).feat;
     }
 
     /* East border */
-    generate_area(player_ptr, wild_y, wild_x + 1, true, false);
-    for (int i = 1; i < MAX_HGT - 1; i++) {
-        border.right[i] = floor.grid_array[i][1].feat;
+    generate_area(player_ptr, { wild_y, wild_x + 1 }, true, false);
+    for (auto i = 1; i < MAX_HGT - 1; i++) {
+        border.right[i] = floor.get_grid({ i, 1 }).feat;
     }
 
     /* North west corner */
-    generate_area(player_ptr, wild_y - 1, wild_x - 1, false, true);
-    border.top_left = floor.grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
+    generate_area(player_ptr, { wild_y - 1, wild_x - 1 }, false, true);
+    border.top_left = floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat;
 
     /* North east corner */
-    generate_area(player_ptr, wild_y - 1, wild_x + 1, false, true);
-    border.top_right = floor.grid_array[MAX_HGT - 2][1].feat;
+    generate_area(player_ptr, { wild_y - 1, wild_x + 1 }, false, true);
+    border.top_right = floor.get_grid({ MAX_HGT - 2, 1 }).feat;
 
     /* South west corner */
-    generate_area(player_ptr, wild_y + 1, wild_x - 1, false, true);
-    border.bottom_left = floor.grid_array[1][MAX_WID - 2].feat;
+    generate_area(player_ptr, { wild_y + 1, wild_x - 1 }, false, true);
+    border.bottom_left = floor.get_grid({ 1, MAX_WID - 2 }).feat;
 
     /* South east corner */
-    generate_area(player_ptr, wild_y + 1, wild_x + 1, false, true);
-    border.bottom_right = floor.grid_array[1][1].feat;
+    generate_area(player_ptr, { wild_y + 1, wild_x + 1 }, false, true);
+    border.bottom_right = floor.get_grid({ 1, 1 }).feat;
 
     /* Create terrain of the current area */
-    generate_area(player_ptr, wild_y, wild_x, false, false);
+    generate_area(player_ptr, { wild_y, wild_x }, false, false);
 
     /* Special boundary walls -- North */
     for (auto i = 0; i < MAX_WID; i++) {
@@ -613,54 +615,58 @@ void wilderness_gen(PlayerType *player_ptr)
  */
 void wilderness_gen_small(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (int i = 0; i < MAX_WID; i++) {
-        for (int j = 0; j < MAX_HGT; j++) {
-            floor_ptr->grid_array[j][i].feat = feat_permanent;
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto x = 0; x < MAX_WID; x++) {
+        for (auto y = 0; y < MAX_HGT; y++) {
+            floor.get_grid({ y, x }).feat = feat_permanent;
         }
     }
 
     const auto &world = AngbandWorld::get_instance();
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
-    for (int i = 0; i < world.max_wild_x; i++) {
-        for (int j = 0; j < world.max_wild_y; j++) {
-            if (wilderness[j][i].town && (wilderness[j][i].town != VALID_TOWNS)) {
-                floor_ptr->grid_array[j][i].feat = (int16_t)feat_town;
-                floor_ptr->grid_array[j][i].special = (int16_t)wilderness[j][i].town;
-                floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+    for (auto x = 0; x < world.max_wild_x; x++) {
+        for (auto y = 0; y < world.max_wild_y; y++) {
+            const Pos2D pos(y, x);
+            auto &grid = floor.get_grid(pos);
+            auto &wild_grid = wilderness[y][x];
+            if (wild_grid.town && (wild_grid.town != VALID_TOWNS)) {
+                grid.feat = feat_town;
+                grid.special = wild_grid.town;
+                grid.info |= (CAVE_GLOW | CAVE_MARK);
                 continue;
             }
 
-            if (wilderness[j][i].road) {
-                floor_ptr->grid_array[j][i].feat = feat_floor;
-                floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+            if (wild_grid.road) {
+                grid.set_terrain_id(TerrainTag::FLOOR);
+                grid.info |= (CAVE_GLOW | CAVE_MARK);
                 continue;
             }
 
-            if (wilderness[j][i].entrance && (world.total_winner || dungeons_info[wilderness[j][i].entrance].flags.has_not(DungeonFeatureType::WINNER))) {
-                floor_ptr->grid_array[j][i].feat = feat_entrance;
-                floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
-                floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+            const auto entrance = wild_grid.entrance;
+            if ((entrance > 0) && (world.total_winner || dungeons_info[entrance].flags.has_not(DungeonFeatureType::WINNER))) {
+                grid.feat = feat_entrance;
+                grid.special = entrance;
+                grid.info |= (CAVE_GLOW | CAVE_MARK);
                 continue;
             }
 
-            floor_ptr->grid_array[j][i].feat = conv_terrain2feat[wilderness[j][i].terrain];
-            floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+            grid.feat = conv_terrain2feat[wild_grid.terrain];
+            grid.info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
 
-    floor_ptr->height = (int16_t)world.max_wild_y;
-    floor_ptr->width = (int16_t)world.max_wild_x;
-    if (floor_ptr->height > MAX_HGT) {
-        floor_ptr->height = MAX_HGT;
+    floor.height = (int16_t)world.max_wild_y;
+    floor.width = (int16_t)world.max_wild_x;
+    if (floor.height > MAX_HGT) {
+        floor.height = MAX_HGT;
     }
 
-    if (floor_ptr->width > MAX_WID) {
-        floor_ptr->width = MAX_WID;
+    if (floor.width > MAX_WID) {
+        floor.width = MAX_WID;
     }
 
-    panel_row_min = floor_ptr->height;
-    panel_col_min = floor_ptr->width;
+    panel_row_min = floor.height;
+    panel_col_min = floor.width;
     player_ptr->x = player_ptr->wilderness_x;
     player_ptr->y = player_ptr->wilderness_y;
     player_ptr->town_num = 0;
@@ -865,23 +871,25 @@ static void init_terrain_table(int terrain, int16_t feat_global, concptr fmt, ..
  */
 void init_wilderness_terrains(void)
 {
+    const auto &terrains = TerrainList::get_instance();
+    const auto terrain_floor = terrains.get_terrain_id(TerrainTag::FLOOR);
     init_terrain_table(TERRAIN_EDGE, feat_permanent, "a", feat_permanent, MAX_FEAT_IN_TERRAIN);
-    init_terrain_table(TERRAIN_TOWN, feat_town, "a", feat_floor, MAX_FEAT_IN_TERRAIN);
+    init_terrain_table(TERRAIN_TOWN, feat_town, "a", terrain_floor, MAX_FEAT_IN_TERRAIN);
     init_terrain_table(TERRAIN_DEEP_WATER, feat_deep_water, "ab", feat_deep_water, 12, feat_shallow_water, MAX_FEAT_IN_TERRAIN - 12);
-    init_terrain_table(TERRAIN_SHALLOW_WATER, feat_shallow_water, "abcde", feat_deep_water, 3, feat_shallow_water, 12, feat_floor, 1, feat_dirt, 1, feat_grass,
+    init_terrain_table(TERRAIN_SHALLOW_WATER, feat_shallow_water, "abcde", feat_deep_water, 3, feat_shallow_water, 12, terrain_floor, 1, feat_dirt, 1, feat_grass,
         MAX_FEAT_IN_TERRAIN - 17);
     init_terrain_table(TERRAIN_SWAMP, feat_swamp, "abcdef", feat_dirt, 2, feat_grass, 3, feat_tree, 1, feat_brake, 1, feat_shallow_water, 4, feat_swamp,
         MAX_FEAT_IN_TERRAIN - 11);
     init_terrain_table(
-        TERRAIN_DIRT, feat_dirt, "abcdef", feat_floor, 3, feat_dirt, 10, feat_flower, 1, feat_brake, 1, feat_grass, 1, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
+        TERRAIN_DIRT, feat_dirt, "abcdef", terrain_floor, 3, feat_dirt, 10, feat_flower, 1, feat_brake, 1, feat_grass, 1, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
     init_terrain_table(
-        TERRAIN_GRASS, feat_grass, "abcdef", feat_floor, 2, feat_dirt, 2, feat_grass, 9, feat_flower, 1, feat_brake, 2, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_TREES, feat_tree, "abcde", feat_floor, 2, feat_dirt, 1, feat_tree, 11, feat_brake, 2, feat_grass, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_DESERT, feat_dirt, "abc", feat_floor, 2, feat_dirt, 13, feat_grass, MAX_FEAT_IN_TERRAIN - 15);
+        TERRAIN_GRASS, feat_grass, "abcdef", terrain_floor, 2, feat_dirt, 2, feat_grass, 9, feat_flower, 1, feat_brake, 2, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
+    init_terrain_table(TERRAIN_TREES, feat_tree, "abcde", terrain_floor, 2, feat_dirt, 1, feat_tree, 11, feat_brake, 2, feat_grass, MAX_FEAT_IN_TERRAIN - 16);
+    init_terrain_table(TERRAIN_DESERT, feat_dirt, "abc", terrain_floor, 2, feat_dirt, 13, feat_grass, MAX_FEAT_IN_TERRAIN - 15);
     init_terrain_table(TERRAIN_SHALLOW_LAVA, feat_shallow_lava, "abc", feat_shallow_lava, 14, feat_deep_lava, 3, feat_mountain, MAX_FEAT_IN_TERRAIN - 17);
     init_terrain_table(
         TERRAIN_DEEP_LAVA, feat_deep_lava, "abcd", feat_dirt, 3, feat_shallow_lava, 3, feat_deep_lava, 10, feat_mountain, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_MOUNTAIN, feat_mountain, "abcdef", feat_floor, 1, feat_brake, 1, feat_grass, 2, feat_dirt, 2, feat_tree, 2, feat_mountain,
+    init_terrain_table(TERRAIN_MOUNTAIN, feat_mountain, "abcdef", terrain_floor, 1, feat_brake, 1, feat_grass, 2, feat_dirt, 2, feat_tree, 2, feat_mountain,
         MAX_FEAT_IN_TERRAIN - 8);
 }
 

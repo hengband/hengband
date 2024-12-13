@@ -8,4 +8,5 @@
 
 enum class TerrainTag {
     NONE,
+    FLOOR,
 };

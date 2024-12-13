@@ -39,12 +39,15 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "world/world.h"
@@ -647,13 +650,13 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
                 /* Very old */
                 if (grid.feat == OLD_FEAT_INVIS) {
-                    grid.feat = feat_floor;
+                    grid.set_terrain_id(TerrainTag::FLOOR);
                     grid.info |= CAVE_TRAP;
                 }
 
                 /* Older than 1.1.1 */
                 if (grid.feat == OLD_FEAT_MIRROR) {
-                    grid.feat = feat_floor;
+                    grid.set_terrain_id(TerrainTag::FLOOR);
                     grid.info |= CAVE_OBJECT;
                 }
             }
@@ -671,13 +674,13 @@ errr rd_dungeon_old(PlayerType *player_ptr)
                 } else if ((grid.feat == OLD_FEAT_RUNE_EXPLOSION) || (grid.feat == OLD_FEAT_RUNE_PROTECTION)) {
                     grid.info |= CAVE_OBJECT;
                     grid.mimic = grid.feat;
-                    grid.feat = feat_floor;
+                    grid.set_terrain_id(TerrainTag::FLOOR);
                 } else if (grid.info & CAVE_TRAP) {
                     grid.info &= ~CAVE_TRAP;
-                    grid.mimic = grid.feat;
+                    grid.set_mimic_terrain_id(TerrainTag::FLOOR);
                     grid.feat = choose_random_trap(&floor);
                 } else if (grid.feat == OLD_FEAT_INVIS) {
-                    grid.mimic = feat_floor;
+                    grid.mimic = grid.feat;
                     grid.feat = feat_trap_open;
                 }
             }
