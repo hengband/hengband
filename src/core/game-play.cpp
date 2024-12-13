@@ -199,7 +199,7 @@ static void init_world_floor_info(PlayerType *player_ptr)
     player_ptr->count = 0;
     load = false;
     determine_bounty_uniques(player_ptr);
-    determine_daily_bounty(player_ptr, false);
+    determine_daily_bounty(player_ptr);
     wipe_o_list(floor_ptr);
 }
 

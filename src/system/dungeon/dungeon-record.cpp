@@ -5,6 +5,8 @@
  */
 
 #include "system/dungeon/dungeon-record.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
 
 bool DungeonRecord::has_entered() const
 {
@@ -116,4 +118,22 @@ void DungeonRecords::reset_all()
     for (auto &[_, record] : this->records) {
         record.reset();
     }
+}
+
+int DungeonRecords::find_max_level() const
+{
+    const auto &dungeons = DungeonList::get_instance();
+    auto max_level = 0;
+    for (const auto &[dungeon_id, record] : this->records) {
+        const auto max_level_each = record.get_max_level();
+        if (max_level_each < dungeons.get_dungeon(dungeon_id).mindepth) {
+            continue;
+        }
+
+        if (max_level < max_level_each) {
+            max_level = max_level_each;
+        }
+    }
+
+    return max_level;
 }

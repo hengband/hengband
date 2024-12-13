@@ -47,6 +47,8 @@ public:
     bool empty() const;
     void reset_all();
 
+    int find_max_level() const;
+
 private:
     DungeonRecords();
     static DungeonRecords instance;
