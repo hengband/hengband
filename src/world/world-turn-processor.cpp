@@ -81,7 +81,7 @@ void WorldTurnProcessor::process_world()
     if ((this->hour == 0) && (this->min == 0)) {
         if (this->min != prev_min) {
             exe_write_diary(floor, DiaryKind::DIALY, 0);
-            determine_daily_bounty(this->player_ptr, false);
+            determine_daily_bounty(this->player_ptr);
         }
     }
 
