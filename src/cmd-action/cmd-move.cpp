@@ -272,9 +272,8 @@ void do_cmd_go_down(PlayerType *player_ptr)
         }
 
         if (!DungeonRecords::get_instance().get_record(target_dungeon).has_entered()) {
-            const auto mes = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
-            const auto &dungeon = DungeonList::get_instance().get_dungeon(target_dungeon);
-            msg_format(mes, dungeon.name.data(), dungeon.mindepth);
+            const auto mes = DungeonList::get_instance().get_dungeon(target_dungeon).build_entrance_message();
+            msg_print(mes);
             if (!input_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) {
                 return;
             }
