@@ -20,7 +20,6 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/dungeon/dungeon-definition.h"
-#include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -278,26 +277,11 @@ void show_bounty(void)
 void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
 {
     const auto &dungeon_records = DungeonRecords::get_instance();
-    auto max_dl = 3;
-    if (!conv_old) {
-        for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
-            const auto max_level = dungeon_records.get_record(dungeon_id).get_max_level();
-            if (max_level < dungeon.mindepth) {
-                continue;
-            }
-
-            if (max_dl < max_level) {
-                max_dl = max_level;
-            }
-        }
-    } else {
-        max_dl = std::max(dungeon_records.get_record(DUNGEON_ANGBAND).get_max_level(), 3);
-    }
-
+    const auto max_dungeon_level = conv_old ? std::max(dungeon_records.get_record(DUNGEON_ANGBAND).get_max_level(), 3) : dungeon_records.find_max_level();
     get_mon_num_prep_bounty(player_ptr);
     auto &world = AngbandWorld::get_instance();
     while (true) {
-        world.today_mon = get_mon_num(player_ptr, std::min(max_dl / 2, 40), max_dl, PM_ARENA);
+        world.today_mon = get_mon_num(player_ptr, std::min(max_dungeon_level / 2, 40), max_dungeon_level, PM_ARENA);
         const auto &monrace = world.get_today_bounty();
         if (cheat_hear) {
             msg_format(_("日替わり候補: %s ", "Today's candidate: %s "), monrace.name.data());
