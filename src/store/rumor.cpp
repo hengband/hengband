@@ -28,11 +28,10 @@
 #include <utility>
 
 /*
- * @brief 固定アーティファクト、モンスター、町 をランダムに1つ選び、ダンジョンを固定的に1つ選ぶ
+ * @brief 固定アーティファクト、モンスター、町 をランダムに1つ選ぶ
  * @param zz 検索文字列
  * @param max_idx briefに挙げた各リストにおける最大数
- * @details rumor.txt (rumor_j.txt) の定義により、ダンジョンは鉄獄 (ダンジョンID1)が常に選ばれる
- * その他は常にランダム ("*")
+ * @details rumor.txt (rumor_j.txt) の定義により、常にランダム ("*")。但し拡張性のため固定値の場合も残す.
  */
 static short get_rumor_num(std::string_view zz, short max_idx)
 {
@@ -138,24 +137,13 @@ void display_rumor(PlayerType *player_ptr, bool ex)
             monrace.r_sights++;
         }
     } else if (category == "DUNGEON") {
-        int dungeon_id;
-        const DungeonDefinition *d_ptr;
         const auto &dungeons = DungeonList::get_instance();
-        const auto dungeons_size = static_cast<short>(dungeons.size());
-        const auto &dungeon_name = tokens[1];
-        while (true) {
-            dungeon_id = get_rumor_num(dungeon_name, dungeons_size);
-            d_ptr = &dungeons.get_dungeon(dungeon_id);
-            if (!d_ptr->name.empty()) {
-                break;
-            }
-        }
-
-        full_name = d_ptr->name;
-        auto &dungeon_records = DungeonRecords::get_instance();
-        auto &dungeon_record = dungeon_records.get_record(dungeon_id);
+        const auto dungeon_id = std::stoi(tokens[1]);
+        const auto &dungeon = dungeons.get_dungeon(dungeon_id);
+        full_name = dungeon.name;
+        auto &dungeon_record = DungeonRecords::get_instance().get_record(dungeon_id);
         if (!dungeon_record.has_entered()) {
-            dungeon_record.set_max_level(d_ptr->mindepth);
+            dungeon_record.set_max_level(dungeon.mindepth);
             rumor_format = _("%sに帰還できるようになった。", "You can recall to %s.");
         }
     } else if (category == "TOWN") {
