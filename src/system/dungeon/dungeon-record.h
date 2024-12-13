@@ -10,6 +10,12 @@
 #include <optional>
 #include <vector>
 
+enum class DungeonMessageFormat {
+    DUMP,
+    KNOWLEDGE,
+    RECALL,
+};
+
 class DungeonRecord {
 public:
     DungeonRecord() = default;
@@ -48,6 +54,7 @@ public:
     void reset_all();
 
     int find_max_level() const;
+    std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf) const;
 
 private:
     DungeonRecords();

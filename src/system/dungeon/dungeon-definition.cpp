@@ -2,6 +2,7 @@
 #include "dungeon/dungeon-flag-mask.h"
 #include "grid/feature.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
@@ -104,4 +105,17 @@ short DungeonDefinition::convert_terrain_id(short terrain_id) const
 bool DungeonDefinition::is_open(short terrain_id) const
 {
     return terrain_id != this->convert_terrain_id(terrain_id, TerrainCharacteristics::CLOSE);
+}
+
+/*!
+ * @brief ダンジョンを制覇したかを返す
+ * @return そもそもダンジョンの主がいなかったらfalse、主がいるならば主を撃破したか否か
+ */
+bool DungeonDefinition::is_conquered() const
+{
+    if (!this->has_guardian()) {
+        return false;
+    }
+
+    return this->get_guardian().max_num == 0;
 }
