@@ -6,6 +6,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "term/z-form.h"
 
 enum conversion_type {
     CONVERT_TYPE_FLOOR = 0,
@@ -118,4 +119,10 @@ bool DungeonDefinition::is_conquered() const
     }
 
     return this->get_guardian().max_num == 0;
+}
+
+std::string DungeonDefinition::build_entrance_message() const
+{
+    constexpr auto fmt = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
+    return format(fmt, this->name.data(), this->mindepth);
 }
