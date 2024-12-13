@@ -113,11 +113,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     player_ptr->wait_report_score = false;
     player_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     player_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
-
-    for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
-        max_dlv[dungeon_id] = 0;
-    }
-
+    DungeonRecords::get_instance().reset_all();
     player_ptr->visit = 1;
     world.set_wild_mode(false);
 

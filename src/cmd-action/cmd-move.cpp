@@ -271,7 +271,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
             return;
         }
 
-        if (!max_dlv[target_dungeon]) {
+        if (!DungeonRecords::get_instance().get_record(target_dungeon).has_entered()) {
             const auto mes = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
             const auto &dungeon = DungeonList::get_instance().get_dungeon(target_dungeon);
             msg_format(mes, dungeon.name.data(), dungeon.mindepth);

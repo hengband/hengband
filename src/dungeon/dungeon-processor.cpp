@@ -128,8 +128,9 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         player_ptr->max_plv = player_ptr->lev;
     }
 
-    if ((max_dlv[floor.dungeon_idx] < floor.dun_level) && !floor.is_in_quest()) {
-        max_dlv[floor.dungeon_idx] = floor.dun_level;
+    auto &dungeon_record = DungeonRecords::get_instance().get_record(floor.dungeon_idx);
+    if ((dungeon_record.get_max_level() < floor.dun_level) && !floor.is_in_quest()) {
+        dungeon_record.set_max_level(floor.dun_level);
         if (record_maxdepth) {
             exe_write_diary(floor, DiaryKind::MAXDEAPTH, floor.dun_level);
         }

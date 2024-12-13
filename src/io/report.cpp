@@ -280,7 +280,7 @@ bool report_score(PlayerType *player_ptr)
              << format("level: %d\n", player_ptr->lev)
              << format("depth: %d\n", player_ptr->current_floor_ptr->dun_level)
              << format("maxlv: %d\n", player_ptr->max_plv)
-             << format("maxdp: %d\n", max_dlv[DUNGEON_ANGBAND])
+             << format("maxdp: %d\n", DungeonRecords::get_instance().get_record(DUNGEON_ANGBAND).get_max_level())
              << format("au: %d\n", player_ptr->au);
     const auto &igd = InnerGameData::get_instance();
     score_ss << format("turns: %d\n", igd.get_real_turns(AngbandWorld::get_instance().game_turn))

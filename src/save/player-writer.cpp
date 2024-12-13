@@ -147,10 +147,11 @@ void wr_player(PlayerType *player_ptr)
     wr_u32b(player_ptr->csp_frac);
     wr_s16b(player_ptr->max_plv);
 
-    auto tmp8u = static_cast<uint8_t>(DungeonList::get_instance().size());
+    const auto &dungeon_records = DungeonRecords::get_instance();
+    auto tmp8u = static_cast<uint8_t>(dungeon_records.size());
     wr_byte(tmp8u);
-    for (int i = 0; i < tmp8u; i++) {
-        wr_s16b((int16_t)max_dlv[i]);
+    for (const auto &[_, dungeon_record] : dungeon_records) {
+        wr_s16b(static_cast<int16_t>(dungeon_record.get_max_level()));
     }
 
     wr_s16b(0);

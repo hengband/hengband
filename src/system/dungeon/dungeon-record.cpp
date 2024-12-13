@@ -6,8 +6,6 @@
 
 #include "system/dungeon/dungeon-record.h"
 
-std::vector<int> max_dlv;
-
 bool DungeonRecord::has_entered() const
 {
     return this->max_level.has_value();

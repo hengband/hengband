@@ -101,7 +101,7 @@ void execute_recall(PlayerType *player_ptr)
         exe_write_diary(floor, DiaryKind::RECALL, floor.dun_level);
     }
 
-    floor.dun_level = max_dlv[floor.dungeon_idx];
+    floor.dun_level = DungeonRecords::get_instance().get_record(floor.dungeon_idx).get_max_level();
     if (floor.dun_level < 1) {
         floor.dun_level = 1;
     }

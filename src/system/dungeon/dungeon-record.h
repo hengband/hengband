@@ -10,8 +10,6 @@
 #include <optional>
 #include <vector>
 
-extern std::vector<int> max_dlv;
-
 class DungeonRecord {
 public:
     DungeonRecord() = default;

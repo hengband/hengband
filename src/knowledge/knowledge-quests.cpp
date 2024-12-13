@@ -53,7 +53,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
     int total = 0;
 
     fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
-
+    const auto &dungeon_records = DungeonRecords::get_instance();
     for (const auto &[quest_id, quest] : quests) {
         if (quest_id == QuestId::NONE) {
             continue;
@@ -148,7 +148,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             continue;
         }
         rand_level = quest.level;
-        if (max_dlv[DUNGEON_ANGBAND] < rand_level) {
+        if (dungeon_records.get_record(DUNGEON_ANGBAND).get_max_level() < rand_level) {
             continue;
         }
 

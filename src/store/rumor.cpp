@@ -152,8 +152,10 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         }
 
         full_name = d_ptr->name;
-        if (!max_dlv[dungeon_id]) {
-            max_dlv[dungeon_id] = d_ptr->mindepth;
+        auto &dungeon_records = DungeonRecords::get_instance();
+        auto &dungeon_record = dungeon_records.get_record(dungeon_id);
+        if (!dungeon_record.has_entered()) {
+            dungeon_record.set_max_level(d_ptr->mindepth);
             rumor_format = _("%sに帰還できるようになった。", "You can recall to %s.");
         }
     } else if (category == "TOWN") {
