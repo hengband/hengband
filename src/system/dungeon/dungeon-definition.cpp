@@ -126,3 +126,11 @@ std::string DungeonDefinition::build_entrance_message() const
     constexpr auto fmt = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
     return format(fmt, this->name.data(), this->mindepth);
 }
+
+void DungeonDefinition::set_guardian_flag()
+{
+    if (this->is_dungeon() && this->has_guardian()) {
+        auto &monrace = this->get_guardian();
+        monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
+    }
+}
