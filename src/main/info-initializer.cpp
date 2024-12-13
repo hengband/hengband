@@ -204,7 +204,7 @@ void init_dungeons_info()
 {
     init_header(&dungeons_header);
     auto &dungeons = DungeonList::get_instance();
-    init_info("DungeonDefinitions.txt", dungeons_header, dungeons, parse_dungeons_info, retouch_dungeons_info);
+    init_info("DungeonDefinitions.txt", dungeons_header, dungeons, parse_dungeons_info, [&dungeons] { dungeons.retouch(); });
 }
 
 /*!

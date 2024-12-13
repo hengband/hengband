@@ -380,16 +380,3 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
 
     return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 }
-
-/*!
- * @brief ダンジョン情報の読み込みが終わった後の設定を行う
- */
-void retouch_dungeons_info()
-{
-    for (auto &[_, dungeon] : DungeonList::get_instance()) {
-        if (dungeon.is_dungeon() && dungeon.has_guardian()) {
-            auto &monrace = dungeon.get_guardian();
-            monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
-        }
-    }
-}
