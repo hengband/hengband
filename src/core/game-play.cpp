@@ -245,8 +245,8 @@ static void reset_world_info(PlayerType *player_ptr)
 
 static void generate_wilderness(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level == 0) && floor_ptr->is_in_quest()) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.is_in_underground()) {
         return;
     }
 

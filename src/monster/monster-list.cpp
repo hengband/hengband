@@ -326,7 +326,7 @@ void choose_chameleon_polymorph(PlayerType *player_ptr, MONSTER_IDX m_idx, const
  * @param m_idx 隣接数を調べたいモンスターのID
  * @return 隣接しているモンスターの数
  */
-int get_monster_crowd_number(FloorType *floor_ptr, MONSTER_IDX m_idx)
+int get_monster_crowd_number(const FloorType *floor_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     POSITION my = m_ptr->fy;

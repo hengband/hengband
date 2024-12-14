@@ -137,7 +137,7 @@ static void show_dead_place(PlayerType *player_ptr, int extra_line)
     }
 
     std::string place;
-    if (player_ptr->current_floor_ptr->dun_level == 0) {
+    if (!player_ptr->current_floor_ptr->is_in_underground()) {
         concptr field_name = player_ptr->town_num ? "街" : "荒野";
         if (streq(player_ptr->died_from, "途中終了")) {
             place = format("%sで死んだ", field_name);
