@@ -313,7 +313,7 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case '<': {
-        if (!is_wild_mode && !floor.dun_level && !floor.inside_arena && !floor.is_in_quest()) {
+        if (!is_wild_mode && !floor.is_in_underground() && !floor.inside_arena && !floor.is_in_quest()) {
             if (vanilla_town) {
                 break;
             }

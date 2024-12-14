@@ -262,7 +262,7 @@ bool teleport_level_other(PlayerType *player_ptr)
  */
 bool tele_town(PlayerType *player_ptr)
 {
-    if (player_ptr->current_floor_ptr->dun_level) {
+    if (player_ptr->current_floor_ptr->is_in_underground()) {
         msg_print(_("この魔法は地上でしか使えない！", "This spell can only be used on the surface!"));
         return false;
     }

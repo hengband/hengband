@@ -179,7 +179,7 @@ void print_depth(PlayerType *player_ptr)
     const auto col_depth = wid + COL_DEPTH;
     const auto row_depth = hgt + ROW_DEPTH;
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.dun_level) {
+    if (!floor.is_in_underground()) {
         c_prt(attr, format("%7s", _("地上", "Surf.")), row_depth, col_depth);
         return;
     }

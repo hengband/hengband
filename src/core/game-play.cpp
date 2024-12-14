@@ -245,11 +245,6 @@ static void reset_world_info(PlayerType *player_ptr)
 
 static void generate_wilderness(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level == 0) && floor_ptr->is_in_quest()) {
-        return;
-    }
-
     const auto &world = AngbandWorld::get_instance();
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
     init_flags = INIT_ONLY_BUILDINGS;

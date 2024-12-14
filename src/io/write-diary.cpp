@@ -66,7 +66,7 @@ static std::pair<QuestId, std::string> write_floor(const FloorType &floor)
         return std::make_pair(q_idx, std::string(_("アリーナ:", "Arena:")));
     }
 
-    if (!floor.dun_level) {
+    if (!floor.is_in_underground()) {
         return std::make_pair(q_idx, std::string(_("地上:", "Surface:")));
     }
 
