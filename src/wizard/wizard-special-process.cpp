@@ -473,13 +473,13 @@ void wiz_create_feature(PlayerType *player_ptr)
  */
 static std::optional<DungeonId> select_debugging_dungeon(DungeonId initial_dungeon_id)
 {
-    constexpr auto angband = enum2i(DungeonId::ANGBAND);
-    constexpr auto max_valid_id = enum2i(DungeonId::MAX) - 1;
+    constexpr auto min_dungeon_id = enum2i(DungeonId::WILDERNESS);
+    constexpr auto max_dungeon_id = enum2i(DungeonId::MAX) - 1;
     if (command_arg > 0) {
-        return i2enum<DungeonId>(std::clamp(static_cast<int>(command_arg), angband, max_valid_id));
+        return i2enum<DungeonId>(std::clamp(static_cast<int>(command_arg), min_dungeon_id, max_dungeon_id));
     }
 
-    return input_numerics("Jump which dungeon", angband, max_valid_id, initial_dungeon_id);
+    return input_numerics("Jump which dungeon", min_dungeon_id, max_dungeon_id, initial_dungeon_id);
 }
 
 /*
@@ -542,7 +542,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
     const auto is_in_dungeon = floor.is_underground();
     const auto current_dungeon_id = is_in_dungeon ? floor.dungeon_id : DungeonId::ANGBAND;
     const auto dungeon_id = select_debugging_dungeon(current_dungeon_id);
-    if (!dungeon_id) {
+    if (!dungeon_id || (dungeon_id == DungeonId::WILDERNESS)) {
         if (!is_in_dungeon) {
             return;
         }
