@@ -836,7 +836,7 @@ void cheat_death(PlayerType *player_ptr)
     AngbandSystem::get_instance().set_phase_out(false);
     leaving_quest = QuestId::NONE;
     floor.quest_number = QuestId::NONE;
-    if (floor.dungeon_idx > DungeonId::WILDERNESS) {
+    if (floor.is_underground()) {
         player_ptr->recall_dungeon = floor.dungeon_idx;
     }
 

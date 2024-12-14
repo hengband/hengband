@@ -9,7 +9,6 @@
 #include "player-info/mimic-info-table.h"
 #include "player/player-status-table.h"
 #include "system/angband-system.h"
-#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
@@ -184,11 +183,6 @@ void print_depth(PlayerType *player_ptr)
         return;
     }
 
-    if (floor.is_in_quest() && floor.dungeon_idx == DungeonId::WILDERNESS) {
-        c_prt(attr, format("%7s", _("地上", "Quest")), row_depth, col_depth);
-        return;
-    }
-
     std::string depths;
     if (depth_in_feet) {
         depths = format(_("%d ft", "%d ft"), floor.dun_level * 50);
@@ -241,9 +235,9 @@ void print_depth(PlayerType *player_ptr)
  */
 void print_frame_basic(PlayerType *player_ptr)
 {
-    const auto title = player_ptr->mimic_form == MimicKindType::NONE
-                           ? rp_ptr->title
-                           : mimic_info.at(player_ptr->mimic_form).title;
+    const auto &title = player_ptr->mimic_form == MimicKindType::NONE
+                            ? rp_ptr->title
+                            : mimic_info.at(player_ptr->mimic_form).title;
     print_field(title, ROW_RACE, COL_RACE);
     print_title(player_ptr);
     print_level(player_ptr);
