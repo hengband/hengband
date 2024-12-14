@@ -105,9 +105,9 @@ void pattern_teleport(PlayerType *player_ptr)
  */
 bool pattern_effect(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (!pattern_tile(floor_ptr, p_pos.y, p_pos.x)) {
+    if (!pattern_tile(&floor, p_pos.y, p_pos.x)) {
         return false;
     }
 
@@ -116,7 +116,7 @@ bool pattern_effect(PlayerType *player_ptr)
         wreck_the_pattern(player_ptr);
     }
 
-    int pattern_type = floor_ptr->get_grid(p_pos).get_terrain().subtype;
+    int pattern_type = floor.get_grid(p_pos).get_terrain().subtype;
     switch (pattern_type) {
     case PATTERN_TILE_END:
         (void)BadStatusSetter(player_ptr).hallucination(0);
