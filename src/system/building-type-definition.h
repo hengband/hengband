@@ -68,7 +68,6 @@ private:
     int wager = 0;
     std::array<MeleeGladiator, NUM_GLADIATORS> gladiators{};
 
-    int decide_max_level() const;
     std::pair<int, bool> set_gladiators(PlayerType *player_ptr, int mon_level);
     MonraceId search_gladiator(PlayerType *player_ptr, int mon_level, int num_gladiator) const;
     int matches_gladiator(MonraceId monrace_id, int current_num) const;

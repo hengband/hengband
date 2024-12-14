@@ -98,7 +98,7 @@ std::vector<std::string> MeleeArena::build_gladiators_names() const
  */
 void MeleeArena::update_gladiators(PlayerType *player_ptr)
 {
-    const auto mon_level = this->decide_max_level();
+    const auto mon_level = DungeonRecords::get_instance().decide_gradiator_level();
     while (true) {
         auto [total, is_applicable] = this->set_gladiators(player_ptr, mon_level);
         const auto &[count, new_total] = this->set_odds(total, is_applicable);
@@ -107,23 +107,6 @@ void MeleeArena::update_gladiators(PlayerType *player_ptr)
             break;
         }
     }
-}
-
-int MeleeArena::decide_max_level() const
-{
-    auto max_dungeon_level = DungeonRecords::get_instance().find_max_level();
-    auto max_level = randint1(std::min(max_dungeon_level, 122)) + 5;
-    if (evaluate_percent(60)) {
-        const auto i = randint1(std::min(max_dungeon_level, 122)) + 5;
-        max_level = std::max(i, max_level);
-    }
-
-    if (evaluate_percent(30)) {
-        const auto i = randint1(std::min(max_dungeon_level, 122)) + 5;
-        max_level = std::max(i, max_level);
-    }
-
-    return max_level;
 }
 
 std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_level)

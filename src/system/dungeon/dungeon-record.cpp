@@ -10,6 +10,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
+#include "term/z-rand.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 
@@ -158,6 +159,23 @@ int DungeonRecords::find_max_level() const
     }
 
     return max_level;
+}
+
+int DungeonRecords::decide_gradiator_level() const
+{
+    const auto max_dungeon_level = this->find_max_level();
+    auto gradiator_level = randint1(std::min(max_dungeon_level, 122)) + 5;
+    if (evaluate_percent(60)) {
+        const auto random_level = randint1(std::min(max_dungeon_level, 122)) + 5;
+        gradiator_level = std::max(random_level, gradiator_level);
+    }
+
+    if (evaluate_percent(30)) {
+        const auto random_level = randint1(std::min(max_dungeon_level, 122)) + 5;
+        gradiator_level = std::max(random_level, gradiator_level);
+    }
+
+    return gradiator_level;
 }
 
 std::vector<std::string> DungeonRecords::build_known_dungeons(DungeonMessageFormat dmf) const
