@@ -133,4 +133,7 @@ const std::unordered_map<std::string_view, TerrainCharacteristics> f_info_flags 
 const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
     { "NONE", TerrainTag::NONE },
     { "FLOOR", TerrainTag::FLOOR },
+    { "RUNE_PROTECTION", TerrainTag::RUNE_PROTECTION },
+    { "RUNE_EXPLOSION", TerrainTag::RUNE_EXPLOSION },
+    { "MIRROR", TerrainTag::MIRROR },
 };

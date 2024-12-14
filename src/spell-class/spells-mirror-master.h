@@ -1,6 +1,8 @@
 #pragma once
 
 #include "util/point-2d.h"
+#include <optional>
+#include <string>
 
 class PlayerType;
 struct ProjectResult;
@@ -10,7 +12,7 @@ public:
     void remove_all_mirrors(bool explode);
     void remove_mirror(int y, int x);
     bool mirror_tunnel();
-    bool place_mirror();
+    std::optional<std::string> place_mirror();
     bool mirror_concentration();
     void seal_of_mirror(const int dam);
     void seeker_ray(int dir, int dam);

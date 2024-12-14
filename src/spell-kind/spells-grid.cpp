@@ -10,6 +10,7 @@
 #include "grid/stair.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -24,15 +25,18 @@
  */
 bool create_rune_protection_one(PlayerType *player_ptr)
 {
-    if (!cave_clean_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    if (!cave_clean_bold(&floor, p_pos.y, p_pos.x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info |= CAVE_OBJECT;
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].mimic = feat_rune_protection;
-    note_spot(player_ptr, player_ptr->y, player_ptr->x);
-    lite_spot(player_ptr, player_ptr->y, player_ptr->x);
+    auto &grid = floor.get_grid(p_pos);
+    grid.info |= CAVE_OBJECT;
+    grid.set_mimic_terrain_id(TerrainTag::RUNE_PROTECTION);
+    note_spot(player_ptr, p_pos.y, p_pos.x);
+    lite_spot(player_ptr, p_pos.y, p_pos.x);
     return true;
 }
 
@@ -46,16 +50,18 @@ bool create_rune_protection_one(PlayerType *player_ptr)
  */
 bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!cave_clean_bold(floor_ptr, y, x)) {
+    const Pos2D pos(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (!cave_clean_bold(&floor, pos.y, pos.x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
-    floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
-    floor_ptr->grid_array[y][x].mimic = feat_rune_explosion;
-    note_spot(player_ptr, y, x);
-    lite_spot(player_ptr, y, x);
+    auto &grid = floor.get_grid(pos);
+    grid.info |= CAVE_OBJECT;
+    grid.set_mimic_terrain_id(TerrainTag::RUNE_EXPLOSION);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
     return true;
 }
 
