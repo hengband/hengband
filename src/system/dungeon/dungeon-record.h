@@ -55,6 +55,7 @@ public:
 
     int find_max_level() const;
     std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf) const;
+    std::vector<int> collect_entered_dungeons() const;
 
 private:
     DungeonRecords();
