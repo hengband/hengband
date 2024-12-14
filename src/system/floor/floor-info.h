@@ -49,7 +49,7 @@ class ItemEntity;
 class FloorType {
 public:
     FloorType();
-    DungeonId dungeon_idx{};
+    DungeonId dungeon_id{};
     std::vector<std::vector<Grid>> grid_array;
     DEPTH dun_level = 0; /*!< 現在の実ダンジョン階層 base_level の参照元となる / Current dungeon level */
     DEPTH base_level = 0; /*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */

@@ -126,7 +126,7 @@ static bool scene_dungeon(PlayerType *player_ptr, scene_type *value)
     const auto enable = floor.is_underground();
     if (enable) {
         value->type = TERM_XTRA_MUSIC_DUNGEON;
-        value->val = enum2i(floor.dungeon_idx);
+        value->val = enum2i(floor.dungeon_id);
     }
     return enable;
 }

@@ -29,7 +29,7 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
 {
     auto &quests = QuestList::get_instance();
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.dungeon_idx != DungeonId::ANGBAND) {
+    if (floor.dungeon_id != DungeonId::ANGBAND) {
         return;
     }
 
@@ -80,7 +80,7 @@ void execute_recall(PlayerType *player_ptr)
     if (floor.is_underground() || floor.is_in_quest() || player_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
         if (floor.is_underground()) {
-            player_ptr->recall_dungeon = floor.dungeon_idx;
+            player_ptr->recall_dungeon = floor.dungeon_id;
         }
         if (record_stair) {
             exe_write_diary(floor, DiaryKind::RECALL, floor.dun_level);
@@ -102,11 +102,11 @@ void execute_recall(PlayerType *player_ptr)
         exe_write_diary(floor, DiaryKind::RECALL, floor.dun_level);
     }
 
-    floor.dun_level = DungeonRecords::get_instance().get_record(floor.dungeon_idx).get_max_level();
+    floor.dun_level = DungeonRecords::get_instance().get_record(floor.dungeon_id).get_max_level();
     if (!floor.is_underground()) {
         floor.dun_level = 1;
     }
-    if (ironman_nightmare && !randint0(666) && (floor.dungeon_idx == DungeonId::ANGBAND)) {
+    if (ironman_nightmare && !randint0(666) && (floor.dungeon_id == DungeonId::ANGBAND)) {
         if (floor.dun_level < 50) {
             floor.dun_level *= 2;
         } else if (floor.dun_level < 99) {

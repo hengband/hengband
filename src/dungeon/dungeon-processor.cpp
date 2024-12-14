@@ -129,7 +129,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         player_ptr->max_plv = player_ptr->lev;
     }
 
-    auto &dungeon_record = DungeonRecords::get_instance().get_record(floor.dungeon_idx);
+    auto &dungeon_record = DungeonRecords::get_instance().get_record(floor.dungeon_id);
     if ((dungeon_record.get_max_level() < floor.dun_level) && !floor.is_in_quest()) {
         dungeon_record.set_max_level(floor.dun_level);
         if (record_maxdepth) {
@@ -182,7 +182,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         return;
     }
 
-    if (!floor.is_in_quest() && (floor.dungeon_idx == DungeonId::ANGBAND)) {
+    if (!floor.is_in_quest() && (floor.dungeon_id == DungeonId::ANGBAND)) {
         const auto random_quest_id = floor.get_random_quest_id();
         quest_discovery(random_quest_id);
         floor.quest_number = random_quest_id;

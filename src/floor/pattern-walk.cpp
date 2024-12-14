@@ -48,7 +48,7 @@ void pattern_teleport(PlayerType *player_ptr)
             min_level = current_level;
         }
 
-        if (floor.dungeon_idx == DungeonId::ANGBAND) {
+        if (floor.dungeon_id == DungeonId::ANGBAND) {
             if (floor.dun_level > 100) {
                 max_level = MAX_DEPTH - 1;
             } else if (current_level == 100) {

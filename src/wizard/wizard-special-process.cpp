@@ -493,7 +493,7 @@ static std::optional<int> select_debugging_floor(const FloorType &floor, Dungeon
     const auto &dungeon = DungeonList::get_instance().get_dungeon(dungeon_id);
     const auto max_depth = dungeon.maxdepth;
     const auto min_depth = dungeon.mindepth;
-    const auto is_current_dungeon = floor.dungeon_idx == dungeon_id;
+    const auto is_current_dungeon = floor.dungeon_id == dungeon_id;
     auto initial_depth = floor.dun_level;
     if (!is_current_dungeon) {
         initial_depth = min_depth;
@@ -540,8 +540,8 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto is_in_dungeon = floor.is_underground();
-    const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : DungeonId::ANGBAND;
-    const auto dungeon_id = select_debugging_dungeon(dungeon_idx);
+    const auto current_dungeon_id = is_in_dungeon ? floor.dungeon_id : DungeonId::ANGBAND;
+    const auto dungeon_id = select_debugging_dungeon(current_dungeon_id);
     if (!dungeon_id) {
         if (!is_in_dungeon) {
             return;
@@ -837,7 +837,7 @@ void cheat_death(PlayerType *player_ptr)
     leaving_quest = QuestId::NONE;
     floor.quest_number = QuestId::NONE;
     if (floor.is_underground()) {
-        player_ptr->recall_dungeon = floor.dungeon_idx;
+        player_ptr->recall_dungeon = floor.dungeon_id;
     }
 
     floor.reset_dungeon_index();

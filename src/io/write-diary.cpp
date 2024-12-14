@@ -309,7 +309,7 @@ void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_
             constexpr auto fmt = _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n");
             const auto &dungeon = floor.get_dungeon_definition();
             const auto &dungeon_records = DungeonRecords::get_instance();
-            const auto max_level = dungeon_records.get_record(floor.dungeon_idx).get_max_level();
+            const auto max_level = dungeon_records.get_record(floor.dungeon_id).get_max_level();
             fprintf(fff, fmt, hour, min, note_level.data(), _(dungeon.name.data(), max_level), _(max_level, dungeon.name.data()));
         } else {
             constexpr auto fmt = _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n");

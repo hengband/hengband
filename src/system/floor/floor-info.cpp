@@ -57,7 +57,7 @@ bool FloorType::is_in_quest() const
 
 void FloorType::set_dungeon_index(DungeonId id)
 {
-    this->dungeon_idx = id;
+    this->dungeon_id = id;
 }
 
 void FloorType::reset_dungeon_index()
@@ -67,7 +67,7 @@ void FloorType::reset_dungeon_index()
 
 DungeonDefinition &FloorType::get_dungeon_definition() const
 {
-    return DungeonList::get_instance().get_dungeon(this->dungeon_idx);
+    return DungeonList::get_instance().get_dungeon(this->dungeon_id);
 }
 
 /*!
@@ -78,7 +78,7 @@ DungeonDefinition &FloorType::get_dungeon_definition() const
  */
 QuestId FloorType::get_random_quest_id(std::optional<int> level_opt) const
 {
-    if (this->dungeon_idx != DungeonId::ANGBAND) {
+    if (this->dungeon_id != DungeonId::ANGBAND) {
         return QuestId::NONE;
     }
 
@@ -120,7 +120,7 @@ QuestId FloorType::get_quest_id(const int bonus) const
         auto depth_quest = (quest.type == QuestKindType::KILL_LEVEL);
         depth_quest &= !(quest.flags & QUEST_FLAG_PRESET);
         depth_quest &= (quest.level == level);
-        depth_quest &= (quest.dungeon == this->dungeon_idx);
+        depth_quest &= (quest.dungeon == this->dungeon_id);
         if (depth_quest) {
             return quest_id;
         }

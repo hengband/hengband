@@ -266,7 +266,7 @@ static void preserve_info(PlayerType *player_ptr)
         auto quest_relating_monster = (quest.status == QuestStatusType::TAKEN);
         quest_relating_monster &= ((quest.type == QuestKindType::KILL_LEVEL) || (quest.type == QuestKindType::RANDOM));
         quest_relating_monster &= (quest.level == floor.dun_level);
-        quest_relating_monster &= (floor.dungeon_idx == quest.dungeon);
+        quest_relating_monster &= (floor.dungeon_id == quest.dungeon);
         quest_relating_monster &= !(quest.flags & QUEST_FLAG_PRESET);
         if (quest_relating_monster) {
             quest_monrace_id = quest.r_idx;
@@ -354,7 +354,7 @@ static void jump_floors(FloorType &floor)
 static void exit_to_wilderness(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.is_underground() || (floor.dungeon_idx == DungeonId::WILDERNESS)) {
+    if (floor.is_underground() || (floor.dungeon_id == DungeonId::WILDERNESS)) {
         return;
     }
 
@@ -365,7 +365,7 @@ static void exit_to_wilderness(PlayerType *player_ptr)
         player_ptr->wilderness_x = dungeon.dx;
     }
 
-    player_ptr->recall_dungeon = floor.dungeon_idx;
+    player_ptr->recall_dungeon = floor.dungeon_id;
     player_ptr->word_recall = 0;
     floor.reset_dungeon_index();
     FloorChangeModesStore::get_instace()->reset(FloorChangeMode::SAVE_FLOORS);
