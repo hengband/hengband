@@ -144,8 +144,6 @@
  */
 LPCWSTR win_term_name[] = { L"Hengband", L"Term-1", L"Term-2", L"Term-3", L"Term-4", L"Term-5", L"Term-6", L"Term-7" };
 
-#define MAX_TERM_DATA 8 //!< Maximum number of windows
-
 static term_data data[MAX_TERM_DATA]; //!< An array of term_data's
 static bool is_main_term(term_data *td)
 {
@@ -191,7 +189,7 @@ static HICON hIcon;
 
 /* bg */
 bg_mode current_bg_mode = bg_mode::BG_NONE;
-#define DEFAULT_BG_FILENAME "bg.bmp"
+constexpr auto DEFAULT_BG_FILENAME = "bg.bmp";
 std::filesystem::path wallpaper_path = ""; //!< 壁紙ファイル名。
 
 /*
@@ -446,7 +444,7 @@ static void save_prefs(void)
 /*!
  * @brief callback for EnumDisplayMonitors API
  */
-BOOL CALLBACK monitor_enum_procedure([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] HDC hdcMon, [[maybe_unused]] LPRECT lpMon, LPARAM dwDate)
+static BOOL CALLBACK monitor_enum_procedure([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] HDC hdcMon, [[maybe_unused]] LPRECT lpMon, LPARAM dwDate)
 {
     bool *result = (bool *)dwDate;
     *result = true;
@@ -737,7 +735,7 @@ static void term_data_redraw(term_data *td)
 /*!
  * @brief termの反転色表示
  */
-void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
+static void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 {
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
     int tx = td->size_ow1 + x * td->tile_wid;
@@ -2243,7 +2241,7 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
 /*!
  * @brief メインウインドウ用ウインドウプロシージャ
  */
-LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
 
@@ -2512,7 +2510,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 /*!
  * @brief サブウインドウ用ウインドウプロシージャ
  */
-LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+static LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
     if (handle_window_resize(td, uMsg, wParam, lParam)) {
@@ -2761,7 +2759,7 @@ static void register_wndclass(void)
 /*!
  * @brief ゲームのメインルーチン
  */
-int WINAPI game_main(_In_ HINSTANCE hInst)
+static int WINAPI game_main(_In_ HINSTANCE hInst)
 {
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;
@@ -2848,7 +2846,9 @@ int WINAPI game_main(_In_ HINSTANCE hInst)
     }
 
     quit("");
+#ifdef WIN_DEBUG
     return 0;
+#endif
 }
 
 /*!

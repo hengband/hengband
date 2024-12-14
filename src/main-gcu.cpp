@@ -216,9 +216,6 @@ struct term_data {
     WINDOW *win;
 };
 
-/* Max number of windows on screen */
-#define MAX_TERM_DATA 8
-
 /* Information about our windows */
 static term_data data[MAX_TERM_DATA];
 
