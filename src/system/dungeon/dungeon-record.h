@@ -7,6 +7,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include <optional>
 #include <string>
 #include <vector>
@@ -42,14 +43,14 @@ public:
     static DungeonRecords &get_instance();
     DungeonRecord &get_record(int dungeon_id);
     const DungeonRecord &get_record(int dungeon_id) const;
-    std::map<int, DungeonRecord>::iterator begin();
-    std::map<int, DungeonRecord>::const_iterator begin() const;
-    std::map<int, DungeonRecord>::iterator end();
-    std::map<int, DungeonRecord>::const_iterator end() const;
-    std::map<int, DungeonRecord>::reverse_iterator rbegin();
-    std::map<int, DungeonRecord>::const_reverse_iterator rbegin() const;
-    std::map<int, DungeonRecord>::reverse_iterator rend();
-    std::map<int, DungeonRecord>::const_reverse_iterator rend() const;
+    std::map<int, std::shared_ptr<DungeonRecord>>::iterator begin();
+    std::map<int, std::shared_ptr<DungeonRecord>>::const_iterator begin() const;
+    std::map<int, std::shared_ptr<DungeonRecord>>::iterator end();
+    std::map<int, std::shared_ptr<DungeonRecord>>::const_iterator end() const;
+    std::map<int, std::shared_ptr<DungeonRecord>>::reverse_iterator rbegin();
+    std::map<int, std::shared_ptr<DungeonRecord>>::const_reverse_iterator rbegin() const;
+    std::map<int, std::shared_ptr<DungeonRecord>>::reverse_iterator rend();
+    std::map<int, std::shared_ptr<DungeonRecord>>::const_reverse_iterator rend() const;
     size_t size() const;
     bool empty() const;
     void reset_all();
@@ -61,5 +62,5 @@ public:
 private:
     DungeonRecords();
     static DungeonRecords instance;
-    std::map<int, DungeonRecord> records;
+    std::map<int, std::shared_ptr<DungeonRecord>> records;
 };
