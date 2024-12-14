@@ -138,21 +138,22 @@ void display_rumor(PlayerType *player_ptr, bool ex)
             monrace.r_sights++;
         }
     } else if (category == "DUNGEON") {
-        DUNGEON_IDX d_idx;
-        DungeonDefinition *d_ptr;
-        const auto dungeons_size = static_cast<short>(dungeons_info.size());
-        const auto &d_idx_str = tokens[1];
+        int dungeon_id;
+        const DungeonDefinition *d_ptr;
+        const auto &dungeons = DungeonList::get_instance();
+        const auto dungeons_size = static_cast<short>(dungeons.size());
+        const auto &dungeon_name = tokens[1];
         while (true) {
-            d_idx = get_rumor_num(d_idx_str, dungeons_size);
-            d_ptr = &dungeons_info[d_idx];
+            dungeon_id = get_rumor_num(dungeon_name, dungeons_size);
+            d_ptr = &dungeons.get_dungeon(dungeon_id);
             if (!d_ptr->name.empty()) {
                 break;
             }
         }
 
         full_name = d_ptr->name;
-        if (!max_dlv[d_idx]) {
-            max_dlv[d_idx] = d_ptr->mindepth;
+        if (!max_dlv[dungeon_id]) {
+            max_dlv[dungeon_id] = d_ptr->mindepth;
             rumor_format = _("%sに帰還できるようになった。", "You can recall to %s.");
         }
     } else if (category == "TOWN") {

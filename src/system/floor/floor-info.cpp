@@ -53,7 +53,7 @@ bool FloorType::is_in_quest() const
     return this->quest_number != QuestId::NONE;
 }
 
-void FloorType::set_dungeon_index(short dungeon_idx_)
+void FloorType::set_dungeon_index(int dungeon_idx_)
 {
     this->dungeon_idx = dungeon_idx_;
 }
@@ -65,7 +65,7 @@ void FloorType::reset_dungeon_index()
 
 DungeonDefinition &FloorType::get_dungeon_definition() const
 {
-    return dungeons_info[this->dungeon_idx];
+    return DungeonList::get_instance().get_dungeon(this->dungeon_idx);
 }
 
 /*!

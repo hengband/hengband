@@ -203,7 +203,8 @@ void init_class_skills_info()
 void init_dungeons_info()
 {
     init_header(&dungeons_header);
-    init_info("DungeonDefinitions.txt", dungeons_header, dungeons_info, parse_dungeons_info, retouch_dungeons_info);
+    auto &dungeons = DungeonList::get_instance();
+    init_info("DungeonDefinitions.txt", dungeons_header, dungeons, parse_dungeons_info, retouch_dungeons_info);
 }
 
 /*!

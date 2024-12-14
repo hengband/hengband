@@ -3043,10 +3043,10 @@ long calc_score(PlayerType *player_ptr)
         mult = 5;
     }
 
-    DEPTH max_dl = 0;
-    for (const auto &d_ref : dungeons_info) {
-        if (max_dl < max_dlv[d_ref.idx]) {
-            max_dl = max_dlv[d_ref.idx];
+    auto max_dl = 0;
+    for (const auto &[dungeon_id, _] : DungeonList::get_instance()) {
+        if (max_dl < max_dlv[dungeon_id]) {
+            max_dl = max_dlv[dungeon_id];
         }
     }
 

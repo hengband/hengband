@@ -121,15 +121,15 @@ static void set_floor_and_wall_aux(int16_t feat_type[100], const std::array<feat
  * / Fill the arrays of floors and walls in the good proportions
  * @param type ダンジョンID
  */
-void set_floor_and_wall(DUNGEON_IDX type)
+void set_floor_and_wall(int type)
 {
-    DUNGEON_IDX cur_type = 255;
+    auto cur_type = 255;
     if (cur_type == type) {
         return;
     }
 
     cur_type = type;
-    const auto &dungeon = dungeons_info[type];
+    const auto &dungeon = DungeonList::get_instance().get_dungeon(type);
     set_floor_and_wall_aux(feat_ground_type, dungeon.floor);
     set_floor_and_wall_aux(feat_wall_type, dungeon.fill);
     feat_wall_outer = dungeon.outer_wall;
@@ -383,7 +383,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
     const auto entrance = wilderness_grid.entrance;
     auto is_winner = entrance > 0;
     is_winner &= (wilderness_grid.town == 0);
-    auto is_wild_winner = dungeons_info[entrance].flags.has_not(DungeonFeatureType::WINNER);
+    auto is_wild_winner = DungeonList::get_instance().get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER);
     is_winner &= ((AngbandWorld::get_instance().total_winner != 0) || is_wild_winner);
     if (!is_winner) {
         return;
@@ -622,6 +622,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
         }
     }
 
+    const auto &dungeons = DungeonList::get_instance();
     const auto &world = AngbandWorld::get_instance();
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
     for (auto x = 0; x < world.max_wild_x; x++) {
@@ -643,7 +644,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
             }
 
             const auto entrance = wild_grid.entrance;
-            if ((entrance > 0) && (world.total_winner || dungeons_info[entrance].flags.has_not(DungeonFeatureType::WINNER))) {
+            if ((entrance > 0) && (world.total_winner || dungeons.get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER))) {
                 grid.feat = feat_entrance;
                 grid.special = entrance;
                 grid.info |= (CAVE_GLOW | CAVE_MARK);
@@ -795,12 +796,12 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
         return PARSE_ERROR_UNDEFINED_DIRECTIVE;
     }
 
-    for (const auto &dungeon : dungeons_info) {
+    for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
         if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
             continue;
         }
 
-        wilderness[dungeon.dy][dungeon.dx].entrance = static_cast<byte>(dungeon.idx);
+        wilderness[dungeon.dy][dungeon.dx].entrance = static_cast<uint8_t>(dungeon_id);
         if (!wilderness[dungeon.dy][dungeon.dx].town) {
             wilderness[dungeon.dy][dungeon.dx].level = dungeon.mindepth;
         }

@@ -114,9 +114,9 @@ void MeleeArena::update_gladiators(PlayerType *player_ptr)
 int MeleeArena::decide_max_level() const
 {
     auto max_dl = 0;
-    for (const auto &dungeon : dungeons_info) {
-        if (max_dl < max_dlv[dungeon.idx]) {
-            max_dl = max_dlv[dungeon.idx];
+    for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
+        if (max_dl < max_dlv[dungeon_id]) {
+            max_dl = max_dlv[dungeon_id];
         }
     }
 

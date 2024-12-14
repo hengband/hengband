@@ -262,7 +262,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         return;
     }
 
-    short target_dungeon = 0;
+    auto target_dungeon = 0;
     auto &fcms = FloorChangeModesStore::get_instace();
     if (!floor.is_in_underground()) {
         target_dungeon = terrain.flags.has(TerrainCharacteristics::ENTRANCE) ? grid.special : DUNGEON_ANGBAND;
@@ -273,7 +273,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
         if (!max_dlv[target_dungeon]) {
             const auto mes = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
-            const auto &dungeon = dungeons_info[target_dungeon];
+            const auto &dungeon = DungeonList::get_instance().get_dungeon(target_dungeon);
             msg_format(mes, dungeon.name.data(), dungeon.mindepth);
             if (!input_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) {
                 return;

@@ -68,7 +68,7 @@ static std::optional<std::string> basic_key_at(int index)
  */
 static std::optional<std::string> dungeon_key_at(int index)
 {
-    if (index >= static_cast<int>(dungeons_info.size())) {
+    if (index >= static_cast<int>(DungeonList::get_instance().size())) {
         return std::nullopt;
     }
 

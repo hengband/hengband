@@ -180,13 +180,13 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
 static void dump_aux_recall(FILE *fff)
 {
     fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
-    for (const auto &dungeon : dungeons_info) {
+    for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
         auto is_conquered = false;
         if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
             continue;
         }
 
-        if (!max_dlv[dungeon.idx]) {
+        if (!max_dlv[dungeon_id]) {
             continue;
         }
 
@@ -194,7 +194,7 @@ static void dump_aux_recall(FILE *fff)
             if (dungeon.get_guardian().max_num == 0) {
                 is_conquered = true;
             }
-        } else if (max_dlv[dungeon.idx] == dungeon.maxdepth) {
+        } else if (max_dlv[dungeon_id] == dungeon.maxdepth) {
             is_conquered = true;
         }
 
