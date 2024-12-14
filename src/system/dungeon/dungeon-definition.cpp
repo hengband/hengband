@@ -23,15 +23,6 @@ bool DungeonDefinition::has_river_flag() const
     return this->flags.has_any_of(DF_RIVER_MASK);
 }
 
-/*!
- * @brief ダンジョンが地下ダンジョンかを判定する
- * @return 地下ダンジョンならtrue、地上 (荒野)ならfalse
- */
-bool DungeonDefinition::is_dungeon() const
-{
-    return this->idx > 0;
-}
-
 bool DungeonDefinition::has_guardian() const
 {
     return this->final_guardian != MonraceId::PLAYER;
@@ -134,7 +125,7 @@ std::string DungeonDefinition::describe_depth() const
 
 void DungeonDefinition::set_guardian_flag()
 {
-    if (this->is_dungeon() && this->has_guardian()) {
+    if (this->has_guardian()) {
         auto &monrace = this->get_guardian();
         monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
     }

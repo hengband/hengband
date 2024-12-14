@@ -189,7 +189,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     }
 
     const auto &dungeon = floor.get_dungeon_definition();
-    if ((floor.dun_level == dungeon.maxdepth) && dungeon.is_dungeon()) {
+    if (floor.dun_level == dungeon.maxdepth) {
         const auto &monrace = dungeon.get_guardian();
         if (monrace.max_num > 0) {
 #ifdef JP

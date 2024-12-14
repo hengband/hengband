@@ -44,8 +44,6 @@ enum class TerrainCharacteristics;
 class MonraceDefinition;
 class DungeonDefinition {
 public:
-    int idx{};
-
     std::string name; /* Name */
     std::string text; /* Description */
 
@@ -97,7 +95,6 @@ public:
     int obj_good{};
 
     bool has_river_flag() const;
-    bool is_dungeon() const;
     bool has_guardian() const;
     MonraceDefinition &get_guardian();
     const MonraceDefinition &get_guardian() const;
