@@ -124,15 +124,15 @@ void WorldTurnProcessor::print_time()
 void WorldTurnProcessor::process_downward()
 {
     /* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (!ironman_downward || (floor_ptr->dungeon_idx == DungeonId::ANGBAND) || (floor_ptr->dungeon_idx == DungeonId::WILDERNESS)) {
+    auto &floor = *this->player_ptr->current_floor_ptr;
+    if (!ironman_downward || (floor.dungeon_idx == DungeonId::ANGBAND) || (floor.dungeon_idx == DungeonId::WILDERNESS)) {
         return;
     }
 
-    floor_ptr->dun_level = 0;
-    floor_ptr->reset_dungeon_index();
+    floor.dun_level = 0;
+    floor.reset_dungeon_index();
     FloorChangeModesStore::get_instace()->set({ FloorChangeMode::FIRST_FLOOR, FloorChangeMode::RANDOM_PLACE });
-    floor_ptr->inside_arena = false;
+    floor.inside_arena = false;
     AngbandWorld::get_instance().set_wild_mode(false);
     this->player_ptr->leaving = true;
 }
@@ -145,13 +145,13 @@ void WorldTurnProcessor::process_monster_arena()
 
     auto win_m_idx = 0;
     auto number_mon = 0;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor_ptr->width; ++x) {
-        for (auto y = 0; y < floor_ptr->height; y++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
-            if (g_ptr->has_monster() && !floor_ptr->m_list[g_ptr->m_idx].is_riding()) {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    for (auto x = 0; x < floor.width; ++x) {
+        for (auto y = 0; y < floor.height; y++) {
+            const auto &grid = floor.get_grid({ y, x });
+            if (grid.has_monster() && !floor.m_list[grid.m_idx].is_riding()) {
                 number_mon++;
-                win_m_idx = g_ptr->m_idx;
+                win_m_idx = grid.m_idx;
             }
         }
     }
@@ -226,9 +226,9 @@ void WorldTurnProcessor::decide_auto_save()
 
 void WorldTurnProcessor::process_change_daytime_night()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &world = AngbandWorld::get_instance();
-    if (!floor_ptr->dun_level && !floor_ptr->is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor_ptr->inside_arena) {
+    if (!floor.dun_level && !floor.is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor.inside_arena) {
         if (!(world.game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
             auto dawn = world.game_turn % (TURNS_PER_TICK * TOWN_DAWN) == 0;
             if (dawn) {
@@ -242,8 +242,8 @@ void WorldTurnProcessor::process_change_daytime_night()
     }
 
     auto is_in_dungeon = vanilla_town;
-    is_in_dungeon |= lite_town && !floor_ptr->is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor_ptr->inside_arena;
-    is_in_dungeon &= floor_ptr->dun_level != 0;
+    is_in_dungeon |= lite_town && !floor.is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor.inside_arena;
+    is_in_dungeon &= floor.dun_level != 0;
     if (!is_in_dungeon) {
         return;
     }
@@ -312,10 +312,10 @@ void WorldTurnProcessor::shuffle_shopkeeper()
 
 void WorldTurnProcessor::decide_alloc_monster()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto should_alloc = one_in_(floor_ptr->get_dungeon_definition().max_m_alloc_chance);
-    should_alloc &= !floor_ptr->inside_arena;
-    should_alloc &= !floor_ptr->is_in_quest();
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    auto should_alloc = one_in_(floor.get_dungeon_definition().max_m_alloc_chance);
+    should_alloc &= !floor.inside_arena;
+    should_alloc &= !floor.is_in_quest();
     should_alloc &= !AngbandSystem::get_instance().is_phase_out();
     if (should_alloc) {
         (void)alloc_monster(this->player_ptr, MAX_PLAYER_SIGHT + 5, 0, summon_specific);

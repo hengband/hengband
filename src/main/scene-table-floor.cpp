@@ -123,11 +123,11 @@ static bool scene_dungeon_feeling(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_dungeon(PlayerType *player_ptr, scene_type *value)
 {
-    const auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto enable = floor_ptr->dungeon_idx > DungeonId::WILDERNESS;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto enable = floor.dungeon_idx > DungeonId::WILDERNESS;
     if (enable) {
         value->type = TERM_XTRA_MUSIC_DUNGEON;
-        value->val = enum2i(floor_ptr->dungeon_idx);
+        value->val = enum2i(floor.dungeon_idx);
     }
     return enable;
 }
