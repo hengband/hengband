@@ -79,7 +79,7 @@ void execute_recall(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     if (floor.is_underground() || floor.is_in_quest() || player_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
-        if (floor.dungeon_idx > DungeonId::WILDERNESS) {
+        if (floor.is_underground()) {
             player_ptr->recall_dungeon = floor.dungeon_idx;
         }
         if (record_stair) {

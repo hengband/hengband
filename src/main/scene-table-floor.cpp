@@ -7,7 +7,6 @@
 #include "dungeon/quest.h"
 #include "main/music-definitions-table.h"
 #include "system/angband-system.h"
-#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
@@ -124,7 +123,7 @@ static bool scene_dungeon_feeling(PlayerType *player_ptr, scene_type *value)
 static bool scene_dungeon(PlayerType *player_ptr, scene_type *value)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto enable = floor.dungeon_idx > DungeonId::WILDERNESS;
+    const auto enable = floor.is_underground();
     if (enable) {
         value->type = TERM_XTRA_MUSIC_DUNGEON;
         value->val = enum2i(floor.dungeon_idx);
