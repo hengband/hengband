@@ -60,6 +60,6 @@ void high_score::copy_info(const PlayerType &player)
     std::copy_n(current_dungeon.begin(), current_dungeon.length(), this->cur_dun);
     const auto max_level = format("%3d", std::min<ushort>(player.max_plv, 999));
     std::copy_n(max_level.begin(), max_level.length(), this->max_lev);
-    const auto max_dungeon = format("%3d", DungeonRecords::get_instance().get_record(floor.dungeon_idx).get_max_level());
+    const auto max_dungeon = format("%3d", DungeonRecords::get_instance().get_record(floor.dungeon_id).get_max_level());
     std::copy_n(max_dungeon.begin(), max_dungeon.length(), this->max_dun);
 }

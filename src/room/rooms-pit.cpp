@@ -367,7 +367,7 @@ bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto pit_type = pick_pit_type(floor, pit_types);
 
     /* Only in Angband */
-    if (floor.dungeon_idx != DungeonId::ANGBAND) {
+    if (floor.dungeon_id != DungeonId::ANGBAND) {
         return false;
     }
 
