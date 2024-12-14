@@ -37,6 +37,7 @@ constexpr auto VIEW_MAX = 1536;
  */
 constexpr auto REDRAW_MAX = 2298;
 
+enum class DungeonId;
 enum class GridCountKind;
 enum class MonsterTimedEffect : int;
 enum class QuestId : short;
@@ -48,7 +49,7 @@ class ItemEntity;
 class FloorType {
 public:
     FloorType();
-    int dungeon_idx = 0;
+    DungeonId dungeon_idx{};
     std::vector<std::vector<Grid>> grid_array;
     DEPTH dun_level = 0; /*!< 現在の実ダンジョン階層 base_level の参照元となる / Current dungeon level */
     DEPTH base_level = 0; /*!< 基本生成レベル、後述のobject_level, monster_levelの参照元となる / Base dungeon level */
@@ -95,7 +96,7 @@ public:
     const Grid &get_grid(const Pos2D pos) const;
     bool is_in_underground() const;
     bool is_in_quest() const;
-    void set_dungeon_index(int dungeon_idx_); /*!< @todo 後でenum class にする */
+    void set_dungeon_index(DungeonId id);
     void reset_dungeon_index();
     DungeonDefinition &get_dungeon_definition() const;
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;

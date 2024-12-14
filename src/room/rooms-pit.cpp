@@ -11,7 +11,7 @@
 #include "room/door-definition.h"
 #include "room/pit-nest-util.h"
 #include "room/space-finder.h"
-#include "system/dungeon/dungeon-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -367,7 +367,7 @@ bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto pit_type = pick_pit_type(floor, pit_types);
 
     /* Only in Angband */
-    if (floor.dungeon_idx != DUNGEON_ANGBAND) {
+    if (floor.dungeon_idx != DungeonId::ANGBAND) {
         return false;
     }
 

@@ -173,7 +173,7 @@ void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, cons
         if (h_older_than(0, 3, 11)) {
             set_zangband_quest(player_ptr, &quest, quest_id, old_inside_quest);
         } else {
-            quest.dungeon = rd_byte();
+            quest.dungeon = i2enum<DungeonId>(rd_byte());
         }
 
         if (quest.status == QuestStatusType::TAKEN || quest.status == QuestStatusType::UNTAKEN) {

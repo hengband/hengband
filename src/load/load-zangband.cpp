@@ -19,8 +19,8 @@
 #include "realm/realm-types.h"
 #include "spell/spells-status.h"
 #include "system/building-type-definition.h"
-#include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
 #include "system/monrace/monrace-definition.h"
@@ -151,7 +151,7 @@ void set_zangband_reflection(PlayerType *player_ptr)
 
 void rd_zangband_dungeon()
 {
-    DungeonRecords::get_instance().get_record(DUNGEON_ANGBAND).set_max_level(rd_s16b());
+    DungeonRecords::get_instance().get_record(DungeonId::ANGBAND).set_max_level(rd_s16b());
 }
 
 void set_zangband_game_turns(PlayerType *player_ptr)
@@ -194,7 +194,7 @@ void set_zangband_visited_towns(PlayerType *player_ptr)
 void set_zangband_quest(PlayerType *player_ptr, QuestType *const q_ptr, const QuestId loading_quest_index, const QuestId old_inside_quest)
 {
     if (q_ptr->flags & QUEST_FLAG_PRESET) {
-        q_ptr->dungeon = 0;
+        q_ptr->dungeon = DungeonId::WILDERNESS;
         return;
     }
 

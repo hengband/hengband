@@ -12,6 +12,7 @@
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
@@ -28,7 +29,7 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
 {
     auto &quests = QuestList::get_instance();
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.dungeon_idx != DUNGEON_ANGBAND) {
+    if (floor.dungeon_idx != DungeonId::ANGBAND) {
         return;
     }
 
@@ -78,7 +79,7 @@ void execute_recall(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     if (floor.dun_level || floor.is_in_quest() || player_ptr->enter_dungeon) {
         msg_print(_("上に引っ張りあげられる感じがする！", "You feel yourself yanked upwards!"));
-        if (floor.dungeon_idx) {
+        if (floor.dungeon_idx > DungeonId::WILDERNESS) {
             player_ptr->recall_dungeon = floor.dungeon_idx;
         }
         if (record_stair) {
@@ -105,7 +106,7 @@ void execute_recall(PlayerType *player_ptr)
     if (floor.dun_level < 1) {
         floor.dun_level = 1;
     }
-    if (ironman_nightmare && !randint0(666) && (floor.dungeon_idx == DUNGEON_ANGBAND)) {
+    if (ironman_nightmare && !randint0(666) && (floor.dungeon_idx == DungeonId::ANGBAND)) {
         if (floor.dun_level < 50) {
             floor.dun_level *= 2;
         } else if (floor.dun_level < 99) {

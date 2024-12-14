@@ -23,29 +23,6 @@
 
 constexpr auto DUNGEON_FEAT_PROB_NUM = 3;
 
-/*! @todo 後でenum classとして再定義する */
-#define DUNGEON_ANGBAND 1
-#define DUNGEON_GALGALS 2
-#define DUNGEON_ORC 3
-#define DUNGEON_MAZE 4
-#define DUNGEON_DRAGON 5
-#define DUNGEON_GRAVE 6
-#define DUNGEON_WOOD 7
-#define DUNGEON_VOLCANO 8
-#define DUNGEON_HELL 9
-#define DUNGEON_HEAVEN 10
-#define DUNGEON_OCEAN 11
-#define DUNGEON_CASTLE 12
-#define DUNGEON_CTH 13
-#define DUNGEON_MOUNTAIN 14
-#define DUNGEON_GOLD 15
-#define DUNGEON_NO_MAGIC 16
-#define DUNGEON_NO_MELEE 17
-#define DUNGEON_CHAMELEON 18
-#define DUNGEON_DARKNESS 19
-#define DUNGEON_GLASS 20
-#define DUNGEON_MAX 20
-
 enum class FixedArtifactId : short;
 enum class MonraceId : short;
 enum class MonsterSex;

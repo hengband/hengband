@@ -31,6 +31,7 @@
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/inner-game-data.h"
@@ -124,7 +125,7 @@ void WorldTurnProcessor::process_downward()
 {
     /* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (!ironman_downward || (floor_ptr->dungeon_idx == DUNGEON_ANGBAND) || (floor_ptr->dungeon_idx == 0)) {
+    if (!ironman_downward || (floor_ptr->dungeon_idx == DungeonId::ANGBAND) || (floor_ptr->dungeon_idx == DungeonId::WILDERNESS)) {
         return;
     }
 

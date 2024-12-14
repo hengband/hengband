@@ -206,7 +206,7 @@ static bool parse_qtw_QQ(QuestType *q_ptr, char **zz, int num)
     q_ptr->r_idx = i2enum<MonraceId>(atoi(zz[7]));
     const auto fa_id = i2enum<FixedArtifactId>(atoi(zz[8]));
     q_ptr->reward_fa_id = fa_id;
-    q_ptr->dungeon = std::atoi(zz[9]);
+    q_ptr->dungeon = i2enum<DungeonId>(std::atoi(zz[9]));
 
     if (num > 10) {
         q_ptr->flags = atoi(zz[10]);

@@ -33,6 +33,7 @@ private:
     std::optional<int> max_level; //!< @details 帰還時に浅いフロアを指定すると書き換わる.
 };
 
+enum class DungeonId;
 class DungeonDefinition;
 class DungeonRecords {
 public:
@@ -43,27 +44,27 @@ public:
     ~DungeonRecords() = default;
 
     static DungeonRecords &get_instance();
-    DungeonRecord &get_record(int dungeon_id);
-    const DungeonRecord &get_record(int dungeon_id) const;
-    std::map<int, std::shared_ptr<DungeonRecord>>::iterator begin();
-    std::map<int, std::shared_ptr<DungeonRecord>>::const_iterator begin() const;
-    std::map<int, std::shared_ptr<DungeonRecord>>::iterator end();
-    std::map<int, std::shared_ptr<DungeonRecord>>::const_iterator end() const;
-    std::map<int, std::shared_ptr<DungeonRecord>>::reverse_iterator rbegin();
-    std::map<int, std::shared_ptr<DungeonRecord>>::const_reverse_iterator rbegin() const;
-    std::map<int, std::shared_ptr<DungeonRecord>>::reverse_iterator rend();
-    std::map<int, std::shared_ptr<DungeonRecord>>::const_reverse_iterator rend() const;
+    DungeonRecord &get_record(DungeonId dungeon_id);
+    const DungeonRecord &get_record(DungeonId dungeon_id) const;
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::iterator begin();
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_iterator begin() const;
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::iterator end();
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_iterator end() const;
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::reverse_iterator rbegin();
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_reverse_iterator rbegin() const;
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::reverse_iterator rend();
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_reverse_iterator rend() const;
     size_t size() const;
     bool empty() const;
     void reset_all();
 
     int find_max_level() const;
     std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf) const;
-    std::vector<int> collect_entered_dungeon_ids() const;
-    std::pair<std::shared_ptr<DungeonRecord>, std::shared_ptr<DungeonDefinition>> get_dungeon_pair(int dungeon_id) const;
+    std::vector<DungeonId> collect_entered_dungeon_ids() const;
+    std::pair<std::shared_ptr<DungeonRecord>, std::shared_ptr<DungeonDefinition>> get_dungeon_pair(DungeonId dungeon_id) const;
 
 private:
     DungeonRecords();
     static DungeonRecords instance;
-    std::map<int, std::shared_ptr<DungeonRecord>> records;
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>> records;
 };

@@ -9,6 +9,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
@@ -25,7 +26,8 @@ static void rd_hengband_dungeons()
             continue;
         }
 
-        const auto &[dungeon_record, dungeon] = dungeon_records.get_dungeon_pair(i);
+        const auto dungeon_id = i2enum<DungeonId>(i);
+        const auto &[dungeon_record, dungeon] = dungeon_records.get_dungeon_pair(dungeon_id);
         if (tmp16s > 0) {
             dungeon_record->set_max_level(tmp16s);
         }
@@ -56,9 +58,9 @@ void rd_dungeons(PlayerType *player_ptr)
 void rd_alter_reality(PlayerType *player_ptr)
 {
     if (h_older_than(0, 3, 8)) {
-        player_ptr->recall_dungeon = DUNGEON_ANGBAND;
+        player_ptr->recall_dungeon = DungeonId::ANGBAND;
     } else {
-        player_ptr->recall_dungeon = rd_s16b();
+        player_ptr->recall_dungeon = i2enum<DungeonId>(rd_s16b());
     }
 
     if (h_older_than(1, 5, 0, 0)) {

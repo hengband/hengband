@@ -7,7 +7,7 @@
 #include "dungeon/quest.h"
 #include "main/music-definitions-table.h"
 #include "system/angband-system.h"
-#include "system/dungeon/dungeon-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
@@ -124,10 +124,10 @@ static bool scene_dungeon_feeling(PlayerType *player_ptr, scene_type *value)
 static bool scene_dungeon(PlayerType *player_ptr, scene_type *value)
 {
     const auto *floor_ptr = player_ptr->current_floor_ptr;
-    const bool enable = (floor_ptr->dungeon_idx > 0);
+    const auto enable = floor_ptr->dungeon_idx > DungeonId::WILDERNESS;
     if (enable) {
         value->type = TERM_XTRA_MUSIC_DUNGEON;
-        value->val = floor_ptr->dungeon_idx;
+        value->val = enum2i(floor_ptr->dungeon_idx);
     }
     return enable;
 }

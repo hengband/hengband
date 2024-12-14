@@ -24,6 +24,7 @@
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -351,7 +352,7 @@ static void jump_floors(FloorType &floor)
 static void exit_to_wilderness(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.is_in_underground() || (floor.dungeon_idx == 0)) {
+    if (floor.is_in_underground() || (floor.dungeon_idx == DungeonId::WILDERNESS)) {
         return;
     }
 

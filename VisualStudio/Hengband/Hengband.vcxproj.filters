@@ -5520,6 +5520,9 @@
     <ClInclude Include="..\..\src\system\terrain\terrain-list.h">
       <Filter>system\terrain</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\dungeon\dungeon-id.h">
+      <Filter>system\enums\dungeon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5813,6 +5816,9 @@
     </Filter>
     <Filter Include="system\terrain">
       <UniqueIdentifier>{3a15d903-e2ff-488d-a3c8-7bf69fad0f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\enums\dungeon">
+      <UniqueIdentifier>{605bab39-a92d-4c11-ae24-56e39e302f36}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

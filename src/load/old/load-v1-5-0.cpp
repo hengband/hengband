@@ -37,7 +37,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
-#include "system/dungeon/dungeon-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
@@ -545,9 +545,9 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     floor.dun_level = rd_s16b();
     if (h_older_than(0, 3, 8)) {
-        floor.set_dungeon_index(DUNGEON_ANGBAND);
+        floor.set_dungeon_index(DungeonId::ANGBAND);
     } else {
-        floor.set_dungeon_index(rd_byte());
+        floor.set_dungeon_index(i2enum<DungeonId>(rd_byte()));
     }
 
     floor.base_level = floor.dun_level;

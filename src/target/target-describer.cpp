@@ -480,7 +480,8 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
     }
 
     if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::ENTRANCE)) {
-        const auto &dungeon = DungeonList::get_instance().get_dungeon(ge_ptr->g_ptr->special);
+        const auto dungeon_id = i2enum<DungeonId>(ge_ptr->g_ptr->special);
+        const auto &dungeon = DungeonList::get_instance().get_dungeon(dungeon_id);
         return dungeon.describe_depth();
     }
 
