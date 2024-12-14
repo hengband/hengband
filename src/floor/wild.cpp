@@ -153,7 +153,7 @@ void set_floor_and_wall(DungeonId dungeon_id)
  * @param depth_max 深みの最大値
  */
 static void perturb_point_mid(
-    FloorType *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, FEAT_IDX x4, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
+    FloorType &floor, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, FEAT_IDX x4, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
 {
     FEAT_IDX tmp2 = rough * 2 + 1;
     FEAT_IDX tmp = randint1(tmp2) - (rough + 1);
@@ -170,7 +170,7 @@ static void perturb_point_mid(
         avg = depth_max;
     }
 
-    floor_ptr->grid_array[ymid][xmid].feat = (FEAT_IDX)avg;
+    floor.get_grid({ ymid, xmid }).feat = avg;
 }
 
 /*!
@@ -184,7 +184,7 @@ static void perturb_point_mid(
  * @param rough ランダム幅
  * @param depth_max 深みの最大値
  */
-static void perturb_point_end(FloorType *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
+static void perturb_point_end(FloorType &floor, FEAT_IDX x1, FEAT_IDX x2, FEAT_IDX x3, POSITION xmid, POSITION ymid, FEAT_IDX rough, FEAT_IDX depth_max)
 {
     FEAT_IDX tmp2 = rough * 2 + 1;
     FEAT_IDX tmp = randint0(tmp2) - rough;
@@ -201,7 +201,7 @@ static void perturb_point_end(FloorType *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FE
         avg = depth_max;
     }
 
-    floor_ptr->grid_array[ymid][xmid].feat = (FEAT_IDX)avg;
+    floor.get_grid({ ymid, xmid }).feat = avg;
 }
 
 /*!
@@ -222,7 +222,7 @@ static void perturb_point_end(FloorType *floor_ptr, FEAT_IDX x1, FEAT_IDX x2, FE
  * need to be converted to features.
  * </pre>
  */
-static void plasma_recursive(FloorType *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX depth_max, FEAT_IDX rough)
+static void plasma_recursive(FloorType &floor, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX depth_max, FEAT_IDX rough)
 {
     POSITION xmid = (x2 - x1) / 2 + x1;
     POSITION ymid = (y2 - y1) / 2 + y1;
@@ -230,20 +230,20 @@ static void plasma_recursive(FloorType *floor_ptr, POSITION x1, POSITION y1, POS
         return;
     }
 
-    perturb_point_mid(floor_ptr, floor_ptr->grid_array[y1][x1].feat, floor_ptr->grid_array[y2][x1].feat, floor_ptr->grid_array[y1][x2].feat,
-        floor_ptr->grid_array[y2][x2].feat, xmid, ymid, rough, depth_max);
+    perturb_point_mid(floor, floor.get_grid({ y1, x1 }).feat, floor.get_grid({ y2, x1 }).feat, floor.get_grid({ y1, x2 }).feat,
+        floor.get_grid({ y2, x2 }).feat, xmid, ymid, rough, depth_max);
     perturb_point_end(
-        floor_ptr, floor_ptr->grid_array[y1][x1].feat, floor_ptr->grid_array[y1][x2].feat, floor_ptr->grid_array[ymid][xmid].feat, xmid, y1, rough, depth_max);
+        floor, floor.get_grid({ y1, x1 }).feat, floor.get_grid({ y1, x2 }).feat, floor.get_grid({ ymid, xmid }).feat, xmid, y1, rough, depth_max);
     perturb_point_end(
-        floor_ptr, floor_ptr->grid_array[y1][x2].feat, floor_ptr->grid_array[y2][x2].feat, floor_ptr->grid_array[ymid][xmid].feat, x2, ymid, rough, depth_max);
+        floor, floor.get_grid({ y1, x2 }).feat, floor.get_grid({ y2, x2 }).feat, floor.get_grid({ ymid, xmid }).feat, x2, ymid, rough, depth_max);
     perturb_point_end(
-        floor_ptr, floor_ptr->grid_array[y2][x2].feat, floor_ptr->grid_array[y2][x1].feat, floor_ptr->grid_array[ymid][xmid].feat, xmid, y2, rough, depth_max);
+        floor, floor.get_grid({ y2, x2 }).feat, floor.get_grid({ y2, x1 }).feat, floor.get_grid({ ymid, xmid }).feat, xmid, y2, rough, depth_max);
     perturb_point_end(
-        floor_ptr, floor_ptr->grid_array[y2][x1].feat, floor_ptr->grid_array[y1][x1].feat, floor_ptr->grid_array[ymid][xmid].feat, x1, ymid, rough, depth_max);
-    plasma_recursive(floor_ptr, x1, y1, xmid, ymid, depth_max, rough);
-    plasma_recursive(floor_ptr, xmid, y1, x2, ymid, depth_max, rough);
-    plasma_recursive(floor_ptr, x1, ymid, xmid, y2, depth_max, rough);
-    plasma_recursive(floor_ptr, xmid, ymid, x2, y2, depth_max, rough);
+        floor, floor.get_grid({ y2, x1 }).feat, floor.get_grid({ y1, x1 }).feat, floor.get_grid({ ymid, xmid }).feat, x1, ymid, rough, depth_max);
+    plasma_recursive(floor, x1, y1, xmid, ymid, depth_max, rough);
+    plasma_recursive(floor, xmid, y1, x2, ymid, depth_max, rough);
+    plasma_recursive(floor, x1, ymid, xmid, y2, depth_max, rough);
+    plasma_recursive(floor, xmid, ymid, x2, y2, depth_max, rough);
 }
 
 /*!
@@ -253,12 +253,12 @@ static void plasma_recursive(FloorType *floor_ptr, POSITION x1, POSITION y1, POS
  * @param border 未使用
  * @param corner 広域マップの角部分としての生成ならばTRUE
  */
-static void generate_wilderness_area(FloorType *floor_ptr, int terrain, uint32_t seed, bool corner)
+static void generate_wilderness_area(FloorType &floor, int terrain, uint32_t seed, bool corner)
 {
     if (terrain == TERRAIN_EDGE) {
-        for (POSITION y1 = 0; y1 < MAX_HGT; y1++) {
-            for (POSITION x1 = 0; x1 < MAX_WID; x1++) {
-                floor_ptr->grid_array[y1][x1].feat = feat_permanent;
+        for (auto y = 0; y < MAX_HGT; y++) {
+            for (auto x = 0; x < MAX_WID; x++) {
+                floor.get_grid({ y, x }).feat = feat_permanent;
             }
         }
 
@@ -271,39 +271,39 @@ static void generate_wilderness_area(FloorType *floor_ptr, int terrain, uint32_t
     system.set_rng(wilderness_rng);
     int table_size = sizeof(terrain_table[0]) / sizeof(int16_t);
     if (!corner) {
-        for (POSITION y1 = 0; y1 < MAX_HGT; y1++) {
-            for (POSITION x1 = 0; x1 < MAX_WID; x1++) {
-                floor_ptr->grid_array[y1][x1].feat = table_size / 2;
+        for (auto y = 0; y < MAX_HGT; y++) {
+            for (auto x = 0; x < MAX_WID; x++) {
+                floor.get_grid({ y, x }).feat = table_size / 2;
             }
         }
     }
 
-    floor_ptr->grid_array[1][1].feat = randnum0<short>(table_size);
-    floor_ptr->grid_array[MAX_HGT - 2][1].feat = randnum0<short>(table_size);
-    floor_ptr->grid_array[1][MAX_WID - 2].feat = randnum0<short>(table_size);
-    floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = randnum0<short>(table_size);
+    floor.get_grid({ 1, 1 }).feat = randnum0<short>(table_size);
+    floor.get_grid({ MAX_HGT - 2, 1 }).feat = randnum0<short>(table_size);
+    floor.get_grid({ 1, MAX_WID - 2 }).feat = randnum0<short>(table_size);
+    floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat = randnum0<short>(table_size);
     if (corner) {
-        floor_ptr->grid_array[1][1].feat = terrain_table[terrain][floor_ptr->grid_array[1][1].feat];
-        floor_ptr->grid_array[MAX_HGT - 2][1].feat = terrain_table[terrain][floor_ptr->grid_array[MAX_HGT - 2][1].feat];
-        floor_ptr->grid_array[1][MAX_WID - 2].feat = terrain_table[terrain][floor_ptr->grid_array[1][MAX_WID - 2].feat];
-        floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = terrain_table[terrain][floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat];
+        floor.get_grid({ 1, 1 }).feat = terrain_table[terrain][floor.get_grid({ 1, 1 }).feat];
+        floor.get_grid({ MAX_HGT - 2, 1 }).feat = terrain_table[terrain][floor.get_grid({ MAX_HGT - 2, 1 }).feat];
+        floor.get_grid({ 1, MAX_WID - 2 }).feat = terrain_table[terrain][floor.get_grid({ 1, MAX_WID - 2 }).feat];
+        floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat = terrain_table[terrain][floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat];
         system.set_rng(rng_backup);
         return;
     }
 
-    const auto top_left = floor_ptr->grid_array[1][1].feat;
-    const auto bottom_left = floor_ptr->grid_array[MAX_HGT - 2][1].feat;
-    const auto top_right = floor_ptr->grid_array[1][MAX_WID - 2].feat;
-    const auto bottom_right = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
+    const auto top_left = floor.get_grid({ 1, 1 }).feat;
+    const auto bottom_left = floor.get_grid({ MAX_HGT - 2, 1 }).feat;
+    const auto top_right = floor.get_grid({ 1, MAX_WID - 2 }).feat;
+    const auto bottom_right = floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat;
     const short roughness = 1; /* The roughness of the level. */
-    plasma_recursive(floor_ptr, 1, 1, MAX_WID - 2, MAX_HGT - 2, table_size - 1, roughness);
-    floor_ptr->grid_array[1][1].feat = top_left;
-    floor_ptr->grid_array[MAX_HGT - 2][1].feat = bottom_left;
-    floor_ptr->grid_array[1][MAX_WID - 2].feat = top_right;
-    floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = bottom_right;
+    plasma_recursive(floor, 1, 1, MAX_WID - 2, MAX_HGT - 2, table_size - 1, roughness);
+    floor.get_grid({ 1, 1 }).feat = top_left;
+    floor.get_grid({ MAX_HGT - 2, 1 }).feat = bottom_left;
+    floor.get_grid({ 1, MAX_WID - 2 }).feat = top_right;
+    floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat = bottom_right;
     for (POSITION y1 = 1; y1 < MAX_HGT - 1; y1++) {
         for (POSITION x1 = 1; x1 < MAX_WID - 1; x1++) {
-            floor_ptr->grid_array[y1][x1].feat = terrain_table[terrain][floor_ptr->grid_array[y1][x1].feat];
+            floor.get_grid({ y1, x1 }).feat = terrain_table[terrain][floor.get_grid({ y1, x1 }).feat];
         }
     }
 
@@ -342,7 +342,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
     } else {
         int terrain = wilderness_grid.terrain;
         uint32_t seed = wilderness_grid.seed;
-        generate_wilderness_area(&floor, terrain, seed, is_corner);
+        generate_wilderness_area(floor, terrain, seed, is_corner);
     }
 
     if (!is_corner && (wilderness_grid.town == 0)) {

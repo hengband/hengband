@@ -373,27 +373,27 @@ void wipe_generate_random_floor_flags(FloorType *floor_ptr)
  */
 void clear_cave(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (auto &item : floor_ptr->o_list) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto &item : floor.o_list) {
         item.wipe();
     }
-    floor_ptr->o_max = 1;
-    floor_ptr->o_cnt = 0;
 
+    floor.o_max = 1;
+    floor.o_cnt = 0;
     MonraceList::get_instance().reset_current_numbers();
-    for (auto &monster : floor_ptr->m_list) {
+    for (auto &monster : floor.m_list) {
         monster.wipe();
     }
-    floor_ptr->m_max = 1;
-    floor_ptr->m_cnt = 0;
+    floor.m_max = 1;
+    floor.m_cnt = 0;
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
-        floor_ptr->mproc_max[mte] = 0;
+        floor.mproc_max[mte] = 0;
     }
 
     precalc_cur_num_of_pet();
     for (POSITION y = 0; y < MAX_HGT; y++) {
         for (POSITION x = 0; x < MAX_WID; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor.grid_array[y][x];
             g_ptr->info = 0;
             g_ptr->feat = 0;
             g_ptr->o_idx_list.clear();
@@ -406,9 +406,9 @@ void clear_cave(PlayerType *player_ptr)
         }
     }
 
-    floor_ptr->base_level = floor_ptr->dun_level;
-    floor_ptr->monster_level = floor_ptr->base_level;
-    floor_ptr->object_level = floor_ptr->base_level;
+    floor.base_level = floor.dun_level;
+    floor.monster_level = floor.base_level;
+    floor.object_level = floor.base_level;
 }
 
 typedef bool (*IsWallFunc)(const FloorType *, int, int);

@@ -343,17 +343,17 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
         panels_y++;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->height = panels_y * SCREEN_HGT;
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.height = panels_y * SCREEN_HGT;
     int panels_x = (*qtwg_ptr->x / SCREEN_WID);
     if (*qtwg_ptr->x % SCREEN_WID) {
         panels_x++;
     }
 
-    floor_ptr->width = panels_x * SCREEN_WID;
-    panel_row_min = floor_ptr->height;
-    panel_col_min = floor_ptr->width;
-    if (floor_ptr->is_in_quest()) {
+    floor.width = panels_x * SCREEN_WID;
+    panel_row_min = floor.height;
+    panel_col_min = floor.width;
+    if (floor.is_in_quest()) {
         POSITION py = atoi(zz[0]);
         POSITION px = atoi(zz[1]);
         player_ptr->y = py;
