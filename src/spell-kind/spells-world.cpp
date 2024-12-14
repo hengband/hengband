@@ -377,55 +377,35 @@ static int choose_dungeon(concptr note, POSITION y, POSITION x)
         return 0;
     }
 
-    std::vector<int> dun;
-
     screen_save();
-    for (const auto &[dungeon_id, dungeon] : dungeons) {
-        auto is_conquered = false;
-        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
-            continue;
-        }
-
-        const auto &dungeon_record = dungeon_records.get_record(dungeon_id);
-        if (!dungeon_record.has_entered()) {
-            continue;
-        }
-
-        const auto max_level = dungeon_record.get_max_level();
-        if (dungeon.has_guardian()) {
-            if (dungeon.get_guardian().max_num == 0) {
-                is_conquered = true;
-            }
-        } else if (max_level == dungeon.maxdepth) {
-            is_conquered = true;
-        }
-
-        constexpr auto fmt = _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d");
-        const auto buf = format(fmt, static_cast<char>('a' + dun.size()), is_conquered ? '!' : ' ', dungeon.name.data(), max_level);
-        prt(buf, y + dun.size(), x);
-        dun.push_back(dungeon_id);
+    const auto dungeon_messages = dungeon_records.build_known_dungeons(DungeonMessageFormat::RECALL);
+    const int num_messages = dungeon_messages.size();
+    for (auto i = 0; i < num_messages; i++) {
+        prt(dungeon_messages.at(i), y + i, x);
     }
 
-    if (dun.empty()) {
+    if (dungeon_messages.empty()) {
         prt(_("      選べるダンジョンがない。", "      No dungeon is available."), y, x);
     }
 
     prt(format(_("どのダンジョン%sしますか:", "Which dungeon do you %s?: "), note), 0, 0);
+    const auto ids = dungeon_records.collect_entered_dungeon_ids();
     while (true) {
-        auto i = inkey();
-        if ((i == ESCAPE) || dun.empty()) {
+        const auto key = inkey();
+        if ((key == ESCAPE) || ids.empty()) {
             screen_load();
             return 0;
         }
-        if (i >= 'a' && i < static_cast<char>('a' + dun.size())) {
-            select_dungeon = dun[i - 'a'];
-            break;
-        } else {
-            bell();
-        }
-    }
-    screen_load();
 
+        if (key >= 'a' && key < static_cast<char>('a' + ids.size())) {
+            select_dungeon = ids.at(key - 'a');
+            break;
+        }
+
+        bell();
+    }
+
+    screen_load();
     return select_dungeon;
 }
 
