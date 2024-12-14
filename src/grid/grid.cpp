@@ -95,7 +95,7 @@ bool new_player_spot(PlayerType *player_ptr)
         if (grid.has_monster()) {
             continue;
         }
-        if (floor.is_in_underground()) {
+        if (floor.is_underground()) {
             const auto &terrain = grid.get_terrain();
 
             if (max_attempts > 5000) /* Rule 1 */

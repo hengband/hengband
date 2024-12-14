@@ -288,7 +288,7 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         }
         if (one_in_(250)) {
             const auto *floor_ptr = player_ptr->current_floor_ptr;
-            if (floor_ptr->is_in_underground() && (!floor_ptr->is_in_quest() || !QuestType::is_fixed(floor_ptr->quest_number))) {
+            if (floor_ptr->is_underground() && (!floor_ptr->is_in_quest() || !QuestType::is_fixed(floor_ptr->quest_number))) {
                 if (mam_ptr->damage > 23) {
                     msg_print(_("カオスの力でダンジョンが崩れ始める！", "The dungeon tumbles by the chaotic power!"));
                     earthquake(player_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);

@@ -228,7 +228,7 @@ void WorldTurnProcessor::process_change_daytime_night()
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &world = AngbandWorld::get_instance();
-    if (!floor.is_in_underground() && !floor.is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor.inside_arena) {
+    if (!floor.is_underground() && !floor.is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor.inside_arena) {
         if (!(world.game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2))) {
             auto dawn = world.game_turn % (TURNS_PER_TICK * TOWN_DAWN) == 0;
             if (dawn) {
@@ -243,7 +243,7 @@ void WorldTurnProcessor::process_change_daytime_night()
 
     auto is_in_dungeon = vanilla_town;
     is_in_dungeon |= lite_town && !floor.is_in_quest() && !AngbandSystem::get_instance().is_phase_out() && !floor.inside_arena;
-    is_in_dungeon &= floor.is_in_underground();
+    is_in_dungeon &= floor.is_underground();
     if (!is_in_dungeon) {
         return;
     }

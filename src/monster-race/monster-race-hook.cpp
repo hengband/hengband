@@ -142,7 +142,7 @@ bool mon_hook_quest(PlayerType *player_ptr, MonraceId r_idx)
 bool mon_hook_dungeon(PlayerType *player_ptr, MonraceId r_idx)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.is_in_underground() && !floor.is_in_quest()) {
+    if (!floor.is_underground() && !floor.is_in_quest()) {
         return true;
     }
 

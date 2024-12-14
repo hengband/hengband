@@ -368,7 +368,7 @@ std::string InputKeyRequestor::switch_special_menu_condition(const SpecialMenuCo
         return "";
     case SpecialMenuType::WILD: {
         const auto &floor = *this->player_ptr->current_floor_ptr;
-        if (floor.is_in_underground() || floor.inside_arena) {
+        if (floor.is_underground() || floor.inside_arena) {
             return "";
         }
 

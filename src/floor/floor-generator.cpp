@@ -358,7 +358,7 @@ void wipe_generate_random_floor_flags(FloorType *floor_ptr)
         }
     }
 
-    if (floor_ptr->is_in_underground()) {
+    if (floor_ptr->is_underground()) {
         for (auto y = 1; y < floor_ptr->height - 1; y++) {
             for (auto x = 1; x < floor_ptr->width - 1; x++) {
                 floor_ptr->get_grid({ y, x }).info |= CAVE_UNSAFE;
@@ -519,7 +519,7 @@ void generate_floor(PlayerType *player_ptr)
             generate_gambling_arena(player_ptr);
         } else if (floor.is_in_quest()) {
             generate_fixed_floor(player_ptr);
-        } else if (!floor.is_in_underground()) {
+        } else if (!floor.is_underground()) {
             if (is_wild_mode) {
                 wilderness_gen_small(player_ptr);
             } else {
@@ -539,7 +539,7 @@ void generate_floor(PlayerType *player_ptr)
         // 狂戦士でのプレイに支障をきたしうるので再生成する。
         // 地上、荒野マップ、クエストでは連結性判定は行わない。
         // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
-        const auto check_conn = why && floor.is_in_underground() && !floor.is_in_quest();
+        const auto check_conn = why && floor.is_underground() && !floor.is_in_quest();
         if (check_conn && !floor_is_connected(&floor, is_permanent_blocker)) {
             // 一定回数試しても連結にならないなら諦める。
             if (num >= 1000) {

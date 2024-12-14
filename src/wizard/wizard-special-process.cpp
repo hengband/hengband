@@ -513,14 +513,14 @@ static void wiz_jump_floor(PlayerType *player_ptr, DungeonId dun_idx, DEPTH dept
     floor.dun_level = depth;
     auto &fcms = FloorChangeModesStore::get_instace();
     fcms->set(FloorChangeMode::RANDOM_PLACE);
-    if (!floor.is_in_underground()) {
+    if (!floor.is_underground()) {
         floor.reset_dungeon_index();
     }
 
     floor.inside_arena = false;
     AngbandWorld::get_instance().set_wild_mode(false);
     leave_quest_check(player_ptr);
-    auto to = !floor.is_in_underground()
+    auto to = !floor.is_underground()
                   ? _("地上", "the surface")
                   : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
     constexpr auto mes = _("%sへとウィザード・テレポートで移動した。\n", "You wizard-teleported to %s.\n");
@@ -539,7 +539,7 @@ static void wiz_jump_floor(PlayerType *player_ptr, DungeonId dun_idx, DEPTH dept
 void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto is_in_dungeon = floor.is_in_underground();
+    const auto is_in_dungeon = floor.is_underground();
     const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : DungeonId::ANGBAND;
     const auto dungeon_id = select_debugging_dungeon(dungeon_idx);
     if (!dungeon_id) {
