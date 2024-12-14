@@ -86,7 +86,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     auto &grid = floor.get_grid(pos);
     bool p_can_enter = player_can_enter(player_ptr, grid.feat, CEM_P_CAN_ENTER_PATTERN);
     const auto &world = AngbandWorld::get_instance();
-    if (!floor.is_in_underground() && !world.is_wild_mode() && ((pos.x == 0) || (pos.x == MAX_WID - 1) || (pos.y == 0) || (pos.y == MAX_HGT - 1))) {
+    if (!floor.is_underground() && !world.is_wild_mode() && ((pos.x == 0) || (pos.x == MAX_WID - 1) || (pos.y == 0) || (pos.y == MAX_HGT - 1))) {
         if (grid.mimic && player_can_enter(player_ptr, grid.mimic, 0)) {
             if ((pos.y == 0) && (pos.x == 0)) {
                 player_ptr->wilderness_y--;

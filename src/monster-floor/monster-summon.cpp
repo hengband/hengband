@@ -96,7 +96,7 @@ static bool is_dead_summoning(summon_type type)
 DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.is_in_underground()) {
+    if (floor.is_underground()) {
         return floor.dun_level;
     }
 

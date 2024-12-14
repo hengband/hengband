@@ -94,7 +94,7 @@ public:
 
     Grid &get_grid(const Pos2D pos);
     const Grid &get_grid(const Pos2D pos) const;
-    bool is_in_underground() const;
+    bool is_underground() const;
     bool is_in_quest() const;
     void set_dungeon_index(DungeonId id);
     void reset_dungeon_index();

@@ -356,7 +356,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
         new_exp = (new_exp + 1) / 2;
     }
 
-    if (!floor.is_in_underground()) {
+    if (!floor.is_underground()) {
         new_exp /= 5;
     }
 

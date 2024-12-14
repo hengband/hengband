@@ -106,7 +106,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
 #endif
         if (m_idx <= 0) {
-            if (!floor.is_in_underground()) {
+            if (!floor.is_underground()) {
                 floor.set_dungeon_index(ironman_downward ? DungeonId::ANGBAND : player_ptr->recall_dungeon);
                 player_ptr->oldpy = player_ptr->y;
                 player_ptr->oldpx = player_ptr->x;
@@ -121,7 +121,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
             }
 
             fcms->set(FloorChangeMode::RANDOM_PLACE);
-            if (!floor.is_in_underground()) {
+            if (!floor.is_underground()) {
                 const auto &recall_dungeon = floor.get_dungeon_definition();
                 floor.dun_level = recall_dungeon.mindepth;
             } else {
@@ -262,7 +262,7 @@ bool teleport_level_other(PlayerType *player_ptr)
  */
 bool tele_town(PlayerType *player_ptr)
 {
-    if (player_ptr->current_floor_ptr->is_in_underground()) {
+    if (player_ptr->current_floor_ptr->is_underground()) {
         msg_print(_("この魔法は地上でしか使えない！", "This spell can only be used on the surface!"));
         return false;
     }
@@ -424,7 +424,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
     }
 
     auto &dungeon_record = DungeonRecords::get_instance().get_record(floor.dungeon_idx);
-    auto is_special_floor = floor.is_in_underground();
+    auto is_special_floor = floor.is_underground();
     is_special_floor &= dungeon_record.get_max_level() > floor.dun_level;
     is_special_floor &= !floor.is_in_quest();
     is_special_floor &= !player_ptr->word_recall;
@@ -445,7 +445,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
         return true;
     }
 
-    if (!floor.is_in_underground()) {
+    if (!floor.is_underground()) {
         const auto select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
         if (!select_dungeon) {
             return false;

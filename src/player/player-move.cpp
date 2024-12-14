@@ -188,7 +188,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             grid_new.info &= ~(CAVE_UNSAFE);
         }
 
-        if (floor.is_in_underground() && floor.get_dungeon_definition().flags.has(DungeonFeatureType::FORGET)) {
+        if (floor.is_underground() && floor.get_dungeon_definition().flags.has(DungeonFeatureType::FORGET)) {
             wiz_dark(player_ptr);
         }
 

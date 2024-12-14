@@ -131,7 +131,7 @@ static int rating_boost(int delta)
 static byte get_dungeon_feeling(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.is_in_underground()) {
+    if (!floor.is_underground()) {
         return 0;
     }
 
@@ -278,7 +278,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
 void update_dungeon_feeling(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.is_in_underground()) {
+    if (!floor.is_underground()) {
         return;
     }
 

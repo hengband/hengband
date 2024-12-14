@@ -66,7 +66,7 @@ static std::pair<QuestId, std::string> write_floor(const FloorType &floor)
         return std::make_pair(q_idx, std::string(_("アリーナ:", "Arena:")));
     }
 
-    if (!floor.is_in_underground()) {
+    if (!floor.is_underground()) {
         return std::make_pair(q_idx, std::string(_("地上:", "Surface:")));
     }
 
@@ -368,7 +368,7 @@ void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_
         break;
     }
     case DiaryKind::PAT_TELE: {
-        const auto to = !floor.is_in_underground()
+        const auto to = !floor.is_underground()
                             ? _("地上", "the surface")
                             : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
         constexpr auto fmt = _(" %2d:%02d %20s %sへとパターンの力で移動した。\n", " %2d:%02d %20s used Pattern to teleport to %s.\n");

@@ -45,7 +45,7 @@ const Grid &FloorType::get_grid(const Pos2D pos) const
     return this->grid_array[pos.y][pos.x];
 }
 
-bool FloorType::is_in_underground() const
+bool FloorType::is_underground() const
 {
     return this->dun_level > 0;
 }
@@ -308,7 +308,7 @@ ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
  */
 std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 {
-    if (!this->is_in_underground() || (select_baseitem_id_hook != nullptr)) {
+    if (!this->is_underground() || (select_baseitem_id_hook != nullptr)) {
         return std::nullopt;
     }
 
@@ -504,7 +504,7 @@ void FloorType::place_random_stairs(const Pos2D &pos)
         return;
     }
 
-    auto up_stairs = this->is_in_underground();
+    auto up_stairs = this->is_underground();
     if (ironman_downward) {
         up_stairs = false;
     }

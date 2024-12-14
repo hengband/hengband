@@ -354,7 +354,7 @@ std::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION
         return std::nullopt;
     }
 
-    auto try_become_jural = one_in_(5) || !floor.is_in_underground();
+    auto try_become_jural = one_in_(5) || !floor.is_underground();
     const auto &monrace = monraces.get_monrace(monrace_id);
     try_become_jural &= monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
     try_become_jural &= monrace.symbol_char_is_any_of("hkoptuyAHLOPTUVY");
@@ -505,7 +505,7 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
         y = randint0(floor.height);
         x = randint0(floor.width);
 
-        if (floor.is_in_underground()) {
+        if (floor.is_underground()) {
             if (!is_cave_empty_bold2(player_ptr, y, x)) {
                 continue;
             }

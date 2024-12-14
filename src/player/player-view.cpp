@@ -114,7 +114,7 @@ void update_view(PlayerType *player_ptr)
     POSITION x_max = floor_ptr->width - 1;
 
     Grid *g_ptr;
-    if (view_reduce_view && !floor_ptr->is_in_underground()) {
+    if (view_reduce_view && !floor_ptr->is_underground()) {
         full = MAX_PLAYER_SIGHT / 2;
         over = MAX_PLAYER_SIGHT * 3 / 4;
     } else {
