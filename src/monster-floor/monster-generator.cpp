@@ -123,8 +123,8 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
  */
 std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
-    auto &floor = player_ptr->current_floor_ptr;
-    auto &monster = floor->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
     const auto pos = mon_scatter(player_ptr, monster.r_idx, monster.get_position(), 1);
     if (!pos) {
         return std::nullopt;
@@ -140,7 +140,7 @@ std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX 
     }
 
     if (clone || monster.mflag2.has(MonsterConstantFlagType::CLONED)) {
-        floor->m_list[*multiplied_m_idx].mflag2.set({ MonsterConstantFlagType::CLONED, MonsterConstantFlagType::NOPET });
+        floor.m_list[*multiplied_m_idx].mflag2.set({ MonsterConstantFlagType::CLONED, MonsterConstantFlagType::NOPET });
     }
 
     return multiplied_m_idx;
