@@ -141,11 +141,11 @@ void DungeonRecords::reset_all()
 
 int DungeonRecords::find_max_level() const
 {
-    const auto &dungeons = DungeonList::get_instance();
     auto max_level = 0;
-    for (const auto &[dungeon_id, record] : this->records) {
+    for (auto i = 0; i < 21; i++) {
+        const auto &[record, dungeon] = this->get_dungeon_pair(i);
         const auto max_level_each = record->get_max_level();
-        if (max_level_each < dungeons.get_dungeon(dungeon_id).mindepth) {
+        if (max_level_each < dungeon->mindepth) {
             continue;
         }
 
@@ -202,4 +202,9 @@ std::vector<int> DungeonRecords::collect_entered_dungeon_ids() const
     }
 
     return entered_dungeons;
+}
+
+std::pair<std::shared_ptr<DungeonRecord>, std::shared_ptr<DungeonDefinition>> DungeonRecords::get_dungeon_pair(int dungeon_id) const
+{
+    return { this->records.at(dungeon_id), DungeonList::get_instance().get_dungeon_shared(dungeon_id) };
 }

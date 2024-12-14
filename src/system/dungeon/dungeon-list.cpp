@@ -24,6 +24,11 @@ const DungeonDefinition &DungeonList::get_dungeon(int dungeon_id) const
     return *this->dungeons.at(dungeon_id);
 }
 
+std::shared_ptr<DungeonDefinition> DungeonList::get_dungeon_shared(int dungeon_id) const
+{
+    return this->dungeons.at(dungeon_id);
+}
+
 std::map<int, std::shared_ptr<DungeonDefinition>>::iterator DungeonList::begin()
 {
     return this->dungeons.begin();
@@ -76,7 +81,7 @@ bool DungeonList::empty() const
 
 void DungeonList::emplace(int dungeon_id, DungeonDefinition &&definition)
 {
-    this->dungeons.emplace(dungeon_id, &definition);
+    this->dungeons.emplace(dungeon_id, std::make_shared<DungeonDefinition>(std::move(definition)));
 }
 
 /*!

@@ -10,6 +10,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 
 enum class DungeonMessageFormat {
@@ -32,6 +33,7 @@ private:
     std::optional<int> max_level; //!< @details 帰還時に浅いフロアを指定すると書き換わる.
 };
 
+class DungeonDefinition;
 class DungeonRecords {
 public:
     DungeonRecords(DungeonRecords &&) = delete;
@@ -58,6 +60,7 @@ public:
     int find_max_level() const;
     std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf) const;
     std::vector<int> collect_entered_dungeon_ids() const;
+    std::pair<std::shared_ptr<DungeonRecord>, std::shared_ptr<DungeonDefinition>> get_dungeon_pair(int dungeon_id) const;
 
 private:
     DungeonRecords();
