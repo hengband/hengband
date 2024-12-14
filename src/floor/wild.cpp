@@ -112,6 +112,10 @@ static void set_floor_and_wall_aux(int16_t feat_type[100], const std::array<feat
             cur++;
         }
 
+        if (cur >= DUNGEON_FEAT_PROB_NUM) {
+            return;
+        }
+
         feat_type[i] = prob[cur].feat;
     }
 }
