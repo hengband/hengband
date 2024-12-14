@@ -9,6 +9,7 @@
 #include "player-info/mimic-info-table.h"
 #include "player/player-status-table.h"
 #include "system/angband-system.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
@@ -184,7 +185,7 @@ void print_depth(PlayerType *player_ptr)
         return;
     }
 
-    if (floor_ptr->is_in_quest() && !floor_ptr->dungeon_idx) {
+    if (floor_ptr->is_in_quest() && floor_ptr->dungeon_idx == DungeonId::WILDERNESS) {
         c_prt(attr, format("%7s", _("地上", "Quest")), row_depth, col_depth);
         return;
     }

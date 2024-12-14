@@ -15,8 +15,8 @@
 #include "locale/english.h"
 #include "object-enchant/special-object-flags.h"
 #include "system/artifact-type-definition.h"
-#include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
@@ -148,7 +148,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             continue;
         }
         rand_level = quest.level;
-        if (dungeon_records.get_record(DUNGEON_ANGBAND).get_max_level() < rand_level) {
+        if (dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() < rand_level) {
             continue;
         }
 

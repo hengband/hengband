@@ -25,20 +25,21 @@ enum wt_type {
 /*
  * A structure describing a wilderness area with a terrain or a town
  */
+enum class DungeonId;
 struct wilderness_type {
     wt_type terrain;
     int16_t town;
     int road;
     uint32_t seed;
     DEPTH level;
-    byte entrance;
+    DungeonId entrance;
 };
 
 extern std::vector<std::vector<wilderness_type>> wilderness;
 extern bool reinit_wilderness;
 
 class PlayerType;
-void set_floor_and_wall(int type);
+void set_floor_and_wall(DungeonId dungeon_id);
 void wilderness_gen(PlayerType *player_ptr);
 void wilderness_gen_small(PlayerType *player_ptr);
 void init_wilderness_terrains();

@@ -20,6 +20,7 @@
 #include "status/bad-status-setter.h"
 #include "status/experience.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -47,7 +48,7 @@ void pattern_teleport(PlayerType *player_ptr)
             min_level = current_level;
         }
 
-        if (floor.dungeon_idx == DUNGEON_ANGBAND) {
+        if (floor.dungeon_idx == DungeonId::ANGBAND) {
             if (floor.dun_level > 100) {
                 max_level = MAX_DEPTH - 1;
             } else if (current_level == 100) {

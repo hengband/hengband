@@ -8,6 +8,7 @@
 #include "load/load-util.h"
 #include "load/old/load-v1-5-0.h"
 #include "save/floor-writer.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
@@ -30,7 +31,7 @@ static errr rd_dungeon(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     if (h_older_than(1, 5, 0, 0)) {
         err = rd_dungeon_old(player_ptr);
-        if (floor.dungeon_idx) {
+        if (floor.dungeon_idx > DungeonId::WILDERNESS) {
             player_ptr->floor_id = get_unused_floor_id(player_ptr);
             get_sf_ptr(player_ptr->floor_id)->dun_level = floor.dun_level;
         }
@@ -39,7 +40,7 @@ static errr rd_dungeon(PlayerType *player_ptr)
     }
 
     max_floor_id = rd_s16b();
-    floor.set_dungeon_index(rd_byte()); // @todo セーブデータの方を16ビットにするかdungeon_idxの定義を8ビットにした方が良い.
+    floor.set_dungeon_index(i2enum<DungeonId>(rd_byte())); // @todo セーブデータの方を16ビットにするかdungeon_idxの定義を8ビットにした方が良い.
     auto num = rd_byte();
     if (num == 0) {
         err = rd_saved_floor(player_ptr, nullptr);

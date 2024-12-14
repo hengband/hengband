@@ -19,8 +19,8 @@
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/item-entity.h"
@@ -277,7 +277,7 @@ void show_bounty(void)
 void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
 {
     const auto &dungeon_records = DungeonRecords::get_instance();
-    const auto max_dungeon_level = conv_old ? std::max(dungeon_records.get_record(DUNGEON_ANGBAND).get_max_level(), 3) : dungeon_records.find_max_level();
+    const auto max_dungeon_level = conv_old ? std::max(dungeon_records.get_record(DungeonId::ANGBAND).get_max_level(), 3) : dungeon_records.find_max_level();
     get_mon_num_prep_bounty(player_ptr);
     auto &world = AngbandWorld::get_instance();
     while (true) {

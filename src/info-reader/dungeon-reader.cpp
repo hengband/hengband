@@ -8,6 +8,7 @@
 #include "main/angband-headers.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
@@ -124,7 +125,7 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto i = std::stoi(tokens[1]);
+        const auto i = std::stoi(tokens[1]);
         if (i < error_idx) {
             return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
         }
@@ -135,7 +136,7 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
 #ifdef JP
         dungeon.name = tokens[2];
 #endif
-        dungeons.emplace(i, std::move(dungeon));
+        dungeons.emplace(i2enum<DungeonId>(i), std::move(dungeon));
         return PARSE_ERROR_NONE;
     }
 

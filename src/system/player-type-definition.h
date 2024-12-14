@@ -17,14 +17,14 @@
 #include <map>
 #include <string>
 
+enum class DungeonId;
 enum class ItemKindType : short;
-enum class PlayerSkillKindType;
 enum class MimicKindType;
-enum class MonsterAbilityType;
 enum class MonraceId : short;
-enum class Virtue : short;
+enum class MonsterAbilityType;
+enum class PlayerSkillKindType;
 enum class RealmType;
-
+enum class Virtue : short;
 class FloorType;
 class ItemEntity;
 class TimedEffects;
@@ -147,7 +147,7 @@ public:
 
     TIME_EFFECT word_recall{}; /* Word of recall counter */
     TIME_EFFECT alter_reality{}; /* Alter reality counter */
-    int recall_dungeon{}; /* Dungeon set to be recalled */
+    DungeonId recall_dungeon{}; /* Dungeon set to be recalled */
 
     ENERGY energy_need{}; /* Energy needed for next move */
     ENERGY enchant_energy_need{}; /* Energy needed for next upkeep effect	 */

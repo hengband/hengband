@@ -35,6 +35,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -262,11 +263,11 @@ void do_cmd_go_down(PlayerType *player_ptr)
         return;
     }
 
-    auto target_dungeon = 0;
+    auto target_dungeon = DungeonId::WILDERNESS;
     auto &fcms = FloorChangeModesStore::get_instace();
     if (!floor.is_in_underground()) {
-        target_dungeon = terrain.flags.has(TerrainCharacteristics::ENTRANCE) ? grid.special : DUNGEON_ANGBAND;
-        if (ironman_downward && (target_dungeon != DUNGEON_ANGBAND)) {
+        target_dungeon = terrain.flags.has(TerrainCharacteristics::ENTRANCE) ? i2enum<DungeonId>(grid.special) : DungeonId::ANGBAND;
+        if (ironman_downward && (target_dungeon != DungeonId::ANGBAND)) {
             msg_print(_("ダンジョンの入口は塞がれている！", "The entrance of this dungeon is closed!"));
             return;
         }
@@ -314,7 +315,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
     if (fall_trap) {
         msg_print(_("わざと落とし戸に落ちた。", "You deliberately jump through the trap door."));
     } else {
-        if (target_dungeon) {
+        if (target_dungeon > DungeonId::WILDERNESS) {
             msg_format(_("%sへ入った。", "You entered %s."), dungeon.text.data());
         } else {
             if (is_echizen(player_ptr)) {
