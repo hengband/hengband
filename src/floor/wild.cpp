@@ -797,7 +797,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
     }
 
     for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
-        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
+        if (!dungeon.is_dungeon()) {
             continue;
         }
 
