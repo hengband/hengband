@@ -797,13 +797,13 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
     }
 
     for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
-        if (!dungeon.is_dungeon()) {
+        if (!dungeon->is_dungeon()) {
             continue;
         }
 
-        wilderness[dungeon.dy][dungeon.dx].entrance = static_cast<uint8_t>(dungeon_id);
-        if (!wilderness[dungeon.dy][dungeon.dx].town) {
-            wilderness[dungeon.dy][dungeon.dx].level = dungeon.mindepth;
+        wilderness[dungeon->dy][dungeon->dx].entrance = static_cast<uint8_t>(dungeon_id);
+        if (!wilderness[dungeon->dy][dungeon->dx].town) {
+            wilderness[dungeon->dy][dungeon->dx].level = dungeon->mindepth;
         }
     }
 
