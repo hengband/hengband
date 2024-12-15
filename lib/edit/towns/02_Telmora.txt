@@ -501,4 +501,3 @@ P:57:157
 # Starting position when coming from quest 26
 ?:[EQU $LEAVING_QUEST 26]
 P:43:178
-
