@@ -18,27 +18,23 @@ constexpr auto TOTAL_REALM_NUM = std::ssize(MAGIC_REALM_RANGE) + std::ssize(TECH
 constexpr byte REALM_SELECT_CANCEL = 255;
 
 struct birth_realm_type {
-    int cs;
-    int n;
-    char p2;
+    birth_realm_type();
+    int cs = 0;
+    int n = 0;
+    char p2 = ')';
     char sym[TOTAL_REALM_NUM];
     RealmType picks[TOTAL_REALM_NUM];
     std::string cur;
-    int k;
-    int os;
+    int k = -1;
+    int os = 0;
 };
 
-static birth_realm_type *initialize_birth_realm_type(birth_realm_type *birth_realm_ptr)
+birth_realm_type ::birth_realm_type()
 {
-    birth_realm_ptr->cs = 0;
-    birth_realm_ptr->n = 0;
-    birth_realm_ptr->p2 = ')';
-    for (int i = 0; i < TOTAL_REALM_NUM; i++) {
-        birth_realm_ptr->picks[i] = RealmType::NONE;
+    for (auto i = 0; i < TOTAL_REALM_NUM; i++) {
+        this->sym[i] = '\0';
+        this->picks[i] = RealmType::NONE;
     }
-
-    birth_realm_ptr->k = -1;
-    return birth_realm_ptr;
 }
 
 static void impose_first_realm(PlayerType *player_ptr, RealmChoices &choices)
@@ -206,16 +202,15 @@ static std::optional<RealmType> select_realm(PlayerType *player_ptr, RealmType s
     put_str(_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。", "Note: The realm of magic will determine which spells you can learn."),
         23, 5);
 
-    birth_realm_type tmp_birth_realm;
-    birth_realm_type *birth_realm_ptr = initialize_birth_realm_type(&tmp_birth_realm);
-    analyze_realms(player_ptr, selecting_realm, choices, birth_realm_ptr);
-    birth_realm_ptr->cur = format("%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
-    if (get_a_realm(player_ptr, birth_realm_ptr)) {
+    birth_realm_type birth_realm;
+    analyze_realms(player_ptr, selecting_realm, choices, &birth_realm);
+    birth_realm.cur = format("%c%c %s", '*', birth_realm.p2, _("ランダム", "Random"));
+    if (get_a_realm(player_ptr, &birth_realm)) {
         return std::nullopt;
     }
 
     clear_from(10);
-    return birth_realm_ptr->picks[birth_realm_ptr->k];
+    return birth_realm.picks[birth_realm.k];
 }
 
 static void cleanup_realm_selection_window(void)
