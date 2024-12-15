@@ -12,4 +12,6 @@ enum class TerrainTag {
     RUNE_PROTECTION,
     RUNE_EXPLOSION,
     MIRROR,
+    UP_STAIR,
+    DOWN_STAIR,
 };

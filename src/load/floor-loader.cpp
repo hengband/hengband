@@ -21,6 +21,7 @@
 #include "save/floor-writer.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -143,20 +144,19 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     /* Quest 18 was removed */
     if (h_older_than(1, 7, 0, 6) && !vanilla_town) {
-        for (POSITION y = 0; y < ymax; y++) {
-            for (POSITION x = 0; x < xmax; x++) {
-                auto *g_ptr = &floor.grid_array[y][x];
-
-                if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !floor.dun_level) {
-                    if (g_ptr->feat == OLD_FEAT_QUEST_ENTER) {
-                        g_ptr->feat = feat_tree;
-                        g_ptr->special = 0;
-                    } else if (g_ptr->feat == OLD_FEAT_BLDG_1) {
-                        g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
+        for (auto y = 0; y < ymax; y++) {
+            for (auto x = 0; x < xmax; x++) {
+                auto &grid = floor.get_grid({ y, x });
+                if ((grid.special == OLD_QUEST_WATER_CAVE) && !floor.dun_level) {
+                    if (grid.feat == OLD_FEAT_QUEST_ENTER) {
+                        grid.feat = feat_tree;
+                        grid.special = 0;
+                    } else if (grid.feat == OLD_FEAT_BLDG_1) {
+                        grid.special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
                     }
-                } else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) && (floor.quest_number == i2enum<QuestId>(OLD_QUEST_WATER_CAVE))) {
-                    g_ptr->feat = feat_up_stair;
-                    g_ptr->special = 0;
+                } else if ((grid.feat == OLD_FEAT_QUEST_EXIT) && (floor.quest_number == i2enum<QuestId>(OLD_QUEST_WATER_CAVE))) {
+                    grid.set_terrain_id(TerrainTag::UP_STAIR);
+                    grid.special = 0;
                 }
             }
         }

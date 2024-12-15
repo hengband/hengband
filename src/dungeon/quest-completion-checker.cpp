@@ -10,6 +10,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-ego.h"
 #include "system/enums/terrain/terrain-characteristics.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -17,6 +18,8 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -221,27 +224,25 @@ int QuestCompletionChecker::count_all_hostile_monsters()
 
 Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
 {
-    auto y = this->m_ptr->fy;
-    auto x = this->m_ptr->fx;
+    auto m_pos = this->m_ptr->get_position();
     if (!create_stairs) {
-        return Pos2D(y, x);
+        return m_pos;
     }
 
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    while (cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
+    auto &floor = *this->player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor.get_grid(m_pos);
+    while (cave_has_flag_bold(&floor, m_pos.y, m_pos.x, TerrainCharacteristics::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
         int ny;
         int nx;
-        scatter(this->player_ptr, &ny, &nx, y, x, 1, PROJECT_NONE);
-        y = ny;
-        x = nx;
-        g_ptr = &floor_ptr->grid_array[y][x];
+        scatter(this->player_ptr, &ny, &nx, m_pos.y, m_pos.x, 1, PROJECT_NONE);
+        m_pos = { ny, nx };
+        g_ptr = &floor.get_grid(m_pos);
     }
 
     msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
-    cave_set_feat(this->player_ptr, y, x, feat_down_stair);
+    cave_set_feat(this->player_ptr, m_pos.y, m_pos.x, TerrainList::get_instance().get_terrain_id(TerrainTag::DOWN_STAIR));
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
-    return Pos2D(y, x);
+    return m_pos;
 }
 
 void QuestCompletionChecker::make_reward(const Pos2D pos)

@@ -32,6 +32,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-data-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -414,66 +415,54 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 }
 
 /*!
- * @brief ダンジョンの指定位置近辺に森林を配置する /
- * Places "streamers" of rock through dungeon
- * @param x 指定X座標
- * @param y 指定Y座標
+ * @brief ダンジョンの指定位置近辺に森林を配置する
+ * @param pos 指定座標
  * @details
  * <pre>
  * Put trees near a hole in the dungeon roof  (rubble on ground + up stairway)
  * This happens in real world lava tubes.
  * </pre>
  */
-void place_trees(PlayerType *player_ptr, POSITION x, POSITION y)
+void place_trees(PlayerType *player_ptr, const Pos2D &pos)
 {
-    int i, j;
-    Grid *g_ptr;
-
     /* place trees/ rubble in ovalish distribution */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (i = x - 3; i < x + 4; i++) {
-        for (j = y - 3; j < y + 4; j++) {
-            if (!in_bounds(floor_ptr, j, i)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto x = pos.x - 3; x < pos.x + 4; x++) {
+        for (auto y = pos.y - 3; y < pos.y + 4; y++) {
+            const Pos2D pos_neighbor(y, x);
+            if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
                 continue;
             }
-            g_ptr = &floor_ptr->grid_array[j][i];
 
-            if (g_ptr->info & CAVE_ICKY) {
-                continue;
-            }
-            if (!g_ptr->o_idx_list.empty()) {
+            auto &grid = floor.get_grid(pos_neighbor);
+            if (any_bits(grid.info, CAVE_ICKY) || !grid.o_idx_list.empty()) {
                 continue;
             }
 
             /* Want square to be in the circle and accessable. */
-            if ((distance(j, i, y, x) < 4) && !g_ptr->cave_has_flag(TerrainCharacteristics::PERMANENT)) {
+            if ((distance(y, x, pos.y, pos.x) < 4) && !grid.cave_has_flag(TerrainCharacteristics::PERMANENT)) {
                 /*
                  * Clear previous contents, add feature
                  * The border mainly gets trees, while the center gets rubble
                  */
-                if ((distance(j, i, y, x) > 1) || (randint1(100) < 25)) {
+                if ((distance(y, x, pos.y, pos.x) > 1) || (randint1(100) < 25)) {
                     if (randint1(100) < 75) {
-                        floor_ptr->grid_array[j][i].feat = feat_tree;
+                        grid.feat = feat_tree;
                     }
                 } else {
-                    floor_ptr->grid_array[j][i].feat = feat_rubble;
+                    grid.feat = feat_rubble;
                 }
 
-                /* Clear garbage of hidden trap or door */
-                g_ptr->mimic = 0;
-
-                /* Light area since is open above */
-                if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
-                    floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
+                grid.mimic = 0;
+                if (floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
+                    grid.info |= (CAVE_GLOW | CAVE_ROOM);
                 }
             }
         }
     }
 
-    /* No up stairs in ironman mode */
     if (!ironman_downward && one_in_(3)) {
-        /* up stair */
-        floor_ptr->grid_array[y][x].feat = feat_up_stair;
+        floor.get_grid(pos).set_terrain_id(TerrainTag::UP_STAIR);
     }
 }
 

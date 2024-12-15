@@ -700,7 +700,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
                         grid.special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
                     }
                 } else if ((grid.feat == OLD_FEAT_QUEST_EXIT) && (floor.quest_number == i2enum<QuestId>(OLD_QUEST_WATER_CAVE))) {
-                    grid.feat = feat_up_stair;
+                    grid.set_terrain_id(TerrainTag::UP_STAIR);
                     grid.special = 0;
                 }
             }

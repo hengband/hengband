@@ -618,7 +618,7 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
 
         /* Stairs (20%) */
         else {
-            place_random_stairs(player_ptr, center->y, center->x);
+            place_random_stairs(player_ptr, *center);
         }
 
         /* Traps to protect the treasure */
