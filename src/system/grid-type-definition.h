@@ -96,6 +96,7 @@ public:
     void reset_costs();
     void reset_dists();
     bool has_los() const;
+    bool has_los_terrain(TerrainKind tk = TerrainKind::NORMAL) const;
     TerrainType &get_terrain(TerrainKind tk = TerrainKind::NORMAL);
     const TerrainType &get_terrain(TerrainKind tk = TerrainKind::NORMAL) const;
     void place_closed_curtain();
