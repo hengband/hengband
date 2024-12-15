@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <utility>
 
+constexpr auto MAX_TERM_DATA = 8; //!< Maximum number of terminals
 constexpr auto TERM_DEFAULT_COLS = 80;
 constexpr auto TERM_DEFAULT_ROWS = 24;
 constexpr auto MAIN_TERM_MIN_COLS = TERM_DEFAULT_COLS;
