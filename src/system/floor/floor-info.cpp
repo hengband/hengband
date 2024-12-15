@@ -172,7 +172,7 @@ bool FloorType::is_closed_door(const Pos2D &pos, bool is_mimic) const
 {
     const auto &grid = this->get_grid(pos);
     if (is_mimic) {
-        return grid.get_terrain_mimic().is_closed_door();
+        return grid.get_terrain(TerrainKind::MIMIC).is_closed_door();
     }
 
     return grid.get_terrain().is_closed_door();
@@ -218,16 +218,17 @@ std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCount
 bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
 {
     const auto &grid = this->get_grid(pos);
+    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     switch (gck) {
     case GridCountKind::OPEN: {
-        const auto is_open_grid = grid.get_terrain_mimic().is_open();
+        const auto is_open_grid = terrain.is_open();
         const auto is_open_dungeon = this->get_dungeon_definition().is_open(grid.get_feat_mimic());
         return is_open_grid && is_open_dungeon;
     }
     case GridCountKind::CLOSED_DOOR:
-        return grid.get_terrain_mimic().is_closed_door();
+        return terrain.is_closed_door();
     case GridCountKind::TRAP:
-        return grid.get_terrain_mimic().is_trap();
+        return terrain.is_trap();
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid GridCountKind is Specified! %d", enum2i(gck)));
     }

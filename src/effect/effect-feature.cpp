@@ -231,7 +231,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         int16_t old_mimic = grid.mimic;
-        const auto &terrain_mimic = grid.get_terrain_mimic();
+        const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC);
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
         grid.mimic = old_mimic;
@@ -253,7 +253,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         if (known && grid.is_mark()) {
-            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), grid.get_terrain_mimic().name.data());
+            msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), grid.get_terrain(TerrainKind::MIMIC).name.data());
             obvious = true;
         }
 
@@ -381,7 +381,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
                 }
 
                 const auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                if (grid_neighbor.get_terrain_mimic().flags.has(TerrainCharacteristics::GLOW)) {
+                if (grid_neighbor.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::GLOW)) {
                     do_dark = false;
                     break;
                 }
@@ -429,7 +429,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         if (known && (grid.is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain_mimic().name.data());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain(TerrainKind::MIMIC).name.data());
             sound(SOUND_GLASS);
         }
 
@@ -451,7 +451,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         if (known && (grid.is_mark())) {
-            msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain_mimic().name.data());
+            msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain(TerrainKind::MIMIC).name.data());
             sound(SOUND_GLASS);
         }
 

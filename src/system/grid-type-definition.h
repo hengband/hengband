@@ -39,6 +39,12 @@
 
 // clang-format on
 
+enum class TerrainKind {
+    NORMAL, //!< 普通の特性.
+    MIMIC, //!< 未確認地形・隠しドア・罠といった見た目と中身が違う特性の内、壁や床の方.
+    MIMIC_RAW, //!< 見た目と中身が違う特性の内、隠しドアや罠の方.
+};
+
 enum class GridFlow : int;
 enum class TerrainCharacteristics;
 enum class TerrainTag;
@@ -90,12 +96,8 @@ public:
     void reset_costs();
     void reset_dists();
     bool has_los() const;
-    TerrainType &get_terrain();
-    const TerrainType &get_terrain() const;
-    TerrainType &get_terrain_mimic();
-    const TerrainType &get_terrain_mimic() const;
-    TerrainType &get_terrain_mimic_raw();
-    const TerrainType &get_terrain_mimic_raw() const;
+    TerrainType &get_terrain(TerrainKind tk = TerrainKind::NORMAL);
+    const TerrainType &get_terrain(TerrainKind tk = TerrainKind::NORMAL) const;
     void place_closed_curtain();
     void add_info(int grid_info);
     void set_terrain_id(short terrain_id);

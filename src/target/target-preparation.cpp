@@ -106,7 +106,7 @@ static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
         return true;
     }
 
-    return grid.get_terrain_mimic().flags.has(TerrainCharacteristics::NOTICE);
+    return grid.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::NOTICE);
 }
 
 /*!
