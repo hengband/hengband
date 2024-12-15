@@ -432,7 +432,6 @@
     <ClCompile Include="..\..\src\grid\feature-generator.cpp" />
     <ClCompile Include="..\..\src\grid\object-placer.cpp" />
     <ClCompile Include="..\..\src\grid\lighting-colors-table.cpp" />
-    <ClCompile Include="..\..\src\grid\stair.cpp" />
     <ClCompile Include="..\..\src\info-reader\artifact-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\dungeon-reader.cpp" />
@@ -1227,7 +1226,6 @@
     <ClInclude Include="..\..\src\grid\feature-generator.h" />
     <ClInclude Include="..\..\src\grid\object-placer.h" />
     <ClInclude Include="..\..\src\grid\lighting-colors-table.h" />
-    <ClInclude Include="..\..\src\grid\stair.h" />
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-reader.h" />

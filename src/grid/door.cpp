@@ -105,16 +105,17 @@ void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
  */
 void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const Pos2D pos(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     if (dungeon.flags.has(DungeonFeatureType::NO_DOORS)) {
-        place_bold(player_ptr, y, x, GB_FLOOR);
+        place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
         return;
     }
 
-    set_cave_feat(floor_ptr, y, x, feat_locked_door_random(dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
-    floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
-    delete_monster(player_ptr, y, x);
+    floor.set_terrain_id(pos, feat_locked_door_random(dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+    floor.get_grid(pos).info &= ~(CAVE_FLOOR);
+    delete_monster(player_ptr, pos.y, pos.x);
 }
 
 /*!
@@ -172,7 +173,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
     if (terrain_id == terrain_none) {
         place_bold(player_ptr, y, x, GB_FLOOR);
     } else {
-        set_cave_feat(&floor, y, x, terrain_id);
+        floor.set_terrain_id(pos, terrain_id);
     }
 
     delete_monster(player_ptr, y, x);

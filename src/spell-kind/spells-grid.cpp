@@ -7,7 +7,6 @@
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/stair.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -80,7 +79,8 @@ void stair_creation(PlayerType *player_ptr)
         return;
     }
 
-    if (!cave_valid_bold(&floor, player_ptr->y, player_ptr->x)) {
+    const auto p_pos = player_ptr->get_position();
+    if (!floor.is_grid_changeable(p_pos)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return;
     }

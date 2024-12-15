@@ -84,7 +84,6 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type pg_type);
 bool darkened_grid(PlayerType *player_ptr, Grid *g_ptr);
 void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x);
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
-void set_cave_feat(FloorType *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx);
 void cave_lite_hack(FloorType *floor_ptr, POSITION y, POSITION x);
 void cave_redraw_later(FloorType *floor_ptr, POSITION y, POSITION x);
 void cave_note_and_redraw_later(FloorType *floor_ptr, POSITION y, POSITION x);

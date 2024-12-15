@@ -1949,9 +1949,6 @@
     <ClCompile Include="..\..\src\grid\object-placer.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\stair.cpp">
-      <Filter>grid</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\object-compressor.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -4752,9 +4749,6 @@
       <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\grid\object-placer.h">
-      <Filter>grid</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\grid\stair.h">
       <Filter>grid</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\object-compressor.h">

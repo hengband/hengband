@@ -12,6 +12,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/grid-count-kind.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -465,6 +466,78 @@ short FloorType::pop_empty_index_item()
     }
 
     return 0;
+}
+
+/*!
+ * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos 指定座標
+ * @return 永久地形でなく、かつ該当のマスにアーティファクトが存在しないならばtrue、永久地形かアーティファクトが存在するならばfalse。
+ */
+bool FloorType::is_grid_changeable(const Pos2D &pos) const
+{
+    const auto &grid = this->get_grid(pos);
+    if (grid.cave_has_flag(TerrainCharacteristics::PERMANENT)) {
+        return false;
+    }
+
+    for (const auto this_o_idx : grid.o_idx_list) {
+        const auto &item = this->o_list[this_o_idx];
+        if (item.is_fixed_or_random_artifact()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/*!
+ * @brief 所定の位置に上り階段か下り階段を配置する
+ * @param pos 配置を試みたいマスの座標
+ */
+void FloorType::place_random_stairs(const Pos2D &pos)
+{
+    const auto &grid = this->get_grid(pos);
+    if (!grid.is_floor() || !grid.o_idx_list.empty()) {
+        return;
+    }
+
+    auto up_stairs = this->is_in_underground();
+    if (ironman_downward) {
+        up_stairs = false;
+    }
+
+    auto down_stairs = this->dun_level < this->get_dungeon_definition().maxdepth;
+    if (inside_quest(this->get_quest_id()) && (this->dun_level > 1)) {
+        down_stairs = false;
+    }
+
+    if (down_stairs && up_stairs) {
+        if (one_in_(2)) {
+            up_stairs = false;
+        } else {
+            down_stairs = false;
+        }
+    }
+
+    if (up_stairs) {
+        this->set_terrain_id(pos, TerrainTag::UP_STAIR);
+        return;
+    }
+
+    if (down_stairs) {
+        this->set_terrain_id(pos, TerrainTag::DOWN_STAIR);
+    }
+}
+
+void FloorType::set_terrain_id(const Pos2D &pos, TerrainTag tag)
+{
+    this->get_grid(pos).set_terrain_id(tag);
+}
+
+void FloorType::set_terrain_id(const Pos2D &pos, short terrain_id)
+{
+    this->get_grid(pos).set_terrain_id(terrain_id);
 }
 
 /*!

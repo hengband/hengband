@@ -7,7 +7,6 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/feature.h"
-#include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -164,16 +163,6 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 }
 
 /*!
- * @brief 指定座標に瓦礫を配置する
- * @param Y 指定Y座標
- * @param X 指定X座標
- */
-static void place_rubble(FloorType *floor_ptr, POSITION y, POSITION x)
-{
-    set_cave_feat(floor_ptr, y, x, feat_rubble);
-}
-
-/*!
  * @brief フロア上のランダム位置に各種オブジェクトを配置する / Allocates some objects (using "place" and "type")
  * @param set 配置したい地形の種類
  * @param typ 配置したいオブジェクトの種類
@@ -182,18 +171,16 @@ static void place_rubble(FloorType *floor_ptr, POSITION y, POSITION x)
  */
 void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type typ, int num)
 {
-    POSITION y = 0;
-    POSITION x = 0;
-    int dummy = 0;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    num = num * floor_ptr->height * floor_ptr->width / (MAX_HGT * MAX_WID) + 1;
-    for (int k = 0; k < num; k++) {
+    auto dummy = 0;
+    auto &floor = *player_ptr->current_floor_ptr;
+    num = num * floor.height * floor.width / (MAX_HGT * MAX_WID) + 1;
+    for (auto k = 0; k < num; k++) {
+        Pos2D pos(0, 0);
         while (dummy < SAFE_MAX_ATTEMPTS) {
             dummy++;
-            y = randint0(floor_ptr->height);
-            x = randint0(floor_ptr->width);
-            const Pos2D pos(y, x);
-            const auto &grid = floor_ptr->get_grid(pos);
+            pos.y = randint0(floor.height);
+            pos.x = randint0(floor.width);
+            const auto &grid = floor.get_grid(pos);
             if (!grid.is_floor() || !grid.o_idx_list.empty() || grid.has_monster()) {
                 continue;
             }
@@ -217,18 +204,18 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
 
         switch (typ) {
         case ALLOC_TYP_RUBBLE:
-            place_rubble(floor_ptr, y, x);
-            floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
+            floor.set_terrain_id(pos, feat_rubble);
+            floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_TRAP:
-            place_trap(floor_ptr, y, x);
-            floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
+            place_trap(&floor, pos.y, pos.x);
+            floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_GOLD:
-            place_gold(player_ptr, y, x);
+            place_gold(player_ptr, pos.y, pos.x);
             break;
         case ALLOC_TYP_OBJECT:
-            place_object(player_ptr, y, x, 0L);
+            place_object(player_ptr, pos.y, pos.x, 0L);
             break;
         default:
             break;

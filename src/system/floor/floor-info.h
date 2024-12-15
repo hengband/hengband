@@ -40,6 +40,7 @@ constexpr auto REDRAW_MAX = 2298;
 enum class GridCountKind;
 enum class MonsterTimedEffect : int;
 enum class QuestId : short;
+enum class TerrainTag;
 class DungeonDefinition;
 class Grid;
 class MonsterEntity;
@@ -122,6 +123,10 @@ public:
 
     short pop_empty_index_monster();
     short pop_empty_index_item();
+    bool is_grid_changeable(const Pos2D &pos) const;
+    void place_random_stairs(const Pos2D &pos);
+    void set_terrain_id(const Pos2D &pos, TerrainTag tag);
+    void set_terrain_id(const Pos2D &pos, short terrain_id);
 
 private:
     static int decide_selection_count();
