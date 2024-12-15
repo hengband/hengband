@@ -216,7 +216,7 @@ static bool switch_making_floor(PlayerType *player_ptr, DungeonData *dd_ptr, Dun
 {
     if (d_ptr->flags.has(DungeonFeatureType::MAZE)) {
         const auto &floor = *player_ptr->current_floor_ptr;
-        build_maze_vault(player_ptr, { floor.width / 2 - 1, floor.height / 2 - 1 }, { floor.width - 4, floor.height - 4 }, false);
+        build_maze_vault(player_ptr, { floor.height / 2 - 1, floor.width / 2 - 1 }, { floor.height - 4, floor.width - 4 }, false);
         const auto &terrains = TerrainList::get_instance();
         if (!alloc_stairs(player_ptr, terrains.get_terrain_id(TerrainTag::DOWN_STAIR), rand_range(2, 3), 3)) {
             dd_ptr->why = _("迷宮ダンジョンの下り階段生成に失敗", "Failed to alloc up stairs in maze dungeon.");
