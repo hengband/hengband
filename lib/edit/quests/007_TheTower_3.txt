@@ -38,4 +38,3 @@ D:XXXXXXXXX
 # Starting position when coming from level 2 of the tower (quest 6)
 ?:[EQU $LEAVING_QUEST 6]
 P:7:7
-

@@ -83,10 +83,3 @@ D:XXXXXXXXXXXXXXXXXXXXX
 
 # Starting position
 P:17:10
-
-
-
-
-
-
-

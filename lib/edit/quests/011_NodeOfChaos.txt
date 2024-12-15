@@ -90,4 +90,3 @@ D:hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 
 # Starting position
 P:23:1
-
