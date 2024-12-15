@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.props" Condition="Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.props')" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -103,7 +102,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;HAVE_STDINT_H;JP;SJIS;WORLD_SCORE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;HAVE_STDINT_H;JP;SJIS;WORLD_SCORE;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <WarningLevel>EnableAllWarnings</WarningLevel>
@@ -118,6 +117,11 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
       <AdditionalOptions>/source-charset:utf-8 /execution-charset:shift-jis %(AdditionalOptions)</AdditionalOptions>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -137,13 +141,13 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;HAVE_STDINT_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;HAVE_STDINT_H;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <WarningLevel>Level4</WarningLevel>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>CompileAsCpp</CompileAs>
-      <DisableSpecificWarnings>4127;4996;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
@@ -151,6 +155,12 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
       <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <CompileAsManaged>false</CompileAsManaged>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -164,8 +174,8 @@
     <ClCompile>
       <PreprocessorDefinitions>WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;HAVE_STDINT_H;JP;SJIS;WORLD_SCORE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>4244;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4711;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -177,6 +187,12 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
       <AdditionalOptions>/source-charset:utf-8 /execution-charset:shift-jis %(AdditionalOptions)</AdditionalOptions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <CompileAsManaged>false</CompileAsManaged>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -201,9 +217,9 @@
       <PreprocessorDefinitions>WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;HAVE_STDINT_H;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4244;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4711;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
@@ -212,6 +228,12 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
       <AdditionalOptions>/source-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <CompileAsManaged>false</CompileAsManaged>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <AdditionalDependencies>winmm.lib;gdiplus.lib;Ws2_32.lib;Wldap32.lib;Crypt32.lib;Normaliz.lib;DbgHelp.lib;libcurl\lib\libcurl_a.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -272,7 +294,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
-    <ClCompile Include="..\..\src\floor\floor-list.cpp" />
+    <ClCompile Include="..\..\src\system\floor\floor-list.cpp" />
     <ClCompile Include="..\..\src\item-info\flavor-initializer.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-base.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-factory.cpp" />
@@ -324,12 +346,18 @@
     <ClCompile Include="..\..\src\specific-object\stone-of-lore.cpp" />
     <ClCompile Include="..\..\src\spell-class\spells-mirror-master.cpp" />
     <ClCompile Include="..\..\src\system\angband-system.cpp" />
-    <ClCompile Include="..\..\src\system\dungeon-data-definition.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-allocation.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-data-definition.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-key.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-list.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-list.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-record.cpp" />
+    <ClCompile Include="..\..\src\system\floor\town-list.cpp" />
     <ClCompile Include="..\..\src\system\inner-game-data.cpp" />
+    <ClCompile Include="..\..\src\system\monrace\monrace-list.cpp" />
     <ClCompile Include="..\..\src\system\redrawing-flags-updater.cpp" />
-    <ClCompile Include="..\..\src\system\floor-type-definition.cpp" />
+    <ClCompile Include="..\..\src\system\floor\floor-info.cpp" />
     <ClCompile Include="..\..\src\system\grid-type-definition.cpp" />
-    <ClCompile Include="..\..\src\grid\feature-action-flags.cpp" />
     <ClCompile Include="..\..\src\main-win\commandline-win.cpp" />
     <ClCompile Include="..\..\src\main-win\graphics-win.cpp" />
     <ClCompile Include="..\..\src\main-win\main-win-term.cpp" />
@@ -403,7 +431,6 @@
     <ClCompile Include="..\..\src\grid\feature-generator.cpp" />
     <ClCompile Include="..\..\src\grid\object-placer.cpp" />
     <ClCompile Include="..\..\src\grid\lighting-colors-table.cpp" />
-    <ClCompile Include="..\..\src\grid\stair.cpp" />
     <ClCompile Include="..\..\src\info-reader\artifact-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\dungeon-reader.cpp" />
@@ -616,9 +643,11 @@
     <ClCompile Include="..\..\src\system\angband-version.cpp" />
     <ClCompile Include="..\..\src\system\monster-entity.cpp" />
     <ClCompile Include="..\..\src\system\item-entity.cpp" />
-    <ClCompile Include="..\..\src\system\monster-race-info.cpp" />
+    <ClCompile Include="..\..\src\system\monrace\monrace-definition.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
-    <ClCompile Include="..\..\src\system\terrain-type-definition.cpp" />
+    <ClCompile Include="..\..\src\system\services\baseitem-monrace-service.cpp" />
+    <ClCompile Include="..\..\src\system\terrain\terrain-definition.cpp" />
+    <ClCompile Include="..\..\src\system\terrain\terrain-list.cpp" />
     <ClCompile Include="..\..\src\target\grid-selector.cpp" />
     <ClCompile Include="..\..\src\target\projection-path-calculator.cpp" />
     <ClCompile Include="..\..\src\target\target-describer.cpp" />
@@ -653,7 +682,7 @@
     <ClCompile Include="..\..\src\window\main-window-stat-poster.cpp" />
     <ClCompile Include="..\..\src\window\main-window-util.cpp" />
     <ClCompile Include="..\..\src\mspell\monster-power-table.cpp" />
-    <ClCompile Include="..\..\src\system\alloc-entries.cpp" />
+    <ClCompile Include="..\..\src\system\monrace\monrace-allocation.cpp" />
     <ClCompile Include="..\..\src\term\screen-processor.cpp" />
     <ClCompile Include="..\..\src\util\buffer-shaper.cpp" />
     <ClCompile Include="..\..\src\lore\combat-types-setter.cpp" />
@@ -879,13 +908,13 @@
     <ClCompile Include="..\..\src\core\show-file.cpp" />
     <ClCompile Include="..\..\src\core\speed-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\fixed-map-parser.cpp" />
-    <ClCompile Include="..\..\src\system\dungeon-info.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon\dungeon-definition.cpp" />
     <ClCompile Include="..\..\src\locale\english.cpp" />
     <ClCompile Include="..\..\src\grid\feature.cpp" />
     <ClCompile Include="..\..\src\floor\floor-events.cpp" />
     <ClCompile Include="..\..\src\floor\floor-generator.cpp" />
     <ClCompile Include="..\..\src\floor\floor-save.cpp" />
-    <ClCompile Include="..\..\src\floor\floor-town.cpp" />
+    <ClCompile Include="..\..\src\system\floor\town-info.cpp" />
     <ClCompile Include="..\..\src\floor\geometry.cpp" />
     <ClCompile Include="..\..\src\birth\history.cpp" />
     <ClCompile Include="..\..\src\monster\horror-descriptions.cpp" />
@@ -929,7 +958,7 @@
     <ClCompile Include="..\..\src\object-enchant\object-ego.cpp" />
     <ClCompile Include="..\..\src\flavor\object-flavor.cpp" />
     <ClCompile Include="..\..\src\object\item-tester-hooker.cpp" />
-    <ClCompile Include="..\..\src\system\baseitem-info.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-definition.cpp" />
     <ClCompile Include="..\..\src\system\spell-info-list.cpp" />
     <ClCompile Include="..\..\src\object\object-kind-hook.cpp" />
     <ClCompile Include="..\..\src\object\object-broken.cpp" />
@@ -985,7 +1014,7 @@
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\external-lib\include-json.h" />
     <ClInclude Include="..\..\src\external-lib\json.hpp" />
-    <ClInclude Include="..\..\src\floor\floor-list.h" />
+    <ClInclude Include="..\..\src\system\floor\floor-list.h" />
     <ClInclude Include="..\..\src\item-info\flavor-initializer.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-version-types.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-base.h" />
@@ -1097,7 +1126,6 @@
     <ClInclude Include="..\..\src\action\movement-execution.h" />
     <ClInclude Include="..\..\src\core\score-util.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-mask.h" />
-    <ClInclude Include="..\..\src\grid\feature-action-flags.h" />
     <ClInclude Include="..\..\src\main-win\commandline-win.h" />
     <ClInclude Include="..\..\src\main-win\graphics-win.h" />
     <ClInclude Include="..\..\src\main-win\main-win-term.h" />
@@ -1193,11 +1221,10 @@
     <ClInclude Include="..\..\src\game-option\special-options.h" />
     <ClInclude Include="..\..\src\game-option\text-display-options.h" />
     <ClInclude Include="..\..\src\grid\door.h" />
-    <ClInclude Include="..\..\src\grid\feature-flag-types.h" />
+    <ClInclude Include="..\..\src\system\enums\terrain\terrain-characteristics.h" />
     <ClInclude Include="..\..\src\grid\feature-generator.h" />
     <ClInclude Include="..\..\src\grid\object-placer.h" />
     <ClInclude Include="..\..\src\grid\lighting-colors-table.h" />
-    <ClInclude Include="..\..\src\grid\stair.h" />
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-reader.h" />
@@ -1426,18 +1453,28 @@
     <ClInclude Include="..\..\src\store\purchase-order.h" />
     <ClInclude Include="..\..\src\store\sell-order.h" />
     <ClInclude Include="..\..\src\store\service-checker.h" />
-    <ClInclude Include="..\..\src\system\alloc-entries.h" />
+    <ClInclude Include="..\..\src\system\floor\town-list.h" />
+    <ClInclude Include="..\..\src\system\monrace\monrace-allocation.h" />
     <ClInclude Include="..\..\src\system\angband-exceptions.h" />
     <ClInclude Include="..\..\src\system\angband-system.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-allocation.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-key.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-list.h" />
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-list.h" />
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-record.h" />
     <ClInclude Include="..\..\src\system\enums\grid-count-kind.h" />
     <ClInclude Include="..\..\src\system\enums\grid-flow.h" />
     <ClInclude Include="..\..\src\system\inner-game-data.h" />
+    <ClInclude Include="..\..\src\system\monrace\monrace-list.h" />
     <ClInclude Include="..\..\src\system\redrawing-flags-updater.h" />
-    <ClInclude Include="..\..\src\system\dungeon-data-definition.h" />
-    <ClInclude Include="..\..\src\system\floor-type-definition.h" />
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-data-definition.h" />
+    <ClInclude Include="..\..\src\system\floor\floor-info.h" />
     <ClInclude Include="..\..\src\system\grid-type-definition.h" />
     <ClInclude Include="..\..\src\system\player-type-definition.h" />
-    <ClInclude Include="..\..\src\system\terrain-type-definition.h" />
+    <ClInclude Include="..\..\src\system\services\baseitem-monrace-service.h" />
+    <ClInclude Include="..\..\src\system\terrain\terrain-definition.h" />
+    <ClInclude Include="..\..\src\system\enums\terrain\terrain-tag.h" />
+    <ClInclude Include="..\..\src\system\terrain\terrain-list.h" />
     <ClInclude Include="..\..\src\target\grid-selector.h" />
     <ClInclude Include="..\..\src\target\projection-path-calculator.h" />
     <ClInclude Include="..\..\src\target\target-describer.h" />
@@ -1600,8 +1637,8 @@
     <ClInclude Include="..\..\src\object\item-use-flags.h" />
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\system\building-type-definition.h" />
-    <ClInclude Include="..\..\src\system\enums\game-option-page.h" />
-    <ClInclude Include="..\..\src\system\monster-race-info.h" />
+    <ClInclude Include="..\..\src\game-option\game-option-page.h" />
+    <ClInclude Include="..\..\src\system\monrace\monrace-definition.h" />
     <ClInclude Include="..\..\src\system\item-entity.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
@@ -1802,7 +1839,6 @@
     <ClCompile Include="..\..\src\wizard\wizard-spells.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-special-process.cpp" />
-    <ClCompile Include="..\..\src\world\world-object.cpp" />
     <ClCompile Include="..\..\src\world\world.cpp" />
     <ClCompile Include="..\..\src\world\world-movement-processor.cpp" />
     <ClCompile Include="..\..\src\world\world-turn-processor.cpp" />
@@ -1885,7 +1921,6 @@
     <ClInclude Include="..\..\src\wizard\wizard-messages.h" />
     <ClInclude Include="..\..\src\wizard\wizard-player-modifier.h" />
     <ClInclude Include="..\..\src\wizard\wizard-spells.h" />
-    <ClInclude Include="..\..\src\world\world-object.h" />
     <ClInclude Include="..\..\src\locale\english.h" />
     <ClInclude Include="..\..\src\monster\horror-descriptions.h" />
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />
@@ -1963,13 +1998,13 @@
     <ClInclude Include="..\..\src\system\system-variables.h" />
     <ClInclude Include="..\..\src\core\speed-table.h" />
     <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h" />
-    <ClInclude Include="..\..\src\system\dungeon-info.h" />
+    <ClInclude Include="..\..\src\system\dungeon\dungeon-definition.h" />
     <ClInclude Include="..\..\src\grid\feature.h" />
     <ClInclude Include="..\..\src\io\files-util.h" />
     <ClInclude Include="..\..\src\floor\floor-events.h" />
     <ClInclude Include="..\..\src\floor\floor-generator.h" />
     <ClInclude Include="..\..\src\floor\floor-save.h" />
-    <ClInclude Include="..\..\src\floor\floor-town.h" />
+    <ClInclude Include="..\..\src\system\floor\town-info.h" />
     <ClInclude Include="..\..\src\system\gamevalue.h" />
     <ClInclude Include="..\..\src\floor\geometry.h" />
     <ClInclude Include="..\..\src\grid\grid.h" />
@@ -1993,7 +2028,7 @@
     <ClInclude Include="..\..\src\object\object-broken.h" />
     <ClInclude Include="..\..\src\object\object-info.h" />
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />
-    <ClInclude Include="..\..\src\system\baseitem-info.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-definition.h" />
     <ClInclude Include="..\..\src\system\spell-info-list.h" />
     <ClInclude Include="..\..\src\player\patron.h" />
     <ClInclude Include="..\..\src\player-info\class-info.h" />
@@ -2064,14 +2099,5 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.targets" Condition="Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.props'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.NetAnalyzers.7.0.4\build\Microsoft.CodeAnalysis.NetAnalyzers.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

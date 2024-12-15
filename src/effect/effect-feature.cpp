@@ -17,12 +17,13 @@
 #include "room/door-definition.h"
 #include "spell-class/spells-mirror-master.h"
 #include "system/angband-system.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -171,7 +172,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::KILL_TRAP: {
-        if (is_hidden_door(player_ptr, grid)) {
+        if (grid.is_hidden_door()) {
             disclose_grid(player_ptr, y, x);
             if (known) {
                 obvious = true;
@@ -295,7 +296,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             break;
         }
         grid.info |= CAVE_OBJECT;
-        grid.mimic = feat_rune_protection;
+        grid.set_mimic_terrain_id(TerrainTag::RUNE_PROTECTION);
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
         break;

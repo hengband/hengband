@@ -27,7 +27,6 @@
 #include "game-option/game-play-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature-action-flags.h"
 #include "grid/feature.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
@@ -42,16 +41,16 @@
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
 #include "room/rooms-builder.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/enums/grid-flow.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
 #include "timed-effect/timed-effects.h"
@@ -87,8 +86,8 @@ bool new_player_spot(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     while (max_attempts--) {
         /* Pick a legal spot */
-        y = (POSITION)rand_range(1, floor.height - 2);
-        x = (POSITION)rand_range(1, floor.width - 2);
+        y = rand_range(1, floor.height - 2);
+        x = rand_range(1, floor.width - 2);
 
         const auto &grid = player_ptr->current_floor_ptr->get_grid({ y, x });
 
@@ -143,18 +142,6 @@ bool new_player_spot(PlayerType *player_ptr)
     player_ptr->x = x;
 
     return true;
-}
-
-/*!
- * @brief マスに隠されたドアがあるかの判定を行う。 / Return TRUE if the given grid is a hidden closed door
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param grid マス構造体の参照ポインタ
- * @return 隠されたドアがあるならTRUEを返す。
- */
-bool is_hidden_door(PlayerType *player_ptr, const Grid &grid)
-{
-    (void)player_ptr; // 後でリファクタリングする.
-    return (grid.mimic || grid.cave_has_flag(TerrainCharacteristics::SECRET)) && grid.get_terrain().is_closed_door();
 }
 
 /*!
@@ -756,7 +743,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     cave_set_feat(player_ptr, y, x, new_terrain_id);
     const auto &terrains = TerrainList::get_instance();
     const auto &world = AngbandWorld::get_instance();
-    if (!(terrain_action_flags[enum2i(action)] & FAF_NO_DROP)) {
+    if (!TerrainType::has(action, TerrainAction::NO_DROP)) {
         const auto &old_terrain = terrains.get_terrain(old_terrain_id);
         const auto &new_terrain = terrains.get_terrain(new_terrain_id);
         auto found = false;
@@ -780,7 +767,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
         }
     }
 
-    if (terrain_action_flags[enum2i(action)] & FAF_CRASH_GLASS) {
+    if (TerrainType::has(action, TerrainAction::CRASH_GLASS)) {
         const auto &old_terrain = terrains.get_terrain(old_terrain_id);
         if (old_terrain.flags.has(TerrainCharacteristics::GLASS) && world.character_dungeon) {
             project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor.dun_level, 100) / 4, AttributeType::SHARDS,
@@ -1030,11 +1017,6 @@ void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type g
 {
     Grid *const g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
     place_grid(player_ptr, g_ptr, gb_type);
-}
-
-void set_cave_feat(FloorType *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx)
-{
-    floor_ptr->grid_array[y][x].feat = feature_idx;
 }
 
 /*!

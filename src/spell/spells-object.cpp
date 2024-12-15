@@ -32,10 +32,10 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
-#include "system/floor-type-definition.h"
+#include "system/baseitem/baseitem-key.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
@@ -162,7 +162,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
         }
 
         if (known) {
-            object_aware(player_ptr, &*item);
+            object_aware(player_ptr, *item);
             item->mark_as_known();
         }
 

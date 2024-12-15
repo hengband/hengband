@@ -11,6 +11,7 @@
 #include "object-enchant/tr-types.h"
 #include "perception/object-perception.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -18,7 +19,7 @@
 #ifdef JP
 #else
 #include "object/tval-types.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
 #endif
 #include <sstream>
 

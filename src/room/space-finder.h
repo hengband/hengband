@@ -1,7 +1,8 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/point-2d.h"
+#include <optional>
 
 class DungeonData;
 class PlayerType;
-bool find_space(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y, POSITION *x, POSITION height, POSITION width);
+std::optional<Pos2D> find_space(PlayerType *player_ptr, DungeonData *dd_ptr, int height, int width);

@@ -3,7 +3,8 @@
 #include "locale/language-switcher.h"
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-sex.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
@@ -36,14 +37,14 @@ lore_msg::lore_msg(std::string_view msg, byte color)
 {
 }
 
-lore_type::lore_type(MonraceId r_idx, monster_lore_mode mode)
-    : r_idx(r_idx)
+lore_type::lore_type(MonraceId monrace_id, monster_lore_mode mode)
+    : monrace_id(monrace_id)
     , mode(mode)
     , msex(MonsterSex::NONE)
     , method(RaceBlowMethodType::NONE)
 {
     this->nightmare = ironman_nightmare && (mode != MONSTER_LORE_DEBUG);
-    this->r_ptr = &monraces_info[r_idx];
+    this->r_ptr = &MonraceList::get_instance().get_monrace(monrace_id);
     this->speed = this->nightmare ? this->r_ptr->speed + 5 : this->r_ptr->speed;
     this->drop_gold = this->r_ptr->r_drop_gold;
     this->drop_item = this->r_ptr->r_drop_item;
@@ -65,12 +66,12 @@ bool lore_type::has_reinforce() const
 
 bool lore_type::is_details_known() const
 {
-    return MonraceList::get_instance().get_monrace(this->r_idx).is_details_known();
+    return MonraceList::get_instance().get_monrace(this->monrace_id).is_details_known();
 }
 
 bool lore_type::is_blow_damage_known(int num_blow) const
 {
-    return MonraceList::get_instance().get_monrace(this->r_idx).is_blow_damage_known(num_blow);
+    return MonraceList::get_instance().get_monrace(this->monrace_id).is_blow_damage_known(num_blow);
 }
 
 std::vector<lore_msg> lore_type::build_speed_description() const

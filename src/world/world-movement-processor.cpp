@@ -10,9 +10,10 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "system/angband-system.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
-#include "system/monster-race-info.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-record.h"
+#include "system/floor/floor-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/enum-range.h"
@@ -100,7 +101,7 @@ void execute_recall(PlayerType *player_ptr)
         exe_write_diary(floor, DiaryKind::RECALL, floor.dun_level);
     }
 
-    floor.dun_level = max_dlv[floor.dungeon_idx];
+    floor.dun_level = DungeonRecords::get_instance().get_record(floor.dungeon_idx).get_max_level();
     if (floor.dun_level < 1) {
         floor.dun_level = 1;
     }

@@ -6,7 +6,8 @@
 #include "monster/monster-status.h"
 #include "system/angband-system.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/term-color-types.h"
 #include "tracking/lore-tracker.h"
@@ -42,6 +43,16 @@ bool MonsterEntity::check_sub_alignments(const byte sub_align1, const byte sub_a
     auto this_good = any_bits(sub_align1, SUB_ALIGN_GOOD);
     this_good &= any_bits(sub_align2, SUB_ALIGN_EVIL);
     return this_good;
+}
+
+void MonsterEntity::wipe()
+{
+    *this = {};
+}
+
+MonsterEntity MonsterEntity::clone() const
+{
+    return *this;
 }
 
 bool MonsterEntity::is_friendly() const
@@ -164,17 +175,17 @@ MonraceId MonsterEntity::get_real_monrace_id() const
  */
 MonraceDefinition &MonsterEntity::get_real_monrace() const
 {
-    return monraces_info[this->get_real_monrace_id()];
+    return MonraceList::get_instance().get_monrace(this->get_real_monrace_id());
 }
 
 MonraceDefinition &MonsterEntity::get_appearance_monrace() const
 {
-    return monraces_info[this->ap_r_idx];
+    return MonraceList::get_instance().get_monrace(this->ap_r_idx);
 }
 
 MonraceDefinition &MonsterEntity::get_monrace() const
 {
-    return monraces_info[this->r_idx];
+    return MonraceList::get_instance().get_monrace(this->r_idx);
 }
 
 short MonsterEntity::get_remaining_sleep() const
@@ -417,6 +428,12 @@ void MonsterEntity::set_individual_speed(bool force_fixed_speed)
     }
 
     this->mspeed = speed;
+}
+
+void MonsterEntity::set_position(const Pos2D &pos)
+{
+    this->fy = pos.y;
+    this->fx = pos.x;
 }
 
 /*!

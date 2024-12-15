@@ -5,13 +5,6 @@
 #include <vector>
 
 /*** Terrain feature variables ***/
-extern FEAT_IDX feat_none;
-extern FEAT_IDX feat_floor;
-extern FEAT_IDX feat_rune_protection;
-extern FEAT_IDX feat_rune_explosion;
-extern FEAT_IDX feat_mirror;
-extern FEAT_IDX feat_up_stair;
-extern FEAT_IDX feat_down_stair;
 extern FEAT_IDX feat_entrance;
 extern FEAT_IDX feat_trap_open;
 extern FEAT_IDX feat_trap_armageddon;
@@ -64,7 +57,6 @@ extern FEAT_IDX feat_wall_type[100];
 
 class FloorType;
 class PlayerType;
-bool is_ascii_graphics(char x);
 FEAT_IDX feat_locked_door_random(int door_type);
 FEAT_IDX feat_jammed_door_random(int door_type);
 void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat);

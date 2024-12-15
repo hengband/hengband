@@ -11,11 +11,11 @@
 #include "main/sound-of-music.h"
 #include "player-status/player-energy.h"
 #include "player/player-move.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -118,7 +118,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
         }
     }
 
-    if (is_hidden_door(player_ptr, grid) && one_in_(4)) {
+    if (grid.is_hidden_door() && one_in_(4)) {
         search(player_ptr);
     }
 

@@ -30,15 +30,19 @@
 #include "sv-definition/sv-scroll-types.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "system/services/baseitem-monrace-service.h"
 #include "system/system-variables.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -282,12 +286,13 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
     auto dump_item = 0;
     auto dump_gold = 0;
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto &baseitems = BaseitemList::get_instance();
+    const auto &monraces = MonraceList::get_instance();
     for (auto i = 0; i < drop_numbers; i++) {
         ItemEntity item;
         if (md_ptr->do_gold && (!md_ptr->do_item || one_in_(2))) {
-            const auto offset = baseitems.lookup_creeping_coin_drop_offset(md_ptr->m_ptr->r_idx);
-            item = floor.make_gold(offset);
+            const auto &monrace = monraces.get_monrace(md_ptr->m_ptr->r_idx);
+            const auto bi_key = BaseitemMonraceService::lookup_fixed_gold_drop(monrace.drop_flags);
+            item = floor.make_gold(bi_key);
             dump_gold++;
         } else {
             if (!make_object(player_ptr, &item, md_ptr->mo_mode)) {

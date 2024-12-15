@@ -14,7 +14,6 @@
 #include "save/save.h"
 #include "core/object-compressor.h"
 #include "dungeon/quest.h"
-#include "floor/floor-town.h"
 #include "floor/wild.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
@@ -33,10 +32,13 @@
 #include "store/store-util.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
-#include "system/floor-type-definition.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
+#include "system/floor/floor-info.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/enum-converter.h"
@@ -77,7 +79,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_byte(H_VER_PATCH);
     wr_byte(H_VER_EXTRA);
 
-    byte tmp8u = (byte)Rand_external(256);
+    auto tmp8u = static_cast<uint8_t>(Rand_external(256));
     wr_byte(tmp8u);
     v_stamp = 0L;
     x_stamp = 0L;
@@ -106,10 +108,10 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_options();
     wr_message_history();
 
-    uint16_t tmp16u = static_cast<uint16_t>(monraces_info.size());
+    uint16_t tmp16u = static_cast<uint16_t>(MonraceList::get_instance().size());
     wr_u16b(tmp16u);
-    for (auto r_idx = 0; r_idx < tmp16u; r_idx++) {
-        wr_lore(i2enum<MonraceId>(r_idx));
+    for (auto monrace_id = 0; monrace_id < tmp16u; monrace_id++) {
+        wr_lore(i2enum<MonraceId>(monrace_id));
     }
 
     tmp16u = static_cast<uint16_t>(BaseitemList::get_instance().size());
@@ -216,7 +218,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_u16b(tmp16u);
     for (size_t i = 1; i < towns_info.size(); i++) {
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            wr_store(&towns_info[i].stores[sst]);
+            wr_store(&towns_info[i].get_store(sst));
         }
     }
 

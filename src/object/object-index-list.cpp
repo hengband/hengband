@@ -1,5 +1,5 @@
 #include "object/object-index-list.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 
 #include <algorithm>

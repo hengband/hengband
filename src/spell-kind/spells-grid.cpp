@@ -7,13 +7,14 @@
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/stair.h"
 #include "system/angband-system.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -24,15 +25,18 @@
  */
 bool create_rune_protection_one(PlayerType *player_ptr)
 {
-    if (!cave_clean_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    if (!cave_clean_bold(&floor, p_pos.y, p_pos.x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].info |= CAVE_OBJECT;
-    player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].mimic = feat_rune_protection;
-    note_spot(player_ptr, player_ptr->y, player_ptr->x);
-    lite_spot(player_ptr, player_ptr->y, player_ptr->x);
+    auto &grid = floor.get_grid(p_pos);
+    grid.info |= CAVE_OBJECT;
+    grid.set_mimic_terrain_id(TerrainTag::RUNE_PROTECTION);
+    note_spot(player_ptr, p_pos.y, p_pos.x);
+    lite_spot(player_ptr, p_pos.y, p_pos.x);
     return true;
 }
 
@@ -46,16 +50,18 @@ bool create_rune_protection_one(PlayerType *player_ptr)
  */
 bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!cave_clean_bold(floor_ptr, y, x)) {
+    const Pos2D pos(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (!cave_clean_bold(&floor, pos.y, pos.x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
-    floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
-    floor_ptr->grid_array[y][x].mimic = feat_rune_explosion;
-    note_spot(player_ptr, y, x);
-    lite_spot(player_ptr, y, x);
+    auto &grid = floor.get_grid(pos);
+    grid.info |= CAVE_OBJECT;
+    grid.set_mimic_terrain_id(TerrainTag::RUNE_EXPLOSION);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
     return true;
 }
 
@@ -65,30 +71,22 @@ bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void stair_creation(PlayerType *player_ptr)
 {
-    bool up = true;
-    if (ironman_downward) {
-        up = false;
-    }
-
-    bool down = true;
+    auto up = !ironman_downward;
     auto &floor = *player_ptr->current_floor_ptr;
-    if (inside_quest(floor.get_quest_id()) || (floor.dun_level >= floor.get_dungeon_definition().maxdepth)) {
-        down = false;
-    }
-
+    auto down = !inside_quest(floor.get_quest_id()) && (floor.dun_level < floor.get_dungeon_definition().maxdepth);
     if (!floor.dun_level || (!up && !down) || (floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) || floor.inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         msg_print(_("効果がありません！", "There is no effect!"));
         return;
     }
 
-    if (!cave_valid_bold(&floor, player_ptr->y, player_ptr->x)) {
+    const auto p_pos = player_ptr->get_position();
+    if (!floor.is_grid_changeable(p_pos)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return;
     }
 
     delete_all_items_from_floor(player_ptr, player_ptr->y, player_ptr->x);
-    saved_floor_type *sf_ptr;
-    sf_ptr = get_sf_ptr(player_ptr->floor_id);
+    auto *sf_ptr = get_sf_ptr(player_ptr->floor_id);
     if (!sf_ptr) {
         player_ptr->floor_id = get_unused_floor_id(player_ptr);
         sf_ptr = get_sf_ptr(player_ptr->floor_id);
@@ -102,7 +100,7 @@ void stair_creation(PlayerType *player_ptr)
         }
     }
 
-    FLOOR_IDX dest_floor_id = 0;
+    short dest_floor_id = 0;
     if (up) {
         if (sf_ptr->upper_floor_id) {
             dest_floor_id = sf_ptr->upper_floor_id;
@@ -114,21 +112,23 @@ void stair_creation(PlayerType *player_ptr)
     }
 
     if (dest_floor_id) {
-        for (POSITION y = 0; y < floor.height; y++) {
-            for (POSITION x = 0; x < floor.width; x++) {
-                auto *g_ptr = &floor.grid_array[y][x];
-                if (!g_ptr->special) {
+        for (auto y = 0; y < floor.height; y++) {
+            for (auto x = 0; x < floor.width; x++) {
+                auto &grid = floor.get_grid({ y, x });
+                if (!grid.special) {
                     continue;
                 }
-                if (feat_uses_special(g_ptr->feat)) {
+
+                if (feat_uses_special(grid.feat)) {
                     continue;
                 }
-                if (g_ptr->special != dest_floor_id) {
+
+                if (grid.special != dest_floor_id) {
                     continue;
                 }
 
                 /* Remove old stairs */
-                g_ptr->special = 0;
+                grid.special = 0;
                 cave_set_feat(player_ptr, y, x, rand_choice(feat_ground_type));
             }
         }
@@ -141,18 +141,24 @@ void stair_creation(PlayerType *player_ptr)
         }
     }
 
-    saved_floor_type *dest_sf_ptr;
-    dest_sf_ptr = get_sf_ptr(dest_floor_id);
+    const auto *dest_sf_ptr = get_sf_ptr(dest_floor_id);
     const auto &dungeon = floor.get_dungeon_definition();
+    const auto &terrains = TerrainList::get_instance();
     if (up) {
-        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor.dun_level - 2)) ? dungeon.convert_terrain_id(feat_up_stair, TerrainCharacteristics::SHAFT)
-                                                                                         : feat_up_stair);
+        const auto is_shallow = dest_sf_ptr->dun_level <= floor.dun_level - 2;
+        const auto terrain_up_stair = terrains.get_terrain_id(TerrainTag::UP_STAIR);
+        const auto should_convert = (dest_sf_ptr->last_visit > 0) && is_shallow;
+        const auto converted_terrain_id = dungeon.convert_terrain_id(terrain_up_stair, TerrainCharacteristics::SHAFT);
+        const auto terrain_id = should_convert ? converted_terrain_id : terrain_up_stair;
+        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x, terrain_id);
     } else {
-        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x,
-            (dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor.dun_level + 2)) ? dungeon.convert_terrain_id(feat_down_stair, TerrainCharacteristics::SHAFT)
-                                                                                         : feat_down_stair);
+        const auto is_deep = dest_sf_ptr->dun_level >= floor.dun_level + 2;
+        const auto terrain_down_stair = terrains.get_terrain_id(TerrainTag::DOWN_STAIR);
+        const auto should_convert = (dest_sf_ptr->last_visit > 0) && is_deep;
+        const auto converted_terrain_id = dungeon.convert_terrain_id(terrain_down_stair, TerrainCharacteristics::SHAFT);
+        const auto terrain_id = should_convert ? converted_terrain_id : terrain_down_stair;
+        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x, terrain_id);
     }
 
-    floor.grid_array[player_ptr->y][player_ptr->x].special = dest_floor_id;
+    floor.get_grid(player_ptr->get_position()).special = dest_floor_id;
 }

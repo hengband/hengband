@@ -3,7 +3,6 @@
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
-#include "floor/floor-town.h"
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
@@ -25,15 +24,18 @@
 #include "room/rooms-vault.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
+#include "system/floor/town-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "window/main-window-util.h"
-#include "world/world-object.h"
 #include "world/world.h"
 
 // PARSE_ERROR_MAXが既にあり扱い辛いのでここでconst宣言.
@@ -53,23 +55,22 @@ qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xm
 /*!
  * @brief フロアの所定のマスにオブジェクトを配置する
  * Place the object j_ptr to a grid
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @param j_ptr オブジェクト構造体の参照ポインタ
+ * @param floor 現在フロアへの参照
+ * @param item アイテムの参照
  * @param y 配置先Y座標
  * @param x 配置先X座標
  * @return エラーコード
  */
-static void drop_here(FloorType *floor_ptr, ItemEntity *j_ptr, POSITION y, POSITION x)
+static void drop_here(FloorType &floor, ItemEntity &&item, POSITION y, POSITION x)
 {
-    OBJECT_IDX o_idx = o_pop(floor_ptr);
-    ItemEntity *o_ptr;
-    o_ptr = &floor_ptr->o_list[o_idx];
-    o_ptr->copy_from(j_ptr);
-    o_ptr->iy = y;
-    o_ptr->ix = x;
-    o_ptr->held_m_idx = 0;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    g_ptr->o_idx_list.add(floor_ptr, o_idx);
+    const auto item_idx = floor.pop_empty_index_item();
+    auto &dropped_item = floor.o_list[item_idx];
+    dropped_item = std::move(item);
+    dropped_item.iy = y;
+    dropped_item.ix = x;
+    dropped_item.held_m_idx = 0;
+    auto *g_ptr = &floor.grid_array[y][x];
+    g_ptr->o_idx_list.add(&floor, item_idx);
 }
 
 static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const FixedArtifactId a_idx)
@@ -84,7 +85,7 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
     }
 
     ItemEntity item({ ItemKindType::SCROLL, SV_SCROLL_ACQUIREMENT });
-    drop_here(player_ptr->current_floor_ptr, &item, *qtwg_ptr->y, *qtwg_ptr->x);
+    drop_here(*player_ptr->current_floor_ptr, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
 static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
@@ -171,12 +172,11 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
         } else if (item_index) {
             ItemEntity item(item_index);
             if (item.bi_key.tval() == ItemKindType::GOLD) {
-                const auto offset = BaseitemList::get_instance().lookup_gold_offset(item_index);
-                item = floor.make_gold(offset);
+                item = floor.make_gold(item.bi_key);
             }
 
             ItemMagicApplier(player_ptr, &item, floor.base_level, AM_NO_FIXED_ART | AM_GOOD).execute();
-            drop_here(&floor, &item, *qtwg_ptr->y, *qtwg_ptr->x);
+            drop_here(floor, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
         }
 
         generate_artifact(player_ptr, qtwg_ptr, letter[idx].artifact);
@@ -206,7 +206,7 @@ static bool parse_qtw_QQ(QuestType *q_ptr, char **zz, int num)
     q_ptr->r_idx = i2enum<MonraceId>(atoi(zz[7]));
     const auto fa_id = i2enum<FixedArtifactId>(atoi(zz[8]));
     q_ptr->reward_fa_id = fa_id;
-    q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
+    q_ptr->dungeon = std::atoi(zz[9]);
 
     if (num > 10) {
         q_ptr->flags = atoi(zz[10]);

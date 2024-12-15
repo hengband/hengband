@@ -144,8 +144,6 @@
  */
 LPCWSTR win_term_name[] = { L"Hengband", L"Term-1", L"Term-2", L"Term-3", L"Term-4", L"Term-5", L"Term-6", L"Term-7" };
 
-#define MAX_TERM_DATA 8 //!< Maximum number of windows
-
 static term_data data[MAX_TERM_DATA]; //!< An array of term_data's
 static bool is_main_term(term_data *td)
 {
@@ -191,7 +189,7 @@ static HICON hIcon;
 
 /* bg */
 bg_mode current_bg_mode = bg_mode::BG_NONE;
-#define DEFAULT_BG_FILENAME "bg.bmp"
+constexpr auto DEFAULT_BG_FILENAME = "bg.bmp";
 std::filesystem::path wallpaper_path = ""; //!< 壁紙ファイル名。
 
 /*
@@ -446,7 +444,7 @@ static void save_prefs(void)
 /*!
  * @brief callback for EnumDisplayMonitors API
  */
-BOOL CALLBACK monitor_enum_procedure([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] HDC hdcMon, [[maybe_unused]] LPRECT lpMon, LPARAM dwDate)
+static BOOL CALLBACK monitor_enum_procedure([[maybe_unused]] HMONITOR hMon, [[maybe_unused]] HDC hdcMon, [[maybe_unused]] LPRECT lpMon, LPARAM dwDate)
 {
     bool *result = (bool *)dwDate;
     *result = true;
@@ -737,7 +735,7 @@ static void term_data_redraw(term_data *td)
 /*!
  * @brief termの反転色表示
  */
-void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
+static void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 {
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
     int tx = td->size_ow1 + x * td->tile_wid;
@@ -1645,7 +1643,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             break;
         }
 
-        quit(nullptr);
+        quit("");
         break;
     }
     case IDM_FILE_SCORE: {
@@ -2243,7 +2241,7 @@ static bool handle_window_resize(term_data *td, UINT uMsg, WPARAM wParam, LPARAM
 /*!
  * @brief メインウインドウ用ウインドウプロシージャ
  */
-LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
 
@@ -2422,7 +2420,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     }
     case WM_CLOSE: {
         if (!game_in_progress || !AngbandWorld::get_instance().character_generated) {
-            quit(nullptr);
+            quit("");
             return 0;
         }
 
@@ -2440,7 +2438,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     }
     case WM_QUERYENDSESSION: {
         if (!game_in_progress || !AngbandWorld::get_instance().character_generated) {
-            quit(nullptr);
+            quit("");
             return 0;
         }
 
@@ -2454,11 +2452,11 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         signals_ignore_tstp();
         p_ptr->died_from = _("(緊急セーブ)", "(panic save)");
         (void)save_player(p_ptr, SaveType::CLOSE_GAME);
-        quit(nullptr);
+        quit("");
         return 0;
     }
     case WM_QUIT: {
-        quit(nullptr);
+        quit("");
         return 0;
     }
     case WM_COMMAND: {
@@ -2512,7 +2510,7 @@ LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 /*!
  * @brief サブウインドウ用ウインドウプロシージャ
  */
-LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+static LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     term_data *td = (term_data *)GetWindowLong(hWnd, 0);
     if (handle_window_resize(td, uMsg, wParam, lParam)) {
@@ -2584,20 +2582,20 @@ LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 /*!
  * @brief Display warning message (see "z-util.c")
  */
-static void hook_plog(concptr str)
+static void hook_plog(std::string_view str)
 {
-    if (str) {
-        MessageBoxW(data[0].w, to_wchar(str).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
+    if (!str.empty()) {
+        MessageBoxW(data[0].w, to_wchar(str.data()).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
     }
 }
 
 /*!
  * @brief Display error message and quit (see "z-util.c")
  */
-static void hook_quit(concptr str)
+static void hook_quit(std::string_view str)
 {
-    if (str) {
-        MessageBoxW(data[0].w, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+    if (!str.empty()) {
+        MessageBoxW(data[0].w, to_wchar(str.data()).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
     }
 
     save_prefs();
@@ -2622,7 +2620,7 @@ static void hook_quit(concptr str)
         DestroyIcon(hIcon);
     }
 
-    exit(0);
+    std::exit(0);
 }
 
 /*!
@@ -2725,7 +2723,7 @@ void create_debug_spoiler(void)
         break;
     }
 
-    quit(nullptr);
+    quit("");
 }
 
 /*!
@@ -2746,7 +2744,7 @@ static void register_wndclass(void)
     wc.lpszClassName = AppName;
 
     if (!RegisterClassW(&wc)) {
-        exit(1);
+        std::exit(1);
     }
 
     wc.lpfnWndProc = AngbandListProc;
@@ -2754,14 +2752,14 @@ static void register_wndclass(void)
     wc.lpszClassName = AngList;
 
     if (!RegisterClassW(&wc)) {
-        exit(2);
+        std::exit(2);
     }
 }
 
 /*!
  * @brief ゲームのメインルーチン
  */
-int WINAPI game_main(_In_ HINSTANCE hInst)
+static int WINAPI game_main(_In_ HINSTANCE hInst)
 {
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;
@@ -2776,14 +2774,14 @@ int WINAPI game_main(_In_ HINSTANCE hInst)
     register_wndclass();
 
     // before term_data initialize
-    plog_aux = [](concptr str) {
-        if (str) {
-            MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
+    plog_aux = [](std::string_view str) {
+        if (!str.empty()) {
+            MessageBoxW(NULL, to_wchar(str.data()).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
         }
     };
-    quit_aux = [](concptr str) {
-        if (str) {
-            MessageBoxW(NULL, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+    quit_aux = [](std::string_view str) {
+        if (!str.empty()) {
+            MessageBoxW(NULL, to_wchar(str.data()).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
         }
 
         UnregisterClassW(AppName, hInstance);
@@ -2847,8 +2845,10 @@ int WINAPI game_main(_In_ HINSTANCE hInst)
         play_game(p_ptr, false, false);
     }
 
-    quit(nullptr);
+    quit("");
+#ifdef WIN_DEBUG
     return 0;
+#endif
 }
 
 /*!

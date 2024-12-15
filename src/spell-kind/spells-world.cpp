@@ -9,7 +9,6 @@
 #include "core/asking-player.h"
 #include "dungeon/quest-completion-checker.h"
 #include "floor/floor-mode-changer.h"
-#include "floor/floor-town.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
@@ -24,11 +23,15 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "system/angband-system.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/dungeon-record.h"
+#include "system/floor/floor-info.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/grid-type-definition.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
@@ -359,44 +362,48 @@ void reserve_alter_reality(PlayerType *player_ptr, TIME_EFFECT turns)
  * @param x コンソールX座標
  * @return 選択されたダンジョンID
  */
-static DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
+static int choose_dungeon(concptr note, POSITION y, POSITION x)
 {
-    DUNGEON_IDX select_dungeon;
+    const auto &dungeons = DungeonList::get_instance();
+    const auto &dungeon_records = DungeonRecords::get_instance();
+    int select_dungeon;
     if (lite_town || vanilla_town || ironman_downward) {
-        if (max_dlv[DUNGEON_ANGBAND]) {
+        if (dungeon_records.get_record(DUNGEON_ANGBAND).has_entered()) {
             return DUNGEON_ANGBAND;
-        } else {
-            msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), dungeons_info[DUNGEON_ANGBAND].name.data());
-            msg_print(nullptr);
-            return 0;
         }
+
+        msg_format(_("まだ%sに入ったことはない。", "You haven't entered %s yet."), dungeons.get_dungeon(DUNGEON_ANGBAND).name.data());
+        msg_print(nullptr);
+        return 0;
     }
 
-    std::vector<DUNGEON_IDX> dun;
+    std::vector<int> dun;
 
     screen_save();
-    for (const auto &dungeon : dungeons_info) {
+    for (const auto &[dungeon_id, dungeon] : dungeons) {
         auto is_conquered = false;
         if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
             continue;
         }
 
-        if (!max_dlv[dungeon.idx]) {
+        const auto &dungeon_record = dungeon_records.get_record(dungeon_id);
+        if (!dungeon_record.has_entered()) {
             continue;
         }
 
+        const auto max_level = dungeon_record.get_max_level();
         if (dungeon.has_guardian()) {
             if (dungeon.get_guardian().max_num == 0) {
                 is_conquered = true;
             }
-        } else if (max_dlv[dungeon.idx] == dungeon.maxdepth) {
+        } else if (max_level == dungeon.maxdepth) {
             is_conquered = true;
         }
 
         constexpr auto fmt = _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d");
-        const auto buf = format(fmt, static_cast<char>('a' + dun.size()), is_conquered ? '!' : ' ', dungeon.name.data(), (int)max_dlv[dungeon.idx]);
+        const auto buf = format(fmt, static_cast<char>('a' + dun.size()), is_conquered ? '!' : ' ', dungeon.name.data(), max_level);
         prt(buf, y + dun.size(), x);
-        dun.push_back(dungeon.idx);
+        dun.push_back(dungeon_id);
     }
 
     if (dun.empty()) {
@@ -438,13 +445,14 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
         return true;
     }
 
-    bool is_special_floor = floor.is_in_underground();
-    is_special_floor &= max_dlv[floor.dungeon_idx] > floor.dun_level;
+    auto &dungeon_record = DungeonRecords::get_instance().get_record(floor.dungeon_idx);
+    auto is_special_floor = floor.is_in_underground();
+    is_special_floor &= dungeon_record.get_max_level() > floor.dun_level;
     is_special_floor &= !floor.is_in_quest();
     is_special_floor &= !player_ptr->word_recall;
     if (is_special_floor) {
         if (input_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? "))) {
-            max_dlv[floor.dungeon_idx] = floor.dun_level;
+            dungeon_record.set_max_level(floor.dun_level);
             if (record_maxdepth) {
                 exe_write_diary(floor, DiaryKind::TRUMP, floor.dungeon_idx, _("帰還のときに", "when recalled from dungeon"));
             }
@@ -460,11 +468,11 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
     }
 
     if (!floor.is_in_underground()) {
-        DUNGEON_IDX select_dungeon;
-        select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
-        if (!select_dungeon) {
+        const auto select_dungeon = choose_dungeon(_("に帰還", "recall"), 2, 14);
+        if (select_dungeon == 0) {
             return false;
         }
+
         player_ptr->recall_dungeon = select_dungeon;
     }
 
@@ -476,12 +484,12 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
 
 bool free_level_recall(PlayerType *player_ptr)
 {
-    DUNGEON_IDX select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
-    if (!select_dungeon) {
+    const auto select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
+    if (select_dungeon == 0) {
         return false;
     }
 
-    const auto &dungeon = dungeons_info[select_dungeon];
+    const auto &dungeon = DungeonList::get_instance().get_dungeon(select_dungeon);
     auto max_depth = dungeon.maxdepth;
     if (select_dungeon == DUNGEON_ANGBAND) {
         const auto &quests = QuestList::get_instance();
@@ -500,8 +508,10 @@ bool free_level_recall(PlayerType *player_ptr)
 
     player_ptr->word_recall = 1;
     player_ptr->recall_dungeon = select_dungeon;
-    max_dlv[player_ptr->recall_dungeon] = ((amt > dungeon.maxdepth) ? dungeon.maxdepth
-                                                                    : ((amt < dungeon.mindepth) ? dungeon.mindepth : amt));
+    const auto dun_level = (amt > dungeon.maxdepth) ? dungeon.maxdepth : (amt < dungeon.mindepth) ? dungeon.mindepth
+                                                                                                  : amt;
+    auto &dungeon_record = DungeonRecords::get_instance().get_record(player_ptr->recall_dungeon);
+    dungeon_record.set_max_level(dun_level);
     if (record_maxdepth) {
         exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
     }
@@ -518,33 +528,35 @@ bool free_level_recall(PlayerType *player_ptr)
  */
 bool reset_recall(PlayerType *player_ptr)
 {
-    auto select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
+    const auto select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
     if (ironman_downward) {
         msg_print(_("何も起こらなかった。", "Nothing happens."));
         return true;
     }
 
-    if (!select_dungeon) {
+    if (select_dungeon == 0) {
         return false;
     }
 
     constexpr auto prompt = _("何階にセットしますか？", "Reset to which level?");
-    const auto min_level = dungeons_info[select_dungeon].mindepth;
-    const auto max_level = max_dlv[select_dungeon];
+    const auto &dungeon = DungeonList::get_instance().get_dungeon(select_dungeon);
+    const auto min_level = dungeon.mindepth;
+    auto &dungeon_record = DungeonRecords::get_instance().get_record(select_dungeon);
+    const auto max_level = dungeon_record.get_max_level();
     const auto reset_level = input_numerics(prompt, min_level, max_level, max_level);
     if (!reset_level) {
         return false;
     }
 
-    max_dlv[select_dungeon] = *reset_level;
+    dungeon_record.set_max_level(*reset_level);
     if (record_maxdepth) {
         constexpr auto note = _("フロア・リセットで", "using a scroll of reset recall");
         exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::TRUMP, select_dungeon, note);
     }
 #ifdef JP
-    msg_format("%sの帰還レベルを %d 階にセット。", dungeons_info[select_dungeon].name.data(), *reset_level);
+    msg_format("%sの帰還レベルを %d 階にセット。", dungeon.name.data(), *reset_level);
 #else
-    msg_format("Recall depth set to level %d (%d').", *reset_level, *reset_level * 50);
+    msg_format("Recall depth of %s set to level %d (%d').", dungeon.name.data(), *reset_level, *reset_level * 50);
 #endif
     return true;
 }

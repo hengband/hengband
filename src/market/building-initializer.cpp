@@ -1,5 +1,4 @@
 #include "market/building-initializer.h"
-#include "floor/floor-town.h"
 #include "io/files-util.h"
 #include "player-info/class-types.h"
 #include "realm/realm-types.h"
@@ -8,8 +7,11 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
 #include "util/angband-files.h"
 #include <filesystem>
@@ -48,34 +50,34 @@ void init_towns()
 {
     const auto &baseitems = BaseitemList::get_instance();
     const auto town_numbers = count_town_numbers();
-    towns_info = std::vector<town_type>(town_numbers);
+    towns_info = std::vector<TownInfo>(town_numbers);
     for (auto i = 1; i < town_numbers; i++) {
         auto &town = towns_info[i];
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            auto *store_ptr = &town.stores[sst];
+            auto &store = town.emplace(sst);
             if ((i > 1) && (sst == StoreSaleType::MUSEUM || sst == StoreSaleType::HOME)) {
                 continue;
             }
 
-            store_ptr->stock_size = store_get_stock_max(sst);
+            store.stock_size = store_get_stock_max(sst);
             std::vector<std::unique_ptr<ItemEntity>> stock;
-            for (auto j = 0; j < store_ptr->stock_size; j++) {
+            for (auto j = 0; j < store.stock_size; j++) {
                 stock.push_back(std::make_unique<ItemEntity>());
             }
 
-            store_ptr->stock = std::move(stock);
+            store.stock = std::move(stock);
             if ((sst == StoreSaleType::BLACK) || (sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM)) {
                 continue;
             }
 
             for (const auto &bi_key : store_regular_sale_table.at(sst)) {
                 const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
-                store_ptr->regular.push_back(bi_id);
+                store.regular.push_back(bi_id);
             }
 
             for (const auto &bi_key : store_sale_table.at(sst)) {
                 const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
-                store_ptr->table.push_back(bi_id);
+                store.table.push_back(bi_id);
             }
         }
     }

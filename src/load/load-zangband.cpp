@@ -19,10 +19,12 @@
 #include "realm/realm-types.h"
 #include "spell/spells-status.h"
 #include "system/building-type-definition.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-record.h"
+#include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "world/world.h"
@@ -149,7 +151,7 @@ void set_zangband_reflection(PlayerType *player_ptr)
 
 void rd_zangband_dungeon()
 {
-    max_dlv[DUNGEON_ANGBAND] = rd_s16b();
+    DungeonRecords::get_instance().get_record(DUNGEON_ANGBAND).set_max_level(rd_s16b());
 }
 
 void set_zangband_game_turns(PlayerType *player_ptr)

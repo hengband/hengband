@@ -172,6 +172,7 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-map.h"
+#include <string_view>
 
 #ifdef USE_GCU
 
@@ -214,9 +215,6 @@ struct term_data {
     rect_t r;
     WINDOW *win;
 };
-
-/* Max number of windows on screen */
-#define MAX_TERM_DATA 8
 
 /* Information about our windows */
 static term_data data[MAX_TERM_DATA];
@@ -1216,7 +1214,7 @@ static int _parse_size_list(const char *arg, int sizes[], int max)
     return i;
 }
 
-static void hook_quit(concptr str)
+static void hook_quit(std::string_view str)
 {
     /* Unused */
     (void)str;

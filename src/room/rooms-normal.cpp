@@ -4,14 +4,13 @@
 #include "grid/door.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
-#include "grid/stair.h"
 #include "grid/trap.h"
 #include "room/door-definition.h"
 #include "room/rooms-builder.h"
 #include "room/space-finder.h"
 #include "room/vault-builder.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 
@@ -30,18 +29,15 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
     auto height = randint1(4) + randint1(3) + 1;
     auto width = randint1(11) + randint1(11) + 1;
 
-    /* Find and reserve some space in the dungeon.  Get center of room. */
-    int yval;
-    int xval;
-    auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, height + 2, width + 2);
-    if (!is_pos_found) {
+    auto center = find_space(player_ptr, dd_ptr, height + 2, width + 2);
+    if (!center) {
         /* Limit to the minimum room size, and retry */
         width = 3;
         height = 3;
 
         /* Find and reserve some space in the dungeon.  Get center of room. */
-        is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, height + 2, width + 2);
-        if (!is_pos_found) {
+        center = find_space(player_ptr, dd_ptr, height + 2, width + 2);
+        if (!center) {
             return false;
         }
     }
@@ -50,10 +46,10 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto should_brighten = ((floor.dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Get corner values */
-    const auto top = yval - height / 2;
-    const auto left = xval - width / 2;
-    const auto bottom = yval + (height - 1) / 2;
-    const auto right = xval + (width - 1) / 2;
+    const auto top = center->y - height / 2;
+    const auto left = center->x - width / 2;
+    const auto bottom = center->y + (height - 1) / 2;
+    const auto right = center->x + (width - 1) / 2;
 
     /* Place a full floor under the room */
     for (auto y = top - 1; y <= bottom + 1; y++) {
@@ -139,32 +135,32 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
     if (randint1(100) < 50) {
         /* Horizontal wall */
         for (auto x = left; x <= right; x++) {
-            place_bold(player_ptr, yval, x, GB_INNER);
+            place_bold(player_ptr, center->y, x, GB_INNER);
             if (should_close_curtain) {
-                floor.get_grid({ yval, x }).feat = feat_door[DOOR_CURTAIN].closed;
+                floor.get_grid({ center->y, x }).feat = feat_door[DOOR_CURTAIN].closed;
             }
         }
 
         /* Prevent edge of wall from being tunneled */
-        place_bold(player_ptr, yval, left - 1, GB_SOLID);
-        place_bold(player_ptr, yval, right + 1, GB_SOLID);
+        place_bold(player_ptr, center->y, left - 1, GB_SOLID);
+        place_bold(player_ptr, center->y, right + 1, GB_SOLID);
     } else {
         /* Vertical wall */
         for (auto y = top; y <= bottom; y++) {
-            place_bold(player_ptr, y, xval, GB_INNER);
+            place_bold(player_ptr, y, center->x, GB_INNER);
             if (should_close_curtain) {
-                floor.get_grid({ y, xval }).feat = feat_door[DOOR_CURTAIN].closed;
+                floor.get_grid({ y, center->x }).feat = feat_door[DOOR_CURTAIN].closed;
             }
         }
 
         /* Prevent edge of wall from being tunneled */
-        place_bold(player_ptr, top - 1, xval, GB_SOLID);
-        place_bold(player_ptr, bottom + 1, xval, GB_SOLID);
+        place_bold(player_ptr, top - 1, center->x, GB_SOLID);
+        place_bold(player_ptr, bottom + 1, center->x, GB_SOLID);
     }
 
-    place_random_door(player_ptr, yval, xval, true);
+    place_random_door(player_ptr, center->y, center->x, true);
     if (should_close_curtain) {
-        floor.get_grid({ yval, xval }).feat = feat_door[DOOR_CURTAIN].closed;
+        floor.get_grid(*center).feat = feat_door[DOOR_CURTAIN].closed;
     }
 
     return true;
@@ -176,12 +172,9 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
  */
 bool build_type2(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
-    /* Find and reserve some space in the dungeon.  Get center of room. */
     auto &floor = *player_ptr->current_floor_ptr;
-    int yval;
-    int xval;
-    const auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25);
-    if (!is_pos_found) {
+    const auto center = find_space(player_ptr, dd_ptr, 11, 25);
+    if (!center) {
         return false;
     }
 
@@ -189,16 +182,16 @@ bool build_type2(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto should_brighten = (floor.dun_level <= randint1(25)) && floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS);
 
     /* Determine extents of the first room */
-    auto y1a = yval - randint1(4);
-    auto y2a = yval + randint1(3);
-    auto x1a = xval - randint1(11);
-    auto x2a = xval + randint1(10);
+    auto y1a = center->y - randint1(4);
+    auto y2a = center->y + randint1(3);
+    auto x1a = center->x - randint1(11);
+    auto x2a = center->x + randint1(10);
 
     /* Determine extents of the second room */
-    auto y1b = yval - randint1(3);
-    auto y2b = yval + randint1(4);
-    auto x1b = xval - randint1(10);
-    auto x2b = xval + randint1(11);
+    auto y1b = center->y - randint1(3);
+    auto y2b = center->y + randint1(4);
+    auto x1b = center->x - randint1(10);
+    auto x2b = center->x + randint1(11);
 
     /* Place a full floor for room "a" */
     for (auto y = y1a - 1; y <= y2a + 1; y++) {
@@ -276,12 +269,9 @@ bool build_type2(PlayerType *player_ptr, DungeonData *dd_ptr)
  */
 bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
-    /* Find and reserve some space in the dungeon.  Get center of room. */
     auto &floor = *player_ptr->current_floor_ptr;
-    int yval;
-    int xval;
-    const auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25);
-    if (!is_pos_found) {
+    const auto center = find_space(player_ptr, dd_ptr, 11, 25);
+    if (!center) {
         return false;
     }
 
@@ -300,16 +290,16 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
     auto dx = rand_range(3, 11);
 
     /* Determine extents of the north/south room */
-    auto y1a = yval - dy;
-    auto y2a = yval + dy;
-    auto x1a = xval - wx;
-    auto x2a = xval + wx;
+    auto y1a = center->y - dy;
+    auto y2a = center->y + dy;
+    auto x1a = center->x - wx;
+    auto x2a = center->x + wx;
 
     /* Determine extents of the east/west room */
-    auto y1b = yval - wy;
-    auto y2b = yval + wy;
-    auto x1b = xval - dx;
-    auto x2b = xval + dx;
+    auto y1b = center->y - wy;
+    auto y2b = center->y + wy;
+    auto x1b = center->x - dx;
+    auto x2b = center->x + dx;
 
     /* Place a full floor for room "a" */
     for (auto y = y1a - 1; y <= y2a + 1; y++) {
@@ -396,27 +386,27 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a secret door on the inner room */
         switch (randint0(4)) {
         case 0:
-            place_secret_door(player_ptr, y1b, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1b, center->x, DOOR_DEFAULT);
             break;
         case 1:
-            place_secret_door(player_ptr, y2b, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2b, center->x, DOOR_DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, yval, x1a, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x1a, DOOR_DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, yval, x2a, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x2a, DOOR_DEFAULT);
             break;
         }
 
         /* Place a treasure in the vault */
-        place_object(player_ptr, yval, xval, 0);
+        place_object(player_ptr, center->y, center->x, 0);
 
         /* Let's guard the treasure well */
-        vault_monsters(player_ptr, yval, xval, randint0(2) + 3);
+        vault_monsters(player_ptr, center->y, center->x, randint0(2) + 3);
 
         /* Traps naturally */
-        vault_traps(&floor, yval, xval, 4, 4, randint0(3) + 2);
+        vault_traps(&floor, center->y, center->x, 4, 4, randint0(3) + 2);
 
         break;
     }
@@ -427,7 +417,7 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
         if (one_in_(3)) {
             /* Pinch the east/west sides */
             for (auto y = y1b; y <= y2b; y++) {
-                if (y == yval) {
+                if (y == center->y) {
                     continue;
                 }
 
@@ -437,7 +427,7 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
 
             /* Pinch the north/south sides */
             for (auto x = x1a; x <= x2a; x++) {
-                if (x == xval) {
+                if (x == center->x) {
                     continue;
                 }
 
@@ -451,25 +441,25 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
                                     ? DOOR_CURTAIN
                                     : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
-                place_secret_door(player_ptr, yval, x1a - 1, door_type);
-                place_secret_door(player_ptr, yval, x2a + 1, door_type);
-                place_secret_door(player_ptr, y1b - 1, xval, door_type);
-                place_secret_door(player_ptr, y2b + 1, xval, door_type);
+                place_secret_door(player_ptr, center->y, x1a - 1, door_type);
+                place_secret_door(player_ptr, center->y, x2a + 1, door_type);
+                place_secret_door(player_ptr, y1b - 1, center->x, door_type);
+                place_secret_door(player_ptr, y2b + 1, center->x, door_type);
             }
         }
 
         /* Occasionally put a "plus" in the center */
         else if (one_in_(3)) {
-            place_grid(player_ptr, &floor.get_grid({ yval, xval }), GB_INNER);
-            place_grid(player_ptr, &floor.get_grid({ y1b, xval }), GB_INNER);
-            place_grid(player_ptr, &floor.get_grid({ y2b, xval }), GB_INNER);
-            place_grid(player_ptr, &floor.get_grid({ yval, x1a }), GB_INNER);
-            place_grid(player_ptr, &floor.get_grid({ yval, x2a }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid(*center), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y1b, center->x }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y2b, center->x }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ center->y, x1a }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ center->y, x2a }), GB_INNER);
         }
 
         /* Occasionally put a pillar in the center */
         else if (one_in_(3)) {
-            place_grid(player_ptr, &floor.get_grid({ yval, xval }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid(*center), GB_INNER);
         }
 
         break;
@@ -495,10 +485,8 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
     /* Find and reserve some space in the dungeon.  Get center of room. */
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
-    int yval;
-    int xval;
-    const auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, 11, 25);
-    if (!is_pos_found) {
+    const auto center = find_space(player_ptr, dd_ptr, 11, 25);
+    if (!center) {
         return false;
     }
 
@@ -506,10 +494,10 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto should_brighten = ((floor.dun_level <= randint1(25)) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS));
 
     /* Large room */
-    const auto y1_outer = yval - 4;
-    const auto y2_outer = yval + 4;
-    const auto x1_outer = xval - 11;
-    const auto x2_outer = xval + 11;
+    const auto y1_outer = center->y - 4;
+    const auto y2_outer = center->y + 4;
+    const auto x1_outer = center->x - 11;
+    const auto x2_outer = center->x + 11;
 
     /* Place a full floor under the room */
     for (auto y = y1_outer - 1; y <= y2_outer + 1; y++) {
@@ -555,21 +543,21 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1_inner - 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, center->x, DOOR_DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2_inner + 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, center->x, DOOR_DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, yval, x1_inner - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x1_inner - 1, DOOR_DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, yval, x2_inner + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x2_inner + 1, DOOR_DEFAULT);
             break;
         }
 
         /* Place a monster in the room */
-        vault_monsters(player_ptr, yval, xval, 1);
+        vault_monsters(player_ptr, center->y, center->x, 1);
 
         break;
     }
@@ -579,23 +567,23 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1_inner - 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, center->x, DOOR_DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2_inner + 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, center->x, DOOR_DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, yval, x1_inner - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x1_inner - 1, DOOR_DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, yval, x2_inner + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x2_inner + 1, DOOR_DEFAULT);
             break;
         }
 
         /* Place another inner room */
-        for (auto y = yval - 1; y <= yval + 1; y++) {
-            for (auto x = xval - 1; x <= xval + 1; x++) {
-                if ((x == xval) && (y == yval)) {
+        for (auto y = center->y - 1; y <= center->y + 1; y++) {
+            for (auto x = center->x - 1; x <= center->x + 1; x++) {
+                if ((x == center->x) && (y == center->y)) {
                     continue;
                 }
 
@@ -606,34 +594,30 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a locked door on the inner room */
         switch (randint1(4)) {
         case 1:
-            place_locked_door(player_ptr, yval - 1, xval);
+            place_locked_door(player_ptr, center->y - 1, center->x);
             break;
         case 2:
-            place_locked_door(player_ptr, yval + 1, xval);
+            place_locked_door(player_ptr, center->y + 1, center->x);
             break;
         case 3:
-            place_locked_door(player_ptr, yval, xval - 1);
+            place_locked_door(player_ptr, center->y, center->x - 1);
             break;
         case 4:
-            place_locked_door(player_ptr, yval, xval + 1);
+            place_locked_door(player_ptr, center->y, center->x + 1);
             break;
         }
 
         /* Monsters to guard the "treasure" */
-        vault_monsters(player_ptr, yval, xval, randint1(3) + 2);
+        vault_monsters(player_ptr, center->y, center->x, randint1(3) + 2);
 
-        /* Object (80%) */
         if (evaluate_percent(80)) {
-            place_object(player_ptr, yval, xval, 0L);
-        }
-
-        /* Stairs (20%) */
-        else {
-            place_random_stairs(player_ptr, yval, xval);
+            place_object(player_ptr, center->y, center->x, 0L);
+        } else {
+            player_ptr->current_floor_ptr->place_random_stairs(*center);
         }
 
         /* Traps to protect the treasure */
-        vault_traps(&floor, yval, xval, 4, 10, 2 + randint1(3));
+        vault_traps(&floor, center->y, center->x, 4, 10, 2 + randint1(3));
 
         break;
     }
@@ -643,22 +627,22 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1_inner - 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, center->x, DOOR_DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2_inner + 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, center->x, DOOR_DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, yval, x1_inner - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x1_inner - 1, DOOR_DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, yval, x2_inner + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x2_inner + 1, DOOR_DEFAULT);
             break;
         }
 
         /* Large Inner Pillar */
-        for (auto y = yval - 1; y <= yval + 1; y++) {
-            for (auto x = xval - 1; x <= xval + 1; x++) {
+        for (auto y = center->y - 1; y <= center->y + 1; y++) {
+            for (auto x = center->x - 1; x <= center->x + 1; x++) {
                 place_grid(player_ptr, &floor.get_grid({ y, x }), GB_INNER);
             }
         }
@@ -666,12 +650,12 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Occasionally, two more Large Inner Pillars */
         if (one_in_(2)) {
             const auto tmp = randint1(2);
-            for (auto y = yval - 1; y <= yval + 1; y++) {
-                for (auto x = xval - 5 - tmp; x <= xval - 3 - tmp; x++) {
+            for (auto y = center->y - 1; y <= center->y + 1; y++) {
+                for (auto x = center->x - 5 - tmp; x <= center->x - 3 - tmp; x++) {
                     place_grid(player_ptr, &floor.get_grid({ y, x }), GB_INNER);
                 }
 
-                for (auto x = xval + 3 + tmp; x <= xval + 5 + tmp; x++) {
+                for (auto x = center->x + 3 + tmp; x <= center->x + 5 + tmp; x++) {
                     place_grid(player_ptr, &floor.get_grid({ y, x }), GB_INNER);
                 }
             }
@@ -684,29 +668,29 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
                                 : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
             /* Long horizontal walls */
-            for (auto x = xval - 5; x <= xval + 5; x++) {
-                place_grid(player_ptr, &floor.get_grid({ yval - 1, x }), GB_INNER);
-                place_grid(player_ptr, &floor.get_grid({ yval + 1, x }), GB_INNER);
+            for (auto x = center->x - 5; x <= center->x + 5; x++) {
+                place_grid(player_ptr, &floor.get_grid({ center->y - 1, x }), GB_INNER);
+                place_grid(player_ptr, &floor.get_grid({ center->y + 1, x }), GB_INNER);
             }
 
             /* Close off the left/right edges */
-            place_grid(player_ptr, &floor.get_grid({ yval, xval - 5 }), GB_INNER);
-            place_grid(player_ptr, &floor.get_grid({ yval, xval + 5 }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ center->y, center->x - 5 }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ center->y, center->x + 5 }), GB_INNER);
 
             /* Secret doors (random top/bottom) */
-            place_secret_door(player_ptr, yval - 3 + (randint1(2) * 2), xval - 3, door_type);
-            place_secret_door(player_ptr, yval - 3 + (randint1(2) * 2), xval + 3, door_type);
+            place_secret_door(player_ptr, center->y - 3 + (randint1(2) * 2), center->x - 3, door_type);
+            place_secret_door(player_ptr, center->y - 3 + (randint1(2) * 2), center->x + 3, door_type);
 
             /* Monsters */
-            vault_monsters(player_ptr, yval, xval - 2, randint1(2));
-            vault_monsters(player_ptr, yval, xval + 2, randint1(2));
+            vault_monsters(player_ptr, center->y, center->x - 2, randint1(2));
+            vault_monsters(player_ptr, center->y, center->x + 2, randint1(2));
 
             /* Objects */
             if (one_in_(3)) {
-                place_object(player_ptr, yval, xval - 2, 0L);
+                place_object(player_ptr, center->y, center->x - 2, 0L);
             }
             if (one_in_(3)) {
-                place_object(player_ptr, yval, xval + 2, 0L);
+                place_object(player_ptr, center->y, center->x + 2, 0L);
             }
         }
 
@@ -718,16 +702,16 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1_inner - 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, center->x, DOOR_DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2_inner + 1, xval, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, center->x, DOOR_DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, yval, x1_inner - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x1_inner - 1, DOOR_DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, yval, x2_inner + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x2_inner + 1, DOOR_DEFAULT);
             break;
         }
 
@@ -741,15 +725,15 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         }
 
         /* Monsters just love mazes. */
-        vault_monsters(player_ptr, yval, xval - 5, randint1(3));
-        vault_monsters(player_ptr, yval, xval + 5, randint1(3));
+        vault_monsters(player_ptr, center->y, center->x - 5, randint1(3));
+        vault_monsters(player_ptr, center->y, center->x + 5, randint1(3));
 
         /* Traps make them entertaining. */
-        vault_traps(&floor, yval, xval - 3, 2, 8, randint1(3));
-        vault_traps(&floor, yval, xval + 3, 2, 8, randint1(3));
+        vault_traps(&floor, center->y, center->x - 3, 2, 8, randint1(3));
+        vault_traps(&floor, center->y, center->x + 3, 2, 8, randint1(3));
 
         /* Mazes should have some treasure too. */
-        vault_objects(player_ptr, yval, xval, 3);
+        vault_objects(player_ptr, center->y, center->x, 3);
 
         break;
     }
@@ -762,36 +746,36 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
 
         /* Inner "cross" */
         for (auto y = y1_inner; y <= y2_inner; y++) {
-            place_grid(player_ptr, &floor.get_grid({ y, xval }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ y, center->x }), GB_INNER);
         }
 
         for (auto x = x1_inner; x <= x2_inner; x++) {
-            place_grid(player_ptr, &floor.get_grid({ yval, x }), GB_INNER);
+            place_grid(player_ptr, &floor.get_grid({ center->y, x }), GB_INNER);
         }
 
         /* Doors into the rooms */
         if (one_in_(2)) {
             int i = randint1(10);
-            place_secret_door(player_ptr, y1_inner - 1, xval - i, door_type);
-            place_secret_door(player_ptr, y1_inner - 1, xval + i, door_type);
-            place_secret_door(player_ptr, y2_inner + 1, xval - i, door_type);
-            place_secret_door(player_ptr, y2_inner + 1, xval + i, door_type);
+            place_secret_door(player_ptr, y1_inner - 1, center->x - i, door_type);
+            place_secret_door(player_ptr, y1_inner - 1, center->x + i, door_type);
+            place_secret_door(player_ptr, y2_inner + 1, center->x - i, door_type);
+            place_secret_door(player_ptr, y2_inner + 1, center->x + i, door_type);
         } else {
             int i = randint1(3);
-            place_secret_door(player_ptr, yval + i, x1_inner - 1, door_type);
-            place_secret_door(player_ptr, yval - i, x1_inner - 1, door_type);
-            place_secret_door(player_ptr, yval + i, x2_inner + 1, door_type);
-            place_secret_door(player_ptr, yval - i, x2_inner + 1, door_type);
+            place_secret_door(player_ptr, center->y + i, x1_inner - 1, door_type);
+            place_secret_door(player_ptr, center->y - i, x1_inner - 1, door_type);
+            place_secret_door(player_ptr, center->y + i, x2_inner + 1, door_type);
+            place_secret_door(player_ptr, center->y - i, x2_inner + 1, door_type);
         }
 
         /* Treasure, centered at the center of the cross */
-        vault_objects(player_ptr, yval, xval, 2 + randint1(2));
+        vault_objects(player_ptr, center->y, center->x, 2 + randint1(2));
 
         /* Gotta have some monsters. */
-        vault_monsters(player_ptr, yval + 1, xval - 4, randint1(4));
-        vault_monsters(player_ptr, yval + 1, xval + 4, randint1(4));
-        vault_monsters(player_ptr, yval - 1, xval - 4, randint1(4));
-        vault_monsters(player_ptr, yval - 1, xval + 4, randint1(4));
+        vault_monsters(player_ptr, center->y + 1, center->x - 4, randint1(4));
+        vault_monsters(player_ptr, center->y + 1, center->x + 4, randint1(4));
+        vault_monsters(player_ptr, center->y - 1, center->x - 4, randint1(4));
+        vault_monsters(player_ptr, center->y - 1, center->x + 4, randint1(4));
 
         break;
     }
@@ -815,22 +799,18 @@ bool build_type11(PlayerType *player_ptr, DungeonData *dd_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     const auto should_brighten = (randint1(floor.dun_level) <= 15) && floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS);
     const auto rad = randint0(9);
-
-    /* Find and reserve some space in the dungeon.  Get center of room. */
-    int yval;
-    int xval;
-    const auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, rad * 2 + 1, rad * 2 + 1);
-    if (!is_pos_found) {
+    const auto center = find_space(player_ptr, dd_ptr, rad * 2 + 1, rad * 2 + 1);
+    if (!center) {
         return false;
     }
 
     /* Make circular floor */
-    for (auto x = xval - rad; x <= xval + rad; x++) {
-        for (auto y = yval - rad; y <= yval + rad; y++) {
-            if (distance(yval, xval, y, x) <= rad - 1) {
+    for (auto x = center->x - rad; x <= center->x + rad; x++) {
+        for (auto y = center->y - rad; y <= center->y + rad; y++) {
+            if (distance(center->y, center->x, y, x) <= rad - 1) {
                 /* inside- so is floor */
                 place_bold(player_ptr, y, x, GB_FLOOR);
-            } else if (distance(yval, xval, y, x) <= rad + 1) {
+            } else if (distance(center->y, center->x, y, x) <= rad + 1) {
                 /* make granite outside so on_defeat_arena_monster works */
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }
@@ -838,7 +818,7 @@ bool build_type11(PlayerType *player_ptr, DungeonData *dd_ptr)
     }
 
     /* Find visible outer walls and set to be FEAT_OUTER */
-    add_outer_wall(player_ptr, xval, yval, should_brighten, xval - rad, yval - rad, xval + rad, yval + rad);
+    add_outer_wall(player_ptr, center->x, center->y, should_brighten, center->x - rad, center->y - rad, center->x + rad, center->y + rad);
     return true;
 }
 
@@ -864,24 +844,21 @@ bool build_type12(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto should_brighten = (randint1(floor.dun_level) <= 5) && floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS);
     const auto rad = randint1(9);
 
-    /* Find and reserve some space in the dungeon.  Get center of room. */
-    int yval;
-    int xval;
-    const auto is_pos_found = find_space(player_ptr, dd_ptr, &yval, &xval, rad * 2 + 3, rad * 2 + 3);
-    if (!is_pos_found) {
+    const auto center = find_space(player_ptr, dd_ptr, rad * 2 + 3, rad * 2 + 3);
+    if (!center) {
         return false;
     }
 
     /* Make floor */
-    for (auto x = xval - rad; x <= xval + rad; x++) {
-        for (auto y = yval - rad; y <= yval + rad; y++) {
+    for (auto x = center->x - rad; x <= center->x + rad; x++) {
+        for (auto y = center->y - rad; y <= center->y + rad; y++) {
             /* clear room flag */
             floor.grid_array[y][x].info &= ~(CAVE_ROOM);
 
-            if (dist2(yval, xval, y, x, h1, h2, h3, h4) <= rad - 1) {
+            if (dist2(center->y, center->x, y, x, h1, h2, h3, h4) <= rad - 1) {
                 /* inside - so is floor */
                 place_bold(player_ptr, y, x, GB_FLOOR);
-            } else if (distance(yval, xval, y, x) < 3) {
+            } else if (distance(center->y, center->x, y, x) < 3) {
                 place_bold(player_ptr, y, x, GB_FLOOR);
             } else {
                 /* make granite outside so on_defeat_arena_monster works */
@@ -889,23 +866,23 @@ bool build_type12(PlayerType *player_ptr, DungeonData *dd_ptr)
             }
 
             /* proper boundary for on_defeat_arena_monster */
-            if (((y + rad) == yval) || ((y - rad) == yval) || ((x + rad) == xval) || ((x - rad) == xval)) {
+            if (((y + rad) == center->y) || ((y - rad) == center->y) || ((x + rad) == center->x) || ((x - rad) == center->x)) {
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }
         }
     }
 
     /* Find visible outer walls and set to be FEAT_OUTER */
-    add_outer_wall(player_ptr, xval, yval, should_brighten, xval - rad - 1, yval - rad - 1, xval + rad + 1, yval + rad + 1);
+    add_outer_wall(player_ptr, center->x, center->y, should_brighten, center->x - rad - 1, center->y - rad - 1, center->x + rad + 1, center->y + rad + 1);
 
     /* Check to see if there is room for an inner vault */
     auto is_empty = true;
-    for (auto x = xval - 2; x <= xval + 2; x++) {
+    for (auto x = center->x - 2; x <= center->x + 2; x++) {
         if (!is_empty) {
             break;
         }
 
-        for (auto y = yval - 2; y <= yval + 2; y++) {
+        for (auto y = center->y - 2; y <= center->y + 2; y++) {
             if (!floor.get_grid({ y, x }).is_floor()) {
                 is_empty = false;
                 break;
@@ -915,16 +892,16 @@ bool build_type12(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     if (is_empty && one_in_(2)) {
         /* Build the vault */
-        build_small_room(player_ptr, xval, yval);
+        build_small_room(player_ptr, center->x, center->y);
 
         /* Place a treasure in the vault */
-        place_object(player_ptr, yval, xval, 0);
+        place_object(player_ptr, center->y, center->x, 0);
 
         /* Let's guard the treasure well */
-        vault_monsters(player_ptr, yval, xval, randint0(2) + 3);
+        vault_monsters(player_ptr, center->y, center->x, randint0(2) + 3);
 
         /* Traps naturally */
-        vault_traps(&floor, yval, xval, 4, 4, randint0(3) + 2);
+        vault_traps(&floor, center->y, center->x, 4, 4, randint0(3) + 2);
     }
 
     return true;

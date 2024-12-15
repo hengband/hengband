@@ -7,10 +7,8 @@
 #include "floor/geometry.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
-#include "grid/feature-flag-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/stair.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
@@ -25,14 +23,14 @@
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
@@ -286,28 +284,29 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (!cave_valid_bold(&floor, yy, xx)) {
+            const Pos2D pos(yy, xx);
+            if (!floor.is_grid_changeable(pos)) {
                 continue;
             }
 
-            delete_all_items_from_floor(player_ptr, yy, xx);
-            int t = cave_has_flag_bold(&floor, yy, xx, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
+            delete_all_items_from_floor(player_ptr, pos.y, pos.x);
+            int t = cave_has_flag_bold(&floor, pos.y, pos.x, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
             if (t < 20) {
-                cave_set_feat(player_ptr, yy, xx, feat_granite);
+                cave_set_feat(player_ptr, pos.y, pos.x, feat_granite);
                 continue;
             }
 
             if (t < 70) {
-                cave_set_feat(player_ptr, yy, xx, feat_quartz_vein);
+                cave_set_feat(player_ptr, pos.y, pos.x, feat_quartz_vein);
                 continue;
             }
 
             if (t < 100) {
-                cave_set_feat(player_ptr, yy, xx, feat_magma_vein);
+                cave_set_feat(player_ptr, pos.y, pos.x, feat_magma_vein);
                 continue;
             }
 
-            cave_set_feat(player_ptr, yy, xx, rand_choice(feat_ground_type));
+            cave_set_feat(player_ptr, pos.y, pos.x, rand_choice(feat_ground_type));
         }
     }
 

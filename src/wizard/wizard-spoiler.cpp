@@ -22,7 +22,8 @@
 #include "spell/spells-util.h"
 #include "system/angband-system.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
@@ -105,8 +106,9 @@ static SpoilerOutputResultType spoil_mon_evol()
     ss << "Monster Spoilers for " << AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL) << '\n';
     spoil_out(ss.str());
     spoil_out("------------------------------------------\n\n");
+    const auto &monraces = MonraceList::get_instance();
     for (auto monrace_id : get_mon_evol_roots()) {
-        const auto *monrace_ptr = &monraces_info[monrace_id];
+        const auto *monrace_ptr = &monraces.get_monrace(monrace_id);
         constexpr auto fmt_before = _("[%d]: %s (レベル%d, '%c')\n", "[%d]: %s (Level %d, '%c')\n");
         fprintf(spoiler_file, fmt_before, enum2i(monrace_id), monrace_ptr->name.data(), monrace_ptr->level, monrace_ptr->symbol_definition.character);
         for (auto n = 1; monrace_ptr->get_next().is_valid(); n++) {

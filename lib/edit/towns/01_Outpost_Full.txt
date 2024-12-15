@@ -655,4 +655,3 @@ P:44:109
 # Starting position when coming from quest 34
 ?:[EQU $LEAVING_QUEST 34]
 P:44:109
-

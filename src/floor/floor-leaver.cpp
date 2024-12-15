@@ -23,13 +23,14 @@
 #include "spell-class/spells-mirror-master.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -47,7 +48,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     } else {
-        party_mon[0] = *m_ptr;
+        party_mon[0] = m_ptr->clone();
         delete_monster_idx(player_ptr, player_ptr->riding);
     }
 }
@@ -89,7 +90,7 @@ static void sweep_preserving_pet(PlayerType *player_ptr)
             continue;
         }
 
-        party_mon[party_monster_num] = player_ptr->current_floor_ptr->m_list[i];
+        party_mon[party_monster_num] = player_ptr->current_floor_ptr->m_list[i].clone();
         party_monster_num++;
         delete_monster_idx(player_ptr, i);
     }
@@ -269,7 +270,7 @@ static void preserve_info(PlayerType *player_ptr)
         }
     }
 
-    for (DUNGEON_IDX i = 1; i < floor.m_max; i++) {
+    for (short i = 1; i < floor.m_max; i++) {
         auto *m_ptr = &floor.m_list[i];
         if (!m_ptr->is_valid() || (quest_monrace_id != m_ptr->r_idx)) {
             continue;
@@ -283,7 +284,7 @@ static void preserve_info(PlayerType *player_ptr)
         delete_monster_idx(player_ptr, i);
     }
 
-    for (DUNGEON_IDX i = 0; i < INVEN_PACK; i++) {
+    for (short i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
         if (!o_ptr->is_valid()) {
             continue;
@@ -371,7 +372,7 @@ static void kill_saved_floors(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has_not(FloorChangeMode::SAVE_FLOORS)) {
-        for (DUNGEON_IDX i = 0; i < MAX_SAVED_FLOORS; i++) {
+        for (auto i = 0; i < MAX_SAVED_FLOORS; i++) {
             kill_saved_floor(player_ptr, &saved_floors[i]);
         }
 

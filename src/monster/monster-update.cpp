@@ -28,12 +28,13 @@
 #include "player/special-defense-types.h"
 #include "status/element-resistance.h"
 #include "system/angband-system.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
@@ -490,8 +491,9 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
 
     if (!player_ptr->effects()->hallucination().is_hallucinated()) {
         auto &monrace = monster.get_monrace();
-        if ((monster.ap_r_idx == MonraceId::KAGE) && (monraces_info[MonraceId::KAGE].r_sights < MAX_SHORT)) {
-            monraces_info[MonraceId::KAGE].r_sights++;
+        auto &shadower = MonraceList::get_instance().get_monrace(MonraceId::KAGE);
+        if ((monster.ap_r_idx == MonraceId::KAGE) && (shadower.r_sights < MAX_SHORT)) {
+            shadower.r_sights++;
         } else if (monster.is_original_ap() && (monrace.r_sights < MAX_SHORT)) {
             monrace.r_sights++;
         }

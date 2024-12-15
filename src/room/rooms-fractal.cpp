@@ -4,8 +4,8 @@
 #include "room/cave-filler.h"
 #include "room/rooms-normal.h"
 #include "room/space-finder.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 
@@ -19,17 +19,14 @@ bool build_type9(PlayerType *player_ptr, DungeonData *dd_ptr)
     auto width = randint1(22) * 2 + 6;
     auto height = randint1(15) * 2 + 6;
 
-    /* Find and reserve some space in the dungeon.  Get center of room. */
     auto &floor = *player_ptr->current_floor_ptr;
-    int y0;
-    int x0;
-    if (!find_space(player_ptr, dd_ptr, &y0, &x0, height + 1, width + 1)) {
+    auto center = find_space(player_ptr, dd_ptr, height + 1, width + 1);
+    if (!center) {
         /* Limit to the minimum room size, and retry */
         width = 8;
         height = 8;
-
-        /* Find and reserve some space in the dungeon.  Get center of room. */
-        if (!find_space(player_ptr, dd_ptr, &y0, &x0, height + 1, width + 1)) {
+        center = find_space(player_ptr, dd_ptr, height + 1, width + 1);
+        if (!center) {
             /*
              * Still no space?!
              * Try normal room
@@ -54,10 +51,10 @@ bool build_type9(PlayerType *player_ptr, DungeonData *dd_ptr)
                             randint1(width / 4) + randint1(height / 4);
 
         /* make it */
-        generate_hmap(&floor, y0, x0, width, height, grd, roug, cutoff);
+        generate_hmap(&floor, center->y, center->x, width, height, grd, roug, cutoff);
 
         /* Convert to normal format + clean up */
-        if (generate_fracave(player_ptr, y0, x0, width, height, cutoff, should_brighten, true)) {
+        if (generate_fracave(player_ptr, center->y, center->x, width, height, cutoff, should_brighten, true)) {
             break;
         }
     }

@@ -31,13 +31,16 @@
 #include "player-base/player-class.h"
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -76,9 +79,9 @@ static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
 static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_monster, POSITION *cy, POSITION *cx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     if (current_monster == 0) {
-        MONSTER_IDX m_idx = m_pop(floor_ptr);
+        const auto m_idx = floor.pop_empty_index_monster();
         player_ptr->riding = m_idx;
         if (m_idx) {
             *cy = player_ptr->y;
@@ -103,7 +106,7 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
         }
     }
 
-    return (d == 6) ? 0 : m_pop(floor_ptr);
+    return (d == 6) ? 0 : floor.pop_empty_index_monster();
 }
 
 static MonraceDefinition &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
@@ -111,7 +114,7 @@ static MonraceDefinition &set_pet_params(PlayerType *player_ptr, const int curre
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
     m_ptr->r_idx = party_mon[current_monster].r_idx;
-    *m_ptr = party_mon[current_monster];
+    *m_ptr = party_mon[current_monster].clone();
     m_ptr->fy = cy;
     m_ptr->fx = cx;
     m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
@@ -164,7 +167,9 @@ static void place_pet(PlayerType *player_ptr)
         }
     }
 
-    std::fill(std::begin(party_mon), std::end(party_mon), MonsterEntity{});
+    for (auto &monster : party_mon) {
+        monster.wipe();
+    }
 }
 
 /*!
@@ -337,10 +342,17 @@ static void set_stairs(PlayerType *player_ptr)
     auto &grid = floor.grid_array[player_ptr->y][player_ptr->x];
     const auto &fcms = FloorChangeModesStore::get_instace();
     const auto &dungeon = floor.get_dungeon_definition();
+    const auto &terrains = TerrainList::get_instance();
     if (fcms->has(FloorChangeMode::UP) && !inside_quest(floor.get_quest_id())) {
-        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(feat_down_stair, TerrainCharacteristics::SHAFT) : feat_down_stair;
+        const auto terrain_down_stair = terrains.get_terrain_id(TerrainTag::DOWN_STAIR);
+        const auto converted_terrain_id = dungeon.convert_terrain_id(terrain_down_stair, TerrainCharacteristics::SHAFT);
+        const auto terrain_id = fcms->has(FloorChangeMode::SHAFT) ? converted_terrain_id : terrain_down_stair;
+        grid.set_terrain_id(terrain_id);
     } else if (fcms->has(FloorChangeMode::DOWN) && !ironman_downward) {
-        grid.feat = fcms->has(FloorChangeMode::SHAFT) ? dungeon.convert_terrain_id(feat_up_stair, TerrainCharacteristics::SHAFT) : feat_up_stair;
+        const auto terrain_up_stair = terrains.get_terrain_id(TerrainTag::UP_STAIR);
+        const auto converted_terrain_id = dungeon.convert_terrain_id(terrain_up_stair, TerrainCharacteristics::SHAFT);
+        const auto terrain_id = fcms->has(FloorChangeMode::SHAFT) ? converted_terrain_id : terrain_up_stair;
+        grid.set_terrain_id(terrain_id);
     }
 
     grid.mimic = 0;

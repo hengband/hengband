@@ -40,8 +40,9 @@
 // clang-format on
 
 enum class GridFlow : int;
-class TerrainType;
 enum class TerrainCharacteristics;
+enum class TerrainTag;
+class TerrainType;
 class Grid {
 public:
     Grid();
@@ -79,6 +80,7 @@ public:
     bool is_mirror() const;
     bool is_rune_protection() const;
     bool is_rune_explosion() const;
+    bool is_hidden_door() const;
     bool has_monster() const;
     uint8_t get_cost(GridFlow gf) const;
     uint8_t get_distance(GridFlow gf) const;
@@ -96,4 +98,7 @@ public:
     const TerrainType &get_terrain_mimic_raw() const;
     void place_closed_curtain();
     void add_info(int grid_info);
+    void set_terrain_id(short terrain_id);
+    void set_terrain_id(TerrainTag tag);
+    void set_mimic_terrain_id(TerrainTag tag);
 };

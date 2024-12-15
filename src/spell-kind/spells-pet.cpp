@@ -10,9 +10,9 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "monster/smart-learn-types.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

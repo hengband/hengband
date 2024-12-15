@@ -6,24 +6,33 @@
 #include "market/bounty.h"
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/dungeon-record.h"
+#include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
 
-static void rd_hengband_dungeons(void)
+static void rd_hengband_dungeons()
 {
-    auto max = rd_byte();
+    const auto &dungeons = DungeonList::get_instance();
+    auto &dungeon_records = DungeonRecords::get_instance();
+    const auto max = rd_byte();
     for (auto i = 0U; i < max; i++) {
         auto tmp16s = rd_s16b();
-        if (i >= dungeons_info.size()) {
+        if (i >= dungeons.size()) {
             continue;
         }
 
-        max_dlv[i] = tmp16s;
-        if (max_dlv[i] > dungeons_info[i].maxdepth) {
-            max_dlv[i] = dungeons_info[i].maxdepth;
+        auto &dungeon_record = dungeon_records.get_record(i);
+        if (tmp16s > 0) {
+            dungeon_record.set_max_level(tmp16s);
+        }
+
+        const auto &dungeon = dungeons.get_dungeon(i);
+        if (dungeon_record.get_max_level() > dungeon.maxdepth) {
+            dungeon_record.set_max_level(dungeon.maxdepth);
         }
     }
 }

@@ -19,7 +19,7 @@
 #include "player/player-realm.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
@@ -179,7 +179,7 @@ static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp,
     } else if (streq(b + 1, "REALM2")) {
         v = PlayerRealm(player_ptr).realm2().get_name().en_string();
     } else if (streq(b + 1, "PLAYER")) {
-        char tmp_player_name[32];
+        char tmp_player_name[32]{};
         char *pn, *tpn;
         for (pn = player_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++) {
 #ifdef JP

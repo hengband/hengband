@@ -17,9 +17,9 @@
 #include <sstream>
 
 /*!
- * @brief アイテムの特定記述内容を返す
+ * @brief アイテムの特定記述内容表記を生成する
  * @param item 記述を得たいアイテムへの参照
- * @param desc_ptr 記述内容を返すための文字列参照ポインタ
+ * @return 特定記述内容
  */
 static std::string analyze_general(PlayerType *player_ptr, const ItemEntity &item)
 {
@@ -27,74 +27,68 @@ static std::string analyze_general(PlayerType *player_ptr, const ItemEntity &ite
 }
 
 /*!
- * @brief アーティファクトの種族スレイ特性を構造体に収める /
- * Note the slaying specialties of a weapon
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param slay_list 種族スレイ構造体の参照ポインタ
+ * @brief アーティファクトの種族スレイ特性表記を生成する
+ * @param item アイテムへの参照
+ * @return 種族スレイ
  */
-static std::vector<std::string> analyze_slay(const ItemEntity *o_ptr)
+static std::vector<std::string> analyze_slay(const ItemEntity &item)
 {
-    const auto flags = o_ptr->get_flags();
+    const auto flags = item.get_flags();
     return extract_spoiler_flags(flags, slay_flags_desc);
 }
 
 /*!
- * @brief アーティファクトの属性ブランド特性を構造体に収める /
- * Note an object's elemental brands
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param brand_list 属性ブランド構造体の参照ポインタ
+ * @brief アーティファクトの属性ブランド特性表記を生成する
+ * @param item アイテムへの参照
+ * @return 属性ブランド特性
  */
-static std::vector<std::string> analyze_brand(const ItemEntity *o_ptr)
+static std::vector<std::string> analyze_brand(const ItemEntity &item)
 {
-    const auto flags = o_ptr->get_flags();
+    const auto flags = item.get_flags();
     return extract_spoiler_flags(flags, brand_flags_desc);
 }
 
 /*!
- * @brief アーティファクトの通常耐性を構造体に収める /
- * Note an object's elemental brands
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param resist_list 通常耐性構造体の参照ポインタ
+ * @brief アーティファクトの通常耐性表記を生成する
+ * @param item アイテムへの参照
+ * @return 通常耐性
  */
-static std::vector<std::string> analyze_resist(const ItemEntity *o_ptr)
+static std::vector<std::string> analyze_resist(const ItemEntity &item)
 {
-    const auto flags = o_ptr->get_flags();
+    const auto flags = item.get_flags();
     return extract_spoiler_flags(flags, resist_flags_desc);
 }
 
 /*!
- * @brief アーティファクトの免疫特性を構造体に収める /
- * Note the immunities granted by an object
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param immune_list 免疫構造体の参照ポインタ
+ * @brief アーティファクトの免疫特性表記を生成する
+ * @param item アイテムへの参照
+ * @return 免疫特性
  */
-static std::vector<std::string> analyze_immune(const ItemEntity *o_ptr)
+static std::vector<std::string> analyze_immune(const ItemEntity &item)
 {
-    const auto flags = o_ptr->get_flags();
+    const auto flags = item.get_flags();
     return extract_spoiler_flags(flags, immune_flags_desc);
 }
 
 /*!
- * @brief アーティファクトの弱点付与を構造体に収める /
- * Note the immunities granted by an object
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param immune_list 弱点構造体の参照ポインタ
+ * @brief アーティファクトの弱点付与表記を生成する
+ * @param item アイテムへの参照
+ * @return 弱点付与
  */
-static std::vector<std::string> analyze_vulnerable(const ItemEntity *o_ptr)
+static std::vector<std::string> analyze_vulnerable(const ItemEntity &item)
 {
-    const auto flags = o_ptr->get_flags();
+    const auto flags = item.get_flags();
     return extract_spoiler_flags(flags, vulnerable_flags_desc);
 }
 
 /*!
- * @brief アーティファクトの維持特性を構造体に収める /
- * Note which stats an object sustains
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param sustain_list 維持特性構造体の参照ポインタ
+ * @brief アーティファクトの維持アビリティスコア表記を生成する
+ * @param item アイテムへの参照
+ * @return 維持アビリティスコア
  */
-static std::vector<std::string> analyze_sustains(const ItemEntity *o_ptr)
+static std::vector<std::string> analyze_sustains(const ItemEntity &item)
 {
-    const auto flags = o_ptr->get_flags();
+    const auto flags = item.get_flags();
     if (flags.has_all_of(EnumRangeInclusive(TR_SUST_STR, TR_SUST_CHR))) {
         return { _("全能力", "All stats") };
     }
@@ -107,16 +101,14 @@ static std::vector<std::string> analyze_sustains(const ItemEntity *o_ptr)
 }
 
 /*!
- * @brief アーティファクトのその他の特性を構造体に収める /
- * Note miscellaneous powers bestowed by an artifact such as see invisible,
- * free action, permanent light, etc.
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param misc_list その他の特性構造体の参照ポインタ
+ * @brief アーティファクトのその他の特性表記を生成する
+ * @param item アイテムへの参照
+ * @return その他の特性
  */
-static std::vector<std::string> analyze_misc_magic(const ItemEntity *o_ptr)
+static std::vector<std::string> analyze_misc_magic(const ItemEntity &item)
 {
     std::vector<std::string> descriptions{};
-    const auto flags = o_ptr->get_flags();
+    const auto flags = item.get_flags();
     const auto &flags2_descriptions = extract_spoiler_flags(flags, misc_flags2_desc);
     descriptions.insert(descriptions.end(), flags2_descriptions.begin(), flags2_descriptions.end());
     const auto &flags3_descriptions = extract_spoiler_flags(flags, misc_flags3_desc);
@@ -146,7 +138,7 @@ static std::vector<std::string> analyze_misc_magic(const ItemEntity *o_ptr)
         rad -= 3;
     }
 
-    if (o_ptr->ego_idx == EgoType::LITE_SHINE) {
+    if (item.ego_idx == EgoType::LITE_SHINE) {
         rad++;
     }
 
@@ -171,11 +163,11 @@ static std::vector<std::string> analyze_misc_magic(const ItemEntity *o_ptr)
         descriptions.emplace_back(_("太古の怨念", "Ancient Curse"));
     }
 
-    if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
+    if (item.curse_flags.has(CurseTraitType::PERMA_CURSE)) {
         descriptions.emplace_back(_("永遠の呪い", "Permanently Cursed"));
-    } else if (o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
+    } else if (item.curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
         descriptions.emplace_back(_("強力な呪い", "Heavily Cursed"));
-    } else if (o_ptr->curse_flags.has(CurseTraitType::CURSED)) {
+    } else if (item.curse_flags.has(CurseTraitType::CURSED)) {
         descriptions.emplace_back(_("呪い", "Cursed"));
     }
 
@@ -191,15 +183,13 @@ static std::vector<std::string> analyze_misc_magic(const ItemEntity *o_ptr)
 }
 
 /*!
- * @brief アーティファクトの追加ランダム特性を構造体に収める /
- * Note additional ability and/or resistance of fixed artifacts
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param addition 追加ランダム耐性構造体の参照ポインタ
- * @param addition_sz addition に書き込めるバイト数
+ * @brief アーティファクトの追加ランダム特性表記を生成する
+ * @param item アイテムへの参照
+ * @return 追加ランダム特性
  */
-static std::string analyze_addition(const ItemEntity *o_ptr)
+static std::string analyze_addition(const ItemEntity &item)
 {
-    const auto &artifact = o_ptr->get_fixed_artifact();
+    const auto &artifact = item.get_fixed_artifact();
     std::stringstream ss;
     if (artifact.gen_flags.has_all_of({ ItemGenerationTraitType::XTRA_POWER, ItemGenerationTraitType::XTRA_H_RES })) {
         ss << _("能力and耐性", "Ability and Resistance");
@@ -230,16 +220,13 @@ static std::string analyze_addition(const ItemEntity *o_ptr)
 }
 
 /*!
- * @brief アーティファクトの基本情報を文字列に収める /
- * Determine the minimum depth an artifact can appear, its rarity, its weight,
- * and its value in gold pieces
- * @param o_ptr オブジェクト構造体の参照ポインタ
- * @param misc_desc 基本情報を収める文字列参照ポインタ
- * @param misc_desc_sz misc_desc に書き込めるバイト数
+ * @brief アーティファクトの基本情報表記を生成する
+ * @param item アイテムへの参照
+ * @return 基本情報
  */
-static std::string analyze_misc(const ItemEntity *o_ptr)
+static std::string analyze_misc(const ItemEntity &item)
 {
-    const auto &artifact = o_ptr->get_fixed_artifact();
+    const auto &artifact = item.get_fixed_artifact();
     constexpr auto fmt = _("レベル %d, 希少度 %u, %d.%d kg, ＄%d", "Level %d, Rarity %u, %d.%d lbs, %d Gold");
     const auto weight_integer = _(lb_to_kg_integer(artifact.weight), artifact.weight / 10);
     const auto weight_fraction = _(lb_to_kg_fraction(artifact.weight), artifact.weight % 10);
@@ -247,50 +234,51 @@ static std::string analyze_misc(const ItemEntity *o_ptr)
 }
 
 /*!
- * @brief アーティファクトの情報全体を構造体に収める
+ * @brief 固定アーティファクト情報1件を解析する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr オブジェクト構造体の参照ポインタ
+ * @param item アーティファクトアイテムへの参照
+ * @return アーティファクト情報
  */
-ArtifactsDumpInfo object_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr)
+ArtifactsDumpInfo object_analyze(PlayerType *player_ptr, const ItemEntity &item)
 {
     ArtifactsDumpInfo info{};
-    info.description = analyze_general(player_ptr, *o_ptr);
-    info.pval_info.analyze(*o_ptr);
-    info.brands = analyze_brand(o_ptr);
-    info.slays = analyze_slay(o_ptr);
-    info.immunities = analyze_immune(o_ptr);
-    info.resistances = analyze_resist(o_ptr);
-    info.vulnerabilities = analyze_vulnerable(o_ptr);
-    info.sustenances = analyze_sustains(o_ptr);
-    info.misc_magic = analyze_misc_magic(o_ptr);
-    info.addition = analyze_addition(o_ptr);
-    info.misc_desc = analyze_misc(o_ptr);
-    info.activation = o_ptr->explain_activation();
+    info.description = analyze_general(player_ptr, item);
+    info.pval_info.analyze(item);
+    info.brands = analyze_brand(item);
+    info.slays = analyze_slay(item);
+    info.immunities = analyze_immune(item);
+    info.resistances = analyze_resist(item);
+    info.vulnerabilities = analyze_vulnerable(item);
+    info.sustenances = analyze_sustains(item);
+    info.misc_magic = analyze_misc_magic(item);
+    info.addition = analyze_addition(item);
+    info.misc_desc = analyze_misc(item);
+    info.activation = item.explain_activation();
     return info;
 }
 
 /*!
  * @brief ランダムアーティファクト1件を解析する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
- * @param desc_ptr 記述内容を収める構造体参照ポインタ
+ * @param item アーティファクトアイテムへの参照
+ * @return 解析結果
  */
-ArtifactsDumpInfo random_artifact_analyze(PlayerType *player_ptr, const ItemEntity *o_ptr)
+ArtifactsDumpInfo random_artifact_analyze(PlayerType *player_ptr, const ItemEntity &item)
 {
     ArtifactsDumpInfo info{};
-    info.description = analyze_general(player_ptr, *o_ptr);
-    info.pval_info.analyze(*o_ptr);
-    info.brands = analyze_brand(o_ptr);
-    info.slays = analyze_slay(o_ptr);
-    info.immunities = analyze_immune(o_ptr);
-    info.resistances = analyze_resist(o_ptr);
-    info.vulnerabilities = analyze_vulnerable(o_ptr);
-    info.sustenances = analyze_sustains(o_ptr);
-    info.misc_magic = analyze_misc_magic(o_ptr);
-    info.activation = o_ptr->explain_activation();
+    info.description = analyze_general(player_ptr, item);
+    info.pval_info.analyze(item);
+    info.brands = analyze_brand(item);
+    info.slays = analyze_slay(item);
+    info.immunities = analyze_immune(item);
+    info.resistances = analyze_resist(item);
+    info.vulnerabilities = analyze_vulnerable(item);
+    info.sustenances = analyze_sustains(item);
+    info.misc_magic = analyze_misc_magic(item);
+    info.activation = item.explain_activation();
     constexpr auto weight_mes = _("重さ %d.%d kg", "Weight %d.%d lbs");
-    const auto weight_integer = _(lb_to_kg_integer(o_ptr->weight), o_ptr->weight / 10);
-    const auto weight_fraction = _(lb_to_kg_fraction(o_ptr->weight), o_ptr->weight % 10);
+    const auto weight_integer = _(lb_to_kg_integer(item.weight), item.weight / 10);
+    const auto weight_fraction = _(lb_to_kg_fraction(item.weight), item.weight % 10);
     info.misc_desc = format(weight_mes, weight_integer, weight_fraction);
     return info;
 }

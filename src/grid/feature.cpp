@@ -9,32 +9,21 @@
 #include "monster/monster-update.h"
 #include "player/special-defense-types.h"
 #include "room/door-definition.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h" // @todo 相互依存している. 後で何とかする.
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 #include <span>
 
 /*** Terrain feature variables ***/
 
-/* Nothing */
-FEAT_IDX feat_none;
-
-/* Floor */
-FEAT_IDX feat_floor;
-
-/* Objects */
-FEAT_IDX feat_rune_protection;
-FEAT_IDX feat_rune_explosion;
-FEAT_IDX feat_mirror;
-
 /* Stairs */
-FEAT_IDX feat_up_stair;
-FEAT_IDX feat_down_stair;
 FEAT_IDX feat_entrance;
 
 /* Special traps */
@@ -104,26 +93,20 @@ FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;
 FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 
-/*
- * Not using graphical tiles for this feature?
- */
-bool is_ascii_graphics(char x)
-{
-    return (x & 0x80) == 0;
-}
-
 FEAT_IDX feat_locked_door_random(int door_type)
 {
+    const auto &terrains = TerrainList::get_instance();
     const auto &door = feat_door[door_type];
     std::span<const FEAT_IDX> candidates(std::begin(door.locked), door.num_locked);
-    return candidates.empty() ? feat_none : rand_choice(candidates);
+    return candidates.empty() ? terrains.get_terrain_id(TerrainTag::NONE) : rand_choice(candidates);
 }
 
 FEAT_IDX feat_jammed_door_random(int door_type)
 {
+    const auto &terrains = TerrainList::get_instance();
     const auto &door = feat_door[door_type];
     std::span<const FEAT_IDX> candidates(std::begin(door.jammed), door.num_jammed);
-    return candidates.empty() ? feat_none : rand_choice(candidates);
+    return candidates.empty() ? terrains.get_terrain_id(TerrainTag::NONE) : rand_choice(candidates);
 }
 
 /*

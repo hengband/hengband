@@ -13,9 +13,9 @@
 #include "object-enchant/special-object-flags.h"
 #include "player/player-status-flags.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -204,11 +204,11 @@ void ItemMagicApplier::apply_cursed()
         return;
     }
 
-    const auto &baseitem = this->o_ptr->get_baseitem();
-    if (!baseitem.cost) {
+    if (this->o_ptr->is_worthless()) {
         set_bits(this->o_ptr->ident, IDENT_BROKEN);
     }
 
+    const auto &baseitem = this->o_ptr->get_baseitem();
     if (baseitem.gen_flags.has(ItemGenerationTraitType::CURSED)) {
         this->o_ptr->curse_flags.set(CurseTraitType::CURSED);
     }

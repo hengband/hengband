@@ -13,7 +13,6 @@
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "spell-kind/spells-perception.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -63,14 +62,15 @@ void building_recharge(PlayerType *player_ptr)
         return;
     }
 
-    const auto &baseitem = o_ptr->get_baseitem();
-    const auto lev = baseitem.level;
+    const auto item_level = o_ptr->get_baseitem_level();
     const auto tval = o_ptr->bi_key.tval();
+    const auto base_pval = o_ptr->get_baseitem_pval();
+    const auto base_cost = o_ptr->get_baseitem_cost();
     int price;
     switch (tval) {
     case ItemKindType::ROD:
         if (o_ptr->timeout > 0) {
-            price = (lev * 50 * o_ptr->timeout) / baseitem.pval;
+            price = (item_level * 50 * o_ptr->timeout) / base_pval;
             break;
         }
 
@@ -78,16 +78,16 @@ void building_recharge(PlayerType *player_ptr)
         msg_format(_("それは再充填する必要はありません。", "That doesn't need to be recharged."));
         return;
     case ItemKindType::STAFF:
-        price = (baseitem.cost / 10) * o_ptr->number;
+        price = (base_cost / 10) * o_ptr->number;
         price = std::max(10, price);
         break;
     default:
-        price = baseitem.cost / 10;
+        price = base_cost / 10;
         price = std::max(10, price);
         break;
     }
 
-    if ((tval == ItemKindType::WAND) && (o_ptr->pval / o_ptr->number >= baseitem.pval)) {
+    if ((tval == ItemKindType::WAND) && (o_ptr->pval / o_ptr->number >= base_pval)) {
         if (o_ptr->number > 1) {
             msg_print(_("この魔法棒はもう充分に充填されています。", "These wands are already fully charged."));
         } else {
@@ -95,7 +95,7 @@ void building_recharge(PlayerType *player_ptr)
         }
 
         return;
-    } else if ((tval == ItemKindType::STAFF) && o_ptr->pval >= baseitem.pval) {
+    } else if ((tval == ItemKindType::STAFF) && o_ptr->pval >= base_pval) {
         if (o_ptr->number > 1) {
             msg_print(_("この杖はもう充分に充填されています。", "These staffs are already fully charged."));
         } else {
@@ -130,9 +130,9 @@ void building_recharge(PlayerType *player_ptr)
     } else {
         int max_charges;
         if (tval == ItemKindType::STAFF) {
-            max_charges = baseitem.pval - o_ptr->pval;
+            max_charges = base_pval - o_ptr->pval;
         } else {
-            max_charges = o_ptr->number * baseitem.pval - o_ptr->pval;
+            max_charges = o_ptr->number * base_pval - o_ptr->pval;
         }
 
         const auto mes = _("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold apiece? ");
@@ -191,21 +191,22 @@ void building_recharge_all(PlayerType *player_ptr)
             total_cost += 50;
         }
 
-        const auto &baseitem = item.get_baseitem();
-        const auto lev = baseitem.level;
+        const auto item_level = item.get_baseitem_level();
+        const auto base_pval = item.get_baseitem_pval();
+        const auto base_cost = item.get_baseitem_cost();
         switch (item.bi_key.tval()) {
         case ItemKindType::ROD:
-            price = (lev * 50 * item.timeout) / baseitem.pval;
+            price = (item_level * 50 * item.timeout) / base_pval;
             break;
         case ItemKindType::STAFF:
-            price = (baseitem.cost / 10) * item.number;
+            price = (base_cost / 10) * item.number;
             price = std::max(10, price);
-            price = (baseitem.pval - item.pval) * price;
+            price = (base_pval - item.pval) * price;
             break;
         case ItemKindType::WAND:
-            price = (baseitem.cost / 10);
+            price = (base_cost / 10);
             price = std::max(10, price);
-            price = (item.number * baseitem.pval - item.pval) * price;
+            price = (item.number * base_pval - item.pval) * price;
             break;
         default:
             break;
@@ -234,7 +235,6 @@ void building_recharge_all(PlayerType *player_ptr)
 
     for (short i = 0; i < INVEN_PACK; i++) {
         auto *o_ptr = &player_ptr->inventory_list[i];
-        const auto &baseitem = o_ptr->get_baseitem();
         if (!o_ptr->can_recharge()) {
             continue;
         }
@@ -244,20 +244,21 @@ void building_recharge_all(PlayerType *player_ptr)
             autopick_alter_item(player_ptr, i, false);
         }
 
+        const auto base_pval = o_ptr->get_baseitem_pval();
         switch (o_ptr->bi_key.tval()) {
         case ItemKindType::ROD:
             o_ptr->timeout = 0;
             break;
         case ItemKindType::STAFF:
-            if (o_ptr->pval < baseitem.pval) {
-                o_ptr->pval = baseitem.pval;
+            if (o_ptr->pval < base_pval) {
+                o_ptr->pval = base_pval;
             }
 
             o_ptr->ident &= ~(IDENT_EMPTY);
             break;
         case ItemKindType::WAND:
-            if (o_ptr->pval < o_ptr->number * baseitem.pval) {
-                o_ptr->pval = o_ptr->number * baseitem.pval;
+            if (o_ptr->pval < o_ptr->number * base_pval) {
+                o_ptr->pval = o_ptr->number * base_pval;
             }
 
             o_ptr->ident &= ~(IDENT_EMPTY);

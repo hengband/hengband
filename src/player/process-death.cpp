@@ -10,7 +10,6 @@
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
-#include "floor/floor-town.h"
 #include "game-option/game-play-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
@@ -21,7 +20,9 @@
 #include "player-info/class-info.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -242,7 +243,7 @@ static void inventory_aware(PlayerType *player_ptr)
             continue;
         }
 
-        object_aware(player_ptr, o_ptr);
+        object_aware(player_ptr, *o_ptr);
         o_ptr->mark_as_known();
     }
 }
@@ -254,15 +255,15 @@ static void inventory_aware(PlayerType *player_ptr)
 static void home_aware(PlayerType *player_ptr)
 {
     for (size_t i = 1; i < towns_info.size(); i++) {
-        auto *store_ptr = &towns_info[i].stores[StoreSaleType::HOME];
-        for (auto j = 0; j < store_ptr->stock_num; j++) {
-            auto &item = store_ptr->stock[j];
-            if (!item->is_valid()) {
+        const auto &store = towns_info[i].get_store(StoreSaleType::HOME);
+        for (auto j = 0; j < store.stock_num; j++) {
+            auto &item = *store.stock[j];
+            if (!item.is_valid()) {
                 continue;
             }
 
-            object_aware(player_ptr, item.get());
-            item->mark_as_known();
+            object_aware(player_ptr, item);
+            item.mark_as_known();
         }
     }
 }
@@ -303,18 +304,18 @@ static bool show_dead_player_items(PlayerType *player_ptr)
 static void show_dead_home_items(PlayerType *player_ptr)
 {
     for (size_t l = 1; l < towns_info.size(); l++) {
-        const auto *store_ptr = &towns_info[l].stores[StoreSaleType::HOME];
-        if (store_ptr->stock_num == 0) {
+        const auto &store = towns_info[l].get_store(StoreSaleType::HOME);
+        if (store.stock_num == 0) {
             continue;
         }
 
-        for (int i = 0, k = 0; i < store_ptr->stock_num; k++) {
+        for (int i = 0, k = 0; i < store.stock_num; k++) {
             term_clear();
-            for (int j = 0; (j < 12) && (i < store_ptr->stock_num); j++, i++) {
-                const auto &item = store_ptr->stock[i];
+            for (int j = 0; (j < 12) && (i < store.stock_num); j++, i++) {
+                const auto &item = *store.stock[i];
                 prt(format("%c) ", I2A(j)), j + 2, 4);
-                const auto item_name = describe_flavor(player_ptr, *item, 0);
-                c_put_str(tval_to_attr[enum2i(item->bi_key.tval())], item_name, j + 2, 7);
+                const auto item_name = describe_flavor(player_ptr, item, 0);
+                c_put_str(tval_to_attr[enum2i(item.bi_key.tval())], item_name, j + 2, 7);
             }
 
             prt(format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k + 1), 0, 0);

@@ -3,9 +3,10 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
-#include "system/monster-race-info.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include "util/probability-table.h"
@@ -77,9 +78,10 @@ std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitK
 std::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align, int boost)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monraces = MonraceList::get_instance();
     for (auto attempts = 100; attempts > 0; attempts--) {
         const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level + boost, PM_NONE);
-        const auto &monrace = monraces_info[monrace_id];
+        const auto &monrace = monraces.get_monrace(monrace_id);
         if (monster_has_hostile_align(player_ptr, &align, 0, 0, &monrace)) {
             continue;
         }
@@ -144,8 +146,12 @@ std::string pit_subtype_string(PitKind type)
 std::string nest_subtype_string(NestKind type)
 {
     switch (type) {
-    case NestKind::CLONE:
-        return std::string("(").append(monraces_info[vault_aux_race].name).append(1, ')');
+    case NestKind::CLONE: {
+        const auto &monrace = MonraceList::get_instance().get_monrace(vault_aux_race);
+        std::stringstream ss;
+        ss << '(' << monrace.name << ')';
+        return ss.str();
+    }
     case NestKind::SYMBOL_GOOD:
     case NestKind::SYMBOL_EVIL:
         return std::string("(").append(1, vault_aux_char).append(1, ')');

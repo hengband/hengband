@@ -28,17 +28,22 @@
 #include "room/rooms-vault.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
-#include "system/dungeon-info.h"
-#include "system/monster-race-info.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/spell-info-list.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <fstream>
+#include <functional>
 #include <string>
 #include <string_view>
 #include <sys/stat.h>
@@ -47,8 +52,6 @@
 #endif
 
 namespace {
-
-using Retoucher = void (*)();
 
 /// @note clang-formatによるconceptの整形が安定していないので抑制しておく
 // clang-format off
@@ -81,7 +84,7 @@ static void init_header(angband_header *head)
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename InfoType>
-static void init_info(std::string_view filename, angband_header &head, InfoType &info, Parser parser, Retoucher retouch = nullptr)
+static void init_info(std::string_view filename, angband_header &head, InfoType &info, Parser parser, std::function<void()> retouch = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
@@ -200,7 +203,8 @@ void init_class_skills_info()
 void init_dungeons_info()
 {
     init_header(&dungeons_header);
-    init_info("DungeonDefinitions.txt", dungeons_header, dungeons_info, parse_dungeons_info, retouch_dungeons_info);
+    auto &dungeons = DungeonList::get_instance();
+    init_info("DungeonDefinitions.txt", dungeons_header, dungeons, parse_dungeons_info, retouch_dungeons_info);
 }
 
 /*!
@@ -219,9 +223,8 @@ void init_terrains_info()
 {
     init_header(&terrains_header);
     auto *parser = parse_terrains_info;
-    auto *retoucher = retouch_terrains_info;
     auto &terrains = TerrainList::get_instance();
-    init_info("TerrainDefinitions.txt", terrains_header, terrains, parser, retoucher);
+    init_info("TerrainDefinitions.txt", terrains_header, terrains, parser, [&terrains] { terrains.retouch(); });
 }
 
 /*!
@@ -230,7 +233,7 @@ void init_terrains_info()
 void init_monrace_definitions()
 {
     init_header(&monraces_header);
-    init_json("MonraceDefinitions.jsonc", "monsters", monraces_header, monraces_info, parse_monraces_info);
+    init_json("MonraceDefinitions.jsonc", "monsters", monraces_header, MonraceList::get_instance().get_raw_map(), parse_monraces_info);
 }
 
 /*!

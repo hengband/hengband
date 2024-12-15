@@ -3,10 +3,10 @@
 #include "dungeon/quest.h"
 #include "floor/geometry.h"
 #include "monster/monster-info.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
 melee_spell_type::melee_spell_type(PlayerType *player_ptr, MONSTER_IDX m_idx)

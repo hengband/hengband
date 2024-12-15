@@ -3,8 +3,11 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "system/dungeon-info.h"
-#include "system/monster-race-info.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/dungeon-record.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include <numeric>
 
@@ -110,10 +113,12 @@ void MeleeArena::update_gladiators(PlayerType *player_ptr)
 
 int MeleeArena::decide_max_level() const
 {
+    const auto &dungeon_records = DungeonRecords::get_instance();
     auto max_dl = 0;
-    for (const auto &dungeon : dungeons_info) {
-        if (max_dl < max_dlv[dungeon.idx]) {
-            max_dl = max_dlv[dungeon.idx];
+    for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
+        const auto max_level = dungeon_records.get_record(dungeon_id).get_max_level();
+        if (max_dl < max_level) {
+            max_dl = max_level;
         }
     }
 

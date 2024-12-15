@@ -65,7 +65,7 @@ static void handle_signal_simple(int sig)
     (void)signal(sig, SIG_IGN);
     const auto &world = AngbandWorld::get_instance();
     if (!world.character_generated || world.character_saved) {
-        quit(nullptr);
+        quit("");
     }
 
     signal_count++;
@@ -123,7 +123,7 @@ static void handle_signal_abort(int sig)
     (void)signal(sig, SIG_IGN);
     const auto &world = AngbandWorld::get_instance();
     if (!world.character_generated || world.character_saved) {
-        quit(nullptr);
+        quit("");
     }
 
     auto &floor = *p_ptr->current_floor_ptr;

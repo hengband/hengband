@@ -14,7 +14,6 @@
 #include "floor/geometry.h"
 #include "game-option/cheat-types.h"
 #include "game-option/special-options.h"
-#include "grid/feature-flag-types.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
@@ -47,13 +46,14 @@
 #include "player/player-status-table.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-key.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/enums/terrain/terrain-characteristics.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
@@ -64,7 +64,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
-#include "world/world-object.h"
 
 /*!
  * @brief 矢弾の属性を定義する
@@ -72,7 +71,7 @@
  * @param arrow_ptr 矢弾のオブジェクト構造体参照ポインタ
  * @return スナイパーの射撃属性、弓矢の属性を考慮する。デフォルトはGF_PLAYER_SHOOT。
  */
-AttributeFlags shot_attribute(PlayerType *player_ptr, ItemEntity *bow_ptr, ItemEntity *arrow_ptr, SPELL_IDX snipe_type)
+static AttributeFlags shot_attribute(PlayerType *player_ptr, ItemEntity *bow_ptr, ItemEntity *arrow_ptr, SPELL_IDX snipe_type)
 {
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_SHOOT);
@@ -460,8 +459,6 @@ static MULTIPLY calc_shot_damage_with_slay(
 void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SPELL_IDX snipe_type)
 {
     POSITION y, x, ny, nx, ty, tx, prev_y, prev_x;
-    ItemEntity forge;
-    ItemEntity *q_ptr;
     ItemEntity *o_ptr;
 
     AttributeFlags attribute_flags{};
@@ -471,11 +468,11 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     auto stick_to = false;
 
     /* Access the item (if in the pack) */
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     if (i_idx >= 0) {
         o_ptr = &player_ptr->inventory_list[i_idx];
     } else {
-        o_ptr = &floor_ptr->o_list[0 - i_idx];
+        o_ptr = &floor.o_list[0 - i_idx];
     }
 
     /* Sniper - Cannot shot a single arrow twice */
@@ -596,11 +593,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
         /* Start at the player */
         y = player_ptr->y;
         x = player_ptr->x;
-        q_ptr = &forge;
-        q_ptr->copy_from(o_ptr);
+        auto fire_item = o_ptr->clone();
 
         /* Single object */
-        q_ptr->number = 1;
+        fire_item.number = 1;
 
         vary_item(player_ptr, i_idx, -1);
 
@@ -629,7 +625,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
             /* Shatter Arrow */
             if (snipe_type == SP_KILL_WALL) {
-                g_ptr = &floor_ptr->grid_array[ny][nx];
+                g_ptr = &floor.grid_array[ny][nx];
 
                 if (g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK) && !g_ptr->has_monster()) {
                     if (any_bits(g_ptr->info, (CAVE_MARK))) {
@@ -654,7 +650,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             }
 
             /* Stopped by walls/doors */
-            if (!cave_has_flag_bold(floor_ptr, ny, nx, TerrainCharacteristics::PROJECT) && !floor_ptr->grid_array[ny][nx].has_monster()) {
+            if (!cave_has_flag_bold(&floor, ny, nx, TerrainCharacteristics::PROJECT) && !floor.grid_array[ny][nx].has_monster()) {
                 break;
             }
 
@@ -663,14 +659,14 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
             /* Sniper */
             if (snipe_type == SP_LITE) {
-                set_bits(floor_ptr->grid_array[ny][nx].info, CAVE_GLOW);
+                set_bits(floor.grid_array[ny][nx].info, CAVE_GLOW);
                 note_spot(player_ptr, ny, nx);
                 lite_spot(player_ptr, ny, nx);
             }
 
             /* The player can see the (on screen) missile */
             if (panel_contains(ny, nx) && player_can_see_bold(player_ptr, ny, nx)) {
-                const auto symbol = q_ptr->get_symbol();
+                const auto symbol = fire_item.get_symbol();
 
                 /* Draw, Hilite, Fresh, Pause, Erase */
                 if (delay_factor > 0) {
@@ -699,7 +695,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
             /* Sniper */
             if (snipe_type == SP_EVILNESS) {
-                reset_bits(floor_ptr->grid_array[ny][nx].info, (CAVE_GLOW | CAVE_MARK));
+                reset_bits(floor.grid_array[ny][nx].info, (CAVE_GLOW | CAVE_MARK));
                 note_spot(player_ptr, ny, nx);
                 lite_spot(player_ptr, ny, nx);
             }
@@ -712,11 +708,11 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             y = ny;
 
             /* Monster here, Try to hit it */
-            if (floor_ptr->grid_array[y][x].has_monster()) {
+            if (floor.grid_array[y][x].has_monster()) {
                 sound(SOUND_SHOOT_HIT);
-                Grid *c_mon_ptr = &floor_ptr->grid_array[y][x];
+                Grid *c_mon_ptr = &floor.grid_array[y][x];
 
-                auto *m_ptr = &floor_ptr->m_list[c_mon_ptr->m_idx];
+                auto *m_ptr = &floor.m_list[c_mon_ptr->m_idx];
                 auto *r_ptr = &m_ptr->get_monrace();
 
                 /* Check the visibility */
@@ -793,10 +789,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         }
                     } else {
 
-                        attribute_flags = shot_attribute(player_ptr, j_ptr, q_ptr, snipe_type);
+                        attribute_flags = shot_attribute(player_ptr, j_ptr, &fire_item, snipe_type);
                         /* Apply special damage */
-                        tdam = calc_shot_damage_with_slay(player_ptr, j_ptr, q_ptr, tdam, m_ptr, snipe_type);
-                        tdam = critical_shot(player_ptr, q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
+                        tdam = calc_shot_damage_with_slay(player_ptr, j_ptr, &fire_item, tdam, m_ptr, snipe_type);
+                        tdam = critical_shot(player_ptr, fire_item.weight, fire_item.to_h, j_ptr->to_h, tdam);
 
                         /* No negative damage */
                         if (tdam < 0) {
@@ -822,7 +818,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                     /* Sniper */
                     if (snipe_type == SP_HOLYNESS) {
-                        set_bits(floor_ptr->grid_array[ny][nx].info, CAVE_GLOW);
+                        set_bits(floor.grid_array[ny][nx].info, CAVE_GLOW);
                         note_spot(player_ptr, ny, nx);
                         lite_spot(player_ptr, ny, nx);
                     }
@@ -837,7 +833,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     else {
                         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                         /* STICK TO */
-                        if (q_ptr->is_fixed_artifact() && (sniper_concent == 0)) {
+                        if (fire_item.is_fixed_artifact() && (sniper_concent == 0)) {
                             stick_to = true;
                             msg_format(_("%sは%sに突き刺さった！", "%s^ is stuck in %s!"), item_name.data(), m_name.data());
                         }
@@ -879,12 +875,12 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                 nx = pos_to.x;
 
                                 /* Stopped by wilderness boundary */
-                                if (!in_bounds2(floor_ptr, ny, nx)) {
+                                if (!in_bounds2(&floor, ny, nx)) {
                                     break;
                                 }
 
                                 /* Stopped by walls/doors */
-                                if (!player_can_enter(player_ptr, floor_ptr->grid_array[ny][nx].feat, 0)) {
+                                if (!player_can_enter(player_ptr, floor.grid_array[ny][nx].feat, 0)) {
                                     break;
                                 }
 
@@ -893,8 +889,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                     break;
                                 }
 
-                                floor_ptr->grid_array[ny][nx].m_idx = m_idx;
-                                floor_ptr->grid_array[oy][ox].m_idx = 0;
+                                floor.grid_array[ny][nx].m_idx = m_idx;
+                                floor.grid_array[oy][ox].m_idx = 0;
 
                                 m_ptr->fx = nx;
                                 m_ptr->fy = ny;
@@ -931,41 +927,39 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
         }
 
         /* Chance of breakage (during attacks) */
-        auto j = (hit_body ? breakage_chance(player_ptr, q_ptr, PlayerClass(player_ptr).equals(PlayerClassType::ARCHER), snipe_type) : 0);
+        auto j = (hit_body ? breakage_chance(player_ptr, &fire_item, PlayerClass(player_ptr).equals(PlayerClassType::ARCHER), snipe_type) : 0);
 
         if (stick_to) {
-            MONSTER_IDX m_idx = floor_ptr->grid_array[y][x].m_idx;
-            auto *m_ptr = &floor_ptr->m_list[m_idx];
-            OBJECT_IDX o_idx = o_pop(floor_ptr);
-
-            if (!o_idx) {
+            const auto m_idx = floor.grid_array[y][x].m_idx;
+            auto &monster = floor.m_list[m_idx];
+            const auto item_idx = floor.pop_empty_index_item();
+            if (item_idx == 0) {
                 msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), item_name.data());
-                if (q_ptr->is_fixed_artifact()) {
+                if (fire_item.is_fixed_artifact()) {
                     ArtifactList::get_instance().get_artifact(j_ptr->fa_id).is_generated = false;
                 }
                 return;
             }
 
-            o_ptr = &floor_ptr->o_list[o_idx];
-            o_ptr->copy_from(q_ptr);
-
             /* Forget mark */
-            o_ptr->marked.reset(OmType::TOUCHED);
+            fire_item.marked.reset(OmType::TOUCHED);
 
             /* Forget location */
-            o_ptr->iy = o_ptr->ix = 0;
+            fire_item.iy = fire_item.ix = 0;
 
             /* Memorize monster */
-            o_ptr->held_m_idx = m_idx;
+            fire_item.held_m_idx = m_idx;
+
+            floor.o_list[item_idx] = std::move(fire_item);
 
             /* Carry object */
-            m_ptr->hold_o_idx_list.add(floor_ptr, o_idx);
-        } else if (cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
+            monster.hold_o_idx_list.add(&floor, item_idx);
+        } else if (cave_has_flag_bold(&floor, y, x, TerrainCharacteristics::PROJECT)) {
             /* Drop (or break) near that location */
-            (void)drop_near(player_ptr, q_ptr, j, y, x);
+            (void)drop_near(player_ptr, &fire_item, j, y, x);
         } else {
             /* Drop (or break) near that location */
-            (void)drop_near(player_ptr, q_ptr, j, prev_y, prev_x);
+            (void)drop_near(player_ptr, &fire_item, j, prev_y, prev_x);
         }
 
         /* Sniper - Repeat shooting when double shots */

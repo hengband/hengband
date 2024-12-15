@@ -8,7 +8,6 @@
 #include "core/show-file.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/floor-town.h"
 #include "inventory/inventory-slot-types.h"
 #include "io-dump/dump-util.h"
 #include "object-enchant/special-object-flags.h"
@@ -20,6 +19,8 @@
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-ring-types.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -255,17 +256,16 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
  */
 static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
-    store_type *store_ptr;
-    store_ptr = &towns_info[1].stores[StoreSaleType::HOME];
+    const auto &store = towns_info[1].get_store(StoreSaleType::HOME);
     char where[32];
     strcpy(where, _("家", "H "));
-    for (int i = 0; i < store_ptr->stock_num; i++) {
-        const auto &item = store_ptr->stock[i];
-        if (!check_item_knowledge(*item, tval)) {
+    for (int i = 0; i < store.stock_num; i++) {
+        const auto &item = *store.stock[i];
+        if (!check_item_knowledge(item, tval)) {
             continue;
         }
 
-        do_cmd_knowledge_inventory_aux(player_ptr, fff, *item, where);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, where);
         add_res_label(label_number, fff);
     }
 }

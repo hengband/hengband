@@ -3,11 +3,10 @@
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "system/artifact-type-definition.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
-#include "world/world-object.h"
 
 /*!
  * @brief フロアの指定位置に生成階に応じた財宝オブジェクトの生成を行う。
@@ -21,32 +20,32 @@
  */
 void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
+    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
-    auto &grid = floor.grid_array[y][x];
-    if (!in_bounds(&floor, y, x)) {
+    auto &grid = floor.get_grid(pos);
+    if (!in_bounds(&floor, pos.y, pos.x)) {
         return;
     }
-    if (!cave_drop_bold(&floor, y, x)) {
+    if (!cave_drop_bold(&floor, pos.y, pos.x)) {
         return;
     }
     if (!grid.o_idx_list.empty()) {
         return;
     }
 
-    const auto item = floor.make_gold();
-    const auto o_idx = o_pop(&floor);
-    if (o_idx == 0) {
+    auto item = floor.make_gold();
+    const auto item_idx = floor.pop_empty_index_item();
+    if (item_idx == 0) {
         return;
     }
 
-    auto &item_pop = floor.o_list[o_idx];
-    item_pop = item;
-    item_pop.iy = y;
-    item_pop.ix = x;
-    grid.o_idx_list.add(&floor, o_idx);
+    item.iy = pos.y;
+    item.ix = pos.x;
+    floor.o_list[item_idx] = std::move(item);
+    grid.o_idx_list.add(&floor, item_idx);
 
-    note_spot(player_ptr, y, x);
-    lite_spot(player_ptr, y, x);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
 }
 
 /*!
@@ -64,37 +63,28 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    ItemEntity forge;
-    ItemEntity *q_ptr;
-    if (!in_bounds(floor_ptr, y, x) || !cave_drop_bold(floor_ptr, y, x) || !g_ptr->o_idx_list.empty()) {
+    const Pos2D pos(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid = floor.get_grid(pos);
+    if (!in_bounds(&floor, y, x) || !cave_drop_bold(&floor, y, x) || !grid.o_idx_list.empty()) {
         return;
     }
 
-    q_ptr = &forge;
-    q_ptr->wipe();
-    if (!make_object(player_ptr, q_ptr, mode)) {
+    const auto item_idx = floor.pop_empty_index_item();
+    if (item_idx == 0) {
         return;
     }
 
-    OBJECT_IDX o_idx = o_pop(floor_ptr);
-    if (o_idx == 0) {
-        if (q_ptr->is_fixed_artifact()) {
-            q_ptr->get_fixed_artifact().is_generated = false;
-        }
-
+    auto &item = floor.o_list[item_idx];
+    item.wipe();
+    if (!make_object(player_ptr, &item, mode)) {
         return;
     }
 
-    ItemEntity *o_ptr;
-    o_ptr = &floor_ptr->o_list[o_idx];
-    o_ptr->copy_from(q_ptr);
+    item.iy = pos.y;
+    item.ix = pos.x;
+    grid.o_idx_list.add(&floor, item_idx);
 
-    o_ptr->iy = y;
-    o_ptr->ix = x;
-    g_ptr->o_idx_list.add(floor_ptr, o_idx);
-
-    note_spot(player_ptr, y, x);
-    lite_spot(player_ptr, y, x);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
 }

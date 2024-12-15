@@ -79,15 +79,18 @@
 #include "system/angband-system.h"
 #include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "target/grid-selector.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
@@ -467,10 +470,10 @@ void wiz_create_feature(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details 範囲外の値が選択されたら再入力を促す
  */
-static std::optional<short> select_debugging_dungeon(short initial_dungeon_id)
+static std::optional<int> select_debugging_dungeon(int initial_dungeon_id)
 {
     if (command_arg > 0) {
-        return static_cast<short>(std::clamp(static_cast<int>(command_arg), DUNGEON_ANGBAND, DUNGEON_MAX));
+        return std::clamp(static_cast<int>(command_arg), DUNGEON_ANGBAND, DUNGEON_MAX);
     }
 
     return input_numerics("Jump which dungeon", DUNGEON_ANGBAND, DUNGEON_MAX, initial_dungeon_id);
@@ -484,7 +487,7 @@ static std::optional<short> select_debugging_dungeon(short initial_dungeon_id)
  */
 static std::optional<int> select_debugging_floor(const FloorType &floor, int dungeon_id)
 {
-    const auto &dungeon = dungeons_info[dungeon_id];
+    const auto &dungeon = DungeonList::get_instance().get_dungeon(dungeon_id);
     const auto max_depth = dungeon.maxdepth;
     const auto min_depth = dungeon.mindepth;
     const auto is_current_dungeon = floor.dungeon_idx == dungeon_id;
@@ -500,7 +503,7 @@ static std::optional<int> select_debugging_floor(const FloorType &floor, int dun
  * @brief 任意のダンジョン及び階層に飛ぶ
  * Go to any level
  */
-static void wiz_jump_floor(PlayerType *player_ptr, DUNGEON_IDX dun_idx, DEPTH depth)
+static void wiz_jump_floor(PlayerType *player_ptr, int dun_idx, DEPTH depth)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     floor.set_dungeon_index(dun_idx);
@@ -534,7 +537,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto is_in_dungeon = floor.is_in_underground();
-    const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : static_cast<short>(DUNGEON_ANGBAND);
+    const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : DUNGEON_ANGBAND;
     const auto dungeon_id = select_debugging_dungeon(dungeon_idx);
     if (!dungeon_id) {
         if (!is_in_dungeon) {
@@ -570,7 +573,7 @@ void wiz_learn_items_all(PlayerType *player_ptr)
     for (const auto &baseitem : BaseitemList::get_instance()) {
         if (baseitem.is_valid() && baseitem.level <= command_arg) {
             ItemEntity item(baseitem.idx);
-            object_aware(player_ptr, &item);
+            object_aware(player_ptr, item);
         }
     }
 }

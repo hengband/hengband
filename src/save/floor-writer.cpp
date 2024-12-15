@@ -12,7 +12,7 @@
 #include "save/item-writer.h"
 #include "save/monster-entity-writer.h"
 #include "save/save-util.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -227,7 +227,7 @@ static bool save_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
 
-    byte tmp8u = (byte)randint0(256);
+    auto tmp8u = static_cast<uint8_t>(Rand_external(256));
     save_xor_byte = 0;
     wr_byte(tmp8u);
 

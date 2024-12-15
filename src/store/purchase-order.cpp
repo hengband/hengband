@@ -28,7 +28,8 @@
 #include "store/store.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "term/screen-processor.h"
 #include "util/enum-converter.h"
 #include "util/int-char-converter.h"
@@ -50,7 +51,7 @@
  */
 static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
 {
-    auto price_ask = price_item(player_ptr, o_ptr, ot_ptr->inflate, false, store_num);
+    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), ot_ptr->inflate, false, store_num);
 
     price_ask *= o_ptr->number;
     const auto s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
@@ -87,35 +88,32 @@ static std::optional<short> show_store_select_item(const int i, StoreSaleType st
 /*!
  * @brief 家のアイテムを取得する
  * @param player_ptr プレイヤー情報の参照ポインタ
- * @param o_ptr 取得元オブジェクト
- * @param j_ptr 取得先オブジェクト(指定数量分)
- * @param item_new 取得先インベントリ番号(アドレス渡し)
- * @param amt 数量
- * @param i お店のストック数(アドレス渡し)
- * @param 取得元インベントリ番号
+ * @param item_home 取得元オブジェクト
+ * @param item_inventory 取得先オブジェクト(指定数量分)
+ * @param i_idx 取得先インベントリ番号
  */
-static void take_item_from_home(PlayerType *player_ptr, ItemEntity *o_ptr, ItemEntity *j_ptr, const COMMAND_CODE item)
+static void take_item_from_home(PlayerType *player_ptr, ItemEntity &item_home, ItemEntity &item_inventory, short i_idx)
 {
-    const int amt = j_ptr->number;
-    distribute_charges(o_ptr, j_ptr, amt);
+    const auto amt = item_inventory.number;
+    distribute_charges(&item_home, &item_inventory, amt);
 
-    auto item_new = store_item_to_inventory(player_ptr, j_ptr);
+    const auto item_new = store_item_to_inventory(player_ptr, &item_inventory);
     const auto item_name = describe_flavor(player_ptr, player_ptr->inventory_list[item_new], 0);
     handle_stuff(player_ptr);
     msg_format(_("%s(%c)を取った。", "You have %s (%c)."), item_name.data(), index_to_label(item_new));
 
-    auto i = st_ptr->stock_num;
-    store_item_increase(item, -amt);
-    store_item_optimize(item);
+    const auto stock_num = st_ptr->stock_num;
+    st_ptr->increase_item(i_idx, -amt);
+    st_ptr->optimize_item(i_idx);
 
-    auto combined_or_reordered = combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
-
-    if (i == st_ptr->stock_num) {
+    const auto combined_or_reordered = combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
+    if (stock_num == st_ptr->stock_num) {
         if (combined_or_reordered) {
             display_store_inventory(player_ptr, StoreSaleType::HOME);
-        } else {
-            display_entry(player_ptr, item, StoreSaleType::HOME);
+            return;
         }
+
+        display_entry(player_ptr, i_idx, StoreSaleType::HOME);
         return;
     }
 
@@ -199,41 +197,40 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     const short item_num = *item_num_opt + store_top;
-    auto &item_store = st_ptr->stock[item_num];
-
-    ITEM_NUMBER amt = 1;
-    ItemEntity item = *item_store;
+    auto &item_store = *st_ptr->stock[item_num];
+    auto amt = 1;
+    auto item = item_store.clone();
 
     /*
      * If a rod or wand, allocate total maximum timeouts or charges
      * between those purchased and left on the shelf.
      */
-    reduce_charges(&item, item_store->number - amt);
+    reduce_charges(&item, item_store.number - amt);
     item.number = amt;
     if (!check_store_item_to_inventory(player_ptr, &item)) {
         msg_print(_("そんなにアイテムを持てない。", "You cannot carry that many different items."));
         return;
     }
 
-    const auto best = price_item(player_ptr, &item, ot_ptr->inflate, false, store_num);
-    if (item_store->number > 1) {
+    const auto best = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
+    if (item_store.number > 1) {
         if (store_num != StoreSaleType::HOME) {
             msg_format(_("一つにつき $%dです。", "That costs %d gold per item."), best);
         }
 
-        amt = input_quantity(item_store->number);
+        amt = input_quantity(item_store.number);
         if (amt <= 0) {
             return;
         }
     }
 
-    item = *item_store;
+    item = item_store.clone();
 
     /*
      * If a rod or wand, allocate total maximum timeouts or charges
      * between those purchased and left on the shelf.
      */
-    reduce_charges(&item, item_store->number - amt);
+    reduce_charges(&item, item_store.number - amt);
     item.number = amt;
     if (!check_store_item_to_inventory(player_ptr, &item)) {
         msg_print(_("ザックにそのアイテムを入れる隙間がない。", "You cannot carry that many items."));
@@ -241,7 +238,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     if (store_num == StoreSaleType::HOME) {
-        take_item_from_home(player_ptr, item_store.get(), &item, item_num);
+        take_item_from_home(player_ptr, item_store, item, item_num);
         return;
     }
 
@@ -270,14 +267,14 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     if (store_num == StoreSaleType::BLACK) {
         chg_virtue(player_ptr, Virtue::JUSTICE, -1);
     }
-    if ((item_store->bi_key.tval() == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
+    if ((item_store.bi_key.tval() == ItemKindType::BOTTLE) && (store_num != StoreSaleType::HOME)) {
         chg_virtue(player_ptr, Virtue::NATURE, -1);
     }
 
     sound(SOUND_BUY);
     player_ptr->au -= price;
     store_prt_gold(player_ptr);
-    object_aware(player_ptr, &item);
+    object_aware(player_ptr, item);
 
     msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), purchased_item_name.data(), (long)price);
     angband_strcpy(record_o_name, purchased_item_name, MAX_NLEN);
@@ -287,8 +284,8 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         exe_write_diary(floor, DiaryKind::BUY, 0, purchased_item_name);
     }
 
-    const auto diary_item_name = describe_flavor(player_ptr, *item_store, OD_NAME_ONLY);
-    if (record_rand_art && item_store->is_random_artifact()) {
+    const auto diary_item_name = describe_flavor(player_ptr, item_store, OD_NAME_ONLY);
+    if (record_rand_art && item_store.is_random_artifact()) {
         exe_write_diary(floor, DiaryKind::ART, 0, diary_item_name);
     }
 
@@ -305,12 +302,12 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     const auto got_item_name = describe_flavor(player_ptr, player_ptr->inventory_list[item_new], 0);
     msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), got_item_name.data(), index_to_label(item_new));
 
-    if (item_store->is_wand_rod()) {
-        item_store->pval -= item.pval;
+    if (item_store.is_wand_rod()) {
+        item_store.pval -= item.pval;
     }
 
     i = st_ptr->stock_num;
-    store_item_increase(item_num, -amt);
-    store_item_optimize(item_num);
+    st_ptr->increase_item(item_num, -amt);
+    st_ptr->optimize_item(item_num);
     switch_store_stock(player_ptr, i, item_num, store_num);
 }

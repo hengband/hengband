@@ -33,11 +33,11 @@
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
 #include "system/angband-system.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/grid-selector.h"
@@ -498,8 +498,8 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
     const auto &world = AngbandWorld::get_instance();
     while (true) {
         while (true) {
-            y = (POSITION)rand_spread(ny, dis);
-            x = (POSITION)rand_spread(nx, dis);
+            y = rand_spread(ny, dis);
+            x = rand_spread(nx, dis);
             if (in_bounds(player_ptr->current_floor_ptr, y, x)) {
                 break;
             }

@@ -95,15 +95,17 @@
 #include "status/base-status.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/dungeon-record.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -3041,10 +3043,11 @@ long calc_score(PlayerType *player_ptr)
         mult = 5;
     }
 
-    DEPTH max_dl = 0;
-    for (const auto &d_ref : dungeons_info) {
-        if (max_dl < max_dlv[d_ref.idx]) {
-            max_dl = max_dlv[d_ref.idx];
+    auto max_dl = 0;
+    for (const auto &[_, dungeon_record] : DungeonRecords::get_instance()) {
+        const auto max_level = dungeon_record.get_max_level();
+        if (max_dl < max_level) {
+            max_dl = max_level;
         }
     }
 

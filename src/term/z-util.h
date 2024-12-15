@@ -8,7 +8,7 @@
  * are included in all such copies.
  */
 
-#include "system/h-basic.h"
+#include <cstdint>
 #include <string_view>
 
 /*
@@ -19,13 +19,12 @@
 
 /**** Available variables ****/
 
-/* A concptr to the name of the program */
-extern concptr argv0;
+extern std::string_view program_name;
 
 /* Aux functions */
-extern void (*plog_aux)(concptr);
-extern void (*quit_aux)(concptr);
-extern void (*core_aux)(concptr);
+extern void (*plog_aux)(std::string_view);
+extern void (*quit_aux)(std::string_view);
+extern void (*core_aux)(std::string_view);
 
 /**** Available Functions ****/
 
@@ -35,13 +34,13 @@ bool prefix(std::string_view s, std::string_view t);
 bool suffix(std::string_view s, std::string_view t);
 
 /* Print an error message */
-void plog(concptr str);
+void plog(std::string_view str);
 
 /* Exit, with optional message */
-void quit(concptr str);
+void quit(std::string_view str);
 
 /* Dump core, with optional message */
-void core(concptr str);
+void core(std::string_view str);
 
 /* 64-bit integer operations */
 
@@ -72,4 +71,4 @@ void s64b_mul(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 void s64b_div(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 void s64b_mod(int32_t *A1, uint32_t *A2, int32_t B1, uint32_t B2);
 
-int count_bits(BIT_FLAGS x);
+int count_bits(uint32_t x);

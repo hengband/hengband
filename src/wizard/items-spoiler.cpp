@@ -6,7 +6,8 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-value.h"
 #include "system/angband-system.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/z-form.h"
@@ -24,7 +25,7 @@
  */
 static std::pair<DEPTH, PRICE> get_info(const ItemEntity &item)
 {
-    const auto level = item.get_baseitem().level;
+    const auto level = item.get_baseitem_level();
     const auto price = item.calc_price();
     return { level, price };
 }

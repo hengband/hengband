@@ -5,7 +5,6 @@
 
 #include "main-win/main-win-music.h"
 #include "dungeon/quest.h"
-#include "floor/floor-town.h"
 #include "main-win/main-win-cfg-reader.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-mci.h"
@@ -15,8 +14,11 @@
 #include "main/music-definitions-table.h"
 #include "main/scene-table.h"
 #include "main/sound-of-music.h"
-#include "system/dungeon-info.h"
-#include "system/monster-race-info.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
+#include "system/monrace/monrace-list.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
 #include "world/world.h"
@@ -66,7 +68,7 @@ static std::optional<std::string> basic_key_at(int index)
  */
 static std::optional<std::string> dungeon_key_at(int index)
 {
-    if (index >= static_cast<int>(dungeons_info.size())) {
+    if (index >= static_cast<int>(DungeonList::get_instance().size())) {
         return std::nullopt;
     }
 

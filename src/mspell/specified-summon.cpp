@@ -14,10 +14,11 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell/summon-types.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
@@ -78,8 +79,8 @@ MONSTER_NUMBER summon_guardian(PlayerType *player_ptr, POSITION y, POSITION x, i
     int num = 2 + randint1(3);
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
-
-    if (monraces_info[MonraceId::JORMUNGAND].cur_num < monraces_info[MonraceId::JORMUNGAND].max_num && one_in_(6)) {
+    const auto &jormungand = MonraceList::get_instance().get_monrace(MonraceId::JORMUNGAND);
+    if (jormungand.cur_num < jormungand.max_num && one_in_(6)) {
         mspell_cast_msg_simple msg(_("地面から水が吹き出した！", "Water blew off from the ground!"),
             _("地面から水が吹き出した！", "Water blew off from the ground!"));
 
@@ -152,8 +153,8 @@ MONSTER_NUMBER summon_MOAI(PlayerType *player_ptr, POSITION y, POSITION x, int r
 
 MONSTER_NUMBER summon_DEMON_SLAYER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    auto *r_ptr = &monraces_info[MonraceId::DEMON_SLAYER_MEMBER];
-    if (r_ptr->max_num == 0) {
+    auto &monrace = MonraceList::get_instance().get_monrace(MonraceId::DEMON_SLAYER_MEMBER);
+    if (monrace.max_num == 0) {
         msg_print(_("しかし、隊士は全滅していた…。", "However, all demon slayer members were murdered..."));
         return 0;
     }
@@ -311,8 +312,8 @@ MONSTER_NUMBER summon_THUNDERS(PlayerType *player_ptr, POSITION y, POSITION x, i
  */
 MONSTER_NUMBER summon_YENDER_WIZARD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-    auto *r_ptr = &monraces_info[MonraceId::YENDOR_WIZARD_2];
-    if (r_ptr->max_num == 0) {
+    auto &monrace = MonraceList::get_instance().get_monrace(MonraceId::YENDOR_WIZARD_2);
+    if (monrace.max_num == 0) {
         msg_print(_("しかし、誰も来なかった…。", "However, no kin was appeared..."));
         return 0;
     }
@@ -352,29 +353,25 @@ MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, M
     auto &floor = *player_ptr->current_floor_ptr;
     auto count = 0;
     constexpr auto summon_num = 2;
-    auto real_num = summon_num - monraces_info[MonraceId::BUNBUN_STRIKERS].cur_num;
+    const auto real_num = summon_num - MonraceList::get_instance().get_monrace(MonraceId::BUNBUN_STRIKERS).cur_num;
 
     if (!floor.inside_arena && real_num < MAX_BUNBUN_NUM) {
         for (auto &monster : floor.m_list) {
             if (monster.r_idx == MonraceId::BUNBUN_STRIKERS) {
-                Pos2D attract_position(0, 0);
-                Pos2D current_position(monster.fy, monster.fx);
+                const auto current_position = monster.get_position();
                 auto &current_grid = floor.get_grid(current_position);
                 auto target_m_idx = current_grid.m_idx;
-
-                if (!mon_scatter(player_ptr, MonraceId::BUNBUN_STRIKERS, &attract_position.y, &attract_position.x, position.y, position.x, 2)) {
+                const auto attract_position = mon_scatter(player_ptr, MonraceId::BUNBUN_STRIKERS, position, 2);
+                if (!attract_position) {
                     continue;
                 }
 
                 current_grid.m_idx = 0;
-                floor.get_grid(attract_position).m_idx = target_m_idx;
-
-                monster.fy = attract_position.y;
-                monster.fx = attract_position.x;
-
+                floor.get_grid(*attract_position).m_idx = target_m_idx;
+                monster.set_position(*attract_position);
                 update_monster(player_ptr, target_m_idx, true);
                 lite_spot(player_ptr, current_position.y, current_position.x);
-                lite_spot(player_ptr, attract_position.y, attract_position.x);
+                lite_spot(player_ptr, attract_position->y, attract_position->x);
 
                 count++;
             }

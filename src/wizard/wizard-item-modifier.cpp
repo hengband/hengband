@@ -25,9 +25,11 @@
 #include "object/object-value.h"
 #include "spell-kind/spells-perception.h"
 #include "spell/spells-object.h"
-#include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
-#include "system/floor-type-definition.h"
+#include "system/baseitem/baseitem-allocation.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -276,7 +278,7 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
         }
 
         auto &baseitem = o_ptr->get_baseitem();
-        baseitem.mark_as_aware(); //!< @note 記録には残さないためTRUEを立てるのみ
+        baseitem.mark_awareness(true); //!< @note 記録には残さない.
         set_bits(o_ptr->ident, IDENT_KNOWN | IDENT_FULL_KNOWN);
         o_ptr->marked.set(OmType::TOUCHED);
     }
@@ -311,7 +313,7 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
     for (auto i = 0; i < BASEITEM_MAX_DEPTH; i++) {
         auto total_frac = 0;
         constexpr auto magnificant = CHANCE_BASEITEM_LEVEL_BOOST * BASEITEM_MAX_DEPTH;
-        for (const auto &entry : alloc_kind_table) {
+        for (const auto &entry : BaseitemAllocationTable::get_instance()) {
             auto prob = 0;
             if (entry.level <= i) {
                 prob = entry.prob1 * magnificant;
@@ -319,12 +321,11 @@ static void prt_alloc(const BaseitemKey &bi_key, TERM_LEN row, TERM_LEN col)
                 prob = entry.prob1 * i * BASEITEM_MAX_DEPTH / (entry.level - 1);
             }
 
-            const auto &baseitem = entry.get_baseitem();
             total[i] += prob / magnificant;
             total_frac += prob % magnificant;
 
-            if (baseitem.bi_key == bi_key) {
-                home = baseitem.level;
+            if (entry.is_same_bi_key(bi_key)) {
+                home = entry.get_baseitem_level();
                 rarity[i] += prob / magnificant;
             }
         }
@@ -398,7 +399,7 @@ static void wiz_display_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     auto line = 4;
     const auto &bi_key = o_ptr->bi_key;
-    const auto item_level = o_ptr->get_baseitem().level;
+    const auto item_level = o_ptr->get_baseitem_level();
     prt(format("kind = %-5d  level = %-4d  tval = %-5d  sval = %-5d", o_ptr->bi_id, item_level, enum2i(bi_key.tval()), *bi_key.sval()), line, j);
     prt(format("number = %-3d  wgt = %-6d  ac = %-5d    damage = %s", o_ptr->number, o_ptr->weight, o_ptr->ac, o_ptr->damage_dice.to_string().data()), ++line, j);
     prt(format("pval = %-5d  toac = %-5d  tohit = %-4d  todam = %-4d", o_ptr->pval, o_ptr->to_a, o_ptr->to_h, o_ptr->to_d), ++line, j);
@@ -601,7 +602,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         return;
     }
 
-    ItemEntity item = *o_ptr;
+    auto item = o_ptr->clone();
     auto changed = false;
     constexpr auto prompt = "[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ";
     while (true) {
@@ -627,9 +628,9 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
             item.fa_id = FixedArtifactId::NONE;
         }
 
-        const auto applied_item = wiz_apply_magic_to_item(player_ptr, *command, o_ptr->bi_id);
+        auto applied_item = wiz_apply_magic_to_item(player_ptr, *command, o_ptr->bi_id);
         if (applied_item) {
-            item = *applied_item;
+            item = std::move(*applied_item);
         }
 
         item.iy = o_ptr->iy;
@@ -641,7 +642,7 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         return;
     }
 
-    *o_ptr = item;
+    *o_ptr = std::move(item);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
@@ -743,13 +744,11 @@ void wiz_modify_item(PlayerType *player_ptr)
 
     screen_save();
 
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    q_ptr->copy_from(o_ptr);
+    auto modified_item = o_ptr->clone();
     auto changed = false;
     constexpr auto prompt = "[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ";
     while (true) {
-        wiz_display_item(player_ptr, q_ptr);
+        wiz_display_item(player_ptr, &modified_item);
         const auto command = input_command(prompt);
         if (!command) {
             changed = false;
@@ -762,19 +761,19 @@ void wiz_modify_item(PlayerType *player_ptr)
         }
 
         if (command == 's' || command == 'S') {
-            wiz_statistics(player_ptr, q_ptr);
+            wiz_statistics(player_ptr, &modified_item);
         }
 
         if (command == 'r' || command == 'R') {
-            wiz_reroll_item(player_ptr, q_ptr);
+            wiz_reroll_item(player_ptr, &modified_item);
         }
 
         if (command == 't' || command == 'T') {
-            wiz_tweak_item(player_ptr, q_ptr);
+            wiz_tweak_item(player_ptr, &modified_item);
         }
 
         if (command == 'q' || command == 'Q') {
-            wiz_quantity_item(q_ptr);
+            wiz_quantity_item(&modified_item);
         }
     }
 
@@ -782,7 +781,7 @@ void wiz_modify_item(PlayerType *player_ptr)
     if (changed) {
         msg_print("Changes accepted.");
 
-        o_ptr->copy_from(q_ptr);
+        *o_ptr = std::move(modified_item);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags_srf = {
             StatusRecalculatingFlag::BONUS,

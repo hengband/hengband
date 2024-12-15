@@ -26,41 +26,20 @@
 #include "object/object-kind-hook.h"
 #include "object/object-stack.h"
 #include "perception/object-perception.h"
-#include "system/alloc-entries.h"
 #include "system/artifact-type-definition.h"
-#include "system/floor-type-definition.h"
+#include "system/baseitem/baseitem-allocation.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/system-variables.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
-#include "world/world-object.h"
 #include "world/world.h"
-
-/*!
- * @brief オブジェクト生成テーブルに生成制約を加える /
- * Apply a "object restriction function" to the "object allocation table"
- * @return 常に0を返す。
- * @details 生成の制約はグローバルのget_obj_index_hook関数ポインタで加える
- */
-static errr get_obj_index_prep(void)
-{
-    for (auto &entry : alloc_kind_table) {
-        if (!get_obj_index_hook || (*get_obj_index_hook)(entry.index)) {
-            entry.prob2 = entry.prob1;
-        } else {
-            entry.prob2 = 0;
-        }
-    }
-
-    return 0;
-}
 
 /*!
  * @brief デバッグ時にアイテム生成情報をメッセージに出力する / Cheat -- describe a created object for the user
@@ -69,7 +48,7 @@ static errr get_obj_index_prep(void)
  */
 static void object_mention(PlayerType *player_ptr, ItemEntity &item)
 {
-    object_aware(player_ptr, &item);
+    object_aware(player_ptr, item);
     item.mark_as_known();
     item.ident |= (IDENT_FULL_KNOWN);
     const auto item_name = describe_flavor(player_ptr, item, 0);
@@ -124,26 +103,27 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
     const auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
     const auto base = get_base_floor(floor, mode, rq_mon_level);
     if (one_in_(prob)) {
-        const auto fa_opt = floor.try_make_instant_artifact();
+        auto fa_opt = floor.try_make_instant_artifact();
         if (fa_opt) {
-            *j_ptr = *fa_opt;
+            *j_ptr = std::move(*fa_opt);
             apply();
             return true;
         }
     }
 
-    if (any_bits(mode, AM_GOOD) && !get_obj_index_hook) {
-        get_obj_index_hook = kind_is_good;
+    if (any_bits(mode, AM_GOOD) && !select_baseitem_id_hook) {
+        select_baseitem_id_hook = kind_is_good;
     }
 
-    if (get_obj_index_hook) {
-        get_obj_index_prep();
+    auto &table = BaseitemAllocationTable::get_instance();
+    if (select_baseitem_id_hook) {
+        table.prepare_allocation();
     }
 
-    const auto bi_id = get_obj_index(&floor, base, mode);
-    if (get_obj_index_hook) {
-        get_obj_index_hook = nullptr;
-        get_obj_index_prep();
+    const auto bi_id = floor.select_baseitem_id(base, mode);
+    if (select_baseitem_id_hook) {
+        select_baseitem_id_hook = nullptr;
+        table.prepare_allocation();
     }
 
     if (bi_id == 0) {
@@ -320,7 +300,6 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     int i, k, d, s;
     POSITION dy, dx;
     POSITION ty, tx = 0;
-    OBJECT_IDX o_idx = 0;
     Grid *g_ptr;
     bool flag = false;
     bool done = false;
@@ -348,7 +327,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
 
     POSITION by = y;
     POSITION bx = x;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     for (dy = -3; dy <= 3; dy++) {
         for (dx = -3; dx <= 3; dx++) {
             bool comb = false;
@@ -360,21 +339,21 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
             ty = y + dy;
             tx = x + dx;
             const Pos2D pos_target(ty, tx);
-            if (!in_bounds(floor_ptr, ty, tx)) {
+            if (!in_bounds(&floor, ty, tx)) {
                 continue;
             }
             if (!projectable(player_ptr, { y, x }, pos_target)) {
                 continue;
             }
 
-            g_ptr = &floor_ptr->grid_array[ty][tx];
-            if (!cave_drop_bold(floor_ptr, ty, tx)) {
+            g_ptr = &floor.grid_array[ty][tx];
+            if (!cave_drop_bold(&floor, ty, tx)) {
                 continue;
             }
 
             k = 0;
             for (const auto this_o_idx : g_ptr->o_idx_list) {
-                const auto &item = floor_ptr->o_list[this_o_idx];
+                const auto &item = floor.o_list[this_o_idx];
                 if (item.is_similar(*j_ptr)) {
                     comb = true;
                 }
@@ -427,14 +406,14 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         ty = rand_spread(by, 1);
         tx = rand_spread(bx, 1);
 
-        if (!in_bounds(floor_ptr, ty, tx)) {
+        if (!in_bounds(&floor, ty, tx)) {
             continue;
         }
 
         by = ty;
         bx = tx;
 
-        if (!cave_drop_bold(floor_ptr, by, bx)) {
+        if (!cave_drop_bold(&floor, by, bx)) {
             continue;
         }
 
@@ -444,9 +423,9 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     auto &artifact = j_ptr->get_fixed_artifact();
     if (!flag) {
         int candidates = 0, pick;
-        for (ty = 1; ty < floor_ptr->height - 1; ty++) {
-            for (tx = 1; tx < floor_ptr->width - 1; tx++) {
-                if (cave_drop_bold(floor_ptr, ty, tx)) {
+        for (ty = 1; ty < floor.height - 1; ty++) {
+            for (tx = 1; tx < floor.width - 1; tx++) {
+                if (cave_drop_bold(&floor, ty, tx)) {
                     candidates++;
                 }
             }
@@ -473,9 +452,9 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         }
 
         pick = randint1(candidates);
-        for (ty = 1; ty < floor_ptr->height - 1; ty++) {
-            for (tx = 1; tx < floor_ptr->width - 1; tx++) {
-                if (cave_drop_bold(floor_ptr, ty, tx)) {
+        for (ty = 1; ty < floor.height - 1; ty++) {
+            for (tx = 1; tx < floor.width - 1; tx++) {
+                if (cave_drop_bold(&floor, ty, tx)) {
                     pick--;
                     if (!pick) {
                         break;
@@ -492,9 +471,9 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         bx = tx;
     }
 
-    g_ptr = &floor_ptr->grid_array[by][bx];
+    g_ptr = &floor.grid_array[by][bx];
     for (const auto this_o_idx : g_ptr->o_idx_list) {
-        auto &item = floor_ptr->o_list[this_o_idx];
+        auto &item = floor.o_list[this_o_idx];
         if (item.is_similar(*j_ptr)) {
             item.absorb(*j_ptr);
             done = true;
@@ -502,11 +481,8 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         }
     }
 
-    if (!done) {
-        o_idx = o_pop(floor_ptr);
-    }
-
-    if (!done && !o_idx) {
+    short item_idx = done ? 0 : floor.pop_empty_index_item();
+    if (!done && (item_idx == 0)) {
 #ifdef JP
         msg_format("%sは消えた。", item_name.data());
 #else
@@ -524,12 +500,12 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
     }
 
     if (!done) {
-        (&floor_ptr->o_list[o_idx])->copy_from(j_ptr);
-        j_ptr = &floor_ptr->o_list[o_idx];
+        floor.o_list[item_idx] = j_ptr->clone();
+        j_ptr = &floor.o_list[item_idx];
         j_ptr->iy = by;
         j_ptr->ix = bx;
         j_ptr->held_m_idx = 0;
-        g_ptr->o_idx_list.add(floor_ptr, o_idx);
+        g_ptr->o_idx_list.add(&floor, item_idx);
         done = true;
     }
 
@@ -554,7 +530,7 @@ OBJECT_IDX drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, PERCENTAGE chanc
         msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
     }
 
-    return o_idx;
+    return item_idx;
 }
 
 /*!

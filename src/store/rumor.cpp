@@ -1,20 +1,26 @@
 #include "store/rumor.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/floor-town.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
 #include "object-enchant/special-object-flags.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
-#include "system/dungeon-info.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/dungeon-record.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <cstdlib>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -34,7 +40,7 @@ static short get_rumor_num(std::string_view zz, short max_idx)
         return randnum1<short>(max_idx);
     }
 
-    return static_cast<short>(atoi(zz.data()));
+    return static_cast<short>(std::atoi(zz.data()));
 }
 
 static std::string bind_rumor_name(std::string_view base, std::string_view item_name)
@@ -57,7 +63,7 @@ static std::string bind_rumor_name(std::string_view base, std::string_view item_
  * @return トークン読み込み成否 とトークン群の配列
  * @todo tmp_tokensを使わず単なるsplitにすればもっと簡略化できそう
  */
-std::pair<bool, std::vector<std::string>> get_rumor_tokens(std::string rumor)
+static std::pair<bool, std::vector<std::string>> get_rumor_tokens(std::string rumor)
 {
     constexpr auto num_tokens = 3;
     char *tmp_tokens[num_tokens];
@@ -108,8 +114,8 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         return;
     }
 
-    concptr rumor_eff_format = nullptr;
-    std::string fullname;
+    std::string rumor_format;
+    std::string full_name;
     const auto &category = tokens[0];
     if (category == "ARTIFACT") {
         const auto &artifact_name = tokens[1];
@@ -118,35 +124,39 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         ItemEntity item(bi_id);
         item.fa_id = a_idx;
         item.ident = IDENT_STORE;
-        fullname = describe_flavor(player_ptr, item, OD_NAME_ONLY);
+        full_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     } else if (category == "MONSTER") {
         const auto &monster_name = tokens[1];
 
         // @details プレイヤーもダミーで入っているので、1つ引いておかないと数が合わなくなる.
-        const auto monraces_size = static_cast<short>(monraces_info.size() - 1);
+        auto &monraces = MonraceList::get_instance();
+        const auto monraces_size = static_cast<short>(monraces.size() - 1);
         auto monrace_id = i2enum<MonraceId>(get_rumor_num(monster_name, monraces_size));
-        auto *r_ptr = &monraces_info[monrace_id];
-        fullname = r_ptr->name;
-        if (!r_ptr->r_sights) {
-            r_ptr->r_sights++;
+        auto &monrace = monraces.get_monrace(monrace_id);
+        full_name = monrace.name;
+        if (!monrace.r_sights) {
+            monrace.r_sights++;
         }
     } else if (category == "DUNGEON") {
-        DUNGEON_IDX d_idx;
-        dungeon_type *d_ptr;
-        const auto dungeons_size = static_cast<short>(dungeons_info.size());
-        const auto &d_idx_str = tokens[1];
+        int dungeon_id;
+        const DungeonDefinition *d_ptr;
+        const auto &dungeons = DungeonList::get_instance();
+        const auto dungeons_size = static_cast<short>(dungeons.size());
+        const auto &dungeon_name = tokens[1];
         while (true) {
-            d_idx = get_rumor_num(d_idx_str, dungeons_size);
-            d_ptr = &dungeons_info[d_idx];
+            dungeon_id = get_rumor_num(dungeon_name, dungeons_size);
+            d_ptr = &dungeons.get_dungeon(dungeon_id);
             if (!d_ptr->name.empty()) {
                 break;
             }
         }
 
-        fullname = d_ptr->name;
-        if (!max_dlv[d_idx]) {
-            max_dlv[d_idx] = d_ptr->mindepth;
-            rumor_eff_format = _("%sに帰還できるようになった。", "You can recall to %s.");
+        full_name = d_ptr->name;
+        auto &dungeon_records = DungeonRecords::get_instance();
+        auto &dungeon_record = dungeon_records.get_record(dungeon_id);
+        if (!dungeon_record.has_entered()) {
+            dungeon_record.set_max_level(d_ptr->mindepth);
+            rumor_format = _("%sに帰還できるようになった。", "You can recall to %s.");
         }
     } else if (category == "TOWN") {
         IDX t_idx;
@@ -158,20 +168,20 @@ void display_rumor(PlayerType *player_ptr, bool ex)
             }
         }
 
-        fullname = towns_info[t_idx].name;
+        full_name = towns_info[t_idx].name;
         int32_t visit = (1UL << (t_idx - 1));
         if ((t_idx != SECRET_TOWN) && !(player_ptr->visit & visit)) {
             player_ptr->visit |= visit;
-            rumor_eff_format = _("%sに行ったことがある気がする。", "You feel you have been to %s.");
+            rumor_format = _("%sに行ったことがある気がする。", "You feel you have been to %s.");
         }
     } else {
         THROW_EXCEPTION(std::runtime_error, "Unknown token exists in rumor.txt");
     }
 
-    const auto rumor_msg = bind_rumor_name(tokens[2], fullname);
+    const auto rumor_msg = bind_rumor_name(tokens[2], full_name);
     msg_print(rumor_msg);
-    if (rumor_eff_format) {
+    if (!rumor_format.empty()) {
         msg_print(nullptr);
-        msg_format(rumor_eff_format, fullname.data());
+        msg_format(rumor_format.data(), full_name.data());
     }
 }

@@ -32,8 +32,9 @@
 #include "player/player-status.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-key.h"
 #include "util/bit-flags-calculator.h"
+#include <cctype>
 #include <functional>
 #include <sstream>
 #include <utility>
@@ -76,7 +77,7 @@ std::string get_table_name_aux()
     }
 
     auto name = ss.str();
-    name[0] = toupper(name[0]);
+    name[0] = static_cast<char>(std::toupper(name[0]));
     return name;
 #endif
 }

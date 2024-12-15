@@ -17,6 +17,7 @@
 #include "cmd-io/cmd-help.h"
 #include "core/asking-player.h"
 #include "game-option/birth-options.h"
+#include "game-option/game-option-page.h"
 #include "io/input-key-acceptor.h"
 #include "locale/japanese.h"
 #include "main/sound-definitions-table.h"
@@ -30,7 +31,6 @@
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "player/process-name.h"
-#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
@@ -530,7 +530,7 @@ static bool display_auto_roller(PlayerType *player_ptr, chara_limit_type chara_l
 
         get_extra(player_ptr, true);
         get_money(player_ptr);
-        player_ptr->chaos_patron = (int16_t)randint0(MAX_PATRON);
+        player_ptr->chaos_patron = randnum0<short>(MAX_PATRON);
 
         char c;
         if (!display_auto_roller_result(player_ptr, prev, &c)) {

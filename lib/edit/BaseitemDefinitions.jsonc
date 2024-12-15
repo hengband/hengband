@@ -16328,7 +16328,17 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 3
+      "cost": 5,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 1
+        },
+        {
+          "depth": 1,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 481,
@@ -16347,7 +16357,17 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 4
+      "cost": 6,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 1
+        },
+        {
+          "depth": 1,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 482,
@@ -16366,7 +16386,17 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 5
+      "cost": 7,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 1
+        },
+        {
+          "depth": 1,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 483,
@@ -16385,7 +16415,21 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 6
+      "cost": 9,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 3
+        },
+        {
+          "depth": 5,
+          "rarity": 2
+        },
+        {
+          "depth": 6,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 484,
@@ -16404,7 +16448,21 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 7
+      "cost": 10,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 3
+        },
+        {
+          "depth": 5,
+          "rarity": 2
+        },
+        {
+          "depth": 8,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 485,
@@ -16423,7 +16481,21 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 8
+      "cost": 11,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 3
+        },
+        {
+          "depth": 5,
+          "rarity": 2
+        },
+        {
+          "depth": 10,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 486,
@@ -16442,7 +16514,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 9
+      "cost": 22,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 12
+        },
+        {
+          "depth": 5,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 8
+        },
+        {
+          "depth": 12,
+          "rarity": 5
+        }
+      ]
     },
     {
       "id": 487,
@@ -16461,7 +16551,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 10
+      "cost": 24,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 12
+        },
+        {
+          "depth": 5,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 8
+        },
+        {
+          "depth": 14,
+          "rarity": 5
+        }
+      ]
     },
     {
       "id": 488,
@@ -16480,7 +16588,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 12
+      "cost": 15,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 5,
+          "rarity": 3
+        },
+        {
+          "depth": 10,
+          "rarity": 2
+        },
+        {
+          "depth": 16,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 489,
@@ -16499,7 +16625,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 14
+      "cost": 16,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 5,
+          "rarity": 3
+        },
+        {
+          "depth": 10,
+          "rarity": 2
+        },
+        {
+          "depth": 18,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 490,
@@ -16518,7 +16662,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 16
+      "cost": 17,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 10
+        },
+        {
+          "depth": 5,
+          "rarity": 3
+        },
+        {
+          "depth": 10,
+          "rarity": 2
+        },
+        {
+          "depth": 20,
+          "rarity": 1
+        }
+      ]
     },
     {
       "id": 491,
@@ -16537,7 +16699,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 18
+      "cost": 40,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 15
+        },
+        {
+          "depth": 10,
+          "rarity": 10
+        },
+        {
+          "depth": 20,
+          "rarity": 6
+        },
+        {
+          "depth": 22,
+          "rarity": 5
+        }
+      ]
     },
     {
       "id": 492,
@@ -16556,7 +16736,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 20
+      "cost": 48,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 15
+        },
+        {
+          "depth": 10,
+          "rarity": 10
+        },
+        {
+          "depth": 20,
+          "rarity": 6
+        },
+        {
+          "depth": 24,
+          "rarity": 5
+        }
+      ]
     },
     {
       "id": 493,
@@ -16575,7 +16773,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 24
+      "cost": 52,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 15
+        },
+        {
+          "depth": 10,
+          "rarity": 12
+        },
+        {
+          "depth": 20,
+          "rarity": 8
+        },
+        {
+          "depth": 26,
+          "rarity": 6
+        }
+      ]
     },
     {
       "id": 494,
@@ -16594,7 +16810,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 28
+      "cost": 56,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 15
+        },
+        {
+          "depth": 10,
+          "rarity": 12
+        },
+        {
+          "depth": 20,
+          "rarity": 8
+        },
+        {
+          "depth": 28,
+          "rarity": 6
+        }
+      ]
     },
     {
       "id": 495,
@@ -16613,7 +16847,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 32
+      "cost": 64,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 15
+        },
+        {
+          "depth": 10,
+          "rarity": 12
+        },
+        {
+          "depth": 20,
+          "rarity": 8
+        },
+        {
+          "depth": 30,
+          "rarity": 6
+        }
+      ]
     },
     {
       "id": 496,
@@ -16632,7 +16884,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 40
+      "cost": 120,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 25
+        },
+        {
+          "depth": 10,
+          "rarity": 16
+        },
+        {
+          "depth": 25,
+          "rarity": 12
+        },
+        {
+          "depth": 40,
+          "rarity": 8
+        }
+      ]
     },
     {
       "id": 497,
@@ -16651,7 +16921,25 @@
       "parameter_value": 0,
       "level": 1,
       "weight": 0,
-      "cost": 80
+      "cost": 160,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 25
+        },
+        {
+          "depth": 10,
+          "rarity": 16
+        },
+        {
+          "depth": 25,
+          "rarity": 12
+        },
+        {
+          "depth": 50,
+          "rarity": 8
+        }
+      ]
     },
     //##### Objects 498 and 499 are the "Morgoth Artifacts" #####
     //# These objects, like objects 500 to 511, are never created
@@ -22613,6 +22901,43 @@
         "ja": "安っぽい紙切れだ。グングニルの隠し場所でも書いてあるのだろうか。",
         "en": "It's a cheap piece of paper.  You should wonder if the hidden location of Gungnir is written."
       }
+    },
+    {
+      "id": 682,
+      "name": {
+        "ja": "黒曜石",
+        "en": "obsidians"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Dark Gray"
+      },
+      "itemkind": {
+        "type_value": 127,
+        "subtype_value": 19
+      },
+      "parameter_value": 0,
+      "level": 1,
+      "weight": 0,
+      "cost": 20,
+      "allocations": [
+        {
+          "depth": 1,
+          "rarity": 12
+        },
+        {
+          "depth": 5,
+          "rarity": 10
+        },
+        {
+          "depth": 10,
+          "rarity": 8
+        },
+        {
+          "depth": 12,
+          "rarity": 5
+        }
+      ]
     }
   ]
 }

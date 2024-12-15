@@ -39,12 +39,12 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-system.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
@@ -257,7 +257,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         if (!player_ptr->current_floor_ptr->is_in_underground() && player_ptr->town_num) {
             StoreSaleType sst;
             do {
-                sst = i2enum<StoreSaleType>(randint0(MAX_STORES));
+                sst = randnum0<StoreSaleType>(MAX_STORES);
             } while ((sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM));
 
             msg_print(_("店の主人が丘に向かって走っている！", "You see one of the shopkeepers running for the hills!"));

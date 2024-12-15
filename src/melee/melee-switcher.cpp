@@ -7,8 +7,10 @@
 #include "melee/melee-switcher.h"
 #include "core/disturbance.h"
 #include "dungeon/quest.h"
+#include "effect/attribute-types.h"
 #include "melee/melee-util.h"
 #include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster/monster-info.h"
@@ -17,9 +19,9 @@
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-util.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 
@@ -28,15 +30,15 @@
  */
 static bool monster_has_chaos_resist(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    auto r_info = m_ptr->get_monrace();
-    if (r_info.resistance_flags.has(MonsterResistanceType::RESIST_CHAOS)) {
+    auto &monrace = m_ptr->get_monrace();
+    if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_CHAOS)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_info.r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
+            monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
         }
         return true;
-    } else if (r_info.kind_flags.has(MonsterKindType::DEMON) && one_in_(3)) {
+    } else if (monrace.kind_flags.has(MonsterKindType::DEMON) && one_in_(3)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_info.r_kind_flags.set(MonsterKindType::DEMON);
+            monrace.r_kind_flags.set(MonsterKindType::DEMON);
         }
         return true;
     }

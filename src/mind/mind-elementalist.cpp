@@ -19,9 +19,9 @@
 #include "floor/floor-util.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
+#include "game-option/game-option-page.h"
 #include "game-option/input-options.h"
 #include "game-option/text-display-options.h"
-#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "hpmp/hp-mp-processor.h"
 #include "io/command-repeater.h"
@@ -54,11 +54,11 @@
 #include "spell-kind/spells-world.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
-#include "system/enums/game-option-page.h"
-#include "system/floor-type-definition.h"
+#include "system/enums/terrain/terrain-characteristics.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/grid-selector.h"
@@ -1130,7 +1130,7 @@ static void display_realm_cursor(int i, int n, term_color_type color)
 static int interpret_realm_select_key(int cs, int n, char c)
 {
     if (c == 'Q') {
-        quit(nullptr);
+        quit("");
     }
 
     if (c == '8') {

@@ -27,6 +27,9 @@ class MonsterEntity {
 public:
     friend class MonsterEntityWriter;
     MonsterEntity();
+    MonsterEntity(MonsterEntity &&) = default;
+    MonsterEntity &operator=(MonsterEntity &&) = default;
+
     MonraceId r_idx{}; /*!< モンスターの実種族ID (これが0の時は死亡扱いになる) / Monster race index 0 = dead. */
     MonraceId ap_r_idx{}; /*!< モンスターの外見種族ID（あやしい影、たぬき、ジュラル星人誤認などにより変化する）Monster race appearance index */
     FloorType *current_floor_ptr{}; /*!< 所在フロアID（現状はFloorType構造体によるオブジェクトは1つしかないためソースコード設計上の意義以外はない）*/
@@ -62,6 +65,8 @@ public:
 
     static bool check_sub_alignments(const byte sub_align1, const byte sub_align2);
 
+    void wipe();
+    MonsterEntity clone() const;
     bool is_friendly() const;
     bool is_pet() const;
     bool is_hostile() const;
@@ -105,8 +110,9 @@ public:
     Pos2D get_position() const;
     Pos2D get_target_position() const;
     bool can_ring_boss_call_nazgul() const;
-    void set_individual_speed(bool force_fixed_speed);
 
+    void set_individual_speed(bool force_fixed_speed);
+    void set_position(const Pos2D &pos);
     void set_hostile();
     void make_lore_treasure(int num_item, int num_gold) const;
     void reset_chameleon_polymorph();
@@ -115,6 +121,9 @@ public:
     void set_friendly();
 
 private:
+    MonsterEntity(const MonsterEntity &) = default;
+    MonsterEntity &operator=(const MonsterEntity &) = default;
+
     std::optional<bool> order_pet_named(const MonsterEntity &other) const;
     std::optional<bool> order_pet_hp(const MonsterEntity &other) const;
 };

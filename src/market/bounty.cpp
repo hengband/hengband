@@ -19,11 +19,14 @@
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/dungeon-record.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
@@ -51,7 +54,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
+        if (!MonraceList::is_tsuchinoko(item.get_monrace_id())) {
             continue;
         }
 
@@ -74,7 +77,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
+        if (!MonraceList::is_tsuchinoko(item.get_monrace_id())) {
             continue;
         }
 
@@ -97,7 +100,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        if (item.get_monrace().idx != MonraceId::TSUCHINOKO) {
+        if (!MonraceList::is_tsuchinoko(item.get_monrace_id())) {
             continue;
         }
 
@@ -183,7 +186,7 @@ bool exchange_cash(PlayerType *player_ptr)
 
             ItemEntity prize_item(prize_list[num - 1]);
             ItemMagicApplier(player_ptr, &prize_item, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
-            object_aware(player_ptr, &prize_item);
+            object_aware(player_ptr, prize_item);
             prize_item.mark_as_known();
 
             /*
@@ -274,19 +277,21 @@ void show_bounty(void)
  */
 void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
 {
+    const auto &dungeon_records = DungeonRecords::get_instance();
     auto max_dl = 3;
     if (!conv_old) {
-        for (const auto &dungeon : dungeons_info) {
-            if (max_dlv[dungeon.idx] < dungeon.mindepth) {
+        for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
+            const auto max_level = dungeon_records.get_record(dungeon_id).get_max_level();
+            if (max_level < dungeon.mindepth) {
                 continue;
             }
 
-            if (max_dl < max_dlv[dungeon.idx]) {
-                max_dl = max_dlv[dungeon.idx];
+            if (max_dl < max_level) {
+                max_dl = max_level;
             }
         }
     } else {
-        max_dl = std::max(max_dlv[DUNGEON_ANGBAND], 3);
+        max_dl = std::max(dungeon_records.get_record(DUNGEON_ANGBAND).get_max_level(), 3);
     }
 
     get_mon_num_prep_bounty(player_ptr);

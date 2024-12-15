@@ -4136,22 +4136,22 @@
         "color": "Brown"
       },
       "speed": -10,
-      "hit_point": "7d8",
+      "hit_point": "9d8",
       "vision": 3,
       "armor_class": 24,
       "alertness": 10,
       "level": 4,
       "rarity": 2,
-      "exp": 9,
+      "exp": 11,
       "evolve": {
-        "need_exp": 40,
+        "need_exp": 60,
         "to": 117
       },
       "blows": [
         {
           "method": "HIT",
           "effect": "HURT",
-          "damage_dice": "1d7"
+          "damage_dice": "2d7"
         },
         {
           "method": "TOUCH",
@@ -4161,7 +4161,7 @@
       ],
       "flags": [
         "ONLY_GOLD",
-        "DROP_1D2",
+        "DROP_3D2",
         "COLD_BLOOD",
         "DROP_COPPER",
         "BASH_DOOR",
@@ -5678,33 +5678,32 @@
         "color": "Gray"
       },
       "speed": -10,
-      "hit_point": "12d8",
+      "hit_point": "14d8",
       "vision": 4,
       "armor_class": 30,
       "alertness": 10,
-      "level": 6,
+      "level": 10,
       "rarity": 2,
-      "exp": 18,
+      "exp": 24,
       "evolve": {
-        "need_exp": 50,
+        "need_exp": 100,
         "to": 195
       },
       "blows": [
         {
           "method": "HIT",
           "effect": "HURT",
-          "damage_dice": "1d7"
+          "damage_dice": "2d7"
         },
         {
           "method": "TOUCH",
           "effect": "POISON",
-          "damage_dice": "2d7"
+          "damage_dice": "3d7"
         }
       ],
       "flags": [
         "ONLY_GOLD",
-        "DROP_60",
-        "DROP_1D2",
+        "DROP_3D2",
         "DROP_SILVER",
         "COLD_BLOOD",
         "BASH_DOOR",
@@ -9743,34 +9742,38 @@
         "character": "$",
         "color": "Yellow"
       },
-      "speed": -10,
-      "hit_point": "18d8",
+      "speed": 0,
+      "hit_point": "30d8",
       "vision": 5,
       "armor_class": 36,
       "alertness": 10,
-      "level": 10,
+      "level": 20,
       "rarity": 3,
-      "exp": 32,
+      "exp": 80,
       "evolve": {
-        "need_exp": 150,
+        "need_exp": 300,
         "to": 239
       },
       "blows": [
         {
           "method": "HIT",
           "effect": "HURT",
-          "damage_dice": "2d5"
+          "damage_dice": "3d5"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d5"
         },
         {
           "method": "TOUCH",
           "effect": "POISON",
-          "damage_dice": "3d5"
+          "damage_dice": "4d5"
         }
       ],
       "flags": [
         "ONLY_GOLD",
-        "DROP_90",
-        "DROP_1D2",
+        "DROP_3D2",
         "DROP_GOLD",
         "COLD_BLOOD",
         "BASH_DOOR",
@@ -12093,34 +12096,43 @@
         "character": "$",
         "color": "Light Blue"
       },
-      "speed": 0,
-      "hit_point": "20d8",
+      "speed": 10,
+      "hit_point": "40d12",
       "vision": 5,
-      "armor_class": 50,
+      "armor_class": 90,
       "alertness": 10,
-      "level": 13,
-      "rarity": 4,
-      "exp": 45,
+      "level": 40,
+      "rarity": 6,
+      "exp": 500,
       "evolve": {
-        "need_exp": 500,
+        "need_exp": 1000,
         "to": 423
       },
       "blows": [
         {
           "method": "HIT",
           "effect": "HURT",
-          "damage_dice": "2d5"
+          "damage_dice": "3d5"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d5"
         },
         {
           "method": "TOUCH",
           "effect": "POISON",
-          "damage_dice": "3d5"
+          "damage_dice": "4d5"
+        },
+        {
+          "method": "TOUCH",
+          "effect": "POISON",
+          "damage_dice": "4d5"
         }
       ],
       "flags": [
         "ONLY_GOLD",
-        "DROP_90",
-        "DROP_2D2",
+        "DROP_4D2",
         "DROP_MITHRIL",
         "COLD_BLOOD",
         "BASH_DOOR",
@@ -22336,40 +22348,39 @@
         "character": "$",
         "color": "Light Green"
       },
-      "speed": 10,
-      "hit_point": "20d25",
+      "speed": 20,
+      "hit_point": "60d25",
       "vision": 5,
-      "armor_class": 50,
+      "armor_class": 100,
       "alertness": 10,
-      "level": 27,
-      "rarity": 4,
-      "exp": 45,
+      "level": 50,
+      "rarity": 6,
+      "exp": 1000,
       "blows": [
         {
           "method": "BITE",
           "effect": "POISON",
-          "damage_dice": "3d4"
+          "damage_dice": "5d4"
         },
         {
           "method": "TOUCH",
           "effect": "POISON",
-          "damage_dice": "3d5"
+          "damage_dice": "5d5"
         },
         {
           "method": "HIT",
           "effect": "HURT",
-          "damage_dice": "1d12"
+          "damage_dice": "2d12"
         },
         {
           "method": "HIT",
           "effect": "HURT",
-          "damage_dice": "1d12"
+          "damage_dice": "2d12"
         }
       ],
       "flags": [
         "ONLY_GOLD",
-        "DROP_90",
-        "DROP_2D2",
+        "DROP_4D2",
         "DROP_ADAMANTITE",
         "COLD_BLOOD",
         "BASH_DOOR",
@@ -24986,7 +24997,8 @@
       ],
       "flags": [
         "ONLY_GOLD",
-        "DROP_2D2",
+        "DROP_3D2",
+        "DROP_4D2",
         "DROP_MITHRIL",
         "EMPTY_MIND",
         "COLD_BLOOD",
@@ -87864,6 +87876,699 @@
       "flavor": {
         "ja": "ヘビとヤモリが混合した生物で、それに睨まれるとまともな判断をすることにも一苦労させられる。",
         "en": "It is a mixed snake and gecko. When you glared by it, you'll struggle with a normal thinking even."
+      }
+    },
+    {
+      "id": 1371,
+      "name": {
+        "ja": "オブシディアン・ゴーレム",
+        "en": "Obsidian golem"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Dark Gray"
+      },
+      "speed": 0,
+      "hit_point": "14d8",
+      "vision": 20,
+      "armor_class": 50,
+      "alertness": 10,
+      "level": 14,
+      "rarity": 4,
+      "exp": 70,
+      "blows": [
+        {
+          "method": "SLASH",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        },
+        {
+          "method": "SLASH",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        }
+      ],
+      "flags": [
+        "COLD_BLOOD",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_4D2",
+        "DROP_OBSIDIAN"
+      ],
+      "flavor": {
+        "ja": "それは黒い宝石で造られた堂々たる巨像だ。",
+        "en": "It is a massive statue of black jewels."
+      }
+    },
+    {
+      "id": 1372,
+      "name": {
+        "ja": "エメラルド・ゴーレム",
+        "en": "Ruby golem"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Light Green"
+      },
+      "speed": 0,
+      "hit_point": "80d10",
+      "vision": 20,
+      "armor_class": 80,
+      "alertness": 10,
+      "level": 24,
+      "rarity": 4,
+      "exp": 400,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        }
+      ],
+      "flags": [
+        "COLD_BLOOD",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_4D2",
+        "DROP_EMERALD"
+      ],
+      "flavor": {
+        "ja": "それは緑の宝石で造られた堂々たる巨像だ。それは値段にしたら相当高価だろう！",
+        "en": "It is a massive statue of grenn jewels. It looks expensive!"
+      }
+    },
+    {
+      "id": 1373,
+      "name": {
+        "ja": "サファイア・ゴーレム",
+        "en": "Sapphire golem"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Blue"
+      },
+      "speed": 0,
+      "hit_point": "80d12",
+      "vision": 20,
+      "armor_class": 90,
+      "alertness": 10,
+      "level": 26,
+      "rarity": 4,
+      "exp": 500,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        }
+      ],
+      "flags": [
+        "COLD_BLOOD",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_4D2",
+        "DROP_SAPPHIRE"
+      ],
+      "flavor": {
+        "ja": "それは青い宝石で造られた堂々たる巨像だ。それは値段にしたら相当高価だろう！",
+        "en": "It is a massive statue of blue jewels. It looks expensive!"
+      }
+    },
+    {
+      "id": 1374,
+      "name": {
+        "ja": "ルビー・ゴーレム",
+        "en": "Ruby golem"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Light Red"
+      },
+      "speed": 0,
+      "hit_point": "80d12",
+      "vision": 20,
+      "armor_class": 90,
+      "alertness": 10,
+      "level": 26,
+      "rarity": 4,
+      "exp": 500,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        }
+      ],
+      "flags": [
+        "COLD_BLOOD",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_4D2",
+        "DROP_RUBY"
+      ],
+      "flavor": {
+        "ja": "それは赤い宝石で造られた堂々たる巨像だ。それは値段にしたら相当高価だろう！",
+        "en": "It is a massive statue of red jewels. It looks expensive!"
+      }
+    },
+    {
+      "id": 1375,
+      "name": {
+        "ja": "ダイヤモンド・ゴーレム",
+        "en": "Diamond golem"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "White"
+      },
+      "speed": 0,
+      "hit_point": "80d14",
+      "vision": 20,
+      "armor_class": 100,
+      "alertness": 10,
+      "level": 28,
+      "rarity": 4,
+      "exp": 600,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "5d5"
+        }
+      ],
+      "flags": [
+        "COLD_BLOOD",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "IM_FIRE",
+        "IM_COLD",
+        "IM_ELEC",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_4D2",
+        "DROP_DIAMOND"
+      ],
+      "flavor": {
+        "ja": "それは金剛石で造られた堂々たる巨像だ。それは値段にしたら相当高価だろう！",
+        "en": "It is a massive statue of diamonds. It looks expensive!"
+      }
+    },
+    {
+      "id": 1376,
+      "name": {
+        "ja": "ライト・ボルテックス",
+        "en": "Light vortex"
+      },
+      "symbol": {
+        "character": "v",
+        "color": "Orange"
+      },
+      "speed": 0,
+      "hit_point": "12d12",
+      "vision": 100,
+      "armor_class": 30,
+      "alertness": 0,
+      "level": 25,
+      "rarity": 1,
+      "exp": 200,
+      "odds_correction_ratio": 150,
+      "flags": [
+        "RAND_50",
+        "CAN_FLY",
+        "SELF_LITE_1",
+        "SELF_LITE_2",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "POWERFUL",
+        "RES_LITE",
+        "HURT_DARK",
+        "NO_FEAR",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_STUN",
+        "NONLIVING"
+      ],
+      "skill": {
+        "probability": "1_IN_6",
+        "list": [
+          "BR_LITE"
+        ]
+      },
+      "flavor": {
+        "ja": "それは渦を巻く光で、時折閃光を放っている。",
+        "en": "It is a swirling light, with occasional flashes."
+      }
+    },
+    {
+      "id": 1377,
+      "name": {
+        "ja": "シャドウ・ボルテックス",
+        "en": "Shadow vortex"
+      },
+      "symbol": {
+        "character": "v",
+        "color": "Dark Gray"
+      },
+      "speed": 0,
+      "hit_point": "12d12",
+      "vision": 100,
+      "armor_class": 30,
+      "alertness": 0,
+      "level": 25,
+      "rarity": 1,
+      "exp": 200,
+      "odds_correction_ratio": 150,
+      "flags": [
+        "RAND_50",
+        "CAN_FLY",
+        "SELF_DARK_2",
+        "EMPTY_MIND",
+        "BASH_DOOR",
+        "POWERFUL",
+        "RES_DARK",
+        "HURT_LITE",
+        "NO_FEAR",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_STUN",
+        "NONLIVING"
+      ],
+      "skill": {
+        "probability": "1_IN_6",
+        "list": [
+          "BR_DARK"
+        ]
+      },
+      "flavor": {
+        "ja": "それは渦を巻く影で、時折暗黒の波動を放っている。",
+        "en": "It was a swirling shadow, occasionally emitting dark waves."
+      }
+    },
+    {
+      "id": 1378,
+      "name": {
+        "ja": "クリーピング・オブシディアン",
+        "en": "Creeping obsidians"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Dark Gray"
+      },
+      "speed": 0,
+      "hit_point": "14d11",
+      "vision": 5,
+      "armor_class": 50,
+      "alertness": 10,
+      "level": 12,
+      "rarity": 6,
+      "exp": 50,
+      "blows": [
+        {
+          "method": "SLASH",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        },
+        {
+          "method": "SLASH",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_OBSIDIAN",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは黒い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of black jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1379,
+      "name": {
+        "ja": "クリーピング・ガーネット",
+        "en": "Creeping garnets"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Red"
+      },
+      "speed": 0,
+      "hit_point": "16d8",
+      "vision": 5,
+      "armor_class": 70,
+      "alertness": 10,
+      "level": 14,
+      "rarity": 6,
+      "exp": 70,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d8"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_GARNET",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは赤い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of red jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1380,
+      "name": {
+        "ja": "クリーピング・オパール",
+        "en": "Creeping opals"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Light Gray"
+      },
+      "speed": 0,
+      "hit_point": "32d8",
+      "vision": 5,
+      "armor_class": 60,
+      "alertness": 10,
+      "level": 22,
+      "rarity": 6,
+      "exp": 100,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d8"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d8"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_OPAL",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは白い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of white jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1381,
+      "name": {
+        "ja": "クリーピング・エメラルド",
+        "en": "Creeping emeralds"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Green"
+      },
+      "speed": 5,
+      "hit_point": "34d8",
+      "vision": 0,
+      "armor_class": 80,
+      "alertness": 10,
+      "level": 24,
+      "rarity": 6,
+      "exp": 150,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d9"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d9"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_EMERALD",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは緑の宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of green jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1382,
+      "name": {
+        "ja": "クリーピング・サファイア",
+        "en": "Creeping saphires"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Blue"
+      },
+      "speed": 5,
+      "hit_point": "34d8",
+      "vision": 0,
+      "armor_class": 90,
+      "alertness": 10,
+      "level": 26,
+      "rarity": 6,
+      "exp": 150,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_SAPPHIRE",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは青い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of blue jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1383,
+      "name": {
+        "ja": "クリーピング・ルビー",
+        "en": "Creeping rubies"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "Red"
+      },
+      "speed": 0,
+      "hit_point": "34d8",
+      "vision": 5,
+      "armor_class": 90,
+      "alertness": 10,
+      "level": 28,
+      "rarity": 6,
+      "exp": 150,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "2d10"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_3D2",
+        "DROP_RUBY",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは赤い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of red jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1384,
+      "name": {
+        "ja": "クリーピング・ダイヤモンド",
+        "en": "Creeping diamonds"
+      },
+      "symbol": {
+        "character": "$",
+        "color": "White"
+      },
+      "speed": 0,
+      "hit_point": "40d8",
+      "vision": 5,
+      "armor_class": 100,
+      "alertness": 10,
+      "level": 32,
+      "rarity": 6,
+      "exp": 200,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d10"
+        },
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "3d10"
+        }
+      ],
+      "flags": [
+        "ONLY_GOLD",
+        "DROP_4D2",
+        "DROP_DIAMOND",
+        "COLD_BLOOD",
+        "BASH_DOOR",
+        "ANIMAL",
+        "IM_POIS",
+        "NO_CONF",
+        "NO_SLEEP"
+      ],
+      "flavor": {
+        "ja": "それは白い宝石の塊で、何千もの小さな足で前によろめき歩く。",
+        "en": "It is a pile of white jewels, shambling forward on thousands of tiny legs."
       }
     }
   ]

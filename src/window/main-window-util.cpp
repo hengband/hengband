@@ -8,9 +8,10 @@
 #include "grid/grid.h"
 #include "player/player-status.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
@@ -292,7 +293,7 @@ DisplaySymbol set_term_color(PlayerType *player_ptr, const Pos2D &pos, const Dis
     }
 
     feat_priority = 31;
-    const auto &monrace = monraces_info[MonraceId::PLAYER];
+    const auto &monrace = MonraceList::get_instance().get_monrace(MonraceId::PLAYER);
     return monrace.symbol_config;
 }
 

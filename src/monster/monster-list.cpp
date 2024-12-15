@@ -28,13 +28,14 @@
 #include "monster/monster-util.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-status.h"
-#include "system/alloc-entries.h"
-#include "system/dungeon-info.h"
+#include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
+#include "system/monrace/monrace-allocation.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
@@ -44,40 +45,6 @@
 #include "world/world.h"
 #include <cmath>
 #include <iterator>
-
-/*!
- * @brief モンスター配列の空きを探す / Acquires and returns the index of a "free" monster.
- * @return 利用可能なモンスター配列の添字
- * @details
- * This routine should almost never fail, but it *can* happen.
- */
-MONSTER_IDX m_pop(FloorType *floor_ptr)
-{
-    /* Normal allocation */
-    if (floor_ptr->m_max < MAX_FLOOR_MONSTERS) {
-        const auto i = floor_ptr->m_max;
-        floor_ptr->m_max++;
-        floor_ptr->m_cnt++;
-        return i;
-    }
-
-    /* Recycle dead monsters */
-    for (short i = 1; i < floor_ptr->m_max; i++) {
-        const auto &monster = floor_ptr->m_list[i];
-        if (monster.is_valid()) {
-            continue;
-        }
-
-        floor_ptr->m_cnt++;
-        return i;
-    }
-
-    if (AngbandWorld::get_instance().character_dungeon) {
-        msg_print(_("モンスターが多すぎる！", "Too many monsters!"));
-    }
-
-    return 0;
-}
 
 /*!
  * @brief 生成モンスター種族を1種生成テーブルから選択する

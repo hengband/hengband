@@ -2,7 +2,7 @@
 #include "core/asking-player.h"
 #include "market/arena-entry.h"
 #include "player-info/race-types.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"

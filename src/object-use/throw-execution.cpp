@@ -21,7 +21,6 @@
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "game-option/cheat-types.h"
-#include "grid/feature-flag-types.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
@@ -51,8 +50,8 @@
 #include "player/player-status-table.h"
 #include "racial/racial-android.h"
 #include "specific-object/torch.h"
-#include "system/baseitem-info.h"
-#include "system/floor-type-definition.h"
+#include "system/enums/terrain/terrain-characteristics.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
@@ -66,6 +65,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "view/display-symbol.h"
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
 
@@ -102,7 +102,7 @@ bool ObjectThrowEntity::check_can_throw()
 
 void ObjectThrowEntity::calc_throw_range()
 {
-    this->q_ptr->copy_from(this->o_ptr);
+    *this->q_ptr = this->o_ptr->clone();
     this->obj_flags = this->q_ptr->get_flags();
     torch_flags(this->q_ptr, this->obj_flags);
     distribute_charges(this->o_ptr, this->q_ptr, 1);
@@ -304,7 +304,7 @@ void ObjectThrowEntity::process_boomerang_back()
         }
 
         this->o_ptr = &player_ptr->inventory_list[this->i_idx];
-        this->o_ptr->copy_from(this->q_ptr);
+        *this->o_ptr = this->q_ptr->clone();
         this->player_ptr->equip_cnt++;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags = {

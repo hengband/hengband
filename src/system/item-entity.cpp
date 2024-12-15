@@ -25,8 +25,11 @@
 #include "sv-definition/sv-ring-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
-#include "system/monster-race-info.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
+#include "system/enums/monrace/monrace-id.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "term/term-color-types.h"
 #include "tracking/baseitem-tracker.h"
 #include "util/bit-flags-calculator.h"
@@ -63,11 +66,11 @@ void ItemEntity::wipe()
 
 /*!
  * @brief アイテムを複製する
- * @param j_ptr 複製元アイテムへの参照ポインタ
+ * @return 複製したアイテム
  */
-void ItemEntity::copy_from(const ItemEntity *j_ptr)
+ItemEntity ItemEntity::clone() const
 {
-    *this = *j_ptr;
+    return *this;
 }
 
 void ItemEntity::generate(const BaseitemKey &new_bi_key)
@@ -101,7 +104,7 @@ void ItemEntity::generate(short new_bi_id)
         this->activation_id = baseitem.act_idx;
     }
 
-    if (this->get_baseitem().cost <= 0) {
+    if (this->is_worthless()) {
         this->ident |= (IDENT_BROKEN);
     }
 
@@ -820,7 +823,7 @@ bool ItemEntity::is_target_of(QuestId quest_id) const
     return this->bi_key == artifact.bi_key;
 }
 
-BaseitemInfo &ItemEntity::get_baseitem() const
+BaseitemDefinition &ItemEntity::get_baseitem() const
 {
     return BaseitemList::get_instance().get_baseitem(this->bi_id);
 }
@@ -1200,6 +1203,35 @@ bool ItemEntity::is_similar_for_store(const ItemEntity &other) const
     return true;
 }
 
+int ItemEntity::get_baseitem_level() const
+{
+    return this->get_baseitem().level;
+}
+
+short ItemEntity::get_baseitem_pval() const
+{
+    return this->get_baseitem().pval;
+}
+
+bool ItemEntity::is_worthless() const
+{
+    return this->get_baseitem().cost <= 0;
+}
+
+int ItemEntity::get_baseitem_cost() const
+{
+    return this->get_baseitem().cost;
+}
+
+MonraceId ItemEntity::get_monrace_id() const
+{
+    if (!this->has_monrace()) {
+        THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
+    }
+
+    return i2enum<MonraceId>(this->pval);
+}
+
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
     const auto description = act.build_timeout_description();
@@ -1258,7 +1290,7 @@ void ItemEntity::mark_as_known()
  */
 void ItemEntity::mark_as_tried() const
 {
-    this->get_baseitem().mark_as_tried();
+    this->get_baseitem().mark_trial(true);
 }
 
 /*!
@@ -1510,13 +1542,4 @@ char ItemEntity::get_character() const
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
     return flavor ? BaseitemList::get_instance().get_baseitem(flavor).symbol_config.character : baseitem.symbol_config.character;
-}
-
-MonraceId ItemEntity::get_monrace_id() const
-{
-    if (!this->has_monrace()) {
-        THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
-    }
-
-    return i2enum<MonraceId>(this->pval);
 }

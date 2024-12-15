@@ -1,6 +1,5 @@
 #include "birth/game-play-initializer.h"
 #include "dungeon/quest.h"
-#include "floor/floor-list.h"
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
@@ -15,13 +14,18 @@
 #include "player/digestion-processor.h"
 #include "player/player-spell-status.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/dungeon-record.h"
+#include "system/floor/floor-info.h"
+#include "system/floor/floor-list.h"
 #include "system/inner-game-data.h"
 #include "system/item-entity.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "util/enum-range.h"
 #include "util/string-processor.h"
@@ -109,11 +113,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     player_ptr->wait_report_score = false;
     player_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     player_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
-
-    for (const auto &d_ref : dungeons_info) {
-        max_dlv[d_ref.idx] = 0;
-    }
-
+    DungeonRecords::get_instance().reset_all();
     player_ptr->visit = 1;
     world.set_wild_mode(false);
 

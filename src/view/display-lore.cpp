@@ -15,7 +15,8 @@
 #include "monster-attack/monster-attack-table.h"
 #include "monster-race/race-ability-flags.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/monster-race-info.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -191,12 +192,11 @@ void display_kill_numbers(lore_type *lore_ptr)
     }
 
     const auto kill_unique_description = lore_ptr->build_kill_unique_description();
-    if (!kill_unique_description) {
+    if (kill_unique_description) {
+        for (const auto &[text, color] : *kill_unique_description) {
+            hook_c_roff(color, text);
+        }
         return;
-    }
-
-    for (const auto &[text, color] : *kill_unique_description) {
-        hook_c_roff(color, text);
     }
 
     if (lore_ptr->r_ptr->r_deaths == 0) {
@@ -232,7 +232,7 @@ bool display_where_to_appear(lore_type *lore_ptr)
         lore_ptr->old = true;
     }
 
-    if (lore_ptr->r_idx == MonraceId::CHAMELEON) {
+    if (lore_ptr->monrace_id == MonraceId::CHAMELEON) {
         hooked_roff(_("、他のモンスターに化ける。", "and can take the shape of other monster."));
         return false;
     }
@@ -565,7 +565,7 @@ void display_monster_guardian(lore_type *lore_ptr)
     bool is_kingpin = lore_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
     is_kingpin &= lore_ptr->r_ptr->r_sights > 0;
     is_kingpin &= lore_ptr->r_ptr->max_num > 0;
-    is_kingpin &= (lore_ptr->r_idx == MonraceId::OBERON) || (lore_ptr->r_idx == MonraceId::SERPENT);
+    is_kingpin &= (lore_ptr->monrace_id == MonraceId::OBERON) || (lore_ptr->monrace_id == MonraceId::SERPENT);
     if (is_kingpin) {
         hook_c_roff(TERM_VIOLET, _("あなたはこのモンスターを殺したいという強い欲望を感じている...", "You feel an intense desire to kill this monster...  "));
     } else if (lore_ptr->misc_flags.has(MonsterMiscType::GUARDIAN)) {

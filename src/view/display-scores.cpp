@@ -220,6 +220,6 @@ void display_scores(int from, int to)
     display_scores(from, to, -1, nullptr);
     (void)fd_close(highscore_fd);
     highscore_fd = -1;
-    quit(nullptr);
+    quit("");
 }
 #endif

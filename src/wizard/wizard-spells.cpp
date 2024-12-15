@@ -31,8 +31,8 @@
 #include "spell/spells-status.h"
 #include "spell/summon-types.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/floor-type-definition.h"
-#include "system/monster-race-info.h"
+#include "system/floor/floor-info.h"
+#include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/target-checker.h"
@@ -54,12 +54,13 @@ static const std::vector<debug_spell_command> debug_spell_commands_list = {
     { 5, "pattern teleport", { .spell5 = { pattern_teleport } } },
 };
 
-static std::optional<MonraceId> input_monster_race_id(const MonraceId r_idx)
+static std::optional<MonraceId> input_monster_race_id(const MonraceId monrace_id)
 {
-    if (MonraceList::is_valid(r_idx)) {
-        return r_idx;
+    if (MonraceList::is_valid(monrace_id)) {
+        return monrace_id;
     }
-    return input_numerics("MonsterID", 1, monraces_info.size() - 1, MonraceId::FILTHY_URCHIN);
+
+    return input_numerics("MonsterID", 1, MonraceList::get_instance().size() - 1, MonraceId::FILTHY_URCHIN);
 }
 
 /*!

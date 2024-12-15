@@ -6,15 +6,16 @@
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "tracking/health-bar-tracker.h"
 #include "view/display-messages.h"
+#include <utility>
 
 /*!
  * @brief モンスター情報を配列内移動する / Move an object from index i1 to index i2 in the object list
@@ -71,8 +72,7 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
         }
     }
 
-    floor.m_list[i2] = floor.m_list[i1];
-    floor.m_list[i1] = {};
+    floor.m_list[i2] = std::exchange(floor.m_list[i1], {});
 
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
         const auto index = floor.get_mproc_index(i1, mte);

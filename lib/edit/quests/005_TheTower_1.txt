@@ -78,4 +78,3 @@ D:XXXXXXXXXXX
 # Starting position when coming from town
 ?:[EQU $LEAVING_QUEST 0]
 P:1:1
-

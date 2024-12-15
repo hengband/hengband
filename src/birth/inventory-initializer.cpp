@@ -29,6 +29,8 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
@@ -55,14 +57,14 @@ void wield_all(PlayerType *player_ptr)
         if (slot == INVEN_LITE) {
             continue;
         }
-        if (player_ptr->inventory_list[slot].is_valid()) {
+
+        auto &wield_slot_item = player_ptr->inventory_list[slot];
+        if (wield_slot_item.is_valid()) {
             continue;
         }
 
-        ItemEntity *i_ptr;
-        i_ptr = &ObjectType_body;
-        i_ptr->copy_from(o_ptr);
-        i_ptr->number = 1;
+        wield_slot_item = o_ptr->clone();
+        wield_slot_item.number = 1;
 
         if (i_idx >= 0) {
             inven_item_increase(player_ptr, i_idx, -1);
@@ -72,8 +74,6 @@ void wield_all(PlayerType *player_ptr)
             floor_item_optimize(player_ptr, 0 - i_idx);
         }
 
-        o_ptr = &player_ptr->inventory_list[slot];
-        o_ptr->copy_from(i_ptr);
         player_ptr->equip_cnt++;
     }
 }
@@ -85,7 +85,7 @@ void wield_all(PlayerType *player_ptr)
  */
 static void add_outfit(PlayerType *player_ptr, ItemEntity &item)
 {
-    object_aware(player_ptr, &item);
+    object_aware(player_ptr, item);
     item.mark_as_known();
     const auto slot = store_item_to_inventory(player_ptr, &item);
     autopick_alter_item(player_ptr, slot, false);
@@ -125,7 +125,7 @@ static void decide_initial_items(PlayerType *player_ptr)
     case PlayerRaceType::ENT: {
         /* Potions of Water */
         ItemEntity item({ ItemKindType::POTION, SV_POTION_WATER });
-        item.number = (ITEM_NUMBER)rand_range(15, 23);
+        item.number = rand_range(15, 23);
         add_outfit(player_ptr, item);
         return;
     }
@@ -133,14 +133,14 @@ static void decide_initial_items(PlayerType *player_ptr)
         /* Flasks of oil */
         ItemEntity item(ItemKindType::FLASK);
         ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
-        item.number = (ITEM_NUMBER)rand_range(7, 12);
+        item.number = rand_range(7, 12);
         add_outfit(player_ptr, item);
         return;
     }
     default: {
         /* Food rations */
         ItemEntity item({ ItemKindType::FOOD, SV_FOOD_RATION });
-        item.number = (ITEM_NUMBER)rand_range(3, 7);
+        item.number = rand_range(3, 7);
         add_outfit(player_ptr, item);
         return;
     }
@@ -158,11 +158,11 @@ void player_outfit(PlayerType *player_ptr)
     PlayerRace pr(player_ptr);
     if (pr.equals(PlayerRaceType::VAMPIRE) && !pc.equals(PlayerClassType::NINJA)) {
         ItemEntity item({ ItemKindType::SCROLL, SV_SCROLL_DARKNESS });
-        item.number = (ITEM_NUMBER)rand_range(2, 5);
+        item.number = rand_range(2, 5);
         add_outfit(player_ptr, item);
     } else if (!pc.equals(PlayerClassType::NINJA)) {
         ItemEntity item({ ItemKindType::LITE, SV_LITE_TORCH });
-        item.number = (ITEM_NUMBER)rand_range(3, 7);
+        item.number = rand_range(3, 7);
         item.fuel = rand_range(3, 7) * 500;
         add_outfit(player_ptr, item);
     }
@@ -175,7 +175,7 @@ void player_outfit(PlayerType *player_ptr)
 
     if (pc.equals(PlayerClassType::RANGER) || pc.equals(PlayerClassType::CAVALRY)) {
         ItemEntity item({ ItemKindType::ARROW, SV_AMMO_NORMAL });
-        item.number = (byte)rand_range(15, 20);
+        item.number = rand_range(15, 20);
         add_outfit(player_ptr, item);
     }
 
@@ -184,12 +184,12 @@ void player_outfit(PlayerType *player_ptr)
         add_outfit(player_ptr, item);
     } else if (pc.equals(PlayerClassType::ARCHER)) {
         ItemEntity item({ ItemKindType::ARROW, SV_AMMO_NORMAL });
-        item.number = (ITEM_NUMBER)rand_range(15, 20);
+        item.number = rand_range(15, 20);
         add_outfit(player_ptr, item);
     } else if (pc.equals(PlayerClassType::HIGH_MAGE) || pc.equals(PlayerClassType::ELEMENTALIST)) {
         ItemEntity item({ ItemKindType::WAND, SV_WAND_MAGIC_MISSILE });
         item.number = 1;
-        item.pval = (PARAMETER_VALUE)rand_range(25, 30);
+        item.pval = static_cast<short>(rand_range(25, 30));
         add_outfit(player_ptr, item);
     } else if (pc.equals(PlayerClassType::SORCERER)) {
         for (const auto tval : TV_MAGIC_BOOK_RANGE) {

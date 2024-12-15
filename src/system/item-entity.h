@@ -12,7 +12,7 @@
 #include "object-enchant/trc-types.h"
 #include "object/object-mark-types.h"
 #include "system/angband.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-key.h"
 #include "system/system-variables.h"
 #include "util/dice.h"
 #include "util/flag-group.h"
@@ -29,7 +29,7 @@ enum class RandomArtActType : short;
 enum class SmithEffectType : short;
 class ActivationType;
 class ArtifactType;
-class BaseitemInfo;
+class BaseitemDefinition;
 class DisplaySymbol;
 class EgoItemDefinition;
 class MonraceDefinition;
@@ -38,6 +38,9 @@ public:
     ItemEntity();
     ItemEntity(short bi_id);
     ItemEntity(const BaseitemKey &bi_key);
+    ItemEntity(ItemEntity &&) = default;
+    ItemEntity &operator=(ItemEntity &&) = default;
+
     short bi_id{}; /*!< ベースアイテムID (0は、不具合調査用の無効アイテム または 何も装備していない箇所のアイテム であることを示す) */
     POSITION iy{}; /*!< Y-position on map, or zero */
     POSITION ix{}; /*!< X-position on map, or zero */
@@ -81,7 +84,7 @@ public:
     RandomArtifactBias artifact_bias{}; /*!< ランダムアーティファクト生成時のバイアスID */
 
     void wipe();
-    void copy_from(const ItemEntity *j_ptr);
+    ItemEntity clone() const;
     void generate(const BaseitemKey &new_bi_key);
     void generate(short new_bi_id);
     bool is(ItemKindType tval) const;
@@ -151,7 +154,7 @@ public:
     bool has_bias() const;
     bool is_bounty() const;
     bool is_target_of(QuestId quest_id) const;
-    BaseitemInfo &get_baseitem() const;
+    BaseitemDefinition &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
     ArtifactType &get_fixed_artifact() const;
     TrFlags get_flags() const;
@@ -163,6 +166,11 @@ public:
     bool is_similar(const ItemEntity &other) const;
     int is_similar_part(const ItemEntity &other) const;
     bool is_similar_for_store(const ItemEntity &other) const;
+    int get_baseitem_level() const;
+    short get_baseitem_pval() const;
+    bool is_worthless() const;
+    int get_baseitem_cost() const;
+    MonraceId get_monrace_id() const;
 
     void mark_as_known();
     void mark_as_tried() const;
@@ -171,6 +179,9 @@ public:
     void absorb(ItemEntity &other);
 
 private:
+    ItemEntity(const ItemEntity &) = default;
+    ItemEntity &operator=(const ItemEntity &) = default;
+
     int get_baseitem_price() const;
     int calc_figurine_value() const;
     int calc_capture_value() const;
@@ -183,5 +194,4 @@ private:
     std::string build_activation_description_dragon_breath() const;
     uint8_t get_color() const;
     char get_character() const;
-    MonraceId get_monrace_id() const;
 };

@@ -29,7 +29,7 @@
 #include "perception/identification.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/baseitem-info.h"
+#include "system/baseitem/baseitem-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -306,8 +306,8 @@ static void invest_negative_modified_value(ItemEntity *o_ptr)
             break;
         }
 
-        o_ptr->to_d -= (int)randint0(3);
-        o_ptr->to_h -= (HIT_PROB)randint0(3);
+        o_ptr->to_d -= randint0(3);
+        o_ptr->to_h -= randnum0<short>(3);
     }
 
     while ((o_ptr->to_d + o_ptr->to_h) > 10) {
@@ -315,8 +315,8 @@ static void invest_negative_modified_value(ItemEntity *o_ptr)
             break;
         }
 
-        o_ptr->to_d -= (int)randint0(3);
-        o_ptr->to_h -= (HIT_PROB)randint0(3);
+        o_ptr->to_d -= randint0(3);
+        o_ptr->to_h -= randnum0<short>(3);
     }
 }
 
@@ -388,11 +388,11 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
     }
 
     constexpr auto prompt = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
-    object_aware(player_ptr, o_ptr);
+    object_aware(player_ptr, *o_ptr);
     o_ptr->mark_as_known();
     o_ptr->ident |= IDENT_FULL_KNOWN;
     o_ptr->randart_name.reset();
-    (void)screen_object(player_ptr, o_ptr, 0L);
+    (void)screen_object(player_ptr, *o_ptr, 0L);
 
     auto wrap_name = [](const auto &name) {
         std::stringstream ss;

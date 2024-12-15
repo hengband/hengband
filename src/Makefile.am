@@ -214,13 +214,11 @@ hengband_SOURCES = \
 	floor/floor-generator-util.h \
 	floor/floor-generator.cpp floor/floor-generator.h \
 	floor/floor-leaver.cpp floor/floor-leaver.h \
-	floor/floor-list.cpp floor/floor-list.h \
 	floor/floor-mode-changer.cpp floor/floor-mode-changer.h \
 	floor/floor-object.cpp floor/floor-object.h \
 	floor/floor-save.cpp floor/floor-save.h \
 	floor/floor-save-util.cpp floor/floor-save-util.h \
 	floor/floor-streams.cpp floor/floor-streams.h \
-	floor/floor-town.h floor/floor-town.cpp \
 	floor/floor-util.cpp floor/floor-util.h \
 	floor/geometry.cpp floor/geometry.h \
 	floor/line-of-sight.cpp floor/line-of-sight.h \
@@ -235,6 +233,7 @@ hengband_SOURCES = \
 	game-option/cheat-options.cpp game-option/cheat-options.h \
 	game-option/cheat-types.h \
 	game-option/disturbance-options.cpp game-option/disturbance-options.h \
+	game-option/game-option-page.h \
 	game-option/game-play-options.cpp game-option/game-play-options.h \
 	game-option/input-options.cpp game-option/input-options.h \
 	game-option/keymap-directory-getter.cpp game-option/keymap-directory-getter.h \
@@ -247,14 +246,11 @@ hengband_SOURCES = \
 	game-option/text-display-options.cpp game-option/text-display-options.h \
 	\
 	grid/door.cpp grid/door.h \
-	grid/feature-action-flags.cpp grid/feature-action-flags.h \
-	grid/feature-flag-types.h \
 	grid/feature-generator.cpp grid/feature-generator.h \
 	grid/feature.cpp grid/feature.h \
 	grid/grid.cpp grid/grid.h \
 	grid/lighting-colors-table.cpp grid/lighting-colors-table.h \
 	grid/object-placer.cpp grid/object-placer.h \
-	grid/stair.cpp grid/stair.h \
 	grid/trap.cpp grid/trap.h \
 	\
 	hpmp/hp-mp-processor.cpp hpmp/hp-mp-processor.h \
@@ -916,35 +912,53 @@ hengband_SOURCES = \
 	sv-definition/sv-wand-types.h sv-definition/sv-weapon-types.h \
 	sv-definition/sv-other-types.h \
 	\
-	system/alloc-entries.cpp system/alloc-entries.h \
 	system/angband.h \
 	system/angband-exceptions.h \
 	system/angband-system.h system/angband-system.cpp \
 	system/angband-version.cpp system/angband-version.h \
 	system/artifact-type-definition.cpp system/artifact-type-definition.h \
-	system/baseitem-info.cpp system/baseitem-info.h \
 	system/building-type-definition.cpp system/building-type-definition.h \
-	system/dungeon-data-definition.cpp system/dungeon-data-definition.h \
-	system/dungeon-info.cpp system/dungeon-info.h \
-	system/floor-type-definition.cpp system/floor-type-definition.h \
 	system/grid-type-definition.cpp system/grid-type-definition.h \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
 	system/inner-game-data.cpp system/inner-game-data.h \
 	system/item-entity.cpp system/item-entity.h \
 	system/monster-entity.cpp system/monster-entity.h \
-	system/monster-race-info.cpp system/monster-race-info.h \
 	system/player-type-definition.cpp system/player-type-definition.h \
 	system/redrawing-flags-updater.cpp system/redrawing-flags-updater.h \
 	system/spell-info-list.cpp system/spell-info-list.h \
 	system/system-variables.cpp system/system-variables.h \
-	system/terrain-type-definition.cpp system/terrain-type-definition.h \
 	system/gamevalue.h \
 	\
-	system/enums/game-option-page.h \
+	system/baseitem/baseitem-allocation.cpp system/baseitem/baseitem-allocation.h \
+	system/baseitem/baseitem-definition.cpp system/baseitem/baseitem-definition.h \
+	system/baseitem/baseitem-key.cpp system/baseitem/baseitem-key.h \
+	system/baseitem/baseitem-list.cpp system/baseitem/baseitem-list.h \
+	\
+	system/dungeon/dungeon-data-definition.cpp system/dungeon/dungeon-data-definition.h \
+	system/dungeon/dungeon-definition.cpp system/dungeon/dungeon-definition.h \
+	system/dungeon/dungeon-list.cpp system/dungeon/dungeon-list.h \
+	system/dungeon/dungeon-record.cpp system/dungeon/dungeon-record.h \
+	\
 	system/enums/grid-flow.h \
-	system/enums/monrace/monrace-id.h \
 	system/enums/grid-count-kind.h \
+	system/enums/monrace/monrace-id.h \
+	system/enums/terrain/terrain-characteristics.h \
+	system/enums/terrain/terrain-tag.h \
+	\
+	system/floor/floor-info.cpp system/floor/floor-info.h \
+	system/floor/floor-list.cpp system/floor/floor-list.h \
+	system/floor/town-info.cpp system/floor/town-info.h \
+	system/floor/town-list.cpp system/floor/town-list.h \
+	\
+	system/monrace/monrace-allocation.cpp system/monrace/monrace-allocation.h \
+	system/monrace/monrace-definition.cpp system/monrace/monrace-definition.h \
+	system/monrace/monrace-list.cpp system/monrace/monrace-list.h \
+	\
+	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
+	\
+	system/terrain/terrain-definition.cpp system/terrain/terrain-definition.h \
+	system/terrain/terrain-list.cpp system/terrain/terrain-list.h \
 	\
 	target/grid-selector.cpp target/grid-selector.h \
 	target/projection-path-calculator.cpp target/projection-path-calculator.h \
@@ -1048,7 +1062,6 @@ hengband_SOURCES = \
 	wizard/wizard-special-process.cpp wizard/wizard-special-process.h \
 	\
 	world/world.cpp world/world.h \
-	world/world-object.cpp world/world-object.h \
 	world/world-movement-processor.cpp world/world-movement-processor.h \
 	world/world-turn-processor.cpp world/world-turn-processor.h
 

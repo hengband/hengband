@@ -15,7 +15,7 @@
 #include "main/sound-of-music.h"
 #include "player-base/player-class.h"
 #include "save/save.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h" //!< @todo 相互依存している、後で何とかする.

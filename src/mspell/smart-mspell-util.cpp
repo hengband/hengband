@@ -1,9 +1,9 @@
 #include "mspell/smart-mspell-util.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster/smart-learn-types.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/monster-race-info.h"
 #include "system/player-type-definition.h"
 
 msr_type::msr_type(PlayerType *player_ptr, short m_idx, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags)

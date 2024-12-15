@@ -32,12 +32,14 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/dungeon-record.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "target/target-getter.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
@@ -260,7 +262,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         return;
     }
 
-    short target_dungeon = 0;
+    auto target_dungeon = 0;
     auto &fcms = FloorChangeModesStore::get_instace();
     if (!floor.is_in_underground()) {
         target_dungeon = terrain.flags.has(TerrainCharacteristics::ENTRANCE) ? grid.special : DUNGEON_ANGBAND;
@@ -269,9 +271,9 @@ void do_cmd_go_down(PlayerType *player_ptr)
             return;
         }
 
-        if (!max_dlv[target_dungeon]) {
+        if (!DungeonRecords::get_instance().get_record(target_dungeon).has_entered()) {
             const auto mes = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
-            const auto &dungeon = dungeons_info[target_dungeon];
+            const auto &dungeon = DungeonList::get_instance().get_dungeon(target_dungeon);
             msg_format(mes, dungeon.name.data(), dungeon.mindepth);
             if (!input_check(_("本当にこのダンジョンに入りますか？", "Do you really get in this dungeon? "))) {
                 return;

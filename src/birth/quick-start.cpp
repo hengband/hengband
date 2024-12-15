@@ -41,7 +41,7 @@ bool ask_quick_start(PlayerType *player_ptr)
         put_str(_("クイック・スタートを使いますか？[y/N]", "Use quick start? [y/N]"), 14, 10);
         c = inkey();
         if (c == 'Q') {
-            quit(nullptr);
+            quit("");
         } else if (c == 'S') {
             return false;
         } else if (c == '?') {

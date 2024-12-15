@@ -8,7 +8,8 @@
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "room/door-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
@@ -84,7 +85,17 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         const auto s = static_cast<short>(i);
         auto &terrain = terrains.get_terrain(s);
         terrain.idx = s;
-        terrain.tag = tokens[2];
+        const auto &tag = tokens[2];
+        terrain.tag = tag;
+
+        //!< @todo 後でif文は消す.
+        static const auto tag_begin = terrain_tags.begin();
+        static const auto tag_end = terrain_tags.end();
+        const auto tag_enum = std::find_if(tag_begin, tag_end, [&tag](const auto &x) { return x.first == tag; });
+        if (tag_enum != tag_end) {
+            terrain.tag_enum = tag_enum->second;
+        }
+
         terrain.mimic = s;
         terrain.destroyed = s;
         for (auto j = 0; j < MAX_FEAT_STATES; j++) {
@@ -286,13 +297,10 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
  */
 void init_feat_variables()
 {
-    const auto &terrains = TerrainList::get_instance();
-    feat_none = terrains.get_terrain_id_by_tag("NONE");
-
-    feat_floor = terrains.get_terrain_id_by_tag("FLOOR");
-    feat_rune_protection = terrains.get_terrain_id_by_tag("RUNE_PROTECTION");
-    feat_rune_explosion = terrains.get_terrain_id_by_tag("RUNE_EXPLOSION");
-    feat_mirror = terrains.get_terrain_id_by_tag("MIRROR");
+    auto &terrains = TerrainList::get_instance();
+    for (const auto &tag : terrain_tags) {
+        terrains.emplace_tag(tag.first);
+    }
 
     feat_door[DOOR_DOOR].open = terrains.get_terrain_id_by_tag("OPEN_DOOR");
     feat_door[DOOR_DOOR].broken = terrains.get_terrain_id_by_tag("BROKEN_DOOR");
@@ -337,8 +345,6 @@ void init_feat_variables()
     feat_door[DOOR_CURTAIN].num_jammed = 1;
 
     /* Stairs */
-    feat_up_stair = terrains.get_terrain_id_by_tag("UP_STAIR");
-    feat_down_stair = terrains.get_terrain_id_by_tag("DOWN_STAIR");
     feat_entrance = terrains.get_terrain_id_by_tag("ENTRANCE");
 
     /* Normal traps */
@@ -406,35 +412,4 @@ void init_feat_variables()
     feat_undetected = terrains.get_terrain_id_by_tag("UNDETECTED");
 
     init_wilderness_terrains();
-}
-
-/*!
- * @brief 地形タグからIDを得る /
- * Search for real index corresponding to this fake tag
- * @param tag タグ文字列のオフセット
- * @return 地形ID。該当がないならstd::nullopt
- */
-static std::optional<short> search_real_feat(std::string_view tag)
-{
-    if (tag.empty()) {
-        return std::nullopt;
-    }
-
-    return TerrainList::get_instance().get_terrain_id_by_tag(tag);
-}
-
-/*!
- * @brief 地形情報の各種タグからIDへ変換して結果を収める
- * @param head ヘッダ構造体
- */
-void retouch_terrains_info()
-{
-    auto &terrains = TerrainList::get_instance();
-    for (auto &terrain : terrains) {
-        terrain.mimic = search_real_feat(terrain.mimic_tag).value_or(terrain.mimic);
-        terrain.destroyed = search_real_feat(terrain.destroyed_tag).value_or(terrain.destroyed);
-        for (auto &ts : terrain.state) {
-            ts.result = search_real_feat(ts.result_tag).value_or(ts.result);
-        }
-    }
 }

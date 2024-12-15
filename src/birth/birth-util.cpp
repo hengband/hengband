@@ -1,8 +1,8 @@
 #include "birth/birth-util.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "core/show-file.h"
+#include "game-option/game-option-page.h"
 #include "main/sound-of-music.h"
-#include "system/enums/game-option-page.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include <string>
@@ -12,7 +12,7 @@
  */
 void birth_quit(void)
 {
-    quit(nullptr);
+    quit("");
 }
 
 /*!

@@ -3,7 +3,8 @@
 #include "room/door-definition.h"
 #include "system/angband-system.h"
 #include "system/enums/grid-flow.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 
 Grid::Grid()
@@ -99,6 +100,16 @@ bool Grid::is_rune_protection() const
 bool Grid::is_rune_explosion() const
 {
     return this->is_object() && TerrainList::get_instance().get_terrain(this->mimic).flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
+}
+
+/*!
+ * @brief マスに隠されたドアがあるかの判定
+ * @return 隠されたドアがあるか否か
+ */
+bool Grid::is_hidden_door() const
+{
+    const auto is_secret = (this->mimic > 0) || this->cave_has_flag(TerrainCharacteristics::SECRET);
+    return is_secret && this->get_terrain().is_closed_door();
 }
 
 bool Grid::has_monster() const
@@ -204,4 +215,19 @@ void Grid::place_closed_curtain()
 void Grid::add_info(int grid_info)
 {
     this->info |= grid_info;
+}
+
+void Grid::set_terrain_id(short terrain_id)
+{
+    this->feat = terrain_id;
+}
+
+void Grid::set_terrain_id(TerrainTag tag)
+{
+    this->feat = TerrainList::get_instance().get_terrain_id(tag);
+}
+
+void Grid::set_mimic_terrain_id(TerrainTag tag)
+{
+    this->mimic = TerrainList::get_instance().get_terrain_id(tag);
 }

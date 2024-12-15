@@ -3,14 +3,14 @@
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
-#include "system/baseitem-info.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <utility>
 
 /*!
  * @brief グローバルオブジェクト配列の要素番号i1のオブジェクトを要素番号i2に移動する /
@@ -24,15 +24,12 @@ static void compact_objects_aux(FloorType *floor_ptr, OBJECT_IDX i1, OBJECT_IDX 
         return;
     }
 
-    auto *o_ptr = &floor_ptr->o_list[i1];
-
     // モンスター所為アイテムリストもしくは床上アイテムリストの要素番号i1をi2に書き換える
     auto &list = get_o_idx_list_contains(floor_ptr, i1);
     std::replace(list.begin(), list.end(), i1, i2);
 
-    // 要素番号i1のオブジェクトを要素番号i2に移動
-    floor_ptr->o_list[i2] = floor_ptr->o_list[i1];
-    o_ptr->wipe();
+    // 要素番号i1のオブジェクトを要素番号i2に移動し、i1はクリアする
+    floor_ptr->o_list[i2] = std::exchange(floor_ptr->o_list[i1], {});
 }
 
 /*!
@@ -72,7 +69,7 @@ void compact_objects(PlayerType *player_ptr, int size)
         for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
             o_ptr = &floor_ptr->o_list[i];
 
-            if (!o_ptr->is_valid() || (o_ptr->get_baseitem().level > cur_lev)) {
+            if (!o_ptr->is_valid() || (o_ptr->get_baseitem_level() > cur_lev)) {
                 continue;
             }
 

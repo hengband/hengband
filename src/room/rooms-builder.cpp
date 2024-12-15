@@ -45,11 +45,11 @@
 #include "room/cave-filler.h"
 #include "room/door-definition.h"
 #include "room/lake-types.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "system/terrain-type-definition.h"
+#include "system/terrain/terrain-definition.h"
 #include "view/display-messages.h"
 
 /*!

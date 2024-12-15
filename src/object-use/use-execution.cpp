@@ -20,7 +20,6 @@
 #include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
-#include "system/baseitem-info.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -58,9 +57,9 @@ void ObjectUseEntity::execute()
         return;
     }
 
-    auto lev = o_ptr->get_baseitem().level;
-    if (lev > 50) {
-        lev = 50 + (lev - 50) / 2;
+    auto item_level = o_ptr->get_baseitem_level();
+    if (item_level > 50) {
+        item_level = 50 + (item_level - 50) / 2;
     }
 
     auto chance = this->player_ptr->skill_dev;
@@ -68,7 +67,7 @@ void ObjectUseEntity::execute()
         chance = chance / 2;
     }
 
-    chance = chance - lev;
+    chance = chance - item_level;
     if ((chance < USE_DEVICE) && one_in_(USE_DEVICE - chance + 1)) {
         chance = USE_DEVICE;
     }
@@ -118,8 +117,8 @@ void ObjectUseEntity::execute()
     rfu.reset_flags(flags_srf);
     o_ptr->mark_as_tried();
     if (ident && !o_ptr->is_aware()) {
-        object_aware(this->player_ptr, o_ptr);
-        gain_exp(this->player_ptr, (lev + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
+        object_aware(this->player_ptr, *o_ptr);
+        gain_exp(this->player_ptr, (item_level + (this->player_ptr->lev >> 1)) / this->player_ptr->lev);
     }
 
     static constexpr auto flags_swrf = {
@@ -137,13 +136,11 @@ void ObjectUseEntity::execute()
 
     o_ptr->pval--;
     if ((this->i_idx >= 0) && (o_ptr->number > 1)) {
-        ItemEntity forge;
-        auto *q_ptr = &forge;
-        q_ptr->copy_from(o_ptr);
-        q_ptr->number = 1;
+        auto used_item = o_ptr->clone();
+        used_item.number = 1;
         o_ptr->pval++;
         o_ptr->number--;
-        this->i_idx = store_item_to_inventory(this->player_ptr, q_ptr);
+        this->i_idx = store_item_to_inventory(this->player_ptr, &used_item);
         msg_print(_("杖をまとめなおした。", "You unstack your staff."));
     }
 

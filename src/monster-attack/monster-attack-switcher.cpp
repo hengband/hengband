@@ -29,7 +29,7 @@
 #include "status/base-status.h"
 #include "status/element-resistance.h"
 #include "status/experience.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -111,7 +111,7 @@ static void calc_blow_un_power(PlayerType *player_ptr, MonsterAttackPlayer *mona
 
     int max_draining_item = is_magic_mastery ? 5 : 10;
     for (int i = 0; i < max_draining_item; i++) {
-        INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
+        auto i_idx = randnum0<short>(INVEN_PACK);
         monap_ptr->o_ptr = &player_ptr->inventory_list[i_idx];
         if (!monap_ptr->o_ptr->is_valid()) {
             continue;

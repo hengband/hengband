@@ -2,7 +2,7 @@
 #include "floor/geometry.h"
 #include "monster/monster-util.h"
 #include "system/angband-exceptions.h"
-#include "system/floor-type-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"

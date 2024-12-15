@@ -3,8 +3,8 @@
 #include "game-option/cheat-types.h"
 #include "grid/grid.h"
 #include "room/treasure-deployment.h"
-#include "system/dungeon-info.h"
-#include "system/floor-type-definition.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "wizard/wizard-messages.h"
@@ -97,43 +97,41 @@ void r_visit(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSI
     }
 }
 
-void build_maze_vault(PlayerType *player_ptr, POSITION x0, POSITION y0, POSITION xsize, POSITION ysize, bool is_vault)
+void build_maze_vault(PlayerType *player_ptr, const Pos2D &center, const Pos2DVec &vec, bool is_vault)
 {
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("迷路ランダムVaultを生成しました。", "Maze Vault."));
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool light = ((floor_ptr->dun_level <= randint1(25)) && is_vault && floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS));
-    POSITION dy = ysize / 2 - 1;
-    POSITION dx = xsize / 2 - 1;
-    POSITION y1 = y0 - dy;
-    POSITION x1 = x0 - dx;
-    POSITION y2 = y0 + dy;
-    POSITION x2 = x0 + dx;
-    for (POSITION y = y1 - 1; y <= y2 + 1; y++) {
-        for (POSITION x = x1 - 1; x <= x2 + 1; x++) {
-            Grid *g_ptr;
-            g_ptr = &floor_ptr->grid_array[y][x];
-            g_ptr->info |= CAVE_ROOM;
+    auto &floor = *player_ptr->current_floor_ptr;
+    bool light = ((floor.dun_level <= randint1(25)) && is_vault && floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS));
+    const auto dy = vec.y / 2 - 1;
+    const auto dx = vec.x / 2 - 1;
+    const auto y1 = center.y - dy;
+    const auto x1 = center.x - dx;
+    const auto y2 = center.y + dy;
+    const auto x2 = center.x + dx;
+    for (auto y = y1 - 1; y <= y2 + 1; y++) {
+        for (auto x = x1 - 1; x <= x2 + 1; x++) {
+            auto &grid = floor.get_grid({ y, x });
+            grid.info |= CAVE_ROOM;
             if (is_vault) {
-                g_ptr->info |= CAVE_ICKY;
+                grid.info |= CAVE_ICKY;
             }
             if ((x == x1 - 1) || (x == x2 + 1) || (y == y1 - 1) || (y == y2 + 1)) {
-                place_grid(player_ptr, g_ptr, GB_OUTER);
+                place_grid(player_ptr, &grid, GB_OUTER);
             } else if (!is_vault) {
-                place_grid(player_ptr, g_ptr, GB_EXTRA);
+                place_grid(player_ptr, &grid, GB_EXTRA);
             } else {
-                place_grid(player_ptr, g_ptr, GB_INNER);
+                place_grid(player_ptr, &grid, GB_INNER);
             }
 
             if (light) {
-                g_ptr->info |= (CAVE_GLOW);
+                grid.info |= (CAVE_GLOW);
             }
         }
     }
 
-    int m = dx + 1;
-    int n = dy + 1;
-    int num_vertices = m * n;
-
+    const auto m = dx + 1;
+    const auto n = dy + 1;
+    const auto num_vertices = m * n;
     std::vector<int> visited(num_vertices);
     r_visit(player_ptr, y1, x1, y2, x2, randint0(num_vertices), 0, visited.data());
     if (is_vault) {
