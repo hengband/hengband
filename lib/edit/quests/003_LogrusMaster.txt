@@ -64,4 +64,3 @@ D:XXXXXXXXXXXXXXX
 
 # Starting position
 P:8:2
-

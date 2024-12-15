@@ -77,6 +77,3 @@ D:XXXXXXXXXXXXXXXXX
 
 # Starting position
 P:13:8
-
-
-
