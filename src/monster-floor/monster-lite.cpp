@@ -40,7 +40,7 @@ static void update_monster_lite(
         return;
     }
 
-    if (!feat_supports_los(g_ptr->feat)) {
+    if (!g_ptr->has_los_terrain()) {
         if (((y < player_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > player_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = player_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;
@@ -98,7 +98,7 @@ static void update_monster_dark(
         return;
     }
 
-    if (!feat_supports_los(g_ptr->feat) && !g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
+    if (!g_ptr->has_los_terrain() && !g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
         if (((y < player_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > player_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = player_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;

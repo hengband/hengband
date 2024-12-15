@@ -171,6 +171,11 @@ bool Grid::has_los() const
     return any_bits(this->info, CAVE_VIEW) || AngbandSystem::get_instance().is_phase_out();
 }
 
+bool Grid::has_los_terrain(TerrainKind tk) const
+{
+    return this->get_terrain(tk).flags.has(TerrainCharacteristics::LOS);
+}
+
 TerrainType &Grid::get_terrain(TerrainKind tk)
 {
     auto &terrains = TerrainList::get_instance();

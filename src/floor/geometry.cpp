@@ -1,7 +1,5 @@
 #include "floor/geometry.h"
-#include "floor/cave.h"
 #include "game-option/text-display-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "system/angband-system.h"
 #include "system/floor/floor-info.h"
@@ -142,7 +140,7 @@ bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 
     /* Feature code (applying "mimic" field) */
     /* Floors are simple */
-    if (feat_supports_los(grid.get_feat_mimic())) {
+    if (grid.has_los_terrain(TerrainKind::MIMIC)) {
         return true;
     }
 
