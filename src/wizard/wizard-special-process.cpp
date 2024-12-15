@@ -453,7 +453,7 @@ void wiz_create_feature(PlayerType *player_ptr)
 
     cave_set_feat(player_ptr, y, x, *f_val1);
     grid.mimic = *f_val2;
-    const auto &terrain = grid.get_terrain_mimic();
+    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     if (terrain.flags.has(TerrainCharacteristics::RUNE_PROTECTION) || terrain.flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
         grid.info |= CAVE_OBJECT;
     } else if (terrain.flags.has(TerrainCharacteristics::MIRROR)) {

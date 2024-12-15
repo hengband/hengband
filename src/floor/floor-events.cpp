@@ -96,7 +96,7 @@ void night_falls(PlayerType *player_ptr)
         for (auto x = 0; x < floor.width; x++) {
             const Pos2D pos(y, x);
             auto &grid = floor.get_grid(pos);
-            const auto &terrain = grid.get_terrain_mimic();
+            const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
             using Tc = TerrainCharacteristics;
             if (grid.is_mirror() || terrain.flags.has(Tc::QUEST_ENTER) || terrain.flags.has(Tc::ENTRANCE)) {
                 continue;
@@ -334,7 +334,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
             const auto &grid = floor.get_grid({ y, x });
-            if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::GLOW)) {
+            if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::GLOW)) {
                 continue;
             }
 

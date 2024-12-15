@@ -112,7 +112,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
                 }
 
                 const auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                if (grid_neighbor.get_terrain_mimic().flags.has(TerrainCharacteristics::GLOW)) {
+                if (grid_neighbor.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::GLOW)) {
                     do_dark = false;
                     break;
                 }
@@ -124,7 +124,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
         }
 
         grid.info &= ~(CAVE_GLOW);
-        if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::REMEMBER)) {
+        if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::REMEMBER)) {
             if (!view_torch_grids) {
                 grid.info &= ~(CAVE_MARK);
             }

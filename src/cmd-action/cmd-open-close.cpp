@@ -129,7 +129,7 @@ void do_cmd_open(PlayerType *player_ptr)
         const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = floor.get_grid(pos);
         const auto o_idx = chest_check(&floor, pos, false);
-        if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::OPEN) && !o_idx) {
+        if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
         } else if (grid.has_monster() && !floor.m_list[grid.m_idx].is_riding()) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -179,7 +179,7 @@ void do_cmd_close(PlayerType *player_ptr)
     if (get_rep_dir(player_ptr, &dir)) {
         const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = floor.get_grid(pos);
-        if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::CLOSE)) {
+        if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::CLOSE)) {
             msg_print(_("そこには閉じるものが見当たらない。", "You see nothing there to close."));
         } else if (grid.has_monster()) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -283,7 +283,7 @@ void do_cmd_bash(PlayerType *player_ptr)
     if (get_rep_dir(player_ptr, &dir)) {
         const auto pos = player_ptr->get_neighbor(dir);
         const Grid &grid = player_ptr->current_floor_ptr->get_grid(pos);
-        if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::BASH)) {
+        if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::BASH)) {
             msg_print(_("そこには体当たりするものが見当たらない。", "You see nothing there to bash."));
         } else if (grid.has_monster()) {
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
@@ -349,7 +349,7 @@ void do_cmd_spike(PlayerType *player_ptr)
 
     const auto pos = player_ptr->get_neighbor(dir);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain_mimic = grid.get_terrain_mimic();
+    const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC);
     INVENTORY_IDX i_idx;
     if (terrain_mimic.flags.has_not(TerrainCharacteristics::SPIKE)) {
         msg_print(_("そこにはくさびを打てるものが見当たらない。", "You see nothing there to spike."));

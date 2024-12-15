@@ -49,7 +49,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (terrain.flags.has_not(TerrainCharacteristics::OPEN)) {
         constexpr auto fmt = _("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck.");
-        msg_format(fmt, grid.get_terrain_mimic().name.data());
+        msg_format(fmt, grid.get_terrain(TerrainKind::MIMIC).name.data());
         return false;
     }
 
@@ -160,7 +160,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
     const auto &terrain = grid.get_terrain();
     if (terrain.flags.has_not(TerrainCharacteristics::OPEN)) {
         constexpr auto fmt = _("%sはがっちりと閉じられているようだ。", "The %s appears to be stuck.");
-        msg_format(fmt, grid.get_terrain_mimic().name.data());
+        msg_format(fmt, grid.get_terrain(TerrainKind::MIMIC).name.data());
     } else if (terrain.power) {
         auto power_disarm = player_ptr->skill_dis;
         const auto effects = player_ptr->effects();
@@ -340,7 +340,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     const auto &terrain = grid.get_terrain();
     int bash = adj_str_blow[player_ptr->stat_index[A_STR]];
     int power = terrain.power;
-    const auto &name = grid.get_terrain_mimic().name;
+    const auto &name = grid.get_terrain(TerrainKind::MIMIC).name;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     msg_format(_("%sに体当たりをした！", "You smash into the %s!"), name.data());
     power = (bash - (power * 10));
