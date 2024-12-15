@@ -20,4 +20,3 @@ angbanddir = @DEFAULT_LIB_PATH@/edit
 angband_DATA = \
   $(angband_files)
 endif
-
