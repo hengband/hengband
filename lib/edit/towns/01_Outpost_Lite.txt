@@ -797,4 +797,3 @@ P:19:176
 # Starting position when coming from quest 15
 ?:[EQU $LEAVING_QUEST 15]
 P:3:7
-

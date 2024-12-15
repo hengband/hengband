@@ -340,4 +340,3 @@ P:63:98
 # Starting position when coming from quest 23
 ?:[EQU $LEAVING_QUEST 23]
 P:63:102
-
