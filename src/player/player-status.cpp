@@ -3044,9 +3044,10 @@ long calc_score(PlayerType *player_ptr)
     }
 
     auto max_dl = 0;
-    for (const auto &[dungeon_id, _] : DungeonList::get_instance()) {
-        if (max_dl < max_dlv[dungeon_id]) {
-            max_dl = max_dlv[dungeon_id];
+    for (const auto &[_, dungeon_record] : DungeonRecords::get_instance()) {
+        const auto max_level = dungeon_record.get_max_level();
+        if (max_dl < max_level) {
+            max_dl = max_level;
         }
     }
 

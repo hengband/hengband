@@ -277,19 +277,21 @@ void show_bounty(void)
  */
 void determine_daily_bounty(PlayerType *player_ptr, bool conv_old)
 {
+    const auto &dungeon_records = DungeonRecords::get_instance();
     auto max_dl = 3;
     if (!conv_old) {
         for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
-            if (max_dlv[dungeon_id] < dungeon.mindepth) {
+            const auto max_level = dungeon_records.get_record(dungeon_id).get_max_level();
+            if (max_level < dungeon.mindepth) {
                 continue;
             }
 
-            if (max_dl < max_dlv[dungeon_id]) {
-                max_dl = max_dlv[dungeon_id];
+            if (max_dl < max_level) {
+                max_dl = max_level;
             }
         }
     } else {
-        max_dl = std::max(max_dlv[DUNGEON_ANGBAND], 3);
+        max_dl = std::max(dungeon_records.get_record(DUNGEON_ANGBAND).get_max_level(), 3);
     }
 
     get_mon_num_prep_bounty(player_ptr);

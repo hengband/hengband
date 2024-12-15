@@ -151,7 +151,7 @@ void set_zangband_reflection(PlayerType *player_ptr)
 
 void rd_zangband_dungeon()
 {
-    max_dlv[DUNGEON_ANGBAND] = rd_s16b();
+    DungeonRecords::get_instance().get_record(DUNGEON_ANGBAND).set_max_level(rd_s16b());
 }
 
 void set_zangband_game_turns(PlayerType *player_ptr)

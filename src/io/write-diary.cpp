@@ -288,7 +288,9 @@ void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_
     case DiaryKind::TRUMP: {
         constexpr auto fmt = _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n", " %2d:%02d %20s reset recall level of %s to %d %s.\n");
         const auto &dungeon = floor.get_dungeon_definition();
-        fprintf(fff, fmt, hour, min, note_level.data(), note.data(), _(dungeon.name.data(), (int)max_dlv[num]), _((int)max_dlv[num], dungeon.name.data()));
+        const auto &dungeon_records = DungeonRecords::get_instance();
+        const auto max_level = dungeon_records.get_record(num).get_max_level();
+        fprintf(fff, fmt, hour, min, note_level.data(), note.data(), _(dungeon.name.data(), max_level), _(max_level, dungeon.name.data()));
         break;
     }
     case DiaryKind::STAIR: {
@@ -305,7 +307,9 @@ void exe_write_diary(const FloorType &floor, DiaryKind dk, int num, std::string_
         if (!num) {
             constexpr auto fmt = _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n");
             const auto &dungeon = floor.get_dungeon_definition();
-            fprintf(fff, fmt, hour, min, note_level.data(), _(dungeon.name.data(), (int)max_dlv[floor.dungeon_idx]), _((int)max_dlv[floor.dungeon_idx], dungeon.name.data()));
+            const auto &dungeon_records = DungeonRecords::get_instance();
+            const auto max_level = dungeon_records.get_record(floor.dungeon_idx).get_max_level();
+            fprintf(fff, fmt, hour, min, note_level.data(), _(dungeon.name.data(), max_level), _(max_level, dungeon.name.data()));
         } else {
             constexpr auto fmt = _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n");
             fprintf(fff, fmt, hour, min, note_level.data());
