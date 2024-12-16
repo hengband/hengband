@@ -49,8 +49,11 @@ constexpr auto NUM_BUBBLES = 10;
 namespace {
 std::array<Pos2D, NUM_BUBBLES> allocate_bubbles_center(const Pos2DVec &vec)
 {
+    //!< @details 乱数引数の評価順を固定する.
+    const auto y0 = randint1(vec.y - 3) + 1;
+    const auto x0 = randint1(vec.x - 3) + 1;
     std::array<Pos2D, NUM_BUBBLES> center_points{ {
-        { randint1(vec.y - 3) + 1, randint1(vec.x - 3) + 1 },
+        { y0, x0 },
         { 0, 0 },
         { 0, 0 },
         { 0, 0 },
@@ -73,7 +76,9 @@ std::array<Pos2D, NUM_BUBBLES> create_bubbles_center(const Pos2DVec &vec)
         is_center_checked = false;
         while (!is_center_checked) {
             is_center_checked = true;
-            pos = { randint1(vec.y - 3) + 1, randint1(vec.x - 3) + 1 };
+            const auto y = randint1(vec.y - 3) + 1;
+            const auto x = randint1(vec.x - 3) + 1;
+            pos = { y, x }; //!< @details 乱数引数の評価順を固定する.
             for (auto j = 0; j < i; j++) {
                 if (pos == center_points[j]) {
                     is_center_checked = false;

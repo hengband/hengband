@@ -2857,12 +2857,16 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
 int WINAPI WinMain(
     _In_ HINSTANCE hInst, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 {
+#ifdef WIN_DEBUG
+    return game_main(hInst);
+#else
     try {
         return game_main(hInst);
     } catch (const std::exception &e) {
         handle_unexpected_exception(e);
         return 1;
     }
+#endif
 }
 
 #endif /* WINDOWS */

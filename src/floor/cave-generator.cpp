@@ -76,7 +76,9 @@ static void place_cave_contents(PlayerType *player_ptr, DungeonData *dd_ptr, Dun
     if (floor.dun_level == 1) {
         constexpr auto density_moss = 2;
         while (one_in_(density_moss)) {
-            place_trees(player_ptr, { randint1(floor.width - 2), randint1(floor.height - 2) });
+            const auto tmp_y = randint1(floor.height - 2);
+            const auto tmp_x = randint1(floor.width - 2);
+            place_trees(player_ptr, { tmp_y, tmp_x }); //!< @details 乱数引数の評価順を固定する.
         }
     }
 
