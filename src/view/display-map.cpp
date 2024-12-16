@@ -48,13 +48,15 @@ const std::string image_monsters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
 DisplaySymbol image_object()
 {
     if (use_graphics) {
-        auto &baseitems = BaseitemList::get_instance();
-        const std::span<BaseitemDefinition> candidates(baseitems.begin() + 1, baseitems.end());
+        const auto &baseitems = BaseitemList::get_instance();
+        const std::span<const BaseitemDefinition> candidates(baseitems.begin() + 1, baseitems.end());
         const auto &baseitem = rand_choice(candidates);
         return baseitem.symbol_config;
     }
 
-    return { randnum1<uint8_t>(15), rand_choice(image_objects) };
+    const auto color = randnum1<uint8_t>(15);
+    const auto character = rand_choice(image_objects);
+    return { color, character }; //!< @details 乱数引数の評価順を固定する.
 }
 
 /*!
