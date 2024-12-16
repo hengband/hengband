@@ -175,11 +175,12 @@ static bool possible_doorway(FloorType *floor_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    if (cave_has_flag_bold(floor_ptr, y - 1, x, TerrainCharacteristics::WALL) && cave_has_flag_bold(floor_ptr, y + 1, x, TerrainCharacteristics::WALL)) {
+    constexpr auto wall = TerrainCharacteristics::WALL;
+    if (floor_ptr->has_terrain_characteristics({ y - 1, x }, wall) && floor_ptr->has_terrain_characteristics({ y + 1, x }, wall)) {
         return true;
     }
 
-    if (cave_has_flag_bold(floor_ptr, y, x - 1, TerrainCharacteristics::WALL) && cave_has_flag_bold(floor_ptr, y, x + 1, TerrainCharacteristics::WALL)) {
+    if (floor_ptr->has_terrain_characteristics({ y, x - 1 }, wall) && floor_ptr->has_terrain_characteristics({ y, x + 1 }, wall)) {
         return true;
     }
 
@@ -194,8 +195,9 @@ static bool possible_doorway(FloorType *floor_ptr, POSITION y, POSITION x)
  */
 void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 {
+    const Pos2D pos(y, x);
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x) || cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::WALL) || floor_ptr->grid_array[y][x].is_room()) {
+    if (!in_bounds(floor_ptr, y, x) || floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor_ptr->grid_array[y][x].is_room()) {
         return;
     }
 

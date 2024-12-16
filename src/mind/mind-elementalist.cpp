@@ -457,13 +457,13 @@ static std::string get_element_effect_info(PlayerType *player_ptr, int spell_idx
  */
 static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
     auto spell = i2enum<ElementSpells>(spell_idx);
     auto &power = element_powers.at(spell);
     AttributeType typ;
     DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
     int dam;
-    POSITION y, x;
     int num;
 
     switch (spell) {
@@ -561,25 +561,28 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
             }
         }
         break;
-    case ElementSpells::BURST_1ST:
-        y = player_ptr->y;
-        x = player_ptr->x;
+    case ElementSpells::BURST_1ST: {
+        auto p_pos = player_ptr->get_position();
         num = Dice::roll(4, 3);
         typ = get_element_spells_type(player_ptr, power.elem);
         for (int k = 0; k < num; k++) {
             int attempts = 1000;
             while (attempts--) {
-                scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-                if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
+                scatter(player_ptr, &p_pos.y, &p_pos.x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
+                if (!floor.has_terrain_characteristics(p_pos, TerrainCharacteristics::PROJECT)) {
                     continue;
                 }
-                if (!player_ptr->is_located_at({ y, x })) {
+
+                if (!player_ptr->is_located_at(p_pos)) {
                     break;
                 }
             }
-            project(player_ptr, 0, 0, y, x, Dice::roll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
+
+            project(player_ptr, 0, 0, p_pos.y, p_pos.x, Dice::roll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
         }
+
         break;
+    }
     case ElementSpells::STORM_2ND:
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;

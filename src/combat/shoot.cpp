@@ -650,7 +650,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             }
 
             /* Stopped by walls/doors */
-            if (!cave_has_flag_bold(&floor, ny, nx, TerrainCharacteristics::PROJECT) && !floor.grid_array[ny][nx].has_monster()) {
+            if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECT) && !floor.grid_array[ny][nx].has_monster()) {
                 break;
             }
 
@@ -954,7 +954,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
             /* Carry object */
             monster.hold_o_idx_list.add(&floor, item_idx);
-        } else if (cave_has_flag_bold(&floor, y, x, TerrainCharacteristics::PROJECT)) {
+        } else if (floor.has_terrain_characteristics({ y, x }, TerrainCharacteristics::PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(player_ptr, &fire_item, j, y, x);
         } else {

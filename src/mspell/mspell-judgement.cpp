@@ -111,23 +111,23 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
     auto path_n = 0;
     POSITION y = y1;
     POSITION x = x1;
-    for (const auto &[ny, nx] : grid_g) {
+    for (const auto &pos : grid_g) {
         if (flg & PROJECT_DISI) {
-            if (cave_stop_disintegration(&floor, ny, nx)) {
+            if (cave_stop_disintegration(&floor, pos.y, pos.x)) {
                 break;
             }
         } else if (flg & PROJECT_LOS) {
-            if (!cave_los_bold(&floor, ny, nx)) {
+            if (!cave_los_bold(&floor, pos.y, pos.x)) {
                 break;
             }
         } else {
-            if (!cave_has_flag_bold(&floor, ny, nx, TerrainCharacteristics::PROJECT)) {
+            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                 break;
             }
         }
 
-        y = ny;
-        x = nx;
+        y = pos.y;
+        x = pos.x;
         ++path_n;
     }
 
@@ -199,13 +199,13 @@ void get_project_point(PlayerType *player_ptr, POSITION sy, POSITION sx, POSITIO
     ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { sy, sx }, { *ty, *tx }, flg);
     *ty = sy;
     *tx = sx;
-    for (const auto &[y, x] : path_g) {
-        if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
+    for (const auto &pos : path_g) {
+        if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
             break;
         }
 
-        *ty = y;
-        *tx = x;
+        *ty = pos.y;
+        *tx = pos.x;
     }
 }
 

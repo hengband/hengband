@@ -116,7 +116,7 @@ static void run_init(PlayerType *player_ptr, DIRECTION dir)
     player_ptr->run_py = pos.y;
     player_ptr->run_px = pos.x;
     const auto pos_neighbor = player_ptr->get_neighbor(dir);
-    ignore_avoid_run = cave_has_flag_bold(player_ptr->current_floor_ptr, pos_neighbor.y, pos_neighbor.x, TerrainCharacteristics::AVOID_RUN);
+    ignore_avoid_run = player_ptr->current_floor_ptr->has_terrain_characteristics(pos_neighbor, TerrainCharacteristics::AVOID_RUN);
     int i = chome[dir];
     if (see_wall(player_ptr, cycle[i + 1], pos.y, pos.x)) {
         find_breakleft = true;

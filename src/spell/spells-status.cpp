@@ -541,7 +541,7 @@ bool fishing(PlayerType *player_ptr)
     const auto pos = player_ptr->get_neighbor(*dir);
     player_ptr->fishing_dir = *dir;
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!cave_has_flag_bold(&floor, pos.y, pos.x, TerrainCharacteristics::WATER)) {
+    if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::WATER)) {
         msg_print(_("そこは水辺ではない。", "You can't fish here."));
         return false;
     }

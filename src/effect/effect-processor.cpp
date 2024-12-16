@@ -155,7 +155,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 break;
             }
         } else {
-            if (!cave_has_flag_bold(&floor, ny, nx, TerrainCharacteristics::PROJECT) && (rad > 0)) {
+            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT) && (rad > 0)) {
                 break;
             }
         }

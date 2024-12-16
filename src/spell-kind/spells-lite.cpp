@@ -264,7 +264,7 @@ static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &
  */
 static bool cave_pass_dark_bold(const FloorType *floor_ptr, POSITION y, POSITION x)
 {
-    return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT);
+    return floor_ptr->has_terrain_characteristics({ y, x }, TerrainCharacteristics::PROJECT);
 }
 
 /*!
@@ -385,7 +385,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
         while (attempts--) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_LOS);
             const Pos2D pos(y, x);
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, pos.y, pos.x, TerrainCharacteristics::PROJECT)) {
+            if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
 

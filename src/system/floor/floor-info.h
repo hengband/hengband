@@ -41,6 +41,7 @@ enum class DungeonId;
 enum class GridCountKind;
 enum class MonsterTimedEffect : int;
 enum class QuestId : short;
+enum class TerrainCharacteristics;
 enum class TerrainTag;
 class DungeonDefinition;
 class Grid;
@@ -102,6 +103,7 @@ public:
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
     bool has_los(const Pos2D &pos) const;
+    bool has_terrain_characteristics(const Pos2D &pos, TerrainCharacteristics tc) const;
     bool is_special() const;
     bool can_teleport_level(bool to_player = false) const;
     bool is_mark(const Pos2D &pos) const;

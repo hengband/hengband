@@ -139,6 +139,11 @@ bool FloorType::has_los(const Pos2D &pos) const
     return this->get_grid(pos).has_los();
 }
 
+bool FloorType::has_terrain_characteristics(const Pos2D &pos, TerrainCharacteristics tc) const
+{
+    return this->get_grid(pos).get_terrain().flags.has(tc);
+}
+
 /*!
  * @brief 特別なフロアにいるかを判定する
  * @return 固定クエスト、アリーナ、モンスター闘技場のいずれかならばtrue

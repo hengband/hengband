@@ -314,7 +314,7 @@ void do_cmd_building(PlayerType *player_ptr)
     PlayerEnergy energy(player_ptr);
     energy.set_player_turn_energy(100);
     const auto p_pos = player_ptr->get_position();
-    if (!cave_has_flag_bold(player_ptr->current_floor_ptr, p_pos.y, p_pos.x, TerrainCharacteristics::BLDG)) {
+    if (!player_ptr->current_floor_ptr->has_terrain_characteristics(p_pos, TerrainCharacteristics::BLDG)) {
         msg_print(_("ここには建物はない。", "You see no building here."));
         return;
     }

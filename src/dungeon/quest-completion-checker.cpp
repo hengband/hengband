@@ -231,7 +231,7 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
 
     auto &floor = *this->player_ptr->current_floor_ptr;
     auto *g_ptr = &floor.get_grid(m_pos);
-    while (cave_has_flag_bold(&floor, m_pos.y, m_pos.x, TerrainCharacteristics::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
+    while (floor.has_terrain_characteristics(m_pos, TerrainCharacteristics::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
         int ny;
         int nx;
         scatter(this->player_ptr, &ny, &nx, m_pos.y, m_pos.x, 1, PROJECT_NONE);
