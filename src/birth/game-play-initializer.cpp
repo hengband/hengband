@@ -17,9 +17,9 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
-#include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/floor-list.h"
 #include "system/inner-game-data.h"
@@ -130,9 +130,9 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     if (vanilla_town || ironman_downward) {
-        player_ptr->recall_dungeon = DUNGEON_ANGBAND;
+        player_ptr->recall_dungeon = DungeonId::ANGBAND;
     } else {
-        player_ptr->recall_dungeon = DUNGEON_GALGALS;
+        player_ptr->recall_dungeon = DungeonId::GALGALS;
     }
 
     std::copy_n(backup_name.begin(), backup_name.length(), player_ptr->name);

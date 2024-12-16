@@ -69,7 +69,7 @@ void call_the_void(PlayerType *player_ptr)
     }
 
     auto is_special_fllor = floor.is_in_quest() && QuestType::is_fixed(floor.quest_number);
-    is_special_fllor |= floor.dun_level == 0;
+    is_special_fllor |= !floor.is_underground();
     if (is_special_fllor) {
         msg_print(_("地面が揺れた。", "The ground trembles."));
         return;
@@ -150,7 +150,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto is_special_floor = floor.is_in_quest() && QuestType::is_fixed(floor.quest_number);
-    is_special_floor |= (floor.dun_level == 0);
+    is_special_floor |= !floor.is_underground();
     if (is_special_floor) {
         return false;
     }

@@ -25,7 +25,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
         auto no_quest_monsters = quest.status != QuestStatusType::TAKEN;
         no_quest_monsters |= (quest.type != QuestKindType::KILL_LEVEL && quest.type != QuestKindType::RANDOM);
         no_quest_monsters |= quest.level != floor.dun_level;
-        no_quest_monsters |= floor.dungeon_idx != quest.dungeon;
+        no_quest_monsters |= floor.dungeon_id != quest.dungeon;
         no_quest_monsters |= any_bits(quest.flags, QUEST_FLAG_PRESET);
 
         if (no_quest_monsters) {

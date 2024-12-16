@@ -424,7 +424,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
                 if (floor.inside_arena) {
                     place = _("アリーナ", "in the Arena");
-                } else if (!floor.is_in_underground()) {
+                } else if (!floor.is_underground()) {
                     place = _("地上", "on the surface");
                 } else if (inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))) {
                     place = _("クエスト", "in a quest");

@@ -160,7 +160,7 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
 monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if ((floor.dun_level > 0) || (floor.is_in_quest())) {
+    if (floor.is_underground()) {
         return mon_hook_dungeon;
     }
 

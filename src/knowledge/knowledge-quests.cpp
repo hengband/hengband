@@ -15,8 +15,8 @@
 #include "locale/english.h"
 #include "object-enchant/special-object-flags.h"
 #include "system/artifact-type-definition.h"
-#include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
@@ -148,7 +148,7 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             continue;
         }
         rand_level = quest.level;
-        if (dungeon_records.get_record(DUNGEON_ANGBAND).get_max_level() < rand_level) {
+        if (dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() < rand_level) {
             continue;
         }
 
@@ -174,14 +174,14 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *player_ptr, FILE *fff, Quest
     const auto &quests = QuestList::get_instance();
     const auto &quest = quests.get_quest(q_idx);
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     auto is_fixed_quest = QuestType::is_fixed(q_idx);
     if (is_fixed_quest) {
-        QuestId old_quest = floor_ptr->quest_number;
-        floor_ptr->quest_number = q_idx;
+        const auto old_quest = floor.quest_number;
+        floor.quest_number = q_idx;
         init_flags = INIT_NAME_ONLY;
         parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-        floor_ptr->quest_number = old_quest;
+        floor.quest_number = old_quest;
         if (quest.flags & QUEST_FLAG_SILENT) {
             return false;
         }

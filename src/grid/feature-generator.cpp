@@ -45,15 +45,15 @@ static int calc_cavern_terrains(const DungeonDefinition &d_ref)
     return count;
 }
 
-static bool decide_cavern(const FloorType &floor_ref, const DungeonDefinition &dungeon_ref, const DungeonData &dd_ref)
+static bool decide_cavern(const FloorType &floor, const DungeonDefinition &dungeon_ref, const DungeonData &dd_ref)
 {
     constexpr auto can_become_cavern = 20;
-    auto should_build_cavern = floor_ref.dun_level > can_become_cavern;
+    auto should_build_cavern = floor.dun_level > can_become_cavern;
     should_build_cavern &= !dd_ref.empty_level;
     should_build_cavern &= dungeon_ref.flags.has(DungeonFeatureType::CAVERN);
     should_build_cavern &= dd_ref.laketype == 0;
     should_build_cavern &= !dd_ref.destroyed;
-    should_build_cavern &= randint1(1000) < floor_ref.dun_level;
+    should_build_cavern &= randint1(1000) < floor.dun_level;
     return should_build_cavern;
 }
 

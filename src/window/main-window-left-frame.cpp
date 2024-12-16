@@ -175,25 +175,19 @@ void print_depth(PlayerType *player_ptr)
 {
     TERM_COLOR attr = TERM_WHITE;
     const auto &[wid, hgt] = term_get_size();
-    TERM_LEN col_depth = wid + COL_DEPTH;
-    TERM_LEN row_depth = hgt + ROW_DEPTH;
-
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->dun_level) {
+    const auto col_depth = wid + COL_DEPTH;
+    const auto row_depth = hgt + ROW_DEPTH;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.is_underground()) {
         c_prt(attr, format("%7s", _("地上", "Surf.")), row_depth, col_depth);
-        return;
-    }
-
-    if (floor_ptr->is_in_quest() && !floor_ptr->dungeon_idx) {
-        c_prt(attr, format("%7s", _("地上", "Quest")), row_depth, col_depth);
         return;
     }
 
     std::string depths;
     if (depth_in_feet) {
-        depths = format(_("%d ft", "%d ft"), (int)floor_ptr->dun_level * 50);
+        depths = format(_("%d ft", "%d ft"), floor.dun_level * 50);
     } else {
-        depths = format(_("%d 階", "Lev %d"), (int)floor_ptr->dun_level);
+        depths = format(_("%d 階", "Lev %d"), floor.dun_level);
     }
 
     switch (player_ptr->feeling) {
@@ -241,9 +235,9 @@ void print_depth(PlayerType *player_ptr)
  */
 void print_frame_basic(PlayerType *player_ptr)
 {
-    const auto title = player_ptr->mimic_form == MimicKindType::NONE
-                           ? rp_ptr->title
-                           : mimic_info.at(player_ptr->mimic_form).title;
+    const auto &title = player_ptr->mimic_form == MimicKindType::NONE
+                            ? rp_ptr->title
+                            : mimic_info.at(player_ptr->mimic_form).title;
     print_field(title, ROW_RACE, COL_RACE);
     print_title(player_ptr);
     print_level(player_ptr);

@@ -32,6 +32,7 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
@@ -128,7 +129,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         player_ptr->max_plv = player_ptr->lev;
     }
 
-    auto &dungeon_record = DungeonRecords::get_instance().get_record(floor.dungeon_idx);
+    auto &dungeon_record = DungeonRecords::get_instance().get_record(floor.dungeon_id);
     if ((dungeon_record.get_max_level() < floor.dun_level) && !floor.is_in_quest()) {
         dungeon_record.set_max_level(floor.dun_level);
         if (record_maxdepth) {
@@ -181,14 +182,14 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         return;
     }
 
-    if (!floor.is_in_quest() && (floor.dungeon_idx == DUNGEON_ANGBAND)) {
+    if (!floor.is_in_quest() && (floor.dungeon_id == DungeonId::ANGBAND)) {
         const auto random_quest_id = floor.get_random_quest_id();
         quest_discovery(random_quest_id);
         floor.quest_number = random_quest_id;
     }
 
     const auto &dungeon = floor.get_dungeon_definition();
-    if ((floor.dun_level == dungeon.maxdepth) && dungeon.is_dungeon()) {
+    if (floor.dun_level == dungeon.maxdepth) {
         const auto &monrace = dungeon.get_guardian();
         if (monrace.max_num > 0) {
 #ifdef JP
@@ -206,7 +207,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
     world.is_loading_now = true;
-    if (player_ptr->energy_need > 0 && !is_watching && (floor.is_in_underground() || player_ptr->leaving_dungeon || floor.inside_arena)) {
+    if (player_ptr->energy_need > 0 && !is_watching && (floor.is_underground() || player_ptr->leaving_dungeon || floor.inside_arena)) {
         player_ptr->energy_need = 0;
     }
 

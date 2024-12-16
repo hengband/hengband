@@ -5,6 +5,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "market/building-util.h"
 #include "monster/monster-list.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -87,7 +88,7 @@ void castle_quest(PlayerType *player_ptr)
         get_questinfo(player_ptr, quest_id, false);
         put_str(format(_("現在のクエスト「%s」", "Current quest is '%s'."), quest.name.data()), 11, 0);
 
-        if (quest.type != QuestKindType::KILL_LEVEL || quest.dungeon == 0) {
+        if (quest.type != QuestKindType::KILL_LEVEL || quest.dungeon == DungeonId::WILDERNESS) {
             put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);
             return;
         }
