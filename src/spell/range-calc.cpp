@@ -198,22 +198,21 @@ bool in_disintegration_range(FloorType *floor_ptr, POSITION y1, POSITION x1, POS
 /*
  * breath shape
  */
-void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, AttributeType typ)
+void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, int *pgrids, std::span<Pos2D> positions, std::span<int> gm, int *pgm_rad, int rad, const Pos2D &pos_source, const Pos2D &pos_target, AttributeType typ)
 {
-    POSITION by = y1;
-    POSITION bx = x1;
-    int brad = 0;
-    int brev = rad * rad / dist;
-    int bdis = 0;
+    const auto brev = rad * rad / dist;
+    auto by = pos_source.y;
+    auto bx = pos_source.x;
+    auto brad = 0;
+    auto bdis = 0;
+    auto path_n = 0;
+    auto mdis = distance(pos_source.y, pos_source.x, pos_target.y, pos_target.x) + rad;
     int cdis;
-    int path_n = 0;
-    int mdis = distance(y1, x1, y2, x2) + rad;
-
     auto *floor_ptr = player_ptr->current_floor_ptr;
     while (bdis <= mdis) {
         if ((0 < dist) && (path_n < dist)) {
             const auto &[ny, nx] = path[path_n];
-            POSITION nd = distance(ny, nx, y1, x1);
+            POSITION nd = distance(ny, nx, pos_source.y, pos_source.x);
 
             if (bdis >= nd) {
                 by = ny;
@@ -231,7 +230,7 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
                     if (!in_bounds(floor_ptr, pos.y, pos.x)) {
                         continue;
                     }
-                    if (distance(y1, x1, pos.y, pos.x) != bdis) {
+                    if (distance(pos_source.y, pos_source.x, pos.y, pos.x) != bdis) {
                         continue;
                     }
                     if (distance(pos_breath.y, pos_breath.x, pos.y, pos.x) != cdis) {
@@ -260,8 +259,7 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
                         break;
                     }
 
-                    gy[*pgrids] = pos.y;
-                    gx[*pgrids] = pos.x;
+                    positions[*pgrids] = pos;
                     (*pgrids)++;
                 }
             }
