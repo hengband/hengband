@@ -38,6 +38,8 @@
 #include "tracking/lore-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <array>
+#include <vector>
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系処理のルーチン Generic
@@ -59,21 +61,12 @@
 ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITION rad, const POSITION target_y, const POSITION target_x, const int dam,
     const AttributeType typ, BIT_FLAGS flag, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
-    POSITION y1;
-    POSITION x1;
-    POSITION y2;
-    POSITION x2;
-    bool breath = false;
-    bool old_hide = false;
-    int path_n = 0;
-    int grids = 0;
-    std::vector<Pos2D> positions(1024, { 0, 0 });
-    std::array<int, 32> gm{};
     monster_target_y = player_ptr->y;
     monster_target_x = player_ptr->x;
 
     ProjectResult res;
-
+    int y1;
+    int x1;
     if (any_bits(flag, PROJECT_JUMP)) {
         x1 = target_x;
         y1 = target_y;
@@ -87,15 +80,17 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         x1 = target_x;
         y1 = target_y;
     }
-    y2 = target_y;
-    x2 = target_x;
 
+    const auto y2 = target_y;
+    const auto x2 = target_x;
     if (flag & (PROJECT_THRU)) {
         if ((x1 == x2) && (y1 == y2)) {
             flag &= ~(PROJECT_THRU);
         }
     }
 
+    auto breath = false;
+    auto old_hide = false;
     if (flag & (PROJECT_BREATH)) {
         breath = true;
         if (flag & PROJECT_HIDE) {
@@ -104,10 +99,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         flag |= PROJECT_HIDE;
     }
 
-    for (auto dist = 0; dist < 32; dist++) {
-        gm[dist] = 0;
-    }
-
+    std::vector<Pos2D> positions(1024, { 0, 0 });
+    auto grids = 0;
     if (flag & (PROJECT_BEAM)) {
         positions[grids] = { y1, x1 };
         grids++;
@@ -135,21 +128,19 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     ProjectionPath path_g(player_ptr, (project_length ? project_length : system.get_max_range()), { y1, x1 }, { y2, x2 }, flag);
     handle_stuff(player_ptr);
 
-    int k = 0;
-    auto oy = y1;
-    auto ox = x1;
+    auto k = 0;
+    Pos2D pos_orig(y1, x1);
     auto visual = false;
-    bool see_s_msg = true;
+    auto see_s_msg = true;
     const auto is_blind = player_ptr->effects()->blindness().is_blind();
     auto &floor = *player_ptr->current_floor_ptr;
-    for (const auto &[ny, nx] : path_g) {
-        const Pos2D pos(ny, nx);
+    for (const auto &pos : path_g) {
         if (flag & PROJECT_DISI) {
-            if (cave_stop_disintegration(player_ptr->current_floor_ptr, ny, nx) && (rad > 0)) {
+            if (cave_stop_disintegration(player_ptr->current_floor_ptr, pos.y, pos.x) && (rad > 0)) {
                 break;
             }
         } else if (flag & PROJECT_LOS) {
-            if (!cave_los_bold(&floor, ny, nx) && (rad > 0)) {
+            if (!cave_los_bold(&floor, pos.y, pos.x) && (rad > 0)) {
                 break;
             }
         } else {
@@ -164,15 +155,15 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
         if (delay_factor > 0) {
             if (!is_blind && !(flag & (PROJECT_HIDE | PROJECT_FAST))) {
-                if (panel_contains(ny, nx) && floor.has_los(pos)) {
-                    print_bolt_pict(player_ptr, oy, ox, ny, nx, typ);
-                    move_cursor_relative(ny, nx);
+                if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
+                    print_bolt_pict(player_ptr, pos_orig.y, pos_orig.x, pos.y, pos.x, typ);
+                    move_cursor_relative(pos.y, pos.x);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
-                    lite_spot(player_ptr, ny, nx);
+                    lite_spot(player_ptr, pos.y, pos.x);
                     term_fresh();
                     if (flag & (PROJECT_BEAM)) {
-                        print_bolt_pict(player_ptr, ny, nx, ny, nx, typ);
+                        print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
                     }
 
                     visual = true;
@@ -182,14 +173,12 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             }
         }
 
-        oy = ny;
-        ox = nx;
+        pos_orig = pos;
         k++;
     }
 
-    path_n = k;
-    POSITION by = oy;
-    POSITION bx = ox;
+    auto path_n = k;
+    const auto pos_breath = pos_orig;
     if (breath && !path_n) {
         breath = false;
         if (!old_hide) {
@@ -197,11 +186,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         }
     }
 
-    gm[0] = 0;
+    std::array<int, 32> gm{};
     gm[1] = grids;
     project_length = 0;
 
-    POSITION gm_rad = rad;
+    auto gm_rad = rad;
     /* If we found a "target", explode there */
     if (path_n <= system.get_max_range()) {
         if ((flag & (PROJECT_BEAM)) && (grids > 0)) {
@@ -220,29 +209,28 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         if (breath) {
             flag &= ~(PROJECT_HIDE);
             //!< @todo Clang 15以降はpositions を直接渡せるようになる.
-            breath_shape(player_ptr, path_g, path_n, &grids, std::span(positions.begin(), positions.size()), gm, &gm_rad, rad, { y1, x1 }, { by, bx }, typ);
+            breath_shape(player_ptr, path_g, path_n, &grids, std::span(positions.begin(), positions.size()), gm, &gm_rad, rad, { y1, x1 }, pos_breath, typ);
         } else {
             for (auto dist = 0; dist <= rad; dist++) {
-                for (auto y = by - dist; y <= by + dist; y++) {
-                    for (auto x = bx - dist; x <= bx + dist; x++) {
+                for (auto y = pos_breath.y - dist; y <= pos_breath.y + dist; y++) {
+                    for (auto x = pos_breath.x - dist; x <= pos_breath.x + dist; x++) {
                         const Pos2D pos(y, x);
-                        const Pos2D pos_breath(by, bx);
-                        if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
+                        if (!in_bounds2(player_ptr->current_floor_ptr, pos.y, pos.x)) {
                             continue;
                         }
-                        if (distance(by, bx, y, x) != dist) {
+                        if (distance(pos_breath.y, pos_breath.x, pos.y, pos.x) != dist) {
                             continue;
                         }
 
                         switch (typ) {
                         case AttributeType::LITE:
                         case AttributeType::LITE_WEAK:
-                            if (!los(player_ptr, by, bx, y, x)) {
+                            if (!los(player_ptr, pos_breath.y, pos_breath.x, pos.y, pos.x)) {
                                 continue;
                             }
                             break;
                         case AttributeType::DISINTEGRATE:
-                            if (!in_disintegration_range(player_ptr->current_floor_ptr, by, bx, y, x)) {
+                            if (!in_disintegration_range(player_ptr->current_floor_ptr, pos_breath.y, pos_breath.x, y, x)) {
                                 continue;
                             }
                             break;
@@ -263,7 +251,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         }
     }
 
-    if (!grids) {
+    if (grids == 0) {
         return res;
     }
 
@@ -278,7 +266,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 }
             }
 
-            move_cursor_relative(by, bx);
+            move_cursor_relative(pos_breath.y, pos_breath.x);
             term_fresh();
             if (visual || drawn) {
                 term_xtra(TERM_XTRA_DELAY, delay_factor);
@@ -293,7 +281,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 }
             }
 
-            move_cursor_relative(by, bx);
+            move_cursor_relative(pos_breath.y, pos_breath.x);
             term_fresh();
         }
     }
@@ -314,7 +302,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
             const auto &pos = positions[i];
             if (breath) {
-                int d = dist_to_line(pos.y, pos.x, y1, x1, by, bx);
+                int d = dist_to_line(pos.y, pos.x, y1, x1, pos_breath.y, pos_breath.x);
                 if (affect_feature(player_ptr, src_idx, d, pos.y, pos.x, dam, typ)) {
                     res.notice = true;
                 }
@@ -336,7 +324,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
             const auto &pos = positions[i];
             if (breath) {
-                int d = dist_to_line(pos.y, pos.x, y1, x1, by, bx);
+                int d = dist_to_line(pos.y, pos.x, y1, x1, pos_breath.y, pos_breath.x);
                 if (affect_item(player_ptr, src_idx, d, pos.y, pos.x, dam, typ)) {
                     res.notice = true;
                 }
@@ -411,7 +399,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
             /* Find the closest point in the blast */
             if (breath) {
-                effective_dist = dist_to_line(pos.y, pos.x, y1, x1, by, bx);
+                effective_dist = dist_to_line(pos.y, pos.x, y1, x1, pos_breath.y, pos_breath.x);
             } else {
                 effective_dist = dist;
             }
@@ -494,7 +482,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
     if (flag & (PROJECT_KILL)) {
         auto dist = 0;
-        for (int i = 0; i < grids; i++) {
+        for (auto i = 0; i < grids; i++) {
             int effective_dist;
             if (gm[dist + 1] == i) {
                 dist++;
@@ -507,7 +495,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
             /* Find the closest point in the blast */
             if (breath) {
-                effective_dist = dist_to_line(pos.y, pos.x, y1, x1, by, bx);
+                effective_dist = dist_to_line(pos.y, pos.x, y1, x1, pos_breath.y, pos_breath.x);
             } else {
                 effective_dist = dist;
             }
