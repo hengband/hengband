@@ -111,7 +111,7 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
         }
     }
 
-    const auto &terrain = grid.get_terrain_mimic();
+    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     if (terrain.flags.has_not(TerrainCharacteristics::WALL) || terrain.flags.has(TerrainCharacteristics::HAS_GOLD)) {
         return true;
     }
@@ -146,7 +146,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
     auto &terrains = TerrainList::get_instance();
-    auto *terrain_mimic_ptr = &grid.get_terrain_mimic();
+    auto *terrain_mimic_ptr = &grid.get_terrain(TerrainKind::MIMIC);
     const auto terrain_none = terrains.get_terrain_id(TerrainTag::NONE);
     const auto &world = AngbandWorld::get_instance();
     const auto is_wild_mode = world.is_wild_mode();

@@ -160,9 +160,9 @@ bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
     const auto &grid_yyxx = floor_ptr->grid_array[yy][xx];
     const auto &grid_yxx = floor_ptr->grid_array[y][xx];
     const auto &grid_yyx = floor_ptr->grid_array[yy][x];
-    auto is_illuminated = feat_supports_los(grid_yyxx.get_feat_mimic()) && (grid_yyxx.info & CAVE_GLOW);
-    is_illuminated |= feat_supports_los(grid_yxx.get_feat_mimic()) && (grid_yxx.info & CAVE_GLOW);
-    is_illuminated |= feat_supports_los(grid_yyx.get_feat_mimic()) && (grid_yyx.info & CAVE_GLOW);
+    auto is_illuminated = grid_yyxx.has_los_terrain(TerrainKind::MIMIC) && (grid_yyxx.info & CAVE_GLOW);
+    is_illuminated |= grid_yxx.has_los_terrain(TerrainKind::MIMIC) && (grid_yxx.info & CAVE_GLOW);
+    is_illuminated |= grid_yyx.has_los_terrain(TerrainKind::MIMIC) && (grid_yyx.info & CAVE_GLOW);
     return is_illuminated;
 }
 
@@ -344,7 +344,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
     /* Hack -- memorize grids */
     if (!grid.is_mark()) {
         /* Feature code (applying "mimic" field) */
-        const auto &terrain = grid.get_terrain_mimic();
+        const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
 
         /* Memorize some "boring" grids */
         if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {

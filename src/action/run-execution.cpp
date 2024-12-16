@@ -69,7 +69,7 @@ static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION
     }
 
     const auto terrain_id = grid.get_feat_mimic();
-    const auto &terrain = grid.get_terrain_mimic();
+    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     if (!player_can_enter(player_ptr, terrain_id, 0)) {
         return terrain.flags.has_not(TerrainCharacteristics::DOOR);
     }
@@ -242,7 +242,7 @@ static bool run_test(PlayerType *player_ptr)
 
         auto inv = true;
         if (grid.is_mark()) {
-            const auto &terrain = grid.get_terrain_mimic();
+            const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
             auto notice = terrain.flags.has(TerrainCharacteristics::NOTICE);
             if (notice && terrain.flags.has(TerrainCharacteristics::MOVE)) {
                 if (find_ignore_doors && terrain.flags.has_all_of({ TerrainCharacteristics::DOOR, TerrainCharacteristics::CLOSE })) {
