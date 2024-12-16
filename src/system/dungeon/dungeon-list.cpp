@@ -78,3 +78,13 @@ void DungeonList::emplace(int dungeon_id, DungeonDefinition &&definition)
 {
     this->dungeons.emplace(dungeon_id, definition);
 }
+
+/*!
+ * @brief ダンジョン情報の読み込みが終わった後の設定を行う
+ */
+void DungeonList::retouch()
+{
+    for (auto &[_, dungeon] : this->dungeons) {
+        dungeon.set_guardian_flag();
+    }
+}

@@ -3,8 +3,6 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "system/dungeon/dungeon-definition.h"
-#include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -113,23 +111,15 @@ void MeleeArena::update_gladiators(PlayerType *player_ptr)
 
 int MeleeArena::decide_max_level() const
 {
-    const auto &dungeon_records = DungeonRecords::get_instance();
-    auto max_dl = 0;
-    for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
-        const auto max_level = dungeon_records.get_record(dungeon_id).get_max_level();
-        if (max_dl < max_level) {
-            max_dl = max_level;
-        }
-    }
-
-    auto max_level = randint1(std::min(max_dl, 122)) + 5;
+    auto max_dungeon_level = DungeonRecords::get_instance().find_max_level();
+    auto max_level = randint1(std::min(max_dungeon_level, 122)) + 5;
     if (evaluate_percent(60)) {
-        const auto i = randint1(std::min(max_dl, 122)) + 5;
+        const auto i = randint1(std::min(max_dungeon_level, 122)) + 5;
         max_level = std::max(i, max_level);
     }
 
     if (evaluate_percent(30)) {
-        const auto i = randint1(std::min(max_dl, 122)) + 5;
+        const auto i = randint1(std::min(max_dungeon_level, 122)) + 5;
         max_level = std::max(i, max_level);
     }
 

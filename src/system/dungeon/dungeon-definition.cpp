@@ -2,9 +2,11 @@
 #include "dungeon/dungeon-flag-mask.h"
 #include "grid/feature.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "term/z-form.h"
 
 enum conversion_type {
     CONVERT_TYPE_FLOOR = 0,
@@ -104,4 +106,31 @@ short DungeonDefinition::convert_terrain_id(short terrain_id) const
 bool DungeonDefinition::is_open(short terrain_id) const
 {
     return terrain_id != this->convert_terrain_id(terrain_id, TerrainCharacteristics::CLOSE);
+}
+
+/*!
+ * @brief ダンジョンを制覇したかを返す
+ * @return そもそもダンジョンの主がいなかったらfalse、主がいるならば主を撃破したか否か
+ */
+bool DungeonDefinition::is_conquered() const
+{
+    if (!this->has_guardian()) {
+        return false;
+    }
+
+    return this->get_guardian().max_num == 0;
+}
+
+std::string DungeonDefinition::build_entrance_message() const
+{
+    constexpr auto fmt = _("ここには%sの入り口(%d階相当)があります", "There is the entrance of %s (Danger level: %d)");
+    return format(fmt, this->name.data(), this->mindepth);
+}
+
+void DungeonDefinition::set_guardian_flag()
+{
+    if (this->is_dungeon() && this->has_guardian()) {
+        auto &monrace = this->get_guardian();
+        monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
+    }
 }

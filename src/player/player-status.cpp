@@ -3043,15 +3043,8 @@ long calc_score(PlayerType *player_ptr)
         mult = 5;
     }
 
-    auto max_dl = 0;
-    for (const auto &[_, dungeon_record] : DungeonRecords::get_instance()) {
-        const auto max_level = dungeon_record.get_max_level();
-        if (max_dl < max_level) {
-            max_dl = max_level;
-        }
-    }
-
-    uint32_t point_l = (player_ptr->max_max_exp + (100 * max_dl));
+    const auto max_dungeon_level = DungeonRecords::get_instance().find_max_level();
+    uint32_t point_l = (player_ptr->max_max_exp + (100 * max_dungeon_level));
     uint32_t point_h = point_l / 0x10000L;
     point_l = point_l % 0x10000L;
     point_h *= mult;

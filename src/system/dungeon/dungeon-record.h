@@ -8,7 +8,14 @@
 
 #include <map>
 #include <optional>
+#include <string>
 #include <vector>
+
+enum class DungeonMessageFormat {
+    DUMP,
+    KNOWLEDGE,
+    RECALL,
+};
 
 class DungeonRecord {
 public:
@@ -46,6 +53,9 @@ public:
     size_t size() const;
     bool empty() const;
     void reset_all();
+
+    int find_max_level() const;
+    std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf) const;
 
 private:
     DungeonRecords();

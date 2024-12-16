@@ -127,4 +127,8 @@ public:
     short convert_terrain_id(short terrain_id, TerrainCharacteristics action) const;
     short convert_terrain_id(short terrain_id) const;
     bool is_open(short terrain_id) const;
+    bool is_conquered() const;
+    std::string build_entrance_message() const;
+
+    void set_guardian_flag();
 };
