@@ -624,9 +624,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             nx = pos.x;
 
             /* Shatter Arrow */
+            g_ptr = &floor.get_grid({ ny, nx });
             if (snipe_type == SP_KILL_WALL) {
-                g_ptr = &floor.grid_array[ny][nx];
-
                 if (g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK) && !g_ptr->has_monster()) {
                     if (any_bits(g_ptr->info, (CAVE_MARK))) {
                         msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
@@ -650,7 +649,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             }
 
             /* Stopped by walls/doors */
-            if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECT) && !floor.grid_array[ny][nx].has_monster()) {
+            if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECT) && !g_ptr->has_monster()) {
                 break;
             }
 

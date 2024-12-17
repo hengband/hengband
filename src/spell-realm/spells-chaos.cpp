@@ -209,6 +209,7 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
 {
     const auto b = 10 + randint1(10);
     const auto p_pos = player_ptr->get_position();
+    const auto &floor = *player_ptr->current_floor_ptr;
     for (auto i = 0; i < b; i++) {
         Pos2D pos(0, 0);
         int count;
@@ -223,13 +224,12 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
                 continue;
             }
 
-            auto *floor_ptr = player_ptr->current_floor_ptr;
-            if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+            if (!in_bounds(&floor, pos.y, pos.x)) {
                 continue;
             }
 
             const auto is_projectable = projectable(player_ptr, p_pos, pos);
-            if (!is_projectable || !floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+            if (!is_projectable || !floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
 

@@ -81,26 +81,26 @@ static int sign(int num)
 
 static bool project_stop(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (none_bits(pph_ptr->flag, PROJECT_THRU) && (pph_ptr->pos == pph_ptr->pos_dst)) {
         return true;
     }
 
     if (any_bits(pph_ptr->flag, PROJECT_DISI)) {
-        if (!pph_ptr->position->empty() && cave_stop_disintegration(floor_ptr, pph_ptr->pos.y, pph_ptr->pos.x)) {
+        if (!pph_ptr->position->empty() && cave_stop_disintegration(&floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
             return true;
         }
     } else if (any_bits(pph_ptr->flag, PROJECT_LOS)) {
-        if (!pph_ptr->position->empty() && !cave_los_bold(floor_ptr, pph_ptr->pos.y, pph_ptr->pos.x)) {
+        if (!pph_ptr->position->empty() && !cave_los_bold(&floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
             return true;
         }
     } else if (none_bits(pph_ptr->flag, PROJECT_PATH)) {
-        if (!pph_ptr->position->empty() && !floor_ptr->has_terrain_characteristics(pph_ptr->pos, TerrainCharacteristics::PROJECT)) {
+        if (!pph_ptr->position->empty() && !floor.has_terrain_characteristics(pph_ptr->pos, TerrainCharacteristics::PROJECT)) {
             return true;
         }
     }
 
-    const auto &grid = floor_ptr->get_grid(pph_ptr->pos);
+    const auto &grid = floor.get_grid(pph_ptr->pos);
     if (any_bits(pph_ptr->flag, PROJECT_MIRROR)) {
         if (!pph_ptr->position->empty() && grid.is_mirror()) {
             return true;
@@ -111,7 +111,7 @@ static bool project_stop(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
         return true;
     }
 
-    if (!in_bounds(floor_ptr, pph_ptr->pos.y, pph_ptr->pos.x)) {
+    if (!in_bounds(&floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
         return true;
     }
 
