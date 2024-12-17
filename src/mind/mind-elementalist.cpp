@@ -458,115 +458,138 @@ static std::string get_element_effect_info(PlayerType *player_ptr, int spell_idx
 static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto spell = i2enum<ElementSpells>(spell_idx);
-    auto &power = element_powers.at(spell);
-    AttributeType typ;
-    DIRECTION dir;
-    PLAYER_LEVEL plev = player_ptr->lev;
-    int dam;
-    int num;
-
+    const auto spell = i2enum<ElementSpells>(spell_idx);
+    const auto &power = element_powers.at(spell);
+    const auto plev = player_ptr->lev;
     switch (spell) {
-    case ElementSpells::BOLT_1ST:
+    case ElementSpells::BOLT_1ST: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = Dice::roll(3 + ((plev - 1) / 5), 4);
-        typ = get_element_spells_type(player_ptr, power.elem);
+
+        const auto dam = Dice::roll(3 + ((plev - 1) / 5), 4);
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
         (void)fire_bolt(player_ptr, typ, dir, dam);
-        break;
+        return true;
+    }
     case ElementSpells::MON_DETECT:
         (void)detect_monsters_normal(player_ptr, DETECT_RAD_DEFAULT);
         (void)detect_monsters_invis(player_ptr, DETECT_RAD_DEFAULT);
-        break;
+        return true;
     case ElementSpells::PERCEPT:
         return psychometry(player_ptr);
     case ElementSpells::CURE:
         (void)hp_player(player_ptr, Dice::roll(2, 8));
         (void)BadStatusSetter(player_ptr).mod_cut(-10);
-        break;
-    case ElementSpells::BOLT_2ND:
+        return true;
+    case ElementSpells::BOLT_2ND: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = Dice::roll(8 + ((plev - 5) / 4), 8);
-        typ = get_element_spells_type(player_ptr, power.elem);
+
+        const auto dam = Dice::roll(8 + ((plev - 5) / 4), 8);
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_bolt_or_beam(player_ptr, plev, typ, dir, dam)) {
             if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
-        break;
+
+        return true;
+    }
     case ElementSpells::MAG_DETECT:
         (void)detect_objects_magic(player_ptr, DETECT_RAD_DEFAULT);
-        break;
-    case ElementSpells::BALL_3RD:
+        return true;
+    case ElementSpells::BALL_3RD: {
         project_length = 4;
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        typ = get_element_spells_type(player_ptr, power.elem);
-        dam = 50 + plev * 2;
+
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
+        const auto dam = 50 + plev * 2;
         (void)fire_ball(player_ptr, typ, dir, dam, 1);
         project_length = 0;
-        break;
-    case ElementSpells::BALL_1ST:
+        return true;
+    }
+    case ElementSpells::BALL_1ST: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = 55 + plev;
-        typ = get_element_spells_type(player_ptr, power.elem);
+
+        const auto dam = 55 + plev;
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
         (void)fire_ball(player_ptr, typ, dir, dam, 2);
-        break;
-    case ElementSpells::BREATH_2ND:
+        return true;
+    }
+    case ElementSpells::BREATH_2ND: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = std::min(150, player_ptr->chp / 2);
-        typ = get_element_spells_type(player_ptr, power.elem);
+
+        const auto dam = std::min(150, player_ptr->chp / 2);
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_breath(player_ptr, typ, dir, dam, 3)) {
             if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
-        break;
-    case ElementSpells::ANNIHILATE:
+
+        return true;
+    }
+    case ElementSpells::ANNIHILATE: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
+
         fire_ball_hide(player_ptr, AttributeType::E_GENOCIDE, dir, plev + 50, 0);
-        break;
-    case ElementSpells::BOLT_3RD:
+        return true;
+    }
+    case ElementSpells::BOLT_3RD: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = Dice::roll(12 + ((plev - 5) / 4), 8);
-        typ = get_element_spells_type(player_ptr, power.elem);
+
+        const auto dam = Dice::roll(12 + ((plev - 5) / 4), 8);
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
         fire_bolt_or_beam(player_ptr, plev, typ, dir, dam);
-        break;
-    case ElementSpells::WAVE_1ST:
-        dam = 50 + randint1(plev * 3);
-        typ = get_element_spells_type(player_ptr, power.elem);
+        return true;
+    }
+    case ElementSpells::WAVE_1ST: {
+        const auto dam = 50 + randint1(plev * 3);
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
         project_all_los(player_ptr, typ, dam);
-        break;
-    case ElementSpells::BALL_2ND:
+        return true;
+    }
+    case ElementSpells::BALL_2ND: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = 75 + plev * 3 / 2;
-        typ = get_element_spells_type(player_ptr, power.elem);
+
+        const auto dam = 75 + plev * 3 / 2;
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_ball(player_ptr, typ, dir, dam, 3)) {
             if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
-        break;
+
+        return true;
+    }
     case ElementSpells::BURST_1ST: {
         auto p_pos = player_ptr->get_position();
-        num = Dice::roll(4, 3);
-        typ = get_element_spells_type(player_ptr, power.elem);
-        for (int k = 0; k < num; k++) {
-            int attempts = 1000;
+        const auto num = Dice::roll(4, 3);
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
+        for (auto k = 0; k < num; k++) {
+            auto attempts = 1000;
             while (attempts--) {
                 scatter(player_ptr, &p_pos.y, &p_pos.x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
                 if (!floor.has_terrain_characteristics(p_pos, TerrainCharacteristics::PROJECT)) {
@@ -578,44 +601,53 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
                 }
             }
 
-            project(player_ptr, 0, 0, p_pos.y, p_pos.x, Dice::roll(6 + plev / 8, 7), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
+            constexpr auto flag = PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL;
+            project(player_ptr, 0, 0, p_pos.y, p_pos.x, Dice::roll(6 + plev / 8, 7), typ, flag);
         }
 
-        break;
+        return true;
     }
-    case ElementSpells::STORM_2ND:
+    case ElementSpells::STORM_2ND: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = 115 + plev * 5 / 2;
-        typ = get_element_spells_type(player_ptr, power.elem);
+
+        const auto dam = 115 + plev * 5 / 2;
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
         if (fire_ball(player_ptr, typ, dir, dam, 4)) {
             if (typ == AttributeType::HYPODYNAMIA) {
                 (void)hp_player(player_ptr, dam / 2);
             }
         }
-        break;
-    case ElementSpells::BREATH_1ST:
+
+        return true;
+    }
+    case ElementSpells::BREATH_1ST: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = player_ptr->chp * 2 / 3;
-        typ = get_element_spells_type(player_ptr, power.elem);
+
+        const auto dam = player_ptr->chp * 2 / 3;
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
         (void)fire_breath(player_ptr, typ, dir, dam, 3);
-        break;
-    case ElementSpells::STORM_3ND:
+        return true;
+    }
+    case ElementSpells::STORM_3ND: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
-        dam = 300 + plev * 5;
-        typ = get_element_spells_type(player_ptr, power.elem);
+
+        const auto dam = 300 + plev * 5;
+        const auto typ = get_element_spells_type(player_ptr, power.elem);
         (void)fire_ball(player_ptr, typ, dir, dam, 5);
-        break;
+        return true;
+    }
     default:
         return false;
     }
-
-    return true;
 }
 
 /*!
