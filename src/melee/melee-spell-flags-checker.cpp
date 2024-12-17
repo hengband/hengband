@@ -160,8 +160,8 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
     }
 
     const auto p_pos = player_ptr->get_position();
-    Pos2D pos_real(ms_ptr->y, ms_ptr->x);
-    get_project_point(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, &pos_real.y, &pos_real.x, 0L);
+    const auto m_pos = ms_ptr->m_ptr->get_position();
+    const auto pos_real = get_project_point(player_ptr, m_pos, ms_ptr->get_position(), 0L);
     auto should_preserve = !projectable(player_ptr, pos_real, p_pos);
     should_preserve &= ms_ptr->ability_flags.has(MonsterAbilityType::BA_LITE);
     should_preserve &= distance(pos_real.y, pos_real.x, p_pos.y, p_pos.x) <= 4;
@@ -203,8 +203,7 @@ static void check_melee_spell_rocket(PlayerType *player_ptr, melee_spell_type *m
 
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = ms_ptr->m_ptr->get_position();
-    Pos2D pos_real(ms_ptr->y, ms_ptr->x);
-    get_project_point(player_ptr, m_pos.y, m_pos.x, &pos_real.y, &pos_real.x, PROJECT_STOP);
+    const auto pos_real = get_project_point(player_ptr, m_pos, ms_ptr->get_position(), PROJECT_STOP);
     if (projectable(player_ptr, pos_real, p_pos) && (distance(pos_real.y, pos_real.x, p_pos.y, p_pos.x) <= 2)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::ROCKET);
     }
