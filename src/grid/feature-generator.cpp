@@ -196,14 +196,14 @@ static bool possible_doorway(FloorType *floor_ptr, POSITION y, POSITION x)
 void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x) || floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor_ptr->grid_array[y][x].is_room()) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (!in_bounds(&floor, y, x) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
         return;
     }
 
     auto can_place_door = evaluate_percent(dt_ptr->dun_tun_jct);
-    can_place_door &= possible_doorway(floor_ptr, y, x);
-    can_place_door &= floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_DOORS);
+    can_place_door &= possible_doorway(&floor, y, x);
+    can_place_door &= floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_DOORS);
     if (can_place_door) {
         place_random_door(player_ptr, y, x, false);
     }

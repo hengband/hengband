@@ -115,49 +115,47 @@ FEAT_IDX feat_jammed_door_random(int door_type)
 void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 {
     const Pos2D pos(y, x);
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid = floor.get_grid(pos);
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const auto &dungeon = floor.get_dungeon_definition();
     if (!AngbandWorld::get_instance().character_dungeon) {
-        g_ptr->mimic = 0;
-        g_ptr->feat = feat;
+        grid.mimic = 0;
+        grid.feat = feat;
         if (terrain.flags.has(TerrainCharacteristics::GLOW) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS)) {
-            for (DIRECTION i = 0; i < 9; i++) {
-                POSITION yy = y + ddy_ddd[i];
-                POSITION xx = x + ddx_ddd[i];
-                if (!in_bounds2(floor_ptr, yy, xx)) {
+            for (auto i = 0; i < 9; i++) {
+                const Pos2D pos_neighbor(y + ddy_ddd[i], x + ddx_ddd[i]);
+                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 
-                floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
+                floor.get_grid(pos_neighbor).info |= CAVE_GLOW;
             }
         }
 
         return;
     }
 
-    bool old_los = floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::LOS);
-    bool old_mirror = g_ptr->is_mirror();
-
-    g_ptr->mimic = 0;
-    g_ptr->feat = feat;
-    g_ptr->info &= ~(CAVE_OBJECT);
+    const auto old_los = floor.has_terrain_characteristics(pos, TerrainCharacteristics::LOS);
+    const auto old_mirror = grid.is_mirror();
+    grid.mimic = 0;
+    grid.feat = feat;
+    grid.info &= ~(CAVE_OBJECT);
     if (old_mirror && dungeon.flags.has(DungeonFeatureType::DARKNESS)) {
-        g_ptr->info &= ~(CAVE_GLOW);
+        grid.info &= ~(CAVE_GLOW);
         if (!view_torch_grids) {
-            g_ptr->info &= ~(CAVE_MARK);
+            grid.info &= ~(CAVE_MARK);
         }
 
         update_local_illumination(player_ptr, y, x);
     }
 
     if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
-        g_ptr->info &= ~(CAVE_MARK);
+        grid.info &= ~(CAVE_MARK);
     }
 
-    if (g_ptr->has_monster()) {
-        update_monster(player_ptr, g_ptr->m_idx, false);
+    if (grid.has_monster()) {
+        update_monster(player_ptr, grid.m_idx, false);
     }
 
     note_spot(player_ptr, y, x);
@@ -177,27 +175,26 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
     }
 
     for (auto i = 0; i < 9; i++) {
-        POSITION yy = y + ddy_ddd[i];
-        POSITION xx = x + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, yy, xx)) {
+        const Pos2D pos_neighbor(y + ddy_ddd[i], x + ddx_ddd[i]);
+        if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
 
-        auto *cc_ptr = &floor_ptr->grid_array[yy][xx];
-        cc_ptr->info |= CAVE_GLOW;
-        if (cc_ptr->is_view()) {
-            if (cc_ptr->has_monster()) {
-                update_monster(player_ptr, cc_ptr->m_idx, false);
+        auto &grid_neighbor = floor.get_grid(pos_neighbor);
+        grid_neighbor.info |= CAVE_GLOW;
+        if (grid_neighbor.is_view()) {
+            if (grid_neighbor.has_monster()) {
+                update_monster(player_ptr, grid_neighbor.m_idx, false);
             }
 
-            note_spot(player_ptr, yy, xx);
-            lite_spot(player_ptr, yy, xx);
+            note_spot(player_ptr, pos_neighbor.y, pos_neighbor.x);
+            lite_spot(player_ptr, pos_neighbor.y, pos_neighbor.x);
         }
 
-        update_local_illumination(player_ptr, yy, xx);
+        update_local_illumination(player_ptr, pos_neighbor.y, pos_neighbor.x);
     }
 
-    if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
+    if (floor.get_grid(player_ptr->get_position()).info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }
 }
