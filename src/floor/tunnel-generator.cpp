@@ -387,7 +387,9 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, const Pos2D &pos
         auto i = 50;
         vec = { 0, 0 };
         while ((i > 0) && floor.get_grid(pos + vec).is_solid()) {
-            vec = { randint0(3) - 1, randint0(3) - 1 };
+            const auto tmp_y = randint0(3) - 1;
+            const auto tmp_x = randint0(3) - 1;
+            vec = { tmp_y, tmp_x }; //!< @details 乱数引数の評価順を固定する.
             const auto pos_tmp = pos + vec;
             if (!in_bounds(&floor, pos_tmp.y, pos_tmp.x)) {
                 vec = { 0, 0 };
