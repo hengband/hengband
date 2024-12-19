@@ -401,7 +401,7 @@ bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mod
     }
 
     if (flags.has(TR_VUL_LITE)) {
-        info[i++] = _("それは閃光に対する弱点を授ける。", "It provides vulnerability to cold.");
+        info[i++] = _("それは閃光に対する弱点を授ける。", "It provides vulnerability to light.");
     }
 
     if (flags.has(TR_THROW)) {
