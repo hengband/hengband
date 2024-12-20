@@ -165,7 +165,7 @@ std::string lore_type::build_revenge_description(bool has_defeated) const
     }
 
     std::stringstream ss;
-    ss << ", who remain" << (this->r_ptr->r_deaths == 1 ? "" : "s") << "unavenged.  ";
+    ss << ", who remain" << (this->r_ptr->r_deaths != 1 ? "" : "s") << " unavenged.  ";
     return ss.str();
 #endif
 }
