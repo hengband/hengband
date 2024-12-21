@@ -2740,7 +2740,7 @@ void wreck_the_pattern(PlayerType *player_ptr)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    const auto &terrain = floor_ptr->get_grid(p_pos).get_terrain();
+    const auto &terrain = floor_ptr->get_grid(p_pos).get_apparent_terrain();
     if (terrain.subtype == PATTERN_TILE_WRECKED) {
         return;
     }
@@ -2758,7 +2758,7 @@ void wreck_the_pattern(PlayerType *player_ptr)
         int x;
         scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
         const Pos2D pos(y, x);
-        if (pattern_tile(floor_ptr, pos.y, pos.x) && (floor_ptr->get_grid(pos).get_terrain().subtype != PATTERN_TILE_WRECKED)) {
+        if (pattern_tile(floor_ptr, pos.y, pos.x) && (floor_ptr->get_grid(pos).get_apparent_terrain().subtype != PATTERN_TILE_WRECKED)) {
             cave_set_feat(player_ptr, pos.y, pos.x, feat_pattern_corrupted);
         }
     }

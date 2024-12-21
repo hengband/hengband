@@ -416,7 +416,7 @@ typedef bool (*IsWallFunc)(const FloorType *, int, int);
 // (y,x) がプレイヤーが通れない永久地形かどうかを返す。
 static bool is_permanent_blocker(const FloorType *const floor_ptr, const int y, const int x)
 {
-    const auto &flags = floor_ptr->get_grid({ y, x }).get_terrain().flags;
+    const auto &flags = floor_ptr->get_grid({ y, x }).get_apparent_terrain().flags;
     return flags.has(TerrainCharacteristics::PERMANENT) && flags.has_not(TerrainCharacteristics::MOVE);
 }
 

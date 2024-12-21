@@ -109,7 +109,7 @@ bool Grid::is_rune_explosion() const
 bool Grid::is_hidden_door() const
 {
     const auto is_secret = (this->mimic > 0) || this->cave_has_flag(TerrainCharacteristics::SECRET);
-    return is_secret && this->get_terrain().is_closed_door();
+    return is_secret && this->get_apparent_terrain().is_closed_door();
 }
 
 bool Grid::has_monster() const
@@ -139,7 +139,7 @@ FEAT_IDX Grid::get_feat_mimic() const
 
 bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
 {
-    return this->get_terrain().flags.has(feature_flags);
+    return this->get_apparent_terrain().flags.has(feature_flags);
 }
 
 /*!
@@ -149,7 +149,7 @@ bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
  */
 bool Grid::is_symbol(const int ch) const
 {
-    return this->get_terrain().symbol_configs.at(F_LIT_STANDARD).character == ch;
+    return this->get_apparent_terrain().symbol_configs.at(F_LIT_STANDARD).character == ch;
 }
 
 void Grid::reset_costs()
@@ -173,10 +173,10 @@ bool Grid::has_los() const
 
 bool Grid::has_los_terrain(TerrainKind tk) const
 {
-    return this->get_terrain(tk).flags.has(TerrainCharacteristics::LOS);
+    return this->get_apparent_terrain(tk).flags.has(TerrainCharacteristics::LOS);
 }
 
-TerrainType &Grid::get_terrain(TerrainKind tk)
+TerrainType &Grid::get_apparent_terrain(TerrainKind tk)
 {
     auto &terrains = TerrainList::get_instance();
     switch (tk) {
@@ -191,7 +191,7 @@ TerrainType &Grid::get_terrain(TerrainKind tk)
     }
 }
 
-const TerrainType &Grid::get_terrain(TerrainKind tk) const
+const TerrainType &Grid::get_apparent_terrain(TerrainKind tk) const
 {
     const auto &terrains = TerrainList::get_instance();
     switch (tk) {

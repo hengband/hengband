@@ -80,7 +80,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
     auto &quests = QuestList::get_instance();
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid({ player_ptr->y, player_ptr->x });
-    const auto &terrain = grid.get_terrain();
+    const auto &terrain = grid.get_apparent_terrain();
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
     if (terrain.flags.has_not(TerrainCharacteristics::LESS)) {
@@ -207,7 +207,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.grid_array[player_ptr->y][player_ptr->x];
-    auto &terrain = grid.get_terrain();
+    auto &terrain = grid.get_apparent_terrain();
     if (terrain.flags.has_not(TerrainCharacteristics::MORE)) {
         msg_print(_("ここには下り階段が見当たらない。", "I see no down staircase here."));
         return;

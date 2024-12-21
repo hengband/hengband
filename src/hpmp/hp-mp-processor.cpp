@@ -61,7 +61,7 @@
 static bool deal_damege_by_feat(PlayerType *player_ptr, const Grid &grid, concptr msg_levitation, concptr msg_normal,
     std::function<PERCENTAGE(PlayerType *)> damage_rate, std::function<void(PlayerType *, int)> additional_effect)
 {
-    const auto &terrain = grid.get_terrain();
+    const auto &terrain = grid.get_apparent_terrain();
     auto damage = 0;
     if (terrain.flags.has(TerrainCharacteristics::DEEP)) {
         damage = 6000 + randint0(4000);
@@ -84,14 +84,14 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, const Grid &grid, concpt
     if (player_ptr->levitation) {
         msg_print(msg_levitation);
         constexpr auto mes = _("%sの上に浮遊したダメージ", "flying over %s");
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(mes, grid.get_terrain(TerrainKind::MIMIC).name.data()));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(mes, grid.get_apparent_terrain(TerrainKind::MIMIC).name.data()));
 
         if (additional_effect != nullptr) {
             additional_effect(player_ptr, damage);
         }
     } else {
         const auto p_pos = player_ptr->get_position();
-        const auto &name = player_ptr->current_floor_ptr->get_grid(p_pos).get_terrain(TerrainKind::MIMIC).name;
+        const auto &name = player_ptr->current_floor_ptr->get_grid(p_pos).get_apparent_terrain(TerrainKind::MIMIC).name;
         msg_format(_("%s%s！", "The %s %s!"), name.data(), msg_normal);
         take_hit(player_ptr, DAMAGE_NOESCAPE, damage, name);
 
@@ -111,7 +111,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(player_ptr->get_position());
-    const auto &terrain = grid.get_terrain();
+    const auto &terrain = grid.get_apparent_terrain();
     bool cave_no_regen = false;
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;

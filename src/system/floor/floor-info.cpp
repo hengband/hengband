@@ -172,15 +172,15 @@ bool FloorType::is_closed_door(const Pos2D &pos, bool is_mimic) const
 {
     const auto &grid = this->get_grid(pos);
     if (is_mimic) {
-        return grid.get_terrain(TerrainKind::MIMIC).is_closed_door();
+        return grid.get_apparent_terrain(TerrainKind::MIMIC).is_closed_door();
     }
 
-    return grid.get_terrain().is_closed_door();
+    return grid.get_apparent_terrain().is_closed_door();
 }
 
 bool FloorType::is_trap(const Pos2D &pos) const
 {
-    return this->get_grid(pos).get_terrain().is_trap();
+    return this->get_grid(pos).get_apparent_terrain().is_trap();
 }
 
 /*!
@@ -218,7 +218,7 @@ std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCount
 bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
 {
     const auto &grid = this->get_grid(pos);
-    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+    const auto &terrain = grid.get_apparent_terrain(TerrainKind::MIMIC);
     switch (gck) {
     case GridCountKind::OPEN: {
         const auto is_open_grid = terrain.is_open();

@@ -100,8 +100,8 @@ bool TargetSorter::compare_importance(const FloorType &floor, const Pos2D &pos_a
         return false;
     }
 
-    const auto &terrain_a = grid1.get_terrain();
-    const auto &terrain_b = grid2.get_terrain();
+    const auto &terrain_a = grid1.get_apparent_terrain();
+    const auto &terrain_b = grid2.get_apparent_terrain();
     if (terrain_a.priority > terrain_b.priority) {
         return true;
     }

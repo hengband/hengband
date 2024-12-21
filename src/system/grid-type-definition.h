@@ -97,8 +97,8 @@ public:
     void reset_dists();
     bool has_los() const;
     bool has_los_terrain(TerrainKind tk = TerrainKind::NORMAL) const;
-    TerrainType &get_terrain(TerrainKind tk = TerrainKind::NORMAL);
-    const TerrainType &get_terrain(TerrainKind tk = TerrainKind::NORMAL) const;
+    TerrainType &get_apparent_terrain(TerrainKind tk = TerrainKind::NORMAL);
+    const TerrainType &get_apparent_terrain(TerrainKind tk = TerrainKind::NORMAL) const;
     void place_closed_curtain();
     void add_info(int grid_info);
     void set_terrain_id(short terrain_id);
