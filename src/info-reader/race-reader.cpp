@@ -291,6 +291,7 @@ static errr set_mon_escorts(nlohmann::json &escort_data, MonraceDefinition &monr
 static errr set_mon_blows(nlohmann::json &blow_data, MonraceDefinition &monrace)
 {
     if (blow_data.is_null()) {
+        monrace.behavior_flags.set(MonsterBehaviorType::NEVER_BLOW);
         return PARSE_ERROR_NONE;
     }
     if (!blow_data.is_array()) {
