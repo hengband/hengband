@@ -299,7 +299,7 @@ bool hayagake(PlayerType *player_ptr)
     }
 
     const auto &grid = player_ptr->current_floor_ptr->get_grid(player_ptr->get_position());
-    const auto &terrain = grid.get_terrain();
+    const auto &terrain = grid.get_apparent_terrain();
     if (terrain.flags.has_not(TerrainCharacteristics::PROJECT) || (!player_ptr->levitation && terrain.flags.has(TerrainCharacteristics::DEEP))) {
         msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
     } else {

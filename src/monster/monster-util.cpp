@@ -196,7 +196,7 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
 monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
-    const auto &terrain = player_ptr->current_floor_ptr->get_grid(pos).get_terrain();
+    const auto &terrain = player_ptr->current_floor_ptr->get_grid(pos).get_apparent_terrain();
     if (terrain.flags.has(TerrainCharacteristics::WATER)) {
         return terrain.flags.has(TerrainCharacteristics::DEEP) ? mon_hook_deep_water : mon_hook_shallow_water;
     }

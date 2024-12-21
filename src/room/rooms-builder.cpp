@@ -357,7 +357,7 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
     }
 
     grid.info |= CAVE_ROOM;
-    const auto &terrain = grid.get_terrain();
+    const auto &terrain = grid.get_apparent_terrain();
     if (grid.is_floor()) {
         for (auto i = -1; i <= 1; i++) {
             for (auto j = -1; j <= 1; j++) {

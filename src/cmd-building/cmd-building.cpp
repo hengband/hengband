@@ -319,7 +319,7 @@ void do_cmd_building(PlayerType *player_ptr)
         return;
     }
 
-    int which = player_ptr->current_floor_ptr->get_grid(p_pos).get_terrain().subtype;
+    int which = player_ptr->current_floor_ptr->get_grid(p_pos).get_apparent_terrain().subtype;
 
     building_type *bldg;
     bldg = &buildings[which];

@@ -109,7 +109,7 @@ bool Grid::is_rune_explosion() const
 bool Grid::is_hidden_door() const
 {
     const auto is_secret = (this->mimic > 0) || this->cave_has_flag(TerrainCharacteristics::SECRET);
-    return is_secret && this->get_terrain().is_closed_door();
+    return is_secret && this->get_apparent_terrain().is_closed_door();
 }
 
 bool Grid::has_monster() const
@@ -139,7 +139,7 @@ FEAT_IDX Grid::get_feat_mimic() const
 
 bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
 {
-    return this->get_terrain().flags.has(feature_flags);
+    return this->get_apparent_terrain().flags.has(feature_flags);
 }
 
 /*!
@@ -149,7 +149,7 @@ bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
  */
 bool Grid::is_symbol(const int ch) const
 {
-    return this->get_terrain().symbol_configs.at(F_LIT_STANDARD).character == ch;
+    return this->get_apparent_terrain().symbol_configs.at(F_LIT_STANDARD).character == ch;
 }
 
 void Grid::reset_costs()
@@ -171,34 +171,39 @@ bool Grid::has_los() const
     return any_bits(this->info, CAVE_VIEW) || AngbandSystem::get_instance().is_phase_out();
 }
 
-TerrainType &Grid::get_terrain()
+bool Grid::has_los_terrain(TerrainKind tk) const
 {
-    return TerrainList::get_instance().get_terrain(this->feat);
+    return this->get_apparent_terrain(tk).flags.has(TerrainCharacteristics::LOS);
 }
 
-const TerrainType &Grid::get_terrain() const
+TerrainType &Grid::get_apparent_terrain(TerrainKind tk)
 {
-    return TerrainList::get_instance().get_terrain(this->feat);
+    auto &terrains = TerrainList::get_instance();
+    switch (tk) {
+    case TerrainKind::NORMAL:
+        return terrains.get_terrain(this->feat);
+    case TerrainKind::MIMIC:
+        return terrains.get_terrain(this->get_feat_mimic());
+    case TerrainKind::MIMIC_RAW:
+        return terrains.get_terrain(this->mimic);
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid terrain kind is specified! %d", enum2i(tk)));
+    }
 }
 
-TerrainType &Grid::get_terrain_mimic()
+const TerrainType &Grid::get_apparent_terrain(TerrainKind tk) const
 {
-    return TerrainList::get_instance().get_terrain(this->get_feat_mimic());
-}
-
-const TerrainType &Grid::get_terrain_mimic() const
-{
-    return TerrainList::get_instance().get_terrain(this->get_feat_mimic());
-}
-
-TerrainType &Grid::get_terrain_mimic_raw()
-{
-    return TerrainList::get_instance().get_terrain(this->mimic);
-}
-
-const TerrainType &Grid::get_terrain_mimic_raw() const
-{
-    return TerrainList::get_instance().get_terrain(this->mimic);
+    const auto &terrains = TerrainList::get_instance();
+    switch (tk) {
+    case TerrainKind::NORMAL:
+        return terrains.get_terrain(this->feat);
+    case TerrainKind::MIMIC:
+        return terrains.get_terrain(this->get_feat_mimic());
+    case TerrainKind::MIMIC_RAW:
+        return terrains.get_terrain(this->mimic);
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid terrain kind is specified! %d", enum2i(tk)));
+    }
 }
 
 void Grid::place_closed_curtain()

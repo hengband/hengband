@@ -76,7 +76,7 @@ bool is_cave_empty_bold2(PlayerType *player_ptr, int y, int x)
 bool cave_has_flag_bold(const FloorType *floor_ptr, int y, int x, TerrainCharacteristics f_idx)
 {
     const Pos2D pos(y, x);
-    return floor_ptr->get_grid(pos).get_terrain().flags.has(f_idx);
+    return floor_ptr->get_grid(pos).get_apparent_terrain().flags.has(f_idx);
 }
 
 /*
@@ -99,15 +99,7 @@ bool cave_stop_disintegration(const FloorType *floor_ptr, int y, int x)
  */
 bool cave_los_bold(const FloorType *floor_ptr, int y, int x)
 {
-    return feat_supports_los(floor_ptr->grid_array[y][x].feat);
-}
-
-/*
- * Determine if a "feature" supports "los"
- */
-bool feat_supports_los(short f_idx)
-{
-    return TerrainList::get_instance().get_terrain(f_idx).flags.has(TerrainCharacteristics::LOS);
+    return floor_ptr->get_grid({ y, x }).has_los_terrain();
 }
 
 /*

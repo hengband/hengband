@@ -527,7 +527,7 @@ void wilderness_gen(PlayerType *player_ptr)
                 continue;
             }
 
-            const auto &terrain = grid.get_terrain_mimic();
+            const auto &terrain = grid.get_apparent_terrain(TerrainKind::MIMIC);
             auto can_darken = !grid.is_mirror();
             can_darken &= terrain.flags.has_none_of({ TerrainCharacteristics::QUEST_ENTER, TerrainCharacteristics::ENTRANCE });
             if (can_darken) {
@@ -554,7 +554,7 @@ void wilderness_gen(PlayerType *player_ptr)
         for (auto y = 0; y < floor.height; y++) {
             for (auto x = 0; x < floor.width; x++) {
                 auto &grid = floor.get_grid({ y, x });
-                const auto &terrain = grid.get_terrain();
+                const auto &terrain = grid.get_apparent_terrain();
                 if (terrain.flags.has_not(TerrainCharacteristics::BLDG)) {
                     continue;
                 }
