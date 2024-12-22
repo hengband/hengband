@@ -527,7 +527,7 @@ void wilderness_gen(PlayerType *player_ptr)
                 continue;
             }
 
-            const auto &terrain = grid.get_terrain_mimic();
+            const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
             auto can_darken = !grid.is_mirror();
             can_darken &= terrain.flags.has_none_of({ TerrainCharacteristics::QUEST_ENTER, TerrainCharacteristics::ENTRANCE });
             if (can_darken) {
