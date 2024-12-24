@@ -54,6 +54,12 @@ bool set_tim_levitation(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     return true;
 }
 
+/*!
+ * @brief 究極の耐性の継続時間をセットする / Set "ultimate_res", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ */
 bool set_ultimate_res(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
