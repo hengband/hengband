@@ -2547,6 +2547,9 @@
     <ClCompile Include="..\..\src\system\terrain\terrain-list.cpp">
       <Filter>system\terrain</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\attribute-types.cpp">
+      <Filter>effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">

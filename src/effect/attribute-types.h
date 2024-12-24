@@ -113,5 +113,7 @@ enum class AttributeType : int {
     MAX /*!< 欠番を無視した最大サイズ (直上の値+1) */
 };
 
+std::string getAttributeName(AttributeType attribute);
+
 /*! 属性フラグATTRIBUTEの集合を表すクラス */
 using AttributeFlags = FlagGroup<AttributeType, AttributeType::MAX>;
