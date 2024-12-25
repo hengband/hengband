@@ -207,8 +207,8 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->lightspeed);
     wr_s16b(player_ptr->tsubureru);
     wr_s16b(player_ptr->magicdef);
-    wr_s16b(player_ptr->tim_res_nether);
-    wr_s16b(player_ptr->tim_res_time);
+    wr_s16b(player_ptr->timed_resistance[enum2i(AttributeType::NETHER)]);
+    wr_s16b(player_ptr->timed_resistance[enum2i(AttributeType::TIME)]);
     wr_byte((byte)player_ptr->mimic_form);
     wr_s16b(player_ptr->tim_mimic);
     wr_s16b(player_ptr->tim_sh_fire);

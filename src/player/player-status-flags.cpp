@@ -1413,7 +1413,7 @@ BIT_FLAGS has_resist_neth(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_NETHER);
 
-    if (player_ptr->ult_res || player_ptr->tim_res_nether) {
+    if (player_ptr->ult_res || player_ptr->timed_resistance[enum2i(AttributeType::NETHER)]) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1424,7 +1424,7 @@ BIT_FLAGS has_resist_time(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_TIME);
 
-    if (player_ptr->ult_res || player_ptr->tim_res_time) {
+    if (player_ptr->ult_res || player_ptr->timed_resistance[enum2i(AttributeType::TIME)]) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 

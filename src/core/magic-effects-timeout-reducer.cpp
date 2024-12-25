@@ -101,12 +101,10 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_tim_regen(player_ptr, player_ptr->tim_regen - 1, true);
     }
 
-    if (player_ptr->tim_res_nether) {
-        (void)set_tim_res_nether(player_ptr, player_ptr->tim_res_nether - 1, true);
-    }
-
-    if (player_ptr->tim_res_time) {
-        (void)set_tim_res_time(player_ptr, player_ptr->tim_res_time - 1, true);
+    for (auto i = 0; i < enum2i(AttributeType::MAX); i++) {
+        if (player_ptr->timed_resistance[i] > 0) {
+            (void)set_timed_resistance(player_ptr, static_cast<AttributeType>(i), player_ptr->timed_resistance[i] - 1, true);
+        }
     }
 
     if (player_ptr->tim_reflect) {

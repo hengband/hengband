@@ -1,5 +1,6 @@
 #pragma once
 
+#include "effect/attribute-types.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/trc-types.h"
 #include "player-ability/player-ability-types.h"
@@ -119,8 +120,7 @@ public:
     TIME_EFFECT lightspeed{};
     TIME_EFFECT tsubureru{};
     TIME_EFFECT magicdef{};
-    TIME_EFFECT tim_res_nether{}; /* Timed -- Nether resistance */
-    TIME_EFFECT tim_res_time{}; /* Timed -- Time resistance */
+    TIME_EFFECT timed_resistance[enum2i(AttributeType::MAX)]{}; /* Timed -- Resistance */
     MimicKindType mimic_form{};
     TIME_EFFECT tim_mimic{};
     TIME_EFFECT tim_sh_fire{};

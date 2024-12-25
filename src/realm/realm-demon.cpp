@@ -180,7 +180,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         if (cast) {
-            set_tim_res_nether(player_ptr, dice.roll() + base, false);
+            set_timed_resistance(player_ptr, AttributeType::NETHER, dice.roll() + base, false);
         }
     } break;
 
@@ -386,7 +386,7 @@ std::optional<std::string> do_daemon_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         if (cast) {
-            set_tim_res_time(player_ptr, dice.roll() + base, false);
+            set_timed_resistance(player_ptr, AttributeType::TIME, dice.roll() + base, false);
         }
     } break;
 

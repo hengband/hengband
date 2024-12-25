@@ -1,6 +1,7 @@
 #include "status/temporary-resistance.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
+#include "effect/attribute-types.h"
 #include "game-option/disturbance-options.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -102,7 +103,7 @@ bool set_ultimate_res(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     return true;
 }
 
-bool set_tim_res_nether(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_timed_resistance(PlayerType *player_ptr, AttributeType attribute, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0
@@ -113,65 +114,24 @@ bool set_tim_res_nether(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     if (v) {
-        if (player_ptr->tim_res_nether && !do_dec) {
-            if (player_ptr->tim_res_nether > v) {
+        if (player_ptr->timed_resistance[enum2i(attribute)] && !do_dec) {
+            if (player_ptr->timed_resistance[enum2i(attribute)] > v) {
                 return false;
             }
-        } else if (!player_ptr->tim_res_nether) {
-            msg_print(_("地獄の力に対して耐性がついた気がする！", "You feel nether-resistant!"));
+        } else if (!player_ptr->timed_resistance[enum2i(attribute)]) {
+            msg_format(_("%sの力に対して耐性がついた気がする！", "You feel %s-resistant!"), getAttributeName(attribute).data());
             notice = true;
         }
     }
 
     else {
-        if (player_ptr->tim_res_nether) {
-            msg_print(_("地獄の力に対する耐性が薄れた気がする。", "You feel less nether-resistant"));
+        if (player_ptr->timed_resistance[enum2i(attribute)]) {
+            msg_format(_("%sの力に対する耐性が薄れた気がする。", "You feel less %s-resistant"), getAttributeName(attribute).data());
             notice = true;
         }
     }
 
-    player_ptr->tim_res_nether = v;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
-    if (!notice) {
-        return false;
-    }
-
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
-    }
-
-    rfu.set_flag(StatusRecalculatingFlag::BONUS);
-    handle_stuff(player_ptr);
-    return true;
-}
-
-bool set_tim_res_time(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
-{
-    bool notice = false;
-    v = (v > 10000) ? 10000 : (v < 0) ? 0
-                                      : v;
-    if (player_ptr->is_dead) {
-        return false;
-    }
-
-    if (v) {
-        if (player_ptr->tim_res_time && !do_dec) {
-            if (player_ptr->tim_res_time > v) {
-                return false;
-            }
-        } else if (!player_ptr->tim_res_time) {
-            msg_print(_("時間逆転の力に対して耐性がついた気がする！", "You feel time-resistant!"));
-            notice = true;
-        }
-    } else {
-        if (player_ptr->tim_res_time) {
-            msg_print(_("時間逆転の力に対する耐性が薄れた気がする。", "You feel less time-resistant"));
-            notice = true;
-        }
-    }
-
-    player_ptr->tim_res_time = v;
+    player_ptr->timed_resistance[enum2i(attribute)] = v;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {

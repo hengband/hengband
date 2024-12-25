@@ -61,8 +61,9 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->resist_magic = 0;
     player_ptr->tsuyoshi = 0;
     player_ptr->tim_pass_wall = 0;
-    player_ptr->tim_res_nether = 0;
-    player_ptr->tim_res_time = 0;
+    for (auto i = 0; i < enum2i(AttributeType::MAX); i++) {
+        player_ptr->timed_resistance[i] = 0;
+    }
     player_ptr->tim_mimic = 0;
     player_ptr->mimic_form = MimicKindType::NONE;
     player_ptr->tim_reflect = 0;

@@ -585,7 +585,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_AFRAID);
     }
 
-    if (player_ptr->tim_res_time) {
+    if (player_ptr->timed_resistance[enum2i(AttributeType::TIME)]) {
         ADD_BAR_FLAG(BAR_RESTIME);
     }
 
@@ -609,7 +609,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_LEVITATE);
     }
 
-    if (player_ptr->tim_res_nether) {
+    if (player_ptr->timed_resistance[enum2i(AttributeType::NETHER)]) {
         ADD_BAR_FLAG(BAR_RESNETH);
     }
 
