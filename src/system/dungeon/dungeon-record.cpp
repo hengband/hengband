@@ -5,6 +5,27 @@
  */
 
 #include "system/dungeon/dungeon-record.h"
+#include "locale/language-switcher.h"
+#include "system/angband-exceptions.h"
+#include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/dungeon-list.h"
+#include "util/enum-converter.h"
+
+namespace {
+std::string get_dungeon_format(DungeonMessageFormat dmf)
+{
+    switch (dmf) {
+    case DungeonMessageFormat::DUMP:
+        return _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n");
+    case DungeonMessageFormat::KNOWLEDGE:
+        return _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n");
+    case DungeonMessageFormat::RECALL:
+        return _("      %c) %c%-12s : 最大 %d 階", "      %c) %c%-16s : Max level %d");
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid dungeon message format is specified! %d", enum2i(dmf)));
+    }
+}
+}
 
 bool DungeonRecord::has_entered() const
 {
@@ -116,4 +137,61 @@ void DungeonRecords::reset_all()
     for (auto &[_, record] : this->records) {
         record.reset();
     }
+}
+
+int DungeonRecords::find_max_level() const
+{
+    const auto &dungeons = DungeonList::get_instance();
+    auto max_level = 0;
+    for (const auto &[dungeon_id, record] : this->records) {
+        const auto max_level_each = record.get_max_level();
+        if (max_level_each < dungeons.get_dungeon(dungeon_id).mindepth) {
+            continue;
+        }
+
+        if (max_level < max_level_each) {
+            max_level = max_level_each;
+        }
+    }
+
+    return max_level;
+}
+
+std::vector<std::string> DungeonRecords::build_known_dungeons(DungeonMessageFormat dmf) const
+{
+    const auto fmt = get_dungeon_format(dmf);
+    const auto &dungeons = DungeonList::get_instance();
+    std::vector<std::string> recall_dungeons;
+    auto num_entered = 0;
+    for (const auto &[dungeon_id, record] : this->records) {
+        if (!record.has_entered()) {
+            continue;
+        }
+
+        const auto &dungeon = dungeons.get_dungeon(dungeon_id);
+        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
+            continue;
+        }
+
+        const auto max_level = record.get_max_level();
+        const auto is_dungeon_conquered = dungeon.is_conquered();
+        const auto is_conquered = is_dungeon_conquered || (max_level == dungeon.maxdepth);
+        std::string message;
+        switch (dmf) {
+        case DungeonMessageFormat::DUMP:
+        case DungeonMessageFormat::KNOWLEDGE:
+            message = format(fmt.data(), is_conquered ? '!' : ' ', dungeon.name.data(), max_level);
+            break;
+        case DungeonMessageFormat::RECALL:
+            message = format(fmt.data(), static_cast<char>('a' + num_entered), is_conquered ? '!' : ' ', dungeon.name.data(), max_level);
+            num_entered++;
+            break;
+        default:
+            THROW_EXCEPTION(std::logic_error, format("Invalid dungeon message format is specified! %d", enum2i(dmf)));
+        }
+
+        recall_dungeons.push_back(message);
+    }
+
+    return recall_dungeons;
 }

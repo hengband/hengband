@@ -31,6 +31,7 @@ public:
     size_t size() const;
     bool empty() const;
     void emplace(int dungeon_id, DungeonDefinition &&definition);
+    void retouch();
 
 private:
     DungeonList() = default;

@@ -180,7 +180,7 @@ static bool stay_inn(PlayerType *player_ptr)
     world.pass_game_turn_by_stay();
     prevent_turn_overflow(player_ptr);
     if ((prev_hour >= 18) && (prev_hour <= 23)) {
-        determine_daily_bounty(player_ptr, false); /* Update daily bounty */
+        determine_daily_bounty(player_ptr);
         exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::DIALY, 0);
     }
 
