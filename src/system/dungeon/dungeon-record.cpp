@@ -63,7 +63,7 @@ DungeonRecords::DungeonRecords()
 {
     //!< @todo 後でenum class に変える.
     for (auto i = 0; i < 21; i++) {
-        this->records.emplace(i, DungeonRecord());
+        this->records.emplace(i, std::make_shared<DungeonRecord>());
     }
 }
 
@@ -74,50 +74,50 @@ DungeonRecords &DungeonRecords::get_instance()
 
 DungeonRecord &DungeonRecords::get_record(int dungeon_id)
 {
-    return this->records.at(dungeon_id);
+    return *this->records.at(dungeon_id);
 }
 
 const DungeonRecord &DungeonRecords::get_record(int dungeon_id) const
 {
-    return this->records.at(dungeon_id);
+    return *this->records.at(dungeon_id);
 }
 
-std::map<int, DungeonRecord>::iterator DungeonRecords::begin()
+std::map<int, std::shared_ptr<DungeonRecord>>::iterator DungeonRecords::begin()
 {
     return this->records.begin();
 }
 
-std::map<int, DungeonRecord>::const_iterator DungeonRecords::begin() const
+std::map<int, std::shared_ptr<DungeonRecord>>::const_iterator DungeonRecords::begin() const
 {
     return this->records.cbegin();
 }
 
-std::map<int, DungeonRecord>::iterator DungeonRecords::end()
+std::map<int, std::shared_ptr<DungeonRecord>>::iterator DungeonRecords::end()
 {
     return this->records.end();
 }
 
-std::map<int, DungeonRecord>::const_iterator DungeonRecords::end() const
+std::map<int, std::shared_ptr<DungeonRecord>>::const_iterator DungeonRecords::end() const
 {
     return this->records.cend();
 }
 
-std::map<int, DungeonRecord>::reverse_iterator DungeonRecords::rbegin()
+std::map<int, std::shared_ptr<DungeonRecord>>::reverse_iterator DungeonRecords::rbegin()
 {
     return this->records.rbegin();
 }
 
-std::map<int, DungeonRecord>::const_reverse_iterator DungeonRecords::rbegin() const
+std::map<int, std::shared_ptr<DungeonRecord>>::const_reverse_iterator DungeonRecords::rbegin() const
 {
     return this->records.crbegin();
 }
 
-std::map<int, DungeonRecord>::reverse_iterator DungeonRecords::rend()
+std::map<int, std::shared_ptr<DungeonRecord>>::reverse_iterator DungeonRecords::rend()
 {
     return this->records.rend();
 }
 
-std::map<int, DungeonRecord>::const_reverse_iterator DungeonRecords::rend() const
+std::map<int, std::shared_ptr<DungeonRecord>>::const_reverse_iterator DungeonRecords::rend() const
 {
     return this->records.crend();
 }
@@ -141,11 +141,11 @@ void DungeonRecords::reset_all()
 
 int DungeonRecords::find_max_level() const
 {
-    const auto &dungeons = DungeonList::get_instance();
     auto max_level = 0;
-    for (const auto &[dungeon_id, record] : this->records) {
-        const auto max_level_each = record.get_max_level();
-        if (max_level_each < dungeons.get_dungeon(dungeon_id).mindepth) {
+    for (auto i = 0; i < 21; i++) {
+        const auto &[record, dungeon] = this->get_dungeon_pair(i);
+        const auto max_level_each = record->get_max_level();
+        if (max_level_each < dungeon->mindepth) {
             continue;
         }
 
@@ -164,11 +164,11 @@ std::vector<std::string> DungeonRecords::build_known_dungeons(DungeonMessageForm
     std::vector<std::string> recall_dungeons;
     auto num_entered = 0;
     for (const auto &[dungeon_id, record] : this->records) {
-        if (!record.has_entered()) {
+        if (!record->has_entered()) {
             continue;
         }
 
-        const auto max_level = record.get_max_level();
+        const auto max_level = record->get_max_level();
         const auto &dungeon = dungeons.get_dungeon(dungeon_id);
         const auto is_dungeon_conquered = dungeon.is_conquered();
         const auto is_conquered = is_dungeon_conquered || (max_level == dungeon.maxdepth);
@@ -196,10 +196,15 @@ std::vector<int> DungeonRecords::collect_entered_dungeon_ids() const
 {
     std::vector<int> entered_dungeons;
     for (const auto &[dungeon_id, record] : this->records) {
-        if (record.has_entered()) {
+        if (record->has_entered()) {
             entered_dungeons.push_back(dungeon_id);
         }
     }
 
     return entered_dungeons;
+}
+
+std::pair<std::shared_ptr<DungeonRecord>, std::shared_ptr<DungeonDefinition>> DungeonRecords::get_dungeon_pair(int dungeon_id) const
+{
+    return { this->records.at(dungeon_id), DungeonList::get_instance().get_dungeon_shared(dungeon_id) };
 }

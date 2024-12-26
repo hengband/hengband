@@ -520,24 +520,23 @@ bool reset_recall(PlayerType *player_ptr)
     }
 
     constexpr auto prompt = _("何階にセットしますか？", "Reset to which level?");
-    const auto &dungeon = DungeonList::get_instance().get_dungeon(*select_dungeon);
-    const auto min_level = dungeon.mindepth;
-    auto &dungeon_record = DungeonRecords::get_instance().get_record(*select_dungeon);
-    const auto max_level = dungeon_record.get_max_level();
+    const auto &[dungeon_record, dungeon] = DungeonRecords::get_instance().get_dungeon_pair(*select_dungeon);
+    const auto min_level = dungeon->mindepth;
+    const auto max_level = dungeon_record->get_max_level();
     const auto reset_level = input_numerics(prompt, min_level, max_level, max_level);
     if (!reset_level) {
         return false;
     }
 
-    dungeon_record.set_max_level(*reset_level);
+    dungeon_record->set_max_level(*reset_level);
     if (record_maxdepth) {
         constexpr auto note = _("フロア・リセットで", "using a scroll of reset recall");
         exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::TRUMP, *select_dungeon, note);
     }
 #ifdef JP
-    msg_format("%sの帰還レベルを %d 階にセット。", dungeon.name.data(), *reset_level);
+    msg_format("%sの帰還レベルを %d 階にセット。", dungeon->name.data(), *reset_level);
 #else
-    msg_format("Recall depth of %s set to level %d (%d').", dungeon.name.data(), *reset_level, *reset_level * 50);
+    msg_format("Recall depth of %s set to level %d (%d').", dungeon->name.data(), *reset_level, *reset_level * 50);
 #endif
     return true;
 }

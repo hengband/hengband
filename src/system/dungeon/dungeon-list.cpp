@@ -16,50 +16,55 @@ DungeonList &DungeonList::get_instance()
 
 DungeonDefinition &DungeonList::get_dungeon(int dungeon_id)
 {
-    return this->dungeons.at(dungeon_id);
+    return *this->dungeons.at(dungeon_id);
 }
 
 const DungeonDefinition &DungeonList::get_dungeon(int dungeon_id) const
 {
+    return *this->dungeons.at(dungeon_id);
+}
+
+std::shared_ptr<DungeonDefinition> DungeonList::get_dungeon_shared(int dungeon_id) const
+{
     return this->dungeons.at(dungeon_id);
 }
 
-std::map<int, DungeonDefinition>::iterator DungeonList::begin()
+std::map<int, std::shared_ptr<DungeonDefinition>>::iterator DungeonList::begin()
 {
     return this->dungeons.begin();
 }
 
-std::map<int, DungeonDefinition>::const_iterator DungeonList::begin() const
+std::map<int, std::shared_ptr<DungeonDefinition>>::const_iterator DungeonList::begin() const
 {
     return this->dungeons.cbegin();
 }
 
-std::map<int, DungeonDefinition>::iterator DungeonList::end()
+std::map<int, std::shared_ptr<DungeonDefinition>>::iterator DungeonList::end()
 {
     return this->dungeons.end();
 }
 
-std::map<int, DungeonDefinition>::const_iterator DungeonList::end() const
+std::map<int, std::shared_ptr<DungeonDefinition>>::const_iterator DungeonList::end() const
 {
     return this->dungeons.cend();
 }
 
-std::map<int, DungeonDefinition>::reverse_iterator DungeonList::rbegin()
+std::map<int, std::shared_ptr<DungeonDefinition>>::reverse_iterator DungeonList::rbegin()
 {
     return this->dungeons.rbegin();
 }
 
-std::map<int, DungeonDefinition>::const_reverse_iterator DungeonList::rbegin() const
+std::map<int, std::shared_ptr<DungeonDefinition>>::const_reverse_iterator DungeonList::rbegin() const
 {
     return this->dungeons.crbegin();
 }
 
-std::map<int, DungeonDefinition>::reverse_iterator DungeonList::rend()
+std::map<int, std::shared_ptr<DungeonDefinition>>::reverse_iterator DungeonList::rend()
 {
     return this->dungeons.rend();
 }
 
-std::map<int, DungeonDefinition>::const_reverse_iterator DungeonList::rend() const
+std::map<int, std::shared_ptr<DungeonDefinition>>::const_reverse_iterator DungeonList::rend() const
 {
     return this->dungeons.crend();
 }
@@ -76,7 +81,7 @@ bool DungeonList::empty() const
 
 void DungeonList::emplace(int dungeon_id, DungeonDefinition &&definition)
 {
-    this->dungeons.emplace(dungeon_id, definition);
+    this->dungeons.emplace(dungeon_id, std::make_shared<DungeonDefinition>(std::move(definition)));
 }
 
 /*!
@@ -85,6 +90,6 @@ void DungeonList::emplace(int dungeon_id, DungeonDefinition &&definition)
 void DungeonList::retouch()
 {
     for (auto &[_, dungeon] : this->dungeons) {
-        dungeon.set_guardian_flag();
+        dungeon->set_guardian_flag();
     }
 }

@@ -151,7 +151,7 @@ void wr_player(PlayerType *player_ptr)
     auto tmp8u = static_cast<uint8_t>(dungeon_records.size());
     wr_byte(tmp8u);
     for (const auto &[_, dungeon_record] : dungeon_records) {
-        wr_s16b(static_cast<int16_t>(dungeon_record.get_max_level()));
+        wr_s16b(static_cast<int16_t>(dungeon_record->get_max_level()));
     }
 
     wr_s16b(0);

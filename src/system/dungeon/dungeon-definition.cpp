@@ -127,6 +127,11 @@ std::string DungeonDefinition::build_entrance_message() const
     return format(fmt, this->name.data(), this->mindepth);
 }
 
+std::string DungeonDefinition::describe_depth() const
+{
+    return format(_("%s(%d階相当)", "%s(level %d)"), this->text.data(), this->mindepth);
+}
+
 void DungeonDefinition::set_guardian_flag()
 {
     if (this->is_dungeon() && this->has_guardian()) {

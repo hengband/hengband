@@ -129,6 +129,7 @@ public:
     bool is_open(short terrain_id) const;
     bool is_conquered() const;
     std::string build_entrance_message() const;
+    std::string describe_depth() const;
 
     void set_guardian_flag();
 };
