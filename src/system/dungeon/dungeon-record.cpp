@@ -168,12 +168,8 @@ std::vector<std::string> DungeonRecords::build_known_dungeons(DungeonMessageForm
             continue;
         }
 
-        const auto &dungeon = dungeons.get_dungeon(dungeon_id);
-        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
-            continue;
-        }
-
         const auto max_level = record.get_max_level();
+        const auto &dungeon = dungeons.get_dungeon(dungeon_id);
         const auto is_dungeon_conquered = dungeon.is_conquered();
         const auto is_conquered = is_dungeon_conquered || (max_level == dungeon.maxdepth);
         std::string message;
@@ -194,4 +190,16 @@ std::vector<std::string> DungeonRecords::build_known_dungeons(DungeonMessageForm
     }
 
     return recall_dungeons;
+}
+
+std::vector<int> DungeonRecords::collect_entered_dungeon_ids() const
+{
+    std::vector<int> entered_dungeons;
+    for (const auto &[dungeon_id, record] : this->records) {
+        if (record.has_entered()) {
+            entered_dungeons.push_back(dungeon_id);
+        }
+    }
+
+    return entered_dungeons;
 }
