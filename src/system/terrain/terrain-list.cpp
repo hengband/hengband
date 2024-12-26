@@ -60,66 +60,6 @@ short TerrainList::get_terrain_id_by_tag(std::string_view tag) const
     return static_cast<short>(std::distance(this->terrains.begin(), it));
 }
 
-std::vector<TerrainType>::iterator TerrainList::begin()
-{
-    return this->terrains.begin();
-}
-
-std::vector<TerrainType>::const_iterator TerrainList::begin() const
-{
-    return this->terrains.cbegin();
-}
-
-std::vector<TerrainType>::reverse_iterator TerrainList::rbegin()
-{
-    return this->terrains.rbegin();
-}
-
-std::vector<TerrainType>::const_reverse_iterator TerrainList::rbegin() const
-{
-    return this->terrains.crbegin();
-}
-
-std::vector<TerrainType>::iterator TerrainList::end()
-{
-    return this->terrains.end();
-}
-
-std::vector<TerrainType>::const_iterator TerrainList::end() const
-{
-    return this->terrains.cend();
-}
-
-std::vector<TerrainType>::reverse_iterator TerrainList::rend()
-{
-    return this->terrains.rend();
-}
-
-std::vector<TerrainType>::const_reverse_iterator TerrainList::rend() const
-{
-    return this->terrains.crend();
-}
-
-size_t TerrainList::size() const
-{
-    return this->terrains.size();
-}
-
-bool TerrainList::empty() const
-{
-    return this->terrains.empty();
-}
-
-void TerrainList::resize(size_t new_size)
-{
-    this->terrains.resize(new_size);
-}
-
-void TerrainList::shrink_to_fit()
-{
-    this->terrains.shrink_to_fit();
-}
-
 /*!
  * @brief 地形情報の各種タグからIDへ変換して結果を収める
  */
