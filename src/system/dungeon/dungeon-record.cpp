@@ -135,7 +135,7 @@ bool DungeonRecords::empty() const
 void DungeonRecords::reset_all()
 {
     for (auto &[_, record] : this->records) {
-        record.reset();
+        record->reset();
     }
 }
 
