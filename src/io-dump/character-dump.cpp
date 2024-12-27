@@ -29,7 +29,6 @@
 #include "store/store.h"
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
-#include "system/dungeon/dungeon-record.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
@@ -39,6 +38,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/services/dungeon-service.h"
 #include "term/gameterm.h"
 #include "term/z-form.h"
 #include "util/buffer-shaper.h"
@@ -178,8 +178,7 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
 static void dump_aux_recall(FILE *fff)
 {
     fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
-    const auto &dungeon_records = DungeonRecords::get_instance();
-    for (const auto &known_dungeon : dungeon_records.build_known_dungeons(DungeonMessageFormat::DUMP)) {
+    for (const auto &known_dungeon : DungeonService::build_known_dungeons(DungeonMessageFormat::DUMP)) {
         fprintf(fff, "%s", known_dungeon.data());
     }
 }

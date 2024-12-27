@@ -12,12 +12,6 @@
 #include <string>
 #include <vector>
 
-enum class DungeonMessageFormat {
-    DUMP,
-    KNOWLEDGE,
-    RECALL,
-};
-
 class DungeonRecord {
 public:
     DungeonRecord() = default;
@@ -59,7 +53,6 @@ public:
     bool empty() const;
     void reset_all();
 
-    std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf) const;
     std::vector<DungeonId> collect_entered_dungeon_ids() const;
 
 private:

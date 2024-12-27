@@ -35,6 +35,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "system/services/dungeon-service.h"
 #include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-setter.h"
@@ -379,7 +380,7 @@ static std::optional<DungeonId> choose_dungeon(std::string_view note, int row, i
     }
 
     screen_save();
-    const auto dungeon_messages = dungeon_records.build_known_dungeons(DungeonMessageFormat::RECALL);
+    const auto dungeon_messages = DungeonService::build_known_dungeons(DungeonMessageFormat::RECALL);
     const int num_messages = dungeon_messages.size();
     for (auto i = 0; i < num_messages; i++) {
         prt(dungeon_messages.at(i), row + i, col);
