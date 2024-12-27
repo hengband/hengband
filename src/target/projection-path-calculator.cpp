@@ -79,9 +79,8 @@ static int sign(int num)
     return 0;
 }
 
-static bool project_stop(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
+static bool project_stop(const FloorType &floor, const Pos2D &p_pos, ProjectionPathHelper *pph_ptr)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
     if (none_bits(pph_ptr->flag, PROJECT_THRU) && (pph_ptr->pos == pph_ptr->pos_dst)) {
         return true;
     }
@@ -107,7 +106,7 @@ static bool project_stop(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
         }
     }
 
-    if (any_bits(pph_ptr->flag, PROJECT_STOP) && !pph_ptr->position->empty() && (player_ptr->is_located_at(pph_ptr->pos) || grid.has_monster())) {
+    if (any_bits(pph_ptr->flag, PROJECT_STOP) && !pph_ptr->position->empty() && ((p_pos == pph_ptr->pos) || grid.has_monster())) {
         return true;
     }
 
@@ -139,7 +138,7 @@ static void calc_frac(ProjectionPathHelper *pph_ptr, bool is_vertical)
     pph_ptr->k++;
 }
 
-static void calc_projection_to_target(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr, bool is_vertical)
+static void calc_projection_to_target(const FloorType &floor, const Pos2D &p_pos, ProjectionPathHelper *pph_ptr, bool is_vertical)
 {
     while (true) {
         pph_ptr->position->push_back(pph_ptr->pos);
@@ -147,7 +146,7 @@ static void calc_projection_to_target(PlayerType *player_ptr, ProjectionPathHelp
             break;
         }
 
-        if (project_stop(player_ptr, pph_ptr)) {
+        if (project_stop(floor, p_pos, pph_ptr)) {
             break;
         }
 
@@ -160,7 +159,7 @@ static void calc_projection_to_target(PlayerType *player_ptr, ProjectionPathHelp
     }
 }
 
-static bool calc_vertical_projection(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
+static bool calc_vertical_projection(const FloorType &floor, const Pos2D &p_pos, ProjectionPathHelper *pph_ptr)
 {
     if (std::abs(pph_ptr->pos_diff.y) <= std::abs(pph_ptr->pos_diff.x)) {
         return false;
@@ -176,11 +175,11 @@ static bool calc_vertical_projection(PlayerType *player_ptr, ProjectionPathHelpe
         pph_ptr->k++;
     }
 
-    calc_projection_to_target(player_ptr, pph_ptr, true);
+    calc_projection_to_target(floor, p_pos, pph_ptr, true);
     return true;
 }
 
-static bool calc_horizontal_projection(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
+static bool calc_horizontal_projection(const FloorType &floor, const Pos2D &p_pos, ProjectionPathHelper *pph_ptr)
 {
     if (std::abs(pph_ptr->pos_diff.x) <= std::abs(pph_ptr->pos_diff.y)) {
         return false;
@@ -196,11 +195,11 @@ static bool calc_horizontal_projection(PlayerType *player_ptr, ProjectionPathHel
         pph_ptr->k++;
     }
 
-    calc_projection_to_target(player_ptr, pph_ptr, false);
+    calc_projection_to_target(floor, p_pos, pph_ptr, false);
     return true;
 }
 
-static void calc_diagonal_projection(PlayerType *player_ptr, ProjectionPathHelper *pph_ptr)
+static void calc_diagonal_projection(const FloorType &floor, const Pos2D &p_pos, ProjectionPathHelper *pph_ptr)
 {
     pph_ptr->pos.y = pph_ptr->pos_src.y + sign(pph_ptr->pos_diff.y);
     pph_ptr->pos.x = pph_ptr->pos_src.x + sign(pph_ptr->pos_diff.x);
@@ -211,7 +210,7 @@ static void calc_diagonal_projection(PlayerType *player_ptr, ProjectionPathHelpe
             break;
         }
 
-        if (project_stop(player_ptr, pph_ptr)) {
+        if (project_stop(floor, p_pos, pph_ptr)) {
             break;
         }
 
@@ -221,34 +220,32 @@ static void calc_diagonal_projection(PlayerType *player_ptr, ProjectionPathHelpe
 }
 
 /*!
- * @brief 始点から終点への直線経路を返す /
- * Determine the path taken by a projection.
+ * @brief 始点から終点への直線経路を返す
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param range 距離
- * @param y1 始点Y座標
- * @param x1 始点X座標
- * @param y2 終点Y座標
- * @param x2 終点X座標
- * @param flag フラグID
- * @return リストの長さ
+ * @param pos_src 始点座標
+ * @param pos_dst 終点座標
+ * @param flag フラグ群
  */
 ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &pos_src, const Pos2D &pos_dst, uint32_t flag)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
     this->position.clear();
     if (pos_src == pos_dst) {
         return;
     }
 
     ProjectionPathHelper pph(&this->position, range, flag, pos_src, pos_dst);
-    if (calc_vertical_projection(player_ptr, &pph)) {
+    if (calc_vertical_projection(floor, p_pos, &pph)) {
         return;
     }
 
-    if (calc_horizontal_projection(player_ptr, &pph)) {
+    if (calc_horizontal_projection(floor, p_pos, &pph)) {
         return;
     }
 
-    calc_diagonal_projection(player_ptr, &pph);
+    calc_diagonal_projection(floor, p_pos, &pph);
 }
 
 /*
