@@ -10,7 +10,6 @@
 #include <memory>
 #include <optional>
 #include <string>
-#include <utility>
 #include <vector>
 
 enum class DungeonMessageFormat {
@@ -62,7 +61,6 @@ public:
 
     std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf) const;
     std::vector<DungeonId> collect_entered_dungeon_ids() const;
-    std::pair<std::shared_ptr<DungeonRecord>, std::shared_ptr<DungeonDefinition>> get_dungeon_pair(DungeonId dungeon_id) const;
 
 private:
     DungeonRecords();

@@ -197,8 +197,3 @@ std::vector<DungeonId> DungeonRecords::collect_entered_dungeon_ids() const
 
     return entered_dungeons;
 }
-
-std::pair<std::shared_ptr<DungeonRecord>, std::shared_ptr<DungeonDefinition>> DungeonRecords::get_dungeon_pair(DungeonId dungeon_id) const
-{
-    return { this->records.at(dungeon_id), DungeonList::get_instance().get_dungeon_shared(dungeon_id) };
-}
