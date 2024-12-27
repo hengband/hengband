@@ -8,6 +8,8 @@
 #pragma once
 
 #include <memory>
+#include <optional>
+#include <string>
 
 enum class DungeonId;
 class DungeonDefinition;
@@ -17,4 +19,5 @@ public:
     DungeonService() = delete;
     static int decide_gradiator_level();
     static int find_max_level();
+    static std::optional<std::string> check_first_entrance(DungeonId dungeon_id);
 };
