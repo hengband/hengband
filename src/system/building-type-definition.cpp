@@ -3,10 +3,10 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "system/dungeon/dungeon-record.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
+#include "system/services/dungeon-service.h"
 #include <numeric>
 
 std::array<building_type, MAX_BUILDINGS> buildings;
@@ -98,7 +98,7 @@ std::vector<std::string> MeleeArena::build_gladiators_names() const
  */
 void MeleeArena::update_gladiators(PlayerType *player_ptr)
 {
-    const auto mon_level = DungeonRecords::get_instance().decide_gradiator_level();
+    const auto mon_level = DungeonService::decide_gradiator_level();
     while (true) {
         auto [total, is_applicable] = this->set_gladiators(player_ptr, mon_level);
         const auto &[count, new_total] = this->set_odds(total, is_applicable);

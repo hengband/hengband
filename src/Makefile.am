@@ -957,6 +957,7 @@ hengband_SOURCES = \
 	system/monrace/monrace-list.cpp system/monrace/monrace-list.h \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
+	system/services/dungeon-service.cpp system/services/dungeon-service.h \
 	\
 	system/terrain/terrain-definition.cpp system/terrain/terrain-definition.h \
 	system/terrain/terrain-list.cpp system/terrain/terrain-list.h \

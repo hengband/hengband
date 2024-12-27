@@ -15,8 +15,6 @@
 #include "util/enum-range.h"
 
 namespace {
-constexpr EnumRange<DungeonId> DUNGEON_IDS(DungeonId::WILDERNESS, DungeonId::MAX);
-
 std::string get_dungeon_format(DungeonMessageFormat dmf)
 {
     switch (dmf) {
@@ -86,6 +84,16 @@ const DungeonRecord &DungeonRecords::get_record(DungeonId dungeon_id) const
     return *this->records.at(dungeon_id);
 }
 
+std::shared_ptr<DungeonRecord> DungeonRecords::get_record_shared(DungeonId dungeon_id)
+{
+    return this->records.at(dungeon_id);
+}
+
+std::shared_ptr<const DungeonRecord> DungeonRecords::get_record_shared(DungeonId dungeon_id) const
+{
+    return this->records.at(dungeon_id);
+}
+
 std::map<DungeonId, std::shared_ptr<DungeonRecord>>::iterator DungeonRecords::begin()
 {
     return this->records.begin();
@@ -141,41 +149,6 @@ void DungeonRecords::reset_all()
     for (auto &[_, record] : this->records) {
         record->reset();
     }
-}
-
-int DungeonRecords::find_max_level() const
-{
-    auto max_level = 0;
-    for (auto dungeon_id : DUNGEON_IDS) {
-        const auto &[record, dungeon] = this->get_dungeon_pair(dungeon_id);
-        const auto max_level_each = record->get_max_level();
-        if (max_level_each < dungeon->mindepth) {
-            continue;
-        }
-
-        if (max_level < max_level_each) {
-            max_level = max_level_each;
-        }
-    }
-
-    return max_level;
-}
-
-int DungeonRecords::decide_gradiator_level() const
-{
-    const auto max_dungeon_level = this->find_max_level();
-    auto gradiator_level = randint1(std::min(max_dungeon_level, 122)) + 5;
-    if (evaluate_percent(60)) {
-        const auto random_level = randint1(std::min(max_dungeon_level, 122)) + 5;
-        gradiator_level = std::max(random_level, gradiator_level);
-    }
-
-    if (evaluate_percent(30)) {
-        const auto random_level = randint1(std::min(max_dungeon_level, 122)) + 5;
-        gradiator_level = std::max(random_level, gradiator_level);
-    }
-
-    return gradiator_level;
 }
 
 std::vector<std::string> DungeonRecords::build_known_dungeons(DungeonMessageFormat dmf) const

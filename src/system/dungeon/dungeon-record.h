@@ -46,6 +46,8 @@ public:
     static DungeonRecords &get_instance();
     DungeonRecord &get_record(DungeonId dungeon_id);
     const DungeonRecord &get_record(DungeonId dungeon_id) const;
+    std::shared_ptr<DungeonRecord> get_record_shared(DungeonId dungeon_id);
+    std::shared_ptr<const DungeonRecord> get_record_shared(DungeonId dungeon_id) const;
     std::map<DungeonId, std::shared_ptr<DungeonRecord>>::iterator begin();
     std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_iterator begin() const;
     std::map<DungeonId, std::shared_ptr<DungeonRecord>>::iterator end();
@@ -58,8 +60,6 @@ public:
     bool empty() const;
     void reset_all();
 
-    int find_max_level() const;
-    int decide_gradiator_level() const;
     std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf) const;
     std::vector<DungeonId> collect_entered_dungeon_ids() const;
     std::pair<std::shared_ptr<DungeonRecord>, std::shared_ptr<DungeonDefinition>> get_dungeon_pair(DungeonId dungeon_id) const;
