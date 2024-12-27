@@ -8,6 +8,7 @@
 #include "locale/language-switcher.h"
 #include "system/angband-exceptions.h"
 #include "system/enums/dungeon/dungeon-id.h"
+#include "term/z-form.h"
 #include "term/z-rand.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
@@ -29,11 +30,14 @@ int DungeonRecord::get_max_max_level() const
 
 void DungeonRecord::set_max_level(int level)
 {
-    if (!this->max_max_level || (level > this->max_max_level)) {
-        this->max_max_level = level;
+    if (level <= 0) {
+        THROW_EXCEPTION(std::logic_error, format("Invalid dungeon level: %d", level));
     }
 
     this->max_level = level;
+    if (!this->max_max_level || (level > this->max_max_level)) {
+        this->max_max_level = level;
+    }
 }
 
 void DungeonRecord::reset()
@@ -135,12 +139,12 @@ void DungeonRecords::reset_all()
 
 std::vector<DungeonId> DungeonRecords::collect_entered_dungeon_ids() const
 {
-    std::vector<DungeonId> entered_dungeons;
+    std::vector<DungeonId> ids;
     for (const auto &[dungeon_id, record] : this->records) {
         if (record->has_entered()) {
-            entered_dungeons.push_back(dungeon_id);
+            ids.push_back(dungeon_id);
         }
     }
 
-    return entered_dungeons;
+    return ids;
 }
