@@ -39,7 +39,7 @@ private:
     BaseitemList() = default;
 
     static BaseitemList instance;
-    std::vector<BaseitemDefinition> baseitems{};
+    std::vector<BaseitemDefinition> baseitems;
 
     std::vector<BaseitemDefinition> &get_inner_container() override
     {
