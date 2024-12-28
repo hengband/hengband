@@ -77,21 +77,16 @@ bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, 
 }
 
 /*!
- * @brief モンスターが敵対モンスターに直接ブレスを当てることが可能かを判定する /
- * Determine if a breath will hit the target.
- * @param y1 始点のY座標
- * @param x1 始点のX座標
- * @param y2 目標のY座標
- * @param x2 目標のX座標
+ * @brief モンスターが敵対モンスターに直接ブレスを当てることが可能かを判定する
+ * @param pos_source 始点座標
+ * @param pos_target 目標座標
  * @param rad 半径
  * @param typ 効果属性ID
  * @param is_friend TRUEならば、プレイヤーを巻き込む時にブレスの判定をFALSEにする。
  * @return ブレスを直接当てられるならばTRUEを返す
  */
-bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, AttributeType typ, bool is_friend)
+bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D &pos_target, int rad, AttributeType typ, bool is_friend)
 {
-    const Pos2D pos_source(y1, x1);
-    const Pos2D pos_target(y2, x2);
     BIT_FLAGS flg;
     switch (typ) {
     case AttributeType::LITE:
@@ -109,7 +104,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
     auto &floor = *player_ptr->current_floor_ptr;
     ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), pos_source, pos_target, flg);
     auto path_n = 0;
-    auto pos_breath = pos_source;
+    Pos2D pos_breath = pos_source;
     for (const auto &pos : grid_g) {
         if (flg & PROJECT_DISI) {
             if (cave_stop_disintegration(&floor, pos.y, pos.x)) {
@@ -134,24 +129,24 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
     if (path_n == 0) {
         const auto p_pos = player_ptr->get_position();
         if (flg & PROJECT_DISI) {
-            if (in_disintegration_range(&floor, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) {
+            if (in_disintegration_range(&floor, pos_source.y, pos_source.x, pos_target.y, pos_target.x) && (distance(pos_source.y, pos_source.x, pos_target.y, pos_target.x) <= rad)) {
                 hit2 = true;
             }
-            if (in_disintegration_range(&floor, y1, x1, p_pos.y, p_pos.x) && (distance(y1, x1, p_pos.y, p_pos.x) <= rad)) {
+            if (in_disintegration_range(&floor, pos_source.y, pos_source.x, p_pos.y, p_pos.x) && (distance(pos_source.y, pos_source.x, p_pos.y, p_pos.x) <= rad)) {
                 hityou = true;
             }
         } else if (flg & PROJECT_LOS) {
-            if (los(player_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) {
+            if (los(player_ptr, pos_source.y, pos_source.x, pos_target.y, pos_target.x) && (distance(pos_source.y, pos_source.x, pos_target.y, pos_target.x) <= rad)) {
                 hit2 = true;
             }
-            if (los(player_ptr, y1, x1, p_pos.y, p_pos.x) && (distance(y1, x1, p_pos.y, p_pos.x) <= rad)) {
+            if (los(player_ptr, pos_source.y, pos_source.x, p_pos.y, p_pos.x) && (distance(pos_source.y, pos_source.x, p_pos.y, p_pos.x) <= rad)) {
                 hityou = true;
             }
         } else {
-            if (projectable(player_ptr, pos_source, pos_target) && (distance(y1, x1, y2, x2) <= rad)) {
+            if (projectable(player_ptr, pos_source, pos_target) && (distance(pos_source.y, pos_source.x, pos_target.y, pos_target.x) <= rad)) {
                 hit2 = true;
             }
-            if (projectable(player_ptr, pos_source, p_pos) && (distance(y1, x1, p_pos.y, p_pos.x) <= rad)) {
+            if (projectable(player_ptr, pos_source, p_pos) && (distance(pos_source.y, pos_source.x, p_pos.y, p_pos.x) <= rad)) {
                 hityou = true;
             }
         }
@@ -164,7 +159,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
         breath_shape(player_ptr, grid_g, path_n, &grids, std::span(positions.begin(), positions.size()), gm, &gm_rad, rad, pos_source, pos_breath, typ);
         for (auto i = 0; i < grids; i++) {
             const auto &position = positions[i];
-            if ((position.y == y2) && (position.x == x2)) {
+            if (position == pos_target) {
                 hit2 = true;
             }
             if (player_ptr->is_located_at(position)) {
