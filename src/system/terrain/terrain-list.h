@@ -36,7 +36,7 @@ private:
     TerrainList() = default;
 
     static TerrainList instance;
-    std::vector<TerrainType> terrains{};
+    std::vector<TerrainType> terrains;
     std::map<TerrainTag, short> tags; //!< @details 全てのTerrainTag を繰り込んだら、terrains からlookupが可能になる. そうなったら削除する.
 
     std::vector<TerrainType> &get_inner_container() override

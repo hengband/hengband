@@ -25,6 +25,8 @@ constexpr auto INVALID_BASEITEM_KEY = "Invalid Baseitem Key is specified! Type: 
 
 BaseitemList BaseitemList::instance{};
 
+BaseitemList::~BaseitemList() = default;
+
 BaseitemList &BaseitemList::get_instance()
 {
     return instance;

@@ -21,7 +21,7 @@ public:
     BaseitemList(const BaseitemList &) = delete;
     BaseitemList &operator=(const BaseitemList &) = delete;
     BaseitemList &operator=(BaseitemList &&) = delete;
-    ~BaseitemList() = default;
+    ~BaseitemList();
 
     static BaseitemList &get_instance();
     BaseitemDefinition &get_baseitem(const short bi_id);
@@ -39,7 +39,7 @@ private:
     BaseitemList() = default;
 
     static BaseitemList instance;
-    std::vector<BaseitemDefinition> baseitems{};
+    std::vector<BaseitemDefinition> baseitems;
 
     std::vector<BaseitemDefinition> &get_inner_container() override
     {
