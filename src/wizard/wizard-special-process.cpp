@@ -473,13 +473,13 @@ void wiz_create_feature(PlayerType *player_ptr)
  */
 static std::optional<DungeonId> select_debugging_dungeon(DungeonId initial_dungeon_id)
 {
-    constexpr auto angband = enum2i(DungeonId::ANGBAND);
-    constexpr auto max_valid_id = enum2i(DungeonId::MAX) - 1;
+    constexpr auto min_dungeon_id = enum2i(DungeonId::WILDERNESS);
+    constexpr auto max_dungeon_id = enum2i(DungeonId::MAX) - 1;
     if (command_arg > 0) {
-        return i2enum<DungeonId>(std::clamp(static_cast<int>(command_arg), angband, max_valid_id));
+        return i2enum<DungeonId>(std::clamp(static_cast<int>(command_arg), min_dungeon_id, max_dungeon_id));
     }
 
-    return input_numerics("Jump which dungeon", angband, max_valid_id, initial_dungeon_id);
+    return input_numerics("Jump which dungeon", min_dungeon_id, max_dungeon_id, initial_dungeon_id);
 }
 
 /*
@@ -493,7 +493,7 @@ static std::optional<int> select_debugging_floor(const FloorType &floor, Dungeon
     const auto &dungeon = DungeonList::get_instance().get_dungeon(dungeon_id);
     const auto max_depth = dungeon.maxdepth;
     const auto min_depth = dungeon.mindepth;
-    const auto is_current_dungeon = floor.dungeon_idx == dungeon_id;
+    const auto is_current_dungeon = floor.dungeon_id == dungeon_id;
     auto initial_depth = floor.dun_level;
     if (!is_current_dungeon) {
         initial_depth = min_depth;
@@ -540,9 +540,9 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto is_in_dungeon = floor.is_underground();
-    const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : DungeonId::ANGBAND;
-    const auto dungeon_id = select_debugging_dungeon(dungeon_idx);
-    if (!dungeon_id) {
+    const auto current_dungeon_id = is_in_dungeon ? floor.dungeon_id : DungeonId::ANGBAND;
+    const auto dungeon_id = select_debugging_dungeon(current_dungeon_id);
+    if (!dungeon_id || (dungeon_id == DungeonId::WILDERNESS)) {
         if (!is_in_dungeon) {
             return;
         }
@@ -836,8 +836,8 @@ void cheat_death(PlayerType *player_ptr)
     AngbandSystem::get_instance().set_phase_out(false);
     leaving_quest = QuestId::NONE;
     floor.quest_number = QuestId::NONE;
-    if (floor.dungeon_idx > DungeonId::WILDERNESS) {
-        player_ptr->recall_dungeon = floor.dungeon_idx;
+    if (floor.is_underground()) {
+        player_ptr->recall_dungeon = floor.dungeon_id;
     }
 
     floor.reset_dungeon_index();

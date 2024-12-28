@@ -423,7 +423,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
         return true;
     }
 
-    auto &dungeon_record = DungeonRecords::get_instance().get_record(floor.dungeon_idx);
+    auto &dungeon_record = DungeonRecords::get_instance().get_record(floor.dungeon_id);
     auto is_special_floor = floor.is_underground();
     is_special_floor &= dungeon_record.get_max_level() > floor.dun_level;
     is_special_floor &= !floor.is_in_quest();
@@ -432,7 +432,7 @@ bool recall_player(PlayerType *player_ptr, TIME_EFFECT turns)
         if (input_check(_("ここは最深到達階より浅い階です。この階に戻って来ますか？ ", "Reset recall depth? "))) {
             dungeon_record.set_max_level(floor.dun_level);
             if (record_maxdepth) {
-                exe_write_diary(floor, DiaryKind::TRUMP, enum2i(floor.dungeon_idx), _("帰還のときに", "when recalled from dungeon"));
+                exe_write_diary(floor, DiaryKind::TRUMP, enum2i(floor.dungeon_id), _("帰還のときに", "when recalled from dungeon"));
             }
         }
     }

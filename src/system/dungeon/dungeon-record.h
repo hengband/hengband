@@ -59,6 +59,7 @@ public:
     void reset_all();
 
     int find_max_level() const;
+    int decide_gradiator_level() const;
     std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf) const;
     std::vector<DungeonId> collect_entered_dungeon_ids() const;
     std::pair<std::shared_ptr<DungeonRecord>, std::shared_ptr<DungeonDefinition>> get_dungeon_pair(DungeonId dungeon_id) const;
