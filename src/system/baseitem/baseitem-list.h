@@ -21,7 +21,7 @@ public:
     BaseitemList(const BaseitemList &) = delete;
     BaseitemList &operator=(const BaseitemList &) = delete;
     BaseitemList &operator=(BaseitemList &&) = delete;
-    ~BaseitemList() = default;
+    ~BaseitemList();
 
     static BaseitemList &get_instance();
     BaseitemDefinition &get_baseitem(const short bi_id);
