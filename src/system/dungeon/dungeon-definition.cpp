@@ -123,6 +123,32 @@ std::string DungeonDefinition::describe_depth() const
     return format(_("%s(%d階相当)", "%s(level %d)"), this->text.data(), this->mindepth);
 }
 
+/*
+ * @brief 洞窟らしい地形 (湖、溶岩、瓦礫、森林)の個数を決める
+ * @return 地形の個数
+ */
+int DungeonDefinition::calc_cavern_terrains() const
+{
+    auto count = 0;
+    if (this->flags.has(DungeonFeatureType::LAKE_WATER)) {
+        count += 3;
+    }
+
+    if (this->flags.has(DungeonFeatureType::LAKE_LAVA)) {
+        count += 3;
+    }
+
+    if (this->flags.has(DungeonFeatureType::LAKE_RUBBLE)) {
+        count += 3;
+    }
+
+    if (this->flags.has(DungeonFeatureType::LAKE_TREE)) {
+        count += 3;
+    }
+
+    return count;
+}
+
 void DungeonDefinition::set_guardian_flag()
 {
     if (this->has_guardian()) {

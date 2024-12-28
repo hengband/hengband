@@ -18,41 +18,14 @@
 #include "system/player-type-definition.h"
 #include "wizard/wizard-messages.h"
 
-/*
- * @brief 洞窟らしい地形 (湖、溶岩、瓦礫、森林)の個数を決める
- * @param d_ref ダンジョンへの参照
- * @return briefで定義した個数
- */
-static int calc_cavern_terrains(const DungeonDefinition &d_ref)
-{
-    auto count = 0;
-    if (d_ref.flags.has(DungeonFeatureType::LAKE_WATER)) {
-        count += 3;
-    }
-
-    if (d_ref.flags.has(DungeonFeatureType::LAKE_LAVA)) {
-        count += 3;
-    }
-
-    if (d_ref.flags.has(DungeonFeatureType::LAKE_RUBBLE)) {
-        count += 3;
-    }
-
-    if (d_ref.flags.has(DungeonFeatureType::LAKE_TREE)) {
-        count += 3;
-    }
-
-    return count;
-}
-
-static bool decide_cavern(const FloorType &floor, const DungeonDefinition &dungeon_ref, const DungeonData &dd_ref)
+static bool decide_cavern(const FloorType &floor, const DungeonDefinition &dungeon, const DungeonData &dd)
 {
     constexpr auto can_become_cavern = 20;
     auto should_build_cavern = floor.dun_level > can_become_cavern;
-    should_build_cavern &= !dd_ref.empty_level;
-    should_build_cavern &= dungeon_ref.flags.has(DungeonFeatureType::CAVERN);
-    should_build_cavern &= dd_ref.laketype == 0;
-    should_build_cavern &= !dd_ref.destroyed;
+    should_build_cavern &= !dd.empty_level;
+    should_build_cavern &= dungeon.flags.has(DungeonFeatureType::CAVERN);
+    should_build_cavern &= dd.laketype == 0;
+    should_build_cavern &= !dd.destroyed;
     should_build_cavern &= randint1(1000) < floor.dun_level;
     return should_build_cavern;
 }
@@ -71,7 +44,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
 
     constexpr auto chance_water = 24;
     if (one_in_(chance_water) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
-        auto count = calc_cavern_terrains(*dungeon_ptr);
+        auto count = dungeon_ptr->calc_cavern_terrains();
         if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_LAVA)) {
             if ((floor.dun_level > 80) && (randint0(count) < 2)) {
                 dd_ptr->laketype = LAKE_T_LAVA;
