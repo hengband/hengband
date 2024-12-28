@@ -15,4 +15,5 @@ enum class TerrainTag {
     UP_STAIR,
     DOWN_STAIR,
     ENTRANCE,
+    RUBBLE,
 };

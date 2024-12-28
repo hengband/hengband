@@ -6,10 +6,10 @@
 #include "floor/floor-generator-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
-#include "grid/feature.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -204,7 +204,7 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
 
         switch (typ) {
         case ALLOC_TYP_RUBBLE:
-            floor.set_terrain_id(pos, feat_rubble);
+            floor.set_terrain_id(pos, TerrainTag::RUBBLE);
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_TRAP:

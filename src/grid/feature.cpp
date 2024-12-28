@@ -28,9 +28,6 @@ FEAT_IDX feat_trap_open;
 FEAT_IDX feat_trap_armageddon;
 FEAT_IDX feat_trap_piranha;
 
-/* Rubble */
-FEAT_IDX feat_rubble;
-
 /* Seams */
 FEAT_IDX feat_magma_vein;
 FEAT_IDX feat_quartz_vein;

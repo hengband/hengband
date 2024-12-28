@@ -8,7 +8,6 @@
 extern FEAT_IDX feat_trap_open;
 extern FEAT_IDX feat_trap_armageddon;
 extern FEAT_IDX feat_trap_piranha;
-extern FEAT_IDX feat_rubble;
 extern FEAT_IDX feat_magma_vein;
 extern FEAT_IDX feat_quartz_vein;
 extern FEAT_IDX feat_granite;

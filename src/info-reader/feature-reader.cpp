@@ -352,9 +352,6 @@ void init_feat_variables()
     feat_trap_armageddon = terrains.get_terrain_id_by_tag("TRAP_ARMAGEDDON");
     feat_trap_piranha = terrains.get_terrain_id_by_tag("TRAP_PIRANHA");
 
-    /* Rubble */
-    feat_rubble = terrains.get_terrain_id_by_tag("RUBBLE");
-
     /* Seams */
     feat_magma_vein = terrains.get_terrain_id_by_tag("MAGMA_VEIN");
     feat_quartz_vein = terrains.get_terrain_id_by_tag("QUARTZ_VEIN");

@@ -12,10 +12,12 @@
 #include "grid/grid.h"
 #include "room/lake-types.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/point-2d.h"
 #include <queue>
 
@@ -399,9 +401,13 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
 
 bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type)
 {
-    short feat1, feat2, feat3;
+    const auto &terrains = TerrainList::get_instance();
+    const auto terrain_id_rubble = terrains.get_terrain_id(TerrainTag::RUBBLE);
     const auto xhsize = xsize / 2;
     const auto yhsize = ysize / 2;
+    short feat1;
+    short feat2;
+    short feat3;
     switch (type) {
     case LAKE_T_LAVA: /* Lava */
         feat1 = feat_deep_lava;
@@ -416,12 +422,12 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
     case LAKE_T_CAVE: /* Collapsed floor_ptr->grid_array */
         feat1 = rand_choice(feat_ground_type);
         feat2 = rand_choice(feat_ground_type);
-        feat3 = feat_rubble;
+        feat3 = terrain_id_rubble;
         break;
     case LAKE_T_EARTH_VAULT: /* Earth vault */
-        feat1 = feat_rubble;
+        feat1 = terrain_id_rubble;
         feat2 = rand_choice(feat_ground_type);
-        feat3 = feat_rubble;
+        feat3 = terrain_id_rubble;
         break;
     case LAKE_T_AIR_VAULT: /* Air vault */
         feat1 = feat_grass;
