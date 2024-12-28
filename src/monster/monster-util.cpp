@@ -283,7 +283,7 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
         }
 
         // 生成制約関数が偽を返したら生成禁止。
-        if ((hook1 && !hook1(player_ptr, monrace_id))) {
+        if (hook1 && !hook1(player_ptr, monrace_id)) {
             continue;
         }
 
@@ -314,14 +314,14 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             //   * 1階かそれより深いところにいる
             //   * ランダムクエスト中でない
             const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
-            const auto cond = !system.is_phase_out() && dungeon_level > 0 && !in_random_quest;
+            const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
             if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, summon_specific_type.has_value(), is_chameleon_polymorph)) {
                 // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
                 // 丸めは確率的に行う。
                 const int numer = entry.prob2 * dungeon.special_div;
                 const int q = numer / 64;
                 const int r = numer % 64;
-                entry.prob2 = (PROB)(randint0(64) < r ? q + 1 : q);
+                entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
             }
         }
 
@@ -356,7 +356,39 @@ void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1
  */
 void get_mon_num_prep_chameleon(PlayerType *player_ptr, const monsterrace_hook_type &hook)
 {
-    do_get_mon_num_prep(player_ptr, hook, MonraceHookTerrain::NONE, true, std::nullopt, true);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_level = floor.dun_level;
+    const auto &system = AngbandSystem::get_instance();
+    auto &table = MonraceAllocationTable::get_instance();
+    const auto &dungeon = floor.get_dungeon_definition();
+    MonraceFilterDebugInfo mfdi;
+    for (auto &entry : table) {
+        const auto monrace_id = entry.index;
+        entry.prob2 = 0;
+        if (entry.prob1 <= 0) {
+            continue;
+        }
+
+        if (!hook(player_ptr, monrace_id)) {
+            continue;
+        }
+
+        entry.prob2 = entry.prob1;
+        const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+        const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, true)) {
+            const int numer = entry.prob2 * dungeon.special_div;
+            const int q = numer / 64;
+            const int r = numer % 64;
+            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+        }
+
+        mfdi.update(entry.prob2, entry.level);
+    }
+
+    if (cheat_hear) {
+        msg_print(mfdi.to_string());
+    }
 }
 
 /*!
