@@ -360,7 +360,7 @@ void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 対象にできるならtrueを返す
  */
-static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonraceId r_idx, short m_idx, const Grid &grid, std::optional<short> summoner_m_idx)
+static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonraceId r_idx, short m_idx, short terrain_id, std::optional<short> summoner_m_idx)
 {
     const auto &monraces = MonraceList::get_instance();
     const auto &monrace = monraces.get_monrace(r_idx);
@@ -380,7 +380,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonraceId r_idx,
         return false;
     }
 
-    if (!monster_can_cross_terrain(player_ptr, grid.feat, &monrace, 0)) {
+    if (!monster_can_cross_terrain(player_ptr, terrain_id, &monrace, 0)) {
         return false;
     }
 
@@ -404,7 +404,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonraceId r_idx,
  * @return 対象にできるならtrueを返す
  * @todo グローバル変数対策の上 monster_hook.cへ移す。
  */
-static bool monster_hook_chameleon(PlayerType *player_ptr, MonraceId r_idx, short m_idx, const Grid &grid, std::optional<short> summoner_m_idx)
+static bool monster_hook_chameleon(PlayerType *player_ptr, MonraceId r_idx, short m_idx, short terrain_id, std::optional<short> summoner_m_idx)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
@@ -423,7 +423,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonraceId r_idx, shor
         return false;
     }
 
-    if (!monster_can_cross_terrain(player_ptr, grid.feat, &monrace, 0)) {
+    if (!monster_can_cross_terrain(player_ptr, terrain_id, &monrace, 0)) {
         return false;
     }
 
@@ -454,12 +454,12 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonraceId r_idx, shor
  * @brief モンスター生成テーブルの重み修正(カメレオン変身専用)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx カメレオンのフロア内インデックス
- * @param grid カメレオンの足元グリッド
+ * @param terrain_id カメレオンの足元にある地形のID
  * @param summoner_m_idx 召喚者のモンスターインデックス
  * @param is_unique ユニークであるか否か (実質、カメレオンの王であるか否か)
  * @details get_mon_num() を呼ぶ前に get_mon_num_prep 系関数のいずれかを呼ぶこと。
  */
-void get_mon_num_prep_chameleon(PlayerType *player_ptr, short m_idx, const Grid &grid, const std::optional<short> summoner_m_idx, bool is_unique)
+void get_mon_num_prep_chameleon(PlayerType *player_ptr, short m_idx, short terrain_id, const std::optional<short> summoner_m_idx, bool is_unique)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto dungeon_level = floor.dun_level;
@@ -475,7 +475,7 @@ void get_mon_num_prep_chameleon(PlayerType *player_ptr, short m_idx, const Grid 
             continue;
         }
 
-        if (!hook_func(player_ptr, monrace_id, m_idx, grid, summoner_m_idx)) {
+        if (!hook_func(player_ptr, monrace_id, m_idx, terrain_id, summoner_m_idx)) {
             continue;
         }
 

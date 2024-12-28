@@ -71,6 +71,7 @@ public:
     std::map<GridFlow, uint8_t> dists; //!< Distance from player
     byte when{}; /* Hack -- when cost was computed */
 
+    short get_terrain_id(TerrainKind tk = TerrainKind::NORMAL) const;
     bool is_floor() const;
     bool is_room() const;
     bool is_extra() const;

@@ -15,6 +15,20 @@ Grid::Grid()
     }
 }
 
+short Grid::get_terrain_id(TerrainKind tk) const
+{
+    switch (tk) {
+    case TerrainKind::NORMAL:
+        return this->feat;
+    case TerrainKind::MIMIC:
+        return this->get_feat_mimic();
+    case TerrainKind::MIMIC_RAW:
+        return this->mimic;
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid terrain kind is specified! %d", enum2i(tk)));
+    }
+}
+
 /*!
  * @brief 指定座標がFLOOR属性を持ったマスかどうかを返す
  * @param Y 指定Y座標
