@@ -14,4 +14,5 @@ enum class TerrainTag {
     MIRROR,
     UP_STAIR,
     DOWN_STAIR,
+    ENTRANCE,
 };

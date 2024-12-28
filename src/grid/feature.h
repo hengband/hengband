@@ -5,7 +5,6 @@
 #include <vector>
 
 /*** Terrain feature variables ***/
-extern FEAT_IDX feat_entrance;
 extern FEAT_IDX feat_trap_open;
 extern FEAT_IDX feat_trap_armageddon;
 extern FEAT_IDX feat_trap_piranha;

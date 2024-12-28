@@ -23,9 +23,6 @@
 
 /*** Terrain feature variables ***/
 
-/* Stairs */
-FEAT_IDX feat_entrance;
-
 /* Special traps */
 FEAT_IDX feat_trap_open;
 FEAT_IDX feat_trap_armageddon;

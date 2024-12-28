@@ -397,7 +397,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
     Xoshiro128StarStar wilderness_rng(wilderness_grid.seed);
     system.set_rng(wilderness_rng);
     const Pos2D pos_entrance(rand_range(6, floor.height - 6), rand_range(6, floor.width - 6));
-    floor.get_grid(pos_entrance).feat = feat_entrance;
+    floor.get_grid(pos_entrance).set_terrain_id(TerrainTag::ENTRANCE);
     floor.get_grid(pos_entrance).special = static_cast<short>(wilderness_grid.entrance);
     system.set_rng(rng_backup);
 }
@@ -648,7 +648,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
 
             const auto entrance = wild_grid.entrance;
             if ((entrance > DungeonId::WILDERNESS) && (world.total_winner || dungeons.get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER))) {
-                grid.feat = feat_entrance;
+                grid.set_terrain_id(TerrainTag::ENTRANCE);
                 grid.special = static_cast<short>(entrance);
                 grid.info |= (CAVE_GLOW | CAVE_MARK);
                 continue;
