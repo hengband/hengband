@@ -300,13 +300,17 @@ void do_cmd_go_down(PlayerType *player_ptr)
         down_num = dungeon.mindepth;
     }
 
-    if (record_stair) {
+    if (record_stair && !floor.is_in_quest()) {
         const auto note = is_fall_trap ? _("落とし戸に落ちた", "fell through a trap door") : _("階段を下りた", "climbed down the stairs to");
         exe_write_diary(floor, DiaryKind::STAIR, down_num, note);
     }
 
     if (is_fall_trap) {
         msg_print(_("わざと落とし戸に落ちた。", "You deliberately jump through the trap door."));
+        if (floor.is_in_quest()) {
+            msg_print(_("しかし何も起こらなかった。", "But, nothing happens."));
+            return;
+        }
     } else {
         if (dungeon_id > DungeonId::WILDERNESS) {
             msg_format(_("%sへ入った。", "You entered %s."), dungeon.text.data());
