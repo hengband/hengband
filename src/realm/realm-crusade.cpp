@@ -457,12 +457,13 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             auto sp_sides = 20 + plev;
             auto sp_base = plev;
             crusade(player_ptr);
+            const auto p_pos = player_ptr->get_position();
             for (auto i = 0; i < 12; i++) {
                 auto attempt = 10;
-                POSITION my = 0, mx = 0;
+                Pos2D pos(0, 0);
                 while (attempt--) {
-                    scatter(player_ptr, &my, &mx, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-                    if (is_cave_empty_bold2(player_ptr, my, mx)) {
+                    pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
+                    if (is_cave_empty_bold2(player_ptr, pos.y, pos.x)) {
                         break;
                     }
                 }
@@ -471,7 +472,7 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
                     continue;
                 }
 
-                summon_specific(player_ptr, my, mx, plev, SUMMON_KNIGHTS, PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE);
+                summon_specific(player_ptr, pos.y, pos.x, plev, SUMMON_KNIGHTS, PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE);
             }
 
             set_hero(player_ptr, randint1(base) + base, false);

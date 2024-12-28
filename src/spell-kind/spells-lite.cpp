@@ -377,14 +377,13 @@ bool starlight(PlayerType *player_ptr, bool magic)
         msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
     }
 
-    int num = Dice::roll(5, 3);
-    auto y = 0;
-    auto x = 0;
-    for (int k = 0; k < num; k++) {
+    const auto p_pos = player_ptr->get_position();
+    const auto num = Dice::roll(5, 3);
+    for (auto k = 0; k < num; k++) {
+        Pos2D pos(0, 0);
         auto attempts = 1000;
         while (attempts--) {
-            scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_LOS);
-            const Pos2D pos(y, x);
+            pos = scatter(player_ptr, p_pos, 4, PROJECT_LOS);
             if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
@@ -395,7 +394,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
         }
 
         constexpr uint flags = PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL | PROJECT_LOS;
-        project(player_ptr, 0, 0, y, x, Dice::roll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK, flags);
+        project(player_ptr, 0, 0, pos.y, pos.x, Dice::roll(6 + player_ptr->lev / 8, 10), AttributeType::LITE_WEAK, flags);
     }
 
     return true;

@@ -78,26 +78,27 @@ static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 }
 
-static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_monster, POSITION *cy, POSITION *cx)
+static std::pair<short, Pos2D> decide_pet_index(PlayerType *player_ptr, const int current_monster)
 {
     auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    Pos2D pos(0, 0);
     if (current_monster == 0) {
         const auto m_idx = floor.pop_empty_index_monster();
         player_ptr->riding = m_idx;
         if (m_idx) {
-            *cy = player_ptr->y;
-            *cx = player_ptr->x;
+            pos = p_pos;
         }
 
-        return m_idx;
+        return { m_idx, pos };
     }
 
-    POSITION d;
+    int d;
     for (d = 1; d < A_MAX; d++) {
         int j;
         for (j = 1000; j > 0; j--) {
-            scatter(player_ptr, cy, cx, player_ptr->y, player_ptr->x, d, PROJECT_NONE);
-            if (monster_can_enter(player_ptr, *cy, *cx, &party_mon[current_monster].get_monrace(), 0)) {
+            pos = scatter(player_ptr, p_pos, d, PROJECT_NONE);
+            if (monster_can_enter(player_ptr, pos.y, pos.x, &party_mon[current_monster].get_monrace(), 0)) {
                 break;
             }
         }
@@ -107,7 +108,8 @@ static MONSTER_IDX decide_pet_index(PlayerType *player_ptr, const int current_mo
         }
     }
 
-    return (d == 6) ? 0 : floor.pop_empty_index_monster();
+    const short m_idx = (d == 6) ? 0 : floor.pop_empty_index_monster();
+    return { m_idx, pos };
 }
 
 static MonraceDefinition &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
@@ -140,18 +142,16 @@ static void place_pet(PlayerType *player_ptr)
     const auto max_num = AngbandWorld::get_instance().is_wild_mode() ? 1 : MAX_PARTY_MON;
     auto &floor = *player_ptr->current_floor_ptr;
     for (int current_monster = 0; current_monster < max_num; current_monster++) {
-        POSITION cy = 0;
-        POSITION cx = 0;
         if (!MonraceList::is_valid(party_mon[current_monster].r_idx)) {
             continue;
         }
 
-        MONSTER_IDX m_idx = decide_pet_index(player_ptr, current_monster, &cy, &cx);
+        const auto &[m_idx, pos] = decide_pet_index(player_ptr, current_monster);
         if (m_idx != 0) {
-            auto &r_ref = set_pet_params(player_ptr, current_monster, m_idx, cy, cx);
+            const auto &monrace = set_pet_params(player_ptr, current_monster, m_idx, pos.y, pos.x);
             update_monster(player_ptr, m_idx, true);
-            lite_spot(player_ptr, cy, cx);
-            if (r_ref.misc_flags.has(MonsterMiscType::MULTIPLY)) {
+            lite_spot(player_ptr, pos.y, pos.x);
+            if (monrace.misc_flags.has(MonsterMiscType::MULTIPLY)) {
                 floor.num_repro++;
             }
         } else {

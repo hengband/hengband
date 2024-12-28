@@ -366,8 +366,6 @@ bool set_superstealth(PlayerType *player_ptr, bool set)
  */
 bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
 {
-    POSITION x = 0, y = 0;
-    DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
     auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
     switch (spell) {
@@ -411,13 +409,15 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         }
 
         break;
-    case MindNinjaType::BIND_MONSTER:
+    case MindNinjaType::BIND_MONSTER: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         (void)stasis_monster(player_ptr, dir);
         break;
+    }
     case MindNinjaType::ANCIENT_KNOWLEDGE:
         return ident_spell(player_ptr, false);
     case MindNinjaType::FLOATING:
@@ -459,15 +459,18 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
     case MindNinjaType::CHAIN_HOOK:
         (void)fetch_monster(player_ptr);
         break;
-    case MindNinjaType::SMOKE_BALL:
+    case MindNinjaType::SMOKE_BALL: {
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             return false;
         }
 
         fire_ball(player_ptr, AttributeType::OLD_CONF, dir, plev * 3, 3);
         break;
-    case MindNinjaType::SWAP_POSITION:
+    }
+    case MindNinjaType::SWAP_POSITION: {
         project_length = -1;
+        int dir;
         if (!get_aim_dir(player_ptr, &dir)) {
             project_length = 0;
             return false;
@@ -476,6 +479,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         project_length = 0;
         (void)teleport_swap(player_ptr, dir);
         break;
+    }
     case MindNinjaType::EXPLOSIVE_RUNE:
         create_rune_explosion(player_ptr, player_ptr->y, player_ptr->x);
         break;
@@ -490,19 +494,21 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         break;
     case MindNinjaType::PURGATORY_FLAME: {
-        int num = Dice::roll(3, 9);
-        for (int k = 0; k < num; k++) {
-            AttributeType typ = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER
-                                                                              : AttributeType::PLASMA;
-            int attempts = 1000;
+        const auto num = Dice::roll(3, 9);
+        for (auto k = 0; k < num; k++) {
+            const auto type = one_in_(2) ? AttributeType::FIRE : one_in_(3) ? AttributeType::NETHER
+                                                                            : AttributeType::PLASMA;
+            auto attempts = 1000;
+            Pos2D pos(0, 0);
             while (attempts--) {
-                scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-                if (!player_ptr->is_located_at({ y, x })) {
+                pos = scatter(player_ptr, player_ptr->get_position(), 4, PROJECT_NONE);
+                if (!player_ptr->is_located_at(pos)) {
                     break;
                 }
             }
 
-            project(player_ptr, 0, 0, y, x, Dice::roll(6 + plev / 8, 10), typ, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL));
+            const uint32_t flags = PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL;
+            project(player_ptr, 0, 0, pos.y, pos.x, Dice::roll(6 + plev / 8, 10), type, flags);
         }
 
         break;

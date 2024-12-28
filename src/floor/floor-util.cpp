@@ -155,35 +155,31 @@ void wipe_o_list(FloorType *floor_ptr)
  *
  * Currently the "m" parameter is unused.
  */
-void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
+Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode)
 {
-    const Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
-    POSITION nx, ny;
     while (true) {
-        ny = rand_spread(y, d);
-        nx = rand_spread(x, d);
+        const auto ny = rand_spread(pos.y, d);
+        const auto nx = rand_spread(pos.x, d);
         const Pos2D pos_neighbor(ny, nx);
-        if (!in_bounds(&floor, ny, nx)) {
+        if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
-        if ((d > 1) && (distance(y, x, ny, nx) > d)) {
+        if ((d > 1) && (distance(pos.y, pos.x, pos_neighbor.y, pos_neighbor.x) > d)) {
             continue;
         }
         if (mode & PROJECT_LOS) {
-            if (los(player_ptr, y, x, ny, nx)) {
-                break;
+            if (los(player_ptr, pos.y, pos.x, pos_neighbor.y, pos_neighbor.x)) {
+                return pos_neighbor;
             }
+
             continue;
         }
 
-        if (projectable(player_ptr, { y, x }, pos_neighbor)) {
-            break;
+        if (projectable(player_ptr, pos, pos_neighbor)) {
+            return pos_neighbor;
         }
     }
-
-    *yp = ny;
-    *xp = nx;
 }
 
 /*!

@@ -2736,32 +2736,28 @@ bool player_place(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void wreck_the_pattern(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    const auto &terrain = floor_ptr->get_grid(p_pos).get_terrain();
+    const auto &terrain = floor.get_grid(p_pos).get_terrain();
     if (terrain.subtype == PATTERN_TILE_WRECKED) {
         return;
     }
 
     msg_print(_("パターンを血で汚してしまった！", "You bleed on the Pattern!"));
     msg_print(_("何か恐ろしい事が起こった！", "Something terrible happens!"));
-
     if (!is_invuln(player_ptr)) {
         take_hit(player_ptr, DAMAGE_NOESCAPE, Dice::roll(10, 8), _("パターン損壊", "corrupting the Pattern"));
     }
 
     auto to_ruin = randint1(45) + 35;
     while (to_ruin--) {
-        int y;
-        int x;
-        scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-        const Pos2D pos(y, x);
-        if (pattern_tile(floor_ptr, pos.y, pos.x) && (floor_ptr->get_grid(pos).get_terrain().subtype != PATTERN_TILE_WRECKED)) {
+        const auto pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
+        if (pattern_tile(&floor, pos.y, pos.x) && (floor.get_grid(pos).get_terrain().subtype != PATTERN_TILE_WRECKED)) {
             cave_set_feat(player_ptr, pos.y, pos.x, feat_pattern_corrupted);
         }
     }
 
-    cave_set_feat(player_ptr, player_ptr->y, player_ptr->x, feat_pattern_corrupted);
+    cave_set_feat(player_ptr, p_pos.y, p_pos.x, feat_pattern_corrupted);
 }
 
 /*!
