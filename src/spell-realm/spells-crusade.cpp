@@ -26,6 +26,7 @@
 #include "target/target-getter.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <cmath>
 
 /*!
  * @brief 破邪魔法「神の怒り」の処理としてターゲットを指定した後分解のボールを最大20回発生させる。
@@ -41,13 +42,13 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
         return false;
     }
 
-    Pos2D pos_target(player_ptr->y + 99 * ddy[dir], player_ptr->x + 99 * ddx[dir]);
+    const auto p_pos = player_ptr->get_position();
+    auto pos_target = p_pos + Pos2DVec(99 * ddy[dir], 99 * ddx[dir]);
     if ((dir == 5) && target_okay(player_ptr)) {
-        pos_target.x = target_col;
-        pos_target.y = target_row;
+        pos_target = { target_col, target_row };
     }
 
-    Pos2D pos = player_ptr->get_position();
+    auto pos = p_pos;
     auto &floor = *player_ptr->current_floor_ptr;
     while (true) {
         if (pos == pos_target) {
@@ -72,16 +73,15 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
     const auto b = 10 + randint1(10);
     for (auto i = 0; i < b; i++) {
         auto count = 20;
-        Pos2D pos_explode(pos_target.x, pos_target.y);
+        auto pos_explode = pos_target;
         while (count--) {
-            const auto x = pos_target.x - 5 + randint0(11);
             const auto y = pos_target.y - 5 + randint0(11);
-            const auto dx = (pos_target.x > x) ? (pos_target.x - x) : (x - pos_target.x);
-            const auto dy = (pos_target.y > y) ? (pos_target.y - y) : (y - pos_target.y);
+            const auto x = pos_target.x - 5 + randint0(11);
+            const auto dy = std::abs(pos_target.y - y);
+            const auto dx = std::abs(pos_target.x - x);
             const auto d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
             if (d < 5) {
-                pos_explode.x = x;
-                pos_explode.y = y;
+                pos_explode = { y, x };
                 break;
             }
         }
