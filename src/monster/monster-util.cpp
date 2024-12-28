@@ -21,6 +21,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "wizard/monrace-filter-debug-info.h"
 #include <algorithm>
 #include <iterator>
 
@@ -264,16 +265,11 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto dungeon_level = floor.dun_level;
 
-    // デバッグ用統計情報。
-    int mon_num = 0; // 重み(prob2)が正の要素数
-    DEPTH lev_min = MAX_DEPTH; // 重みが正の要素のうち最小階
-    DEPTH lev_max = 0; // 重みが正の要素のうち最大階
-    int prob2_total = 0; // 重みの総和
-
     // モンスター生成テーブルの各要素について重みを修正する。
     const auto &system = AngbandSystem::get_instance();
     auto &table = MonraceAllocationTable::get_instance();
     const auto &dungeon = floor.get_dungeon_definition();
+    MonraceFilterDebugInfo mfdi;
     for (auto &entry : table) {
         const auto monrace_id = entry.index;
 
@@ -329,22 +325,11 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             }
         }
 
-        // 統計情報更新。
-        if (entry.prob2 > 0) {
-            mon_num++;
-            if (lev_min > entry.level) {
-                lev_min = entry.level;
-            }
-            if (lev_max < entry.level) {
-                lev_max = entry.level;
-            }
-            prob2_total += entry.prob2;
-        }
+        mfdi.update(entry.prob2, entry.level);
     }
 
-    // チートオプションが有効なら統計情報を出力。
     if (cheat_hear) {
-        msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)%d "), mon_num, lev_min, lev_max, prob2_total);
+        msg_print(mfdi.to_string());
     }
 }
 

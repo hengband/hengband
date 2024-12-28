@@ -2550,6 +2550,9 @@
     <ClCompile Include="..\..\src\system\services\dungeon-service.cpp">
       <Filter>system\services</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\wizard\monrace-filter-debug-info.cpp">
+      <Filter>wizard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5531,6 +5534,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\enums\monrace\monrace-hook-types.h">
       <Filter>system\enums\monrace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\monrace-filter-debug-info.h">
+      <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
