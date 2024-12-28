@@ -67,6 +67,11 @@ struct Point2D {
 
     // 座標同士の減算の結果はVector2Dであり、自身から座標を引くことには意味がないので明示的に削除しておく
     constexpr Point2D &operator-=(const Point2D &other) = delete;
+
+    constexpr Point2D centered(const Point2D &pos) const
+    {
+        return Point2D((this->y + pos.y) / 2, (this->x + pos.x) / 2);
+    }
 };
 
 template <typename T>
