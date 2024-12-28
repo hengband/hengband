@@ -194,6 +194,37 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
     }
 }
 
+static MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
+{
+    if (is_underground) {
+        return MonraceHook::DUNGEON;
+    }
+
+    switch (wilderness[pos_wilderness.y][pos_wilderness.x].terrain) {
+    case TERRAIN_TOWN:
+        return MonraceHook::TOWN;
+    case TERRAIN_DEEP_WATER:
+        return MonraceHook::OCEAN;
+    case TERRAIN_SHALLOW_WATER:
+    case TERRAIN_SWAMP:
+        return MonraceHook::SHORE;
+    case TERRAIN_DIRT:
+    case TERRAIN_DESERT:
+        return MonraceHook::WASTE;
+    case TERRAIN_GRASS:
+        return MonraceHook::GRASS;
+    case TERRAIN_TREES:
+        return MonraceHook::WOOD;
+    case TERRAIN_SHALLOW_LAVA:
+    case TERRAIN_DEEP_LAVA:
+        return MonraceHook::VOLCANO;
+    case TERRAIN_MOUNTAIN:
+        return MonraceHook::MOUNTAIN;
+    default:
+        return MonraceHook::DUNGEON;
+    }
+}
+
 /*!
  * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
  * @return 地勢にあったモンスターの生成条件関数
@@ -446,8 +477,31 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, MonraceId r_idx, shor
         return false;
     }
 
-    const auto hook_pf = get_monster_hook(player_ptr);
-    return hook_pf(player_ptr, r_idx);
+    const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
+    const auto hook = get_monster_hook(pos_wilderness, floor.is_underground());
+    switch (hook) {
+    case MonraceHook::NONE:
+    case MonraceHook::DUNGEON:
+        return mon_hook_dungeon(player_ptr, r_idx);
+    case MonraceHook::TOWN:
+        return mon_hook_town(player_ptr, r_idx);
+    case MonraceHook::OCEAN:
+        return mon_hook_ocean(player_ptr, r_idx);
+    case MonraceHook::SHORE:
+        return mon_hook_shore(player_ptr, r_idx);
+    case MonraceHook::WASTE:
+        return mon_hook_waste(player_ptr, r_idx);
+    case MonraceHook::GRASS:
+        return mon_hook_grass(player_ptr, r_idx);
+    case MonraceHook::WOOD:
+        return mon_hook_wood(player_ptr, r_idx);
+    case MonraceHook::VOLCANO:
+        return mon_hook_volcano(player_ptr, r_idx);
+    case MonraceHook::MOUNTAIN:
+        return mon_hook_mountain(player_ptr, r_idx);
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
+    }
 }
 
 /*!

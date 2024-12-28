@@ -6,6 +6,19 @@
 
 #pragma once
 
+enum class MonraceHook {
+    NONE,
+    DUNGEON,
+    TOWN,
+    OCEAN,
+    SHORE,
+    WASTE,
+    GRASS,
+    WOOD,
+    VOLCANO,
+    MOUNTAIN,
+};
+
 enum class MonraceHookTerrain {
     NONE,
     FLOOR,
