@@ -211,7 +211,7 @@ static void check_melee_spell_rocket(PlayerType *player_ptr, melee_spell_type *m
 
 static void check_melee_spell_beam(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    if (ms_ptr->ability_flags.has_none_of(RF_ABILITY_BEAM_MASK) || direct_beam(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->m_ptr)) {
+    if (ms_ptr->ability_flags.has_none_of(RF_ABILITY_BEAM_MASK) || direct_beam(player_ptr, *ms_ptr->m_ptr, ms_ptr->t_ptr->get_position())) {
         return;
     }
 

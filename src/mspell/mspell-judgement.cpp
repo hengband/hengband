@@ -39,32 +39,28 @@
 #include "target/projection-path-calculator.h"
 
 /*!
- * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
- * Determine if a beam spell will hit the target.
+ * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y1 始点のY座標
- * @param x1 始点のX座標
- * @param y2 目標のY座標
- * @param x2 目標のX座標
- * @param m_ptr 使用するモンスターの構造体参照ポインタ
+ * @param monster 使用するモンスターへの参照
+ * @param pos_target 目標座標
  * @return ビームが到達可能ならばTRUEを返す
  */
-bool direct_beam(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, MonsterEntity *m_ptr)
+bool direct_beam(PlayerType *player_ptr, const MonsterEntity &monster, const Pos2D &pos_target)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
-    ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { y1, x1 }, { y2, x2 }, PROJECT_THRU);
+    const auto pos_source = monster.get_position();
+    ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), pos_source, pos_target, PROJECT_THRU);
     if (grid_g.path_num()) {
         return false;
     }
 
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto is_friend = monster.is_pet();
     auto hit2 = false;
-    auto is_friend = m_ptr->is_pet();
-    for (const auto &[y, x] : grid_g) {
-        const Pos2D pos(y, x);
+    for (const auto &pos : grid_g) {
         const auto &grid = floor.get_grid(pos);
-        if (y == y2 && x == x2) {
+        if (pos == pos_target) {
             hit2 = true;
-        } else if (is_friend && grid.has_monster() && !m_ptr->is_hostile_to_melee(floor.m_list[grid.m_idx])) {
+        } else if (is_friend && grid.has_monster() && !monster.is_hostile_to_melee(floor.m_list[grid.m_idx])) {
             return false;
         }
 
