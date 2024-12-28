@@ -3,10 +3,12 @@
 #include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "game-option/cheat-options.h"
+#include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-misc-flags.h"
+#include "monster/monster-info.h"
 #include "spell/summon-types.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
@@ -17,6 +19,7 @@
 #include "system/monrace/monrace-allocation.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -349,18 +352,121 @@ void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1
 }
 
 /*!
+ * @brief カメレオンの王の変身対象となるモンスターかどうか判定する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param r_idx モンスター種族ID
+ * @param m_idx 変身するモンスターのモンスターID
+ * @param grid カメレオンの足元の地形
+ * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
+ * @return 対象にできるならtrueを返す
+ */
+static bool monster_hook_chameleon_lord(PlayerType *player_ptr, MonraceId r_idx, short m_idx, const Grid &grid, std::optional<short> summoner_m_idx)
+{
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace = monraces.get_monrace(r_idx);
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    if (monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY) || monrace.misc_flags.has(MonsterMiscType::CHAMELEON)) {
+        return false;
+    }
+
+    if (std::abs(monrace.level - monraces.get_monrace(MonraceId::CHAMELEON_K).level) > 5) {
+        return false;
+    }
+
+    if (monrace.is_explodable()) {
+        return false;
+    }
+
+    if (!monster_can_cross_terrain(player_ptr, grid.feat, &monrace, 0)) {
+        return false;
+    }
+
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    const auto &old_monrace = monster.get_monrace();
+    if (old_monrace.misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
+        return !monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace);
+    }
+
+    return !summoner_m_idx || !monster_has_hostile_align(player_ptr, &floor.m_list[*summoner_m_idx], 0, 0, &monrace);
+}
+
+/*!
+ * @brief カメレオンの変身対象となるモンスターかどうか判定する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param r_idx モンスター種族ID
+ * @param m_idx 変身するモンスターのモンスターID
+ * @param grid カメレオンの足元の地形
+ * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
+ * @return 対象にできるならtrueを返す
+ * @todo グローバル変数対策の上 monster_hook.cへ移す。
+ */
+static bool monster_hook_chameleon(PlayerType *player_ptr, MonraceId r_idx, short m_idx, const Grid &grid, std::optional<short> summoner_m_idx)
+{
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    if (monrace.misc_flags.has(MonsterMiscType::MULTIPLY)) {
+        return false;
+    }
+
+    if (monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY) || (monrace.misc_flags.has(MonsterMiscType::CHAMELEON))) {
+        return false;
+    }
+
+    if (monrace.is_explodable()) {
+        return false;
+    }
+
+    if (!monster_can_cross_terrain(player_ptr, grid.feat, &monrace, 0)) {
+        return false;
+    }
+
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    const auto &old_monrace = monster.get_monrace();
+    if (old_monrace.misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
+        if (old_monrace.kind_flags.has(MonsterKindType::GOOD) && monrace.kind_flags.has_not(MonsterKindType::GOOD)) {
+            return false;
+        }
+
+        if (old_monrace.kind_flags.has(MonsterKindType::EVIL) && monrace.kind_flags.has_not(MonsterKindType::EVIL)) {
+            return false;
+        }
+
+        if (old_monrace.kind_flags.has_none_of(alignment_mask)) {
+            return false;
+        }
+    } else if (summoner_m_idx && monster_has_hostile_align(player_ptr, &floor.m_list[*summoner_m_idx], 0, 0, &monrace)) {
+        return false;
+    }
+
+    const auto hook_pf = get_monster_hook(player_ptr);
+    return hook_pf(player_ptr, r_idx);
+}
+
+/*!
  * @brief モンスター生成テーブルの重み修正(カメレオン変身専用)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param hook 生成制約関数 (nullptr の場合、制約なし)
+ * @param m_idx カメレオンのフロア内インデックス
+ * @param grid カメレオンの足元グリッド
+ * @param summoner_m_idx 召喚者のモンスターインデックス
+ * @param is_unique ユニークであるか否か (実質、カメレオンの王であるか否か)
  * @details get_mon_num() を呼ぶ前に get_mon_num_prep 系関数のいずれかを呼ぶこと。
  */
-void get_mon_num_prep_chameleon(PlayerType *player_ptr, const monsterrace_hook_type &hook)
+void get_mon_num_prep_chameleon(PlayerType *player_ptr, short m_idx, const Grid &grid, const std::optional<short> summoner_m_idx, bool is_unique)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto dungeon_level = floor.dun_level;
     const auto &system = AngbandSystem::get_instance();
     auto &table = MonraceAllocationTable::get_instance();
     const auto &dungeon = floor.get_dungeon_definition();
+    const auto hook_func = is_unique ? monster_hook_chameleon_lord : monster_hook_chameleon;
     MonraceFilterDebugInfo mfdi;
     for (auto &entry : table) {
         const auto monrace_id = entry.index;
@@ -369,7 +475,7 @@ void get_mon_num_prep_chameleon(PlayerType *player_ptr, const monsterrace_hook_t
             continue;
         }
 
-        if (!hook(player_ptr, monrace_id)) {
+        if (!hook_func(player_ptr, monrace_id, m_idx, grid, summoner_m_idx)) {
             continue;
         }
 
