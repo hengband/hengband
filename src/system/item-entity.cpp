@@ -1323,6 +1323,12 @@ void ItemEntity::mark_as_tried() const
     this->get_baseitem().mark_trial(true);
 }
 
+void ItemEntity::set_position(const Pos2D &pos)
+{
+    this->iy = pos.y;
+    this->ix = pos.x;
+}
+
 /*!
  * @brief 非INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する.
  * @param dungeon_level ダンジョンの階層
