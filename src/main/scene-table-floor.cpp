@@ -7,7 +7,7 @@
 #include "dungeon/quest.h"
 #include "main/music-definitions-table.h"
 #include "system/angband-system.h"
-#include "system/dungeon/dungeon-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
@@ -71,7 +71,7 @@ static bool scene_quest_basic(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_town(PlayerType *player_ptr, scene_type *value)
 {
-    const auto enable = !player_ptr->current_floor_ptr->is_in_underground() && (player_ptr->town_num > 0);
+    const auto enable = !player_ptr->current_floor_ptr->is_underground() && (player_ptr->town_num > 0);
     if (enable) {
         value->type = TERM_XTRA_MUSIC_TOWN;
         value->val = player_ptr->town_num;
@@ -81,7 +81,7 @@ static bool scene_town(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_town_basic(PlayerType *player_ptr, scene_type *value)
 {
-    const auto enable = !player_ptr->current_floor_ptr->is_in_underground() && (player_ptr->town_num > 0);
+    const auto enable = !player_ptr->current_floor_ptr->is_underground() && (player_ptr->town_num > 0);
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_TOWN;
@@ -91,7 +91,7 @@ static bool scene_town_basic(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_field(PlayerType *player_ptr, scene_type *value)
 {
-    const auto enable = !player_ptr->current_floor_ptr->is_in_underground();
+    const auto enable = !player_ptr->current_floor_ptr->is_underground();
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
 
@@ -123,18 +123,18 @@ static bool scene_dungeon_feeling(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_dungeon(PlayerType *player_ptr, scene_type *value)
 {
-    const auto *floor_ptr = player_ptr->current_floor_ptr;
-    const bool enable = (floor_ptr->dungeon_idx > 0);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto enable = floor.dungeon_idx > DungeonId::WILDERNESS;
     if (enable) {
         value->type = TERM_XTRA_MUSIC_DUNGEON;
-        value->val = floor_ptr->dungeon_idx;
+        value->val = enum2i(floor.dungeon_idx);
     }
     return enable;
 }
 
 static bool scene_dungeon_basic(PlayerType *player_ptr, scene_type *value)
 {
-    const auto enable = player_ptr->current_floor_ptr->is_in_underground();
+    const auto enable = player_ptr->current_floor_ptr->is_underground();
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
 

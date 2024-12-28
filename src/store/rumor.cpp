@@ -138,7 +138,7 @@ void display_rumor(PlayerType *player_ptr, bool ex)
         }
     } else if (category == "DUNGEON") {
         const auto &dungeons = DungeonList::get_instance();
-        const auto dungeon_id = std::stoi(tokens[1]);
+        const auto dungeon_id = i2enum<DungeonId>(std::stoi(tokens[1]));
         const auto &dungeon = dungeons.get_dungeon(dungeon_id);
         full_name = dungeon.name;
         auto &dungeon_record = DungeonRecords::get_instance().get_record(dungeon_id);

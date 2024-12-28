@@ -84,7 +84,7 @@ static void travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int n, bool
         return;
     }
 
-    if (floor.dun_level > 0 && !(grid.info & CAVE_KNOWN)) {
+    if (floor.is_underground() && !(grid.info & CAVE_KNOWN)) {
         return;
     }
 

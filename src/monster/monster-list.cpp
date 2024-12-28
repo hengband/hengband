@@ -280,7 +280,7 @@ static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, M
     int level;
     if (old_unique) {
         level = MonraceList::get_instance().get_monrace(MonraceId::CHAMELEON_K).level;
-    } else if (!floor.is_in_underground()) {
+    } else if (!floor.is_underground()) {
         level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
     } else {
         level = floor.dun_level;
@@ -326,7 +326,7 @@ void choose_chameleon_polymorph(PlayerType *player_ptr, MONSTER_IDX m_idx, const
  * @param m_idx 隣接数を調べたいモンスターのID
  * @return 隣接しているモンスターの数
  */
-int get_monster_crowd_number(FloorType *floor_ptr, MONSTER_IDX m_idx)
+int get_monster_crowd_number(const FloorType *floor_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor_ptr->m_list[m_idx];
     POSITION my = m_ptr->fy;

@@ -83,7 +83,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
     if (terrain.flags.has(TerrainCharacteristics::LESS)) {
-        if (ironman_downward || !floor.dun_level) {
+        if (ironman_downward || !floor.is_underground()) {
             return true;
         }
 

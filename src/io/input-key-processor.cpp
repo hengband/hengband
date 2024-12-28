@@ -313,7 +313,7 @@ void process_command(PlayerType *player_ptr)
         break;
     }
     case '<': {
-        if (!is_wild_mode && !floor.dun_level && !floor.inside_arena && !floor.is_in_quest()) {
+        if (!is_wild_mode && !floor.is_underground() && !floor.inside_arena && !floor.is_in_quest()) {
             if (vanilla_town) {
                 break;
             }
@@ -410,7 +410,7 @@ void process_command(PlayerType *player_ptr)
         const auto &dungeon = floor.get_dungeon_definition();
         auto non_magic_class = pc.equals(PlayerClassType::BERSERKER);
         non_magic_class |= pc.equals(PlayerClassType::SMITH);
-        if (floor.is_in_underground() && dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && !non_magic_class) {
+        if (floor.is_underground() && dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && !non_magic_class) {
             msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
             msg_print(nullptr);
             break;

@@ -83,6 +83,7 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -470,13 +471,15 @@ void wiz_create_feature(PlayerType *player_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @details 範囲外の値が選択されたら再入力を促す
  */
-static std::optional<int> select_debugging_dungeon(int initial_dungeon_id)
+static std::optional<DungeonId> select_debugging_dungeon(DungeonId initial_dungeon_id)
 {
+    constexpr auto angband = enum2i(DungeonId::ANGBAND);
+    constexpr auto max_valid_id = enum2i(DungeonId::MAX) - 1;
     if (command_arg > 0) {
-        return std::clamp(static_cast<int>(command_arg), DUNGEON_ANGBAND, DUNGEON_MAX);
+        return i2enum<DungeonId>(std::clamp(static_cast<int>(command_arg), angband, max_valid_id));
     }
 
-    return input_numerics("Jump which dungeon", DUNGEON_ANGBAND, DUNGEON_MAX, initial_dungeon_id);
+    return input_numerics("Jump which dungeon", angband, max_valid_id, initial_dungeon_id);
 }
 
 /*
@@ -485,7 +488,7 @@ static std::optional<int> select_debugging_dungeon(int initial_dungeon_id)
  * @param dungeon_id ダンジョン番号
  * @return レベルを選択したらその値、キャンセルならnullopt
  */
-static std::optional<int> select_debugging_floor(const FloorType &floor, int dungeon_id)
+static std::optional<int> select_debugging_floor(const FloorType &floor, DungeonId dungeon_id)
 {
     const auto &dungeon = DungeonList::get_instance().get_dungeon(dungeon_id);
     const auto max_depth = dungeon.maxdepth;
@@ -503,21 +506,21 @@ static std::optional<int> select_debugging_floor(const FloorType &floor, int dun
  * @brief 任意のダンジョン及び階層に飛ぶ
  * Go to any level
  */
-static void wiz_jump_floor(PlayerType *player_ptr, int dun_idx, DEPTH depth)
+static void wiz_jump_floor(PlayerType *player_ptr, DungeonId dun_idx, DEPTH depth)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     floor.set_dungeon_index(dun_idx);
     floor.dun_level = depth;
     auto &fcms = FloorChangeModesStore::get_instace();
     fcms->set(FloorChangeMode::RANDOM_PLACE);
-    if (!floor.is_in_underground()) {
+    if (!floor.is_underground()) {
         floor.reset_dungeon_index();
     }
 
     floor.inside_arena = false;
     AngbandWorld::get_instance().set_wild_mode(false);
     leave_quest_check(player_ptr);
-    auto to = !floor.is_in_underground()
+    auto to = !floor.is_underground()
                   ? _("地上", "the surface")
                   : format(_("%d階(%s)", "level %d of %s"), floor.dun_level, floor.get_dungeon_definition().name.data());
     constexpr auto mes = _("%sへとウィザード・テレポートで移動した。\n", "You wizard-teleported to %s.\n");
@@ -536,8 +539,8 @@ static void wiz_jump_floor(PlayerType *player_ptr, int dun_idx, DEPTH depth)
 void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto is_in_dungeon = floor.is_in_underground();
-    const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : DUNGEON_ANGBAND;
+    const auto is_in_dungeon = floor.is_underground();
+    const auto dungeon_idx = is_in_dungeon ? floor.dungeon_idx : DungeonId::ANGBAND;
     const auto dungeon_id = select_debugging_dungeon(dungeon_idx);
     if (!dungeon_id) {
         if (!is_in_dungeon) {
@@ -545,7 +548,7 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
         }
 
         if (input_check(("Jump to the ground?"))) {
-            wiz_jump_floor(player_ptr, 0, 0);
+            wiz_jump_floor(player_ptr, DungeonId::WILDERNESS, 0);
         }
 
         return;
@@ -833,7 +836,7 @@ void cheat_death(PlayerType *player_ptr)
     AngbandSystem::get_instance().set_phase_out(false);
     leaving_quest = QuestId::NONE;
     floor.quest_number = QuestId::NONE;
-    if (floor.dungeon_idx) {
+    if (floor.dungeon_idx > DungeonId::WILDERNESS) {
         player_ptr->recall_dungeon = floor.dungeon_idx;
     }
 

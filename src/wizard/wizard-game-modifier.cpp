@@ -10,6 +10,7 @@
 #include "io/input-key-requester.h"
 #include "player-info/self-info.h"
 #include "system/building-type-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
@@ -117,7 +118,7 @@ void wiz_enter_quest(PlayerType *player_ptr)
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     auto &quest = quests.get_quest(*quest_id);
     quest.status = QuestStatusType::TAKEN;
-    if (quest.dungeon == 0) {
+    if (quest.dungeon == DungeonId::WILDERNESS) {
         exe_enter_quest(player_ptr, *quest_id);
     }
 }

@@ -25,7 +25,7 @@
 bool cmd_limit_cast(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.is_in_underground() && (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MAGIC))) {
+    if (floor.is_underground() && (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MAGIC))) {
         msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
         msg_print(nullptr);
         return true;
