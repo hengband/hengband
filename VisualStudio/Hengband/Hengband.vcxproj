@@ -1017,6 +1017,7 @@
     <ClInclude Include="..\..\src\external-lib\json.hpp" />
     <ClInclude Include="..\..\src\system\services\dungeon-service.h" />
     <ClInclude Include="..\..\src\system\enums\dungeon\dungeon-id.h" />
+    <ClInclude Include="..\..\src\system\enums\monrace\monrace-hook-types.h" />
     <ClInclude Include="..\..\src\system\floor\floor-list.h" />
     <ClInclude Include="..\..\src\item-info\flavor-initializer.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-version-types.h" />

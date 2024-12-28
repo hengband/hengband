@@ -5529,6 +5529,9 @@
     <ClInclude Include="..\..\src\system\services\dungeon-service.h">
       <Filter>system\services</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\monrace\monrace-hook-types.h">
+      <Filter>system\enums\monrace</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

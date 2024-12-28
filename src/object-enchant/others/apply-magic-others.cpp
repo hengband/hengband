@@ -144,7 +144,7 @@ void OtherItemsEnchanter::generate_corpse()
         { SV_CORPSE, MonsterDropType::DROP_CORPSE },
     };
 
-    get_mon_num_prep(this->player_ptr, item_monster_okay, nullptr);
+    get_mon_num_prep(this->player_ptr, item_monster_okay);
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
     MonraceId monrace_id;

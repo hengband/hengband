@@ -401,7 +401,7 @@ std::optional<std::string> cave_gen(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     reset_lite_area(floor);
     set_floor_and_wall(floor.dungeon_id);
-    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
+    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr));
 
     DungeonData dd({ floor.height, floor.width });
     auto &dungeon = floor.get_dungeon_definition();

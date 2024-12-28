@@ -943,6 +943,7 @@ hengband_SOURCES = \
 	system/enums/grid-flow.h \
 	system/enums/grid-count-kind.h \
 	system/enums/dungeon/dungeon-id.h \
+	system/enums/monrace/monrace-hook-types.h \
 	system/enums/monrace/monrace-id.h \
 	system/enums/terrain/terrain-characteristics.h \
 	system/enums/terrain/terrain-tag.h \

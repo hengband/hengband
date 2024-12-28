@@ -86,7 +86,7 @@ static MonraceId initial_monrace_appearance(PlayerType *player_ptr, MonraceId mo
         return monrace_id;
     }
 
-    get_mon_num_prep(player_ptr, monster_hook_tanuki, nullptr);
+    get_mon_num_prep(player_ptr, monster_hook_tanuki);
     auto attempts = 1000;
     const auto &floor = *player_ptr->current_floor_ptr;
     auto min = std::min(floor.base_level - 5, 50);
