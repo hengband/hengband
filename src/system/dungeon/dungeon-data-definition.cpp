@@ -1,8 +1,10 @@
 #include "system/dungeon/dungeon-data-definition.h"
 #include "floor/floor-base-definitions.h"
 
-DungeonData::DungeonData()
-    : tunnel_pos(0, 0)
+DungeonData::DungeonData(const Pos2DVec &dungeon_size)
+    : row_rooms(dungeon_size.y / BLOCK_HGT)
+    , col_rooms(dungeon_size.x / BLOCK_WID)
+    , tunnel_pos(0, 0)
 {
     constexpr auto max_centers = 100;
     for (auto i = 0; i < max_centers; i++) {
