@@ -305,29 +305,6 @@ MonraceHookTerrain get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITIO
     return MonraceHookTerrain::FLOOR;
 }
 
-static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, MonraceHookTerrain hook)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    const auto is_suitable_for_dungeon = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
-    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
-    switch (hook) {
-    case MonraceHookTerrain::NONE:
-        return true;
-    case MonraceHookTerrain::FLOOR:
-        return monrace.is_suitable_for_floor();
-    case MonraceHookTerrain::SHALLOW_WATER:
-        return is_suitable_for_dungeon && monrace.is_suitable_for_shallow_water();
-    case MonraceHookTerrain::DEEP_WATER:
-        return is_suitable_for_dungeon && monrace.is_suitable_for_deep_water();
-    case MonraceHookTerrain::TRAPPED_PIT:
-        return is_suitable_for_dungeon && monrace.is_suitable_for_special_room() && monrace.is_suitable_for_trapped_pit();
-    case MonraceHookTerrain::LAVA:
-        return is_suitable_for_dungeon && monrace.is_suitable_for_lava();
-    default:
-        THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
-    }
-}
-
 /*!
  * @brief モンスター生成テーブルの重み修正
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -357,7 +334,7 @@ void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1, MonraceHoo
             continue;
         }
 
-        if (!filter_monrace_hook2(player_ptr, monrace_id, hook2)) {
+        if (!floor.filter_monrace_terrain(monrace_id, hook2)) {
             continue;
         }
 
@@ -466,7 +443,7 @@ void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_
             continue;
         }
 
-        if (!filter_monrace_hook2(player_ptr, monrace_id, hook)) {
+        if (!floor.filter_monrace_terrain(monrace_id, hook)) {
             continue;
         }
 
@@ -571,7 +548,7 @@ void get_mon_num_prep_summon(PlayerType *player_ptr, const SummonCondition &cond
             continue;
         }
 
-        if (!filter_monrace_hook2(player_ptr, monrace_id, condition.hook)) {
+        if (!floor.filter_monrace_terrain(monrace_id, condition.hook)) {
             continue;
         }
 

@@ -40,6 +40,7 @@ constexpr auto REDRAW_MAX = 2298;
 enum class DungeonId;
 enum class GridCountKind;
 enum class MonsterTimedEffect : int;
+enum class MonraceHookTerrain;
 enum class MonraceId : short;
 enum class QuestId : short;
 enum class TerrainCharacteristics;
@@ -118,6 +119,7 @@ public:
     ItemEntity make_gold(std::optional<BaseitemKey> bi_key = std::nullopt) const;
     std::optional<ItemEntity> try_make_instant_artifact() const;
     short select_baseitem_id(int level_initial, uint32_t mode) const;
+    bool filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain hook) const;
 
     void reset_mproc();
     void reset_mproc_max();
