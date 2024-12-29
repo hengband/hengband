@@ -23,6 +23,7 @@ enum class MonraceHook {
     HUMAN,
     GLASS, // ガラス (取り違え注意)
     SHARDS,
+    TANUKI,
 };
 
 enum class MonraceHookTerrain {

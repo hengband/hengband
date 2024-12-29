@@ -261,9 +261,34 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
         return vault_aux_lite(player_ptr, monrace_id);
     case MonraceHook::SHARDS:
         return vault_aux_shards(player_ptr, monrace_id);
+    case MonraceHook::TANUKI:
+        return monster_hook_tanuki(player_ptr, monrace_id);
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
     }
+}
+
+/*!
+ * @brief たぬきの変身対象となるモンスターかどうか判定する / Hook for Tanuki
+ * @param monrace_id モンスター種族ID
+ * @return 対象にできるならtrueを返す
+ * @todo グローバル変数対策の上 monster_hook.cへ移す。
+ */
+static bool monster_hook_tanuki(PlayerType *player_ptr, MonraceId monrace_id)
+{
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    auto unselectable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
+    unselectable |= monrace.misc_flags.has(MonsterMiscType::MULTIPLY);
+    unselectable |= monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
+    unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
+    unselectable |= monrace.misc_flags.has(MonsterMiscType::CHAMELEON);
+    unselectable |= monrace.is_explodable();
+    if (unselectable) {
+        return false;
+    }
+
+    auto hook_pf = get_monster_hook(player_ptr);
+    return hook_pf(player_ptr, monrace_id);
 }
 
 /*!
