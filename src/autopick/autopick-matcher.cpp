@@ -304,7 +304,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
 
     if (entry.has(FLG_HUMAN) && o_ptr->has_monrace()) {
         const auto &monrace = o_ptr->get_monrace();
-        if (tval != ItemKindType::MONSTER_REMAINS || !monrace.symbol_char_is_any_of("pht")) {
+        if (tval != ItemKindType::MONSTER_REMAINS || !monrace.is_human()) {
             return false;
         }
     }

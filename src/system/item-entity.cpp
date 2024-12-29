@@ -479,7 +479,7 @@ bool ItemEntity::is_offerable() const
         return false;
     }
 
-    return this->get_monrace().symbol_char_is_any_of("pht");
+    return this->get_monrace().is_human();
 }
 
 /*!
