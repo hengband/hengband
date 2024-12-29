@@ -197,23 +197,23 @@ bool mon_hook_grass(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_lite(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    if (r_ptr->ability_flags.has_none_of({ MonsterAbilityType::BR_LITE, MonsterAbilityType::BA_LITE })) {
+    if (monrace.ability_flags.has_none_of({ MonsterAbilityType::BR_LITE, MonsterAbilityType::BA_LITE })) {
         return false;
     }
 
-    if (r_ptr->feature_flags.has_any_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL })) {
+    if (monrace.feature_flags.has_any_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL })) {
         return false;
     }
 
-    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_DISI)) {
+    if (monrace.ability_flags.has(MonsterAbilityType::BR_DISI)) {
         return false;
     }
 
@@ -225,15 +225,15 @@ bool vault_aux_lite(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_shards(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    if (r_ptr->ability_flags.has_not(MonsterAbilityType::BR_SHAR)) {
+    if (monrace.ability_flags.has_not(MonsterAbilityType::BR_SHAR)) {
         return false;
     }
 
@@ -248,10 +248,10 @@ bool vault_aux_shards(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_jelly(PlayerType *player_ptr, MonraceId r_idx)
 {
-    const auto &monrace = monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
@@ -275,15 +275,15 @@ bool vault_aux_jelly(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_animal(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::ANIMAL)) {
         return false;
     }
 
@@ -298,15 +298,15 @@ bool vault_aux_animal(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_undead(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::UNDEAD)) {
         return false;
     }
 
@@ -337,10 +337,10 @@ bool vault_aux_chapel_g(PlayerType *player_ptr, MonraceId r_idx)
         MonraceId::TOPAZ_MONK,
     };
 
-    const auto &monrace = monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
@@ -368,15 +368,15 @@ bool vault_aux_chapel_g(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_kennel(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    return r_ptr->symbol_char_is_any_of("CZ");
+    return monrace.symbol_char_is_any_of("CZ");
 }
 
 /*!
@@ -387,15 +387,15 @@ bool vault_aux_kennel(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_mimic(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    return r_ptr->symbol_char_is_any_of("!$&(/=?[\\|][`~>+");
+    return monrace.symbol_char_is_any_of("!$&(/=?[\\|][`~>+");
 }
 
 /*!
@@ -406,9 +406,10 @@ bool vault_aux_mimic(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_clone(PlayerType *player_ptr, MonraceId r_idx)
 {
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
@@ -424,10 +425,10 @@ bool vault_aux_clone(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_symbol_e(PlayerType *player_ptr, MonraceId r_idx)
 {
-    const auto &monrace = monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
@@ -455,10 +456,10 @@ bool vault_aux_symbol_e(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_symbol_g(PlayerType *player_ptr, MonraceId r_idx)
 {
-    const auto &monrace = monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
@@ -486,19 +487,19 @@ bool vault_aux_symbol_g(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_orc(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has_not(MonsterKindType::ORC)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::ORC)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNDEAD)) {
         return false;
     }
 
@@ -513,19 +514,19 @@ bool vault_aux_orc(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_troll(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has_not(MonsterKindType::TROLL)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::TROLL)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNDEAD)) {
         return false;
     }
 
@@ -540,23 +541,23 @@ bool vault_aux_troll(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_giant(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has_not(MonsterKindType::GIANT)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::GIANT)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+    if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNDEAD)) {
         return false;
     }
 
@@ -571,26 +572,26 @@ bool vault_aux_giant(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_dragon(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has_not(MonsterKindType::DRAGON)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::DRAGON)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNDEAD)) {
         return false;
     }
 
     auto flags = RF_ABILITY_BREATH_MASK;
     flags.reset(vault_aux_dragon_mask4);
 
-    if (r_ptr->ability_flags.has_any_of(flags) || !r_ptr->ability_flags.has_all_of(vault_aux_dragon_mask4)) {
+    if (monrace.ability_flags.has_any_of(flags) || !monrace.ability_flags.has_all_of(vault_aux_dragon_mask4)) {
         return false;
     }
 
@@ -605,19 +606,19 @@ bool vault_aux_dragon(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_demon(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has_not(MonsterKindType::DEMON)) {
+    if (monrace.kind_flags.has_not(MonsterKindType::DEMON)) {
         return false;
     }
 
@@ -632,19 +633,19 @@ bool vault_aux_demon(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool vault_aux_cthulhu(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::KILL_BODY) && r_ptr->behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 
-    if (r_ptr->misc_flags.has_not(MonsterMiscType::ELDRITCH_HORROR)) {
+    if (monrace.misc_flags.has_not(MonsterMiscType::ELDRITCH_HORROR)) {
         return false;
     }
 
@@ -672,9 +673,10 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MonraceId r_idx)
         MonraceId::D_ELF_SHADE,
     };
 
+    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &floor = *player_ptr->current_floor_ptr;
     auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= vault_monster_okay(player_ptr, r_idx);
+    is_valid &= monrace.is_suitable_for_special_room();
     if (!is_valid) {
         return false;
     }
@@ -809,24 +811,4 @@ bool item_monster_okay(PlayerType *player_ptr, MonraceId r_idx)
     }
 
     return true;
-}
-
-/*!
- * vaultに配置可能なモンスターの条件を指定する / Monster validation
- * @param r_idx モンスター種別ID
- * @param Vaultに配置可能であればTRUE
- * @details
- * Line 1 -- forbid town monsters
- * Line 2 -- forbid uniques
- * Line 3 -- forbid aquatic monsters
- */
-bool vault_monster_okay(PlayerType *player_ptr, MonraceId r_idx)
-{
-    (void)player_ptr;
-    const auto &monrace = monraces_info[r_idx];
-    auto is_valid = monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
-    is_valid &= monrace.population_flags.has_not(MonsterPopulationType::ONLY_ONE);
-    is_valid &= monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
-    is_valid &= monrace.feature_flags.has_not(MonsterFeatureType::AQUATIC);
-    return is_valid;
 }
