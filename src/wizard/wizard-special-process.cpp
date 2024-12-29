@@ -469,17 +469,16 @@ void wiz_create_feature(PlayerType *player_ptr)
 /*!
  * @brief デバッグ帰還のダンジョンを選ぶ
  * @param player_ptr プレイヤーへの参照ポインタ
- * @details 範囲外の値が選択されたら再入力を促す
  */
-static std::optional<DungeonId> select_debugging_dungeon(DungeonId initial_dungeon_id)
+static std::optional<DungeonId> select_debugging_dungeon()
 {
-    constexpr auto min_dungeon_id = enum2i(DungeonId::WILDERNESS);
-    constexpr auto max_dungeon_id = enum2i(DungeonId::MAX) - 1;
-    if (command_arg > 0) {
-        return i2enum<DungeonId>(std::clamp(static_cast<int>(command_arg), min_dungeon_id, max_dungeon_id));
-    }
+    const auto &dungeons = DungeonList::get_instance();
+    auto describer = [&](DungeonId id) { return dungeons.get_dungeon(id).name; };
 
-    return input_numerics("Jump which dungeon", min_dungeon_id, max_dungeon_id, initial_dungeon_id);
+    CandidateSelector cs("Jump to which dungeon: ", 15);
+    const auto choice = cs.select(DUNGEON_IDS, describer);
+
+    return (choice != DUNGEON_IDS.end()) ? std::make_optional(*choice) : std::nullopt;
 }
 
 /*
@@ -539,18 +538,15 @@ static void wiz_jump_floor(PlayerType *player_ptr, DungeonId dun_idx, DEPTH dept
 void wiz_jump_to_dungeon(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto is_in_dungeon = floor.is_underground();
-    const auto current_dungeon_id = is_in_dungeon ? floor.dungeon_id : DungeonId::ANGBAND;
-    const auto dungeon_id = select_debugging_dungeon(current_dungeon_id);
-    if (!dungeon_id || (dungeon_id == DungeonId::WILDERNESS)) {
-        if (!is_in_dungeon) {
-            return;
-        }
+    const auto dungeon_id = select_debugging_dungeon();
+    if (!dungeon_id) {
+        return;
+    }
 
-        if (input_check(("Jump to the ground?"))) {
+    if (dungeon_id == DungeonId::WILDERNESS) {
+        if (floor.is_underground() && input_check("Jump to the ground? ")) {
             wiz_jump_floor(player_ptr, DungeonId::WILDERNESS, 0);
         }
-
         return;
     }
 
