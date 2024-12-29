@@ -24,6 +24,9 @@ enum class MonraceHook {
     GLASS, // ガラス (取り違え注意)
     SHARDS,
     TANUKI,
+    FISHING,
+    QUEST,
+    VAULT,
 };
 
 enum class MonraceHookTerrain {

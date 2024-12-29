@@ -34,7 +34,7 @@ EnumClassFlagGroup<MonsterAbilityType> vault_aux_dragon_mask4;
  */
 void vault_prep_clone(PlayerType *player_ptr)
 {
-    get_mon_num_prep(player_ptr, vault_monster_okay);
+    get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
     vault_aux_race = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep_enum(player_ptr);
 }
@@ -45,7 +45,7 @@ void vault_prep_clone(PlayerType *player_ptr)
  */
 void vault_prep_symbol(PlayerType *player_ptr)
 {
-    get_mon_num_prep(player_ptr, vault_monster_okay);
+    get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
     MonraceId r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep_enum(player_ptr);
     vault_aux_char = monraces_info[r_idx].symbol_definition.character;

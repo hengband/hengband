@@ -241,6 +241,12 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
         const auto hook_tanuki = get_monster_hook(pos_wilderness, floor.is_underground());
         return do_hook(player_ptr, hook_tanuki, monrace_id);
     }
+    case MonraceHook::FISHING:
+        return monster_is_fishing_target(player_ptr, monrace_id);
+    case MonraceHook::QUEST:
+        return mon_hook_quest(player_ptr, monrace_id);
+    case MonraceHook::VAULT:
+        return vault_monster_okay(player_ptr, monrace_id);
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
     }
