@@ -34,11 +34,12 @@ enum class PitKind {
 };
 
 /*! pit/nest型情報の構造体定義 */
+enum class MonraceHook;
 enum class MonraceId : short;
 class PlayerType;
 struct nest_pit_type {
     std::string name; //<! 部屋名
-    std::function<bool(PlayerType *, MonraceId)> hook_func; //<! モンスターフィルタ関数
+    MonraceHook hook; //<! モンスターフィルタ関数
     std::optional<std::function<void(PlayerType *)>> prep_func; //<! 能力フィルタ関数
     int level; //<! 相当階
     int chance; //!< 生成確率
