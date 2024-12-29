@@ -388,10 +388,7 @@ void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1, MonraceHoo
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
         if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id)) {
-            const int numer = entry.prob2 * dungeon.special_div;
-            const int q = numer / 64;
-            const int r = numer % 64;
-            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+            entry.update_prob2(dungeon.special_div);
         }
 
         mfdi.update(entry.prob2, entry.level);
@@ -496,10 +493,7 @@ void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
         if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id)) {
-            const int numer = entry.prob2 * dungeon.special_div;
-            const int q = numer / 64;
-            const int r = numer % 64;
-            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+            entry.update_prob2(dungeon.special_div);
         }
 
         mfdi.update(entry.prob2, entry.level);
@@ -604,10 +598,7 @@ void get_mon_num_prep_summon(PlayerType *player_ptr, const SummonCondition &cond
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
         if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, true)) {
-            const int numer = entry.prob2 * dungeon.special_div;
-            const int q = numer / 64;
-            const int r = numer % 64;
-            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+            entry.update_prob2(dungeon.special_div);
         }
 
         mfdi.update(entry.prob2, entry.level);
@@ -744,10 +735,7 @@ void get_mon_num_prep_chameleon(PlayerType *player_ptr, const ChameleonTransform
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
         if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, true)) {
-            const int numer = entry.prob2 * dungeon.special_div;
-            const int q = numer / 64;
-            const int r = numer % 64;
-            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+            entry.update_prob2(dungeon.special_div);
         }
 
         mfdi.update(entry.prob2, entry.level);
@@ -792,10 +780,7 @@ void get_mon_num_prep_bounty(PlayerType *player_ptr)
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
         if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id)) {
-            const int numer = entry.prob2 * dungeon.special_div;
-            const int q = numer / 64;
-            const int r = numer % 64;
-            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+            entry.update_prob2(dungeon.special_div);
         }
 
         mfdi.update(entry.prob2, entry.level);
