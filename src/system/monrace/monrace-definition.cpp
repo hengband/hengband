@@ -439,6 +439,11 @@ bool MonraceDefinition::is_suitable_for_grass() const
     return this->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_GRASS, MonsterWildernessType::WILD_ALL });
 }
 
+bool MonraceDefinition::is_suitable_for_wood() const
+{
+    return this->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_WOOD, MonsterWildernessType::WILD_ALL });
+}
+
 /*!
  * @brief たぬきが変身できるかを判定する
  *
