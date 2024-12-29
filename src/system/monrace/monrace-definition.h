@@ -171,6 +171,7 @@ public:
     bool is_suitable_for_ocean() const;
     bool is_suitable_for_shore() const;
     bool is_suitable_for_waste() const;
+    bool is_suitable_for_grass() const;
     bool is_suitable_for_tanuki() const;
 
     void init_sex(uint32_t value);

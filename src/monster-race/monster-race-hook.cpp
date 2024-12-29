@@ -122,20 +122,6 @@ bool mon_hook_mountain(PlayerType *player_ptr, MonraceId r_idx)
     return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);
 }
 
-/*!
- * @brief モンスターが草原に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 森林に出現するならばTRUEを返す
- */
-bool mon_hook_grass(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    auto *r_ptr = &monraces_info[r_idx];
-    return r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_GRASS, MonsterWildernessType::WILD_ALL });
-}
-
 /*
  * Helper function for "glass room"
  */
