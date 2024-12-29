@@ -159,43 +159,6 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
     return true;
 }
 
-/*!
- * @brief プレイヤーの現在の広域マップ座標から得た地勢を元にモンスターの生成条件関数を返す
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return 地勢にあったモンスターの生成条件関数
- */
-monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.is_underground()) {
-        return mon_hook_dungeon;
-    }
-
-    switch (wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].terrain) {
-    case TERRAIN_TOWN:
-        return mon_hook_town;
-    case TERRAIN_DEEP_WATER:
-        return mon_hook_ocean;
-    case TERRAIN_SHALLOW_WATER:
-    case TERRAIN_SWAMP:
-        return mon_hook_shore;
-    case TERRAIN_DIRT:
-    case TERRAIN_DESERT:
-        return mon_hook_waste;
-    case TERRAIN_GRASS:
-        return mon_hook_grass;
-    case TERRAIN_TREES:
-        return mon_hook_wood;
-    case TERRAIN_SHALLOW_LAVA:
-    case TERRAIN_DEEP_LAVA:
-        return mon_hook_volcano;
-    case TERRAIN_MOUNTAIN:
-        return mon_hook_mountain;
-    default:
-        return mon_hook_dungeon;
-    }
-}
-
 MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
 {
     if (is_underground) {
@@ -261,34 +224,26 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
         return vault_aux_lite(player_ptr, monrace_id);
     case MonraceHook::SHARDS:
         return vault_aux_shards(player_ptr, monrace_id);
-    case MonraceHook::TANUKI:
-        return monster_hook_tanuki(player_ptr, monrace_id);
+    case MonraceHook::TANUKI: {
+        const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+        auto unselectable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
+        unselectable |= monrace.misc_flags.has(MonsterMiscType::MULTIPLY);
+        unselectable |= monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
+        unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
+        unselectable |= monrace.misc_flags.has(MonsterMiscType::CHAMELEON);
+        unselectable |= monrace.is_explodable();
+        if (unselectable) {
+            return false;
+        }
+
+        const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
+        const auto &floor = *player_ptr->current_floor_ptr;
+        const auto hook_tanuki = get_monster_hook(pos_wilderness, floor.is_underground());
+        return do_hook(player_ptr, hook_tanuki, monrace_id);
+    }
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
     }
-}
-
-/*!
- * @brief たぬきの変身対象となるモンスターかどうか判定する / Hook for Tanuki
- * @param monrace_id モンスター種族ID
- * @return 対象にできるならtrueを返す
- * @todo グローバル変数対策の上 monster_hook.cへ移す。
- */
-static bool monster_hook_tanuki(PlayerType *player_ptr, MonraceId monrace_id)
-{
-    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
-    auto unselectable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
-    unselectable |= monrace.misc_flags.has(MonsterMiscType::MULTIPLY);
-    unselectable |= monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
-    unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
-    unselectable |= monrace.misc_flags.has(MonsterMiscType::CHAMELEON);
-    unselectable |= monrace.is_explodable();
-    if (unselectable) {
-        return false;
-    }
-
-    auto hook_pf = get_monster_hook(player_ptr);
-    return hook_pf(player_ptr, monrace_id);
 }
 
 /*!
