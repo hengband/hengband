@@ -209,7 +209,7 @@ bool QuestList::order_completed(QuestId id1, QuestId id2) const
  */
 void determine_random_questor(PlayerType *player_ptr, QuestType &quest)
 {
-    get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
+    get_mon_num_prep(player_ptr, mon_hook_quest);
     const auto &monraces = MonraceList::get_instance();
     MonraceId r_idx;
     while (true) {

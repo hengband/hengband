@@ -943,6 +943,7 @@ hengband_SOURCES = \
 	system/enums/grid-flow.h \
 	system/enums/grid-count-kind.h \
 	system/enums/dungeon/dungeon-id.h \
+	system/enums/monrace/monrace-hook-types.h \
 	system/enums/monrace/monrace-id.h \
 	system/enums/terrain/terrain-characteristics.h \
 	system/enums/terrain/terrain-tag.h \
@@ -1052,6 +1053,7 @@ hengband_SOURCES = \
 	wizard/cmd-wizard.cpp wizard/cmd-wizard.h \
 	wizard/fixed-artifacts-spoiler.cpp wizard/fixed-artifacts-spoiler.h \
 	wizard/items-spoiler.cpp wizard/items-spoiler.h \
+	wizard/monrace-filter-debug-info.cpp wizard/monrace-filter-debug-info.h \
 	wizard/monster-info-spoiler.cpp wizard/monster-info-spoiler.h \
 	wizard/spoiler-table.cpp wizard/spoiler-table.h \
 	wizard/spoiler-util.cpp wizard/spoiler-util.h \

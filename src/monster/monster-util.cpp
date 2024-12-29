@@ -8,6 +8,7 @@
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-misc-flags.h"
 #include "spell/summon-types.h"
+#include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
@@ -20,6 +21,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include "wizard/monrace-filter-debug-info.h"
 #include <algorithm>
 #include <iterator>
 
@@ -193,19 +195,57 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
  * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
  * @return 地勢にあったモンスターの生成条件関数
  */
-monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
+MonraceHookTerrain get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
     const auto &terrain = player_ptr->current_floor_ptr->get_grid(pos).get_terrain();
     if (terrain.flags.has(TerrainCharacteristics::WATER)) {
-        return terrain.flags.has(TerrainCharacteristics::DEEP) ? mon_hook_deep_water : mon_hook_shallow_water;
+        return terrain.flags.has(TerrainCharacteristics::DEEP) ? MonraceHookTerrain::DEEP_WATER : MonraceHookTerrain::SHALLOW_WATER;
     }
 
     if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
-        return mon_hook_lava;
+        return MonraceHookTerrain::LAVA;
     }
 
-    return mon_hook_floor;
+    return MonraceHookTerrain::FLOOR;
+}
+
+/*!
+ * @brief 開門トラップに配置するモンスターの条件フィルタ
+ * @details 穴を掘るモンスター、壁を抜けるモンスターは却下
+ */
+static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonraceId r_idx)
+{
+    auto *r_ptr = &monraces_info[r_idx];
+    if (!vault_monster_okay(player_ptr, r_idx)) {
+        return false;
+    }
+
+    if (r_ptr->feature_flags.has_any_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL })) {
+        return false;
+    }
+
+    return true;
+}
+
+static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, MonraceHookTerrain hook)
+{
+    switch (hook) {
+    case MonraceHookTerrain::NONE:
+        return true;
+    case MonraceHookTerrain::FLOOR:
+        return mon_hook_floor(player_ptr, monrace_id);
+    case MonraceHookTerrain::SHALLOW_WATER:
+        return mon_hook_shallow_water(player_ptr, monrace_id);
+    case MonraceHookTerrain::DEEP_WATER:
+        return mon_hook_deep_water(player_ptr, monrace_id);
+    case MonraceHookTerrain::TRAPPED_PIT:
+        return vault_aux_trapped_pit(player_ptr, monrace_id);
+    case MonraceHookTerrain::LAVA:
+        return mon_hook_lava(player_ptr, monrace_id);
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
+    }
 }
 
 /*!
@@ -220,21 +260,16 @@ monsterrace_hook_type get_monster_hook2(PlayerType *player_ptr, POSITION y, POSI
  * モンスター生成テーブル alloc_race_table の各要素の基本重み prob1 を指定条件
  * に従って変更し、結果を prob2 に書き込む。
  */
-static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, const bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
+static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, MonraceHookTerrain hook2, bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto dungeon_level = floor.dun_level;
-
-    // デバッグ用統計情報。
-    int mon_num = 0; // 重み(prob2)が正の要素数
-    DEPTH lev_min = MAX_DEPTH; // 重みが正の要素のうち最小階
-    DEPTH lev_max = 0; // 重みが正の要素のうち最大階
-    int prob2_total = 0; // 重みの総和
 
     // モンスター生成テーブルの各要素について重みを修正する。
     const auto &system = AngbandSystem::get_instance();
     auto &table = MonraceAllocationTable::get_instance();
     const auto &dungeon = floor.get_dungeon_definition();
+    MonraceFilterDebugInfo mfdi;
     for (auto &entry : table) {
         const auto monrace_id = entry.index;
 
@@ -247,8 +282,12 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             continue;
         }
 
-        // いずれかの生成制約関数が偽を返したら生成禁止。
-        if ((hook1 && !hook1(player_ptr, monrace_id)) || (hook2 && !hook2(player_ptr, monrace_id))) {
+        // 生成制約関数が偽を返したら生成禁止。
+        if ((hook1 && !hook1(player_ptr, monrace_id))) {
+            continue;
+        }
+
+        if (!filter_monrace_hook2(player_ptr, monrace_id, hook2)) {
             continue;
         }
 
@@ -286,22 +325,11 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
             }
         }
 
-        // 統計情報更新。
-        if (entry.prob2 > 0) {
-            mon_num++;
-            if (lev_min > entry.level) {
-                lev_min = entry.level;
-            }
-            if (lev_max < entry.level) {
-                lev_max = entry.level;
-            }
-            prob2_total += entry.prob2;
-        }
+        mfdi.update(entry.prob2, entry.level);
     }
 
-    // チートオプションが有効なら統計情報を出力。
     if (cheat_hear) {
-        msg_format(_("モンスター第2次候補数:%d(%d-%dF)%d ", "monster second selection:%d(%d-%dF)%d "), mon_num, lev_min, lev_max, prob2_total);
+        msg_print(mfdi.to_string());
     }
 }
 
@@ -315,7 +343,7 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
  *
  * get_mon_num() を呼ぶ前に get_mon_num_prep() 系関数のいずれかを呼ぶこと。
  */
-void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, const monsterrace_hook_type &hook2, std::optional<summon_type> summon_specific_type)
+void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, MonraceHookTerrain hook2, std::optional<summon_type> summon_specific_type)
 {
     do_get_mon_num_prep(player_ptr, hook1, hook2, true, summon_specific_type, false);
 }
@@ -328,7 +356,7 @@ void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1
  */
 void get_mon_num_prep_chameleon(PlayerType *player_ptr, const monsterrace_hook_type &hook)
 {
-    do_get_mon_num_prep(player_ptr, hook, nullptr, true, std::nullopt, true);
+    do_get_mon_num_prep(player_ptr, hook, MonraceHookTerrain::NONE, true, std::nullopt, true);
 }
 
 /*!
@@ -338,7 +366,7 @@ void get_mon_num_prep_chameleon(PlayerType *player_ptr, const monsterrace_hook_t
  */
 void get_mon_num_prep_bounty(PlayerType *player_ptr)
 {
-    do_get_mon_num_prep(player_ptr, nullptr, nullptr, false, std::nullopt, false);
+    do_get_mon_num_prep(player_ptr, nullptr, MonraceHookTerrain::NONE, false, std::nullopt, false);
 }
 
 bool is_player(MONSTER_IDX m_idx)
