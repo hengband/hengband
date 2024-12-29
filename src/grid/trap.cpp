@@ -419,6 +419,10 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
 
             take_hit(player_ptr, DAMAGE_NOESCAPE, dam, name);
 
+            if (floor.is_in_quest()) {
+                return;
+            }
+
             /* Still alive and autosave enabled */
             if (autosave_l && (player_ptr->chp >= 0)) {
                 do_cmd_save_game(player_ptr, true);
