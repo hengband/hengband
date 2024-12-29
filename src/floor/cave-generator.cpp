@@ -401,7 +401,8 @@ std::optional<std::string> cave_gen(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     reset_lite_area(floor);
     set_floor_and_wall(floor.dungeon_id);
-    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr));
+    const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
+    get_mon_num_prep_enum(player_ptr, get_monster_hook(pos_wilderness, floor.is_underground()));
 
     DungeonData dd({ floor.height, floor.width });
     auto &dungeon = floor.get_dungeon_definition();

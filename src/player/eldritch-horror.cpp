@@ -123,7 +123,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
         auto &monrace = monraces.get_monrace(monrace_id);
         power = monrace.level + 10;
         const auto &desc = monrace.name;
-        get_mon_num_prep(player_ptr, nullptr);
+        get_mon_num_prep_enum(player_ptr);
         std::string m_name;
 #ifdef JP
 #else

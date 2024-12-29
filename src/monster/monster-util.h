@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "system/enums/monrace/monrace-hook-types.h"
+#include "util/point-2d.h"
 #include <functional>
 #include <optional>
 
@@ -10,8 +11,10 @@ enum class MonraceId : short;
 class PlayerType;
 using monsterrace_hook_type = std::function<bool(PlayerType *, MonraceId)>;
 monsterrace_hook_type get_monster_hook(PlayerType *player_ptr);
+MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground);
 MonraceHookTerrain get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x);
 void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, MonraceHookTerrain hook2 = MonraceHookTerrain::NONE, std::optional<summon_type> summon_specific_type = std::nullopt);
+void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1 = MonraceHook::NONE, MonraceHookTerrain hook2 = MonraceHookTerrain::NONE, std::optional<summon_type> summon_specific_type = std::nullopt);
 void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_id, short m_idx, MonraceHookTerrain hook2);
 
 class SummonCondition {
