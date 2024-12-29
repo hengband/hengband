@@ -170,7 +170,8 @@ static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, s
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     const auto old_unique = monster.get_monrace().kind_flags.has(MonsterKindType::UNIQUE);
-    get_mon_num_prep_chameleon(player_ptr, m_idx, terrain_id, summoner_m_idx, old_unique);
+    ChameleonTransformation ct(m_idx, terrain_id, old_unique, std::move(summoner_m_idx));
+    get_mon_num_prep_chameleon(player_ptr, ct);
 
     int level;
     if (old_unique) {
