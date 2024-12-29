@@ -340,7 +340,7 @@ static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, M
     case MonraceHookTerrain::TRAPPED_PIT:
         return vault_aux_trapped_pit(player_ptr, monrace_id);
     case MonraceHookTerrain::LAVA:
-        return mon_hook_lava(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_lava();
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
     }

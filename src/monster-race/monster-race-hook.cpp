@@ -193,22 +193,6 @@ bool mon_hook_grass(PlayerType *player_ptr, MonraceId r_idx)
 }
 
 /*!
- * @brief モンスターが溶岩地形に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 溶岩地形に出現するならばTRUEを返す
- */
-bool mon_hook_lava(PlayerType *player_ptr, MonraceId r_idx)
-{
-    const auto &monrace = monraces_info[r_idx];
-    const auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.is_underground() && !DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx)) {
-        return false;
-    }
-
-    return (monrace.resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) || monrace.feature_flags.has(MonsterFeatureType::CAN_FLY)) && monrace.aura_flags.has_not(MonsterAuraType::COLD);
-}
-
-/*!
  * @brief モンスターが通常の床地形に出現するかどうかを返す
  * @param r_idx 判定するモンスターの種族ID
  * @return 通常の床地形に出現するならばTRUEを返す
