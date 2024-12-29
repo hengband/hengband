@@ -13,7 +13,6 @@ class PlayerType;
 bool mon_hook_ocean(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_shore(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_waste(PlayerType *player_ptr, MonraceId r_idx);
-bool mon_hook_town(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_wood(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_volcano(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_wood(PlayerType *player_ptr, MonraceId r_idx);

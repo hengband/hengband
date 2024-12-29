@@ -201,7 +201,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::DUNGEON:
         return is_suitable_for_dungeon;
     case MonraceHook::TOWN:
-        return mon_hook_town(player_ptr, monrace_id);
+        return monrace.is_suitable_for_town();
     case MonraceHook::OCEAN:
         return mon_hook_ocean(player_ptr, monrace_id);
     case MonraceHook::SHORE:

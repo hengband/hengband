@@ -167,6 +167,7 @@ public:
     bool is_suitable_for_trapped_pit() const;
     bool is_suitable_for_special_room() const;
     bool is_suitable_for_glass() const;
+    bool is_suitable_for_town() const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();
