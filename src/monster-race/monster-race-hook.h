@@ -20,7 +20,6 @@ bool mon_hook_wood(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_volcano(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_mountain(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_grass(PlayerType *player_ptr, MonraceId r_idx);
-bool mon_hook_deep_water(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_lava(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_floor(PlayerType *player_ptr, MonraceId r_idx);
 

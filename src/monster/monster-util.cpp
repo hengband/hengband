@@ -336,7 +336,7 @@ static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, M
     case MonraceHookTerrain::SHALLOW_WATER:
         return is_suitable_for_dungeon && monrace.is_suitable_for_shallow_water();
     case MonraceHookTerrain::DEEP_WATER:
-        return mon_hook_deep_water(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_deep_water();
     case MonraceHookTerrain::TRAPPED_PIT:
         return vault_aux_trapped_pit(player_ptr, monrace_id);
     case MonraceHookTerrain::LAVA:

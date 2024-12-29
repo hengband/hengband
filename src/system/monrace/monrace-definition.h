@@ -161,6 +161,7 @@ public:
     GridFlow get_grid_flow_type() const;
     bool is_suitable_for_random_quest() const;
     bool is_suitable_for_shallow_water() const;
+    bool is_suitable_for_deep_water() const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();

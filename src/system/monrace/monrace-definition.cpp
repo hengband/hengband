@@ -360,6 +360,11 @@ bool MonraceDefinition::is_suitable_for_shallow_water() const
     return this->aura_flags.has_not(MonsterAuraType::FIRE);
 }
 
+bool MonraceDefinition::is_suitable_for_deep_water() const
+{
+    return this->feature_flags.has(MonsterFeatureType::AQUATIC);
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
