@@ -395,6 +395,25 @@ bool MonraceDefinition::is_suitable_for_special_room() const
     return is_valid;
 }
 
+/*!
+ * @brief ガラス部屋に配置可能かを判定する
+ *
+ * 以下の全条件を満たせばOK
+ * - 特殊部屋に出現可能
+ * - スターバーストか閃光ブレスを使える
+ * - 壁抜けも壁破壊もできない
+ * - 分解ブレスは使えない
+ * @param 配置可不可
+ */
+bool MonraceDefinition::is_suitable_for_glass() const
+{
+    auto is_selectable = this->is_suitable_for_special_room();
+    is_selectable &= this->ability_flags.has_any_of({ MonsterAbilityType::BR_LITE, MonsterAbilityType::BA_LITE });
+    is_selectable &= this->feature_flags.has_none_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL });
+    is_selectable &= this->ability_flags.has_not(MonsterAbilityType::BR_DISI);
+    return is_selectable;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);

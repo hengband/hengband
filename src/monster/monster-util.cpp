@@ -225,7 +225,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::HUMAN:
         return monster_hook_human(player_ptr, monrace_id);
     case MonraceHook::GLASS:
-        return vault_aux_lite(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_glass();
     case MonraceHook::SHARDS:
         return vault_aux_shards(player_ptr, monrace_id);
     case MonraceHook::TANUKI: {

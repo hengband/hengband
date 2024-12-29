@@ -195,34 +195,6 @@ bool mon_hook_grass(PlayerType *player_ptr, MonraceId r_idx)
 /*
  * Helper function for "glass room"
  */
-bool vault_aux_lite(PlayerType *player_ptr, MonraceId r_idx)
-{
-    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= monrace.is_suitable_for_special_room();
-    if (!is_valid) {
-        return false;
-    }
-
-    if (monrace.ability_flags.has_none_of({ MonsterAbilityType::BR_LITE, MonsterAbilityType::BA_LITE })) {
-        return false;
-    }
-
-    if (monrace.feature_flags.has_any_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL })) {
-        return false;
-    }
-
-    if (monrace.ability_flags.has(MonsterAbilityType::BR_DISI)) {
-        return false;
-    }
-
-    return true;
-}
-
-/*
- * Helper function for "glass room"
- */
 bool vault_aux_shards(PlayerType *player_ptr, MonraceId r_idx)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
