@@ -249,6 +249,18 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
         return mon_hook_volcano(player_ptr, monrace_id);
     case MonraceHook::MOUNTAIN:
         return mon_hook_mountain(player_ptr, monrace_id);
+    case MonraceHook::FIGURINE:
+        return item_monster_okay(player_ptr, monrace_id);
+    case MonraceHook::ARENA:
+        return monster_can_entry_arena(player_ptr, monrace_id);
+    case MonraceHook::NIGHTMARE:
+        return get_nightmare(player_ptr, monrace_id);
+    case MonraceHook::HUMAN:
+        return monster_hook_human(player_ptr, monrace_id);
+    case MonraceHook::GLASS:
+        return vault_aux_lite(player_ptr, monrace_id);
+    case MonraceHook::SHARDS:
+        return vault_aux_shards(player_ptr, monrace_id);
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
     }

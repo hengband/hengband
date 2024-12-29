@@ -101,7 +101,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
     switch (randint1(3)) {
     case 1: /* 4 lite breathers + potion */
     {
-        get_mon_num_prep(player_ptr, vault_aux_lite);
+        get_mon_num_prep_enum(player_ptr, MonraceHook::GLASS);
 
         /* Place fixed lite berathers */
         for (auto dir1 = 4; dir1 < 8; dir1++) {
@@ -147,7 +147,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
         place_inner_glass(player_ptr, floor.get_grid({ top + 1, right - 1 }));
         place_inner_glass(player_ptr, floor.get_grid({ bottom - 1, left + 1 }));
         place_inner_glass(player_ptr, floor.get_grid({ bottom - 1, right - 1 }));
-        get_mon_num_prep(player_ptr, vault_aux_lite);
+        get_mon_num_prep_enum(player_ptr, MonraceHook::GLASS);
 
         const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level, 0);
         if (MonraceList::is_valid(monrace_id)) {
@@ -192,7 +192,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
             place_inner_glass(player_ptr, floor.get_grid({ center->y + 2 * ddy_ddd[dir1], center->x + 2 * ddx_ddd[dir1] }));
         }
 
-        get_mon_num_prep(player_ptr, vault_aux_shards);
+        get_mon_num_prep_enum(player_ptr, MonraceHook::SHARDS);
 
         /* Place shard berathers */
         for (auto dir1 = 4; dir1 < 8; dir1++) {
