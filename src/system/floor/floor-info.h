@@ -40,6 +40,7 @@ constexpr auto REDRAW_MAX = 2298;
 enum class DungeonId;
 enum class GridCountKind;
 enum class MonsterTimedEffect : int;
+enum class MonraceId : short;
 enum class QuestId : short;
 enum class TerrainCharacteristics;
 enum class TerrainTag;
