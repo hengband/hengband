@@ -205,7 +205,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::OCEAN:
         return monrace.is_suitable_for_ocean();
     case MonraceHook::SHORE:
-        return mon_hook_shore(player_ptr, monrace_id);
+        return monrace.is_suitable_for_shore();
     case MonraceHook::WASTE:
         return mon_hook_waste(player_ptr, monrace_id);
     case MonraceHook::GRASS:

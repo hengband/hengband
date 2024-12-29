@@ -424,6 +424,11 @@ bool MonraceDefinition::is_suitable_for_ocean() const
     return this->wilderness_flags.has(MonsterWildernessType::WILD_OCEAN);
 }
 
+bool MonraceDefinition::is_suitable_for_shore() const
+{
+    return this->wilderness_flags.has(MonsterWildernessType::WILD_SHORE);
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);

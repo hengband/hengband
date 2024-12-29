@@ -81,20 +81,6 @@ void vault_prep_dragon(PlayerType *player_ptr)
 }
 
 /*!
- * @brief モンスターが海岸に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 海岸に出現するならばTRUEを返す
- */
-bool mon_hook_shore(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    auto *r_ptr = &monraces_info[r_idx];
-    return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_SHORE);
-}
-
-/*!
  * @brief モンスターが荒地に出現するかどうかを返す
  * @param r_idx 判定するモンスターの種族ID
  * @return 荒地に出現するならばTRUEを返す
