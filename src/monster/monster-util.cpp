@@ -195,11 +195,11 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto is_underground = floor.is_underground();
+    const auto is_suitable_for_dungeon = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
     switch (hook) {
     case MonraceHook::NONE:
     case MonraceHook::DUNGEON:
-        return !is_underground || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
+        return is_suitable_for_dungeon;
     case MonraceHook::TOWN:
         return mon_hook_town(player_ptr, monrace_id);
     case MonraceHook::OCEAN:
@@ -325,13 +325,16 @@ static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonraceId r_idx)
 
 static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, MonraceHookTerrain hook)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto is_suitable_for_dungeon = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     switch (hook) {
     case MonraceHookTerrain::NONE:
         return true;
     case MonraceHookTerrain::FLOOR:
         return mon_hook_floor(player_ptr, monrace_id);
     case MonraceHookTerrain::SHALLOW_WATER:
-        return mon_hook_shallow_water(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_shallow_water();
     case MonraceHookTerrain::DEEP_WATER:
         return mon_hook_deep_water(player_ptr, monrace_id);
     case MonraceHookTerrain::TRAPPED_PIT:

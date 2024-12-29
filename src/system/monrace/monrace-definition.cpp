@@ -355,6 +355,11 @@ bool MonraceDefinition::is_suitable_for_random_quest() const
     return is_suitable;
 }
 
+bool MonraceDefinition::is_suitable_for_shallow_water() const
+{
+    return this->aura_flags.has_not(MonsterAuraType::FIRE);
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
