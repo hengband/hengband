@@ -229,13 +229,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::SHARDS:
         return vault_aux_shards(player_ptr, monrace_id);
     case MonraceHook::TANUKI: {
-        auto unselectable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
-        unselectable |= monrace.misc_flags.has(MonsterMiscType::MULTIPLY);
-        unselectable |= monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
-        unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
-        unselectable |= monrace.misc_flags.has(MonsterMiscType::CHAMELEON);
-        unselectable |= monrace.is_explodable();
-        if (unselectable) {
+        if (!monrace.is_suitable_for_tanuki()) {
             return false;
         }
 

@@ -429,6 +429,28 @@ bool MonraceDefinition::is_suitable_for_shore() const
     return this->wilderness_flags.has(MonsterWildernessType::WILD_SHORE);
 }
 
+/*!
+ * @brief たぬきが変身できるかを判定する
+ *
+ * 以下の全条件を満たせばOK
+ * - ユニークではない
+ * - 分裂しない
+ * - フレンドリーフラグがない
+ * - 水棲生物ではない
+ * - カメレオンではない
+ * @param 変身可不可
+ */
+bool MonraceDefinition::is_suitable_for_tanuki() const
+{
+    auto is_suitable = this->kind_flags.has_not(MonsterKindType::UNIQUE);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::MULTIPLY);
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::FRIENDLY);
+    is_suitable &= this->feature_flags.has_not(MonsterFeatureType::AQUATIC);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::CHAMELEON);
+    is_suitable &= !this->is_explodable();
+    return is_suitable;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
