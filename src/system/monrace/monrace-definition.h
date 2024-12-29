@@ -174,6 +174,7 @@ public:
     bool is_suitable_for_grass() const;
     bool is_suitable_for_wood() const;
     bool is_suitable_for_volcano() const;
+    bool is_suitable_for_mountain() const;
     bool is_suitable_for_tanuki() const;
 
     void init_sex(uint32_t value);

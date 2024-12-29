@@ -449,6 +449,11 @@ bool MonraceDefinition::is_suitable_for_volcano() const
     return this->wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO);
 }
 
+bool MonraceDefinition::is_suitable_for_mountain() const
+{
+    return this->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);
+}
+
 /*!
  * @brief たぬきが変身できるかを判定する
  *

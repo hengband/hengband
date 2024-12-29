@@ -80,20 +80,6 @@ void vault_prep_dragon(PlayerType *player_ptr)
     vault_aux_dragon_mask4.set(rand_choice(breath_list));
 }
 
-/*!
- * @brief モンスターが山地に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 山地に出現するならばTRUEを返す
- */
-bool mon_hook_mountain(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    auto *r_ptr = &monraces_info[r_idx];
-    return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);
-}
-
 /*
  * Helper function for "glass room"
  */

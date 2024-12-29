@@ -215,7 +215,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::VOLCANO:
         return monrace.is_suitable_for_volcano();
     case MonraceHook::MOUNTAIN:
-        return mon_hook_mountain(player_ptr, monrace_id);
+        return monrace.is_suitable_for_mountain();
     case MonraceHook::FIGURINE:
         return item_monster_okay(player_ptr, monrace_id);
     case MonraceHook::ARENA:
