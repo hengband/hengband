@@ -107,22 +107,7 @@ void OtherItemsEnchanter::generate_figurine()
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
-    MonraceId monrace_id;
-    while (true) {
-        monrace_id = monraces.pick_id_at_random();
-        const auto &monrace = monraces.get_monrace(monrace_id);
-        if (!monrace.is_suitable_for_figurine() || (monrace_id == MonraceId::TSUCHINOKO)) {
-            continue;
-        }
-
-        auto check = (floor.dun_level < monrace.level) ? (monrace.level - floor.dun_level) : 0;
-        if ((monrace.rarity > 100) || (randint0(check) > 0)) {
-            continue;
-        }
-
-        break;
-    }
-
+    const auto monrace_id = monraces.select_figurine(floor.dun_level);
     this->o_ptr->pval = enum2i(monrace_id);
     if (one_in_(6)) {
         this->o_ptr->curse_flags.set(CurseTraitType::CURSED);

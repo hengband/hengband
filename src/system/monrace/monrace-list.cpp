@@ -438,6 +438,24 @@ int MonraceList::calc_defeat_count() const
     return total;
 }
 
+MonraceId MonraceList::select_figurine(int max_level) const
+{
+    while (true) {
+        const auto monrace_id = this->pick_id_at_random();
+        const auto &monrace = this->get_monrace(monrace_id);
+        if (!monrace.is_suitable_for_figurine() || (monrace_id == MonraceId::TSUCHINOKO)) {
+            continue;
+        }
+
+        const auto check = (max_level < monrace.level) ? (monrace.level - max_level) : 0;
+        if ((monrace.rarity > 100) || (randint0(check) > 0)) {
+            continue;
+        }
+
+        return monrace_id;
+    }
+}
+
 /*!
  * @brief 現在フロアに存在している1種別辺りのモンスター数を全てリセットする
  * @todo そもそもcur_num はMonsterRaceInfo にいるべきではない、後で分離する
