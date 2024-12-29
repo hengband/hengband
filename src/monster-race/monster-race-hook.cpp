@@ -34,7 +34,7 @@ EnumClassFlagGroup<MonsterAbilityType> vault_aux_dragon_mask4;
  */
 void vault_prep_clone(PlayerType *player_ptr)
 {
-    get_mon_num_prep(player_ptr, vault_aux_simple);
+    get_mon_num_prep(player_ptr, vault_monster_okay);
     vault_aux_race = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep_enum(player_ptr);
 }
@@ -45,7 +45,7 @@ void vault_prep_clone(PlayerType *player_ptr)
  */
 void vault_prep_symbol(PlayerType *player_ptr)
 {
-    get_mon_num_prep(player_ptr, vault_aux_simple);
+    get_mon_num_prep(player_ptr, vault_monster_okay);
     MonraceId r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep_enum(player_ptr);
     vault_aux_char = monraces_info[r_idx].symbol_definition.character;
@@ -377,20 +377,6 @@ bool vault_aux_shards(PlayerType *player_ptr, MonraceId r_idx)
     }
 
     return true;
-}
-
-/*!
- * @brief モンスターがVault生成の最低必要条件を満たしているかを返す /
- * Helper monster selection function
- * @param r_idx 確認したいモンスター種族ID
- * @return Vault生成の最低必要条件を満たしているならTRUEを返す。
- */
-bool vault_aux_simple(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    return vault_monster_okay(player_ptr, r_idx);
 }
 
 /*!
