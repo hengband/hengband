@@ -338,6 +338,11 @@ GridFlow MonraceDefinition::get_grid_flow_type() const
     return this->feature_flags.has(MonsterFeatureType::CAN_FLY) ? GridFlow::CAN_FLY : GridFlow::NORMAL;
 }
 
+bool MonraceDefinition::is_suitable_for_floor() const
+{
+    return this->feature_flags.has_not(MonsterFeatureType::AQUATIC) || this->feature_flags.has(MonsterFeatureType::CAN_FLY);
+}
+
 /*!
  * @brief モンスター種族がランダムクエストの討伐対象に成り得るかをチェックする
  * @return 討伐対象にできるか否か

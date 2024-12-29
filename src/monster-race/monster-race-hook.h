@@ -20,7 +20,6 @@ bool mon_hook_wood(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_volcano(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_mountain(PlayerType *player_ptr, MonraceId r_idx);
 bool mon_hook_grass(PlayerType *player_ptr, MonraceId r_idx);
-bool mon_hook_floor(PlayerType *player_ptr, MonraceId r_idx);
 
 void vault_prep_clone(PlayerType *player_ptr);
 void vault_prep_dragon(PlayerType *player_ptr);

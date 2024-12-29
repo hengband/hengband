@@ -332,7 +332,7 @@ static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, M
     case MonraceHookTerrain::NONE:
         return true;
     case MonraceHookTerrain::FLOOR:
-        return mon_hook_floor(player_ptr, monrace_id);
+        return monrace.is_suitable_for_floor();
     case MonraceHookTerrain::SHALLOW_WATER:
         return is_suitable_for_dungeon && monrace.is_suitable_for_shallow_water();
     case MonraceHookTerrain::DEEP_WATER:
