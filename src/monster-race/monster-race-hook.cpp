@@ -563,25 +563,6 @@ bool monster_hook_human(PlayerType *player_ptr, MonraceId r_idx)
 }
 
 /*!
- * @brief 悪夢の元凶となるモンスターかどうかを返す。
- * @param r_idx 判定対象となるモンスターのＩＤ
- * @return 悪夢の元凶となり得るか否か。
- */
-bool get_nightmare(PlayerType *player_ptr, MonraceId r_idx)
-{
-    auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->misc_flags.has_not(MonsterMiscType::ELDRITCH_HORROR)) {
-        return false;
-    }
-
-    if (r_ptr->level <= player_ptr->lev) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief モンスター種族が釣れる種族かどうかを判定する。
  * @param r_idx 判定したいモンスター種族のID
  * @return 釣れる対象ならばTRUEを返す

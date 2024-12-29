@@ -178,6 +178,7 @@ public:
     bool is_suitable_for_tanuki() const;
     bool is_suitable_for_figurine() const;
     bool can_entry_arena() const;
+    bool is_suitable_for_nightmare(int max_level) const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();
