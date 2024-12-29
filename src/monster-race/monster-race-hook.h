@@ -35,4 +35,3 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MonraceId r_idx);
 bool monster_hook_human(PlayerType *player_ptr, MonraceId r_idx);
 bool get_nightmare(PlayerType *player_ptr, MonraceId r_idx);
 bool monster_is_fishing_target(PlayerType *player_ptr, MonraceId r_idx);
-bool monster_can_entry_arena(PlayerType *player_ptr, MonraceId r_idx);

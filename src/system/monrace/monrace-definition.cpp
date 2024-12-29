@@ -1,6 +1,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "game-option/cheat-options.h"
 #include "monster-attack/monster-attack-table.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster-race/race-sex.h"
 #include "monster/horror-descriptions.h"
@@ -491,6 +492,17 @@ bool MonraceDefinition::is_suitable_for_figurine() const
     return is_suitable;
 }
 
+bool MonraceDefinition::can_entry_arena() const
+{
+    if (!this->is_suitable_for_arena()) {
+        return false;
+    }
+
+    auto can_entry = this->has_blow_with_damage();
+    can_entry |= this->ability_flags.has_any_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_BREATH_MASK);
+    return can_entry;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
@@ -762,6 +774,33 @@ void MonraceDefinition::increment_tkills()
     if (this->r_tkills < MAX_SHORT) {
         this->r_tkills++;
     }
+}
+
+/*!
+ * @brief モンスター闘技場 (ギャンブル)に出場できるかを返す
+ * @return 出場可不可
+ */
+bool MonraceDefinition::is_suitable_for_arena() const
+{
+    auto is_suitable = this->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::MULTIPLY);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::QUANTUM) || this->kind_flags.has(MonsterKindType::UNIQUE);
+    is_suitable &= this->feature_flags.has_not(MonsterFeatureType::AQUATIC);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::CHAMELEON);
+    is_suitable &= !this->is_explodable();
+    return is_suitable;
+}
+
+bool MonraceDefinition::has_blow_with_damage() const
+{
+    auto max_blow_damage = 0;
+    for (const auto &blow : this->blows) {
+        if (blow.effect != RaceBlowEffectType::DR_MANA) {
+            max_blow_damage += blow.damage_dice.num;
+        }
+    }
+
+    return max_blow_damage > 0;
 }
 
 /*!

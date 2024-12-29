@@ -219,7 +219,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::FIGURINE:
         return monrace.is_suitable_for_figurine();
     case MonraceHook::ARENA:
-        return monster_can_entry_arena(player_ptr, monrace_id);
+        return monrace.can_entry_arena();
     case MonraceHook::NIGHTMARE:
         return get_nightmare(player_ptr, monrace_id);
     case MonraceHook::HUMAN:
