@@ -410,6 +410,108 @@ void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1
 }
 
 /*!
+ * @brief モンスター種族が護衛となれるかどうかをチェックする
+ * @param monrace_id チェックするモンスターの種族ID
+ * @param escorted_monrace_id 護衛されるモンスターの種族ID
+ * @param escorted_m_idx 護衛されるモンスターのフロア内インデックス
+ * @return 護衛にできるならばtrue
+ * @todo escorted_m_idx とescorted_monrace_id は両方グローバル変数なので、前者が指し示すモンスター種族IDが後者である保証が確認できなかった. 要調査.
+ */
+static bool place_monster_can_escort(PlayerType *player_ptr, MonraceId monrace_id, MonraceId escorted_monrace_id, short escorted_m_idx)
+{
+    const auto &escorted_monster = player_ptr->current_floor_ptr->m_list[escorted_m_idx];
+    const auto &monraces = MonraceList::get_instance();
+    const auto &escorted_monrace = monraces.get_monrace(escorted_monrace_id);
+    const auto &monrace = monraces.get_monrace(monrace_id);
+    if (mon_hook_dungeon(player_ptr, escorted_monrace_id) != mon_hook_dungeon(player_ptr, monrace_id)) {
+        return false;
+    }
+
+    if (monrace.symbol_definition.character != escorted_monrace.symbol_definition.character) {
+        return false;
+    }
+
+    if (monrace.level > escorted_monrace.level) {
+        return false;
+    }
+
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    if (escorted_monrace_id == monrace_id) {
+        return false;
+    }
+
+    if (monster_has_hostile_align(player_ptr, &escorted_monster, 0, 0, &monrace)) {
+        return false;
+    }
+
+    if (escorted_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
+        if (monster_has_hostile_align(player_ptr, nullptr, 1, -1, &monrace)) {
+            return false;
+        }
+    }
+
+    if (escorted_monrace.misc_flags.has(MonsterMiscType::CHAMELEON) && monrace.misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
+        return false;
+    }
+
+    return true;
+}
+
+void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_id, short m_idx, MonraceHookTerrain hook)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_level = floor.dun_level;
+    const auto &system = AngbandSystem::get_instance();
+    auto &table = MonraceAllocationTable::get_instance();
+    const auto &dungeon = floor.get_dungeon_definition();
+    MonraceFilterDebugInfo mfdi;
+    for (auto &entry : table) {
+        const auto monrace_id = entry.index;
+        entry.prob2 = 0;
+        if (entry.prob1 <= 0) {
+            continue;
+        }
+
+        if (!place_monster_can_escort(player_ptr, monrace_id, escorted_monrace_id, m_idx)) {
+            continue;
+        }
+
+        if (!filter_monrace_hook2(player_ptr, monrace_id, hook)) {
+            continue;
+        }
+
+        if (!system.is_phase_out()) {
+            if (!entry.is_permitted(dungeon_level)) {
+                continue;
+            }
+
+            if (floor.is_in_quest() && !entry.is_defeatable(dungeon_level)) {
+                continue;
+            }
+        }
+
+        entry.prob2 = entry.prob1;
+        const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+        const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+            const int numer = entry.prob2 * dungeon.special_div;
+            const int q = numer / 64;
+            const int r = numer % 64;
+            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+        }
+
+        mfdi.update(entry.prob2, entry.level);
+    }
+
+    if (cheat_hear) {
+        msg_print(mfdi.to_string());
+    }
+}
+
+/*!
  * @brief カメレオンの王の変身対象となるモンスターかどうか判定する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param ct カメレオンの変身情報
