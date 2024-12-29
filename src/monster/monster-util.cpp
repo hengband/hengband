@@ -305,24 +305,6 @@ MonraceHookTerrain get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITIO
     return MonraceHookTerrain::FLOOR;
 }
 
-/*!
- * @brief 開門トラップに配置するモンスターの条件フィルタ
- * @details 穴を掘るモンスター、壁を抜けるモンスターは却下
- */
-static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonraceId r_idx)
-{
-    auto *r_ptr = &monraces_info[r_idx];
-    if (!vault_monster_okay(player_ptr, r_idx)) {
-        return false;
-    }
-
-    if (r_ptr->feature_flags.has_any_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL })) {
-        return false;
-    }
-
-    return true;
-}
-
 static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, MonraceHookTerrain hook)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -338,7 +320,7 @@ static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, M
     case MonraceHookTerrain::DEEP_WATER:
         return is_suitable_for_dungeon && monrace.is_suitable_for_deep_water();
     case MonraceHookTerrain::TRAPPED_PIT:
-        return vault_aux_trapped_pit(player_ptr, monrace_id);
+        return vault_monster_okay(player_ptr, monrace_id) && monrace.is_suitable_for_trapped_pit();
     case MonraceHookTerrain::LAVA:
         return is_suitable_for_dungeon && monrace.is_suitable_for_lava();
     default:

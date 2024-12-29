@@ -377,6 +377,11 @@ bool MonraceDefinition::is_suitable_for_lava() const
     return is_suitable;
 }
 
+bool MonraceDefinition::is_suitable_for_trapped_pit() const
+{
+    return this->feature_flags.has_none_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL });
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
