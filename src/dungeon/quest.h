@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include "util/abstract-map-wrapper.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include <map>
@@ -132,7 +133,7 @@ public:
     const MonraceDefinition &get_bounty() const;
 };
 
-class QuestList final {
+class QuestList final : public util::AbstractMapWrapper<QuestId, QuestType> {
 public:
     QuestList(const QuestList &) = delete;
     QuestList(QuestList &&) = delete;
@@ -143,23 +144,17 @@ public:
     void initialize();
     QuestType &get_quest(QuestId id);
     const QuestType &get_quest(QuestId id) const;
-    std::map<QuestId, QuestType>::iterator begin();
-    std::map<QuestId, QuestType>::const_iterator begin() const;
-    std::map<QuestId, QuestType>::iterator end();
-    std::map<QuestId, QuestType>::const_iterator end() const;
-    std::map<QuestId, QuestType>::reverse_iterator rbegin();
-    std::map<QuestId, QuestType>::const_reverse_iterator rbegin() const;
-    std::map<QuestId, QuestType>::reverse_iterator rend();
-    std::map<QuestId, QuestType>::const_reverse_iterator rend() const;
-    std::map<QuestId, QuestType>::iterator find(QuestId id);
-    std::map<QuestId, QuestType>::const_iterator find(QuestId id) const;
-    size_t size() const;
     std::vector<QuestId> get_sorted_quest_ids() const;
 
 private:
     static QuestList instance;
     std::map<QuestId, QuestType> quests;
     QuestList() = default;
+
+    std::map<QuestId, QuestType> &get_inner_container() override
+    {
+        return this->quests;
+    }
 
     bool order_completed(QuestId id1, QuestId id2) const;
 };

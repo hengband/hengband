@@ -34,56 +34,6 @@ std::shared_ptr<const DungeonDefinition> DungeonList::get_dungeon_shared(Dungeon
     return this->dungeons.at(dungeon_id);
 }
 
-std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::iterator DungeonList::begin()
-{
-    return this->dungeons.begin();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::const_iterator DungeonList::begin() const
-{
-    return this->dungeons.cbegin();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::iterator DungeonList::end()
-{
-    return this->dungeons.end();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::const_iterator DungeonList::end() const
-{
-    return this->dungeons.cend();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::reverse_iterator DungeonList::rbegin()
-{
-    return this->dungeons.rbegin();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::const_reverse_iterator DungeonList::rbegin() const
-{
-    return this->dungeons.crbegin();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::reverse_iterator DungeonList::rend()
-{
-    return this->dungeons.rend();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::const_reverse_iterator DungeonList::rend() const
-{
-    return this->dungeons.crend();
-}
-
-size_t DungeonList::size() const
-{
-    return this->dungeons.size();
-}
-
-bool DungeonList::empty() const
-{
-    return this->dungeons.empty();
-}
-
 void DungeonList::emplace(DungeonId dungeon_id, DungeonDefinition &&definition)
 {
     this->dungeons.emplace(dungeon_id, std::make_shared<DungeonDefinition>(std::move(definition)));
