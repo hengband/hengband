@@ -419,6 +419,11 @@ bool MonraceDefinition::is_suitable_for_town() const
     return this->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
 }
 
+bool MonraceDefinition::is_suitable_for_ocean() const
+{
+    return this->wilderness_flags.has(MonsterWildernessType::WILD_OCEAN);
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
