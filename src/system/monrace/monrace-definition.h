@@ -69,6 +69,7 @@ private:
  * MonraceMemory (r_hoge の思い出関係フラグ類)
  * MonraceInfo (max_num/cur_num/floor_id/defeat_level/defeat_time 他、思い出以外でゲームデータ依存の数値類)
  */
+enum class DungeonId;
 enum class GridFlow : int;
 class MonraceDefinition {
 public:

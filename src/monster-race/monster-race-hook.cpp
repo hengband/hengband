@@ -15,6 +15,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
+#include "system/services/dungeon-monrace-service.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include <set>
@@ -77,39 +78,6 @@ void vault_prep_dragon(PlayerType *player_ptr)
     }
 
     vault_aux_dragon_mask4.set(rand_choice(breath_list));
-}
-
-/*!
- * @brief モンスターがダンジョンに出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return ダンジョンに出現するならばTRUEを返す
- * @details
- * <pre>
- * 地上は常にTRUE(荒野の出現は別hookで絞るため)。
- * 荒野限定(WILD_ONLY)の場合、荒野の山に出るモンスターにのみダンジョンの山に出現を許可する。
- * その他の場合、山及び火山以外のダンジョンでは全てのモンスターに出現を許可する。
- * ダンジョンが山の場合は、荒野の山(WILD_MOUNTAIN)に出ない水棲動物(AQUATIC)は許可しない。
- * ダンジョンが火山の場合は、荒野の火山(WILD_VOLCANO)に出ない水棲動物(AQUATIC)は許可しない。
- * </pre>
- */
-bool mon_hook_dungeon(PlayerType *player_ptr, MonraceId r_idx)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.is_underground() && !floor.is_in_quest()) {
-        return true;
-    }
-
-    auto *r_ptr = &monraces_info[r_idx];
-    DungeonDefinition *d_ptr = &floor.get_dungeon_definition();
-    if (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
-        return d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN) && r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);
-    }
-
-    auto land = r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC);
-    auto is_mountain_monster = d_ptr->mon_wilderness_flags.has_none_of({ MonsterWildernessType::WILD_MOUNTAIN, MonsterWildernessType::WILD_VOLCANO });
-    is_mountain_monster |= d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN) && (land || r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN));
-    is_mountain_monster |= d_ptr->mon_wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO) && (land || r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO));
-    return is_mountain_monster;
 }
 
 /*!
@@ -231,12 +199,13 @@ bool mon_hook_grass(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool mon_hook_deep_water(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
-    if (!mon_hook_dungeon(player_ptr, r_idx)) {
+    const auto &monrace = monraces_info[r_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.is_underground() && !DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx)) {
         return false;
     }
 
-    return r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC);
+    return monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
 }
 
 /*!
@@ -246,12 +215,13 @@ bool mon_hook_deep_water(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool mon_hook_shallow_water(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
-    if (!mon_hook_dungeon(player_ptr, r_idx)) {
+    const auto &monrace = monraces_info[r_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.is_underground() && !DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx)) {
         return false;
     }
 
-    return r_ptr->aura_flags.has_not(MonsterAuraType::FIRE);
+    return monrace.aura_flags.has_not(MonsterAuraType::FIRE);
 }
 
 /*!
@@ -261,12 +231,13 @@ bool mon_hook_shallow_water(PlayerType *player_ptr, MonraceId r_idx)
  */
 bool mon_hook_lava(PlayerType *player_ptr, MonraceId r_idx)
 {
-    auto *r_ptr = &monraces_info[r_idx];
-    if (!mon_hook_dungeon(player_ptr, r_idx)) {
+    const auto &monrace = monraces_info[r_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.is_underground() && !DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx)) {
         return false;
     }
 
-    return (r_ptr->resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) || r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) && r_ptr->aura_flags.has_not(MonsterAuraType::COLD);
+    return (monrace.resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) || monrace.feature_flags.has(MonsterFeatureType::CAN_FLY)) && monrace.aura_flags.has_not(MonsterAuraType::COLD);
 }
 
 /*!
@@ -867,7 +838,8 @@ bool item_monster_okay(PlayerType *player_ptr, MonraceId r_idx)
 bool vault_monster_okay(PlayerType *player_ptr, MonraceId r_idx)
 {
     const auto &monrace = monraces_info[r_idx];
-    auto is_valid = mon_hook_dungeon(player_ptr, r_idx);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
     is_valid &= monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
     is_valid &= monrace.population_flags.has_not(MonsterPopulationType::ONLY_ONE);
     is_valid &= monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);

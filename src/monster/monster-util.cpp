@@ -23,6 +23,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/services/dungeon-monrace-service.h"
 #include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -193,10 +194,12 @@ MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
 static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_id)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto is_underground = floor.is_underground();
     switch (hook) {
     case MonraceHook::NONE:
     case MonraceHook::DUNGEON:
-        return mon_hook_dungeon(player_ptr, monrace_id);
+        return !is_underground || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
     case MonraceHook::TOWN:
         return mon_hook_town(player_ptr, monrace_id);
     case MonraceHook::OCEAN:
@@ -237,7 +240,6 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
         }
 
         const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-        const auto &floor = *player_ptr->current_floor_ptr;
         const auto hook_tanuki = get_monster_hook(pos_wilderness, floor.is_underground());
         return do_hook(player_ptr, hook_tanuki, monrace_id);
     }
@@ -408,11 +410,15 @@ void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1, MonraceHoo
  */
 static bool place_monster_can_escort(PlayerType *player_ptr, MonraceId monrace_id, MonraceId escorted_monrace_id, short escorted_m_idx)
 {
-    const auto &escorted_monster = player_ptr->current_floor_ptr->m_list[escorted_m_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_id = floor.dungeon_id;
+    const auto &escorted_monster = floor.m_list[escorted_m_idx];
     const auto &monraces = MonraceList::get_instance();
     const auto &escorted_monrace = monraces.get_monrace(escorted_monrace_id);
     const auto &monrace = monraces.get_monrace(monrace_id);
-    if (mon_hook_dungeon(player_ptr, escorted_monrace_id) != mon_hook_dungeon(player_ptr, monrace_id)) {
+    const auto is_suitable_escorted_monrace = DungeonMonraceService::is_suitable_for_dungeon(dungeon_id, escorted_monrace_id);
+    const auto is_suitable_escorting_monrace = DungeonMonraceService::is_suitable_for_dungeon(dungeon_id, monrace_id);
+    if (floor.is_underground() && (is_suitable_escorted_monrace != is_suitable_escorting_monrace)) {
         return false;
     }
 
@@ -514,12 +520,12 @@ void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_
  */
 static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, const SummonCondition &condition)
 {
-    if (!mon_hook_dungeon(player_ptr, monrace_id)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.is_underground() && !DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id)) {
         return false;
     }
 
-    auto &floor = *player_ptr->current_floor_ptr;
-    auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     if (condition.summoner_m_idx) {
         const auto &monster = floor.m_list[*condition.summoner_m_idx];
         if (monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace)) {
