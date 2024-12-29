@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "util/enum-range.h"
+
 enum class DungeonId {
     WILDERNESS = 0,
     ANGBAND = 1,
@@ -30,3 +32,5 @@ enum class DungeonId {
     GLASS = 20,
     MAX,
 };
+
+constexpr EnumRange<DungeonId> DUNGEON_IDS(DungeonId::WILDERNESS, DungeonId::MAX);

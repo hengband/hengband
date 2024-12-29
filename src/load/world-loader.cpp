@@ -18,7 +18,8 @@
 static void rd_hengband_dungeons()
 {
     const int dungeons_size = DungeonList::get_instance().size();
-    const auto &dungeon_records = DungeonRecords::get_instance();
+    const auto &dungeons = DungeonList::get_instance();
+    auto &records = DungeonRecords::get_instance();
     const int max = rd_byte();
     for (auto i = 0; i < max; i++) {
         int tmp16s = rd_s16b();
@@ -27,13 +28,14 @@ static void rd_hengband_dungeons()
         }
 
         const auto dungeon_id = i2enum<DungeonId>(i);
-        const auto &[dungeon_record, dungeon] = dungeon_records.get_dungeon_pair(dungeon_id);
+        const auto &dungeon = dungeons.get_dungeon(dungeon_id);
+        auto &record = records.get_record(dungeon_id);
         if (tmp16s > 0) {
-            dungeon_record->set_max_level(tmp16s);
+            record.set_max_level(tmp16s);
         }
 
-        if (dungeon_record->get_max_level() > dungeon->maxdepth) {
-            dungeon_record->set_max_level(dungeon->maxdepth);
+        if (record.get_max_level() > dungeon.maxdepth) {
+            record.set_max_level(dungeon.maxdepth);
         }
     }
 }

@@ -95,9 +95,6 @@
 #include "status/base-status.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/dungeon/dungeon-definition.h"
-#include "system/dungeon/dungeon-list.h"
-#include "system/dungeon/dungeon-record.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -105,6 +102,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "system/services/dungeon-service.h"
 #include "system/terrain/terrain-definition.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
@@ -3043,7 +3041,7 @@ long calc_score(PlayerType *player_ptr)
         mult = 5;
     }
 
-    const auto max_dungeon_level = DungeonRecords::get_instance().find_max_level();
+    const auto max_dungeon_level = DungeonService::find_max_level();
     uint32_t point_l = (player_ptr->max_max_exp + (100 * max_dungeon_level));
     uint32_t point_h = point_l / 0x10000L;
     point_l = point_l % 0x10000L;

@@ -22,7 +22,8 @@ public:
     static DungeonList &get_instance();
     DungeonDefinition &get_dungeon(DungeonId dungeon_id);
     const DungeonDefinition &get_dungeon(DungeonId dungeon_id) const;
-    std::shared_ptr<DungeonDefinition> get_dungeon_shared(DungeonId dungeon_id) const;
+    std::shared_ptr<DungeonDefinition> get_dungeon_shared(DungeonId dungeon_id);
+    std::shared_ptr<const DungeonDefinition> get_dungeon_shared(DungeonId dungeon_id) const;
     std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::iterator begin();
     std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::const_iterator begin() const;
     std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::iterator end();

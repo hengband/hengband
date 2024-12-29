@@ -11,9 +11,9 @@
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "knowledge/lighting-level-table.h"
-#include "system/dungeon/dungeon-record.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
+#include "system/services/dungeon-service.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
@@ -362,7 +362,7 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    const auto known_dungeons = DungeonRecords::get_instance().build_known_dungeons(DungeonMessageFormat::KNOWLEDGE);
+    const auto known_dungeons = DungeonService::build_known_dungeons(DungeonMessageFormat::KNOWLEDGE);
     for (const auto &known_dungeon : known_dungeons) {
         fprintf(fff, "%s", known_dungeon.data());
     }

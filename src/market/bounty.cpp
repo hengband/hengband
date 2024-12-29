@@ -19,7 +19,6 @@
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/dungeon/dungeon-record.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -28,6 +27,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "system/services/dungeon-service.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
@@ -275,8 +275,7 @@ void show_bounty(void)
  */
 void determine_daily_bounty(PlayerType *player_ptr)
 {
-    const auto &dungeon_records = DungeonRecords::get_instance();
-    const auto max_dungeon_level = std::max(dungeon_records.find_max_level(), 3);
+    const auto max_dungeon_level = std::max(DungeonService::find_max_level(), 3);
     get_mon_num_prep_bounty(player_ptr);
     auto &world = AngbandWorld::get_instance();
     while (true) {

@@ -29,7 +29,7 @@ struct birth_realm_type {
     int os = 0;
 };
 
-birth_realm_type ::birth_realm_type()
+birth_realm_type::birth_realm_type()
 {
     for (auto i = 0; i < TOTAL_REALM_NUM; i++) {
         this->sym[i] = '\0';
