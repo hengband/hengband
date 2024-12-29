@@ -80,53 +80,6 @@ void vault_prep_dragon(PlayerType *player_ptr)
 }
 
 /*!
- * @brief モンスター種族がランダムクエストの討伐対象に成り得るかを返す
- * @param r_idx モンスター種族ID
- * @return 討伐対象にできるならTRUEを返す。
- */
-bool mon_hook_quest(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    const auto &monraces = MonraceList::get_instance();
-    const auto &monrace = monraces.get_monrace(r_idx);
-    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    if (monrace.misc_flags.has(MonsterMiscType::NO_QUEST)) {
-        return false;
-    }
-
-    if (monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
-        return false;
-    }
-
-    if (monrace.rarity > 100) {
-        return false;
-    }
-
-    if (monrace.wilderness_flags.has(MonsterWildernessType::WILD_ONLY)) {
-        return false;
-    }
-
-    if (monrace.feature_flags.has(MonsterFeatureType::AQUATIC)) {
-        return false;
-    }
-
-    if (monrace.misc_flags.has(MonsterMiscType::MULTIPLY)) {
-        return false;
-    }
-
-    if (monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief モンスターがダンジョンに出現するかどうかを返す
  * @param r_idx 判定するモンスターの種族ID
  * @return ダンジョンに出現するならばTRUEを返す

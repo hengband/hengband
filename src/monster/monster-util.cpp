@@ -192,6 +192,7 @@ MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
 
 static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_id)
 {
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     switch (hook) {
     case MonraceHook::NONE:
     case MonraceHook::DUNGEON:
@@ -225,7 +226,6 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::SHARDS:
         return vault_aux_shards(player_ptr, monrace_id);
     case MonraceHook::TANUKI: {
-        const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
         auto unselectable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
         unselectable |= monrace.misc_flags.has(MonsterMiscType::MULTIPLY);
         unselectable |= monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
@@ -244,7 +244,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::FISHING:
         return monster_is_fishing_target(player_ptr, monrace_id);
     case MonraceHook::QUEST:
-        return mon_hook_quest(player_ptr, monrace_id);
+        return monrace.is_suitable_for_random_quest();
     case MonraceHook::VAULT:
         return vault_monster_okay(player_ptr, monrace_id);
     case MonraceHook::CLONE:

@@ -352,6 +352,23 @@ GridFlow MonraceDefinition::get_grid_flow_type() const
     return this->feature_flags.has(MonsterFeatureType::CAN_FLY) ? GridFlow::CAN_FLY : GridFlow::NORMAL;
 }
 
+/*!
+ * @brief モンスター種族がランダムクエストの討伐対象に成り得るかをチェックする
+ * @return 討伐対象にできるか否か
+ */
+bool MonraceDefinition::is_suitable_for_random_quest() const
+{
+    auto is_suitable = this->kind_flags.has(MonsterKindType::UNIQUE);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::NO_QUEST);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::QUESTOR);
+    is_suitable &= this->rarity <= 100;
+    is_suitable &= this->wilderness_flags.has_not(MonsterWildernessType::WILD_ONLY);
+    is_suitable &= this->feature_flags.has_not(MonsterFeatureType::AQUATIC);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::MULTIPLY);
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::FRIENDLY);
+    return is_suitable;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
