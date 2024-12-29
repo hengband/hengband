@@ -508,6 +508,11 @@ bool MonraceDefinition::is_suitable_for_nightmare(int max_level) const
     return this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR) && (this->level > max_level);
 }
 
+bool MonraceDefinition::is_eatable_human() const
+{
+    return this->symbol_char_is_any_of("pht") && this->kind_flags.has_not(MonsterKindType::UNIQUE);
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
