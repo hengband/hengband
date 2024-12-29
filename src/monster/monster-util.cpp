@@ -248,7 +248,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::QUEST:
         return monrace.is_suitable_for_random_quest();
     case MonraceHook::VAULT:
-        return vault_monster_okay(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && vault_monster_okay(player_ptr, monrace_id);
     case MonraceHook::CLONE:
         return vault_aux_clone(player_ptr, monrace_id);
     case MonraceHook::JELLY:
@@ -320,7 +320,7 @@ static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, M
     case MonraceHookTerrain::DEEP_WATER:
         return is_suitable_for_dungeon && monrace.is_suitable_for_deep_water();
     case MonraceHookTerrain::TRAPPED_PIT:
-        return vault_monster_okay(player_ptr, monrace_id) && monrace.is_suitable_for_trapped_pit();
+        return is_suitable_for_dungeon && vault_monster_okay(player_ptr, monrace_id) && monrace.is_suitable_for_trapped_pit();
     case MonraceHookTerrain::LAVA:
         return is_suitable_for_dungeon && monrace.is_suitable_for_lava();
     default:
