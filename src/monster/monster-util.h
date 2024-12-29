@@ -13,6 +13,7 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr);
 MonraceHookTerrain get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x);
 void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, MonraceHookTerrain hook2 = MonraceHookTerrain::NONE, std::optional<summon_type> summon_specific_type = std::nullopt);
 void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_id, short m_idx, MonraceHookTerrain hook2);
+void get_mon_num_prep_summon(PlayerType *player_ptr, summon_type type, BIT_FLAGS mode, std::optional<short> summoner_m_idx, MonraceHookTerrain hook);
 
 class ChameleonTransformation {
 public:

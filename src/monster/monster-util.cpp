@@ -3,12 +3,14 @@
 #include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "game-option/cheat-options.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-misc-flags.h"
 #include "monster/monster-info.h"
+#include "mspell/summon-checker.h"
 #include "spell/summon-types.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
@@ -476,6 +478,109 @@ void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_
         }
 
         if (!place_monster_can_escort(player_ptr, monrace_id, escorted_monrace_id, m_idx)) {
+            continue;
+        }
+
+        if (!filter_monrace_hook2(player_ptr, monrace_id, hook)) {
+            continue;
+        }
+
+        if (!system.is_phase_out()) {
+            if (!entry.is_permitted(dungeon_level)) {
+                continue;
+            }
+
+            if (floor.is_in_quest() && !entry.is_defeatable(dungeon_level)) {
+                continue;
+            }
+        }
+
+        entry.prob2 = entry.prob1;
+        const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+        const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+            const int numer = entry.prob2 * dungeon.special_div;
+            const int q = numer / 64;
+            const int r = numer % 64;
+            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+        }
+
+        mfdi.update(entry.prob2, entry.level);
+    }
+
+    if (cheat_hear) {
+        msg_print(mfdi.to_string());
+    }
+}
+
+/*!
+ * @brief モンスターが召喚の基本条件に合っているかをチェックする / Hack -- help decide if a monster race is "okay" to summon
+ * @param r_idx チェックするモンスター種族ID
+ * @param type 召喚種別
+ * @param mode 生成オプション
+ * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
+ * @return 召喚対象にできるならばTRUE
+ */
+static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, summon_type type, BIT_FLAGS mode, std::optional<short> summoner_m_idx)
+{
+    if (!mon_hook_dungeon(player_ptr, monrace_id)) {
+        return false;
+    }
+
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    if (summoner_m_idx) {
+        const auto &monster = floor.m_list[*summoner_m_idx];
+        if (monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace)) {
+            return false;
+        }
+    } else if (any_bits(mode, PM_FORCE_PET)) {
+        if (monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1)) {
+            return false;
+        }
+    }
+
+    if (none_bits(mode, PM_ALLOW_UNIQUE) && (monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL)))) {
+        return false;
+    }
+
+    if (type == SUMMON_NONE) {
+        return true;
+    }
+
+    const auto is_like_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
+    if (any_bits(mode, PM_FORCE_PET) && is_like_unique && monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace)) {
+        return false;
+    }
+
+    if (monrace.misc_flags.has(MonsterMiscType::CHAMELEON) && floor.get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
+        return true;
+    }
+
+    if (!summoner_m_idx) {
+        return check_summon_specific(player_ptr, MonraceId::PLAYER, monrace_id, type);
+    }
+
+    const auto &monster = floor.m_list[*summoner_m_idx];
+    return check_summon_specific(player_ptr, monster.r_idx, monrace_id, type);
+}
+
+void get_mon_num_prep_summon(PlayerType *player_ptr, summon_type type, BIT_FLAGS mode, std::optional<short> summoner_m_idx, MonraceHookTerrain hook)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_level = floor.dun_level;
+    const auto &system = AngbandSystem::get_instance();
+    auto &table = MonraceAllocationTable::get_instance();
+    const auto &dungeon = floor.get_dungeon_definition();
+    MonraceFilterDebugInfo mfdi;
+    for (auto &entry : table) {
+        const auto monrace_id = entry.index;
+        entry.prob2 = 0;
+        if (entry.prob1 <= 0) {
+            continue;
+        }
+
+        if (!summon_specific_okay(player_ptr, monrace_id, type, mode, summoner_m_idx)) {
             continue;
         }
 

@@ -10,7 +10,6 @@
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "mspell/summon-checker.h"
 #include "spell/summon-types.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
@@ -19,58 +18,6 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-
-/*!
- * @brief モンスターが召喚の基本条件に合っているかをチェックする / Hack -- help decide if a monster race is "okay" to summon
- * @param r_idx チェックするモンスター種族ID
- * @param type 召喚種別
- * @param mode 生成オプション
- * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
- * @return 召喚対象にできるならばTRUE
- */
-static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, summon_type type, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
-{
-    if (!mon_hook_dungeon(player_ptr, monrace_id)) {
-        return false;
-    }
-
-    auto &floor = *player_ptr->current_floor_ptr;
-    auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
-    if (summoner_m_idx) {
-        auto &monster = floor.m_list[*summoner_m_idx];
-        if (monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace)) {
-            return false;
-        }
-    } else if (any_bits(mode, PM_FORCE_PET)) {
-        if (monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1)) {
-            return false;
-        }
-    }
-
-    if (none_bits(mode, PM_ALLOW_UNIQUE) && (monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL)))) {
-        return false;
-    }
-
-    if (type == SUMMON_NONE) {
-        return true;
-    }
-
-    const auto is_like_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
-    if (any_bits(mode, PM_FORCE_PET) && is_like_unique && monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace)) {
-        return false;
-    }
-
-    if (monrace.misc_flags.has(MonsterMiscType::CHAMELEON) && floor.get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
-        return true;
-    }
-
-    if (summoner_m_idx) {
-        auto *m_ptr = &floor.m_list[*summoner_m_idx];
-        return check_summon_specific(player_ptr, m_ptr->r_idx, monrace_id, type);
-    } else {
-        return check_summon_specific(player_ptr, MonraceId::PLAYER, monrace_id, type);
-    }
-}
 
 /*!
  * @brief モンスター死亡時に召喚されうるモンスターかどうかの判定
@@ -126,10 +73,8 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
         return std::nullopt;
     }
 
-    auto summon_specific_hook = [type, mode, summoner_m_idx](PlayerType *player_ptr, MonraceId r_idx) {
-        return summon_specific_okay(player_ptr, r_idx, type, mode, summoner_m_idx);
-    };
-    get_mon_num_prep(player_ptr, std::move(summon_specific_hook), get_monster_hook2(player_ptr, pos->y, pos->x), type);
+    const auto hook = get_monster_hook2(player_ptr, pos->y, pos->x);
+    get_mon_num_prep_summon(player_ptr, type, mode, summoner_m_idx, hook);
 
     DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
     const auto r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
