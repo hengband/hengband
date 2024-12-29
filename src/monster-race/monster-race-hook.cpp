@@ -81,20 +81,6 @@ void vault_prep_dragon(PlayerType *player_ptr)
 }
 
 /*!
- * @brief モンスターが火山に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 火山に出現するならばTRUEを返す
- */
-bool mon_hook_volcano(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    auto *r_ptr = &monraces_info[r_idx];
-    return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO);
-}
-
-/*!
  * @brief モンスターが山地に出現するかどうかを返す
  * @param r_idx 判定するモンスターの種族ID
  * @return 山地に出現するならばTRUEを返す
