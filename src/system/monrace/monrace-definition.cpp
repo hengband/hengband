@@ -476,6 +476,21 @@ bool MonraceDefinition::is_suitable_for_tanuki() const
     return is_suitable;
 }
 
+/*!
+ * モンスターが人形のベースにできるかを返す
+ * @return 人形にできるか否か
+ */
+bool MonraceDefinition::is_suitable_for_figurine() const
+{
+    auto is_suitable = this->kind_flags.has_not(MonsterKindType::UNIQUE);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::KAGE);
+    is_suitable &= this->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
+    is_suitable &= this->population_flags.has_not(MonsterPopulationType::NAZGUL);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::FORCE_DEPTH);
+    is_suitable &= this->population_flags.has_none_of({ MonsterPopulationType::ONLY_ONE, MonsterPopulationType::BUNBUN_STRIKER });
+    return is_suitable;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);

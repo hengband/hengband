@@ -110,11 +110,11 @@ void OtherItemsEnchanter::generate_figurine()
     MonraceId monrace_id;
     while (true) {
         monrace_id = monraces.pick_id_at_random();
-        if (!item_monster_okay(this->player_ptr, monrace_id) || (monrace_id == MonraceId::TSUCHINOKO)) {
+        const auto &monrace = monraces.get_monrace(monrace_id);
+        if (!monrace.is_suitable_for_figurine() || (monrace_id == MonraceId::TSUCHINOKO)) {
             continue;
         }
 
-        const auto &monrace = monraces.get_monrace(monrace_id);
         auto check = (floor.dun_level < monrace.level) ? (monrace.level - floor.dun_level) : 0;
         if ((monrace.rarity > 100) || (randint0(check) > 0)) {
             continue;
