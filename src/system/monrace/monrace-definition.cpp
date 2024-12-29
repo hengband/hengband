@@ -429,6 +429,11 @@ bool MonraceDefinition::is_suitable_for_shore() const
     return this->wilderness_flags.has(MonsterWildernessType::WILD_SHORE);
 }
 
+bool MonraceDefinition::is_suitable_for_waste() const
+{
+    return this->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_WASTE, MonsterWildernessType::WILD_ALL });
+}
+
 /*!
  * @brief たぬきが変身できるかを判定する
  *
