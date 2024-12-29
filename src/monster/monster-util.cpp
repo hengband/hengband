@@ -521,7 +521,7 @@ void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 召喚対象にできるならばTRUE
  */
-static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, summon_type type, BIT_FLAGS mode, std::optional<short> summoner_m_idx)
+static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, const SummonCondition &condition)
 {
     if (!mon_hook_dungeon(player_ptr, monrace_id)) {
         return false;
@@ -529,27 +529,27 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, s
 
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
-    if (summoner_m_idx) {
-        const auto &monster = floor.m_list[*summoner_m_idx];
+    if (condition.summoner_m_idx) {
+        const auto &monster = floor.m_list[*condition.summoner_m_idx];
         if (monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace)) {
             return false;
         }
-    } else if (any_bits(mode, PM_FORCE_PET)) {
+    } else if (any_bits(condition.mode, PM_FORCE_PET)) {
         if (monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1)) {
             return false;
         }
     }
 
-    if (none_bits(mode, PM_ALLOW_UNIQUE) && (monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL)))) {
+    if (none_bits(condition.mode, PM_ALLOW_UNIQUE) && (monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL)))) {
         return false;
     }
 
-    if (type == SUMMON_NONE) {
+    if (condition.type == SUMMON_NONE) {
         return true;
     }
 
     const auto is_like_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
-    if (any_bits(mode, PM_FORCE_PET) && is_like_unique && monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace)) {
+    if (any_bits(condition.mode, PM_FORCE_PET) && is_like_unique && monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace)) {
         return false;
     }
 
@@ -557,15 +557,15 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, s
         return true;
     }
 
-    if (!summoner_m_idx) {
-        return check_summon_specific(player_ptr, MonraceId::PLAYER, monrace_id, type);
+    if (!condition.summoner_m_idx) {
+        return check_summon_specific(player_ptr, MonraceId::PLAYER, monrace_id, condition.type);
     }
 
-    const auto &monster = floor.m_list[*summoner_m_idx];
-    return check_summon_specific(player_ptr, monster.r_idx, monrace_id, type);
+    const auto &monster = floor.m_list[*condition.summoner_m_idx];
+    return check_summon_specific(player_ptr, monster.r_idx, monrace_id, condition.type);
 }
 
-void get_mon_num_prep_summon(PlayerType *player_ptr, summon_type type, BIT_FLAGS mode, std::optional<short> summoner_m_idx, MonraceHookTerrain hook)
+void get_mon_num_prep_summon(PlayerType *player_ptr, const SummonCondition &condition)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto dungeon_level = floor.dun_level;
@@ -580,11 +580,11 @@ void get_mon_num_prep_summon(PlayerType *player_ptr, summon_type type, BIT_FLAGS
             continue;
         }
 
-        if (!summon_specific_okay(player_ptr, monrace_id, type, mode, summoner_m_idx)) {
+        if (!summon_specific_okay(player_ptr, monrace_id, condition)) {
             continue;
         }
 
-        if (!filter_monrace_hook2(player_ptr, monrace_id, hook)) {
+        if (!filter_monrace_hook2(player_ptr, monrace_id, condition.hook)) {
             continue;
         }
 

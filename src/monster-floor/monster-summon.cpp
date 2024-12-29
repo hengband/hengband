@@ -74,7 +74,8 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
     }
 
     const auto hook = get_monster_hook2(player_ptr, pos->y, pos->x);
-    get_mon_num_prep_summon(player_ptr, type, mode, summoner_m_idx, hook);
+    SummonCondition condition(type, mode, summoner_m_idx, hook);
+    get_mon_num_prep_summon(player_ptr, condition);
 
     DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
     const auto r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
