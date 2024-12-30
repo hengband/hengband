@@ -7,6 +7,7 @@
 #pragma once
 
 #include "util/abstract-map-wrapper.h"
+#include <functional>
 #include <map>
 #include <optional>
 #include <set>
@@ -35,6 +36,9 @@ public:
     MonraceDefinition &get_monrace(MonraceId monrace_id);
     const MonraceDefinition &get_monrace(MonraceId monrace_id) const;
     const std::vector<MonraceId> &get_valid_monrace_ids() const;
+    std::vector<MonraceId> search(std::function<bool(const MonraceDefinition &)> filter, bool is_known_only = false) const;
+    std::vector<MonraceId> search_by_name(std::string_view name, bool is_known_only = false) const;
+    std::vector<MonraceId> search_by_symbol(char symbol, bool is_known_only) const;
     const std::vector<std::pair<MonraceId, const MonraceDefinition *>> &get_sorted_monraces() const;
     bool can_unify_separate(const MonraceId r_idx) const;
     void kill_unified_unique(const MonraceId r_idx);
