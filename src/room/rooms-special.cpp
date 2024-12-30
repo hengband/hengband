@@ -35,13 +35,13 @@ void place_floor_glass(PlayerType *player_ptr, Grid &grid)
 void place_outer_glass(PlayerType *player_ptr, Grid &grid)
 {
     place_grid(player_ptr, &grid, GB_OUTER);
-    grid.feat = feat_glass_wall;
+    grid.set_terrain_id(TerrainTag::GLASS_WALL);
 }
 
 void place_inner_glass(PlayerType *player_ptr, Grid &grid)
 {
     place_grid(player_ptr, &grid, GB_INNER);
-    grid.feat = feat_glass_wall;
+    grid.set_terrain_id(TerrainTag::GLASS_WALL);
 }
 
 void place_inner_perm_glass(PlayerType *player_ptr, Grid &grid)
@@ -132,7 +132,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
         place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
         const Pos2D pos(y, x);
         if (floor.has_closed_door_at(pos)) {
-            floor.get_grid(pos).mimic = feat_glass_wall;
+            floor.get_grid(pos).set_mimic_terrain_id(TerrainTag::GLASS_WALL);
         }
 
         /* Place a potion */

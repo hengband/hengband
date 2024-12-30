@@ -31,6 +31,7 @@
 #include "store/store.h"
 #include "system/dungeon/dungeon-data-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
@@ -354,7 +355,7 @@ static void build_vault(
                 break;
             case '$':
                 place_grid(player_ptr, &grid, GB_INNER);
-                grid.feat = feat_glass_wall;
+                grid.set_terrain_id(TerrainTag::GLASS_WALL);
                 break;
             case 'X':
                 place_grid(player_ptr, &grid, GB_INNER_PERM);
@@ -383,7 +384,7 @@ static void build_vault(
             case '-':
                 place_secret_door(player_ptr, pos.y, pos.x, DOOR_GLASS_DOOR);
                 if (floor.has_closed_door_at(pos)) {
-                    grid.mimic = feat_glass_wall;
+                    grid.set_mimic_terrain_id(TerrainTag::GLASS_WALL);
                 }
 
                 break;

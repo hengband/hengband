@@ -21,4 +21,5 @@ enum class TerrainTag {
     GRANITE_WALL,
     PERMANENT_WALL,
     GLASS_FLOOR,
+    GLASS_WALL,
 };
