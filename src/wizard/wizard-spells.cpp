@@ -32,20 +32,24 @@
 #include "spell/summon-types.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
+#include "util/candidate-selector.h"
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
+#include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include <string_view>
 #include <vector>
 
-static const std::vector<debug_spell_command> debug_spell_commands_list = {
+namespace {
+const std::vector<debug_spell_command> debug_spell_commands_list = {
     { 2, "vanish dungeon", { .spell2 = { vanish_dungeon } } },
     { 2, "unique detection", { .spell2 = { activate_unique_detection } } },
     { 3, "true healing", { .spell3 = { true_healing } } },
@@ -54,13 +58,52 @@ static const std::vector<debug_spell_command> debug_spell_commands_list = {
     { 5, "pattern teleport", { .spell5 = { pattern_teleport } } },
 };
 
-static std::optional<MonraceId> input_monster_race_id(const MonraceId monrace_id)
+std::vector<MonraceId> wiz_collect_monster_candidates(char symbol)
+{
+    const auto &monraces = MonraceList::get_instance();
+
+    if (symbol == KTRL('M')) {
+        const auto monster_name = input_string("Monster name: ", MAX_MONSTER_NAME);
+        if (!monster_name || monster_name->empty()) {
+            return {};
+        }
+
+        return monraces.search_by_name(*monster_name, false);
+    }
+
+    return monraces.search_by_symbol(symbol, false);
+}
+
+std::optional<MonraceId> wiz_select_summon_monrace_id(MonraceId monrace_id)
 {
     if (MonraceList::is_valid(monrace_id)) {
         return monrace_id;
     }
 
-    return input_numerics("MonsterID", 1, MonraceList::get_instance().size() - 1, MonraceId::FILTHY_URCHIN);
+    constexpr auto prompt = "Enter monster symbol character(^M:Search by name, ^I:Input MonsterID): ";
+    const auto symbol = input_command(prompt);
+    if (!symbol) {
+        return std::nullopt;
+    }
+
+    const auto &monraces = MonraceList::get_instance();
+    if (*symbol == KTRL('I')) {
+        return input_numerics("MonsterID", 1, monraces.size() - 1, MonraceId::FILTHY_URCHIN);
+    }
+
+    const auto monrace_ids = wiz_collect_monster_candidates(*symbol);
+    if (monrace_ids.empty()) {
+        return std::nullopt;
+    }
+
+    auto describer = [&](MonraceId id) {
+        return monraces.get_monrace(id).name.string();
+    };
+    CandidateSelector cs("Witch monster: ", 15);
+    const auto choice = cs.select(monrace_ids, describer);
+
+    return (choice != monrace_ids.end()) ? std::make_optional(*choice) : std::nullopt;
+}
 }
 
 /*!
@@ -231,7 +274,7 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
  */
 void wiz_summon_specific_monster(PlayerType *player_ptr, const MonraceId r_idx)
 {
-    const auto new_monrace_id = input_monster_race_id(r_idx);
+    const auto new_monrace_id = wiz_select_summon_monrace_id(r_idx);
     if (!new_monrace_id) {
         return;
     }
@@ -248,7 +291,7 @@ void wiz_summon_specific_monster(PlayerType *player_ptr, const MonraceId r_idx)
  */
 void wiz_summon_pet(PlayerType *player_ptr, const MonraceId r_idx)
 {
-    const auto new_monrace_id = input_monster_race_id(r_idx);
+    const auto new_monrace_id = wiz_select_summon_monrace_id(r_idx);
     if (!new_monrace_id) {
         return;
     }
@@ -263,7 +306,7 @@ void wiz_summon_pet(PlayerType *player_ptr, const MonraceId r_idx)
  */
 void wiz_summon_clone(PlayerType *player_ptr, const MonraceId r_idx)
 {
-    const auto new_monrace_id = input_monster_race_id(r_idx);
+    const auto new_monrace_id = wiz_select_summon_monrace_id(r_idx);
     if (!new_monrace_id) {
         return;
     }
