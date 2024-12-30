@@ -225,9 +225,9 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::HUMAN:
         return monrace.is_eatable_human();
     case MonraceHook::GLASS:
-        return is_suitable_for_dungeon && monrace.is_suitable_for_glass();
+        return is_suitable_for_dungeon && monrace.is_suitable_for_glass_through();
     case MonraceHook::SHARDS:
-        return vault_aux_shards(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_glass_breaking();
     case MonraceHook::TANUKI: {
         if (!monrace.is_suitable_for_tanuki()) {
             return false;

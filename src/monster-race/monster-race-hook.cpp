@@ -80,26 +80,6 @@ void vault_prep_dragon(PlayerType *player_ptr)
     vault_aux_dragon_mask4.set(rand_choice(breath_list));
 }
 
-/*
- * Helper function for "glass room"
- */
-bool vault_aux_shards(PlayerType *player_ptr, MonraceId r_idx)
-{
-    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= monrace.is_suitable_for_special_room();
-    if (!is_valid) {
-        return false;
-    }
-
-    if (monrace.ability_flags.has_not(MonsterAbilityType::BR_SHAR)) {
-        return false;
-    }
-
-    return true;
-}
-
 /*!
  * @brief モンスターがゼリーnestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (jelly)"

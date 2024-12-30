@@ -166,7 +166,8 @@ public:
     bool is_suitable_for_lava() const;
     bool is_suitable_for_trapped_pit() const;
     bool is_suitable_for_special_room() const;
-    bool is_suitable_for_glass() const;
+    bool is_suitable_for_glass_through() const;
+    bool is_suitable_for_glass_breaking() const;
     bool is_suitable_for_town() const;
     bool is_suitable_for_ocean() const;
     bool is_suitable_for_shore() const;

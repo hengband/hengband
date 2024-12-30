@@ -406,13 +406,20 @@ bool MonraceDefinition::is_suitable_for_special_room() const
  * - 分解ブレスは使えない
  * @param 配置可不可
  */
-bool MonraceDefinition::is_suitable_for_glass() const
+bool MonraceDefinition::is_suitable_for_glass_through() const
 {
-    auto is_selectable = this->is_suitable_for_special_room();
-    is_selectable &= this->ability_flags.has_any_of({ MonsterAbilityType::BR_LITE, MonsterAbilityType::BA_LITE });
-    is_selectable &= this->feature_flags.has_none_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL });
-    is_selectable &= this->ability_flags.has_not(MonsterAbilityType::BR_DISI);
-    return is_selectable;
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->ability_flags.has_any_of({ MonsterAbilityType::BR_LITE, MonsterAbilityType::BA_LITE });
+    is_suitable &= this->feature_flags.has_none_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL });
+    is_suitable &= this->ability_flags.has_not(MonsterAbilityType::BR_DISI);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_glass_breaking() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->ability_flags.has(MonsterAbilityType::BR_SHAR);
+    return is_suitable;
 }
 
 bool MonraceDefinition::is_suitable_for_town() const
