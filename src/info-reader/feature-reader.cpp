@@ -353,7 +353,6 @@ void init_feat_variables()
     feat_trap_piranha = terrains.get_terrain_id_by_tag("TRAP_PIRANHA");
 
     /* Walls */
-    feat_granite = terrains.get_terrain_id_by_tag("GRANITE");
     feat_permanent = terrains.get_terrain_id_by_tag("PERMANENT");
 
     /* Glass floor */

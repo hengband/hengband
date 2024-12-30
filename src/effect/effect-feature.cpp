@@ -301,16 +301,13 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         lite_spot(player_ptr, y, x);
         break;
     }
-    case AttributeType::STONE_WALL: {
-        if (!cave_naked_bold(player_ptr, pos)) {
+    case AttributeType::STONE_WALL:
+        if (!cave_naked_bold(player_ptr, pos) || player_ptr->is_located_at(pos)) {
             break;
         }
-        if (player_ptr->is_located_at(pos)) {
-            break;
-        }
-        cave_set_feat(player_ptr, y, x, feat_granite);
+
+        cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
         break;
-    }
     case AttributeType::LAVA_FLOW: {
         if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
             break;

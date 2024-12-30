@@ -395,7 +395,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             {
                 if (t < 20) {
                     /* Create granite wall */
-                    cave_set_feat(player_ptr, pos.y, pos.x, feat_granite);
+                    cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
                 } else if (t < 70) {
                     /* Create quartz vein */
                     cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);

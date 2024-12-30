@@ -29,7 +29,6 @@ FEAT_IDX feat_trap_armageddon;
 FEAT_IDX feat_trap_piranha;
 
 /* Walls */
-FEAT_IDX feat_granite;
 FEAT_IDX feat_permanent;
 
 /* Glass floor */
