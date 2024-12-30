@@ -4,7 +4,6 @@
 #include "artifact/random-art-effects.h"
 #include "artifact/random-art-generator.h"
 #include "core/asking-player.h"
-#include "core/show-file.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
@@ -812,8 +811,7 @@ static std::vector<FixedArtifactId> find_wishing_fixed_artifact(PlayerType *play
 #ifdef JP
         const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #else
-        auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
-        str_tolower(item_name.data());
+        const auto item_name = str_tolower(describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE)));
 #endif
         std::string art_description = artifact.name;
 #ifdef JP
@@ -841,7 +839,7 @@ static std::vector<FixedArtifactId> find_wishing_fixed_artifact(PlayerType *play
             }
         }
 
-        str_tolower(art_description.data());
+        art_description = str_tolower(art_description);
 #endif
         const std::string match_name(_(item_name.substr(2), item_name));
         if (cheat_xtra) {
@@ -940,9 +938,11 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
         return WishResultType::NOTHING;
     }
 
+#ifdef JP
     auto *pray_chars = pray.data();
-#ifndef JP
-    str_tolower(pray_chars);
+#else
+    pray = str_tolower(pray);
+    auto *pray_chars = pray.data();
     const std::string article_single("a ");
     const std::string article_multi("an ");
     if (pray.starts_with("a ")) {
@@ -952,7 +952,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     }
 
     pray_chars = ltrim(pray_chars);
-#endif // !JP
+#endif
 
     pray_chars = rtrim(pray_chars);
 
@@ -1017,8 +1017,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
 #ifdef JP
             const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #else
-            auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
-            str_tolower(item_name.data());
+            const auto item_name = str_tolower(describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE)));
 #endif
             if (cheat_xtra) {
                 msg_format("Matching object No.%d %s", baseitem.idx, item_name.data());
@@ -1040,10 +1039,10 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                     continue;
                 }
 
-                std::string item_name(ego.name);
 #ifdef JP
+                const auto &item_name = ego.name;
 #else
-                str_tolower(item_name.data());
+                const auto item_name = str_tolower(ego.name);
 #endif
                 if (cheat_xtra) {
                     msg_format("matching ego no.%d %s...", enum2i(ego.idx), item_name.data());

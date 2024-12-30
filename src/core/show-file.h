@@ -17,5 +17,3 @@ private:
     bool is_terminated = false;
     std::string player_name;
 };
-
-void str_tolower(char *str);
