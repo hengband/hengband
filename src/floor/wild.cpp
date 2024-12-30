@@ -258,7 +258,7 @@ static void generate_wilderness_area(FloorType &floor, int terrain, uint32_t see
     if (terrain == TERRAIN_EDGE) {
         for (auto y = 0; y < MAX_HGT; y++) {
             for (auto x = 0; x < MAX_WID; x++) {
-                floor.get_grid({ y, x }).feat = feat_permanent;
+                floor.get_grid({ y, x }).set_terrain_id(TerrainTag::PERMANENT_WALL);
             }
         }
 
@@ -489,28 +489,28 @@ void wilderness_gen(PlayerType *player_ptr)
     /* Special boundary walls -- North */
     for (auto i = 0; i < MAX_WID; i++) {
         auto &grid = floor.get_grid({ 0, i });
-        grid.feat = feat_permanent;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
         grid.mimic = border.top[i];
     }
 
     /* Special boundary walls -- South */
     for (auto i = 0; i < MAX_WID; i++) {
         auto &grid = floor.get_grid({ MAX_HGT - 1, i });
-        grid.feat = feat_permanent;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
         grid.mimic = border.bottom[i];
     }
 
     /* Special boundary walls -- West */
     for (auto i = 0; i < MAX_HGT; i++) {
         auto &grid = floor.get_grid({ i, 0 });
-        grid.feat = feat_permanent;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
         grid.mimic = border.left[i];
     }
 
     /* Special boundary walls -- East */
     for (auto i = 0; i < MAX_HGT; i++) {
         auto &grid = floor.get_grid({ i, MAX_WID - 1 });
-        grid.feat = feat_permanent;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
         grid.mimic = border.right[i];
     }
 
@@ -621,7 +621,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     for (auto x = 0; x < MAX_WID; x++) {
         for (auto y = 0; y < MAX_HGT; y++) {
-            floor.get_grid({ y, x }).feat = feat_permanent;
+            floor.get_grid({ y, x }).set_terrain_id(TerrainTag::PERMANENT_WALL);
         }
     }
 
@@ -877,7 +877,8 @@ void init_wilderness_terrains(void)
 {
     const auto &terrains = TerrainList::get_instance();
     const auto terrain_floor = terrains.get_terrain_id(TerrainTag::FLOOR);
-    init_terrain_table(TERRAIN_EDGE, feat_permanent, "a", feat_permanent, MAX_FEAT_IN_TERRAIN);
+    const auto terrain_permanent_wall = terrains.get_terrain_id(TerrainTag::PERMANENT_WALL);
+    init_terrain_table(TERRAIN_EDGE, terrain_permanent_wall, "a", terrain_permanent_wall, MAX_FEAT_IN_TERRAIN);
     init_terrain_table(TERRAIN_TOWN, feat_town, "a", terrain_floor, MAX_FEAT_IN_TERRAIN);
     init_terrain_table(TERRAIN_DEEP_WATER, feat_deep_water, "ab", feat_deep_water, 12, feat_shallow_water, MAX_FEAT_IN_TERRAIN - 12);
     init_terrain_table(TERRAIN_SHALLOW_WATER, feat_shallow_water, "abcde", feat_deep_water, 3, feat_shallow_water, 12, terrain_floor, 1, feat_dirt, 1, feat_grass,

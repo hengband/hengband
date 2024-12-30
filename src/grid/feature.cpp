@@ -28,9 +28,6 @@ FEAT_IDX feat_trap_open;
 FEAT_IDX feat_trap_armageddon;
 FEAT_IDX feat_trap_piranha;
 
-/* Walls */
-FEAT_IDX feat_permanent;
-
 /* Glass floor */
 FEAT_IDX feat_glass_floor;
 

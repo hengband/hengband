@@ -143,4 +143,5 @@ const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
     { "MAGMA_VEIN", TerrainTag::MAGMA_VEIN },
     { "QUARTZ_VEIN", TerrainTag::QUARTZ_VEIN },
     { "GRANITE", TerrainTag::GRANITE_WALL },
+    { "PERMANENT", TerrainTag::PERMANENT_WALL },
 };
