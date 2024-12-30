@@ -17,6 +17,7 @@
 #include "room/door-definition.h"
 #include "room/space-finder.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -28,7 +29,7 @@ namespace {
 void place_floor_glass(PlayerType *player_ptr, Grid &grid)
 {
     place_grid(player_ptr, &grid, GB_FLOOR);
-    grid.feat = feat_glass_floor;
+    grid.set_terrain_id(TerrainTag::GLASS_FLOOR);
 }
 
 void place_outer_glass(PlayerType *player_ptr, Grid &grid)

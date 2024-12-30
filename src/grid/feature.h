@@ -9,7 +9,6 @@
 extern FEAT_IDX feat_trap_open;
 extern FEAT_IDX feat_trap_armageddon;
 extern FEAT_IDX feat_trap_piranha;
-extern FEAT_IDX feat_glass_floor;
 extern FEAT_IDX feat_glass_wall;
 extern FEAT_IDX feat_permanent_glass_wall;
 extern FEAT_IDX feat_pattern_start;
