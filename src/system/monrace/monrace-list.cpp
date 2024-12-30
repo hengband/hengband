@@ -140,7 +140,7 @@ std::vector<MonraceId> MonraceList::search_by_name(std::string_view name, bool i
     const auto lowered_search_name = str_tolower(name);
 
     auto filter = [&](const MonraceDefinition &monrace) {
-        const auto lowered_en_name = monrace.name.en_string();
+        const auto lowered_en_name = str_tolower(monrace.name.en_string());
 
 #ifdef JP
         return str_find(lowered_en_name, lowered_search_name) || str_find(monrace.name.string(), lowered_search_name);
