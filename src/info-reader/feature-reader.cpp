@@ -352,9 +352,6 @@ void init_feat_variables()
     feat_trap_armageddon = terrains.get_terrain_id_by_tag("TRAP_ARMAGEDDON");
     feat_trap_piranha = terrains.get_terrain_id_by_tag("TRAP_PIRANHA");
 
-    /* Seams */
-    feat_quartz_vein = terrains.get_terrain_id_by_tag("QUARTZ_VEIN");
-
     /* Walls */
     feat_granite = terrains.get_terrain_id_by_tag("GRANITE");
     feat_permanent = terrains.get_terrain_id_by_tag("PERMANENT");

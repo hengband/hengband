@@ -291,7 +291,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             }
 
             if (t < 70) {
-                cave_set_feat(player_ptr, pos.y, pos.x, feat_quartz_vein);
+                cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
                 continue;
             }
 

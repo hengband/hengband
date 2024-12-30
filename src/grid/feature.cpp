@@ -28,9 +28,6 @@ FEAT_IDX feat_trap_open;
 FEAT_IDX feat_trap_armageddon;
 FEAT_IDX feat_trap_piranha;
 
-/* Seams */
-FEAT_IDX feat_quartz_vein;
-
 /* Walls */
 FEAT_IDX feat_granite;
 FEAT_IDX feat_permanent;

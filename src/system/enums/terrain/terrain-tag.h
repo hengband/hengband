@@ -17,4 +17,5 @@ enum class TerrainTag {
     ENTRANCE,
     RUBBLE,
     MAGMA_VEIN,
+    QUARTZ_VEIN,
 };

@@ -398,7 +398,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                     cave_set_feat(player_ptr, pos.y, pos.x, feat_granite);
                 } else if (t < 70) {
                     /* Create quartz vein */
-                    cave_set_feat(player_ptr, pos.y, pos.x, feat_quartz_vein);
+                    cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
                 } else if (t < 100) {
                     /* Create magma vein */
                     cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
@@ -415,7 +415,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 place_grid(player_ptr, &grid, GB_EXTRA);
             } else if (t < 70) {
                 /* Create quartz vein */
-                grid.feat = feat_quartz_vein;
+                grid.set_terrain_id(TerrainTag::QUARTZ_VEIN);
             } else if (t < 100) {
                 /* Create magma vein */
                 grid.set_terrain_id(TerrainTag::MAGMA_VEIN);
