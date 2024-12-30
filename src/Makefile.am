@@ -997,6 +997,7 @@ hengband_SOURCES = \
 	tracking/health-bar-tracker.cpp tracking/health-bar-tracker.h \
 	tracking/lore-tracker.cpp tracking/lore-tracker.h \
 	\
+	util/abstract-map-wrapper.h \
 	util/abstract-vector-wrapper.h \
 	util/angband-files.cpp util/angband-files.h \
 	util/buffer-shaper.cpp util/buffer-shaper.h \

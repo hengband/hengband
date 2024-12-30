@@ -6,12 +6,13 @@
 
 #pragma once
 
+#include "util/abstract-map-wrapper.h"
 #include <map>
 #include <memory>
 
 enum class DungeonId;
 class DungeonDefinition;
-class DungeonList {
+class DungeonList : public util::AbstractMapWrapper<DungeonId, std::shared_ptr<DungeonDefinition>> {
 public:
     DungeonList(DungeonList &&) = delete;
     DungeonList(const DungeonList &) = delete;
@@ -24,16 +25,6 @@ public:
     const DungeonDefinition &get_dungeon(DungeonId dungeon_id) const;
     std::shared_ptr<DungeonDefinition> get_dungeon_shared(DungeonId dungeon_id);
     std::shared_ptr<const DungeonDefinition> get_dungeon_shared(DungeonId dungeon_id) const;
-    std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::iterator begin();
-    std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::const_iterator begin() const;
-    std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::iterator end();
-    std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::const_iterator end() const;
-    std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::reverse_iterator rbegin();
-    std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::const_reverse_iterator rbegin() const;
-    std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::reverse_iterator rend();
-    std::map<DungeonId, std::shared_ptr<DungeonDefinition>>::const_reverse_iterator rend() const;
-    size_t size() const;
-    bool empty() const;
     void emplace(DungeonId dungeon_id, DungeonDefinition &&definition);
     void retouch();
 
@@ -42,4 +33,9 @@ private:
     static DungeonList instance;
 
     std::map<DungeonId, std::shared_ptr<DungeonDefinition>> dungeons;
+
+    std::map<DungeonId, std::shared_ptr<DungeonDefinition>> &get_inner_container() override
+    {
+        return this->dungeons;
+    }
 };

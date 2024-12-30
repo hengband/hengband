@@ -1503,6 +1503,7 @@
     <ClInclude Include="..\..\src\tracking\baseitem-tracker.h" />
     <ClInclude Include="..\..\src\tracking\health-bar-tracker.h" />
     <ClInclude Include="..\..\src\tracking\lore-tracker.h" />
+    <ClInclude Include="..\..\src\util\abstract-map-wrapper.h" />
     <ClInclude Include="..\..\src\util\abstract-vector-wrapper.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
     <ClInclude Include="..\..\src\util\buffer-shaper.h" />

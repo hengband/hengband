@@ -80,56 +80,6 @@ std::shared_ptr<const DungeonRecord> DungeonRecords::get_record_shared(DungeonId
     return this->records.at(dungeon_id);
 }
 
-std::map<DungeonId, std::shared_ptr<DungeonRecord>>::iterator DungeonRecords::begin()
-{
-    return this->records.begin();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_iterator DungeonRecords::begin() const
-{
-    return this->records.cbegin();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonRecord>>::iterator DungeonRecords::end()
-{
-    return this->records.end();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_iterator DungeonRecords::end() const
-{
-    return this->records.cend();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonRecord>>::reverse_iterator DungeonRecords::rbegin()
-{
-    return this->records.rbegin();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_reverse_iterator DungeonRecords::rbegin() const
-{
-    return this->records.crbegin();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonRecord>>::reverse_iterator DungeonRecords::rend()
-{
-    return this->records.rend();
-}
-
-std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_reverse_iterator DungeonRecords::rend() const
-{
-    return this->records.crend();
-}
-
-size_t DungeonRecords::size() const
-{
-    return this->records.size();
-}
-
-bool DungeonRecords::empty() const
-{
-    return this->records.empty();
-}
-
 void DungeonRecords::reset_all()
 {
     for (auto &[_, record] : this->records) {

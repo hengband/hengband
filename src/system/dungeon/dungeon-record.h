@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "util/abstract-map-wrapper.h"
 #include <map>
 #include <memory>
 #include <optional>
@@ -28,7 +29,7 @@ private:
 
 enum class DungeonId;
 class DungeonDefinition;
-class DungeonRecords {
+class DungeonRecords : public util::AbstractMapWrapper<DungeonId, std::shared_ptr<DungeonRecord>> {
 public:
     DungeonRecords(DungeonRecords &&) = delete;
     DungeonRecords(const DungeonRecords &) = delete;
@@ -41,16 +42,6 @@ public:
     const DungeonRecord &get_record(DungeonId dungeon_id) const;
     std::shared_ptr<DungeonRecord> get_record_shared(DungeonId dungeon_id);
     std::shared_ptr<const DungeonRecord> get_record_shared(DungeonId dungeon_id) const;
-    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::iterator begin();
-    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_iterator begin() const;
-    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::iterator end();
-    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_iterator end() const;
-    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::reverse_iterator rbegin();
-    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_reverse_iterator rbegin() const;
-    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::reverse_iterator rend();
-    std::map<DungeonId, std::shared_ptr<DungeonRecord>>::const_reverse_iterator rend() const;
-    size_t size() const;
-    bool empty() const;
     void reset_all();
 
     std::vector<DungeonId> collect_entered_dungeon_ids() const;
@@ -59,4 +50,9 @@ private:
     DungeonRecords();
     static DungeonRecords instance;
     std::map<DungeonId, std::shared_ptr<DungeonRecord>> records;
+
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>> &get_inner_container() override
+    {
+        return this->records;
+    }
 };

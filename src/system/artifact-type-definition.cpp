@@ -120,46 +120,6 @@ ArtifactList &ArtifactList::get_instance()
     return instance;
 }
 
-std::map<FixedArtifactId, ArtifactType>::iterator ArtifactList::begin()
-{
-    return this->artifacts.begin();
-}
-
-std::map<FixedArtifactId, ArtifactType>::iterator ArtifactList::end()
-{
-    return this->artifacts.end();
-}
-
-std::map<FixedArtifactId, ArtifactType>::const_iterator ArtifactList::begin() const
-{
-    return this->artifacts.cbegin();
-}
-
-std::map<FixedArtifactId, ArtifactType>::const_iterator ArtifactList::end() const
-{
-    return this->artifacts.cend();
-}
-
-std::map<FixedArtifactId, ArtifactType>::reverse_iterator ArtifactList::rbegin()
-{
-    return this->artifacts.rbegin();
-}
-
-std::map<FixedArtifactId, ArtifactType>::reverse_iterator ArtifactList::rend()
-{
-    return this->artifacts.rend();
-}
-
-std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator ArtifactList::rbegin() const
-{
-    return this->artifacts.crbegin();
-}
-
-std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator ArtifactList::rend() const
-{
-    return this->artifacts.crend();
-}
-
 const ArtifactType &ArtifactList::get_artifact(const FixedArtifactId fa_id) const
 {
     if (fa_id == FixedArtifactId::NONE) {

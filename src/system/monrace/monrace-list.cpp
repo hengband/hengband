@@ -53,51 +53,6 @@ bool MonraceList::is_tsuchinoko(MonraceId monrace_id)
     return monrace_id == MonraceId::TSUCHINOKO;
 }
 
-std::map<MonraceId, MonraceDefinition>::iterator MonraceList::begin()
-{
-    return monraces_info.begin();
-}
-
-std::map<MonraceId, MonraceDefinition>::const_iterator MonraceList::begin() const
-{
-    return monraces_info.cbegin();
-}
-
-std::map<MonraceId, MonraceDefinition>::iterator MonraceList::end()
-{
-    return monraces_info.end();
-}
-
-std::map<MonraceId, MonraceDefinition>::const_iterator MonraceList::end() const
-{
-    return monraces_info.cend();
-}
-
-std::map<MonraceId, MonraceDefinition>::reverse_iterator MonraceList::rbegin()
-{
-    return monraces_info.rbegin();
-}
-
-std::map<MonraceId, MonraceDefinition>::const_reverse_iterator MonraceList::rbegin() const
-{
-    return monraces_info.crbegin();
-}
-
-std::map<MonraceId, MonraceDefinition>::reverse_iterator MonraceList::rend()
-{
-    return monraces_info.rend();
-}
-
-std::map<MonraceId, MonraceDefinition>::const_reverse_iterator MonraceList::rend() const
-{
-    return monraces_info.crend();
-}
-
-size_t MonraceList::size() const
-{
-    return monraces_info.size();
-}
-
 MonraceDefinition &MonraceList::emplace(MonraceId monrace_id)
 {
     return monraces_info.emplace_hint(monraces_info.end(), monrace_id, MonraceDefinition{})->second;

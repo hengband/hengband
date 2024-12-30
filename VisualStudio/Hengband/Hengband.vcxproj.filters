@@ -5385,6 +5385,9 @@
     <ClInclude Include="..\..\src\net\curl-slist.h">
       <Filter>net</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\util\abstract-map-wrapper.h">
+      <Filter>util</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\util\abstract-vector-wrapper.h">
       <Filter>util</Filter>
     </ClInclude>
