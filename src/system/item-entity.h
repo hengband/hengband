@@ -171,6 +171,7 @@ public:
     bool is_worthless() const;
     int get_baseitem_cost() const;
     MonraceId get_monrace_id() const;
+    int get_lite_radius() const;
 
     void mark_as_known();
     void mark_as_tried() const;
