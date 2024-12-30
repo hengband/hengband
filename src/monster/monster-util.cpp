@@ -238,7 +238,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
         return do_hook(player_ptr, hook_tanuki, monrace_id);
     }
     case MonraceHook::FISHING:
-        return monster_is_fishing_target(player_ptr, monrace_id);
+        return monrace.is_catchable_for_fishing();
     case MonraceHook::QUEST:
         return monrace.is_suitable_for_random_quest();
     case MonraceHook::VAULT:

@@ -523,20 +523,3 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MonraceId r_idx)
 
     return dark_elf_list.find(r_idx) != dark_elf_list.end();
 }
-
-/*!
- * @brief モンスター種族が釣れる種族かどうかを判定する。
- * @param r_idx 判定したいモンスター種族のID
- * @return 釣れる対象ならばTRUEを返す
- */
-bool monster_is_fishing_target(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    const auto &monrace = monraces_info[r_idx];
-    auto can_fish = monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
-    can_fish &= monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
-    can_fish &= angband_strchr("Jjlw", monrace.symbol_definition.character) != nullptr;
-    return can_fish;
-}

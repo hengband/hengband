@@ -182,6 +182,7 @@ public:
     bool is_suitable_for_nightmare(int max_level) const;
     bool is_human() const;
     bool is_eatable_human() const;
+    bool is_catchable_for_fishing() const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();

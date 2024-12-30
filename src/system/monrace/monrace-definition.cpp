@@ -10,6 +10,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/system-variables.h"
 #include "util/enum-converter.h"
+#include "util/string-processor.h"
 #include "world/world.h"
 #include <algorithm>
 #ifndef JP
@@ -523,6 +524,14 @@ bool MonraceDefinition::is_human() const
 bool MonraceDefinition::is_eatable_human() const
 {
     return this->is_human() && this->kind_flags.has_not(MonsterKindType::UNIQUE);
+}
+
+bool MonraceDefinition::is_catchable_for_fishing() const
+{
+    auto is_catchable = this->feature_flags.has(MonsterFeatureType::AQUATIC);
+    is_catchable &= this->kind_flags.has_not(MonsterKindType::UNIQUE);
+    is_catchable &= str_find("Jjlw", &this->symbol_definition.character);
+    return is_catchable;
 }
 
 void MonraceDefinition::init_sex(uint32_t value)
