@@ -24,6 +24,7 @@
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -295,7 +296,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             }
 
             if (t < 100) {
-                cave_set_feat(player_ptr, pos.y, pos.x, feat_magma_vein);
+                cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
                 continue;
             }
 

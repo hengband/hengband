@@ -29,7 +29,6 @@ FEAT_IDX feat_trap_armageddon;
 FEAT_IDX feat_trap_piranha;
 
 /* Seams */
-FEAT_IDX feat_magma_vein;
 FEAT_IDX feat_quartz_vein;
 
 /* Walls */
@@ -101,6 +100,11 @@ FEAT_IDX feat_jammed_door_random(int door_type)
     const auto &door = feat_door[door_type];
     std::span<const FEAT_IDX> candidates(std::begin(door.jammed), door.num_jammed);
     return candidates.empty() ? terrains.get_terrain_id(TerrainTag::NONE) : rand_choice(candidates);
+}
+
+void cave_set_feat(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag)
+{
+    cave_set_feat(player_ptr, pos.y, pos.x, TerrainList::get_instance().get_terrain_id(tag));
 }
 
 /*

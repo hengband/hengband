@@ -353,7 +353,6 @@ void init_feat_variables()
     feat_trap_piranha = terrains.get_terrain_id_by_tag("TRAP_PIRANHA");
 
     /* Seams */
-    feat_magma_vein = terrains.get_terrain_id_by_tag("MAGMA_VEIN");
     feat_quartz_vein = terrains.get_terrain_id_by_tag("QUARTZ_VEIN");
 
     /* Walls */
