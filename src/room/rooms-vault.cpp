@@ -362,7 +362,7 @@ static void build_vault(
                 break;
             case 'Y':
                 place_grid(player_ptr, &grid, GB_INNER_PERM);
-                grid.feat = feat_permanent_glass_wall;
+                grid.set_terrain_id(TerrainTag::PERMANENT_GLASS_WALL);
                 break;
             case '*':
                 if (evaluate_percent(75)) {

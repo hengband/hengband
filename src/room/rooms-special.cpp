@@ -4,7 +4,6 @@
 #include "floor/floor-generator.h"
 #include "game-option/cheat-types.h"
 #include "grid/door.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "monster-floor/monster-generator.h"
@@ -47,7 +46,7 @@ void place_inner_glass(PlayerType *player_ptr, Grid &grid)
 void place_inner_perm_glass(PlayerType *player_ptr, Grid &grid)
 {
     place_grid(player_ptr, &grid, GB_INNER_PERM);
-    grid.feat = feat_permanent_glass_wall;
+    grid.set_terrain_id(TerrainTag::PERMANENT_GLASS_WALL);
 }
 }
 

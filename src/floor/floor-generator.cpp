@@ -21,7 +21,6 @@
 #include "game-option/cheat-types.h"
 #include "game-option/game-play-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
@@ -212,7 +211,7 @@ static Pos2D build_battle(PlayerType *player_ptr)
 
     for (auto y = y_height + 1; y <= y_height + 5; y++) {
         for (auto x = x_left + 20 + 2 * (y_height + 5 - y); x <= x_right - 20 - 2 * (y_height + 5 - y); x++) {
-            floor.get_grid({ y, x }).feat = feat_permanent_glass_wall;
+            floor.get_grid({ y, x }).set_terrain_id(TerrainTag::PERMANENT_GLASS_WALL);
         }
     }
 
