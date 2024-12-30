@@ -77,50 +77,16 @@ void update_lite_radius(PlayerType *player_ptr)
             continue;
         }
 
-        if (o_ptr->ego_idx == EgoType::LITE_SHINE) {
-            player_ptr->cur_lite++;
-        }
-
         const auto flags = o_ptr->get_flags();
         if (flags.has_not(TR_DARK_SOURCE)) {
             if (o_ptr->bi_key.tval() == ItemKindType::LITE) {
                 const auto sval = o_ptr->bi_key.sval();
-                if ((sval == SV_LITE_TORCH) && (o_ptr->fuel <= 0)) {
-                    continue;
-                }
-
-                if ((sval == SV_LITE_LANTERN) && (o_ptr->fuel <= 0)) {
+                if ((sval == SV_LITE_TORCH || sval == SV_LITE_LANTERN) && (o_ptr->fuel <= 0)) {
                     continue;
                 }
             }
         }
-
-        POSITION rad = 0;
-        if (flags.has(TR_LITE_1) && flags.has_not(TR_DARK_SOURCE)) {
-            rad += 1;
-        }
-
-        if (flags.has(TR_LITE_2) && flags.has_not(TR_DARK_SOURCE)) {
-            rad += 2;
-        }
-
-        if (flags.has(TR_LITE_3) && flags.has_not(TR_DARK_SOURCE)) {
-            rad += 3;
-        }
-
-        if (flags.has(TR_LITE_M1)) {
-            rad -= 1;
-        }
-
-        if (flags.has(TR_LITE_M2)) {
-            rad -= 2;
-        }
-
-        if (flags.has(TR_LITE_M3)) {
-            rad -= 3;
-        }
-
-        player_ptr->cur_lite += rad;
+        player_ptr->cur_lite += o_ptr->get_lite_radius();
     }
 
     if (player_ptr->current_floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS) && player_ptr->cur_lite > 1) {
