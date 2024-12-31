@@ -145,7 +145,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         tb->last_destroyed = autopick_line_from_entry(*entry);
     }
 
-    tb->lines_list = read_pickpref_text_lines(player_ptr, &tb->filename_mode);
+    tb->lines_list = read_pickpref_text_lines(player_ptr->base_name, &tb->filename_mode);
     for (i = 0; i < tb->cy; i++) {
         if (!tb->lines_list[i]) {
             tb->cy = tb->cx = 0;

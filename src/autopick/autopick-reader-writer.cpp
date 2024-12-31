@@ -160,21 +160,21 @@ static void prepare_default_pickpref(std::string_view player_base_name)
  * @brief Read an autopick prefence file to memory
  * Prepare default if no user file is found
  */
-std::vector<concptr> read_pickpref_text_lines(PlayerType *player_ptr, int *filename_mode_p)
+std::vector<concptr> read_pickpref_text_lines(std::string_view player_base_name, int *filename_mode_p)
 {
     /* Try a filename with player name */
     *filename_mode_p = PT_WITH_PNAME;
-    auto filename = pickpref_filename(player_ptr->base_name, *filename_mode_p);
+    auto filename = pickpref_filename(player_base_name, *filename_mode_p);
     std::vector<concptr> lines_list = read_text_lines(filename);
 
     if (lines_list.empty()) {
         *filename_mode_p = PT_DEFAULT;
-        filename = pickpref_filename(player_ptr->base_name, *filename_mode_p);
+        filename = pickpref_filename(player_base_name, *filename_mode_p);
         lines_list = read_text_lines(filename);
     }
 
     if (lines_list.empty()) {
-        prepare_default_pickpref(player_ptr->base_name);
+        prepare_default_pickpref(player_base_name);
         lines_list = read_text_lines(filename);
     }
 

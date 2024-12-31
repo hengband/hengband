@@ -26,9 +26,9 @@ static const char autoregister_header[] = "?:$AUTOREGISTER";
 /*!
  * @brief Clear auto registered lines in the picktype.prf .
  */
-static bool clear_auto_register(PlayerType *player_ptr)
+static bool clear_auto_register(std::string_view player_base_name)
 {
-    const auto path_pref = search_pickpref_path(player_ptr->base_name);
+    const auto path_pref = search_pickpref_path(player_base_name);
     if (path_pref.empty()) {
         return true;
     }
@@ -134,7 +134,7 @@ bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
     }
 
     if (!player_ptr->autopick_autoregister) {
-        if (!clear_auto_register(player_ptr)) {
+        if (!clear_auto_register(player_ptr->base_name)) {
             return false;
         }
     }
