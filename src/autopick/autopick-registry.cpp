@@ -28,7 +28,7 @@ static const char autoregister_header[] = "?:$AUTOREGISTER";
  */
 static bool clear_auto_register(PlayerType *player_ptr)
 {
-    const auto path_pref = search_pickpref_path(player_ptr);
+    const auto path_pref = search_pickpref_path(player_ptr->base_name);
     if (path_pref.empty()) {
         return true;
     }
@@ -139,7 +139,7 @@ bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
         }
     }
 
-    const auto path_pref = search_pickpref_path(player_ptr);
+    const auto path_pref = search_pickpref_path(player_ptr->base_name);
     auto *pref_fff = !path_pref.empty() ? angband_fopen(path_pref, FileOpenMode::READ) : nullptr;
 
     if (pref_fff) {

@@ -20,7 +20,7 @@ void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
 {
     init_autopick();
 
-    const auto path = search_pickpref_path(player_ptr);
+    const auto path = search_pickpref_path(player_ptr->base_name);
     if (!path.empty()) {
         const auto pickpref_filename = path.filename().string();
         if (process_autopick_file(player_ptr, pickpref_filename) == 0) {
@@ -44,10 +44,10 @@ void autopick_load_pref(PlayerType *player_ptr, bool disp_mes)
  *
  * @return 見つかった自動拾い設定ファイルのパス。見つからなかった場合は空のパス。
  */
-std::filesystem::path search_pickpref_path(PlayerType *player_ptr)
+std::filesystem::path search_pickpref_path(std::string_view player_base_name)
 {
     for (const auto filename_mode : { PT_WITH_PNAME, PT_DEFAULT }) {
-        const auto filename = pickpref_filename(player_ptr->base_name, filename_mode);
+        const auto filename = pickpref_filename(player_base_name, filename_mode);
         const auto path = path_build(ANGBAND_DIR_USER, filename);
         if (std::filesystem::exists(path)) {
             return path;
@@ -113,13 +113,13 @@ static std::vector<concptr> read_text_lines(std::string_view filename)
 /*!
  * @brief Copy the default autopick file to the user directory
  */
-static void prepare_default_pickpref(PlayerType *player_ptr)
+static void prepare_default_pickpref(std::string_view player_base_name)
 {
     const std::vector<std::string> messages = { _("あなたは「自動拾いエディタ」を初めて起動しました。", "You have activated the Auto-Picker Editor for the first time."),
         _("自動拾いのユーザー設定ファイルがまだ書かれていないので、", "Since user pref file for autopick is not yet created,"),
         _("基本的な自動拾い設定ファイルをlib/pref/picktype.prfからコピーします。", "the default setting is loaded from lib/pref/pickpref.prf .") };
 
-    const auto filename = pickpref_filename(player_ptr->base_name, PT_DEFAULT);
+    const auto filename = pickpref_filename(player_base_name, PT_DEFAULT);
     for (const auto &message : messages) {
         msg_print(message);
     }
@@ -174,7 +174,7 @@ std::vector<concptr> read_pickpref_text_lines(PlayerType *player_ptr, int *filen
     }
 
     if (lines_list.empty()) {
-        prepare_default_pickpref(player_ptr);
+        prepare_default_pickpref(player_ptr->base_name);
         lines_list = read_text_lines(filename);
     }
 
