@@ -496,7 +496,8 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
                 if (!line_str) {
                     break;
                 }
-                angband_fputs(ffp, line_str->data(), line_str->size());
+
+                fprintf(ffp, "%s\n", line_str->data());
             }
             angband_fclose(fff);
             angband_fclose(ffp);

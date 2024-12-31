@@ -202,7 +202,7 @@ bool write_text_lines(std::string_view filename, const std::vector<concptr> &lin
             break;
         }
 
-        angband_fputs(fff, line, 1024);
+        fprintf(fff, "%s\n", line);
     }
 
     angband_fclose(fff);
