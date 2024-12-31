@@ -15,6 +15,7 @@
 #include "io/input-key-acceptor.h"
 #include "io/read-pref-file.h"
 #include "system/item-entity.h"
+#include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
@@ -201,7 +202,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     }
 
     screen_load();
-    const auto filename = pickpref_filename(player_ptr, tb->filename_mode);
+    const auto filename = pickpref_filename(player_ptr->base_name, tb->filename_mode);
 
     if (quit == APE_QUIT_AND_SAVE) {
         write_text_lines(filename, tb->lines_list);
