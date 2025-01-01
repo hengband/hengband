@@ -39,18 +39,6 @@ void autopick_type::remove(int flag)
 }
 
 /*!
- * @brief Free memory of lines_list.
- */
-void free_text_lines(std::vector<concptr> &lines_list)
-{
-    for (int lines = 0; lines_list[lines]; lines++) {
-        string_free(lines_list[lines]);
-    }
-
-    lines_list.clear();
-}
-
-/*!
  * @brief Find a command by 'key'.
  */
 int get_com_id(char key)
