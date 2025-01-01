@@ -325,7 +325,7 @@ void search_for_object(PlayerType *player_ptr, text_body_type *tb, const ItemEnt
             }
         }
 
-        if (!autopick_new_entry(entry, tb->lines_list[i], false)) {
+        if (!autopick_new_entry(entry, *tb->lines_list[i], false)) {
             continue;
         }
 
@@ -370,7 +370,6 @@ void search_for_string(text_body_type *tb, concptr search_str, bool forward)
 
     int i = tb->cy;
     while (true) {
-        concptr pos;
         if (forward) {
             if (!tb->lines_list[++i]) {
                 break;
@@ -381,7 +380,8 @@ void search_for_string(text_body_type *tb, concptr search_str, bool forward)
             }
         }
 
-        pos = angband_strstr(tb->lines_list[i], search_str);
+        const auto line_data = tb->lines_list[i]->data();
+        const auto *pos = angband_strstr(line_data, search_str);
         if (!pos) {
             continue;
         }
@@ -389,13 +389,13 @@ void search_for_string(text_body_type *tb, concptr search_str, bool forward)
         if ((tb->states[i] & LSTAT_BYPASS) && !(tb->states[i] & LSTAT_EXPRESSION)) {
             if (bypassed_cy == -1) {
                 bypassed_cy = i;
-                bypassed_cx = (int)(pos - tb->lines_list[i]);
+                bypassed_cx = (int)(pos - line_data);
             }
 
             continue;
         }
 
-        tb->cx = (int)(pos - tb->lines_list[i]);
+        tb->cx = (int)(pos - line_data);
         tb->cy = i;
 
         if (bypassed_cy != -1) {

@@ -97,10 +97,9 @@ void auto_inscribe_item(ItemEntity *o_ptr, int idx)
  */
 int count_line(text_body_type *tb)
 {
-    int num_lines;
-    for (num_lines = 0; tb->lines_list[num_lines]; num_lines++) {
-        ;
-    }
-
-    return num_lines;
+    const auto begin = tb->lines_list.begin();
+    const auto it = std::find_if(begin, tb->lines_list.end(), [](const auto &line) {
+        return !line;
+    });
+    return std::distance(begin, it);
 }

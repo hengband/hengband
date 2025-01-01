@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
-
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -63,7 +63,7 @@ struct text_body_type {
     std::vector<std::string> yank{};
     bool yank_eol = false;
 
-    std::vector<concptr> lines_list{};
+    std::vector<std::unique_ptr<std::string>> lines_list;
     byte states[MAX_LINES]{};
 
     uint16_t dirty_flags = 0;

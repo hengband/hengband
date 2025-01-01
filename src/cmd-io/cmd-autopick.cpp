@@ -78,7 +78,7 @@ static int analyze_move_key(text_body_type *tb, uint32_t skey)
         return com_id;
     }
 
-    int len = strlen(tb->lines_list[tb->cy]);
+    const int len = tb->lines_list[tb->cy]->length();
     tb->mark = MARK_MARK | MARK_BY_SHIFT;
     tb->my = tb->cy;
     tb->mx = tb->cx;
@@ -211,7 +211,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         write_text_lines(filename, tb->lines_list);
     }
 
-    free_text_lines(tb->lines_list);
     string_free(tb->search_str);
     string_free(tb->last_destroyed);
     kill_yank_chain(tb);

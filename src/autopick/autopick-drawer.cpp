@@ -25,26 +25,19 @@ static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
     }
 
     byte state = 0;
-    for (int y = 0; tb->lines_list[y]; y++) {
-        auto s = tb->lines_list[y];
+    for (auto y = 0; tb->lines_list[y]; y++) {
+        std::string_view s(*tb->lines_list[y]);
         tb->states[y] = state;
-
-        if (*s++ != '?') {
-            continue;
-        }
-        if (*s++ != ':') {
+        if (!s.starts_with("?:")) {
             continue;
         }
 
-        if (streq(s, "$AUTOREGISTER")) {
+        if (s.substr(2) == "$AUTOREGISTER") {
             state |= LSTAT_AUTOREGISTER;
         }
 
-        auto s_keep = string_make(s);
-        //! @note string_make の戻り値は const char* だが process_pref_file_expr で書き換える
-        // 可能性があるのでconstを外す必要がある。バッファ領域内のみの操作なので安全なはず。
-        auto ss = const_cast<char *>(s_keep);
-
+        std::string s_keep(s);
+        auto ss = s_keep.data();
         char f;
         auto v = process_pref_file_expr(player_ptr, &ss, &f);
         if (v == "0") {
@@ -53,7 +46,6 @@ static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
             state &= ~LSTAT_BYPASS;
         }
 
-        string_free(s_keep);
         tb->states[y] = state | LSTAT_EXPRESSION;
     }
 
@@ -77,8 +69,8 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
 
 #ifdef JP
     /* Don't let cursor at second byte of kanji */
-    for (int i = 0; tb->lines_list[tb->cy][i]; i++) {
-        if (iskanji(tb->lines_list[tb->cy][i])) {
+    for (int i = 0; (*tb->lines_list[tb->cy])[i]; i++) {
+        if (iskanji((*tb->lines_list[tb->cy])[i])) {
             i++;
             if (i == tb->cx) {
                 /*
@@ -141,7 +133,6 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
     int i;
     for (i = 0; i < tb->hgt; i++) {
         int leftcol = 0;
-        concptr msg;
         byte color;
         int y = tb->upper + i;
 
@@ -149,12 +140,13 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
             continue;
         }
 
-        msg = tb->lines_list[y];
+        const auto &msg = tb->lines_list[y];
         if (!msg) {
             break;
         }
 
-        for (int j = 0; *msg; msg++, j++) {
+        auto msg_ptr = msg->data();
+        for (auto j = 0; *msg_ptr != '\0'; msg_ptr++, j++) {
             if (j == tb->left) {
                 break;
             }
@@ -163,8 +155,8 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
                 leftcol = 1;
                 break;
             }
-            if (iskanji(*msg)) {
-                msg++;
+            if (iskanji(*msg_ptr)) {
+                msg_ptr++;
                 j++;
             }
 #endif
@@ -182,14 +174,14 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         }
 
         if (!tb->mark || (y < by1 || by2 < y)) {
-            term_putstr(leftcol, i + 1, tb->wid - 1, color, msg);
+            term_putstr(leftcol, i + 1, tb->wid - 1, color, *msg);
         } else if (by1 != by2) {
-            term_putstr(leftcol, i + 1, tb->wid - 1, TERM_YELLOW, msg);
+            term_putstr(leftcol, i + 1, tb->wid - 1, TERM_YELLOW, *msg);
         } else {
-            int x0 = leftcol + tb->left;
-            int len = strlen(tb->lines_list[tb->cy]);
-            int bx1 = std::min(tb->mx, tb->cx);
-            int bx2 = std::max(tb->mx, tb->cx);
+            const auto x0 = leftcol + tb->left;
+            const int len = tb->lines_list[tb->cy]->length();
+            const auto bx1 = std::min(tb->mx, tb->cx);
+            auto bx2 = std::max(tb->mx, tb->cx);
 
             if (bx2 > len) {
                 bx2 = len;
@@ -197,12 +189,12 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
 
             term_gotoxy(leftcol, i + 1);
             if (x0 < bx1) {
-                term_addstr(bx1 - x0, color, msg);
+                term_addstr(bx1 - x0, color, *msg);
             }
             if (x0 < bx2) {
-                term_addstr(bx2 - bx1, TERM_YELLOW, msg + (bx1 - x0));
+                term_addstr(bx2 - bx1, TERM_YELLOW, msg->substr(bx1 - x0));
             }
-            term_addstr(-1, color, msg + (bx2 - x0));
+            term_addstr(-1, color, msg->substr(bx2 - x0));
         }
     }
 
@@ -230,10 +222,10 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         str1 = format(_("無効状態の行だけが見付かりました。(%sを検索中)", "Found only an inactive line. (Searching %s)"), tb->search_str);
     } else if (tb->dirty_flags & DIRTY_NO_SEARCH) {
         str1 = _("検索するパターンがありません(^S で検索)。", "No pattern to search. (Press ^S to search.)");
-    } else if (tb->lines_list[tb->cy][0] == '#') {
+    } else if ((*tb->lines_list[tb->cy])[0] == '#') {
         str1 = _("この行はコメントです。", "This line is a comment.");
-    } else if (tb->lines_list[tb->cy][0] && tb->lines_list[tb->cy][1] == ':') {
-        switch (tb->lines_list[tb->cy][0]) {
+    } else if ((*tb->lines_list[tb->cy])[0] && (*tb->lines_list[tb->cy])[1] == ':') {
+        switch ((*tb->lines_list[tb->cy])[0]) {
         case '?':
             str1 = _("この行は条件分岐式です。", "This line is a Conditional Expression.");
             break;
@@ -248,7 +240,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
             break;
         }
 
-        switch (tb->lines_list[tb->cy][0]) {
+        switch ((*tb->lines_list[tb->cy])[0]) {
         case '?':
             if (tb->states[tb->cy] & LSTAT_BYPASS) {
                 str2 = _("現在の式の値は「偽(=0)」です。", "The expression is 'False'(=0) currently.");
@@ -267,7 +259,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
             }
             break;
         }
-    } else if (autopick_new_entry(entry, tb->lines_list[tb->cy], false)) {
+    } else if (autopick_new_entry(entry, *tb->lines_list[tb->cy], false)) {
         char buf[MAX_LINELEN];
 
         describe_autopick(buf, *entry);

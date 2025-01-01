@@ -32,16 +32,18 @@ static char kanji_colon[] = "：";
 /*!
  * @brief A function to create new entry
  */
-bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
+bool autopick_new_entry(autopick_type *entry, std::string_view str_view, bool allow_default)
 {
-    if (str[0] && str[1] == ':') {
-        switch (str[0]) {
+    if ((str_view.length() > 1) && (str_view[1] == ':')) {
+        switch (str_view[0]) {
         case '?':
         case '%':
         case 'A':
         case 'P':
         case 'C':
             return false;
+        default:
+            break;
         }
     }
 
@@ -50,6 +52,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
     entry->bonus = 0;
 
     byte act = DO_AUTOPICK | DO_DISPLAY;
+    auto str = str_view.data();
     while (true) {
         if ((act & DO_AUTOPICK) && *str == '!') {
             act &= ~DO_AUTOPICK;

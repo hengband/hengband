@@ -9,6 +9,7 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fstream>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -81,33 +82,29 @@ std::string pickpref_filename(std::string_view player_base_name, int filename_mo
 /*!
  * @brief Read whole lines of a file to memory
  */
-static std::vector<concptr> read_text_lines(std::string_view filename)
+static std::vector<std::unique_ptr<std::string>> read_text_lines(std::string_view filename)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
-    auto *fff = angband_fopen(path, FileOpenMode::READ);
-    if (!fff) {
+    auto ifs = std::ifstream(path);
+    if (!ifs) {
         return {};
     }
 
-    auto lines = 0;
-    std::vector<concptr> lines_list(MAX_LINES);
-    while (true) {
-        const auto line_str = angband_fgets(fff, MAX_LINELEN);
-        if (!line_str) {
-            break;
-        }
-        lines_list[lines++] = string_make(line_str->data());
-        if (is_greater_autopick_max_line(lines)) {
+    auto num_lines = 0;
+    std::vector<std::unique_ptr<std::string>> lines(MAX_LINES);
+    std::string line;
+    while (std::getline(ifs, line)) {
+        lines[num_lines++] = std::make_unique<std::string>(std::move(line));
+        if (is_greater_autopick_max_line(num_lines)) {
             break;
         }
     }
 
-    if (lines == 0) {
-        lines_list[0] = string_make("");
+    if (num_lines == 0) {
+        lines[0] = std::make_unique<std::string>();
     }
 
-    angband_fclose(fff);
-    return lines_list;
+    return lines;
 }
 
 /*!
@@ -160,13 +157,12 @@ static void prepare_default_pickpref(std::string_view player_base_name)
  * @brief Read an autopick prefence file to memory
  * Prepare default if no user file is found
  */
-std::vector<concptr> read_pickpref_text_lines(std::string_view player_base_name, int *filename_mode_p)
+std::vector<std::unique_ptr<std::string>> read_pickpref_text_lines(std::string_view player_base_name, int *filename_mode_p)
 {
     /* Try a filename with player name */
     *filename_mode_p = PT_WITH_PNAME;
     auto filename = pickpref_filename(player_base_name, *filename_mode_p);
-    std::vector<concptr> lines_list = read_text_lines(filename);
-
+    auto lines_list = read_text_lines(filename);
     if (lines_list.empty()) {
         *filename_mode_p = PT_DEFAULT;
         filename = pickpref_filename(player_base_name, *filename_mode_p);
@@ -180,7 +176,7 @@ std::vector<concptr> read_pickpref_text_lines(std::string_view player_base_name,
 
     if (lines_list.empty()) {
         lines_list.resize(MAX_LINES);
-        lines_list[0] = string_make("");
+        lines_list[0] = std::make_unique<std::string>();
     }
 
     return lines_list;
@@ -189,7 +185,7 @@ std::vector<concptr> read_pickpref_text_lines(std::string_view player_base_name,
 /*!
  * @brief Write whole lines of memory to a file.
  */
-bool write_text_lines(std::string_view filename, const std::vector<concptr> &lines)
+bool write_text_lines(std::string_view filename, const std::vector<std::unique_ptr<std::string>> &lines)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     auto *fff = angband_fopen(path, FileOpenMode::WRITE);
@@ -197,12 +193,12 @@ bool write_text_lines(std::string_view filename, const std::vector<concptr> &lin
         return false;
     }
 
-    for (const auto *line : lines) {
-        if (line == nullptr) {
+    for (const auto &line : lines) {
+        if (!line) {
             break;
         }
 
-        fprintf(fff, "%s\n", line);
+        fprintf(fff, "%s\n", line->data());
     }
 
     angband_fclose(fff);
