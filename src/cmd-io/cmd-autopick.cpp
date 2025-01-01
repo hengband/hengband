@@ -123,7 +123,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
 
     tb->yank.clear();
     tb->search_o_ptr = nullptr;
-    tb->search_str = nullptr;
     tb->dirty_flags = DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
     tb->dirty_line = -1;
     tb->filename_mode = PT_DEFAULT;
@@ -209,9 +208,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     if (quit == APE_QUIT_AND_SAVE) {
         write_text_lines(filename, tb->lines_list);
     }
-
-    string_free(tb->search_str);
-    kill_yank_chain(tb);
 
     process_autopick_file(player_ptr, filename);
     cx_save = tb->cx;

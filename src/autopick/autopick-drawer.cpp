@@ -215,11 +215,11 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
     }
 
     if (tb->dirty_flags & DIRTY_NOT_FOUND) {
-        str1 = format(_("パターンが見つかりません: %s", "Pattern not found: %s"), tb->search_str);
+        str1 = format(_("パターンが見つかりません: %s", "Pattern not found: %s"), tb->search_str.data());
     } else if (tb->dirty_flags & DIRTY_SKIP_INACTIVE) {
-        str1 = format(_("無効状態の行をスキップしました。(%sを検索中)", "Some inactive lines are skipped. (Searching %s)"), tb->search_str);
+        str1 = format(_("無効状態の行をスキップしました。(%sを検索中)", "Some inactive lines are skipped. (Searching %s)"), tb->search_str.data());
     } else if (tb->dirty_flags & DIRTY_INACTIVE) {
-        str1 = format(_("無効状態の行だけが見付かりました。(%sを検索中)", "Found only an inactive line. (Searching %s)"), tb->search_str);
+        str1 = format(_("無効状態の行だけが見付かりました。(%sを検索中)", "Found only an inactive line. (Searching %s)"), tb->search_str.data());
     } else if (tb->dirty_flags & DIRTY_NO_SEARCH) {
         str1 = _("検索するパターンがありません(^S で検索)。", "No pattern to search. (Press ^S to search.)");
     } else if ((*tb->lines_list[tb->cy])[0] == '#') {

@@ -52,7 +52,7 @@ int find_autopick_list(PlayerType *player_ptr, const ItemEntity *o_ptr)
 /*!
  * @brief Choose an item for search
  */
-bool get_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concptr *search_strp)
+bool get_object_for_search(PlayerType *player_ptr, AutopickSearch &as)
 {
     constexpr auto q = _("どのアイテムを検索しますか? ", "Enter which item? ");
     constexpr auto s = _("アイテムを持っていない。", "You have nothing to enter.");
@@ -62,26 +62,24 @@ bool get_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
         return false;
     }
 
-    *o_handle = o_ptr;
-    string_free(*search_strp);
-    const auto item_name = describe_flavor(player_ptr, **o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    *search_strp = string_make(format("<%s>", item_name.data()).data());
+    as.item_ptr = o_ptr;
+    const auto item_name = describe_flavor(player_ptr, *as.item_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+    as.search_str = format("<%s>", item_name.data());
     return true;
 }
 
 /*!
  * @brief Prepare for search by destroyed object
  */
-bool get_destroyed_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concptr *search_strp)
+bool get_destroyed_object_for_search(PlayerType *player_ptr, AutopickSearch &as)
 {
     if (!autopick_last_destroyed_object.is_valid()) {
         return false;
     }
 
-    *o_handle = &autopick_last_destroyed_object;
-    string_free(*search_strp);
-    const auto item_name = describe_flavor(player_ptr, **o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    *search_strp = string_make(format("<%s>", item_name.data()).data());
+    as.item_ptr = &autopick_last_destroyed_object;
+    const auto item_name = describe_flavor(player_ptr, *as.item_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+    as.search_str = format("<%s>", item_name.data());
     return true;
 }
 
@@ -92,18 +90,13 @@ bool get_destroyed_object_for_search(PlayerType *player_ptr, ItemEntity **o_hand
  * TERM_YELLOW : Overwrite mode
  * TERM_WHITE : Insert mode
  */
-byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concptr *search_strp)
+AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearch &as_initial)
 {
-    byte color = TERM_YELLOW;
-    char buf[MAX_NLEN + 20];
+    AutopickSearch as = as_initial;
+    std::string buf = as.search_str;
     const int len = 80;
-    if (*search_strp) {
-        strcpy(buf, *search_strp);
-    } else {
-        buf[0] = '\0';
-    }
-
-    if (*o_handle) {
+    uint8_t color = TERM_YELLOW;
+    if (as.item_ptr != nullptr) {
         color = TERM_L_GREEN;
     }
 
@@ -165,7 +158,7 @@ byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
             break;
 
         case ESCAPE:
-            return 0;
+            return as;
 
         case KTRL('r'):
             back = true;
@@ -174,25 +167,25 @@ byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
         case '\n':
         case '\r':
         case KTRL('s'): {
-            byte ret = back ? -1 : 1;
-            if (*o_handle) {
-                return ret;
+            as.result = back ? AutopickSearchResult::BACK : AutopickSearchResult::FORWARD;
+            if (as.item_ptr != nullptr) {
+                return as;
             }
 
-            string_free(*search_strp);
-            *search_strp = string_make(buf);
-            *o_handle = nullptr;
-            return ret;
+            as.search_str = buf;
+            as.item_ptr = nullptr;
+            return as;
         }
         case KTRL('i'):
-            return get_object_for_search(player_ptr, o_handle, search_strp);
-
+            as.result = get_object_for_search(player_ptr, as) ? AutopickSearchResult::FORWARD : AutopickSearchResult::CANCEL;
+            return as;
         case KTRL('l'):
-            if (get_destroyed_object_for_search(player_ptr, o_handle, search_strp)) {
-                return 1;
+            if (get_destroyed_object_for_search(player_ptr, as)) {
+                as.result = AutopickSearchResult::FORWARD;
+                return as;
             }
-            break;
 
+            break;
         case '\010': {
             int i = 0;
             color = TERM_WHITE;
@@ -241,34 +234,35 @@ byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
         }
 
         default: {
-            char tmp[100];
-            char c;
             if (skey & SKEY_MASK) {
                 break;
             }
 
-            c = (char)skey;
+            const auto c = static_cast<char>(skey);
             if (color != TERM_WHITE) {
                 if (color == TERM_L_GREEN) {
-                    *o_handle = nullptr;
-                    string_free(*search_strp);
-                    *search_strp = nullptr;
+                    as.item_ptr = nullptr;
+                    as.search_str = "";
                 }
 
-                buf[0] = '\0';
+                buf = "";
                 color = TERM_WHITE;
             }
 
-            strcpy(tmp, buf + pos);
+            const auto tmp = buf.substr(pos);
 #ifdef JP
             if (iskanji(c)) {
-                char next;
                 inkey_base = true;
-                next = inkey();
-
+                const auto next = inkey();
                 if (pos + 1 < len) {
-                    buf[pos++] = c;
-                    buf[pos++] = next;
+                    if (static_cast<int>(buf.length()) < pos) {
+                        buf[pos++] = c;
+                        buf[pos++] = next;
+                    } else {
+                        buf.push_back(c);
+                        buf.push_back(next);
+                        pos += 2;
+                    }
                 } else {
                     bell();
                 }
@@ -280,26 +274,24 @@ byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
             if (pos < len && isprint(c))
 #endif
             {
-                buf[pos++] = c;
+                buf.push_back(c);
+                pos++;
             } else {
                 bell();
             }
 
-            buf[pos] = '\0';
-            angband_strcat(buf, tmp, len + 1);
-
+            buf += tmp.substr(0, len + 1);
             break;
         }
         }
 
-        if (*o_handle == nullptr || color == TERM_L_GREEN) {
+        if (as.item_ptr == nullptr || color == TERM_L_GREEN) {
             continue;
         }
 
-        *o_handle = nullptr;
-        buf[0] = '\0';
-        string_free(*search_strp);
-        *search_strp = nullptr;
+        as.item_ptr = nullptr;
+        buf = "";
+        as.search_str = "";
     }
 }
 
@@ -363,7 +355,7 @@ void search_for_object(PlayerType *player_ptr, text_body_type *tb, const ItemEnt
 /*!
  * @brief Search next line matches to the string
  */
-void search_for_string(text_body_type *tb, concptr search_str, bool forward)
+void search_for_string(text_body_type *tb, std::string_view search_str, bool forward)
 {
     int bypassed_cy = -1;
     int bypassed_cx = 0;

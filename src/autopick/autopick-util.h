@@ -57,7 +57,7 @@ struct text_body_type {
     byte mark = 0;
 
     ItemEntity *search_o_ptr = nullptr;
-    concptr search_str = "";
+    std::string search_str = "";
     std::string last_destroyed = "";
 
     std::vector<std::string> yank{};
