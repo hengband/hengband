@@ -124,7 +124,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     tb->yank.clear();
     tb->search_o_ptr = nullptr;
     tb->search_str = nullptr;
-    tb->last_destroyed = nullptr;
     tb->dirty_flags = DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
     tb->dirty_line = -1;
     tb->filename_mode = PT_DEFAULT;
@@ -212,7 +211,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     }
 
     string_free(tb->search_str);
-    string_free(tb->last_destroyed);
     kill_yank_chain(tb);
 
     process_autopick_file(player_ptr, filename);

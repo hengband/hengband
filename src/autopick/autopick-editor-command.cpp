@@ -516,7 +516,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         break;
     }
     case EC_INSERT_DESTROYED: {
-        if (!tb->last_destroyed) {
+        if (tb->last_destroyed.empty()) {
             break;
         }
 

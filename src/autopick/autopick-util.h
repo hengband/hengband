@@ -58,7 +58,7 @@ struct text_body_type {
 
     ItemEntity *search_o_ptr = nullptr;
     concptr search_str = "";
-    concptr last_destroyed = "";
+    std::string last_destroyed = "";
 
     std::vector<std::string> yank{};
     bool yank_eol = false;

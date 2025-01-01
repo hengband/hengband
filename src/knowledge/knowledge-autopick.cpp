@@ -47,27 +47,22 @@ void do_cmd_knowledge_autopick(PlayerType *player_ptr)
     }
 
     for (const auto &entry : autopick_list) {
-        concptr tmp;
-        byte act = entry.action;
-        if (act & DONT_AUTOPICK) {
-            tmp = _("放置", "Leave");
+        std::string command;
+        const auto act = entry.action;
+        if (any_bits(act, DONT_AUTOPICK)) {
+            command = _("放置", "Leave");
         } else if (act & DO_AUTODESTROY) {
-            tmp = _("破壊", "Destroy");
+            command = _("破壊", "Destroy");
         } else if (act & DO_AUTOPICK) {
-            tmp = _("拾う", "Pickup");
+            command = _("拾う", "Pickup");
         } else {
-            tmp = _("確認", "Query");
+            command = _("確認", "Query");
         }
 
-        if (act & DO_DISPLAY) {
-            fprintf(fff, "%11s", format("[%s]", tmp).data());
-        } else {
-            fprintf(fff, "%11s", format("(%s)", tmp).data());
-        }
-
-        tmp = autopick_line_from_entry(entry);
-        fprintf(fff, " %s", tmp);
-        string_free(tmp);
+        const auto fmt = any_bits(act, DO_DISPLAY) ? "[%s]" : "(%s)";
+        fprintf(fff, "%11s", format(fmt, command.data()).data());
+        const auto line = autopick_line_from_entry(entry);
+        fprintf(fff, " %s", line.data());
         fprintf(fff, "\n");
     }
 
