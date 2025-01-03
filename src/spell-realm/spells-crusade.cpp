@@ -58,7 +58,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
         if (AngbandSystem::get_instance().get_max_range() <= distance(player_ptr->y, player_ptr->x, pos_to.y, pos_to.x)) {
             break;
         }
-        if (!cave_has_flag_bold(&floor, pos_to.y, pos_to.x, TerrainCharacteristics::PROJECT)) {
+        if (!floor.has_terrain_characteristics(pos_to, TerrainCharacteristics::PROJECT)) {
             break;
         }
         if ((dir != 5) && floor.get_grid(pos_to).has_monster()) {

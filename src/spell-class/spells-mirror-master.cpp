@@ -477,7 +477,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
             }
         }
 
-        if (!cave_has_flag_bold(&floor, ny, nx, TerrainCharacteristics::PROJECT)) {
+        if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECT)) {
             break;
         }
         oy = ny;

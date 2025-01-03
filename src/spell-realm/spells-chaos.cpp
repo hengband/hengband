@@ -229,7 +229,7 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
             }
 
             const auto is_projectable = projectable(player_ptr, p_pos, pos);
-            if (!is_projectable || !cave_has_flag_bold(floor_ptr, pos.y, pos.x, TerrainCharacteristics::PROJECT)) {
+            if (!is_projectable || !floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
 

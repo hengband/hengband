@@ -91,7 +91,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
                 return;
             }
 
-            if (!cave_has_flag_bold(&floor, ty, tx, TerrainCharacteristics::PROJECT)) {
+            if (!floor.has_terrain_characteristics({ ty, tx }, TerrainCharacteristics::PROJECT)) {
                 return;
             }
         }

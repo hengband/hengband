@@ -7,6 +7,7 @@
 #include "grid/grid.h"
 #include "spell-kind/earthquake.h"
 #include "system/enums/terrain/terrain-characteristics.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
@@ -131,11 +132,11 @@ void wall_breaker(PlayerType *player_ptr)
     if (randint1(80 + player_ptr->lev) < 70) {
         while (attempts--) {
             scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
+            const Pos2D pos(y, x);
+            if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
 
-            const Pos2D pos(y, x);
             if (!player_ptr->is_located_at(pos)) {
                 break;
             }

@@ -611,7 +611,7 @@ void massacre(PlayerType *player_ptr)
         POSITION x = player_ptr->x + ddx_ddd[dir];
         g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
         m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-        if (g_ptr->has_monster() && (m_ptr->ml || cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT))) {
+        if (g_ptr->has_monster() && (m_ptr->ml || player_ptr->current_floor_ptr->has_terrain_characteristics({ y, x }, TerrainCharacteristics::PROJECT))) {
             do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
         }
     }

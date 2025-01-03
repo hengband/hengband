@@ -372,13 +372,16 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
         more = true;
     }
 
-    if (is_wild_mode && !cave_has_flag_bold(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x, TerrainCharacteristics::TOWN)) {
-        int tmp = 120 + player_ptr->lev * 10 - wilderness[player_ptr->y][player_ptr->x].level + 5;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    if (is_wild_mode && !floor.has_terrain_characteristics(p_pos, TerrainCharacteristics::TOWN)) {
+        const auto &wilderness_grid = wilderness[p_pos.y][p_pos.x];
+        int tmp = 120 + player_ptr->lev * 10 - wilderness_grid.level + 5;
         if (tmp < 1) {
             tmp = 1;
         }
 
-        if (((wilderness[player_ptr->y][player_ptr->x].level + 5) > (player_ptr->lev / 2)) && randint0(tmp) < (21 - player_ptr->skill_stl)) {
+        if (((wilderness_grid.level + 5) > (player_ptr->lev / 2)) && randint0(tmp) < (21 - player_ptr->skill_stl)) {
             msg_print(_("襲撃だ！", "You are ambushed !"));
             player_ptr->oldpy = randint1(MAX_HGT - 2);
             player_ptr->oldpx = randint1(MAX_WID - 2);

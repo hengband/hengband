@@ -315,7 +315,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_HAGAN);
             }
 
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, pos.y, pos.x, TerrainCharacteristics::HURT_ROCK)) {
+            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::HURT_ROCK)) {
                 break;
             }
 
@@ -435,7 +435,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 const Pos2D pos_ddd(pos.y + ddy_ddd[dir], pos.x + ddx_ddd[dir]);
                 const auto &grid = floor.get_grid(pos_ddd);
                 const auto &monster = floor.m_list[grid.m_idx];
-                if (!grid.has_monster() || (!monster.ml && !cave_has_flag_bold(&floor, pos_ddd.y, pos_ddd.x, TerrainCharacteristics::PROJECT))) {
+                if (!grid.has_monster() || (!monster.ml && !floor.has_terrain_characteristics(pos_ddd, TerrainCharacteristics::PROJECT))) {
                     continue;
                 }
 
@@ -735,7 +735,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 total_damage += (damage / 100);
             }
 
-            const auto is_bold = cave_has_flag_bold(&floor, pos.y, pos.x, TerrainCharacteristics::PROJECT);
+            const auto is_bold = floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
             constexpr auto flags = PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM;
             project(player_ptr, 0, (is_bold ? 5 : 0), pos.y, pos.x, total_damage * 3 / 2, AttributeType::METEOR, flags);
         }

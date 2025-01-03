@@ -114,6 +114,7 @@ FEAT_IDX feat_jammed_door_random(int door_type)
  */
 void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 {
+    const Pos2D pos(y, x);
     auto *floor_ptr = player_ptr->current_floor_ptr;
     auto *g_ptr = &floor_ptr->grid_array[y][x];
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
@@ -136,7 +137,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
         return;
     }
 
-    bool old_los = cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::LOS);
+    bool old_los = floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::LOS);
     bool old_mirror = g_ptr->is_mirror();
 
     g_ptr->mimic = 0;

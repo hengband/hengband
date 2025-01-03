@@ -33,7 +33,8 @@ void fill_treasure(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1
                 value = 20;
             }
 
-            if (!floor_ptr->grid_array[y][x].is_floor() && (!cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PLACE) || !cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::DROP))) {
+            const Pos2D pos(y, x);
+            if (!floor_ptr->get_grid(pos).is_floor() && (!floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PLACE) || !floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::DROP))) {
                 continue;
             }
 

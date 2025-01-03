@@ -290,7 +290,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             }
 
             delete_all_items_from_floor(player_ptr, pos.y, pos.x);
-            int t = cave_has_flag_bold(&floor, pos.y, pos.x, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
+            const auto t = floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
             if (t < 20) {
                 cave_set_feat(player_ptr, pos.y, pos.x, feat_granite);
                 continue;

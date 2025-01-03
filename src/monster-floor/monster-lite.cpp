@@ -99,16 +99,17 @@ static void update_monster_dark(
     }
 
     if (!g_ptr->has_los_terrain() && !g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
+        const auto &floor = *player_ptr->current_floor_ptr;
         if (((y < player_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > player_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = player_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;
             midpoint = ml_ptr->mon_fx + ((player_ptr->x - ml_ptr->mon_fx) * std::abs(d)) / std::abs(dpf);
             if (x < midpoint) {
-                if (!cave_los_bold(player_ptr->current_floor_ptr, y, x + 1) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x + 1, TerrainCharacteristics::PROJECT)) {
+                if (!cave_los_bold(player_ptr->current_floor_ptr, y, x + 1) && !floor.has_terrain_characteristics({ y, x + 1 }, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (x > midpoint) {
-                if (!cave_los_bold(player_ptr->current_floor_ptr, y, x - 1) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x - 1, TerrainCharacteristics::PROJECT)) {
+                if (!cave_los_bold(player_ptr->current_floor_ptr, y, x - 1) && !floor.has_terrain_characteristics({ y, x - 1 }, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (ml_ptr->mon_invis) {
@@ -121,11 +122,11 @@ static void update_monster_dark(
             d = x - ml_ptr->mon_fx;
             midpoint = ml_ptr->mon_fy + ((player_ptr->y - ml_ptr->mon_fy) * std::abs(d)) / std::abs(dpf);
             if (y < midpoint) {
-                if (!cave_los_bold(player_ptr->current_floor_ptr, y + 1, x) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y + 1, x, TerrainCharacteristics::PROJECT)) {
+                if (!cave_los_bold(player_ptr->current_floor_ptr, y + 1, x) && !floor.has_terrain_characteristics({ y + 1, x }, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (y > midpoint) {
-                if (!cave_los_bold(player_ptr->current_floor_ptr, y - 1, x) && !cave_has_flag_bold(player_ptr->current_floor_ptr, y - 1, x, TerrainCharacteristics::PROJECT)) {
+                if (!cave_los_bold(player_ptr->current_floor_ptr, y - 1, x) && !floor.has_terrain_characteristics({ y - 1, x }, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (ml_ptr->mon_invis) {
@@ -232,7 +233,7 @@ void update_mon_lite(PlayerType *player_ptr)
             }
 
             Grid *g_ptr;
-            if (cave_has_flag_bold(player_ptr->current_floor_ptr, ml_ptr->mon_fy + 1, ml_ptr->mon_fx, f_flag)) {
+            if (floor.has_terrain_characteristics({ ml_ptr->mon_fy + 1, ml_ptr->mon_fx }, f_flag)) {
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy + 2, ml_ptr->mon_fx + 1, ml_ptr);
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy + 2, ml_ptr->mon_fx, ml_ptr);
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy + 2, ml_ptr->mon_fx - 1, ml_ptr);
@@ -244,7 +245,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 }
             }
 
-            if (cave_has_flag_bold(player_ptr->current_floor_ptr, ml_ptr->mon_fy - 1, ml_ptr->mon_fx, f_flag)) {
+            if (floor.has_terrain_characteristics({ ml_ptr->mon_fy - 1, ml_ptr->mon_fx }, f_flag)) {
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy - 2, ml_ptr->mon_fx + 1, ml_ptr);
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy - 2, ml_ptr->mon_fx, ml_ptr);
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy - 2, ml_ptr->mon_fx - 1, ml_ptr);
@@ -256,7 +257,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 }
             }
 
-            if (cave_has_flag_bold(player_ptr->current_floor_ptr, ml_ptr->mon_fy, ml_ptr->mon_fx + 1, f_flag)) {
+            if (floor.has_terrain_characteristics({ ml_ptr->mon_fy, ml_ptr->mon_fx + 1 }, f_flag)) {
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy + 1, ml_ptr->mon_fx + 2, ml_ptr);
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy, ml_ptr->mon_fx + 2, ml_ptr);
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy - 1, ml_ptr->mon_fx + 2, ml_ptr);
@@ -268,7 +269,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 }
             }
 
-            if (cave_has_flag_bold(player_ptr->current_floor_ptr, ml_ptr->mon_fy, ml_ptr->mon_fx - 1, f_flag)) {
+            if (floor.has_terrain_characteristics({ ml_ptr->mon_fy, ml_ptr->mon_fx - 1 }, f_flag)) {
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy + 1, ml_ptr->mon_fx - 2, ml_ptr);
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy, ml_ptr->mon_fx - 2, ml_ptr);
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy - 1, ml_ptr->mon_fx - 2, ml_ptr);
@@ -284,19 +285,19 @@ void update_mon_lite(PlayerType *player_ptr)
                 continue;
             }
 
-            if (cave_has_flag_bold(player_ptr->current_floor_ptr, ml_ptr->mon_fy + 1, ml_ptr->mon_fx + 1, f_flag)) {
+            if (floor.has_terrain_characteristics({ ml_ptr->mon_fy + 1, ml_ptr->mon_fx + 1 }, f_flag)) {
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy + 2, ml_ptr->mon_fx + 2, ml_ptr);
             }
 
-            if (cave_has_flag_bold(player_ptr->current_floor_ptr, ml_ptr->mon_fy + 1, ml_ptr->mon_fx - 1, f_flag)) {
+            if (floor.has_terrain_characteristics({ ml_ptr->mon_fy + 1, ml_ptr->mon_fx - 1 }, f_flag)) {
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy + 2, ml_ptr->mon_fx - 2, ml_ptr);
             }
 
-            if (cave_has_flag_bold(player_ptr->current_floor_ptr, ml_ptr->mon_fy - 1, ml_ptr->mon_fx + 1, f_flag)) {
+            if (floor.has_terrain_characteristics({ ml_ptr->mon_fy - 1, ml_ptr->mon_fx + 1 }, f_flag)) {
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy - 2, ml_ptr->mon_fx + 2, ml_ptr);
             }
 
-            if (cave_has_flag_bold(player_ptr->current_floor_ptr, ml_ptr->mon_fy - 1, ml_ptr->mon_fx - 1, f_flag)) {
+            if (floor.has_terrain_characteristics({ ml_ptr->mon_fy - 1, ml_ptr->mon_fx - 1 }, f_flag)) {
                 add_mon_lite(player_ptr, points, ml_ptr->mon_fy - 2, ml_ptr->mon_fx - 2, ml_ptr);
             }
         }
