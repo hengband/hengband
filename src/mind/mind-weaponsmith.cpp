@@ -11,7 +11,6 @@
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "main/sound-of-music.h"
-#include "mind/mind-weaponsmith.h"
 #include "object-enchant/tr-types.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -667,7 +666,7 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                 term_erase(14, 18);
                 term_erase(14, 17);
                 term_erase(14, 16);
-                if (mode > 0) {
+                if ((mode > 0) && (mode <= 5)) {
                     display_wrap_around(kaji_tips[mode - 1], 62, 17, 15);
                 }
 

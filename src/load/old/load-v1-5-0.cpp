@@ -37,7 +37,7 @@
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
-#include "system/dungeon/dungeon-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
@@ -545,9 +545,9 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     floor.dun_level = rd_s16b();
     if (h_older_than(0, 3, 8)) {
-        floor.set_dungeon_index(DUNGEON_ANGBAND);
+        floor.set_dungeon_index(DungeonId::ANGBAND);
     } else {
-        floor.set_dungeon_index(rd_byte());
+        floor.set_dungeon_index(i2enum<DungeonId>(rd_byte()));
     }
 
     floor.base_level = floor.dun_level;
@@ -556,7 +556,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     floor.num_repro = rd_s16b();
     player_ptr->y = rd_s16b();
     player_ptr->x = rd_s16b();
-    if (h_older_than(0, 3, 13) && !floor.dun_level && !floor.inside_arena) {
+    if (h_older_than(0, 3, 13) && !floor.is_underground() && !floor.inside_arena) {
         player_ptr->y = 33;
         player_ptr->x = 131;
     }
@@ -692,7 +692,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         for (int y = 0; y < ymax; y++) {
             for (int x = 0; x < xmax; x++) {
                 auto &grid = floor.get_grid({ y, x });
-                if ((grid.special == OLD_QUEST_WATER_CAVE) && !floor.dun_level) {
+                if ((grid.special == OLD_QUEST_WATER_CAVE) && !floor.is_underground()) {
                     if (grid.feat == OLD_FEAT_QUEST_ENTER) {
                         grid.feat = feat_tree;
                         grid.special = 0;
@@ -749,7 +749,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
     }
 
     auto &world = AngbandWorld::get_instance();
-    if (h_older_than(0, 3, 13) && !floor.dun_level && !floor.inside_arena) {
+    if (h_older_than(0, 3, 13) && !floor.is_underground() && !floor.inside_arena) {
         world.character_dungeon = false;
     } else {
         world.character_dungeon = true;

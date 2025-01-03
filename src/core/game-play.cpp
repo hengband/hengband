@@ -199,7 +199,7 @@ static void init_world_floor_info(PlayerType *player_ptr)
     player_ptr->count = 0;
     load = false;
     determine_bounty_uniques(player_ptr);
-    determine_daily_bounty(player_ptr, false);
+    determine_daily_bounty(player_ptr);
     wipe_o_list(floor_ptr);
 }
 
@@ -245,11 +245,6 @@ static void reset_world_info(PlayerType *player_ptr)
 
 static void generate_wilderness(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level == 0) && floor_ptr->is_in_quest()) {
-        return;
-    }
-
     const auto &world = AngbandWorld::get_instance();
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
     init_flags = INIT_ONLY_BUILDINGS;
@@ -287,7 +282,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     panel_row_min = floor.height;
     panel_col_min = floor.width;
 
-    set_floor_and_wall(floor.dungeon_idx);
+    set_floor_and_wall(floor.dungeon_id);
     initialize_items_flavor();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
     term_fresh();

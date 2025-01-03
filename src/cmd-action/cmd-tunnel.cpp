@@ -51,7 +51,7 @@ void do_cmd_tunnel(PlayerType *player_ptr)
     auto more = false;
     const auto pos = player_ptr->get_neighbor(dir);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain_mimic = grid.get_terrain_mimic();
+    const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC);
     if (terrain_mimic.flags.has(TerrainCharacteristics::DOOR)) {
         msg_print(_("ドアは掘れない。", "You cannot tunnel through doors."));
     } else if (terrain_mimic.flags.has_not(TerrainCharacteristics::TUNNEL)) {

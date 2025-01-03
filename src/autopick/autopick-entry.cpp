@@ -4,7 +4,6 @@
 #include "autopick/autopick-keys-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
-#include "core/show-file.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -516,7 +515,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
     }
 
     if (!name) {
-        str_tolower(entry->name.data());
+        entry->name = str_tolower(entry->name);
         return;
     }
 
@@ -526,8 +525,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
      * If necessary, add a '^' which indicates the
      * beginning of line.
      */
-    entry->name = std::string(is_hat_added ? "^" : "").append(item_name);
-    str_tolower(entry->name.data());
+    entry->name = str_tolower(std::string(is_hat_added ? "^" : "").append(item_name));
 }
 
 std::string shape_autopick_key(const std::string &key)

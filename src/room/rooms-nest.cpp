@@ -212,7 +212,7 @@ bool build_type5(PlayerType *player_ptr, DungeonData *dd_ptr)
         (*nest.prep_func)(player_ptr);
     }
 
-    get_mon_num_prep(player_ptr, nest.hook_func, nullptr);
+    get_mon_num_prep(player_ptr, nest.hook_func);
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 

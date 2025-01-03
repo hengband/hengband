@@ -9,6 +9,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
@@ -16,23 +17,25 @@
 
 static void rd_hengband_dungeons()
 {
+    const int dungeons_size = DungeonList::get_instance().size();
     const auto &dungeons = DungeonList::get_instance();
-    auto &dungeon_records = DungeonRecords::get_instance();
-    const auto max = rd_byte();
-    for (auto i = 0U; i < max; i++) {
-        auto tmp16s = rd_s16b();
-        if (i >= dungeons.size()) {
+    auto &records = DungeonRecords::get_instance();
+    const int max = rd_byte();
+    for (auto i = 0; i < max; i++) {
+        int tmp16s = rd_s16b();
+        if (i >= dungeons_size) {
             continue;
         }
 
-        auto &dungeon_record = dungeon_records.get_record(i);
+        const auto dungeon_id = i2enum<DungeonId>(i);
+        const auto &dungeon = dungeons.get_dungeon(dungeon_id);
+        auto &record = records.get_record(dungeon_id);
         if (tmp16s > 0) {
-            dungeon_record.set_max_level(tmp16s);
+            record.set_max_level(tmp16s);
         }
 
-        const auto &dungeon = dungeons.get_dungeon(i);
-        if (dungeon_record.get_max_level() > dungeon.maxdepth) {
-            dungeon_record.set_max_level(dungeon.maxdepth);
+        if (record.get_max_level() > dungeon.maxdepth) {
+            record.set_max_level(dungeon.maxdepth);
         }
     }
 }
@@ -57,9 +60,9 @@ void rd_dungeons(PlayerType *player_ptr)
 void rd_alter_reality(PlayerType *player_ptr)
 {
     if (h_older_than(0, 3, 8)) {
-        player_ptr->recall_dungeon = DUNGEON_ANGBAND;
+        player_ptr->recall_dungeon = DungeonId::ANGBAND;
     } else {
-        player_ptr->recall_dungeon = rd_s16b();
+        player_ptr->recall_dungeon = i2enum<DungeonId>(rd_s16b());
     }
 
     if (h_older_than(1, 5, 0, 0)) {
@@ -124,7 +127,7 @@ static void rd_world_info(PlayerType *player_ptr)
     }
 
     if (h_older_than(0, 0, 3)) {
-        determine_daily_bounty(player_ptr, true);
+        determine_daily_bounty(player_ptr);
     } else {
         world.today_mon = i2enum<MonraceId>(rd_s16b());
         world.knows_daily_bounty = rd_s16b() != 0; // 現在bool型だが、かつてモンスター種族IDを保存していた仕様に合わせる

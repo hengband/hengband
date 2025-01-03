@@ -2547,6 +2547,12 @@
     <ClCompile Include="..\..\src\system\terrain\terrain-list.cpp">
       <Filter>system\terrain</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\services\dungeon-service.cpp">
+      <Filter>system\services</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\monrace-filter-debug-info.cpp">
+      <Filter>wizard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5379,6 +5385,12 @@
     <ClInclude Include="..\..\src\net\curl-slist.h">
       <Filter>net</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\util\abstract-map-wrapper.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\abstract-vector-wrapper.h">
+      <Filter>util</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\util\finalizer.h">
       <Filter>util</Filter>
     </ClInclude>
@@ -5516,6 +5528,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\terrain\terrain-list.h">
       <Filter>system\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\dungeon\dungeon-id.h">
+      <Filter>system\enums\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\services\dungeon-service.h">
+      <Filter>system\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\monrace\monrace-hook-types.h">
+      <Filter>system\enums\monrace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\monrace-filter-debug-info.h">
+      <Filter>wizard</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -5810,6 +5834,9 @@
     </Filter>
     <Filter Include="system\terrain">
       <UniqueIdentifier>{3a15d903-e2ff-488d-a3c8-7bf69fad0f43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\enums\dungeon">
+      <UniqueIdentifier>{605bab39-a92d-4c11-ae24-56e39e302f36}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

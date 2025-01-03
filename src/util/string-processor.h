@@ -39,3 +39,5 @@ std::string str_erase(std::string str, std::string_view erase_chars);
 std::string str_substr(std::string_view sv, size_t pos = 0, size_t n = std::string_view::npos);
 std::string str_substr(std::string &&str, size_t pos = 0, size_t n = std::string_view::npos);
 std::string str_substr(const char *str, size_t pos = 0, size_t n = std::string_view::npos);
+std::string str_toupper(std::string_view str);
+std::string str_tolower(std::string_view str);

@@ -11,6 +11,7 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/grid-count-kind.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/gamevalue.h"
@@ -44,7 +45,7 @@ const Grid &FloorType::get_grid(const Pos2D pos) const
     return this->grid_array[pos.y][pos.x];
 }
 
-bool FloorType::is_in_underground() const
+bool FloorType::is_underground() const
 {
     return this->dun_level > 0;
 }
@@ -54,19 +55,19 @@ bool FloorType::is_in_quest() const
     return this->quest_number != QuestId::NONE;
 }
 
-void FloorType::set_dungeon_index(int dungeon_idx_)
+void FloorType::set_dungeon_index(DungeonId id)
 {
-    this->dungeon_idx = dungeon_idx_;
+    this->dungeon_id = id;
 }
 
 void FloorType::reset_dungeon_index()
 {
-    this->set_dungeon_index(0);
+    this->set_dungeon_index(DungeonId::WILDERNESS);
 }
 
 DungeonDefinition &FloorType::get_dungeon_definition() const
 {
-    return DungeonList::get_instance().get_dungeon(this->dungeon_idx);
+    return DungeonList::get_instance().get_dungeon(this->dungeon_id);
 }
 
 /*!
@@ -77,7 +78,7 @@ DungeonDefinition &FloorType::get_dungeon_definition() const
  */
 QuestId FloorType::get_random_quest_id(std::optional<int> level_opt) const
 {
-    if (this->dungeon_idx != DUNGEON_ANGBAND) {
+    if (this->dungeon_id != DungeonId::ANGBAND) {
         return QuestId::NONE;
     }
 
@@ -88,7 +89,7 @@ QuestId FloorType::get_random_quest_id(std::optional<int> level_opt) const
         auto is_random_quest = (quest.type == QuestKindType::RANDOM);
         is_random_quest &= (quest.status == QuestStatusType::TAKEN);
         is_random_quest &= (quest.level == level);
-        is_random_quest &= (quest.dungeon == DUNGEON_ANGBAND);
+        is_random_quest &= (quest.dungeon == DungeonId::ANGBAND);
         if (is_random_quest) {
             return quest_id;
         }
@@ -119,7 +120,7 @@ QuestId FloorType::get_quest_id(const int bonus) const
         auto depth_quest = (quest.type == QuestKindType::KILL_LEVEL);
         depth_quest &= !(quest.flags & QUEST_FLAG_PRESET);
         depth_quest &= (quest.level == level);
-        depth_quest &= (quest.dungeon == this->dungeon_idx);
+        depth_quest &= (quest.dungeon == this->dungeon_id);
         if (depth_quest) {
             return quest_id;
         }
@@ -172,7 +173,7 @@ bool FloorType::is_closed_door(const Pos2D &pos, bool is_mimic) const
 {
     const auto &grid = this->get_grid(pos);
     if (is_mimic) {
-        return grid.get_terrain_mimic().is_closed_door();
+        return grid.get_terrain(TerrainKind::MIMIC).is_closed_door();
     }
 
     return grid.get_terrain().is_closed_door();
@@ -218,16 +219,17 @@ std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCount
 bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
 {
     const auto &grid = this->get_grid(pos);
+    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     switch (gck) {
     case GridCountKind::OPEN: {
-        const auto is_open_grid = grid.get_terrain_mimic().is_open();
+        const auto is_open_grid = terrain.is_open();
         const auto is_open_dungeon = this->get_dungeon_definition().is_open(grid.get_feat_mimic());
         return is_open_grid && is_open_dungeon;
     }
     case GridCountKind::CLOSED_DOOR:
-        return grid.get_terrain_mimic().is_closed_door();
+        return terrain.is_closed_door();
     case GridCountKind::TRAP:
-        return grid.get_terrain_mimic().is_trap();
+        return terrain.is_trap();
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid GridCountKind is Specified! %d", enum2i(gck)));
     }
@@ -306,7 +308,7 @@ ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
  */
 std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 {
-    if (!this->is_in_underground() || (select_baseitem_id_hook != nullptr)) {
+    if (!this->is_underground() || (select_baseitem_id_hook != nullptr)) {
         return std::nullopt;
     }
 
@@ -502,7 +504,7 @@ void FloorType::place_random_stairs(const Pos2D &pos)
         return;
     }
 
-    auto up_stairs = this->is_in_underground();
+    auto up_stairs = this->is_underground();
     if (ironman_downward) {
         up_stairs = false;
     }

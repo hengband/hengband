@@ -294,6 +294,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
+    <ClCompile Include="..\..\src\system\services\dungeon-service.cpp" />
     <ClCompile Include="..\..\src\system\floor\floor-list.cpp" />
     <ClCompile Include="..\..\src\item-info\flavor-initializer.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-base.cpp" />
@@ -999,6 +1000,7 @@
     <ClCompile Include="..\..\src\wizard\cmd-wizard.cpp" />
     <ClCompile Include="..\..\src\wizard\fixed-artifacts-spoiler.cpp" />
     <ClCompile Include="..\..\src\wizard\items-spoiler.cpp" />
+    <ClCompile Include="..\..\src\wizard\monrace-filter-debug-info.cpp" />
     <ClCompile Include="..\..\src\wizard\monster-info-spoiler.cpp" />
     <ClCompile Include="..\..\src\wizard\spoiler-table.cpp" />
     <ClCompile Include="..\..\src\wizard\spoiler-util.cpp" />
@@ -1014,6 +1016,9 @@
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\external-lib\include-json.h" />
     <ClInclude Include="..\..\src\external-lib\json.hpp" />
+    <ClInclude Include="..\..\src\system\services\dungeon-service.h" />
+    <ClInclude Include="..\..\src\system\enums\dungeon\dungeon-id.h" />
+    <ClInclude Include="..\..\src\system\enums\monrace\monrace-hook-types.h" />
     <ClInclude Include="..\..\src\system\floor\floor-list.h" />
     <ClInclude Include="..\..\src\item-info\flavor-initializer.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-version-types.h" />
@@ -1498,6 +1503,8 @@
     <ClInclude Include="..\..\src\tracking\baseitem-tracker.h" />
     <ClInclude Include="..\..\src\tracking\health-bar-tracker.h" />
     <ClInclude Include="..\..\src\tracking\lore-tracker.h" />
+    <ClInclude Include="..\..\src\util\abstract-map-wrapper.h" />
+    <ClInclude Include="..\..\src\util\abstract-vector-wrapper.h" />
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
     <ClInclude Include="..\..\src\util\buffer-shaper.h" />
     <ClInclude Include="..\..\src\util\candidate-selector.h" />
@@ -1913,6 +1920,7 @@
     <ClInclude Include="..\..\src\wizard\cmd-wizard.h" />
     <ClInclude Include="..\..\src\wizard\fixed-artifacts-spoiler.h" />
     <ClInclude Include="..\..\src\wizard\items-spoiler.h" />
+    <ClInclude Include="..\..\src\wizard\monrace-filter-debug-info.h" />
     <ClInclude Include="..\..\src\wizard\monster-info-spoiler.h" />
     <ClInclude Include="..\..\src\wizard\spoiler-table.h" />
     <ClInclude Include="..\..\src\wizard\spoiler-util.h" />

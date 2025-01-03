@@ -10,6 +10,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "tracking/lore-tracker.h"
 #include "util/probability-table.h"
+#include "util/string-processor.h"
 #include <algorithm>
 
 std::map<MonraceId, MonraceDefinition> monraces_info;
@@ -53,51 +54,6 @@ bool MonraceList::is_tsuchinoko(MonraceId monrace_id)
     return monrace_id == MonraceId::TSUCHINOKO;
 }
 
-std::map<MonraceId, MonraceDefinition>::iterator MonraceList::begin()
-{
-    return monraces_info.begin();
-}
-
-std::map<MonraceId, MonraceDefinition>::const_iterator MonraceList::begin() const
-{
-    return monraces_info.cbegin();
-}
-
-std::map<MonraceId, MonraceDefinition>::iterator MonraceList::end()
-{
-    return monraces_info.end();
-}
-
-std::map<MonraceId, MonraceDefinition>::const_iterator MonraceList::end() const
-{
-    return monraces_info.cend();
-}
-
-std::map<MonraceId, MonraceDefinition>::reverse_iterator MonraceList::rbegin()
-{
-    return monraces_info.rbegin();
-}
-
-std::map<MonraceId, MonraceDefinition>::const_reverse_iterator MonraceList::rbegin() const
-{
-    return monraces_info.crbegin();
-}
-
-std::map<MonraceId, MonraceDefinition>::reverse_iterator MonraceList::rend()
-{
-    return monraces_info.rend();
-}
-
-std::map<MonraceId, MonraceDefinition>::const_reverse_iterator MonraceList::rend() const
-{
-    return monraces_info.crend();
-}
-
-size_t MonraceList::size() const
-{
-    return monraces_info.size();
-}
-
 MonraceDefinition &MonraceList::emplace(MonraceId monrace_id)
 {
     return monraces_info.emplace_hint(monraces_info.end(), monrace_id, MonraceDefinition{})->second;
@@ -139,6 +95,77 @@ const std::vector<MonraceId> &MonraceList::get_valid_monrace_ids() const
 
     std::transform(++monraces_info.begin(), monraces_info.end(), std::back_inserter(valid_monraces), [](auto &x) { return x.first; });
     return valid_monraces;
+}
+
+/*!
+ * @brief モンスターを引数で与えたフィルタ関数で検索する
+ *
+ * @param filter このフィルタ関数がtrueを返すモンスターを検索する
+ * @param is_known_only trueならばプレイヤーが既知のモンスターのみを対象とする。falseならば全てのモンスターを対象とする。
+ * @return std::vector<MonraceId> 検索結果のモンスター種族IDリスト
+ */
+std::vector<MonraceId> MonraceList::search(std::function<bool(const MonraceDefinition &)> filter, bool is_known_only) const
+{
+    std::vector<MonraceId> result_ids;
+
+    for (const auto &[id, monrace] : monraces_info) {
+        if (!monrace.is_valid()) {
+            continue;
+        }
+
+        if (is_known_only && (monrace.r_sights == 0)) {
+            continue;
+        }
+
+        if (filter(monrace)) {
+            result_ids.push_back(id);
+        }
+    }
+
+    return result_ids;
+}
+
+/*!
+ * @brief モンスターを名前で検索する
+ *
+ * 引数で与えた名前を含む(部分一致)モンスターを検索する。
+ *
+ * @param name 検索するモンスターの名前
+ * @param is_known_only trueならばプレイヤーが既知のモンスターのみを対象とする。falseならば全てのモンスターを対象とする。
+ * @return std::vector<MonraceId> 検索結果のモンスター種族IDリスト
+ */
+std::vector<MonraceId> MonraceList::search_by_name(std::string_view name, bool is_known_only) const
+{
+    std::vector<MonraceId> result_ids;
+    const auto lowered_search_name = str_tolower(name);
+
+    auto filter = [&](const MonraceDefinition &monrace) {
+        const auto lowered_en_name = str_tolower(monrace.name.en_string());
+
+#ifdef JP
+        return str_find(lowered_en_name, lowered_search_name) || str_find(monrace.name.string(), lowered_search_name);
+#else
+        return str_find(lowered_en_name, lowered_search_name);
+#endif
+    };
+
+    return this->search(std::move(filter), is_known_only);
+}
+
+/*!
+ * @brief モンスターのシンボルで検索する
+ *
+ * @param symbol 検索するモンスターのシンボル
+ * @param is_known_only trueならばプレイヤーが既知のモンスターのみを対象とする。falseならば全てのモンスターを対象とする。
+ * @return std::vector<MonraceId> 検索結果のモンスター種族IDリスト
+ */
+std::vector<MonraceId> MonraceList::search_by_symbol(char symbol, bool is_known_only) const
+{
+    auto filter = [&](const MonraceDefinition &monrace) {
+        return monrace.symbol_char_is_any_of(std::string(1, symbol));
+    };
+
+    return this->search(std::move(filter), is_known_only);
 }
 
 //!< @todo ややトリッキーだが、元のmapでMonsterRaceInfo をshared_ptr で持つようにすればかなりスッキリ書けるはず.

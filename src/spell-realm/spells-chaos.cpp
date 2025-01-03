@@ -39,7 +39,7 @@ void call_the_void(PlayerType *player_ptr)
         const Pos2D p_pos_neighbor(player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i]);
         const auto &grid = floor.get_grid(p_pos_neighbor);
         if (!grid.cave_has_flag(TerrainCharacteristics::PROJECT)) {
-            if (!grid.mimic || grid.get_terrain_mimic_raw().flags.has_not(TerrainCharacteristics::PROJECT) || !grid.get_terrain().is_permanent_wall()) {
+            if (!grid.mimic || grid.get_terrain(TerrainKind::MIMIC_RAW).flags.has_not(TerrainCharacteristics::PROJECT) || !grid.get_terrain().is_permanent_wall()) {
                 do_call = false;
                 break;
             }
@@ -69,7 +69,7 @@ void call_the_void(PlayerType *player_ptr)
     }
 
     auto is_special_fllor = floor.is_in_quest() && QuestType::is_fixed(floor.quest_number);
-    is_special_fllor |= floor.dun_level == 0;
+    is_special_fllor |= !floor.is_underground();
     if (is_special_fllor) {
         msg_print(_("地面が揺れた。", "The ground trembles."));
         return;
@@ -108,14 +108,14 @@ void call_the_void(PlayerType *player_ptr)
 static void erase_wall(FloorType &floor, const Pos2D &pos)
 {
     auto &grid = floor.get_grid(pos);
-    const auto &terrain = grid.get_terrain_mimic_raw();
+    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC_RAW);
     grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
     if ((grid.mimic == 0) || terrain.flags.has_not(TerrainCharacteristics::HURT_DISI)) {
         return;
     }
 
     grid.mimic = floor.get_dungeon_definition().convert_terrain_id(grid.mimic, TerrainCharacteristics::HURT_DISI);
-    const auto &terrain_changed = grid.get_terrain_mimic_raw();
+    const auto &terrain_changed = grid.get_terrain(TerrainKind::MIMIC_RAW);
     if (terrain_changed.flags.has_not(TerrainCharacteristics::REMEMBER)) {
         grid.info &= ~(CAVE_MARK);
     }
@@ -150,7 +150,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto is_special_floor = floor.is_in_quest() && QuestType::is_fixed(floor.quest_number);
-    is_special_floor |= (floor.dun_level == 0);
+    is_special_floor |= !floor.is_underground();
     if (is_special_floor) {
         return false;
     }

@@ -10,7 +10,6 @@
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-matcher.h"
 #include "autopick/autopick-util.h"
-#include "core/show-file.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -39,8 +38,7 @@ int find_autopick_list(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return -1;
     }
 
-    auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    str_tolower(item_name.data());
+    const auto item_name = str_tolower(describe_flavor(player_ptr, *o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL)));
     for (auto i = 0U; i < autopick_list.size(); i++) {
         const auto &entry = autopick_list[i];
         if (is_autopick_match(player_ptr, o_ptr, entry, item_name)) {
@@ -313,8 +311,7 @@ void search_for_object(PlayerType *player_ptr, text_body_type *tb, const ItemEnt
     autopick_type an_entry, *entry = &an_entry;
     int bypassed_cy = -1;
     int i = tb->cy;
-    auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    str_tolower(item_name.data());
+    const auto item_name = str_tolower(describe_flavor(player_ptr, *o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL)));
 
     while (true) {
         bool match;

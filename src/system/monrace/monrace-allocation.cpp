@@ -67,11 +67,6 @@ MonraceAllocationTable &MonraceAllocationTable::get_instance()
     return instance;
 }
 
-size_t MonraceAllocationTable::size() const
-{
-    return this->entries.size();
-}
-
 void MonraceAllocationTable::initialize()
 {
     auto &monraces = MonraceList::get_instance();
@@ -81,26 +76,6 @@ void MonraceAllocationTable::initialize()
         const auto prob = static_cast<short>(100 / r_ptr->rarity);
         this->entries.emplace_back(monrace_id, r_ptr->level, prob, prob);
     }
-}
-
-std::vector<MonraceAllocationEntry>::iterator MonraceAllocationTable::begin()
-{
-    return this->entries.begin();
-}
-
-std::vector<MonraceAllocationEntry>::const_iterator MonraceAllocationTable::begin() const
-{
-    return this->entries.begin();
-}
-
-std::vector<MonraceAllocationEntry>::iterator MonraceAllocationTable::end()
-{
-    return this->entries.end();
-}
-
-std::vector<MonraceAllocationEntry>::const_iterator MonraceAllocationTable::end() const
-{
-    return this->entries.end();
 }
 
 const MonraceAllocationEntry &MonraceAllocationTable::get_entry(int index) const

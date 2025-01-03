@@ -133,61 +133,6 @@ const QuestType &QuestList::get_quest(QuestId id) const
     return this->quests.at(id);
 }
 
-std::map<QuestId, QuestType>::iterator QuestList::begin()
-{
-    return this->quests.begin();
-}
-
-std::map<QuestId, QuestType>::const_iterator QuestList::begin() const
-{
-    return this->quests.cbegin();
-}
-
-std::map<QuestId, QuestType>::iterator QuestList::end()
-{
-    return this->quests.end();
-}
-
-std::map<QuestId, QuestType>::const_iterator QuestList::end() const
-{
-    return this->quests.cend();
-}
-
-std::map<QuestId, QuestType>::reverse_iterator QuestList::rbegin()
-{
-    return this->quests.rbegin();
-}
-
-std::map<QuestId, QuestType>::const_reverse_iterator QuestList::rbegin() const
-{
-    return this->quests.crbegin();
-}
-
-std::map<QuestId, QuestType>::reverse_iterator QuestList::rend()
-{
-    return this->quests.rend();
-}
-
-std::map<QuestId, QuestType>::const_reverse_iterator QuestList::rend() const
-{
-    return this->quests.crend();
-}
-
-std::map<QuestId, QuestType>::iterator QuestList::find(QuestId id)
-{
-    return this->quests.find(id);
-}
-
-std::map<QuestId, QuestType>::const_iterator QuestList::find(QuestId id) const
-{
-    return this->quests.find(id);
-}
-
-size_t QuestList::size() const
-{
-    return this->quests.size();
-}
-
 std::vector<QuestId> QuestList::get_sorted_quest_ids() const
 {
     std::vector<QuestId> quest_ids;
@@ -209,7 +154,7 @@ bool QuestList::order_completed(QuestId id1, QuestId id2) const
  */
 void determine_random_questor(PlayerType *player_ptr, QuestType &quest)
 {
-    get_mon_num_prep(player_ptr, mon_hook_quest, nullptr);
+    get_mon_num_prep(player_ptr, mon_hook_quest);
     const auto &monraces = MonraceList::get_instance();
     MonraceId r_idx;
     while (true) {

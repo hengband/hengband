@@ -84,14 +84,14 @@ static bool deal_damege_by_feat(PlayerType *player_ptr, const Grid &grid, concpt
     if (player_ptr->levitation) {
         msg_print(msg_levitation);
         constexpr auto mes = _("%sの上に浮遊したダメージ", "flying over %s");
-        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(mes, grid.get_terrain_mimic().name.data()));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, damage, format(mes, grid.get_terrain(TerrainKind::MIMIC).name.data()));
 
         if (additional_effect != nullptr) {
             additional_effect(player_ptr, damage);
         }
     } else {
         const auto p_pos = player_ptr->get_position();
-        const auto &name = player_ptr->current_floor_ptr->get_grid(p_pos).get_terrain_mimic().name;
+        const auto &name = player_ptr->current_floor_ptr->get_grid(p_pos).get_terrain(TerrainKind::MIMIC).name;
         msg_format(_("%s%s！", "The %s %s!"), name.data(), msg_normal);
         take_hit(player_ptr, DAMAGE_NOESCAPE, damage, name);
 
@@ -133,7 +133,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
 
     const PlayerRace race(player_ptr);
     if (race.life() == PlayerRaceLifeType::UNDEAD && race.tr_flags().has(TR_VUL_LITE)) {
-        if (!floor.is_in_underground() && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && AngbandWorld::get_instance().is_daytime()) {
+        if (!floor.is_underground() && !has_resist_lite(player_ptr) && !is_invuln(player_ptr) && AngbandWorld::get_instance().is_daytime()) {
             if ((floor.grid_array[player_ptr->y][player_ptr->x].info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) {
                 msg_print(_("日光があなたのアンデッドの肉体を焼き焦がした！", "The sun's rays scorch your undead flesh!"));
                 take_hit(player_ptr, DAMAGE_NOESCAPE, 1, _("日光", "sunlight"));

@@ -124,16 +124,13 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     decide_drop_from_monster(player_ptr, m_idx, turn_flags_ptr->is_riding_mon);
     if (m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON) && one_in_(13) && !m_ptr->is_asleep()) {
         const auto &floor = *player_ptr->current_floor_ptr;
-
         const auto old_m_name = monster_desc(player_ptr, m_ptr, 0);
-
         const auto &monrace = m_ptr->get_monrace();
-
-        choose_chameleon_polymorph(player_ptr, m_idx, floor.get_grid(Pos2D(m_ptr->fy, m_ptr->fx)));
-
+        const auto m_pos = m_ptr->get_position();
+        const auto &grid = floor.get_grid(m_pos);
+        choose_chameleon_polymorph(player_ptr, m_idx, grid.get_terrain_id());
         update_monster(player_ptr, m_idx, false);
-        lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
-
+        lite_spot(player_ptr, m_pos.y, m_pos.x);
         const auto &new_monrace = m_ptr->get_monrace();
 
         if (new_monrace.brightness_flags.has_any_of(ld_mask) || monrace.brightness_flags.has_any_of(ld_mask)) {

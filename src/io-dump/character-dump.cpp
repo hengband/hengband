@@ -29,9 +29,6 @@
 #include "store/store.h"
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
-#include "system/dungeon/dungeon-definition.h"
-#include "system/dungeon/dungeon-list.h"
-#include "system/dungeon/dungeon-record.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
@@ -41,6 +38,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
+#include "system/services/dungeon-service.h"
 #include "term/gameterm.h"
 #include "term/z-form.h"
 #include "util/buffer-shaper.h"
@@ -180,28 +178,8 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
 static void dump_aux_recall(FILE *fff)
 {
     fprintf(fff, _("\n  [帰還場所]\n\n", "\n  [Recall Depth]\n\n"));
-    const auto &dungeon_records = DungeonRecords::get_instance();
-    for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
-        auto is_conquered = false;
-        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
-            continue;
-        }
-
-        const auto &dungeon_record = dungeon_records.get_record(dungeon_id);
-        if (!dungeon_record.has_entered()) {
-            continue;
-        }
-
-        const auto max_level = dungeon_record.get_max_level();
-        if (dungeon.has_guardian()) {
-            if (dungeon.get_guardian().max_num == 0) {
-                is_conquered = true;
-            }
-        } else if (max_level == dungeon.maxdepth) {
-            is_conquered = true;
-        }
-
-        fprintf(fff, _("   %c%-12s: %3d 階\n", "   %c%-16s: level %3d\n"), is_conquered ? '!' : ' ', dungeon.name.data(), max_level);
+    for (const auto &known_dungeon : DungeonService::build_known_dungeons(DungeonMessageFormat::DUMP)) {
+        fprintf(fff, "%s", known_dungeon.data());
     }
 }
 

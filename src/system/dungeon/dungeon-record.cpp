@@ -5,6 +5,13 @@
  */
 
 #include "system/dungeon/dungeon-record.h"
+#include "locale/language-switcher.h"
+#include "system/angband-exceptions.h"
+#include "system/enums/dungeon/dungeon-id.h"
+#include "term/z-form.h"
+#include "term/z-rand.h"
+#include "util/enum-converter.h"
+#include "util/enum-range.h"
 
 bool DungeonRecord::has_entered() const
 {
@@ -23,11 +30,14 @@ int DungeonRecord::get_max_max_level() const
 
 void DungeonRecord::set_max_level(int level)
 {
-    if (!this->max_max_level || (level > this->max_max_level)) {
-        this->max_max_level = level;
+    if (level <= 0) {
+        THROW_EXCEPTION(std::logic_error, format("Invalid dungeon level: %d", level));
     }
 
     this->max_level = level;
+    if (!this->max_max_level || (level > this->max_max_level)) {
+        this->max_max_level = level;
+    }
 }
 
 void DungeonRecord::reset()
@@ -40,9 +50,8 @@ DungeonRecords DungeonRecords::instance{};
 
 DungeonRecords::DungeonRecords()
 {
-    //!< @todo 後でenum class に変える.
-    for (auto i = 0; i < 21; i++) {
-        this->records.emplace(i, DungeonRecord());
+    for (auto dungeon_id : DUNGEON_IDS) {
+        this->records.emplace(dungeon_id, std::make_shared<DungeonRecord>());
     }
 }
 
@@ -51,69 +60,41 @@ DungeonRecords &DungeonRecords::get_instance()
     return instance;
 }
 
-DungeonRecord &DungeonRecords::get_record(int dungeon_id)
+DungeonRecord &DungeonRecords::get_record(DungeonId dungeon_id)
+{
+    return *this->records.at(dungeon_id);
+}
+
+const DungeonRecord &DungeonRecords::get_record(DungeonId dungeon_id) const
+{
+    return *this->records.at(dungeon_id);
+}
+
+std::shared_ptr<DungeonRecord> DungeonRecords::get_record_shared(DungeonId dungeon_id)
 {
     return this->records.at(dungeon_id);
 }
 
-const DungeonRecord &DungeonRecords::get_record(int dungeon_id) const
+std::shared_ptr<const DungeonRecord> DungeonRecords::get_record_shared(DungeonId dungeon_id) const
 {
     return this->records.at(dungeon_id);
-}
-
-std::map<int, DungeonRecord>::iterator DungeonRecords::begin()
-{
-    return this->records.begin();
-}
-
-std::map<int, DungeonRecord>::const_iterator DungeonRecords::begin() const
-{
-    return this->records.cbegin();
-}
-
-std::map<int, DungeonRecord>::iterator DungeonRecords::end()
-{
-    return this->records.end();
-}
-
-std::map<int, DungeonRecord>::const_iterator DungeonRecords::end() const
-{
-    return this->records.cend();
-}
-
-std::map<int, DungeonRecord>::reverse_iterator DungeonRecords::rbegin()
-{
-    return this->records.rbegin();
-}
-
-std::map<int, DungeonRecord>::const_reverse_iterator DungeonRecords::rbegin() const
-{
-    return this->records.crbegin();
-}
-
-std::map<int, DungeonRecord>::reverse_iterator DungeonRecords::rend()
-{
-    return this->records.rend();
-}
-
-std::map<int, DungeonRecord>::const_reverse_iterator DungeonRecords::rend() const
-{
-    return this->records.crend();
-}
-
-size_t DungeonRecords::size() const
-{
-    return this->records.size();
-}
-
-bool DungeonRecords::empty() const
-{
-    return this->records.empty();
 }
 
 void DungeonRecords::reset_all()
 {
     for (auto &[_, record] : this->records) {
-        record.reset();
+        record->reset();
     }
+}
+
+std::vector<DungeonId> DungeonRecords::collect_entered_dungeon_ids() const
+{
+    std::vector<DungeonId> ids;
+    for (const auto &[dungeon_id, record] : this->records) {
+        if (record->has_entered()) {
+            ids.push_back(dungeon_id);
+        }
+    }
+
+    return ids;
 }

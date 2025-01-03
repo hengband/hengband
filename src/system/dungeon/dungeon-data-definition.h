@@ -10,7 +10,7 @@
  */
 class DungeonData {
 public:
-    DungeonData();
+    DungeonData(const Pos2DVec &dungeon_size);
 
     size_t cent_n = 0;
     std::vector<Pos2D> centers;
@@ -25,8 +25,8 @@ public:
     std::vector<Pos2D> tunnels;
 
     /* Number of blocks along each axis */
-    int row_rooms = 0;
-    int col_rooms = 0;
+    int row_rooms;
+    int col_rooms;
 
     /* Array of which blocks are used */
     std::vector<std::vector<bool>> room_map;

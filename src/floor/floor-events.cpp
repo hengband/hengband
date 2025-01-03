@@ -96,7 +96,7 @@ void night_falls(PlayerType *player_ptr)
         for (auto x = 0; x < floor.width; x++) {
             const Pos2D pos(y, x);
             auto &grid = floor.get_grid(pos);
-            const auto &terrain = grid.get_terrain_mimic();
+            const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
             using Tc = TerrainCharacteristics;
             if (grid.is_mirror() || terrain.flags.has(Tc::QUEST_ENTER) || terrain.flags.has(Tc::ENTRANCE)) {
                 continue;
@@ -130,55 +130,54 @@ static int rating_boost(int delta)
  */
 static byte get_dungeon_feeling(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!floor_ptr->dun_level) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.is_underground()) {
         return 0;
     }
 
     const int base = 10;
     int rating = 0;
-    for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        auto *m_ptr = &floor_ptr->m_list[i];
-        MonraceDefinition *r_ptr;
-        int delta = 0;
-        if (!m_ptr->is_valid() || m_ptr->is_pet()) {
+    for (short i = 1; i < floor.m_max; i++) {
+        const auto &monster = floor.m_list[i];
+        auto delta = 0;
+        if (!monster.is_valid() || monster.is_pet()) {
             continue;
         }
 
-        r_ptr = &m_ptr->get_monrace();
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            if (r_ptr->level + 10 > floor_ptr->dun_level) {
-                delta += (r_ptr->level + 10 - floor_ptr->dun_level) * 2 * base;
+        const auto &monrace = monster.get_monrace();
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            if (monrace.level + 10 > floor.dun_level) {
+                delta += (monrace.level + 10 - floor.dun_level) * 2 * base;
             }
-        } else if (r_ptr->level > floor_ptr->dun_level) {
-            delta += (r_ptr->level - floor_ptr->dun_level) * base;
+        } else if (monrace.level > floor.dun_level) {
+            delta += (monrace.level - floor.dun_level) * base;
         }
 
-        if (r_ptr->misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
-            if (5 <= get_monster_crowd_number(floor_ptr, i)) {
+        if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
+            if (5 <= get_monster_crowd_number(&floor, i)) {
                 delta += 1;
             }
-        } else if (2 <= get_monster_crowd_number(floor_ptr, i)) {
+        } else if (2 <= get_monster_crowd_number(&floor, i)) {
             delta += 1;
         }
 
         rating += rating_boost(delta);
     }
 
-    for (MONSTER_IDX i = 1; i < floor_ptr->o_max; i++) {
-        auto *o_ptr = &floor_ptr->o_list[i];
-        int delta = 0;
-        if (!o_ptr->is_valid() || (o_ptr->is_known() && o_ptr->marked.has(OmType::TOUCHED)) || ((o_ptr->ident & IDENT_SENSE) != 0)) {
+    for (short i = 1; i < floor.o_max; i++) {
+        const auto &item = floor.o_list[i];
+        auto delta = 0;
+        if (!item.is_valid() || (item.is_known() && item.marked.has(OmType::TOUCHED)) || ((item.ident & IDENT_SENSE) != 0)) {
             continue;
         }
 
-        if (o_ptr->is_ego()) {
-            const auto &ego = o_ptr->get_ego();
+        if (item.is_ego()) {
+            const auto &ego = item.get_ego();
             delta += ego.rating * base;
         }
 
-        if (o_ptr->is_fixed_or_random_artifact()) {
-            PRICE cost = object_value_real(o_ptr);
+        if (item.is_fixed_or_random_artifact()) {
+            const auto cost = object_value_real(&item);
             delta += 10 * base;
             if (cost > 10000L) {
                 delta += 10 * base;
@@ -197,41 +196,41 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
             }
         }
 
-        if (o_ptr->bi_key.tval() == ItemKindType::DRAG_ARMOR) {
+        if (item.bi_key.tval() == ItemKindType::DRAG_ARMOR) {
             delta += 30 * base;
         }
 
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD)) {
+        if (item.bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD)) {
             delta += 5 * base;
         }
 
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES)) {
+        if (item.bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES)) {
             delta += 5 * base;
         }
 
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE)) {
+        if (item.bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE)) {
             delta += 5 * base;
         }
 
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM)) {
+        if (item.bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM)) {
             delta += 5 * base;
         }
 
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_SPEED) && !o_ptr->is_cursed()) {
+        if (item.bi_key == BaseitemKey(ItemKindType::RING, SV_RING_SPEED) && !item.is_cursed()) {
             delta += 25 * base;
         }
 
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY) && !o_ptr->is_cursed()) {
+        if (item.bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY) && !item.is_cursed()) {
             delta += 15 * base;
         }
 
-        if (o_ptr->bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_THE_MAGI) && !o_ptr->is_cursed()) {
+        if (item.bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_THE_MAGI) && !item.is_cursed()) {
             delta += 15 * base;
         }
 
-        const auto item_level = o_ptr->get_baseitem_level();
-        if (!o_ptr->is_cursed() && !o_ptr->is_broken() && item_level > floor_ptr->dun_level) {
-            delta += (item_level - floor_ptr->dun_level) * base;
+        const auto item_level = item.get_baseitem_level();
+        if (!item.is_cursed() && !item.is_broken() && item_level > floor.dun_level) {
+            delta += (item_level - floor.dun_level) * base;
         }
 
         rating += rating_boost(delta);
@@ -279,7 +278,7 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
 void update_dungeon_feeling(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.dun_level) {
+    if (!floor.is_underground()) {
         return;
     }
 
@@ -334,7 +333,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
             const auto &grid = floor.get_grid({ y, x });
-            if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::GLOW)) {
+            if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::GLOW)) {
                 continue;
             }
 

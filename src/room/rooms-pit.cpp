@@ -11,7 +11,7 @@
 #include "room/door-definition.h"
 #include "room/pit-nest-util.h"
 #include "room/space-finder.h"
-#include "system/dungeon/dungeon-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -213,7 +213,7 @@ bool build_type6(PlayerType *player_ptr, DungeonData *dd_ptr)
         (*(pit.prep_func))(player_ptr);
     }
 
-    get_mon_num_prep(player_ptr, pit.hook_func, nullptr);
+    get_mon_num_prep(player_ptr, pit.hook_func);
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -294,30 +294,6 @@ bool build_type6(PlayerType *player_ptr, DungeonData *dd_ptr)
 }
 
 /*!
- * @brief 開門トラップに配置するモンスターの条件フィルタ
- * @detai;
- * 穴を掘るモンスター、壁を抜けるモンスターは却下
- */
-static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    auto *r_ptr = &monraces_info[r_idx];
-
-    if (!vault_monster_okay(player_ptr, r_idx)) {
-        return false;
-    }
-
-    /* No wall passing monster */
-    if (r_ptr->feature_flags.has_any_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL })) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief タイプ13の部屋…開門トラップpitの生成 / Type 13 -- Trapped monster pits
  * @details
  * A trapped monster pit is a "big" room with a straight corridor in\n
@@ -367,7 +343,7 @@ bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto pit_type = pick_pit_type(floor, pit_types);
 
     /* Only in Angband */
-    if (floor.dungeon_idx != DUNGEON_ANGBAND) {
+    if (floor.dungeon_id != DungeonId::ANGBAND) {
         return false;
     }
 
@@ -383,7 +359,7 @@ bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
         (*(pit.prep_func))(player_ptr);
     }
 
-    get_mon_num_prep(player_ptr, pit.hook_func, vault_aux_trapped_pit);
+    get_mon_num_prep(player_ptr, pit.hook_func, MonraceHookTerrain::TRAPPED_PIT);
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
     auto whats = pick_pit_monraces(player_ptr, align);

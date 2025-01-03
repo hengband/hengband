@@ -86,7 +86,7 @@ static MonraceId initial_monrace_appearance(PlayerType *player_ptr, MonraceId mo
         return monrace_id;
     }
 
-    get_mon_num_prep(player_ptr, monster_hook_tanuki, nullptr);
+    get_mon_num_prep(player_ptr, monster_hook_tanuki);
     auto attempts = 1000;
     const auto &floor = *player_ptr->current_floor_ptr;
     auto min = std::min(floor.base_level - 5, 50);
@@ -284,7 +284,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
     monster.mflag2.clear();
     if (monrace.misc_flags.has(MonsterMiscType::CHAMELEON)) {
         monster.r_idx = r_idx;
-        choose_chameleon_polymorph(player_ptr, grid.m_idx, grid, summoner_m_idx);
+        choose_chameleon_polymorph(player_ptr, grid.m_idx, grid.get_terrain_id(), summoner_m_idx);
         monster.mflag2.set(MonsterConstantFlagType::CHAMELEON);
     } else {
         monster.r_idx = r_idx;

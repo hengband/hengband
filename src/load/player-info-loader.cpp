@@ -303,7 +303,7 @@ static void rd_arena(PlayerType *player_ptr)
     player_ptr->oldpx = rd_s16b();
     player_ptr->oldpy = rd_s16b();
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (h_older_than(0, 3, 13) && !floor.is_in_underground() && !floor.inside_arena) {
+    if (h_older_than(0, 3, 13) && !floor.is_underground() && !floor.inside_arena) {
         player_ptr->oldpy = 33;
         player_ptr->oldpx = 131;
     }

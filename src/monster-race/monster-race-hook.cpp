@@ -34,9 +34,9 @@ EnumClassFlagGroup<MonsterAbilityType> vault_aux_dragon_mask4;
  */
 void vault_prep_clone(PlayerType *player_ptr)
 {
-    get_mon_num_prep(player_ptr, vault_aux_simple, nullptr);
+    get_mon_num_prep(player_ptr, vault_aux_simple);
     vault_aux_race = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
-    get_mon_num_prep(player_ptr, nullptr, nullptr);
+    get_mon_num_prep(player_ptr, nullptr);
 }
 
 /*!
@@ -45,9 +45,9 @@ void vault_prep_clone(PlayerType *player_ptr)
  */
 void vault_prep_symbol(PlayerType *player_ptr)
 {
-    get_mon_num_prep(player_ptr, vault_aux_simple, nullptr);
+    get_mon_num_prep(player_ptr, vault_aux_simple);
     MonraceId r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
-    get_mon_num_prep(player_ptr, nullptr, nullptr);
+    get_mon_num_prep(player_ptr, nullptr);
     vault_aux_char = monraces_info[r_idx].symbol_definition.character;
 }
 
@@ -142,7 +142,7 @@ bool mon_hook_quest(PlayerType *player_ptr, MonraceId r_idx)
 bool mon_hook_dungeon(PlayerType *player_ptr, MonraceId r_idx)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.is_in_underground() && !floor.is_in_quest()) {
+    if (!floor.is_underground() && !floor.is_in_quest()) {
         return true;
     }
 

@@ -70,10 +70,10 @@ static void process_fishing(PlayerType *player_ptr)
     term_xtra(TERM_XTRA_DELAY, 10);
     if (one_in_(1000)) {
         bool success = false;
-        get_mon_num_prep(player_ptr, monster_is_fishing_target, nullptr);
+        get_mon_num_prep(player_ptr, monster_is_fishing_target);
         auto *floor_ptr = player_ptr->current_floor_ptr;
         const auto wild_level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
-        const auto level = floor_ptr->is_in_underground() ? floor_ptr->dun_level : wild_level;
+        const auto level = floor_ptr->is_underground() ? floor_ptr->dun_level : wild_level;
         const auto r_idx = get_mon_num(player_ptr, 0, level, PM_NONE);
         msg_print(nullptr);
         if (MonraceList::is_valid(r_idx) && one_in_(2)) {

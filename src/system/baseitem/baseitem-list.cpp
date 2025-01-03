@@ -25,6 +25,8 @@ constexpr auto INVALID_BASEITEM_KEY = "Invalid Baseitem Key is specified! Type: 
 
 BaseitemList BaseitemList::instance{};
 
+BaseitemList::~BaseitemList() = default;
+
 BaseitemList &BaseitemList::get_instance()
 {
     return instance;
@@ -46,66 +48,6 @@ const BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id) const
     }
 
     return this->baseitems[bi_id];
-}
-
-std::vector<BaseitemDefinition>::iterator BaseitemList::begin()
-{
-    return this->baseitems.begin();
-}
-
-std::vector<BaseitemDefinition>::const_iterator BaseitemList::begin() const
-{
-    return this->baseitems.begin();
-}
-
-std::vector<BaseitemDefinition>::iterator BaseitemList::end()
-{
-    return this->baseitems.end();
-}
-
-std::vector<BaseitemDefinition>::const_iterator BaseitemList::end() const
-{
-    return this->baseitems.end();
-}
-
-std::vector<BaseitemDefinition>::reverse_iterator BaseitemList::rbegin()
-{
-    return this->baseitems.rbegin();
-}
-
-std::vector<BaseitemDefinition>::const_reverse_iterator BaseitemList::rbegin() const
-{
-    return this->baseitems.rbegin();
-}
-
-std::vector<BaseitemDefinition>::reverse_iterator BaseitemList::rend()
-{
-    return this->baseitems.rend();
-}
-
-std::vector<BaseitemDefinition>::const_reverse_iterator BaseitemList::rend() const
-{
-    return this->baseitems.rend();
-}
-
-size_t BaseitemList::size() const
-{
-    return this->baseitems.size();
-}
-
-bool BaseitemList::empty() const
-{
-    return this->baseitems.empty();
-}
-
-void BaseitemList::resize(size_t new_size)
-{
-    this->baseitems.resize(new_size);
-}
-
-void BaseitemList::shrink_to_fit()
-{
-    this->baseitems.shrink_to_fit();
 }
 
 /*!

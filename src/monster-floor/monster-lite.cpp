@@ -40,7 +40,7 @@ static void update_monster_lite(
         return;
     }
 
-    if (!feat_supports_los(g_ptr->feat)) {
+    if (!g_ptr->has_los_terrain()) {
         if (((y < player_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > player_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = player_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;
@@ -98,7 +98,7 @@ static void update_monster_dark(
         return;
     }
 
-    if (!feat_supports_los(g_ptr->feat) && !g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
+    if (!g_ptr->has_los_terrain() && !g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
         if (((y < player_ptr->y) && (y > ml_ptr->mon_fy)) || ((y > player_ptr->y) && (y < ml_ptr->mon_fy))) {
             dpf = player_ptr->y - ml_ptr->mon_fy;
             d = y - ml_ptr->mon_fy;
@@ -195,7 +195,7 @@ void update_mon_lite(PlayerType *player_ptr)
             TerrainCharacteristics f_flag;
             if (rad > 0) {
                 auto should_lite = r_ptr->brightness_flags.has_none_of({ MonsterBrightnessType::SELF_LITE_1, MonsterBrightnessType::SELF_LITE_2 });
-                should_lite &= (m_ptr->is_asleep() || (!floor.dun_level && world.is_daytime()) || AngbandSystem::get_instance().is_phase_out());
+                should_lite &= (m_ptr->is_asleep() || (!floor.is_underground() && world.is_daytime()) || AngbandSystem::get_instance().is_phase_out());
                 if (should_lite) {
                     continue;
                 }
@@ -207,7 +207,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 add_mon_lite = update_monster_lite;
                 f_flag = TerrainCharacteristics::LOS;
             } else {
-                if (r_ptr->brightness_flags.has_none_of({ MonsterBrightnessType::SELF_DARK_1, MonsterBrightnessType::SELF_DARK_2 }) && (m_ptr->is_asleep() || (!floor.dun_level && !world.is_daytime()))) {
+                if (r_ptr->brightness_flags.has_none_of({ MonsterBrightnessType::SELF_DARK_1, MonsterBrightnessType::SELF_DARK_2 }) && (m_ptr->is_asleep() || (!floor.is_underground() && !world.is_daytime()))) {
                     continue;
                 }
 

@@ -106,48 +106,24 @@ bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mod
         info[i++] = _("それは全く光らない。", "It provides no light.");
     }
 
-    POSITION rad = 0;
-    if (flags.has(TR_LITE_1) && flags.has_not(TR_DARK_SOURCE)) {
-        rad += 1;
-    }
-    if (flags.has(TR_LITE_2) && flags.has_not(TR_DARK_SOURCE)) {
-        rad += 2;
-    }
-    if (flags.has(TR_LITE_3) && flags.has_not(TR_DARK_SOURCE)) {
-        rad += 3;
-    }
-    if (flags.has(TR_LITE_M1)) {
-        rad -= 1;
-    }
-    if (flags.has(TR_LITE_M2)) {
-        rad -= 2;
-    }
-    if (flags.has(TR_LITE_M3)) {
-        rad -= 3;
-    }
-
-    if (item.ego_idx == EgoType::LITE_SHINE) {
-        rad++;
-    }
+    const auto radius = item.get_lite_radius();
 
     std::string desc;
-    if (flags.has(TR_LITE_FUEL) && flags.has_not(TR_DARK_SOURCE)) {
-        if (rad > 0) {
-            desc = _("それは燃料補給によって明かり(半径 ", "It provides light (radius ");
-            desc.append(std::to_string((int)rad)).append(_(")を授ける。", ") when fueled."));
-        }
-    } else {
-        if (rad > 0) {
-            desc = _("それは永遠なる明かり(半径 ", "It provides light (radius ");
-            desc.append(std::to_string((int)rad)).append(_(")を授ける。", ") forever."));
-        }
-        if (rad < 0) {
-            desc = _("それは明かりの半径を狭める(半径に-", "It decreases the radius of your light by ");
-            desc.append(std::to_string((int)-rad)).append(_(")。", "."));
-        }
-    }
+    if (radius > 0) {
+        if (flags.has(TR_LITE_FUEL)) {
 
-    if (rad != 0) {
+            desc = _("それは燃料補給によって明かり(半径 ", "It provides light (radius ");
+            desc.append(std::to_string(radius)).append(_(")を授ける。", ") when fueled."));
+
+        } else {
+            desc = _("それは永遠なる明かり(半径 ", "It provides light (radius ");
+            desc.append(std::to_string(radius)).append(_(")を授ける。", ") forever."));
+        }
+        info[i++] = desc.data();
+    }
+    if (radius < 0) {
+        desc = _("それは明かりの半径を狭める(半径に-", "It decreases the radius of your light by ");
+        desc.append(std::to_string(-radius)).append(_(")。", "."));
         info[i++] = desc.data();
     }
 
@@ -401,7 +377,7 @@ bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mod
     }
 
     if (flags.has(TR_VUL_LITE)) {
-        info[i++] = _("それは閃光に対する弱点を授ける。", "It provides vulnerability to cold.");
+        info[i++] = _("それは閃光に対する弱点を授ける。", "It provides vulnerability to light.");
     }
 
     if (flags.has(TR_THROW)) {

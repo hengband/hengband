@@ -839,3 +839,51 @@ std::string str_substr(const char *str, size_t pos, size_t n)
 {
     return str_substr(std::string_view(str), pos, n);
 }
+
+/*!
+ * @brief 文字列を大文字に変換する
+ * @param str 変換元の文字列
+ * @return 大文字に変換した文字列
+ */
+std::string str_toupper(std::string_view str)
+{
+    std::string uc_str;
+    uc_str.reserve(str.size());
+    for (size_t i = 0; i < str.length(); ++i) {
+        const auto ch = str[i];
+#ifdef JP
+        if (iskanji(ch)) {
+            uc_str.push_back(ch);
+            uc_str.push_back(str[++i]);
+            continue;
+        }
+#endif
+        uc_str.push_back(static_cast<char>(toupper(ch)));
+    }
+
+    return uc_str;
+}
+
+/*!
+ * @brief 文字列を小文字に変換する
+ * @param str 変換元の文字列
+ * @return 小文字に変換した文字列
+ */
+std::string str_tolower(std::string_view str)
+{
+    std::string lc_str;
+    lc_str.reserve(str.size());
+    for (size_t i = 0; i < str.length(); ++i) {
+        const auto ch = str[i];
+#ifdef JP
+        if (iskanji(ch)) {
+            lc_str.push_back(ch);
+            lc_str.push_back(str[++i]);
+            continue;
+        }
+#endif
+        lc_str.push_back(static_cast<char>(tolower(ch)));
+    }
+
+    return lc_str;
+}

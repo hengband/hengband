@@ -102,31 +102,6 @@ void BaseitemAllocationTable::initialize()
     }
 }
 
-std::vector<BaseitemAllocationEntry>::iterator BaseitemAllocationTable::begin()
-{
-    return this->entries.begin();
-}
-
-std::vector<BaseitemAllocationEntry>::const_iterator BaseitemAllocationTable::begin() const
-{
-    return this->entries.cbegin();
-}
-
-std::vector<BaseitemAllocationEntry>::iterator BaseitemAllocationTable::end()
-{
-    return this->entries.end();
-}
-
-std::vector<BaseitemAllocationEntry>::const_iterator BaseitemAllocationTable::end() const
-{
-    return this->entries.cend();
-}
-
-size_t BaseitemAllocationTable::size() const
-{
-    return this->entries.size();
-}
-
 const BaseitemAllocationEntry &BaseitemAllocationTable::get_entry(int index) const
 {
     return this->entries.at(index);

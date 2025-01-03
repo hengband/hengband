@@ -11,11 +11,9 @@
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "knowledge/lighting-level-table.h"
-#include "system/dungeon/dungeon-definition.h"
-#include "system/dungeon/dungeon-list.h"
-#include "system/dungeon/dungeon-record.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
+#include "system/services/dungeon-service.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
@@ -364,28 +362,9 @@ void do_cmd_knowledge_dungeon(PlayerType *player_ptr)
         return;
     }
 
-    const auto &dungeon_records = DungeonRecords::get_instance();
-    for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
-        auto is_conquered = false;
-        if (!dungeon.is_dungeon() || !dungeon.maxdepth) {
-            continue;
-        }
-
-        const auto &dungeon_record = dungeon_records.get_record(dungeon_id);
-        if (!dungeon_record.has_entered()) {
-            continue;
-        }
-
-        const auto max_level = dungeon_record.get_max_level();
-        if (dungeon.has_guardian()) {
-            if (dungeon.get_guardian().max_num == 0) {
-                is_conquered = true;
-            }
-        } else if (max_level == dungeon.maxdepth) {
-            is_conquered = true;
-        }
-
-        fprintf(fff, _("%c%-12s :  %3d 階\n", "%c%-16s :  level %3d\n"), is_conquered ? '!' : ' ', dungeon.name.data(), max_level);
+    const auto known_dungeons = DungeonService::build_known_dungeons(DungeonMessageFormat::KNOWLEDGE);
+    for (const auto &known_dungeon : known_dungeons) {
+        fprintf(fff, "%s", known_dungeon.data());
     }
 
     angband_fclose(fff);

@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "util/abstract-vector-wrapper.h"
 #include "util/probability-table.h"
 
 /*
@@ -35,7 +36,7 @@ private:
     const BaseitemKey &get_bi_key() const;
 };
 
-class BaseitemAllocationTable {
+class BaseitemAllocationTable : public util::AbstractVectorWrapper<BaseitemAllocationEntry> {
 public:
     BaseitemAllocationTable(const BaseitemAllocationTable &) = delete;
     BaseitemAllocationTable(BaseitemAllocationTable &&) = delete;
@@ -44,11 +45,6 @@ public:
     static BaseitemAllocationTable &get_instance();
 
     void initialize();
-    std::vector<BaseitemAllocationEntry>::iterator begin();
-    std::vector<BaseitemAllocationEntry>::const_iterator begin() const;
-    std::vector<BaseitemAllocationEntry>::iterator end();
-    std::vector<BaseitemAllocationEntry>::const_iterator end() const;
-    size_t size() const;
     const BaseitemAllocationEntry &get_entry(int index) const;
     BaseitemAllocationEntry &get_entry(int index);
     short draw_lottery(int level, uint32_t mode, int count) const;
@@ -60,6 +56,11 @@ private:
     static BaseitemAllocationTable instance;
     BaseitemAllocationTable() = default;
     std::vector<BaseitemAllocationEntry> entries;
+
+    std::vector<BaseitemAllocationEntry> &get_inner_container() override
+    {
+        return this->entries;
+    }
 
     ProbabilityTable<int> make_table(int level, uint32_t mode) const;
 };

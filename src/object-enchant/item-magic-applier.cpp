@@ -162,7 +162,7 @@ int ItemMagicApplier::calculate_rolls(const int power)
 void ItemMagicApplier::try_make_artifact(const int rolls)
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    if (!floor.is_in_underground()) {
+    if (!floor.is_underground()) {
         return;
     }
 

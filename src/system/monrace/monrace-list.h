@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "util/abstract-map-wrapper.h"
+#include <functional>
 #include <map>
 #include <optional>
 #include <set>
@@ -17,7 +19,7 @@ enum class MonraceId : short;
 class MonraceDefinition;
 extern std::map<MonraceId, MonraceDefinition> monraces_info;
 
-class MonraceList {
+class MonraceList : public util::AbstractMapWrapper<MonraceId, MonraceDefinition> {
 public:
     MonraceList(MonraceList &&) = delete;
     MonraceList(const MonraceList &) = delete;
@@ -29,20 +31,14 @@ public:
     static MonraceList &get_instance();
     static MonraceId empty_id();
     static bool is_tsuchinoko(MonraceId monrace_id);
-    std::map<MonraceId, MonraceDefinition>::iterator begin();
-    std::map<MonraceId, MonraceDefinition>::const_iterator begin() const;
-    std::map<MonraceId, MonraceDefinition>::iterator end();
-    std::map<MonraceId, MonraceDefinition>::const_iterator end() const;
-    std::map<MonraceId, MonraceDefinition>::reverse_iterator rbegin();
-    std::map<MonraceId, MonraceDefinition>::const_reverse_iterator rbegin() const;
-    std::map<MonraceId, MonraceDefinition>::reverse_iterator rend();
-    std::map<MonraceId, MonraceDefinition>::const_reverse_iterator rend() const;
-    size_t size() const;
     MonraceDefinition &emplace(MonraceId monrace_id);
     std::map<MonraceId, MonraceDefinition> &get_raw_map();
     MonraceDefinition &get_monrace(MonraceId monrace_id);
     const MonraceDefinition &get_monrace(MonraceId monrace_id) const;
     const std::vector<MonraceId> &get_valid_monrace_ids() const;
+    std::vector<MonraceId> search(std::function<bool(const MonraceDefinition &)> filter, bool is_known_only = false) const;
+    std::vector<MonraceId> search_by_name(std::string_view name, bool is_known_only = false) const;
+    std::vector<MonraceId> search_by_symbol(char symbol, bool is_known_only) const;
     const std::vector<std::pair<MonraceId, const MonraceDefinition *>> &get_sorted_monraces() const;
     bool can_unify_separate(const MonraceId r_idx) const;
     void kill_unified_unique(const MonraceId r_idx);
@@ -70,4 +66,9 @@ private:
     static MonraceList instance;
 
     const static std::map<MonraceId, std::set<MonraceId>> unified_uniques;
+
+    std::map<MonraceId, MonraceDefinition> &get_inner_container() override
+    {
+        return monraces_info;
+    }
 };

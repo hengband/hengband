@@ -111,7 +111,7 @@ bool create_ammo(PlayerType *player_ptr)
 
         const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-        if (grid.get_terrain_mimic().flags.has_not(TerrainCharacteristics::CAN_DIG)) {
+        if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::CAN_DIG)) {
             msg_print(_("そこには岩石がない。", "You need a pile of rubble."));
             return false;
         }

@@ -113,49 +113,19 @@ static std::vector<std::string> analyze_misc_magic(const ItemEntity &item)
     descriptions.insert(descriptions.end(), flags2_descriptions.begin(), flags2_descriptions.end());
     const auto &flags3_descriptions = extract_spoiler_flags(flags, misc_flags3_desc);
     descriptions.insert(descriptions.end(), flags3_descriptions.begin(), flags3_descriptions.end());
-    POSITION rad = 0;
-    if (flags.has(TR_LITE_1)) {
-        rad += 1;
-    }
 
-    if (flags.has(TR_LITE_2)) {
-        rad += 2;
-    }
-
-    if (flags.has(TR_LITE_3)) {
-        rad += 3;
-    }
-
-    if (flags.has(TR_LITE_M1)) {
-        rad -= 1;
-    }
-
-    if (flags.has(TR_LITE_M2)) {
-        rad -= 2;
-    }
-
-    if (flags.has(TR_LITE_M3)) {
-        rad -= 3;
-    }
-
-    if (item.ego_idx == EgoType::LITE_SHINE) {
-        rad++;
-    }
+    const auto radius = item.get_lite_radius();
 
     std::string desc;
-    if (flags.has(TR_LITE_FUEL)) {
-        if (rad > 0) {
-            desc = format(_("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), (int)rad);
+    if (radius > 0) {
+        if (flags.has(TR_LITE_FUEL)) {
+            desc = format(_("それは燃料補給によって明かり(半径 %d)を授ける。", "It provides light (radius %d) when fueled."), radius);
+        } else {
+            desc = format(_("永久光源(半径 %d)", "Permanent Light(radius %d)"), radius);
         }
-    } else {
-        if (rad > 0) {
-            desc = format(_("永久光源(半径 %d)", "Permanent Light(radius %d)"), (int)rad);
-        } else if (rad < 0) {
-            desc = format(_("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), (int)-rad);
-        }
-    }
-
-    if (rad != 0) {
+        descriptions.push_back(std::move(desc));
+    } else if (radius < 0) {
+        desc = format(_("永久光源(半径-%d)。", "Permanent Light(radius -%d)"), radius);
         descriptions.push_back(std::move(desc));
     }
 

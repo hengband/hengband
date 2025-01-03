@@ -147,7 +147,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         for (auto y = 0; y < ymax; y++) {
             for (auto x = 0; x < xmax; x++) {
                 auto &grid = floor.get_grid({ y, x });
-                if ((grid.special == OLD_QUEST_WATER_CAVE) && !floor.dun_level) {
+                if ((grid.special == OLD_QUEST_WATER_CAVE) && !floor.is_underground()) {
                     if (grid.feat == OLD_FEAT_QUEST_ENTER) {
                         grid.feat = feat_tree;
                         grid.special = 0;

@@ -1232,6 +1232,36 @@ MonraceId ItemEntity::get_monrace_id() const
     return i2enum<MonraceId>(this->pval);
 }
 
+int ItemEntity::get_lite_radius() const
+{
+    const auto flags = this->get_flags();
+    auto radius = 0;
+
+    if (flags.has(TR_LITE_1) && flags.has_not(TR_DARK_SOURCE)) {
+        radius += 1;
+    }
+    if (flags.has(TR_LITE_2) && flags.has_not(TR_DARK_SOURCE)) {
+        radius += 2;
+    }
+    if (flags.has(TR_LITE_3) && flags.has_not(TR_DARK_SOURCE)) {
+        radius += 3;
+    }
+    if (flags.has(TR_LITE_M1)) {
+        radius -= 1;
+    }
+    if (flags.has(TR_LITE_M2)) {
+        radius -= 2;
+    }
+    if (flags.has(TR_LITE_M3)) {
+        radius -= 3;
+    }
+
+    if (this->ego_idx == EgoType::LITE_SHINE) {
+        radius++;
+    }
+    return radius;
+}
+
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
     const auto description = act.build_timeout_description();

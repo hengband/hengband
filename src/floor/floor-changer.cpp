@@ -32,6 +32,7 @@
 #include "spell-kind/spells-floor.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -56,7 +57,7 @@ static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
     clear_cave(player_ptr);
     player_ptr->x = player_ptr->y = 0;
-    set_floor_and_wall(0);
+    set_floor_and_wall(DungeonId::WILDERNESS);
     player_ptr->current_floor_ptr->height = SCREEN_HGT;
     player_ptr->current_floor_ptr->width = SCREEN_WID;
     for (POSITION y = 0; y < MAX_HGT; y++) {
@@ -181,10 +182,10 @@ static void place_pet(PlayerType *player_ptr)
  * while new floor creation since dungeons may be re-created by
  * auto-scum option.
  */
-static void update_unique_artifact(FloorType *floor_ptr, int16_t cur_floor_id)
+static void update_unique_artifact(const FloorType &floor, int16_t cur_floor_id)
 {
-    for (int i = 1; i < floor_ptr->m_max; i++) {
-        const auto &m_ref = floor_ptr->m_list[i];
+    for (int i = 1; i < floor.m_max; i++) {
+        const auto &m_ref = floor.m_list[i];
         if (!m_ref.is_valid()) {
             continue;
         }
@@ -195,8 +196,8 @@ static void update_unique_artifact(FloorType *floor_ptr, int16_t cur_floor_id)
         }
     }
 
-    for (int i = 1; i < floor_ptr->o_max; i++) {
-        const auto &o_ref = floor_ptr->o_list[i];
+    for (int i = 1; i < floor.o_max; i++) {
+        const auto &o_ref = floor.o_list[i];
         if (!o_ref.is_valid()) {
             continue;
         }
@@ -267,15 +268,15 @@ static void update_floor_id(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
 static void reset_unique_by_floor_change(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        auto *m_ptr = &floor_ptr->m_list[i];
-        if (!m_ptr->is_valid()) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (short i = 1; i < floor.m_max; i++) {
+        auto &monster = floor.m_list[i];
+        if (!monster.is_valid()) {
             continue;
         }
 
-        if (!m_ptr->is_pet()) {
-            m_ptr->hp = m_ptr->maxhp = m_ptr->max_maxhp;
+        if (!monster.is_pet()) {
+            monster.hp = monster.maxhp = monster.max_maxhp;
             (void)set_monster_fast(player_ptr, i, 0);
             (void)set_monster_slow(player_ptr, i, 0);
             (void)set_monster_stunned(player_ptr, i, 0);
@@ -284,12 +285,12 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
             (void)set_monster_invulner(player_ptr, i, 0, false);
         }
 
-        const auto &r_ref = m_ptr->get_real_monrace();
-        if (r_ref.kind_flags.has_not(MonsterKindType::UNIQUE) && r_ref.population_flags.has_not(MonsterPopulationType::NAZGUL)) {
+        const auto &monrace = monster.get_real_monrace();
+        if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) && monrace.population_flags.has_not(MonsterPopulationType::NAZGUL)) {
             continue;
         }
 
-        if (r_ref.floor_id != new_floor_id) {
+        if (monrace.floor_id != new_floor_id) {
             delete_monster_idx(player_ptr, i);
         }
     }
@@ -451,7 +452,7 @@ void change_floor(PlayerType *player_ptr)
     update_floor(player_ptr);
     place_pet(player_ptr);
     forget_travel_flow(player_ptr->current_floor_ptr);
-    update_unique_artifact(player_ptr->current_floor_ptr, new_floor_id);
+    update_unique_artifact(*player_ptr->current_floor_ptr, new_floor_id);
     player_ptr->floor_id = new_floor_id;
     world.character_dungeon = true;
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {

@@ -236,9 +236,8 @@ static void generate_gambling_arena(PlayerType *player_ptr)
         }
     }
 
-    Pos2D pos_arena(1, 1);
-    for (; pos_arena.y < SCREEN_HGT - 1; pos_arena.y++) {
-        for (; pos_arena.x < SCREEN_WID - 1; pos_arena.x++) {
+    for (Pos2D pos_arena(1, 1); pos_arena.y < SCREEN_HGT - 1; pos_arena.y++) {
+        for (pos_arena.x = 1; pos_arena.x < SCREEN_WID - 1; pos_arena.x++) {
             floor.get_grid(pos_arena).set_terrain_id(TerrainTag::FLOOR);
         }
     }
@@ -288,7 +287,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
     if (record_stair) {
         exe_write_diary_quest(player_ptr, DiaryKind::TO_QUEST, floor.quest_number);
     }
-    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
+    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr));
     init_flags = INIT_CREATE_DUNGEON;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID);
 }
@@ -358,7 +357,7 @@ void wipe_generate_random_floor_flags(FloorType *floor_ptr)
         }
     }
 
-    if (floor_ptr->is_in_underground()) {
+    if (floor_ptr->is_underground()) {
         for (auto y = 1; y < floor_ptr->height - 1; y++) {
             for (auto x = 1; x < floor_ptr->width - 1; x++) {
                 floor_ptr->get_grid({ y, x }).info |= CAVE_UNSAFE;
@@ -373,27 +372,27 @@ void wipe_generate_random_floor_flags(FloorType *floor_ptr)
  */
 void clear_cave(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (auto &item : floor_ptr->o_list) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto &item : floor.o_list) {
         item.wipe();
     }
-    floor_ptr->o_max = 1;
-    floor_ptr->o_cnt = 0;
 
+    floor.o_max = 1;
+    floor.o_cnt = 0;
     MonraceList::get_instance().reset_current_numbers();
-    for (auto &monster : floor_ptr->m_list) {
+    for (auto &monster : floor.m_list) {
         monster.wipe();
     }
-    floor_ptr->m_max = 1;
-    floor_ptr->m_cnt = 0;
+    floor.m_max = 1;
+    floor.m_cnt = 0;
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
-        floor_ptr->mproc_max[mte] = 0;
+        floor.mproc_max[mte] = 0;
     }
 
     precalc_cur_num_of_pet();
     for (POSITION y = 0; y < MAX_HGT; y++) {
         for (POSITION x = 0; x < MAX_WID; x++) {
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
+            auto *g_ptr = &floor.grid_array[y][x];
             g_ptr->info = 0;
             g_ptr->feat = 0;
             g_ptr->o_idx_list.clear();
@@ -406,9 +405,9 @@ void clear_cave(PlayerType *player_ptr)
         }
     }
 
-    floor_ptr->base_level = floor_ptr->dun_level;
-    floor_ptr->monster_level = floor_ptr->base_level;
-    floor_ptr->object_level = floor_ptr->base_level;
+    floor.base_level = floor.dun_level;
+    floor.monster_level = floor.base_level;
+    floor.object_level = floor.base_level;
 }
 
 typedef bool (*IsWallFunc)(const FloorType *, int, int);
@@ -507,7 +506,7 @@ static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFun
 void generate_floor(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    set_floor_and_wall(floor.dungeon_idx);
+    set_floor_and_wall(floor.dungeon_id);
     const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
     for (int num = 0; true; num++) {
         std::optional<std::string> why;
@@ -519,7 +518,7 @@ void generate_floor(PlayerType *player_ptr)
             generate_gambling_arena(player_ptr);
         } else if (floor.is_in_quest()) {
             generate_fixed_floor(player_ptr);
-        } else if (!floor.is_in_underground()) {
+        } else if (!floor.is_underground()) {
             if (is_wild_mode) {
                 wilderness_gen_small(player_ptr);
             } else {
@@ -539,7 +538,7 @@ void generate_floor(PlayerType *player_ptr)
         // 狂戦士でのプレイに支障をきたしうるので再生成する。
         // 地上、荒野マップ、クエストでは連結性判定は行わない。
         // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
-        const auto check_conn = why && floor.is_in_underground() && !floor.is_in_quest();
+        const auto check_conn = why && floor.is_underground() && !floor.is_in_quest();
         if (check_conn && !floor_is_connected(&floor, is_permanent_blocker)) {
             // 一定回数試しても連結にならないなら諦める。
             if (num >= 1000) {

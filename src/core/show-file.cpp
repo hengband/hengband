@@ -36,16 +36,13 @@
  */
 static void show_file_aux_line(std::string_view str, int cy, std::string_view shower)
 {
-    char lcstr[1024];
+    const auto lcstr = str_tolower(str);
     concptr ptr;
     byte textcolor = TERM_WHITE;
     byte focuscolor = TERM_YELLOW;
 
     if (!shower.empty()) {
-        strcpy(lcstr, str.data());
-        str_tolower(lcstr);
-
-        ptr = angband_strstr(lcstr, shower);
+        ptr = angband_strstr(lcstr.data(), shower);
         textcolor = (ptr == nullptr) ? TERM_L_DARK : TERM_WHITE;
     }
 
@@ -281,8 +278,7 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
             }
             next++;
             if (!find.empty() && !row_count) {
-                auto lc_str = *line_str;
-                str_tolower(lc_str.data());
+                const auto lc_str = str_tolower(*line_str);
                 if (!str_find(lc_str, find)) {
                     continue;
                 }
@@ -343,13 +339,12 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
                 break;
             }
 
-            shower_str = *ask_result;
+            shower_str = str_tolower(*ask_result);
             if (shower_str.empty()) {
                 shower.clear();
                 break;
             }
 
-            str_tolower(shower_str.data());
             shower = shower_str;
             break;
         }
@@ -370,7 +365,7 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
             find = finder_str;
             back = line;
             line = line + 1;
-            str_tolower(finder_str.data());
+            finder_str = str_tolower(finder_str);
             shower = finder_str;
             break;
         }
@@ -523,20 +518,4 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
 
     angband_fclose(fff);
     this->is_terminated = skey == 'q';
-}
-
-/*
- * Convert string to lower case
- */
-void str_tolower(char *str)
-{
-    for (; *str; str++) {
-#ifdef JP
-        if (iskanji(*str)) {
-            str++;
-            continue;
-        }
-#endif
-        *str = (char)tolower(*str);
-    }
 }

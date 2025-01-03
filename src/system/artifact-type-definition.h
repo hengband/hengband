@@ -4,6 +4,7 @@
 #include "object-enchant/trg-types.h"
 #include "system/angband.h"
 #include "system/baseitem/baseitem-key.h"
+#include "util/abstract-map-wrapper.h"
 #include "util/dice.h"
 #include "util/flag-group.h"
 #include <map>
@@ -50,7 +51,7 @@ private:
 };
 
 class ItemEntity;
-class ArtifactList {
+class ArtifactList : public util::AbstractMapWrapper<FixedArtifactId, ArtifactType> {
 public:
     ArtifactList(const ArtifactList &) = delete;
     ArtifactList(ArtifactList &&) = delete;
@@ -59,14 +60,6 @@ public:
     ~ArtifactList() = default;
 
     static ArtifactList &get_instance();
-    std::map<FixedArtifactId, ArtifactType>::iterator begin();
-    std::map<FixedArtifactId, ArtifactType>::iterator end();
-    std::map<FixedArtifactId, ArtifactType>::const_iterator begin() const;
-    std::map<FixedArtifactId, ArtifactType>::const_iterator end() const;
-    std::map<FixedArtifactId, ArtifactType>::reverse_iterator rbegin();
-    std::map<FixedArtifactId, ArtifactType>::reverse_iterator rend();
-    std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator rbegin() const;
-    std::map<FixedArtifactId, ArtifactType>::const_reverse_iterator rend() const;
     const ArtifactType &get_artifact(const FixedArtifactId fa_id) const;
     ArtifactType &get_artifact(const FixedArtifactId fa_id);
 
@@ -81,4 +74,9 @@ private:
     static ArtifactType dummy;
 
     std::map<FixedArtifactId, ArtifactType> artifacts{};
+
+    std::map<FixedArtifactId, ArtifactType> &get_inner_container() override
+    {
+        return this->artifacts;
+    }
 };

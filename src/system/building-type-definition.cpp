@@ -3,12 +3,10 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "system/dungeon/dungeon-definition.h"
-#include "system/dungeon/dungeon-list.h"
-#include "system/dungeon/dungeon-record.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
+#include "system/services/dungeon-service.h"
 #include <numeric>
 
 std::array<building_type, MAX_BUILDINGS> buildings;
@@ -100,7 +98,7 @@ std::vector<std::string> MeleeArena::build_gladiators_names() const
  */
 void MeleeArena::update_gladiators(PlayerType *player_ptr)
 {
-    const auto mon_level = this->decide_max_level();
+    const auto mon_level = DungeonService::decide_gradiator_level();
     while (true) {
         auto [total, is_applicable] = this->set_gladiators(player_ptr, mon_level);
         const auto &[count, new_total] = this->set_odds(total, is_applicable);
@@ -109,31 +107,6 @@ void MeleeArena::update_gladiators(PlayerType *player_ptr)
             break;
         }
     }
-}
-
-int MeleeArena::decide_max_level() const
-{
-    const auto &dungeon_records = DungeonRecords::get_instance();
-    auto max_dl = 0;
-    for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
-        const auto max_level = dungeon_records.get_record(dungeon_id).get_max_level();
-        if (max_dl < max_level) {
-            max_dl = max_level;
-        }
-    }
-
-    auto max_level = randint1(std::min(max_dl, 122)) + 5;
-    if (evaluate_percent(60)) {
-        const auto i = randint1(std::min(max_dl, 122)) + 5;
-        max_level = std::max(i, max_level);
-    }
-
-    if (evaluate_percent(30)) {
-        const auto i = randint1(std::min(max_dl, 122)) + 5;
-        max_level = std::max(i, max_level);
-    }
-
-    return max_level;
 }
 
 std::pair<int, bool> MeleeArena::set_gladiators(PlayerType *player_ptr, int mon_level)
@@ -195,7 +168,7 @@ MonraceId MeleeArena::search_gladiator(PlayerType *player_ptr, int mon_level, in
     const auto &monraces = MonraceList::get_instance();
     MonraceId monrace_id;
     while (true) {
-        get_mon_num_prep(player_ptr, monster_can_entry_arena, nullptr);
+        get_mon_num_prep(player_ptr, monster_can_entry_arena);
         monrace_id = get_mon_num(player_ptr, 0, mon_level, PM_ARENA);
         if (!MonraceList::is_valid(monrace_id)) {
             continue;

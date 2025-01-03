@@ -32,12 +32,12 @@
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
-static void reset_lite_area(FloorType *floor_ptr)
+static void reset_lite_area(FloorType &floor)
 {
-    floor_ptr->lite_n = 0;
-    floor_ptr->mon_lite_n = 0;
-    floor_ptr->redraw_n = 0;
-    floor_ptr->view_n = 0;
+    floor.lite_n = 0;
+    floor.mon_lite_n = 0;
+    floor.redraw_n = 0;
+    floor.view_n = 0;
 }
 
 static void check_arena_floor(PlayerType *player_ptr, DungeonData *dd_ptr)
@@ -170,13 +170,13 @@ static void make_doors(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_
     }
 }
 
-static void make_only_tunnel_points(FloorType *floor_ptr, DungeonData *dd_ptr)
+static void make_only_tunnel_points(const FloorType &floor, DungeonData *dd_ptr)
 {
-    int point_num = (floor_ptr->width * floor_ptr->height) / 200 + randint1(3);
+    int point_num = (floor.width * floor.height) / 200 + randint1(3);
     dd_ptr->cent_n = point_num;
     for (int i = 0; i < point_num; i++) {
-        dd_ptr->centers[i].y = randint0(floor_ptr->height);
-        dd_ptr->centers[i].x = randint0(floor_ptr->width);
+        dd_ptr->centers[i].y = randint0(floor.height);
+        dd_ptr->centers[i].x = randint0(floor.width);
     }
 }
 
@@ -184,7 +184,7 @@ static bool make_one_floor(PlayerType *player_ptr, DungeonData *dd_ptr, DungeonD
 {
     auto &floor = *player_ptr->current_floor_ptr;
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_ROOM)) {
-        make_only_tunnel_points(&floor, dd_ptr);
+        make_only_tunnel_points(floor, dd_ptr);
     } else {
         if (!generate_rooms(player_ptr, dd_ptr)) {
             dd_ptr->why = _("部屋群の生成に失敗", "Failed to generate rooms");
@@ -315,8 +315,8 @@ static bool check_place_necessary_objects(PlayerType *player_ptr, DungeonData *d
 
 static void decide_dungeon_data_allocation(PlayerType *player_ptr, DungeonData *dd_ptr, DungeonDefinition *d_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    dd_ptr->alloc_object_num = floor_ptr->dun_level / 3;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    dd_ptr->alloc_object_num = floor.dun_level / 3;
     if (dd_ptr->alloc_object_num > 10) {
         dd_ptr->alloc_object_num = 10;
     }
@@ -326,13 +326,13 @@ static void decide_dungeon_data_allocation(PlayerType *player_ptr, DungeonData *
     }
 
     dd_ptr->alloc_monster_num = d_ptr->min_m_alloc_level;
-    if (floor_ptr->height >= MAX_HGT && floor_ptr->width >= MAX_WID) {
+    if (floor.height >= MAX_HGT && floor.width >= MAX_WID) {
         return;
     }
 
     int small_tester = dd_ptr->alloc_monster_num;
-    dd_ptr->alloc_monster_num = (dd_ptr->alloc_monster_num * floor_ptr->height) / MAX_HGT;
-    dd_ptr->alloc_monster_num = (dd_ptr->alloc_monster_num * floor_ptr->width) / MAX_WID;
+    dd_ptr->alloc_monster_num = (dd_ptr->alloc_monster_num * floor.height) / MAX_HGT;
+    dd_ptr->alloc_monster_num = (dd_ptr->alloc_monster_num * floor.width) / MAX_WID;
     dd_ptr->alloc_monster_num += 1;
     if (dd_ptr->alloc_monster_num > small_tester) {
         dd_ptr->alloc_monster_num = small_tester;
@@ -354,9 +354,9 @@ static bool allocate_dungeon_data(PlayerType *player_ptr, DungeonData *dd_ptr, D
         alloc_object(player_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(dd_ptr->alloc_object_num));
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (player_ptr->enter_dungeon && floor_ptr->dun_level > 1) {
-        floor_ptr->object_level = 1;
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (player_ptr->enter_dungeon && floor.dun_level > 1) {
+        floor.object_level = 1;
     }
 
     constexpr auto alloc_room = 9;
@@ -365,7 +365,7 @@ static bool allocate_dungeon_data(PlayerType *player_ptr, DungeonData *dd_ptr, D
     alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_OBJECT, randnor(alloc_item, 3));
     constexpr auto alloc_gold = 3;
     alloc_object(player_ptr, ALLOC_SET_BOTH, ALLOC_TYP_GOLD, randnor(alloc_gold, 3));
-    floor_ptr->object_level = floor_ptr->base_level;
+    floor.object_level = floor.base_level;
     if (alloc_guardian(player_ptr, true)) {
         return true;
     }
@@ -398,45 +398,36 @@ static void decide_grid_glowing(FloorType *floor_ptr, DungeonData *dd_ptr, Dunge
  */
 std::optional<std::string> cave_gen(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    reset_lite_area(floor_ptr);
-    set_floor_and_wall(floor_ptr->dungeon_idx);
-    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), nullptr);
+    auto &floor = *player_ptr->current_floor_ptr;
+    reset_lite_area(floor);
+    set_floor_and_wall(floor.dungeon_id);
+    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr));
 
-    DungeonData dd;
-    dd.row_rooms = floor_ptr->height / BLOCK_HGT;
-    dd.col_rooms = floor_ptr->width / BLOCK_WID;
-    for (POSITION y = 0; y < dd.row_rooms; y++) {
-        for (POSITION x = 0; x < dd.col_rooms; x++) {
-            dd.room_map[y][x] = false;
-        }
-    }
-
-    dd.cent_n = 0;
-    auto *d_ptr = &floor_ptr->get_dungeon_definition();
+    DungeonData dd({ floor.height, floor.width });
+    auto &dungeon = floor.get_dungeon_definition();
     constexpr auto chance_empty_floor = 24;
-    if (ironman_empty_levels || (d_ptr->flags.has(DungeonFeatureType::ARENA) && (empty_levels && one_in_(chance_empty_floor)))) {
+    if (ironman_empty_levels || (dungeon.flags.has(DungeonFeatureType::ARENA) && (empty_levels && one_in_(chance_empty_floor)))) {
         dd.empty_level = true;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("アリーナレベルを生成。", "Arena level."));
     }
 
     check_arena_floor(player_ptr, &dd);
-    gen_caverns_and_lakes(player_ptr, d_ptr, &dd);
-    if (!switch_making_floor(player_ptr, &dd, d_ptr)) {
+    gen_caverns_and_lakes(player_ptr, &dungeon, &dd);
+    if (!switch_making_floor(player_ptr, &dd, &dungeon)) {
         return dd.why;
     }
 
-    make_aqua_streams(player_ptr, &dd, d_ptr);
+    make_aqua_streams(player_ptr, &dd, &dungeon);
     make_perm_walls(player_ptr);
     if (!check_place_necessary_objects(player_ptr, &dd)) {
         return dd.why;
     }
 
-    decide_dungeon_data_allocation(player_ptr, &dd, d_ptr);
-    if (!allocate_dungeon_data(player_ptr, &dd, d_ptr)) {
+    decide_dungeon_data_allocation(player_ptr, &dd, &dungeon);
+    if (!allocate_dungeon_data(player_ptr, &dd, &dungeon)) {
         return dd.why;
     }
 
-    decide_grid_glowing(floor_ptr, &dd, d_ptr);
+    decide_grid_glowing(&floor, &dd, &dungeon);
     return std::nullopt;
 }

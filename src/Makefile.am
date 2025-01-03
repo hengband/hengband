@@ -942,6 +942,8 @@ hengband_SOURCES = \
 	\
 	system/enums/grid-flow.h \
 	system/enums/grid-count-kind.h \
+	system/enums/dungeon/dungeon-id.h \
+	system/enums/monrace/monrace-hook-types.h \
 	system/enums/monrace/monrace-id.h \
 	system/enums/terrain/terrain-characteristics.h \
 	system/enums/terrain/terrain-tag.h \
@@ -956,6 +958,7 @@ hengband_SOURCES = \
 	system/monrace/monrace-list.cpp system/monrace/monrace-list.h \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
+	system/services/dungeon-service.cpp system/services/dungeon-service.h \
 	\
 	system/terrain/terrain-definition.cpp system/terrain/terrain-definition.h \
 	system/terrain/terrain-list.cpp system/terrain/terrain-list.h \
@@ -994,6 +997,8 @@ hengband_SOURCES = \
 	tracking/health-bar-tracker.cpp tracking/health-bar-tracker.h \
 	tracking/lore-tracker.cpp tracking/lore-tracker.h \
 	\
+	util/abstract-map-wrapper.h \
+	util/abstract-vector-wrapper.h \
 	util/angband-files.cpp util/angband-files.h \
 	util/buffer-shaper.cpp util/buffer-shaper.h \
 	util/bit-flags-calculator.h \
@@ -1049,6 +1054,7 @@ hengband_SOURCES = \
 	wizard/cmd-wizard.cpp wizard/cmd-wizard.h \
 	wizard/fixed-artifacts-spoiler.cpp wizard/fixed-artifacts-spoiler.h \
 	wizard/items-spoiler.cpp wizard/items-spoiler.h \
+	wizard/monrace-filter-debug-info.cpp wizard/monrace-filter-debug-info.h \
 	wizard/monster-info-spoiler.cpp wizard/monster-info-spoiler.h \
 	wizard/spoiler-table.cpp wizard/spoiler-table.h \
 	wizard/spoiler-util.cpp wizard/spoiler-util.h \

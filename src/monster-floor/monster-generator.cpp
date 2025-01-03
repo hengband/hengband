@@ -123,8 +123,8 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
  */
 std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
-    auto &floor = player_ptr->current_floor_ptr;
-    auto &monster = floor->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
     const auto pos = mon_scatter(player_ptr, monster.r_idx, monster.get_position(), 1);
     if (!pos) {
         return std::nullopt;
@@ -140,7 +140,7 @@ std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX 
     }
 
     if (clone || monster.mflag2.has(MonsterConstantFlagType::CLONED)) {
-        floor->m_list[*multiplied_m_idx].mflag2.set({ MonsterConstantFlagType::CLONED, MonsterConstantFlagType::NOPET });
+        floor.m_list[*multiplied_m_idx].mflag2.set({ MonsterConstantFlagType::CLONED, MonsterConstantFlagType::NOPET });
     }
 
     return multiplied_m_idx;
@@ -354,7 +354,7 @@ std::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION
         return std::nullopt;
     }
 
-    auto try_become_jural = one_in_(5) || !floor.is_in_underground();
+    auto try_become_jural = one_in_(5) || !floor.is_underground();
     const auto &monrace = monraces.get_monrace(monrace_id);
     try_become_jural &= monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
     try_become_jural &= monrace.symbol_char_is_any_of("hkoptuyAHLOPTUVY");
@@ -497,15 +497,15 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
         return true;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     auto y = 0;
     auto x = 0;
     auto attempts_left = 10000;
     while (attempts_left--) {
-        y = randint0(floor_ptr->height);
-        x = randint0(floor_ptr->width);
+        y = randint0(floor.height);
+        x = randint0(floor.width);
 
-        if (floor_ptr->dun_level) {
+        if (floor.is_underground()) {
             if (!is_cave_empty_bold2(player_ptr, y, x)) {
                 continue;
             }
@@ -529,7 +529,7 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
         return false;
     }
 
-    if (randint1(5000) <= floor_ptr->dun_level) {
+    if (randint1(5000) <= floor.dun_level) {
         if (alloc_horde(player_ptr, y, x, summon_specific)) {
             return true;
         }
