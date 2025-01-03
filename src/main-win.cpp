@@ -522,16 +522,12 @@ static void load_prefs(void)
     wallpaper_path = wallpaper_buf;
     char savefile_buf[1024]{};
     GetPrivateProfileStringA("Angband", "SaveFile", "", savefile_buf, 1023, ini_file);
-    if (strncmp(".\\", savefile_buf, 2) == 0) {
-        std::string angband_dir_str(ANGBAND_DIR.string());
-        const auto path_length = angband_dir_str.length() - 4; // "\lib" を除く.
-        angband_dir_str = angband_dir_str.substr(0, path_length);
-        char tmp[1024] = "";
-        strncat(tmp, angband_dir_str.data(), path_length);
-        strncat(tmp, savefile_buf + 2, std::string_view(savefile_buf).length() - 2 + path_length);
-        savefile = tmp;
+    const auto loaded_save_path = std::filesystem::path(savefile_buf).lexically_normal();
+    if (loaded_save_path.is_relative()) {
+        const auto angband_path = ANGBAND_DIR.parent_path().parent_path(); // remove "\\lib\\"
+        savefile = angband_path / loaded_save_path;
     } else {
-        savefile = savefile_buf;
+        savefile = loaded_save_path;
     }
 
     keep_subwindows = (GetPrivateProfileIntA("Angband", "KeepSubwindows", 0, ini_file) != 0);
