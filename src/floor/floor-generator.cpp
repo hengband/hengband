@@ -236,9 +236,8 @@ static void generate_gambling_arena(PlayerType *player_ptr)
         }
     }
 
-    Pos2D pos_arena(1, 1);
-    for (; pos_arena.y < SCREEN_HGT - 1; pos_arena.y++) {
-        for (; pos_arena.x < SCREEN_WID - 1; pos_arena.x++) {
+    for (Pos2D pos_arena(1, 1); pos_arena.y < SCREEN_HGT - 1; pos_arena.y++) {
+        for (pos_arena.x = 1; pos_arena.x < SCREEN_WID - 1; pos_arena.x++) {
             floor.get_grid(pos_arena).set_terrain_id(TerrainTag::FLOOR);
         }
     }
