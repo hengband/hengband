@@ -13,10 +13,20 @@ enum class MonraceHook {
     OCEAN,
     SHORE,
     WASTE,
-    GRASS,
+    GRASS, // 草原 (取り違え注意)
     WOOD,
     VOLCANO,
     MOUNTAIN,
+    FIGURINE,
+    ARENA,
+    NIGHTMARE,
+    HUMAN,
+    GLASS, // ガラス (取り違え注意)
+    SHARDS,
+    TANUKI,
+    FISHING,
+    QUEST,
+    VAULT,
 };
 
 enum class MonraceHookTerrain {
