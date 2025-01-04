@@ -3,12 +3,14 @@
 #include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "game-option/cheat-options.h"
+#include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/monster-race-hook.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-misc-flags.h"
 #include "monster/monster-info.h"
+#include "mspell/summon-checker.h"
 #include "spell/summon-types.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
@@ -194,7 +196,7 @@ monsterrace_hook_type get_monster_hook(PlayerType *player_ptr)
     }
 }
 
-static MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
+MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
 {
     if (is_underground) {
         return MonraceHook::DUNGEON;
@@ -310,18 +312,16 @@ static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, M
 }
 
 /*!
- * @brief モンスター生成テーブルの重みを指定条件に従って変更する。
- * @param player_ptr
+ * @brief モンスター生成テーブルの重み修正
+ * @param player_ptr プレイヤーへの参照ポインタ
  * @param hook1 生成制約関数1 (nullptr の場合、制約なし)
  * @param hook2 生成制約関数2 (nullptr の場合、制約なし)
- * @param restrict_to_dungeon 現在プレイヤーのいるダンジョンの制約を適用するか
  * @param summon_specific_type summon_specific によるものの場合、召喚種別を指定する
- * @param is_chameleon_polymorph カメレオンの変身の場合、true
+ * @return 常に 0
  *
- * モンスター生成テーブル alloc_race_table の各要素の基本重み prob1 を指定条件
- * に従って変更し、結果を prob2 に書き込む。
+ * get_mon_num() を呼ぶ前に get_mon_num_prep() 系関数のいずれかを呼ぶこと。
  */
-static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, MonraceHookTerrain hook2, bool restrict_to_dungeon, std::optional<summon_type> summon_specific_type, bool is_chameleon_polymorph)
+void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, MonraceHookTerrain hook2, std::optional<summon_type> summon_specific_type)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto dungeon_level = floor.dun_level;
@@ -353,7 +353,7 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
         }
 
         // 原則生成禁止するものたち(フェイズアウト状態 / カメレオンの変身先 / ダンジョンの主召喚 は例外)。
-        if (!system.is_phase_out() && !is_chameleon_polymorph && summon_specific_type != SUMMON_GUARDIANS) {
+        if (!system.is_phase_out() && summon_specific_type != SUMMON_GUARDIANS) {
             if (!entry.is_permitted(dungeon_level)) {
                 continue;
             }
@@ -367,23 +367,70 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
         // 生成を許可するものは基本重みをそのまま引き継ぐ。
         entry.prob2 = entry.prob1;
 
-        // 引数で指定されていればさらにダンジョンによる制約を試みる。
-        if (restrict_to_dungeon) {
-            // ダンジョンによる制約を適用する条件:
-            //
-            //   * フェイズアウト状態でない
-            //   * 1階かそれより深いところにいる
-            //   * ランダムクエスト中でない
-            const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
-            const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-            if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, summon_specific_type.has_value(), is_chameleon_polymorph)) {
-                // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
-                // 丸めは確率的に行う。
-                const int numer = entry.prob2 * dungeon.special_div;
-                const int q = numer / 64;
-                const int r = numer % 64;
-                entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+        // ダンジョンによる制約を適用する条件:
+        //   * フェイズアウト状態でない
+        //   * 1階かそれより深いところにいる
+        //   * ランダムクエスト中でない
+        const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+        const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, summon_specific_type.has_value(), false)) {
+            // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
+            // 丸めは確率的に行う。
+            const int numer = entry.prob2 * dungeon.special_div;
+            const int q = numer / 64;
+            const int r = numer % 64;
+            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+        }
+
+        mfdi.update(entry.prob2, entry.level);
+    }
+
+    if (cheat_hear) {
+        msg_print(mfdi.to_string());
+    }
+}
+
+void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1, MonraceHookTerrain hook2, std::optional<summon_type> summon_specific_type)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_level = floor.dun_level;
+    const auto &system = AngbandSystem::get_instance();
+    auto &table = MonraceAllocationTable::get_instance();
+    const auto &dungeon = floor.get_dungeon_definition();
+    MonraceFilterDebugInfo mfdi;
+    for (auto &entry : table) {
+        const auto monrace_id = entry.index;
+        entry.prob2 = 0;
+        if (entry.prob1 <= 0) {
+            continue;
+        }
+
+        if (!do_hook(player_ptr, hook1, monrace_id)) {
+            continue;
+        }
+
+        if (!filter_monrace_hook2(player_ptr, monrace_id, hook2)) {
+            continue;
+        }
+
+        if (!system.is_phase_out() && summon_specific_type != SUMMON_GUARDIANS) {
+            if (!entry.is_permitted(dungeon_level)) {
+                continue;
             }
+
+            if (floor.is_in_quest() && !entry.is_defeatable(dungeon_level)) {
+                continue;
+            }
+        }
+
+        entry.prob2 = entry.prob1;
+        const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+        const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, summon_specific_type.has_value(), false)) {
+            const int numer = entry.prob2 * dungeon.special_div;
+            const int q = numer / 64;
+            const int r = numer % 64;
+            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
         }
 
         mfdi.update(entry.prob2, entry.level);
@@ -395,18 +442,208 @@ static void do_get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_t
 }
 
 /*!
- * @brief モンスター生成テーブルの重み修正
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param hook1 生成制約関数1 (nullptr の場合、制約なし)
- * @param hook2 生成制約関数2 (nullptr の場合、制約なし)
- * @param summon_specific_type summon_specific によるものの場合、召喚種別を指定する
- * @return 常に 0
- *
- * get_mon_num() を呼ぶ前に get_mon_num_prep() 系関数のいずれかを呼ぶこと。
+ * @brief モンスター種族が護衛となれるかどうかをチェックする
+ * @param monrace_id チェックするモンスターの種族ID
+ * @param escorted_monrace_id 護衛されるモンスターの種族ID
+ * @param escorted_m_idx 護衛されるモンスターのフロア内インデックス
+ * @return 護衛にできるならばtrue
+ * @todo escorted_m_idx とescorted_monrace_id は両方グローバル変数なので、前者が指し示すモンスター種族IDが後者である保証が確認できなかった. 要調査.
  */
-void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, MonraceHookTerrain hook2, std::optional<summon_type> summon_specific_type)
+static bool place_monster_can_escort(PlayerType *player_ptr, MonraceId monrace_id, MonraceId escorted_monrace_id, short escorted_m_idx)
 {
-    do_get_mon_num_prep(player_ptr, hook1, hook2, true, summon_specific_type, false);
+    const auto &escorted_monster = player_ptr->current_floor_ptr->m_list[escorted_m_idx];
+    const auto &monraces = MonraceList::get_instance();
+    const auto &escorted_monrace = monraces.get_monrace(escorted_monrace_id);
+    const auto &monrace = monraces.get_monrace(monrace_id);
+    if (mon_hook_dungeon(player_ptr, escorted_monrace_id) != mon_hook_dungeon(player_ptr, monrace_id)) {
+        return false;
+    }
+
+    if (monrace.symbol_definition.character != escorted_monrace.symbol_definition.character) {
+        return false;
+    }
+
+    if (monrace.level > escorted_monrace.level) {
+        return false;
+    }
+
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    if (escorted_monrace_id == monrace_id) {
+        return false;
+    }
+
+    if (monster_has_hostile_align(player_ptr, &escorted_monster, 0, 0, &monrace)) {
+        return false;
+    }
+
+    if (escorted_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
+        if (monster_has_hostile_align(player_ptr, nullptr, 1, -1, &monrace)) {
+            return false;
+        }
+    }
+
+    if (escorted_monrace.misc_flags.has(MonsterMiscType::CHAMELEON) && monrace.misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
+        return false;
+    }
+
+    return true;
+}
+
+void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_id, short m_idx, MonraceHookTerrain hook)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_level = floor.dun_level;
+    const auto &system = AngbandSystem::get_instance();
+    auto &table = MonraceAllocationTable::get_instance();
+    const auto &dungeon = floor.get_dungeon_definition();
+    MonraceFilterDebugInfo mfdi;
+    for (auto &entry : table) {
+        const auto monrace_id = entry.index;
+        entry.prob2 = 0;
+        if (entry.prob1 <= 0) {
+            continue;
+        }
+
+        if (!place_monster_can_escort(player_ptr, monrace_id, escorted_monrace_id, m_idx)) {
+            continue;
+        }
+
+        if (!filter_monrace_hook2(player_ptr, monrace_id, hook)) {
+            continue;
+        }
+
+        if (!system.is_phase_out()) {
+            if (!entry.is_permitted(dungeon_level)) {
+                continue;
+            }
+
+            if (floor.is_in_quest() && !entry.is_defeatable(dungeon_level)) {
+                continue;
+            }
+        }
+
+        entry.prob2 = entry.prob1;
+        const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+        const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+            const int numer = entry.prob2 * dungeon.special_div;
+            const int q = numer / 64;
+            const int r = numer % 64;
+            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+        }
+
+        mfdi.update(entry.prob2, entry.level);
+    }
+
+    if (cheat_hear) {
+        msg_print(mfdi.to_string());
+    }
+}
+
+/*!
+ * @brief モンスターが召喚の基本条件に合っているかをチェックする / Hack -- help decide if a monster race is "okay" to summon
+ * @param r_idx チェックするモンスター種族ID
+ * @param type 召喚種別
+ * @param mode 生成オプション
+ * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
+ * @return 召喚対象にできるならばTRUE
+ */
+static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, const SummonCondition &condition)
+{
+    if (!mon_hook_dungeon(player_ptr, monrace_id)) {
+        return false;
+    }
+
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    if (condition.summoner_m_idx) {
+        const auto &monster = floor.m_list[*condition.summoner_m_idx];
+        if (monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace)) {
+            return false;
+        }
+    } else if (any_bits(condition.mode, PM_FORCE_PET)) {
+        if (monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1)) {
+            return false;
+        }
+    }
+
+    if (none_bits(condition.mode, PM_ALLOW_UNIQUE) && (monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL)))) {
+        return false;
+    }
+
+    if (condition.type == SUMMON_NONE) {
+        return true;
+    }
+
+    const auto is_like_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
+    if (any_bits(condition.mode, PM_FORCE_PET) && is_like_unique && monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace)) {
+        return false;
+    }
+
+    if (monrace.misc_flags.has(MonsterMiscType::CHAMELEON) && floor.get_dungeon_definition().flags.has(DungeonFeatureType::CHAMELEON)) {
+        return true;
+    }
+
+    if (!condition.summoner_m_idx) {
+        return check_summon_specific(player_ptr, MonraceId::PLAYER, monrace_id, condition.type);
+    }
+
+    const auto &monster = floor.m_list[*condition.summoner_m_idx];
+    return check_summon_specific(player_ptr, monster.r_idx, monrace_id, condition.type);
+}
+
+void get_mon_num_prep_summon(PlayerType *player_ptr, const SummonCondition &condition)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_level = floor.dun_level;
+    const auto &system = AngbandSystem::get_instance();
+    auto &table = MonraceAllocationTable::get_instance();
+    const auto &dungeon = floor.get_dungeon_definition();
+    MonraceFilterDebugInfo mfdi;
+    for (auto &entry : table) {
+        const auto monrace_id = entry.index;
+        entry.prob2 = 0;
+        if (entry.prob1 <= 0) {
+            continue;
+        }
+
+        if (!summon_specific_okay(player_ptr, monrace_id, condition)) {
+            continue;
+        }
+
+        if (!filter_monrace_hook2(player_ptr, monrace_id, condition.hook)) {
+            continue;
+        }
+
+        if (!system.is_phase_out()) {
+            if (!entry.is_permitted(dungeon_level)) {
+                continue;
+            }
+
+            if (floor.is_in_quest() && !entry.is_defeatable(dungeon_level)) {
+                continue;
+            }
+        }
+
+        entry.prob2 = entry.prob1;
+        const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+        const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+            const int numer = entry.prob2 * dungeon.special_div;
+            const int q = numer / 64;
+            const int r = numer % 64;
+            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+        }
+
+        mfdi.update(entry.prob2, entry.level);
+    }
+
+    if (cheat_hear) {
+        msg_print(mfdi.to_string());
+    }
 }
 
 /*!
@@ -556,7 +793,45 @@ void get_mon_num_prep_chameleon(PlayerType *player_ptr, const ChameleonTransform
  */
 void get_mon_num_prep_bounty(PlayerType *player_ptr)
 {
-    do_get_mon_num_prep(player_ptr, nullptr, MonraceHookTerrain::NONE, false, std::nullopt, false);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto dungeon_level = floor.dun_level;
+    const auto &system = AngbandSystem::get_instance();
+    auto &table = MonraceAllocationTable::get_instance();
+    const auto &dungeon = floor.get_dungeon_definition();
+    MonraceFilterDebugInfo mfdi;
+    for (auto &entry : table) {
+        const auto monrace_id = entry.index;
+        entry.prob2 = 0;
+        if (entry.prob1 <= 0) {
+            continue;
+        }
+
+        if (!system.is_phase_out()) {
+            if (!entry.is_permitted(dungeon_level)) {
+                continue;
+            }
+
+            if (floor.is_in_quest() && !entry.is_defeatable(dungeon_level)) {
+                continue;
+            }
+        }
+
+        entry.prob2 = entry.prob1;
+        const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
+        const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+            const int numer = entry.prob2 * dungeon.special_div;
+            const int q = numer / 64;
+            const int r = numer % 64;
+            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
+        }
+
+        mfdi.update(entry.prob2, entry.level);
+    }
+
+    if (cheat_hear) {
+        msg_print(mfdi.to_string());
+    }
 }
 
 bool is_player(MONSTER_IDX m_idx)

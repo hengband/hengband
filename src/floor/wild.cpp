@@ -441,7 +441,7 @@ void wilderness_gen(PlayerType *player_ptr)
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
     const auto wild_y = player_ptr->wilderness_y;
     const auto wild_x = player_ptr->wilderness_x;
-    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr));
+    get_mon_num_prep_enum(player_ptr, get_monster_hook({ wild_y, wild_x }, floor.is_underground()));
 
     /* North border */
     generate_area(player_ptr, { wild_y - 1, wild_x }, true, false);

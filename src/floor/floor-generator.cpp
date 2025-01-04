@@ -287,7 +287,9 @@ static void generate_fixed_floor(PlayerType *player_ptr)
     if (record_stair) {
         exe_write_diary_quest(player_ptr, DiaryKind::TO_QUEST, floor.quest_number);
     }
-    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr));
+
+    const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
+    get_mon_num_prep_enum(player_ptr, get_monster_hook(pos_wilderness, floor.is_underground()));
     init_flags = INIT_CREATE_DUNGEON;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID);
 }
