@@ -65,7 +65,7 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
  * @param is_chameleon_polymorph カメレオンの変身の場合、true
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_level, MonraceId monrace_id, bool has_summon_specific_type, bool is_chameleon_polymorph)
+static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_level, MonraceId monrace_id, bool has_summon_specific_type = false, bool is_chameleon_polymorph = false)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     if (dungeon.flags.has(DungeonFeatureType::CHAMELEON)) {
@@ -387,7 +387,7 @@ void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1, MonraceHoo
         entry.prob2 = entry.prob1;
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id)) {
             const int numer = entry.prob2 * dungeon.special_div;
             const int q = numer / 64;
             const int r = numer % 64;
@@ -495,7 +495,7 @@ void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_
         entry.prob2 = entry.prob1;
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id)) {
             const int numer = entry.prob2 * dungeon.special_div;
             const int q = numer / 64;
             const int r = numer % 64;
@@ -603,7 +603,7 @@ void get_mon_num_prep_summon(PlayerType *player_ptr, const SummonCondition &cond
         entry.prob2 = entry.prob1;
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, true, false)) {
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, true)) {
             const int numer = entry.prob2 * dungeon.special_div;
             const int q = numer / 64;
             const int r = numer % 64;
@@ -791,7 +791,7 @@ void get_mon_num_prep_bounty(PlayerType *player_ptr)
         entry.prob2 = entry.prob1;
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id)) {
             const int numer = entry.prob2 * dungeon.special_div;
             const int q = numer / 64;
             const int r = numer % 64;
