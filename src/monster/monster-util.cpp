@@ -603,7 +603,7 @@ void get_mon_num_prep_summon(PlayerType *player_ptr, const SummonCondition &cond
         entry.prob2 = entry.prob1;
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, true, false)) {
             const int numer = entry.prob2 * dungeon.special_div;
             const int q = numer / 64;
             const int r = numer % 64;
