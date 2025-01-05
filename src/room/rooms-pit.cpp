@@ -30,16 +30,16 @@ constexpr Pos2DVec PIT_SIZE(4, 11);
  * @brief 生成するPitの情報テーブル
  */
 const std::map<PitKind, nest_pit_type> pit_types = {
-    { PitKind::ORC, { _("オーク", "orc"), vault_aux_orc, std::nullopt, 5, 6 } },
-    { PitKind::TROLL, { _("トロル", "troll"), vault_aux_troll, std::nullopt, 20, 6 } },
-    { PitKind::GIANT, { _("巨人", "giant"), vault_aux_giant, std::nullopt, 50, 6 } },
-    { PitKind::LOVECRAFTIAN, { _("狂気", "lovecraftian"), vault_aux_cthulhu, std::nullopt, 80, 2 } },
-    { PitKind::SYMBOL_GOOD, { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 70, 1 } },
-    { PitKind::SYMBOL_EVIL, { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 70, 1 } },
-    { PitKind::CHAPEL, { _("教会", "chapel"), vault_aux_chapel_g, std::nullopt, 65, 2 } },
-    { PitKind::DRAGON, { _("ドラゴン", "dragon"), vault_aux_dragon, vault_prep_dragon, 70, 6 } },
-    { PitKind::DEMON, { _("デーモン", "demon"), vault_aux_demon, std::nullopt, 80, 6 } },
-    { PitKind::DARK_ELF, { _("ダークエルフ", "dark elf"), vault_aux_dark_elf, std::nullopt, 45, 4 } },
+    { PitKind::ORC, { _("オーク", "orc"), MonraceHook::ORC, std::nullopt, 5, 6 } },
+    { PitKind::TROLL, { _("トロル", "troll"), MonraceHook::TROLL, std::nullopt, 20, 6 } },
+    { PitKind::GIANT, { _("巨人", "giant"), MonraceHook::GIANT, std::nullopt, 50, 6 } },
+    { PitKind::LOVECRAFTIAN, { _("狂気", "lovecraftian"), MonraceHook::LOVECRAFTIAN, std::nullopt, 80, 2 } },
+    { PitKind::SYMBOL_GOOD, { _("シンボル(善)", "symbol good"), MonraceHook::GOOD, vault_prep_symbol, 70, 1 } },
+    { PitKind::SYMBOL_EVIL, { _("シンボル(悪)", "symbol evil"), MonraceHook::EVIL, vault_prep_symbol, 70, 1 } },
+    { PitKind::CHAPEL, { _("教会", "chapel"), MonraceHook::CHAPEL, std::nullopt, 65, 2 } },
+    { PitKind::DRAGON, { _("ドラゴン", "dragon"), MonraceHook::DRAGON, vault_prep_dragon, 70, 6 } },
+    { PitKind::DEMON, { _("デーモン", "demon"), MonraceHook::DEMON, std::nullopt, 80, 6 } },
+    { PitKind::DARK_ELF, { _("ダークエルフ", "dark elf"), MonraceHook::DARK_ELF, std::nullopt, 45, 4 } },
 };
 
 class TrappedMonster {
@@ -213,7 +213,7 @@ bool build_type6(PlayerType *player_ptr, DungeonData *dd_ptr)
         (*(pit.prep_func))(player_ptr);
     }
 
-    get_mon_num_prep(player_ptr, pit.hook_func);
+    get_mon_num_prep_enum(player_ptr, pit.hook);
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -359,7 +359,7 @@ bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
         (*(pit.prep_func))(player_ptr);
     }
 
-    get_mon_num_prep(player_ptr, pit.hook_func, MonraceHookTerrain::TRAPPED_PIT);
+    get_mon_num_prep_enum(player_ptr, pit.hook, MonraceHookTerrain::TRAPPED_PIT);
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
     auto whats = pick_pit_monraces(player_ptr, align);

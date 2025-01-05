@@ -65,7 +65,7 @@ static bool is_possible_monster_or(const EnumClassFlagGroup<T> &r_flags, const E
  * @param is_chameleon_polymorph カメレオンの変身の場合、true
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_level, MonraceId monrace_id, bool has_summon_specific_type, bool is_chameleon_polymorph)
+static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int floor_level, MonraceId monrace_id, bool has_summon_specific_type = false, bool is_chameleon_polymorph = false)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     if (dungeon.flags.has(DungeonFeatureType::CHAMELEON)) {
@@ -247,6 +247,38 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
         return mon_hook_quest(player_ptr, monrace_id);
     case MonraceHook::VAULT:
         return vault_monster_okay(player_ptr, monrace_id);
+    case MonraceHook::CLONE:
+        return vault_aux_clone(player_ptr, monrace_id);
+    case MonraceHook::JELLY:
+        return vault_aux_jelly(player_ptr, monrace_id);
+    case MonraceHook::GOOD:
+        return vault_aux_symbol_g(player_ptr, monrace_id);
+    case MonraceHook::EVIL:
+        return vault_aux_symbol_e(player_ptr, monrace_id);
+    case MonraceHook::MIMIC:
+        return vault_aux_mimic(player_ptr, monrace_id);
+    case MonraceHook::LOVECRAFTIAN:
+        return vault_aux_cthulhu(player_ptr, monrace_id);
+    case MonraceHook::KENNEL:
+        return vault_aux_kennel(player_ptr, monrace_id);
+    case MonraceHook::ANIMAL:
+        return vault_aux_animal(player_ptr, monrace_id);
+    case MonraceHook::CHAPEL:
+        return vault_aux_chapel_g(player_ptr, monrace_id);
+    case MonraceHook::UNDEAD:
+        return vault_aux_undead(player_ptr, monrace_id);
+    case MonraceHook::ORC:
+        return vault_aux_orc(player_ptr, monrace_id);
+    case MonraceHook::TROLL:
+        return vault_aux_troll(player_ptr, monrace_id);
+    case MonraceHook::GIANT:
+        return vault_aux_giant(player_ptr, monrace_id);
+    case MonraceHook::DRAGON:
+        return vault_aux_dragon(player_ptr, monrace_id);
+    case MonraceHook::DEMON:
+        return vault_aux_demon(player_ptr, monrace_id);
+    case MonraceHook::DARK_ELF:
+        return vault_aux_dark_elf(player_ptr, monrace_id);
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
     }
@@ -312,83 +344,14 @@ static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, M
 /*!
  * @brief モンスター生成テーブルの重み修正
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param hook1 生成制約関数1 (nullptr の場合、制約なし)
- * @param hook2 生成制約関数2 (nullptr の場合、制約なし)
+ * @param hook1 生成制約1
+ * @param hook2 生成制約2
  * @param summon_specific_type summon_specific によるものの場合、召喚種別を指定する
  * @return 常に 0
  *
  * get_mon_num() を呼ぶ前に get_mon_num_prep() 系関数のいずれかを呼ぶこと。
  */
-void get_mon_num_prep(PlayerType *player_ptr, const monsterrace_hook_type &hook1, MonraceHookTerrain hook2, std::optional<summon_type> summon_specific_type)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    const auto dungeon_level = floor.dun_level;
-
-    // モンスター生成テーブルの各要素について重みを修正する。
-    const auto &system = AngbandSystem::get_instance();
-    auto &table = MonraceAllocationTable::get_instance();
-    const auto &dungeon = floor.get_dungeon_definition();
-    MonraceFilterDebugInfo mfdi;
-    for (auto &entry : table) {
-        const auto monrace_id = entry.index;
-
-        // 生成を禁止する要素は重み 0 とする。
-        entry.prob2 = 0;
-
-        // 基本重みが 0 以下なら生成禁止。
-        // テーブル内の無効エントリもこれに該当する(alloc_race_table は生成時にゼロクリアされるため)。
-        if (entry.prob1 <= 0) {
-            continue;
-        }
-
-        // 生成制約関数が偽を返したら生成禁止。
-        if (hook1 && !hook1(player_ptr, monrace_id)) {
-            continue;
-        }
-
-        if (!filter_monrace_hook2(player_ptr, monrace_id, hook2)) {
-            continue;
-        }
-
-        // 原則生成禁止するものたち(フェイズアウト状態 / カメレオンの変身先 / ダンジョンの主召喚 は例外)。
-        if (!system.is_phase_out() && summon_specific_type != SUMMON_GUARDIANS) {
-            if (!entry.is_permitted(dungeon_level)) {
-                continue;
-            }
-
-            // 殲滅系クエストの詰み防止 (クエスト内では特殊なフラグ持ちの生成を禁止する)
-            if (floor.is_in_quest() && !entry.is_defeatable(dungeon_level)) {
-                continue;
-            }
-        }
-
-        // 生成を許可するものは基本重みをそのまま引き継ぐ。
-        entry.prob2 = entry.prob1;
-
-        // ダンジョンによる制約を適用する条件:
-        //   * フェイズアウト状態でない
-        //   * 1階かそれより深いところにいる
-        //   * ランダムクエスト中でない
-        const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
-        const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, summon_specific_type.has_value(), false)) {
-            // ダンジョンによる制約に掛かった場合、重みを special_div/64 倍する。
-            // 丸めは確率的に行う。
-            const int numer = entry.prob2 * dungeon.special_div;
-            const int q = numer / 64;
-            const int r = numer % 64;
-            entry.prob2 = static_cast<short>(randint0(64) < r ? q + 1 : q);
-        }
-
-        mfdi.update(entry.prob2, entry.level);
-    }
-
-    if (cheat_hear) {
-        msg_print(mfdi.to_string());
-    }
-}
-
-void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1, MonraceHookTerrain hook2, std::optional<summon_type> summon_specific_type)
+void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1, MonraceHookTerrain hook2)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto dungeon_level = floor.dun_level;
@@ -411,7 +374,7 @@ void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1, MonraceHoo
             continue;
         }
 
-        if (!system.is_phase_out() && summon_specific_type != SUMMON_GUARDIANS) {
+        if (!system.is_phase_out()) {
             if (!entry.is_permitted(dungeon_level)) {
                 continue;
             }
@@ -424,7 +387,7 @@ void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1, MonraceHoo
         entry.prob2 = entry.prob1;
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, summon_specific_type.has_value(), false)) {
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id)) {
             const int numer = entry.prob2 * dungeon.special_div;
             const int q = numer / 64;
             const int r = numer % 64;
@@ -445,7 +408,6 @@ void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1, MonraceHoo
  * @param escorted_monrace_id 護衛されるモンスターの種族ID
  * @param escorted_m_idx 護衛されるモンスターのフロア内インデックス
  * @return 護衛にできるならばtrue
- * @todo escorted_m_idx とescorted_monrace_id は両方グローバル変数なので、前者が指し示すモンスター種族IDが後者である保証が確認できなかった. 要調査.
  */
 static bool place_monster_can_escort(PlayerType *player_ptr, MonraceId monrace_id, MonraceId escorted_monrace_id, short escorted_m_idx)
 {
@@ -490,6 +452,13 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonraceId monrace_i
     return true;
 }
 
+/*!
+ * @brief モンスター生成テーブルの重み修正
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param escorted_monrace_id 護衛されるモンスターの種族ID
+ * @param m_idx 護衛されるモンスターのフロア内インデックス
+ * @param hook 生成の地形条件
+ */
 void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_id, short m_idx, MonraceHookTerrain hook)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -526,7 +495,7 @@ void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_
         entry.prob2 = entry.prob1;
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id)) {
             const int numer = entry.prob2 * dungeon.special_div;
             const int q = numer / 64;
             const int r = numer % 64;
@@ -593,6 +562,11 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, c
     return check_summon_specific(player_ptr, monster.r_idx, monrace_id, condition.type);
 }
 
+/*!
+ * @brief モンスター生成テーブルの重み修正 (召喚用)
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param SummonCondition 生成制約
+ */
 void get_mon_num_prep_summon(PlayerType *player_ptr, const SummonCondition &condition)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -616,7 +590,7 @@ void get_mon_num_prep_summon(PlayerType *player_ptr, const SummonCondition &cond
             continue;
         }
 
-        if (!system.is_phase_out()) {
+        if (!system.is_phase_out() && (condition.type != SUMMON_GUARDIANS)) {
             if (!entry.is_permitted(dungeon_level)) {
                 continue;
             }
@@ -629,7 +603,7 @@ void get_mon_num_prep_summon(PlayerType *player_ptr, const SummonCondition &cond
         entry.prob2 = entry.prob1;
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, true)) {
             const int numer = entry.prob2 * dungeon.special_div;
             const int q = numer / 64;
             const int r = numer % 64;
@@ -817,7 +791,7 @@ void get_mon_num_prep_bounty(PlayerType *player_ptr)
         entry.prob2 = entry.prob1;
         const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
         const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id, false, false)) {
+        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id)) {
             const int numer = entry.prob2 * dungeon.special_div;
             const int q = numer / 64;
             const int r = numer % 64;
