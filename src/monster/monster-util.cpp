@@ -590,7 +590,7 @@ void get_mon_num_prep_summon(PlayerType *player_ptr, const SummonCondition &cond
             continue;
         }
 
-        if (!system.is_phase_out()) {
+        if (!system.is_phase_out() && (condition.type != SUMMON_GUARDIANS)) {
             if (!entry.is_permitted(dungeon_level)) {
                 continue;
             }
