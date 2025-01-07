@@ -67,9 +67,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     bool old_hide = false;
     int path_n = 0;
     int grids = 0;
-    POSITION gx[1024]{};
-    POSITION gy[1024]{};
-    POSITION gm[32]{};
+    std::vector<Pos2D> positions(1024, { 0, 0 });
+    std::array<int, 32> gm{};
     monster_target_y = player_ptr->y;
     monster_target_x = player_ptr->x;
 
@@ -110,8 +109,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     }
 
     if (flag & (PROJECT_BEAM)) {
-        gy[grids] = y1;
-        gx[grids] = x1;
+        positions[grids] = { y1, x1 };
         grids++;
     }
 
@@ -160,8 +158,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             }
         }
         if (flag & (PROJECT_BEAM)) {
-            gy[grids] = ny;
-            gx[grids] = nx;
+            positions[grids] = pos;
             grids++;
         }
 
@@ -222,7 +219,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
          */
         if (breath) {
             flag &= ~(PROJECT_HIDE);
-            breath_shape(player_ptr, path_g, path_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
+            //!< @todo Clang 15以降はpositions を直接渡せるようになる.
+            breath_shape(player_ptr, path_g, path_n, &grids, std::span(positions.begin(), positions.size()), gm, &gm_rad, rad, { y1, x1 }, { by, bx }, typ);
         } else {
             for (auto dist = 0; dist <= rad; dist++) {
                 for (auto y = by - dist; y <= by + dist; y++) {
@@ -255,8 +253,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                             break;
                         }
 
-                        gy[grids] = y;
-                        gx[grids] = x;
+                        positions[grids] = { y, x };
                         grids++;
                     }
                 }
@@ -274,7 +271,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         auto drawn = false;
         for (int t = 0; t <= gm_rad; t++) {
             for (int i = gm[t]; i < gm[t + 1]; i++) {
-                const Pos2D pos(gy[i], gx[i]);
+                const Pos2D &pos = positions[i];
                 if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
                     drawn = true;
                     print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
@@ -290,7 +287,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
         if (drawn) {
             for (int i = 0; i < grids; i++) {
-                const Pos2D pos(gy[i], gx[i]);
+                const Pos2D &pos = positions[i];
                 if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
                     lite_spot(player_ptr, pos.y, pos.x);
                 }
@@ -314,15 +311,15 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             if (gm[dist + 1] == i) {
                 dist++;
             }
-            auto y = gy[i];
-            auto x = gx[i];
+
+            const auto &pos = positions[i];
             if (breath) {
-                int d = dist_to_line(y, x, y1, x1, by, bx);
-                if (affect_feature(player_ptr, src_idx, d, y, x, dam, typ)) {
+                int d = dist_to_line(pos.y, pos.x, y1, x1, by, bx);
+                if (affect_feature(player_ptr, src_idx, d, pos.y, pos.x, dam, typ)) {
                     res.notice = true;
                 }
             } else {
-                if (affect_feature(player_ptr, src_idx, dist, y, x, dam, typ)) {
+                if (affect_feature(player_ptr, src_idx, dist, pos.y, pos.x, dam, typ)) {
                     res.notice = true;
                 }
             }
@@ -337,15 +334,14 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 dist++;
             }
 
-            auto y = gy[i];
-            auto x = gx[i];
+            const auto &pos = positions[i];
             if (breath) {
-                int d = dist_to_line(y, x, y1, x1, by, bx);
-                if (affect_item(player_ptr, src_idx, d, y, x, dam, typ)) {
+                int d = dist_to_line(pos.y, pos.x, y1, x1, by, bx);
+                if (affect_item(player_ptr, src_idx, d, pos.y, pos.x, dam, typ)) {
                     res.notice = true;
                 }
             } else {
-                if (affect_item(player_ptr, src_idx, dist, y, x, dam, typ)) {
+                if (affect_item(player_ptr, src_idx, dist, pos.y, pos.x, dam, typ)) {
                     res.notice = true;
                 }
             }
@@ -365,7 +361,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 dist++;
             }
 
-            const Pos2D pos(gy[i], gx[i]);
+            const Pos2D &pos = positions[i];
             const auto &grid = floor.get_grid(pos);
             if (grids <= 1) {
                 auto *m_ptr = &floor.m_list[grid.m_idx];
@@ -504,7 +500,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 dist++;
             }
 
-            const Pos2D pos(gy[i], gx[i]);
+            const Pos2D &pos = positions[i];
             if (!player_ptr->is_located_at(pos)) {
                 continue;
             }
