@@ -349,8 +349,8 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
         command_arg = 0;
     }
 
-    bool more = false;
-    DIRECTION dir;
+    auto more = false;
+    int dir;
     const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
     if (get_rep_dir(player_ptr, &dir)) {
         PlayerEnergy energy(player_ptr);
@@ -376,7 +376,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
     const auto p_pos = player_ptr->get_position();
     if (is_wild_mode && !floor.has_terrain_characteristics(p_pos, TerrainCharacteristics::TOWN)) {
         const auto &wilderness_grid = wilderness[p_pos.y][p_pos.x];
-        int tmp = 120 + player_ptr->lev * 10 - wilderness_grid.level + 5;
+        auto tmp = 120 + player_ptr->lev * 10 - wilderness_grid.level + 5;
         if (tmp < 1) {
             tmp = 1;
         }

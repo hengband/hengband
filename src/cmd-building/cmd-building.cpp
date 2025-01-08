@@ -90,19 +90,19 @@ static void town_history(PlayerType *player_ptr)
  * @param i 実行したい施設のサービステーブルの添字
  * @return 施設から別フロアへ移動するか否か (アリーナ/モンスター闘技場のみtrue)
  */
-static bool bldg_process_command(PlayerType *player_ptr, building_type *bldg, int i)
+static bool bldg_process_command(PlayerType *player_ptr, const building_type &bldg, int i)
 {
     msg_flag = false;
     msg_erase();
     const auto can_be_owner = is_owner(player_ptr, bldg);
-    const auto building_cost = can_be_owner ? bldg->member_costs[i] : bldg->other_costs[i];
-    if (((bldg->action_restr[i] == 1) && !is_member(player_ptr, bldg)) || ((bldg->action_restr[i] == 2) && !can_be_owner)) {
+    const auto building_cost = can_be_owner ? bldg.member_costs[i] : bldg.other_costs[i];
+    if (((bldg.action_restr[i] == 1) && !is_member(player_ptr, bldg)) || ((bldg.action_restr[i] == 2) && !can_be_owner)) {
         msg_print(_("それを選択する権利はありません！", "You have no right to choose that!"));
         return false;
     }
 
-    const auto building_action = bldg->actions[i];
-    if ((building_action != BACT_RECHARGE) && (((bldg->member_costs[i] > player_ptr->au) && can_be_owner) || ((bldg->other_costs[i] > player_ptr->au) && !can_be_owner))) {
+    const auto building_action = bldg.actions[i];
+    if ((building_action != BACT_RECHARGE) && (((bldg.member_costs[i] > player_ptr->au) && can_be_owner) || ((bldg.other_costs[i] > player_ptr->au) && !can_be_owner))) {
         msg_print(_("お金が足りません！", "You do not have the gold!"));
         return false;
     }
@@ -314,16 +314,15 @@ void do_cmd_building(PlayerType *player_ptr)
     PlayerEnergy energy(player_ptr);
     energy.set_player_turn_energy(100);
     const auto p_pos = player_ptr->get_position();
-    if (!player_ptr->current_floor_ptr->has_terrain_characteristics(p_pos, TerrainCharacteristics::BLDG)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (!floor.has_terrain_characteristics(p_pos, TerrainCharacteristics::BLDG)) {
         msg_print(_("ここには建物はない。", "You see no building here."));
         return;
     }
 
-    int which = player_ptr->current_floor_ptr->get_grid(p_pos).get_terrain().subtype;
+    int which = floor.get_grid(p_pos).get_terrain().subtype;
 
-    building_type *bldg;
-    bldg = &buildings[which];
-
+    auto &bldg = buildings[which];
     reinit_wilderness = false;
     const auto &entries = ArenaEntryList::get_instance();
     if ((which == 2) && entries.get_defeated_entry() && !entries.is_player_true_victor()) {
@@ -333,12 +332,12 @@ void do_cmd_building(PlayerType *player_ptr)
 
     auto &fcms = FloorChangeModesStore::get_instace();
     auto &world = AngbandWorld::get_instance();
-    if ((which == 2) && player_ptr->current_floor_ptr->inside_arena) {
-        if (!world.get_arena() && player_ptr->current_floor_ptr->m_cnt > 0) {
+    if ((which == 2) && floor.inside_arena) {
+        if (!world.get_arena() && floor.m_cnt > 0) {
             prt(_("ゲートは閉まっている。モンスターがあなたを待っている！", "The gates are closed.  The monster awaits!"), 0, 0);
         } else {
             fcms->set({ FloorChangeMode::SAVE_FLOORS, FloorChangeMode::NO_RETURN });
-            player_ptr->current_floor_ptr->inside_arena = false;
+            floor.inside_arena = false;
             player_ptr->leaving = true;
             command_new = SPECIAL_KEY_BUILDING;
             energy.reset_player_turn();
@@ -361,8 +360,8 @@ void do_cmd_building(PlayerType *player_ptr)
 
     player_ptr->oldpy = player_ptr->y;
     player_ptr->oldpx = player_ptr->x;
-    forget_lite(player_ptr->current_floor_ptr);
-    forget_view(player_ptr->current_floor_ptr);
+    forget_lite(&floor);
+    forget_view(&floor);
     world.character_icky_depth++;
 
     command_arg = 0;
@@ -377,7 +376,7 @@ void do_cmd_building(PlayerType *player_ptr)
         building_prt_gold(player_ptr);
         const auto command = inkey();
         if (command == ESCAPE) {
-            player_ptr->current_floor_ptr->inside_arena = false;
+            floor.inside_arena = false;
             system.set_phase_out(false);
             break;
         }
@@ -385,7 +384,7 @@ void do_cmd_building(PlayerType *player_ptr)
         auto is_valid_command = false;
         int i;
         for (i = 0; i < 8; i++) {
-            if (bldg->letters[i] && (bldg->letters[i] == command)) {
+            if (bldg.letters[i] && (bldg.letters[i] == command)) {
                 is_valid_command = true;
                 break;
             }
