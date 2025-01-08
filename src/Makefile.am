@@ -1088,6 +1088,7 @@ EXTRA_hengband_SOURCES = \
 	main-win/main-win-term.cpp main-win/main-win-term.h \
 	main-win/main-win-tokenizer.cpp main-win/main-win-tokenizer.h \
 	main-win/main-win-utils.cpp main-win/main-win-utils.h \
+	main-win/os-support-checker.cpp main-win/os-support-checker.h \
 	main-win/stack-trace-win.cpp \
 	main-win/wav-reader.cpp main-win/wav-reader.h \
 	test/test-sha256.cpp \

@@ -109,6 +109,7 @@
 #include "main-win/main-win-sound.h"
 #include "main-win/main-win-term.h"
 #include "main-win/main-win-utils.h"
+#include "main-win/os-support-checker.h"
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-lite.h"
@@ -2853,9 +2854,19 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
 int WINAPI WinMain(
     _In_ HINSTANCE hInst, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 {
+    const auto message = OsSupportChecker::check_avx_enabled();
 #ifdef WIN_DEBUG
+    if (message) {
+        MessageBoxW(NULL, to_wchar(message->data()).wc_str(), _(L"警告！", L"Warning"), MB_ICONEXCLAMATION | MB_OK);
+    }
+
     return game_main(hInst);
 #else
+    if (message) {
+        MessageBoxW(NULL, to_wchar(message->data()).wc_str(), _(L"エラー！", L"Error"), MB_ICONERROR | MB_OK);
+        quit("");
+    }
+
     try {
         return game_main(hInst);
     } catch (const std::exception &e) {
