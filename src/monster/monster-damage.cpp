@@ -141,12 +141,8 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
         return false;
     }
 
-    this->death_special_flag_monster();
-    if (monrace.r_akills < MAX_SHORT) {
-        monrace.r_akills++;
-    }
-
-    this->increase_kill_numbers();
+    const auto can_unify = this->death_special_flag_monster();
+    this->increase_kill_numbers(can_unify);
     const auto m_name = monster_desc(this->player_ptr, &monster, MD_TRUE_NAME);
     this->death_amberites(m_name);
     this->dying_scream(m_name);
@@ -171,8 +167,9 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
 /*
  * @brief たぬき、カメレオン、ナズグル、ユニークの死亡時処理
  * @param m_ptr ダメージを与えたモンスターの構造体参照ポインタ
+ * @return 分離/合体フラグの付与されたユニークの場合のみtrue
  */
-void MonsterDamageProcessor::death_special_flag_monster()
+bool MonsterDamageProcessor::death_special_flag_monster()
 {
     auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto monrace_id = monster.r_idx;
@@ -193,22 +190,23 @@ void MonsterDamageProcessor::death_special_flag_monster()
     }
 
     if (monster.mflag2.has(MonsterConstantFlagType::CLONED)) {
-        return;
+        return false;
     }
 
     if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
         monrace.max_num--;
-        return;
+        return false;
     }
 
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return;
+        return false;
     }
 
     MonraceList::get_instance().kill_unique_monster(monrace_id);
+    return true;
 }
 
-void MonsterDamageProcessor::increase_kill_numbers()
+void MonsterDamageProcessor::increase_kill_numbers(bool can_unify)
 {
     auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto &monrace = monster.get_real_monrace();
@@ -217,17 +215,16 @@ void MonsterDamageProcessor::increase_kill_numbers()
         return;
     }
 
-    auto &shadower = MonraceList::get_instance().get_monrace(MonraceId::KAGE);
-    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (shadower.r_pkills < MAX_SHORT)) {
-        shadower.r_pkills++;
-    } else if (monrace.r_pkills < MAX_SHORT) {
-        monrace.r_pkills++;
-    }
-
-    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (shadower.r_tkills < MAX_SHORT)) {
-        shadower.r_tkills++;
-    } else if (monrace.r_tkills < MAX_SHORT) {
-        monrace.r_tkills++;
+    if (!can_unify) {
+        monrace.increment_akills();
+        auto &shadower = MonraceList::get_instance().get_monrace(MonraceId::KAGE);
+        if (monster.mflag2.has(MonsterConstantFlagType::KAGE)) {
+            shadower.increment_pkills();
+            shadower.increment_tkills();
+        } else {
+            monrace.increment_pkills();
+            monrace.increment_tkills();
+        }
     }
 
     LoreTracker::get_instance().set_trackee(monster.ap_r_idx);

@@ -176,6 +176,9 @@ public:
     void increment_current_numbers();
     void decrement_current_numbers();
     void reset_max_number();
+    void increment_akills();
+    void increment_pkills();
+    void increment_tkills();
 
 private:
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト

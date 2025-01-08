@@ -27,8 +27,8 @@ private:
     void get_exp_from_mon(const MonsterEntity &monster, int exp_dam);
     bool genocide_chaos_patron();
     bool process_dead_exp_virtue(std::string_view note, const MonsterEntity &exp_mon);
-    void death_special_flag_monster();
-    void increase_kill_numbers();
+    bool death_special_flag_monster();
+    void increase_kill_numbers(bool can_unify);
     void death_amberites(std::string_view m_name);
     void dying_scream(std::string_view m_name);
     void show_kill_message(std::string_view note, std::string_view m_name);
