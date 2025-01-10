@@ -30,8 +30,9 @@ Hengband is a variant of ZAngband.
 Official page is this,
 https://hengband.github.io
 
-More infomation is /usr/share/doc/hengband/readme-eng.md
-This is a Japanese version.
+More information is in /usr/share/doc/hengband/readme-eng.md
+This package contains an executable file in Japanese.
+You also need to install hengband-data package for playing.
 
 Summary(ja): 変愚蛮怒 %{version}
 
@@ -42,7 +43,8 @@ Summary(ja): 変愚蛮怒 %{version}
 https://hengband.github.io
 
 詳しくは /usr/share/doc/hengband/readme.md を参照。
-このパッケージは日本語版です。
+このパッケージは日本語版実行ファイルです。
+他にゲーム用データファイルが必要です。
 
 %description data
 Hengband is a variant of ZAngband.
@@ -50,7 +52,7 @@ Hengband is a variant of ZAngband.
 Official page is this,
 https://hengband.github.io
 
-More infomation is /usr/share/doc/hengband/readme-eng.md
+More information is in /usr/share/doc/hengband/readme-eng.md
 This packages contains common data files.
 
 Summary(ja): 変愚蛮怒 %{version}
@@ -70,8 +72,9 @@ Hengband is a variant of ZAngband.
 Official page is this,
 https://hengband.github.io
 
-More infomation is /usr/share/doc/hengband/readme-eng.md
-This is a English version.
+More information is in /usr/share/doc/hengband/readme-eng.md
+This package contains an executable file in English.
+You also need to install hengband-data package for playing.
 
 Summary(ja): 変愚蛮怒 %{version}
 
