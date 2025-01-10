@@ -148,7 +148,7 @@ exit 0
 %{_datadir}/games/%{name}/lib/pref/*.prf
 %{_datadir}/games/%{name}/lib/xtra/graf/8x8.bmp
 %doc readme.md readme_angband readme-eng.md
-%license lib/help/jlicense.txt
+%license lib/help/jlicense.txt THIRD-PARTY-NOTICES.txt
 
 %changelog
 * Mon Jan 6 2025 whitehara <white@vx-xv.com>
