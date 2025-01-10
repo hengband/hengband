@@ -147,7 +147,7 @@ exit 0
 %{_datadir}/games/%{name}/lib/help/*.txt
 %{_datadir}/games/%{name}/lib/pref/*.prf
 %{_datadir}/games/%{name}/lib/xtra/graf/8x8.bmp
-%doc readme.md readme_angband readme-eng.md
+%doc readme.md readme_angband readme-eng.md autopick.txt autopick_eng.txt
 %license lib/help/jlicense.txt THIRD-PARTY-NOTICES.txt
 
 %changelog
