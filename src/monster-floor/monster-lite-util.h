@@ -1,12 +1,11 @@
 #pragma once
 
-#include "system/angband.h"
-
-struct monster_lite_type {
-    bool mon_invis;
-    POSITION mon_fy;
-    POSITION mon_fx;
-};
+#include "util/point-2d.h"
+#include <cstdint>
 
 class MonsterEntity;
-monster_lite_type *initialize_monster_lite_type(BIT_FLAGS grid_info, monster_lite_type *ml_ptr, MonsterEntity *m_ptr);
+struct monster_lite_type {
+    monster_lite_type(uint32_t grid_info, const MonsterEntity &monster);
+    bool mon_invis;
+    Pos2D m_pos;
+};
