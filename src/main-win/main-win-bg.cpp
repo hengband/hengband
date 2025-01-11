@@ -30,8 +30,7 @@ void delete_bg(void)
 bool load_bg(const std::filesystem::path &path)
 {
     delete_bg();
-    const auto &filename = path.string();
-    hBG = read_graphic(filename.data());
+    hBG = read_graphic(path);
 
     return hBG != NULL;
 }
