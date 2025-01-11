@@ -16,18 +16,18 @@
  */
 class to_wchar {
 public:
-    to_wchar(const char *src)
+    to_wchar(std::string_view src)
     {
-        if (!src) {
+        if (src.empty()) {
             return;
         }
 
-        int size = ::MultiByteToWideChar(932, 0, src, -1, NULL, 0);
+        const auto size = ::MultiByteToWideChar(932, 0, src.data(), src.length(), NULL, 0);
         if (size > 0) {
-            buf = std::vector<WCHAR>(size + 1);
-            if (::MultiByteToWideChar(932, 0, src, -1, (*buf).data(), (*buf).size()) == 0) {
+            this->buf = std::vector<WCHAR>(size + 1);
+            if (::MultiByteToWideChar(932, 0, src.data(), src.length(), this->buf->data(), this->buf->size()) == 0) {
                 // fail
-                buf = std::nullopt;
+                this->buf = std::nullopt;
             }
         }
     }
@@ -39,7 +39,7 @@ public:
 
     WCHAR *wc_str()
     {
-        return buf ? (*buf).data() : NULL;
+        return this->buf ? this->buf->data() : NULL;
     }
 
 protected:
@@ -53,16 +53,16 @@ class to_multibyte {
 public:
     to_multibyte(const WCHAR *src)
     {
-        if (!src) {
+        if (src == nullptr) {
             return;
         }
 
-        int size = ::WideCharToMultiByte(932, 0, src, -1, NULL, 0, NULL, NULL);
+        const auto size = ::WideCharToMultiByte(932, 0, src, -1, NULL, 0, NULL, NULL);
         if (size > 0) {
-            buf = std::vector<char>(size + 1);
-            if (::WideCharToMultiByte(932, 0, src, -1, (*buf).data(), (*buf).size(), NULL, NULL) == 0) {
+            this->buf = std::vector<char>(size + 1);
+            if (::WideCharToMultiByte(932, 0, src, -1, this->buf->data(), this->buf->size(), NULL, NULL) == 0) {
                 // fail
-                buf = std::nullopt;
+                this->buf = std::nullopt;
             }
         }
     }
@@ -74,7 +74,7 @@ public:
 
     char *c_str()
     {
-        return buf ? (*buf).data() : NULL;
+        return this->buf ? this->buf->data() : NULL;
     }
 
 protected:
