@@ -173,7 +173,7 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
 #ifdef WINDOWS
     // システムロケールがUTF-8の場合、appendによるUTF-16への変換時に
     // Shift-JISをUTF-8とみなしてしまい変換に失敗するので、自前でUTF-16に変換してからappendする
-    const auto &path_ret = parsed_path.append(to_wchar(file.data()).wc_str());
+    const auto &path_ret = parsed_path.append(to_wchar(file).wc_str());
 #else
     const auto &path_ret = parsed_path.append(file);
 #endif

@@ -130,9 +130,9 @@ static std::optional<std::string> monster_key_at(int index)
 void load_music_prefs()
 {
     CfgReader reader(ANGBAND_DIR_XTRA_MUSIC, { "music_debug.cfg", "music.cfg" });
-
-    char device_type[256];
-    GetPrivateProfileStringA("Device", "type", "MPEGVideo", device_type, _countof(device_type), reader.get_cfg_path().string().data());
+    constexpr auto size = 256;
+    char device_type[size];
+    GetPrivateProfileStringA("Device", "type", "MPEGVideo", device_type, size, reader.get_cfg_path().string().data());
     mci_device_type = to_wchar(device_type).wc_str();
 
     // clang-format off
