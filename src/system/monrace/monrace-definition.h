@@ -177,6 +177,10 @@ public:
     void decrement_current_numbers();
     void reset_max_number();
 
+    void increment_akills();
+    void increment_pkills();
+    void increment_tkills();
+
 private:
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
     std::vector<Reinforce> reinforces; //!< 指定護衛リスト
