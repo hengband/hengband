@@ -9,6 +9,7 @@
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include "util/finalizer.h"
 
 class ProjectionPathHelper {
 public:
@@ -235,6 +236,7 @@ ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &p
     }
 
     ProjectionPathHelper pph(range, flag, pos_src, pos_dst);
+    const auto finalizer = util::make_finalizer([this, &pph] { this->positions = std::move(pph.positions); });
     if (calc_vertical_projection(floor, p_pos, &pph)) {
         return;
     }
@@ -244,7 +246,6 @@ ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &p
     }
 
     calc_diagonal_projection(floor, p_pos, &pph);
-    this->positions = std::move(pph.positions);
 }
 
 /*
