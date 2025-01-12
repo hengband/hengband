@@ -1,7 +1,5 @@
 #pragma once
 
-#include "util/enum-converter.h"
-
 /*!
  * @brief 地形特性フラグ群定義
  * @details Originally from UnAngband
