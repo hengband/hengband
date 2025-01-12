@@ -117,6 +117,12 @@ bool Grid::is_rune_explosion() const
     return this->is_object() && TerrainList::get_instance().get_terrain(this->mimic).flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
 }
 
+bool Grid::is_closed_door(bool is_mimic) const
+{
+    const auto tk = is_mimic ? TerrainKind::MIMIC : TerrainKind::NORMAL;
+    return this->get_terrain(tk).is_closed_door();
+}
+
 /*!
  * @brief マスに隠されたドアがあるかの判定
  * @return 隠されたドアがあるか否か
