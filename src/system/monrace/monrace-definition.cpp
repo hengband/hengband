@@ -171,15 +171,6 @@ std::optional<bool> MonraceDefinition::order_pet(const MonraceDefinition &other)
     return this->order_level(other);
 }
 
-/*!
- * @brief ユニークモンスターの撃破状態を更新する
- * @todo 状態変更はモンスター「定義」ではないので将来的に別クラスへ分離する
- */
-void MonraceDefinition::kill_unique()
-{
-    this->max_num = 0;
-}
-
 std::string MonraceDefinition::get_pronoun_of_summoned_kin() const
 {
     if (this->kind_flags.has(MonsterKindType::UNIQUE)) {
@@ -565,6 +556,15 @@ bool MonraceDefinition::is_blow_damage_known(int num_blow) const
     }
 
     return (4 + this->level) * (2 * r_blow) > 80 * max_damage;
+}
+
+/*!
+ * @brief ユニークモンスターの撃破状態を更新する
+ * @todo 状態変更はモンスター「定義」ではないので将来的に別クラスへ分離する
+ */
+void MonraceDefinition::kill_unique()
+{
+    this->max_num = 0;
 }
 
 void MonraceDefinition::reset_current_numbers()
