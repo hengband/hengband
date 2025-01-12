@@ -69,6 +69,7 @@ private:
  * MonraceMemory (r_hoge の思い出関係フラグ類)
  * MonraceInfo (max_num/cur_num/floor_id/defeat_level/defeat_time 他、思い出以外でゲームデータ依存の数値類)
  */
+enum class DungeonId;
 enum class GridFlow : int;
 class MonraceDefinition {
 public:
@@ -159,6 +160,7 @@ public:
     const std::vector<Reinforce> &get_reinforces() const;
     bool can_generate() const;
     GridFlow get_grid_flow_type() const;
+    bool is_suitable_for_random_quest() const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();

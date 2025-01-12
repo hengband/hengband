@@ -22,6 +22,8 @@ public:
     bool is_permitted(int threshold_level) const;
     bool is_defeatable(int threshold_level) const;
 
+    void update_prob2(int division);
+
 private:
     const MonraceDefinition &get_monrace() const;
 };
