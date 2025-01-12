@@ -108,16 +108,14 @@ static void run_init(PlayerType *player_ptr, DIRECTION dir)
     find_prevdir = dir;
     find_openarea = true;
     find_breakright = find_breakleft = false;
-    bool deepleft = false;
-    bool deepright = false;
-    bool shortright = false;
-    bool shortleft = false;
     const auto pos = player_ptr->get_position();
     player_ptr->run_py = pos.y;
     player_ptr->run_px = pos.x;
     const auto pos_neighbor = player_ptr->get_neighbor(dir);
     ignore_avoid_run = player_ptr->current_floor_ptr->has_terrain_characteristics(pos_neighbor, TerrainCharacteristics::AVOID_RUN);
     int i = chome[dir];
+    auto deepleft = false;
+    auto shortleft = false;
     if (see_wall(player_ptr, cycle[i + 1], pos.y, pos.x)) {
         find_breakleft = true;
         shortleft = true;
@@ -126,6 +124,8 @@ static void run_init(PlayerType *player_ptr, DIRECTION dir)
         deepleft = true;
     }
 
+    auto deepright = false;
+    auto shortright = false;
     if (see_wall(player_ptr, cycle[i - 1], pos.y, pos.x)) {
         find_breakright = true;
         shortright = true;

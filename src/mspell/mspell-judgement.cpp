@@ -109,8 +109,7 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
     auto &floor = *player_ptr->current_floor_ptr;
     ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), pos_source, pos_target, flg);
     auto path_n = 0;
-    POSITION y = y1;
-    POSITION x = x1;
+    auto pos_breath = pos_source;
     for (const auto &pos : grid_g) {
         if (flg & PROJECT_DISI) {
             if (cave_stop_disintegration(&floor, pos.y, pos.x)) {
@@ -126,13 +125,12 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
             }
         }
 
-        y = pos.y;
-        x = pos.x;
+        pos_breath = pos;
         ++path_n;
     }
 
-    bool hit2 = false;
-    bool hityou = false;
+    auto hit2 = false;
+    auto hityou = false;
     if (path_n == 0) {
         const auto p_pos = player_ptr->get_position();
         if (flg & PROJECT_DISI) {
@@ -163,22 +161,19 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
         std::array<int, 32> gm{};
         auto gm_rad = rad;
         //!< @todo Clang 15以降はpositions を直接渡せるようになる.
-        breath_shape(player_ptr, grid_g, path_n, &grids, std::span(positions.begin(), positions.size()), gm, &gm_rad, rad, { y1, x1 }, { y, x }, typ);
+        breath_shape(player_ptr, grid_g, path_n, &grids, std::span(positions.begin(), positions.size()), gm, &gm_rad, rad, pos_source, pos_breath, typ);
         for (auto i = 0; i < grids; i++) {
-            const Pos2D &pos = positions[i];
-            if ((pos.y == y2) && (pos.x == x2)) {
+            const auto &position = positions[i];
+            if ((position.y == y2) && (position.x == x2)) {
                 hit2 = true;
             }
-            if (player_ptr->is_located_at(pos)) {
+            if (player_ptr->is_located_at(position)) {
                 hityou = true;
             }
         }
     }
 
-    if (!hit2) {
-        return false;
-    }
-    if (is_friend && hityou) {
+    if (!hit2 || (is_friend && hityou)) {
         return false;
     }
 
@@ -186,28 +181,26 @@ bool breath_direct(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2
 }
 
 /*!
- * @brief モンスターが特殊能力の目標地点を決める処理 /
- * Get the actual center point of ball spells (rad > 1) (originally from TOband)
+ * @brief モンスターが特殊能力の目標地点を決める処理
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param sy 始点のY座標
- * @param sx 始点のX座標
- * @param ty 目標Y座標を返す参照ポインタ
- * @param tx 目標X座標を返す参照ポインタ
+ * @param pos_source 始点座標
+ * @param pos_target_initial 目標座標の初期値
  * @param flg 判定のフラグ配列
+ * @return 目標座標
  */
-void get_project_point(PlayerType *player_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
+Pos2D get_project_point(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D &pos_target_initial, BIT_FLAGS flags)
 {
-    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { sy, sx }, { *ty, *tx }, flg);
-    *ty = sy;
-    *tx = sx;
+    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), pos_source, pos_target_initial, flags);
+    Pos2D pos_target = pos_source;
     for (const auto &pos : path_g) {
         if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
             break;
         }
 
-        *ty = pos.y;
-        *tx = pos.x;
+        pos_target = pos;
     }
+
+    return pos_target;
 }
 
 /*!

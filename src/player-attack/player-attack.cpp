@@ -604,15 +604,13 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
  */
 void massacre(PlayerType *player_ptr)
 {
-    Grid *g_ptr;
-    MonsterEntity *m_ptr;
-    for (DIRECTION dir = 0; dir < 8; dir++) {
-        POSITION y = player_ptr->y + ddy_ddd[dir];
-        POSITION x = player_ptr->x + ddx_ddd[dir];
-        g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-        m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-        if (g_ptr->has_monster() && (m_ptr->ml || player_ptr->current_floor_ptr->has_terrain_characteristics({ y, x }, TerrainCharacteristics::PROJECT))) {
-            do_cmd_attack(player_ptr, y, x, HISSATSU_NONE);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (auto dir = 0; dir < 8; dir++) {
+        const auto pos = player_ptr->get_position() + Pos2DVec(ddy_ddd[dir], ddx_ddd[dir]);
+        const auto &grid = floor.get_grid(pos);
+        const auto &monster = floor.m_list[grid.m_idx];
+        if (grid.has_monster() && (monster.ml || floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT))) {
+            do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         }
     }
 }
