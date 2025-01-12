@@ -247,27 +247,6 @@ bool MonraceList::is_selectable(const MonraceId r_idx) const
     return std::all_of(it->second.begin(), it->second.end(), [this](const auto x) { return !this->get_monrace(x).has_entity(); });
 }
 
-/*!
- * @brief 合体ユニークが撃破済の状態でフロアから離脱した時に、各分離ユニークも撃破済状態へと変更する
- */
-void MonraceList::defeat_separated_uniques()
-{
-    for (const auto &[unified_unique, separates] : unified_uniques) {
-        if (!this->get_monrace(unified_unique).is_dead_unique()) {
-            continue;
-        }
-
-        for (const auto separate : separates) {
-            auto &monrace = this->get_monrace(separate);
-            if (monrace.is_dead_unique()) {
-                continue;
-            }
-
-            monrace.kill_unique();
-        }
-    }
-}
-
 bool MonraceList::is_unified(const MonraceId r_idx) const
 {
     return unified_uniques.contains(r_idx);

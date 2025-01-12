@@ -43,7 +43,6 @@ public:
     bool can_unify_separate(const MonraceId r_idx) const;
     void kill_unified_unique(const MonraceId r_idx);
     bool is_selectable(const MonraceId r_idx) const;
-    void defeat_separated_uniques();
     bool is_unified(const MonraceId r_idx) const;
     bool exists_separates(const MonraceId r_idx) const;
     bool is_separated(const MonraceId r_idx) const;
