@@ -302,6 +302,22 @@ bool MonraceList::can_select_separate(MonraceId monrace_id, const int hp, const 
     return std::all_of(found_separates.begin(), found_separates.end(), [this](const auto x) { return !this->get_monrace(x).is_dead_unique(); });
 }
 
+/*!
+ * @brief 合体ユニークの分離先ユニークのいずれかをランダムで1つ選択する
+ *
+ * @param monrace_id 合体ユニークのモンスター種族ID
+ * @return 分離先ユニークのモンスター種族ID。合体ユニークでない場合は monrace_id がそのまま返る
+ */
+MonraceId MonraceList::select_random_separated_unique_of(MonraceId monrace_id) const
+{
+    const auto it = unified_uniques.find(monrace_id);
+    if (it != unified_uniques.end()) {
+        return rand_choice(it->second);
+    }
+
+    return monrace_id;
+}
+
 bool MonraceList::order(MonraceId id1, MonraceId id2, bool is_detailed) const
 {
     const auto &monrace1 = monraces_info[id1];

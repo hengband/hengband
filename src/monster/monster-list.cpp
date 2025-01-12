@@ -115,9 +115,14 @@ MonraceId get_mon_num(PlayerType *player_ptr, int min_level, int max_level, uint
         if (max_level < entry.level) {
             break;
         } // sorted by depth array,
-        const auto monrace_id = entry.index;
-        auto &monrace = monraces.get_monrace(monrace_id);
+
+        auto monrace_id = entry.index;
         if (none_bits(mode, PM_ARENA | PM_CHAMELEON)) {
+            if (monraces.is_unified(monrace_id) && monraces.get_monrace(monrace_id).is_dead_unique()) {
+                monrace_id = monraces.select_random_separated_unique_of(monrace_id);
+            }
+
+            auto &monrace = monraces.get_monrace(monrace_id);
             if (monrace.can_generate() && none_bits(mode, PM_CLONE)) {
                 continue;
             }

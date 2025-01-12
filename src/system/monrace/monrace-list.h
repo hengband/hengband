@@ -47,6 +47,7 @@ public:
     bool exists_separates(MonraceId monrace_id) const;
     bool is_separated(MonraceId monrace_id) const;
     bool can_select_separate(MonraceId morace_id, const int hp, const int maxhp) const;
+    MonraceId select_random_separated_unique_of(MonraceId monrace_id) const;
     bool order(MonraceId id1, MonraceId id2, bool is_detailed = false) const;
     bool order_level(MonraceId id1, MonraceId id2) const;
     bool order_level_unique(MonraceId id1, MonraceId id2) const;
