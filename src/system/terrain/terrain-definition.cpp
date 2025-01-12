@@ -47,7 +47,7 @@ bool TerrainType::is_permanent_wall() const
 
 /*!
  * @brief ドアやカーテンが開いているかを調べる
- * @return 開いているか否か
+ * @return 閉じる機能の有無
  * @details 上流でダンジョン側の判定と併せて判定すること
  */
 bool TerrainType::is_open() const

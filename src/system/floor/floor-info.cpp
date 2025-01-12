@@ -14,6 +14,7 @@
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/grid-count-kind.h"
 #include "system/enums/monrace/monrace-hook-types.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
@@ -22,7 +23,6 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/services/dungeon-monrace-service.h"
-#include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 #include "world/world.h"
@@ -225,7 +225,7 @@ bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
     const auto &grid = this->get_grid(pos);
     switch (gck) {
     case GridCountKind::OPEN: {
-        const auto is_open_grid = grid.get_terrain(TerrainKind::MIMIC).is_open();
+        const auto is_open_grid = grid.is_open();
         const auto is_open_dungeon = this->get_dungeon_definition().is_open(grid.get_feat_mimic());
         return is_open_grid && is_open_dungeon;
     }

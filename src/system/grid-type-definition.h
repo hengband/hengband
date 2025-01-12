@@ -87,6 +87,7 @@ public:
     bool is_mirror() const;
     bool is_rune_protection() const;
     bool is_rune_explosion() const;
+    bool is_open() const;
     bool is_closed_door(bool is_mimic) const;
     bool is_hidden_door() const;
     bool has_monster() const;
