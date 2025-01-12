@@ -104,6 +104,7 @@ public:
     bool is_conquered() const;
     std::string build_entrance_message() const;
     std::string describe_depth() const;
+    int calc_cavern_terrains() const;
 
     void set_guardian_flag();
 };

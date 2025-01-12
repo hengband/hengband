@@ -45,14 +45,11 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         return;
     }
 
-    POSITION ty, tx;
     Grid *g_ptr;
     const auto &system = AngbandSystem::get_instance();
     if (dir == 5 && target_okay(player_ptr)) {
-        tx = target_col;
-        ty = target_row;
-        const Pos2D pos(ty, tx);
-        if (distance(p_pos.y, p_pos.x, ty, tx) > system.get_max_range()) {
+        const Pos2D pos(target_col, target_row);
+        if (distance(p_pos.y, p_pos.x, pos.y, pos.x) > system.get_max_range()) {
             msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
             return;
         }
@@ -78,20 +75,18 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
             }
         }
     } else {
-        ty = p_pos.y;
-        tx = p_pos.x;
-        bool is_first_loop = true;
-        g_ptr = &floor.grid_array[ty][tx];
+        auto pos = p_pos;
+        auto is_first_loop = true;
+        g_ptr = &floor.get_grid(pos);
         while (is_first_loop || g_ptr->o_idx_list.empty()) {
             is_first_loop = false;
-            ty += ddy[dir];
-            tx += ddx[dir];
-            g_ptr = &floor.grid_array[ty][tx];
-            if ((distance(p_pos.y, p_pos.x, ty, tx) > system.get_max_range())) {
+            pos += Pos2DVec(ddy[dir], ddx[dir]);
+            g_ptr = &floor.get_grid(pos);
+            if ((distance(p_pos.y, p_pos.x, pos.y, pos.x) > system.get_max_range())) {
                 return;
             }
 
-            if (!floor.has_terrain_characteristics({ ty, tx }, TerrainCharacteristics::PROJECT)) {
+            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                 return;
             }
         }
@@ -103,11 +98,10 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         return;
     }
 
-    OBJECT_IDX i = g_ptr->o_idx_list.front();
+    const auto item_idx = g_ptr->o_idx_list.front();
     g_ptr->o_idx_list.pop_front();
-    floor.grid_array[p_pos.y][p_pos.x].o_idx_list.add(&floor, i); /* 'move' it */
-    item.iy = p_pos.y;
-    item.ix = p_pos.x;
+    floor.get_grid(p_pos).o_idx_list.add(&floor, item_idx); /* 'move' it */
+    item.set_position(p_pos);
 
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     msg_format(_("%s^があなたの足元に飛んできた。", "%s^ flies through the air to your feet."), item_name.data());
