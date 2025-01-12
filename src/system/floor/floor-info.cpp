@@ -190,7 +190,7 @@ bool FloorType::is_closed_door(const Pos2D &pos, bool is_mimic) const
 
 bool FloorType::is_trap(const Pos2D &pos) const
 {
-    return this->get_grid(pos).get_terrain().is_trap();
+    return this->get_grid(pos).get_terrain().has(TerrainCharacteristics::TRAP);
 }
 
 /*!
@@ -238,7 +238,7 @@ bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
     case GridCountKind::CLOSED_DOOR:
         return terrain.is_closed_door();
     case GridCountKind::TRAP:
-        return terrain.is_trap();
+        return terrain.has(TerrainCharacteristics::TRAP);
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid GridCountKind is Specified! %d", enum2i(gck)));
     }
