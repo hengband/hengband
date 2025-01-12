@@ -190,7 +190,7 @@ bool FloorType::is_closed_door(const Pos2D &pos, bool is_mimic) const
 
 bool FloorType::is_trap(const Pos2D &pos) const
 {
-    return this->get_grid(pos).get_terrain().has(TerrainCharacteristics::TRAP);
+    return this->get_grid(pos).has(TerrainCharacteristics::TRAP);
 }
 
 /*!
@@ -510,7 +510,7 @@ short FloorType::pop_empty_index_item()
 bool FloorType::is_grid_changeable(const Pos2D &pos) const
 {
     const auto &grid = this->get_grid(pos);
-    if (grid.cave_has_flag(TerrainCharacteristics::PERMANENT)) {
+    if (grid.has(TerrainCharacteristics::PERMANENT)) {
         return false;
     }
 

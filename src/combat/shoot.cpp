@@ -611,8 +611,6 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
         /* Travel until stopped */
         for (auto cur_dis = 0; cur_dis <= tdis;) {
-            Grid *g_ptr;
-
             /* Hack -- Stop at the target */
             if ((y == ty) && (x == tx)) {
                 break;
@@ -624,14 +622,14 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             nx = pos.x;
 
             /* Shatter Arrow */
-            g_ptr = &floor.get_grid({ ny, nx });
+            auto &grid = floor.get_grid({ ny, nx });
             if (snipe_type == SP_KILL_WALL) {
-                if (g_ptr->cave_has_flag(TerrainCharacteristics::HURT_ROCK) && !g_ptr->has_monster()) {
-                    if (any_bits(g_ptr->info, (CAVE_MARK))) {
+                if (grid.has(TerrainCharacteristics::HURT_ROCK) && !grid.has_monster()) {
+                    if (any_bits(grid.info, (CAVE_MARK))) {
                         msg_print(_("岩が砕け散った。", "Wall rocks were shattered."));
                     }
                     /* Forget the wall */
-                    reset_bits(g_ptr->info, (CAVE_MARK));
+                    reset_bits(grid.info, (CAVE_MARK));
                     static constexpr auto flags = {
                         StatusRecalculatingFlag::VIEW,
                         StatusRecalculatingFlag::LITE,
@@ -649,7 +647,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             }
 
             /* Stopped by walls/doors */
-            if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECT) && !g_ptr->has_monster()) {
+            if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECT) && !grid.has_monster()) {
                 break;
             }
 

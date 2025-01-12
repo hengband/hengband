@@ -57,7 +57,7 @@ bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION 
         const Pos2DVec vec(tonari_y[next][i], tonari_x[next][i]);
         const auto pos_next = pos + vec;
         const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_next);
-        if (!grid.cave_has_flag(f_flag)) {
+        if (!grid.has(f_flag)) {
             continue;
         }
 

@@ -123,7 +123,7 @@ bool Grid::is_rune_explosion() const
  */
 bool Grid::is_hidden_door() const
 {
-    const auto is_secret = (this->mimic > 0) || this->cave_has_flag(TerrainCharacteristics::SECRET);
+    const auto is_secret = (this->mimic > 0) || this->has(TerrainCharacteristics::SECRET);
     return is_secret && this->get_terrain().is_closed_door();
 }
 
@@ -152,9 +152,9 @@ FEAT_IDX Grid::get_feat_mimic() const
     return TerrainList::get_instance().get_terrain(this->mimic ? this->mimic : this->feat).mimic;
 }
 
-bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
+bool Grid::has(TerrainCharacteristics tc) const
 {
-    return this->get_terrain().flags.has(feature_flags);
+    return this->get_terrain().has(tc);
 }
 
 /*!

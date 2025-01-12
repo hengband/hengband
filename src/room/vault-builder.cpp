@@ -26,7 +26,7 @@ static bool player_grid(PlayerType *player_ptr, Grid *g_ptr)
  */
 static bool is_cave_empty_grid(PlayerType *player_ptr, Grid *g_ptr)
 {
-    bool is_empty_grid = g_ptr->cave_has_flag(TerrainCharacteristics::PLACE);
+    bool is_empty_grid = g_ptr->has(TerrainCharacteristics::PLACE);
     is_empty_grid &= !g_ptr->has_monster();
     is_empty_grid &= !player_grid(player_ptr, g_ptr);
     return is_empty_grid;

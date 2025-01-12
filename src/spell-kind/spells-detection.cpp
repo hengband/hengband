@@ -65,7 +65,7 @@ static bool detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainChar
                 }
             }
 
-            if (g_ptr->cave_has_flag(flag)) {
+            if (g_ptr->has(flag)) {
                 disclose_grid(player_ptr, y, x);
                 g_ptr->info |= (CAVE_MARK);
                 lite_spot(player_ptr, y, x);

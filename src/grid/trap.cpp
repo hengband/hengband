@@ -196,7 +196,7 @@ void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 
-    if (g_ptr->cave_has_flag(TerrainCharacteristics::SECRET)) {
+    if (g_ptr->has(TerrainCharacteristics::SECRET)) {
         /* No longer hidden */
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SECRET);
     } else if (g_ptr->mimic) {

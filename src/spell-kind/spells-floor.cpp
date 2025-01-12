@@ -383,7 +383,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             delete_all_items_from_floor(player_ptr, pos.y, pos.x);
 
             /* Destroy "non-permanent" grids */
-            if (grid.cave_has_flag(TerrainCharacteristics::PERMANENT)) {
+            if (grid.has(TerrainCharacteristics::PERMANENT)) {
                 continue;
             }
 

@@ -92,7 +92,7 @@ public:
     uint8_t get_cost(GridFlow gf) const;
     uint8_t get_distance(GridFlow gf) const;
     FEAT_IDX get_feat_mimic() const;
-    bool cave_has_flag(TerrainCharacteristics feature_flags) const;
+    bool has(TerrainCharacteristics tc) const;
     bool is_symbol(const int ch) const;
     void reset_costs();
     void reset_dists();
