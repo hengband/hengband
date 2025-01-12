@@ -95,7 +95,7 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
         const auto &quests = QuestList::get_instance();
         if (floor.dun_level > 1 && inside_quest(quest_id)) {
             const auto &monrace = quests.get_quest(quest_id).get_bounty();
-            if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) || (monrace.max_num > 0)) {
+            if (!monrace.is_dead_unique()) {
                 return true;
             }
         }

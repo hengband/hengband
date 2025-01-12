@@ -136,7 +136,7 @@ std::optional<std::vector<lore_msg>> lore_type::build_kill_unique_description() 
     }
 
     std::vector<lore_msg> texts;
-    const auto is_dead = (this->r_ptr->max_num == 0);
+    const auto is_dead = this->r_ptr->is_dead_unique();
     if (this->r_ptr->r_deaths > 0) {
         constexpr auto fmt = _("%s^はあなたの先祖を %d 人葬っている", "%s^ has slain %d of your ancestors");
         texts.emplace_back(format(fmt, Who::who(this->msex).data(), this->r_ptr->r_deaths));

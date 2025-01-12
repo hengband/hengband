@@ -266,9 +266,7 @@ void quest_discovery(QuestId quest_id)
         return;
     }
 
-    auto is_random_quest_skipped = monrace.kind_flags.has(MonsterKindType::UNIQUE);
-    is_random_quest_skipped &= monrace.max_num == 0;
-    if (!is_random_quest_skipped) {
+    if (!monrace.is_dead_unique()) {
         msg_format(_("注意せよ！この階は%sによって守られている！", "Beware, this level is protected by %s!"), name.data());
         return;
     }

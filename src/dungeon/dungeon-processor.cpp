@@ -191,7 +191,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     const auto &dungeon = floor.get_dungeon_definition();
     if (floor.dun_level == dungeon.maxdepth) {
         const auto &monrace = dungeon.get_guardian();
-        if (monrace.max_num > 0) {
+        if (!monrace.is_dead_unique()) {
 #ifdef JP
             msg_format("この階には%sの主である%sが棲んでいる。", dungeon.name.data(), monrace.name.data());
 #else
