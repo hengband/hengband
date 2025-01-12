@@ -142,10 +142,6 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
     }
 
     this->death_special_flag_monster();
-    if (monrace.r_akills < MAX_SHORT) {
-        monrace.r_akills++;
-    }
-
     this->increase_kill_numbers();
     const auto m_name = monster_desc(this->player_ptr, &monster, MD_TRUE_NAME);
     this->death_amberites(m_name);
@@ -212,22 +208,21 @@ void MonsterDamageProcessor::increase_kill_numbers()
 {
     auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto &monrace = monster.get_real_monrace();
-    auto is_hallucinated = this->player_ptr->effects()->hallucination().is_hallucinated();
+    monrace.increment_akills();
+
+    const auto is_hallucinated = this->player_ptr->effects()->hallucination().is_hallucinated();
     if (((monster.ml == 0) || is_hallucinated) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
-    auto &shadower = MonraceList::get_instance().get_monrace(MonraceId::KAGE);
-    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (shadower.r_pkills < MAX_SHORT)) {
-        shadower.r_pkills++;
-    } else if (monrace.r_pkills < MAX_SHORT) {
-        monrace.r_pkills++;
-    }
-
-    if (monster.mflag2.has(MonsterConstantFlagType::KAGE) && (shadower.r_tkills < MAX_SHORT)) {
-        shadower.r_tkills++;
-    } else if (monrace.r_tkills < MAX_SHORT) {
-        monrace.r_tkills++;
+    auto &monraces = MonraceList::get_instance();
+    if (monster.mflag2.has(MonsterConstantFlagType::KAGE)) {
+        auto &shadower = monraces.get_monrace(MonraceId::KAGE);
+        shadower.increment_pkills();
+        shadower.increment_tkills();
+    } else {
+        monrace.increment_pkills();
+        monrace.increment_tkills();
     }
 
     LoreTracker::get_instance().set_trackee(monster.ap_r_idx);

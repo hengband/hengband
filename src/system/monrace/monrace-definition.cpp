@@ -178,11 +178,6 @@ std::optional<bool> MonraceDefinition::order_pet(const MonraceDefinition &other)
 void MonraceDefinition::kill_unique()
 {
     this->max_num = 0;
-    this->r_pkills++;
-    this->r_akills++;
-    if (this->r_tkills < MAX_SHORT) {
-        this->r_tkills++;
-    }
 }
 
 std::string MonraceDefinition::get_pronoun_of_summoned_kin() const
@@ -605,6 +600,27 @@ void MonraceDefinition::reset_max_number()
     }
 
     this->max_num = MAX_MONSTER_NUM;
+}
+
+void MonraceDefinition::increment_akills()
+{
+    if (this->r_akills < MAX_SHORT) {
+        this->r_akills++;
+    }
+}
+
+void MonraceDefinition::increment_pkills()
+{
+    if (this->r_pkills < MAX_SHORT) {
+        this->r_pkills++;
+    }
+}
+
+void MonraceDefinition::increment_tkills()
+{
+    if (this->r_tkills < MAX_SHORT) {
+        this->r_tkills++;
+    }
 }
 
 /*!
