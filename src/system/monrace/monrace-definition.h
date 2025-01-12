@@ -173,6 +173,7 @@ public:
     bool is_details_known() const;
     bool is_blow_damage_known(int num_blow) const;
     void kill_unique();
+    bool is_dead_unique() const;
 
     void reset_current_numbers();
     void increment_current_numbers();

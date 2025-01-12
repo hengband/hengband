@@ -567,6 +567,11 @@ void MonraceDefinition::kill_unique()
     this->max_num = 0;
 }
 
+bool MonraceDefinition::is_dead_unique() const
+{
+    return this->kind_flags.has(MonsterKindType::UNIQUE) && this->max_num == 0;
+}
+
 void MonraceDefinition::reset_current_numbers()
 {
     this->cur_num = 0;

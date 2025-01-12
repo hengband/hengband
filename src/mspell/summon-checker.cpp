@@ -153,7 +153,7 @@ bool check_summon_specific(PlayerType *player_ptr, MonraceId summoner_id, Monrac
         return is_match;
     }
     case SUMMON_DEAD_UNIQUE: {
-        return monrace.kind_flags.has(MonsterKindType::UNIQUE) && monrace.max_num == 0;
+        return monrace.is_dead_unique();
     }
     default:
         return false;

@@ -307,8 +307,7 @@ static void dump_aux_monsters(FILE *fff)
         }
 
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            auto dead = (monrace.max_num == 0);
-            if (dead) {
+            if (monrace.is_dead_unique()) {
                 norm_total++;
 
                 /* Add a unique monster to the list */

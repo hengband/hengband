@@ -253,13 +253,13 @@ bool MonraceList::is_selectable(const MonraceId r_idx) const
 void MonraceList::defeat_separated_uniques()
 {
     for (const auto &[unified_unique, separates] : unified_uniques) {
-        if (this->get_monrace(unified_unique).max_num > 0) {
+        if (!this->get_monrace(unified_unique).is_dead_unique()) {
             continue;
         }
 
         for (const auto separate : separates) {
             auto &monrace = this->get_monrace(separate);
-            if (monrace.max_num == 0) {
+            if (monrace.is_dead_unique()) {
                 continue;
             }
 
@@ -320,7 +320,7 @@ bool MonraceList::can_select_separate(const MonraceId monrace_id, const int hp, 
         return false;
     }
 
-    return std::all_of(found_separates.begin(), found_separates.end(), [this](const auto x) { return this->get_monrace(x).max_num > 0; });
+    return std::all_of(found_separates.begin(), found_separates.end(), [this](const auto x) { return !this->get_monrace(x).is_dead_unique(); });
 }
 
 bool MonraceList::order(MonraceId id1, MonraceId id2, bool is_detailed) const
@@ -428,7 +428,7 @@ int MonraceList::calc_defeat_count() const
     auto total = 0;
     for (const auto &[_, monrace] : monraces_info) {
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            if (monrace.max_num == 0) {
+            if (monrace.is_dead_unique()) {
                 total++;
             }
 

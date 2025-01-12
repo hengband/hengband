@@ -122,7 +122,7 @@ void set_zangband_bounty_uniques(PlayerType *player_ptr)
     const auto &monraces = MonraceList::get_instance();
     for (auto &[monrace_id, is_achieved] : AngbandWorld::get_instance().bounties) {
         /* Is this bounty unique already dead? */
-        if (monraces.get_monrace(monrace_id).max_num == 0) {
+        if (monraces.get_monrace(monrace_id).is_dead_unique()) {
             is_achieved = true;
         }
     }

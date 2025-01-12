@@ -109,7 +109,7 @@ bool DungeonDefinition::is_conquered() const
         return false;
     }
 
-    return this->get_guardian().max_num == 0;
+    return this->get_guardian().is_dead_unique();
 }
 
 std::string DungeonDefinition::build_entrance_message() const
