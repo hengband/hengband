@@ -195,11 +195,11 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto is_underground = floor.is_underground();
+    const auto is_suitable_for_dungeon = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
     switch (hook) {
     case MonraceHook::NONE:
     case MonraceHook::DUNGEON:
-        return !is_underground || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
+        return is_suitable_for_dungeon;
     case MonraceHook::TOWN:
         return mon_hook_town(player_ptr, monrace_id);
     case MonraceHook::OCEAN:
@@ -305,39 +305,24 @@ MonraceHookTerrain get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITIO
     return MonraceHookTerrain::FLOOR;
 }
 
-/*!
- * @brief 開門トラップに配置するモンスターの条件フィルタ
- * @details 穴を掘るモンスター、壁を抜けるモンスターは却下
- */
-static bool vault_aux_trapped_pit(PlayerType *player_ptr, MonraceId r_idx)
-{
-    auto *r_ptr = &monraces_info[r_idx];
-    if (!vault_monster_okay(player_ptr, r_idx)) {
-        return false;
-    }
-
-    if (r_ptr->feature_flags.has_any_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL })) {
-        return false;
-    }
-
-    return true;
-}
-
 static bool filter_monrace_hook2(PlayerType *player_ptr, MonraceId monrace_id, MonraceHookTerrain hook)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto is_suitable_for_dungeon = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     switch (hook) {
     case MonraceHookTerrain::NONE:
         return true;
     case MonraceHookTerrain::FLOOR:
-        return mon_hook_floor(player_ptr, monrace_id);
+        return monrace.is_suitable_for_floor();
     case MonraceHookTerrain::SHALLOW_WATER:
-        return mon_hook_shallow_water(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_shallow_water();
     case MonraceHookTerrain::DEEP_WATER:
-        return mon_hook_deep_water(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_deep_water();
     case MonraceHookTerrain::TRAPPED_PIT:
-        return vault_aux_trapped_pit(player_ptr, monrace_id);
+        return vault_monster_okay(player_ptr, monrace_id) && monrace.is_suitable_for_trapped_pit();
     case MonraceHookTerrain::LAVA:
-        return mon_hook_lava(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_lava();
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
     }

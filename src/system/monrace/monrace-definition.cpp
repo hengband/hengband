@@ -338,6 +338,11 @@ GridFlow MonraceDefinition::get_grid_flow_type() const
     return this->feature_flags.has(MonsterFeatureType::CAN_FLY) ? GridFlow::CAN_FLY : GridFlow::NORMAL;
 }
 
+bool MonraceDefinition::is_suitable_for_floor() const
+{
+    return this->feature_flags.has_not(MonsterFeatureType::AQUATIC) || this->feature_flags.has(MonsterFeatureType::CAN_FLY);
+}
+
 /*!
  * @brief モンスター種族がランダムクエストの討伐対象に成り得るかをチェックする
  * @return 討伐対象にできるか否か
@@ -353,6 +358,28 @@ bool MonraceDefinition::is_suitable_for_random_quest() const
     is_suitable &= this->misc_flags.has_not(MonsterMiscType::MULTIPLY);
     is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::FRIENDLY);
     return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_shallow_water() const
+{
+    return this->aura_flags.has_not(MonsterAuraType::FIRE);
+}
+
+bool MonraceDefinition::is_suitable_for_deep_water() const
+{
+    return this->feature_flags.has(MonsterFeatureType::AQUATIC);
+}
+
+bool MonraceDefinition::is_suitable_for_lava() const
+{
+    auto is_suitable = this->resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) || this->feature_flags.has(MonsterFeatureType::CAN_FLY);
+    is_suitable &= this->aura_flags.has_not(MonsterAuraType::COLD);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_trapped_pit() const
+{
+    return this->feature_flags.has_none_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL });
 }
 
 void MonraceDefinition::init_sex(uint32_t value)
