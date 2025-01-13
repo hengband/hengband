@@ -23,7 +23,7 @@
  */
 void fill_treasure(PlayerType *player_ptr, const Pos2D &top_left, const Pos2D &bottom_right, int difficulty)
 {
-    const auto center = top_left.centered(bottom_right);
+    const auto center = Pos2D::midpoint(top_left, bottom_right);
     const auto size = std::abs(bottom_right.x - top_left.x) + std::abs(bottom_right.y - top_left.y);
     auto &floor = *player_ptr->current_floor_ptr;
     for (auto x = top_left.x; x <= bottom_right.x; x++) {
