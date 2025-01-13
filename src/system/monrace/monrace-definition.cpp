@@ -328,8 +328,8 @@ const std::vector<Reinforce> &MonraceDefinition::get_reinforces() const
 
 bool MonraceDefinition::can_generate() const
 {
-    auto can_generate = this->kind_flags.has(MonsterKindType::UNIQUE) || this->population_flags.has(MonsterPopulationType::NAZGUL);
-    can_generate &= this->cur_num >= this->max_num;
+    auto can_generate = this->kind_flags.has_not(MonsterKindType::UNIQUE) && this->population_flags.has_not(MonsterPopulationType::NAZGUL);
+    can_generate |= this->cur_num < this->max_num;
     return can_generate;
 }
 
