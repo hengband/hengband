@@ -176,7 +176,7 @@ static void build_bubble_vault(PlayerType *player_ptr, const Pos2D &pos0, const 
 /* Create a random vault that looks like a collection of overlapping rooms */
 static void build_room_vault(PlayerType *player_ptr, const Pos2D &center, const Pos2DVec &vec)
 {
-    const Pos2DVec vec_half(vec.x / 2, vec.y / 2);
+    const Pos2DVec vec_half(vec.y / 2, vec.x / 2);
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("部屋型ランダムVaultを生成しました。", "Room Vault."));
 
     /* fill area so don't get problems with on_defeat_arena_monster levels */
