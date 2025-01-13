@@ -3,6 +3,7 @@
 #include "system/h-type.h"
 #include <algorithm>
 #include <concepts>
+#include <numeric>
 #include <type_traits>
 
 /**
@@ -55,6 +56,18 @@ struct Point2D {
     {
     }
 
+    /*!
+     * @brief 2点間の中点を求める
+     * @param p1 点1
+     * @param p2 点2
+     * @return 点1と点2の中点
+     * @note Tが整数型で結果が整数にならない場合、p1側に丸められる
+     */
+    static constexpr Point2D midpoint(const Point2D &p1, const Point2D &p2)
+    {
+        return Point2D(std::midpoint(p1.y, p2.y), std::midpoint(p1.x, p2.x));
+    }
+
     constexpr Point2D &operator+=(const Vector2D<T> &vector)
     {
         this->y += vector.y;
@@ -67,11 +80,6 @@ struct Point2D {
 
     // 座標同士の減算の結果はVector2Dであり、自身から座標を引くことには意味がないので明示的に削除しておく
     constexpr Point2D &operator-=(const Point2D &other) = delete;
-
-    constexpr Point2D centered(const Point2D &pos) const
-    {
-        return Point2D((this->y + pos.y) / 2, (this->x + pos.x) / 2);
-    }
 };
 
 template <typename T>
