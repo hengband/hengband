@@ -130,7 +130,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
         const auto x = center->x + 2 * ddx_ddd[dir1];
         place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
         const Pos2D pos(y, x);
-        if (floor.is_closed_door(pos)) {
+        if (floor.has_closed_door_at(pos)) {
             floor.get_grid(pos).mimic = feat_glass_wall;
         }
 

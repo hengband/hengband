@@ -152,7 +152,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.is_closed_door(pos)) {
+    if (!floor.has_closed_door_at(pos)) {
         return false;
     }
 

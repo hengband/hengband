@@ -388,7 +388,7 @@ static void build_vault(
                 break;
             case '-':
                 place_secret_door(player_ptr, pos.y, pos.x, DOOR_GLASS_DOOR);
-                if (floor.is_closed_door(pos)) {
+                if (floor.has_closed_door_at(pos)) {
                     grid.mimic = feat_glass_wall;
                 }
 

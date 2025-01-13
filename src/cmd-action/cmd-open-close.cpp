@@ -231,7 +231,7 @@ void do_cmd_disarm(PlayerType *player_ptr)
         const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = floor.get_grid(pos);
         const auto o_idx = chest_check(&floor, pos, true);
-        if (!floor.is_trap(pos) && !o_idx) {
+        if (!floor.has_trap_at(pos) && !o_idx) {
             msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
         } else if (grid.has_monster() && !floor.m_list[grid.m_idx].is_riding()) {
             msg_print(_("モンスターが立ちふさがっている！", "There is a monster in the way!"));

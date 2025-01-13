@@ -630,7 +630,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         break;
     }
 
-    if (break_trap && floor.is_trap(p_pos)) {
+    if (break_trap && floor.has_trap_at(p_pos)) {
         cave_alter_feat(player_ptr, p_pos.y, p_pos.x, TerrainCharacteristics::DISARM);
         msg_print(_("トラップを粉砕した。", "You destroyed the trap."));
     }

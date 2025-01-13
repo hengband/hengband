@@ -678,7 +678,7 @@ void update_flow(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (floor.is_closed_door(pos_neighbor)) {
+                if (floor.has_closed_door_at(pos_neighbor)) {
                     m += 3;
                 }
 
@@ -701,7 +701,7 @@ void update_flow(PlayerType *player_ptr)
                     break;
                 }
 
-                if (!can_move && !floor.is_closed_door(pos_neighbor)) {
+                if (!can_move && !floor.has_closed_door_at(pos_neighbor)) {
                     continue;
                 }
 

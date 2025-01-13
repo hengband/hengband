@@ -185,13 +185,13 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             }
 
             do_cmd_attack(player_ptr, pos_target.y, pos_target.x, HISSATSU_NONE);
-            if (!player_can_enter(player_ptr, grid_target.feat, 0) || floor.is_trap(pos_target)) {
+            if (!player_can_enter(player_ptr, grid_target.feat, 0) || floor.has_trap_at(pos_target)) {
                 break;
             }
 
             const auto pos_opposite = pos_target + Pos2DVec(ddy[*dir], ddx[*dir]);
             const auto &grid_opposite = floor.get_grid(pos_opposite);
-            if (player_can_enter(player_ptr, grid_opposite.feat, 0) && !floor.is_trap(pos_opposite) && !grid_opposite.m_idx) {
+            if (player_can_enter(player_ptr, grid_opposite.feat, 0) && !floor.has_trap_at(pos_opposite) && !grid_opposite.m_idx) {
                 msg_print(nullptr);
                 (void)move_player_effect(player_ptr, pos_opposite.y, pos_opposite.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
             }

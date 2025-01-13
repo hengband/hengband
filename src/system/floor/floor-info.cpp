@@ -173,17 +173,17 @@ bool FloorType::can_teleport_level(bool to_player) const
     return this->is_special() || is_invalid_floor;
 }
 
-bool FloorType::is_mark(const Pos2D &pos) const
+bool FloorType::has_marked_grid_at(const Pos2D &pos) const
 {
     return this->get_grid(pos).is_mark();
 }
 
-bool FloorType::is_closed_door(const Pos2D &pos, bool is_mimic) const
+bool FloorType::has_closed_door_at(const Pos2D &pos, bool is_mimic) const
 {
     return this->get_grid(pos).is_closed_door(is_mimic);
 }
 
-bool FloorType::is_trap(const Pos2D &pos) const
+bool FloorType::has_trap_at(const Pos2D &pos) const
 {
     return this->get_grid(pos).has(TerrainCharacteristics::TRAP);
 }
@@ -205,7 +205,7 @@ std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCount
         }
 
         Pos2D pos_neighbor = p_pos + Pos2DVec(ddy_ddd[d], ddx_ddd[d]);
-        if (!this->is_mark(pos_neighbor)) {
+        if (!this->has_marked_grid_at(pos_neighbor)) {
             continue;
         }
 

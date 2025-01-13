@@ -108,9 +108,9 @@ public:
     bool has_terrain_characteristics(const Pos2D &pos, TerrainCharacteristics tc) const;
     bool is_special() const;
     bool can_teleport_level(bool to_player = false) const;
-    bool is_mark(const Pos2D &pos) const;
-    bool is_closed_door(const Pos2D &pos, bool is_mimic = false) const;
-    bool is_trap(const Pos2D &pos) const;
+    bool has_marked_grid_at(const Pos2D &pos) const;
+    bool has_closed_door_at(const Pos2D &pos, bool is_mimic = false) const;
+    bool has_trap_at(const Pos2D &pos) const;
     std::pair<int, Pos2D> count_doors_traps(const Pos2D &p_pos, GridCountKind gck, bool under) const;
     bool check_terrain_state(const Pos2D &pos, GridCountKind gck) const;
     bool order_pet_whistle(short index1, short index2) const;

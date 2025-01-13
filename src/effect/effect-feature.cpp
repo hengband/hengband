@@ -179,7 +179,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             }
         }
 
-        if (floor.is_trap(pos)) {
+        if (floor.has_trap_at(pos)) {
             if (known) {
                 msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
                 obvious = true;
@@ -188,7 +188,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
         }
 
-        if (floor.is_closed_door(pos) && terrain.power && terrain.flags.has(TerrainCharacteristics::OPEN)) {
+        if (floor.has_closed_door_at(pos) && terrain.power && terrain.flags.has(TerrainCharacteristics::OPEN)) {
             FEAT_IDX old_feat = grid.feat;
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::DISARM);
             if (known && (old_feat != grid.feat)) {
@@ -207,7 +207,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::KILL_DOOR: {
-        if (floor.is_trap(pos) || terrain.flags.has(TerrainCharacteristics::DOOR)) {
+        if (floor.has_trap_at(pos) || terrain.flags.has(TerrainCharacteristics::DOOR)) {
             if (known) {
                 msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
                 obvious = true;
