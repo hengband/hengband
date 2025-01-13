@@ -337,21 +337,24 @@ bool activate_ball_lite(PlayerType *player_ptr, std::string_view name)
 {
     const auto num = Dice::roll(5, 3);
     msg_format(_("%sが稲妻で覆われた...", "The %s is surrounded by lightning..."), name.data());
+    const auto p_pos = player_ptr->get_position();
+    const auto &floor = *player_ptr->current_floor_ptr;
     for (auto k = 0; k < num; k++) {
         auto attempts = 1000;
         Pos2D pos(0, 0);
         while (attempts--) {
-            scatter(player_ptr, &pos.y, &pos.x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-            if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+            pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
+            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
 
-            if (!player_ptr->is_located_at(pos)) {
+            if (pos != p_pos) {
                 break;
             }
         }
 
-        project(player_ptr, 0, 3, pos.y, pos.x, 150, AttributeType::ELEC, PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+        constexpr uint32_t flags = PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+        project(player_ptr, 0, 3, pos.y, pos.x, 150, AttributeType::ELEC, flags);
     }
 
     return true;

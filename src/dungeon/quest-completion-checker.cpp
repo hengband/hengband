@@ -232,10 +232,7 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
     auto &floor = *this->player_ptr->current_floor_ptr;
     auto *g_ptr = &floor.get_grid(m_pos);
     while (floor.has_terrain_characteristics(m_pos, TerrainCharacteristics::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
-        int ny;
-        int nx;
-        scatter(this->player_ptr, &ny, &nx, m_pos.y, m_pos.x, 1, PROJECT_NONE);
-        m_pos = { ny, nx };
+        m_pos = scatter(this->player_ptr, m_pos, 1, PROJECT_NONE);
         g_ptr = &floor.get_grid(m_pos);
     }
 

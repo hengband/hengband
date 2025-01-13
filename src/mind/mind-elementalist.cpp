@@ -585,24 +585,25 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BURST_1ST: {
-        auto p_pos = player_ptr->get_position();
+        const auto p_pos = player_ptr->get_position();
+        auto pos = p_pos;
         const auto num = Dice::roll(4, 3);
         const auto typ = get_element_spells_type(player_ptr, power.elem);
         for (auto k = 0; k < num; k++) {
             auto attempts = 1000;
             while (attempts--) {
-                scatter(player_ptr, &p_pos.y, &p_pos.x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-                if (!floor.has_terrain_characteristics(p_pos, TerrainCharacteristics::PROJECT)) {
+                pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
+                if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                     continue;
                 }
 
-                if (!player_ptr->is_located_at(p_pos)) {
+                if (!player_ptr->is_located_at(pos)) {
                     break;
                 }
             }
 
             constexpr auto flag = PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_KILL;
-            project(player_ptr, 0, 0, p_pos.y, p_pos.x, Dice::roll(6 + plev / 8, 7), typ, flag);
+            project(player_ptr, 0, 0, pos.y, pos.x, Dice::roll(6 + plev / 8, 7), typ, flag);
         }
 
         return true;

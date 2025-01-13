@@ -1,6 +1,7 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/point-2d.h"
+#include <cstdint>
 #include <string>
 
 class FloorType;
@@ -10,5 +11,5 @@ class PlayerType;
 void update_smell(FloorType *floor_ptr, PlayerType *player_ptr);
 void forget_flow(FloorType *floor_ptr);
 void wipe_o_list(FloorType *floor_ptr);
-void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
+Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode);
 std::string map_name(PlayerType *player_ptr);

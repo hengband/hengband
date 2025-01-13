@@ -182,8 +182,9 @@ MONSTER_NUMBER summon_DEMON_SLAYER(PlayerType *player_ptr, POSITION y, POSITION 
 MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
     BIT_FLAGS mode = 0L;
-    POSITION cy = y;
-    POSITION cx = x;
+    Pos2D pos_initial(y, x);
+    auto pos = pos_initial;
+    auto pos_scat = pos_initial;
     const auto m_name = monster_name(player_ptr, m_idx);
 
     if (player_ptr->effects()->blindness().is_blind()) {
@@ -194,32 +195,31 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
 
     msg_print(nullptr);
 
-    int count = 0;
-    for (int k = 0; k < 30; k++) {
-        if (!summon_possible(player_ptr, cy, cx) || !is_cave_empty_bold(player_ptr, cy, cx)) {
+    auto count = 0;
+    for (auto k = 0; k < 30; k++) {
+        if (!summon_possible(player_ptr, pos_scat.y, pos_scat.x) || !is_cave_empty_bold(player_ptr, pos_scat.y, pos_scat.x)) {
             int j;
             for (j = 100; j > 0; j--) {
-                scatter(player_ptr, &cy, &cx, y, x, 2, PROJECT_NONE);
-                if (is_cave_empty_bold(player_ptr, cy, cx)) {
+                pos_scat = scatter(player_ptr, pos, 2, PROJECT_NONE);
+                if (is_cave_empty_bold(player_ptr, pos_scat.y, pos_scat.x)) {
                     break;
                 }
             }
 
-            if (!j) {
+            if (j == 0) {
                 break;
             }
         }
 
-        if (!is_cave_empty_bold(player_ptr, cy, cx)) {
+        if (!is_cave_empty_bold(player_ptr, pos_scat.y, pos_scat.x)) {
             continue;
         }
 
-        if (!summon_named_creature(player_ptr, m_idx, cy, cx, MonraceId::NAZGUL, mode)) {
+        if (!summon_named_creature(player_ptr, m_idx, pos_scat.y, pos_scat.x, MonraceId::NAZGUL, mode)) {
             continue;
         }
 
-        y = cy;
-        x = cx;
+        pos = pos_scat;
         count++;
         if (count == 1) {
             msg_format(_("「幽鬼戦隊%d号、ナズグル・ブラック！」", "A Nazgul says 'Nazgul-Rangers Number %d, Nazgul-Black!'"), count);

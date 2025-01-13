@@ -9,7 +9,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 
-MonsterDeath::MonsterDeath(FloorType &floor, MONSTER_IDX m_idx, bool drop_item)
+MonsterDeath::MonsterDeath(FloorType &floor, short m_idx, bool drop_item)
     : m_idx(m_idx)
     , m_ptr(&floor.m_list[m_idx])
 {
@@ -23,4 +23,9 @@ MonsterDeath::MonsterDeath(FloorType &floor, MONSTER_IDX m_idx, bool drop_item)
     this->do_item |= this->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_GOOD, MonsterDropType::DROP_GREAT });
     this->cloned = this->m_ptr->mflag2.has(MonsterConstantFlagType::CLONED);
     this->drop_chosen_item = drop_item && !this->cloned && !floor.inside_arena && !AngbandSystem::get_instance().is_phase_out() && !this->m_ptr->is_pet();
+}
+
+Pos2D MonsterDeath::get_position() const
+{
+    return { this->md_y, this->md_x };
 }
