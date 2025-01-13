@@ -13,6 +13,7 @@
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/grid-count-kind.h"
+#include "system/enums/monrace/monrace-hook-types.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
@@ -20,6 +21,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
+#include "system/services/dungeon-monrace-service.h"
 #include "system/terrain/terrain-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
@@ -343,6 +345,28 @@ short FloorType::select_baseitem_id(int level_initial, uint32_t mode) const
 
     const auto &table = BaseitemAllocationTable::get_instance();
     return table.draw_lottery(level, mode, decide_selection_count());
+}
+
+bool FloorType::filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain hook) const
+{
+    const auto is_suitable_for_dungeon = !this->is_underground() || DungeonMonraceService::is_suitable_for_dungeon(this->dungeon_id, monrace_id);
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    switch (hook) {
+    case MonraceHookTerrain::NONE:
+        return true;
+    case MonraceHookTerrain::FLOOR:
+        return monrace.is_suitable_for_floor();
+    case MonraceHookTerrain::SHALLOW_WATER:
+        return is_suitable_for_dungeon && monrace.is_suitable_for_shallow_water();
+    case MonraceHookTerrain::DEEP_WATER:
+        return is_suitable_for_dungeon && monrace.is_suitable_for_deep_water();
+    case MonraceHookTerrain::TRAPPED_PIT:
+        return is_suitable_for_dungeon && monrace.is_suitable_for_special_room() && monrace.is_suitable_for_trapped_pit();
+    case MonraceHookTerrain::LAVA:
+        return is_suitable_for_dungeon && monrace.is_suitable_for_lava();
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
+    }
 }
 
 /*!

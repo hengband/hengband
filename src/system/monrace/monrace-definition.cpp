@@ -382,6 +382,19 @@ bool MonraceDefinition::is_suitable_for_trapped_pit() const
     return this->feature_flags.has_none_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL });
 }
 
+/*!
+ * @brief 特殊な部屋へ配置可能かを判定する (Vault/Pit/Nest/ガラス部屋)
+ * @return 配置可不可
+ */
+bool MonraceDefinition::is_suitable_for_special_room() const
+{
+    auto is_valid = this->kind_flags.has_not(MonsterKindType::UNIQUE);
+    is_valid &= this->population_flags.has_not(MonsterPopulationType::ONLY_ONE);
+    is_valid &= this->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
+    is_valid &= this->feature_flags.has_not(MonsterFeatureType::AQUATIC);
+    return is_valid;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
