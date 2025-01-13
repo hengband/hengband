@@ -200,7 +200,7 @@ bool MonraceList::can_unify_separate(MonraceId monrace_id) const
         return true;
     }
 
-    return std::any_of(unified_uniques.begin(), unified_uniques.end(), [&monrace_id](const auto &x) { return x.second.contains(monrace_id); });
+    return std::any_of(unified_uniques.begin(), unified_uniques.end(), [monrace_id](const auto &x) { return x.second.contains(monrace_id); });
 }
 
 /*!
@@ -273,7 +273,7 @@ bool MonraceList::is_separated(MonraceId monrace_id) const
         return false;
     }
 
-    return std::any_of(unified_uniques.begin(), unified_uniques.end(), [&monrace_id](const auto &x) { return x.second.contains(monrace_id); });
+    return std::any_of(unified_uniques.begin(), unified_uniques.end(), [monrace_id](const auto &x) { return x.second.contains(monrace_id); });
 }
 
 /*!
