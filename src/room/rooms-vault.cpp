@@ -168,9 +168,8 @@ static void build_bubble_vault(PlayerType *player_ptr, const Pos2D &pos0, const 
 
     /* Fill with monsters and treasure, low difficulty */
     const auto pos = pos0 + vec_half.inverted();
-    const auto top_left = pos + Pos2DVec(1, 1);
-    const auto bottom_right = pos + Pos2DVec(vec.y - 2, vec.x - 2);
-    fill_treasure(player_ptr, top_left, bottom_right, randint1(5));
+    const auto area = Rect2D(pos, pos + Pos2DVec(vec.y - 1, vec.x - 1)).resized(-1);
+    fill_treasure(player_ptr, area, randint1(5));
 }
 
 /* Create a random vault that looks like a collection of overlapping rooms */
@@ -208,19 +207,17 @@ static void build_room_vault(PlayerType *player_ptr, const Pos2D &center, const 
 
     /* Fill with monsters and treasure, high difficulty */
     const auto pos = center + vec_half.inverted();
-    const auto top_left = pos + Pos2DVec(1, 1);
-    const auto bottom_right = pos + Pos2DVec(vec.y - 2, vec.x - 2);
-    fill_treasure(player_ptr, top_left, bottom_right, randint1(5) + 5);
+    const Rect2D area(pos, pos + Pos2DVec(vec.y - 1, vec.x - 1));
+    fill_treasure(player_ptr, area.resized(-1), randint1(5) + 5);
 }
 
 /* Create a random vault out of a fractal grid */
 static void build_cave_vault(PlayerType *player_ptr, const Pos2D &center, const Pos2DVec &vec)
 {
     /* round to make sizes even */
-    const auto xhsize = vec.x / 2;
-    const auto yhsize = vec.y / 2;
-    const auto xsize = xhsize * 2;
-    const auto ysize = yhsize * 2;
+    const Pos2DVec vec_half(vec.y / 2, vec.x / 2);
+    const auto xsize = vec_half.x * 2;
+    const auto ysize = vec_half.y * 2;
 
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("洞穴ランダムVaultを生成しました。", "Cave Vault."));
 
@@ -247,16 +244,13 @@ static void build_cave_vault(PlayerType *player_ptr, const Pos2D &center, const 
     }
 
     /* Set icky flag because is a vault */
-    for (auto x = 0; x <= xsize; x++) {
-        for (auto y = 0; y <= ysize; y++) {
-            floor.get_grid({ center.y - yhsize + y, center.x - xhsize + x }).info |= CAVE_ICKY;
-        }
-    }
+    const Rect2D area(center, vec_half);
+    area.each_area([&floor](const Pos2D &pos) {
+        floor.get_grid(pos).info |= CAVE_ICKY;
+    });
 
     /* Fill with monsters and treasure, low difficulty */
-    const Pos2D top_left(center.y - yhsize + 1, center.x - xhsize + 1);
-    const Pos2D bottom_right(center.y - yhsize + ysize - 1, center.x - xhsize + xsize - 1);
-    fill_treasure(player_ptr, top_left, bottom_right, randint1(5));
+    fill_treasure(player_ptr, area.resized(-1), randint1(5));
 }
 
 /*!
@@ -646,9 +640,8 @@ static void build_target_vault(PlayerType *player_ptr, const Pos2D &center, cons
 
     /* Fill with stuff - medium difficulty */
     const Pos2DVec vec_radius(rad, rad);
-    const auto top_left = center + vec_radius.inverted();
-    const auto bottom_right = center + vec_radius;
-    fill_treasure(player_ptr, top_left, bottom_right, randint1(3) + 3);
+    const Rect2D area(center, vec_radius);
+    fill_treasure(player_ptr, area, randint1(3) + 3);
 }
 
 /*
@@ -663,10 +656,9 @@ static void build_elemental_vault(PlayerType *player_ptr, const Pos2D &center, c
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("精霊界ランダムVaultを生成しました。", "Elemental Vault"));
 
     /* round to make sizes even */
-    const auto xhsize = vec.x / 2;
-    const auto yhsize = vec.y / 2;
-    const auto xsize = xhsize * 2;
-    const auto ysize = yhsize * 2;
+    const Pos2DVec vec_half(vec.y / 2, vec.x / 2);
+    const auto xsize = vec_half.x * 2;
+    const auto ysize = vec_half.y * 2;
 
     auto &floor = *player_ptr->current_floor_ptr;
     lake_type type;
@@ -710,11 +702,10 @@ static void build_elemental_vault(PlayerType *player_ptr, const Pos2D &center, c
     }
 
     /* Set icky flag because is a vault */
-    for (auto x = 0; x <= xsize; x++) {
-        for (auto y = 0; y <= ysize; y++) {
-            floor.get_grid({ center.y - yhsize + y, center.x - xhsize + x }).info |= CAVE_ICKY;
-        }
-    }
+    const Rect2D area(center, vec_half);
+    area.each_area([&floor](const Pos2D &pos) {
+        floor.get_grid(pos).info |= CAVE_ICKY;
+    });
 
     /* make a few rooms in the vault */
     for (auto i = 1; i <= (xsize * ysize) / 50; i++) {
@@ -722,9 +713,7 @@ static void build_elemental_vault(PlayerType *player_ptr, const Pos2D &center, c
     }
 
     /* Fill with monsters and treasure, low difficulty */
-    const Pos2D top_left(center.y - yhsize + 1, center.x - xhsize + 1);
-    const Pos2D bottom_right(center.y - yhsize + ysize - 1, center.x - xhsize + xsize - 1);
-    fill_treasure(player_ptr, top_left, bottom_right, randint1(5));
+    fill_treasure(player_ptr, area.resized(-1), randint1(5));
 }
 
 /* Build a "mini" checkerboard vault
@@ -834,9 +823,7 @@ static void build_mini_c_vault(PlayerType *player_ptr, const Pos2D &center, cons
     }
 
     /* Fill with monsters and treasure, highest difficulty */
-    const Pos2D top_left(y1, x1);
-    const Pos2D bottom_right(y2, x2);
-    fill_treasure(player_ptr, top_left, bottom_right, 10);
+    fill_treasure(player_ptr, { y1, x1, y2, x2 }, 10);
 }
 
 /* Build a castle */
@@ -849,26 +836,22 @@ static void build_castle_vault(PlayerType *player_ptr, const Pos2D &center, cons
 {
     /* Pick a random room size */
     const Pos2DVec vec_half(vec.y / 2 - 1, vec.x / 2 - 1);
-    auto top_left = center + vec_half.inverted();
-    auto bottom_right = center + vec_half;
+    const Rect2D area(center, vec_half);
     msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("城型ランダムVaultを生成しました。", "Castle Vault"));
 
     /* generate the room */
     auto &floor = *player_ptr->current_floor_ptr;
-    for (auto y = top_left.y - 1; y <= bottom_right.y + 1; y++) {
-        for (auto x = top_left.x - 1; x <= bottom_right.x + 1; x++) {
-            const Pos2D pos(y, x);
-            floor.get_grid(pos).info |= (CAVE_ROOM | CAVE_ICKY);
-            /* Make everything a floor */
-            place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
-        }
-    }
+    area.resized(1).each_area([&](const Pos2D &pos) {
+        floor.get_grid(pos).info |= (CAVE_ROOM | CAVE_ICKY);
+        /* Make everything a floor */
+        place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
+    });
 
     /* Make the castle */
-    build_recursive_room(player_ptr, top_left.x, top_left.y, bottom_right.x, bottom_right.y, randint1(5));
+    build_recursive_room(player_ptr, area.top_left.x, area.top_left.y, area.bottom_right.x, area.bottom_right.y, randint1(5));
 
     /* Fill with monsters and treasure, low difficulty */
-    fill_treasure(player_ptr, top_left, bottom_right, randint1(3));
+    fill_treasure(player_ptr, area, randint1(3));
 }
 
 /*!

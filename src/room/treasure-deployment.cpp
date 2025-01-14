@@ -125,15 +125,13 @@ void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &cent
 /*
  * Routine that fills the empty areas of a room with treasure and monsters.
  */
-void fill_treasure(PlayerType *player_ptr, const Pos2D &top_left, const Pos2D &bottom_right, int difficulty)
+void fill_treasure(PlayerType *player_ptr, const Rect2D &area, int difficulty)
 {
-    const auto center = Pos2D::midpoint(top_left, bottom_right);
-    const auto size = std::abs(bottom_right.x - top_left.x) + std::abs(bottom_right.y - top_left.y);
+    const auto center = area.center();
+    const auto size = area.width() - 1 + area.height() - 1;
     auto &floor = *player_ptr->current_floor_ptr;
 
-    for (auto x = top_left.x; x <= bottom_right.x; x++) {
-        for (auto y = top_left.y; y <= bottom_right.y; y++) {
-            deploy_treasure(player_ptr, floor, center, { y, x }, size, difficulty);
-        }
-    }
+    area.each_area([&](const Pos2D &pos) {
+        deploy_treasure(player_ptr, floor, center, pos, size, difficulty);
+    });
 }
