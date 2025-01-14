@@ -141,9 +141,14 @@ template <std::integral T>
 struct Rectangle2D {
     Point2D<T> top_left;
     Point2D<T> bottom_right;
+    constexpr Rectangle2D(T y1, T x1, T y2, T x2)
+        : top_left(std::min<T>(y1, y2), std::min<T>(x1, x2))
+        , bottom_right(std::max<T>(y1, y2), std::max<T>(x1, x2))
+    {
+    }
+
     constexpr Rectangle2D(const Point2D<T> &pos1, const Point2D<T> &pos2)
-        : top_left(std::min<T>(pos1.y, pos2.y), std::min<T>(pos1.x, pos2.x))
-        , bottom_right(std::max<T>(pos1.y, pos2.y), std::max<T>(pos1.x, pos2.x))
+        : Rectangle2D(pos1.y, pos1.x, pos2.y, pos2.x)
     {
     }
 
