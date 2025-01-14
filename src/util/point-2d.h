@@ -157,6 +157,21 @@ struct Rectangle2D {
     {
     }
 
+    constexpr T width() const
+    {
+        return this->bottom_right.x - this->top_left.x + 1;
+    }
+
+    constexpr T height() const
+    {
+        return this->bottom_right.y - this->top_left.y + 1;
+    }
+
+    constexpr Point2D<T> center() const
+    {
+        return Point2D<T>::midpoint(this->top_left, this->bottom_right);
+    }
+
     constexpr Rectangle2D resized(T margin) const
     {
         const Vector2D<T> vec(margin, margin);
