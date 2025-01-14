@@ -70,7 +70,7 @@ public:
     bool is_permanent_wall() const;
     bool is_open() const;
     bool is_closed_door() const;
-    bool is_trap() const;
+    bool has(TerrainCharacteristics tc) const;
 
     void reset_lighting(bool is_config = true);
 

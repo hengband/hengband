@@ -99,7 +99,7 @@ static void update_monster_dark(
         return;
     }
 
-    if (!grid.has_los_terrain() && !grid.cave_has_flag(TerrainCharacteristics::PROJECT)) {
+    if (!grid.has_los_terrain() && !grid.has(TerrainCharacteristics::PROJECT)) {
         if (((pos.y < p_pos.y) && (pos.y > monster_lite.m_pos.y)) || ((pos.y > p_pos.y) && (pos.y < monster_lite.m_pos.y))) {
             const auto dpf = p_pos.y - monster_lite.m_pos.y;
             const auto d = pos.y - monster_lite.m_pos.y;
@@ -235,7 +235,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y + 2, monster_lite.m_pos.x }, monster_lite);
                 add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y + 2, monster_lite.m_pos.x - 1 }, monster_lite);
                 const auto &grid = floor.grid_array[monster_lite.m_pos.y + 2][monster_lite.m_pos.x];
-                if ((rad == 3) && grid.cave_has_flag(tc)) {
+                if ((rad == 3) && grid.has(tc)) {
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y + 3, monster_lite.m_pos.x + 1 }, monster_lite);
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y + 3, monster_lite.m_pos.x }, monster_lite);
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y + 3, monster_lite.m_pos.x - 1 }, monster_lite);
@@ -247,7 +247,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y - 2, monster_lite.m_pos.x }, monster_lite);
                 add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y - 2, monster_lite.m_pos.x - 1 }, monster_lite);
                 const auto &grid = floor.grid_array[monster_lite.m_pos.y - 2][monster_lite.m_pos.x];
-                if ((rad == 3) && grid.cave_has_flag(tc)) {
+                if ((rad == 3) && grid.has(tc)) {
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y - 3, monster_lite.m_pos.x + 1 }, monster_lite);
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y - 3, monster_lite.m_pos.x }, monster_lite);
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y - 3, monster_lite.m_pos.x - 1 }, monster_lite);
@@ -259,7 +259,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y, monster_lite.m_pos.x + 2 }, monster_lite);
                 add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y - 1, monster_lite.m_pos.x + 2 }, monster_lite);
                 const auto &grid = floor.grid_array[monster_lite.m_pos.y][monster_lite.m_pos.x + 2];
-                if ((rad == 3) && grid.cave_has_flag(tc)) {
+                if ((rad == 3) && grid.has(tc)) {
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y + 1, monster_lite.m_pos.x + 3 }, monster_lite);
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y, monster_lite.m_pos.x + 3 }, monster_lite);
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y - 1, monster_lite.m_pos.x + 3 }, monster_lite);
@@ -271,7 +271,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y, monster_lite.m_pos.x - 2 }, monster_lite);
                 add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y - 1, monster_lite.m_pos.x - 2 }, monster_lite);
                 const auto &grid = floor.grid_array[monster_lite.m_pos.y][monster_lite.m_pos.x - 2];
-                if ((rad == 3) && grid.cave_has_flag(tc)) {
+                if ((rad == 3) && grid.has(tc)) {
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y + 1, monster_lite.m_pos.x - 3 }, monster_lite);
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y, monster_lite.m_pos.x - 3 }, monster_lite);
                     add_mon_lite(floor, points, p_pos, { monster_lite.m_pos.y - 1, monster_lite.m_pos.x - 3 }, monster_lite);

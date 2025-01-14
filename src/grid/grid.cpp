@@ -678,7 +678,7 @@ void update_flow(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (floor.is_closed_door(pos_neighbor)) {
+                if (floor.has_closed_door_at(pos_neighbor)) {
                     m += 3;
                 }
 
@@ -694,14 +694,14 @@ void update_flow(PlayerType *player_ptr)
                 auto can_move = false;
                 switch (gf) {
                 case GridFlow::CAN_FLY:
-                    can_move = grid_neighbor.cave_has_flag(TerrainCharacteristics::MOVE) || grid_neighbor.cave_has_flag(TerrainCharacteristics::CAN_FLY);
+                    can_move = grid_neighbor.has(TerrainCharacteristics::MOVE) || grid_neighbor.has(TerrainCharacteristics::CAN_FLY);
                     break;
                 default:
-                    can_move = grid_neighbor.cave_has_flag(TerrainCharacteristics::MOVE);
+                    can_move = grid_neighbor.has(TerrainCharacteristics::MOVE);
                     break;
                 }
 
-                if (!can_move && !floor.is_closed_door(pos_neighbor)) {
+                if (!can_move && !floor.has_closed_door_at(pos_neighbor)) {
                     continue;
                 }
 

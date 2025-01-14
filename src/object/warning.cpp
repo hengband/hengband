@@ -541,7 +541,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         old_damage = old_damage / 2;
     }
 
-    auto is_warning = (!easy_disarm || floor.get_grid(pos).mimic) && floor.is_trap(pos);
+    auto is_warning = (!easy_disarm || floor.get_grid(pos).mimic) && floor.has_trap_at(pos);
     is_warning &= !one_in_(13);
     if (!is_warning) {
         return true;

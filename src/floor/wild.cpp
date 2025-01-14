@@ -580,7 +580,7 @@ void wilderness_gen(PlayerType *player_ptr)
         for (auto y = 0; y < floor.height; y++) {
             for (auto x = 0; x < floor.width; x++) {
                 auto &grid = floor.get_grid({ y, x });
-                if (!grid.cave_has_flag(TerrainCharacteristics::ENTRANCE)) {
+                if (!grid.has(TerrainCharacteristics::ENTRANCE)) {
                     continue;
                 }
 

@@ -38,7 +38,7 @@ void call_the_void(PlayerType *player_ptr)
     for (int i = 0; i < 9; i++) {
         const Pos2D p_pos_neighbor(player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i]);
         const auto &grid = floor.get_grid(p_pos_neighbor);
-        if (!grid.cave_has_flag(TerrainCharacteristics::PROJECT)) {
+        if (!grid.has(TerrainCharacteristics::PROJECT)) {
             if (!grid.mimic || grid.get_terrain(TerrainKind::MIMIC_RAW).flags.has_not(TerrainCharacteristics::PROJECT) || !grid.get_terrain().is_permanent_wall()) {
                 do_call = false;
                 break;

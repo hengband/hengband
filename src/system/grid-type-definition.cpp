@@ -6,6 +6,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 
 Grid::Grid()
 {
@@ -116,13 +117,24 @@ bool Grid::is_rune_explosion() const
     return this->is_object() && TerrainList::get_instance().get_terrain(this->mimic).flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
 }
 
+bool Grid::is_open() const
+{
+    return this->get_terrain(TerrainKind::MIMIC).is_open();
+}
+
+bool Grid::is_closed_door(bool is_mimic) const
+{
+    const auto tk = is_mimic ? TerrainKind::MIMIC : TerrainKind::NORMAL;
+    return this->get_terrain(tk).is_closed_door();
+}
+
 /*!
  * @brief マスに隠されたドアがあるかの判定
  * @return 隠されたドアがあるか否か
  */
 bool Grid::is_hidden_door() const
 {
-    const auto is_secret = (this->mimic > 0) || this->cave_has_flag(TerrainCharacteristics::SECRET);
+    const auto is_secret = (this->mimic > 0) || this->has(TerrainCharacteristics::SECRET);
     return is_secret && this->get_terrain().is_closed_door();
 }
 
@@ -151,9 +163,9 @@ FEAT_IDX Grid::get_feat_mimic() const
     return TerrainList::get_instance().get_terrain(this->mimic ? this->mimic : this->feat).mimic;
 }
 
-bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
+bool Grid::has(TerrainCharacteristics tc) const
 {
-    return this->get_terrain().flags.has(feature_flags);
+    return this->get_terrain().has(tc);
 }
 
 /*!

@@ -125,7 +125,7 @@ static int next_to_corr(FloorType *floor_ptr, POSITION y1, POSITION x1)
         POSITION x = x1 + ddx_ddd[i];
         Grid *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
-        if (g_ptr->cave_has_flag(TerrainCharacteristics::WALL) || !g_ptr->is_floor() || g_ptr->is_room()) {
+        if (g_ptr->has(TerrainCharacteristics::WALL) || !g_ptr->is_floor() || g_ptr->is_room()) {
             continue;
         }
 

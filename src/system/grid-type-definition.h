@@ -87,12 +87,14 @@ public:
     bool is_mirror() const;
     bool is_rune_protection() const;
     bool is_rune_explosion() const;
+    bool is_open() const;
+    bool is_closed_door(bool is_mimic) const;
     bool is_hidden_door() const;
     bool has_monster() const;
     uint8_t get_cost(GridFlow gf) const;
     uint8_t get_distance(GridFlow gf) const;
     FEAT_IDX get_feat_mimic() const;
-    bool cave_has_flag(TerrainCharacteristics feature_flags) const;
+    bool has(TerrainCharacteristics tc) const;
     bool is_symbol(const int ch) const;
     void reset_costs();
     void reset_dists();
