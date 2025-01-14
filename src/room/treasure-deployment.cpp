@@ -18,6 +18,110 @@
 #include "system/player-type-definition.h"
 #include <cstdlib>
 
+namespace {
+void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &center, const Pos2D &pos, int size, int difficulty)
+{
+    auto value = distance(center.x, center.y, pos.x, pos.y) * 100 / size + randint1(10) - difficulty;
+
+    /// @note
+    /// v2.2.1のコードのコメントを見ると強制的に空白マスに設定するのを意図しているようだが、
+    /// 後のコードを見ればわかるように本来は value に10以上17未満を設定する必要があると思われる。
+    /// 少なくともv2.2.1の段階ですでにこうなっているので、最初から間違っていた可能性が高い。
+    /// ゲームバランスに影響があるため修正するかは要検討。
+    if ((randint1(100) - difficulty * 3) > 50) {
+        value = 20;
+    }
+
+    const auto has_terrain_place = floor.has_terrain_characteristics(pos, TerrainCharacteristics::PLACE);
+    const auto has_terrain_drop = floor.has_terrain_characteristics(pos, TerrainCharacteristics::DROP);
+    if (!floor.get_grid(pos).is_floor() && (!has_terrain_place || !has_terrain_drop)) {
+        return;
+    }
+
+    if (value < 0) {
+        floor.monster_level = floor.base_level + 40;
+        place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+        floor.monster_level = floor.base_level;
+        floor.object_level = floor.base_level + 20;
+        place_object(player_ptr, pos.y, pos.x, AM_GOOD);
+        floor.object_level = floor.base_level;
+        return;
+    }
+
+    if (value < 5) {
+        floor.monster_level = floor.base_level + 20;
+        place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+        floor.monster_level = floor.base_level;
+        floor.object_level = floor.base_level + 10;
+        place_object(player_ptr, pos.y, pos.x, AM_GOOD);
+        floor.object_level = floor.base_level;
+        return;
+    }
+
+    if (value < 10) {
+        floor.monster_level = floor.base_level + 9;
+        place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+        floor.monster_level = floor.base_level;
+        return;
+    }
+
+    if (value < 17) {
+        // 意図的になにも設置せず空白マスとする
+        return;
+    }
+
+    if (value < 23) {
+        if (one_in_(4)) {
+            place_object(player_ptr, pos.y, pos.x, 0L);
+            return;
+        }
+        place_trap(&floor, pos.y, pos.x);
+        return;
+    }
+
+    if (value < 30) {
+        floor.monster_level = floor.base_level + 5;
+        place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+        floor.monster_level = floor.base_level;
+        place_trap(&floor, pos.y, pos.x);
+        return;
+    }
+
+    if (value < 40) {
+        if (one_in_(2)) {
+            floor.monster_level = floor.base_level + 3;
+            place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+            floor.monster_level = floor.base_level;
+        }
+        if (one_in_(2)) {
+            floor.object_level = floor.base_level + 7;
+            place_object(player_ptr, pos.y, pos.x, 0L);
+            floor.object_level = floor.base_level;
+        }
+        return;
+    }
+
+    if (value < 50) {
+        place_trap(&floor, pos.y, pos.x);
+        return;
+    }
+
+    if (one_in_(5)) {
+        place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+        return;
+    }
+
+    if (one_in_(2)) {
+        place_trap(&floor, pos.y, pos.x);
+        return;
+    }
+
+    if (one_in_(2)) {
+        place_object(player_ptr, pos.y, pos.x, 0L);
+    }
+}
+}
+
 /*
  * Routine that fills the empty areas of a room with treasure and monsters.
  */
@@ -26,104 +130,10 @@ void fill_treasure(PlayerType *player_ptr, const Pos2D &top_left, const Pos2D &b
     const auto center = Pos2D::midpoint(top_left, bottom_right);
     const auto size = std::abs(bottom_right.x - top_left.x) + std::abs(bottom_right.y - top_left.y);
     auto &floor = *player_ptr->current_floor_ptr;
+
     for (auto x = top_left.x; x <= bottom_right.x; x++) {
         for (auto y = top_left.y; y <= bottom_right.y; y++) {
-            const Pos2D pos(y, x);
-            auto value = distance(center.x, center.y, pos.x, pos.y) * 100 / size + randint1(10) - difficulty;
-            if ((randint1(100) - difficulty * 3) > 50) {
-                value = 20;
-            }
-
-            const auto has_terrain_place = floor.has_terrain_characteristics(pos, TerrainCharacteristics::PLACE);
-            const auto has_terrain_drop = floor.has_terrain_characteristics(pos, TerrainCharacteristics::DROP);
-            if (!floor.get_grid(pos).is_floor() && (!has_terrain_place || !has_terrain_drop)) {
-                continue;
-            }
-
-            if (value < 0) {
-                floor.monster_level = floor.base_level + 40;
-                place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
-                floor.monster_level = floor.base_level;
-                floor.object_level = floor.base_level + 20;
-                place_object(player_ptr, pos.y, pos.x, AM_GOOD);
-                floor.object_level = floor.base_level;
-                continue;
-            }
-
-            if (value < 5) {
-                floor.monster_level = floor.base_level + 20;
-                place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
-                floor.monster_level = floor.base_level;
-                floor.object_level = floor.base_level + 10;
-                place_object(player_ptr, pos.y, pos.x, AM_GOOD);
-                floor.object_level = floor.base_level;
-            }
-
-            if (value < 10) {
-                floor.monster_level = floor.base_level + 9;
-                place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
-                floor.monster_level = floor.base_level;
-                continue;
-            }
-
-            if (value < 17) {
-                continue;
-            }
-
-            if (value < 23) {
-                if (one_in_(4)) {
-                    place_object(player_ptr, pos.y, pos.x, 0L);
-                    continue;
-                }
-
-                place_trap(&floor, y, x);
-                continue;
-            }
-
-            if (value < 30) {
-                floor.monster_level = floor.base_level + 5;
-                place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
-                floor.monster_level = floor.base_level;
-                place_trap(&floor, y, x);
-                continue;
-            }
-
-            if (value < 40) {
-                if (one_in_(2)) {
-                    floor.monster_level = floor.base_level + 3;
-                    place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
-                    floor.monster_level = floor.base_level;
-                }
-
-                if (one_in_(2)) {
-                    floor.object_level = floor.base_level + 7;
-                    place_object(player_ptr, pos.y, pos.x, 0L);
-                    floor.object_level = floor.base_level;
-                }
-
-                continue;
-            }
-
-            if (value < 50) {
-                place_trap(&floor, y, x);
-                continue;
-            }
-
-            if (one_in_(5)) {
-                place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
-                continue;
-            }
-
-            if (one_in_(2)) {
-                place_trap(&floor, y, x);
-                continue;
-            }
-
-            if (one_in_(2)) {
-                place_object(player_ptr, pos.y, pos.x, 0L);
-            }
-
-            continue;
+            deploy_treasure(player_ptr, floor, center, { y, x }, size, difficulty);
         }
     }
 }
