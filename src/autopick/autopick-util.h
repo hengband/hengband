@@ -41,17 +41,18 @@ struct autopick_type {
  */
 class ItemEntity;
 struct text_body_type {
+    text_body_type(int cx, int cy); //!< @details 画面表示はX→Yの順番であることが多いので一応揃える.
+    int cx;
+    int cy;
     int wid = 0;
     int hgt = 0;
-    int cx = 0;
-    int cy = 0;
     int upper = 0;
     int left = 0;
-    int old_wid = 0;
-    int old_hgt = 0;
-    int old_cy = 0;
-    int old_upper = 0;
-    int old_left = 0;
+    int old_wid = -1;
+    int old_hgt = -1;
+    int old_cy = -1;
+    int old_upper = -1;
+    int old_left = -1;
     int mx = 0;
     int my = 0;
     byte mark = 0;
@@ -67,7 +68,7 @@ struct text_body_type {
     byte states[MAX_LINES]{};
 
     uint16_t dirty_flags = 0;
-    int dirty_line = 0;
+    int dirty_line = -1;
     int filename_mode = 0;
     int old_com_id = 0;
 
