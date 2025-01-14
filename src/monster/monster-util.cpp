@@ -201,11 +201,11 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::DUNGEON:
         return is_suitable_for_dungeon;
     case MonraceHook::TOWN:
-        return mon_hook_town(player_ptr, monrace_id);
+        return monrace.is_suitable_for_town();
     case MonraceHook::OCEAN:
-        return mon_hook_ocean(player_ptr, monrace_id);
+        return monrace.is_suitable_for_ocean();
     case MonraceHook::SHORE:
-        return mon_hook_shore(player_ptr, monrace_id);
+        return monrace.is_suitable_for_shore();
     case MonraceHook::WASTE:
         return mon_hook_waste(player_ptr, monrace_id);
     case MonraceHook::GRASS:
@@ -225,17 +225,11 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::HUMAN:
         return monster_hook_human(player_ptr, monrace_id);
     case MonraceHook::GLASS:
-        return vault_aux_lite(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_glass();
     case MonraceHook::SHARDS:
         return vault_aux_shards(player_ptr, monrace_id);
     case MonraceHook::TANUKI: {
-        auto unselectable = monrace.kind_flags.has(MonsterKindType::UNIQUE);
-        unselectable |= monrace.misc_flags.has(MonsterMiscType::MULTIPLY);
-        unselectable |= monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
-        unselectable |= monrace.feature_flags.has(MonsterFeatureType::AQUATIC);
-        unselectable |= monrace.misc_flags.has(MonsterMiscType::CHAMELEON);
-        unselectable |= monrace.is_explodable();
-        if (unselectable) {
+        if (!monrace.is_suitable_for_tanuki()) {
             return false;
         }
 

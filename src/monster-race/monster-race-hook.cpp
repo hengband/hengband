@@ -81,34 +81,6 @@ void vault_prep_dragon(PlayerType *player_ptr)
 }
 
 /*!
- * @brief モンスターが海洋に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 海洋に出現するならばTRUEを返す
- */
-bool mon_hook_ocean(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    auto *r_ptr = &monraces_info[r_idx];
-    return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_OCEAN);
-}
-
-/*!
- * @brief モンスターが海岸に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 海岸に出現するならばTRUEを返す
- */
-bool mon_hook_shore(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    auto *r_ptr = &monraces_info[r_idx];
-    return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_SHORE);
-}
-
-/*!
  * @brief モンスターが荒地に出現するかどうかを返す
  * @param r_idx 判定するモンスターの種族ID
  * @return 荒地に出現するならばTRUEを返す
@@ -120,20 +92,6 @@ bool mon_hook_waste(PlayerType *player_ptr, MonraceId r_idx)
 
     auto *r_ptr = &monraces_info[r_idx];
     return r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_WASTE, MonsterWildernessType::WILD_ALL });
-}
-
-/*!
- * @brief モンスターが町に出現するかどうかを返す
- * @param r_idx 判定するモンスターの種族ID
- * @return 荒地に出現するならばTRUEを返す
- */
-bool mon_hook_town(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    auto *r_ptr = &monraces_info[r_idx];
-    return r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
 }
 
 /*!
@@ -190,34 +148,6 @@ bool mon_hook_grass(PlayerType *player_ptr, MonraceId r_idx)
 
     auto *r_ptr = &monraces_info[r_idx];
     return r_ptr->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_GRASS, MonsterWildernessType::WILD_ALL });
-}
-
-/*
- * Helper function for "glass room"
- */
-bool vault_aux_lite(PlayerType *player_ptr, MonraceId r_idx)
-{
-    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= monrace.is_suitable_for_special_room();
-    if (!is_valid) {
-        return false;
-    }
-
-    if (monrace.ability_flags.has_none_of({ MonsterAbilityType::BR_LITE, MonsterAbilityType::BA_LITE })) {
-        return false;
-    }
-
-    if (monrace.feature_flags.has_any_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL })) {
-        return false;
-    }
-
-    if (monrace.ability_flags.has(MonsterAbilityType::BR_DISI)) {
-        return false;
-    }
-
-    return true;
 }
 
 /*
