@@ -188,8 +188,8 @@ std::vector<std::unique_ptr<std::string>> read_pickpref_text_lines(std::string_v
 bool write_text_lines(std::string_view filename, const std::vector<std::unique_ptr<std::string>> &lines)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
-    auto *fff = angband_fopen(path, FileOpenMode::WRITE);
-    if (!fff) {
+    auto ofs = std::ofstream(path);
+    if (!ofs) {
         return false;
     }
 
@@ -198,9 +198,8 @@ bool write_text_lines(std::string_view filename, const std::vector<std::unique_p
             break;
         }
 
-        fprintf(fff, "%s\n", line->data());
+        ofs << *line << '\n';
     }
 
-    angband_fclose(fff);
     return true;
 }
