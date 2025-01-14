@@ -48,7 +48,6 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
 FILE *angband_fopen(const std::filesystem::path &path, const FileOpenMode mode, const bool is_binary = false);
 FILE *angband_fopen_temp(char *buf, int max);
 std::optional<std::string> angband_fgets(FILE *fp, size_t n = std::string::npos);
-errr angband_fputs(FILE *fff, concptr buf, ulong n);
 errr angband_fclose(FILE *fff);
 void fd_kill(const std::filesystem::path &path);
 void fd_move(const std::filesystem::path &path_from, const std::filesystem::path &path_to);

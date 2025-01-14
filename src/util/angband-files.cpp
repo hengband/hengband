@@ -364,18 +364,6 @@ std::optional<std::string> angband_fgets(FILE *fp, size_t n)
 }
 
 /*
- * Hack -- replacement for "fputs()"
- * Dump a string, plus a newline, to a file
- * Process internal weirdness?
- */
-errr angband_fputs(FILE *fff, concptr buf, ulong n)
-{
-    n = n ? n : 0;
-    (void)fprintf(fff, "%s\n", buf);
-    return 0;
-}
-
-/*
  * Several systems have no "O_BINARY" flag
  */
 #ifndef O_BINARY
