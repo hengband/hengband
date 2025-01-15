@@ -10,14 +10,6 @@ extern char vault_aux_char;
 extern EnumClassFlagGroup<MonsterAbilityType> vault_aux_dragon_mask4;
 
 class PlayerType;
-bool mon_hook_waste(PlayerType *player_ptr, MonraceId r_idx);
-bool mon_hook_wood(PlayerType *player_ptr, MonraceId r_idx);
-bool mon_hook_volcano(PlayerType *player_ptr, MonraceId r_idx);
-bool mon_hook_wood(PlayerType *player_ptr, MonraceId r_idx);
-bool mon_hook_volcano(PlayerType *player_ptr, MonraceId r_idx);
-bool mon_hook_mountain(PlayerType *player_ptr, MonraceId r_idx);
-bool mon_hook_grass(PlayerType *player_ptr, MonraceId r_idx);
-
 void vault_prep_clone(PlayerType *player_ptr);
 void vault_prep_dragon(PlayerType *player_ptr);
 void vault_prep_symbol(PlayerType *player_ptr);

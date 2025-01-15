@@ -207,15 +207,15 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::SHORE:
         return monrace.is_suitable_for_shore();
     case MonraceHook::WASTE:
-        return mon_hook_waste(player_ptr, monrace_id);
+        return monrace.is_suitable_for_waste();
     case MonraceHook::GRASS:
-        return mon_hook_grass(player_ptr, monrace_id);
+        return monrace.is_suitable_for_grass();
     case MonraceHook::WOOD:
-        return mon_hook_wood(player_ptr, monrace_id);
+        return monrace.is_suitable_for_wood();
     case MonraceHook::VOLCANO:
-        return mon_hook_volcano(player_ptr, monrace_id);
+        return monrace.is_suitable_for_volcano();
     case MonraceHook::MOUNTAIN:
-        return mon_hook_mountain(player_ptr, monrace_id);
+        return monrace.is_suitable_for_mountain();
     case MonraceHook::FIGURINE:
         return item_monster_okay(player_ptr, monrace_id);
     case MonraceHook::ARENA:
