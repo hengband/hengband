@@ -634,7 +634,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
             auto &grid = floor.get_grid(pos);
             auto &wild_grid = wilderness[y][x];
             if (wild_grid.town && (wild_grid.town != VALID_TOWNS)) {
-                grid.feat = feat_town;
+                grid.set_terrain_id(TerrainTag::TOWN);
                 grid.special = wild_grid.town;
                 grid.info |= (CAVE_GLOW | CAVE_MARK);
                 continue;
@@ -879,7 +879,7 @@ void init_wilderness_terrains(void)
     const auto terrain_floor = terrains.get_terrain_id(TerrainTag::FLOOR);
     const auto terrain_permanent_wall = terrains.get_terrain_id(TerrainTag::PERMANENT_WALL);
     init_terrain_table(TERRAIN_EDGE, terrain_permanent_wall, "a", terrain_permanent_wall, MAX_FEAT_IN_TERRAIN);
-    init_terrain_table(TERRAIN_TOWN, feat_town, "a", terrain_floor, MAX_FEAT_IN_TERRAIN);
+    init_terrain_table(TERRAIN_TOWN, terrains.get_terrain_id(TerrainTag::TOWN), "a", terrain_floor, MAX_FEAT_IN_TERRAIN);
     init_terrain_table(TERRAIN_DEEP_WATER, feat_deep_water, "ab", feat_deep_water, 12, feat_shallow_water, MAX_FEAT_IN_TERRAIN - 12);
     init_terrain_table(TERRAIN_SHALLOW_WATER, feat_shallow_water, "abcde", feat_deep_water, 3, feat_shallow_water, 12, terrain_floor, 1, feat_dirt, 1, feat_grass,
         MAX_FEAT_IN_TERRAIN - 17);
