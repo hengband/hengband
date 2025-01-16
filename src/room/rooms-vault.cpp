@@ -395,7 +395,7 @@ static void build_vault(
                 place_trap(&floor, pos.y, pos.x);
                 break;
             case 'S':
-                floor.set_terrain_id(pos, feat_black_market);
+                floor.set_terrain_id(pos, TerrainTag::BLACK_MARKET);
                 store_init(VALID_TOWNS, StoreSaleType::BLACK);
                 break;
             case 'p':

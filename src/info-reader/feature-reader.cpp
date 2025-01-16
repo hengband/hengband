@@ -364,7 +364,6 @@ void init_feat_variables()
     feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
 
     /* Various */
-    feat_black_market = terrains.get_terrain_id_by_tag("BLACK_MARKET");
     feat_town = terrains.get_terrain_id_by_tag("TOWN");
 
     /* Terrains */
