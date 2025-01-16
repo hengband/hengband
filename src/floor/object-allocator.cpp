@@ -204,7 +204,7 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
 
         switch (typ) {
         case ALLOC_TYP_RUBBLE:
-            floor.set_terrain_id(pos, TerrainTag::RUBBLE);
+            floor.set_terrain_id_at(pos, TerrainTag::RUBBLE);
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_TRAP:
