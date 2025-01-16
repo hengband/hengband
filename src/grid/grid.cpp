@@ -43,6 +43,7 @@
 #include "room/rooms-builder.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/grid-flow.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -934,7 +935,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_EXTRA_PERM: {
-        g_ptr->feat = feat_permanent;
+        g_ptr->set_terrain_id(TerrainTag::PERMANENT_WALL);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_EXTRA;
         break;
@@ -946,7 +947,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_INNER_PERM: {
-        g_ptr->feat = feat_permanent;
+        g_ptr->set_terrain_id(TerrainTag::PERMANENT_WALL);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_INNER;
         break;
@@ -976,7 +977,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_SOLID_PERM: {
-        g_ptr->feat = feat_permanent;
+        g_ptr->set_terrain_id(TerrainTag::PERMANENT_WALL);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_SOLID;
         break;

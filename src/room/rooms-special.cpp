@@ -4,7 +4,6 @@
 #include "floor/floor-generator.h"
 #include "game-option/cheat-types.h"
 #include "grid/door.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "monster-floor/monster-generator.h"
@@ -17,6 +16,7 @@
 #include "room/door-definition.h"
 #include "room/space-finder.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -28,25 +28,25 @@ namespace {
 void place_floor_glass(PlayerType *player_ptr, Grid &grid)
 {
     place_grid(player_ptr, &grid, GB_FLOOR);
-    grid.feat = feat_glass_floor;
+    grid.set_terrain_id(TerrainTag::GLASS_FLOOR);
 }
 
 void place_outer_glass(PlayerType *player_ptr, Grid &grid)
 {
     place_grid(player_ptr, &grid, GB_OUTER);
-    grid.feat = feat_glass_wall;
+    grid.set_terrain_id(TerrainTag::GLASS_WALL);
 }
 
 void place_inner_glass(PlayerType *player_ptr, Grid &grid)
 {
     place_grid(player_ptr, &grid, GB_INNER);
-    grid.feat = feat_glass_wall;
+    grid.set_terrain_id(TerrainTag::GLASS_WALL);
 }
 
 void place_inner_perm_glass(PlayerType *player_ptr, Grid &grid)
 {
     place_grid(player_ptr, &grid, GB_INNER_PERM);
-    grid.feat = feat_permanent_glass_wall;
+    grid.set_terrain_id(TerrainTag::PERMANENT_GLASS_WALL);
 }
 }
 
@@ -131,7 +131,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
         place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
         const Pos2D pos(y, x);
         if (floor.has_closed_door_at(pos)) {
-            floor.get_grid(pos).mimic = feat_glass_wall;
+            floor.get_grid(pos).set_mimic_terrain_id(TerrainTag::GLASS_WALL);
         }
 
         /* Place a potion */

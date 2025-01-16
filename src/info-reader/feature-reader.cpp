@@ -344,9 +344,6 @@ void init_feat_variables()
     feat_door[DOOR_CURTAIN].jammed[0] = feat_door[DOOR_CURTAIN].closed;
     feat_door[DOOR_CURTAIN].num_jammed = 1;
 
-    /* Stairs */
-    feat_entrance = terrains.get_terrain_id_by_tag("ENTRANCE");
-
     /* Normal traps */
     init_normal_traps();
 
@@ -354,24 +351,6 @@ void init_feat_variables()
     feat_trap_open = terrains.get_terrain_id_by_tag("TRAP_OPEN");
     feat_trap_armageddon = terrains.get_terrain_id_by_tag("TRAP_ARMAGEDDON");
     feat_trap_piranha = terrains.get_terrain_id_by_tag("TRAP_PIRANHA");
-
-    /* Rubble */
-    feat_rubble = terrains.get_terrain_id_by_tag("RUBBLE");
-
-    /* Seams */
-    feat_magma_vein = terrains.get_terrain_id_by_tag("MAGMA_VEIN");
-    feat_quartz_vein = terrains.get_terrain_id_by_tag("QUARTZ_VEIN");
-
-    /* Walls */
-    feat_granite = terrains.get_terrain_id_by_tag("GRANITE");
-    feat_permanent = terrains.get_terrain_id_by_tag("PERMANENT");
-
-    /* Glass floor */
-    feat_glass_floor = terrains.get_terrain_id_by_tag("GLASS_FLOOR");
-
-    /* Glass walls */
-    feat_glass_wall = terrains.get_terrain_id_by_tag("GLASS_WALL");
-    feat_permanent_glass_wall = terrains.get_terrain_id_by_tag("PERMANENT_GLASS_WALL");
 
     /* Pattern */
     feat_pattern_start = terrains.get_terrain_id_by_tag("PATTERN_START");

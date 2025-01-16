@@ -41,6 +41,7 @@
 #include "status/bad-status-setter.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -394,13 +395,13 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             {
                 if (t < 20) {
                     /* Create granite wall */
-                    cave_set_feat(player_ptr, pos.y, pos.x, feat_granite);
+                    cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
                 } else if (t < 70) {
                     /* Create quartz vein */
-                    cave_set_feat(player_ptr, pos.y, pos.x, feat_quartz_vein);
+                    cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
                 } else if (t < 100) {
                     /* Create magma vein */
-                    cave_set_feat(player_ptr, pos.y, pos.x, feat_magma_vein);
+                    cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
                 } else {
                     /* Create floor */
                     cave_set_feat(player_ptr, pos.y, pos.x, rand_choice(feat_ground_type));
@@ -414,10 +415,10 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 place_grid(player_ptr, &grid, GB_EXTRA);
             } else if (t < 70) {
                 /* Create quartz vein */
-                grid.feat = feat_quartz_vein;
+                grid.set_terrain_id(TerrainTag::QUARTZ_VEIN);
             } else if (t < 100) {
                 /* Create magma vein */
-                grid.feat = feat_magma_vein;
+                grid.set_terrain_id(TerrainTag::MAGMA_VEIN);
             } else {
                 /* Create floor */
                 place_grid(player_ptr, &grid, GB_FLOOR);

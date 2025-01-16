@@ -24,6 +24,7 @@
 #include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -285,17 +286,17 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             delete_all_items_from_floor(player_ptr, pos.y, pos.x);
             const auto t = floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
             if (t < 20) {
-                cave_set_feat(player_ptr, pos.y, pos.x, feat_granite);
+                cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
                 continue;
             }
 
             if (t < 70) {
-                cave_set_feat(player_ptr, pos.y, pos.x, feat_quartz_vein);
+                cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
                 continue;
             }
 
             if (t < 100) {
-                cave_set_feat(player_ptr, pos.y, pos.x, feat_magma_vein);
+                cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
                 continue;
             }
 

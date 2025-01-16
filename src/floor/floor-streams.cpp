@@ -450,7 +450,7 @@ void place_trees(PlayerType *player_ptr, const Pos2D &pos)
                         grid.feat = feat_tree;
                     }
                 } else {
-                    grid.feat = feat_rubble;
+                    grid.set_terrain_id(TerrainTag::RUBBLE);
                 }
 
                 grid.mimic = 0;
