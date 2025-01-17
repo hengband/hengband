@@ -317,7 +317,7 @@ int MonraceDefinition::calc_capture_value() const
  */
 std::string MonraceDefinition::build_eldritch_horror_message(std::string_view description) const
 {
-    const auto &horror_message = this->decide_horror_message();
+    const auto &horror_message = MonraceDefinition::decide_horror_message(this->kind_flags);
     constexpr auto fmt = _("%s%sの顔を見てしまった！", "You behold the %s visage of %s!");
     return format(fmt, horror_message.data(), description.data());
 }
@@ -933,9 +933,10 @@ bool MonraceDefinition::has_blow_with_damage() const
 
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める
+ * @param モンスターの種族フラグ
  * @return エルドリッチホラーの形容詞
  */
-const std::string &MonraceDefinition::decide_horror_message() const
+const std::string &MonraceDefinition::decide_horror_message(const EnumClassFlagGroup<MonsterKindType> &kind_flags)
 {
     const int horror_desc_common_size = horror_desc_common.size();
     auto horror_num = randint0(horror_desc_common_size + horror_desc_evil.size());
@@ -943,7 +944,7 @@ const std::string &MonraceDefinition::decide_horror_message() const
         return horror_desc_common[horror_num];
     }
 
-    if (this->kind_flags.has(MonsterKindType::EVIL)) {
+    if (kind_flags.has(MonsterKindType::EVIL)) {
         return horror_desc_evil[horror_num - horror_desc_common_size];
     }
 
