@@ -16,8 +16,8 @@
 #define SKEY_UP 0xf004
 #define SKEY_PGUP 0xf005
 #define SKEY_PGDOWN 0xf006
-#define SKEY_TOP 0xf007
-#define SKEY_BOTTOM 0xf008
+#define SKEY_HOME 0xf007
+#define SKEY_END 0xf008
 
 extern bool inkey_base;
 extern bool inkey_xtra;
