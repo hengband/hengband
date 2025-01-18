@@ -50,10 +50,10 @@ static int analyze_move_key(text_body_type *tb, int skey)
         com_id = EC_PGDOWN;
         break;
     case SKEY_HOME:
-        com_id = EC_TOP;
+        com_id = EC_BOL;
         break;
     case SKEY_END:
-        com_id = EC_BOTTOM;
+        com_id = EC_EOL;
         break;
     default:
         return 0;
