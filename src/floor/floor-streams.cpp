@@ -202,7 +202,7 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
         }
         if (dungeon.flags.has(DungeonFeatureType::ACID_RIVER)) {
             select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_ACID_PUDDLE);
-            select_shallow_feat[select_id_max] = feat_shallow_acid_puddle;
+            select_shallow_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::SHALLOW_ACID_PUDDLE);
             select_id_max++;
         }
 

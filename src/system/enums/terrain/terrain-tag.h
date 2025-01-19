@@ -34,4 +34,5 @@ enum class TerrainTag {
     HEAVY_ELECTRICAL_ZONE,
     ELECTRICAL_ZONE,
     DEEP_ACID_PUDDLE,
+    SHALLOW_ACID_PUDDLE,
 };
