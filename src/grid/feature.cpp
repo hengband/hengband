@@ -40,7 +40,6 @@ FEAT_IDX feat_pattern_exit;
 FEAT_IDX feat_pattern_corrupted;
 
 /* Terrains */
-FEAT_IDX feat_deep_water;
 FEAT_IDX feat_shallow_water;
 FEAT_IDX feat_deep_lava;
 FEAT_IDX feat_shallow_lava;

@@ -364,7 +364,6 @@ void init_feat_variables()
     feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
 
     /* Terrains */
-    feat_deep_water = terrains.get_terrain_id_by_tag("DEEP_WATER");
     feat_shallow_water = terrains.get_terrain_id_by_tag("SHALLOW_WATER");
     feat_deep_lava = terrains.get_terrain_id_by_tag("DEEP_LAVA");
     feat_shallow_lava = terrains.get_terrain_id_by_tag("SHALLOW_LAVA");

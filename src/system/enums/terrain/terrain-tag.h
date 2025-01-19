@@ -25,4 +25,5 @@ enum class TerrainTag {
     PERMANENT_GLASS_WALL,
     BLACK_MARKET,
     TOWN,
+    DEEP_WATER,
 };

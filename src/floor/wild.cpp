@@ -880,8 +880,9 @@ void init_wilderness_terrains(void)
     const auto terrain_permanent_wall = terrains.get_terrain_id(TerrainTag::PERMANENT_WALL);
     init_terrain_table(TERRAIN_EDGE, terrain_permanent_wall, "a", terrain_permanent_wall, MAX_FEAT_IN_TERRAIN);
     init_terrain_table(TERRAIN_TOWN, terrains.get_terrain_id(TerrainTag::TOWN), "a", terrain_floor, MAX_FEAT_IN_TERRAIN);
-    init_terrain_table(TERRAIN_DEEP_WATER, feat_deep_water, "ab", feat_deep_water, 12, feat_shallow_water, MAX_FEAT_IN_TERRAIN - 12);
-    init_terrain_table(TERRAIN_SHALLOW_WATER, feat_shallow_water, "abcde", feat_deep_water, 3, feat_shallow_water, 12, terrain_floor, 1, feat_dirt, 1, feat_grass,
+    const auto terrain_id_deep_water = terrains.get_terrain_id(TerrainTag::DEEP_WATER);
+    init_terrain_table(TERRAIN_DEEP_WATER, terrain_id_deep_water, "ab", terrain_id_deep_water, 12, feat_shallow_water, MAX_FEAT_IN_TERRAIN - 12);
+    init_terrain_table(TERRAIN_SHALLOW_WATER, feat_shallow_water, "abcde", terrain_id_deep_water, 3, feat_shallow_water, 12, terrain_floor, 1, feat_dirt, 1, feat_grass,
         MAX_FEAT_IN_TERRAIN - 17);
     init_terrain_table(TERRAIN_SWAMP, feat_swamp, "abcdef", feat_dirt, 2, feat_grass, 3, feat_tree, 1, feat_brake, 1, feat_shallow_water, 4, feat_swamp,
         MAX_FEAT_IN_TERRAIN - 11);

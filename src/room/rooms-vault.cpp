@@ -428,7 +428,7 @@ static void build_vault(
                 floor.set_terrain_id_at(pos, feat_shallow_water);
                 break;
             case '=':
-                floor.set_terrain_id_at(pos, feat_deep_water);
+                floor.set_terrain_id_at(pos, TerrainTag::DEEP_WATER);
                 break;
             case 'v':
                 floor.set_terrain_id_at(pos, feat_shallow_lava);
