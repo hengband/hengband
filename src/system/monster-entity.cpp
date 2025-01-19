@@ -401,20 +401,9 @@ std::optional<bool> MonsterEntity::order_pet_dismission(const MonsterEntity &oth
 void MonsterEntity::set_individual_speed(bool force_fixed_speed)
 {
     const auto &monrace = this->get_monrace();
-    auto speed = monrace.speed;
-    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) && !force_fixed_speed) {
-        /* Allow some small variation per monster */
-        int i = speed_to_energy(monrace.speed) / (one_in_(4) ? 3 : 10);
-        if (i) {
-            speed += static_cast<uint8_t>(rand_spread(0, i));
-        }
-    }
+    auto do_fixed_speed = monrace.kind_flags.has_not(MonsterKindType::UNIQUE) && !force_fixed_speed;
 
-    if (speed > STANDARD_SPEED + 99) {
-        speed = STANDARD_SPEED + 99;
-    }
-
-    this->mspeed = speed;
+    this->mspeed = MonsterEntity::calc_individual_speed(monrace.speed, do_fixed_speed);
 }
 
 void MonsterEntity::set_position(const Pos2D &pos)
@@ -561,6 +550,29 @@ byte MonsterEntity::calc_temporary_speed(decltype(MonsterEntity::mspeed) speed, 
 
     if (decelerated) {
         result_speed -= 10;
+    }
+
+    return result_speed;
+}
+
+/*!
+ * @brief モンスターの個体加速を計算する / Calc initial monster speed
+ * @param speed 速度のベース値
+ * @param fixed_speed Trueの場合、速度に個体差を適用しない
+ */
+decltype(MonsterEntity::mspeed) MonsterEntity::calc_individual_speed(decltype(MonsterEntity::mspeed) speed, bool fixed_speed)
+{
+    auto result_speed = speed;
+    if (!fixed_speed) {
+        /* Allow some small variation per monster */
+        int i = speed_to_energy(speed) / (one_in_(4) ? 3 : 10);
+        if (i) {
+            result_speed += static_cast<uint8_t>(rand_spread(0, i));
+        }
+    }
+
+    if (result_speed > STANDARD_SPEED + 99) {
+        result_speed = STANDARD_SPEED + 99;
     }
 
     return result_speed;
