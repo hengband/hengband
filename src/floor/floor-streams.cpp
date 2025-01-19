@@ -184,7 +184,7 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
     /* Choose water mainly */
     if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon.flags.has(DungeonFeatureType::WATER_RIVER)) {
         feat1 = terrains.get_terrain_id(TerrainTag::DEEP_WATER);
-        feat2 = feat_shallow_water;
+        feat2 = terrains.get_terrain_id(TerrainTag::SHALLOW_WATER);
     } else /* others */
     {
         short select_deep_feat[10]{};

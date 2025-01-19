@@ -18,7 +18,6 @@ extern FEAT_IDX feat_pattern_end;
 extern FEAT_IDX feat_pattern_old;
 extern FEAT_IDX feat_pattern_exit;
 extern FEAT_IDX feat_pattern_corrupted;
-extern FEAT_IDX feat_shallow_water;
 extern FEAT_IDX feat_deep_lava;
 extern FEAT_IDX feat_shallow_lava;
 extern FEAT_IDX feat_heavy_cold_zone;

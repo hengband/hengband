@@ -26,4 +26,5 @@ enum class TerrainTag {
     BLACK_MARKET,
     TOWN,
     DEEP_WATER,
+    SHALLOW_WATER,
 };

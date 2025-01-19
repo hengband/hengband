@@ -425,7 +425,7 @@ static void build_vault(
                 floor.object_level = floor.base_level;
                 break;
             case '~':
-                floor.set_terrain_id_at(pos, feat_shallow_water);
+                floor.set_terrain_id_at(pos, TerrainTag::SHALLOW_WATER);
                 break;
             case '=':
                 floor.set_terrain_id_at(pos, TerrainTag::DEEP_WATER);

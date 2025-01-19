@@ -404,6 +404,7 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
     const auto &terrains = TerrainList::get_instance();
     const auto terrain_id_rubble = terrains.get_terrain_id(TerrainTag::RUBBLE);
     const auto terrain_id_deep_water = terrains.get_terrain_id(TerrainTag::DEEP_WATER);
+    const auto terrain_id_shallow_water = terrains.get_terrain_id(TerrainTag::SHALLOW_WATER);
     const auto xhsize = xsize / 2;
     const auto yhsize = ysize / 2;
     short feat1;
@@ -417,7 +418,7 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
         break;
     case LAKE_T_WATER: /* Water */
         feat1 = terrain_id_deep_water;
-        feat2 = feat_shallow_water;
+        feat2 = terrain_id_shallow_water;
         feat3 = rand_choice(feat_ground_type);
         break;
     case LAKE_T_CAVE: /* Collapsed floor_ptr->grid_array */
@@ -436,9 +437,9 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
         feat3 = feat_grass;
         break;
     case LAKE_T_WATER_VAULT: /* Water vault */
-        feat1 = feat_shallow_water;
+        feat1 = terrain_id_shallow_water;
         feat2 = terrain_id_deep_water;
-        feat3 = feat_shallow_water;
+        feat3 = terrain_id_shallow_water;
         break;
     case LAKE_T_FIRE_VAULT: /* Fire Vault */
         feat1 = feat_shallow_lava;
