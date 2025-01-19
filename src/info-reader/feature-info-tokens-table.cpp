@@ -166,4 +166,5 @@ const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
     { "BRAKE", TerrainTag::BRAKE },
     { "FLOWER", TerrainTag::FLOWER },
     { "TREE", TerrainTag::TREE },
+    { "MOUNTAIN", TerrainTag::MOUNTAIN },
 };

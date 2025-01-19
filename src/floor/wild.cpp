@@ -900,10 +900,11 @@ void init_wilderness_terrains(void)
     init_terrain_table(TERRAIN_DESERT, terrain_id_dirt, "abc", terrain_floor, 2, terrain_id_dirt, 13, terrain_id_grass, MAX_FEAT_IN_TERRAIN - 15);
     const auto terrain_id_deep_lava = terrains.get_terrain_id(TerrainTag::DEEP_LAVA);
     const auto terrain_id_shallow_lava = terrains.get_terrain_id(TerrainTag::SHALLOW_LAVA);
-    init_terrain_table(TERRAIN_SHALLOW_LAVA, terrain_id_shallow_lava, "abc", terrain_id_shallow_lava, 14, terrain_id_deep_lava, 3, feat_mountain, MAX_FEAT_IN_TERRAIN - 17);
+    const auto terrain_id_mountain = terrains.get_terrain_id(TerrainTag::MOUNTAIN);
+    init_terrain_table(TERRAIN_SHALLOW_LAVA, terrain_id_shallow_lava, "abc", terrain_id_shallow_lava, 14, terrain_id_deep_lava, 3, terrain_id_mountain, MAX_FEAT_IN_TERRAIN - 17);
     init_terrain_table(
-        TERRAIN_DEEP_LAVA, terrain_id_deep_lava, "abcd", terrain_id_dirt, 3, terrain_id_shallow_lava, 3, terrain_id_deep_lava, 10, feat_mountain, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_MOUNTAIN, feat_mountain, "abcdef", terrain_floor, 1, terrain_id_brake, 1, terrain_id_grass, 2, terrain_id_dirt, 2, terrain_id_tree, 2, feat_mountain,
+        TERRAIN_DEEP_LAVA, terrain_id_deep_lava, "abcd", terrain_id_dirt, 3, terrain_id_shallow_lava, 3, terrain_id_deep_lava, 10, terrain_id_mountain, MAX_FEAT_IN_TERRAIN - 16);
+    init_terrain_table(TERRAIN_MOUNTAIN, terrain_id_mountain, "abcdef", terrain_floor, 1, terrain_id_brake, 1, terrain_id_grass, 2, terrain_id_dirt, 2, terrain_id_tree, 2, terrain_id_mountain,
         MAX_FEAT_IN_TERRAIN - 8);
 }
 

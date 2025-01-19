@@ -24,7 +24,6 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster-info.h"
 #include "room/lake-types.h"

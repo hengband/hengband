@@ -42,4 +42,5 @@ enum class TerrainTag {
     BRAKE, //!< 草むら.
     FLOWER,
     TREE,
+    MOUNTAIN,
 };
