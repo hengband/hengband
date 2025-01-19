@@ -364,18 +364,6 @@ void init_feat_variables()
     feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
 
     /* Terrains */
-    feat_deep_water = terrains.get_terrain_id_by_tag("DEEP_WATER");
-    feat_shallow_water = terrains.get_terrain_id_by_tag("SHALLOW_WATER");
-    feat_deep_lava = terrains.get_terrain_id_by_tag("DEEP_LAVA");
-    feat_shallow_lava = terrains.get_terrain_id_by_tag("SHALLOW_LAVA");
-    feat_heavy_cold_zone = terrains.get_terrain_id_by_tag("HEAVY_COLD_ZONE");
-    feat_cold_zone = terrains.get_terrain_id_by_tag("COLD_ZONE");
-    feat_heavy_electrical_zone = terrains.get_terrain_id_by_tag("HEAVY_ELECTRICAL_ZONE");
-    feat_electrical_zone = terrains.get_terrain_id_by_tag("ELECTRICAL_ZONE");
-    feat_deep_acid_puddle = terrains.get_terrain_id_by_tag("DEEP_ACID_PUDDLE");
-    feat_shallow_acid_puddle = terrains.get_terrain_id_by_tag("SHALLOW_ACID_PUDDLE");
-    feat_deep_poisonous_puddle = terrains.get_terrain_id_by_tag("DEEP_POISONOUS_PUDDLE");
-    feat_shallow_poisonous_puddle = terrains.get_terrain_id_by_tag("SHALLOW_POISONOUS_PUDDLE");
     feat_dirt = terrains.get_terrain_id_by_tag("DIRT");
     feat_grass = terrains.get_terrain_id_by_tag("GRASS");
     feat_flower = terrains.get_terrain_id_by_tag("FLOWER");

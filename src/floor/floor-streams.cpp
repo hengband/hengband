@@ -179,29 +179,30 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
     short feat2 = 0;
 
     const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const auto &terrains = TerrainList::get_instance();
 
     /* Choose water mainly */
     if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon.flags.has(DungeonFeatureType::WATER_RIVER)) {
-        feat1 = feat_deep_water;
-        feat2 = feat_shallow_water;
+        feat1 = terrains.get_terrain_id(TerrainTag::DEEP_WATER);
+        feat2 = terrains.get_terrain_id(TerrainTag::SHALLOW_WATER);
     } else /* others */
     {
         short select_deep_feat[10]{};
         short select_shallow_feat[10]{};
         auto select_id_max = 0;
         if (dungeon.flags.has(DungeonFeatureType::LAVA_RIVER)) {
-            select_deep_feat[select_id_max] = feat_deep_lava;
-            select_shallow_feat[select_id_max] = feat_shallow_lava;
+            select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_LAVA);
+            select_shallow_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::SHALLOW_LAVA);
             select_id_max++;
         }
         if (dungeon.flags.has(DungeonFeatureType::POISONOUS_RIVER)) {
-            select_deep_feat[select_id_max] = feat_deep_poisonous_puddle;
-            select_shallow_feat[select_id_max] = feat_shallow_poisonous_puddle;
+            select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_POISONOUS_PUDDLE);
+            select_shallow_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::SHALLOW_POISONOUS_PUDDLE);
             select_id_max++;
         }
         if (dungeon.flags.has(DungeonFeatureType::ACID_RIVER)) {
-            select_deep_feat[select_id_max] = feat_deep_acid_puddle;
-            select_shallow_feat[select_id_max] = feat_shallow_acid_puddle;
+            select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_ACID_PUDDLE);
+            select_shallow_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::SHALLOW_ACID_PUDDLE);
             select_id_max++;
         }
 
