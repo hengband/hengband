@@ -168,55 +168,53 @@ static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSI
 }
 
 /*!
- * @brief ランダムに川/溶岩流をダンジョンに配置する /
- * Places water /lava through dungeon.
- * @param feat1 中央部地形ID
- * @param feat2 境界部地形ID
+ * @brief ランダムに川/溶岩流をダンジョンに配置する
+ * @param floor_ptr フロアへの参照ポインタ
+ * @param dd_ptr ダンジョン生成データへの参照ポインタ
  */
 void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
 {
-    short feat1 = 0;
-    short feat2 = 0;
-
     const auto &dungeon = floor_ptr->get_dungeon_definition();
     const auto &terrains = TerrainList::get_instance();
 
     /* Choose water mainly */
+    auto tag1 = TerrainTag::NONE;
+    auto tag2 = TerrainTag::NONE;
     if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon.flags.has(DungeonFeatureType::WATER_RIVER)) {
-        feat1 = terrains.get_terrain_id(TerrainTag::DEEP_WATER);
-        feat2 = terrains.get_terrain_id(TerrainTag::SHALLOW_WATER);
+        tag1 = TerrainTag::DEEP_WATER;
+        tag2 = TerrainTag::SHALLOW_WATER;
     } else /* others */
     {
-        short select_deep_feat[10]{};
-        short select_shallow_feat[10]{};
+        std::array<TerrainTag, 10> select_deep_feat{};
+        std::array<TerrainTag, 10> select_shallow_feat{};
         auto select_id_max = 0;
         if (dungeon.flags.has(DungeonFeatureType::LAVA_RIVER)) {
-            select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_LAVA);
-            select_shallow_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::SHALLOW_LAVA);
+            select_deep_feat[select_id_max] = TerrainTag::DEEP_LAVA;
+            select_shallow_feat[select_id_max] = TerrainTag::SHALLOW_LAVA;
             select_id_max++;
         }
         if (dungeon.flags.has(DungeonFeatureType::POISONOUS_RIVER)) {
-            select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_POISONOUS_PUDDLE);
-            select_shallow_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::SHALLOW_POISONOUS_PUDDLE);
+            select_deep_feat[select_id_max] = TerrainTag::DEEP_POISONOUS_PUDDLE;
+            select_shallow_feat[select_id_max] = TerrainTag::SHALLOW_POISONOUS_PUDDLE;
             select_id_max++;
         }
         if (dungeon.flags.has(DungeonFeatureType::ACID_RIVER)) {
-            select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_ACID_PUDDLE);
-            select_shallow_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::SHALLOW_ACID_PUDDLE);
+            select_deep_feat[select_id_max] = TerrainTag::DEEP_ACID_PUDDLE;
+            select_shallow_feat[select_id_max] = TerrainTag::SHALLOW_ACID_PUDDLE;
             select_id_max++;
         }
 
         if (select_id_max > 0) {
             const auto selected = randint0(select_id_max);
-            feat1 = select_deep_feat[selected];
-            feat2 = select_shallow_feat[selected];
+            tag1 = select_deep_feat[selected];
+            tag2 = select_shallow_feat[selected];
         } else {
             return;
         }
     }
 
-    if (feat1) {
-        const auto &terrain = TerrainList::get_instance().get_terrain(feat1);
+    if (tag1 > TerrainTag::NONE) {
+        const auto &terrain = terrains.get_terrain(tag1);
         auto is_lava = dd_ptr->laketype == LAKE_T_LAVA;
         is_lava &= terrain.flags.has(TerrainCharacteristics::LAVA);
         auto is_water = dd_ptr->laketype == LAKE_T_WATER;
@@ -263,7 +261,9 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
 
     constexpr auto width_rivers = 2;
     const auto wid = randint1(width_rivers);
-    recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
+    const auto terrain_id1 = terrains.get_terrain_id(tag1);
+    const auto terrain_id2 = terrains.get_terrain_id(tag2);
+    recursive_river(floor_ptr, x1, y1, x2, y2, terrain_id1, terrain_id2, wid);
 
     /* Hack - Save the location as a "room" */
     if (dd_ptr->cent_n < dd_ptr->centers.size()) {
