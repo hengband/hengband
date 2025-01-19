@@ -205,6 +205,10 @@ public:
     static const std::string &decide_horror_message(const EnumClassFlagGroup<MonsterKindType> &kind_flags);
     static bool check_blow_times_for_knowing_damage(const int level, const int max_roll, const int hitted_time, const EnumClassFlagGroup<MonsterKindType> &kind_flags);
     static int calc_figurine_value(int level);
+    static int calc_power_from_maxhp(decltype(MonraceDefinition::hit_dice) hit_dice, bool force_maxhp);
+    static int calc_power_from_speed(int power, decltype(MonraceDefinition::speed) speed);
+    static int calc_power_from_defensiveness(int power, int num_resistances, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags);
+    static int calc_power_from_moving(int power, const EnumClassFlagGroup<MonsterBehaviorType> &behavior_flags);
 
     //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
     bool has_entity() const;

@@ -234,38 +234,12 @@ int MonraceDefinition::calc_power() const
 {
     auto power = 0;
     const auto num_resistances = EnumClassFlagGroup<MonsterResistanceType>(this->resistance_flags & RFR_EFF_IMMUNE_ELEMENT_MASK).count();
-    if (this->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
-        power = this->hit_dice.maxroll() * 2;
-    } else {
-        power = this->hit_dice.floored_expected_value_multiplied_by(2);
-    }
 
+    power = calc_power_from_maxhp(this->hit_dice, this->misc_flags.has(MonsterMiscType::FORCE_MAXHP));
     power = power * (100 + this->level) / 100;
-    if (this->speed > STANDARD_SPEED) {
-        power = power * (this->speed * 2 - 110) / 100;
-    }
-
-    if (this->speed < STANDARD_SPEED) {
-        power = power * (this->speed - 20) / 100;
-    }
-
-    if (num_resistances > 2) {
-        power = power * (num_resistances * 2 + 5) / 10;
-    } else if (this->ability_flags.has(MonsterAbilityType::INVULNER)) {
-        power = power * 4 / 3;
-    } else if (this->ability_flags.has(MonsterAbilityType::HEAL)) {
-        power = power * 4 / 3;
-    } else if (this->ability_flags.has(MonsterAbilityType::DRAIN_MANA)) {
-        power = power * 11 / 10;
-    }
-
-    if (this->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
-        power = power * 9 / 10;
-    }
-
-    if (this->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50)) {
-        power = power * 9 / 10;
-    }
+    power = calc_power_from_speed(power, this->speed);
+    power = calc_power_from_defensiveness(power, num_resistances, this->ability_flags);
+    power = calc_power_from_moving(power, this->behavior_flags);
 
     if (this->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         power *= 100000;
@@ -973,4 +947,76 @@ int MonraceDefinition::calc_figurine_value(int level)
     }
 
     return 14000 + (level - 50) * 2000;
+}
+
+/*!
+ * @brief モンスターの強さの総合計算の最大HP関連部分
+ * @param hit_dice HPのダイス
+ * @param force_maxhp ダイスの最大値で固定するか否か
+ * @return 計算結果
+ */
+int MonraceDefinition::calc_power_from_maxhp(decltype(MonraceDefinition::hit_dice) hit_dice, bool force_maxhp)
+{
+    return force_maxhp ? hit_dice.maxroll() * 2 : hit_dice.floored_expected_value_multiplied_by(2);
+}
+
+/*!
+ * @brief モンスターの強さの総合計算の加速関連部分
+ * @param power 計算に使う強さの値
+ * @param speed 加速の値
+ * @return 計算結果
+ */
+int MonraceDefinition::calc_power_from_speed(int power, decltype(MonraceDefinition::speed) speed)
+{
+    auto result = power;
+    if (speed > STANDARD_SPEED) {
+        result = result * (speed * 2 - 110) / 100;
+    }
+
+    if (speed < STANDARD_SPEED) {
+        result = result * (speed - 20) / 100;
+    }
+    return result;
+}
+
+/*!
+ * @brief モンスターの強さの総合計算の防御関連部分
+ * @param power 計算に使う強さの値
+ * @param num_resistances 属性耐性の数
+ * @param ability_flags 魔法フラグ
+ * @return 計算結果
+ */
+int MonraceDefinition::calc_power_from_defensiveness(int power, int num_resistances, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags)
+{
+    if (num_resistances > 2) {
+        return power * (num_resistances * 2 + 5) / 10;
+    } else if (ability_flags.has(MonsterAbilityType::INVULNER)) {
+        return power * 4 / 3;
+    } else if (ability_flags.has(MonsterAbilityType::HEAL)) {
+        return power * 4 / 3;
+    } else if (ability_flags.has(MonsterAbilityType::DRAIN_MANA)) {
+        return power * 11 / 10;
+    }
+    return power;
+}
+
+/*!
+ * @brief モンスターの強さの総合計算の移動関連部分
+ * @param power 計算に使う強さの値
+ * @param behavior_flags 行動フラグ
+ * @return 計算結果
+ */
+int MonraceDefinition::calc_power_from_moving(int power, const EnumClassFlagGroup<MonsterBehaviorType> &behavior_flags)
+{
+    auto result = power;
+
+    if (behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
+        result = result * 9 / 10;
+    }
+
+    if (behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50)) {
+        result = result * 9 / 10;
+    }
+
+    return result;
 }
