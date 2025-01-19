@@ -53,6 +53,9 @@
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <map>
+#include <numeric>
+#include <utility>
 
 constexpr auto MAX_FEAT_IN_TERRAIN = 18;
 
@@ -829,84 +832,59 @@ void seed_wilderness(void)
 }
 
 /*!
- * @brief 荒野の地勢設定を初期化する /
- * Initialize wilderness array
- * @param terrain 初期化したい地勢ID
- * @param feat_global 基本的な地形ID
- * @param fmt 地勢内の地形数を参照するための独自フォーマット
+ * @brief 荒野の地勢設定を初期化する
  */
-static void init_terrain_table(int terrain, int16_t feat_global, concptr fmt, ...)
+void init_wilderness_terrains()
 {
-    va_list vp;
-    va_start(vp, fmt);
-    conv_terrain2feat[terrain] = feat_global;
-    int cur = 0;
-    char check = 'a';
-    for (concptr p = fmt; *p; p++) {
-        if (*p != check) {
-            plog_fmt("Format error");
-            continue;
-        }
+    /// @details 地上フロアの種類をキーに、地形タグと出現率 (1/18ずつ)のペアを値にした連想配列.
+    /// map にするとTerrainTag の順番がソートされてしまうので不適。terrain_table もmap に変えればここもmap でOK.
+    /// wt_type も将来的にenum class へ変える.
+    static const std::map<wt_type, std::vector<std::pair<TerrainTag, int>>> wt_tag_map{
+        { TERRAIN_EDGE, { { TerrainTag::PERMANENT_WALL, 18 } } },
+        { TERRAIN_TOWN, { { TerrainTag::FLOOR, 18 } } },
+        { TERRAIN_DEEP_WATER, { { TerrainTag::DEEP_WATER, 12 }, { TerrainTag::SHALLOW_WATER, 6 } } },
+        { TERRAIN_SHALLOW_WATER, { { TerrainTag::DEEP_WATER, 3 }, { TerrainTag::SHALLOW_WATER, 12 }, { TerrainTag::FLOOR, 1 }, { TerrainTag::DIRT, 1 }, { TerrainTag::GRASS, 1 } } },
+        { TERRAIN_SWAMP, { { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 3 }, { TerrainTag::TREE, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::SHALLOW_WATER, 4 }, { TerrainTag::SWAMP, 7 } } },
+        { TERRAIN_DIRT, { { TerrainTag::FLOOR, 3 }, { TerrainTag::DIRT, 10 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 1 }, { TerrainTag::TREE, 2 } } },
+        { TERRAIN_GRASS, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 9 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::TREE, 2 } } },
+        { TERRAIN_TREES, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 1 }, { TerrainTag::TREE, 11 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::GRASS, 2 } } },
+        { TERRAIN_DESERT, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 13 }, { TerrainTag::GRASS, 3 } } },
+        { TERRAIN_SHALLOW_LAVA, { { TerrainTag::SHALLOW_LAVA, 14 }, { TerrainTag::DEEP_LAVA, 3 }, { TerrainTag::MOUNTAIN, 1 } } },
+        { TERRAIN_DEEP_LAVA, { { TerrainTag::DIRT, 3 }, { TerrainTag::SHALLOW_LAVA, 3 }, { TerrainTag::DEEP_LAVA, 10 }, { TerrainTag::MOUNTAIN, 2 } } },
+        { TERRAIN_MOUNTAIN, { { TerrainTag::FLOOR, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::TREE, 2 }, { TerrainTag::MOUNTAIN, 10 } } },
+    };
 
-        FEAT_IDX feat = (int16_t)va_arg(vp, int);
-        int num = va_arg(vp, int);
-        int lim = cur + num;
-        for (; (cur < lim) && (cur < MAX_FEAT_IN_TERRAIN); cur++) {
-            terrain_table[terrain][cur] = feat;
-        }
+    static const std::map<wt_type, TerrainTag> base_terrain_id_map{
+        { TERRAIN_EDGE, TerrainTag::PERMANENT_WALL },
+        { TERRAIN_TOWN, TerrainTag::TOWN },
+        { TERRAIN_DEEP_WATER, TerrainTag::DEEP_WATER },
+        { TERRAIN_SHALLOW_WATER, TerrainTag::SHALLOW_WATER },
+        { TERRAIN_SWAMP, TerrainTag::SWAMP },
+        { TERRAIN_DIRT, TerrainTag::DIRT },
+        { TERRAIN_GRASS, TerrainTag::GRASS },
+        { TERRAIN_TREES, TerrainTag::TREE },
+        { TERRAIN_DESERT, TerrainTag::DIRT },
+        { TERRAIN_SHALLOW_LAVA, TerrainTag::SHALLOW_LAVA },
+        { TERRAIN_DEEP_LAVA, TerrainTag::DEEP_LAVA },
+        { TERRAIN_MOUNTAIN, TerrainTag::MOUNTAIN },
+    };
 
-        if (cur >= MAX_FEAT_IN_TERRAIN) {
-            break;
-        }
-
-        check++;
-    }
-
-    if (cur < MAX_FEAT_IN_TERRAIN) {
-        plog_fmt("Too few parameters");
-    }
-
-    va_end(vp);
-}
-
-/*!
- * @brief 荒野の地勢設定全体を初期化するメインルーチン /
- * Initialize arrays for wilderness terrains
- */
-void init_wilderness_terrains(void)
-{
     const auto &terrains = TerrainList::get_instance();
-    const auto terrain_floor = terrains.get_terrain_id(TerrainTag::FLOOR);
-    const auto terrain_permanent_wall = terrains.get_terrain_id(TerrainTag::PERMANENT_WALL);
-    init_terrain_table(TERRAIN_EDGE, terrain_permanent_wall, "a", terrain_permanent_wall, MAX_FEAT_IN_TERRAIN);
-    init_terrain_table(TERRAIN_TOWN, terrains.get_terrain_id(TerrainTag::TOWN), "a", terrain_floor, MAX_FEAT_IN_TERRAIN);
-    const auto terrain_id_deep_water = terrains.get_terrain_id(TerrainTag::DEEP_WATER);
-    const auto terrain_id_shallow_water = terrains.get_terrain_id(TerrainTag::SHALLOW_WATER);
-    init_terrain_table(TERRAIN_DEEP_WATER, terrain_id_deep_water, "ab", terrain_id_deep_water, 12, terrain_id_shallow_water, MAX_FEAT_IN_TERRAIN - 12);
-    const auto terrain_id_dirt = terrains.get_terrain_id(TerrainTag::DIRT);
-    const auto terrain_id_grass = terrains.get_terrain_id(TerrainTag::GRASS);
-    init_terrain_table(TERRAIN_SHALLOW_WATER, terrain_id_shallow_water, "abcde", terrain_id_deep_water, 3, terrain_id_shallow_water, 12, terrain_floor, 1, terrain_id_dirt, 1, terrain_id_grass,
-        MAX_FEAT_IN_TERRAIN - 17);
-    const auto terrain_id_brake = terrains.get_terrain_id(TerrainTag::BRAKE);
-    const auto terrain_id_tree = terrains.get_terrain_id(TerrainTag::TREE);
-    const auto terrain_id_swamp = terrains.get_terrain_id(TerrainTag::SWAMP);
-    init_terrain_table(TERRAIN_SWAMP, terrain_id_swamp, "abcdef", terrain_id_dirt, 2, terrain_id_grass, 3, terrain_id_tree, 1, terrain_id_brake, 1, terrain_id_shallow_water, 4, terrain_id_swamp,
-        MAX_FEAT_IN_TERRAIN - 11);
-    const auto terrain_id_flower = terrains.get_terrain_id(TerrainTag::FLOWER);
-    init_terrain_table(
-        TERRAIN_DIRT, terrain_id_dirt, "abcdef", terrain_floor, 3, terrain_id_dirt, 10, terrain_id_flower, 1, terrain_id_brake, 1, terrain_id_grass, 1, terrain_id_tree, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(
-        TERRAIN_GRASS, terrain_id_grass, "abcdef", terrain_floor, 2, terrain_id_dirt, 2, terrain_id_grass, 9, terrain_id_flower, 1, terrain_id_brake, 2, terrain_id_tree, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_TREES, terrain_id_tree, "abcde", terrain_floor, 2, terrain_id_dirt, 1, terrain_id_tree, 11, terrain_id_brake, 2, terrain_id_grass, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_DESERT, terrain_id_dirt, "abc", terrain_floor, 2, terrain_id_dirt, 13, terrain_id_grass, MAX_FEAT_IN_TERRAIN - 15);
-    const auto terrain_id_deep_lava = terrains.get_terrain_id(TerrainTag::DEEP_LAVA);
-    const auto terrain_id_shallow_lava = terrains.get_terrain_id(TerrainTag::SHALLOW_LAVA);
-    const auto terrain_id_mountain = terrains.get_terrain_id(TerrainTag::MOUNTAIN);
-    init_terrain_table(TERRAIN_SHALLOW_LAVA, terrain_id_shallow_lava, "abc", terrain_id_shallow_lava, 14, terrain_id_deep_lava, 3, terrain_id_mountain, MAX_FEAT_IN_TERRAIN - 17);
-    init_terrain_table(
-        TERRAIN_DEEP_LAVA, terrain_id_deep_lava, "abcd", terrain_id_dirt, 3, terrain_id_shallow_lava, 3, terrain_id_deep_lava, 10, terrain_id_mountain, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_MOUNTAIN, terrain_id_mountain, "abcdef", terrain_floor, 1, terrain_id_brake, 1, terrain_id_grass, 2, terrain_id_dirt, 2, terrain_id_tree, 2, terrain_id_mountain,
-        MAX_FEAT_IN_TERRAIN - 8);
+    for (const auto &[wt, tags] : wt_tag_map) {
+        const auto check = std::accumulate(tags.begin(), tags.end(), 0, [](int sum, const auto &x) { return sum + x.second; });
+        if (check != MAX_FEAT_IN_TERRAIN) {
+            THROW_EXCEPTION(std::logic_error, "Initializing wilderness is failed!");
+        }
+
+        conv_terrain2feat[wt] = terrains.get_terrain_id(base_terrain_id_map.at(wt));
+        auto cur = 0;
+        for (const auto &[tag, num] : tags) {
+            const auto limit = cur + num;
+            for (; (cur < limit) && (cur < MAX_FEAT_IN_TERRAIN); cur++) {
+                terrain_table[wt][cur] = terrains.get_terrain_id(tag);
+            }
+        }
+    }
 }
 
 void init_wilderness_encounter()
