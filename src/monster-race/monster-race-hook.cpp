@@ -379,35 +379,3 @@ bool vault_aux_cthulhu(PlayerType *player_ptr, MonraceId r_idx)
 
     return true;
 }
-
-/*!
- * @brief モンスターがダークエルフpitの生成必要条件を満たしているかを返す /
- * Helper function for "monster pit (dark elf)"
- * @param r_idx 確認したいモンスター種族ID
- * @return 生成必要条件を満たしているならTRUEを返す。
- */
-bool vault_aux_dark_elf(PlayerType *player_ptr, MonraceId r_idx)
-{
-    static const std::set<MonraceId> dark_elf_list = {
-        MonraceId::D_ELF,
-        MonraceId::D_ELF_MAGE,
-        MonraceId::D_ELF_WARRIOR,
-        MonraceId::D_ELF_PRIEST,
-        MonraceId::D_ELF_LORD,
-        MonraceId::D_ELF_WARLOCK,
-        MonraceId::D_ELF_DRUID,
-        MonraceId::NIGHTBLADE,
-        MonraceId::D_ELF_SORC,
-        MonraceId::D_ELF_SHADE,
-    };
-
-    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= monrace.is_suitable_for_special_room();
-    if (!is_valid) {
-        return false;
-    }
-
-    return dark_elf_list.find(r_idx) != dark_elf_list.end();
-}

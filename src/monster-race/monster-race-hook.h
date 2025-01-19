@@ -25,4 +25,3 @@ bool vault_aux_symbol_e(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_symbol_g(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_dragon(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_cthulhu(PlayerType *player_ptr, MonraceId r_idx);
-bool vault_aux_dark_elf(PlayerType *player_ptr, MonraceId r_idx);
