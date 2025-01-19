@@ -887,20 +887,21 @@ void init_wilderness_terrains(void)
     const auto terrain_id_grass = terrains.get_terrain_id(TerrainTag::GRASS);
     init_terrain_table(TERRAIN_SHALLOW_WATER, terrain_id_shallow_water, "abcde", terrain_id_deep_water, 3, terrain_id_shallow_water, 12, terrain_floor, 1, terrain_id_dirt, 1, terrain_id_grass,
         MAX_FEAT_IN_TERRAIN - 17);
-    init_terrain_table(TERRAIN_SWAMP, feat_swamp, "abcdef", terrain_id_dirt, 2, terrain_id_grass, 3, feat_tree, 1, feat_brake, 1, terrain_id_shallow_water, 4, feat_swamp,
+    const auto terrain_id_brake = terrains.get_terrain_id(TerrainTag::BRAKE);
+    init_terrain_table(TERRAIN_SWAMP, feat_swamp, "abcdef", terrain_id_dirt, 2, terrain_id_grass, 3, feat_tree, 1, terrain_id_brake, 1, terrain_id_shallow_water, 4, feat_swamp,
         MAX_FEAT_IN_TERRAIN - 11);
     init_terrain_table(
-        TERRAIN_DIRT, terrain_id_dirt, "abcdef", terrain_floor, 3, terrain_id_dirt, 10, feat_flower, 1, feat_brake, 1, terrain_id_grass, 1, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
+        TERRAIN_DIRT, terrain_id_dirt, "abcdef", terrain_floor, 3, terrain_id_dirt, 10, feat_flower, 1, terrain_id_brake, 1, terrain_id_grass, 1, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
     init_terrain_table(
-        TERRAIN_GRASS, terrain_id_grass, "abcdef", terrain_floor, 2, terrain_id_dirt, 2, terrain_id_grass, 9, feat_flower, 1, feat_brake, 2, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_TREES, feat_tree, "abcde", terrain_floor, 2, terrain_id_dirt, 1, feat_tree, 11, feat_brake, 2, terrain_id_grass, MAX_FEAT_IN_TERRAIN - 16);
+        TERRAIN_GRASS, terrain_id_grass, "abcdef", terrain_floor, 2, terrain_id_dirt, 2, terrain_id_grass, 9, feat_flower, 1, terrain_id_brake, 2, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
+    init_terrain_table(TERRAIN_TREES, feat_tree, "abcde", terrain_floor, 2, terrain_id_dirt, 1, feat_tree, 11, terrain_id_brake, 2, terrain_id_grass, MAX_FEAT_IN_TERRAIN - 16);
     init_terrain_table(TERRAIN_DESERT, terrain_id_dirt, "abc", terrain_floor, 2, terrain_id_dirt, 13, terrain_id_grass, MAX_FEAT_IN_TERRAIN - 15);
     const auto terrain_id_deep_lava = terrains.get_terrain_id(TerrainTag::DEEP_LAVA);
     const auto terrain_id_shallow_lava = terrains.get_terrain_id(TerrainTag::SHALLOW_LAVA);
     init_terrain_table(TERRAIN_SHALLOW_LAVA, terrain_id_shallow_lava, "abc", terrain_id_shallow_lava, 14, terrain_id_deep_lava, 3, feat_mountain, MAX_FEAT_IN_TERRAIN - 17);
     init_terrain_table(
         TERRAIN_DEEP_LAVA, terrain_id_deep_lava, "abcd", terrain_id_dirt, 3, terrain_id_shallow_lava, 3, terrain_id_deep_lava, 10, feat_mountain, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_MOUNTAIN, feat_mountain, "abcdef", terrain_floor, 1, feat_brake, 1, terrain_id_grass, 2, terrain_id_dirt, 2, feat_tree, 2, feat_mountain,
+    init_terrain_table(TERRAIN_MOUNTAIN, feat_mountain, "abcdef", terrain_floor, 1, terrain_id_brake, 1, terrain_id_grass, 2, terrain_id_dirt, 2, feat_tree, 2, feat_mountain,
         MAX_FEAT_IN_TERRAIN - 8);
 }
 

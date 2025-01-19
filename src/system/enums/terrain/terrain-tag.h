@@ -39,4 +39,5 @@ enum class TerrainTag {
     SHALLOW_POISONOUS_PUDDLE,
     DIRT,
     GRASS,
+    BRAKE, //!< 草むら.
 };

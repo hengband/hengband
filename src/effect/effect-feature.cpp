@@ -24,7 +24,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
-#include "system/terrain/terrain-list.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
@@ -128,7 +127,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
 
         if (message) {
             msg_format(_("木は%s。", "A tree %s"), message);
-            cave_set_feat(player_ptr, y, x, one_in_(3) ? feat_brake : TerrainList::get_instance().get_terrain_id(TerrainTag::GRASS));
+            cave_set_feat(player_ptr, pos, one_in_(3) ? TerrainTag::BRAKE : TerrainTag::GRASS);
 
             /* Observe */
             if (grid.is_mark()) {

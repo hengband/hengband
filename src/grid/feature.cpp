@@ -41,7 +41,6 @@ FEAT_IDX feat_pattern_corrupted;
 
 /* Terrains */
 FEAT_IDX feat_flower;
-FEAT_IDX feat_brake;
 FEAT_IDX feat_tree;
 FEAT_IDX feat_mountain;
 FEAT_IDX feat_swamp;

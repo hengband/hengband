@@ -365,7 +365,6 @@ void init_feat_variables()
 
     /* Terrains */
     feat_flower = terrains.get_terrain_id_by_tag("FLOWER");
-    feat_brake = terrains.get_terrain_id_by_tag("BRAKE");
     feat_tree = terrains.get_terrain_id_by_tag("TREE");
     feat_mountain = terrains.get_terrain_id_by_tag("MOUNTAIN");
     feat_swamp = terrains.get_terrain_id_by_tag("SWAMP");
