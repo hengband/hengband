@@ -18,7 +18,6 @@ extern FEAT_IDX feat_pattern_end;
 extern FEAT_IDX feat_pattern_old;
 extern FEAT_IDX feat_pattern_exit;
 extern FEAT_IDX feat_pattern_corrupted;
-extern FEAT_IDX feat_grass;
 extern FEAT_IDX feat_flower;
 extern FEAT_IDX feat_brake;
 extern FEAT_IDX feat_tree;

@@ -38,4 +38,5 @@ enum class TerrainTag {
     DEEP_POISONOUS_PUDDLE,
     SHALLOW_POISONOUS_PUDDLE,
     DIRT,
+    GRASS,
 };

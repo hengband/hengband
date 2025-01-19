@@ -40,7 +40,6 @@ FEAT_IDX feat_pattern_exit;
 FEAT_IDX feat_pattern_corrupted;
 
 /* Terrains */
-FEAT_IDX feat_grass;
 FEAT_IDX feat_flower;
 FEAT_IDX feat_brake;
 FEAT_IDX feat_tree;

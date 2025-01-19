@@ -162,4 +162,5 @@ const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
     { "DEEP_POISONOUS_PUDDLE", TerrainTag::DEEP_POISONOUS_PUDDLE },
     { "SHALLOW_POISONOUS_PUDDLE", TerrainTag::SHALLOW_POISONOUS_PUDDLE },
     { "DIRT", TerrainTag::DIRT },
+    { "GRASS", TerrainTag::GRASS },
 };
