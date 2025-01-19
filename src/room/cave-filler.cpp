@@ -405,6 +405,7 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
     const auto terrain_id_rubble = terrains.get_terrain_id(TerrainTag::RUBBLE);
     const auto terrain_id_deep_water = terrains.get_terrain_id(TerrainTag::DEEP_WATER);
     const auto terrain_id_shallow_water = terrains.get_terrain_id(TerrainTag::SHALLOW_WATER);
+    const auto terrain_id_deep_lava = terrains.get_terrain_id(TerrainTag::DEEP_LAVA);
     const auto xhsize = xsize / 2;
     const auto yhsize = ysize / 2;
     short feat1;
@@ -412,7 +413,7 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
     short feat3;
     switch (type) {
     case LAKE_T_LAVA: /* Lava */
-        feat1 = feat_deep_lava;
+        feat1 = terrain_id_deep_lava;
         feat2 = feat_shallow_lava;
         feat3 = rand_choice(feat_ground_type);
         break;
@@ -443,7 +444,7 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
         break;
     case LAKE_T_FIRE_VAULT: /* Fire Vault */
         feat1 = feat_shallow_lava;
-        feat2 = feat_deep_lava;
+        feat2 = terrain_id_deep_lava;
         feat3 = feat_shallow_lava;
         break;
     default:

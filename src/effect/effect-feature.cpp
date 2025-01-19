@@ -318,7 +318,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             }
             cave_set_feat(player_ptr, y, x, feat_shallow_lava);
         } else if (dam) {
-            cave_set_feat(player_ptr, y, x, feat_deep_lava);
+            cave_set_feat(player_ptr, pos, TerrainTag::DEEP_LAVA);
         }
 
         break;

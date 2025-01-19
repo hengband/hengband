@@ -191,7 +191,7 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
         short select_shallow_feat[10]{};
         auto select_id_max = 0;
         if (dungeon.flags.has(DungeonFeatureType::LAVA_RIVER)) {
-            select_deep_feat[select_id_max] = feat_deep_lava;
+            select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_LAVA);
             select_shallow_feat[select_id_max] = feat_shallow_lava;
             select_id_max++;
         }
