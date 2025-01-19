@@ -29,4 +29,5 @@ enum class TerrainTag {
     SHALLOW_WATER,
     DEEP_LAVA,
     SHALLOW_LAVA,
+    HEAVY_COLD_ZONE,
 };

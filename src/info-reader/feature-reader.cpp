@@ -364,7 +364,6 @@ void init_feat_variables()
     feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
 
     /* Terrains */
-    feat_heavy_cold_zone = terrains.get_terrain_id_by_tag("HEAVY_COLD_ZONE");
     feat_cold_zone = terrains.get_terrain_id_by_tag("COLD_ZONE");
     feat_heavy_electrical_zone = terrains.get_terrain_id_by_tag("HEAVY_ELECTRICAL_ZONE");
     feat_electrical_zone = terrains.get_terrain_id_by_tag("ELECTRICAL_ZONE");
