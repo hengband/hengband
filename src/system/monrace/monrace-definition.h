@@ -176,6 +176,8 @@ public:
     bool is_suitable_for_volcano() const;
     bool is_suitable_for_mountain() const;
     bool is_suitable_for_tanuki() const;
+    bool is_suitable_for_figurine() const;
+    bool can_entry_arena() const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();
@@ -205,5 +207,7 @@ private:
     std::vector<Reinforce> reinforces; //!< 指定護衛リスト
     MonsterSex sex{}; //!< 性別 / Sex
 
+    bool is_suitable_for_arena() const;
+    bool has_blow_with_damage() const;
     const std::string &decide_horror_message() const;
 };

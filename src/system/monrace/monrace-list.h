@@ -54,6 +54,7 @@ public:
     MonraceId pick_id_at_random() const;
     const MonraceDefinition &pick_monrace_at_random() const;
     int calc_defeat_count() const;
+    MonraceId select_figurine(int max_level) const;
 
     void reset_current_numbers();
     void reset_all_visuals();
