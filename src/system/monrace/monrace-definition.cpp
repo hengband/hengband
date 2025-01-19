@@ -542,6 +542,14 @@ bool MonraceDefinition::is_suitable_for_orc_pit() const
     return is_suitable;
 }
 
+bool MonraceDefinition::is_suitable_for_troll_pit() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::TROLL);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::UNDEAD);
+    return is_suitable;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);

@@ -23,7 +23,6 @@ bool vault_aux_mimic(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_clone(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_symbol_e(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_symbol_g(PlayerType *player_ptr, MonraceId r_idx);
-bool vault_aux_troll(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_giant(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_dragon(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_demon(PlayerType *player_ptr, MonraceId r_idx);

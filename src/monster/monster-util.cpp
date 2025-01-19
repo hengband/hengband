@@ -266,7 +266,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::ORC:
         return is_suitable_for_dungeon && monrace.is_suitable_for_orc_pit();
     case MonraceHook::TROLL:
-        return vault_aux_troll(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_troll_pit();
     case MonraceHook::GIANT:
         return vault_aux_giant(player_ptr, monrace_id);
     case MonraceHook::DRAGON:
