@@ -44,6 +44,7 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
+#include <cmath>
 
 /*!
  * @brief 再帰フラクタルアルゴリズムによりダンジョン内に川を配置する
@@ -57,41 +58,35 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
 {
     const auto length = distance(pos_start.y, pos_start.x, pos_end.y, pos_end.x);
     if (length > 4) {
-        /*
-         * Divide path in half and call routine twice.
-         * There is a small chance of splitting the river
-         */
         const auto dy = (pos_end.y - pos_start.y) / 2;
-        int changex;
+        Pos2DVec vec_change(0, 0);
         if (dy != 0) {
-            /* perturbation perpendicular to path */
-            changex = randint1(abs(dy)) * 2 - abs(dy);
-        } else {
-            changex = 0;
+            vec_change.x = randint1(std::abs(dy)) * 2 - std::abs(dy);
         }
 
         const auto dx = (pos_end.x - pos_start.x) / 2;
-        int changey;
         if (dx != 0) {
-            /* perturbation perpendicular to path */
-            changey = randint1(abs(dx)) * 2 - abs(dx);
-        } else {
-            changey = 0;
+            vec_change.y = randint1(std::abs(dx)) * 2 - std::abs(dx);
         }
 
-        if (!in_bounds(floor_ptr, pos_start.y + dy + changey, pos_start.x + dx + changex)) {
-            changex = 0;
-            changey = 0;
+        Pos2DVec vec_division(dy, dx);
+        auto pos = pos_start + vec_division + vec_change;
+        if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+            vec_change = { 0, 0 };
         }
 
         /* construct river out of two smaller ones */
-        recursive_river(floor_ptr, pos_start, { pos_start.y + dy + changey, pos_start.x + dx + changex }, tag_deep, tag_shallow, width);
-        recursive_river(floor_ptr, { pos_start.y + dy + changey, pos_start.x + dx + changex }, pos_end, tag_deep, tag_shallow, width);
+        pos = pos_start + vec_division + vec_change;
+        recursive_river(floor_ptr, pos_start, pos, tag_deep, tag_shallow, width);
+        recursive_river(floor_ptr, pos, pos_end, tag_deep, tag_shallow, width);
 
         /* Split the river some of the time - junctions look cool */
         constexpr auto chance_river_junction = 50;
         if (one_in_(chance_river_junction) && (width > 0)) {
-            recursive_river(floor_ptr, { pos_start.y + dy + changey, pos_start.x + dx + changex }, { pos_start.y + 8 * (dy + changey), pos_start.x + 8 * (dx + changex) }, tag_deep, tag_shallow, width - 1);
+            vec_division *= 8;
+            vec_change *= 8;
+            const auto pos_junction = pos_start + vec_division + vec_change;
+            recursive_river(floor_ptr, pos, pos_junction, tag_deep, tag_shallow, width - 1);
         }
 
         return;
