@@ -123,12 +123,12 @@ std::optional<std::string> askfor(int len, std::string_view initial_value, bool 
             pos++;
 #endif
             break;
-        case SKEY_TOP:
+        case SKEY_HOME:
         case KTRL('a'):
             color = TERM_WHITE;
             pos = 0;
             break;
-        case SKEY_BOTTOM:
+        case SKEY_END:
         case KTRL('e'):
             color = TERM_WHITE;
             pos = std::string_view(buf.data()).length();

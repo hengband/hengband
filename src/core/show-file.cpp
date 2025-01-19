@@ -390,10 +390,10 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
 
             break;
         }
-        case SKEY_TOP:
+        case SKEY_HOME:
             line = 0;
             break;
-        case SKEY_BOTTOM:
+        case SKEY_END:
             line = ((size - 1) / rows) * rows;
             break;
         case '%': {

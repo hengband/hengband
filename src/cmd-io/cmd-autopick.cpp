@@ -17,13 +17,14 @@
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
 
 /*
  * Check special key code and get a movement command id
  */
-static int analyze_move_key(text_body_type *tb, int skey)
+static int analyze_move_key(text_body_type *tb, uint32_t skey)
 {
     int com_id;
     if (!(skey & SKEY_MASK)) {
@@ -49,11 +50,11 @@ static int analyze_move_key(text_body_type *tb, int skey)
     case SKEY_PGDOWN:
         com_id = EC_PGDOWN;
         break;
-    case SKEY_TOP:
-        com_id = EC_TOP;
+    case SKEY_HOME:
+        com_id = any_bits(skey, SKEY_MOD_CONTROL) ? EC_TOP : EC_BOL;
         break;
-    case SKEY_BOTTOM:
-        com_id = EC_BOTTOM;
+    case SKEY_END:
+        com_id = any_bits(skey, SKEY_MOD_CONTROL) ? EC_BOTTOM : EC_EOL;
         break;
     default:
         return 0;
@@ -180,7 +181,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         key = inkey_special(true);
 
         if (key & SKEY_MASK) {
-            com_id = analyze_move_key(tb, key);
+            com_id = analyze_move_key(tb, static_cast<uint32_t>(key));
         } else if (key == ESCAPE) {
             com_id = do_command_menu(0, 0);
             tb->dirty_flags |= DIRTY_SCREEN;
