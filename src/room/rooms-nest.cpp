@@ -38,7 +38,7 @@ const std::map<NestKind, nest_pit_type> nest_types = {
     { NestKind::SYMBOL_GOOD, { _("シンボル(善)", "symbol good"), MonraceHook::GOOD, vault_prep_symbol, 25, 2 } },
     { NestKind::SYMBOL_EVIL, { _("シンボル(悪)", "symbol evil"), MonraceHook::EVIL, vault_prep_symbol, 25, 2 } },
     { NestKind::MIMIC, { _("ミミック", "mimic"), MonraceHook::MIMIC, std::nullopt, 30, 4 } },
-    { NestKind::LOVECRAFTIAN, { _("狂気", "lovecraftian"), MonraceHook::LOVECRAFTIAN, std::nullopt, 70, 2 } },
+    { NestKind::HORROR, { _("狂気", "lovecraftian"), MonraceHook::HORROR, std::nullopt, 70, 2 } },
     { NestKind::KENNEL, { _("犬小屋", "kennel"), MonraceHook::KENNEL, std::nullopt, 45, 4 } },
     { NestKind::ANIMAL, { _("動物園", "animal"), MonraceHook::ANIMAL, std::nullopt, 35, 5 } },
     { NestKind::CHAPEL, { _("教会", "chapel"), MonraceHook::CHAPEL, std::nullopt, 75, 4 } },

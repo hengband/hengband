@@ -253,8 +253,8 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
         return vault_aux_symbol_e(player_ptr, monrace_id);
     case MonraceHook::MIMIC:
         return vault_aux_mimic(player_ptr, monrace_id);
-    case MonraceHook::LOVECRAFTIAN:
-        return vault_aux_cthulhu(player_ptr, monrace_id);
+    case MonraceHook::HORROR:
+        return is_suitable_for_dungeon && monrace.is_suitable_for_horror_pit();
     case MonraceHook::KENNEL:
         return vault_aux_kennel(player_ptr, monrace_id);
     case MonraceHook::ANIMAL:
