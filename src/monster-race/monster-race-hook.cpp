@@ -354,33 +354,6 @@ bool vault_aux_dragon(PlayerType *player_ptr, MonraceId r_idx)
 }
 
 /*!
- * @brief モンスターが悪魔pitの生成必要条件を満たしているかを返す /
- * Helper function for "monster pit (demon)"
- * @param r_idx 確認したいモンスター種族ID
- * @return 生成必要条件を満たしているならTRUEを返す。
- */
-bool vault_aux_demon(PlayerType *player_ptr, MonraceId r_idx)
-{
-    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= monrace.is_suitable_for_special_room();
-    if (!is_valid) {
-        return false;
-    }
-
-    if (monrace.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
-        return false;
-    }
-
-    if (monrace.kind_flags.has_not(MonsterKindType::DEMON)) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief モンスターが狂気pitの生成必要条件を満たしているかを返す /
  * Helper function for "monster pit (lovecraftian)"
  * @param r_idx 確認したいモンスター種族ID

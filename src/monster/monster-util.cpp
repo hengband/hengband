@@ -272,7 +272,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::DRAGON:
         return vault_aux_dragon(player_ptr, monrace_id);
     case MonraceHook::DEMON:
-        return vault_aux_demon(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_demon_pit();
     case MonraceHook::DARK_ELF:
         return vault_aux_dark_elf(player_ptr, monrace_id);
     default:
