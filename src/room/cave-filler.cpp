@@ -436,7 +436,7 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
         break;
     case LAKE_T_AIR_VAULT: /* Air vault */
         feat1 = terrain_id_grass;
-        feat2 = feat_tree;
+        feat2 = terrains.get_terrain_id(TerrainTag::TREE);
         feat3 = terrain_id_grass;
         break;
     case LAKE_T_WATER_VAULT: /* Water vault */

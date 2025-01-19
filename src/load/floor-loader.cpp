@@ -149,7 +149,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
                 auto &grid = floor.get_grid({ y, x });
                 if ((grid.special == OLD_QUEST_WATER_CAVE) && !floor.is_underground()) {
                     if (grid.feat == OLD_FEAT_QUEST_ENTER) {
-                        grid.feat = feat_tree;
+                        grid.set_terrain_id(TerrainTag::TREE);
                         grid.special = 0;
                     } else if (grid.feat == OLD_FEAT_BLDG_1) {
                         grid.special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;

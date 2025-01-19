@@ -18,7 +18,6 @@ extern FEAT_IDX feat_pattern_end;
 extern FEAT_IDX feat_pattern_old;
 extern FEAT_IDX feat_pattern_exit;
 extern FEAT_IDX feat_pattern_corrupted;
-extern FEAT_IDX feat_tree;
 extern FEAT_IDX feat_mountain;
 extern FEAT_IDX feat_swamp;
 extern FEAT_IDX feat_undetected;

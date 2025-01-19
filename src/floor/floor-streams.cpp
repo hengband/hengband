@@ -403,7 +403,7 @@ void place_trees(PlayerType *player_ptr, const Pos2D &pos)
                  */
                 if ((distance(y, x, pos.y, pos.x) > 1) || (randint1(100) < 25)) {
                     if (randint1(100) < 75) {
-                        grid.feat = feat_tree;
+                        grid.set_terrain_id(TerrainTag::TREE);
                     }
                 } else {
                     grid.set_terrain_id(TerrainTag::RUBBLE);

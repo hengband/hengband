@@ -364,7 +364,6 @@ void init_feat_variables()
     feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
 
     /* Terrains */
-    feat_tree = terrains.get_terrain_id_by_tag("TREE");
     feat_mountain = terrains.get_terrain_id_by_tag("MOUNTAIN");
     feat_swamp = terrains.get_terrain_id_by_tag("SWAMP");
 
