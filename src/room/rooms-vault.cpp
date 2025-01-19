@@ -449,7 +449,7 @@ static void build_vault(
                 floor.set_terrain_id_at(pos, feat_deep_poisonous_puddle);
                 break;
             case 'h':
-                floor.set_terrain_id_at(pos, feat_cold_zone);
+                floor.set_terrain_id_at(pos, TerrainTag::COLD_ZONE);
                 break;
             case 'H':
                 floor.set_terrain_id_at(pos, TerrainTag::HEAVY_COLD_ZONE);
