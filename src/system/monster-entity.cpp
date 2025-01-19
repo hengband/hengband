@@ -263,25 +263,12 @@ bool MonsterEntity::is_invulnerable() const
     return this->get_remaining_invulnerability() > 0;
 }
 
-/*
+/*!
  * @brief 悪夢モード、一時加速、一時減速に基づくモンスターの現在速度を返す
  */
 byte MonsterEntity::get_temporary_speed() const
 {
-    auto speed = this->mspeed;
-    if (ironman_nightmare) {
-        speed += 5;
-    }
-
-    if (this->is_accelerated()) {
-        speed += 10;
-    }
-
-    if (this->is_decelerated()) {
-        speed -= 10;
-    }
-
-    return speed;
+    return MonsterEntity::calc_temporary_speed(this->mspeed, this->is_accelerated(), this->is_decelerated());
 }
 
 /*!
@@ -552,4 +539,29 @@ bool MonsterEntity::can_ring_boss_call_nazgul() const
     const auto &nazgul = MonraceList::get_instance().get_monrace(MonraceId::NAZGUL);
     const auto is_nazgul_alive = (nazgul.cur_num + 2) < nazgul.max_num;
     return is_boss && is_nazgul_alive;
+}
+
+/*!
+ * @brief 悪夢モード、一時加速、一時減速に基づくモンスターの現在速度を計算する
+ * @param speed モンスターのスピード
+ * @param accelerated 一時加速の有無
+ * @param decelerated 一時減速の有無
+ * @return 現在速度の計算結果
+ */
+byte MonsterEntity::calc_temporary_speed(decltype(MonsterEntity::mspeed) speed, bool accelerated, bool decelerated)
+{
+    auto result_speed = speed;
+    if (ironman_nightmare) {
+        result_speed += 5;
+    }
+
+    if (accelerated) {
+        result_speed += 10;
+    }
+
+    if (decelerated) {
+        result_speed -= 10;
+    }
+
+    return result_speed;
 }

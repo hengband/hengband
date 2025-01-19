@@ -119,6 +119,8 @@ public:
     void set_target(POSITION y, POSITION x);
     void reset_target();
     void set_friendly();
+    
+    static byte calc_temporary_speed(decltype(MonsterEntity::mspeed) speed, bool accelerated, bool decelerated);
 
 private:
     MonsterEntity(const MonsterEntity &) = default;
