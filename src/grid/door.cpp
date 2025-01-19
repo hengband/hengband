@@ -112,7 +112,7 @@ void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
         return;
     }
 
-    floor.set_terrain_id(pos, feat_locked_door_random(dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+    floor.set_terrain_id_at(pos, feat_locked_door_random(dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
     floor.get_grid(pos).info &= ~(CAVE_FLOOR);
     delete_monster(player_ptr, pos.y, pos.x);
 }
@@ -172,7 +172,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
     if (terrain_id == terrain_none) {
         place_bold(player_ptr, y, x, GB_FLOOR);
     } else {
-        floor.set_terrain_id(pos, terrain_id);
+        floor.set_terrain_id_at(pos, terrain_id);
     }
 
     delete_monster(player_ptr, y, x);
