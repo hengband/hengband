@@ -575,6 +575,13 @@ bool MonraceDefinition::is_suitable_for_horror_pit() const
     return is_suitable;
 }
 
+bool MonraceDefinition::is_suitable_for_mimic_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->symbol_char_is_any_of("!$&(/=?[\\|][`~>+");
+    return is_suitable;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
