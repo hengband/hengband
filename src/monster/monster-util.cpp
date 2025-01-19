@@ -719,10 +719,8 @@ void get_mon_num_prep_bounty(PlayerType *player_ptr)
     const auto dungeon_level = floor.dun_level;
     const auto &system = AngbandSystem::get_instance();
     auto &table = MonraceAllocationTable::get_instance();
-    const auto &dungeon = floor.get_dungeon_definition();
     MonraceFilterDebugInfo mfdi;
     for (auto &entry : table) {
-        const auto monrace_id = entry.index;
         entry.prob2 = 0;
         if (entry.prob1 <= 0) {
             continue;
@@ -739,12 +737,6 @@ void get_mon_num_prep_bounty(PlayerType *player_ptr)
         }
 
         entry.prob2 = entry.prob1;
-        const auto in_random_quest = floor.is_in_quest() && !QuestType::is_fixed(floor.quest_number);
-        const auto cond = !system.is_phase_out() && floor.is_underground() && !in_random_quest;
-        if (cond && !restrict_monster_to_dungeon(dungeon, dungeon_level, monrace_id)) {
-            entry.update_prob2(dungeon.special_div);
-        }
-
         mfdi.update(entry.prob2, entry.level);
     }
 
