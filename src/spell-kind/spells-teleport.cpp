@@ -67,7 +67,7 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
         return false;
     }
 
-    if ((grid.is_icky()) || (distance(pos.y, pos.x, player_ptr->y, player_ptr->x) > player_ptr->lev * 3 / 2 + 10)) {
+    if ((grid.is_icky()) || (distance(pos, player_ptr->get_position()) > player_ptr->lev * 3 / 2 + 10)) {
         msg_print(_("失敗した。", "Failed to swap."));
         return false;
     }
@@ -142,7 +142,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
             while (true) {
                 ny = rand_spread(oy, dis);
                 nx = rand_spread(ox, dis);
-                POSITION d = distance(oy, ox, ny, nx);
+                const auto d = distance({ oy, ox }, { ny, nx });
                 if ((d >= min) && (d <= dis)) {
                     break;
                 }
@@ -229,7 +229,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
             while (true) {
                 ny = rand_spread(ty, dis);
                 nx = rand_spread(tx, dis);
-                int d = distance(ty, tx, ny, nx);
+                const auto d = distance({ ty, tx }, { ny, nx });
                 if ((d >= min) && (d <= dis)) {
                     break;
                 }
@@ -323,7 +323,7 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
                 continue;
             }
 
-            int d = distance(player_ptr->y, player_ptr->x, y, x);
+            const auto d = distance(player_ptr->get_position(), { y, x });
             if (d > dis) {
                 continue;
             }
@@ -357,7 +357,7 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
                 continue;
             }
 
-            int d = distance(player_ptr->y, player_ptr->x, y, x);
+            const auto d = distance(player_ptr->get_position(), { y, x });
             if (d > dis) {
                 continue;
             }
@@ -592,7 +592,7 @@ bool exe_dimension_door(PlayerType *player_ptr, POSITION x, POSITION y)
 
     player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
     auto is_successful = cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS);
-    is_successful &= distance(y, x, player_ptr->y, player_ptr->x) <= plev / 2 + 10;
+    is_successful &= distance({ y, x }, player_ptr->get_position()) <= plev / 2 + 10;
     is_successful &= !one_in_(plev / 10 + 10);
     if (!is_successful) {
         player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);

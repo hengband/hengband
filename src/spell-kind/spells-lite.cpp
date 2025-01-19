@@ -220,7 +220,7 @@ static void cave_temp_room_aux(
         if (!in_bounds2(floor_ptr, y, x)) {
             return;
         }
-        if (distance(player_ptr->y, player_ptr->x, y, x) > AngbandSystem::get_instance().get_max_range()) {
+        if (distance(player_ptr->get_position(), { y, x }) > AngbandSystem::get_instance().get_max_range()) {
             return;
         }
 

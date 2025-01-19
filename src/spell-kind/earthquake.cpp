@@ -72,7 +72,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (distance(cy, cx, pos.y, pos.x) > r) {
+            if (distance({ cy, cx }, pos) > r) {
                 continue;
             }
 
@@ -311,7 +311,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (distance(cy, cx, pos.y, pos.x) > r) {
+            if (distance({ cy, cx }, pos) > r) {
                 continue;
             }
 

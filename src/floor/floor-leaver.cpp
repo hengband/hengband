@@ -62,7 +62,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEnt
 
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = m_ptr->get_position();
-    const auto dis = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx);
+    const auto dis = distance(p_pos, m_pos);
     if (m_ptr->is_confused() || m_ptr->is_stunned() || m_ptr->is_asleep() || m_ptr->has_parent()) {
         return true;
     }

@@ -88,7 +88,7 @@ void compact_objects(PlayerType *player_ptr, int size)
                 x = o_ptr->ix;
             }
 
-            if ((cur_dis > 0) && (distance(player_ptr->y, player_ptr->x, y, x) < cur_dis)) {
+            if ((cur_dis > 0) && (distance(player_ptr->get_position(), { y, x }) < cur_dis)) {
                 continue;
             }
 

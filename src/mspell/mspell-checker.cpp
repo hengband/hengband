@@ -74,7 +74,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
                 continue;
             }
 
-            if (distance(y1, x1, y, x) > 2) {
+            if (distance(pos1, pos) > 2) {
                 continue;
             }
 
@@ -105,7 +105,7 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
     for (auto xx = m_pos.x - 5; xx <= m_pos.x + 5; xx++) {
         for (auto yy = m_pos.y - 5; yy <= m_pos.y + 5; yy++) {
             const Pos2D pos(yy, xx);
-            if (distance(m_pos.y, m_pos.x, yy, xx) > 5) {
+            if (distance(m_pos, { yy, xx }) > 5) {
                 continue;
             }
             if (!los(player_ptr, m_pos.y, m_pos.x, yy, xx)) {

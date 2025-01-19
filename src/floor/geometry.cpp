@@ -12,44 +12,29 @@
 
 /*!
  * @brief 2点間の距離をニュートン・ラプソン法で算出する / Distance between two points via Newton-Raphson technique
- * @param y1 1点目のy座標
- * @param x1 1点目のx座標
- * @param y2 2点目のy座標
- * @param x2 2点目のx座標
+ * @param pos1 1点目の座標
+ * @param pos2 2点目の座標
  * @return 2点間の距離
  */
-POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+int distance(const Pos2D &pos1, const Pos2D &pos2)
 {
-    POSITION dy = (y1 > y2) ? (y1 - y2) : (y2 - y1);
-    POSITION dx = (x1 > x2) ? (x1 - x2) : (x2 - x1);
+    const auto dy = std::abs(pos1.y - pos2.y);
+    const auto dx = std::abs(pos1.x - pos2.x);
+    auto approximate_distance = std::max(dy, dx) + std::min(dy, dx) / 2;
 
-    /* Squared distance */
-    POSITION target = (dy * dy) + (dx * dx);
-
-    /* Approximate distance: hypot(dy,dx) = max(dy,dx) + min(dy,dx) / 2 */
-    POSITION d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
-
-    POSITION err;
-
-    /* Simple case */
-    if (!dy || !dx) {
-        return d;
+    if (dy == 0 || dx == 0) {
+        return approximate_distance;
     }
 
+    const auto squared_distance = (dy * dy) + (dx * dx);
     while (true) {
-        /* Approximate error */
-        err = (target - d * d) / (2 * d);
-
-        /* No error - we are done */
-        if (!err) {
-            break;
+        const auto approximate_error = (squared_distance - approximate_distance * approximate_distance) / (2 * approximate_distance);
+        if (approximate_error == 0) {
+            return approximate_distance;
         }
 
-        /* Adjust distance */
-        d += err;
+        approximate_distance += approximate_error;
     }
-
-    return d;
 }
 
 /*!

@@ -275,7 +275,7 @@ static void short_seg_hack(
         return;
     }
 
-    int length = distance(x1, y1, x2, y2);
+    const auto length = distance({ x1, y1 }, { x2, y2 });
     count++;
     POSITION x, y;
     if ((type == 1) && (length != 0)) {
@@ -363,7 +363,7 @@ static void short_seg_hack(
  */
 bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, const Pos2D &pos_start, const Pos2D &pos_end, int type, int cutoff)
 {
-    const auto length = distance(pos_start.x, pos_start.y, pos_end.x, pos_end.y);
+    const auto length = distance(pos_start, pos_end);
     auto &floor = *player_ptr->current_floor_ptr;
     if (length <= cutoff) {
         auto initial_failure = true;

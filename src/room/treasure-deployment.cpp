@@ -21,7 +21,7 @@
 namespace {
 void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &center, const Pos2D &pos, int size, int difficulty)
 {
-    auto value = distance(center.x, center.y, pos.x, pos.y) * 100 / size + randint1(10) - difficulty;
+    auto value = distance(center, pos) * 100 / size + randint1(10) - difficulty;
 
     /// @note
     /// v2.2.1のコードのコメントを見ると強制的に空白マスに設定するのを意図しているようだが、

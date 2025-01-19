@@ -476,9 +476,8 @@ static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)
         ts_ptr->m = 0;
         int bd = 999;
         for (size_t i = 0; i < size(ys_interest); i++) {
-            const POSITION y = ys_interest[i];
-            const POSITION x = xs_interest[i];
-            int t = distance(ts_ptr->y, ts_ptr->x, y, x);
+            const Pos2D pos_interest(ys_interest[i], xs_interest[i]);
+            const auto t = distance({ ts_ptr->y, ts_ptr->x }, pos_interest);
             if (t < bd) {
                 ts_ptr->m = i;
                 bd = t;

@@ -87,7 +87,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
                 }
             }
 
-            dist = distance(pos.y, pos.x, pos_neighbor.y, pos_neighbor.x);
+            dist = distance(pos, pos_neighbor);
             if (dist > max_distance) {
                 continue;
             }
@@ -459,7 +459,7 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
             }
         }
 
-        const auto dist = distance(y, x, player_ptr->y, player_ptr->x);
+        const auto dist = distance({ y, x }, player_ptr->get_position());
         if ((min_dis < dist) && (dist <= max_dis)) {
             break;
         }

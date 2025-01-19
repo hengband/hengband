@@ -59,7 +59,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                         continue;
                     }
 
-                    if (distance(pos.y, pos.x, player_ptr->y, player_ptr->x) < 10) {
+                    if (distance(pos, player_ptr->get_position()) < 10) {
                         continue;
                     }
 

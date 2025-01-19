@@ -157,7 +157,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     }
 
     const auto pos_breath = get_project_point(player_ptr, m_pos, msa_ptr->get_position(), 0);
-    if ((distance(pos_breath.y, pos_breath.x, pos.y, pos.x) <= 3) && los(player_ptr, pos_breath.y, pos_breath.x, pos.y, pos.x) && one_in_(5)) {
+    if ((distance(pos_breath, pos) <= 3) && los(player_ptr, pos_breath.y, pos_breath.x, pos.y, pos.x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
         msa_ptr->success = true;
     }

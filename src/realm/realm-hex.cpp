@@ -661,7 +661,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                     }
                 }
 
-                const auto dist = distance(y, x, player_ptr->y, player_ptr->x);
+                const auto dist = distance({ y, x }, player_ptr->get_position());
                 if (!is_cave_empty_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].is_icky() || (dist > player_ptr->lev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;

@@ -89,7 +89,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            const auto dist = distance(p_pos.y, p_pos.x, pos.y, pos.x);
+            const auto dist = distance(p_pos, pos);
             const auto is_projectable = projectable(player_ptr, p_pos, pos);
             if ((dist == 0) || (dist > max_range) || !grid.has_los() || !is_projectable) {
                 continue;

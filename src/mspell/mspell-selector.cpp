@@ -331,7 +331,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         }
     }
 
-    auto should_select_tactic = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4;
+    auto should_select_tactic = distance(player_ptr->get_position(), m_ptr->get_position()) < 4;
     should_select_tactic &= !attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS);
     should_select_tactic &= evaluate_percent(75);
     should_select_tactic &= world.timewalk_m_idx == 0;

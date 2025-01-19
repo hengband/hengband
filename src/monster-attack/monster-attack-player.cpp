@@ -215,7 +215,7 @@ bool MonsterAttackPlayer::check_monster_continuous_attack()
         this->damage_dice.num /= 10;
     }
 
-    auto is_neighbor = distance(this->player_ptr->y, this->player_ptr->x, this->m_ptr->fy, this->m_ptr->fx) <= 1;
+    const auto is_neighbor = distance(this->player_ptr->get_position(), this->m_ptr->get_position()) <= 1;
     return this->player_ptr->playing && !this->player_ptr->is_dead && is_neighbor && !this->player_ptr->leaving;
 }
 
