@@ -43,4 +43,5 @@ enum class TerrainTag {
     FLOWER,
     TREE,
     MOUNTAIN,
+    SWAMP,
 };

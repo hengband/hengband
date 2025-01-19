@@ -889,7 +889,8 @@ void init_wilderness_terrains(void)
         MAX_FEAT_IN_TERRAIN - 17);
     const auto terrain_id_brake = terrains.get_terrain_id(TerrainTag::BRAKE);
     const auto terrain_id_tree = terrains.get_terrain_id(TerrainTag::TREE);
-    init_terrain_table(TERRAIN_SWAMP, feat_swamp, "abcdef", terrain_id_dirt, 2, terrain_id_grass, 3, terrain_id_tree, 1, terrain_id_brake, 1, terrain_id_shallow_water, 4, feat_swamp,
+    const auto terrain_id_swamp = terrains.get_terrain_id(TerrainTag::SWAMP);
+    init_terrain_table(TERRAIN_SWAMP, terrain_id_swamp, "abcdef", terrain_id_dirt, 2, terrain_id_grass, 3, terrain_id_tree, 1, terrain_id_brake, 1, terrain_id_shallow_water, 4, terrain_id_swamp,
         MAX_FEAT_IN_TERRAIN - 11);
     const auto terrain_id_flower = terrains.get_terrain_id(TerrainTag::FLOWER);
     init_terrain_table(

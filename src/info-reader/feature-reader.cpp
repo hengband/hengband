@@ -363,9 +363,6 @@ void init_feat_variables()
     feat_pattern_exit = terrains.get_terrain_id_by_tag("PATTERN_EXIT");
     feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
 
-    /* Terrains */
-    feat_swamp = terrains.get_terrain_id_by_tag("SWAMP");
-
     feat_undetected = terrains.get_terrain_id_by_tag("UNDETECTED");
 
     init_wilderness_terrains();
