@@ -156,4 +156,5 @@ const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
     { "HEAVY_COLD_ZONE", TerrainTag::HEAVY_COLD_ZONE },
     { "COLD_ZONE", TerrainTag::COLD_ZONE },
     { "HEAVY_ELECTRICAL_ZONE", TerrainTag::HEAVY_ELECTRICAL_ZONE },
+    { "ELECTRICAL_ZONE", TerrainTag::ELECTRICAL_ZONE },
 };

@@ -364,7 +364,6 @@ void init_feat_variables()
     feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
 
     /* Terrains */
-    feat_electrical_zone = terrains.get_terrain_id_by_tag("ELECTRICAL_ZONE");
     feat_deep_acid_puddle = terrains.get_terrain_id_by_tag("DEEP_ACID_PUDDLE");
     feat_shallow_acid_puddle = terrains.get_terrain_id_by_tag("SHALLOW_ACID_PUDDLE");
     feat_deep_poisonous_puddle = terrains.get_terrain_id_by_tag("DEEP_POISONOUS_PUDDLE");

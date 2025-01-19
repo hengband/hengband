@@ -40,7 +40,6 @@ FEAT_IDX feat_pattern_exit;
 FEAT_IDX feat_pattern_corrupted;
 
 /* Terrains */
-FEAT_IDX feat_electrical_zone;
 FEAT_IDX feat_deep_acid_puddle;
 FEAT_IDX feat_shallow_acid_puddle;
 FEAT_IDX feat_deep_poisonous_puddle;
