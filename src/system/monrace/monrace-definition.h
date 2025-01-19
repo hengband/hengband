@@ -201,8 +201,9 @@ public:
     void make_lore_treasure(int num_item, int num_drop);
     void emplace_drop_artifact(FixedArtifactId fa_id, int percentage);
     void emplace_reinforce(MonraceId monrace_id, const Dice &dice);
-    
-    static const std::string &decide_horror_message(EnumClassFlagGroup<MonsterKindType> &kind_flags);
+
+    static const std::string &decide_horror_message(const EnumClassFlagGroup<MonsterKindType> &kind_flags);
+    static bool check_blow_times_for_knowing_damage(const int level, const int max_roll, const int hitted_time, const EnumClassFlagGroup<MonsterKindType> &kind_flags);
 
     //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
     bool has_entity() const;

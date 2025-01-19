@@ -818,20 +818,8 @@ bool MonraceDefinition::is_details_known() const
 bool MonraceDefinition::is_blow_damage_known(int num_blow) const
 {
     const auto r_blow = this->r_blows[num_blow];
-    auto max_damage = this->blows[num_blow].damage_dice.maxroll();
-    if (max_damage >= ((4 + this->level) * MAX_UCHAR) / 80) {
-        max_damage = ((4 + this->level) * MAX_UCHAR - 1) / 80;
-    }
-
-    if ((4 + this->level) * r_blow > 80 * max_damage) {
-        return true;
-    }
-
-    if (this->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    return (4 + this->level) * (2 * r_blow) > 80 * max_damage;
+    const auto max_roll = this->blows[num_blow].damage_dice.maxroll();
+    return MonraceDefinition::check_blow_times_for_knowing_damage(this->level, max_roll, r_blow, this->kind_flags);
 }
 
 /*!
@@ -949,4 +937,31 @@ const std::string &MonraceDefinition::decide_horror_message(const EnumClassFlagG
     }
 
     return horror_desc_neutral[horror_num - horror_desc_common_size];
+}
+
+/*!
+ * @brief モンスターの打撃威力を知るのに十分な攻撃回数を受けているか判定
+ * @param level モンスターのレベル
+ * @param max_roll 与えるダメージ(最大ダイス)
+ * @param hitted_time 攻撃を受けた回数
+ * @param kind_flags モンスターの種族フラグ
+ * @return 敵のダメージダイスを知る条件が満たされているか否か
+ * @todo kind_flags はis_blow_damage_known() 側で判定し、こちらには代わりにis_unique のみを入れる(モジュールの結合度を弱めるため)
+ */
+bool MonraceDefinition::check_blow_times_for_knowing_damage(const int level, const int max_roll, const int hitted_time, const EnumClassFlagGroup<MonsterKindType> &kind_flags)
+{
+    auto temp_max_damage = max_roll;
+    if (temp_max_damage >= ((4 + level) * MAX_UCHAR) / 80) {
+        temp_max_damage = ((4 + level) * MAX_UCHAR - 1) / 80;
+    }
+
+    if ((4 + level) * hitted_time > 80 * temp_max_damage) {
+        return true;
+    }
+
+    if (kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    return (4 + level) * (2 * hitted_time) > 80 * temp_max_damage;
 }
