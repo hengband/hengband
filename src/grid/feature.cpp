@@ -40,7 +40,6 @@ FEAT_IDX feat_pattern_exit;
 FEAT_IDX feat_pattern_corrupted;
 
 /* Terrains */
-FEAT_IDX feat_deep_poisonous_puddle;
 FEAT_IDX feat_shallow_poisonous_puddle;
 FEAT_IDX feat_dirt;
 FEAT_IDX feat_grass;

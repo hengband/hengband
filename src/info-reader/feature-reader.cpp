@@ -364,7 +364,6 @@ void init_feat_variables()
     feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
 
     /* Terrains */
-    feat_deep_poisonous_puddle = terrains.get_terrain_id_by_tag("DEEP_POISONOUS_PUDDLE");
     feat_shallow_poisonous_puddle = terrains.get_terrain_id_by_tag("SHALLOW_POISONOUS_PUDDLE");
     feat_dirt = terrains.get_terrain_id_by_tag("DIRT");
     feat_grass = terrains.get_terrain_id_by_tag("GRASS");
