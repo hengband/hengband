@@ -33,7 +33,7 @@ const std::map<PitKind, nest_pit_type> pit_types = {
     { PitKind::ORC, { _("オーク", "orc"), MonraceHook::ORC, std::nullopt, 5, 6 } },
     { PitKind::TROLL, { _("トロル", "troll"), MonraceHook::TROLL, std::nullopt, 20, 6 } },
     { PitKind::GIANT, { _("巨人", "giant"), MonraceHook::GIANT, std::nullopt, 50, 6 } },
-    { PitKind::LOVECRAFTIAN, { _("狂気", "lovecraftian"), MonraceHook::LOVECRAFTIAN, std::nullopt, 80, 2 } },
+    { PitKind::HORROR, { _("狂気", "lovecraftian"), MonraceHook::HORROR, std::nullopt, 80, 2 } },
     { PitKind::SYMBOL_GOOD, { _("シンボル(善)", "symbol good"), MonraceHook::GOOD, vault_prep_symbol, 70, 1 } },
     { PitKind::SYMBOL_EVIL, { _("シンボル(悪)", "symbol evil"), MonraceHook::EVIL, vault_prep_symbol, 70, 1 } },
     { PitKind::CHAPEL, { _("教会", "chapel"), MonraceHook::CHAPEL, std::nullopt, 65, 2 } },

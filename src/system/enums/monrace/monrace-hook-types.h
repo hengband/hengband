@@ -32,7 +32,7 @@ enum class MonraceHook {
     GOOD,
     EVIL,
     MIMIC,
-    LOVECRAFTIAN,
+    HORROR,
     KENNEL,
     ANIMAL,
     CHAPEL,

@@ -13,6 +13,21 @@
 #include "util/string-processor.h"
 #include <algorithm>
 
+namespace {
+const std::set<MonraceId> DARK_ELF_RACES = {
+    MonraceId::D_ELF,
+    MonraceId::D_ELF_MAGE,
+    MonraceId::D_ELF_WARRIOR,
+    MonraceId::D_ELF_PRIEST,
+    MonraceId::D_ELF_LORD,
+    MonraceId::D_ELF_WARLOCK,
+    MonraceId::D_ELF_DRUID,
+    MonraceId::NIGHTBLADE,
+    MonraceId::D_ELF_SORC,
+    MonraceId::D_ELF_SHADE,
+};
+}
+
 std::map<MonraceId, MonraceDefinition> monraces_info;
 
 const std::map<MonraceId, std::set<MonraceId>> MonraceList::unified_uniques = {
@@ -52,6 +67,11 @@ MonraceId MonraceList::empty_id()
 bool MonraceList::is_tsuchinoko(MonraceId monrace_id)
 {
     return monrace_id == MonraceId::TSUCHINOKO;
+}
+
+bool MonraceList::is_dark_elf(MonraceId monrace_id)
+{
+    return DARK_ELF_RACES.contains(monrace_id);
 }
 
 MonraceDefinition &MonraceList::emplace(MonraceId monrace_id)

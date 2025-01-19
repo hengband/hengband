@@ -31,6 +31,7 @@ public:
     static MonraceList &get_instance();
     static MonraceId empty_id();
     static bool is_tsuchinoko(MonraceId monrace_id);
+    static bool is_dark_elf(MonraceId monrace_id);
     MonraceDefinition &emplace(MonraceId monrace_id);
     std::map<MonraceId, MonraceDefinition> &get_raw_map();
     MonraceDefinition &get_monrace(MonraceId monrace_id);
