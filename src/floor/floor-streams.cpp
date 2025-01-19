@@ -49,11 +49,11 @@
  * @brief 再帰フラクタルアルゴリズムによりダンジョン内に川を配置する
  * @param pos_start 起点座標
  * @param pos_end 終点座標
- * @param tag1 中央部地形ID
- * @param tag2 境界部地形ID
+ * @param tag_deep 深い方の地形タグ
+ * @param tag_shallow 浅い方の地形タグ
  * @param width 基本幅
  */
-static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const Pos2D &pos_end, TerrainTag tag1, TerrainTag tag2, int width)
+static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const Pos2D &pos_end, TerrainTag tag_deep, TerrainTag tag_shallow, int width)
 {
     const auto length = distance(pos_start.x, pos_start.y, pos_end.x, pos_end.y);
     if (length > 4) {
@@ -85,13 +85,13 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
         }
 
         /* construct river out of two smaller ones */
-        recursive_river(floor_ptr, pos_start, { pos_start.y + dy + changey, pos_start.x + dx + changex }, tag1, tag2, width);
-        recursive_river(floor_ptr, { pos_start.y + dy + changey, pos_start.x + dx + changex }, pos_end, tag1, tag2, width);
+        recursive_river(floor_ptr, pos_start, { pos_start.y + dy + changey, pos_start.x + dx + changex }, tag_deep, tag_shallow, width);
+        recursive_river(floor_ptr, { pos_start.y + dy + changey, pos_start.x + dx + changex }, pos_end, tag_deep, tag_shallow, width);
 
         /* Split the river some of the time - junctions look cool */
         constexpr auto chance_river_junction = 50;
         if (one_in_(chance_river_junction) && (width > 0)) {
-            recursive_river(floor_ptr, { pos_start.y + dy + changey, pos_start.x + dx + changex }, { pos_start.y + 8 * (dy + changey), pos_start.x + 8 * (dx + changex) }, tag1, tag2, width - 1);
+            recursive_river(floor_ptr, { pos_start.y + dy + changey, pos_start.x + dx + changex }, { pos_start.y + 8 * (dy + changey), pos_start.x + 8 * (dx + changex) }, tag_deep, tag_shallow, width - 1);
         }
 
         return;
@@ -113,11 +113,11 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
                     }
 
                     auto &grid = floor_ptr->get_grid(pos_target);
-                    if (grid.feat == terrains.get_terrain_id(tag1)) {
+                    if (grid.feat == terrains.get_terrain_id(tag_deep)) {
                         continue;
                     }
 
-                    if (grid.feat == terrains.get_terrain_id(tag2)) {
+                    if (grid.feat == terrains.get_terrain_id(tag_shallow)) {
                         continue;
                     }
 
@@ -135,16 +135,16 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
                      * The border mainly gets tag2, while the center gets tag1
                      */
                     if (distance(pos_target.y, pos_target.x, pos.y, pos.x) > width) {
-                        grid.set_terrain_id(tag2);
+                        grid.set_terrain_id(tag_shallow);
                     } else {
-                        grid.set_terrain_id(tag1);
+                        grid.set_terrain_id(tag_deep);
                     }
 
                     /* Clear garbage of hidden trap or door */
                     grid.mimic = 0;
 
                     /* Lava terrain glows */
-                    if (terrains.get_terrain(tag1).flags.has(TerrainCharacteristics::LAVA)) {
+                    if (terrains.get_terrain(tag_deep).flags.has(TerrainCharacteristics::LAVA)) {
                         if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
                             grid.info |= CAVE_GLOW;
                         }
@@ -168,46 +168,15 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
 void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
 {
     const auto &dungeon = floor_ptr->get_dungeon_definition();
-    const auto &terrains = TerrainList::get_instance();
-
-    /* Choose water mainly */
-    auto tag1 = TerrainTag::NONE;
-    auto tag2 = TerrainTag::NONE;
-    if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon.flags.has(DungeonFeatureType::WATER_RIVER)) {
-        tag1 = TerrainTag::DEEP_WATER;
-        tag2 = TerrainTag::SHALLOW_WATER;
-    } else /* others */
-    {
-        std::array<TerrainTag, 10> select_deep_feat{};
-        std::array<TerrainTag, 10> select_shallow_feat{};
-        auto select_id_max = 0;
-        if (dungeon.flags.has(DungeonFeatureType::LAVA_RIVER)) {
-            select_deep_feat[select_id_max] = TerrainTag::DEEP_LAVA;
-            select_shallow_feat[select_id_max] = TerrainTag::SHALLOW_LAVA;
-            select_id_max++;
-        }
-        if (dungeon.flags.has(DungeonFeatureType::POISONOUS_RIVER)) {
-            select_deep_feat[select_id_max] = TerrainTag::DEEP_POISONOUS_PUDDLE;
-            select_shallow_feat[select_id_max] = TerrainTag::SHALLOW_POISONOUS_PUDDLE;
-            select_id_max++;
-        }
-        if (dungeon.flags.has(DungeonFeatureType::ACID_RIVER)) {
-            select_deep_feat[select_id_max] = TerrainTag::DEEP_ACID_PUDDLE;
-            select_shallow_feat[select_id_max] = TerrainTag::SHALLOW_ACID_PUDDLE;
-            select_id_max++;
-        }
-
-        if (select_id_max > 0) {
-            const auto selected = randint0(select_id_max);
-            tag1 = select_deep_feat[selected];
-            tag2 = select_shallow_feat[selected];
-        } else {
-            return;
-        }
+    const auto tag_pair = dungeon.decide_river_terrains(floor_ptr->dun_level);
+    if (!tag_pair) {
+        return;
     }
 
-    if (tag1 > TerrainTag::NONE) {
-        const auto &terrain = terrains.get_terrain(tag1);
+    const auto &[tag_deep, tag_shallow] = *tag_pair;
+    const auto &terrains = TerrainList::get_instance();
+    if (tag_deep > TerrainTag::NONE) {
+        const auto &terrain = terrains.get_terrain(tag_deep);
         auto is_lava = dd_ptr->laketype == LAKE_T_LAVA;
         is_lava &= terrain.flags.has(TerrainCharacteristics::LAVA);
         auto is_water = dd_ptr->laketype == LAKE_T_WATER;
@@ -254,7 +223,7 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
 
     constexpr auto width_rivers = 2;
     const auto wid = randint1(width_rivers);
-    recursive_river(floor_ptr, { y1, x1 }, { y2, x2 }, tag1, tag2, wid);
+    recursive_river(floor_ptr, { y1, x1 }, { y2, x2 }, tag_deep, tag_shallow, wid);
 
     /* Hack - Save the location as a "room" */
     if (dd_ptr->cent_n < dd_ptr->centers.size()) {

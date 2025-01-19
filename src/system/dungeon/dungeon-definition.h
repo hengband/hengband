@@ -18,7 +18,9 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include <array>
+#include <optional>
 #include <string>
+#include <utility>
 #include <vector>
 
 constexpr auto DUNGEON_FEAT_PROB_NUM = 3;
@@ -41,6 +43,7 @@ struct feat_prob {
 
 /* A structure for the != dungeon types */
 enum class TerrainCharacteristics;
+enum class TerrainTag;
 class MonraceDefinition;
 class DungeonDefinition {
 public:
@@ -105,6 +108,7 @@ public:
     std::string build_entrance_message() const;
     std::string describe_depth() const;
     int calc_cavern_terrains() const;
+    std::optional<std::pair<TerrainTag, TerrainTag>> decide_river_terrains(int threshold) const;
 
     void set_guardian_flag();
 };
