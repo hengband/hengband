@@ -673,7 +673,7 @@ int ItemEntity::get_baseitem_price() const
 
 int ItemEntity::calc_figurine_value() const
 {
-    return this->get_monrace().calc_figurine_value();
+    return this->get_monrace().get_figurine_value();
 }
 
 int ItemEntity::calc_capture_value() const

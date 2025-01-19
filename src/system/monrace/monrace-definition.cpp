@@ -278,26 +278,9 @@ int MonraceDefinition::calc_power() const
     return power;
 }
 
-int MonraceDefinition::calc_figurine_value() const
+int MonraceDefinition::get_figurine_value() const
 {
-    const auto figurine_level = this->level;
-    if (figurine_level < 20) {
-        return figurine_level * 50;
-    }
-
-    if (figurine_level < 30) {
-        return 1000 + (figurine_level - 20) * 150;
-    }
-
-    if (figurine_level < 40) {
-        return 2500 + (figurine_level - 30) * 350;
-    }
-
-    if (figurine_level < 50) {
-        return 6000 + (figurine_level - 40) * 800;
-    }
-
-    return 14000 + (figurine_level - 50) * 2000;
+    return MonraceDefinition::calc_figurine_value(this->level);
 }
 
 int MonraceDefinition::calc_capture_value() const
@@ -964,4 +947,30 @@ bool MonraceDefinition::check_blow_times_for_knowing_damage(const int level, con
     }
 
     return (4 + level) * (2 * hitted_time) > 80 * temp_max_damage;
+}
+
+/*!
+ * @brief 人形の価格を計算する
+ * @param level モンスターのレベル
+ * @return 計算した価格
+ */
+int MonraceDefinition::calc_figurine_value(int level)
+{
+    if (level < 20) {
+        return level * 50;
+    }
+
+    if (level < 30) {
+        return 1000 + (level - 20) * 150;
+    }
+
+    if (level < 40) {
+        return 2500 + (level - 30) * 350;
+    }
+
+    if (level < 50) {
+        return 6000 + (level - 40) * 800;
+    }
+
+    return 14000 + (level - 50) * 2000;
 }

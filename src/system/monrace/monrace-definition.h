@@ -152,7 +152,7 @@ public:
     const MonraceDefinition &get_next() const;
     bool is_bounty(bool unachieved_only) const;
     int calc_power() const;
-    int calc_figurine_value() const;
+    int get_figurine_value() const;
     int calc_capture_value() const;
     std::string build_eldritch_horror_message(std::string_view description) const;
     bool has_reinforce() const;
@@ -204,6 +204,7 @@ public:
 
     static const std::string &decide_horror_message(const EnumClassFlagGroup<MonsterKindType> &kind_flags);
     static bool check_blow_times_for_knowing_damage(const int level, const int max_roll, const int hitted_time, const EnumClassFlagGroup<MonsterKindType> &kind_flags);
+    static int calc_figurine_value(int level);
 
     //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
     bool has_entity() const;
