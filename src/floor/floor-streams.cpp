@@ -55,22 +55,14 @@
  */
 static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const Pos2D &pos_end, TerrainTag tag1, TerrainTag tag2, int width)
 {
-    POSITION dx, dy, length, l, x, y;
-    POSITION changex, changey;
-    POSITION ty, tx;
-    bool done;
-    Grid *g_ptr;
-
-    length = distance(pos_start.x, pos_start.y, pos_end.x, pos_end.y);
-
+    const auto length = distance(pos_start.x, pos_start.y, pos_end.x, pos_end.y);
     if (length > 4) {
         /*
          * Divide path in half and call routine twice.
          * There is a small chance of splitting the river
          */
-        dx = (pos_end.x - pos_start.x) / 2;
-        dy = (pos_end.y - pos_start.y) / 2;
-
+        const auto dy = (pos_end.y - pos_start.y) / 2;
+        int changex;
         if (dy != 0) {
             /* perturbation perpendicular to path */
             changex = randint1(abs(dy)) * 2 - abs(dy);
@@ -78,6 +70,8 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
             changex = 0;
         }
 
+        const auto dx = (pos_end.x - pos_start.x) / 2;
+        int changey;
         if (dx != 0) {
             /* perturbation perpendicular to path */
             changey = randint1(abs(dx)) * 2 - abs(dx);
@@ -105,34 +99,34 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
 
     /* Actually build the river */
     const auto &terrains = TerrainList::get_instance();
-    for (l = 0; l < length; l++) {
-        x = pos_start.x + l * (pos_end.x - pos_start.x) / length;
-        y = pos_start.y + l * (pos_end.y - pos_start.y) / length;
-
-        done = false;
-
+    for (auto l = 0; l < length; l++) {
+        const auto x = pos_start.x + l * (pos_end.x - pos_start.x) / length;
+        const auto y = pos_start.y + l * (pos_end.y - pos_start.y) / length;
+        const Pos2D pos(y, x);
+        auto done = false;
         while (!done) {
-            for (ty = y - width - 1; ty <= y + width + 1; ty++) {
-                for (tx = x - width - 1; tx <= x + width + 1; tx++) {
-                    if (!in_bounds2(floor_ptr, ty, tx)) {
+            for (auto ty = pos.y - width - 1; ty <= pos.y + width + 1; ty++) {
+                for (auto tx = pos.x - width - 1; tx <= pos.x + width + 1; tx++) {
+                    const Pos2D pos_target(ty, tx);
+                    if (!in_bounds2(floor_ptr, pos_target.y, pos_target.x)) {
                         continue;
                     }
 
-                    g_ptr = &floor_ptr->grid_array[ty][tx];
-
-                    if (g_ptr->feat == terrains.get_terrain_id(tag1)) {
-                        continue;
-                    }
-                    if (g_ptr->feat == terrains.get_terrain_id(tag2)) {
+                    auto &grid = floor_ptr->get_grid(pos_target);
+                    if (grid.feat == terrains.get_terrain_id(tag1)) {
                         continue;
                     }
 
-                    if (distance(ty, tx, y, x) > rand_spread(width, 1)) {
+                    if (grid.feat == terrains.get_terrain_id(tag2)) {
+                        continue;
+                    }
+
+                    if (distance(pos_target.y, pos_target.x, pos.y, pos.x) > rand_spread(width, 1)) {
                         continue;
                     }
 
                     /* Do not convert permanent features */
-                    if (g_ptr->has(TerrainCharacteristics::PERMANENT)) {
+                    if (grid.has(TerrainCharacteristics::PERMANENT)) {
                         continue;
                     }
 
@@ -140,24 +134,24 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
                      * Clear previous contents, add feature
                      * The border mainly gets tag2, while the center gets tag1
                      */
-                    if (distance(ty, tx, y, x) > width) {
-                        g_ptr->set_terrain_id(tag2);
+                    if (distance(pos_target.y, pos_target.x, pos.y, pos.x) > width) {
+                        grid.set_terrain_id(tag2);
                     } else {
-                        g_ptr->set_terrain_id(tag1);
+                        grid.set_terrain_id(tag1);
                     }
 
                     /* Clear garbage of hidden trap or door */
-                    g_ptr->mimic = 0;
+                    grid.mimic = 0;
 
                     /* Lava terrain glows */
                     if (terrains.get_terrain(tag1).flags.has(TerrainCharacteristics::LAVA)) {
                         if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
-                            g_ptr->info |= CAVE_GLOW;
+                            grid.info |= CAVE_GLOW;
                         }
                     }
 
                     /* Hack -- don't teleport here */
-                    g_ptr->info |= CAVE_ICKY;
+                    grid.info |= CAVE_ICKY;
                 }
             }
 
