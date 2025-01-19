@@ -55,7 +55,7 @@
  */
 static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const Pos2D &pos_end, TerrainTag tag_deep, TerrainTag tag_shallow, int width)
 {
-    const auto length = distance(pos_start.x, pos_start.y, pos_end.x, pos_end.y);
+    const auto length = distance(pos_start.y, pos_start.x, pos_end.y, pos_end.x);
     if (length > 4) {
         /*
          * Divide path in half and call routine twice.
