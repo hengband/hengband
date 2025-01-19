@@ -264,7 +264,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::UNDEAD:
         return vault_aux_undead(player_ptr, monrace_id);
     case MonraceHook::ORC:
-        return vault_aux_orc(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_orc_pit();
     case MonraceHook::TROLL:
         return vault_aux_troll(player_ptr, monrace_id);
     case MonraceHook::GIANT:

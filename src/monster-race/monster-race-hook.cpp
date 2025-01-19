@@ -320,33 +320,6 @@ bool vault_aux_symbol_g(PlayerType *player_ptr, MonraceId r_idx)
 }
 
 /*!
- * @brief モンスターがオークpitの生成必要条件を満たしているかを返す /
- * Helper function for "monster pit (orc)"
- * @param r_idx 確認したいモンスター種族ID
- * @return 生成必要条件を満たしているならTRUEを返す。
- */
-bool vault_aux_orc(PlayerType *player_ptr, MonraceId r_idx)
-{
-    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= monrace.is_suitable_for_special_room();
-    if (!is_valid) {
-        return false;
-    }
-
-    if (monrace.kind_flags.has_not(MonsterKindType::ORC)) {
-        return false;
-    }
-
-    if (monrace.kind_flags.has(MonsterKindType::UNDEAD)) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief モンスターがトロルpitの生成必要条件を満たしているかを返す /
  * Helper function for "monster pit (troll)"
  * @param r_idx 確認したいモンスター種族ID

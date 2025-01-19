@@ -534,6 +534,14 @@ bool MonraceDefinition::is_catchable_for_fishing() const
     return is_catchable;
 }
 
+bool MonraceDefinition::is_suitable_for_orc_pit() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::ORC);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::UNDEAD);
+    return is_suitable;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
