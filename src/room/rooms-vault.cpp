@@ -443,7 +443,7 @@ static void build_vault(
                 floor.set_terrain_id_at(pos, TerrainTag::DEEP_ACID_PUDDLE);
                 break;
             case 'g':
-                floor.set_terrain_id_at(pos, feat_shallow_poisonous_puddle);
+                floor.set_terrain_id_at(pos, TerrainTag::SHALLOW_POISONOUS_PUDDLE);
                 break;
             case 'G':
                 floor.set_terrain_id_at(pos, TerrainTag::DEEP_POISONOUS_PUDDLE);
