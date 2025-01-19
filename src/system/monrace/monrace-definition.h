@@ -185,6 +185,7 @@ public:
     bool is_catchable_for_fishing() const;
     bool is_suitable_for_orc_pit() const;
     bool is_suitable_for_troll_pit() const;
+    bool is_suitable_for_giant_pit() const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();
