@@ -545,43 +545,6 @@ bool vault_aux_dark_elf(PlayerType *player_ptr, MonraceId r_idx)
 }
 
 /*!
- * @brief バルログが死体を食べられるモンスターかの判定 / Hook function for human corpses
- * @param r_idx モンスターＩＤ
- * @return 死体を食べられるならTRUEを返す。
- */
-bool monster_hook_human(PlayerType *player_ptr, MonraceId r_idx)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    const auto &monrace = monraces_info[r_idx];
-    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    return monrace.symbol_char_is_any_of("pht");
-}
-
-/*!
- * @brief 悪夢の元凶となるモンスターかどうかを返す。
- * @param r_idx 判定対象となるモンスターのＩＤ
- * @return 悪夢の元凶となり得るか否か。
- */
-bool get_nightmare(PlayerType *player_ptr, MonraceId r_idx)
-{
-    auto *r_ptr = &monraces_info[r_idx];
-    if (r_ptr->misc_flags.has_not(MonsterMiscType::ELDRITCH_HORROR)) {
-        return false;
-    }
-
-    if (r_ptr->level <= player_ptr->lev) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief モンスター種族が釣れる種族かどうかを判定する。
  * @param r_idx 判定したいモンスター種族のID
  * @return 釣れる対象ならばTRUEを返す
