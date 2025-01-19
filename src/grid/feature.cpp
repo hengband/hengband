@@ -40,7 +40,6 @@ FEAT_IDX feat_pattern_exit;
 FEAT_IDX feat_pattern_corrupted;
 
 /* Terrains */
-FEAT_IDX feat_shallow_lava;
 FEAT_IDX feat_heavy_cold_zone;
 FEAT_IDX feat_cold_zone;
 FEAT_IDX feat_heavy_electrical_zone;
