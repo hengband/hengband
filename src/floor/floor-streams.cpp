@@ -44,179 +44,134 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
+#include <cmath>
 
 /*!
- * @brief 再帰フラクタルアルゴリズムによりダンジョン内に川を配置する /
- * Recursive fractal algorithm to place water through the dungeon.
- * @param x1 起点x座標
- * @param y1 起点y座標
- * @param x2 終点x座標
- * @param y2 終点y座標
- * @param feat1 中央部地形ID
- * @param feat2 境界部地形ID
+ * @brief 再帰フラクタルアルゴリズムによりダンジョン内に川を配置する
+ * @param pos_start 起点座標
+ * @param pos_end 終点座標
+ * @param tag_deep 深い方の地形タグ
+ * @param tag_shallow 浅い方の地形タグ
  * @param width 基本幅
  */
-static void recursive_river(FloorType *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, FEAT_IDX feat1, FEAT_IDX feat2, POSITION width)
+static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const Pos2D &pos_end, TerrainTag tag_deep, TerrainTag tag_shallow, int width)
 {
-    POSITION dx, dy, length, l, x, y;
-    POSITION changex, changey;
-    POSITION ty, tx;
-    bool done;
-    Grid *g_ptr;
-
-    length = distance(x1, y1, x2, y2);
-
+    const auto length = distance(pos_start.y, pos_start.x, pos_end.y, pos_end.x);
     if (length > 4) {
-        /*
-         * Divide path in half and call routine twice.
-         * There is a small chance of splitting the river
-         */
-        dx = (x2 - x1) / 2;
-        dy = (y2 - y1) / 2;
-
+        const auto dy = (pos_end.y - pos_start.y) / 2;
+        Pos2DVec vec_change(0, 0);
         if (dy != 0) {
-            /* perturbation perpendicular to path */
-            changex = randint1(abs(dy)) * 2 - abs(dy);
-        } else {
-            changex = 0;
+            vec_change.x = randint1(std::abs(dy)) * 2 - std::abs(dy);
         }
 
+        const auto dx = (pos_end.x - pos_start.x) / 2;
         if (dx != 0) {
-            /* perturbation perpendicular to path */
-            changey = randint1(abs(dx)) * 2 - abs(dx);
-        } else {
-            changey = 0;
+            vec_change.y = randint1(std::abs(dx)) * 2 - std::abs(dx);
         }
 
-        if (!in_bounds(floor_ptr, y1 + dy + changey, x1 + dx + changex)) {
-            changex = 0;
-            changey = 0;
+        Pos2DVec vec_division(dy, dx);
+        auto pos = pos_start + vec_division + vec_change;
+        if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+            vec_change = { 0, 0 };
         }
 
         /* construct river out of two smaller ones */
-        recursive_river(floor_ptr, x1, y1, x1 + dx + changex, y1 + dy + changey, feat1, feat2, width);
-        recursive_river(floor_ptr, x1 + dx + changex, y1 + dy + changey, x2, y2, feat1, feat2, width);
+        pos = pos_start + vec_division + vec_change;
+        recursive_river(floor_ptr, pos_start, pos, tag_deep, tag_shallow, width);
+        recursive_river(floor_ptr, pos, pos_end, tag_deep, tag_shallow, width);
 
         /* Split the river some of the time - junctions look cool */
         constexpr auto chance_river_junction = 50;
         if (one_in_(chance_river_junction) && (width > 0)) {
-            recursive_river(floor_ptr, x1 + dx + changex, y1 + dy + changey, x1 + 8 * (dx + changex), y1 + 8 * (dy + changey), feat1, feat2, width - 1);
+            vec_division *= 8;
+            vec_change *= 8;
+            const auto pos_junction = pos_start + vec_division + vec_change;
+            recursive_river(floor_ptr, pos, pos_junction, tag_deep, tag_shallow, width - 1);
         }
-    } else {
-        /* Actually build the river */
-        const auto &terrains = TerrainList::get_instance();
-        for (l = 0; l < length; l++) {
-            x = x1 + l * (x2 - x1) / length;
-            y = y1 + l * (y2 - y1) / length;
 
-            done = false;
+        return;
+    }
 
-            while (!done) {
-                for (ty = y - width - 1; ty <= y + width + 1; ty++) {
-                    for (tx = x - width - 1; tx <= x + width + 1; tx++) {
-                        if (!in_bounds2(floor_ptr, ty, tx)) {
-                            continue;
-                        }
-
-                        g_ptr = &floor_ptr->grid_array[ty][tx];
-
-                        if (g_ptr->feat == feat1) {
-                            continue;
-                        }
-                        if (g_ptr->feat == feat2) {
-                            continue;
-                        }
-
-                        if (distance(ty, tx, y, x) > rand_spread(width, 1)) {
-                            continue;
-                        }
-
-                        /* Do not convert permanent features */
-                        if (g_ptr->has(TerrainCharacteristics::PERMANENT)) {
-                            continue;
-                        }
-
-                        /*
-                         * Clear previous contents, add feature
-                         * The border mainly gets feat2, while the center gets feat1
-                         */
-                        if (distance(ty, tx, y, x) > width) {
-                            g_ptr->feat = feat2;
-                        } else {
-                            g_ptr->feat = feat1;
-                        }
-
-                        /* Clear garbage of hidden trap or door */
-                        g_ptr->mimic = 0;
-
-                        /* Lava terrain glows */
-                        if (terrains.get_terrain(feat1).flags.has(TerrainCharacteristics::LAVA)) {
-                            if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
-                                g_ptr->info |= CAVE_GLOW;
-                            }
-                        }
-
-                        /* Hack -- don't teleport here */
-                        g_ptr->info |= CAVE_ICKY;
+    /* Actually build the river */
+    const auto &terrains = TerrainList::get_instance();
+    for (auto l = 0; l < length; l++) {
+        const auto x = pos_start.x + l * (pos_end.x - pos_start.x) / length;
+        const auto y = pos_start.y + l * (pos_end.y - pos_start.y) / length;
+        const Pos2D pos(y, x);
+        auto done = false;
+        while (!done) {
+            for (auto ty = pos.y - width - 1; ty <= pos.y + width + 1; ty++) {
+                for (auto tx = pos.x - width - 1; tx <= pos.x + width + 1; tx++) {
+                    const Pos2D pos_target(ty, tx);
+                    if (!in_bounds2(floor_ptr, pos_target.y, pos_target.x)) {
+                        continue;
                     }
-                }
 
-                done = true;
+                    auto &grid = floor_ptr->get_grid(pos_target);
+                    if (grid.feat == terrains.get_terrain_id(tag_deep)) {
+                        continue;
+                    }
+
+                    if (grid.feat == terrains.get_terrain_id(tag_shallow)) {
+                        continue;
+                    }
+
+                    if (distance(pos_target.y, pos_target.x, pos.y, pos.x) > rand_spread(width, 1)) {
+                        continue;
+                    }
+
+                    /* Do not convert permanent features */
+                    if (grid.has(TerrainCharacteristics::PERMANENT)) {
+                        continue;
+                    }
+
+                    /*
+                     * Clear previous contents, add feature
+                     * The border mainly gets tag2, while the center gets tag1
+                     */
+                    if (distance(pos_target.y, pos_target.x, pos.y, pos.x) > width) {
+                        grid.set_terrain_id(tag_shallow);
+                    } else {
+                        grid.set_terrain_id(tag_deep);
+                    }
+
+                    /* Clear garbage of hidden trap or door */
+                    grid.mimic = 0;
+
+                    /* Lava terrain glows */
+                    if (terrains.get_terrain(tag_deep).flags.has(TerrainCharacteristics::LAVA)) {
+                        if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
+                            grid.info |= CAVE_GLOW;
+                        }
+                    }
+
+                    /* Hack -- don't teleport here */
+                    grid.info |= CAVE_ICKY;
+                }
             }
+
+            done = true;
         }
     }
 }
 
 /*!
- * @brief ランダムに川/溶岩流をダンジョンに配置する /
- * Places water /lava through dungeon.
- * @param feat1 中央部地形ID
- * @param feat2 境界部地形ID
+ * @brief ランダムに川/溶岩流をダンジョンに配置する
+ * @param floor_ptr フロアへの参照ポインタ
+ * @param dd_ptr ダンジョン生成データへの参照ポインタ
  */
 void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
 {
-    short feat1 = 0;
-    short feat2 = 0;
-
     const auto &dungeon = floor_ptr->get_dungeon_definition();
-    const auto &terrains = TerrainList::get_instance();
-
-    /* Choose water mainly */
-    if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && dungeon.flags.has(DungeonFeatureType::WATER_RIVER)) {
-        feat1 = terrains.get_terrain_id(TerrainTag::DEEP_WATER);
-        feat2 = terrains.get_terrain_id(TerrainTag::SHALLOW_WATER);
-    } else /* others */
-    {
-        short select_deep_feat[10]{};
-        short select_shallow_feat[10]{};
-        auto select_id_max = 0;
-        if (dungeon.flags.has(DungeonFeatureType::LAVA_RIVER)) {
-            select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_LAVA);
-            select_shallow_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::SHALLOW_LAVA);
-            select_id_max++;
-        }
-        if (dungeon.flags.has(DungeonFeatureType::POISONOUS_RIVER)) {
-            select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_POISONOUS_PUDDLE);
-            select_shallow_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::SHALLOW_POISONOUS_PUDDLE);
-            select_id_max++;
-        }
-        if (dungeon.flags.has(DungeonFeatureType::ACID_RIVER)) {
-            select_deep_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::DEEP_ACID_PUDDLE);
-            select_shallow_feat[select_id_max] = terrains.get_terrain_id(TerrainTag::SHALLOW_ACID_PUDDLE);
-            select_id_max++;
-        }
-
-        if (select_id_max > 0) {
-            const auto selected = randint0(select_id_max);
-            feat1 = select_deep_feat[selected];
-            feat2 = select_shallow_feat[selected];
-        } else {
-            return;
-        }
+    const auto tag_pair = dungeon.decide_river_terrains(floor_ptr->dun_level);
+    if (!tag_pair) {
+        return;
     }
 
-    if (feat1) {
-        const auto &terrain = TerrainList::get_instance().get_terrain(feat1);
+    const auto &[tag_deep, tag_shallow] = *tag_pair;
+    const auto &terrains = TerrainList::get_instance();
+    if (tag_deep > TerrainTag::NONE) {
+        const auto &terrain = terrains.get_terrain(tag_deep);
         auto is_lava = dd_ptr->laketype == LAKE_T_LAVA;
         is_lava &= terrain.flags.has(TerrainCharacteristics::LAVA);
         auto is_water = dd_ptr->laketype == LAKE_T_WATER;
@@ -263,7 +218,7 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
 
     constexpr auto width_rivers = 2;
     const auto wid = randint1(width_rivers);
-    recursive_river(floor_ptr, x1, y1, x2, y2, feat1, feat2, wid);
+    recursive_river(floor_ptr, { y1, x1 }, { y2, x2 }, tag_deep, tag_shallow, wid);
 
     /* Hack - Save the location as a "room" */
     if (dd_ptr->cent_n < dd_ptr->centers.size()) {

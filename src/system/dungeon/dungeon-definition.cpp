@@ -1,12 +1,15 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "dungeon/dungeon-flag-mask.h"
+#include "floor/floor-base-definitions.h"
 #include "grid/feature.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/z-form.h"
+#include "term/z-rand.h"
 
 enum conversion_type {
     CONVERT_TYPE_FLOOR = 0,
@@ -147,6 +150,37 @@ int DungeonDefinition::calc_cavern_terrains() const
     }
 
     return count;
+}
+
+/*!
+ * @brief 川地形の種類 (普通の川、溶岩、毒沼、酸沼)を決める
+ * @param threshold 川生成の確率閾値 (深いフロアほど生成率が高い)
+ * @return 川地形の生成条件が満たされたら地形タグの組み合わせ (深/浅)、満たされなかったらnullopt
+ */
+std::optional<std::pair<TerrainTag, TerrainTag>> DungeonDefinition::decide_river_terrains(int threshold) const
+{
+    if (this->flags.has(DungeonFeatureType::WATER_RIVER) && (randint1(MAX_DEPTH * 2) - 1 > threshold)) {
+        return std::make_pair<TerrainTag, TerrainTag>(TerrainTag::DEEP_WATER, TerrainTag::SHALLOW_WATER);
+    }
+
+    std::vector<std::pair<TerrainTag, TerrainTag>> tags;
+    if (this->flags.has(DungeonFeatureType::LAVA_RIVER)) {
+        tags.emplace_back(TerrainTag::DEEP_LAVA, TerrainTag::SHALLOW_LAVA);
+    }
+
+    if (this->flags.has(DungeonFeatureType::POISONOUS_RIVER)) {
+        tags.emplace_back(TerrainTag::DEEP_POISONOUS_PUDDLE, TerrainTag::SHALLOW_POISONOUS_PUDDLE);
+    }
+
+    if (this->flags.has(DungeonFeatureType::ACID_RIVER)) {
+        tags.emplace_back(TerrainTag::DEEP_ACID_PUDDLE, TerrainTag::SHALLOW_ACID_PUDDLE);
+    }
+
+    if (tags.empty()) {
+        return std::nullopt;
+    }
+
+    return rand_choice(tags);
 }
 
 void DungeonDefinition::set_guardian_flag()
