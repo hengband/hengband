@@ -623,12 +623,7 @@ std::optional<std::string> MonraceDefinition::probe_lore()
     }
 
     using Mdt = MonsterDropType;
-    auto num_drops = (this->drop_flags.has(Mdt::DROP_4D2) ? 8 : 0);
-    num_drops += (this->drop_flags.has(Mdt::DROP_3D2) ? 6 : 0);
-    num_drops += (this->drop_flags.has(Mdt::DROP_2D2) ? 4 : 0);
-    num_drops += (this->drop_flags.has(Mdt::DROP_1D2) ? 2 : 0);
-    num_drops += (this->drop_flags.has(Mdt::DROP_90) ? 1 : 0);
-    num_drops += (this->drop_flags.has(Mdt::DROP_60) ? 1 : 0);
+    auto num_drops = calc_drop_num(this->drop_flags);
     if (this->drop_flags.has_not(Mdt::ONLY_GOLD)) {
         if (this->r_drop_item != num_drops) {
             n = true;
@@ -1019,4 +1014,21 @@ int MonraceDefinition::calc_power_from_moving(int power, const EnumClassFlagGrou
     }
 
     return result;
+}
+
+/*!
+ * @brief アイテムドロップフラグからドロップ数を計算する
+ * @param drop_flags アイテムドロップフラグ
+ * @return アイテムのドロップ数
+ */
+int MonraceDefinition::calc_drop_num(const EnumClassFlagGroup<MonsterDropType> &drop_flags)
+{
+    using Mdt = MonsterDropType;
+    auto num_drops = (drop_flags.has(Mdt::DROP_4D2) ? 8 : 0);
+    num_drops += (drop_flags.has(Mdt::DROP_3D2) ? 6 : 0);
+    num_drops += (drop_flags.has(Mdt::DROP_2D2) ? 4 : 0);
+    num_drops += (drop_flags.has(Mdt::DROP_1D2) ? 2 : 0);
+    num_drops += (drop_flags.has(Mdt::DROP_90) ? 1 : 0);
+    num_drops += (drop_flags.has(Mdt::DROP_60) ? 1 : 0);
+    return num_drops;
 }

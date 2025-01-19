@@ -209,6 +209,7 @@ public:
     static int calc_power_from_speed(int power, decltype(MonraceDefinition::speed) speed);
     static int calc_power_from_defensiveness(int power, int num_resistances, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags);
     static int calc_power_from_moving(int power, const EnumClassFlagGroup<MonsterBehaviorType> &behavior_flags);
+    static int calc_drop_num(const EnumClassFlagGroup<MonsterDropType> &drop_flags);
 
     //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
     bool has_entity() const;
