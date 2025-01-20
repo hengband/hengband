@@ -376,7 +376,7 @@ static void build_vault(
                 place_object(player_ptr, pos.y, pos.x, 0L);
                 break;
             case ':':
-                grid.feat = feat_tree;
+                grid.set_terrain_id(TerrainTag::TREE);
                 break;
             case '+':
                 place_secret_door(player_ptr, pos.y, pos.x, DOOR_DEFAULT);

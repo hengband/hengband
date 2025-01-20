@@ -363,15 +363,6 @@ void init_feat_variables()
     feat_pattern_exit = terrains.get_terrain_id_by_tag("PATTERN_EXIT");
     feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
 
-    /* Terrains */
-    feat_dirt = terrains.get_terrain_id_by_tag("DIRT");
-    feat_grass = terrains.get_terrain_id_by_tag("GRASS");
-    feat_flower = terrains.get_terrain_id_by_tag("FLOWER");
-    feat_brake = terrains.get_terrain_id_by_tag("BRAKE");
-    feat_tree = terrains.get_terrain_id_by_tag("TREE");
-    feat_mountain = terrains.get_terrain_id_by_tag("MOUNTAIN");
-    feat_swamp = terrains.get_terrain_id_by_tag("SWAMP");
-
     feat_undetected = terrains.get_terrain_id_by_tag("UNDETECTED");
 
     init_wilderness_terrains();

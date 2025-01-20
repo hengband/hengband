@@ -39,15 +39,6 @@ FEAT_IDX feat_pattern_old;
 FEAT_IDX feat_pattern_exit;
 FEAT_IDX feat_pattern_corrupted;
 
-/* Terrains */
-FEAT_IDX feat_dirt;
-FEAT_IDX feat_grass;
-FEAT_IDX feat_flower;
-FEAT_IDX feat_brake;
-FEAT_IDX feat_tree;
-FEAT_IDX feat_mountain;
-FEAT_IDX feat_swamp;
-
 /* Unknown grid (not detected) */
 FEAT_IDX feat_undetected;
 
