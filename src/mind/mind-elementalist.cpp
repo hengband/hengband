@@ -17,7 +17,6 @@
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
-#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/game-option-page.h"
 #include "game-option/input-options.h"
@@ -1479,7 +1478,7 @@ static bool is_target_grid_dark(FloorType *f_ptr, POSITION y, POSITION x)
                 continue;
             }
 
-            POSITION d = distance(dy, dx, y, x);
+            const auto d = Grid::calc_distance({ dy, dx }, { y, x });
             const auto &monrace = f_ptr->m_list[m_idx].get_monrace();
             if (d <= 1 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::SELF_LITE_1 })) {
                 return false;
@@ -1516,7 +1515,7 @@ static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
 
         f_ptr = player_ptr->current_floor_ptr;
 
-        if (distance(y, x, player_ptr->y, player_ptr->x) > dist) {
+        if (Grid::calc_distance({ y, x }, player_ptr->get_position()) > dist) {
             msg_print(_("遠すぎる！", "That is too far!"));
             continue;
         }

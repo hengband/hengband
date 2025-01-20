@@ -2,6 +2,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/geometry.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/target-checker.h"
 #include "util/bit-flags-calculator.h"
@@ -179,7 +180,7 @@ bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, const 
         lx = tx = player_ptr->x + 20 * ddx[dir];
     }
 
-    int ld = distance(player_ptr->y, player_ptr->x, ly, lx);
+    const auto ld = Grid::calc_distance(player_ptr->get_position(), { ly, lx });
     BIT_FLAGS flg = PROJECT_FAST | PROJECT_THRU | PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE | PROJECT_GRID;
     bool result = true;
     for (int i = 0; i < num; i++) {
@@ -188,7 +189,7 @@ bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, const 
             y = rand_spread(ly, ld * dev / 20);
             x = rand_spread(lx, ld * dev / 20);
 
-            if (distance(ly, lx, y, x) <= ld * dev / 20) {
+            if (Grid::calc_distance({ ly, lx }, { y, x }) <= ld * dev / 20) {
                 break;
             }
         }

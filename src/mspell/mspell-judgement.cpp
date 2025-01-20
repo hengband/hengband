@@ -13,7 +13,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "main/sound-definitions-table.h"
 #include "monster-race/race-flags-resistance.h"
@@ -125,24 +124,24 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
     if (path_n == 0) {
         const auto p_pos = player_ptr->get_position();
         if (flg & PROJECT_DISI) {
-            if (in_disintegration_range(&floor, pos_source.y, pos_source.x, pos_target.y, pos_target.x) && (distance(pos_source.y, pos_source.x, pos_target.y, pos_target.x) <= rad)) {
+            if (in_disintegration_range(&floor, pos_source.y, pos_source.x, pos_target.y, pos_target.x) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
                 hit2 = true;
             }
-            if (in_disintegration_range(&floor, pos_source.y, pos_source.x, p_pos.y, p_pos.x) && (distance(pos_source.y, pos_source.x, p_pos.y, p_pos.x) <= rad)) {
+            if (in_disintegration_range(&floor, pos_source.y, pos_source.x, p_pos.y, p_pos.x) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
                 hityou = true;
             }
         } else if (flg & PROJECT_LOS) {
-            if (los(player_ptr, pos_source.y, pos_source.x, pos_target.y, pos_target.x) && (distance(pos_source.y, pos_source.x, pos_target.y, pos_target.x) <= rad)) {
+            if (los(player_ptr, pos_source.y, pos_source.x, pos_target.y, pos_target.x) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
                 hit2 = true;
             }
-            if (los(player_ptr, pos_source.y, pos_source.x, p_pos.y, p_pos.x) && (distance(pos_source.y, pos_source.x, p_pos.y, p_pos.x) <= rad)) {
+            if (los(player_ptr, pos_source.y, pos_source.x, p_pos.y, p_pos.x) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
                 hityou = true;
             }
         } else {
-            if (projectable(player_ptr, pos_source, pos_target) && (distance(pos_source.y, pos_source.x, pos_target.y, pos_target.x) <= rad)) {
+            if (projectable(player_ptr, pos_source, pos_target) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
                 hit2 = true;
             }
-            if (projectable(player_ptr, pos_source, p_pos) && (distance(pos_source.y, pos_source.x, p_pos.y, p_pos.x) <= rad)) {
+            if (projectable(player_ptr, pos_source, p_pos) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
                 hityou = true;
             }
         }

@@ -218,7 +218,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         if (!in_bounds2(player_ptr->current_floor_ptr, pos.y, pos.x)) {
                             continue;
                         }
-                        if (distance(pos_breath.y, pos_breath.x, pos.y, pos.x) != dist) {
+                        if (Grid::calc_distance(pos_breath, pos) != dist) {
                             continue;
                         }
 

@@ -55,8 +55,8 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
             break;
         }
 
-        const auto pos_to = mmove2(pos, player_ptr->get_position(), pos_target);
-        if (AngbandSystem::get_instance().get_max_range() <= distance(player_ptr->y, player_ptr->x, pos_to.y, pos_to.x)) {
+        const auto pos_to = mmove2(pos, p_pos, pos_target);
+        if (AngbandSystem::get_instance().get_max_range() <= Grid::calc_distance(p_pos, pos_to)) {
             break;
         }
         if (!floor.has_terrain_characteristics(pos_to, TerrainCharacteristics::PROJECT)) {

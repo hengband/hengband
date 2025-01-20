@@ -132,15 +132,15 @@ static void build_bubble_vault(PlayerType *player_ptr, const Pos2D &pos0, const 
     for (auto x = 1; x < vec.x - 1; x++) {
         for (auto y = 1; y < vec.y - 1; y++) {
             /* Get distances to two closest centers */
-            auto min1 = distance(x, y, center_points[0].x, center_points[0].y);
-            auto min2 = distance(x, y, center_points[1].x, center_points[1].y);
+            auto min1 = Grid::calc_distance({ y, x }, center_points[0]);
+            auto min2 = Grid::calc_distance({ y, x }, center_points[1]);
             if (min1 > min2) {
                 std::swap(min1, min2);
             }
 
             /* Scan the rest */
             for (auto i = 2; i < NUM_BUBBLES; i++) {
-                auto temp = distance(x, y, center_points[i].x, center_points[i].y);
+                auto temp = Grid::calc_distance({ y, x }, center_points[i]);
                 if (temp < min1) {
                     min2 = min1;
                     std::swap(temp, min1);

@@ -2,6 +2,7 @@
 
 #include "object/object-index-list.h"
 #include "system/angband.h"
+#include "util/point-2d.h"
 #include <map>
 
 /*
@@ -70,6 +71,8 @@ public:
     std::map<GridFlow, uint8_t> costs; //!< Cost of flowing
     std::map<GridFlow, uint8_t> dists; //!< Distance from player
     byte when{}; /* Hack -- when cost was computed */
+
+    static int calc_distance(const Pos2D &pos1, const Pos2D &pos2);
 
     short get_terrain_id(TerrainKind tk = TerrainKind::NORMAL) const;
     bool is_floor() const;

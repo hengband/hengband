@@ -501,9 +501,9 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     std::map<int, std::vector<ProjectionPath::pp_const_iterator>> pos_list_map;
     for (const auto &second_path_g : second_path_g_list) {
         for (auto it = second_path_g.begin(); it != second_path_g.end(); ++it) {
-            const auto &[o_y, o_x] = path_g.back();
-            const auto &[y, x] = *it;
-            auto d = distance(o_y, o_x, y, x);
+            const auto &o_pos = path_g.back();
+            const auto &pos = *it;
+            auto d = Grid::calc_distance(o_pos, pos);
             pos_list_map[d].push_back(it);
         }
     }

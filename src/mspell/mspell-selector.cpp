@@ -6,7 +6,6 @@
  */
 
 #include "mspell/mspell-selector.h"
-#include "floor/geometry.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-attack-util.h"
@@ -15,6 +14,7 @@
 #include "system/angband-system.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
+#include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
@@ -331,7 +331,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         }
     }
 
-    auto should_select_tactic = distance(player_ptr->y, player_ptr->x, m_ptr->fy, m_ptr->fx) < 4;
+    auto should_select_tactic = Grid::calc_distance(player_ptr->get_position(), m_ptr->get_position()) < 4;
     should_select_tactic &= !attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS);
     should_select_tactic &= evaluate_percent(75);
     should_select_tactic &= world.timewalk_m_idx == 0;

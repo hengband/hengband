@@ -6,7 +6,6 @@
 
 #include "room/treasure-deployment.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
@@ -21,7 +20,7 @@
 namespace {
 void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &center, const Pos2D &pos, int size, int difficulty)
 {
-    auto value = distance(center.x, center.y, pos.x, pos.y) * 100 / size + randint1(10) - difficulty;
+    auto value = Grid::calc_distance(center, pos) * 100 / size + randint1(10) - difficulty;
 
     /// @note
     /// v2.2.1のコードのコメントを見ると強制的に空白マスに設定するのを意図しているようだが、

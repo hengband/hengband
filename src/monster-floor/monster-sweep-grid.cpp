@@ -266,7 +266,7 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
     const auto &grid = floor.get_grid(m_pos);
     const auto gf = monrace.get_grid_flow_type();
     if (grid.has_los() && projectable(this->player_ptr, p_pos, m_pos)) {
-        if ((distance(m_pos.y, m_pos.x, p_pos.y, p_pos.x) == 1) || (monrace.freq_spell > 0) || (grid.get_cost(gf) > 5)) {
+        if ((Grid::calc_distance(m_pos, p_pos) == 1) || (monrace.freq_spell > 0) || (grid.get_cost(gf) > 5)) {
             return;
         }
     }
@@ -423,7 +423,7 @@ bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
             continue;
         }
 
-        auto dis = distance(y, x, y1, x1);
+        const auto dis = Grid::calc_distance({ y, x }, { y1, x1 });
         auto s = 5000 / (dis + 3) - 500 / (floor_ptr->grid_array[y][x].get_distance(r_ptr->get_grid_flow_type()) + 1);
         if (s < 0) {
             s = 0;

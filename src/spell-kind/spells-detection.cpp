@@ -3,7 +3,6 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
 #include "floor/floor-save-util.h"
-#include "floor/geometry.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "monster-race/monster-race-hook.h"
@@ -46,7 +45,7 @@ static bool detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainChar
     bool detect = false;
     for (POSITION y = 1; y < floor.height - 1; y++) {
         for (POSITION x = 1; x <= floor.width - 1; x++) {
-            int dist = distance(player_ptr->y, player_ptr->x, y, x);
+            int dist = Grid::calc_distance(player_ptr->get_position(), { y, x });
             if (dist > range) {
                 continue;
             }
@@ -196,7 +195,7 @@ bool detect_objects_gold(PlayerType *player_ptr, POSITION range)
 
         y = o_ptr->iy;
         x = o_ptr->ix;
-        if (distance(player_ptr->y, player_ptr->x, y, x) > range2) {
+        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range2) {
             continue;
         }
 
@@ -249,7 +248,7 @@ bool detect_objects_normal(PlayerType *player_ptr, POSITION range)
         POSITION y = o_ptr->iy;
         POSITION x = o_ptr->ix;
 
-        if (distance(player_ptr->y, player_ptr->x, y, x) > range2) {
+        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range2) {
             continue;
         }
 
@@ -314,7 +313,7 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
 
         auto y = o_ptr->iy;
         auto x = o_ptr->ix;
-        if (distance(player_ptr->y, player_ptr->x, y, x) > range) {
+        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
@@ -358,7 +357,7 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
 
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
-        if (distance(player_ptr->y, player_ptr->x, y, x) > range) {
+        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
@@ -406,7 +405,7 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
 
-        if (distance(player_ptr->y, player_ptr->x, y, x) > range) {
+        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
@@ -457,7 +456,7 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
 
-        if (distance(player_ptr->y, player_ptr->x, y, x) > range) {
+        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
@@ -506,7 +505,7 @@ bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
 
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
-        if (distance(player_ptr->y, player_ptr->x, y, x) > range) {
+        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
@@ -554,7 +553,7 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
 
-        if (distance(player_ptr->y, player_ptr->x, y, x) > range) {
+        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
@@ -603,7 +602,7 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
         POSITION y = m_ptr->fy;
         POSITION x = m_ptr->fx;
 
-        if (distance(player_ptr->y, player_ptr->x, y, x) > range) {
+        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 

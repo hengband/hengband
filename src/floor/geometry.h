@@ -34,7 +34,6 @@ constexpr std::array<Pos2DVec, 8> CCW_DD = {
 
 class PlayerType;
 DIRECTION coords_to_dir(PlayerType *player_ptr, POSITION y, POSITION x);
-POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 Pos2D mmove2(const Pos2D &pos_orig, const Pos2D &pos1, const Pos2D &pos2);
 bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x);
 
