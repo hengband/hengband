@@ -43,7 +43,7 @@ private:
     void menu_target();
     void switch_target_input();
     bool check_panel_changed();
-    void sweep_targets();
+    void sweep_targets(int panel_row_min_initial, int panel_col_min_initial);
     bool set_target_grid();
     std::string describe_grid_wizard() const;
     void switch_next_grid_command();
@@ -52,8 +52,6 @@ private:
     PlayerType *player_ptr;
     target_type mode;
     Pos2D pos_target;
-    POSITION y2 = 0; // panel_row_min 退避用
-    POSITION x2 = 0; // panel_col_min 退避用
     bool done = false;
     bool flag = true; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
     char query{};
@@ -336,7 +334,7 @@ bool TargetSetter::check_panel_changed()
  *
  * 既に "interesting" な座標を発見している場合、この関数は何もしない。
  */
-void TargetSetter::sweep_targets()
+void TargetSetter::sweep_targets(int panel_row_min_initial, int panel_col_min_initial)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
@@ -350,8 +348,8 @@ void TargetSetter::sweep_targets()
 
         POSITION dx = ddx[this->distance];
         POSITION dy = ddy[this->distance];
-        panel_row_min = this->y2;
-        panel_col_min = this->x2;
+        panel_row_min = panel_row_min_initial;
+        panel_col_min = panel_col_min_initial;
         panel_bounds_center();
         rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         rfu.set_flag(MainWindowRedrawingFlag::MAP);
@@ -402,12 +400,8 @@ bool TargetSetter::set_target_grid()
         return true;
     }
 
-    this->y2 = panel_row_min;
-    this->x2 = panel_col_min;
-    {
-        this->target_num = target_pick(pos_interests[this->m].y, pos_interests[this->m].x, ddy[this->distance], ddx[this->distance]);
-    }
-    this->sweep_targets();
+    this->target_num = target_pick(pos_interests[this->m].y, pos_interests[this->m].x, ddy[this->distance], ddx[this->distance]);
+    this->sweep_targets(panel_row_min, panel_col_min);
     this->m = this->target_num;
     return true;
 }
