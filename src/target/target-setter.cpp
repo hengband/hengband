@@ -55,7 +55,6 @@ private:
     bool done = false;
     bool flag = true; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
     char query{};
-    Grid *g_ptr = nullptr;
     TERM_LEN wid, hgt;
     int m = 0; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
     int distance = 0; // カーソルの移動方向 (1,2,3,4,6,7,8,9)
@@ -179,8 +178,8 @@ std::string TargetSetter::describe_projectablity()
     }
 
     std::string info;
-    this->g_ptr = &this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
-    if (target_able(this->player_ptr, this->g_ptr->m_idx)) {
+    const auto &grid = this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
+    if (target_able(this->player_ptr, grid.m_idx)) {
         info = _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>");
     } else {
         info = _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>");
@@ -220,18 +219,20 @@ void TargetSetter::switch_target_input()
     case 't':
     case '.':
     case '5':
-    case '0':
-        if (!target_able(this->player_ptr, this->g_ptr->m_idx)) {
+    case '0': {
+        const auto &grid = this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
+        if (!target_able(this->player_ptr, grid.m_idx)) {
             bell();
             return;
         }
 
-        health_track(this->player_ptr, this->g_ptr->m_idx);
-        target_who = this->g_ptr->m_idx;
+        health_track(this->player_ptr, grid.m_idx);
+        target_who = grid.m_idx;
         target_row = this->pos_target.y;
         target_col = this->pos_target.x;
         this->done = true;
         return;
+    }
     case ' ':
     case '*':
     case '+':
@@ -412,10 +413,11 @@ std::string TargetSetter::describe_grid_wizard() const
         return "";
     }
 
+    const auto &grid = this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
     constexpr auto fmt = " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d";
     const auto is_los = los(this->player_ptr, this->player_ptr->y, this->player_ptr->x, this->pos_target.y, this->pos_target.x);
     const auto is_projectable = projectable(this->player_ptr, this->player_ptr->get_position(), this->pos_target);
-    const auto cheatinfo = format(fmt, this->pos_target.x, this->pos_target.y, is_los, is_projectable, this->g_ptr->special);
+    const auto cheatinfo = format(fmt, this->pos_target.x, this->pos_target.y, is_los, is_projectable, grid.special);
     return cheatinfo;
 }
 
@@ -537,7 +539,6 @@ void TargetSetter::sweep_target_grids()
             print_path(this->player_ptr, this->pos_target.y, this->pos_target.x);
         }
 
-        this->g_ptr = &this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
         std::string info = _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>");
         info.append(this->describe_grid_wizard());
         fix_floor_item_list(this->player_ptr, this->pos_target);
