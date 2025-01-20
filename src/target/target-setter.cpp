@@ -43,8 +43,8 @@ private:
     std::string describe_projectablity() const;
     char examine_target_grid(std::string_view info, std::optional<target_type> append_mode = std::nullopt) const;
     std::optional<int> switch_target_input();
-    bool check_panel_changed(int dir);
-    void sweep_targets(int dir, int panel_row_min_initial, int panel_col_min_initial);
+    std::optional<int> check_panel_changed(int dir);
+    std::optional<int> sweep_targets(int dir, int panel_row_min_initial, int panel_col_min_initial);
     bool set_target_grid();
     std::string describe_grid_wizard() const;
     std::optional<int> switch_next_grid_command();
@@ -56,7 +56,6 @@ private:
     bool done = false;
     bool flag = true; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
     int m = 0; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
-    int target_num = 0; // target_pick() の結果
     bool move_fast = false; // カーソル移動を粗くする(1マスずつ移動しない)
 };
 
@@ -113,12 +112,13 @@ static bool change_panel_xy(PlayerType *player_ptr, const Pos2D &pos)
  * @param dx 現在地からの向きx [-1,1]
  * @return 最も近い座標のインデックス。適切なものがない場合 -1
  */
-static POSITION_IDX target_pick(const POSITION y1, const POSITION x1, const POSITION dy, const POSITION dx)
+std::optional<int> target_pick(const POSITION y1, const POSITION x1, const POSITION dy, const POSITION dx)
 {
     // 最も近いもののインデックスとその距離。
-    POSITION_IDX b_i = -1, b_v = 9999;
+    std::optional<int> b_i;
+    auto b_v = 9999;
 
-    for (POSITION_IDX i = 0; i < std::ssize(pos_interests); i++) {
+    for (auto i = 0; i < std::ssize(pos_interests); i++) {
         const auto &[y2, x2] = pos_interests[i];
 
         // (y1,x1) から (y2,x2) へ向かうベクトル。
@@ -300,13 +300,8 @@ std::optional<int> TargetSetter::switch_target_input()
  * @brief カーソル移動に伴い、描画範囲、"interesting" 座標リスト、現在のターゲットを更新する。
  * @return カーソル移動によって描画範囲が変化したかどうか
  */
-bool TargetSetter::check_panel_changed(int dir)
+std::optional<int> TargetSetter::check_panel_changed(int dir)
 {
-    // カーソル移動によって描画範囲が変化しないなら何もせずその旨を返す。
-    if (!change_panel(this->player_ptr, ddy[dir], ddx[dir])) {
-        return false;
-    }
-
     // 描画範囲が変化した場合、"interesting" 座標リストおよび現在のターゲットを更新する必要がある。
 
     // "interesting" 座標を探す起点。
@@ -320,12 +315,7 @@ bool TargetSetter::check_panel_changed(int dir)
 
     // 新たな "interesting" 座標リストからターゲットを探す。
     this->flag = true;
-    this->target_num = target_pick(pos.y, pos.x, ddy[dir], ddx[dir]);
-    if (this->target_num >= 0) {
-        this->m = this->target_num;
-    }
-
-    return true;
+    return target_pick(pos.y, pos.x, ddy[dir], ddx[dir]);
 }
 
 /*!
@@ -333,20 +323,23 @@ bool TargetSetter::check_panel_changed(int dir)
  *
  * 既に "interesting" な座標を発見している場合、この関数は何もしない。
  */
-void TargetSetter::sweep_targets(int dir, int panel_row_min_initial, int panel_col_min_initial)
+std::optional<int> TargetSetter::sweep_targets(int dir, int panel_row_min_initial, int panel_col_min_initial)
 {
     auto *floor_ptr = this->player_ptr->current_floor_ptr;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto &[y, x] = this->pos_target;
-    while (this->flag && (this->target_num < 0)) {
+    std::optional<int> target_index;
+    while (this->flag && !target_index) {
+        auto dy = ddy[dir];
+        auto dx = ddx[dir];
+
         // カーソル移動に伴い、必要なだけ描画範囲を更新。
         // "interesting" 座標リストおよび現在のターゲットも更新。
-        if (this->check_panel_changed(dir)) {
+        if (change_panel(this->player_ptr, dy, dx)) {
+            target_index = this->check_panel_changed(dir);
             continue;
         }
 
-        auto dx = ddx[dir];
-        auto dy = ddy[dir];
         panel_row_min = panel_row_min_initial;
         panel_col_min = panel_col_min_initial;
         panel_bounds_center();
@@ -376,6 +369,8 @@ void TargetSetter::sweep_targets(int dir, int panel_row_min_initial, int panel_c
         x = std::clamp(x, 1, floor_ptr->width - 2);
         y = std::clamp(y, 1, floor_ptr->height - 2);
     }
+
+    return target_index;
 }
 
 bool TargetSetter::set_target_grid()
@@ -393,9 +388,11 @@ bool TargetSetter::set_target_grid()
         return true;
     }
 
-    this->target_num = target_pick(pos_interests[this->m].y, pos_interests[this->m].x, ddy[*dir], ddx[*dir]);
-    this->sweep_targets(*dir, panel_row_min, panel_col_min);
-    this->m = this->target_num;
+    auto target_index = target_pick(pos_interests[this->m].y, pos_interests[this->m].x, ddy[*dir], ddx[*dir]);
+    if (!target_index) {
+        target_index = this->sweep_targets(*dir, panel_row_min, panel_col_min);
+    }
+    this->m = target_index.value_or(-1);
     return true;
 }
 
