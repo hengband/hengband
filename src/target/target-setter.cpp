@@ -55,7 +55,6 @@ private:
     bool done = false;
     bool flag = true; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
     char query{};
-    TERM_LEN wid, hgt;
     int m = 0; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
     int distance = 0; // カーソルの移動方向 (1,2,3,4,6,7,8,9)
     int target_num = 0; // target_pick() の結果
@@ -67,7 +66,6 @@ TargetSetter::TargetSetter(PlayerType *player_ptr, target_type mode)
     , mode(mode)
     , pos_target(player_ptr->get_position())
 {
-    std::tie(this->wid, this->hgt) = get_screen_size();
 }
 
 /*!
@@ -360,15 +358,16 @@ void TargetSetter::sweep_targets(int panel_row_min_initial, int panel_col_min_in
         this->flag = false;
         x += dx;
         y += dy;
-        if (((x < panel_col_min + this->wid / 2) && (dx > 0)) || ((x > panel_col_min + this->wid / 2) && (dx < 0))) {
+        const auto [wid, hgt] = get_screen_size();
+        if (((x < panel_col_min + wid / 2) && (dx > 0)) || ((x > panel_col_min + wid / 2) && (dx < 0))) {
             dx = 0;
         }
 
-        if (((y < panel_row_min + this->hgt / 2) && (dy > 0)) || ((y > panel_row_min + this->hgt / 2) && (dy < 0))) {
+        if (((y < panel_row_min + hgt / 2) && (dy > 0)) || ((y > panel_row_min + hgt / 2) && (dy < 0))) {
             dy = 0;
         }
 
-        if ((y >= panel_row_min + this->hgt) || (y < panel_row_min) || (x >= panel_col_min + this->wid) || (x < panel_col_min)) {
+        if ((y >= panel_row_min + hgt) || (y < panel_row_min) || (x >= panel_col_min + wid) || (x < panel_col_min)) {
             if (change_panel(this->player_ptr, dy, dx)) {
                 pos_interests = target_set_prepare(this->player_ptr, this->mode);
             }
@@ -497,8 +496,9 @@ void TargetSetter::decide_change_panel()
     POSITION dx = ddx[this->distance];
     POSITION dy = ddy[this->distance];
     auto &[y, x] = this->pos_target;
+    const auto [wid, hgt] = get_screen_size();
     if (this->move_fast) {
-        int mag = std::min(this->wid / 2, this->hgt / 2);
+        int mag = std::min(wid / 2, hgt / 2);
         x += dx * mag;
         y += dy * mag;
     } else {
@@ -506,17 +506,17 @@ void TargetSetter::decide_change_panel()
         y += dy;
     }
 
-    if (((x < panel_col_min + this->wid / 2) && (dx > 0)) || ((x > panel_col_min + this->wid / 2) && (dx < 0))) {
+    if (((x < panel_col_min + wid / 2) && (dx > 0)) || ((x > panel_col_min + wid / 2) && (dx < 0))) {
         dx = 0;
     }
 
-    if (((y < panel_row_min + this->hgt / 2) && (dy > 0)) || ((y > panel_row_min + this->hgt / 2) && (dy < 0))) {
+    if (((y < panel_row_min + hgt / 2) && (dy > 0)) || ((y > panel_row_min + hgt / 2) && (dy < 0))) {
         dy = 0;
     }
 
-    auto should_change_panel = y >= panel_row_min + this->hgt;
+    auto should_change_panel = y >= panel_row_min + hgt;
     should_change_panel |= y < panel_row_min;
-    should_change_panel |= x >= panel_col_min + this->wid;
+    should_change_panel |= x >= panel_col_min + wid;
     should_change_panel |= x < panel_col_min;
     if (should_change_panel && change_panel(this->player_ptr, dy, dx)) {
         pos_interests = target_set_prepare(this->player_ptr, this->mode);
