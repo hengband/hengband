@@ -511,9 +511,9 @@ bool MonraceDefinition::can_entry_arena() const
     return can_entry;
 }
 
-bool MonraceDefinition::is_suitable_for_nightmare(int max_level) const
+bool MonraceDefinition::is_suitable_for_nightmare(int min_level) const
 {
-    return this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR) && (this->level > max_level);
+    return this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR) && (this->level > min_level);
 }
 
 bool MonraceDefinition::is_human() const

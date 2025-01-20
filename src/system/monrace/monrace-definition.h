@@ -179,7 +179,7 @@ public:
     bool is_suitable_for_tanuki() const;
     bool is_suitable_for_figurine() const;
     bool can_entry_arena() const;
-    bool is_suitable_for_nightmare(int max_level) const;
+    bool is_suitable_for_nightmare(int min_level) const;
     bool is_human() const;
     bool is_eatable_human() const;
     bool is_catchable_for_fishing() const;
