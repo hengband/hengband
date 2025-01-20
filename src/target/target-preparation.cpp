@@ -110,15 +110,11 @@ static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
 }
 
 /*!
- * @brief "interesting" な座標たちを ys, xs に返す。
- * @param player_ptr
- * @param ys y座標たちを格納する配列 (POSITION 型)
- * @param xs x座標たちを格納する配列 (POSITION 型)
- * @param mode
- *
- * ys, xs は処理開始時にクリアされる。
+ * @brief "interesting" な座標の一覧を返す。
+ * @param mode ターゲット選択モード
+ * @return "interesting" な座標の一覧
  */
-void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs, const BIT_FLAGS mode)
+std::vector<Pos2D> target_set_prepare(PlayerType *player_ptr, target_type mode)
 {
     POSITION min_hgt, max_hgt, min_wid, max_wid;
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -145,12 +141,12 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
             }
 
             const auto &grid = floor.get_grid(pos);
-            if ((mode & (TARGET_KILL)) && !target_able(player_ptr, grid.m_idx)) {
+            if (is_killable && !target_able(player_ptr, grid.m_idx)) {
                 continue;
             }
 
             const auto &monster = floor.m_list[grid.m_idx];
-            if ((mode & (TARGET_KILL)) && !target_pet && monster.is_pet()) {
+            if (is_killable && !target_pet && monster.is_pet()) {
                 continue;
             }
 
@@ -169,21 +165,14 @@ void target_set_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::
         });
     }
 
-    ys.clear();
-    xs.clear();
-    for (const auto &pos : pos_list) {
-        ys.push_back(pos.y);
-        xs.push_back(pos.x);
+    if (player_ptr->riding == 0 || !target_pet || (std::ssize(pos_list) <= 1) || !is_killable) {
+        return pos_list;
     }
 
-    // 乗っているモンスターがターゲットリストの先頭にならないようにする調整。
-    if (player_ptr->riding == 0 || !target_pet || (size(ys) <= 1) || !(mode & (TARGET_KILL))) {
-        return;
-    }
+    // 乗っているモンスターがターゲットリストの先頭にならないようにする調整
+    std::swap(pos_list[0], pos_list[1]);
 
-    // 0 番目と 1 番目を入れ替える。
-    std::swap(ys[0], ys[1]);
-    std::swap(xs[0], xs[1]);
+    return pos_list;
 }
 
 void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER_IDX> &monster_list)
