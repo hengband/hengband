@@ -26,6 +26,7 @@
 #include "util/string-processor.h"
 #include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
+#include <optional>
 #include <tuple>
 #include <vector>
 
@@ -39,8 +40,8 @@ public:
     void sweep_target_grids();
 
 private:
-    std::string describe_projectablity();
-    void menu_target();
+    std::string describe_projectablity() const;
+    char examine_target_grid(std::string_view info, std::optional<target_type> append_mode = std::nullopt) const;
     void switch_target_input();
     bool check_panel_changed();
     void sweep_targets(int panel_row_min_initial, int panel_col_min_initial);
@@ -54,7 +55,6 @@ private:
     Pos2D pos_target;
     bool done = false;
     bool flag = true; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
-    char query{};
     int m = 0; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
     int distance = 0; // カーソルの移動方向 (1,2,3,4,6,7,8,9)
     int target_num = 0; // target_pick() の結果
@@ -167,9 +167,8 @@ static POSITION_IDX target_pick(const POSITION y1, const POSITION x1, const POSI
     return b_i;
 }
 
-std::string TargetSetter::describe_projectablity()
+std::string TargetSetter::describe_projectablity() const
 {
-    this->pos_target = pos_interests[this->m];
     change_panel_xy(this->player_ptr, this->pos_target);
     if ((this->mode & TARGET_LOOK) == 0) {
         print_path(this->player_ptr, this->pos_target.y, this->pos_target.x);
@@ -195,21 +194,23 @@ std::string TargetSetter::describe_projectablity()
     return info.append(cheatinfo);
 }
 
-void TargetSetter::menu_target()
+char TargetSetter::examine_target_grid(std::string_view info, std::optional<target_type> append_mode) const
 {
-    if (!use_menu) {
-        return;
-    }
-
-    if (this->query == '\r') {
-        this->query = 't';
+    const auto target_mode = append_mode ? i2enum<target_type>(this->mode | *append_mode) : this->mode;
+    while (true) {
+        const auto query = examine_grid(this->player_ptr, this->pos_target.y, this->pos_target.x, target_mode, info.data());
+        if (query != '\0') {
+            return (use_menu && (query == '\r')) ? 't' : query;
+        }
     }
 }
 
 void TargetSetter::switch_target_input()
 {
     this->distance = 0;
-    switch (this->query) {
+    const auto info = this->describe_projectablity();
+    const auto query = this->examine_target_grid(info);
+    switch (query) {
     case ESCAPE:
     case 'q':
         this->done = true;
@@ -273,8 +274,8 @@ void TargetSetter::switch_target_input()
         return;
     default: {
         const char queried_command = rogue_like_commands ? 'x' : 'l';
-        if (this->query != queried_command) {
-            this->distance = get_keymap_dir(this->query);
+        if (query != queried_command) {
+            this->distance = get_keymap_dir(query);
             if (this->distance == 0) {
                 bell();
             }
@@ -384,17 +385,10 @@ bool TargetSetter::set_target_grid()
         return false;
     }
 
-    const auto info = this->describe_projectablity();
+    this->pos_target = pos_interests[this->m];
+
     fix_floor_item_list(this->player_ptr, this->pos_target);
 
-    while (true) {
-        this->query = examine_grid(this->player_ptr, this->pos_target.y, this->pos_target.x, this->mode, info.data());
-        if (this->query) {
-            break;
-        }
-    }
-
-    this->menu_target();
     this->switch_target_input();
     if (this->distance == 0) {
         return true;
@@ -422,7 +416,11 @@ std::string TargetSetter::describe_grid_wizard() const
 
 void TargetSetter::switch_next_grid_command()
 {
-    switch (this->query) {
+    this->distance = 0;
+    std::string info = _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>");
+    info.append(this->describe_grid_wizard());
+    const auto query = this->examine_target_grid(info, TARGET_LOOK);
+    switch (query) {
     case ESCAPE:
     case 'q':
         this->done = true;
@@ -474,8 +472,8 @@ void TargetSetter::switch_next_grid_command()
         break;
     }
     default:
-        this->distance = get_keymap_dir(this->query);
-        if (isupper(this->query)) {
+        this->distance = get_keymap_dir(query);
+        if (isupper(query)) {
             this->move_fast = true;
         }
 
@@ -539,20 +537,7 @@ void TargetSetter::sweep_target_grids()
             print_path(this->player_ptr, this->pos_target.y, this->pos_target.x);
         }
 
-        std::string info = _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>");
-        info.append(this->describe_grid_wizard());
         fix_floor_item_list(this->player_ptr, this->pos_target);
-
-        /* Describe and Prompt (enable "TARGET_LOOK") */
-        const auto target = i2enum<target_type>(this->mode | TARGET_LOOK);
-        while ((this->query = examine_grid(this->player_ptr, this->pos_target.y, this->pos_target.x, target, info.data())) == 0) {
-            ;
-        }
-
-        this->distance = 0;
-        if (use_menu && (this->query == '\r')) {
-            this->query = 't';
-        }
 
         this->switch_next_grid_command();
         this->decide_change_panel();
