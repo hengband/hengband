@@ -14,7 +14,6 @@
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/files-util.h"
 #include "monster-attack/monster-attack-processor.h"

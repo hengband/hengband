@@ -6,7 +6,6 @@
 #include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "object/object-info.h"
 #include "object/object-mark-types.h"

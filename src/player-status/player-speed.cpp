@@ -1,6 +1,5 @@
 #include "player-status/player-speed.h"
 #include "artifact/fixed-art-types.h"
-#include "grid/feature.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster/monster-status.h"
 #include "mutation/mutation-flag-types.h"

@@ -3,7 +3,6 @@
 #include "cmd-action/cmd-attack.h"
 #include "floor/geometry.h"
 #include "game-option/input-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "mind/mind-numbers.h"
 #include "player-attack/player-attack.h"

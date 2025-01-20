@@ -18,7 +18,6 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/cursor.h"
 #include "io/screen-util.h"

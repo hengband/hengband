@@ -10,7 +10,6 @@
 #include "floor/floor-object.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
-#include "grid/feature.h"
 #include "perception/object-perception.h"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"

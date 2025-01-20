@@ -7,7 +7,6 @@
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "game-option/input-options.h"
-#include "grid/feature.h"
 #include "inventory/inventory-slot-types.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
