@@ -148,21 +148,23 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     const auto &terrains = TerrainList::get_instance();
     const auto &world = AngbandWorld::get_instance();
     const auto is_wild_mode = world.is_wild_mode();
+    const auto is_blind = player_ptr->effects()->blindness().is_blind();
+    const auto has_nocto = player_ptr->see_nocto != 0;
+    const auto is_darkened = !has_nocto && grid.is_darkened();
     const auto tag_unsafe = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? TerrainTag::UNDETECTED : TerrainTag::NONE;
     const auto *terrain_mimic_ptr = &grid.get_terrain(TerrainKind::MIMIC);
     DisplaySymbol symbol_config;
     if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
         const auto is_visible = any_bits(grid.info, (CAVE_MARK | CAVE_LITE | CAVE_MNLT));
         const auto is_glowing = match_bits(grid.info, CAVE_GLOW | CAVE_MNDK, CAVE_GLOW);
-        const auto can_view = grid.is_view() && (is_glowing || player_ptr->see_nocto);
-        const auto is_blind = player_ptr->effects()->blindness().is_blind();
+        const auto can_view = grid.is_view() && (is_glowing || has_nocto);
         if (!is_blind && (is_visible || can_view)) {
             symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_STANDARD);
             if (is_wild_mode) {
                 if (view_special_lite && !world.is_daytime()) {
                     symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
                 }
-            } else if (darkened_grid(player_ptr, &grid)) {
+            } else if (is_darkened) {
                 terrain_mimic_ptr = &terrains.get_terrain(tag_unsafe);
                 symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_STANDARD);
             } else if (view_special_lite) {
@@ -185,12 +187,11 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     } else {
         if (grid.is_mark() && is_revealed_wall(floor, pos)) {
             symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_STANDARD);
-            const auto is_blind = player_ptr->effects()->blindness().is_blind();
             if (is_wild_mode) {
                 if (view_granite_lite && (is_blind || !world.is_daytime())) {
                     symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
                 }
-            } else if (darkened_grid(player_ptr, &grid) && !is_blind) {
+            } else if (is_darkened && !is_blind) {
                 if (terrain_mimic_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECT })) {
                     terrain_mimic_ptr = &terrains.get_terrain(tag_unsafe);
                     symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_STANDARD);

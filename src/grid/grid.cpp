@@ -1003,17 +1003,6 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
     }
 }
 
-/*!
- * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param grid グリッドへの参照ポインタ
- * @return 照明が消されている地形ならばTRUE
- */
-bool darkened_grid(PlayerType *player_ptr, const Grid *g_ptr)
-{
-    return ((g_ptr->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) && !player_ptr->see_nocto;
-}
-
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gb_type)
 {
     Grid *const g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];

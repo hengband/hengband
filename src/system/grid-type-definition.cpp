@@ -205,6 +205,15 @@ bool Grid::is_symbol(const int ch) const
     return this->get_terrain().symbol_configs.at(F_LIT_STANDARD).character == ch;
 }
 
+/*!
+ * @brief モンスターにより照明が消されている地形か否かを判定する
+ * @return 照明が消されているか否か
+ */
+bool Grid::is_darkened() const
+{
+    return match_bits(this->info, CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK, CAVE_VIEW | CAVE_MNDK);
+}
+
 void Grid::reset_costs()
 {
     for (const auto gf : GRID_FLOW_RANGE) {
