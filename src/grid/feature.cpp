@@ -39,9 +39,6 @@ FEAT_IDX feat_pattern_old;
 FEAT_IDX feat_pattern_exit;
 FEAT_IDX feat_pattern_corrupted;
 
-/* Unknown grid (not detected) */
-FEAT_IDX feat_undetected;
-
 FEAT_IDX feat_wall_outer;
 FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;

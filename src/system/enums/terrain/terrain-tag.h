@@ -8,6 +8,7 @@
 
 enum class TerrainTag {
     NONE,
+    UNDETECTED,
     FLOOR,
     RUNE_PROTECTION,
     RUNE_EXPLOSION,
