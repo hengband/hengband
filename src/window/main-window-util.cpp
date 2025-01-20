@@ -36,7 +36,7 @@ POSITION panel_col_prt;
 POSITION panel_row_prt;
 
 int match_autopick;
-ItemEntity *autopick_obj; /*!< 各種自動拾い処理時に使うオブジェクトポインタ */
+const ItemEntity *autopick_obj; /*!< 各種自動拾い処理時に使うオブジェクトポインタ */
 int feat_priority; /*!< マップ縮小表示時に表示すべき地形の優先度を保管する */
 
 static const std::vector<std::pair<std::string_view, std::string_view>> simplify_list = {
@@ -182,7 +182,7 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     vector<vector<char>> mc(hgt + 2, vector<char>(wid + 2, ' '));
     vector<vector<byte>> mp(hgt + 2, vector<byte>(wid + 2, 0));
     vector<vector<int>> match_autopick_yx(hgt + 2, vector<int>(wid + 2, -1));
-    vector<vector<ItemEntity *>> object_autopick_yx(hgt + 2, vector<ItemEntity *>(wid + 2, nullptr));
+    vector<vector<const ItemEntity *>> object_autopick_yx(hgt + 2, vector<const ItemEntity *>(wid + 2, nullptr));
 
     vector<vector<TERM_COLOR>> bigma(floor_ptr->height + 2, vector<TERM_COLOR>(floor_ptr->width + 2, TERM_WHITE));
     vector<vector<char>> bigmc(floor_ptr->height + 2, vector<char>(floor_ptr->width + 2, ' '));

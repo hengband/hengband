@@ -8,7 +8,7 @@
 #define COL_MAP 12
 
 class ItemEntity;
-extern ItemEntity *autopick_obj;
+extern const ItemEntity *autopick_obj;
 extern POSITION panel_row_min;
 extern POSITION panel_row_max;
 extern POSITION panel_col_min;
