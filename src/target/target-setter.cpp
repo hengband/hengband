@@ -48,15 +48,14 @@ private:
     std::optional<int> sweep_targets(int dir, int panel_row_min_initial, int panel_col_min_initial);
     bool set_target_grid();
     std::string describe_grid_wizard() const;
-    std::optional<int> switch_next_grid_command();
-    void decide_change_panel(int dir);
+    std::optional<std::pair<int, bool>> switch_next_grid_command();
+    void decide_change_panel(int dir, bool move_fast);
 
     PlayerType *player_ptr;
     target_type mode;
     Pos2D pos_target;
     bool done = false;
     std::optional<int> interest_index = 0; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
-    bool move_fast = false; // カーソル移動を粗くする(1マスずつ移動しない)
 };
 
 TargetSetter::TargetSetter(PlayerType *player_ptr, target_type mode)
@@ -406,7 +405,12 @@ std::string TargetSetter::describe_grid_wizard() const
     return cheatinfo;
 }
 
-std::optional<int> TargetSetter::switch_next_grid_command()
+/*!
+ * @brief 隣接マスへのターゲット切り替えモードでのコマンドを処理する
+ *
+ * @return 移動方向と早く移動するかどうかのペア。移動しない場合はstd::nullopt
+ */
+std::optional<std::pair<int, bool>> TargetSetter::switch_next_grid_command()
 {
     std::string info = _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>");
     info.append(this->describe_grid_wizard());
@@ -460,33 +464,25 @@ std::optional<int> TargetSetter::switch_next_grid_command()
     }
     default:
         const auto dir = get_keymap_dir(query);
-        if (isupper(query)) {
-            this->move_fast = true;
-        }
-
         if (dir == 0) {
             bell();
             return std::nullopt;
         }
 
-        return dir;
+        const auto move_fast = isupper(query) != 0;
+        return std::make_pair(dir, move_fast);
     }
 }
 
-void TargetSetter::decide_change_panel(int dir)
+void TargetSetter::decide_change_panel(int dir, bool move_fast)
 {
     auto dx = ddx[dir];
     auto dy = ddy[dir];
     auto &[y, x] = this->pos_target;
     const auto [wid, hgt] = get_screen_size();
-    if (this->move_fast) {
-        int mag = std::min(wid / 2, hgt / 2);
-        x += dx * mag;
-        y += dy * mag;
-    } else {
-        x += dx;
-        y += dy;
-    }
+    const auto mag = move_fast ? std::min(wid / 2, hgt / 2) : 1;
+    x += dx * mag;
+    y += dy * mag;
 
     if (((x < panel_col_min + wid / 2) && (dx > 0)) || ((x > panel_col_min + wid / 2) && (dx < 0))) {
         dx = 0;
@@ -516,15 +512,15 @@ void TargetSetter::sweep_target_grids()
             continue;
         }
 
-        this->move_fast = false;
         if ((this->mode & TARGET_LOOK) == 0) {
             print_path(this->player_ptr, this->pos_target.y, this->pos_target.x);
         }
 
         fix_floor_item_list(this->player_ptr, this->pos_target);
 
-        if (auto dir = this->switch_next_grid_command(); dir) {
-            this->decide_change_panel(*dir);
+        if (auto dir_and_velocity = this->switch_next_grid_command(); dir_and_velocity) {
+            const auto &[dir, move_fast] = *dir_and_velocity;
+            this->decide_change_panel(dir, move_fast);
         }
     }
 }
