@@ -42,6 +42,7 @@ public:
 private:
     std::string describe_projectablity() const;
     char examine_target_grid(std::string_view info, std::optional<target_type> append_mode = std::nullopt) const;
+    void change_interest_index(int amount);
     std::optional<int> switch_target_input();
     std::optional<int> check_panel_changed(int dir);
     std::optional<int> sweep_targets(int dir, int panel_row_min_initial, int panel_col_min_initial);
@@ -55,7 +56,7 @@ private:
     Pos2D pos_target;
     bool done = false;
     bool flag = true; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
-    int m = 0; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
+    std::optional<int> interest_index = 0; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
     bool move_fast = false; // カーソル移動を粗くする(1マスずつ移動しない)
 };
 
@@ -204,6 +205,26 @@ char TargetSetter::examine_target_grid(std::string_view info, std::optional<targ
     }
 }
 
+void TargetSetter::change_interest_index(int amount)
+{
+    if (!this->interest_index || pos_interests.empty()) {
+        this->interest_index = std::nullopt;
+        return;
+    }
+    *this->interest_index += amount;
+
+    if (*this->interest_index >= 0 && *this->interest_index < std::ssize(pos_interests)) {
+        return;
+    }
+
+    // wrap around
+    this->interest_index = (*this->interest_index < 0) ? std::ssize(pos_interests) - 1 : 0;
+
+    if (!expand_list) {
+        this->done = true;
+    }
+}
+
 std::optional<int> TargetSetter::switch_target_input()
 {
     const auto info = this->describe_projectablity();
@@ -233,26 +254,10 @@ std::optional<int> TargetSetter::switch_target_input()
     case ' ':
     case '*':
     case '+':
-        if (++this->m != std::ssize(pos_interests)) {
-            return std::nullopt;
-        }
-
-        this->m = 0;
-        if (!expand_list) {
-            this->done = true;
-        }
-
+        this->change_interest_index(1);
         return std::nullopt;
     case '-':
-        if (this->m-- != 0) {
-            return std::nullopt;
-        }
-
-        this->m = std::ssize(pos_interests) - 1;
-        if (!expand_list) {
-            this->done = true;
-        }
-
+        this->change_interest_index(-1);
         return std::nullopt;
     case 'p': {
         verify_panel(this->player_ptr);
@@ -282,15 +287,7 @@ std::optional<int> TargetSetter::switch_target_input()
             return dir;
         }
 
-        if (++this->m != std::ssize(pos_interests)) {
-            return std::nullopt;
-        }
-
-        this->m = 0;
-        if (!expand_list) {
-            this->done = true;
-        }
-
+        this->change_interest_index(1);
         return std::nullopt;
     }
     }
@@ -307,8 +304,8 @@ std::optional<int> TargetSetter::check_panel_changed(int dir)
     // "interesting" 座標を探す起点。
     // this->m が有効な座標を指していればそれを使う。
     // さもなくば (this->y, this->x) を使う。
-    const auto is_point_interest = (this->m < std::ssize(pos_interests));
-    const auto pos = is_point_interest ? pos_interests[this->m] : this->pos_target;
+    const auto is_point_interest = (this->interest_index && *this->interest_index < std::ssize(pos_interests));
+    const auto pos = is_point_interest ? pos_interests[*this->interest_index] : this->pos_target;
 
     // 新たな描画範囲を用いて "interesting" 座標リストを更新。
     pos_interests = target_set_prepare(this->player_ptr, this->mode);
@@ -375,11 +372,11 @@ std::optional<int> TargetSetter::sweep_targets(int dir, int panel_row_min_initia
 
 bool TargetSetter::set_target_grid()
 {
-    if (!this->flag || pos_interests.empty()) {
+    if (!this->flag || pos_interests.empty() || !this->interest_index) {
         return false;
     }
 
-    this->pos_target = pos_interests[this->m];
+    this->pos_target = pos_interests[*this->interest_index];
 
     fix_floor_item_list(this->player_ptr, this->pos_target);
 
@@ -388,11 +385,11 @@ bool TargetSetter::set_target_grid()
         return true;
     }
 
-    auto target_index = target_pick(pos_interests[this->m].y, pos_interests[this->m].x, ddy[*dir], ddx[*dir]);
+    auto target_index = target_pick(pos_interests[*this->interest_index].y, pos_interests[*this->interest_index].x, ddy[*dir], ddx[*dir]);
     if (!target_index) {
         target_index = this->sweep_targets(*dir, panel_row_min, panel_col_min);
     }
-    this->m = target_index.value_or(-1);
+    this->interest_index = target_index;
     return true;
 }
 
@@ -449,18 +446,16 @@ std::optional<int> TargetSetter::switch_next_grid_command()
     case '+':
     case '-':
     case 'm': {
-        this->flag = true;
-        this->m = 0;
-        int bd = 999;
-        for (auto i = 0; i < std::ssize(pos_interests); i++) {
-            const auto t = Grid::calc_distance(this->pos_target, pos_interests[i]);
-            if (t < bd) {
-                this->m = i;
-                bd = t;
-            }
-        }
-
-        if (bd == 999) {
+        const auto begin = pos_interests.begin();
+        const auto end = pos_interests.end();
+        const auto target = std::min_element(begin, end, [&](const auto &lhs, const auto &rhs) {
+            return Grid::calc_distance(this->pos_target, lhs) < Grid::calc_distance(this->pos_target, rhs);
+        });
+        if (target != end) {
+            this->interest_index = std::distance(pos_interests.begin(), target);
+            this->flag = true;
+        } else {
+            this->interest_index = std::nullopt;
             this->flag = false;
         }
 
