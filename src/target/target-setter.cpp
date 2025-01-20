@@ -39,13 +39,13 @@ public:
     void sweep_target_grids();
 
 private:
-    void describe_projectablity();
+    std::string describe_projectablity();
     void menu_target();
     void switch_target_input();
     bool check_panel_changed();
     void sweep_targets();
     bool set_target_grid();
-    void describe_grid_wizard();
+    std::string describe_grid_wizard() const;
     void switch_next_grid_command();
     void decide_change_panel();
 
@@ -58,7 +58,6 @@ private:
     bool done = false;
     bool flag = true; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
     char query{};
-    char info[80]{};
     Grid *g_ptr = nullptr;
     TERM_LEN wid, hgt;
     int m = 0; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
@@ -176,7 +175,7 @@ static POSITION_IDX target_pick(const POSITION y1, const POSITION x1, const POSI
     return b_i;
 }
 
-void TargetSetter::describe_projectablity()
+std::string TargetSetter::describe_projectablity()
 {
     this->y = pos_interests[this->m].y;
     this->x = pos_interests[this->m].x;
@@ -185,22 +184,23 @@ void TargetSetter::describe_projectablity()
         print_path(this->player_ptr, this->y, this->x);
     }
 
+    std::string info;
     this->g_ptr = &this->player_ptr->current_floor_ptr->grid_array[this->y][this->x];
     if (target_able(this->player_ptr, this->g_ptr->m_idx)) {
-        angband_strcpy(this->info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"), sizeof(this->info));
+        info = _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>");
     } else {
-        angband_strcpy(this->info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"), sizeof(this->info));
+        info = _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>");
     }
 
     if (!cheat_sight) {
-        return;
+        return info;
     }
 
     const auto cheatinfo = format(" X:%d Y:%d LOS:%d LOP:%d",
         this->x, this->y,
         los(this->player_ptr, this->player_ptr->y, this->player_ptr->x, this->y, this->x),
         projectable(this->player_ptr, this->player_ptr->get_position(), { this->y, this->x }));
-    angband_strcat(this->info, cheatinfo, sizeof(this->info));
+    return info.append(cheatinfo);
 }
 
 void TargetSetter::menu_target()
@@ -404,11 +404,11 @@ bool TargetSetter::set_target_grid()
         return false;
     }
 
-    this->describe_projectablity();
+    const auto info = this->describe_projectablity();
     fix_floor_item_list(this->player_ptr, { this->y, this->x });
 
     while (true) {
-        this->query = examine_grid(this->player_ptr, this->y, this->x, this->mode, this->info);
+        this->query = examine_grid(this->player_ptr, this->y, this->x, this->mode, info.data());
         if (this->query) {
             break;
         }
@@ -430,17 +430,17 @@ bool TargetSetter::set_target_grid()
     return true;
 }
 
-void TargetSetter::describe_grid_wizard()
+std::string TargetSetter::describe_grid_wizard() const
 {
     if (!cheat_sight) {
-        return;
+        return "";
     }
 
     constexpr auto fmt = " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d";
     const auto is_los = los(this->player_ptr, this->player_ptr->y, this->player_ptr->x, this->y, this->x);
     const auto is_projectable = projectable(this->player_ptr, this->player_ptr->get_position(), { this->y, this->x });
     const auto cheatinfo = format(fmt, this->x, this->y, is_los, is_projectable, this->g_ptr->special);
-    angband_strcat(this->info, cheatinfo, sizeof(this->info));
+    return cheatinfo;
 }
 
 void TargetSetter::switch_next_grid_command()
@@ -571,13 +571,13 @@ void TargetSetter::sweep_target_grids()
         }
 
         this->g_ptr = &this->player_ptr->current_floor_ptr->grid_array[this->y][this->x];
-        strcpy(this->info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
-        this->describe_grid_wizard();
+        std::string info = _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>");
+        info.append(this->describe_grid_wizard());
         fix_floor_item_list(this->player_ptr, { this->y, this->x });
 
         /* Describe and Prompt (enable "TARGET_LOOK") */
         const auto target = i2enum<target_type>(this->mode | TARGET_LOOK);
-        while ((this->query = examine_grid(this->player_ptr, this->y, this->x, target, this->info)) == 0) {
+        while ((this->query = examine_grid(this->player_ptr, this->y, this->x, target, info.data())) == 0) {
             ;
         }
 
