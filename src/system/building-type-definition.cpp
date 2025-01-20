@@ -168,7 +168,7 @@ MonraceId MeleeArena::search_gladiator(PlayerType *player_ptr, int mon_level, in
     const auto &monraces = MonraceList::get_instance();
     MonraceId monrace_id;
     while (true) {
-        get_mon_num_prep(player_ptr, monster_can_entry_arena);
+        get_mon_num_prep_enum(player_ptr, MonraceHook::ARENA);
         monrace_id = get_mon_num(player_ptr, 0, mon_level, PM_ARENA);
         if (!MonraceList::is_valid(monrace_id)) {
             continue;

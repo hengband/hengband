@@ -26,7 +26,7 @@ static bool player_grid(PlayerType *player_ptr, Grid *g_ptr)
  */
 static bool is_cave_empty_grid(PlayerType *player_ptr, Grid *g_ptr)
 {
-    bool is_empty_grid = g_ptr->cave_has_flag(TerrainCharacteristics::PLACE);
+    bool is_empty_grid = g_ptr->has(TerrainCharacteristics::PLACE);
     is_empty_grid &= !g_ptr->has_monster();
     is_empty_grid &= !player_grid(player_ptr, g_ptr);
     return is_empty_grid;
@@ -43,21 +43,19 @@ static bool is_cave_empty_grid(PlayerType *player_ptr, Grid *g_ptr)
  */
 void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (int k = 0; k < num; k++) {
-        for (int i = 0; i < 9; i++) {
-            int d = 1;
-            POSITION y, x;
-            scatter(player_ptr, &y, &x, y1, x1, d, 0);
-            Grid *g_ptr;
-            g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-            if (!is_cave_empty_grid(player_ptr, g_ptr)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (auto k = 0; k < num; k++) {
+        for (auto i = 0; i < 9; i++) {
+            const auto d = 1;
+            const auto pos = scatter(player_ptr, { y1, x1 }, d, 0);
+            auto &grid = floor.get_grid(pos);
+            if (!is_cave_empty_grid(player_ptr, &grid)) {
                 continue;
             }
 
-            floor_ptr->monster_level = floor_ptr->base_level + 2;
-            (void)place_random_monster(player_ptr, y, x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
-            floor_ptr->monster_level = floor_ptr->base_level;
+            floor.monster_level = floor.base_level + 2;
+            (void)place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+            floor.monster_level = floor.base_level;
         }
     }
 }

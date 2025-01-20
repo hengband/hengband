@@ -69,7 +69,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
             term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, symbol_pair);
         }
 
-        if (g_ptr->is_mark() && !g_ptr->cave_has_flag(TerrainCharacteristics::PROJECT)) {
+        if (g_ptr->is_mark() && !g_ptr->has(TerrainCharacteristics::PROJECT)) {
             break;
         }
 

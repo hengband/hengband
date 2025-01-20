@@ -43,6 +43,7 @@
 #include "room/rooms-builder.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/grid-flow.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -678,7 +679,7 @@ void update_flow(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (floor.is_closed_door(pos_neighbor)) {
+                if (floor.has_closed_door_at(pos_neighbor)) {
                     m += 3;
                 }
 
@@ -694,14 +695,14 @@ void update_flow(PlayerType *player_ptr)
                 auto can_move = false;
                 switch (gf) {
                 case GridFlow::CAN_FLY:
-                    can_move = grid_neighbor.cave_has_flag(TerrainCharacteristics::MOVE) || grid_neighbor.cave_has_flag(TerrainCharacteristics::CAN_FLY);
+                    can_move = grid_neighbor.has(TerrainCharacteristics::MOVE) || grid_neighbor.has(TerrainCharacteristics::CAN_FLY);
                     break;
                 default:
-                    can_move = grid_neighbor.cave_has_flag(TerrainCharacteristics::MOVE);
+                    can_move = grid_neighbor.has(TerrainCharacteristics::MOVE);
                     break;
                 }
 
-                if (!can_move && !floor.is_closed_door(pos_neighbor)) {
+                if (!can_move && !floor.has_closed_door_at(pos_neighbor)) {
                     continue;
                 }
 
@@ -934,7 +935,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_EXTRA_PERM: {
-        g_ptr->feat = feat_permanent;
+        g_ptr->set_terrain_id(TerrainTag::PERMANENT_WALL);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_EXTRA;
         break;
@@ -946,7 +947,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_INNER_PERM: {
-        g_ptr->feat = feat_permanent;
+        g_ptr->set_terrain_id(TerrainTag::PERMANENT_WALL);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_INNER;
         break;
@@ -976,7 +977,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_SOLID_PERM: {
-        g_ptr->feat = feat_permanent;
+        g_ptr->set_terrain_id(TerrainTag::PERMANENT_WALL);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_SOLID;
         break;

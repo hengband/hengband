@@ -116,7 +116,7 @@ bool create_ammo(PlayerType *player_ptr)
             return false;
         }
 
-        if (!grid.cave_has_flag(TerrainCharacteristics::CAN_DIG) || !grid.cave_has_flag(TerrainCharacteristics::HURT_ROCK)) {
+        if (!grid.has(TerrainCharacteristics::CAN_DIG) || !grid.has(TerrainCharacteristics::HURT_ROCK)) {
             msg_print(_("硬すぎて崩せなかった。", "You failed to make ammo."));
             return true;
         }

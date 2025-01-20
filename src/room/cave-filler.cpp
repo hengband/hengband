@@ -12,10 +12,12 @@
 #include "grid/grid.h"
 #include "room/lake-types.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/point-2d.h"
 #include <queue>
 
@@ -399,44 +401,53 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
 
 bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type)
 {
-    FEAT_IDX feat1, feat2, feat3;
-    POSITION xhsize = xsize / 2;
-    POSITION yhsize = ysize / 2;
+    const auto &terrains = TerrainList::get_instance();
+    const auto terrain_id_rubble = terrains.get_terrain_id(TerrainTag::RUBBLE);
+    const auto terrain_id_deep_water = terrains.get_terrain_id(TerrainTag::DEEP_WATER);
+    const auto terrain_id_shallow_water = terrains.get_terrain_id(TerrainTag::SHALLOW_WATER);
+    const auto terrain_id_deep_lava = terrains.get_terrain_id(TerrainTag::DEEP_LAVA);
+    const auto terrain_id_shallow_lava = terrains.get_terrain_id(TerrainTag::SHALLOW_LAVA);
+    const auto terrain_id_grass = terrains.get_terrain_id(TerrainTag::GRASS);
+    const auto xhsize = xsize / 2;
+    const auto yhsize = ysize / 2;
+    short feat1;
+    short feat2;
+    short feat3;
     switch (type) {
     case LAKE_T_LAVA: /* Lava */
-        feat1 = feat_deep_lava;
-        feat2 = feat_shallow_lava;
+        feat1 = terrain_id_deep_lava;
+        feat2 = terrain_id_shallow_lava;
         feat3 = rand_choice(feat_ground_type);
         break;
     case LAKE_T_WATER: /* Water */
-        feat1 = feat_deep_water;
-        feat2 = feat_shallow_water;
+        feat1 = terrain_id_deep_water;
+        feat2 = terrain_id_shallow_water;
         feat3 = rand_choice(feat_ground_type);
         break;
     case LAKE_T_CAVE: /* Collapsed floor_ptr->grid_array */
         feat1 = rand_choice(feat_ground_type);
         feat2 = rand_choice(feat_ground_type);
-        feat3 = feat_rubble;
+        feat3 = terrain_id_rubble;
         break;
     case LAKE_T_EARTH_VAULT: /* Earth vault */
-        feat1 = feat_rubble;
+        feat1 = terrain_id_rubble;
         feat2 = rand_choice(feat_ground_type);
-        feat3 = feat_rubble;
+        feat3 = terrain_id_rubble;
         break;
     case LAKE_T_AIR_VAULT: /* Air vault */
-        feat1 = feat_grass;
-        feat2 = feat_tree;
-        feat3 = feat_grass;
+        feat1 = terrain_id_grass;
+        feat2 = terrains.get_terrain_id(TerrainTag::TREE);
+        feat3 = terrain_id_grass;
         break;
     case LAKE_T_WATER_VAULT: /* Water vault */
-        feat1 = feat_shallow_water;
-        feat2 = feat_deep_water;
-        feat3 = feat_shallow_water;
+        feat1 = terrain_id_shallow_water;
+        feat2 = terrain_id_deep_water;
+        feat3 = terrain_id_shallow_water;
         break;
     case LAKE_T_FIRE_VAULT: /* Fire Vault */
-        feat1 = feat_shallow_lava;
-        feat2 = feat_deep_lava;
-        feat3 = feat_shallow_lava;
+        feat1 = terrain_id_shallow_lava;
+        feat2 = terrain_id_deep_lava;
+        feat3 = terrain_id_shallow_lava;
         break;
     default:
         return false;
@@ -453,44 +464,50 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
     fill_data.info3 = 0;
     fill_data.amount = 0;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     cave_fill(player_ptr, { y0, x0 });
     if (fill_data.amount < 10) {
-        for (POSITION x = 0; x <= xsize; ++x) {
-            for (POSITION y = 0; y <= ysize; ++y) {
-                place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_FLOOR);
-                floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY);
+        for (auto x = 0; x <= xsize; ++x) {
+            for (auto y = 0; y <= ysize; ++y) {
+                const Pos2D pos(y0 + y - yhsize, x0 + x - xhsize);
+                place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
+                floor.get_grid(pos).info &= ~(CAVE_ICKY);
             }
         }
 
         return false;
     }
 
-    for (int i = 0; i <= xsize; ++i) {
-        place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, GB_EXTRA);
-        place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, GB_EXTRA);
-        floor_ptr->grid_array[y0 - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
-        floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
+    for (auto i = 0; i <= xsize; ++i) {
+        const Pos2D pos(y0 - yhsize, x0 + i - xhsize);
+        const Pos2DVec vec(ysize, 0);
+        place_bold(player_ptr, pos.y, pos.x, GB_EXTRA);
+        place_bold(player_ptr, (pos + vec).y, (pos + vec).x, GB_EXTRA);
+        floor.get_grid(pos).info &= ~(CAVE_ICKY);
+        floor.get_grid(pos + vec).info &= ~(CAVE_ICKY);
     }
 
-    for (int i = 1; i < ysize; ++i) {
-        place_bold(player_ptr, y0 + i - yhsize, x0 - xhsize, GB_EXTRA);
-        place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, GB_EXTRA);
-        floor_ptr->grid_array[y0 + i - yhsize][x0 - xhsize].info &= ~(CAVE_ICKY);
-        floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info &= ~(CAVE_ICKY);
+    for (auto i = 1; i < ysize; ++i) {
+        const Pos2D pos(y0 + i - yhsize, x0 - xhsize);
+        const Pos2DVec vec(0, xsize);
+        place_bold(player_ptr, pos.y, pos.x, GB_EXTRA);
+        place_bold(player_ptr, (pos + vec).y, (pos + vec).x, GB_EXTRA);
+        floor.get_grid(pos).info &= ~(CAVE_ICKY);
+        floor.get_grid(pos + vec).info &= ~(CAVE_ICKY);
     }
 
-    for (POSITION x = 1; x < xsize; ++x) {
-        for (POSITION y = 1; y < ysize; ++y) {
-            auto *g_ptr = &floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize];
-            if (!g_ptr->is_icky() || g_ptr->is_outer()) {
-                place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_EXTRA);
+    for (auto x = 1; x < xsize; ++x) {
+        for (auto y = 1; y < ysize; ++y) {
+            const Pos2D pos(y0 + y - yhsize, x0 + x - xhsize);
+            auto &grid = floor.get_grid(pos);
+            if (!grid.is_icky() || grid.is_outer()) {
+                place_bold(player_ptr, pos.y, pos.x, GB_EXTRA);
             }
 
-            floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
-            if (cave_has_flag_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize, TerrainCharacteristics::LAVA)) {
-                if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
-                    floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= CAVE_GLOW;
+            grid.info &= ~(CAVE_ICKY | CAVE_ROOM);
+            if (floor.has_terrain_characteristics(pos, TerrainCharacteristics::LAVA)) {
+                if (floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
+                    grid.info |= CAVE_GLOW;
                 }
             }
         }

@@ -53,6 +53,9 @@
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <map>
+#include <numeric>
+#include <utility>
 
 constexpr auto MAX_FEAT_IN_TERRAIN = 18;
 
@@ -258,7 +261,7 @@ static void generate_wilderness_area(FloorType &floor, int terrain, uint32_t see
     if (terrain == TERRAIN_EDGE) {
         for (auto y = 0; y < MAX_HGT; y++) {
             for (auto x = 0; x < MAX_WID; x++) {
-                floor.get_grid({ y, x }).feat = feat_permanent;
+                floor.get_grid({ y, x }).set_terrain_id(TerrainTag::PERMANENT_WALL);
             }
         }
 
@@ -397,7 +400,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
     Xoshiro128StarStar wilderness_rng(wilderness_grid.seed);
     system.set_rng(wilderness_rng);
     const Pos2D pos_entrance(rand_range(6, floor.height - 6), rand_range(6, floor.width - 6));
-    floor.get_grid(pos_entrance).feat = feat_entrance;
+    floor.get_grid(pos_entrance).set_terrain_id(TerrainTag::ENTRANCE);
     floor.get_grid(pos_entrance).special = static_cast<short>(wilderness_grid.entrance);
     system.set_rng(rng_backup);
 }
@@ -441,7 +444,7 @@ void wilderness_gen(PlayerType *player_ptr)
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
     const auto wild_y = player_ptr->wilderness_y;
     const auto wild_x = player_ptr->wilderness_x;
-    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr));
+    get_mon_num_prep_enum(player_ptr, get_monster_hook({ wild_y, wild_x }, floor.is_underground()));
 
     /* North border */
     generate_area(player_ptr, { wild_y - 1, wild_x }, true, false);
@@ -489,28 +492,28 @@ void wilderness_gen(PlayerType *player_ptr)
     /* Special boundary walls -- North */
     for (auto i = 0; i < MAX_WID; i++) {
         auto &grid = floor.get_grid({ 0, i });
-        grid.feat = feat_permanent;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
         grid.mimic = border.top[i];
     }
 
     /* Special boundary walls -- South */
     for (auto i = 0; i < MAX_WID; i++) {
         auto &grid = floor.get_grid({ MAX_HGT - 1, i });
-        grid.feat = feat_permanent;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
         grid.mimic = border.bottom[i];
     }
 
     /* Special boundary walls -- West */
     for (auto i = 0; i < MAX_HGT; i++) {
         auto &grid = floor.get_grid({ i, 0 });
-        grid.feat = feat_permanent;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
         grid.mimic = border.left[i];
     }
 
     /* Special boundary walls -- East */
     for (auto i = 0; i < MAX_HGT; i++) {
         auto &grid = floor.get_grid({ i, MAX_WID - 1 });
-        grid.feat = feat_permanent;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
         grid.mimic = border.right[i];
     }
 
@@ -580,7 +583,7 @@ void wilderness_gen(PlayerType *player_ptr)
         for (auto y = 0; y < floor.height; y++) {
             for (auto x = 0; x < floor.width; x++) {
                 auto &grid = floor.get_grid({ y, x });
-                if (!grid.cave_has_flag(TerrainCharacteristics::ENTRANCE)) {
+                if (!grid.has(TerrainCharacteristics::ENTRANCE)) {
                     continue;
                 }
 
@@ -621,7 +624,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     for (auto x = 0; x < MAX_WID; x++) {
         for (auto y = 0; y < MAX_HGT; y++) {
-            floor.get_grid({ y, x }).feat = feat_permanent;
+            floor.get_grid({ y, x }).set_terrain_id(TerrainTag::PERMANENT_WALL);
         }
     }
 
@@ -634,7 +637,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
             auto &grid = floor.get_grid(pos);
             auto &wild_grid = wilderness[y][x];
             if (wild_grid.town && (wild_grid.town != VALID_TOWNS)) {
-                grid.feat = feat_town;
+                grid.set_terrain_id(TerrainTag::TOWN);
                 grid.special = wild_grid.town;
                 grid.info |= (CAVE_GLOW | CAVE_MARK);
                 continue;
@@ -648,7 +651,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
 
             const auto entrance = wild_grid.entrance;
             if ((entrance > DungeonId::WILDERNESS) && (world.total_winner || dungeons.get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER))) {
-                grid.feat = feat_entrance;
+                grid.set_terrain_id(TerrainTag::ENTRANCE);
                 grid.special = static_cast<short>(entrance);
                 grid.info |= (CAVE_GLOW | CAVE_MARK);
                 continue;
@@ -829,72 +832,59 @@ void seed_wilderness(void)
 }
 
 /*!
- * @brief 荒野の地勢設定を初期化する /
- * Initialize wilderness array
- * @param terrain 初期化したい地勢ID
- * @param feat_global 基本的な地形ID
- * @param fmt 地勢内の地形数を参照するための独自フォーマット
+ * @brief 荒野の地勢設定を初期化する
  */
-static void init_terrain_table(int terrain, int16_t feat_global, concptr fmt, ...)
+void init_wilderness_terrains()
 {
-    va_list vp;
-    va_start(vp, fmt);
-    conv_terrain2feat[terrain] = feat_global;
-    int cur = 0;
-    char check = 'a';
-    for (concptr p = fmt; *p; p++) {
-        if (*p != check) {
-            plog_fmt("Format error");
-            continue;
-        }
+    /// @details 地上フロアの種類をキーに、地形タグと出現率 (1/18ずつ)のペアを値にした連想配列.
+    /// map にするとTerrainTag の順番がソートされてしまうので不適。terrain_table もmap に変えればここもmap でOK.
+    /// wt_type も将来的にenum class へ変える.
+    static const std::map<wt_type, std::vector<std::pair<TerrainTag, int>>> wt_tag_map{
+        { TERRAIN_EDGE, { { TerrainTag::PERMANENT_WALL, 18 } } },
+        { TERRAIN_TOWN, { { TerrainTag::FLOOR, 18 } } },
+        { TERRAIN_DEEP_WATER, { { TerrainTag::DEEP_WATER, 12 }, { TerrainTag::SHALLOW_WATER, 6 } } },
+        { TERRAIN_SHALLOW_WATER, { { TerrainTag::DEEP_WATER, 3 }, { TerrainTag::SHALLOW_WATER, 12 }, { TerrainTag::FLOOR, 1 }, { TerrainTag::DIRT, 1 }, { TerrainTag::GRASS, 1 } } },
+        { TERRAIN_SWAMP, { { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 3 }, { TerrainTag::TREE, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::SHALLOW_WATER, 4 }, { TerrainTag::SWAMP, 7 } } },
+        { TERRAIN_DIRT, { { TerrainTag::FLOOR, 3 }, { TerrainTag::DIRT, 10 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 1 }, { TerrainTag::TREE, 2 } } },
+        { TERRAIN_GRASS, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 9 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::TREE, 2 } } },
+        { TERRAIN_TREES, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 1 }, { TerrainTag::TREE, 11 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::GRASS, 2 } } },
+        { TERRAIN_DESERT, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 13 }, { TerrainTag::GRASS, 3 } } },
+        { TERRAIN_SHALLOW_LAVA, { { TerrainTag::SHALLOW_LAVA, 14 }, { TerrainTag::DEEP_LAVA, 3 }, { TerrainTag::MOUNTAIN, 1 } } },
+        { TERRAIN_DEEP_LAVA, { { TerrainTag::DIRT, 3 }, { TerrainTag::SHALLOW_LAVA, 3 }, { TerrainTag::DEEP_LAVA, 10 }, { TerrainTag::MOUNTAIN, 2 } } },
+        { TERRAIN_MOUNTAIN, { { TerrainTag::FLOOR, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::TREE, 2 }, { TerrainTag::MOUNTAIN, 10 } } },
+    };
 
-        FEAT_IDX feat = (int16_t)va_arg(vp, int);
-        int num = va_arg(vp, int);
-        int lim = cur + num;
-        for (; (cur < lim) && (cur < MAX_FEAT_IN_TERRAIN); cur++) {
-            terrain_table[terrain][cur] = feat;
-        }
+    static const std::map<wt_type, TerrainTag> base_terrain_id_map{
+        { TERRAIN_EDGE, TerrainTag::PERMANENT_WALL },
+        { TERRAIN_TOWN, TerrainTag::TOWN },
+        { TERRAIN_DEEP_WATER, TerrainTag::DEEP_WATER },
+        { TERRAIN_SHALLOW_WATER, TerrainTag::SHALLOW_WATER },
+        { TERRAIN_SWAMP, TerrainTag::SWAMP },
+        { TERRAIN_DIRT, TerrainTag::DIRT },
+        { TERRAIN_GRASS, TerrainTag::GRASS },
+        { TERRAIN_TREES, TerrainTag::TREE },
+        { TERRAIN_DESERT, TerrainTag::DIRT },
+        { TERRAIN_SHALLOW_LAVA, TerrainTag::SHALLOW_LAVA },
+        { TERRAIN_DEEP_LAVA, TerrainTag::DEEP_LAVA },
+        { TERRAIN_MOUNTAIN, TerrainTag::MOUNTAIN },
+    };
 
-        if (cur >= MAX_FEAT_IN_TERRAIN) {
-            break;
-        }
-
-        check++;
-    }
-
-    if (cur < MAX_FEAT_IN_TERRAIN) {
-        plog_fmt("Too few parameters");
-    }
-
-    va_end(vp);
-}
-
-/*!
- * @brief 荒野の地勢設定全体を初期化するメインルーチン /
- * Initialize arrays for wilderness terrains
- */
-void init_wilderness_terrains(void)
-{
     const auto &terrains = TerrainList::get_instance();
-    const auto terrain_floor = terrains.get_terrain_id(TerrainTag::FLOOR);
-    init_terrain_table(TERRAIN_EDGE, feat_permanent, "a", feat_permanent, MAX_FEAT_IN_TERRAIN);
-    init_terrain_table(TERRAIN_TOWN, feat_town, "a", terrain_floor, MAX_FEAT_IN_TERRAIN);
-    init_terrain_table(TERRAIN_DEEP_WATER, feat_deep_water, "ab", feat_deep_water, 12, feat_shallow_water, MAX_FEAT_IN_TERRAIN - 12);
-    init_terrain_table(TERRAIN_SHALLOW_WATER, feat_shallow_water, "abcde", feat_deep_water, 3, feat_shallow_water, 12, terrain_floor, 1, feat_dirt, 1, feat_grass,
-        MAX_FEAT_IN_TERRAIN - 17);
-    init_terrain_table(TERRAIN_SWAMP, feat_swamp, "abcdef", feat_dirt, 2, feat_grass, 3, feat_tree, 1, feat_brake, 1, feat_shallow_water, 4, feat_swamp,
-        MAX_FEAT_IN_TERRAIN - 11);
-    init_terrain_table(
-        TERRAIN_DIRT, feat_dirt, "abcdef", terrain_floor, 3, feat_dirt, 10, feat_flower, 1, feat_brake, 1, feat_grass, 1, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(
-        TERRAIN_GRASS, feat_grass, "abcdef", terrain_floor, 2, feat_dirt, 2, feat_grass, 9, feat_flower, 1, feat_brake, 2, feat_tree, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_TREES, feat_tree, "abcde", terrain_floor, 2, feat_dirt, 1, feat_tree, 11, feat_brake, 2, feat_grass, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_DESERT, feat_dirt, "abc", terrain_floor, 2, feat_dirt, 13, feat_grass, MAX_FEAT_IN_TERRAIN - 15);
-    init_terrain_table(TERRAIN_SHALLOW_LAVA, feat_shallow_lava, "abc", feat_shallow_lava, 14, feat_deep_lava, 3, feat_mountain, MAX_FEAT_IN_TERRAIN - 17);
-    init_terrain_table(
-        TERRAIN_DEEP_LAVA, feat_deep_lava, "abcd", feat_dirt, 3, feat_shallow_lava, 3, feat_deep_lava, 10, feat_mountain, MAX_FEAT_IN_TERRAIN - 16);
-    init_terrain_table(TERRAIN_MOUNTAIN, feat_mountain, "abcdef", terrain_floor, 1, feat_brake, 1, feat_grass, 2, feat_dirt, 2, feat_tree, 2, feat_mountain,
-        MAX_FEAT_IN_TERRAIN - 8);
+    for (const auto &[wt, tags] : wt_tag_map) {
+        const auto check = std::accumulate(tags.begin(), tags.end(), 0, [](int sum, const auto &x) { return sum + x.second; });
+        if (check != MAX_FEAT_IN_TERRAIN) {
+            THROW_EXCEPTION(std::logic_error, "Initializing wilderness is failed!");
+        }
+
+        conv_terrain2feat[wt] = terrains.get_terrain_id(base_terrain_id_map.at(wt));
+        auto cur = 0;
+        for (const auto &[tag, num] : tags) {
+            const auto limit = cur + num;
+            for (; (cur < limit) && (cur < MAX_FEAT_IN_TERRAIN); cur++) {
+                terrain_table[wt][cur] = terrains.get_terrain_id(tag);
+            }
+        }
+    }
 }
 
 void init_wilderness_encounter()

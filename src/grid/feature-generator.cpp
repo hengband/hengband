@@ -18,41 +18,14 @@
 #include "system/player-type-definition.h"
 #include "wizard/wizard-messages.h"
 
-/*
- * @brief 洞窟らしい地形 (湖、溶岩、瓦礫、森林)の個数を決める
- * @param d_ref ダンジョンへの参照
- * @return briefで定義した個数
- */
-static int calc_cavern_terrains(const DungeonDefinition &d_ref)
-{
-    auto count = 0;
-    if (d_ref.flags.has(DungeonFeatureType::LAKE_WATER)) {
-        count += 3;
-    }
-
-    if (d_ref.flags.has(DungeonFeatureType::LAKE_LAVA)) {
-        count += 3;
-    }
-
-    if (d_ref.flags.has(DungeonFeatureType::LAKE_RUBBLE)) {
-        count += 3;
-    }
-
-    if (d_ref.flags.has(DungeonFeatureType::LAKE_TREE)) {
-        count += 3;
-    }
-
-    return count;
-}
-
-static bool decide_cavern(const FloorType &floor, const DungeonDefinition &dungeon_ref, const DungeonData &dd_ref)
+static bool decide_cavern(const FloorType &floor, const DungeonDefinition &dungeon, const DungeonData &dd)
 {
     constexpr auto can_become_cavern = 20;
     auto should_build_cavern = floor.dun_level > can_become_cavern;
-    should_build_cavern &= !dd_ref.empty_level;
-    should_build_cavern &= dungeon_ref.flags.has(DungeonFeatureType::CAVERN);
-    should_build_cavern &= dd_ref.laketype == 0;
-    should_build_cavern &= !dd_ref.destroyed;
+    should_build_cavern &= !dd.empty_level;
+    should_build_cavern &= dungeon.flags.has(DungeonFeatureType::CAVERN);
+    should_build_cavern &= dd.laketype == 0;
+    should_build_cavern &= !dd.destroyed;
     should_build_cavern &= randint1(1000) < floor.dun_level;
     return should_build_cavern;
 }
@@ -71,7 +44,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
 
     constexpr auto chance_water = 24;
     if (one_in_(chance_water) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
-        auto count = calc_cavern_terrains(*dungeon_ptr);
+        auto count = dungeon_ptr->calc_cavern_terrains();
         if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_LAVA)) {
             if ((floor.dun_level > 80) && (randint0(count) < 2)) {
                 dd_ptr->laketype = LAKE_T_LAVA;
@@ -152,7 +125,7 @@ static int next_to_corr(FloorType *floor_ptr, POSITION y1, POSITION x1)
         POSITION x = x1 + ddx_ddd[i];
         Grid *g_ptr;
         g_ptr = &floor_ptr->grid_array[y][x];
-        if (g_ptr->cave_has_flag(TerrainCharacteristics::WALL) || !g_ptr->is_floor() || g_ptr->is_room()) {
+        if (g_ptr->has(TerrainCharacteristics::WALL) || !g_ptr->is_floor() || g_ptr->is_room()) {
             continue;
         }
 
@@ -175,11 +148,12 @@ static bool possible_doorway(FloorType *floor_ptr, POSITION y, POSITION x)
         return false;
     }
 
-    if (cave_has_flag_bold(floor_ptr, y - 1, x, TerrainCharacteristics::WALL) && cave_has_flag_bold(floor_ptr, y + 1, x, TerrainCharacteristics::WALL)) {
+    constexpr auto wall = TerrainCharacteristics::WALL;
+    if (floor_ptr->has_terrain_characteristics({ y - 1, x }, wall) && floor_ptr->has_terrain_characteristics({ y + 1, x }, wall)) {
         return true;
     }
 
-    if (cave_has_flag_bold(floor_ptr, y, x - 1, TerrainCharacteristics::WALL) && cave_has_flag_bold(floor_ptr, y, x + 1, TerrainCharacteristics::WALL)) {
+    if (floor_ptr->has_terrain_characteristics({ y, x - 1 }, wall) && floor_ptr->has_terrain_characteristics({ y, x + 1 }, wall)) {
         return true;
     }
 
@@ -194,14 +168,15 @@ static bool possible_doorway(FloorType *floor_ptr, POSITION y, POSITION x)
  */
 void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x) || cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::WALL) || floor_ptr->grid_array[y][x].is_room()) {
+    const Pos2D pos(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (!in_bounds(&floor, y, x) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
         return;
     }
 
     auto can_place_door = evaluate_percent(dt_ptr->dun_tun_jct);
-    can_place_door &= possible_doorway(floor_ptr, y, x);
-    can_place_door &= floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_DOORS);
+    can_place_door &= possible_doorway(&floor, y, x);
+    can_place_door &= floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_DOORS);
     if (can_place_door) {
         place_random_door(player_ptr, y, x, false);
     }

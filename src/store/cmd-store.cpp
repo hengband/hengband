@@ -63,7 +63,7 @@ void do_cmd_store(PlayerType *player_ptr)
 
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(player_ptr->get_position());
-    if (!grid.cave_has_flag(TerrainCharacteristics::STORE)) {
+    if (!grid.has(TerrainCharacteristics::STORE)) {
         msg_print(_("ここには店がありません。", "You see no store here."));
         return;
     }

@@ -31,6 +31,7 @@ public:
     static MonraceList &get_instance();
     static MonraceId empty_id();
     static bool is_tsuchinoko(MonraceId monrace_id);
+    static bool is_dark_elf(MonraceId monrace_id);
     MonraceDefinition &emplace(MonraceId monrace_id);
     std::map<MonraceId, MonraceDefinition> &get_raw_map();
     MonraceDefinition &get_monrace(MonraceId monrace_id);
@@ -40,20 +41,21 @@ public:
     std::vector<MonraceId> search_by_name(std::string_view name, bool is_known_only = false) const;
     std::vector<MonraceId> search_by_symbol(char symbol, bool is_known_only) const;
     const std::vector<std::pair<MonraceId, const MonraceDefinition *>> &get_sorted_monraces() const;
-    bool can_unify_separate(const MonraceId r_idx) const;
-    void kill_unified_unique(const MonraceId r_idx);
-    bool is_selectable(const MonraceId r_idx) const;
-    void defeat_separated_uniques();
-    bool is_unified(const MonraceId r_idx) const;
-    bool exists_separates(const MonraceId r_idx) const;
-    bool is_separated(const MonraceId r_idx) const;
-    bool can_select_separate(const MonraceId morace_id, const int hp, const int maxhp) const;
+    bool can_unify_separate(MonraceId monrace_id) const;
+    void kill_unified_unique(MonraceId monrace_id);
+    bool is_selectable(MonraceId monrace_id) const;
+    bool is_unified(MonraceId monrace_id) const;
+    bool exists_separates(MonraceId monrace_id) const;
+    bool is_separated(MonraceId monrace_id) const;
+    bool can_select_separate(MonraceId morace_id, const int hp, const int maxhp) const;
+    MonraceId select_random_separated_unique_of(MonraceId monrace_id) const;
     bool order(MonraceId id1, MonraceId id2, bool is_detailed = false) const;
     bool order_level(MonraceId id1, MonraceId id2) const;
     bool order_level_unique(MonraceId id1, MonraceId id2) const;
     MonraceId pick_id_at_random() const;
     const MonraceDefinition &pick_monrace_at_random() const;
     int calc_defeat_count() const;
+    MonraceId select_figurine(int max_level) const;
 
     void reset_current_numbers();
     void reset_all_visuals();

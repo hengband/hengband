@@ -18,7 +18,7 @@ public:
     int path_num() const;
 
 private:
-    std::vector<Pos2D> position;
+    std::vector<Pos2D> positions;
 };
 
 bool projectable(PlayerType *player_ptr, const Pos2D &pos1, const Pos2D &pos2);

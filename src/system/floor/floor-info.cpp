@@ -13,12 +13,16 @@
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/grid-count-kind.h"
+#include "system/enums/monrace/monrace-hook-types.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
+#include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
-#include "system/terrain/terrain-definition.h"
+#include "system/services/dungeon-monrace-service.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 #include "world/world.h"
@@ -139,6 +143,11 @@ bool FloorType::has_los(const Pos2D &pos) const
     return this->get_grid(pos).has_los();
 }
 
+bool FloorType::has_terrain_characteristics(const Pos2D &pos, TerrainCharacteristics tc) const
+{
+    return this->get_grid(pos).has(tc);
+}
+
 /*!
  * @brief 特別なフロアにいるかを判定する
  * @return 固定クエスト、アリーナ、モンスター闘技場のいずれかならばtrue
@@ -164,24 +173,19 @@ bool FloorType::can_teleport_level(bool to_player) const
     return this->is_special() || is_invalid_floor;
 }
 
-bool FloorType::is_mark(const Pos2D &pos) const
+bool FloorType::has_marked_grid_at(const Pos2D &pos) const
 {
     return this->get_grid(pos).is_mark();
 }
 
-bool FloorType::is_closed_door(const Pos2D &pos, bool is_mimic) const
+bool FloorType::has_closed_door_at(const Pos2D &pos, bool is_mimic) const
 {
-    const auto &grid = this->get_grid(pos);
-    if (is_mimic) {
-        return grid.get_terrain(TerrainKind::MIMIC).is_closed_door();
-    }
-
-    return grid.get_terrain().is_closed_door();
+    return this->get_grid(pos).is_closed_door(is_mimic);
 }
 
-bool FloorType::is_trap(const Pos2D &pos) const
+bool FloorType::has_trap_at(const Pos2D &pos) const
 {
-    return this->get_grid(pos).get_terrain().is_trap();
+    return this->get_grid(pos).has(TerrainCharacteristics::TRAP);
 }
 
 /*!
@@ -201,7 +205,7 @@ std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCount
         }
 
         Pos2D pos_neighbor = p_pos + Pos2DVec(ddy_ddd[d], ddx_ddd[d]);
-        if (!this->is_mark(pos_neighbor)) {
+        if (!this->has_marked_grid_at(pos_neighbor)) {
             continue;
         }
 
@@ -219,17 +223,16 @@ std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCount
 bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
 {
     const auto &grid = this->get_grid(pos);
-    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     switch (gck) {
     case GridCountKind::OPEN: {
-        const auto is_open_grid = terrain.is_open();
+        const auto is_open_grid = grid.is_open();
         const auto is_open_dungeon = this->get_dungeon_definition().is_open(grid.get_feat_mimic());
         return is_open_grid && is_open_dungeon;
     }
     case GridCountKind::CLOSED_DOOR:
-        return terrain.is_closed_door();
+        return grid.is_closed_door(true);
     case GridCountKind::TRAP:
-        return terrain.is_trap();
+        return grid.has(TerrainCharacteristics::TRAP);
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid GridCountKind is Specified! %d", enum2i(gck)));
     }
@@ -336,6 +339,28 @@ short FloorType::select_baseitem_id(int level_initial, uint32_t mode) const
 
     const auto &table = BaseitemAllocationTable::get_instance();
     return table.draw_lottery(level, mode, decide_selection_count());
+}
+
+bool FloorType::filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain hook) const
+{
+    const auto is_suitable_for_dungeon = !this->is_underground() || DungeonMonraceService::is_suitable_for_dungeon(this->dungeon_id, monrace_id);
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    switch (hook) {
+    case MonraceHookTerrain::NONE:
+        return true;
+    case MonraceHookTerrain::FLOOR:
+        return monrace.is_suitable_for_floor();
+    case MonraceHookTerrain::SHALLOW_WATER:
+        return is_suitable_for_dungeon && monrace.is_suitable_for_shallow_water();
+    case MonraceHookTerrain::DEEP_WATER:
+        return is_suitable_for_dungeon && monrace.is_suitable_for_deep_water();
+    case MonraceHookTerrain::TRAPPED_PIT:
+        return is_suitable_for_dungeon && monrace.is_suitable_for_special_room() && monrace.is_suitable_for_trapped_pit();
+    case MonraceHookTerrain::LAVA:
+        return is_suitable_for_dungeon && monrace.is_suitable_for_lava();
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
+    }
 }
 
 /*!
@@ -479,7 +504,7 @@ short FloorType::pop_empty_index_item()
 bool FloorType::is_grid_changeable(const Pos2D &pos) const
 {
     const auto &grid = this->get_grid(pos);
-    if (grid.cave_has_flag(TerrainCharacteristics::PERMANENT)) {
+    if (grid.has(TerrainCharacteristics::PERMANENT)) {
         return false;
     }
 
@@ -523,21 +548,21 @@ void FloorType::place_random_stairs(const Pos2D &pos)
     }
 
     if (up_stairs) {
-        this->set_terrain_id(pos, TerrainTag::UP_STAIR);
+        this->set_terrain_id_at(pos, TerrainTag::UP_STAIR);
         return;
     }
 
     if (down_stairs) {
-        this->set_terrain_id(pos, TerrainTag::DOWN_STAIR);
+        this->set_terrain_id_at(pos, TerrainTag::DOWN_STAIR);
     }
 }
 
-void FloorType::set_terrain_id(const Pos2D &pos, TerrainTag tag)
+void FloorType::set_terrain_id_at(const Pos2D &pos, TerrainTag tag)
 {
     this->get_grid(pos).set_terrain_id(tag);
 }
 
-void FloorType::set_terrain_id(const Pos2D &pos, short terrain_id)
+void FloorType::set_terrain_id_at(const Pos2D &pos, short terrain_id)
 {
     this->get_grid(pos).set_terrain_id(terrain_id);
 }

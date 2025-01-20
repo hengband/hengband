@@ -7,11 +7,11 @@
 #include "spell/range-calc.h"
 #include "effect/attribute-types.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "system/floor/floor-info.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
@@ -25,11 +25,11 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
     POSITION px = x1 - x;
     POSITION ny = x2 - x1;
     POSITION nx = y1 - y2;
-    POSITION pd = distance(y1, x1, y, x);
-    POSITION nd = distance(y1, x1, y2, x2);
+    POSITION pd = Grid::calc_distance({ y1, x1 }, { y, x });
+    POSITION nd = Grid::calc_distance({ y1, x1 }, { y2, x2 });
 
     if (pd > nd) {
-        return distance(y, x, y2, x2);
+        return Grid::calc_distance({ y, x }, { y2, x2 });
     }
 
     nd = ((nd) ? ((py * ny + px * nx) / nd) : 0);
@@ -198,26 +198,25 @@ bool in_disintegration_range(FloorType *floor_ptr, POSITION y1, POSITION x1, POS
 /*
  * breath shape
  */
-void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, AttributeType typ)
+void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, int *pgrids, std::span<Pos2D> positions, std::span<int> gm, int *pgm_rad, int rad, const Pos2D &pos_source, const Pos2D &pos_target, AttributeType typ)
 {
-    POSITION by = y1;
-    POSITION bx = x1;
-    int brad = 0;
-    int brev = rad * rad / dist;
-    int bdis = 0;
+    const auto brev = rad * rad / dist;
+    auto by = pos_source.y;
+    auto bx = pos_source.x;
+    auto brad = 0;
+    auto bdis = 0;
+    auto path_n = 0;
+    const auto mdis = Grid::calc_distance(pos_source, pos_target) + rad;
     int cdis;
-    int path_n = 0;
-    int mdis = distance(y1, x1, y2, x2) + rad;
-
     auto *floor_ptr = player_ptr->current_floor_ptr;
     while (bdis <= mdis) {
         if ((0 < dist) && (path_n < dist)) {
-            const auto &[ny, nx] = path[path_n];
-            POSITION nd = distance(ny, nx, y1, x1);
+            const auto &pos_path = path[path_n];
+            POSITION nd = Grid::calc_distance(pos_path, pos_source);
 
             if (bdis >= nd) {
-                by = ny;
-                bx = nx;
+                by = pos_path.y;
+                bx = pos_path.x;
                 path_n++;
             }
         }
@@ -231,10 +230,10 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
                     if (!in_bounds(floor_ptr, pos.y, pos.x)) {
                         continue;
                     }
-                    if (distance(y1, x1, pos.y, pos.x) != bdis) {
+                    if (Grid::calc_distance(pos_source, pos) != bdis) {
                         continue;
                     }
-                    if (distance(pos_breath.y, pos_breath.x, pos.y, pos.x) != cdis) {
+                    if (Grid::calc_distance(pos_breath, pos) != cdis) {
                         continue;
                     }
 
@@ -260,8 +259,7 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
                         break;
                     }
 
-                    gy[*pgrids] = pos.y;
-                    gx[*pgrids] = pos.x;
+                    positions[*pgrids] = pos;
                     (*pgrids)++;
                 }
             }

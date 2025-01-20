@@ -3,6 +3,7 @@
 #include "system/h-type.h"
 #include <algorithm>
 #include <concepts>
+#include <numeric>
 #include <type_traits>
 
 /**
@@ -53,6 +54,18 @@ struct Point2D {
         : y(y)
         , x(x)
     {
+    }
+
+    /*!
+     * @brief 2点間の中点を求める
+     * @param p1 点1
+     * @param p2 点2
+     * @return 点1と点2の中点
+     * @note Tが整数型で結果が整数にならない場合、p1側に丸められる
+     */
+    static constexpr Point2D midpoint(const Point2D &p1, const Point2D &p2)
+    {
+        return Point2D(std::midpoint(p1.y, p2.y), std::midpoint(p1.x, p2.x));
     }
 
     constexpr Point2D &operator+=(const Vector2D<T> &vector)
@@ -128,15 +141,35 @@ template <std::integral T>
 struct Rectangle2D {
     Point2D<T> top_left;
     Point2D<T> bottom_right;
+    constexpr Rectangle2D(T y1, T x1, T y2, T x2)
+        : top_left(std::min<T>(y1, y2), std::min<T>(x1, x2))
+        , bottom_right(std::max<T>(y1, y2), std::max<T>(x1, x2))
+    {
+    }
+
     constexpr Rectangle2D(const Point2D<T> &pos1, const Point2D<T> &pos2)
-        : top_left(std::min<T>(pos1.y, pos2.y), std::min<T>(pos1.x, pos2.x))
-        , bottom_right(std::max<T>(pos1.y, pos2.y), std::max<T>(pos1.x, pos2.x))
+        : Rectangle2D(pos1.y, pos1.x, pos2.y, pos2.x)
     {
     }
 
     constexpr Rectangle2D(const Point2D<T> &center, const Vector2D<T> &vec)
         : Rectangle2D(center + vec, center + vec.inverted())
     {
+    }
+
+    constexpr T width() const
+    {
+        return this->bottom_right.x - this->top_left.x + 1;
+    }
+
+    constexpr T height() const
+    {
+        return this->bottom_right.y - this->top_left.y + 1;
+    }
+
+    constexpr Point2D<T> center() const
+    {
+        return Point2D<T>::midpoint(this->top_left, this->bottom_right);
     }
 
     constexpr Rectangle2D resized(T margin) const

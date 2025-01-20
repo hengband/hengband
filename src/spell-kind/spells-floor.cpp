@@ -41,6 +41,7 @@
 #include "status/bad-status-setter.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -213,7 +214,7 @@ void map_area(PlayerType *player_ptr, POSITION range)
     const auto &terrains = TerrainList::get_instance();
     for (POSITION y = 1; y < floor.height - 1; y++) {
         for (POSITION x = 1; x < floor.width - 1; x++) {
-            if (distance(player_ptr->y, player_ptr->x, y, x) > range) {
+            if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
                 continue;
             }
 
@@ -299,7 +300,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             }
 
             /* Extract the distance */
-            auto k = distance(pos1.y, pos1.x, pos.y, pos.x);
+            auto k = Grid::calc_distance(pos1, pos);
 
             /* Stay in the circle of death */
             if (k > r) {
@@ -383,7 +384,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             delete_all_items_from_floor(player_ptr, pos.y, pos.x);
 
             /* Destroy "non-permanent" grids */
-            if (grid.cave_has_flag(TerrainCharacteristics::PERMANENT)) {
+            if (grid.has(TerrainCharacteristics::PERMANENT)) {
                 continue;
             }
 
@@ -394,13 +395,13 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             {
                 if (t < 20) {
                     /* Create granite wall */
-                    cave_set_feat(player_ptr, pos.y, pos.x, feat_granite);
+                    cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
                 } else if (t < 70) {
                     /* Create quartz vein */
-                    cave_set_feat(player_ptr, pos.y, pos.x, feat_quartz_vein);
+                    cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
                 } else if (t < 100) {
                     /* Create magma vein */
-                    cave_set_feat(player_ptr, pos.y, pos.x, feat_magma_vein);
+                    cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
                 } else {
                     /* Create floor */
                     cave_set_feat(player_ptr, pos.y, pos.x, rand_choice(feat_ground_type));
@@ -414,10 +415,10 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 place_grid(player_ptr, &grid, GB_EXTRA);
             } else if (t < 70) {
                 /* Create quartz vein */
-                grid.feat = feat_quartz_vein;
+                grid.set_terrain_id(TerrainTag::QUARTZ_VEIN);
             } else if (t < 100) {
                 /* Create magma vein */
-                grid.feat = feat_magma_vein;
+                grid.set_terrain_id(TerrainTag::MAGMA_VEIN);
             } else {
                 /* Create floor */
                 place_grid(player_ptr, &grid, GB_FLOOR);
@@ -441,7 +442,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             }
 
             /* Stay in the circle of death */
-            auto k = distance(y1, x1, pos.y, pos.x);
+            auto k = Grid::calc_distance(pos1, pos);
             if (k > r) {
                 continue;
             }

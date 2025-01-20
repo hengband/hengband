@@ -1,6 +1,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "game-option/cheat-options.h"
 #include "monster-attack/monster-attack-table.h"
+#include "monster-race/race-ability-mask.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster-race/race-sex.h"
 #include "monster/horror-descriptions.h"
@@ -9,6 +10,7 @@
 #include "system/monrace/monrace-list.h"
 #include "system/system-variables.h"
 #include "util/enum-converter.h"
+#include "util/string-processor.h"
 #include "world/world.h"
 #include <algorithm>
 #ifndef JP
@@ -171,20 +173,6 @@ std::optional<bool> MonraceDefinition::order_pet(const MonraceDefinition &other)
     return this->order_level(other);
 }
 
-/*!
- * @brief ユニークモンスターの撃破状態を更新する
- * @todo 状態変更はモンスター「定義」ではないので将来的に別クラスへ分離する
- */
-void MonraceDefinition::kill_unique()
-{
-    this->max_num = 0;
-    this->r_pkills++;
-    this->r_akills++;
-    if (this->r_tkills < MAX_SHORT) {
-        this->r_tkills++;
-    }
-}
-
 std::string MonraceDefinition::get_pronoun_of_summoned_kin() const
 {
     if (this->kind_flags.has(MonsterKindType::UNIQUE)) {
@@ -342,14 +330,249 @@ const std::vector<Reinforce> &MonraceDefinition::get_reinforces() const
 
 bool MonraceDefinition::can_generate() const
 {
-    auto can_generate = this->kind_flags.has(MonsterKindType::UNIQUE) || this->population_flags.has(MonsterPopulationType::NAZGUL);
-    can_generate &= this->cur_num >= this->max_num;
+    auto can_generate = this->kind_flags.has_not(MonsterKindType::UNIQUE) && this->population_flags.has_not(MonsterPopulationType::NAZGUL);
+    can_generate |= this->cur_num < this->max_num;
     return can_generate;
 }
 
 GridFlow MonraceDefinition::get_grid_flow_type() const
 {
     return this->feature_flags.has(MonsterFeatureType::CAN_FLY) ? GridFlow::CAN_FLY : GridFlow::NORMAL;
+}
+
+bool MonraceDefinition::is_suitable_for_floor() const
+{
+    return this->feature_flags.has_not(MonsterFeatureType::AQUATIC) || this->feature_flags.has(MonsterFeatureType::CAN_FLY);
+}
+
+/*!
+ * @brief モンスター種族がランダムクエストの討伐対象に成り得るかをチェックする
+ * @return 討伐対象にできるか否か
+ */
+bool MonraceDefinition::is_suitable_for_random_quest() const
+{
+    auto is_suitable = this->kind_flags.has(MonsterKindType::UNIQUE);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::NO_QUEST);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::QUESTOR);
+    is_suitable &= this->rarity <= 100;
+    is_suitable &= this->wilderness_flags.has_not(MonsterWildernessType::WILD_ONLY);
+    is_suitable &= this->feature_flags.has_not(MonsterFeatureType::AQUATIC);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::MULTIPLY);
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::FRIENDLY);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_shallow_water() const
+{
+    return this->aura_flags.has_not(MonsterAuraType::FIRE);
+}
+
+bool MonraceDefinition::is_suitable_for_deep_water() const
+{
+    return this->feature_flags.has(MonsterFeatureType::AQUATIC);
+}
+
+bool MonraceDefinition::is_suitable_for_lava() const
+{
+    auto is_suitable = this->resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) || this->feature_flags.has(MonsterFeatureType::CAN_FLY);
+    is_suitable &= this->aura_flags.has_not(MonsterAuraType::COLD);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_trapped_pit() const
+{
+    return this->feature_flags.has_none_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL });
+}
+
+/*!
+ * @brief 特殊な部屋へ配置可能かを判定する (Vault/Pit/Nest/ガラス部屋)
+ * @return 配置可不可
+ */
+bool MonraceDefinition::is_suitable_for_special_room() const
+{
+    auto is_valid = this->kind_flags.has_not(MonsterKindType::UNIQUE);
+    is_valid &= this->population_flags.has_not(MonsterPopulationType::ONLY_ONE);
+    is_valid &= this->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
+    is_valid &= this->feature_flags.has_not(MonsterFeatureType::AQUATIC);
+    return is_valid;
+}
+
+/*!
+ * @brief ガラス部屋に配置可能かを判定する
+ *
+ * 以下の全条件を満たせばOK
+ * - 特殊部屋に出現可能
+ * - スターバーストか閃光ブレスを使える
+ * - 壁抜けも壁破壊もできない
+ * - 分解ブレスは使えない
+ * @param 配置可不可
+ */
+bool MonraceDefinition::is_suitable_for_glass_through() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->ability_flags.has_any_of({ MonsterAbilityType::BR_LITE, MonsterAbilityType::BA_LITE });
+    is_suitable &= this->feature_flags.has_none_of({ MonsterFeatureType::PASS_WALL, MonsterFeatureType::KILL_WALL });
+    is_suitable &= this->ability_flags.has_not(MonsterAbilityType::BR_DISI);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_glass_breaking() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->ability_flags.has(MonsterAbilityType::BR_SHAR);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_town() const
+{
+    return this->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_TOWN, MonsterWildernessType::WILD_ALL });
+}
+
+bool MonraceDefinition::is_suitable_for_ocean() const
+{
+    return this->wilderness_flags.has(MonsterWildernessType::WILD_OCEAN);
+}
+
+bool MonraceDefinition::is_suitable_for_shore() const
+{
+    return this->wilderness_flags.has(MonsterWildernessType::WILD_SHORE);
+}
+
+bool MonraceDefinition::is_suitable_for_waste() const
+{
+    return this->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_WASTE, MonsterWildernessType::WILD_ALL });
+}
+
+bool MonraceDefinition::is_suitable_for_grass() const
+{
+    return this->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_GRASS, MonsterWildernessType::WILD_ALL });
+}
+
+bool MonraceDefinition::is_suitable_for_wood() const
+{
+    return this->wilderness_flags.has_any_of({ MonsterWildernessType::WILD_WOOD, MonsterWildernessType::WILD_ALL });
+}
+
+bool MonraceDefinition::is_suitable_for_volcano() const
+{
+    return this->wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO);
+}
+
+bool MonraceDefinition::is_suitable_for_mountain() const
+{
+    return this->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN);
+}
+
+/*!
+ * @brief たぬきが変身できるかを判定する
+ *
+ * 以下の全条件を満たせばOK
+ * - ユニークではない
+ * - 分裂しない
+ * - フレンドリーフラグがない
+ * - 水棲生物ではない
+ * - カメレオンではない
+ * @param 変身可不可
+ */
+bool MonraceDefinition::is_suitable_for_tanuki() const
+{
+    auto is_suitable = this->kind_flags.has_not(MonsterKindType::UNIQUE);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::MULTIPLY);
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::FRIENDLY);
+    is_suitable &= this->feature_flags.has_not(MonsterFeatureType::AQUATIC);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::CHAMELEON);
+    is_suitable &= !this->is_explodable();
+    return is_suitable;
+}
+
+/*!
+ * モンスターが人形のベースにできるかを返す
+ * @return 人形にできるか否か
+ */
+bool MonraceDefinition::is_suitable_for_figurine() const
+{
+    auto is_suitable = this->kind_flags.has_not(MonsterKindType::UNIQUE);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::KAGE);
+    is_suitable &= this->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
+    is_suitable &= this->population_flags.has_not(MonsterPopulationType::NAZGUL);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::FORCE_DEPTH);
+    is_suitable &= this->population_flags.has_none_of({ MonsterPopulationType::ONLY_ONE, MonsterPopulationType::BUNBUN_STRIKER });
+    return is_suitable;
+}
+
+bool MonraceDefinition::can_entry_arena() const
+{
+    if (!this->is_suitable_for_arena()) {
+        return false;
+    }
+
+    auto can_entry = this->has_blow_with_damage();
+    can_entry |= this->ability_flags.has_any_of(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK | RF_ABILITY_BREATH_MASK);
+    return can_entry;
+}
+
+bool MonraceDefinition::is_suitable_for_nightmare(int max_level) const
+{
+    return this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR) && (this->level > max_level);
+}
+
+bool MonraceDefinition::is_human() const
+{
+    return this->symbol_char_is_any_of("pht");
+}
+
+bool MonraceDefinition::is_eatable_human() const
+{
+    return this->is_human() && this->kind_flags.has_not(MonsterKindType::UNIQUE);
+}
+
+bool MonraceDefinition::is_catchable_for_fishing() const
+{
+    auto is_catchable = this->feature_flags.has(MonsterFeatureType::AQUATIC);
+    is_catchable &= this->kind_flags.has_not(MonsterKindType::UNIQUE);
+    is_catchable &= str_find("Jjlw", &this->symbol_definition.character);
+    return is_catchable;
+}
+
+bool MonraceDefinition::is_suitable_for_orc_pit() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::ORC);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::UNDEAD);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_troll_pit() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::TROLL);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::UNDEAD);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_giant_pit() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::GIANT);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::GOOD);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::UNDEAD);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_demon_pit() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::DEMON);
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) || this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_horror_pit() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR);
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) || this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    return is_suitable;
 }
 
 void MonraceDefinition::init_sex(uint32_t value)
@@ -555,6 +778,20 @@ bool MonraceDefinition::is_blow_damage_known(int num_blow) const
     return (4 + this->level) * (2 * r_blow) > 80 * max_damage;
 }
 
+/*!
+ * @brief ユニークモンスターの撃破状態を更新する
+ * @todo 状態変更はモンスター「定義」ではないので将来的に別クラスへ分離する
+ */
+void MonraceDefinition::kill_unique()
+{
+    this->max_num = 0;
+}
+
+bool MonraceDefinition::is_dead_unique() const
+{
+    return this->kind_flags.has(MonsterKindType::UNIQUE) && this->max_num == 0;
+}
+
 void MonraceDefinition::reset_current_numbers()
 {
     this->cur_num = 0;
@@ -588,6 +825,54 @@ void MonraceDefinition::reset_max_number()
     }
 
     this->max_num = MAX_MONSTER_NUM;
+}
+
+void MonraceDefinition::increment_akills()
+{
+    if (this->r_akills < MAX_SHORT) {
+        this->r_akills++;
+    }
+}
+
+void MonraceDefinition::increment_pkills()
+{
+    if (this->r_pkills < MAX_SHORT) {
+        this->r_pkills++;
+    }
+}
+
+void MonraceDefinition::increment_tkills()
+{
+    if (this->r_tkills < MAX_SHORT) {
+        this->r_tkills++;
+    }
+}
+
+/*!
+ * @brief モンスター闘技場 (ギャンブル)に出場できるかを返す
+ * @return 出場可不可
+ */
+bool MonraceDefinition::is_suitable_for_arena() const
+{
+    auto is_suitable = this->behavior_flags.has_not(MonsterBehaviorType::NEVER_MOVE);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::MULTIPLY);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::QUANTUM) || this->kind_flags.has(MonsterKindType::UNIQUE);
+    is_suitable &= this->feature_flags.has_not(MonsterFeatureType::AQUATIC);
+    is_suitable &= this->misc_flags.has_not(MonsterMiscType::CHAMELEON);
+    is_suitable &= !this->is_explodable();
+    return is_suitable;
+}
+
+bool MonraceDefinition::has_blow_with_damage() const
+{
+    auto max_blow_damage = 0;
+    for (const auto &blow : this->blows) {
+        if (blow.effect != RaceBlowEffectType::DR_MANA) {
+            max_blow_damage += blow.damage_dice.num;
+        }
+    }
+
+    return max_blow_damage > 0;
 }
 
 /*!

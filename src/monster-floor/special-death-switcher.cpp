@@ -72,24 +72,23 @@ static BIT_FLAGS dead_mode(MonsterDeath *md_ptr)
  */
 static void summon_self(PlayerType *player_ptr, MonsterDeath *md_ptr, summon_type type, int probability, POSITION radius, concptr message)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out() || one_in_(probability)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.inside_arena || AngbandSystem::get_instance().is_phase_out() || one_in_(probability)) {
         return;
     }
 
-    POSITION wy = md_ptr->md_y;
-    POSITION wx = md_ptr->md_x;
-    int attempts = 100;
+    auto m_pos = md_ptr->get_position();
+    auto attempts = 100;
     do {
-        scatter(player_ptr, &wy, &wx, md_ptr->md_y, md_ptr->md_x, radius, PROJECT_NONE);
-    } while (!(in_bounds(floor_ptr, wy, wx) && is_cave_empty_bold2(player_ptr, wy, wx)) && --attempts);
+        m_pos = scatter(player_ptr, md_ptr->get_position(), radius, PROJECT_NONE);
+    } while (!(in_bounds(&floor, m_pos.y, m_pos.x) && is_cave_empty_bold2(player_ptr, m_pos.y, m_pos.x)) && --attempts);
 
     if (attempts <= 0) {
         return;
     }
 
     BIT_FLAGS mode = dead_mode(md_ptr);
-    if (summon_specific(player_ptr, wy, wx, 100, type, mode) && player_can_see_bold(player_ptr, wy, wx)) {
+    if (summon_specific(player_ptr, m_pos.y, m_pos.x, 100, type, mode) && player_can_see_bold(player_ptr, m_pos.y, m_pos.x)) {
         msg_print(message);
     }
 }

@@ -48,13 +48,13 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
         }
 
         do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
-        if (!player_can_enter(player_ptr, grid.feat, 0) || floor.is_trap(pos)) {
+        if (!player_can_enter(player_ptr, grid.feat, 0) || floor.has_trap_at(pos)) {
             return true;
         }
 
         const auto pos_new = pos + Pos2DVec(ddy[*dir], ddx[*dir]);
         const auto &grid_new = floor.get_grid(pos_new);
-        if (player_can_enter(player_ptr, grid_new.feat, 0) && !floor.is_trap(pos_new) && !grid_new.has_monster()) {
+        if (player_can_enter(player_ptr, grid_new.feat, 0) && !floor.has_trap_at(pos_new) && !grid_new.has_monster()) {
             msg_print(nullptr);
             (void)move_player_effect(player_ptr, pos_new.y, pos_new.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
         }

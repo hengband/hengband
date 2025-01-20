@@ -440,7 +440,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
     }
 
     if (tval == ItemKindType::MONSTER_REMAINS) {
-        if (o_ptr->get_monrace().symbol_char_is_any_of("pht")) {
+        if (o_ptr->get_monrace().is_human()) {
             entry->add(FLG_HUMAN);
         }
     }

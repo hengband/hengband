@@ -170,17 +170,17 @@ void wiz_dimension_door(PlayerType *player_ptr)
  */
 void wiz_summon_horde(PlayerType *player_ptr)
 {
-    POSITION wy = player_ptr->y, wx = player_ptr->x;
-    int attempts = 1000;
-
+    const auto p_pos = player_ptr->get_position();
+    auto pos = p_pos;
+    auto attempts = 1000;
     while (--attempts) {
-        scatter(player_ptr, &wy, &wx, player_ptr->y, player_ptr->x, 3, PROJECT_NONE);
-        if (is_cave_empty_bold(player_ptr, wy, wx)) {
+        pos = scatter(player_ptr, p_pos, 3, PROJECT_NONE);
+        if (is_cave_empty_bold(player_ptr, pos.y, pos.x)) {
             break;
         }
     }
 
-    (void)alloc_horde(player_ptr, wy, wx, summon_specific);
+    (void)alloc_horde(player_ptr, pos.y, pos.x, summon_specific);
 }
 
 /*!

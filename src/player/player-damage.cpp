@@ -411,6 +411,15 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 #ifdef JP
                 player_ptr->died_from = format("%s%s%s", paralysis_state, hallucintion_state, hit_from.data());
 #else
+                if (is_hallucinated) {
+                    if (hit_from.starts_with("a ") || hit_from.starts_with("A ")) {
+                        hit_from.remove_prefix(2);
+                    } else if (hit_from.starts_with("an ") || hit_from.starts_with("An ")) {
+                        hit_from.remove_prefix(3);
+                    } else if (hit_from.starts_with("the ") || hit_from.starts_with("The ")) {
+                        hit_from.remove_prefix(4);
+                    }
+                }
                 player_ptr->died_from = format("%s%s%s", hallucintion_state, hit_from.data(), paralysis_state);
 #endif
             }

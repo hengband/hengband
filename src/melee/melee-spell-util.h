@@ -3,6 +3,7 @@
 #include "monster-race/race-ability-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include "util/point-2d.h"
 #include <string>
 #include <vector>
 
@@ -31,4 +32,6 @@ struct melee_spell_type {
     bool maneable;
     bool pet;
     bool in_no_magic_dungeon;
+
+    Pos2D get_position();
 };

@@ -53,7 +53,7 @@ bool in_bounds2u(const FloorType *floor_ptr, int y, int x)
 bool is_cave_empty_bold(PlayerType *player_ptr, int y, int x)
 {
     auto *floor_ptr = player_ptr->current_floor_ptr;
-    bool is_empty_grid = cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PLACE);
+    bool is_empty_grid = floor_ptr->has_terrain_characteristics({ y, x }, TerrainCharacteristics::PLACE);
     is_empty_grid &= !(floor_ptr->grid_array[y][x].m_idx);
     is_empty_grid &= !player_ptr->is_located_at({ y, x });
     return is_empty_grid;
@@ -68,15 +68,10 @@ bool is_cave_empty_bold(PlayerType *player_ptr, int y, int x)
  */
 bool is_cave_empty_bold2(PlayerType *player_ptr, int y, int x)
 {
-    bool is_empty_grid = is_cave_empty_bold(player_ptr, y, x);
-    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::TREE);
-    return is_empty_grid;
-}
-
-bool cave_has_flag_bold(const FloorType *floor_ptr, int y, int x, TerrainCharacteristics f_idx)
-{
     const Pos2D pos(y, x);
-    return floor_ptr->get_grid(pos).get_terrain().flags.has(f_idx);
+    bool is_empty_grid = is_cave_empty_bold(player_ptr, y, x);
+    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::TREE);
+    return is_empty_grid;
 }
 
 /*
@@ -84,9 +79,10 @@ bool cave_has_flag_bold(const FloorType *floor_ptr, int y, int x, TerrainCharact
  */
 bool cave_stop_disintegration(const FloorType *floor_ptr, int y, int x)
 {
-    const auto can_stop = !cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PROJECT);
-    auto is_bold = !cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::HURT_DISI);
-    is_bold |= cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PERMANENT);
+    const Pos2D pos(y, x);
+    const auto can_stop = !floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
+    auto is_bold = !floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::HURT_DISI);
+    is_bold |= floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PERMANENT);
     return can_stop && is_bold;
 }
 
@@ -112,7 +108,9 @@ bool cave_los_bold(const FloorType *floor_ptr, int y, int x)
  */
 bool cave_clean_bold(const FloorType *floor_ptr, int y, int x)
 {
-    return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::FLOOR) && ((floor_ptr->grid_array[y][x].is_object()) == 0) && floor_ptr->grid_array[y][x].o_idx_list.empty();
+    const Pos2D pos(y, x);
+    const auto &grid = floor_ptr->get_grid(pos);
+    return floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::FLOOR) && !grid.is_object() && grid.o_idx_list.empty();
 }
 
 /*
@@ -123,10 +121,13 @@ bool cave_clean_bold(const FloorType *floor_ptr, int y, int x)
  */
 bool cave_drop_bold(const FloorType *floor_ptr, int y, int x)
 {
-    return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::DROP) && ((floor_ptr->grid_array[y][x].is_object()) == 0);
+    const Pos2D pos(y, x);
+    const auto &grid = floor_ptr->get_grid(pos);
+    return floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::DROP) && !grid.is_object();
 }
 
 bool pattern_tile(const FloorType *floor_ptr, int y, int x)
 {
-    return cave_has_flag_bold(floor_ptr, y, x, TerrainCharacteristics::PATTERN);
+    const Pos2D pos(y, x);
+    return floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PATTERN);
 }

@@ -344,9 +344,6 @@ void init_feat_variables()
     feat_door[DOOR_CURTAIN].jammed[0] = feat_door[DOOR_CURTAIN].closed;
     feat_door[DOOR_CURTAIN].num_jammed = 1;
 
-    /* Stairs */
-    feat_entrance = terrains.get_terrain_id_by_tag("ENTRANCE");
-
     /* Normal traps */
     init_normal_traps();
 
@@ -354,24 +351,6 @@ void init_feat_variables()
     feat_trap_open = terrains.get_terrain_id_by_tag("TRAP_OPEN");
     feat_trap_armageddon = terrains.get_terrain_id_by_tag("TRAP_ARMAGEDDON");
     feat_trap_piranha = terrains.get_terrain_id_by_tag("TRAP_PIRANHA");
-
-    /* Rubble */
-    feat_rubble = terrains.get_terrain_id_by_tag("RUBBLE");
-
-    /* Seams */
-    feat_magma_vein = terrains.get_terrain_id_by_tag("MAGMA_VEIN");
-    feat_quartz_vein = terrains.get_terrain_id_by_tag("QUARTZ_VEIN");
-
-    /* Walls */
-    feat_granite = terrains.get_terrain_id_by_tag("GRANITE");
-    feat_permanent = terrains.get_terrain_id_by_tag("PERMANENT");
-
-    /* Glass floor */
-    feat_glass_floor = terrains.get_terrain_id_by_tag("GLASS_FLOOR");
-
-    /* Glass walls */
-    feat_glass_wall = terrains.get_terrain_id_by_tag("GLASS_WALL");
-    feat_permanent_glass_wall = terrains.get_terrain_id_by_tag("PERMANENT_GLASS_WALL");
 
     /* Pattern */
     feat_pattern_start = terrains.get_terrain_id_by_tag("PATTERN_START");
@@ -383,31 +362,6 @@ void init_feat_variables()
     feat_pattern_old = terrains.get_terrain_id_by_tag("PATTERN_OLD");
     feat_pattern_exit = terrains.get_terrain_id_by_tag("PATTERN_EXIT");
     feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
-
-    /* Various */
-    feat_black_market = terrains.get_terrain_id_by_tag("BLACK_MARKET");
-    feat_town = terrains.get_terrain_id_by_tag("TOWN");
-
-    /* Terrains */
-    feat_deep_water = terrains.get_terrain_id_by_tag("DEEP_WATER");
-    feat_shallow_water = terrains.get_terrain_id_by_tag("SHALLOW_WATER");
-    feat_deep_lava = terrains.get_terrain_id_by_tag("DEEP_LAVA");
-    feat_shallow_lava = terrains.get_terrain_id_by_tag("SHALLOW_LAVA");
-    feat_heavy_cold_zone = terrains.get_terrain_id_by_tag("HEAVY_COLD_ZONE");
-    feat_cold_zone = terrains.get_terrain_id_by_tag("COLD_ZONE");
-    feat_heavy_electrical_zone = terrains.get_terrain_id_by_tag("HEAVY_ELECTRICAL_ZONE");
-    feat_electrical_zone = terrains.get_terrain_id_by_tag("ELECTRICAL_ZONE");
-    feat_deep_acid_puddle = terrains.get_terrain_id_by_tag("DEEP_ACID_PUDDLE");
-    feat_shallow_acid_puddle = terrains.get_terrain_id_by_tag("SHALLOW_ACID_PUDDLE");
-    feat_deep_poisonous_puddle = terrains.get_terrain_id_by_tag("DEEP_POISONOUS_PUDDLE");
-    feat_shallow_poisonous_puddle = terrains.get_terrain_id_by_tag("SHALLOW_POISONOUS_PUDDLE");
-    feat_dirt = terrains.get_terrain_id_by_tag("DIRT");
-    feat_grass = terrains.get_terrain_id_by_tag("GRASS");
-    feat_flower = terrains.get_terrain_id_by_tag("FLOWER");
-    feat_brake = terrains.get_terrain_id_by_tag("BRAKE");
-    feat_tree = terrains.get_terrain_id_by_tag("TREE");
-    feat_mountain = terrains.get_terrain_id_by_tag("MOUNTAIN");
-    feat_swamp = terrains.get_terrain_id_by_tag("SWAMP");
 
     feat_undetected = terrains.get_terrain_id_by_tag("UNDETECTED");
 

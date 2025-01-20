@@ -33,7 +33,7 @@ static bool do_cmd_tunnel_test(const Grid &grid)
         return false;
     }
 
-    if (!grid.cave_has_flag(TerrainCharacteristics::TUNNEL)) {
+    if (!grid.has(TerrainCharacteristics::TUNNEL)) {
         msg_print(_("そこには掘るものが見当たらない。", "You see nothing there to tunnel."));
         return false;
     }

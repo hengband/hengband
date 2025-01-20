@@ -7,7 +7,6 @@
 #include "mspell/mspell-lite.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-brightness-mask.h"
@@ -57,7 +56,7 @@ bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION 
         const Pos2DVec vec(tonari_y[next][i], tonari_x[next][i]);
         const auto pos_next = pos + vec;
         const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_next);
-        if (!grid.cave_has_flag(f_flag)) {
+        if (!grid.has(f_flag)) {
             continue;
         }
 
@@ -156,10 +155,8 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
         return;
     }
 
-    auto by = msa_ptr->y;
-    auto bx = msa_ptr->x;
-    get_project_point(player_ptr, m_pos.y, m_pos.x, &by, &bx, 0L);
-    if ((distance(by, bx, pos.y, pos.x) <= 3) && los(player_ptr, by, bx, pos.y, pos.x) && one_in_(5)) {
+    const auto pos_breath = get_project_point(player_ptr, m_pos, msa_ptr->get_position(), 0);
+    if ((Grid::calc_distance(pos_breath, pos) <= 3) && los(player_ptr, pos_breath.y, pos_breath.x, pos.y, pos.x) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
         msa_ptr->success = true;
     }

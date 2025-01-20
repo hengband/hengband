@@ -154,7 +154,7 @@ bool QuestList::order_completed(QuestId id1, QuestId id2) const
  */
 void determine_random_questor(PlayerType *player_ptr, QuestType &quest)
 {
-    get_mon_num_prep(player_ptr, mon_hook_quest);
+    get_mon_num_prep_enum(player_ptr, MonraceHook::QUEST);
     const auto &monraces = MonraceList::get_instance();
     MonraceId r_idx;
     while (true) {
@@ -266,9 +266,7 @@ void quest_discovery(QuestId quest_id)
         return;
     }
 
-    auto is_random_quest_skipped = monrace.kind_flags.has(MonsterKindType::UNIQUE);
-    is_random_quest_skipped &= monrace.max_num == 0;
-    if (!is_random_quest_skipped) {
+    if (!monrace.is_dead_unique()) {
         msg_format(_("注意せよ！この階は%sによって守られている！", "Beware, this level is protected by %s!"), name.data());
         return;
     }
@@ -377,7 +375,7 @@ void do_cmd_quest(PlayerType *player_ptr)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!cave_has_flag_bold(&floor, player_ptr->y, player_ptr->x, TerrainCharacteristics::QUEST_ENTER)) {
+    if (!floor.has_terrain_characteristics(player_ptr->get_position(), TerrainCharacteristics::QUEST_ENTER)) {
         msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
         return;
     }

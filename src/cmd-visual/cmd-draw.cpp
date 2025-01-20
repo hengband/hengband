@@ -362,10 +362,10 @@ void do_cmd_messages(int num_now)
 
             break;
         }
-        case SKEY_TOP:
+        case SKEY_HOME:
             base_msg_num = oldest_base_msg_num;
             break;
-        case SKEY_BOTTOM:
+        case SKEY_END:
             base_msg_num = 0;
             break;
         case '8':

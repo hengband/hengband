@@ -47,7 +47,7 @@ static bool is_leave_special_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     const auto &bi_key = o_ptr->bi_key;
     const auto tval = bi_key.tval();
     if (PlayerRace(player_ptr).equals(PlayerRaceType::BALROG)) {
-        if (o_ptr->is_corpse() && o_ptr->get_monrace().symbol_char_is_any_of("pht")) {
+        if (o_ptr->is_corpse() && o_ptr->get_monrace().is_human()) {
             return false;
         }
     }

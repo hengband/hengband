@@ -38,7 +38,7 @@ void call_the_void(PlayerType *player_ptr)
     for (int i = 0; i < 9; i++) {
         const Pos2D p_pos_neighbor(player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i]);
         const auto &grid = floor.get_grid(p_pos_neighbor);
-        if (!grid.cave_has_flag(TerrainCharacteristics::PROJECT)) {
+        if (!grid.has(TerrainCharacteristics::PROJECT)) {
             if (!grid.mimic || grid.get_terrain(TerrainKind::MIMIC_RAW).flags.has_not(TerrainCharacteristics::PROJECT) || !grid.get_terrain().is_permanent_wall()) {
                 do_call = false;
                 break;
@@ -209,6 +209,7 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
 {
     const auto b = 10 + randint1(10);
     const auto p_pos = player_ptr->get_position();
+    const auto &floor = *player_ptr->current_floor_ptr;
     for (auto i = 0; i < b; i++) {
         Pos2D pos(0, 0);
         int count;
@@ -223,13 +224,12 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
                 continue;
             }
 
-            auto *floor_ptr = player_ptr->current_floor_ptr;
-            if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+            if (!in_bounds(&floor, pos.y, pos.x)) {
                 continue;
             }
 
             const auto is_projectable = projectable(player_ptr, p_pos, pos);
-            if (!is_projectable || !cave_has_flag_bold(floor_ptr, pos.y, pos.x, TerrainCharacteristics::PROJECT)) {
+            if (!is_projectable || !floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
 

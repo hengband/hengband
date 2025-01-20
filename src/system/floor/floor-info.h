@@ -40,7 +40,10 @@ constexpr auto REDRAW_MAX = 2298;
 enum class DungeonId;
 enum class GridCountKind;
 enum class MonsterTimedEffect : int;
+enum class MonraceHookTerrain;
+enum class MonraceId : short;
 enum class QuestId : short;
+enum class TerrainCharacteristics;
 enum class TerrainTag;
 class DungeonDefinition;
 class Grid;
@@ -102,11 +105,12 @@ public:
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
     bool has_los(const Pos2D &pos) const;
+    bool has_terrain_characteristics(const Pos2D &pos, TerrainCharacteristics tc) const;
     bool is_special() const;
     bool can_teleport_level(bool to_player = false) const;
-    bool is_mark(const Pos2D &pos) const;
-    bool is_closed_door(const Pos2D &pos, bool is_mimic = false) const;
-    bool is_trap(const Pos2D &pos) const;
+    bool has_marked_grid_at(const Pos2D &pos) const;
+    bool has_closed_door_at(const Pos2D &pos, bool is_mimic = false) const;
+    bool has_trap_at(const Pos2D &pos) const;
     std::pair<int, Pos2D> count_doors_traps(const Pos2D &p_pos, GridCountKind gck, bool under) const;
     bool check_terrain_state(const Pos2D &pos, GridCountKind gck) const;
     bool order_pet_whistle(short index1, short index2) const;
@@ -115,6 +119,7 @@ public:
     ItemEntity make_gold(std::optional<BaseitemKey> bi_key = std::nullopt) const;
     std::optional<ItemEntity> try_make_instant_artifact() const;
     short select_baseitem_id(int level_initial, uint32_t mode) const;
+    bool filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain hook) const;
 
     void reset_mproc();
     void reset_mproc_max();
@@ -126,8 +131,8 @@ public:
     short pop_empty_index_item();
     bool is_grid_changeable(const Pos2D &pos) const;
     void place_random_stairs(const Pos2D &pos);
-    void set_terrain_id(const Pos2D &pos, TerrainTag tag);
-    void set_terrain_id(const Pos2D &pos, short terrain_id);
+    void set_terrain_id_at(const Pos2D &pos, TerrainTag tag);
+    void set_terrain_id_at(const Pos2D &pos, short terrain_id);
 
 private:
     static int decide_selection_count();

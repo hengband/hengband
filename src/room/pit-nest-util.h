@@ -11,7 +11,7 @@ enum class NestKind {
     SYMBOL_GOOD = 2,
     SYMBOL_EVIL = 3,
     MIMIC = 4,
-    LOVECRAFTIAN = 5,
+    HORROR = 5,
     KENNEL = 6,
     ANIMAL = 7,
     CHAPEL = 8,
@@ -23,7 +23,7 @@ enum class PitKind {
     ORC = 0,
     TROLL = 1,
     GIANT = 2,
-    LOVECRAFTIAN = 3,
+    HORROR = 3,
     SYMBOL_GOOD = 4,
     SYMBOL_EVIL = 5,
     CHAPEL = 6,
@@ -34,11 +34,12 @@ enum class PitKind {
 };
 
 /*! pit/nest型情報の構造体定義 */
+enum class MonraceHook;
 enum class MonraceId : short;
 class PlayerType;
 struct nest_pit_type {
     std::string name; //<! 部屋名
-    std::function<bool(PlayerType *, MonraceId)> hook_func; //<! モンスターフィルタ関数
+    MonraceHook hook; //<! モンスターフィルタ関数
     std::optional<std::function<void(PlayerType *)>> prep_func; //<! 能力フィルタ関数
     int level; //<! 相当階
     int chance; //!< 生成確率

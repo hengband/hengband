@@ -8,6 +8,7 @@
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-specific-bolt.h"
 #include "system/enums/terrain/terrain-characteristics.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
@@ -334,23 +335,26 @@ bool activate_ball_water(PlayerType *player_ptr, std::string_view name)
 
 bool activate_ball_lite(PlayerType *player_ptr, std::string_view name)
 {
-    int num = Dice::roll(5, 3);
-    POSITION y = 0, x = 0;
+    const auto num = Dice::roll(5, 3);
     msg_format(_("%sが稲妻で覆われた...", "The %s is surrounded by lightning..."), name.data());
-    for (int k = 0; k < num; k++) {
-        int attempts = 1000;
+    const auto p_pos = player_ptr->get_position();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (auto k = 0; k < num; k++) {
+        auto attempts = 1000;
+        Pos2D pos(0, 0);
         while (attempts--) {
-            scatter(player_ptr, &y, &x, player_ptr->y, player_ptr->x, 4, PROJECT_NONE);
-            if (!cave_has_flag_bold(player_ptr->current_floor_ptr, y, x, TerrainCharacteristics::PROJECT)) {
+            pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
+            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
                 continue;
             }
 
-            if (!player_ptr->is_located_at({ y, x })) {
+            if (pos != p_pos) {
                 break;
             }
         }
 
-        project(player_ptr, 0, 3, y, x, 150, AttributeType::ELEC, PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
+        constexpr uint32_t flags = PROJECT_THRU | PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+        project(player_ptr, 0, 3, pos.y, pos.x, 150, AttributeType::ELEC, flags);
     }
 
     return true;

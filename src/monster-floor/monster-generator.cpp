@@ -9,7 +9,6 @@
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
-#include "floor/geometry.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
 #include "monster-floor/one-monster-placer.h"
@@ -87,7 +86,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
                 }
             }
 
-            dist = distance(pos.y, pos.x, pos_neighbor.y, pos_neighbor.x);
+            dist = Grid::calc_distance(pos, pos_neighbor);
             if (dist > max_distance) {
                 continue;
             }
@@ -187,68 +186,16 @@ static void place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center,
         for (auto i = 0; (i < 8) && (positions.size() < total_size); i++) {
             //!< @details 要素数が変わると参照がダングリング状態になるので毎回取得する必要がある.
             const auto &pos_neighbor = positions.at(n);
-            int mx, my;
-            scatter(player_ptr, &my, &mx, pos_neighbor.y, pos_neighbor.x, 4, PROJECT_NONE);
-            if (!is_cave_empty_bold2(player_ptr, my, mx)) {
+            const auto pos = scatter(player_ptr, pos_neighbor, 4, PROJECT_NONE);
+            if (!is_cave_empty_bold2(player_ptr, pos.y, pos.x)) {
                 continue;
             }
 
-            if (place_monster_one(player_ptr, my, mx, monrace_id, mode, summoner_m_idx)) {
-                positions.emplace_back(my, mx);
+            if (place_monster_one(player_ptr, pos.y, pos.x, monrace_id, mode, summoner_m_idx)) {
+                positions.push_back(pos);
             }
         }
     }
-}
-
-/*!
- * @brief モンスター種族が護衛となれるかどうかをチェックする
- * @param monrace_id チェックするモンスターの種族ID
- * @param escorted_monrace_id 護衛されるモンスターの種族ID
- * @param escorted_m_idx 護衛されるモンスターのフロア内インデックス
- * @return 護衛にできるならばtrue
- * @todo escorted_m_idx とescorted_monrace_id は両方グローバル変数なので、前者が指し示すモンスター種族IDが後者である保証が確認できなかった. 要調査.
- */
-static bool place_monster_can_escort(PlayerType *player_ptr, MonraceId monrace_id, MonraceId escorted_monrace_id, short escorted_m_idx)
-{
-    const auto &escorted_monster = player_ptr->current_floor_ptr->m_list[escorted_m_idx];
-    const auto &monraces = MonraceList::get_instance();
-    const auto &escorted_monrace = monraces.get_monrace(escorted_monrace_id);
-    const auto &monrace = monraces.get_monrace(monrace_id);
-    if (mon_hook_dungeon(player_ptr, escorted_monrace_id) != mon_hook_dungeon(player_ptr, monrace_id)) {
-        return false;
-    }
-
-    if (monrace.symbol_definition.character != escorted_monrace.symbol_definition.character) {
-        return false;
-    }
-
-    if (monrace.level > escorted_monrace.level) {
-        return false;
-    }
-
-    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    if (escorted_monrace_id == monrace_id) {
-        return false;
-    }
-
-    if (monster_has_hostile_align(player_ptr, &escorted_monster, 0, 0, &monrace)) {
-        return false;
-    }
-
-    if (escorted_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
-        if (monster_has_hostile_align(player_ptr, nullptr, 1, -1, &monrace)) {
-            return false;
-        }
-    }
-
-    if (escorted_monrace.misc_flags.has(MonsterMiscType::CHAMELEON) && monrace.misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
-        return false;
-    }
-
-    return true;
 }
 
 /*!
@@ -265,6 +212,7 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonraceId monrace_i
  */
 std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITION y, POSITION x, MonraceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
+    const Pos2D pos(y, x);
     const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     if (!(mode & PM_NO_KAGE) && one_in_(333)) {
         mode |= PM_KAGE;
@@ -286,12 +234,12 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
 
         const auto n = reinforce.roll_dice();
         for (int j = 0; j < n; j++) {
-            POSITION nx, ny, d;
-            const POSITION scatter_min = 7;
-            const POSITION scatter_max = 40;
+            constexpr auto scatter_min = 7;
+            constexpr auto scatter_max = 40;
+            int d;
             for (d = scatter_min; d <= scatter_max; d++) {
-                scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
-                if (place_monster_one(player_ptr, ny, nx, reinforce.get_monrace_id(), mode, *m_idx)) {
+                const auto pos_neighbor = scatter(player_ptr, pos, d, PROJECT_NONE);
+                if (place_monster_one(player_ptr, pos_neighbor.y, pos_neighbor.x, reinforce.get_monrace_id(), mode, *m_idx)) {
                     break;
                 }
             }
@@ -302,32 +250,29 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
     }
 
     if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
-        place_monster_group(player_ptr, { y, x }, r_idx, mode, summoner_m_idx);
+        place_monster_group(player_ptr, pos, r_idx, mode, summoner_m_idx);
     }
 
     if (monrace.misc_flags.has_not(MonsterMiscType::ESCORT)) {
         return m_idx;
     }
 
-    for (int i = 0; i < 32; i++) {
-        POSITION nx, ny, d = 3;
-        scatter(player_ptr, &ny, &nx, y, x, d, PROJECT_NONE);
-        if (!is_cave_empty_bold2(player_ptr, ny, nx)) {
+    for (auto i = 0; i < 32; i++) {
+        constexpr auto d = 3;
+        const auto pos_neighbor = scatter(player_ptr, pos, d, PROJECT_NONE);
+        if (!is_cave_empty_bold2(player_ptr, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
 
-        auto hook = [place_monster_monrace_id = r_idx, place_monster_m_idx = *m_idx](PlayerType *player_ptr, MonraceId escort_monrace_id) {
-            return place_monster_can_escort(player_ptr, escort_monrace_id, place_monster_monrace_id, place_monster_m_idx);
-        };
-        get_mon_num_prep(player_ptr, std::move(hook), get_monster_hook2(player_ptr, ny, nx));
+        get_mon_num_prep_escort(player_ptr, r_idx, *m_idx, get_monster_hook2(player_ptr, pos_neighbor.y, pos_neighbor.x));
         const auto monrace_id = get_mon_num(player_ptr, 0, monrace.level, 0);
         if (!MonraceList::is_valid(monrace_id)) {
             break;
         }
 
-        (void)place_monster_one(player_ptr, ny, nx, monrace_id, mode, *m_idx);
+        (void)place_monster_one(player_ptr, pos_neighbor.y, pos_neighbor.x, monrace_id, mode, *m_idx);
         if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS) || monrace.misc_flags.has(MonsterMiscType::MORE_ESCORT)) {
-            place_monster_group(player_ptr, { ny, nx }, monrace_id, mode, *m_idx);
+            place_monster_group(player_ptr, pos_neighbor, monrace_id, mode, *m_idx);
         }
     }
 
@@ -343,8 +288,9 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
  */
 std::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
     const auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
+    get_mon_num_prep_enum(player_ptr, get_monster_hook(pos_wilderness, floor.is_underground()), get_monster_hook2(player_ptr, y, x));
     const auto &monraces = MonraceList::get_instance();
     MonraceId monrace_id;
     do {
@@ -398,8 +344,10 @@ static std::optional<MonraceId> select_horde_leader_r_idx(PlayerType *player_ptr
  */
 bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific_pf summon_specific)
 {
-    get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
-
+    Pos2D pos(y, x);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
+    get_mon_num_prep_enum(player_ptr, get_monster_hook(pos_wilderness, floor.is_underground()), get_monster_hook2(player_ptr, pos.y, pos.x));
     const auto monrace_id = select_horde_leader_r_idx(player_ptr);
     if (!monrace_id) {
         return false;
@@ -415,17 +363,12 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
         }
     }
 
-    const auto &floor = *player_ptr->current_floor_ptr;
-    const auto m_idx = floor.get_grid({ y, x }).m_idx;
+    const auto m_idx = floor.get_grid(pos).m_idx;
     const auto &monentity = floor.m_list[m_idx];
-
-    POSITION cy = y;
-    POSITION cx = x;
     for (auto attempts = randint1(10) + 5; attempts > 0; attempts--) {
-        scatter(player_ptr, &cy, &cx, y, x, 5, PROJECT_NONE);
-        (void)(*summon_specific)(player_ptr, cy, cx, floor.dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, m_idx);
-        y = cy;
-        x = cx;
+        const auto pos_scat = scatter(player_ptr, pos, 5, PROJECT_NONE);
+        (void)(*summon_specific)(player_ptr, pos_scat.y, pos_scat.x, floor.dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, m_idx);
+        pos = pos_scat;
     }
 
     if (!cheat_hear) {
@@ -515,7 +458,7 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
             }
         }
 
-        const auto dist = distance(y, x, player_ptr->y, player_ptr->x);
+        const auto dist = Grid::calc_distance({ y, x }, player_ptr->get_position());
         if ((min_dis < dist) && (dist <= max_dis)) {
             break;
         }

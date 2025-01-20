@@ -2,6 +2,7 @@
 
 #include "object/object-index-list.h"
 #include "system/angband.h"
+#include "util/point-2d.h"
 #include <map>
 
 /*
@@ -71,6 +72,8 @@ public:
     std::map<GridFlow, uint8_t> dists; //!< Distance from player
     byte when{}; /* Hack -- when cost was computed */
 
+    static int calc_distance(const Pos2D &pos1, const Pos2D &pos2);
+
     short get_terrain_id(TerrainKind tk = TerrainKind::NORMAL) const;
     bool is_floor() const;
     bool is_room() const;
@@ -87,12 +90,14 @@ public:
     bool is_mirror() const;
     bool is_rune_protection() const;
     bool is_rune_explosion() const;
+    bool is_open() const;
+    bool is_closed_door(bool is_mimic) const;
     bool is_hidden_door() const;
     bool has_monster() const;
     uint8_t get_cost(GridFlow gf) const;
     uint8_t get_distance(GridFlow gf) const;
     FEAT_IDX get_feat_mimic() const;
-    bool cave_has_flag(TerrainCharacteristics feature_flags) const;
+    bool has(TerrainCharacteristics tc) const;
     bool is_symbol(const int ch) const;
     void reset_costs();
     void reset_dists();

@@ -33,16 +33,16 @@ constexpr auto NUM_NEST_MON_TYPE = 64; //! nestの種別数.
  * @brief 生成するNestの情報テーブル
  */
 const std::map<NestKind, nest_pit_type> nest_types = {
-    { NestKind::CLONE, { _("クローン", "clone"), vault_aux_clone, vault_prep_clone, 5, 3 } },
-    { NestKind::JELLY, { _("ゼリー", "jelly"), vault_aux_jelly, std::nullopt, 5, 6 } },
-    { NestKind::SYMBOL_GOOD, { _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 } },
-    { NestKind::SYMBOL_EVIL, { _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 25, 2 } },
-    { NestKind::MIMIC, { _("ミミック", "mimic"), vault_aux_mimic, std::nullopt, 30, 4 } },
-    { NestKind::LOVECRAFTIAN, { _("狂気", "lovecraftian"), vault_aux_cthulhu, std::nullopt, 70, 2 } },
-    { NestKind::KENNEL, { _("犬小屋", "kennel"), vault_aux_kennel, std::nullopt, 45, 4 } },
-    { NestKind::ANIMAL, { _("動物園", "animal"), vault_aux_animal, std::nullopt, 35, 5 } },
-    { NestKind::CHAPEL, { _("教会", "chapel"), vault_aux_chapel_g, std::nullopt, 75, 4 } },
-    { NestKind::UNDEAD, { _("アンデッド", "undead"), vault_aux_undead, std::nullopt, 75, 5 } },
+    { NestKind::CLONE, { _("クローン", "clone"), MonraceHook::CLONE, vault_prep_clone, 5, 3 } },
+    { NestKind::JELLY, { _("ゼリー", "jelly"), MonraceHook::JELLY, std::nullopt, 5, 6 } },
+    { NestKind::SYMBOL_GOOD, { _("シンボル(善)", "symbol good"), MonraceHook::GOOD, vault_prep_symbol, 25, 2 } },
+    { NestKind::SYMBOL_EVIL, { _("シンボル(悪)", "symbol evil"), MonraceHook::EVIL, vault_prep_symbol, 25, 2 } },
+    { NestKind::MIMIC, { _("ミミック", "mimic"), MonraceHook::MIMIC, std::nullopt, 30, 4 } },
+    { NestKind::HORROR, { _("狂気", "lovecraftian"), MonraceHook::HORROR, std::nullopt, 70, 2 } },
+    { NestKind::KENNEL, { _("犬小屋", "kennel"), MonraceHook::KENNEL, std::nullopt, 45, 4 } },
+    { NestKind::ANIMAL, { _("動物園", "animal"), MonraceHook::ANIMAL, std::nullopt, 35, 5 } },
+    { NestKind::CHAPEL, { _("教会", "chapel"), MonraceHook::CHAPEL, std::nullopt, 75, 4 } },
+    { NestKind::UNDEAD, { _("アンデッド", "undead"), MonraceHook::UNDEAD, std::nullopt, 75, 5 } },
 };
 
 std::optional<std::array<NestMonsterInfo, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
@@ -212,7 +212,7 @@ bool build_type5(PlayerType *player_ptr, DungeonData *dd_ptr)
         (*nest.prep_func)(player_ptr);
     }
 
-    get_mon_num_prep(player_ptr, nest.hook_func);
+    get_mon_num_prep_enum(player_ptr, nest.hook);
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 

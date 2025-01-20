@@ -57,7 +57,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
         }
 
         free_text_lines(tb->lines_list);
-        tb->lines_list = read_pickpref_text_lines(player_ptr, &tb->filename_mode);
+        tb->lines_list = read_pickpref_text_lines(player_ptr->base_name, &tb->filename_mode);
         tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
         tb->cx = tb->cy = 0;
         tb->mark = 0;

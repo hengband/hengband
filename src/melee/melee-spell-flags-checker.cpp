@@ -1,7 +1,6 @@
 #include "melee/melee-spell-flags-checker.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/effect-characteristics.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "melee/melee-spell-util.h"
 #include "monster-floor/monster-move.h"
@@ -160,18 +159,18 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
     }
 
     const auto p_pos = player_ptr->get_position();
-    Pos2D pos_real(ms_ptr->y, ms_ptr->x);
-    get_project_point(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, &pos_real.y, &pos_real.x, 0L);
+    const auto m_pos = ms_ptr->m_ptr->get_position();
+    const auto pos_real = get_project_point(player_ptr, m_pos, ms_ptr->get_position(), 0L);
     auto should_preserve = !projectable(player_ptr, pos_real, p_pos);
     should_preserve &= ms_ptr->ability_flags.has(MonsterAbilityType::BA_LITE);
-    should_preserve &= distance(pos_real.y, pos_real.x, p_pos.y, p_pos.x) <= 4;
+    should_preserve &= Grid::calc_distance(pos_real, p_pos) <= 4;
     should_preserve &= los(player_ptr, pos_real.y, pos_real.x, p_pos.y, p_pos.x);
     if (should_preserve) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BA_LITE);
         return;
     }
 
-    const auto dist = distance(pos_real.y, pos_real.x, p_pos.y, p_pos.x);
+    const auto dist = Grid::calc_distance(pos_real, p_pos);
     if (dist <= 2) {
         ms_ptr->ability_flags.reset(ball_mask_except_rocket);
         return;
@@ -203,16 +202,15 @@ static void check_melee_spell_rocket(PlayerType *player_ptr, melee_spell_type *m
 
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = ms_ptr->m_ptr->get_position();
-    Pos2D pos_real(ms_ptr->y, ms_ptr->x);
-    get_project_point(player_ptr, m_pos.y, m_pos.x, &pos_real.y, &pos_real.x, PROJECT_STOP);
-    if (projectable(player_ptr, pos_real, p_pos) && (distance(pos_real.y, pos_real.x, p_pos.y, p_pos.x) <= 2)) {
+    const auto pos_real = get_project_point(player_ptr, m_pos, ms_ptr->get_position(), PROJECT_STOP);
+    if (projectable(player_ptr, pos_real, p_pos) && (Grid::calc_distance(pos_real, p_pos) <= 2)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::ROCKET);
     }
 }
 
 static void check_melee_spell_beam(PlayerType *player_ptr, melee_spell_type *ms_ptr)
 {
-    if (ms_ptr->ability_flags.has_none_of(RF_ABILITY_BEAM_MASK) || direct_beam(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, ms_ptr->m_ptr)) {
+    if (ms_ptr->ability_flags.has_none_of(RF_ABILITY_BEAM_MASK) || direct_beam(player_ptr, *ms_ptr->m_ptr, ms_ptr->t_ptr->get_position())) {
         return;
     }
 
@@ -226,19 +224,19 @@ static void check_melee_spell_breath(PlayerType *player_ptr, melee_spell_type *m
     }
 
     POSITION rad = ms_ptr->r_ptr->misc_flags.has(MonsterMiscType::POWERFUL) ? 3 : 2;
-    if (!breath_direct(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, AttributeType::NONE, true)) {
+    if (!breath_direct(player_ptr, ms_ptr->m_ptr->get_position(), ms_ptr->t_ptr->get_position(), rad, AttributeType::NONE, true)) {
         ms_ptr->ability_flags.reset(RF_ABILITY_BREATH_MASK);
         return;
     }
 
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && !breath_direct(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx,
-                                                                      ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, AttributeType::LITE, true)) {
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && !breath_direct(player_ptr, ms_ptr->m_ptr->get_position(),
+                                                                      ms_ptr->t_ptr->get_position(), rad, AttributeType::LITE, true)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         return;
     }
 
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && !breath_direct(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx,
-                                                                      ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx, rad, AttributeType::DISINTEGRATE, true)) {
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_DISI) && !breath_direct(player_ptr, ms_ptr->m_ptr->get_position(),
+                                                                      ms_ptr->t_ptr->get_position(), rad, AttributeType::DISINTEGRATE, true)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BR_DISI);
     }
 }

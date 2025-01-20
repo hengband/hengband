@@ -11,48 +11,6 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief 2点間の距離をニュートン・ラプソン法で算出する / Distance between two points via Newton-Raphson technique
- * @param y1 1点目のy座標
- * @param x1 1点目のx座標
- * @param y2 2点目のy座標
- * @param x2 2点目のx座標
- * @return 2点間の距離
- */
-POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
-{
-    POSITION dy = (y1 > y2) ? (y1 - y2) : (y2 - y1);
-    POSITION dx = (x1 > x2) ? (x1 - x2) : (x2 - x1);
-
-    /* Squared distance */
-    POSITION target = (dy * dy) + (dx * dx);
-
-    /* Approximate distance: hypot(dy,dx) = max(dy,dx) + min(dy,dx) / 2 */
-    POSITION d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
-
-    POSITION err;
-
-    /* Simple case */
-    if (!dy || !dx) {
-        return d;
-    }
-
-    while (true) {
-        /* Approximate error */
-        err = (target - d * d) / (2 * d);
-
-        /* No error - we are done */
-        if (!err) {
-            break;
-        }
-
-        /* Adjust distance */
-        d += err;
-    }
-
-    return d;
-}
-
-/*!
  * @brief プレイヤーから指定の座標がどの方角にあるかを返す /
  * Convert an adjacent location to a direction.
  * @param y 方角を確認したY座標

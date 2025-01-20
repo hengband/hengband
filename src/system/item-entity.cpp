@@ -479,7 +479,7 @@ bool ItemEntity::is_offerable() const
         return false;
     }
 
-    return this->get_monrace().symbol_char_is_any_of("pht");
+    return this->get_monrace().is_human();
 }
 
 /*!
@@ -1321,6 +1321,12 @@ void ItemEntity::mark_as_known()
 void ItemEntity::mark_as_tried() const
 {
     this->get_baseitem().mark_trial(true);
+}
+
+void ItemEntity::set_position(const Pos2D &pos)
+{
+    this->iy = pos.y;
+    this->ix = pos.x;
 }
 
 /*!

@@ -6,12 +6,40 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 
 Grid::Grid()
 {
     for (const auto gf : GRID_FLOW_RANGE) {
         this->costs[gf] = 0;
         this->dists[gf] = 0;
+    }
+}
+
+/*!
+ * @brief 2点間の距離をニュートン・ラプソン法で算出する / Distance between two points via Newton-Raphson technique
+ * @param pos1 1点目の座標
+ * @param pos2 2点目の座標
+ * @return 2点間の距離
+ */
+int Grid::calc_distance(const Pos2D &pos1, const Pos2D &pos2)
+{
+    const auto dy = std::abs(pos1.y - pos2.y);
+    const auto dx = std::abs(pos1.x - pos2.x);
+    auto approximate_distance = std::max(dy, dx) + std::min(dy, dx) / 2;
+
+    if (dy == 0 || dx == 0) {
+        return approximate_distance;
+    }
+
+    const auto squared_distance = (dy * dy) + (dx * dx);
+    while (true) {
+        const auto approximate_error = (squared_distance - approximate_distance * approximate_distance) / (2 * approximate_distance);
+        if (approximate_error == 0) {
+            return approximate_distance;
+        }
+
+        approximate_distance += approximate_error;
     }
 }
 
@@ -116,13 +144,24 @@ bool Grid::is_rune_explosion() const
     return this->is_object() && TerrainList::get_instance().get_terrain(this->mimic).flags.has(TerrainCharacteristics::RUNE_EXPLOSION);
 }
 
+bool Grid::is_open() const
+{
+    return this->get_terrain(TerrainKind::MIMIC).is_open();
+}
+
+bool Grid::is_closed_door(bool is_mimic) const
+{
+    const auto tk = is_mimic ? TerrainKind::MIMIC : TerrainKind::NORMAL;
+    return this->get_terrain(tk).is_closed_door();
+}
+
 /*!
  * @brief マスに隠されたドアがあるかの判定
  * @return 隠されたドアがあるか否か
  */
 bool Grid::is_hidden_door() const
 {
-    const auto is_secret = (this->mimic > 0) || this->cave_has_flag(TerrainCharacteristics::SECRET);
+    const auto is_secret = (this->mimic > 0) || this->has(TerrainCharacteristics::SECRET);
     return is_secret && this->get_terrain().is_closed_door();
 }
 
@@ -151,9 +190,9 @@ FEAT_IDX Grid::get_feat_mimic() const
     return TerrainList::get_instance().get_terrain(this->mimic ? this->mimic : this->feat).mimic;
 }
 
-bool Grid::cave_has_flag(TerrainCharacteristics feature_flags) const
+bool Grid::has(TerrainCharacteristics tc) const
 {
-    return this->get_terrain().flags.has(feature_flags);
+    return this->get_terrain().has(tc);
 }
 
 /*!

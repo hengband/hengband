@@ -6,7 +6,6 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "game-option/input-options.h"
 #include "grid/feature.h"
 #include "inventory/inventory-slot-types.h"
@@ -359,7 +358,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         for (auto my = yy - warning_aware_range; my < yy + warning_aware_range + 1; my++) {
             const Pos2D pos_neighbor(my, mx);
             int dam_max0 = 0;
-            if (!in_bounds(&floor, my, mx) || (distance(my, mx, yy, xx) > warning_aware_range)) {
+            if (!in_bounds(&floor, my, mx) || (Grid::calc_distance(pos_neighbor, pos) > warning_aware_range)) {
                 continue;
             }
 
@@ -541,7 +540,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         old_damage = old_damage / 2;
     }
 
-    auto is_warning = (!easy_disarm || floor.get_grid(pos).mimic) && floor.is_trap(pos);
+    auto is_warning = (!easy_disarm || floor.get_grid(pos).mimic) && floor.has_trap_at(pos);
     is_warning &= !one_in_(13);
     if (!is_warning) {
         return true;

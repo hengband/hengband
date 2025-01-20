@@ -419,10 +419,7 @@ static bool activate_super_ray_effect(PlayerType *player_ptr, int y, int x, int 
 
 void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 {
-    POSITION y1;
-    POSITION x1;
-    POSITION y2;
-    POSITION x2;
+    const Pos2D pos_target(target_y, target_x);
     constexpr auto typ = AttributeType::SUPER_RAY;
     BIT_FLAGS flag = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM | PROJECT_THRU | PROJECT_MIRROR;
     monster_target_y = this->player_ptr->y;
@@ -430,20 +427,14 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     const auto &floor = *this->player_ptr->current_floor_ptr;
 
     ProjectResult res;
-
-    x1 = this->player_ptr->x;
-    y1 = this->player_ptr->y;
-
-    y2 = target_y;
-    x2 = target_x;
-
-    if ((x1 == x2) && (y1 == y2)) {
+    const auto p_pos = this->player_ptr->get_position();
+    if (p_pos == pos_target) {
         flag &= ~(PROJECT_THRU);
     }
 
     /* Calculate the projection path */
     const auto &system = AngbandSystem::get_instance();
-    ProjectionPath path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), { y1, x1 }, { y2, x2 }, flag);
+    ProjectionPath path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), p_pos, pos_target, flag);
     std::vector<ProjectionPath> second_path_g_list;
     handle_stuff(this->player_ptr);
 
@@ -454,8 +445,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     project_m_n = 0;
     project_m_x = 0;
     project_m_y = 0;
-    auto oy = y1;
-    auto ox = x1;
+    auto oy = p_pos.y;
+    auto ox = p_pos.x;
     auto visual = false;
     std::vector<std::pair<int, int>> drawn_pos_list;
     for (const auto &[ny, nx] : path_g) {
@@ -477,7 +468,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
             }
         }
 
-        if (!cave_has_flag_bold(&floor, ny, nx, TerrainCharacteristics::PROJECT)) {
+        if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECT)) {
             break;
         }
         oy = ny;
@@ -489,31 +480,30 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     }
 
     {
-        const auto &[y, x] = path_g.back();
-        if (floor.get_grid({ y, x }).is_mirror()) {
-            this->remove_mirror(y, x);
+        const auto &pos = path_g.back();
+        if (floor.get_grid(pos).is_mirror()) {
+            this->remove_mirror(pos.y, pos.x);
             auto project_flag = flag;
             reset_bits(project_flag, PROJECT_MIRROR);
 
             const auto length = project_length ? project_length : system.get_max_range();
             for (const auto &dd : CCW_DD) {
-                const Pos2D pos(y, x);
                 second_path_g_list.emplace_back(this->player_ptr, length, pos, pos + dd, project_flag);
             }
         }
     }
 
-    for (const auto &[py, px] : path_g) {
-        res.notice |= activate_super_ray_effect(this->player_ptr, py, px, dam, flag);
+    for (const auto &pos : path_g) {
+        res.notice |= activate_super_ray_effect(this->player_ptr, pos.y, pos.x, dam, flag);
     }
 
     // 起点の鏡からの距離 → 8方向へのスーパーレイの軌道上のその距離にある座標のイテレータのリストの map
     std::map<int, std::vector<ProjectionPath::pp_const_iterator>> pos_list_map;
     for (const auto &second_path_g : second_path_g_list) {
         for (auto it = second_path_g.begin(); it != second_path_g.end(); ++it) {
-            const auto &[o_y, o_x] = path_g.back();
-            const auto &[y, x] = *it;
-            auto d = distance(o_y, o_x, y, x);
+            const auto &o_pos = path_g.back();
+            const auto &pos = *it;
+            auto d = Grid::calc_distance(o_pos, pos);
             pos_list_map[d].push_back(it);
         }
     }
@@ -522,10 +512,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 
     for (auto &&[n, pos_list] : pos_list_map) {
         rand_shuffle(pos_list.begin(), pos_list.end());
-
         for (const auto &it : pos_list) {
-            const auto &[y, x] = *it;
-            res.notice |= activate_super_ray_effect(player_ptr, y, x, dam, flag);
+            res.notice |= activate_super_ray_effect(this->player_ptr, it->y, it->x, dam, flag);
         }
     }
 }

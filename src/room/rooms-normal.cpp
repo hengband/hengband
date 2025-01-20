@@ -1,6 +1,5 @@
 #include "room/rooms-normal.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "floor/geometry.h"
 #include "grid/door.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
@@ -807,10 +806,10 @@ bool build_type11(PlayerType *player_ptr, DungeonData *dd_ptr)
     /* Make circular floor */
     for (auto x = center->x - rad; x <= center->x + rad; x++) {
         for (auto y = center->y - rad; y <= center->y + rad; y++) {
-            if (distance(center->y, center->x, y, x) <= rad - 1) {
+            if (Grid::calc_distance(*center, { y, x }) <= rad - 1) {
                 /* inside- so is floor */
                 place_bold(player_ptr, y, x, GB_FLOOR);
-            } else if (distance(center->y, center->x, y, x) <= rad + 1) {
+            } else if (Grid::calc_distance(*center, { y, x }) <= rad + 1) {
                 /* make granite outside so on_defeat_arena_monster works */
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }
@@ -858,7 +857,7 @@ bool build_type12(PlayerType *player_ptr, DungeonData *dd_ptr)
             if (dist2(center->y, center->x, y, x, h1, h2, h3, h4) <= rad - 1) {
                 /* inside - so is floor */
                 place_bold(player_ptr, y, x, GB_FLOOR);
-            } else if (distance(center->y, center->x, y, x) < 3) {
+            } else if (Grid::calc_distance(*center, { y, x }) < 3) {
                 place_bold(player_ptr, y, x, GB_FLOOR);
             } else {
                 /* make granite outside so on_defeat_arena_monster works */

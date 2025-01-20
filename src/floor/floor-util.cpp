@@ -8,7 +8,6 @@
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
@@ -83,7 +82,7 @@ void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
             }
 
             auto &grid = floor_ptr->get_grid(pos);
-            auto update_when = !grid.cave_has_flag(TerrainCharacteristics::MOVE) && !floor_ptr->is_closed_door(pos);
+            auto update_when = !grid.has(TerrainCharacteristics::MOVE) && !floor_ptr->has_closed_door_at(pos);
             update_when |= !grid.has_los();
             update_when |= scent_adjust[i][j] == -1;
             if (update_when) {
@@ -155,35 +154,31 @@ void wipe_o_list(FloorType *floor_ptr)
  *
  * Currently the "m" parameter is unused.
  */
-void scatter(PlayerType *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
+Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode)
 {
-    const Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
-    POSITION nx, ny;
     while (true) {
-        ny = rand_spread(y, d);
-        nx = rand_spread(x, d);
+        const auto ny = rand_spread(pos.y, d);
+        const auto nx = rand_spread(pos.x, d);
         const Pos2D pos_neighbor(ny, nx);
-        if (!in_bounds(&floor, ny, nx)) {
+        if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
-        if ((d > 1) && (distance(y, x, ny, nx) > d)) {
+        if ((d > 1) && (Grid::calc_distance(pos, pos_neighbor) > d)) {
             continue;
         }
         if (mode & PROJECT_LOS) {
-            if (los(player_ptr, y, x, ny, nx)) {
-                break;
+            if (los(player_ptr, pos.y, pos.x, pos_neighbor.y, pos_neighbor.x)) {
+                return pos_neighbor;
             }
+
             continue;
         }
 
-        if (projectable(player_ptr, { y, x }, pos_neighbor)) {
-            break;
+        if (projectable(player_ptr, pos, pos_neighbor)) {
+            return pos_neighbor;
         }
     }
-
-    *yp = ny;
-    *xp = nx;
 }
 
 /*!

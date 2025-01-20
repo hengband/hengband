@@ -111,7 +111,6 @@ void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i)
 void wipe_monsters_list(PlayerType *player_ptr)
 {
     auto &monraces = MonraceList::get_instance();
-    monraces.defeat_separated_uniques();
     auto &floor = *player_ptr->current_floor_ptr;
     for (auto i = floor.m_max - 1; i >= 1; i--) {
         auto &monster = floor.m_list[i];

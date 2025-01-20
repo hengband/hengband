@@ -13,6 +13,21 @@
 #include "util/string-processor.h"
 #include <algorithm>
 
+namespace {
+const std::set<MonraceId> DARK_ELF_RACES = {
+    MonraceId::D_ELF,
+    MonraceId::D_ELF_MAGE,
+    MonraceId::D_ELF_WARRIOR,
+    MonraceId::D_ELF_PRIEST,
+    MonraceId::D_ELF_LORD,
+    MonraceId::D_ELF_WARLOCK,
+    MonraceId::D_ELF_DRUID,
+    MonraceId::NIGHTBLADE,
+    MonraceId::D_ELF_SORC,
+    MonraceId::D_ELF_SHADE,
+};
+}
+
 std::map<MonraceId, MonraceDefinition> monraces_info;
 
 const std::map<MonraceId, std::set<MonraceId>> MonraceList::unified_uniques = {
@@ -52,6 +67,11 @@ MonraceId MonraceList::empty_id()
 bool MonraceList::is_tsuchinoko(MonraceId monrace_id)
 {
     return monrace_id == MonraceId::TSUCHINOKO;
+}
+
+bool MonraceList::is_dark_elf(MonraceId monrace_id)
+{
+    return DARK_ELF_RACES.contains(monrace_id);
 }
 
 MonraceDefinition &MonraceList::emplace(MonraceId monrace_id)
@@ -190,17 +210,17 @@ const std::vector<std::pair<MonraceId, const MonraceDefinition *>> &MonraceList:
 
 /*!
  * @brief 合体/分離ユニーク判定
- * @param r_idx 調査対象のモンスター種族ID
+ * @param monrace_id 調査対象のモンスター種族ID
  * @return 合体/分離ユニークか否か
  * @details 合体/分離ユニークは、賞金首にもランダムクエスト討伐対象にもならない.
  */
-bool MonraceList::can_unify_separate(const MonraceId r_idx) const
+bool MonraceList::can_unify_separate(MonraceId monrace_id) const
 {
-    if (unified_uniques.contains(r_idx)) {
+    if (unified_uniques.contains(monrace_id)) {
         return true;
     }
 
-    return std::any_of(unified_uniques.begin(), unified_uniques.end(), [&r_idx](const auto &x) { return x.second.contains(r_idx); });
+    return std::any_of(unified_uniques.begin(), unified_uniques.end(), [monrace_id](const auto &x) { return x.second.contains(monrace_id); });
 }
 
 /*!
@@ -208,13 +228,12 @@ bool MonraceList::can_unify_separate(const MonraceId r_idx) const
  * @details 分離/合体が A = B + C + D という図式の時、Aが死亡した場合BとCとDも死亡処理を行う。
  * B・C・Dのいずれかが死亡した場合、その死亡したユニークに加えてAの死亡処理も行う。
  * v3.0.0 α89現在は、分離後のユニーク数は2のみ。3以上は将来の拡張。
- * @param r_idx 実際に死亡したモンスターの種族ID
+ * @param monrace_id 実際に死亡したモンスターの種族ID
  */
-void MonraceList::kill_unified_unique(const MonraceId r_idx)
+void MonraceList::kill_unified_unique(MonraceId monrace_id)
 {
-    const auto it_unique = unified_uniques.find(r_idx);
+    const auto it_unique = unified_uniques.find(monrace_id);
     if (it_unique != unified_uniques.end()) {
-        this->get_monrace(it_unique->first).kill_unique();
         for (const auto separate : it_unique->second) {
             this->get_monrace(separate).kill_unique();
         }
@@ -223,9 +242,7 @@ void MonraceList::kill_unified_unique(const MonraceId r_idx)
     }
 
     for (const auto &[unified_unique, separates] : unified_uniques) {
-        const auto it_separate = separates.find(r_idx);
-        if (it_separate != separates.end()) {
-            this->get_monrace(*it_separate).kill_unique();
+        if (separates.contains(monrace_id)) {
             this->get_monrace(unified_unique).kill_unique();
             return;
         }
@@ -234,15 +251,15 @@ void MonraceList::kill_unified_unique(const MonraceId r_idx)
 
 /*!
  * @brief 合体ユニークの生成可能確認
- * @param r_idx 生成しようとしているモンスターの種族ID
+ * @param monrace_id 生成しようとしているモンスターの種族ID
  * @return 合体後ユニークが生成可能か否か
  * @details 分離も合体もしないならば常にtrue
  * 分離ユニークもtrueだが、通常レアリティ255のためこのメソッドとは別処理で生成不能
  * 分離/合体が A = B + C + D という図式の時、B・C・Dのいずれか1体がフロア内に生成済の場合、Aの生成を抑制する
  */
-bool MonraceList::is_selectable(const MonraceId r_idx) const
+bool MonraceList::is_selectable(MonraceId monrace_id) const
 {
-    const auto it = unified_uniques.find(r_idx);
+    const auto it = unified_uniques.find(monrace_id);
     if (it == unified_uniques.end()) {
         return true;
     }
@@ -250,54 +267,33 @@ bool MonraceList::is_selectable(const MonraceId r_idx) const
     return std::all_of(it->second.begin(), it->second.end(), [this](const auto x) { return !this->get_monrace(x).has_entity(); });
 }
 
-/*!
- * @brief 合体ユニークが撃破済の状態でフロアから離脱した時に、各分離ユニークも撃破済状態へと変更する
- */
-void MonraceList::defeat_separated_uniques()
+bool MonraceList::is_unified(MonraceId monrace_id) const
 {
-    for (const auto &[unified_unique, separates] : unified_uniques) {
-        if (this->get_monrace(unified_unique).max_num > 0) {
-            continue;
-        }
-
-        for (const auto separate : separates) {
-            auto &monrace = this->get_monrace(separate);
-            if (monrace.max_num == 0) {
-                continue;
-            }
-
-            monrace.kill_unique();
-        }
-    }
-}
-
-bool MonraceList::is_unified(const MonraceId r_idx) const
-{
-    return unified_uniques.contains(r_idx);
+    return unified_uniques.contains(monrace_id);
 }
 
 /*!
  * @brief 合体ユニークの各分離ユニークが全員フロアにいるかをチェックする
- * @param r_idx 合体ユニークの種族ID
+ * @param monrace_id 合体ユニークの種族ID
  * @return 全員が現在フロアに生成されているか
  */
-bool MonraceList::exists_separates(const MonraceId r_idx) const
+bool MonraceList::exists_separates(MonraceId monrace_id) const
 {
-    const auto &separates = unified_uniques.at(r_idx);
+    const auto &separates = unified_uniques.at(monrace_id);
     return std::all_of(separates.begin(), separates.end(), [this](const auto x) { return this->get_monrace(x).has_entity(); });
 }
 
 /*!
  * @brief 与えられたIDが分離ユニークのいずれかに一致するかをチェックする
- * @param r_idx 調査対象のモンスター種族ID
+ * @param monrace_id 調査対象のモンスター種族ID
  */
-bool MonraceList::is_separated(const MonraceId r_idx) const
+bool MonraceList::is_separated(MonraceId monrace_id) const
 {
-    if (unified_uniques.contains(r_idx)) {
+    if (unified_uniques.contains(monrace_id)) {
         return false;
     }
 
-    return std::any_of(unified_uniques.begin(), unified_uniques.end(), [&r_idx](const auto &x) { return x.second.contains(r_idx); });
+    return std::any_of(unified_uniques.begin(), unified_uniques.end(), [monrace_id](const auto &x) { return x.second.contains(monrace_id); });
 }
 
 /*!
@@ -306,7 +302,7 @@ bool MonraceList::is_separated(const MonraceId r_idx) const
  * @param hp 分離ユニークの現在HP
  * @param maxhp 分離ユニークの最大HP (衰弱を含)
  */
-bool MonraceList::can_select_separate(const MonraceId monrace_id, const int hp, const int maxhp) const
+bool MonraceList::can_select_separate(MonraceId monrace_id, const int hp, const int maxhp) const
 {
     if (unified_uniques.contains(monrace_id)) {
         return false;
@@ -323,7 +319,23 @@ bool MonraceList::can_select_separate(const MonraceId monrace_id, const int hp, 
         return false;
     }
 
-    return std::all_of(found_separates.begin(), found_separates.end(), [this](const auto x) { return this->get_monrace(x).max_num > 0; });
+    return std::all_of(found_separates.begin(), found_separates.end(), [this](const auto x) { return !this->get_monrace(x).is_dead_unique(); });
+}
+
+/*!
+ * @brief 合体ユニークの分離先ユニークのいずれかをランダムで1つ選択する
+ *
+ * @param monrace_id 合体ユニークのモンスター種族ID
+ * @return 分離先ユニークのモンスター種族ID。合体ユニークでない場合は monrace_id がそのまま返る
+ */
+MonraceId MonraceList::select_random_separated_unique_of(MonraceId monrace_id) const
+{
+    const auto it = unified_uniques.find(monrace_id);
+    if (it != unified_uniques.end()) {
+        return rand_choice(it->second);
+    }
+
+    return monrace_id;
 }
 
 bool MonraceList::order(MonraceId id1, MonraceId id2, bool is_detailed) const
@@ -431,7 +443,7 @@ int MonraceList::calc_defeat_count() const
     auto total = 0;
     for (const auto &[_, monrace] : monraces_info) {
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
-            if (monrace.max_num == 0) {
+            if (monrace.is_dead_unique()) {
                 total++;
             }
 
@@ -444,6 +456,24 @@ int MonraceList::calc_defeat_count() const
     }
 
     return total;
+}
+
+MonraceId MonraceList::select_figurine(int max_level) const
+{
+    while (true) {
+        const auto monrace_id = this->pick_id_at_random();
+        const auto &monrace = this->get_monrace(monrace_id);
+        if (!monrace.is_suitable_for_figurine() || (monrace_id == MonraceId::TSUCHINOKO)) {
+            continue;
+        }
+
+        const auto check = (max_level < monrace.level) ? (monrace.level - max_level) : 0;
+        if ((monrace.rarity > 100) || (randint0(check) > 0)) {
+            continue;
+        }
+
+        return monrace_id;
+    }
 }
 
 /*!
@@ -479,7 +509,7 @@ std::optional<std::string> MonraceList::probe_lore(MonraceId monrace_id)
  */
 void MonraceList::kill_unique_monster(MonraceId monrace_id)
 {
-    this->get_monrace(monrace_id).max_num = 0;
+    this->get_monrace(monrace_id).kill_unique();
     if (this->can_unify_separate(monrace_id)) {
         this->kill_unified_unique(monrace_id);
     }
