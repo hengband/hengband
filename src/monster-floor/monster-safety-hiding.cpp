@@ -6,7 +6,6 @@
 
 #include "monster-floor/monster-safety-hiding.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-dist-offsets.h"
 #include "monster/monster-flag-types.h"
@@ -64,7 +63,7 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
             continue;
         }
 
-        const auto dis = distance(pos, p_pos);
+        const auto dis = Grid::calc_distance(pos, p_pos);
         if (dis <= candidate.gdis) {
             continue;
         }
@@ -148,7 +147,7 @@ static void sweep_hiding_candidate(
             continue;
         }
 
-        const auto dis = distance(pos, p_pos);
+        const auto dis = Grid::calc_distance(pos, p_pos);
         if (dis < candidate->gdis && dis >= 2) {
             candidate->gy = pos.y;
             candidate->gx = pos.x;

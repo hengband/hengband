@@ -49,7 +49,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
     const auto &system = AngbandSystem::get_instance();
     if (dir == 5 && target_okay(player_ptr)) {
         const Pos2D pos(target_col, target_row);
-        if (distance(p_pos, pos) > system.get_max_range()) {
+        if (Grid::calc_distance(p_pos, pos) > system.get_max_range()) {
             msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
             return;
         }
@@ -82,7 +82,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
             is_first_loop = false;
             pos += Pos2DVec(ddy[dir], ddx[dir]);
             g_ptr = &floor.get_grid(pos);
-            if ((distance(p_pos, pos) > system.get_max_range())) {
+            if ((Grid::calc_distance(p_pos, pos) > system.get_max_range())) {
                 return;
             }
 

@@ -11,33 +11,6 @@
 #include "util/bit-flags-calculator.h"
 
 /*!
- * @brief 2点間の距離をニュートン・ラプソン法で算出する / Distance between two points via Newton-Raphson technique
- * @param pos1 1点目の座標
- * @param pos2 2点目の座標
- * @return 2点間の距離
- */
-int distance(const Pos2D &pos1, const Pos2D &pos2)
-{
-    const auto dy = std::abs(pos1.y - pos2.y);
-    const auto dx = std::abs(pos1.x - pos2.x);
-    auto approximate_distance = std::max(dy, dx) + std::min(dy, dx) / 2;
-
-    if (dy == 0 || dx == 0) {
-        return approximate_distance;
-    }
-
-    const auto squared_distance = (dy * dy) + (dx * dx);
-    while (true) {
-        const auto approximate_error = (squared_distance - approximate_distance * approximate_distance) / (2 * approximate_distance);
-        if (approximate_error == 0) {
-            return approximate_distance;
-        }
-
-        approximate_distance += approximate_error;
-    }
-}
-
-/*!
  * @brief プレイヤーから指定の座標がどの方角にあるかを返す /
  * Convert an adjacent location to a direction.
  * @param y 方角を確認したY座標

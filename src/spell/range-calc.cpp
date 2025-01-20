@@ -7,11 +7,11 @@
 #include "spell/range-calc.h"
 #include "effect/attribute-types.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "system/floor/floor-info.h"
+#include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
@@ -25,11 +25,11 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
     POSITION px = x1 - x;
     POSITION ny = x2 - x1;
     POSITION nx = y1 - y2;
-    POSITION pd = distance({ y1, x1 }, { y, x });
-    POSITION nd = distance({ y1, x1 }, { y2, x2 });
+    POSITION pd = Grid::calc_distance({ y1, x1 }, { y, x });
+    POSITION nd = Grid::calc_distance({ y1, x1 }, { y2, x2 });
 
     if (pd > nd) {
-        return distance({ y, x }, { y2, x2 });
+        return Grid::calc_distance({ y, x }, { y2, x2 });
     }
 
     nd = ((nd) ? ((py * ny + px * nx) / nd) : 0);
@@ -206,13 +206,13 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
     auto brad = 0;
     auto bdis = 0;
     auto path_n = 0;
-    const auto mdis = distance(pos_source, pos_target) + rad;
+    const auto mdis = Grid::calc_distance(pos_source, pos_target) + rad;
     int cdis;
     auto *floor_ptr = player_ptr->current_floor_ptr;
     while (bdis <= mdis) {
         if ((0 < dist) && (path_n < dist)) {
             const auto &pos_path = path[path_n];
-            POSITION nd = distance(pos_path, pos_source);
+            POSITION nd = Grid::calc_distance(pos_path, pos_source);
 
             if (bdis >= nd) {
                 by = pos_path.y;
@@ -230,10 +230,10 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
                     if (!in_bounds(floor_ptr, pos.y, pos.x)) {
                         continue;
                     }
-                    if (distance(pos_source, pos) != bdis) {
+                    if (Grid::calc_distance(pos_source, pos) != bdis) {
                         continue;
                     }
-                    if (distance(pos_breath, pos) != cdis) {
+                    if (Grid::calc_distance(pos_breath, pos) != cdis) {
                         continue;
                     }
 

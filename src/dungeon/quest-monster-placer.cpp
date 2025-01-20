@@ -1,7 +1,6 @@
 #include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
 #include "floor/floor-generator-util.h"
-#include "floor/geometry.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-info.h"
@@ -59,7 +58,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                         continue;
                     }
 
-                    if (distance(pos, player_ptr->get_position()) < 10) {
+                    if (Grid::calc_distance(pos, player_ptr->get_position()) < 10) {
                         continue;
                     }
 

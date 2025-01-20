@@ -56,7 +56,7 @@
  */
 static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const Pos2D &pos_end, TerrainTag tag_deep, TerrainTag tag_shallow, int width)
 {
-    const auto length = distance(pos_start, pos_end);
+    const auto length = Grid::calc_distance(pos_start, pos_end);
     if (length > 4) {
         const auto dy = (pos_end.y - pos_start.y) / 2;
         Pos2DVec vec_change(0, 0);
@@ -116,7 +116,7 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
                         continue;
                     }
 
-                    if (distance(pos_target, pos) > rand_spread(width, 1)) {
+                    if (Grid::calc_distance(pos_target, pos) > rand_spread(width, 1)) {
                         continue;
                     }
 
@@ -129,7 +129,7 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
                      * Clear previous contents, add feature
                      * The border mainly gets tag2, while the center gets tag1
                      */
-                    if (distance(pos_target, pos) > width) {
+                    if (Grid::calc_distance(pos_target, pos) > width) {
                         grid.set_terrain_id(tag_shallow);
                     } else {
                         grid.set_terrain_id(tag_deep);
@@ -396,12 +396,12 @@ void place_trees(PlayerType *player_ptr, const Pos2D &pos)
             }
 
             /* Want square to be in the circle and accessable. */
-            if ((distance(pos_neighbor, pos) < 4) && !grid.has(TerrainCharacteristics::PERMANENT)) {
+            if ((Grid::calc_distance(pos_neighbor, pos) < 4) && !grid.has(TerrainCharacteristics::PERMANENT)) {
                 /*
                  * Clear previous contents, add feature
                  * The border mainly gets trees, while the center gets rubble
                  */
-                if ((distance(pos_neighbor, pos) > 1) || (randint1(100) < 25)) {
+                if ((Grid::calc_distance(pos_neighbor, pos) > 1) || (randint1(100) < 25)) {
                     if (randint1(100) < 75) {
                         grid.feat = feat_tree;
                     }

@@ -9,7 +9,6 @@
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-util.h"
-#include "floor/geometry.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
 #include "monster-floor/one-monster-placer.h"
@@ -87,7 +86,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
                 }
             }
 
-            dist = distance(pos, pos_neighbor);
+            dist = Grid::calc_distance(pos, pos_neighbor);
             if (dist > max_distance) {
                 continue;
             }
@@ -459,7 +458,7 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
             }
         }
 
-        const auto dist = distance({ y, x }, player_ptr->get_position());
+        const auto dist = Grid::calc_distance({ y, x }, player_ptr->get_position());
         if ((min_dis < dist) && (dist <= max_dis)) {
             break;
         }

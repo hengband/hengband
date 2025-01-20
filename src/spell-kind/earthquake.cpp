@@ -72,7 +72,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (distance({ cy, cx }, pos) > r) {
+            if (Grid::calc_distance({ cy, cx }, pos) > r) {
                 continue;
             }
 
@@ -311,7 +311,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            if (distance({ cy, cx }, pos) > r) {
+            if (Grid::calc_distance({ cy, cx }, pos) > r) {
                 continue;
             }
 

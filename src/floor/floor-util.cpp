@@ -8,7 +8,6 @@
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "grid/feature.h"
@@ -165,7 +164,7 @@ Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode)
         if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
-        if ((d > 1) && (distance(pos, pos_neighbor) > d)) {
+        if ((d > 1) && (Grid::calc_distance(pos, pos_neighbor) > d)) {
             continue;
         }
         if (mode & PROJECT_LOS) {

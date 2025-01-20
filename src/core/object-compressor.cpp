@@ -1,9 +1,9 @@
 #include "core/object-compressor.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
-#include "floor/geometry.h"
 #include "grid/grid.h"
 #include "system/floor/floor-info.h"
+#include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -88,7 +88,7 @@ void compact_objects(PlayerType *player_ptr, int size)
                 x = o_ptr->ix;
             }
 
-            if ((cur_dis > 0) && (distance(player_ptr->get_position(), { y, x }) < cur_dis)) {
+            if ((cur_dis > 0) && (Grid::calc_distance(player_ptr->get_position(), { y, x }) < cur_dis)) {
                 continue;
             }
 

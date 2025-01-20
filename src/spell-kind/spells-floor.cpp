@@ -214,7 +214,7 @@ void map_area(PlayerType *player_ptr, POSITION range)
     const auto &terrains = TerrainList::get_instance();
     for (POSITION y = 1; y < floor.height - 1; y++) {
         for (POSITION x = 1; x < floor.width - 1; x++) {
-            if (distance(player_ptr->get_position(), { y, x }) > range) {
+            if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
                 continue;
             }
 
@@ -300,7 +300,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             }
 
             /* Extract the distance */
-            auto k = distance(pos1, pos);
+            auto k = Grid::calc_distance(pos1, pos);
 
             /* Stay in the circle of death */
             if (k > r) {
@@ -442,7 +442,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             }
 
             /* Stay in the circle of death */
-            auto k = distance(pos1, pos);
+            auto k = Grid::calc_distance(pos1, pos);
             if (k > r) {
                 continue;
             }

@@ -503,7 +503,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
         for (auto it = second_path_g.begin(); it != second_path_g.end(); ++it) {
             const auto &o_pos = path_g.back();
             const auto &pos = *it;
-            auto d = distance(o_pos, pos);
+            auto d = Grid::calc_distance(o_pos, pos);
             pos_list_map[d].push_back(it);
         }
     }

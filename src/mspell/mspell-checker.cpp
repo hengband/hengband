@@ -18,7 +18,6 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/race-ability-mask.h"
@@ -74,7 +73,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
                 continue;
             }
 
-            if (distance(pos1, pos) > 2) {
+            if (Grid::calc_distance(pos1, pos) > 2) {
                 continue;
             }
 
@@ -105,7 +104,7 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
     for (auto xx = m_pos.x - 5; xx <= m_pos.x + 5; xx++) {
         for (auto yy = m_pos.y - 5; yy <= m_pos.y + 5; yy++) {
             const Pos2D pos(yy, xx);
-            if (distance(m_pos, { yy, xx }) > 5) {
+            if (Grid::calc_distance(m_pos, { yy, xx }) > 5) {
                 continue;
             }
             if (!los(player_ptr, m_pos.y, m_pos.x, yy, xx)) {

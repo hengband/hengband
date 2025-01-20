@@ -12,7 +12,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
@@ -67,7 +66,7 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
         return false;
     }
 
-    if ((grid.is_icky()) || (distance(pos, player_ptr->get_position()) > player_ptr->lev * 3 / 2 + 10)) {
+    if ((grid.is_icky()) || (Grid::calc_distance(pos, player_ptr->get_position()) > player_ptr->lev * 3 / 2 + 10)) {
         msg_print(_("失敗した。", "Failed to swap."));
         return false;
     }
@@ -142,7 +141,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
             while (true) {
                 ny = rand_spread(oy, dis);
                 nx = rand_spread(ox, dis);
-                const auto d = distance({ oy, ox }, { ny, nx });
+                const auto d = Grid::calc_distance({ oy, ox }, { ny, nx });
                 if ((d >= min) && (d <= dis)) {
                     break;
                 }
@@ -229,7 +228,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
             while (true) {
                 ny = rand_spread(ty, dis);
                 nx = rand_spread(tx, dis);
-                const auto d = distance({ ty, tx }, { ny, nx });
+                const auto d = Grid::calc_distance({ ty, tx }, { ny, nx });
                 if ((d >= min) && (d <= dis)) {
                     break;
                 }
@@ -323,7 +322,7 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
                 continue;
             }
 
-            const auto d = distance(player_ptr->get_position(), { y, x });
+            const auto d = Grid::calc_distance(player_ptr->get_position(), { y, x });
             if (d > dis) {
                 continue;
             }
@@ -357,7 +356,7 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
                 continue;
             }
 
-            const auto d = distance(player_ptr->get_position(), { y, x });
+            const auto d = Grid::calc_distance(player_ptr->get_position(), { y, x });
             if (d > dis) {
                 continue;
             }
@@ -592,7 +591,7 @@ bool exe_dimension_door(PlayerType *player_ptr, POSITION x, POSITION y)
 
     player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
     auto is_successful = cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS);
-    is_successful &= distance({ y, x }, player_ptr->get_position()) <= plev / 2 + 10;
+    is_successful &= Grid::calc_distance({ y, x }, player_ptr->get_position()) <= plev / 2 + 10;
     is_successful &= !one_in_(plev / 10 + 10);
     if (!is_successful) {
         player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);

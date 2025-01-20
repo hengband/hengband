@@ -14,7 +14,6 @@
 #include "combat/hallucination-attacks-table.h"
 #include "core/disturbance.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "floor/geometry.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -46,6 +45,7 @@
 #include "system/angband.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
+#include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
@@ -215,7 +215,7 @@ bool MonsterAttackPlayer::check_monster_continuous_attack()
         this->damage_dice.num /= 10;
     }
 
-    const auto is_neighbor = distance(this->player_ptr->get_position(), this->m_ptr->get_position()) <= 1;
+    const auto is_neighbor = Grid::calc_distance(this->player_ptr->get_position(), this->m_ptr->get_position()) <= 1;
     return this->player_ptr->playing && !this->player_ptr->is_dead && is_neighbor && !this->player_ptr->leaving;
 }
 
