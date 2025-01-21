@@ -37,7 +37,7 @@ public:
     void sweep_target_grids();
 
 private:
-    std::optional<int> target_pick(const POSITION y1, const POSITION x1, const POSITION dy, const POSITION dx);
+    std::optional<int> pick_nearest_interest_target(const Pos2D &pos, int dir);
     std::string describe_projectablity() const;
     char examine_target_grid(std::string_view info, std::optional<target_type> append_mode = std::nullopt) const;
     void change_interest_index(int amount);
@@ -104,65 +104,65 @@ static bool change_panel_xy(PlayerType *player_ptr, const Pos2D &pos)
 }
 
 /*!
- * @brief "interesting" な座標たちのうち、(y1,x1) から (dy,dx) 方向にある最も近いもののインデックスを得る。
- * @param y1 現在地座標y
- * @param x1 現在地座標x
- * @param dy 現在地からの向きy [-1,1]
- * @param dx 現在地からの向きx [-1,1]
- * @return 最も近い座標のインデックス。適切なものがない場合 -1
+ * @brief 基準の座標から見て目標の座標がおよそ dir の方向にあるかどうかを判定する
+ *
+ * およそ dir の方向にあるとは、その方向の左右45°以内にあることを意味する
+ *
+ * @param pos_from 基準の座標
+ * @param pos_to 目標の座標
+ * @param dir 方向
+ * @return dirの方向にある場合 true
  */
-std::optional<int> TargetSetter::target_pick(const POSITION y1, const POSITION x1, const POSITION dy, const POSITION dx)
+static bool is_roughly_in_direction(const Pos2D &pos_from, const Pos2D &pos_to, int dir)
 {
-    // 最も近いもののインデックスとその距離。
-    std::optional<int> b_i;
-    auto b_v = 9999;
+    const auto dy = ddy[dir];
+    const auto dx = ddx[dir];
+    const auto vec = pos_to - pos_from;
+    const Pos2DVec vec_abs(std::abs(vec.y), std::abs(vec.x));
 
-    for (auto i = 0; i < std::ssize(this->pos_interests); i++) {
-        const auto &[y2, x2] = this->pos_interests[i];
-
-        // (y1,x1) から (y2,x2) へ向かうベクトル。
-        const POSITION x3 = (x2 - x1);
-        const POSITION y3 = (y2 - y1);
-
-        // (dy,dx) 方向にないものを除外する。
-
-        // dx > 0 のとき、x3 <= 0 なるものは除外。
-        // dx < 0 のとき、x3 >= 0 なるものは除外。
-        if (dx && (x3 * dx <= 0)) {
-            continue;
-        }
-
-        // dy > 0 のとき、y3 <= 0 なるものは除外。
-        // dy < 0 のとき、y3 >= 0 なるものは除外。
-        if (dy && (y3 * dy <= 0)) {
-            continue;
-        }
-
-        const POSITION x4 = std::abs(x3);
-        const POSITION y4 = std::abs(y3);
-
-        // (dy,dx) が (-1,0) or (1,0) のとき、|x3| > |y3| なるものは除外。
-        if (dy && !dx && (x4 > y4)) {
-            continue;
-        }
-
-        // (dy,dx) が (0,-1) or (0,1) のとき、|y3| > |x3| なるものは除外。
-        if (dx && !dy && (y4 > x4)) {
-            continue;
-        }
-
-        // (y1,x1), (y2,x2) 間の距離を求め、最も近いものを更新する。
-        // 距離の定義は v の式を参照。
-        const POSITION_IDX v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
-        if ((b_i >= 0) && (v >= b_v)) {
-            continue;
-        }
-
-        b_i = i;
-        b_v = v;
+    if (dx != 0 && (vec.x * dx <= 0)) {
+        return false;
+    }
+    if (dy != 0 && (vec.y * dy <= 0)) {
+        return false;
     }
 
-    return b_i;
+    if (dy != 0 && dx == 0 && (vec_abs.x > vec_abs.y)) {
+        return false;
+    }
+    if (dx != 0 && dy == 0 && (vec_abs.y > vec_abs.x)) {
+        return false;
+    }
+
+    return true;
+}
+
+/*!
+ * @brief "interesting" な座標たちのうち、pos から dir 方向にある最も近いもののインデックスを得る。
+ * @param pos 基準座標
+ * @param dir 基準座標からの向き
+ * @return 最も近い座標のインデックス。適切なものがない場合 std::nullopt
+ */
+std::optional<int> TargetSetter::pick_nearest_interest_target(const Pos2D &pos, int dir)
+{
+    std::optional<int> nearest_interest_index;
+    std::optional<int> nearest_distance;
+
+    for (auto i = 0; i < std::ssize(this->pos_interests); i++) {
+        if (!is_roughly_in_direction(pos, this->pos_interests[i], dir)) {
+            continue;
+        }
+
+        const auto distance = Grid::calc_distance(pos, this->pos_interests[i]);
+        if (nearest_interest_index && (distance >= nearest_distance)) {
+            continue;
+        }
+
+        nearest_interest_index = i;
+        nearest_distance = distance;
+    }
+
+    return nearest_interest_index;
 }
 
 std::string TargetSetter::describe_projectablity() const
@@ -300,8 +300,6 @@ std::optional<int> TargetSetter::check_panel_changed(int dir)
     // 描画範囲が変化した場合、"interesting" 座標リストおよび現在のターゲットを更新する必要がある。
 
     // "interesting" 座標を探す起点。
-    // this->m が有効な座標を指していればそれを使う。
-    // さもなくば (this->y, this->x) を使う。
     const auto is_point_interest = (this->interest_index && *this->interest_index < std::ssize(this->pos_interests));
     const auto pos = is_point_interest ? this->pos_interests[*this->interest_index] : this->pos_target;
 
@@ -309,7 +307,7 @@ std::optional<int> TargetSetter::check_panel_changed(int dir)
     this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
 
     // 新たな "interesting" 座標リストからターゲットを探す。
-    return target_pick(pos.y, pos.x, ddy[dir], ddx[dir]);
+    return pick_nearest_interest_target(pos, dir);
 }
 
 /*!
@@ -383,7 +381,7 @@ bool TargetSetter::set_target_grid()
         return true;
     }
 
-    auto target_index = target_pick(this->pos_interests[*this->interest_index].y, this->pos_interests[*this->interest_index].x, ddy[*dir], ddx[*dir]);
+    auto target_index = pick_nearest_interest_target(this->pos_interests[*this->interest_index], *dir);
     if (!target_index) {
         target_index = this->sweep_targets(*dir, panel_row_min, panel_col_min);
     }
