@@ -81,33 +81,6 @@ void vault_prep_dragon(PlayerType *player_ptr)
 }
 
 /*!
- * @brief モンスターがゼリーnestの生成必要条件を満たしているかを返す /
- * Helper function for "monster nest (jelly)"
- * @param r_idx 確認したいモンスター種族ID
- * @return 生成必要条件を満たしているならTRUEを返す。
- */
-bool vault_aux_jelly(PlayerType *player_ptr, MonraceId r_idx)
-{
-    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= monrace.is_suitable_for_special_room();
-    if (!is_valid) {
-        return false;
-    }
-
-    if (monrace.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) {
-        return false;
-    }
-
-    if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
-        return false;
-    }
-
-    return monrace.symbol_char_is_any_of("ijm,");
-}
-
-/*!
  * @brief モンスターが動物nestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (animal)"
  * @param r_idx 確認したいモンスター種族ID

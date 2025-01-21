@@ -608,6 +608,15 @@ bool MonraceDefinition::is_suitable_for_chapel_nest() const
     return is_suitable;
 }
 
+bool MonraceDefinition::is_suitable_for_jelly_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) && this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::EVIL);
+    is_suitable &= this->symbol_char_is_any_of("ijm,");
+    return is_suitable;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);

@@ -247,7 +247,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::CLONE:
         return vault_aux_clone(player_ptr, monrace_id);
     case MonraceHook::JELLY:
-        return vault_aux_jelly(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_jelly_nest();
     case MonraceHook::GOOD:
         return vault_aux_symbol_g(player_ptr, monrace_id);
     case MonraceHook::EVIL:

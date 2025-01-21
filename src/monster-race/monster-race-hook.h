@@ -14,7 +14,6 @@ void vault_prep_clone(PlayerType *player_ptr);
 void vault_prep_dragon(PlayerType *player_ptr);
 void vault_prep_symbol(PlayerType *player_ptr);
 
-bool vault_aux_jelly(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_animal(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_undead(PlayerType *player_ptr, MonraceId r_idx);
 bool vault_aux_clone(PlayerType *player_ptr, MonraceId r_idx);
