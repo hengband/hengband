@@ -193,7 +193,8 @@ MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
 
 static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_id)
 {
-    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace = monraces.get_monrace(monrace_id);
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto is_suitable_for_dungeon = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
     switch (hook) {
@@ -260,7 +261,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::ANIMAL:
         return vault_aux_animal(player_ptr, monrace_id);
     case MonraceHook::CHAPEL:
-        return vault_aux_chapel_g(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && (monraces.is_angel(monrace_id) || MonraceList::is_chapel(monrace_id)) && monrace.is_suitable_for_chapel_nest();
     case MonraceHook::UNDEAD:
         return vault_aux_undead(player_ptr, monrace_id);
     case MonraceHook::ORC:

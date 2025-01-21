@@ -118,6 +118,18 @@ bool MonraceDefinition::is_explodable() const
 }
 
 /*!
+ * @brief モンスターが表面的に天使かどうかを返す
+ * @return 天使か否か
+ * @details 「Aシンボルだが天使ではないモンスター」もいる。例外リストはMonraceList 側に定義されている
+ */
+bool MonraceDefinition::is_angel_superficially() const
+{
+    auto is_angel = this->symbol_char_is_any_of("A");
+    is_angel |= this->kind_flags.has(MonsterKindType::ANGEL);
+    return is_angel;
+}
+
+/*!
  * @brief モンスターのシンボル文字が指定された文字列に含まれるかどうかを返す
  * @param candidate_chars シンボル文字の集合の文字列。"pht" のように複数の文字を指定可能。
  * @return モンスターのシンボル文字が candidate_chars に含まれるならばtrue
@@ -586,6 +598,13 @@ bool MonraceDefinition::is_suitable_for_dog_nest() const
 {
     auto is_suitable = this->is_suitable_for_special_room();
     is_suitable &= this->symbol_char_is_any_of("CZ");
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_chapel_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::EVIL);
     return is_suitable;
 }
 

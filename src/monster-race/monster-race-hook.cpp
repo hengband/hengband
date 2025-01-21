@@ -154,53 +154,6 @@ bool vault_aux_undead(PlayerType *player_ptr, MonraceId r_idx)
 }
 
 /*!
- * @brief モンスターが聖堂nestの生成必要条件を満たしているかを返す /
- * Helper function for "monster nest (chapel)"
- * @param r_idx 確認したいモンスター種族ID
- * @return 生成必要条件を満たしているならTRUEを返す。
- */
-bool vault_aux_chapel_g(PlayerType *player_ptr, MonraceId r_idx)
-{
-    static const std::set<MonraceId> chapel_list = {
-        MonraceId::NOV_PRIEST,
-        MonraceId::NOV_PALADIN,
-        MonraceId::NOV_PRIEST_G,
-        MonraceId::NOV_PALADIN_G,
-        MonraceId::PRIEST,
-        MonraceId::JADE_MONK,
-        MonraceId::IVORY_MONK,
-        MonraceId::ULTRA_PALADIN,
-        MonraceId::EBONY_MONK,
-        MonraceId::W_KNIGHT,
-        MonraceId::KNI_TEMPLAR,
-        MonraceId::PALADIN,
-        MonraceId::TOPAZ_MONK,
-    };
-
-    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= monrace.is_suitable_for_special_room();
-    if (!is_valid) {
-        return false;
-    }
-
-    if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
-        return false;
-    }
-
-    if ((r_idx == MonraceId::A_GOLD) || (r_idx == MonraceId::A_SILVER)) {
-        return false;
-    }
-
-    if (monrace.symbol_char_is_any_of("A")) {
-        return true;
-    }
-
-    return chapel_list.find(r_idx) != chapel_list.end();
-}
-
-/*!
  * @brief モンスターが単一クローンnestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (clone)"
  * @param r_idx 確認したいモンスター種族ID
