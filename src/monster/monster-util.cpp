@@ -263,7 +263,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::CHAPEL:
         return is_suitable_for_dungeon && (monraces.is_angel(monrace_id) || MonraceList::is_chapel(monrace_id)) && monrace.is_suitable_for_chapel_nest();
     case MonraceHook::UNDEAD:
-        return vault_aux_undead(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_undead_nest();
     case MonraceHook::ORC:
         return is_suitable_for_dungeon && monrace.is_suitable_for_orc_pit();
     case MonraceHook::TROLL:
