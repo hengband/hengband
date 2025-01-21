@@ -317,53 +317,51 @@ std::optional<int> TargetSetter::check_panel_changed(int dir)
  */
 std::optional<int> TargetSetter::sweep_targets(int dir, int panel_row_min_initial, int panel_col_min_initial)
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    auto &[y, x] = this->pos_target;
-    std::optional<int> target_index;
-    while (true) {
-        auto dy = ddy[dir];
-        auto dx = ddx[dir];
-
+    while (change_panel(this->player_ptr, ddy[dir], ddx[dir])) {
         // カーソル移動に伴い、必要なだけ描画範囲を更新。
         // "interesting" 座標リストおよび現在のターゲットも更新。
-        if (change_panel(this->player_ptr, dy, dx)) {
-            const auto target_index = this->check_panel_changed(dir);
-            if (target_index) {
-                return target_index;
-            }
-            continue;
+        const auto target_index = this->check_panel_changed(dir);
+        if (target_index) {
+            return target_index;
         }
-
-        panel_row_min = panel_row_min_initial;
-        panel_col_min = panel_col_min_initial;
-        panel_bounds_center();
-        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-        rfu.set_flag(MainWindowRedrawingFlag::MAP);
-        rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
-        handle_stuff(this->player_ptr);
-        this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
-        x += dx;
-        y += dy;
-        const auto [wid, hgt] = get_screen_size();
-        if (((x < panel_col_min + wid / 2) && (dx > 0)) || ((x > panel_col_min + wid / 2) && (dx < 0))) {
-            dx = 0;
-        }
-
-        if (((y < panel_row_min + hgt / 2) && (dy > 0)) || ((y > panel_row_min + hgt / 2) && (dy < 0))) {
-            dy = 0;
-        }
-
-        if ((y >= panel_row_min + hgt) || (y < panel_row_min) || (x >= panel_col_min + wid) || (x < panel_col_min)) {
-            if (change_panel(this->player_ptr, dy, dx)) {
-                this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
-            }
-        }
-
-        x = std::clamp(x, 1, floor_ptr->width - 2);
-        y = std::clamp(y, 1, floor_ptr->height - 2);
-        return std::nullopt;
     }
+
+    panel_row_min = panel_row_min_initial;
+    panel_col_min = panel_col_min_initial;
+    panel_bounds_center();
+
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
+    rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+    handle_stuff(this->player_ptr);
+
+    this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
+
+    auto &[y, x] = this->pos_target;
+    auto dy = ddy[dir];
+    auto dx = ddx[dir];
+    x += dx;
+    y += dy;
+    const auto [wid, hgt] = get_screen_size();
+    if (((x < panel_col_min + wid / 2) && (dx > 0)) || ((x > panel_col_min + wid / 2) && (dx < 0))) {
+        dx = 0;
+    }
+
+    if (((y < panel_row_min + hgt / 2) && (dy > 0)) || ((y > panel_row_min + hgt / 2) && (dy < 0))) {
+        dy = 0;
+    }
+
+    if ((y >= panel_row_min + hgt) || (y < panel_row_min) || (x >= panel_col_min + wid) || (x < panel_col_min)) {
+        if (change_panel(this->player_ptr, dy, dx)) {
+            this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
+        }
+    }
+
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    x = std::clamp(x, 1, floor.width - 2);
+    y = std::clamp(y, 1, floor.height - 2);
+    return std::nullopt;
 }
 
 bool TargetSetter::set_target_grid()
