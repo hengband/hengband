@@ -67,4 +67,5 @@ enum class TerrainTag {
 
     TRAP_OPEN,
     TRAP_PIRANHA,
+    TRAP_ARMAGEDDON,
 };

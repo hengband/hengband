@@ -6,7 +6,6 @@
 #include <vector>
 
 /*** Terrain feature variables ***/
-extern FEAT_IDX feat_trap_armageddon;
 extern FEAT_IDX feat_pattern_start;
 extern FEAT_IDX feat_pattern_1;
 extern FEAT_IDX feat_pattern_2;

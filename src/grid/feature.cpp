@@ -23,9 +23,6 @@
 
 /*** Terrain feature variables ***/
 
-/* Special traps */
-FEAT_IDX feat_trap_armageddon;
-
 /* Pattern */
 FEAT_IDX feat_pattern_start;
 FEAT_IDX feat_pattern_1;

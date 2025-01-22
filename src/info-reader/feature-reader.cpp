@@ -343,9 +343,6 @@ void init_feat_variables()
     feat_door[DOOR_CURTAIN].jammed[0] = feat_door[DOOR_CURTAIN].closed;
     feat_door[DOOR_CURTAIN].num_jammed = 1;
 
-    /* Special traps */
-    feat_trap_armageddon = terrains.get_terrain_id_by_tag("TRAP_ARMAGEDDON");
-
     /* Pattern */
     feat_pattern_start = terrains.get_terrain_id_by_tag("PATTERN_START");
     feat_pattern_1 = terrains.get_terrain_id_by_tag("PATTERN_1");

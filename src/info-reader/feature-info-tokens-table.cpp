@@ -191,4 +191,5 @@ const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
 
     { "TRAP_OPEN", TerrainTag::TRAP_OPEN },
     { "TRAP_PIRANHA", TerrainTag::TRAP_PIRANHA },
+    { "TRAP_ARMAGEDDON", TerrainTag::TRAP_ARMAGEDDON },
 };
