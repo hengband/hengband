@@ -232,8 +232,13 @@ void MonsterSweepGrid::search_pet_runnable_grid(POSITION *y, POSITION *x, bool n
 
     auto tmp_x = -(*x);
     auto tmp_y = -(*y);
-    if (find_safety(this->player_ptr, this->m_idx, y, x) && !no_flow && this->sweep_runnable_away_grid(y, x)) {
-        this->done = true;
+    const auto vec_safety = find_safety(this->player_ptr, this->m_idx);
+    if (vec_safety) {
+        *y = vec_safety->y;
+        *x = vec_safety->x;
+        if (!no_flow && this->sweep_runnable_away_grid(y, x)) {
+            this->done = true;
+        }
     }
 
     if (this->done) {

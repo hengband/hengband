@@ -95,10 +95,10 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
  *\n
  * Return TRUE if a safe location is available.\n
  */
-bool find_safety(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+std::optional<Pos2DVec> find_safety(PlayerType *player_ptr, short m_idx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    for (POSITION d = 1; d < 10; d++) {
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    for (auto d = 1; d < 10; d++) {
         const POSITION *y_offsets;
         y_offsets = dist_offsets_y[d];
 
@@ -106,18 +106,16 @@ bool find_safety(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITI
         x_offsets = dist_offsets_x[d];
 
         coordinate_candidate candidate = sweep_safe_coordinate(player_ptr, m_idx, y_offsets, x_offsets, d);
-
         if (candidate.gdis <= 0) {
             continue;
         }
 
-        *yp = m_ptr->fy - candidate.gy;
-        *xp = m_ptr->fx - candidate.gx;
-
-        return true;
+        const auto y = monster.fy - candidate.gy;
+        const auto x = monster.fx - candidate.gx;
+        return Pos2DVec(y, x);
     }
 
-    return false;
+    return std::nullopt;
 }
 
 /*!
