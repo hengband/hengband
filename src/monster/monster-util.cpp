@@ -193,7 +193,8 @@ MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
 
 static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_id)
 {
-    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace = monraces.get_monrace(monrace_id);
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto is_suitable_for_dungeon = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
     switch (hook) {
@@ -246,23 +247,23 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::CLONE:
         return vault_aux_clone(player_ptr, monrace_id);
     case MonraceHook::JELLY:
-        return vault_aux_jelly(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_jelly_nest();
     case MonraceHook::GOOD:
         return vault_aux_symbol_g(player_ptr, monrace_id);
     case MonraceHook::EVIL:
         return vault_aux_symbol_e(player_ptr, monrace_id);
     case MonraceHook::MIMIC:
-        return vault_aux_mimic(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_mimic_nest();
     case MonraceHook::HORROR:
         return is_suitable_for_dungeon && monrace.is_suitable_for_horror_pit();
     case MonraceHook::KENNEL:
-        return vault_aux_kennel(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_dog_nest();
     case MonraceHook::ANIMAL:
-        return vault_aux_animal(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_animal_nest();
     case MonraceHook::CHAPEL:
-        return vault_aux_chapel_g(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && (monraces.is_angel(monrace_id) || MonraceList::is_chapel(monrace_id)) && monrace.is_suitable_for_chapel_nest();
     case MonraceHook::UNDEAD:
-        return vault_aux_undead(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_undead_nest();
     case MonraceHook::ORC:
         return is_suitable_for_dungeon && monrace.is_suitable_for_orc_pit();
     case MonraceHook::TROLL:
@@ -274,7 +275,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::DEMON:
         return is_suitable_for_dungeon && monrace.is_suitable_for_demon_pit();
     case MonraceHook::DARK_ELF:
-        return is_suitable_for_dungeon && monrace.is_suitable_for_special_room() && MonraceList::is_dark_elf(monrace_id);
+        return is_suitable_for_dungeon && MonraceList::is_dark_elf(monrace_id) && monrace.is_suitable_for_special_room();
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
     }

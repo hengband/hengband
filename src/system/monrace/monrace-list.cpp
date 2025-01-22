@@ -26,6 +26,28 @@ const std::set<MonraceId> DARK_ELF_RACES = {
     MonraceId::D_ELF_SORC,
     MonraceId::D_ELF_SHADE,
 };
+
+const std::set<MonraceId> CHAPEL_RACES = {
+    MonraceId::NOV_PRIEST,
+    MonraceId::NOV_PALADIN,
+    MonraceId::NOV_PRIEST_G,
+    MonraceId::NOV_PALADIN_G,
+    MonraceId::PRIEST,
+    MonraceId::JADE_MONK,
+    MonraceId::IVORY_MONK,
+    MonraceId::ULTRA_PALADIN,
+    MonraceId::EBONY_MONK,
+    MonraceId::W_KNIGHT,
+    MonraceId::KNI_TEMPLAR,
+    MonraceId::PALADIN,
+    MonraceId::TOPAZ_MONK,
+};
+
+//!< @details 「Aシンボルだが天使ではない」モンスターのリスト.
+const std::set<MonraceId> NON_ANGEL_RACES = {
+    MonraceId::A_GOLD,
+    MonraceId::A_SILVER,
+};
 }
 
 std::map<MonraceId, MonraceDefinition> monraces_info;
@@ -72,6 +94,11 @@ bool MonraceList::is_tsuchinoko(MonraceId monrace_id)
 bool MonraceList::is_dark_elf(MonraceId monrace_id)
 {
     return DARK_ELF_RACES.contains(monrace_id);
+}
+
+bool MonraceList::is_chapel(MonraceId monrace_id)
+{
+    return CHAPEL_RACES.contains(monrace_id);
 }
 
 MonraceDefinition &MonraceList::emplace(MonraceId monrace_id)
@@ -186,6 +213,14 @@ std::vector<MonraceId> MonraceList::search_by_symbol(char symbol, bool is_known_
     };
 
     return this->search(std::move(filter), is_known_only);
+}
+
+bool MonraceList::is_angel(MonraceId monrace_id) const
+{
+    const auto &monrace = this->get_monrace(monrace_id);
+    auto is_angel = monrace.is_angel_superficially();
+    is_angel &= !NON_ANGEL_RACES.contains(monrace_id);
+    return is_angel;
 }
 
 //!< @todo ややトリッキーだが、元のmapでMonsterRaceInfo をshared_ptr で持つようにすればかなりスッキリ書けるはず.

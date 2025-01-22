@@ -118,6 +118,18 @@ bool MonraceDefinition::is_explodable() const
 }
 
 /*!
+ * @brief モンスターが表面的に天使かどうかを返す
+ * @return 天使か否か
+ * @details 「Aシンボルだが天使ではないモンスター」もいる。例外リストはMonraceList 側に定義されている
+ */
+bool MonraceDefinition::is_angel_superficially() const
+{
+    auto is_angel = this->symbol_char_is_any_of("A");
+    is_angel |= this->kind_flags.has(MonsterKindType::ANGEL);
+    return is_angel;
+}
+
+/*!
  * @brief モンスターのシンボル文字が指定された文字列に含まれるかどうかを返す
  * @param candidate_chars シンボル文字の集合の文字列。"pht" のように複数の文字を指定可能。
  * @return モンスターのシンボル文字が candidate_chars に含まれるならばtrue
@@ -511,9 +523,9 @@ bool MonraceDefinition::can_entry_arena() const
     return can_entry;
 }
 
-bool MonraceDefinition::is_suitable_for_nightmare(int max_level) const
+bool MonraceDefinition::is_suitable_for_nightmare(int min_level) const
 {
-    return this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR) && (this->level > max_level);
+    return this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR) && (this->level > min_level);
 }
 
 bool MonraceDefinition::is_human() const
@@ -572,6 +584,50 @@ bool MonraceDefinition::is_suitable_for_horror_pit() const
     auto is_suitable = this->is_suitable_for_special_room();
     is_suitable &= this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR);
     is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) || this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_mimic_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->symbol_char_is_any_of("!$&(/=?[\\|][`~>+");
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_dog_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->symbol_char_is_any_of("CZ");
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_chapel_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::EVIL);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_jelly_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) && this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::EVIL);
+    is_suitable &= this->symbol_char_is_any_of("ijm,");
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_animal_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::ANIMAL);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_undead_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::UNDEAD);
     return is_suitable;
 }
 

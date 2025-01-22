@@ -142,6 +142,7 @@ public:
     bool is_female() const;
     bool has_living_flag() const;
     bool is_explodable() const;
+    bool is_angel_superficially() const;
     bool symbol_char_is_any_of(std::string_view symbol_characters) const;
     std::string get_died_message() const;
     std::optional<bool> order_level(const MonraceDefinition &other) const;
@@ -179,7 +180,7 @@ public:
     bool is_suitable_for_tanuki() const;
     bool is_suitable_for_figurine() const;
     bool can_entry_arena() const;
-    bool is_suitable_for_nightmare(int max_level) const;
+    bool is_suitable_for_nightmare(int min_level) const;
     bool is_human() const;
     bool is_eatable_human() const;
     bool is_catchable_for_fishing() const;
@@ -188,6 +189,12 @@ public:
     bool is_suitable_for_giant_pit() const;
     bool is_suitable_for_demon_pit() const;
     bool is_suitable_for_horror_pit() const;
+    bool is_suitable_for_mimic_nest() const;
+    bool is_suitable_for_dog_nest() const;
+    bool is_suitable_for_chapel_nest() const;
+    bool is_suitable_for_jelly_nest() const;
+    bool is_suitable_for_animal_nest() const;
+    bool is_suitable_for_undead_nest() const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();
