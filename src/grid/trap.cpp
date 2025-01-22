@@ -38,7 +38,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
-#include "system/terrain/terrain-list.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
@@ -124,33 +123,6 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
 };
 
 /*!
- * @brief 基本トラップをランダムに選択する
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @return 選択したトラップのタグ (トラップドアでないならばそのタグ)
- * @details トラップドアは、アリーナ・クエスト・ダンジョンの最下層には設置しない.
- */
-TerrainTag choose_random_trap(FloorType *floor_ptr)
-{
-    const auto &terrains = TerrainList::get_instance();
-    while (true) {
-        const auto tag = terrains.select_normal_trap();
-        if (terrains.get_terrain(tag).flags.has_not(TerrainCharacteristics::MORE)) {
-            return tag;
-        }
-
-        if (floor_ptr->inside_arena || inside_quest(floor_ptr->get_quest_id())) {
-            continue;
-        }
-
-        if (floor_ptr->dun_level >= floor_ptr->get_dungeon_definition().maxdepth) {
-            continue;
-        }
-
-        return tag;
-    }
-}
-
-/*!
  * @brief マスに存在する隠しトラップを公開する /
  * Disclose an invisible trap
  * @param player
@@ -199,7 +171,7 @@ void place_trap(FloorType *floor_ptr, POSITION y, POSITION x)
 
     /* Place an invisible trap */
     g_ptr->mimic = g_ptr->feat;
-    g_ptr->set_terrain_id(choose_random_trap(floor_ptr));
+    g_ptr->set_terrain_id(floor_ptr->select_random_trap());
 }
 
 /*!

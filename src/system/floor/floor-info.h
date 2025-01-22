@@ -120,6 +120,7 @@ public:
     std::optional<ItemEntity> try_make_instant_artifact() const;
     short select_baseitem_id(int level_initial, uint32_t mode) const;
     bool filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain hook) const;
+    TerrainTag select_random_trap() const;
 
     void reset_mproc();
     void reset_mproc_max();
