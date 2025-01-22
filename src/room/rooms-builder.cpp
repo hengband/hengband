@@ -40,7 +40,6 @@
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "grid/door.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/cave-filler.h"
 #include "room/door-definition.h"

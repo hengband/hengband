@@ -11,7 +11,6 @@
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "player-status/player-energy.h"
 #include "player/player-move.h"

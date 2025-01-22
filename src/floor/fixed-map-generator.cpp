@@ -4,7 +4,6 @@
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
 #include "floor/wild.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"

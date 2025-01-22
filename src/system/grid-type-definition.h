@@ -99,6 +99,7 @@ public:
     FEAT_IDX get_feat_mimic() const;
     bool has(TerrainCharacteristics tc) const;
     bool is_symbol(const int ch) const;
+    bool is_darkened() const;
     void reset_costs();
     void reset_dists();
     bool has_los() const;

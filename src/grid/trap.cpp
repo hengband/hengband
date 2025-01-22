@@ -9,7 +9,6 @@
 #include "floor/floor-mode-changer.h"
 #include "game-option/birth-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/files-util.h"
 #include "io/write-diary.h"

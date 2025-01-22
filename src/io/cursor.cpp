@@ -5,7 +5,6 @@
 #include "floor/cave.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "io/screen-util.h"
 #include "player/player-status.h"
 #include "system/angband-system.h"

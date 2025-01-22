@@ -8,7 +8,6 @@
 #include "floor/cave.h"
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-safety-hiding.h"
 #include "monster-race/race-ability-mask.h"
