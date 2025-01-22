@@ -30,7 +30,6 @@
 #include <tuple>
 #include <vector>
 
-// Target Setter.
 class TargetSetter {
 public:
     TargetSetter(PlayerType *player_ptr, target_type mode);
@@ -54,7 +53,7 @@ private:
     Pos2D pos_target;
     bool done = false;
     std::vector<Pos2D> pos_interests; // "interesting" な座標一覧を記録する配列
-    std::optional<int> interest_index = 0; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
+    std::optional<int> interest_index = 0; // "interesting" な座標一覧のうち現在ターゲットしているもののインデックス
 };
 
 TargetSetter::TargetSetter(PlayerType *player_ptr, target_type mode)
@@ -104,9 +103,7 @@ static bool change_panel_xy(PlayerType *player_ptr, const Pos2D &pos)
 }
 
 /*!
- * @brief 基準の座標から見て目標の座標がおよそ dir の方向にあるかどうかを判定する
- *
- * およそ dir の方向にあるとは、その方向の左右45°以内にあることを意味する
+ * @brief 基準の座標から見て目標の座標が dir の方向±45°の範囲にあるかどうかを判定する
  *
  * @param pos_from 基準の座標
  * @param pos_to 目標の座標
@@ -138,7 +135,7 @@ static bool is_roughly_in_direction(const Pos2D &pos_from, const Pos2D &pos_to, 
 }
 
 /*!
- * @brief "interesting" な座標たちのうち、pos から dir 方向にある最も近いもののインデックスを得る。
+ * @brief "interesting" な座標一覧のうち、pos から dir 方向にある最も近いもののインデックスを得る。
  * @param pos 基準座標
  * @param dir 基準座標からの向き
  * @return 最も近い座標のインデックス。適切なものがない場合 std::nullopt
@@ -293,7 +290,7 @@ std::optional<int> TargetSetter::switch_target_input()
 
 /*!
  * @brief カーソル移動に伴い、描画範囲、"interesting" 座標リスト、現在のターゲットを更新する。
- * @return カーソル移動によって描画範囲が変化したかどうか
+ * @return カーソル移動によって "interesting" な座標が選択されたらそのインデックス、そうでなければ std::nullopt
  */
 std::optional<int> TargetSetter::check_panel_changed(int dir)
 {
@@ -306,14 +303,14 @@ std::optional<int> TargetSetter::check_panel_changed(int dir)
     // 新たな描画範囲を用いて "interesting" 座標リストを更新。
     this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
 
-    // 新たな "interesting" 座標リストからターゲットを探す。
+    // 新たな "interesting" 座標一覧からターゲットを探す。
     return pick_nearest_interest_target(pos, dir);
 }
 
 /*!
  * @brief カーソル移動方向に "interesting" な座標がなかったとき、画面外まで探す。
  *
- * 既に "interesting" な座標を発見している場合、この関数は何もしない。
+ * @return 画面外を探し "interesting" な座標が見つかった場合はそのインデックス、それでも見つからなければ std::nullopt
  */
 std::optional<int> TargetSetter::sweep_targets(int dir, int panel_row_min_initial, int panel_col_min_initial)
 {
