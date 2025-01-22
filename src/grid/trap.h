@@ -55,10 +55,10 @@ enum class TrapType {
 
 extern const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps;
 
+enum class TerrainTag;
 class FloorType;
 class PlayerType;
-void init_normal_traps();
-short choose_random_trap(FloorType *floor_ptr);
+TerrainTag choose_random_trap(FloorType *floor_ptr);
 void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x);
 void place_trap(FloorType *floor_ptr, POSITION y, POSITION x);
 void hit_trap(PlayerType *player_ptr, bool break_trap);

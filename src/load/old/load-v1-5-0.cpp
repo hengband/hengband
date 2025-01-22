@@ -678,7 +678,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
                 } else if (grid.info & CAVE_TRAP) {
                     grid.info &= ~CAVE_TRAP;
                     grid.set_mimic_terrain_id(TerrainTag::FLOOR);
-                    grid.feat = choose_random_trap(&floor);
+                    grid.set_terrain_id(choose_random_trap(&floor));
                 } else if (grid.feat == OLD_FEAT_INVIS) {
                     grid.mimic = grid.feat;
                     grid.feat = feat_trap_open;

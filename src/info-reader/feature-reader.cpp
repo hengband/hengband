@@ -2,7 +2,6 @@
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/trap.h"
 #include "info-reader/feature-info-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
@@ -343,9 +342,6 @@ void init_feat_variables()
     feat_door[DOOR_CURTAIN].num_locked = 1;
     feat_door[DOOR_CURTAIN].jammed[0] = feat_door[DOOR_CURTAIN].closed;
     feat_door[DOOR_CURTAIN].num_jammed = 1;
-
-    /* Normal traps */
-    init_normal_traps();
 
     /* Special traps */
     feat_trap_open = terrains.get_terrain_id_by_tag("TRAP_OPEN");
