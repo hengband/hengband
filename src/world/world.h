@@ -3,6 +3,7 @@
 #include "market/bounty-type-definition.h"
 #include "player-info/class-types.h"
 #include "system/angband.h"
+#include "util/elapsed-time.h"
 #include "util/flag-group.h"
 #include <tuple>
 
@@ -29,7 +30,6 @@ public:
     GAME_TURN dungeon_turn{}; /*!< NASTY生成の計算に関わる内部ターン値 / Game turn in dungeon */
     GAME_TURN dungeon_turn_limit{}; /*!< dungeon_turnの最大値 / Limit of game_turn in dungeon */
     GAME_TURN arena_start_turn{}; /*!< 闘技場賭博の開始ターン値 */
-    uint32_t start_time{};
     uint16_t noscore{}; /* Cheating flags */
     uint16_t total_winner{}; /* Total winner */
 
@@ -39,7 +39,7 @@ public:
     bool knows_daily_bounty{}; //!< 日替わり賞金首を知っているか否か
     MonraceId today_mon{}; //!< 実際の日替わり賞金首
 
-    uint32_t play_time{}; /*!< 実プレイ時間 */
+    ElapsedTime play_time{}; /*!< 実プレイ時間 */
 
     bool is_loading_now{}; /*!< ロード処理中フラグ...ロード直後にcalc_bonus()時の徳変化、及びsanity_blast()による異常を抑止する */
 
@@ -69,7 +69,6 @@ public:
     bool get_arena() const;
     std::tuple<int, int, int> extract_date_time(PlayerRaceType start_race) const;
     bool is_daytime() const;
-    void update_playtime();
     void add_winner_class(PlayerClassType c);
     void add_retired_class(PlayerClassType c);
     term_color_type get_birth_class_color(PlayerClassType c) const;

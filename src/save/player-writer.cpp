@@ -271,7 +271,7 @@ void wr_player(PlayerType *player_ptr)
 
     /* Save temporary preserved pets (obsolated) */
     wr_s16b(0);
-    wr_u32b(world.play_time);
+    wr_u32b(world.play_time.elapsed_sec());
     wr_s32b(player_ptr->visit);
     wr_u32b(player_ptr->count);
 }

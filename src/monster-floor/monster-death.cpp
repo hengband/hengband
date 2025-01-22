@@ -375,8 +375,8 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
 
     // プレイヤーしかユニークを倒せないのでここで時間を記録
     if (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && md_ptr->m_ptr->mflag2.has_not(MonsterConstantFlagType::CLONED)) {
-        world.update_playtime();
-        md_ptr->r_ptr->defeat_time = world.play_time;
+        world.play_time.update();
+        md_ptr->r_ptr->defeat_time = world.play_time.elapsed_sec();
         md_ptr->r_ptr->defeat_level = player_ptr->lev;
     }
 

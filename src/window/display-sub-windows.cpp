@@ -391,7 +391,7 @@ void fix_equip(PlayerType *player_ptr)
  */
 void fix_player(PlayerType *player_ptr)
 {
-    AngbandWorld::get_instance().update_playtime();
+    AngbandWorld::get_instance().play_time.update();
     display_sub_windows(SubWindowRedrawingFlag::PLAYER,
         [player_ptr] {
             display_player(player_ptr, 0);

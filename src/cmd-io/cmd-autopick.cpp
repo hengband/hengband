@@ -18,6 +18,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
+#include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
 
@@ -128,6 +129,8 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     tb->dirty_line = -1;
     tb->filename_mode = PT_DEFAULT;
     auto &world = AngbandWorld::get_instance();
+    world.play_time.pause();
+    const auto unpauser = util::make_finalizer([&world]() { world.play_time.unpause(); });
     if (world.game_turn < old_autosave_turn) {
         while (old_autosave_turn > world.game_turn) {
             old_autosave_turn -= TURNS_PER_TICK * TOWN_DAWN;
@@ -139,7 +142,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         old_autosave_turn = world.game_turn;
     }
 
-    world.update_playtime();
     init_autopick();
     if (autopick_last_destroyed_object.is_valid()) {
         autopick_entry_from_object(player_ptr, entry, &autopick_last_destroyed_object);
@@ -215,7 +217,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     kill_yank_chain(tb);
 
     process_autopick_file(player_ptr, filename);
-    world.start_time = (uint32_t)time(nullptr);
     cx_save = tb->cx;
     cy_save = tb->cy;
 }

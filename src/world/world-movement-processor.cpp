@@ -45,8 +45,8 @@ void check_random_quest_auto_failure(PlayerType *player_ptr)
 
         quest.status = QuestStatusType::FAILED;
         quest.complev = (byte)player_ptr->lev;
-        world.update_playtime();
-        quest.comptime = world.play_time;
+        world.play_time.update();
+        quest.comptime = world.play_time.elapsed_sec();
         quest.get_bounty().misc_flags.reset(MonsterMiscType::QUESTOR);
     }
 }
