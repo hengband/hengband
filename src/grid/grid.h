@@ -68,7 +68,6 @@ enum class GridCountKind;
 enum class TerrainCharacteristics;
 bool new_player_spot(PlayerType *player_ptr);
 bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
-bool feat_uses_special(FEAT_IDX f_idx);
 void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);
 bool no_lite(PlayerType *player_ptr);
 void print_rel(PlayerType *player_ptr, const DisplaySymbol &symbol, POSITION y, POSITION x);

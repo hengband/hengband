@@ -226,7 +226,7 @@ static void set_player_grid(FloorType &floor, const Pos2D &p_pos)
     }
 
     auto &grid = floor.get_grid(p_pos);
-    if (feat_uses_special(grid.feat)) {
+    if (grid.has_special_terrain()) {
         return;
     }
 
