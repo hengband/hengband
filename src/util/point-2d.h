@@ -95,6 +95,18 @@ constexpr bool operator!=(const Point2D<T> &point1, const Point2D<T> &point2)
 }
 
 template <typename T>
+constexpr bool operator==(const Vector2D<T> &vector1, const Vector2D<T> &vector2)
+{
+    return (vector1.y == vector2.y) && (vector1.x == vector2.x);
+}
+
+template <typename T>
+constexpr bool operator!=(const Vector2D<T> &vector1, const Vector2D<T> &vector2)
+{
+    return !(vector1 == vector2);
+}
+
+template <typename T>
 constexpr Point2D<T> operator+(const Point2D<T> &point, const Vector2D<T> &vector)
 {
     auto result = point;

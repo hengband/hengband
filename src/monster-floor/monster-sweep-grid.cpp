@@ -79,12 +79,12 @@ bool MonsterSweepGrid::get_movable_grid()
         x = monster_from.fx - x2;
     }
 
-    this->search_pet_runnable_grid(&y, &x, no_flow);
-    if (!x && !y) {
+    const auto vec = this->search_pet_runnable_grid({ y, x }, no_flow);
+    if (vec == Pos2DVec(0, 0)) {
         return false;
     }
 
-    store_moves_val(this->mm, y, x);
+    store_moves_val(this->mm, vec.y, vec.x);
     return true;
 }
 
@@ -216,37 +216,31 @@ void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
     }
 }
 
-void MonsterSweepGrid::search_pet_runnable_grid(POSITION *y, POSITION *x, bool no_flow)
+Pos2DVec MonsterSweepGrid::search_pet_runnable_grid(const Pos2DVec &vec_initial, bool no_flow)
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    if (m_ptr->is_pet() && this->will_run) {
-        *y = -(*y);
-        *x = -(*x);
-        return;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[this->m_idx];
+    const auto vec_inverted = vec_initial.inverted();
+    if (monster.is_pet() && this->will_run) {
+        return vec_inverted;
     }
 
     if (this->done || !this->will_run) {
-        return;
+        return vec_initial;
     }
 
-    auto tmp_x = -(*x);
-    auto tmp_y = -(*y);
     const auto vec_safety = find_safety(this->player_ptr, this->m_idx);
-    if (vec_safety) {
-        *y = vec_safety->y;
-        *x = vec_safety->x;
-        if (!no_flow && this->sweep_runnable_away_grid(y, x)) {
-            this->done = true;
-        }
+    if (!vec_safety || no_flow) {
+        return vec_inverted;
     }
 
-    if (this->done) {
-        return;
+    const auto vec_runaway = this->sweep_runnable_away_grid(*vec_safety);
+    if (!vec_runaway) {
+        return vec_inverted;
     }
 
-    *y = tmp_y;
-    *x = tmp_x;
+    this->done = true;
+    return *vec_runaway;
 }
 
 /*!
@@ -408,16 +402,14 @@ bool MonsterSweepGrid::is_best_cost(const Pos2D &pos, const int now_cost)
  * @param xp 移動先のマスのX座標を返す参照ポインタ
  * @return 有効なマスがあった場合TRUEを返す
  */
-bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
+std::optional<Pos2DVec> MonsterSweepGrid::sweep_runnable_away_grid(const Pos2DVec &vec_initial) const
 {
-    auto gy = 0;
-    auto gx = 0;
+    Pos2D pos_run(0, 0);
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[this->m_idx];
     const auto &monrace = monster.get_monrace();
     const auto m_pos = monster.get_position();
-    auto y1 = m_pos.y - *yp;
-    auto x1 = m_pos.x - *xp;
+    auto pos1 = m_pos + vec_initial.inverted();
     auto score = -1;
     for (auto i = 7; i >= 0; i--) {
         auto y = m_pos.y + ddy_ddd[i];
@@ -427,7 +419,7 @@ bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
         }
 
         const Pos2D pos(y, x);
-        const auto dis = Grid::calc_distance(pos, { y1, x1 });
+        const auto dis = Grid::calc_distance(pos, pos1);
         auto s = 5000 / (dis + 3) - 500 / (floor.get_grid(pos).get_distance(monrace.get_grid_flow_type()) + 1);
         if (s < 0) {
             s = 0;
@@ -438,17 +430,14 @@ bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
         }
 
         score = s;
-        gy = y;
-        gx = x;
+        pos_run = pos;
     }
 
     if (score == -1) {
-        return false;
+        return vec_initial;
     }
 
-    *yp = m_pos.y - gy;
-    *xp = m_pos.x - gx;
-    return true;
+    return m_pos - pos_run;
 }
 
 void MonsterSweepGrid::determine_when_cost(POSITION *yp, POSITION *xp, POSITION y1, POSITION x1, const bool use_scent)
