@@ -344,7 +344,6 @@ void init_feat_variables()
     feat_door[DOOR_CURTAIN].num_jammed = 1;
 
     /* Special traps */
-    feat_trap_open = terrains.get_terrain_id_by_tag("TRAP_OPEN");
     feat_trap_armageddon = terrains.get_terrain_id_by_tag("TRAP_ARMAGEDDON");
     feat_trap_piranha = terrains.get_terrain_id_by_tag("TRAP_PIRANHA");
 

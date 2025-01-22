@@ -64,4 +64,6 @@ enum class TerrainTag {
     TRAP_SLEEP,
     TRAP_TRAPS,
     TRAP_ALARM,
+
+    TRAP_OPEN,
 };

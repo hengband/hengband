@@ -24,7 +24,6 @@
 /*** Terrain feature variables ***/
 
 /* Special traps */
-FEAT_IDX feat_trap_open;
 FEAT_IDX feat_trap_armageddon;
 FEAT_IDX feat_trap_piranha;
 

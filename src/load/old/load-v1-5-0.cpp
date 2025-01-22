@@ -9,7 +9,6 @@
 #include "artifact/fixed-art-types.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "load/angband-version-comparer.h"
 #include "load/item/item-loader-factory.h"
@@ -680,7 +679,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
                     grid.set_terrain_id(floor.select_random_trap());
                 } else if (grid.feat == OLD_FEAT_INVIS) {
                     grid.mimic = grid.feat;
-                    grid.feat = feat_trap_open;
+                    grid.set_terrain_id(TerrainTag::TRAP_OPEN);
                 }
             }
         }
