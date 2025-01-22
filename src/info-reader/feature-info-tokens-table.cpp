@@ -192,4 +192,14 @@ const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
     { "TRAP_OPEN", TerrainTag::TRAP_OPEN },
     { "TRAP_PIRANHA", TerrainTag::TRAP_PIRANHA },
     { "TRAP_ARMAGEDDON", TerrainTag::TRAP_ARMAGEDDON },
+
+    { "PATTERN_START", TerrainTag::PATTERN_START },
+    { "PATTERN_1", TerrainTag::PATTERN_1 },
+    { "PATTERN_2", TerrainTag::PATTERN_2 },
+    { "PATTERN_3", TerrainTag::PATTERN_3 },
+    { "PATTERN_4", TerrainTag::PATTERN_4 },
+    { "PATTERN_END", TerrainTag::PATTERN_END },
+    { "PATTERN_OLD", TerrainTag::PATTERN_OLD },
+    { "PATTERN_EXIT", TerrainTag::PATTERN_EXIT },
+    { "PATTERN_CORRUPTED", TerrainTag::PATTERN_CORRUPTED },
 };

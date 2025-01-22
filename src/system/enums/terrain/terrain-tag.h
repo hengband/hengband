@@ -68,4 +68,13 @@ enum class TerrainTag {
     TRAP_OPEN,
     TRAP_PIRANHA,
     TRAP_ARMAGEDDON,
+    PATTERN_START,
+    PATTERN_1,
+    PATTERN_2,
+    PATTERN_3,
+    PATTERN_4,
+    PATTERN_END,
+    PATTERN_OLD,
+    PATTERN_EXIT,
+    PATTERN_CORRUPTED,
 };

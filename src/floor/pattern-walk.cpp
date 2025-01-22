@@ -21,6 +21,7 @@
 #include "status/experience.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/dungeon/dungeon-id.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -124,7 +125,7 @@ bool pattern_effect(PlayerType *player_ptr)
         (void)restore_level(player_ptr);
         (void)cure_critical_wounds(player_ptr, 1000);
 
-        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x, feat_pattern_old);
+        cave_set_feat(player_ptr, player_ptr->get_position(), TerrainTag::PATTERN_OLD);
         msg_print(_("「パターン」のこの部分は他の部分より強力でないようだ。", "This section of the Pattern looks less powerful."));
 
         /*
