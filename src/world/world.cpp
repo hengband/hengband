@@ -80,20 +80,6 @@ std::tuple<int, int, int> AngbandWorld::extract_date_time(PlayerRaceType start_r
 }
 
 /*!
- * @brief 実ゲームプレイ時間を更新する
- */
-void AngbandWorld::update_playtime()
-{
-    if (this->start_time == 0) {
-        return;
-    }
-
-    const auto current_time = static_cast<uint32_t>(time(nullptr));
-    this->play_time += (current_time - this->start_time);
-    this->start_time = current_time;
-}
-
-/*!
  * @brief 勝利したクラスを追加する
  */
 void AngbandWorld::add_winner_class(PlayerClassType c)
@@ -189,9 +175,10 @@ void AngbandWorld::pass_game_turn_by_stay()
  */
 std::string AngbandWorld::format_real_playtime() const
 {
-    const auto hour = this->play_time / (60 * 60);
-    const auto min = (this->play_time / 60) % 60;
-    const auto sec = this->play_time % 60;
+    const auto playtime = this->play_time.elapsed_sec();
+    const auto hour = playtime / (60 * 60);
+    const auto min = (playtime / 60) % 60;
+    const auto sec = playtime % 60;
     return format("%.2u:%.2u:%.2u", hour, min, sec);
 }
 

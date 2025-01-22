@@ -672,6 +672,7 @@
     <ClCompile Include="..\..\src\tracking\health-bar-tracker.cpp" />
     <ClCompile Include="..\..\src\tracking\lore-tracker.cpp" />
     <ClCompile Include="..\..\src\util\candidate-selector.cpp" />
+    <ClCompile Include="..\..\src\util\elapsed-time.cpp" />
     <ClCompile Include="..\..\src\util\rng-xoshiro.cpp" />
     <ClCompile Include="..\..\src\util\dice.cpp" />
     <ClCompile Include="..\..\src\util\sha256.cpp" />
@@ -1510,6 +1511,7 @@
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
     <ClInclude Include="..\..\src\util\buffer-shaper.h" />
     <ClInclude Include="..\..\src\util\candidate-selector.h" />
+    <ClInclude Include="..\..\src\util\elapsed-time.h" />
     <ClInclude Include="..\..\src\util\enum-converter.h" />
     <ClInclude Include="..\..\src\util\enum-range.h" />
     <ClInclude Include="..\..\src\util\finalizer.h" />

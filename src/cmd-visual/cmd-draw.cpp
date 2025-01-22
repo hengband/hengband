@@ -79,7 +79,7 @@ void do_cmd_redraw(PlayerType *player_ptr)
         SubWindowRedrawingFlag::ITEM_KNOWLEDGE,
     };
     rfu.set_flags(flags_swrf);
-    AngbandWorld::get_instance().update_playtime();
+    AngbandWorld::get_instance().play_time.update();
     handle_stuff(player_ptr);
     if (PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         calc_android_exp(player_ptr);
@@ -115,7 +115,7 @@ static std::optional<int> input_status_command(PlayerType *player_ptr, int page)
 
         const auto &filename = str_ltrim(*input_filename);
         if (!filename.empty()) {
-            AngbandWorld::get_instance().update_playtime();
+            AngbandWorld::get_instance().play_time.update();
             file_character(player_ptr, filename);
         }
 
@@ -143,7 +143,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
     while (true) {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
-        world.update_playtime();
+        world.play_time.update();
         (void)display_player(player_ptr, page);
         if (page == 5) {
             page = 0;

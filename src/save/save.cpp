@@ -287,7 +287,7 @@ static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path 
     }
 
     auto &world = AngbandWorld::get_instance();
-    counts_write(player_ptr, 0, world.play_time);
+    counts_write(player_ptr, 0, world.play_time.elapsed_sec());
     world.character_saved = true;
     return true;
 }
@@ -312,7 +312,7 @@ bool save_player(PlayerType *player_ptr, SaveType type)
 
     safe_setuid_drop();
     auto &world = AngbandWorld::get_instance();
-    world.update_playtime();
+    world.play_time.update();
     auto result = false;
     if (save_player_aux(player_ptr, savefile_new.data())) {
         std::stringstream ss_old;

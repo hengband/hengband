@@ -1004,6 +1004,7 @@ hengband_SOURCES = \
 	util/buffer-shaper.cpp util/buffer-shaper.h \
 	util/bit-flags-calculator.h \
 	util/candidate-selector.cpp util/candidate-selector.h \
+	util/elapsed-time.cpp util/elapsed-time.h \
 	util/enum-converter.h \
 	util/enum-range.h \
 	util/finalizer.h \
