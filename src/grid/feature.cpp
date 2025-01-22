@@ -25,7 +25,6 @@
 
 /* Special traps */
 FEAT_IDX feat_trap_armageddon;
-FEAT_IDX feat_trap_piranha;
 
 /* Pattern */
 FEAT_IDX feat_pattern_start;

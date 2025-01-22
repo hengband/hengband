@@ -345,7 +345,6 @@ void init_feat_variables()
 
     /* Special traps */
     feat_trap_armageddon = terrains.get_terrain_id_by_tag("TRAP_ARMAGEDDON");
-    feat_trap_piranha = terrains.get_terrain_id_by_tag("TRAP_PIRANHA");
 
     /* Pattern */
     feat_pattern_start = terrains.get_terrain_id_by_tag("PATTERN_START");
