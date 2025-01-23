@@ -268,7 +268,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (player_ptr->is_located_at(pos)) {
             break;
         }
-        cave_set_feat(player_ptr, y, x, feat_door.at(DoorKind::DOOR).closed);
+        cave_set_feat(player_ptr, pos, feat_door.at(DoorKind::DOOR).closed);
         if (grid.is_mark()) {
             obvious = true;
         }

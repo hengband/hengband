@@ -136,7 +136,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
         for (auto x = left; x <= right; x++) {
             place_bold(player_ptr, center->y, x, GB_INNER);
             if (should_close_curtain) {
-                floor.get_grid({ center->y, x }).feat = feat_door.at(DoorKind::CURTAIN).closed;
+                floor.set_terrain_id_at({ center->y, x }, feat_door.at(DoorKind::CURTAIN).closed);
             }
         }
 
@@ -148,7 +148,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
         for (auto y = top; y <= bottom; y++) {
             place_bold(player_ptr, y, center->x, GB_INNER);
             if (should_close_curtain) {
-                floor.get_grid({ y, center->x }).feat = feat_door.at(DoorKind::CURTAIN).closed;
+                floor.set_terrain_id_at({ y, center->x }, feat_door.at(DoorKind::CURTAIN).closed);
             }
         }
 
@@ -159,7 +159,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     place_random_door(player_ptr, center->y, center->x, true);
     if (should_close_curtain) {
-        floor.get_grid(*center).feat = feat_door.at(DoorKind::CURTAIN).closed;
+        floor.set_terrain_id_at(*center, feat_door.at(DoorKind::CURTAIN).closed);
     }
 
     return true;

@@ -236,4 +236,13 @@ const std::unordered_map<std::string_view, TerrainTag> terrain_tags = {
     { "JAMMED_GLASS_DOOR_5", TerrainTag::JAMMED_GLASS_DOOR_5 },
     { "JAMMED_GLASS_DOOR_6", TerrainTag::JAMMED_GLASS_DOOR_6 },
     { "JAMMED_GLASS_DOOR_7", TerrainTag::JAMMED_GLASS_DOOR_7 },
+
+    { "OPEN_DOOR", TerrainTag::OPEN_DOOR },
+    { "BROKEN_DOOR", TerrainTag::BROKEN_DOOR },
+    { "CLOSED_DOOR", TerrainTag::CLOSED_DOOR },
+    { "OPEN_GLASS_DOOR", TerrainTag::OPEN_GLASS_DOOR },
+    { "BROKEN_GLASS_DOOR", TerrainTag::BROKEN_GLASS_DOOR },
+    { "CLOSED_GLASS_DOOR", TerrainTag::CLOSED_GLASS_DOOR },
+    { "OPEN_CURTAIN", TerrainTag::OPEN_CURTAIN },
+    { "CLOSED_CURTAIN", TerrainTag::CLOSED_CURTAIN },
 };

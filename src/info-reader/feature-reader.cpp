@@ -305,14 +305,14 @@ void init_feat_variables()
     }
 
     /* Normal doors */
-    feat_door[DoorKind::DOOR].open = terrains.get_terrain_id_by_tag("OPEN_DOOR");
-    feat_door[DoorKind::DOOR].broken = terrains.get_terrain_id_by_tag("BROKEN_DOOR");
-    feat_door[DoorKind::DOOR].closed = terrains.get_terrain_id_by_tag("CLOSED_DOOR");
+    feat_door[DoorKind::DOOR].open = TerrainTag::OPEN_DOOR;
+    feat_door[DoorKind::DOOR].broken = TerrainTag::BROKEN_DOOR;
+    feat_door[DoorKind::DOOR].closed = TerrainTag::CLOSED_DOOR;
 
     /* Glass doors */
-    feat_door[DoorKind::GLASS_DOOR].open = terrains.get_terrain_id_by_tag("OPEN_GLASS_DOOR");
-    feat_door[DoorKind::GLASS_DOOR].broken = terrains.get_terrain_id_by_tag("BROKEN_GLASS_DOOR");
-    feat_door[DoorKind::GLASS_DOOR].closed = terrains.get_terrain_id_by_tag("CLOSED_GLASS_DOOR");
+    feat_door[DoorKind::GLASS_DOOR].open = TerrainTag::OPEN_GLASS_DOOR;
+    feat_door[DoorKind::GLASS_DOOR].broken = TerrainTag::BROKEN_GLASS_DOOR;
+    feat_door[DoorKind::GLASS_DOOR].closed = TerrainTag::CLOSED_GLASS_DOOR;
 
     /* Locked doors */
     static const std::map<DoorKind, std::set<TerrainTag>> locked_door_tags = {
@@ -340,7 +340,7 @@ void init_feat_variables()
     for (const auto &[door_kind, tags] : locked_door_tags) {
         auto &door = feat_door.at(door_kind);
         for (const auto &tag : tags) {
-            door.locked.push_back(terrains.get_terrain_id(tag));
+            door.locked.push_back(tag);
         }
 
         door.num_locked = static_cast<short>(door.locked.size());
@@ -373,19 +373,19 @@ void init_feat_variables()
     for (const auto &[door_kind, tags] : jammed_door_tags) {
         auto &door = feat_door.at(door_kind);
         for (const auto &tag : tags) {
-            door.jammed.push_back(terrains.get_terrain_id(tag));
+            door.jammed.push_back(tag);
         }
 
         door.num_jammed = static_cast<short>(door.jammed.size());
     }
 
     /* Curtains */
-    feat_door[DoorKind::CURTAIN].open = terrains.get_terrain_id_by_tag("OPEN_CURTAIN");
-    feat_door[DoorKind::CURTAIN].broken = feat_door.at(DoorKind::CURTAIN).open;
-    feat_door[DoorKind::CURTAIN].closed = terrains.get_terrain_id_by_tag("CLOSED_CURTAIN");
-    feat_door[DoorKind::CURTAIN].locked.push_back(feat_door.at(DoorKind::CURTAIN).closed);
+    feat_door[DoorKind::CURTAIN].open = TerrainTag::OPEN_CURTAIN;
+    feat_door[DoorKind::CURTAIN].broken = TerrainTag::OPEN_CURTAIN;
+    feat_door[DoorKind::CURTAIN].closed = TerrainTag::CLOSED_CURTAIN;
+    feat_door[DoorKind::CURTAIN].locked.push_back(TerrainTag::CLOSED_CURTAIN);
     feat_door[DoorKind::CURTAIN].num_locked = 1; //!< @todo 後で消す.
-    feat_door[DoorKind::CURTAIN].jammed.push_back(feat_door.at(DoorKind::CURTAIN).closed);
+    feat_door[DoorKind::CURTAIN].jammed.push_back(TerrainTag::CLOSED_CURTAIN);
     feat_door[DoorKind::CURTAIN].num_jammed = 1; //!< @todo 後で消す.
 
     init_wilderness_terrains();

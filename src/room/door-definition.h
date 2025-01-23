@@ -18,16 +18,17 @@ enum class LockJam {
 };
 
 /* A structure type for doors */
+enum class TerrainTag;
 class Door {
 public:
     Door() = default;
 
-    short open = 0;
-    short broken = 0;
-    short closed = 0;
-    std::vector<short> locked;
+    TerrainTag open{};
+    TerrainTag broken{};
+    TerrainTag closed{};
+    std::vector<TerrainTag> locked;
     short num_locked = 0;
-    std::vector<short> jammed;
+    std::vector<TerrainTag> jammed;
     short num_jammed = 0;
 };
 

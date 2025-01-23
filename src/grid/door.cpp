@@ -141,8 +141,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
                           : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR);
 
     auto tmp = randint0(1000);
-    const auto &terrains = TerrainList::get_instance();
-    const auto terrain_none = terrains.get_terrain_id(TerrainTag::NONE);
+    const auto terrain_none = TerrainTag::NONE;
     auto terrain_id = terrain_none;
     if (tmp < 300) {
         terrain_id = feat_door.at(type).open;
@@ -194,23 +193,21 @@ void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, DoorKind 
         return;
     }
 
-    const auto &terrains = TerrainList::get_instance();
-    const auto terrain_none = terrains.get_terrain_id(TerrainTag::NONE);
     auto tmp = randint0(400);
-    auto terrain_id = terrain_none;
+    auto tag = TerrainTag::NONE;
     if (tmp < 300) {
-        terrain_id = feat_door.at(type).closed;
+        tag = feat_door.at(type).closed;
     } else if (tmp < 399) {
-        terrain_id = feat_locked_door_random(type);
+        tag = feat_locked_door_random(type);
     } else {
-        terrain_id = feat_jammed_door_random(type);
+        tag = feat_jammed_door_random(type);
     }
 
-    if (terrain_id == terrain_none) {
+    if (tag == TerrainTag::NONE) {
         place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
         return;
     }
 
-    cave_set_feat(player_ptr, pos.y, pos.x, terrain_id);
+    cave_set_feat(player_ptr, pos, tag);
     floor.get_grid(pos).info &= ~(CAVE_MASK);
 }
