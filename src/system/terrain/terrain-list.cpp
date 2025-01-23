@@ -104,9 +104,11 @@ void TerrainList::retouch()
     }
 }
 
-void TerrainList::emplace_tag(std::string_view tag)
+void TerrainList::emplace_tags()
 {
-    this->tags.emplace(terrain_tags.at(tag), this->get_terrain_id_by_tag(tag));
+    for (const auto &[tag_str, tag] : terrain_tags) {
+        this->tags.emplace(tag, this->get_terrain_id_by_tag(tag_str));
+    }
 }
 
 /*!
