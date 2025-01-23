@@ -2,8 +2,6 @@
 
 #include "system/angband.h"
 #include "util/point-2d.h"
-#include <string>
-#include <vector>
 
 /*** Terrain feature variables ***/
 extern FEAT_IDX feat_wall_outer;
