@@ -104,16 +104,16 @@ void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &re
     /* Place a secret door */
     switch (randint1(4)) {
     case 1:
-        place_secret_door(player_ptr, inner_rectangle.top_left.y - 1, center.x, DOOR_DEFAULT);
+        place_secret_door(player_ptr, inner_rectangle.top_left.y - 1, center.x, DoorKind::DEFAULT);
         break;
     case 2:
-        place_secret_door(player_ptr, inner_rectangle.bottom_right.y + 1, center.x, DOOR_DEFAULT);
+        place_secret_door(player_ptr, inner_rectangle.bottom_right.y + 1, center.x, DoorKind::DEFAULT);
         break;
     case 3:
-        place_secret_door(player_ptr, center.y, inner_rectangle.top_left.x - 1, DOOR_DEFAULT);
+        place_secret_door(player_ptr, center.y, inner_rectangle.top_left.x - 1, DoorKind::DEFAULT);
         break;
     case 4:
-        place_secret_door(player_ptr, center.y, inner_rectangle.bottom_right.x + 1, DOOR_DEFAULT);
+        place_secret_door(player_ptr, center.y, inner_rectangle.bottom_right.x + 1, DoorKind::DEFAULT);
         break;
     }
 }

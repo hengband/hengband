@@ -136,7 +136,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
         for (auto x = left; x <= right; x++) {
             place_bold(player_ptr, center->y, x, GB_INNER);
             if (should_close_curtain) {
-                floor.get_grid({ center->y, x }).feat = feat_door[DOOR_CURTAIN].closed;
+                floor.set_terrain_id_at({ center->y, x }, feat_door.at(DoorKind::CURTAIN).closed);
             }
         }
 
@@ -148,7 +148,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
         for (auto y = top; y <= bottom; y++) {
             place_bold(player_ptr, y, center->x, GB_INNER);
             if (should_close_curtain) {
-                floor.get_grid({ y, center->x }).feat = feat_door[DOOR_CURTAIN].closed;
+                floor.set_terrain_id_at({ y, center->x }, feat_door.at(DoorKind::CURTAIN).closed);
             }
         }
 
@@ -159,7 +159,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     place_random_door(player_ptr, center->y, center->x, true);
     if (should_close_curtain) {
-        floor.get_grid(*center).feat = feat_door[DOOR_CURTAIN].closed;
+        floor.set_terrain_id_at(*center, feat_door.at(DoorKind::CURTAIN).closed);
     }
 
     return true;
@@ -385,16 +385,16 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a secret door on the inner room */
         switch (randint0(4)) {
         case 0:
-            place_secret_door(player_ptr, y1b, center->x, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1b, center->x, DoorKind::DEFAULT);
             break;
         case 1:
-            place_secret_door(player_ptr, y2b, center->x, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2b, center->x, DoorKind::DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, center->y, x1a, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x1a, DoorKind::DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, center->y, x2a, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x2a, DoorKind::DEFAULT);
             break;
         }
 
@@ -436,9 +436,9 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
 
             /* Sometimes shut using secret doors */
             if (one_in_(3)) {
-                int door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                                    ? DOOR_CURTAIN
-                                    : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+                const auto door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+                                           ? DoorKind::CURTAIN
+                                           : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR);
 
                 place_secret_door(player_ptr, center->y, x1a - 1, door_type);
                 place_secret_door(player_ptr, center->y, x2a + 1, door_type);
@@ -542,16 +542,16 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1_inner - 1, center->x, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, center->x, DoorKind::DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2_inner + 1, center->x, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, center->x, DoorKind::DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, center->y, x1_inner - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x1_inner - 1, DoorKind::DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, center->y, x2_inner + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x2_inner + 1, DoorKind::DEFAULT);
             break;
         }
 
@@ -566,16 +566,16 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1_inner - 1, center->x, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, center->x, DoorKind::DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2_inner + 1, center->x, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, center->x, DoorKind::DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, center->y, x1_inner - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x1_inner - 1, DoorKind::DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, center->y, x2_inner + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x2_inner + 1, DoorKind::DEFAULT);
             break;
         }
 
@@ -626,16 +626,16 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1_inner - 1, center->x, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, center->x, DoorKind::DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2_inner + 1, center->x, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, center->x, DoorKind::DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, center->y, x1_inner - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x1_inner - 1, DoorKind::DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, center->y, x2_inner + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x2_inner + 1, DoorKind::DEFAULT);
             break;
         }
 
@@ -662,9 +662,9 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
 
         /* Occasionally, some Inner rooms */
         if (one_in_(3)) {
-            int door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                                ? DOOR_CURTAIN
-                                : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+            const auto door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+                                       ? DoorKind::CURTAIN
+                                       : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR);
 
             /* Long horizontal walls */
             for (auto x = center->x - 5; x <= center->x + 5; x++) {
@@ -701,16 +701,16 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Place a secret door */
         switch (randint1(4)) {
         case 1:
-            place_secret_door(player_ptr, y1_inner - 1, center->x, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y1_inner - 1, center->x, DoorKind::DEFAULT);
             break;
         case 2:
-            place_secret_door(player_ptr, y2_inner + 1, center->x, DOOR_DEFAULT);
+            place_secret_door(player_ptr, y2_inner + 1, center->x, DoorKind::DEFAULT);
             break;
         case 3:
-            place_secret_door(player_ptr, center->y, x1_inner - 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x1_inner - 1, DoorKind::DEFAULT);
             break;
         case 4:
-            place_secret_door(player_ptr, center->y, x2_inner + 1, DOOR_DEFAULT);
+            place_secret_door(player_ptr, center->y, x2_inner + 1, DoorKind::DEFAULT);
             break;
         }
 
@@ -739,9 +739,9 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     /* Four small rooms. */
     case 5: {
-        int door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                            ? DOOR_CURTAIN
-                            : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+        const auto door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+                                   ? DoorKind::CURTAIN
+                                   : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR);
 
         /* Inner "cross" */
         for (auto y = y1_inner; y <= y2_inner; y++) {

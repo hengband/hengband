@@ -147,16 +147,16 @@ void place_pit_inner(PlayerType *player_ptr, const Pos2D &center)
 
     switch (randint1(4)) {
     case 1:
-        place_secret_door(player_ptr, rectangle.top_left.y - 1, center.x, DOOR_DEFAULT);
+        place_secret_door(player_ptr, rectangle.top_left.y - 1, center.x, DoorKind::DEFAULT);
         break;
     case 2:
-        place_secret_door(player_ptr, rectangle.bottom_right.y + 1, center.x, DOOR_DEFAULT);
+        place_secret_door(player_ptr, rectangle.bottom_right.y + 1, center.x, DoorKind::DEFAULT);
         break;
     case 3:
-        place_secret_door(player_ptr, center.y, rectangle.top_left.x - 1, DOOR_DEFAULT);
+        place_secret_door(player_ptr, center.y, rectangle.top_left.x - 1, DoorKind::DEFAULT);
         break;
     case 4:
-        place_secret_door(player_ptr, center.y, rectangle.bottom_right.x + 1, DOOR_DEFAULT);
+        place_secret_door(player_ptr, center.y, rectangle.bottom_right.x + 1, DoorKind::DEFAULT);
         break;
     }
 }

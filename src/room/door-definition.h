@@ -1,30 +1,33 @@
 #pragma once
 
-#include "system/angband.h"
+#include <map>
+#include <vector>
 
 #define DUN_ROOMS_MAX 40 /*!< 部屋生成処理の基本比率(ダンジョンのサイズに比例する) / Max number rate of rooms */
 
-/* Maximum locked/jammed doors */
-#define MAX_LJ_DOORS 8
+enum class DoorKind {
+    DEFAULT = -1,
+    DOOR = 0,
+    GLASS_DOOR = 1,
+    CURTAIN = 2,
+};
 
-#define MAX_DOOR_TYPES 3
-
-enum door_kind_type {
-    DOOR_DEFAULT = -1,
-    DOOR_DOOR = 0,
-    DOOR_GLASS_DOOR = 1,
-    DOOR_CURTAIN = 2,
+enum class LockJam {
+    LOCKED,
+    JAMMED,
 };
 
 /* A structure type for doors */
-struct door_type {
-    FEAT_IDX open;
-    FEAT_IDX broken;
-    FEAT_IDX closed;
-    FEAT_IDX locked[MAX_LJ_DOORS];
-    FEAT_IDX num_locked;
-    FEAT_IDX jammed[MAX_LJ_DOORS];
-    FEAT_IDX num_jammed;
+enum class TerrainTag;
+class Door {
+public:
+    Door() = default;
+
+    TerrainTag open{};
+    TerrainTag broken{};
+    TerrainTag closed{};
+    std::vector<TerrainTag> locked;
+    std::vector<TerrainTag> jammed;
 };
 
-extern door_type feat_door[MAX_DOOR_TYPES];
+extern std::map<DoorKind, Door> feat_door;

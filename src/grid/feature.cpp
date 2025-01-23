@@ -19,7 +19,6 @@
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
-#include <span>
 
 /*** Terrain feature variables ***/
 FEAT_IDX feat_wall_outer;
@@ -27,20 +26,16 @@ FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;
 FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 
-FEAT_IDX feat_locked_door_random(int door_type)
+TerrainTag feat_locked_door_random(DoorKind door_kind)
 {
-    const auto &terrains = TerrainList::get_instance();
-    const auto &door = feat_door[door_type];
-    std::span<const FEAT_IDX> candidates(std::begin(door.locked), door.num_locked);
-    return candidates.empty() ? terrains.get_terrain_id(TerrainTag::NONE) : rand_choice(candidates);
+    const auto &door = feat_door.at(door_kind);
+    return rand_choice(door.locked);
 }
 
-FEAT_IDX feat_jammed_door_random(int door_type)
+TerrainTag feat_jammed_door_random(DoorKind door_kind)
 {
-    const auto &terrains = TerrainList::get_instance();
-    const auto &door = feat_door[door_type];
-    std::span<const FEAT_IDX> candidates(std::begin(door.jammed), door.num_jammed);
-    return candidates.empty() ? terrains.get_terrain_id(TerrainTag::NONE) : rand_choice(candidates);
+    const auto &door = feat_door.at(door_kind);
+    return rand_choice(door.jammed);
 }
 
 void cave_set_feat(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag)
