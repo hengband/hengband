@@ -1,6 +1,6 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/point-2d.h"
 
-class PlayerType;
-bool los(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+class FloorType;
+bool los(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to);

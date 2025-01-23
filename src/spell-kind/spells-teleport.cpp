@@ -527,9 +527,9 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
 
 void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    POSITION oldfy = m_ptr->fy;
-    POSITION oldfx = m_ptr->fx;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[m_idx];
+    const auto old_m_pos = m_ptr->get_position();
     bool old_ml = m_ptr->ml;
     POSITION old_cdis = m_ptr->cdis;
 
@@ -539,7 +539,7 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
     is_followable &= old_cdis <= MAX_PLAYER_SIGHT;
     is_followable &= AngbandWorld::get_instance().timewalk_m_idx == 0;
     is_followable &= !AngbandSystem::get_instance().is_phase_out();
-    is_followable &= los(player_ptr, player_ptr->y, player_ptr->x, oldfy, oldfx);
+    is_followable &= los(floor, player_ptr->get_position(), old_m_pos);
     if (!is_followable) {
         return;
     }

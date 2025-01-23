@@ -62,7 +62,7 @@ bool MonsterSweepGrid::get_movable_grid()
         if (t_m_idx > 0) {
             const auto is_enemies = monster_from.is_hostile_to_melee(floor.m_list[t_m_idx]);
             const Pos2D pos_from = monster_from.get_position();
-            const auto is_los = los(this->player_ptr, pos_from.y, pos_from.x, pos_to.y, pos_to.x);
+            const auto is_los = los(floor, pos_from, pos_to);
             const auto is_projectable = projectable(this->player_ptr, pos_from, pos_to);
             if (is_enemies && is_los && is_projectable) {
                 y = pos_from.y - pos_to.y;
@@ -145,7 +145,7 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
     const auto m_pos = monster.get_position();
     const auto gf = monrace.get_grid_flow_type();
     const auto distance = floor.get_grid(m_pos).get_distance(gf);
-    if ((!los(this->player_ptr, m_pos.y, m_pos.x, p_pos.y, p_pos.x) || !projectable(this->player_ptr, m_pos, p_pos))) {
+    if (!los(floor, m_pos, p_pos) || !projectable(this->player_ptr, m_pos, p_pos)) {
         if (distance >= MAX_PLAYER_SIGHT / 2) {
             return;
         }

@@ -309,7 +309,7 @@ void mitokohmon(PlayerType *player_ptr)
             }
 
             const auto m_pos = monster.get_position();
-            if (!los(player_ptr, m_pos.y, m_pos.x, p_pos.y, p_pos.x)) {
+            if (!los(floor, m_pos, p_pos)) {
                 continue;
             }
             if (!projectable(player_ptr, m_pos, p_pos)) {

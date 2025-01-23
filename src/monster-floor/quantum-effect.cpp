@@ -51,8 +51,9 @@ static void vanish_nonunique(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see
  */
 static void produce_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    bool coherent = los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[m_idx];
+    const auto coherent = los(floor, m_ptr->get_position(), player_ptr->get_position());
     if (!see_m && !coherent) {
         return;
     }

@@ -167,7 +167,7 @@ Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode)
             continue;
         }
         if (mode & PROJECT_LOS) {
-            if (los(player_ptr, pos.y, pos.x, pos_neighbor.y, pos_neighbor.x)) {
+            if (los(floor, pos, pos_neighbor)) {
                 return pos_neighbor;
             }
 
