@@ -10,7 +10,6 @@
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
@@ -199,7 +198,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, FloorType &floor, sa
     if (num == 0) {
         FloorChangeModesStore::get_instace()->set({ FloorChangeMode::RANDOM_PLACE, FloorChangeMode::NO_RETURN });
         auto &grid = floor.get_grid(player_ptr->get_position());
-        if (!feat_uses_special(grid.feat)) {
+        if (!grid.has_special_terrain()) {
             grid.special = 0;
         }
 
@@ -394,7 +393,7 @@ static void refresh_new_floor_id(PlayerType *player_ptr, Grid *g_ptr)
     }
 
     new_floor_id = get_unused_floor_id(player_ptr);
-    if ((g_ptr != nullptr) && !feat_uses_special(g_ptr->feat)) {
+    if ((g_ptr != nullptr) && !g_ptr->has_special_terrain()) {
         g_ptr->special = new_floor_id;
     }
 }

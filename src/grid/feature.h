@@ -6,19 +6,6 @@
 #include <vector>
 
 /*** Terrain feature variables ***/
-extern FEAT_IDX feat_trap_open;
-extern FEAT_IDX feat_trap_armageddon;
-extern FEAT_IDX feat_trap_piranha;
-extern FEAT_IDX feat_pattern_start;
-extern FEAT_IDX feat_pattern_1;
-extern FEAT_IDX feat_pattern_2;
-extern FEAT_IDX feat_pattern_3;
-extern FEAT_IDX feat_pattern_4;
-extern FEAT_IDX feat_pattern_end;
-extern FEAT_IDX feat_pattern_old;
-extern FEAT_IDX feat_pattern_exit;
-extern FEAT_IDX feat_pattern_corrupted;
-
 extern FEAT_IDX feat_wall_outer;
 extern FEAT_IDX feat_wall_inner;
 extern FEAT_IDX feat_wall_solid;

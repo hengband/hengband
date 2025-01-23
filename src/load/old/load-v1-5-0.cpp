@@ -9,9 +9,7 @@
 #include "artifact/fixed-art-types.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/trap.h"
 #include "load/angband-version-comparer.h"
 #include "load/item/item-loader-factory.h"
 #include "load/item/item-loader-version-types.h"
@@ -678,10 +676,10 @@ errr rd_dungeon_old(PlayerType *player_ptr)
                 } else if (grid.info & CAVE_TRAP) {
                     grid.info &= ~CAVE_TRAP;
                     grid.set_mimic_terrain_id(TerrainTag::FLOOR);
-                    grid.feat = choose_random_trap(&floor);
+                    grid.set_terrain_id(floor.select_random_trap());
                 } else if (grid.feat == OLD_FEAT_INVIS) {
                     grid.mimic = grid.feat;
-                    grid.feat = feat_trap_open;
+                    grid.set_terrain_id(TerrainTag::TRAP_OPEN);
                 }
             }
         }

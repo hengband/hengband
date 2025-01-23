@@ -38,14 +38,11 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
-#include "system/terrain/terrain-list.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-static std::vector<int16_t> normal_traps;
 
 /*!
  * @brief 箱のトラップテーブル
@@ -126,65 +123,6 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
 };
 
 /*!
- * @brief タグに従って、基本トラップテーブルを初期化する / Initialize arrays for normal traps
- */
-void init_normal_traps(void)
-{
-    static constexpr auto normal_trap_tags = {
-        "TRAP_TRAPDOOR",
-        "TRAP_PIT",
-        "TRAP_SPIKED_PIT",
-        "TRAP_POISON_PIT",
-        "TRAP_TY_CURSE",
-        "TRAP_TELEPORT",
-        "TRAP_FIRE",
-        "TRAP_ACID",
-        "TRAP_SLOW",
-        "TRAP_LOSE_STR",
-        "TRAP_LOSE_DEX",
-        "TRAP_LOSE_CON",
-        "TRAP_BLIND",
-        "TRAP_CONFUSE",
-        "TRAP_POISON",
-        "TRAP_SLEEP",
-        "TRAP_TRAPS",
-        "TRAP_ALARM",
-    };
-
-    std::transform(normal_trap_tags.begin(), normal_trap_tags.end(), std::back_inserter(normal_traps), [](const auto &tag) {
-        return TerrainList::get_instance().get_terrain_id_by_tag(tag);
-    });
-}
-
-/*!
- * @brief 基本トラップをランダムに選択する
- * @param floor_ptr 現在フロアへの参照ポインタ
- * @return 選択したトラップのID
- * @details トラップドアでないならばそのID.
- * トラップドアは、アリーナ・クエスト・ダンジョンの最下層には設置しない.
- */
-short choose_random_trap(FloorType *floor_ptr)
-{
-    const auto &terrains = TerrainList::get_instance();
-    while (true) {
-        const auto terrain_id = rand_choice(normal_traps);
-        if (terrains.get_terrain(terrain_id).flags.has_not(TerrainCharacteristics::MORE)) {
-            return terrain_id;
-        }
-
-        if (floor_ptr->inside_arena || inside_quest(floor_ptr->get_quest_id())) {
-            continue;
-        }
-
-        if (floor_ptr->dun_level >= floor_ptr->get_dungeon_definition().maxdepth) {
-            continue;
-        }
-
-        return terrain_id;
-    }
-}
-
-/*!
  * @brief マスに存在する隠しトラップを公開する /
  * Disclose an invisible trap
  * @param player
@@ -233,7 +171,7 @@ void place_trap(FloorType *floor_ptr, POSITION y, POSITION x)
 
     /* Place an invisible trap */
     g_ptr->mimic = g_ptr->feat;
-    g_ptr->feat = choose_random_trap(floor_ptr);
+    g_ptr->set_terrain_id(floor_ptr->select_random_trap());
 }
 
 /*!

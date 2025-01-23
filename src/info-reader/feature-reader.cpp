@@ -2,7 +2,6 @@
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/trap.h"
 #include "info-reader/feature-info-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
@@ -343,25 +342,6 @@ void init_feat_variables()
     feat_door[DOOR_CURTAIN].num_locked = 1;
     feat_door[DOOR_CURTAIN].jammed[0] = feat_door[DOOR_CURTAIN].closed;
     feat_door[DOOR_CURTAIN].num_jammed = 1;
-
-    /* Normal traps */
-    init_normal_traps();
-
-    /* Special traps */
-    feat_trap_open = terrains.get_terrain_id_by_tag("TRAP_OPEN");
-    feat_trap_armageddon = terrains.get_terrain_id_by_tag("TRAP_ARMAGEDDON");
-    feat_trap_piranha = terrains.get_terrain_id_by_tag("TRAP_PIRANHA");
-
-    /* Pattern */
-    feat_pattern_start = terrains.get_terrain_id_by_tag("PATTERN_START");
-    feat_pattern_1 = terrains.get_terrain_id_by_tag("PATTERN_1");
-    feat_pattern_2 = terrains.get_terrain_id_by_tag("PATTERN_2");
-    feat_pattern_3 = terrains.get_terrain_id_by_tag("PATTERN_3");
-    feat_pattern_4 = terrains.get_terrain_id_by_tag("PATTERN_4");
-    feat_pattern_end = terrains.get_terrain_id_by_tag("PATTERN_END");
-    feat_pattern_old = terrains.get_terrain_id_by_tag("PATTERN_OLD");
-    feat_pattern_exit = terrains.get_terrain_id_by_tag("PATTERN_EXIT");
-    feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
 
     init_wilderness_terrains();
 }

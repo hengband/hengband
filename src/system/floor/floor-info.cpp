@@ -23,6 +23,8 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/services/dungeon-monrace-service.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 #include "world/world.h"
@@ -360,6 +362,32 @@ bool FloorType::filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain 
         return is_suitable_for_dungeon && monrace.is_suitable_for_lava();
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
+    }
+}
+
+/*!
+ * @brief 基本トラップをランダムに選択する
+ * @return 選択したトラップのタグ (トラップドアでないならばそのタグ)
+ * @details トラップドアは、アリーナ・クエスト・ダンジョンの最下層には設置しない.
+ */
+TerrainTag FloorType::select_random_trap() const
+{
+    const auto &terrains = TerrainList::get_instance();
+    while (true) {
+        const auto tag = terrains.select_normal_trap();
+        if (terrains.get_terrain(tag).flags.has_not(TerrainCharacteristics::MORE)) {
+            return tag;
+        }
+
+        if (this->inside_arena || inside_quest(this->get_quest_id())) {
+            continue;
+        }
+
+        if (this->dun_level >= this->get_dungeon_definition().maxdepth) {
+            continue;
+        }
+
+        return tag;
     }
 }
 

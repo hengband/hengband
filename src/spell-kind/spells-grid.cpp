@@ -119,7 +119,7 @@ void stair_creation(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (feat_uses_special(grid.feat)) {
+                if (grid.has_special_terrain()) {
                     continue;
                 }
 

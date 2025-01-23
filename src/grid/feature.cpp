@@ -22,23 +22,6 @@
 #include <span>
 
 /*** Terrain feature variables ***/
-
-/* Special traps */
-FEAT_IDX feat_trap_open;
-FEAT_IDX feat_trap_armageddon;
-FEAT_IDX feat_trap_piranha;
-
-/* Pattern */
-FEAT_IDX feat_pattern_start;
-FEAT_IDX feat_pattern_1;
-FEAT_IDX feat_pattern_2;
-FEAT_IDX feat_pattern_3;
-FEAT_IDX feat_pattern_4;
-FEAT_IDX feat_pattern_end;
-FEAT_IDX feat_pattern_old;
-FEAT_IDX feat_pattern_exit;
-FEAT_IDX feat_pattern_corrupted;
-
 FEAT_IDX feat_wall_outer;
 FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;

@@ -13,7 +13,6 @@
 #include "floor/wild.h"
 #include "game-option/cheat-types.h"
 #include "grid/door.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
@@ -399,25 +398,25 @@ static void build_vault(
                 store_init(VALID_TOWNS, StoreSaleType::BLACK);
                 break;
             case 'p':
-                floor.set_terrain_id_at(pos, feat_pattern_start);
+                floor.set_terrain_id_at(pos, TerrainTag::PATTERN_START);
                 break;
             case 'a':
-                floor.set_terrain_id_at(pos, feat_pattern_1);
+                floor.set_terrain_id_at(pos, TerrainTag::PATTERN_1);
                 break;
             case 'b':
-                floor.set_terrain_id_at(pos, feat_pattern_2);
+                floor.set_terrain_id_at(pos, TerrainTag::PATTERN_2);
                 break;
             case 'c':
-                floor.set_terrain_id_at(pos, feat_pattern_3);
+                floor.set_terrain_id_at(pos, TerrainTag::PATTERN_3);
                 break;
             case 'd':
-                floor.set_terrain_id_at(pos, feat_pattern_4);
+                floor.set_terrain_id_at(pos, TerrainTag::PATTERN_4);
                 break;
             case 'P':
-                floor.set_terrain_id_at(pos, feat_pattern_end);
+                floor.set_terrain_id_at(pos, TerrainTag::PATTERN_END);
                 break;
             case 'B':
-                floor.set_terrain_id_at(pos, feat_pattern_exit);
+                floor.set_terrain_id_at(pos, TerrainTag::PATTERN_EXIT);
                 break;
             case 'A':
                 floor.object_level = floor.base_level + 12;
