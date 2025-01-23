@@ -342,8 +342,6 @@ void init_feat_variables()
         for (const auto &tag : tags) {
             door.locked.push_back(tag);
         }
-
-        door.num_locked = static_cast<short>(door.locked.size());
     }
 
     static const std::map<DoorKind, std::set<TerrainTag>> jammed_door_tags = {
@@ -375,8 +373,6 @@ void init_feat_variables()
         for (const auto &tag : tags) {
             door.jammed.push_back(tag);
         }
-
-        door.num_jammed = static_cast<short>(door.jammed.size());
     }
 
     /* Curtains */
@@ -384,9 +380,7 @@ void init_feat_variables()
     feat_door[DoorKind::CURTAIN].broken = TerrainTag::OPEN_CURTAIN;
     feat_door[DoorKind::CURTAIN].closed = TerrainTag::CLOSED_CURTAIN;
     feat_door[DoorKind::CURTAIN].locked.push_back(TerrainTag::CLOSED_CURTAIN);
-    feat_door[DoorKind::CURTAIN].num_locked = 1; //!< @todo 後で消す.
     feat_door[DoorKind::CURTAIN].jammed.push_back(TerrainTag::CLOSED_CURTAIN);
-    feat_door[DoorKind::CURTAIN].num_jammed = 1; //!< @todo 後で消す.
 
     init_wilderness_terrains();
 }

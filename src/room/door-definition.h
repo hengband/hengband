@@ -27,9 +27,7 @@ public:
     TerrainTag broken{};
     TerrainTag closed{};
     std::vector<TerrainTag> locked;
-    short num_locked = 0;
     std::vector<TerrainTag> jammed;
-    short num_jammed = 0;
 };
 
 extern std::map<DoorKind, Door> feat_door;
