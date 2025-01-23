@@ -230,7 +230,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                             }
                             break;
                         case AttributeType::DISINTEGRATE:
-                            if (!in_disintegration_range(player_ptr->current_floor_ptr, pos_breath.y, pos_breath.x, y, x)) {
+                            if (!in_disintegration_range(floor, pos_breath, pos)) {
                                 continue;
                             }
                             break;
