@@ -164,7 +164,7 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
     auto should_preserve = !projectable(player_ptr, pos_real, p_pos);
     should_preserve &= ms_ptr->ability_flags.has(MonsterAbilityType::BA_LITE);
     should_preserve &= Grid::calc_distance(pos_real, p_pos) <= 4;
-    should_preserve &= los(player_ptr, pos_real.y, pos_real.x, p_pos.y, p_pos.x);
+    should_preserve &= los(*player_ptr->current_floor_ptr, pos_real, p_pos);
     if (should_preserve) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BA_LITE);
         return;
@@ -375,7 +375,7 @@ bool check_melee_spell_set(PlayerType *player_ptr, melee_spell_type *ms_ptr)
     ms_ptr->x = ms_ptr->t_ptr->fx;
     ms_ptr->m_ptr->reset_target();
     ms_ptr->ability_flags.reset({ MonsterAbilityType::WORLD, MonsterAbilityType::TRAPS, MonsterAbilityType::FORGET });
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && !los(player_ptr, ms_ptr->m_ptr->fy, ms_ptr->m_ptr->fx, ms_ptr->t_ptr->fy, ms_ptr->t_ptr->fx)) {
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::BR_LITE) && !los(*player_ptr->current_floor_ptr, ms_ptr->m_ptr->get_position(), ms_ptr->t_ptr->get_position())) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
     }
 

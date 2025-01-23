@@ -40,7 +40,7 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
  * Modified version of los() for calculation of disintegration balls.
  * Disintegration effects are stopped by permanent walls.
  */
-bool in_disintegration_range(FloorType *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool in_disintegration_range(const FloorType *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
     POSITION delta_y = y2 - y1;
     POSITION delta_x = x2 - x1;
@@ -207,7 +207,7 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
     auto path_n = 0;
     const auto mdis = Grid::calc_distance(pos_source, pos_target) + rad;
     int cdis;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     while (bdis <= mdis) {
         if ((0 < dist) && (path_n < dist)) {
             const auto &pos_path = path[path_n];
@@ -226,7 +226,7 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
             for (auto y = pos_breath.y - cdis; y <= pos_breath.y + cdis; y++) {
                 for (auto x = pos_breath.x - cdis; x <= pos_breath.x + cdis; x++) {
                     const Pos2D pos(y, x);
-                    if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+                    if (!in_bounds(&floor, pos.y, pos.x)) {
                         continue;
                     }
                     if (Grid::calc_distance(pos_source, pos) != bdis) {
@@ -240,13 +240,13 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
                     case AttributeType::LITE:
                     case AttributeType::LITE_WEAK:
                         /* Lights are stopped by opaque terrains */
-                        if (!los(player_ptr, pos_breath.y, pos_breath.x, pos.y, pos.x)) {
+                        if (!los(floor, pos_breath, pos)) {
                             continue;
                         }
                         break;
                     case AttributeType::DISINTEGRATE:
                         /* Disintegration are stopped only by perma-walls */
-                        if (!in_disintegration_range(floor_ptr, pos_breath.y, pos_breath.x, pos.y, pos.x)) {
+                        if (!in_disintegration_range(&floor, pos_breath.y, pos_breath.x, pos.y, pos.x)) {
                             continue;
                         }
                         break;
