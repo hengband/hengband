@@ -12,6 +12,7 @@
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-range.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <map>
@@ -314,66 +315,17 @@ void init_feat_variables()
     feat_door[DoorKind::GLASS_DOOR].broken = TerrainTag::BROKEN_GLASS_DOOR;
     feat_door[DoorKind::GLASS_DOOR].closed = TerrainTag::CLOSED_GLASS_DOOR;
 
-    /* Locked doors */
-    static const std::map<DoorKind, std::set<TerrainTag>> locked_door_tags = {
-        { DoorKind::DOOR,
-            {
-                TerrainTag::LOCKED_DOOR_1,
-                TerrainTag::LOCKED_DOOR_2,
-                TerrainTag::LOCKED_DOOR_3,
-                TerrainTag::LOCKED_DOOR_4,
-                TerrainTag::LOCKED_DOOR_5,
-                TerrainTag::LOCKED_DOOR_6,
-                TerrainTag::LOCKED_DOOR_7,
-            } },
-        { DoorKind::GLASS_DOOR,
-            {
-                TerrainTag::LOCKED_GLASS_DOOR_1,
-                TerrainTag::LOCKED_GLASS_DOOR_2,
-                TerrainTag::LOCKED_GLASS_DOOR_3,
-                TerrainTag::LOCKED_GLASS_DOOR_4,
-                TerrainTag::LOCKED_GLASS_DOOR_5,
-                TerrainTag::LOCKED_GLASS_DOOR_6,
-                TerrainTag::LOCKED_GLASS_DOOR_7,
-            } }
-    };
-    for (const auto &[door_kind, tags] : locked_door_tags) {
-        auto &door = feat_door.at(door_kind);
-        for (const auto &tag : tags) {
-            door.locked.push_back(tag);
-        }
-    }
+    constexpr auto locked_door_tags = EnumRangeInclusive(TerrainTag::LOCKED_DOOR_1, TerrainTag::LOCKED_DOOR_7);
+    feat_door[DoorKind::DOOR].locked.assign(locked_door_tags.begin(), locked_door_tags.end());
 
-    static const std::map<DoorKind, std::set<TerrainTag>> jammed_door_tags = {
-        { DoorKind::DOOR,
-            {
-                TerrainTag::JAMMED_DOOR_0,
-                TerrainTag::JAMMED_DOOR_1,
-                TerrainTag::JAMMED_DOOR_2,
-                TerrainTag::JAMMED_DOOR_3,
-                TerrainTag::JAMMED_DOOR_4,
-                TerrainTag::JAMMED_DOOR_5,
-                TerrainTag::JAMMED_DOOR_6,
-                TerrainTag::JAMMED_DOOR_7,
-            } },
-        { DoorKind::GLASS_DOOR,
-            {
-                TerrainTag::JAMMED_GLASS_DOOR_0,
-                TerrainTag::JAMMED_GLASS_DOOR_1,
-                TerrainTag::JAMMED_GLASS_DOOR_2,
-                TerrainTag::JAMMED_GLASS_DOOR_3,
-                TerrainTag::JAMMED_GLASS_DOOR_4,
-                TerrainTag::JAMMED_GLASS_DOOR_5,
-                TerrainTag::JAMMED_GLASS_DOOR_6,
-                TerrainTag::JAMMED_GLASS_DOOR_7,
-            } }
-    };
-    for (const auto &[door_kind, tags] : jammed_door_tags) {
-        auto &door = feat_door.at(door_kind);
-        for (const auto &tag : tags) {
-            door.jammed.push_back(tag);
-        }
-    }
+    constexpr auto locked_glass_door_tags = EnumRangeInclusive(TerrainTag::LOCKED_GLASS_DOOR_1, TerrainTag::LOCKED_GLASS_DOOR_7);
+    feat_door[DoorKind::GLASS_DOOR].locked.assign(locked_glass_door_tags.begin(), locked_glass_door_tags.end());
+
+    constexpr auto jammed_door_tags = EnumRangeInclusive(TerrainTag::JAMMED_DOOR_0, TerrainTag::JAMMED_DOOR_7);
+    feat_door[DoorKind::DOOR].jammed.assign(jammed_door_tags.begin(), jammed_door_tags.end());
+
+    constexpr auto jammed_glass_door_tags = EnumRangeInclusive(TerrainTag::JAMMED_GLASS_DOOR_0, TerrainTag::JAMMED_GLASS_DOOR_7);
+    feat_door[DoorKind::GLASS_DOOR].jammed.assign(jammed_glass_door_tags.begin(), jammed_glass_door_tags.end());
 
     /* Curtains */
     feat_door[DoorKind::CURTAIN].open = TerrainTag::OPEN_CURTAIN;
