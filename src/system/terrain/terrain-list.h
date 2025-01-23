@@ -27,7 +27,7 @@ public:
     TerrainType &get_terrain(TerrainTag tag);
     const TerrainType &get_terrain(TerrainTag tag) const;
     short get_terrain_id(TerrainTag tag) const;
-    short get_terrain_id_by_tag(std::string_view tag) const;
+    short get_terrain_id(std::string_view tag) const;
     TerrainTag select_normal_trap() const;
 
     void retouch();

@@ -113,7 +113,7 @@ static Pos2D build_arena(PlayerType *player_ptr)
 
     const Pos2D pos(y_height + 5, xval);
     auto &grid = floor.get_grid(pos);
-    grid.feat = TerrainList::get_instance().get_terrain_id_by_tag("ARENA_GATE");
+    grid.feat = TerrainList::get_instance().get_terrain_id("ARENA_GATE");
     grid.info |= CAVE_GLOW | CAVE_MARK;
     return pos;
 }
@@ -216,7 +216,7 @@ static Pos2D build_battle(PlayerType *player_ptr)
     }
 
     const Pos2D pos(y_height + 1, xval);
-    floor.get_grid(pos).feat = TerrainList::get_instance().get_terrain_id_by_tag("BUILDING_3");
+    floor.get_grid(pos).feat = TerrainList::get_instance().get_terrain_id("BUILDING_3");
     floor.get_grid(pos).info |= CAVE_GLOW | CAVE_MARK;
     return pos;
 }
