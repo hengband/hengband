@@ -336,11 +336,11 @@ void init_feat_variables()
 
     /* Curtains */
     feat_door[DOOR_CURTAIN].open = terrains.get_terrain_id_by_tag("OPEN_CURTAIN");
-    feat_door[DOOR_CURTAIN].broken = feat_door[DOOR_CURTAIN].open;
+    feat_door[DOOR_CURTAIN].broken = feat_door.at(DOOR_CURTAIN).open;
     feat_door[DOOR_CURTAIN].closed = terrains.get_terrain_id_by_tag("CLOSED_CURTAIN");
-    feat_door[DOOR_CURTAIN].locked[0] = feat_door[DOOR_CURTAIN].closed;
+    feat_door[DOOR_CURTAIN].locked[0] = feat_door.at(DOOR_CURTAIN).closed;
     feat_door[DOOR_CURTAIN].num_locked = 1;
-    feat_door[DOOR_CURTAIN].jammed[0] = feat_door[DOOR_CURTAIN].closed;
+    feat_door[DOOR_CURTAIN].jammed[0] = feat_door.at(DOOR_CURTAIN).closed;
     feat_door[DOOR_CURTAIN].num_jammed = 1;
 
     init_wilderness_terrains();

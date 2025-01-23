@@ -1,3 +1,3 @@
 #include "room/door-definition.h"
 
-door_type feat_door[MAX_DOOR_TYPES];
+std::map<door_kind_type, door_type> feat_door;

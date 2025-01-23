@@ -136,7 +136,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
         for (auto x = left; x <= right; x++) {
             place_bold(player_ptr, center->y, x, GB_INNER);
             if (should_close_curtain) {
-                floor.get_grid({ center->y, x }).feat = feat_door[DOOR_CURTAIN].closed;
+                floor.get_grid({ center->y, x }).feat = feat_door.at(DOOR_CURTAIN).closed;
             }
         }
 
@@ -148,7 +148,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
         for (auto y = top; y <= bottom; y++) {
             place_bold(player_ptr, y, center->x, GB_INNER);
             if (should_close_curtain) {
-                floor.get_grid({ y, center->x }).feat = feat_door[DOOR_CURTAIN].closed;
+                floor.get_grid({ y, center->x }).feat = feat_door.at(DOOR_CURTAIN).closed;
             }
         }
 
@@ -159,7 +159,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     place_random_door(player_ptr, center->y, center->x, true);
     if (should_close_curtain) {
-        floor.get_grid(*center).feat = feat_door[DOOR_CURTAIN].closed;
+        floor.get_grid(*center).feat = feat_door.at(DOOR_CURTAIN).closed;
     }
 
     return true;
@@ -436,9 +436,9 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
 
             /* Sometimes shut using secret doors */
             if (one_in_(3)) {
-                int door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                                    ? DOOR_CURTAIN
-                                    : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+                const auto door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+                                           ? DOOR_CURTAIN
+                                           : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
                 place_secret_door(player_ptr, center->y, x1a - 1, door_type);
                 place_secret_door(player_ptr, center->y, x2a + 1, door_type);
@@ -662,9 +662,9 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
 
         /* Occasionally, some Inner rooms */
         if (one_in_(3)) {
-            int door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                                ? DOOR_CURTAIN
-                                : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+            const auto door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+                                       ? DOOR_CURTAIN
+                                       : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
             /* Long horizontal walls */
             for (auto x = center->x - 5; x <= center->x + 5; x++) {
@@ -739,9 +739,9 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     /* Four small rooms. */
     case 5: {
-        int door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                            ? DOOR_CURTAIN
-                            : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+        const auto door_type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+                                   ? DOOR_CURTAIN
+                                   : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
         /* Inner "cross" */
         for (auto y = y1_inner; y <= y2_inner; y++) {

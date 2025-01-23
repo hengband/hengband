@@ -62,7 +62,7 @@ void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
  * @param x 配置したいフロアのX座標
  * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
  */
-void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
+void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, door_kind_type type)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y, x);
@@ -136,7 +136,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
         return;
     }
 
-    auto type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+    const auto type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
                     ? DOOR_CURTAIN
                     : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
@@ -145,9 +145,9 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
     const auto terrain_none = terrains.get_terrain_id(TerrainTag::NONE);
     auto terrain_id = terrain_none;
     if (tmp < 300) {
-        terrain_id = feat_door[type].open;
+        terrain_id = feat_door.at(type).open;
     } else if (tmp < 400) {
-        terrain_id = feat_door[type].broken;
+        terrain_id = feat_door.at(type).broken;
     } else if (tmp < 600) {
         place_closed_door(player_ptr, y, x, type);
         if (type != DOOR_CURTAIN) {
@@ -185,7 +185,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
  * @param x ドアの配置を試みたいマスのX座標
  * @param type ドアの地形ID
  */
-void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
+void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, door_kind_type type)
 {
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
@@ -199,7 +199,7 @@ void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, int type)
     auto tmp = randint0(400);
     auto terrain_id = terrain_none;
     if (tmp < 300) {
-        terrain_id = feat_door[type].closed;
+        terrain_id = feat_door.at(type).closed;
     } else if (tmp < 399) {
         terrain_id = feat_locked_door_random(type);
     } else {
