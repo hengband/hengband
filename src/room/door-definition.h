@@ -1,6 +1,5 @@
 #pragma once
 
-#include "system/angband.h"
 #include <map>
 
 #define DUN_ROOMS_MAX 40 /*!< 部屋生成処理の基本比率(ダンジョンのサイズに比例する) / Max number rate of rooms */
@@ -17,13 +16,13 @@ enum door_kind_type : int {
 
 /* A structure type for doors */
 struct door_type {
-    FEAT_IDX open;
-    FEAT_IDX broken;
-    FEAT_IDX closed;
-    FEAT_IDX locked[MAX_LJ_DOORS];
-    FEAT_IDX num_locked;
-    FEAT_IDX jammed[MAX_LJ_DOORS];
-    FEAT_IDX num_jammed;
+    short open;
+    short broken;
+    short closed;
+    short locked[MAX_LJ_DOORS];
+    short num_locked;
+    short jammed[MAX_LJ_DOORS];
+    short num_jammed;
 };
 
 extern std::map<door_kind_type, door_type> feat_door;
