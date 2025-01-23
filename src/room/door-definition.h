@@ -12,10 +12,15 @@ enum class DoorKind {
     CURTAIN = 2,
 };
 
+enum class LockJam {
+    LOCKED,
+    JAMMED,
+};
+
 /* A structure type for doors */
 class Door {
 public:
-    Door();
+    Door() = default;
 
     short open = 0;
     short broken = 0;

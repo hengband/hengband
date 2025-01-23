@@ -7,12 +7,15 @@
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "room/door-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <map>
+#include <set>
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る（地形情報向け） /
@@ -301,46 +304,88 @@ void init_feat_variables()
         terrains.emplace_tag(tag.first);
     }
 
+    /* Normal doors */
     feat_door[DoorKind::DOOR].open = terrains.get_terrain_id_by_tag("OPEN_DOOR");
     feat_door[DoorKind::DOOR].broken = terrains.get_terrain_id_by_tag("BROKEN_DOOR");
     feat_door[DoorKind::DOOR].closed = terrains.get_terrain_id_by_tag("CLOSED_DOOR");
-
-    /* Locked doors */
-    for (size_t i = 1; i < feat_door[DoorKind::DOOR].locked.size(); i++) {
-        feat_door[DoorKind::DOOR].locked[i - 1] = terrains.get_terrain_id_by_tag(format("LOCKED_DOOR_%d", i));
-    }
-    feat_door[DoorKind::DOOR].num_locked = feat_door[DoorKind::DOOR].locked.size() - 1; //!< @todo 次のコミットで消す.
-
-    /* Jammed doors */
-    for (size_t i = 0; i < feat_door[DoorKind::DOOR].jammed.size(); i++) {
-        feat_door[DoorKind::DOOR].jammed[i] = terrains.get_terrain_id_by_tag(format("JAMMED_DOOR_%d", i));
-    }
-    feat_door[DoorKind::DOOR].num_jammed = feat_door[DoorKind::DOOR].locked.size();
 
     /* Glass doors */
     feat_door[DoorKind::GLASS_DOOR].open = terrains.get_terrain_id_by_tag("OPEN_GLASS_DOOR");
     feat_door[DoorKind::GLASS_DOOR].broken = terrains.get_terrain_id_by_tag("BROKEN_GLASS_DOOR");
     feat_door[DoorKind::GLASS_DOOR].closed = terrains.get_terrain_id_by_tag("CLOSED_GLASS_DOOR");
 
-    /* Locked glass doors */
-    for (size_t i = 1; i < feat_door[DoorKind::GLASS_DOOR].locked.size(); i++) {
-        feat_door[DoorKind::GLASS_DOOR].locked[i - 1] = terrains.get_terrain_id_by_tag(format("LOCKED_GLASS_DOOR_%d", i));
-    }
-    feat_door[DoorKind::GLASS_DOOR].num_locked = feat_door[DoorKind::GLASS_DOOR].locked.size() - 1; //!< @todo 次のコミットで消す.
+    /* Locked doors */
+    static const std::map<DoorKind, std::set<TerrainTag>> locked_door_tags = {
+        { DoorKind::DOOR,
+            {
+                TerrainTag::LOCKED_DOOR_1,
+                TerrainTag::LOCKED_DOOR_2,
+                TerrainTag::LOCKED_DOOR_3,
+                TerrainTag::LOCKED_DOOR_4,
+                TerrainTag::LOCKED_DOOR_5,
+                TerrainTag::LOCKED_DOOR_6,
+                TerrainTag::LOCKED_DOOR_7,
+            } },
+        { DoorKind::GLASS_DOOR,
+            {
+                TerrainTag::LOCKED_GLASS_DOOR_1,
+                TerrainTag::LOCKED_GLASS_DOOR_2,
+                TerrainTag::LOCKED_GLASS_DOOR_3,
+                TerrainTag::LOCKED_GLASS_DOOR_4,
+                TerrainTag::LOCKED_GLASS_DOOR_5,
+                TerrainTag::LOCKED_GLASS_DOOR_6,
+                TerrainTag::LOCKED_GLASS_DOOR_7,
+            } }
+    };
+    for (const auto &[door_kind, tags] : locked_door_tags) {
+        auto &door = feat_door.at(door_kind);
+        for (const auto &tag : tags) {
+            door.locked.push_back(terrains.get_terrain_id(tag));
+        }
 
-    /* Jammed glass doors */
-    for (size_t i = 0; i < feat_door[DoorKind::GLASS_DOOR].jammed.size(); i++) {
-        feat_door[DoorKind::GLASS_DOOR].jammed[i] = terrains.get_terrain_id_by_tag(format("JAMMED_GLASS_DOOR_%d", i));
+        door.num_locked = static_cast<short>(door.locked.size());
     }
-    feat_door[DoorKind::GLASS_DOOR].num_jammed = feat_door[DoorKind::GLASS_DOOR].jammed.size(); //!< @todo 次のコミットで消す.
+
+    static const std::map<DoorKind, std::set<TerrainTag>> jammed_door_tags = {
+        { DoorKind::DOOR,
+            {
+                TerrainTag::JAMMED_DOOR_0,
+                TerrainTag::JAMMED_DOOR_1,
+                TerrainTag::JAMMED_DOOR_2,
+                TerrainTag::JAMMED_DOOR_3,
+                TerrainTag::JAMMED_DOOR_4,
+                TerrainTag::JAMMED_DOOR_5,
+                TerrainTag::JAMMED_DOOR_6,
+                TerrainTag::JAMMED_DOOR_7,
+            } },
+        { DoorKind::GLASS_DOOR,
+            {
+                TerrainTag::JAMMED_GLASS_DOOR_0,
+                TerrainTag::JAMMED_GLASS_DOOR_1,
+                TerrainTag::JAMMED_GLASS_DOOR_2,
+                TerrainTag::JAMMED_GLASS_DOOR_3,
+                TerrainTag::JAMMED_GLASS_DOOR_4,
+                TerrainTag::JAMMED_GLASS_DOOR_5,
+                TerrainTag::JAMMED_GLASS_DOOR_6,
+                TerrainTag::JAMMED_GLASS_DOOR_7,
+            } }
+    };
+    for (const auto &[door_kind, tags] : jammed_door_tags) {
+        auto &door = feat_door.at(door_kind);
+        for (const auto &tag : tags) {
+            door.jammed.push_back(terrains.get_terrain_id(tag));
+        }
+
+        door.num_jammed = static_cast<short>(door.jammed.size());
+    }
 
     /* Curtains */
     feat_door[DoorKind::CURTAIN].open = terrains.get_terrain_id_by_tag("OPEN_CURTAIN");
     feat_door[DoorKind::CURTAIN].broken = feat_door.at(DoorKind::CURTAIN).open;
     feat_door[DoorKind::CURTAIN].closed = terrains.get_terrain_id_by_tag("CLOSED_CURTAIN");
-    feat_door[DoorKind::CURTAIN].locked[0] = feat_door.at(DoorKind::CURTAIN).closed;
+    feat_door[DoorKind::CURTAIN].locked.push_back(feat_door.at(DoorKind::CURTAIN).closed);
     feat_door[DoorKind::CURTAIN].num_locked = 1; //!< @todo 後で消す.
-    feat_door[DoorKind::CURTAIN].jammed[0] = feat_door.at(DoorKind::CURTAIN).closed;
+    feat_door[DoorKind::CURTAIN].jammed.push_back(feat_door.at(DoorKind::CURTAIN).closed);
     feat_door[DoorKind::CURTAIN].num_jammed = 1; //!< @todo 後で消す.
 
     init_wilderness_terrains();
