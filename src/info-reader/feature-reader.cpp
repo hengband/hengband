@@ -306,16 +306,16 @@ void init_feat_variables()
     feat_door[DoorKind::DOOR].closed = terrains.get_terrain_id_by_tag("CLOSED_DOOR");
 
     /* Locked doors */
-    for (auto i = 1; i < MAX_LJ_DOORS; i++) {
+    for (size_t i = 1; i < feat_door[DoorKind::DOOR].locked.size(); i++) {
         feat_door[DoorKind::DOOR].locked[i - 1] = terrains.get_terrain_id_by_tag(format("LOCKED_DOOR_%d", i));
     }
-    feat_door[DoorKind::DOOR].num_locked = MAX_LJ_DOORS - 1;
+    feat_door[DoorKind::DOOR].num_locked = feat_door[DoorKind::DOOR].locked.size() - 1; //!< @todo 次のコミットで消す.
 
     /* Jammed doors */
-    for (auto i = 0; i < MAX_LJ_DOORS; i++) {
+    for (size_t i = 0; i < feat_door[DoorKind::DOOR].jammed.size(); i++) {
         feat_door[DoorKind::DOOR].jammed[i] = terrains.get_terrain_id_by_tag(format("JAMMED_DOOR_%d", i));
     }
-    feat_door[DoorKind::DOOR].num_jammed = MAX_LJ_DOORS;
+    feat_door[DoorKind::DOOR].num_jammed = feat_door[DoorKind::DOOR].locked.size();
 
     /* Glass doors */
     feat_door[DoorKind::GLASS_DOOR].open = terrains.get_terrain_id_by_tag("OPEN_GLASS_DOOR");
@@ -323,25 +323,25 @@ void init_feat_variables()
     feat_door[DoorKind::GLASS_DOOR].closed = terrains.get_terrain_id_by_tag("CLOSED_GLASS_DOOR");
 
     /* Locked glass doors */
-    for (auto i = 1; i < MAX_LJ_DOORS; i++) {
+    for (size_t i = 1; i < feat_door[DoorKind::GLASS_DOOR].locked.size(); i++) {
         feat_door[DoorKind::GLASS_DOOR].locked[i - 1] = terrains.get_terrain_id_by_tag(format("LOCKED_GLASS_DOOR_%d", i));
     }
-    feat_door[DoorKind::GLASS_DOOR].num_locked = MAX_LJ_DOORS - 1;
+    feat_door[DoorKind::GLASS_DOOR].num_locked = feat_door[DoorKind::GLASS_DOOR].locked.size() - 1; //!< @todo 次のコミットで消す.
 
     /* Jammed glass doors */
-    for (auto i = 0; i < MAX_LJ_DOORS; i++) {
+    for (size_t i = 0; i < feat_door[DoorKind::GLASS_DOOR].jammed.size(); i++) {
         feat_door[DoorKind::GLASS_DOOR].jammed[i] = terrains.get_terrain_id_by_tag(format("JAMMED_GLASS_DOOR_%d", i));
     }
-    feat_door[DoorKind::GLASS_DOOR].num_jammed = MAX_LJ_DOORS;
+    feat_door[DoorKind::GLASS_DOOR].num_jammed = feat_door[DoorKind::GLASS_DOOR].jammed.size(); //!< @todo 次のコミットで消す.
 
     /* Curtains */
     feat_door[DoorKind::CURTAIN].open = terrains.get_terrain_id_by_tag("OPEN_CURTAIN");
     feat_door[DoorKind::CURTAIN].broken = feat_door.at(DoorKind::CURTAIN).open;
     feat_door[DoorKind::CURTAIN].closed = terrains.get_terrain_id_by_tag("CLOSED_CURTAIN");
     feat_door[DoorKind::CURTAIN].locked[0] = feat_door.at(DoorKind::CURTAIN).closed;
-    feat_door[DoorKind::CURTAIN].num_locked = 1;
+    feat_door[DoorKind::CURTAIN].num_locked = 1; //!< @todo 後で消す.
     feat_door[DoorKind::CURTAIN].jammed[0] = feat_door.at(DoorKind::CURTAIN).closed;
-    feat_door[DoorKind::CURTAIN].num_jammed = 1;
+    feat_door[DoorKind::CURTAIN].num_jammed = 1; //!< @todo 後で消す.
 
     init_wilderness_terrains();
 }

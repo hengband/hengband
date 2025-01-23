@@ -1,11 +1,9 @@
 #pragma once
 
 #include <map>
+#include <vector>
 
 #define DUN_ROOMS_MAX 40 /*!< 部屋生成処理の基本比率(ダンジョンのサイズに比例する) / Max number rate of rooms */
-
-/* Maximum locked/jammed doors */
-#define MAX_LJ_DOORS 8
 
 enum class DoorKind {
     DEFAULT = -1,
@@ -17,14 +15,14 @@ enum class DoorKind {
 /* A structure type for doors */
 class Door {
 public:
-    Door() = default;
+    Door();
 
     short open = 0;
     short broken = 0;
     short closed = 0;
-    short locked[MAX_LJ_DOORS]{};
+    std::vector<short> locked;
     short num_locked = 0;
-    short jammed[MAX_LJ_DOORS]{};
+    std::vector<short> jammed;
     short num_jammed = 0;
 };
 
