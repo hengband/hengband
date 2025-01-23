@@ -378,17 +378,17 @@ static void build_vault(
                 grid.set_terrain_id(TerrainTag::TREE);
                 break;
             case '+':
-                place_secret_door(player_ptr, pos.y, pos.x, DOOR_DEFAULT);
+                place_secret_door(player_ptr, pos.y, pos.x, DoorKind::DEFAULT);
                 break;
             case '-':
-                place_secret_door(player_ptr, pos.y, pos.x, DOOR_GLASS_DOOR);
+                place_secret_door(player_ptr, pos.y, pos.x, DoorKind::GLASS_DOOR);
                 if (floor.has_closed_door_at(pos)) {
                     grid.set_mimic_terrain_id(TerrainTag::GLASS_WALL);
                 }
 
                 break;
             case '\'':
-                place_secret_door(player_ptr, pos.y, pos.x, DOOR_CURTAIN);
+                place_secret_door(player_ptr, pos.y, pos.x, DoorKind::CURTAIN);
                 break;
             case '^':
                 place_trap(&floor, pos.y, pos.x);

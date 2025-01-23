@@ -7,22 +7,25 @@
 /* Maximum locked/jammed doors */
 #define MAX_LJ_DOORS 8
 
-enum door_kind_type : int {
-    DOOR_DEFAULT = -1,
-    DOOR_DOOR = 0,
-    DOOR_GLASS_DOOR = 1,
-    DOOR_CURTAIN = 2,
+enum class DoorKind {
+    DEFAULT = -1,
+    DOOR = 0,
+    GLASS_DOOR = 1,
+    CURTAIN = 2,
 };
 
 /* A structure type for doors */
-struct door_type {
-    short open;
-    short broken;
-    short closed;
-    short locked[MAX_LJ_DOORS];
-    short num_locked;
-    short jammed[MAX_LJ_DOORS];
-    short num_jammed;
+class Door {
+public:
+    Door() = default;
+
+    short open = 0;
+    short broken = 0;
+    short closed = 0;
+    short locked[MAX_LJ_DOORS]{};
+    short num_locked = 0;
+    short jammed[MAX_LJ_DOORS]{};
+    short num_jammed = 0;
 };
 
-extern std::map<door_kind_type, door_type> feat_door;
+extern std::map<DoorKind, Door> feat_door;

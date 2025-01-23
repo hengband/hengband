@@ -35,7 +35,7 @@ void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
      */
 
     if (floor_ptr->grid_array[y - 1][x].is_floor() && floor_ptr->grid_array[y + 1][x].is_floor() && floor_ptr->grid_array[y][x - 1].is_outer() && floor_ptr->grid_array[y][x + 1].is_outer()) {
-        place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
+        place_secret_door(player_ptr, y, x, DoorKind::DEFAULT);
         place_bold(player_ptr, y, x - 1, GB_SOLID);
         place_bold(player_ptr, y, x + 1, GB_SOLID);
     }
@@ -49,7 +49,7 @@ void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
      *  .=floor, #=wall
      */
     if (floor_ptr->grid_array[y - 1][x].is_outer() && floor_ptr->grid_array[y + 1][x].is_outer() && floor_ptr->grid_array[y][x - 1].is_floor() && floor_ptr->grid_array[y][x + 1].is_floor()) {
-        place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
+        place_secret_door(player_ptr, y, x, DoorKind::DEFAULT);
         place_bold(player_ptr, y - 1, x, GB_SOLID);
         place_bold(player_ptr, y + 1, x, GB_SOLID);
     }
@@ -62,7 +62,7 @@ void add_door(PlayerType *player_ptr, POSITION x, POSITION y)
  * @param x 配置したいフロアのX座標
  * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
  */
-void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, door_kind_type type)
+void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, DoorKind type)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y, x);
@@ -72,15 +72,15 @@ void place_secret_door(PlayerType *player_ptr, POSITION y, POSITION x, door_kind
         return;
     }
 
-    if (type == DOOR_DEFAULT) {
+    if (type == DoorKind::DEFAULT) {
         type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                   ? DOOR_CURTAIN
-                   : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+                   ? DoorKind::CURTAIN
+                   : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR);
     }
 
     place_closed_door(player_ptr, pos.y, pos.x, type);
     auto &grid = floor.get_grid(pos);
-    if (type != DOOR_CURTAIN) {
+    if (type != DoorKind::CURTAIN) {
         grid.mimic = feat_wall_inner;
         if (grid.has_los_terrain(TerrainKind::MIMIC_RAW) && !grid.has_los_terrain()) {
             const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC_RAW);
@@ -112,7 +112,7 @@ void place_locked_door(PlayerType *player_ptr, POSITION y, POSITION x)
         return;
     }
 
-    floor.set_terrain_id_at(pos, feat_locked_door_random(dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+    floor.set_terrain_id_at(pos, feat_locked_door_random(dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR));
     floor.get_grid(pos).info &= ~(CAVE_FLOOR);
     delete_monster(player_ptr, pos.y, pos.x);
 }
@@ -137,8 +137,8 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
     }
 
     const auto type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                    ? DOOR_CURTAIN
-                    : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
+                          ? DoorKind::CURTAIN
+                          : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR);
 
     auto tmp = randint0(1000);
     const auto &terrains = TerrainList::get_instance();
@@ -150,7 +150,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
         terrain_id = feat_door.at(type).broken;
     } else if (tmp < 600) {
         place_closed_door(player_ptr, y, x, type);
-        if (type != DOOR_CURTAIN) {
+        if (type != DoorKind::CURTAIN) {
             grid.mimic = room ? feat_wall_outer : rand_choice(feat_wall_type);
             if (grid.has_los_terrain(TerrainKind::MIMIC_RAW) && !grid.has_los_terrain()) {
                 const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC_RAW);
@@ -185,7 +185,7 @@ void place_random_door(PlayerType *player_ptr, POSITION y, POSITION x, bool room
  * @param x ドアの配置を試みたいマスのX座標
  * @param type ドアの地形ID
  */
-void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, door_kind_type type)
+void place_closed_door(PlayerType *player_ptr, POSITION y, POSITION x, DoorKind type)
 {
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;

@@ -76,7 +76,7 @@ void build_small_room(PlayerType *player_ptr, POSITION x0, POSITION y0)
     }
 
     const auto n = randint0(4);
-    place_secret_door(player_ptr, y0 + ddy_ddd[n], x0 + ddx_ddd[n], DOOR_DEFAULT);
+    place_secret_door(player_ptr, y0 + ddy_ddd[n], x0 + ddx_ddd[n], DoorKind::DEFAULT);
 
     player_ptr->current_floor_ptr->grid_array[y0][x0].mimic = 0;
     place_bold(player_ptr, y0, x0, GB_FLOOR);
