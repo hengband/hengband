@@ -585,14 +585,14 @@ void FloorType::place_random_stairs(const Pos2D &pos)
     }
 }
 
-void FloorType::set_terrain_id_at(const Pos2D &pos, TerrainTag tag)
+void FloorType::set_terrain_id_at(const Pos2D &pos, TerrainTag tag, TerrainKind tk)
 {
-    this->get_grid(pos).set_terrain_id(tag);
+    this->get_grid(pos).set_terrain_id(tag, tk);
 }
 
-void FloorType::set_terrain_id_at(const Pos2D &pos, short terrain_id)
+void FloorType::set_terrain_id_at(const Pos2D &pos, short terrain_id, TerrainKind tk)
 {
-    this->get_grid(pos).set_terrain_id(terrain_id);
+    this->get_grid(pos).set_terrain_id(terrain_id, tk);
 }
 
 /*!

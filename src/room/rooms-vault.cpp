@@ -383,7 +383,7 @@ static void build_vault(
             case '-':
                 place_secret_door(player_ptr, pos.y, pos.x, DoorKind::GLASS_DOOR);
                 if (floor.has_closed_door_at(pos)) {
-                    grid.set_mimic_terrain_id(TerrainTag::GLASS_WALL);
+                    grid.set_terrain_id(TerrainTag::GLASS_WALL, TerrainKind::MIMIC);
                 }
 
                 break;

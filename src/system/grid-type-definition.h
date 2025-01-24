@@ -2,6 +2,7 @@
 
 #include "object/object-index-list.h"
 #include "system/angband.h"
+#include "system/enums/terrain/terrain-kind.h"
 #include "util/point-2d.h"
 #include <map>
 
@@ -39,12 +40,6 @@
 #define CAVE_IN_DETECT 0x4000 /* trap detected area (inner circle only) */
 
 // clang-format on
-
-enum class TerrainKind {
-    NORMAL, //!< 普通の特性.
-    MIMIC, //!< 未確認地形・隠しドア・罠といった見た目と中身が違う特性の内、壁や床の方.
-    MIMIC_RAW, //!< 見た目と中身が違う特性の内、隠しドアや罠の方.
-};
 
 enum class GridFlow : int;
 enum class TerrainCharacteristics;
@@ -109,7 +104,6 @@ public:
     const TerrainType &get_terrain(TerrainKind tk = TerrainKind::NORMAL) const;
     void place_closed_curtain();
     void add_info(int grid_info);
-    void set_terrain_id(short terrain_id);
-    void set_terrain_id(TerrainTag tag);
-    void set_mimic_terrain_id(TerrainTag tag);
+    void set_terrain_id(short terrain_id, TerrainKind tk = TerrainKind::NORMAL);
+    void set_terrain_id(TerrainTag tag, TerrainKind tk = TerrainKind::NORMAL);
 };

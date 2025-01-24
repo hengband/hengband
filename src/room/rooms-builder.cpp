@@ -45,6 +45,7 @@
 #include "room/door-definition.h"
 #include "room/lake-types.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -65,6 +66,7 @@
  */
 void build_small_room(PlayerType *player_ptr, POSITION x0, POSITION y0)
 {
+    const Pos2D pos(y0, x0);
     for (POSITION y = y0 - 1; y <= y0 + 1; y++) {
         place_bold(player_ptr, y, x0 - 1, GB_INNER);
         place_bold(player_ptr, y, x0 + 1, GB_INNER);
@@ -78,7 +80,7 @@ void build_small_room(PlayerType *player_ptr, POSITION x0, POSITION y0)
     const auto n = randint0(4);
     place_secret_door(player_ptr, y0 + ddy_ddd[n], x0 + ddx_ddd[n], DoorKind::DEFAULT);
 
-    player_ptr->current_floor_ptr->grid_array[y0][x0].mimic = 0;
+    player_ptr->current_floor_ptr->set_terrain_id_at(pos, TerrainTag::NONE, TerrainKind::MIMIC);
     place_bold(player_ptr, y0, x0, GB_FLOOR);
 }
 

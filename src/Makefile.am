@@ -946,6 +946,7 @@ hengband_SOURCES = \
 	system/enums/monrace/monrace-hook-types.h \
 	system/enums/monrace/monrace-id.h \
 	system/enums/terrain/terrain-characteristics.h \
+	system/enums/terrain/terrain-kind.h \
 	system/enums/terrain/terrain-tag.h \
 	\
 	system/floor/floor-info.cpp system/floor/floor-info.h \

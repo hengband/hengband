@@ -131,7 +131,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
         place_secret_door(player_ptr, y, x, DoorKind::GLASS_DOOR);
         const Pos2D pos(y, x);
         if (floor.has_closed_door_at(pos)) {
-            floor.get_grid(pos).set_mimic_terrain_id(TerrainTag::GLASS_WALL);
+            floor.get_grid(pos).set_terrain_id(TerrainTag::GLASS_WALL, TerrainKind::MIMIC);
         }
 
         /* Place a potion */
