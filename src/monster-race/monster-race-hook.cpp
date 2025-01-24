@@ -34,7 +34,7 @@ PitNestFilter &PitNestFilter::get_instance()
 void vault_prep_clone(PlayerType *player_ptr)
 {
     get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
-    PitNestFilter::get_instance().vault_aux_race = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
+    PitNestFilter::get_instance().monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep_enum(player_ptr);
 }
 
@@ -47,7 +47,7 @@ void vault_prep_symbol(PlayerType *player_ptr)
     get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
     MonraceId r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep_enum(player_ptr);
-    PitNestFilter::get_instance().vault_aux_char = monraces_info[r_idx].symbol_definition.character;
+    PitNestFilter::get_instance().monrace_symbol = monraces_info[r_idx].symbol_definition.character;
 }
 
 /*!
@@ -60,7 +60,7 @@ void vault_prep_dragon(PlayerType *player_ptr)
     (void)player_ptr;
 
     auto &pit_filer = PitNestFilter::get_instance();
-    pit_filer.vault_aux_dragon_mask4.clear();
+    pit_filer.dragon_breaths.clear();
 
     constexpr static auto breath_list = {
         MonsterAbilityType::BR_ACID, /* Black */
@@ -72,11 +72,11 @@ void vault_prep_dragon(PlayerType *player_ptr)
 
     if (one_in_(6)) {
         /* Multi-hued */
-        pit_filer.vault_aux_dragon_mask4.set(breath_list);
+        pit_filer.dragon_breaths.set(breath_list);
         return;
     }
 
-    pit_filer.vault_aux_dragon_mask4.set(rand_choice(breath_list));
+    pit_filer.dragon_breaths.set(rand_choice(breath_list));
 }
 
 /*!
@@ -95,7 +95,7 @@ bool vault_aux_clone(PlayerType *player_ptr, MonraceId r_idx)
         return false;
     }
 
-    return r_idx == PitNestFilter::get_instance().vault_aux_race;
+    return r_idx == PitNestFilter::get_instance().monrace_id;
 }
 
 /*!
@@ -122,7 +122,7 @@ bool vault_aux_symbol_e(PlayerType *player_ptr, MonraceId r_idx)
         return false;
     }
 
-    if (monrace.symbol_definition.character != PitNestFilter::get_instance().vault_aux_char) {
+    if (monrace.symbol_definition.character != PitNestFilter::get_instance().monrace_symbol) {
         return false;
     }
 
@@ -153,7 +153,7 @@ bool vault_aux_symbol_g(PlayerType *player_ptr, MonraceId r_idx)
         return false;
     }
 
-    if (monrace.symbol_definition.character != PitNestFilter::get_instance().vault_aux_char) {
+    if (monrace.symbol_definition.character != PitNestFilter::get_instance().monrace_symbol) {
         return false;
     }
 
@@ -185,7 +185,7 @@ bool vault_aux_dragon(PlayerType *player_ptr, MonraceId r_idx)
     }
 
     auto flags = RF_ABILITY_BREATH_MASK;
-    const auto &dragon_mask = PitNestFilter::get_instance().vault_aux_dragon_mask4;
+    const auto &dragon_mask = PitNestFilter::get_instance().dragon_breaths;
     flags.reset(dragon_mask);
     if (monrace.ability_flags.has_any_of(flags) || !monrace.ability_flags.has_all_of(dragon_mask)) {
         return false;

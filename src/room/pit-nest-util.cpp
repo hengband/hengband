@@ -107,9 +107,9 @@ std::string pit_subtype_string(PitKind type)
     switch (type) {
     case PitKind::SYMBOL_GOOD:
     case PitKind::SYMBOL_EVIL:
-        return std::string("(").append(1, pit_filter.vault_aux_char).append(1, ')');
+        return std::string("(").append(1, pit_filter.monrace_symbol).append(1, ')');
     case PitKind::DRAGON: {
-        const auto &mask = pit_filter.vault_aux_dragon_mask4;
+        const auto &mask = pit_filter.dragon_breaths;
         if (mask.has_all_of({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS })) {
             return _("(万色)", "(multi-hued)");
         }
@@ -151,14 +151,14 @@ std::string nest_subtype_string(NestKind type)
     const auto &nest_filter = PitNestFilter::get_instance();
     switch (type) {
     case NestKind::CLONE: {
-        const auto &monrace = MonraceList::get_instance().get_monrace(nest_filter.vault_aux_race);
+        const auto &monrace = MonraceList::get_instance().get_monrace(nest_filter.monrace_id);
         std::stringstream ss;
         ss << '(' << monrace.name << ')';
         return ss.str();
     }
     case NestKind::SYMBOL_GOOD:
     case NestKind::SYMBOL_EVIL:
-        return std::string("(").append(1, nest_filter.vault_aux_char).append(1, ')');
+        return std::string("(").append(1, nest_filter.monrace_symbol).append(1, ')');
     default:
         return "";
     }
