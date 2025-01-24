@@ -668,14 +668,14 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
                 /* Old CAVE_IN_MIRROR flag */
                 if (grid.info & CAVE_OBJECT) {
-                    grid.set_mimic_terrain_id(TerrainTag::MIRROR);
+                    grid.set_terrain_id(TerrainTag::MIRROR, TerrainKind::MIMIC);
                 } else if ((grid.feat == OLD_FEAT_RUNE_EXPLOSION) || (grid.feat == OLD_FEAT_RUNE_PROTECTION)) {
                     grid.info |= CAVE_OBJECT;
                     grid.mimic = grid.feat;
                     grid.set_terrain_id(TerrainTag::FLOOR);
                 } else if (grid.info & CAVE_TRAP) {
                     grid.info &= ~CAVE_TRAP;
-                    grid.set_mimic_terrain_id(TerrainTag::FLOOR);
+                    grid.set_terrain_id(TerrainTag::FLOOR, TerrainKind::MIMIC);
                     grid.set_terrain_id(floor.select_random_trap());
                 } else if (grid.feat == OLD_FEAT_INVIS) {
                     grid.mimic = grid.feat;

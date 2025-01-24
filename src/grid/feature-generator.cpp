@@ -178,6 +178,6 @@ void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
     can_place_door &= possible_doorway(&floor, y, x);
     can_place_door &= floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_DOORS);
     if (can_place_door) {
-        place_random_door(player_ptr, y, x, false);
+        place_random_door(player_ptr, pos, false);
     }
 }

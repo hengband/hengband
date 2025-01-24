@@ -296,7 +296,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             break;
         }
         grid.info |= CAVE_OBJECT;
-        grid.set_mimic_terrain_id(TerrainTag::RUNE_PROTECTION);
+        grid.set_terrain_id(TerrainTag::RUNE_PROTECTION, TerrainKind::MIMIC);
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
         break;

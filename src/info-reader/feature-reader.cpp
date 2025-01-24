@@ -91,7 +91,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         const auto &tag = tokens[2];
         terrain.tag = tag;
 
-        //!< @todo 後でif文は消す.
+        //!< @details リテラルで呼ばれていない地形タグ(文字列形式)もあるので残しておく.
         static const auto tag_begin = terrain_tags.begin();
         static const auto tag_end = terrain_tags.end();
         const auto tag_enum = std::find_if(tag_begin, tag_end, [&tag](const auto &x) { return x.first == tag; });
@@ -301,9 +301,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
 void init_feat_variables()
 {
     auto &terrains = TerrainList::get_instance();
-    for (const auto &tag : terrain_tags) {
-        terrains.emplace_tag(tag.first);
-    }
+    terrains.emplace_tags();
 
     /* Normal doors */
     feat_door[DoorKind::DOOR].open = TerrainTag::OPEN_DOOR;

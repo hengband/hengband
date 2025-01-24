@@ -5553,6 +5553,9 @@
     <ClInclude Include="..\..\src\util\elapsed-time.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\terrain\terrain-kind.h">
+      <Filter>system\enums\terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

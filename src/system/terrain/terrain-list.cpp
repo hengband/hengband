@@ -72,7 +72,7 @@ short TerrainList::get_terrain_id(TerrainTag tag) const
  * @throw std::runtime_error 未定義のタグが指定された
  * @return 地形タグに対応するID
  */
-short TerrainList::get_terrain_id_by_tag(std::string_view tag) const
+short TerrainList::get_terrain_id(std::string_view tag) const
 {
     const auto it = std::find_if(this->terrains.begin(), this->terrains.end(),
         [tag](const auto &terrain) {
@@ -104,9 +104,11 @@ void TerrainList::retouch()
     }
 }
 
-void TerrainList::emplace_tag(std::string_view tag)
+void TerrainList::emplace_tags()
 {
-    this->tags.emplace(terrain_tags.at(tag), this->get_terrain_id_by_tag(tag));
+    for (const auto &[tag_str, tag] : terrain_tags) {
+        this->tags.emplace(tag, this->get_terrain_id(tag_str));
+    }
 }
 
 /*!
@@ -120,5 +122,5 @@ std::optional<short> TerrainList::search_real_terrain(std::string_view tag) cons
         return std::nullopt;
     }
 
-    return this->get_terrain_id_by_tag(tag);
+    return this->get_terrain_id(tag);
 }

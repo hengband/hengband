@@ -45,6 +45,7 @@
 #include "room/door-definition.h"
 #include "room/lake-types.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -65,21 +66,23 @@
  */
 void build_small_room(PlayerType *player_ptr, POSITION x0, POSITION y0)
 {
-    for (POSITION y = y0 - 1; y <= y0 + 1; y++) {
-        place_bold(player_ptr, y, x0 - 1, GB_INNER);
-        place_bold(player_ptr, y, x0 + 1, GB_INNER);
+    const Pos2D pos(y0, x0);
+    for (auto y = y0 - 1; y <= y0 + 1; y++) {
+        place_bold(player_ptr, y, pos.x - 1, GB_INNER);
+        place_bold(player_ptr, y, pos.x + 1, GB_INNER);
     }
 
-    for (POSITION x = x0 - 1; x <= x0 + 1; x++) {
-        place_bold(player_ptr, y0 - 1, x, GB_INNER);
-        place_bold(player_ptr, y0 + 1, x, GB_INNER);
+    for (auto x = x0 - 1; x <= x0 + 1; x++) {
+        place_bold(player_ptr, pos.y - 1, x, GB_INNER);
+        place_bold(player_ptr, pos.y + 1, x, GB_INNER);
     }
 
     const auto n = randint0(4);
-    place_secret_door(player_ptr, y0 + ddy_ddd[n], x0 + ddx_ddd[n], DoorKind::DEFAULT);
+    const Pos2DVec vec(ddy_ddd[n], ddx_ddd[n]);
+    place_secret_door(player_ptr, pos + vec);
 
-    player_ptr->current_floor_ptr->grid_array[y0][x0].mimic = 0;
-    place_bold(player_ptr, y0, x0, GB_FLOOR);
+    player_ptr->current_floor_ptr->set_terrain_id_at(pos, TerrainTag::NONE, TerrainKind::MIMIC);
+    place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
 }
 
 /*

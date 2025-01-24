@@ -226,7 +226,7 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
             auto feat_idx = i * 2 + 1;
             auto per_idx = feat_idx + 1;
             try {
-                dungeon->floor[i].feat = terrains.get_terrain_id_by_tag(tokens[feat_idx]);
+                dungeon->floor[i].feat = terrains.get_terrain_id(tokens[feat_idx]);
             } catch (const std::exception &) {
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
             }
@@ -249,7 +249,7 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
             auto feat_idx = i * 2 + 1;
             auto prob_idx = feat_idx + 1;
             try {
-                dungeon->fill[i].feat = terrains.get_terrain_id_by_tag(tokens[feat_idx]);
+                dungeon->fill[i].feat = terrains.get_terrain_id(tokens[feat_idx]);
             } catch (const std::exception &) {
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
             }
@@ -259,10 +259,10 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
 
         try {
             const std::span tags(tokens.begin() + DUNGEON_FEAT_PROB_NUM * 2 + 1, 4);
-            dungeon->outer_wall = terrains.get_terrain_id_by_tag(tags[0]);
-            dungeon->inner_wall = terrains.get_terrain_id_by_tag(tags[1]);
-            dungeon->stream1 = terrains.get_terrain_id_by_tag(tags[2]);
-            dungeon->stream2 = terrains.get_terrain_id_by_tag(tags[3]);
+            dungeon->outer_wall = terrains.get_terrain_id(tags[0]);
+            dungeon->inner_wall = terrains.get_terrain_id(tags[1]);
+            dungeon->stream1 = terrains.get_terrain_id(tags[2]);
+            dungeon->stream2 = terrains.get_terrain_id(tags[3]);
             return PARSE_ERROR_NONE;
         } catch (const std::exception &) {
             return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;

@@ -133,7 +133,7 @@ std::optional<std::string> SpellsMirrorMaster::place_mirror()
 
     auto &grid = floor.get_grid(p_pos);
     set_bits(grid.info, CAVE_OBJECT | CAVE_GLOW);
-    grid.set_mimic_terrain_id(TerrainTag::MIRROR);
+    grid.set_terrain_id(TerrainTag::MIRROR, TerrainKind::MIMIC);
 
     note_spot(this->player_ptr, p_pos.y, p_pos.x);
     lite_spot(this->player_ptr, p_pos.y, p_pos.x);

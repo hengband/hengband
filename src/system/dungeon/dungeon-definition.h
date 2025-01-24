@@ -42,6 +42,7 @@ struct feat_prob {
 };
 
 /* A structure for the != dungeon types */
+enum class DoorKind;
 enum class TerrainCharacteristics;
 enum class TerrainTag;
 class MonraceDefinition;
@@ -109,6 +110,7 @@ public:
     std::string describe_depth() const;
     int calc_cavern_terrains() const;
     std::optional<std::pair<TerrainTag, TerrainTag>> decide_river_terrains(int threshold) const;
+    DoorKind select_door_kind() const;
 
     void set_guardian_flag();
 };

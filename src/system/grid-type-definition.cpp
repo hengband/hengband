@@ -289,17 +289,22 @@ void Grid::add_info(int grid_info)
     this->info |= grid_info;
 }
 
-void Grid::set_terrain_id(short terrain_id)
+//!< @details MIMIC_RAW は入ってこない想定.
+void Grid::set_terrain_id(short terrain_id, TerrainKind tk)
 {
-    this->feat = terrain_id;
+    switch (tk) {
+    case TerrainKind::NORMAL:
+        this->feat = terrain_id;
+        break;
+    case TerrainKind::MIMIC:
+        this->mimic = terrain_id;
+        break;
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid terrain kind is specified! %d", enum2i(tk)));
+    }
 }
 
-void Grid::set_terrain_id(TerrainTag tag)
+void Grid::set_terrain_id(TerrainTag tag, TerrainKind tk)
 {
-    this->feat = TerrainList::get_instance().get_terrain_id(tag);
-}
-
-void Grid::set_mimic_terrain_id(TerrainTag tag)
-{
-    this->mimic = TerrainList::get_instance().get_terrain_id(tag);
+    this->set_terrain_id(TerrainList::get_instance().get_terrain_id(tag), tk);
 }
