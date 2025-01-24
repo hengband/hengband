@@ -9,6 +9,7 @@
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "player/player-status.h"
+#include "room/pit-nest-util.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -25,6 +26,70 @@ PitNestFilter PitNestFilter::instance{};
 PitNestFilter &PitNestFilter::get_instance()
 {
     return instance;
+}
+
+/*!
+ * @brief デバッグ時に生成されたpitの型を出力する処理
+ * @param type pitの型ID
+ * @return デバッグ表示文字列
+ */
+std::string PitNestFilter::pit_subtype(PitKind type) const
+{
+    switch (type) {
+    case PitKind::SYMBOL_GOOD:
+    case PitKind::SYMBOL_EVIL:
+        return std::string("(").append(1, this->monrace_symbol).append(1, ')');
+    case PitKind::DRAGON:
+        if (this->dragon_breaths.has_all_of({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS })) {
+            return _("(万色)", "(multi-hued)");
+        }
+
+        if (this->dragon_breaths.has(MonsterAbilityType::BR_ACID)) {
+            return _("(酸)", "(acid)");
+        }
+
+        if (this->dragon_breaths.has(MonsterAbilityType::BR_ELEC)) {
+            return _("(稲妻)", "(lightning)");
+        }
+
+        if (this->dragon_breaths.has(MonsterAbilityType::BR_FIRE)) {
+            return _("(火炎)", "(fire)");
+        }
+
+        if (this->dragon_breaths.has(MonsterAbilityType::BR_COLD)) {
+            return _("(冷気)", "(frost)");
+        }
+
+        if (this->dragon_breaths.has(MonsterAbilityType::BR_POIS)) {
+            return _("(毒)", "(poison)");
+        }
+
+        return _("(未定義)", "(undefined)"); // @todo 本来は例外を飛ばすべき.
+    default:
+        return "";
+    }
+}
+
+/*!
+ * @brief デバッグ時に生成されたnestの型を出力する処理
+ * @param type nestの型ID
+ * @return デバッグ表示文字列
+ */
+std::string PitNestFilter::nest_subtype(NestKind type) const
+{
+    switch (type) {
+    case NestKind::CLONE: {
+        const auto &monrace = MonraceList::get_instance().get_monrace(this->monrace_id);
+        std::stringstream ss;
+        ss << '(' << monrace.name << ')';
+        return ss.str();
+    }
+    case NestKind::SYMBOL_GOOD:
+    case NestKind::SYMBOL_EVIL:
+        return std::string("(").append(1, this->monrace_symbol).append(1, ')');
+    default:
+        return "";
+    }
 }
 
 /*!

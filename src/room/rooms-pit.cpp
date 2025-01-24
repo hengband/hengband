@@ -234,7 +234,7 @@ bool build_type6(PlayerType *player_ptr, DungeonData *dd_ptr)
         return monraces.order_level(monrace_id2, monrace_id1);
     });
     constexpr auto fmt_generate = _("モンスター部屋(pit)(%s%s)を生成します。", "Monster pit (%s%s)");
-    const auto pit_subtype = pit_subtype_string(*pit_type);
+    const auto pit_subtype = PitNestFilter::get_instance().pit_subtype(*pit_type);
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt_generate, pit.name.data(), pit_subtype.data());
 
     for (auto i = 0; i < NUM_PIT_MONRACES / 2; i++) {
@@ -454,7 +454,7 @@ bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
         return monraces.order_level(monrace_id2, monrace_id1);
     });
     constexpr auto fmt = _("%s%sの罠ピットが生成されました。", "Trapped monster pit (%s%s)");
-    const auto pit_subtype = pit_subtype_string(*pit_type);
+    const auto pit_subtype = PitNestFilter::get_instance().pit_subtype(*pit_type);
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, pit.name.data(), pit_subtype.data());
 
     for (auto i = 0; i < NUM_PIT_MONRACES / 2; i++) {
