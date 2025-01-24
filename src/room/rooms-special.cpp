@@ -128,8 +128,8 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
         const auto dir1 = randint0(4);
         const auto y = center->y + 2 * ddy_ddd[dir1];
         const auto x = center->x + 2 * ddx_ddd[dir1];
-        place_secret_door(player_ptr, y, x, DoorKind::GLASS_DOOR);
         const Pos2D pos(y, x);
+        place_secret_door(player_ptr, pos, DoorKind::GLASS_DOOR);
         if (floor.has_closed_door_at(pos)) {
             floor.get_grid(pos).set_terrain_id(TerrainTag::GLASS_WALL, TerrainKind::MIMIC);
         }
@@ -161,13 +161,13 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
 
         /* Curtains around the breather */
         for (auto y = center->y - 1; y <= center->y + 1; y++) {
-            place_secret_door(player_ptr, y, center->x - 2, DoorKind::CURTAIN);
-            place_secret_door(player_ptr, y, center->x + 2, DoorKind::CURTAIN);
+            place_secret_door(player_ptr, { y, center->x - 2 }, DoorKind::CURTAIN);
+            place_secret_door(player_ptr, { y, center->x + 2 }, DoorKind::CURTAIN);
         }
 
         for (auto x = center->x - 1; x <= center->x + 1; x++) {
-            place_secret_door(player_ptr, center->y - 2, x, DoorKind::CURTAIN);
-            place_secret_door(player_ptr, center->y + 2, x, DoorKind::CURTAIN);
+            place_secret_door(player_ptr, { center->y - 2, x }, DoorKind::CURTAIN);
+            place_secret_door(player_ptr, { center->y + 2, x }, DoorKind::CURTAIN);
         }
 
         /* Place an object */
