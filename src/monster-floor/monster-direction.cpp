@@ -86,7 +86,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
         const auto m_pos_from = monster_from.get_position();
         const auto m_pos_to = monster_to.get_position();
         if (can_pass_wall || can_kill_wall) {
-            if (!in_disintegration_range(&floor, m_pos_from.y, m_pos_from.x, m_pos_to.y, m_pos_to.x)) {
+            if (!in_disintegration_range(floor, m_pos_from, m_pos_to)) {
                 continue;
             }
         } else {

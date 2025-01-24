@@ -124,10 +124,10 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
     if (path_n == 0) {
         const auto p_pos = player_ptr->get_position();
         if (flg & PROJECT_DISI) {
-            if (in_disintegration_range(&floor, pos_source.y, pos_source.x, pos_target.y, pos_target.x) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
+            if (in_disintegration_range(floor, pos_source, pos_target) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
                 hit2 = true;
             }
-            if (in_disintegration_range(&floor, pos_source.y, pos_source.x, p_pos.y, p_pos.x) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
+            if (in_disintegration_range(floor, pos_source, p_pos) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
                 hityou = true;
             }
         } else if (flg & PROJECT_LOS) {

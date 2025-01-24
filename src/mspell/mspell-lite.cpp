@@ -136,7 +136,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     const auto pos = msa_ptr->get_position();
     const auto m_pos = msa_ptr->m_ptr->get_position();
     const auto &floor = *player_ptr->current_floor_ptr;
-    light_by_disintegration &= in_disintegration_range(&floor, m_pos.y, m_pos.x, pos.y, pos.x);
+    light_by_disintegration &= in_disintegration_range(floor, m_pos, pos);
     light_by_disintegration &= one_in_(10) || (projectable(player_ptr, pos, m_pos) && one_in_(2));
     if (light_by_disintegration) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;

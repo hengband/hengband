@@ -40,22 +40,21 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
  * Modified version of los() for calculation of disintegration balls.
  * Disintegration effects are stopped by permanent walls.
  */
-bool in_disintegration_range(const FloorType *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to)
 {
-    POSITION delta_y = y2 - y1;
-    POSITION delta_x = x2 - x1;
-    POSITION absolute_y = std::abs(delta_y);
-    POSITION absolute_x = std::abs(delta_x);
+    const auto delta_y = pos_to.y - pos_from.y;
+    const auto delta_x = pos_to.x - pos_from.x;
+    const auto absolute_y = std::abs(delta_y);
+    const auto absolute_x = std::abs(delta_x);
     if ((absolute_x < 2) && (absolute_y < 2)) {
         return true;
     }
 
-    POSITION scanner_y;
     if (!delta_x) {
         /* South -- check for walls */
         if (delta_y > 0) {
-            for (scanner_y = y1 + 1; scanner_y < y2; scanner_y++) {
-                if (cave_stop_disintegration(floor_ptr, scanner_y, x1)) {
+            for (auto scanner_y = pos_from.y + 1; scanner_y < pos_to.y; scanner_y++) {
+                if (cave_stop_disintegration(&floor, scanner_y, pos_from.x)) {
                     return false;
                 }
             }
@@ -63,8 +62,8 @@ bool in_disintegration_range(const FloorType *floor_ptr, POSITION y1, POSITION x
 
         /* North -- check for walls */
         else {
-            for (scanner_y = y1 - 1; scanner_y > y2; scanner_y--) {
-                if (cave_stop_disintegration(floor_ptr, scanner_y, x1)) {
+            for (auto scanner_y = pos_from.y - 1; scanner_y > pos_to.y; scanner_y--) {
+                if (cave_stop_disintegration(&floor, scanner_y, pos_from.x)) {
                     return false;
                 }
             }
@@ -74,12 +73,11 @@ bool in_disintegration_range(const FloorType *floor_ptr, POSITION y1, POSITION x
     }
 
     /* Directly East/West */
-    POSITION scanner_x;
     if (!delta_y) {
         /* East -- check for walls */
         if (delta_x > 0) {
-            for (scanner_x = x1 + 1; scanner_x < x2; scanner_x++) {
-                if (cave_stop_disintegration(floor_ptr, y1, scanner_x)) {
+            for (auto scanner_x = pos_from.x + 1; scanner_x < pos_to.x; scanner_x++) {
+                if (cave_stop_disintegration(&floor, pos_from.y, scanner_x)) {
                     return false;
                 }
             }
@@ -87,8 +85,8 @@ bool in_disintegration_range(const FloorType *floor_ptr, POSITION y1, POSITION x
 
         /* West -- check for walls */
         else {
-            for (scanner_x = x1 - 1; scanner_x > x2; scanner_x--) {
-                if (cave_stop_disintegration(floor_ptr, y1, scanner_x)) {
+            for (auto scanner_x = pos_from.x - 1; scanner_x > pos_to.x; scanner_x--) {
+                if (cave_stop_disintegration(&floor, pos_from.y, scanner_x)) {
                     return false;
                 }
             }
@@ -97,41 +95,38 @@ bool in_disintegration_range(const FloorType *floor_ptr, POSITION y1, POSITION x
         return true;
     }
 
-    POSITION sign_x = (delta_x < 0) ? -1 : 1;
-    POSITION sign_y = (delta_y < 0) ? -1 : 1;
+    const auto sign_x = (delta_x < 0) ? -1 : 1;
+    const auto sign_y = (delta_y < 0) ? -1 : 1;
     if (absolute_x == 1) {
         if (absolute_y == 2) {
-            if (!cave_stop_disintegration(floor_ptr, y1 + sign_y, x1)) {
+            if (!cave_stop_disintegration(&floor, pos_from.y + sign_y, pos_from.x)) {
                 return true;
             }
         }
     } else if (absolute_y == 1) {
         if (absolute_x == 2) {
-            if (!cave_stop_disintegration(floor_ptr, y1, x1 + sign_x)) {
+            if (!cave_stop_disintegration(&floor, pos_from.y, pos_from.x + sign_x)) {
                 return true;
             }
         }
     }
 
-    POSITION scale_factor_2 = (absolute_x * absolute_y);
-    POSITION scale_factor_1 = scale_factor_2 << 1;
-    POSITION fraction_y;
-    POSITION m; /* Slope, or 1/Slope, of LOS */
+    const auto scale_factor_2 = (absolute_x * absolute_y);
+    const auto scale_factor_1 = scale_factor_2 << 1;
     if (absolute_x >= absolute_y) {
-        fraction_y = absolute_y * absolute_y;
-        m = fraction_y << 1;
-        scanner_x = x1 + sign_x;
+        auto fraction_y = absolute_y * absolute_y;
+        const auto m = fraction_y << 1;
+        auto scanner_y = pos_from.y;
+        auto scanner_x = pos_from.x + sign_x;
         if (fraction_y == scale_factor_2) {
-            scanner_y = y1 + sign_y;
+            scanner_y += sign_y;
             fraction_y -= scale_factor_1;
-        } else {
-            scanner_y = y1;
         }
 
         /* Note (below) the case (qy == f2), where */
         /* the LOS exactly meets the corner of a tile. */
-        while (x2 - scanner_x) {
-            if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) {
+        while (pos_to.x - scanner_x) {
+            if (cave_stop_disintegration(&floor, scanner_y, scanner_x)) {
                 return false;
             }
 
@@ -141,7 +136,7 @@ bool in_disintegration_range(const FloorType *floor_ptr, POSITION y1, POSITION x
                 scanner_x += sign_x;
             } else if (fraction_y > scale_factor_2) {
                 scanner_y += sign_y;
-                if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) {
+                if (cave_stop_disintegration(&floor, scanner_y, scanner_x)) {
                     return false;
                 }
                 fraction_y -= scale_factor_1;
@@ -156,20 +151,19 @@ bool in_disintegration_range(const FloorType *floor_ptr, POSITION y1, POSITION x
         return true;
     }
 
-    POSITION fraction_x = absolute_x * absolute_x;
-    m = fraction_x << 1;
-    scanner_y = y1 + sign_y;
+    auto fraction_x = absolute_x * absolute_x;
+    const auto m = fraction_x << 1;
+    auto scanner_y = pos_from.y + sign_y;
+    auto scanner_x = pos_from.x;
     if (fraction_x == scale_factor_2) {
-        scanner_x = x1 + sign_x;
+        scanner_x += sign_x;
         fraction_x -= scale_factor_1;
-    } else {
-        scanner_x = x1;
     }
 
     /* Note (below) the case (qx == f2), where */
     /* the LOS exactly meets the corner of a tile. */
-    while (y2 - scanner_y) {
-        if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) {
+    while (pos_to.y - scanner_y) {
+        if (cave_stop_disintegration(&floor, scanner_y, scanner_x)) {
             return false;
         }
 
@@ -179,7 +173,7 @@ bool in_disintegration_range(const FloorType *floor_ptr, POSITION y1, POSITION x
             scanner_y += sign_y;
         } else if (fraction_x > scale_factor_2) {
             scanner_x += sign_x;
-            if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) {
+            if (cave_stop_disintegration(&floor, scanner_y, scanner_x)) {
                 return false;
             }
             fraction_x -= scale_factor_1;
@@ -246,7 +240,7 @@ void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, 
                         break;
                     case AttributeType::DISINTEGRATE:
                         /* Disintegration are stopped only by perma-walls */
-                        if (!in_disintegration_range(&floor, pos_breath.y, pos_breath.x, pos.y, pos.x)) {
+                        if (!in_disintegration_range(floor, pos_breath, pos)) {
                             continue;
                         }
                         break;
