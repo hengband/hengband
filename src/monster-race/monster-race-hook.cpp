@@ -28,6 +28,16 @@ PitNestFilter &PitNestFilter::get_instance()
     return instance;
 }
 
+MonraceId PitNestFilter::get_monrace_id() const
+{
+    return this->monrace_id;
+}
+
+char PitNestFilter::get_monrace_symbol() const
+{
+    return this->monrace_symbol;
+}
+
 const EnumClassFlagGroup<MonsterAbilityType> &PitNestFilter::get_dragon_breaths() const
 {
     return this->dragon_breaths;
@@ -97,6 +107,16 @@ std::string PitNestFilter::nest_subtype(NestKind type) const
     }
 }
 
+void PitNestFilter::set_monrace_id(MonraceId id)
+{
+    this->monrace_id = id;
+}
+
+void PitNestFilter::set_monrace_symbol(char symbol)
+{
+    this->monrace_symbol = symbol;
+}
+
 /*!
  * @brief pit/nestの基準となるドラゴンの種類を決める
  */
@@ -126,7 +146,8 @@ void PitNestFilter::set_dragon_breaths()
 void vault_prep_clone(PlayerType *player_ptr)
 {
     get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
-    PitNestFilter::get_instance().monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
+    const auto monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
+    PitNestFilter::get_instance().set_monrace_id(monrace_id);
     get_mon_num_prep_enum(player_ptr);
 }
 
@@ -137,9 +158,10 @@ void vault_prep_clone(PlayerType *player_ptr)
 void vault_prep_symbol(PlayerType *player_ptr)
 {
     get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
-    MonraceId r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
+    const auto monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep_enum(player_ptr);
-    PitNestFilter::get_instance().monrace_symbol = monraces_info[r_idx].symbol_definition.character;
+    const auto symbol = MonraceList::get_instance().get_monrace(monrace_id).symbol_definition.character;
+    PitNestFilter::get_instance().set_monrace_symbol(symbol);
 }
 
 /*!
@@ -158,7 +180,7 @@ bool vault_aux_clone(PlayerType *player_ptr, MonraceId r_idx)
         return false;
     }
 
-    return r_idx == PitNestFilter::get_instance().monrace_id;
+    return r_idx == PitNestFilter::get_instance().get_monrace_id();
 }
 
 /*!
@@ -185,7 +207,7 @@ bool vault_aux_symbol_e(PlayerType *player_ptr, MonraceId r_idx)
         return false;
     }
 
-    if (monrace.symbol_definition.character != PitNestFilter::get_instance().monrace_symbol) {
+    if (monrace.symbol_definition.character != PitNestFilter::get_instance().get_monrace_symbol()) {
         return false;
     }
 
@@ -216,7 +238,7 @@ bool vault_aux_symbol_g(PlayerType *player_ptr, MonraceId r_idx)
         return false;
     }
 
-    if (monrace.symbol_definition.character != PitNestFilter::get_instance().monrace_symbol) {
+    if (monrace.symbol_definition.character != PitNestFilter::get_instance().get_monrace_symbol()) {
         return false;
     }
 
