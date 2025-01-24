@@ -55,7 +55,7 @@ void add_door(PlayerType *player_ptr, const Pos2D &pos)
  * @param pos 配置先座標
  * @param door_kind ドア種別
  */
-void place_secret_door(PlayerType *player_ptr, const Pos2D &pos, DoorKind door_kind)
+void place_secret_door(PlayerType *player_ptr, const Pos2D &pos, std::optional<DoorKind> door_kind_initial)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
@@ -64,10 +64,15 @@ void place_secret_door(PlayerType *player_ptr, const Pos2D &pos, DoorKind door_k
         return;
     }
 
-    if (door_kind == DoorKind::DEFAULT) {
-        door_kind = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                        ? DoorKind::CURTAIN
-                        : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR);
+    DoorKind door_kind;
+    if (door_kind_initial) {
+        door_kind = *door_kind_initial;
+    } else if (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256)) {
+        door_kind = DoorKind::CURTAIN;
+    } else if (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR)) {
+        door_kind = DoorKind::GLASS_DOOR;
+    } else {
+        door_kind = DoorKind::DOOR;
     }
 
     place_closed_door(player_ptr, pos, door_kind);

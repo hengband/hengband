@@ -6,7 +6,6 @@
 #define DUN_ROOMS_MAX 40 /*!< 部屋生成処理の基本比率(ダンジョンのサイズに比例する) / Max number rate of rooms */
 
 enum class DoorKind {
-    DEFAULT = -1,
     DOOR = 0,
     GLASS_DOOR = 1,
     CURTAIN = 2,
