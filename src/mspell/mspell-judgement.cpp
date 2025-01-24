@@ -121,8 +121,8 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
 
     auto hit2 = false;
     auto hityou = false;
+    const auto p_pos = player_ptr->get_position();
     if (path_n == 0) {
-        const auto p_pos = player_ptr->get_position();
         if (flg & PROJECT_DISI) {
             if (in_disintegration_range(floor, pos_source, pos_target) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
                 hit2 = true;
@@ -146,21 +146,9 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
             }
         }
     } else {
-        auto grids = 0;
-        std::vector<Pos2D> positions(1024, { 0, 0 });
-        std::array<int, 32> gm{};
-        auto gm_rad = rad;
-        //!< @todo Clang 15以降はpositions を直接渡せるようになる.
-        breath_shape(player_ptr, grid_g, path_n, &grids, std::span(positions.begin(), positions.size()), gm, &gm_rad, rad, pos_source, pos_breath, typ);
-        for (auto i = 0; i < grids; i++) {
-            const auto &position = positions[i];
-            if (position == pos_target) {
-                hit2 = true;
-            }
-            if (player_ptr->is_located_at(position)) {
-                hityou = true;
-            }
-        }
+        const auto positions = breath_shape(player_ptr, grid_g, path_n, rad, pos_source, pos_breath, typ);
+        hit2 |= std::any_of(positions.begin(), positions.end(), [&pos_target](const auto &pair) { return pair.second == pos_target; });
+        hityou |= std::any_of(positions.begin(), positions.end(), [&p_pos](const auto &pair) { return pair.second == p_pos; });
     }
 
     if (!hit2 || (is_friend && hityou)) {

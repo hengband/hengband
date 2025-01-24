@@ -4,11 +4,12 @@
 #include "system/angband.h"
 #include "util/point-2d.h"
 #include <span>
+#include <utility>
 #include <vector>
 
 class FloorType;
 class PlayerType;
 class ProjectionPath;
 bool in_disintegration_range(const FloorType &floor, const Pos2D &pos1, const Pos2D &pos2);
-void breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, int *pgrids, std::span<Pos2D> positions, std::span<int> gm, int *pgm_rad, int rad, const Pos2D &pos_source, const Pos2D &pos_target, AttributeType typ);
+std::vector<std::pair<int, Pos2D>> breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, int rad, const Pos2D &pos_source, const Pos2D &pos_target, AttributeType typ);
 POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2);

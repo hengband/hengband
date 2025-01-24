@@ -97,11 +97,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         flag |= PROJECT_HIDE;
     }
 
-    std::vector<Pos2D> positions(1024, { 0, 0 });
-    auto grids = 0;
+    std::vector<Pos2D> project_positions;
     if (flag & (PROJECT_BEAM)) {
-        positions[grids] = pos_source;
-        grids++;
+        project_positions.push_back(pos_source);
     }
 
     switch (typ) {
@@ -147,8 +145,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             }
         }
         if (flag & (PROJECT_BEAM)) {
-            positions[grids] = pos;
-            grids++;
+            project_positions.push_back(pos);
         }
 
         if (delay_factor > 0) {
@@ -184,15 +181,18 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         }
     }
 
-    std::array<int, 32> gm{};
-    gm[1] = grids;
+    // 中心からの距離と位置のペア
+    std::vector<std::pair<int, Pos2D>> positions;
+    for (const auto &pos : project_positions) {
+        // ビームの軌道上はすべての座標が効果の中心なので距離は0固定
+        positions.emplace_back(0, pos);
+    }
     project_length = 0;
 
-    auto gm_rad = rad;
     /* If we found a "target", explode there */
     if (path_n <= system.get_max_range()) {
-        if ((flag & (PROJECT_BEAM)) && (grids > 0)) {
-            grids--;
+        if ((flag & (PROJECT_BEAM)) && !positions.empty()) {
+            positions.pop_back();
         }
 
         /*
@@ -206,8 +206,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
          */
         if (breath) {
             flag &= ~(PROJECT_HIDE);
-            //!< @todo Clang 15以降はpositions を直接渡せるようになる.
-            breath_shape(player_ptr, path_g, path_n, &grids, std::span(positions.begin(), positions.size()), gm, &gm_rad, rad, pos_source, pos_impact, typ);
+            auto breath_positions = breath_shape(player_ptr, path_g, path_n, rad, pos_source, pos_impact, typ);
+            positions.insert(positions.end(), std::make_move_iterator(breath_positions.begin()), std::make_move_iterator(breath_positions.end()));
         } else {
             for (auto dist = 0; dist <= rad; dist++) {
                 for (auto y = pos_impact.y - dist; y <= pos_impact.y + dist; y++) {
@@ -239,29 +239,30 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                             break;
                         }
 
-                        positions[grids] = { y, x };
-                        grids++;
+                        positions.emplace_back(dist, pos);
                     }
                 }
-
-                gm[dist + 1] = grids;
             }
         }
     }
 
-    if (grids == 0) {
+    if (positions.empty()) {
         return res;
     }
 
     if (!is_blind && !(flag & (PROJECT_HIDE)) && (delay_factor > 0)) {
         auto drawn = false;
-        for (int t = 0; t <= gm_rad; t++) {
-            for (int i = gm[t]; i < gm[t + 1]; i++) {
-                const Pos2D &pos = positions[i];
+        auto pos_total = 0;
+        for (auto dist_step = 0; std::cmp_less(pos_total, positions.size()); ++dist_step) {
+            for (const auto &[dist, pos] : positions) {
+                if (dist != dist_step) {
+                    continue;
+                }
                 if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
                     drawn = true;
                     print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
                 }
+                pos_total++;
             }
 
             move_cursor_relative(pos_impact.y, pos_impact.x);
@@ -272,8 +273,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         }
 
         if (drawn) {
-            for (int i = 0; i < grids; i++) {
-                const Pos2D &pos = positions[i];
+            for (const auto &[_, pos] : positions) {
                 if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
                     lite_spot(player_ptr, pos.y, pos.x);
                 }
@@ -292,13 +292,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     }
 
     if (flag & (PROJECT_GRID)) {
-        auto dist = 0;
-        for (int i = 0; i < grids; i++) {
-            if (gm[dist + 1] == i) {
-                dist++;
-            }
-
-            const auto &pos = positions[i];
+        for (const auto &[dist, pos] : positions) {
             if (breath) {
                 int d = dist_to_line(pos.y, pos.x, pos_source.y, pos_source.x, pos_impact.y, pos_impact.x);
                 if (affect_feature(player_ptr, src_idx, d, pos.y, pos.x, dam, typ)) {
@@ -314,13 +308,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
     update_creature(player_ptr);
     if (flag & (PROJECT_ITEM)) {
-        auto dist = 0;
-        for (int i = 0; i < grids; i++) {
-            if (gm[dist + 1] == i) {
-                dist++;
-            }
-
-            const auto &pos = positions[i];
+        for (const auto &[dist, pos] : positions) {
             if (breath) {
                 int d = dist_to_line(pos.y, pos.x, pos_source.y, pos_source.x, pos_impact.y, pos_impact.x);
                 if (affect_item(player_ptr, src_idx, d, pos.y, pos.x, dam, typ)) {
@@ -339,17 +327,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         project_m_n = 0;
         project_m_x = 0;
         project_m_y = 0;
-        auto dist = 0;
         auto &tracker = LoreTracker::get_instance();
-        for (int i = 0; i < grids; i++) {
+        for (const auto &[dist, pos] : positions) {
             int effective_dist;
-            if (gm[dist + 1] == i) {
-                dist++;
-            }
-
-            const Pos2D &pos = positions[i];
             const auto &grid = floor.get_grid(pos);
-            if (grids <= 1) {
+            if (positions.size() <= 1) {
                 auto *m_ptr = &floor.m_list[grid.m_idx];
                 MonraceDefinition *ref_ptr = &m_ptr->get_monrace();
                 if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && ref_ptr->misc_flags.has(MonsterMiscType::REFLECTING) && (!m_ptr->is_riding() || !(flag & PROJECT_PLAYER)) && (!src_idx || path_n > 1) && !one_in_(10)) {
@@ -478,14 +460,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     }
 
     if (flag & (PROJECT_KILL)) {
-        auto dist = 0;
-        for (auto i = 0; i < grids; i++) {
+        for (const auto &[dist, pos] : positions) {
             int effective_dist;
-            if (gm[dist + 1] == i) {
-                dist++;
-            }
-
-            const Pos2D &pos = positions[i];
             if (!player_ptr->is_located_at(pos)) {
                 continue;
             }
