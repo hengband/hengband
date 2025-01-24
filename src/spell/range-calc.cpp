@@ -15,6 +15,25 @@
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 
+namespace {
+bool is_prevent_blast(PlayerType *player_ptr, const Pos2D &center, const Pos2D &pos, AttributeType type)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    switch (type) {
+    case AttributeType::LITE:
+    case AttributeType::LITE_WEAK:
+        /* Lights are stopped by opaque terrains */
+        return !los(floor, center, pos);
+    case AttributeType::DISINTEGRATE:
+        /* Disintegration are stopped only by perma-walls */
+        return !in_disintegration_range(floor, center, pos);
+    default:
+        /* Others are stopped by walls */
+        return !projectable(player_ptr, center, pos);
+    }
+}
+}
+
 /*
  * Find the distance from (x, y) to a line.
  */
@@ -236,27 +255,8 @@ std::vector<std::pair<int, Pos2D>> breath_shape(PlayerType *player_ptr, const Pr
                     if (Grid::calc_distance(pos_breath, pos) != cdis) {
                         continue;
                     }
-
-                    switch (typ) {
-                    case AttributeType::LITE:
-                    case AttributeType::LITE_WEAK:
-                        /* Lights are stopped by opaque terrains */
-                        if (!los(floor, pos_breath, pos)) {
-                            continue;
-                        }
-                        break;
-                    case AttributeType::DISINTEGRATE:
-                        /* Disintegration are stopped only by perma-walls */
-                        if (!in_disintegration_range(floor, pos_breath, pos)) {
-                            continue;
-                        }
-                        break;
-                    default:
-                        /* Ball explosions are stopped by walls */
-                        if (!projectable(player_ptr, pos_breath, pos)) {
-                            continue;
-                        }
-                        break;
+                    if (is_prevent_blast(player_ptr, pos_source, pos, typ)) {
+                        continue;
                     }
 
                     positions.emplace_back(bdis, pos);
@@ -276,30 +276,14 @@ std::vector<std::pair<int, Pos2D>> ball_shape(PlayerType *player_ptr, const Pos2
         for (auto y = center.y - dist; y <= center.y + dist; y++) {
             for (auto x = center.x - dist; x <= center.x + dist; x++) {
                 const Pos2D pos(y, x);
-                if (!in_bounds2(player_ptr->current_floor_ptr, pos.y, pos.x)) {
+                if (!in_bounds2(&floor, pos.y, pos.x)) {
                     continue;
                 }
                 if (Grid::calc_distance(center, pos) != dist) {
                     continue;
                 }
-
-                switch (typ) {
-                case AttributeType::LITE:
-                case AttributeType::LITE_WEAK:
-                    if (!los(floor, center, pos)) {
-                        continue;
-                    }
-                    break;
-                case AttributeType::DISINTEGRATE:
-                    if (!in_disintegration_range(floor, center, pos)) {
-                        continue;
-                    }
-                    break;
-                default:
-                    if (!projectable(player_ptr, center, pos)) {
-                        continue;
-                    }
-                    break;
+                if (is_prevent_blast(player_ptr, center, pos, typ)) {
+                    continue;
                 }
 
                 positions.emplace_back(dist, pos);
