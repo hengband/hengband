@@ -2,6 +2,7 @@
 #include "dungeon/dungeon-flag-mask.h"
 #include "floor/floor-base-definitions.h"
 #include "grid/feature.h"
+#include "room/door-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/monrace/monrace-definition.h"
@@ -181,6 +182,20 @@ std::optional<std::pair<TerrainTag, TerrainTag>> DungeonDefinition::decide_river
     }
 
     return rand_choice(tags);
+}
+
+DoorKind DungeonDefinition::select_door_kind() const
+{
+    const auto possibility = this->flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256;
+    if (this->flags.has(DungeonFeatureType::CURTAIN) && one_in_(possibility)) {
+        return DoorKind::CURTAIN;
+    }
+
+    if (this->flags.has(DungeonFeatureType::GLASS_DOOR)) {
+        return DoorKind::GLASS_DOOR;
+    }
+
+    return DoorKind::DOOR;
 }
 
 void DungeonDefinition::set_guardian_flag()
