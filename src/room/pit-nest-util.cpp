@@ -23,7 +23,7 @@ void nest_pit_type::prepare_filter(PlayerType *player_ptr) const
         vault_prep_symbol(player_ptr);
         break;
     case PitNestHook::DRAGON:
-        vault_prep_dragon(player_ptr);
+        PitNestFilter::get_instance().set_dragon_breaths();
         break;
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid hook! %d", enum2i(this->pn_hook)));

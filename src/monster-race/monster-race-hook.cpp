@@ -28,6 +28,11 @@ PitNestFilter &PitNestFilter::get_instance()
     return instance;
 }
 
+const EnumClassFlagGroup<MonsterAbilityType> &PitNestFilter::get_dragon_breaths() const
+{
+    return this->dragon_breaths;
+}
+
 /*!
  * @brief デバッグ時に生成されたpitの型を出力する処理
  * @param type pitの型ID
@@ -93,6 +98,28 @@ std::string PitNestFilter::nest_subtype(NestKind type) const
 }
 
 /*!
+ * @brief pit/nestの基準となるドラゴンの種類を決める
+ */
+void PitNestFilter::set_dragon_breaths()
+{
+    this->dragon_breaths.clear();
+    constexpr static auto element_breaths = {
+        MonsterAbilityType::BR_ACID, /* Black */
+        MonsterAbilityType::BR_ELEC, /* Blue */
+        MonsterAbilityType::BR_FIRE, /* Red */
+        MonsterAbilityType::BR_COLD, /* White */
+        MonsterAbilityType::BR_POIS, /* Green */
+    };
+
+    if (one_in_(6)) {
+        this->dragon_breaths.set(element_breaths);
+        return;
+    }
+
+    this->dragon_breaths.set(rand_choice(element_breaths));
+}
+
+/*!
  * @brief pit/nestの基準となる単種モンスターを決める /
  * @param player_ptr プレイヤーへの参照ポインタ
  */
@@ -113,35 +140,6 @@ void vault_prep_symbol(PlayerType *player_ptr)
     MonraceId r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep_enum(player_ptr);
     PitNestFilter::get_instance().monrace_symbol = monraces_info[r_idx].symbol_definition.character;
-}
-
-/*!
- * @brief pit/nestの基準となるドラゴンの種類を決める /
- * @param player_ptr プレイヤーへの参照ポインタ
- */
-void vault_prep_dragon(PlayerType *player_ptr)
-{
-    /* Unused */
-    (void)player_ptr;
-
-    auto &pit_filer = PitNestFilter::get_instance();
-    pit_filer.dragon_breaths.clear();
-
-    constexpr static auto breath_list = {
-        MonsterAbilityType::BR_ACID, /* Black */
-        MonsterAbilityType::BR_ELEC, /* Blue */
-        MonsterAbilityType::BR_FIRE, /* Red */
-        MonsterAbilityType::BR_COLD, /* White */
-        MonsterAbilityType::BR_POIS, /* Green */
-    };
-
-    if (one_in_(6)) {
-        /* Multi-hued */
-        pit_filer.dragon_breaths.set(breath_list);
-        return;
-    }
-
-    pit_filer.dragon_breaths.set(rand_choice(breath_list));
 }
 
 /*!
@@ -250,7 +248,7 @@ bool vault_aux_dragon(PlayerType *player_ptr, MonraceId r_idx)
     }
 
     auto flags = RF_ABILITY_BREATH_MASK;
-    const auto &dragon_mask = PitNestFilter::get_instance().dragon_breaths;
+    const auto &dragon_mask = PitNestFilter::get_instance().get_dragon_breaths();
     flags.reset(dragon_mask);
     if (monrace.ability_flags.has_any_of(flags) || !monrace.ability_flags.has_all_of(dragon_mask)) {
         return false;

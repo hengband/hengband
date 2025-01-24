@@ -18,20 +18,23 @@ public:
 
     MonraceId monrace_id{}; //<! 通常pit/nest生成時のモンスターの構成条件ID.
     char monrace_symbol = '\0'; //!< 単一シンボルpit/nest生成時の指定シンボル.
-    EnumClassFlagGroup<MonsterAbilityType> dragon_breaths{}; //!< ブレス属性に基づくドラゴンpit生成時条件マスク.
 
+    const EnumClassFlagGroup<MonsterAbilityType> &get_dragon_breaths() const;
     std::string pit_subtype(PitKind type) const;
     std::string nest_subtype(NestKind type) const;
+
+    void set_dragon_breaths();
 
 private:
     PitNestFilter() = default;
 
     static PitNestFilter instance;
+
+    EnumClassFlagGroup<MonsterAbilityType> dragon_breaths{}; //!< ブレス属性に基づくドラゴンpit生成時条件マスク.
 };
 
 class PlayerType;
 void vault_prep_clone(PlayerType *player_ptr);
-void vault_prep_dragon(PlayerType *player_ptr);
 void vault_prep_symbol(PlayerType *player_ptr);
 
 bool vault_aux_clone(PlayerType *player_ptr, MonraceId r_idx);
