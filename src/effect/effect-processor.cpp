@@ -209,40 +209,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             auto breath_positions = breath_shape(player_ptr, path_g, path_n, rad, pos_source, pos_impact, typ);
             positions.insert(positions.end(), std::make_move_iterator(breath_positions.begin()), std::make_move_iterator(breath_positions.end()));
         } else {
-            for (auto dist = 0; dist <= rad; dist++) {
-                for (auto y = pos_impact.y - dist; y <= pos_impact.y + dist; y++) {
-                    for (auto x = pos_impact.x - dist; x <= pos_impact.x + dist; x++) {
-                        const Pos2D pos(y, x);
-                        if (!in_bounds2(player_ptr->current_floor_ptr, pos.y, pos.x)) {
-                            continue;
-                        }
-                        if (Grid::calc_distance(pos_impact, pos) != dist) {
-                            continue;
-                        }
-
-                        switch (typ) {
-                        case AttributeType::LITE:
-                        case AttributeType::LITE_WEAK:
-                            if (!los(floor, pos_impact, pos)) {
-                                continue;
-                            }
-                            break;
-                        case AttributeType::DISINTEGRATE:
-                            if (!in_disintegration_range(floor, pos_impact, pos)) {
-                                continue;
-                            }
-                            break;
-                        default:
-                            if (!projectable(player_ptr, pos_impact, pos)) {
-                                continue;
-                            }
-                            break;
-                        }
-
-                        positions.emplace_back(dist, pos);
-                    }
-                }
-            }
+            auto ball_positions = ball_shape(player_ptr, pos_impact, rad, typ);
+            positions.insert(positions.end(), std::make_move_iterator(ball_positions.begin()), std::make_move_iterator(ball_positions.end()));
         }
     }
 

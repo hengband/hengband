@@ -261,3 +261,45 @@ std::vector<std::pair<int, Pos2D>> breath_shape(PlayerType *player_ptr, const Pr
 
     return positions;
 }
+
+std::vector<std::pair<int, Pos2D>> ball_shape(PlayerType *player_ptr, const Pos2D &center, int rad, AttributeType typ)
+{
+    std::vector<std::pair<int, Pos2D>> positions;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (auto dist = 0; dist <= rad; dist++) {
+        for (auto y = center.y - dist; y <= center.y + dist; y++) {
+            for (auto x = center.x - dist; x <= center.x + dist; x++) {
+                const Pos2D pos(y, x);
+                if (!in_bounds2(player_ptr->current_floor_ptr, pos.y, pos.x)) {
+                    continue;
+                }
+                if (Grid::calc_distance(center, pos) != dist) {
+                    continue;
+                }
+
+                switch (typ) {
+                case AttributeType::LITE:
+                case AttributeType::LITE_WEAK:
+                    if (!los(floor, center, pos)) {
+                        continue;
+                    }
+                    break;
+                case AttributeType::DISINTEGRATE:
+                    if (!in_disintegration_range(floor, center, pos)) {
+                        continue;
+                    }
+                    break;
+                default:
+                    if (!projectable(player_ptr, center, pos)) {
+                        continue;
+                    }
+                    break;
+                }
+
+                positions.emplace_back(dist, pos);
+            }
+        }
+    }
+
+    return positions;
+}
