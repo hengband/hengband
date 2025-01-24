@@ -20,14 +20,12 @@
 #include "util/string-processor.h"
 #include <set>
 
-/*! 通常pit生成時のモンスターの構成条件ID / Race index for "monster pit (clone)" */
-MonraceId vault_aux_race;
+PitNestFilter PitNestFilter::instance{};
 
-/*! 単一シンボルpit生成時の指定シンボル / Race index for "monster pit (symbol clone)" */
-char vault_aux_char;
-
-/*! ブレス属性に基づくドラゴンpit生成時条件マスク / Breath mask for "monster pit (dragon)" */
-EnumClassFlagGroup<MonsterAbilityType> vault_aux_dragon_mask4;
+PitNestFilter &PitNestFilter::get_instance()
+{
+    return instance;
+}
 
 /*!
  * @brief pit/nestの基準となる単種モンスターを決める /
@@ -36,7 +34,7 @@ EnumClassFlagGroup<MonsterAbilityType> vault_aux_dragon_mask4;
 void vault_prep_clone(PlayerType *player_ptr)
 {
     get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
-    vault_aux_race = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
+    PitNestFilter::get_instance().vault_aux_race = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep_enum(player_ptr);
 }
 
@@ -49,7 +47,7 @@ void vault_prep_symbol(PlayerType *player_ptr)
     get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
     MonraceId r_idx = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
     get_mon_num_prep_enum(player_ptr);
-    vault_aux_char = monraces_info[r_idx].symbol_definition.character;
+    PitNestFilter::get_instance().vault_aux_char = monraces_info[r_idx].symbol_definition.character;
 }
 
 /*!
@@ -61,7 +59,8 @@ void vault_prep_dragon(PlayerType *player_ptr)
     /* Unused */
     (void)player_ptr;
 
-    vault_aux_dragon_mask4.clear();
+    auto &pit_filer = PitNestFilter::get_instance();
+    pit_filer.vault_aux_dragon_mask4.clear();
 
     constexpr static auto breath_list = {
         MonsterAbilityType::BR_ACID, /* Black */
@@ -73,11 +72,11 @@ void vault_prep_dragon(PlayerType *player_ptr)
 
     if (one_in_(6)) {
         /* Multi-hued */
-        vault_aux_dragon_mask4.set(breath_list);
+        pit_filer.vault_aux_dragon_mask4.set(breath_list);
         return;
     }
 
-    vault_aux_dragon_mask4.set(rand_choice(breath_list));
+    pit_filer.vault_aux_dragon_mask4.set(rand_choice(breath_list));
 }
 
 /*!
@@ -96,7 +95,7 @@ bool vault_aux_clone(PlayerType *player_ptr, MonraceId r_idx)
         return false;
     }
 
-    return r_idx == vault_aux_race;
+    return r_idx == PitNestFilter::get_instance().vault_aux_race;
 }
 
 /*!
@@ -123,7 +122,7 @@ bool vault_aux_symbol_e(PlayerType *player_ptr, MonraceId r_idx)
         return false;
     }
 
-    if (monrace.symbol_definition.character != vault_aux_char) {
+    if (monrace.symbol_definition.character != PitNestFilter::get_instance().vault_aux_char) {
         return false;
     }
 
@@ -154,7 +153,7 @@ bool vault_aux_symbol_g(PlayerType *player_ptr, MonraceId r_idx)
         return false;
     }
 
-    if (monrace.symbol_definition.character != vault_aux_char) {
+    if (monrace.symbol_definition.character != PitNestFilter::get_instance().vault_aux_char) {
         return false;
     }
 
@@ -186,9 +185,9 @@ bool vault_aux_dragon(PlayerType *player_ptr, MonraceId r_idx)
     }
 
     auto flags = RF_ABILITY_BREATH_MASK;
-    flags.reset(vault_aux_dragon_mask4);
-
-    if (monrace.ability_flags.has_any_of(flags) || !monrace.ability_flags.has_all_of(vault_aux_dragon_mask4)) {
+    const auto &dragon_mask = PitNestFilter::get_instance().vault_aux_dragon_mask4;
+    flags.reset(dragon_mask);
+    if (monrace.ability_flags.has_any_of(flags) || !monrace.ability_flags.has_all_of(dragon_mask)) {
         return false;
     }
 

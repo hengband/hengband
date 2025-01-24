@@ -103,36 +103,39 @@ std::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, Mons
  */
 std::string pit_subtype_string(PitKind type)
 {
+    const auto &pit_filter = PitNestFilter::get_instance();
     switch (type) {
     case PitKind::SYMBOL_GOOD:
     case PitKind::SYMBOL_EVIL:
-        return std::string("(").append(1, vault_aux_char).append(1, ')');
-    case PitKind::DRAGON:
-        if (vault_aux_dragon_mask4.has_all_of({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS })) {
+        return std::string("(").append(1, pit_filter.vault_aux_char).append(1, ')');
+    case PitKind::DRAGON: {
+        const auto &mask = pit_filter.vault_aux_dragon_mask4;
+        if (mask.has_all_of({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS })) {
             return _("(万色)", "(multi-hued)");
         }
 
-        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ACID)) {
+        if (mask.has(MonsterAbilityType::BR_ACID)) {
             return _("(酸)", "(acid)");
         }
 
-        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ELEC)) {
+        if (mask.has(MonsterAbilityType::BR_ELEC)) {
             return _("(稲妻)", "(lightning)");
         }
 
-        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_FIRE)) {
+        if (mask.has(MonsterAbilityType::BR_FIRE)) {
             return _("(火炎)", "(fire)");
         }
 
-        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_COLD)) {
+        if (mask.has(MonsterAbilityType::BR_COLD)) {
             return _("(冷気)", "(frost)");
         }
 
-        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_POIS)) {
+        if (mask.has(MonsterAbilityType::BR_POIS)) {
             return _("(毒)", "(poison)");
         }
 
         return _("(未定義)", "(undefined)"); // @todo 本来は例外を飛ばすべき.
+    }
     default:
         return "";
     }
@@ -145,16 +148,17 @@ std::string pit_subtype_string(PitKind type)
  */
 std::string nest_subtype_string(NestKind type)
 {
+    const auto &nest_filter = PitNestFilter::get_instance();
     switch (type) {
     case NestKind::CLONE: {
-        const auto &monrace = MonraceList::get_instance().get_monrace(vault_aux_race);
+        const auto &monrace = MonraceList::get_instance().get_monrace(nest_filter.vault_aux_race);
         std::stringstream ss;
         ss << '(' << monrace.name << ')';
         return ss.str();
     }
     case NestKind::SYMBOL_GOOD:
     case NestKind::SYMBOL_EVIL:
-        return std::string("(").append(1, vault_aux_char).append(1, ')');
+        return std::string("(").append(1, nest_filter.vault_aux_char).append(1, ')');
     default:
         return "";
     }
