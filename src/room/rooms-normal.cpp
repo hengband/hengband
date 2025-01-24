@@ -131,12 +131,13 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     /* Hack -- Occasional divided room */
     const auto should_close_curtain = (dungeon.flags.has(DungeonFeatureType::CURTAIN)) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 2 : 128);
+    const auto &doors = Doors::get_instance();
     if (randint1(100) < 50) {
         /* Horizontal wall */
         for (auto x = left; x <= right; x++) {
             place_bold(player_ptr, center->y, x, GB_INNER);
             if (should_close_curtain) {
-                floor.set_terrain_id_at({ center->y, x }, feat_door.at(DoorKind::CURTAIN).closed);
+                floor.set_terrain_id_at({ center->y, x }, doors.get_door(DoorKind::CURTAIN).closed);
             }
         }
 
@@ -148,7 +149,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
         for (auto y = top; y <= bottom; y++) {
             place_bold(player_ptr, y, center->x, GB_INNER);
             if (should_close_curtain) {
-                floor.set_terrain_id_at({ y, center->x }, feat_door.at(DoorKind::CURTAIN).closed);
+                floor.set_terrain_id_at({ y, center->x }, doors.get_door(DoorKind::CURTAIN).closed);
             }
         }
 
@@ -159,7 +160,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     place_random_door(player_ptr, *center, true);
     if (should_close_curtain) {
-        floor.set_terrain_id_at(*center, feat_door.at(DoorKind::CURTAIN).closed);
+        floor.set_terrain_id_at(*center, doors.get_door(DoorKind::CURTAIN).closed);
     }
 
     return true;

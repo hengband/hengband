@@ -21,4 +21,22 @@ public:
     std::vector<TerrainTag> jammed;
 };
 
-extern std::map<DoorKind, Door> feat_door;
+class Doors {
+public:
+    ~Doors() = default;
+    Doors(const Doors &) = delete;
+    Doors(Doors &&) = delete;
+    Doors &operator=(const Doors &) = delete;
+    Doors &operator=(Doors &&) = delete;
+    static const Doors &get_instance();
+
+    const Door &get_door(DoorKind dk) const;
+    TerrainTag select_locked_tag(DoorKind dk) const;
+    TerrainTag select_jammed_tag(DoorKind dk) const;
+
+private:
+    Doors();
+
+    static Doors instance;
+    std::map<DoorKind, Door> doors;
+};

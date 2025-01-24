@@ -97,7 +97,8 @@ void place_locked_door(PlayerType *player_ptr, const Pos2D &pos)
         return;
     }
 
-    floor.set_terrain_id_at(pos, feat_locked_door_random(dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR));
+    const auto door_kind = dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR;
+    floor.set_terrain_id_at(pos, Doors::get_instance().select_locked_tag(door_kind));
     floor.get_grid(pos).info &= ~(CAVE_FLOOR);
     delete_monster(player_ptr, pos.y, pos.x);
 }
@@ -119,19 +120,19 @@ void place_random_door(PlayerType *player_ptr, const Pos2D &pos, bool is_room_do
         return;
     }
 
-    const auto type = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
-                          ? DoorKind::CURTAIN
-                          : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR);
-
+    const auto door_kind = (dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 16 : 256))
+                               ? DoorKind::CURTAIN
+                               : (dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR);
     const auto tmp = randint0(1000);
     auto tag = TerrainTag::NONE;
+    const auto &door = Doors::get_instance().get_door(door_kind);
     if (tmp < 300) {
-        tag = feat_door.at(type).open;
+        tag = door.open;
     } else if (tmp < 400) {
-        tag = feat_door.at(type).broken;
+        tag = door.broken;
     } else if (tmp < 600) {
-        place_closed_door(player_ptr, pos, type);
-        if (type != DoorKind::CURTAIN) {
+        place_closed_door(player_ptr, pos, door_kind);
+        if (door_kind != DoorKind::CURTAIN) {
             grid.mimic = is_room_door ? feat_wall_outer : rand_choice(feat_wall_type);
             if (grid.has_los_terrain(TerrainKind::MIMIC_RAW) && !grid.has_los_terrain()) {
                 const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC_RAW);
@@ -142,7 +143,7 @@ void place_random_door(PlayerType *player_ptr, const Pos2D &pos, bool is_room_do
             }
         }
     } else {
-        place_closed_door(player_ptr, pos, type);
+        place_closed_door(player_ptr, pos, door_kind);
     }
 
     if (tmp >= 400) {
@@ -173,14 +174,15 @@ void place_closed_door(PlayerType *player_ptr, const Pos2D &pos, DoorKind door_k
         return;
     }
 
+    const auto &doors = Doors::get_instance();
     const auto tmp = randint0(400);
     auto tag = TerrainTag::NONE;
     if (tmp < 300) {
-        tag = feat_door.at(door_kind).closed;
+        tag = doors.get_door(door_kind).closed;
     } else if (tmp < 399) {
-        tag = feat_locked_door_random(door_kind);
+        tag = doors.select_locked_tag(door_kind);
     } else {
-        tag = feat_jammed_door_random(door_kind);
+        tag = doors.select_jammed_tag(door_kind);
     }
 
     if (tag == TerrainTag::NONE) {

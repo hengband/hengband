@@ -26,18 +26,6 @@ FEAT_IDX feat_wall_inner;
 FEAT_IDX feat_wall_solid;
 FEAT_IDX feat_ground_type[100], feat_wall_type[100];
 
-TerrainTag feat_locked_door_random(DoorKind door_kind)
-{
-    const auto &door = feat_door.at(door_kind);
-    return rand_choice(door.locked);
-}
-
-TerrainTag feat_jammed_door_random(DoorKind door_kind)
-{
-    const auto &door = feat_door.at(door_kind);
-    return rand_choice(door.jammed);
-}
-
 void cave_set_feat(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag)
 {
     cave_set_feat(player_ptr, pos.y, pos.x, TerrainList::get_instance().get_terrain_id(tag));
