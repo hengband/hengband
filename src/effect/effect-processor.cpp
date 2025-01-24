@@ -195,15 +195,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             positions.pop_back();
         }
 
-        /*
-         * Create a conical breath attack
-         *
-         *       ***
-         *   ********
-         * D********@**
-         *   ********
-         *       ***
-         */
         if (breath) {
             flag &= ~(PROJECT_HIDE);
             auto breath_positions = breath_shape(player_ptr, path_g, path_n, rad, pos_source, pos_impact, typ);

@@ -188,8 +188,14 @@ bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, cons
     return true;
 }
 
-/*
- * breath shape
+/*!
+ * @brief Create a conical breath attack shape
+ *
+ *       ***
+ *   ********
+ * D********@**
+ *   ********
+ *       ***
  */
 std::vector<std::pair<int, Pos2D>> breath_shape(PlayerType *player_ptr, const ProjectionPath &path, int dist, int rad, const Pos2D &pos_source, const Pos2D &pos_target, AttributeType typ)
 {
