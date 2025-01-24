@@ -33,16 +33,16 @@ constexpr auto NUM_NEST_MON_TYPE = 64; //! nestの種別数.
  * @brief 生成するNestの情報テーブル
  */
 const std::map<NestKind, nest_pit_type> nest_types = {
-    { NestKind::CLONE, { _("クローン", "clone"), MonraceHook::CLONE, vault_prep_clone, 5, 3 } },
-    { NestKind::JELLY, { _("ゼリー", "jelly"), MonraceHook::JELLY, std::nullopt, 5, 6 } },
-    { NestKind::SYMBOL_GOOD, { _("シンボル(善)", "symbol good"), MonraceHook::GOOD, vault_prep_symbol, 25, 2 } },
-    { NestKind::SYMBOL_EVIL, { _("シンボル(悪)", "symbol evil"), MonraceHook::EVIL, vault_prep_symbol, 25, 2 } },
-    { NestKind::MIMIC, { _("ミミック", "mimic"), MonraceHook::MIMIC, std::nullopt, 30, 4 } },
-    { NestKind::HORROR, { _("狂気", "lovecraftian"), MonraceHook::HORROR, std::nullopt, 70, 2 } },
-    { NestKind::KENNEL, { _("犬小屋", "kennel"), MonraceHook::KENNEL, std::nullopt, 45, 4 } },
-    { NestKind::ANIMAL, { _("動物園", "animal"), MonraceHook::ANIMAL, std::nullopt, 35, 5 } },
-    { NestKind::CHAPEL, { _("教会", "chapel"), MonraceHook::CHAPEL, std::nullopt, 75, 4 } },
-    { NestKind::UNDEAD, { _("アンデッド", "undead"), MonraceHook::UNDEAD, std::nullopt, 75, 5 } },
+    { NestKind::CLONE, { _("クローン", "clone"), MonraceHook::CLONE, PitNestHook::CLONE, 5, 3 } },
+    { NestKind::JELLY, { _("ゼリー", "jelly"), MonraceHook::JELLY, PitNestHook::NONE, 5, 6 } },
+    { NestKind::SYMBOL_GOOD, { _("シンボル(善)", "symbol good"), MonraceHook::GOOD, PitNestHook::SYMBOL, 25, 2 } },
+    { NestKind::SYMBOL_EVIL, { _("シンボル(悪)", "symbol evil"), MonraceHook::EVIL, PitNestHook::SYMBOL, 25, 2 } },
+    { NestKind::MIMIC, { _("ミミック", "mimic"), MonraceHook::MIMIC, PitNestHook::NONE, 30, 4 } },
+    { NestKind::HORROR, { _("狂気", "lovecraftian"), MonraceHook::HORROR, PitNestHook::NONE, 70, 2 } },
+    { NestKind::KENNEL, { _("犬小屋", "kennel"), MonraceHook::KENNEL, PitNestHook::NONE, 45, 4 } },
+    { NestKind::ANIMAL, { _("動物園", "animal"), MonraceHook::ANIMAL, PitNestHook::NONE, 35, 5 } },
+    { NestKind::CHAPEL, { _("教会", "chapel"), MonraceHook::CHAPEL, PitNestHook::NONE, 75, 4 } },
+    { NestKind::UNDEAD, { _("アンデッド", "undead"), MonraceHook::UNDEAD, PitNestHook::NONE, 75, 5 } },
 };
 
 std::optional<std::array<NestMonsterInfo, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
@@ -208,11 +208,8 @@ bool build_type5(PlayerType *player_ptr, DungeonData *dd_ptr)
     }
 
     const auto &nest = nest_types.at(*nest_type);
-    if (nest.prep_func) {
-        (*nest.prep_func)(player_ptr);
-    }
-
-    get_mon_num_prep_enum(player_ptr, nest.hook);
+    nest.prepare_filter(player_ptr);
+    get_mon_num_prep_enum(player_ptr, nest.monrace_hook);
     MonsterEntity align;
     align.sub_align = SUB_ALIGN_NEUTRAL;
 

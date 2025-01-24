@@ -11,6 +11,25 @@
 #include "util/enum-converter.h"
 #include "util/probability-table.h"
 
+void nest_pit_type::prepare_filter(PlayerType *player_ptr) const
+{
+    switch (this->pn_hook) {
+    case PitNestHook::NONE:
+        break;
+    case PitNestHook::CLONE:
+        vault_prep_clone(player_ptr);
+        break;
+    case PitNestHook::SYMBOL:
+        vault_prep_symbol(player_ptr);
+        break;
+    case PitNestHook::DRAGON:
+        vault_prep_dragon(player_ptr);
+        break;
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid hook! %d", enum2i(this->pn_hook)));
+    }
+}
+
 /*!
  * @brief ダンジョン毎に指定されたピット配列を基準にランダムなnestタイプを決める
  * @param floor フロアへの参照
