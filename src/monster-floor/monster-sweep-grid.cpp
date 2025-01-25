@@ -295,8 +295,13 @@ bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool
 {
     const auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     const auto &monrace = monster.get_monrace();
-    if ((monrace.ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) && (sweep_ranged_attack_grid(yp, xp))) {
-        return false;
+    if (monrace.ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) {
+        const auto &pos = sweep_ranged_attack_grid({ *yp, *xp });
+        if (pos) {
+            *yp = pos->y;
+            *xp = pos->x;
+            return false;
+        }
     }
 
     if (no_flow) {
@@ -315,20 +320,17 @@ bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool
 }
 
 /*!
- * @brief モンスターがプレイヤーに向けて遠距離攻撃を行うことが可能なマスを走査する /
- * Search spell castable grid
- * @param yp 適したマスのY座標を返す参照ポインタ
- * @param xp 適したマスのX座標を返す参照ポインタ
- * @return 有効なマスがあった場合TRUEを返す
+ * @brief モンスターがプレイヤーに向けて遠距離攻撃を行うことが可能なマスを走査する
+ * @return 有効なグリッドがあった場合その座標、なかったらnullopt
  */
-bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
+std::optional<Pos2D> MonsterSweepGrid::sweep_ranged_attack_grid(const Pos2D &pos_initial)
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[this->m_idx];
     const auto &monrace = monster.get_monrace();
     const auto m_pos = monster.get_position();
     if (projectable(this->player_ptr, m_pos, this->player_ptr->get_position())) {
-        return false;
+        return std::nullopt;
     }
 
     const auto gf = monrace.get_grid_flow_type();
@@ -341,28 +343,32 @@ bool MonsterSweepGrid::sweep_ranged_attack_grid(POSITION *yp, POSITION *xp)
         this->can_open_door = true;
     }
 
+    Pos2D pos = pos_initial;
     for (auto i = 7; i >= 0; i--) {
-        const Pos2D pos(m_pos.y + ddy_ddd[i], m_pos.x + ddx_ddd[i]);
-        if (!in_bounds2(&floor, pos.y, pos.x)) {
+        const Pos2D pos_neighbor(m_pos.y + ddy_ddd[i], m_pos.x + ddx_ddd[i]);
+        if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
 
-        if (this->player_ptr->is_located_at(pos)) {
-            return false;
+        if (this->player_ptr->is_located_at(pos_neighbor)) {
+            return std::nullopt;
         }
 
-        const auto &grid = floor.get_grid(pos);
+        const auto &grid = floor.get_grid(pos_neighbor);
         this->cost = grid.get_cost(gf);
-        if (!this->is_best_cost(pos, now_cost)) {
+        if (!this->is_best_cost(pos_neighbor, now_cost)) {
             continue;
         }
 
         this->best = this->cost;
-        *yp = m_pos.y + ddy_ddd[i];
-        *xp = m_pos.x + ddx_ddd[i];
+        pos = m_pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
     }
 
-    return this->best != 999;
+    if (this->best >= 999) {
+        return std::nullopt;
+    }
+
+    return pos;
 }
 
 bool MonsterSweepGrid::is_best_cost(const Pos2D &pos, const int now_cost)
