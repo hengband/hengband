@@ -29,6 +29,6 @@ private:
     void check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2, POSITION *x2);
     void search_room_to_run(POSITION *y, POSITION *x);
     Pos2DVec search_pet_runnable_grid(const Pos2DVec &vec_initial, bool no_flow);
-    void determine_when_cost(POSITION *yp, POSITION *xp, POSITION y1, POSITION x1, const bool use_scent);
+    Pos2D determine_when_cost(const Pos2D &pos_initial, const Pos2D &m_pos, const bool use_scent);
     bool is_best_cost(const Pos2D &pos, const int now_cost);
 };
