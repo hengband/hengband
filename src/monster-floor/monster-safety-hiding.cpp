@@ -127,11 +127,11 @@ std::optional<Pos2DVec> find_safety(PlayerType *player_ptr, short m_idx)
  * @param candidate 隠れられる地点の候補地
  */
 static void sweep_hiding_candidate(
-    PlayerType *player_ptr, MonsterEntity *m_ptr, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)
+    PlayerType *player_ptr, const MonsterEntity &monster, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)
 {
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monrace = monster.get_monrace();
     const auto p_pos = player_ptr->get_position();
-    const auto m_pos = m_ptr->get_position();
+    const auto m_pos = monster.get_position();
     for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
         const Pos2DVec vec(dy, dx);
         const auto pos = m_pos + vec;
@@ -141,7 +141,7 @@ static void sweep_hiding_candidate(
         if (!monster_can_enter(player_ptr, pos.y, pos.x, &monrace, 0)) {
             continue;
         }
-        if (projectable(player_ptr, p_pos, pos) || !clean_shot(player_ptr, m_ptr->fy, m_ptr->fx, pos.y, pos.x, false)) {
+        if (projectable(player_ptr, p_pos, pos) || !clean_shot(player_ptr, monster.fy, monster.fx, pos.y, pos.x, false)) {
             continue;
         }
 
@@ -155,22 +155,14 @@ static void sweep_hiding_candidate(
 }
 
 /*!
- * @brief モンスターが隠れ潜める地点を返す /
- * Choose a good hiding place near a monster for it to run toward.
+ * @brief モンスターが隠れ潜める地点を返す
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
- * @param yp 移動先のマスのY座標を返す参照ポインタ
- * @param xp 移動先のマスのX座標を返す参照ポインタ
- * @return 有効なマスがあった場合TRUEを返す
- * @details
- * Pack monsters will use this to "ambush" the player and lure him out\n
- * of corridors into open space so they can swarm him.\n
- *\n
- * Return TRUE if a good location is available.\n
+ * @return 有効なマスがあった場合、その座標。なかったらnullopt
  */
-bool find_hiding(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+std::optional<Pos2DVec> find_hiding(PlayerType *player_ptr, short m_idx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     coordinate_candidate candidate;
     candidate.gdis = 999;
 
@@ -181,15 +173,13 @@ bool find_hiding(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITI
         const POSITION *x_offsets;
         x_offsets = dist_offsets_x[d];
 
-        sweep_hiding_candidate(player_ptr, m_ptr, y_offsets, x_offsets, &candidate);
+        sweep_hiding_candidate(player_ptr, monster, y_offsets, x_offsets, &candidate);
         if (candidate.gdis >= 999) {
             continue;
         }
 
-        *yp = m_ptr->fy - candidate.gy;
-        *xp = m_ptr->fx - candidate.gx;
-        return true;
+        return Pos2DVec({ monster.fy - candidate.gy, monster.fx - candidate.gx });
     }
 
-    return false;
+    return std::nullopt;
 }

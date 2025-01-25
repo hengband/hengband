@@ -211,7 +211,10 @@ void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
         return;
     }
 
-    if (find_hiding(this->player_ptr, this->m_idx, y, x)) {
+    const auto vec = find_hiding(this->player_ptr, this->m_idx);
+    if (vec) {
+        *y = vec->y;
+        *x = vec->x;
         this->done = true;
     }
 }
