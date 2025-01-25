@@ -1,7 +1,7 @@
 #pragma once
 
+#include "util/enum-range.h"
 #include <map>
-#include <vector>
 
 enum class DoorKind {
     DOOR = 0,
@@ -12,13 +12,13 @@ enum class DoorKind {
 enum class TerrainTag;
 class Door {
 public:
-    Door() = default;
+    Door(TerrainTag open, TerrainTag broken, TerrainTag closd, const EnumRangeInclusive<TerrainTag> &locked, const EnumRangeInclusive<TerrainTag> &jammed);
 
     TerrainTag open{};
     TerrainTag broken{};
     TerrainTag closed{};
-    std::vector<TerrainTag> locked;
-    std::vector<TerrainTag> jammed;
+    EnumRangeInclusive<TerrainTag> locked;
+    EnumRangeInclusive<TerrainTag> jammed;
 };
 
 class Doors {

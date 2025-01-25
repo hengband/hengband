@@ -1,7 +1,15 @@
 #include "room/door-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "term/z-rand.h"
-#include "util/enum-range.h"
+
+Door::Door(TerrainTag open, TerrainTag broken, TerrainTag closd, const EnumRangeInclusive<TerrainTag> &locked, const EnumRangeInclusive<TerrainTag> &jammed)
+    : open(open)
+    , broken(broken)
+    , closed(closd)
+    , locked(locked)
+    , jammed(jammed)
+{
+}
 
 Doors Doors::instance{};
 
@@ -9,30 +17,16 @@ Doors::Doors()
 {
     constexpr EnumRangeInclusive<TerrainTag> locked_door_tags(TerrainTag::LOCKED_DOOR_1, TerrainTag::LOCKED_DOOR_7);
     constexpr EnumRangeInclusive<TerrainTag> jammed_door_tags(TerrainTag::JAMMED_DOOR_0, TerrainTag::JAMMED_DOOR_7);
-    Door door;
-    door.open = TerrainTag::OPEN_DOOR;
-    door.broken = TerrainTag::BROKEN_DOOR;
-    door.closed = TerrainTag::CLOSED_DOOR;
-    door.locked.assign(locked_door_tags.begin(), locked_door_tags.end());
-    door.jammed.assign(jammed_door_tags.begin(), jammed_door_tags.end());
+    Door door(TerrainTag::OPEN_DOOR, TerrainTag::BROKEN_DOOR, TerrainTag::CLOSED_DOOR, locked_door_tags, jammed_door_tags);
     this->doors.emplace(DoorKind::DOOR, door);
 
     constexpr EnumRangeInclusive<TerrainTag> locked_glass_door_tags(TerrainTag::LOCKED_GLASS_DOOR_1, TerrainTag::LOCKED_GLASS_DOOR_7);
     constexpr EnumRangeInclusive<TerrainTag> jammed_glass_door_tags(TerrainTag::JAMMED_GLASS_DOOR_0, TerrainTag::JAMMED_GLASS_DOOR_7);
-    Door glass_door;
-    glass_door.open = TerrainTag::OPEN_GLASS_DOOR;
-    glass_door.broken = TerrainTag::BROKEN_GLASS_DOOR;
-    glass_door.closed = TerrainTag::CLOSED_GLASS_DOOR;
-    glass_door.locked.assign(locked_glass_door_tags.begin(), locked_glass_door_tags.end());
-    glass_door.jammed.assign(jammed_glass_door_tags.begin(), jammed_glass_door_tags.end());
+    Door glass_door(TerrainTag::OPEN_GLASS_DOOR, TerrainTag::BROKEN_GLASS_DOOR, TerrainTag::CLOSED_GLASS_DOOR, locked_glass_door_tags, jammed_glass_door_tags);
     this->doors.emplace(DoorKind::GLASS_DOOR, glass_door);
 
-    Door curtain;
-    curtain.open = TerrainTag::OPEN_CURTAIN;
-    curtain.broken = TerrainTag::OPEN_CURTAIN;
-    curtain.closed = TerrainTag::CLOSED_CURTAIN;
-    curtain.locked.push_back(TerrainTag::CLOSED_CURTAIN);
-    curtain.jammed.push_back(TerrainTag::CLOSED_CURTAIN);
+    constexpr EnumRangeInclusive<TerrainTag> curtain_tags(TerrainTag::OPEN_CURTAIN, TerrainTag::OPEN_CURTAIN);
+    Door curtain(TerrainTag::OPEN_CURTAIN, TerrainTag::OPEN_CURTAIN, TerrainTag::CLOSED_CURTAIN, curtain_tags, curtain_tags);
     this->doors.emplace(DoorKind::CURTAIN, curtain);
 }
 
