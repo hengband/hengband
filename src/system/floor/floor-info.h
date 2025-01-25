@@ -102,7 +102,7 @@ public:
     bool is_in_quest() const;
     void set_dungeon_index(DungeonId id);
     void reset_dungeon_index();
-    DungeonDefinition &get_dungeon_definition() const;
+    const DungeonDefinition &get_dungeon_definition() const; //!< @details 定義データなので非const 版の使用は禁止.
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
     bool has_los(const Pos2D &pos) const;

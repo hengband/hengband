@@ -71,7 +71,7 @@ void FloorType::reset_dungeon_index()
     this->set_dungeon_index(DungeonId::WILDERNESS);
 }
 
-DungeonDefinition &FloorType::get_dungeon_definition() const
+const DungeonDefinition &FloorType::get_dungeon_definition() const
 {
     return DungeonList::get_instance().get_dungeon(this->dungeon_id);
 }
