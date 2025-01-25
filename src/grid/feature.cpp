@@ -20,9 +20,6 @@
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
-/*** Terrain feature variables ***/
-short feat_ground_type[100], feat_wall_type[100];
-
 void cave_set_feat(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag)
 {
     cave_set_feat(player_ptr, pos, TerrainList::get_instance().get_terrain_id(tag));

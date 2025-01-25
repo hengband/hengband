@@ -7,7 +7,6 @@
 #include "floor/geometry.h"
 #include "floor/object-allocator.h"
 #include "floor/tunnel-generator.h"
-#include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "game-option/game-play-options.h"
@@ -400,7 +399,6 @@ std::optional<std::string> cave_gen(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     reset_lite_area(floor);
-    set_floor_and_wall(floor.dungeon_id);
     const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
     get_mon_num_prep_enum(player_ptr, get_monster_hook(pos_wilderness, floor.is_underground()));
 

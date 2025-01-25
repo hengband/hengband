@@ -111,6 +111,7 @@ void stair_creation(PlayerType *player_ptr)
         }
     }
 
+    const auto &dungeon = floor.get_dungeon_definition();
     if (dest_floor_id) {
         for (auto y = 0; y < floor.height; y++) {
             for (auto x = 0; x < floor.width; x++) {
@@ -130,7 +131,7 @@ void stair_creation(PlayerType *player_ptr)
 
                 /* Remove old stairs */
                 grid.special = 0;
-                cave_set_feat(player_ptr, pos, rand_choice(feat_ground_type));
+                cave_set_feat(player_ptr, pos, dungeon.select_floor_terrain_id());
             }
         }
     } else {
@@ -143,7 +144,6 @@ void stair_creation(PlayerType *player_ptr)
     }
 
     const auto *dest_sf_ptr = get_sf_ptr(dest_floor_id);
-    const auto &dungeon = floor.get_dungeon_definition();
     const auto &terrains = TerrainList::get_instance();
     if (up) {
         const auto is_shallow = dest_sf_ptr->dun_level <= floor.dun_level - 2;

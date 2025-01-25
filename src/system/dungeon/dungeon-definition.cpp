@@ -74,9 +74,9 @@ short DungeonDefinition::convert_terrain_id(short terrain_id) const
 
     switch (terrain.subtype) {
     case CONVERT_TYPE_FLOOR:
-        return rand_choice(feat_ground_type);
+        return this->select_floor_terrain_id();
     case CONVERT_TYPE_WALL:
-        return rand_choice(feat_wall_type);
+        return this->select_wall_terrain_id();
     case CONVERT_TYPE_INNER:
         return this->inner_wall;
     case CONVERT_TYPE_OUTER:
@@ -198,10 +198,63 @@ DoorKind DungeonDefinition::select_door_kind() const
     return DoorKind::DOOR;
 }
 
+short DungeonDefinition::select_floor_terrain_id() const
+{
+    return rand_choice(this->floor_terrain_ids);
+}
+
+short DungeonDefinition::select_wall_terrain_id() const
+{
+    return rand_choice(this->wall_terrain_ids);
+}
+
 void DungeonDefinition::set_guardian_flag()
 {
     if (this->has_guardian()) {
         auto &monrace = this->get_guardian();
         monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
     }
+}
+
+void DungeonDefinition::set_floor_terrain_ids()
+{
+    this->floor_terrain_ids = this->make_terrain_ids(this->floor);
+}
+
+void DungeonDefinition::set_wall_terrain_ids()
+{
+    this->wall_terrain_ids = this->make_terrain_ids(this->fill);
+}
+
+/*!
+ * @brief 地形生成確率の決定要素を確率テーブルから作成する
+ * @param is_floor 床/地面ならtrue、壁ならfalse
+ */
+std::array<short, 100> DungeonDefinition::make_terrain_ids(const std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> &prob_table)
+{
+    std::array<int, DUNGEON_FEAT_PROB_NUM> limits{};
+    limits[0] = prob_table[0].percent;
+    for (auto i = 1; i < DUNGEON_FEAT_PROB_NUM; i++) {
+        limits[i] = limits[i - 1] + prob_table[i].percent;
+    }
+
+    if (limits[DUNGEON_FEAT_PROB_NUM - 1] < 100) {
+        limits[DUNGEON_FEAT_PROB_NUM - 1] = 100;
+    }
+
+    std::array<short, 100> ids{};
+    auto cur = 0;
+    for (auto i = 0; i < 100; i++) {
+        while (i == limits[cur]) {
+            cur++;
+        }
+
+        if (cur >= DUNGEON_FEAT_PROB_NUM) {
+            THROW_EXCEPTION(std::logic_error, "Invalid probability table is generated!");
+        }
+
+        ids[i] = prob_table[cur].feat;
+    }
+
+    return ids;
 }

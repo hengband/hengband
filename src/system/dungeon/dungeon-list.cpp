@@ -46,5 +46,7 @@ void DungeonList::retouch()
 {
     for (auto &[_, dungeon] : this->dungeons) {
         dungeon->set_guardian_flag();
+        dungeon->set_floor_terrain_ids();
+        dungeon->set_wall_terrain_ids();
     }
 }

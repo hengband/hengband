@@ -94,53 +94,6 @@ static int16_t terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
 static int16_t conv_terrain2feat[MAX_WILDERNESS];
 
 /*!
- * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
- * @param feat_type 非一様確率を再現するための要素数100の配列
- * @param prob 元の確率テーブル
- */
-static void set_floor_and_wall_aux(int16_t feat_type[100], const std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> &prob)
-{
-    std::array<int, DUNGEON_FEAT_PROB_NUM> lim{};
-    lim[0] = prob[0].percent;
-    for (int i = 1; i < DUNGEON_FEAT_PROB_NUM; i++) {
-        lim[i] = lim[i - 1] + prob[i].percent;
-    }
-
-    if (lim[DUNGEON_FEAT_PROB_NUM - 1] < 100) {
-        lim[DUNGEON_FEAT_PROB_NUM - 1] = 100;
-    }
-
-    int cur = 0;
-    for (int i = 0; i < 100; i++) {
-        while (i == lim[cur]) {
-            cur++;
-        }
-
-        if (cur >= DUNGEON_FEAT_PROB_NUM) {
-            return;
-        }
-
-        feat_type[i] = prob[cur].feat;
-    }
-}
-
-/*!
- * @brief ダンジョンの地形を指定確率に応じて各マスへランダムに敷き詰める
- * / Fill the arrays of floors and walls in the good proportions
- * @param type ダンジョンID
- */
-void set_floor_and_wall(DungeonId dungeon_id)
-{
-    if (dungeon_id == i2enum<DungeonId>(255)) {
-        return;
-    }
-
-    const auto &dungeon = DungeonList::get_instance().get_dungeon(dungeon_id);
-    set_floor_and_wall_aux(feat_ground_type, dungeon.floor);
-    set_floor_and_wall_aux(feat_wall_type, dungeon.fill);
-}
-
-/*!
  * @brief プラズマフラクタル的地形生成の再帰中間処理
  * / Helper for plasma generation.
  * @param x1 左上端の深み
@@ -603,7 +556,6 @@ void wilderness_gen(PlayerType *player_ptr)
     }
 
     generate_encounter = false;
-    set_floor_and_wall(DungeonId::WILDERNESS);
     auto &quests = QuestList::get_instance();
     for (auto &[quest_id, quest] : quests) {
         if (quest.status == QuestStatusType::REWARDED) {

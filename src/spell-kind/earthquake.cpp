@@ -270,6 +270,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
     }
 
     clear_mon_lite(&floor);
+    const auto &dungeon = floor.get_dungeon_definition();
     for (auto dy = -r; dy <= r; dy++) {
         for (auto dx = -r; dx <= r; dx++) {
             auto yy = cy + dy;
@@ -300,7 +301,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            cave_set_feat(player_ptr, pos, rand_choice(feat_ground_type));
+            cave_set_feat(player_ptr, pos, dungeon.select_floor_terrain_id());
         }
     }
 

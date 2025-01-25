@@ -111,6 +111,16 @@ public:
     int calc_cavern_terrains() const;
     std::optional<std::pair<TerrainTag, TerrainTag>> decide_river_terrains(int threshold) const;
     DoorKind select_door_kind() const;
+    short select_floor_terrain_id() const;
+    short select_wall_terrain_id() const;
 
     void set_guardian_flag();
+    void set_floor_terrain_ids();
+    void set_wall_terrain_ids();
+
+private:
+    std::array<short, 100> floor_terrain_ids{};
+    std::array<short, 100> wall_terrain_ids{};
+
+    static std::array<short, 100> make_terrain_ids(const std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> &prob_table);
 };

@@ -72,10 +72,11 @@ void place_secret_door(PlayerType *player_ptr, const Pos2D &pos, std::optional<D
         if (grid.has_los_terrain(TerrainKind::MIMIC_RAW) && !grid.has_los_terrain()) {
             const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC_RAW);
             if (terrain_mimic.flags.has(TerrainCharacteristics::MOVE) || terrain_mimic.flags.has(TerrainCharacteristics::CAN_FLY)) {
-                grid.feat = one_in_(2) ? grid.mimic : rand_choice(feat_ground_type);
+                const auto terrain_id = one_in_(2) ? grid.mimic : dungeon.select_floor_terrain_id();
+                grid.set_terrain_id(terrain_id);
             }
 
-            grid.mimic = 0;
+            grid.set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
         }
     }
 
@@ -113,7 +114,7 @@ void place_random_door(PlayerType *player_ptr, const Pos2D &pos, bool is_room_do
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    grid.mimic = 0;
+    grid.set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
     const auto &dungeon = floor.get_dungeon_definition();
     if (dungeon.flags.has(DungeonFeatureType::NO_DOORS)) {
         place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
@@ -133,13 +134,16 @@ void place_random_door(PlayerType *player_ptr, const Pos2D &pos, bool is_room_do
     } else if (tmp < 600) {
         place_closed_door(player_ptr, pos, door_kind);
         if (door_kind != DoorKind::CURTAIN) {
-            grid.mimic = is_room_door ? dungeon.outer_wall : rand_choice(feat_wall_type);
+            const auto mimic_terrain_id = is_room_door ? dungeon.outer_wall : dungeon.select_wall_terrain_id();
+            grid.set_terrain_id(mimic_terrain_id, TerrainKind::MIMIC);
             if (grid.has_los_terrain(TerrainKind::MIMIC_RAW) && !grid.has_los_terrain()) {
                 const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC_RAW);
                 if (terrain_mimic.flags.has(TerrainCharacteristics::MOVE) || terrain_mimic.flags.has(TerrainCharacteristics::CAN_FLY)) {
-                    grid.feat = one_in_(2) ? grid.mimic : rand_choice(feat_ground_type);
+                    const auto terrain_id = one_in_(2) ? grid.mimic : dungeon.select_floor_terrain_id();
+                    grid.set_terrain_id(terrain_id);
                 }
-                grid.mimic = 0;
+
+                grid.set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
             }
         }
     } else {

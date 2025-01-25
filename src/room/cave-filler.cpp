@@ -8,7 +8,6 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "floor//geometry.h"
 #include "floor/cave.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/lake-types.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -271,25 +270,26 @@ static void cave_fill(PlayerType *player_ptr, const Pos2D &initial_pos)
 
 bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int cutoff, bool light, bool room)
 {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     POSITION xhsize = xsize / 2;
     POSITION yhsize = ysize / 2;
     fill_data.c1 = cutoff;
     fill_data.c2 = 0;
     fill_data.c3 = 0;
-    fill_data.feat1 = rand_choice(feat_ground_type);
-    fill_data.feat2 = rand_choice(feat_ground_type);
-    fill_data.feat3 = rand_choice(feat_ground_type);
+    fill_data.feat1 = dungeon.select_floor_terrain_id();
+    fill_data.feat2 = dungeon.select_floor_terrain_id();
+    fill_data.feat3 = dungeon.select_floor_terrain_id();
     fill_data.info1 = CAVE_FLOOR;
     fill_data.info2 = CAVE_FLOOR;
     fill_data.info3 = CAVE_FLOOR;
     fill_data.amount = 0;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
     cave_fill(player_ptr, { y0, x0 });
     if (fill_data.amount < 10) {
         for (POSITION x = 0; x <= xsize; ++x) {
             for (POSITION y = 0; y <= ysize; ++y) {
                 place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_EXTRA);
-                floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
+                floor.grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
             }
         }
 
@@ -297,11 +297,11 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
     }
 
     for (int i = 0; i <= xsize; ++i) {
-        auto *g_ptr1 = &floor_ptr->grid_array[y0 - yhsize][i + x0 - xhsize];
+        auto *g_ptr1 = &floor.grid_array[y0 - yhsize][i + x0 - xhsize];
         if (g_ptr1->is_icky() && (room)) {
             place_bold(player_ptr, y0 - yhsize, x0 + i - xhsize, GB_OUTER);
             if (light) {
-                floor_ptr->grid_array[y0 - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
+                floor.grid_array[y0 - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
             }
 
             g_ptr1->info |= (CAVE_ROOM);
@@ -310,7 +310,7 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
             place_bold(player_ptr, y0 - yhsize, x0 + i - xhsize, GB_EXTRA);
         }
 
-        auto *g_ptr2 = &floor_ptr->grid_array[ysize + y0 - yhsize][i + x0 - xhsize];
+        auto *g_ptr2 = &floor.grid_array[ysize + y0 - yhsize][i + x0 - xhsize];
         if (g_ptr2->is_icky() && (room)) {
             place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, GB_OUTER);
             if (light) {
@@ -328,7 +328,7 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
     }
 
     for (int i = 1; i < ysize; ++i) {
-        auto *g_ptr1 = &floor_ptr->grid_array[i + y0 - yhsize][x0 - xhsize];
+        auto *g_ptr1 = &floor.grid_array[i + y0 - yhsize][x0 - xhsize];
         if (g_ptr1->is_icky() && room) {
             place_bold(player_ptr, y0 + i - yhsize, x0 - xhsize, GB_OUTER);
             if (light) {
@@ -341,7 +341,7 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
             place_bold(player_ptr, y0 + i - yhsize, x0 - xhsize, GB_EXTRA);
         }
 
-        auto *g_ptr2 = &floor_ptr->grid_array[i + y0 - yhsize][xsize + x0 - xhsize];
+        auto *g_ptr2 = &floor.grid_array[i + y0 - yhsize][xsize + x0 - xhsize];
         if (g_ptr2->is_icky() && room) {
             place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, GB_OUTER);
             if (light) {
@@ -360,7 +360,7 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
 
     for (POSITION x = 1; x < xsize; ++x) {
         for (POSITION y = 1; y < ysize; ++y) {
-            auto *g_ptr1 = &floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize];
+            auto *g_ptr1 = &floor.grid_array[y0 + y - yhsize][x0 + x - xhsize];
             if (g_ptr1->is_floor() && g_ptr1->is_icky()) {
                 g_ptr1->info &= ~CAVE_ICKY;
                 if (light) {
@@ -374,7 +374,7 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
                 continue;
             }
 
-            auto *g_ptr2 = &floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize];
+            auto *g_ptr2 = &floor.grid_array[y0 + y - yhsize][x0 + x - xhsize];
             if (g_ptr2->is_outer() && g_ptr2->is_icky()) {
                 g_ptr2->info &= ~(CAVE_ICKY);
                 if (light) {
@@ -401,6 +401,8 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
 
 bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xsize, POSITION ysize, int c1, int c2, int c3, int type)
 {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     const auto &terrains = TerrainList::get_instance();
     const auto terrain_id_rubble = terrains.get_terrain_id(TerrainTag::RUBBLE);
     const auto terrain_id_deep_water = terrains.get_terrain_id(TerrainTag::DEEP_WATER);
@@ -417,21 +419,21 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
     case LAKE_T_LAVA: /* Lava */
         feat1 = terrain_id_deep_lava;
         feat2 = terrain_id_shallow_lava;
-        feat3 = rand_choice(feat_ground_type);
+        feat3 = dungeon.select_floor_terrain_id();
         break;
     case LAKE_T_WATER: /* Water */
         feat1 = terrain_id_deep_water;
         feat2 = terrain_id_shallow_water;
-        feat3 = rand_choice(feat_ground_type);
+        feat3 = dungeon.select_floor_terrain_id();
         break;
     case LAKE_T_CAVE: /* Collapsed floor_ptr->grid_array */
-        feat1 = rand_choice(feat_ground_type);
-        feat2 = rand_choice(feat_ground_type);
+        feat1 = dungeon.select_floor_terrain_id();
+        feat2 = dungeon.select_floor_terrain_id();
         feat3 = terrain_id_rubble;
         break;
     case LAKE_T_EARTH_VAULT: /* Earth vault */
         feat1 = terrain_id_rubble;
-        feat2 = rand_choice(feat_ground_type);
+        feat2 = dungeon.select_floor_terrain_id();
         feat3 = terrain_id_rubble;
         break;
     case LAKE_T_AIR_VAULT: /* Air vault */
@@ -464,7 +466,6 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
     fill_data.info3 = 0;
     fill_data.amount = 0;
 
-    auto &floor = *player_ptr->current_floor_ptr;
     cave_fill(player_ptr, { y0, x0 });
     if (fill_data.amount < 10) {
         for (auto x = 0; x <= xsize; ++x) {

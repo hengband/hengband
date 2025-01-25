@@ -924,13 +924,13 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
     const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
     switch (gb_type) {
     case GB_FLOOR: {
-        g_ptr->feat = rand_choice(feat_ground_type);
+        g_ptr->set_terrain_id(dungeon.select_floor_terrain_id());
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_FLOOR;
         break;
     }
     case GB_EXTRA: {
-        g_ptr->feat = rand_choice(feat_wall_type);
+        g_ptr->set_terrain_id(dungeon.select_wall_terrain_id());
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_EXTRA;
         break;
