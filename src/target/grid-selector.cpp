@@ -29,26 +29,8 @@
  * XAngband: determine if a given location is "interesting"
  * based on target_set_accept function.
  */
-static bool tgt_pt_accept(PlayerType *player_ptr, POSITION y, POSITION x)
+static bool tgt_pt_accept(const Grid &grid)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!(in_bounds(floor_ptr, y, x))) {
-        return false;
-    }
-
-    if ((y == player_ptr->y) && (x == player_ptr->x)) {
-        return true;
-    }
-
-    if (player_ptr->effects()->hallucination().is_hallucinated()) {
-        return false;
-    }
-
-    auto &grid = floor_ptr->grid_array[y][x];
-    if (!grid.is_mark()) {
-        return false;
-    }
-
     using Tc = TerrainCharacteristics;
     auto is_acceptable = grid.has(Tc::LESS);
     is_acceptable |= grid.has(Tc::MORE);
@@ -71,17 +53,36 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
 
     std::vector<Pos2D> pos_list;
     const auto &floor = *player_ptr->current_floor_ptr;
-    for (POSITION y = 1; y < floor.height; y++) {
-        for (POSITION x = 1; x < floor.width; x++) {
-            if (!tgt_pt_accept(player_ptr, y, x)) {
+    const auto p_pos = player_ptr->get_position();
+    const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
+    for (auto y = 1; y < floor.height; y++) {
+        for (auto x = 1; x < floor.width; x++) {
+            const Pos2D pos(y, x);
+            if (!in_bounds(&floor, pos.y, pos.x)) {
                 continue;
             }
 
-            pos_list.emplace_back(y, x);
+            if (pos == p_pos) {
+                pos_list.push_back(pos);
+                continue;
+            }
+
+            if (is_hallucinated) {
+                continue;
+            }
+
+            const auto &grid = floor.get_grid(pos);
+            if (!grid.is_mark()) {
+                continue;
+            }
+
+            if (tgt_pt_accept(grid)) {
+                pos_list.push_back(pos);
+            }
         }
     }
 
-    TargetSorter sorter(player_ptr->get_position());
+    TargetSorter sorter(p_pos);
     std::stable_sort(pos_list.begin(), pos_list.end(), [&sorter](const auto &a, const auto &b) { return sorter.compare_distance(a, b); });
     for (const auto &pos : pos_list) {
         ys.push_back(pos.y);
