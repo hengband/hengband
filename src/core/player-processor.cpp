@@ -413,7 +413,7 @@ void process_player(PlayerType *player_ptr)
         }
     }
 
-    update_smell(player_ptr->current_floor_ptr, player_ptr);
+    update_smell(*player_ptr->current_floor_ptr, player_ptr->get_position());
 }
 
 /*!
