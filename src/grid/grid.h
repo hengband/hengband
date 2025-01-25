@@ -2,16 +2,9 @@
 
 /*!
  * @file grid.h
- * @brief ダンジョンの生成処理の基幹部分ヘッダーファイル
- * @date 2014/08/15
- * @details
- * Purpose: header file for grid.c, used only in dungeon generation
- * files (generate.c, rooms.c)
- * @author
- * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
- * This software may be copied and distributed for educational, research, and
- * not for profit purposes provided that this copyright and statement are
- * included in all such copies.
+ * @brief グリッドに関するコントローラ的処理定義
+ * @author Hourier
+ * @date 2015/01/25
  */
 
 #include "object/object-index-list.h"
@@ -67,8 +60,8 @@ class MonraceDefinition;
 enum class GridCountKind;
 enum class TerrainCharacteristics;
 enum class TerrainTag;
-void cave_set_feat(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag);
-void cave_set_feat(PlayerType *player_ptr, const Pos2D &pos, short terrain_id);
+void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag);
+void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terrain_id);
 bool new_player_spot(PlayerType *player_ptr);
 bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
 void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);

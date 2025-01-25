@@ -2753,11 +2753,11 @@ void wreck_the_pattern(PlayerType *player_ptr)
     while (to_ruin--) {
         const auto pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
         if (pattern_tile(&floor, pos.y, pos.x) && (floor.get_grid(pos).get_terrain().subtype != PATTERN_TILE_WRECKED)) {
-            cave_set_feat(player_ptr, pos, TerrainTag::PATTERN_CORRUPTED);
+            set_terrain_id_to_grid(player_ptr, pos, TerrainTag::PATTERN_CORRUPTED);
         }
     }
 
-    cave_set_feat(player_ptr, p_pos, TerrainTag::PATTERN_CORRUPTED);
+    set_terrain_id_to_grid(player_ptr, p_pos, TerrainTag::PATTERN_CORRUPTED);
 }
 
 /*!

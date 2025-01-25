@@ -192,6 +192,6 @@ void place_closed_door(PlayerType *player_ptr, const Pos2D &pos, DoorKind door_k
         return;
     }
 
-    cave_set_feat(player_ptr, pos, tag);
+    set_terrain_id_to_grid(player_ptr, pos, tag);
     floor.get_grid(pos).info &= ~(CAVE_MASK);
 }

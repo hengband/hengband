@@ -418,7 +418,7 @@ void wiz_create_feature(PlayerType *player_ptr)
         return;
     }
 
-    cave_set_feat(player_ptr, pos, *f_val1);
+    set_terrain_id_to_grid(player_ptr, pos, *f_val1);
     grid.mimic = *f_val2;
     const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     if (terrain.flags.has(TerrainCharacteristics::RUNE_PROTECTION) || terrain.flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {

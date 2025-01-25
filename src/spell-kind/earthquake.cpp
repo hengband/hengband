@@ -280,21 +280,21 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             delete_all_items_from_floor(player_ptr, pos.y, pos.x);
             const auto t = floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
             if (t < 20) {
-                cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
+                set_terrain_id_to_grid(player_ptr, pos, TerrainTag::GRANITE_WALL);
                 continue;
             }
 
             if (t < 70) {
-                cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
+                set_terrain_id_to_grid(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
                 continue;
             }
 
             if (t < 100) {
-                cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
+                set_terrain_id_to_grid(player_ptr, pos, TerrainTag::MAGMA_VEIN);
                 continue;
             }
 
-            cave_set_feat(player_ptr, pos, dungeon.select_floor_terrain_id());
+            set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
         }
     }
 

@@ -56,15 +56,15 @@ bool GridTemplate::matches(const Grid &grid) const
     return is_matched;
 }
 
-void cave_set_feat(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag)
+void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag)
 {
-    cave_set_feat(player_ptr, pos, TerrainList::get_instance().get_terrain_id(tag));
+    set_terrain_id_to_grid(player_ptr, pos, TerrainList::get_instance().get_terrain_id(tag));
 }
 
 /*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
-void cave_set_feat(PlayerType *player_ptr, const Pos2D &pos, short terrain_id)
+void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terrain_id)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
@@ -818,7 +818,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     }
 
     /* Set the new feature */
-    cave_set_feat(player_ptr, pos, new_terrain_id);
+    set_terrain_id_to_grid(player_ptr, pos, new_terrain_id);
     const auto &terrains = TerrainList::get_instance();
     const auto &world = AngbandWorld::get_instance();
     if (!TerrainType::has(action, TerrainAction::NO_DROP)) {

@@ -384,16 +384,16 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             {
                 if (t < 20) {
                     /* Create granite wall */
-                    cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
+                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::GRANITE_WALL);
                 } else if (t < 70) {
                     /* Create quartz vein */
-                    cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
+                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
                 } else if (t < 100) {
                     /* Create magma vein */
-                    cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
+                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::MAGMA_VEIN);
                 } else {
                     /* Create floor */
-                    cave_set_feat(player_ptr, pos, dungeon.select_floor_terrain_id());
+                    set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
                 }
 
                 continue;

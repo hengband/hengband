@@ -110,7 +110,7 @@ void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector
             continue;
         }
 
-        cave_set_feat(player_ptr, pos_ug + vec, it->idx);
+        set_terrain_id_to_grid(player_ptr, pos_ug + vec, it->idx);
         store_init(VALID_TOWNS, stores[i]);
     }
 }

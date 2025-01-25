@@ -123,7 +123,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
 
         if (message) {
             msg_format(_("木は%s。", "A tree %s"), message);
-            cave_set_feat(player_ptr, pos, one_in_(3) ? TerrainTag::BRAKE : TerrainTag::GRASS);
+            set_terrain_id_to_grid(player_ptr, pos, one_in_(3) ? TerrainTag::BRAKE : TerrainTag::GRASS);
 
             /* Observe */
             if (grid.is_mark()) {
@@ -264,7 +264,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (player_ptr->is_located_at(pos)) {
             break;
         }
-        cave_set_feat(player_ptr, pos, Doors::get_instance().get_door(DoorKind::DOOR).closed);
+        set_terrain_id_to_grid(player_ptr, pos, Doors::get_instance().get_door(DoorKind::DOOR).closed);
         if (grid.is_mark()) {
             obvious = true;
         }
@@ -281,7 +281,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (player_ptr->is_located_at(pos)) {
             break;
         }
-        cave_set_feat(player_ptr, pos, TerrainTag::TREE);
+        set_terrain_id_to_grid(player_ptr, pos, TerrainTag::TREE);
         if (grid.is_mark()) {
             obvious = true;
         }
@@ -302,7 +302,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             break;
         }
 
-        cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
+        set_terrain_id_to_grid(player_ptr, pos, TerrainTag::GRANITE_WALL);
         break;
     case AttributeType::LAVA_FLOW: {
         if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
@@ -312,9 +312,9 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             if (terrain.flags.has_not(TerrainCharacteristics::FLOOR)) {
                 break;
             }
-            cave_set_feat(player_ptr, pos, TerrainTag::SHALLOW_LAVA);
+            set_terrain_id_to_grid(player_ptr, pos, TerrainTag::SHALLOW_LAVA);
         } else if (dam) {
-            cave_set_feat(player_ptr, pos, TerrainTag::DEEP_LAVA);
+            set_terrain_id_to_grid(player_ptr, pos, TerrainTag::DEEP_LAVA);
         }
 
         break;
@@ -327,9 +327,9 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             if (terrain.flags.has_not(TerrainCharacteristics::FLOOR)) {
                 break;
             }
-            cave_set_feat(player_ptr, pos, TerrainTag::SHALLOW_WATER);
+            set_terrain_id_to_grid(player_ptr, pos, TerrainTag::SHALLOW_WATER);
         } else if (dam) {
-            cave_set_feat(player_ptr, pos, TerrainTag::DEEP_WATER);
+            set_terrain_id_to_grid(player_ptr, pos, TerrainTag::DEEP_WATER);
         }
 
         break;
