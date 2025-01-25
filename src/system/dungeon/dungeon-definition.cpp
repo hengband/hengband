@@ -32,11 +32,6 @@ bool DungeonDefinition::has_guardian() const
     return this->final_guardian != MonraceId::PLAYER;
 }
 
-MonraceDefinition &DungeonDefinition::get_guardian()
-{
-    return MonraceList::get_instance().get_monrace(this->final_guardian);
-}
-
 const MonraceDefinition &DungeonDefinition::get_guardian() const
 {
     return MonraceList::get_instance().get_monrace(this->final_guardian);
@@ -230,16 +225,16 @@ void DungeonDefinition::set_wall_terrain_ids()
  * @brief 地形生成確率の決定要素を確率テーブルから作成する
  * @param is_floor 床/地面ならtrue、壁ならfalse
  */
-std::array<short, 100> DungeonDefinition::make_terrain_ids(const std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> &prob_table)
+std::array<short, 100> DungeonDefinition::make_terrain_ids(const std::array<TerrainProbabilityEntry, TERRAIN_PROBABILITY_NUM> &prob_table)
 {
-    std::array<int, DUNGEON_FEAT_PROB_NUM> limits{};
-    limits[0] = prob_table[0].percent;
-    for (auto i = 1; i < DUNGEON_FEAT_PROB_NUM; i++) {
-        limits[i] = limits[i - 1] + prob_table[i].percent;
+    std::array<int, TERRAIN_PROBABILITY_NUM> limits{};
+    limits[0] = prob_table[0].chance;
+    for (auto i = 1; i < TERRAIN_PROBABILITY_NUM; i++) {
+        limits[i] = limits[i - 1] + prob_table[i].chance;
     }
 
-    if (limits[DUNGEON_FEAT_PROB_NUM - 1] < 100) {
-        limits[DUNGEON_FEAT_PROB_NUM - 1] = 100;
+    if (limits[TERRAIN_PROBABILITY_NUM - 1] < 100) {
+        limits[TERRAIN_PROBABILITY_NUM - 1] = 100;
     }
 
     std::array<short, 100> ids{};
@@ -249,12 +244,17 @@ std::array<short, 100> DungeonDefinition::make_terrain_ids(const std::array<feat
             cur++;
         }
 
-        if (cur >= DUNGEON_FEAT_PROB_NUM) {
+        if (cur >= TERRAIN_PROBABILITY_NUM) {
             THROW_EXCEPTION(std::logic_error, "Invalid probability table is generated!");
         }
 
-        ids[i] = prob_table[cur].feat;
+        ids[i] = prob_table[cur].terrain_id;
     }
 
     return ids;
+}
+
+MonraceDefinition &DungeonDefinition::get_guardian()
+{
+    return MonraceList::get_instance().get_monrace(this->final_guardian);
 }
