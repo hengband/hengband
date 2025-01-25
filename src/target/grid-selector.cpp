@@ -29,13 +29,13 @@
  * XAngband: Prepare the "temp" array for "tget_pt"
  * based on target_set_prepare funciton.
  */
-static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, std::vector<POSITION> &xs)
+static std::vector<Pos2D> tgt_pt_prepare(PlayerType *player_ptr)
 {
     if (!expand_list) {
-        return;
+        return {};
     }
 
-    std::vector<Pos2D> pos_list;
+    std::vector<Pos2D> positions;
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
     const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
@@ -47,7 +47,7 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
             }
 
             if (pos == p_pos) {
-                pos_list.push_back(pos);
+                positions.push_back(pos);
                 continue;
             }
 
@@ -61,17 +61,14 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
             }
 
             if (grid.is_acceptable_target()) {
-                pos_list.push_back(pos);
+                positions.push_back(pos);
             }
         }
     }
 
     TargetSorter sorter(p_pos);
-    std::stable_sort(pos_list.begin(), pos_list.end(), [&sorter](const auto &a, const auto &b) { return sorter.compare_distance(a, b); });
-    for (const auto &pos : pos_list) {
-        ys.push_back(pos.y);
-        xs.push_back(pos.x);
-    }
+    std::stable_sort(positions.begin(), positions.end(), [&sorter](const auto &a, const auto &b) { return sorter.compare_distance(a, b); });
+    return positions;
 }
 
 /*!
@@ -95,8 +92,6 @@ std::unordered_map<int, std::function<bool(Grid *)>> tgt_pt_symbol_call_back = {
 
 /*!
  * @brief 位置ターゲット指定情報構造体
- * @details
- * ang_sort() を利用する関係上、y/x 座標それぞれについて配列を作る。
  */
 struct tgt_pt_info {
     tgt_pt_info()
@@ -106,10 +101,8 @@ struct tgt_pt_info {
 
     int width; //!< 画面サイズ(幅)
     int height; //!< 画面サイズ(高さ)
-    POSITION y = 0; //!< 現在の指定位置(Y)
-    POSITION x = 0; //!< 現在の指定位置(X)
-    std::vector<POSITION> ys{}; //!< "interesting" な座標たちを記録する配列(Y)
-    std::vector<POSITION> xs{}; //!< "interesting" な座標たちを記録する配列(X)
+    Pos2D pos = { 0, 0 }; //!< 現在の指定位置
+    std::vector<Pos2D> positions{}; //!< "interesting" な座標一覧の記録
     size_t n = 0; //<! シンボル配列の何番目か
     char ch = '\0'; //<! 入力キー
     char prev_ch = '\0'; //<! 前回入力キー
@@ -126,32 +119,30 @@ struct tgt_pt_info {
  */
 void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
 {
-    if (!expand_list || this->ys.empty()) {
+    if (!expand_list || this->positions.empty()) {
         return;
     }
 
-    int dx, dy;
-    int cx = (panel_col_min + panel_col_max) / 2;
-    int cy = (panel_row_min + panel_row_max) / 2;
+    const auto cx = (panel_col_min + panel_col_max) / 2;
+    const auto cy = (panel_row_min + panel_row_max) / 2;
     if (this->ch != this->prev_ch) {
         this->n = 0;
     }
     this->prev_ch = this->ch;
     this->n++;
 
-    for (; this->n < size(this->ys); ++this->n) {
-        const POSITION y_cur = this->ys[this->n];
-        const POSITION x_cur = this->xs[this->n];
-        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y_cur][x_cur];
+    const auto size = this->positions.size();
+    for (; this->n < size; ++this->n) {
+        const auto &pos_cur = this->positions.at(this->n);
+        auto *g_ptr = &player_ptr->current_floor_ptr->get_grid(pos_cur);
         if (this->callback(g_ptr)) {
             break;
         }
     }
 
-    if (this->n == size(this->ys)) {
+    if (this->n == size) {
         this->n = 0;
-        this->y = player_ptr->y;
-        this->x = player_ptr->x;
+        this->pos = player_ptr->get_position();
         verify_panel(player_ptr);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
@@ -159,11 +150,10 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
         rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
         handle_stuff(player_ptr);
     } else {
-        this->y = this->ys[this->n];
-        this->x = this->xs[this->n];
-        dy = 2 * (this->y - cy) / this->height;
-        dx = 2 * (this->x - cx) / this->width;
-        if (dy || dx) {
+        this->pos = this->positions.at(this->n);
+        const auto dy = 2 * (this->pos.y - cy) / this->height;
+        const auto dx = 2 * (this->pos.x - cx) / this->width;
+        if ((dy != 0) || (dx != 0)) {
             change_panel(player_ptr, dy, dx);
         }
     }
@@ -179,10 +169,9 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
 bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
 {
     tgt_pt_info info;
-    info.y = player_ptr->y;
-    info.x = player_ptr->x;
+    info.pos = player_ptr->get_position();
     if (expand_list) {
-        tgt_pt_prepare(player_ptr, info.ys, info.xs);
+        info.positions = tgt_pt_prepare(player_ptr);
     }
 
     msg_print(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."));
@@ -193,7 +182,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
     bool success = false;
     while ((info.ch != ESCAPE) && !success) {
         bool move_fast = false;
-        move_cursor_relative(info.y, info.x);
+        move_cursor_relative(info.pos.y, info.pos.x);
         info.ch = inkey();
         switch (info.ch) {
         case ESCAPE:
@@ -201,7 +190,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
         case ' ':
         case 't':
         case '.':
-            if (player_ptr->is_located_at({ info.y, info.x })) {
+            if (player_ptr->is_located_at(info.pos)) {
                 info.ch = 0;
             } else {
                 success = true;
@@ -235,7 +224,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
                 }
             } else {
                 if (info.ch == '5' || info.ch == '0') {
-                    if (player_ptr->is_located_at({ info.y, info.x })) {
+                    if (player_ptr->is_located_at(info.pos)) {
                         info.ch = 0;
                     } else {
                         success = true;
@@ -257,35 +246,35 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
             int dy = ddy[d];
             if (move_fast) {
                 int mag = std::min(info.width / 2, info.height / 2);
-                info.x += dx * mag;
-                info.y += dy * mag;
+                info.pos.y += dy * mag;
+                info.pos.x += dx * mag;
             } else {
-                info.x += dx;
-                info.y += dy;
+                info.pos.y += dy;
+                info.pos.x += dx;
             }
 
-            if (((info.x < panel_col_min + info.width / 2) && (dx > 0)) || ((info.x > panel_col_min + info.width / 2) && (dx < 0))) {
+            if (((info.pos.x < panel_col_min + info.width / 2) && (dx > 0)) || ((info.pos.x > panel_col_min + info.width / 2) && (dx < 0))) {
                 dx = 0;
             }
 
-            if (((info.y < panel_row_min + info.height / 2) && (dy > 0)) || ((info.y > panel_row_min + info.height / 2) && (dy < 0))) {
+            if (((info.pos.y < panel_row_min + info.height / 2) && (dy > 0)) || ((info.pos.y > panel_row_min + info.height / 2) && (dy < 0))) {
                 dy = 0;
             }
 
-            if ((info.y >= panel_row_min + info.height) || (info.y < panel_row_min) || (info.x >= panel_col_min + info.width) || (info.x < panel_col_min)) {
+            if ((info.pos.y >= panel_row_min + info.height) || (info.pos.y < panel_row_min) || (info.pos.x >= panel_col_min + info.width) || (info.pos.x < panel_col_min)) {
                 change_panel(player_ptr, dy, dx);
             }
 
-            if (info.x >= player_ptr->current_floor_ptr->width - 1) {
-                info.x = player_ptr->current_floor_ptr->width - 2;
-            } else if (info.x <= 0) {
-                info.x = 1;
+            if (info.pos.x >= player_ptr->current_floor_ptr->width - 1) {
+                info.pos.x = player_ptr->current_floor_ptr->width - 2;
+            } else if (info.pos.x <= 0) {
+                info.pos.x = 1;
             }
 
-            if (info.y >= player_ptr->current_floor_ptr->height - 1) {
-                info.y = player_ptr->current_floor_ptr->height - 2;
-            } else if (info.y <= 0) {
-                info.y = 1;
+            if (info.pos.y >= player_ptr->current_floor_ptr->height - 1) {
+                info.pos.y = player_ptr->current_floor_ptr->height - 2;
+            } else if (info.pos.y <= 0) {
+                info.pos.y = 1;
             }
 
             break;
@@ -300,7 +289,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
     rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
     handle_stuff(player_ptr);
-    *x_ptr = info.x;
-    *y_ptr = info.y;
+    *y_ptr = info.pos.y;
+    *x_ptr = info.pos.x;
     return success;
 }
