@@ -138,9 +138,6 @@ void set_floor_and_wall(DungeonId dungeon_id)
     const auto &dungeon = DungeonList::get_instance().get_dungeon(dungeon_id);
     set_floor_and_wall_aux(feat_ground_type, dungeon.floor);
     set_floor_and_wall_aux(feat_wall_type, dungeon.fill);
-    feat_wall_outer = dungeon.outer_wall;
-    feat_wall_inner = dungeon.inner_wall;
-    feat_wall_solid = dungeon.outer_wall;
 }
 
 /*!

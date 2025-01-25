@@ -78,11 +78,11 @@ short DungeonDefinition::convert_terrain_id(short terrain_id) const
     case CONVERT_TYPE_WALL:
         return rand_choice(feat_wall_type);
     case CONVERT_TYPE_INNER:
-        return feat_wall_inner;
+        return this->inner_wall;
     case CONVERT_TYPE_OUTER:
-        return feat_wall_outer;
+        return this->outer_wall;
     case CONVERT_TYPE_SOLID:
-        return feat_wall_solid;
+        return this->outer_wall;
     case CONVERT_TYPE_STREAM1:
         return this->stream1;
     case CONVERT_TYPE_STREAM2:

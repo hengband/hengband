@@ -942,7 +942,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_INNER: {
-        g_ptr->feat = feat_wall_inner;
+        g_ptr->set_terrain_id(dungeon.inner_wall);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_INNER;
         break;
@@ -954,17 +954,18 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_OUTER: {
-        g_ptr->feat = feat_wall_outer;
+        g_ptr->set_terrain_id(dungeon.outer_wall);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_OUTER;
         break;
     }
     case GB_OUTER_NOPERM: {
-        const auto &terrain = TerrainList::get_instance().get_terrain(feat_wall_outer);
+        const auto &terrain = TerrainList::get_instance().get_terrain(dungeon.outer_wall);
         if (terrain.is_permanent_wall()) {
-            g_ptr->feat = dungeon.convert_terrain_id(feat_wall_outer, TerrainCharacteristics::UNPERM);
+            const auto terrain_id = dungeon.convert_terrain_id(dungeon.outer_wall, TerrainCharacteristics::UNPERM);
+            g_ptr->set_terrain_id(terrain_id);
         } else {
-            g_ptr->feat = feat_wall_outer;
+            g_ptr->set_terrain_id(dungeon.outer_wall);
         }
 
         g_ptr->info &= ~(CAVE_MASK);
@@ -972,7 +973,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_SOLID: {
-        g_ptr->feat = feat_wall_solid;
+        g_ptr->set_terrain_id(dungeon.outer_wall);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_SOLID;
         break;
@@ -984,11 +985,12 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_SOLID_NOPERM: {
-        const auto &terrain = TerrainList::get_instance().get_terrain(feat_wall_solid);
+        const auto &terrain = TerrainList::get_instance().get_terrain(dungeon.outer_wall);
         if ((g_ptr->info & CAVE_VAULT) && terrain.is_permanent_wall()) {
-            g_ptr->feat = dungeon.convert_terrain_id(feat_wall_solid, TerrainCharacteristics::UNPERM);
+            const auto terrain_id = dungeon.convert_terrain_id(dungeon.outer_wall, TerrainCharacteristics::UNPERM);
+            g_ptr->set_terrain_id(terrain_id);
         } else {
-            g_ptr->feat = feat_wall_solid;
+            g_ptr->set_terrain_id(dungeon.outer_wall);
         }
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_SOLID;

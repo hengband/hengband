@@ -56,8 +56,8 @@ public:
 
     std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> floor{}; /* Floor probability */
     std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> fill{}; /* Cave wall probability */
-    FEAT_IDX outer_wall{}; /* Outer wall tile */
-    FEAT_IDX inner_wall{}; /* Inner wall tile */
+    short outer_wall{}; /* 外壁の地形ID */
+    short inner_wall{}; /* 内壁の地形ID */
     FEAT_IDX stream1{}; /* stream tile */
     FEAT_IDX stream2{}; /* stream tile */
 
