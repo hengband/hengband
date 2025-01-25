@@ -732,8 +732,9 @@ void update_flow(PlayerType *player_ptr)
  */
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainCharacteristics action)
 {
+    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto old_terrain_id = floor.get_grid({ y, x }).feat;
+    const auto old_terrain_id = floor.get_grid(pos).feat;
     const auto &dungeon = floor.get_dungeon_definition();
     const auto new_terrain_id = dungeon.convert_terrain_id(old_terrain_id, action);
     if (new_terrain_id == old_terrain_id) {
@@ -741,7 +742,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     }
 
     /* Set the new feature */
-    cave_set_feat(player_ptr, y, x, new_terrain_id);
+    cave_set_feat(player_ptr, pos, new_terrain_id);
     const auto &terrains = TerrainList::get_instance();
     const auto &world = AngbandWorld::get_instance();
     if (!TerrainType::has(action, TerrainAction::NO_DROP)) {
@@ -752,18 +753,18 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
         /* Handle gold */
         if (old_terrain.flags.has(TerrainCharacteristics::HAS_GOLD) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_GOLD)) {
             /* Place some gold */
-            place_gold(player_ptr, y, x);
+            place_gold(player_ptr, pos.y, pos.x);
             found = true;
         }
 
         /* Handle item */
         if (old_terrain.flags.has(TerrainCharacteristics::HAS_ITEM) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_ITEM) && evaluate_percent(15 - floor.dun_level / 2)) {
             /* Place object */
-            place_object(player_ptr, y, x, 0L);
+            place_object(player_ptr, pos.y, pos.x, 0L);
             found = true;
         }
 
-        if (found && world.character_dungeon && player_can_see_bold(player_ptr, y, x)) {
+        if (found && world.character_dungeon && player_can_see_bold(player_ptr, pos.y, pos.x)) {
             msg_print(_("何かを発見した！", "You have found something!"));
         }
     }
@@ -771,7 +772,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     if (TerrainType::has(action, TerrainAction::CRASH_GLASS)) {
         const auto &old_terrain = terrains.get_terrain(old_terrain_id);
         if (old_terrain.flags.has(TerrainCharacteristics::GLASS) && world.character_dungeon) {
-            project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor.dun_level, 100) / 4, AttributeType::SHARDS,
+            project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, pos.y, pos.x, std::min(floor.dun_level, 100) / 4, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
     }

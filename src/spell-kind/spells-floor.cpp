@@ -404,7 +404,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                     cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
                 } else {
                     /* Create floor */
-                    cave_set_feat(player_ptr, pos.y, pos.x, rand_choice(feat_ground_type));
+                    cave_set_feat(player_ptr, pos, rand_choice(feat_ground_type));
                 }
 
                 continue;

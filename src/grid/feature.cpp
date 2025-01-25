@@ -21,32 +21,31 @@
 #include "world/world.h"
 
 /*** Terrain feature variables ***/
-FEAT_IDX feat_wall_outer;
-FEAT_IDX feat_wall_inner;
-FEAT_IDX feat_wall_solid;
-FEAT_IDX feat_ground_type[100], feat_wall_type[100];
+short feat_wall_outer;
+short feat_wall_inner;
+short feat_wall_solid;
+short feat_ground_type[100], feat_wall_type[100];
 
 void cave_set_feat(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag)
 {
-    cave_set_feat(player_ptr, pos.y, pos.x, TerrainList::get_instance().get_terrain_id(tag));
+    cave_set_feat(player_ptr, pos, TerrainList::get_instance().get_terrain_id(tag));
 }
 
 /*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
-void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat)
+void cave_set_feat(PlayerType *player_ptr, const Pos2D &pos, short terrain_id)
 {
-    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    const auto &terrain = TerrainList::get_instance().get_terrain(feat);
+    const auto &terrain = TerrainList::get_instance().get_terrain(terrain_id);
     const auto &dungeon = floor.get_dungeon_definition();
     if (!AngbandWorld::get_instance().character_dungeon) {
-        grid.mimic = 0;
-        grid.feat = feat;
+        grid.set_terrain_id(terrain_id);
+        grid.set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
         if (terrain.flags.has(TerrainCharacteristics::GLOW) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS)) {
             for (auto i = 0; i < 9; i++) {
-                const Pos2D pos_neighbor(y + ddy_ddd[i], x + ddx_ddd[i]);
+                const auto pos_neighbor = pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
                 if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
@@ -60,8 +59,8 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
 
     const auto old_los = floor.has_terrain_characteristics(pos, TerrainCharacteristics::LOS);
     const auto old_mirror = grid.is_mirror();
-    grid.mimic = 0;
-    grid.feat = feat;
+    grid.set_terrain_id(terrain_id);
+    grid.set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
     grid.info &= ~(CAVE_OBJECT);
     if (old_mirror && dungeon.flags.has(DungeonFeatureType::DARKNESS)) {
         grid.info &= ~(CAVE_GLOW);
@@ -69,7 +68,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
             grid.info &= ~(CAVE_MARK);
         }
 
-        update_local_illumination(player_ptr, y, x);
+        update_local_illumination(player_ptr, pos.y, pos.x);
     }
 
     if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
@@ -80,8 +79,8 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
         update_monster(player_ptr, grid.m_idx, false);
     }
 
-    note_spot(player_ptr, y, x);
-    lite_spot(player_ptr, y, x);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
     if (old_los ^ terrain.flags.has(TerrainCharacteristics::LOS)) {
         static constexpr auto flags = {
             StatusRecalculatingFlag::VIEW,
@@ -97,7 +96,7 @@ void cave_set_feat(PlayerType *player_ptr, POSITION y, POSITION x, FEAT_IDX feat
     }
 
     for (auto i = 0; i < 9; i++) {
-        const Pos2D pos_neighbor(y + ddy_ddd[i], x + ddx_ddd[i]);
+        const auto pos_neighbor = pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
         if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }

@@ -300,7 +300,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 continue;
             }
 
-            cave_set_feat(player_ptr, pos.y, pos.x, rand_choice(feat_ground_type));
+            cave_set_feat(player_ptr, pos, rand_choice(feat_ground_type));
         }
     }
 

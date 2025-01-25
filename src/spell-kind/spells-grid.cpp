@@ -114,7 +114,8 @@ void stair_creation(PlayerType *player_ptr)
     if (dest_floor_id) {
         for (auto y = 0; y < floor.height; y++) {
             for (auto x = 0; x < floor.width; x++) {
-                auto &grid = floor.get_grid({ y, x });
+                const Pos2D pos(y, x);
+                auto &grid = floor.get_grid(pos);
                 if (!grid.special) {
                     continue;
                 }
@@ -129,7 +130,7 @@ void stair_creation(PlayerType *player_ptr)
 
                 /* Remove old stairs */
                 grid.special = 0;
-                cave_set_feat(player_ptr, y, x, rand_choice(feat_ground_type));
+                cave_set_feat(player_ptr, pos, rand_choice(feat_ground_type));
             }
         }
     } else {
@@ -150,14 +151,14 @@ void stair_creation(PlayerType *player_ptr)
         const auto should_convert = (dest_sf_ptr->last_visit > 0) && is_shallow;
         const auto converted_terrain_id = dungeon.convert_terrain_id(terrain_up_stair, TerrainCharacteristics::SHAFT);
         const auto terrain_id = should_convert ? converted_terrain_id : terrain_up_stair;
-        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x, terrain_id);
+        cave_set_feat(player_ptr, player_ptr->get_position(), terrain_id);
     } else {
         const auto is_deep = dest_sf_ptr->dun_level >= floor.dun_level + 2;
         const auto terrain_down_stair = terrains.get_terrain_id(TerrainTag::DOWN_STAIR);
         const auto should_convert = (dest_sf_ptr->last_visit > 0) && is_deep;
         const auto converted_terrain_id = dungeon.convert_terrain_id(terrain_down_stair, TerrainCharacteristics::SHAFT);
         const auto terrain_id = should_convert ? converted_terrain_id : terrain_down_stair;
-        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x, terrain_id);
+        cave_set_feat(player_ptr, player_ptr->get_position(), terrain_id);
     }
 
     floor.get_grid(player_ptr->get_position()).special = dest_floor_id;

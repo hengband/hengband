@@ -237,7 +237,7 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
     }
 
     msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
-    cave_set_feat(this->player_ptr, m_pos.y, m_pos.x, TerrainList::get_instance().get_terrain_id(TerrainTag::DOWN_STAIR));
+    cave_set_feat(this->player_ptr, m_pos, TerrainTag::DOWN_STAIR);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
     return m_pos;
 }
