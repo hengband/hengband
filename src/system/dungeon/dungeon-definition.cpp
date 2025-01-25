@@ -1,7 +1,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "dungeon/dungeon-flag-mask.h"
 #include "floor/floor-base-definitions.h"
-#include "grid/feature.h"
+#include "grid/grid.h"
 #include "room/door-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/terrain-tag.h"

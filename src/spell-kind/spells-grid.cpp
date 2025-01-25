@@ -5,9 +5,7 @@
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "game-option/birth-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
-#include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
@@ -15,7 +13,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

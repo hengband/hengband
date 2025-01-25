@@ -247,7 +247,6 @@ hengband_SOURCES = \
 	\
 	grid/door.cpp grid/door.h \
 	grid/feature-generator.cpp grid/feature-generator.h \
-	grid/feature.cpp grid/feature.h \
 	grid/grid.cpp grid/grid.h \
 	grid/lighting-colors-table.cpp grid/lighting-colors-table.h \
 	grid/object-placer.cpp grid/object-placer.h \

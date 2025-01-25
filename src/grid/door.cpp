@@ -1,6 +1,5 @@
 #include "grid/door.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/door-definition.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -10,7 +9,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 
 /*!
  * @brief ドアを配置する

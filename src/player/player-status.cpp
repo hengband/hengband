@@ -19,7 +19,6 @@
 #include "floor/floor-save.h"
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "io/input-key-acceptor.h"
