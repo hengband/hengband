@@ -68,8 +68,7 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
             continue;
         }
 
-        candidate.gy = pos.y;
-        candidate.gx = pos.x;
+        candidate.pos = pos;
         candidate.gdis = dis;
     }
 
@@ -110,9 +109,7 @@ std::optional<Pos2DVec> find_safety(PlayerType *player_ptr, short m_idx)
             continue;
         }
 
-        const auto y = monster.fy - candidate.gy;
-        const auto x = monster.fx - candidate.gx;
-        return Pos2DVec(y, x);
+        return monster.get_position() - candidate.pos;
     }
 
     return std::nullopt;
@@ -127,12 +124,12 @@ std::optional<Pos2DVec> find_safety(PlayerType *player_ptr, short m_idx)
  * @param candidate 隠れられる地点の候補地
  */
 static void sweep_hiding_candidate(
-    PlayerType *player_ptr, const MonsterEntity &monster, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)
+    PlayerType *player_ptr, const MonsterEntity &monster, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate &candidate)
 {
     const auto &monrace = monster.get_monrace();
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();
-    for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
+    for (auto i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
         const Pos2DVec vec(dy, dx);
         const auto pos = m_pos + vec;
         if (!in_bounds(player_ptr->current_floor_ptr, pos.y, pos.x)) {
@@ -146,10 +143,9 @@ static void sweep_hiding_candidate(
         }
 
         const auto dis = Grid::calc_distance(pos, p_pos);
-        if (dis < candidate->gdis && dis >= 2) {
-            candidate->gy = pos.y;
-            candidate->gx = pos.x;
-            candidate->gdis = dis;
+        if (dis < candidate.gdis && dis >= 2) {
+            candidate.pos = pos;
+            candidate.gdis = dis;
         }
     }
 }
@@ -165,20 +161,19 @@ std::optional<Pos2DVec> find_hiding(PlayerType *player_ptr, short m_idx)
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     coordinate_candidate candidate;
     candidate.gdis = 999;
-
-    for (POSITION d = 1; d < 10; d++) {
+    for (auto d = 1; d < 10; d++) {
         const POSITION *y_offsets;
         y_offsets = dist_offsets_y[d];
 
         const POSITION *x_offsets;
         x_offsets = dist_offsets_x[d];
 
-        sweep_hiding_candidate(player_ptr, monster, y_offsets, x_offsets, &candidate);
+        sweep_hiding_candidate(player_ptr, monster, y_offsets, x_offsets, candidate);
         if (candidate.gdis >= 999) {
             continue;
         }
 
-        return Pos2DVec({ monster.fy - candidate.gy, monster.fx - candidate.gx });
+        return monster.get_position() - candidate.pos;
     }
 
     return std::nullopt;
