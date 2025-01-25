@@ -26,22 +26,6 @@
 #include <vector>
 
 /*
- * XAngband: determine if a given location is "interesting"
- * based on target_set_accept function.
- */
-static bool tgt_pt_accept(const Grid &grid)
-{
-    using Tc = TerrainCharacteristics;
-    auto is_acceptable = grid.has(Tc::LESS);
-    is_acceptable |= grid.has(Tc::MORE);
-    is_acceptable |= grid.has(Tc::QUEST_ENTER);
-    is_acceptable |= grid.has(Tc::QUEST_EXIT);
-    is_acceptable |= grid.has(Tc::STORE);
-    is_acceptable |= grid.has(Tc::BLDG);
-    return is_acceptable;
-}
-
-/*
  * XAngband: Prepare the "temp" array for "tget_pt"
  * based on target_set_prepare funciton.
  */
@@ -76,7 +60,7 @@ static void tgt_pt_prepare(PlayerType *player_ptr, std::vector<POSITION> &ys, st
                 continue;
             }
 
-            if (tgt_pt_accept(grid)) {
+            if (grid.is_acceptable_target()) {
                 pos_list.push_back(pos);
             }
         }

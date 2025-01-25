@@ -166,6 +166,17 @@ bool Grid::is_hidden_door() const
     return is_secret && this->get_terrain().is_closed_door();
 }
 
+bool Grid::is_acceptable_target() const
+{
+    auto is_acceptable = this->has(TerrainCharacteristics::LESS);
+    is_acceptable |= this->has(TerrainCharacteristics::MORE);
+    is_acceptable |= this->has(TerrainCharacteristics::QUEST_ENTER);
+    is_acceptable |= this->has(TerrainCharacteristics::QUEST_EXIT);
+    is_acceptable |= this->has(TerrainCharacteristics::STORE);
+    is_acceptable |= this->has(TerrainCharacteristics::BLDG);
+    return is_acceptable;
+}
+
 bool Grid::has_monster() const
 {
     return is_monster(this->m_idx);
