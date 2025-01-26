@@ -631,14 +631,14 @@ static void build_target_vault(PlayerType *player_ptr, const Pos2D &center, cons
     /* get two distances so can place doors relative to centre */
     const auto x = (rad - 2) / 4 + 1;
     const auto y = rad / 2 + x;
-    add_door(player_ptr, { center.x + x, center.y });
-    add_door(player_ptr, { center.x + y, center.y });
-    add_door(player_ptr, { center.x - x, center.y });
-    add_door(player_ptr, { center.x - y, center.y });
-    add_door(player_ptr, { center.x, center.y + x });
-    add_door(player_ptr, { center.x, center.y + y });
-    add_door(player_ptr, { center.x, center.y - x });
-    add_door(player_ptr, { center.x, center.y - y });
+    add_door(player_ptr, { center.y, center.x + x });
+    add_door(player_ptr, { center.y, center.x + y });
+    add_door(player_ptr, { center.y, center.x - x });
+    add_door(player_ptr, { center.y, center.x - y });
+    add_door(player_ptr, { center.y + x, center.x });
+    add_door(player_ptr, { center.y + y, center.x });
+    add_door(player_ptr, { center.y - x, center.x });
+    add_door(player_ptr, { center.y - y, center.x });
 
     /* Fill with stuff - medium difficulty */
     const Pos2DVec vec_radius(rad, rad);
