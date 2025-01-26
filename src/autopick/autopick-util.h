@@ -42,8 +42,13 @@ struct autopick_type {
 class ItemEntity;
 struct text_body_type {
     text_body_type(int cx, int cy); //!< @details 画面表示はX→Yの順番であることが多いので一応揃える.
+
+    void adjust_cursor_column();
+    void update_cursor_column_record(int com_id);
+
     int cx;
     int cy;
+    int rec_cx = 0;
     int wid = 0;
     int hgt = 0;
     int upper = 0;
