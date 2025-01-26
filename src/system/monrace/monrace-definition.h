@@ -74,6 +74,10 @@ enum class GridFlow : int;
 class MonraceDefinition {
 public:
     MonraceDefinition();
+    MonraceDefinition(const MonraceDefinition &) = delete;
+    MonraceDefinition &operator=(const MonraceDefinition &) = delete;
+    MonraceDefinition(MonraceDefinition &&) = default;
+    MonraceDefinition &operator=(MonraceDefinition &&) = delete;
 
     MonraceId idx{};
     LocalizedString name{}; //!< モンスターの名称
