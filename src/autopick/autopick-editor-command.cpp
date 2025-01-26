@@ -26,6 +26,7 @@
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
+#include "util/string-processor.h"
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -401,9 +402,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
                 break;
             }
             tb->cx = tb->lines_list[tb->cy - 1]->length();
-            std::stringstream ss;
-            ss << *tb->lines_list[tb->cy - 1] << *tb->lines_list[tb->cy];
-            tb->lines_list[tb->cy - 1] = std::make_unique<std::string>(ss.str());
+            tb->lines_list[tb->cy - 1]->append(*tb->lines_list[tb->cy]);
 
             int i;
             for (i = tb->cy; tb->lines_list[i + 1]; i++) {
@@ -418,18 +417,10 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             break;
         }
 
-        auto first_half = 0;
-        for (auto i = 0; (*tb->lines_list[tb->cy])[i] != '\0' && i < tb->cx; i++) {
-            first_half = i;
-#ifdef JP
-            if (iskanji((*tb->lines_list[tb->cy])[i])) {
-                i++;
-            }
-#endif
-        }
-
-        tb->lines_list[tb->cy]->erase(first_half, tb->cx - first_half);
-        tb->cx = first_half;
+        const auto mb_chars = str_find_all_multibyte_chars(*tb->lines_list[tb->cy]);
+        const auto delete_bytes = mb_chars.contains(tb->cx - 2) ? 2 : 1;
+        tb->cx -= delete_bytes;
+        tb->lines_list[tb->cy]->erase(tb->cx, delete_bytes);
         tb->dirty_line = tb->cy;
         check_expression_line(tb, tb->cy);
         tb->changed = true;

@@ -94,7 +94,7 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
 {
     AutopickSearch as = as_initial;
     std::string buf = as.search_str;
-    const int len = 80;
+    constexpr auto max_len = 80;
     uint8_t color = TERM_YELLOW;
     if (as.item_ptr != nullptr) {
         color = TERM_L_GREEN;
@@ -114,56 +114,31 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
         switch (skey) {
         case SKEY_LEFT:
         case KTRL('b'): {
-            int i = 0;
             color = TERM_WHITE;
             if (pos == 0) {
                 break;
             }
 
-            while (true) {
-                int next_pos = i + 1;
-
-#ifdef JP
-                if (iskanji(buf[i])) {
-                    next_pos++;
-                }
-#endif
-                if (next_pos >= pos) {
-                    break;
-                }
-
-                i = next_pos;
-            }
-
-            pos = i;
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            pos = mb_chars.contains(pos - 2) ? pos - 2 : pos - 1;
             break;
         }
-
         case SKEY_RIGHT:
-        case KTRL('f'):
+        case KTRL('f'): {
             color = TERM_WHITE;
-            if ('\0' == buf[pos]) {
+            if (std::cmp_equal(pos, buf.length())) {
                 break;
             }
 
-#ifdef JP
-            if (iskanji(buf[pos])) {
-                pos += 2;
-            } else {
-                pos++;
-            }
-#else
-            pos++;
-#endif
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            pos = mb_chars.contains(pos) ? pos + 2 : pos + 1;
             break;
-
+        }
         case ESCAPE:
             return as;
-
         case KTRL('r'):
             back = true;
             [[fallthrough]];
-
         case '\n':
         case '\r':
         case KTRL('s'): {
@@ -186,50 +161,28 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
             }
 
             break;
-        case '\010': {
-            int i = 0;
+        case '\010': { // Backspace
             color = TERM_WHITE;
             if (pos == 0) {
                 break;
             }
 
-            while (true) {
-                int next_pos = i + 1;
-#ifdef JP
-                if (iskanji(buf[i])) {
-                    next_pos++;
-                }
-#endif
-                if (next_pos >= pos) {
-                    break;
-                }
-
-                i = next_pos;
-            }
-
-            pos = i;
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            const auto delete_bytes = mb_chars.contains(pos - 2) ? 2 : 1;
+            pos -= delete_bytes;
+            buf.erase(pos, delete_bytes);
+            break;
         }
-            [[fallthrough]];
-
-        case 0x7F:
+        case 0x7F: // Delete
         case KTRL('d'): {
-            int dst, src;
             color = TERM_WHITE;
-            if (buf[pos] == '\0') {
+            if (std::cmp_equal(pos, buf.length())) {
                 break;
             }
 
-            src = pos + 1;
-#ifdef JP
-            if (iskanji(buf[pos])) {
-                src++;
-            }
-#endif
-            dst = pos;
-            while ('\0' != (buf[dst++] = buf[src++])) {
-                ;
-            }
-
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            const auto delete_bytes = mb_chars.contains(pos) ? 2 : 1;
+            buf.erase(pos, delete_bytes);
             break;
         }
 
@@ -245,42 +198,31 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
                     as.search_str = "";
                 }
 
+                pos = 0;
                 buf = "";
                 color = TERM_WHITE;
             }
 
-            const auto tmp = buf.substr(pos);
 #ifdef JP
             if (iskanji(c)) {
                 inkey_base = true;
                 const auto next = inkey();
-                if (pos + 1 < len) {
-                    if (static_cast<int>(buf.length()) < pos) {
-                        buf[pos++] = c;
-                        buf[pos++] = next;
-                    } else {
-                        buf.push_back(c);
-                        buf.push_back(next);
-                        pos += 2;
-                    }
-                } else {
-                    bell();
+                if (std::cmp_less(buf.length(), max_len - 1)) {
+                    buf.insert(pos++, 1, c);
+                    buf.insert(pos++, 1, next);
+                    break;
                 }
-            } else
-#endif
-#ifdef JP
-                if (pos < len && (isprint(c) || iskana(c)))
+            } else if (isprint(c) || iskana(c)) {
 #else
-            if (pos < len && isprint(c))
+            if (isprint(c)) {
 #endif
-            {
-                buf.push_back(c);
-                pos++;
-            } else {
-                bell();
+                if (std::cmp_less(buf.length(), max_len)) {
+                    buf.insert(pos++, 1, c);
+                    break;
+                }
             }
 
-            buf += tmp.substr(0, len + 1);
+            bell();
             break;
         }
         }
@@ -290,8 +232,9 @@ AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearc
         }
 
         as.item_ptr = nullptr;
-        buf = "";
         as.search_str = "";
+        pos = 0;
+        buf = "";
     }
 }
 
