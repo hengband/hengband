@@ -38,4 +38,3 @@ private:
 
 class PlayerType;
 bool vault_aux_symbol_e(PlayerType *player_ptr, MonraceId r_idx);
-bool vault_aux_symbol_g(PlayerType *player_ptr, MonraceId r_idx);
