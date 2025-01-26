@@ -15,8 +15,7 @@
  */
 void check_expression_line(text_body_type *tb, int y)
 {
-    auto s = tb->lines_list[y];
-
+    const auto &s = *tb->lines_list[y];
     if ((s[0] == '?' && s[1] == ':') || (tb->states[y] & LSTAT_BYPASS)) {
         tb->dirty_flags |= DIRTY_EXPRESSION;
     }
@@ -40,10 +39,7 @@ bool can_insert_line(text_body_type *tb, int add_num)
  */
 bool insert_return_code(text_body_type *tb)
 {
-    char buf[MAX_LINELEN]{};
-    int i, j, num_lines;
-
-    num_lines = count_line(tb);
+    auto num_lines = count_line(tb);
     if (is_greater_autopick_max_line(num_lines)) {
         return false;
     }
@@ -51,23 +47,23 @@ bool insert_return_code(text_body_type *tb)
     num_lines--;
 
     for (; tb->cy < num_lines; num_lines--) {
-        tb->lines_list[num_lines + 1] = tb->lines_list[num_lines];
-        tb->states[num_lines + 1] = tb->states[num_lines];
+        std::swap(tb->lines_list[num_lines + 1], tb->lines_list[num_lines]);
+        std::swap(tb->states[num_lines + 1], tb->states[num_lines]);
     }
 
-    for (i = j = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++) {
+    std::string buf;
+    int i;
+    for (i = 0; ((*tb->lines_list[tb->cy])[i] != '\0') && (i < tb->cx); i++) {
 #ifdef JP
-        if (iskanji(tb->lines_list[tb->cy][i])) {
-            buf[j++] = tb->lines_list[tb->cy][i++];
+        if (iskanji((*tb->lines_list[tb->cy])[i])) {
+            buf.push_back((*tb->lines_list[tb->cy])[i++]);
         }
 #endif
-        buf[j++] = tb->lines_list[tb->cy][i];
+        buf.push_back((*tb->lines_list[tb->cy])[i]);
     }
 
-    buf[j] = '\0';
-    tb->lines_list[tb->cy + 1] = string_make(&tb->lines_list[tb->cy][i]);
-    string_free(tb->lines_list[tb->cy]);
-    tb->lines_list[tb->cy] = string_make(buf);
+    tb->lines_list[tb->cy + 1] = std::make_unique<std::string>(tb->lines_list[tb->cy]->substr(i));
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(std::move(buf));
     tb->dirty_flags |= DIRTY_EXPRESSION;
     tb->changed = true;
     return true;
@@ -104,8 +100,7 @@ bool insert_macro_line(text_body_type *tb)
 
     tb->cx = 0;
     insert_return_code(tb);
-    string_free(tb->lines_list[tb->cy]);
-    tb->lines_list[tb->cy] = string_make(format("P:%s", tmp).data());
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(format("P:%s", tmp));
 
     i = macro_find_exact(buf);
     if (i == -1) {
@@ -115,8 +110,7 @@ bool insert_macro_line(text_body_type *tb)
     }
 
     insert_return_code(tb);
-    string_free(tb->lines_list[tb->cy]);
-    tb->lines_list[tb->cy] = string_make(format("A:%s", tmp).data());
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(format("A:%s", tmp));
 
     return true;
 }
@@ -150,8 +144,7 @@ bool insert_keymap_line(text_body_type *tb)
 
     tb->cx = 0;
     insert_return_code(tb);
-    string_free(tb->lines_list[tb->cy]);
-    tb->lines_list[tb->cy] = string_make(format("C:%d:%s", mode, tmp).data());
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(format("C:%d:%s", mode, tmp));
 
     concptr act = keymap_act[mode][(byte)(buf[0])];
     if (act) {
@@ -159,8 +152,7 @@ bool insert_keymap_line(text_body_type *tb)
     }
 
     insert_return_code(tb);
-    string_free(tb->lines_list[tb->cy]);
-    tb->lines_list[tb->cy] = string_make(format("A:%s", tmp).data());
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(format("A:%s", tmp));
 
     return true;
 }
@@ -170,22 +162,19 @@ bool insert_keymap_line(text_body_type *tb)
  */
 void insert_single_letter(text_body_type *tb, int key)
 {
-    int i, j, len;
-    char buf[MAX_LINELEN]{};
-
-    for (i = j = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++) {
-        buf[j++] = tb->lines_list[tb->cy][i];
+    int i;
+    std::string buf;
+    for (i = 0; ((*tb->lines_list[tb->cy])[i] != '\0') && (i < tb->cx); i++) {
+        buf.push_back((*tb->lines_list[tb->cy])[i]);
     }
 
 #ifdef JP
     if (iskanji(key)) {
-        int next;
-
         inkey_base = true;
-        next = inkey();
-        if (j + 2 < MAX_LINELEN) {
-            buf[j++] = (char)key;
-            buf[j++] = (char)next;
+        const auto next = inkey();
+        if (buf.size() + 2 < MAX_LINELEN) {
+            buf.push_back(static_cast<char>(key));
+            buf.push_back(next);
             tb->cx += 2;
         } else {
             bell();
@@ -193,20 +182,18 @@ void insert_single_letter(text_body_type *tb, int key)
     } else
 #endif
     {
-        if (j + 1 < MAX_LINELEN) {
-            buf[j++] = (char)key;
+        if (buf.size() + 1 < MAX_LINELEN) {
+            buf.push_back(static_cast<char>(key));
         }
         tb->cx++;
     }
 
-    for (; tb->lines_list[tb->cy][i] && j + 1 < MAX_LINELEN; i++) {
-        buf[j++] = tb->lines_list[tb->cy][i];
+    for (; ((*tb->lines_list[tb->cy])[i] != '\0') && (buf.size() + 1 < MAX_LINELEN); i++) {
+        buf.push_back((*tb->lines_list[tb->cy])[i]);
     }
-    buf[j] = '\0';
 
-    string_free(tb->lines_list[tb->cy]);
-    tb->lines_list[tb->cy] = string_make(buf);
-    len = strlen(tb->lines_list[tb->cy]);
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(std::move(buf));
+    const int len = tb->lines_list[tb->cy]->length();
     if (len < tb->cx) {
         tb->cx = len;
     }
@@ -221,18 +208,15 @@ void insert_single_letter(text_body_type *tb, int key)
  */
 void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
 {
-    auto s = tb->lines_list[y];
-    if (whole && x0 == 0 && s[x1] == '\0' && tb->lines_list[y + 1]) {
-        string_free(tb->lines_list[y]);
-
+    auto &s = *tb->lines_list[y];
+    if (whole && (x0 == 0) && (s[x1] == '\0') && tb->lines_list[y + 1]) {
         int i;
         for (i = y; tb->lines_list[i + 1]; i++) {
-            tb->lines_list[i] = tb->lines_list[i + 1];
+            std::swap(tb->lines_list[i], tb->lines_list[i + 1]);
         }
-        tb->lines_list[i] = nullptr;
 
+        tb->lines_list[i].reset();
         tb->dirty_flags |= DIRTY_EXPRESSION;
-
         return;
     }
 
@@ -240,19 +224,16 @@ void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
         return;
     }
 
-    char buf[MAX_LINELEN]{};
-    char *d = buf;
-    for (int x = 0; x < x0; x++) {
-        *(d++) = s[x];
+    std::string buf;
+    for (auto x = 0; x < x0; x++) {
+        buf.push_back(s[x]);
     }
 
-    for (int x = x1; s[x]; x++) {
-        *(d++) = s[x];
+    for (auto x = x1; s[x]; x++) {
+        buf.push_back(s[x]);
     }
 
-    *d = '\0';
-    string_free(tb->lines_list[y]);
-    tb->lines_list[y] = string_make(buf);
+    tb->lines_list[y] = std::make_unique<std::string>(std::move(buf));
     check_expression_line(tb, y);
     tb->changed = true;
 }

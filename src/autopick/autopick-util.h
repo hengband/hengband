@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
-
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -41,33 +41,34 @@ struct autopick_type {
  */
 class ItemEntity;
 struct text_body_type {
+    text_body_type(int cx, int cy); //!< @details 画面表示はX→Yの順番であることが多いので一応揃える.
+    int cx;
+    int cy;
     int wid = 0;
     int hgt = 0;
-    int cx = 0;
-    int cy = 0;
     int upper = 0;
     int left = 0;
-    int old_wid = 0;
-    int old_hgt = 0;
-    int old_cy = 0;
-    int old_upper = 0;
-    int old_left = 0;
+    int old_wid = -1;
+    int old_hgt = -1;
+    int old_cy = -1;
+    int old_upper = -1;
+    int old_left = -1;
     int mx = 0;
     int my = 0;
     byte mark = 0;
 
     ItemEntity *search_o_ptr = nullptr;
-    concptr search_str = "";
-    concptr last_destroyed = "";
+    std::string search_str = "";
+    std::string last_destroyed = "";
 
     std::vector<std::string> yank{};
     bool yank_eol = false;
 
-    std::vector<concptr> lines_list{};
+    std::vector<std::unique_ptr<std::string>> lines_list;
     byte states[MAX_LINES]{};
 
     uint16_t dirty_flags = 0;
-    int dirty_line = 0;
+    int dirty_line = -1;
     int filename_mode = 0;
     int old_com_id = 0;
 
@@ -80,7 +81,6 @@ struct text_body_type {
 extern std::vector<autopick_type> autopick_list;
 extern ItemEntity autopick_last_destroyed_object;
 
-void free_text_lines(std::vector<concptr> &lines_list);
 int get_com_id(char key);
 void auto_inscribe_item(ItemEntity *o_ptr, int idx);
 int count_line(text_body_type *tb);

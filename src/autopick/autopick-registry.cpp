@@ -187,9 +187,8 @@ bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
     entry->action = DO_AUTODESTROY;
     autopick_list.push_back(*entry);
 
-    concptr tmp = autopick_line_from_entry(*entry);
-    fprintf(pref_fff, "%s\n", tmp);
-    string_free(tmp);
+    const auto line = autopick_line_from_entry(*entry);
+    fprintf(pref_fff, "%s\n", line.data());
     fclose(pref_fff);
     return true;
 }
