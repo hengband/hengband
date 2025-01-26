@@ -556,39 +556,55 @@ bool MonsterEntity::can_ring_boss_call_nazgul() const
 
 std::string MonsterEntity::build_looking_description(bool needs_attitude) const
 {
+    const auto description = this->build_damage_description();
+    const auto attitude = needs_attitude ? this->build_attitude_description() : "";
+    const std::string clone(this->mflag2.has(MonsterConstantFlagType::CLONED) ? ", clone" : "");
+    const auto &apparent_monrace = this->get_appearance_monrace();
+    if ((apparent_monrace.r_tkills > 0) && this->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
+        constexpr auto fmt = _("レベル%d, %s%s%s", "Level %d, %s%s%s");
+        return format(fmt, apparent_monrace.level, description.data(), attitude.data(), clone.data());
+    }
+
+    constexpr auto fmt = _("レベル???, %s%s%s", "Level ???, %s%s%s");
+    return format(fmt, description.data(), attitude.data(), clone.data());
+}
+
+std::string MonsterEntity::build_damage_description() const
+{
     const auto is_living = this->has_living_flag(true);
     const auto damage_ratio = this->maxhp > 0 ? 100L * this->hp / this->maxhp : 0;
-    std::string description;
     if (!this->ml) {
-        description = _("損傷具合不明", "damage unknown");
-    } else if (this->hp >= this->maxhp) {
-        description = is_living ? _("無傷", "unhurt") : _("無ダメージ", "undamaged");
-    } else if (damage_ratio >= 60) {
-        description = is_living ? _("軽傷", "somewhat wounded") : _("小ダメージ", "somewhat damaged");
-    } else if (damage_ratio >= 25) {
-        description = is_living ? _("負傷", "wounded") : _("中ダメージ", "damaged");
-    } else if (damage_ratio >= 10) {
-        description = is_living ? _("重傷", "badly wounded") : _("大ダメージ", "badly damaged");
-    } else {
-        description = is_living ? _("半死半生", "almost dead") : _("倒れかけ", "almost destroyed");
+        return _("損傷具合不明", "damage unknown");
     }
 
-    std::string attitude;
-    if (!needs_attitude) {
-        attitude = "";
-    } else if (this->is_pet()) {
-        attitude = _(", ペット", ", pet");
-    } else if (this->is_friendly()) {
-        attitude = _(", 友好的", ", friendly");
-    } else {
-        attitude = _("", "");
+    if (this->hp >= this->maxhp) {
+        return is_living ? _("無傷", "unhurt") : _("無ダメージ", "undamaged");
     }
 
-    const std::string clone(this->mflag2.has(MonsterConstantFlagType::CLONED) ? ", clone" : "");
-    MonraceDefinition *ap_r_ptr = &this->get_appearance_monrace();
-    if (ap_r_ptr->r_tkills && this->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
-        return format(_("レベル%d, %s%s%s", "Level %d, %s%s%s"), ap_r_ptr->level, description.data(), attitude.data(), clone.data());
+    if (damage_ratio >= 60) {
+        return is_living ? _("軽傷", "somewhat wounded") : _("小ダメージ", "somewhat damaged");
     }
 
-    return format(_("レベル???, %s%s%s", "Level ???, %s%s%s"), description.data(), attitude.data(), clone.data());
+    if (damage_ratio >= 25) {
+        return is_living ? _("負傷", "wounded") : _("中ダメージ", "damaged");
+    }
+
+    if (damage_ratio >= 10) {
+        return is_living ? _("重傷", "badly wounded") : _("大ダメージ", "badly damaged");
+    }
+
+    return is_living ? _("半死半生", "almost dead") : _("倒れかけ", "almost destroyed");
+}
+
+std::string MonsterEntity::build_attitude_description() const
+{
+    if (this->is_pet()) {
+        return _(", ペット", ", pet");
+    }
+
+    if (this->is_friendly()) {
+        return _(", 友好的", ", friendly");
+    }
+
+    return "";
 }

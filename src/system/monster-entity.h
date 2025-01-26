@@ -127,4 +127,6 @@ private:
 
     std::optional<bool> order_pet_named(const MonsterEntity &other) const;
     std::optional<bool> order_pet_hp(const MonsterEntity &other) const;
+    std::string build_damage_description() const;
+    std::string build_attitude_description() const;
 };
