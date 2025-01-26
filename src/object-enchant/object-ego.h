@@ -242,6 +242,11 @@ enum class RandomArtActType : short;
 class EgoItemDefinition {
 public:
     EgoItemDefinition() = default;
+    EgoItemDefinition(EgoItemDefinition &) = delete;
+    EgoItemDefinition &operator=(EgoItemDefinition &) = delete;
+    EgoItemDefinition(EgoItemDefinition &&) = default;
+    EgoItemDefinition &operator=(EgoItemDefinition &&) = delete;
+
     EgoType idx{};
 
     std::string name; //!< エゴの名前
