@@ -161,9 +161,9 @@ bool ArtifactList::order(const FixedArtifactId id1, const FixedArtifactId id2) c
     return id1 < id2;
 }
 
-void ArtifactList::emplace(const FixedArtifactId fa_id, const ArtifactType &artifact)
+void ArtifactList::emplace(const FixedArtifactId fa_id, ArtifactType &&artifact)
 {
-    this->artifacts.emplace(fa_id, artifact);
+    this->artifacts.emplace(fa_id, std::move(artifact));
 }
 
 void ArtifactList::reset_generated_flags()

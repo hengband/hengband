@@ -192,6 +192,6 @@ errr parse_artifacts_info(nlohmann::json &art_data, angband_header *)
         return err;
     }
 
-    ArtifactList::get_instance().emplace(artifact_id, artifact);
+    ArtifactList::get_instance().emplace(artifact_id, std::move(artifact));
     return PARSE_ERROR_NONE;
 }

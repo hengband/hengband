@@ -132,7 +132,7 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
         };
 
         auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result &= std::all_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [monrace](const auto &v) { return v == monrace.symbol_definition.character; });
+        result &= std::all_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [&monrace](const auto &v) { return v == monrace.symbol_definition.character; });
         return dungeon.mode == DungeonMode::AND ? result : !result;
     }
     case DungeonMode::OR:
@@ -152,7 +152,7 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
         };
 
         auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result |= std::any_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [monrace](const auto &v) { return v == monrace.symbol_definition.character; });
+        result |= std::any_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [&monrace](const auto &v) { return v == monrace.symbol_definition.character; });
         return dungeon.mode == DungeonMode::OR ? result : !result;
     }
     }
