@@ -197,6 +197,7 @@ public:
     bool is_suitable_for_undead_nest() const;
     bool is_suitable_for_dragon_nest(const EnumClassFlagGroup<MonsterAbilityType> &dragon_breaths) const;
     bool is_suitable_for_good_nest(char symbol) const;
+    bool is_suitable_for_evil_nest(char symbol) const;
 
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();

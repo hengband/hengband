@@ -251,7 +251,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::GOOD:
         return is_suitable_for_dungeon && monrace.is_suitable_for_good_nest(PitNestFilter::get_instance().get_monrace_symbol());
     case MonraceHook::EVIL:
-        return vault_aux_symbol_e(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_evil_nest(PitNestFilter::get_instance().get_monrace_symbol());
     case MonraceHook::MIMIC:
         return is_suitable_for_dungeon && monrace.is_suitable_for_mimic_nest();
     case MonraceHook::HORROR:
