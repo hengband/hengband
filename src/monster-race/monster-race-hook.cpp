@@ -140,31 +140,6 @@ void PitNestFilter::set_dragon_breaths()
 }
 
 /*!
- * @brief pit/nestの基準となる単種モンスターを決める /
- * @param player_ptr プレイヤーへの参照ポインタ
- */
-void vault_prep_clone(PlayerType *player_ptr)
-{
-    get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
-    const auto monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
-    PitNestFilter::get_instance().set_monrace_id(monrace_id);
-    get_mon_num_prep_enum(player_ptr);
-}
-
-/*!
- * @brief pit/nestの基準となるモンスターシンボルを決める /
- * @param player_ptr プレイヤーへの参照ポインタ
- */
-void vault_prep_symbol(PlayerType *player_ptr)
-{
-    get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
-    const auto monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
-    get_mon_num_prep_enum(player_ptr);
-    const auto symbol = MonraceList::get_instance().get_monrace(monrace_id).symbol_definition.character;
-    PitNestFilter::get_instance().set_monrace_symbol(symbol);
-}
-
-/*!
  * @brief モンスターが単一クローンnestの生成必要条件を満たしているかを返す /
  * Helper function for "monster nest (clone)"
  * @param r_idx 確認したいモンスター種族ID

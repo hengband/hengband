@@ -3,6 +3,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
+#include "monster/monster-util.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
@@ -13,17 +14,27 @@
 
 void nest_pit_type::prepare_filter(PlayerType *player_ptr) const
 {
+    auto &filter = PitNestFilter::get_instance();
     switch (this->pn_hook) {
     case PitNestHook::NONE:
         break;
-    case PitNestHook::CLONE:
-        vault_prep_clone(player_ptr);
+    case PitNestHook::CLONE: {
+        get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
+        const auto monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
+        filter.set_monrace_id(monrace_id);
+        get_mon_num_prep_enum(player_ptr);
         break;
-    case PitNestHook::SYMBOL:
-        vault_prep_symbol(player_ptr);
+    }
+    case PitNestHook::SYMBOL: {
+        get_mon_num_prep_enum(player_ptr, MonraceHook::VAULT);
+        const auto monrace_id = get_mon_num(player_ptr, 0, player_ptr->current_floor_ptr->dun_level + 10, PM_NONE);
+        get_mon_num_prep_enum(player_ptr);
+        const auto symbol = MonraceList::get_instance().get_monrace(monrace_id).symbol_definition.character;
+        filter.set_monrace_symbol(symbol);
         break;
+    }
     case PitNestHook::DRAGON:
-        PitNestFilter::get_instance().set_dragon_breaths();
+        filter.set_dragon_breaths();
         break;
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid hook! %d", enum2i(this->pn_hook)));
