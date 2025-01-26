@@ -17,25 +17,17 @@
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
-#include <array>
+#include "util/probability-table.h"
 #include <optional>
 #include <string>
 #include <utility>
 #include <vector>
-
-constexpr auto TERRAIN_PROBABILITY_NUM = 3;
 
 enum class DungeonMode {
     AND = 1,
     NAND = 2,
     OR = 3,
     NOR = 4,
-};
-
-class TerrainProbabilityEntry {
-public:
-    short terrain_id{}; //!< 地形ID.
-    int chance{}; //!< 確率(%).
 };
 
 /* A structure for the != dungeon types */
@@ -54,8 +46,8 @@ public:
     POSITION dy{};
     POSITION dx{};
 
-    std::array<TerrainProbabilityEntry, TERRAIN_PROBABILITY_NUM> floor{}; /* Floor probability */
-    std::array<TerrainProbabilityEntry, TERRAIN_PROBABILITY_NUM> fill{}; /* Cave wall probability */
+    ProbabilityTable<short> prob_table_floor{}; /* Floor probability */
+    ProbabilityTable<short> prob_table_wall{}; /* Cave wall probability */
     short outer_wall{}; /* 外壁の地形ID */
     short inner_wall{}; /* 内壁の地形ID */
     FEAT_IDX stream1{}; /* stream tile */
@@ -115,13 +107,7 @@ public:
 
     //!< @details ここから下は、地形など全ての定義ファイルを読み込んだ後に呼び出される初期化処理.
     void set_guardian_flag();
-    void set_floor_terrain_ids();
-    void set_wall_terrain_ids();
 
 private:
-    std::array<short, 100> floor_terrain_ids{};
-    std::array<short, 100> wall_terrain_ids{};
-
-    static std::array<short, 100> make_terrain_ids(const std::array<TerrainProbabilityEntry, TERRAIN_PROBABILITY_NUM> &prob_table);
     MonraceDefinition &get_guardian();
 };

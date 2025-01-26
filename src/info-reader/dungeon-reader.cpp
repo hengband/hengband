@@ -107,6 +107,24 @@ static bool grab_one_spell_monster_flag(DungeonDefinition &dungeon, std::string_
     return false;
 }
 
+static std::optional<ProbabilityTable<short>> parse_terrain_probability(std::span<const std::string> tokens)
+{
+    const auto &terrains = TerrainList::get_instance();
+    ProbabilityTable<short> prob_table;
+
+    for (auto i = 0; std::cmp_less(i + 1, tokens.size()); i += 2) {
+        try {
+            const auto terrain_id = terrains.get_terrain_id(tokens[i]);
+            const auto prob = static_cast<short>(std::stoi(tokens[i + 1]));
+            prob_table.entry_item(terrain_id, prob);
+        } catch (const std::exception &) {
+            return std::nullopt;
+        }
+    }
+
+    return prob_table;
+}
+
 /*!
  * @brief ダンジョン情報(DungeonsDefinition)のパース関数 /
  * @param buf テキスト列
@@ -217,48 +235,37 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
     }
 
     // L:floor_1:prob_1:floor_2:prob_2:floor_3:prob_3:tunnel_prob
+    constexpr auto terrain_probability_num = 3;
     if (tokens[0] == "L") {
-        if (tokens.size() < TERRAIN_PROBABILITY_NUM * 2 + 2) {
+        if (tokens.size() < terrain_probability_num * 2 + 2) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        for (size_t i = 0; i < TERRAIN_PROBABILITY_NUM; i++) {
-            auto feat_idx = i * 2 + 1;
-            auto per_idx = feat_idx + 1;
-            try {
-                dungeon->floor[i].terrain_id = terrains.get_terrain_id(tokens[feat_idx]);
-            } catch (const std::exception &) {
-                return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
-            }
-
-            info_set_value(dungeon->floor[i].chance, tokens[per_idx]);
+        auto prob_table = parse_terrain_probability(std::span(tokens.begin() + 1, terrain_probability_num * 2));
+        if (!prob_table) {
+            return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
         }
+        dungeon->prob_table_floor = std::move(*prob_table);
 
-        auto tunnel_idx = TERRAIN_PROBABILITY_NUM * 2 + 1;
+        auto tunnel_idx = terrain_probability_num * 2 + 1;
         info_set_value(dungeon->tunnel_percent, tokens[tunnel_idx]);
         return PARSE_ERROR_NONE;
     }
 
     // A:wall_1:prob_1:wall_2:prob_2:wall_3:prob_3:outer_wall:inner_wall:stream_1:stream_2
     if (tokens[0] == "A") {
-        if (tokens.size() < TERRAIN_PROBABILITY_NUM * 2 + 5) {
+        if (tokens.size() < terrain_probability_num * 2 + 5) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        for (int i = 0; i < TERRAIN_PROBABILITY_NUM; i++) {
-            auto feat_idx = i * 2 + 1;
-            auto prob_idx = feat_idx + 1;
-            try {
-                dungeon->fill[i].terrain_id = terrains.get_terrain_id(tokens[feat_idx]);
-            } catch (const std::exception &) {
-                return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
-            }
-
-            info_set_value(dungeon->fill[i].chance, tokens[prob_idx]);
+        auto prob_table = parse_terrain_probability(std::span(tokens.begin() + 1, terrain_probability_num * 2));
+        if (!prob_table) {
+            return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
         }
+        dungeon->prob_table_wall = std::move(*prob_table);
 
         try {
-            const std::span tags(tokens.begin() + TERRAIN_PROBABILITY_NUM * 2 + 1, 4);
+            const std::span tags(tokens.begin() + terrain_probability_num * 2 + 1, 4);
             dungeon->outer_wall = terrains.get_terrain_id(tags[0]);
             dungeon->inner_wall = terrains.get_terrain_id(tags[1]);
             dungeon->stream1 = terrains.get_terrain_id(tags[2]);
