@@ -20,6 +20,11 @@ enum class RandomArtActType : short;
 class BaseitemDefinition {
 public:
     BaseitemDefinition();
+    BaseitemDefinition(BaseitemDefinition &) = delete;
+    BaseitemDefinition &operator=(BaseitemDefinition &) = delete;
+    BaseitemDefinition(BaseitemDefinition &&) = default;
+    BaseitemDefinition &operator=(BaseitemDefinition &&) = delete;
+
     short idx{};
 
     std::string name; /*!< ベースアイテム名 */
