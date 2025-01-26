@@ -13,7 +13,8 @@
 #include "util/string-processor.h"
 #include "world/world.h"
 #include <algorithm>
-#ifndef JP
+#ifdef JP
+#else
 #include "locale/english.h"
 #endif
 

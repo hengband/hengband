@@ -1010,9 +1010,6 @@
     <ClCompile Include="..\..\src\object-enchant\activation-info-table.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-race\monster-race-hook.cpp">
-      <Filter>monster-race</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-sniper.cpp">
       <Filter>mind</Filter>
     </ClCompile>
@@ -3706,9 +3703,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h">
       <Filter>object-enchant</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\monster-race-hook.h">
-      <Filter>monster-race</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\drs-types.h">
       <Filter>mind</Filter>

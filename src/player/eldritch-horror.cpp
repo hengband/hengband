@@ -6,23 +6,16 @@
 
 #include "player/eldritch-horror.h"
 #include "core/stuff-handler.h"
-#include "locale/english.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/horror-descriptions.h"
 #include "monster/monster-describer.h"
-#include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "monster/smart-learn-types.h"
-#include "mutation/mutation-flag-types.h"
 #include "player-base/player-race.h"
 #include "player-info/mimic-info-table.h"
 #include "player/player-status-flags.h"
-#include "player/player-status.h"
 #include "status/bad-status-setter.h"
 #include "status/base-status.h"
-#include "system/angband-system.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -34,6 +27,10 @@
 #include "world/world.h"
 #include <string>
 #include <string_view>
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m_name, const MonraceDefinition &monrace)
 {

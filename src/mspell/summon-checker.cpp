@@ -1,15 +1,9 @@
 #include "mspell/summon-checker.h"
-#include "monster-attack/monster-attack-table.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster/monster-util.h"
 #include "player-base/player-race.h"
 #include "spell/summon-types.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
-#include "system/player-type-definition.h"
-#include "util/bit-flags-calculator.h"
-#include "util/string-processor.h"
 
 /*!
  * @brief 指定されたモンスター種族がsummon_specific_typeで指定された召喚条件に合うかどうかを返す

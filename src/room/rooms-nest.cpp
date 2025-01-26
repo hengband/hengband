@@ -4,26 +4,19 @@
 #include "grid/door.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-generator.h"
-#include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster/monster-info.h"
-#include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "room/door-definition.h"
 #include "room/pit-nest-util.h"
 #include "room/space-finder.h"
-#include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "util/probability-table.h"
 #include "wizard/wizard-messages.h"
+#include <algorithm>
 #include <array>
 #include <optional>
-#include <utility>
 #include <vector>
 
 namespace {

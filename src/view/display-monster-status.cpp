@@ -1,8 +1,4 @@
 #include "view/display-monster-status.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster/monster-flag-types.h"
-#include "monster/monster-info.h"
-#include "monster/smart-learn-types.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 

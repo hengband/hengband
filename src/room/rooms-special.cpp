@@ -1,14 +1,11 @@
 #include "room/rooms-special.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "floor//geometry.h"
-#include "floor/floor-generator.h"
 #include "game-option/cheat-types.h"
 #include "grid/door.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "object-enchant/item-apply-magic.h"
@@ -21,7 +18,6 @@
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
-#include "system/system-variables.h"
 #include "wizard/wizard-messages.h"
 
 namespace {
