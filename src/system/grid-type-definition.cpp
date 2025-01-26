@@ -275,7 +275,7 @@ const TerrainType &Grid::get_terrain(TerrainKind tk) const
 
 void Grid::place_closed_curtain()
 {
-    this->set_terrain_id(feat_door.at(DoorKind::CURTAIN).closed);
+    this->set_terrain_id(Doors::get_instance().get_door(DoorKind::CURTAIN).closed);
     this->info &= ~(CAVE_MASK);
 }
 

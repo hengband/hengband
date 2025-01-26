@@ -1,18 +1,15 @@
 #include "info-reader/feature-reader.h"
 #include "floor/wild.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "info-reader/feature-info-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "main/angband-headers.h"
 #include "room/door-definition.h"
-#include "system/enums/terrain/terrain-tag.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "util/bit-flags-calculator.h"
-#include "util/enum-range.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <map>
@@ -300,37 +297,6 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
  */
 void init_feat_variables()
 {
-    auto &terrains = TerrainList::get_instance();
-    terrains.emplace_tags();
-
-    /* Normal doors */
-    feat_door[DoorKind::DOOR].open = TerrainTag::OPEN_DOOR;
-    feat_door[DoorKind::DOOR].broken = TerrainTag::BROKEN_DOOR;
-    feat_door[DoorKind::DOOR].closed = TerrainTag::CLOSED_DOOR;
-
-    /* Glass doors */
-    feat_door[DoorKind::GLASS_DOOR].open = TerrainTag::OPEN_GLASS_DOOR;
-    feat_door[DoorKind::GLASS_DOOR].broken = TerrainTag::BROKEN_GLASS_DOOR;
-    feat_door[DoorKind::GLASS_DOOR].closed = TerrainTag::CLOSED_GLASS_DOOR;
-
-    constexpr auto locked_door_tags = EnumRangeInclusive(TerrainTag::LOCKED_DOOR_1, TerrainTag::LOCKED_DOOR_7);
-    feat_door[DoorKind::DOOR].locked.assign(locked_door_tags.begin(), locked_door_tags.end());
-
-    constexpr auto locked_glass_door_tags = EnumRangeInclusive(TerrainTag::LOCKED_GLASS_DOOR_1, TerrainTag::LOCKED_GLASS_DOOR_7);
-    feat_door[DoorKind::GLASS_DOOR].locked.assign(locked_glass_door_tags.begin(), locked_glass_door_tags.end());
-
-    constexpr auto jammed_door_tags = EnumRangeInclusive(TerrainTag::JAMMED_DOOR_0, TerrainTag::JAMMED_DOOR_7);
-    feat_door[DoorKind::DOOR].jammed.assign(jammed_door_tags.begin(), jammed_door_tags.end());
-
-    constexpr auto jammed_glass_door_tags = EnumRangeInclusive(TerrainTag::JAMMED_GLASS_DOOR_0, TerrainTag::JAMMED_GLASS_DOOR_7);
-    feat_door[DoorKind::GLASS_DOOR].jammed.assign(jammed_glass_door_tags.begin(), jammed_glass_door_tags.end());
-
-    /* Curtains */
-    feat_door[DoorKind::CURTAIN].open = TerrainTag::OPEN_CURTAIN;
-    feat_door[DoorKind::CURTAIN].broken = TerrainTag::OPEN_CURTAIN;
-    feat_door[DoorKind::CURTAIN].closed = TerrainTag::CLOSED_CURTAIN;
-    feat_door[DoorKind::CURTAIN].locked.push_back(TerrainTag::CLOSED_CURTAIN);
-    feat_door[DoorKind::CURTAIN].jammed.push_back(TerrainTag::CLOSED_CURTAIN);
-
+    TerrainList::get_instance().emplace_tags();
     init_wilderness_terrains();
 }

@@ -89,17 +89,16 @@ static void move_prob_list(RoomType dst, RoomType src, std::map<RoomType, int> &
  */
 bool generate_rooms(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    int crowded = 0;
+    constexpr auto max_rooms = 40; //!< 部屋生成処理の基本比率(ダンジョンのサイズに比例する).
+    auto &floor = *player_ptr->current_floor_ptr;
     std::map<RoomType, int> prob_list;
-    int rooms_built = 0;
-    int area_size = 100 * (floor_ptr->height * floor_ptr->width) / (MAX_HGT * MAX_WID);
-    int level_index = std::min(10, div_round(floor_ptr->dun_level, 10));
+    const auto area_size = 100 * (floor.height * floor.width) / (MAX_HGT * MAX_WID);
+    const auto level_index = std::min(10, div_round(floor.dun_level, 10));
     std::map<RoomType, int> room_num;
-    int dun_rooms = DUN_ROOMS_MAX * area_size / 100;
+    const auto dun_rooms = max_rooms * area_size / 100;
     room_info_type *room_info_ptr = room_info_normal;
     for (auto r : ROOM_TYPE_LIST) {
-        if (floor_ptr->dun_level < room_info_ptr[enum2i(r)].min_level) {
+        if (floor.dun_level < room_info_ptr[enum2i(r)].min_level) {
             prob_list[r] = 0;
         } else {
             prob_list[r] = room_info_ptr[enum2i(r)].prob[level_index];
@@ -111,7 +110,7 @@ bool generate_rooms(PlayerType *player_ptr, DungeonData *dd_ptr)
      * かつ「常に通常でない部屋を生成する」フラグがONならば、
      * GRATER_VAULTのみを生成対象とする。 / Ironman sees only Greater Vaults
      */
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const auto &dungeon = floor.get_dungeon_definition();
     if (ironman_rooms && dungeon.flags.has_none_of({ DungeonFeatureType::BEGINNER, DungeonFeatureType::CHAMELEON, DungeonFeatureType::SMALLEST })) {
         for (auto r : ROOM_TYPE_LIST) {
             if (r == RoomType::GREATER_VAULT) {
@@ -185,6 +184,8 @@ bool generate_rooms(PlayerType *player_ptr, DungeonData *dd_ptr)
         }
     }
 
+    auto rooms_built = 0;
+    auto crowded = 0;
     bool remain;
     while (true) {
         remain = false;
