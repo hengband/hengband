@@ -21,6 +21,7 @@
 #include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
+#include <set>
 
 text_body_type::text_body_type(int cx, int cy)
     : cx(cx)
@@ -101,6 +102,20 @@ static int analyze_move_key(text_body_type *tb, uint32_t skey)
     return com_id;
 }
 
+void text_body_type::adjust_cursor_column()
+{
+    this->cx = std::max(this->cx, this->rec_cx);
+    this->cx = std::min<int>(this->lines_list[this->cy]->length(), this->cx);
+}
+
+void text_body_type::update_cursor_column_record(int com_id)
+{
+    static const std::set record_cursor_column_commands = { EC_UP, EC_DOWN, EC_PGUP, EC_PGDOWN, EC_TOP, EC_BOTTOM };
+
+    const auto should_record = record_cursor_column_commands.contains(com_id);
+    this->rec_cx = should_record ? std::max(this->cx, this->rec_cx) : 0;
+}
+
 /*
  * In-game editor of Object Auto-picker/Destoryer
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -152,6 +167,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     screen_save();
     while (quit == APE_QUIT) {
         int com_id = 0;
+        tb->adjust_cursor_column();
         draw_text_editor(player_ptr, tb);
         prt(_("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)",
                 "(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)"),
@@ -185,7 +201,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
             }
 
             insert_single_letter(tb, key);
-            continue;
         } else {
             com_id = get_com_id((char)key);
         }
@@ -193,6 +208,8 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         if (com_id) {
             quit = do_editor_command(player_ptr, tb, com_id);
         }
+
+        tb->update_cursor_column_record(com_id);
     }
 
     screen_load();
