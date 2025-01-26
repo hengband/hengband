@@ -140,13 +140,12 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
             continue;
         }
 
-        const auto &msg = tb->lines_list[y];
-        if (!msg) {
+        if (!tb->lines_list[y]) {
             break;
         }
 
-        auto msg_ptr = msg->data();
-        for (auto j = 0; *msg_ptr != '\0'; msg_ptr++, j++) {
+        std::string_view msg(*tb->lines_list[y]);
+        for (auto j = 0; !msg.empty(); msg.remove_prefix(1), j++) {
             if (j == tb->left) {
                 break;
             }
@@ -155,8 +154,8 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
                 leftcol = 1;
                 break;
             }
-            if (iskanji(*msg_ptr)) {
-                msg_ptr++;
+            if (iskanji(msg.front())) {
+                msg.remove_prefix(1);
                 j++;
             }
 #endif
@@ -174,9 +173,9 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         }
 
         if (!tb->mark || (y < by1 || by2 < y)) {
-            term_putstr(leftcol, i + 1, tb->wid - 1, color, *msg);
+            term_putstr(leftcol, i + 1, tb->wid - 1, color, msg);
         } else if (by1 != by2) {
-            term_putstr(leftcol, i + 1, tb->wid - 1, TERM_YELLOW, *msg);
+            term_putstr(leftcol, i + 1, tb->wid - 1, TERM_YELLOW, msg);
         } else {
             const auto x0 = leftcol + tb->left;
             const int len = tb->lines_list[tb->cy]->length();
@@ -189,12 +188,12 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
 
             term_gotoxy(leftcol, i + 1);
             if (x0 < bx1) {
-                term_addstr(bx1 - x0, color, *msg);
+                term_addstr(bx1 - x0, color, msg);
             }
             if (x0 < bx2) {
-                term_addstr(bx2 - bx1, TERM_YELLOW, msg->substr(bx1 - x0));
+                term_addstr(bx2 - bx1, TERM_YELLOW, msg.substr(bx1 - x0));
             }
-            term_addstr(-1, color, msg->substr(bx2 - x0));
+            term_addstr(-1, color, msg.substr(bx2 - x0));
         }
     }
 
