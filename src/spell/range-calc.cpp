@@ -37,21 +37,20 @@ bool is_prevent_blast(PlayerType *player_ptr, const Pos2D &center, const Pos2D &
 /*
  * Find the distance from (x, y) to a line.
  */
-POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+int dist_to_line(const Pos2D &pos, const Pos2D &pos_line1, const Pos2D &pos_line2)
 {
-    POSITION py = y1 - y;
-    POSITION px = x1 - x;
-    POSITION ny = x2 - x1;
-    POSITION nx = y1 - y2;
-    POSITION pd = Grid::calc_distance({ y1, x1 }, { y, x });
-    POSITION nd = Grid::calc_distance({ y1, x1 }, { y2, x2 });
+    const auto pd = Grid::calc_distance(pos_line1, pos);
+    const auto nd = Grid::calc_distance(pos_line1, pos_line2);
 
     if (pd > nd) {
-        return Grid::calc_distance({ y, x }, { y2, x2 });
+        return Grid::calc_distance(pos, pos_line2);
     }
 
-    nd = ((nd) ? ((py * ny + px * nx) / nd) : 0);
-    return nd >= 0 ? nd : 0 - nd;
+    const auto vec_to_pos_line1 = pos_line1 - pos;
+    // pos_line1からpos_line2の法線ベクトル
+    const auto vec_normal = Pos2DVec(pos_line2.x - pos_line1.x, pos_line1.y - pos_line2.y);
+    const auto dist = (nd > 0) ? std::abs((vec_to_pos_line1.y * vec_normal.y + vec_to_pos_line1.x * vec_normal.x) / nd) : 0;
+    return dist;
 }
 
 /*

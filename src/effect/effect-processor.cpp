@@ -252,15 +252,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
     if (flag & (PROJECT_GRID)) {
         for (const auto &[dist, pos] : positions) {
-            if (breath) {
-                int d = dist_to_line(pos.y, pos.x, pos_source.y, pos_source.x, pos_impact.y, pos_impact.x);
-                if (affect_feature(player_ptr, src_idx, d, pos.y, pos.x, dam, typ)) {
-                    res.notice = true;
-                }
-            } else {
-                if (affect_feature(player_ptr, src_idx, dist, pos.y, pos.x, dam, typ)) {
-                    res.notice = true;
-                }
+            const auto effective_dist = breath ? dist_to_line(pos, pos_source, pos_impact) : dist;
+            if (affect_feature(player_ptr, src_idx, effective_dist, pos.y, pos.x, dam, typ)) {
+                res.notice = true;
             }
         }
     }
@@ -268,15 +262,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     update_creature(player_ptr);
     if (flag & (PROJECT_ITEM)) {
         for (const auto &[dist, pos] : positions) {
-            if (breath) {
-                int d = dist_to_line(pos.y, pos.x, pos_source.y, pos_source.x, pos_impact.y, pos_impact.x);
-                if (affect_item(player_ptr, src_idx, d, pos.y, pos.x, dam, typ)) {
-                    res.notice = true;
-                }
-            } else {
-                if (affect_item(player_ptr, src_idx, dist, pos.y, pos.x, dam, typ)) {
-                    res.notice = true;
-                }
+            const auto effective_dist = breath ? dist_to_line(pos, pos_source, pos_impact) : dist;
+            if (affect_item(player_ptr, src_idx, effective_dist, pos.y, pos.x, dam, typ)) {
+                res.notice = true;
             }
         }
     }
@@ -288,7 +276,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         project_m_y = 0;
         auto &tracker = LoreTracker::get_instance();
         for (const auto &[dist, pos] : positions) {
-            int effective_dist;
             const auto &grid = floor.get_grid(pos);
             if (positions.size() <= 1) {
                 auto *m_ptr = &floor.m_list[grid.m_idx];
@@ -336,11 +323,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             }
 
             /* Find the closest point in the blast */
-            if (breath) {
-                effective_dist = dist_to_line(pos.y, pos.x, pos_source.y, pos_source.x, pos_impact.y, pos_impact.x);
-            } else {
-                effective_dist = dist;
-            }
+            auto effective_dist = breath ? dist_to_line(pos, pos_source, pos_impact) : dist;
 
             if (player_ptr->riding && player_ptr->is_located_at(pos)) {
                 if (flag & PROJECT_PLAYER) {
@@ -420,17 +403,12 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
     if (flag & (PROJECT_KILL)) {
         for (const auto &[dist, pos] : positions) {
-            int effective_dist;
             if (!player_ptr->is_located_at(pos)) {
                 continue;
             }
 
             /* Find the closest point in the blast */
-            if (breath) {
-                effective_dist = dist_to_line(pos.y, pos.x, pos_source.y, pos_source.x, pos_impact.y, pos_impact.x);
-            } else {
-                effective_dist = dist;
-            }
+            auto effective_dist = breath ? dist_to_line(pos, pos_source, pos_impact) : dist;
 
             if (player_ptr->riding) {
                 if (flag & PROJECT_PLAYER) {
