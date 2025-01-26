@@ -195,12 +195,12 @@ DoorKind DungeonDefinition::select_door_kind() const
 
 short DungeonDefinition::select_floor_terrain_id() const
 {
-    return rand_choice(this->floor_terrain_ids);
+    return this->prob_table_floor.pick_one_at_random();
 }
 
 short DungeonDefinition::select_wall_terrain_id() const
 {
-    return rand_choice(this->wall_terrain_ids);
+    return this->prob_table_wall.pick_one_at_random();
 }
 
 void DungeonDefinition::set_guardian_flag()
@@ -209,49 +209,6 @@ void DungeonDefinition::set_guardian_flag()
         auto &monrace = this->get_guardian();
         monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
     }
-}
-
-void DungeonDefinition::set_floor_terrain_ids()
-{
-    this->floor_terrain_ids = this->make_terrain_ids(this->floor);
-}
-
-void DungeonDefinition::set_wall_terrain_ids()
-{
-    this->wall_terrain_ids = this->make_terrain_ids(this->fill);
-}
-
-/*!
- * @brief 地形生成確率の決定要素を確率テーブルから作成する
- * @param is_floor 床/地面ならtrue、壁ならfalse
- */
-std::array<short, 100> DungeonDefinition::make_terrain_ids(const std::array<TerrainProbabilityEntry, TERRAIN_PROBABILITY_NUM> &prob_table)
-{
-    std::array<int, TERRAIN_PROBABILITY_NUM> limits{};
-    limits[0] = prob_table[0].chance;
-    for (auto i = 1; i < TERRAIN_PROBABILITY_NUM; i++) {
-        limits[i] = limits[i - 1] + prob_table[i].chance;
-    }
-
-    if (limits[TERRAIN_PROBABILITY_NUM - 1] < 100) {
-        limits[TERRAIN_PROBABILITY_NUM - 1] = 100;
-    }
-
-    std::array<short, 100> ids{};
-    auto cur = 0;
-    for (auto i = 0; i < 100; i++) {
-        while (i == limits[cur]) {
-            cur++;
-        }
-
-        if (cur >= TERRAIN_PROBABILITY_NUM) {
-            THROW_EXCEPTION(std::logic_error, "Invalid probability table is generated!");
-        }
-
-        ids[i] = prob_table[cur].terrain_id;
-    }
-
-    return ids;
 }
 
 MonraceDefinition &DungeonDefinition::get_guardian()
