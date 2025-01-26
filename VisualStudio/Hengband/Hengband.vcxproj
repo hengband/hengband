@@ -1824,7 +1824,6 @@
     <ClCompile Include="..\..\src\view\display-lore-magics.cpp" />
     <ClCompile Include="..\..\src\view\display-lore-status.cpp" />
     <ClCompile Include="..\..\src\view\display-lore.cpp" />
-    <ClCompile Include="..\..\src\view\display-monster-status.cpp" />
     <ClCompile Include="..\..\src\view\display-player-middle.cpp" />
     <ClCompile Include="..\..\src\view\display-player-stat-info.cpp" />
     <ClCompile Include="..\..\src\view\display-player.cpp" />
@@ -1908,7 +1907,6 @@
     <ClInclude Include="..\..\src\view\display-lore.h" />
     <ClInclude Include="..\..\src\view\display-map.h" />
     <ClInclude Include="..\..\src\view\display-messages.h" />
-    <ClInclude Include="..\..\src\view\display-monster-status.h" />
     <ClInclude Include="..\..\src\view\display-self-info.h" />
     <ClInclude Include="..\..\src\view\display-scores.h" />
     <ClInclude Include="..\..\src\window\display-sub-windows.h" />

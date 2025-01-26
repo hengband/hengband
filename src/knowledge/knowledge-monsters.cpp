@@ -14,13 +14,9 @@
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "knowledge/monster-group-table.h"
-#include "locale/english.h"
 #include "lore/lore-util.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
-#include "monster/smart-learn-types.h"
 #include "pet/pet-util.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
@@ -29,16 +25,16 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "tracking/lore-tracker.h"
 #include "util/angband-files.h"
-#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
-#include "view/display-monster-status.h"
 #include "world/world.h"
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 /*!
  * @brief 特定の与えられた条件に応じてモンスターのIDリストを作成する / Build a list of monster indexes in the given group.
