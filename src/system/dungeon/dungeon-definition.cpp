@@ -1,7 +1,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "dungeon/dungeon-flag-mask.h"
 #include "floor/floor-base-definitions.h"
-#include "grid/feature.h"
+#include "grid/grid.h"
 #include "room/door-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -30,11 +30,6 @@ bool DungeonDefinition::has_river_flag() const
 bool DungeonDefinition::has_guardian() const
 {
     return this->final_guardian != MonraceId::PLAYER;
-}
-
-MonraceDefinition &DungeonDefinition::get_guardian()
-{
-    return MonraceList::get_instance().get_monrace(this->final_guardian);
 }
 
 const MonraceDefinition &DungeonDefinition::get_guardian() const
@@ -74,15 +69,15 @@ short DungeonDefinition::convert_terrain_id(short terrain_id) const
 
     switch (terrain.subtype) {
     case CONVERT_TYPE_FLOOR:
-        return rand_choice(feat_ground_type);
+        return this->select_floor_terrain_id();
     case CONVERT_TYPE_WALL:
-        return rand_choice(feat_wall_type);
+        return this->select_wall_terrain_id();
     case CONVERT_TYPE_INNER:
-        return feat_wall_inner;
+        return this->inner_wall;
     case CONVERT_TYPE_OUTER:
-        return feat_wall_outer;
+        return this->outer_wall;
     case CONVERT_TYPE_SOLID:
-        return feat_wall_solid;
+        return this->outer_wall;
     case CONVERT_TYPE_STREAM1:
         return this->stream1;
     case CONVERT_TYPE_STREAM2:
@@ -198,10 +193,68 @@ DoorKind DungeonDefinition::select_door_kind() const
     return DoorKind::DOOR;
 }
 
+short DungeonDefinition::select_floor_terrain_id() const
+{
+    return rand_choice(this->floor_terrain_ids);
+}
+
+short DungeonDefinition::select_wall_terrain_id() const
+{
+    return rand_choice(this->wall_terrain_ids);
+}
+
 void DungeonDefinition::set_guardian_flag()
 {
     if (this->has_guardian()) {
         auto &monrace = this->get_guardian();
         monrace.misc_flags.set(MonsterMiscType::GUARDIAN);
     }
+}
+
+void DungeonDefinition::set_floor_terrain_ids()
+{
+    this->floor_terrain_ids = this->make_terrain_ids(this->floor);
+}
+
+void DungeonDefinition::set_wall_terrain_ids()
+{
+    this->wall_terrain_ids = this->make_terrain_ids(this->fill);
+}
+
+/*!
+ * @brief 地形生成確率の決定要素を確率テーブルから作成する
+ * @param is_floor 床/地面ならtrue、壁ならfalse
+ */
+std::array<short, 100> DungeonDefinition::make_terrain_ids(const std::array<TerrainProbabilityEntry, TERRAIN_PROBABILITY_NUM> &prob_table)
+{
+    std::array<int, TERRAIN_PROBABILITY_NUM> limits{};
+    limits[0] = prob_table[0].chance;
+    for (auto i = 1; i < TERRAIN_PROBABILITY_NUM; i++) {
+        limits[i] = limits[i - 1] + prob_table[i].chance;
+    }
+
+    if (limits[TERRAIN_PROBABILITY_NUM - 1] < 100) {
+        limits[TERRAIN_PROBABILITY_NUM - 1] = 100;
+    }
+
+    std::array<short, 100> ids{};
+    auto cur = 0;
+    for (auto i = 0; i < 100; i++) {
+        while (i == limits[cur]) {
+            cur++;
+        }
+
+        if (cur >= TERRAIN_PROBABILITY_NUM) {
+            THROW_EXCEPTION(std::logic_error, "Invalid probability table is generated!");
+        }
+
+        ids[i] = prob_table[cur].terrain_id;
+    }
+
+    return ids;
+}
+
+MonraceDefinition &DungeonDefinition::get_guardian()
+{
+    return MonraceList::get_instance().get_monrace(this->final_guardian);
 }

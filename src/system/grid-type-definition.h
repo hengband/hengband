@@ -106,4 +106,5 @@ public:
     void add_info(int grid_info);
     void set_terrain_id(short terrain_id, TerrainKind tk = TerrainKind::NORMAL);
     void set_terrain_id(TerrainTag tag, TerrainKind tk = TerrainKind::NORMAL);
+    void set_door_id(short terrain_id_random);
 };

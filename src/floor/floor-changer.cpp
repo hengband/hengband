@@ -12,7 +12,6 @@
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"
 #include "load/floor-loader.h"
@@ -57,7 +56,6 @@ static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
     clear_cave(player_ptr);
     player_ptr->x = player_ptr->y = 0;
-    set_floor_and_wall(DungeonId::WILDERNESS);
     player_ptr->current_floor_ptr->height = SCREEN_HGT;
     player_ptr->current_floor_ptr->width = SCREEN_WID;
     for (POSITION y = 0; y < MAX_HGT; y++) {
@@ -231,7 +229,8 @@ static void set_player_grid(FloorType &floor, const Pos2D &p_pos)
     }
 
     if (fcms->has_any_of({ FloorChangeMode::DOWN, FloorChangeMode::UP })) {
-        grid.feat = rand_choice(feat_ground_type);
+        const auto &dungeon = floor.get_dungeon_definition();
+        grid.set_terrain_id(dungeon.select_floor_terrain_id());
     }
 
     grid.special = 0;

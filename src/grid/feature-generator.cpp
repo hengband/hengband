@@ -33,19 +33,19 @@ static bool decide_cavern(const FloorType &floor, const DungeonDefinition &dunge
 /*!
  * @brief フロアに破壊地形、洞窟、湖、溶岩、森林等を配置する.
  */
-void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_ptr, DungeonData *dd_ptr)
+void gen_caverns_and_lakes(PlayerType *player_ptr, const DungeonDefinition &dungeon, DungeonData *dd_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     constexpr auto chance_destroyed = 18;
-    if ((floor.dun_level > 30) && one_in_(chance_destroyed * 2) && small_levels && dungeon_ptr->flags.has(DungeonFeatureType::DESTROY)) {
+    if ((floor.dun_level > 30) && one_in_(chance_destroyed * 2) && small_levels && dungeon.flags.has(DungeonFeatureType::DESTROY)) {
         dd_ptr->destroyed = true;
         build_lake(player_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
     }
 
     constexpr auto chance_water = 24;
-    if (one_in_(chance_water) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
-        auto count = dungeon_ptr->calc_cavern_terrains();
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_LAVA)) {
+    if (one_in_(chance_water) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon.flags.has_any_of(DF_LAKE_MASK)) {
+        auto count = dungeon.calc_cavern_terrains();
+        if (dungeon.flags.has(DungeonFeatureType::LAKE_LAVA)) {
             if ((floor.dun_level > 80) && (randint0(count) < 2)) {
                 dd_ptr->laketype = LAKE_T_LAVA;
             }
@@ -58,7 +58,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
             count--;
         }
 
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_WATER) && !dd_ptr->laketype) {
+        if (dungeon.flags.has(DungeonFeatureType::LAKE_WATER) && !dd_ptr->laketype) {
             if ((floor.dun_level > 50) && randint0(count) < 2) {
                 dd_ptr->laketype = LAKE_T_WATER;
             }
@@ -71,7 +71,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
             count--;
         }
 
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_RUBBLE) && !dd_ptr->laketype) {
+        if (dungeon.flags.has(DungeonFeatureType::LAKE_RUBBLE) && !dd_ptr->laketype) {
             if ((floor.dun_level > 35) && (randint0(count) < 2)) {
                 dd_ptr->laketype = LAKE_T_CAVE;
             }
@@ -84,7 +84,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
             count--;
         }
 
-        if ((floor.dun_level > 5) && dungeon_ptr->flags.has(DungeonFeatureType::LAKE_TREE) && !dd_ptr->laketype) {
+        if ((floor.dun_level > 5) && dungeon.flags.has(DungeonFeatureType::LAKE_TREE) && !dd_ptr->laketype) {
             dd_ptr->laketype = LAKE_T_AIR_VAULT;
         }
 
@@ -94,7 +94,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
         }
     }
 
-    const auto should_build_cavern = decide_cavern(floor, *dungeon_ptr, *dd_ptr);
+    const auto should_build_cavern = decide_cavern(floor, dungeon, *dd_ptr);
     if (should_build_cavern) {
         dd_ptr->cavern = true;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));

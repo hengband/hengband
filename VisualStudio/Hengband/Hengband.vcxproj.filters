@@ -434,9 +434,6 @@
     <ClCompile Include="..\..\src\grid\trap.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\feature.cpp">
-      <Filter>grid</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\horror-descriptions.cpp">
       <Filter>monster</Filter>
     </ClCompile>
@@ -3016,9 +3013,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-summon.h">
       <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\grid\feature.h">
-      <Filter>grid</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\grid\grid.h">
       <Filter>grid</Filter>

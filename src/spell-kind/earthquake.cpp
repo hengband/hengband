@@ -1,27 +1,21 @@
 #include "spell-kind/earthquake.h"
-#include "core/window-redrawer.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-update.h"
-#include "monster/smart-learn-types.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-status-flags.h"
-#include "player/special-defense-types.h"
 #include "status/bad-status-setter.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -32,7 +26,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -270,6 +263,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
     }
 
     clear_mon_lite(&floor);
+    const auto &dungeon = floor.get_dungeon_definition();
     for (auto dy = -r; dy <= r; dy++) {
         for (auto dx = -r; dx <= r; dx++) {
             auto yy = cy + dy;
@@ -286,21 +280,21 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             delete_all_items_from_floor(player_ptr, pos.y, pos.x);
             const auto t = floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT) ? randint0(100) : 200;
             if (t < 20) {
-                cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
+                set_terrain_id_to_grid(player_ptr, pos, TerrainTag::GRANITE_WALL);
                 continue;
             }
 
             if (t < 70) {
-                cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
+                set_terrain_id_to_grid(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
                 continue;
             }
 
             if (t < 100) {
-                cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
+                set_terrain_id_to_grid(player_ptr, pos, TerrainTag::MAGMA_VEIN);
                 continue;
             }
 
-            cave_set_feat(player_ptr, pos.y, pos.x, rand_choice(feat_ground_type));
+            set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
         }
     }
 

@@ -1,15 +1,9 @@
 #include "dungeon/quest-completion-checker.h"
-#include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
-#include "monster/monster-info.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object-enchant/object-ego.h"
-#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -19,8 +13,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
-#include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <algorithm>
 
@@ -237,7 +229,7 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
     }
 
     msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
-    cave_set_feat(this->player_ptr, m_pos.y, m_pos.x, TerrainList::get_instance().get_terrain_id(TerrainTag::DOWN_STAIR));
+    set_terrain_id_to_grid(this->player_ptr, m_pos, TerrainTag::DOWN_STAIR);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
     return m_pos;
 }

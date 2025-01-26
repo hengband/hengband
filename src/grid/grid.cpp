@@ -15,32 +15,19 @@
  */
 
 #include "grid/grid.h"
-#include "core/window-redrawer.h"
-#include "dungeon/dungeon-flag-types.h"
-#include "dungeon/quest.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/floor-generator.h"
 #include "floor/geometry.h"
-#include "game-option/game-play-options.h"
 #include "game-option/map-screen-options.h"
-#include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "grid/object-placer.h"
-#include "grid/trap.h"
 #include "io/screen-util.h"
+#include "mind/mind-ninja.h"
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "object/item-tester-hooker.h"
-#include "object/object-mark-types.h"
-#include "player-info/class-info.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
-#include "room/rooms-builder.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/grid-flow.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -53,14 +40,9 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
-#include "term/term-color-types.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
-#include "util/enum-converter.h"
-#include "util/point-2d.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
-#include "view/display-symbol.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <queue>
@@ -72,6 +54,100 @@ bool GridTemplate::matches(const Grid &grid) const
     is_matched &= this->mimic == grid.mimic;
     is_matched &= this->special == grid.special;
     return is_matched;
+}
+
+void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag)
+{
+    set_terrain_id_to_grid(player_ptr, pos, TerrainList::get_instance().get_terrain_id(tag));
+}
+
+/*
+ * Change the "feat" flag for a grid, and notice/redraw the grid
+ */
+void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terrain_id)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid = floor.get_grid(pos);
+    const auto &terrain = TerrainList::get_instance().get_terrain(terrain_id);
+    const auto &dungeon = floor.get_dungeon_definition();
+    if (!AngbandWorld::get_instance().character_dungeon) {
+        grid.set_terrain_id(terrain_id);
+        grid.set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
+        if (terrain.flags.has(TerrainCharacteristics::GLOW) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS)) {
+            for (auto i = 0; i < 9; i++) {
+                const auto pos_neighbor = pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
+                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                    continue;
+                }
+
+                floor.get_grid(pos_neighbor).info |= CAVE_GLOW;
+            }
+        }
+
+        return;
+    }
+
+    const auto old_los = floor.has_terrain_characteristics(pos, TerrainCharacteristics::LOS);
+    const auto old_mirror = grid.is_mirror();
+    grid.set_terrain_id(terrain_id);
+    grid.set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
+    grid.info &= ~(CAVE_OBJECT);
+    if (old_mirror && dungeon.flags.has(DungeonFeatureType::DARKNESS)) {
+        grid.info &= ~(CAVE_GLOW);
+        if (!view_torch_grids) {
+            grid.info &= ~(CAVE_MARK);
+        }
+
+        update_local_illumination(player_ptr, pos.y, pos.x);
+    }
+
+    if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
+        grid.info &= ~(CAVE_MARK);
+    }
+
+    if (grid.has_monster()) {
+        update_monster(player_ptr, grid.m_idx, false);
+    }
+
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
+    if (old_los ^ terrain.flags.has(TerrainCharacteristics::LOS)) {
+        static constexpr auto flags = {
+            StatusRecalculatingFlag::VIEW,
+            StatusRecalculatingFlag::LITE,
+            StatusRecalculatingFlag::MONSTER_LITE,
+            StatusRecalculatingFlag::MONSTER_STATUSES,
+        };
+        RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    }
+
+    if (terrain.flags.has_not(TerrainCharacteristics::GLOW) || dungeon.flags.has(DungeonFeatureType::DARKNESS)) {
+        return;
+    }
+
+    for (auto i = 0; i < 9; i++) {
+        const auto pos_neighbor = pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
+        if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+            continue;
+        }
+
+        auto &grid_neighbor = floor.get_grid(pos_neighbor);
+        grid_neighbor.info |= CAVE_GLOW;
+        if (grid_neighbor.is_view()) {
+            if (grid_neighbor.has_monster()) {
+                update_monster(player_ptr, grid_neighbor.m_idx, false);
+            }
+
+            note_spot(player_ptr, pos_neighbor.y, pos_neighbor.x);
+            lite_spot(player_ptr, pos_neighbor.y, pos_neighbor.x);
+        }
+
+        update_local_illumination(player_ptr, pos_neighbor.y, pos_neighbor.x);
+    }
+
+    if (floor.get_grid(player_ptr->get_position()).info & CAVE_GLOW) {
+        set_superstealth(player_ptr, false);
+    }
 }
 
 /*!
@@ -732,8 +808,9 @@ void update_flow(PlayerType *player_ptr)
  */
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainCharacteristics action)
 {
+    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto old_terrain_id = floor.get_grid({ y, x }).feat;
+    const auto old_terrain_id = floor.get_grid(pos).feat;
     const auto &dungeon = floor.get_dungeon_definition();
     const auto new_terrain_id = dungeon.convert_terrain_id(old_terrain_id, action);
     if (new_terrain_id == old_terrain_id) {
@@ -741,7 +818,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     }
 
     /* Set the new feature */
-    cave_set_feat(player_ptr, y, x, new_terrain_id);
+    set_terrain_id_to_grid(player_ptr, pos, new_terrain_id);
     const auto &terrains = TerrainList::get_instance();
     const auto &world = AngbandWorld::get_instance();
     if (!TerrainType::has(action, TerrainAction::NO_DROP)) {
@@ -752,18 +829,18 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
         /* Handle gold */
         if (old_terrain.flags.has(TerrainCharacteristics::HAS_GOLD) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_GOLD)) {
             /* Place some gold */
-            place_gold(player_ptr, y, x);
+            place_gold(player_ptr, pos.y, pos.x);
             found = true;
         }
 
         /* Handle item */
         if (old_terrain.flags.has(TerrainCharacteristics::HAS_ITEM) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_ITEM) && evaluate_percent(15 - floor.dun_level / 2)) {
             /* Place object */
-            place_object(player_ptr, y, x, 0L);
+            place_object(player_ptr, pos.y, pos.x, 0L);
             found = true;
         }
 
-        if (found && world.character_dungeon && player_can_see_bold(player_ptr, y, x)) {
+        if (found && world.character_dungeon && player_can_see_bold(player_ptr, pos.y, pos.x)) {
             msg_print(_("何かを発見した！", "You have found something!"));
         }
     }
@@ -771,7 +848,7 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
     if (TerrainType::has(action, TerrainAction::CRASH_GLASS)) {
         const auto &old_terrain = terrains.get_terrain(old_terrain_id);
         if (old_terrain.flags.has(TerrainCharacteristics::GLASS) && world.character_dungeon) {
-            project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, y, x, std::min(floor.dun_level, 100) / 4, AttributeType::SHARDS,
+            project(player_ptr, PROJECT_WHO_GLASS_SHARDS, 1, pos.y, pos.x, std::min(floor.dun_level, 100) / 4, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_JUMP | PROJECT_NO_HANGEKI));
         }
     }
@@ -923,13 +1000,13 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
     const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
     switch (gb_type) {
     case GB_FLOOR: {
-        g_ptr->feat = rand_choice(feat_ground_type);
+        g_ptr->set_terrain_id(dungeon.select_floor_terrain_id());
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_FLOOR;
         break;
     }
     case GB_EXTRA: {
-        g_ptr->feat = rand_choice(feat_wall_type);
+        g_ptr->set_terrain_id(dungeon.select_wall_terrain_id());
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_EXTRA;
         break;
@@ -941,7 +1018,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_INNER: {
-        g_ptr->feat = feat_wall_inner;
+        g_ptr->set_terrain_id(dungeon.inner_wall);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_INNER;
         break;
@@ -953,17 +1030,18 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_OUTER: {
-        g_ptr->feat = feat_wall_outer;
+        g_ptr->set_terrain_id(dungeon.outer_wall);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_OUTER;
         break;
     }
     case GB_OUTER_NOPERM: {
-        const auto &terrain = TerrainList::get_instance().get_terrain(feat_wall_outer);
+        const auto &terrain = TerrainList::get_instance().get_terrain(dungeon.outer_wall);
         if (terrain.is_permanent_wall()) {
-            g_ptr->feat = dungeon.convert_terrain_id(feat_wall_outer, TerrainCharacteristics::UNPERM);
+            const auto terrain_id = dungeon.convert_terrain_id(dungeon.outer_wall, TerrainCharacteristics::UNPERM);
+            g_ptr->set_terrain_id(terrain_id);
         } else {
-            g_ptr->feat = feat_wall_outer;
+            g_ptr->set_terrain_id(dungeon.outer_wall);
         }
 
         g_ptr->info &= ~(CAVE_MASK);
@@ -971,7 +1049,7 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_SOLID: {
-        g_ptr->feat = feat_wall_solid;
+        g_ptr->set_terrain_id(dungeon.outer_wall);
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_SOLID;
         break;
@@ -983,11 +1061,12 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         break;
     }
     case GB_SOLID_NOPERM: {
-        const auto &terrain = TerrainList::get_instance().get_terrain(feat_wall_solid);
+        const auto &terrain = TerrainList::get_instance().get_terrain(dungeon.outer_wall);
         if ((g_ptr->info & CAVE_VAULT) && terrain.is_permanent_wall()) {
-            g_ptr->feat = dungeon.convert_terrain_id(feat_wall_solid, TerrainCharacteristics::UNPERM);
+            const auto terrain_id = dungeon.convert_terrain_id(dungeon.outer_wall, TerrainCharacteristics::UNPERM);
+            g_ptr->set_terrain_id(terrain_id);
         } else {
-            g_ptr->feat = feat_wall_solid;
+            g_ptr->set_terrain_id(dungeon.outer_wall);
         }
         g_ptr->info &= ~(CAVE_MASK);
         g_ptr->info |= CAVE_SOLID;

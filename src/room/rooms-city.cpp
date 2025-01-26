@@ -1,20 +1,15 @@
 #include "room/rooms-city.h"
-#include "floor/floor-generator.h"
 #include "game-option/cheat-types.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/space-finder.h"
-#include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-exceptions.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 #include <algorithm>
 
@@ -104,7 +99,7 @@ void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector
         const auto &ug_building = underground_buildings[i];
         const auto &rectangle = ug_building.get_inner_room(pos_ug);
         generate_fill_perm_bold(player_ptr, rectangle);
-        const auto pos = ug_building.pick_door_direction();
+        const auto vec = ug_building.pick_door_direction();
         const auto &terrains = TerrainList::get_instance();
         const auto end = terrains.end();
         const auto it = std::find_if(terrains.begin(), end,
@@ -115,7 +110,7 @@ void build_stores(PlayerType *player_ptr, const Pos2D &pos_ug, const std::vector
             continue;
         }
 
-        cave_set_feat(player_ptr, pos_ug.y + pos.y, pos_ug.x + pos.x, it->idx);
+        set_terrain_id_to_grid(player_ptr, pos_ug + vec, it->idx);
         store_init(VALID_TOWNS, stores[i]);
     }
 }
@@ -126,7 +121,7 @@ UndergroundBuilding::UndergroundBuilding()
 {
 }
 
-Pos2D UndergroundBuilding::pick_door_direction() const
+Pos2DVec UndergroundBuilding::pick_door_direction() const
 {
     switch (randint0(4)) {
     case 0: // Bottom

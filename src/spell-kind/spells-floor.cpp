@@ -6,23 +6,17 @@
 
 #include "spell-kind/spells-floor.h"
 #include "action/travel-execution.h"
-#include "cmd-io/cmd-dump.h"
-#include "core/window-redrawer.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
-#include "effect/attribute-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
-#include "floor/floor-save.h"
 #include "floor/floor-util.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
@@ -31,12 +25,7 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
-#include "monster/smart-learn-types.h"
-#include "object-enchant/special-object-flags.h"
-#include "object/object-mark-types.h"
-#include "perception/object-perception.h"
 #include "player/player-status-flags.h"
-#include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
 #include "status/bad-status-setter.h"
 #include "system/artifact-type-definition.h"
@@ -51,7 +40,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*
@@ -291,6 +279,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
     }
 
     /* Big area of affect */
+    const auto &dungeon = floor.get_dungeon_definition();
     auto flag = false;
     for (auto y = (y1 - r); y <= (y1 + r); y++) {
         for (auto x = (x1 - r); x <= (x1 + r); x++) {
@@ -395,16 +384,16 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             {
                 if (t < 20) {
                     /* Create granite wall */
-                    cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
+                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::GRANITE_WALL);
                 } else if (t < 70) {
                     /* Create quartz vein */
-                    cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
+                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
                 } else if (t < 100) {
                     /* Create magma vein */
-                    cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
+                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::MAGMA_VEIN);
                 } else {
                     /* Create floor */
-                    cave_set_feat(player_ptr, pos.y, pos.x, rand_choice(feat_ground_type));
+                    set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
                 }
 
                 continue;

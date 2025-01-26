@@ -23,11 +23,7 @@
 #include <utility>
 #include <vector>
 
-constexpr auto DUNGEON_FEAT_PROB_NUM = 3;
-
-enum class FixedArtifactId : short;
-enum class MonraceId : short;
-enum class MonsterSex;
+constexpr auto TERRAIN_PROBABILITY_NUM = 3;
 
 enum class DungeonMode {
     AND = 1,
@@ -36,13 +32,17 @@ enum class DungeonMode {
     NOR = 4,
 };
 
-struct feat_prob {
-    FEAT_IDX feat{}; /* Feature tile */
-    PERCENTAGE percent{}; /* Chance of type */
+class TerrainProbabilityEntry {
+public:
+    short terrain_id{}; //!< 地形ID.
+    int chance{}; //!< 確率(%).
 };
 
 /* A structure for the != dungeon types */
 enum class DoorKind;
+enum class FixedArtifactId : short;
+enum class MonraceId : short;
+enum class MonsterSex;
 enum class TerrainCharacteristics;
 enum class TerrainTag;
 class MonraceDefinition;
@@ -54,10 +54,10 @@ public:
     POSITION dy{};
     POSITION dx{};
 
-    std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> floor{}; /* Floor probability */
-    std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> fill{}; /* Cave wall probability */
-    FEAT_IDX outer_wall{}; /* Outer wall tile */
-    FEAT_IDX inner_wall{}; /* Inner wall tile */
+    std::array<TerrainProbabilityEntry, TERRAIN_PROBABILITY_NUM> floor{}; /* Floor probability */
+    std::array<TerrainProbabilityEntry, TERRAIN_PROBABILITY_NUM> fill{}; /* Cave wall probability */
+    short outer_wall{}; /* 外壁の地形ID */
+    short inner_wall{}; /* 内壁の地形ID */
     FEAT_IDX stream1{}; /* stream tile */
     FEAT_IDX stream2{}; /* stream tile */
 
@@ -100,7 +100,6 @@ public:
 
     bool has_river_flag() const;
     bool has_guardian() const;
-    MonraceDefinition &get_guardian();
     const MonraceDefinition &get_guardian() const;
     short convert_terrain_id(short terrain_id, TerrainCharacteristics action) const;
     short convert_terrain_id(short terrain_id) const;
@@ -111,6 +110,18 @@ public:
     int calc_cavern_terrains() const;
     std::optional<std::pair<TerrainTag, TerrainTag>> decide_river_terrains(int threshold) const;
     DoorKind select_door_kind() const;
+    short select_floor_terrain_id() const;
+    short select_wall_terrain_id() const;
 
+    //!< @details ここから下は、地形など全ての定義ファイルを読み込んだ後に呼び出される初期化処理.
     void set_guardian_flag();
+    void set_floor_terrain_ids();
+    void set_wall_terrain_ids();
+
+private:
+    std::array<short, 100> floor_terrain_ids{};
+    std::array<short, 100> wall_terrain_ids{};
+
+    static std::array<short, 100> make_terrain_ids(const std::array<TerrainProbabilityEntry, TERRAIN_PROBABILITY_NUM> &prob_table);
+    MonraceDefinition &get_guardian();
 };
