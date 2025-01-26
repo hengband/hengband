@@ -17,8 +17,6 @@
 enum class MonraceId : short;
 
 class MonraceDefinition;
-extern std::map<MonraceId, MonraceDefinition> monraces_info;
-
 class MonraceList : public util::AbstractMapWrapper<MonraceId, MonraceDefinition> {
 public:
     MonraceList(MonraceList &&) = delete;
@@ -34,7 +32,6 @@ public:
     static bool is_dark_elf(MonraceId monrace_id);
     static bool is_chapel(MonraceId monrace_id);
     MonraceDefinition &emplace(MonraceId monrace_id);
-    std::map<MonraceId, MonraceDefinition> &get_raw_map();
     MonraceDefinition &get_monrace(MonraceId monrace_id);
     const MonraceDefinition &get_monrace(MonraceId monrace_id) const;
     const std::vector<MonraceId> &get_valid_monrace_ids() const;
@@ -68,11 +65,12 @@ private:
     MonraceList() = default;
 
     static MonraceList instance;
+    std::map<MonraceId, MonraceDefinition> monraces;
 
     const static std::map<MonraceId, std::set<MonraceId>> unified_uniques;
 
     std::map<MonraceId, MonraceDefinition> &get_inner_container() override
     {
-        return monraces_info;
+        return this->monraces;
     }
 };

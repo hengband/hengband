@@ -11,6 +11,25 @@
 #include "util/enum-converter.h"
 #include "util/probability-table.h"
 
+void nest_pit_type::prepare_filter(PlayerType *player_ptr) const
+{
+    switch (this->pn_hook) {
+    case PitNestHook::NONE:
+        break;
+    case PitNestHook::CLONE:
+        vault_prep_clone(player_ptr);
+        break;
+    case PitNestHook::SYMBOL:
+        vault_prep_symbol(player_ptr);
+        break;
+    case PitNestHook::DRAGON:
+        PitNestFilter::get_instance().set_dragon_breaths();
+        break;
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid hook! %d", enum2i(this->pn_hook)));
+    }
+}
+
 /*!
  * @brief ダンジョン毎に指定されたピット配列を基準にランダムなnestタイプを決める
  * @param floor フロアへの参照
@@ -94,68 +113,4 @@ std::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, Mons
     }
 
     return std::nullopt;
-}
-
-/*!
- * @brief デバッグ時に生成されたpitの型を出力する処理
- * @param type pitの型ID
- * @return デバッグ表示文字列
- */
-std::string pit_subtype_string(PitKind type)
-{
-    switch (type) {
-    case PitKind::SYMBOL_GOOD:
-    case PitKind::SYMBOL_EVIL:
-        return std::string("(").append(1, vault_aux_char).append(1, ')');
-    case PitKind::DRAGON:
-        if (vault_aux_dragon_mask4.has_all_of({ MonsterAbilityType::BR_ACID, MonsterAbilityType::BR_ELEC, MonsterAbilityType::BR_FIRE, MonsterAbilityType::BR_COLD, MonsterAbilityType::BR_POIS })) {
-            return _("(万色)", "(multi-hued)");
-        }
-
-        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ACID)) {
-            return _("(酸)", "(acid)");
-        }
-
-        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_ELEC)) {
-            return _("(稲妻)", "(lightning)");
-        }
-
-        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_FIRE)) {
-            return _("(火炎)", "(fire)");
-        }
-
-        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_COLD)) {
-            return _("(冷気)", "(frost)");
-        }
-
-        if (vault_aux_dragon_mask4.has(MonsterAbilityType::BR_POIS)) {
-            return _("(毒)", "(poison)");
-        }
-
-        return _("(未定義)", "(undefined)"); // @todo 本来は例外を飛ばすべき.
-    default:
-        return "";
-    }
-}
-
-/*!
- * @brief デバッグ時に生成されたnestの型を出力する処理
- * @param type nestの型ID
- * @return デバッグ表示文字列
- */
-std::string nest_subtype_string(NestKind type)
-{
-    switch (type) {
-    case NestKind::CLONE: {
-        const auto &monrace = MonraceList::get_instance().get_monrace(vault_aux_race);
-        std::stringstream ss;
-        ss << '(' << monrace.name << ')';
-        return ss.str();
-    }
-    case NestKind::SYMBOL_GOOD:
-    case NestKind::SYMBOL_EVIL:
-        return std::string("(").append(1, vault_aux_char).append(1, ')');
-    default:
-        return "";
-    }
 }

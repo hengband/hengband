@@ -50,8 +50,6 @@ const std::set<MonraceId> NON_ANGEL_RACES = {
 };
 }
 
-std::map<MonraceId, MonraceDefinition> monraces_info;
-
 const std::map<MonraceId, std::set<MonraceId>> MonraceList::unified_uniques = {
     { MonraceId::BANORLUPART, { MonraceId::BANOR, MonraceId::LUPART } },
 };
@@ -103,12 +101,7 @@ bool MonraceList::is_chapel(MonraceId monrace_id)
 
 MonraceDefinition &MonraceList::emplace(MonraceId monrace_id)
 {
-    return monraces_info.emplace_hint(monraces_info.end(), monrace_id, MonraceDefinition{})->second;
-}
-
-std::map<MonraceId, MonraceDefinition> &MonraceList::get_raw_map()
-{
-    return monraces_info;
+    return this->monraces.emplace_hint(this->monraces.end(), monrace_id, MonraceDefinition{})->second;
 }
 
 /*!
@@ -119,7 +112,7 @@ std::map<MonraceId, MonraceDefinition> &MonraceList::get_raw_map()
  */
 MonraceDefinition &MonraceList::get_monrace(MonraceId monrace_id)
 {
-    return monraces_info.at(monrace_id);
+    return this->monraces.at(monrace_id);
 }
 
 /*!
@@ -130,7 +123,7 @@ MonraceDefinition &MonraceList::get_monrace(MonraceId monrace_id)
  */
 const MonraceDefinition &MonraceList::get_monrace(MonraceId monrace_id) const
 {
-    return monraces_info.at(monrace_id);
+    return this->monraces.at(monrace_id);
 }
 
 const std::vector<MonraceId> &MonraceList::get_valid_monrace_ids() const
@@ -140,7 +133,7 @@ const std::vector<MonraceId> &MonraceList::get_valid_monrace_ids() const
         return valid_monraces;
     }
 
-    std::transform(++monraces_info.begin(), monraces_info.end(), std::back_inserter(valid_monraces), [](auto &x) { return x.first; });
+    std::transform(++this->monraces.begin(), this->monraces.end(), std::back_inserter(valid_monraces), [](auto &x) { return x.first; });
     return valid_monraces;
 }
 
@@ -155,7 +148,7 @@ std::vector<MonraceId> MonraceList::search(std::function<bool(const MonraceDefin
 {
     std::vector<MonraceId> result_ids;
 
-    for (const auto &[id, monrace] : monraces_info) {
+    for (const auto &[id, monrace] : this->monraces) {
         if (!monrace.is_valid()) {
             continue;
         }
@@ -231,7 +224,7 @@ const std::vector<std::pair<MonraceId, const MonraceDefinition *>> &MonraceList:
         return sorted_monraces;
     }
 
-    for (const auto &pair : monraces_info) {
+    for (const auto &pair : this->monraces) {
         if (pair.second.is_valid()) {
             sorted_monraces.emplace_back(pair.first, &pair.second);
         }
@@ -375,8 +368,8 @@ MonraceId MonraceList::select_random_separated_unique_of(MonraceId monrace_id) c
 
 bool MonraceList::order(MonraceId id1, MonraceId id2, bool is_detailed) const
 {
-    const auto &monrace1 = monraces_info[id1];
-    const auto &monrace2 = monraces_info[id2];
+    const auto &monrace1 = this->monraces.at(id1);
+    const auto &monrace2 = this->monraces.at(id2);
     if (is_detailed) {
         const auto pkills1 = monrace1.r_pkills;
         const auto pkills2 = monrace2.r_pkills;
@@ -458,7 +451,7 @@ MonraceId MonraceList::pick_id_at_random() const
 {
     static ProbabilityTable<MonraceId> table;
     if (table.empty()) {
-        for (const auto &[monrace_id, monrace] : monraces_info) {
+        for (const auto &[monrace_id, monrace] : this->monraces) {
             if (monrace.is_valid()) {
                 table.entry_item(monrace_id, 1);
             }
@@ -470,13 +463,13 @@ MonraceId MonraceList::pick_id_at_random() const
 
 const MonraceDefinition &MonraceList::pick_monrace_at_random() const
 {
-    return monraces_info.at(this->pick_id_at_random());
+    return this->monraces.at(this->pick_id_at_random());
 }
 
 int MonraceList::calc_defeat_count() const
 {
     auto total = 0;
-    for (const auto &[_, monrace] : monraces_info) {
+    for (const auto &[_, monrace] : this->monraces) {
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             if (monrace.is_dead_unique()) {
                 total++;
@@ -517,14 +510,14 @@ MonraceId MonraceList::select_figurine(int max_level) const
  */
 void MonraceList::reset_current_numbers()
 {
-    for (auto &[_, monrace] : monraces_info) {
+    for (auto &[_, monrace] : this->monraces) {
         monrace.reset_current_numbers();
     }
 }
 
 void MonraceList::reset_all_visuals()
 {
-    for (auto &[_, monrace] : monraces_info) {
+    for (auto &[_, monrace] : this->monraces) {
         monrace.symbol_config = monrace.symbol_definition;
     }
 }
