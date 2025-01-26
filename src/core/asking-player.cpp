@@ -24,15 +24,6 @@
 #include <stdexcept>
 #include <string>
 
-namespace {
-std::vector<char> clear_buffer(int len, std::string_view initial_value)
-{
-    std::vector<char> buf(len + 1, '\0');
-    initial_value.copy(buf.data(), len);
-    return buf;
-}
-}
-
 /*
  * Get some string input at the cursor location.
  * Assume the buffer is initialized to a default string.
@@ -73,56 +64,36 @@ std::optional<std::string> askfor(int len, std::string_view initial_value, bool 
         len = MAIN_TERM_MIN_COLS - x;
     }
 
-    auto buf = clear_buffer(len, initial_value);
+    std::string buf(initial_value);
     auto pos = 0;
     while (true) {
-        term_erase(x, y, len);
-        term_putstr(x, y, -1, color, buf.data());
+        term_erase(x, y);
+        term_putstr(x, y, -1, color, buf);
         term_gotoxy(x + pos, y);
         const auto skey = inkey_special(numpad_cursor);
         switch (skey) {
         case SKEY_LEFT:
         case KTRL('b'): {
-            auto i = 0;
             color = TERM_WHITE;
             if (0 == pos) {
                 break;
             }
 
-            while (true) {
-                auto next_pos = i + 1;
-#ifdef JP
-                if (iskanji(buf[i])) {
-                    next_pos++;
-                }
-#endif
-                if (next_pos >= pos) {
-                    break;
-                }
-
-                i = next_pos;
-            }
-
-            pos = i;
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            pos = mb_chars.contains(pos - 2) ? pos - 2 : pos - 1;
             break;
         }
         case SKEY_RIGHT:
-        case KTRL('f'):
+        case KTRL('f'): {
             color = TERM_WHITE;
-            if ('\0' == buf[pos]) {
+            if (std::cmp_equal(pos, buf.length())) {
                 break;
             }
 
-#ifdef JP
-            if (iskanji(buf[pos])) {
-                pos += 2;
-            } else {
-                pos++;
-            }
-#else
-            pos++;
-#endif
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            pos = mb_chars.contains(pos) ? pos + 2 : pos + 1;
             break;
+        }
         case SKEY_HOME:
         case KTRL('a'):
             color = TERM_WHITE;
@@ -131,55 +102,35 @@ std::optional<std::string> askfor(int len, std::string_view initial_value, bool 
         case SKEY_END:
         case KTRL('e'):
             color = TERM_WHITE;
-            pos = std::string_view(buf.data()).length();
+            pos = buf.length();
             break;
         case ESCAPE:
             return std::nullopt;
         case '\n':
         case '\r':
-            return buf.data();
-        case '\010': {
-            auto i = 0;
+            return buf;
+        case '\010': { // Backspace
             color = TERM_WHITE;
             if (pos == 0) {
                 break;
             }
 
-            while (true) {
-                auto next_pos = i + 1;
-#ifdef JP
-                if (iskanji(buf[i])) {
-                    next_pos++;
-                }
-#endif
-                if (next_pos >= pos) {
-                    break;
-                }
-
-                i = next_pos;
-            }
-
-            pos = i;
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            const auto delete_bytes = mb_chars.contains(pos - 2) ? 2 : 1;
+            pos -= delete_bytes;
+            buf.erase(pos, delete_bytes);
+            break;
         }
-            [[fallthrough]];
-        case 0x7F:
+        case 0x7F: // Delete
         case KTRL('d'): {
             color = TERM_WHITE;
-            if (buf[pos] == '\0') {
+            if (std::cmp_equal(pos, buf.length())) {
                 break;
             }
 
-            auto src = pos + 1;
-#ifdef JP
-            if (iskanji(buf[pos])) {
-                src++;
-            }
-#endif
-            auto dst = pos;
-            while ('\0' != (buf[dst++] = buf[src++])) {
-                ;
-            }
-
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            const auto delete_bytes = mb_chars.contains(pos) ? 2 : 1;
+            buf.erase(pos, delete_bytes);
             break;
         }
         default: {
@@ -189,34 +140,30 @@ std::optional<std::string> askfor(int len, std::string_view initial_value, bool 
 
             const auto c = static_cast<char>(skey);
             if (color == TERM_YELLOW) {
-                buf = clear_buffer(len, "");
+                buf = "";
                 color = TERM_WHITE;
             }
 
-            const auto str_right_cursor = std::string(buf.data()).substr(pos);
 #ifdef JP
             if (iskanji(c)) {
                 inkey_base = true;
-                char next = inkey();
-                if (pos + 1 < len) {
-                    buf[pos++] = c;
-                    buf[pos++] = next;
-                } else {
-                    bell();
+                const auto next = inkey();
+                if (std::cmp_less(buf.length(), len - 1)) {
+                    buf.insert(pos++, 1, c);
+                    buf.insert(pos++, 1, next);
+                    break;
                 }
-            } else
+            } else if (isprint(c) || iskana(c)) {
+#else
+            if (isprint(c)) {
 #endif
-            {
-                const auto is_print = _(isprint(c) || iskana(c), isprint(c));
-                if (pos < len && is_print) {
-                    buf[pos++] = c;
-                } else {
-                    bell();
+                if (std::cmp_less(buf.length(), len)) {
+                    buf.insert(pos++, 1, c);
+                    break;
                 }
             }
 
-            buf[pos] = '\0';
-            angband_strcat(buf.data(), str_right_cursor, buf.size());
+            bell();
             break;
         }
         }

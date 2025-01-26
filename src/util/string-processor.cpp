@@ -887,3 +887,26 @@ std::string str_tolower(std::string_view str)
 
     return lc_str;
 }
+
+/*!
+ * @brief 文字列に含まれるすべてのマルチバイト文字のインデックスを取得する
+ *
+ * @param str 文字列
+ * @return std::set<int> マルチバイト文字のインデックスの集合
+ */
+std::set<int> str_find_all_multibyte_chars([[maybe_unused]] std::string_view str)
+{
+#ifdef JP
+    std::set<int> mb_chars;
+    for (auto i = 0; std::cmp_less(i, str.length()); ++i) {
+        if (iskanji(str[i])) {
+            mb_chars.insert(mb_chars.end(), i);
+            ++i;
+        }
+    }
+
+    return mb_chars;
+#else
+    return {};
+#endif
+}
