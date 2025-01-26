@@ -67,15 +67,7 @@ void place_secret_door(PlayerType *player_ptr, const Pos2D &pos, std::optional<D
     auto &grid = floor.get_grid(pos);
     if (door_kind != DoorKind::CURTAIN) {
         grid.set_terrain_id(dungeon.inner_wall, TerrainKind::MIMIC);
-        if (grid.has_los_terrain(TerrainKind::MIMIC_RAW) && !grid.has_los_terrain()) {
-            const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC_RAW);
-            if (terrain_mimic.flags.has(TerrainCharacteristics::MOVE) || terrain_mimic.flags.has(TerrainCharacteristics::CAN_FLY)) {
-                const auto terrain_id = one_in_(2) ? grid.mimic : dungeon.select_floor_terrain_id();
-                grid.set_terrain_id(terrain_id);
-            }
-
-            grid.set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
-        }
+        grid.set_door_id(dungeon.select_floor_terrain_id());
     }
 
     grid.info &= ~(CAVE_FLOOR);
@@ -134,15 +126,7 @@ void place_random_door(PlayerType *player_ptr, const Pos2D &pos, bool is_room_do
         if (door_kind != DoorKind::CURTAIN) {
             const auto mimic_terrain_id = is_room_door ? dungeon.outer_wall : dungeon.select_wall_terrain_id();
             grid.set_terrain_id(mimic_terrain_id, TerrainKind::MIMIC);
-            if (grid.has_los_terrain(TerrainKind::MIMIC_RAW) && !grid.has_los_terrain()) {
-                const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC_RAW);
-                if (terrain_mimic.flags.has(TerrainCharacteristics::MOVE) || terrain_mimic.flags.has(TerrainCharacteristics::CAN_FLY)) {
-                    const auto terrain_id = one_in_(2) ? grid.mimic : dungeon.select_floor_terrain_id();
-                    grid.set_terrain_id(terrain_id);
-                }
-
-                grid.set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
-            }
+            grid.set_door_id(dungeon.select_floor_terrain_id());
         }
     } else {
         place_closed_door(player_ptr, pos, door_kind);

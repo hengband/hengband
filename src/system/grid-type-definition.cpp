@@ -3,6 +3,7 @@
 #include "room/door-definition.h"
 #include "system/angband-system.h"
 #include "system/enums/grid-flow.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
@@ -307,4 +308,19 @@ void Grid::set_terrain_id(short terrain_id, TerrainKind tk)
 void Grid::set_terrain_id(TerrainTag tag, TerrainKind tk)
 {
     this->set_terrain_id(TerrainList::get_instance().get_terrain_id(tag), tk);
+}
+
+void Grid::set_door_id(short terrain_id_random)
+{
+    if (!this->has_los_terrain(TerrainKind::MIMIC_RAW) || this->has_los_terrain()) {
+        return;
+    }
+
+    const auto &terrain_mimic = this->get_terrain(TerrainKind::MIMIC_RAW);
+    if (terrain_mimic.flags.has(TerrainCharacteristics::MOVE) || terrain_mimic.flags.has(TerrainCharacteristics::CAN_FLY)) {
+        const auto terrain_id = one_in_(2) ? this->mimic : terrain_id_random;
+        this->set_terrain_id(terrain_id);
+    }
+
+    this->set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
 }
