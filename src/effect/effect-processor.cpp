@@ -213,11 +213,13 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         auto drawn = false;
         auto pos_total = 0;
         for (auto dist_step = 0; std::cmp_less(pos_total, positions.size()); ++dist_step) {
+            auto can_see_disi = breath && any_bits(flag, PROJECT_DISI) && floor.has_los(pos_source);
+            can_see_disi |= !breath && any_bits(flag, PROJECT_DISI) && floor.has_los(pos_impact);
             for (const auto &[dist, pos] : positions) {
                 if (dist != dist_step) {
                     continue;
                 }
-                if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
+                if (panel_contains(pos.y, pos.x) && (can_see_disi || floor.has_los(pos))) {
                     drawn = true;
                     print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
                 }
