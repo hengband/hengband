@@ -123,7 +123,7 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
 
         t_friends++;
         const auto pet_name = monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-        fprintf(fff, "%s (%s)\n", pet_name.data(), look_mon_desc(m_ptr, 0x00).data());
+        fprintf(fff, "%s (%s)\n", pet_name.data(), m_ptr->build_looking_description(true).data());
     }
 
     int show_upkeep = calculate_upkeep(player_ptr);

@@ -110,6 +110,7 @@ public:
     Pos2D get_position() const;
     Pos2D get_target_position() const;
     bool can_ring_boss_call_nazgul() const;
+    std::string build_looking_description(bool needs_attitude) const;
 
     void set_individual_speed(bool force_fixed_speed);
     void set_position(const Pos2D &pos);
