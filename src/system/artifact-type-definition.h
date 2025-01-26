@@ -20,6 +20,10 @@ enum class RandomArtActType : short;
 class ArtifactType {
 public:
     ArtifactType();
+    ArtifactType(const ArtifactType &) = delete;
+    ArtifactType &operator=(const ArtifactType &) = delete;
+    ArtifactType(ArtifactType &&) = default;
+    ArtifactType &operator=(ArtifactType &&) = delete;
 
     std::string name; /*!< アーティファクト名 / Name */
     std::string text; /*!< アーティファクト解説 / Text */
@@ -64,7 +68,7 @@ public:
     ArtifactType &get_artifact(const FixedArtifactId fa_id);
 
     bool order(const FixedArtifactId id1, const FixedArtifactId id2) const;
-    void emplace(const FixedArtifactId fa_id, const ArtifactType &artifact);
+    void emplace(const FixedArtifactId fa_id, ArtifactType &&artifact);
     void reset_generated_flags();
     std::optional<ItemEntity> try_make_instant_artifact(int making_level) const;
 
