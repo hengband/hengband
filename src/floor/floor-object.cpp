@@ -276,15 +276,9 @@ ObjectIndexList &get_o_idx_list_contains(FloorType *floor_ptr, OBJECT_IDX o_idx)
  */
 short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std::optional<int> chance)
 {
-    int i, k, d, s;
-    POSITION dy, dx;
-    POSITION ty, tx = 0;
-    Grid *g_ptr;
-    bool flag = false;
-    bool done = false;
 #ifdef JP
 #else
-    bool plural = (j_ptr->number != 1);
+    const auto plural = (j_ptr->number != 1);
 #endif
     const auto &world = AngbandWorld::get_instance();
     const auto item_name = describe_flavor(player_ptr, *j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -301,37 +295,35 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
         return 0;
     }
 
-    int bs = -1;
-    int bn = 0;
-
-    auto by = pos.y;
-    auto bx = pos.x;
+    Pos2D pos_drop = pos; //!< @details 実際に落ちる座標.
+    auto bs = -1;
+    auto bn = 0;
     auto &floor = *player_ptr->current_floor_ptr;
-    for (dy = -3; dy <= 3; dy++) {
-        for (dx = -3; dx <= 3; dx++) {
-            bool comb = false;
-            d = (dy * dy) + (dx * dx);
+    auto has_floor_space = false;
+    for (auto dy = -3; dy <= 3; dy++) {
+        for (auto dx = -3; dx <= 3; dx++) {
+            const Pos2DVec vec(dy, dx);
+            auto comb = false;
+            const auto d = (dy * dy) + (dx * dx);
             if (d > 10) {
                 continue;
             }
 
-            ty = pos.y + dy;
-            tx = pos.x + dx;
-            const Pos2D pos_target(ty, tx);
-            if (!in_bounds(&floor, ty, tx)) {
+            const auto pos_target = pos + vec;
+            if (!in_bounds(&floor, pos_target.y, pos_target.x)) {
                 continue;
             }
             if (!projectable(player_ptr, pos, pos_target)) {
                 continue;
             }
 
-            g_ptr = &floor.grid_array[ty][tx];
-            if (!cave_drop_bold(&floor, ty, tx)) {
+            if (!cave_drop_bold(&floor, pos_target.y, pos_target.x)) {
                 continue;
             }
 
-            k = 0;
-            for (const auto this_o_idx : g_ptr->o_idx_list) {
+            const auto &grid = floor.get_grid(pos_target);
+            auto k = 0;
+            for (const auto this_o_idx : grid.o_idx_list) {
                 const auto &item = floor.o_list[this_o_idx];
                 if (item.is_similar(*j_ptr)) {
                     comb = true;
@@ -343,11 +335,12 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
             if (!comb) {
                 k++;
             }
+
             if (k > 99) {
                 continue;
             }
 
-            s = 1000 - (d + k * 5);
+            const auto s = 1000 - (d + k * 5);
             if (s < bs) {
                 continue;
             }
@@ -361,14 +354,12 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
             }
 
             bs = s;
-            by = ty;
-            bx = tx;
-
-            flag = true;
+            pos_drop = pos_target;
+            has_floor_space = true;
         }
     }
 
-    if (!flag && !j_ptr->is_fixed_or_random_artifact()) {
+    if (!has_floor_space && !j_ptr->is_fixed_or_random_artifact()) {
 #ifdef JP
         msg_format("%sは消えた。", item_name.data());
 #else
@@ -381,29 +372,27 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
         return 0;
     }
 
-    for (i = 0; !flag && (i < 1000); i++) {
-        ty = rand_spread(by, 1);
-        tx = rand_spread(bx, 1);
-
-        if (!in_bounds(&floor, ty, tx)) {
+    for (auto i = 0; !has_floor_space && (i < 1000); i++) {
+        const auto ty = rand_spread(pos_drop.y, 1);
+        const auto tx = rand_spread(pos_drop.x, 1);
+        Pos2D pos_target(ty, tx); //!< @details 乱数引数の評価順を固定する.
+        if (!in_bounds(&floor, pos_target.y, pos_target.x)) {
             continue;
         }
 
-        by = ty;
-        bx = tx;
-
-        if (!cave_drop_bold(&floor, by, bx)) {
+        pos_drop = pos_target;
+        if (!cave_drop_bold(&floor, pos_drop.y, pos_drop.x)) {
             continue;
         }
 
-        flag = true;
+        has_floor_space = true;
     }
 
     auto &artifact = j_ptr->get_fixed_artifact();
-    if (!flag) {
-        int candidates = 0, pick;
-        for (ty = 1; ty < floor.height - 1; ty++) {
-            for (tx = 1; tx < floor.width - 1; tx++) {
+    if (!has_floor_space) {
+        auto candidates = 0;
+        for (auto ty = 1; ty < floor.height - 1; ty++) {
+            for (auto tx = 1; tx < floor.width - 1; tx++) {
                 if (cave_drop_bold(&floor, ty, tx)) {
                     candidates++;
                 }
@@ -430,38 +419,37 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
             return 0;
         }
 
-        pick = randint1(candidates);
-        for (ty = 1; ty < floor.height - 1; ty++) {
-            for (tx = 1; tx < floor.width - 1; tx++) {
+        auto pick = randint1(candidates);
+        for (auto ty = 1; ty < floor.height - 1; ty++) {
+            for (auto tx = 1; tx < floor.width - 1; tx++) {
                 if (cave_drop_bold(&floor, ty, tx)) {
                     pick--;
-                    if (!pick) {
+                    if (pick == 0) {
+                        pos_drop = { ty, tx };
                         break;
                     }
                 }
             }
 
-            if (!pick) {
+            if (pick == 0) {
                 break;
             }
         }
-
-        by = ty;
-        bx = tx;
     }
 
-    g_ptr = &floor.grid_array[by][bx];
-    for (const auto this_o_idx : g_ptr->o_idx_list) {
+    auto is_absorbed = false;
+    auto &grid = floor.get_grid(pos_drop);
+    for (const auto this_o_idx : grid.o_idx_list) {
         auto &item = floor.o_list[this_o_idx];
         if (item.is_similar(*j_ptr)) {
             item.absorb(*j_ptr);
-            done = true;
+            is_absorbed = true;
             break;
         }
     }
 
-    short item_idx = done ? 0 : floor.pop_empty_index_item();
-    if (!done && (item_idx == 0)) {
+    short item_idx = is_absorbed ? 0 : floor.pop_empty_index_item();
+    if (!is_absorbed && (item_idx == 0)) {
 #ifdef JP
         msg_format("%sは消えた。", item_name.data());
 #else
@@ -478,25 +466,23 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
         return 0;
     }
 
-    if (!done) {
+    if (!is_absorbed) {
         floor.o_list[item_idx] = j_ptr->clone();
         j_ptr = &floor.o_list[item_idx];
-        j_ptr->iy = by;
-        j_ptr->ix = bx;
+        j_ptr->set_position(pos_drop);
         j_ptr->held_m_idx = 0;
-        g_ptr->o_idx_list.add(&floor, item_idx);
-        done = true;
+        grid.o_idx_list.add(&floor, item_idx);
     }
 
     if (j_ptr->is_fixed_artifact() && world.character_dungeon) {
         artifact.floor_id = player_ptr->floor_id;
     }
 
-    note_spot(player_ptr, by, bx);
-    lite_spot(player_ptr, by, bx);
+    note_spot(player_ptr, pos_drop.y, pos_drop.x);
+    lite_spot(player_ptr, pos_drop.y, pos_drop.x);
     sound(SOUND_DROP);
 
-    const auto is_located = player_ptr->is_located_at({ by, bx });
+    const auto is_located = player_ptr->is_located_at(pos_drop);
     if (is_located) {
         static constexpr auto flags = {
             SubWindowRedrawingFlag::FLOOR_ITEMS,
