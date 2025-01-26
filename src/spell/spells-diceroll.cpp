@@ -1,16 +1,11 @@
 #include "spell/spells-diceroll.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster-race/race-flags-resistance.h"
-#include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "player-base/player-class.h"
-#include "player-info/class-info.h"
 #include "player/player-status-table.h"
-#include "room/rooms-builder.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/player-type-definition.h"
 
 /*!
  * @brief モンスター魅了用セービングスロー共通部(汎用系)
@@ -92,15 +87,16 @@ bool common_saving_throw_control(PlayerType *player_ptr, int pow, MonsterEntity 
  * ハードコーティングによる実装が行われている。
  * メイジは(レベル)%、ハイメイジ、スペルマスターは(レベル)%、それ以外の職業は(レベル/2)%
  */
-PERCENTAGE beam_chance(PlayerType *player_ptr)
+int beam_chance(PlayerType *player_ptr)
 {
     PlayerClass pc(player_ptr);
     if (pc.equals(PlayerClassType::MAGE)) {
-        return (PERCENTAGE)(player_ptr->lev);
-    }
-    if (pc.equals(PlayerClassType::HIGH_MAGE) || pc.equals(PlayerClassType::SORCERER)) {
-        return (PERCENTAGE)(player_ptr->lev + 10);
+        return player_ptr->lev;
     }
 
-    return (PERCENTAGE)(player_ptr->lev / 2);
+    if (pc.equals(PlayerClassType::HIGH_MAGE) || pc.equals(PlayerClassType::SORCERER)) {
+        return player_ptr->lev + 10;
+    }
+
+    return player_ptr->lev / 2;
 }

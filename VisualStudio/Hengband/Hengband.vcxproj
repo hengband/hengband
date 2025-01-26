@@ -942,7 +942,6 @@
     <ClCompile Include="..\..\src\monster-floor\monster-dist-offsets.cpp" />
     <ClCompile Include="..\..\src\monster\monster-processor.cpp" />
     <ClCompile Include="..\..\src\monster\monster-status.cpp" />
-    <ClCompile Include="..\..\src\monster-race\monster-race-hook.cpp" />
     <ClCompile Include="..\..\src\monster-attack\monster-attack-processor.cpp" />
     <ClCompile Include="..\..\src\monster-floor\monster-direction.cpp" />
     <ClCompile Include="..\..\src\monster-floor\monster-move.cpp" />
@@ -2030,7 +2029,6 @@
     <ClInclude Include="..\..\src\monster\monster-processor.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
     <ClInclude Include="..\..\src\system\monster-entity.h" />
-    <ClInclude Include="..\..\src\monster-race\monster-race-hook.h" />
     <ClInclude Include="..\..\src\mutation\mutation-calculator.h" />
     <ClInclude Include="..\..\src\object-enchant\object-boost.h" />
     <ClInclude Include="..\..\src\object-enchant\object-curse.h" />

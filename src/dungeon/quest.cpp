@@ -1,30 +1,18 @@
 #include "dungeon/quest.h"
 #include "artifact/fixed-art-types.h"
-#include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
-#include "floor/cave.h"
-#include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
-#include "floor/floor-object.h"
 #include "game-option/play-record-options.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/write-diary.h"
-#include "locale/english.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "monster/smart-learn-types.h"
-#include "object-enchant/item-apply-magic.h"
-#include "object-enchant/trg-types.h"
 #include "player-status/player-energy.h"
-#include "player/player-personality-types.h"
 #include "player/player-status.h"
 #include "system/artifact-type-definition.h"
-#include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h" // @todo 相互参照、将来的に削除する.
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -32,11 +20,12 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <sstream>
-#include <stdexcept>
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 std::vector<std::string> quest_text_lines; /*!< Quest text */
 QuestId leaving_quest = QuestId::NONE;

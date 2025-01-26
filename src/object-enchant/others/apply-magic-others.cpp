@@ -6,19 +6,11 @@
  */
 
 #include "object-enchant/others/apply-magic-others.h"
-#include "artifact/random-art-generator.h"
 #include "game-option/cheat-options.h"
-#include "inventory/inventory-slot-types.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "object-enchant/object-ego.h"
-#include "object-enchant/tr-types.h"
-#include "object-enchant/trc-types.h"
-#include "object/tval-types.h"
 #include "perception/object-perception.h"
-#include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -26,7 +18,6 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <unordered_map>
 

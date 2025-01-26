@@ -1,19 +1,15 @@
 #include "monster/monster-util.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "game-option/cheat-options.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster-race/race-ability-mask.h"
-#include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-misc-flags.h"
 #include "monster/monster-info.h"
 #include "mspell/summon-checker.h"
+#include "room/pit-nest-util.h"
 #include "spell/summon-types.h"
 #include "system/angband-exceptions.h"
-#include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -25,7 +21,6 @@
 #include "system/player-type-definition.h"
 #include "system/services/dungeon-monrace-service.h"
 #include "system/terrain/terrain-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/monrace-filter-debug-info.h"
 #include <algorithm>
@@ -245,13 +240,13 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::VAULT:
         return is_suitable_for_dungeon && monrace.is_suitable_for_special_room();
     case MonraceHook::CLONE:
-        return vault_aux_clone(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_special_room() && (monrace_id == PitNestFilter::get_instance().get_monrace_id());
     case MonraceHook::JELLY:
         return is_suitable_for_dungeon && monrace.is_suitable_for_jelly_nest();
     case MonraceHook::GOOD:
-        return vault_aux_symbol_g(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_good_nest(PitNestFilter::get_instance().get_monrace_symbol());
     case MonraceHook::EVIL:
-        return vault_aux_symbol_e(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_evil_nest(PitNestFilter::get_instance().get_monrace_symbol());
     case MonraceHook::MIMIC:
         return is_suitable_for_dungeon && monrace.is_suitable_for_mimic_nest();
     case MonraceHook::HORROR:
@@ -271,7 +266,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::GIANT:
         return is_suitable_for_dungeon && monrace.is_suitable_for_giant_pit();
     case MonraceHook::DRAGON:
-        return vault_aux_dragon(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_dragon_nest(PitNestFilter::get_instance().get_dragon_breaths());
     case MonraceHook::DEMON:
         return is_suitable_for_dungeon && monrace.is_suitable_for_demon_pit();
     case MonraceHook::DARK_ELF:

@@ -1,11 +1,8 @@
 #include "effect/effect-monster-evil.h"
 #include "effect/effect-monster-util.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster-race/race-flags-resistance.h"
 #include "monster/monster-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/player-type-definition.h"
 
 static bool effect_monster_away_resist(PlayerType *player_ptr, EffectMonster *em_ptr)
 {

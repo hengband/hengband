@@ -13,7 +13,8 @@
 #include "util/string-processor.h"
 #include "world/world.h"
 #include <algorithm>
-#ifndef JP
+#ifdef JP
+#else
 #include "locale/english.h"
 #endif
 
@@ -628,6 +629,35 @@ bool MonraceDefinition::is_suitable_for_undead_nest() const
 {
     auto is_suitable = this->is_suitable_for_special_room();
     is_suitable &= this->kind_flags.has(MonsterKindType::UNDEAD);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_dragon_nest(const EnumClassFlagGroup<MonsterAbilityType> &dragon_breaths) const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::DRAGON);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::UNDEAD);
+    auto flags = RF_ABILITY_BREATH_MASK;
+    flags.reset(dragon_breaths);
+    is_suitable &= this->ability_flags.has_none_of(flags) && this->ability_flags.has_all_of(dragon_breaths);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_good_nest(char symbol) const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) || this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::EVIL);
+    is_suitable &= this->symbol_definition.matches_character(symbol);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_evil_nest(char symbol) const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) || this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::GOOD);
+    is_suitable &= this->symbol_definition.matches_character(symbol);
     return is_suitable;
 }
 

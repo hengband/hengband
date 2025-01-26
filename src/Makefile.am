@@ -510,7 +510,6 @@ hengband_SOURCES = \
 	\
 	monster-race/monster-aura-types.h \
 	monster-race/monster-kind-mask.cpp monster-race/monster-kind-mask.h \
-	monster-race/monster-race-hook.cpp monster-race/monster-race-hook.h \
 	monster-race/race-ability-flags.h \
 	monster-race/race-ability-mask.cpp monster-race/race-ability-mask.h \
 	monster-race/race-behavior-flags.h \

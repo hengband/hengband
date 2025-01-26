@@ -9,15 +9,11 @@
 #include "game-option/cheat-options.h"
 #include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-slot-types.h"
-#include "monster-race/monster-race-hook.h"
-#include "object-enchant/tr-types.h"
 #include "player-attack/player-attack.h"
-#include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-hex.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!

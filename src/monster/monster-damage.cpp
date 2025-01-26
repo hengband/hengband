@@ -7,7 +7,6 @@
 #include "monster/monster-damage.h"
 #include "avatar/avatar-changer.h"
 #include "core/speed-table.h"
-#include "core/stuff-handler.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "io/files-util.h"
@@ -20,18 +19,13 @@
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
-#include "monster/monster-status.h"
 #include "object-enchant/object-curse.h"
 #include "player/player-status.h"
-#include "player/special-defense-types.h"
 #include "spell-kind/spells-random.h"
 #include "status/experience.h"
-#include "system/angband-system.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
@@ -42,11 +36,8 @@
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
 #include "tracking/lore-tracker.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <optional>
-#include <sstream>
 #include <string>
 
 /*

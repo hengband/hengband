@@ -44,6 +44,11 @@ public:
     {
         return this->color < 0x80;
     }
+
+    bool matches_character(char other_character) const
+    {
+        return this->character == other_character;
+    }
 };
 
 class DisplaySymbolPair {
