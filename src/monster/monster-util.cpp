@@ -245,7 +245,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::VAULT:
         return is_suitable_for_dungeon && monrace.is_suitable_for_special_room();
     case MonraceHook::CLONE:
-        return vault_aux_clone(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_special_room() && (monrace_id == PitNestFilter::get_instance().get_monrace_id());
     case MonraceHook::JELLY:
         return is_suitable_for_dungeon && monrace.is_suitable_for_jelly_nest();
     case MonraceHook::GOOD:
