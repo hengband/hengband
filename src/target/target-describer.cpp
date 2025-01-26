@@ -564,7 +564,7 @@ char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, ta
         return (char)footing_items_description;
     }
 
-    ge_ptr->feat = ge_ptr->g_ptr->get_feat_mimic();
+    ge_ptr->feat = ge_ptr->g_ptr->get_terrain_id(TerrainKind::MIMIC);
     if (!ge_ptr->g_ptr->is_mark() && !player_can_see_bold(player_ptr, y, x)) {
         ge_ptr->set_terrain_id(TerrainTag::NONE);
     }

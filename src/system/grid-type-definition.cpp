@@ -50,7 +50,7 @@ short Grid::get_terrain_id(TerrainKind tk) const
     case TerrainKind::NORMAL:
         return this->feat;
     case TerrainKind::MIMIC:
-        return this->get_feat_mimic();
+        return TerrainList::get_instance().get_terrain(this->mimic ? this->mimic : this->feat).mimic;
     case TerrainKind::MIMIC_RAW:
         return this->mimic;
     default:
@@ -181,16 +181,6 @@ uint8_t Grid::get_distance(GridFlow gf) const
     return this->dists.at(gf);
 }
 
-/*
- * @brief グリッドのミミック特性地形を返す
- * @param g_ptr グリッドへの参照ポインタ
- * @return 地形情報
- */
-FEAT_IDX Grid::get_feat_mimic() const
-{
-    return TerrainList::get_instance().get_terrain(this->mimic ? this->mimic : this->feat).mimic;
-}
-
 bool Grid::has(TerrainCharacteristics tc) const
 {
     return this->get_terrain().has(tc);
@@ -251,7 +241,7 @@ TerrainType &Grid::get_terrain(TerrainKind tk)
     case TerrainKind::NORMAL:
         return terrains.get_terrain(this->feat);
     case TerrainKind::MIMIC:
-        return terrains.get_terrain(this->get_feat_mimic());
+        return terrains.get_terrain(this->get_terrain_id(TerrainKind::MIMIC));
     case TerrainKind::MIMIC_RAW:
         return terrains.get_terrain(this->mimic);
     default:
@@ -266,7 +256,7 @@ const TerrainType &Grid::get_terrain(TerrainKind tk) const
     case TerrainKind::NORMAL:
         return terrains.get_terrain(this->feat);
     case TerrainKind::MIMIC:
-        return terrains.get_terrain(this->get_feat_mimic());
+        return terrains.get_terrain(this->get_terrain_id(TerrainKind::MIMIC));
     case TerrainKind::MIMIC_RAW:
         return terrains.get_terrain(this->mimic);
     default:

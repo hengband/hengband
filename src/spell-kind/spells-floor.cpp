@@ -64,44 +64,40 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 
     /* Scan all normal grids */
     const auto &terrains = TerrainList::get_instance();
-    for (POSITION y = 1; y < floor.height - 1; y++) {
+    for (auto y = 1; y < floor.height - 1; y++) {
         /* Scan all normal grids */
-        for (POSITION x = 1; x < floor.width - 1; x++) {
-            auto *g_ptr = &floor.grid_array[y][x];
+        for (auto x = 1; x < floor.width - 1; x++) {
+            const Pos2D pos(y, x);
+            auto &grid = floor.get_grid(pos);
 
             /* Memorize terrain of the grid */
-            g_ptr->info |= (CAVE_KNOWN);
-
-            /* Feature code (applying "mimic" field) */
-            FEAT_IDX feat = g_ptr->get_feat_mimic();
-            auto *t_ptr = &terrains.get_terrain(feat);
+            grid.info |= (CAVE_KNOWN);
 
             /* Scan all neighbors */
             for (OBJECT_IDX i = 0; i < 9; i++) {
-                POSITION yy = y + ddy_ddd[i];
-                POSITION xx = x + ddx_ddd[i];
-                g_ptr = &floor.grid_array[yy][xx];
+                const auto pos_neighbor = pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
+                auto &grid_neighbor = floor.get_grid(pos_neighbor);
 
                 /* Feature code (applying "mimic" field) */
-                t_ptr = &terrains.get_terrain(g_ptr->get_feat_mimic());
+                const auto &terrain = terrains.get_terrain(grid_neighbor.get_terrain_id(TerrainKind::MIMIC));
 
                 /* Perma-lite the grid */
                 if (floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS) && !ninja) {
-                    g_ptr->info |= (CAVE_GLOW);
+                    grid_neighbor.info |= (CAVE_GLOW);
                 }
 
                 /* Memorize normal features */
-                if (t_ptr->flags.has(TerrainCharacteristics::REMEMBER)) {
+                if (terrain.flags.has(TerrainCharacteristics::REMEMBER)) {
                     /* Memorize the grid */
-                    g_ptr->info |= (CAVE_MARK);
+                    grid_neighbor.info |= (CAVE_MARK);
                 }
 
                 /* Perma-lit grids (newly and previously) */
-                else if (g_ptr->info & CAVE_GLOW) {
+                else if (grid_neighbor.info & CAVE_GLOW) {
                     /* Normally, memorize floors (see above) */
                     if (view_perma_grids && !view_torch_grids) {
                         /* Memorize the grid */
-                        g_ptr->info |= (CAVE_MARK);
+                        grid_neighbor.info |= (CAVE_MARK);
                     }
                 }
             }
@@ -200,40 +196,40 @@ void map_area(PlayerType *player_ptr, POSITION range)
 
     /* Scan that area */
     const auto &terrains = TerrainList::get_instance();
-    for (POSITION y = 1; y < floor.height - 1; y++) {
-        for (POSITION x = 1; x < floor.width - 1; x++) {
-            if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
+    for (auto y = 1; y < floor.height - 1; y++) {
+        for (auto x = 1; x < floor.width - 1; x++) {
+            const Pos2D pos(y, x);
+            if (Grid::calc_distance(player_ptr->get_position(), pos) > range) {
                 continue;
             }
 
-            Grid *g_ptr;
-            g_ptr = &floor.grid_array[y][x];
+            auto &grid = floor.get_grid(pos);
 
             /* Memorize terrain of the grid */
-            g_ptr->info |= (CAVE_KNOWN);
+            grid.info |= (CAVE_KNOWN);
 
             /* Feature code (applying "mimic" field) */
-            FEAT_IDX feat = g_ptr->get_feat_mimic();
-            auto *t_ptr = &terrains.get_terrain(feat);
+            const auto mimic_terrain_id = grid.get_terrain_id(TerrainKind::MIMIC);
+            const auto &terrain_mimic = terrains.get_terrain(mimic_terrain_id);
 
             /* Memorize normal features */
-            if (t_ptr->flags.has(TerrainCharacteristics::REMEMBER)) {
+            if (terrain_mimic.flags.has(TerrainCharacteristics::REMEMBER)) {
                 /* Memorize the object */
-                g_ptr->info |= (CAVE_MARK);
+                grid.info |= (CAVE_MARK);
             }
 
             /* Memorize known walls */
             for (int i = 0; i < 8; i++) {
-                g_ptr = &floor.grid_array[y + ddy_ddd[i]][x + ddx_ddd[i]];
+                auto &grid_neighbor = floor.get_grid(pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]));
 
                 /* Feature code (applying "mimic" field) */
-                feat = g_ptr->get_feat_mimic();
-                t_ptr = &terrains.get_terrain(feat);
+                const auto terrain_id = grid_neighbor.get_terrain_id(TerrainKind::MIMIC);
+                const auto &terrain = terrains.get_terrain(terrain_id);
 
                 /* Memorize walls (etc) */
-                if (t_ptr->flags.has(TerrainCharacteristics::REMEMBER)) {
+                if (terrain.flags.has(TerrainCharacteristics::REMEMBER)) {
                     /* Memorize the walls */
-                    g_ptr->info |= (CAVE_MARK);
+                    grid_neighbor.info |= (CAVE_MARK);
                 }
             }
         }
