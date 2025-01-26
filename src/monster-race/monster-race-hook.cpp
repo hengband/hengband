@@ -244,37 +244,3 @@ bool vault_aux_symbol_g(PlayerType *player_ptr, MonraceId r_idx)
 
     return true;
 }
-
-/*!
- * @brief モンスターがドラゴンpitの生成必要条件を満たしているかを返す /
- * Helper function for "monster pit (dragon)"
- * @param r_idx 確認したいモンスター種族ID
- * @return 生成必要条件を満たしているならTRUEを返す。
- */
-bool vault_aux_dragon(PlayerType *player_ptr, MonraceId r_idx)
-{
-    const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
-    const auto &floor = *player_ptr->current_floor_ptr;
-    auto is_valid = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, r_idx);
-    is_valid &= monrace.is_suitable_for_special_room();
-    if (!is_valid) {
-        return false;
-    }
-
-    if (monrace.kind_flags.has_not(MonsterKindType::DRAGON)) {
-        return false;
-    }
-
-    if (monrace.kind_flags.has(MonsterKindType::UNDEAD)) {
-        return false;
-    }
-
-    auto flags = RF_ABILITY_BREATH_MASK;
-    const auto &dragon_mask = PitNestFilter::get_instance().get_dragon_breaths();
-    flags.reset(dragon_mask);
-    if (monrace.ability_flags.has_any_of(flags) || !monrace.ability_flags.has_all_of(dragon_mask)) {
-        return false;
-    }
-
-    return true;
-}

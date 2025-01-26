@@ -631,6 +631,17 @@ bool MonraceDefinition::is_suitable_for_undead_nest() const
     return is_suitable;
 }
 
+bool MonraceDefinition::is_suitable_for_dragon_nest(const EnumClassFlagGroup<MonsterAbilityType> &dragon_breaths) const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::DRAGON);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::UNDEAD);
+    auto flags = RF_ABILITY_BREATH_MASK;
+    flags.reset(dragon_breaths);
+    is_suitable &= this->ability_flags.has_none_of(flags) && this->ability_flags.has_all_of(dragon_breaths);
+    return is_suitable;
+}
+
 void MonraceDefinition::init_sex(uint32_t value)
 {
     const auto sex_tmp = i2enum<MonsterSex>(value);
