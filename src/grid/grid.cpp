@@ -151,11 +151,11 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
 }
 
 /*!
- * @brief 新規フロアに入りたてのプレイヤーをランダムな場所に配置する / Returns random co-ordinates for player/monster/object
+ * @brief 新規フロアに入りたてのプレイヤーをランダムな場所に配置する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return 配置に成功したらTRUEを返す
+ * @return 配置に成功したらその座標、失敗したらnullopt
  */
-bool new_player_spot(PlayerType *player_ptr)
+std::optional<Pos2D> new_player_spot(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     auto max_attempts = 10000;
@@ -207,11 +207,10 @@ bool new_player_spot(PlayerType *player_ptr)
     }
 
     if (max_attempts < 1) { /* Should be -1, actually if we failed... */
-        return false;
+        return std::nullopt;
     }
 
-    player_ptr->set_position(pos);
-    return true;
+    return pos;
 }
 
 /*!
