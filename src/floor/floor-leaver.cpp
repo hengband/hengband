@@ -220,16 +220,16 @@ static void get_out_monster(PlayerType *player_ptr)
     auto dis = 1;
     const auto p_pos = player_ptr->get_position();
     auto &floor = *player_ptr->current_floor_ptr;
-    auto &grid = floor.get_grid(p_pos);
-    const auto m_idx = grid.m_idx;
+    auto &p_grid = floor.get_grid(p_pos);
+    const auto m_idx = p_grid.m_idx;
     if (m_idx == 0) {
         return;
     }
 
     while (true) {
-        const auto ny = rand_spread(p_pos.y, dis);
-        const auto nx = rand_spread(p_pos.x, dis);
-        const Pos2D pos_neighbor(ny, nx); //!< @details 乱数引数の評価順を固定.
+        auto y = rand_spread(p_pos.y, dis);
+        auto x = rand_spread(p_pos.x, dis);
+        const Pos2D pos(y, x); //!< @details 乱数引数の評価順を固定.
         tries++;
         if (tries > 10000) {
             return;
@@ -239,16 +239,15 @@ static void get_out_monster(PlayerType *player_ptr)
             dis++;
         }
 
-        auto &grid_neighbor = floor.get_grid(pos_neighbor);
-        if (!in_bounds(&floor, ny, nx) || !is_cave_empty_bold(player_ptr, ny, nx) || grid_neighbor.is_rune_protection() || grid_neighbor.is_rune_explosion() || pattern_tile(&floor, ny, nx)) {
+        auto &grid = floor.get_grid(pos);
+        if (!in_bounds(&floor, pos.y, pos.x) || !is_cave_empty_bold(player_ptr, pos.y, pos.x) || grid.is_rune_protection() || grid.is_rune_explosion() || pattern_tile(&floor, pos.y, pos.x)) {
             continue;
         }
 
+        p_grid.m_idx = 0;
+        grid.m_idx = m_idx;
         auto &monster = floor.m_list[m_idx];
-        grid.m_idx = 0;
-        grid_neighbor.m_idx = m_idx;
-        monster.fy = ny;
-        monster.fx = nx;
+        monster.set_position(pos);
         return;
     }
 }

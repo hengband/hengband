@@ -2,6 +2,7 @@
 
 #include "object/item-tester-hooker.h"
 #include "system/angband.h"
+#include "util/point-2d.h"
 #include <optional>
 
 class ObjectIndexList;
@@ -11,7 +12,7 @@ class ItemEntity;
 class PlayerType;
 class ItemTester;
 bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level = std::nullopt);
-void delete_all_items_from_floor(PlayerType *player_ptr, POSITION y, POSITION x);
+void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos);
 void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num);
 void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx);
 void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx);

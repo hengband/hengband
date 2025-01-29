@@ -51,7 +51,7 @@ static int scent_when = 0;
  * Whenever the age count loops, most of the scent trail is erased and
  * the age of the remainder is recalculated.
  */
-void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
+void update_smell(FloorType &floor, const Pos2D &p_pos)
 {
     /* Create a table that controls the spread of scent */
     const int scent_adjust[5][5] = {
@@ -63,32 +63,34 @@ void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
     };
 
     if (++scent_when == 254) {
-        for (auto y = 0; y < floor_ptr->height; y++) {
-            for (auto x = 0; x < floor_ptr->width; x++) {
-                int w = floor_ptr->grid_array[y][x].when;
-                floor_ptr->grid_array[y][x].when = (w > 128) ? (w - 128) : 0;
+        for (auto y = 0; y < floor.height; y++) {
+            for (auto x = 0; x < floor.width; x++) {
+                const Pos2D pos(y, x);
+                auto &grid = floor.get_grid(pos);
+                int w = grid.when;
+                grid.when = (w > 128) ? (w - 128) : 0;
             }
         }
 
         scent_when = 126;
     }
 
-    for (auto i = 0; i < 5; i++) {
-        for (auto j = 0; j < 5; j++) {
-            const Pos2D pos(i + player_ptr->y - 2, j + player_ptr->x - 2);
-            if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+    for (auto y = 0; y < 5; y++) {
+        for (auto x = 0; x < 5; x++) {
+            const auto pos = p_pos + Pos2DVec(y, x) + Pos2DVec(-2, -2);
+            if (!in_bounds(&floor, pos.y, pos.x)) {
                 continue;
             }
 
-            auto &grid = floor_ptr->get_grid(pos);
-            auto update_when = !grid.has(TerrainCharacteristics::MOVE) && !floor_ptr->has_closed_door_at(pos);
+            auto &grid = floor.get_grid(pos);
+            auto update_when = !grid.has(TerrainCharacteristics::MOVE) && !floor.has_closed_door_at(pos);
             update_when |= !grid.has_los();
-            update_when |= scent_adjust[i][j] == -1;
+            update_when |= scent_adjust[y][x] == -1;
             if (update_when) {
                 continue;
             }
 
-            grid.when = scent_when + scent_adjust[i][j];
+            grid.when = scent_when + scent_adjust[y][x];
         }
     }
 }

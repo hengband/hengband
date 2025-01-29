@@ -1395,60 +1395,6 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 }
 
 /*!
- * @todo 宣言だけ。後日適切な場所に移動
- */
-static bool door_to_darkness(PlayerType *player_ptr, POSITION dist);
-
-/*!
- * @brief クラスパワーを実行
- * @param player_ptr プレイヤー情報への参照ポインタ
- * @return 実行したらTRUE、しなかったらFALSE
- */
-bool switch_element_execution(PlayerType *player_ptr)
-{
-    auto realm = i2enum<ElementRealmType>(player_ptr->element);
-    PLAYER_LEVEL plev = player_ptr->lev;
-    DIRECTION dir;
-
-    switch (realm) {
-    case ElementRealmType::FIRE:
-        (void)lite_area(player_ptr, Dice::roll(2, plev / 2), plev / 10);
-        break;
-    case ElementRealmType::ICE:
-        (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, AttributeType::COLD, PROJECT_ITEM);
-        (void)project_all_los(player_ptr, AttributeType::OLD_SLEEP, 20 + plev * 3 / 2);
-        break;
-    case ElementRealmType::SKY:
-        (void)recharge(player_ptr, 120);
-        break;
-    case ElementRealmType::SEA:
-        if (!get_aim_dir(player_ptr, &dir)) {
-            return false;
-        }
-        (void)wall_to_mud(player_ptr, dir, plev * 3 / 2);
-        break;
-    case ElementRealmType::DARKNESS:
-        return door_to_darkness(player_ptr, 15 + plev / 2);
-        break;
-    case ElementRealmType::CHAOS:
-        reserve_alter_reality(player_ptr, randint0(21) + 15);
-        break;
-    case ElementRealmType::EARTH:
-        (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
-        break;
-    case ElementRealmType::DEATH:
-        if (player_ptr->current_floor_ptr->num_repro <= MAX_REPRODUCTION) {
-            player_ptr->current_floor_ptr->num_repro += MAX_REPRODUCTION;
-        }
-        break;
-    default:
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief 指定したマスが暗いかどうか
  * @param f_ptr 階の情報への参照ポインタ
  * @param y 指定のy座標
@@ -1535,4 +1481,52 @@ static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
         msg_print(_("闇の扉は開かなかった！", "The door to darkness does not open!"));
     }
     return true;
+}
+
+/*!
+ * @brief クラスパワーを実行
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @return 実行したらTRUE、しなかったらFALSE
+ */
+bool switch_element_execution(PlayerType *player_ptr)
+{
+    auto realm = i2enum<ElementRealmType>(player_ptr->element);
+    PLAYER_LEVEL plev = player_ptr->lev;
+    DIRECTION dir;
+
+    switch (realm) {
+    case ElementRealmType::FIRE:
+        (void)lite_area(player_ptr, Dice::roll(2, plev / 2), plev / 10);
+        return true;
+    case ElementRealmType::ICE:
+        (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, AttributeType::COLD, PROJECT_ITEM);
+        (void)project_all_los(player_ptr, AttributeType::OLD_SLEEP, 20 + plev * 3 / 2);
+        return true;
+    case ElementRealmType::SKY:
+        (void)recharge(player_ptr, 120);
+        return true;
+    case ElementRealmType::SEA:
+        if (!get_aim_dir(player_ptr, &dir)) {
+            return false;
+        }
+
+        (void)wall_to_mud(player_ptr, dir, plev * 3 / 2);
+        return true;
+    case ElementRealmType::DARKNESS:
+        return door_to_darkness(player_ptr, 15 + plev / 2);
+    case ElementRealmType::CHAOS:
+        reserve_alter_reality(player_ptr, randint0(21) + 15);
+        return true;
+    case ElementRealmType::EARTH:
+        (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
+        return true;
+    case ElementRealmType::DEATH:
+        if (player_ptr->current_floor_ptr->num_repro <= MAX_REPRODUCTION) {
+            player_ptr->current_floor_ptr->num_repro += MAX_REPRODUCTION;
+        }
+
+        return true;
+    default:
+        return false;
+    }
 }

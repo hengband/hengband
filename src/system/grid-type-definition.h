@@ -88,6 +88,7 @@ public:
     bool is_open() const;
     bool is_closed_door(bool is_mimic) const;
     bool is_hidden_door() const;
+    bool is_acceptable_target() const;
     bool has_monster() const;
     uint8_t get_cost(GridFlow gf) const;
     uint8_t get_distance(GridFlow gf) const;
