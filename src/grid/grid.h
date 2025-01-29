@@ -65,7 +65,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, TerrainTag
 void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terrain_id);
 std::optional<Pos2D> new_player_spot(PlayerType *player_ptr);
 bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
-void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);
+void update_local_illumination(PlayerType *player_ptr, const Pos2D &pos);
 bool no_lite(PlayerType *player_ptr);
 void print_rel(PlayerType *player_ptr, const DisplaySymbol &symbol, POSITION y, POSITION x);
 void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ);

@@ -98,7 +98,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
             grid.info &= ~(CAVE_MARK);
         }
 
-        update_local_illumination(player_ptr, pos.y, pos.x);
+        update_local_illumination(player_ptr, pos);
     }
 
     if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
@@ -142,7 +142,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
             lite_spot(player_ptr, pos_neighbor.y, pos_neighbor.x);
         }
 
-        update_local_illumination(player_ptr, pos_neighbor.y, pos_neighbor.x);
+        update_local_illumination(player_ptr, pos_neighbor);
     }
 
     if (floor.get_grid(player_ptr->get_position()).info & CAVE_GLOW) {
@@ -238,13 +238,11 @@ bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
 /*!
  * @brief 対象座標のマスの照明状態を更新する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 更新したいマスのY座標
- * @param x 更新したいマスのX座標
+ * @param pos 更新したいマスの座標
  */
-static void update_local_illumination_aux(PlayerType *player_ptr, int y, int x)
+static void update_local_illumination_aux(PlayerType *player_ptr, const Pos2D &pos)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(y, x);
     const auto &grid = floor.get_grid(pos);
     if (!grid.has_los()) {
         return;
@@ -254,60 +252,58 @@ static void update_local_illumination_aux(PlayerType *player_ptr, int y, int x)
         update_monster(player_ptr, grid.m_idx, false);
     }
 
-    note_spot(player_ptr, y, x);
-    lite_spot(player_ptr, y, x);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
 }
 
 /*!
  * @brief 指定された座標の照明状態を更新する / Update "local" illumination
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 視界先y座標
- * @param x 視界先x座標
+ * @param pos 視界先座標
  */
-void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
+void update_local_illumination(PlayerType *player_ptr, const Pos2D &pos)
 {
-    const Pos2D pos(y, x);
     if (!in_bounds(player_ptr->current_floor_ptr, pos.y, pos.x)) {
         return;
     }
 
     const auto p_pos = player_ptr->get_position();
     if ((pos.y != p_pos.y) && (pos.x != p_pos.x)) {
-        const auto yy = (y < player_ptr->y) ? (y - 1) : (y + 1);
-        const auto xx = (x < player_ptr->x) ? (x - 1) : (x + 1);
-        update_local_illumination_aux(player_ptr, yy, xx);
-        update_local_illumination_aux(player_ptr, y, xx);
-        update_local_illumination_aux(player_ptr, yy, x);
+        const auto yy = (pos.y < p_pos.y) ? (pos.y - 1) : (pos.y + 1);
+        const auto xx = (pos.x < p_pos.x) ? (pos.x - 1) : (pos.x + 1);
+        update_local_illumination_aux(player_ptr, { yy, xx });
+        update_local_illumination_aux(player_ptr, { pos.y, xx });
+        update_local_illumination_aux(player_ptr, { yy, pos.x });
         return;
     }
 
-    if (x != p_pos.x) { //!< y == player_ptr->y
-        const auto xx = (x < player_ptr->x) ? (x - 1) : (x + 1);
+    if (pos.x != p_pos.x) { //!< y == player_ptr->y
+        const auto xx = (pos.x < p_pos.x) ? (pos.x - 1) : (pos.x + 1);
         int yy;
         for (auto i = -1; i <= 1; i++) {
-            yy = y + i;
-            update_local_illumination_aux(player_ptr, yy, xx);
+            yy = pos.y + i;
+            update_local_illumination_aux(player_ptr, { yy, xx });
         }
 
-        yy = y - 1;
-        update_local_illumination_aux(player_ptr, yy, x);
-        yy = y + 1;
-        update_local_illumination_aux(player_ptr, yy, x);
+        yy = pos.y - 1;
+        update_local_illumination_aux(player_ptr, { yy, pos.x });
+        yy = pos.y + 1;
+        update_local_illumination_aux(player_ptr, { yy, pos.x });
         return;
     }
 
-    if (y != p_pos.y) { //!< x == player_ptr->x
-        const auto yy = (y < player_ptr->y) ? (y - 1) : (y + 1);
+    if (pos.y != p_pos.y) { //!< x == player_ptr->x
+        const auto yy = (pos.y < player_ptr->y) ? (pos.y - 1) : (pos.y + 1);
         int xx;
         for (auto i = -1; i <= 1; i++) {
-            xx = x + i;
-            update_local_illumination_aux(player_ptr, yy, xx);
+            xx = pos.x + i;
+            update_local_illumination_aux(player_ptr, { yy, xx });
         }
 
-        xx = x - 1;
-        update_local_illumination_aux(player_ptr, y, xx);
-        xx = x + 1;
-        update_local_illumination_aux(player_ptr, y, xx);
+        xx = pos.x - 1;
+        update_local_illumination_aux(player_ptr, { pos.y, xx });
+        xx = pos.x + 1;
+        update_local_illumination_aux(player_ptr, { pos.y, xx });
     }
 
     if (p_pos != pos) {
@@ -315,7 +311,7 @@ void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     for (const auto &dd : CCW_DD) {
-        update_local_illumination_aux(player_ptr, (pos + dd).y, (pos + dd).x);
+        update_local_illumination_aux(player_ptr, pos + dd);
     }
 }
 
