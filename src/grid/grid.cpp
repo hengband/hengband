@@ -157,34 +157,28 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
  */
 bool new_player_spot(PlayerType *player_ptr)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
     auto max_attempts = 10000;
-    auto y = 0;
-    auto x = 0;
-    auto &floor = *player_ptr->current_floor_ptr;
+    Pos2D pos(0, 0);
     while (max_attempts--) {
-        /* Pick a legal spot */
-        y = rand_range(1, floor.height - 2);
-        x = rand_range(1, floor.width - 2);
-
-        const auto &grid = player_ptr->current_floor_ptr->get_grid({ y, x });
-
-        /* Must be a "naked" floor grid */
+        pos.y = rand_range(1, floor.height - 2);
+        pos.x = rand_range(1, floor.width - 2);
+        const auto &grid = floor.get_grid(pos);
         if (grid.has_monster()) {
             continue;
         }
+
         if (floor.is_underground()) {
             const auto &terrain = grid.get_terrain();
-
-            if (max_attempts > 5000) /* Rule 1 */
-            {
+            if (max_attempts > 5000) { /* Rule 1 */
                 if (terrain.flags.has_not(TerrainCharacteristics::FLOOR)) {
                     continue;
                 }
-            } else /* Rule 2 */
-            {
+            } else { /* Rule 2 */
                 if (terrain.flags.has_not(TerrainCharacteristics::MOVE)) {
                     continue;
                 }
+
                 if (terrain.flags.has(TerrainCharacteristics::HIT_TRAP)) {
                     continue;
                 }
@@ -195,10 +189,12 @@ bool new_player_spot(PlayerType *player_ptr)
                 continue;
             }
         }
+
         if (!player_can_enter(player_ptr, grid.feat, 0)) {
             continue;
         }
-        if (!in_bounds(&floor, y, x)) {
+
+        if (!in_bounds(&floor, pos.y, pos.x)) {
             continue;
         }
 
@@ -214,10 +210,7 @@ bool new_player_spot(PlayerType *player_ptr)
         return false;
     }
 
-    /* Save the new player grid */
-    player_ptr->y = y;
-    player_ptr->x = x;
-
+    player_ptr->set_position(pos);
     return true;
 }
 
