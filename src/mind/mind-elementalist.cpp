@@ -1396,45 +1396,48 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 
 /*!
  * @brief 指定したマスが暗いかどうか
- * @param f_ptr 階の情報への参照ポインタ
- * @param y 指定のy座標
- * @param x 指定のx座標
+ * @param floor フロアへの参照
+ * @param pos 指定の座標
  * @return 暗いならTRUE、そうでないならFALSE
  */
-static bool is_target_grid_dark(FloorType *f_ptr, POSITION y, POSITION x)
+static bool is_target_grid_dark(const FloorType &floor, const Pos2D &pos)
 {
-    if (any_bits(f_ptr->grid_array[y][x].info, CAVE_MNLT)) {
+    const auto &grid = floor.get_grid(pos);
+    if (any_bits(grid.info, CAVE_MNLT)) {
         return false;
     }
 
-    bool is_dark = false;
-    bool is_lite = any_bits(f_ptr->grid_array[y][x].info, CAVE_GLOW | CAVE_LITE);
-
-    for (int dx = x - 2; dx <= x + 2; dx++) {
-        for (int dy = y - 2; dy <= y + 2; dy++) {
-            if (dx == x && dy == y) {
+    auto is_dark = false;
+    auto is_lite = any_bits(grid.info, CAVE_GLOW | CAVE_LITE);
+    for (auto dx = pos.x - 2; dx <= pos.x + 2; dx++) {
+        for (auto dy = pos.y - 2; dy <= pos.y + 2; dy++) {
+            const Pos2D pos_neighbor(dy, dx);
+            if (pos == pos_neighbor) {
                 continue;
             }
-            if (!in_bounds(f_ptr, dy, dx)) {
-                continue;
-            }
-
-            MONSTER_IDX m_idx = f_ptr->grid_array[dy][dx].m_idx;
-            if (!m_idx) {
+            if (!in_bounds(&floor, dy, dx)) {
                 continue;
             }
 
-            const auto d = Grid::calc_distance({ dy, dx }, { y, x });
-            const auto &monrace = f_ptr->m_list[m_idx].get_monrace();
+            const auto m_idx = floor.get_grid(pos_neighbor).m_idx;
+            if (m_idx == 0) {
+                continue;
+            }
+
+            const auto d = Grid::calc_distance(pos, pos_neighbor);
+            const auto &monrace = floor.m_list[m_idx].get_monrace();
             if (d <= 1 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::SELF_LITE_1 })) {
                 return false;
             }
+
             if (d <= 2 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_2, MonsterBrightnessType::SELF_LITE_2 })) {
                 return false;
             }
+
             if (d <= 1 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_1, MonsterBrightnessType::SELF_DARK_1 })) {
                 is_dark = true;
             }
+
             if (d <= 2 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_2, MonsterBrightnessType::SELF_DARK_2 })) {
                 is_dark = true;
             }
@@ -1448,25 +1451,22 @@ static bool is_target_grid_dark(FloorType *f_ptr, POSITION y, POSITION x)
  * @breif 暗いところ限定での次元の扉
  * @param player_ptr プレイヤー情報への参照ポインタ
  */
-static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
+static bool door_to_darkness(PlayerType *player_ptr, int distance)
 {
-    POSITION y = player_ptr->y;
-    POSITION x = player_ptr->x;
-    FloorType *f_ptr;
-
+    const auto p_pos_orig = player_ptr->get_position();
+    auto p_pos = player_ptr->get_position();
+    const auto &floor = *player_ptr->current_floor_ptr;
     for (int i = 0; i < 3; i++) {
-        if (!tgt_pt(player_ptr, &x, &y)) {
+        if (!tgt_pt(player_ptr, &p_pos.x, &p_pos.y)) {
             return false;
         }
 
-        f_ptr = player_ptr->current_floor_ptr;
-
-        if (Grid::calc_distance({ y, x }, player_ptr->get_position()) > dist) {
+        if (Grid::calc_distance(p_pos, p_pos_orig) > distance) {
             msg_print(_("遠すぎる！", "That is too far!"));
             continue;
         }
 
-        if (!is_cave_empty_bold(player_ptr, y, x) || f_ptr->grid_array[y][x].is_icky()) {
+        if (!is_cave_empty_bold(player_ptr, p_pos.y, p_pos.x) || floor.get_grid(p_pos).is_icky()) {
             msg_print(_("そこには移動できない。", "Can not teleport to there."));
             continue;
         }
@@ -1474,12 +1474,13 @@ static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
         break;
     }
 
-    bool flag = cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) && is_target_grid_dark(f_ptr, y, x);
+    const auto flag = cave_player_teleportable_bold(player_ptr, p_pos.y, p_pos.x, TELEPORT_SPONTANEOUS) && is_target_grid_dark(floor, p_pos);
     if (flag) {
-        teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
+        teleport_player_to(player_ptr, p_pos.y, p_pos.x, TELEPORT_SPONTANEOUS);
     } else {
         msg_print(_("闇の扉は開かなかった！", "The door to darkness does not open!"));
     }
+
     return true;
 }
 
