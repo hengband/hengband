@@ -79,12 +79,12 @@ bool MonsterSweepGrid::get_movable_grid()
         x = monster_from.fx - x2;
     }
 
-    this->search_pet_runnable_grid(&y, &x, no_flow);
-    if (!x && !y) {
+    const auto vec = this->search_pet_runnable_grid({ y, x }, no_flow);
+    if (vec == Pos2DVec(0, 0)) {
         return false;
     }
 
-    store_moves_val(this->mm, y, x);
+    store_moves_val(this->mm, vec.y, vec.x);
     return true;
 }
 
@@ -211,37 +211,39 @@ void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
         return;
     }
 
-    if (find_hiding(this->player_ptr, this->m_idx, y, x)) {
+    const auto vec = find_hiding(this->player_ptr, this->m_idx);
+    if (vec) {
+        *y = vec->y;
+        *x = vec->x;
         this->done = true;
     }
 }
 
-void MonsterSweepGrid::search_pet_runnable_grid(POSITION *y, POSITION *x, bool no_flow)
+Pos2DVec MonsterSweepGrid::search_pet_runnable_grid(const Pos2DVec &vec_initial, bool no_flow)
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    if (m_ptr->is_pet() && this->will_run) {
-        *y = -(*y);
-        *x = -(*x);
-        return;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[this->m_idx];
+    const auto vec_inverted = vec_initial.inverted();
+    if (monster.is_pet() && this->will_run) {
+        return vec_inverted;
     }
 
     if (this->done || !this->will_run) {
-        return;
+        return vec_initial;
     }
 
-    auto tmp_x = -(*x);
-    auto tmp_y = -(*y);
-    if (find_safety(this->player_ptr, this->m_idx, y, x) && !no_flow && this->sweep_runnable_away_grid(y, x)) {
-        this->done = true;
+    const auto vec_safety = find_safety(this->player_ptr, this->m_idx);
+    if (!vec_safety || no_flow) {
+        return vec_inverted;
     }
 
-    if (this->done) {
-        return;
+    const auto vec_runaway = this->sweep_runnable_away_grid(*vec_safety);
+    if (!vec_runaway) {
+        return vec_inverted;
     }
 
-    *y = tmp_y;
-    *x = tmp_x;
+    this->done = true;
+    return *vec_runaway;
 }
 
 /*!
@@ -284,7 +286,9 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
         return;
     }
 
-    this->determine_when_cost(yp, xp, m_pos.y, m_pos.x, use_scent);
+    const auto pos = this->determine_when_cost({ *yp, *xp }, m_pos, use_scent);
+    *yp = pos.y;
+    *xp = pos.x;
 }
 
 bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow)
@@ -403,27 +407,25 @@ bool MonsterSweepGrid::is_best_cost(const Pos2D &pos, const int now_cost)
  * @param xp 移動先のマスのX座標を返す参照ポインタ
  * @return 有効なマスがあった場合TRUEを返す
  */
-bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
+std::optional<Pos2DVec> MonsterSweepGrid::sweep_runnable_away_grid(const Pos2DVec &vec_initial) const
 {
-    auto gy = 0;
-    auto gx = 0;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    auto fy = m_ptr->fy;
-    auto fx = m_ptr->fx;
-    auto y1 = fy - *yp;
-    auto x1 = fx - *xp;
+    Pos2D pos_run(0, 0);
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[this->m_idx];
+    const auto &monrace = monster.get_monrace();
+    const auto m_pos = monster.get_position();
+    auto pos1 = m_pos + vec_initial.inverted();
     auto score = -1;
     for (auto i = 7; i >= 0; i--) {
-        auto y = fy + ddy_ddd[i];
-        auto x = fx + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, y, x)) {
+        auto y = m_pos.y + ddy_ddd[i];
+        auto x = m_pos.x + ddx_ddd[i];
+        if (!in_bounds2(&floor, y, x)) {
             continue;
         }
 
-        const auto dis = Grid::calc_distance({ y, x }, { y1, x1 });
-        auto s = 5000 / (dis + 3) - 500 / (floor_ptr->grid_array[y][x].get_distance(r_ptr->get_grid_flow_type()) + 1);
+        const Pos2D pos(y, x);
+        const auto dis = Grid::calc_distance(pos, pos1);
+        auto s = 5000 / (dis + 3) - 500 / (floor.get_grid(pos).get_distance(monrace.get_grid_flow_type()) + 1);
         if (s < 0) {
             s = 0;
         }
@@ -433,41 +435,39 @@ bool MonsterSweepGrid::sweep_runnable_away_grid(POSITION *yp, POSITION *xp)
         }
 
         score = s;
-        gy = y;
-        gx = x;
+        pos_run = pos;
     }
 
     if (score == -1) {
-        return false;
+        return vec_initial;
     }
 
-    *yp = fy - gy;
-    *xp = fx - gx;
-    return true;
+    return m_pos - pos_run;
 }
 
-void MonsterSweepGrid::determine_when_cost(POSITION *yp, POSITION *xp, POSITION y1, POSITION x1, const bool use_scent)
+Pos2D MonsterSweepGrid::determine_when_cost(const Pos2D &pos_initial, const Pos2D &m_pos, const bool use_scent)
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    Pos2D pos = pos_initial;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
     for (auto i = 7; i >= 0; i--) {
-        auto y = y1 + ddy_ddd[i];
-        auto x = x1 + ddx_ddd[i];
-        if (!in_bounds2(floor_ptr, y, x)) {
+        auto y = m_pos.y + ddy_ddd[i];
+        auto x = m_pos.x + ddx_ddd[i];
+        if (!in_bounds2(&floor, y, x)) {
             continue;
         }
 
-        auto *g_ptr = &floor_ptr->grid_array[y][x];
+        const auto &grid = floor.grid_array[y][x];
         if (use_scent) {
-            int when = g_ptr->when;
+            int when = grid.when;
             if (this->best > when) {
                 continue;
             }
 
             this->best = when;
         } else {
-            const auto &monrace = floor_ptr->m_list[this->m_idx].get_monrace();
+            const auto &monrace = floor.m_list[this->m_idx].get_monrace();
             const auto gf = monrace.get_grid_flow_type();
-            this->cost = monrace.behavior_flags.has_any_of({ MonsterBehaviorType::BASH_DOOR, MonsterBehaviorType::OPEN_DOOR }) ? g_ptr->get_distance(gf) : g_ptr->get_cost(gf);
+            this->cost = monrace.behavior_flags.has_any_of({ MonsterBehaviorType::BASH_DOOR, MonsterBehaviorType::OPEN_DOOR }) ? grid.get_distance(gf) : grid.get_cost(gf);
             if ((this->cost == 0) || (this->best < this->cost)) {
                 continue;
             }
@@ -475,7 +475,8 @@ void MonsterSweepGrid::determine_when_cost(POSITION *yp, POSITION *xp, POSITION 
             this->best = this->cost;
         }
 
-        *yp = this->player_ptr->y + 16 * ddy_ddd[i];
-        *xp = this->player_ptr->x + 16 * ddx_ddd[i];
+        pos = this->player_ptr->get_position() + Pos2DVec(ddy_ddd[i], ddx_ddd[i]) * 16;
     }
+
+    return pos;
 }

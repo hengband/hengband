@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "util/point-2d.h"
+#include <optional>
 
 class PlayerType;
 class MonsterSweepGrid {
@@ -24,10 +25,10 @@ private:
     void sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow);
     bool check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow);
     bool sweep_ranged_attack_grid(POSITION *yp, POSITION *xp);
-    bool sweep_runnable_away_grid(POSITION *yp, POSITION *xp);
+    std::optional<Pos2DVec> sweep_runnable_away_grid(const Pos2DVec &vec_initial) const;
     void check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2, POSITION *x2);
     void search_room_to_run(POSITION *y, POSITION *x);
-    void search_pet_runnable_grid(POSITION *y, POSITION *x, bool no_flow);
-    void determine_when_cost(POSITION *yp, POSITION *xp, POSITION y1, POSITION x1, const bool use_scent);
+    Pos2DVec search_pet_runnable_grid(const Pos2DVec &vec_initial, bool no_flow);
+    Pos2D determine_when_cost(const Pos2D &pos_initial, const Pos2D &m_pos, const bool use_scent);
     bool is_best_cost(const Pos2D &pos, const int now_cost);
 };

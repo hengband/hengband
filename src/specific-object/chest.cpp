@@ -80,23 +80,23 @@ void Chest::open(bool scatter, const Pos2D &pos, short item_idx)
 
         if (!scatter) {
             /* Normally, drop object near the chest. */
-            (void)drop_near(this->player_ptr, &item_inner_chest, -1, pos.y, pos.x);
+            (void)drop_near(this->player_ptr, &item_inner_chest, pos);
             continue;
         }
 
         /* If chest scatters its contents, pick any floor square. */
         for (auto i = 0; i < 200; i++) {
-            /* Pick a totally random spot. */
             const auto y = randint0(MAX_HGT);
             const auto x = randint0(MAX_WID);
+            const Pos2D pos_random(y, x); //!< @details 乱数引数の標準を固定する.
 
             /* Must be an empty floor. */
-            if (!is_cave_empty_bold(this->player_ptr, y, x)) {
+            if (!is_cave_empty_bold(this->player_ptr, pos_random.y, pos_random.x)) {
                 continue;
             }
 
             /* Place the object there. */
-            (void)drop_near(this->player_ptr, &item_inner_chest, -1, y, x);
+            (void)drop_near(this->player_ptr, &item_inner_chest, pos_random);
             break;
         }
     }

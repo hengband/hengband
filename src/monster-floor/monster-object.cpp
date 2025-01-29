@@ -219,7 +219,7 @@ void monster_drop_carried_objects(PlayerType *player_ptr, MonsterEntity *m_ptr)
         auto drop_item = player_ptr->current_floor_ptr->o_list[this_o_idx].clone();
         drop_item.held_m_idx = 0;
         delete_object_idx(player_ptr, this_o_idx);
-        (void)drop_near(player_ptr, &drop_item, -1, m_ptr->fy, m_ptr->fx);
+        (void)drop_near(player_ptr, &drop_item, m_ptr->get_position());
     }
 
     m_ptr->hold_o_idx_list.clear();

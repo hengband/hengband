@@ -83,7 +83,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
     if (bi_key.is_valid()) {
         ItemEntity item(bi_key);
         ItemMagicApplier(player_ptr, &item, floor.object_level, AM_NO_FIXED_ART).execute();
-        (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+        (void)drop_near(player_ptr, &item, md_ptr->get_position());
     }
 
     if (is_true_victor) {
@@ -129,7 +129,7 @@ static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)
     ItemEntity item({ ItemKindType::MONSTER_REMAINS, (corpse ? SV_CORPSE : SV_SKELETON) });
     ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
     item.pval = enum2i(md_ptr->m_ptr->r_idx);
-    (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+    (void)drop_near(player_ptr, &item, md_ptr->get_position());
 }
 
 /*!
@@ -205,7 +205,7 @@ static void drop_artifacts(PlayerType *player_ptr, MonsterDeath *md_ptr)
     if (bi_id) {
         ItemEntity item(*bi_id);
         ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
-        (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+        (void)drop_near(player_ptr, &item, md_ptr->get_position());
     }
 
     msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), dungeon.name.data());
@@ -290,7 +290,7 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
             dump_item++;
         }
 
-        (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+        (void)drop_near(player_ptr, &item, md_ptr->get_position());
     }
 
     floor.object_level = floor.base_level;

@@ -157,7 +157,7 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
     item.number = amt;
     const auto item_name = describe_flavor(player_ptr, item, 0);
     msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
-    (void)drop_near(player_ptr, &item, 0, player_ptr->y, player_ptr->x);
+    (void)drop_near(player_ptr, &item, player_ptr->get_position());
     vary_item(player_ptr, i_idx, -amt);
 }
 

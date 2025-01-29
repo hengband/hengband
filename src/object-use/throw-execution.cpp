@@ -334,7 +334,7 @@ void ObjectThrowEntity::drop_thrown_item()
     const auto has_terrain_projection = floor.has_terrain_characteristics({ this->y, this->x }, TerrainCharacteristics::PROJECT);
     const auto drop_y = has_terrain_projection ? this->y : this->prev_y;
     const auto drop_x = has_terrain_projection ? this->x : this->prev_x;
-    (void)drop_near(this->player_ptr, this->q_ptr, this->corruption_possibility, drop_y, drop_x);
+    (void)drop_near(this->player_ptr, this->q_ptr, { drop_y, drop_x }, this->corruption_possibility);
 }
 
 bool ObjectThrowEntity::check_what_throw()

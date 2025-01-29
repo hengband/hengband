@@ -178,3 +178,19 @@ bool PlayerType::try_resist_eldritch_horror() const
 {
     return evaluate_percent(this->skill_sav) || one_in_(2);
 }
+
+/*!
+ * @brief プレイヤーから指定の座標がどの方角にあるかを返す
+ * @param pos 確認したい座標
+ * @return 方向ID
+ */
+int PlayerType::point_direction(const Pos2D &pos) const
+{
+    static const std::vector<std::vector<int>> directions = { { 7, 8, 9 }, { 4, 5, 6 }, { 1, 2, 3 } };
+    const auto pos_dir = pos - this->get_position();
+    if ((std::abs(pos_dir.y) > 1) || (std::abs(pos_dir.x) > 1)) {
+        return 0;
+    }
+
+    return directions[pos_dir.y + 1][pos_dir.x + 1];
+}
