@@ -266,46 +266,56 @@ static void update_local_illumination_aux(PlayerType *player_ptr, int y, int x)
  */
 void update_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    int i;
-    POSITION yy, xx;
-
-    if (!in_bounds(player_ptr->current_floor_ptr, y, x)) {
+    const Pos2D pos(y, x);
+    if (!in_bounds(player_ptr->current_floor_ptr, pos.y, pos.x)) {
         return;
     }
 
-    if ((y != player_ptr->y) && (x != player_ptr->x)) {
-        yy = (y < player_ptr->y) ? (y - 1) : (y + 1);
-        xx = (x < player_ptr->x) ? (x - 1) : (x + 1);
+    const auto p_pos = player_ptr->get_position();
+    if ((pos.y != p_pos.y) && (pos.x != p_pos.x)) {
+        const auto yy = (y < player_ptr->y) ? (y - 1) : (y + 1);
+        const auto xx = (x < player_ptr->x) ? (x - 1) : (x + 1);
         update_local_illumination_aux(player_ptr, yy, xx);
         update_local_illumination_aux(player_ptr, y, xx);
         update_local_illumination_aux(player_ptr, yy, x);
-    } else if (x != player_ptr->x) /* y == player_ptr->y */
-    {
-        xx = (x < player_ptr->x) ? (x - 1) : (x + 1);
-        for (i = -1; i <= 1; i++) {
+        return;
+    }
+
+    if (x != p_pos.x) { //!< y == player_ptr->y
+        const auto xx = (x < player_ptr->x) ? (x - 1) : (x + 1);
+        int yy;
+        for (auto i = -1; i <= 1; i++) {
             yy = y + i;
             update_local_illumination_aux(player_ptr, yy, xx);
         }
+
         yy = y - 1;
         update_local_illumination_aux(player_ptr, yy, x);
         yy = y + 1;
         update_local_illumination_aux(player_ptr, yy, x);
-    } else if (y != player_ptr->y) /* x == player_ptr->x */
-    {
-        yy = (y < player_ptr->y) ? (y - 1) : (y + 1);
-        for (i = -1; i <= 1; i++) {
+        return;
+    }
+
+    if (y != p_pos.y) { //!< x == player_ptr->x
+        const auto yy = (y < player_ptr->y) ? (y - 1) : (y + 1);
+        int xx;
+        for (auto i = -1; i <= 1; i++) {
             xx = x + i;
             update_local_illumination_aux(player_ptr, yy, xx);
         }
+
         xx = x - 1;
         update_local_illumination_aux(player_ptr, y, xx);
         xx = x + 1;
         update_local_illumination_aux(player_ptr, y, xx);
-    } else /* Player's grid */
-    {
-        for (const auto &dd : CCW_DD) {
-            update_local_illumination_aux(player_ptr, y + dd.y, x + dd.x);
-        }
+    }
+
+    if (p_pos != pos) {
+        return;
+    }
+
+    for (const auto &dd : CCW_DD) {
+        update_local_illumination_aux(player_ptr, (pos + dd).y, (pos + dd).x);
     }
 }
 
