@@ -1,6 +1,7 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/point-2d.h"
+#include <array>
+#include <vector>
 
-extern const POSITION *dist_offsets_y[10];
-extern const POSITION *dist_offsets_x[10];
+extern const std::array<std::vector<Pos2DVec>, 10> DIST_OFFSETS;
