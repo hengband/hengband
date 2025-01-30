@@ -114,4 +114,4 @@ extern std::filesystem::path ANGBAND_DIR_XTRA_GRAF;
  * @param filename an image file name
  * @return bitmap handle
  */
-HBITMAP read_graphic(const char *filename);
+HBITMAP read_graphic(const std::filesystem::path &path);
