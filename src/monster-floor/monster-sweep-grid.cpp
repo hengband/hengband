@@ -151,7 +151,9 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
         }
     }
 
-    this->search_room_to_run(y, x);
+    const auto vec = this->search_room_to_run({ *y, *x });
+    *y = vec.y;
+    *x = vec.x;
     if (this->done || (distance >= 3)) {
         return;
     }
@@ -177,29 +179,29 @@ void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2,
     this->done = true;
 }
 
-void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
+Pos2DVec MonsterSweepGrid::search_room_to_run(const Pos2DVec &vec_initial)
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    const auto &monrace = floor_ptr->m_list[this->m_idx].get_monrace();
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monrace = floor.m_list[this->m_idx].get_monrace();
     if (monrace.kind_flags.has_not(MonsterKindType::ANIMAL) || this->can_pass_wall || monrace.feature_flags.has(MonsterFeatureType::KILL_WALL)) {
-        return;
+        return vec_initial;
     }
 
     auto room = 0;
     for (auto i = 0; i < 8; i++) {
         auto xx = this->player_ptr->x + ddx_ddd[i];
         auto yy = this->player_ptr->y + ddy_ddd[i];
-        if (!in_bounds2(floor_ptr, yy, xx)) {
+        if (!in_bounds2(&floor, yy, xx)) {
             continue;
         }
 
-        auto *g_ptr = &floor_ptr->grid_array[yy][xx];
+        auto *g_ptr = &floor.grid_array[yy][xx];
         if (monster_can_cross_terrain(this->player_ptr, g_ptr->feat, &monrace, 0)) {
             room++;
         }
     }
 
-    if (floor_ptr->grid_array[this->player_ptr->y][this->player_ptr->x].is_room()) {
+    if (floor.grid_array[this->player_ptr->y][this->player_ptr->x].is_room()) {
         room -= 2;
     }
 
@@ -208,15 +210,16 @@ void MonsterSweepGrid::search_room_to_run(POSITION *y, POSITION *x)
     }
 
     if (room >= (8 * (this->player_ptr->chp + this->player_ptr->csp)) / (this->player_ptr->mhp + this->player_ptr->msp)) {
-        return;
+        return vec_initial;
     }
 
     const auto vec = find_hiding(this->player_ptr, this->m_idx);
-    if (vec) {
-        *y = vec->y;
-        *x = vec->x;
-        this->done = true;
+    if (!vec) {
+        return vec_initial;
     }
+
+    this->done = true;
+    return *vec;
 }
 
 Pos2DVec MonsterSweepGrid::search_pet_runnable_grid(const Pos2DVec &vec_initial, bool no_flow)

@@ -27,7 +27,7 @@ private:
     std::optional<Pos2D> sweep_ranged_attack_grid(const Pos2D &pos_initial);
     std::optional<Pos2DVec> sweep_runnable_away_grid(const Pos2DVec &vec_initial) const;
     void check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2, POSITION *x2);
-    void search_room_to_run(POSITION *y, POSITION *x);
+    Pos2DVec search_room_to_run(const Pos2DVec &vec_initial);
     Pos2DVec search_pet_runnable_grid(const Pos2DVec &vec_initial, bool no_flow);
     Pos2D determine_when_cost(const Pos2D &pos_initial, const Pos2D &m_pos, const bool use_scent);
     bool is_best_cost(const Pos2D &pos, const int now_cost);
