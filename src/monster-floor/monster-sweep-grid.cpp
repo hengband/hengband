@@ -78,9 +78,9 @@ bool MonsterSweepGrid::get_movable_grid()
     y2 = pos.y;
     x2 = pos.x;
     if (!this->done) {
-        this->sweep_movable_grid(&y2, &x2, no_flow);
-        y = monster_from.fy - y2;
-        x = monster_from.fx - x2;
+        const auto pos_movable = this->sweep_movable_grid({ y2, x2 }, no_flow);
+        y = monster_from.fy - pos_movable.y;
+        x = monster_from.fx - pos_movable.x;
     }
 
     const auto vec_pet = this->search_pet_runnable_grid({ y, x }, no_flow);
@@ -250,31 +250,26 @@ Pos2DVec MonsterSweepGrid::search_pet_runnable_grid(const Pos2DVec &vec_initial,
 }
 
 /*!
- * @brief モンスターがプレイヤーに向けて接近することが可能なマスを走査する /
- * Choose the "best" direction for "flowing"
- * @param yp 移動先のマスのY座標を返す参照ポインタ
- * @param xp 移動先のマスのX座標を返す参照ポインタ
+ * @brief モンスターがプレイヤーに向けて接近することが可能なマスを走査する
+ * @param p_pos プレイヤーの座標
  * @param no_flow モンスターにFLOWフラグが経っていない状態でTRUE
  */
-void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow)
+Pos2D MonsterSweepGrid::sweep_movable_grid(const Pos2D &p_pos, bool no_flow)
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[this->m_idx];
     const auto &monrace = monster.get_monrace();
-    const auto &[pos, check] = this->check_movable_grid({ *yp, *xp }, no_flow);
-    *yp = pos.y;
-    *xp = pos.x;
+    const auto &[pos_movable, check] = this->check_movable_grid(p_pos, no_flow);
     if (!check) {
-        return;
+        return pos_movable;
     }
 
-    const auto p_pos = this->player_ptr->get_position();
     const auto m_pos = monster.get_position();
     const auto &grid = floor.get_grid(m_pos);
     const auto gf = monrace.get_grid_flow_type();
     if (grid.has_los() && projectable(this->player_ptr, p_pos, m_pos)) {
         if ((Grid::calc_distance(m_pos, p_pos) == 1) || (monrace.freq_spell > 0) || (grid.get_cost(gf) > 5)) {
-            return;
+            return pos_movable;
         }
     }
 
@@ -283,18 +278,17 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
         this->best = 999;
     } else if (grid.when) {
         if (floor.get_grid(p_pos).when - grid.when > 127) {
-            return;
+            return pos_movable;
         }
 
         use_scent = true;
         this->best = 0;
     } else {
-        return;
+        return pos_movable;
     }
 
-    const auto pos = this->determine_when_cost({ *yp, *xp }, m_pos, use_scent);
-    *yp = pos.y;
-    *xp = pos.x;
+    const auto pos = this->determine_when_cost(pos_movable, m_pos, use_scent);
+    return pos;
 }
 
 std::pair<Pos2D, bool> MonsterSweepGrid::check_movable_grid(const Pos2D &pos_initial, bool no_flow)

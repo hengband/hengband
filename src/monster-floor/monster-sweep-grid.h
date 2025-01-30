@@ -23,7 +23,7 @@ private:
     int cost = 0;
     int best = 999;
     bool mon_will_run();
-    void sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow);
+    Pos2D sweep_movable_grid(const Pos2D &p_pos, bool no_flow);
     std::pair<Pos2D, bool> check_movable_grid(const Pos2D &pos_initial, bool no_flow);
     std::optional<Pos2D> sweep_ranged_attack_grid(const Pos2D &pos_initial);
     std::optional<Pos2DVec> sweep_runnable_away_grid(const Pos2DVec &vec_initial) const;
