@@ -238,7 +238,7 @@ void print_frame_basic(PlayerType *player_ptr)
     const auto &title = player_ptr->mimic_form == MimicKindType::NONE
                             ? rp_ptr->title
                             : mimic_info.at(player_ptr->mimic_form).title;
-    print_field(title, ROW_RACE, COL_RACE);
+    print_field(str_substr(title, 0, 12), ROW_RACE, COL_RACE);
     print_title(player_ptr);
     print_level(player_ptr);
     print_exp(player_ptr);
