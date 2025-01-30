@@ -24,7 +24,7 @@ private:
     bool mon_will_run();
     void sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_flow);
     bool check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow);
-    bool sweep_ranged_attack_grid(POSITION *yp, POSITION *xp);
+    std::optional<Pos2D> sweep_ranged_attack_grid(const Pos2D &pos_initial);
     std::optional<Pos2DVec> sweep_runnable_away_grid(const Pos2DVec &vec_initial) const;
     void check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2, POSITION *x2);
     void search_room_to_run(POSITION *y, POSITION *x);
