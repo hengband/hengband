@@ -48,10 +48,8 @@ bool MonsterSweepGrid::get_movable_grid()
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster_from = floor.m_list[this->m_idx];
     auto &monrace = monster_from.get_monrace();
-    auto y = 0;
-    auto x = 0;
-    auto y2 = this->player_ptr->y;
-    auto x2 = this->player_ptr->x;
+    Pos2DVec vec(0, 0);
+    auto pos_target = this->player_ptr->get_position();
     this->will_run = this->mon_will_run();
     const auto pos_monster_from = monster_from.get_position();
     const auto no_flow = monster_from.mflag2.has(MonsterConstantFlagType::NOFLOW) && (floor.get_grid(pos_monster_from).get_cost(monrace.get_grid_flow_type()) > 2);
@@ -65,25 +63,21 @@ bool MonsterSweepGrid::get_movable_grid()
             const auto is_los = los(floor, pos_from, pos_to);
             const auto is_projectable = projectable(this->player_ptr, pos_from, pos_to);
             if (is_enemies && is_los && is_projectable) {
-                y = pos_from.y - pos_to.y;
-                x = pos_from.x - pos_to.x;
+                vec = pos_from - pos_to;
                 this->done = true;
             }
         }
     }
 
-    const auto &[vec, pos] = this->check_hiding_grid({ y, x }, { y2, x2 });
-    y = vec.y;
-    x = vec.x;
-    y2 = pos.y;
-    x2 = pos.x;
+    const auto &[vec_hiding, pos] = this->check_hiding_grid(vec, pos_target);
+    vec = vec_hiding;
+    pos_target = pos;
     if (!this->done) {
-        const auto pos_movable = this->sweep_movable_grid({ y2, x2 }, no_flow);
-        y = monster_from.fy - pos_movable.y;
-        x = monster_from.fx - pos_movable.x;
+        const auto pos_movable = this->sweep_movable_grid(pos_target, no_flow);
+        vec = pos_monster_from - pos_movable;
     }
 
-    const auto vec_pet = this->search_pet_runnable_grid({ y, x }, no_flow);
+    const auto vec_pet = this->search_pet_runnable_grid(vec, no_flow);
     if (vec_pet == Pos2DVec(0, 0)) {
         return false;
     }
