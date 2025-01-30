@@ -45,7 +45,7 @@ MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, DI
  */
 bool MonsterSweepGrid::get_movable_grid()
 {
-    auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster_from = floor.m_list[this->m_idx];
     auto &monrace = monster_from.get_monrace();
     auto y = 0;
@@ -72,19 +72,23 @@ bool MonsterSweepGrid::get_movable_grid()
         }
     }
 
-    this->check_hiding_grid(&y, &x, &y2, &x2);
+    const auto &[vec, pos] = this->check_hiding_grid({ y, x }, { y2, x2 });
+    y = vec.y;
+    x = vec.x;
+    y2 = pos.y;
+    x2 = pos.x;
     if (!this->done) {
         this->sweep_movable_grid(&y2, &x2, no_flow);
         y = monster_from.fy - y2;
         x = monster_from.fx - x2;
     }
 
-    const auto vec = this->search_pet_runnable_grid({ y, x }, no_flow);
-    if (vec == Pos2DVec(0, 0)) {
+    const auto vec_pet = this->search_pet_runnable_grid({ y, x }, no_flow);
+    if (vec_pet == Pos2DVec(0, 0)) {
         return false;
     }
 
-    store_moves_val(this->mm, vec.y, vec.x);
+    store_moves_val(this->mm, vec_pet.y, vec_pet.x);
     return true;
 }
 
@@ -132,51 +136,47 @@ bool MonsterSweepGrid::mon_will_run()
     return p_val * m_mhp > m_val * p_mhp;
 }
 
-void MonsterSweepGrid::check_hiding_grid(POSITION *y, POSITION *x, POSITION *y2, POSITION *x2)
+std::pair<Pos2DVec, Pos2D> MonsterSweepGrid::check_hiding_grid(const Pos2DVec &vec_initial, const Pos2D &p_pos)
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[this->m_idx];
     const auto &monrace = monster.get_monrace();
     if (this->done || this->will_run || !monster.is_hostile() || monrace.misc_flags.has_not(MonsterMiscType::HAS_FRIENDS)) {
-        return;
+        return std::pair<Pos2DVec, Pos2D>(vec_initial, p_pos);
     }
 
-    const auto p_pos = this->player_ptr->get_position();
     const auto m_pos = monster.get_position();
     const auto gf = monrace.get_grid_flow_type();
     const auto distance = floor.get_grid(m_pos).get_distance(gf);
     if (!los(floor, m_pos, p_pos) || !projectable(this->player_ptr, m_pos, p_pos)) {
         if (distance >= MAX_PLAYER_SIGHT / 2) {
-            return;
+            return std::pair<Pos2DVec, Pos2D>(vec_initial, p_pos);
         }
     }
 
-    const auto vec = this->search_room_to_run({ *y, *x });
-    *y = vec.y;
-    *x = vec.x;
+    const auto vec = this->search_room_to_run(vec_initial);
     if (this->done || (distance >= 3)) {
-        return;
+        return std::pair<Pos2DVec, Pos2D>(vec, p_pos);
     }
 
+    Pos2D pos = p_pos;
     for (auto i = 0; i < 8; i++) {
-        *y2 = p_pos.y + ddy_ddd[(this->m_idx + i) & 7];
-        *x2 = p_pos.x + ddx_ddd[(this->m_idx + i) & 7];
-        if ((monster.fy == *y2) && (monster.fx == *x2)) {
-            *y2 = p_pos.y;
-            *x2 = p_pos.x;
+        const auto dir = (this->m_idx + i) & 7;
+        pos = p_pos + Pos2DVec(ddy_ddd[dir], ddx_ddd[dir]);
+        if (m_pos == pos) {
+            pos = p_pos;
             break;
         }
 
-        if (!in_bounds2(&floor, *y2, *x2) || !monster_can_enter(this->player_ptr, *y2, *x2, &monrace, 0)) {
+        if (!in_bounds2(&floor, pos.y, pos.x) || !monster_can_enter(this->player_ptr, pos.y, pos.x, &monrace, 0)) {
             continue;
         }
 
         break;
     }
 
-    *y = m_pos.y - *y2;
-    *x = m_pos.x - *x2;
     this->done = true;
+    return std::pair<Pos2DVec, Pos2D>(m_pos - pos, pos);
 }
 
 Pos2DVec MonsterSweepGrid::search_room_to_run(const Pos2DVec &vec_initial)
