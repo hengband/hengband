@@ -186,8 +186,8 @@ void do_cmd_macros(PlayerType *player_ptr)
             prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             const auto ask_result = askfor(70, initial_filename);
-            if (!ask_result) {
-                continue;
+            if (!ask_result || ask_result->empty()) {
+                break;
             }
 
             const auto err = process_pref_file(player_ptr, *ask_result, true);
@@ -206,8 +206,8 @@ void do_cmd_macros(PlayerType *player_ptr)
             prt(_("コマンド: マクロをファイルに追加する", "Command: Append macros to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             const auto ask_result = askfor(70, initial_filename);
-            if (!ask_result) {
-                continue;
+            if (!ask_result || ask_result->empty()) {
+                break;
             }
 
             macro_dump(&auto_dump_stream, *ask_result);
@@ -248,7 +248,7 @@ void do_cmd_macros(PlayerType *player_ptr)
             char tmp[81]{};
             ascii_to_text(tmp, macro_buf, sizeof(tmp));
             const auto ask_result = askfor(80, tmp);
-            if (!ask_result) {
+            if (!ask_result || ask_result->empty()) {
                 break;
             }
 
@@ -268,8 +268,8 @@ void do_cmd_macros(PlayerType *player_ptr)
             prt(_("コマンド: キー配置をファイルに追加する", "Command: Append keymaps to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
             const auto ask_result = askfor(80, initial_filename);
-            if (!ask_result) {
-                continue;
+            if (!ask_result || ask_result->empty()) {
+                break;
             }
 
             (void)keymap_dump(*ask_result);
@@ -311,7 +311,7 @@ void do_cmd_macros(PlayerType *player_ptr)
             char tmp[81]{};
             ascii_to_text(tmp, macro_buf, sizeof(tmp));
             const auto ask_result = askfor(80, tmp);
-            if (!ask_result) {
+            if (!ask_result || ask_result->empty()) {
                 break;
             }
 
@@ -337,8 +337,8 @@ void do_cmd_macros(PlayerType *player_ptr)
                 22, 0);
             prt(_("マクロ行動: ", "Action: "), 20, 0);
             const auto ask_result = askfor(80);
-            if (!ask_result) {
-                continue;
+            if (!ask_result || ask_result->empty()) {
+                break;
             }
 
             text_to_ascii(macro_buf, *ask_result, sizeof(macro_buf));
