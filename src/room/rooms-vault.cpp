@@ -163,8 +163,8 @@ static void build_bubble_vault(PlayerType *player_ptr, const Pos2D &pos0, const 
 
     /* Try to add some random doors */
     for (auto i = 0; i < 500; i++) {
-        const auto y = randint1(vec.x - 3) - vec_half.x + pos0.x + 1;
-        const auto x = randint1(vec.y - 3) - vec_half.y + pos0.y + 1;
+        const auto y = randint1(vec.y - 3) - vec_half.y + pos0.y + 1;
+        const auto x = randint1(vec.x - 3) - vec_half.x + pos0.x + 1;
         add_door(player_ptr, { y, x }); //!<@ details 乱数引数の評価順を固定する.
     }
 
