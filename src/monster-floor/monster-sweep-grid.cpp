@@ -82,7 +82,7 @@ bool MonsterSweepGrid::get_movable_grid()
         return false;
     }
 
-    store_moves_val(this->mm, vec_pet.y, vec_pet.x);
+    store_moves_val(this->mm, vec_pet);
     return true;
 }
 

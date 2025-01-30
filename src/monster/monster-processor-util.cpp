@@ -87,29 +87,27 @@ void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
  * @param y 移動先Y座標
  * @param x 移動先X座標
  */
-void store_moves_val(int *mm, int y, int x)
+void store_moves_val(int *mm, const Pos2DVec &vec)
 {
-    POSITION ax = std::abs(x);
-    POSITION ay = std::abs(y);
-
-    int move_val = 0;
-    if (y < 0) {
+    const Pos2DVec vec_abs(std::abs(vec.y), std::abs(vec.x));
+    auto move_val = 0;
+    if (vec.y < 0) {
         move_val += 8;
     }
-    if (x > 0) {
+    if (vec.x > 0) {
         move_val += 4;
     }
 
-    if (ay > (ax << 1)) {
+    if (vec_abs.y > (vec_abs.x << 1)) {
         move_val += 2;
-    } else if (ax > (ay << 1)) {
+    } else if (vec_abs.x > (vec_abs.y << 1)) {
         move_val++;
     }
 
     switch (move_val) {
     case 0: {
         mm[0] = 9;
-        if (ay > ax) {
+        if (vec_abs.y > vec_abs.x) {
             mm[1] = 8;
             mm[2] = 6;
             mm[3] = 7;
@@ -126,7 +124,7 @@ void store_moves_val(int *mm, int y, int x)
     case 1:
     case 9: {
         mm[0] = 6;
-        if (y < 0) {
+        if (vec.y < 0) {
             mm[1] = 3;
             mm[2] = 9;
             mm[3] = 2;
@@ -143,7 +141,7 @@ void store_moves_val(int *mm, int y, int x)
     case 2:
     case 6: {
         mm[0] = 8;
-        if (x < 0) {
+        if (vec.x < 0) {
             mm[1] = 9;
             mm[2] = 7;
             mm[3] = 6;
@@ -159,7 +157,7 @@ void store_moves_val(int *mm, int y, int x)
     }
     case 4: {
         mm[0] = 7;
-        if (ay > ax) {
+        if (vec_abs.y > vec_abs.x) {
             mm[1] = 8;
             mm[2] = 4;
             mm[3] = 9;
@@ -176,7 +174,7 @@ void store_moves_val(int *mm, int y, int x)
     case 5:
     case 13: {
         mm[0] = 4;
-        if (y < 0) {
+        if (vec.y < 0) {
             mm[1] = 1;
             mm[2] = 7;
             mm[3] = 2;
@@ -192,7 +190,7 @@ void store_moves_val(int *mm, int y, int x)
     }
     case 8: {
         mm[0] = 3;
-        if (ay > ax) {
+        if (vec_abs.y > vec_abs.x) {
             mm[1] = 2;
             mm[2] = 6;
             mm[3] = 1;
@@ -209,7 +207,7 @@ void store_moves_val(int *mm, int y, int x)
     case 10:
     case 14: {
         mm[0] = 2;
-        if (x < 0) {
+        if (vec.x < 0) {
             mm[1] = 3;
             mm[2] = 1;
             mm[3] = 6;
@@ -225,7 +223,7 @@ void store_moves_val(int *mm, int y, int x)
     }
     case 12: {
         mm[0] = 1;
-        if (ay > ax) {
+        if (vec_abs.y > vec_abs.x) {
             mm[1] = 2;
             mm[2] = 4;
             mm[3] = 3;
