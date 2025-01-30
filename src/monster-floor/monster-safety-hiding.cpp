@@ -18,25 +18,24 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
+#include <span>
 
 /*!
  * @brief モンスターが逃げ込める地点を走査する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @param y_offsets
- * @param x_offsets
+ * @param offsets モンスターがいる地点から逃げ込もうとする地点へのオフセットの候補リスト
  * @param d モンスターがいる地点からの距離
  * @return 逃げ込める地点の候補地
  */
-static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTER_IDX m_idx, const POSITION *y_offsets, const POSITION *x_offsets, int d)
+static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTER_IDX m_idx, std::span<const Pos2DVec> offsets, int d)
 {
     coordinate_candidate candidate;
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();
-    for (auto i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
-        const Pos2DVec vec(dy, dx);
+    for (const auto &vec : offsets) {
         const auto pos = m_pos + vec;
         if (!in_bounds(&floor, pos.y, pos.x)) {
             continue;
@@ -98,13 +97,10 @@ std::optional<Pos2DVec> find_safety(PlayerType *player_ptr, short m_idx)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     for (auto d = 1; d < 10; d++) {
-        const POSITION *y_offsets;
-        y_offsets = dist_offsets_y[d];
+        /// @todo clang-15以降は直接DIST_OFFSETS[d]を受け取るコンストラクタが使用できる
+        const auto offsets = std::span(DIST_OFFSETS[d].begin(), DIST_OFFSETS[d].size());
 
-        const POSITION *x_offsets;
-        x_offsets = dist_offsets_x[d];
-
-        coordinate_candidate candidate = sweep_safe_coordinate(player_ptr, m_idx, y_offsets, x_offsets, d);
+        const auto candidate = sweep_safe_coordinate(player_ptr, m_idx, offsets, d);
         if (candidate.gdis <= 0) {
             continue;
         }
@@ -119,18 +115,16 @@ std::optional<Pos2DVec> find_safety(PlayerType *player_ptr, short m_idx)
  * @brief モンスターが隠れられる地点を走査する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @param y_offsets
- * @param x_offsets
+ * @param offsets モンスターがいる地点から隠れようとする地点へのオフセットの候補リスト
  * @param candidate 隠れられる地点の候補地
  */
 static void sweep_hiding_candidate(
-    PlayerType *player_ptr, const MonsterEntity &monster, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate &candidate)
+    PlayerType *player_ptr, const MonsterEntity &monster, std::span<const Pos2DVec> offsets, coordinate_candidate &candidate)
 {
     const auto &monrace = monster.get_monrace();
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();
-    for (auto i = 0, dx = x_offsets[0], dy = y_offsets[0]; dx != 0 || dy != 0; i++, dx = x_offsets[i], dy = y_offsets[i]) {
-        const Pos2DVec vec(dy, dx);
+    for (const auto &vec : offsets) {
         const auto pos = m_pos + vec;
         if (!in_bounds(player_ptr->current_floor_ptr, pos.y, pos.x)) {
             continue;
@@ -162,13 +156,10 @@ std::optional<Pos2DVec> find_hiding(PlayerType *player_ptr, short m_idx)
     coordinate_candidate candidate;
     candidate.gdis = 999;
     for (auto d = 1; d < 10; d++) {
-        const POSITION *y_offsets;
-        y_offsets = dist_offsets_y[d];
+        /// @todo clang-15以降は直接DIST_OFFSETS[d]を受け取るコンストラクタが使用できる
+        const auto offsets = std::span(DIST_OFFSETS[d].begin(), DIST_OFFSETS[d].size());
 
-        const POSITION *x_offsets;
-        x_offsets = dist_offsets_x[d];
-
-        sweep_hiding_candidate(player_ptr, monster, y_offsets, x_offsets, candidate);
+        sweep_hiding_candidate(player_ptr, monster, offsets, candidate);
         if (candidate.gdis >= 999) {
             continue;
         }
