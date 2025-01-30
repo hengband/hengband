@@ -261,7 +261,10 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[this->m_idx];
     const auto &monrace = monster.get_monrace();
-    if (!this->check_movable_grid(yp, xp, no_flow)) {
+    const auto &[pos, check] = this->check_movable_grid({ *yp, *xp }, no_flow);
+    *yp = pos.y;
+    *xp = pos.x;
+    if (!check) {
         return;
     }
 
@@ -294,32 +297,30 @@ void MonsterSweepGrid::sweep_movable_grid(POSITION *yp, POSITION *xp, bool no_fl
     *xp = pos.x;
 }
 
-bool MonsterSweepGrid::check_movable_grid(POSITION *yp, POSITION *xp, const bool no_flow)
+std::pair<Pos2D, bool> MonsterSweepGrid::check_movable_grid(const Pos2D &pos_initial, bool no_flow)
 {
     const auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     const auto &monrace = monster.get_monrace();
     if (monrace.ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) {
-        const auto &pos = sweep_ranged_attack_grid({ *yp, *xp });
+        const auto &pos = sweep_ranged_attack_grid(pos_initial);
         if (pos) {
-            *yp = pos->y;
-            *xp = pos->x;
-            return false;
+            return std::pair<Pos2D, bool>(*pos, false);
         }
     }
 
     if (no_flow) {
-        return false;
+        return std::pair<Pos2D, bool>(pos_initial, false);
     }
 
     if (monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && (!monster.is_riding() || has_pass_wall(this->player_ptr))) {
-        return false;
+        return std::pair<Pos2D, bool>(pos_initial, false);
     }
 
     if (monrace.feature_flags.has(MonsterFeatureType::KILL_WALL) && !monster.is_riding()) {
-        return false;
+        return std::pair<Pos2D, bool>(pos_initial, false);
     }
 
-    return true;
+    return std::pair<Pos2D, bool>(pos_initial, true);
 }
 
 /*!
