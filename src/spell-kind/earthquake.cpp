@@ -45,8 +45,8 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         return false;
     }
 
-    if (r > 12) {
-        r = 12;
+    if (r > 15) {
+        r = 15;
     }
 
     bool map[32][32]{};
