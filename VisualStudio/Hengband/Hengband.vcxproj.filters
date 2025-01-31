@@ -5544,6 +5544,9 @@
     <ClInclude Include="..\..\src\system\enums\terrain\terrain-kind.h">
       <Filter>system\enums\terrain</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\terrain\wilderness-terrain.h">
+      <Filter>system\enums\terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
