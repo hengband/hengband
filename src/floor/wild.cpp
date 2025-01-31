@@ -91,7 +91,7 @@ static wilderness_grid w_letter[255];
 /* The default table in terrain level generation. */
 static int16_t terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
 
-static int16_t conv_terrain2feat[MAX_WILDERNESS];
+static std::map<wt_type, short> conv_terrain2feat;
 
 /*!
  * @brief プラズマフラクタル的地形生成の再帰中間処理
@@ -606,7 +606,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
                 continue;
             }
 
-            grid.feat = conv_terrain2feat[wild_grid.terrain];
+            grid.feat = conv_terrain2feat.at(wild_grid.terrain);
             grid.info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
@@ -825,7 +825,7 @@ void init_wilderness_terrains()
             THROW_EXCEPTION(std::logic_error, "Initializing wilderness is failed!");
         }
 
-        conv_terrain2feat[wt] = terrains.get_terrain_id(base_terrain_id_map.at(wt));
+        conv_terrain2feat.emplace(wt, terrains.get_terrain_id(base_terrain_id_map.at(wt)));
         auto cur = 0;
         for (const auto &[tag, num] : tags) {
             const auto limit = cur + num;
