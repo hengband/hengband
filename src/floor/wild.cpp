@@ -77,7 +77,7 @@ struct border_type {
 };
 
 struct wilderness_grid {
-    wt_type terrain; /* Terrain type */
+    WildernessTerrain terrain; /* Terrain type */
     int16_t town; /* Town number */
     DEPTH level; /* Level of the wilderness */
     byte road; /* Road */
@@ -89,9 +89,9 @@ static border_type border;
 static wilderness_grid w_letter[255];
 
 /* The default table in terrain level generation. */
-static std::map<wt_type, std::map<short, TerrainTag>> terrain_table;
+static std::map<WildernessTerrain, std::map<short, TerrainTag>> terrain_table;
 
-static std::map<wt_type, short> conv_terrain2feat;
+static std::map<WildernessTerrain, short> conv_terrain2feat;
 
 /*!
  * @brief プラズマフラクタル的地形生成の再帰中間処理
@@ -206,9 +206,9 @@ static void plasma_recursive(FloorType &floor, POSITION x1, POSITION y1, POSITIO
  * @param border 未使用
  * @param corner 広域マップの角部分としての生成ならばTRUE
  */
-static void generate_wilderness_area(FloorType &floor, wt_type terrain, uint32_t seed, bool corner)
+static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain, uint32_t seed, bool corner)
 {
-    if (terrain == TERRAIN_EDGE) {
+    if (terrain == WildernessTerrain::EDGE) {
         for (auto y = 0; y < MAX_HGT; y++) {
             for (auto x = 0; x < MAX_WID; x++) {
                 floor.get_grid({ y, x }).set_terrain_id(TerrainTag::PERMANENT_WALL);
@@ -671,9 +671,9 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
             int index = zz[0][0];
 
             if (num > 1) {
-                w_letter[index].terrain = i2enum<wt_type>(atoi(zz[1]));
+                w_letter[index].terrain = i2enum<WildernessTerrain>(atoi(zz[1]));
             } else {
-                w_letter[index].terrain = TERRAIN_EDGE;
+                w_letter[index].terrain = WildernessTerrain::EDGE;
             }
 
             if (num > 2) {
@@ -794,34 +794,34 @@ void init_wilderness_terrains()
     /// @details 地上フロアの種類をキーに、地形タグと出現率 (1/18ずつ)のペアを値にした連想配列.
     /// map にするとTerrainTag の順番がソートされてしまうので不適。terrain_table もmap に変えればここもmap でOK.
     /// wt_type も将来的にenum class へ変える.
-    static const std::map<wt_type, std::vector<std::pair<TerrainTag, int>>> wt_tag_map{
-        { TERRAIN_EDGE, { { TerrainTag::PERMANENT_WALL, 18 } } },
-        { TERRAIN_TOWN, { { TerrainTag::FLOOR, 18 } } },
-        { TERRAIN_DEEP_WATER, { { TerrainTag::DEEP_WATER, 12 }, { TerrainTag::SHALLOW_WATER, 6 } } },
-        { TERRAIN_SHALLOW_WATER, { { TerrainTag::DEEP_WATER, 3 }, { TerrainTag::SHALLOW_WATER, 12 }, { TerrainTag::FLOOR, 1 }, { TerrainTag::DIRT, 1 }, { TerrainTag::GRASS, 1 } } },
-        { TERRAIN_SWAMP, { { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 3 }, { TerrainTag::TREE, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::SHALLOW_WATER, 4 }, { TerrainTag::SWAMP, 7 } } },
-        { TERRAIN_DIRT, { { TerrainTag::FLOOR, 3 }, { TerrainTag::DIRT, 10 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 1 }, { TerrainTag::TREE, 2 } } },
-        { TERRAIN_GRASS, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 9 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::TREE, 2 } } },
-        { TERRAIN_TREES, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 1 }, { TerrainTag::TREE, 11 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::GRASS, 2 } } },
-        { TERRAIN_DESERT, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 13 }, { TerrainTag::GRASS, 3 } } },
-        { TERRAIN_SHALLOW_LAVA, { { TerrainTag::SHALLOW_LAVA, 14 }, { TerrainTag::DEEP_LAVA, 3 }, { TerrainTag::MOUNTAIN, 1 } } },
-        { TERRAIN_DEEP_LAVA, { { TerrainTag::DIRT, 3 }, { TerrainTag::SHALLOW_LAVA, 3 }, { TerrainTag::DEEP_LAVA, 10 }, { TerrainTag::MOUNTAIN, 2 } } },
-        { TERRAIN_MOUNTAIN, { { TerrainTag::FLOOR, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::TREE, 2 }, { TerrainTag::MOUNTAIN, 10 } } },
+    static const std::map<WildernessTerrain, std::vector<std::pair<TerrainTag, int>>> wt_tag_map{
+        { WildernessTerrain::EDGE, { { TerrainTag::PERMANENT_WALL, 18 } } },
+        { WildernessTerrain::TOWN, { { TerrainTag::FLOOR, 18 } } },
+        { WildernessTerrain::DEEP_WATER, { { TerrainTag::DEEP_WATER, 12 }, { TerrainTag::SHALLOW_WATER, 6 } } },
+        { WildernessTerrain::SHALLOW_WATER, { { TerrainTag::DEEP_WATER, 3 }, { TerrainTag::SHALLOW_WATER, 12 }, { TerrainTag::FLOOR, 1 }, { TerrainTag::DIRT, 1 }, { TerrainTag::GRASS, 1 } } },
+        { WildernessTerrain::SWAMP, { { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 3 }, { TerrainTag::TREE, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::SHALLOW_WATER, 4 }, { TerrainTag::SWAMP, 7 } } },
+        { WildernessTerrain::DIRT, { { TerrainTag::FLOOR, 3 }, { TerrainTag::DIRT, 10 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 1 }, { TerrainTag::TREE, 2 } } },
+        { WildernessTerrain::GRASS, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 9 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::TREE, 2 } } },
+        { WildernessTerrain::TREES, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 1 }, { TerrainTag::TREE, 11 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::GRASS, 2 } } },
+        { WildernessTerrain::DESERT, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 13 }, { TerrainTag::GRASS, 3 } } },
+        { WildernessTerrain::SHALLOW_LAVA, { { TerrainTag::SHALLOW_LAVA, 14 }, { TerrainTag::DEEP_LAVA, 3 }, { TerrainTag::MOUNTAIN, 1 } } },
+        { WildernessTerrain::DEEP_LAVA, { { TerrainTag::DIRT, 3 }, { TerrainTag::SHALLOW_LAVA, 3 }, { TerrainTag::DEEP_LAVA, 10 }, { TerrainTag::MOUNTAIN, 2 } } },
+        { WildernessTerrain::MOUNTAIN, { { TerrainTag::FLOOR, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::TREE, 2 }, { TerrainTag::MOUNTAIN, 10 } } },
     };
 
-    static const std::map<wt_type, TerrainTag> base_terrain_id_map{
-        { TERRAIN_EDGE, TerrainTag::PERMANENT_WALL },
-        { TERRAIN_TOWN, TerrainTag::TOWN },
-        { TERRAIN_DEEP_WATER, TerrainTag::DEEP_WATER },
-        { TERRAIN_SHALLOW_WATER, TerrainTag::SHALLOW_WATER },
-        { TERRAIN_SWAMP, TerrainTag::SWAMP },
-        { TERRAIN_DIRT, TerrainTag::DIRT },
-        { TERRAIN_GRASS, TerrainTag::GRASS },
-        { TERRAIN_TREES, TerrainTag::TREE },
-        { TERRAIN_DESERT, TerrainTag::DIRT },
-        { TERRAIN_SHALLOW_LAVA, TerrainTag::SHALLOW_LAVA },
-        { TERRAIN_DEEP_LAVA, TerrainTag::DEEP_LAVA },
-        { TERRAIN_MOUNTAIN, TerrainTag::MOUNTAIN },
+    static const std::map<WildernessTerrain, TerrainTag> base_terrain_id_map{
+        { WildernessTerrain::EDGE, TerrainTag::PERMANENT_WALL },
+        { WildernessTerrain::TOWN, TerrainTag::TOWN },
+        { WildernessTerrain::DEEP_WATER, TerrainTag::DEEP_WATER },
+        { WildernessTerrain::SHALLOW_WATER, TerrainTag::SHALLOW_WATER },
+        { WildernessTerrain::SWAMP, TerrainTag::SWAMP },
+        { WildernessTerrain::DIRT, TerrainTag::DIRT },
+        { WildernessTerrain::GRASS, TerrainTag::GRASS },
+        { WildernessTerrain::TREES, TerrainTag::TREE },
+        { WildernessTerrain::DESERT, TerrainTag::DIRT },
+        { WildernessTerrain::SHALLOW_LAVA, TerrainTag::SHALLOW_LAVA },
+        { WildernessTerrain::DEEP_LAVA, TerrainTag::DEEP_LAVA },
+        { WildernessTerrain::MOUNTAIN, TerrainTag::MOUNTAIN },
     };
 
     const auto &terrains = TerrainList::get_instance();

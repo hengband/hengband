@@ -8,10 +8,10 @@ enum parse_error_type : int;
 /*
  * A structure describing a wilderness area with a terrain or a town
  */
-enum wt_type : int;
+enum class WildernessTerrain;
 enum class DungeonId;
 struct wilderness_type {
-    wt_type terrain;
+    WildernessTerrain terrain;
     int16_t town;
     int road;
     uint32_t seed;

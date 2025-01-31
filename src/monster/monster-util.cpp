@@ -163,24 +163,24 @@ MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
     }
 
     switch (wilderness[pos_wilderness.y][pos_wilderness.x].terrain) {
-    case TERRAIN_TOWN:
+    case WildernessTerrain::TOWN:
         return MonraceHook::TOWN;
-    case TERRAIN_DEEP_WATER:
+    case WildernessTerrain::DEEP_WATER:
         return MonraceHook::OCEAN;
-    case TERRAIN_SHALLOW_WATER:
-    case TERRAIN_SWAMP:
+    case WildernessTerrain::SHALLOW_WATER:
+    case WildernessTerrain::SWAMP:
         return MonraceHook::SHORE;
-    case TERRAIN_DIRT:
-    case TERRAIN_DESERT:
+    case WildernessTerrain::DIRT:
+    case WildernessTerrain::DESERT:
         return MonraceHook::WASTE;
-    case TERRAIN_GRASS:
+    case WildernessTerrain::GRASS:
         return MonraceHook::GRASS;
-    case TERRAIN_TREES:
+    case WildernessTerrain::TREES:
         return MonraceHook::WOOD;
-    case TERRAIN_SHALLOW_LAVA:
-    case TERRAIN_DEEP_LAVA:
+    case WildernessTerrain::SHALLOW_LAVA:
+    case WildernessTerrain::DEEP_LAVA:
         return MonraceHook::VOLCANO;
-    case TERRAIN_MOUNTAIN:
+    case WildernessTerrain::MOUNTAIN:
         return MonraceHook::MOUNTAIN;
     default:
         return MonraceHook::DUNGEON;
