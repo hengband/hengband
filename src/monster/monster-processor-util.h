@@ -69,4 +69,4 @@ struct coordinate_candidate {
 turn_flags *init_turn_flags(bool is_riding, turn_flags *turn_flags_ptr);
 
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
-void store_moves_val(int *mm, int y, int x);
+void store_moves_val(int *mm, const Pos2DVec &vec);
