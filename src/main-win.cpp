@@ -1143,7 +1143,7 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
             rc.right += 2 * td->tile_wid;
         } else if (iskanji(*(s + i))) /* 2バイト文字 */
         {
-            to_wchar wc({ s + 1, 2 });
+            to_wchar wc({ s + i, 2 });
             const auto *buf = wc.wc_str();
             rc.right += td->font_wid;
             if (buf == NULL) {
