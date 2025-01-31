@@ -150,7 +150,7 @@ static void sweep_hiding_candidate(
  * @param m_idx モンスターの参照ID
  * @return 有効なマスがあった場合、その座標。なかったらnullopt
  */
-std::optional<Pos2DVec> find_hiding(PlayerType *player_ptr, short m_idx)
+std::optional<Pos2D> find_hiding(PlayerType *player_ptr, short m_idx)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     coordinate_candidate candidate;
@@ -164,7 +164,7 @@ std::optional<Pos2DVec> find_hiding(PlayerType *player_ptr, short m_idx)
             continue;
         }
 
-        return monster.get_position() - candidate.pos;
+        return candidate.pos;
     }
 
     return std::nullopt;
