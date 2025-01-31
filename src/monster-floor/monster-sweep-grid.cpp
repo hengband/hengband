@@ -23,6 +23,8 @@
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
+#include <range/v3/algorithm.hpp>
+#include <range/v3/functional.hpp>
 #include <span>
 
 namespace {
@@ -99,6 +101,51 @@ public:
         }
 
         return default_pos;
+    }
+
+    /*!
+     * @brief モンスターの逃亡先を決定する
+     *
+     * @param m_idx モンスターの参照ID
+     * @param pos_move 逃亡しない場合の移動先
+     * @return 逃亡先の座標
+     */
+    static Pos2D run_away(PlayerType *player_ptr, MONSTER_IDX m_idx, const Pos2D &pos_move)
+    {
+        const auto &floor = *player_ptr->current_floor_ptr;
+        const auto &monster = floor.m_list[m_idx];
+        const auto &monrace = monster.get_monrace();
+        const auto m_pos = monster.get_position();
+        const auto no_flow = monster.mflag2.has(MonsterConstantFlagType::NOFLOW) && (floor.get_grid(m_pos).get_cost(monrace.get_grid_flow_type()) > 2);
+
+        // 単に反対側に逃げる(あまり賢くない方法)場合の移動先
+        const auto pos_run_away_simple = m_pos + (pos_move - m_pos);
+        if (monster.is_pet() || no_flow) {
+            return pos_run_away_simple;
+        }
+
+        // 周囲の安全な地点を見つけ、そこに近づくように逃げる
+        // 逃げる先が見つからない場合は単に反対側に逃げる
+        const auto pos_safety = find_safety(player_ptr, m_idx);
+        if (!pos_safety) {
+            return pos_run_away_simple;
+        }
+
+        using ScoreAndPos = std::pair<int, Pos2D>;
+        std::vector<ScoreAndPos> pos_run_away_candidates;
+        for (const auto &d : Direction::directions_8()) {
+            const auto pos_neighbor = m_pos + d.vec();
+            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+                continue;
+            }
+
+            const auto distance = Grid::calc_distance(pos_neighbor, *pos_safety);
+            const auto score = 5000 / (distance + 3) - 500 / (floor.get_grid(pos_neighbor).get_distance(monrace.get_grid_flow_type()) + 1);
+            pos_run_away_candidates.emplace_back(score, pos_neighbor);
+        }
+
+        const auto pos_run_away = ranges::max_element(pos_run_away_candidates, ranges::less(), &ScoreAndPos::first);
+        return (pos_run_away != pos_run_away_candidates.end()) ? pos_run_away->second : pos_run_away_simple;
     }
 };
 
@@ -483,89 +530,18 @@ MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, DI
 bool MonsterSweepGrid::get_movable_grid()
 {
     const auto deciders = MonsterMoveGridDecidersFactory::create_deciders(this->player_ptr, this->m_idx);
-    const auto pos_move = MonsterMoveGridDecider::evalute_deciders(deciders, this->player_ptr->get_position());
+    auto pos_move = MonsterMoveGridDecider::evalute_deciders(deciders, this->player_ptr->get_position());
+    if (mon_will_run(this->player_ptr, this->m_idx)) {
+        pos_move = MonsterMoveGridDecider::run_away(this->player_ptr, this->m_idx, pos_move);
+    }
 
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[this->m_idx];
-    const auto &monrace = monster.get_monrace();
-
     const auto vec = monster.get_position() - pos_move;
-
-    const auto m_pos = monster.get_position();
-    const auto no_flow = monster.mflag2.has(MonsterConstantFlagType::NOFLOW) && (floor.get_grid(m_pos).get_cost(monrace.get_grid_flow_type()) > 2);
-    const auto will_run = mon_will_run(this->player_ptr, this->m_idx);
-    const auto vec_pet = this->search_pet_runnable_grid(vec, will_run, no_flow);
-    if (vec_pet == Pos2DVec(0, 0)) {
+    if (vec == Pos2DVec(0, 0)) {
         return false;
     }
 
-    store_moves_val(this->mm, vec_pet);
+    store_moves_val(this->mm, vec);
     return true;
-}
-
-Pos2DVec MonsterSweepGrid::search_pet_runnable_grid(const Pos2DVec &vec_initial, bool will_run, bool no_flow)
-{
-    const auto &floor = *this->player_ptr->current_floor_ptr;
-    const auto &monster = floor.m_list[this->m_idx];
-    const auto vec_inverted = vec_initial.inverted();
-    if (monster.is_pet() && will_run) {
-        return vec_inverted;
-    }
-
-    if (!will_run) {
-        return vec_initial;
-    }
-
-    const auto vec_safety = find_safety(this->player_ptr, this->m_idx);
-    if (!vec_safety || no_flow) {
-        return vec_inverted;
-    }
-
-    const auto vec_runaway = this->sweep_runnable_away_grid(*vec_safety);
-    if (!vec_runaway) {
-        return vec_inverted;
-    }
-
-    return *vec_runaway;
-}
-
-/*!
- * @brief モンスターがプレイヤーから逃走することが可能なマスを走査する
- * @param vec_initial 移動先から移動元へ向かうベクトル
- * @return 有効なマスがあった場合はその座標、なかったらnullopt
- */
-std::optional<Pos2DVec> MonsterSweepGrid::sweep_runnable_away_grid(const Pos2DVec &vec_initial) const
-{
-    Pos2D pos_run(0, 0);
-    const auto &floor = *this->player_ptr->current_floor_ptr;
-    const auto &monster = floor.m_list[this->m_idx];
-    const auto &monrace = monster.get_monrace();
-    const auto m_pos = monster.get_position();
-    auto pos1 = m_pos + vec_initial.inverted();
-    auto score = -1;
-    for (const auto &d : Direction::directions_8_reverse()) {
-        const auto pos = m_pos + d.vec();
-        if (!in_bounds2(floor, pos.y, pos.x)) {
-            continue;
-        }
-
-        const auto dis = Grid::calc_distance(pos, pos1);
-        auto s = 5000 / (dis + 3) - 500 / (floor.get_grid(pos).get_distance(monrace.get_grid_flow_type()) + 1);
-        if (s < 0) {
-            s = 0;
-        }
-
-        if (s < score) {
-            continue;
-        }
-
-        score = s;
-        pos_run = pos;
-    }
-
-    if (score == -1) {
-        return vec_initial;
-    }
-
-    return m_pos - pos_run;
 }

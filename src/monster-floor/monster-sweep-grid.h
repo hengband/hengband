@@ -14,8 +14,4 @@ public:
     MONSTER_IDX m_idx;
     DIRECTION *mm;
     bool get_movable_grid();
-
-private:
-    std::optional<Pos2DVec> sweep_runnable_away_grid(const Pos2DVec &vec_initial) const;
-    Pos2DVec search_pet_runnable_grid(const Pos2DVec &vec_initial, bool will_run, bool no_flow);
 };

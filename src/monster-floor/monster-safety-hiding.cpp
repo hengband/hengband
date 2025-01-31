@@ -93,16 +93,15 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
  *\n
  * Return TRUE if a safe location is available.\n
  */
-std::optional<Pos2DVec> find_safety(PlayerType *player_ptr, short m_idx)
+std::optional<Pos2D> find_safety(PlayerType *player_ptr, short m_idx)
 {
-    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     for (auto d = 1; d < 10; d++) {
         const auto candidate = sweep_safe_coordinate(player_ptr, m_idx, DIST_OFFSETS[d], d);
         if (candidate.gdis <= 0) {
             continue;
         }
 
-        return monster.get_position() - candidate.pos;
+        return candidate.pos;
     }
 
     return std::nullopt;
