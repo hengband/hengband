@@ -27,7 +27,7 @@
 /*
  * @brief コンストラクタ
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param m_idx 逃走するモンスターの参照ID
+ * @param m_idx 移動するモンスターの参照ID
  * @param mm 移動方向を返す方向IDの参照ポインタ
  */
 MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
@@ -38,8 +38,7 @@ MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, DI
 }
 
 /*!
- * @brief モンスターの移動方向を返す /
- * Choose "logical" directions for monster movement
+ * @brief モンスターの移動方向を返す
  * @return 有効方向があった場合TRUEを返す
  * @todo 分割したいが条件が多すぎて適切な関数名と詳細処理を追いきれない……
  */
@@ -87,8 +86,7 @@ bool MonsterSweepGrid::get_movable_grid()
 }
 
 /*!
- * @brief モンスターがプレイヤーから逃走するかどうかを返す /
- * Returns whether a given monster will try to run from the player.
+ * @brief モンスターがプレイヤーから逃走するかどうかを返す
  * @return モンスターがプレイヤーから逃走するならばTRUEを返す。
  */
 bool MonsterSweepGrid::mon_will_run()
@@ -247,6 +245,7 @@ Pos2DVec MonsterSweepGrid::search_pet_runnable_grid(const Pos2DVec &vec_initial,
  * @brief モンスターがプレイヤーに向けて接近することが可能なマスを走査する
  * @param p_pos プレイヤーの座標
  * @param no_flow モンスターにFLOWフラグが経っていない状態でTRUE
+ * @return 接近可能な座標
  */
 Pos2D MonsterSweepGrid::sweep_movable_grid(const Pos2D &p_pos, bool no_flow)
 {
@@ -290,7 +289,7 @@ std::pair<Pos2D, bool> MonsterSweepGrid::check_movable_grid(const Pos2D &pos_ini
     const auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     const auto &monrace = monster.get_monrace();
     if (monrace.ability_flags.has_any_of(RF_ABILITY_ATTACK_MASK)) {
-        const auto &pos = sweep_ranged_attack_grid(pos_initial);
+        const auto &pos = this->sweep_ranged_attack_grid(pos_initial);
         if (pos) {
             return std::pair<Pos2D, bool>(*pos, false);
         }
@@ -399,11 +398,9 @@ bool MonsterSweepGrid::is_best_cost(const Pos2D &pos, const int now_cost)
 }
 
 /*!
- * @brief モンスターがプレイヤーから逃走することが可能なマスを走査する /
- * Provide a location to flee to, but give the player a wide berth.
- * @param yp 移動先のマスのY座標を返す参照ポインタ
- * @param xp 移動先のマスのX座標を返す参照ポインタ
- * @return 有効なマスがあった場合TRUEを返す
+ * @brief モンスターがプレイヤーから逃走することが可能なマスを走査する
+ * @param vec_initial 移動先から移動元へ向かうベクトル
+ * @return 有効なマスがあった場合はその座標、なかったらnullopt
  */
 std::optional<Pos2DVec> MonsterSweepGrid::sweep_runnable_away_grid(const Pos2DVec &vec_initial) const
 {

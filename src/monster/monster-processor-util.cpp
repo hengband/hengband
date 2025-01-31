@@ -84,8 +84,7 @@ void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
 /*!
  * @brief get_movable_grid() における移動の方向を保存する
  * @param mm 移動方向
- * @param y 移動先Y座標
- * @param x 移動先X座標
+ * @param vec 移動方向のベクトル
  */
 void store_moves_val(int *mm, const Pos2DVec &vec)
 {
