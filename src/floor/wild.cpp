@@ -91,7 +91,20 @@ static wilderness_grid w_letter[255];
 /* The default table in terrain level generation. */
 static std::map<WildernessTerrain, std::map<short, TerrainTag>> terrain_table;
 
-static std::map<WildernessTerrain, short> conv_terrain2feat;
+static const std::map<WildernessTerrain, TerrainTag> WT_TT_MAP = {
+    { WildernessTerrain::EDGE, TerrainTag::PERMANENT_WALL },
+    { WildernessTerrain::TOWN, TerrainTag::TOWN },
+    { WildernessTerrain::DEEP_WATER, TerrainTag::DEEP_WATER },
+    { WildernessTerrain::SHALLOW_WATER, TerrainTag::SHALLOW_WATER },
+    { WildernessTerrain::SWAMP, TerrainTag::SWAMP },
+    { WildernessTerrain::DIRT, TerrainTag::DIRT },
+    { WildernessTerrain::GRASS, TerrainTag::GRASS },
+    { WildernessTerrain::TREES, TerrainTag::TREE },
+    { WildernessTerrain::DESERT, TerrainTag::DIRT },
+    { WildernessTerrain::SHALLOW_LAVA, TerrainTag::SHALLOW_LAVA },
+    { WildernessTerrain::DEEP_LAVA, TerrainTag::DEEP_LAVA },
+    { WildernessTerrain::MOUNTAIN, TerrainTag::MOUNTAIN },
+};
 
 /*!
  * @brief プラズマフラクタル的地形生成の再帰中間処理
@@ -612,7 +625,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
                 continue;
             }
 
-            grid.set_terrain_id(conv_terrain2feat.at(wild_grid.terrain));
+            grid.set_terrain_id(WT_TT_MAP.at(wild_grid.terrain));
             grid.info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
@@ -809,29 +822,12 @@ void init_wilderness_terrains()
         { WildernessTerrain::MOUNTAIN, { { TerrainTag::FLOOR, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::TREE, 2 }, { TerrainTag::MOUNTAIN, 10 } } },
     };
 
-    static const std::map<WildernessTerrain, TerrainTag> base_terrain_id_map{
-        { WildernessTerrain::EDGE, TerrainTag::PERMANENT_WALL },
-        { WildernessTerrain::TOWN, TerrainTag::TOWN },
-        { WildernessTerrain::DEEP_WATER, TerrainTag::DEEP_WATER },
-        { WildernessTerrain::SHALLOW_WATER, TerrainTag::SHALLOW_WATER },
-        { WildernessTerrain::SWAMP, TerrainTag::SWAMP },
-        { WildernessTerrain::DIRT, TerrainTag::DIRT },
-        { WildernessTerrain::GRASS, TerrainTag::GRASS },
-        { WildernessTerrain::TREES, TerrainTag::TREE },
-        { WildernessTerrain::DESERT, TerrainTag::DIRT },
-        { WildernessTerrain::SHALLOW_LAVA, TerrainTag::SHALLOW_LAVA },
-        { WildernessTerrain::DEEP_LAVA, TerrainTag::DEEP_LAVA },
-        { WildernessTerrain::MOUNTAIN, TerrainTag::MOUNTAIN },
-    };
-
-    const auto &terrains = TerrainList::get_instance();
     for (const auto &[wt, tags] : wt_tag_map) {
         const auto check = std::accumulate(tags.begin(), tags.end(), 0, [](int sum, const auto &x) { return sum + x.second; });
         if (check != MAX_FEAT_IN_TERRAIN) {
             THROW_EXCEPTION(std::logic_error, "Initializing wilderness is failed!");
         }
 
-        conv_terrain2feat.emplace(wt, terrains.get_terrain_id(base_terrain_id_map.at(wt)));
         terrain_table.emplace(wt, std::map<short, TerrainTag>());
         short cur = 0;
         for (const auto &[tag, num] : tags) {
