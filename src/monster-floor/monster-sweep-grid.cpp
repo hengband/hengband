@@ -89,28 +89,28 @@ bool MonsterSweepGrid::get_movable_grid()
  * @brief モンスターがプレイヤーから逃走するかどうかを返す
  * @return モンスターがプレイヤーから逃走するならばTRUEを返す。
  */
-bool MonsterSweepGrid::mon_will_run()
+bool MonsterSweepGrid::mon_will_run() const
 {
-    auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (m_ptr->is_pet()) {
-        return (this->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - this->player_ptr->pet_follow_distance));
+    const auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
+    if (monster.is_pet()) {
+        return (this->player_ptr->pet_follow_distance < 0) && (monster.cdis <= (0 - this->player_ptr->pet_follow_distance));
     }
 
-    if (m_ptr->cdis > MAX_PLAYER_SIGHT + 5) {
+    if (monster.cdis > MAX_PLAYER_SIGHT + 5) {
         return false;
     }
 
-    if (m_ptr->is_fearful()) {
+    if (monster.is_fearful()) {
         return true;
     }
 
-    if (m_ptr->cdis <= 5) {
+    if (monster.cdis <= 5) {
         return false;
     }
 
-    auto p_lev = this->player_ptr->lev;
-    auto m_lev = r_ptr->level + (this->m_idx & 0x08) + 25;
+    const auto p_lev = this->player_ptr->lev;
+    const auto &monrace = monster.get_monrace();
+    const auto m_lev = monrace.level + (this->m_idx & 0x08) + 25;
     if (m_lev > p_lev + 4) {
         return false;
     }
@@ -121,8 +121,8 @@ bool MonsterSweepGrid::mon_will_run()
 
     auto p_chp = this->player_ptr->chp;
     auto p_mhp = this->player_ptr->mhp;
-    auto m_chp = m_ptr->hp;
-    auto m_mhp = m_ptr->maxhp;
+    auto m_chp = monster.hp;
+    auto m_mhp = monster.maxhp;
     uint32_t p_val = (p_lev * p_mhp) + (p_chp << 2);
     uint32_t m_val = (m_lev * m_mhp) + (m_chp << 2);
     return p_val * m_mhp > m_val * p_mhp;
@@ -362,7 +362,7 @@ std::optional<Pos2D> MonsterSweepGrid::sweep_ranged_attack_grid(const Pos2D &pos
     return pos;
 }
 
-bool MonsterSweepGrid::is_best_cost(const Pos2D &pos, const int now_cost)
+bool MonsterSweepGrid::is_best_cost(const Pos2D &pos, int now_cost)
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[this->m_idx];
@@ -440,7 +440,7 @@ std::optional<Pos2DVec> MonsterSweepGrid::sweep_runnable_away_grid(const Pos2DVe
     return m_pos - pos_run;
 }
 
-Pos2D MonsterSweepGrid::determine_when_cost(const Pos2D &pos_initial, const Pos2D &m_pos, const bool use_scent)
+Pos2D MonsterSweepGrid::determine_when_cost(const Pos2D &pos_initial, const Pos2D &m_pos, bool use_scent)
 {
     Pos2D pos = pos_initial;
     const auto &floor = *this->player_ptr->current_floor_ptr;
