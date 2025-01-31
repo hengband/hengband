@@ -89,7 +89,7 @@ static border_type border;
 static wilderness_grid w_letter[255];
 
 /* The default table in terrain level generation. */
-static int16_t terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
+static std::map<wt_type, std::map<short, TerrainTag>> terrain_table;
 
 static std::map<wt_type, short> conv_terrain2feat;
 
@@ -206,7 +206,7 @@ static void plasma_recursive(FloorType &floor, POSITION x1, POSITION y1, POSITIO
  * @param border 未使用
  * @param corner 広域マップの角部分としての生成ならばTRUE
  */
-static void generate_wilderness_area(FloorType &floor, int terrain, uint32_t seed, bool corner)
+static void generate_wilderness_area(FloorType &floor, wt_type terrain, uint32_t seed, bool corner)
 {
     if (terrain == TERRAIN_EDGE) {
         for (auto y = 0; y < MAX_HGT; y++) {
@@ -222,41 +222,47 @@ static void generate_wilderness_area(FloorType &floor, int terrain, uint32_t see
     const Xoshiro128StarStar rng_backup = system.get_rng();
     Xoshiro128StarStar wilderness_rng(seed);
     system.set_rng(wilderness_rng);
-    int table_size = sizeof(terrain_table[0]) / sizeof(int16_t);
     if (!corner) {
         for (auto y = 0; y < MAX_HGT; y++) {
             for (auto x = 0; x < MAX_WID; x++) {
-                floor.get_grid({ y, x }).feat = table_size / 2;
+                floor.get_grid({ y, x }).feat = MAX_FEAT_IN_TERRAIN / 2;
             }
         }
     }
 
-    floor.get_grid({ 1, 1 }).feat = randnum0<short>(table_size);
-    floor.get_grid({ MAX_HGT - 2, 1 }).feat = randnum0<short>(table_size);
-    floor.get_grid({ 1, MAX_WID - 2 }).feat = randnum0<short>(table_size);
-    floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat = randnum0<short>(table_size);
+    auto &grid_top_left = floor.get_grid({ 1, 1 });
+    auto &grid_bottom_left = floor.get_grid({ MAX_HGT - 2, 1 });
+    auto &grid_top_right = floor.get_grid({ 1, MAX_WID - 2 });
+    auto &grid_bottom_right = floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 });
+    grid_top_left.feat = randnum0<short>(MAX_FEAT_IN_TERRAIN);
+    grid_bottom_left.feat = randnum0<short>(MAX_FEAT_IN_TERRAIN);
+    grid_top_right.feat = randnum0<short>(MAX_FEAT_IN_TERRAIN);
+    grid_bottom_right.feat = randnum0<short>(MAX_FEAT_IN_TERRAIN);
     if (corner) {
-        floor.get_grid({ 1, 1 }).feat = terrain_table[terrain][floor.get_grid({ 1, 1 }).feat];
-        floor.get_grid({ MAX_HGT - 2, 1 }).feat = terrain_table[terrain][floor.get_grid({ MAX_HGT - 2, 1 }).feat];
-        floor.get_grid({ 1, MAX_WID - 2 }).feat = terrain_table[terrain][floor.get_grid({ 1, MAX_WID - 2 }).feat];
-        floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat = terrain_table[terrain][floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat];
+        const auto &tags = terrain_table.at(terrain);
+        grid_top_left.set_terrain_id(tags.at(grid_top_left.feat));
+        grid_bottom_left.set_terrain_id(tags.at(grid_bottom_left.feat));
+        grid_top_right.set_terrain_id(tags.at(grid_top_right.feat));
+        grid_bottom_right.set_terrain_id(tags.at(grid_bottom_right.feat));
         system.set_rng(rng_backup);
         return;
     }
 
-    const auto top_left = floor.get_grid({ 1, 1 }).feat;
-    const auto bottom_left = floor.get_grid({ MAX_HGT - 2, 1 }).feat;
-    const auto top_right = floor.get_grid({ 1, MAX_WID - 2 }).feat;
-    const auto bottom_right = floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat;
+    const auto top_left = grid_top_left.feat;
+    const auto bottom_left = grid_bottom_left.feat;
+    const auto top_right = grid_top_right.feat;
+    const auto bottom_right = grid_bottom_right.feat;
     const short roughness = 1; /* The roughness of the level. */
-    plasma_recursive(floor, 1, 1, MAX_WID - 2, MAX_HGT - 2, table_size - 1, roughness);
-    floor.get_grid({ 1, 1 }).feat = top_left;
-    floor.get_grid({ MAX_HGT - 2, 1 }).feat = bottom_left;
-    floor.get_grid({ 1, MAX_WID - 2 }).feat = top_right;
-    floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat = bottom_right;
-    for (POSITION y1 = 1; y1 < MAX_HGT - 1; y1++) {
-        for (POSITION x1 = 1; x1 < MAX_WID - 1; x1++) {
-            floor.get_grid({ y1, x1 }).feat = terrain_table[terrain][floor.get_grid({ y1, x1 }).feat];
+    plasma_recursive(floor, 1, 1, MAX_WID - 2, MAX_HGT - 2, MAX_FEAT_IN_TERRAIN - 1, roughness);
+    grid_top_left.feat = top_left;
+    grid_bottom_left.feat = bottom_left;
+    grid_top_right.feat = top_right;
+    grid_bottom_right.feat = bottom_right;
+    for (auto y = 1; y < MAX_HGT - 1; y++) {
+        for (auto x = 1; x < MAX_WID - 1; x++) {
+            const Pos2D pos(y, x);
+            auto &grid = floor.get_grid(pos);
+            grid.set_terrain_id(terrain_table.at(terrain).at(grid.feat));
         }
     }
 
@@ -293,8 +299,8 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
             player_ptr->visit |= (1UL << (player_ptr->town_num - 1));
         }
     } else {
-        int terrain = wilderness_grid.terrain;
-        uint32_t seed = wilderness_grid.seed;
+        const auto terrain = wilderness_grid.terrain;
+        const auto seed = wilderness_grid.seed;
         generate_wilderness_area(floor, terrain, seed, is_corner);
     }
 
@@ -606,7 +612,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
                 continue;
             }
 
-            grid.feat = conv_terrain2feat.at(wild_grid.terrain);
+            grid.set_terrain_id(conv_terrain2feat.at(wild_grid.terrain));
             grid.info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
@@ -826,11 +832,12 @@ void init_wilderness_terrains()
         }
 
         conv_terrain2feat.emplace(wt, terrains.get_terrain_id(base_terrain_id_map.at(wt)));
-        auto cur = 0;
+        terrain_table.emplace(wt, std::map<short, TerrainTag>());
+        short cur = 0;
         for (const auto &[tag, num] : tags) {
             const auto limit = cur + num;
             for (; (cur < limit) && (cur < MAX_FEAT_IN_TERRAIN); cur++) {
-                terrain_table[wt][cur] = terrains.get_terrain_id(tag);
+                terrain_table.at(wt).emplace(cur, tag);
             }
         }
     }
