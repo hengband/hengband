@@ -111,7 +111,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
 
     world.noscore = 0;
     world.wizard = false;
-    player_ptr->wait_report_score = false;
+    system.set_awaiting_report_score(false);
     player_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     player_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
     DungeonRecords::get_instance().reset_all();
