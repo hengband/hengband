@@ -199,23 +199,21 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
  */
 void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (!m_ptr->is_valid()) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
+    if (!monster.is_valid()) {
         return;
     }
     if (randint1(100) > power) {
         return;
     }
 
-    POSITION ny = m_ptr->fy;
-    POSITION nx = m_ptr->fx;
-    POSITION oy = m_ptr->fy;
-    POSITION ox = m_ptr->fx;
-
-    POSITION dis = 2;
-    int min = dis / 2;
-    int attempts = 500;
-    bool look = true;
+    const auto m_pos_orig = monster.get_position();
+    Pos2D m_pos = m_pos_orig;
+    auto dis = 2;
+    auto min = dis / 2;
+    auto attempts = 500;
+    auto look = true;
     while (look && --attempts) {
         if (dis > 200) {
             dis = 200;
@@ -223,18 +221,18 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
 
         for (int i = 0; i < 500; i++) {
             while (true) {
-                ny = rand_spread(ty, dis);
-                nx = rand_spread(tx, dis);
-                const auto d = Grid::calc_distance({ ty, tx }, { ny, nx });
+                m_pos.y = rand_spread(ty, dis);
+                m_pos.x = rand_spread(tx, dis);
+                const auto d = Grid::calc_distance({ ty, tx }, m_pos);
                 if ((d >= min) && (d <= dis)) {
                     break;
                 }
             }
 
-            if (!in_bounds(player_ptr->current_floor_ptr, ny, nx)) {
+            if (!in_bounds(player_ptr->current_floor_ptr, m_pos.y, m_pos.x)) {
                 continue;
             }
-            if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode)) {
+            if (!cave_monster_teleportable_bold(player_ptr, m_idx, m_pos.y, m_pos.x, mode)) {
                 continue;
             }
 
@@ -251,17 +249,14 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
     }
 
     sound(SOUND_TPOTHER);
-    player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
-    player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
-
-    m_ptr->fy = ny;
-    m_ptr->fx = nx;
-
+    floor.get_grid(m_pos_orig).m_idx = 0;
+    floor.get_grid(m_pos).m_idx = m_idx;
+    monster.set_position(m_pos);
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, oy, ox);
-    lite_spot(player_ptr, ny, nx);
+    lite_spot(player_ptr, m_pos_orig.y, m_pos_orig.x);
+    lite_spot(player_ptr, m_pos.y, m_pos.x);
 
-    if (m_ptr->get_monrace().brightness_flags.has_any_of(ld_mask)) {
+    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 }
