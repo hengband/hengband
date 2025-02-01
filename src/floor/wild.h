@@ -1,3 +1,13 @@
+/*!
+ * @brief 荒野マップの生成とルール管理定義
+ * @date 2025/02/01
+ * @author
+ * Robert A. Koeneke, 1983
+ * James E. Wilson, 1989
+ * Deskull, 2013
+ * Hourier, 2025
+ */
+
 #pragma once
 
 #include "util/point-2d.h"
@@ -7,9 +17,6 @@
 #include <utility>
 #include <vector>
 
-/*
- * A structure describing a wilderness area with a terrain or a town
- */
 enum class WildernessTerrain;
 enum class DungeonId;
 class WildernessGrid {

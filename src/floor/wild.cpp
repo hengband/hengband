@@ -1,33 +1,26 @@
 /*!
- * @brief 荒野マップの生成とルール管理 / Wilderness generation
- * @date 2014/02/13
+ * @brief 荒野マップの生成とルール管理実装
+ * @date 2025/02/01
  * @author
- * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
- * This software may be copied and distributed for educational, research, and
- * not for profit purposes provided that this copyright and statement are
- * included in all such copies.
- * 2013 Deskull rearranged comment for Doxygen.
+ * Robert A. Koeneke, 1983
+ * James E. Wilson, 1989
+ * Deskull, 2013
+ * Hourier, 2025
  */
 
 #include "floor/wild.h"
 #include "core/asking-player.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
-#include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/parse-error-types.h"
-#include "io/files-util.h"
 #include "io/tokenizer.h"
 #include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "monster/monster-util.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -46,7 +39,6 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/system-variables.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
