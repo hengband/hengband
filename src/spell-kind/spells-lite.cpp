@@ -36,7 +36,7 @@ using PassBoldFunc = bool (*)(const FloorType *, POSITION, POSITION);
 /*!
  * @brief 指定した座標全てを照らす。
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param points 明るくすべき座標たち
+ * @param positions 明るくすべき座標群
  * @details
  * <pre>
  * This routine clears the entire "temp" set.
@@ -49,41 +49,38 @@ using PassBoldFunc = bool (*)(const FloorType *, POSITION, POSITION);
  * NORMAL monsters wake up 1/4 the time when illuminated
  * STUPID monsters wake up 1/10 the time when illuminated
  * </pre>
- * @todo この辺、xとyが引数になっているが、player_ptr->xとplayer_ptr->yで全て置き換えが効くはず……
  */
-static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D> &points)
+static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D> &positions)
 {
-    for (const auto &point : points) {
-        const POSITION y = point.y;
-        const POSITION x = point.x;
-
-        auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-        g_ptr->info &= ~(CAVE_TEMP);
-        g_ptr->info |= (CAVE_GLOW);
-        if (g_ptr->has_monster()) {
-            PERCENTAGE chance = 25;
-            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-            auto *r_ptr = &m_ptr->get_monrace();
-            update_monster(player_ptr, g_ptr->m_idx, false);
-            if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (const auto &pos : positions) {
+        auto &grid = floor.get_grid(pos);
+        grid.info &= ~(CAVE_TEMP);
+        grid.info |= (CAVE_GLOW);
+        if (grid.has_monster()) {
+            auto chance = 25;
+            const auto &monster = floor.m_list[grid.m_idx];
+            const auto &monrace = monster.get_monrace();
+            update_monster(player_ptr, grid.m_idx, false);
+            if (monrace.behavior_flags.has(MonsterBehaviorType::STUPID)) {
                 chance = 10;
             }
-            if (r_ptr->behavior_flags.has(MonsterBehaviorType::SMART)) {
+            if (monrace.behavior_flags.has(MonsterBehaviorType::SMART)) {
                 chance = 100;
             }
 
-            if (m_ptr->is_asleep() && evaluate_percent(chance)) {
-                (void)set_monster_csleep(player_ptr, g_ptr->m_idx, 0);
-                if (m_ptr->ml) {
-                    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+            if (monster.is_asleep() && evaluate_percent(chance)) {
+                (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
+                if (monster.ml) {
+                    const auto m_name = monster_desc(player_ptr, &monster, 0);
                     msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
                 }
             }
         }
 
-        note_spot(player_ptr, y, x);
-        lite_spot(player_ptr, y, x);
-        update_local_illumination(player_ptr, y, x);
+        note_spot(player_ptr, pos.y, pos.x);
+        lite_spot(player_ptr, pos.y, pos.x);
+        update_local_illumination(player_ptr, pos);
     }
 }
 
@@ -92,12 +89,12 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param points 暗くすべき座標群
  */
-static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2D> &points)
+static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2D> &positions)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &world = AngbandWorld::get_instance();
-    for (const auto &point : points) {
-        auto &grid = floor.get_grid(point);
+    for (const auto &pos : positions) {
+        auto &grid = floor.get_grid(pos);
         auto do_dark = !grid.is_mirror();
         grid.info &= ~(CAVE_TEMP);
         if (!do_dark) {
@@ -105,8 +102,8 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
         }
 
         if (floor.is_underground() || !world.is_daytime()) {
-            for (int j = 0; j < 9; j++) {
-                const Pos2D pos_neighbor(point.y + ddy_ddd[j], point.x + ddx_ddd[j]);
+            for (auto j = 0; j < 9; j++) {
+                const Pos2D pos_neighbor(pos.y + ddy_ddd[j], pos.x + ddx_ddd[j]);
                 if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
@@ -128,15 +125,15 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
             if (!view_torch_grids) {
                 grid.info &= ~(CAVE_MARK);
             }
-            note_spot(player_ptr, point.y, point.x);
+            note_spot(player_ptr, pos.y, pos.x);
         }
 
         if (grid.has_monster()) {
             update_monster(player_ptr, grid.m_idx, false);
         }
 
-        lite_spot(player_ptr, point.y, point.x);
-        update_local_illumination(player_ptr, point.y, point.x);
+        lite_spot(player_ptr, pos.y, pos.x);
+        update_local_illumination(player_ptr, pos);
     }
 }
 

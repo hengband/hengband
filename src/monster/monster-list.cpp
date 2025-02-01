@@ -228,18 +228,16 @@ void choose_chameleon_polymorph(PlayerType *player_ptr, short m_idx, short terra
  */
 int get_monster_crowd_number(const FloorType *floor_ptr, short m_idx)
 {
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    POSITION my = m_ptr->fy;
-    POSITION mx = m_ptr->fx;
-    int count = 0;
-    for (int i = 0; i < 7; i++) {
-        int ay = my + ddy_ddd[i];
-        int ax = mx + ddx_ddd[i];
-
-        if (!in_bounds(floor_ptr, ay, ax)) {
+    const auto &monster = floor_ptr->m_list[m_idx];
+    const auto m_pos = monster.get_position();
+    auto count = 0;
+    for (auto i = 0; i < 7; i++) {
+        const auto pos = m_pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
+        if (!in_bounds(floor_ptr, pos.y, pos.x)) {
             continue;
         }
-        if (floor_ptr->grid_array[ay][ax].has_monster()) {
+
+        if (floor_ptr->get_grid(pos).has_monster()) {
             count++;
         }
     }

@@ -133,82 +133,74 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
         return false;
     }
 
-    int tx = player_ptr->x + project_length * ddx[dir];
-    int ty = player_ptr->y + project_length * ddy[dir];
-
+    const auto p_pos = player_ptr->get_position();
+    auto pos_target = p_pos + Pos2DVec(ddy[dir], ddx[dir]) * project_length;
     if ((dir == 5) && target_okay(player_ptr)) {
-        tx = target_col;
-        ty = target_row;
+        pos_target = { target_row, target_col };
     }
 
-    int tm_idx = 0;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (in_bounds(floor_ptr, ty, tx)) {
-        tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
+    auto tm_idx = 0;
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (in_bounds(&floor, pos_target.y, pos_target.x)) {
+        tm_idx = floor.get_grid(pos_target).m_idx;
     }
 
-    ProjectionPath path_g(player_ptr, project_length, player_ptr->get_position(), { ty, tx }, PROJECT_STOP | PROJECT_KILL);
+    ProjectionPath path_g(player_ptr, project_length, player_ptr->get_position(), pos_target, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
     if (path_g.path_num() == 0) {
         return true;
     }
 
-    auto y = player_ptr->y;
-    auto x = player_ptr->x;
+    auto p_pos_new = p_pos;
     auto tmp_mdeath = false;
     auto moved = false;
-    for (const auto &[ny, nx] : path_g) {
-        const auto &grid_new = floor_ptr->get_grid({ ny, nx });
-        if (is_cave_empty_bold(player_ptr, ny, nx) && player_can_enter(player_ptr, grid_new.feat, 0)) {
-            y = ny;
-            x = nx;
+    for (const auto &pos : path_g) {
+        const auto &grid_new = floor.get_grid(pos);
+        if (is_cave_empty_bold(player_ptr, pos.y, pos.x) && player_can_enter(player_ptr, grid_new.feat, 0)) {
+            p_pos_new = pos;
             continue;
         }
 
         if (!grid_new.has_monster()) {
-            if (tm_idx) {
-                msg_print(_("失敗！", "Failed!"));
-            } else {
-                msg_print(_("ここには入身では入れない。", "You can't move to that place."));
-            }
-
+            const auto *mes = tm_idx > 0 ? _("失敗！", "Failed!") : _("ここには入身では入れない。", "You can't move to that place.");
+            msg_print(mes);
             break;
         }
 
-        const Pos2D p_pos(y, x);
-        if (!player_ptr->is_located_at(p_pos)) {
-            teleport_player_to(player_ptr, y, x, TELEPORT_NONMAGICAL);
+        if (!player_ptr->is_located_at(p_pos_new)) {
+            teleport_player_to(player_ptr, p_pos_new.y, p_pos_new.x, TELEPORT_NONMAGICAL);
         }
 
         update_monster(player_ptr, grid_new.m_idx, true);
-        const auto *m_ptr = &floor_ptr->m_list[grid_new.m_idx];
+        const auto &monster = floor.m_list[grid_new.m_idx];
         if (tm_idx != grid_new.m_idx) {
 #ifdef JP
-            msg_format("%s%sが立ちふさがっている！", tm_idx ? "別の" : "", m_ptr->ml ? "モンスター" : "何か");
+            msg_format("%s%sが立ちふさがっている！", tm_idx > 0 ? "別の" : "", monster.ml ? "モンスター" : "何か");
 #else
-            msg_format("There is %s in the way!", m_ptr->ml ? (tm_idx ? "another monster" : "a monster") : "someone");
+            msg_format("There is %s in the way!", monster.ml ? (tm_idx > 0 ? "another monster" : "a monster") : "someone");
 #endif
-        } else if (!player_ptr->is_located_at(p_pos)) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        } else if (!player_ptr->is_located_at(p_pos_new)) {
+            const auto m_name = monster_desc(player_ptr, &monster, 0);
             msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name.data());
         }
 
-        if (!player_ptr->is_located_at(p_pos)) {
-            teleport_player_to(player_ptr, y, x, TELEPORT_NONMAGICAL);
+        if (!player_ptr->is_located_at(p_pos_new)) {
+            teleport_player_to(player_ptr, p_pos_new.y, p_pos_new.x, TELEPORT_NONMAGICAL);
         }
-        moved = true;
-        tmp_mdeath = do_cmd_attack(player_ptr, ny, nx, HISSATSU_NYUSIN);
 
+        moved = true;
+        tmp_mdeath = do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NYUSIN);
         break;
     }
 
-    if (!moved && !player_ptr->is_located_at({ y, x })) {
-        teleport_player_to(player_ptr, y, x, TELEPORT_NONMAGICAL);
+    if (!moved && !player_ptr->is_located_at(p_pos_new)) {
+        teleport_player_to(player_ptr, p_pos_new.y, p_pos_new.x, TELEPORT_NONMAGICAL);
     }
 
     if (mdeath) {
         *mdeath = tmp_mdeath;
     }
+
     return true;
 }
 

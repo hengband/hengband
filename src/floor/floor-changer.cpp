@@ -386,7 +386,10 @@ static void cut_off_the_upstair(PlayerType *player_ptr)
 {
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has(FloorChangeMode::RANDOM_PLACE)) {
-        (void)new_player_spot(player_ptr);
+        if (const auto p_pos = new_player_spot(player_ptr); p_pos) {
+            player_ptr->set_position(*p_pos);
+        }
+
         return;
     }
 
@@ -394,11 +397,11 @@ static void cut_off_the_upstair(PlayerType *player_ptr)
         return;
     }
 
-    if (!player_ptr->effects()->blindness().is_blind()) {
-        msg_print(_("突然階段が塞がれてしまった。", "Suddenly the stairs is blocked!"));
-    } else {
-        msg_print(_("ゴトゴトと何か音がした。", "You hear some noises."));
-    }
+    const auto is_blind = player_ptr->effects()->blindness().is_blind();
+    const auto mes = is_blind
+                         ? _("ゴトゴトと何か音がした。", "You hear some noises.")
+                         : _("突然階段が塞がれてしまった！", "Suddenly the stairs is blocked!");
+    msg_print(mes);
 }
 
 static void update_floor(PlayerType *player_ptr)

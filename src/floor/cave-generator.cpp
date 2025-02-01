@@ -299,11 +299,13 @@ static void make_perm_walls(PlayerType *player_ptr)
 
 static bool check_place_necessary_objects(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
-    if (!new_player_spot(player_ptr)) {
+    const auto p_pos = new_player_spot(player_ptr);
+    if (!p_pos) {
         dd_ptr->why = _("プレイヤー配置に失敗", "Failed to place a player");
         return false;
     }
 
+    player_ptr->set_position(*p_pos);
     if (!place_quest_monsters(player_ptr)) {
         dd_ptr->why = _("クエストモンスター配置に失敗", "Failed to place a quest monster");
         return false;

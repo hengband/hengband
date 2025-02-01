@@ -51,21 +51,22 @@ SpellsMirrorMaster::SpellsMirrorMaster(PlayerType *player_ptr)
 
 void SpellsMirrorMaster::remove_mirror(int y, int x)
 {
+    const Pos2D pos(y, x);
     auto &floor = *this->player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor.grid_array[y][x];
-    reset_bits(g_ptr->info, CAVE_OBJECT);
-    g_ptr->mimic = 0;
+    auto &grid = floor.get_grid(pos);
+    reset_bits(grid.info, CAVE_OBJECT);
+    grid.mimic = 0;
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        reset_bits(g_ptr->info, CAVE_GLOW);
+        reset_bits(grid.info, CAVE_GLOW);
         if (!view_torch_grids) {
-            reset_bits(g_ptr->info, CAVE_MARK);
+            reset_bits(grid.info, CAVE_MARK);
         }
 
-        if (g_ptr->has_monster()) {
-            update_monster(this->player_ptr, g_ptr->m_idx, false);
+        if (grid.has_monster()) {
+            update_monster(this->player_ptr, grid.m_idx, false);
         }
 
-        update_local_illumination(this->player_ptr, y, x);
+        update_local_illumination(this->player_ptr, { y, x });
     }
 
     note_spot(this->player_ptr, y, x);
@@ -137,7 +138,7 @@ std::optional<std::string> SpellsMirrorMaster::place_mirror()
 
     note_spot(this->player_ptr, p_pos.y, p_pos.x);
     lite_spot(this->player_ptr, p_pos.y, p_pos.x);
-    update_local_illumination(this->player_ptr, p_pos.y, p_pos.x);
+    update_local_illumination(this->player_ptr, p_pos);
     return std::nullopt;
 }
 
