@@ -47,112 +47,108 @@ static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1
 /*!
  * @brief 部屋間のトンネルを生成する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param pos_start_initial 始点の初期値
- * @param pos_end 終点 (固定)
+ * @param pos_start 始点
+ * @param pos_end 終点
  * @return 生成に成功したらTRUEを返す
  */
-bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, const Pos2D &pos_start_initial, const Pos2D &pos_end)
+bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, const Pos2D &pos_start, const Pos2D &pos_end)
 {
-    Pos2D pos_start = pos_start_initial;
-    POSITION tmp_row, tmp_col;
-    POSITION row_dir, col_dir;
-    POSITION start_row, start_col;
-    int main_loop_count = 0;
-    bool door_flag = false;
-    start_row = pos_start.y;
-    start_col = pos_start.x;
-    correct_dir(&row_dir, &col_dir, pos_start.y, pos_start.x, pos_end.y, pos_end.x);
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    while (pos_start != pos_end) {
+    Pos2D pos_current = pos_start;
+    auto main_loop_count = 0;
+    auto door_flag = false;
+    int row_dir;
+    int col_dir;
+    correct_dir(&row_dir, &col_dir, pos_current.y, pos_current.x, pos_end.y, pos_end.x);
+    Pos2DVec vec(row_dir, col_dir);
+    auto &floor = *player_ptr->current_floor_ptr;
+    while (pos_current != pos_end) {
         if (main_loop_count++ > 2000) {
             return false;
         }
 
         if (evaluate_percent(dt_ptr->dun_tun_chg)) {
-            correct_dir(&row_dir, &col_dir, pos_start.y, pos_start.x, pos_end.y, pos_end.x);
+            correct_dir(&vec.y, &vec.x, pos_current.y, pos_current.x, pos_end.y, pos_end.x);
             if (evaluate_percent(dt_ptr->dun_tun_rnd)) {
-                rand_dir(&row_dir, &col_dir);
+                rand_dir(&vec.y, &vec.x);
             }
         }
 
-        tmp_row = pos_start.y + row_dir;
-        tmp_col = pos_start.x + col_dir;
-        while (!in_bounds(floor_ptr, tmp_row, tmp_col)) {
-            correct_dir(&row_dir, &col_dir, pos_start.y, pos_start.x, pos_end.y, pos_end.x);
+        auto pos_tmp = pos_current + vec;
+        while (!in_bounds(&floor, pos_tmp.y, pos_tmp.x)) {
+            correct_dir(&vec.y, &vec.x, pos_current.y, pos_current.x, pos_end.y, pos_end.x);
             if (evaluate_percent(dt_ptr->dun_tun_rnd)) {
-                rand_dir(&row_dir, &col_dir);
+                rand_dir(&vec.y, &vec.x);
             }
 
-            tmp_row = pos_start.y + row_dir;
-            tmp_col = pos_start.x + col_dir;
+            pos_tmp = pos_current + vec;
         }
 
-        auto *tmp_g_ptr = &floor_ptr->grid_array[tmp_row][tmp_col];
-        if (tmp_g_ptr->is_solid()) {
+        const auto &grid_tmp = floor.get_grid(pos_tmp);
+        if (grid_tmp.is_solid()) {
             continue;
         }
 
-        if (tmp_g_ptr->is_outer()) {
-            POSITION y = tmp_row + row_dir;
-            POSITION x = tmp_col + col_dir;
-            auto *g_ptr = &floor_ptr->grid_array[y][x];
-            if (g_ptr->is_outer() || g_ptr->is_solid()) {
+        if (grid_tmp.is_outer()) {
+            const auto pos = pos_tmp + vec;
+            auto &grid = floor.get_grid(pos);
+            if (grid.is_outer() || grid.is_solid()) {
                 continue;
             }
 
-            pos_start = { tmp_row, tmp_col };
+            pos_current = pos_tmp;
             if (dd_ptr->wall_n >= dd_ptr->walls.size()) {
                 return false;
             }
 
-            dd_ptr->walls[dd_ptr->wall_n] = pos_start;
+            dd_ptr->walls[dd_ptr->wall_n] = pos_current;
             dd_ptr->wall_n++;
-            for (y = pos_start.y - 1; y <= pos_start.y + 1; y++) {
-                for (x = pos_start.x - 1; x <= pos_start.x + 1; x++) {
-                    if (floor_ptr->grid_array[y][x].is_outer()) {
-                        place_bold(player_ptr, y, x, GB_SOLID_NOPERM);
+            for (auto y = pos_current.y - 1; y <= pos_current.y + 1; y++) {
+                for (auto x = pos_current.x - 1; x <= pos_current.x + 1; x++) {
+                    const Pos2D pos_wall(y, x);
+                    if (floor.get_grid(pos_wall).is_outer()) {
+                        place_bold(player_ptr, pos_wall.y, pos_wall.x, GB_SOLID_NOPERM);
                     }
                 }
             }
 
-        } else if (tmp_g_ptr->info & (CAVE_ROOM)) {
-            pos_start = { tmp_row, tmp_col };
-        } else if (tmp_g_ptr->is_extra() || tmp_g_ptr->is_inner() || tmp_g_ptr->is_solid()) {
-            pos_start = { tmp_row, tmp_col };
+            continue;
+        }
+
+        if (grid_tmp.info & (CAVE_ROOM)) {
+            pos_current = pos_tmp;
+            continue;
+        }
+
+        if (grid_tmp.is_extra() || grid_tmp.is_inner() || grid_tmp.is_solid()) {
+            pos_current = pos_tmp;
             if (dd_ptr->tunn_n >= dd_ptr->tunnels.size()) {
                 return false;
             }
 
-            dd_ptr->tunnels[dd_ptr->tunn_n] = pos_start;
+            dd_ptr->tunnels[dd_ptr->tunn_n] = pos_current;
             dd_ptr->tunn_n++;
             door_flag = false;
-        } else {
-            pos_start = { tmp_row, tmp_col };
-            if (!door_flag) {
-                if (dd_ptr->door_n >= dd_ptr->doors.size()) {
-                    return false;
-                }
+            continue;
+        }
 
-                dd_ptr->doors[dd_ptr->door_n] = pos_start;
-                dd_ptr->door_n++;
-                door_flag = true;
+        pos_current = pos_tmp;
+        if (!door_flag) {
+            if (dd_ptr->door_n >= dd_ptr->doors.size()) {
+                return false;
             }
 
-            if (!evaluate_percent(dt_ptr->dun_tun_con)) {
-                tmp_row = pos_start.y - start_row;
-                if (tmp_row < 0) {
-                    tmp_row = (-tmp_row);
-                }
+            dd_ptr->doors[dd_ptr->door_n] = pos_current;
+            dd_ptr->door_n++;
+            door_flag = true;
+        }
 
-                tmp_col = pos_start.x - start_col;
-                if (tmp_col < 0) {
-                    tmp_col = (-tmp_col);
-                }
+        if (evaluate_percent(dt_ptr->dun_tun_con)) {
+            continue;
+        }
 
-                if ((tmp_row > 10) || (tmp_col > 10)) {
-                    break;
-                }
-            }
+        const auto vec_current = pos_current - pos_start;
+        if ((std::abs(vec_current.y) > 10) || (std::abs(vec_current.x) > 10)) {
+            break;
         }
     }
 
