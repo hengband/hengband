@@ -159,15 +159,16 @@ bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, 
  * @param affectwall (調査中)
  * @todo 特に詳細な処理の意味を調査すべし
  */
-static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *x, POSITION *y, bool affectwall)
+static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y, POSITION *x, bool affectwall)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[*y][*x];
-    if (!in_bounds(floor_ptr, *y, *x) || g_ptr->is_inner()) {
+    const Pos2D pos(*y, *x);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid = floor.get_grid(pos);
+    if (!in_bounds(&floor, *y, *x) || grid.is_inner()) {
         return true;
     }
 
-    if (g_ptr->is_extra()) {
+    if (grid.is_extra()) {
         if (dd_ptr->tunn_n >= dd_ptr->tunnels.size()) {
             return false;
         }
@@ -177,53 +178,50 @@ static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *x,
         return true;
     }
 
-    if (g_ptr->is_floor()) {
+    if (grid.is_floor()) {
         return true;
     }
 
-    if (g_ptr->is_outer() && affectwall) {
+    if (grid.is_outer() && affectwall) {
         if (dd_ptr->wall_n >= dd_ptr->walls.size()) {
             return false;
         }
 
-        dd_ptr->walls[dd_ptr->wall_n] = { *y, *x };
+        dd_ptr->walls[dd_ptr->wall_n] = pos;
         dd_ptr->wall_n++;
-        for (int j = *y - 1; j <= *y + 1; j++) {
-            for (int i = *x - 1; i <= *x + 1; i++) {
-                if (floor_ptr->grid_array[j][i].is_outer()) {
+        for (auto j = *y - 1; j <= *y + 1; j++) {
+            for (auto i = *x - 1; i <= *x + 1; i++) {
+                if (floor.get_grid({ j, i }).is_outer()) {
                     place_bold(player_ptr, j, i, GB_SOLID_NOPERM);
                 }
             }
         }
 
-        floor_ptr->grid_array[*y][*x].mimic = 0;
+        grid.mimic = 0;
         place_bold(player_ptr, *y, *x, GB_FLOOR);
         return true;
     }
 
-    if (g_ptr->is_solid() && affectwall) {
-        int i = 50;
-        int dy = 0;
-        int dx = 0;
-        while ((i > 0) && floor_ptr->grid_array[*y + dy][*x + dx].is_solid()) {
-            dy = randint0(3) - 1;
-            dx = randint0(3) - 1;
-            if (!in_bounds(floor_ptr, *y + dy, *x + dx)) {
-                dx = 0;
-                dy = 0;
+    if (grid.is_solid() && affectwall) {
+        auto i = 50;
+        Pos2DVec vec(0, 0);
+        while ((i > 0) && floor.get_grid(pos + vec).is_solid()) {
+            vec.y = randint0(3) - 1;
+            vec.x = randint0(3) - 1;
+            if (!in_bounds(&floor, (pos + vec).y, (pos + vec).x)) {
+                vec = { 0, 0 };
             }
 
             i--;
         }
 
         if (i == 0) {
-            place_grid(player_ptr, g_ptr, GB_OUTER);
-            dx = 0;
-            dy = 0;
+            place_grid(player_ptr, &grid, GB_OUTER);
+            vec = { 0, 0 };
         }
 
-        *x = *x + dx;
-        *y = *y + dy;
+        *x += vec.x;
+        *y += vec.y;
         return false;
     }
 
@@ -238,21 +236,21 @@ static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *x,
  */
 static void create_cata_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION x, POSITION y)
 {
-    POSITION x1 = x - 1;
-    POSITION y1 = y;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
+    auto x1 = x - 1;
+    auto y1 = y;
+    set_tunnel(player_ptr, dd_ptr, &y1, &x1, false);
 
     x1 = x + 1;
     y1 = y;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
+    set_tunnel(player_ptr, dd_ptr, &y1, &x1, false);
 
     x1 = x;
     y1 = y - 1;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
+    set_tunnel(player_ptr, dd_ptr, &y1, &x1, false);
 
     x1 = x;
     y1 = y + 1;
-    set_tunnel(player_ptr, dd_ptr, &x1, &y1, false);
+    set_tunnel(player_ptr, dd_ptr, &y1, &x1, false);
 }
 
 /*!
@@ -274,7 +272,7 @@ static void short_seg_hack(
         for (int i = 0; i <= length; i++) {
             x = x1 + i * (x2 - x1) / length;
             y = y1 + i * (y2 - y1) / length;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &y, &x, true)) {
                 if (count > 50) {
                     *fail = false;
                     return;
@@ -296,7 +294,7 @@ static void short_seg_hack(
         for (int i = x1; i <= x2; i++) {
             x = i;
             y = y1;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &y, &x, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, i - 1, y1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, i + 1, y1, 1, count, fail);
             }
@@ -309,7 +307,7 @@ static void short_seg_hack(
         for (int i = x2; i <= x1; i++) {
             x = i;
             y = y1;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &y, &x, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, i - 1, y1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, i + 1, y1, 1, count, fail);
             }
@@ -324,7 +322,7 @@ static void short_seg_hack(
         for (int i = y1; i <= y2; i++) {
             x = x2;
             y = i;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &y, &x, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i - 1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i + 1, 1, count, fail);
             }
@@ -337,7 +335,7 @@ static void short_seg_hack(
         for (int i = y2; i <= y1; i++) {
             x = x2;
             y = i;
-            if (!set_tunnel(player_ptr, dd_ptr, &x, &y, true)) {
+            if (!set_tunnel(player_ptr, dd_ptr, &y, &x, true)) {
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i - 1, 1, count, fail);
                 short_seg_hack(player_ptr, dd_ptr, x, y, x2, i + 1, 1, count, fail);
             }
@@ -431,7 +429,7 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, const Pos2D &pos
     }
 
     if (is_successful) {
-        (void)set_tunnel(player_ptr, dd_ptr, &pos.x, &pos.y, true);
+        (void)set_tunnel(player_ptr, dd_ptr, &pos.y, &pos.x, true);
     }
 
     return is_tunnel_built;
