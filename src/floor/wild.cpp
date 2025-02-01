@@ -59,7 +59,7 @@
 
 constexpr auto SUM_TERRAIN_PROBABILITIES = 18;
 
-std::vector<std::vector<wilderness_type>> wilderness;
+std::vector<std::vector<WildernessGrid>> wilderness;
 
 bool reinit_wilderness = false;
 
@@ -76,17 +76,9 @@ struct border_type {
     short bottom_right;
 };
 
-struct wilderness_grid {
-    WildernessTerrain terrain; /* Terrain type */
-    int16_t town; /* Town number */
-    DEPTH level; /* Level of the wilderness */
-    byte road; /* Road */
-    char name[32]; /* Name of the town/wilderness */
-};
-
 static border_type border;
 
-static wilderness_grid w_letter[255];
+static WildernessGrid w_letter[255];
 
 /* The default table in terrain level generation. */
 static std::map<WildernessTerrain, std::map<short, TerrainTag>> terrain_table;
@@ -708,9 +700,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
             }
 
             if (num > 5) {
-                strcpy(w_letter[index].name, zz[5]);
-            } else {
-                w_letter[index].name[0] = 0;
+                w_letter[index].name = zz[5];
             }
         } else {
             /* Failure */

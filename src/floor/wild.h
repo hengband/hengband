@@ -1,27 +1,28 @@
 #pragma once
 
-#include "system/angband.h"
 #include <vector>
-
-enum parse_error_type : int;
 
 /*
  * A structure describing a wilderness area with a terrain or a town
  */
 enum class WildernessTerrain;
 enum class DungeonId;
-struct wilderness_type {
-    WildernessTerrain terrain;
-    int16_t town;
-    int road;
-    uint32_t seed;
-    DEPTH level;
-    DungeonId entrance;
+class WildernessGrid {
+public:
+    WildernessGrid() = default;
+    WildernessTerrain terrain{};
+    short town = 0;
+    int road = 0;
+    uint32_t seed = 0;
+    int level = 0;
+    DungeonId entrance{};
+    std::string name = "";
 };
 
-extern std::vector<std::vector<wilderness_type>> wilderness;
+extern std::vector<std::vector<WildernessGrid>> wilderness;
 extern bool reinit_wilderness;
 
+enum parse_error_type : int;
 class PlayerType;
 void wilderness_gen(PlayerType *player_ptr);
 void wilderness_gen_small(PlayerType *player_ptr);
