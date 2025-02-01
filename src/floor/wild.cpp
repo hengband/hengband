@@ -731,9 +731,9 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
 
     /* Process "W:P:<x>:<y> - starting position in the wilderness */
     case 'P': {
-        auto is_corner = player_ptr->wilderness_x == 0;
-        is_corner = player_ptr->wilderness_y == 0;
-        if (!is_corner) {
+        auto has_player_located = player_ptr->wilderness_x > 0;
+        has_player_located &= player_ptr->wilderness_y > 0;
+        if (has_player_located) {
             break;
         }
 
