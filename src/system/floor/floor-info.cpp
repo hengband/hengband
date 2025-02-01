@@ -56,6 +56,11 @@ bool FloorType::is_entering_dungeon() const
     return this->entering_dungeon;
 }
 
+bool FloorType::is_leaving_dungeon() const
+{
+    return this->leaving_dungeon;
+}
+
 bool FloorType::is_underground() const
 {
     return this->dun_level > 0;
@@ -399,6 +404,11 @@ TerrainTag FloorType::select_random_trap() const
 void FloorType::enter_dungeon(bool state)
 {
     this->entering_dungeon = state;
+}
+
+void FloorType::leave_dungeon(bool state)
+{
+    this->leaving_dungeon = state;
 }
 
 /*!

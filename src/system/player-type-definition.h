@@ -225,7 +225,6 @@ public:
 
     bool monk_notify_aux{};
 
-    bool leaving_dungeon{}; /* True if player is leaving the dungeon */
     bool teleport_town{};
 
     int16_t new_spells{}; /* Number of spells available */

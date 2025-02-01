@@ -207,11 +207,11 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
     world.is_loading_now = true;
-    if (player_ptr->energy_need > 0 && !is_watching && (floor.is_underground() || player_ptr->leaving_dungeon || floor.inside_arena)) {
+    if (player_ptr->energy_need > 0 && !is_watching && (floor.is_underground() || floor.is_leaving_dungeon() || floor.inside_arena)) {
         player_ptr->energy_need = 0;
     }
 
-    player_ptr->leaving_dungeon = false;
+    floor.leave_dungeon(false);
     floor.reset_mproc();
 
     while (true) {

@@ -548,7 +548,7 @@ void wilderness_gen(PlayerType *player_ptr)
         }
 
         player_ptr->teleport_town = false;
-    } else if (player_ptr->leaving_dungeon) {
+    } else if (floor.is_leaving_dungeon()) {
         for (auto y = 0; y < floor.height; y++) {
             for (auto x = 0; x < floor.width; x++) {
                 auto &grid = floor.get_grid({ y, x });
