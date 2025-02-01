@@ -199,25 +199,24 @@ static int next_to_walls_adj(FloorType *floor_ptr, const POSITION cy, const POSI
  * @param only_room 部屋内地形のみをチェック対象にするならば TRUE
  * @param pass_bold 地形条件を返す関数ポインタ
  */
-static void cave_temp_room_aux(
-    PlayerType *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x, const bool only_room, const PassBoldFunc pass_bold)
+static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos, bool only_room, const PassBoldFunc pass_bold)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid = floor.get_grid(pos);
 
     // 既に points に追加済みなら何もしない。
-    if (g_ptr->info & (CAVE_TEMP)) {
+    if (grid.info & (CAVE_TEMP)) {
         return;
     }
 
-    if (!(g_ptr->info & (CAVE_ROOM))) {
+    if (!(grid.info & (CAVE_ROOM))) {
         if (only_room) {
             return;
         }
-        if (!in_bounds2(floor_ptr, y, x)) {
+        if (!in_bounds2(&floor, pos.y, pos.x)) {
             return;
         }
-        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > AngbandSystem::get_instance().get_max_range()) {
+        if (Grid::calc_distance(player_ptr->get_position(), pos) > AngbandSystem::get_instance().get_max_range()) {
             return;
         }
 
@@ -230,14 +229,14 @@ static void cave_temp_room_aux(
          * properly.
          * This leaves only a check for 6 bounding walls!
          */
-        if (in_bounds(floor_ptr, y, x) && pass_bold(floor_ptr, y, x) && (next_to_walls_adj(floor_ptr, y, x, pass_bold) == 6) && (next_to_open(floor_ptr, y, x, pass_bold) <= 1)) {
+        if (in_bounds(&floor, pos.y, pos.x) && pass_bold(&floor, pos.y, pos.x) && (next_to_walls_adj(&floor, pos.y, pos.x, pass_bold) == 6) && (next_to_open(&floor, pos.y, pos.x, pass_bold) <= 1)) {
             return;
         }
     }
 
     // (y,x) を points に追加し、追加済みフラグを立てる。
-    points.emplace_back(y, x);
-    g_ptr->info |= (CAVE_TEMP);
+    points.push_back(pos);
+    grid.info |= (CAVE_TEMP);
 }
 
 /*!
@@ -247,9 +246,9 @@ static void cave_temp_room_aux(
  * @param y 指定Y座標
  * @param x 指定X座標
  */
-static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
+static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos)
 {
-    cave_temp_room_aux(player_ptr, points, y, x, false, cave_los_bold);
+    cave_temp_room_aux(player_ptr, points, pos, false, cave_los_bold);
 }
 
 /*!
@@ -270,9 +269,9 @@ static bool cave_pass_dark_bold(const FloorType *floor_ptr, POSITION y, POSITION
  * @param y 指定Y座標
  * @param x 指定X座標
  */
-static void cave_temp_unlite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const POSITION y, const POSITION x)
+static void cave_temp_unlite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos)
 {
-    cave_temp_room_aux(player_ptr, points, y, x, true, cave_pass_dark_bold);
+    cave_temp_room_aux(player_ptr, points, pos, true, cave_pass_dark_bold);
 }
 
 /*!
@@ -292,7 +291,7 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 
     // (y1,x1) を起点として明るくするマスを記録していく。
     // 実質幅優先探索。
-    cave_temp_lite_room_aux(player_ptr, points, y1, x1);
+    cave_temp_lite_room_aux(player_ptr, points, { y1, x1 });
     for (size_t i = 0; i < size(points); i++) {
         const auto &point = points[i];
         const POSITION y = point.y;
@@ -302,15 +301,15 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
             continue;
         }
 
-        cave_temp_lite_room_aux(player_ptr, points, y + 1, x);
-        cave_temp_lite_room_aux(player_ptr, points, y - 1, x);
-        cave_temp_lite_room_aux(player_ptr, points, y, x + 1);
-        cave_temp_lite_room_aux(player_ptr, points, y, x - 1);
+        cave_temp_lite_room_aux(player_ptr, points, { y + 1, x });
+        cave_temp_lite_room_aux(player_ptr, points, { y - 1, x });
+        cave_temp_lite_room_aux(player_ptr, points, { y, x + 1 });
+        cave_temp_lite_room_aux(player_ptr, points, { y, x - 1 });
 
-        cave_temp_lite_room_aux(player_ptr, points, y + 1, x + 1);
-        cave_temp_lite_room_aux(player_ptr, points, y - 1, x - 1);
-        cave_temp_lite_room_aux(player_ptr, points, y - 1, x + 1);
-        cave_temp_lite_room_aux(player_ptr, points, y + 1, x - 1);
+        cave_temp_lite_room_aux(player_ptr, points, { y + 1, x + 1 });
+        cave_temp_lite_room_aux(player_ptr, points, { y - 1, x - 1 });
+        cave_temp_lite_room_aux(player_ptr, points, { y - 1, x + 1 });
+        cave_temp_lite_room_aux(player_ptr, points, { y + 1, x - 1 });
     }
 
     // 記録したマスを実際に明るくする。
@@ -337,7 +336,7 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 
     // (y1,x1) を起点として暗くするマスを記録していく。
     // 実質幅優先探索。
-    cave_temp_unlite_room_aux(player_ptr, points, y1, x1);
+    cave_temp_unlite_room_aux(player_ptr, points, { y1, x1 });
     for (size_t i = 0; i < size(points); i++) {
         const auto &point = points[i];
         const POSITION y = point.y;
@@ -347,15 +346,15 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
             continue;
         }
 
-        cave_temp_unlite_room_aux(player_ptr, points, y + 1, x);
-        cave_temp_unlite_room_aux(player_ptr, points, y - 1, x);
-        cave_temp_unlite_room_aux(player_ptr, points, y, x + 1);
-        cave_temp_unlite_room_aux(player_ptr, points, y, x - 1);
+        cave_temp_unlite_room_aux(player_ptr, points, { y + 1, x });
+        cave_temp_unlite_room_aux(player_ptr, points, { y - 1, x });
+        cave_temp_unlite_room_aux(player_ptr, points, { y, x + 1 });
+        cave_temp_unlite_room_aux(player_ptr, points, { y, x - 1 });
 
-        cave_temp_unlite_room_aux(player_ptr, points, y + 1, x + 1);
-        cave_temp_unlite_room_aux(player_ptr, points, y - 1, x - 1);
-        cave_temp_unlite_room_aux(player_ptr, points, y - 1, x + 1);
-        cave_temp_unlite_room_aux(player_ptr, points, y + 1, x - 1);
+        cave_temp_unlite_room_aux(player_ptr, points, { y + 1, x + 1 });
+        cave_temp_unlite_room_aux(player_ptr, points, { y - 1, x - 1 });
+        cave_temp_unlite_room_aux(player_ptr, points, { y - 1, x + 1 });
+        cave_temp_unlite_room_aux(player_ptr, points, { y + 1, x - 1 });
     }
 
     // 記録したマスを実際に暗くする。
