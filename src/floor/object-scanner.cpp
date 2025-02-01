@@ -32,22 +32,22 @@
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-ITEM_NUMBER scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester &item_tester)
+int scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester &item_tester)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds(floor_ptr, y, x)) {
+    const Pos2D pos(y, x);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!in_bounds(&floor, pos.y, pos.x)) {
         return 0;
     }
 
-    ITEM_NUMBER num = 0;
-    for (const auto this_o_idx : floor_ptr->grid_array[y][x].o_idx_list) {
-        ItemEntity *o_ptr;
-        o_ptr = &floor_ptr->o_list[this_o_idx];
-        if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester.okay(o_ptr)) {
+    auto num = 0;
+    for (const auto this_o_idx : floor.get_grid(pos).o_idx_list) {
+        const auto &item = floor.o_list[this_o_idx];
+        if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester.okay(&item)) {
             continue;
         }
 
-        if ((mode & SCAN_FLOOR_ONLY_MARKED) && o_ptr->marked.has_not(OmType::FOUND)) {
+        if ((mode & SCAN_FLOOR_ONLY_MARKED) && item.marked.has_not(OmType::FOUND)) {
             continue;
         }
 
