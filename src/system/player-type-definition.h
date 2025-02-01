@@ -227,7 +227,6 @@ public:
 
     bool leaving_dungeon{}; /* True if player is leaving the dungeon */
     bool teleport_town{};
-    bool enter_dungeon{}; /* Just enter the dungeon */
 
     int16_t new_spells{}; /* Number of spells available */
     int16_t old_spells{};

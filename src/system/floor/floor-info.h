@@ -98,6 +98,7 @@ public:
 
     Grid &get_grid(const Pos2D pos);
     const Grid &get_grid(const Pos2D pos) const;
+    bool is_entering_dungeon() const;
     bool is_underground() const;
     bool is_in_quest() const;
     void set_dungeon_index(DungeonId id);
@@ -123,6 +124,7 @@ public:
     bool filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain hook) const;
     TerrainTag select_random_trap() const;
 
+    void enter_dungeon(bool state);
     void reset_mproc();
     void reset_mproc_max();
     std::optional<int> get_mproc_index(short m_idx, MonsterTimedEffect mte);
@@ -138,4 +140,6 @@ public:
 
 private:
     static int decide_selection_count();
+
+    bool entering_dungeon = false;
 };

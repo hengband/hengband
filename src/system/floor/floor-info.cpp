@@ -51,6 +51,11 @@ const Grid &FloorType::get_grid(const Pos2D pos) const
     return this->grid_array[pos.y][pos.x];
 }
 
+bool FloorType::is_entering_dungeon() const
+{
+    return this->entering_dungeon;
+}
+
 bool FloorType::is_underground() const
 {
     return this->dun_level > 0;
@@ -389,6 +394,11 @@ TerrainTag FloorType::select_random_trap() const
 
         return tag;
     }
+}
+
+void FloorType::enter_dungeon(bool state)
+{
+    this->entering_dungeon = state;
 }
 
 /*!
