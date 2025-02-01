@@ -71,18 +71,20 @@ void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
  */
 void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const Pos2D pos_center(y, x);
+    auto &floor = *player_ptr->current_floor_ptr;
     for (; num > 0; --num) {
-        int j = y, k = x;
+        Pos2D pos = pos_center;
         int dummy = 0;
         for (int i = 0; i < 11; ++i) {
             while (dummy < SAFE_MAX_ATTEMPTS) {
-                j = rand_spread(y, 2);
-                k = rand_spread(x, 3);
+                pos.y = rand_spread(pos_center.y, 2);
+                pos.x = rand_spread(pos_center.x, 3);
                 dummy++;
-                if (!in_bounds(floor_ptr, j, k)) {
+                if (!in_bounds(&floor, pos.y, pos.x)) {
                     continue;
                 }
+
                 break;
             }
 
@@ -90,16 +92,15 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
                 msg_print(_("警告！地下室のアイテムを配置できません！", "Warning! Could not place vault object!"));
             }
 
-            Grid *g_ptr;
-            g_ptr = &floor_ptr->grid_array[j][k];
-            if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty()) {
+            const auto &grid = floor.get_grid(pos);
+            if (!grid.is_floor() || !grid.o_idx_list.empty()) {
                 continue;
             }
 
             if (evaluate_percent(75)) {
-                place_object(player_ptr, j, k, 0L);
+                place_object(player_ptr, pos.y, pos.x, 0);
             } else {
-                place_gold(player_ptr, j, k);
+                place_gold(player_ptr, pos.y, pos.x);
             }
 
             break;
