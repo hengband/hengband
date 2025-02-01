@@ -638,11 +638,10 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
     }
     case HEX_SHADOW_MOVE: {
         if (cast) {
-            int i, dir;
             POSITION y, x;
             bool flag;
 
-            for (i = 0; i < 3; i++) {
+            for (auto i = 0; i < 3; i++) {
                 if (!tgt_pt(player_ptr, &x, &y)) {
                     return "";
                 }
@@ -650,12 +649,9 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 flag = false;
 
                 const auto *floor_ptr = player_ptr->current_floor_ptr;
-                for (dir = 0; dir < 8; dir++) {
-                    int dy = y + ddy_ddd[dir];
-                    int dx = x + ddx_ddd[dir];
-                    if (dir == 5) {
-                        continue;
-                    }
+                for (auto d = 0; d < 8; d++) {
+                    const auto dy = y + ddy_ddd[d];
+                    const auto dx = x + ddx_ddd[d];
                     if (floor_ptr->grid_array[dy][dx].has_monster()) {
                         flag = true;
                     }
