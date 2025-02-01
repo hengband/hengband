@@ -9,39 +9,38 @@
 #include "system/player-type-definition.h"
 
 /*!
- * @brief build_tunnel用に通路を掘るための方向をランダムに決める / Pick a random direction
- * @param rdir Y方向に取るべきベクトル値を返す参照ポインタ
- * @param cdir X方向に取るべきベクトル値を返す参照ポインタ
+ * @brief build_tunnel用に通路を掘るための方向をランダムに決める
+ * @return トンネルの方向
  */
-static void rand_dir(POSITION *rdir, POSITION *cdir)
+static Pos2DVec rand_dir()
 {
-    int i = randint0(4);
-    *rdir = ddy_ddd[i];
-    *cdir = ddx_ddd[i];
+    const auto dir = randint0(4);
+    return { ddy_ddd[dir], ddx_ddd[dir] };
 }
 
 /*!
- * @brief build_tunnel用に通路を掘るための方向を位置関係通りに決める / Always picks a correct direction
- * @param rdir Y方向に取るべきベクトル値を返す参照ポインタ
- * @param cdir X方向に取るべきベクトル値を返す参照ポインタ
- * @param y1 始点Y座標
- * @param x1 始点X座標
- * @param y2 終点Y座標
- * @param x2 終点X座標
+ * @brief build_tunnel用に通路を掘るための方向を位置関係通りに決める
+ * @param pos_start 始点座標
+ * @param pos_end 終点座標
+ * @return トンネルの方向
  */
-static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+static Pos2DVec correct_dir(const Pos2D &pos_start, const Pos2D &pos_end)
 {
-    *rdir = (y1 == y2) ? 0 : (y1 < y2) ? 1
-                                       : -1;
-    *cdir = (x1 == x2) ? 0 : (x1 < x2) ? 1
-                                       : -1;
-    if (*rdir && *cdir) {
-        if (one_in_(2)) {
-            *rdir = 0;
-        } else {
-            *cdir = 0;
-        }
+    auto y = (pos_start.y == pos_end.y) ? 0 : (pos_start.y < pos_end.y) ? 1
+                                                                        : -1;
+    auto x = (pos_start.x == pos_end.x) ? 0 : (pos_start.x < pos_end.x) ? 1
+                                                                        : -1;
+    if ((y == 0) || (x == 0)) {
+        return { y, x };
     }
+
+    if (one_in_(2)) {
+        y = 0;
+    } else {
+        x = 0;
+    }
+
+    return { y, x };
 }
 
 /*!
@@ -56,10 +55,7 @@ bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, 
     Pos2D pos_current = pos_start;
     auto main_loop_count = 0;
     auto door_flag = false;
-    int row_dir;
-    int col_dir;
-    correct_dir(&row_dir, &col_dir, pos_current.y, pos_current.x, pos_end.y, pos_end.x);
-    Pos2DVec vec(row_dir, col_dir);
+    auto vec = correct_dir(pos_start, pos_end);
     auto &floor = *player_ptr->current_floor_ptr;
     while (pos_current != pos_end) {
         if (main_loop_count++ > 2000) {
@@ -67,17 +63,17 @@ bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, 
         }
 
         if (evaluate_percent(dt_ptr->dun_tun_chg)) {
-            correct_dir(&vec.y, &vec.x, pos_current.y, pos_current.x, pos_end.y, pos_end.x);
+            vec = correct_dir(pos_current, pos_end);
             if (evaluate_percent(dt_ptr->dun_tun_rnd)) {
-                rand_dir(&vec.y, &vec.x);
+                vec = rand_dir();
             }
         }
 
         auto pos_tmp = pos_current + vec;
         while (!in_bounds(&floor, pos_tmp.y, pos_tmp.x)) {
-            correct_dir(&vec.y, &vec.x, pos_current.y, pos_current.x, pos_end.y, pos_end.x);
+            vec = correct_dir(pos_current, pos_end);
             if (evaluate_percent(dt_ptr->dun_tun_rnd)) {
-                rand_dir(&vec.y, &vec.x);
+                vec = rand_dir();
             }
 
             pos_tmp = pos_current + vec;
