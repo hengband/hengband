@@ -1,6 +1,7 @@
 #include "grid/door.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "grid/grid.h"
+#include "monster-floor/monster-remover.h"
 #include "room/door-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -71,7 +72,7 @@ void place_secret_door(PlayerType *player_ptr, const Pos2D &pos, std::optional<D
     }
 
     grid.info &= ~(CAVE_FLOOR);
-    delete_monster(player_ptr, pos.y, pos.x);
+    delete_monster(player_ptr, pos);
 }
 
 /*!
@@ -91,7 +92,7 @@ void place_locked_door(PlayerType *player_ptr, const Pos2D &pos)
     const auto door_kind = dungeon.flags.has(DungeonFeatureType::GLASS_DOOR) ? DoorKind::GLASS_DOOR : DoorKind::DOOR;
     floor.set_terrain_id_at(pos, Doors::get_instance().select_locked_tag(door_kind));
     floor.get_grid(pos).info &= ~(CAVE_FLOOR);
-    delete_monster(player_ptr, pos.y, pos.x);
+    delete_monster(player_ptr, pos);
 }
 
 /*!
@@ -133,7 +134,7 @@ void place_random_door(PlayerType *player_ptr, const Pos2D &pos, bool is_room_do
     }
 
     if (tmp >= 400) {
-        delete_monster(player_ptr, pos.y, pos.x);
+        delete_monster(player_ptr, pos);
         return;
     }
 
@@ -143,7 +144,7 @@ void place_random_door(PlayerType *player_ptr, const Pos2D &pos, bool is_room_do
         floor.set_terrain_id_at(pos, tag);
     }
 
-    delete_monster(player_ptr, pos.y, pos.x);
+    delete_monster(player_ptr, pos);
 }
 
 /*!

@@ -21,10 +21,9 @@
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "player/player-status-flags.h"
 #include "spell-kind/spells-teleport.h"
 #include "status/bad-status-setter.h"
@@ -327,7 +326,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 if (in_generate) /* In generation */
                 {
                     /* Delete the monster (if any) */
-                    delete_monster(player_ptr, pos.y, pos.x);
+                    delete_monster(player_ptr, pos);
                 } else if (monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
                     /* Heal the monster */
                     monster.hp = monster.maxhp;
@@ -343,7 +342,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                     }
 
                     /* Delete the monster (if any) */
-                    delete_monster(player_ptr, pos.y, pos.x);
+                    delete_monster(player_ptr, pos);
                 }
             }
 
