@@ -57,7 +57,7 @@
 #include <numeric>
 #include <utility>
 
-constexpr auto MAX_FEAT_IN_TERRAIN = 18;
+constexpr auto SUM_TERRAIN_PROBABILITIES = 18;
 
 std::vector<std::vector<wilderness_type>> wilderness;
 
@@ -238,7 +238,7 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
     if (!corner) {
         for (auto y = 0; y < MAX_HGT; y++) {
             for (auto x = 0; x < MAX_WID; x++) {
-                floor.get_grid({ y, x }).feat = MAX_FEAT_IN_TERRAIN / 2;
+                floor.get_grid({ y, x }).feat = SUM_TERRAIN_PROBABILITIES / 2;
             }
         }
     }
@@ -247,10 +247,10 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
     auto &grid_bottom_left = floor.get_grid({ MAX_HGT - 2, 1 });
     auto &grid_top_right = floor.get_grid({ 1, MAX_WID - 2 });
     auto &grid_bottom_right = floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 });
-    grid_top_left.feat = randnum0<short>(MAX_FEAT_IN_TERRAIN);
-    grid_bottom_left.feat = randnum0<short>(MAX_FEAT_IN_TERRAIN);
-    grid_top_right.feat = randnum0<short>(MAX_FEAT_IN_TERRAIN);
-    grid_bottom_right.feat = randnum0<short>(MAX_FEAT_IN_TERRAIN);
+    grid_top_left.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
+    grid_bottom_left.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
+    grid_top_right.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
+    grid_bottom_right.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
     if (corner) {
         const auto &tags = terrain_table.at(terrain);
         grid_top_left.set_terrain_id(tags.at(grid_top_left.feat));
@@ -266,7 +266,7 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
     const auto top_right = grid_top_right.feat;
     const auto bottom_right = grid_bottom_right.feat;
     const short roughness = 1; /* The roughness of the level. */
-    plasma_recursive(floor, 1, 1, MAX_WID - 2, MAX_HGT - 2, MAX_FEAT_IN_TERRAIN - 1, roughness);
+    plasma_recursive(floor, 1, 1, MAX_WID - 2, MAX_HGT - 2, SUM_TERRAIN_PROBABILITIES - 1, roughness);
     grid_top_left.feat = top_left;
     grid_bottom_left.feat = bottom_left;
     grid_top_right.feat = top_right;
@@ -788,7 +788,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
  * @brief ゲーム開始時に各荒野フロアの乱数シードを指定する /
  * Generate the random seeds for the wilderness
  */
-void seed_wilderness(void)
+void seed_wilderness()
 {
     const auto &world = AngbandWorld::get_instance();
     for (auto x = 0; x < world.max_wild_x; x++) {
@@ -804,9 +804,8 @@ void seed_wilderness(void)
  */
 void init_wilderness_terrains()
 {
-    /// @details 地上フロアの種類をキーに、地形タグと出現率 (1/18ずつ)のペアを値にした連想配列.
-    /// map にするとTerrainTag の順番がソートされてしまうので不適。terrain_table もmap に変えればここもmap でOK.
-    /// wt_type も将来的にenum class へ変える.
+    /// @details 地上フロアの種類をキーに、地形タグと出現率 (1/18ずつ)のペアを値にした(擬似的)連想配列.
+    /// map にするとTerrainTag の順番がソートされてしまうので不適.
     static const std::map<WildernessTerrain, std::vector<std::pair<TerrainTag, int>>> wt_tag_map{
         { WildernessTerrain::EDGE, { { TerrainTag::PERMANENT_WALL, 18 } } },
         { WildernessTerrain::TOWN, { { TerrainTag::FLOOR, 18 } } },
@@ -824,7 +823,7 @@ void init_wilderness_terrains()
 
     for (const auto &[wt, tags] : wt_tag_map) {
         const auto check = std::accumulate(tags.begin(), tags.end(), 0, [](int sum, const auto &x) { return sum + x.second; });
-        if (check != MAX_FEAT_IN_TERRAIN) {
+        if (check != SUM_TERRAIN_PROBABILITIES) {
             THROW_EXCEPTION(std::logic_error, "Initializing wilderness is failed!");
         }
 
@@ -832,7 +831,7 @@ void init_wilderness_terrains()
         short cur = 0;
         for (const auto &[tag, num] : tags) {
             const auto limit = cur + num;
-            for (; (cur < limit) && (cur < MAX_FEAT_IN_TERRAIN); cur++) {
+            for (; (cur < limit) && (cur < SUM_TERRAIN_PROBABILITIES); cur++) {
                 terrain_table.at(wt).emplace(cur, tag);
             }
         }
