@@ -465,7 +465,6 @@ void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION di
 
 /*!
  * @brief プレイヤーを指定位置近辺にテレポートさせる
- * Teleport player to a grid near the given location
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param ny 目標Y座標
  * @param nx 目標X座標
@@ -483,27 +482,29 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
         return;
     }
 
-    /* Find a usable location */
-    POSITION y, x;
-    POSITION dis = 0, ctr = 0;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    Pos2D pos(0, 0);
+    auto dis = 0;
+    auto ctr = 0;
     const auto &world = AngbandWorld::get_instance();
     while (true) {
         while (true) {
-            y = rand_spread(ny, dis);
-            x = rand_spread(nx, dis);
-            if (in_bounds(player_ptr->current_floor_ptr, y, x)) {
+            pos.y = rand_spread(ny, dis);
+            pos.x = rand_spread(nx, dis);
+            if (in_bounds(&floor, pos.y, pos.x)) {
                 break;
             }
         }
 
         auto is_anywhere = world.wizard;
         is_anywhere &= (mode & TELEPORT_PASSIVE) == 0;
-        is_anywhere &= player_ptr->current_floor_ptr->grid_array[y][x].has_monster() || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
+        const auto &grid = floor.get_grid(pos);
+        is_anywhere &= grid.has_monster() || grid.m_idx == player_ptr->riding;
         if (is_anywhere) {
             break;
         }
 
-        if (cave_player_teleportable_bold(player_ptr, y, x, mode)) {
+        if (cave_player_teleportable_bold(player_ptr, pos.y, pos.x, mode)) {
             break;
         }
 
@@ -514,7 +515,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
     }
 
     sound(SOUND_TELEPORT);
-    (void)move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+    (void)move_player_effect(player_ptr, pos.y, pos.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 }
 
 void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
