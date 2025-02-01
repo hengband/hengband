@@ -254,7 +254,7 @@ void wr_player(PlayerType *player_ptr)
     const auto &system = AngbandSystem::get_instance();
     wr_u32b(system.get_seed_flavor());
     wr_u32b(system.get_seed_town());
-    wr_u16b(player_ptr->panic_save);
+    wr_u16b(system.is_panic_save_executed() ? 1 : 0);
     wr_u16b(world.total_winner);
     wr_u16b(world.noscore);
     wr_bool(player_ptr->is_dead);

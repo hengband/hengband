@@ -154,8 +154,7 @@ void rd_global_configurations(PlayerType *player_ptr)
     auto &system = AngbandSystem::get_instance();
     system.set_seed_flavor(rd_u32b());
     system.set_seed_town(rd_u32b());
-
-    player_ptr->panic_save = rd_u16b();
+    system.set_panic_save(rd_u16b() > 0);
     auto &world = AngbandWorld::get_instance();
     world.total_winner = rd_u16b();
     world.noscore = rd_u16b();

@@ -106,7 +106,8 @@ void player_wipe_without_name(PlayerType *player_ptr)
     auto &world = AngbandWorld::get_instance();
     world.total_winner = false;
     player_ptr->timewalk = false;
-    player_ptr->panic_save = 0;
+    auto &system = AngbandSystem::get_instance();
+    system.set_panic_save(false);
 
     world.noscore = 0;
     world.wizard = false;

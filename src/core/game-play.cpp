@@ -256,7 +256,8 @@ static void change_floor_if_error(PlayerType *player_ptr)
         return;
     }
 
-    if (player_ptr->panic_save == 0) {
+    auto &system = AngbandSystem::get_instance();
+    if (!system.is_panic_save_executed()) {
         return;
     }
 
@@ -269,7 +270,7 @@ static void change_floor_if_error(PlayerType *player_ptr)
         player_ptr->y = player_ptr->x = 10;
     }
 
-    player_ptr->panic_save = 0;
+    system.set_panic_save(false);
 }
 
 static void generate_world(PlayerType *player_ptr, bool new_game)

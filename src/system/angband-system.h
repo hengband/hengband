@@ -16,6 +16,8 @@ public:
 
     uint8_t savefile_key{}; //!< セーブファイルエンコードキー(XOR)
 
+    void set_panic_save(bool state);
+    bool is_panic_save_executed() const;
     void set_phase_out(bool new_status);
     bool is_phase_out() const;
     int get_max_range() const;
@@ -34,6 +36,8 @@ private:
     AngbandSystem() = default;
 
     static AngbandSystem instance;
+
+    bool panic_save = false;
     bool phase_out_stat = false; // カジノ闘技場の観戦状態等に利用。NPCの処理の対象にならず自身もほとんどの行動ができない.
     Xoshiro128StarStar rng; //!< Uniform random bit generator for <random>
     uint32_t seed_flavor{}; /* アイテム未鑑定名をシャッフルするための乱数シード */

@@ -2443,8 +2443,7 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
             p_ptr->is_dead = false;
         }
         exe_write_diary(*p_ptr->current_floor_ptr, DiaryKind::GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
-
-        p_ptr->panic_save = 1;
+        AngbandSystem::get_instance().set_panic_save(true);
         signals_ignore_tstp();
         p_ptr->died_from = _("(緊急セーブ)", "(panic save)");
         (void)save_player(p_ptr, SaveType::CLOSE_GAME);

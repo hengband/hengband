@@ -8,6 +8,16 @@ AngbandSystem &AngbandSystem::get_instance()
     return instance;
 }
 
+void AngbandSystem::set_panic_save(bool state)
+{
+    this->panic_save = state;
+}
+
+bool AngbandSystem::is_panic_save_executed() const
+{
+    return this->panic_save;
+}
+
 void AngbandSystem::set_phase_out(bool new_status)
 {
     this->phase_out_stat = new_status;
