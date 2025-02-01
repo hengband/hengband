@@ -78,7 +78,7 @@ struct border_type {
 
 static border_type border;
 
-static WildernessGrid w_letter[255];
+static std::vector<WildernessGrid> wilderness_letters;
 
 /* The default table in terrain level generation. */
 static std::map<WildernessTerrain, std::map<short, TerrainTag>> terrain_table;
@@ -649,6 +649,10 @@ void wilderness_gen_small(PlayerType *player_ptr)
  */
 std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerType *player_ptr, char *line, int xmin, int xmax, const Pos2D &pos_parsing)
 {
+    if (wilderness_letters.empty()) {
+        wilderness_letters.resize(TerrainList::get_instance().size());
+    }
+
     if (!(std::string_view(line).starts_with("W:"))) {
         return { PARSE_ERROR_GENERIC, std::nullopt };
     }
@@ -675,32 +679,33 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
         }
 
         int index = zz[0][0];
+        auto &letter = wilderness_letters.at(index);
         if (num > 1) {
-            w_letter[index].terrain = i2enum<WildernessTerrain>(std::stoi(zz[1]));
+            letter.terrain = i2enum<WildernessTerrain>(std::stoi(zz[1]));
         } else {
-            w_letter[index].terrain = WildernessTerrain::EDGE;
+            letter.terrain = WildernessTerrain::EDGE;
         }
 
         if (num > 2) {
-            w_letter[index].level = std::stoi(zz[2]);
+            letter.level = std::stoi(zz[2]);
         } else {
-            w_letter[index].level = 0;
+            letter.level = 0;
         }
 
         if (num > 3) {
-            w_letter[index].town = static_cast<short>(std::stoi(zz[3]));
+            letter.town = static_cast<short>(std::stoi(zz[3]));
         } else {
-            w_letter[index].town = 0;
+            letter.town = 0;
         }
 
         if (num > 4) {
-            w_letter[index].road = std::stoi(zz[4]);
+            letter.road = std::stoi(zz[4]);
         } else {
-            w_letter[index].road = 0;
+            letter.road = 0;
         }
 
         if (num > 5) {
-            w_letter[index].name = zz[5];
+            letter.name = zz[5];
         }
 
         break;
@@ -714,11 +719,13 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
         int len = strlen(s);
         for (auto i = 0; ((pos.x < xmax) && (i < len)); pos.x++, s++, i++) {
             int id = s[0];
-            wilderness[pos.y][pos.x].terrain = w_letter[id].terrain;
-            wilderness[pos.y][pos.x].level = w_letter[id].level;
-            wilderness[pos.y][pos.x].town = w_letter[id].town;
-            wilderness[pos.y][pos.x].road = w_letter[id].road;
-            towns_info[w_letter[id].town].name = w_letter[id].name;
+            auto &wg = wilderness[pos.y][pos.x];
+            const auto &letter = wilderness_letters.at(id);
+            wg.terrain = letter.terrain;
+            wg.level = letter.level;
+            wg.town = letter.town;
+            wg.road = letter.road;
+            towns_info[letter.town].name = letter.name;
         }
 
         pos.y++;
