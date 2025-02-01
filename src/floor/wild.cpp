@@ -640,71 +640,67 @@ void wilderness_gen_small(PlayerType *player_ptr)
 }
 
 /*!
- * @brief w_info.txtのデータ解析 /
- * Parse a sub-file of the "extra info"
- * @param buf 読み取ったデータ行のバッファ
- * @param ymin 未使用
+ * @brief WildernessDefinition.txt を1行読み取って解析する
+ * @param line 読み取ったデータ行のバッファ
  * @param xmin 広域地形マップを読み込みたいx座標の開始位置
- * @param ymax 未使用
  * @param xmax 広域地形マップを読み込みたいx座標の終了位置
- * @param y 広域マップの高さを返す参照ポインタ
- * @param x 広域マップの幅を返す参照ポインタ
+ * @param pos_parsing 解析対象の座標
+ * @return エラーコードと座標のペア。エラー時は座標は無効値。Dタグの時だけ更新の可能性があり、それ以外はpos_parsingをそのまま返却
  */
-parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xmin, int xmax, int *y, int *x)
+std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerType *player_ptr, char *line, int xmin, int xmax, const Pos2D &pos_parsing)
 {
-    if (!(buf[0] == 'W')) {
-        return PARSE_ERROR_GENERIC;
+    if (!(std::string_view(line).starts_with("W:"))) {
+        return { PARSE_ERROR_GENERIC, std::nullopt };
     }
 
-    int num;
-    char *zz[33];
-    switch (buf[2]) {
+    Pos2D pos = pos_parsing;
+    switch (line[2]) {
         /* Process "W:F:<letter>:<terrain>:<town>:<road>:<name> */
 #ifdef JP
     case 'E':
-        return PARSE_ERROR_NONE;
+        return { PARSE_ERROR_NONE, pos_parsing };
     case 'F':
     case 'J':
 #else
     case 'J':
-        return PARSE_ERROR_NONE;
+        return { PARSE_ERROR_NONE, pos_parsing };
     case 'F':
     case 'E':
 #endif
     {
-        if ((num = tokenize(buf + 4, 6, zz, 0)) > 1) {
-            int index = zz[0][0];
+        char *zz[33];
+        const auto num = tokenize(line + 4, 6, zz, 0);
+        if (num <= 1) {
+            return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
+        }
 
-            if (num > 1) {
-                w_letter[index].terrain = i2enum<WildernessTerrain>(atoi(zz[1]));
-            } else {
-                w_letter[index].terrain = WildernessTerrain::EDGE;
-            }
-
-            if (num > 2) {
-                w_letter[index].level = (int16_t)atoi(zz[2]);
-            } else {
-                w_letter[index].level = 0;
-            }
-
-            if (num > 3) {
-                w_letter[index].town = static_cast<int16_t>(atoi(zz[3]));
-            } else {
-                w_letter[index].town = 0;
-            }
-
-            if (num > 4) {
-                w_letter[index].road = (byte)atoi(zz[4]);
-            } else {
-                w_letter[index].road = 0;
-            }
-
-            if (num > 5) {
-                w_letter[index].name = zz[5];
-            }
+        int index = zz[0][0];
+        if (num > 1) {
+            w_letter[index].terrain = i2enum<WildernessTerrain>(std::stoi(zz[1]));
         } else {
-            /* Failure */
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            w_letter[index].terrain = WildernessTerrain::EDGE;
+        }
+
+        if (num > 2) {
+            w_letter[index].level = std::stoi(zz[2]);
+        } else {
+            w_letter[index].level = 0;
+        }
+
+        if (num > 3) {
+            w_letter[index].town = static_cast<short>(std::stoi(zz[3]));
+        } else {
+            w_letter[index].town = 0;
+        }
+
+        if (num > 4) {
+            w_letter[index].road = std::stoi(zz[4]);
+        } else {
+            w_letter[index].road = 0;
+        }
+
+        if (num > 5) {
+            w_letter[index].name = zz[5];
         }
 
         break;
@@ -713,19 +709,19 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
     /* Process "W:D:<layout> */
     /* Layout of the wilderness */
     case 'D': {
-        char *s = buf + 4;
+        pos.x = xmin;
+        char *s = line + 4;
         int len = strlen(s);
-        int i;
-        for (*x = xmin, i = 0; ((*x < xmax) && (i < len)); (*x)++, s++, i++) {
+        for (auto i = 0; ((pos.x < xmax) && (i < len)); pos.x++, s++, i++) {
             int id = s[0];
-            wilderness[*y][*x].terrain = w_letter[id].terrain;
-            wilderness[*y][*x].level = w_letter[id].level;
-            wilderness[*y][*x].town = w_letter[id].town;
-            wilderness[*y][*x].road = w_letter[id].road;
+            wilderness[pos.y][pos.x].terrain = w_letter[id].terrain;
+            wilderness[pos.y][pos.x].level = w_letter[id].level;
+            wilderness[pos.y][pos.x].town = w_letter[id].town;
+            wilderness[pos.y][pos.x].road = w_letter[id].road;
             towns_info[w_letter[id].town].name = w_letter[id].name;
         }
 
-        (*y)++;
+        pos.y++;
         break;
     }
 
@@ -737,12 +733,13 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
             break;
         }
 
-        if (tokenize(buf + 4, 2, zz, 0) != 2) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        char *zz[33];
+        if (tokenize(line + 4, 2, zz, 0) != 2) {
+            return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
         }
 
-        player_ptr->wilderness_y = atoi(zz[0]);
-        player_ptr->wilderness_x = atoi(zz[1]);
+        player_ptr->wilderness_y = std::stoi(zz[0]);
+        player_ptr->wilderness_x = std::stoi(zz[1]);
 
         auto out_of_bounds = (player_ptr->wilderness_x < 1);
         const auto &world = AngbandWorld::get_instance();
@@ -750,14 +747,13 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
         out_of_bounds |= (player_ptr->wilderness_y < 1);
         out_of_bounds |= (player_ptr->wilderness_y > world.max_wild_y);
         if (out_of_bounds) {
-            return PARSE_ERROR_OUT_OF_BOUNDS;
+            return { PARSE_ERROR_OUT_OF_BOUNDS, std::nullopt };
         }
 
         break;
     }
-
     default:
-        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+        return { PARSE_ERROR_UNDEFINED_DIRECTIVE, std::nullopt };
     }
 
     for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
@@ -771,7 +767,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
         }
     }
 
-    return PARSE_ERROR_NONE;
+    return { PARSE_ERROR_NONE, pos };
 }
 
 /*!
