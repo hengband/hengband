@@ -63,7 +63,7 @@ void acquire_chaos_weapon(PlayerType *player_ptr)
         SV_BLADE_OF_CHAOS, // LV50
     };
 
-    std::span<const sv_sword_type> candidates(weapons.begin(), player_ptr->lev);
+    const auto candidates = std::span(weapons).first(player_ptr->lev);
     const auto sval = rand_choice(candidates);
 
     ItemEntity item({ ItemKindType::SWORD, sval });

@@ -241,7 +241,7 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto prob_table = parse_terrain_probability(std::span(tokens.begin() + 1, terrain_probability_num * 2));
+        auto prob_table = parse_terrain_probability(std::span(tokens).subspan(1, terrain_probability_num * 2));
         if (!prob_table) {
             return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
         }
@@ -258,14 +258,14 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        auto prob_table = parse_terrain_probability(std::span(tokens.begin() + 1, terrain_probability_num * 2));
+        auto prob_table = parse_terrain_probability(std::span(tokens).subspan(1, terrain_probability_num * 2));
         if (!prob_table) {
             return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
         }
         dungeon->prob_table_wall = std::move(*prob_table);
 
         try {
-            const std::span tags(tokens.begin() + terrain_probability_num * 2 + 1, 4);
+            const auto tags = std::span(tokens).subspan(terrain_probability_num * 2 + 1, 4);
             dungeon->outer_wall = terrains.get_terrain_id(tags[0]);
             dungeon->inner_wall = terrains.get_terrain_id(tags[1]);
             dungeon->stream1 = terrains.get_terrain_id(tags[2]);
