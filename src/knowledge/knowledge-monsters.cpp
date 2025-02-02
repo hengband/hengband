@@ -14,13 +14,9 @@
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "knowledge/monster-group-table.h"
-#include "locale/english.h"
 #include "lore/lore-util.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
-#include "monster/smart-learn-types.h"
 #include "pet/pet-util.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
@@ -29,16 +25,16 @@
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "tracking/lore-tracker.h"
 #include "util/angband-files.h"
-#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
-#include "view/display-monster-status.h"
 #include "world/world.h"
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 /*!
  * @brief 特定の与えられた条件に応じてモンスターのIDリストを作成する / Build a list of monster indexes in the given group.
@@ -123,7 +119,7 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
 
         t_friends++;
         const auto pet_name = monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-        fprintf(fff, "%s (%s)\n", pet_name.data(), look_mon_desc(m_ptr, 0x00).data());
+        fprintf(fff, "%s (%s)\n", pet_name.data(), m_ptr->build_looking_description(true).data());
     }
 
     int show_upkeep = calculate_upkeep(player_ptr);

@@ -1031,9 +1031,6 @@
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\display-monster-status.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-info.cpp">
       <Filter>monster</Filter>
     </ClCompile>
@@ -3750,9 +3747,6 @@
       <Filter>cmd-io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-symbol.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\view\display-monster-status.h">
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-info.h">

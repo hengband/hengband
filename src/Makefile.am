@@ -1030,7 +1030,6 @@ hengband_SOURCES = \
 	view/display-lore.cpp view/display-lore.h \
 	view/display-map.cpp view/display-map.h \
 	view/display-messages.cpp view/display-messages.h \
-	view/display-monster-status.cpp view/display-monster-status.h \
 	view/display-player-stat-info.cpp view/display-player-stat-info.h \
 	view/display-player-misc-info.cpp view/display-player-misc-info.h \
 	view/display-player-middle.cpp view/display-player-middle.h \

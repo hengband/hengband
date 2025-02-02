@@ -4,7 +4,6 @@
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "floor/cave.h"
-#include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "floor/object-scanner.h"
 #include "game-option/input-options.h"
@@ -12,13 +11,9 @@
 #include "info-reader/fixed-map-parser.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
-#include "locale/english.h"
-#include "lore/lore-util.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-flag-types.h"
 #include "object/item-tester-hooker.h"
-#include "object/object-mark-types.h"
 #include "player-base/player-race.h"
 #include "player/player-status-table.h"
 #include "system/building-type-definition.h"
@@ -30,7 +25,6 @@
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/grid-type-definition.h"
-#include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -39,16 +33,16 @@
 #include "system/terrain/terrain-list.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
-#include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/lore-tracker.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-lore.h"
 #include "view/display-messages.h"
-#include "view/display-monster-status.h"
 #include "window/display-sub-windows.h"
 #include "world/world.h"
+#ifdef JP
+#else
+#include "locale/english.h"
+#endif
 
 namespace {
 constexpr short CONTINUOUS_DESCRIPTION = 256;
@@ -214,7 +208,7 @@ static void describe_grid_monster(PlayerType *player_ptr, GridExamination *ge_pt
         }
 
         std::string acount = evaluate_monster_exp(player_ptr, ge_ptr->m_ptr);
-        const auto mon_desc = look_mon_desc(ge_ptr->m_ptr, 0x01);
+        const auto mon_desc = ge_ptr->m_ptr->build_looking_description(false);
 #ifdef JP
         const auto out_val = format("[%s]%s%s(%s)%s%s [r思 %s%s]", acount.data(), ge_ptr->s1, m_name.data(), mon_desc.data(), ge_ptr->s2, ge_ptr->s3,
             ge_ptr->x_info, ge_ptr->info);
