@@ -38,6 +38,7 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <ranges>
 #include <sstream>
 
 /*!
@@ -120,8 +121,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
 
         std::stringstream ss;
         ss << *m_names.begin();
-        for (size_t i = 1; i < m_names.size(); i++) { // @todo clang v14 はstd::views::drop() 非対応
-            const auto &m_name = m_names[i];
+        for (const auto &m_name : m_names | std::ranges::views::drop(1)) {
             ss << _("と", " and ");
             ss << m_name;
         }
