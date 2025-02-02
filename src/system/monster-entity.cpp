@@ -263,25 +263,12 @@ bool MonsterEntity::is_invulnerable() const
     return this->get_remaining_invulnerability() > 0;
 }
 
-/*
+/*!
  * @brief 悪夢モード、一時加速、一時減速に基づくモンスターの現在速度を返す
  */
 byte MonsterEntity::get_temporary_speed() const
 {
-    auto speed = this->mspeed;
-    if (ironman_nightmare) {
-        speed += 5;
-    }
-
-    if (this->is_accelerated()) {
-        speed += 10;
-    }
-
-    if (this->is_decelerated()) {
-        speed -= 10;
-    }
-
-    return speed;
+    return MonsterEntity::calc_temporary_speed(this->mspeed, this->is_accelerated(), this->is_decelerated());
 }
 
 /*!
@@ -414,20 +401,9 @@ std::optional<bool> MonsterEntity::order_pet_dismission(const MonsterEntity &oth
 void MonsterEntity::set_individual_speed(bool force_fixed_speed)
 {
     const auto &monrace = this->get_monrace();
-    auto speed = monrace.speed;
-    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) && !force_fixed_speed) {
-        /* Allow some small variation per monster */
-        int i = speed_to_energy(monrace.speed) / (one_in_(4) ? 3 : 10);
-        if (i) {
-            speed += static_cast<uint8_t>(rand_spread(0, i));
-        }
-    }
+    auto do_fixed_speed = monrace.kind_flags.has_not(MonsterKindType::UNIQUE) && !force_fixed_speed;
 
-    if (speed > STANDARD_SPEED + 99) {
-        speed = STANDARD_SPEED + 99;
-    }
-
-    this->mspeed = speed;
+    this->mspeed = MonsterEntity::calc_individual_speed(monrace.speed, do_fixed_speed);
 }
 
 void MonsterEntity::set_position(const Pos2D &pos)
@@ -552,4 +528,52 @@ bool MonsterEntity::can_ring_boss_call_nazgul() const
     const auto &nazgul = MonraceList::get_instance().get_monrace(MonraceId::NAZGUL);
     const auto is_nazgul_alive = (nazgul.cur_num + 2) < nazgul.max_num;
     return is_boss && is_nazgul_alive;
+}
+
+/*!
+ * @brief 悪夢モード、一時加速、一時減速に基づくモンスターの現在速度を計算する
+ * @param speed モンスターのスピード
+ * @param accelerated 一時加速の有無
+ * @param decelerated 一時減速の有無
+ * @return 現在速度の計算結果
+ */
+byte MonsterEntity::calc_temporary_speed(decltype(MonsterEntity::mspeed) speed, bool accelerated, bool decelerated)
+{
+    auto result_speed = speed;
+    if (ironman_nightmare) {
+        result_speed += 5;
+    }
+
+    if (accelerated) {
+        result_speed += 10;
+    }
+
+    if (decelerated) {
+        result_speed -= 10;
+    }
+
+    return result_speed;
+}
+
+/*!
+ * @brief モンスターの個体加速を計算する / Calc initial monster speed
+ * @param speed 速度のベース値
+ * @param fixed_speed Trueの場合、速度に個体差を適用しない
+ */
+decltype(MonsterEntity::mspeed) MonsterEntity::calc_individual_speed(decltype(MonsterEntity::mspeed) speed, bool fixed_speed)
+{
+    auto result_speed = speed;
+    if (!fixed_speed) {
+        /* Allow some small variation per monster */
+        int i = speed_to_energy(speed) / (one_in_(4) ? 3 : 10);
+        if (i) {
+            result_speed += static_cast<uint8_t>(rand_spread(0, i));
+        }
+    }
+
+    if (result_speed > STANDARD_SPEED + 99) {
+        result_speed = STANDARD_SPEED + 99;
+    }
+
+    return result_speed;
 }

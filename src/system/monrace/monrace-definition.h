@@ -156,7 +156,7 @@ public:
     const MonraceDefinition &get_next() const;
     bool is_bounty(bool unachieved_only) const;
     int calc_power() const;
-    int calc_figurine_value() const;
+    int get_figurine_value() const;
     int calc_capture_value() const;
     std::string build_eldritch_horror_message(std::string_view description) const;
     bool has_reinforce() const;
@@ -209,6 +209,15 @@ public:
     void emplace_drop_artifact(FixedArtifactId fa_id, int percentage);
     void emplace_reinforce(MonraceId monrace_id, const Dice &dice);
 
+    static const std::string &decide_horror_message(const EnumClassFlagGroup<MonsterKindType> &kind_flags);
+    static bool check_blow_times_for_knowing_damage(const int level, const int max_roll, const int hitted_time, const EnumClassFlagGroup<MonsterKindType> &kind_flags);
+    static int calc_figurine_value(int level);
+    static int calc_power_from_maxhp(decltype(MonraceDefinition::hit_dice) hit_dice, bool force_maxhp);
+    static int calc_power_from_speed(int power, decltype(MonraceDefinition::speed) speed);
+    static int calc_power_from_defensiveness(int power, int num_resistances, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags);
+    static int calc_power_from_moving(int power, const EnumClassFlagGroup<MonsterBehaviorType> &behavior_flags);
+    static int calc_drop_num(const EnumClassFlagGroup<MonsterDropType> &drop_flags);
+
     //!< @todo ここから先はミュータブルなフィールドなので分離すべき.
     bool has_entity() const;
     bool should_display(bool is_alive) const;
@@ -233,5 +242,4 @@ private:
 
     bool is_suitable_for_arena() const;
     bool has_blow_with_damage() const;
-    const std::string &decide_horror_message() const;
 };

@@ -235,38 +235,12 @@ int MonraceDefinition::calc_power() const
 {
     auto power = 0;
     const auto num_resistances = EnumClassFlagGroup<MonsterResistanceType>(this->resistance_flags & RFR_EFF_IMMUNE_ELEMENT_MASK).count();
-    if (this->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
-        power = this->hit_dice.maxroll() * 2;
-    } else {
-        power = this->hit_dice.floored_expected_value_multiplied_by(2);
-    }
 
+    power = calc_power_from_maxhp(this->hit_dice, this->misc_flags.has(MonsterMiscType::FORCE_MAXHP));
     power = power * (100 + this->level) / 100;
-    if (this->speed > STANDARD_SPEED) {
-        power = power * (this->speed * 2 - 110) / 100;
-    }
-
-    if (this->speed < STANDARD_SPEED) {
-        power = power * (this->speed - 20) / 100;
-    }
-
-    if (num_resistances > 2) {
-        power = power * (num_resistances * 2 + 5) / 10;
-    } else if (this->ability_flags.has(MonsterAbilityType::INVULNER)) {
-        power = power * 4 / 3;
-    } else if (this->ability_flags.has(MonsterAbilityType::HEAL)) {
-        power = power * 4 / 3;
-    } else if (this->ability_flags.has(MonsterAbilityType::DRAIN_MANA)) {
-        power = power * 11 / 10;
-    }
-
-    if (this->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
-        power = power * 9 / 10;
-    }
-
-    if (this->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50)) {
-        power = power * 9 / 10;
-    }
+    power = calc_power_from_speed(power, this->speed);
+    power = calc_power_from_defensiveness(power, num_resistances, this->ability_flags);
+    power = calc_power_from_moving(power, this->behavior_flags);
 
     if (this->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         power *= 100000;
@@ -279,26 +253,9 @@ int MonraceDefinition::calc_power() const
     return power;
 }
 
-int MonraceDefinition::calc_figurine_value() const
+int MonraceDefinition::get_figurine_value() const
 {
-    const auto figurine_level = this->level;
-    if (figurine_level < 20) {
-        return figurine_level * 50;
-    }
-
-    if (figurine_level < 30) {
-        return 1000 + (figurine_level - 20) * 150;
-    }
-
-    if (figurine_level < 40) {
-        return 2500 + (figurine_level - 30) * 350;
-    }
-
-    if (figurine_level < 50) {
-        return 6000 + (figurine_level - 40) * 800;
-    }
-
-    return 14000 + (figurine_level - 50) * 2000;
+    return MonraceDefinition::calc_figurine_value(this->level);
 }
 
 int MonraceDefinition::calc_capture_value() const
@@ -318,7 +275,7 @@ int MonraceDefinition::calc_capture_value() const
  */
 std::string MonraceDefinition::build_eldritch_horror_message(std::string_view description) const
 {
-    const auto &horror_message = this->decide_horror_message();
+    const auto &horror_message = MonraceDefinition::decide_horror_message(this->kind_flags);
     constexpr auto fmt = _("%s%sの顔を見てしまった！", "You behold the %s visage of %s!");
     return format(fmt, horror_message.data(), description.data());
 }
@@ -696,12 +653,7 @@ std::optional<std::string> MonraceDefinition::probe_lore()
     }
 
     using Mdt = MonsterDropType;
-    auto num_drops = (this->drop_flags.has(Mdt::DROP_4D2) ? 8 : 0);
-    num_drops += (this->drop_flags.has(Mdt::DROP_3D2) ? 6 : 0);
-    num_drops += (this->drop_flags.has(Mdt::DROP_2D2) ? 4 : 0);
-    num_drops += (this->drop_flags.has(Mdt::DROP_1D2) ? 2 : 0);
-    num_drops += (this->drop_flags.has(Mdt::DROP_90) ? 1 : 0);
-    num_drops += (this->drop_flags.has(Mdt::DROP_60) ? 1 : 0);
+    auto num_drops = calc_drop_num(this->drop_flags);
     if (this->drop_flags.has_not(Mdt::ONLY_GOLD)) {
         if (this->r_drop_item != num_drops) {
             n = true;
@@ -848,20 +800,8 @@ bool MonraceDefinition::is_details_known() const
 bool MonraceDefinition::is_blow_damage_known(int num_blow) const
 {
     const auto r_blow = this->r_blows[num_blow];
-    auto max_damage = this->blows[num_blow].damage_dice.maxroll();
-    if (max_damage >= ((4 + this->level) * MAX_UCHAR) / 80) {
-        max_damage = ((4 + this->level) * MAX_UCHAR - 1) / 80;
-    }
-
-    if ((4 + this->level) * r_blow > 80 * max_damage) {
-        return true;
-    }
-
-    if (this->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return false;
-    }
-
-    return (4 + this->level) * (2 * r_blow) > 80 * max_damage;
+    const auto max_roll = this->blows[num_blow].damage_dice.maxroll();
+    return MonraceDefinition::check_blow_times_for_knowing_damage(this->level, max_roll, r_blow, this->kind_flags);
 }
 
 /*!
@@ -963,9 +903,10 @@ bool MonraceDefinition::has_blow_with_damage() const
 
 /*!
  * @brief エルドリッチホラーの形容詞種別を決める
+ * @param モンスターの種族フラグ
  * @return エルドリッチホラーの形容詞
  */
-const std::string &MonraceDefinition::decide_horror_message() const
+const std::string &MonraceDefinition::decide_horror_message(const EnumClassFlagGroup<MonsterKindType> &kind_flags)
 {
     const int horror_desc_common_size = horror_desc_common.size();
     auto horror_num = randint0(horror_desc_common_size + horror_desc_evil.size());
@@ -973,9 +914,151 @@ const std::string &MonraceDefinition::decide_horror_message() const
         return horror_desc_common[horror_num];
     }
 
-    if (this->kind_flags.has(MonsterKindType::EVIL)) {
+    if (kind_flags.has(MonsterKindType::EVIL)) {
         return horror_desc_evil[horror_num - horror_desc_common_size];
     }
 
     return horror_desc_neutral[horror_num - horror_desc_common_size];
+}
+
+/*!
+ * @brief モンスターの打撃威力を知るのに十分な攻撃回数を受けているか判定
+ * @param level モンスターのレベル
+ * @param max_roll 与えるダメージ(最大ダイス)
+ * @param hitted_time 攻撃を受けた回数
+ * @param kind_flags モンスターの種族フラグ
+ * @return 敵のダメージダイスを知る条件が満たされているか否か
+ * @todo kind_flags はis_blow_damage_known() 側で判定し、こちらには代わりにis_unique のみを入れる(モジュールの結合度を弱めるため)
+ */
+bool MonraceDefinition::check_blow_times_for_knowing_damage(const int level, const int max_roll, const int hitted_time, const EnumClassFlagGroup<MonsterKindType> &kind_flags)
+{
+    auto temp_max_damage = max_roll;
+    if (temp_max_damage >= ((4 + level) * MAX_UCHAR) / 80) {
+        temp_max_damage = ((4 + level) * MAX_UCHAR - 1) / 80;
+    }
+
+    if ((4 + level) * hitted_time > 80 * temp_max_damage) {
+        return true;
+    }
+
+    if (kind_flags.has_not(MonsterKindType::UNIQUE)) {
+        return false;
+    }
+
+    return (4 + level) * (2 * hitted_time) > 80 * temp_max_damage;
+}
+
+/*!
+ * @brief 人形の価格を計算する
+ * @param level モンスターのレベル
+ * @return 計算した価格
+ */
+int MonraceDefinition::calc_figurine_value(int level)
+{
+    if (level < 20) {
+        return level * 50;
+    }
+
+    if (level < 30) {
+        return 1000 + (level - 20) * 150;
+    }
+
+    if (level < 40) {
+        return 2500 + (level - 30) * 350;
+    }
+
+    if (level < 50) {
+        return 6000 + (level - 40) * 800;
+    }
+
+    return 14000 + (level - 50) * 2000;
+}
+
+/*!
+ * @brief モンスターの強さの総合計算の最大HP関連部分
+ * @param hit_dice HPのダイス
+ * @param force_maxhp ダイスの最大値で固定するか否か
+ * @return 計算結果
+ */
+int MonraceDefinition::calc_power_from_maxhp(decltype(MonraceDefinition::hit_dice) hit_dice, bool force_maxhp)
+{
+    return force_maxhp ? hit_dice.maxroll() * 2 : hit_dice.floored_expected_value_multiplied_by(2);
+}
+
+/*!
+ * @brief モンスターの強さの総合計算の加速関連部分
+ * @param power 計算に使う強さの値
+ * @param speed 加速の値
+ * @return 計算結果
+ */
+int MonraceDefinition::calc_power_from_speed(int power, decltype(MonraceDefinition::speed) speed)
+{
+    auto result = power;
+    if (speed > STANDARD_SPEED) {
+        result = result * (speed * 2 - 110) / 100;
+    }
+
+    if (speed < STANDARD_SPEED) {
+        result = result * (speed - 20) / 100;
+    }
+    return result;
+}
+
+/*!
+ * @brief モンスターの強さの総合計算の防御関連部分
+ * @param power 計算に使う強さの値
+ * @param num_resistances 属性耐性の数
+ * @param ability_flags 魔法フラグ
+ * @return 計算結果
+ */
+int MonraceDefinition::calc_power_from_defensiveness(int power, int num_resistances, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags)
+{
+    if (num_resistances > 2) {
+        return power * (num_resistances * 2 + 5) / 10;
+    } else if (ability_flags.has(MonsterAbilityType::INVULNER)) {
+        return power * 4 / 3;
+    } else if (ability_flags.has(MonsterAbilityType::HEAL)) {
+        return power * 4 / 3;
+    } else if (ability_flags.has(MonsterAbilityType::DRAIN_MANA)) {
+        return power * 11 / 10;
+    }
+    return power;
+}
+
+/*!
+ * @brief モンスターの強さの総合計算の移動関連部分
+ * @param power 計算に使う強さの値
+ * @param behavior_flags 行動フラグ
+ * @return 計算結果
+ */
+int MonraceDefinition::calc_power_from_moving(int power, const EnumClassFlagGroup<MonsterBehaviorType> &behavior_flags)
+{
+    auto result = power;
+
+    if (behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25)) {
+        result = result * 9 / 10;
+    }
+
+    if (behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50)) {
+        result = result * 9 / 10;
+    }
+
+    return result;
+}
+
+/*!
+ * @brief アイテムドロップフラグからドロップ数を計算する
+ * @param drop_flags アイテムドロップフラグ
+ * @return アイテムのドロップ数
+ */
+int MonraceDefinition::calc_drop_num(const EnumClassFlagGroup<MonsterDropType> &drop_flags)
+{
+    using Mdt = MonsterDropType;
+    auto num_drops = (drop_flags.has(Mdt::DROP_4D2) ? 8 : 0);
+    num_drops += (drop_flags.has(Mdt::DROP_3D2) ? 6 : 0);
+    num_drops += (drop_flags.has(Mdt::DROP_2D2) ? 4 : 0);
+    num_drops += (drop_flags.has(Mdt::DROP_1D2) ? 2 : 0);
+    num_drops += (drop_flags.has(Mdt::DROP_90) ? 1 : 0);
+    num_drops += (drop_flags.has(Mdt::DROP_60) ? 1 : 0);
+    return num_drops;
 }
