@@ -170,7 +170,7 @@ MonraceId get_mon_num(PlayerType *player_ptr, int min_level, int max_level, uint
     return *it;
 }
 
-static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, short m_idx, short terrain_id, const std::optional<short> summoner_m_idx)
+static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, short m_idx, short terrain_id, std::optional<short> summoner_m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
