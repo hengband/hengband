@@ -39,6 +39,7 @@
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/terrain-tag.h"
+#include "system/enums/terrain/wilderness-terrain.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
@@ -56,7 +57,7 @@
 #include <numeric>
 #include <utility>
 
-constexpr auto MAX_FEAT_IN_TERRAIN = 18;
+constexpr auto SUM_TERRAIN_PROBABILITIES = 18;
 
 std::vector<std::vector<wilderness_type>> wilderness;
 
@@ -76,7 +77,7 @@ struct border_type {
 };
 
 struct wilderness_grid {
-    wt_type terrain; /* Terrain type */
+    WildernessTerrain terrain; /* Terrain type */
     int16_t town; /* Town number */
     DEPTH level; /* Level of the wilderness */
     byte road; /* Road */
@@ -88,9 +89,22 @@ static border_type border;
 static wilderness_grid w_letter[255];
 
 /* The default table in terrain level generation. */
-static int16_t terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
+static std::map<WildernessTerrain, std::map<short, TerrainTag>> terrain_table;
 
-static int16_t conv_terrain2feat[MAX_WILDERNESS];
+static const std::map<WildernessTerrain, TerrainTag> WT_TT_MAP = {
+    { WildernessTerrain::EDGE, TerrainTag::PERMANENT_WALL },
+    { WildernessTerrain::TOWN, TerrainTag::TOWN },
+    { WildernessTerrain::DEEP_WATER, TerrainTag::DEEP_WATER },
+    { WildernessTerrain::SHALLOW_WATER, TerrainTag::SHALLOW_WATER },
+    { WildernessTerrain::SWAMP, TerrainTag::SWAMP },
+    { WildernessTerrain::DIRT, TerrainTag::DIRT },
+    { WildernessTerrain::GRASS, TerrainTag::GRASS },
+    { WildernessTerrain::TREES, TerrainTag::TREE },
+    { WildernessTerrain::DESERT, TerrainTag::DIRT },
+    { WildernessTerrain::SHALLOW_LAVA, TerrainTag::SHALLOW_LAVA },
+    { WildernessTerrain::DEEP_LAVA, TerrainTag::DEEP_LAVA },
+    { WildernessTerrain::MOUNTAIN, TerrainTag::MOUNTAIN },
+};
 
 /*!
  * @brief プラズマフラクタル的地形生成の再帰中間処理
@@ -205,9 +219,9 @@ static void plasma_recursive(FloorType &floor, POSITION x1, POSITION y1, POSITIO
  * @param border 未使用
  * @param corner 広域マップの角部分としての生成ならばTRUE
  */
-static void generate_wilderness_area(FloorType &floor, int terrain, uint32_t seed, bool corner)
+static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain, uint32_t seed, bool corner)
 {
-    if (terrain == TERRAIN_EDGE) {
+    if (terrain == WildernessTerrain::EDGE) {
         for (auto y = 0; y < MAX_HGT; y++) {
             for (auto x = 0; x < MAX_WID; x++) {
                 floor.get_grid({ y, x }).set_terrain_id(TerrainTag::PERMANENT_WALL);
@@ -221,41 +235,47 @@ static void generate_wilderness_area(FloorType &floor, int terrain, uint32_t see
     const Xoshiro128StarStar rng_backup = system.get_rng();
     Xoshiro128StarStar wilderness_rng(seed);
     system.set_rng(wilderness_rng);
-    int table_size = sizeof(terrain_table[0]) / sizeof(int16_t);
     if (!corner) {
         for (auto y = 0; y < MAX_HGT; y++) {
             for (auto x = 0; x < MAX_WID; x++) {
-                floor.get_grid({ y, x }).feat = table_size / 2;
+                floor.get_grid({ y, x }).feat = SUM_TERRAIN_PROBABILITIES / 2;
             }
         }
     }
 
-    floor.get_grid({ 1, 1 }).feat = randnum0<short>(table_size);
-    floor.get_grid({ MAX_HGT - 2, 1 }).feat = randnum0<short>(table_size);
-    floor.get_grid({ 1, MAX_WID - 2 }).feat = randnum0<short>(table_size);
-    floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat = randnum0<short>(table_size);
+    auto &grid_top_left = floor.get_grid({ 1, 1 });
+    auto &grid_bottom_left = floor.get_grid({ MAX_HGT - 2, 1 });
+    auto &grid_top_right = floor.get_grid({ 1, MAX_WID - 2 });
+    auto &grid_bottom_right = floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 });
+    grid_top_left.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
+    grid_bottom_left.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
+    grid_top_right.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
+    grid_bottom_right.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
     if (corner) {
-        floor.get_grid({ 1, 1 }).feat = terrain_table[terrain][floor.get_grid({ 1, 1 }).feat];
-        floor.get_grid({ MAX_HGT - 2, 1 }).feat = terrain_table[terrain][floor.get_grid({ MAX_HGT - 2, 1 }).feat];
-        floor.get_grid({ 1, MAX_WID - 2 }).feat = terrain_table[terrain][floor.get_grid({ 1, MAX_WID - 2 }).feat];
-        floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat = terrain_table[terrain][floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat];
+        const auto &tags = terrain_table.at(terrain);
+        grid_top_left.set_terrain_id(tags.at(grid_top_left.feat));
+        grid_bottom_left.set_terrain_id(tags.at(grid_bottom_left.feat));
+        grid_top_right.set_terrain_id(tags.at(grid_top_right.feat));
+        grid_bottom_right.set_terrain_id(tags.at(grid_bottom_right.feat));
         system.set_rng(rng_backup);
         return;
     }
 
-    const auto top_left = floor.get_grid({ 1, 1 }).feat;
-    const auto bottom_left = floor.get_grid({ MAX_HGT - 2, 1 }).feat;
-    const auto top_right = floor.get_grid({ 1, MAX_WID - 2 }).feat;
-    const auto bottom_right = floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat;
+    const auto top_left = grid_top_left.feat;
+    const auto bottom_left = grid_bottom_left.feat;
+    const auto top_right = grid_top_right.feat;
+    const auto bottom_right = grid_bottom_right.feat;
     const short roughness = 1; /* The roughness of the level. */
-    plasma_recursive(floor, 1, 1, MAX_WID - 2, MAX_HGT - 2, table_size - 1, roughness);
-    floor.get_grid({ 1, 1 }).feat = top_left;
-    floor.get_grid({ MAX_HGT - 2, 1 }).feat = bottom_left;
-    floor.get_grid({ 1, MAX_WID - 2 }).feat = top_right;
-    floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat = bottom_right;
-    for (POSITION y1 = 1; y1 < MAX_HGT - 1; y1++) {
-        for (POSITION x1 = 1; x1 < MAX_WID - 1; x1++) {
-            floor.get_grid({ y1, x1 }).feat = terrain_table[terrain][floor.get_grid({ y1, x1 }).feat];
+    plasma_recursive(floor, 1, 1, MAX_WID - 2, MAX_HGT - 2, SUM_TERRAIN_PROBABILITIES - 1, roughness);
+    grid_top_left.feat = top_left;
+    grid_bottom_left.feat = bottom_left;
+    grid_top_right.feat = top_right;
+    grid_bottom_right.feat = bottom_right;
+    for (auto y = 1; y < MAX_HGT - 1; y++) {
+        for (auto x = 1; x < MAX_WID - 1; x++) {
+            const Pos2D pos(y, x);
+            auto &grid = floor.get_grid(pos);
+            grid.set_terrain_id(terrain_table.at(terrain).at(grid.feat));
         }
     }
 
@@ -292,8 +312,8 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
             player_ptr->visit |= (1UL << (player_ptr->town_num - 1));
         }
     } else {
-        int terrain = wilderness_grid.terrain;
-        uint32_t seed = wilderness_grid.seed;
+        const auto terrain = wilderness_grid.terrain;
+        const auto seed = wilderness_grid.seed;
         generate_wilderness_area(floor, terrain, seed, is_corner);
     }
 
@@ -605,7 +625,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
                 continue;
             }
 
-            grid.feat = conv_terrain2feat[wild_grid.terrain];
+            grid.set_terrain_id(WT_TT_MAP.at(wild_grid.terrain));
             grid.info |= (CAVE_GLOW | CAVE_MARK);
         }
     }
@@ -664,9 +684,9 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
             int index = zz[0][0];
 
             if (num > 1) {
-                w_letter[index].terrain = i2enum<wt_type>(atoi(zz[1]));
+                w_letter[index].terrain = i2enum<WildernessTerrain>(atoi(zz[1]));
             } else {
-                w_letter[index].terrain = TERRAIN_EDGE;
+                w_letter[index].terrain = WildernessTerrain::EDGE;
             }
 
             if (num > 2) {
@@ -768,7 +788,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
  * @brief ゲーム開始時に各荒野フロアの乱数シードを指定する /
  * Generate the random seeds for the wilderness
  */
-void seed_wilderness(void)
+void seed_wilderness()
 {
     const auto &world = AngbandWorld::get_instance();
     for (auto x = 0; x < world.max_wild_x; x++) {
@@ -784,52 +804,35 @@ void seed_wilderness(void)
  */
 void init_wilderness_terrains()
 {
-    /// @details 地上フロアの種類をキーに、地形タグと出現率 (1/18ずつ)のペアを値にした連想配列.
-    /// map にするとTerrainTag の順番がソートされてしまうので不適。terrain_table もmap に変えればここもmap でOK.
-    /// wt_type も将来的にenum class へ変える.
-    static const std::map<wt_type, std::vector<std::pair<TerrainTag, int>>> wt_tag_map{
-        { TERRAIN_EDGE, { { TerrainTag::PERMANENT_WALL, 18 } } },
-        { TERRAIN_TOWN, { { TerrainTag::FLOOR, 18 } } },
-        { TERRAIN_DEEP_WATER, { { TerrainTag::DEEP_WATER, 12 }, { TerrainTag::SHALLOW_WATER, 6 } } },
-        { TERRAIN_SHALLOW_WATER, { { TerrainTag::DEEP_WATER, 3 }, { TerrainTag::SHALLOW_WATER, 12 }, { TerrainTag::FLOOR, 1 }, { TerrainTag::DIRT, 1 }, { TerrainTag::GRASS, 1 } } },
-        { TERRAIN_SWAMP, { { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 3 }, { TerrainTag::TREE, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::SHALLOW_WATER, 4 }, { TerrainTag::SWAMP, 7 } } },
-        { TERRAIN_DIRT, { { TerrainTag::FLOOR, 3 }, { TerrainTag::DIRT, 10 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 1 }, { TerrainTag::TREE, 2 } } },
-        { TERRAIN_GRASS, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 9 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::TREE, 2 } } },
-        { TERRAIN_TREES, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 1 }, { TerrainTag::TREE, 11 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::GRASS, 2 } } },
-        { TERRAIN_DESERT, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 13 }, { TerrainTag::GRASS, 3 } } },
-        { TERRAIN_SHALLOW_LAVA, { { TerrainTag::SHALLOW_LAVA, 14 }, { TerrainTag::DEEP_LAVA, 3 }, { TerrainTag::MOUNTAIN, 1 } } },
-        { TERRAIN_DEEP_LAVA, { { TerrainTag::DIRT, 3 }, { TerrainTag::SHALLOW_LAVA, 3 }, { TerrainTag::DEEP_LAVA, 10 }, { TerrainTag::MOUNTAIN, 2 } } },
-        { TERRAIN_MOUNTAIN, { { TerrainTag::FLOOR, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::TREE, 2 }, { TerrainTag::MOUNTAIN, 10 } } },
+    /// @details 地上フロアの種類をキーに、地形タグと出現率 (1/18ずつ)のペアを値にした(擬似的)連想配列.
+    /// map にするとTerrainTag の順番がソートされてしまうので不適.
+    static const std::map<WildernessTerrain, std::vector<std::pair<TerrainTag, int>>> wt_tag_map{
+        { WildernessTerrain::EDGE, { { TerrainTag::PERMANENT_WALL, 18 } } },
+        { WildernessTerrain::TOWN, { { TerrainTag::FLOOR, 18 } } },
+        { WildernessTerrain::DEEP_WATER, { { TerrainTag::DEEP_WATER, 12 }, { TerrainTag::SHALLOW_WATER, 6 } } },
+        { WildernessTerrain::SHALLOW_WATER, { { TerrainTag::DEEP_WATER, 3 }, { TerrainTag::SHALLOW_WATER, 12 }, { TerrainTag::FLOOR, 1 }, { TerrainTag::DIRT, 1 }, { TerrainTag::GRASS, 1 } } },
+        { WildernessTerrain::SWAMP, { { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 3 }, { TerrainTag::TREE, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::SHALLOW_WATER, 4 }, { TerrainTag::SWAMP, 7 } } },
+        { WildernessTerrain::DIRT, { { TerrainTag::FLOOR, 3 }, { TerrainTag::DIRT, 10 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 1 }, { TerrainTag::TREE, 2 } } },
+        { WildernessTerrain::GRASS, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::GRASS, 9 }, { TerrainTag::FLOWER, 1 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::TREE, 2 } } },
+        { WildernessTerrain::TREES, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 1 }, { TerrainTag::TREE, 11 }, { TerrainTag::BRAKE, 2 }, { TerrainTag::GRASS, 2 } } },
+        { WildernessTerrain::DESERT, { { TerrainTag::FLOOR, 2 }, { TerrainTag::DIRT, 13 }, { TerrainTag::GRASS, 3 } } },
+        { WildernessTerrain::SHALLOW_LAVA, { { TerrainTag::SHALLOW_LAVA, 14 }, { TerrainTag::DEEP_LAVA, 3 }, { TerrainTag::MOUNTAIN, 1 } } },
+        { WildernessTerrain::DEEP_LAVA, { { TerrainTag::DIRT, 3 }, { TerrainTag::SHALLOW_LAVA, 3 }, { TerrainTag::DEEP_LAVA, 10 }, { TerrainTag::MOUNTAIN, 2 } } },
+        { WildernessTerrain::MOUNTAIN, { { TerrainTag::FLOOR, 1 }, { TerrainTag::BRAKE, 1 }, { TerrainTag::GRASS, 2 }, { TerrainTag::DIRT, 2 }, { TerrainTag::TREE, 2 }, { TerrainTag::MOUNTAIN, 10 } } },
     };
 
-    static const std::map<wt_type, TerrainTag> base_terrain_id_map{
-        { TERRAIN_EDGE, TerrainTag::PERMANENT_WALL },
-        { TERRAIN_TOWN, TerrainTag::TOWN },
-        { TERRAIN_DEEP_WATER, TerrainTag::DEEP_WATER },
-        { TERRAIN_SHALLOW_WATER, TerrainTag::SHALLOW_WATER },
-        { TERRAIN_SWAMP, TerrainTag::SWAMP },
-        { TERRAIN_DIRT, TerrainTag::DIRT },
-        { TERRAIN_GRASS, TerrainTag::GRASS },
-        { TERRAIN_TREES, TerrainTag::TREE },
-        { TERRAIN_DESERT, TerrainTag::DIRT },
-        { TERRAIN_SHALLOW_LAVA, TerrainTag::SHALLOW_LAVA },
-        { TERRAIN_DEEP_LAVA, TerrainTag::DEEP_LAVA },
-        { TERRAIN_MOUNTAIN, TerrainTag::MOUNTAIN },
-    };
-
-    const auto &terrains = TerrainList::get_instance();
     for (const auto &[wt, tags] : wt_tag_map) {
         const auto check = std::accumulate(tags.begin(), tags.end(), 0, [](int sum, const auto &x) { return sum + x.second; });
-        if (check != MAX_FEAT_IN_TERRAIN) {
+        if (check != SUM_TERRAIN_PROBABILITIES) {
             THROW_EXCEPTION(std::logic_error, "Initializing wilderness is failed!");
         }
 
-        conv_terrain2feat[wt] = terrains.get_terrain_id(base_terrain_id_map.at(wt));
-        auto cur = 0;
+        terrain_table.emplace(wt, std::map<short, TerrainTag>());
+        short cur = 0;
         for (const auto &[tag, num] : tags) {
             const auto limit = cur + num;
-            for (; (cur < limit) && (cur < MAX_FEAT_IN_TERRAIN); cur++) {
-                terrain_table[wt][cur] = terrains.get_terrain_id(tag);
+            for (; (cur < limit) && (cur < SUM_TERRAIN_PROBABILITIES); cur++) {
+                terrain_table.at(wt).emplace(cur, tag);
             }
         }
     }

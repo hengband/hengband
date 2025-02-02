@@ -946,6 +946,7 @@ hengband_SOURCES = \
 	system/enums/terrain/terrain-characteristics.h \
 	system/enums/terrain/terrain-kind.h \
 	system/enums/terrain/terrain-tag.h \
+	system/enums/terrain/wilderness-terrain.h \
 	\
 	system/floor/floor-info.cpp system/floor/floor-info.h \
 	system/floor/floor-list.cpp system/floor/floor-list.h \
