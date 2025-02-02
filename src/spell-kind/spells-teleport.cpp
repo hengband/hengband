@@ -116,8 +116,9 @@ bool teleport_monster(PlayerType *player_ptr, DIRECTION dir, int distance)
  */
 bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (!m_ptr->is_valid()) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
+    if (!monster.is_valid()) {
         return false;
     }
 
@@ -125,36 +126,35 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
         chg_virtue(player_ptr, Virtue::VALOUR, -1);
     }
 
-    POSITION oy = m_ptr->fy;
-    POSITION ox = m_ptr->fx;
-    POSITION min = dis / 2;
-    int tries = 0;
-    POSITION ny = 0, nx = 0;
-    bool look = true;
+    const auto m_pos_orig = monster.get_position();
+    auto min = dis / 2;
+    auto tries = 0;
+    Pos2D m_pos(0, 0);
+    auto look = true;
     while (look) {
         tries++;
         if (dis > 200) {
             dis = 200;
         }
 
-        for (int i = 0; i < 500; i++) {
+        for (auto i = 0; i < 500; i++) {
             while (true) {
-                ny = rand_spread(oy, dis);
-                nx = rand_spread(ox, dis);
-                const auto d = Grid::calc_distance({ oy, ox }, { ny, nx });
+                m_pos.y = rand_spread(m_pos_orig.y, dis);
+                m_pos.x = rand_spread(m_pos_orig.x, dis);
+                const auto d = Grid::calc_distance(m_pos_orig, m_pos);
                 if ((d >= min) && (d <= dis)) {
                     break;
                 }
             }
 
-            if (!in_bounds(player_ptr->current_floor_ptr, ny, nx)) {
+            if (!in_bounds(&floor, m_pos.y, m_pos.x)) {
                 continue;
             }
-            if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode)) {
+            if (!cave_monster_teleportable_bold(player_ptr, m_idx, m_pos.y, m_pos.x, mode)) {
                 continue;
             }
-            if (!(player_ptr->current_floor_ptr->is_in_quest() || player_ptr->current_floor_ptr->inside_arena)) {
-                if (player_ptr->current_floor_ptr->grid_array[ny][nx].is_icky()) {
+            if (!floor.is_in_quest() && !floor.inside_arena) {
+                if (floor.get_grid(m_pos).is_icky()) {
                     continue;
                 }
             }
@@ -172,18 +172,15 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
     }
 
     sound(SOUND_TPOTHER);
-    player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
-    player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
-
-    m_ptr->fy = ny;
-    m_ptr->fx = nx;
-
-    m_ptr->reset_target();
+    floor.get_grid(m_pos_orig).m_idx = 0;
+    floor.get_grid(m_pos).m_idx = m_idx;
+    monster.set_position(m_pos);
+    monster.reset_target();
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, oy, ox);
-    lite_spot(player_ptr, ny, nx);
+    lite_spot(player_ptr, m_pos_orig.y, m_pos_orig.x);
+    lite_spot(player_ptr, m_pos.y, m_pos.x);
 
-    if (m_ptr->get_monrace().brightness_flags.has_any_of(ld_mask)) {
+    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
@@ -202,23 +199,21 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
  */
 void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    if (!m_ptr->is_valid()) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
+    if (!monster.is_valid()) {
         return;
     }
     if (randint1(100) > power) {
         return;
     }
 
-    POSITION ny = m_ptr->fy;
-    POSITION nx = m_ptr->fx;
-    POSITION oy = m_ptr->fy;
-    POSITION ox = m_ptr->fx;
-
-    POSITION dis = 2;
-    int min = dis / 2;
-    int attempts = 500;
-    bool look = true;
+    const auto m_pos_orig = monster.get_position();
+    Pos2D m_pos = m_pos_orig;
+    auto dis = 2;
+    auto min = dis / 2;
+    auto attempts = 500;
+    auto look = true;
     while (look && --attempts) {
         if (dis > 200) {
             dis = 200;
@@ -226,18 +221,18 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
 
         for (int i = 0; i < 500; i++) {
             while (true) {
-                ny = rand_spread(ty, dis);
-                nx = rand_spread(tx, dis);
-                const auto d = Grid::calc_distance({ ty, tx }, { ny, nx });
+                m_pos.y = rand_spread(ty, dis);
+                m_pos.x = rand_spread(tx, dis);
+                const auto d = Grid::calc_distance({ ty, tx }, m_pos);
                 if ((d >= min) && (d <= dis)) {
                     break;
                 }
             }
 
-            if (!in_bounds(player_ptr->current_floor_ptr, ny, nx)) {
+            if (!in_bounds(player_ptr->current_floor_ptr, m_pos.y, m_pos.x)) {
                 continue;
             }
-            if (!cave_monster_teleportable_bold(player_ptr, m_idx, ny, nx, mode)) {
+            if (!cave_monster_teleportable_bold(player_ptr, m_idx, m_pos.y, m_pos.x, mode)) {
                 continue;
             }
 
@@ -254,17 +249,14 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
     }
 
     sound(SOUND_TPOTHER);
-    player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
-    player_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
-
-    m_ptr->fy = ny;
-    m_ptr->fx = nx;
-
+    floor.get_grid(m_pos_orig).m_idx = 0;
+    floor.get_grid(m_pos).m_idx = m_idx;
+    monster.set_position(m_pos);
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, oy, ox);
-    lite_spot(player_ptr, ny, nx);
+    lite_spot(player_ptr, m_pos_orig.y, m_pos_orig.x);
+    lite_spot(player_ptr, m_pos.y, m_pos.x);
 
-    if (m_ptr->get_monrace().brightness_flags.has_any_of(ld_mask)) {
+    if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 }
@@ -473,7 +465,6 @@ void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION di
 
 /*!
  * @brief プレイヤーを指定位置近辺にテレポートさせる
- * Teleport player to a grid near the given location
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param ny 目標Y座標
  * @param nx 目標X座標
@@ -491,27 +482,29 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
         return;
     }
 
-    /* Find a usable location */
-    POSITION y, x;
-    POSITION dis = 0, ctr = 0;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    Pos2D pos(0, 0);
+    auto dis = 0;
+    auto ctr = 0;
     const auto &world = AngbandWorld::get_instance();
     while (true) {
         while (true) {
-            y = rand_spread(ny, dis);
-            x = rand_spread(nx, dis);
-            if (in_bounds(player_ptr->current_floor_ptr, y, x)) {
+            pos.y = rand_spread(ny, dis);
+            pos.x = rand_spread(nx, dis);
+            if (in_bounds(&floor, pos.y, pos.x)) {
                 break;
             }
         }
 
         auto is_anywhere = world.wizard;
         is_anywhere &= (mode & TELEPORT_PASSIVE) == 0;
-        is_anywhere &= player_ptr->current_floor_ptr->grid_array[y][x].has_monster() || player_ptr->current_floor_ptr->grid_array[y][x].m_idx == player_ptr->riding;
+        const auto &grid = floor.get_grid(pos);
+        is_anywhere &= grid.has_monster() || grid.m_idx == player_ptr->riding;
         if (is_anywhere) {
             break;
         }
 
-        if (cave_player_teleportable_bold(player_ptr, y, x, mode)) {
+        if (cave_player_teleportable_bold(player_ptr, pos.y, pos.x, mode)) {
             break;
         }
 
@@ -522,7 +515,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
     }
 
     sound(SOUND_TELEPORT);
-    (void)move_player_effect(player_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
+    (void)move_player_effect(player_ptr, pos.y, pos.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 }
 
 void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)

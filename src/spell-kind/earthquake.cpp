@@ -9,6 +9,7 @@
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
 #include "monster/monster-status-setter.h"
@@ -244,7 +245,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                     }
                 }
 
-                delete_monster(player_ptr, pos.y, pos.x);
+                delete_monster(player_ptr, pos);
                 sn = 0;
             }
 

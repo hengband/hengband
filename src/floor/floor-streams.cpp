@@ -13,18 +13,17 @@
  */
 
 #include "floor/floor-streams.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
-#include "floor/floor-generator.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/grid.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-info.h"
 #include "room/lake-types.h"
 #include "spell-kind/spells-floor.h"
@@ -35,12 +34,10 @@
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
-#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include <cmath>
@@ -301,7 +298,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
             const auto &monrace = floor.m_list[grid.m_idx].get_monrace();
             if (grid.has_monster() && !(streamer.flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, &monrace, 0))) {
                 /* Delete the monster (if any) */
-                delete_monster(player_ptr, pos.y, pos.x);
+                delete_monster(player_ptr, pos);
             }
 
             if (!grid.o_idx_list.empty() && streamer.flags.has_not(TerrainCharacteristics::DROP)) {

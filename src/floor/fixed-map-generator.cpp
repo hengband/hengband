@@ -4,7 +4,6 @@
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
 #include "floor/wild.h"
-#include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "grid/trap.h"
 #include "info-reader/general-parser.h"
@@ -12,15 +11,11 @@
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
 #include "monster-floor/monster-generator.h"
+#include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-util.h"
-#include "monster/smart-learn-types.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
-#include "object-enchant/object-ego.h"
-#include "object-enchant/trg-types.h"
-#include "object/object-info.h"
-#include "room/rooms-vault.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -35,7 +30,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "window/main-window-util.h"
-#include "world/world.h"
 
 // PARSE_ERROR_MAXが既にあり扱い辛いのでここでconst宣言.
 static const int PARSE_CONTINUE = 255;
@@ -357,7 +351,7 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char **zz)
         POSITION px = atoi(zz[1]);
         player_ptr->y = py;
         player_ptr->x = px;
-        delete_monster(player_ptr, player_ptr->y, player_ptr->x);
+        delete_monster(player_ptr, player_ptr->get_position());
         return true;
     }
 

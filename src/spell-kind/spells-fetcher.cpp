@@ -117,7 +117,7 @@ bool fetch_monster(PlayerType *player_ptr)
 
     auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(target_row, target_col);
-    auto m_idx = floor.get_grid(pos).m_idx;
+    const auto m_idx = floor.get_grid(pos).m_idx;
     if (!is_monster(m_idx)) {
         return false;
     }
@@ -138,9 +138,8 @@ bool fetch_monster(PlayerType *player_ptr)
     auto ty = target_row, tx = target_col;
     for (const auto &[ny, nx] : path_g) {
         const Pos2D pos_path(ny, nx);
-        auto *g_ptr = &floor.get_grid(pos_path);
-
-        if (in_bounds(&floor, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object() && !pattern_tile(&floor, ny, nx)) {
+        const auto &grid = floor.get_grid(pos_path);
+        if (in_bounds(&floor, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !grid.is_object() && !pattern_tile(&floor, ny, nx)) {
             ty = ny;
             tx = nx;
         }
