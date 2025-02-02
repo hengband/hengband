@@ -1,33 +1,26 @@
 /*!
- * @brief 荒野マップの生成とルール管理 / Wilderness generation
- * @date 2014/02/13
+ * @brief 荒野マップの生成とルール管理実装
+ * @date 2025/02/01
  * @author
- * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke
- * This software may be copied and distributed for educational, research, and
- * not for profit purposes provided that this copyright and statement are
- * included in all such copies.
- * 2013 Deskull rearranged comment for Doxygen.
+ * Robert A. Koeneke, 1983
+ * James E. Wilson, 1989
+ * Deskull, 2013
+ * Hourier, 2025
  */
 
 #include "floor/wild.h"
 #include "core/asking-player.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
-#include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/parse-error-types.h"
-#include "io/files-util.h"
 #include "io/tokenizer.h"
 #include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "monster/monster-util.h"
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
@@ -46,7 +39,6 @@
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
-#include "system/system-variables.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
@@ -59,7 +51,7 @@
 
 constexpr auto SUM_TERRAIN_PROBABILITIES = 18;
 
-std::vector<std::vector<wilderness_type>> wilderness;
+std::vector<std::vector<WildernessGrid>> wilderness;
 
 bool reinit_wilderness = false;
 
@@ -76,17 +68,9 @@ struct border_type {
     short bottom_right;
 };
 
-struct wilderness_grid {
-    WildernessTerrain terrain; /* Terrain type */
-    int16_t town; /* Town number */
-    DEPTH level; /* Level of the wilderness */
-    byte road; /* Road */
-    char name[32]; /* Name of the town/wilderness */
-};
-
 static border_type border;
 
-static wilderness_grid w_letter[255];
+static std::vector<WildernessGrid> wilderness_letters;
 
 /* The default table in terrain level generation. */
 static std::map<WildernessTerrain, std::map<short, TerrainTag>> terrain_table;
@@ -648,73 +632,72 @@ void wilderness_gen_small(PlayerType *player_ptr)
 }
 
 /*!
- * @brief w_info.txtのデータ解析 /
- * Parse a sub-file of the "extra info"
- * @param buf 読み取ったデータ行のバッファ
- * @param ymin 未使用
+ * @brief WildernessDefinition.txt を1行読み取って解析する
+ * @param line 読み取ったデータ行のバッファ
  * @param xmin 広域地形マップを読み込みたいx座標の開始位置
- * @param ymax 未使用
  * @param xmax 広域地形マップを読み込みたいx座標の終了位置
- * @param y 広域マップの高さを返す参照ポインタ
- * @param x 広域マップの幅を返す参照ポインタ
+ * @param pos_parsing 解析対象の座標
+ * @return エラーコードと座標のペア。エラー時は座標は無効値。Dタグの時だけ更新の可能性があり、それ以外はpos_parsingをそのまま返却
  */
-parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xmin, int xmax, int *y, int *x)
+std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerType *player_ptr, char *line, int xmin, int xmax, const Pos2D &pos_parsing)
 {
-    if (!(buf[0] == 'W')) {
-        return PARSE_ERROR_GENERIC;
+    if (wilderness_letters.empty()) {
+        wilderness_letters.resize(TerrainList::get_instance().size());
     }
 
-    int num;
-    char *zz[33];
-    switch (buf[2]) {
+    if (!(std::string_view(line).starts_with("W:"))) {
+        return { PARSE_ERROR_GENERIC, std::nullopt };
+    }
+
+    Pos2D pos = pos_parsing;
+    switch (line[2]) {
         /* Process "W:F:<letter>:<terrain>:<town>:<road>:<name> */
 #ifdef JP
     case 'E':
-        return PARSE_ERROR_NONE;
+        return { PARSE_ERROR_NONE, pos_parsing };
     case 'F':
     case 'J':
 #else
     case 'J':
-        return PARSE_ERROR_NONE;
+        return { PARSE_ERROR_NONE, pos_parsing };
     case 'F':
     case 'E':
 #endif
     {
-        if ((num = tokenize(buf + 4, 6, zz, 0)) > 1) {
-            int index = zz[0][0];
+        char *zz[33];
+        const auto num = tokenize(line + 4, 6, zz, 0);
+        if (num <= 1) {
+            return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
+        }
 
-            if (num > 1) {
-                w_letter[index].terrain = i2enum<WildernessTerrain>(atoi(zz[1]));
-            } else {
-                w_letter[index].terrain = WildernessTerrain::EDGE;
-            }
-
-            if (num > 2) {
-                w_letter[index].level = (int16_t)atoi(zz[2]);
-            } else {
-                w_letter[index].level = 0;
-            }
-
-            if (num > 3) {
-                w_letter[index].town = static_cast<int16_t>(atoi(zz[3]));
-            } else {
-                w_letter[index].town = 0;
-            }
-
-            if (num > 4) {
-                w_letter[index].road = (byte)atoi(zz[4]);
-            } else {
-                w_letter[index].road = 0;
-            }
-
-            if (num > 5) {
-                strcpy(w_letter[index].name, zz[5]);
-            } else {
-                w_letter[index].name[0] = 0;
-            }
+        int index = zz[0][0];
+        auto &letter = wilderness_letters.at(index);
+        if (num > 1) {
+            letter.terrain = i2enum<WildernessTerrain>(std::stoi(zz[1]));
         } else {
-            /* Failure */
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+            letter.terrain = WildernessTerrain::EDGE;
+        }
+
+        if (num > 2) {
+            letter.level = std::stoi(zz[2]);
+        } else {
+            letter.level = 0;
+        }
+
+        if (num > 3) {
+            letter.town = static_cast<short>(std::stoi(zz[3]));
+        } else {
+            letter.town = 0;
+        }
+
+        if (num > 4) {
+            letter.road = std::stoi(zz[4]);
+        } else {
+            letter.road = 0;
+        }
+
+        if (num > 5) {
+            letter.name = zz[5];
         }
 
         break;
@@ -723,36 +706,39 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
     /* Process "W:D:<layout> */
     /* Layout of the wilderness */
     case 'D': {
-        char *s = buf + 4;
+        pos.x = xmin;
+        char *s = line + 4;
         int len = strlen(s);
-        int i;
-        for (*x = xmin, i = 0; ((*x < xmax) && (i < len)); (*x)++, s++, i++) {
+        for (auto i = 0; ((pos.x < xmax) && (i < len)); pos.x++, s++, i++) {
             int id = s[0];
-            wilderness[*y][*x].terrain = w_letter[id].terrain;
-            wilderness[*y][*x].level = w_letter[id].level;
-            wilderness[*y][*x].town = w_letter[id].town;
-            wilderness[*y][*x].road = w_letter[id].road;
-            towns_info[w_letter[id].town].name = w_letter[id].name;
+            auto &wg = wilderness[pos.y][pos.x];
+            const auto &letter = wilderness_letters.at(id);
+            wg.terrain = letter.terrain;
+            wg.level = letter.level;
+            wg.town = letter.town;
+            wg.road = letter.road;
+            towns_info[letter.town].name = letter.name;
         }
 
-        (*y)++;
+        pos.y++;
         break;
     }
 
     /* Process "W:P:<x>:<y> - starting position in the wilderness */
     case 'P': {
-        auto is_corner = player_ptr->wilderness_x == 0;
-        is_corner = player_ptr->wilderness_y == 0;
-        if (!is_corner) {
+        auto has_player_located = player_ptr->wilderness_x > 0;
+        has_player_located &= player_ptr->wilderness_y > 0;
+        if (has_player_located) {
             break;
         }
 
-        if (tokenize(buf + 4, 2, zz, 0) != 2) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        char *zz[33];
+        if (tokenize(line + 4, 2, zz, 0) != 2) {
+            return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
         }
 
-        player_ptr->wilderness_y = atoi(zz[0]);
-        player_ptr->wilderness_x = atoi(zz[1]);
+        player_ptr->wilderness_y = std::stoi(zz[0]);
+        player_ptr->wilderness_x = std::stoi(zz[1]);
 
         auto out_of_bounds = (player_ptr->wilderness_x < 1);
         const auto &world = AngbandWorld::get_instance();
@@ -760,14 +746,13 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
         out_of_bounds |= (player_ptr->wilderness_y < 1);
         out_of_bounds |= (player_ptr->wilderness_y > world.max_wild_y);
         if (out_of_bounds) {
-            return PARSE_ERROR_OUT_OF_BOUNDS;
+            return { PARSE_ERROR_OUT_OF_BOUNDS, std::nullopt };
         }
 
         break;
     }
-
     default:
-        return PARSE_ERROR_UNDEFINED_DIRECTIVE;
+        return { PARSE_ERROR_UNDEFINED_DIRECTIVE, std::nullopt };
     }
 
     for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
@@ -781,7 +766,7 @@ parse_error_type parse_line_wilderness(PlayerType *player_ptr, char *buf, int xm
         }
     }
 
-    return PARSE_ERROR_NONE;
+    return { PARSE_ERROR_NONE, pos };
 }
 
 /*!

@@ -289,7 +289,7 @@ static bool read_wilderness_definition(std::ifstream &ifs)
         }
 
         if ((world.max_wild_x > 0) && (world.max_wild_y > 0)) {
-            wilderness.assign(world.max_wild_y, std::vector<wilderness_type>(world.max_wild_x));
+            wilderness.assign(world.max_wild_y, std::vector<WildernessGrid>(world.max_wild_x));
             init_wilderness_encounter();
             return true;
         }
