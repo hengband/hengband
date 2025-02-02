@@ -294,7 +294,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
     const auto &dungeon = floor.get_dungeon_definition();
     if (!floor.is_underground()) {
-        player_ptr->enter_dungeon = true;
+        floor.enter_dungeon(true);
         down_num = dungeon.mindepth;
     }
 

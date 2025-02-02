@@ -186,9 +186,6 @@ public:
     std::string last_message = ""; /* Last message on death or retirement */
     char history[4][60]{}; /* Textual "history" for the Player */
 
-    uint16_t panic_save{}; /* Panic save */
-
-    bool wait_report_score{}; /* Waiting to report score */
     bool is_dead{}; /* Player is dead */
     bool now_damaged{};
     bool ambush_flag{};
@@ -228,9 +225,7 @@ public:
 
     bool monk_notify_aux{};
 
-    bool leaving_dungeon{}; /* True if player is leaving the dungeon */
     bool teleport_town{};
-    bool enter_dungeon{}; /* Just enter the dungeon */
 
     int16_t new_spells{}; /* Number of spells available */
     int16_t old_spells{};

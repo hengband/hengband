@@ -356,7 +356,7 @@ static bool allocate_dungeon_data(PlayerType *player_ptr, DungeonData *dd_ptr, c
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    if (player_ptr->enter_dungeon && floor.dun_level > 1) {
+    if (floor.is_entering_dungeon() && floor.dun_level > 1) {
         floor.object_level = 1;
     }
 

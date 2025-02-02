@@ -224,7 +224,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
 
     wr_s16b(player_ptr->pet_follow_distance);
     wr_s16b(player_ptr->pet_extra_flags);
-    if (screen_dump && (player_ptr->wait_report_score || !player_ptr->is_dead)) {
+    if (screen_dump && (AngbandSystem::get_instance().is_awaiting_report_status() || !player_ptr->is_dead)) {
         wr_string(screen_dump);
     } else {
         wr_string("");

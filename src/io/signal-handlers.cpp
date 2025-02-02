@@ -139,7 +139,7 @@ static void handle_signal_abort(int sig)
     exe_write_diary(floor, DiaryKind::GAMESTART, 0, _("----ゲーム異常終了----", "-- Tried Panic Save and Aborted Game --"));
     term_fresh();
 
-    p_ptr->panic_save = 1;
+    AngbandSystem::get_instance().set_panic_save(true);
     p_ptr->died_from = _("(緊急セーブ)", "(panic save)");
 
     signals_ignore_tstp();

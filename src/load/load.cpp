@@ -114,7 +114,7 @@ static void load_player_world(PlayerType *player_ptr)
     rd_base_info(player_ptr);
     rd_player_info(player_ptr);
     preserve_mode = rd_bool();
-    player_ptr->wait_report_score = rd_bool();
+    AngbandSystem::get_instance().set_awaiting_report_score(rd_bool());
     rd_dummy2();
     rd_global_configurations(player_ptr);
     rd_extra(player_ptr);
@@ -322,7 +322,7 @@ static bool on_read_save_data_not_supported(PlayerType *player_ptr, bool *new_ga
         return false;
     }
 
-    player_ptr->wait_report_score = false;
+    AngbandSystem::get_instance().set_awaiting_report_score(false);
     return reset_save_data(player_ptr, new_game);
 }
 

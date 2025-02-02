@@ -357,7 +357,7 @@ static void exit_to_wilderness(PlayerType *player_ptr)
         return;
     }
 
-    player_ptr->leaving_dungeon = true;
+    floor.leave_dungeon(true);
     if (!vanilla_town && !lite_town) {
         const auto &dungeon = floor.get_dungeon_definition();
         player_ptr->wilderness_y = dungeon.dy;

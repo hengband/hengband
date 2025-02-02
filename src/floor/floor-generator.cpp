@@ -558,6 +558,6 @@ void generate_floor(PlayerType *player_ptr)
     }
 
     glow_deep_lava_and_bldg(player_ptr);
-    player_ptr->enter_dungeon = false;
+    floor.enter_dungeon(false);
     wipe_generate_random_floor_flags(&floor);
 }

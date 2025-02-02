@@ -113,7 +113,8 @@ static void restore_windows(PlayerType *player_ptr)
 
 static void send_waiting_record(PlayerType *player_ptr)
 {
-    if (!player_ptr->wait_report_score) {
+    auto &system = AngbandSystem::get_instance();
+    if (!system.is_awaiting_report_status()) {
         return;
     }
 
@@ -144,7 +145,7 @@ static void send_waiting_record(PlayerType *player_ptr)
         prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
         (void)inkey();
     } else {
-        player_ptr->wait_report_score = false;
+        system.set_awaiting_report_score(false);
         top_twenty(player_ptr);
         if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {
             msg_print(_("セーブ失敗！", "death save failed!"));
@@ -256,7 +257,8 @@ static void change_floor_if_error(PlayerType *player_ptr)
         return;
     }
 
-    if (player_ptr->panic_save == 0) {
+    auto &system = AngbandSystem::get_instance();
+    if (!system.is_panic_save_executed()) {
         return;
     }
 
@@ -269,7 +271,7 @@ static void change_floor_if_error(PlayerType *player_ptr)
         player_ptr->y = player_ptr->x = 10;
     }
 
-    player_ptr->panic_save = 0;
+    system.set_panic_save(false);
 }
 
 static void generate_world(PlayerType *player_ptr, bool new_game)
