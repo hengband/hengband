@@ -103,14 +103,14 @@ static bool change_panel_xy(PlayerType *player_ptr, const Pos2D &pos)
 }
 
 /*!
- * @brief 基準の座標から見て目標の座標が dir の方向±45°の範囲にあるかどうかを判定する
+ * @brief 基準の座標から見て目標の座標が dir の方向±45°の範囲にあるかどうか判定し、その距離を返す
  *
  * @param pos_from 基準の座標
  * @param pos_to 目標の座標
  * @param dir 方向
- * @return dirの方向にある場合 true
+ * @return 距離。目標の座標が dir の方向±45°の範囲にない場合 std::nullopt
  */
-static bool is_roughly_in_direction(const Pos2D &pos_from, const Pos2D &pos_to, int dir)
+static std::optional<int> calc_target_distance(const Pos2D &pos_from, const Pos2D &pos_to, int dir)
 {
     const auto dy = ddy[dir];
     const auto dx = ddx[dir];
@@ -118,20 +118,25 @@ static bool is_roughly_in_direction(const Pos2D &pos_from, const Pos2D &pos_to, 
     const Pos2DVec vec_abs(std::abs(vec.y), std::abs(vec.x));
 
     if (dx != 0 && (vec.x * dx <= 0)) {
-        return false;
+        return std::nullopt;
     }
     if (dy != 0 && (vec.y * dy <= 0)) {
-        return false;
+        return std::nullopt;
     }
 
     if (dy != 0 && dx == 0 && (vec_abs.x > vec_abs.y)) {
-        return false;
+        return std::nullopt;
     }
     if (dx != 0 && dy == 0 && (vec_abs.y > vec_abs.x)) {
-        return false;
+        return std::nullopt;
     }
 
-    return true;
+    // ターゲット選択用に独自の距離計算を行う
+    const auto a = std::max(vec_abs.y, vec_abs.x);
+    const auto b = std::min(vec_abs.y, vec_abs.x);
+    const auto distance = a + a + b;
+
+    return distance;
 }
 
 /*!
@@ -146,17 +151,17 @@ std::optional<int> TargetSetter::pick_nearest_interest_target(const Pos2D &pos, 
     std::optional<int> nearest_distance;
 
     for (auto i = 0; i < std::ssize(this->pos_interests); i++) {
-        if (!is_roughly_in_direction(pos, this->pos_interests[i], dir)) {
+        const auto distance = calc_target_distance(pos, this->pos_interests[i], dir);
+        if (!distance) {
             continue;
         }
 
-        const auto distance = Grid::calc_distance(pos, this->pos_interests[i]);
-        if (nearest_interest_index && (distance >= nearest_distance)) {
+        if (nearest_interest_index && (*distance >= nearest_distance)) {
             continue;
         }
 
         nearest_interest_index = i;
-        nearest_distance = distance;
+        nearest_distance = *distance;
     }
 
     return nearest_interest_index;
