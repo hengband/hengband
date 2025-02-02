@@ -57,6 +57,8 @@ jobs:
             libncursesw5-dev \
             libcurl4-openssl-dev \
             nkf \
+            libc++-15-dev \
+            libc++abi-15-dev \
 
       - name: Generate configure
         run: ./bootstrap
