@@ -1098,7 +1098,10 @@ EXTRA_hengband_SOURCES = \
 EXTRA_DIST = \
 	gcc-wrap
 
-DEFAULT_INCLUDES = -I$(srcdir) -I$(top_builddir)/src
+DEFAULT_INCLUDES = \
+	-I$(srcdir) -I$(srcdir)/external-lib/include \
+	-I$(top_builddir)/src -I$(top_builddir)/src/external-lib/include
+
 CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
 if PCH
 CPPFLAGS += -include ../src/stdafx.h
