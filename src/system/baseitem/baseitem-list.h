@@ -26,6 +26,7 @@ public:
     static BaseitemList &get_instance();
     BaseitemDefinition &get_baseitem(const short bi_id);
     const BaseitemDefinition &get_baseitem(const short bi_id) const;
+    const BaseitemDefinition &pick_one_at_random() const;
 
     short lookup_baseitem_id(const BaseitemKey &bi_key) const;
     const BaseitemDefinition &lookup_baseitem(const BaseitemKey &bi_key) const;

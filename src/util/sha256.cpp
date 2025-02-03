@@ -142,7 +142,7 @@ void SHA256::update(const std::byte *message_array, size_t length)
  */
 void SHA256::update(std::string_view message)
 {
-    const auto message_as_byte = std::as_bytes(std::span(message.begin(), message.end()));
+    const auto message_as_byte = std::as_bytes(std::span(message.data(), message.size()));
     this->update(message_as_byte.data(), message_as_byte.size_bytes());
 }
 

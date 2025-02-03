@@ -481,7 +481,7 @@ MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, DI
 bool MonsterSweepGrid::get_movable_grid()
 {
     const auto deciders = MonsterMoveGridDecidersFactory::create_deciders(this->player_ptr, this->m_idx);
-    const auto pos_move = MonsterMoveGridDecider::evalute_deciders(std::span(deciders.begin(), deciders.size()), this->player_ptr->get_position()); // @todo clang-15以降は直接decidersを渡せる
+    const auto pos_move = MonsterMoveGridDecider::evalute_deciders(deciders, this->player_ptr->get_position());
 
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[this->m_idx];

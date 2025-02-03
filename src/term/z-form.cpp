@@ -289,7 +289,7 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
         }
         }
 
-        std::span<char> formatted_str(std::begin(tmp), strlen(tmp));
+        const auto formatted_str = std::span(tmp).first(strlen(tmp));
 #ifdef JP
         for (auto ch : formatted_str) {
             if (iskanji(ch)) {

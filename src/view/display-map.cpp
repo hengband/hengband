@@ -47,9 +47,7 @@ const std::string image_monsters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
 DisplaySymbol image_object()
 {
     if (use_graphics) {
-        const auto &baseitems = BaseitemList::get_instance();
-        const std::span<const BaseitemDefinition> candidates(baseitems.begin() + 1, baseitems.end());
-        const auto &baseitem = rand_choice(candidates);
+        const auto &baseitem = BaseitemList::get_instance().pick_one_at_random();
         return baseitem.symbol_config;
     }
 

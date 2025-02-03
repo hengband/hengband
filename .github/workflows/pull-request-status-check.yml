@@ -29,13 +29,23 @@ jobs:
       - uses: actions/checkout@v3
       - run: sh ./.github/scripts/check-format.sh
 
-  build_test_clang_without_pch:
-    name: Build Japanese version with clang (without using pre-compiled headers)
+  build_test_clang15_libcpp_without_pch:
+    name: Build Japanese version with clang 15 -stdlib=libc++ (without using pre-compiled headers)
+    uses: ./.github/workflows/build-with-autotools.yml
+    with:
+      runner: ubuntu-22.04
+      cxx: clang++-15
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding -stdlib=libc++"
+      configure-opts: "--disable-pch"
+      use-ccache: true
+
+  build_test_clang14_without_pch:
+    name: Build Japanese version with clang 14 (without using pre-compiled headers)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-22.04
       cxx: clang++-14
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding -stdlib=libc++"
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding"
       configure-opts: "--disable-pch"
       use-ccache: true
 
