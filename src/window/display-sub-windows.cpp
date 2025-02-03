@@ -128,7 +128,7 @@ void fix_inventory(PlayerType *player_ptr)
  *  name: name of monster
  * </pre>
  */
-static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int n_same, int n_awake)
+static void print_monster_line(TERM_LEN x, TERM_LEN y, const MonsterEntity *m_ptr, int n_same, int n_awake)
 {
     term_erase(0, y);
     term_gotoxy(x, y);
@@ -164,11 +164,11 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, MonsterEntity *m_ptr, int
  * @param y 表示行
  * @param max_lines 最大何行描画するか
  */
-void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
+void print_monster_list(const FloorType &floor, const std::vector<MONSTER_IDX> &monster_list, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines)
 {
     TERM_LEN line = y;
     struct info {
-        MonsterEntity *monster_entity;
+        const MonsterEntity *monster_entity;
         int visible_count; // 現在数
         int awake_count; // 起きている数
     };
@@ -178,7 +178,7 @@ void print_monster_list(FloorType *floor_ptr, const std::vector<MONSTER_IDX> &mo
 
     // 描画に必要なデータを集める
     for (auto monster_index : monster_list) {
-        auto m_ptr = &floor_ptr->m_list[monster_index];
+        auto m_ptr = &floor.m_list[monster_index];
 
         if (m_ptr->is_pet()) {
             continue;
@@ -275,7 +275,7 @@ void fix_monster_list(PlayerType *player_ptr)
         [player_ptr, &once] {
             const auto &[wid, hgt] = term_get_size();
             std::call_once(once, target_sensing_monsters_prepare, player_ptr, monster_list);
-            print_monster_list(player_ptr->current_floor_ptr, monster_list, 0, 0, hgt);
+            print_monster_list(*player_ptr->current_floor_ptr, monster_list, 0, 0, hgt);
         });
 
     if (use_music && has_monster_music) {
@@ -464,7 +464,7 @@ static void display_dungeon(PlayerType *player_ptr)
         for (auto y = player_ptr->y - game_term->hgt / 2 + 1; y <= player_ptr->y + game_term->hgt / 2; y++) {
             const auto pos_y = y - player_ptr->y + game_term->hgt / 2 - 1;
             const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
-            if (!in_bounds2(player_ptr->current_floor_ptr, y, x)) {
+            if (!in_bounds2(*player_ptr->current_floor_ptr, y, x)) {
                 const auto &terrain = TerrainList::get_instance().get_terrain(TerrainTag::NONE);
                 const auto &symbol_foreground = terrain.symbol_configs.at(F_LIT_STANDARD);
                 term_queue_char(pos_x, pos_y, { symbol_foreground, {} });
@@ -528,13 +528,13 @@ void fix_object(PlayerType *player_ptr)
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
-static const MonsterEntity *monster_on_floor_items(FloorType *floor_ptr, const Grid *g_ptr)
+static const MonsterEntity *monster_on_floor_items(const FloorType &floor, const Grid *g_ptr)
 {
     if (!g_ptr->has_monster()) {
         return nullptr;
     }
 
-    auto m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    auto m_ptr = &floor.m_list[g_ptr->m_idx];
     if (!m_ptr->is_valid() || !m_ptr->ml) {
         return nullptr;
     }
@@ -566,7 +566,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
     const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
     if (player_ptr->is_located_at(pos)) {
         line = format(_("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), pos.x, pos.y);
-    } else if (const auto *m_ptr = monster_on_floor_items(&floor, &grid); m_ptr != nullptr) {
+    } else if (const auto *m_ptr = monster_on_floor_items(floor, &grid); m_ptr != nullptr) {
         if (is_hallucinated) {
             line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), pos.x, pos.y);
         } else {
@@ -640,15 +640,15 @@ static void display_found_item_list(PlayerType *player_ptr)
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
 
     // 所持品一覧と同じ順にソートする
-    // あらかじめfloor_ptr->o_list から↓項目を取り除く
+    // あらかじめfloor.o_list から↓項目を取り除く
     // bi_idが0
     // OM_FOUNDフラグが立っていない
     // ItemKindTypeがGOLD
-    std::vector<ItemEntity *> found_item_list;
-    for (auto &item : floor_ptr->o_list) {
+    std::vector<const ItemEntity *> found_item_list;
+    for (auto &item : floor.o_list) {
         const auto is_item_to_display =
             item.is_valid() && (item.number > 0) &&
             item.marked.has(OmType::FOUND) && (item.bi_key.tval() != ItemKindType::GOLD);

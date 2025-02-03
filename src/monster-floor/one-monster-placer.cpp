@@ -233,11 +233,11 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
     auto &grid = floor.get_grid(pos);
     auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &world = AngbandWorld::get_instance();
-    if (world.is_wild_mode() || !in_bounds(&floor, pos.y, pos.x) || !MonraceList::is_valid(r_idx)) {
+    if (world.is_wild_mode() || !in_bounds(floor, pos.y, pos.x) || !MonraceList::is_valid(r_idx)) {
         return std::nullopt;
     }
 
-    if (none_bits(mode, PM_IGNORE_TERRAIN) && (pattern_tile(&floor, pos.y, pos.x) || !monster_can_enter(player_ptr, pos.y, pos.x, &monrace, 0))) {
+    if (none_bits(mode, PM_IGNORE_TERRAIN) && (pattern_tile(floor, pos.y, pos.x) || !monster_can_enter(player_ptr, pos.y, pos.x, &monrace, 0))) {
         return std::nullopt;
     }
 

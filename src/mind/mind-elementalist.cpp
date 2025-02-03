@@ -1415,7 +1415,7 @@ static bool is_target_grid_dark(const FloorType &floor, const Pos2D &pos)
             if (pos == pos_neighbor) {
                 continue;
             }
-            if (!in_bounds(&floor, dy, dx)) {
+            if (!in_bounds(floor, dy, dx)) {
                 continue;
             }
 

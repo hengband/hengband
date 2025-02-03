@@ -67,15 +67,15 @@ static MonraceId select_polymorph_monrace_id(PlayerType *player_ptr, MonraceId m
  */
 bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor.grid_array[y][x];
+    auto *m_ptr = &floor.m_list[g_ptr->m_idx];
     MonraceId new_r_idx;
     MonraceId old_r_idx = m_ptr->r_idx;
     bool targeted = target_who == g_ptr->m_idx;
     auto health_tracked = HealthBarTracker::get_instance().is_tracking(g_ptr->m_idx);
 
-    if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
+    if (floor.inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         return false;
     }
     if (m_ptr->is_riding() || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
@@ -106,7 +106,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     bool polymorphed = false;
     auto m_idx = place_specific_monster(player_ptr, y, x, new_r_idx, mode);
     if (m_idx) {
-        auto &monster = floor_ptr->m_list[*m_idx];
+        auto &monster = floor.m_list[*m_idx];
         monster.nickname = back_m.nickname;
         monster.parent_m_idx = back_m.parent_m_idx;
         monster.hold_o_idx_list = back_m.hold_o_idx_list;
@@ -114,8 +114,8 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     } else {
         m_idx = place_specific_monster(player_ptr, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN));
         if (m_idx) {
-            floor_ptr->m_list[*m_idx] = back_m.clone();
-            floor_ptr->reset_mproc();
+            floor.m_list[*m_idx] = back_m.clone();
+            floor.reset_mproc();
         } else {
             preserve_hold_objects = false;
         }
@@ -123,7 +123,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 
     if (preserve_hold_objects) {
         for (const auto this_o_idx : back_m.hold_o_idx_list) {
-            auto *o_ptr = &floor_ptr->o_list[this_o_idx];
+            auto *o_ptr = &floor.o_list[this_o_idx];
             o_ptr->held_m_idx = *m_idx;
         }
     } else {

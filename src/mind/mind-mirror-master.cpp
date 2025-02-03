@@ -344,12 +344,12 @@ bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
  * @brief 現在フロアに存在している鏡の数を数える / calculate mirrors
  * @return 鏡の枚数
  */
-static int number_of_mirrors(FloorType *floor_ptr)
+static int number_of_mirrors(const FloorType &floor)
 {
     int val = 0;
-    for (POSITION x = 0; x < floor_ptr->width; x++) {
-        for (POSITION y = 0; y < floor_ptr->height; y++) {
-            if (floor_ptr->grid_array[y][x].is_mirror()) {
+    for (POSITION x = 0; x < floor.width; x++) {
+        for (POSITION y = 0; y < floor.height; y++) {
+            if (floor.grid_array[y][x].is_mirror()) {
                 val++;
             }
         }
@@ -392,7 +392,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
         }
         break;
     case MindMirrorMasterType::MAKE_MIRROR:
-        if (number_of_mirrors(player_ptr->current_floor_ptr) < 4 + plev / 10) {
+        if (number_of_mirrors(*player_ptr->current_floor_ptr) < 4 + plev / 10) {
             const auto error = SpellsMirrorMaster(player_ptr).place_mirror();
             if (error) {
                 msg_print(*error);

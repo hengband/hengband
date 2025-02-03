@@ -648,16 +648,16 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
                 flag = false;
 
-                const auto *floor_ptr = player_ptr->current_floor_ptr;
+                const auto &floor = *player_ptr->current_floor_ptr;
                 for (const auto &d : Direction::directions_8()) {
                     const auto pos_neighbor = Pos2D(y, x) + d.vec();
-                    if (floor_ptr->get_grid(pos_neighbor).has_monster()) {
+                    if (floor.get_grid(pos_neighbor).has_monster()) {
                         flag = true;
                     }
                 }
 
                 const auto dist = Grid::calc_distance({ y, x }, player_ptr->get_position());
-                if (!is_cave_empty_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].is_icky() || (dist > player_ptr->lev + 2)) {
+                if (!is_cave_empty_bold(player_ptr, y, x) || floor.grid_array[y][x].is_icky() || (dist > player_ptr->lev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;
                 }

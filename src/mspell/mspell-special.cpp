@@ -47,11 +47,11 @@
  */
 static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[m_idx];
     auto dummy_y = m_ptr->fy;
     auto dummy_x = m_ptr->fx;
-    if (see_monster(player_ptr, m_idx) && monster_near_player(floor_ptr, m_idx, 0)) {
+    if (see_monster(player_ptr, m_idx) && monster_near_player(floor, m_idx, 0)) {
         disturb(player_ptr, true, true);
     }
 
@@ -61,19 +61,19 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         const int separates_size = it_unified->second.size();
         const auto separated_hp = (m_ptr->hp + 1) / separates_size;
         const auto separated_maxhp = m_ptr->maxhp / separates_size;
-        if (floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out() || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
+        if (floor.inside_arena || AngbandSystem::get_instance().is_phase_out() || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
             return MonsterSpellResult::make_invalid();
         }
 
-        delete_monster_idx(player_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
+        delete_monster_idx(player_ptr, floor.grid_array[m_ptr->fy][m_ptr->fx].m_idx);
         for (const auto separate : it_unified->second) {
             auto summoned_m_idx = summon_named_creature(player_ptr, 0, dummy_y, dummy_x, separate, MD_NONE);
             if (!summoned_m_idx) {
                 continue;
             }
 
-            floor_ptr->m_list[*summoned_m_idx].hp = separated_hp;
-            floor_ptr->m_list[*summoned_m_idx].maxhp = separated_maxhp;
+            floor.m_list[*summoned_m_idx].hp = separated_hp;
+            floor.m_list[*summoned_m_idx].maxhp = separated_maxhp;
         }
 
         const auto &m_name = monraces.get_monrace(it_unified->first).name;
@@ -92,8 +92,8 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
 
         auto unified_hp = 0;
         auto unified_maxhp = 0;
-        for (short k = 1; k < floor_ptr->m_max; k++) {
-            const auto &monster = floor_ptr->m_list[k];
+        for (short k = 1; k < floor.m_max; k++) {
+            const auto &monster = floor.m_list[k];
             if (!separates.contains(monster.r_idx)) {
                 continue;
             }
@@ -109,8 +109,8 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         }
 
         if (auto summoned_m_idx = summon_named_creature(player_ptr, 0, dummy_y, dummy_x, unified_unique, MD_NONE)) {
-            floor_ptr->m_list[*summoned_m_idx].hp = unified_hp;
-            floor_ptr->m_list[*summoned_m_idx].maxhp = unified_maxhp;
+            floor.m_list[*summoned_m_idx].hp = unified_hp;
+            floor.m_list[*summoned_m_idx].maxhp = unified_maxhp;
         }
         std::vector<std::string> m_names;
         for (const auto &separate : separates) {
@@ -148,11 +148,11 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
     int count = 0, k;
     int num = 1 + randint1(3);
     BIT_FLAGS mode = 0L;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool mon_to_mon = target_type == MONSTER_TO_MONSTER;
     bool mon_to_player = target_type == MONSTER_TO_PLAYER;
-    bool known = monster_near_player(floor_ptr, m_idx, t_idx);
+    bool known = monster_near_player(floor, m_idx, t_idx);
 
     mspell_cast_msg_blind msg(_("%s^が何か大量に投げた。", "%s^ spreads something."),
         _("%s^は手榴弾をばらまいた。", "%s^ throws some hand grenades."), _("%s^は手榴弾をばらまいた。", "%s^ throws some hand grenades."));
@@ -184,9 +184,9 @@ static MonsterSpellResult spell_RF6_SPECIAL_ROLENTO(PlayerType *player_ptr, POSI
 static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     mspell_cast_msg_simple msg{};
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto *m_ptr = &floor.m_list[m_idx];
+    const auto *t_ptr = &floor.m_list[t_idx];
     MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
     bool monster_to_player = (target_type == MONSTER_TO_PLAYER);
     bool monster_to_monster = (target_type == MONSTER_TO_MONSTER);
@@ -245,7 +245,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     }
 
     if (monster_to_player && player_ptr->riding) {
-        const auto &m_ref = floor_ptr->m_list[player_ptr->riding];
+        const auto &m_ref = floor.m_list[player_ptr->riding];
         mon_take_hit_mon(player_ptr, player_ptr->riding, dam, &dead, &fear, m_ref.get_died_message(), m_idx);
     }
 

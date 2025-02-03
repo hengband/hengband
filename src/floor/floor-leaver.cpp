@@ -240,7 +240,7 @@ static void get_out_monster(PlayerType *player_ptr)
         }
 
         auto &grid = floor.get_grid(pos);
-        if (!in_bounds(&floor, pos.y, pos.x) || !is_cave_empty_bold(player_ptr, pos.y, pos.x) || grid.is_rune_protection() || grid.is_rune_explosion() || pattern_tile(&floor, pos.y, pos.x)) {
+        if (!in_bounds(floor, pos.y, pos.x) || !is_cave_empty_bold(player_ptr, pos.y, pos.x) || grid.is_rune_protection() || grid.is_rune_explosion() || pattern_tile(floor, pos.y, pos.x)) {
             continue;
         }
 
@@ -431,9 +431,9 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     get_out_monster(player_ptr);
     sf_ptr->last_visit = AngbandWorld::get_instance().game_turn;
-    forget_lite(player_ptr->current_floor_ptr);
-    forget_view(player_ptr->current_floor_ptr);
-    clear_mon_lite(player_ptr->current_floor_ptr);
+    forget_lite(*player_ptr->current_floor_ptr);
+    forget_view(*player_ptr->current_floor_ptr);
+    clear_mon_lite(*player_ptr->current_floor_ptr);
     if (save_floor(player_ptr, sf_ptr, 0)) {
         return;
     }

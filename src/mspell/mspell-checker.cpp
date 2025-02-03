@@ -69,7 +69,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
     for (auto y = y1 - 2; y <= y1 + 2; y++) {
         for (auto x = x1 - 2; x <= x1 + 2; x++) {
             const Pos2D pos(y, x);
-            if (!in_bounds(&floor, y, x)) {
+            if (!in_bounds(floor, y, x)) {
                 continue;
             }
 
@@ -77,7 +77,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
                 continue;
             }
 
-            if (pattern_tile(&floor, y, x)) {
+            if (pattern_tile(floor, y, x)) {
                 continue;
             }
 
@@ -152,7 +152,7 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
  */
 bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { y1, x1 }, { y2, x2 }, 0);
     if (grid_g.path_num() == 0) {
         return false;
@@ -165,9 +165,9 @@ bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, P
 
     for (const auto &[y, x] : grid_g) {
         const Pos2D pos(y, x);
-        const auto &grid = floor_ptr->get_grid(pos);
+        const auto &grid = floor.get_grid(pos);
         if (grid.has_monster() && (y != y2 || x != x2)) {
-            auto *m_ptr = &floor_ptr->m_list[grid.m_idx];
+            auto *m_ptr = &floor.m_list[grid.m_idx];
             if (is_friend == m_ptr->is_pet()) {
                 return false;
             }

@@ -595,9 +595,9 @@ void update_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool full)
  */
 void update_monsters(PlayerType *player_ptr, bool full)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (MONSTER_IDX i = 1; i < floor_ptr->m_max; i++) {
-        auto *m_ptr = &floor_ptr->m_list[i];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
+        auto *m_ptr = &floor.m_list[i];
         if (!m_ptr->is_valid()) {
             continue;
         }

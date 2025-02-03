@@ -1631,9 +1631,9 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             }
 
             msg_flag = false;
-            forget_lite(player_ptr->current_floor_ptr);
-            forget_view(player_ptr->current_floor_ptr);
-            clear_mon_lite(player_ptr->current_floor_ptr);
+            forget_lite(*player_ptr->current_floor_ptr);
+            forget_view(*player_ptr->current_floor_ptr);
+            clear_mon_lite(*player_ptr->current_floor_ptr);
 
             term_key_push(SPECIAL_KEY_QUIT);
             break;
@@ -2426,9 +2426,9 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
         }
 
         msg_flag = false;
-        forget_lite(p_ptr->current_floor_ptr);
-        forget_view(p_ptr->current_floor_ptr);
-        clear_mon_lite(p_ptr->current_floor_ptr);
+        forget_lite(*p_ptr->current_floor_ptr);
+        forget_view(*p_ptr->current_floor_ptr);
+        clear_mon_lite(*p_ptr->current_floor_ptr);
         term_key_push(SPECIAL_KEY_QUIT);
         return 0;
     }

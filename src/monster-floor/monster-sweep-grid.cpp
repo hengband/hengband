@@ -159,7 +159,7 @@ public:
         auto room = 0;
         for (const auto &d : Direction::directions_8()) {
             const auto pos_p_neighbor = p_pos + d.vec();
-            if (!in_bounds2(&floor, pos_p_neighbor.y, pos_p_neighbor.x)) {
+            if (!in_bounds2(floor, pos_p_neighbor.y, pos_p_neighbor.x)) {
                 continue;
             }
 
@@ -218,7 +218,7 @@ public:
                 return p_pos;
             }
 
-            if (!in_bounds2(&floor, pos_move.y, pos_move.x) || !monster_can_enter(this->player_ptr, pos_move.y, pos_move.x, &monrace, 0)) {
+            if (!in_bounds2(floor, pos_move.y, pos_move.x) || !monster_can_enter(this->player_ptr, pos_move.y, pos_move.x, &monrace, 0)) {
                 continue;
             }
 
@@ -271,7 +271,7 @@ public:
         std::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                 continue;
             }
 
@@ -341,7 +341,7 @@ public:
         std::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                 continue;
             }
 
@@ -386,7 +386,7 @@ public:
         std::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                 continue;
             }
 
@@ -545,7 +545,7 @@ std::optional<Pos2DVec> MonsterSweepGrid::sweep_runnable_away_grid(const Pos2DVe
     auto score = -1;
     for (const auto &d : Direction::directions_8_reverse()) {
         const auto pos = m_pos + d.vec();
-        if (!in_bounds2(&floor, pos.y, pos.x)) {
+        if (!in_bounds2(floor, pos.y, pos.x)) {
             continue;
         }
 

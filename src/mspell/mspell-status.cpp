@@ -93,10 +93,10 @@ void spell_badstatus_message_to_player(PlayerType *player_ptr, MONSTER_IDX m_idx
 void spell_badstatus_message_to_mons(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_bad_status_to_monster &msgs, bool resist,
     bool saved_throw)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool see_t = see_monster(player_ptr, t_idx);
-    bool known = monster_near_player(floor_ptr, m_idx, t_idx);
+    bool known = monster_near_player(floor, m_idx, t_idx);
     const auto m_name = monster_name(player_ptr, m_idx);
     const auto t_name = monster_name(player_ptr, t_idx);
 
@@ -104,7 +104,7 @@ void spell_badstatus_message_to_mons(PlayerType *player_ptr, MONSTER_IDX m_idx, 
         if (see_either) {
             msg_format(msgs.default_msg, m_name.data(), t_name.data());
         } else {
-            floor_ptr->monster_noise = true;
+            floor.monster_noise = true;
         }
     }
 
@@ -249,10 +249,10 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto *t_ptr = &floor.m_list[t_idx];
     MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
-    DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
+    DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
     if (target_type == MONSTER_TO_PLAYER) {
@@ -306,10 +306,10 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto *t_ptr = &floor.m_list[t_idx];
     MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
-    DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
+    DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
     if (target_type == MONSTER_TO_PLAYER) {
@@ -371,10 +371,10 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto *t_ptr = &floor.m_list[t_idx];
     MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
-    DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
+    DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
     if (target_type == MONSTER_TO_PLAYER) {
@@ -429,10 +429,10 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto *t_ptr = &floor.m_list[t_idx];
     MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
-    DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
+    DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
     if (target_type == MONSTER_TO_PLAYER) {
@@ -517,10 +517,10 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto *t_ptr = &floor.m_list[t_idx];
     MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
-    DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
+    DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
     if (target_type == MONSTER_TO_PLAYER) {
@@ -583,9 +583,9 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
     const auto res = MonsterSpellResult::make_valid();
 
     mspell_cast_msg msg;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[m_idx];
+    DEPTH rlev = monster_level_idx(floor, m_idx);
     const auto is_blind = player_ptr->effects()->blindness().is_blind();
     const auto seen = (!is_blind && m_ptr->ml);
     const auto m_poss = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
@@ -685,7 +685,7 @@ MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx,
  */
 MonsterSpellResult spell_RF6_FORGET(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    DEPTH rlev = monster_level_idx(player_ptr->current_floor_ptr, m_idx);
+    DEPTH rlev = monster_level_idx(*player_ptr->current_floor_ptr, m_idx);
     const auto m_name = monster_name(player_ptr, m_idx);
 
     disturb(player_ptr, true, true);

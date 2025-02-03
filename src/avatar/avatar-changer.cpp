@@ -111,16 +111,16 @@ void AvatarChanger::change_virtue_unique()
  */
 void AvatarChanger::change_virtue_good_evil()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
     auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->kind_flags.has(MonsterKindType::GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100))) {
+    if (r_ptr->kind_flags.has(MonsterKindType::GOOD) && ((r_ptr->level) / 10 + (3 * floor.dun_level) >= randint1(100))) {
         chg_virtue(this->player_ptr, Virtue::UNLIFE, 1);
     }
 
     if (r_ptr->kind_flags.has(MonsterKindType::ANGEL)) {
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(this->player_ptr, Virtue::FAITH, -2);
-        } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
+        } else if ((r_ptr->level) / 10 + (3 * floor.dun_level) >= randint1(100)) {
             auto change_value = r_ptr->kind_flags.has(MonsterKindType::GOOD) ? -1 : 1;
             chg_virtue(this->player_ptr, Virtue::FAITH, change_value);
         }
@@ -131,7 +131,7 @@ void AvatarChanger::change_virtue_good_evil()
     if (r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
         if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(this->player_ptr, Virtue::FAITH, 2);
-        } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
+        } else if ((r_ptr->level) / 10 + (3 * floor.dun_level) >= randint1(100)) {
             chg_virtue(this->player_ptr, Virtue::FAITH, 1);
         }
     }
@@ -142,7 +142,7 @@ void AvatarChanger::change_virtue_good_evil()
  */
 void AvatarChanger::change_virtue_revenge()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
     auto *r_ptr = &m_ptr->get_monrace();
     if (r_ptr->r_deaths == 0) {
         return;
@@ -153,7 +153,7 @@ void AvatarChanger::change_virtue_revenge()
         return;
     }
 
-    if ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level) >= randint1(100)) {
+    if ((r_ptr->level) / 10 + (2 * floor.dun_level) >= randint1(100)) {
         chg_virtue(this->player_ptr, Virtue::HONOUR, 1);
     }
 }
@@ -163,7 +163,7 @@ void AvatarChanger::change_virtue_revenge()
  */
 void AvatarChanger::change_virtue_wild_thief()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
     auto *r_ptr = &m_ptr->get_monrace();
     auto innocent = true;
     auto thief = false;
@@ -187,7 +187,7 @@ void AvatarChanger::change_virtue_wild_thief()
             return;
         }
 
-        if (1 + ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level)) >= randint1(100)) {
+        if (1 + ((r_ptr->level) / 10 + (2 * floor.dun_level)) >= randint1(100)) {
             chg_virtue(this->player_ptr, Virtue::JUSTICE, 1);
         }
 

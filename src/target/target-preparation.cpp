@@ -71,7 +71,7 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!(in_bounds(&floor, pos.y, pos.x))) {
+    if (!(in_bounds(floor, pos.y, pos.x))) {
         return false;
     }
 
@@ -198,9 +198,9 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
         monster_list.push_back(i);
     }
 
-    auto comp_importance = [floor_ptr = player_ptr->current_floor_ptr](MONSTER_IDX idx1, MONSTER_IDX idx2) {
-        const auto &monster1 = floor_ptr->m_list[idx1];
-        const auto &monster2 = floor_ptr->m_list[idx2];
+    auto comp_importance = [&floor = *player_ptr->current_floor_ptr](MONSTER_IDX idx1, MONSTER_IDX idx2) {
+        const auto &monster1 = floor.m_list[idx1];
+        const auto &monster2 = floor.m_list[idx2];
         const auto &monrace1 = monster1.get_appearance_monrace();
         const auto &monrace2 = monster2.get_appearance_monrace();
 

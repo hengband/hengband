@@ -81,7 +81,7 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
                 pos.y = rand_spread(pos_center.y, 2);
                 pos.x = rand_spread(pos_center.x, 3);
                 dummy++;
-                if (!in_bounds(&floor, pos.y, pos.x)) {
+                if (!in_bounds(floor, pos.y, pos.x)) {
                     continue;
                 }
 
@@ -117,7 +117,7 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
  * @details
  * Only really called by some of the "vault" routines.
  */
-static void vault_trap_aux(FloorType *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
+static void vault_trap_aux(FloorType &floor, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
     Grid *g_ptr;
     int y1 = y, x1 = x;
@@ -127,7 +127,7 @@ static void vault_trap_aux(FloorType *floor_ptr, POSITION y, POSITION x, POSITIO
             y1 = rand_spread(y, yd);
             x1 = rand_spread(x, xd);
             dummy++;
-            if (!in_bounds(floor_ptr, y1, x1)) {
+            if (!in_bounds(floor, y1, x1)) {
                 continue;
             }
             break;
@@ -137,12 +137,12 @@ static void vault_trap_aux(FloorType *floor_ptr, POSITION y, POSITION x, POSITIO
             msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
         }
 
-        g_ptr = &floor_ptr->grid_array[y1][x1];
+        g_ptr = &floor.grid_array[y1][x1];
         if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || g_ptr->has_monster()) {
             continue;
         }
 
-        place_trap(floor_ptr, y1, x1);
+        place_trap(floor, y1, x1);
         break;
     }
 }
@@ -159,9 +159,9 @@ static void vault_trap_aux(FloorType *floor_ptr, POSITION y, POSITION x, POSITIO
  * Only really called by some of the "vault" routines.
  * @todo rooms-normal からしか呼ばれていない、要調整
  */
-void vault_traps(FloorType *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
+void vault_traps(FloorType &floor, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 {
     for (int i = 0; i < num; i++) {
-        vault_trap_aux(floor_ptr, y, x, yd, xd);
+        vault_trap_aux(floor, y, x, yd, xd);
     }
 }

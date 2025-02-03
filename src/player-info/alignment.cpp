@@ -42,9 +42,9 @@ std::string PlayerAlignment::get_alignment_description(bool with_value)
 void PlayerAlignment::update_alignment()
 {
     this->reset_alignment();
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    for (MONSTER_IDX m_idx = floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
-        auto *m_ptr = &floor_ptr->m_list[m_idx];
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    for (MONSTER_IDX m_idx = floor.m_max - 1; m_idx >= 1; m_idx--) {
+        auto *m_ptr = &floor.m_list[m_idx];
         if (!m_ptr->is_valid()) {
             continue;
         }

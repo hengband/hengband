@@ -396,7 +396,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         const Pos2D pos_neighbor(pos.y + ddy[d], pos.x + ddx[d]);
-        if (!in_bounds2(player_ptr->current_floor_ptr, pos_neighbor.y, pos_neighbor.x)) {
+        if (!in_bounds2(*player_ptr->current_floor_ptr, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
 

@@ -63,7 +63,7 @@ static void drop_here(FloorType &floor, ItemEntity &&item, POSITION y, POSITION 
     dropped_item.ix = x;
     dropped_item.held_m_idx = 0;
     auto *g_ptr = &floor.grid_array[y][x];
-    g_ptr->o_idx_list.add(&floor, item_idx);
+    g_ptr->o_idx_list.add(floor, item_idx);
 }
 
 static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const FixedArtifactId a_idx)
@@ -142,7 +142,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             if (evaluate_percent(75)) {
                 place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, 0L);
             } else {
-                place_trap(&floor, *qtwg_ptr->y, *qtwg_ptr->x);
+                place_trap(floor, *qtwg_ptr->y, *qtwg_ptr->x);
             }
 
             floor.object_level = floor.base_level;
@@ -158,7 +158,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
 
             floor.object_level = floor.base_level;
         } else if (random & RANDOM_TRAP) {
-            place_trap(&floor, *qtwg_ptr->y, *qtwg_ptr->x);
+            place_trap(floor, *qtwg_ptr->y, *qtwg_ptr->x);
         } else if (letter[idx].trap) {
             grid.mimic = grid.feat;
             grid.feat = dungeon.convert_terrain_id(letter[idx].trap);
@@ -402,7 +402,7 @@ parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtw
 
     /* Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid */
     if (qtwg_ptr->buf[0] == 'F') {
-        return parse_line_feature(player_ptr->current_floor_ptr, qtwg_ptr->buf);
+        return parse_line_feature(*player_ptr->current_floor_ptr, qtwg_ptr->buf);
     }
 
     if (qtwg_ptr->buf[0] == 'D') {

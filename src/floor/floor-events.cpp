@@ -154,10 +154,10 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
         }
 
         if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
-            if (5 <= get_monster_crowd_number(&floor, i)) {
+            if (5 <= get_monster_crowd_number(floor, i)) {
                 delta += 1;
             }
-        } else if (2 <= get_monster_crowd_number(&floor, i)) {
+        } else if (2 <= get_monster_crowd_number(floor, i)) {
             delta += 1;
         }
 
@@ -339,7 +339,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 
             for (const auto &d : Direction::directions()) {
                 const auto pos = Pos2D(y, x) + d.vec();
-                if (!in_bounds2(&floor, pos.y, pos.x)) {
+                if (!in_bounds2(floor, pos.y, pos.x)) {
                     continue;
                 }
 
@@ -361,37 +361,37 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 /*
  * Actually erase the entire "lite" array, redrawing every grid
  */
-void forget_lite(FloorType *floor_ptr)
+void forget_lite(FloorType &floor)
 {
-    if (!floor_ptr->lite_n) {
+    if (!floor.lite_n) {
         return;
     }
 
-    for (int i = 0; i < floor_ptr->lite_n; i++) {
-        POSITION y = floor_ptr->lite_y[i];
-        POSITION x = floor_ptr->lite_x[i];
-        floor_ptr->grid_array[y][x].info &= ~(CAVE_LITE);
+    for (int i = 0; i < floor.lite_n; i++) {
+        POSITION y = floor.lite_y[i];
+        POSITION x = floor.lite_x[i];
+        floor.grid_array[y][x].info &= ~(CAVE_LITE);
     }
 
-    floor_ptr->lite_n = 0;
+    floor.lite_n = 0;
 }
 
 /*
  * Clear the viewable space
  */
-void forget_view(FloorType *floor_ptr)
+void forget_view(FloorType &floor)
 {
-    if (!floor_ptr->view_n) {
+    if (!floor.view_n) {
         return;
     }
 
-    for (int i = 0; i < floor_ptr->view_n; i++) {
-        POSITION y = floor_ptr->view_y[i];
-        POSITION x = floor_ptr->view_x[i];
+    for (int i = 0; i < floor.view_n; i++) {
+        POSITION y = floor.view_y[i];
+        POSITION x = floor.view_x[i];
         Grid *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
+        g_ptr = &floor.grid_array[y][x];
         g_ptr->info &= ~(CAVE_VIEW);
     }
 
-    floor_ptr->view_n = 0;
+    floor.view_n = 0;
 }

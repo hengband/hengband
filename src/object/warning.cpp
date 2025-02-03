@@ -357,7 +357,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         for (auto my = yy - warning_aware_range; my < yy + warning_aware_range + 1; my++) {
             const Pos2D pos_neighbor(my, mx);
             int dam_max0 = 0;
-            if (!in_bounds(&floor, my, mx) || (Grid::calc_distance(pos_neighbor, pos) > warning_aware_range)) {
+            if (!in_bounds(floor, my, mx) || (Grid::calc_distance(pos_neighbor, pos) > warning_aware_range)) {
                 continue;
             }
 

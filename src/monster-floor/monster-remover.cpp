@@ -136,7 +136,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
 void delete_monster(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds(&floor, pos.y, pos.x)) {
+    if (!in_bounds(floor, pos.y, pos.x)) {
         return;
     }
 

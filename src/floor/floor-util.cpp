@@ -78,7 +78,7 @@ void update_smell(FloorType &floor, const Pos2D &p_pos)
     for (auto y = 0; y < 5; y++) {
         for (auto x = 0; x < 5; x++) {
             const auto pos = p_pos + Pos2DVec(y, x) + Pos2DVec(-2, -2);
-            if (!in_bounds(&floor, pos.y, pos.x)) {
+            if (!in_bounds(floor, pos.y, pos.x)) {
                 continue;
             }
 
@@ -98,14 +98,14 @@ void update_smell(FloorType &floor, const Pos2D &p_pos)
 /*
  * Hack -- forget the "flow" information
  */
-void forget_flow(FloorType *floor_ptr)
+void forget_flow(FloorType &floor)
 {
-    for (POSITION y = 0; y < floor_ptr->height; y++) {
-        for (POSITION x = 0; x < floor_ptr->width; x++) {
-            auto &grid = floor_ptr->grid_array[y][x];
+    for (POSITION y = 0; y < floor.height; y++) {
+        for (POSITION x = 0; x < floor.width; x++) {
+            auto &grid = floor.grid_array[y][x];
             grid.reset_costs();
             grid.reset_dists();
-            floor_ptr->grid_array[y][x].when = 0;
+            floor.grid_array[y][x].when = 0;
         }
     }
 }
@@ -121,10 +121,10 @@ void forget_flow(FloorType *floor_ptr)
  * clear those fields for grids/monsters containing objects,
  * and we clear it once for every such object.
  */
-void wipe_o_list(FloorType *floor_ptr)
+void wipe_o_list(FloorType &floor)
 {
-    for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
-        auto *o_ptr = &floor_ptr->o_list[i];
+    for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
+        auto *o_ptr = &floor.o_list[i];
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -135,13 +135,13 @@ void wipe_o_list(FloorType *floor_ptr)
             }
         }
 
-        auto &list = get_o_idx_list_contains(floor_ptr, i);
+        auto &list = get_o_idx_list_contains(floor, i);
         list.clear();
         o_ptr->wipe();
     }
 
-    floor_ptr->o_max = 1;
-    floor_ptr->o_cnt = 0;
+    floor.o_max = 1;
+    floor.o_cnt = 0;
 }
 
 /*
@@ -162,7 +162,7 @@ Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode)
         const auto ny = rand_spread(pos.y, d);
         const auto nx = rand_spread(pos.x, d);
         const Pos2D pos_neighbor(ny, nx);
-        if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
+        if (!in_bounds(floor, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
         if ((d > 1) && (Grid::calc_distance(pos, pos_neighbor) > d)) {

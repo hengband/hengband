@@ -23,10 +23,10 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    if (!in_bounds(&floor, pos.y, pos.x)) {
+    if (!in_bounds(floor, pos.y, pos.x)) {
         return;
     }
-    if (!cave_drop_bold(&floor, pos.y, pos.x)) {
+    if (!cave_drop_bold(floor, pos.y, pos.x)) {
         return;
     }
     if (!grid.o_idx_list.empty()) {
@@ -42,7 +42,7 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
     item.iy = pos.y;
     item.ix = pos.x;
     floor.o_list[item_idx] = std::move(item);
-    grid.o_idx_list.add(&floor, item_idx);
+    grid.o_idx_list.add(floor, item_idx);
 
     note_spot(player_ptr, pos.y, pos.x);
     lite_spot(player_ptr, pos.y, pos.x);
@@ -66,7 +66,7 @@ void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    if (!in_bounds(&floor, y, x) || !cave_drop_bold(&floor, y, x) || !grid.o_idx_list.empty()) {
+    if (!in_bounds(floor, y, x) || !cave_drop_bold(floor, y, x) || !grid.o_idx_list.empty()) {
         return;
     }
 
@@ -83,7 +83,7 @@ void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 
     item.iy = pos.y;
     item.ix = pos.x;
-    grid.o_idx_list.add(&floor, item_idx);
+    grid.o_idx_list.add(floor, item_idx);
 
     note_spot(player_ptr, pos.y, pos.x);
     lite_spot(player_ptr, pos.y, pos.x);

@@ -62,7 +62,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
     for (auto dy = -r; dy <= r; dy++) {
         for (auto dx = -r; dx <= r; dx++) {
             const Pos2D pos(cy + dy, cx + dx);
-            if (!in_bounds(&floor, pos.y, pos.x)) {
+            if (!in_bounds(floor, pos.y, pos.x)) {
                 continue;
             }
 
@@ -199,7 +199,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                         continue;
                     }
 
-                    if (pattern_tile(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                    if (pattern_tile(floor, pos_neighbor.y, pos_neighbor.x)) {
                         continue;
                     }
 
@@ -262,7 +262,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
         }
     }
 
-    clear_mon_lite(&floor);
+    clear_mon_lite(floor);
     const auto &dungeon = floor.get_dungeon_definition();
     for (auto dy = -r; dy <= r; dy++) {
         for (auto dx = -r; dx <= r; dx++) {
@@ -301,7 +301,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
     for (auto dy = -r; dy <= r; dy++) {
         for (auto dx = -r; dx <= r; dx++) {
             const Pos2D pos(cy + dy, cx + dx);
-            if (!in_bounds(&floor, pos.y, pos.x)) {
+            if (!in_bounds(floor, pos.y, pos.x)) {
                 continue;
             }
 
@@ -321,7 +321,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
 
             for (const auto &d : Direction::directions()) {
                 const auto pos_neighbor = pos + d.vec();
-                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 

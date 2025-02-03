@@ -57,7 +57,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
     for (auto nx = pos.x - max_distance; nx <= pos.x + max_distance; nx++) {
         for (auto ny = pos.y - max_distance; ny <= pos.y + max_distance; ny++) {
             const Pos2D pos_neighbor(ny, nx);
-            if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!in_bounds(floor, pos_neighbor.y, pos_neighbor.x)) {
                 continue;
             }
 
@@ -75,7 +75,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
                     continue;
                 }
 
-                if (pattern_tile(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (pattern_tile(floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
             }
@@ -384,14 +384,14 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
  */
 bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     if (!dungeon.has_guardian()) {
         return def_val;
     }
 
     const auto &monrace = dungeon.get_guardian();
-    auto is_guardian_applicable = dungeon.maxdepth == floor_ptr->dun_level;
+    auto is_guardian_applicable = dungeon.maxdepth == floor.dun_level;
     is_guardian_applicable &= monrace.cur_num < monrace.max_num;
     if (!is_guardian_applicable) {
         return def_val;
@@ -399,13 +399,13 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 
     auto try_count = 4000;
     while (try_count > 0) {
-        const auto pos = Pos2D(randint1(floor_ptr->height - 4), randint1(floor_ptr->width - 4)) + Pos2DVec(2, 2);
+        const auto pos = Pos2D(randint1(floor.height - 4), randint1(floor.width - 4)) + Pos2DVec(2, 2);
         if (!is_cave_empty_bold2(player_ptr, pos.y, pos.x)) {
             try_count++;
             continue;
         }
 
-        if (!monster_can_cross_terrain(player_ptr, floor_ptr->get_grid(pos).feat, &monrace, 0)) {
+        if (!monster_can_cross_terrain(player_ptr, floor.get_grid(pos).feat, &monrace, 0)) {
             try_count++;
             continue;
         }

@@ -350,18 +350,18 @@ static std::optional<std::string> level_gen(PlayerType *player_ptr)
 /*!
  * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after grid_array generation
  */
-void wipe_generate_random_floor_flags(FloorType *floor_ptr)
+void wipe_generate_random_floor_flags(FloorType &floor)
 {
-    for (auto y = 0; y < floor_ptr->height; y++) {
-        for (auto x = 0; x < floor_ptr->width; x++) {
-            floor_ptr->get_grid({ y, x }).info &= ~(CAVE_MASK);
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
+            floor.get_grid({ y, x }).info &= ~(CAVE_MASK);
         }
     }
 
-    if (floor_ptr->is_underground()) {
-        for (auto y = 1; y < floor_ptr->height - 1; y++) {
-            for (auto x = 1; x < floor_ptr->width - 1; x++) {
-                floor_ptr->get_grid({ y, x }).info |= CAVE_UNSAFE;
+    if (floor.is_underground()) {
+        for (auto y = 1; y < floor.height - 1; y++) {
+            for (auto x = 1; x < floor.width - 1; x++) {
+                floor.get_grid({ y, x }).info |= CAVE_UNSAFE;
             }
         }
     }
@@ -411,24 +411,24 @@ void clear_cave(PlayerType *player_ptr)
     floor.object_level = floor.base_level;
 }
 
-typedef bool (*IsWallFunc)(const FloorType *, int, int);
+typedef bool (*IsWallFunc)(const FloorType &, int, int);
 
 // (y,x) がプレイヤーが通れない永久地形かどうかを返す。
-static bool is_permanent_blocker(const FloorType *const floor_ptr, const int y, const int x)
+static bool is_permanent_blocker(const FloorType &floor, const int y, const int x)
 {
-    const auto &flags = floor_ptr->get_grid({ y, x }).get_terrain().flags;
+    const auto &flags = floor.get_grid({ y, x }).get_terrain().flags;
     return flags.has(TerrainCharacteristics::PERMANENT) && flags.has_not(TerrainCharacteristics::MOVE);
 }
 
-static void floor_is_connected_dfs(const FloorType *const floor_ptr, const IsWallFunc is_wall, const int y_start, const int x_start, bool *const visited)
+static void floor_is_connected_dfs(const FloorType &floor, const IsWallFunc is_wall, const int y_start, const int x_start, bool *const visited)
 {
     // clang-format off
     static const int DY[8] = { -1, -1, -1,  0, 0,  1, 1, 1 };
     static const int DX[8] = { -1,  0,  1, -1, 1, -1, 0, 1 };
     // clang-format on
 
-    const int h = floor_ptr->height;
-    const int w = floor_ptr->width;
+    const int h = floor.height;
+    const int w = floor.width;
     const int start = w * y_start + x_start;
 
     // 深さ優先探索用のスタック。
@@ -454,7 +454,7 @@ static void floor_is_connected_dfs(const FloorType *const floor_ptr, const IsWal
             if (visited[nxt]) {
                 continue;
             }
-            if (is_wall(floor_ptr, y_nxt, x_nxt)) {
+            if (is_wall(floor, y_nxt, x_nxt)) {
                 continue;
             }
 
@@ -468,12 +468,12 @@ static void floor_is_connected_dfs(const FloorType *const floor_ptr, const IsWal
 // 各セルの8近傍は互いに移動可能とし、is_wall が真を返すセルのみを壁とみなす。
 //
 // 連結成分数が 0 の場合、偽を返す。
-static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFunc is_wall)
+static bool floor_is_connected(const FloorType &floor, const IsWallFunc is_wall)
 {
     static std::array<bool, MAX_HGT * MAX_WID> visited;
 
-    const int h = floor_ptr->height;
-    const int w = floor_ptr->width;
+    const int h = floor.height;
+    const int w = floor.width;
 
     std::fill(begin(visited), end(visited), false);
 
@@ -485,14 +485,14 @@ static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFun
             if (visited[idx]) {
                 continue;
             }
-            if (is_wall(floor_ptr, y, x)) {
+            if (is_wall(floor, y, x)) {
                 continue;
             }
 
             if (++n_component >= 2) {
                 break;
             }
-            floor_is_connected_dfs(floor_ptr, is_wall, y, x, visited.data());
+            floor_is_connected_dfs(floor, is_wall, y, x, visited.data());
         }
     }
 
@@ -539,7 +539,7 @@ void generate_floor(PlayerType *player_ptr)
         // 地上、荒野マップ、クエストでは連結性判定は行わない。
         // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
         const auto check_conn = why && floor.is_underground() && !floor.is_in_quest();
-        if (check_conn && !floor_is_connected(&floor, is_permanent_blocker)) {
+        if (check_conn && !floor_is_connected(floor, is_permanent_blocker)) {
             // 一定回数試しても連結にならないなら諦める。
             if (num >= 1000) {
                 plog("cannot generate connected floor. giving up...");
@@ -553,11 +553,11 @@ void generate_floor(PlayerType *player_ptr)
         }
 
         msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why->data());
-        wipe_o_list(&floor);
+        wipe_o_list(floor);
         wipe_monsters_list(player_ptr);
     }
 
     glow_deep_lava_and_bldg(player_ptr);
     floor.enter_dungeon(false);
-    wipe_generate_random_floor_flags(&floor);
+    wipe_generate_random_floor_flags(floor);
 }

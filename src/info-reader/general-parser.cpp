@@ -96,7 +96,7 @@ std::tuple<errr, int> init_info_txt(FILE *fp, char *buf, angband_header *head, P
  * @param buf 解析文字列
  * @return エラーコード
  */
-parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
+parse_error_type parse_line_feature(const FloorType &floor, char *buf)
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
         return PARSE_ERROR_NONE;
@@ -142,9 +142,9 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
                 letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6] + 1));
             }
         } else if (zz[6][0] == '!') {
-            if (floor_ptr->is_in_quest()) {
+            if (floor.is_in_quest()) {
                 const auto &quests = QuestList::get_instance();
-                letter[index].artifact = quests.get_quest(floor_ptr->quest_number).reward_fa_id;
+                letter[index].artifact = quests.get_quest(floor.quest_number).reward_fa_id;
             }
         } else {
             letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6]));
@@ -167,9 +167,9 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
                 letter[index].object = (OBJECT_IDX)atoi(zz[4] + 1);
             }
         } else if (zz[4][0] == '!') {
-            if (floor_ptr->is_in_quest()) {
+            if (floor.is_in_quest()) {
                 const auto &quests = QuestList::get_instance();
-                const auto &quest = quests.get_quest(floor_ptr->quest_number);
+                const auto &quest = quests.get_quest(floor.quest_number);
                 if (quest.has_reward()) {
                     const auto &artifact = quest.get_reward();
                     if (artifact.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {

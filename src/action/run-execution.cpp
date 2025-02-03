@@ -57,13 +57,13 @@ static bool find_breakleft;
  */
 static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y + ddy[dir], x + ddx[dir]);
-    if (!in_bounds2(floor_ptr, pos.y, pos.x)) {
+    if (!in_bounds2(floor, pos.y, pos.x)) {
         return false;
     }
 
-    const auto &grid = floor_ptr->get_grid(pos);
+    const auto &grid = floor.get_grid(pos);
     if (!grid.is_mark()) {
         return false;
     }
@@ -174,12 +174,12 @@ static bool see_nothing(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSIT
     y += ddy[dir];
     x += ddx[dir];
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!in_bounds2(floor_ptr, y, x)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!in_bounds2(floor, y, x)) {
         return true;
     }
 
-    if (floor_ptr->grid_array[y][x].is_mark()) {
+    if (floor.grid_array[y][x].is_mark()) {
         return false;
     }
 

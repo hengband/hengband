@@ -58,7 +58,7 @@ bool los(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to)
         /* South -- check for walls */
         if (dy > 0) {
             for (auto ty = pos_from.y + 1; ty < pos_to.y; ty++) {
-                if (!cave_los_bold(&floor, ty, pos_from.x)) {
+                if (!cave_los_bold(floor, ty, pos_from.x)) {
                     return false;
                 }
             }
@@ -67,7 +67,7 @@ bool los(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to)
         /* North -- check for walls */
         else {
             for (auto ty = pos_from.y - 1; ty > pos_to.y; ty--) {
-                if (!cave_los_bold(&floor, ty, pos_from.x)) {
+                if (!cave_los_bold(floor, ty, pos_from.x)) {
                     return false;
                 }
             }
@@ -82,7 +82,7 @@ bool los(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to)
         /* East -- check for walls */
         if (dx > 0) {
             for (auto tx = pos_from.x + 1; tx < pos_to.x; tx++) {
-                if (!cave_los_bold(&floor, pos_from.y, tx)) {
+                if (!cave_los_bold(floor, pos_from.y, tx)) {
                     return false;
                 }
             }
@@ -91,7 +91,7 @@ bool los(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to)
         /* West -- check for walls */
         else {
             for (auto tx = pos_from.x - 1; tx > pos_to.x; tx--) {
-                if (!cave_los_bold(&floor, pos_from.y, tx)) {
+                if (!cave_los_bold(floor, pos_from.y, tx)) {
                     return false;
                 }
             }
@@ -105,13 +105,13 @@ bool los(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to)
 
     if (ax == 1) {
         if (ay == 2) {
-            if (cave_los_bold(&floor, pos_from.y + sy, pos_from.x)) {
+            if (cave_los_bold(floor, pos_from.y + sy, pos_from.x)) {
                 return true;
             }
         }
     } else if (ay == 1) {
         if (ax == 2) {
-            if (cave_los_bold(&floor, pos_from.y, pos_from.x + sx)) {
+            if (cave_los_bold(floor, pos_from.y, pos_from.x + sx)) {
                 return true;
             }
         }
@@ -132,7 +132,7 @@ bool los(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to)
         /* Note (below) the case (qy == f2), where */
         /* the LOS exactly meets the corner of a tile. */
         while (pos_to.x - tx) {
-            if (!cave_los_bold(&floor, ty, tx)) {
+            if (!cave_los_bold(floor, ty, tx)) {
                 return false;
             }
 
@@ -145,7 +145,7 @@ bool los(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to)
 
             if (qy > f2) {
                 ty += sy;
-                if (!cave_los_bold(&floor, ty, tx)) {
+                if (!cave_los_bold(floor, ty, tx)) {
                     return false;
                 }
                 qy -= f1;
@@ -174,7 +174,7 @@ bool los(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to)
     /* Note (below) the case (qx == f2), where */
     /* the LOS exactly meets the corner of a tile. */
     while (pos_to.y - ty) {
-        if (!cave_los_bold(&floor, ty, tx)) {
+        if (!cave_los_bold(floor, ty, tx)) {
             return false;
         }
 
@@ -187,7 +187,7 @@ bool los(const FloorType &floor, const Pos2D &pos_from, const Pos2D &pos_to)
 
         if (qx > f2) {
             tx += sx;
-            if (!cave_los_bold(&floor, ty, tx)) {
+            if (!cave_los_bold(floor, ty, tx)) {
                 return false;
             }
             qx -= f1;

@@ -24,7 +24,7 @@ bool create_rune_protection_one(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (!cave_clean_bold(&floor, p_pos.y, p_pos.x)) {
+    if (!cave_clean_bold(floor, p_pos.y, p_pos.x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
@@ -49,7 +49,7 @@ bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!cave_clean_bold(&floor, pos.y, pos.x)) {
+    if (!cave_clean_bold(floor, pos.y, pos.x)) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }

@@ -127,7 +127,7 @@ void do_cmd_open(PlayerType *player_ptr)
     if (get_rep_dir(player_ptr, &dir, true)) {
         const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = floor.get_grid(pos);
-        const auto o_idx = chest_check(&floor, pos, false);
+        const auto o_idx = chest_check(floor, pos, false);
         if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::OPEN) && !o_idx) {
             msg_print(_("そこには開けるものが見当たらない。", "You see nothing there to open."));
         } else if (grid.has_monster() && !floor.m_list[grid.m_idx].is_riding()) {
@@ -229,7 +229,7 @@ void do_cmd_disarm(PlayerType *player_ptr)
     if (get_rep_dir(player_ptr, &dir, true)) {
         const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = floor.get_grid(pos);
-        const auto o_idx = chest_check(&floor, pos, true);
+        const auto o_idx = chest_check(floor, pos, true);
         if (!floor.has_trap_at(pos) && !o_idx) {
             msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
         } else if (grid.has_monster() && !floor.m_list[grid.m_idx].is_riding()) {

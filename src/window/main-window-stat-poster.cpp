@@ -252,14 +252,14 @@ void print_speed(PlayerType *player_ptr)
     auto row_speed = hgt + ROW_SPEED;
 
     const auto speed = player_ptr->pspeed - STANDARD_SPEED;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     bool is_player_fast = is_fast(player_ptr);
     std::string buf;
     TERM_COLOR attr = TERM_WHITE;
     const auto is_slow = player_ptr->effects()->deceleration().is_slow();
     if (speed > 0) {
         if (player_ptr->riding) {
-            auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
+            auto *m_ptr = &floor.m_list[player_ptr->riding];
             if (m_ptr->is_accelerated() && !m_ptr->is_decelerated()) {
                 attr = TERM_L_BLUE;
             } else if (m_ptr->is_decelerated() && !m_ptr->is_accelerated()) {
@@ -277,7 +277,7 @@ void print_speed(PlayerType *player_ptr)
         buf = format("%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), speed);
     } else if (speed < 0) {
         if (player_ptr->riding) {
-            auto *m_ptr = &floor_ptr->m_list[player_ptr->riding];
+            auto *m_ptr = &floor.m_list[player_ptr->riding];
             if (m_ptr->is_accelerated() && !m_ptr->is_decelerated()) {
                 attr = TERM_L_BLUE;
             } else if (m_ptr->is_decelerated() && !m_ptr->is_accelerated()) {

@@ -80,7 +80,7 @@ static void travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int n, bool
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
     auto &terrain = grid.get_terrain();
-    if (!in_bounds(&floor, pos.y, pos.x)) {
+    if (!in_bounds(floor, pos.y, pos.x)) {
         return;
     }
 
@@ -183,7 +183,7 @@ void do_cmd_travel(PlayerType *player_ptr)
         return;
     }
 
-    forget_travel_flow(player_ptr->current_floor_ptr);
+    forget_travel_flow(*player_ptr->current_floor_ptr);
     travel_flow(player_ptr, pos);
     travel.x = x;
     travel.y = y;

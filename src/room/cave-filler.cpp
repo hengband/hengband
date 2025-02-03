@@ -50,17 +50,17 @@ static fill_data_type fill_data;
  * Store routine for the fractal floor generator
  * this routine probably should be an inline function or a macro.
  */
-static void store_height(FloorType *floor_ptr, POSITION x, POSITION y, FEAT_IDX val)
+static void store_height(FloorType &floor, POSITION x, POSITION y, FEAT_IDX val)
 {
     if (((x == fill_data.xmin) || (y == fill_data.ymin) || (x == fill_data.xmax) || (y == fill_data.ymax)) && (val <= fill_data.c1)) {
         val = fill_data.c1 + 1;
     }
 
-    floor_ptr->grid_array[y][x].feat = val;
+    floor.grid_array[y][x].feat = val;
     return;
 }
 
-void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
+void generate_hmap(FloorType &floor, POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
 {
     POSITION xsize = xsiz;
     POSITION ysize = ysiz;
@@ -95,16 +95,16 @@ void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz
     POSITION maxsize = (xsize > ysize) ? xsize : ysize;
     for (POSITION i = 0; i <= xsize; i++) {
         for (POSITION j = 0; j <= ysize; j++) {
-            floor_ptr->grid_array[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].feat = -1;
-            floor_ptr->grid_array[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].info &= ~(CAVE_ICKY);
+            floor.grid_array[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].feat = -1;
+            floor.grid_array[(int)(fill_data.ymin + j)][(int)(fill_data.xmin + i)].info &= ~(CAVE_ICKY);
         }
     }
 
-    floor_ptr->grid_array[fill_data.ymin][fill_data.xmin].feat = (int16_t)maxsize;
-    floor_ptr->grid_array[fill_data.ymax][fill_data.xmin].feat = (int16_t)maxsize;
-    floor_ptr->grid_array[fill_data.ymin][fill_data.xmax].feat = (int16_t)maxsize;
-    floor_ptr->grid_array[fill_data.ymax][fill_data.xmax].feat = (int16_t)maxsize;
-    floor_ptr->grid_array[y0][x0].feat = 0;
+    floor.grid_array[fill_data.ymin][fill_data.xmin].feat = (int16_t)maxsize;
+    floor.grid_array[fill_data.ymax][fill_data.xmin].feat = (int16_t)maxsize;
+    floor.grid_array[fill_data.ymin][fill_data.xmax].feat = (int16_t)maxsize;
+    floor.grid_array[fill_data.ymax][fill_data.xmax].feat = (int16_t)maxsize;
+    floor.grid_array[y0][x0].feat = 0;
     POSITION xstep = xsize * 256;
     POSITION xhstep = xsize * 256;
     POSITION ystep = ysize * 256;
@@ -124,17 +124,17 @@ void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz
             for (POSITION j = 0; j <= yysize; j += ystep) {
                 POSITION ii = i / 256 + fill_data.xmin;
                 POSITION jj = j / 256 + fill_data.ymin;
-                if (floor_ptr->grid_array[jj][ii].feat != -1) {
+                if (floor.grid_array[jj][ii].feat != -1) {
                     continue;
                 }
 
                 if (xhstep2 > grd) {
-                    store_height(floor_ptr, ii, jj, randnum1<short>(maxsize));
+                    store_height(floor, ii, jj, randnum1<short>(maxsize));
                     continue;
                 }
 
-                store_height(floor_ptr, ii, jj,
-                    (floor_ptr->grid_array[jj][fill_data.xmin + (i - xhstep) / 256].feat + floor_ptr->grid_array[jj][fill_data.xmin + (i + xhstep) / 256].feat) / 2 + (randint1(xstep2) - xhstep2) * roug / 16);
+                store_height(floor, ii, jj,
+                    (floor.grid_array[jj][fill_data.xmin + (i - xhstep) / 256].feat + floor.grid_array[jj][fill_data.xmin + (i + xhstep) / 256].feat) / 2 + (randint1(xstep2) - xhstep2) * roug / 16);
             }
         }
 
@@ -142,17 +142,17 @@ void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz
             for (POSITION i = 0; i <= xxsize; i += xstep) {
                 POSITION ii = i / 256 + fill_data.xmin;
                 POSITION jj = j / 256 + fill_data.ymin;
-                if (floor_ptr->grid_array[jj][ii].feat != -1) {
+                if (floor.grid_array[jj][ii].feat != -1) {
                     continue;
                 }
 
                 if (xhstep2 > grd) {
-                    store_height(floor_ptr, ii, jj, randnum1<short>(maxsize));
+                    store_height(floor, ii, jj, randnum1<short>(maxsize));
                     continue;
                 }
 
-                store_height(floor_ptr, ii, jj,
-                    (floor_ptr->grid_array[fill_data.ymin + (j - yhstep) / 256][ii].feat + floor_ptr->grid_array[fill_data.ymin + (j + yhstep) / 256][ii].feat) / 2 + (randint1(ystep2) - yhstep2) * roug / 16);
+                store_height(floor, ii, jj,
+                    (floor.grid_array[fill_data.ymin + (j - yhstep) / 256][ii].feat + floor.grid_array[fill_data.ymin + (j + yhstep) / 256][ii].feat) / 2 + (randint1(ystep2) - yhstep2) * roug / 16);
             }
         }
 
@@ -160,12 +160,12 @@ void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz
             for (POSITION j = yhstep; j <= yysize - yhstep; j += ystep) {
                 POSITION ii = i / 256 + fill_data.xmin;
                 POSITION jj = j / 256 + fill_data.ymin;
-                if (floor_ptr->grid_array[jj][ii].feat != -1) {
+                if (floor.grid_array[jj][ii].feat != -1) {
                     continue;
                 }
 
                 if (xhstep2 > grd) {
-                    store_height(floor_ptr, ii, jj, randnum1<short>(maxsize));
+                    store_height(floor, ii, jj, randnum1<short>(maxsize));
                     continue;
                 }
 
@@ -173,8 +173,8 @@ void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz
                 POSITION xp = fill_data.xmin + (i + xhstep) / 256;
                 POSITION ym = fill_data.ymin + (j - yhstep) / 256;
                 POSITION yp = fill_data.ymin + (j + yhstep) / 256;
-                store_height(floor_ptr, ii, jj,
-                    (floor_ptr->grid_array[ym][xm].feat + floor_ptr->grid_array[yp][xm].feat + floor_ptr->grid_array[ym][xp].feat + floor_ptr->grid_array[yp][xp].feat) / 4 + (randint1(xstep2) - xhstep2) * (diagsize / 16) / 256 * roug);
+                store_height(floor, ii, jj,
+                    (floor.grid_array[ym][xm].feat + floor.grid_array[yp][xm].feat + floor.grid_array[ym][xp].feat + floor.grid_array[yp][xp].feat) / 4 + (randint1(xstep2) - xhstep2) * (diagsize / 16) / 256 * roug);
             }
         }
     }
@@ -183,44 +183,44 @@ void generate_hmap(FloorType *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz
 static bool hack_isnt_wall(PlayerType *player_ptr, POSITION y, POSITION x, int c1, int c2, int c3, FEAT_IDX feat1, FEAT_IDX feat2, FEAT_IDX feat3,
     BIT_FLAGS info1, BIT_FLAGS info2, BIT_FLAGS info3)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->grid_array[y][x].info & CAVE_ICKY) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.grid_array[y][x].info & CAVE_ICKY) {
         return false;
     }
 
-    floor_ptr->grid_array[y][x].info |= (CAVE_ICKY);
-    if (floor_ptr->grid_array[y][x].feat <= c1) {
+    floor.grid_array[y][x].info |= (CAVE_ICKY);
+    if (floor.grid_array[y][x].feat <= c1) {
         if (randint1(100) < 75) {
-            floor_ptr->grid_array[y][x].feat = feat1;
-            floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-            floor_ptr->grid_array[y][x].info |= info1;
+            floor.grid_array[y][x].feat = feat1;
+            floor.grid_array[y][x].info &= ~(CAVE_MASK);
+            floor.grid_array[y][x].info |= info1;
             return true;
         } else {
-            floor_ptr->grid_array[y][x].feat = feat2;
-            floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-            floor_ptr->grid_array[y][x].info |= info2;
+            floor.grid_array[y][x].feat = feat2;
+            floor.grid_array[y][x].info &= ~(CAVE_MASK);
+            floor.grid_array[y][x].info |= info2;
             return true;
         }
     }
 
-    if (floor_ptr->grid_array[y][x].feat <= c2) {
+    if (floor.grid_array[y][x].feat <= c2) {
         if (randint1(100) < 75) {
-            floor_ptr->grid_array[y][x].feat = feat2;
-            floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-            floor_ptr->grid_array[y][x].info |= info2;
+            floor.grid_array[y][x].feat = feat2;
+            floor.grid_array[y][x].info &= ~(CAVE_MASK);
+            floor.grid_array[y][x].info |= info2;
             return true;
         } else {
-            floor_ptr->grid_array[y][x].feat = feat1;
-            floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-            floor_ptr->grid_array[y][x].info |= info1;
+            floor.grid_array[y][x].feat = feat1;
+            floor.grid_array[y][x].info &= ~(CAVE_MASK);
+            floor.grid_array[y][x].info |= info1;
             return true;
         }
     }
 
-    if (floor_ptr->grid_array[y][x].feat <= c3) {
-        floor_ptr->grid_array[y][x].feat = feat3;
-        floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-        floor_ptr->grid_array[y][x].info |= info3;
+    if (floor.grid_array[y][x].feat <= c3) {
+        floor.grid_array[y][x].feat = feat3;
+        floor.grid_array[y][x].info &= ~(CAVE_MASK);
+        floor.grid_array[y][x].info |= info3;
         return true;
     }
 
@@ -247,7 +247,7 @@ static void cave_fill(PlayerType *player_ptr, const Pos2D &initial_pos)
         for (const auto &d : Direction::directions_8()) {
             const auto pos_to = pos + d.vec();
             auto &grid = floor.get_grid(pos_to);
-            if (!in_bounds(&floor, pos_to.y, pos_to.x)) {
+            if (!in_bounds(floor, pos_to.y, pos_to.x)) {
                 grid.info |= CAVE_ICKY;
                 continue;
             }
@@ -426,7 +426,7 @@ bool generate_lake(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION xs
         feat2 = terrain_id_shallow_water;
         feat3 = dungeon.select_floor_terrain_id();
         break;
-    case LAKE_T_CAVE: /* Collapsed floor_ptr->grid_array */
+    case LAKE_T_CAVE: /* Collapsed floor.grid_array */
         feat1 = dungeon.select_floor_terrain_id();
         feat2 = dungeon.select_floor_terrain_id();
         feat3 = terrain_id_rubble;

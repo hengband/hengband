@@ -85,9 +85,9 @@ inline static bool can_mute_scene_monster()
 static bool is_high_rate(PlayerType *player_ptr, MONSTER_IDX m_idx1, MONSTER_IDX m_idx2)
 {
     // FIXME 視界内モンスターリストの比較関数と同じ処理
-    auto floor_ptr = player_ptr->current_floor_ptr;
-    auto m_ptr1 = &floor_ptr->m_list[m_idx1];
-    auto m_ptr2 = &floor_ptr->m_list[m_idx2];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto m_ptr1 = &floor.m_list[m_idx1];
+    auto m_ptr2 = &floor.m_list[m_idx2];
     auto ap_r_ptr1 = &m_ptr1->get_appearance_monrace();
     auto ap_r_ptr2 = &m_ptr2->get_appearance_monrace();
 

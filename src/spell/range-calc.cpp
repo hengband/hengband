@@ -72,7 +72,7 @@ bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, cons
         /* South -- check for walls */
         if (delta_y > 0) {
             for (auto scanner_y = pos_from.y + 1; scanner_y < pos_to.y; scanner_y++) {
-                if (cave_stop_disintegration(&floor, scanner_y, pos_from.x)) {
+                if (cave_stop_disintegration(floor, scanner_y, pos_from.x)) {
                     return false;
                 }
             }
@@ -81,7 +81,7 @@ bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, cons
         /* North -- check for walls */
         else {
             for (auto scanner_y = pos_from.y - 1; scanner_y > pos_to.y; scanner_y--) {
-                if (cave_stop_disintegration(&floor, scanner_y, pos_from.x)) {
+                if (cave_stop_disintegration(floor, scanner_y, pos_from.x)) {
                     return false;
                 }
             }
@@ -95,7 +95,7 @@ bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, cons
         /* East -- check for walls */
         if (delta_x > 0) {
             for (auto scanner_x = pos_from.x + 1; scanner_x < pos_to.x; scanner_x++) {
-                if (cave_stop_disintegration(&floor, pos_from.y, scanner_x)) {
+                if (cave_stop_disintegration(floor, pos_from.y, scanner_x)) {
                     return false;
                 }
             }
@@ -104,7 +104,7 @@ bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, cons
         /* West -- check for walls */
         else {
             for (auto scanner_x = pos_from.x - 1; scanner_x > pos_to.x; scanner_x--) {
-                if (cave_stop_disintegration(&floor, pos_from.y, scanner_x)) {
+                if (cave_stop_disintegration(floor, pos_from.y, scanner_x)) {
                     return false;
                 }
             }
@@ -117,13 +117,13 @@ bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, cons
     const auto sign_y = (delta_y < 0) ? -1 : 1;
     if (absolute_x == 1) {
         if (absolute_y == 2) {
-            if (!cave_stop_disintegration(&floor, pos_from.y + sign_y, pos_from.x)) {
+            if (!cave_stop_disintegration(floor, pos_from.y + sign_y, pos_from.x)) {
                 return true;
             }
         }
     } else if (absolute_y == 1) {
         if (absolute_x == 2) {
-            if (!cave_stop_disintegration(&floor, pos_from.y, pos_from.x + sign_x)) {
+            if (!cave_stop_disintegration(floor, pos_from.y, pos_from.x + sign_x)) {
                 return true;
             }
         }
@@ -144,7 +144,7 @@ bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, cons
         /* Note (below) the case (qy == f2), where */
         /* the LOS exactly meets the corner of a tile. */
         while (pos_to.x - scanner_x) {
-            if (cave_stop_disintegration(&floor, scanner_y, scanner_x)) {
+            if (cave_stop_disintegration(floor, scanner_y, scanner_x)) {
                 return false;
             }
 
@@ -154,7 +154,7 @@ bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, cons
                 scanner_x += sign_x;
             } else if (fraction_y > scale_factor_2) {
                 scanner_y += sign_y;
-                if (cave_stop_disintegration(&floor, scanner_y, scanner_x)) {
+                if (cave_stop_disintegration(floor, scanner_y, scanner_x)) {
                     return false;
                 }
                 fraction_y -= scale_factor_1;
@@ -181,7 +181,7 @@ bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, cons
     /* Note (below) the case (qx == f2), where */
     /* the LOS exactly meets the corner of a tile. */
     while (pos_to.y - scanner_y) {
-        if (cave_stop_disintegration(&floor, scanner_y, scanner_x)) {
+        if (cave_stop_disintegration(floor, scanner_y, scanner_x)) {
             return false;
         }
 
@@ -191,7 +191,7 @@ bool in_disintegration_range(const FloorType &floor, const Pos2D &pos_from, cons
             scanner_y += sign_y;
         } else if (fraction_x > scale_factor_2) {
             scanner_x += sign_x;
-            if (cave_stop_disintegration(&floor, scanner_y, scanner_x)) {
+            if (cave_stop_disintegration(floor, scanner_y, scanner_x)) {
                 return false;
             }
             fraction_x -= scale_factor_1;
@@ -245,7 +245,7 @@ std::vector<std::pair<int, Pos2D>> breath_shape(PlayerType *player_ptr, const Pr
             for (auto y = pos_breath.y - cdis; y <= pos_breath.y + cdis; y++) {
                 for (auto x = pos_breath.x - cdis; x <= pos_breath.x + cdis; x++) {
                     const Pos2D pos(y, x);
-                    if (!in_bounds(&floor, pos.y, pos.x)) {
+                    if (!in_bounds(floor, pos.y, pos.x)) {
                         continue;
                     }
                     if (Grid::calc_distance(pos_source, pos) != bdis) {
@@ -275,7 +275,7 @@ std::vector<std::pair<int, Pos2D>> ball_shape(PlayerType *player_ptr, const Pos2
         for (auto y = center.y - dist; y <= center.y + dist; y++) {
             for (auto x = center.x - dist; x <= center.x + dist; x++) {
                 const Pos2D pos(y, x);
-                if (!in_bounds2(&floor, pos.y, pos.x)) {
+                if (!in_bounds2(floor, pos.y, pos.x)) {
                     continue;
                 }
                 if (Grid::calc_distance(center, pos) != dist) {

@@ -60,15 +60,15 @@ static void process_fishing(PlayerType *player_ptr)
     if (one_in_(1000)) {
         bool success = false;
         get_mon_num_prep_enum(player_ptr, MonraceHook::FISHING);
-        auto *floor_ptr = player_ptr->current_floor_ptr;
+        const auto &floor = *player_ptr->current_floor_ptr;
         const auto wild_level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
-        const auto level = floor_ptr->is_underground() ? floor_ptr->dun_level : wild_level;
+        const auto level = floor.is_underground() ? floor.dun_level : wild_level;
         const auto r_idx = get_mon_num(player_ptr, 0, level, PM_NONE);
         msg_print(nullptr);
         if (MonraceList::is_valid(r_idx) && one_in_(2)) {
             const auto pos = player_ptr->get_neighbor(player_ptr->fishing_dir);
             if (auto m_idx = place_specific_monster(player_ptr, pos.y, pos.x, r_idx, PM_NO_KAGE)) {
-                const auto m_name = monster_desc(player_ptr, &floor_ptr->m_list[*m_idx], 0);
+                const auto m_name = monster_desc(player_ptr, &floor.m_list[*m_idx], 0);
                 msg_print(_(format("%sが釣れた！", m_name.data()), "You have a good catch!"));
                 success = true;
             }

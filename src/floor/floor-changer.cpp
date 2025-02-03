@@ -67,7 +67,7 @@ static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     player_ptr->y = player_ptr->current_floor_ptr->height / 2;
     player_ptr->x = player_ptr->current_floor_ptr->width / 2;
     place_bold(player_ptr, player_ptr->y, player_ptr->x, GB_FLOOR);
-    wipe_generate_random_floor_flags(player_ptr->current_floor_ptr);
+    wipe_generate_random_floor_flags(*player_ptr->current_floor_ptr);
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has(FloorChangeMode::UP)) {
         sf_ptr->upper_floor_id = 0;
@@ -453,7 +453,7 @@ void change_floor(PlayerType *player_ptr)
     player_ptr->ambush_flag = false;
     update_floor(player_ptr);
     place_pet(player_ptr);
-    forget_travel_flow(player_ptr->current_floor_ptr);
+    forget_travel_flow(*player_ptr->current_floor_ptr);
     update_unique_artifact(*player_ptr->current_floor_ptr, new_floor_id);
     player_ptr->floor_id = new_floor_id;
     world.character_dungeon = true;

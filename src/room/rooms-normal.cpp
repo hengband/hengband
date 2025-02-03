@@ -400,7 +400,7 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
         vault_monsters(player_ptr, center->y, center->x, randint0(2) + 3);
 
         /* Traps naturally */
-        vault_traps(&floor, center->y, center->x, 4, 4, randint0(3) + 2);
+        vault_traps(floor, center->y, center->x, 4, 4, randint0(3) + 2);
 
         break;
     }
@@ -611,7 +611,7 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         }
 
         /* Traps to protect the treasure */
-        vault_traps(&floor, center->y, center->x, 4, 10, 2 + randint1(3));
+        vault_traps(floor, center->y, center->x, 4, 10, 2 + randint1(3));
 
         break;
     }
@@ -723,8 +723,8 @@ bool build_type4(PlayerType *player_ptr, DungeonData *dd_ptr)
         vault_monsters(player_ptr, center->y, center->x + 5, randint1(3));
 
         /* Traps make them entertaining. */
-        vault_traps(&floor, center->y, center->x - 3, 2, 8, randint1(3));
-        vault_traps(&floor, center->y, center->x + 3, 2, 8, randint1(3));
+        vault_traps(floor, center->y, center->x - 3, 2, 8, randint1(3));
+        vault_traps(floor, center->y, center->x + 3, 2, 8, randint1(3));
 
         /* Mazes should have some treasure too. */
         vault_objects(player_ptr, center->y, center->x, 3);
@@ -895,7 +895,7 @@ bool build_type12(PlayerType *player_ptr, DungeonData *dd_ptr)
         vault_monsters(player_ptr, center->y, center->x, randint0(2) + 3);
 
         /* Traps naturally */
-        vault_traps(&floor, center->y, center->x, 4, 4, randint0(3) + 2);
+        vault_traps(floor, center->y, center->x, 4, 4, randint0(3) + 2);
     }
 
     return true;

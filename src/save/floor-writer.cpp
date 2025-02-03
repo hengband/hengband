@@ -160,9 +160,9 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
  */
 bool wr_dungeon(PlayerType *player_ptr)
 {
-    forget_lite(player_ptr->current_floor_ptr);
-    forget_view(player_ptr->current_floor_ptr);
-    clear_mon_lite(player_ptr->current_floor_ptr);
+    forget_lite(*player_ptr->current_floor_ptr);
+    forget_view(*player_ptr->current_floor_ptr);
+    clear_mon_lite(*player_ptr->current_floor_ptr);
     static constexpr auto flags = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,

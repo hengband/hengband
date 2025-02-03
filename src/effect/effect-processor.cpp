@@ -132,11 +132,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     auto &floor = *player_ptr->current_floor_ptr;
     for (const auto &pos : path_g) {
         if (flag & PROJECT_DISI) {
-            if (cave_stop_disintegration(player_ptr->current_floor_ptr, pos.y, pos.x) && (rad > 0)) {
+            if (cave_stop_disintegration(*player_ptr->current_floor_ptr, pos.y, pos.x) && (rad > 0)) {
                 break;
             }
         } else if (flag & PROJECT_LOS) {
-            if (!cave_los_bold(&floor, pos.y, pos.x) && (rad > 0)) {
+            if (!cave_los_bold(floor, pos.y, pos.x) && (rad > 0)) {
                 break;
             }
         } else {
@@ -290,7 +290,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         pos_refrect.y = pos_source.y - 1 + randint1(3);
                         pos_refrect.x = pos_source.x - 1 + randint1(3);
                         max_attempts--;
-                    } while (max_attempts && in_bounds2u(player_ptr->current_floor_ptr, pos_refrect.y, pos_refrect.x) && !projectable(player_ptr, pos, pos_refrect));
+                    } while (max_attempts && in_bounds2u(*player_ptr->current_floor_ptr, pos_refrect.y, pos_refrect.x) && !projectable(player_ptr, pos, pos_refrect));
 
                     if (max_attempts < 1) {
                         pos_refrect = pos_source;

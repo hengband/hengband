@@ -57,8 +57,8 @@ DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
  */
 std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (floor_ptr->inside_arena) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (floor.inside_arena) {
         return std::nullopt;
     }
 

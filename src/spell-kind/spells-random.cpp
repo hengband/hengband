@@ -102,7 +102,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
 {
     BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
     bool is_first_curse = true;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     while (is_first_curse || (one_in_(3) && !stop_ty)) {
         is_first_curse = false;
         switch (randint1(34)) {
@@ -175,7 +175,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 8:
         case 9:
         case 18:
-            (*count) += summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)) ? 1 : 0;
+            (*count) += summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor.dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)) ? 1 : 0;
             if (!one_in_(6)) {
                 break;
             }
@@ -225,7 +225,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             }
             [[fallthrough]];
         case 25:
-            if ((floor_ptr->dun_level > 65) && !stop_ty) {
+            if ((floor.dun_level > 65) && !stop_ty) {
                 (*count) += summon_cyber(player_ptr, player_ptr->y, player_ptr->x);
                 stop_ty = true;
                 break;
@@ -261,7 +261,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
         type = SUMMON_MIMIC;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     switch (randint1(spell) + randint1(8) + 1) {
     case 1:
     case 2:
@@ -334,7 +334,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
     case 35:
         for (int counter = 0; counter < 8; counter++) {
             (void)summon_specific(
-                player_ptr, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3) / 2, i2enum<summon_type>(type), (PM_ALLOW_GROUP | PM_NO_PET));
+                player_ptr, player_ptr->y, player_ptr->x, (floor.dun_level * 3) / 2, i2enum<summon_type>(type), (PM_ALLOW_GROUP | PM_NO_PET));
         }
 
         break;

@@ -4,17 +4,17 @@
 
 #include <algorithm>
 
-void ObjectIndexList::add(FloorType *floor_ptr, OBJECT_IDX o_idx, IDX stack_idx)
+void ObjectIndexList::add(FloorType &floor, OBJECT_IDX o_idx, IDX stack_idx)
 {
     if (stack_idx <= 0) {
-        stack_idx = o_idx_list_.empty() ? 1 : floor_ptr->o_list[o_idx_list_.front()].stack_idx + 1;
+        stack_idx = o_idx_list_.empty() ? 1 : floor.o_list[o_idx_list_.front()].stack_idx + 1;
     }
 
     auto it = std::partition_point(
-        o_idx_list_.begin(), o_idx_list_.end(), [floor_ptr, stack_idx](IDX idx) { return floor_ptr->o_list[idx].stack_idx > stack_idx; });
+        o_idx_list_.begin(), o_idx_list_.end(), [&floor, stack_idx](IDX idx) { return floor.o_list[idx].stack_idx > stack_idx; });
 
     o_idx_list_.insert(it, o_idx);
-    floor_ptr->o_list[o_idx].stack_idx = stack_idx;
+    floor.o_list[o_idx].stack_idx = stack_idx;
 }
 
 void ObjectIndexList::remove(OBJECT_IDX o_idx)
@@ -22,7 +22,7 @@ void ObjectIndexList::remove(OBJECT_IDX o_idx)
     o_idx_list_.remove(o_idx);
 }
 
-void ObjectIndexList::rotate(FloorType *floor_ptr)
+void ObjectIndexList::rotate(FloorType &floor)
 {
     if (o_idx_list_.size() < 2) {
         return;
@@ -32,8 +32,8 @@ void ObjectIndexList::rotate(FloorType *floor_ptr)
     o_idx_list_.pop_front();
 
     for (const auto o_idx : o_idx_list_) {
-        floor_ptr->o_list[o_idx].stack_idx++;
+        floor.o_list[o_idx].stack_idx++;
     }
 
-    floor_ptr->o_list[o_idx_list_.back()].stack_idx = 1;
+    floor.o_list[o_idx_list_.back()].stack_idx = 1;
 }

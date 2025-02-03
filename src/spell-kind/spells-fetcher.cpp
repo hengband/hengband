@@ -100,7 +100,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
 
     const auto item_idx = g_ptr->o_idx_list.front();
     g_ptr->o_idx_list.pop_front();
-    floor.get_grid(p_pos).o_idx_list.add(&floor, item_idx); /* 'move' it */
+    floor.get_grid(p_pos).o_idx_list.add(floor, item_idx); /* 'move' it */
     item.set_position(p_pos);
 
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
@@ -139,7 +139,7 @@ bool fetch_monster(PlayerType *player_ptr)
     for (const auto &[ny, nx] : path_g) {
         const Pos2D pos_path(ny, nx);
         const auto &grid = floor.get_grid(pos_path);
-        if (in_bounds(&floor, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !grid.is_object() && !pattern_tile(&floor, ny, nx)) {
+        if (in_bounds(floor, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !grid.is_object() && !pattern_tile(floor, ny, nx)) {
             ty = ny;
             tx = nx;
         }

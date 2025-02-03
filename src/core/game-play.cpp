@@ -183,11 +183,11 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
 static void init_world_floor_info(PlayerType *player_ptr)
 {
     AngbandWorld::get_instance().character_dungeon = false;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    floor_ptr->reset_dungeon_index();
-    floor_ptr->dun_level = 0;
-    floor_ptr->quest_number = QuestId::NONE;
-    floor_ptr->inside_arena = false;
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.reset_dungeon_index();
+    floor.dun_level = 0;
+    floor.quest_number = QuestId::NONE;
+    floor.inside_arena = false;
     AngbandSystem::get_instance().set_phase_out(false);
     write_level = true;
     auto &system = AngbandSystem::get_instance();
@@ -199,7 +199,7 @@ static void init_world_floor_info(PlayerType *player_ptr)
     load = false;
     determine_bounty_uniques(player_ptr);
     determine_daily_bounty(player_ptr);
-    wipe_o_list(floor_ptr);
+    wipe_o_list(floor);
 }
 
 /*!
@@ -376,14 +376,14 @@ static void process_game_turn(PlayerType *player_ptr)
         world.character_xtra = false;
         target_who = 0;
         health_track(player_ptr, 0);
-        forget_lite(&floor);
-        forget_view(&floor);
-        clear_mon_lite(&floor);
+        forget_lite(floor);
+        forget_view(floor);
+        clear_mon_lite(floor);
         if (!player_ptr->playing && !player_ptr->is_dead) {
             break;
         }
 
-        wipe_o_list(&floor);
+        wipe_o_list(floor);
         if (!player_ptr->is_dead) {
             wipe_monsters_list(player_ptr);
         }

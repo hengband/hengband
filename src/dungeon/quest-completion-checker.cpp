@@ -52,7 +52,7 @@ void QuestCompletionChecker::complete()
 
 static bool check_quest_completion(PlayerType *player_ptr, const QuestType &quest, MonsterEntity *m_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (quest.status != QuestStatusType::TAKEN) {
         return false;
     }
@@ -61,7 +61,7 @@ static bool check_quest_completion(PlayerType *player_ptr, const QuestType &ques
         return false;
     }
 
-    if ((quest.level != floor_ptr->dun_level)) {
+    if ((quest.level != floor.dun_level)) {
         return false;
     }
 
@@ -200,12 +200,12 @@ void QuestCompletionChecker::complete_tower()
  */
 int QuestCompletionChecker::count_all_hostile_monsters()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
     auto number_mon = 0;
-    for (auto x = 0; x < floor_ptr->width; ++x) {
-        for (auto y = 0; y < floor_ptr->height; ++y) {
-            auto m_idx = floor_ptr->grid_array[y][x].m_idx;
-            if ((m_idx > 0) && floor_ptr->m_list[m_idx].is_hostile()) {
+    for (auto x = 0; x < floor.width; ++x) {
+        for (auto y = 0; y < floor.height; ++y) {
+            auto m_idx = floor.grid_array[y][x].m_idx;
+            if ((m_idx > 0) && floor.m_list[m_idx].is_hostile()) {
                 ++number_mon;
             }
         }
