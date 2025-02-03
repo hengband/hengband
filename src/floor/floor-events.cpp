@@ -337,8 +337,8 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
                 continue;
             }
 
-            for (auto i = 0; i < 9; i++) {
-                const Pos2D pos(y + ddy_ddd[i], x + ddx_ddd[i]);
+            for (const auto &d : Direction::directions()) {
+                const auto pos = Pos2D(y, x) + d.vec();
                 if (!in_bounds2(&floor, pos.y, pos.x)) {
                     continue;
                 }

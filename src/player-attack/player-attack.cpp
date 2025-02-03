@@ -592,8 +592,8 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
 void massacre(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    for (auto dir = 0; dir < 8; dir++) {
-        const auto pos = player_ptr->get_position() + Pos2DVec(ddy_ddd[dir], ddx_ddd[dir]);
+    for (const auto &d : Direction::directions_8()) {
+        const auto pos = player_ptr->get_position() + d.vec();
         const auto &grid = floor.get_grid(pos);
         const auto &monster = floor.m_list[grid.m_idx];
         if (grid.has_monster() && (monster.ml || floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT))) {

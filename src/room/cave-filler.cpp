@@ -244,8 +244,8 @@ static void cave_fill(PlayerType *player_ptr, const Pos2D &initial_pos)
         // 参照で受けるとダングリング状態になるのでコピーする.
         const Pos2D pos = que.front();
         que.pop();
-        for (int d = 0; d < 8; d++) {
-            const Pos2D pos_to(pos.y + ddy_ddd[d], pos.x + ddx_ddd[d]);
+        for (const auto &d : Direction::directions_8()) {
+            const auto pos_to = pos + d.vec();
             auto &grid = floor.get_grid(pos_to);
             if (!in_bounds(&floor, pos_to.y, pos_to.x)) {
                 grid.info |= CAVE_ICKY;

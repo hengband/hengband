@@ -144,8 +144,8 @@ static void travel_flow(PlayerType *player_ptr, const Pos2D pos)
             flow_tail = 0;
         }
 
-        for (auto d = 0; d < 8; d++) {
-            const Pos2D pos_neighbor(pos_flow.y + ddy_ddd[d], pos_flow.x + ddx_ddd[d]);
+        for (const auto &d : Direction::directions_8()) {
+            const auto pos_neighbor = pos_flow + d.vec();
             travel_flow_aux(player_ptr, pos_neighbor, travel.cost[pos_flow.y][pos_flow.x], wall);
         }
     }

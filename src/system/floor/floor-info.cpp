@@ -211,12 +211,8 @@ std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCount
 {
     auto count = 0;
     Pos2D pos(0, 0);
-    for (auto d = 0; d < 9; d++) {
-        if ((d == 8) && !under) {
-            continue;
-        }
-
-        Pos2D pos_neighbor = p_pos + Pos2DVec(ddy_ddd[d], ddx_ddd[d]);
+    for (const auto &d : under ? Direction::directions() : Direction::directions_8()) {
+        const auto pos_neighbor = p_pos + d.vec();
         if (!this->has_marked_grid_at(pos_neighbor)) {
             continue;
         }

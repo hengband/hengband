@@ -367,8 +367,8 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         if (floor.is_underground() || !AngbandWorld::get_instance().is_daytime()) {
-            for (int j = 0; j < 9; j++) {
-                const Pos2D pos_neighbor(y + ddy_ddd[j], x + ddx_ddd[j]);
+            for (const auto &d : Direction::directions()) {
+                const auto pos_neighbor = Pos2D(y, x) + d.vec();
                 if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }

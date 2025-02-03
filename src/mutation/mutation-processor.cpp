@@ -108,7 +108,7 @@ static int get_hack_dir(PlayerType *player_ptr)
 
     command_dir = dir;
     if (player_ptr->effects()->confusion().is_confused()) {
-        dir = ddd[randint0(8)];
+        dir = rand_choice(Direction::directions_8()).dir();
     }
 
     if (command_dir != dir) {
