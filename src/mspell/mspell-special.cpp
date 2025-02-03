@@ -38,6 +38,7 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <range/v3/view.hpp>
 #include <sstream>
 
 /*!
@@ -112,22 +113,16 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
             floor.m_list[*summoned_m_idx].hp = unified_hp;
             floor.m_list[*summoned_m_idx].maxhp = unified_maxhp;
         }
-        std::vector<std::string> m_names;
-        for (const auto &separate : separates) {
-            const auto &monrace = monraces.get_monrace(separate);
-            m_names.push_back(monrace.name.string());
-        }
 
-        std::stringstream ss;
-        ss << *m_names.begin();
-        for (size_t i = 1; i < m_names.size(); i++) { // @todo clang v14 はstd::views::drop() 非対応
-            const auto &m_name = m_names[i];
-            ss << _("と", " and ");
-            ss << m_name;
-        }
-
+        using namespace std::string_view_literals;
+        const auto monrace_id_to_name = [&monraces](auto id) { return monraces.get_monrace(id).name.string(); };
+        const auto separates_names =
+            separates |
+            ranges::views::transform(monrace_id_to_name) |
+            ranges::views::join(_("と"sv, " and "sv)) |
+            ranges::to<std::string>;
         const auto fmt = _("%sが合体した！", "%s combine into one!");
-        msg_print(format(fmt, ss.str().data()));
+        msg_format(fmt, separates_names.data());
         return MonsterSpellResult::make_valid();
     }
 
