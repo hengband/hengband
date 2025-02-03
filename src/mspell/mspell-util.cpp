@@ -24,7 +24,6 @@ mspell_cast_msg_simple::mspell_cast_msg_simple(concptr to_player, concptr to_mon
 
 /*!
  * @brief プレイヤーがモンスターを見ることができるかの判定 /
- * @param floor_ptr 現在フロアへの参照ポインタ
  * @param m_idx モンスターID
  * @return プレイヤーがモンスターを見ることができるならTRUE、そうでなければFALSEを返す。
  */
@@ -36,7 +35,7 @@ bool see_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
 /*!
  * @brief モンスター2体がプレイヤーの近くに居るかの判定 /
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスターID一体目
  * @param t_idx モンスターID二体目
  * @return モンスター2体のどちらかがプレイヤーの近くに居ればTRUE、どちらも遠ければFALSEを返す。

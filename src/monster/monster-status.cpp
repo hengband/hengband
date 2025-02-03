@@ -33,7 +33,7 @@ static uint32_t csleep_noise;
 
 /*!
  * @brief モンスターIDからPOWERFULフラグの有無を取得する /
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスターID
  * @return POWERFULフラグがあればTRUE、なければFALSEを返す。
  */
@@ -103,7 +103,7 @@ int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool i
 
 /*!
  * @brief モンスターの各種状態値を時間経過により更新するサブルーチン
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスター参照ID
  * @param mte 更新するモンスターの時限ステータスID
  */

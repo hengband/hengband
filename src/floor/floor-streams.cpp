@@ -153,7 +153,7 @@ static void recursive_river(FloorType &floor, const Pos2D &pos_start, const Pos2
 
 /*!
  * @brief ランダムに川/溶岩流をダンジョンに配置する
- * @param floor_ptr フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param dd_ptr ダンジョン生成データへの参照ポインタ
  */
 void add_river(FloorType &floor, DungeonData *dd_ptr)

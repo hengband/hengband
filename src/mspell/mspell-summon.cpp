@@ -48,7 +48,7 @@ static void summon_disturb(PlayerType *player_ptr, int target_type, bool known, 
 
 /*!
  * @brief 特定条件のモンスター召喚のみPM_ALLOW_UNIQUEを許可する /
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスターID
  * @return 召喚可能であればPM_ALLOW_UNIQUEを返す。
  */

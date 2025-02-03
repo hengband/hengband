@@ -522,7 +522,7 @@ void fix_object(PlayerType *player_ptr)
 
 /*!
  * @brief 床上のモンスター情報を返す
- * @param floor_ptr 階の情報への参照ポインタ
+ * @param floor フロアへの参照
  * @param grid_prt 座標グリッドの情報への参照ポインタ
  * @return モンスターが見える場合にはモンスター情報への参照ポインタ、それ以外はnullptr
  * @details

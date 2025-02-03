@@ -92,7 +92,7 @@ std::tuple<errr, int> init_info_txt(FILE *fp, char *buf, angband_header *head, P
 /*!
  * @brief 地形情報の「F:」情報をパースする
  * Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param buf 解析文字列
  * @return エラーコード
  */

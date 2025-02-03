@@ -88,7 +88,7 @@ bool cave_stop_disintegration(const FloorType &floor, int y, int x)
 
 /*
  * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
- * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param floor フロアへの参照
  * @param y 指定Y座標
  * @param x 指定X座標
  * @return 光を通すならばtrueを返す。

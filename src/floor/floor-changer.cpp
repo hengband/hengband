@@ -173,7 +173,7 @@ static void place_pet(PlayerType *player_ptr)
 
 /*!
  * @brief ユニークモンスターやアーティファクトの所在フロアを更新する
- * @param floor_ptr 現在フロアへのポインタ
+ * @param floor フロアへの参照
  * @param cur_floor_id 現在のフロアID
  * @details
  * The floor_id and floor_id are not updated correctly

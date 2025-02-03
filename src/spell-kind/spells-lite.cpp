@@ -139,7 +139,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
 
 /*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
- * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param floor フロアへの参照
  * @param cy Y座標
  * @param cx X座標
  * @param pass_bold 地形条件を返す関数ポインタ
@@ -168,7 +168,7 @@ static int next_to_open(const FloorType &floor, const POSITION cy, const POSITIO
 
 /*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
- * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param floor フロアへの参照
  * @param cy Y座標
  * @param cx X座標
  * @param pass_bold 地形条件を返す関数ポインタ
@@ -251,7 +251,7 @@ static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &
 
 /*!
  * @brief 指定のマスが光を通さず射線のみを通すかを返す。 / Aux function -- see below
- * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param floor フロアへの参照
  * @param y 指定Y座標
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
