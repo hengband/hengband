@@ -77,9 +77,8 @@ void build_small_room(PlayerType *player_ptr, POSITION x0, POSITION y0)
         place_bold(player_ptr, pos.y + 1, x, GB_INNER);
     }
 
-    const auto n = randint0(4);
-    const Pos2DVec vec(ddy_ddd[n], ddx_ddd[n]);
-    place_secret_door(player_ptr, pos + vec);
+    const auto d = rand_choice(Direction::directions_4());
+    place_secret_door(player_ptr, pos + d.vec());
 
     player_ptr->current_floor_ptr->set_terrain_id_at(pos, TerrainTag::NONE, TerrainKind::MIMIC);
     place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);

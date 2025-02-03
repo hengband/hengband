@@ -113,9 +113,9 @@ void search(PlayerType *player_ptr)
         chance = chance / 10;
     }
 
-    for (DIRECTION i = 0; i < 9; ++i) {
+    for (const auto &d : Direction::directions()) {
         if (evaluate_percent(chance)) {
-            discover_hidden_things(player_ptr, { player_ptr->y + ddy_ddd[i], player_ptr->x + ddx_ddd[i] });
+            discover_hidden_things(player_ptr, player_ptr->get_position() + d.vec());
         }
     }
 }

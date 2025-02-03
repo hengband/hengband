@@ -14,8 +14,8 @@
  */
 static Pos2DVec rand_dir()
 {
-    const auto dir = randint0(4);
-    return { ddy_ddd[dir], ddx_ddd[dir] };
+    const auto d = rand_choice(Direction::directions_4());
+    return d.vec();
 }
 
 /*!

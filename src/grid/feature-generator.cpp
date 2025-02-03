@@ -120,11 +120,10 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, const DungeonDefinition &dung
 static int next_to_corr(FloorType *floor_ptr, POSITION y1, POSITION x1)
 {
     int k = 0;
-    for (int i = 0; i < 4; i++) {
-        POSITION y = y1 + ddy_ddd[i];
-        POSITION x = x1 + ddx_ddd[i];
+    for (const auto &d : Direction::directions_4()) {
+        const auto pos = Pos2D(y1, x1) + d.vec();
         Grid *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
+        g_ptr = &floor_ptr->get_grid(pos);
         if (g_ptr->has(TerrainCharacteristics::WALL) || !g_ptr->is_floor() || g_ptr->is_room()) {
             continue;
         }

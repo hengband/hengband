@@ -102,8 +102,8 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
         }
 
         if (floor.is_underground() || !world.is_daytime()) {
-            for (auto j = 0; j < 9; j++) {
-                const Pos2D pos_neighbor(pos.y + ddy_ddd[j], pos.x + ddx_ddd[j]);
+            for (const auto &d : Direction::directions()) {
+                const Pos2D pos_neighbor = pos + d.vec();
                 if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
@@ -176,13 +176,11 @@ static int next_to_open(FloorType *floor_ptr, const POSITION cy, const POSITION 
  */
 static int next_to_walls_adj(FloorType *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
 {
-    POSITION y, x;
-    int c = 0;
-    for (DIRECTION i = 0; i < 8; i++) {
-        y = cy + ddy_ddd[i];
-        x = cx + ddx_ddd[i];
+    auto c = 0;
+    for (const auto &d : Direction::directions_8()) {
+        const auto pos = Pos2D(cy, cx) + d.vec();
 
-        if (!pass_bold(floor_ptr, y, x)) {
+        if (!pass_bold(floor_ptr, pos.y, pos.x)) {
             c++;
         }
     }

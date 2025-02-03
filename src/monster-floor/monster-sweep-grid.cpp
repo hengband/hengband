@@ -157,8 +157,8 @@ public:
         const auto p_pos = this->player_ptr->get_position();
 
         auto room = 0;
-        for (auto i = 0; i < 8; i++) {
-            const auto pos_p_neighbor = p_pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
+        for (const auto &d : Direction::directions_8()) {
+            const auto pos_p_neighbor = p_pos + d.vec();
             if (!in_bounds2(&floor, pos_p_neighbor.y, pos_p_neighbor.x)) {
                 continue;
             }
@@ -208,9 +208,11 @@ public:
         const auto p_pos = this->player_ptr->get_position();
         const auto m_pos = monster.get_position();
 
+        /// @todo std::views::enumerate
+        constexpr auto directions = Direction::directions_8();
         for (auto i = 0; i < 8; i++) {
-            const auto dir = (this->m_idx + i) & 7;
-            const auto pos_move = p_pos + Pos2DVec(ddy_ddd[dir], ddx_ddd[dir]);
+            const auto d = (this->m_idx + i) & 7;
+            const auto pos_move = p_pos + directions[d].vec();
             if (m_pos == pos_move) {
                 // プレイヤーを攻撃する
                 return p_pos;
@@ -267,8 +269,8 @@ public:
 
         auto best = 999;
         std::optional<Pos2D> pos_move;
-        for (auto i = 7; i >= 0; i--) {
-            const Pos2D pos_neighbor(m_pos.y + ddy_ddd[i], m_pos.x + ddx_ddd[i]);
+        for (const auto &d : Direction::directions_8_reverse()) {
+            const auto pos_neighbor = m_pos + d.vec();
             if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                 continue;
             }
@@ -337,8 +339,8 @@ public:
 
         auto best = 999;
         std::optional<Pos2D> pos_move;
-        for (auto i = 7; i >= 0; i--) {
-            const auto pos_neighbor = m_pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
+        for (const auto &d : Direction::directions_8_reverse()) {
+            const auto pos_neighbor = m_pos + d.vec();
             if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                 continue;
             }
@@ -351,7 +353,7 @@ public:
             }
 
             best = cost;
-            pos_move = p_pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]) * 16;
+            pos_move = p_pos + d.vec() * 16;
         }
 
         return pos_move;
@@ -382,8 +384,8 @@ public:
 
         auto best = 0;
         std::optional<Pos2D> pos_move;
-        for (auto i = 7; i >= 0; i--) {
-            const auto pos_neighbor = m_pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
+        for (const auto &d : Direction::directions_8_reverse()) {
+            const auto pos_neighbor = m_pos + d.vec();
             if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                 continue;
             }
@@ -395,7 +397,7 @@ public:
             }
 
             best = when;
-            pos_move = p_pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]) * 16;
+            pos_move = p_pos + d.vec() * 16;
         }
 
         return pos_move;
@@ -541,14 +543,12 @@ std::optional<Pos2DVec> MonsterSweepGrid::sweep_runnable_away_grid(const Pos2DVe
     const auto m_pos = monster.get_position();
     auto pos1 = m_pos + vec_initial.inverted();
     auto score = -1;
-    for (auto i = 7; i >= 0; i--) {
-        auto y = m_pos.y + ddy_ddd[i];
-        auto x = m_pos.x + ddx_ddd[i];
-        if (!in_bounds2(&floor, y, x)) {
+    for (const auto &d : Direction::directions_8_reverse()) {
+        const auto pos = m_pos + d.vec();
+        if (!in_bounds2(&floor, pos.y, pos.x)) {
             continue;
         }
 
-        const Pos2D pos(y, x);
         const auto dis = Grid::calc_distance(pos, pos1);
         auto s = 5000 / (dis + 3) - 500 / (floor.get_grid(pos).get_distance(monrace.get_grid_flow_type()) + 1);
         if (s < 0) {

@@ -74,8 +74,8 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
         grid.set_terrain_id(terrain_id);
         grid.set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
         if (terrain.flags.has(TerrainCharacteristics::GLOW) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS)) {
-            for (auto i = 0; i < 9; i++) {
-                const auto pos_neighbor = pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
+            for (const auto &d : Direction::directions()) {
+                const auto pos_neighbor = pos + d.vec();
                 if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
@@ -125,8 +125,8 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
         return;
     }
 
-    for (auto i = 0; i < 9; i++) {
-        const auto pos_neighbor = pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
+    for (const auto &d : Direction::directions()) {
+        const auto pos_neighbor = pos + d.vec();
         if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
@@ -743,10 +743,10 @@ void update_flow(PlayerType *player_ptr)
             const auto &grid = floor.get_grid(pos);
 
             /* Add the "children" */
-            for (auto d = 0; d < 8; d++) {
+            for (const auto &d : Direction::directions_8()) {
                 uint8_t m = grid.costs.at(gf) + 1;
                 const uint8_t n = grid.dists.at(gf) + 1;
-                const Pos2D pos_neighbor(pos.y + ddy_ddd[d], pos.x + ddx_ddd[d]);
+                const auto pos_neighbor = pos + d.vec();
 
                 /* Ignore player's grid */
                 if (player_ptr->is_located_at(pos_neighbor)) {

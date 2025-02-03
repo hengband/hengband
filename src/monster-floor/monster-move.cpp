@@ -392,7 +392,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
     for (int i = 0; mm[i]; i++) {
         int d = mm[i];
         if (d == 5) {
-            d = ddd[randint0(8)];
+            d = rand_choice(Direction::directions_8()).dir();
         }
 
         const Pos2D pos_neighbor(pos.y + ddy[d], pos.x + ddx[d]);

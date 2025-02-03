@@ -231,8 +231,8 @@ int get_monster_crowd_number(const FloorType *floor_ptr, short m_idx)
     const auto &monster = floor_ptr->m_list[m_idx];
     const auto m_pos = monster.get_position();
     auto count = 0;
-    for (auto i = 0; i < 7; i++) {
-        const auto pos = m_pos + Pos2DVec(ddy_ddd[i], ddx_ddd[i]);
+    for (const auto &d : Direction::directions_8()) {
+        const auto pos = m_pos + d.vec();
         if (!in_bounds(floor_ptr, pos.y, pos.x)) {
             continue;
         }
