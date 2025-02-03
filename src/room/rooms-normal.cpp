@@ -359,29 +359,23 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
         }
     }
 
+    const Rect2D rect_inner(y1b, x1a, y2b, x2a);
     /* Special features (3/4) */
     switch (randint0(4)) {
         /* Large solid middle pillar */
     case 1: {
-        for (auto y = y1b; y <= y2b; y++) {
-            for (auto x = x1a; x <= x2a; x++) {
-                place_grid(player_ptr, &floor.get_grid({ y, x }), GB_INNER);
-            }
-        }
+        rect_inner.each_area([&](const auto &pos) {
+            place_grid(player_ptr, &floor.get_grid(pos), GB_INNER);
+        });
         break;
     }
 
     /* Inner treasure vault */
     case 2: {
         /* Build the vault */
-        for (auto y = y1b; y <= y2b; y++) {
-            place_grid(player_ptr, &floor.get_grid({ y, x1a }), GB_INNER);
-            place_grid(player_ptr, &floor.get_grid({ y, x2a }), GB_INNER);
-        }
-        for (auto x = x1a; x <= x2a; x++) {
-            place_grid(player_ptr, &floor.get_grid({ y1b, x }), GB_INNER);
-            place_grid(player_ptr, &floor.get_grid({ y1b, x }), GB_INNER);
-        }
+        rect_inner.each_edge([&](const auto &pos) {
+            place_grid(player_ptr, &floor.get_grid(pos), GB_INNER);
+        });
 
         /* Place a secret door on the inner room */
         switch (randint0(4)) {
