@@ -19,4 +19,8 @@
 #undef AND
 #undef declval
 
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#else
 RANGES_DIAGNOSTIC_POP
+#endif

@@ -20,7 +20,14 @@
 #endif
 #define RANGES_PROLOGUE_INCLUDED
 
+#if defined(_MSC_VER)
+// MSVCの警告レベルを最大に設定してあるため大量の警告を
+// 出力してしまうので警告を抑制しておく
+#pragma warning(push, 0)
+#pragma warning(disable : 4868)
+#else
 RANGES_DIAGNOSTIC_PUSH
+#endif
 
 #ifdef RANGES_FEWER_WARNINGS
 RANGES_DIAGNOSTIC_IGNORE_UNDEFINED_INTERNAL
