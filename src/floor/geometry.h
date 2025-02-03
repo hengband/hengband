@@ -14,13 +14,6 @@
  */
 #define TEMP_MAX 2298
 
-//!< 対象グリッドの一覧をまとめる構造体
-struct pos_list {
-    POSITION_IDX n; //!< Array of grids for use by various functions (see grid.c")
-    POSITION y[TEMP_MAX];
-    POSITION x[TEMP_MAX];
-};
-
 constexpr std::array<int, 9> ddd = { { 2, 8, 6, 4, 3, 1, 9, 7, 5 } }; //!< キーパッドの方向 (南から反時計回り順).
 constexpr std::array<int, 10> ddx = { { 0, -1, 0, 1, -1, 0, 1, -1, 0, 1 } }; //!< dddで定義した順にベクトルのX軸成分.
 constexpr std::array<int, 10> ddy = { { 0, 1, 1, 1, 0, 0, 0, -1, -1, -1 } }; //!< dddで定義した順にベクトルのY軸成分.
