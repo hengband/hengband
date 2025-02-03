@@ -80,10 +80,10 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
  */
 void SpellsMirrorMaster::remove_all_mirrors(bool explode)
 {
-    const auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor_ptr->width; x++) {
-        for (auto y = 0; y < floor_ptr->height; y++) {
-            if (!floor_ptr->grid_array[y][x].is_mirror()) {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    for (auto x = 0; x < floor.width; x++) {
+        for (auto y = 0; y < floor.height; y++) {
+            if (!floor.grid_array[y][x].is_mirror()) {
                 continue;
             }
 
@@ -128,7 +128,7 @@ std::optional<std::string> SpellsMirrorMaster::place_mirror()
 {
     const auto p_pos = this->player_ptr->get_position();
     auto &floor = *this->player_ptr->current_floor_ptr;
-    if (!cave_clean_bold(&floor, p_pos.y, p_pos.x)) {
+    if (!cave_clean_bold(floor, p_pos.y, p_pos.x)) {
         return _("床上のアイテムが呪文を跳ね返した。", "The object resists the spell.");
     }
 
@@ -177,10 +177,10 @@ bool SpellsMirrorMaster::mirror_concentration()
  */
 void SpellsMirrorMaster::seal_of_mirror(const int dam)
 {
-    const auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor_ptr->width; x++) {
-        for (auto y = 0; y < floor_ptr->height; y++) {
-            const auto &g_ref = floor_ptr->grid_array[y][x];
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    for (auto x = 0; x < floor.width; x++) {
+        for (auto y = 0; y < floor.height; y++) {
+            const auto &g_ref = floor.grid_array[y][x];
             if (!g_ref.is_mirror()) {
                 continue;
             }
@@ -404,9 +404,9 @@ static bool activate_super_ray_effect(PlayerType *player_ptr, int y, int x, int 
 
     (void)affect_monster(player_ptr, 0, 0, y, x, dam, typ, flag, true);
 
-    const auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
-    const auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto *g_ptr = &floor.grid_array[project_m_y][project_m_x];
+    const auto *m_ptr = &floor.m_list[g_ptr->m_idx];
     if (project_m_n == 1 && g_ptr->has_monster() && m_ptr->ml) {
         if (!player_ptr->effects()->hallucination().is_hallucinated()) {
             LoreTracker::get_instance().set_trackee(m_ptr->ap_r_idx);

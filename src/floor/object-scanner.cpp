@@ -36,7 +36,7 @@ int scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSI
 {
     const Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds(&floor, pos.y, pos.x)) {
+    if (!in_bounds(floor, pos.y, pos.x)) {
         return 0;
     }
 
@@ -73,14 +73,14 @@ int scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSI
  */
 /*
  */
-static void prepare_label_string_floor(FloorType *floor_ptr, char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
+static void prepare_label_string_floor(const FloorType &floor, char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
     concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     strcpy(label, alphabet_chars);
     for (int i = 0; i < 52; i++) {
         COMMAND_CODE index;
         auto c = alphabet_chars[i];
-        if (!get_tag_floor(floor_ptr, &index, c, floor_list, floor_num)) {
+        if (!get_tag_floor(floor, &index, c, floor_list, floor_num)) {
             continue;
         }
 
@@ -146,7 +146,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
 
     *min_width = len;
     int col = (len > wid - 4) ? 0 : (wid - len - 1);
-    prepare_label_string_floor(&floor, floor_label, floor_list, floor_num);
+    prepare_label_string_floor(floor, floor_label, floor_list, floor_num);
     for (j = 0; j < k; j++) {
         m = floor_list[out_index[j]];
         const auto &item = floor.o_list[m];

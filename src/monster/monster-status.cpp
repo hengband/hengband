@@ -33,13 +33,13 @@ static uint32_t csleep_noise;
 
 /*!
  * @brief モンスターIDからPOWERFULフラグの有無を取得する /
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスターID
  * @return POWERFULフラグがあればTRUE、なければFALSEを返す。
  */
-bool monster_is_powerful(FloorType *floor_ptr, MONSTER_IDX m_idx)
+bool monster_is_powerful(const FloorType &floor, MONSTER_IDX m_idx)
 {
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor.m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
     return r_ptr->misc_flags.has(MonsterMiscType::POWERFUL);
 }
@@ -49,9 +49,9 @@ bool monster_is_powerful(FloorType *floor_ptr, MONSTER_IDX m_idx)
  * @param m_idx モンスターID
  * @return モンスターのレベル
  */
-DEPTH monster_level_idx(FloorType *floor_ptr, MONSTER_IDX m_idx)
+DEPTH monster_level_idx(const FloorType &floor, MONSTER_IDX m_idx)
 {
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto *m_ptr = &floor.m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
     return (r_ptr->level >= 1) ? r_ptr->level : 1;
 }
@@ -103,7 +103,7 @@ int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool i
 
 /*!
  * @brief モンスターの各種状態値を時間経過により更新するサブルーチン
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスター参照ID
  * @param mte 更新するモンスターの時限ステータスID
  */
@@ -282,8 +282,8 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
  */
 void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &cur_mproc_list = floor_ptr->mproc_list[mte];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &cur_mproc_list = floor.mproc_list.at(mte);
 
     /* Hack -- calculate the "player noise" */
     if (mte == MonsterTimedEffect::SLEEP) {
@@ -291,7 +291,7 @@ void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte)
     }
 
     /* Process the monsters (backwards) */
-    for (auto i = floor_ptr->mproc_max[mte] - 1; i >= 0; i--) {
+    for (auto i = floor.mproc_max.at(mte) - 1; i >= 0; i--) {
         const auto m_idx = cur_mproc_list[i];
         process_monsters_mtimed_aux(player_ptr, m_idx, mte);
         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);

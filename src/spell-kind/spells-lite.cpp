@@ -31,7 +31,7 @@
 #include "world/world.h"
 #include <vector>
 
-using PassBoldFunc = bool (*)(const FloorType *, POSITION, POSITION);
+using PassBoldFunc = bool (*)(const FloorType &, POSITION, POSITION);
 
 /*!
  * @brief 指定した座標全てを照らす。
@@ -104,7 +104,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
         if (floor.is_underground() || !world.is_daytime()) {
             for (const auto &d : Direction::directions()) {
                 const Pos2D pos_neighbor = pos + d.vec();
-                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 
@@ -139,20 +139,20 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
 
 /*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
- * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param floor フロアへの参照
  * @param cy Y座標
  * @param cx X座標
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_open(FloorType *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
+static int next_to_open(const FloorType &floor, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
 {
     int len = 0;
     int blen = 0;
     const Pos2D pos_center(cy, cx);
     for (int i = 0; i < 16; i++) {
         const auto pos = pos_center + CCW_DD[i % 8];
-        if (!pass_bold(floor_ptr, pos.y, pos.x)) {
+        if (!pass_bold(floor, pos.y, pos.x)) {
             if (len > blen) {
                 blen = len;
             }
@@ -168,19 +168,19 @@ static int next_to_open(FloorType *floor_ptr, const POSITION cy, const POSITION 
 
 /*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
- * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param floor フロアへの参照
  * @param cy Y座標
  * @param cx X座標
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_walls_adj(FloorType *floor_ptr, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
+static int next_to_walls_adj(const FloorType &floor, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
 {
     auto c = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos = Pos2D(cy, cx) + d.vec();
 
-        if (!pass_bold(floor_ptr, pos.y, pos.x)) {
+        if (!pass_bold(floor, pos.y, pos.x)) {
             c++;
         }
     }
@@ -211,7 +211,7 @@ static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &point
         if (only_room) {
             return;
         }
-        if (!in_bounds2(&floor, pos.y, pos.x)) {
+        if (!in_bounds2(floor, pos.y, pos.x)) {
             return;
         }
         if (Grid::calc_distance(player_ptr->get_position(), pos) > AngbandSystem::get_instance().get_max_range()) {
@@ -227,7 +227,7 @@ static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &point
          * properly.
          * This leaves only a check for 6 bounding walls!
          */
-        if (in_bounds(&floor, pos.y, pos.x) && pass_bold(&floor, pos.y, pos.x) && (next_to_walls_adj(&floor, pos.y, pos.x, pass_bold) == 6) && (next_to_open(&floor, pos.y, pos.x, pass_bold) <= 1)) {
+        if (in_bounds(floor, pos.y, pos.x) && pass_bold(floor, pos.y, pos.x) && (next_to_walls_adj(floor, pos.y, pos.x, pass_bold) == 6) && (next_to_open(floor, pos.y, pos.x, pass_bold) <= 1)) {
             return;
         }
     }
@@ -251,14 +251,14 @@ static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &
 
 /*!
  * @brief 指定のマスが光を通さず射線のみを通すかを返す。 / Aux function -- see below
- * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param floor フロアへの参照
  * @param y 指定Y座標
  * @param x 指定X座標
  * @return 射線を通すならばtrueを返す。
  */
-static bool cave_pass_dark_bold(const FloorType *floor_ptr, POSITION y, POSITION x)
+static bool cave_pass_dark_bold(const FloorType &floor, POSITION y, POSITION x)
 {
-    return floor_ptr->has_terrain_characteristics({ y, x }, TerrainCharacteristics::PROJECT);
+    return floor.has_terrain_characteristics({ y, x }, TerrainCharacteristics::PROJECT);
 }
 
 /*!
@@ -285,7 +285,7 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
     // 明るくするマスを記録する配列。
     std::vector<Pos2D> points;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
 
     // (y1,x1) を起点として明るくするマスを記録していく。
     // 実質幅優先探索。
@@ -295,7 +295,7 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
         const POSITION y = point.y;
         const POSITION x = point.x;
 
-        if (!cave_los_bold(floor_ptr, y, x)) {
+        if (!cave_los_bold(floor, y, x)) {
             continue;
         }
 
@@ -314,7 +314,7 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
     cave_temp_room_lite(player_ptr, points);
 
     // 超隠密状態の更新。
-    if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
+    if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }
 }
@@ -330,7 +330,7 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
     // 暗くするマスを記録する配列。
     std::vector<Pos2D> points;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
 
     // (y1,x1) を起点として暗くするマスを記録していく。
     // 実質幅優先探索。
@@ -340,7 +340,7 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
         const POSITION y = point.y;
         const POSITION x = point.x;
 
-        if (!cave_pass_dark_bold(floor_ptr, y, x)) {
+        if (!cave_pass_dark_bold(floor, y, x)) {
             continue;
         }
 

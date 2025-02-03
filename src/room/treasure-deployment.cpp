@@ -74,7 +74,7 @@ void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &cent
             place_object(player_ptr, pos.y, pos.x, 0L);
             return;
         }
-        place_trap(&floor, pos.y, pos.x);
+        place_trap(floor, pos.y, pos.x);
         return;
     }
 
@@ -82,7 +82,7 @@ void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &cent
         floor.monster_level = floor.base_level + 5;
         place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
         floor.monster_level = floor.base_level;
-        place_trap(&floor, pos.y, pos.x);
+        place_trap(floor, pos.y, pos.x);
         return;
     }
 
@@ -101,7 +101,7 @@ void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &cent
     }
 
     if (value < 50) {
-        place_trap(&floor, pos.y, pos.x);
+        place_trap(floor, pos.y, pos.x);
         return;
     }
 
@@ -111,7 +111,7 @@ void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &cent
     }
 
     if (one_in_(2)) {
-        place_trap(&floor, pos.y, pos.x);
+        place_trap(floor, pos.y, pos.x);
         return;
     }
 

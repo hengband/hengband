@@ -113,14 +113,14 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
         return true;
     }
 
-    if (in_bounds(&floor, pos.y, pos.x) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
+    if (in_bounds(floor, pos.y, pos.x) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
         return true;
     }
 
     const auto num_of_walls = std::count_if(CCW_DD.begin(), CCW_DD.end(),
         [&floor, &pos](const auto &dd) {
             const auto pos_neighbor = pos + dd;
-            if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!in_bounds(floor, pos_neighbor.y, pos_neighbor.x)) {
                 return true;
             }
 

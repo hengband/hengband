@@ -53,7 +53,7 @@ static bool check_floor_item_tag_aux(PlayerType *player_ptr, fis_type *fis_ptr, 
 
     if (*prev_tag && command_cmd) {
         fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
-        if (get_tag_floor(player_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
+        if (get_tag_floor(*player_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
             *fis_ptr->cp = 0 - fis_ptr->floor_list[fis_ptr->k];
             command_cmd = 0;
             return true;
@@ -664,7 +664,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
             const auto next_o_idx = fis_ptr->floor_list[1];
             while (g_ptr->o_idx_list.front() != next_o_idx) {
-                g_ptr->o_idx_list.rotate(player_ptr->current_floor_ptr);
+                g_ptr->o_idx_list.rotate(*player_ptr->current_floor_ptr);
             }
 
             rfu.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
@@ -764,7 +764,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     break;
                 }
             } else {
-                if (get_tag_floor(player_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
+                if (get_tag_floor(*player_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
                     fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
                 } else {
                     bell();
@@ -806,7 +806,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     fis_ptr->cur_tag = fis_ptr->which;
                 }
             } else {
-                if (get_tag_floor(player_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
+                if (get_tag_floor(*player_ptr->current_floor_ptr, &fis_ptr->k, fis_ptr->which, fis_ptr->floor_list, fis_ptr->floor_num)) {
                     fis_ptr->k = 0 - fis_ptr->floor_list[fis_ptr->k];
                     fis_ptr->cur_tag = fis_ptr->which;
                 } else {

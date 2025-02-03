@@ -259,8 +259,8 @@ void MonsterDamageProcessor::dying_scream(std::string_view m_name)
 
 void MonsterDamageProcessor::show_kill_message(std::string_view note, std::string_view m_name)
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[this->m_idx];
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[this->m_idx];
     if (!note.empty()) {
         msg_format("%s^%s", m_name.data(), note.data());
         return;

@@ -127,10 +127,10 @@ void travel_step(PlayerType *player_ptr)
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
  * @param player_ptr	プレイヤーへの参照ポインタ
  */
-void forget_travel_flow(FloorType *floor_ptr)
+void forget_travel_flow(const FloorType &floor)
 {
-    for (POSITION y = 0; y < floor_ptr->height; y++) {
-        for (POSITION x = 0; x < floor_ptr->width; x++) {
+    for (POSITION y = 0; y < floor.height; y++) {
+        for (POSITION x = 0; x < floor.width; x++) {
             travel.cost[y][x] = MAX_SHORT;
         }
     }

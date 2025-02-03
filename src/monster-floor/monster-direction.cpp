@@ -111,26 +111,26 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
  */
 bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[m_idx];
 
     POSITION x = 0, y = 0;
     if (player_ptr->riding_t_m_idx && player_ptr->is_located_at({ m_ptr->fy, m_ptr->fx })) {
-        y = floor_ptr->m_list[player_ptr->riding_t_m_idx].fy;
-        x = floor_ptr->m_list[player_ptr->riding_t_m_idx].fx;
+        y = floor.m_list[player_ptr->riding_t_m_idx].fy;
+        x = floor.m_list[player_ptr->riding_t_m_idx].fx;
     } else if (m_ptr->is_pet() && player_ptr->pet_t_m_idx) {
-        y = floor_ptr->m_list[player_ptr->pet_t_m_idx].fy;
-        x = floor_ptr->m_list[player_ptr->pet_t_m_idx].fx;
+        y = floor.m_list[player_ptr->pet_t_m_idx].fy;
+        x = floor.m_list[player_ptr->pet_t_m_idx].fx;
     } else {
         int start;
         int plus = 1;
         if (AngbandSystem::get_instance().is_phase_out()) {
-            start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
+            start = randint1(floor.m_max - 1) + floor.m_max;
             if (randint0(2)) {
                 plus = -1;
             }
         } else {
-            start = floor_ptr->m_max + 1;
+            start = floor.m_max + 1;
         }
 
         decide_enemy_approch_direction(player_ptr, m_idx, start, plus, &y, &x);

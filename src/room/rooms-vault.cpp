@@ -239,7 +239,7 @@ static void build_cave_vault(PlayerType *player_ptr, const Pos2D &center, const 
         const auto cutoff = randint1(xsize / 4) + randint1(ysize / 4) + randint1(xsize / 4) + randint1(ysize / 4);
 
         /* make it */
-        generate_hmap(&floor, center.y, center.x, xsize, ysize, grd, roug, cutoff);
+        generate_hmap(floor, center.y, center.x, xsize, ysize, grd, roug, cutoff);
 
         /* Convert to normal format+ clean up */
         done = generate_fracave(player_ptr, center.y, center.x, xsize, ysize, cutoff, light, room);
@@ -369,7 +369,7 @@ static void build_vault(
                 if (evaluate_percent(75)) {
                     place_object(player_ptr, pos.y, pos.x, 0L);
                 } else {
-                    place_trap(&floor, pos.y, pos.x);
+                    place_trap(floor, pos.y, pos.x);
                 }
 
                 break;
@@ -393,7 +393,7 @@ static void build_vault(
                 place_secret_door(player_ptr, pos, DoorKind::CURTAIN);
                 break;
             case '^':
-                place_trap(&floor, pos.y, pos.x);
+                place_trap(floor, pos.y, pos.x);
                 break;
             case 'S':
                 floor.set_terrain_id_at(pos, TerrainTag::BLACK_MARKET);
@@ -697,7 +697,7 @@ static void build_elemental_vault(PlayerType *player_ptr, const Pos2D &center, c
         const auto c2 = (c1 + c3) / 2;
 
         /* make it */
-        generate_hmap(&floor, center.y, center.x, xsize, ysize, grd, roug, c3);
+        generate_hmap(floor, center.y, center.x, xsize, ysize, grd, roug, c3);
 
         /* Convert to normal format+ clean up */
         done = generate_lake(player_ptr, center.y, center.x, xsize, ysize, c1, c2, c3, type);
@@ -741,7 +741,7 @@ static void build_mini_c_vault(PlayerType *player_ptr, const Pos2D &center, cons
     auto &floor = *player_ptr->current_floor_ptr;
     for (auto x = x1 - 2; x <= x2 + 2; x++) {
         const Pos2D pos(y1 - 2, x);
-        if (!in_bounds(&floor, pos.y, pos.x)) {
+        if (!in_bounds(floor, pos.y, pos.x)) {
             break;
         }
 
@@ -751,7 +751,7 @@ static void build_mini_c_vault(PlayerType *player_ptr, const Pos2D &center, cons
 
     for (auto x = x1 - 2; x <= x2 + 2; x++) {
         const Pos2D pos(y2 + 2, x);
-        if (!in_bounds(&floor, pos.y, pos.x)) {
+        if (!in_bounds(floor, pos.y, pos.x)) {
             break;
         }
 
@@ -761,7 +761,7 @@ static void build_mini_c_vault(PlayerType *player_ptr, const Pos2D &center, cons
 
     for (auto y = y1 - 2; y <= y2 + 2; y++) {
         const Pos2D pos(y, x1 - 2);
-        if (!in_bounds(&floor, pos.y, pos.x)) {
+        if (!in_bounds(floor, pos.y, pos.x)) {
             break;
         }
 
@@ -770,7 +770,7 @@ static void build_mini_c_vault(PlayerType *player_ptr, const Pos2D &center, cons
     }
 
     for (auto y = y1 - 2; y <= y2 + 2; y++) {
-        if (!in_bounds(&floor, y, x2 + 2)) {
+        if (!in_bounds(floor, y, x2 + 2)) {
             break;
         }
 

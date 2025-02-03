@@ -63,7 +63,7 @@ void cast_shuffle(PlayerType *player_ptr)
         chg_virtue(player_ptr, Virtue::CHANCE, 1);
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (die < 7) {
         msg_print(_("なんてこった！《死》だ！", "Oh no! It's Death!"));
 
@@ -76,7 +76,7 @@ void cast_shuffle(PlayerType *player_ptr)
 
     if (die < 14) {
         msg_print(_("なんてこった！《悪魔》だ！", "Oh no! It's the Devil!"));
-        summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+        summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor.dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
         return;
     }
 
@@ -102,7 +102,7 @@ void cast_shuffle(PlayerType *player_ptr)
 
     if (die < 30) {
         msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
-        trump_summoning(player_ptr, 1, false, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3 / 2),
+        trump_summoning(player_ptr, 1, false, player_ptr->y, player_ptr->x, (floor.dun_level * 3 / 2),
             SUMMON_UNIQUE + randint1(6), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
         return;
     }
@@ -163,25 +163,25 @@ void cast_shuffle(PlayerType *player_ptr)
 
     if (die < 82) {
         msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-        trump_summoning(player_ptr, 1, true, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_MOLD, 0L);
+        trump_summoning(player_ptr, 1, true, player_ptr->y, player_ptr->x, (floor.dun_level * 3 / 2), SUMMON_MOLD, 0L);
         return;
     }
 
     if (die < 84) {
         msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-        trump_summoning(player_ptr, 1, true, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_BAT, 0L);
+        trump_summoning(player_ptr, 1, true, player_ptr->y, player_ptr->x, (floor.dun_level * 3 / 2), SUMMON_BAT, 0L);
         return;
     }
 
     if (die < 86) {
         msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-        trump_summoning(player_ptr, 1, true, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_VORTEX, 0L);
+        trump_summoning(player_ptr, 1, true, player_ptr->y, player_ptr->x, (floor.dun_level * 3 / 2), SUMMON_VORTEX, 0L);
         return;
     }
 
     if (die < 88) {
         msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
-        trump_summoning(player_ptr, 1, true, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
+        trump_summoning(player_ptr, 1, true, player_ptr->y, player_ptr->x, (floor.dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
         return;
     }
 

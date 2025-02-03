@@ -137,7 +137,7 @@ bool generate_rooms(PlayerType *player_ptr, DungeonData *dd_ptr)
         move_prob_list(RoomType::INNER_FEAT, RoomType::CRYPT, prob_list);
         move_prob_list(RoomType::INNER_FEAT, RoomType::OVAL, prob_list);
     } else if (dungeon.flags.has(DungeonFeatureType::CAVE)) {
-        /*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc floor_ptr->grid_array etc.) */
+        /*! @details ダンジョンにCAVEフラグがある場合、NORMALの生成枠がFRACAVEに与えられる。/ CAVE dungeon (Orc floor.grid_array etc.) */
         move_prob_list(RoomType::FRACAVE, RoomType::NORMAL, prob_list);
     } else if (dd_ptr->cavern || dd_ptr->empty_level) {
         /*! @details ダンジョンの基本地形が最初から渓谷かアリーナ型の場合 FRACAVE は生成から除外。 /  No caves when a (random) cavern exists: they look bad */

@@ -125,6 +125,6 @@ bool check_book_realm(PlayerType *player_ptr, const BaseitemKey &bi_key)
 
 ItemEntity *ref_item(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    return i_idx >= 0 ? &player_ptr->inventory_list[i_idx] : &(floor_ptr->o_list[0 - i_idx]);
+    auto &floor = *player_ptr->current_floor_ptr;
+    return i_idx >= 0 ? &player_ptr->inventory_list[i_idx] : &(floor.o_list[0 - i_idx]);
 }

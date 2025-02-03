@@ -117,13 +117,12 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, const DungeonDefinition &dung
  * grids which are not in rooms.  We might want to also count stairs,\n
  * open doors, closed doors, etc.
  */
-static int next_to_corr(FloorType *floor_ptr, POSITION y1, POSITION x1)
+static int next_to_corr(const FloorType &floor, POSITION y1, POSITION x1)
 {
     int k = 0;
     for (const auto &d : Direction::directions_4()) {
         const auto pos = Pos2D(y1, x1) + d.vec();
-        Grid *g_ptr;
-        g_ptr = &floor_ptr->get_grid(pos);
+        const auto *g_ptr = &floor.get_grid(pos);
         if (g_ptr->has(TerrainCharacteristics::WALL) || !g_ptr->is_floor() || g_ptr->is_room()) {
             continue;
         }
@@ -141,18 +140,18 @@ static int next_to_corr(FloorType *floor_ptr, POSITION y1, POSITION x1)
  * @return ドアを設置可能ならばTRUEを返す
  * @details まず垂直方向に、次に水平方向に調べる
  */
-static bool possible_doorway(FloorType *floor_ptr, POSITION y, POSITION x)
+static bool possible_doorway(const FloorType &floor, POSITION y, POSITION x)
 {
-    if (next_to_corr(floor_ptr, y, x) < 2) {
+    if (next_to_corr(floor, y, x) < 2) {
         return false;
     }
 
     constexpr auto wall = TerrainCharacteristics::WALL;
-    if (floor_ptr->has_terrain_characteristics({ y - 1, x }, wall) && floor_ptr->has_terrain_characteristics({ y + 1, x }, wall)) {
+    if (floor.has_terrain_characteristics({ y - 1, x }, wall) && floor.has_terrain_characteristics({ y + 1, x }, wall)) {
         return true;
     }
 
-    if (floor_ptr->has_terrain_characteristics({ y, x - 1 }, wall) && floor_ptr->has_terrain_characteristics({ y, x + 1 }, wall)) {
+    if (floor.has_terrain_characteristics({ y, x - 1 }, wall) && floor.has_terrain_characteristics({ y, x + 1 }, wall)) {
         return true;
     }
 
@@ -169,12 +168,12 @@ void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds(&floor, y, x) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
+    if (!in_bounds(floor, y, x) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
         return;
     }
 
     auto can_place_door = evaluate_percent(dt_ptr->dun_tun_jct);
-    can_place_door &= possible_doorway(&floor, y, x);
+    can_place_door &= possible_doorway(floor, y, x);
     can_place_door &= floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_DOORS);
     if (can_place_door) {
         place_random_door(player_ptr, pos, false);

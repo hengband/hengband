@@ -153,12 +153,12 @@ static player_hand main_attack_hand(PlayerType *player_ptr);
  */
 static void delayed_visual_update(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (int i = 0; i < floor_ptr->redraw_n; i++) {
-        POSITION y = floor_ptr->redraw_y[i];
-        POSITION x = floor_ptr->redraw_x[i];
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (int i = 0; i < floor.redraw_n; i++) {
+        POSITION y = floor.redraw_y[i];
+        POSITION x = floor.redraw_x[i];
         Grid *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
+        g_ptr = &floor.grid_array[y][x];
         if (none_bits(g_ptr->info, CAVE_REDRAW)) {
             continue;
         }
@@ -175,7 +175,7 @@ static void delayed_visual_update(PlayerType *player_ptr)
         reset_bits(g_ptr->info, (CAVE_NOTE | CAVE_REDRAW));
     }
 
-    floor_ptr->redraw_n = 0;
+    floor.redraw_n = 0;
 }
 
 /*!
@@ -1897,7 +1897,7 @@ static bool is_riding_two_hands(PlayerType *player_ptr)
 
 static int16_t calc_riding_bow_penalty(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (!player_ptr->riding) {
         return 0;
     }
@@ -1909,7 +1909,7 @@ static int16_t calc_riding_bow_penalty(PlayerType *player_ptr)
             penalty = 5;
         }
     } else {
-        penalty = floor_ptr->m_list[player_ptr->riding].get_monrace().level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;
+        penalty = floor.m_list[player_ptr->riding].get_monrace().level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;
         penalty += 30;
         if (penalty < 30) {
             penalty = 30;
@@ -2591,7 +2591,7 @@ void update_creature(PlayerType *player_ptr)
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     if (rfu.has(StatusRecalculatingFlag::AUTO_DESTRUCTION)) {
         rfu.reset_flag(StatusRecalculatingFlag::AUTO_DESTRUCTION);
         autopick_delayed_alter(player_ptr);
@@ -2643,12 +2643,12 @@ void update_creature(PlayerType *player_ptr)
 
     if (rfu.has(StatusRecalculatingFlag::UN_LITE)) {
         rfu.reset_flag(StatusRecalculatingFlag::UN_LITE);
-        forget_lite(floor_ptr);
+        forget_lite(floor);
     }
 
     if (rfu.has(StatusRecalculatingFlag::UN_VIEW)) {
         rfu.reset_flag(StatusRecalculatingFlag::UN_VIEW);
-        forget_view(floor_ptr);
+        forget_view(floor);
     }
 
     if (rfu.has(StatusRecalculatingFlag::VIEW)) {
@@ -2693,17 +2693,16 @@ void update_creature(PlayerType *player_ptr)
  */
 bool player_has_no_spellbooks(PlayerType *player_ptr)
 {
-    ItemEntity *o_ptr;
     for (int i = 0; i < INVEN_PACK; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
+        const auto *o_ptr = &player_ptr->inventory_list[i];
         if (o_ptr->is_valid() && check_book_realm(player_ptr, o_ptr->bi_key)) {
             return false;
         }
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (const auto this_o_idx : floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-        o_ptr = &floor_ptr->o_list[this_o_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (const auto this_o_idx : floor.grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
+        const auto *o_ptr = &floor.o_list[this_o_idx];
         if (o_ptr->is_valid() && o_ptr->marked.has(OmType::FOUND) && check_book_realm(player_ptr, o_ptr->bi_key)) {
             return false;
         }
@@ -2751,7 +2750,7 @@ void wreck_the_pattern(PlayerType *player_ptr)
     auto to_ruin = randint1(45) + 35;
     while (to_ruin--) {
         const auto pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
-        if (pattern_tile(&floor, pos.y, pos.x) && (floor.get_grid(pos).get_terrain().subtype != PATTERN_TILE_WRECKED)) {
+        if (pattern_tile(floor, pos.y, pos.x) && (floor.get_grid(pos).get_terrain().subtype != PATTERN_TILE_WRECKED)) {
             set_terrain_id_to_grid(player_ptr, pos, TerrainTag::PATTERN_CORRUPTED);
         }
     }

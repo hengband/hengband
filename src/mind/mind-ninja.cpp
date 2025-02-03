@@ -141,7 +141,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
 
     auto tm_idx = 0;
     auto &floor = *player_ptr->current_floor_ptr;
-    if (in_bounds(&floor, pos_target.y, pos_target.x)) {
+    if (in_bounds(floor, pos_target.y, pos_target.x)) {
         tm_idx = floor.get_grid(pos_target).m_idx;
     }
 

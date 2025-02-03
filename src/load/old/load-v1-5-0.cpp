@@ -721,8 +721,8 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
         auto &item = floor.o_list[item_idx];
         item_loader->rd_item(&item);
-        auto &list = get_o_idx_list_contains(&floor, item_idx);
-        list.add(&floor, item_idx);
+        auto &list = get_o_idx_list_contains(floor, item_idx);
+        list.add(floor, item_idx);
     }
 
     limit = rd_u16b();

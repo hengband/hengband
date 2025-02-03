@@ -42,7 +42,7 @@ static std::vector<Pos2D> tgt_pt_prepare(PlayerType *player_ptr)
     for (auto y = 1; y < floor.height; y++) {
         for (auto x = 1; x < floor.width; x++) {
             const Pos2D pos(y, x);
-            if (!in_bounds(&floor, pos.y, pos.x)) {
+            if (!in_bounds(floor, pos.y, pos.x)) {
                 continue;
             }
 

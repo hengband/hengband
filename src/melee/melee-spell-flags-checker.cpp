@@ -45,13 +45,13 @@ static void decide_indirection_melee_spell(PlayerType *player_ptr, melee_spell_t
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    ms_ptr->target_idx = floor_ptr->grid_array[monster_from.target_y][monster_from.target_x].m_idx;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    ms_ptr->target_idx = floor.grid_array[monster_from.target_y][monster_from.target_x].m_idx;
     if (ms_ptr->target_idx == 0) {
         return;
     }
 
-    ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
+    ms_ptr->t_ptr = &floor.m_list[ms_ptr->target_idx];
     const auto &monster_to = *ms_ptr->t_ptr;
     if ((ms_ptr->m_idx == ms_ptr->target_idx) || ((ms_ptr->target_idx != player_ptr->pet_t_m_idx) && !monster_from.is_hostile_to_melee(monster_to))) {
         ms_ptr->target_idx = 0;
@@ -73,24 +73,24 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
 
     int start;
     int plus = 1;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (AngbandSystem::get_instance().is_phase_out()) {
-        start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
+        start = randint1(floor.m_max - 1) + floor.m_max;
         if (randint0(2)) {
             plus = -1;
         }
     } else {
-        start = floor_ptr->m_max + 1;
+        start = floor.m_max + 1;
     }
 
-    for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus) {
-        MONSTER_IDX dummy = (i % floor_ptr->m_max);
+    for (int i = start; ((i < start + floor.m_max) && (i > start - floor.m_max)); i += plus) {
+        MONSTER_IDX dummy = (i % floor.m_max);
         if (!dummy) {
             continue;
         }
 
         ms_ptr->target_idx = dummy;
-        ms_ptr->t_ptr = &floor_ptr->m_list[ms_ptr->target_idx];
+        ms_ptr->t_ptr = &floor.m_list[ms_ptr->target_idx];
         const auto &monster_from = *ms_ptr->m_ptr;
         const auto &monster_to = *ms_ptr->t_ptr;
         const auto is_enemies = monster_from.is_hostile_to_melee(monster_to);

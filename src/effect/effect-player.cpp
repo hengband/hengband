@@ -106,7 +106,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
             const Pos2DVec vec(randint1(3) - 1, randint1(3) - 1);
             pos = monster.get_position() + vec;
             max_attempts--;
-        } while (max_attempts && in_bounds2u(&floor, pos.y, pos.x) && !projectable(player_ptr, player_ptr->get_position(), pos));
+        } while (max_attempts && in_bounds2u(floor, pos.y, pos.x) && !projectable(player_ptr, player_ptr->get_position(), pos));
 
         if (max_attempts < 1) {
             pos = monster.get_position();

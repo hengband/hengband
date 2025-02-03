@@ -213,9 +213,9 @@ void ObjectThrowEntity::exe_throw()
             continue;
         }
 
-        auto *floor_ptr = this->player_ptr->current_floor_ptr;
-        this->g_ptr = &floor_ptr->grid_array[this->y][this->x];
-        this->m_ptr = &floor_ptr->m_list[this->g_ptr->m_idx];
+        auto &floor = *this->player_ptr->current_floor_ptr;
+        this->g_ptr = &floor.grid_array[this->y][this->x];
+        this->m_ptr = &floor.m_list[this->g_ptr->m_idx];
         this->m_name = monster_name(this->player_ptr, this->g_ptr->m_idx);
         this->visible = this->m_ptr->ml;
         this->hit_body = true;
@@ -259,17 +259,17 @@ void ObjectThrowEntity::display_potion_throw()
         return;
     }
 
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *angry_m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[this->y][this->x].m_idx];
-    if (!floor_ptr->grid_array[this->y][this->x].has_monster() || !angry_m_ptr->is_friendly() || angry_m_ptr->is_invulnerable()) {
+    auto &floor = *this->player_ptr->current_floor_ptr;
+    auto *angry_m_ptr = &floor.m_list[floor.grid_array[this->y][this->x].m_idx];
+    if (!floor.grid_array[this->y][this->x].has_monster() || !angry_m_ptr->is_friendly() || angry_m_ptr->is_invulnerable()) {
         this->do_drop = false;
         return;
     }
 
     const auto angry_m_name = monster_desc(this->player_ptr, angry_m_ptr, 0);
     msg_format(_("%sは怒った！", "%s^ gets angry!"), angry_m_name.data());
-    const auto &grid = floor_ptr->get_grid({ this->y, this->x });
-    floor_ptr->m_list[grid.m_idx].set_hostile();
+    const auto &grid = floor.get_grid({ this->y, this->x });
+    floor.m_list[grid.m_idx].set_hostile();
     this->do_drop = false;
 }
 
@@ -391,14 +391,14 @@ bool ObjectThrowEntity::check_racial_target_bold()
     const auto pos = mmove2({ this->y, this->x }, this->player_ptr->get_position(), { this->ty, this->tx });
     this->ny[this->cur_dis] = pos.y;
     this->nx[this->cur_dis] = pos.x;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (floor_ptr->has_terrain_characteristics({ this->ny[this->cur_dis], this->nx[this->cur_dis] }, TerrainCharacteristics::PROJECT)) {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    if (floor.has_terrain_characteristics({ this->ny[this->cur_dis], this->nx[this->cur_dis] }, TerrainCharacteristics::PROJECT)) {
         return false;
     }
 
     this->hit_wall = true;
     const auto is_figurine = this->q_ptr->bi_key.tval() == ItemKindType::FIGURINE;
-    return is_figurine || this->q_ptr->is_potion() || (floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
+    return is_figurine || this->q_ptr->is_potion() || (floor.grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
 }
 
 void ObjectThrowEntity::check_racial_target_seen()

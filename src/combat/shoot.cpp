@@ -871,7 +871,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                 nx = pos_to.x;
 
                                 /* Stopped by wilderness boundary */
-                                if (!in_bounds2(&floor, ny, nx)) {
+                                if (!in_bounds2(floor, ny, nx)) {
                                     break;
                                 }
 
@@ -949,7 +949,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
             /* Carry object */
             auto &monster = floor.m_list[m_idx];
-            monster.hold_o_idx_list.add(&floor, item_idx);
+            monster.hold_o_idx_list.add(floor, item_idx);
         } else if (floor.has_terrain_characteristics(pos_impact, TerrainCharacteristics::PROJECT)) {
             /* Drop (or break) near that location */
             (void)drop_near(player_ptr, &fire_item, pos_impact, j);

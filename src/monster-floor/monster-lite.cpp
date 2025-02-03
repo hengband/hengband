@@ -44,11 +44,11 @@ static void update_monster_lite(
             const auto d = pos.y - monster_lite.m_pos.y;
             const auto midpoint = monster_lite.m_pos.x + ((p_pos.x - monster_lite.m_pos.x) * std::abs(d)) / std::abs(dpf);
             if (pos.x < midpoint) {
-                if (!cave_los_bold(&floor, pos.y, pos.x + 1)) {
+                if (!cave_los_bold(floor, pos.y, pos.x + 1)) {
                     return;
                 }
             } else if (pos.x > midpoint) {
-                if (!cave_los_bold(&floor, pos.y, pos.x - 1)) {
+                if (!cave_los_bold(floor, pos.y, pos.x - 1)) {
                     return;
                 }
             } else if (monster_lite.mon_invis) {
@@ -61,11 +61,11 @@ static void update_monster_lite(
             const auto d = pos.x - monster_lite.m_pos.x;
             const auto midpoint = monster_lite.m_pos.y + ((p_pos.y - monster_lite.m_pos.y) * std::abs(d)) / std::abs(dpf);
             if (pos.y < midpoint) {
-                if (!cave_los_bold(&floor, pos.y + 1, pos.x)) {
+                if (!cave_los_bold(floor, pos.y + 1, pos.x)) {
                     return;
                 }
             } else if (pos.y > midpoint) {
-                if (!cave_los_bold(&floor, pos.y - 1, pos.x)) {
+                if (!cave_los_bold(floor, pos.y - 1, pos.x)) {
                     return;
                 }
             } else if (monster_lite.mon_invis) {
@@ -105,11 +105,11 @@ static void update_monster_dark(
             const auto d = pos.y - monster_lite.m_pos.y;
             const auto midpoint = monster_lite.m_pos.x + ((p_pos.x - monster_lite.m_pos.x) * std::abs(d)) / std::abs(dpf);
             if (pos.x < midpoint) {
-                if (!cave_los_bold(&floor, pos.y, pos.x + 1) && !floor.has_terrain_characteristics({ pos.y, pos.x + 1 }, TerrainCharacteristics::PROJECT)) {
+                if (!cave_los_bold(floor, pos.y, pos.x + 1) && !floor.has_terrain_characteristics({ pos.y, pos.x + 1 }, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (pos.x > midpoint) {
-                if (!cave_los_bold(&floor, pos.y, pos.x - 1) && !floor.has_terrain_characteristics({ pos.y, pos.x - 1 }, TerrainCharacteristics::PROJECT)) {
+                if (!cave_los_bold(floor, pos.y, pos.x - 1) && !floor.has_terrain_characteristics({ pos.y, pos.x - 1 }, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (monster_lite.mon_invis) {
@@ -122,11 +122,11 @@ static void update_monster_dark(
             const auto d = pos.x - monster_lite.m_pos.x;
             const auto midpoint = monster_lite.m_pos.y + ((p_pos.y - monster_lite.m_pos.y) * std::abs(d)) / std::abs(dpf);
             if (pos.y < midpoint) {
-                if (!cave_los_bold(&floor, pos.y + 1, pos.x) && !floor.has_terrain_characteristics({ pos.y + 1, pos.x }, TerrainCharacteristics::PROJECT)) {
+                if (!cave_los_bold(floor, pos.y + 1, pos.x) && !floor.has_terrain_characteristics({ pos.y + 1, pos.x }, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (pos.y > midpoint) {
-                if (!cave_los_bold(&floor, pos.y - 1, pos.x) && !floor.has_terrain_characteristics({ pos.y - 1, pos.x }, TerrainCharacteristics::PROJECT)) {
+                if (!cave_los_bold(floor, pos.y - 1, pos.x) && !floor.has_terrain_characteristics({ pos.y - 1, pos.x }, TerrainCharacteristics::PROJECT)) {
                     return;
                 }
             } else if (monster_lite.mon_invis) {
@@ -307,10 +307,10 @@ void update_mon_lite(PlayerType *player_ptr)
         const auto &grid = floor.get_grid({ fy, fx });
         if (grid.info & CAVE_TEMP) {
             if ((grid.info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW) {
-                cave_note_and_redraw_later(&floor, fy, fx);
+                cave_note_and_redraw_later(floor, fy, fx);
             }
         } else if ((grid.info & (CAVE_VIEW | CAVE_MNDK)) == CAVE_VIEW) {
-            cave_note_and_redraw_later(&floor, fy, fx);
+            cave_note_and_redraw_later(floor, fy, fx);
         }
 
         points.emplace_back(fy, fx);
@@ -322,10 +322,10 @@ void update_mon_lite(PlayerType *player_ptr)
         const auto &grid = floor.get_grid(pos);
         if (grid.info & CAVE_MNLT) {
             if ((grid.info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW) {
-                cave_note_and_redraw_later(&floor, pos.y, pos.x);
+                cave_note_and_redraw_later(floor, pos.y, pos.x);
             }
         } else if ((grid.info & (CAVE_VIEW | CAVE_XTRA)) == CAVE_VIEW) {
-            cave_note_and_redraw_later(&floor, pos.y, pos.x);
+            cave_note_and_redraw_later(floor, pos.y, pos.x);
         }
 
         floor.mon_lite_x[floor.mon_lite_n] = pos.x;
@@ -362,15 +362,15 @@ void update_mon_lite(PlayerType *player_ptr)
 
 /*!
  * @brief 画面切り替え等でモンスターの灯りを消去する
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor フロアへの参照
  */
-void clear_mon_lite(FloorType *floor_ptr)
+void clear_mon_lite(FloorType &floor)
 {
-    for (int i = 0; i < floor_ptr->mon_lite_n; i++) {
+    for (int i = 0; i < floor.mon_lite_n; i++) {
         Grid *g_ptr;
-        g_ptr = &floor_ptr->grid_array[floor_ptr->mon_lite_y[i]][floor_ptr->mon_lite_x[i]];
+        g_ptr = &floor.grid_array[floor.mon_lite_y[i]][floor.mon_lite_x[i]];
         g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
     }
 
-    floor_ptr->mon_lite_n = 0;
+    floor.mon_lite_n = 0;
 }

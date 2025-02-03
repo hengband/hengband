@@ -27,22 +27,22 @@
  * @note Assumes "in_bounds()"
  * @details We count only granite walls and permanent walls.
  */
-static int next_to_walls(FloorType *floor_ptr, POSITION y, POSITION x)
+static int next_to_walls(const FloorType &floor, POSITION y, POSITION x)
 {
     int k = 0;
-    if (in_bounds(floor_ptr, y + 1, x) && floor_ptr->grid_array[y + 1][x].is_extra()) {
+    if (in_bounds(floor, y + 1, x) && floor.grid_array[y + 1][x].is_extra()) {
         k++;
     }
 
-    if (in_bounds(floor_ptr, y - 1, x) && floor_ptr->grid_array[y - 1][x].is_extra()) {
+    if (in_bounds(floor, y - 1, x) && floor.grid_array[y - 1][x].is_extra()) {
         k++;
     }
 
-    if (in_bounds(floor_ptr, y, x + 1) && floor_ptr->grid_array[y][x + 1].is_extra()) {
+    if (in_bounds(floor, y, x + 1) && floor.grid_array[y][x + 1].is_extra()) {
         k++;
     }
 
-    if (in_bounds(floor_ptr, y, x - 1) && floor_ptr->grid_array[y][x - 1].is_extra()) {
+    if (in_bounds(floor, y, x - 1) && floor.grid_array[y][x - 1].is_extra()) {
         k++;
     }
 
@@ -59,9 +59,9 @@ static int next_to_walls(FloorType *floor_ptr, POSITION y, POSITION x)
  */
 static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int walls)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (!g_ptr->is_floor() || pattern_tile(floor_ptr, y, x) || !g_ptr->o_idx_list.empty() || g_ptr->has_monster() || next_to_walls(floor_ptr, y, x) < walls) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto *g_ptr = &floor.grid_array[y][x];
+    if (!g_ptr->is_floor() || pattern_tile(floor, y, x) || !g_ptr->o_idx_list.empty() || g_ptr->has_monster() || next_to_walls(floor, y, x) < walls) {
         return false;
     }
 
@@ -208,7 +208,7 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_TRAP:
-            place_trap(&floor, pos.y, pos.x);
+            place_trap(floor, pos.y, pos.x);
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_GOLD:

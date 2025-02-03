@@ -224,7 +224,7 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
                 continue;
             }
 
-            if (!in_bounds(&floor, pos.y, pos.x)) {
+            if (!in_bounds(floor, pos.y, pos.x)) {
                 continue;
             }
 

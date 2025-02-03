@@ -34,8 +34,8 @@
  */
 static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    return cave_clean_bold(floor_ptr, pos.y, pos.x) && (floor_ptr->get_grid(pos).m_idx == 0) && !player_ptr->is_located_at(pos);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    return cave_clean_bold(floor, pos.y, pos.x) && (floor.get_grid(pos).m_idx == 0) && !player_ptr->is_located_at(pos);
 }
 
 /*!
@@ -271,7 +271,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::MAKE_TRAP: {
-        place_trap(&floor, y, x);
+        place_trap(floor, y, x);
         break;
     }
     case AttributeType::MAKE_TREE: {
@@ -369,7 +369,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (floor.is_underground() || !AngbandWorld::get_instance().is_daytime()) {
             for (const auto &d : Direction::directions()) {
                 const auto pos_neighbor = Pos2D(y, x) + d.vec();
-                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 

@@ -106,7 +106,7 @@ bool pattern_effect(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (!pattern_tile(&floor, p_pos.y, p_pos.x)) {
+    if (!pattern_tile(floor, p_pos.y, p_pos.x)) {
         return false;
     }
 

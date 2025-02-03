@@ -500,9 +500,9 @@ void TargetSetter::decide_change_panel(int dir, bool move_fast)
         this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
     }
 
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    x = std::clamp(x, 1, floor_ptr->width - 2);
-    y = std::clamp(y, 1, floor_ptr->height - 2);
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    x = std::clamp(x, 1, floor.width - 2);
+    y = std::clamp(y, 1, floor.height - 2);
 }
 
 void TargetSetter::sweep_target_grids()

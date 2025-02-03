@@ -150,20 +150,20 @@ void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
  * @param y 配置したいマスのY座標
  * @param x 配置したいマスのX座標
  */
-void place_trap(FloorType *floor_ptr, POSITION y, POSITION x)
+void place_trap(FloorType &floor, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
-    auto &grid = floor_ptr->get_grid(pos);
-    if (!in_bounds(floor_ptr, y, x)) {
+    auto &grid = floor.get_grid(pos);
+    if (!in_bounds(floor, y, x)) {
         return;
     }
 
-    if (!cave_clean_bold(floor_ptr, y, x)) {
+    if (!cave_clean_bold(floor, y, x)) {
         return;
     }
 
     grid.mimic = grid.feat;
-    grid.set_terrain_id(floor_ptr->select_random_trap());
+    grid.set_terrain_id(floor.select_random_trap());
 }
 
 /*!
@@ -473,7 +473,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
             const auto num = levs[std::min(lev / 10, 9)];
             for (auto i = 0; i < num; i++) {
                 const Pos2D pos(rand_spread(p_pos.y, 5), rand_spread(p_pos.x, 7));
-                if (!in_bounds(&floor, pos.y, pos.x)) {
+                if (!in_bounds(floor, pos.y, pos.x)) {
                     continue;
                 }
 

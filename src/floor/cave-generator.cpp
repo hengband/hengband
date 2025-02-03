@@ -41,10 +41,10 @@ static void reset_lite_area(FloorType &floor)
 
 static void check_arena_floor(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (!dd_ptr->empty_level) {
-        for (POSITION y = 0; y < floor_ptr->height; y++) {
-            for (POSITION x = 0; x < floor_ptr->width; x++) {
+        for (POSITION y = 0; y < floor.height; y++) {
+            for (POSITION x = 0; x < floor.width; x++) {
                 place_bold(player_ptr, y, x, GB_EXTRA);
             }
         }
@@ -52,20 +52,20 @@ static void check_arena_floor(PlayerType *player_ptr, DungeonData *dd_ptr)
         return;
     }
 
-    for (POSITION y = 0; y < floor_ptr->height; y++) {
-        for (POSITION x = 0; x < floor_ptr->width; x++) {
+    for (POSITION y = 0; y < floor.height; y++) {
+        for (POSITION x = 0; x < floor.width; x++) {
             place_bold(player_ptr, y, x, GB_FLOOR);
         }
     }
 
-    for (POSITION x = 0; x < floor_ptr->width; x++) {
+    for (POSITION x = 0; x < floor.width; x++) {
         place_bold(player_ptr, 0, x, GB_EXTRA);
-        place_bold(player_ptr, floor_ptr->height - 1, x, GB_EXTRA);
+        place_bold(player_ptr, floor.height - 1, x, GB_EXTRA);
     }
 
-    for (POSITION y = 1; y < (floor_ptr->height - 1); y++) {
+    for (POSITION y = 1; y < (floor.height - 1); y++) {
         place_bold(player_ptr, y, 0, GB_EXTRA);
-        place_bold(player_ptr, y, floor_ptr->width - 1, GB_EXTRA);
+        place_bold(player_ptr, y, floor.width - 1, GB_EXTRA);
     }
 }
 
@@ -86,7 +86,7 @@ static void place_cave_contents(PlayerType *player_ptr, DungeonData *dd_ptr, con
     }
 
     if (dungeon.has_river_flag() && one_in_(3) && (randint1(floor.dun_level) > 5)) {
-        add_river(&floor, dd_ptr);
+        add_river(floor, dd_ptr);
     }
 
     for (size_t i = 0; i < dd_ptr->cent_n; i++) {
@@ -375,19 +375,19 @@ static bool allocate_dungeon_data(PlayerType *player_ptr, DungeonData *dd_ptr, c
     return false;
 }
 
-static void decide_grid_glowing(FloorType *floor_ptr, DungeonData *dd_ptr, const DungeonDefinition &dungeon)
+static void decide_grid_glowing(FloorType &floor, DungeonData *dd_ptr, const DungeonDefinition &dungeon)
 {
     constexpr auto chanle_wholly_dark = 5;
     auto is_empty_or_dark = dd_ptr->empty_level;
-    is_empty_or_dark &= !one_in_(chanle_wholly_dark) || (randint1(100) > floor_ptr->dun_level);
+    is_empty_or_dark &= !one_in_(chanle_wholly_dark) || (randint1(100) > floor.dun_level);
     is_empty_or_dark &= dungeon.flags.has_not(DungeonFeatureType::DARKNESS);
     if (!is_empty_or_dark) {
         return;
     }
 
-    for (POSITION y = 0; y < floor_ptr->height; y++) {
-        for (POSITION x = 0; x < floor_ptr->width; x++) {
-            floor_ptr->grid_array[y][x].info |= CAVE_GLOW;
+    for (POSITION y = 0; y < floor.height; y++) {
+        for (POSITION x = 0; x < floor.width; x++) {
+            floor.grid_array[y][x].info |= CAVE_GLOW;
         }
     }
 }
@@ -429,6 +429,6 @@ std::optional<std::string> cave_gen(PlayerType *player_ptr)
         return dd.why;
     }
 
-    decide_grid_glowing(&floor, &dd, dungeon);
+    decide_grid_glowing(floor, &dd, dungeon);
     return std::nullopt;
 }

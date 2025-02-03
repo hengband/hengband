@@ -226,18 +226,18 @@ void choose_chameleon_polymorph(PlayerType *player_ptr, short m_idx, short terra
  * @param m_idx 隣接数を調べたいモンスターのID
  * @return 隣接しているモンスターの数
  */
-int get_monster_crowd_number(const FloorType *floor_ptr, short m_idx)
+int get_monster_crowd_number(const FloorType &floor, short m_idx)
 {
-    const auto &monster = floor_ptr->m_list[m_idx];
+    const auto &monster = floor.m_list[m_idx];
     const auto m_pos = monster.get_position();
     auto count = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos = m_pos + d.vec();
-        if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+        if (!in_bounds(floor, pos.y, pos.x)) {
             continue;
         }
 
-        if (floor_ptr->get_grid(pos).has_monster()) {
+        if (floor.get_grid(pos).has_monster()) {
             count++;
         }
     }

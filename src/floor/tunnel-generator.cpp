@@ -70,7 +70,7 @@ bool build_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_ptr, 
         }
 
         auto pos_tmp = pos_current + vec;
-        while (!in_bounds(&floor, pos_tmp.y, pos_tmp.x)) {
+        while (!in_bounds(floor, pos_tmp.y, pos_tmp.x)) {
             vec = correct_dir(pos_current, pos_end);
             if (evaluate_percent(dt_ptr->dun_tun_rnd)) {
                 vec = rand_dir();
@@ -164,7 +164,7 @@ static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y,
     const Pos2D pos(*y, *x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    if (!in_bounds(&floor, *y, *x) || grid.is_inner()) {
+    if (!in_bounds(floor, *y, *x) || grid.is_inner()) {
         return true;
     }
 
@@ -208,7 +208,7 @@ static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y,
         while ((i > 0) && floor.get_grid(pos + vec).is_solid()) {
             vec.y = randint0(3) - 1;
             vec.x = randint0(3) - 1;
-            if (!in_bounds(&floor, (pos + vec).y, (pos + vec).x)) {
+            if (!in_bounds(floor, (pos + vec).y, (pos + vec).x)) {
                 vec = { 0, 0 };
             }
 
@@ -367,7 +367,7 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, const Pos2D &pos
     const auto changey = (randint0(std::abs(vec.x) + 2) * 2 - std::abs(vec.x) - 1) / 2;
     auto pos = pos_start + vec;
     pos += Pos2DVec(changey, changex);
-    if (!in_bounds(&floor, pos.y, pos.x)) {
+    if (!in_bounds(floor, pos.y, pos.x)) {
         pos.x = (pos_start.x + pos_end.x) / 2;
         pos.y = (pos_start.y + pos_end.y) / 2;
     }
@@ -381,7 +381,7 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, const Pos2D &pos
             const auto tmp_x = randint0(3) - 1;
             vec = { tmp_y, tmp_x }; //!< @details 乱数引数の評価順を固定する.
             const auto pos_tmp = pos + vec;
-            if (!in_bounds(&floor, pos_tmp.y, pos_tmp.x)) {
+            if (!in_bounds(floor, pos_tmp.y, pos_tmp.x)) {
                 vec = { 0, 0 };
             }
 

@@ -260,8 +260,8 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
  */
 void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX src_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[m_idx];
     mam_pp_type tmp_mam_pp(player_ptr, m_idx, dam, dead, fear, note, src_idx);
     mam_pp_type *mam_pp_ptr = &tmp_mam_pp;
     prepare_redraw(mam_pp_ptr);
@@ -284,7 +284,7 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     cancel_fear_by_pain(player_ptr, mam_pp_ptr);
     make_monster_fear(player_ptr, mam_pp_ptr);
     if ((dam > 0) && !m_ptr->is_pet() && !m_ptr->is_friendly() && (mam_pp_ptr->src_idx != m_idx)) {
-        const auto &m_ref = floor_ptr->m_list[src_idx];
+        const auto &m_ref = floor.m_list[src_idx];
         if (m_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
             m_ptr->set_target(m_ref.fy, m_ref.fx);
         }

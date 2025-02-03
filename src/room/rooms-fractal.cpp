@@ -51,7 +51,7 @@ bool build_type9(PlayerType *player_ptr, DungeonData *dd_ptr)
                             randint1(width / 4) + randint1(height / 4);
 
         /* make it */
-        generate_hmap(&floor, center->y, center->x, width, height, grd, roug, cutoff);
+        generate_hmap(floor, center->y, center->x, width, height, grd, roug, cutoff);
 
         /* Convert to normal format + clean up */
         if (generate_fracave(player_ptr, center->y, center->x, width, height, cutoff, should_brighten, true)) {

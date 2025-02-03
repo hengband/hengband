@@ -80,11 +80,11 @@ void print_map(PlayerType *player_ptr)
 
     (void)term_set_cursor(0);
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     POSITION xmin = (0 < panel_col_min) ? panel_col_min : 0;
-    POSITION xmax = (floor_ptr->width - 1 > panel_col_max) ? panel_col_max : floor_ptr->width - 1;
+    POSITION xmax = (floor.width - 1 > panel_col_max) ? panel_col_max : floor.width - 1;
     POSITION ymin = (0 < panel_row_min) ? panel_row_min : 0;
-    POSITION ymax = (floor_ptr->height - 1 > panel_row_max) ? panel_row_max : floor_ptr->height - 1;
+    POSITION ymax = (floor.height - 1 > panel_row_max) ? panel_row_max : floor.height - 1;
 
     for (auto y = 1; y <= ymin - panel_row_prt; y++) {
         term_erase(COL_MAP, y, wid);
@@ -171,9 +171,9 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
         wid = wid / 2 - 1;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto yrat = (floor_ptr->height + hgt - 1) / hgt;
-    const auto xrat = (floor_ptr->width + wid - 1) / wid;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto yrat = (floor.height + hgt - 1) / hgt;
+    const auto xrat = (floor.width + wid - 1) / wid;
     view_special_lite = false;
     view_granite_lite = false;
 
@@ -184,12 +184,12 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     vector<vector<int>> match_autopick_yx(hgt + 2, vector<int>(wid + 2, -1));
     vector<vector<const ItemEntity *>> object_autopick_yx(hgt + 2, vector<const ItemEntity *>(wid + 2, nullptr));
 
-    vector<vector<TERM_COLOR>> bigma(floor_ptr->height + 2, vector<TERM_COLOR>(floor_ptr->width + 2, TERM_WHITE));
-    vector<vector<char>> bigmc(floor_ptr->height + 2, vector<char>(floor_ptr->width + 2, ' '));
-    vector<vector<byte>> bigmp(floor_ptr->height + 2, vector<byte>(floor_ptr->width + 2, 0));
+    vector<vector<TERM_COLOR>> bigma(floor.height + 2, vector<TERM_COLOR>(floor.width + 2, TERM_WHITE));
+    vector<vector<char>> bigmc(floor.height + 2, vector<char>(floor.width + 2, ' '));
+    vector<vector<byte>> bigmp(floor.height + 2, vector<byte>(floor.width + 2, 0));
 
-    for (i = 0; i < floor_ptr->width; ++i) {
-        for (j = 0; j < floor_ptr->height; ++j) {
+    for (i = 0; i < floor.width; ++i) {
+        for (j = 0; j < floor.height; ++j) {
             x = i / xrat + 1;
             y = j / yrat + 1;
 
@@ -210,8 +210,8 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
         }
     }
 
-    for (j = 0; j < floor_ptr->height; ++j) {
-        for (i = 0; i < floor_ptr->width; ++i) {
+    for (j = 0; j < floor.height; ++j) {
+        for (i = 0; i < floor.width; ++i) {
             x = i / xrat + 1;
             y = j / yrat + 1;
 

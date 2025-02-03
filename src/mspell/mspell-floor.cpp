@@ -173,9 +173,9 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    auto *t_ptr = &floor_ptr->m_list[t_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[m_idx];
+    auto *t_ptr = &floor.m_list[t_idx];
     auto *tr_ptr = &t_ptr->get_monrace();
 
     mspell_cast_msg_simple msg(_("%s^があなたを引き戻した。", "%s^ commands you to return."),
@@ -244,8 +244,8 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
     auto res = MonsterSpellResult::make_valid();
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto *t_ptr = &floor.m_list[t_idx];
     MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
 
     mspell_cast_msg_simple msg(_("%s^にテレポートさせられた。", "%s^ teleports you away."),
@@ -323,10 +323,10 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
 {
     const auto res = MonsterSpellResult::make_valid();
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto *t_ptr = &floor.m_list[t_idx];
     MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
-    DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
+    DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
     if (target_type == MONSTER_TO_PLAYER) {
@@ -381,8 +381,8 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
 {
     mspell_cast_msg_blind msg;
     concptr msg_done;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto *m_ptr = &floor.m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
     bool can_use_lite_area = false;
     bool monster_to_monster = target_type == MONSTER_TO_MONSTER;
@@ -396,7 +396,7 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
         can_use_lite_area = true;
     }
 
-    const auto &t_ref = floor_ptr->m_list[t_idx];
+    const auto &t_ref = floor.m_list[t_idx];
     if (monster_to_monster && !t_ref.is_hostile()) {
         can_use_lite_area = false;
     }

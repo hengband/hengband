@@ -101,10 +101,10 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
 
 static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     auto is_drop_corpse = one_in_(md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? 1 : 4);
     is_drop_corpse &= md_ptr->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON });
-    is_drop_corpse &= !(floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out() || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == AngbandWorld::get_instance().today_mon) && md_ptr->m_ptr->is_pet()));
+    is_drop_corpse &= !(floor.inside_arena || AngbandSystem::get_instance().is_phase_out() || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == AngbandWorld::get_instance().today_mon) && md_ptr->m_ptr->is_pet()));
     if (!is_drop_corpse) {
         return;
     }
@@ -127,7 +127,7 @@ static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)
     }
 
     ItemEntity item({ ItemKindType::MONSTER_REMAINS, (corpse ? SV_CORPSE : SV_SKELETON) });
-    ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
+    ItemMagicApplier(player_ptr, &item, floor.object_level, AM_NO_FIXED_ART).execute();
     item.pval = enum2i(md_ptr->m_ptr->r_idx);
     (void)drop_near(player_ptr, &item, md_ptr->get_position());
 }
@@ -195,8 +195,8 @@ static void drop_artifacts(PlayerType *player_ptr, MonsterDeath *md_ptr)
     }
 
     drop_artifact_from_unique(player_ptr, md_ptr);
-    const auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     if (md_ptr->r_ptr->misc_flags.has_not(MonsterMiscType::GUARDIAN) || (dungeon.final_guardian != md_ptr->m_ptr->r_idx)) {
         return;
     }
@@ -204,7 +204,7 @@ static void drop_artifacts(PlayerType *player_ptr, MonsterDeath *md_ptr)
     const auto bi_id = drop_dungeon_final_artifact(player_ptr, md_ptr);
     if (bi_id) {
         ItemEntity item(*bi_id);
-        ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+        ItemMagicApplier(player_ptr, &item, floor.object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
         (void)drop_near(player_ptr, &item, md_ptr->get_position());
     }
 

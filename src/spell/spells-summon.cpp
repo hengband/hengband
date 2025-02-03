@@ -259,15 +259,15 @@ int summon_cyber(PlayerType *player_ptr, POSITION y, POSITION x, std::optional<M
 {
     /* Summoned by a monster */
     BIT_FLAGS mode = PM_ALLOW_GROUP;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (summoner_m_idx) {
-        auto *m_ptr = &floor_ptr->m_list[*summoner_m_idx];
+        auto *m_ptr = &floor.m_list[*summoner_m_idx];
         if (m_ptr->is_pet()) {
             mode |= PM_FORCE_PET;
         }
     }
 
-    int max_cyber = (floor_ptr->dun_level / 50) + randint1(2);
+    int max_cyber = (floor.dun_level / 50) + randint1(2);
     if (max_cyber > 4) {
         max_cyber = 4;
     }

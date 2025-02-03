@@ -81,7 +81,7 @@ static void summon_self(PlayerType *player_ptr, MonsterDeath *md_ptr, summon_typ
     auto attempts = 100;
     do {
         m_pos = scatter(player_ptr, md_ptr->get_position(), radius, PROJECT_NONE);
-    } while (!(in_bounds(&floor, m_pos.y, m_pos.x) && is_cave_empty_bold2(player_ptr, m_pos.y, m_pos.x)) && --attempts);
+    } while (!(in_bounds(floor, m_pos.y, m_pos.x) && is_cave_empty_bold2(player_ptr, m_pos.y, m_pos.x)) && --attempts);
 
     if (attempts <= 0) {
         return;
@@ -129,15 +129,15 @@ static void on_dead_bloodletter(PlayerType *player_ptr, MonsterDeath *md_ptr)
 
 static void on_dead_raal(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!md_ptr->drop_chosen_item || (floor_ptr->dun_level <= 9)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!md_ptr->drop_chosen_item || (floor.dun_level <= 9)) {
         return;
     }
 
     ItemEntity forge;
     auto *q_ptr = &forge;
     q_ptr->wipe();
-    if ((floor_ptr->dun_level > 49) && one_in_(5)) {
+    if ((floor.dun_level > 49) && one_in_(5)) {
         select_baseitem_id_hook = kind_is_good_book;
     } else {
         select_baseitem_id_hook = kind_is_book;

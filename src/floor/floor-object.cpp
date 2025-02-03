@@ -142,7 +142,7 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std:
 void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds(&floor, pos.y, pos.x)) {
+    if (!in_bounds(floor, pos.y, pos.x)) {
         return;
     }
 
@@ -166,9 +166,9 @@ void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos)
  */
 void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
 
-    auto *o_ptr = &floor_ptr->o_list[i_idx];
+    auto *o_ptr = &floor.o_list[i_idx];
     num += o_ptr->number;
     if (num > 255) {
         num = 255;
@@ -220,9 +220,9 @@ void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
     ItemEntity *j_ptr;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    excise_object_idx(floor_ptr, o_idx);
-    j_ptr = &floor_ptr->o_list[o_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    excise_object_idx(floor, o_idx);
+    j_ptr = &floor.o_list[o_idx];
     if (!j_ptr->is_held_by_monster()) {
         POSITION y, x;
         y = j_ptr->iy;
@@ -231,7 +231,7 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
     }
 
     j_ptr->wipe();
-    floor_ptr->o_cnt--;
+    floor.o_cnt--;
     static constexpr auto flags = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
@@ -244,9 +244,9 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
  */
-void excise_object_idx(FloorType *floor_ptr, OBJECT_IDX o_idx)
+void excise_object_idx(FloorType &floor, OBJECT_IDX o_idx)
 {
-    auto &list = get_o_idx_list_contains(floor_ptr, o_idx);
+    auto &list = get_o_idx_list_contains(floor, o_idx);
     list.remove(o_idx);
 }
 
@@ -256,14 +256,14 @@ void excise_object_idx(FloorType *floor_ptr, OBJECT_IDX o_idx)
  * @param o_idx 参照を得るリストに含まれるOBJECT_IDX
  * @return o_idxを含む ObjectIndexList への参照
  */
-ObjectIndexList &get_o_idx_list_contains(FloorType *floor_ptr, OBJECT_IDX o_idx)
+ObjectIndexList &get_o_idx_list_contains(FloorType &floor, OBJECT_IDX o_idx)
 {
-    auto *o_ptr = &floor_ptr->o_list[o_idx];
+    auto *o_ptr = &floor.o_list[o_idx];
 
     if (o_ptr->is_held_by_monster()) {
-        return floor_ptr->m_list[o_ptr->held_m_idx].hold_o_idx_list;
+        return floor.m_list[o_ptr->held_m_idx].hold_o_idx_list;
     } else {
-        return floor_ptr->grid_array[o_ptr->iy][o_ptr->ix].o_idx_list;
+        return floor.grid_array[o_ptr->iy][o_ptr->ix].o_idx_list;
     }
 }
 
@@ -310,14 +310,14 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
             }
 
             const auto pos_target = pos + vec;
-            if (!in_bounds(&floor, pos_target.y, pos_target.x)) {
+            if (!in_bounds(floor, pos_target.y, pos_target.x)) {
                 continue;
             }
             if (!projectable(player_ptr, pos, pos_target)) {
                 continue;
             }
 
-            if (!cave_drop_bold(&floor, pos_target.y, pos_target.x)) {
+            if (!cave_drop_bold(floor, pos_target.y, pos_target.x)) {
                 continue;
             }
 
@@ -376,12 +376,12 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
         const auto ty = rand_spread(pos_drop.y, 1);
         const auto tx = rand_spread(pos_drop.x, 1);
         Pos2D pos_target(ty, tx); //!< @details 乱数引数の評価順を固定する.
-        if (!in_bounds(&floor, pos_target.y, pos_target.x)) {
+        if (!in_bounds(floor, pos_target.y, pos_target.x)) {
             continue;
         }
 
         pos_drop = pos_target;
-        if (!cave_drop_bold(&floor, pos_drop.y, pos_drop.x)) {
+        if (!cave_drop_bold(floor, pos_drop.y, pos_drop.x)) {
             continue;
         }
 
@@ -393,7 +393,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
         auto candidates = 0;
         for (auto ty = 1; ty < floor.height - 1; ty++) {
             for (auto tx = 1; tx < floor.width - 1; tx++) {
-                if (cave_drop_bold(&floor, ty, tx)) {
+                if (cave_drop_bold(floor, ty, tx)) {
                     candidates++;
                 }
             }
@@ -422,7 +422,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
         auto pick = randint1(candidates);
         for (auto ty = 1; ty < floor.height - 1; ty++) {
             for (auto tx = 1; tx < floor.width - 1; tx++) {
-                if (cave_drop_bold(&floor, ty, tx)) {
+                if (cave_drop_bold(floor, ty, tx)) {
                     pick--;
                     if (pick == 0) {
                         pos_drop = { ty, tx };
@@ -471,7 +471,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
         j_ptr = &floor.o_list[item_idx];
         j_ptr->set_position(pos_drop);
         j_ptr->held_m_idx = 0;
-        grid.o_idx_list.add(&floor, item_idx);
+        grid.o_idx_list.add(floor, item_idx);
     }
 
     if (j_ptr->is_fixed_artifact() && world.character_dungeon) {
@@ -503,9 +503,9 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param i_idx メッセージの対象にしたいアイテム所持スロット
  */
-void floor_item_charges(FloorType *floor_ptr, INVENTORY_IDX i_idx)
+void floor_item_charges(const FloorType &floor, INVENTORY_IDX i_idx)
 {
-    const auto &item = floor_ptr->o_list[i_idx];
+    const auto &item = floor.o_list[i_idx];
     if (!item.is_wand_staff() || !item.is_known()) {
         return;
     }

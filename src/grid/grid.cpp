@@ -76,7 +76,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
         if (terrain.flags.has(TerrainCharacteristics::GLOW) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS)) {
             for (const auto &d : Direction::directions()) {
                 const auto pos_neighbor = pos + d.vec();
-                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 
@@ -127,7 +127,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
 
     for (const auto &d : Direction::directions()) {
         const auto pos_neighbor = pos + d.vec();
-        if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+        if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
 
@@ -194,7 +194,7 @@ std::optional<Pos2D> new_player_spot(PlayerType *player_ptr)
             continue;
         }
 
-        if (!in_bounds(&floor, pos.y, pos.x)) {
+        if (!in_bounds(floor, pos.y, pos.x)) {
             continue;
         }
 
@@ -225,10 +225,10 @@ bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
                                                                         : y;
     const auto xx = (x < player_ptr->x) ? (x + 1) : (x > player_ptr->x) ? (x - 1)
                                                                         : x;
-    const auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &grid_yyxx = floor_ptr->grid_array[yy][xx];
-    const auto &grid_yxx = floor_ptr->grid_array[y][xx];
-    const auto &grid_yyx = floor_ptr->grid_array[yy][x];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid_yyxx = floor.grid_array[yy][xx];
+    const auto &grid_yxx = floor.grid_array[y][xx];
+    const auto &grid_yyx = floor.grid_array[yy][x];
     auto is_illuminated = grid_yyxx.has_los_terrain(TerrainKind::MIMIC) && (grid_yyxx.info & CAVE_GLOW);
     is_illuminated |= grid_yxx.has_los_terrain(TerrainKind::MIMIC) && (grid_yxx.info & CAVE_GLOW);
     is_illuminated |= grid_yyx.has_los_terrain(TerrainKind::MIMIC) && (grid_yyx.info & CAVE_GLOW);
@@ -263,7 +263,7 @@ static void update_local_illumination_aux(PlayerType *player_ptr, const Pos2D &p
  */
 void update_local_illumination(PlayerType *player_ptr, const Pos2D &pos)
 {
-    if (!in_bounds(player_ptr->current_floor_ptr, pos.y, pos.x)) {
+    if (!in_bounds(*player_ptr->current_floor_ptr, pos.y, pos.x)) {
         return;
     }
 
@@ -466,7 +466,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
  */
 void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    if (panel_contains(y, x) && in_bounds2(player_ptr->current_floor_ptr, y, x)) {
+    if (panel_contains(y, x) && in_bounds2(*player_ptr->current_floor_ptr, y, x)) {
         auto symbol_pair = map_info(player_ptr, { y, x });
         symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 
@@ -711,7 +711,7 @@ void update_flow(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
 
     /* The last way-point is on the map */
-    if (player_ptr->running && in_bounds(&floor, flow_y, flow_x)) {
+    if (player_ptr->running && in_bounds(floor, flow_y, flow_x)) {
         /* The way point is in sight - do not update.  (Speedup) */
         if (floor.grid_array[flow_y][flow_x].info & CAVE_VIEW) {
             return;
@@ -1092,51 +1092,51 @@ void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type g
  * have already been placed into the "lite" array, and we are never
  * called when the "lite" array is full.
  */
-void cave_lite_hack(FloorType *floor_ptr, POSITION y, POSITION x)
+void cave_lite_hack(FloorType &floor, POSITION y, POSITION x)
 {
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor.grid_array[y][x];
     if (g_ptr->is_lite()) {
         return;
     }
 
     g_ptr->info |= CAVE_LITE;
-    floor_ptr->lite_y[floor_ptr->lite_n] = y;
-    floor_ptr->lite_x[floor_ptr->lite_n++] = x;
+    floor.lite_y[floor.lite_n] = y;
+    floor.lite_x[floor.lite_n++] = x;
 }
 
 /*
  * For delayed visual update
  */
-void cave_redraw_later(FloorType *floor_ptr, POSITION y, POSITION x)
+void cave_redraw_later(FloorType &floor, POSITION y, POSITION x)
 {
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor.grid_array[y][x];
     if (g_ptr->is_redraw()) {
         return;
     }
 
     g_ptr->info |= CAVE_REDRAW;
-    floor_ptr->redraw_y[floor_ptr->redraw_n] = y;
-    floor_ptr->redraw_x[floor_ptr->redraw_n++] = x;
+    floor.redraw_y[floor.redraw_n] = y;
+    floor.redraw_x[floor.redraw_n++] = x;
 }
 
 /*
  * For delayed visual update
  */
-void cave_note_and_redraw_later(FloorType *floor_ptr, POSITION y, POSITION x)
+void cave_note_and_redraw_later(FloorType &floor, POSITION y, POSITION x)
 {
-    floor_ptr->grid_array[y][x].info |= CAVE_NOTE;
-    cave_redraw_later(floor_ptr, y, x);
+    floor.grid_array[y][x].info |= CAVE_NOTE;
+    cave_redraw_later(floor, y, x);
 }
 
-void cave_view_hack(FloorType *floor_ptr, POSITION y, POSITION x)
+void cave_view_hack(FloorType &floor, POSITION y, POSITION x)
 {
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
+    auto *g_ptr = &floor.grid_array[y][x];
     if (g_ptr->is_view()) {
         return;
     }
 
     g_ptr->info |= CAVE_VIEW;
-    floor_ptr->view_y[floor_ptr->view_n] = y;
-    floor_ptr->view_x[floor_ptr->view_n] = x;
-    floor_ptr->view_n++;
+    floor.view_y[floor.view_n] = y;
+    floor.view_x[floor.view_n] = x;
+    floor.view_n++;
 }

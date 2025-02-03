@@ -67,7 +67,7 @@ static MonsterSpellResult monspell_to_player_impl(PlayerType *player_ptr, Monste
     case MonsterAbilityType::BA_FIRE:
     case MonsterAbilityType::BA_COLD:
          {
-         auto rad = monster_is_powerful(player_ptr->current_floor_ptr, m_idx) ? 4 : 2;
+         auto rad = monster_is_powerful(*player_ptr->current_floor_ptr, m_idx) ? 4 : 2;
          return MSpellBall(player_ptr, m_idx, ms_type, rad, MONSTER_TO_PLAYER).shoot(y, x);
          }
 
@@ -202,7 +202,7 @@ static MonsterSpellResult monspell_to_monster_impl(
     case MonsterAbilityType::BA_FIRE:
     case MonsterAbilityType::BA_COLD:
          {
-         auto rad = monster_is_powerful(player_ptr->current_floor_ptr, m_idx) ? 4 : 2;
+         auto rad = monster_is_powerful(*player_ptr->current_floor_ptr, m_idx) ? 4 : 2;
          return MSpellBall(player_ptr, m_idx, t_idx, ms_type, rad, MONSTER_TO_MONSTER).shoot(y, x);
          }
          

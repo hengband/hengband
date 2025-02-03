@@ -21,4 +21,4 @@ extern travel_type travel;
 class FloorType;
 class PlayerType;
 void travel_step(PlayerType *player_ptr);
-void forget_travel_flow(FloorType *floor_ptr);
+void forget_travel_flow(const FloorType &floor);
