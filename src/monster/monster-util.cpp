@@ -162,7 +162,7 @@ MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
         return MonraceHook::DUNGEON;
     }
 
-    switch (wilderness_grids[pos_wilderness.y][pos_wilderness.x].terrain) {
+    switch (WildernessGrids::get_instance().get_grid(pos_wilderness).terrain) {
     case WildernessTerrain::TOWN:
         return MonraceHook::TOWN;
     case WildernessTerrain::DEEP_WATER:
