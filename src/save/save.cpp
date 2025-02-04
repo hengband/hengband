@@ -14,7 +14,6 @@
 #include "save/save.h"
 #include "core/object-compressor.h"
 #include "dungeon/quest.h"
-#include "floor/wild.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/report.h"
@@ -37,6 +36,7 @@
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
@@ -161,7 +161,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_s32b(world.max_wild_y);
     for (int i = 0; i < world.max_wild_x; i++) {
         for (int j = 0; j < world.max_wild_y; j++) {
-            wr_u32b(wilderness[j][i].seed);
+            wr_u32b(wilderness_grids[j][i].seed);
         }
     }
 

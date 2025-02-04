@@ -32,6 +32,7 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
@@ -289,7 +290,7 @@ static bool read_wilderness_definition(std::ifstream &ifs)
         }
 
         if ((world.max_wild_x > 0) && (world.max_wild_y > 0)) {
-            wilderness.assign(world.max_wild_y, std::vector<WildernessGrid>(world.max_wild_x));
+            wilderness_grids.assign(world.max_wild_y, std::vector<WildernessGrid>(world.max_wild_x));
             init_wilderness_encounter();
             return true;
         }

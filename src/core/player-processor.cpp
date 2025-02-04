@@ -8,7 +8,6 @@
 #include "core/window-redrawer.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-util.h"
-#include "floor/wild.h"
 #include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
@@ -42,6 +41,7 @@
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/redrawing-flags-updater.h"
@@ -61,7 +61,7 @@ static void process_fishing(PlayerType *player_ptr)
         bool success = false;
         get_mon_num_prep_enum(player_ptr, MonraceHook::FISHING);
         const auto &floor = *player_ptr->current_floor_ptr;
-        const auto wild_level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
+        const auto wild_level = wilderness_grids[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
         const auto level = floor.is_underground() ? floor.dun_level : wild_level;
         const auto r_idx = get_mon_num(player_ptr, 0, level, PM_NONE);
         msg_print(nullptr);

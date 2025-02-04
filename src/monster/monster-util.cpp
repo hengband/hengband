@@ -1,6 +1,5 @@
 #include "monster/monster-util.h"
 #include "dungeon/quest.h"
-#include "floor/wild.h"
 #include "game-option/cheat-options.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
@@ -14,6 +13,7 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/wilderness-terrain.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-allocation.h"
 #include "system/monrace/monrace-definition.h"
@@ -162,7 +162,7 @@ MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
         return MonraceHook::DUNGEON;
     }
 
-    switch (wilderness[pos_wilderness.y][pos_wilderness.x].terrain) {
+    switch (wilderness_grids[pos_wilderness.y][pos_wilderness.x].terrain) {
     case WildernessTerrain::TOWN:
         return MonraceHook::TOWN;
     case WildernessTerrain::DEEP_WATER:

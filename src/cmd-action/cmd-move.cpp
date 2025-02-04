@@ -35,6 +35,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -375,7 +376,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
     if (is_wild_mode && !floor.has_terrain_characteristics(p_pos, TerrainCharacteristics::TOWN)) {
-        const auto &wilderness_grid = wilderness[p_pos.y][p_pos.x];
+        const auto &wilderness_grid = wilderness_grids[p_pos.y][p_pos.x];
         auto tmp = 120 + player_ptr->lev * 10 - wilderness_grid.level + 5;
         if (tmp < 1) {
             tmp = 1;

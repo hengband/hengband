@@ -36,6 +36,7 @@
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -50,8 +51,6 @@
 #include <utility>
 
 constexpr auto SUM_TERRAIN_PROBABILITIES = 18;
-
-std::vector<std::vector<WildernessGrid>> wilderness;
 
 bool reinit_wilderness = false;
 
@@ -276,7 +275,7 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
  */
 static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_border, bool is_corner)
 {
-    const auto &wilderness_grid = wilderness[pos.y][pos.x];
+    const auto &wilderness_grid = wilderness_grids[pos.y][pos.x];
     player_ptr->town_num = wilderness_grid.town;
     auto &floor = *player_ptr->current_floor_ptr;
     floor.base_level = wilderness_grid.level;
@@ -305,7 +304,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
         //!< @todo make the road a bit more interresting.
         if (wilderness_grid.road) {
             floor.get_grid({ MAX_HGT / 2, MAX_WID / 2 }).set_terrain_id(TerrainTag::FLOOR);
-            if (wilderness[pos.y - 1][pos.x].road) {
+            if (wilderness_grids[pos.y - 1][pos.x].road) {
                 /* North road */
                 for (auto y = 1; y < MAX_HGT / 2; y++) {
                     const Pos2D pos_road(y, MAX_WID / 2);
@@ -313,7 +312,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
                 }
             }
 
-            if (wilderness[pos.y + 1][pos.x].road) {
+            if (wilderness_grids[pos.y + 1][pos.x].road) {
                 /* North road */
                 for (auto y = MAX_HGT / 2; y < MAX_HGT - 1; y++) {
                     const Pos2D pos_road(y, MAX_WID / 2);
@@ -321,7 +320,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
                 }
             }
 
-            if (wilderness[pos.y][pos.x + 1].road) {
+            if (wilderness_grids[pos.y][pos.x + 1].road) {
                 /* East road */
                 for (auto x = MAX_WID / 2; x < MAX_WID - 1; x++) {
                     const Pos2D pos_road(MAX_HGT / 2, x);
@@ -329,7 +328,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
                 }
             }
 
-            if (wilderness[pos.y][pos.x - 1].road) {
+            if (wilderness_grids[pos.y][pos.x - 1].road) {
                 /* West road */
                 for (auto x = 1; x < MAX_WID / 2; x++) {
                     const Pos2D pos_road(MAX_HGT / 2, x);
@@ -587,7 +586,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
         for (auto y = 0; y < world.max_wild_y; y++) {
             const Pos2D pos(y, x);
             auto &grid = floor.get_grid(pos);
-            auto &wild_grid = wilderness[y][x];
+            auto &wild_grid = wilderness_grids[y][x];
             if (wild_grid.town && (wild_grid.town != VALID_TOWNS)) {
                 grid.set_terrain_id(TerrainTag::TOWN);
                 grid.special = wild_grid.town;
@@ -711,7 +710,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
         int len = strlen(s);
         for (auto i = 0; ((pos.x < xmax) && (i < len)); pos.x++, s++, i++) {
             int id = s[0];
-            auto &wg = wilderness[pos.y][pos.x];
+            auto &wg = wilderness_grids[pos.y][pos.x];
             const auto &letter = wilderness_letters.at(id);
             wg.terrain = letter.terrain;
             wg.level = letter.level;
@@ -760,9 +759,9 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
             continue;
         }
 
-        wilderness[dungeon->dy][dungeon->dx].entrance = dungeon_id;
-        if (!wilderness[dungeon->dy][dungeon->dx].town) {
-            wilderness[dungeon->dy][dungeon->dx].level = dungeon->mindepth;
+        wilderness_grids[dungeon->dy][dungeon->dx].entrance = dungeon_id;
+        if (!wilderness_grids[dungeon->dy][dungeon->dx].town) {
+            wilderness_grids[dungeon->dy][dungeon->dx].level = dungeon->mindepth;
         }
     }
 
@@ -778,8 +777,8 @@ void seed_wilderness()
     const auto &world = AngbandWorld::get_instance();
     for (auto x = 0; x < world.max_wild_x; x++) {
         for (auto y = 0; y < world.max_wild_y; y++) {
-            wilderness[y][x].seed = randint0(0x10000000);
-            wilderness[y][x].entrance = DungeonId::WILDERNESS;
+            wilderness_grids[y][x].seed = randint0(0x10000000);
+            wilderness_grids[y][x].entrance = DungeonId::WILDERNESS;
         }
     }
 }

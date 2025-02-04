@@ -1,5 +1,4 @@
 #include "load/world-loader.h"
-#include "floor/wild.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/load-zangband.h"
@@ -11,6 +10,7 @@
 #include "system/dungeon/dungeon-record.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
@@ -200,7 +200,7 @@ errr analyze_wilderness(void)
 
     for (int i = 0; i < wild_x_size; i++) {
         for (int j = 0; j < wild_y_size; j++) {
-            wilderness[j][i].seed = rd_u32b();
+            wilderness_grids[j][i].seed = rd_u32b();
         }
     }
 
