@@ -46,6 +46,7 @@ public:
     bool is_height_initialized() const;
     bool is_width_initialized() const;
     const Pos2D &get_bottom_right() const;
+    const std::vector<Pos2D> &get_positions() const;
 
     void move_player_to(const Pos2DVec &vec);
 

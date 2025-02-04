@@ -192,15 +192,16 @@ errr analyze_wilderness(void)
 {
     const auto wild_x_size = rd_s32b();
     const auto wild_y_size = rd_s32b();
-    auto &world = AngbandWorld::get_instance();
-    if ((wild_x_size > world.max_wild_x) || (wild_y_size > world.max_wild_y)) {
-        load_note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
+    auto &wilderness = WildernessGrids::get_instance();
+    const auto &bottom_right = wilderness.get_bottom_right();
+    if ((wild_x_size > bottom_right.x) || (wild_y_size > bottom_right.y)) {
+        load_note(format(_("荒野が大きすぎる(%d/%d)！", "Wilderness is too big (%d/%d)!"), wild_x_size, wild_y_size));
         return 23;
     }
 
-    for (int i = 0; i < wild_x_size; i++) {
-        for (int j = 0; j < wild_y_size; j++) {
-            wilderness_grids[j][i].seed = rd_u32b();
+    for (auto x = 0; x < wild_x_size; x++) {
+        for (auto y = 0; y < wild_y_size; y++) {
+            wilderness.get_grid({ y, x }).seed = rd_u32b();
         }
     }
 

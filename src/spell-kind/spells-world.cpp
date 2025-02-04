@@ -317,10 +317,11 @@ bool tele_town(PlayerType *player_ptr)
         break;
     }
 
-    const auto &world = AngbandWorld::get_instance();
-    for (POSITION y = 0; y < world.max_wild_y; y++) {
-        for (POSITION x = 0; x < world.max_wild_x; x++) {
-            if (wilderness_grids[y][x].town == (key - 'a' + 1)) {
+    const auto &wilderness = WildernessGrids::get_instance();
+    const auto &bottom_right = wilderness.get_bottom_right();
+    for (auto y = 0; y < bottom_right.y; y++) {
+        for (auto x = 0; x < bottom_right.x; x++) {
+            if (wilderness.get_grid({ y, x }).town == (key - 'a' + 1)) {
                 player_ptr->wilderness_y = y;
                 player_ptr->wilderness_x = x;
             }

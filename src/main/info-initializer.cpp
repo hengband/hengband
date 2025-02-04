@@ -42,7 +42,6 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 #include <fstream>
 #include <functional>
 #include <string>
@@ -266,7 +265,6 @@ void init_vaults_info()
 static bool read_wilderness_definition(std::ifstream &ifs)
 {
     auto &wilderness = WildernessGrids::get_instance();
-    auto &world = AngbandWorld::get_instance();
     std::string line;
     while (!ifs.eof()) {
         if (!std::getline(ifs, line)) {
@@ -284,15 +282,13 @@ static bool read_wilderness_definition(std::ifstream &ifs)
 
         if (splits[1] == "WX") {
             wilderness.init_width(std::stoi(splits[2]));
-            world.max_wild_x = std::stoi(splits[2]); //!< @todo 後で消す.
         } else if (splits[1] == "WY") {
             wilderness.init_height(std::stoi(splits[2]));
-            world.max_wild_y = std::stoi(splits[2]); //!< @todo 後で消す.
         } else {
             return false;
         }
 
-        if ((world.max_wild_x > 0) && (world.max_wild_y > 0)) {
+        if (wilderness.is_height_initialized() && wilderness.is_width_initialized()) {
             wilderness.initialize_grids();
             init_wilderness_encounter();
             return true;

@@ -83,3 +83,8 @@ const Pos2D &WildernessGrids::get_bottom_right() const
 {
     return this->bottom_right;
 }
+
+const std::vector<Pos2D> &WildernessGrids::get_positions() const
+{
+    return this->positions;
+}

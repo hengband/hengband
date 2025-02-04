@@ -392,8 +392,8 @@ void wilderness_gen(PlayerType *player_ptr)
     floor.width = MAX_WID;
     panel_row_min = floor.height;
     panel_col_min = floor.width;
-    auto &world = AngbandWorld::get_instance();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
+    const auto &bottom_right = WildernessGrids::get_instance().get_bottom_right();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, bottom_right.y, bottom_right.x);
     const auto wild_y = player_ptr->wilderness_y;
     const auto wild_x = player_ptr->wilderness_x;
     get_mon_num_prep_enum(player_ptr, get_monster_hook({ wild_y, wild_x }, floor.is_underground()));
@@ -473,6 +473,7 @@ void wilderness_gen(PlayerType *player_ptr)
     floor.get_grid({ 0, MAX_WID - 1 }).mimic = border.top_right;
     floor.get_grid({ MAX_HGT - 1, 0 }).mimic = border.bottom_left;
     floor.get_grid({ MAX_HGT - 1, MAX_WID - 1 }).mimic = border.bottom_right;
+    const auto &world = AngbandWorld::get_instance();
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
             auto &grid = floor.get_grid({ y, x });
@@ -581,40 +582,39 @@ void wilderness_gen_small(PlayerType *player_ptr)
 
     const auto &dungeons = DungeonList::get_instance();
     const auto &world = AngbandWorld::get_instance();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
-    for (auto x = 0; x < world.max_wild_x; x++) {
-        for (auto y = 0; y < world.max_wild_y; y++) {
-            const Pos2D pos(y, x);
-            auto &grid = floor.get_grid(pos);
-            auto &wild_grid = wilderness_grids[y][x];
-            if (wild_grid.town && (wild_grid.town != VALID_TOWNS)) {
-                grid.set_terrain_id(TerrainTag::TOWN);
-                grid.special = wild_grid.town;
-                grid.info |= (CAVE_GLOW | CAVE_MARK);
-                continue;
-            }
-
-            if (wild_grid.road) {
-                grid.set_terrain_id(TerrainTag::FLOOR);
-                grid.info |= (CAVE_GLOW | CAVE_MARK);
-                continue;
-            }
-
-            const auto entrance = wild_grid.entrance;
-            if ((entrance > DungeonId::WILDERNESS) && (world.total_winner || dungeons.get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER))) {
-                grid.set_terrain_id(TerrainTag::ENTRANCE);
-                grid.special = static_cast<short>(entrance);
-                grid.info |= (CAVE_GLOW | CAVE_MARK);
-                continue;
-            }
-
-            grid.set_terrain_id(WT_TT_MAP.at(wild_grid.terrain));
+    const auto &wilderness = WildernessGrids::get_instance();
+    const auto &bottom_right = wilderness.get_bottom_right();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, bottom_right.y, bottom_right.x);
+    for (const auto &pos : wilderness.get_positions()) {
+        auto &grid = floor.get_grid(pos);
+        const auto &wg = wilderness.get_grid(pos);
+        if (wg.town && (wg.town != VALID_TOWNS)) {
+            grid.set_terrain_id(TerrainTag::TOWN);
+            grid.special = wg.town;
             grid.info |= (CAVE_GLOW | CAVE_MARK);
+            continue;
         }
+
+        if (wg.road) {
+            grid.set_terrain_id(TerrainTag::FLOOR);
+            grid.info |= (CAVE_GLOW | CAVE_MARK);
+            continue;
+        }
+
+        const auto entrance = wg.entrance;
+        if ((entrance > DungeonId::WILDERNESS) && (world.total_winner || dungeons.get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER))) {
+            grid.set_terrain_id(TerrainTag::ENTRANCE);
+            grid.special = static_cast<short>(entrance);
+            grid.info |= (CAVE_GLOW | CAVE_MARK);
+            continue;
+        }
+
+        grid.set_terrain_id(WT_TT_MAP.at(wg.terrain));
+        grid.info |= (CAVE_GLOW | CAVE_MARK);
     }
 
-    floor.height = (int16_t)world.max_wild_y;
-    floor.width = (int16_t)world.max_wild_x;
+    floor.height = bottom_right.y;
+    floor.width = bottom_right.x;
     if (floor.height > MAX_HGT) {
         floor.height = MAX_HGT;
     }
@@ -740,10 +740,10 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
         player_ptr->wilderness_x = std::stoi(zz[1]);
 
         auto out_of_bounds = (player_ptr->wilderness_x < 1);
-        const auto &world = AngbandWorld::get_instance();
-        out_of_bounds |= (player_ptr->wilderness_x > world.max_wild_x);
+        const auto &bottom_right = WildernessGrids::get_instance().get_bottom_right();
+        out_of_bounds |= (player_ptr->wilderness_x > bottom_right.x);
         out_of_bounds |= (player_ptr->wilderness_y < 1);
-        out_of_bounds |= (player_ptr->wilderness_y > world.max_wild_y);
+        out_of_bounds |= (player_ptr->wilderness_y > bottom_right.y);
         if (out_of_bounds) {
             return { PARSE_ERROR_OUT_OF_BOUNDS, std::nullopt };
         }
