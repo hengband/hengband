@@ -67,7 +67,7 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
         return std::nullopt;
     }
 
-    const auto hook = get_monster_hook2(player_ptr, pos->y, pos->x);
+    const auto hook = floor.get_monrace_hook_terrain_at(*pos);
     SummonCondition condition(type, mode, summoner_m_idx, hook);
     get_mon_num_prep_summon(player_ptr, condition);
 

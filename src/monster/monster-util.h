@@ -9,7 +9,6 @@
 enum summon_type : int;
 enum class MonraceId : short;
 class PlayerType;
-MonraceHookTerrain get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x);
 void get_mon_num_prep_enum(PlayerType *player_ptr, MonraceHook hook1 = MonraceHook::NONE, MonraceHookTerrain hook2 = MonraceHookTerrain::NONE);
 void get_mon_num_prep_escort(PlayerType *player_ptr, MonraceId escorted_monrace_id, short m_idx, MonraceHookTerrain hook2);
 

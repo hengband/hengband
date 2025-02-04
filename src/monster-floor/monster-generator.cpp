@@ -258,7 +258,7 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
             continue;
         }
 
-        get_mon_num_prep_escort(player_ptr, r_idx, *m_idx, get_monster_hook2(player_ptr, pos_neighbor.y, pos_neighbor.x));
+        get_mon_num_prep_escort(player_ptr, r_idx, *m_idx, player_ptr->current_floor_ptr->get_monrace_hook_terrain_at(pos_neighbor));
         const auto monrace_id = get_mon_num(player_ptr, 0, monrace.level, 0);
         if (!MonraceList::is_valid(monrace_id)) {
             break;
@@ -282,9 +282,10 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
  */
 std::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
+    const Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-    get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook_at(pos_wilderness), get_monster_hook2(player_ptr, y, x));
+    get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook_at(pos_wilderness), floor.get_monrace_hook_terrain_at(pos));
     const auto &monraces = MonraceList::get_instance();
     MonraceId monrace_id;
     do {
@@ -341,7 +342,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
     Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-    get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook_at(pos_wilderness), get_monster_hook2(player_ptr, pos.y, pos.x));
+    get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook_at(pos_wilderness), floor.get_monrace_hook_terrain_at(pos));
     const auto monrace_id = select_horde_leader_r_idx(player_ptr);
     if (!monrace_id) {
         return false;

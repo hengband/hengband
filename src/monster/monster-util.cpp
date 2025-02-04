@@ -247,25 +247,6 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
 }
 
 /*!
- * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
- * @return 地勢にあったモンスターの生成条件関数
- */
-MonraceHookTerrain get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
-{
-    const Pos2D pos(y, x);
-    const auto &terrain = player_ptr->current_floor_ptr->get_grid(pos).get_terrain();
-    if (terrain.flags.has(TerrainCharacteristics::WATER)) {
-        return terrain.flags.has(TerrainCharacteristics::DEEP) ? MonraceHookTerrain::DEEP_WATER : MonraceHookTerrain::SHALLOW_WATER;
-    }
-
-    if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
-        return MonraceHookTerrain::LAVA;
-    }
-
-    return MonraceHookTerrain::FLOOR;
-}
-
-/*!
  * @brief モンスター生成テーブルの重み修正
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param hook1 生成制約1

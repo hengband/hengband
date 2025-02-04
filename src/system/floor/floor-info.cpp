@@ -430,6 +430,24 @@ MonraceHook FloorType::get_monrace_hook_at(const Pos2D &pos_wilderness) const
     }
 }
 
+/*!
+ * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
+ * @return 地勢にあったモンスターの生成条件関数
+ */
+MonraceHookTerrain FloorType::get_monrace_hook_terrain_at(const Pos2D &pos) const
+{
+    const auto &terrain = this->get_grid(pos).get_terrain();
+    if (terrain.flags.has(TerrainCharacteristics::WATER)) {
+        return terrain.flags.has(TerrainCharacteristics::DEEP) ? MonraceHookTerrain::DEEP_WATER : MonraceHookTerrain::SHALLOW_WATER;
+    }
+
+    if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
+        return MonraceHookTerrain::LAVA;
+    }
+
+    return MonraceHookTerrain::FLOOR;
+}
+
 void FloorType::enter_dungeon(bool state)
 {
     this->entering_dungeon = state;
