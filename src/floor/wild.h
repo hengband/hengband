@@ -22,6 +22,5 @@ void wilderness_gen(PlayerType *player_ptr);
 void wilderness_gen_small(PlayerType *player_ptr);
 void init_wilderness_terrains();
 void init_wilderness_encounter();
-void seed_wilderness();
 std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerType *player_ptr, char *buf, int xmin, int xmax, const Pos2D &pos_parsing);
 bool change_wild_mode(PlayerType *player_ptr, bool encount);

@@ -769,21 +769,6 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
 }
 
 /*!
- * @brief ゲーム開始時に各荒野フロアの乱数シードを指定する /
- * Generate the random seeds for the wilderness
- */
-void seed_wilderness()
-{
-    const auto &world = AngbandWorld::get_instance();
-    for (auto x = 0; x < world.max_wild_x; x++) {
-        for (auto y = 0; y < world.max_wild_y; y++) {
-            wilderness_grids[y][x].seed = randint0(0x10000000);
-            wilderness_grids[y][x].entrance = DungeonId::WILDERNESS;
-        }
-    }
-}
-
-/*!
  * @brief 荒野の地勢設定を初期化する
  */
 void init_wilderness_terrains()

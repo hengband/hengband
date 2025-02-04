@@ -23,6 +23,8 @@ public:
     int level = 0;
     DungeonId entrance{};
     std::string name = "";
+
+    void initialize_seed();
 };
 
 class WildernessGrids {
@@ -35,6 +37,7 @@ public:
     void init_height(int height);
     void init_width(int width);
     void initialize_grids(); //!< @details 全ての定義ファイルを読み込んでから初期化する.
+    void initialize_seeds();
 
     static WildernessGrids &get_instance();
     const WildernessGrid &get_grid(const Pos2D &pos) const;
@@ -49,6 +52,7 @@ public:
 private:
     WildernessGrids() = default;
     static WildernessGrids instance;
+    std::vector<Pos2D> positions;
     Pos2D bottom_right = { 0, 0 };
     Pos2D current_pos = { 0, 0 };
 };
