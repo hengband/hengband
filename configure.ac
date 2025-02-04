@@ -4,7 +4,7 @@ AC_INIT(hengband, 3.0.1.25-Beta)
 AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_HEADERS(src/autoconf.h)
 AC_CONFIG_SRCDIR(src/main.cpp)
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE(tar-pax)
 
 AC_ARG_WITH(setgid,
 [  --with-setgid=NAME      install hengband as group NAME],
