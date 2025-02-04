@@ -16,6 +16,8 @@
 #include "system/enums/monrace/monrace-hook-types.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-tag.h"
+#include "system/enums/terrain/wilderness-terrain.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -394,6 +396,37 @@ TerrainTag FloorType::select_random_trap() const
         }
 
         return tag;
+    }
+}
+
+MonraceHook FloorType::get_monrace_hook_at(const Pos2D &pos_wilderness) const
+{
+    if (this->is_underground()) {
+        return MonraceHook::DUNGEON;
+    }
+
+    switch (WildernessGrids::get_instance().get_grid(pos_wilderness).terrain) {
+    case WildernessTerrain::TOWN:
+        return MonraceHook::TOWN;
+    case WildernessTerrain::DEEP_WATER:
+        return MonraceHook::OCEAN;
+    case WildernessTerrain::SHALLOW_WATER:
+    case WildernessTerrain::SWAMP:
+        return MonraceHook::SHORE;
+    case WildernessTerrain::DIRT:
+    case WildernessTerrain::DESERT:
+        return MonraceHook::WASTE;
+    case WildernessTerrain::GRASS:
+        return MonraceHook::GRASS;
+    case WildernessTerrain::TREES:
+        return MonraceHook::WOOD;
+    case WildernessTerrain::SHALLOW_LAVA:
+    case WildernessTerrain::DEEP_LAVA:
+        return MonraceHook::VOLCANO;
+    case WildernessTerrain::MOUNTAIN:
+        return MonraceHook::MOUNTAIN;
+    default:
+        return MonraceHook::DUNGEON;
     }
 }
 

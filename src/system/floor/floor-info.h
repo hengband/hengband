@@ -41,6 +41,7 @@ constexpr auto REDRAW_MAX = 2298;
 enum class DungeonId;
 enum class GridCountKind;
 enum class MonsterTimedEffect : int;
+enum class MonraceHook;
 enum class MonraceHookTerrain;
 enum class MonraceId : short;
 enum class QuestId : short;
@@ -124,6 +125,7 @@ public:
     short select_baseitem_id(int level_initial, uint32_t mode) const;
     bool filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain hook) const;
     TerrainTag select_random_trap() const;
+    MonraceHook get_monrace_hook_at(const Pos2D &pos_wilderness) const;
 
     void enter_dungeon(bool state);
     void leave_dungeon(bool state);

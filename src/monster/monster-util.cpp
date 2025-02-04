@@ -156,37 +156,6 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
     return true;
 }
 
-MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
-{
-    if (is_underground) {
-        return MonraceHook::DUNGEON;
-    }
-
-    switch (WildernessGrids::get_instance().get_grid(pos_wilderness).terrain) {
-    case WildernessTerrain::TOWN:
-        return MonraceHook::TOWN;
-    case WildernessTerrain::DEEP_WATER:
-        return MonraceHook::OCEAN;
-    case WildernessTerrain::SHALLOW_WATER:
-    case WildernessTerrain::SWAMP:
-        return MonraceHook::SHORE;
-    case WildernessTerrain::DIRT:
-    case WildernessTerrain::DESERT:
-        return MonraceHook::WASTE;
-    case WildernessTerrain::GRASS:
-        return MonraceHook::GRASS;
-    case WildernessTerrain::TREES:
-        return MonraceHook::WOOD;
-    case WildernessTerrain::SHALLOW_LAVA:
-    case WildernessTerrain::DEEP_LAVA:
-        return MonraceHook::VOLCANO;
-    case WildernessTerrain::MOUNTAIN:
-        return MonraceHook::MOUNTAIN;
-    default:
-        return MonraceHook::DUNGEON;
-    }
-}
-
 static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_id)
 {
     const auto &monraces = MonraceList::get_instance();
@@ -231,7 +200,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
         }
 
         const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-        const auto hook_tanuki = get_monster_hook(pos_wilderness, floor.is_underground());
+        const auto hook_tanuki = floor.get_monrace_hook_at(pos_wilderness);
         return do_hook(player_ptr, hook_tanuki, monrace_id);
     }
     case MonraceHook::FISHING:
@@ -660,7 +629,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, const ChameleonTransf
     }
 
     const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-    const auto hook = get_monster_hook(pos_wilderness, floor.is_underground());
+    const auto hook = floor.get_monrace_hook_at(pos_wilderness);
     return do_hook(player_ptr, hook, monrace_id);
 }
 
