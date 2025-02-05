@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include <concepts>
+#include <fmt/format.h>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -24,3 +25,9 @@ void msg_print(std::nullptr_t);
 void msg_format(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 void wr_message_history();
 void rd_message_history();
+
+template <typename... Args>
+void msg_print(fmt::format_string<Args...> fmt, Args &&...args)
+{
+    return msg_print(fmt::format(fmt, std::forward<Args>(args)...));
+}
