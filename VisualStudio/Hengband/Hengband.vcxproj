@@ -1015,7 +1015,6 @@
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\external-lib\include-json.h" />
-    <ClInclude Include="..\..\src\external-lib\json.hpp" />
     <ClInclude Include="..\..\src\system\enums\terrain\terrain-kind.h" />
     <ClInclude Include="..\..\src\system\enums\terrain\wilderness-terrain.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-monrace-service.h" />
