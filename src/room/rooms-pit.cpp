@@ -107,19 +107,19 @@ void place_pit_outer(PlayerType *player_ptr, const Pos2D &center)
     for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
         for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
             auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, &grid, GB_FLOOR);
+            place_grid(player_ptr, grid, GB_FLOOR);
             grid.add_info(CAVE_ROOM);
         }
     }
 
     for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, rectangle.top_left.x - 1 }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y, rectangle.bottom_right.x + 1 }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y, rectangle.top_left.x - 1 }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y, rectangle.bottom_right.x + 1 }), GB_OUTER);
     }
 
     for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ rectangle.top_left.y - 1, x }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ rectangle.bottom_right.y + 1, x }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ rectangle.top_left.y - 1, x }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ rectangle.bottom_right.y + 1, x }), GB_OUTER);
     }
 }
 
@@ -128,13 +128,13 @@ void place_pit_inner(PlayerType *player_ptr, const Pos2D &center)
     auto &floor = *player_ptr->current_floor_ptr;
     const auto rectangle = Rect2D(center, PIT_SIZE).resized(-2);
     for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, rectangle.top_left.x - 1 }), GB_INNER);
-        place_grid(player_ptr, &floor.get_grid({ y, rectangle.bottom_right.x + 1 }), GB_INNER);
+        place_grid(player_ptr, floor.get_grid({ y, rectangle.top_left.x - 1 }), GB_INNER);
+        place_grid(player_ptr, floor.get_grid({ y, rectangle.bottom_right.x + 1 }), GB_INNER);
     }
 
     for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ rectangle.top_left.y - 1, x }), GB_INNER);
-        place_grid(player_ptr, &floor.get_grid({ rectangle.bottom_right.y + 1, x }), GB_INNER);
+        place_grid(player_ptr, floor.get_grid({ rectangle.top_left.y - 1, x }), GB_INNER);
+        place_grid(player_ptr, floor.get_grid({ rectangle.bottom_right.y + 1, x }), GB_INNER);
     }
 
     for (auto y = rectangle.top_left.y; y <= rectangle.bottom_right.y; y++) {
@@ -367,7 +367,7 @@ bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
     for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
         for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
             auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, &grid, GB_INNER);
+            place_grid(player_ptr, grid, GB_INNER);
             grid.add_info(CAVE_ROOM);
         }
     }
@@ -375,41 +375,41 @@ bool build_type13(PlayerType *player_ptr, DungeonData *dd_ptr)
     /* Place the floor area 1 */
     for (auto x = rectangle.top_left.x + 3; x <= rectangle.bottom_right.x - 3; x++) {
         auto &grid_top = floor.get_grid({ center->y - 2, x });
-        place_grid(player_ptr, &grid_top, GB_FLOOR);
+        place_grid(player_ptr, grid_top, GB_FLOOR);
         grid_top.add_info(CAVE_ICKY);
 
         auto &grid_bottom = floor.get_grid({ center->y + 2, x });
-        place_grid(player_ptr, &grid_bottom, GB_FLOOR);
+        place_grid(player_ptr, grid_bottom, GB_FLOOR);
         grid_bottom.add_info(CAVE_ICKY);
     }
 
     /* Place the floor area 2 */
     for (auto x = rectangle.top_left.x + 5; x <= rectangle.bottom_right.x - 5; x++) {
         auto &grid_left = floor.get_grid({ center->y - 3, x });
-        place_grid(player_ptr, &grid_left, GB_FLOOR);
+        place_grid(player_ptr, grid_left, GB_FLOOR);
         grid_left.add_info(CAVE_ICKY);
 
         auto &grid_right = floor.get_grid({ center->y + 3, x });
-        place_grid(player_ptr, &grid_right, GB_FLOOR);
+        place_grid(player_ptr, grid_right, GB_FLOOR);
         grid_right.add_info(CAVE_ICKY);
     }
 
     /* Corridor */
     for (auto x = rectangle.top_left.x; x <= rectangle.bottom_right.x; x++) {
-        place_grid(player_ptr, &floor.get_grid({ center->y, x }), GB_FLOOR);
-        place_grid(player_ptr, &floor.get_grid({ rectangle.top_left.y, x }), GB_FLOOR);
-        place_grid(player_ptr, &floor.get_grid({ rectangle.bottom_right.y, x }), GB_FLOOR);
+        place_grid(player_ptr, floor.get_grid({ center->y, x }), GB_FLOOR);
+        place_grid(player_ptr, floor.get_grid({ rectangle.top_left.y, x }), GB_FLOOR);
+        place_grid(player_ptr, floor.get_grid({ rectangle.bottom_right.y, x }), GB_FLOOR);
     }
 
     /* Place the outer walls */
     for (auto y = rectangle.top_left.y - 1; y <= rectangle.bottom_right.y + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, rectangle.top_left.x - 1 }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y, rectangle.bottom_right.x + 1 }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y, rectangle.top_left.x - 1 }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y, rectangle.bottom_right.x + 1 }), GB_OUTER);
     }
 
     for (auto x = rectangle.top_left.x - 1; x <= rectangle.bottom_right.x + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ rectangle.top_left.y - 1, x }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ rectangle.bottom_right.y + 1, x }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ rectangle.top_left.y - 1, x }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ rectangle.bottom_right.y + 1, x }), GB_OUTER);
     }
 
     /* Random corridor */

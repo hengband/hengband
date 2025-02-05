@@ -268,8 +268,8 @@ void update_lite(PlayerType *player_ptr)
     for (int i = 0; i < floor.lite_n; i++) {
         POSITION y = floor.lite_y[i];
         POSITION x = floor.lite_x[i];
-        auto *g_ptr = &floor.grid_array[y][x];
-        if (g_ptr->info & CAVE_TEMP) {
+        const auto &grid = floor.grid_array[y][x];
+        if (grid.info & CAVE_TEMP) {
             continue;
         }
 
@@ -278,9 +278,9 @@ void update_lite(PlayerType *player_ptr)
 
     // 前回照らされていた座標たちのうち、状態が変わったものについて再描画フラグを立てる。
     for (const auto &[y, x] : points) {
-        auto *g_ptr = &floor.grid_array[y][x];
-        g_ptr->info &= ~(CAVE_TEMP);
-        if (g_ptr->info & CAVE_LITE) {
+        auto &grid = floor.grid_array[y][x];
+        grid.info &= ~(CAVE_TEMP);
+        if (grid.info & CAVE_LITE) {
             continue;
         }
 

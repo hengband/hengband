@@ -216,7 +216,7 @@ static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y,
         }
 
         if (i == 0) {
-            place_grid(player_ptr, &grid, GB_OUTER);
+            place_grid(player_ptr, grid, GB_OUTER);
             vec = { 0, 0 };
         }
 

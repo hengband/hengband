@@ -126,11 +126,11 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         } while (tmp8u == MAX_UCHAR);
 
         for (int i = count; i > 0; i--) {
-            auto *g_ptr = &floor.grid_array[y][x];
-            g_ptr->info = templates[id].info;
-            g_ptr->feat = templates[id].feat;
-            g_ptr->mimic = templates[id].mimic;
-            g_ptr->special = templates[id].special;
+            auto &grid = floor.grid_array[y][x];
+            grid.info = templates[id].info;
+            grid.feat = templates[id].feat;
+            grid.mimic = templates[id].mimic;
+            grid.special = templates[id].special;
 
             if (++x >= xmax) {
                 x = 0;

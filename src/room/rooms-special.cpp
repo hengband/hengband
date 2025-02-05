@@ -23,25 +23,25 @@
 namespace {
 void place_floor_glass(PlayerType *player_ptr, Grid &grid)
 {
-    place_grid(player_ptr, &grid, GB_FLOOR);
+    place_grid(player_ptr, grid, GB_FLOOR);
     grid.set_terrain_id(TerrainTag::GLASS_FLOOR);
 }
 
 void place_outer_glass(PlayerType *player_ptr, Grid &grid)
 {
-    place_grid(player_ptr, &grid, GB_OUTER);
+    place_grid(player_ptr, grid, GB_OUTER);
     grid.set_terrain_id(TerrainTag::GLASS_WALL);
 }
 
 void place_inner_glass(PlayerType *player_ptr, Grid &grid)
 {
-    place_grid(player_ptr, &grid, GB_INNER);
+    place_grid(player_ptr, grid, GB_INNER);
     grid.set_terrain_id(TerrainTag::GLASS_WALL);
 }
 
 void place_inner_perm_glass(PlayerType *player_ptr, Grid &grid)
 {
-    place_grid(player_ptr, &grid, GB_INNER_PERM);
+    place_grid(player_ptr, grid, GB_INNER_PERM);
     grid.set_terrain_id(TerrainTag::PERMANENT_GLASS_WALL);
 }
 }

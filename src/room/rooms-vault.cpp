@@ -340,7 +340,7 @@ static void build_vault(
             auto &grid = floor.get_grid(pos);
 
             /* Lay down a floor */
-            place_grid(player_ptr, &grid, GB_FLOOR);
+            place_grid(player_ptr, grid, GB_FLOOR);
             grid.mimic = 0;
 
             /* Part of a vault */
@@ -349,20 +349,20 @@ static void build_vault(
             /* Analyze the grid */
             switch (*t) {
             case '%':
-                place_grid(player_ptr, &grid, GB_OUTER_NOPERM);
+                place_grid(player_ptr, grid, GB_OUTER_NOPERM);
                 break;
             case '#':
-                place_grid(player_ptr, &grid, GB_INNER);
+                place_grid(player_ptr, grid, GB_INNER);
                 break;
             case '$':
-                place_grid(player_ptr, &grid, GB_INNER);
+                place_grid(player_ptr, grid, GB_INNER);
                 grid.set_terrain_id(TerrainTag::GLASS_WALL);
                 break;
             case 'X':
-                place_grid(player_ptr, &grid, GB_INNER_PERM);
+                place_grid(player_ptr, grid, GB_INNER_PERM);
                 break;
             case 'Y':
-                place_grid(player_ptr, &grid, GB_INNER_PERM);
+                place_grid(player_ptr, grid, GB_INNER_PERM);
                 grid.set_terrain_id(TerrainTag::PERMANENT_GLASS_WALL);
                 break;
             case '*':
@@ -785,7 +785,7 @@ static void build_mini_c_vault(PlayerType *player_ptr, const Pos2D &center, cons
             grid.info |= (CAVE_ROOM | CAVE_ICKY);
 
             /* Permanent walls */
-            place_grid(player_ptr, &grid, GB_INNER_PERM);
+            place_grid(player_ptr, grid, GB_INNER_PERM);
         }
     }
 

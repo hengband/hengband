@@ -22,8 +22,8 @@
  */
 short chest_check(const FloorType &floor, const Pos2D &pos, bool trapped)
 {
-    auto *g_ptr = &floor.get_grid(pos);
-    for (const auto this_o_idx : g_ptr->o_idx_list) {
+    const auto &grid = floor.get_grid(pos);
+    for (const auto this_o_idx : grid.o_idx_list) {
         const auto &item = floor.o_list[this_o_idx];
         const auto is_empty = trapped || (item.pval == 0);
         const auto trapped_only = trapped && (item.pval > 0);

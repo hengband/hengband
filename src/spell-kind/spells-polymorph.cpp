@@ -68,12 +68,12 @@ static MonraceId select_polymorph_monrace_id(PlayerType *player_ptr, MonraceId m
 bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor.grid_array[y][x];
-    auto *m_ptr = &floor.m_list[g_ptr->m_idx];
+    const auto &grid = floor.grid_array[y][x];
+    auto *m_ptr = &floor.m_list[grid.m_idx];
     MonraceId new_r_idx;
     MonraceId old_r_idx = m_ptr->r_idx;
-    bool targeted = target_who == g_ptr->m_idx;
-    auto health_tracked = HealthBarTracker::get_instance().is_tracking(g_ptr->m_idx);
+    bool targeted = target_who == grid.m_idx;
+    auto health_tracked = HealthBarTracker::get_instance().is_tracking(grid.m_idx);
 
     if (floor.inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         return false;
@@ -102,7 +102,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     m_ptr->hold_o_idx_list.clear();
-    delete_monster_idx(player_ptr, g_ptr->m_idx);
+    delete_monster_idx(player_ptr, grid.m_idx);
     bool polymorphed = false;
     auto m_idx = place_specific_monster(player_ptr, y, x, new_r_idx, mode);
     if (m_idx) {

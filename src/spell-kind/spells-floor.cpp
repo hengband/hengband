@@ -125,11 +125,11 @@ void wiz_dark(PlayerType *player_ptr)
     /* Forget every grid */
     for (POSITION y = 1; y < player_ptr->current_floor_ptr->height - 1; y++) {
         for (POSITION x = 1; x < player_ptr->current_floor_ptr->width - 1; x++) {
-            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
 
             /* Process the grid */
-            g_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
-            g_ptr->info |= (CAVE_UNSAFE);
+            grid.info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
+            grid.info |= (CAVE_UNSAFE);
         }
     }
 
@@ -396,7 +396,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
 
             if (t < 20) {
                 /* Create granite wall */
-                place_grid(player_ptr, &grid, GB_EXTRA);
+                place_grid(player_ptr, grid, GB_EXTRA);
             } else if (t < 70) {
                 /* Create quartz vein */
                 grid.set_terrain_id(TerrainTag::QUARTZ_VEIN);
@@ -405,7 +405,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 grid.set_terrain_id(TerrainTag::MAGMA_VEIN);
             } else {
                 /* Create floor */
-                place_grid(player_ptr, &grid, GB_FLOOR);
+                place_grid(player_ptr, grid, GB_FLOOR);
             }
 
             /* Clear garbage of hidden trap or door */

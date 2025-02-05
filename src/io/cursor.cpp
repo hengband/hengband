@@ -48,10 +48,10 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);
     handle_stuff(player_ptr);
     for (const auto &pos_path : path_g) {
-        auto *g_ptr = &floor.get_grid(pos_path);
+        const auto &grid = floor.get_grid(pos_path);
         if (panel_contains(pos_path.y, pos_path.x)) {
             DisplaySymbolPair symbol_pair({ default_color, '\0' }, { default_color, '*' });
-            if (g_ptr->has_monster() && floor.m_list[g_ptr->m_idx].ml) {
+            if (grid.has_monster() && floor.m_list[grid.m_idx].ml) {
                 symbol_pair = map_info(player_ptr, pos_path);
                 auto &symbol_foreground = symbol_pair.symbol_foreground;
                 if (!symbol_foreground.is_ascii_graphics()) {
@@ -68,7 +68,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
             term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, symbol_pair);
         }
 
-        if (g_ptr->is_mark() && !g_ptr->has(TerrainCharacteristics::PROJECT)) {
+        if (grid.is_mark() && !grid.has(TerrainCharacteristics::PROJECT)) {
             break;
         }
 

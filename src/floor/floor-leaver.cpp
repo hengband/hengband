@@ -304,17 +304,17 @@ static Grid *set_grid_by_leaving_floor(FloorType &floor, const Pos2D &p_pos)
         return nullptr;
     }
 
-    auto *g_ptr = &floor.get_grid(p_pos);
-    const auto &terrain = g_ptr->get_terrain();
-    if (g_ptr->special && terrain.flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr(g_ptr->special)) {
-        new_floor_id = g_ptr->special;
+    auto &grid = floor.get_grid(p_pos);
+    const auto &terrain = grid.get_terrain();
+    if (grid.special && terrain.flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr(grid.special)) {
+        new_floor_id = grid.special;
     }
 
     if (terrain.flags.has_all_of({ TerrainCharacteristics::STAIRS, TerrainCharacteristics::SHAFT })) {
         FloorChangeModesStore::get_instace()->set(FloorChangeMode::SHAFT);
     }
 
-    return g_ptr;
+    return &grid;
 }
 
 static void jump_floors(FloorType &floor)

@@ -195,7 +195,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
     if (player_ptr->riding) {
         /* Skip non-empty grids */
-        if (!can_player_ride_pet(player_ptr, &grid, false)) {
+        if (!can_player_ride_pet(player_ptr, grid, false)) {
             msg_print(_("そちらには降りられません。", "You cannot go that direction."));
             return false;
         }
@@ -240,7 +240,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             return false;
         }
 
-        if (!can_player_ride_pet(player_ptr, &grid, true)) {
+        if (!can_player_ride_pet(player_ptr, grid, true)) {
             /* Feature code (applying "mimic" field) */
             const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
             using Tc = TerrainCharacteristics;
@@ -686,8 +686,8 @@ void do_cmd_pet(PlayerType *player_ptr)
         if (!target_set(player_ptr, TARGET_KILL)) {
             player_ptr->pet_t_m_idx = 0;
         } else {
-            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[target_row][target_col];
-            if (g_ptr->has_monster() && (player_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)) {
+            const auto &grid = player_ptr->current_floor_ptr->grid_array[target_row][target_col];
+            if (grid.has_monster() && (player_ptr->current_floor_ptr->m_list[grid.m_idx].ml)) {
                 player_ptr->pet_t_m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
                 player_ptr->pet_follow_distance = PET_DESTROY_DIST;
             } else {

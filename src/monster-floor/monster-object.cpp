@@ -181,9 +181,9 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     auto *r_ptr = &m_ptr->get_monrace();
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
+    const auto &grid = player_ptr->current_floor_ptr->grid_array[ny][nx];
     turn_flags_ptr->do_take = r_ptr->behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
-    for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
+    for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
         EnumClassFlagGroup<MonsterKindType> flg_monster_kind;
         EnumClassFlagGroup<MonsterResistanceType> flgr;
         OBJECT_IDX this_o_idx = *it++;

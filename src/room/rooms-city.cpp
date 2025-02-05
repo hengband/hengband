@@ -70,7 +70,7 @@ void generate_room_floor(PlayerType *player_ptr, const Rect2D &rectangle, int li
 
     rectangle.each_area([player_ptr, info](const Pos2D &pos) {
         auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-        place_grid(player_ptr, &grid, GB_FLOOR);
+        place_grid(player_ptr, grid, GB_FLOOR);
         grid.add_info(info);
     });
 }

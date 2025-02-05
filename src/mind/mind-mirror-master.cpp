@@ -371,10 +371,10 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
     int tmp;
     TIME_EFFECT t;
     POSITION x, y;
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    const auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     switch (spell) {
     case MindMirrorMasterType::MIRROR_SEEING:
-        tmp = g_ptr->is_mirror() ? 4 : 0;
+        tmp = grid.is_mirror() ? 4 : 0;
         if (plev + tmp > 4) {
             detect_monsters_normal(player_ptr, DETECT_RAD_DEFAULT);
         }
@@ -407,7 +407,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
             return false;
         }
 
-        if (plev > 9 && g_ptr->is_mirror()) {
+        if (plev > 9 && grid.is_mirror()) {
             fire_beam(player_ptr, AttributeType::LITE, dir, Dice::roll(3 + ((plev - 1) / 5), 4));
         } else {
             fire_bolt(player_ptr, AttributeType::LITE, dir, Dice::roll(3 + ((plev - 1) / 5), 4));
@@ -481,7 +481,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
         SpellsMirrorMaster(player_ptr).super_ray(dir, 150 + randint1(2 * plev));
         break;
     case MindMirrorMasterType::ILLUSION_LIGHT:
-        tmp = g_ptr->is_mirror() ? 4 : 3;
+        tmp = grid.is_mirror() ? 4 : 3;
         slow_monsters(player_ptr, plev);
         stun_monsters(player_ptr, plev * tmp * 2);
         confuse_monsters(player_ptr, plev * tmp);
@@ -489,7 +489,7 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
         stasis_monsters(player_ptr, plev * tmp);
         break;
     case MindMirrorMasterType::MIRROR_SHIFT:
-        if (!g_ptr->is_mirror()) {
+        if (!grid.is_mirror()) {
             msg_print(_("鏡の国の場所がわからない！", "You cannot find out where the mirror is!"));
             break;
         }

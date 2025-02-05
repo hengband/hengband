@@ -528,13 +528,13 @@ void fix_object(PlayerType *player_ptr)
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
  */
-static const MonsterEntity *monster_on_floor_items(const FloorType &floor, const Grid *g_ptr)
+static const MonsterEntity *monster_on_floor_items(const FloorType &floor, const Grid &grid)
 {
-    if (!g_ptr->has_monster()) {
+    if (!grid.has_monster()) {
         return nullptr;
     }
 
-    auto m_ptr = &floor.m_list[g_ptr->m_idx];
+    auto m_ptr = &floor.m_list[grid.m_idx];
     if (!m_ptr->is_valid() || !m_ptr->ml) {
         return nullptr;
     }
@@ -566,7 +566,7 @@ static void display_floor_item_list(PlayerType *player_ptr, const Pos2D &pos)
     const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
     if (player_ptr->is_located_at(pos)) {
         line = format(_("(X:%03d Y:%03d) あなたの足元のアイテム一覧", "Items at (%03d,%03d) under you"), pos.x, pos.y);
-    } else if (const auto *m_ptr = monster_on_floor_items(floor, &grid); m_ptr != nullptr) {
+    } else if (const auto *m_ptr = monster_on_floor_items(floor, grid); m_ptr != nullptr) {
         if (is_hallucinated) {
             line = format(_("(X:%03d Y:%03d) 何か奇妙な物の足元の発見済みアイテム一覧", "Found items at (%03d,%03d) under something strange"), pos.x, pos.y);
         } else {

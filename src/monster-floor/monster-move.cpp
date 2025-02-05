@@ -418,7 +418,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         exe_monster_attack_to_player(player_ptr, turn_flags_ptr, m_idx, pos_neighbor);
-        if (process_monster_attack_to_monster(player_ptr, turn_flags_ptr, m_idx, &grid, can_cross)) {
+        if (process_monster_attack_to_monster(player_ptr, turn_flags_ptr, m_idx, grid, can_cross)) {
             return false;
         }
 
