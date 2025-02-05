@@ -513,6 +513,21 @@ hengband_SOURCES = \
 	external-lib/include/range/v3/range.hpp \
 	external-lib/include/meta/meta.hpp \
 	external-lib/include/meta/meta_fwd.hpp \
+	external-lib/include/fmt/core.h \
+	external-lib/include/fmt/ranges.h \
+	external-lib/include/fmt/compile.h \
+	external-lib/include/fmt/color.h \
+	external-lib/include/fmt/xchar.h \
+	external-lib/include/fmt/format.h \
+	external-lib/include/fmt/format-inl.h \
+	external-lib/include/fmt/os.h \
+	external-lib/include/fmt/base.h \
+	external-lib/include/fmt/chrono.h \
+	external-lib/include/fmt/args.h \
+	external-lib/include/fmt/std.h \
+	external-lib/include/fmt/printf.h \
+	external-lib/include/fmt/ostream.h \
+	external-lib/fmt/format.cc \
 	\
 	flavor/flag-inscriptions-table.cpp flavor/flag-inscriptions-table.h \
 	flavor/flavor-describer.cpp flavor/flavor-describer.h \
