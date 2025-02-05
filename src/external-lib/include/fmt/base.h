@@ -8,6 +8,11 @@
 #ifndef FMT_BASE_H_
 #define FMT_BASE_H_
 
+#if defined(_MSC_VER)
+// MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく
+#pragma warning(push, 0)
+#endif
+
 #if defined(FMT_IMPORT_STD) && !defined(FMT_MODULE)
 #  define FMT_MODULE
 #endif
@@ -2958,4 +2963,9 @@ FMT_END_NAMESPACE
 #ifdef FMT_HEADER_ONLY
 #  include "format.h"
 #endif
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+
 #endif  // FMT_BASE_H_

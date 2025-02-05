@@ -8,6 +8,11 @@
 #ifndef FMT_FORMAT_INL_H_
 #define FMT_FORMAT_INL_H_
 
+#if defined(_MSC_VER)
+// MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく
+#pragma warning(push, 0)
+#endif
+
 #ifndef FMT_MODULE
 #  include <algorithm>
 #  include <cerrno>  // errno
@@ -1952,5 +1957,9 @@ FMT_FUNC auto is_printable(uint32_t cp) -> bool {
 }  // namespace detail
 
 FMT_END_NAMESPACE
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 #endif  // FMT_FORMAT_INL_H_
