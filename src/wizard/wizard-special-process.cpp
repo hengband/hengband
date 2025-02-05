@@ -814,7 +814,7 @@ void cheat_death(PlayerType *player_ptr)
             player_ptr->oldpx = 131;
         }
     } else {
-        wilderness.set_player_position({ 48, 5 });
+        wilderness.initialize_position();
         player_ptr->oldpy = 33;
         player_ptr->oldpx = 131;
     }

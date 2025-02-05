@@ -39,6 +39,7 @@ public:
     void init_width(int width);
     void initialize_grids(); //!< @details 全ての定義ファイルを読み込んでから初期化する.
     void initialize_seeds();
+    void initialize_position();
 
     static WildernessGrids &get_instance();
     const WildernessGrid &get_grid(const Pos2D &pos) const;

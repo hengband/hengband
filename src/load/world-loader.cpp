@@ -172,7 +172,7 @@ void load_wilderness_info(PlayerType *player_ptr)
     auto &wilderness = WildernessGrids::get_instance();
     wilderness.set_player_position({ y, x });
     if (h_older_than(0, 3, 13)) {
-        wilderness.set_player_position({ 48, 5 });
+        wilderness.initialize_position();
     }
 
     auto &world = AngbandWorld::get_instance();
