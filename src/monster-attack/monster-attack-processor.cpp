@@ -70,7 +70,7 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
  * @brief モンスターからモンスターへの直接攻撃を実行する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @param g_ptr グリッドへの参照ポインタ
+ * @param grid グリッドへの参照
  */
 static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, const Grid &grid)
 {
@@ -114,7 +114,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
- * @param g_ptr グリッドへの参照ポインタ
+ * @param grid グリッドへの参照
  * @param can_cross モンスターが地形を踏破できるならばTRUE
  * @return ターン消費が発生したらTRUE
  */

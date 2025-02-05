@@ -263,7 +263,7 @@ static void make_aqua_streams(PlayerType *player_ptr, DungeonData *dd_ptr, const
 
 /*!
  * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
- * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
+ * @param grid 永久壁を配置したいグリッドへの参照
  */
 static void place_bound_perm_wall(PlayerType *player_ptr, Grid &grid)
 {

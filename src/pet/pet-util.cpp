@@ -17,7 +17,7 @@ int total_friends = 0;
 
 /*!
  * @brief プレイヤーの騎乗/下馬処理判定
- * @param g_ptr プレイヤーの移動先マスの構造体参照ポインタ
+ * @param grid プレイヤーの移動先グリッドへの参照
  * @param now_riding trueなら下馬処理、falseならば騎乗処理
  * @return 可能ならばtrueを返す
  */

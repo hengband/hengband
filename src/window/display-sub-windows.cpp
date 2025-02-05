@@ -523,7 +523,7 @@ void fix_object(PlayerType *player_ptr)
 /*!
  * @brief 床上のモンスター情報を返す
  * @param floor フロアへの参照
- * @param grid_prt 座標グリッドの情報への参照ポインタ
+ * @param grid グリッドへの参照
  * @return モンスターが見える場合にはモンスター情報への参照ポインタ、それ以外はnullptr
  * @details
  * Lookコマンドでカーソルを合わせた場合に合わせてミミックは考慮しない。
