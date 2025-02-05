@@ -464,8 +464,10 @@ enum { use_utf8 = !FMT_WIN32 || is_utf8_enabled };
 #  define FMT_UNICODE 1
 #endif
 
+#if !defined(_MSC_VER)
 static_assert(!FMT_UNICODE || use_utf8,
               "Unicode support requires compiling with /utf-8");
+#endif
 
 template <typename T> constexpr const char* narrow(const T*) { return nullptr; }
 constexpr FMT_ALWAYS_INLINE const char* narrow(const char* s) { return s; }
