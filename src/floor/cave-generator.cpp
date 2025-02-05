@@ -129,9 +129,8 @@ static void make_tunnels(PlayerType *player_ptr, DungeonData *dd_ptr)
 static void make_walls(PlayerType *player_ptr, DungeonData *dd_ptr, const DungeonDefinition &dungeon, dt_type *dt_ptr)
 {
     for (size_t j = 0; j < dd_ptr->wall_n; j++) {
-        Grid *g_ptr;
         dd_ptr->tunnel_pos = dd_ptr->walls[j];
-        g_ptr = &player_ptr->current_floor_ptr->get_grid(dd_ptr->tunnel_pos);
+        auto *g_ptr = &player_ptr->current_floor_ptr->get_grid(dd_ptr->tunnel_pos);
         g_ptr->mimic = 0;
         place_grid(player_ptr, g_ptr, GB_FLOOR);
         if (evaluate_percent(dt_ptr->dun_tun_pen) && dungeon.flags.has_not(DungeonFeatureType::NO_DOORS)) {

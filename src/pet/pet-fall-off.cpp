@@ -107,8 +107,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         for (const auto &d : Direction::directions_8()) {
             const auto pos = player_ptr->get_position() + d.vec();
 
-            Grid *g_ptr;
-            g_ptr = &player_ptr->current_floor_ptr->get_grid(pos);
+            auto *g_ptr = &player_ptr->current_floor_ptr->get_grid(pos);
 
             if (g_ptr->has_monster()) {
                 continue;

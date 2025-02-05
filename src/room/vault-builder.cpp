@@ -119,7 +119,6 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
  */
 static void vault_trap_aux(FloorType &floor, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
-    Grid *g_ptr;
     int y1 = y, x1 = x;
     int dummy = 0;
     for (int count = 0; count <= 5; count++) {
@@ -137,7 +136,7 @@ static void vault_trap_aux(FloorType &floor, POSITION y, POSITION x, POSITION yd
             msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
         }
 
-        g_ptr = &floor.grid_array[y1][x1];
+        auto *g_ptr = &floor.grid_array[y1][x1];
         if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || g_ptr->has_monster()) {
             continue;
         }

@@ -157,8 +157,7 @@ static void delayed_visual_update(PlayerType *player_ptr)
     for (int i = 0; i < floor.redraw_n; i++) {
         POSITION y = floor.redraw_y[i];
         POSITION x = floor.redraw_x[i];
-        Grid *g_ptr;
-        g_ptr = &floor.grid_array[y][x];
+        auto *g_ptr = &floor.grid_array[y][x];
         if (none_bits(g_ptr->info, CAVE_REDRAW)) {
             continue;
         }

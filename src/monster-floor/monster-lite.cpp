@@ -367,8 +367,7 @@ void update_mon_lite(PlayerType *player_ptr)
 void clear_mon_lite(FloorType &floor)
 {
     for (int i = 0; i < floor.mon_lite_n; i++) {
-        Grid *g_ptr;
-        g_ptr = &floor.grid_array[floor.mon_lite_y[i]][floor.mon_lite_x[i]];
+        auto *g_ptr = &floor.grid_array[floor.mon_lite_y[i]][floor.mon_lite_x[i]];
         g_ptr->info &= ~(CAVE_MNLT | CAVE_MNDK);
     }
 
