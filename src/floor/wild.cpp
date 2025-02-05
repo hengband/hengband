@@ -392,11 +392,14 @@ void wilderness_gen(PlayerType *player_ptr)
     floor.width = MAX_WID;
     panel_row_min = floor.height;
     panel_col_min = floor.width;
-    const auto &bottom_right = WildernessGrids::get_instance().get_bottom_right();
+    const auto &wilderness = WildernessGrids::get_instance();
+    const auto &bottom_right = wilderness.get_bottom_right();
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, bottom_right.y, bottom_right.x);
-    const auto wild_y = player_ptr->wilderness_y;
-    const auto wild_x = player_ptr->wilderness_x;
-    get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook_at({ wild_y, wild_x }));
+
+    const auto &pos_wilderness = wilderness.get_player_position();
+    const auto wild_y = pos_wilderness.y;
+    const auto wild_x = pos_wilderness.x;
+    get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook());
 
     /* North border */
     generate_area(player_ptr, { wild_y - 1, wild_x }, true, false);
@@ -625,8 +628,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
 
     panel_row_min = floor.height;
     panel_col_min = floor.width;
-    player_ptr->x = player_ptr->wilderness_x;
-    player_ptr->y = player_ptr->wilderness_y;
+    player_ptr->set_position(wilderness.get_player_position());
     player_ptr->town_num = 0;
 }
 
@@ -638,7 +640,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
  * @param pos_parsing 解析対象の座標
  * @return エラーコードと座標のペア。エラー時は座標は無効値。Dタグの時だけ更新の可能性があり、それ以外はpos_parsingをそのまま返却
  */
-std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerType *player_ptr, char *line, int xmin, int xmax, const Pos2D &pos_parsing)
+std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *line, int xmin, int xmax, const Pos2D &pos_parsing)
 {
     if (wilderness_letters.empty()) {
         wilderness_letters.resize(TerrainList::get_instance().size());
@@ -725,9 +727,8 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
 
     /* Process "W:P:<x>:<y> - starting position in the wilderness */
     case 'P': {
-        auto has_player_located = player_ptr->wilderness_x > 0;
-        has_player_located &= player_ptr->wilderness_y > 0;
-        if (has_player_located) {
+        auto &wilderness = WildernessGrids::get_instance();
+        if (wilderness.has_player_located()) {
             break;
         }
 
@@ -736,15 +737,8 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
             return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
         }
 
-        player_ptr->wilderness_y = std::stoi(zz[0]);
-        player_ptr->wilderness_x = std::stoi(zz[1]);
-
-        auto out_of_bounds = (player_ptr->wilderness_x < 1);
-        const auto &bottom_right = WildernessGrids::get_instance().get_bottom_right();
-        out_of_bounds |= (player_ptr->wilderness_x > bottom_right.x);
-        out_of_bounds |= (player_ptr->wilderness_y < 1);
-        out_of_bounds |= (player_ptr->wilderness_y > bottom_right.y);
-        if (out_of_bounds) {
+        wilderness.set_player_position({ std::stoi(zz[0]), std::stoi(zz[1]) });
+        if (!wilderness.is_player_in_bounds()) {
             return { PARSE_ERROR_OUT_OF_BOUNDS, std::nullopt };
         }
 
@@ -831,9 +825,9 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
     }
 
     auto &world = AngbandWorld::get_instance();
+    auto &wilderness = WildernessGrids::get_instance();
     if (world.is_wild_mode()) {
-        player_ptr->wilderness_x = player_ptr->x;
-        player_ptr->wilderness_y = player_ptr->y;
+        wilderness.set_player_position(player_ptr->get_position());
         player_ptr->energy_need = 0;
         world.set_wild_mode(false);
         player_ptr->leaving = true;

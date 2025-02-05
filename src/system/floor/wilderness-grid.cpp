@@ -5,6 +5,7 @@
  */
 
 #include "system/floor/wilderness-grid.h"
+#include "floor/geometry.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "term/z-rand.h"
 
@@ -64,9 +65,19 @@ const Pos2D &WildernessGrids::get_player_position() const
     return this->current_pos;
 }
 
-void WildernessGrids::move_player_to(const Pos2DVec &vec)
+void WildernessGrids::set_player_position(const Pos2D &pos)
 {
-    this->current_pos += vec;
+    this->current_pos = pos;
+}
+
+const WildernessGrid &WildernessGrids::get_player_grid() const
+{
+    return wilderness_grids.at(this->current_pos.y).at(this->current_pos.x);
+}
+
+void WildernessGrids::move_player_to(const Direction &dir)
+{
+    this->current_pos += dir.vec();
 }
 
 bool WildernessGrids::is_height_initialized() const
@@ -77,6 +88,20 @@ bool WildernessGrids::is_height_initialized() const
 bool WildernessGrids::is_width_initialized() const
 {
     return this->bottom_right.x > 0;
+}
+
+bool WildernessGrids::has_player_located() const
+{
+    return (this->current_pos.x > 0) && (this->current_pos.y > 0);
+}
+
+bool WildernessGrids::is_player_in_bounds() const
+{
+    auto is_in_bounds_x = this->current_pos.x >= 1;
+    is_in_bounds_x &= this->current_pos.x <= this->bottom_right.x;
+    auto is_in_bounds_y = this->current_pos.y >= 1;
+    is_in_bounds_y &= this->current_pos.y <= this->bottom_right.y;
+    return is_in_bounds_x && is_in_bounds_y;
 }
 
 const Pos2D &WildernessGrids::get_bottom_right() const

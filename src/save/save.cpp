@@ -153,11 +153,12 @@ static bool wr_savefile_new(PlayerType *player_ptr)
         wr_byte((byte)quest.dungeon);
     }
 
-    wr_s32b(player_ptr->wilderness_x);
-    wr_s32b(player_ptr->wilderness_y);
+    const auto &wilderness = WildernessGrids::get_instance();
+    const auto &pos = wilderness.get_player_position();
+    wr_s32b(pos.x);
+    wr_s32b(pos.y);
     wr_bool(world.is_wild_mode());
     wr_bool(player_ptr->ambush_flag);
-    const auto &wilderness = WildernessGrids::get_instance();
     const auto &bottom_right = wilderness.get_bottom_right();
     wr_s32b(bottom_right.x);
     wr_s32b(bottom_right.y);

@@ -14,6 +14,7 @@
 #include "system/dungeon/dungeon-record.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -118,8 +119,7 @@ void execute_recall(PlayerType *player_ptr)
 
     auto &world = AngbandWorld::get_instance();
     if (world.is_wild_mode()) {
-        player_ptr->wilderness_y = player_ptr->y;
-        player_ptr->wilderness_x = player_ptr->x;
+        WildernessGrids::get_instance().set_player_position(player_ptr->get_position());
     } else {
         player_ptr->oldpx = player_ptr->x;
         player_ptr->oldpy = player_ptr->y;

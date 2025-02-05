@@ -13,6 +13,7 @@
 
 enum class WildernessTerrain;
 enum class DungeonId;
+class Direction;
 class WildernessGrid {
 public:
     WildernessGrid() = default;
@@ -43,12 +44,16 @@ public:
     const WildernessGrid &get_grid(const Pos2D &pos) const;
     WildernessGrid &get_grid(const Pos2D &pos);
     const Pos2D &get_player_position() const;
+    const WildernessGrid &get_player_grid() const;
     bool is_height_initialized() const;
     bool is_width_initialized() const;
+    bool has_player_located() const;
+    bool is_player_in_bounds() const;
     const Pos2D &get_bottom_right() const;
     const std::vector<Pos2D> &get_positions() const;
 
-    void move_player_to(const Pos2DVec &vec);
+    void set_player_position(const Pos2D &pos);
+    void move_player_to(const Direction &dir);
 
 private:
     WildernessGrids() = default;

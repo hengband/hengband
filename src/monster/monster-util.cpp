@@ -199,8 +199,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
             return false;
         }
 
-        const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-        const auto hook_tanuki = floor.get_monrace_hook_at(pos_wilderness);
+        const auto hook_tanuki = floor.get_monrace_hook();
         return do_hook(player_ptr, hook_tanuki, monrace_id);
     }
     case MonraceHook::FISHING:
@@ -609,8 +608,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, const ChameleonTransf
         return false;
     }
 
-    const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-    const auto hook = floor.get_monrace_hook_at(pos_wilderness);
+    const auto hook = floor.get_monrace_hook();
     return do_hook(player_ptr, hook, monrace_id);
 }
 

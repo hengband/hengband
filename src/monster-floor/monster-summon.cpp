@@ -41,7 +41,7 @@ DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
         return floor.dun_level;
     }
 
-    return wilderness_grids[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
+    return WildernessGrids::get_instance().get_player_grid().level;
 }
 
 /*!

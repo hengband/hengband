@@ -399,13 +399,13 @@ TerrainTag FloorType::select_random_trap() const
     }
 }
 
-MonraceHook FloorType::get_monrace_hook_at(const Pos2D &pos_wilderness) const
+MonraceHook FloorType::get_monrace_hook() const
 {
     if (this->is_underground()) {
         return MonraceHook::DUNGEON;
     }
 
-    switch (WildernessGrids::get_instance().get_grid(pos_wilderness).terrain) {
+    switch (WildernessGrids::get_instance().get_player_grid().terrain) {
     case WildernessTerrain::TOWN:
         return MonraceHook::TOWN;
     case WildernessTerrain::DEEP_WATER:

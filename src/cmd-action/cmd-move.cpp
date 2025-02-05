@@ -376,7 +376,7 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
     if (is_wild_mode && !floor.has_terrain_characteristics(p_pos, TerrainCharacteristics::TOWN)) {
-        const auto &wg = WildernessGrids::get_instance().get_grid(p_pos);
+        const auto &wg = WildernessGrids::get_instance().get_player_grid();
         auto tmp = 120 + player_ptr->lev * 10 - wg.level + 5;
         if (tmp < 1) {
             tmp = 1;

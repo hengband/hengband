@@ -125,7 +125,7 @@ public:
     short select_baseitem_id(int level_initial, uint32_t mode) const;
     bool filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain hook) const;
     TerrainTag select_random_trap() const;
-    MonraceHook get_monrace_hook_at(const Pos2D &pos_wilderness) const;
+    MonraceHook get_monrace_hook() const;
     MonraceHookTerrain get_monrace_hook_terrain_at(const Pos2D &pos) const;
 
     void enter_dungeon(bool state);
