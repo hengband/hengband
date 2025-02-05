@@ -131,14 +131,14 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
  */
 void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
 {
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+    auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
 
-    if (g_ptr->has(TerrainCharacteristics::SECRET)) {
+    if (grid.has(TerrainCharacteristics::SECRET)) {
         /* No longer hidden */
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SECRET);
-    } else if (g_ptr->mimic) {
+    } else if (grid.mimic) {
         /* No longer hidden */
-        g_ptr->mimic = 0;
+        grid.mimic = 0;
 
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);

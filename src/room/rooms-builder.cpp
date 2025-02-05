@@ -185,12 +185,12 @@ void build_room(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1, P
 
     for (POSITION x = 1; x < xsize; x++) {
         for (POSITION y = 1; y < ysize; y++) {
-            auto *g_ptr = &floor.grid_array[y1 + y][x1 + x];
-            if (g_ptr->is_extra()) {
+            auto &grid = floor.grid_array[y1 + y][x1 + x];
+            if (grid.is_extra()) {
                 place_bold(player_ptr, y1 + y, x1 + x, GB_FLOOR);
-                g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
+                grid.info |= (CAVE_ROOM | CAVE_ICKY);
             } else {
-                g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
+                grid.info |= (CAVE_ROOM | CAVE_ICKY);
             }
         }
     }

@@ -41,23 +41,23 @@ static bool detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainChar
                 continue;
             }
 
-            auto *g_ptr = &floor.grid_array[y][x];
+            auto &grid = floor.grid_array[y][x];
             if (flag == TerrainCharacteristics::TRAP) {
                 /* Mark as detected */
                 if (dist <= range && known) {
                     if (dist <= range - 1) {
-                        g_ptr->info |= (CAVE_IN_DETECT);
+                        grid.info |= (CAVE_IN_DETECT);
                     }
 
-                    g_ptr->info &= ~(CAVE_UNSAFE);
+                    grid.info &= ~(CAVE_UNSAFE);
 
                     lite_spot(player_ptr, y, x);
                 }
             }
 
-            if (g_ptr->has(flag)) {
+            if (grid.has(flag)) {
                 disclose_grid(player_ptr, y, x);
-                g_ptr->info |= (CAVE_MARK);
+                grid.info |= (CAVE_MARK);
                 lite_spot(player_ptr, y, x);
                 detect = true;
             }

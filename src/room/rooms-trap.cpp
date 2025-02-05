@@ -50,7 +50,7 @@ bool build_type14(PlayerType *player_ptr, DungeonData *dd_ptr)
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
         for (auto x = x1 - 1; x <= x2 + 1; x++) {
             auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, &grid, GB_FLOOR);
+            place_grid(player_ptr, grid, GB_FLOOR);
             grid.info |= (CAVE_ROOM);
             if (light) {
                 grid.info |= (CAVE_GLOW);
@@ -60,13 +60,13 @@ bool build_type14(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     /* Walls around the room */
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y, x1 - 1 }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y, x2 + 1 }), GB_OUTER);
     }
 
     for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y1 - 1, x }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y2 + 1, x }), GB_OUTER);
     }
 
     const auto trap = floor.dun_level < 30 + randint1(30) ? TerrainTag::TRAP_PIRANHA : TerrainTag::TRAP_ARMAGEDDON;

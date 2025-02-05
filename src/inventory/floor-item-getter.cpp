@@ -653,18 +653,18 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         case '\n':
         case '\r':
         case '+': {
-            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+            auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
             if (command_wrk != (USE_FLOOR)) {
                 break;
             }
 
-            if (g_ptr->o_idx_list.size() < 2) {
+            if (grid.o_idx_list.size() < 2) {
                 break;
             }
 
             const auto next_o_idx = fis_ptr->floor_list[1];
-            while (g_ptr->o_idx_list.front() != next_o_idx) {
-                g_ptr->o_idx_list.rotate(*player_ptr->current_floor_ptr);
+            while (grid.o_idx_list.front() != next_o_idx) {
+                grid.o_idx_list.rotate(*player_ptr->current_floor_ptr);
             }
 
             rfu.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);

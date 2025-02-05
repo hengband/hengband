@@ -60,8 +60,8 @@ static int next_to_walls(const FloorType &floor, POSITION y, POSITION x)
 static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int walls)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor.grid_array[y][x];
-    if (!g_ptr->is_floor() || pattern_tile(floor, y, x) || !g_ptr->o_idx_list.empty() || g_ptr->has_monster() || next_to_walls(floor, y, x) < walls) {
+    const auto &grid = floor.grid_array[y][x];
+    if (!grid.is_floor() || pattern_tile(floor, y, x) || !grid.o_idx_list.empty() || grid.has_monster() || next_to_walls(floor, y, x) < walls) {
         return false;
     }
 
@@ -113,7 +113,6 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 
     for (int i = 0; i < num; i++) {
         while (true) {
-            Grid *g_ptr;
             int candidates = 0;
             const POSITION max_x = floor.width - 1;
             for (POSITION y = 1; y < floor.height - 1; y++) {
@@ -151,10 +150,10 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
                 }
             }
 
-            g_ptr = &floor.grid_array[y][x];
-            g_ptr->mimic = 0;
-            g_ptr->feat = (i < shaft_num) ? dungeon.convert_terrain_id(feat, TerrainCharacteristics::SHAFT) : feat;
-            g_ptr->info &= ~(CAVE_FLOOR);
+            auto &grid = floor.grid_array[y][x];
+            grid.mimic = 0;
+            grid.feat = (i < shaft_num) ? dungeon.convert_terrain_id(feat, TerrainCharacteristics::SHAFT) : feat;
+            grid.info &= ~(CAVE_FLOOR);
             break;
         }
     }

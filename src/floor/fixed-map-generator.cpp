@@ -62,8 +62,8 @@ static void drop_here(FloorType &floor, ItemEntity &&item, POSITION y, POSITION 
     dropped_item.iy = y;
     dropped_item.ix = x;
     dropped_item.held_m_idx = 0;
-    auto *g_ptr = &floor.grid_array[y][x];
-    g_ptr->o_idx_list.add(floor, item_idx);
+    auto &grid = floor.grid_array[y][x];
+    grid.o_idx_list.add(floor, item_idx);
 }
 
 static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const FixedArtifactId a_idx)

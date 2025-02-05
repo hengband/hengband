@@ -16,19 +16,19 @@
 /*
  * Grid based version of "creature_bold()"
  */
-static bool player_grid(PlayerType *player_ptr, Grid *g_ptr)
+static bool player_grid(PlayerType *player_ptr, const Grid &grid)
 {
-    return g_ptr == &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    return &grid == &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
 }
 
 /*
  * Grid based version of "cave_empty_bold()"
  */
-static bool is_cave_empty_grid(PlayerType *player_ptr, Grid *g_ptr)
+static bool is_cave_empty_grid(PlayerType *player_ptr, const Grid &grid)
 {
-    bool is_empty_grid = g_ptr->has(TerrainCharacteristics::PLACE);
-    is_empty_grid &= !g_ptr->has_monster();
-    is_empty_grid &= !player_grid(player_ptr, g_ptr);
+    bool is_empty_grid = grid.has(TerrainCharacteristics::PLACE);
+    is_empty_grid &= !grid.has_monster();
+    is_empty_grid &= !player_grid(player_ptr, grid);
     return is_empty_grid;
 }
 
@@ -49,7 +49,7 @@ void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
             const auto d = 1;
             const auto pos = scatter(player_ptr, { y1, x1 }, d, 0);
             auto &grid = floor.get_grid(pos);
-            if (!is_cave_empty_grid(player_ptr, &grid)) {
+            if (!is_cave_empty_grid(player_ptr, grid)) {
                 continue;
             }
 
@@ -119,7 +119,6 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
  */
 static void vault_trap_aux(FloorType &floor, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
-    Grid *g_ptr;
     int y1 = y, x1 = x;
     int dummy = 0;
     for (int count = 0; count <= 5; count++) {
@@ -137,8 +136,8 @@ static void vault_trap_aux(FloorType &floor, POSITION y, POSITION x, POSITION yd
             msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
         }
 
-        g_ptr = &floor.grid_array[y1][x1];
-        if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || g_ptr->has_monster()) {
+        const auto &grid = floor.grid_array[y1][x1];
+        if (!grid.is_floor() || !grid.o_idx_list.empty() || grid.has_monster()) {
             continue;
         }
 

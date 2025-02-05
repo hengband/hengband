@@ -393,16 +393,16 @@ void clear_cave(PlayerType *player_ptr)
     precalc_cur_num_of_pet();
     for (POSITION y = 0; y < MAX_HGT; y++) {
         for (POSITION x = 0; x < MAX_WID; x++) {
-            auto *g_ptr = &floor.grid_array[y][x];
-            g_ptr->info = 0;
-            g_ptr->feat = 0;
-            g_ptr->o_idx_list.clear();
-            g_ptr->m_idx = 0;
-            g_ptr->special = 0;
-            g_ptr->mimic = 0;
-            g_ptr->reset_costs();
-            g_ptr->reset_dists();
-            g_ptr->when = 0;
+            auto &grid = floor.grid_array[y][x];
+            grid.info = 0;
+            grid.feat = 0;
+            grid.o_idx_list.clear();
+            grid.m_idx = 0;
+            grid.special = 0;
+            grid.mimic = 0;
+            grid.reset_costs();
+            grid.reset_dists();
+            grid.when = 0;
         }
     }
 

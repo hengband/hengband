@@ -388,9 +388,8 @@ void forget_view(FloorType &floor)
     for (int i = 0; i < floor.view_n; i++) {
         POSITION y = floor.view_y[i];
         POSITION x = floor.view_x[i];
-        Grid *g_ptr;
-        g_ptr = &floor.grid_array[y][x];
-        g_ptr->info &= ~(CAVE_VIEW);
+        auto &grid = floor.grid_array[y][x];
+        grid.info &= ~(CAVE_VIEW);
     }
 
     floor.view_n = 0;

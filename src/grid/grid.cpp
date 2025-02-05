@@ -993,81 +993,81 @@ bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode
     return true;
 }
 
-void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
+void place_grid(PlayerType *player_ptr, Grid &grid, grid_bold_type gb_type)
 {
     const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
     switch (gb_type) {
     case GB_FLOOR: {
-        g_ptr->set_terrain_id(dungeon.select_floor_terrain_id());
-        g_ptr->info &= ~(CAVE_MASK);
-        g_ptr->info |= CAVE_FLOOR;
+        grid.set_terrain_id(dungeon.select_floor_terrain_id());
+        grid.info &= ~(CAVE_MASK);
+        grid.info |= CAVE_FLOOR;
         break;
     }
     case GB_EXTRA: {
-        g_ptr->set_terrain_id(dungeon.select_wall_terrain_id());
-        g_ptr->info &= ~(CAVE_MASK);
-        g_ptr->info |= CAVE_EXTRA;
+        grid.set_terrain_id(dungeon.select_wall_terrain_id());
+        grid.info &= ~(CAVE_MASK);
+        grid.info |= CAVE_EXTRA;
         break;
     }
     case GB_EXTRA_PERM: {
-        g_ptr->set_terrain_id(TerrainTag::PERMANENT_WALL);
-        g_ptr->info &= ~(CAVE_MASK);
-        g_ptr->info |= CAVE_EXTRA;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
+        grid.info &= ~(CAVE_MASK);
+        grid.info |= CAVE_EXTRA;
         break;
     }
     case GB_INNER: {
-        g_ptr->set_terrain_id(dungeon.inner_wall);
-        g_ptr->info &= ~(CAVE_MASK);
-        g_ptr->info |= CAVE_INNER;
+        grid.set_terrain_id(dungeon.inner_wall);
+        grid.info &= ~(CAVE_MASK);
+        grid.info |= CAVE_INNER;
         break;
     }
     case GB_INNER_PERM: {
-        g_ptr->set_terrain_id(TerrainTag::PERMANENT_WALL);
-        g_ptr->info &= ~(CAVE_MASK);
-        g_ptr->info |= CAVE_INNER;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
+        grid.info &= ~(CAVE_MASK);
+        grid.info |= CAVE_INNER;
         break;
     }
     case GB_OUTER: {
-        g_ptr->set_terrain_id(dungeon.outer_wall);
-        g_ptr->info &= ~(CAVE_MASK);
-        g_ptr->info |= CAVE_OUTER;
+        grid.set_terrain_id(dungeon.outer_wall);
+        grid.info &= ~(CAVE_MASK);
+        grid.info |= CAVE_OUTER;
         break;
     }
     case GB_OUTER_NOPERM: {
         const auto &terrain = TerrainList::get_instance().get_terrain(dungeon.outer_wall);
         if (terrain.is_permanent_wall()) {
             const auto terrain_id = dungeon.convert_terrain_id(dungeon.outer_wall, TerrainCharacteristics::UNPERM);
-            g_ptr->set_terrain_id(terrain_id);
+            grid.set_terrain_id(terrain_id);
         } else {
-            g_ptr->set_terrain_id(dungeon.outer_wall);
+            grid.set_terrain_id(dungeon.outer_wall);
         }
 
-        g_ptr->info &= ~(CAVE_MASK);
-        g_ptr->info |= (CAVE_OUTER | CAVE_VAULT);
+        grid.info &= ~(CAVE_MASK);
+        grid.info |= (CAVE_OUTER | CAVE_VAULT);
         break;
     }
     case GB_SOLID: {
-        g_ptr->set_terrain_id(dungeon.outer_wall);
-        g_ptr->info &= ~(CAVE_MASK);
-        g_ptr->info |= CAVE_SOLID;
+        grid.set_terrain_id(dungeon.outer_wall);
+        grid.info &= ~(CAVE_MASK);
+        grid.info |= CAVE_SOLID;
         break;
     }
     case GB_SOLID_PERM: {
-        g_ptr->set_terrain_id(TerrainTag::PERMANENT_WALL);
-        g_ptr->info &= ~(CAVE_MASK);
-        g_ptr->info |= CAVE_SOLID;
+        grid.set_terrain_id(TerrainTag::PERMANENT_WALL);
+        grid.info &= ~(CAVE_MASK);
+        grid.info |= CAVE_SOLID;
         break;
     }
     case GB_SOLID_NOPERM: {
         const auto &terrain = TerrainList::get_instance().get_terrain(dungeon.outer_wall);
-        if ((g_ptr->info & CAVE_VAULT) && terrain.is_permanent_wall()) {
+        if ((grid.info & CAVE_VAULT) && terrain.is_permanent_wall()) {
             const auto terrain_id = dungeon.convert_terrain_id(dungeon.outer_wall, TerrainCharacteristics::UNPERM);
-            g_ptr->set_terrain_id(terrain_id);
+            grid.set_terrain_id(terrain_id);
         } else {
-            g_ptr->set_terrain_id(dungeon.outer_wall);
+            grid.set_terrain_id(dungeon.outer_wall);
         }
-        g_ptr->info &= ~(CAVE_MASK);
-        g_ptr->info |= CAVE_SOLID;
+        grid.info &= ~(CAVE_MASK);
+        grid.info |= CAVE_SOLID;
         break;
     }
     default:
@@ -1075,15 +1075,15 @@ void place_grid(PlayerType *player_ptr, Grid *g_ptr, grid_bold_type gb_type)
         return;
     }
 
-    if (g_ptr->has_monster()) {
-        delete_monster_idx(player_ptr, g_ptr->m_idx);
+    if (grid.has_monster()) {
+        delete_monster_idx(player_ptr, grid.m_idx);
     }
 }
 
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gb_type)
 {
-    Grid *const g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-    place_grid(player_ptr, g_ptr, gb_type);
+    auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
+    place_grid(player_ptr, grid, gb_type);
 }
 
 /*
@@ -1094,12 +1094,12 @@ void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type g
  */
 void cave_lite_hack(FloorType &floor, POSITION y, POSITION x)
 {
-    auto *g_ptr = &floor.grid_array[y][x];
-    if (g_ptr->is_lite()) {
+    auto &grid = floor.grid_array[y][x];
+    if (grid.is_lite()) {
         return;
     }
 
-    g_ptr->info |= CAVE_LITE;
+    grid.info |= CAVE_LITE;
     floor.lite_y[floor.lite_n] = y;
     floor.lite_x[floor.lite_n++] = x;
 }
@@ -1109,12 +1109,12 @@ void cave_lite_hack(FloorType &floor, POSITION y, POSITION x)
  */
 void cave_redraw_later(FloorType &floor, POSITION y, POSITION x)
 {
-    auto *g_ptr = &floor.grid_array[y][x];
-    if (g_ptr->is_redraw()) {
+    auto &grid = floor.grid_array[y][x];
+    if (grid.is_redraw()) {
         return;
     }
 
-    g_ptr->info |= CAVE_REDRAW;
+    grid.info |= CAVE_REDRAW;
     floor.redraw_y[floor.redraw_n] = y;
     floor.redraw_x[floor.redraw_n++] = x;
 }
@@ -1130,12 +1130,12 @@ void cave_note_and_redraw_later(FloorType &floor, POSITION y, POSITION x)
 
 void cave_view_hack(FloorType &floor, POSITION y, POSITION x)
 {
-    auto *g_ptr = &floor.grid_array[y][x];
-    if (g_ptr->is_view()) {
+    auto &grid = floor.grid_array[y][x];
+    if (grid.is_view()) {
         return;
     }
 
-    g_ptr->info |= CAVE_VIEW;
+    grid.info |= CAVE_VIEW;
     floor.view_y[floor.view_n] = y;
     floor.view_x[floor.view_n] = x;
     floor.view_n++;

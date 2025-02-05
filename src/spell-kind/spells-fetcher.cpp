@@ -45,7 +45,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         return;
     }
 
-    Grid *g_ptr;
+    Grid *grid_ptr;
     const auto &system = AngbandSystem::get_instance();
     if (dir == 5 && target_okay(player_ptr)) {
         const Pos2D pos(target_col, target_row);
@@ -54,13 +54,13 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
             return;
         }
 
-        g_ptr = &floor.get_grid(pos);
-        if (g_ptr->o_idx_list.empty()) {
+        grid_ptr = &floor.get_grid(pos);
+        if (grid_ptr->o_idx_list.empty()) {
             msg_print(_("そこには何もありません。", "There is no object there."));
             return;
         }
 
-        if (g_ptr->is_icky()) {
+        if (grid_ptr->is_icky()) {
             msg_print(_("アイテムがコントロールを外れて落ちた。", "The item slips from your control."));
             return;
         }
@@ -77,11 +77,11 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
     } else {
         auto pos = p_pos;
         auto is_first_loop = true;
-        g_ptr = &floor.get_grid(pos);
-        while (is_first_loop || g_ptr->o_idx_list.empty()) {
+        grid_ptr = &floor.get_grid(pos);
+        while (is_first_loop || grid_ptr->o_idx_list.empty()) {
             is_first_loop = false;
             pos += Pos2DVec(ddy[dir], ddx[dir]);
-            g_ptr = &floor.get_grid(pos);
+            grid_ptr = &floor.get_grid(pos);
             if ((Grid::calc_distance(p_pos, pos) > system.get_max_range())) {
                 return;
             }
@@ -92,14 +92,14 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         }
     }
 
-    auto &item = floor.o_list[g_ptr->o_idx_list.front()];
+    auto &item = floor.o_list[grid_ptr->o_idx_list.front()];
     if (item.weight > wgt) {
         msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
         return;
     }
 
-    const auto item_idx = g_ptr->o_idx_list.front();
-    g_ptr->o_idx_list.pop_front();
+    const auto item_idx = grid_ptr->o_idx_list.front();
+    grid_ptr->o_idx_list.pop_front();
     floor.get_grid(p_pos).o_idx_list.add(floor, item_idx); /* 'move' it */
     item.set_position(p_pos);
 

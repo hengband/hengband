@@ -69,20 +69,20 @@ struct um_type {
 bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[ny][nx];
-    MonsterEntity *y_ptr = &player_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+    auto &grid = player_ptr->current_floor_ptr->grid_array[ny][nx];
+    MonsterEntity *y_ptr = &player_ptr->current_floor_ptr->m_list[grid.m_idx];
     if (turn_flags_ptr->is_riding_mon) {
         return move_player_effect(player_ptr, ny, nx, MPE_DONT_PICKUP);
     }
 
-    player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
-    if (g_ptr->has_monster()) {
+    player_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = grid.m_idx;
+    if (grid.has_monster()) {
         y_ptr->fy = oy;
         y_ptr->fx = ox;
-        update_monster(player_ptr, g_ptr->m_idx, true);
+        update_monster(player_ptr, grid.m_idx, true);
     }
 
-    g_ptr->m_idx = m_idx;
+    grid.m_idx = m_idx;
     m_ptr->fy = ny;
     m_ptr->fx = nx;
     update_monster(player_ptr, m_idx, true);

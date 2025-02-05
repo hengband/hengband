@@ -122,8 +122,8 @@ static int next_to_corr(const FloorType &floor, POSITION y1, POSITION x1)
     int k = 0;
     for (const auto &d : Direction::directions_4()) {
         const auto pos = Pos2D(y1, x1) + d.vec();
-        const auto *g_ptr = &floor.get_grid(pos);
-        if (g_ptr->has(TerrainCharacteristics::WALL) || !g_ptr->is_floor() || g_ptr->is_room()) {
+        const auto &grid = floor.get_grid(pos);
+        if (grid.has(TerrainCharacteristics::WALL) || !grid.is_floor() || grid.is_room()) {
             continue;
         }
 

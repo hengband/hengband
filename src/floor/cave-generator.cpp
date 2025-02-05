@@ -121,7 +121,7 @@ static void make_tunnels(PlayerType *player_ptr, DungeonData *dd_ptr)
         const auto &terrain = grid.get_terrain();
         if (terrain.flags.has_not(TerrainCharacteristics::MOVE) || terrain.flags.has_none_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::LAVA })) {
             grid.mimic = 0;
-            place_grid(player_ptr, &grid, GB_FLOOR);
+            place_grid(player_ptr, grid, GB_FLOOR);
         }
     }
 }
@@ -129,11 +129,10 @@ static void make_tunnels(PlayerType *player_ptr, DungeonData *dd_ptr)
 static void make_walls(PlayerType *player_ptr, DungeonData *dd_ptr, const DungeonDefinition &dungeon, dt_type *dt_ptr)
 {
     for (size_t j = 0; j < dd_ptr->wall_n; j++) {
-        Grid *g_ptr;
         dd_ptr->tunnel_pos = dd_ptr->walls[j];
-        g_ptr = &player_ptr->current_floor_ptr->get_grid(dd_ptr->tunnel_pos);
-        g_ptr->mimic = 0;
-        place_grid(player_ptr, g_ptr, GB_FLOOR);
+        auto &grid = player_ptr->current_floor_ptr->get_grid(dd_ptr->tunnel_pos);
+        grid.mimic = 0;
+        place_grid(player_ptr, grid, GB_FLOOR);
         if (evaluate_percent(dt_ptr->dun_tun_pen) && dungeon.flags.has_not(DungeonFeatureType::NO_DOORS)) {
             place_random_door(player_ptr, dd_ptr->tunnel_pos, true);
         }
@@ -264,13 +263,13 @@ static void make_aqua_streams(PlayerType *player_ptr, DungeonData *dd_ptr, const
 
 /*!
  * @brief マスにフロア端用の永久壁を配置する / Set boundary mimic and add "solid" perma-wall
- * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
+ * @param grid 永久壁を配置したいグリッドへの参照
  */
 static void place_bound_perm_wall(PlayerType *player_ptr, Grid &grid)
 {
     if (bound_walls_perm) {
         grid.mimic = 0;
-        place_grid(player_ptr, &grid, GB_SOLID_PERM);
+        place_grid(player_ptr, grid, GB_SOLID_PERM);
         return;
     }
 
@@ -280,7 +279,7 @@ static void place_bound_perm_wall(PlayerType *player_ptr, Grid &grid)
     }
 
     grid.mimic = grid.feat;
-    place_grid(player_ptr, &grid, GB_SOLID_PERM);
+    place_grid(player_ptr, grid, GB_SOLID_PERM);
 }
 
 static void make_perm_walls(PlayerType *player_ptr)

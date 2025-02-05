@@ -216,7 +216,7 @@ static bool set_tunnel(PlayerType *player_ptr, DungeonData *dd_ptr, POSITION *y,
         }
 
         if (i == 0) {
-            place_grid(player_ptr, &grid, GB_OUTER);
+            place_grid(player_ptr, grid, GB_OUTER);
             vec = { 0, 0 };
         }
 
@@ -372,8 +372,8 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, const Pos2D &pos
         pos.y = (pos_start.y + pos_end.y) / 2;
     }
 
-    const auto *g_ptr = &floor.get_grid(pos);
-    if (g_ptr->is_solid()) {
+    const auto *grid_ptr = &floor.get_grid(pos);
+    if (grid_ptr->is_solid()) {
         auto i = 50;
         vec = { 0, 0 };
         while ((i > 0) && floor.get_grid(pos + vec).is_solid()) {
@@ -394,12 +394,12 @@ bool build_tunnel2(PlayerType *player_ptr, DungeonData *dd_ptr, const Pos2D &pos
         }
 
         pos += vec;
-        g_ptr = &floor.get_grid(pos);
+        grid_ptr = &floor.get_grid(pos);
     }
 
     bool is_tunnel_built;
     bool is_successful;
-    if (g_ptr->is_floor()) {
+    if (grid_ptr->is_floor()) {
         if (build_tunnel2(player_ptr, dd_ptr, pos_start, pos, type, cutoff)) {
             if (floor.get_grid(pos).is_room() || (randint1(100) > 95)) {
                 is_tunnel_built = build_tunnel2(player_ptr, dd_ptr, pos, pos_end, type, cutoff);

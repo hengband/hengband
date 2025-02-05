@@ -115,7 +115,7 @@ void forget_flow(FloorType &floor)
  * Delete all the items when player leaves the level
  * @note we do NOT visually reflect these (irrelevant) changes
  * @details
- * Hack -- we clear the "g_ptr->o_idx" field for every grid,
+ * Hack -- we clear the "grid.o_idx" field for every grid,
  * and the "m_ptr->next_o_idx" field for every monster, since
  * we know we are clearing every object.  Technically, we only
  * clear those fields for grids/monsters containing objects,

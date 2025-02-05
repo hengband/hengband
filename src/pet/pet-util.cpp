@@ -17,11 +17,11 @@ int total_friends = 0;
 
 /*!
  * @brief プレイヤーの騎乗/下馬処理判定
- * @param g_ptr プレイヤーの移動先マスの構造体参照ポインタ
+ * @param grid プレイヤーの移動先グリッドへの参照
  * @param now_riding trueなら下馬処理、falseならば騎乗処理
  * @return 可能ならばtrueを返す
  */
-bool can_player_ride_pet(PlayerType *player_ptr, const Grid *g_ptr, bool now_riding)
+bool can_player_ride_pet(PlayerType *player_ptr, const Grid &grid, bool now_riding)
 {
     auto &world = AngbandWorld::get_instance();
     const auto old_character_xtra = world.character_xtra;
@@ -32,7 +32,7 @@ bool can_player_ride_pet(PlayerType *player_ptr, const Grid *g_ptr, bool now_rid
     world.character_xtra = true;
 
     if (now_riding) {
-        player_ptr->ride_monster(g_ptr->m_idx);
+        player_ptr->ride_monster(grid.m_idx);
     } else {
         player_ptr->ride_monster(0);
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
@@ -43,7 +43,7 @@ bool can_player_ride_pet(PlayerType *player_ptr, const Grid *g_ptr, bool now_rid
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
 
-    bool p_can_enter = player_can_enter(player_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
+    bool p_can_enter = player_can_enter(player_ptr, grid.feat, CEM_P_CAN_ENTER_PATTERN);
     player_ptr->ride_monster(old_riding);
     if (old_pf_two_hands) {
         player_ptr->pet_extra_flags |= (PF_TWO_HANDS);

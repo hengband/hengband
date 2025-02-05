@@ -107,21 +107,20 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         for (const auto &d : Direction::directions_8()) {
             const auto pos = player_ptr->get_position() + d.vec();
 
-            Grid *g_ptr;
-            g_ptr = &player_ptr->current_floor_ptr->get_grid(pos);
+            const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
 
-            if (g_ptr->has_monster()) {
+            if (grid.has_monster()) {
                 continue;
             }
 
             /* Skip non-empty grids */
-            if (!g_ptr->has(TerrainCharacteristics::MOVE) && !g_ptr->has(TerrainCharacteristics::CAN_FLY)) {
-                if (!can_player_ride_pet(player_ptr, g_ptr, false)) {
+            if (!grid.has(TerrainCharacteristics::MOVE) && !grid.has(TerrainCharacteristics::CAN_FLY)) {
+                if (!can_player_ride_pet(player_ptr, grid, false)) {
                     continue;
                 }
             }
 
-            if (g_ptr->has(TerrainCharacteristics::PATTERN)) {
+            if (grid.has(TerrainCharacteristics::PATTERN)) {
                 continue;
             }
 

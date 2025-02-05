@@ -70,12 +70,12 @@ Rect2D generate_large_room(PlayerType *player_ptr, const Pos2D &center)
     const Rect2D rectangle(center, vec);
     rectangle.resized(1).each_area([player_ptr, &floor](const Pos2D &pos) {
         auto &grid = floor.get_grid(pos);
-        place_grid(player_ptr, &grid, GB_FLOOR);
+        place_grid(player_ptr, grid, GB_FLOOR);
         grid.add_info(CAVE_ROOM);
     });
 
     rectangle.resized(1).each_edge([player_ptr, &floor](const Pos2D &pos) {
-        place_grid(player_ptr, &floor.get_grid(pos), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid(pos), GB_OUTER);
     });
 
     return rectangle;
@@ -87,7 +87,7 @@ void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &re
     const auto inner_rectangle = rectangle.resized(-2);
 
     inner_rectangle.resized(1).each_edge([player_ptr, &floor](const Pos2D &pos) {
-        place_grid(player_ptr, &floor.get_grid(pos), GB_INNER);
+        place_grid(player_ptr, floor.get_grid(pos), GB_INNER);
     });
 
     inner_rectangle.each_area([&floor](const Pos2D &pos) {

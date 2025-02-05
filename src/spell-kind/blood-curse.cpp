@@ -20,7 +20,7 @@
 void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
+    const auto &grid = player_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
     BIT_FLAGS curse_flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
     int count = 0;
     bool is_first_loop = true;
@@ -55,7 +55,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
             if (!count) {
                 msg_print(_("空間が歪んだ！", "Space warps about you!"));
                 if (m_ptr->is_valid()) {
-                    teleport_away(player_ptr, g_ptr->m_idx, Dice::roll(10, 10), TELEPORT_PASSIVE);
+                    teleport_away(player_ptr, grid.m_idx, Dice::roll(10, 10), TELEPORT_PASSIVE);
                 }
                 if (one_in_(13)) {
                     count += activate_hi_summon(player_ptr, m_ptr->fy, m_ptr->fx, true);

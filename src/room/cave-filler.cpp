@@ -297,102 +297,102 @@ bool generate_fracave(PlayerType *player_ptr, POSITION y0, POSITION x0, POSITION
     }
 
     for (int i = 0; i <= xsize; ++i) {
-        auto *g_ptr1 = &floor.grid_array[y0 - yhsize][i + x0 - xhsize];
-        if (g_ptr1->is_icky() && (room)) {
+        auto &grid1 = floor.grid_array[y0 - yhsize][i + x0 - xhsize];
+        if (grid1.is_icky() && (room)) {
             place_bold(player_ptr, y0 - yhsize, x0 + i - xhsize, GB_OUTER);
             if (light) {
                 floor.grid_array[y0 - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
             }
 
-            g_ptr1->info |= (CAVE_ROOM);
+            grid1.info |= (CAVE_ROOM);
             place_bold(player_ptr, y0 - yhsize, x0 + i - xhsize, GB_OUTER);
         } else {
             place_bold(player_ptr, y0 - yhsize, x0 + i - xhsize, GB_EXTRA);
         }
 
-        auto *g_ptr2 = &floor.grid_array[ysize + y0 - yhsize][i + x0 - xhsize];
-        if (g_ptr2->is_icky() && (room)) {
+        auto &grid2 = floor.grid_array[ysize + y0 - yhsize][i + x0 - xhsize];
+        if (grid2.is_icky() && (room)) {
             place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, GB_OUTER);
             if (light) {
-                g_ptr2->info |= (CAVE_GLOW);
+                grid2.info |= (CAVE_GLOW);
             }
 
-            g_ptr2->info |= (CAVE_ROOM);
+            grid2.info |= (CAVE_ROOM);
             place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, GB_OUTER);
         } else {
             place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, GB_EXTRA);
         }
 
-        g_ptr1->info &= ~(CAVE_ICKY);
-        g_ptr2->info &= ~(CAVE_ICKY);
+        grid1.info &= ~(CAVE_ICKY);
+        grid2.info &= ~(CAVE_ICKY);
     }
 
     for (int i = 1; i < ysize; ++i) {
-        auto *g_ptr1 = &floor.grid_array[i + y0 - yhsize][x0 - xhsize];
-        if (g_ptr1->is_icky() && room) {
+        auto &grid1 = floor.grid_array[i + y0 - yhsize][x0 - xhsize];
+        if (grid1.is_icky() && room) {
             place_bold(player_ptr, y0 + i - yhsize, x0 - xhsize, GB_OUTER);
             if (light) {
-                g_ptr1->info |= (CAVE_GLOW);
+                grid1.info |= (CAVE_GLOW);
             }
 
-            g_ptr1->info |= (CAVE_ROOM);
+            grid1.info |= (CAVE_ROOM);
             place_bold(player_ptr, y0 + i - yhsize, x0 - xhsize, GB_OUTER);
         } else {
             place_bold(player_ptr, y0 + i - yhsize, x0 - xhsize, GB_EXTRA);
         }
 
-        auto *g_ptr2 = &floor.grid_array[i + y0 - yhsize][xsize + x0 - xhsize];
-        if (g_ptr2->is_icky() && room) {
+        auto &grid2 = floor.grid_array[i + y0 - yhsize][xsize + x0 - xhsize];
+        if (grid2.is_icky() && room) {
             place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, GB_OUTER);
             if (light) {
-                g_ptr2->info |= (CAVE_GLOW);
+                grid2.info |= (CAVE_GLOW);
             }
 
-            g_ptr2->info |= (CAVE_ROOM);
+            grid2.info |= (CAVE_ROOM);
             place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, GB_OUTER);
         } else {
             place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, GB_EXTRA);
         }
 
-        g_ptr1->info &= ~(CAVE_ICKY);
-        g_ptr2->info &= ~(CAVE_ICKY);
+        grid1.info &= ~(CAVE_ICKY);
+        grid2.info &= ~(CAVE_ICKY);
     }
 
     for (POSITION x = 1; x < xsize; ++x) {
         for (POSITION y = 1; y < ysize; ++y) {
-            auto *g_ptr1 = &floor.grid_array[y0 + y - yhsize][x0 + x - xhsize];
-            if (g_ptr1->is_floor() && g_ptr1->is_icky()) {
-                g_ptr1->info &= ~CAVE_ICKY;
+            auto &grid1 = floor.grid_array[y0 + y - yhsize][x0 + x - xhsize];
+            if (grid1.is_floor() && grid1.is_icky()) {
+                grid1.info &= ~CAVE_ICKY;
                 if (light) {
-                    g_ptr1->info |= (CAVE_GLOW);
+                    grid1.info |= (CAVE_GLOW);
                 }
 
                 if (room) {
-                    g_ptr1->info |= (CAVE_ROOM);
+                    grid1.info |= (CAVE_ROOM);
                 }
 
                 continue;
             }
 
-            auto *g_ptr2 = &floor.grid_array[y0 + y - yhsize][x0 + x - xhsize];
-            if (g_ptr2->is_outer() && g_ptr2->is_icky()) {
-                g_ptr2->info &= ~(CAVE_ICKY);
+            auto &grid2 = floor.grid_array[y0 + y - yhsize][x0 + x - xhsize];
+            if (grid2.is_outer() && grid2.is_icky()) {
+                grid2.info &= ~(CAVE_ICKY);
                 if (light) {
-                    g_ptr2->info |= (CAVE_GLOW);
+                    grid2.info |= (CAVE_GLOW);
                 }
 
                 if (room) {
-                    g_ptr2->info |= (CAVE_ROOM);
+                    grid2.info |= (CAVE_ROOM);
                 } else {
                     place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_EXTRA);
-                    g_ptr2->info &= ~(CAVE_ROOM);
+                    grid2.info &= ~(CAVE_ROOM);
                 }
 
                 continue;
             }
 
             place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_EXTRA);
-            g_ptr2->info &= ~(CAVE_ICKY | CAVE_ROOM);
+            grid2.info &= ~(CAVE_ICKY | CAVE_ROOM);
         }
     }
 

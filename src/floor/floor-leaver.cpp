@@ -304,17 +304,17 @@ static Grid *set_grid_by_leaving_floor(FloorType &floor, const Pos2D &p_pos)
         return nullptr;
     }
 
-    auto *g_ptr = &floor.get_grid(p_pos);
-    const auto &terrain = g_ptr->get_terrain();
-    if (g_ptr->special && terrain.flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr(g_ptr->special)) {
-        new_floor_id = g_ptr->special;
+    auto &grid = floor.get_grid(p_pos);
+    const auto &terrain = grid.get_terrain();
+    if (grid.special && terrain.flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr(grid.special)) {
+        new_floor_id = grid.special;
     }
 
     if (terrain.flags.has_all_of({ TerrainCharacteristics::STAIRS, TerrainCharacteristics::SHAFT })) {
         FloorChangeModesStore::get_instace()->set(FloorChangeMode::SHAFT);
     }
 
-    return g_ptr;
+    return &grid;
 }
 
 static void jump_floors(FloorType &floor)
@@ -386,15 +386,15 @@ static void kill_saved_floors(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 }
 
-static void refresh_new_floor_id(PlayerType *player_ptr, Grid *g_ptr)
+static void refresh_new_floor_id(PlayerType *player_ptr, Grid *grid_ptr)
 {
     if (new_floor_id != 0) {
         return;
     }
 
     new_floor_id = get_unused_floor_id(player_ptr);
-    if ((g_ptr != nullptr) && !g_ptr->has_special_terrain()) {
-        g_ptr->special = new_floor_id;
+    if ((grid_ptr != nullptr) && !grid_ptr->has_special_terrain()) {
+        grid_ptr->special = new_floor_id;
     }
 }
 
@@ -414,7 +414,7 @@ static void update_upper_lower_or_floor_id(saved_floor_type *sf_ptr)
 
 static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    auto g_ptr = set_grid_by_leaving_floor(*player_ptr->current_floor_ptr, player_ptr->get_position());
+    auto *grid_ptr = set_grid_by_leaving_floor(*player_ptr->current_floor_ptr, player_ptr->get_position());
     jump_floors(*player_ptr->current_floor_ptr);
     exit_to_wilderness(player_ptr);
     kill_saved_floors(player_ptr, sf_ptr);
@@ -422,7 +422,7 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         return;
     }
 
-    refresh_new_floor_id(player_ptr, g_ptr);
+    refresh_new_floor_id(player_ptr, grid_ptr);
     update_upper_lower_or_floor_id(sf_ptr);
     auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has_not(FloorChangeMode::SAVE_FLOORS) || fcms->has(FloorChangeMode::NO_RETURN)) {

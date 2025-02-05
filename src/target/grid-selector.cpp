@@ -74,20 +74,20 @@ static std::vector<Pos2D> tgt_pt_prepare(PlayerType *player_ptr)
 /*!
  * @brief 指定したシンボルのマスかどうかを判定するための条件式コールバック
  */
-std::unordered_map<int, std::function<bool(Grid *)>> tgt_pt_symbol_call_back = {
-    { '<', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STAIRS) && g_ptr->has(TerrainCharacteristics::LESS); } },
-    { '>', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STAIRS) && g_ptr->has(TerrainCharacteristics::MORE); } },
-    { '+', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::BLDG); } },
-    { '0', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STORE) && g_ptr->is_symbol('0'); } },
-    { '!', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STORE) && g_ptr->is_symbol('1'); } },
-    { '"', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STORE) && g_ptr->is_symbol('2'); } },
-    { '#', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STORE) && g_ptr->is_symbol('3'); } },
-    { '$', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STORE) && g_ptr->is_symbol('4'); } },
-    { '%', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STORE) && g_ptr->is_symbol('5'); } },
-    { '&', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STORE) && g_ptr->is_symbol('6'); } },
-    { '\'', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STORE) && g_ptr->is_symbol('7'); } },
-    { '(', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STORE) && g_ptr->is_symbol('8'); } },
-    { ')', [](Grid *g_ptr) { return g_ptr->has(TerrainCharacteristics::STORE) && g_ptr->is_symbol('9'); } },
+std::unordered_map<int, std::function<bool(const Grid &)>> tgt_pt_symbol_call_back = {
+    { '<', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STAIRS) && grid.has(TerrainCharacteristics::LESS); } },
+    { '>', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STAIRS) && grid.has(TerrainCharacteristics::MORE); } },
+    { '+', [](const Grid &grid) { return grid.has(TerrainCharacteristics::BLDG); } },
+    { '0', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STORE) && grid.is_symbol('0'); } },
+    { '!', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STORE) && grid.is_symbol('1'); } },
+    { '"', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STORE) && grid.is_symbol('2'); } },
+    { '#', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STORE) && grid.is_symbol('3'); } },
+    { '$', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STORE) && grid.is_symbol('4'); } },
+    { '%', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STORE) && grid.is_symbol('5'); } },
+    { '&', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STORE) && grid.is_symbol('6'); } },
+    { '\'', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STORE) && grid.is_symbol('7'); } },
+    { '(', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STORE) && grid.is_symbol('8'); } },
+    { ')', [](const Grid &grid) { return grid.has(TerrainCharacteristics::STORE) && grid.is_symbol('9'); } },
 };
 
 /*!
@@ -106,7 +106,7 @@ struct tgt_pt_info {
     size_t n = 0; //<! シンボル配列の何番目か
     char ch = '\0'; //<! 入力キー
     char prev_ch = '\0'; //<! 前回入力キー
-    std::function<bool(Grid *)> callback{}; //<! 条件判定コールバック
+    std::function<bool(const Grid &)> callback{}; //<! 条件判定コールバック
 
     void move_to_symbol(PlayerType *player_ptr);
 };
@@ -134,8 +134,8 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
     const auto size = this->positions.size();
     for (; this->n < size; ++this->n) {
         const auto &pos_cur = this->positions.at(this->n);
-        auto *g_ptr = &player_ptr->current_floor_ptr->get_grid(pos_cur);
-        if (this->callback(g_ptr)) {
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_cur);
+        if (this->callback(grid)) {
             break;
         }
     }
