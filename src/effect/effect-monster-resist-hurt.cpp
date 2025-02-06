@@ -577,6 +577,7 @@ static void effect_monster_gravity_stun(EffectMonster *em_ptr)
     em_ptr->do_stun = Dice::roll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
     bool has_resistance = em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
     has_resistance |= (em_ptr->r_ptr->level > randint1(std::max(1, em_ptr->dam - 10)) + 10);
+    has_resistance |= em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_GRAVITY);
     if (has_resistance) {
         em_ptr->do_stun = 0;
         return;
@@ -639,7 +640,10 @@ ProcessResult effect_monster_icee_bolt(PlayerType *player_ptr, EffectMonster *em
         em_ptr->obvious = true;
     }
 
-    em_ptr->do_stun = (randint1(15) + 1) / (em_ptr->r + 1);
+    if (em_ptr->r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_SOUND)) {
+        em_ptr->do_stun = (randint1(15) + 1) / (em_ptr->r + 1);
+    }
+
     if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
         em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
         em_ptr->dam /= 9;
