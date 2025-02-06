@@ -3,6 +3,7 @@
 #include "system/angband-exceptions.h"
 #include "system/angband.h"
 #include "util/point-2d.h"
+#include <algorithm>
 #include <array>
 #include <span>
 #include <utility>
@@ -96,9 +97,7 @@ constexpr std::array<Direction, 9> DIRECTIONS = {
 constexpr std::array<Direction, 9> reverse_array(const std::array<Direction, 9> &arr)
 {
     std::array<Direction, 9> res{};
-    for (std::size_t i = 0; i < 9; ++i) {
-        res[i] = arr[9 - 1 - i];
-    }
+    std::reverse_copy(arr.begin(), arr.end(), res.begin());
     return res;
 }
 
