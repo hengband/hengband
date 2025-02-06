@@ -246,7 +246,7 @@ void effect_player_chaos(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     }
 
     BadStatusSetter bss(player_ptr);
-    if (!has_resist_conf(player_ptr)) {
+    if (!has_resist_conf(player_ptr) && !has_resist_chaos(player_ptr)) {
         (void)bss.mod_confusion(randint0(20) + 10);
     }
 
