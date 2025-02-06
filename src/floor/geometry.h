@@ -50,6 +50,32 @@ public:
     {
     }
 
+    /*!
+     * @brief 引数に指定した、円周順に方向を示す値から方向クラスのインスタンスを生成する
+     *
+     * 引数 cdir は南を0とし反時計回りの順。
+     *
+     * 5 4 3
+     *  \|/
+     * 6-@-2
+     *  /|\
+     * 7 0 1
+     *
+     * @param cdir 円周順に方向を示す値
+     */
+    static constexpr Direction from_cdir(int cdir)
+    {
+        constexpr std::array<Direction, 8> DIRECTIONS_8_CCW = {
+            { Direction(2), Direction(3), Direction(6), Direction(9), Direction(8), Direction(7), Direction(4), Direction(1) }
+        };
+
+        if ((cdir < 0) || std::cmp_greater_equal(cdir, DIRECTIONS_8_CCW.size())) {
+            THROW_EXCEPTION(std::logic_error, "Invalid direction is specified!");
+        }
+
+        return DIRECTIONS_8_CCW[cdir];
+    }
+
     static constexpr std::span<const Direction> directions();
     static constexpr std::span<const Direction> directions_8();
     static constexpr std::span<const Direction> directions_4();
@@ -161,11 +187,6 @@ constexpr std::span<const Direction> Direction::directions_8_reverse()
 {
     return Direction::directions_reverse().subspan(1, 8);
 }
-
-//! 下方向から反時計回りに8方向への方向ベクトル配列
-constexpr std::array<Pos2DVec, 8> CCW_DD = {
-    { { 1, 0 }, { 1, 1 }, { 0, 1 }, { -1, 1 }, { -1, 0 }, { -1, -1 }, { 0, -1 }, { 1, -1 } }
-};
 
 class PlayerType;
 Pos2D mmove2(const Pos2D &pos_orig, const Pos2D &pos1, const Pos2D &pos2);
