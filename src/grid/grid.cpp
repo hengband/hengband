@@ -310,8 +310,8 @@ void update_local_illumination(PlayerType *player_ptr, const Pos2D &pos)
         return;
     }
 
-    for (const auto &dd : CCW_DD) {
-        update_local_illumination_aux(player_ptr, pos + dd);
+    for (const auto &d : Direction::directions_8()) {
+        update_local_illumination_aux(player_ptr, pos + d.vec());
     }
 }
 

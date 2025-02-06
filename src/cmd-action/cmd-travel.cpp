@@ -193,9 +193,9 @@ void do_cmd_travel(PlayerType *player_ptr)
     auto dy = std::abs(player_ptr->y - y);
     auto sx = ((x == player_ptr->x) || (dx < dy)) ? 0 : ((x > player_ptr->x) ? 1 : -1);
     auto sy = ((y == player_ptr->y) || (dy < dx)) ? 0 : ((y > player_ptr->y) ? 1 : -1);
-    for (auto i = 1; i <= 9; i++) {
-        if ((sx == ddx[i]) && (sy == ddy[i])) {
-            travel.dir = i;
+    for (const auto &d : Direction::directions()) {
+        if (Pos2DVec(sy, sx) == d.vec()) {
+            travel.dir = d.dir();
         }
     }
 }

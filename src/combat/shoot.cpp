@@ -457,7 +457,7 @@ static MULTIPLY calc_shot_damage_with_slay(
  */
 void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SPELL_IDX snipe_type)
 {
-    POSITION y, x, ny, nx, ty, tx, prev_y, prev_x;
+    POSITION y, x, ny, nx, prev_y, prev_x;
     ItemEntity *o_ptr;
 
     AttributeFlags attribute_flags{};
@@ -553,8 +553,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     }
 
     /* Predict the "target" location */
-    tx = player_ptr->x + 99 * ddx[dir];
-    ty = player_ptr->y + 99 * ddy[dir];
+    auto [ty, tx] = player_ptr->get_position() + Direction(dir).vec() * 99;
 
     /* Check for "target request" */
     if ((dir == 5) && target_okay(player_ptr)) {

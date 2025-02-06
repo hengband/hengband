@@ -250,7 +250,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     auto x = rand_spread(floor.width / 2, floor.width / 6);
 
     /* Choose a random compass direction */
-    auto dir = randint0(8);
+    auto cdir = randint0(8);
 
     /* Place streamer into dungeon */
     auto dummy = 0;
@@ -348,15 +348,13 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
         }
 
         /* Advance the streamer */
-        y += CCW_DD[dir].y;
-        x += CCW_DD[dir].x;
+        const auto d = Direction::from_cdir(cdir);
+        y += d.vec().y;
+        x += d.vec().x;
 
         if (one_in_(10)) {
-            if (one_in_(2)) {
-                dir = (dir + 1) % 8;
-            } else {
-                dir = (dir > 0) ? dir - 1 : 7;
-            }
+            // 左右45度どちらかに方向転換
+            cdir = (cdir + (one_in_(2) ? 1 : 7)) % 8;
         }
 
         /* Quit before leaving the dungeon */

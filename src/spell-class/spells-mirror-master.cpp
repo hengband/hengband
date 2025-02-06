@@ -480,17 +480,14 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
         lite_spot(this->player_ptr, y, x);
     }
 
-    {
-        const auto &pos = path_g.back();
-        if (floor.get_grid(pos).is_mirror()) {
-            this->remove_mirror(pos.y, pos.x);
-            auto project_flag = flag;
-            reset_bits(project_flag, PROJECT_MIRROR);
+    if (const auto &pos = path_g.back(); floor.get_grid(pos).is_mirror()) {
+        this->remove_mirror(pos.y, pos.x);
+        auto project_flag = flag;
+        reset_bits(project_flag, PROJECT_MIRROR);
 
-            const auto length = project_length ? project_length : system.get_max_range();
-            for (const auto &dd : CCW_DD) {
-                second_path_g_list.emplace_back(this->player_ptr, length, pos, pos + dd, project_flag);
-            }
+        const auto length = project_length ? project_length : system.get_max_range();
+        for (const auto &d : Direction::directions_8()) {
+            second_path_g_list.emplace_back(this->player_ptr, length, pos, pos + d.vec(), project_flag);
         }
     }
 

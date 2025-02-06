@@ -29,6 +29,7 @@
 #include "util/point-2d.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <range/v3/view.hpp>
 #include <vector>
 
 using PassBoldFunc = bool (*)(const FloorType &, POSITION, POSITION);
@@ -150,8 +151,8 @@ static int next_to_open(const FloorType &floor, const POSITION cy, const POSITIO
     int len = 0;
     int blen = 0;
     const Pos2D pos_center(cy, cx);
-    for (int i = 0; i < 16; i++) {
-        const auto pos = pos_center + CCW_DD[i % 8];
+    for (const auto cdir : ranges::views::iota(0, 8) | ranges::views::cycle | ranges::views::take(16)) {
+        const auto pos = pos_center + Direction::from_cdir(cdir).vec();
         if (!pass_bold(floor, pos.y, pos.x)) {
             if (len > blen) {
                 blen = len;

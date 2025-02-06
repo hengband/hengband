@@ -81,7 +81,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             }
 
             const auto attack_to = [player_ptr](int cdir) {
-                const auto pos = player_ptr->get_position() + CCW_DD[cdir];
+                const auto pos = player_ptr->get_position() + Direction::from_cdir(cdir).vec();
                 const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
 
                 if (grid.has_monster()) {
@@ -181,7 +181,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 break;
             }
 
-            const auto pos_opposite = pos_target + Pos2DVec(ddy[*dir], ddx[*dir]);
+            const auto pos_opposite = pos_target + Direction(*dir).vec();
             const auto &grid_opposite = floor.get_grid(pos_opposite);
             if (player_can_enter(player_ptr, grid_opposite.feat, 0) && !floor.has_trap_at(pos_opposite) && !grid_opposite.m_idx) {
                 msg_print(nullptr);
@@ -253,8 +253,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 const auto m_name = monster_desc(player_ptr, &monster, 0);
                 Pos2D neighbor(pos.y, pos.x);
                 for (auto i = 0; i < 5; i++) {
-                    neighbor.y += ddy[*dir];
-                    neighbor.x += ddx[*dir];
+                    neighbor += Direction(*dir).vec();
                     if (is_cave_empty_bold(player_ptr, neighbor.y, neighbor.x)) {
                         target = Pos2D(neighbor.y, neighbor.x);
                     } else {
@@ -535,7 +534,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     break;
                 }
 
-                const Pos2D pos_new(pos.y + ddy[*dir], pos.x + ddx[*dir]);
+                const auto pos_new = pos + Direction(*dir).vec();
                 const auto m_idx = grid.m_idx;
                 auto &monster = floor.m_list[m_idx];
 

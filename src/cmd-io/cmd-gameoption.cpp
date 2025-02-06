@@ -285,14 +285,16 @@ static void do_cmd_options_win(PlayerType *player_ptr)
             FileDisplayer(player_ptr->name).display(true, _("joption.txt#Window", "option.txt#Window"), 0, 0);
             term_clear();
             break;
-        default:
+        default: {
             d = get_keymap_dir(ch);
-            x = (x + ddx[d] + 8) % 8;
-            y = (y + ddy[d] + 16) % 16;
+            const auto vec = Direction(d).vec();
+            x = (x + vec.x + 8) % 8;
+            y = (y + vec.y + 16) % 16;
             if (!d) {
                 bell();
             }
             break;
+        }
         }
     }
 
@@ -426,7 +428,7 @@ void do_cmd_options(PlayerType *player_ptr)
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
 
     char k;
-    int d, skey;
+    int skey;
     TERM_LEN i, y = 0;
     screen_save();
     const auto &world = AngbandWorld::get_instance();
@@ -478,15 +480,15 @@ void do_cmd_options(PlayerType *player_ptr)
                 break;
             }
 
-            d = 0;
+            Direction d(0);
             if (skey == SKEY_UP) {
-                d = 8;
+                d = Direction(8);
             }
             if (skey == SKEY_DOWN) {
-                d = 2;
+                d = Direction(2);
             }
-            y = (y + ddy[d] + n) % n;
-            if (!d) {
+            y = (y + d.vec().y + n) % n;
+            if (d.vec().y == 0) {
                 bell();
             }
         }

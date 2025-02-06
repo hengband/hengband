@@ -134,7 +134,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     }
 
     const auto p_pos = player_ptr->get_position();
-    auto pos_target = p_pos + Pos2DVec(ddy[dir], ddx[dir]) * project_length;
+    auto pos_target = p_pos + Direction(dir).vec() * project_length;
     if ((dir == 5) && target_okay(player_ptr)) {
         pos_target = { target_row, target_col };
     }

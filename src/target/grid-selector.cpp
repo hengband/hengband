@@ -242,8 +242,7 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
                 break;
             }
 
-            int dx = ddx[d];
-            int dy = ddy[d];
+            auto [dy, dx] = Direction(d).vec();
             if (move_fast) {
                 int mag = std::min(info.width / 2, info.height / 2);
                 info.pos.y += dy * mag;

@@ -131,37 +131,38 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
             eff_width = width;
         }
 
-        if ((a == 0) && (ddy[d] < 0)) {
+        const auto vec = Direction(d).vec();
+        if ((a == 0) && (vec.y < 0)) {
             d = 0;
         }
-        if ((c == 0) && (ddx[d] < 0)) {
+        if ((c == 0) && (vec.x < 0)) {
             d = 0;
         }
-        if ((a == 0x7f) && (ddy[d] > 0)) {
+        if ((a == 0x7f) && (vec.y > 0)) {
             d = 0;
         }
-        if (((byte)c == 0xff) && (ddx[d] > 0)) {
+        if (((byte)c == 0xff) && (vec.x > 0)) {
             d = 0;
         }
 
-        a += (TERM_COLOR)ddy[d];
-        c += static_cast<char>(ddx[d]);
+        a += (TERM_COLOR)vec.y;
+        c += static_cast<char>(vec.x);
         if (c & 0x80) {
             a |= 0x80;
         }
 
         *cur_attr_ptr = a;
         *cur_char_ptr = c;
-        if ((ddx[d] < 0) && *char_left_ptr > std::max(0, (unsigned char)c - 10)) {
+        if ((vec.x < 0) && *char_left_ptr > std::max(0, (unsigned char)c - 10)) {
             (*char_left_ptr)--;
         }
-        if ((ddx[d] > 0) && *char_left_ptr + eff_width < std::min(0xff, (unsigned char)c + 10)) {
+        if ((vec.x > 0) && *char_left_ptr + eff_width < std::min(0xff, (unsigned char)c + 10)) {
             (*char_left_ptr)++;
         }
-        if ((ddy[d] < 0) && *attr_top_ptr > std::max(0, (int)(a & 0x7f) - 4)) {
+        if ((vec.y < 0) && *attr_top_ptr > std::max(0, (int)(a & 0x7f) - 4)) {
             (*attr_top_ptr)--;
         }
-        if ((ddy[d] > 0) && *attr_top_ptr + height < std::min(0x7f, (a & 0x7f) + 4)) {
+        if ((vec.y > 0) && *attr_top_ptr + height < std::min(0x7f, (a & 0x7f) + 4)) {
             (*attr_top_ptr)++;
         }
 
@@ -286,13 +287,14 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
         return;
     }
 
-    if ((ddx[d] > 0) && ddy[d]) {
+    const auto vec = Direction(d).vec();
+    if ((vec.x > 0) && vec.y) {
         int browser_rows;
         const auto &[wid, hgt] = term_get_size();
         browser_rows = hgt - 8;
         if (!col) {
             int old_grp = grp;
-            grp += ddy[d] * (browser_rows - 1);
+            grp += vec.y * (browser_rows - 1);
             if (grp >= grp_cnt) {
                 grp = grp_cnt - 1;
             }
@@ -303,7 +305,7 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
                 list = 0;
             }
         } else {
-            list += ddy[d] * browser_rows;
+            list += vec.y * browser_rows;
             if (list >= list_cnt) {
                 list = list_cnt - 1;
             }
@@ -317,8 +319,8 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
         return;
     }
 
-    if (ddx[d]) {
-        col += ddx[d];
+    if (vec.x) {
+        col += vec.x;
         if (col < 0) {
             col = 0;
         }
@@ -332,7 +334,7 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
 
     if (!col) {
         int old_grp = grp;
-        grp += (IDX)ddy[d];
+        grp += (IDX)vec.y;
         if (grp >= grp_cnt) {
             grp = grp_cnt - 1;
         }
@@ -343,7 +345,7 @@ void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_c
             list = 0;
         }
     } else {
-        list += (IDX)ddy[d];
+        list += (IDX)vec.y;
         if (list >= list_cnt) {
             list = list_cnt - 1;
         }

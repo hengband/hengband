@@ -112,8 +112,7 @@ static bool change_panel_xy(PlayerType *player_ptr, const Pos2D &pos)
  */
 static std::optional<int> calc_target_distance(const Pos2D &pos_from, const Pos2D &pos_to, int dir)
 {
-    const auto dy = ddy[dir];
-    const auto dx = ddx[dir];
+    const auto [dy, dx] = Direction(dir).vec();
     const auto vec = pos_to - pos_from;
     const Pos2DVec vec_abs(std::abs(vec.y), std::abs(vec.x));
 
@@ -319,7 +318,8 @@ std::optional<int> TargetSetter::check_panel_changed(int dir)
  */
 std::optional<int> TargetSetter::sweep_targets(int dir, int panel_row_min_initial, int panel_col_min_initial)
 {
-    while (change_panel(this->player_ptr, ddy[dir], ddx[dir])) {
+    auto [dy, dx] = Direction(dir).vec();
+    while (change_panel(this->player_ptr, dy, dx)) {
         // カーソル移動に伴い、必要なだけ描画範囲を更新。
         // "interesting" 座標リストおよび現在のターゲットも更新。
         const auto target_index = this->check_panel_changed(dir);
@@ -341,8 +341,6 @@ std::optional<int> TargetSetter::sweep_targets(int dir, int panel_row_min_initia
     this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
 
     auto &[y, x] = this->pos_target;
-    auto dy = ddy[dir];
-    auto dx = ddx[dir];
     x += dx;
     y += dy;
     const auto [wid, hgt] = get_screen_size();
@@ -476,8 +474,7 @@ std::optional<std::pair<int, bool>> TargetSetter::switch_next_grid_command()
 
 void TargetSetter::decide_change_panel(int dir, bool move_fast)
 {
-    auto dx = ddx[dir];
-    auto dy = ddy[dir];
+    auto [dy, dx] = Direction(dir).vec();
     auto &[y, x] = this->pos_target;
     const auto [wid, hgt] = get_screen_size();
     const auto mag = move_fast ? std::min(wid / 2, hgt / 2) : 1;

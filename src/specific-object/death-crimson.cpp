@@ -26,8 +26,7 @@ static bool fire_crimson(PlayerType *player_ptr)
         return false;
     }
 
-    POSITION tx = player_ptr->x + 99 * ddx[dir];
-    POSITION ty = player_ptr->y + 99 * ddy[dir];
+    auto [ty, tx] = player_ptr->get_position() + Direction(dir).vec() * 99;
     if ((dir == 5) && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;

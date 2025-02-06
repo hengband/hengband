@@ -117,9 +117,10 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
         return true;
     }
 
-    const auto num_of_walls = std::count_if(CCW_DD.begin(), CCW_DD.end(),
-        [&floor, &pos](const auto &dd) {
-            const auto pos_neighbor = pos + dd;
+    constexpr auto dirs = Direction::directions_8();
+    const auto num_of_walls = std::count_if(dirs.begin(), dirs.end(),
+        [&floor, &pos](const auto &d) {
+            const auto pos_neighbor = pos + d.vec();
             if (!in_bounds(floor, pos_neighbor.y, pos_neighbor.x)) {
                 return true;
             }
@@ -128,7 +129,7 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
             return terrain_neighbor.flags.has(TerrainCharacteristics::WALL);
         });
 
-    return num_of_walls != std::ssize(CCW_DD);
+    return num_of_walls != std::ssize(dirs);
 }
 
 /*!
