@@ -1,6 +1,7 @@
 #pragma once
 
 #include "locale/language-switcher.h"
+#include <fmt/format.h>
 #include <ostream>
 #include <string>
 #include <string_view>
@@ -32,3 +33,18 @@ private:
 };
 
 std::ostream &operator<<(std::ostream &os, const LocalizedString &str);
+
+/// LocalizedStringオブジェクトを fmt::format の引数として渡せるようにするためのテンプレート特殊化
+template <>
+struct fmt::formatter<LocalizedString> {
+    template <typename ParseContext>
+    constexpr auto parse(ParseContext &ctx)
+    {
+        return ctx.begin();
+    }
+    template <typename FormatContext>
+    constexpr auto format(const LocalizedString &str, FormatContext &ctx) const
+    {
+        return fmt::format_to(ctx.out(), "{}", str.string());
+    }
+};
