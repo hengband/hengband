@@ -406,7 +406,6 @@ static void effect_damage_piles_stun(PlayerType *player_ptr, EffectMonster *em_p
 {
     const auto *r_ptr = em_ptr->r_ptr;
     auto can_avoid_stun = em_ptr->do_stun == 0;
-    can_avoid_stun |= r_ptr->resistance_flags.has_any_of({ MonsterResistanceType::RESIST_SOUND, MonsterResistanceType::RESIST_FORCE });
     can_avoid_stun |= r_ptr->resistance_flags.has(MonsterResistanceType::NO_STUN);
     if (can_avoid_stun) {
         return;
