@@ -138,8 +138,9 @@ bool ObjectThrowEntity::calc_throw_grid()
         return false;
     }
 
-    this->tx = this->player_ptr->x + 99 * ddx[dir];
-    this->ty = this->player_ptr->y + 99 * ddy[dir];
+    const auto vec = Direction(dir).vec();
+    this->tx = this->player_ptr->x + 99 * vec.x;
+    this->ty = this->player_ptr->y + 99 * vec.y;
     if ((dir == 5) && target_okay(this->player_ptr)) {
         this->tx = target_col;
         this->ty = target_row;

@@ -338,27 +338,23 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     }
 
     if (world.is_wild_mode()) {
-        if (ddy[dir] > 0) {
+        const auto vec = Direction(dir).vec();
+        if (vec.y > 0) {
             player_ptr->oldpy = 1;
         }
-
-        if (ddy[dir] < 0) {
+        if (vec.y < 0) {
             player_ptr->oldpy = MAX_HGT - 2;
         }
-
-        if (ddy[dir] == 0) {
+        if (vec.y == 0) {
             player_ptr->oldpy = MAX_HGT / 2;
         }
-
-        if (ddx[dir] > 0) {
+        if (vec.x > 0) {
             player_ptr->oldpx = 1;
         }
-
-        if (ddx[dir] < 0) {
+        if (vec.x < 0) {
             player_ptr->oldpx = MAX_WID - 2;
         }
-
-        if (ddx[dir] == 0) {
+        if (vec.x == 0) {
             player_ptr->oldpx = MAX_WID / 2;
         }
     }

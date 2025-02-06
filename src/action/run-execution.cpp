@@ -58,7 +58,7 @@ static bool find_breakleft;
 static bool see_wall(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(y + ddy[dir], x + ddx[dir]);
+    const auto pos = Pos2D(y, x) + Direction(dir).vec();
     if (!in_bounds2(floor, pos.y, pos.x)) {
         return false;
     }
@@ -171,8 +171,9 @@ static void run_init(PlayerType *player_ptr, DIRECTION dir)
  */
 static bool see_nothing(PlayerType *player_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
-    y += ddy[dir];
-    x += ddx[dir];
+    const auto vec = Direction(dir).vec();
+    y += vec.y;
+    x += vec.x;
 
     const auto &floor = *player_ptr->current_floor_ptr;
     if (!in_bounds2(floor, y, x)) {

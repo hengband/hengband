@@ -30,8 +30,7 @@ bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam
         flg |= PROJECT_HIDE;
     }
 
-    POSITION tx = player_ptr->x + 99 * ddx[dir];
-    POSITION ty = player_ptr->y + 99 * ddy[dir];
+    auto [ty, tx] = player_ptr->get_position() + Direction(dir).vec() * 99;
 
     if ((dir == 5) && target_okay(player_ptr)) {
         flg &= ~(PROJECT_STOP);
@@ -61,8 +60,7 @@ bool fire_breath(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int d
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_BREATH;
 
-    auto tx = player_ptr->x + 99 * ddx[dir];
-    auto ty = player_ptr->y + 99 * ddy[dir];
+    auto [ty, tx] = player_ptr->get_position() + Direction(dir).vec() * 99;
 
     if ((dir == 5) && target_okay(player_ptr)) {
         reset_bits(flg, PROJECT_STOP);
@@ -90,8 +88,7 @@ bool fire_breath(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int d
  */
 bool fire_rocket(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
 {
-    POSITION tx = player_ptr->x + 99 * ddx[dir];
-    POSITION ty = player_ptr->y + 99 * ddy[dir];
+    auto [ty, tx] = player_ptr->get_position() + Direction(dir).vec() * 99;
     if ((dir == 5) && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
@@ -118,8 +115,7 @@ bool fire_rocket(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int d
  */
 bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
 {
-    POSITION tx = player_ptr->x + 99 * ddx[dir];
-    POSITION ty = player_ptr->y + 99 * ddy[dir];
+    auto [ty, tx] = player_ptr->get_position() + Direction(dir).vec() * 99;
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
     if ((dir == 5) && target_okay(player_ptr)) {
         flg &= ~(PROJECT_STOP);
@@ -176,8 +172,9 @@ bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, const 
         lx = 20 * (tx - player_ptr->x) + player_ptr->x;
         ly = 20 * (ty - player_ptr->y) + player_ptr->y;
     } else {
-        ly = ty = player_ptr->y + 20 * ddy[dir];
-        lx = tx = player_ptr->x + 20 * ddx[dir];
+        const auto vec = Direction(dir).vec();
+        ly = ty = player_ptr->y + 20 * vec.y;
+        lx = tx = player_ptr->x + 20 * vec.x;
     }
 
     const auto ld = Grid::calc_distance(player_ptr->get_position(), { ly, lx });

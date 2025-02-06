@@ -162,9 +162,6 @@ constexpr std::span<const Direction> Direction::directions_8_reverse()
     return Direction::directions_reverse().subspan(1, 8);
 }
 
-constexpr std::array<int, 10> ddx = { { 0, -1, 0, 1, -1, 0, 1, -1, 0, 1 } }; //!< dddで定義した順にベクトルのX軸成分.
-constexpr std::array<int, 10> ddy = { { 0, 1, 1, 1, 0, 0, 0, -1, -1, -1 } }; //!< dddで定義した順にベクトルのY軸成分.
-
 //! 下方向から反時計回りに8方向への方向ベクトル配列
 constexpr std::array<Pos2DVec, 8> CCW_DD = {
     { { 1, 0 }, { 1, 1 }, { 0, 1 }, { -1, 1 }, { -1, 0 }, { -1, -1 }, { 0, -1 }, { 1, -1 } }

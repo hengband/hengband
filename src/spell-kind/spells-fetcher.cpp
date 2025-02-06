@@ -80,7 +80,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         grid_ptr = &floor.get_grid(pos);
         while (is_first_loop || grid_ptr->o_idx_list.empty()) {
             is_first_loop = false;
-            pos += Pos2DVec(ddy[dir], ddx[dir]);
+            pos += Direction(dir).vec();
             grid_ptr = &floor.get_grid(pos);
             if ((Grid::calc_distance(p_pos, pos) > system.get_max_range())) {
                 return;

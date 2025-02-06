@@ -51,7 +51,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
             return true;
         }
 
-        const auto pos_new = pos + Pos2DVec(ddy[*dir], ddx[*dir]);
+        const auto pos_new = pos + Direction(*dir).vec();
         const auto &grid_new = floor.get_grid(pos_new);
         if (player_can_enter(player_ptr, grid_new.feat, 0) && !floor.has_trap_at(pos_new) && !grid_new.has_monster()) {
             msg_print(nullptr);
