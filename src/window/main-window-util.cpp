@@ -220,8 +220,9 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             if (mp[y][x] == tp) {
                 int cnt = 0;
 
-                for (const auto &dd : CCW_DD) {
-                    if ((symbol_foreground.character == bigmc[j + 1 + dd.y][i + 1 + dd.x]) && (symbol_foreground.color == bigma[j + 1 + dd.y][i + 1 + dd.x])) {
+                for (const auto &d : Direction::directions_8()) {
+                    const auto vec = d.vec();
+                    if ((symbol_foreground.character == bigmc[j + 1 + vec.y][i + 1 + vec.x]) && (symbol_foreground.color == bigma[j + 1 + vec.y][i + 1 + vec.x])) {
                         cnt++;
                     }
                 }
