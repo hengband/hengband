@@ -216,26 +216,6 @@ bool MonraceList::is_angel(MonraceId monrace_id) const
     return is_angel;
 }
 
-//!< @todo ややトリッキーだが、元のmapでMonsterRaceInfo をshared_ptr で持つようにすればかなりスッキリ書けるはず.
-const std::vector<std::pair<MonraceId, const MonraceDefinition *>> &MonraceList::get_sorted_monraces() const
-{
-    static std::vector<std::pair<MonraceId, const MonraceDefinition *>> sorted_monraces;
-    if (!sorted_monraces.empty()) {
-        return sorted_monraces;
-    }
-
-    for (const auto &pair : this->monraces) {
-        if (pair.second.is_valid()) {
-            sorted_monraces.emplace_back(pair.first, &pair.second);
-        }
-    }
-
-    std::stable_sort(sorted_monraces.begin(), sorted_monraces.end(), [](const auto &pair1, const auto &pair2) {
-        return pair2.second->order_level_strictly(*pair1.second);
-    });
-    return sorted_monraces;
-}
-
 /*!
  * @brief 合体/分離ユニーク判定
  * @param monrace_id 調査対象のモンスター種族ID
