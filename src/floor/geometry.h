@@ -58,6 +58,17 @@ public:
     static constexpr std::span<const Direction> directions_8_reverse();
 
     /*!
+     * @brief 引数で指定された方向IDが有効かどうかを返す
+     *
+     * @param dir 方向ID
+     * @return 有効な方向IDならばtrue、そうでなければfalse
+     */
+    static constexpr bool is_valid_dir(int dir)
+    {
+        return (dir >= 0) && std::cmp_less(dir, DIR_TO_VEC.size());
+    }
+
+    /*!
      * @brief 方向を示すベクトルを取得する
      *
      * ベクトルのy, xの値はその方向を示すY成分/X成分があれば1もしくは-1、なければ0を返す。

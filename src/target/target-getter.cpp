@@ -20,13 +20,6 @@
 #include "view/display-messages.h"
 #include <string>
 
-namespace {
-bool is_valid_dir(int dir)
-{
-    return (dir >= 0) && (dir < static_cast<int>(std::size(ddx)));
-}
-}
-
 /*
  * Get an "aiming direction" from the user.
  *
@@ -46,7 +39,7 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
     }
 
     short code = 0;
-    if (repeat_pull(&code) && is_valid_dir(code)) {
+    if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
         if (!(code == 5 && !target_okay(player_ptr))) {
             dir = code;
         }
@@ -138,7 +131,7 @@ std::optional<int> get_direction(PlayerType *player_ptr)
 {
     auto dir = command_dir;
     short code = 0;
-    if (repeat_pull(&code) && is_valid_dir(code)) {
+    if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
         dir = code;
     }
 
@@ -228,7 +221,7 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
 {
     auto dir = command_dir;
     short code = 0;
-    if (repeat_pull(&code) && is_valid_dir(code)) {
+    if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
         dir = code;
     }
 
