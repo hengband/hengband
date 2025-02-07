@@ -247,9 +247,9 @@ static void build_cave_vault(PlayerType *player_ptr, const Pos2D &center, const 
 
     /* Set icky flag because is a vault */
     const Rect2D area(center, vec_half);
-    area.each_area([&floor](const Pos2D &pos) {
+    for (const auto &pos : area) {
         floor.get_grid(pos).info |= CAVE_ICKY;
-    });
+    }
 
     /* Fill with monsters and treasure, low difficulty */
     fill_treasure(player_ptr, area.resized(-1), randint1(5));
@@ -705,9 +705,9 @@ static void build_elemental_vault(PlayerType *player_ptr, const Pos2D &center, c
 
     /* Set icky flag because is a vault */
     const Rect2D area(center, vec_half);
-    area.each_area([&floor](const Pos2D &pos) {
+    for (const auto &pos : area) {
         floor.get_grid(pos).info |= CAVE_ICKY;
-    });
+    }
 
     /* make a few rooms in the vault */
     for (auto i = 1; i <= (xsize * ysize) / 50; i++) {
@@ -843,11 +843,11 @@ static void build_castle_vault(PlayerType *player_ptr, const Pos2D &center, cons
 
     /* generate the room */
     auto &floor = *player_ptr->current_floor_ptr;
-    area.resized(1).each_area([&](const Pos2D &pos) {
+    for (const auto &pos : area.resized(1)) {
         floor.get_grid(pos).info |= (CAVE_ROOM | CAVE_ICKY);
         /* Make everything a floor */
         place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
-    });
+    }
 
     /* Make the castle */
     build_recursive_room(player_ptr, area.top_left.x, area.top_left.y, area.bottom_right.x, area.bottom_right.y, randint1(5));

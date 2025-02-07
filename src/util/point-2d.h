@@ -191,16 +191,6 @@ struct Rectangle2D {
     }
 
     template <std::invocable<Point2D<T>> F>
-    void each_area(F &&f) const
-    {
-        for (auto y = this->top_left.y; y <= this->bottom_right.y; ++y) {
-            for (auto x = this->top_left.x; x <= this->bottom_right.x; ++x) {
-                f(Point2D<T>(y, x));
-            }
-        }
-    }
-
-    template <std::invocable<Point2D<T>> F>
     void each_edge(F &&f) const
     {
         for (auto y = this->top_left.y; y <= this->bottom_right.y; ++y) {

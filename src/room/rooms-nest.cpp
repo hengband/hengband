@@ -68,11 +68,11 @@ Rect2D generate_large_room(PlayerType *player_ptr, const Pos2D &center)
     auto &floor = *player_ptr->current_floor_ptr;
     constexpr Vector2D vec(4, 11);
     const Rect2D rectangle(center, vec);
-    rectangle.resized(1).each_area([player_ptr, &floor](const Pos2D &pos) {
+    for (const auto &pos : rectangle.resized(1)) {
         auto &grid = floor.get_grid(pos);
         place_grid(player_ptr, grid, GB_FLOOR);
         grid.add_info(CAVE_ROOM);
-    });
+    }
 
     rectangle.resized(1).each_edge([player_ptr, &floor](const Pos2D &pos) {
         place_grid(player_ptr, floor.get_grid(pos), GB_OUTER);
@@ -90,9 +90,9 @@ void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &re
         place_grid(player_ptr, floor.get_grid(pos), GB_INNER);
     });
 
-    inner_rectangle.each_area([&floor](const Pos2D &pos) {
+    for (const auto &pos : inner_rectangle) {
         floor.get_grid(pos).add_info(CAVE_ICKY);
-    });
+    }
 
     /* Place a secret door */
     switch (randint1(4)) {
@@ -113,11 +113,11 @@ void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &re
 
 void place_monsters_in_nest(PlayerType *player_ptr, const Pos2D &center, std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> &nest_mon_info_list)
 {
-    Rect2D(center, Vector2D(2, 9)).each_area([player_ptr, &nest_mon_info_list](const Pos2D &pos) {
+    for (const auto &pos : Rect2D(center, Pos2DVec(2, 9))) {
         auto &nest_mon_info = rand_choice(nest_mon_info_list);
         (void)place_specific_monster(player_ptr, pos.y, pos.x, nest_mon_info.monrace_id, 0L);
         nest_mon_info.used = true;
-    });
+    }
 }
 
 void output_debug_nest(PlayerType *player_ptr, std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> &nest_mon_info_list)
