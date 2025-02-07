@@ -38,7 +38,6 @@ public:
     std::vector<MonraceId> search(std::function<bool(const MonraceDefinition &)> filter, bool is_known_only = false) const;
     std::vector<MonraceId> search_by_name(std::string_view name, bool is_known_only = false) const;
     std::vector<MonraceId> search_by_symbol(char symbol, bool is_known_only) const;
-    const std::vector<std::pair<MonraceId, const MonraceDefinition *>> &get_sorted_monraces() const;
     bool is_angel(MonraceId monrace_id) const;
     bool can_unify_separate(MonraceId monrace_id) const;
     void kill_unified_unique(MonraceId monrace_id);
