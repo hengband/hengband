@@ -194,8 +194,7 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
     const auto &artifact = ArtifactList::get_instance().get_artifact(fa_id);
     ItemEntity item(artifact.bi_key);
     item.fa_id = fa_id;
-    item.mark_as_known();
-    return describe_flavor(player_ptr, item, OD_NAME_ONLY);
+    return describe_flavor(player_ptr, item, OD_NAME_ONLY | OD_STORE);
 }
 
 /**
