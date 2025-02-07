@@ -68,18 +68,18 @@ void generate_room_floor(PlayerType *player_ptr, const Rect2D &rectangle, int li
         info |= CAVE_GLOW;
     }
 
-    rectangle.each_area([player_ptr, info](const Pos2D &pos) {
+    for (const auto &pos : rectangle) {
         auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
         place_grid(player_ptr, grid, GB_FLOOR);
         grid.add_info(info);
-    });
+    }
 }
 
 void generate_fill_perm_bold(PlayerType *player_ptr, const Rect2D &rectangle)
 {
-    rectangle.each_area([player_ptr](const Pos2D &pos) {
+    for (const auto &pos : rectangle) {
         place_bold(player_ptr, pos.y, pos.x, GB_INNER_PERM);
-    });
+    }
 }
 
 /*!
@@ -157,20 +157,20 @@ bool UndergroundBuilding::is_area_used(const std::vector<std::vector<bool>> &uga
 {
     auto is_used = false;
 
-    this->rectangle.each_area([&ugarcade_used, &is_used](const Pos2D &pos) {
+    for (const auto &pos : this->rectangle) {
         if (ugarcade_used[pos.y][pos.x]) {
             is_used = true;
         }
-    });
+    }
 
     return is_used;
 }
 
 void UndergroundBuilding::reserve_area(std::vector<std::vector<bool>> &ugarcade_used) const
 {
-    this->rectangle.resized(1).each_area([&ugarcade_used](const Pos2D &pos) {
+    for (const auto &pos : this->rectangle.resized(1)) {
         ugarcade_used[pos.y][pos.x] = true;
-    });
+    }
 }
 
 Rect2D UndergroundBuilding::get_outer_room(const Pos2D &pos_ug) const

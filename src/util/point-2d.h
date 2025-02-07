@@ -191,16 +191,6 @@ struct Rectangle2D {
     }
 
     template <std::invocable<Point2D<T>> F>
-    void each_area(F &&f) const
-    {
-        for (auto y = this->top_left.y; y <= this->bottom_right.y; ++y) {
-            for (auto x = this->top_left.x; x <= this->bottom_right.x; ++x) {
-                f(Point2D<T>(y, x));
-            }
-        }
-    }
-
-    template <std::invocable<Point2D<T>> F>
     void each_edge(F &&f) const
     {
         for (auto y = this->top_left.y; y <= this->bottom_right.y; ++y) {
@@ -211,6 +201,54 @@ struct Rectangle2D {
             f(Point2D<T>(top_left.y, x));
             f(Point2D<T>(bottom_right.y, x));
         }
+    }
+
+    /// @brief 長方形内の座標を走査するイテレータ
+    class iterator {
+    public:
+        using value_type = Point2D<T>;
+        using iterator_category = std::input_iterator_tag;
+
+        constexpr iterator(const Rectangle2D *rect, const value_type &pos_cur) noexcept
+            : rect(rect)
+            , pos_cur(pos_cur)
+        {
+        }
+
+        constexpr value_type operator*() const noexcept
+        {
+            return this->pos_cur;
+        }
+
+        constexpr iterator &operator++() noexcept
+        {
+            if (this->pos_cur.x < this->rect->bottom_right.x) {
+                ++(this->pos_cur.x);
+            } else {
+                this->pos_cur.x = this->rect->top_left.x;
+                ++(this->pos_cur.y);
+            }
+            return *this;
+        }
+
+        constexpr bool operator==(const iterator &other) const noexcept
+        {
+            return this->pos_cur == other.pos_cur;
+        }
+
+    private:
+        const Rectangle2D *rect;
+        value_type pos_cur;
+    };
+
+    constexpr iterator begin() const noexcept
+    {
+        return iterator(this, this->top_left);
+    }
+
+    constexpr iterator end() const noexcept
+    {
+        return iterator(this, Point2D<T>(this->bottom_right.y + 1, this->top_left.x));
     }
 };
 

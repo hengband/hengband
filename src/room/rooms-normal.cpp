@@ -364,9 +364,9 @@ bool build_type3(PlayerType *player_ptr, DungeonData *dd_ptr)
     switch (randint0(4)) {
         /* Large solid middle pillar */
     case 1: {
-        rect_inner.each_area([&](const auto &pos) {
+        for (const auto &pos : rect_inner) {
             place_grid(player_ptr, floor.get_grid(pos), GB_INNER);
-        });
+        }
         break;
     }
 

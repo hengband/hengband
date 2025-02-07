@@ -130,7 +130,7 @@ void fill_treasure(PlayerType *player_ptr, const Rect2D &area, int difficulty)
     const auto size = area.width() - 1 + area.height() - 1;
     auto &floor = *player_ptr->current_floor_ptr;
 
-    area.each_area([&](const Pos2D &pos) {
+    for (const auto &pos : area) {
         deploy_treasure(player_ptr, floor, center, pos, size, difficulty);
-    });
+    }
 }
