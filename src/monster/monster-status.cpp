@@ -423,14 +423,12 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
         const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, monster.fy, monster.fx)) {
             if (is_hallucinated) {
-                const MonraceDefinition *hallucinated_race = nullptr;
-                do {
-                    hallucinated_race = &monraces.pick_monrace_at_random();
-                } while (hallucinated_race->kind_flags.has(MonsterKindType::UNIQUE));
+                const auto ids = monraces.search([](const auto &monrace) { return monrace.kind_flags.has_not(MonsterKindType::UNIQUE); });
+                const auto &monrace_hallucinated = monraces.get_monrace(rand_choice(ids));
                 auto mes_evolution = _("%sは%sに進化した。", "%s^ evolved into %s.");
                 auto mes_degeneration = _("%sは%sに退化した。", "%s^ degenerated into %s.");
                 auto mes = randint0(2) == 0 ? mes_evolution : mes_degeneration;
-                msg_format(mes, m_name.data(), hallucinated_race->name.data());
+                msg_format(mes, m_name.data(), monrace_hallucinated.name.data());
             } else {
                 msg_format(_("%sは%sに進化した。", "%s^ evolved into %s."), m_name.data(), new_monrace.name.data());
             }
