@@ -25,6 +25,7 @@ public:
     DungeonId entrance{};
     std::string name = "";
 
+    int get_level() const;
     void initialize_seed();
 };
 

@@ -11,6 +11,11 @@
 
 std::vector<std::vector<WildernessGrid>> wilderness_grids;
 
+int WildernessGrid::get_level() const
+{
+    return this->level;
+}
+
 void WildernessGrid::initialize_seed()
 {
     this->seed = randint0(0x10000000);

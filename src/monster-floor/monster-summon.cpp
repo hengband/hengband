@@ -27,24 +27,6 @@ static bool is_dead_summoning(summon_type type)
 }
 
 /*!
- * @brief 荒野のレベルを含めた階層レベルを返す
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return 階層レベル
- * @details
- * ダンジョン及びクエストはdun_level>0となる。
- * 荒野はdun_level==0なので、その場合荒野レベルを返す。
- */
-DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.is_underground()) {
-        return floor.dun_level;
-    }
-
-    return WildernessGrids::get_instance().get_player_grid().level;
-}
-
-/*!
  * @brief モンスターを召喚により配置する / Place a monster (of the specified "type") near the given location. Return TRUE if a monster was actually summoned.
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 目標地点y座標
@@ -71,7 +53,7 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
     SummonCondition condition(type, mode, summoner_m_idx, hook);
     get_mon_num_prep_summon(player_ptr, condition);
 
-    DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
+    const auto dlev = floor.is_underground() ? floor.get_level() : WildernessGrids::get_instance().get_player_grid().get_level();
     const auto r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
     if (!MonraceList::is_valid(r_idx)) {
         return std::nullopt;
