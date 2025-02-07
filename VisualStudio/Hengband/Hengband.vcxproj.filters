@@ -2550,6 +2550,9 @@
     <ClCompile Include="..\..\src\util\elapsed-time.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\external-lib\fmt\format.cc">
+      <Filter>external-lib\fmt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5834,6 +5837,9 @@
     </Filter>
     <Filter Include="system\enums\dungeon">
       <UniqueIdentifier>{605bab39-a92d-4c11-ae24-56e39e302f36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external-lib\fmt">
+      <UniqueIdentifier>{de5173c3-9151-46e9-a937-8861a5a14c00}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
