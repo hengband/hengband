@@ -261,8 +261,8 @@ int summon_cyber(PlayerType *player_ptr, POSITION y, POSITION x, std::optional<M
     BIT_FLAGS mode = PM_ALLOW_GROUP;
     const auto &floor = *player_ptr->current_floor_ptr;
     if (summoner_m_idx) {
-        auto *m_ptr = &floor.m_list[*summoner_m_idx];
-        if (m_ptr->is_pet()) {
+        const auto &monster = floor.m_list[*summoner_m_idx];
+        if (monster.is_pet()) {
             mode |= PM_FORCE_PET;
         }
     }

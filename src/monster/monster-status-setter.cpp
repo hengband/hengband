@@ -30,12 +30,12 @@
  * @param PlayerType プレイヤーへの参照ポインタ
  * @param m_ptr モンスター情報構造体の参照ポインタ
  */
-void set_pet(PlayerType *player_ptr, MonsterEntity *m_ptr)
+void set_pet(PlayerType *player_ptr, MonsterEntity &monster)
 {
-    QuestCompletionChecker(player_ptr, m_ptr).complete();
-    m_ptr->mflag2.set(MonsterConstantFlagType::PET);
-    if (m_ptr->get_monrace().kind_flags.has_none_of(alignment_mask)) {
-        m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
+    QuestCompletionChecker(player_ptr, monster).complete();
+    monster.mflag2.set(MonsterConstantFlagType::PET);
+    if (monster.get_monrace().kind_flags.has_none_of(alignment_mask)) {
+        monster.sub_align = SUB_ALIGN_NEUTRAL;
     }
 }
 
@@ -44,15 +44,15 @@ void set_pet(PlayerType *player_ptr, MonsterEntity *m_ptr)
  * Anger the monster
  * @param m_ptr モンスター情報構造体の参照ポインタ
  */
-void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr)
+void anger_monster(PlayerType *player_ptr, MonsterEntity &monster)
 {
-    if (AngbandSystem::get_instance().is_phase_out() || !m_ptr->is_friendly()) {
+    if (AngbandSystem::get_instance().is_phase_out() || !monster.is_friendly()) {
         return;
     }
 
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
     msg_format(_("%s^は怒った！", "%s^ gets angry!"), m_name.data());
-    m_ptr->set_hostile();
+    monster.set_hostile();
     chg_virtue(player_ptr, Virtue::INDIVIDUALISM, 1);
     chg_virtue(player_ptr, Virtue::HONOUR, -1);
     chg_virtue(player_ptr, Virtue::JUSTICE, -1);
@@ -347,7 +347,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
     }
 
     if (vs_player) {
-        const auto m_name = monster_desc(player_ptr, &monster, 0);
+        const auto m_name = monster_desc(player_ptr, monster, 0);
         std::string mes;
         switch (monster.r_idx) {
         case MonraceId::DIO:

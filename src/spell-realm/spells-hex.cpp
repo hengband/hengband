@@ -340,8 +340,8 @@ void SpellHex::store_vengeful_damage(int dam)
  */
 bool SpellHex::check_hex_barrier(MONSTER_IDX m_idx, spell_hex_type type) const
 {
-    const auto *m_ptr = &this->player_ptr->current_floor_ptr->m_list[m_idx];
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monster = this->player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
     return this->is_spelling_specific(type) && ((this->player_ptr->lev * 3 / 2) >= randint1(monrace.level));
 }
 
@@ -374,11 +374,11 @@ void SpellHex::eyes_on_eyes(MONSTER_IDX m_idx, int dam)
     }
 
     const auto &monster = this->player_ptr->current_floor_ptr->m_list[m_idx];
-    const auto m_name = monster_desc(this->player_ptr, &monster, 0);
+    const auto m_name = monster_desc(this->player_ptr, monster, 0);
 #ifdef JP
     msg_format("攻撃が%s自身を傷つけた！", m_name.data());
 #else
-    const auto m_name_self = monster_desc(this->player_ptr, &monster, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+    const auto m_name_self = monster_desc(this->player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
     msg_format("The attack of %s has wounded %s!", m_name.data(), m_name_self.data());
 #endif
     const auto y = monster.fy;

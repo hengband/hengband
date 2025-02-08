@@ -39,14 +39,14 @@ void remove_bad_spells(MONSTER_IDX m_idx, PlayerType *player_ptr, EnumClassFlagG
         return;
     }
 
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     if (smart_learn) {
         /* 時々学習情報を忘れる */
         if (one_in_(100)) {
-            m_ptr->smart.clear();
+            monster.smart.clear();
         }
 
-        msr_ptr->smart_flags = m_ptr->smart;
+        msr_ptr->smart_flags = monster.smart;
     }
 
     add_cheat_remove_flags(player_ptr, msr_ptr);

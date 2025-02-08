@@ -64,7 +64,7 @@ void sanity_blast(PlayerType *player_ptr, std::optional<short> m_idx, bool necro
     if (!necro && m_idx) {
         auto &monster = player_ptr->current_floor_ptr->m_list[*m_idx];
         auto &monrace = monster.get_appearance_monrace();
-        const auto m_name = monster_desc(player_ptr, &monster, 0);
+        const auto m_name = monster_desc(player_ptr, monster, 0);
         power = monrace.level / 2;
         if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
             if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {

@@ -82,8 +82,8 @@ void MonsterAttackPlayer::make_attack_normal()
 
     const auto &monrace = this->m_ptr->get_monrace();
     this->rlev = ((monrace.level >= 1) ? monrace.level : 1);
-    angband_strcpy(this->m_name, monster_desc(this->player_ptr, this->m_ptr, 0), sizeof(this->m_name));
-    angband_strcpy(this->ddesc, monster_desc(this->player_ptr, this->m_ptr, MD_WRONGDOER_NAME), sizeof(this->ddesc));
+    angband_strcpy(this->m_name, monster_desc(this->player_ptr, *this->m_ptr, 0), sizeof(this->m_name));
+    angband_strcpy(this->ddesc, monster_desc(this->player_ptr, *this->m_ptr, MD_WRONGDOER_NAME), sizeof(this->ddesc));
     if (PlayerClass(this->player_ptr).samurai_stance_is(SamuraiStanceType::IAI)) {
         msg_print(_("相手が襲いかかる前に素早く武器を振るった。", format("You took sen, drew and cut in one motion before %s moved.", this->m_name)));
         if (do_cmd_attack(this->player_ptr, this->m_ptr->fy, this->m_ptr->fx, HISSATSU_IAI)) {
@@ -267,7 +267,7 @@ bool MonsterAttackPlayer::effect_protecion_from_evil()
         return false;
     }
 
-    if (is_original_ap_and_seen(this->player_ptr, this->m_ptr)) {
+    if (is_original_ap_and_seen(this->player_ptr, *this->m_ptr)) {
         monrace.r_kind_flags.set(MonsterKindType::EVIL);
     }
 
@@ -480,7 +480,7 @@ void MonsterAttackPlayer::gain_armor_exp()
  */
 void MonsterAttackPlayer::increase_blow_type_seen(const int ap_cnt)
 {
-    if (!is_original_ap_and_seen(this->player_ptr, this->m_ptr) || this->do_silly_attack) {
+    if (!is_original_ap_and_seen(this->player_ptr, *this->m_ptr) || this->do_silly_attack) {
         return;
     }
 

@@ -426,9 +426,9 @@ void process_world_aux_mutation(PlayerType *player_ptr)
     if (player_ptr->muta.has(PlayerMutationType::WARNING) && one_in_(1000)) {
         int danger_amount = 0;
         for (auto m_idx = 0; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
-            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-            const auto &monrace = m_ptr->get_monrace();
-            if (!m_ptr->is_valid()) {
+            const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+            const auto &monrace = monster.get_monrace();
+            if (!monster.is_valid()) {
                 continue;
             }
 

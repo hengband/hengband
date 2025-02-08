@@ -49,24 +49,24 @@
 static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
-    auto dummy_y = m_ptr->fy;
-    auto dummy_x = m_ptr->fx;
+    const auto &monster = floor.m_list[m_idx];
+    auto dummy_y = monster.fy;
+    auto dummy_x = monster.fx;
     if (see_monster(player_ptr, m_idx) && monster_near_player(floor, m_idx, 0)) {
         disturb(player_ptr, true, true);
     }
 
     const auto &monraces = MonraceList::get_instance();
     const auto &unified_uniques = MonraceList::get_unified_uniques();
-    if (const auto it_unified = unified_uniques.find(m_ptr->r_idx); it_unified != unified_uniques.end()) {
+    if (const auto it_unified = unified_uniques.find(monster.r_idx); it_unified != unified_uniques.end()) {
         const int separates_size = it_unified->second.size();
-        const auto separated_hp = (m_ptr->hp + 1) / separates_size;
-        const auto separated_maxhp = m_ptr->maxhp / separates_size;
-        if (floor.inside_arena || AngbandSystem::get_instance().is_phase_out() || !summon_possible(player_ptr, m_ptr->fy, m_ptr->fx)) {
+        const auto separated_hp = (monster.hp + 1) / separates_size;
+        const auto separated_maxhp = monster.maxhp / separates_size;
+        if (floor.inside_arena || AngbandSystem::get_instance().is_phase_out() || !summon_possible(player_ptr, monster.fy, monster.fx)) {
             return MonsterSpellResult::make_invalid();
         }
 
-        delete_monster_idx(player_ptr, floor.grid_array[m_ptr->fy][m_ptr->fx].m_idx);
+        delete_monster_idx(player_ptr, floor.grid_array[monster.fy][monster.fx].m_idx);
         for (const auto separate : it_unified->second) {
             auto summoned_m_idx = summon_named_creature(player_ptr, 0, dummy_y, dummy_x, separate, MD_NONE);
             if (!summoned_m_idx) {
@@ -83,7 +83,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
     }
 
     for (const auto &[unified_unique, separates] : unified_uniques) {
-        if (!separates.contains(m_ptr->r_idx)) {
+        if (!separates.contains(monster.r_idx)) {
             continue;
         }
 
@@ -101,7 +101,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
 
             unified_hp += monster_separate.hp;
             unified_maxhp += monster_separate.maxhp;
-            if (monster_separate.r_idx != m_ptr->r_idx) {
+            if (monster_separate.r_idx != monster.r_idx) {
                 dummy_y = monster_separate.fy;
                 dummy_x = monster_separate.fx;
             }
@@ -180,9 +180,9 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
 {
     mspell_cast_msg_simple msg{};
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto *m_ptr = &floor.m_list[m_idx];
-    const auto *t_ptr = &floor.m_list[t_idx];
-    const auto &monrace_target = t_ptr->get_monrace();
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monster_target = floor.m_list[t_idx];
+    const auto &monrace_target = monster_target.get_monrace();
     bool monster_to_player = (target_type == MONSTER_TO_PLAYER);
     bool monster_to_monster = (target_type == MONSTER_TO_MONSTER);
     bool direct = player_ptr->is_located_at({ y, x });
@@ -212,10 +212,10 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     bool fear, dead; /* dummy */
     int dam = Dice::roll(4, 8);
 
-    if (monster_to_player || t_ptr->is_riding()) {
-        teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
+    if (monster_to_player || monster_target.is_riding()) {
+        teleport_player_to(player_ptr, monster.fy, monster.fx, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
     } else {
-        teleport_monster_to(player_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
+        teleport_monster_to(player_ptr, t_idx, monster.fy, monster.fx, 100, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
     }
 
     if ((monster_to_player && player_ptr->levitation) || (monster_to_monster && monrace_target.feature_flags.has(MonsterFeatureType::CAN_FLY))) {
@@ -229,12 +229,12 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
     dam += Dice::roll(6, 8);
 
-    if (monster_to_player || (monster_to_monster && t_ptr->is_riding())) {
+    if (monster_to_player || (monster_to_monster && monster_target.is_riding())) {
         int get_damage = take_hit(player_ptr, DAMAGE_NOESCAPE, dam, m_name);
         if (player_ptr->tim_eyeeye && get_damage > 0 && !player_ptr->is_dead) {
-            const auto m_name_self = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+            const auto m_name_self = monster_desc(player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
             msg_print(_(format("攻撃が%s自身を傷つけた！", m_name.data()), format("The attack of %s has wounded %s!", m_name.data(), m_name_self.data())));
-            project(player_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, AttributeType::MISSILE, PROJECT_KILL);
+            project(player_ptr, 0, 0, monster.fy, monster.fx, get_damage, AttributeType::MISSILE, PROJECT_KILL);
             set_tim_eyeeye(player_ptr, player_ptr->tim_eyeeye - 5, true);
         }
     }
@@ -245,7 +245,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     }
 
     if (monster_to_monster) {
-        mon_take_hit_mon(player_ptr, t_idx, dam, &dead, &fear, t_ptr->get_died_message(), m_idx);
+        mon_take_hit_mon(player_ptr, t_idx, dam, &dead, &fear, monster_target.get_died_message(), m_idx);
     }
 
     return MonsterSpellResult::make_valid();

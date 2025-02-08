@@ -347,125 +347,125 @@ void rd_item_old(ItemEntity *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  */
-void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
+void rd_monster_old(PlayerType *player_ptr, MonsterEntity &monster)
 {
-    m_ptr->r_idx = i2enum<MonraceId>(rd_s16b());
+    monster.r_idx = i2enum<MonraceId>(rd_s16b());
 
     if (h_older_than(1, 0, 12)) {
-        m_ptr->ap_r_idx = m_ptr->r_idx;
+        monster.ap_r_idx = monster.r_idx;
     } else {
-        m_ptr->ap_r_idx = i2enum<MonraceId>(rd_s16b());
+        monster.ap_r_idx = i2enum<MonraceId>(rd_s16b());
     }
 
     if (h_older_than(1, 0, 14)) {
-        const auto &monrace = m_ptr->get_monrace();
+        const auto &monrace = monster.get_monrace();
 
-        m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
+        monster.sub_align = SUB_ALIGN_NEUTRAL;
         if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
-            m_ptr->sub_align |= SUB_ALIGN_EVIL;
+            monster.sub_align |= SUB_ALIGN_EVIL;
         }
         if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
-            m_ptr->sub_align |= SUB_ALIGN_GOOD;
+            monster.sub_align |= SUB_ALIGN_GOOD;
         }
     } else {
-        m_ptr->sub_align = rd_byte();
+        monster.sub_align = rd_byte();
     }
 
-    m_ptr->fy = rd_byte();
-    m_ptr->fx = rd_byte();
-    m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
+    monster.fy = rd_byte();
+    monster.fx = rd_byte();
+    monster.current_floor_ptr = player_ptr->current_floor_ptr;
 
-    m_ptr->hp = rd_s16b();
-    m_ptr->maxhp = rd_s16b();
+    monster.hp = rd_s16b();
+    monster.maxhp = rd_s16b();
 
     if (h_older_than(1, 0, 5)) {
-        m_ptr->max_maxhp = m_ptr->maxhp;
+        monster.max_maxhp = monster.maxhp;
     } else {
-        m_ptr->max_maxhp = rd_s16b();
+        monster.max_maxhp = rd_s16b();
     }
     if (h_older_than(2, 1, 2, 1)) {
-        m_ptr->dealt_damage = 0;
+        monster.dealt_damage = 0;
     } else {
-        m_ptr->dealt_damage = rd_s32b();
+        monster.dealt_damage = rd_s32b();
     }
 
-    m_ptr->mtimed[MonsterTimedEffect::SLEEP] = rd_s16b();
-    m_ptr->mspeed = rd_byte();
+    monster.mtimed[MonsterTimedEffect::SLEEP] = rd_s16b();
+    monster.mspeed = rd_byte();
 
     if (h_older_than(0, 4, 2)) {
-        m_ptr->energy_need = rd_byte();
+        monster.energy_need = rd_byte();
     } else {
-        m_ptr->energy_need = rd_s16b();
+        monster.energy_need = rd_s16b();
     }
 
     if (h_older_than(1, 0, 13)) {
-        m_ptr->energy_need = 100 - m_ptr->energy_need;
+        monster.energy_need = 100 - monster.energy_need;
     }
 
     if (h_older_than(0, 0, 7)) {
-        m_ptr->mtimed[MonsterTimedEffect::FAST] = 0;
-        m_ptr->mtimed[MonsterTimedEffect::SLOW] = 0;
+        monster.mtimed[MonsterTimedEffect::FAST] = 0;
+        monster.mtimed[MonsterTimedEffect::SLOW] = 0;
     } else {
-        m_ptr->mtimed[MonsterTimedEffect::FAST] = rd_byte();
-        m_ptr->mtimed[MonsterTimedEffect::SLOW] = rd_byte();
+        monster.mtimed[MonsterTimedEffect::FAST] = rd_byte();
+        monster.mtimed[MonsterTimedEffect::SLOW] = rd_byte();
     }
 
-    m_ptr->mtimed[MonsterTimedEffect::STUN] = rd_byte();
-    m_ptr->mtimed[MonsterTimedEffect::CONFUSION] = rd_byte();
-    m_ptr->mtimed[MonsterTimedEffect::FEAR] = rd_byte();
+    monster.mtimed[MonsterTimedEffect::STUN] = rd_byte();
+    monster.mtimed[MonsterTimedEffect::CONFUSION] = rd_byte();
+    monster.mtimed[MonsterTimedEffect::FEAR] = rd_byte();
 
     if (h_older_than(0, 0, 10)) {
-        m_ptr->reset_target();
+        monster.reset_target();
     } else if (h_older_than(0, 0, 11)) {
         strip_bytes(2);
-        m_ptr->reset_target();
+        monster.reset_target();
     } else {
-        m_ptr->target_y = rd_s16b();
-        m_ptr->target_x = rd_s16b();
+        monster.target_y = rd_s16b();
+        monster.target_x = rd_s16b();
     }
 
-    m_ptr->mtimed[MonsterTimedEffect::INVULNERABILITY] = rd_byte();
+    monster.mtimed[MonsterTimedEffect::INVULNERABILITY] = rd_byte();
 
     auto tmp32u = rd_u32b();
-    migrate_bitflag_to_flaggroup(m_ptr->smart, tmp32u);
+    migrate_bitflag_to_flaggroup(monster.smart, tmp32u);
 
     // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
     // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
     std::bitset<32> rd_bits_smart(tmp32u);
-    m_ptr->mflag2[MonsterConstantFlagType::CLONED] = rd_bits_smart[22];
-    m_ptr->mflag2[MonsterConstantFlagType::PET] = rd_bits_smart[23];
-    m_ptr->mflag2[MonsterConstantFlagType::FRIENDLY] = rd_bits_smart[28];
-    m_ptr->smart.reset(i2enum<MonsterSmartLearnType>(22)).reset(i2enum<MonsterSmartLearnType>(23)).reset(i2enum<MonsterSmartLearnType>(28));
+    monster.mflag2[MonsterConstantFlagType::CLONED] = rd_bits_smart[22];
+    monster.mflag2[MonsterConstantFlagType::PET] = rd_bits_smart[23];
+    monster.mflag2[MonsterConstantFlagType::FRIENDLY] = rd_bits_smart[28];
+    monster.smart.reset(i2enum<MonsterSmartLearnType>(22)).reset(i2enum<MonsterSmartLearnType>(23)).reset(i2enum<MonsterSmartLearnType>(28));
 
     if (h_older_than(0, 4, 5)) {
-        m_ptr->exp = 0;
+        monster.exp = 0;
     } else {
-        m_ptr->exp = rd_u32b();
+        monster.exp = rd_u32b();
     }
 
     if (h_older_than(0, 2, 2)) {
-        if (enum2i(m_ptr->r_idx) < 0) {
-            m_ptr->r_idx = i2enum<MonraceId>(0 - enum2i(m_ptr->r_idx));
-            m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
+        if (enum2i(monster.r_idx) < 0) {
+            monster.r_idx = i2enum<MonraceId>(0 - enum2i(monster.r_idx));
+            monster.mflag2.set(MonsterConstantFlagType::KAGE);
         }
     } else {
         auto tmp8u = rd_byte();
         constexpr auto base = enum2i(MonsterConstantFlagType::KAGE);
-        migrate_bitflag_to_flaggroup(m_ptr->mflag2, tmp8u, base, 7);
+        migrate_bitflag_to_flaggroup(monster.mflag2, tmp8u, base, 7);
     }
 
     if (h_older_than(1, 0, 12)) {
-        if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
-            m_ptr->ap_r_idx = MonraceId::KAGE;
+        if (monster.mflag2.has(MonsterConstantFlagType::KAGE)) {
+            monster.ap_r_idx = MonraceId::KAGE;
         }
     }
 
     if (h_older_than(0, 1, 3)) {
-        m_ptr->nickname.clear();
+        monster.nickname.clear();
     } else {
         auto nickname = rd_string();
         if (!nickname.empty()) {
-            m_ptr->nickname = std::move(nickname);
+            monster.nickname = std::move(nickname);
         }
     }
 
@@ -740,7 +740,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         }
 
         auto &monster = floor.m_list[m_idx];
-        monster_loader->rd_monster(&monster);
+        monster_loader->rd_monster(monster);
         auto &grid = floor.get_grid(monster.get_position());
         grid.m_idx = m_idx;
         monster.get_real_monrace().increment_current_numbers();

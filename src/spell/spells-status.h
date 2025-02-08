@@ -31,5 +31,5 @@ bool restore_all_status(PlayerType *player_ptr);
 
 bool fishing(PlayerType *player_ptr);
 bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr);
-void apply_nexus(MonsterEntity *m_ptr, PlayerType *player_ptr);
+void apply_nexus(const MonsterEntity &monster, PlayerType *player_ptr);
 void status_shuffle(PlayerType *player_ptr);

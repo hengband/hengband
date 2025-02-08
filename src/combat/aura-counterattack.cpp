@@ -37,7 +37,7 @@ static void aura_fire_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
 
     auto &monrace = monap_ptr->m_ptr->get_monrace();
     if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK)) {
-        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *monap_ptr->m_ptr)) {
             monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_FIRE_MASK);
         }
 
@@ -45,7 +45,7 @@ static void aura_fire_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     }
 
     int dam = Dice::roll(2, 6);
-    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, *monap_ptr->m_ptr, dam, false);
     msg_format(_("%s^は突然熱くなった！", "%s^ is suddenly very hot!"), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::FIRE);
     if (mdp.mon_take_hit(_("は灰の山になった。", " turns into a pile of ash."))) {
@@ -62,7 +62,7 @@ static void aura_elec_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
 
     auto &monrace = monap_ptr->m_ptr->get_monrace();
     if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK)) {
-        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *monap_ptr->m_ptr)) {
             monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_ELEC_MASK);
         }
 
@@ -70,7 +70,7 @@ static void aura_elec_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     }
 
     int dam = Dice::roll(2, 6);
-    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, *monap_ptr->m_ptr, dam, false);
     msg_format(_("%s^は電撃をくらった！", "%s^ gets zapped!"), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::ELEC);
     if (mdp.mon_take_hit(_("は燃え殻の山になった。", " turns into a pile of cinders."))) {
@@ -87,7 +87,7 @@ static void aura_cold_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
 
     auto &monrace = monap_ptr->m_ptr->get_monrace();
     if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK)) {
-        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *monap_ptr->m_ptr)) {
             monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_COLD_MASK);
         }
 
@@ -95,7 +95,7 @@ static void aura_cold_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     }
 
     int dam = Dice::roll(2, 6);
-    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, *monap_ptr->m_ptr, dam, false);
     msg_format(_("%s^は冷気をくらった！", "%s^ is very cold!"), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::COLD);
     if (mdp.mon_take_hit(_("は凍りついた。", " was frozen."))) {
@@ -112,12 +112,12 @@ static void aura_shards_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
 
     auto &monrace = monap_ptr->m_ptr->get_monrace();
     if (monrace.resistance_flags.has_any_of(RFR_EFF_RESIST_SHARDS_MASK)) {
-        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *monap_ptr->m_ptr)) {
             monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_RESIST_SHARDS_MASK);
         }
     } else {
         int dam = Dice::roll(2, 6);
-        dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
+        dam = mon_damage_mod(player_ptr, *monap_ptr->m_ptr, dam, false);
         msg_format(_("%s^は鏡の破片をくらった！", "%s^ gets sliced!"), monap_ptr->m_name);
         MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::SHARDS);
         if (mdp.mon_take_hit(_("はズタズタになった。", " is torn to pieces."))) {
@@ -143,7 +143,7 @@ static void aura_holy_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     }
 
     if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *monap_ptr->m_ptr)) {
             monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
         }
 
@@ -151,7 +151,7 @@ static void aura_holy_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
     }
 
     int dam = Dice::roll(2, 6);
-    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, *monap_ptr->m_ptr, dam, false);
     msg_format(_("%s^は聖なるオーラで傷ついた！", "%s^ is injured by holy power!"), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::HOLY_FIRE);
     if (mdp.mon_take_hit(_("は倒れた。", " is destroyed."))) {
@@ -159,7 +159,7 @@ static void aura_holy_by_monster_attack(PlayerType *player_ptr, MonsterAttackPla
         monap_ptr->alive = false;
     }
 
-    if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *monap_ptr->m_ptr)) {
         monrace.r_kind_flags.set(MonsterKindType::EVIL);
     }
 }
@@ -172,7 +172,7 @@ static void aura_force_by_monster_attack(PlayerType *player_ptr, MonsterAttackPl
 
     auto &monrace = monap_ptr->m_ptr->get_monrace();
     if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *monap_ptr->m_ptr)) {
             monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
         }
 
@@ -180,7 +180,7 @@ static void aura_force_by_monster_attack(PlayerType *player_ptr, MonsterAttackPl
     }
 
     int dam = Dice::roll(2, 6);
-    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, *monap_ptr->m_ptr, dam, false);
     msg_format(_("%s^が鋭い闘気のオーラで傷ついた！", "%s^ is injured by the Force"), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::MANA);
     if (mdp.mon_take_hit(_("は倒れた。", " is destroyed."))) {
@@ -201,7 +201,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
     const EnumClassFlagGroup<MonsterResistanceType> resist_flags = { MonsterResistanceType::RESIST_ALL, MonsterResistanceType::RESIST_DARK };
 
     if (monrace.resistance_flags.has_any_of(resist_flags)) {
-        if (is_original_ap_and_seen(player_ptr, monap_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *monap_ptr->m_ptr)) {
             monrace.r_resistance_flags.set(monrace.resistance_flags & resist_flags);
         }
 
@@ -219,7 +219,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
         dam *= 2;
     }
 
-    dam = mon_damage_mod(player_ptr, monap_ptr->m_ptr, dam, false);
+    dam = mon_damage_mod(player_ptr, *monap_ptr->m_ptr, dam, false);
     msg_format(_("影のオーラが%s^に反撃した！", "Enveloping shadows attack %s^."), monap_ptr->m_name);
     MonsterDamageProcessor mdp(player_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, AttributeType::DARK);
     if (mdp.mon_take_hit(_("は倒れた。", " is destroyed."))) {

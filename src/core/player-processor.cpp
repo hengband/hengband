@@ -68,7 +68,7 @@ static void process_fishing(PlayerType *player_ptr)
         if (MonraceList::is_valid(r_idx) && one_in_(2)) {
             const auto pos = player_ptr->get_neighbor(player_ptr->fishing_dir);
             if (auto m_idx = place_specific_monster(player_ptr, pos.y, pos.x, r_idx, PM_NO_KAGE)) {
-                const auto m_name = monster_desc(player_ptr, &floor.m_list[*m_idx], 0);
+                const auto m_name = monster_desc(player_ptr, floor.m_list[*m_idx], 0);
                 msg_print(_(format("%sが釣れた！", m_name.data()), "You have a good catch!"));
                 success = true;
             }
@@ -111,12 +111,12 @@ void process_player(PlayerType *player_ptr)
     const auto &system = AngbandSystem::get_instance();
     if (system.is_phase_out()) {
         for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
-            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-            if (!m_ptr->is_valid()) {
+            auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+            if (!monster.is_valid()) {
                 continue;
             }
 
-            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
+            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, m_idx, false);
         }
 
@@ -165,34 +165,34 @@ void process_player(PlayerType *player_ptr)
 
     const auto effects = player_ptr->effects();
     if (player_ptr->riding && !effects->confusion().is_confused() && !effects->blindness().is_blind()) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        const auto &monrace = m_ptr->get_monrace();
-        if (m_ptr->is_asleep()) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+        const auto &monrace = monster.get_monrace();
+        if (monster.is_asleep()) {
+            const auto m_name = monster_desc(player_ptr, monster, 0);
             (void)set_monster_csleep(player_ptr, player_ptr->riding, 0);
             msg_format(_("%s^を起こした。", "You have woken %s up."), m_name.data());
         }
 
-        if (m_ptr->is_stunned()) {
+        if (monster.is_stunned()) {
             if (set_monster_stunned(player_ptr, player_ptr->riding,
-                    (randint0(monrace.level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_stun() - 1))) {
-                const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+                    (randint0(monrace.level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (monster.get_remaining_stun() - 1))) {
+                const auto m_name = monster_desc(player_ptr, monster, 0);
                 msg_format(_("%s^を朦朧状態から立ち直らせた。", "%s^ is no longer stunned."), m_name.data());
             }
         }
 
-        if (m_ptr->is_confused()) {
+        if (monster.is_confused()) {
             if (set_monster_confused(player_ptr, player_ptr->riding,
-                    (randint0(monrace.level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_confusion() - 1))) {
-                const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+                    (randint0(monrace.level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (monster.get_remaining_confusion() - 1))) {
+                const auto m_name = monster_desc(player_ptr, monster, 0);
                 msg_format(_("%s^を混乱状態から立ち直らせた。", "%s^ is no longer confused."), m_name.data());
             }
         }
 
-        if (m_ptr->is_fearful()) {
+        if (monster.is_fearful()) {
             if (set_monster_monfear(player_ptr, player_ptr->riding,
-                    (randint0(monrace.level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_fear() - 1))) {
-                const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+                    (randint0(monrace.level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (monster.get_remaining_fear() - 1))) {
+                const auto m_name = monster_desc(player_ptr, monster, 0);
                 msg_format(_("%s^を恐怖から立ち直らせた。", "%s^ is no longer fearful."), m_name.data());
             }
         }
@@ -321,43 +321,43 @@ void process_player(PlayerType *player_ptr)
             }
 
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
-                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-                if (!m_ptr->is_valid()) {
+                auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+                if (!monster.is_valid()) {
                     continue;
                 }
 
-                const auto &monrace = m_ptr->get_appearance_monrace();
+                const auto &monrace = monster.get_appearance_monrace();
 
                 // モンスターのシンボル/カラーの更新
-                if (m_ptr->ml && monrace.visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {
-                    lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
+                if (monster.ml && monrace.visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {
+                    lite_spot(player_ptr, monster.fy, monster.fx);
                 }
 
                 // 出現して即魔法を使わないようにするフラグを落とす処理
-                if (m_ptr->mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC)) {
-                    m_ptr->mflag.reset(MonsterTemporaryFlagType::PREVENT_MAGIC);
+                if (monster.mflag.has(MonsterTemporaryFlagType::PREVENT_MAGIC)) {
+                    monster.mflag.reset(MonsterTemporaryFlagType::PREVENT_MAGIC);
                 }
 
-                if (m_ptr->mflag.has(MonsterTemporaryFlagType::SANITY_BLAST)) {
-                    m_ptr->mflag.reset(MonsterTemporaryFlagType::SANITY_BLAST);
+                if (monster.mflag.has(MonsterTemporaryFlagType::SANITY_BLAST)) {
+                    monster.mflag.reset(MonsterTemporaryFlagType::SANITY_BLAST);
                     sanity_blast(player_ptr, m_idx);
                 }
 
                 // 感知中のモンスターのフラグを落とす処理
                 // 感知したターンはMFLAG2_SHOWを落とし、次のターンに感知中フラグのMFLAG2_MARKを落とす
-                if (m_ptr->mflag2.has(MonsterConstantFlagType::MARK)) {
-                    if (m_ptr->mflag2.has(MonsterConstantFlagType::SHOW)) {
-                        m_ptr->mflag2.reset(MonsterConstantFlagType::SHOW);
+                if (monster.mflag2.has(MonsterConstantFlagType::MARK)) {
+                    if (monster.mflag2.has(MonsterConstantFlagType::SHOW)) {
+                        monster.mflag2.reset(MonsterConstantFlagType::SHOW);
                     } else {
-                        m_ptr->mflag2.reset(MonsterConstantFlagType::MARK);
-                        m_ptr->ml = false;
+                        monster.mflag2.reset(MonsterConstantFlagType::MARK);
+                        monster.ml = false;
                         update_monster(player_ptr, m_idx, false);
                         HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-                        if (m_ptr->is_riding()) {
+                        if (monster.is_riding()) {
                             rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
                         }
 
-                        lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
+                        lite_spot(player_ptr, monster.fy, monster.fx);
                     }
                 }
             }

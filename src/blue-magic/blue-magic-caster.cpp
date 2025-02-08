@@ -102,15 +102,15 @@ static std::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr)
         return std::nullopt;
     }
 
-    const auto *m_ptr = &floor.m_list[grid.m_idx];
-    auto &monrace = m_ptr->get_monrace();
-    auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    const auto &monster = floor.m_list[grid.m_idx];
+    auto &monrace = monster.get_monrace();
+    auto m_name = monster_desc(player_ptr, monster, 0);
     if (monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
         return m_name;
     }
 
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         }
 
@@ -122,7 +122,7 @@ static std::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr)
         return m_name;
     }
 
-    if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, monster)) {
         monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
     }
 

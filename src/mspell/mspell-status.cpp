@@ -173,8 +173,8 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(PlayerType *player_ptr, POSITION y, POSI
  */
 MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->effects()->blindness().is_blind() && m_ptr->ml);
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    bool seen = (!player_ptr->effects()->blindness().is_blind() && monster.ml);
     const auto m_name = monster_name(player_ptr, m_idx);
     const auto t_name = monster_name(player_ptr, t_idx);
 
@@ -211,8 +211,8 @@ MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSI
  */
 MonsterSpellResult spell_RF5_BRAIN_SMASH(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->effects()->blindness().is_blind() && m_ptr->ml);
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    bool seen = (!player_ptr->effects()->blindness().is_blind() && monster.ml);
     const auto m_name = monster_name(player_ptr, m_idx);
     const auto t_name = monster_name(player_ptr, t_idx);
 
@@ -250,8 +250,8 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto *t_ptr = &floor.m_list[t_idx];
-    const auto &monrace_target = t_ptr->get_monrace();
+    const auto &monster_target = floor.m_list[t_idx];
+    const auto &monrace_target = monster_target.get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -287,7 +287,7 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        set_monster_monfear(player_ptr, t_idx, t_ptr->get_remaining_fear() + randint0(4) + 4);
+        set_monster_monfear(player_ptr, t_idx, monster_target.get_remaining_fear() + randint0(4) + 4);
     }
 
     return res;
@@ -307,8 +307,8 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto *t_ptr = &floor.m_list[t_idx];
-    const auto &monrace_target = t_ptr->get_monrace();
+    const auto &monster_target = floor.m_list[t_idx];
+    const auto &monrace_target = monster_target.get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -352,7 +352,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_confused(player_ptr, t_idx, t_ptr->get_remaining_confusion() + 12 + randint0(4));
+        (void)set_monster_confused(player_ptr, t_idx, monster_target.get_remaining_confusion() + 12 + randint0(4));
     }
 
     return res;
@@ -372,8 +372,8 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto *t_ptr = &floor.m_list[t_idx];
-    const auto &monrace_target = t_ptr->get_monrace();
+    const auto &monster_target = floor.m_list[t_idx];
+    const auto &monrace_target = monster_target.get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -410,7 +410,7 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_confused(player_ptr, t_idx, t_ptr->get_remaining_confusion() + 12 + randint0(4));
+        (void)set_monster_confused(player_ptr, t_idx, monster_target.get_remaining_confusion() + 12 + randint0(4));
     }
 
     return res;
@@ -430,8 +430,8 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto *t_ptr = &floor.m_list[t_idx];
-    const auto &monrace_target = t_ptr->get_monrace();
+    const auto &monster_target = floor.m_list[t_idx];
+    const auto &monrace_target = monster_target.get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -484,9 +484,9 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
 MonsterSpellResult spell_RF6_HASTE(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     bool see_m = see_monster(player_ptr, m_idx);
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     const auto m_name = monster_name(player_ptr, m_idx);
-    const auto m_poss = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+    const auto m_poss = monster_desc(player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
     mspell_cast_msg msg(_("%s^が何かをつぶやいた。", "%s^ mumbles."),
         _("%s^が自分の体に念を送った。", format("%%s^ concentrates on %s body.", m_poss.data())),
@@ -495,7 +495,7 @@ MonsterSpellResult spell_RF6_HASTE(PlayerType *player_ptr, MONSTER_IDX m_idx, MO
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->effects()->blindness().is_blind(), target_type);
 
-    if (set_monster_fast(player_ptr, m_idx, m_ptr->get_remaining_acceleration() + 100)) {
+    if (set_monster_fast(player_ptr, m_idx, monster.get_remaining_acceleration() + 100)) {
         if (target_type == MONSTER_TO_PLAYER || (target_type == MONSTER_TO_MONSTER && see_m)) {
             msg_format(_("%s^の動きが速くなった。", "%s^ starts moving faster."), m_name.data());
         }
@@ -518,8 +518,8 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto *t_ptr = &floor.m_list[t_idx];
-    const auto &monrace_target = t_ptr->get_monrace();
+    const auto &monster_target = floor.m_list[t_idx];
+    const auto &monrace_target = monster_target.get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -563,7 +563,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        set_monster_slow(player_ptr, t_idx, t_ptr->get_remaining_deceleration() + 50);
+        set_monster_slow(player_ptr, t_idx, monster_target.get_remaining_deceleration() + 50);
     }
 
     return res;
@@ -584,11 +584,11 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
 
     mspell_cast_msg msg;
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
+    auto &monster = floor.m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor, m_idx);
     const auto is_blind = player_ptr->effects()->blindness().is_blind();
-    const auto seen = (!is_blind && m_ptr->ml);
-    const auto m_poss = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+    const auto seen = (!is_blind && monster.ml);
+    const auto m_poss = monster_desc(player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
     msg.to_player_true = _("%s^が何かをつぶやいた。", "%s^ mumbles.");
     msg.to_mons_true = _("%s^は自分の傷に念を集中した。", format("%%s^ concentrates on %s wounds.", m_poss.data()));
@@ -597,10 +597,10 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, is_blind, target_type);
 
-    m_ptr->hp += (rlev * 6);
-    if (m_ptr->hp >= m_ptr->maxhp) {
+    monster.hp += (rlev * 6);
+    if (monster.hp >= monster.maxhp) {
         /* Fully healed */
-        m_ptr->hp = m_ptr->maxhp;
+        monster.hp = monster.maxhp;
 
         msg.to_player_true = _("%s^は完全に治ったようだ！", "%s^ sounds completely healed!");
         msg.to_mons_true = _("%s^は完全に治ったようだ！", "%s^ sounds completely healed!");
@@ -615,11 +615,11 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, !seen, target_type);
     HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
-    if (m_ptr->is_riding()) {
+    if (monster.is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
-    if (!m_ptr->is_fearful()) {
+    if (!monster.is_fearful()) {
         return res;
     }
 
@@ -644,17 +644,17 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
  */
 MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->effects()->blindness().is_blind() && m_ptr->ml);
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    bool seen = (!player_ptr->effects()->blindness().is_blind() && monster.ml);
     mspell_cast_msg msg(_("%s^が何かを力強くつぶやいた。", "%s^ mumbles powerfully."),
         _("%s^が何かを力強くつぶやいた。", "%s^ mumbles powerfully."), _("%sは無傷の球の呪文を唱えた。", "%s^ casts a Globe of Invulnerability."),
         _("%sは無傷の球の呪文を唱えた。", "%s^ casts a Globe of Invulnerability."));
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, !seen, target_type);
 
-    if (m_ptr->ml) {
-        MonraceId r_idx = m_ptr->r_idx;
-        const auto m_name = monster_desc(player_ptr, m_ptr, MD_NONE);
+    if (monster.ml) {
+        MonraceId r_idx = monster.r_idx;
+        const auto m_name = monster_desc(player_ptr, monster, MD_NONE);
         switch (r_idx) {
         case MonraceId::MARIO:
         case MonraceId::LUIGI:
@@ -669,7 +669,7 @@ MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx,
         }
     }
 
-    if (!m_ptr->is_invulnerable()) {
+    if (!monster.is_invulnerable()) {
         (void)set_monster_invulner(player_ptr, m_idx, randint1(4) + 4, false);
     }
 

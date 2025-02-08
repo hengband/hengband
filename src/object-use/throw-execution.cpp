@@ -264,7 +264,7 @@ void ObjectThrowEntity::display_potion_throw()
         return;
     }
 
-    const auto angry_m_name = monster_desc(this->player_ptr, this->m_ptr, 0);
+    const auto angry_m_name = monster_desc(this->player_ptr, *this->m_ptr, 0);
     msg_format(_("%sは怒った！", "%s^ gets angry!"), angry_m_name.data());
     this->m_ptr->set_hostile();
 }
@@ -429,7 +429,7 @@ bool ObjectThrowEntity::check_racial_target_monster()
 
 void ObjectThrowEntity::attack_racial_power()
 {
-    if (!test_hit_fire(this->player_ptr, this->chance - this->cur_dis, this->m_ptr, this->m_ptr->ml, this->o_name)) {
+    if (!test_hit_fire(this->player_ptr, this->chance - this->cur_dis, *this->m_ptr, this->m_ptr->ml, this->o_name)) {
         return;
     }
 
@@ -455,7 +455,7 @@ void ObjectThrowEntity::attack_racial_power()
     }
 
     if ((this->tdam > 0) && !this->q_ptr->is_potion()) {
-        anger_monster(this->player_ptr, this->m_ptr);
+        anger_monster(this->player_ptr, *this->m_ptr);
     }
 
     if (fear && this->m_ptr->ml) {
@@ -487,7 +487,7 @@ void ObjectThrowEntity::calc_racial_power_damage()
 {
     const auto damage_dice = is_active_torch(this->o_ptr) ? Dice(1, 6) : this->q_ptr->damage_dice;
     this->tdam = damage_dice.roll();
-    this->tdam = calc_attack_damage_with_slay(this->player_ptr, this->q_ptr, this->tdam, this->m_ptr, HISSATSU_NONE, true);
+    this->tdam = calc_attack_damage_with_slay(this->player_ptr, this->q_ptr, this->tdam, *this->m_ptr, HISSATSU_NONE, true);
     this->tdam = critical_shot(this->player_ptr, this->q_ptr->weight, this->q_ptr->to_h, 0, this->tdam);
     this->tdam += (this->q_ptr->to_d > 0 ? 1 : -1) * this->q_ptr->to_d;
     if (this->boomerang) {
@@ -508,7 +508,7 @@ void ObjectThrowEntity::calc_racial_power_damage()
         this->tdam = 0;
     }
 
-    this->tdam = mon_damage_mod(this->player_ptr, this->m_ptr, this->tdam, false);
+    this->tdam = mon_damage_mod(this->player_ptr, *this->m_ptr, this->tdam, false);
 }
 
 void ObjectThrowEntity::process_boomerang_throw()

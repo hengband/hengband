@@ -185,13 +185,13 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
     }
 
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || !m_ptr->ml || m_ptr->is_pet()) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[i];
+        if (!monster.is_valid() || !monster.ml || monster.is_pet()) {
             continue;
         }
 
         // 感知魔法/スキルやESPで感知していない擬態モンスターはモンスター一覧に表示しない
-        if (m_ptr->is_mimicry() && m_ptr->mflag2.has_none_of({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW }) && m_ptr->mflag.has_not(MonsterTemporaryFlagType::ESP)) {
+        if (monster.is_mimicry() && monster.mflag2.has_none_of({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW }) && monster.mflag.has_not(MonsterTemporaryFlagType::ESP)) {
             continue;
         }
 

@@ -147,14 +147,14 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             grid_new.m_idx = om_idx;
             grid_old.m_idx = nm_idx;
             if (om_idx > 0) {
-                auto *m_ptr = &floor.m_list[om_idx];
-                m_ptr->set_position(pos_new);
+                auto &monster = floor.m_list[om_idx];
+                monster.set_position(pos_new);
                 update_monster(player_ptr, om_idx, true);
             }
 
             if (nm_idx > 0) {
-                auto *m_ptr = &floor.m_list[nm_idx];
-                m_ptr->set_position(pos_old);
+                auto &monster = floor.m_list[nm_idx];
+                monster.set_position(pos_old);
                 update_monster(player_ptr, nm_idx, true);
             }
         }

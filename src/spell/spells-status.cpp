@@ -548,7 +548,7 @@ bool fishing(PlayerType *player_ptr)
 
     const auto &grid = floor.get_grid(pos);
     if (grid.has_monster()) {
-        const auto m_name = monster_desc(player_ptr, &floor.m_list[grid.m_idx], 0);
+        const auto m_name = monster_desc(player_ptr, floor.m_list[grid.m_idx], 0);
         msg_format(_("%sが邪魔だ！", "%s^ is standing in your way."), m_name.data());
         PlayerEnergy(player_ptr).reset_player_turn();
         return false;
@@ -618,7 +618,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
  * @brief プレイヤーの因果混乱処理 / Apply Nexus
  * @param m_ptr 因果混乱をプレイヤーに与えたモンスターの情報参照ポインタ
  */
-void apply_nexus(MonsterEntity *m_ptr, PlayerType *player_ptr)
+void apply_nexus(const MonsterEntity &monster, PlayerType *player_ptr)
 {
     switch (randint1(7)) {
     case 1:
@@ -630,7 +630,7 @@ void apply_nexus(MonsterEntity *m_ptr, PlayerType *player_ptr)
 
     case 4:
     case 5: {
-        teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+        teleport_player_to(player_ptr, monster.fy, monster.fx, TELEPORT_PASSIVE);
         break;
     }
 

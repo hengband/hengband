@@ -137,7 +137,7 @@ void compact_monsters(PlayerType *player_ptr, int size)
             }
 
             if (record_named_pet && monster.is_named_pet()) {
-                const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+                const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
                 exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
             }
 

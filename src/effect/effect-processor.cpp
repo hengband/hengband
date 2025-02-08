@@ -248,7 +248,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     update_creature(player_ptr);
 
     if (flag & PROJECT_KILL) {
-        see_s_msg = is_monster(src_idx) ? is_seen(player_ptr, &player_ptr->current_floor_ptr->m_list[src_idx])
+        see_s_msg = is_monster(src_idx) ? is_seen(player_ptr, player_ptr->current_floor_ptr->m_list[src_idx])
                                         : (is_player(src_idx) ? true : (player_can_see_bold(player_ptr, pos_source.y, pos_source.x) && projectable(player_ptr, player_ptr->get_position(), pos_source)));
     }
 
@@ -280,9 +280,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
         for (const auto &[dist, pos] : positions) {
             const auto &grid = floor.get_grid(pos);
             if (positions.size() <= 1) {
-                auto *m_ptr = &floor.m_list[grid.m_idx];
-                auto &monrace = m_ptr->get_monrace();
-                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && monrace.misc_flags.has(MonsterMiscType::REFLECTING) && (!m_ptr->is_riding() || !(flag & PROJECT_PLAYER)) && (!src_idx || path_n > 1) && !one_in_(10)) {
+                const auto &monster = floor.m_list[grid.m_idx];
+                auto &monrace = monster.get_monrace();
+                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && monrace.misc_flags.has(MonsterMiscType::REFLECTING) && (!monster.is_riding() || !(flag & PROJECT_PLAYER)) && (!src_idx || path_n > 1) && !one_in_(10)) {
 
                     Pos2D pos_refrect(0, 0);
                     int max_attempts = 10;
@@ -296,11 +296,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         pos_refrect = pos_source;
                     }
 
-                    if (is_seen(player_ptr, m_ptr)) {
+                    if (is_seen(player_ptr, monster)) {
                         sound(SOUND_REFLECT);
-                        if ((m_ptr->r_idx == MonraceId::KENSHIROU) || (m_ptr->r_idx == MonraceId::RAOU)) {
+                        if ((monster.r_idx == MonraceId::KENSHIROU) || (monster.r_idx == MonraceId::RAOU)) {
                             msg_print(_("「北斗神拳奥義・二指真空把！」", "The attack bounces!"));
-                        } else if (m_ptr->r_idx == MonraceId::DIO) {
+                        } else if (monster.r_idx == MonraceId::DIO) {
                             msg_print(_("ディオ・ブランドーは指一本で攻撃を弾き返した！", "The attack bounces!"));
                         } else {
                             msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
@@ -309,7 +309,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         sound(SOUND_REFLECT);
                     }
 
-                    if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+                    if (is_original_ap_and_seen(player_ptr, monster)) {
                         monrace.r_misc_flags.set(MonsterMiscType::REFLECTING);
                     }
 
@@ -446,7 +446,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
             std::string who_name;
             if (is_monster(src_idx)) {
-                who_name = monster_desc(player_ptr, &floor.m_list[src_idx], MD_WRONGDOER_NAME);
+                who_name = monster_desc(player_ptr, floor.m_list[src_idx], MD_WRONGDOER_NAME);
             }
 
             if (affect_player(src_idx, player_ptr, who_name.data(), effective_dist, pos.y, pos.x, dam, typ, flag, fall_off_horse_effect, project)) {

@@ -100,14 +100,14 @@ bool show_gold_on_floor = false;
 /*
  * Evaluate number of kill needed to gain level
  */
-static std::string evaluate_monster_exp(PlayerType *player_ptr, MonsterEntity *m_ptr)
+static std::string evaluate_monster_exp(PlayerType *player_ptr, const MonsterEntity &monster)
 {
-    const auto &monrace = m_ptr->get_appearance_monrace();
+    const auto &monrace = monster.get_appearance_monrace();
     if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         return "**";
     }
 
-    if (!monrace.r_tkills || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
+    if (!monrace.r_tkills || monster.mflag2.has(MonsterConstantFlagType::KAGE)) {
         if (!AngbandWorld::get_instance().wizard) {
             return "??";
         }
@@ -196,7 +196,7 @@ static bool describe_grid_lore(PlayerType *player_ptr, GridExamination *ge_ptr)
 static void describe_grid_monster(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     bool recall = false;
-    const auto m_name = monster_desc(player_ptr, ge_ptr->m_ptr, MD_INDEF_VISIBLE);
+    const auto m_name = monster_desc(player_ptr, *ge_ptr->m_ptr, MD_INDEF_VISIBLE);
     while (true) {
         if (recall) {
             if (describe_grid_lore(player_ptr, ge_ptr)) {
@@ -207,7 +207,7 @@ static void describe_grid_monster(PlayerType *player_ptr, GridExamination *ge_pt
             continue;
         }
 
-        std::string acount = evaluate_monster_exp(player_ptr, ge_ptr->m_ptr);
+        std::string acount = evaluate_monster_exp(player_ptr, *ge_ptr->m_ptr);
         const auto mon_desc = ge_ptr->m_ptr->build_looking_description(false);
 #ifdef JP
         const auto out_val = format("[%s]%s%s(%s)%s%s [r思 %s%s]", acount.data(), ge_ptr->s1, m_name.data(), mon_desc.data(), ge_ptr->s2, ge_ptr->s3,

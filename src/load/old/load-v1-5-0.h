@@ -41,6 +41,6 @@ class MonsterEntity;
 class MonraceDefinition;
 class PlayerType;
 void rd_item_old(ItemEntity *o_ptr);
-void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr);
+void rd_monster_old(PlayerType *player_ptr, MonsterEntity &monster);
 void set_old_lore(MonraceDefinition &monrace, BIT_FLAGS f3, BIT_FLAGS f4, const MonraceId r_idx);
 errr rd_dungeon_old(PlayerType *player_ptr);

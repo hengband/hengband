@@ -316,7 +316,7 @@ static void process_weapon_attack(PlayerType *player_ptr, player_attack_type *pa
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     const auto num = o_ptr->damage_dice.num + player_ptr->damage_dice_bonus[pa_ptr->hand].num + magical_brand_extra_dice(pa_ptr);
     const auto sides = o_ptr->damage_dice.sides + player_ptr->damage_dice_bonus[pa_ptr->hand].sides;
-    pa_ptr->attack_damage = calc_attack_damage_with_slay(player_ptr, o_ptr, Dice::roll(num, sides), pa_ptr->m_ptr, pa_ptr->mode, false);
+    pa_ptr->attack_damage = calc_attack_damage_with_slay(player_ptr, o_ptr, Dice::roll(num, sides), *pa_ptr->m_ptr, pa_ptr->mode, false);
     calc_surprise_attack_damage(player_ptr, pa_ptr);
 
     if (does_equip_cause_earthquake(player_ptr, pa_ptr) || (pa_ptr->chaos_effect == CE_QUAKE) || (pa_ptr->mode == HISSATSU_QUAKE)) {
@@ -484,7 +484,7 @@ static void apply_actual_attack(
 
     const auto is_death_scythe = o_ptr->bi_key == BaseitemKey(ItemKindType::POLEARM, SV_DEATH_SCYTHE);
     const auto is_berserker = PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER);
-    pa_ptr->attack_damage = mon_damage_mod(player_ptr, pa_ptr->m_ptr, pa_ptr->attack_damage, is_death_scythe || (is_berserker && one_in_(2)));
+    pa_ptr->attack_damage = mon_damage_mod(player_ptr, *pa_ptr->m_ptr, pa_ptr->attack_damage, is_death_scythe || (is_berserker && one_in_(2)));
     critical_attack(player_ptr, pa_ptr);
     msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
         pa_ptr->attack_damage, pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);
@@ -538,7 +538,7 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
 
     /* Disturb the monster */
     (void)set_monster_csleep(player_ptr, pa_ptr->m_idx, 0);
-    angband_strcpy(pa_ptr->m_name, monster_desc(player_ptr, pa_ptr->m_ptr, 0), sizeof(pa_ptr->m_name));
+    angband_strcpy(pa_ptr->m_name, monster_desc(player_ptr, *pa_ptr->m_ptr, 0), sizeof(pa_ptr->m_name));
 
     int chance = calc_attack_quality(player_ptr, pa_ptr);
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
@@ -562,10 +562,10 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
 
         /* Anger the monster */
         if (pa_ptr->attack_damage > 0) {
-            anger_monster(player_ptr, pa_ptr->m_ptr);
+            anger_monster(player_ptr, *pa_ptr->m_ptr);
         }
 
-        touch_zap_player(pa_ptr->m_ptr, player_ptr);
+        touch_zap_player(*pa_ptr->m_ptr, player_ptr);
         process_drain(player_ptr, pa_ptr, is_human, &drain_msg);
         pa_ptr->can_drain = false;
         pa_ptr->drain_result = 0;

@@ -340,20 +340,20 @@ bool detect_monsters_normal(PlayerType *player_ptr, POSITION range)
 
     bool flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        const auto &monrace = m_ptr->get_monrace();
-        if (!m_ptr->is_valid()) {
+        auto &monster = floor.m_list[i];
+        const auto &monrace = monster.get_monrace();
+        if (!monster.is_valid()) {
             continue;
         }
 
-        POSITION y = m_ptr->fy;
-        POSITION x = m_ptr->fx;
+        POSITION y = monster.fy;
+        POSITION x = monster.fx;
         if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
         if (monrace.misc_flags.has_not(MonsterMiscType::INVISIBLE) || player_ptr->see_inv) {
-            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
+            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -386,26 +386,26 @@ bool detect_monsters_invis(PlayerType *player_ptr, POSITION range)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        const auto &monrace = m_ptr->get_monrace();
+        auto &monster = floor.m_list[i];
+        const auto &monrace = monster.get_monrace();
 
-        if (!m_ptr->is_valid()) {
+        if (!monster.is_valid()) {
             continue;
         }
 
-        POSITION y = m_ptr->fy;
-        POSITION x = m_ptr->fx;
+        POSITION y = monster.fy;
+        POSITION x = monster.fx;
 
         if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
         if (monrace.misc_flags.has(MonsterMiscType::INVISIBLE)) {
-            if (tracker.is_tracking(m_ptr->r_idx)) {
+            if (tracker.is_tracking(monster.r_idx)) {
                 rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }
 
-            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
+            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -438,28 +438,28 @@ bool detect_monsters_evil(PlayerType *player_ptr, POSITION range)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        auto &monrace = m_ptr->get_monrace();
-        if (!m_ptr->is_valid()) {
+        auto &monster = floor.m_list[i];
+        auto &monrace = monster.get_monrace();
+        if (!monster.is_valid()) {
             continue;
         }
 
-        POSITION y = m_ptr->fy;
-        POSITION x = m_ptr->fx;
+        POSITION y = monster.fy;
+        POSITION x = monster.fx;
 
         if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
         if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
-            if (m_ptr->is_original_ap()) {
+            if (monster.is_original_ap()) {
                 monrace.r_kind_flags.set(MonsterKindType::EVIL);
-                if (tracker.is_tracking(m_ptr->r_idx)) {
+                if (tracker.is_tracking(monster.r_idx)) {
                     rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
                 }
             }
 
-            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
+            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -489,23 +489,23 @@ bool detect_monsters_nonliving(PlayerType *player_ptr, POSITION range)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        if (!m_ptr->is_valid()) {
+        auto &monster = floor.m_list[i];
+        if (!monster.is_valid()) {
             continue;
         }
 
-        POSITION y = m_ptr->fy;
-        POSITION x = m_ptr->fx;
+        POSITION y = monster.fy;
+        POSITION x = monster.fx;
         if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
-        if (!m_ptr->has_living_flag()) {
-            if (tracker.is_tracking(m_ptr->r_idx)) {
+        if (!monster.has_living_flag()) {
+            if (tracker.is_tracking(monster.r_idx)) {
                 rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }
 
-            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
+            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -535,25 +535,25 @@ bool detect_monsters_mind(PlayerType *player_ptr, POSITION range)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        const auto &monrace = m_ptr->get_monrace();
-        if (!m_ptr->is_valid()) {
+        auto &monster = floor.m_list[i];
+        const auto &monrace = monster.get_monrace();
+        if (!monster.is_valid()) {
             continue;
         }
 
-        POSITION y = m_ptr->fy;
-        POSITION x = m_ptr->fx;
+        POSITION y = monster.fy;
+        POSITION x = monster.fx;
 
         if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
         if (monrace.misc_flags.has_not(MonsterMiscType::EMPTY_MIND)) {
-            if (tracker.is_tracking(m_ptr->r_idx)) {
+            if (tracker.is_tracking(monster.r_idx)) {
                 rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }
 
-            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
+            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }
@@ -584,25 +584,25 @@ bool detect_monsters_string(PlayerType *player_ptr, POSITION range, concptr Matc
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     auto flag = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        const auto &monrace = m_ptr->get_monrace();
-        if (!m_ptr->is_valid()) {
+        auto &monster = floor.m_list[i];
+        const auto &monrace = monster.get_monrace();
+        if (!monster.is_valid()) {
             continue;
         }
 
-        POSITION y = m_ptr->fy;
-        POSITION x = m_ptr->fx;
+        POSITION y = monster.fy;
+        POSITION x = monster.fx;
 
         if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
             continue;
         }
 
         if (angband_strchr(Match, monrace.symbol_definition.character)) {
-            if (tracker.is_tracking(m_ptr->r_idx)) {
+            if (tracker.is_tracking(monster.r_idx)) {
                 rfu.set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }
 
-            m_ptr->mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
+            monster.mflag2.set({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW });
             update_monster(player_ptr, i, false);
             flag = true;
         }

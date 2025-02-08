@@ -78,7 +78,7 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
 
     if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
         msg_print(_("テレポートを邪魔された！", "Your teleportation is blocked!"));
-        if (is_original_ap_and_seen(player_ptr, &monster)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         }
         return false;
@@ -404,13 +404,13 @@ void teleport_player(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode)
             if (!is_monster(tmp_m_idx)) {
                 continue;
             }
-            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
-            if (!m_ptr->is_riding()) {
-                const auto &monrace = m_ptr->get_monrace();
+            const auto &monster = player_ptr->current_floor_ptr->m_list[tmp_m_idx];
+            if (!monster.is_riding()) {
+                const auto &monrace = monster.get_monrace();
 
                 bool can_follow = monrace.ability_flags.has(MonsterAbilityType::TPORT);
                 can_follow &= monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
-                can_follow &= !m_ptr->is_asleep();
+                can_follow &= !monster.is_asleep();
                 if (can_follow) {
                     teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, monrace.level, TELEPORT_SPONTANEOUS);
                 }
@@ -450,12 +450,12 @@ void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION di
                 continue;
             }
 
-            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
-            const auto &monrace = m_ptr->get_monrace();
+            const auto &monster = player_ptr->current_floor_ptr->m_list[tmp_m_idx];
+            const auto &monrace = monster.get_monrace();
 
             bool can_follow = monrace.ability_flags.has(MonsterAbilityType::TPORT);
             can_follow &= monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
-            can_follow &= !m_ptr->is_asleep();
+            can_follow &= !monster.is_asleep();
             if (can_follow) {
                 teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, monrace.level, TELEPORT_SPONTANEOUS);
             }
@@ -521,10 +521,10 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
 void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
-    const auto old_m_pos = m_ptr->get_position();
-    bool old_ml = m_ptr->ml;
-    POSITION old_cdis = m_ptr->cdis;
+    const auto &monster = floor.m_list[m_idx];
+    const auto old_m_pos = monster.get_position();
+    bool old_ml = monster.ml;
+    POSITION old_cdis = monster.cdis;
 
     teleport_away(player_ptr, m_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
 
@@ -564,7 +564,7 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
         teleport_player(player_ptr, 200, TELEPORT_PASSIVE);
         msg_print(_("失敗！", "Failed!"));
     } else {
-        teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_SPONTANEOUS);
+        teleport_player_to(player_ptr, monster.fy, monster.fx, TELEPORT_SPONTANEOUS);
     }
 
     player_ptr->energy_need += ENERGY_NEED();

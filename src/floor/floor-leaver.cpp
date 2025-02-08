@@ -43,31 +43,31 @@ static void check_riding_preservation(PlayerType *player_ptr)
         return;
     }
 
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    if (m_ptr->has_parent()) {
+    const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    if (monster.has_parent()) {
         player_ptr->ride_monster(0);
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     } else {
-        party_mon[0] = m_ptr->clone();
+        party_mon[0] = monster.clone();
         delete_monster_idx(player_ptr, player_ptr->riding);
     }
 }
 
-static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEntity *m_ptr)
+static bool check_pet_preservation_conditions(PlayerType *player_ptr, const MonsterEntity &monster)
 {
     if (reinit_wilderness) {
         return false;
     }
 
     const auto p_pos = player_ptr->get_position();
-    const auto m_pos = m_ptr->get_position();
+    const auto m_pos = monster.get_position();
     const auto dis = Grid::calc_distance(p_pos, m_pos);
-    if (m_ptr->is_confused() || m_ptr->is_stunned() || m_ptr->is_asleep() || m_ptr->has_parent()) {
+    if (monster.is_confused() || monster.is_stunned() || monster.is_asleep() || monster.has_parent()) {
         return true;
     }
 
-    const auto should_preserve = m_ptr->is_named();
+    const auto should_preserve = monster.is_named();
     const auto &floor = *player_ptr->current_floor_ptr;
     auto sight_from_player = floor.has_los(m_pos);
     sight_from_player &= projectable(player_ptr, p_pos, m_pos);
@@ -87,8 +87,8 @@ static void sweep_preserving_pet(PlayerType *player_ptr)
     }
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || !m_ptr->is_pet() || m_ptr->is_riding() || check_pet_preservation_conditions(player_ptr, m_ptr)) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[i];
+        if (!monster.is_valid() || !monster.is_pet() || monster.is_riding() || check_pet_preservation_conditions(player_ptr, monster)) {
             continue;
         }
 
@@ -111,7 +111,7 @@ static void record_pet_diary(PlayerType *player_ptr)
             continue;
         }
 
-        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_MOVED, monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE));
+        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_MOVED, monster_desc(player_ptr, monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE));
     }
 }
 
@@ -129,14 +129,14 @@ static void preserve_pet(PlayerType *player_ptr)
     sweep_preserving_pet(player_ptr);
     record_pet_diary(player_ptr);
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        const auto parent_r_idx = player_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx;
-        if (!m_ptr->has_parent() || MonraceList::is_valid(parent_r_idx)) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[i];
+        const auto parent_r_idx = player_ptr->current_floor_ptr->m_list[monster.parent_m_idx].r_idx;
+        if (!monster.has_parent() || MonraceList::is_valid(parent_r_idx)) {
             continue;
         }
 
-        if (is_seen(player_ptr, m_ptr)) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        if (is_seen(player_ptr, monster)) {
+            const auto m_name = monster_desc(player_ptr, monster, 0);
             msg_format(_("%sは消え去った！", "%s^ disappears!"), m_name.data());
         }
 
@@ -274,12 +274,12 @@ static void preserve_info(PlayerType *player_ptr)
     }
 
     for (short i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        if (!m_ptr->is_valid() || (quest_monrace_id != m_ptr->r_idx)) {
+        const auto &monster = floor.m_list[i];
+        if (!monster.is_valid() || (quest_monrace_id != monster.r_idx)) {
             continue;
         }
 
-        const auto &r_ref = m_ptr->get_real_monrace();
+        const auto &r_ref = monster.get_real_monrace();
         if (r_ref.kind_flags.has(MonsterKindType::UNIQUE) || (r_ref.population_flags.has(MonsterPopulationType::NAZGUL))) {
             continue;
         }

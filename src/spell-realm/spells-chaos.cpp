@@ -165,7 +165,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
             if (grid.has_monster() && monster.is_asleep()) {
                 (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
                 if (monster.ml) {
-                    const auto m_name = monster_desc(player_ptr, &monster, 0);
+                    const auto m_name = monster_desc(player_ptr, monster, 0);
                     msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
                 }
             }

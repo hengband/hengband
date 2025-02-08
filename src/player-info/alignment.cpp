@@ -44,13 +44,13 @@ void PlayerAlignment::update_alignment()
     this->reset_alignment();
     const auto &floor = *this->player_ptr->current_floor_ptr;
     for (MONSTER_IDX m_idx = floor.m_max - 1; m_idx >= 1; m_idx--) {
-        auto *m_ptr = &floor.m_list[m_idx];
-        if (!m_ptr->is_valid()) {
+        const auto &monster = floor.m_list[m_idx];
+        if (!monster.is_valid()) {
             continue;
         }
-        const auto &monrace = m_ptr->get_monrace();
+        const auto &monrace = monster.get_monrace();
 
-        if (!m_ptr->is_pet()) {
+        if (!monster.is_pet()) {
             continue;
         }
 

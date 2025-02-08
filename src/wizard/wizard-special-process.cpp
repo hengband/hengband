@@ -741,7 +741,7 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
         }
 
         if (record_named_pet && monster.is_named_pet()) {
-            const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+            const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
             exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
@@ -763,7 +763,7 @@ void wiz_zap_floor_monsters(PlayerType *player_ptr)
         }
 
         if (record_named_pet && monster.is_named_pet()) {
-            const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+            const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
             exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 

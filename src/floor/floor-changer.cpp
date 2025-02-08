@@ -155,9 +155,9 @@ static void place_pet(PlayerType *player_ptr)
         } else {
             const auto &monster = party_mon[current_monster];
             auto &monrace = monster.get_real_monrace();
-            msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), monster_desc(player_ptr, &monster, 0).data());
+            msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), monster_desc(player_ptr, monster, 0).data());
             if (record_named_pet && monster.is_named()) {
-                exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE));
+                exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, monster, MD_INDEF_VISIBLE));
             }
 
             if (monrace.has_entity()) {

@@ -71,10 +71,10 @@ static bool is_high_rate(PlayerType *player_ptr, MONSTER_IDX m_idx1, MONSTER_IDX
 {
     // FIXME 視界内モンスターリストの比較関数と同じ処理
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto m_ptr1 = &floor.m_list[m_idx1];
-    auto m_ptr2 = &floor.m_list[m_idx2];
-    auto ap_r_ptr1 = &m_ptr1->get_appearance_monrace();
-    auto ap_r_ptr2 = &m_ptr2->get_appearance_monrace();
+    const auto &monster1 = floor.m_list[m_idx1];
+    const auto &monster2 = floor.m_list[m_idx2];
+    auto ap_r_ptr1 = &monster1.get_appearance_monrace();
+    auto ap_r_ptr2 = &monster2.get_appearance_monrace();
 
     /* Unique monsters first */
     if (ap_r_ptr1->kind_flags.has(MonsterKindType::UNIQUE) != ap_r_ptr2->kind_flags.has(MonsterKindType::UNIQUE)) {
@@ -82,8 +82,8 @@ static bool is_high_rate(PlayerType *player_ptr, MONSTER_IDX m_idx1, MONSTER_IDX
     }
 
     /* Shadowers first (あやしい影) */
-    if (m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE) != m_ptr2->mflag2.has(MonsterConstantFlagType::KAGE)) {
-        return m_ptr1->mflag2.has(MonsterConstantFlagType::KAGE);
+    if (monster1.mflag2.has(MonsterConstantFlagType::KAGE) != monster2.mflag2.has(MonsterConstantFlagType::KAGE)) {
+        return monster1.mflag2.has(MonsterConstantFlagType::KAGE);
     }
 
     /* Unknown monsters first */
@@ -97,7 +97,7 @@ static bool is_high_rate(PlayerType *player_ptr, MONSTER_IDX m_idx1, MONSTER_IDX
     }
 
     /* Sort by index if all conditions are same */
-    return m_ptr1->ap_r_idx > m_ptr2->ap_r_idx;
+    return monster1.ap_r_idx > monster2.ap_r_idx;
 }
 
 /*!
@@ -124,8 +124,8 @@ static void update_target_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
 
         if (do_dwap) {
-            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-            auto *ap_r_ptr = &m_ptr->get_appearance_monrace();
+            const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+            auto *ap_r_ptr = &monster.get_appearance_monrace();
             scene_target_monster.m_idx = m_idx;
             scene_target_monster.ap_r_ptr = ap_r_ptr;
             scene_target_monster.last_seen = get_game_turn();
@@ -137,15 +137,15 @@ using scene_monster_func = bool (*)(PlayerType *player_ptr, scene_type *value);
 
 static bool scene_monster(PlayerType *player_ptr, scene_type *value)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[scene_target_monster.m_idx];
+    const auto &monster = player_ptr->current_floor_ptr->m_list[scene_target_monster.m_idx];
 
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::KAGE)) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_SHADOWER;
         return true;
     } else {
         value->type = TERM_XTRA_MUSIC_MONSTER;
-        value->val = enum2i(m_ptr->ap_r_idx);
+        value->val = enum2i(monster.ap_r_idx);
         return true;
     }
 }
@@ -229,8 +229,8 @@ void refresh_scene_monster(PlayerType *player_ptr, const std::vector<MONSTER_IDX
                 // 最後に見かけてから一定のゲームターンが経過した場合、BGM対象から外す
                 clear_scene_target_monster();
             } else {
-                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[scene_target_monster.m_idx];
-                auto *ap_r_ptr = &m_ptr->get_appearance_monrace();
+                const auto &monster = player_ptr->current_floor_ptr->m_list[scene_target_monster.m_idx];
+                auto *ap_r_ptr = &monster.get_appearance_monrace();
                 if (ap_r_ptr != scene_target_monster.ap_r_ptr) {
                     // 死亡、チェンジモンスター、etc.
                     clear_scene_target_monster();

@@ -275,7 +275,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         can_banish &= monster.mflag2.has_not(MonsterConstantFlagType::NOGENO);
         if (can_banish) {
             if (record_named_pet && monster.is_named_pet()) {
-                const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+                const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
                 exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
             }
 

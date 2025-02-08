@@ -221,7 +221,7 @@ bool shock_power(PlayerType *player_ptr)
     const auto m_idx = grid.m_idx;
     auto &monster = floor.m_list[m_idx];
     const auto &monrace = monster.get_monrace();
-    const auto m_name = monster_desc(player_ptr, &monster, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
 
     if (randint1(monrace.level * 3 / 2) > randint0(dam / 2) + dam / 2) {
         msg_format(_("%sは飛ばされなかった。", "%s^ was not blown away."), m_name.data());

@@ -13,9 +13,9 @@
  * @param m_ptr 対象モンスター
  * @return 魅了に抵抗したらTRUE
  */
-bool common_saving_throw_charm(PlayerType *player_ptr, int pow, MonsterEntity *m_ptr)
+bool common_saving_throw_charm(PlayerType *player_ptr, int pow, const MonsterEntity &monster)
 {
-    auto &monrace = m_ptr->get_monrace();
+    auto &monrace = monster.get_monrace();
 
     if (player_ptr->current_floor_ptr->inside_arena) {
         return true;
@@ -23,20 +23,20 @@ bool common_saving_throw_charm(PlayerType *player_ptr, int pow, MonsterEntity *m
 
     /* Memorize a flag */
     if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
         }
         return true;
     }
 
     if (monrace.resistance_flags.has(MonsterResistanceType::NO_CONF)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.resistance_flags.set(MonsterResistanceType::NO_CONF);
         }
         return true;
     }
 
-    if (monrace.misc_flags.has(MonsterMiscType::QUESTOR) || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
+    if (monrace.misc_flags.has(MonsterMiscType::QUESTOR) || monster.mflag2.has(MonsterConstantFlagType::NOPET)) {
         return true;
     }
 
@@ -53,9 +53,9 @@ bool common_saving_throw_charm(PlayerType *player_ptr, int pow, MonsterEntity *m
  * @param m_ptr 対象モンスター
  * @return 服従に抵抗したらTRUE
  */
-bool common_saving_throw_control(PlayerType *player_ptr, int pow, MonsterEntity *m_ptr)
+bool common_saving_throw_control(PlayerType *player_ptr, int pow, const MonsterEntity &monster)
 {
-    auto &monrace = m_ptr->get_monrace();
+    auto &monrace = monster.get_monrace();
 
     if (player_ptr->current_floor_ptr->inside_arena) {
         return true;
@@ -63,13 +63,13 @@ bool common_saving_throw_control(PlayerType *player_ptr, int pow, MonsterEntity 
 
     /* Memorize a flag */
     if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
         }
         return true;
     }
 
-    if (monrace.misc_flags.has(MonsterMiscType::QUESTOR) || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
+    if (monrace.misc_flags.has(MonsterMiscType::QUESTOR) || monster.mflag2.has(MonsterConstantFlagType::NOPET)) {
         return true;
     }
 

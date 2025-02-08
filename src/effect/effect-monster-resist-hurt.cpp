@@ -38,7 +38,7 @@ ProcessResult effect_monster_acid(PlayerType *player_ptr, EffectMonster *em_ptr)
 
     em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
     em_ptr->dam /= 9;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_ACID);
     }
 
@@ -57,7 +57,7 @@ ProcessResult effect_monster_elec(PlayerType *player_ptr, EffectMonster *em_ptr)
 
     em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
     em_ptr->dam /= 9;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_ELEC);
     }
 
@@ -73,7 +73,7 @@ ProcessResult effect_monster_fire(PlayerType *player_ptr, EffectMonster *em_ptr)
     if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
         em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
         em_ptr->dam /= 9;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_FIRE);
         }
 
@@ -86,7 +86,7 @@ ProcessResult effect_monster_fire(PlayerType *player_ptr, EffectMonster *em_ptr)
 
     em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
     em_ptr->dam *= 2;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
     }
 
@@ -102,7 +102,7 @@ ProcessResult effect_monster_cold(PlayerType *player_ptr, EffectMonster *em_ptr)
     if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
         em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
         em_ptr->dam /= 9;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_COLD);
         }
 
@@ -115,7 +115,7 @@ ProcessResult effect_monster_cold(PlayerType *player_ptr, EffectMonster *em_ptr)
 
     em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
     em_ptr->dam *= 2;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
     }
 
@@ -134,7 +134,7 @@ ProcessResult effect_monster_pois(PlayerType *player_ptr, EffectMonster *em_ptr)
 
     em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
     em_ptr->dam /= 9;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_POISON);
     }
 
@@ -151,7 +151,7 @@ ProcessResult effect_monster_nuke(PlayerType *player_ptr, EffectMonster *em_ptr)
         em_ptr->note = _("には耐性がある。", " resists.");
         em_ptr->dam *= 3;
         em_ptr->dam /= randint1(6) + 6;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_POISON);
         }
 
@@ -177,7 +177,7 @@ ProcessResult effect_monster_hell_fire(PlayerType *player_ptr, EffectMonster *em
 
     em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
     em_ptr->dam *= 2;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
     }
 
@@ -193,7 +193,7 @@ ProcessResult effect_monster_holy_fire(PlayerType *player_ptr, EffectMonster *em
     if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
         em_ptr->note = _("には完全な耐性がある！", " is immune.");
         em_ptr->dam = 0;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
         }
         return ProcessResult::PROCESS_CONTINUE;
@@ -202,7 +202,7 @@ ProcessResult effect_monster_holy_fire(PlayerType *player_ptr, EffectMonster *em
     if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
         em_ptr->dam *= 2;
         em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
         }
         return ProcessResult::PROCESS_CONTINUE;
@@ -228,7 +228,7 @@ ProcessResult effect_monster_plasma(PlayerType *player_ptr, EffectMonster *em_pt
     em_ptr->note = _("には耐性がある。", " resists.");
     em_ptr->dam *= 3;
     em_ptr->dam /= randint1(6) + 6;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_PLASMA);
     }
 
@@ -244,7 +244,7 @@ static bool effect_monster_nether_resist(PlayerType *player_ptr, EffectMonster *
     if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
         em_ptr->note = _("には完全な耐性がある！", " is immune.");
         em_ptr->dam = 0;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
         }
     } else {
@@ -253,7 +253,7 @@ static bool effect_monster_nether_resist(PlayerType *player_ptr, EffectMonster *
         em_ptr->dam /= randint1(6) + 6;
     }
 
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_NETHER);
     }
 
@@ -272,7 +272,7 @@ ProcessResult effect_monster_nether(PlayerType *player_ptr, EffectMonster *em_pt
 
     em_ptr->note = _("はいくらか耐性を示した。", " resists somewhat.");
     em_ptr->dam /= 2;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
     }
 
@@ -298,7 +298,7 @@ ProcessResult effect_monster_water(PlayerType *player_ptr, EffectMonster *em_ptr
         em_ptr->dam /= randint1(6) + 6;
     }
 
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_WATER);
     }
 
@@ -315,14 +315,14 @@ ProcessResult effect_monster_chaos(PlayerType *player_ptr, EffectMonster *em_ptr
         em_ptr->note = _("には耐性がある。", " resists.");
         em_ptr->dam *= 3;
         em_ptr->dam /= randint1(6) + 6;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
         }
     } else if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::DEMON) && one_in_(3)) {
         em_ptr->note = _("はいくらか耐性を示した。", " resists somewhat.");
         em_ptr->dam *= 3;
         em_ptr->dam /= randint1(6) + 6;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::DEMON);
         }
     } else {
@@ -346,7 +346,7 @@ ProcessResult effect_monster_shards(PlayerType *player_ptr, EffectMonster *em_pt
     em_ptr->note = _("には耐性がある。", " resists.");
     em_ptr->dam *= 3;
     em_ptr->dam /= randint1(6) + 6;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_SHARDS);
     }
 
@@ -365,7 +365,7 @@ ProcessResult effect_monster_rocket(PlayerType *player_ptr, EffectMonster *em_pt
 
     em_ptr->note = _("はいくらか耐性を示した。", " resists somewhat.");
     em_ptr->dam /= 2;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_SHARDS);
     }
 
@@ -386,7 +386,7 @@ ProcessResult effect_monster_sound(PlayerType *player_ptr, EffectMonster *em_ptr
     em_ptr->note = _("には耐性がある。", " resists.");
     em_ptr->dam *= 2;
     em_ptr->dam /= randint1(6) + 6;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_SOUND);
     }
 
@@ -407,7 +407,7 @@ ProcessResult effect_monster_confusion(PlayerType *player_ptr, EffectMonster *em
     em_ptr->note = _("には耐性がある。", " resists.");
     em_ptr->dam *= 3;
     em_ptr->dam /= randint1(6) + 6;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->resistance_flags.set(MonsterResistanceType::NO_CONF);
     }
 
@@ -427,7 +427,7 @@ ProcessResult effect_monster_disenchant(PlayerType *player_ptr, EffectMonster *e
     em_ptr->note = _("には耐性がある。", " resists.");
     em_ptr->dam *= 3;
     em_ptr->dam /= randint1(6) + 6;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_DISENCHANT);
     }
 
@@ -447,7 +447,7 @@ ProcessResult effect_monster_nexus(PlayerType *player_ptr, EffectMonster *em_ptr
     em_ptr->note = _("には耐性がある。", " resists.");
     em_ptr->dam *= 3;
     em_ptr->dam /= randint1(6) + 6;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_NEXUS);
     }
 
@@ -468,7 +468,7 @@ ProcessResult effect_monster_force(PlayerType *player_ptr, EffectMonster *em_ptr
     em_ptr->note = _("には耐性がある。", " resists.");
     em_ptr->dam *= 3;
     em_ptr->dam /= randint1(6) + 6;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_FORCE);
     }
 
@@ -486,7 +486,7 @@ ProcessResult effect_monster_inertial(PlayerType *player_ptr, EffectMonster *em_
         em_ptr->note = _("には耐性がある。", " resists.");
         em_ptr->dam *= 3;
         em_ptr->dam /= randint1(6) + 6;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_INERTIA);
         }
 
@@ -521,7 +521,7 @@ ProcessResult effect_monster_time(PlayerType *player_ptr, EffectMonster *em_ptr)
     em_ptr->note = _("には耐性がある。", " resists.");
     em_ptr->dam *= 3;
     em_ptr->dam /= randint1(6) + 6;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TIME);
     }
 
@@ -536,7 +536,7 @@ static bool effect_monster_gravity_resist_teleport(PlayerType *player_ptr, Effec
     }
 
     if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         }
 
@@ -549,7 +549,7 @@ static bool effect_monster_gravity_resist_teleport(PlayerType *player_ptr, Effec
         return false;
     }
 
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
     }
 
@@ -601,7 +601,7 @@ ProcessResult effect_monster_gravity(PlayerType *player_ptr, EffectMonster *em_p
         em_ptr->dam *= 3;
         em_ptr->dam /= randint1(6) + 6;
         em_ptr->do_dist = 0;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_GRAVITY);
         }
         return ProcessResult::PROCESS_CONTINUE;
@@ -624,7 +624,7 @@ ProcessResult effect_monster_disintegration(PlayerType *player_ptr, EffectMonste
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_ROCK);
     }
 
@@ -647,13 +647,13 @@ ProcessResult effect_monster_icee_bolt(PlayerType *player_ptr, EffectMonster *em
     if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
         em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
         em_ptr->dam /= 9;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_COLD);
         }
     } else if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
         em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
         em_ptr->dam *= 2;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
         }
     }
@@ -679,7 +679,7 @@ ProcessResult effect_monster_void(PlayerType *player_ptr, EffectMonster *em_ptr)
         em_ptr->note = _("の存在確率が減少した。", "'s wave function is reduced.");
         em_ptr->note_dies = _("は観測されなくなった。", "'s wave function collapses.");
         em_ptr->dam *= 2;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::QUANTUM);
         }
     } else if (em_ptr->r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL)) {
@@ -687,14 +687,14 @@ ProcessResult effect_monster_void(PlayerType *player_ptr, EffectMonster *em_ptr)
         em_ptr->note_dies = _("は消えてしまった。", " has disappeared.");
         em_ptr->dam *= 3;
         em_ptr->dam /= 2;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_feature_flags.set(MonsterFeatureType::PASS_WALL);
         }
     } else if (em_ptr->r_ptr->resistance_flags.has_any_of({ MonsterResistanceType::RESIST_TELEPORT, MonsterResistanceType::RESIST_FORCE, MonsterResistanceType::RESIST_GRAVITY })) {
         em_ptr->note = _("には耐性がある！", " resists!");
         em_ptr->dam *= 3;
         em_ptr->dam /= randint1(6) + 6;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
                 em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
             }
@@ -737,14 +737,14 @@ ProcessResult effect_monster_abyss(PlayerType *player_ptr, EffectMonster *em_ptr
         em_ptr->note = _("には耐性がある！", " resists!");
         em_ptr->dam *= 3;
         em_ptr->dam /= (randint1(4) + 5);
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_DARK);
         }
     } else if (em_ptr->r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
         if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
             em_ptr->dam *= 5;
             em_ptr->dam /= 4;
-            if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
                 em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
             }
         }
@@ -785,7 +785,7 @@ ProcessResult effect_monster_meteor(PlayerType *player_ptr, EffectMonster *em_pt
     em_ptr->note = _("には耐性がある！", " resists!");
     em_ptr->dam *= 3;
     em_ptr->dam /= randint1(6) + 6;
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_METEOR);
     }
 

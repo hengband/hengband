@@ -62,9 +62,9 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (m_idx <= 0) {
         m_name = _("あなた", "you");
     } else {
-        auto *m_ptr = &floor.m_list[m_idx];
-        m_name = monster_desc(player_ptr, m_ptr, 0);
-        see_m = is_seen(player_ptr, m_ptr);
+        const auto &monster = floor.m_list[m_idx];
+        m_name = monster_desc(player_ptr, monster, 0);
+        see_m = is_seen(player_ptr, monster);
     }
 
     if (floor.can_teleport_level(m_idx != 0)) {
@@ -208,10 +208,10 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return;
     }
 
-    auto *m_ptr = &floor.m_list[m_idx];
-    QuestCompletionChecker(player_ptr, m_ptr).complete();
-    if (record_named_pet && m_ptr->is_named_pet()) {
-        const auto m2_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+    const auto &monster = floor.m_list[m_idx];
+    QuestCompletionChecker(player_ptr, monster).complete();
+    if (record_named_pet && monster.is_named_pet()) {
+        const auto m2_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
         exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
     }
 
@@ -243,7 +243,7 @@ bool teleport_level_other(PlayerType *player_ptr)
 
     const auto &monster = floor.m_list[target_m_idx];
     const auto &monrace = monster.get_monrace();
-    const auto m_name = monster_desc(player_ptr, &monster, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
     msg_format(_("%s^の足を指さした。", "You gesture at %s^'s feet."), m_name.data());
 
     auto has_immune = monrace.resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || monrace.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
