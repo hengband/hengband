@@ -704,8 +704,8 @@
     <ClCompile Include="..\..\src\cmd-io\diary-subtitle-table.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\feeling-table.cpp">
-      <Filter>cmd-io</Filter>
+    <ClCompile Include="..\..\src\floor\dungeon-feeling.cpp">
+      <Filter>floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.cpp">
       <Filter>cmd-action</Filter>
@@ -3308,8 +3308,8 @@
     <ClInclude Include="..\..\src\cmd-io\diary-subtitle-table.h">
       <Filter>cmd-io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd-io\feeling-table.h">
-      <Filter>cmd-io</Filter>
+    <ClInclude Include="..\..\src\floor\dungeon-feeling.h">
+      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h">
       <Filter>cmd-action</Filter>

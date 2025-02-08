@@ -876,7 +876,7 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-zaprod.cpp" />
     <ClCompile Include="..\..\src\cmd-item\cmd-zapwand.cpp" />
     <ClCompile Include="..\..\src\cmd-io\diary-subtitle-table.cpp" />
-    <ClCompile Include="..\..\src\cmd-io\feeling-table.cpp" />
+    <ClCompile Include="..\..\src\floor\dungeon-feeling.cpp" />
     <ClCompile Include="..\..\src\knowledge\lighting-level-table.cpp" />
     <ClCompile Include="..\..\src\knowledge\monster-group-table.cpp" />
     <ClCompile Include="..\..\src\knowledge\item-group-table.cpp" />
@@ -1884,7 +1884,7 @@
     <ClInclude Include="..\..\src\cmd-item\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-zapwand.h" />
     <ClInclude Include="..\..\src\cmd-io\diary-subtitle-table.h" />
-    <ClInclude Include="..\..\src\cmd-io\feeling-table.h" />
+    <ClInclude Include="..\..\src\floor\dungeon-feeling.h" />
     <ClInclude Include="..\..\src\knowledge\lighting-level-table.h" />
     <ClInclude Include="..\..\src\knowledge\monster-group-table.h" />
     <ClInclude Include="..\..\src\knowledge\item-group-table.h" />

@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "cmd-io/feeling-table.h"
+#include "floor/dungeon-feeling.h"
 #include "locale/language-switcher.h"
 
 const std::vector<std::string_view> do_cmd_feeling_text = {
