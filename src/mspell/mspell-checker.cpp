@@ -119,7 +119,7 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
                 const auto &item = floor.o_list[this_o_idx];
                 if (item.bi_key.tval() == ItemKindType::MONSTER_REMAINS) {
                     const auto &monrace = item.get_monrace();
-                    if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, monrace)) {
+                    if (!monster_has_hostile_to_other_monster(*m_ptr, monrace)) {
                         return true;
                     }
                 }

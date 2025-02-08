@@ -228,7 +228,7 @@ std::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, Mons
     for (auto attempts = 100; attempts > 0; attempts--) {
         const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level + boost, PM_NONE);
         const auto &monrace = monraces.get_monrace(monrace_id);
-        if (monster_has_hostile_align(player_ptr, &align, 0, 0, monrace)) {
+        if (monster_has_hostile_to_other_monster(align, monrace)) {
             continue;
         }
 

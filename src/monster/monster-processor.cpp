@@ -386,7 +386,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
     auto gets_angry = monster.is_friendly() && has_aggravate(player_ptr);
     const auto should_aggravate = monster.is_pet();
     auto has_hostile = monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
-    has_hostile &= monster_has_hostile_align(player_ptr, nullptr, 10, -10, monrace);
+    has_hostile &= monster_has_hostile_to_player(player_ptr, 10, -10, monrace);
     const auto has_resist_all = monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL);
     if (should_aggravate && (has_hostile || has_resist_all)) {
         gets_angry = true;

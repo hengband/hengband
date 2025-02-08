@@ -340,12 +340,12 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonraceId monrace_i
         return false;
     }
 
-    if (monster_has_hostile_align(player_ptr, &escorted_monster, 0, 0, monrace)) {
+    if (monster_has_hostile_to_other_monster(escorted_monster, monrace)) {
         return false;
     }
 
     if (escorted_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
-        if (monster_has_hostile_align(player_ptr, nullptr, 1, -1, monrace)) {
+        if (monster_has_hostile_to_player(player_ptr, 1, -1, monrace)) {
             return false;
         }
     }
@@ -430,11 +430,11 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, c
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     if (condition.summoner_m_idx) {
         const auto &monster = floor.m_list[*condition.summoner_m_idx];
-        if (monster_has_hostile_align(player_ptr, &monster, 0, 0, monrace)) {
+        if (monster_has_hostile_to_other_monster(monster, monrace)) {
             return false;
         }
     } else if (any_bits(condition.mode, PM_FORCE_PET)) {
-        if (monster_has_hostile_align(player_ptr, nullptr, 10, -10, monrace) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1)) {
+        if (monster_has_hostile_to_player(player_ptr, 10, -10, monrace) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1)) {
             return false;
         }
     }
@@ -448,7 +448,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, c
     }
 
     const auto is_like_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
-    if (any_bits(condition.mode, PM_FORCE_PET) && is_like_unique && monster_has_hostile_align(player_ptr, nullptr, 10, -10, monrace)) {
+    if (any_bits(condition.mode, PM_FORCE_PET) && is_like_unique && monster_has_hostile_to_player(player_ptr, 10, -10, monrace)) {
         return false;
     }
 
@@ -552,10 +552,10 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, const ChameleonT
     const auto &monster = floor.m_list[ct.m_idx];
     const auto &old_monrace = monster.get_monrace();
     if (old_monrace.misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
-        return !monster_has_hostile_align(player_ptr, &monster, 0, 0, monrace);
+        return !monster_has_hostile_to_other_monster(monster, monrace);
     }
 
-    return !ct.summoner_m_idx || !monster_has_hostile_align(player_ptr, &floor.m_list[*ct.summoner_m_idx], 0, 0, monrace);
+    return !ct.summoner_m_idx || !monster_has_hostile_to_other_monster(floor.m_list[*ct.summoner_m_idx], monrace);
 }
 
 /*!
@@ -604,7 +604,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, const ChameleonTransf
         if (old_monrace.kind_flags.has_none_of(alignment_mask)) {
             return false;
         }
-    } else if (ct.summoner_m_idx && monster_has_hostile_align(player_ptr, &floor.m_list[*ct.summoner_m_idx], 0, 0, monrace)) {
+    } else if (ct.summoner_m_idx && monster_has_hostile_to_other_monster(floor.m_list[*ct.summoner_m_idx], monrace)) {
         return false;
     }
 

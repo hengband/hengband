@@ -144,45 +144,50 @@ bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const Mon
     return monster_can_cross_terrain(player_ptr, grid.feat, monrace, mode);
 }
 
-/*!
- * @brief モンスターがプレイヤーに対して敵意を抱くかどうかを返す
- * Check if this monster race has "hostile" alignment
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param m_ptr モンスター情報構造体の参照ポインタ
- * @param pa_good プレイヤーの善傾向値
- * @param pa_evil プレイヤーの悪傾向値
- * @param r_ptr モンスター種族情報の構造体参照ポインタ
- * @return プレイヤーに敵意を持つならばTRUEを返す
- * @details
- * If user is player, m_ptr == nullptr.
- */
-bool monster_has_hostile_align(PlayerType *player_ptr, const MonsterEntity *m_ptr, int pa_good, int pa_evil, const MonraceDefinition &monrace)
+static uint8_t get_recial_sub_align(const MonraceDefinition &monrace)
 {
-    byte sub_align1 = SUB_ALIGN_NEUTRAL;
-    byte sub_align2 = SUB_ALIGN_NEUTRAL;
-
-    if (m_ptr) /* For a monster */
-    {
-        sub_align1 = m_ptr->sub_align;
-    } else /* For player */
-    {
-        if (player_ptr->alignment >= pa_good) {
-            sub_align1 |= SUB_ALIGN_GOOD;
-        }
-        if (player_ptr->alignment <= pa_evil) {
-            sub_align1 |= SUB_ALIGN_EVIL;
-        }
-    }
-
-    /* Racial alignment flags */
+    uint8_t sub_align = SUB_ALIGN_NEUTRAL;
     if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
-        sub_align2 |= SUB_ALIGN_EVIL;
+        sub_align |= SUB_ALIGN_EVIL;
     }
     if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
-        sub_align2 |= SUB_ALIGN_GOOD;
+        sub_align |= SUB_ALIGN_GOOD;
+    }
+    return sub_align;
+}
+
+/*!
+ * @brief モンスターがプレイヤーに対して敵意を抱くかどうかを返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pa_good プレイヤーの善傾向値
+ * @param pa_evil プレイヤーの悪傾向値
+ * @param monrace モンスター種族情報の参照
+ * @return プレイヤーに敵意を持つならばtrueを返す
+ */
+bool monster_has_hostile_to_player(PlayerType *player_ptr, int pa_good, int pa_evil, const MonraceDefinition &monrace)
+{
+    byte sub_align1 = SUB_ALIGN_NEUTRAL;
+    if (player_ptr->alignment >= pa_good) {
+        sub_align1 |= SUB_ALIGN_GOOD;
+    }
+    if (player_ptr->alignment <= pa_evil) {
+        sub_align1 |= SUB_ALIGN_EVIL;
     }
 
+    const auto sub_align2 = get_recial_sub_align(monrace);
     return MonsterEntity::check_sub_alignments(sub_align1, sub_align2);
+}
+
+/*!
+ * @brief モンスターが他のモンスターに対して敵意を抱くかどうかを返す
+ * @param monster_other 敵意を抱くか調べる他のモンスターの参照
+ * @param monrace モンスター種族情報の参照
+ * @return monster_other で指定したモンスターに敵意を持つならばtrueを返す
+ */
+bool monster_has_hostile_to_other_monster(const MonsterEntity &monster_other, const MonraceDefinition &monrace)
+{
+    const auto sub_align2 = get_recial_sub_align(monrace);
+    return MonsterEntity::check_sub_alignments(monster_other.sub_align, sub_align2);
 }
 
 bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr)
