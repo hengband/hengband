@@ -1,4 +1,5 @@
 #include "core/turn-compensator.h"
+#include "floor/dungeon-feeling.h"
 #include "player-info/race-types.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
@@ -45,10 +46,12 @@ void prevent_turn_overflow(PlayerType *player_ptr)
     } else {
         world.arena_start_turn = 1;
     }
-    if (player_ptr->feeling_turn > rollback_turns) {
-        player_ptr->feeling_turn -= rollback_turns;
+
+    auto &df = DungeonFeeling::get_instance();
+    if (df.get_turns() > rollback_turns) {
+        df.mod_turns(-rollback_turns);
     } else {
-        player_ptr->feeling_turn = 1;
+        df.set_turns(1);
     }
 
     for (size_t i = 1; i < towns_info.size(); i++) {

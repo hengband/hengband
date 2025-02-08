@@ -1,4 +1,5 @@
 #include "load/world-loader.h"
+#include "floor/dungeon-feeling.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/load-zangband.h"
@@ -102,11 +103,13 @@ static void rd_world_info(PlayerType *player_ptr)
     igd.init_turn_limit();
     auto &world = AngbandWorld::get_instance();
     world.dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-    player_ptr->current_floor_ptr->generated_turn = rd_s32b();
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.generated_turn = rd_s32b();
+    auto &df = DungeonFeeling::get_instance();
     if (h_older_than(1, 7, 0, 4)) {
-        player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
+        df.set_feeling(floor.generated_turn);
     } else {
-        player_ptr->feeling_turn = rd_s32b();
+        df.set_feeling(rd_s32b());
     }
 
     world.game_turn = rd_s32b();
@@ -161,7 +164,7 @@ void rd_global_configurations(PlayerType *player_ptr)
 
     player_ptr->is_dead = rd_bool();
 
-    player_ptr->feeling = rd_byte();
+    DungeonFeeling::get_instance().set_feeling(rd_byte());
     rd_world_info(player_ptr);
 }
 

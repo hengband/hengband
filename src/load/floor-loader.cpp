@@ -1,4 +1,5 @@
 #include "load/floor-loader.h"
+#include "floor/dungeon-feeling.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save-util.h"
@@ -95,7 +96,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     floor.height = rd_s16b();
     floor.width = rd_s16b();
 
-    player_ptr->feeling = rd_byte();
+    DungeonFeeling::get_instance().set_feeling(rd_byte());
 
     auto limit = rd_u16b();
     std::vector<GridTemplate> templates(limit);

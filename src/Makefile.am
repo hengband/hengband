@@ -114,7 +114,6 @@ hengband_SOURCES = \
 	cmd-io/cmd-process-screen.cpp cmd-io/cmd-process-screen.h \
 	cmd-io/cmd-save.cpp cmd-io/cmd-save.h \
 	cmd-io/diary-subtitle-table.cpp cmd-io/diary-subtitle-table.h \
-	cmd-io/feeling-table.cpp cmd-io/feeling-table.h \
 	cmd-io/macro-util.cpp cmd-io/macro-util.h \
 	\
 	cmd-item/cmd-destroy.cpp cmd-item/cmd-destroy.h \
@@ -539,6 +538,7 @@ hengband_SOURCES = \
 	\
 	floor/cave.cpp floor/cave.h \
 	floor/cave-generator.cpp floor/cave-generator.h \
+	floor/dungeon-feeling.cpp floor/dungeon-feeling.h \
 	floor/dungeon-tunnel-util.cpp floor/dungeon-tunnel-util.h \
 	floor/fixed-map-generator.cpp floor/fixed-map-generator.h \
 	floor/floor-allocation-types.h \

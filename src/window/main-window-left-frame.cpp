@@ -1,5 +1,6 @@
 #include "window/main-window-left-frame.h"
 #include "dungeon/quest.h"
+#include "floor/dungeon-feeling.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "market/arena-entry.h"
@@ -190,7 +191,7 @@ void print_depth(PlayerType *player_ptr)
         depths = format(_("%d 階", "Lev %d"), floor.dun_level);
     }
 
-    switch (player_ptr->feeling) {
+    switch (DungeonFeeling::get_instance().get_feeling()) {
     case 0:
         attr = TERM_SLATE;
         break; /* Unknown */

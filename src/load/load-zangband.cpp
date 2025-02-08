@@ -1,6 +1,7 @@
 #include "load/load-zangband.h"
 #include "avatar/avatar.h"
 #include "dungeon/quest.h"
+#include "floor/dungeon-feeling.h"
 #include "game-option/option-flags.h"
 #include "info-reader/fixed-map-parser.h"
 #include "load/angband-version-comparer.h"
@@ -157,7 +158,8 @@ void rd_zangband_dungeon()
 void set_zangband_game_turns(PlayerType *player_ptr)
 {
     player_ptr->current_floor_ptr->generated_turn /= 2;
-    player_ptr->feeling_turn /= 2;
+    auto &df = DungeonFeeling::get_instance();
+    df.set_turns(df.get_turns() / 2);
     auto &world = AngbandWorld::get_instance();
     world.game_turn /= 2;
     world.dungeon_turn /= 2;

@@ -3,6 +3,7 @@
 #include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/dungeon-feeling.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
@@ -452,17 +453,19 @@ void change_floor(PlayerType *player_ptr)
     player_ptr->ambush_flag = false;
     update_floor(player_ptr);
     place_pet(player_ptr);
-    forget_travel_flow(*player_ptr->current_floor_ptr);
-    update_unique_artifact(*player_ptr->current_floor_ptr, new_floor_id);
+    auto &floor = *player_ptr->current_floor_ptr;
+    forget_travel_flow(floor);
+    update_unique_artifact(floor, new_floor_id);
     player_ptr->floor_id = new_floor_id;
     world.character_dungeon = true;
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         wiz_lite(player_ptr, PlayerClass(player_ptr).equals(PlayerClassType::NINJA));
     }
 
-    player_ptr->current_floor_ptr->generated_turn = world.game_turn;
-    player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
-    player_ptr->feeling = 0;
+    floor.generated_turn = world.game_turn;
+    auto &df = DungeonFeeling::get_instance();
+    df.set_turns(floor.generated_turn);
+    df.set_feeling(0);
     auto &fcms = FloorChangeModesStore::get_instace();
     fcms->clear();
     select_floor_music(player_ptr);
