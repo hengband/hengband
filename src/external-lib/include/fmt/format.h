@@ -36,6 +36,8 @@
 #if defined(_MSC_VER)
 // MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく
 #pragma warning(push, 0)
+#pragma warning(disable : 26495)
+#pragma warning(disable : 26498)
 #endif
 
 #ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
