@@ -75,8 +75,7 @@ void compact_objects(PlayerType *player_ptr, int size)
 
             POSITION y, x;
             if (o_ptr->is_held_by_monster()) {
-                MonsterEntity *m_ptr;
-                m_ptr = &floor.m_list[o_ptr->held_m_idx];
+                const auto *m_ptr = &floor.m_list[o_ptr->held_m_idx];
                 y = m_ptr->fy;
                 x = m_ptr->fx;
 
