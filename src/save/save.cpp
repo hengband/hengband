@@ -159,11 +159,11 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_s32b(pos.y);
     wr_bool(world.is_wild_mode());
     wr_bool(player_ptr->ambush_flag);
-    const auto &bottom_right = wilderness.get_bottom_right();
-    wr_s32b(bottom_right.x);
-    wr_s32b(bottom_right.y);
-    for (auto x = 0; x < bottom_right.x; x++) {
-        for (auto y = 0; y < bottom_right.y; y++) {
+    const auto &area = wilderness.get_area();
+    wr_s32b(area.width());
+    wr_s32b(area.height());
+    for (auto x = 0; x < area.width(); x++) {
+        for (auto y = 0; y < area.height(); y++) {
             wr_u32b(wilderness.get_grid({ y, x }).seed);
         }
     }

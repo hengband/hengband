@@ -393,8 +393,8 @@ void wilderness_gen(PlayerType *player_ptr)
     panel_row_min = floor.height;
     panel_col_min = floor.width;
     const auto &wilderness = WildernessGrids::get_instance();
-    const auto &bottom_right = wilderness.get_bottom_right();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, bottom_right.y, bottom_right.x);
+    const auto &area = wilderness.get_area();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
 
     const auto &pos_wilderness = wilderness.get_player_position();
     const auto wild_y = pos_wilderness.y;
@@ -586,9 +586,9 @@ void wilderness_gen_small(PlayerType *player_ptr)
     const auto &dungeons = DungeonList::get_instance();
     const auto &world = AngbandWorld::get_instance();
     const auto &wilderness = WildernessGrids::get_instance();
-    const auto &bottom_right = wilderness.get_bottom_right();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, bottom_right.y, bottom_right.x);
-    for (const auto &pos : wilderness.get_positions()) {
+    const auto &area = wilderness.get_area();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
+    for (const auto &pos : area) {
         auto &grid = floor.get_grid(pos);
         const auto &wg = wilderness.get_grid(pos);
         if (wg.town && (wg.town != VALID_TOWNS)) {
@@ -616,8 +616,8 @@ void wilderness_gen_small(PlayerType *player_ptr)
         grid.info |= (CAVE_GLOW | CAVE_MARK);
     }
 
-    floor.height = bottom_right.y;
-    floor.width = bottom_right.x;
+    floor.height = area.height();
+    floor.width = area.width();
     if (floor.height > MAX_HGT) {
         floor.height = MAX_HGT;
     }

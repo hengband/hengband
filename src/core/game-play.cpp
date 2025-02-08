@@ -140,8 +140,8 @@ static void send_waiting_record(PlayerType *player_ptr)
     highscore_fd = fd_open(path, O_RDWR);
 
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
-    const auto &bottom_right = WildernessGrids::get_instance().get_bottom_right();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, bottom_right.y, bottom_right.x);
+    const auto &area = WildernessGrids::get_instance().get_area();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
     bool success = send_world_score(player_ptr, true);
     if (!success && !input_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), UserCheck::NO_HISTORY)) {
         prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
@@ -245,8 +245,8 @@ static void reset_world_info(PlayerType *player_ptr)
 
 static void generate_wilderness(PlayerType *player_ptr)
 {
-    const auto &bottom_right = WildernessGrids::get_instance().get_bottom_right();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, bottom_right.y, bottom_right.x);
+    const auto &area = WildernessGrids::get_instance().get_area();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
     init_flags = INIT_ONLY_BUILDINGS;
     parse_fixed_map(player_ptr, TOWN_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID);
     select_floor_music(player_ptr);

@@ -194,8 +194,8 @@ errr analyze_wilderness(void)
     const auto wild_x_size = rd_s32b();
     const auto wild_y_size = rd_s32b();
     auto &wilderness = WildernessGrids::get_instance();
-    const auto &bottom_right = wilderness.get_bottom_right();
-    if ((wild_x_size > bottom_right.x) || (wild_y_size > bottom_right.y)) {
+    const auto &area = wilderness.get_area();
+    if ((wild_y_size > area.height()) || (wild_x_size > area.width())) {
         load_note(format(_("荒野が大きすぎる(%d/%d)！", "Wilderness is too big (%d/%d)!"), wild_x_size, wild_y_size));
         return 23;
     }

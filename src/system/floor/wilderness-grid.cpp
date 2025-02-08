@@ -25,27 +25,22 @@ WildernessGrids WildernessGrids::instance{};
 
 void WildernessGrids::init_height(int height)
 {
-    this->bottom_right.y = height;
+    this->area.bottom_right.y = height - 1;
 }
 
 void WildernessGrids::init_width(int width)
 {
-    this->bottom_right.x = width;
+    this->area.bottom_right.x = width - 1;
 }
 
 void WildernessGrids::initialize_grids()
 {
-    wilderness_grids.assign(this->bottom_right.y, std::vector<WildernessGrid>(this->bottom_right.x));
-    for (auto y = 0; y < this->bottom_right.y; y++) {
-        for (auto x = 0; x < this->bottom_right.x; x++) {
-            this->positions.emplace_back(y, x);
-        }
-    }
+    wilderness_grids.assign(this->area.bottom_right.y + 1, std::vector<WildernessGrid>(this->area.bottom_right.x + 1));
 }
 
 void WildernessGrids::initialize_seeds()
 {
-    for (const auto &pos : this->positions) {
+    for (const auto &pos : this->area) {
         wilderness_grids[pos.y][pos.x].initialize_seed();
     }
 }
@@ -93,12 +88,12 @@ void WildernessGrids::move_player_to(const Direction &dir)
 
 bool WildernessGrids::is_height_initialized() const
 {
-    return this->bottom_right.y > 0;
+    return this->area.bottom_right.y > 0;
 }
 
 bool WildernessGrids::is_width_initialized() const
 {
-    return this->bottom_right.x > 0;
+    return this->area.bottom_right.x > 0;
 }
 
 bool WildernessGrids::has_player_located() const
@@ -109,18 +104,13 @@ bool WildernessGrids::has_player_located() const
 bool WildernessGrids::is_player_in_bounds() const
 {
     auto is_in_bounds_x = this->current_pos.x >= 1;
-    is_in_bounds_x &= this->current_pos.x <= this->bottom_right.x;
+    is_in_bounds_x &= this->current_pos.x <= this->area.bottom_right.x;
     auto is_in_bounds_y = this->current_pos.y >= 1;
-    is_in_bounds_y &= this->current_pos.y <= this->bottom_right.y;
+    is_in_bounds_y &= this->current_pos.y <= this->area.bottom_right.y;
     return is_in_bounds_x && is_in_bounds_y;
 }
 
-const Pos2D &WildernessGrids::get_bottom_right() const
+const Rect2D &WildernessGrids::get_area() const
 {
-    return this->bottom_right;
-}
-
-const std::vector<Pos2D> &WildernessGrids::get_positions() const
-{
-    return this->positions;
+    return this->area;
 }
