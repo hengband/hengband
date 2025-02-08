@@ -321,14 +321,12 @@ void process_player(PlayerType *player_ptr)
             }
 
             for (MONSTER_IDX m_idx = 1; m_idx < player_ptr->current_floor_ptr->m_max; m_idx++) {
-                MonsterEntity *m_ptr;
-                MonraceDefinition *r_ptr;
-                m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
                 if (!m_ptr->is_valid()) {
                     continue;
                 }
 
-                r_ptr = &m_ptr->get_appearance_monrace();
+                const auto *r_ptr = &m_ptr->get_appearance_monrace();
 
                 // モンスターのシンボル/カラーの更新
                 if (m_ptr->ml && r_ptr->visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {
