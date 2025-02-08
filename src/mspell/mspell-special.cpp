@@ -94,16 +94,16 @@ static MonsterSpellResult spell_RF6_SPECIAL_UNIFICATION(PlayerType *player_ptr, 
         auto unified_hp = 0;
         auto unified_maxhp = 0;
         for (short k = 1; k < floor.m_max; k++) {
-            const auto &monster = floor.m_list[k];
-            if (!separates.contains(monster.r_idx)) {
+            const auto &monster_separate = floor.m_list[k];
+            if (!separates.contains(monster_separate.r_idx)) {
                 continue;
             }
 
-            unified_hp += monster.hp;
-            unified_maxhp += monster.maxhp;
-            if (monster.r_idx != m_ptr->r_idx) {
-                dummy_y = monster.fy;
-                dummy_x = monster.fx;
+            unified_hp += monster_separate.hp;
+            unified_maxhp += monster_separate.maxhp;
+            if (monster_separate.r_idx != m_ptr->r_idx) {
+                dummy_y = monster_separate.fy;
+                dummy_x = monster_separate.fx;
             }
 
             delete_monster_idx(player_ptr, k);
