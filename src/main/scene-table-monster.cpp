@@ -23,21 +23,6 @@ struct scene_monster_info {
 
 scene_monster_info scene_target_monster;
 
-inline static bool has_shadower_flag(MonsterEntity *m_ptr)
-{
-    return m_ptr->mflag2.has(MonsterConstantFlagType::KAGE);
-}
-
-inline static bool is_unique(MonraceDefinition *ap_r_ptr)
-{
-    return ap_r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-}
-
-inline static bool is_unknown_monster(MonraceDefinition *ap_r_ptr)
-{
-    return ap_r_ptr->r_tkills == 0;
-}
-
 void clear_scene_target_monster()
 {
     scene_target_monster.ap_r_ptr = nullptr;
@@ -154,7 +139,7 @@ static bool scene_monster(PlayerType *player_ptr, scene_type *value)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[scene_target_monster.m_idx];
 
-    if (has_shadower_flag(m_ptr)) {
+    if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_SHADOWER;
         return true;
@@ -169,7 +154,7 @@ static bool scene_unique(PlayerType *player_ptr, scene_type *value)
 {
     (void)player_ptr;
 
-    if (is_unique(scene_target_monster.ap_r_ptr)) {
+    if (scene_target_monster.ap_r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_UNIQUE;
         return true;
@@ -181,7 +166,7 @@ static bool scene_unique(PlayerType *player_ptr, scene_type *value)
 static bool scene_unknown(PlayerType *player_ptr, scene_type *value)
 {
     (void)player_ptr;
-    if (is_unknown_monster(scene_target_monster.ap_r_ptr)) {
+    if (scene_target_monster.ap_r_ptr->r_tkills == 0) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_UNKNOWN_MONSTER;
         return true;
@@ -192,7 +177,7 @@ static bool scene_unknown(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_high_level(PlayerType *player_ptr, scene_type *value)
 {
-    if (!is_unknown_monster(scene_target_monster.ap_r_ptr) && (scene_target_monster.ap_r_ptr->level >= player_ptr->lev)) {
+    if (scene_target_monster.ap_r_ptr->r_tkills > 0 && (scene_target_monster.ap_r_ptr->level >= player_ptr->lev)) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_HIGHER_LEVEL_MONSTER;
         return true;
