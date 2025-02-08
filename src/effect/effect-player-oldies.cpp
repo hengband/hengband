@@ -53,7 +53,7 @@ void effect_player_old_sleep(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
 
         /* Have some nightmares */
-        sanity_blast(player_ptr, nullptr, false);
+        sanity_blast(player_ptr);
     }
 
     (void)BadStatusSetter(player_ptr).mod_paralysis(static_cast<TIME_EFFECT>(ep_ptr->dam));
