@@ -51,8 +51,7 @@ public:
     bool is_width_initialized() const;
     bool has_player_located() const;
     bool is_player_in_bounds() const;
-    const Pos2D &get_bottom_right() const;
-    const std::vector<Pos2D> &get_positions() const;
+    const Rect2D &get_area() const;
 
     void set_player_position(const Pos2D &pos);
     void move_player_to(const Direction &dir);
@@ -60,8 +59,7 @@ public:
 private:
     WildernessGrids() = default;
     static WildernessGrids instance;
-    std::vector<Pos2D> positions;
-    Pos2D bottom_right = { 0, 0 };
+    Rect2D area = { 0, 0, 0, 0 };
     Pos2D current_pos = { 0, 0 };
 };
 

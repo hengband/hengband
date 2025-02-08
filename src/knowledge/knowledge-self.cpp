@@ -189,8 +189,8 @@ void do_cmd_knowledge_stat(PlayerType *player_ptr)
  */
 void do_cmd_knowledge_home(PlayerType *player_ptr)
 {
-    const auto &bottom_right = WildernessGrids::get_instance().get_bottom_right();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, bottom_right.y, bottom_right.x);
+    const auto &area = WildernessGrids::get_instance().get_area();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
 
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];
