@@ -109,10 +109,9 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
         return;
     }
 
-    MonsterEntity *m_ptr;
     int t_friends = 0;
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        const auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!m_ptr->is_valid() || !m_ptr->is_pet()) {
             continue;
         }

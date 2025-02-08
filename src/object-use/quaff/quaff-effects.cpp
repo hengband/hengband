@@ -302,7 +302,7 @@ bool QuaffEffects::sleep()
     msg_print(_("あなたは眠ってしまった。", "You fall asleep."));
     if (ironman_nightmare) {
         msg_print(_("恐ろしい光景が頭に浮かんできた。", "A horrible vision enters your mind."));
-        sanity_blast(this->player_ptr, nullptr, false);
+        sanity_blast(this->player_ptr);
     }
 
     return BadStatusSetter(this->player_ptr).mod_paralysis(randint0(4) + 4);

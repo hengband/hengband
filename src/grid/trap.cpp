@@ -444,7 +444,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
         msg_print(_("あなたは眠りに就いた。", "You fall asleep."));
         if (ironman_nightmare) {
             msg_print(_("身の毛もよだつ光景が頭に浮かんだ。", "A horrible vision enters your mind."));
-            sanity_blast(player_ptr, nullptr, false);
+            sanity_blast(player_ptr);
         }
 
         (void)BadStatusSetter(player_ptr).mod_paralysis(randint0(10) + 5);

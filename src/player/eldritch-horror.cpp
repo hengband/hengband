@@ -49,10 +49,10 @@ static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m
 
 /*!
  * @brief ELDRITCH_HORRORによるプレイヤーの精神破壊処理
- * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ。薬・罠・魔法の影響ならnullptr
- * @param necro 暗黒領域魔法の詠唱失敗によるものならばTRUEを返す
+ * @param m_idx ELDRITCH_HORRORを引き起こしたモンスターの参照ID。薬・罠・魔法の影響ならstd::nullopt。(デフォルト: std::nullopt)
+ * @param necro 暗黒領域魔法の詠唱失敗によるものならばtrueを指定する (デフォルト: false)
  */
-void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
+void sanity_blast(PlayerType *player_ptr, std::optional<short> m_idx, bool necro)
 {
     const auto &world = AngbandWorld::get_instance();
     if (AngbandSystem::get_instance().is_phase_out() || !world.character_dungeon) {
@@ -61,9 +61,10 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
 
     auto &monraces = MonraceList::get_instance();
     auto power = 100;
-    if (!necro && m_ptr) {
-        auto &monrace = m_ptr->get_appearance_monrace();
-        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    if (!necro && m_idx) {
+        auto &monster = player_ptr->current_floor_ptr->m_list[*m_idx];
+        auto &monrace = monster.get_appearance_monrace();
+        const auto m_name = monster_desc(player_ptr, &monster, 0);
         power = monrace.level / 2;
         if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
             if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
@@ -77,7 +78,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             return;
         }
 
-        if (!m_ptr->ml) {
+        if (!monster.ml) {
             return;
         }
 
@@ -85,7 +86,7 @@ void sanity_blast(PlayerType *player_ptr, MonsterEntity *m_ptr, bool necro)
             return;
         }
 
-        if (m_ptr->is_pet()) {
+        if (monster.is_pet()) {
             return;
         }
 

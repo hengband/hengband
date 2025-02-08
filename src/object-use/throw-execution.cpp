@@ -255,23 +255,18 @@ void ObjectThrowEntity::display_potion_throw()
     }
 
     msg_format(_("%sは砕け散った！", "The %s shatters!"), this->o_name.data());
-    if (!potion_smash_effect(this->player_ptr, 0, this->y, this->x, this->q_ptr->bi_id)) {
-        this->do_drop = false;
-        return;
-    }
-
-    auto &floor = *this->player_ptr->current_floor_ptr;
-    auto *angry_m_ptr = &floor.m_list[floor.grid_array[this->y][this->x].m_idx];
-    if (!floor.grid_array[this->y][this->x].has_monster() || !angry_m_ptr->is_friendly() || angry_m_ptr->is_invulnerable()) {
-        this->do_drop = false;
-        return;
-    }
-
-    const auto angry_m_name = monster_desc(this->player_ptr, angry_m_ptr, 0);
-    msg_format(_("%sは怒った！", "%s^ gets angry!"), angry_m_name.data());
-    const auto &grid = floor.get_grid({ this->y, this->x });
-    floor.m_list[grid.m_idx].set_hostile();
     this->do_drop = false;
+    if (!potion_smash_effect(this->player_ptr, 0, this->y, this->x, this->q_ptr->bi_id)) {
+        return;
+    }
+
+    if (!this->g_ptr->has_monster() || !this->m_ptr->is_friendly() || this->m_ptr->is_invulnerable()) {
+        return;
+    }
+
+    const auto angry_m_name = monster_desc(this->player_ptr, this->m_ptr, 0);
+    msg_format(_("%sは怒った！", "%s^ gets angry!"), angry_m_name.data());
+    this->m_ptr->set_hostile();
 }
 
 void ObjectThrowEntity::check_boomerang_throw()

@@ -368,7 +368,6 @@ void do_cmd_pet(PlayerType *player_ptr)
     bool flag, redraw;
     char choice;
     int pet_ctr;
-    MonsterEntity *m_ptr;
     auto command_idx = 0;
     int menu_line = use_menu ? 1 : 0;
     auto num = 0;
@@ -739,7 +738,7 @@ void do_cmd_pet(PlayerType *player_ptr)
         if (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) {
             player_ptr->pet_extra_flags &= ~(PF_PICKUP_ITEMS);
             for (pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
-                m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
+                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
                 if (m_ptr->is_pet()) {
                     monster_drop_carried_objects(player_ptr, m_ptr);
                 }

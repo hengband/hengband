@@ -112,20 +112,19 @@ static std::pair<short, Pos2D> decide_pet_index(PlayerType *player_ptr, const in
 
 static MonraceDefinition &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
-    m_ptr->r_idx = party_mon[current_monster].r_idx;
-    *m_ptr = party_mon[current_monster].clone();
-    m_ptr->fy = cy;
-    m_ptr->fx = cx;
-    m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
-    m_ptr->ml = true;
-    m_ptr->mtimed[MonsterTimedEffect::SLEEP] = 0;
-    m_ptr->hold_o_idx_list.clear();
-    m_ptr->target_y = 0;
-    auto &r_ref = m_ptr->get_real_monrace();
+    auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    monster = party_mon[current_monster].clone();
+    monster.fy = cy;
+    monster.fx = cx;
+    monster.current_floor_ptr = player_ptr->current_floor_ptr;
+    monster.ml = true;
+    monster.mtimed[MonsterTimedEffect::SLEEP] = 0;
+    monster.hold_o_idx_list.clear();
+    monster.target_y = 0;
+    auto &r_ref = monster.get_real_monrace();
     if (!ironman_nightmare) {
-        m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
+        monster.mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 
     return r_ref;

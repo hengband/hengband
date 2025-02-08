@@ -11,5 +11,4 @@ public:
 
 private:
     PlayerType *player_ptr;
-    MonsterEntity *m_ptr = nullptr;
 };
