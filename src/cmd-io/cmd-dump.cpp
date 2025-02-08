@@ -258,13 +258,16 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
+    std::string_view feeling_text;
     if (has_good_luck(player_ptr)) {
-        msg_print(do_cmd_feeling_text_lucky[player_ptr->feeling]);
+        feeling_text = do_cmd_feeling_text_lucky[player_ptr->feeling];
     } else if (is_echizen(player_ptr)) {
-        msg_print(do_cmd_feeling_text_combat[player_ptr->feeling]);
+        feeling_text = do_cmd_feeling_text_combat[player_ptr->feeling];
     } else {
-        msg_print(do_cmd_feeling_text[player_ptr->feeling]);
+        feeling_text = do_cmd_feeling_text[player_ptr->feeling];
     }
+
+    msg_print(feeling_text);
 }
 
 /*

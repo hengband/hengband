@@ -1,9 +1,8 @@
 #pragma once
 
-#include "system/angband.h"
+#include <string_view>
+#include <vector>
 
-#define MAX_FEELING_TEXT 11
-
-extern concptr do_cmd_feeling_text[MAX_FEELING_TEXT];
-extern concptr do_cmd_feeling_text_combat[MAX_FEELING_TEXT];
-extern concptr do_cmd_feeling_text_lucky[MAX_FEELING_TEXT];
+extern const std::vector<std::string_view> do_cmd_feeling_text;
+extern const std::vector<std::string_view> do_cmd_feeling_text_combat;
+extern const std::vector<std::string_view> do_cmd_feeling_text_lucky;
