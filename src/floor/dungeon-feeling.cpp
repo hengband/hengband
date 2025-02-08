@@ -51,17 +51,34 @@ const std::vector<std::string_view> FEELING_TEXTS_LUCKY = {
 };
 }
 
-std::string_view DungeonFeeling::get_feeling_normal(int feeling) const
+DungeonFeeling DungeonFeeling::instance{};
+
+DungeonFeeling &DungeonFeeling::get_instance()
 {
-    return FEELING_TEXTS_NORMAL[feeling];
+    return instance;
 }
 
-std::string_view DungeonFeeling::get_feeling_combat(int feeling) const
+int DungeonFeeling::get_feeling() const
 {
-    return FEELING_TEXTS_COMBAT[feeling];
+    return this->feeling;
 }
 
-std::string_view DungeonFeeling::get_feeling_lucky(int feeling) const
+void DungeonFeeling::set_feeling(int new_feeling)
 {
-    return FEELING_TEXTS_LUCKY[feeling];
+    this->feeling = new_feeling;
+}
+
+std::string_view DungeonFeeling::get_feeling_normal() const
+{
+    return FEELING_TEXTS_NORMAL[this->feeling];
+}
+
+std::string_view DungeonFeeling::get_feeling_combat() const
+{
+    return FEELING_TEXTS_COMBAT[this->feeling];
+}
+
+std::string_view DungeonFeeling::get_feeling_lucky() const
+{
+    return FEELING_TEXTS_LUCKY[this->feeling];
 }

@@ -258,14 +258,14 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    const DungeonFeeling feeling{};
+    const auto &df = DungeonFeeling::get_instance();
     std::string_view feeling_text;
     if (has_good_luck(player_ptr)) {
-        feeling_text = feeling.get_feeling_lucky(player_ptr->feeling);
+        feeling_text = df.get_feeling_lucky();
     } else if (is_echizen(player_ptr)) {
-        feeling_text = feeling.get_feeling_combat(player_ptr->feeling);
+        feeling_text = df.get_feeling_combat();
     } else {
-        feeling_text = feeling.get_feeling_normal(player_ptr->feeling);
+        feeling_text = df.get_feeling_normal();
     }
 
     msg_print(feeling_text);

@@ -1,4 +1,5 @@
 #include "load/world-loader.h"
+#include "floor/dungeon-feeling.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/load-zangband.h"
@@ -161,7 +162,7 @@ void rd_global_configurations(PlayerType *player_ptr)
 
     player_ptr->is_dead = rd_bool();
 
-    player_ptr->feeling = rd_byte();
+    DungeonFeeling::get_instance().set_feeling(rd_byte());
     rd_world_info(player_ptr);
 }
 

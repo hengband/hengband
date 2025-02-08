@@ -3,6 +3,7 @@
 #include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/dungeon-feeling.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
@@ -463,7 +464,7 @@ void change_floor(PlayerType *player_ptr)
 
     player_ptr->current_floor_ptr->generated_turn = world.game_turn;
     player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
-    player_ptr->feeling = 0;
+    DungeonFeeling::get_instance().set_feeling(0);
     auto &fcms = FloorChangeModesStore::get_instace();
     fcms->clear();
     select_floor_music(player_ptr);

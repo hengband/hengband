@@ -5,6 +5,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
+#include "floor/dungeon-feeling.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
@@ -307,11 +308,12 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     }
     byte new_feeling = get_dungeon_feeling(player_ptr);
     player_ptr->feeling_turn = world.game_turn;
-    if (player_ptr->feeling == new_feeling) {
+    auto &feeling = DungeonFeeling::get_instance();
+    if (feeling.get_feeling() == new_feeling) {
         return;
     }
 
-    player_ptr->feeling = new_feeling;
+    DungeonFeeling::get_instance().set_feeling(new_feeling);
     do_cmd_feeling(player_ptr);
     select_floor_music(player_ptr);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::DEPTH);
