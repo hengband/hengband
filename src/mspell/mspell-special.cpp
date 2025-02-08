@@ -182,7 +182,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto *m_ptr = &floor.m_list[m_idx];
     const auto *t_ptr = &floor.m_list[t_idx];
-    MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
+    const auto &monrace_target = t_ptr->get_monrace();
     bool monster_to_player = (target_type == MONSTER_TO_PLAYER);
     bool monster_to_monster = (target_type == MONSTER_TO_MONSTER);
     bool direct = player_ptr->is_located_at({ y, x });
@@ -218,7 +218,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
         teleport_monster_to(player_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, i2enum<teleport_flags>(TELEPORT_NONMAGICAL | TELEPORT_PASSIVE));
     }
 
-    if ((monster_to_player && player_ptr->levitation) || (monster_to_monster && tr_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY))) {
+    if ((monster_to_player && player_ptr->levitation) || (monster_to_monster && monrace_target.feature_flags.has(MonsterFeatureType::CAN_FLY))) {
         msg.to_player = _("あなたは静かに着地した。", "You float gently down to the ground.");
         msg.to_mons = _("%s^は静かに着地した。", "%s^ floats gently down to the ground.");
     } else {

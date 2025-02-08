@@ -99,8 +99,8 @@ static void attack_classify(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static void get_bare_knuckle_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
-    if ((r_ptr->level + 10) <= player_ptr->lev) {
+    const auto &monrace = pa_ptr->m_ptr->get_monrace();
+    if ((monrace.level + 10) <= player_ptr->lev) {
         return;
     }
 
@@ -126,14 +126,14 @@ static void get_weapon_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static void get_attack_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
+    const auto &monrace = pa_ptr->m_ptr->get_monrace();
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     if (!o_ptr->is_valid()) {
         get_bare_knuckle_exp(player_ptr, pa_ptr);
         return;
     }
 
-    if (!o_ptr->is_melee_weapon() || ((r_ptr->level + 10) <= player_ptr->lev)) {
+    if (!o_ptr->is_melee_weapon() || ((monrace.level + 10) <= player_ptr->lev)) {
         return;
     }
 
@@ -398,8 +398,8 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
         pa_ptr->attack_damage = 0;
     }
 
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
-    if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!pa_ptr->m_ptr->has_living_flag() && r_ptr->kind_flags.has(MonsterKindType::EVIL))) {
+    const auto &monrace = pa_ptr->m_ptr->get_monrace();
+    if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!pa_ptr->m_ptr->has_living_flag() && monrace.kind_flags.has(MonsterKindType::EVIL))) {
         pa_ptr->attack_damage = 0;
     }
 

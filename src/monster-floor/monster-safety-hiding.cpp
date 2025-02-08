@@ -44,7 +44,7 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
         const auto &monrace = monster.get_monrace();
         const auto &grid = floor.get_grid(pos);
         BIT_FLAGS16 riding_mode = monster.is_riding() ? CEM_RIDING : 0;
-        if (!monster_can_cross_terrain(player_ptr, grid.feat, &monrace, riding_mode)) {
+        if (!monster_can_cross_terrain(player_ptr, grid.feat, monrace, riding_mode)) {
             continue;
         }
 
@@ -125,7 +125,7 @@ static void sweep_hiding_candidate(
         if (!in_bounds(*player_ptr->current_floor_ptr, pos.y, pos.x)) {
             continue;
         }
-        if (!monster_can_enter(player_ptr, pos.y, pos.x, &monrace, 0)) {
+        if (!monster_can_enter(player_ptr, pos.y, pos.x, monrace, 0)) {
             continue;
         }
         if (projectable(player_ptr, p_pos, pos) || !clean_shot(player_ptr, monster.fy, monster.fx, pos.y, pos.x, false)) {

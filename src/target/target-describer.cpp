@@ -102,18 +102,18 @@ bool show_gold_on_floor = false;
  */
 static std::string evaluate_monster_exp(PlayerType *player_ptr, MonsterEntity *m_ptr)
 {
-    const auto *r_ptr = &m_ptr->get_appearance_monrace();
+    const auto &monrace = m_ptr->get_appearance_monrace();
     if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
         return "**";
     }
 
-    if (!r_ptr->r_tkills || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
+    if (!monrace.r_tkills || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
         if (!AngbandWorld::get_instance().wizard) {
             return "??";
         }
     }
 
-    int32_t exp_mon = r_ptr->mexp * r_ptr->level;
+    int32_t exp_mon = monrace.mexp * monrace.level;
     uint32_t exp_mon_frac = 0;
     s64b_div(&exp_mon, &exp_mon_frac, 0, (player_ptr->max_plv + 2));
 

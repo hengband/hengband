@@ -96,7 +96,7 @@ static std::pair<short, Pos2D> decide_pet_index(PlayerType *player_ptr, const in
         int j;
         for (j = 1000; j > 0; j--) {
             pos = scatter(player_ptr, p_pos, d, PROJECT_NONE);
-            if (monster_can_enter(player_ptr, pos.y, pos.x, &party_mon[current_monster].get_monrace(), 0)) {
+            if (monster_can_enter(player_ptr, pos.y, pos.x, party_mon[current_monster].get_monrace(), 0)) {
                 break;
             }
         }

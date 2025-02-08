@@ -281,8 +281,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             const auto &grid = floor.get_grid(pos);
             if (positions.size() <= 1) {
                 auto *m_ptr = &floor.m_list[grid.m_idx];
-                auto *r_ptr = &m_ptr->get_monrace();
-                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && r_ptr->misc_flags.has(MonsterMiscType::REFLECTING) && (!m_ptr->is_riding() || !(flag & PROJECT_PLAYER)) && (!src_idx || path_n > 1) && !one_in_(10)) {
+                auto &monrace = m_ptr->get_monrace();
+                if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && monrace.misc_flags.has(MonsterMiscType::REFLECTING) && (!m_ptr->is_riding() || !(flag & PROJECT_PLAYER)) && (!src_idx || path_n > 1) && !one_in_(10)) {
 
                     Pos2D pos_refrect(0, 0);
                     int max_attempts = 10;
@@ -310,7 +310,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                     }
 
                     if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-                        r_ptr->r_misc_flags.set(MonsterMiscType::REFLECTING);
+                        monrace.r_misc_flags.set(MonsterMiscType::REFLECTING);
                     }
 
                     if (player_ptr->is_located_at(pos) || one_in_(2)) {

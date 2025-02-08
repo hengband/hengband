@@ -166,7 +166,7 @@ void process_player(PlayerType *player_ptr)
     const auto effects = player_ptr->effects();
     if (player_ptr->riding && !effects->confusion().is_confused() && !effects->blindness().is_blind()) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        auto *r_ptr = &m_ptr->get_monrace();
+        const auto &monrace = m_ptr->get_monrace();
         if (m_ptr->is_asleep()) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
             (void)set_monster_csleep(player_ptr, player_ptr->riding, 0);
@@ -175,7 +175,7 @@ void process_player(PlayerType *player_ptr)
 
         if (m_ptr->is_stunned()) {
             if (set_monster_stunned(player_ptr, player_ptr->riding,
-                    (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_stun() - 1))) {
+                    (randint0(monrace.level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_stun() - 1))) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                 msg_format(_("%s^を朦朧状態から立ち直らせた。", "%s^ is no longer stunned."), m_name.data());
             }
@@ -183,7 +183,7 @@ void process_player(PlayerType *player_ptr)
 
         if (m_ptr->is_confused()) {
             if (set_monster_confused(player_ptr, player_ptr->riding,
-                    (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_confusion() - 1))) {
+                    (randint0(monrace.level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_confusion() - 1))) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                 msg_format(_("%s^を混乱状態から立ち直らせた。", "%s^ is no longer confused."), m_name.data());
             }
@@ -191,7 +191,7 @@ void process_player(PlayerType *player_ptr)
 
         if (m_ptr->is_fearful()) {
             if (set_monster_monfear(player_ptr, player_ptr->riding,
-                    (randint0(r_ptr->level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_fear() - 1))) {
+                    (randint0(monrace.level) < player_ptr->skill_exp[PlayerSkillKindType::RIDING]) ? 0 : (m_ptr->get_remaining_fear() - 1))) {
                 const auto m_name = monster_desc(player_ptr, m_ptr, 0);
                 msg_format(_("%s^を恐怖から立ち直らせた。", "%s^ is no longer fearful."), m_name.data());
             }
@@ -326,10 +326,10 @@ void process_player(PlayerType *player_ptr)
                     continue;
                 }
 
-                const auto *r_ptr = &m_ptr->get_appearance_monrace();
+                const auto &monrace = m_ptr->get_appearance_monrace();
 
                 // モンスターのシンボル/カラーの更新
-                if (m_ptr->ml && r_ptr->visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {
+                if (m_ptr->ml && monrace.visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {
                     lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
                 }
 

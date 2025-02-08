@@ -57,16 +57,16 @@ MULTIPLY mult_slaying(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flag
         { TR_KILL_DRAGON, MonsterKindType::DRAGON, 50 },
     };
 
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
     for (size_t i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++i) {
         const struct slay_table_t *p = &slay_table[i];
 
-        if (flags.has_not(p->slay_flag) || r_ptr->kind_flags.has_not(p->affect_race_flag)) {
+        if (flags.has_not(p->slay_flag) || monrace.kind_flags.has_not(p->affect_race_flag)) {
             continue;
         }
 
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_kind_flags.set(p->affect_race_flag);
+            monrace.r_kind_flags.set(p->affect_race_flag);
         }
 
         mult = std::max(mult, p->slay_mult);
@@ -97,7 +97,7 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags,
         { TR_BRAND_POIS, RFR_EFF_IM_POISON_MASK, MonsterResistanceType::MAX },
     };
 
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
     for (size_t i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++i) {
         const struct brand_table_t *p = &brand_table[i];
 
@@ -106,18 +106,18 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags,
         }
 
         /* Notice immunity */
-        if (r_ptr->resistance_flags.has_any_of(p->resist_mask)) {
+        if (monrace.resistance_flags.has_any_of(p->resist_mask)) {
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-                r_ptr->r_resistance_flags.set(r_ptr->resistance_flags & p->resist_mask);
+                monrace.r_resistance_flags.set(monrace.resistance_flags & p->resist_mask);
             }
 
             continue;
         }
 
         /* Otherwise, take the damage */
-        if (r_ptr->resistance_flags.has(p->hurt_flag)) {
+        if (monrace.resistance_flags.has(p->hurt_flag)) {
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-                r_ptr->r_resistance_flags.set(p->hurt_flag);
+                monrace.r_resistance_flags.set(p->hurt_flag);
             }
 
             mult = std::max<short>(mult, 50);

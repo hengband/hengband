@@ -241,8 +241,8 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     std::vector<MonsterAbilityType> dispel;
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
+    const auto &monrace = m_ptr->get_monrace();
+    if (monrace.behavior_flags.has(MonsterBehaviorType::STUPID)) {
         return rand_choice(msa_ptr->mspells);
     }
 
@@ -332,7 +332,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     }
 
     auto should_select_tactic = Grid::calc_distance(player_ptr->get_position(), m_ptr->get_position()) < 4;
-    should_select_tactic &= !attack.empty() || r_ptr->ability_flags.has(MonsterAbilityType::TRAPS);
+    should_select_tactic &= !attack.empty() || monrace.ability_flags.has(MonsterAbilityType::TRAPS);
     should_select_tactic &= evaluate_percent(75);
     should_select_tactic &= world.timewalk_m_idx == 0;
     should_select_tactic &= !tactic.empty();

@@ -36,7 +36,7 @@ bool rodeo(PlayerType *player_ptr)
     }
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = m_ptr->get_monrace();
     const auto m_name = monster_desc(player_ptr, m_ptr, 0);
     msg_format(_("%sに乗った。", "You ride on %s."), m_name.data());
 
@@ -44,16 +44,16 @@ bool rodeo(PlayerType *player_ptr)
         return true;
     }
 
-    auto rlev = r_ptr->level;
+    auto rlev = monrace.level;
 
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         rlev = rlev * 3 / 2;
     }
     if (rlev > 60) {
         rlev = 60 + (rlev - 60) / 2;
     }
     if ((randint1(player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 120 + player_ptr->lev * 2 / 3) > rlev) && one_in_(2) &&
-        !player_ptr->current_floor_ptr->inside_arena && !AngbandSystem::get_instance().is_phase_out() && r_ptr->misc_flags.has_not(MonsterMiscType::GUARDIAN) && r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR) &&
+        !player_ptr->current_floor_ptr->inside_arena && !AngbandSystem::get_instance().is_phase_out() && monrace.misc_flags.has_not(MonsterMiscType::GUARDIAN) && monrace.misc_flags.has_not(MonsterMiscType::QUESTOR) &&
         (rlev < player_ptr->lev * 3 / 2 + randint0(player_ptr->lev / 5))) {
         msg_format(_("%sを手なずけた。", "You tame %s."), m_name.data());
         set_pet(player_ptr, m_ptr);

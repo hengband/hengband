@@ -56,14 +56,14 @@ static void heal_monster_by_melee(mam_type *mam_ptr)
 
 static void process_blow_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    auto *r_ptr = &mam_ptr->m_ptr->get_monrace();
+    const auto &monrace = mam_ptr->m_ptr->get_monrace();
     switch (mam_ptr->attribute) {
     case BlowEffectType::FEAR:
         project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage,
             AttributeType::TURN_ALL, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
     case BlowEffectType::SLEEP:
-        project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level,
+        project(player_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, monrace.level,
             AttributeType::OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED);
         break;
     case BlowEffectType::HEAL:
@@ -160,8 +160,8 @@ static bool check_same_monster(PlayerType *player_ptr, mam_type *mam_ptr)
         return false;
     }
 
-    auto *r_ptr = &mam_ptr->m_ptr->get_monrace();
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
+    const auto &monrace = mam_ptr->m_ptr->get_monrace();
+    if (monrace.behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 
@@ -291,11 +291,11 @@ static void explode_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 static void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
     const auto *m_ptr = mam_ptr->m_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
-        mam_ptr->effect = r_ptr->blows[ap_cnt].effect;
-        mam_ptr->method = r_ptr->blows[ap_cnt].method;
-        mam_ptr->damage_dice = r_ptr->blows[ap_cnt].damage_dice;
+        mam_ptr->effect = monrace.blows[ap_cnt].effect;
+        mam_ptr->method = monrace.blows[ap_cnt].method;
+        mam_ptr->damage_dice = monrace.blows[ap_cnt].damage_dice;
 
         if (!m_ptr->is_valid()) {
             break;
@@ -313,12 +313,12 @@ static void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
             continue;
         }
 
-        if (!mam_ptr->obvious && !mam_ptr->damage && (r_ptr->r_blows[ap_cnt] <= 10)) {
+        if (!mam_ptr->obvious && !mam_ptr->damage && (monrace.r_blows[ap_cnt] <= 10)) {
             continue;
         }
 
-        if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR) {
-            r_ptr->r_blows[ap_cnt]++;
+        if (monrace.r_blows[ap_cnt] < MAX_UCHAR) {
+            monrace.r_blows[ap_cnt]++;
         }
     }
 }

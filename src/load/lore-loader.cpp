@@ -204,7 +204,7 @@ static void migrate_old_resistance_and_ability_flags(MonraceDefinition &monrace,
         uint32_t f5 = rd_u32b();
         uint32_t f6 = rd_u32b();
         if (h_older_than(1, 5, 0, 3)) {
-            set_old_lore(&monrace, f3, f4, r_idx);
+            set_old_lore(monrace, f3, f4, r_idx);
         } else {
             r_flagsr = rd_u32b();
         }

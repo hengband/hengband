@@ -14,4 +14,4 @@ struct msr_type {
     EnumClassFlagGroup<MonsterSmartLearnType> smart_flags{};
 };
 
-bool int_outof(MonraceDefinition *r_ptr, int prob);
+bool int_outof(const MonraceDefinition &monrace, int prob);

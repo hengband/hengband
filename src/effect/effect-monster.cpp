@@ -380,17 +380,17 @@ static void effect_makes_change_virtues(PlayerType *player_ptr, EffectMonster *e
  */
 static void affected_monster_prevents_bad_status(EffectMonster *em_ptr)
 {
-    const auto *r_ptr = em_ptr->r_ptr;
-    auto can_avoid_polymorph = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    can_avoid_polymorph |= r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
+    const auto &monrace = *em_ptr->r_ptr;
+    auto can_avoid_polymorph = monrace.kind_flags.has(MonsterKindType::UNIQUE);
+    can_avoid_polymorph |= monrace.misc_flags.has(MonsterMiscType::QUESTOR);
     can_avoid_polymorph |= em_ptr->m_ptr->is_riding();
     if (can_avoid_polymorph) {
         em_ptr->do_polymorph = false;
     }
 
-    auto should_alive = r_ptr->kind_flags.has(MonsterKindType::UNIQUE);
-    should_alive |= r_ptr->misc_flags.has(MonsterMiscType::QUESTOR);
-    should_alive |= r_ptr->population_flags.has(MonsterPopulationType::NAZGUL);
+    auto should_alive = monrace.kind_flags.has(MonsterKindType::UNIQUE);
+    should_alive |= monrace.misc_flags.has(MonsterMiscType::QUESTOR);
+    should_alive |= monrace.population_flags.has(MonsterPopulationType::NAZGUL);
     if (should_alive && !AngbandSystem::get_instance().is_phase_out() && em_ptr->is_monster() && (em_ptr->dam > em_ptr->m_ptr->hp)) {
         em_ptr->dam = em_ptr->m_ptr->hp;
     }
@@ -404,9 +404,9 @@ static void affected_monster_prevents_bad_status(EffectMonster *em_ptr)
  */
 static void effect_damage_piles_stun(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    const auto *r_ptr = em_ptr->r_ptr;
+    const auto &monrace = *em_ptr->r_ptr;
     auto can_avoid_stun = em_ptr->do_stun == 0;
-    can_avoid_stun |= r_ptr->resistance_flags.has(MonsterResistanceType::NO_STUN);
+    can_avoid_stun |= monrace.resistance_flags.has(MonsterResistanceType::NO_STUN);
     if (can_avoid_stun) {
         return;
     }

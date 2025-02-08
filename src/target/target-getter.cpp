@@ -257,14 +257,14 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
         }
     } else if (player_ptr->riding) {
         auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        auto *r_ptr = &m_ptr->get_monrace();
+        const auto &monrace = m_ptr->get_monrace();
         if (m_ptr->is_confused()) {
             if (evaluate_percent(75)) {
                 dir = rand_choice(Direction::directions_8()).dir();
             }
-        } else if (r_ptr->behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && one_in_(2)) {
+        } else if (monrace.behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && one_in_(2)) {
             dir = rand_choice(Direction::directions_8()).dir();
-        } else if (r_ptr->behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && one_in_(4)) {
+        } else if (monrace.behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && one_in_(4)) {
             dir = rand_choice(Direction::directions_8()).dir();
         }
     }

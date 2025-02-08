@@ -40,12 +40,12 @@
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const MonraceDefinition *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const MonraceDefinition &monrace, BIT_FLAGS16 mode)
 {
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     if (terrain.flags.has(TerrainCharacteristics::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
-            if (r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
+            if (monrace.feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
                 return false;
             }
         } else {
@@ -55,14 +55,14 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Monr
         }
     }
 
-    if (terrain.flags.has(TerrainCharacteristics::CAN_FLY) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) {
+    if (terrain.flags.has(TerrainCharacteristics::CAN_FLY) && monrace.feature_flags.has(MonsterFeatureType::CAN_FLY)) {
         return true;
     }
-    if (terrain.flags.has(TerrainCharacteristics::CAN_SWIM) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
+    if (terrain.flags.has(TerrainCharacteristics::CAN_SWIM) && monrace.feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
         return true;
     }
     if (terrain.flags.has(TerrainCharacteristics::CAN_PASS)) {
-        if (r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr))) {
+        if (monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr))) {
             return true;
         }
     }
@@ -71,48 +71,48 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Monr
         return false;
     }
 
-    if (terrain.flags.has(TerrainCharacteristics::MOUNTAIN) && (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN))) {
+    if (terrain.flags.has(TerrainCharacteristics::MOUNTAIN) && (monrace.wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN))) {
         return true;
     }
 
     if (terrain.flags.has(TerrainCharacteristics::WATER)) {
-        if (r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC)) {
+        if (monrace.feature_flags.has_not(MonsterFeatureType::AQUATIC)) {
             if (terrain.flags.has(TerrainCharacteristics::DEEP)) {
                 return false;
-            } else if (r_ptr->aura_flags.has(MonsterAuraType::FIRE)) {
+            } else if (monrace.aura_flags.has(MonsterAuraType::FIRE)) {
                 return false;
             }
         }
-    } else if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
+    } else if (monrace.feature_flags.has(MonsterFeatureType::AQUATIC)) {
         return false;
     }
 
     if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
-        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
+        if (monrace.resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
             return false;
         }
     }
 
     if (terrain.flags.has(TerrainCharacteristics::COLD_PUDDLE)) {
-        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK)) {
+        if (monrace.resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK)) {
             return false;
         }
     }
 
     if (terrain.flags.has(TerrainCharacteristics::ELEC_PUDDLE)) {
-        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK)) {
+        if (monrace.resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK)) {
             return false;
         }
     }
 
     if (terrain.flags.has(TerrainCharacteristics::ACID_PUDDLE)) {
-        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK)) {
+        if (monrace.resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK)) {
             return false;
         }
     }
 
     if (terrain.flags.has(TerrainCharacteristics::POISON_PUDDLE)) {
-        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK)) {
+        if (monrace.resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK)) {
             return false;
         }
     }
@@ -130,7 +130,7 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Monr
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const MonraceDefinition *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const MonraceDefinition &monrace, BIT_FLAGS16 mode)
 {
     const Pos2D pos(y, x);
     auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
@@ -141,7 +141,7 @@ bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const Mon
         return false;
     }
 
-    return monster_can_cross_terrain(player_ptr, grid.feat, r_ptr, mode);
+    return monster_can_cross_terrain(player_ptr, grid.feat, monrace, mode);
 }
 
 /*!
@@ -156,7 +156,7 @@ bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const Mon
  * @details
  * If user is player, m_ptr == nullptr.
  */
-bool monster_has_hostile_align(PlayerType *player_ptr, const MonsterEntity *m_ptr, int pa_good, int pa_evil, const MonraceDefinition *r_ptr)
+bool monster_has_hostile_align(PlayerType *player_ptr, const MonsterEntity *m_ptr, int pa_good, int pa_evil, const MonraceDefinition &monrace)
 {
     byte sub_align1 = SUB_ALIGN_NEUTRAL;
     byte sub_align2 = SUB_ALIGN_NEUTRAL;
@@ -175,10 +175,10 @@ bool monster_has_hostile_align(PlayerType *player_ptr, const MonsterEntity *m_pt
     }
 
     /* Racial alignment flags */
-    if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+    if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
         sub_align2 |= SUB_ALIGN_EVIL;
     }
-    if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+    if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
         sub_align2 |= SUB_ALIGN_GOOD;
     }
 

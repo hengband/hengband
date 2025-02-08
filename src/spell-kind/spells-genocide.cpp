@@ -213,11 +213,11 @@ bool mass_genocide_undead(PlayerType *player_ptr, int power, bool player_cast)
     bool result = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
         auto *m_ptr = &floor.m_list[i];
-        auto *r_ptr = &m_ptr->get_monrace();
+        const auto &monrace = m_ptr->get_monrace();
         if (!m_ptr->is_valid()) {
             continue;
         }
-        if (r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD)) {
+        if (monrace.kind_flags.has_not(MonsterKindType::UNDEAD)) {
             continue;
         }
         if (m_ptr->cdis > MAX_PLAYER_SIGHT) {

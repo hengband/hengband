@@ -427,13 +427,13 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         int danger_amount = 0;
         for (MONSTER_IDX monster = 0; monster < player_ptr->current_floor_ptr->m_max; monster++) {
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[monster];
-            auto *r_ptr = &m_ptr->get_monrace();
+            const auto &monrace = m_ptr->get_monrace();
             if (!m_ptr->is_valid()) {
                 continue;
             }
 
-            if (r_ptr->level >= player_ptr->lev) {
-                danger_amount += r_ptr->level - player_ptr->lev + 1;
+            if (monrace.level >= player_ptr->lev) {
+                danger_amount += monrace.level - player_ptr->lev + 1;
             }
         }
 

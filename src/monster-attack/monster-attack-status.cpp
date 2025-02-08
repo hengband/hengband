@@ -50,14 +50,14 @@ void process_terrify_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_p
         return;
     }
 
-    auto *r_ptr = &monap_ptr->m_ptr->get_monrace();
+    const auto &monrace = monap_ptr->m_ptr->get_monrace();
     if (has_resist_fear(player_ptr)) {
         msg_print(_("しかし恐怖に侵されなかった！", "You stand your ground!"));
         monap_ptr->obvious = true;
         return;
     }
 
-    if (randint0(100 + r_ptr->level / 2) < player_ptr->skill_sav) {
+    if (randint0(100 + monrace.level / 2) < player_ptr->skill_sav) {
         msg_print(_("しかし恐怖に侵されなかった！", "You stand your ground!"));
         monap_ptr->obvious = true;
         return;
@@ -126,8 +126,8 @@ void process_stun_attack(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         return;
     }
 
-    auto *r_ptr = &monap_ptr->m_ptr->get_monrace();
-    if (BadStatusSetter(player_ptr).mod_stun(10 + randint1(r_ptr->level / 4))) {
+    const auto &monrace = monap_ptr->m_ptr->get_monrace();
+    if (BadStatusSetter(player_ptr).mod_stun(10 + randint1(monrace.level / 4))) {
         monap_ptr->obvious = true;
     }
 }

@@ -406,13 +406,13 @@ void teleport_player(PlayerType *player_ptr, POSITION dis, BIT_FLAGS mode)
             }
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
             if (!m_ptr->is_riding()) {
-                auto *r_ptr = &m_ptr->get_monrace();
+                const auto &monrace = m_ptr->get_monrace();
 
-                bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
-                can_follow &= r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
+                bool can_follow = monrace.ability_flags.has(MonsterAbilityType::TPORT);
+                can_follow &= monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
                 can_follow &= !m_ptr->is_asleep();
                 if (can_follow) {
-                    teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
+                    teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, monrace.level, TELEPORT_SPONTANEOUS);
                 }
             }
         }
@@ -451,13 +451,13 @@ void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION di
             }
 
             auto *m_ptr = &player_ptr->current_floor_ptr->m_list[tmp_m_idx];
-            auto *r_ptr = &m_ptr->get_monrace();
+            const auto &monrace = m_ptr->get_monrace();
 
-            bool can_follow = r_ptr->ability_flags.has(MonsterAbilityType::TPORT);
-            can_follow &= r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
+            bool can_follow = monrace.ability_flags.has(MonsterAbilityType::TPORT);
+            can_follow &= monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT);
             can_follow &= !m_ptr->is_asleep();
             if (can_follow) {
-                teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
+                teleport_monster_to(player_ptr, tmp_m_idx, player_ptr->y, player_ptr->x, monrace.level, TELEPORT_SPONTANEOUS);
             }
         }
     }

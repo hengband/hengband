@@ -180,9 +180,9 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
 void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = m_ptr->get_monrace();
     const auto &grid = player_ptr->current_floor_ptr->grid_array[ny][nx];
-    turn_flags_ptr->do_take = r_ptr->behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
+    turn_flags_ptr->do_take = monrace.behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
     for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
         EnumClassFlagGroup<MonsterKindType> flg_monster_kind;
         EnumClassFlagGroup<MonsterResistanceType> flgr;
@@ -201,8 +201,8 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
         update_object_flags(flags, flg_monster_kind, flgr);
 
         auto is_unpickable_object = item.is_fixed_or_random_artifact();
-        is_unpickable_object |= r_ptr->kind_flags.has_any_of(flg_monster_kind);
-        is_unpickable_object |= !r_ptr->resistance_flags.has_all_of(flgr) && r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
+        is_unpickable_object |= monrace.kind_flags.has_any_of(flg_monster_kind);
+        is_unpickable_object |= !monrace.resistance_flags.has_all_of(flgr) && monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_ALL);
         monster_pickup_object(player_ptr, turn_flags_ptr, m_idx, &item, is_unpickable_object, ny, nx, m_name, item_name, this_o_idx);
     }
 }

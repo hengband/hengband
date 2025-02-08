@@ -83,8 +83,8 @@ static void produce_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bo
 bool process_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->kind_flags.has_not(MonsterKindType::QUANTUM)) {
+    const auto &monrace = m_ptr->get_monrace();
+    if (monrace.kind_flags.has_not(MonsterKindType::QUANTUM)) {
         return false;
     }
     if (!randint0(2)) {
@@ -94,8 +94,8 @@ bool process_quantum_effect(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_
         return false;
     }
 
-    bool can_disappear = r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE);
-    can_disappear &= r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR);
+    bool can_disappear = monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
+    can_disappear &= monrace.misc_flags.has_not(MonsterMiscType::QUESTOR);
     if (can_disappear) {
         vanish_nonunique(player_ptr, m_idx, see_m);
         return true;

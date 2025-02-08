@@ -40,8 +40,8 @@ static uint32_t csleep_noise;
 bool monster_is_powerful(const FloorType &floor, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor.m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    return r_ptr->misc_flags.has(MonsterMiscType::POWERFUL);
+    const auto &monrace = m_ptr->get_monrace();
+    return monrace.misc_flags.has(MonsterMiscType::POWERFUL);
 }
 
 /*!
@@ -52,8 +52,8 @@ bool monster_is_powerful(const FloorType &floor, MONSTER_IDX m_idx)
 DEPTH monster_level_idx(const FloorType &floor, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &floor.m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    return (r_ptr->level >= 1) ? r_ptr->level : 1;
+    const auto &monrace = m_ptr->get_monrace();
+    return (monrace.level >= 1) ? monrace.level : 1;
 }
 
 /*!
@@ -68,8 +68,8 @@ DEPTH monster_level_idx(const FloorType &floor, MONSTER_IDX m_idx)
  */
 int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool is_psy_spear)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL) && dam > 0) {
+    const auto &monrace = m_ptr->get_monrace();
+    if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL) && dam > 0) {
         dam /= 100;
         if ((dam == 0) && one_in_(3)) {
             dam = 1;
@@ -113,11 +113,11 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
     auto *m_ptr = &floor.m_list[m_idx];
     switch (mte) {
     case MonsterTimedEffect::SLEEP: {
-        auto *r_ptr = &m_ptr->get_monrace();
+        auto &monrace = m_ptr->get_monrace();
         auto is_wakeup = false;
         if (m_ptr->cdis < MAX_MONSTER_SENSING) {
             /* Handle "sensing radius" */
-            if (m_ptr->cdis <= (m_ptr->is_pet() ? ((r_ptr->aaf > MAX_PLAYER_SIGHT) ? MAX_PLAYER_SIGHT : r_ptr->aaf) : r_ptr->aaf)) {
+            if (m_ptr->cdis <= (m_ptr->is_pet() ? ((monrace.aaf > MAX_PLAYER_SIGHT) ? MAX_PLAYER_SIGHT : monrace.aaf) : monrace.aaf)) {
                 is_wakeup = true;
             }
 
@@ -160,8 +160,8 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
             /* Notice the "not waking up" */
             if (is_original_ap_and_seen(player_ptr, m_ptr)) {
                 /* Hack -- Count the ignores */
-                if (r_ptr->r_ignore < MAX_UCHAR) {
-                    r_ptr->r_ignore++;
+                if (monrace.r_ignore < MAX_UCHAR) {
+                    monrace.r_ignore++;
                 }
             }
 
@@ -176,8 +176,8 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
 
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
             /* Hack -- Count the wakings */
-            if (r_ptr->r_wake < MAX_UCHAR) {
-                r_ptr->r_wake++;
+            if (monrace.r_wake < MAX_UCHAR) {
+                monrace.r_wake++;
             }
         }
 

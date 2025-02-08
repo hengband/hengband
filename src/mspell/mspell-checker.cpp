@@ -119,7 +119,7 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
                 const auto &item = floor.o_list[this_o_idx];
                 if (item.bi_key.tval() == ItemKindType::MONSTER_REMAINS) {
                     const auto &monrace = item.get_monrace();
-                    if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, &monrace)) {
+                    if (!monster_has_hostile_align(player_ptr, m_ptr, 0, 0, monrace)) {
                         return true;
                     }
                 }
@@ -264,14 +264,14 @@ ProjectResult ball(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m
 ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = m_ptr->get_monrace();
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_BREATH;
     if (target_type == MONSTER_TO_PLAYER) {
         flg |= PROJECT_PLAYER;
     }
 
     if (rad < 1) {
-        rad = r_ptr->misc_flags.has(MonsterMiscType::POWERFUL) ? 3 : 2;
+        rad = monrace.misc_flags.has(MonsterMiscType::POWERFUL) ? 3 : 2;
     }
 
     return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);

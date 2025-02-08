@@ -251,7 +251,7 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto *t_ptr = &floor.m_list[t_idx];
-    MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
+    const auto &monrace_target = t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -277,8 +277,8 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
         return res;
     }
 
-    resist = (tr_ptr->resistance_flags.has(MonsterResistanceType::NO_FEAR));
-    saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    resist = (monrace_target.resistance_flags.has(MonsterResistanceType::NO_FEAR));
+    saving_throw = (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     mspell_cast_msg_bad_status_to_monster msg(_("%s^が恐ろしげな幻覚を作り出した。", "%s^ casts a fearful illusion in front of %s."),
         _("%s^は恐怖を感じない。", "%s^ refuses to be frightened."), _("%s^は恐怖を感じない。", "%s^ refuses to be frightened."),
@@ -308,7 +308,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto *t_ptr = &floor.m_list[t_idx];
-    MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
+    const auto &monrace_target = t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -343,8 +343,8 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
         msg_default = _("%sは呪文を唱えて%sの目を焼き付かせた。", "%s^ casts a spell, burning %s's eyes.");
     }
 
-    resist = (tr_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF));
-    saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    resist = (monrace_target.resistance_flags.has(MonsterResistanceType::NO_CONF));
+    saving_throw = (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     mspell_cast_msg_bad_status_to_monster msg(msg_default, _("%s^には効果がなかった。", "%s^ is unaffected."),
         _("%s^には効果がなかった。", "%s^ is unaffected."), _("%s^は目が見えなくなった！ ", "%s^ is blinded!"));
@@ -373,7 +373,7 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto *t_ptr = &floor.m_list[t_idx];
-    MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
+    const auto &monrace_target = t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -400,8 +400,8 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
         return res;
     }
 
-    resist = (tr_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF));
-    saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    resist = (monrace_target.resistance_flags.has(MonsterResistanceType::NO_CONF));
+    saving_throw = (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     mspell_cast_msg_bad_status_to_monster msg(_("%s^が%sの前に幻惑的な幻をつくり出した。", "%s^ casts a mesmerizing illusion in front of %s."),
         _("%s^は惑わされなかった。", "%s^ disbelieves the feeble spell."), _("%s^は惑わされなかった。", "%s^ disbelieves the feeble spell."),
@@ -431,7 +431,7 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto *t_ptr = &floor.m_list[t_idx];
-    MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
+    const auto &monrace_target = t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -457,8 +457,8 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
         return res;
     }
 
-    resist = (tr_ptr->kind_flags.has(MonsterKindType::UNIQUE) || tr_ptr->resistance_flags.has(MonsterResistanceType::NO_SLEEP));
-    saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    resist = (monrace_target.kind_flags.has(MonsterKindType::UNIQUE) || monrace_target.resistance_flags.has(MonsterResistanceType::NO_SLEEP));
+    saving_throw = (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     mspell_cast_msg_bad_status_to_monster msg(_("%s^は%sをじっと見つめた。", "%s^ stares intently at %s."),
         _("%s^には効果がなかった。", "%s^ is unaffected."), _("%s^には効果がなかった。", "%s^ is unaffected."), _("%s^は麻痺した！", "%s^ is paralyzed!"));
@@ -519,7 +519,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto *t_ptr = &floor.m_list[t_idx];
-    MonraceDefinition *tr_ptr = &t_ptr->get_monrace();
+    const auto &monrace_target = t_ptr->get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -554,8 +554,8 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
         msg_default = _("%sが%sの筋肉から力を吸いとった。", "%s^ drains power from %s's muscles.");
     }
 
-    resist = (tr_ptr->kind_flags.has(MonsterKindType::UNIQUE));
-    saving_throw = (tr_ptr->level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
+    resist = (monrace_target.kind_flags.has(MonsterKindType::UNIQUE));
+    saving_throw = (monrace_target.level > randint1((rlev - 10) < 1 ? 1 : (rlev - 10)) + 10);
 
     mspell_cast_msg_bad_status_to_monster msg(msg_default, _("%s^には効果がなかった。", "%s^ is unaffected."),
         _("%s^には効果がなかった。", "%s^ is unaffected."), _("%sの動きが遅くなった。", "%s^ starts moving slower."));

@@ -1025,46 +1025,46 @@ void display_element_spell_list(PlayerType *player_ptr, int y, int x)
  * @param type 魔法攻撃属性
  * @return 効果があるならTRUE、なければFALSE
  */
-static bool is_elemental_genocide_effective(MonraceDefinition *r_ptr, AttributeType type)
+static bool is_elemental_genocide_effective(const MonraceDefinition &monrace, AttributeType type)
 {
     switch (type) {
     case AttributeType::FIRE:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
             return false;
         }
         break;
     case AttributeType::COLD:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
             return false;
         }
         break;
     case AttributeType::ELEC:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
             return false;
         }
         break;
     case AttributeType::ACID:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ACID)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_ACID)) {
             return false;
         }
         break;
     case AttributeType::DARK:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_DARK) || r_ptr->r_resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_DARK) || monrace.r_resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
             return false;
         }
         break;
     case AttributeType::CONFUSION:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::NO_CONF)) {
             return false;
         }
         break;
     case AttributeType::SHARDS:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_SHARDS)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_SHARDS)) {
             return false;
         }
         break;
     case AttributeType::POIS:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_POISON)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_POISON)) {
             return false;
         }
         break;
@@ -1093,7 +1093,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMo
     }
 
     const auto type = get_element_type(player_ptr->element, 0);
-    const auto is_effective = is_elemental_genocide_effective(em_ptr->r_ptr, type);
+    const auto is_effective = is_elemental_genocide_effective(*em_ptr->r_ptr, type);
     if (!is_effective) {
         if (em_ptr->seen_msg) {
             msg_format(_("%sには効果がなかった。", "%s^ is unaffected."), em_ptr->m_name);

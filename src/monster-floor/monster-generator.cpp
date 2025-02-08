@@ -67,7 +67,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
 
             if (MonraceList::is_valid(monrace_id)) {
                 const auto &monrace = monraces.get_monrace(monrace_id);
-                if (!monster_can_enter(player_ptr, pos_neighbor.y, pos_neighbor.x, &monrace, 0)) {
+                if (!monster_can_enter(player_ptr, pos_neighbor.y, pos_neighbor.x, monrace, 0)) {
                     continue;
                 }
             } else {
@@ -404,7 +404,7 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
             continue;
         }
 
-        if (!monster_can_cross_terrain(player_ptr, floor.get_grid(pos).feat, &monrace, 0)) {
+        if (!monster_can_cross_terrain(player_ptr, floor.get_grid(pos).feat, monrace, 0)) {
             try_count++;
             continue;
         }

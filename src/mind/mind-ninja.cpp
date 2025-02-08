@@ -211,7 +211,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
  */
 void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
+    const auto &monrace = pa_ptr->m_ptr->get_monrace();
     if (!has_melee_weapon(player_ptr, enum2i(INVEN_MAIN_HAND) + pa_ptr->hand) || player_ptr->is_icky_wield[pa_ptr->hand]) {
         return;
     }
@@ -223,7 +223,7 @@ void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
     if (has_aggravate(player_ptr)) {
         tmp /= 2;
     }
-    if (r_ptr->level > (player_ptr->lev * player_ptr->lev / 20 + 10)) {
+    if (monrace.level > (player_ptr->lev * player_ptr->lev / 20 + 10)) {
         tmp /= 3;
     }
 
@@ -231,8 +231,8 @@ void process_surprise_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
     if (pa_ptr->m_ptr->is_asleep() && pa_ptr->m_ptr->ml) {
         /* Can't backstab creatures that we can't see, right? */
         pa_ptr->backstab = true;
-    } else if ((ninja_data && ninja_data->s_stealth) && (randint0(tmp) > (r_ptr->level + 20)) &&
-               pa_ptr->m_ptr->ml && !r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
+    } else if ((ninja_data && ninja_data->s_stealth) && (randint0(tmp) > (monrace.level + 20)) &&
+               pa_ptr->m_ptr->ml && !monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         pa_ptr->surprise_attack = true;
     } else if (pa_ptr->m_ptr->is_fearful() && pa_ptr->m_ptr->ml) {
         pa_ptr->stab_fleeing = true;

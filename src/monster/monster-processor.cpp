@@ -240,7 +240,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     update_map_flags(turn_flags_ptr);
-    update_lite_flags(turn_flags_ptr, &monrace);
+    update_lite_flags(turn_flags_ptr, monrace);
     update_monster_race_flags(player_ptr, turn_flags_ptr, m_ptr);
 
     if (!process_monster_fear(player_ptr, turn_flags_ptr, m_idx)) {
@@ -266,7 +266,7 @@ bool process_stealth(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = m_ptr->get_monrace();
     int tmp = player_ptr->lev * 6 + (player_ptr->skill_stl + 10) * 4;
     if (player_ptr->monlite) {
         tmp /= 3;
@@ -276,11 +276,11 @@ bool process_stealth(PlayerType *player_ptr, MONSTER_IDX m_idx)
         tmp /= 2;
     }
 
-    if (r_ptr->level > (player_ptr->lev * player_ptr->lev / 20 + 10)) {
+    if (monrace.level > (player_ptr->lev * player_ptr->lev / 20 + 10)) {
         tmp /= 3;
     }
 
-    return randint0(tmp) <= (r_ptr->level + 20);
+    return randint0(tmp) <= (monrace.level + 20);
 }
 
 /*!
@@ -292,8 +292,8 @@ bool process_stealth(PlayerType *player_ptr, MONSTER_IDX m_idx)
 void decide_drop_from_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool is_riding_mon)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (!is_riding_mon || r_ptr->misc_flags.has(MonsterMiscType::RIDING)) {
+    const auto &monrace = m_ptr->get_monrace();
+    if (!is_riding_mon || monrace.misc_flags.has(MonsterMiscType::RIDING)) {
         return;
     }
 
@@ -351,7 +351,7 @@ bool vanish_summoned_children(PlayerType *player_ptr, MONSTER_IDX m_idx, bool se
 bool awake_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
     if (!m_ptr->is_asleep()) {
         return true;
     }
@@ -366,8 +366,8 @@ bool awake_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
     }
 
-    if (is_original_ap_and_seen(player_ptr, m_ptr) && (r_ptr->r_wake < MAX_UCHAR)) {
-        r_ptr->r_wake++;
+    if (is_original_ap_and_seen(player_ptr, m_ptr) && (monrace.r_wake < MAX_UCHAR)) {
+        monrace.r_wake++;
     }
 
     return true;
@@ -386,7 +386,7 @@ void process_angar(PlayerType *player_ptr, MONSTER_IDX m_idx, bool see_m)
     auto gets_angry = monster.is_friendly() && has_aggravate(player_ptr);
     const auto should_aggravate = monster.is_pet();
     auto has_hostile = monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
-    has_hostile &= monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace);
+    has_hostile &= monster_has_hostile_align(player_ptr, nullptr, 10, -10, monrace);
     const auto has_resist_all = monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL);
     if (should_aggravate && (has_hostile || has_resist_all)) {
         gets_angry = true;
@@ -445,19 +445,19 @@ bool explode_grenade(PlayerType *player_ptr, MONSTER_IDX m_idx)
 void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    auto can_do_special = r_ptr->ability_flags.has(MonsterAbilityType::SPECIAL);
+    auto &monrace = m_ptr->get_monrace();
+    auto can_do_special = monrace.ability_flags.has(MonsterAbilityType::SPECIAL);
     can_do_special &= m_ptr->r_idx == MonraceId::OHMU;
     can_do_special &= !player_ptr->current_floor_ptr->inside_arena;
     can_do_special &= !AngbandSystem::get_instance().is_phase_out();
-    can_do_special &= r_ptr->freq_spell != 0;
-    can_do_special &= randint1(100) <= r_ptr->freq_spell;
+    can_do_special &= monrace.freq_spell != 0;
+    can_do_special &= randint1(100) <= monrace.freq_spell;
     if (!can_do_special) {
         return;
     }
 
     int count = 0;
-    DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+    DEPTH rlev = ((monrace.level >= 1) ? monrace.level : 1);
     BIT_FLAGS p_mode = m_ptr->is_pet() ? PM_FORCE_PET : PM_NONE;
 
     for (int k = 0; k < A_MAX; k++) {
@@ -469,7 +469,7 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (count && is_original_ap_and_seen(player_ptr, m_ptr)) {
-        r_ptr->r_ability_flags.set(MonsterAbilityType::SPECIAL);
+        monrace.r_ability_flags.set(MonsterAbilityType::SPECIAL);
     }
 }
 
@@ -484,8 +484,8 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
 bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->misc_flags.has_not(MonsterMiscType::MULTIPLY) || (player_ptr->current_floor_ptr->num_repro >= MAX_REPRODUCTION)) {
+    auto &monrace = m_ptr->get_monrace();
+    if (monrace.misc_flags.has_not(MonsterMiscType::MULTIPLY) || (player_ptr->current_floor_ptr->num_repro >= MAX_REPRODUCTION)) {
         return false;
     }
 
@@ -510,7 +510,7 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
     if ((k < 4) && (!k || !randint0(k * chance_reproduction))) {
         if (auto multiplied_m_idx = multiply_monster(player_ptr, m_idx, false, (m_ptr->is_pet() ? PM_FORCE_PET : 0))) {
             if (player_ptr->current_floor_ptr->m_list[*multiplied_m_idx].ml && is_original_ap_and_seen(player_ptr, m_ptr)) {
-                r_ptr->r_misc_flags.set(MonsterMiscType::MULTIPLY);
+                monrace.r_misc_flags.set(MonsterMiscType::MULTIPLY);
             }
 
             return true;

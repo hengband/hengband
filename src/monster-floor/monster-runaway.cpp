@@ -87,9 +87,9 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
 bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = m_ptr->get_monrace();
     bool can_runaway = m_ptr->is_pet() || m_ptr->is_friendly();
-    can_runaway &= (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL));
+    can_runaway &= (monrace.kind_flags.has(MonsterKindType::UNIQUE)) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
     can_runaway &= !AngbandSystem::get_instance().is_phase_out();
     if (!can_runaway) {
         return false;

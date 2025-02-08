@@ -235,7 +235,7 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
 bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = m_ptr->get_monrace();
 
     if (m_ptr->is_confused() || !aware) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -246,7 +246,7 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MO
         return true;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) && (m_ptr->cdis > 1)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) && (m_ptr->cdis > 1)) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }

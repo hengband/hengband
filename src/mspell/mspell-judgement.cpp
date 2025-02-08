@@ -251,8 +251,8 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     const auto &floor_ref = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor_ref.m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ACID)) {
+    const auto &monrace = m_ptr->get_monrace();
+    if (monrace.ability_flags.has(MonsterAbilityType::BR_ACID)) {
         if (!has_immune_acid(player_ptr) && (player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST))) {
             return true;
         }
@@ -262,7 +262,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_FIRE)) {
+    if (monrace.ability_flags.has(MonsterAbilityType::BR_FIRE)) {
         if (!(PlayerRace(player_ptr).equals(PlayerRaceType::BALROG) && player_ptr->lev > 44)) {
             if (!has_immune_fire(player_ptr) && (player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST))) {
                 return true;
@@ -274,7 +274,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ELEC)) {
+    if (monrace.ability_flags.has(MonsterAbilityType::BR_ELEC)) {
         if (!has_immune_elec(player_ptr) && (player_ptr->oppose_elec || music_singing(player_ptr, MUSIC_RESIST))) {
             return true;
         }
@@ -284,7 +284,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_COLD)) {
+    if (monrace.ability_flags.has(MonsterAbilityType::BR_COLD)) {
         if (!has_immune_cold(player_ptr) && (player_ptr->oppose_cold || music_singing(player_ptr, MUSIC_RESIST))) {
             return true;
         }
@@ -294,7 +294,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (r_ptr->ability_flags.has_any_of({ MonsterAbilityType::BR_POIS, MonsterAbilityType::BR_NUKE }) && !(pc.equals(PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
+    if (monrace.ability_flags.has_any_of({ MonsterAbilityType::BR_POIS, MonsterAbilityType::BR_NUKE }) && !(pc.equals(PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
         if (player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST)) {
             return true;
         }
@@ -312,23 +312,23 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return true;
     }
 
-    if ((player_ptr->special_attack & ATTACK_ACID) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK)) {
+    if ((player_ptr->special_attack & ATTACK_ACID) && monrace.resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK)) {
         return true;
     }
 
-    if ((player_ptr->special_attack & ATTACK_FIRE) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
+    if ((player_ptr->special_attack & ATTACK_FIRE) && monrace.resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
         return true;
     }
 
-    if ((player_ptr->special_attack & ATTACK_ELEC) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK)) {
+    if ((player_ptr->special_attack & ATTACK_ELEC) && monrace.resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK)) {
         return true;
     }
 
-    if ((player_ptr->special_attack & ATTACK_COLD) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK)) {
+    if ((player_ptr->special_attack & ATTACK_COLD) && monrace.resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK)) {
         return true;
     }
 
-    if ((player_ptr->special_attack & ATTACK_POIS) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK)) {
+    if ((player_ptr->special_attack & ATTACK_POIS) && monrace.resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK)) {
         return true;
     }
 

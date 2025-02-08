@@ -539,7 +539,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 auto &monster = floor.m_list[m_idx];
 
                 /* Monster cannot move back? */
-                if (!monster_can_enter(player_ptr, pos_new.y, pos_new.x, &monster.get_monrace(), 0)) {
+                if (!monster_can_enter(player_ptr, pos_new.y, pos_new.x, monster.get_monrace(), 0)) {
                     /* -more- */
                     if (i < 2) {
                         msg_print(nullptr);

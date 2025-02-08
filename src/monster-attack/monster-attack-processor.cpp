@@ -34,24 +34,24 @@ void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto *m_ptr = &floor.m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
     if (!turn_flags_ptr->do_move || !player_ptr->is_located_at(pos)) {
         return;
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_behavior_flags.set(MonsterBehaviorType::NEVER_BLOW);
+            monrace.r_behavior_flags.set(MonsterBehaviorType::NEVER_BLOW);
         }
 
         turn_flags_ptr->do_move = false;
     }
 
     if (turn_flags_ptr->do_move && floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE) && !m_ptr->is_confused()) {
-        if (r_ptr->behavior_flags.has_not(MonsterBehaviorType::STUPID)) {
+        if (monrace.behavior_flags.has_not(MonsterBehaviorType::STUPID)) {
             turn_flags_ptr->do_move = false;
         } else if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
+            monrace.r_behavior_flags.set(MonsterBehaviorType::STUPID);
         }
     }
 
@@ -140,7 +140,7 @@ bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_
     do_move_body &= (monrace_from.mexp > monrace_to.mexp);
     do_move_body &= can_cross;
     do_move_body &= !monster_to.is_riding();
-    do_move_body &= monster_can_cross_terrain(player_ptr, player_ptr->current_floor_ptr->grid_array[monster_from.fy][monster_from.fx].feat, &monrace_to, 0);
+    do_move_body &= monster_can_cross_terrain(player_ptr, player_ptr->current_floor_ptr->grid_array[monster_from.fy][monster_from.fx].feat, monrace_to, 0);
     if (do_move_body) {
         turn_flags_ptr->do_move = true;
         turn_flags_ptr->did_move_body = true;
