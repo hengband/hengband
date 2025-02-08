@@ -37,6 +37,7 @@
 #include "util/string-processor.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <sstream>
 
 ItemEntity::ItemEntity()
@@ -949,7 +950,8 @@ bool ItemEntity::has_monrace() const
 const MonraceDefinition &ItemEntity::get_monrace() const
 {
     if (!this->has_monrace()) {
-        THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
+        const auto msg = fmt::format("This item is not related to monrace!: {}", this->build_item_info_for_debug());
+        THROW_EXCEPTION(std::logic_error, msg);
     }
 
     const auto monrace_id = this->get_monrace_id();
@@ -1226,7 +1228,8 @@ int ItemEntity::get_baseitem_cost() const
 MonraceId ItemEntity::get_monrace_id() const
 {
     if (!this->has_monrace()) {
-        THROW_EXCEPTION(std::logic_error, "This item is not related to monrace!");
+        const auto msg = fmt::format("This item is not related to monrace!: {}", this->build_item_info_for_debug());
+        THROW_EXCEPTION(std::logic_error, msg);
     }
 
     return i2enum<MonraceId>(this->pval);
@@ -1578,4 +1581,10 @@ char ItemEntity::get_character() const
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
     return flavor ? BaseitemList::get_instance().get_baseitem(flavor).symbol_config.character : baseitem.symbol_config.character;
+}
+
+std::string ItemEntity::build_item_info_for_debug() const
+{
+    // とりあえず例外送出の原因となる可能性のあるフィールドのみ出力
+    return fmt::format("tval = {}, sval = {}, pval = {}", enum2i(this->bi_key.tval()), this->bi_key.sval().value_or(-1), this->pval);
 }
