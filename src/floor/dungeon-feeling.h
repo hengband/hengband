@@ -3,6 +3,10 @@
 #include <string_view>
 #include <vector>
 
-extern const std::vector<std::string_view> do_cmd_feeling_text;
-extern const std::vector<std::string_view> do_cmd_feeling_text_combat;
-extern const std::vector<std::string_view> do_cmd_feeling_text_lucky;
+class DungeonFeeling {
+public:
+    DungeonFeeling() = default;
+    std::string_view get_feeling_normal(int feeling) const;
+    std::string_view get_feeling_combat(int feeling) const;
+    std::string_view get_feeling_lucky(int feeling) const;
+};

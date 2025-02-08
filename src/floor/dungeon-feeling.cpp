@@ -7,7 +7,8 @@
 #include "floor/dungeon-feeling.h"
 #include "locale/language-switcher.h"
 
-const std::vector<std::string_view> do_cmd_feeling_text = {
+namespace {
+const std::vector<std::string_view> FEELING_TEXTS_NORMAL = {
     _("この階の雰囲気を感じとれなかった...", "Looks like any other level."),
     _("この階には何か特別なものがあるような気がする。", "You feel there is something special about this level."),
     _("恐ろしい死の幻が目に浮かび、気絶しそうになった！", "You nearly faint as horrible visions of death fill your mind!"),
@@ -21,7 +22,7 @@ const std::vector<std::string_view> do_cmd_feeling_text = {
     _("なんて退屈なところだ...", "What a boring place...")
 };
 
-const std::vector<std::string_view> do_cmd_feeling_text_combat = {
+const std::vector<std::string_view> FEELING_TEXTS_COMBAT = {
     _("この階の雰囲気を感じとれなかった...", "Looks like any other level."),
     _("この階には何か特別なものがあるような気がする。", "You feel there is something special about this level."),
     _("今夜もまた、誰かが命を落とす...", "You nearly faint as horrible visions of death fill your mind!"),
@@ -35,7 +36,7 @@ const std::vector<std::string_view> do_cmd_feeling_text_combat = {
     _("なんて退屈なところだ...", "What a boring place...")
 };
 
-const std::vector<std::string_view> do_cmd_feeling_text_lucky = {
+const std::vector<std::string_view> FEELING_TEXTS_LUCKY = {
     _("この階の雰囲気を感じとれなかった...", "Looks like any other level."),
     _("この階には何か特別なものがあるような気がする。", "You feel there is something special about this level."),
     _("この階はこの上なく素晴らしい感じがする。", "You have a superb feeling about this level."),
@@ -48,3 +49,19 @@ const std::vector<std::string_view> do_cmd_feeling_text_lucky = {
     _("全然駄目ということはないが...", "This level can't be all bad..."),
     _("なんて退屈なところだ...", "What a boring place...")
 };
+}
+
+std::string_view DungeonFeeling::get_feeling_normal(int feeling) const
+{
+    return FEELING_TEXTS_NORMAL[feeling];
+}
+
+std::string_view DungeonFeeling::get_feeling_combat(int feeling) const
+{
+    return FEELING_TEXTS_COMBAT[feeling];
+}
+
+std::string_view DungeonFeeling::get_feeling_lucky(int feeling) const
+{
+    return FEELING_TEXTS_LUCKY[feeling];
+}
