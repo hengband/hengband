@@ -125,19 +125,18 @@ static int rating_boost(int delta)
 }
 
 /*!
- * @brief ダンジョンの雰囲気を算出する。
- * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
+ * @brief ダンジョンの雰囲気を算出する
+ * @param floor フロアへの参照
  * @return 算出されたダンジョンの雰囲気ランク
  */
-static byte get_dungeon_feeling(PlayerType *player_ptr)
+static int get_dungeon_feeling(const auto &floor)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
     if (!floor.is_underground()) {
         return 0;
     }
 
-    const int base = 10;
-    int rating = 0;
+    const auto base = 10;
+    auto rating = 0;
     for (short i = 1; i < floor.m_max; i++) {
         const auto &monster = floor.m_list[i];
         auto delta = 0;
@@ -299,7 +298,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
 
     auto dungeon_quest = (quest_id == QuestId::OBERON);
     dungeon_quest |= (quest_id == QuestId::SERPENT);
-    dungeon_quest |= !(quests.get_quest(quest_id).flags & QUEST_FLAG_PRESET);
+    dungeon_quest |= none_bits(quests.get_quest(quest_id).flags, QUEST_FLAG_PRESET);
 
     auto feeling_quest = inside_quest(quest_id);
     feeling_quest &= QuestType::is_fixed(quest_id);
@@ -307,7 +306,8 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     if (feeling_quest) {
         return;
     }
-    byte new_feeling = get_dungeon_feeling(player_ptr);
+
+    const auto new_feeling = get_dungeon_feeling(floor);
     df.set_turns(world.game_turn);
     if (df.get_feeling() == new_feeling) {
         return;
