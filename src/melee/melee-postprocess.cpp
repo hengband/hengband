@@ -57,7 +57,7 @@ mam_pp_type::mam_pp_type(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, boo
 {
     this->seen = is_seen(player_ptr, this->m_ptr);
     this->known = this->m_ptr->cdis <= MAX_PLAYER_SIGHT;
-    this->m_name = monster_desc(player_ptr, m_ptr, 0);
+    this->m_name = monster_desc(player_ptr, this->m_ptr, 0);
 }
 
 static void prepare_redraw(mam_pp_type *mam_pp_ptr)

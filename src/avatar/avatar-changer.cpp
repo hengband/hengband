@@ -35,7 +35,7 @@ void AvatarChanger::change_virtue()
     this->change_virtue_non_beginner();
     this->change_virtue_unique();
     const auto &r_ref = this->m_ptr->get_real_monrace();
-    if (m_ptr->r_idx == MonraceId::BEGGAR || m_ptr->r_idx == MonraceId::LEPER) {
+    if (this->m_ptr->r_idx == MonraceId::BEGGAR || this->m_ptr->r_idx == MonraceId::LEPER) {
         chg_virtue(this->player_ptr, Virtue::COMPASSION, -1);
     }
 
@@ -86,7 +86,7 @@ void AvatarChanger::change_virtue_non_beginner()
  */
 void AvatarChanger::change_virtue_unique()
 {
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monrace = this->m_ptr->get_monrace();
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
@@ -112,7 +112,7 @@ void AvatarChanger::change_virtue_unique()
 void AvatarChanger::change_virtue_good_evil()
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monrace = this->m_ptr->get_monrace();
     if (monrace.kind_flags.has(MonsterKindType::GOOD) && ((monrace.level) / 10 + (3 * floor.dun_level) >= randint1(100))) {
         chg_virtue(this->player_ptr, Virtue::UNLIFE, 1);
     }
@@ -143,7 +143,7 @@ void AvatarChanger::change_virtue_good_evil()
 void AvatarChanger::change_virtue_revenge()
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monrace = this->m_ptr->get_monrace();
     if (monrace.r_deaths == 0) {
         return;
     }
@@ -164,7 +164,7 @@ void AvatarChanger::change_virtue_revenge()
 void AvatarChanger::change_virtue_wild_thief()
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monrace = this->m_ptr->get_monrace();
     auto innocent = true;
     auto thief = false;
     for (const auto &blow : monrace.blows) {
@@ -204,7 +204,7 @@ void AvatarChanger::change_virtue_wild_thief()
  */
 void AvatarChanger::change_virtue_good_animal()
 {
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monrace = this->m_ptr->get_monrace();
     auto magic_ability_flags = monrace.ability_flags;
     magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
     if (monrace.kind_flags.has_not(MonsterKindType::ANIMAL) || monrace.kind_flags.has(MonsterKindType::EVIL) || magic_ability_flags.any()) {
