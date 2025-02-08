@@ -14,7 +14,6 @@
 #include "save/save.h"
 #include "core/object-compressor.h"
 #include "dungeon/quest.h"
-#include "floor/wild.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/report.h"
@@ -37,6 +36,7 @@
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
@@ -153,15 +153,18 @@ static bool wr_savefile_new(PlayerType *player_ptr)
         wr_byte((byte)quest.dungeon);
     }
 
-    wr_s32b(player_ptr->wilderness_x);
-    wr_s32b(player_ptr->wilderness_y);
+    const auto &wilderness = WildernessGrids::get_instance();
+    const auto &pos = wilderness.get_player_position();
+    wr_s32b(pos.x);
+    wr_s32b(pos.y);
     wr_bool(world.is_wild_mode());
     wr_bool(player_ptr->ambush_flag);
-    wr_s32b(world.max_wild_x);
-    wr_s32b(world.max_wild_y);
-    for (int i = 0; i < world.max_wild_x; i++) {
-        for (int j = 0; j < world.max_wild_y; j++) {
-            wr_u32b(wilderness[j][i].seed);
+    const auto &bottom_right = wilderness.get_bottom_right();
+    wr_s32b(bottom_right.x);
+    wr_s32b(bottom_right.y);
+    for (auto x = 0; x < bottom_right.x; x++) {
+        for (auto y = 0; y < bottom_right.y; y++) {
+            wr_u32b(wilderness.get_grid({ y, x }).seed);
         }
     }
 

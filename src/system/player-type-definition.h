@@ -66,9 +66,6 @@ public:
 
     int16_t town_num{}; /* Current town number */
 
-    POSITION wilderness_x{}; /* Coordinates in the wilderness */
-    POSITION wilderness_y{};
-
     int mhp{}; /* Max hit pts */
     int chp{}; /* Cur hit pts */
     uint32_t chp_frac{}; /* Cur hit frac (times 2^16) */

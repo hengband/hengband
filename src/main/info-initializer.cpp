@@ -32,6 +32,7 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
@@ -41,7 +42,6 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include "world/world.h"
 #include <fstream>
 #include <functional>
 #include <string>
@@ -264,7 +264,7 @@ void init_vaults_info()
 
 static bool read_wilderness_definition(std::ifstream &ifs)
 {
-    auto &world = AngbandWorld::get_instance();
+    auto &wilderness = WildernessGrids::get_instance();
     std::string line;
     while (!ifs.eof()) {
         if (!std::getline(ifs, line)) {
@@ -281,15 +281,15 @@ static bool read_wilderness_definition(std::ifstream &ifs)
         }
 
         if (splits[1] == "WX") {
-            world.max_wild_x = std::stoi(splits[2]);
+            wilderness.init_width(std::stoi(splits[2]));
         } else if (splits[1] == "WY") {
-            world.max_wild_y = std::stoi(splits[2]);
+            wilderness.init_height(std::stoi(splits[2]));
         } else {
             return false;
         }
 
-        if ((world.max_wild_x > 0) && (world.max_wild_y > 0)) {
-            wilderness.assign(world.max_wild_y, std::vector<WildernessGrid>(world.max_wild_x));
+        if (wilderness.is_height_initialized() && wilderness.is_width_initialized()) {
+            wilderness.initialize_grids();
             init_wilderness_encounter();
             return true;
         }

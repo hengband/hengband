@@ -2553,6 +2553,9 @@
     <ClCompile Include="..\..\src\external-lib\fmt\format.cc">
       <Filter>external-lib\fmt</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\floor\wilderness-grid.cpp">
+      <Filter>system\floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5540,6 +5543,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\enums\terrain\wilderness-terrain.h">
       <Filter>system\enums\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\floor\wilderness-grid.h">
+      <Filter>system\floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

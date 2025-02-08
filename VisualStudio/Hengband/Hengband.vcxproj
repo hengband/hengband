@@ -295,6 +295,7 @@
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
     <ClCompile Include="..\..\src\external-lib\fmt\format.cc" />
+    <ClCompile Include="..\..\src\system\floor\wilderness-grid.cpp" />
     <ClCompile Include="..\..\src\system\services\dungeon-monrace-service.cpp" />
     <ClCompile Include="..\..\src\system\services\dungeon-service.cpp" />
     <ClCompile Include="..\..\src\system\floor\floor-list.cpp" />
@@ -1018,6 +1019,7 @@
     <ClInclude Include="..\..\src\external-lib\include-json.h" />
     <ClInclude Include="..\..\src\system\enums\terrain\terrain-kind.h" />
     <ClInclude Include="..\..\src\system\enums\terrain\wilderness-terrain.h" />
+    <ClInclude Include="..\..\src\system\floor\wilderness-grid.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-monrace-service.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-service.h" />
     <ClInclude Include="..\..\src\system\enums\dungeon\dungeon-id.h" />

@@ -1,6 +1,5 @@
 #include "monster-floor/monster-summon.h"
 #include "floor/geometry.h"
-#include "floor/wild.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-generator.h"
@@ -9,6 +8,7 @@
 #include "monster/monster-util.h"
 #include "spell/summon-types.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -24,24 +24,6 @@ static bool is_dead_summoning(summon_type type)
     summoning |= type == SUMMON_DAWN;
     summoning |= type == SUMMON_TOTEM_MOAI;
     return summoning;
-}
-
-/*!
- * @brief 荒野のレベルを含めた階層レベルを返す
- * @param player_ptr プレイヤーへの参照ポインタ
- * @return 階層レベル
- * @details
- * ダンジョン及びクエストはdun_level>0となる。
- * 荒野はdun_level==0なので、その場合荒野レベルを返す。
- */
-DEPTH get_dungeon_or_wilderness_level(PlayerType *player_ptr)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.is_underground()) {
-        return floor.dun_level;
-    }
-
-    return wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
 }
 
 /*!
@@ -67,11 +49,11 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
         return std::nullopt;
     }
 
-    const auto hook = get_monster_hook2(player_ptr, pos->y, pos->x);
+    const auto hook = floor.get_monrace_hook_terrain_at(*pos);
     SummonCondition condition(type, mode, summoner_m_idx, hook);
     get_mon_num_prep_summon(player_ptr, condition);
 
-    DEPTH dlev = get_dungeon_or_wilderness_level(player_ptr);
+    const auto dlev = floor.is_underground() ? floor.get_level() : WildernessGrids::get_instance().get_player_grid().get_level();
     const auto r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
     if (!MonraceList::is_valid(r_idx)) {
         return std::nullopt;

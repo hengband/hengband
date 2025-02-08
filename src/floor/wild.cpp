@@ -36,6 +36,7 @@
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -50,8 +51,6 @@
 #include <utility>
 
 constexpr auto SUM_TERRAIN_PROBABILITIES = 18;
-
-std::vector<std::vector<WildernessGrid>> wilderness;
 
 bool reinit_wilderness = false;
 
@@ -276,10 +275,10 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
  */
 static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_border, bool is_corner)
 {
-    const auto &wilderness_grid = wilderness[pos.y][pos.x];
-    player_ptr->town_num = wilderness_grid.town;
+    const auto &wg = WildernessGrids::get_instance().get_grid(pos);
+    player_ptr->town_num = wg.town;
     auto &floor = *player_ptr->current_floor_ptr;
-    floor.base_level = wilderness_grid.level;
+    floor.base_level = wg.level;
     floor.dun_level = 0;
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
@@ -296,16 +295,16 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
             player_ptr->visit |= (1UL << (player_ptr->town_num - 1));
         }
     } else {
-        const auto terrain = wilderness_grid.terrain;
-        const auto seed = wilderness_grid.seed;
+        const auto terrain = wg.terrain;
+        const auto seed = wg.seed;
         generate_wilderness_area(floor, terrain, seed, is_corner);
     }
 
-    if (!is_corner && (wilderness_grid.town == 0)) {
+    if (!is_corner && (wg.town == 0)) {
         //!< @todo make the road a bit more interresting.
-        if (wilderness_grid.road) {
+        if (wg.road) {
             floor.get_grid({ MAX_HGT / 2, MAX_WID / 2 }).set_terrain_id(TerrainTag::FLOOR);
-            if (wilderness[pos.y - 1][pos.x].road) {
+            if (wilderness_grids[pos.y - 1][pos.x].road) {
                 /* North road */
                 for (auto y = 1; y < MAX_HGT / 2; y++) {
                     const Pos2D pos_road(y, MAX_WID / 2);
@@ -313,7 +312,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
                 }
             }
 
-            if (wilderness[pos.y + 1][pos.x].road) {
+            if (wilderness_grids[pos.y + 1][pos.x].road) {
                 /* North road */
                 for (auto y = MAX_HGT / 2; y < MAX_HGT - 1; y++) {
                     const Pos2D pos_road(y, MAX_WID / 2);
@@ -321,7 +320,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
                 }
             }
 
-            if (wilderness[pos.y][pos.x + 1].road) {
+            if (wilderness_grids[pos.y][pos.x + 1].road) {
                 /* East road */
                 for (auto x = MAX_WID / 2; x < MAX_WID - 1; x++) {
                     const Pos2D pos_road(MAX_HGT / 2, x);
@@ -329,7 +328,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
                 }
             }
 
-            if (wilderness[pos.y][pos.x - 1].road) {
+            if (wilderness_grids[pos.y][pos.x - 1].road) {
                 /* West road */
                 for (auto x = 1; x < MAX_WID / 2; x++) {
                     const Pos2D pos_road(MAX_HGT / 2, x);
@@ -339,9 +338,9 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
         }
     }
 
-    const auto entrance = wilderness_grid.entrance;
+    const auto entrance = wg.entrance;
     auto is_winner = entrance > DungeonId::WILDERNESS;
-    is_winner &= (wilderness_grid.town == 0);
+    is_winner &= (wg.town == 0);
     auto is_wild_winner = DungeonList::get_instance().get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER);
     is_winner &= ((AngbandWorld::get_instance().total_winner != 0) || is_wild_winner);
     if (!is_winner) {
@@ -350,11 +349,11 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
 
     auto &system = AngbandSystem::get_instance();
     const Xoshiro128StarStar rng_backup = system.get_rng();
-    Xoshiro128StarStar wilderness_rng(wilderness_grid.seed);
+    Xoshiro128StarStar wilderness_rng(wg.seed);
     system.set_rng(wilderness_rng);
     const Pos2D pos_entrance(rand_range(6, floor.height - 6), rand_range(6, floor.width - 6));
     floor.get_grid(pos_entrance).set_terrain_id(TerrainTag::ENTRANCE);
-    floor.get_grid(pos_entrance).special = static_cast<short>(wilderness_grid.entrance);
+    floor.get_grid(pos_entrance).special = static_cast<short>(wg.entrance);
     system.set_rng(rng_backup);
 }
 
@@ -393,11 +392,14 @@ void wilderness_gen(PlayerType *player_ptr)
     floor.width = MAX_WID;
     panel_row_min = floor.height;
     panel_col_min = floor.width;
-    auto &world = AngbandWorld::get_instance();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
-    const auto wild_y = player_ptr->wilderness_y;
-    const auto wild_x = player_ptr->wilderness_x;
-    get_mon_num_prep_enum(player_ptr, get_monster_hook({ wild_y, wild_x }, floor.is_underground()));
+    const auto &wilderness = WildernessGrids::get_instance();
+    const auto &bottom_right = wilderness.get_bottom_right();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, bottom_right.y, bottom_right.x);
+
+    const auto &pos_wilderness = wilderness.get_player_position();
+    const auto wild_y = pos_wilderness.y;
+    const auto wild_x = pos_wilderness.x;
+    get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook());
 
     /* North border */
     generate_area(player_ptr, { wild_y - 1, wild_x }, true, false);
@@ -474,6 +476,7 @@ void wilderness_gen(PlayerType *player_ptr)
     floor.get_grid({ 0, MAX_WID - 1 }).mimic = border.top_right;
     floor.get_grid({ MAX_HGT - 1, 0 }).mimic = border.bottom_left;
     floor.get_grid({ MAX_HGT - 1, MAX_WID - 1 }).mimic = border.bottom_right;
+    const auto &world = AngbandWorld::get_instance();
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
             auto &grid = floor.get_grid({ y, x });
@@ -582,40 +585,39 @@ void wilderness_gen_small(PlayerType *player_ptr)
 
     const auto &dungeons = DungeonList::get_instance();
     const auto &world = AngbandWorld::get_instance();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
-    for (auto x = 0; x < world.max_wild_x; x++) {
-        for (auto y = 0; y < world.max_wild_y; y++) {
-            const Pos2D pos(y, x);
-            auto &grid = floor.get_grid(pos);
-            auto &wild_grid = wilderness[y][x];
-            if (wild_grid.town && (wild_grid.town != VALID_TOWNS)) {
-                grid.set_terrain_id(TerrainTag::TOWN);
-                grid.special = wild_grid.town;
-                grid.info |= (CAVE_GLOW | CAVE_MARK);
-                continue;
-            }
-
-            if (wild_grid.road) {
-                grid.set_terrain_id(TerrainTag::FLOOR);
-                grid.info |= (CAVE_GLOW | CAVE_MARK);
-                continue;
-            }
-
-            const auto entrance = wild_grid.entrance;
-            if ((entrance > DungeonId::WILDERNESS) && (world.total_winner || dungeons.get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER))) {
-                grid.set_terrain_id(TerrainTag::ENTRANCE);
-                grid.special = static_cast<short>(entrance);
-                grid.info |= (CAVE_GLOW | CAVE_MARK);
-                continue;
-            }
-
-            grid.set_terrain_id(WT_TT_MAP.at(wild_grid.terrain));
+    const auto &wilderness = WildernessGrids::get_instance();
+    const auto &bottom_right = wilderness.get_bottom_right();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, bottom_right.y, bottom_right.x);
+    for (const auto &pos : wilderness.get_positions()) {
+        auto &grid = floor.get_grid(pos);
+        const auto &wg = wilderness.get_grid(pos);
+        if (wg.town && (wg.town != VALID_TOWNS)) {
+            grid.set_terrain_id(TerrainTag::TOWN);
+            grid.special = wg.town;
             grid.info |= (CAVE_GLOW | CAVE_MARK);
+            continue;
         }
+
+        if (wg.road) {
+            grid.set_terrain_id(TerrainTag::FLOOR);
+            grid.info |= (CAVE_GLOW | CAVE_MARK);
+            continue;
+        }
+
+        const auto entrance = wg.entrance;
+        if ((entrance > DungeonId::WILDERNESS) && (world.total_winner || dungeons.get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER))) {
+            grid.set_terrain_id(TerrainTag::ENTRANCE);
+            grid.special = static_cast<short>(entrance);
+            grid.info |= (CAVE_GLOW | CAVE_MARK);
+            continue;
+        }
+
+        grid.set_terrain_id(WT_TT_MAP.at(wg.terrain));
+        grid.info |= (CAVE_GLOW | CAVE_MARK);
     }
 
-    floor.height = (int16_t)world.max_wild_y;
-    floor.width = (int16_t)world.max_wild_x;
+    floor.height = bottom_right.y;
+    floor.width = bottom_right.x;
     if (floor.height > MAX_HGT) {
         floor.height = MAX_HGT;
     }
@@ -626,8 +628,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
 
     panel_row_min = floor.height;
     panel_col_min = floor.width;
-    player_ptr->x = player_ptr->wilderness_x;
-    player_ptr->y = player_ptr->wilderness_y;
+    player_ptr->set_position(wilderness.get_player_position());
     player_ptr->town_num = 0;
 }
 
@@ -639,7 +640,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
  * @param pos_parsing 解析対象の座標
  * @return エラーコードと座標のペア。エラー時は座標は無効値。Dタグの時だけ更新の可能性があり、それ以外はpos_parsingをそのまま返却
  */
-std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerType *player_ptr, char *line, int xmin, int xmax, const Pos2D &pos_parsing)
+std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *line, int xmin, int xmax, const Pos2D &pos_parsing)
 {
     if (wilderness_letters.empty()) {
         wilderness_letters.resize(TerrainList::get_instance().size());
@@ -711,7 +712,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
         int len = strlen(s);
         for (auto i = 0; ((pos.x < xmax) && (i < len)); pos.x++, s++, i++) {
             int id = s[0];
-            auto &wg = wilderness[pos.y][pos.x];
+            auto &wg = WildernessGrids::get_instance().get_grid(pos);
             const auto &letter = wilderness_letters.at(id);
             wg.terrain = letter.terrain;
             wg.level = letter.level;
@@ -726,9 +727,8 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
 
     /* Process "W:P:<x>:<y> - starting position in the wilderness */
     case 'P': {
-        auto has_player_located = player_ptr->wilderness_x > 0;
-        has_player_located &= player_ptr->wilderness_y > 0;
-        if (has_player_located) {
+        auto &wilderness = WildernessGrids::get_instance();
+        if (wilderness.has_player_located()) {
             break;
         }
 
@@ -737,15 +737,8 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
             return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
         }
 
-        player_ptr->wilderness_y = std::stoi(zz[0]);
-        player_ptr->wilderness_x = std::stoi(zz[1]);
-
-        auto out_of_bounds = (player_ptr->wilderness_x < 1);
-        const auto &world = AngbandWorld::get_instance();
-        out_of_bounds |= (player_ptr->wilderness_x > world.max_wild_x);
-        out_of_bounds |= (player_ptr->wilderness_y < 1);
-        out_of_bounds |= (player_ptr->wilderness_y > world.max_wild_y);
-        if (out_of_bounds) {
+        wilderness.set_player_position({ std::stoi(zz[0]), std::stoi(zz[1]) });
+        if (!wilderness.is_player_in_bounds()) {
             return { PARSE_ERROR_OUT_OF_BOUNDS, std::nullopt };
         }
 
@@ -760,28 +753,13 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(PlayerTy
             continue;
         }
 
-        wilderness[dungeon->dy][dungeon->dx].entrance = dungeon_id;
-        if (!wilderness[dungeon->dy][dungeon->dx].town) {
-            wilderness[dungeon->dy][dungeon->dx].level = dungeon->mindepth;
+        wilderness_grids[dungeon->dy][dungeon->dx].entrance = dungeon_id;
+        if (!wilderness_grids[dungeon->dy][dungeon->dx].town) {
+            wilderness_grids[dungeon->dy][dungeon->dx].level = dungeon->mindepth;
         }
     }
 
     return { PARSE_ERROR_NONE, pos };
-}
-
-/*!
- * @brief ゲーム開始時に各荒野フロアの乱数シードを指定する /
- * Generate the random seeds for the wilderness
- */
-void seed_wilderness()
-{
-    const auto &world = AngbandWorld::get_instance();
-    for (auto x = 0; x < world.max_wild_x; x++) {
-        for (auto y = 0; y < world.max_wild_y; y++) {
-            wilderness[y][x].seed = randint0(0x10000000);
-            wilderness[y][x].entrance = DungeonId::WILDERNESS;
-        }
-    }
 }
 
 /*!
@@ -847,9 +825,9 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
     }
 
     auto &world = AngbandWorld::get_instance();
+    auto &wilderness = WildernessGrids::get_instance();
     if (world.is_wild_mode()) {
-        player_ptr->wilderness_x = player_ptr->x;
-        player_ptr->wilderness_y = player_ptr->y;
+        wilderness.set_player_position(player_ptr->get_position());
         player_ptr->energy_need = 0;
         world.set_wild_mode(false);
         player_ptr->leaving = true;

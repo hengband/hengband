@@ -25,6 +25,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
@@ -360,8 +361,7 @@ static void exit_to_wilderness(PlayerType *player_ptr)
     floor.leave_dungeon(true);
     if (!vanilla_town && !lite_town) {
         const auto &dungeon = floor.get_dungeon_definition();
-        player_ptr->wilderness_y = dungeon.dy;
-        player_ptr->wilderness_x = dungeon.dx;
+        WildernessGrids::get_instance().set_player_position({ dungeon.dy, dungeon.dx });
     }
 
     player_ptr->recall_dungeon = floor.dungeon_id;

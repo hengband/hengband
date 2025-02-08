@@ -59,6 +59,7 @@
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
@@ -802,9 +803,9 @@ void cheat_death(PlayerType *player_ptr)
     }
 
     floor.reset_dungeon_index();
+    auto &wilderness = WildernessGrids::get_instance();
     if (lite_town || vanilla_town) {
-        player_ptr->wilderness_y = 1;
-        player_ptr->wilderness_x = 1;
+        wilderness.set_player_position({ 1, 1 });
         if (vanilla_town) {
             player_ptr->oldpy = 10;
             player_ptr->oldpx = 34;
@@ -813,8 +814,7 @@ void cheat_death(PlayerType *player_ptr)
             player_ptr->oldpx = 131;
         }
     } else {
-        player_ptr->wilderness_y = 48;
-        player_ptr->wilderness_x = 5;
+        wilderness.initialize_position();
         player_ptr->oldpy = 33;
         player_ptr->oldpx = 131;
     }

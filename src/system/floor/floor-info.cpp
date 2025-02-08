@@ -16,6 +16,8 @@
 #include "system/enums/monrace/monrace-hook-types.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-tag.h"
+#include "system/enums/terrain/wilderness-terrain.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -39,6 +41,11 @@ FloorType::FloorType()
         this->mproc_list[mte] = std::vector<short>(MAX_FLOOR_MONSTERS, {});
         this->mproc_max[mte] = 0;
     }
+}
+
+int FloorType::get_level() const
+{
+    return this->dun_level;
 }
 
 Grid &FloorType::get_grid(const Pos2D pos)
@@ -395,6 +402,55 @@ TerrainTag FloorType::select_random_trap() const
 
         return tag;
     }
+}
+
+MonraceHook FloorType::get_monrace_hook() const
+{
+    if (this->is_underground()) {
+        return MonraceHook::DUNGEON;
+    }
+
+    switch (WildernessGrids::get_instance().get_player_grid().terrain) {
+    case WildernessTerrain::TOWN:
+        return MonraceHook::TOWN;
+    case WildernessTerrain::DEEP_WATER:
+        return MonraceHook::OCEAN;
+    case WildernessTerrain::SHALLOW_WATER:
+    case WildernessTerrain::SWAMP:
+        return MonraceHook::SHORE;
+    case WildernessTerrain::DIRT:
+    case WildernessTerrain::DESERT:
+        return MonraceHook::WASTE;
+    case WildernessTerrain::GRASS:
+        return MonraceHook::GRASS;
+    case WildernessTerrain::TREES:
+        return MonraceHook::WOOD;
+    case WildernessTerrain::SHALLOW_LAVA:
+    case WildernessTerrain::DEEP_LAVA:
+        return MonraceHook::VOLCANO;
+    case WildernessTerrain::MOUNTAIN:
+        return MonraceHook::MOUNTAIN;
+    default:
+        return MonraceHook::DUNGEON;
+    }
+}
+
+/*!
+ * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
+ * @return 地勢にあったモンスターの生成条件関数
+ */
+MonraceHookTerrain FloorType::get_monrace_hook_terrain_at(const Pos2D &pos) const
+{
+    const auto &terrain = this->get_grid(pos).get_terrain();
+    if (terrain.flags.has(TerrainCharacteristics::WATER)) {
+        return terrain.flags.has(TerrainCharacteristics::DEEP) ? MonraceHookTerrain::DEEP_WATER : MonraceHookTerrain::SHALLOW_WATER;
+    }
+
+    if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
+        return MonraceHookTerrain::LAVA;
+    }
+
+    return MonraceHookTerrain::FLOOR;
 }
 
 void FloorType::enter_dungeon(bool state)
