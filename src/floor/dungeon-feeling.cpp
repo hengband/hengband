@@ -68,6 +68,21 @@ void DungeonFeeling::set_feeling(int new_feeling)
     this->feeling = new_feeling;
 }
 
+int DungeonFeeling::get_turns() const
+{
+    return this->turns;
+}
+
+void DungeonFeeling::set_turns(int new_turns)
+{
+    this->turns = new_turns;
+}
+
+void DungeonFeeling::mod_turns(int diff)
+{
+    this->turns += diff;
+}
+
 std::string_view DungeonFeeling::get_feeling_normal() const
 {
     return FEELING_TEXTS_NORMAL[this->feeling];

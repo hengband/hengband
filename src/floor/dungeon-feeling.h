@@ -14,6 +14,9 @@ public:
 
     int get_feeling() const;
     void set_feeling(int new_feeling);
+    int get_turns() const;
+    void set_turns(int new_turns);
+    void mod_turns(int diff);
     std::string_view get_feeling_normal() const;
     std::string_view get_feeling_combat() const;
     std::string_view get_feeling_lucky() const;
@@ -23,4 +26,5 @@ private:
     static DungeonFeeling instance;
 
     int feeling = 0;
+    int turns = 0;
 };

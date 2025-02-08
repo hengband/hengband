@@ -103,11 +103,13 @@ static void rd_world_info(PlayerType *player_ptr)
     igd.init_turn_limit();
     auto &world = AngbandWorld::get_instance();
     world.dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-    player_ptr->current_floor_ptr->generated_turn = rd_s32b();
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.generated_turn = rd_s32b();
+    auto &df = DungeonFeeling::get_instance();
     if (h_older_than(1, 7, 0, 4)) {
-        player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
+        df.set_feeling(floor.generated_turn);
     } else {
-        player_ptr->feeling_turn = rd_s32b();
+        df.set_feeling(rd_s32b());
     }
 
     world.game_turn = rd_s32b();

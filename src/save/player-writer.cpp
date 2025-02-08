@@ -259,9 +259,10 @@ void wr_player(PlayerType *player_ptr)
     wr_u16b(world.total_winner);
     wr_u16b(world.noscore);
     wr_bool(player_ptr->is_dead);
-    wr_byte(static_cast<uint8_t>(DungeonFeeling::get_instance().get_feeling()));
+    const auto &df = DungeonFeeling::get_instance();
+    wr_byte(static_cast<uint8_t>(df.get_feeling()));
     wr_s32b(player_ptr->current_floor_ptr->generated_turn);
-    wr_s32b(player_ptr->feeling_turn);
+    wr_s32b(df.get_turns());
     wr_s32b(world.game_turn);
     wr_s32b(world.dungeon_turn);
     wr_s32b(world.arena_start_turn);

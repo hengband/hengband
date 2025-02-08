@@ -289,7 +289,8 @@ void update_dungeon_feeling(PlayerType *player_ptr)
 
     const auto delay = std::max(10, 150 - player_ptr->skill_fos) * (150 - floor.dun_level) * TURNS_PER_TICK / 100;
     const auto &world = AngbandWorld::get_instance();
-    if (world.game_turn < player_ptr->feeling_turn + delay && !cheat_xtra) {
+    auto &df = DungeonFeeling::get_instance();
+    if (world.game_turn < df.get_turns() + delay && !cheat_xtra) {
         return;
     }
 
@@ -307,13 +308,12 @@ void update_dungeon_feeling(PlayerType *player_ptr)
         return;
     }
     byte new_feeling = get_dungeon_feeling(player_ptr);
-    player_ptr->feeling_turn = world.game_turn;
-    auto &feeling = DungeonFeeling::get_instance();
-    if (feeling.get_feeling() == new_feeling) {
+    df.set_turns(world.game_turn);
+    if (df.get_feeling() == new_feeling) {
         return;
     }
 
-    DungeonFeeling::get_instance().set_feeling(new_feeling);
+    df.set_feeling(new_feeling);
     do_cmd_feeling(player_ptr);
     select_floor_music(player_ptr);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::DEPTH);
