@@ -54,7 +54,7 @@ void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
  * @return FALSEなら落馬しないことで確定、TRUEなら処理続行
  * @details レベルの低い乗馬からは落馬しにくい
  */
-static bool calc_fall_off_possibility(PlayerType *player_ptr, const int dam, const bool force, MonraceDefinition *r_ptr)
+static bool calc_fall_off_possibility(PlayerType *player_ptr, const int dam, const bool force, const MonraceDefinition &monrace)
 {
     if (force) {
         return true;
@@ -62,7 +62,7 @@ static bool calc_fall_off_possibility(PlayerType *player_ptr, const int dam, con
 
     auto cur = player_ptr->skill_exp[PlayerSkillKindType::RIDING];
 
-    int fall_off_level = r_ptr->level;
+    int fall_off_level = monrace.level;
     if (player_ptr->riding_ryoute) {
         fall_off_level += 20;
     }
@@ -92,14 +92,14 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     POSITION sx = 0;
     int sn = 0;
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = m_ptr->get_monrace();
 
     if (!player_ptr->riding || AngbandWorld::get_instance().is_wild_mode()) {
         return false;
     }
 
     if (dam >= 0 || force) {
-        if (!calc_fall_off_possibility(player_ptr, dam, force, r_ptr)) {
+        if (!calc_fall_off_possibility(player_ptr, dam, force, monrace)) {
             return false;
         }
 
@@ -140,7 +140,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         if (!sn) {
             const auto m_name = monster_desc(player_ptr, m_ptr, 0);
             msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s but bumped into a wall."), m_name.data());
-            take_hit(player_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("壁への衝突", "bumping into a wall"));
+            take_hit(player_ptr, DAMAGE_NOESCAPE, monrace.level + 3, _("壁への衝突", "bumping into a wall"));
             return false;
         }
 
@@ -183,7 +183,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         const auto m_name = monster_desc(player_ptr, m_ptr, 0);
         msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s but make a good landing."), m_name.data());
     } else {
-        take_hit(player_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("落馬", "Falling from riding"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, monrace.level + 3, _("落馬", "Falling from riding"));
         fall_dam = true;
     }
 

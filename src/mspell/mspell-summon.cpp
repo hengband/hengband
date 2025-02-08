@@ -578,10 +578,10 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
     summon_disturb(player_ptr, target_type, known, see_either);
 
     auto *m_ptr = &floor.m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monrace = m_ptr->get_monrace();
     int num = 1;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        num += r_ptr->level / 40;
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+        num += monrace.level / 40;
     }
 
     int count = 0;

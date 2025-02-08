@@ -116,12 +116,12 @@ void update_map_flags(turn_flags *turn_flags_ptr)
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param r_ptr モンスター種族への参照ポインタ
  */
-void update_lite_flags(turn_flags *turn_flags_ptr, MonraceDefinition *r_ptr)
+void update_lite_flags(turn_flags *turn_flags_ptr, const MonraceDefinition &monrace)
 {
     using Mbt = MonsterBrightnessType;
-    const auto has_lite = r_ptr->brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
+    const auto has_lite = monrace.brightness_flags.has_any_of({ Mbt::HAS_LITE_1, Mbt::HAS_LITE_2 });
     const auto except_has_lite = EnumClassFlagGroup<Mbt>(self_ld_mask).set({ Mbt::HAS_DARK_1, Mbt::HAS_DARK_2 });
-    if (turn_flags_ptr->do_move && (r_ptr->brightness_flags.has_any_of(except_has_lite) || (has_lite && !AngbandSystem::get_instance().is_phase_out()))) {
+    if (turn_flags_ptr->do_move && (monrace.brightness_flags.has_any_of(except_has_lite) || (has_lite && !AngbandSystem::get_instance().is_phase_out()))) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 }
@@ -134,37 +134,37 @@ void update_lite_flags(turn_flags *turn_flags_ptr, MonraceDefinition *r_ptr)
  */
 void update_monster_race_flags(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
     if (!is_original_ap_and_seen(player_ptr, m_ptr)) {
         return;
     }
 
     if (turn_flags_ptr->did_open_door) {
-        r_ptr->r_behavior_flags.set(MonsterBehaviorType::OPEN_DOOR);
+        monrace.r_behavior_flags.set(MonsterBehaviorType::OPEN_DOOR);
     }
 
     if (turn_flags_ptr->did_bash_door) {
-        r_ptr->r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
+        monrace.r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
     }
 
     if (turn_flags_ptr->did_take_item) {
-        r_ptr->r_behavior_flags.set(MonsterBehaviorType::TAKE_ITEM);
+        monrace.r_behavior_flags.set(MonsterBehaviorType::TAKE_ITEM);
     }
 
     if (turn_flags_ptr->did_kill_item) {
-        r_ptr->r_behavior_flags.set(MonsterBehaviorType::KILL_ITEM);
+        monrace.r_behavior_flags.set(MonsterBehaviorType::KILL_ITEM);
     }
 
     if (turn_flags_ptr->did_move_body) {
-        r_ptr->r_behavior_flags.set(MonsterBehaviorType::MOVE_BODY);
+        monrace.r_behavior_flags.set(MonsterBehaviorType::MOVE_BODY);
     }
 
     if (turn_flags_ptr->did_pass_wall) {
-        r_ptr->r_feature_flags.set(MonsterFeatureType::PASS_WALL);
+        monrace.r_feature_flags.set(MonsterFeatureType::PASS_WALL);
     }
 
     if (turn_flags_ptr->did_kill_wall) {
-        r_ptr->r_feature_flags.set(MonsterFeatureType::KILL_WALL);
+        monrace.r_feature_flags.set(MonsterFeatureType::KILL_WALL);
     }
 }
 
@@ -203,14 +203,14 @@ static POSITION decide_updated_distance(PlayerType *player_ptr, um_type *um_ptr)
     return distance;
 }
 
-static void update_smart_stupid_flags(MonraceDefinition *r_ptr)
+static void update_smart_stupid_flags(MonraceDefinition &monrace)
 {
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::SMART)) {
-        r_ptr->r_behavior_flags.set(MonsterBehaviorType::SMART);
+    if (monrace.behavior_flags.has(MonsterBehaviorType::SMART)) {
+        monrace.r_behavior_flags.set(MonsterBehaviorType::SMART);
     }
 
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) {
-        r_ptr->r_behavior_flags.set(MonsterBehaviorType::STUPID);
+    if (monrace.behavior_flags.has(MonsterBehaviorType::STUPID)) {
+        monrace.r_behavior_flags.set(MonsterBehaviorType::STUPID);
     }
 }
 
@@ -224,8 +224,8 @@ static void update_smart_stupid_flags(MonraceDefinition *r_ptr)
 static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = um_ptr->m_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->misc_flags.has_not(MonsterMiscType::WEIRD_MIND)) {
+    auto &monrace = m_ptr->get_monrace();
+    if (monrace.misc_flags.has_not(MonsterMiscType::WEIRD_MIND)) {
         return false;
     }
 
@@ -236,8 +236,8 @@ static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONS
     um_ptr->flag = true;
     m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
     if (m_ptr->is_original_ap() && !player_ptr->effects()->hallucination().is_hallucinated()) {
-        r_ptr->r_misc_flags.set(MonsterMiscType::WEIRD_MIND);
-        update_smart_stupid_flags(r_ptr);
+        monrace.r_misc_flags.set(MonsterMiscType::WEIRD_MIND);
+        update_smart_stupid_flags(monrace);
     }
 
     return true;
@@ -246,13 +246,13 @@ static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONS
 static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONSTER_IDX m_idx)
 {
     auto *m_ptr = um_ptr->m_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
     const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (um_ptr->m_ptr->is_original_ap() && !is_hallucinated) {
-            update_smart_stupid_flags(r_ptr);
+            update_smart_stupid_flags(monrace);
         }
 
         return;
@@ -262,9 +262,9 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
         return;
     }
 
-    if (r_ptr->misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
+    if (monrace.misc_flags.has(MonsterMiscType::EMPTY_MIND)) {
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_misc_flags.set(MonsterMiscType::EMPTY_MIND);
+            monrace.r_misc_flags.set(MonsterMiscType::EMPTY_MIND);
         }
 
         return;
@@ -277,108 +277,108 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
     um_ptr->flag = true;
     m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
     if (m_ptr->is_original_ap() && !is_hallucinated) {
-        update_smart_stupid_flags(r_ptr);
+        update_smart_stupid_flags(monrace);
     }
 }
 
 static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_ptr)
 {
     auto *m_ptr = um_ptr->m_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
     const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
-    if ((player_ptr->esp_animal) && r_ptr->kind_flags.has(MonsterKindType::ANIMAL)) {
+    if ((player_ptr->esp_animal) && monrace.kind_flags.has(MonsterKindType::ANIMAL)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::ANIMAL);
+            monrace.r_kind_flags.set(MonsterKindType::ANIMAL);
         }
     }
 
-    if ((player_ptr->esp_undead) && r_ptr->kind_flags.has(MonsterKindType::UNDEAD)) {
+    if ((player_ptr->esp_undead) && monrace.kind_flags.has(MonsterKindType::UNDEAD)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::UNDEAD);
+            monrace.r_kind_flags.set(MonsterKindType::UNDEAD);
         }
     }
 
-    if ((player_ptr->esp_demon) && r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
+    if ((player_ptr->esp_demon) && monrace.kind_flags.has(MonsterKindType::DEMON)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::DEMON);
+            monrace.r_kind_flags.set(MonsterKindType::DEMON);
         }
     }
 
-    if ((player_ptr->esp_orc) && r_ptr->kind_flags.has(MonsterKindType::ORC)) {
+    if ((player_ptr->esp_orc) && monrace.kind_flags.has(MonsterKindType::ORC)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::ORC);
+            monrace.r_kind_flags.set(MonsterKindType::ORC);
         }
     }
 
-    if ((player_ptr->esp_troll) && r_ptr->kind_flags.has(MonsterKindType::TROLL)) {
+    if ((player_ptr->esp_troll) && monrace.kind_flags.has(MonsterKindType::TROLL)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::TROLL);
+            monrace.r_kind_flags.set(MonsterKindType::TROLL);
         }
     }
 
-    if ((player_ptr->esp_giant) && r_ptr->kind_flags.has(MonsterKindType::GIANT)) {
+    if ((player_ptr->esp_giant) && monrace.kind_flags.has(MonsterKindType::GIANT)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::GIANT);
+            monrace.r_kind_flags.set(MonsterKindType::GIANT);
         }
     }
 
-    if ((player_ptr->esp_dragon) && r_ptr->kind_flags.has(MonsterKindType::DRAGON)) {
+    if ((player_ptr->esp_dragon) && monrace.kind_flags.has(MonsterKindType::DRAGON)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::DRAGON);
+            monrace.r_kind_flags.set(MonsterKindType::DRAGON);
         }
     }
 
-    if ((player_ptr->esp_human) && r_ptr->kind_flags.has(MonsterKindType::HUMAN)) {
+    if ((player_ptr->esp_human) && monrace.kind_flags.has(MonsterKindType::HUMAN)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::HUMAN);
+            monrace.r_kind_flags.set(MonsterKindType::HUMAN);
         }
     }
 
-    if ((player_ptr->esp_evil) && r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+    if ((player_ptr->esp_evil) && monrace.kind_flags.has(MonsterKindType::EVIL)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
+            monrace.r_kind_flags.set(MonsterKindType::EVIL);
         }
     }
 
-    if ((player_ptr->esp_good) && r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+    if ((player_ptr->esp_good) && monrace.kind_flags.has(MonsterKindType::GOOD)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
+            monrace.r_kind_flags.set(MonsterKindType::GOOD);
         }
     }
 
-    if ((player_ptr->esp_nonliving) && r_ptr->kind_flags.has(MonsterKindType::NONLIVING) && r_ptr->kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD })) {
+    if ((player_ptr->esp_nonliving) && monrace.kind_flags.has(MonsterKindType::NONLIVING) && monrace.kind_flags.has_none_of({ MonsterKindType::DEMON, MonsterKindType::UNDEAD })) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
+            monrace.r_kind_flags.set(MonsterKindType::NONLIVING);
         }
     }
 
-    if ((player_ptr->esp_unique) && r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    if ((player_ptr->esp_unique) && monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         um_ptr->flag = true;
         m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
         if (m_ptr->is_original_ap() && !is_hallucinated) {
-            r_ptr->r_kind_flags.set(MonsterKindType::UNIQUE);
+            monrace.r_kind_flags.set(MonsterKindType::UNIQUE);
         }
     }
 }
@@ -389,8 +389,8 @@ static bool check_cold_blood(PlayerType *player_ptr, um_type *um_ptr, const POSI
         return false;
     }
 
-    auto *r_ptr = &um_ptr->m_ptr->get_monrace();
-    if (r_ptr->misc_flags.has(MonsterMiscType::COLD_BLOOD) && r_ptr->aura_flags.has_not(MonsterAuraType::FIRE)) {
+    const auto &monrace = um_ptr->m_ptr->get_monrace();
+    if (monrace.misc_flags.has(MonsterMiscType::COLD_BLOOD) && monrace.aura_flags.has_not(MonsterAuraType::FIRE)) {
         return false;
     }
 
@@ -405,8 +405,8 @@ static bool check_invisible(PlayerType *player_ptr, um_type *um_ptr)
         return false;
     }
 
-    auto *r_ptr = &um_ptr->m_ptr->get_monrace();
-    if (r_ptr->misc_flags.has(MonsterMiscType::INVISIBLE)) {
+    const auto &monrace = um_ptr->m_ptr->get_monrace();
+    if (monrace.misc_flags.has(MonsterMiscType::INVISIBLE)) {
         if (player_ptr->see_inv) {
             um_ptr->easy = true;
             um_ptr->flag = true;
@@ -428,7 +428,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
 {
     POSITION distance = decide_updated_distance(player_ptr, um_ptr);
     auto *m_ptr = um_ptr->m_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
 
     m_ptr->mflag.reset(MonsterTemporaryFlagType::ESP);
 
@@ -458,11 +458,11 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
     }
 
     if (do_invisible) {
-        r_ptr->r_misc_flags.set(MonsterMiscType::INVISIBLE);
+        monrace.r_misc_flags.set(MonsterMiscType::INVISIBLE);
     }
 
     if (do_cold_blood) {
-        r_ptr->r_misc_flags.set(MonsterMiscType::COLD_BLOOD);
+        monrace.r_misc_flags.set(MonsterMiscType::COLD_BLOOD);
     }
 }
 
@@ -614,8 +614,8 @@ void update_monsters(PlayerType *player_ptr, bool full)
 void update_smart_learn(PlayerType *player_ptr, MONSTER_IDX m_idx, int what)
 {
     auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (!smart_learn || (r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID)) || ((r_ptr->behavior_flags.has_not(MonsterBehaviorType::SMART)) && one_in_(2))) {
+    const auto &monrace = m_ptr->get_monrace();
+    if (!smart_learn || (monrace.behavior_flags.has(MonsterBehaviorType::STUPID)) || ((monrace.behavior_flags.has_not(MonsterBehaviorType::SMART)) && one_in_(2))) {
         return;
     }
 

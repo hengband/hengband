@@ -15,36 +15,36 @@
  */
 bool common_saving_throw_charm(PlayerType *player_ptr, int pow, MonsterEntity *m_ptr)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
 
     if (player_ptr->current_floor_ptr->inside_arena) {
         return true;
     }
 
     /* Memorize a flag */
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
+    if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
+            monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
         }
         return true;
     }
 
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
+    if (monrace.resistance_flags.has(MonsterResistanceType::NO_CONF)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->resistance_flags.set(MonsterResistanceType::NO_CONF);
+            monrace.resistance_flags.set(MonsterResistanceType::NO_CONF);
         }
         return true;
     }
 
-    if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR) || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
+    if (monrace.misc_flags.has(MonsterMiscType::QUESTOR) || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
         return true;
     }
 
     pow += (adj_chr_chm[player_ptr->stat_index[A_CHR]] - 1);
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL))) {
         pow = pow * 2 / 3;
     }
-    return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
+    return (monrace.level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }
 
 /*!
@@ -55,29 +55,29 @@ bool common_saving_throw_charm(PlayerType *player_ptr, int pow, MonsterEntity *m
  */
 bool common_saving_throw_control(PlayerType *player_ptr, int pow, MonsterEntity *m_ptr)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
 
     if (player_ptr->current_floor_ptr->inside_arena) {
         return true;
     }
 
     /* Memorize a flag */
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
+    if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
         if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
+            monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_ALL);
         }
         return true;
     }
 
-    if (r_ptr->misc_flags.has(MonsterMiscType::QUESTOR) || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
+    if (monrace.misc_flags.has(MonsterMiscType::QUESTOR) || m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
         return true;
     }
 
     pow += adj_chr_chm[player_ptr->stat_index[A_CHR]] - 1;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL))) {
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL))) {
         pow = pow * 2 / 3;
     }
-    return (r_ptr->level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
+    return (monrace.level > randint1((pow - 10) < 1 ? 1 : (pow - 10)) + 5);
 }
 
 /*!

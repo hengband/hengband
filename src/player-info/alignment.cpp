@@ -48,18 +48,18 @@ void PlayerAlignment::update_alignment()
         if (!m_ptr->is_valid()) {
             continue;
         }
-        auto *r_ptr = &m_ptr->get_monrace();
+        const auto &monrace = m_ptr->get_monrace();
 
         if (!m_ptr->is_pet()) {
             continue;
         }
 
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
-            this->bias_good_alignment(r_ptr->level);
+        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
+            this->bias_good_alignment(monrace.level);
         }
 
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-            this->bias_evil_alignment(r_ptr->level);
+        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
+            this->bias_evil_alignment(monrace.level);
         }
     }
 

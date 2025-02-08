@@ -607,16 +607,16 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
  */
 static void process_aura_damage(MonsterEntity *m_ptr, PlayerType *player_ptr, bool immune, MonsterAuraType aura_flag, dam_func dam_func, concptr message)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->aura_flags.has_not(aura_flag) || immune) {
+    auto &monrace = m_ptr->get_monrace();
+    if (monrace.aura_flags.has_not(aura_flag) || immune) {
         return;
     }
 
-    int aura_damage = Dice::roll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
+    int aura_damage = Dice::roll(1 + (monrace.level / 26), 1 + (monrace.level / 17));
     msg_print(message);
     (*dam_func)(player_ptr, aura_damage, monster_desc(player_ptr, m_ptr, MD_WRONGDOER_NAME).data(), true);
     if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-        r_ptr->r_aura_flags.set(aura_flag);
+        monrace.r_aura_flags.set(aura_flag);
     }
 
     handle_stuff(player_ptr);

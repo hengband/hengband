@@ -164,18 +164,16 @@ bool activate_telekinesis(PlayerType *player_ptr, std::string_view name)
 
 bool activate_unique_detection(PlayerType *player_ptr)
 {
-    MonsterEntity *m_ptr;
-    MonraceDefinition *r_ptr;
     msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        m_ptr = &player_ptr->current_floor_ptr->m_list[i];
+        const auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
         if (!m_ptr->is_valid()) {
             continue;
         }
 
-        r_ptr = &m_ptr->get_monrace();
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            msg_format(_("%s． ", "%s. "), r_ptr->name.data());
+        const auto &monrace = m_ptr->get_monrace();
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            msg_format(_("%s． ", "%s. "), monrace.name.data());
         }
 
         if (m_ptr->r_idx == MonraceId::DIO) {

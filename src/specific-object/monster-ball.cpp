@@ -96,7 +96,7 @@ static bool release_monster(PlayerType *player_ptr, ItemEntity &item, DIRECTION 
 {
     const auto &monrace = item.get_monrace();
     const auto pos = player_ptr->get_neighbor(dir);
-    if (!monster_can_enter(player_ptr, pos.y, pos.x, &monrace, 0)) {
+    if (!monster_can_enter(player_ptr, pos.y, pos.x, monrace, 0)) {
         return false;
     }
 

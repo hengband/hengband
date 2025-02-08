@@ -237,7 +237,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
         return std::nullopt;
     }
 
-    if (none_bits(mode, PM_IGNORE_TERRAIN) && (pattern_tile(floor, pos.y, pos.x) || !monster_can_enter(player_ptr, pos.y, pos.x, &monrace, 0))) {
+    if (none_bits(mode, PM_IGNORE_TERRAIN) && (pattern_tile(floor, pos.y, pos.x) || !monster_can_enter(player_ptr, pos.y, pos.x, monrace, 0))) {
         return std::nullopt;
     }
 
@@ -337,7 +337,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
         auto should_be_friendly = !is_summoned && new_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
         should_be_friendly |= is_summoned && summoner.is_friendly();
         should_be_friendly |= any_bits(mode, PM_FORCE_FRIENDLY);
-        auto force_hostile = monster_has_hostile_align(player_ptr, nullptr, 0, -1, &new_monrace);
+        auto force_hostile = monster_has_hostile_align(player_ptr, nullptr, 0, -1, new_monrace);
         force_hostile |= player_ptr->current_floor_ptr->inside_arena;
         if (should_be_friendly && !force_hostile) {
             monster.set_friendly();

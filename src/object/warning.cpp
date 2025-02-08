@@ -71,8 +71,8 @@ ItemEntity *choose_warning_item(PlayerType *player_ptr)
  */
 static void spell_damcalc(PlayerType *player_ptr, MonsterEntity *m_ptr, AttributeType typ, int dam, int *max)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    int rlev = r_ptr->level;
+    const auto &monrace = m_ptr->get_monrace();
+    int rlev = monrace.level;
     bool ignore_wraith_form = false;
 
     /* Vulnerability, resistance and immunity */
@@ -376,11 +376,11 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 continue;
             }
 
-            auto *r_ptr = &m_ptr->get_monrace();
+            const auto &monrace = m_ptr->get_monrace();
 
             /* Monster spells (only powerful ones)*/
             if (projectable(player_ptr, pos_neighbor, pos)) {
-                const auto flags = r_ptr->ability_flags;
+                const auto flags = monrace.ability_flags;
 
                 if (dungeon.flags.has_not(DungeonFeatureType::NO_MAGIC)) {
                     if (flags.has(MonsterAbilityType::BA_CHAO)) {
@@ -486,7 +486,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 }
             }
             /* Monster melee attacks */
-            if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW) || dungeon.flags.has(DungeonFeatureType::NO_MELEE)) {
+            if (monrace.behavior_flags.has(MonsterBehaviorType::NEVER_BLOW) || dungeon.flags.has(DungeonFeatureType::NO_MELEE)) {
                 dam_max += dam_max0;
                 continue;
             }
@@ -497,7 +497,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             }
 
             int dam_melee = 0;
-            for (const auto &blow : r_ptr->blows) {
+            for (const auto &blow : monrace.blows) {
                 /* Skip non-attacks */
                 if (blow.method == RaceBlowMethodType::NONE) {
                     continue;

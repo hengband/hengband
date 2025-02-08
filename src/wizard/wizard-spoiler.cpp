@@ -128,45 +128,45 @@ static SpoilerOutputResultType spoil_mon_evol()
 
 static SpoilerOutputResultType spoil_categorized_mon_desc()
 {
-    auto status = spoil_mon_desc("mon-desc-ridable.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->misc_flags.has(MonsterMiscType::RIDING); });
+    auto status = spoil_mon_desc("mon-desc-ridable.txt", [](const MonraceDefinition &monrace) { return monrace.misc_flags.has(MonsterMiscType::RIDING); });
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
-        status = spoil_mon_desc("mon-desc-wildonly.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ONLY); });
+        status = spoil_mon_desc("mon-desc-wildonly.txt", [](const MonraceDefinition &monrace) { return monrace.wilderness_flags.has(MonsterWildernessType::WILD_ONLY); });
     }
 
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
-        status = spoil_mon_desc("mon-desc-town.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_TOWN); });
+        status = spoil_mon_desc("mon-desc-town.txt", [](const MonraceDefinition &monrace) { return monrace.wilderness_flags.has(MonsterWildernessType::WILD_TOWN); });
     }
 
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
-        status = spoil_mon_desc("mon-desc-shore.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_SHORE); });
+        status = spoil_mon_desc("mon-desc-shore.txt", [](const MonraceDefinition &monrace) { return monrace.wilderness_flags.has(MonsterWildernessType::WILD_SHORE); });
     }
 
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
-        status = spoil_mon_desc("mon-desc-ocean.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_OCEAN); });
+        status = spoil_mon_desc("mon-desc-ocean.txt", [](const MonraceDefinition &monrace) { return monrace.wilderness_flags.has(MonsterWildernessType::WILD_OCEAN); });
     }
 
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
-        status = spoil_mon_desc("mon-desc-waste.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_WASTE); });
+        status = spoil_mon_desc("mon-desc-waste.txt", [](const MonraceDefinition &monrace) { return monrace.wilderness_flags.has(MonsterWildernessType::WILD_WASTE); });
     }
 
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
-        status = spoil_mon_desc("mon-desc-wood.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_WOOD); });
+        status = spoil_mon_desc("mon-desc-wood.txt", [](const MonraceDefinition &monrace) { return monrace.wilderness_flags.has(MonsterWildernessType::WILD_WOOD); });
     }
 
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
-        status = spoil_mon_desc("mon-desc-volcano.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO); });
+        status = spoil_mon_desc("mon-desc-volcano.txt", [](const MonraceDefinition &monrace) { return monrace.wilderness_flags.has(MonsterWildernessType::WILD_VOLCANO); });
     }
 
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
-        status = spoil_mon_desc("mon-desc-mountain.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN); });
+        status = spoil_mon_desc("mon-desc-mountain.txt", [](const MonraceDefinition &monrace) { return monrace.wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN); });
     }
 
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
-        status = spoil_mon_desc("mon-desc-grass.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_GRASS); });
+        status = spoil_mon_desc("mon-desc-grass.txt", [](const MonraceDefinition &monrace) { return monrace.wilderness_flags.has(MonsterWildernessType::WILD_GRASS); });
     }
 
     if (status == SpoilerOutputResultType::SUCCESSFUL) {
-        status = spoil_mon_desc("mon-desc-wildall.txt", [](const MonraceDefinition *r_ptr) { return r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_ALL); });
+        status = spoil_mon_desc("mon-desc-wildall.txt", [](const MonraceDefinition &monrace) { return monrace.wilderness_flags.has(MonsterWildernessType::WILD_ALL); });
     }
 
     return status;

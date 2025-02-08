@@ -33,7 +33,7 @@
 #include "view/display-messages.h"
 
 struct samurai_slaying_type {
-    samurai_slaying_type(MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonraceDefinition *r_ptr);
+    samurai_slaying_type(MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonraceDefinition &monrace);
     MULTIPLY mult;
     TrFlags flags;
     MonsterEntity *m_ptr;
@@ -41,12 +41,12 @@ struct samurai_slaying_type {
     MonraceDefinition *r_ptr;
 };
 
-samurai_slaying_type::samurai_slaying_type(MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonraceDefinition *r_ptr)
+samurai_slaying_type::samurai_slaying_type(MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode, MonraceDefinition &monrace)
     : mult(mult)
     , flags(flags)
     , m_ptr(m_ptr)
     , mode(mode)
-    , r_ptr(r_ptr)
+    , r_ptr(&monrace)
 {
 }
 
@@ -311,8 +311,8 @@ static void hissatsu_keiun_kininken(PlayerType *player_ptr, samurai_slaying_type
  */
 MULTIPLY mult_hissatsu(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr, combat_options mode)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    samurai_slaying_type tmp_slaying(mult, flags, m_ptr, mode, r_ptr);
+    auto &monrace = m_ptr->get_monrace();
+    samurai_slaying_type tmp_slaying(mult, flags, m_ptr, mode, monrace);
     samurai_slaying_type *samurai_slaying_ptr = &tmp_slaying;
     hissatsu_burning_strike(player_ptr, samurai_slaying_ptr);
     hissatsu_serpent_tongue(player_ptr, samurai_slaying_ptr);
@@ -488,8 +488,8 @@ void mineuchi(PlayerType *player_ptr, player_attack_type *pa_ptr)
     pa_ptr->attack_damage = 0;
     anger_monster(player_ptr, pa_ptr->m_ptr);
 
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_STUN)) {
+    const auto &monrace = pa_ptr->m_ptr->get_monrace();
+    if (monrace.resistance_flags.has(MonsterResistanceType::NO_STUN)) {
         msg_format(_("%s には効果がなかった。", "%s is not effected."), pa_ptr->m_name);
         return;
     }

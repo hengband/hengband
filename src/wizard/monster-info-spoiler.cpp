@@ -71,7 +71,7 @@ static std::string attr_to_text(const MonraceDefinition &monrace)
     return _("変な色の", "Icky");
 }
 
-SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonraceDefinition *)> filter_monster)
+SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonraceDefinition &)> filter_monster)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     std::ofstream ofs(path);
@@ -94,7 +94,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     for (auto monrace_id : monrace_ids) {
         const auto &monrace = monraces.get_monrace(monrace_id);
-        if (filter_monster && !filter_monster(&monrace)) {
+        if (filter_monster && !filter_monster(monrace)) {
             continue;
         }
 

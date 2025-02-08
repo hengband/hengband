@@ -368,7 +368,7 @@ bool deathray_monsters(PlayerType *player_ptr)
  * @param r_ptr モンスター種族への参照ポインタ
  * @return 調査結果 善悪アライメント、最大HP、残りHP、AC、速度、ステータス
  */
-std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, MonraceDefinition *r_ptr)
+std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, const MonraceDefinition &monrace)
 {
     if (!m_ptr->is_original_ap()) {
         if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
@@ -382,11 +382,11 @@ std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, Mo
     const auto m_name = monster_desc(player_ptr, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
     concptr align;
-    if (r_ptr->kind_flags.has_all_of(alignment_mask)) {
+    if (monrace.kind_flags.has_all_of(alignment_mask)) {
         align = _("善悪", "good&evil");
-    } else if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+    } else if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
         align = _("邪悪", "evil");
-    } else if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+    } else if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
         align = _("善良", "good");
     } else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) {
         align = _("中立(善悪)", "neutral(good&evil)");
@@ -400,10 +400,10 @@ std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, Mo
 
     const auto speed = m_ptr->get_temporary_speed() - STANDARD_SPEED;
     constexpr auto mes = _("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:");
-    auto result = format(mes, m_name.data(), align, (int)m_ptr->hp, (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
+    auto result = format(mes, m_name.data(), align, (int)m_ptr->hp, (int)m_ptr->maxhp, monrace.ac, (speed > 0) ? "+" : "", speed);
 
-    if (r_ptr->get_next().is_valid()) {
-        result.append(format("%d/%d ", m_ptr->exp, r_ptr->next_exp));
+    if (monrace.get_next().is_valid()) {
+        result.append(format("%d/%d ", m_ptr->exp, monrace.next_exp));
     } else {
         result.append("xxx ");
     }
@@ -458,7 +458,7 @@ bool probing(PlayerType *player_ptr)
         }
         msg_print(nullptr);
 
-        const auto probe_result = probed_monster_info(player_ptr, &monster, &monrace);
+        const auto probe_result = probed_monster_info(player_ptr, &monster, monrace);
         prt(probe_result, 0, 0);
 
         message_add(probe_result);

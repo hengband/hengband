@@ -74,29 +74,29 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
         if (!m_ptr->is_valid()) {
             continue;
         }
-        auto *r_ptr = &m_ptr->get_monrace();
+        const auto &monrace = m_ptr->get_monrace();
 
         if (!m_ptr->is_pet()) {
             continue;
         }
 
         total_friends++;
-        if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-            total_friend_levels += r_ptr->level;
+        if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
+            total_friend_levels += monrace.level;
             continue;
         }
 
         if (player_ptr->pclass != PlayerClassType::CAVALRY) {
-            total_friend_levels += (r_ptr->level + 5) * 10;
+            total_friend_levels += (monrace.level + 5) * 10;
             continue;
         }
 
         if (m_ptr->is_riding()) {
-            total_friend_levels += (r_ptr->level + 5) * 2;
+            total_friend_levels += (monrace.level + 5) * 2;
         } else if (!has_a_unique && m_ptr->get_monrace().misc_flags.has(MonsterMiscType::RIDING)) {
-            total_friend_levels += (r_ptr->level + 5) * 7 / 2;
+            total_friend_levels += (monrace.level + 5) * 7 / 2;
         } else {
-            total_friend_levels += (r_ptr->level + 5) * 10;
+            total_friend_levels += (monrace.level + 5) * 10;
         }
 
         has_a_unique = true;

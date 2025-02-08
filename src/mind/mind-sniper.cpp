@@ -393,7 +393,7 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
  */
 MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, MonsterEntity *m_ptr, SPELL_IDX snipe_type)
 {
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = m_ptr->get_monrace();
     bool seen = is_seen(player_ptr, m_ptr);
 
     auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
@@ -401,10 +401,10 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, Mons
 
     switch (snipe_type) {
     case SP_LITE:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
             MULTIPLY n = 20 + sniper_concent;
             if (seen) {
-                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
+                monrace.r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
             }
             if (mult < n) {
                 mult = n;
@@ -412,15 +412,15 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, Mons
         }
         break;
     case SP_FIRE:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
             if (seen) {
-                r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_FIRE);
+                monrace.r_resistance_flags.set(MonsterResistanceType::IMMUNE_FIRE);
             }
         } else {
             MULTIPLY n;
-            if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
+            if (monrace.resistance_flags.has(MonsterResistanceType::HURT_FIRE)) {
                 n = 22 + (sniper_concent * 4);
-                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
+                monrace.r_resistance_flags.set(MonsterResistanceType::HURT_FIRE);
             } else {
                 n = 15 + (sniper_concent * 3);
             }
@@ -431,15 +431,15 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, Mons
         }
         break;
     case SP_COLD:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
             if (seen) {
-                r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_COLD);
+                monrace.r_resistance_flags.set(MonsterResistanceType::IMMUNE_COLD);
             }
         } else {
             MULTIPLY n;
-            if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
+            if (monrace.resistance_flags.has(MonsterResistanceType::HURT_COLD)) {
                 n = 22 + (sniper_concent * 4);
-                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
+                monrace.r_resistance_flags.set(MonsterResistanceType::HURT_COLD);
             } else {
                 n = 15 + (sniper_concent * 3);
             }
@@ -450,9 +450,9 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, Mons
         }
         break;
     case SP_ELEC:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
             if (seen) {
-                r_ptr->r_resistance_flags.set(MonsterResistanceType::IMMUNE_ELEC);
+                monrace.r_resistance_flags.set(MonsterResistanceType::IMMUNE_ELEC);
             }
         } else {
             MULTIPLY n = 18 + (sniper_concent * 4);
@@ -462,18 +462,18 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, Mons
         }
         break;
     case SP_KILL_WALL:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_ROCK)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::HURT_ROCK)) {
             MULTIPLY n = 15 + (sniper_concent * 2);
             if (seen) {
-                r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_ROCK);
+                monrace.r_resistance_flags.set(MonsterResistanceType::HURT_ROCK);
             }
             if (mult < n) {
                 mult = n;
             }
-        } else if (r_ptr->kind_flags.has(MonsterKindType::NONLIVING)) {
+        } else if (monrace.kind_flags.has(MonsterKindType::NONLIVING)) {
             MULTIPLY n = 15 + (sniper_concent * 2);
             if (seen) {
-                r_ptr->r_kind_flags.set(MonsterKindType::NONLIVING);
+                monrace.r_kind_flags.set(MonsterKindType::NONLIVING);
             }
             if (mult < n) {
                 mult = n;
@@ -481,10 +481,10 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, Mons
         }
         break;
     case SP_EVILNESS:
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
             MULTIPLY n = 15 + (sniper_concent * 4);
             if (seen) {
-                r_ptr->r_kind_flags.set(MonsterKindType::GOOD);
+                monrace.r_kind_flags.set(MonsterKindType::GOOD);
             }
             if (mult < n) {
                 mult = n;
@@ -492,15 +492,15 @@ MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, Mons
         }
         break;
     case SP_HOLYNESS:
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
+        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
             MULTIPLY n = 12 + (sniper_concent * 3);
             if (seen) {
-                r_ptr->r_kind_flags.set(MonsterKindType::EVIL);
+                monrace.r_kind_flags.set(MonsterKindType::EVIL);
             }
-            if (r_ptr->resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
+            if (monrace.resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
                 n += (sniper_concent * 3);
                 if (seen) {
-                    r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
+                    monrace.r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
                 }
             }
             if (mult < n) {

@@ -463,8 +463,8 @@ void MonsterDamageProcessor::add_monster_fear()
         }
     }
 
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (m_ptr->is_fearful() || r_ptr->resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
+    const auto &monrace = m_ptr->get_monrace();
+    if (m_ptr->is_fearful() || monrace.resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
         return;
     }
 
