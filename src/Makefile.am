@@ -1449,7 +1449,7 @@ CXXCOMPILE = $(srcdir)/gcc-wrap $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 
 if PCH
 stdafx.h.gch: stdafx.h stdafx.cpp Makefile
-	$(CXX) -x c++-header $(CXXFLAGS) $(srcdir)/stdafx.cpp -o $@
+	$(CXX) -x c++-header $(CXXFLAGS) $(DEFAULT_INCLUDES) $(srcdir)/stdafx.cpp -o $@
 	if test none != "$(PCH_CHECKSUMMER)" ; then \
 		rm -f "$@".sum ; \
 		$(PCH_CHECKSUMMER) $@ > "$@".sum ; \

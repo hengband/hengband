@@ -12,6 +12,7 @@
 #include "view/display-lore.h"
 #include "view/display-messages.h"
 #include "wizard/spoiler-util.h"
+#include <algorithm>
 
 /*!
  * @brief シンボル職の記述名を返す
