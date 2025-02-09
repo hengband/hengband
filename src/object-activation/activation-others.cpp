@@ -166,21 +166,21 @@ bool activate_unique_detection(PlayerType *player_ptr)
 {
     msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        const auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid()) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[i];
+        if (!monster.is_valid()) {
             continue;
         }
 
-        const auto &monrace = m_ptr->get_monrace();
+        const auto &monrace = monster.get_monrace();
         if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             msg_format(_("%s． ", "%s. "), monrace.name.data());
         }
 
-        if (m_ptr->r_idx == MonraceId::DIO) {
+        if (monster.r_idx == MonraceId::DIO) {
             msg_print(_("きさま！　見ているなッ！", "You bastard! You're watching me, well watch this!"));
         }
 
-        if (m_ptr->r_idx == MonraceId::SAURON) {
+        if (monster.r_idx == MonraceId::SAURON) {
             msg_print(_("あなたは一瞬、瞼なき御目に凝視される感覚に襲われた！",
                 "For a moment, you had the horrible sensation of being stared at by the lidless eye!"));
         }

@@ -43,7 +43,7 @@ static void write_pet_death(PlayerType *player_ptr, MonsterDeath *md_ptr)
     md_ptr->md_y = md_ptr->m_ptr->fy;
     md_ptr->md_x = md_ptr->m_ptr->fx;
     if (record_named_pet && md_ptr->m_ptr->is_named_pet()) {
-        const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_INDEF_VISIBLE);
+        const auto m_name = monster_desc(player_ptr, *md_ptr->m_ptr, MD_INDEF_VISIBLE);
         exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::NAMED_PET, 3, m_name);
     }
 }
@@ -95,7 +95,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
         return;
     }
 
-    const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_WRONGDOER_NAME);
+    const auto m_name = monster_desc(player_ptr, *md_ptr->m_ptr, MD_WRONGDOER_NAME);
     exe_write_diary(floor, DiaryKind::ARENA, 0, m_name);
 }
 
@@ -379,14 +379,14 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
         md_ptr->r_ptr = &md_ptr->m_ptr->get_monrace();
     }
 
-    QuestCompletionChecker(player_ptr, md_ptr->m_ptr).complete();
+    QuestCompletionChecker(player_ptr, *md_ptr->m_ptr).complete();
     on_defeat_arena_monster(player_ptr, md_ptr);
     if (md_ptr->m_ptr->is_riding() && process_fall_off_horse(player_ptr, -1, false)) {
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
     }
 
     drop_corpse(player_ptr, md_ptr);
-    monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
+    monster_drop_carried_objects(player_ptr, *md_ptr->m_ptr);
     decide_drop_quality(md_ptr);
     switch_special_death(player_ptr, md_ptr, attribute_flags);
     drop_artifacts(player_ptr, md_ptr);

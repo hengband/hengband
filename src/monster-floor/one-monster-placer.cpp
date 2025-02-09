@@ -332,7 +332,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
 
     monster.ml = false;
     if (any_bits(mode, PM_FORCE_PET)) {
-        set_pet(player_ptr, &monster);
+        set_pet(player_ptr, monster);
     } else {
         auto should_be_friendly = !is_summoned && new_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY);
         should_be_friendly |= is_summoned && summoner.is_friendly();

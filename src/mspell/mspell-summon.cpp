@@ -55,8 +55,8 @@ static void summon_disturb(PlayerType *player_ptr, int target_type, bool known, 
 static BIT_FLAGS monster_u_mode(const FloorType &floor, MONSTER_IDX m_idx)
 {
     BIT_FLAGS u_mode = 0L;
-    auto *m_ptr = &floor.m_list[m_idx];
-    bool pet = m_ptr->is_pet();
+    const auto &monster = floor.m_list[m_idx];
+    bool pet = monster.is_pet();
     if (!pet) {
         u_mode |= PM_ALLOW_UNIQUE;
     }
@@ -86,12 +86,12 @@ static void decide_summon_kin_caster(
     PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, concptr m_name, concptr m_poss, const bool known)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
+    const auto &monster = floor.m_list[m_idx];
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool mon_to_mon = target_type == MONSTER_TO_MONSTER;
     bool mon_to_player = target_type == MONSTER_TO_PLAYER;
 
-    if (m_ptr->r_idx == MonraceId::SERPENT || m_ptr->r_idx == MonraceId::ZOMBI_SERPENT) {
+    if (monster.r_idx == MonraceId::SERPENT || monster.r_idx == MonraceId::ZOMBI_SERPENT) {
         mspell_cast_msg_blind msg(_("%s^が何かをつぶやいた。", "%s^ mumbles."),
             _("%s^がダンジョンの主を召喚した。", "%s^ magically summons guardians of dungeons."),
             _("%s^がダンジョンの主を召喚した。", "%s^ magically summons guardians of dungeons."));
@@ -110,8 +110,8 @@ static void decide_summon_kin_caster(
 #ifdef JP
         (void)m_poss;
 #endif
-        _(msg_format("%sが魔法で%sを召喚した。", m_name, m_ptr->get_pronoun_of_summoned_kin().data()),
-            msg_format("%s^ magically summons %s %s.", m_name, m_poss, m_ptr->get_pronoun_of_summoned_kin().data()));
+        _(msg_format("%sが魔法で%sを召喚した。", m_name, monster.get_pronoun_of_summoned_kin().data()),
+            msg_format("%s^ magically summons %s %s.", m_name, m_poss, monster.get_pronoun_of_summoned_kin().data()));
     }
 
     if (mon_to_mon && known && !see_either) {
@@ -133,10 +133,10 @@ static void decide_summon_kin_caster(
 MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
+    const auto &monster = floor.m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor, m_idx);
     const auto m_name = monster_name(player_ptr, m_idx);
-    const auto m_poss = monster_desc(player_ptr, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+    const auto m_poss = monster_desc(player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool known = monster_near_player(floor, m_idx, t_idx);
@@ -145,7 +145,7 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
 
     decide_summon_kin_caster(player_ptr, m_idx, t_idx, target_type, m_name.data(), m_poss.data(), known);
     int count = 0;
-    switch (m_ptr->r_idx) {
+    switch (monster.r_idx) {
     case MonraceId::MENELDOR:
     case MonraceId::GWAIHIR:
     case MonraceId::THORONDOR:
@@ -236,7 +236,7 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
 MonsterSpellResult spell_RF6_S_CYBER(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
+    const auto &monster = floor.m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
@@ -250,7 +250,7 @@ MonsterSpellResult spell_RF6_S_CYBER(PlayerType *player_ptr, POSITION y, POSITIO
     summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
-    if (m_ptr->is_friendly() && mon_to_mon) {
+    if (monster.is_friendly() && mon_to_mon) {
         count += summon_specific(player_ptr, y, x, rlev, SUMMON_CYBER, (PM_ALLOW_GROUP), m_idx) ? 1 : 0;
     } else {
         count += summon_cyber(player_ptr, y, x, m_idx);
@@ -577,8 +577,8 @@ MonsterSpellResult spell_RF6_S_ANGEL(PlayerType *player_ptr, POSITION y, POSITIO
     monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
     summon_disturb(player_ptr, target_type, known, see_either);
 
-    auto *m_ptr = &floor.m_list[m_idx];
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
     int num = 1;
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         num += monrace.level / 40;
@@ -763,7 +763,7 @@ MonsterSpellResult spell_RF6_S_DRAGON(PlayerType *player_ptr, POSITION y, POSITI
 MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
+    const auto &monster = floor.m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
@@ -773,7 +773,7 @@ MonsterSpellResult spell_RF6_S_HI_UNDEAD(PlayerType *player_ptr, POSITION y, POS
     summon_disturb(player_ptr, target_type, known, see_either);
 
     int count = 0;
-    if (m_ptr->can_ring_boss_call_nazgul() && mon_to_player) {
+    if (monster.can_ring_boss_call_nazgul() && mon_to_player) {
         count += summon_NAZGUL(player_ptr, y, x, m_idx);
     } else {
         mspell_cast_msg_blind msg(_("%s^が何かをつぶやいた。", "%s^ mumbles."),
@@ -932,7 +932,7 @@ MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITI
     monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
     summon_disturb(player_ptr, target_type, known, see_either);
 
-    auto *m_ptr = &floor.m_list[m_idx];
+    const auto &monster = floor.m_list[m_idx];
     bool uniques_are_summoned = false;
     int count = 0;
     for (auto k = 0; k < S_NUM_4; k++) {
@@ -944,9 +944,9 @@ MonsterSpellResult spell_RF6_S_UNIQUE(PlayerType *player_ptr, POSITION y, POSITI
     }
 
     summon_type non_unique_type = SUMMON_HI_UNDEAD;
-    if ((m_ptr->sub_align & (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) == (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) {
+    if ((monster.sub_align & (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) == (SUB_ALIGN_GOOD | SUB_ALIGN_EVIL)) {
         non_unique_type = SUMMON_NONE;
-    } else if (m_ptr->sub_align & SUB_ALIGN_GOOD) {
+    } else if (monster.sub_align & SUB_ALIGN_GOOD) {
         non_unique_type = SUMMON_ANGEL;
     }
 

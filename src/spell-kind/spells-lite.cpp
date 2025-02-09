@@ -73,7 +73,7 @@ static void cave_temp_room_lite(PlayerType *player_ptr, const std::vector<Pos2D>
             if (monster.is_asleep() && evaluate_percent(chance)) {
                 (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
                 if (monster.ml) {
-                    const auto m_name = monster_desc(player_ptr, &monster, 0);
+                    const auto m_name = monster_desc(player_ptr, monster, 0);
                     msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
                 }
             }

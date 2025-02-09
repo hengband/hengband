@@ -240,8 +240,8 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     std::vector<MonsterAbilityType> heal;
     std::vector<MonsterAbilityType> dispel;
 
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monster = player_ptr->current_floor_ptr->m_list[msa_ptr->m_idx];
+    const auto &monrace = monster.get_monrace();
     if (monrace.behavior_flags.has(MonsterBehaviorType::STUPID)) {
         return rand_choice(msa_ptr->mspells);
     }
@@ -306,24 +306,24 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
     }
 
     const auto &monrace_list = MonraceList::get_instance();
-    if (!special.empty() && monrace_list.can_select_separate(m_ptr->r_idx, m_ptr->hp, m_ptr->maxhp)) {
+    if (!special.empty() && monrace_list.can_select_separate(monster.r_idx, monster.hp, monster.maxhp)) {
         return rand_choice(special);
     }
 
-    if (m_ptr->hp < m_ptr->maxhp / 3 && one_in_(2)) {
+    if (monster.hp < monster.maxhp / 3 && one_in_(2)) {
         if (!heal.empty()) {
             return rand_choice(heal);
         }
     }
 
-    if (((m_ptr->hp < m_ptr->maxhp / 3) || m_ptr->is_fearful()) && one_in_(2)) {
+    if (((monster.hp < monster.maxhp / 3) || monster.is_fearful()) && one_in_(2)) {
         if (!escape.empty()) {
             return rand_choice(escape);
         }
     }
 
     if (!special.empty()) {
-        const auto r_idx = m_ptr->r_idx;
+        const auto r_idx = monster.r_idx;
         auto should_select_special = monrace_list.is_unified(r_idx) && evaluate_percent(70);
         should_select_special |= decide_select_special(r_idx);
         if (should_select_special) {
@@ -331,7 +331,7 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         }
     }
 
-    auto should_select_tactic = Grid::calc_distance(player_ptr->get_position(), m_ptr->get_position()) < 4;
+    auto should_select_tactic = Grid::calc_distance(player_ptr->get_position(), monster.get_position()) < 4;
     should_select_tactic &= !attack.empty() || monrace.ability_flags.has(MonsterAbilityType::TRAPS);
     should_select_tactic &= evaluate_percent(75);
     should_select_tactic &= world.timewalk_m_idx == 0;
@@ -368,17 +368,17 @@ MonsterAbilityType choose_attack_spell(PlayerType *player_ptr, msa_type *msa_ptr
         return rand_choice(tactic);
     }
 
-    if (!invul.empty() && !m_ptr->mtimed[MonsterTimedEffect::INVULNERABILITY] && one_in_(2)) {
+    if (!invul.empty() && !monster.mtimed.at(MonsterTimedEffect::INVULNERABILITY) && one_in_(2)) {
         return rand_choice(invul);
     }
 
-    if ((m_ptr->hp < m_ptr->maxhp * 3 / 4) && one_in_(4)) {
+    if ((monster.hp < monster.maxhp * 3 / 4) && one_in_(4)) {
         if (!heal.empty()) {
             return rand_choice(heal);
         }
     }
 
-    if (!haste.empty() && one_in_(5) && !m_ptr->is_accelerated()) {
+    if (!haste.empty() && one_in_(5) && !monster.is_accelerated()) {
         return rand_choice(haste);
     }
 

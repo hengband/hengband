@@ -55,9 +55,9 @@ mam_pp_type::mam_pp_type(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, boo
     , note(note)
     , src_idx(src_idx)
 {
-    this->seen = is_seen(player_ptr, this->m_ptr);
+    this->seen = is_seen(player_ptr, *this->m_ptr);
     this->known = this->m_ptr->cdis <= MAX_PLAYER_SIGHT;
-    this->m_name = monster_desc(player_ptr, this->m_ptr, 0);
+    this->m_name = monster_desc(player_ptr, *this->m_ptr, 0);
 }
 
 static void prepare_redraw(mam_pp_type *mam_pp_ptr)
@@ -134,7 +134,7 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
         return;
     }
 
-    mam_pp_ptr->m_name = monster_desc(player_ptr, mam_pp_ptr->m_ptr, MD_TRUE_NAME);
+    mam_pp_ptr->m_name = monster_desc(player_ptr, *mam_pp_ptr->m_ptr, MD_TRUE_NAME);
     if (!mam_pp_ptr->seen) {
         player_ptr->current_floor_ptr->monster_noise = true;
         return;
@@ -237,7 +237,7 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
         return;
     }
 
-    mam_pp_ptr->m_name = monster_desc(player_ptr, mam_pp_ptr->m_ptr, 0);
+    mam_pp_ptr->m_name = monster_desc(player_ptr, *mam_pp_ptr->m_ptr, 0);
     if (mam_pp_ptr->m_ptr->hp > mam_pp_ptr->m_ptr->maxhp / 3) {
         mam_pp_ptr->dam = (mam_pp_ptr->dam + 1) / 2;
     }
@@ -261,13 +261,13 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
 void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX src_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
+    auto &monster = floor.m_list[m_idx];
     mam_pp_type tmp_mam_pp(player_ptr, m_idx, dam, dead, fear, note, src_idx);
     mam_pp_type *mam_pp_ptr = &tmp_mam_pp;
     prepare_redraw(mam_pp_ptr);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
 
-    if (m_ptr->is_riding()) {
+    if (monster.is_riding()) {
         disturb(player_ptr, true, true);
     }
 
@@ -275,7 +275,7 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
         return;
     }
 
-    m_ptr->hp -= dam;
+    monster.hp -= dam;
     if (check_monster_hp(player_ptr, mam_pp_ptr)) {
         return;
     }
@@ -283,10 +283,10 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     *dead = false;
     cancel_fear_by_pain(player_ptr, mam_pp_ptr);
     make_monster_fear(player_ptr, mam_pp_ptr);
-    if ((dam > 0) && !m_ptr->is_pet() && !m_ptr->is_friendly() && (mam_pp_ptr->src_idx != m_idx)) {
+    if ((dam > 0) && !monster.is_pet() && !monster.is_friendly() && (mam_pp_ptr->src_idx != m_idx)) {
         const auto &m_ref = floor.m_list[src_idx];
-        if (m_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
-            m_ptr->set_target(m_ref.fy, m_ref.fx);
+        if (m_ref.is_pet() && !player_ptr->is_located_at({ monster.target_y, monster.target_x })) {
+            monster.set_target(m_ref.fy, m_ref.fx);
         }
     }
 

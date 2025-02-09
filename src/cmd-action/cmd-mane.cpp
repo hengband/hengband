@@ -966,17 +966,17 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
 
         const auto &monster = floor.m_list[grid_target.m_idx];
         auto &monrace = monster.get_monrace();
-        const auto m_name = monster_desc(player_ptr, &monster, 0);
+        const auto m_name = monster_desc(player_ptr, monster, 0);
         if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
             if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-                if (is_original_ap_and_seen(player_ptr, &monster)) {
+                if (is_original_ap_and_seen(player_ptr, monster)) {
                     monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
                 }
                 msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name.data());
 
                 break;
             } else if (monrace.level > randint1(100)) {
-                if (is_original_ap_and_seen(player_ptr, &monster)) {
+                if (is_original_ap_and_seen(player_ptr, monster)) {
                     monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
                 }
                 msg_format(_("%sには耐性がある！", "%s resists!"), m_name.data());

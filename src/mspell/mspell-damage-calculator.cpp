@@ -419,10 +419,10 @@ static int monspell_damage_base(
 int monspell_damage(PlayerType *player_ptr, MonsterAbilityType ms_type, MONSTER_IDX m_idx, int TYPE)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
-    int hp = (TYPE == DAM_ROLL) ? m_ptr->hp : m_ptr->max_maxhp;
+    int hp = (TYPE == DAM_ROLL) ? monster.hp : monster.max_maxhp;
 
     return monspell_damage_base(player_ptr, ms_type, hp, rlev, monster_is_powerful(floor, m_idx), monrace.shoot_damage_dice, 0, TYPE);
 }

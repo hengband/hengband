@@ -72,10 +72,10 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
     if (!summoner_m_idx) {
         notice = true;
     } else {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[*summoner_m_idx];
-        if (m_ptr->is_pet()) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[*summoner_m_idx];
+        if (monster.is_pet()) {
             notice = true;
-        } else if (is_seen(player_ptr, m_ptr)) {
+        } else if (is_seen(player_ptr, monster)) {
             notice = true;
         } else if (player_can_see_bold(player_ptr, pos->y, pos->x)) {
             notice = true;

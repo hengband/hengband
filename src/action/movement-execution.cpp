@@ -139,7 +139,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         p_can_enter = false;
     }
 
-    auto *m_ptr = &floor.m_list[grid.m_idx];
+    const auto &monster = floor.m_list[grid.m_idx];
 
     // @todo 「特定の武器を装備している」旨のメソッドを別途作る
     constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
@@ -160,22 +160,22 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
     std::string m_name;
     bool can_move = true;
     bool do_past = false;
-    if (grid.has_monster() && (m_ptr->ml || p_can_enter || p_can_kill_walls)) {
-        const auto &monrace = m_ptr->get_monrace();
+    if (grid.has_monster() && (monster.ml || p_can_enter || p_can_kill_walls)) {
+        const auto &monrace = monster.get_monrace();
         const auto effects = player_ptr->effects();
         const auto is_stunned = effects->stun().is_stunned();
         auto can_cast = !effects->confusion().is_confused();
         const auto is_hallucinated = effects->hallucination().is_hallucinated();
         can_cast &= !is_hallucinated;
-        can_cast &= m_ptr->ml;
+        can_cast &= monster.ml;
         can_cast &= !is_stunned;
         can_cast &= player_ptr->muta.has_not(PlayerMutationType::BERS_RAGE) || !is_shero(player_ptr);
-        if (!m_ptr->is_hostile() && can_cast && pattern_seq(player_ptr, pos) && (p_can_enter || p_can_kill_walls)) {
+        if (!monster.is_hostile() && can_cast && pattern_seq(player_ptr, pos) && (p_can_enter || p_can_kill_walls)) {
             (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
-            m_name = monster_desc(player_ptr, m_ptr, 0);
-            if (m_ptr->ml) {
+            m_name = monster_desc(player_ptr, monster, 0);
+            if (monster.ml) {
                 if (!is_hallucinated) {
-                    LoreTracker::get_instance().set_trackee(m_ptr->ap_r_idx);
+                    LoreTracker::get_instance().set_trackee(monster.ap_r_idx);
                 }
 
                 health_track(player_ptr, grid.m_idx);
@@ -207,7 +207,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
             can_move = false;
             disturb(player_ptr, false, true);
         } else if (riding_monster.is_fearful()) {
-            const auto steed_name = monster_desc(player_ptr, &riding_monster, 0);
+            const auto steed_name = monster_desc(player_ptr, riding_monster, 0);
             msg_format(_("%sが恐怖していて制御できない。", "%s^ is too scared to control."), steed_name.data());
             can_move = false;
             disturb(player_ptr, false, true);
@@ -238,7 +238,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
         }
 
         if (can_move && riding_monster.is_stunned() && one_in_(2)) {
-            const auto steed_name = monster_desc(player_ptr, &riding_monster, 0);
+            const auto steed_name = monster_desc(player_ptr, riding_monster, 0);
             msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name.data());
             can_move = false;
             disturb(player_ptr, false, true);

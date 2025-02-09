@@ -29,8 +29,8 @@ mspell_cast_msg_simple::mspell_cast_msg_simple(concptr to_player, concptr to_mon
  */
 bool see_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    MonsterEntity *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    return is_seen(player_ptr, m_ptr);
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    return is_seen(player_ptr, monster);
 }
 
 /*!
@@ -42,9 +42,9 @@ bool see_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
  */
 bool monster_near_player(const FloorType &floor, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-    const auto *m_ptr = &floor.m_list[m_idx];
-    const auto *t_ptr = &floor.m_list[t_idx];
-    return (m_ptr->cdis <= MAX_PLAYER_SIGHT) || (t_ptr->cdis <= MAX_PLAYER_SIGHT);
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monster_target = floor.m_list[t_idx];
+    return (monster.cdis <= MAX_PLAYER_SIGHT) || (monster_target.cdis <= MAX_PLAYER_SIGHT);
 }
 
 /*!

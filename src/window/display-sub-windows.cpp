@@ -128,11 +128,11 @@ void fix_inventory(PlayerType *player_ptr)
  *  name: name of monster
  * </pre>
  */
-static void print_monster_line(TERM_LEN x, TERM_LEN y, const MonsterEntity *m_ptr, int n_same, int n_awake)
+static void print_monster_line(TERM_LEN x, TERM_LEN y, const MonsterEntity &monster, int n_same, int n_awake)
 {
     term_erase(0, y);
     term_gotoxy(x, y);
-    const auto &monrace = m_ptr->get_appearance_monrace();
+    const auto &monrace = monster.get_appearance_monrace();
     if (!monrace.is_valid()) {
         return;
     }
@@ -148,7 +148,7 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, const MonsterEntity *m_pt
     term_addstr(-1, TERM_WHITE, " ");
     term_add_bigch(monrace.symbol_config);
 
-    if (monrace.r_tkills && m_ptr->mflag2.has_not(MonsterConstantFlagType::KAGE)) {
+    if (monrace.r_tkills && monster.mflag2.has_not(MonsterConstantFlagType::KAGE)) {
         buf = format(" %2d", monrace.level);
     } else {
         buf = " ??";
@@ -178,32 +178,32 @@ void print_monster_list(const FloorType &floor, const std::vector<MONSTER_IDX> &
 
     // 描画に必要なデータを集める
     for (auto monster_index : monster_list) {
-        auto m_ptr = &floor.m_list[monster_index];
+        const auto &monster = floor.m_list[monster_index];
 
-        if (m_ptr->is_pet()) {
+        if (monster.is_pet()) {
             continue;
         } // pet
-        if (!m_ptr->is_valid()) {
+        if (!monster.is_valid()) {
             continue;
         } // dead?
 
         // ソート済みなので同じモンスターは連続する．これを利用して同じモンスターをカウント，まとめて表示する．
-        if (monster_list_info.empty() || (monster_list_info.back().monster_entity->ap_r_idx != m_ptr->ap_r_idx)) {
-            monster_list_info.push_back({ m_ptr, 0, 0 });
+        if (monster_list_info.empty() || (monster_list_info.back().monster_entity->ap_r_idx != monster.ap_r_idx)) {
+            monster_list_info.push_back({ &monster, 0, 0 });
         }
 
         // 出現数をカウント
         monster_list_info.back().visible_count++;
 
         // 起きているモンスターをカウント
-        if (!m_ptr->is_asleep()) {
+        if (!monster.is_asleep()) {
             monster_list_info.back().awake_count++;
         }
     }
 
     // 集めたデータを元にリストを表示する
     for (const auto &info : monster_list_info) {
-        print_monster_line(x, line++, info.monster_entity, info.visible_count, info.awake_count);
+        print_monster_line(x, line++, *info.monster_entity, info.visible_count, info.awake_count);
 
         // 行数が足りなくなったら中断。
         if (line - y == max_lines) {
@@ -221,7 +221,7 @@ void print_monster_list(const FloorType &floor, const std::vector<MONSTER_IDX> &
 static void print_pet_list_oneline(PlayerType *player_ptr, const MonsterEntity &monster, TERM_LEN x, TERM_LEN y, TERM_LEN width)
 {
     const auto &monrace = monster.get_appearance_monrace();
-    const auto name = monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE | MD_NO_OWNER);
+    const auto name = monster_desc(player_ptr, monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE | MD_NO_OWNER);
     const auto &[bar_color, bar_len] = monster.get_hp_bar_data();
     const auto is_visible = monster.ml && !player_ptr->effects()->hallucination().is_hallucinated();
 

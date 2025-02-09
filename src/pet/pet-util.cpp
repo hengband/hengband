@@ -70,13 +70,13 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
     DEPTH total_friend_levels = 0;
     total_friends = 0;
     for (auto m_idx = player_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-        if (!m_ptr->is_valid()) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+        if (!monster.is_valid()) {
             continue;
         }
-        const auto &monrace = m_ptr->get_monrace();
+        const auto &monrace = monster.get_monrace();
 
-        if (!m_ptr->is_pet()) {
+        if (!monster.is_pet()) {
             continue;
         }
 
@@ -91,9 +91,9 @@ PERCENTAGE calculate_upkeep(PlayerType *player_ptr)
             continue;
         }
 
-        if (m_ptr->is_riding()) {
+        if (monster.is_riding()) {
             total_friend_levels += (monrace.level + 5) * 2;
-        } else if (!has_a_unique && m_ptr->get_monrace().misc_flags.has(MonsterMiscType::RIDING)) {
+        } else if (!has_a_unique && monster.get_monrace().misc_flags.has(MonsterMiscType::RIDING)) {
             total_friend_levels += (monrace.level + 5) * 7 / 2;
         } else {
             total_friend_levels += (monrace.level + 5) * 10;

@@ -82,7 +82,7 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
-    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) && is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr)) {
+    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) && is_original_ap_and_seen(player_ptr, *mam_ptr->m_ptr)) {
         monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_FIRE_MASK);
         return;
     }
@@ -91,7 +91,7 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         msg_format(_("%s^は突然熱くなった！", "%s^ is suddenly very hot!"), mam_ptr->m_name);
     }
 
-    if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
+    if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
         monrace_target.aura_flags.set(MonsterAuraType::FIRE);
     }
 
@@ -109,7 +109,7 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
-    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK) && is_original_ap_and_seen(player_ptr, &monster)) {
+    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK) && is_original_ap_and_seen(player_ptr, monster)) {
         monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_COLD_MASK);
         return;
     }
@@ -118,7 +118,7 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         msg_format(_("%s^は突然寒くなった！", "%s^ is suddenly very cold!"), mam_ptr->m_name);
     }
 
-    if (monster.ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
+    if (monster.ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
         monrace_target.aura_flags.set(MonsterAuraType::COLD);
     }
 
@@ -136,7 +136,7 @@ static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
-    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK) && is_original_ap_and_seen(player_ptr, &monster)) {
+    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK) && is_original_ap_and_seen(player_ptr, monster)) {
         monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_ELEC_MASK);
         return;
     }
@@ -145,7 +145,7 @@ static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         msg_format(_("%s^は電撃を食らった！", "%s^ gets zapped!"), mam_ptr->m_name);
     }
 
-    if (monster.ml && is_original_ap_and_seen(player_ptr, mam_ptr->t_ptr)) {
+    if (monster.ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
         monrace_target.aura_flags.set(MonsterAuraType::ELEC);
     }
 
@@ -290,14 +290,14 @@ static void explode_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
  */
 static void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 {
-    const auto *m_ptr = mam_ptr->m_ptr;
-    auto &monrace = m_ptr->get_monrace();
+    const auto &monster = *mam_ptr->m_ptr;
+    auto &monrace = monster.get_monrace();
     for (int ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         mam_ptr->effect = monrace.blows[ap_cnt].effect;
         mam_ptr->method = monrace.blows[ap_cnt].method;
         mam_ptr->damage_dice = monrace.blows[ap_cnt].damage_dice;
 
-        if (!m_ptr->is_valid()) {
+        if (!monster.is_valid()) {
             break;
         }
 
@@ -309,7 +309,7 @@ static void repeat_melee(PlayerType *player_ptr, mam_type *mam_ptr)
 
         mam_ptr->power = mbe_info[enum2i(mam_ptr->effect)].power;
         process_melee(player_ptr, mam_ptr);
-        if (!is_original_ap_and_seen(player_ptr, mam_ptr->m_ptr) || mam_ptr->do_silly_attack) {
+        if (!is_original_ap_and_seen(player_ptr, *mam_ptr->m_ptr) || mam_ptr->do_silly_attack) {
             continue;
         }
 
@@ -338,8 +338,8 @@ bool monst_attack_monst(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
         return false;
     }
 
-    angband_strcpy(mam_ptr->m_name, monster_desc(player_ptr, mam_ptr->m_ptr, 0), sizeof(mam_ptr->m_name));
-    angband_strcpy(mam_ptr->t_name, monster_desc(player_ptr, mam_ptr->t_ptr, 0), sizeof(mam_ptr->t_name));
+    angband_strcpy(mam_ptr->m_name, monster_desc(player_ptr, *mam_ptr->m_ptr, 0), sizeof(mam_ptr->m_name));
+    angband_strcpy(mam_ptr->t_name, monster_desc(player_ptr, *mam_ptr->t_ptr, 0), sizeof(mam_ptr->t_name));
     if (!mam_ptr->see_either && mam_ptr->known) {
         player_ptr->current_floor_ptr->monster_noise = true;
     }

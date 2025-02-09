@@ -33,24 +33,24 @@
 void exe_monster_attack_to_player(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
-    auto &monrace = m_ptr->get_monrace();
+    const auto &monster = floor.m_list[m_idx];
+    auto &monrace = monster.get_monrace();
     if (!turn_flags_ptr->do_move || !player_ptr->is_located_at(pos)) {
         return;
     }
 
     if (monrace.behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_behavior_flags.set(MonsterBehaviorType::NEVER_BLOW);
         }
 
         turn_flags_ptr->do_move = false;
     }
 
-    if (turn_flags_ptr->do_move && floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE) && !m_ptr->is_confused()) {
+    if (turn_flags_ptr->do_move && floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE) && !monster.is_confused()) {
         if (monrace.behavior_flags.has_not(MonsterBehaviorType::STUPID)) {
             turn_flags_ptr->do_move = false;
-        } else if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        } else if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_behavior_flags.set(MonsterBehaviorType::STUPID);
         }
     }
@@ -82,7 +82,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
         return false;
     }
 
-    if ((monrace.behavior_flags.has_not(MonsterBehaviorType::KILL_BODY)) && is_original_ap_and_seen(player_ptr, &monster)) {
+    if ((monrace.behavior_flags.has_not(MonsterBehaviorType::KILL_BODY)) && is_original_ap_and_seen(player_ptr, monster)) {
         monrace.r_behavior_flags.set(MonsterBehaviorType::KILL_BODY);
     }
 
@@ -102,7 +102,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
         return false;
     }
 
-    if (is_original_ap_and_seen(player_ptr, &monster)) {
+    if (is_original_ap_and_seen(player_ptr, monster)) {
         monrace.r_behavior_flags.set(MonsterBehaviorType::STUPID);
     }
 

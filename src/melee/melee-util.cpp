@@ -16,8 +16,8 @@ mam_type *initialize_mam_type(PlayerType *player_ptr, mam_type *mam_ptr, MONSTER
     mam_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     mam_ptr->t_ptr = &player_ptr->current_floor_ptr->m_list[t_idx];
     mam_ptr->damage = 0;
-    mam_ptr->see_m = is_seen(player_ptr, mam_ptr->m_ptr);
-    mam_ptr->see_t = is_seen(player_ptr, mam_ptr->t_ptr);
+    mam_ptr->see_m = is_seen(player_ptr, *mam_ptr->m_ptr);
+    mam_ptr->see_t = is_seen(player_ptr, *mam_ptr->t_ptr);
     mam_ptr->see_either = mam_ptr->see_m || mam_ptr->see_t;
     mam_ptr->y_saver = mam_ptr->t_ptr->fy;
     mam_ptr->x_saver = mam_ptr->t_ptr->fx;

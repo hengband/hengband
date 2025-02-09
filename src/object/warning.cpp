@@ -69,9 +69,9 @@ ItemEntity *choose_warning_item(PlayerType *player_ptr)
  * @param dam 基本ダメージ
  * @param max 算出した最大ダメージを返すポインタ
  */
-static void spell_damcalc(PlayerType *player_ptr, MonsterEntity *m_ptr, AttributeType typ, int dam, int *max)
+static void spell_damcalc(PlayerType *player_ptr, const MonsterEntity &monster, AttributeType typ, int dam, int *max)
 {
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monrace = monster.get_monrace();
     int rlev = monrace.level;
     bool ignore_wraith_form = false;
 
@@ -224,7 +224,7 @@ static void spell_damcalc(PlayerType *player_ptr, MonsterEntity *m_ptr, Attribut
         break;
 
     case AttributeType::CAUSE_4:
-        if ((100 + rlev / 2 <= player_ptr->skill_sav) && (m_ptr->r_idx != MonraceId::KENSHIROU)) {
+        if ((100 + rlev / 2 <= player_ptr->skill_sav) && (monster.r_idx != MonraceId::KENSHIROU)) {
             dam = 0;
             ignore_wraith_form = true;
         }
@@ -256,9 +256,9 @@ static void spell_damcalc(PlayerType *player_ptr, MonsterEntity *m_ptr, Attribut
  */
 static void spell_damcalc_by_spellnum(PlayerType *player_ptr, MonsterAbilityType ms_type, AttributeType typ, MONSTER_IDX m_idx, int *max)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     int dam = monspell_damage(player_ptr, ms_type, m_idx, DAM_MAX);
-    spell_damcalc(player_ptr, m_ptr, typ, dam, max);
+    spell_damcalc(player_ptr, monster, typ, dam, max);
 }
 
 /*!
@@ -268,14 +268,14 @@ static void spell_damcalc_by_spellnum(PlayerType *player_ptr, MonsterAbilityType
  * @param blow モンスターの打撃能力の構造体参照
  * @return 算出された最大ダメージを返す。
  */
-static int blow_damcalc(MonsterEntity *m_ptr, PlayerType *player_ptr, const MonsterBlow &blow)
+static int blow_damcalc(const MonsterEntity &monster, PlayerType *player_ptr, const MonsterBlow &blow)
 {
     int dam = blow.damage_dice.maxroll();
     int dummy_max = 0;
 
     if (blow.method == RaceBlowMethodType::EXPLODE) {
         dam = (dam + 1) / 2;
-        spell_damcalc(player_ptr, m_ptr, mbe_info[enum2i(blow.effect)].explode_type, dam, &dummy_max);
+        spell_damcalc(player_ptr, monster, mbe_info[enum2i(blow.effect)].explode_type, dam, &dummy_max);
         dam = dummy_max;
         return dam;
     }
@@ -295,25 +295,25 @@ static int blow_damcalc(MonsterEntity *m_ptr, PlayerType *player_ptr, const Mons
         break;
 
     case RaceBlowEffectType::ACID:
-        spell_damcalc(player_ptr, m_ptr, AttributeType::ACID, dam, &dummy_max);
+        spell_damcalc(player_ptr, monster, AttributeType::ACID, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
 
     case RaceBlowEffectType::ELEC:
-        spell_damcalc(player_ptr, m_ptr, AttributeType::ELEC, dam, &dummy_max);
+        spell_damcalc(player_ptr, monster, AttributeType::ELEC, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
 
     case RaceBlowEffectType::FIRE:
-        spell_damcalc(player_ptr, m_ptr, AttributeType::FIRE, dam, &dummy_max);
+        spell_damcalc(player_ptr, monster, AttributeType::FIRE, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
 
     case RaceBlowEffectType::COLD:
-        spell_damcalc(player_ptr, m_ptr, AttributeType::COLD, dam, &dummy_max);
+        spell_damcalc(player_ptr, monster, AttributeType::COLD, dam, &dummy_max);
         dam = dummy_max;
         check_wraith_form = false;
         break;
@@ -367,16 +367,16 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 continue;
             }
 
-            auto *m_ptr = &floor.m_list[grid.m_idx];
+            const auto &monster = floor.m_list[grid.m_idx];
 
-            if (m_ptr->is_asleep()) {
+            if (monster.is_asleep()) {
                 continue;
             }
-            if (!m_ptr->is_hostile()) {
+            if (!monster.is_hostile()) {
                 continue;
             }
 
-            const auto &monrace = m_ptr->get_monrace();
+            const auto &monrace = monster.get_monrace();
 
             /* Monster spells (only powerful ones)*/
             if (projectable(player_ptr, pos_neighbor, pos)) {
@@ -504,7 +504,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
                 }
 
                 /* Extract the attack info */
-                dam_melee += blow_damcalc(m_ptr, player_ptr, blow);
+                dam_melee += blow_damcalc(monster, player_ptr, blow);
                 if (blow.method == RaceBlowMethodType::EXPLODE) {
                     break;
                 }

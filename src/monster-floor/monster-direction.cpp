@@ -112,13 +112,13 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
 bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
+    const auto &monster = floor.m_list[m_idx];
 
     POSITION x = 0, y = 0;
-    if (player_ptr->riding_t_m_idx && player_ptr->is_located_at({ m_ptr->fy, m_ptr->fx })) {
+    if (player_ptr->riding_t_m_idx && player_ptr->is_located_at({ monster.fy, monster.fx })) {
         y = floor.m_list[player_ptr->riding_t_m_idx].fy;
         x = floor.m_list[player_ptr->riding_t_m_idx].fx;
-    } else if (m_ptr->is_pet() && player_ptr->pet_t_m_idx) {
+    } else if (monster.is_pet() && player_ptr->pet_t_m_idx) {
         y = floor.m_list[player_ptr->pet_t_m_idx].fy;
         x = floor.m_list[player_ptr->pet_t_m_idx].fx;
     } else {
@@ -140,8 +140,8 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
         }
     }
 
-    x -= m_ptr->fx;
-    y -= m_ptr->fy;
+    x -= monster.fx;
+    y -= monster.fy;
 
     store_enemy_approch_direction(mm, y, x);
     return true;
@@ -155,11 +155,11 @@ bool get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx, int *mm)
  * @return 不規則な方向へ歩くことになったらTRUE
  * @todo "5"とはもしかして「その場に留まる」という意味か？
  */
-static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, MonsterEntity *m_ptr)
+static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, const MonsterEntity &monster)
 {
-    auto &monrace = m_ptr->get_monrace();
+    auto &monrace = monster.get_monrace();
     if (monrace.behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && evaluate_percent(75)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_behavior_flags.set({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 });
         }
 
@@ -168,7 +168,7 @@ static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, MonsterEntity *m_
     }
 
     if (monrace.behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && one_in_(2)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_behavior_flags.set(MonsterBehaviorType::RAND_MOVE_50);
         }
 
@@ -177,7 +177,7 @@ static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, MonsterEntity *m_
     }
 
     if (monrace.behavior_flags.has(MonsterBehaviorType::RAND_MOVE_25) && one_in_(4)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_behavior_flags.set(MonsterBehaviorType::RAND_MOVE_25);
         }
 
@@ -197,14 +197,14 @@ static bool random_walk(PlayerType *player_ptr, DIRECTION *mm, MonsterEntity *m_
  */
 static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
 {
-    auto *m_ptr = &msd->player_ptr->current_floor_ptr->m_list[msd->m_idx];
-    if (!m_ptr->is_pet()) {
+    const auto &monster = msd->player_ptr->current_floor_ptr->m_list[msd->m_idx];
+    if (!monster.is_pet()) {
         return false;
     }
 
-    bool avoid = ((msd->player_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - msd->player_ptr->pet_follow_distance)));
-    bool lonely = (!avoid && (m_ptr->cdis > msd->player_ptr->pet_follow_distance));
-    bool distant = (m_ptr->cdis > PET_SEEK_DIST);
+    bool avoid = ((msd->player_ptr->pet_follow_distance < 0) && (monster.cdis <= (0 - msd->player_ptr->pet_follow_distance)));
+    bool lonely = (!avoid && (monster.cdis > msd->player_ptr->pet_follow_distance));
+    bool distant = (monster.cdis > PET_SEEK_DIST);
     msd->mm[0] = msd->mm[1] = msd->mm[2] = msd->mm[3] = 5;
     if (get_enemy_dir(msd->player_ptr, msd->m_idx, msd->mm)) {
         return true;
@@ -234,19 +234,19 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
  */
 bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
 
-    if (m_ptr->is_confused() || !aware) {
+    if (monster.is_confused() || !aware) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
 
-    if (random_walk(player_ptr, mm, m_ptr)) {
+    if (random_walk(player_ptr, mm, monster)) {
         return true;
     }
 
-    if (monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) && (m_ptr->cdis > 1)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE) && (monster.cdis > 1)) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         return true;
     }
@@ -256,7 +256,7 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, DIRECTION *mm, MO
         return true;
     }
 
-    if (!m_ptr->is_hostile()) {
+    if (!monster.is_hostile()) {
         mm[0] = mm[1] = mm[2] = mm[3] = 5;
         get_enemy_dir(player_ptr, m_idx, mm);
         return true;

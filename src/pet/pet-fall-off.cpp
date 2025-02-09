@@ -39,7 +39,7 @@ void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
         return;
     }
 
-    const auto m_steed_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
+    const auto m_steed_name = monster_desc(player_ptr, player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
     if (process_fall_off_horse(player_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, false)) {
         msg_format(_("%s^から落ちてしまった！", "You have fallen from %s."), m_steed_name.data());
     }
@@ -91,8 +91,8 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     POSITION sy = 0;
     POSITION sx = 0;
     int sn = 0;
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    const auto &monrace = monster.get_monrace();
 
     if (!player_ptr->riding || AngbandWorld::get_instance().is_wild_mode()) {
         return false;
@@ -138,7 +138,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         }
 
         if (!sn) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+            const auto m_name = monster_desc(player_ptr, monster, 0);
             msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s but bumped into a wall."), m_name.data());
             take_hit(player_ptr, DAMAGE_NOESCAPE, monrace.level + 3, _("壁への衝突", "bumping into a wall"));
             return false;
@@ -180,7 +180,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     rfu.set_flags(flags_mwrf);
     auto fall_dam = false;
     if (player_ptr->levitation && !force) {
-        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        const auto m_name = monster_desc(player_ptr, monster, 0);
         msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s but make a good landing."), m_name.data());
     } else {
         take_hit(player_ptr, DAMAGE_NOESCAPE, monrace.level + 3, _("落馬", "Falling from riding"));

@@ -64,8 +64,8 @@
 static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMutationType attack, bool *fear, bool *mdeath)
 {
     WEIGHT n_weight = 0;
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    const auto &monrace = m_ptr->get_monrace();
+    auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
 
     Dice dice{};
     concptr atk_desc;
@@ -99,12 +99,12 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
         THROW_EXCEPTION(std::range_error, _("未定義の部位", "undefined body part"));
     }
 
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
     int bonus = player_ptr->to_h_m + (player_ptr->lev * 6 / 5);
     int chance = (player_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
 
     bool is_hit = (monrace.kind_flags.has_not(MonsterKindType::QUANTUM)) || !randint0(2);
-    is_hit &= test_hit_norm(player_ptr, chance, monrace.ac, m_ptr->ml);
+    is_hit &= test_hit_norm(player_ptr, chance, monrace.ac, monster.ml);
     if (!is_hit) {
         sound(SOUND_MISS);
         msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name.data());
@@ -120,17 +120,17 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
         k = 0;
     }
 
-    k = mon_damage_mod(player_ptr, m_ptr, k, false);
-    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, m_ptr->hp - k,
-        m_ptr->maxhp, m_ptr->max_maxhp);
+    k = mon_damage_mod(player_ptr, monster, k, false);
+    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, monster.hp - k,
+        monster.maxhp, monster.max_maxhp);
     if (k > 0) {
-        anger_monster(player_ptr, m_ptr);
+        anger_monster(player_ptr, monster);
     }
 
     switch (attack) {
     case PlayerMutationType::SCOR_TAIL:
-        project(player_ptr, 0, 0, m_ptr->fy, m_ptr->fx, k, AttributeType::POIS, PROJECT_KILL);
-        *mdeath = !m_ptr->is_valid();
+        project(player_ptr, 0, 0, monster.fy, monster.fx, k, AttributeType::POIS, PROJECT_KILL);
+        *mdeath = !monster.is_valid();
         break;
     case PlayerMutationType::HORNS:
     case PlayerMutationType::BEAK:
@@ -143,7 +143,7 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     }
     }
 
-    touch_zap_player(m_ptr, player_ptr);
+    touch_zap_player(monster, player_ptr);
 }
 
 /*!
@@ -177,7 +177,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         return false;
     }
 
-    const auto m_name = monster_desc(player_ptr, &monster, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
     const auto effects = player_ptr->effects();
     const auto is_hallucinated = effects->hallucination().is_hallucinated();
     if (monster.ml) {

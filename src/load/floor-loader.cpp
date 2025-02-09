@@ -193,7 +193,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         }
 
         auto &monster = floor.m_list[m_idx];
-        monster_loader->rd_monster(&monster);
+        monster_loader->rd_monster(monster);
         auto &grid = floor.get_grid(monster.get_position());
         grid.m_idx = m_idx;
         monster.get_real_monrace().increment_current_numbers();

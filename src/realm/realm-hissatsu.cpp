@@ -250,7 +250,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 Pos2D origin(pos.y, pos.x);
                 const auto m_idx = grid.m_idx;
                 auto &monster = floor.m_list[m_idx];
-                const auto m_name = monster_desc(player_ptr, &monster, 0);
+                const auto m_name = monster_desc(player_ptr, monster, 0);
                 Pos2D neighbor(pos.y, pos.x);
                 for (auto i = 0; i < 5; i++) {
                     neighbor += Direction(*dir).vec();
@@ -435,7 +435,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     continue;
                 }
 
-                const auto m_name = monster_desc(player_ptr, &monster, 0);
+                const auto m_name = monster_desc(player_ptr, monster, 0);
                 msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name.data());
             }
         }

@@ -135,11 +135,11 @@ Pos2D mmove2(const Pos2D &pos_orig, const Pos2D &pos1, const Pos2D &pos2)
  * @return 個々のモンスターがプレイヤーが見えたらTRUE
  * @todo is_seen() の関数マクロをバラそうとしたがインクルード関係のコンパイルエラーで失敗
  */
-bool is_seen(PlayerType *player_ptr, MonsterEntity *m_ptr)
+bool is_seen(PlayerType *player_ptr, const MonsterEntity &monster)
 {
     auto is_inside_view = !ignore_unview;
     is_inside_view |= AngbandSystem::get_instance().is_phase_out();
-    const auto m_pos = m_ptr->get_position();
+    const auto m_pos = monster.get_position();
     is_inside_view |= player_can_see_bold(player_ptr, m_pos.y, m_pos.x) && projectable(player_ptr, player_ptr->get_position(), m_pos);
-    return m_ptr->ml && is_inside_view;
+    return monster.ml && is_inside_view;
 }

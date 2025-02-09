@@ -11,14 +11,14 @@ class PlayerType;
 class QuestType;
 class QuestCompletionChecker {
 public:
-    QuestCompletionChecker(PlayerType *player_ptr, MonsterEntity *m_ptr);
+    QuestCompletionChecker(PlayerType *player_ptr, const MonsterEntity &monster);
     virtual ~QuestCompletionChecker() = default;
 
     void complete();
 
 private:
     PlayerType *player_ptr;
-    MonsterEntity *m_ptr;
+    const MonsterEntity *m_ptr;
     QuestId quest_idx;
     QuestType *q_ptr = nullptr;
 

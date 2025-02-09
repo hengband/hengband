@@ -16,9 +16,9 @@
 #include "view/display-messages.h"
 #include <algorithm>
 
-QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, MonsterEntity *m_ptr)
+QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, const MonsterEntity &monster)
     : player_ptr(player_ptr)
-    , m_ptr(m_ptr)
+    , m_ptr(&monster)
     , quest_idx(QuestId::NONE)
 {
 }
@@ -50,7 +50,7 @@ void QuestCompletionChecker::complete()
     this->make_reward(pos);
 }
 
-static bool check_quest_completion(PlayerType *player_ptr, const QuestType &quest, MonsterEntity *m_ptr)
+static bool check_quest_completion(PlayerType *player_ptr, const QuestType &quest, const MonsterEntity &monster)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     if (quest.status != QuestStatusType::TAKEN) {
@@ -76,7 +76,7 @@ static bool check_quest_completion(PlayerType *player_ptr, const QuestType &ques
         return true;
     }
 
-    auto is_target = (quest.type == QuestKindType::RANDOM) && (quest.r_idx == m_ptr->r_idx);
+    auto is_target = (quest.type == QuestKindType::RANDOM) && (quest.r_idx == monster.r_idx);
     if ((quest.type == QuestKindType::KILL_LEVEL) || is_target) {
         return true;
     }
@@ -92,7 +92,7 @@ void QuestCompletionChecker::set_quest_idx()
     if (inside_quest(this->quest_idx)) {
         return;
     }
-    auto q = std::find_if(quests.rbegin(), quests.rend(), [this](auto q) { return check_quest_completion(this->player_ptr, q.second, this->m_ptr); });
+    auto q = std::find_if(quests.rbegin(), quests.rend(), [this](auto q) { return check_quest_completion(this->player_ptr, q.second, *this->m_ptr); });
 
     if (q != quests.rend()) {
         this->quest_idx = q->first;

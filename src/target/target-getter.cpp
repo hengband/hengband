@@ -167,7 +167,7 @@ std::optional<int> get_direction(PlayerType *player_ptr)
     }
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    const auto m_name = monster_desc(player_ptr, &monster, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
     const auto fmt = monster.is_confused()
                          ? _("%sは混乱している。", "%s^ is confused.")
                          : _("%sは思い通りに動いてくれない。", "You cannot control %s.");
@@ -256,9 +256,9 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
             dir = rand_choice(Direction::directions_8()).dir();
         }
     } else if (player_ptr->riding) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-        const auto &monrace = m_ptr->get_monrace();
-        if (m_ptr->is_confused()) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+        const auto &monrace = monster.get_monrace();
+        if (monster.is_confused()) {
             if (evaluate_percent(75)) {
                 dir = rand_choice(Direction::directions_8()).dir();
             }
@@ -273,9 +273,9 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
         if (is_confused) {
             msg_print(_("あなたは混乱している。", "You are confused."));
         } else {
-            auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
-            if (m_ptr->is_confused()) {
+            const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+            const auto m_name = monster_desc(player_ptr, monster, 0);
+            if (monster.is_confused()) {
                 msg_format(_("%sは混乱している。", "%s^ is confused."), m_name.data());
             } else {
                 msg_format(_("%sは思い通りに動いてくれない。", "You cannot control %s."), m_name.data());

@@ -97,7 +97,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
         const auto &monster = floor.m_list[pet_ctr];
         auto delete_this = false;
         const auto should_ask = (pet_ctr == riding_index) || monster.is_named();
-        const auto friend_name = monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE);
+        const auto friend_name = monster_desc(player_ptr, monster, MD_ASSUME_VISIBLE);
         if (!all_pets) {
             health_track(player_ptr, pet_ctr);
             handle_stuff(player_ptr);
@@ -137,7 +137,7 @@ void do_cmd_pet_dismiss(PlayerType *player_ptr)
 
         if ((all_pets && !should_ask) || (!all_pets && delete_this)) {
             if (record_named_pet && monster.is_named()) {
-                const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+                const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
                 exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
             }
 
@@ -221,17 +221,17 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
             return false;
         }
 
-        const auto *m_ptr = &player_ptr->current_floor_ptr->m_list[grid.m_idx];
+        const auto &monster = player_ptr->current_floor_ptr->m_list[grid.m_idx];
 
-        if (!grid.has_monster() || !m_ptr->ml) {
+        if (!grid.has_monster() || !monster.ml) {
             msg_print(_("その場所にはモンスターはいません。", "There is no monster here."));
             return false;
         }
-        if (!m_ptr->is_pet() && !force) {
+        if (!monster.is_pet() && !force) {
             msg_print(_("そのモンスターはペットではありません。", "That monster is not a pet."));
             return false;
         }
-        if (m_ptr->get_monrace().misc_flags.has_not(MonsterMiscType::RIDING)) {
+        if (monster.get_monrace().misc_flags.has_not(MonsterMiscType::RIDING)) {
             msg_print(_("そのモンスターには乗れなさそうだ。", "This monster doesn't seem suitable for riding."));
             return false;
         }
@@ -254,14 +254,14 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
             return false;
         }
-        if (m_ptr->get_monrace().level > randint1((player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 50 + player_ptr->lev / 2 + 20))) {
+        if (monster.get_monrace().level > randint1((player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 50 + player_ptr->lev / 2 + 20))) {
             msg_print(_("うまく乗れなかった。", "You failed to ride."));
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
             return false;
         }
 
-        if (m_ptr->is_asleep()) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        if (monster.is_asleep()) {
+            const auto m_name = monster_desc(player_ptr, monster, 0);
             (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
             msg_format(_("%sを起こした。", "You have woken %s up."), m_name.data());
         }
@@ -314,24 +314,24 @@ static void do_name_pet(PlayerType *player_ptr)
         return;
     }
 
-    auto *m_ptr = &floor.m_list[grid.m_idx];
-    if (!m_ptr->is_pet()) {
+    auto &monster = floor.m_list[grid.m_idx];
+    if (!monster.is_pet()) {
         msg_print(_("そのモンスターはペットではない。", "This monster is not a pet."));
         return;
     }
 
-    if (m_ptr->get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (monster.get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
         msg_print(_("そのモンスターの名前は変えられない！", "You cannot change the name of this monster!"));
         return;
     }
 
-    msg_format(_("%sに名前をつける。", "Name %s."), monster_desc(player_ptr, m_ptr, 0).data());
+    msg_format(_("%sに名前をつける。", "Name %s."), monster_desc(player_ptr, monster, 0).data());
     msg_print(nullptr);
 
     auto old_name = false;
     std::string initial_name("");
-    if (m_ptr->is_named()) {
-        initial_name = m_ptr->nickname;
+    if (monster.is_named()) {
+        initial_name = monster.nickname;
         old_name = true;
     }
 
@@ -341,19 +341,19 @@ static void do_name_pet(PlayerType *player_ptr)
     }
 
     if (!new_name->empty()) {
-        m_ptr->nickname = *new_name;
+        monster.nickname = *new_name;
         if (record_named_pet) {
-            exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
+            exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_NAME, monster_desc(player_ptr, monster, MD_INDEF_VISIBLE));
         }
 
         return;
     }
 
     if (record_named_pet && old_name) {
-        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE));
+        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_UNNAME, monster_desc(player_ptr, monster, MD_INDEF_VISIBLE));
     }
 
-    m_ptr->nickname.clear();
+    monster.nickname.clear();
 }
 
 /*!
@@ -738,9 +738,9 @@ void do_cmd_pet(PlayerType *player_ptr)
         if (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) {
             player_ptr->pet_extra_flags &= ~(PF_PICKUP_ITEMS);
             for (pet_ctr = player_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--) {
-                auto *m_ptr = &player_ptr->current_floor_ptr->m_list[pet_ctr];
-                if (m_ptr->is_pet()) {
-                    monster_drop_carried_objects(player_ptr, m_ptr);
+                auto &monster = player_ptr->current_floor_ptr->m_list[pet_ctr];
+                if (monster.is_pet()) {
+                    monster_drop_carried_objects(player_ptr, monster);
                 }
             }
         } else {

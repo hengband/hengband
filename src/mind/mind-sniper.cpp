@@ -391,10 +391,10 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
  * @param m_ptr 目標となるモンスターの構造体参照ポインタ
  * @return スレイの倍率(/10倍)
  */
-MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, MonsterEntity *m_ptr, SPELL_IDX snipe_type)
+MULTIPLY calc_snipe_damage_with_slay(PlayerType *player_ptr, MULTIPLY mult, const MonsterEntity &monster, SPELL_IDX snipe_type)
 {
-    auto &monrace = m_ptr->get_monrace();
-    bool seen = is_seen(player_ptr, m_ptr);
+    auto &monrace = monster.get_monrace();
+    bool seen = is_seen(player_ptr, monster);
 
     auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
     const auto sniper_concent = sniper_data ? sniper_data->concent : 0;

@@ -50,7 +50,7 @@ static bool spell_RF4_BREATH_special_message(MonraceId r_idx, AttributeType GF_T
 static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, std::string_view type_s, AttributeType GF_TYPE)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
+    const auto &monster = floor.m_list[m_idx];
     auto see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     auto known = monster_near_player(floor, m_idx, t_idx);
     auto mon_to_mon = (target_type == MONSTER_TO_MONSTER);
@@ -58,7 +58,7 @@ static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
     const auto m_name = monster_name(player_ptr, m_idx);
     const auto t_name = monster_name(player_ptr, t_idx);
 
-    if (!spell_RF4_BREATH_special_message(m_ptr->r_idx, GF_TYPE, m_name.data())) {
+    if (!spell_RF4_BREATH_special_message(monster.r_idx, GF_TYPE, m_name.data())) {
         if (player_ptr->effects()->blindness().is_blind()) {
             if (mon_to_player || (mon_to_mon && known && see_either)) {
                 msg_format(_("%s^が何かのブレスを吐いた。", "%s^ breathes."), m_name.data());

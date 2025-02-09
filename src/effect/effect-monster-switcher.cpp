@@ -39,7 +39,7 @@ ProcessResult effect_monster_hypodynamia(PlayerType *player_ptr, EffectMonster *
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
             em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::DEMON);
         }
@@ -67,7 +67,7 @@ ProcessResult effect_monster_death_ray(PlayerType *player_ptr, EffectMonster *em
     }
 
     if (!em_ptr->m_ptr->has_living_flag()) {
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
                 em_ptr->r_ptr->r_kind_flags.set(MonsterKindType::DEMON);
             }
@@ -108,7 +108,7 @@ ProcessResult effect_monster_kill_wall(PlayerType *player_ptr, EffectMonster *em
         em_ptr->obvious = true;
     }
 
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_ROCK);
     }
 
@@ -163,7 +163,7 @@ ProcessResult effect_monster_engetsu(PlayerType *player_ptr, EffectMonster *em_p
         em_ptr->note = _("には効果がなかった。", " is unaffected.");
         em_ptr->dam = 0;
         em_ptr->skipped = true;
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_misc_flags.set(MonsterMiscType::EMPTY_MIND);
         }
         return ProcessResult::PROCESS_CONTINUE;
@@ -207,7 +207,7 @@ ProcessResult effect_monster_engetsu(PlayerType *player_ptr, EffectMonster *em_p
         case 2:
             if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
                 if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
-                    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+                    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
                         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_CONF);
                     }
                 }
@@ -222,7 +222,7 @@ ProcessResult effect_monster_engetsu(PlayerType *player_ptr, EffectMonster *em_p
         default:
             if (em_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_SLEEP)) {
                 if (em_ptr->r_ptr->resistance_flags.has(MonsterResistanceType::NO_SLEEP)) {
-                    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+                    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
                         em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_SLEEP);
                     }
                 }
@@ -280,7 +280,7 @@ ProcessResult effect_monster_photo(PlayerType *player_ptr, EffectMonster *em_ptr
             em_ptr->obvious = true;
         }
 
-        if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
             em_ptr->r_ptr->r_resistance_flags.set(MonsterResistanceType::HURT_LITE);
         }
 

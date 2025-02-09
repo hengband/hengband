@@ -69,20 +69,20 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.grid_array[y][x];
-    auto *m_ptr = &floor.m_list[grid.m_idx];
+    auto &monster = floor.m_list[grid.m_idx];
     MonraceId new_r_idx;
-    MonraceId old_r_idx = m_ptr->r_idx;
+    MonraceId old_r_idx = monster.r_idx;
     bool targeted = target_who == grid.m_idx;
     auto health_tracked = HealthBarTracker::get_instance().is_tracking(grid.m_idx);
 
     if (floor.inside_arena || AngbandSystem::get_instance().is_phase_out()) {
         return false;
     }
-    if (m_ptr->is_riding() || m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
+    if (monster.is_riding() || monster.mflag2.has(MonsterConstantFlagType::KAGE)) {
         return false;
     }
 
-    const auto back_m = m_ptr->clone();
+    const auto back_m = monster.clone();
     new_r_idx = select_polymorph_monrace_id(player_ptr, old_r_idx);
     if (new_r_idx == old_r_idx) {
         return false;
@@ -91,25 +91,25 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     bool preserve_hold_objects = !back_m.hold_o_idx_list.empty();
 
     BIT_FLAGS mode = 0L;
-    if (m_ptr->is_friendly()) {
+    if (monster.is_friendly()) {
         mode |= PM_FORCE_FRIENDLY;
     }
-    if (m_ptr->is_pet()) {
+    if (monster.is_pet()) {
         mode |= PM_FORCE_PET;
     }
-    if (m_ptr->mflag2.has(MonsterConstantFlagType::NOPET)) {
+    if (monster.mflag2.has(MonsterConstantFlagType::NOPET)) {
         mode |= PM_NO_PET;
     }
 
-    m_ptr->hold_o_idx_list.clear();
+    monster.hold_o_idx_list.clear();
     delete_monster_idx(player_ptr, grid.m_idx);
     bool polymorphed = false;
     auto m_idx = place_specific_monster(player_ptr, y, x, new_r_idx, mode);
     if (m_idx) {
-        auto &monster = floor.m_list[*m_idx];
-        monster.nickname = back_m.nickname;
-        monster.parent_m_idx = back_m.parent_m_idx;
-        monster.hold_o_idx_list = back_m.hold_o_idx_list;
+        auto &monster_polymorphed = floor.m_list[*m_idx];
+        monster_polymorphed.nickname = back_m.nickname;
+        monster_polymorphed.parent_m_idx = back_m.parent_m_idx;
+        monster_polymorphed.hold_o_idx_list = back_m.hold_o_idx_list;
         polymorphed = true;
     } else {
         m_idx = place_specific_monster(player_ptr, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN));

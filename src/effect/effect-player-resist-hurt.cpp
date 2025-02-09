@@ -347,7 +347,7 @@ void effect_player_nexus(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     ep_ptr->dam = ep_ptr->dam * calc_nexus_damage_rate(player_ptr, CALC_RAND) / 100;
 
     if (!has_resist_nexus(player_ptr) && !check_multishadow(player_ptr)) {
-        apply_nexus(ep_ptr->m_ptr, player_ptr);
+        apply_nexus(*ep_ptr->m_ptr, player_ptr);
     }
 
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);

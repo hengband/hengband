@@ -337,7 +337,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                     }
                 } else {
                     if (record_named_pet && monster.is_named_pet()) {
-                        const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+                        const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
                         exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
                     }
 

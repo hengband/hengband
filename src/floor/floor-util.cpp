@@ -116,7 +116,7 @@ void forget_flow(FloorType &floor)
  * @note we do NOT visually reflect these (irrelevant) changes
  * @details
  * Hack -- we clear the "grid.o_idx" field for every grid,
- * and the "m_ptr->next_o_idx" field for every monster, since
+ * and the "monster.next_o_idx" field for every monster, since
  * we know we are clearing every object.  Technically, we only
  * clear those fields for grids/monsters containing objects,
  * and we clear it once for every such object.

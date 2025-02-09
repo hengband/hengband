@@ -97,9 +97,9 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
  * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
  * @return 死者復活が有効な状態ならばTRUEを返す。
  */
-bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
+bool raise_possible(PlayerType *player_ptr, const MonsterEntity &monster)
 {
-    const auto m_pos = m_ptr->get_position();
+    const auto m_pos = monster.get_position();
     const auto &floor = *player_ptr->current_floor_ptr;
     for (auto xx = m_pos.x - 5; xx <= m_pos.x + 5; xx++) {
         for (auto yy = m_pos.y - 5; yy <= m_pos.y + 5; yy++) {
@@ -119,7 +119,7 @@ bool raise_possible(PlayerType *player_ptr, MonsterEntity *m_ptr)
                 const auto &item = floor.o_list[this_o_idx];
                 if (item.bi_key.tval() == ItemKindType::MONSTER_REMAINS) {
                     const auto &monrace = item.get_monrace();
-                    if (!monster_has_hostile_to_other_monster(*m_ptr, monrace)) {
+                    if (!monster_has_hostile_to_other_monster(monster, monrace)) {
                         return true;
                     }
                 }
@@ -167,8 +167,8 @@ bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, P
         const Pos2D pos(y, x);
         const auto &grid = floor.get_grid(pos);
         if (grid.has_monster() && (y != y2 || x != x2)) {
-            auto *m_ptr = &floor.m_list[grid.m_idx];
-            if (is_friend == m_ptr->is_pet()) {
+            const auto &monster = floor.m_list[grid.m_idx];
+            if (is_friend == monster.is_pet()) {
                 return false;
             }
         }
@@ -263,8 +263,8 @@ ProjectResult ball(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m
  */
 ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_BREATH;
     if (target_type == MONSTER_TO_PLAYER) {
         flg |= PROJECT_PLAYER;

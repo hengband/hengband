@@ -145,7 +145,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             std::string killer;
             if (m_idx) {
                 const auto &monster = floor.m_list[m_idx];
-                const auto m_name = monster_desc(player_ptr, &monster, MD_WRONGDOER_NAME);
+                const auto m_name = monster_desc(player_ptr, monster, MD_WRONGDOER_NAME);
                 killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name.data());
             } else {
                 killer = _("地震", "an earthquake");
@@ -224,8 +224,8 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
                 }
             }
 
-            const auto m_name = monster_desc(player_ptr, &monster, 0);
-            if (!ignore_unview || is_seen(player_ptr, &monster)) {
+            const auto m_name = monster_desc(player_ptr, monster, 0);
+            if (!ignore_unview || is_seen(player_ptr, monster)) {
                 msg_format(_("%s^は苦痛で泣きわめいた！", "%s^ wails out in pain!"), m_name.data());
             }
 
@@ -233,13 +233,13 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
             monster.hp -= damage;
             if (monster.hp < 0) {
-                if (!ignore_unview || is_seen(player_ptr, &monster)) {
+                if (!ignore_unview || is_seen(player_ptr, monster)) {
                     msg_format(_("%s^は岩石に埋もれてしまった！", "%s^ is embedded in the rock!"), m_name.data());
                 }
 
                 if (grid.has_monster()) {
                     if (record_named_pet && monster.is_named_pet()) {
-                        const auto m2_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+                        const auto m2_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
                         exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
                     }
                 }

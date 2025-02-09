@@ -21,9 +21,9 @@
 /*!
  * @brief AvaterChangerコンストラクタ
  */
-AvatarChanger::AvatarChanger(PlayerType *player_ptr, MonsterEntity *m_ptr)
+AvatarChanger::AvatarChanger(PlayerType *player_ptr, const MonsterEntity &monster)
     : player_ptr(player_ptr)
-    , m_ptr(m_ptr)
+    , m_ptr(&monster)
 {
 }
 

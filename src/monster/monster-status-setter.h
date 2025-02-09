@@ -5,8 +5,8 @@
 enum class MonraceId : short;
 class MonsterEntity;
 class PlayerType;
-void set_pet(PlayerType *player_ptr, MonsterEntity *m_ptr);
-void anger_monster(PlayerType *player_ptr, MonsterEntity *m_ptr);
+void set_pet(PlayerType *player_ptr, MonsterEntity &monster);
+void anger_monster(PlayerType *player_ptr, MonsterEntity &monster);
 bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v);
 bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v);
 bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v);

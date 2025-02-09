@@ -190,9 +190,9 @@ bool monster_has_hostile_to_other_monster(const MonsterEntity &monster_other, co
     return MonsterEntity::check_sub_alignments(monster_other.sub_align, sub_align2);
 }
 
-bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr)
+bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity &monster)
 {
-    return m_ptr->ml && !player_ptr->effects()->hallucination().is_hallucinated() && m_ptr->is_original_ap();
+    return monster.ml && !player_ptr->effects()->hallucination().is_hallucinated() && monster.is_original_ap();
 }
 
 /*!
@@ -203,6 +203,6 @@ bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr)
  */
 std::string monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    return monster_desc(player_ptr, m_ptr, 0x00);
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    return monster_desc(player_ptr, monster, 0x00);
 }

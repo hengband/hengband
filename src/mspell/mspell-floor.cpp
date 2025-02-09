@@ -58,9 +58,9 @@ MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, PlayerType *player_ptr, M
 
     simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     auto result = MonsterSpellResult::make_valid();
-    if (m_ptr->r_idx == MonraceId::LEE_QIEZI) {
+    if (monster.r_idx == MonraceId::LEE_QIEZI) {
         msg_print(_("しかし、その声は誰の心にも響かなかった…。", "However, that voice didn't touch anyone's heart..."));
         return result;
     }
@@ -174,9 +174,9 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
-    auto *t_ptr = &floor.m_list[t_idx];
-    auto &monrace_target = t_ptr->get_monrace();
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monster_target = floor.m_list[t_idx];
+    auto &monrace_target = monster_target.get_monrace();
 
     mspell_cast_msg_simple msg(_("%s^があなたを引き戻した。", "%s^ commands you to return."),
         _("%s^が%sを引き戻した。", "%s^ commands %s to return."));
@@ -184,7 +184,7 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
     if (target_type == MONSTER_TO_PLAYER) {
-        teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+        teleport_player_to(player_ptr, monster.fy, monster.fx, TELEPORT_PASSIVE);
         return res;
     }
 
@@ -197,7 +197,7 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
 
     if (monrace_target.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
         if (monrace_target.kind_flags.has(MonsterKindType::UNIQUE) || monrace_target.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-            if (is_original_ap_and_seen(player_ptr, t_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_target)) {
                 monrace_target.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
             }
             if (see_monster(player_ptr, t_idx)) {
@@ -205,7 +205,7 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
             }
             resists_tele = true;
         } else if (monrace_target.level > randint1(100)) {
-            if (is_original_ap_and_seen(player_ptr, t_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_target)) {
                 monrace_target.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
             }
             if (see_monster(player_ptr, t_idx)) {
@@ -220,10 +220,10 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
         return res;
     }
 
-    if (t_ptr->is_riding()) {
-        teleport_player_to(player_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
+    if (monster_target.is_riding()) {
+        teleport_player_to(player_ptr, monster.fy, monster.fx, TELEPORT_PASSIVE);
     } else {
-        teleport_monster_to(player_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_PASSIVE);
+        teleport_monster_to(player_ptr, t_idx, monster.fy, monster.fx, 100, TELEPORT_PASSIVE);
     }
     set_monster_csleep(player_ptr, t_idx, 0);
 
@@ -245,8 +245,8 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
     res.learnable = target_type == MONSTER_TO_PLAYER;
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto *t_ptr = &floor.m_list[t_idx];
-    auto &monrace_target = t_ptr->get_monrace();
+    const auto &monster_target = floor.m_list[t_idx];
+    auto &monrace_target = monster_target.get_monrace();
 
     mspell_cast_msg_simple msg(_("%s^にテレポートさせられた。", "%s^ teleports you away."),
         _("%s^は%sをテレポートさせた。", "%s^ teleports %s away."));
@@ -277,7 +277,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
 
     if (monrace_target.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT)) {
         if (monrace_target.kind_flags.has(MonsterKindType::UNIQUE) || monrace_target.resistance_flags.has(MonsterResistanceType::RESIST_ALL)) {
-            if (is_original_ap_and_seen(player_ptr, t_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_target)) {
                 monrace_target.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
             }
             if (see_monster(player_ptr, t_idx)) {
@@ -285,7 +285,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
             }
             resists_tele = true;
         } else if (monrace_target.level > randint1(100)) {
-            if (is_original_ap_and_seen(player_ptr, t_ptr)) {
+            if (is_original_ap_and_seen(player_ptr, monster_target)) {
                 monrace_target.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
             }
             if (see_monster(player_ptr, t_idx)) {
@@ -300,7 +300,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
         return res;
     }
 
-    if (t_ptr->is_riding()) {
+    if (monster_target.is_riding()) {
         teleport_player_away(m_idx, player_ptr, MAX_PLAYER_SIGHT * 2 + 5, false);
     } else {
         teleport_away(player_ptr, t_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_PASSIVE);
@@ -324,8 +324,8 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
     const auto res = MonsterSpellResult::make_valid();
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto *t_ptr = &floor.m_list[t_idx];
-    const auto &monrace_target = t_ptr->get_monrace();
+    const auto &monster_target = floor.m_list[t_idx];
+    const auto &monrace_target = monster_target.get_monrace();
     DEPTH rlev = monster_level_idx(floor, m_idx);
     bool resist, saving_throw;
 
@@ -360,7 +360,7 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        teleport_level(player_ptr, t_ptr->is_riding() ? 0 : t_idx);
+        teleport_level(player_ptr, monster_target.is_riding() ? 0 : t_idx);
     }
 
     return res;
@@ -382,8 +382,8 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
     mspell_cast_msg_blind msg;
     concptr msg_done;
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor.m_list[m_idx];
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
     bool can_use_lite_area = false;
     bool monster_to_monster = target_type == MONSTER_TO_MONSTER;
     bool monster_to_player = target_type == MONSTER_TO_PLAYER;
@@ -482,13 +482,13 @@ MonsterSpellResult spell_RF6_TRAPS(PlayerType *player_ptr, POSITION y, POSITION 
  */
 MonsterSpellResult spell_RF6_RAISE_DEAD(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     mspell_cast_msg_blind msg(_("%s^が何かをつぶやいた。", "%s^ mumbles."),
         _("%s^が死者復活の呪文を唱えた。", "%s^ casts a spell to revive corpses."), _("%s^が死者復活の呪文を唱えた。", "%s^ casts a spell to revive corpses."));
 
     monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
-    animate_dead(player_ptr, m_idx, m_ptr->fy, m_ptr->fx);
+    animate_dead(player_ptr, m_idx, monster.fy, monster.fx);
 
     return MonsterSpellResult::make_valid();
 }

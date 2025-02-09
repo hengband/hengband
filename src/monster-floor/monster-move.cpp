@@ -213,7 +213,7 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
                 SubWindowRedrawingFlag::DUNGEON,
             };
             rfu.set_flags(flags);
-            if (is_original_ap_and_seen(player_ptr, &monster)) {
+            if (is_original_ap_and_seen(player_ptr, monster)) {
                 monrace.r_behavior_flags.set(MonsterBehaviorType::BASH_DOOR);
             }
 
@@ -235,10 +235,10 @@ static bool process_door(PlayerType *player_ptr, turn_flags *turn_flags_ptr, con
  * @param pos モンスターの移動先座標
  * @return ルーンに侵入できるか否か
  */
-static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, const Pos2D &pos)
+static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const Pos2D &pos)
 {
     auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monrace = monster.get_monrace();
     auto can_enter = turn_flags_ptr->do_move;
     can_enter &= grid.is_rune_protection();
     can_enter &= (monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) || !player_ptr->is_located_at(pos);
@@ -247,7 +247,7 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
     }
 
     turn_flags_ptr->do_move = false;
-    if (m_ptr->is_pet() || (randint1(BREAK_RUNE_PROTECTION) >= monrace.level)) {
+    if (monster.is_pet() || (randint1(BREAK_RUNE_PROTECTION) >= monrace.level)) {
         return true;
     }
 
@@ -271,24 +271,24 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
  * @param pos モンスターの移動先座標
  * @return モンスターが死亡した場合のみFALSE
  */
-static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, const Pos2D &pos)
+static bool process_explosive_rune(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, const Pos2D &pos)
 {
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &monrace = m_ptr->get_monrace();
+    const auto &monrace = monster.get_monrace();
     auto should_explode = turn_flags_ptr->do_move;
     should_explode &= (monrace.behavior_flags.has_not(MonsterBehaviorType::NEVER_BLOW)) || !player_ptr->is_located_at(pos);
     if (!should_explode) {
         return true;
     }
 
-    if (m_ptr->is_pet() && grid.is_rune_explosion()) {
+    if (monster.is_pet() && grid.is_rune_explosion()) {
         turn_flags_ptr->do_move = false;
         return true;
     }
 
     activate_explosive_rune(player_ptr, pos, monrace);
 
-    if (!m_ptr->is_valid()) {
+    if (!monster.is_valid()) {
         return false;
     }
 
@@ -332,7 +332,7 @@ static bool process_post_dig_wall(PlayerType *player_ptr, turn_flags *turn_flags
             SubWindowRedrawingFlag::DUNGEON,
         };
         rfu.set_flags(flags);
-        if (is_original_ap_and_seen(player_ptr, &monster)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_feature_flags.set(MonsterFeatureType::KILL_WALL);
         }
 
@@ -411,8 +411,8 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             }
         }
 
-        if (!process_protection_rune(player_ptr, turn_flags_ptr, &monster, pos_neighbor)) {
-            if (!process_explosive_rune(player_ptr, turn_flags_ptr, &monster, pos_neighbor)) {
+        if (!process_protection_rune(player_ptr, turn_flags_ptr, monster, pos_neighbor)) {
+            if (!process_explosive_rune(player_ptr, turn_flags_ptr, monster, pos_neighbor)) {
                 return false;
             }
         }
@@ -444,7 +444,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         if (turn_flags_ptr->do_move && monrace.behavior_flags.has(MonsterBehaviorType::NEVER_MOVE)) {
-            if (is_original_ap_and_seen(player_ptr, &monster)) {
+            if (is_original_ap_and_seen(player_ptr, monster)) {
                 monrace.r_behavior_flags.set(MonsterBehaviorType::NEVER_MOVE);
             }
 
@@ -572,7 +572,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
         return;
     }
 
-    const auto m_name = monster.ml ? monster_desc(player_ptr, &monster, 0) : std::string(_("それ", "It"));
+    const auto m_name = monster.ml ? monster_desc(player_ptr, monster, 0) : std::string(_("それ", "It"));
     auto filename = get_speak_filename(monster);
     if (filename.empty()) {
         return;

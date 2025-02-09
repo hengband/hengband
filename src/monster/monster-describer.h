@@ -5,4 +5,4 @@
 
 class MonsterEntity;
 class PlayerType;
-std::string monster_desc(PlayerType *player_ptr, const MonsterEntity *m_ptr, BIT_FLAGS mode);
+std::string monster_desc(PlayerType *player_ptr, const MonsterEntity &monster, BIT_FLAGS mode);

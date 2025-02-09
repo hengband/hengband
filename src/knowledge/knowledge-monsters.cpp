@@ -111,14 +111,14 @@ void do_cmd_knowledge_pets(PlayerType *player_ptr)
 
     int t_friends = 0;
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        const auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || !m_ptr->is_pet()) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[i];
+        if (!monster.is_valid() || !monster.is_pet()) {
             continue;
         }
 
         t_friends++;
-        const auto pet_name = monster_desc(player_ptr, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-        fprintf(fff, "%s (%s)\n", pet_name.data(), m_ptr->build_looking_description(true).data());
+        const auto pet_name = monster_desc(player_ptr, monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+        fprintf(fff, "%s (%s)\n", pet_name.data(), monster.build_looking_description(true).data());
     }
 
     int show_upkeep = calculate_upkeep(player_ptr);

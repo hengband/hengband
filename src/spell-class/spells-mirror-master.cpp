@@ -406,10 +406,10 @@ static bool activate_super_ray_effect(PlayerType *player_ptr, int y, int x, int 
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.grid_array[project_m_y][project_m_x];
-    const auto *m_ptr = &floor.m_list[grid.m_idx];
-    if (project_m_n == 1 && grid.has_monster() && m_ptr->ml) {
+    const auto &monster = floor.m_list[grid.m_idx];
+    if (project_m_n == 1 && grid.has_monster() && monster.ml) {
         if (!player_ptr->effects()->hallucination().is_hallucinated()) {
-            LoreTracker::get_instance().set_trackee(m_ptr->ap_r_idx);
+            LoreTracker::get_instance().set_trackee(monster.ap_r_idx);
         }
 
         health_track(player_ptr, grid.m_idx);

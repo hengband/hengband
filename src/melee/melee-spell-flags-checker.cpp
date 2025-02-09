@@ -322,7 +322,7 @@ static void check_non_stupid(PlayerType *player_ptr, melee_spell_type *ms_ptr)
         ms_ptr->ability_flags.reset(MonsterAbilityType::DISPEL);
     }
 
-    if (ms_ptr->ability_flags.has(MonsterAbilityType::RAISE_DEAD) && !raise_possible(player_ptr, ms_ptr->m_ptr)) {
+    if (ms_ptr->ability_flags.has(MonsterAbilityType::RAISE_DEAD) && !raise_possible(player_ptr, *ms_ptr->m_ptr)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::RAISE_DEAD);
     }
 

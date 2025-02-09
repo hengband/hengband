@@ -9,8 +9,8 @@
 msr_type::msr_type(PlayerType *player_ptr, short m_idx, const EnumClassFlagGroup<MonsterAbilityType> &ability_flags)
     : ability_flags(ability_flags)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    this->r_ptr = &m_ptr->get_monrace();
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    this->r_ptr = &monster.get_monrace();
 }
 
 /*!
