@@ -53,6 +53,7 @@ public:
     bool is_player_in_bounds() const;
     const Rect2D &get_area() const;
 
+    void set_starting_player_position(const Pos2D &pos);
     void set_player_position(const Pos2D &pos);
     void move_player_to(const Direction &dir);
 
@@ -61,6 +62,7 @@ private:
     static WildernessGrids instance;
     Rect2D area = { 0, 0, 0, 0 };
     Pos2D current_pos = { 0, 0 };
+    Pos2D starting_pos = { 0, 0 };
 };
 
 extern std::vector<std::vector<WildernessGrid>> wilderness_grids;

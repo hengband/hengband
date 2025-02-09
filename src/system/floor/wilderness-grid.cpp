@@ -47,8 +47,7 @@ void WildernessGrids::initialize_seeds()
 
 void WildernessGrids::initialize_position()
 {
-    constexpr Pos2D initial_position(48, 5);
-    this->current_pos = initial_position;
+    this->current_pos = this->starting_pos;
 }
 
 WildernessGrids &WildernessGrids::get_instance()
@@ -69,6 +68,11 @@ WildernessGrid &WildernessGrids::get_grid(const Pos2D &pos)
 const Pos2D &WildernessGrids::get_player_position() const
 {
     return this->current_pos;
+}
+
+void WildernessGrids::set_starting_player_position(const Pos2D &pos)
+{
+    this->starting_pos = pos;
 }
 
 void WildernessGrids::set_player_position(const Pos2D &pos)
