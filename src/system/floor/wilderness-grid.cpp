@@ -90,6 +90,16 @@ void WildernessGrids::move_player_to(const Direction &dir)
     this->current_pos += dir.vec();
 }
 
+bool WildernessGrids::should_reinitialize() const
+{
+    return this->reinitialization_flag;
+}
+
+void WildernessGrids::set_reinitialization(bool state)
+{
+    this->reinitialization_flag = state;
+}
+
 bool WildernessGrids::is_height_initialized() const
 {
     return this->area.bottom_right.y > 0;

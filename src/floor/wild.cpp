@@ -52,8 +52,6 @@
 
 constexpr auto SUM_TERRAIN_PROBABILITIES = 18;
 
-bool reinit_wilderness = false;
-
 static bool generate_encounter;
 
 struct border_type {

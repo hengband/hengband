@@ -14,8 +14,6 @@
 #include <optional>
 #include <utility>
 
-extern bool reinit_wilderness;
-
 enum parse_error_type : int;
 class PlayerType;
 void wilderness_gen(PlayerType *player_ptr);
