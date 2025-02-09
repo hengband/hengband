@@ -668,30 +668,22 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
             return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
         }
 
-        int index = zz[0][0];
+        const int index = zz[0][0];
         auto &letter = wilderness_letters.at(index);
         if (num > 1) {
             letter.terrain = i2enum<WildernessTerrain>(std::stoi(zz[1]));
-        } else {
-            letter.terrain = WildernessTerrain::EDGE;
         }
 
         if (num > 2) {
             letter.level = std::stoi(zz[2]);
-        } else {
-            letter.level = 0;
         }
 
         if (num > 3) {
             letter.town = static_cast<short>(std::stoi(zz[3]));
-        } else {
-            letter.town = 0;
         }
 
         if (num > 4) {
             letter.road = std::stoi(zz[4]);
-        } else {
-            letter.road = 0;
         }
 
         if (num > 5) {
