@@ -1970,7 +1970,9 @@ static errr game_term_xtra_x11(int n, int v)
         s_ptr->drawn = false;
         return 0;
     case TERM_XTRA_DELAY:
-        usleep(1000 * v);
+        if (v > 0) {
+            usleep(1000 * v);
+        }
         return 0;
     case TERM_XTRA_REACT:
         return game_term_xtra_x11_react();
