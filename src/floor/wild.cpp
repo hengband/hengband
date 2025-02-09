@@ -52,8 +52,6 @@
 
 constexpr auto SUM_TERRAIN_PROBABILITIES = 18;
 
-static bool generate_encounter;
-
 struct border_type {
     short top[MAX_WID];
     short bottom[MAX_WID];
@@ -366,14 +364,15 @@ static void generate_wild_monsters(PlayerType *player_ptr)
 {
     constexpr auto num_ambush_monsters = 40;
     constexpr auto num_normal_monsters = 8;
-    const auto lim = generate_encounter ? num_ambush_monsters : num_normal_monsters;
+    const auto should_ambush = WildernessGrids::get_instance().should_ambush();
+    const auto lim = should_ambush ? num_ambush_monsters : num_normal_monsters;
     for (auto i = 0; i < lim; i++) {
         BIT_FLAGS mode = 0;
-        if (!(generate_encounter || (one_in_(2) && (!player_ptr->town_num)))) {
+        if (!should_ambush && (one_in_(2) || player_ptr->town_num)) {
             mode |= PM_ALLOW_SLEEP;
         }
 
-        (void)alloc_monster(player_ptr, generate_encounter ? 0 : 3, mode, summon_specific);
+        (void)alloc_monster(player_ptr, should_ambush ? 0 : 3, mode, summon_specific);
     }
 }
 
@@ -390,7 +389,7 @@ void wilderness_gen(PlayerType *player_ptr)
     floor.width = MAX_WID;
     panel_row_min = floor.height;
     panel_col_min = floor.width;
-    const auto &wilderness = WildernessGrids::get_instance();
+    auto &wilderness = WildernessGrids::get_instance();
     const auto &area = wilderness.get_area();
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
 
@@ -555,11 +554,11 @@ void wilderness_gen(PlayerType *player_ptr)
 
     player_place(player_ptr, player_ptr->oldpy, player_ptr->oldpx);
     generate_wild_monsters(player_ptr);
-    if (generate_encounter) {
+    if (wilderness.should_ambush()) {
         player_ptr->ambush_flag = true;
     }
 
-    generate_encounter = false;
+    wilderness.set_ambushes(false);
     auto &quests = QuestList::get_instance();
     for (auto &[quest_id, quest] : quests) {
         if (quest.status == QuestStatusType::REWARDED) {
@@ -800,11 +799,6 @@ void init_wilderness_terrains()
     }
 }
 
-void init_wilderness_encounter()
-{
-    generate_encounter = false;
-}
-
 /*!
  * @brief 荒野から広域マップへの切り替え処理 /
  * Initialize arrays for wilderness terrains
@@ -813,7 +807,8 @@ void init_wilderness_encounter()
  */
 bool change_wild_mode(PlayerType *player_ptr, bool encount)
 {
-    generate_encounter = encount;
+    auto &wilderness = WildernessGrids::get_instance();
+    wilderness.set_ambushes(encount);
     if (player_ptr->leaving) {
         return false;
     }
@@ -824,7 +819,6 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
     }
 
     auto &world = AngbandWorld::get_instance();
-    auto &wilderness = WildernessGrids::get_instance();
     if (world.is_wild_mode()) {
         wilderness.set_player_position(player_ptr->get_position());
         player_ptr->energy_need = 0;

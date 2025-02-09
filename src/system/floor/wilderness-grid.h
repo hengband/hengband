@@ -58,6 +58,8 @@ public:
     void move_player_to(const Direction &dir);
     bool should_reinitialize() const;
     void set_reinitialization(bool state);
+    bool should_ambush() const;
+    void set_ambushes(bool state);
 
 private:
     WildernessGrids() = default;
@@ -67,6 +69,7 @@ private:
     Pos2D current_pos = { 0, 0 };
     Pos2D starting_pos = { 0, 0 };
     bool reinitialization_flag = false;
+    bool ambushes_flag = false;
 };
 
 extern std::vector<std::vector<WildernessGrid>> wilderness_grids;

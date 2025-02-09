@@ -100,6 +100,16 @@ void WildernessGrids::set_reinitialization(bool state)
     this->reinitialization_flag = state;
 }
 
+bool WildernessGrids::should_ambush() const
+{
+    return this->ambushes_flag;
+}
+
+void WildernessGrids::set_ambushes(bool state)
+{
+    this->ambushes_flag = state;
+}
+
 bool WildernessGrids::is_height_initialized() const
 {
     return this->area.bottom_right.y > 0;

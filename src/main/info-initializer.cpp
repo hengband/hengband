@@ -290,7 +290,7 @@ static bool read_wilderness_definition(std::ifstream &ifs)
 
         if (wilderness.is_height_initialized() && wilderness.is_width_initialized()) {
             wilderness.initialize_grids();
-            init_wilderness_encounter();
+            wilderness.set_ambushes(false);
             return true;
         }
     }
