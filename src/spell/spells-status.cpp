@@ -538,8 +538,8 @@ bool fishing(PlayerType *player_ptr)
         return false;
     }
 
-    const auto pos = player_ptr->get_neighbor(*dir);
-    player_ptr->fishing_dir = *dir;
+    const auto pos = player_ptr->get_neighbor(dir);
+    player_ptr->fishing_dir = dir.dir();
     const auto &floor = *player_ptr->current_floor_ptr;
     if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::WATER)) {
         msg_print(_("そこは水辺ではない。", "You can't fish here."));

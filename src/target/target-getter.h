@@ -1,8 +1,8 @@
 #pragma once
 
-#include <optional>
+#include "floor/geometry.h"
 
 class PlayerType;
 bool get_aim_dir(PlayerType *player_ptr, int *dp);
-std::optional<int> get_direction(PlayerType *player_ptr);
+Direction get_direction(PlayerType *player_ptr);
 bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under = false);

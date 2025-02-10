@@ -223,6 +223,12 @@ bool fire_bolt(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam
     return project_hook(player_ptr, typ, dir, dam, flg);
 }
 
+/// @todo Direction型へ移行中のラッパー。最終的に完全に置き換える予定。
+bool fire_bolt(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam)
+{
+    return fire_bolt(player_ptr, typ, dir.dir(), dam);
+}
+
 /*!
  * @brief ビーム系スペルの発動 / Cast a beam spell.
  * @param player_ptr プレイヤーへの参照ポインタ

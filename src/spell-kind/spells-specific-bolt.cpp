@@ -1,6 +1,7 @@
 #include "spell-kind/spells-specific-bolt.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
+#include "floor/geometry.h"
 #include "spell-kind/spells-launcher.h"
 #include "system/player-type-definition.h"
 
@@ -15,6 +16,12 @@ bool hypodynamic_bolt(PlayerType *player_ptr, DIRECTION dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     return project_hook(player_ptr, AttributeType::HYPODYNAMIA, dir, dam, flg);
+}
+
+/// @todo Direction型へ移行中のラッパー。最終的に完全に置き換える予定。
+bool hypodynamic_bolt(PlayerType *player_ptr, const Direction &dir, int dam)
+{
+    return hypodynamic_bolt(player_ptr, dir.dir(), dam);
 }
 
 /*!

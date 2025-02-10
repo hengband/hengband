@@ -373,3 +373,9 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
 
     (void)move_player_effect(player_ptr, pos.y, pos.x, mpe_mode);
 }
+
+/// @todo Direction型へ移行中のラッパー。最終的に完全に置き換える予定。
+void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, bool break_trap)
+{
+    exe_movement(player_ptr, dir.dir(), do_pickup, break_trap);
+}
