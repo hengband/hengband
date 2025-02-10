@@ -13,7 +13,7 @@ public:
 
 private:
     PlayerType *player_ptr;
-    concptr alignment_label();
+    std::string alignment_label() const;
     void bias_good_alignment(int value);
     void bias_evil_alignment(int value);
     void reset_alignment();

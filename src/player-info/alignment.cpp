@@ -14,6 +14,8 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include <array>
+#include <fmt/format.h>
 
 PlayerAlignment::PlayerAlignment(PlayerType *player_ptr)
 {
@@ -27,9 +29,9 @@ PlayerAlignment::PlayerAlignment(PlayerType *player_ptr)
  */
 std::string PlayerAlignment::get_alignment_description(bool with_value)
 {
-    auto s = alignment_label();
+    const auto s = this->alignment_label();
     if (with_value || show_actual_value) {
-        return format(_("%s(%ld)", "%s (%ld)"), s, static_cast<long>(this->player_ptr->alignment));
+        return fmt::format(_("{}({})", "{} ({})"), s, this->player_ptr->alignment);
     }
 
     return s;
@@ -99,7 +101,7 @@ void PlayerAlignment::update_alignment()
     }
 
     int j = 0;
-    int neutral[2];
+    std::array<int, 2> neutral{};
     for (int i = 0; i < 8; i++) {
         switch (this->player_ptr->vir_types[i]) {
         case Virtue::JUSTICE:
@@ -155,7 +157,7 @@ void PlayerAlignment::reset_alignment()
  * @param player_ptr プレイヤーへの参照ポインタ。
  * @return アライメントの表記名
  */
-concptr PlayerAlignment::alignment_label()
+std::string PlayerAlignment::alignment_label() const
 {
     if (this->player_ptr->alignment > 150) {
         return _("大善", "Lawful");
