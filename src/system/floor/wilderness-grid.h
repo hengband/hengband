@@ -36,8 +36,8 @@ public:
     WildernessGrids(WildernessGrids &&) = delete;
     WildernessGrids &operator=(const WildernessGrids &) = delete;
     WildernessGrids &operator=(WildernessGrids &&) = delete;
-    void init_height(int height);
-    void init_width(int width);
+    void initialize_height(int height);
+    void initialize_width(int width);
     void initialize_grids(); //!< @details 全ての定義ファイルを読み込んでから初期化する.
     void initialize_seeds();
     void initialize_position();

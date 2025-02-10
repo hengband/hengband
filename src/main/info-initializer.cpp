@@ -281,9 +281,9 @@ static bool read_wilderness_definition(std::ifstream &ifs)
         }
 
         if (splits[1] == "WX") {
-            wilderness.init_width(std::stoi(splits[2]));
+            wilderness.initialize_width(std::stoi(splits[2]));
         } else if (splits[1] == "WY") {
-            wilderness.init_height(std::stoi(splits[2]));
+            wilderness.initialize_height(std::stoi(splits[2]));
         } else {
             return false;
         }

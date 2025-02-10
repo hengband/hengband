@@ -23,12 +23,12 @@ void WildernessGrid::initialize_seed()
 
 WildernessGrids WildernessGrids::instance{};
 
-void WildernessGrids::init_height(int height)
+void WildernessGrids::initialize_height(int height)
 {
     this->area.bottom_right.y = height - 1;
 }
 
-void WildernessGrids::init_width(int width)
+void WildernessGrids::initialize_width(int width)
 {
     this->area.bottom_right.x = width - 1;
 }
