@@ -51,14 +51,13 @@ static bool find_breakleft;
  * Hack -- Check for a "known wall" (see below)
  * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 想定する移動方向
- * @param y 移動元のY座標
- * @param x 移動元のX座標
+ * @param pos_orig 移動元の座標
  * @return 移動先が既知の壁ならばTRUE
  */
-static bool see_wall(PlayerType *player_ptr, const Direction &dir, POSITION y, POSITION x)
+static bool see_wall(PlayerType *player_ptr, const Direction &dir, const Pos2D &pos_orig)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto pos = Pos2D(y, x) + dir.vec();
+    const auto pos = pos_orig + dir.vec();
     if (!in_bounds2(floor, pos.y, pos.x)) {
         return false;
     }
@@ -117,20 +116,20 @@ static void run_init(PlayerType *player_ptr, const Direction &dir)
     const auto dir_right45 = dir.rotated_45degree(-1);
     auto deepleft = false;
     auto shortleft = false;
-    if (see_wall(player_ptr, dir_left45, pos.y, pos.x)) {
+    if (see_wall(player_ptr, dir_left45, pos)) {
         find_breakleft = true;
         shortleft = true;
-    } else if (see_wall(player_ptr, dir_left45, pos_neighbor.y, pos_neighbor.x)) {
+    } else if (see_wall(player_ptr, dir_left45, pos_neighbor)) {
         find_breakleft = true;
         deepleft = true;
     }
 
     auto deepright = false;
     auto shortright = false;
-    if (see_wall(player_ptr, dir_right45, pos.y, pos.x)) {
+    if (see_wall(player_ptr, dir_right45, pos)) {
         find_breakright = true;
         shortright = true;
-    } else if (see_wall(player_ptr, dir_right45, pos_neighbor.y, pos_neighbor.x)) {
+    } else if (see_wall(player_ptr, dir_right45, pos_neighbor)) {
         find_breakright = true;
         deepright = true;
     }
@@ -150,7 +149,7 @@ static void run_init(PlayerType *player_ptr, const Direction &dir)
         return;
     }
 
-    if (!see_wall(player_ptr, dir, pos_neighbor.y, pos_neighbor.x)) {
+    if (!see_wall(player_ptr, dir, pos_neighbor)) {
         return;
     }
 
@@ -166,26 +165,22 @@ static void run_init(PlayerType *player_ptr, const Direction &dir)
  * Hack -- Check for an "unknown corner" (see below)
  * @param player_ptr	プレイヤーへの参照ポインタ
  * @param dir 想定する移動方向
- * @param y 移動元のY座標
- * @param x 移動元のX座標
+ * @param pos_orig 移動元の座標
  * @return 移動先が未知の地形ならばTRUE
  */
-static bool see_nothing(PlayerType *player_ptr, const Direction &dir, POSITION y, POSITION x)
+static bool see_nothing(PlayerType *player_ptr, const Direction &dir, const Pos2D &pos_orig)
 {
-    const auto vec = dir.vec();
-    y += vec.y;
-    x += vec.x;
-
+    const auto pos = pos_orig + dir.vec();
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds2(floor, y, x)) {
+    if (!in_bounds2(floor, pos.y, pos.x)) {
         return true;
     }
 
-    if (floor.grid_array[y][x].is_mark()) {
+    if (floor.get_grid(pos).is_mark()) {
         return false;
     }
 
-    if (player_can_see_bold(player_ptr, y, x)) {
+    if (player_can_see_bold(player_ptr, pos.y, pos.x)) {
         return false;
     }
 
@@ -265,7 +260,7 @@ static bool run_test(PlayerType *player_ptr)
             inv = false;
         }
 
-        if (!inv && see_wall(player_ptr, Direction(0), pos.y, pos.x)) {
+        if (!inv && see_wall(player_ptr, Direction(0), pos)) {
             if (find_openarea) {
                 if (i < 0) {
                     find_breakright = true;
@@ -307,7 +302,7 @@ static bool run_test(PlayerType *player_ptr)
 
     if (find_openarea) {
         for (int i = -max; i < 0; i++) {
-            if (!see_wall(player_ptr, prev_dir.rotated_45degree(i), player_ptr->y, player_ptr->x)) {
+            if (!see_wall(player_ptr, prev_dir.rotated_45degree(i), p_pos)) {
                 if (find_breakright) {
                     return true;
                 }
@@ -319,7 +314,7 @@ static bool run_test(PlayerType *player_ptr)
         }
 
         for (int i = max; i > 0; i--) {
-            if (!see_wall(player_ptr, prev_dir.rotated_45degree(i), player_ptr->y, player_ptr->x)) {
+            if (!see_wall(player_ptr, prev_dir.rotated_45degree(i), p_pos)) {
                 if (find_breakleft) {
                     return true;
                 }
@@ -330,7 +325,7 @@ static bool run_test(PlayerType *player_ptr)
             }
         }
 
-        return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
+        return see_wall(player_ptr, find_current, p_pos);
     }
 
     if (!option) {
@@ -340,19 +335,19 @@ static bool run_test(PlayerType *player_ptr)
     if (!option2) {
         find_current = *option;
         find_prevdir = *option;
-        return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
+        return see_wall(player_ptr, find_current, p_pos);
     } else if (!find_cut) {
         find_current = *option;
         find_prevdir = *option2;
-        return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
+        return see_wall(player_ptr, find_current, p_pos);
     }
 
     const auto pos = player_ptr->get_position() + option->vec();
-    if (!see_wall(player_ptr, *option, pos.y, pos.x) || !see_wall(player_ptr, check_dir, pos.y, pos.x)) {
-        if (see_nothing(player_ptr, *option, pos.y, pos.x) && see_nothing(player_ptr, *option2, pos.y, pos.x)) {
+    if (!see_wall(player_ptr, *option, pos) || !see_wall(player_ptr, check_dir, pos)) {
+        if (see_nothing(player_ptr, *option, pos) && see_nothing(player_ptr, *option2, pos)) {
             find_current = *option;
             find_prevdir = *option2;
-            return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
+            return see_wall(player_ptr, find_current, p_pos);
         }
 
         return true;
@@ -361,12 +356,12 @@ static bool run_test(PlayerType *player_ptr)
     if (find_cut) {
         find_current = *option2;
         find_prevdir = *option2;
-        return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
+        return see_wall(player_ptr, find_current, p_pos);
     }
 
     find_current = *option;
     find_prevdir = *option2;
-    return see_wall(player_ptr, find_current, player_ptr->y, player_ptr->x);
+    return see_wall(player_ptr, find_current, p_pos);
 }
 
 /*!
@@ -379,7 +374,7 @@ void run_step(PlayerType *player_ptr, const Direction &dir)
 {
     if (dir.has_direction()) {
         ignore_avoid_run = true;
-        if (see_wall(player_ptr, dir, player_ptr->y, player_ptr->x)) {
+        if (see_wall(player_ptr, dir, player_ptr->get_position())) {
             sound(SOUND_HITWALL);
             msg_print(_("その方向には走れません。", "You cannot run in that direction."));
             disturb(player_ptr, false, false);
