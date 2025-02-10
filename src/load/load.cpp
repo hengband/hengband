@@ -242,12 +242,7 @@ static errr exe_reading_savefile(PlayerType *player_ptr)
     }
 
     if (!h_older_than(1, 0, 9)) {
-        std::vector<char> buf(SCREEN_BUF_MAX_SIZE);
-        const auto dump_str = rd_string();
-        dump_str.copy(buf.data(), SCREEN_BUF_MAX_SIZE - 1);
-        if (buf[0]) {
-            screen_dump = string_make(buf.data());
-        }
+        screen_dump = rd_string();
     }
 
     auto restore_dungeon_result = restore_dungeon(player_ptr);
