@@ -2712,24 +2712,6 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
 }
 
 /*!
- * @brief プレイヤーを指定座標に配置する / Place the player in the dungeon XXX XXX
- * @param x 配置先X座標
- * @param y 配置先Y座標
- * @return 配置に成功したらTRUE
- */
-bool player_place(PlayerType *player_ptr, int y, int x)
-{
-    if (player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
-        return false;
-    }
-
-    /* Save player location */
-    player_ptr->y = y;
-    player_ptr->x = x;
-    return true;
-}
-
-/*!
  * @brief 種族アンバライトが出血時パターンの上に乗った際のペナルティ処理
  */
 void wreck_the_pattern(PlayerType *player_ptr)

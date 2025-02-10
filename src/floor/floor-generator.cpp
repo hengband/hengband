@@ -33,7 +33,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "player/player-status.h"
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -143,7 +142,10 @@ static void generate_challenge_arena(PlayerType *player_ptr)
     }
 
     const auto pos = build_arena(player_ptr);
-    player_place(player_ptr, pos.y, pos.x);
+    if (!player_ptr->try_set_position(pos)) {
+        return;
+    }
+
     auto &entries = ArenaEntryList::get_instance();
     const auto &monrace = entries.get_monrace();
     if (place_specific_monster(player_ptr, player_ptr->y + 5, player_ptr->x, monrace.idx, PM_NO_KAGE | PM_NO_PET)) {
@@ -242,7 +244,10 @@ static void generate_gambling_arena(PlayerType *player_ptr)
     }
 
     const auto pos = build_battle(player_ptr);
-    player_place(player_ptr, pos.y, pos.x);
+    if (!player_ptr->try_set_position(pos)) {
+        return;
+    }
+
     const auto &melee_arena = MeleeArena::get_instance();
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
         const auto &gladiator = melee_arena.get_gladiator(i);

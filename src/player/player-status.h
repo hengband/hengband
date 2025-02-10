@@ -20,8 +20,6 @@ int calc_weight_limit(PlayerType *player_ptr);
 void update_creature(PlayerType *player_ptr);
 bool player_has_no_spellbooks(PlayerType *player_ptr);
 
-bool player_place(PlayerType *player_ptr, int y, int x);
-
 void check_experience(PlayerType *player_ptr);
 void wreck_the_pattern(PlayerType *player_ptr);
 std::string cnv_stat(int val);
