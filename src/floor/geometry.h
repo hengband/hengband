@@ -173,6 +173,11 @@ private:
     int dir_; //<! 方向ID
 };
 
+constexpr bool operator==(const Direction &dir1, const Direction &dir2) noexcept
+{
+    return dir1.dir() == dir2.dir();
+}
+
 /* 以降の定義は直接使用しないようdetail名前空間に入れておく*/
 namespace detail {
 /// 下・上・右・左・右下・左下・右上・左上・中央の順にDirectionクラスのインスタンスを保持する配列
