@@ -698,12 +698,8 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         auto &wilderness = WildernessGrids::get_instance();
         for (auto i = 0; ((pos.x < xmax) && (i < len)); pos.x++, s++, i++) {
             int id = s[0];
-            auto &wg = wilderness.get_grid(pos);
             const auto &letter = letters.get_grid(id);
-            wg.terrain = letter.terrain;
-            wg.level = letter.level;
-            wg.town = letter.town;
-            wg.road = letter.road;
+            wilderness.get_grid(pos).initialize(letter);
             towns_info[letter.town].name = letter.name;
         }
 

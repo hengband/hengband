@@ -18,6 +18,14 @@ int WildernessGrid::get_level() const
     return this->level;
 }
 
+void WildernessGrid::initialize(const WildernessGrid &letter)
+{
+    this->terrain = letter.terrain;
+    this->level = letter.level;
+    this->town = letter.town;
+    this->road = letter.road;
+}
+
 void WildernessGrid::initialize_seed()
 {
     this->seed = randint0(0x10000000);

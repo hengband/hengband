@@ -26,6 +26,7 @@ public:
     std::string name = "";
 
     int get_level() const;
+    void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
     void initialize_seed();
 };
 
