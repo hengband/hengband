@@ -8,6 +8,7 @@
 #include "core/window-redrawer.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-util.h"
+#include "floor/geometry.h"
 #include "game-option/cheat-options.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/map-screen-options.h"
@@ -282,7 +283,7 @@ void process_player(PlayerType *player_ptr)
         } else if (player_ptr->action == ACTION_FISH) {
             energy.set_player_turn_energy(100);
         } else if (player_ptr->running) {
-            run_step(player_ptr, 0);
+            run_step(player_ptr, Direction(0));
         } else if (travel.run) {
             travel_step(player_ptr);
         } else if (command_rep) {

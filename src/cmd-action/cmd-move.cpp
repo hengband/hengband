@@ -10,6 +10,7 @@
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-mode-changer.h"
+#include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
@@ -412,7 +413,7 @@ void do_cmd_run(PlayerType *player_ptr)
 
     if (get_rep_dir(player_ptr, &dir)) {
         player_ptr->running = (command_arg ? command_arg : 1000);
-        run_step(player_ptr, dir);
+        run_step(player_ptr, Direction(dir));
     }
 }
 

@@ -115,14 +115,68 @@ public:
         return this->dir_;
     }
 
+    /*!
+     * @brief 円周順に方向を示す値を取得する
+     * @return 円周順に方向を示す値。示す値がない(方向IDが0もしくは5)場合はstd::nulloptを返す
+     */
+    constexpr std::optional<int> cdir() const
+    {
+        return DIR_TO_CDIR[this->dir_];
+    }
+
+    /*!
+     * @brief 8方向いずれかの方向を指し示しているかどうかを返す
+     * @return 方向IDが8方向いずれかの方向を示している場合はtrue、そうでない場合はfalseを返す。
+     */
+    constexpr bool has_direction() const noexcept
+    {
+        return this->dir_ != 0 && this->dir_ != 5;
+    }
+
+    /*!
+     * @brief 方向が斜め方向かどうかを返す
+     * @return 斜め方向ならばtrue、そうでなければfalse
+     */
+    constexpr bool is_diagonal() const noexcept
+    {
+        return this->dir_ != 5 && (this->dir_ & 0x01);
+    }
+
+    /*!
+     * @brief 方向を45度単位で回転させた方向クラスのインスタンスを生成する
+     *
+     * すなわち、 cdir をdeltaだけ増減させた(0↔7でつながる)方向を示すインスタンスを返す。
+     *
+     * @param delta 回転させる回数。正の値で反時計回り、負の値で時計回りに回転する。
+     * @return 回転させた方向を示す方向クラスのインスタンス
+     */
+    constexpr Direction rotated_45degree(int delta) const
+    {
+        const auto cdir = this->cdir();
+        if (!cdir) {
+            return *this;
+        }
+
+        const auto new_cdir = (*cdir + delta) & 0x7;
+        return Direction::from_cdir(new_cdir);
+    }
+
 private:
     /// 方向IDに対応するベクトルの定義
     static constexpr std::array<Pos2DVec, 10> DIR_TO_VEC = {
         { { 0, 0 }, { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { -1, -1 }, { -1, 0 }, { -1, 1 } }
     };
 
+    /// 方向IDに対応する円周順に方向を示す値の定義
+    static constexpr std::array<std::optional<int>, 10> DIR_TO_CDIR = { { std::nullopt, 7, 0, 1, 6, std::nullopt, 2, 5, 4, 3 } };
+
     int dir_; //<! 方向ID
 };
+
+constexpr bool operator==(const Direction &dir1, const Direction &dir2) noexcept
+{
+    return dir1.dir() == dir2.dir();
+}
 
 /* 以降の定義は直接使用しないようdetail名前空間に入れておく*/
 namespace detail {
