@@ -13,7 +13,6 @@ bmc_type *initialize_blue_magic_type(
     bmc_ptr->spell = spell;
     bmc_ptr->plev = (*get_pseudo_monstetr_level)(player_ptr);
     bmc_ptr->summon_lev = player_ptr->lev * 2 / 3 + randint1(player_ptr->lev / 2);
-    bmc_ptr->damage = 0;
     bmc_ptr->pet = success; // read-only.
     bmc_ptr->no_trump = false;
     bmc_ptr->p_mode = bmc_ptr->pet ? PM_FORCE_PET : PM_NO_PET;

@@ -59,36 +59,39 @@ static bool cast_blue_dispel(PlayerType *player_ptr)
 
 static bool cast_blue_rocket(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+    int dir;
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
 
     msg_print(_("ロケットを発射した。", "You fire a rocket."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::ROCKET, bmc_ptr->plev, DAM_ROLL);
-    fire_rocket(player_ptr, AttributeType::ROCKET, bmc_ptr->dir, bmc_ptr->damage, 2);
+    const auto damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::ROCKET, bmc_ptr->plev, DAM_ROLL);
+    fire_rocket(player_ptr, AttributeType::ROCKET, dir, damage, 2);
     return true;
 }
 
 static bool cast_blue_shoot(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+    int dir;
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
 
     msg_print(_("矢を放った。", "You fire an arrow."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::SHOOT, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::MONSTER_SHOOT, bmc_ptr->dir, bmc_ptr->damage);
+    const auto damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::SHOOT, bmc_ptr->plev, DAM_ROLL);
+    fire_bolt(player_ptr, AttributeType::MONSTER_SHOOT, dir, damage);
     return true;
 }
 
 static bool cast_blue_hand_doom(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+    int dir;
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
 
     msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
-    fire_ball_hide(player_ptr, AttributeType::HAND_DOOM, bmc_ptr->dir, bmc_ptr->plev * 3, 0);
+    fire_ball_hide(player_ptr, AttributeType::HAND_DOOM, dir, bmc_ptr->plev * 3, 0);
     return true;
 }
 
@@ -147,25 +150,27 @@ static bool cast_blue_teleport_back(PlayerType *player_ptr)
     return true;
 }
 
-static bool cast_blue_teleport_away(PlayerType *player_ptr, bmc_type *bmc_ptr)
+static bool cast_blue_teleport_away(PlayerType *player_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+    int dir;
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
 
-    (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, bmc_ptr->dir, 100);
+    (void)fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, 100);
     return true;
 }
 
 static bool cast_blue_psy_spear(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+    int dir;
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
 
     msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::PSY_SPEAR, bmc_ptr->plev, DAM_ROLL);
-    (void)fire_beam(player_ptr, AttributeType::PSY_SPEAR, bmc_ptr->dir, bmc_ptr->damage);
+    const auto damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::PSY_SPEAR, bmc_ptr->plev, DAM_ROLL);
+    (void)fire_beam(player_ptr, AttributeType::PSY_SPEAR, dir, damage);
     return true;
 }
 
@@ -303,7 +308,7 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr)
     case MonsterAbilityType::TELE_TO:
         return cast_blue_teleport_back(player_ptr);
     case MonsterAbilityType::TELE_AWAY:
-        return cast_blue_teleport_away(player_ptr, bmc_ptr);
+        return cast_blue_teleport_away(player_ptr);
     case MonsterAbilityType::TELE_LEVEL:
         return teleport_level_other(player_ptr);
     case MonsterAbilityType::PSY_SPEAR:

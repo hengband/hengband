@@ -11,10 +11,8 @@ enum class MonsterAbilityType;
 // Blue Magic Cast.
 struct bmc_type {
     MonsterAbilityType spell;
-    DIRECTION dir;
     PLAYER_LEVEL plev;
     PLAYER_LEVEL summon_lev;
-    int damage;
     bool pet;
     bool no_trump;
     BIT_FLAGS p_mode;
