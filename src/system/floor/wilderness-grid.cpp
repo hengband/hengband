@@ -57,12 +57,12 @@ WildernessGrids &WildernessGrids::get_instance()
 
 const WildernessGrid &WildernessGrids::get_grid(const Pos2D &pos) const
 {
-    return wilderness_grids[pos.y][pos.x];
+    return wilderness_grids.at(pos.y).at(pos.x);
 }
 
 WildernessGrid &WildernessGrids::get_grid(const Pos2D &pos)
 {
-    return wilderness_grids[pos.y][pos.x];
+    return wilderness_grids.at(pos.y).at(pos.x);
 }
 
 const Pos2D &WildernessGrids::get_player_position() const
