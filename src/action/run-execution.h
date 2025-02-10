@@ -14,4 +14,5 @@ extern byte cycle[MAX_RUN_CYCLES];
 extern byte chome[MAX_RUN_CHOME];
 
 class PlayerType;
-void run_step(PlayerType *player_ptr, DIRECTION dir);
+class Direction;
+void run_step(PlayerType *player_ptr, const Direction &dir);
