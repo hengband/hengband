@@ -133,6 +133,25 @@ public:
         return this->dir_ != 5 && (this->dir_ & 0x01);
     }
 
+    /*!
+     * @brief 方向を45度単位で回転させた方向クラスのインスタンスを生成する
+     *
+     * すなわち、 cdir をdeltaだけ増減させた(0↔7でつながる)方向を示すインスタンスを返す。
+     *
+     * @param delta 回転させる回数。正の値で反時計回り、負の値で時計回りに回転する。
+     * @return 回転させた方向を示す方向クラスのインスタンス
+     */
+    constexpr Direction rotated_45degree(int delta) const
+    {
+        const auto cdir = this->cdir();
+        if (!cdir) {
+            return *this;
+        }
+
+        const auto new_cdir = (*cdir + delta) & 0x7;
+        return Direction::from_cdir(new_cdir);
+    }
+
 private:
     /// 方向IDに対応するベクトルの定義
     static constexpr std::array<Pos2DVec, 10> DIR_TO_VEC = {
