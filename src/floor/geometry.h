@@ -124,6 +124,15 @@ public:
         return DIR_TO_CDIR[this->dir_];
     }
 
+    /*!
+     * @brief 方向が斜め方向かどうかを返す
+     * @return 斜め方向ならばtrue、そうでなければfalse
+     */
+    constexpr bool is_diagonal() const noexcept
+    {
+        return this->dir_ != 5 && (this->dir_ & 0x01);
+    }
+
 private:
     /// 方向IDに対応するベクトルの定義
     static constexpr std::array<Pos2DVec, 10> DIR_TO_VEC = {
