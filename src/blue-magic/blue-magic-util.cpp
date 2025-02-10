@@ -8,8 +8,9 @@
 #include "system/player-type-definition.h"
 
 bmc_type *initialize_blue_magic_type(
-    PlayerType *player_ptr, bmc_type *bmc_ptr, const bool success, get_pseudo_monstetr_level_pf get_pseudo_monstetr_level)
+    PlayerType *player_ptr, bmc_type *bmc_ptr, MonsterAbilityType spell, const bool success, get_pseudo_monstetr_level_pf get_pseudo_monstetr_level)
 {
+    bmc_ptr->spell = spell;
     bmc_ptr->plev = (*get_pseudo_monstetr_level)(player_ptr);
     bmc_ptr->summon_lev = player_ptr->lev * 2 / 3 + randint1(player_ptr->lev / 2);
     bmc_ptr->damage = 0;

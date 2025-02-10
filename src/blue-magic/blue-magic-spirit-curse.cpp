@@ -9,83 +9,40 @@
 #include "monster-race/race-ability-flags.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "spell-kind/spells-launcher.h"
+#include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
+#include <unordered_map>
 
-bool cast_blue_drain_mana(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::DRAIN_MANA, bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(player_ptr, AttributeType::DRAIN_MANA, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return true;
+namespace {
+const std::unordered_map<MonsterAbilityType, AttributeType> BLUE_MAGIC_SPIRIT_CURSE_TABLE = {
+    { MonsterAbilityType::DRAIN_MANA, AttributeType::DRAIN_MANA },
+    { MonsterAbilityType::MIND_BLAST, AttributeType::MIND_BLAST },
+    { MonsterAbilityType::BRAIN_SMASH, AttributeType::BRAIN_SMASH },
+    { MonsterAbilityType::CAUSE_1, AttributeType::CAUSE_1 },
+    { MonsterAbilityType::CAUSE_2, AttributeType::CAUSE_2 },
+    { MonsterAbilityType::CAUSE_3, AttributeType::CAUSE_3 },
+    { MonsterAbilityType::CAUSE_4, AttributeType::CAUSE_4 },
+};
 }
 
-bool cast_blue_mind_blast(PlayerType *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_magic_spirit_curse(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+    int dir;
+    if (!get_aim_dir(player_ptr, &dir)) {
         return false;
     }
 
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::MIND_BLAST, bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(player_ptr, AttributeType::MIND_BLAST, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return true;
-}
-
-bool cast_blue_brain_smash(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
+    const auto magic = BLUE_MAGIC_SPIRIT_CURSE_TABLE.find(bmc_ptr->spell);
+    if (magic == BLUE_MAGIC_SPIRIT_CURSE_TABLE.end()) {
+        const auto message = fmt::format("Unknown blue magic spirit curse: {}", static_cast<int>(bmc_ptr->spell));
+        THROW_EXCEPTION(std::logic_error, message);
     }
 
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BRAIN_SMASH, bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(player_ptr, AttributeType::BRAIN_SMASH, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return true;
-}
-
-bool cast_blue_curse_1(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::CAUSE_1, bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(player_ptr, AttributeType::CAUSE_1, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return true;
-}
-
-bool cast_blue_curse_2(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::CAUSE_2, bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(player_ptr, AttributeType::CAUSE_2, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return true;
-}
-
-bool cast_blue_curse_3(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::CAUSE_3, bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(player_ptr, AttributeType::CAUSE_3, bmc_ptr->dir, bmc_ptr->damage, 0);
-    return true;
-}
-
-bool cast_blue_curse_4(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::CAUSE_4, bmc_ptr->plev, DAM_ROLL);
-    fire_ball_hide(player_ptr, AttributeType::CAUSE_4, bmc_ptr->dir, bmc_ptr->damage, 0);
+    const auto attribute_type = magic->second;
+    const auto damage = monspell_bluemage_damage(player_ptr, bmc_ptr->spell, bmc_ptr->plev, DAM_ROLL);
+    fire_ball_hide(player_ptr, attribute_type, dir, damage, 0);
     return true;
 }

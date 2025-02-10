@@ -180,9 +180,9 @@ static bool cast_blue_make_trap(PlayerType *player_ptr)
     return true;
 }
 
-static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr, MonsterAbilityType spell)
+static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    switch (spell) {
+    switch (bmc_ptr->spell) {
     case MonsterAbilityType::SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
         aggravate_monsters(player_ptr, 0);
@@ -199,125 +199,69 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr, Mo
     case MonsterAbilityType::SHOOT:
         return cast_blue_shoot(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_ACID:
-        return cast_blue_breath_acid(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_ELEC:
-        return cast_blue_breath_elec(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_FIRE:
-        return cast_blue_breath_fire(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_COLD:
-        return cast_blue_breath_cold(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_POIS:
-        return cast_blue_breath_pois(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_NETH:
-        return cast_blue_breath_nether(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_LITE:
-        return cast_blue_breath_lite(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_DARK:
-        return cast_blue_breath_dark(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_CONF:
-        return cast_blue_breath_conf(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_SOUN:
-        return cast_blue_breath_sound(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_CHAO:
-        return cast_blue_breath_chaos(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_DISE:
-        return cast_blue_breath_disenchant(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_NEXU:
-        return cast_blue_breath_nexus(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_TIME:
-        return cast_blue_breath_time(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_INER:
-        return cast_blue_breath_inertia(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_GRAV:
-        return cast_blue_breath_gravity(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_SHAR:
-        return cast_blue_breath_shards(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_PLAS:
-        return cast_blue_breath_plasma(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_FORC:
-        return cast_blue_breath_force(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_MANA:
-        return cast_blue_breath_mana(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_NUKE:
-        return cast_blue_breath_nuke(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_DISI:
-        return cast_blue_breath_disintegration(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_VOID:
-        return cast_blue_breath_void(player_ptr, bmc_ptr);
     case MonsterAbilityType::BR_ABYSS:
-        return cast_blue_breath_abyss(player_ptr, bmc_ptr);
+        return cast_blue_magic_breath(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_ACID:
-        return cast_blue_ball_acid(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_ELEC:
-        return cast_blue_ball_elec(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_FIRE:
-        return cast_blue_ball_fire(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_COLD:
-        return cast_blue_ball_cold(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_POIS:
-        return cast_blue_ball_pois(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_NUKE:
-        return cast_blue_ball_nuke(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_NETH:
-        return cast_blue_ball_nether(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_CHAO:
-        return cast_blue_ball_chaos(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_WATE:
-        return cast_blue_ball_water(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_LITE:
-        return cast_blue_ball_star_burst(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_DARK:
-        return cast_blue_ball_dark_storm(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_MANA:
-        return cast_blue_ball_mana_storm(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_VOID:
-        return cast_blue_ball_void(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_ABYSS:
-        return cast_blue_ball_abyss(player_ptr, bmc_ptr);
     case MonsterAbilityType::BA_METEOR:
-        return cast_blue_ball_meteor(player_ptr, bmc_ptr);
+        return cast_blue_magic_ball(player_ptr, bmc_ptr);
     case MonsterAbilityType::DRAIN_MANA:
-        return cast_blue_drain_mana(player_ptr, bmc_ptr);
     case MonsterAbilityType::MIND_BLAST:
-        return cast_blue_mind_blast(player_ptr, bmc_ptr);
     case MonsterAbilityType::BRAIN_SMASH:
-        return cast_blue_brain_smash(player_ptr, bmc_ptr);
     case MonsterAbilityType::CAUSE_1:
-        return cast_blue_curse_1(player_ptr, bmc_ptr);
     case MonsterAbilityType::CAUSE_2:
-        return cast_blue_curse_2(player_ptr, bmc_ptr);
     case MonsterAbilityType::CAUSE_3:
-        return cast_blue_curse_3(player_ptr, bmc_ptr);
     case MonsterAbilityType::CAUSE_4:
-        return cast_blue_curse_4(player_ptr, bmc_ptr);
+        return cast_blue_magic_spirit_curse(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_ACID:
-        return cast_blue_bolt_acid(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_ELEC:
-        return cast_blue_bolt_elec(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_FIRE:
-        return cast_blue_bolt_fire(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_COLD:
-        return cast_blue_bolt_cold(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_NETH:
-        return cast_blue_bolt_nether(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_WATE:
-        return cast_blue_bolt_water(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_MANA:
-        return cast_blue_bolt_mana(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_PLAS:
-        return cast_blue_bolt_plasma(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_ICEE:
-        return cast_blue_bolt_icee(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_ABYSS:
-        return cast_blue_bolt_abyss(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_VOID:
-        return cast_blue_bolt_void(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_METEOR:
-        return cast_blue_bolt_meteor(player_ptr, bmc_ptr);
     case MonsterAbilityType::BO_LITE:
-        return cast_blue_bolt_lite(player_ptr, bmc_ptr);
     case MonsterAbilityType::MISSILE:
-        return cast_blue_bolt_missile(player_ptr, bmc_ptr);
+        return cast_blue_magic_bolt(player_ptr, bmc_ptr);
     case MonsterAbilityType::SCARE:
         return cast_blue_scare(player_ptr, bmc_ptr);
     case MonsterAbilityType::BLIND:
@@ -427,8 +371,8 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr, Mo
 bool cast_learned_spell(PlayerType *player_ptr, MonsterAbilityType spell, const bool success)
 {
     bmc_type tmp_bm;
-    bmc_type *bmc_ptr = initialize_blue_magic_type(player_ptr, &tmp_bm, success, get_pseudo_monstetr_level);
-    if (!switch_cast_blue_magic(player_ptr, bmc_ptr, spell)) {
+    bmc_type *bmc_ptr = initialize_blue_magic_type(player_ptr, &tmp_bm, spell, success, get_pseudo_monstetr_level);
+    if (!switch_cast_blue_magic(player_ptr, bmc_ptr)) {
         return false;
     }
 
