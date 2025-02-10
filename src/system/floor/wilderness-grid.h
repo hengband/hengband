@@ -73,3 +73,23 @@ private:
 };
 
 extern std::vector<std::vector<WildernessGrid>> wilderness_grids;
+
+class WildernessLetters {
+public:
+    ~WildernessLetters() = default;
+    WildernessLetters(const WildernessLetters &) = delete;
+    WildernessLetters(WildernessLetters &&) = delete;
+    WildernessLetters &operator=(const WildernessLetters &) = delete;
+    WildernessLetters &operator=(WildernessLetters &&) = delete;
+    static WildernessLetters &get_instance();
+    void initialize();
+
+    const WildernessGrid &get_grid(int index) const;
+    WildernessGrid &get_grid(int index);
+
+private:
+    WildernessLetters() = default;
+    static WildernessLetters instance;
+
+    std::vector<WildernessGrid> letters;
+};

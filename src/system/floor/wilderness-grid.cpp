@@ -7,6 +7,8 @@
 #include "system/floor/wilderness-grid.h"
 #include "floor/geometry.h"
 #include "system/enums/dungeon/dungeon-id.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "term/z-rand.h"
 
 std::vector<std::vector<WildernessGrid>> wilderness_grids;
@@ -137,4 +139,28 @@ bool WildernessGrids::is_player_in_bounds() const
 const Rect2D &WildernessGrids::get_area() const
 {
     return this->area;
+}
+
+WildernessLetters WildernessLetters::instance{};
+
+WildernessLetters &WildernessLetters::get_instance()
+{
+    return instance;
+}
+
+void WildernessLetters::initialize()
+{
+    if (this->letters.empty()) {
+        this->letters.resize(TerrainList::get_instance().size());
+    }
+}
+
+const WildernessGrid &WildernessLetters::get_grid(int index) const
+{
+    return this->letters.at(index);
+}
+
+WildernessGrid &WildernessLetters::get_grid(int index)
+{
+    return this->letters.at(index);
 }

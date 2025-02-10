@@ -65,8 +65,6 @@ struct border_type {
 
 static border_type border;
 
-static std::vector<WildernessGrid> wilderness_letters;
-
 /* The default table in terrain level generation. */
 static std::map<WildernessTerrain, std::map<short, TerrainTag>> terrain_table;
 
@@ -639,11 +637,9 @@ void wilderness_gen_small(PlayerType *player_ptr)
  */
 std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *line, int xmin, int xmax, const Pos2D &pos_parsing)
 {
-    if (wilderness_letters.empty()) {
-        wilderness_letters.resize(TerrainList::get_instance().size());
-    }
-
-    if (!(std::string_view(line).starts_with("W:"))) {
+    auto &letters = WildernessLetters::get_instance();
+    letters.initialize();
+    if (!std::string_view(line).starts_with("W:")) {
         return { PARSE_ERROR_GENERIC, std::nullopt };
     }
 
@@ -669,7 +665,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         }
 
         const int index = zz[0][0];
-        auto &letter = wilderness_letters.at(index);
+        auto &letter = letters.get_grid(index);
         if (num > 1) {
             letter.terrain = i2enum<WildernessTerrain>(std::stoi(zz[1]));
         }
@@ -699,10 +695,11 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         pos.x = xmin;
         char *s = line + 4;
         int len = strlen(s);
+        auto &wilderness = WildernessGrids::get_instance();
         for (auto i = 0; ((pos.x < xmax) && (i < len)); pos.x++, s++, i++) {
             int id = s[0];
-            auto &wg = WildernessGrids::get_instance().get_grid(pos);
-            const auto &letter = wilderness_letters.at(id);
+            auto &wg = wilderness.get_grid(pos);
+            const auto &letter = letters.get_grid(id);
             wg.terrain = letter.terrain;
             wg.level = letter.level;
             wg.town = letter.town;
