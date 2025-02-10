@@ -737,7 +737,8 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
             return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
         }
 
-        wilderness.set_player_position({ std::stoi(zz[0]), std::stoi(zz[1]) });
+        wilderness.set_starting_player_position({ std::stoi(zz[0]), std::stoi(zz[1]) });
+        wilderness.initialize_position();
         if (!wilderness.is_player_in_bounds()) {
             return { PARSE_ERROR_OUT_OF_BOUNDS, std::nullopt };
         }
