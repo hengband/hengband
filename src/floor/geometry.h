@@ -3,7 +3,6 @@
 #include "system/angband-exceptions.h"
 #include "system/angband.h"
 #include "util/point-2d.h"
-#include <algorithm>
 #include <array>
 #include <span>
 #include <utility>
@@ -33,7 +32,7 @@ public:
      *  /|\
      * 1 2 3
      *
-     * 0: 5と同じ
+     * 0: 無効な方向を意味する
      *
      * @param dir 方向ID
      */
@@ -45,9 +44,12 @@ public:
         }
     }
 
-    constexpr Direction()
-        : dir_(0)
+    /*!
+     * @brief 無効な方向を示す方向クラスのインスタンスを生成する
+     */
+    static constexpr Direction none()
     {
+        return Direction(0);
     }
 
     /*!
@@ -161,6 +163,15 @@ public:
         return Direction::from_cdir(new_cdir);
     }
 
+    /*!
+     * @brief インスタンスが有効な方向を示しているかどうかを返す
+     * @return 有効な方向を示している場合はtrue、そうでない場合はfalse
+     */
+    constexpr explicit operator bool() const noexcept
+    {
+        return this->dir_ != 0;
+    }
+
 private:
     /// 方向IDに対応するベクトルの定義
     static constexpr std::array<Pos2DVec, 10> DIR_TO_VEC = {
@@ -185,15 +196,10 @@ constexpr std::array<Direction, 9> DIRECTIONS = {
     { Direction(2), Direction(8), Direction(6), Direction(4), Direction(3), Direction(1), Direction(9), Direction(7), Direction(5) }
 };
 
-constexpr std::array<Direction, 9> reverse_array(const std::array<Direction, 9> &arr)
-{
-    std::array<Direction, 9> res{};
-    std::reverse_copy(arr.begin(), arr.end(), res.begin());
-    return res;
-}
-
 /// DIRECTIONSの要素を逆順にした配列
-constexpr auto REVERSE_DIRECTIONS = reverse_array(DIRECTIONS);
+constexpr std::array<Direction, 9> REVERSE_DIRECTIONS = {
+    { Direction(5), Direction(7), Direction(9), Direction(1), Direction(3), Direction(4), Direction(6), Direction(8), Direction(2) }
+};
 }
 
 /*!
