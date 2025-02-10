@@ -82,17 +82,16 @@ void do_cmd_inven(PlayerType *player_ptr)
 
     screen_save();
     (void)show_inventory(player_ptr, 0, USE_FULL, AllMatchItemTester());
-    WEIGHT weight = calc_inventory_weight(player_ptr);
-    WEIGHT weight_lim = calc_weight_limit(player_ptr);
-    std::string out_val;
+    const auto weight = calc_inventory_weight(player_ptr);
+    const auto weight_lim = calc_weight_limit(player_ptr);
+    const auto percentage = weight * 100 / weight_lim;
 #ifdef JP
-    out_val = format("持ち物： 合計 %3d.%1d kg (限界の%ld%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight),
+    const auto mes = format("持ち物： 合計 %3d.%1d kg (限界の%d%%) コマンド: ", lb_to_kg_integer(weight), lb_to_kg_fraction(weight), percentage);
 #else
-    out_val = format("Inventory: carrying %d.%d pounds (%ld%% of capacity). Command: ", weight / 10, weight % 10,
+    const auto mes = format("Inventory: carrying %d.%d pounds (%d%% of capacity). Command: ", weight / 10, weight % 10, percentage);
 #endif
-        (long int)(weight * 100) / weight_lim);
 
-    prt(out_val, 0, 0);
+    prt(mes, 0, 0);
     command_new = inkey();
     screen_load();
     if (command_new != ESCAPE) {
