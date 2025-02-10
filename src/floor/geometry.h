@@ -125,6 +125,15 @@ public:
     }
 
     /*!
+     * @brief 8方向いずれかの方向を指し示しているかどうかを返す
+     * @return 方向IDが8方向いずれかの方向を示している場合はtrue、そうでない場合はfalseを返す。
+     */
+    constexpr bool has_direction() const noexcept
+    {
+        return this->dir_ != 0 && this->dir_ != 5;
+    }
+
+    /*!
      * @brief 方向が斜め方向かどうかを返す
      * @return 斜め方向ならばtrue、そうでなければfalse
      */
