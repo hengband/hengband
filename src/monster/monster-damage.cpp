@@ -145,7 +145,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
         exe_write_diary(*this->player_ptr->current_floor_ptr, DiaryKind::UNIQUE, 0, ss.str());
     }
 
-    sound(SOUND_KILL);
+    sound(SoundKind::KILL);
     this->show_kill_message(note, m_name);
     this->show_bounty_message(m_name);
     monster_death(this->player_ptr, this->m_idx, true, this->attribute_flags);

@@ -535,7 +535,7 @@ static bool cast_sniper_spell(PlayerType *player_ptr, int spell)
     auto snipe_type = SP_NONE;
     switch (spell) {
     case 0: /* Concentration */
-        sound(SOUND_ZAP);
+        sound(SoundKind::ZAP);
         if (!snipe_concentrate(player_ptr)) {
             return false;
         }

@@ -375,7 +375,7 @@ void run_step(PlayerType *player_ptr, const Direction &dir)
     if (dir.has_direction()) {
         ignore_avoid_run = true;
         if (see_wall(player_ptr, dir, player_ptr->get_position())) {
-            sound(SOUND_HITWALL);
+            sound(SoundKind::HITWALL);
             msg_print(_("その方向には走れません。", "You cannot run in that direction."));
             disturb(player_ptr, false, false);
             return;

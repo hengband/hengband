@@ -45,7 +45,7 @@ void purchase_analyze(PlayerType *player_ptr, PRICE price, PRICE value, PRICE gu
         msg_print(rand_choice(comment_7a));
         chg_virtue(player_ptr, Virtue::HONOUR, -1);
         chg_virtue(player_ptr, Virtue::JUSTICE, -1);
-        sound(SOUND_STORE1);
+        sound(SoundKind::STORE1);
         return;
     }
 
@@ -56,7 +56,7 @@ void purchase_analyze(PlayerType *player_ptr, PRICE price, PRICE value, PRICE gu
         if (one_in_(4)) {
             chg_virtue(player_ptr, Virtue::HONOUR, -1);
         }
-        sound(SOUND_STORE2);
+        sound(SoundKind::STORE2);
         return;
     }
 
@@ -68,7 +68,7 @@ void purchase_analyze(PlayerType *player_ptr, PRICE price, PRICE value, PRICE gu
         } else if (one_in_(4)) {
             chg_virtue(player_ptr, Virtue::HONOUR, 1);
         }
-        sound(SOUND_STORE3);
+        sound(SoundKind::STORE3);
         return;
     }
 
@@ -84,7 +84,7 @@ void purchase_analyze(PlayerType *player_ptr, PRICE price, PRICE value, PRICE gu
         if (10 * price < value) {
             chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
         }
-        sound(SOUND_STORE4);
+        sound(SoundKind::STORE4);
         return;
     }
 }

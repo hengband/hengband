@@ -297,7 +297,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                     }
 
                     if (is_seen(player_ptr, monster)) {
-                        sound(SOUND_REFLECT);
+                        sound(SoundKind::REFLECT);
                         if ((monster.r_idx == MonraceId::KENSHIROU) || (monster.r_idx == MonraceId::RAOU)) {
                             msg_print(_("「北斗神拳奥義・二指真空把！」", "The attack bounces!"));
                         } else if (monster.r_idx == MonraceId::DIO) {
@@ -306,7 +306,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                             msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
                         }
                     } else if (!is_monster(src_idx)) {
-                        sound(SOUND_REFLECT);
+                        sound(SoundKind::REFLECT);
                     }
 
                     if (is_original_ap_and_seen(player_ptr, monster)) {

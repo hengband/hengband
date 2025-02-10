@@ -271,7 +271,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         chg_virtue(player_ptr, Virtue::NATURE, -1);
     }
 
-    sound(SOUND_BUY);
+    sound(SoundKind::BUY);
     player_ptr->au -= price;
     store_prt_gold(player_ptr);
     object_aware(player_ptr, item);

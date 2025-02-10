@@ -86,7 +86,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
     }
 
     auto max_attempts = 10;
-    sound(SOUND_REFLECT);
+    sound(SoundKind::REFLECT);
 
     std::string mes;
     if (player_ptr->effects()->blindness().is_blind()) {

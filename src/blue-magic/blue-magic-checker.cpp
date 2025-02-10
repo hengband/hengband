@@ -55,7 +55,7 @@ void learn_spell(PlayerType *player_ptr, MonsterAbilityType monspell)
         bluemage_data->learnt_blue_magics.set(monspell);
         msg_format(_("%sを学習した！", "You have learned %s!"), monster_power.name);
         gain_exp(player_ptr, monster_power.level * monster_power.smana);
-        sound(SOUND_STUDY);
+        sound(SoundKind::STUDY);
         bluemage_data->new_magic_learned = true;
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::ACTION);
     }

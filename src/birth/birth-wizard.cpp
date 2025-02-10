@@ -523,7 +523,7 @@ static bool display_auto_roller(PlayerType *player_ptr, chara_limit_type chara_l
         display_auto_roller_success_rate(col);
         exe_auto_roller(player_ptr, chara_limit, col);
         if (autoroller || autochara) {
-            sound(SOUND_LEVEL);
+            sound(SoundKind::LEVEL);
         }
 
         flush();

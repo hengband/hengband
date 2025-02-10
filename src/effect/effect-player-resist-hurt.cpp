@@ -128,7 +128,7 @@ void effect_player_hell_fire(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 void effect_player_arrow(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
 {
     if (player_ptr->effects()->blindness().is_blind()) {
-        sound(SOUND_SHOOT_HIT);
+        sound(SoundKind::SHOOT_HIT);
         msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
         ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
         return;
@@ -139,7 +139,7 @@ void effect_player_arrow(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
         return;
     }
 
-    sound(SOUND_SHOOT_HIT);
+    sound(SoundKind::SHOOT_HIT);
     ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
 

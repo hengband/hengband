@@ -224,7 +224,7 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 
     auto *o_ptr = ref_item(player_ptr, i_idx);
 
-    sound(SOUND_EAT);
+    sound(SoundKind::EAT);
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     const auto level = o_ptr->get_baseitem_level();

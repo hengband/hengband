@@ -101,7 +101,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
             msg_print(_("上の階に登った。", "You enter the up staircase."));
         }
 
-        sound(SOUND_STAIRWAY);
+        sound(SoundKind::STAIRWAY);
 
         leave_quest_check(player_ptr);
         floor.quest_number = i2enum<QuestId>(grid.special);
@@ -192,7 +192,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         }
     }
 
-    sound(SOUND_STAIRWAY);
+    sound(SoundKind::STAIRWAY);
 
     player_ptr->leaving = true;
 }
@@ -230,7 +230,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
             msg_print(_("下の階に降りた。", "You enter the down staircase."));
         }
 
-        sound(SOUND_STAIRWAY);
+        sound(SoundKind::STAIRWAY);
 
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
@@ -322,7 +322,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
             }
         }
 
-        sound(SOUND_STAIRWAY);
+        sound(SoundKind::STAIRWAY);
     }
 
     player_ptr->leaving = true;

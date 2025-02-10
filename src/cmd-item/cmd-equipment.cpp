@@ -253,7 +253,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         }
     }
 
-    sound(SOUND_WIELD);
+    sound(SoundKind::WIELD);
     if (need_switch_wielding && !player_ptr->inventory_list[need_switch_wielding].is_cursed()) {
         auto &slot_item = player_ptr->inventory_list[slot];
         auto &switch_item = player_ptr->inventory_list[need_switch_wielding];
@@ -395,7 +395,7 @@ void do_cmd_takeoff(PlayerType *player_ptr)
         }
     }
 
-    sound(SOUND_TAKE_OFF);
+    sound(SoundKind::TAKE_OFF);
     energy.set_player_turn_energy(50);
     (void)inven_takeoff(player_ptr, i_idx, 255);
     verify_equip_slot(player_ptr, i_idx);

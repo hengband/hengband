@@ -367,7 +367,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             msg_print(_("セーブ失敗！", "death save failed!"));
         }
 
-        sound(SOUND_DEATH);
+        sound(SoundKind::DEATH);
         chg_virtue(player_ptr, Virtue::SACRIFICE, 10);
         handle_stuff(player_ptr);
         player_ptr->leaving = true;
@@ -566,7 +566,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             bell();
         }
 
-        sound(SOUND_WARN);
+        sound(SoundKind::WARN);
         if (record_danger && (old_chp > warning)) {
             if (player_ptr->effects()->hallucination().is_hallucinated() && damage_type == DAMAGE_ATTACK) {
                 hit_from = _("何か", "something");

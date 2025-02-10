@@ -111,7 +111,7 @@ static void on_dead_pink_horror(PlayerType *player_ptr, MonsterDeath *md_ptr)
     }
 
     if (notice) {
-        sound(SOUND_SUMMON);
+        sound(SoundKind::SUMMON);
         msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
     }
 }
@@ -247,7 +247,7 @@ static void on_dead_aqua_illusion(PlayerType *player_ptr, MonsterDeath *md_ptr)
 
     if (notice) {
         msg_print(_("泡が弾けた！", "The bubble pops!"));
-        sound(SOUND_SUMMON);
+        sound(SoundKind::SUMMON);
     }
 }
 
@@ -284,7 +284,7 @@ static void on_dead_dragon_centipede(PlayerType *player_ptr, MonsterDeath *md_pt
     if (notice) {
         const auto m_name = monster_desc(player_ptr, *md_ptr->m_ptr, MD_NONE);
         msg_format(_("%sが再生した！", "The %s reproduced!"), m_name.data());
-        sound(SOUND_SUMMON);
+        sound(SoundKind::SUMMON);
     }
 }
 
@@ -415,7 +415,7 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, MonsterDeath *md_ptr)
 
     if (notice) {
         msg_print(_("箱の中から新たなミミックが現れた！", "A new mimic appears in the dead mimic!"));
-        sound(SOUND_SUMMON);
+        sound(SoundKind::SUMMON);
     }
 }
 

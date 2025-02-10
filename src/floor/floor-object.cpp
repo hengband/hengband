@@ -480,7 +480,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
 
     note_spot(player_ptr, pos_drop.y, pos_drop.x);
     lite_spot(player_ptr, pos_drop.y, pos_drop.x);
-    sound(SOUND_DROP);
+    sound(SoundKind::DROP);
 
     const auto is_located = player_ptr->is_located_at(pos_drop);
     if (is_located) {

@@ -9,6 +9,7 @@
 #include "main/scene-table.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
+#include "util/enum-converter.h"
 
 // モンスターBGMの設定有無。設定なし時に関連処理をスキップする。
 bool has_monster_music = false;
@@ -30,13 +31,13 @@ void bell(void)
  * @brief 音を鳴らす
  * @todo intをsound_typeに差し替える
  */
-void sound(int val)
+void sound(SoundKind sk)
 {
     if (!use_sound) {
         return;
     }
 
-    term_xtra(TERM_XTRA_SOUND, val);
+    term_xtra(TERM_XTRA_SOUND, enum2i(sk));
 }
 
 /*!

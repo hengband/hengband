@@ -387,7 +387,7 @@ void MonsterAttackPlayer::monster_explode()
         return;
     }
 
-    sound(SOUND_EXPLODE);
+    sound(SoundKind::EXPLODE);
     MonsterDamageProcessor mdp(this->player_ptr, this->m_idx, this->m_ptr->hp + 1, &this->fear, AttributeType::NONE);
     if (mdp.mon_take_hit("")) {
         this->blinked = false;
@@ -507,7 +507,7 @@ void MonsterAttackPlayer::postprocess_monster_blows()
     }
 
     if (this->m_ptr->ml && this->fear && this->alive && !this->player_ptr->is_dead) {
-        sound(SOUND_FLEE);
+        sound(SoundKind::FLEE);
         msg_format(_("%s^は恐怖で逃げ出した！", "%s^ flees in terror!"), this->m_name);
     }
 

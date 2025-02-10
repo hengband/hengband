@@ -204,7 +204,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (m_idx <= 0) {
-        sound(SOUND_TPLEVEL);
+        sound(SoundKind::TPLEVEL);
         return;
     }
 
@@ -217,7 +217,7 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     delete_monster_idx(player_ptr, m_idx);
     if (see_m) {
-        sound(SOUND_TPLEVEL);
+        sound(SoundKind::TPLEVEL);
     }
 }
 

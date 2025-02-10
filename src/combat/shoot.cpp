@@ -549,7 +549,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     }
 
     if (snipe_type != SP_NONE) {
-        sound(SOUND_ZAP);
+        sound(SoundKind::ZAP);
     }
 
     /* Predict the "target" location */
@@ -598,7 +598,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
         vary_item(player_ptr, i_idx, -1);
 
-        sound(SOUND_SHOOT);
+        sound(SoundKind::SHOOT);
         handle_stuff(player_ptr);
 
         prev_y = y;
@@ -704,7 +704,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
             /* Monster here, Try to hit it */
             if (floor.grid_array[y][x].has_monster()) {
-                sound(SOUND_SHOOT_HIT);
+                sound(SoundKind::SHOOT_HIT);
                 Grid *c_mon_ptr = &floor.grid_array[y][x];
 
                 auto &monster = floor.m_list[c_mon_ptr->m_idx];
@@ -806,7 +806,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     if (snipe_type == SP_EXPLODE) {
                         uint16_t flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
 
-                        sound(SOUND_EXPLODE); /* No explode sound - use breath fire instead */
+                        sound(SoundKind::EXPLODE); /* No explode sound - use breath fire instead */
                         project(player_ptr, 0, ((sniper_concent + 1) / 2 + 1), ny, nx, base_dam, AttributeType::MISSILE, flg);
                         break;
                     }
@@ -844,7 +844,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         }
 
                         if (fear && monster.ml) {
-                            sound(SOUND_FLEE);
+                            sound(SoundKind::FLEE);
                             msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
                         }
 

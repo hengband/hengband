@@ -93,7 +93,7 @@ void execute_recall(PlayerType *player_ptr)
         leave_tower_check(player_ptr);
         floor.quest_number = QuestId::NONE;
         player_ptr->leaving = true;
-        sound(SOUND_TPLEVEL);
+        sound(SoundKind::TPLEVEL);
         return;
     }
 
@@ -135,7 +135,7 @@ void execute_recall(PlayerType *player_ptr)
     player_ptr->leaving = true;
 
     check_random_quest_auto_failure(player_ptr);
-    sound(SOUND_TPLEVEL);
+    sound(SoundKind::TPLEVEL);
 }
 
 /*!
@@ -169,5 +169,5 @@ void execute_floor_reset(PlayerType *player_ptr)
         msg_print(_("世界が少しの間変化したようだ。", "The world seems to change for a moment!"));
     }
 
-    sound(SOUND_TPLEVEL);
+    sound(SoundKind::TPLEVEL);
 }

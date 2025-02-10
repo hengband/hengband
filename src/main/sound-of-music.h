@@ -10,9 +10,10 @@
 
 extern bool has_monster_music;
 
+enum class SoundKind;
 class PlayerType;
 void bell();
-void sound(int num);
+void sound(SoundKind sk);
 errr play_music(int type, int num);
 void select_floor_music(PlayerType *player_ptr);
 void select_monster_music(PlayerType *player_ptr, const std::vector<MONSTER_IDX> &monster_list);

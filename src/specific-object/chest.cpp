@@ -284,7 +284,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
         msg_print(_("突然、箱が爆発した！", "There is a sudden explosion!"));
         msg_print(_("箱の中の物はすべて粉々に砕け散った！", "Everything inside the chest is destroyed!"));
         o_ptr->pval = 0;
-        sound(SOUND_EXPLODE);
+        sound(SoundKind::EXPLODE);
         take_hit(this->player_ptr, DAMAGE_ATTACK, Dice::roll(5, 8), _("爆発する箱", "an exploding chest"));
     }
     /* Scatter contents. */
