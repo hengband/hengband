@@ -115,11 +115,23 @@ public:
         return this->dir_;
     }
 
+    /*!
+     * @brief 円周順に方向を示す値を取得する
+     * @return 円周順に方向を示す値。示す値がない(方向IDが0もしくは5)場合はstd::nulloptを返す
+     */
+    constexpr std::optional<int> cdir() const
+    {
+        return DIR_TO_CDIR[this->dir_];
+    }
+
 private:
     /// 方向IDに対応するベクトルの定義
     static constexpr std::array<Pos2DVec, 10> DIR_TO_VEC = {
         { { 0, 0 }, { 1, -1 }, { 1, 0 }, { 1, 1 }, { 0, -1 }, { 0, 0 }, { 0, 1 }, { -1, -1 }, { -1, 0 }, { -1, 1 } }
     };
+
+    /// 方向IDに対応する円周順に方向を示す値の定義
+    static constexpr std::array<std::optional<int>, 10> DIR_TO_CDIR = { { std::nullopt, 7, 0, 1, 6, std::nullopt, 2, 5, 4, 3 } };
 
     int dir_; //<! 方向ID
 };
