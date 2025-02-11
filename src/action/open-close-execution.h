@@ -6,10 +6,11 @@
 
 #include "system/angband.h"
 
+class Direction;
 class PlayerType;
 bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x);
 bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x);
 bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x);
-bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir);
+bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, const Direction &dir);
 bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx);
-bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir);
+bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, const Direction &dir);

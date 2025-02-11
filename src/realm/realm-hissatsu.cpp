@@ -665,8 +665,8 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
 
     case 28:
         if (cast) {
-            int dir;
-            if (!get_rep_dir(player_ptr, &dir)) {
+            const auto dir = get_direction(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 

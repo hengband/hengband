@@ -266,8 +266,8 @@ void process_monk_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 
 bool double_attack(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_rep_dir(player_ptr, &dir)) {
+    const auto dir = get_rep_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
