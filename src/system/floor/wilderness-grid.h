@@ -19,15 +19,19 @@ public:
     WildernessGrid() = default;
     WildernessTerrain terrain{};
     short town = 0;
-    int road = 0;
     uint32_t seed = 0;
     int level = 0;
     DungeonId entrance{};
     std::string name = "";
 
+    bool has_road() const;
+    void set_road(int road_parsing);
     int get_level() const;
     void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
     void initialize_seed();
+
+private:
+    int road = 0;
 };
 
 class WildernessGrids {

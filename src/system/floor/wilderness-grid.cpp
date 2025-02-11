@@ -18,6 +18,16 @@ int WildernessGrid::get_level() const
     return this->level;
 }
 
+bool WildernessGrid::has_road() const
+{
+    return this->road > 0;
+}
+
+void WildernessGrid::set_road(int road_parsing)
+{
+    this->road = road_parsing;
+}
+
 void WildernessGrid::initialize(const WildernessGrid &letter)
 {
     this->terrain = letter.terrain;

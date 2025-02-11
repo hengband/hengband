@@ -295,9 +295,9 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
 
     if (!is_corner && (wg.town == 0)) {
         //!< @todo make the road a bit more interresting.
-        if (wg.road) {
+        if (wg.has_road()) {
             floor.get_grid({ MAX_HGT / 2, MAX_WID / 2 }).set_terrain_id(TerrainTag::FLOOR);
-            if (wilderness_grids[pos.y - 1][pos.x].road) {
+            if (wilderness_grids[pos.y - 1][pos.x].has_road()) {
                 /* North road */
                 for (auto y = 1; y < MAX_HGT / 2; y++) {
                     const Pos2D pos_road(y, MAX_WID / 2);
@@ -305,15 +305,15 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
                 }
             }
 
-            if (wilderness_grids[pos.y + 1][pos.x].road) {
-                /* North road */
+            if (wilderness_grids[pos.y + 1][pos.x].has_road()) {
+                /* South road */
                 for (auto y = MAX_HGT / 2; y < MAX_HGT - 1; y++) {
                     const Pos2D pos_road(y, MAX_WID / 2);
                     floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
-            if (wilderness_grids[pos.y][pos.x + 1].road) {
+            if (wilderness_grids[pos.y][pos.x + 1].has_road()) {
                 /* East road */
                 for (auto x = MAX_WID / 2; x < MAX_WID - 1; x++) {
                     const Pos2D pos_road(MAX_HGT / 2, x);
@@ -321,7 +321,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
                 }
             }
 
-            if (wilderness_grids[pos.y][pos.x - 1].road) {
+            if (wilderness_grids[pos.y][pos.x - 1].has_road()) {
                 /* West road */
                 for (auto x = 1; x < MAX_WID / 2; x++) {
                     const Pos2D pos_road(MAX_HGT / 2, x);
@@ -595,7 +595,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
             continue;
         }
 
-        if (wg.road) {
+        if (wg.has_road()) {
             grid.set_terrain_id(TerrainTag::FLOOR);
             grid.info |= (CAVE_GLOW | CAVE_MARK);
             continue;
@@ -681,7 +681,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         }
 
         if (num > 4) {
-            letter.road = std::stoi(zz[4]);
+            letter.set_road(std::stoi(zz[4]));
         }
 
         if (num > 5) {
