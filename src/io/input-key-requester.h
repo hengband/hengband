@@ -1,5 +1,6 @@
 #pragma once
 
+#include "floor/geometry.h"
 #include "game-option/keymap-directory-getter.h"
 #include "system/angband.h"
 #include <optional>
@@ -12,7 +13,7 @@ extern bool use_menu;
 extern COMMAND_CODE command_cmd;
 extern COMMAND_ARG command_arg;
 extern short command_rep;
-extern DIRECTION command_dir;
+extern Direction command_dir;
 extern int16_t command_see;
 extern TERM_LEN command_gap;
 extern int16_t command_wrk;

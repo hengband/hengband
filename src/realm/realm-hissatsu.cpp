@@ -625,7 +625,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 if (!mdeath) {
                     break;
                 }
-                command_dir = 0;
+                command_dir = Direction::none();
 
                 RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
                 handle_stuff(player_ptr);

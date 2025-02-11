@@ -714,7 +714,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 DIRECTION dir;
 
                 if (power) {
-                    command_dir = 0;
+                    command_dir = Direction::none();
 
                     do {
                         msg_print(_("復讐の時だ！", "Time for revenge!"));

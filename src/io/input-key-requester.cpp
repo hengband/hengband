@@ -36,7 +36,7 @@ bool use_menu;
 int16_t command_cmd; /* Current "Angband Command" */
 COMMAND_ARG command_arg; /*!< 各種コマンドの汎用的な引数として扱う / Gives argument of current command */
 short command_rep; /*!< 各種コマンドの汎用的なリピート数として扱う / Gives repetition of current command */
-DIRECTION command_dir; /*!< 各種コマンドの汎用的な方向値処理として扱う/ Gives direction of current command */
+Direction command_dir = Direction::none(); /*!< 各種コマンドの汎用的な方向値処理として扱う/ Gives direction of current command */
 int16_t command_see; /* アイテム使用時等にリストを表示させるかどうか (ゲームオプションの他、様々なタイミングでONになったりOFFになったりする模様……) */
 int16_t command_wrk; /* アイテムの使用許可状況 (ex. 装備品のみ、床上もOK等) */
 TERM_LEN command_gap = 999; /* アイテムの表示に使う (詳細未調査) */
@@ -59,7 +59,7 @@ void InputKeyRequestor::request_command()
 {
     command_cmd = 0;
     command_arg = 0;
-    command_dir = 0;
+    command_dir = Direction::none();
     use_menu = false;
     this->process_input_command();
     if (always_repeat && (command_arg <= 0)) {

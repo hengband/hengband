@@ -106,12 +106,12 @@ static int get_hack_dir(PlayerType *player_ptr)
         return 0;
     }
 
-    command_dir = dir;
+    command_dir = Direction(dir);
     if (player_ptr->effects()->confusion().is_confused()) {
         dir = rand_choice(Direction::directions_8()).dir();
     }
 
-    if (command_dir != dir) {
+    if (command_dir != Direction(dir)) {
         msg_print(_("あなたは混乱している。", "You are confused."));
     }
 
