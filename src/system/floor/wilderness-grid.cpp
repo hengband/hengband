@@ -13,8 +13,6 @@
 #include "system/terrain/terrain-list.h"
 #include "term/z-rand.h"
 
-std::vector<std::vector<WildernessGrid>> wilderness_grids;
-
 int WildernessGrid::get_level() const
 {
     return this->level;
@@ -149,13 +147,13 @@ void WildernessGrids::initialize_width(int width)
 
 void WildernessGrids::initialize_grids()
 {
-    wilderness_grids.assign(this->area.bottom_right.y + 1, std::vector<WildernessGrid>(this->area.bottom_right.x + 1));
+    this->grids.assign(this->area.bottom_right.y + 1, std::vector<WildernessGrid>(this->area.bottom_right.x + 1));
 }
 
 void WildernessGrids::initialize_seeds()
 {
     for (const auto &pos : this->area) {
-        wilderness_grids[pos.y][pos.x].initialize_seed();
+        this->grids[pos.y][pos.x].initialize_seed();
     }
 }
 
@@ -171,12 +169,12 @@ WildernessGrids &WildernessGrids::get_instance()
 
 const WildernessGrid &WildernessGrids::get_grid(const Pos2D &pos) const
 {
-    return wilderness_grids.at(pos.y).at(pos.x);
+    return this->grids.at(pos.y).at(pos.x);
 }
 
 WildernessGrid &WildernessGrids::get_grid(const Pos2D &pos)
 {
-    return wilderness_grids.at(pos.y).at(pos.x);
+    return this->grids.at(pos.y).at(pos.x);
 }
 
 const Pos2D &WildernessGrids::get_player_position() const
@@ -196,7 +194,7 @@ void WildernessGrids::set_player_position(const Pos2D &pos)
 
 const WildernessGrid &WildernessGrids::get_player_grid() const
 {
-    return wilderness_grids.at(this->current_pos.y).at(this->current_pos.x);
+    return this->grids.at(this->current_pos.y).at(this->current_pos.x);
 }
 
 void WildernessGrids::move_player_to(const Direction &dir)
