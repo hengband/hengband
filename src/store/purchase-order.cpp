@@ -268,7 +268,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
 
     sound(SoundKind::BUY);
     player_ptr->au -= price;
-    store_prt_gold(player_ptr);
+    store_prt_gold(player_ptr->au);
     object_aware(player_ptr, item);
 
     msg_print(_("{}を ${}で購入しました。", "You bought {} for {} gold."), purchased_item_name, price);

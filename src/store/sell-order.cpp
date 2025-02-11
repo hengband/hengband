@@ -144,7 +144,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             }
 
             player_ptr->au += price;
-            store_prt_gold(player_ptr);
+            store_prt_gold(player_ptr->au);
             const auto dummy = selling_item.calc_price() * selling_item.number;
 
             identify_item(player_ptr, o_ptr);
