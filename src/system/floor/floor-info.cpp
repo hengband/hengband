@@ -212,12 +212,12 @@ bool FloorType::has_trap_at(const Pos2D &pos) const
  * @param p_pos プレイヤーの現在位置
  * @param gck 判定条件
  * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
- * @return 該当する地形の数と、該当する地形の中から1つの座標
+ * @return 該当する地形の数と、該当する地形の中から1つの方向
  */
-std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCountKind gck, bool under) const
+std::pair<int, Direction> FloorType::count_doors_traps(const Pos2D &p_pos, GridCountKind gck, bool under) const
 {
     auto count = 0;
-    Pos2D pos(0, 0);
+    auto dir = Direction::none();
     for (const auto &d : under ? Direction::directions() : Direction::directions_8()) {
         const auto pos_neighbor = p_pos + d.vec();
         if (!this->has_marked_grid_at(pos_neighbor)) {
@@ -229,10 +229,10 @@ std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCount
         }
 
         ++count;
-        pos = pos_neighbor;
+        dir = d;
     }
 
-    return { count, pos };
+    return { count, dir };
 }
 
 bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const

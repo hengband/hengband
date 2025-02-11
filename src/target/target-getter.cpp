@@ -33,7 +33,7 @@
  */
 bool get_aim_dir(PlayerType *player_ptr, int *dp)
 {
-    auto dir = command_dir;
+    auto dir = command_dir ? command_dir.dir() : 0;
     if (use_old_target && target_okay(player_ptr)) {
         dir = 5;
     }
@@ -99,17 +99,17 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
         return false;
     }
 
-    command_dir = dir;
+    command_dir = Direction(dir);
     if (player_ptr->effects()->confusion().is_confused()) {
         dir = rand_choice(Direction::directions_8()).dir();
     }
 
-    if (command_dir != dir) {
+    if (command_dir != Direction(dir)) {
         msg_print(_("あなたは混乱している。", "You are confused."));
     }
 
     *dp = dir;
-    repeat_push((COMMAND_CODE)command_dir);
+    repeat_push((COMMAND_CODE)command_dir.dir());
     return true;
 }
 
@@ -129,7 +129,7 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
  */
 std::optional<int> get_direction(PlayerType *player_ptr)
 {
-    auto dir = command_dir;
+    auto dir = command_dir ? command_dir.dir() : 0;
     short code = 0;
     if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
         dir = code;
@@ -148,16 +148,16 @@ std::optional<int> get_direction(PlayerType *player_ptr)
         }
     }
 
-    command_dir = dir;
+    command_dir = Direction(dir);
     const auto finalizer = util::make_finalizer([] {
-        repeat_push(static_cast<short>(command_dir));
+        repeat_push(static_cast<short>(command_dir.dir()));
     });
     const auto is_confused = player_ptr->effects()->confusion().is_confused();
     if (is_confused && evaluate_percent(75)) {
         dir = rand_choice(Direction::directions_8()).dir();
     }
 
-    if (command_dir == dir) {
+    if (command_dir == Direction(dir)) {
         return dir;
     }
 
@@ -193,7 +193,7 @@ std::optional<int> get_direction(PlayerType *player_ptr)
  */
 bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
 {
-    auto dir = command_dir;
+    auto dir = command_dir ? command_dir.dir() : 0;
     short code = 0;
     if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
         dir = code;
@@ -223,7 +223,7 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
         return false;
     }
 
-    command_dir = dir;
+    command_dir = Direction(dir);
     auto is_confused = player_ptr->effects()->confusion().is_confused();
     if (is_confused) {
         if (evaluate_percent(75)) {
@@ -243,7 +243,7 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
         }
     }
 
-    if (command_dir != dir) {
+    if (command_dir != Direction(dir)) {
         if (is_confused) {
             msg_print(_("あなたは混乱している。", "You are confused."));
         } else {
@@ -258,6 +258,6 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
     }
 
     *dp = dir;
-    repeat_push(static_cast<short>(command_dir));
+    repeat_push(static_cast<short>(command_dir.dir()));
     return true;
 }

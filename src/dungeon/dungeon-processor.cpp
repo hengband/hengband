@@ -109,7 +109,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     command_cmd = 0;
     command_rep = 0;
     command_arg = 0;
-    command_dir = 0;
+    command_dir = Direction::none();
 
     target_who = 0;
     player_ptr->pet_t_m_idx = 0;

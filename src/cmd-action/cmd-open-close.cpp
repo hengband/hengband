@@ -106,13 +106,12 @@ void do_cmd_open(PlayerType *player_ptr)
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
     auto &floor = *player_ptr->current_floor_ptr;
     if (easy_open) {
-        const auto &[num_doors, pos_door] = floor.count_doors_traps(player_ptr->get_position(), GridCountKind::CLOSED_DOOR, false);
-        const auto &[num_chests, pos_chest] = count_chests(player_ptr, false);
+        const auto &[num_doors, dir_door] = floor.count_doors_traps(player_ptr->get_position(), GridCountKind::CLOSED_DOOR, false);
+        const auto &[num_chests, dir_chest] = count_chests(player_ptr, false);
         if ((num_doors > 0) || (num_chests > 0)) {
-            const auto pos = pos_chest == Pos2D(0, 0) ? pos_door : pos_chest;
             const auto too_many = (num_doors && num_chests) || (num_doors > 1) || (num_chests > 1);
             if (!too_many) {
-                command_dir = player_ptr->point_direction(pos);
+                command_dir = num_chests == 0 ? dir_door : dir_chest;
             }
         }
     }
@@ -161,9 +160,9 @@ void do_cmd_close(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
     if (easy_open) {
-        const auto &[num_doors, pos] = floor.count_doors_traps(player_ptr->get_position(), GridCountKind::OPEN, false);
+        const auto &[num_doors, dir] = floor.count_doors_traps(player_ptr->get_position(), GridCountKind::OPEN, false);
         if (num_doors == 1) {
-            command_dir = player_ptr->point_direction(pos);
+            command_dir = dir;
         }
     }
 
@@ -207,13 +206,12 @@ void do_cmd_disarm(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
     if (easy_disarm) {
-        const auto &[num_traps, pos_trap] = floor.count_doors_traps(player_ptr->get_position(), GridCountKind::TRAP, true);
-        const auto &[num_chests, pos_chest] = count_chests(player_ptr, true);
+        const auto &[num_traps, dir_trap] = floor.count_doors_traps(player_ptr->get_position(), GridCountKind::TRAP, true);
+        const auto &[num_chests, dir_chest] = count_chests(player_ptr, true);
         if ((num_traps > 0) || (num_chests > 0)) {
-            const auto pos = pos_chest == Pos2D(0, 0) ? pos_trap : pos_chest;
             const auto too_many = (num_traps && num_chests) || (num_traps > 1) || (num_chests > 1);
             if (!too_many) {
-                command_dir = player_ptr->point_direction(pos);
+                command_dir = (num_chests == 0) ? dir_trap : dir_chest;
             }
         }
     }
