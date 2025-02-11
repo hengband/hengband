@@ -11,18 +11,20 @@
 #include <string>
 #include <vector>
 
-enum class WildernessTerrain;
 enum class DungeonId;
+enum class MonraceHook;
+enum class WildernessTerrain;
 class Direction;
 class WildernessGrid {
 public:
     WildernessGrid() = default;
-    WildernessTerrain terrain{};
-    uint32_t seed = 0;
     int level = 0;
     DungeonId entrance{};
     std::string name = "";
 
+    MonraceHook get_monrace_hook() const;
+    WildernessTerrain get_terrain() const;
+    void set_terrain(WildernessTerrain wt);
     bool has_town() const;
     bool matches_town(short town_matching) const;
     short get_town() const;
@@ -30,10 +32,14 @@ public:
     bool has_road() const;
     void set_road(int road_parsing);
     int get_level() const;
+    uint32_t get_seed() const;
+    void set_seed(uint32_t saved_seed);
     void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
     void initialize_seed();
 
 private:
+    WildernessTerrain terrain{};
+    uint32_t seed = 0;
     short town = 0;
     int road = 0;
 };
@@ -61,6 +67,7 @@ public:
     bool has_player_located() const;
     bool is_player_in_bounds() const;
     const Rect2D &get_area() const;
+    MonraceHook get_monrace_hook() const;
 
     void set_starting_player_position(const Pos2D &pos);
     void set_player_position(const Pos2D &pos);

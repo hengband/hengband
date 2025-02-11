@@ -195,9 +195,10 @@ static void plasma_recursive(FloorType &floor, POSITION x1, POSITION y1, POSITIO
  * @param border 未使用
  * @param corner 広域マップの角部分としての生成ならばTRUE
  */
-static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain, uint32_t seed, bool corner)
+static void generate_wilderness_area(FloorType &floor, const WildernessGrid &wg, bool corner)
 {
-    if (terrain == WildernessTerrain::EDGE) {
+    const auto wg_terrain = wg.get_terrain();
+    if (wg_terrain == WildernessTerrain::EDGE) {
         for (auto y = 0; y < MAX_HGT; y++) {
             for (auto x = 0; x < MAX_WID; x++) {
                 floor.get_grid({ y, x }).set_terrain_id(TerrainTag::PERMANENT_WALL);
@@ -209,7 +210,7 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
 
     auto &system = AngbandSystem::get_instance();
     const Xoshiro128StarStar rng_backup = system.get_rng();
-    Xoshiro128StarStar wilderness_rng(seed);
+    Xoshiro128StarStar wilderness_rng(wg.get_seed());
     system.set_rng(wilderness_rng);
     if (!corner) {
         for (auto y = 0; y < MAX_HGT; y++) {
@@ -228,7 +229,7 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
     grid_top_right.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
     grid_bottom_right.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
     if (corner) {
-        const auto &tags = terrain_table.at(terrain);
+        const auto &tags = terrain_table.at(wg_terrain);
         grid_top_left.set_terrain_id(tags.at(grid_top_left.feat));
         grid_bottom_left.set_terrain_id(tags.at(grid_bottom_left.feat));
         grid_top_right.set_terrain_id(tags.at(grid_top_right.feat));
@@ -251,7 +252,7 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
         for (auto x = 1; x < MAX_WID - 1; x++) {
             const Pos2D pos(y, x);
             auto &grid = floor.get_grid(pos);
-            grid.set_terrain_id(terrain_table.at(terrain).at(grid.feat));
+            grid.set_terrain_id(terrain_table.at(wg_terrain).at(grid.feat));
         }
     }
 
@@ -289,9 +290,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
             player_ptr->visit |= (1UL << (player_ptr->town_num - 1));
         }
     } else {
-        const auto terrain = wg.terrain;
-        const auto seed = wg.seed;
-        generate_wilderness_area(floor, terrain, seed, is_corner);
+        generate_wilderness_area(floor, wg, is_corner);
     }
 
     //!< @details 地上マップに曲がり道の道路を作る.
@@ -339,7 +338,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
 
     auto &system = AngbandSystem::get_instance();
     const Xoshiro128StarStar rng_backup = system.get_rng();
-    Xoshiro128StarStar wilderness_rng(wg.seed);
+    Xoshiro128StarStar wilderness_rng(wg.get_seed());
     system.set_rng(wilderness_rng);
     const Pos2D pos_entrance(rand_range(6, floor.height - 6), rand_range(6, floor.width - 6));
     floor.get_grid(pos_entrance).set_terrain_id(TerrainTag::ENTRANCE);
@@ -606,7 +605,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
             continue;
         }
 
-        grid.set_terrain_id(WT_TT_MAP.at(wg.terrain));
+        grid.set_terrain_id(WT_TT_MAP.at(wg.get_terrain()));
         grid.info |= (CAVE_GLOW | CAVE_MARK);
     }
 
@@ -667,7 +666,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         const int index = zz[0][0];
         auto &letter = letters.get_grid(index);
         if (num > 1) {
-            letter.terrain = i2enum<WildernessTerrain>(std::stoi(zz[1]));
+            letter.set_terrain(i2enum<WildernessTerrain>(std::stoi(zz[1])));
         }
 
         if (num > 2) {

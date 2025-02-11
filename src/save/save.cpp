@@ -157,7 +157,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     wr_s32b(area.height());
     for (auto x = 0; x < area.width(); x++) {
         for (auto y = 0; y < area.height(); y++) {
-            wr_u32b(wilderness.get_grid({ y, x }).seed);
+            wr_u32b(wilderness.get_grid({ y, x }).get_seed());
         }
     }
 
