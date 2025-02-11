@@ -260,7 +260,7 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
  * Perform the basic "disarm" command
  * @param y 解除を行うマスのY座標
  * @param x 解除を行うマスのX座標
- * @param dir プレイヤーからみた方向ID
+ * @param dir プレイヤーからみた方向
  * @return ターンを消費する処理が行われた場合TRUEを返す
  * @details
  * <pre>
@@ -270,7 +270,7 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
  * </pre>
  */
 
-bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
+bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, const Direction &dir)
 {
     const Pos2D pos(y, x);
     const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
@@ -319,7 +319,7 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
  * Perform the basic "bash" command
  * @param y 対象を行うマスのY座標
  * @param x 対象を行うマスのX座標
- * @param dir プレイヤーから見たターゲットの方角ID
+ * @param dir プレイヤーから見たターゲットの方向
  * @return 実際に処理が行われた場合TRUEを返す。
  * @details
  * <pre>
@@ -328,7 +328,7 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
  * Returns TRUE if repeated commands may continue
  * </pre>
  */
-bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
+bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, const Direction &dir)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y, x);

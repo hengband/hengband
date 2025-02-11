@@ -352,12 +352,11 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
     }
 
     auto more = false;
-    int dir;
     const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
-    if (get_rep_dir(player_ptr, &dir)) {
+    if (const auto dir = get_rep_dir(player_ptr)) {
         PlayerEnergy energy(player_ptr);
         energy.set_player_turn_energy(100);
-        if (dir != 5) {
+        if (dir.has_direction()) {
             PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
         }
 
@@ -404,14 +403,13 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
  */
 void do_cmd_run(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     if (cmd_limit_confused(player_ptr)) {
         return;
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    if (get_rep_dir(player_ptr, &dir)) {
+    if (const auto dir = get_rep_dir(player_ptr)) {
         player_ptr->running = (command_arg ? command_arg : 1000);
         run_step(player_ptr, Direction(dir));
     }

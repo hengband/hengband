@@ -165,75 +165,68 @@ Direction get_direction(PlayerType *player_ptr)
     return dir;
 }
 
-/*
- * @brief 進行方向を指定する(騎乗対象の混乱の影響を受ける) / Request a "movement" direction (1,2,3,4,6,7,8,9) from the user,
- * and place it into "command_dir", unless we already have one.
+/*!
+ * @brief 方向を指定する(騎乗対象の混乱の影響を受ける)
  *
- * This function should be used for all "repeatable" commands, such as
- * run, walk, open, close, bash, disarm, spike, tunnel, etc, as well
- * as all commands which must reference a grid adjacent to the player,
- * and which may not reference the grid under the player.  Note that,
- * for example, it is no longer possible to "disarm" or "open" chests
- * in the same grid as the player.
+ * 上下左右と斜めの8方向を指定する。underがtrueの場合、足元も指定可能。
  *
- * Direction "5" is illegal and will (cleanly) abort the command.
- *
- * This function tracks and uses the "global direction", and uses
- * that as the "desired direction", to which "confusion" is applied.
+ * @param under 足元も指定可能かどうか
+ * @return 指定した方向
+ * @note この関数は繰り返し可能なコマンドに使用する。
+ * (例) 走る、歩く、ドア開閉、ドア破壊、罠解除、楔を打つ、掘るなど
  */
-bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
+Direction get_rep_dir(PlayerType *player_ptr, bool under)
 {
-    auto dir = command_dir ? command_dir.dir() : 0;
+    auto dir = command_dir;
     short code = 0;
     if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
-        dir = code;
+        dir = Direction(code);
     }
 
-    *dp = code;
     const auto prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
                               : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
-    while (dir == 0) {
+    while (!dir) {
         const auto command = input_command(prompt, true);
         if (!command) {
-            return false;
+            return Direction::none();
         }
 
         if (under && ((command == '5') || (command == '-') || (command == '.'))) {
-            dir = 5;
+            dir = Direction(5);
             break;
         }
 
-        dir = get_keymap_dir(*command);
-        if (dir == 0) {
+        dir = Direction(get_keymap_dir(*command));
+        if (!dir) {
             bell();
         }
     }
 
-    if ((dir == 5) && !under) {
-        return false;
+    if (dir == Direction(5) && !under) {
+        return Direction::none();
     }
 
-    command_dir = Direction(dir);
+    command_dir = dir;
     auto is_confused = player_ptr->effects()->confusion().is_confused();
     if (is_confused) {
         if (evaluate_percent(75)) {
-            dir = rand_choice(Direction::directions_8()).dir();
+            dir = rand_choice(Direction::directions_8());
         }
     } else if (player_ptr->riding) {
         const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
         const auto &monrace = monster.get_monrace();
         if (monster.is_confused()) {
             if (evaluate_percent(75)) {
-                dir = rand_choice(Direction::directions_8()).dir();
+                dir = rand_choice(Direction::directions_8());
             }
         } else if (monrace.behavior_flags.has_all_of({ MonsterBehaviorType::RAND_MOVE_50, MonsterBehaviorType::RAND_MOVE_25 }) && one_in_(2)) {
-            dir = rand_choice(Direction::directions_8()).dir();
+            dir = rand_choice(Direction::directions_8());
         } else if (monrace.behavior_flags.has(MonsterBehaviorType::RAND_MOVE_50) && one_in_(4)) {
-            dir = rand_choice(Direction::directions_8()).dir();
+            dir = rand_choice(Direction::directions_8());
         }
     }
 
-    if (command_dir != Direction(dir)) {
+    if (command_dir != dir) {
         if (is_confused) {
             msg_print(_("あなたは混乱している。", "You are confused."));
         } else {
@@ -247,7 +240,6 @@ bool get_rep_dir(PlayerType *player_ptr, int *dp, bool under)
         }
     }
 
-    *dp = dir;
     repeat_push(static_cast<short>(command_dir.dir()));
-    return true;
+    return dir;
 }

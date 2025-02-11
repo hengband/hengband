@@ -394,7 +394,7 @@ void run_step(PlayerType *player_ptr, const Direction &dir)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    exe_movement(player_ptr, find_current.dir(), false, false);
+    exe_movement(player_ptr, find_current, false, false);
     if (player_ptr->is_located_at_running_destination()) {
         player_ptr->run_py = 0;
         player_ptr->run_px = 0;

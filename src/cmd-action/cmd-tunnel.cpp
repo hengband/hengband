@@ -42,8 +42,8 @@ void do_cmd_tunnel(PlayerType *player_ptr)
         command_arg = 0;
     }
 
-    int dir;
-    if (!get_rep_dir(player_ptr, &dir)) {
+    const auto dir = get_rep_dir(player_ptr);
+    if (!dir) {
         disturb(player_ptr, false, false);
         return;
     }
