@@ -6,16 +6,12 @@
 
 #include "monster-attack/monster-eating.h"
 #include "avatar/avatar.h"
-#include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-object.h"
-#include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
 #include "monster-attack/monster-attack-player.h"
-#include "monster/monster-status.h"
 #include "object/object-info.h"
-#include "object/object-mark-types.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player/digestion-processor.h"
@@ -29,7 +25,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 void process_eat_gold(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
@@ -62,7 +57,7 @@ void process_eat_gold(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         msg_print(_("しかし何も盗まれなかった。", "Nothing was stolen."));
     } else if (player_ptr->au > 0) {
         msg_print(_("財布が軽くなった気がする。", "Your purse feels lighter."));
-        msg_format(_("$%ld のお金が盗まれた！", "%ld coins were stolen!"), (long)gold);
+        msg_print(_("${} のお金が盗まれた！", "{} coins were stolen!"), gold);
         chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
     } else {
         msg_print(_("財布が軽くなった気がする。", "Your purse feels lighter."));
