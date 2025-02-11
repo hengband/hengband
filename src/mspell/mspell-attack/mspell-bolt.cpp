@@ -24,7 +24,7 @@ static bool message_shoot(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     auto notice = monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
     if (notice) {
-        sound(SOUND_SHOOT);
+        sound(SoundKind::SHOOT);
     }
     return notice;
 }

@@ -179,15 +179,15 @@ bool set_food(PlayerType *player_ptr, TIME_EFFECT v)
     } else if (new_aux < old_aux) {
         switch (new_aux) {
         case 0:
-            sound(SOUND_FAINT);
+            sound(SoundKind::FAINT);
             msg_print(_("あまりにも空腹で気を失ってしまった！", "You are getting faint from hunger!"));
             break;
         case 1:
-            sound(SOUND_WEAK);
+            sound(SoundKind::WEAK);
             msg_print(_("お腹が空いて倒れそうだ。", "You are getting weak from hunger!"));
             break;
         case 2:
-            sound(SOUND_HUNGRY);
+            sound(SoundKind::HUNGRY);
             msg_print(_("お腹が空いてきた。", "You are getting hungry."));
             break;
         case 3:

@@ -56,7 +56,7 @@ static void monster_attack_show(MonsterAttackPlayer *monap_ptr)
         }
     }
 
-    sound(SOUND_SHOW);
+    sound(SoundKind::SHOW);
 }
 
 void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
@@ -66,74 +66,74 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
         monap_ptr->act = _("殴られた。", "hits you.");
         monap_ptr->do_cut = monap_ptr->do_stun = 1;
         monap_ptr->touched = true;
-        sound(SOUND_ENEMY_HIT);
+        sound(SoundKind::ENEMY_HIT);
         break;
     }
     case RaceBlowMethodType::TOUCH: {
         monap_ptr->act = _("触られた。", "touches you.");
         monap_ptr->touched = true;
-        sound(SOUND_TOUCH);
+        sound(SoundKind::TOUCH);
         break;
     }
     case RaceBlowMethodType::PUNCH: {
         monap_ptr->act = _("パンチされた。", "punches you.");
         monap_ptr->touched = true;
         monap_ptr->do_stun = 1;
-        sound(SOUND_ENEMY_HIT);
+        sound(SoundKind::ENEMY_HIT);
         break;
     }
     case RaceBlowMethodType::KICK: {
         monap_ptr->act = _("蹴られた。", "kicks you.");
         monap_ptr->touched = true;
         monap_ptr->do_stun = 1;
-        sound(SOUND_ENEMY_HIT);
+        sound(SoundKind::ENEMY_HIT);
         break;
     }
     case RaceBlowMethodType::CLAW: {
         monap_ptr->act = _("ひっかかれた。", "claws you.");
         monap_ptr->touched = true;
         monap_ptr->do_cut = 1;
-        sound(SOUND_CLAW);
+        sound(SoundKind::CLAW);
         break;
     }
     case RaceBlowMethodType::BITE: {
         monap_ptr->act = _("噛まれた。", "bites you.");
         monap_ptr->do_cut = 1;
         monap_ptr->touched = true;
-        sound(SOUND_BITE);
+        sound(SoundKind::BITE);
         break;
     }
     case RaceBlowMethodType::STING: {
         monap_ptr->act = _("刺された。", "stings you.");
         monap_ptr->touched = true;
-        sound(SOUND_STING);
+        sound(SoundKind::STING);
         break;
     }
     case RaceBlowMethodType::SLASH: {
         monap_ptr->act = _("斬られた。", "slashes you.");
         monap_ptr->touched = true;
         monap_ptr->do_cut = 1;
-        sound(SOUND_CLAW);
+        sound(SoundKind::CLAW);
         break;
     }
     case RaceBlowMethodType::BUTT: {
         monap_ptr->act = _("角で突かれた。", "butts you.");
         monap_ptr->do_stun = 1;
         monap_ptr->touched = true;
-        sound(SOUND_ENEMY_HIT);
+        sound(SoundKind::ENEMY_HIT);
         break;
     }
     case RaceBlowMethodType::CRUSH: {
         monap_ptr->act = _("押し潰された。", "crushes you.");
         monap_ptr->do_stun = 1;
         monap_ptr->touched = true;
-        sound(SOUND_CRUSH);
+        sound(SoundKind::CRUSH);
         break;
     }
     case RaceBlowMethodType::ENGULF: {
         monap_ptr->act = _("飲み込まれた。", "engulfs you.");
         monap_ptr->touched = true;
-        sound(SOUND_CRUSH);
+        sound(SoundKind::CRUSH);
         break;
     }
     case RaceBlowMethodType::CHARGE: {
@@ -144,7 +144,7 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
         monap_ptr->touched = true;
 
         /* このコメントはジョークが効いているので残しておく / Note! This is "charges", not "charges at". */
-        sound(SOUND_BUY);
+        sound(SoundKind::BUY);
         break;
     }
     case RaceBlowMethodType::CRAWL: {
@@ -153,17 +153,17 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
 #endif
         monap_ptr->act = _("が体の上を這い回った。", "crawls on you.");
         monap_ptr->touched = true;
-        sound(SOUND_SLIME);
+        sound(SoundKind::SLIME);
         break;
     }
     case RaceBlowMethodType::DROOL: {
         monap_ptr->act = _("よだれをたらされた。", "drools on you.");
-        sound(SOUND_SLIME);
+        sound(SoundKind::SLIME);
         break;
     }
     case RaceBlowMethodType::SPIT: {
         monap_ptr->act = _("唾を吐かれた。", "spits on you.");
-        sound(SOUND_SLIME);
+        sound(SoundKind::SLIME);
         break;
     }
     case RaceBlowMethodType::EXPLODE: {
@@ -180,12 +180,12 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
     }
     case RaceBlowMethodType::WAIL: {
         monap_ptr->act = _("泣き叫ばれた。", "wails at you.");
-        sound(SOUND_WAIL);
+        sound(SoundKind::WAIL);
         break;
     }
     case RaceBlowMethodType::SPORE: {
         monap_ptr->act = _("胞子を飛ばされた。", "releases spores at you.");
-        sound(SOUND_SLIME);
+        sound(SoundKind::SLIME);
         break;
     }
     case RaceBlowMethodType::XXX4: {
@@ -197,7 +197,7 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
     }
     case RaceBlowMethodType::BEG: {
         monap_ptr->act = _("金をせがまれた。", "begs you for money.");
-        sound(SOUND_MOAN);
+        sound(SoundKind::MOAN);
         break;
     }
     case RaceBlowMethodType::INSULT: {
@@ -205,7 +205,7 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
         monap_ptr->abbreviate = -1;
 #endif
         monap_ptr->act = desc_insult[randint0(monap_ptr->m_ptr->r_idx == MonraceId::DEBBY ? 10 : 8)];
-        sound(SOUND_MOAN);
+        sound(SoundKind::MOAN);
         break;
     }
     case RaceBlowMethodType::MOAN: {
@@ -213,7 +213,7 @@ void describe_monster_attack_method(MonsterAttackPlayer *monap_ptr)
         monap_ptr->abbreviate = -1;
 #endif
         monap_ptr->act = rand_choice(desc_moan);
-        sound(SOUND_MOAN);
+        sound(SoundKind::MOAN);
         break;
     }
     case RaceBlowMethodType::SHOW: {

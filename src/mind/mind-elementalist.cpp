@@ -877,7 +877,7 @@ static bool check_element_mp_sufficiency(PlayerType *player_ptr, int mana_cost)
 static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, PERCENTAGE chance)
 {
     if (!evaluate_percent(chance)) {
-        sound(SOUND_ZAP);
+        sound(SoundKind::ZAP);
         return cast_element_spell(player_ptr, spell_idx);
     }
 
@@ -886,7 +886,7 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
     }
 
     msg_format(_("魔力の集中に失敗した！", "You failed to focus the elemental power!"));
-    sound(SOUND_FAIL);
+    sound(SoundKind::FAIL);
 
     if (randint1(100) < chance / 2) {
         int plev = player_ptr->lev;

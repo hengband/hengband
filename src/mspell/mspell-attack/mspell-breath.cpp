@@ -77,7 +77,7 @@ static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
     }
 
     if (known || see_either) {
-        sound(SOUND_BREATH);
+        sound(SoundKind::BREATH);
     }
 }
 

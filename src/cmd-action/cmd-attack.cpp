@@ -106,12 +106,12 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     bool is_hit = (monrace.kind_flags.has_not(MonsterKindType::QUANTUM)) || !randint0(2);
     is_hit &= test_hit_norm(player_ptr, chance, monrace.ac, monster.ml);
     if (!is_hit) {
-        sound(SOUND_MISS);
+        sound(SoundKind::MISS);
         msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name.data());
         return;
     }
 
-    sound(SOUND_HIT);
+    sound(SoundKind::HIT);
     msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name.data(), atk_desc);
 
     auto k = critical_norm(player_ptr, n_weight, bonus, dice.roll(), (int16_t)bonus, HISSATSU_NONE);
@@ -172,7 +172,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     disturb(player_ptr, false, true);
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (!can_attack_with_main_hand(player_ptr) && !can_attack_with_sub_hand(player_ptr) && player_ptr->muta.has_none_of(mutation_attack_methods)) {
-        sound(SOUND_ATTACK_FAILED);
+        sound(SoundKind::ATTACK_FAILED);
         msg_print(_(format("%s攻撃できない。", (empty_hands(player_ptr, false) == EMPTY_HAND_NONE) ? "両手がふさがって" : ""), "You cannot attack."));
         return false;
     }
@@ -196,14 +196,14 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         const auto is_main_hand_zantetsu = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(zantetsu);
         const auto is_sub_hand_zantetsu = player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(zantetsu);
         if (is_main_hand_zantetsu || is_sub_hand_zantetsu) {
-            sound(SOUND_ATTACK_FAILED);
+            sound(SoundKind::ATTACK_FAILED);
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
             return false;
         }
     }
 
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE)) {
-        sound(SOUND_ATTACK_FAILED);
+        sound(SoundKind::ATTACK_FAILED);
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
         return false;
     }
@@ -240,10 +240,10 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
 
     if (effects->fear().is_fearful()) {
         if (monster.ml) {
-            sound(SOUND_ATTACK_FAILED);
+            sound(SoundKind::ATTACK_FAILED);
             msg_format(_("恐くて%sを攻撃できない！", "You are too fearful to attack %s!"), m_name.data());
         } else {
-            sound(SOUND_ATTACK_FAILED);
+            sound(SoundKind::ATTACK_FAILED);
             msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
         }
 
@@ -289,7 +289,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     }
 
     if (fear && monster.ml && !mdeath) {
-        sound(SOUND_FLEE);
+        sound(SoundKind::FLEE);
         msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
     }
 

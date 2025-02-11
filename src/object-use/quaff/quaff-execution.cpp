@@ -53,7 +53,7 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX i_idx)
 
     auto item = this->copy_object(i_idx);
     vary_item(this->player_ptr, i_idx, -1);
-    sound(SOUND_QUAFF);
+    sound(SoundKind::QUAFF);
     auto ident = QuaffEffects(this->player_ptr).influence(item);
     if (PlayerRace(this->player_ptr).equals(PlayerRaceType::SKELETON)) {
         msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
@@ -113,7 +113,7 @@ bool ObjectQuaffEntity::can_quaff()
         }
 
         msg_print(_("瓶から水が流れ出てこない！", "The potion doesn't flow out from the bottle."));
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
         return false;
     }
 

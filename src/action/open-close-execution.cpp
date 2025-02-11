@@ -14,7 +14,6 @@
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "player/player-status-table.h"
@@ -25,12 +24,10 @@
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
-#include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -54,7 +51,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
 
     if (!terrain.power) {
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::OPEN);
-        sound(SOUND_OPENDOOR);
+        sound(SoundKind::OPENDOOR);
         return false;
     }
 
@@ -85,7 +82,7 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
 
     msg_print(_("鍵をはずした。", "You have picked the lock."));
     cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::OPEN);
-    sound(SOUND_OPENDOOR);
+    sound(SoundKind::OPENDOOR);
     gain_exp(player_ptr, 1);
     return false;
 }
@@ -127,7 +124,7 @@ bool exe_close(PlayerType *player_ptr, POSITION y, POSITION x)
     if (terrain_id == grid.feat) {
         msg_print(_("ドアは壊れてしまっている。", "The door appears to be broken."));
     } else {
-        sound(SOUND_SHUTDOOR);
+        sound(SoundKind::SHUTDOOR);
     }
 
     return more;
@@ -180,7 +177,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
         if (evaluate_percent(power_terrain)) {
             msg_print(_("鍵をはずした。", "You have picked the lock."));
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::OPEN);
-            sound(SOUND_OPENDOOR);
+            sound(SoundKind::OPENDOOR);
             gain_exp(player_ptr, 1);
         } else {
             if (flush_failure) {
@@ -191,7 +188,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
         }
     } else {
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::OPEN);
-        sound(SOUND_OPENDOOR);
+        sound(SoundKind::OPENDOOR);
     }
 
     return true;
@@ -251,7 +248,7 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
         msg_print(_("箱のトラップ解除に失敗した。", "You failed to disarm the chest."));
     } else {
         msg_print(_("トラップを作動させてしまった！", "You set off a trap!"));
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
         Chest(player_ptr).fire_trap(pos, o_idx);
     }
 
@@ -354,7 +351,7 @@ bool exe_bash(PlayerType *player_ptr, POSITION y, POSITION x, DIRECTION dir)
     auto more = false;
     if (evaluate_percent(power)) {
         msg_format(_("%sを壊した！", "The %s crashes open!"), name.data());
-        sound(terrain.flags.has(TerrainCharacteristics::GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
+        sound(terrain.flags.has(TerrainCharacteristics::GLASS) ? SoundKind::GLASS : SoundKind::OPENDOOR);
         const auto &dungeon = floor.get_dungeon_definition();
         if (one_in_(2) || (dungeon.convert_terrain_id(grid.feat, TerrainCharacteristics::OPEN) == grid.feat) || terrain.flags.has(TerrainCharacteristics::GLASS)) {
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::BASH);

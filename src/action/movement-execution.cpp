@@ -305,7 +305,7 @@ void exe_movement(PlayerType *player_ptr, DIRECTION dir, bool do_pickup, bool br
 
         disturb(player_ptr, false, true);
         if (!boundary_floor(grid, terrain, terrain_mimic)) {
-            sound(SOUND_HITWALL);
+            sound(SoundKind::HITWALL);
         }
     }
 

@@ -200,7 +200,7 @@ static bool keep_subwindows = true;
 /*
  * Full path to ANGBAND.INI
  */
-static concptr ini_file = nullptr;
+static std::filesystem::path path_ini_file;
 
 /*
  * Name of application
@@ -334,7 +334,8 @@ static void save_prefs_aux(int i)
     }
 
     wsprintfA(sec_name, "Term-%d", i);
-
+    const auto &str_ini_file = path_ini_file.string();
+    const auto *ini_file = str_ini_file.data();
     if (i > 0) {
         strcpy(buf, td->visible ? "1" : "0");
         WritePrivateProfileStringA(sec_name, "Visible", buf, ini_file);
@@ -397,8 +398,10 @@ static void save_prefs_aux(int i)
  * @brief Write the "prefs"
  * We assume that the windows have all been initialized
  */
-static void save_prefs(void)
+static void save_prefs()
 {
+    const auto &str_ini_file = path_ini_file.string();
+    const auto *ini_file = str_ini_file.data();
     char buf[128];
     wsprintfA(buf, "%d", arg_graphics);
     WritePrivateProfileStringA("Angband", "Graphics", buf, ini_file);
@@ -458,18 +461,19 @@ static void load_prefs_aux(int i)
 {
     term_data *td = &data[i];
     GAME_TEXT sec_name[128];
-    char tmp[1024];
-
     wsprintfA(sec_name, "Term-%d", i);
+    const auto &str_ini_file = path_ini_file.string();
+    const auto *ini_file = str_ini_file.data();
     if (i > 0) {
         td->visible = (GetPrivateProfileIntA(sec_name, "Visible", td->visible, ini_file) != 0);
     }
 
+    char tmp[1024]{};
     GetPrivateProfileStringA(sec_name, "Font", _("ＭＳ ゴシック", "Courier"), tmp, 127, ini_file);
+    td->font_want = tmp;
 
-    td->font_want = string_make(tmp);
-    int hgt = 15;
-    int wid = 0;
+    const auto hgt = 15;
+    const auto wid = 0;
     td->lf.lfWidth = GetPrivateProfileIntA(sec_name, "FontWid", wid, ini_file);
     td->lf.lfHeight = GetPrivateProfileIntA(sec_name, "FontHgt", hgt, ini_file);
     td->lf.lfWeight = GetPrivateProfileIntA(sec_name, "FontWgt", 0, ini_file);
@@ -506,8 +510,10 @@ static void load_prefs_aux(int i)
 /*!
  * @brief Load the "prefs"
  */
-static void load_prefs(void)
+static void load_prefs()
 {
+    const auto &str_ini_file = path_ini_file.string();
+    const auto *ini_file = str_ini_file.data();
     arg_graphics = (byte)GetPrivateProfileIntA("Angband", "Graphics", enum2i(graphics_mode::GRAPHICS_NONE), ini_file);
     arg_bigtile = (GetPrivateProfileIntA("Angband", "Bigtile", false, ini_file) != 0);
     use_bigtile = arg_bigtile;
@@ -539,7 +545,7 @@ static void load_prefs(void)
 /*!
  * @brief Initialize music
  */
-static void init_music(void)
+static void init_music()
 {
     // Flag set once "music" has been initialized
     static bool can_use_music = false;
@@ -553,7 +559,7 @@ static void init_music(void)
 /*!
  * @brief Initialize sound
  */
-static void init_sound(void)
+static void init_sound()
 {
     // Flag set once "sound" has been initialized
     static bool can_use_sound = false;
@@ -579,7 +585,7 @@ static void change_sound_mode(bool new_mode)
 /*!
  * @brief Initialize background
  */
-static void init_background(void)
+static void init_background()
 {
     // Flag set once "background" has been initialized
     static bool can_use_background = false;
@@ -856,7 +862,7 @@ static errr term_xtra_win_event(int v)
 /*!
  * @brief Process all pending events
  */
-static errr term_xtra_win_flush(void)
+static errr term_xtra_win_flush()
 {
     MSG msg;
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -872,7 +878,7 @@ static errr term_xtra_win_flush(void)
  * @details
  * Make this more efficient
  */
-static errr term_xtra_win_clear(void)
+static errr term_xtra_win_clear()
 {
     term_data *td = (term_data *)(game_term->data);
 
@@ -897,7 +903,7 @@ static errr term_xtra_win_clear(void)
 /*!
  * @brief Hack -- make a noise
  */
-static errr term_xtra_win_noise(void)
+static errr term_xtra_win_noise()
 {
     MessageBeep(MB_ICONASTERISK);
     return 0;
@@ -1319,7 +1325,7 @@ static void term_data_link(term_data *td)
  * Must use SW_SHOW not SW_SHOWNA, since on 256 color display
  * must make active to realize the palette.
  */
-static void init_windows(void)
+static void init_windows()
 {
     term_data *td;
     td = &data[0];
@@ -1371,8 +1377,7 @@ static void init_windows(void)
     /* Font of each window */
     for (int i = 0; i < MAX_TERM_DATA; i++) {
         td = &data[i];
-        const std::string_view font(td->font_want != NULL ? td->font_want : "");
-        wcsncpy(td->lf.lfFaceName, to_wchar(font).wc_str(), LF_FACESIZE);
+        wcsncpy(td->lf.lfFaceName, to_wchar(td->font_want).wc_str(), LF_FACESIZE);
         td->lf.lfCharSet = _(SHIFTJIS_CHARSET, DEFAULT_CHARSET);
         td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
         term_force_font(td);
@@ -1462,7 +1467,7 @@ static void init_windows(void)
 /*!
  * @brief Prepare the menus
  */
-static void setup_menus(void)
+static void setup_menus()
 {
     HMENU hm = GetMenu(data[0].w);
 
@@ -2596,12 +2601,11 @@ static void hook_quit(std::string_view str)
     save_prefs();
     for (int i = MAX_TERM_DATA - 1; i >= 0; --i) {
         term_force_font(&data[i]);
-        if (data[i].font_want) {
-            string_free(data[i].font_want);
-        }
+        data[i].font_want = "";
         if (data[i].w) {
             DestroyWindow(data[i].w);
         }
+
         data[i].w = 0;
     }
 
@@ -2626,7 +2630,7 @@ static void init_stuff()
     char path[MAIN_WIN_MAX_PATH];
     DWORD path_len = GetModuleFileNameA(hInstance, path, MAIN_WIN_MAX_PATH);
     strcpy(path + path_len - 4, ".INI");
-    ini_file = string_make(path);
+    path_ini_file = path;
 
     int i = path_len;
     for (; i > 0; i--) {
@@ -2699,7 +2703,7 @@ static void init_stuff()
  * Create Spoiler files
  * @details スポイラー出力処理の成功、失敗に関わらずプロセスを終了する。
  */
-void create_debug_spoiler(void)
+void create_debug_spoiler()
 {
     init_stuff();
     init_angband(p_ptr, true);
@@ -2724,7 +2728,7 @@ void create_debug_spoiler(void)
 /*!
  * @brief メインウインドウ、サブウインドウのウインドウクラス登録
  */
-static void register_wndclass(void)
+static void register_wndclass()
 {
     WNDCLASSW wc{};
     wc.style = CS_CLASSDC;

@@ -312,7 +312,7 @@ static bool deal_effect_damage_from_player(PlayerType *player_ptr, EffectMonster
     }
 
     if ((fear || em_ptr->do_fear) && em_ptr->seen) {
-        sound(SOUND_FLEE);
+        sound(SoundKind::FLEE);
         msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), em_ptr->m_name);
     }
 

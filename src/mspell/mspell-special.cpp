@@ -201,7 +201,7 @@ static MonsterSpellResult spell_RF6_SPECIAL_B(PlayerType *player_ptr, POSITION y
     }
 
     if (direct) {
-        sound(SOUND_FALL);
+        sound(SoundKind::FALL);
     }
 
     msg.to_player = _("%s^があなたを掴んで空中から投げ落とした。", "%s^ snatches you, soars into the sky, and drops you.");

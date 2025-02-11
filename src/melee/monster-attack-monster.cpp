@@ -276,7 +276,7 @@ static void explode_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
-    sound(SOUND_EXPLODE);
+    sound(SoundKind::EXPLODE);
     (void)set_monster_invulner(player_ptr, mam_ptr->m_idx, 0, false);
     mon_take_hit_mon(player_ptr, mam_ptr->m_idx, mam_ptr->m_ptr->hp + 1, &mam_ptr->dead, &mam_ptr->fear,
         _("は爆発して粉々になった。", " explodes into tiny shreds."), mam_ptr->m_idx);

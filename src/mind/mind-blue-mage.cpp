@@ -60,12 +60,12 @@ bool do_cmd_cast_learned(PlayerType *player_ptr)
         }
 
         msg_print(_("魔法をうまく唱えられなかった。", "You failed to concentrate hard enough!"));
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
         if (RF_ABILITY_SUMMON_MASK.has(*selected_spell)) {
             cast_learned_spell(player_ptr, *selected_spell, false);
         }
     } else {
-        sound(SOUND_ZAP);
+        sound(SoundKind::ZAP);
         if (!cast_learned_spell(player_ptr, *selected_spell, true)) {
             return false;
         }

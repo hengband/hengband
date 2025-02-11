@@ -8,7 +8,6 @@
 #include "io/report.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
-#include "core/turn-compensator.h"
 #include "core/visuals-reseter.h"
 #include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
@@ -32,7 +31,6 @@
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -44,9 +42,9 @@
 #include <string_view>
 #include <vector>
 
-#ifdef WORLD_SCORE
+std::string screen_dump;
 
-concptr screen_dump = nullptr;
+#ifdef WORLD_SCORE
 
 #ifdef JP
 constexpr auto SCORE_POST_URL = "http://mars.kmc.gr.jp/~dis/heng_score/register_score.php"; /*!< スコア開示URL */
@@ -139,7 +137,7 @@ static errr make_dump(PlayerType *player_ptr, std::ostream &stream)
  * @brief スクリーンダンプを作成する/ Make screen dump to buffer
  * @return 作成したスクリーンダンプの参照ポインタ
  */
-concptr make_screen_dump(PlayerType *player_ptr)
+std::string make_screen_dump(PlayerType *player_ptr)
 {
     constexpr auto html_head =
         "<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n"
@@ -236,12 +234,10 @@ concptr make_screen_dump(PlayerType *player_ptr)
 
     screen_ss << html_foot;
 
-    concptr ret;
+    std::string ret;
     if (const auto screen_dump_size = screen_ss.tellp();
         (0 <= screen_dump_size) && (screen_dump_size < SCREEN_BUF_MAX_SIZE)) {
-        ret = string_make(screen_ss.str().data());
-    } else {
-        ret = nullptr;
+        ret = screen_ss.str();
     }
 
     if (!old_use_graphics) {
@@ -295,7 +291,7 @@ bool report_score(PlayerType *player_ptr)
              << "-----charcter dump-----\n";
 
     make_dump(player_ptr, score_ss);
-    if (screen_dump) {
+    if (!screen_dump.empty()) {
         score_ss << "-----screen shot-----\n"
                  << screen_dump;
     }
@@ -303,5 +299,4 @@ bool report_score(PlayerType *player_ptr)
     return post_score_to_score_server(player_ptr, score_ss.str());
 }
 #else
-concptr screen_dump = nullptr;
 #endif /* WORLD_SCORE */

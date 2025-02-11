@@ -141,7 +141,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             const auto price = *res;
             store_owner_says_comment(player_ptr, store_num);
 
-            sound(SOUND_SELL);
+            sound(SoundKind::SELL);
             if (store_num == StoreSaleType::BLACK) {
                 chg_virtue(player_ptr, Virtue::JUSTICE, -1);
             }

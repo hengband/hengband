@@ -98,7 +98,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         }
 
         msg_print(_("うまくロッドを使えなかった。", "You failed to use the rod properly."));
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
         return;
     }
 
@@ -119,7 +119,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    sound(SOUND_ZAP);
+    sound(SoundKind::ZAP);
     auto ident = rod_effect(this->player_ptr, *o_ptr->bi_key.sval(), dir, &use_charge, false);
     if (use_charge) {
         o_ptr->timeout += base_pval;

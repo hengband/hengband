@@ -2836,7 +2836,7 @@ void check_experience(PlayerType *player_ptr)
             exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::LEVELUP, player_ptr->lev);
         }
 
-        sound(SOUND_LEVEL);
+        sound(SoundKind::LEVEL);
         msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), player_ptr->lev);
         rfu.set_flags(flags_srf);
         const auto flags_mwrf_levelup = {

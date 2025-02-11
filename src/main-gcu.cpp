@@ -171,7 +171,12 @@
 #include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
+#include "util/enum-converter.h"
+#include "util/enum-range.h"
 #include "view/display-map.h"
+#include <filesystem>
+#include <map>
+#include <string>
 #include <string_view>
 
 #ifdef USE_GCU
@@ -300,7 +305,7 @@ static bool can_use_sound = false;
 /*
  * An array of sound file names
  */
-static concptr sound_file[SOUND_MAX];
+static std::map<SoundKind, std::string> sound_files;
 
 /*
  * Save the "normal" and "angband" terminal settings
@@ -566,37 +571,20 @@ static errr game_term_xtra_gcu_alive(int v)
 }
 
 /*
- * Check for existance of a file
- */
-static bool check_file(concptr s)
-{
-    FILE *fff;
-    fff = fopen(s, "r");
-    if (!fff) {
-        return false;
-    }
-
-    fclose(fff);
-    return true;
-}
-
-/*
  * Initialize sound
  */
-static bool init_sound(void)
+static bool init_sound()
 {
     if (can_use_sound) {
         return can_use_sound;
     }
 
-    for (auto i = 1; i < SOUND_MAX; i++) {
-        std::string wav = angband_sound_name[i];
+    constexpr EnumRange<SoundKind> sound_kinds(SoundKind::HIT, SoundKind::MAX);
+    for (const auto sk : sound_kinds) {
+        std::string wav = sound_names.at(sk);
         wav.append(".wav");
         const auto &path = path_build(ANGBAND_DIR_XTRA_SOUND, wav);
-        const auto &filename = path.string();
-        if (check_file(filename.data())) {
-            sound_file[i] = string_make(filename.data());
-        }
+        sound_files[sk] = std::filesystem::exists(path) ? path.string() : "";
     }
 
     /* Sound available */
@@ -866,17 +854,12 @@ static errr game_term_xtra_gcu_sound(int v)
     }
 
     /* Illegal sound */
-    if ((v < 0) || (v >= SOUND_MAX)) {
+    if ((v < 0) || (v >= enum2i(SoundKind::MAX))) {
         return 1;
     }
 
-    /* Unknown sound */
-    if (!sound_file[v]) {
-        return 1;
-    }
-
-    std::string buf = "./gcusound.sh ";
-    buf.append(sound_file[v]).append("\n");
+    std::string buf("./gcusound.sh ");
+    buf.append(sound_files.at(i2enum<SoundKind>(v))).append("\n");
     return system(buf.data()) < 0;
 }
 

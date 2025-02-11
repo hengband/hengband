@@ -22,7 +22,7 @@ static void exe_ring_of_power(PlayerType *player_ptr, DIRECTION dir)
     case 1:
     case 2:
         msg_print(_("あなたは悪性のオーラに包み込まれた。", "You are surrounded by a malignant aura."));
-        sound(SOUND_EVIL);
+        sound(SoundKind::EVIL);
         (void)dec_stat(player_ptr, A_STR, 50, true);
         (void)dec_stat(player_ptr, A_INT, 50, true);
         (void)dec_stat(player_ptr, A_WIS, 50, true);

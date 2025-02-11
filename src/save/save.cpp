@@ -27,21 +27,14 @@
 #include "save/lore-writer.h"
 #include "save/player-writer.h"
 #include "save/save-util.h"
-#include "store/store-owners.h"
-#include "store/store-util.h"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/floor/wilderness-grid.h"
-#include "system/item-entity.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
-#include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
@@ -227,7 +220,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
 
     wr_s16b(player_ptr->pet_follow_distance);
     wr_s16b(player_ptr->pet_extra_flags);
-    if (screen_dump && (AngbandSystem::get_instance().is_awaiting_report_status() || !player_ptr->is_dead)) {
+    if (AngbandSystem::get_instance().is_awaiting_report_status() || !player_ptr->is_dead) {
         wr_string(screen_dump);
     } else {
         wr_string("");

@@ -592,7 +592,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
 
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), item_name.data());
-    sound(SOUND_TAKE_OFF);
+    sound(SoundKind::TAKE_OFF);
 
     /* Get effects */
     msg_print(_("「燃え上がれ俺の小宇宙！」", "You say, 'Burn up my cosmo!"));

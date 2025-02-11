@@ -119,7 +119,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     const auto &player_poison = effects->poison();
     if (player_poison.is_poisoned() && !is_invuln(player_ptr)) {
         if (take_hit(player_ptr, DAMAGE_NOESCAPE, 1, _("毒", "poison")) > 0) {
-            sound(SOUND_DAMAGE_OVER_TIME);
+            sound(SoundKind::DAMAGE_OVER_TIME);
         }
     }
 
@@ -127,7 +127,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
     if (player_cut.is_cut() && !is_invuln(player_ptr)) {
         const auto dam = player_cut.get_damage();
         if (take_hit(player_ptr, DAMAGE_NOESCAPE, dam, _("致命傷", "a mortal wound")) > 0) {
-            sound(SOUND_DAMAGE_OVER_TIME);
+            sound(SoundKind::DAMAGE_OVER_TIME);
         }
     }
 
@@ -161,7 +161,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         constexpr auto mes_normal = _("で火傷した！", "burns you!");
         if (deal_damege_by_feat(player_ptr, grid, mes_leviation, mes_normal, calc_fire_damage_rate, nullptr)) {
             cave_no_regen = true;
-            sound(SOUND_TERRAIN_DAMAGE);
+            sound(SoundKind::TERRAIN_DAMAGE);
         }
     }
 
@@ -170,7 +170,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         constexpr auto mes_normal = _("に凍えた！", "frostbites you!");
         if (deal_damege_by_feat(player_ptr, grid, mes_leviation, mes_normal, calc_cold_damage_rate, nullptr)) {
             cave_no_regen = true;
-            sound(SOUND_TERRAIN_DAMAGE);
+            sound(SoundKind::TERRAIN_DAMAGE);
         }
     }
 
@@ -179,7 +179,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         constexpr auto mes_normal = _("に感電した！", "shocks you!");
         if (deal_damege_by_feat(player_ptr, grid, mes_leviation, mes_normal, calc_elec_damage_rate, nullptr)) {
             cave_no_regen = true;
-            sound(SOUND_TERRAIN_DAMAGE);
+            sound(SoundKind::TERRAIN_DAMAGE);
         }
     }
 
@@ -188,7 +188,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
         constexpr auto mes_normal = _("に溶かされた！", "melts you!");
         if (deal_damege_by_feat(player_ptr, grid, mes_leviation, mes_normal, calc_acid_damage_rate, nullptr)) {
             cave_no_regen = true;
-            sound(SOUND_TERRAIN_DAMAGE);
+            sound(SoundKind::TERRAIN_DAMAGE);
         }
     }
 
@@ -202,7 +202,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
                     }
                 })) {
             cave_no_regen = true;
-            sound(SOUND_TERRAIN_DAMAGE);
+            sound(SoundKind::TERRAIN_DAMAGE);
         }
     }
 
@@ -212,7 +212,7 @@ void process_player_hp_mp(PlayerType *player_ptr)
             msg_print(_("溺れている！", "You are drowning!"));
             take_hit(player_ptr, DAMAGE_NOESCAPE, randint1(player_ptr->lev), _("溺れ", "drowning"));
             cave_no_regen = true;
-            sound(SOUND_TERRAIN_DAMAGE);
+            sound(SoundKind::TERRAIN_DAMAGE);
         }
     }
 

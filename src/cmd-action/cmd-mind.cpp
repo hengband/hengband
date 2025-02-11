@@ -334,7 +334,7 @@ static void mind_turn_passing(PlayerType *player_ptr, cm_type *cm_ptr)
 static bool judge_mind_chance(PlayerType *player_ptr, cm_type *cm_ptr)
 {
     if (!evaluate_percent(cm_ptr->chance)) {
-        sound(SOUND_ZAP);
+        sound(SoundKind::ZAP);
         return switch_mind_class(player_ptr, cm_ptr) && cm_ptr->cast;
     }
 
@@ -343,7 +343,7 @@ static bool judge_mind_chance(PlayerType *player_ptr, cm_type *cm_ptr)
     }
 
     msg_format(_("%sの集中に失敗した！", "You failed to concentrate hard enough for %s!"), cm_ptr->mind_explanation);
-    sound(SOUND_FAIL);
+    sound(SoundKind::FAIL);
     check_mind_class(player_ptr, cm_ptr);
     return true;
 }

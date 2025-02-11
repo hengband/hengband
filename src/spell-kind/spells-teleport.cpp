@@ -84,7 +84,7 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
         return false;
     }
 
-    sound(SOUND_TELEPORT);
+    sound(SoundKind::TELEPORT);
     (void)move_player_effect(player_ptr, pos.y, pos.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
     return true;
 }
@@ -171,7 +171,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
         }
     }
 
-    sound(SOUND_TPOTHER);
+    sound(SoundKind::TPOTHER);
     floor.get_grid(m_pos_orig).m_idx = 0;
     floor.get_grid(m_pos).m_idx = m_idx;
     monster.set_position(m_pos);
@@ -248,7 +248,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
         return;
     }
 
-    sound(SOUND_TPOTHER);
+    sound(SoundKind::TPOTHER);
     floor.get_grid(m_pos_orig).m_idx = 0;
     floor.get_grid(m_pos).m_idx = m_idx;
     monster.set_position(m_pos);
@@ -372,7 +372,7 @@ bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_e
         return false;
     }
 
-    sound(SOUND_TELEPORT);
+    sound(SoundKind::TELEPORT);
 #ifdef JP
     if (is_echizen(player_ptr)) {
         msg_format("『こっちだぁ、%s』", player_ptr->name);
@@ -514,7 +514,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
         }
     }
 
-    sound(SOUND_TELEPORT);
+    sound(SoundKind::TELEPORT);
     (void)move_player_effect(player_ptr, pos.y, pos.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 }
 

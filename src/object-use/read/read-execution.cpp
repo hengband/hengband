@@ -82,7 +82,7 @@ void ObjectReadEntity::execute(bool known)
         return;
     }
 
-    sound(SOUND_SCROLL);
+    sound(SoundKind::SCROLL);
     vary_item(this->player_ptr, this->i_idx, -1);
 }
 

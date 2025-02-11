@@ -1311,9 +1311,9 @@ bool do_cmd_mane(PlayerType *player_ptr, bool baigaesi)
             flush();
         }
         msg_print(_("ものまねに失敗した！", "You failed to concentrate hard enough!"));
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
     } else {
-        sound(SOUND_ZAP);
+        sound(SoundKind::ZAP);
         cast = use_mane(player_ptr, mane_data->mane_list[n].spell);
         if (!cast) {
             return false;

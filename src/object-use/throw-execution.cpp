@@ -459,7 +459,7 @@ void ObjectThrowEntity::attack_racial_power()
     }
 
     if (fear && this->m_ptr->ml) {
-        sound(SOUND_FLEE);
+        sound(SoundKind::FLEE);
         msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), this->m_name.data());
     }
 }

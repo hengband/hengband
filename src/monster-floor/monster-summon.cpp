@@ -83,7 +83,7 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
     }
 
     if (notice) {
-        sound(SOUND_SUMMON);
+        sound(SoundKind::SUMMON);
     }
 
     return summoned_m_idx;
