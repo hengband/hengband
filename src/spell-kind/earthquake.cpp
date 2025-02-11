@@ -92,7 +92,7 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
     Pos2D p_pos_new(0, 0); // 落石を避けた後のプレイヤー座標
     if (hurt && !has_pass_wall(player_ptr) && !has_kill_wall(player_ptr)) {
         for (const auto &d : Direction::directions_8()) {
-            const auto pos = player_ptr->get_position() + d.vec();
+            const auto pos = player_ptr->get_neighbor(d);
             if (!is_cave_empty_bold(player_ptr, pos.y, pos.x)) {
                 continue;
             }

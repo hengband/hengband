@@ -45,7 +45,7 @@ bool sword_dancing(PlayerType *player_ptr)
 {
     for (auto i = 0; i < 6; i++) {
         const auto d = rand_choice(Direction::directions_8());
-        const auto pos = player_ptr->get_position() + d.vec();
+        const auto pos = player_ptr->get_neighbor(d);
         const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
         if (grid.has_monster()) {
             do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);

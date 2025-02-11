@@ -68,7 +68,7 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
     int cost = travel.cost[player_ptr->y][player_ptr->x];
     DIRECTION new_dir = 0;
     for (const auto &d : Direction::directions_8()) {
-        const auto pos_neighbor = player_ptr->get_position() + d.vec();
+        const auto pos_neighbor = player_ptr->get_neighbor(d);
         int dir_cost = travel.cost[pos_neighbor.y][pos_neighbor.x];
         if (dir_cost < cost) {
             new_dir = d.dir();

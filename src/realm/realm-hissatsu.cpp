@@ -81,7 +81,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             }
 
             const auto attack_to = [player_ptr](const Direction &dir) {
-                const auto pos = player_ptr->get_position() + dir.vec();
+                const auto pos = player_ptr->get_neighbor(dir);
                 const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
 
                 if (grid.has_monster()) {
