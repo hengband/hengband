@@ -119,8 +119,6 @@ void travel_step(PlayerType *player_ptr)
     } else if (travel.run > 0) {
         travel.run--;
     }
-
-    term_xtra(TERM_XTRA_DELAY, delay_factor);
 }
 
 /*!
