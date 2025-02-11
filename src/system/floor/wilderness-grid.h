@@ -18,7 +18,6 @@ class Direction;
 class WildernessGrid {
 public:
     WildernessGrid() = default;
-    int level = 0;
     DungeonId entrance{};
     std::string name = "";
 
@@ -32,6 +31,7 @@ public:
     bool has_road() const;
     void set_road(int road_parsing);
     int get_level() const;
+    void set_level(int level_parsing);
     uint32_t get_seed() const;
     void set_seed(uint32_t saved_seed);
     void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
@@ -39,6 +39,7 @@ public:
 
 private:
     WildernessTerrain terrain{};
+    int level = 0;
     uint32_t seed = 0;
     short town = 0;
     int road = 0;

@@ -20,6 +20,11 @@ int WildernessGrid::get_level() const
     return this->level;
 }
 
+void WildernessGrid::set_level(int level_parsing)
+{
+    this->level = level_parsing;
+}
+
 uint32_t WildernessGrid::get_seed() const
 {
     return this->seed;

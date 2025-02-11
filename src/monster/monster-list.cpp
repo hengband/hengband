@@ -182,7 +182,7 @@ static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, s
     if (old_unique) {
         level = MonraceList::get_instance().get_monrace(MonraceId::CHAMELEON_K).level;
     } else if (!floor.is_underground()) {
-        level = WildernessGrids::get_instance().get_player_grid().level;
+        level = WildernessGrids::get_instance().get_player_grid().get_level();
     } else {
         level = floor.dun_level;
     }

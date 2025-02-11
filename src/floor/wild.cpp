@@ -273,7 +273,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
     const auto &wg = wilderness.get_grid(pos);
     player_ptr->town_num = wg.get_town();
     auto &floor = *player_ptr->current_floor_ptr;
-    floor.base_level = wg.level;
+    floor.base_level = wg.get_level();
     floor.dun_level = 0;
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
@@ -670,7 +670,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         }
 
         if (num > 2) {
-            letter.level = std::stoi(zz[2]);
+            letter.set_level(std::stoi(zz[2]));
         }
 
         if (num > 3) {
@@ -736,7 +736,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         auto &wg = wilderness.get_grid(dungeon->get_position());
         wg.entrance = dungeon_id;
         if (!wg.has_town()) {
-            wg.level = dungeon->mindepth;
+            wg.set_level(dungeon->mindepth);
         }
     }
 
