@@ -61,6 +61,17 @@ public:
     }
 
     /*!
+     * @brief 特定のマスをターゲット中であることを示す方向クラスのインスタンスを生成する
+     * @todo 将来的にはできればDirectionクラスにtarget_row/target_colを繰り込みたい
+     */
+    static constexpr Direction targetting()
+    {
+        auto dir = Direction::self();
+        dir.is_targetting_ = true;
+        return dir;
+    }
+
+    /*!
      * @brief 引数に指定した、円周順に方向を示す値から方向クラスのインスタンスを生成する
      *
      * 引数 cdir は南を0とし反時計回りの順。
@@ -162,6 +173,14 @@ public:
     }
 
     /*!
+     * @brief 特定のマスをターゲット中であるかどうかを返す
+     */
+    constexpr bool is_targetting() const noexcept
+    {
+        return this->dir_ == 5 && this->is_targetting_;
+    }
+
+    /*!
      * @brief 方向を45度単位で回転させた方向クラスのインスタンスを生成する
      *
      * すなわち、 cdir をdeltaだけ増減させた(0↔7でつながる)方向を示すインスタンスを返す。
@@ -199,11 +218,12 @@ private:
     static constexpr std::array<std::optional<int>, 10> DIR_TO_CDIR = { { std::nullopt, 7, 0, 1, 6, std::nullopt, 2, 5, 4, 3 } };
 
     int dir_; //<! 方向ID
+    bool is_targetting_ = false; //<! 特定のマスをターゲット中であるかどうか
 };
 
 constexpr bool operator==(const Direction &dir1, const Direction &dir2) noexcept
 {
-    return dir1.dir() == dir2.dir();
+    return dir1.dir() == dir2.dir() && dir1.is_targetting() == dir2.is_targetting();
 }
 
 /* 以降の定義は直接使用しないようdetail名前空間に入れておく*/
