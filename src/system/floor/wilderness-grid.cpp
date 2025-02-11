@@ -18,6 +18,26 @@ int WildernessGrid::get_level() const
     return this->level;
 }
 
+bool WildernessGrid::has_town() const
+{
+    return this->town > 0;
+}
+
+bool WildernessGrid::matches_town(short town_matching) const
+{
+    return this->town == town_matching;
+}
+
+short WildernessGrid::get_town() const
+{
+    return this->town;
+}
+
+void WildernessGrid::set_town(short town_parsing)
+{
+    this->town = town_parsing;
+}
+
 bool WildernessGrid::has_road() const
 {
     return this->road > 0;

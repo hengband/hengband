@@ -319,7 +319,7 @@ bool tele_town(PlayerType *player_ptr)
 
     auto &wilderness = WildernessGrids::get_instance();
     for (const auto &pos : wilderness.get_area()) {
-        if (wilderness.get_grid(pos).town == (key - 'a' + 1)) {
+        if (wilderness.get_grid(pos).matches_town(key - 'a' + 1)) {
             wilderness.set_player_position(pos);
         }
     }
