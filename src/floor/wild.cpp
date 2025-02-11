@@ -268,7 +268,8 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
  */
 static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_border, bool is_corner)
 {
-    const auto &wg = WildernessGrids::get_instance().get_grid(pos);
+    const auto &wilderness = WildernessGrids::get_instance();
+    const auto &wg = wilderness.get_grid(pos);
     player_ptr->town_num = wg.town;
     auto &floor = *player_ptr->current_floor_ptr;
     floor.base_level = wg.level;
@@ -293,36 +294,32 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
         generate_wilderness_area(floor, terrain, seed, is_corner);
     }
 
+    //!< @details 地上マップに曲がり道の道路を作る.
     if (!is_corner && (wg.town == 0)) {
-        //!< @todo make the road a bit more interresting.
         if (wg.has_road()) {
             floor.get_grid({ MAX_HGT / 2, MAX_WID / 2 }).set_terrain_id(TerrainTag::FLOOR);
-            if (wilderness_grids[pos.y - 1][pos.x].has_road()) {
-                /* North road */
+            if (wilderness.get_grid(pos + Direction(8).vec()).has_road()) {
                 for (auto y = 1; y < MAX_HGT / 2; y++) {
                     const Pos2D pos_road(y, MAX_WID / 2);
                     floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
-            if (wilderness_grids[pos.y + 1][pos.x].has_road()) {
-                /* South road */
+            if (wilderness.get_grid(pos + Direction(2).vec()).has_road()) {
                 for (auto y = MAX_HGT / 2; y < MAX_HGT - 1; y++) {
                     const Pos2D pos_road(y, MAX_WID / 2);
                     floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
-            if (wilderness_grids[pos.y][pos.x + 1].has_road()) {
-                /* East road */
+            if (wilderness.get_grid(pos + Direction(6).vec()).has_road()) {
                 for (auto x = MAX_WID / 2; x < MAX_WID - 1; x++) {
                     const Pos2D pos_road(MAX_HGT / 2, x);
                     floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
-            if (wilderness_grids[pos.y][pos.x - 1].has_road()) {
-                /* West road */
+            if (wilderness.get_grid(pos + Direction(4).vec()).has_road()) {
                 for (auto x = 1; x < MAX_WID / 2; x++) {
                     const Pos2D pos_road(MAX_HGT / 2, x);
                     floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
