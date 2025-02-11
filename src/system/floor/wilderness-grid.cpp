@@ -35,6 +35,16 @@ void WildernessGrid::set_seed(uint32_t saved_seed)
     this->seed = saved_seed;
 }
 
+DungeonId WildernessGrid::get_entrance() const
+{
+    return this->entrance;
+}
+
+void WildernessGrid::set_entrance(DungeonId entrance_parsing)
+{
+    this->entrance = entrance_parsing;
+}
+
 MonraceHook WildernessGrid::get_monrace_hook() const
 {
     switch (this->terrain) {

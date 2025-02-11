@@ -18,7 +18,6 @@ class Direction;
 class WildernessGrid {
 public:
     WildernessGrid() = default;
-    DungeonId entrance{};
     std::string name = "";
 
     MonraceHook get_monrace_hook() const;
@@ -34,12 +33,15 @@ public:
     void set_level(int level_parsing);
     uint32_t get_seed() const;
     void set_seed(uint32_t saved_seed);
+    DungeonId get_entrance() const;
+    void set_entrance(DungeonId entrance_parsing);
     void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
     void initialize_seed();
 
 private:
     WildernessTerrain terrain{};
     int level = 0;
+    DungeonId entrance{};
     uint32_t seed = 0;
     short town = 0;
     int road = 0;

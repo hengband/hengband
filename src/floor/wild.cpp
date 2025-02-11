@@ -327,7 +327,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
         }
     }
 
-    const auto entrance = wg.entrance;
+    const auto entrance = wg.get_entrance();
     auto is_winner = entrance > DungeonId::WILDERNESS;
     is_winner &= !wg.has_town();
     auto is_wild_winner = DungeonList::get_instance().get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER);
@@ -342,7 +342,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
     system.set_rng(wilderness_rng);
     const Pos2D pos_entrance(rand_range(6, floor.height - 6), rand_range(6, floor.width - 6));
     floor.get_grid(pos_entrance).set_terrain_id(TerrainTag::ENTRANCE);
-    floor.get_grid(pos_entrance).special = static_cast<short>(wg.entrance);
+    floor.get_grid(pos_entrance).special = static_cast<short>(entrance);
     system.set_rng(rng_backup);
 }
 
@@ -597,7 +597,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
             continue;
         }
 
-        const auto entrance = wg.entrance;
+        const auto entrance = wg.get_entrance();
         if ((entrance > DungeonId::WILDERNESS) && (world.total_winner || dungeons.get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER))) {
             grid.set_terrain_id(TerrainTag::ENTRANCE);
             grid.special = static_cast<short>(entrance);
@@ -734,7 +734,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         }
 
         auto &wg = wilderness.get_grid(dungeon->get_position());
-        wg.entrance = dungeon_id;
+        wg.set_entrance(dungeon_id);
         if (!wg.has_town()) {
             wg.set_level(dungeon->mindepth);
         }
