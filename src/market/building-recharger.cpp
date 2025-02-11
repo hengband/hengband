@@ -1,17 +1,13 @@
 #include "market/building-recharger.h"
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
-#include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "market/building-util.h"
 #include "object-enchant/special-object-flags.h"
-#include "object-hook/hook-magic.h"
-#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
-#include "perception/object-perception.h"
 #include "spell-kind/spells-perception.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -56,7 +52,7 @@ void building_recharge(PlayerType *player_ptr)
             const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
             msg_format(_("%s です。", "You have: %s."), item_name.data());
             autopick_alter_item(player_ptr, i_idx, false);
-            building_prt_gold(player_ptr);
+            building_prt_gold(player_ptr->au);
         }
 
         return;
