@@ -1,13 +1,11 @@
 #include "store/purchase-order.h"
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-util.h"
-#include "autopick/autopick.h"
 #include "avatar/avatar.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "inventory/inventory-object.h"
 #include "io/write-diary.h"
@@ -17,26 +15,23 @@
 #include "object-enchant/special-object-flags.h"
 #include "object/object-info.h"
 #include "object/object-stack.h"
-#include "object/object-value.h"
 #include "perception/object-perception.h"
 #include "player/race-info-table.h"
 #include "store/home.h"
 #include "store/pricing.h"
 #include "store/say-comments.h"
 #include "store/store-owners.h"
-#include "store/store-util.h"
 #include "store/store.h"
-#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/screen-processor.h"
-#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <optional>
 #include <string>
 
@@ -54,7 +49,7 @@ static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_
     auto price_ask = price_item(player_ptr, o_ptr->calc_price(), ot_ptr->inflate, false, store_num);
 
     price_ask *= o_ptr->number;
-    const auto s = format(_("買値 $%ld で買いますか？", "Do you buy for $%ld? "), static_cast<long>(price_ask));
+    const auto s = fmt::format(_("買値 ${} で買いますか？", "Do you buy for ${}? "), price_ask);
     if (input_check_strict(player_ptr, s, UserCheck::DEFAULT_Y)) {
         return price_ask;
     }
@@ -276,7 +271,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     store_prt_gold(player_ptr);
     object_aware(player_ptr, item);
 
-    msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), purchased_item_name.data(), (long)price);
+    msg_print(_("{}を ${}で購入しました。", "You bought {} for {} gold."), purchased_item_name, price);
     angband_strcpy(record_o_name, purchased_item_name, MAX_NLEN);
     record_turn = world.game_turn;
     const auto &floor = *player_ptr->current_floor_ptr;
