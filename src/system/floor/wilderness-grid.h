@@ -26,6 +26,7 @@ public:
     std::string name = "";
 
     int get_level() const;
+    void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
     void initialize_seed();
 };
 
@@ -36,8 +37,8 @@ public:
     WildernessGrids(WildernessGrids &&) = delete;
     WildernessGrids &operator=(const WildernessGrids &) = delete;
     WildernessGrids &operator=(WildernessGrids &&) = delete;
-    void init_height(int height);
-    void init_width(int width);
+    void initialize_height(int height);
+    void initialize_width(int width);
     void initialize_grids(); //!< @details 全ての定義ファイルを読み込んでから初期化する.
     void initialize_seeds();
     void initialize_position();
@@ -56,13 +57,40 @@ public:
     void set_starting_player_position(const Pos2D &pos);
     void set_player_position(const Pos2D &pos);
     void move_player_to(const Direction &dir);
+    bool should_reinitialize() const;
+    void set_reinitialization(bool state);
+    bool should_ambush() const;
+    void set_ambushes(bool state);
 
 private:
     WildernessGrids() = default;
     static WildernessGrids instance;
+
     Rect2D area = { 0, 0, 0, 0 };
     Pos2D current_pos = { 0, 0 };
     Pos2D starting_pos = { 0, 0 };
+    bool reinitialization_flag = false;
+    bool ambushes_flag = false;
 };
 
 extern std::vector<std::vector<WildernessGrid>> wilderness_grids;
+
+class WildernessLetters {
+public:
+    ~WildernessLetters() = default;
+    WildernessLetters(const WildernessLetters &) = delete;
+    WildernessLetters(WildernessLetters &&) = delete;
+    WildernessLetters &operator=(const WildernessLetters &) = delete;
+    WildernessLetters &operator=(WildernessLetters &&) = delete;
+    static WildernessLetters &get_instance();
+    void initialize();
+
+    const WildernessGrid &get_grid(int index) const;
+    WildernessGrid &get_grid(int index);
+
+private:
+    WildernessLetters() = default;
+    static WildernessLetters instance;
+
+    std::vector<WildernessGrid> letters;
+};

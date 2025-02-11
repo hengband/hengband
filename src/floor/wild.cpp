@@ -52,10 +52,6 @@
 
 constexpr auto SUM_TERRAIN_PROBABILITIES = 18;
 
-bool reinit_wilderness = false;
-
-static bool generate_encounter;
-
 struct border_type {
     short top[MAX_WID];
     short bottom[MAX_WID];
@@ -68,8 +64,6 @@ struct border_type {
 };
 
 static border_type border;
-
-static std::vector<WildernessGrid> wilderness_letters;
 
 /* The default table in terrain level generation. */
 static std::map<WildernessTerrain, std::map<short, TerrainTag>> terrain_table;
@@ -368,14 +362,15 @@ static void generate_wild_monsters(PlayerType *player_ptr)
 {
     constexpr auto num_ambush_monsters = 40;
     constexpr auto num_normal_monsters = 8;
-    const auto lim = generate_encounter ? num_ambush_monsters : num_normal_monsters;
+    const auto should_ambush = WildernessGrids::get_instance().should_ambush();
+    const auto lim = should_ambush ? num_ambush_monsters : num_normal_monsters;
     for (auto i = 0; i < lim; i++) {
         BIT_FLAGS mode = 0;
-        if (!(generate_encounter || (one_in_(2) && (!player_ptr->town_num)))) {
+        if (!should_ambush && (one_in_(2) || player_ptr->town_num)) {
             mode |= PM_ALLOW_SLEEP;
         }
 
-        (void)alloc_monster(player_ptr, generate_encounter ? 0 : 3, mode, summon_specific);
+        (void)alloc_monster(player_ptr, should_ambush ? 0 : 3, mode, summon_specific);
     }
 }
 
@@ -392,7 +387,7 @@ void wilderness_gen(PlayerType *player_ptr)
     floor.width = MAX_WID;
     panel_row_min = floor.height;
     panel_col_min = floor.width;
-    const auto &wilderness = WildernessGrids::get_instance();
+    auto &wilderness = WildernessGrids::get_instance();
     const auto &area = wilderness.get_area();
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
 
@@ -557,11 +552,11 @@ void wilderness_gen(PlayerType *player_ptr)
 
     player_place(player_ptr, player_ptr->oldpy, player_ptr->oldpx);
     generate_wild_monsters(player_ptr);
-    if (generate_encounter) {
+    if (wilderness.should_ambush()) {
         player_ptr->ambush_flag = true;
     }
 
-    generate_encounter = false;
+    wilderness.set_ambushes(false);
     auto &quests = QuestList::get_instance();
     for (auto &[quest_id, quest] : quests) {
         if (quest.status == QuestStatusType::REWARDED) {
@@ -642,11 +637,9 @@ void wilderness_gen_small(PlayerType *player_ptr)
  */
 std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *line, int xmin, int xmax, const Pos2D &pos_parsing)
 {
-    if (wilderness_letters.empty()) {
-        wilderness_letters.resize(TerrainList::get_instance().size());
-    }
-
-    if (!(std::string_view(line).starts_with("W:"))) {
+    auto &letters = WildernessLetters::get_instance();
+    letters.initialize();
+    if (!std::string_view(line).starts_with("W:")) {
         return { PARSE_ERROR_GENERIC, std::nullopt };
     }
 
@@ -671,30 +664,22 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
             return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
         }
 
-        int index = zz[0][0];
-        auto &letter = wilderness_letters.at(index);
+        const int index = zz[0][0];
+        auto &letter = letters.get_grid(index);
         if (num > 1) {
             letter.terrain = i2enum<WildernessTerrain>(std::stoi(zz[1]));
-        } else {
-            letter.terrain = WildernessTerrain::EDGE;
         }
 
         if (num > 2) {
             letter.level = std::stoi(zz[2]);
-        } else {
-            letter.level = 0;
         }
 
         if (num > 3) {
             letter.town = static_cast<short>(std::stoi(zz[3]));
-        } else {
-            letter.town = 0;
         }
 
         if (num > 4) {
             letter.road = std::stoi(zz[4]);
-        } else {
-            letter.road = 0;
         }
 
         if (num > 5) {
@@ -710,14 +695,11 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         pos.x = xmin;
         char *s = line + 4;
         int len = strlen(s);
+        auto &wilderness = WildernessGrids::get_instance();
         for (auto i = 0; ((pos.x < xmax) && (i < len)); pos.x++, s++, i++) {
             int id = s[0];
-            auto &wg = WildernessGrids::get_instance().get_grid(pos);
-            const auto &letter = wilderness_letters.at(id);
-            wg.terrain = letter.terrain;
-            wg.level = letter.level;
-            wg.town = letter.town;
-            wg.road = letter.road;
+            const auto &letter = letters.get_grid(id);
+            wilderness.get_grid(pos).initialize(letter);
             towns_info[letter.town].name = letter.name;
         }
 
@@ -802,11 +784,6 @@ void init_wilderness_terrains()
     }
 }
 
-void init_wilderness_encounter()
-{
-    generate_encounter = false;
-}
-
 /*!
  * @brief 荒野から広域マップへの切り替え処理 /
  * Initialize arrays for wilderness terrains
@@ -815,7 +792,8 @@ void init_wilderness_encounter()
  */
 bool change_wild_mode(PlayerType *player_ptr, bool encount)
 {
-    generate_encounter = encount;
+    auto &wilderness = WildernessGrids::get_instance();
+    wilderness.set_ambushes(encount);
     if (player_ptr->leaving) {
         return false;
     }
@@ -826,7 +804,6 @@ bool change_wild_mode(PlayerType *player_ptr, bool encount)
     }
 
     auto &world = AngbandWorld::get_instance();
-    auto &wilderness = WildernessGrids::get_instance();
     if (world.is_wild_mode()) {
         wilderness.set_player_position(player_ptr->get_position());
         player_ptr->energy_need = 0;

@@ -7,7 +7,6 @@
 #include "floor/floor-save.h"
 #include "floor/geometry.h"
 #include "floor/line-of-sight.h"
-#include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "inventory/inventory-slot-types.h"
@@ -20,7 +19,6 @@
 #include "pet/pet-util.h"
 #include "save/floor-writer.h"
 #include "spell-class/spells-mirror-master.h"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/dungeon/dungeon-id.h"
@@ -33,7 +31,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -56,7 +53,7 @@ static void check_riding_preservation(PlayerType *player_ptr)
 
 static bool check_pet_preservation_conditions(PlayerType *player_ptr, const MonsterEntity &monster)
 {
-    if (reinit_wilderness) {
+    if (WildernessGrids::get_instance().should_reinitialize()) {
         return false;
     }
 

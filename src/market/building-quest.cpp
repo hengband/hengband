@@ -1,18 +1,15 @@
 #include "market/building-quest.h"
 #include "core/asking-player.h"
 #include "dungeon/quest.h"
-#include "floor/wild.h"
 #include "info-reader/fixed-map-parser.h"
 #include "market/building-util.h"
-#include "monster/monster-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
-#include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "view/display-messages.h"
 
 /*!
@@ -74,10 +71,11 @@ void castle_quest(PlayerType *player_ptr)
 
     auto &quests = QuestList::get_instance();
     auto &quest = quests.get_quest(quest_id);
+    auto &wilderness = WildernessGrids::get_instance();
     if (quest.status == QuestStatusType::COMPLETED) {
         quest.status = QuestStatusType::REWARDED;
         print_questinfo(player_ptr, quest_id, false);
-        reinit_wilderness = true;
+        wilderness.set_reinitialization(true);
         return;
     }
 
@@ -107,7 +105,7 @@ void castle_quest(PlayerType *player_ptr)
     if (quest.status == QuestStatusType::FAILED) {
         print_questinfo(player_ptr, quest_id, false);
         quest.status = QuestStatusType::FAILED_DONE;
-        reinit_wilderness = true;
+        wilderness.set_reinitialization(true);
         return;
     }
 
@@ -116,6 +114,6 @@ void castle_quest(PlayerType *player_ptr)
     }
 
     quest.status = QuestStatusType::TAKEN;
-    reinit_wilderness = true;
+    wilderness.set_reinitialization(true);
     print_questinfo(player_ptr, quest_id, true);
 }
