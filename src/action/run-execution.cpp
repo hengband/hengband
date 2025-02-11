@@ -35,10 +35,10 @@ byte cycle[MAX_RUN_CYCLES] = { 1, 2, 3, 6, 9, 8, 7, 4, 1, 2, 3, 6, 9, 8, 7, 4, 1
 byte chome[MAX_RUN_CHOME] = { 0, 8, 9, 10, 7, 0, 11, 6, 5, 4 };
 
 /* The direction we are running */
-static Direction find_current;
+static Direction find_current = Direction::none();
 
 /* The direction we came from */
-static Direction find_prevdir;
+static Direction find_prevdir = Direction::none();
 
 static bool find_openarea;
 
@@ -215,9 +215,9 @@ static bool run_test(PlayerType *player_ptr)
         }
     }
 
-    Direction check_dir(0);
-    std::optional<Direction> option;
-    std::optional<Direction> option2;
+    Direction check_dir(5);
+    auto option = Direction::none();
+    auto option2 = Direction::none();
     const auto max = prev_dir.is_diagonal() ? 2 : 1;
     for (auto i = -max; i <= max; i++) {
         const auto new_dir = prev_dir.rotated_45degree(i);
@@ -260,7 +260,7 @@ static bool run_test(PlayerType *player_ptr)
             inv = false;
         }
 
-        if (!inv && see_wall(player_ptr, Direction(0), pos)) {
+        if (!inv && see_wall(player_ptr, Direction(5), pos)) {
             if (find_openarea) {
                 if (i < 0) {
                     find_breakright = true;
@@ -333,20 +333,20 @@ static bool run_test(PlayerType *player_ptr)
     }
 
     if (!option2) {
-        find_current = *option;
-        find_prevdir = *option;
+        find_current = option;
+        find_prevdir = option;
         return see_wall(player_ptr, find_current, p_pos);
     } else if (!find_cut) {
-        find_current = *option;
-        find_prevdir = *option2;
+        find_current = option;
+        find_prevdir = option2;
         return see_wall(player_ptr, find_current, p_pos);
     }
 
-    const auto pos = player_ptr->get_position() + option->vec();
-    if (!see_wall(player_ptr, *option, pos) || !see_wall(player_ptr, check_dir, pos)) {
-        if (see_nothing(player_ptr, *option, pos) && see_nothing(player_ptr, *option2, pos)) {
-            find_current = *option;
-            find_prevdir = *option2;
+    const auto pos = player_ptr->get_position() + option.vec();
+    if (!see_wall(player_ptr, option, pos) || !see_wall(player_ptr, check_dir, pos)) {
+        if (see_nothing(player_ptr, option, pos) && see_nothing(player_ptr, option2, pos)) {
+            find_current = option;
+            find_prevdir = option2;
             return see_wall(player_ptr, find_current, p_pos);
         }
 
@@ -354,13 +354,13 @@ static bool run_test(PlayerType *player_ptr)
     }
 
     if (find_cut) {
-        find_current = *option2;
-        find_prevdir = *option2;
+        find_current = option2;
+        find_prevdir = option2;
         return see_wall(player_ptr, find_current, p_pos);
     }
 
-    find_current = *option;
-    find_prevdir = *option2;
+    find_current = option;
+    find_prevdir = option2;
     return see_wall(player_ptr, find_current, p_pos);
 }
 
@@ -372,7 +372,7 @@ static bool run_test(PlayerType *player_ptr)
  */
 void run_step(PlayerType *player_ptr, const Direction &dir)
 {
-    if (dir.has_direction()) {
+    if (dir) {
         ignore_avoid_run = true;
         if (see_wall(player_ptr, dir, player_ptr->get_position())) {
             sound(SoundKind::HITWALL);

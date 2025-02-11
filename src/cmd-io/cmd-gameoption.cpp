@@ -480,7 +480,7 @@ void do_cmd_options(PlayerType *player_ptr)
                 break;
             }
 
-            Direction d(0);
+            auto d = Direction::none();
             if (skey == SKEY_UP) {
                 d = Direction(8);
             }

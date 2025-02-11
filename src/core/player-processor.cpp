@@ -283,7 +283,7 @@ void process_player(PlayerType *player_ptr)
         } else if (player_ptr->action == ACTION_FISH) {
             energy.set_player_turn_energy(100);
         } else if (player_ptr->running) {
-            run_step(player_ptr, Direction(0));
+            run_step(player_ptr, Direction::none());
         } else if (travel.run) {
             travel_step(player_ptr);
         } else if (command_rep) {
