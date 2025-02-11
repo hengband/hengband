@@ -35,6 +35,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <fstream>
 #include <span>
 #include <sstream>
@@ -271,23 +272,23 @@ bool report_score(PlayerType *player_ptr)
 
     PlayerRealm pr(player_ptr);
     const auto &realm1_name = PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST) ? get_element_title(player_ptr->element) : pr.realm1().get_name().string();
-    score_ss << format("name: %s\n", player_ptr->name)
-             << format("version: %s\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL).data())
-             << format("score: %ld\n", calc_score(player_ptr))
-             << format("level: %d\n", player_ptr->lev)
-             << format("depth: %d\n", player_ptr->current_floor_ptr->dun_level)
-             << format("maxlv: %d\n", player_ptr->max_plv)
-             << format("maxdp: %d\n", DungeonRecords::get_instance().get_record(DungeonId::ANGBAND).get_max_level())
-             << format("au: %d\n", player_ptr->au);
+    score_ss << fmt::format("name: {}\n", player_ptr->name)
+             << fmt::format("version: {}\n", AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL))
+             << fmt::format("score: {}\n", calc_score(player_ptr))
+             << fmt::format("level: {}\n", player_ptr->lev)
+             << fmt::format("depth: {}\n", player_ptr->current_floor_ptr->dun_level)
+             << fmt::format("maxlv: {}\n", player_ptr->max_plv)
+             << fmt::format("maxdp: {}\n", DungeonRecords::get_instance().get_record(DungeonId::ANGBAND).get_max_level())
+             << fmt::format("au: {}\n", player_ptr->au);
     const auto &igd = InnerGameData::get_instance();
-    score_ss << format("turns: %d\n", igd.get_real_turns(AngbandWorld::get_instance().game_turn))
-             << format("sex: %d\n", player_ptr->psex)
-             << format("race: %s\n", rp_ptr->title.data())
-             << format("class: %s\n", cp_ptr->title.data())
-             << format("seikaku: %s\n", personality_desc.data())
-             << format("realm1: %s\n", realm1_name.data())
-             << format("realm2: %s\n", pr.realm2().get_name().data())
-             << format("killer: %s\n", player_ptr->died_from.data())
+    score_ss << fmt::format("turns: {}\n", igd.get_real_turns(AngbandWorld::get_instance().game_turn))
+             << fmt::format("sex: {}\n", enum2i(player_ptr->psex))
+             << fmt::format("race: {}\n", rp_ptr->title)
+             << fmt::format("class: {}\n", cp_ptr->title)
+             << fmt::format("seikaku: {}\n", personality_desc)
+             << fmt::format("realm1: {}\n", realm1_name)
+             << fmt::format("realm2: {}\n", pr.realm2().get_name())
+             << fmt::format("killer: {}\n", player_ptr->died_from)
              << "-----charcter dump-----\n";
 
     make_dump(player_ptr, score_ss);

@@ -3,6 +3,7 @@
 #include "monster/monster-util.h"
 #include "system/angband-exceptions.h"
 #include "system/floor/floor-info.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
@@ -122,6 +123,11 @@ Pos2D PlayerType::get_position() const
     return Pos2D(this->y, this->x);
 }
 
+Pos2D PlayerType::get_old_position() const
+{
+    return Pos2D(this->oldpy, this->oldpx);
+}
+
 /*!
  * @brief 現在地の隣 (瞬時値)または現在地を返す
  * @param dir 隣を表す方向番号
@@ -154,6 +160,22 @@ bool PlayerType::is_located_at_running_destination() const
 bool PlayerType::is_located_at(const Pos2D &pos) const
 {
     return (this->y == pos.y) && (this->x == pos.x);
+}
+
+/*!
+ * @brief プレイヤーを指定座標に配置する
+ * @param pos 配置先座標
+ * @return 配置に成功したらTRUE
+ */
+bool PlayerType::try_set_position(const Pos2D &pos)
+{
+    if (this->current_floor_ptr->get_grid(pos).has_monster()) {
+        return false;
+    }
+
+    this->y = pos.y;
+    this->x = pos.x;
+    return true;
 }
 
 void PlayerType::set_position(const Pos2D &pos)

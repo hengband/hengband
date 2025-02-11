@@ -144,8 +144,8 @@ MonraceId get_mon_num(PlayerType *player_ptr, int min_level, int max_level, uint
     }
 
     if (cheat_hear) {
-        msg_format(_("モンスター第3次候補数:%lu(%d-%dF)%d ", "monster third selection:%lu(%d-%dF)%d "), prob_table.item_count(), min_level, max_level,
-            prob_table.total_prob());
+        constexpr auto fmt = _("モンスター第3次候補数:{}({}-{}F){} ", "monster third selection:{}({}-{}F){} ");
+        msg_print(fmt, prob_table.item_count(), min_level, max_level, prob_table.total_prob());
     }
 
     if (prob_table.empty()) {

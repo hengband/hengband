@@ -31,6 +31,7 @@
 #include "util/string-processor.h"
 #include "view/display-lore.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #ifdef JP
 #else
 #include "locale/english.h"
@@ -367,7 +368,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
             display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), color_top, character_left);
         }
 
-        prt(format(_("%lu 種", "%lu Races"), monrace_ids.size()), 3, 26);
+        prt(fmt::format(_("{} 種", "{} Races"), monrace_ids.size()), 3, 26);
         prt(format(_("<方向>%s%s%s, ESC", "<dir>%s%s%s, ESC"), (!visual_list && !visual_only) ? _(", 'r'で思い出を見る", ", 'r' to recall") : "",
                 visual_list ? _(", ENTERで決定", ", ENTER to accept") : _(", 'v'でシンボル変更", ", 'v' for visuals"),
                 (symbols_cb.symbol != DisplaySymbol()) ? _(", 'c', 'p'でペースト", ", 'c', 'p' to paste") : _(", 'c'でコピー", ", 'c' to copy")),
