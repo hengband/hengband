@@ -682,7 +682,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         }
 
         if (num > 5) {
-            letter.name = zz[5];
+            letter.set_name(zz[5]);
         }
 
         break;
@@ -698,7 +698,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
             int id = s[0];
             const auto &letter = letters.get_grid(id);
             wilderness.get_grid(pos).initialize(letter);
-            towns_info[letter.get_town()].name = letter.name;
+            towns_info[letter.get_town()].name = letter.get_name();
         }
 
         pos.y++;

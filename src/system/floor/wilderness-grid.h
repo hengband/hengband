@@ -9,6 +9,7 @@
 #include "util/point-2d.h"
 #include <cstdint>
 #include <string>
+#include <string_view>
 #include <vector>
 
 enum class DungeonId;
@@ -18,7 +19,6 @@ class Direction;
 class WildernessGrid {
 public:
     WildernessGrid() = default;
-    std::string name = "";
 
     MonraceHook get_monrace_hook() const;
     WildernessTerrain get_terrain() const;
@@ -34,17 +34,20 @@ public:
     uint32_t get_seed() const;
     void set_seed(uint32_t saved_seed);
     DungeonId get_entrance() const;
+    const std::string &get_name() const;
+    void set_name(std::string_view name_parsing);
     void set_entrance(DungeonId entrance_parsing);
     void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
     void initialize_seed();
 
 private:
     WildernessTerrain terrain{};
-    int level = 0;
-    DungeonId entrance{};
     uint32_t seed = 0;
     short town = 0;
     int road = 0;
+    int level = 0;
+    DungeonId entrance{};
+    std::string name = "";
 };
 
 class WildernessGrids {

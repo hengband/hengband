@@ -40,6 +40,16 @@ DungeonId WildernessGrid::get_entrance() const
     return this->entrance;
 }
 
+const std::string &WildernessGrid::get_name() const
+{
+    return this->name;
+}
+
+void WildernessGrid::set_name(std::string_view name_parsing)
+{
+    this->name = name_parsing;
+}
+
 void WildernessGrid::set_entrance(DungeonId entrance_parsing)
 {
     this->entrance = entrance_parsing;
