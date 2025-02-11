@@ -45,7 +45,7 @@ std::pair<int, Pos2D> count_chests(PlayerType *player_ptr, bool trapped)
     Pos2D pos(0, 0);
     auto count = 0;
     for (const auto &d : Direction::directions()) {
-        const auto pos_neighbor = player_ptr->get_position() + d.vec();
+        const auto pos_neighbor = player_ptr->get_neighbor(d);
         const auto o_idx = chest_check(*player_ptr->current_floor_ptr, pos_neighbor, false);
         if (o_idx == 0) {
             continue;

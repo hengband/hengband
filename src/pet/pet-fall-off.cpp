@@ -105,7 +105,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
 
         /* Check around the player */
         for (const auto &d : Direction::directions_8()) {
-            const auto pos = player_ptr->get_position() + d.vec();
+            const auto pos = player_ptr->get_neighbor(d);
 
             const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
 

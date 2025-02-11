@@ -110,7 +110,7 @@ static void run_init(PlayerType *player_ptr, const Direction &dir)
     const auto pos = player_ptr->get_position();
     player_ptr->run_py = pos.y;
     player_ptr->run_px = pos.x;
-    const auto pos_neighbor = player_ptr->get_position() + dir.vec();
+    const auto pos_neighbor = player_ptr->get_neighbor(dir);
     ignore_avoid_run = player_ptr->current_floor_ptr->has_terrain_characteristics(pos_neighbor, TerrainCharacteristics::AVOID_RUN);
     const auto dir_left45 = dir.rotated_45degree(1);
     const auto dir_right45 = dir.rotated_45degree(-1);
@@ -221,7 +221,7 @@ static bool run_test(PlayerType *player_ptr)
     const auto max = prev_dir.is_diagonal() ? 2 : 1;
     for (auto i = -max; i <= max; i++) {
         const auto new_dir = prev_dir.rotated_45degree(i);
-        const auto pos = player_ptr->get_position() + new_dir.vec();
+        const auto pos = player_ptr->get_neighbor(new_dir);
         const auto &grid = floor.get_grid(pos);
         if (grid.has_monster()) {
             const auto &monster = floor.m_list[grid.m_idx];
@@ -342,7 +342,7 @@ static bool run_test(PlayerType *player_ptr)
         return see_wall(player_ptr, find_current, p_pos);
     }
 
-    const auto pos = player_ptr->get_position() + option.vec();
+    const auto pos = player_ptr->get_neighbor(option);
     if (!see_wall(player_ptr, option, pos) || !see_wall(player_ptr, check_dir, pos)) {
         if (see_nothing(player_ptr, option, pos) && see_nothing(player_ptr, option2, pos)) {
             find_current = option;

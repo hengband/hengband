@@ -115,7 +115,7 @@ void search(PlayerType *player_ptr)
 
     for (const auto &d : Direction::directions()) {
         if (evaluate_percent(chance)) {
-            discover_hidden_things(player_ptr, player_ptr->get_position() + d.vec());
+            discover_hidden_things(player_ptr, player_ptr->get_neighbor(d));
         }
     }
 }
