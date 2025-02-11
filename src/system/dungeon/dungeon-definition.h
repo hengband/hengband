@@ -17,6 +17,7 @@
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
+#include "util/point-2d.h"
 #include "util/probability-table.h"
 #include <optional>
 #include <string>
@@ -42,9 +43,6 @@ class DungeonDefinition {
 public:
     std::string name; /* Name */
     std::string text; /* Description */
-
-    POSITION dy{};
-    POSITION dx{};
 
     ProbabilityTable<short> prob_table_floor{}; /* Floor probability */
     ProbabilityTable<short> prob_table_wall{}; /* Cave wall probability */
@@ -104,10 +102,15 @@ public:
     DoorKind select_door_kind() const;
     short select_floor_terrain_id() const;
     short select_wall_terrain_id() const;
+    const Pos2D &get_position() const;
+
+    void initialize_position(const Pos2D &pos_tokens);
 
     //!< @details ここから下は、地形など全ての定義ファイルを読み込んだ後に呼び出される初期化処理.
     void set_guardian_flag();
 
 private:
+    Pos2D pos = { 0, 0 };
+
     MonraceDefinition &get_guardian();
 };

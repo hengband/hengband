@@ -215,3 +215,13 @@ MonraceDefinition &DungeonDefinition::get_guardian()
 {
     return MonraceList::get_instance().get_monrace(this->final_guardian);
 }
+
+const Pos2D &DungeonDefinition::get_position() const
+{
+    return this->pos;
+}
+
+void DungeonDefinition::initialize_position(const Pos2D &pos_tokens)
+{
+    this->pos = pos_tokens;
+}
