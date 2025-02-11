@@ -4,34 +4,26 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "locale/japanese.h"
-#include "object-enchant/special-object-flags.h"
-#include "object/object-info.h"
 #include "player/race-info-table.h"
 #include "store/pricing.h"
 #include "store/store-owners.h"
-#include "store/store-util.h"
 #include "store/store.h" //!< @todo 相互依存している、こっちは残す？.
-#include "system/baseitem/baseitem-key.h"
-#include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
-#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 
 /*!
- * @brief プレイヤーの所持金を表示する /
- * Displays players gold					-RAK-
- * @param player_ptr プレイヤーへの参照ポインタ
- * @details
+ * @brief プレイヤーの所持金を表示する
+ * @param num_golds 所持金
  */
-void store_prt_gold(PlayerType *player_ptr)
+void store_prt_gold(int num_golds)
 {
     prt(_("手持ちのお金: ", "Gold Remaining: "), 19 + xtra_stock, 53);
-    prt(format("%9ld", (long)player_ptr->au), 19 + xtra_stock, 68);
+    prt(format("%9d", num_golds), 19 + xtra_stock, 68);
 }
 
 /*!
@@ -90,7 +82,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
     }
 
     const auto price = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
-    put_str(format("%9ld  ", (long)price), i + 6, 68);
+    put_str(format("%9d  ", price), i + 6, 68);
 }
 
 /*!
@@ -147,7 +139,7 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
             put_str(_("  重さ", "Weight"), 5, 70);
         }
 
-        store_prt_gold(player_ptr);
+        store_prt_gold(player_ptr->au);
         display_store_inventory(player_ptr, store_num);
         return;
     }
@@ -159,7 +151,7 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
             put_str(_("  重さ", "Weight"), 5, 70);
         }
 
-        store_prt_gold(player_ptr);
+        store_prt_gold(player_ptr->au);
         display_store_inventory(player_ptr, store_num);
         return;
     }
@@ -177,6 +169,6 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     put_str(_(" 価格", "Price"), 5, 72);
-    store_prt_gold(player_ptr);
+    store_prt_gold(player_ptr->au);
     display_store_inventory(player_ptr, store_num);
 }

@@ -366,7 +366,7 @@ void do_cmd_building(PlayerType *player_ptr)
 
     while (true) {
         prt("", 1, 0);
-        building_prt_gold(player_ptr);
+        building_prt_gold(player_ptr->au);
         const auto command = inkey();
         if (command == ESCAPE) {
             floor.inside_arena = false;

@@ -5,6 +5,7 @@
 #include "mind/mind-types.h"
 #include "player-info/equipment-info.h"
 #include "system/player-type-definition.h"
+#include <fmt/format.h>
 
 static std::string switch_mind_mindcrafter(PlayerType *player_ptr, const PLAYER_LEVEL plev, const int power)
 {
@@ -35,7 +36,7 @@ static std::string switch_mind_mindcrafter(PlayerType *player_ptr, const PLAYER_
     case 12:
         return format(" %sd%d+%d", KWD_DAM, plev * 3, plev * 3);
     case 13:
-        return format(_(" 行動:%ld回", " %ld acts."), (long int)(player_ptr->csp + 100 - player_ptr->energy_need - 50) / 100);
+        return fmt::format(_(" 行動:{}回", " {} acts."), (player_ptr->csp + 100 - player_ptr->energy_need - 50) / 100);
     default:
         return std::string();
     }
