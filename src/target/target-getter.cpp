@@ -114,50 +114,40 @@ bool get_aim_dir(PlayerType *player_ptr, int *dp)
 }
 
 /*!
- * @brief 方向を指定する(テンキー配列順)
- *
- * 上下左右および斜め方向を指定する。
- * 指定された方向は整数で返され、それぞれの値方向は以下の通り。
- *
- * 7 8 9
- *  \|/
- * 4-@-6
- *  /|\
- * 1 2 3
- *
- * @return 指定した方向。指定をキャンセルした場合はstd::nullopt。
+ * @brief 上下左右および斜め方向を指定する
+ * @return 指定した方向
  */
-std::optional<int> get_direction(PlayerType *player_ptr)
+Direction get_direction(PlayerType *player_ptr)
 {
-    auto dir = command_dir ? command_dir.dir() : 0;
+    auto dir = command_dir;
     short code = 0;
     if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
-        dir = code;
+        dir = Direction(code);
     }
 
     constexpr auto prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
-    while (dir == 0) {
+    while (!dir) {
         const auto command = input_command(prompt, true);
         if (!command) {
-            return std::nullopt;
+            return Direction::none();
         }
 
-        dir = get_keymap_dir(*command);
-        if (dir == 0) {
+        dir = Direction(get_keymap_dir(*command));
+        if (!dir) {
             bell();
         }
     }
 
-    command_dir = Direction(dir);
+    command_dir = dir;
     const auto finalizer = util::make_finalizer([] {
         repeat_push(static_cast<short>(command_dir.dir()));
     });
     const auto is_confused = player_ptr->effects()->confusion().is_confused();
     if (is_confused && evaluate_percent(75)) {
-        dir = rand_choice(Direction::directions_8()).dir();
+        dir = rand_choice(Direction::directions_8());
     }
 
-    if (command_dir == Direction(dir)) {
+    if (command_dir == dir) {
         return dir;
     }
 

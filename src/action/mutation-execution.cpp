@@ -257,7 +257,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
             return false;
         }
 
-        const auto pos = player_ptr->get_neighbor(*dir);
+        const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = floor.get_grid(pos);
         if (!grid.has_monster()) {
             msg_print(_("邪悪な存在を感じとれません！", "You sense no evil there!"));
@@ -297,14 +297,14 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
             return false;
         }
 
-        const auto pos = player_ptr->get_neighbor(*dir);
+        const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = floor.get_grid(pos);
         if (!grid.has_monster()) {
             msg_print(_("あなたは何もない場所で手を振った。", "You wave your hands in the air."));
             return true;
         }
 
-        fire_bolt(player_ptr, AttributeType::COLD, *dir, 2 * lvl);
+        fire_bolt(player_ptr, AttributeType::COLD, dir, 2 * lvl);
         return true;
     }
     case PlayerMutationType::LAUNCHER:

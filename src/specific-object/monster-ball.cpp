@@ -92,7 +92,7 @@ static void restore_monster_nickname(MonsterEntity &monster, ItemEntity &item)
     insc->erase(s - insc->data());
 }
 
-static bool release_monster(PlayerType *player_ptr, ItemEntity &item, DIRECTION dir)
+static bool release_monster(PlayerType *player_ptr, ItemEntity &item, const Direction &dir)
 {
     const auto &monrace = item.get_monrace();
     const auto pos = player_ptr->get_neighbor(dir);
@@ -147,7 +147,7 @@ bool exe_monster_capture(PlayerType *player_ptr, ItemEntity &item)
         return true;
     }
 
-    if (!release_monster(player_ptr, item, *dir)) {
+    if (!release_monster(player_ptr, item, dir)) {
         msg_print(_("おっと、解放に失敗した。", "Oops.  You failed to release your pet."));
     }
 

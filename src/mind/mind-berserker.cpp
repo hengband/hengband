@@ -34,11 +34,11 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
         }
 
         const auto dir = get_direction(player_ptr);
-        if (!dir || (dir == 5)) {
+        if (!dir.has_direction()) {
             return false;
         }
 
-        const auto pos = player_ptr->get_neighbor(*dir);
+        const auto pos = player_ptr->get_neighbor(dir);
         const auto &floor = *player_ptr->current_floor_ptr;
         const auto &grid = floor.get_grid(pos);
         if (!grid.has_monster()) {
@@ -51,7 +51,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
             return true;
         }
 
-        const auto pos_new = pos + Direction(*dir).vec();
+        const auto pos_new = pos + dir.vec();
         const auto &grid_new = floor.get_grid(pos_new);
         if (player_can_enter(player_ptr, grid_new.feat, 0) && !floor.has_trap_at(pos_new) && !grid_new.has_monster()) {
             msg_print(nullptr);
@@ -66,7 +66,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
             return false;
         }
 
-        exe_movement(player_ptr, *dir, easy_disarm, true);
+        exe_movement(player_ptr, dir, easy_disarm, true);
         return true;
     }
     case MindBerserkerType::QUAKE:

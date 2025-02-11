@@ -188,7 +188,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
         return false;
     }
 
-    const auto pos = player_ptr->get_neighbor(*dir);
+    const auto pos = player_ptr->get_neighbor(dir);
     auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
