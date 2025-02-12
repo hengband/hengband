@@ -131,18 +131,12 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
             eff_width = width;
         }
 
-        const auto vec = Direction(d).vec();
-        if ((a == 0) && (vec.y < 0)) {
-            d = 0;
-        }
-        if ((c == 0) && (vec.x < 0)) {
-            d = 0;
-        }
-        if ((a == 0x7f) && (vec.y > 0)) {
-            d = 0;
-        }
-        if (((byte)c == 0xff) && (vec.x > 0)) {
-            d = 0;
+        auto vec = Direction(d).vec();
+        if (((a == 0) && (vec.y < 0)) ||
+            ((c == 0) && (vec.x < 0)) ||
+            ((a == 0x7f) && (vec.y > 0)) ||
+            (((byte)c == 0xff) && (vec.x > 0))) {
+            vec = Direction::self().vec();
         }
 
         a += (TERM_COLOR)vec.y;
