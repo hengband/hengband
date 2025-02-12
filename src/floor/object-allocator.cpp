@@ -20,29 +20,30 @@
 #include "wizard/wizard-messages.h"
 
 /*!
- * @brief 上下左右の外壁数をカウントする / Count the number of walls adjacent to the given grid.
- * @param y 基準のy座標
- * @param x 基準のx座標
+ * @brief 上下左右の外壁数をカウントする
+ * @param pos 基準座標
  * @return 隣接する外壁の数
- * @note Assumes "in_bounds()"
- * @details We count only granite walls and permanent walls.
  */
-static int next_to_walls(const FloorType &floor, POSITION y, POSITION x)
+static int next_to_walls(const FloorType &floor, const Pos2D &pos)
 {
-    int k = 0;
-    if (in_bounds(floor, y + 1, x) && floor.grid_array[y + 1][x].is_extra()) {
+    auto k = 0;
+    const auto north = pos + Direction(8).vec();
+    if (in_bounds(floor, north.y, north.x) && floor.get_grid(north).is_extra()) {
         k++;
     }
 
-    if (in_bounds(floor, y - 1, x) && floor.grid_array[y - 1][x].is_extra()) {
+    const auto south = pos + Direction(2).vec();
+    if (in_bounds(floor, south.y, south.x) && floor.get_grid(south).is_extra()) {
         k++;
     }
 
-    if (in_bounds(floor, y, x + 1) && floor.grid_array[y][x + 1].is_extra()) {
+    const auto east = pos + Direction(6).vec();
+    if (in_bounds(floor, east.y, east.x) && floor.get_grid(east).is_extra()) {
         k++;
     }
 
-    if (in_bounds(floor, y, x - 1) && floor.grid_array[y][x - 1].is_extra()) {
+    const auto west = pos + Direction(4).vec();
+    if (in_bounds(floor, west.y, west.x) && floor.get_grid(west).is_extra()) {
         k++;
     }
 
@@ -50,18 +51,17 @@ static int next_to_walls(const FloorType &floor, POSITION y, POSITION x)
 }
 
 /*!
- * @brief alloc_stairs()の補助として指定の位置に階段を生成できるかの判定を行う / Helper function for alloc_stairs(). Is this a good location for stairs?
+ * @brief alloc_stairs()の補助として指定の位置に階段を生成できるかの判定を行う
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 基準のy座標
- * @param x 基準のx座標
+ * @param pos 基準座標
  * @param walls 最低減隣接させたい外壁の数
  * @return 階段を生成して問題がないならばTRUEを返す。
  */
-static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int walls)
+static bool alloc_stairs_aux(PlayerType *player_ptr, const Pos2D &pos, int walls)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid = floor.grid_array[y][x];
-    if (!grid.is_floor() || pattern_tile(floor, y, x) || !grid.o_idx_list.empty() || grid.has_monster() || next_to_walls(floor, y, x) < walls) {
+    const auto &grid = floor.get_grid(pos);
+    if (!grid.is_floor() || pattern_tile(floor, pos.y, pos.x) || !grid.o_idx_list.empty() || grid.has_monster() || next_to_walls(floor, pos) < walls) {
         return false;
     }
 
@@ -111,13 +111,13 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
         return false;
     }
 
-    for (int i = 0; i < num; i++) {
+    for (auto i = 0; i < num; i++) {
         while (true) {
-            int candidates = 0;
-            const POSITION max_x = floor.width - 1;
-            for (POSITION y = 1; y < floor.height - 1; y++) {
-                for (POSITION x = 1; x < max_x; x++) {
-                    if (alloc_stairs_aux(player_ptr, y, x, walls)) {
+            auto candidates = 0;
+            const auto max_x = floor.width - 1;
+            for (auto y = 1; y < floor.height - 1; y++) {
+                for (auto x = 1; x < max_x; x++) {
+                    if (alloc_stairs_aux(player_ptr, { y, x }, walls)) {
                         candidates++;
                     }
                 }
@@ -132,12 +132,12 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
                 continue;
             }
 
-            int pick = randint1(candidates);
-            POSITION y;
-            POSITION x = max_x;
+            auto pick = randint1(candidates);
+            int y;
+            auto x = max_x;
             for (y = 1; y < floor.height - 1; y++) {
                 for (x = 1; x < floor.width - 1; x++) {
-                    if (alloc_stairs_aux(player_ptr, y, x, walls)) {
+                    if (alloc_stairs_aux(player_ptr, { y, x }, walls)) {
                         pick--;
                         if (pick == 0) {
                             break;
