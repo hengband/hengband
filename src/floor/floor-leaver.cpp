@@ -358,7 +358,7 @@ static void exit_to_wilderness(PlayerType *player_ptr)
     floor.leave_dungeon(true);
     if (!vanilla_town && !lite_town) {
         const auto &dungeon = floor.get_dungeon_definition();
-        WildernessGrids::get_instance().set_player_position({ dungeon.dy, dungeon.dx });
+        WildernessGrids::get_instance().set_player_position(dungeon.get_position());
     }
 
     player_ptr->recall_dungeon = floor.dungeon_id;

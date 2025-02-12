@@ -195,9 +195,10 @@ static void plasma_recursive(FloorType &floor, POSITION x1, POSITION y1, POSITIO
  * @param border 未使用
  * @param corner 広域マップの角部分としての生成ならばTRUE
  */
-static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain, uint32_t seed, bool corner)
+static void generate_wilderness_area(FloorType &floor, const WildernessGrid &wg, bool corner)
 {
-    if (terrain == WildernessTerrain::EDGE) {
+    const auto wg_terrain = wg.get_terrain();
+    if (wg_terrain == WildernessTerrain::EDGE) {
         for (auto y = 0; y < MAX_HGT; y++) {
             for (auto x = 0; x < MAX_WID; x++) {
                 floor.get_grid({ y, x }).set_terrain_id(TerrainTag::PERMANENT_WALL);
@@ -209,7 +210,7 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
 
     auto &system = AngbandSystem::get_instance();
     const Xoshiro128StarStar rng_backup = system.get_rng();
-    Xoshiro128StarStar wilderness_rng(seed);
+    Xoshiro128StarStar wilderness_rng(wg.get_seed());
     system.set_rng(wilderness_rng);
     if (!corner) {
         for (auto y = 0; y < MAX_HGT; y++) {
@@ -228,7 +229,7 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
     grid_top_right.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
     grid_bottom_right.feat = randnum0<short>(SUM_TERRAIN_PROBABILITIES);
     if (corner) {
-        const auto &tags = terrain_table.at(terrain);
+        const auto &tags = terrain_table.at(wg_terrain);
         grid_top_left.set_terrain_id(tags.at(grid_top_left.feat));
         grid_bottom_left.set_terrain_id(tags.at(grid_bottom_left.feat));
         grid_top_right.set_terrain_id(tags.at(grid_top_right.feat));
@@ -251,7 +252,7 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
         for (auto x = 1; x < MAX_WID - 1; x++) {
             const Pos2D pos(y, x);
             auto &grid = floor.get_grid(pos);
-            grid.set_terrain_id(terrain_table.at(terrain).at(grid.feat));
+            grid.set_terrain_id(terrain_table.at(wg_terrain).at(grid.feat));
         }
     }
 
@@ -268,10 +269,11 @@ static void generate_wilderness_area(FloorType &floor, WildernessTerrain terrain
  */
 static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_border, bool is_corner)
 {
-    const auto &wg = WildernessGrids::get_instance().get_grid(pos);
-    player_ptr->town_num = wg.town;
+    const auto &wilderness = WildernessGrids::get_instance();
+    const auto &wg = wilderness.get_grid(pos);
+    player_ptr->town_num = wg.get_town();
     auto &floor = *player_ptr->current_floor_ptr;
-    floor.base_level = wg.level;
+    floor.base_level = wg.get_level();
     floor.dun_level = 0;
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
@@ -288,41 +290,35 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
             player_ptr->visit |= (1UL << (player_ptr->town_num - 1));
         }
     } else {
-        const auto terrain = wg.terrain;
-        const auto seed = wg.seed;
-        generate_wilderness_area(floor, terrain, seed, is_corner);
+        generate_wilderness_area(floor, wg, is_corner);
     }
 
-    if (!is_corner && (wg.town == 0)) {
-        //!< @todo make the road a bit more interresting.
-        if (wg.road) {
+    //!< @details 地上マップに曲がり道の道路を作る.
+    if (!is_corner && !wg.has_town()) {
+        if (wg.has_road()) {
             floor.get_grid({ MAX_HGT / 2, MAX_WID / 2 }).set_terrain_id(TerrainTag::FLOOR);
-            if (wilderness_grids[pos.y - 1][pos.x].road) {
-                /* North road */
+            if (wilderness.get_grid(pos + Direction(8).vec()).has_road()) {
                 for (auto y = 1; y < MAX_HGT / 2; y++) {
                     const Pos2D pos_road(y, MAX_WID / 2);
                     floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
-            if (wilderness_grids[pos.y + 1][pos.x].road) {
-                /* North road */
+            if (wilderness.get_grid(pos + Direction(2).vec()).has_road()) {
                 for (auto y = MAX_HGT / 2; y < MAX_HGT - 1; y++) {
                     const Pos2D pos_road(y, MAX_WID / 2);
                     floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
-            if (wilderness_grids[pos.y][pos.x + 1].road) {
-                /* East road */
+            if (wilderness.get_grid(pos + Direction(6).vec()).has_road()) {
                 for (auto x = MAX_WID / 2; x < MAX_WID - 1; x++) {
                     const Pos2D pos_road(MAX_HGT / 2, x);
                     floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
                 }
             }
 
-            if (wilderness_grids[pos.y][pos.x - 1].road) {
-                /* West road */
+            if (wilderness.get_grid(pos + Direction(4).vec()).has_road()) {
                 for (auto x = 1; x < MAX_WID / 2; x++) {
                     const Pos2D pos_road(MAX_HGT / 2, x);
                     floor.get_grid(pos_road).set_terrain_id(TerrainTag::FLOOR);
@@ -331,9 +327,9 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
         }
     }
 
-    const auto entrance = wg.entrance;
+    const auto entrance = wg.get_entrance();
     auto is_winner = entrance > DungeonId::WILDERNESS;
-    is_winner &= (wg.town == 0);
+    is_winner &= !wg.has_town();
     auto is_wild_winner = DungeonList::get_instance().get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER);
     is_winner &= ((AngbandWorld::get_instance().total_winner != 0) || is_wild_winner);
     if (!is_winner) {
@@ -342,11 +338,11 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
 
     auto &system = AngbandSystem::get_instance();
     const Xoshiro128StarStar rng_backup = system.get_rng();
-    Xoshiro128StarStar wilderness_rng(wg.seed);
+    Xoshiro128StarStar wilderness_rng(wg.get_seed());
     system.set_rng(wilderness_rng);
     const Pos2D pos_entrance(rand_range(6, floor.height - 6), rand_range(6, floor.width - 6));
     floor.get_grid(pos_entrance).set_terrain_id(TerrainTag::ENTRANCE);
-    floor.get_grid(pos_entrance).special = static_cast<short>(wg.entrance);
+    floor.get_grid(pos_entrance).special = static_cast<short>(entrance);
     system.set_rng(rng_backup);
 }
 
@@ -588,20 +584,20 @@ void wilderness_gen_small(PlayerType *player_ptr)
     for (const auto &pos : area) {
         auto &grid = floor.get_grid(pos);
         const auto &wg = wilderness.get_grid(pos);
-        if (wg.town && (wg.town != VALID_TOWNS)) {
+        if (wg.has_town() && !wg.matches_town(VALID_TOWNS)) {
             grid.set_terrain_id(TerrainTag::TOWN);
-            grid.special = wg.town;
+            grid.special = wg.get_town();
             grid.info |= (CAVE_GLOW | CAVE_MARK);
             continue;
         }
 
-        if (wg.road) {
+        if (wg.has_road()) {
             grid.set_terrain_id(TerrainTag::FLOOR);
             grid.info |= (CAVE_GLOW | CAVE_MARK);
             continue;
         }
 
-        const auto entrance = wg.entrance;
+        const auto entrance = wg.get_entrance();
         if ((entrance > DungeonId::WILDERNESS) && (world.total_winner || dungeons.get_dungeon(entrance).flags.has_not(DungeonFeatureType::WINNER))) {
             grid.set_terrain_id(TerrainTag::ENTRANCE);
             grid.special = static_cast<short>(entrance);
@@ -609,7 +605,7 @@ void wilderness_gen_small(PlayerType *player_ptr)
             continue;
         }
 
-        grid.set_terrain_id(WT_TT_MAP.at(wg.terrain));
+        grid.set_terrain_id(WT_TT_MAP.at(wg.get_terrain()));
         grid.info |= (CAVE_GLOW | CAVE_MARK);
     }
 
@@ -646,6 +642,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
     }
 
     Pos2D pos = pos_parsing;
+    auto &wilderness = WildernessGrids::get_instance();
     switch (line[2]) {
         /* Process "W:F:<letter>:<terrain>:<town>:<road>:<name> */
 #ifdef JP
@@ -669,23 +666,23 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         const int index = zz[0][0];
         auto &letter = letters.get_grid(index);
         if (num > 1) {
-            letter.terrain = i2enum<WildernessTerrain>(std::stoi(zz[1]));
+            letter.set_terrain(i2enum<WildernessTerrain>(std::stoi(zz[1])));
         }
 
         if (num > 2) {
-            letter.level = std::stoi(zz[2]);
+            letter.set_level(std::stoi(zz[2]));
         }
 
         if (num > 3) {
-            letter.town = static_cast<short>(std::stoi(zz[3]));
+            letter.set_town(static_cast<short>(std::stoi(zz[3])));
         }
 
         if (num > 4) {
-            letter.road = std::stoi(zz[4]);
+            letter.set_road(std::stoi(zz[4]));
         }
 
         if (num > 5) {
-            letter.name = zz[5];
+            letter.set_name(zz[5]);
         }
 
         break;
@@ -697,12 +694,11 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         pos.x = xmin;
         char *s = line + 4;
         int len = strlen(s);
-        auto &wilderness = WildernessGrids::get_instance();
         for (auto i = 0; ((pos.x < xmax) && (i < len)); pos.x++, s++, i++) {
             int id = s[0];
             const auto &letter = letters.get_grid(id);
             wilderness.get_grid(pos).initialize(letter);
-            towns_info[letter.town].name = letter.name;
+            towns_info[letter.get_town()].name = letter.get_name();
         }
 
         pos.y++;
@@ -711,7 +707,6 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
 
     /* Process "W:P:<x>:<y> - starting position in the wilderness */
     case 'P': {
-        auto &wilderness = WildernessGrids::get_instance();
         if (wilderness.has_player_located()) {
             break;
         }
@@ -738,9 +733,10 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
             continue;
         }
 
-        wilderness_grids[dungeon->dy][dungeon->dx].entrance = dungeon_id;
-        if (!wilderness_grids[dungeon->dy][dungeon->dx].town) {
-            wilderness_grids[dungeon->dy][dungeon->dx].level = dungeon->mindepth;
+        auto &wg = wilderness.get_grid(dungeon->get_position());
+        wg.set_entrance(dungeon_id);
+        if (!wg.has_town()) {
+            wg.set_level(dungeon->mindepth);
         }
     }
 

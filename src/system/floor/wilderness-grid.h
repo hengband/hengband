@@ -9,25 +9,45 @@
 #include "util/point-2d.h"
 #include <cstdint>
 #include <string>
+#include <string_view>
 #include <vector>
 
-enum class WildernessTerrain;
 enum class DungeonId;
+enum class MonraceHook;
+enum class WildernessTerrain;
 class Direction;
 class WildernessGrid {
 public:
     WildernessGrid() = default;
+
+    MonraceHook get_monrace_hook() const;
+    WildernessTerrain get_terrain() const;
+    void set_terrain(WildernessTerrain wt);
+    bool has_town() const;
+    bool matches_town(short town_matching) const;
+    short get_town() const;
+    void set_town(short town_parsing);
+    bool has_road() const;
+    void set_road(int road_parsing);
+    int get_level() const;
+    void set_level(int level_parsing);
+    uint32_t get_seed() const;
+    void set_seed(uint32_t saved_seed);
+    DungeonId get_entrance() const;
+    const std::string &get_name() const;
+    void set_name(std::string_view name_parsing);
+    void set_entrance(DungeonId entrance_parsing);
+    void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
+    void initialize_seed();
+
+private:
     WildernessTerrain terrain{};
+    uint32_t seed = 0;
     short town = 0;
     int road = 0;
-    uint32_t seed = 0;
     int level = 0;
     DungeonId entrance{};
     std::string name = "";
-
-    int get_level() const;
-    void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
-    void initialize_seed();
 };
 
 class WildernessGrids {
@@ -53,6 +73,7 @@ public:
     bool has_player_located() const;
     bool is_player_in_bounds() const;
     const Rect2D &get_area() const;
+    MonraceHook get_monrace_hook() const;
 
     void set_starting_player_position(const Pos2D &pos);
     void set_player_position(const Pos2D &pos);

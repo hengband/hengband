@@ -62,7 +62,7 @@ static void process_fishing(PlayerType *player_ptr)
         bool success = false;
         get_mon_num_prep_enum(player_ptr, MonraceHook::FISHING);
         const auto &floor = *player_ptr->current_floor_ptr;
-        const auto wild_level = WildernessGrids::get_instance().get_player_grid().level;
+        const auto wild_level = WildernessGrids::get_instance().get_player_grid().get_level();
         const auto level = floor.is_underground() ? floor.dun_level : wild_level;
         const auto r_idx = get_mon_num(player_ptr, 0, level, PM_NONE);
         msg_print(nullptr);

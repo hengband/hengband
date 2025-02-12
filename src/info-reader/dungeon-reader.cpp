@@ -229,8 +229,9 @@ errr parse_dungeons_info(std::string_view buf, angband_header *)
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        info_set_value(dungeon->dy, tokens[1]);
-        info_set_value(dungeon->dx, tokens[2]);
+        const auto wild_y = std::stoi(tokens[1]);
+        const auto wild_x = std::stoi(tokens[2]);
+        dungeon->initialize_position({ wild_y, wild_x });
         return PARSE_ERROR_NONE;
     }
 

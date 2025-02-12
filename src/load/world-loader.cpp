@@ -205,7 +205,7 @@ errr analyze_wilderness(void)
 
     for (auto x = 0; x < wild_x_size; x++) {
         for (auto y = 0; y < wild_y_size; y++) {
-            wilderness.get_grid({ y, x }).seed = rd_u32b();
+            wilderness.get_grid({ y, x }).set_seed(rd_u32b());
         }
     }
 
