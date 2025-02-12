@@ -109,60 +109,50 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
 }
 
 /*!
- * @brief 特殊な部屋向けに各種アイテムを配置する(vault_trapのサブセット) / Place a trap with a given displacement of point
- * @param y トラップを配置したいマスの中心Y座標
- * @param x トラップを配置したいマスの中心X座標
- * @param yd Y方向の配置分散マス数
- * @param xd X方向の配置分散マス数
- * @details
- * Only really called by some of the "vault" routines.
+ * @brief 特殊な部屋向けに各種アイテムを配置する
+ * @param pos_center トラップを配置したいマスの中心座標
+ * @param distribution 配置分散
  */
-static void vault_trap_aux(FloorType &floor, POSITION y, POSITION x, POSITION yd, POSITION xd)
+static void vault_trap_aux(FloorType &floor, const Pos2D &pos_center, const Pos2DVec &distribution)
 {
-    auto y1 = y;
-    auto x1 = x;
-    int dummy = 0;
-    for (int count = 0; count <= 5; count++) {
+    Pos2D pos = pos_center;
+    auto dummy = 0;
+    for (auto count = 0; count <= 5; count++) {
         while (dummy < SAFE_MAX_ATTEMPTS) {
-            y1 = rand_spread(y, yd);
-            x1 = rand_spread(x, xd);
+            pos.y = rand_spread(pos_center.y, distribution.y);
+            pos.x = rand_spread(pos_center.x, distribution.x);
             dummy++;
-            if (!in_bounds(floor, y1, x1)) {
+            if (!in_bounds(floor, pos.y, pos.x)) {
                 continue;
             }
             break;
         }
 
-        const Pos2D pos1(y1, x1);
         if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room) {
             msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
         }
 
-        const auto &grid = floor.get_grid(pos1);
+        const auto &grid = floor.get_grid(pos);
         if (!grid.is_floor() || !grid.o_idx_list.empty() || grid.has_monster()) {
             continue;
         }
 
-        place_trap(floor, pos1);
+        place_trap(floor, pos);
         break;
     }
 }
 
 /*!
- * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
+ * @brief 特殊な部屋向けに各種アイテムを配置する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y トラップを配置したいマスの中心Y座標
- * @param x トラップを配置したいマスの中心X座標
- * @param yd Y方向の配置分散マス数
- * @param xd X方向の配置分散マス数
+ * @param pos_center トラップを配置したいマスの中心座標
+ * @param distribution 配置分散
  * @param num 配置したいトラップの数
- * @details
- * Only really called by some of the "vault" routines.
  * @todo rooms-normal からしか呼ばれていない、要調整
  */
-void vault_traps(FloorType &floor, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
+void vault_traps(FloorType &floor, const Pos2D &pos_center, const Pos2DVec &distribution, int num)
 {
     for (int i = 0; i < num; i++) {
-        vault_trap_aux(floor, y, x, yd, xd);
+        vault_trap_aux(floor, pos_center, distribution);
     }
 }
