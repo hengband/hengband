@@ -535,8 +535,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     project_length = tdis + 1;
 
     /* Get a direction (or cancel) */
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         PlayerEnergy(player_ptr).reset_player_turn();
 
         if (snipe_type == SP_AWAY) {
@@ -553,10 +553,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     }
 
     /* Predict the "target" location */
-    auto [ty, tx] = player_ptr->get_position() + Direction(dir).vec() * 99;
+    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
 
     /* Check for "target request" */
-    if ((dir == 5) && target_okay(player_ptr)) {
+    if (dir.is_targetting() && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
     }

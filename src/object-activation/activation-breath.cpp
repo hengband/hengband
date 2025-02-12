@@ -25,8 +25,8 @@
  */
 bool activate_dragon_breath(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -52,8 +52,8 @@ bool activate_dragon_breath(PlayerType *player_ptr, ItemEntity *o_ptr)
 
 bool activate_breath_fire(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -67,8 +67,8 @@ bool activate_breath_fire(PlayerType *player_ptr, ItemEntity *o_ptr)
 
 bool activate_breath_cold(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

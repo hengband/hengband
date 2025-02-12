@@ -711,14 +711,14 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         if (continuation) {
             spell_hex.set_revenge_turn(1, false);
             if (spell_hex.get_revenge_turn() == 0) {
-                DIRECTION dir;
-
                 if (power) {
                     command_dir = Direction::none();
 
+                    auto dir = Direction::none();
                     do {
                         msg_print(_("復讐の時だ！", "Time for revenge!"));
-                    } while (!get_aim_dir(player_ptr, &dir));
+                        dir = get_aim_dir(player_ptr);
+                    } while (!dir);
 
                     fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, power, 1);
 

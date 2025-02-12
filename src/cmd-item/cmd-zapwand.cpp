@@ -51,7 +51,7 @@
  * @param magic 魔道具術上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-bool wand_effect(PlayerType *player_ptr, int sval, int dir, bool powerful, bool magic)
+bool wand_effect(PlayerType *player_ptr, int sval, const Direction &dir, bool powerful, bool magic)
 {
     bool ident = false;
     PLAYER_LEVEL lev = powerful ? player_ptr->lev * 2 : player_ptr->lev;

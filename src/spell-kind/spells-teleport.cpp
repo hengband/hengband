@@ -52,9 +52,9 @@
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
+bool teleport_swap(PlayerType *player_ptr, const Direction &dir)
 {
-    const auto pos = ((dir == 5) && target_okay(player_ptr)) ? Pos2D(target_row, target_col) : player_ptr->get_neighbor(dir);
+    const auto pos = (dir.is_targetting() && target_okay(player_ptr)) ? Pos2D(target_row, target_col) : player_ptr->get_neighbor(dir);
     if (player_ptr->anti_tele) {
         msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
         return false;
@@ -96,7 +96,7 @@ bool teleport_swap(PlayerType *player_ptr, DIRECTION dir)
  * @param distance 移動距離
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool teleport_monster(PlayerType *player_ptr, DIRECTION dir, int distance)
+bool teleport_monster(PlayerType *player_ptr, const Direction &dir, int distance)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL;
     return project_hook(player_ptr, AttributeType::AWAY_ALL, dir, distance, flg);

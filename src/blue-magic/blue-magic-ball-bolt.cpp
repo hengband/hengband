@@ -66,8 +66,8 @@ const std::unordered_map<MonsterAbilityType, blue_magic_bolt_type> BLUE_MAGIC_BO
 
 bool cast_blue_magic_ball(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -86,8 +86,8 @@ bool cast_blue_magic_ball(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 bool cast_blue_magic_bolt(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

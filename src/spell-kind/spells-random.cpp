@@ -56,15 +56,12 @@ void call_chaos(PlayerType *player_ptr)
         line_chaos = true;
     }
 
-    int dir;
     if (one_in_(6)) {
-        for (int dummy = 1; dummy < 10; dummy++) {
-            if (dummy - 5) {
-                if (line_chaos) {
-                    fire_beam(player_ptr, chaos_type, dummy, 150);
-                } else {
-                    fire_ball(player_ptr, chaos_type, dummy, 150, 2);
-                }
+        for (const auto &dir : Direction::directions_8()) {
+            if (line_chaos) {
+                fire_beam(player_ptr, chaos_type, dir, 150);
+            } else {
+                fire_ball(player_ptr, chaos_type, dir, 150, 2);
             }
         }
 
@@ -72,11 +69,12 @@ void call_chaos(PlayerType *player_ptr)
     }
 
     if (one_in_(3)) {
-        fire_ball(player_ptr, chaos_type, 0, 500, 8);
+        fire_ball(player_ptr, chaos_type, Direction::self(), 500, 8);
         return;
     }
 
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return;
     }
     if (line_chaos) {
@@ -325,7 +323,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
         lose_all_info(player_ptr);
         break;
     case 32:
-        fire_ball(player_ptr, AttributeType::CHAOS, 0, spell + 5, 1 + (spell / 10));
+        fire_ball(player_ptr, AttributeType::CHAOS, Direction::self(), spell + 5, 1 + (spell / 10));
         break;
     case 33:
         wall_stone(player_ptr);
@@ -364,7 +362,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
  * while keeping the results quite random.  It also allows some potent\n
  * effects only at high level.
  */
-void cast_wonder(PlayerType *player_ptr, DIRECTION dir)
+void cast_wonder(PlayerType *player_ptr, const Direction &dir)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     int die = randint1(100) + plev / 5;

@@ -16,7 +16,7 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 発動の方向ID
  */
-static void exe_ring_of_power(PlayerType *player_ptr, DIRECTION dir)
+static void exe_ring_of_power(PlayerType *player_ptr, const Direction &dir)
 {
     switch (randint1(10)) {
     case 1:
@@ -55,9 +55,9 @@ static void exe_ring_of_power(PlayerType *player_ptr, DIRECTION dir)
 
 bool activate_ring_of_power(PlayerType *player_ptr, std::string_view name)
 {
-    DIRECTION dir;
     msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name.data());
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

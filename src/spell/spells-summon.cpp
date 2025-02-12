@@ -445,7 +445,7 @@ int activate_hi_summon(PlayerType *player_ptr, POSITION y, POSITION x, bool can_
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向ID
  */
-void cast_invoke_spirits(PlayerType *player_ptr, DIRECTION dir)
+void cast_invoke_spirits(PlayerType *player_ptr, const Direction &dir)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     int die = randint1(100) + plev / 5;

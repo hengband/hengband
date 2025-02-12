@@ -8,9 +8,9 @@
 
 bool demonic_breath(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     AttributeType type = (one_in_(2) ? AttributeType::NETHER : AttributeType::FIRE);
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
     stop_mouth(player_ptr);

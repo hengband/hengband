@@ -39,7 +39,6 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
 
-    DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
@@ -51,7 +50,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -110,7 +110,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -132,7 +133,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -148,7 +150,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -175,7 +178,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         if (cast) {
 
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -191,7 +195,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -221,7 +226,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -238,7 +244,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -254,7 +261,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -280,7 +288,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -296,7 +305,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -312,7 +322,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            for (dir = 0; dir <= 9; dir++) {
+            for (const auto &dir : Direction::directions_8()) {
                 fire_beam(player_ptr, AttributeType::ELEC, dir, dice.roll());
             }
         }
@@ -340,7 +350,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -370,7 +381,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -399,7 +411,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             fire_beam(player_ptr, AttributeType::GRAVITY, dir, dice.roll());
@@ -428,7 +441,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            fire_ball(player_ptr, AttributeType::FIRE, 0, dam, rad);
+            fire_ball(player_ptr, AttributeType::FIRE, Direction::self(), dam, rad);
         }
     } break;
 
@@ -460,7 +473,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             fire_ball(player_ptr, AttributeType::MANA, dir, dam, rad);
@@ -476,7 +490,8 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 

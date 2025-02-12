@@ -36,7 +36,7 @@
  * @param wgt 許容重量
  * @param require_los 射線の通りを要求するならばTRUE
  */
-void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
+void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool require_los)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
@@ -47,7 +47,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
 
     Grid *grid_ptr;
     const auto &system = AngbandSystem::get_instance();
-    if (dir == 5 && target_okay(player_ptr)) {
+    if (dir.is_targetting() && target_okay(player_ptr)) {
         const Pos2D pos(target_col, target_row);
         if (Grid::calc_distance(p_pos, pos) > system.get_max_range()) {
             msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
@@ -80,7 +80,7 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         grid_ptr = &floor.get_grid(pos);
         while (is_first_loop || grid_ptr->o_idx_list.empty()) {
             is_first_loop = false;
-            pos += Direction(dir).vec();
+            pos += dir.vec();
             grid_ptr = &floor.get_grid(pos);
             if ((Grid::calc_distance(p_pos, pos) > system.get_max_range())) {
                 return;

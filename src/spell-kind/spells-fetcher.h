@@ -3,5 +3,6 @@
 #include "system/angband.h"
 
 class PlayerType;
-void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los);
+class Direction;
+void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool require_los);
 bool fetch_monster(PlayerType *player_ptr);

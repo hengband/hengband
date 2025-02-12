@@ -30,7 +30,6 @@
 void cast_shuffle(PlayerType *player_ptr)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
-    DIRECTION dir;
     int die;
     int vir = virtue_number(player_ptr, Virtue::CHANCE);
     int i;
@@ -188,7 +187,7 @@ void cast_shuffle(PlayerType *player_ptr)
     if (die < 96) {
         msg_print(_("《恋人》だ。", "It's the Lovers."));
 
-        if (get_aim_dir(player_ptr, &dir)) {
+        if (const auto dir = get_aim_dir(player_ptr)) {
             charm_monster(player_ptr, dir, std::min<short>(player_ptr->lev, 20));
         }
 

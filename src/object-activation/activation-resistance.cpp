@@ -33,8 +33,8 @@ bool activate_acid_ball_and_resistance(PlayerType *player_ptr, std::string_view 
 {
     msg_format(_("%sが黒く輝いた...", "The %s grows black."), name.data());
 
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -54,8 +54,8 @@ bool activate_elec_ball_and_resistance(PlayerType *player_ptr, std::string_view 
 {
     msg_format(_("%sが青く輝いた...", "The %s grows blue."), name.data());
 
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -75,8 +75,8 @@ bool activate_fire_ball_and_resistance(PlayerType *player_ptr, std::string_view 
 {
     msg_format(_("%sが赤く輝いた...", "The %s grows red."), name.data());
 
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -96,8 +96,8 @@ bool activate_cold_ball_and_resistance(PlayerType *player_ptr, std::string_view 
 {
     msg_format(_("%sが白く輝いた...", "The %s grows white."), name.data());
 
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -117,8 +117,8 @@ bool activate_pois_ball_and_resistance(PlayerType *player_ptr, std::string_view 
 {
     msg_format(_("%sが緑に輝いた...", "The %s grows green."), name.data());
 
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
