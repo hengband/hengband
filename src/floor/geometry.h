@@ -53,6 +53,14 @@ public:
     }
 
     /*!
+     * @brief 自身のマスを示す方向クラスのインスタンスを生成する
+     */
+    static constexpr Direction self()
+    {
+        return Direction(5);
+    }
+
+    /*!
      * @brief 引数に指定した、円周順に方向を示す値から方向クラスのインスタンスを生成する
      *
      * 引数 cdir は南を0とし反時計回りの順。
