@@ -193,7 +193,6 @@ void do_cmd_travel(PlayerType *player_ptr)
     forget_travel_flow(*player_ptr->current_floor_ptr);
     travel_flow(player_ptr, *pos);
     travel.set_goal(*pos);
-    travel.run = 255;
     travel.dir = 0;
     auto dx = std::abs(player_ptr->x - pos->x);
     auto dy = std::abs(player_ptr->y - pos->y);

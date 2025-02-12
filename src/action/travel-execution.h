@@ -17,13 +17,17 @@ public:
     const std::optional<Pos2D> &get_goal() const;
     void set_goal(const Pos2D &pos);
     void reset_goal();
+    bool is_started() const;
+    bool is_ongoing() const;
+    void decrement_step();
+    void stop();
 
-    int run{}; /* Remaining grid number */
     int cost[MAX_HGT][MAX_WID]{};
     DIRECTION dir{}; /* Running direction */
 
 private:
     std::optional<Pos2D> pos_goal; /* Target position */
+    int run{}; /* Remaining grid number */
 };
 
 extern Travel travel;

@@ -31,11 +31,35 @@ const std::optional<Pos2D> &Travel::get_goal() const
 void Travel::set_goal(const Pos2D &pos)
 {
     this->pos_goal = pos;
+    this->run = 255;
 }
 
 void Travel::reset_goal()
 {
     this->pos_goal.reset();
+    this->run = 0;
+}
+
+bool Travel::is_started() const
+{
+    return this->run < 255;
+}
+
+bool Travel::is_ongoing() const
+{
+    return this->run > 0;
+}
+
+void Travel::decrement_step()
+{
+    if (this->run > 0) {
+        this->run--;
+    }
+}
+
+void Travel::stop()
+{
+    this->run = 0;
 }
 
 /*!
@@ -117,7 +141,7 @@ void travel_step(PlayerType *player_ptr)
 {
     travel.dir = travel_test(player_ptr, travel.dir);
     if (!travel.dir) {
-        if (travel.run == 255) {
+        if (!travel.is_started()) {
             msg_print(_("道筋が見つかりません！", "No route is found!"));
             travel.reset_goal();
         }
@@ -129,10 +153,9 @@ void travel_step(PlayerType *player_ptr)
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     exe_movement(player_ptr, Direction(travel.dir), always_pickup, false);
     if (player_ptr->get_position() == travel.get_goal()) {
-        travel.run = 0;
         travel.reset_goal();
-    } else if (travel.run > 0) {
-        travel.run--;
+    } else {
+        travel.decrement_step();
     }
 }
 
