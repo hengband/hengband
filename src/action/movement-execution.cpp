@@ -336,7 +336,7 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
     }
 
     if (world.is_wild_mode()) {
-        const auto vec = Direction(dir).vec();
+        const auto vec = dir.vec();
         if (vec.y > 0) {
             player_ptr->oldpy = 1;
         }
