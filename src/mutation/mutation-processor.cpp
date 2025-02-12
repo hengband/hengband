@@ -48,77 +48,13 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
+#include "target/target-getter.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-/// @todo get_aim_dir() の repeat_push() / repeat_pull() が無いバージョンらしい。
-/// 後で統合を予定する。
-static Direction get_hack_dir(PlayerType *player_ptr)
-{
-    auto dir = 0;
-    while (dir == 0) {
-        const auto p = target_okay(player_ptr)
-                           ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
-                           : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
-        const auto command_opt = input_command(p, true);
-        if (!command_opt) {
-            break;
-        }
-
-        auto command = *command_opt;
-        if (use_menu && (command == '\r')) {
-            command = 't';
-        }
-
-        switch (command) {
-        case 'T':
-        case 't':
-        case '.':
-        case '5':
-        case '0':
-            dir = 5;
-            break;
-        case '*':
-        case ' ':
-        case '\r':
-            if (target_set(player_ptr, TARGET_KILL)) {
-                dir = 5;
-            }
-
-            break;
-        default:
-            dir = get_keymap_dir(command);
-            break;
-        }
-
-        if ((dir == 5) && !target_okay(player_ptr)) {
-            dir = 0;
-        }
-
-        if (dir == 0) {
-            bell();
-        }
-    }
-
-    if (dir == 0) {
-        return Direction::none();
-    }
-
-    command_dir = Direction(dir);
-    if (player_ptr->effects()->confusion().is_confused()) {
-        dir = rand_choice(Direction::directions_8()).dir();
-    }
-
-    if (command_dir != Direction(dir)) {
-        msg_print(_("あなたは混乱している。", "You are confused."));
-    }
-
-    return (dir == 5) ? Direction::targetting() : Direction(dir);
-}
 
 /*!
  * @brief 10ゲームターンが進行するごとに突然変異の発動判定を行う処理
@@ -210,8 +146,8 @@ void process_world_aux_mutation(PlayerType *player_ptr)
 
         flush();
         msg_print(nullptr);
-        const auto dir = get_hack_dir(player_ptr);
-        fire_ball(player_ptr, AttributeType::MANA, dir, player_ptr->lev * 2, 3);
+        const auto dir = get_aim_dir(player_ptr, false);
+        fire_ball(player_ptr, AttributeType::MANA, dir ? dir : Direction::self(), player_ptr->lev * 2, 3);
     }
 
     if (player_ptr->muta.has(PlayerMutationType::ATT_DEMON) && !player_ptr->anti_magic && (randint1(6666) == 666)) {
