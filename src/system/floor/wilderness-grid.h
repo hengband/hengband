@@ -19,6 +19,8 @@ class Direction;
 class WildernessGrid {
 public:
     WildernessGrid() = default;
+    void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
+    void initialize_seed();
 
     MonraceHook get_monrace_hook() const;
     WildernessTerrain get_terrain() const;
@@ -34,11 +36,9 @@ public:
     uint32_t get_seed() const;
     void set_seed(uint32_t saved_seed);
     DungeonId get_entrance() const;
+    void set_entrance(DungeonId entrance_parsing);
     const std::string &get_name() const;
     void set_name(std::string_view name_parsing);
-    void set_entrance(DungeonId entrance_parsing);
-    void initialize(const WildernessGrid &letter); //!< @details コピーではなく一部引き写し.
-    void initialize_seed();
 
 private:
     WildernessTerrain terrain{};
@@ -57,13 +57,14 @@ public:
     WildernessGrids(WildernessGrids &&) = delete;
     WildernessGrids &operator=(const WildernessGrids &) = delete;
     WildernessGrids &operator=(WildernessGrids &&) = delete;
+    static WildernessGrids &get_instance();
+
     void initialize_height(int height);
     void initialize_width(int width);
     void initialize_grids(); //!< @details 全ての定義ファイルを読み込んでから初期化する.
     void initialize_seeds();
     void initialize_position();
 
-    static WildernessGrids &get_instance();
     const WildernessGrid &get_grid(const Pos2D &pos) const;
     WildernessGrid &get_grid(const Pos2D &pos);
     const Pos2D &get_player_position() const;
@@ -86,6 +87,7 @@ public:
 private:
     WildernessGrids() = default;
     static WildernessGrids instance;
+    std::vector<std::vector<WildernessGrid>> grids;
 
     Rect2D area = { 0, 0, 0, 0 };
     Pos2D current_pos = { 0, 0 };
@@ -93,8 +95,6 @@ private:
     bool reinitialization_flag = false;
     bool ambushes_flag = false;
 };
-
-extern std::vector<std::vector<WildernessGrid>> wilderness_grids;
 
 class WildernessLetters {
 public:
@@ -104,8 +104,8 @@ public:
     WildernessLetters &operator=(const WildernessLetters &) = delete;
     WildernessLetters &operator=(WildernessLetters &&) = delete;
     static WildernessLetters &get_instance();
-    void initialize();
 
+    void initialize();
     const WildernessGrid &get_grid(int index) const;
     WildernessGrid &get_grid(int index);
 

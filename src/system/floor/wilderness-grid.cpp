@@ -13,46 +13,17 @@
 #include "system/terrain/terrain-list.h"
 #include "term/z-rand.h"
 
-std::vector<std::vector<WildernessGrid>> wilderness_grids;
-
-int WildernessGrid::get_level() const
+void WildernessGrid::initialize(const WildernessGrid &letter)
 {
-    return this->level;
+    this->terrain = letter.terrain;
+    this->level = letter.level;
+    this->town = letter.town;
+    this->road = letter.road;
 }
 
-void WildernessGrid::set_level(int level_parsing)
+void WildernessGrid::initialize_seed()
 {
-    this->level = level_parsing;
-}
-
-uint32_t WildernessGrid::get_seed() const
-{
-    return this->seed;
-}
-
-void WildernessGrid::set_seed(uint32_t saved_seed)
-{
-    this->seed = saved_seed;
-}
-
-DungeonId WildernessGrid::get_entrance() const
-{
-    return this->entrance;
-}
-
-const std::string &WildernessGrid::get_name() const
-{
-    return this->name;
-}
-
-void WildernessGrid::set_name(std::string_view name_parsing)
-{
-    this->name = name_parsing;
-}
-
-void WildernessGrid::set_entrance(DungeonId entrance_parsing)
-{
-    this->entrance = entrance_parsing;
+    this->seed = randint0(0x10000000);
 }
 
 MonraceHook WildernessGrid::get_monrace_hook() const
@@ -122,20 +93,52 @@ void WildernessGrid::set_road(int road_parsing)
     this->road = road_parsing;
 }
 
-void WildernessGrid::initialize(const WildernessGrid &letter)
+int WildernessGrid::get_level() const
 {
-    this->terrain = letter.terrain;
-    this->level = letter.level;
-    this->town = letter.town;
-    this->road = letter.road;
+    return this->level;
 }
 
-void WildernessGrid::initialize_seed()
+void WildernessGrid::set_level(int level_parsing)
 {
-    this->seed = randint0(0x10000000);
+    this->level = level_parsing;
+}
+
+uint32_t WildernessGrid::get_seed() const
+{
+    return this->seed;
+}
+
+void WildernessGrid::set_seed(uint32_t saved_seed)
+{
+    this->seed = saved_seed;
+}
+
+DungeonId WildernessGrid::get_entrance() const
+{
+    return this->entrance;
+}
+
+void WildernessGrid::set_entrance(DungeonId entrance_parsing)
+{
+    this->entrance = entrance_parsing;
+}
+
+const std::string &WildernessGrid::get_name() const
+{
+    return this->name;
+}
+
+void WildernessGrid::set_name(std::string_view name_parsing)
+{
+    this->name = name_parsing;
 }
 
 WildernessGrids WildernessGrids::instance{};
+
+WildernessGrids &WildernessGrids::get_instance()
+{
+    return instance;
+}
 
 void WildernessGrids::initialize_height(int height)
 {
@@ -149,13 +152,13 @@ void WildernessGrids::initialize_width(int width)
 
 void WildernessGrids::initialize_grids()
 {
-    wilderness_grids.assign(this->area.bottom_right.y + 1, std::vector<WildernessGrid>(this->area.bottom_right.x + 1));
+    this->grids.assign(this->area.bottom_right.y + 1, std::vector<WildernessGrid>(this->area.bottom_right.x + 1));
 }
 
 void WildernessGrids::initialize_seeds()
 {
     for (const auto &pos : this->area) {
-        wilderness_grids[pos.y][pos.x].initialize_seed();
+        this->grids[pos.y][pos.x].initialize_seed();
     }
 }
 
@@ -164,19 +167,14 @@ void WildernessGrids::initialize_position()
     this->current_pos = this->starting_pos;
 }
 
-WildernessGrids &WildernessGrids::get_instance()
-{
-    return instance;
-}
-
 const WildernessGrid &WildernessGrids::get_grid(const Pos2D &pos) const
 {
-    return wilderness_grids.at(pos.y).at(pos.x);
+    return this->grids.at(pos.y).at(pos.x);
 }
 
 WildernessGrid &WildernessGrids::get_grid(const Pos2D &pos)
 {
-    return wilderness_grids.at(pos.y).at(pos.x);
+    return this->grids.at(pos.y).at(pos.x);
 }
 
 const Pos2D &WildernessGrids::get_player_position() const
@@ -184,44 +182,9 @@ const Pos2D &WildernessGrids::get_player_position() const
     return this->current_pos;
 }
 
-void WildernessGrids::set_starting_player_position(const Pos2D &pos)
-{
-    this->starting_pos = pos;
-}
-
-void WildernessGrids::set_player_position(const Pos2D &pos)
-{
-    this->current_pos = pos;
-}
-
 const WildernessGrid &WildernessGrids::get_player_grid() const
 {
-    return wilderness_grids.at(this->current_pos.y).at(this->current_pos.x);
-}
-
-void WildernessGrids::move_player_to(const Direction &dir)
-{
-    this->current_pos += dir.vec();
-}
-
-bool WildernessGrids::should_reinitialize() const
-{
-    return this->reinitialization_flag;
-}
-
-void WildernessGrids::set_reinitialization(bool state)
-{
-    this->reinitialization_flag = state;
-}
-
-bool WildernessGrids::should_ambush() const
-{
-    return this->ambushes_flag;
-}
-
-void WildernessGrids::set_ambushes(bool state)
-{
-    this->ambushes_flag = state;
+    return this->grids.at(this->current_pos.y).at(this->current_pos.x);
 }
 
 bool WildernessGrids::is_height_initialized() const
@@ -256,6 +219,41 @@ const Rect2D &WildernessGrids::get_area() const
 MonraceHook WildernessGrids::get_monrace_hook() const
 {
     return this->get_player_grid().get_monrace_hook();
+}
+
+void WildernessGrids::set_starting_player_position(const Pos2D &pos)
+{
+    this->starting_pos = pos;
+}
+
+void WildernessGrids::set_player_position(const Pos2D &pos)
+{
+    this->current_pos = pos;
+}
+
+void WildernessGrids::move_player_to(const Direction &dir)
+{
+    this->current_pos += dir.vec();
+}
+
+bool WildernessGrids::should_reinitialize() const
+{
+    return this->reinitialization_flag;
+}
+
+void WildernessGrids::set_reinitialization(bool state)
+{
+    this->reinitialization_flag = state;
+}
+
+bool WildernessGrids::should_ambush() const
+{
+    return this->ambushes_flag;
+}
+
+void WildernessGrids::set_ambushes(bool state)
+{
+    this->ambushes_flag = state;
 }
 
 WildernessLetters WildernessLetters::instance{};

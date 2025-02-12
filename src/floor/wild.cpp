@@ -387,52 +387,42 @@ void wilderness_gen(PlayerType *player_ptr)
     parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
 
     const auto &pos_wilderness = wilderness.get_player_position();
-    const auto wild_y = pos_wilderness.y;
-    const auto wild_x = pos_wilderness.x;
     get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook());
 
-    /* North border */
-    generate_area(player_ptr, { wild_y - 1, wild_x }, true, false);
+    generate_area(player_ptr, pos_wilderness + Direction(8).vec(), true, false);
     for (auto i = 1; i < MAX_WID - 1; i++) {
         border.top[i] = floor.get_grid({ MAX_HGT - 2, i }).feat;
     }
 
-    /* South border */
-    generate_area(player_ptr, { wild_y + 1, wild_x }, true, false);
+    generate_area(player_ptr, pos_wilderness + Direction(2).vec(), true, false);
     for (auto i = 1; i < MAX_WID - 1; i++) {
         border.bottom[i] = floor.get_grid({ 1, i }).feat;
     }
 
-    /* West border */
-    generate_area(player_ptr, { wild_y, wild_x - 1 }, true, false);
+    generate_area(player_ptr, pos_wilderness + Direction(4).vec(), true, false);
     for (auto i = 1; i < MAX_HGT - 1; i++) {
         border.left[i] = floor.get_grid({ i, MAX_WID - 2 }).feat;
     }
 
-    /* East border */
-    generate_area(player_ptr, { wild_y, wild_x + 1 }, true, false);
+    generate_area(player_ptr, pos_wilderness + Direction(6).vec(), true, false);
     for (auto i = 1; i < MAX_HGT - 1; i++) {
         border.right[i] = floor.get_grid({ i, 1 }).feat;
     }
 
-    /* North west corner */
-    generate_area(player_ptr, { wild_y - 1, wild_x - 1 }, false, true);
+    generate_area(player_ptr, pos_wilderness + Direction(7).vec(), false, true);
     border.top_left = floor.get_grid({ MAX_HGT - 2, MAX_WID - 2 }).feat;
 
-    /* North east corner */
-    generate_area(player_ptr, { wild_y - 1, wild_x + 1 }, false, true);
+    generate_area(player_ptr, pos_wilderness + Direction(9).vec(), false, true);
     border.top_right = floor.get_grid({ MAX_HGT - 2, 1 }).feat;
 
-    /* South west corner */
-    generate_area(player_ptr, { wild_y + 1, wild_x - 1 }, false, true);
+    generate_area(player_ptr, pos_wilderness + Direction(1).vec(), false, true);
     border.bottom_left = floor.get_grid({ 1, MAX_WID - 2 }).feat;
 
-    /* South east corner */
-    generate_area(player_ptr, { wild_y + 1, wild_x + 1 }, false, true);
+    generate_area(player_ptr, pos_wilderness + Direction(3).vec(), false, true);
     border.bottom_right = floor.get_grid({ 1, 1 }).feat;
 
     /* Create terrain of the current area */
-    generate_area(player_ptr, { wild_y, wild_x }, false, false);
+    generate_area(player_ptr, pos_wilderness, false, false);
 
     /* Special boundary walls -- North */
     for (auto i = 0; i < MAX_WID; i++) {
