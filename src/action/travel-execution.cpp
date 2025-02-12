@@ -28,10 +28,21 @@ const std::optional<Pos2D> &Travel::get_goal() const
     return this->pos_goal;
 }
 
-void Travel::set_goal(const Pos2D &pos)
+void Travel::set_goal(const Pos2D &p_pos, const Pos2D &pos)
 {
     this->pos_goal = pos;
     this->run = 255;
+
+    this->dir = 0;
+    auto dx = std::abs(p_pos.x - pos.x);
+    auto dy = std::abs(p_pos.y - pos.y);
+    auto sx = ((pos.x == p_pos.x) || (dx < dy)) ? 0 : ((pos.x > p_pos.x) ? 1 : -1);
+    auto sy = ((pos.y == p_pos.y) || (dy < dx)) ? 0 : ((pos.y > p_pos.y) ? 1 : -1);
+    for (const auto &d : Direction::directions()) {
+        if (Pos2DVec(sy, sx) == d.vec()) {
+            this->dir = d.dir();
+        }
+    }
 }
 
 void Travel::reset_goal()

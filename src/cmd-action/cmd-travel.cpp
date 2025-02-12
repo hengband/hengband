@@ -192,15 +192,5 @@ void do_cmd_travel(PlayerType *player_ptr)
 
     forget_travel_flow(*player_ptr->current_floor_ptr);
     travel_flow(player_ptr, *pos);
-    travel.set_goal(*pos);
-    travel.dir = 0;
-    auto dx = std::abs(player_ptr->x - pos->x);
-    auto dy = std::abs(player_ptr->y - pos->y);
-    auto sx = ((pos->x == player_ptr->x) || (dx < dy)) ? 0 : ((pos->x > player_ptr->x) ? 1 : -1);
-    auto sy = ((pos->y == player_ptr->y) || (dy < dx)) ? 0 : ((pos->y > player_ptr->y) ? 1 : -1);
-    for (const auto &d : Direction::directions()) {
-        if (Pos2DVec(sy, sx) == d.vec()) {
-            travel.dir = d.dir();
-        }
-    }
+    travel.set_goal(player_ptr->get_position(), *pos);
 }
