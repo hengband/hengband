@@ -9,18 +9,13 @@
 #include "system/player-type-definition.h"
 
 /*!
- * @brief フロアの指定位置に生成階に応じた財宝オブジェクトの生成を行う。
- * Places a treasure (Gold or Gems) at given location
+ * @brief フロアの指定位置に生成階に応じた財宝オブジェクトの生成を行う
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 配置したいフロアのY座標
- * @param x 配置したいフロアのX座標
+ * @param pos 配置したい座標
  * @return 生成に成功したらTRUEを返す。
- * @details
- * The location must be a legal, clean, floor grid.
  */
-void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
+void place_gold(PlayerType *player_ptr, const Pos2D &pos)
 {
-    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
     if (!in_bounds(floor, pos.y, pos.x)) {
@@ -49,24 +44,17 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief フロアの指定位置に生成階に応じたベースアイテムの生成を行う。
- * Attempt to place an object (normal or good/great) at the given location.
+ * @brief フロアの指定位置に生成階に応じたベースアイテムの生成を行う
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 配置したいフロアのY座標
- * @param x 配置したいフロアのX座標
+ * @param pos 配置したい座標
  * @param mode オプションフラグ
  * @return 生成に成功したらTRUEを返す。
- * @details
- * This routine plays nasty games to generate the "special artifacts".\n
- * This routine uses "object_level" for the "generation level".\n
- * This routine requires a clean floor grid destination.\n
  */
-void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
+void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode)
 {
-    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    if (!in_bounds(floor, y, x) || !cave_drop_bold(floor, y, x) || !grid.o_idx_list.empty()) {
+    if (!in_bounds(floor, pos.y, pos.x) || !cave_drop_bold(floor, pos.y, pos.x) || !grid.o_idx_list.empty()) {
         return;
     }
 

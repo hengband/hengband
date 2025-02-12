@@ -194,14 +194,14 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_TRAP:
-            place_trap(floor, pos.y, pos.x);
+            place_trap(floor, pos);
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_GOLD:
-            place_gold(player_ptr, pos.y, pos.x);
+            place_gold(player_ptr, pos);
             break;
         case ALLOC_TYP_OBJECT:
-            place_object(player_ptr, pos.y, pos.x, 0L);
+            place_object(player_ptr, pos, 0);
             break;
         default:
             break;
