@@ -98,9 +98,9 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
             }
 
             if (evaluate_percent(75)) {
-                place_object(player_ptr, pos.y, pos.x, 0);
+                place_object(player_ptr, pos, 0);
             } else {
-                place_gold(player_ptr, pos.y, pos.x);
+                place_gold(player_ptr, pos);
             }
 
             break;
@@ -119,7 +119,8 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
  */
 static void vault_trap_aux(FloorType &floor, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
-    int y1 = y, x1 = x;
+    auto y1 = y;
+    auto x1 = x;
     int dummy = 0;
     for (int count = 0; count <= 5; count++) {
         while (dummy < SAFE_MAX_ATTEMPTS) {
@@ -132,16 +133,17 @@ static void vault_trap_aux(FloorType &floor, POSITION y, POSITION x, POSITION yd
             break;
         }
 
+        const Pos2D pos1(y1, x1);
         if (dummy >= SAFE_MAX_ATTEMPTS && cheat_room) {
             msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
         }
 
-        const auto &grid = floor.grid_array[y1][x1];
+        const auto &grid = floor.get_grid(pos1);
         if (!grid.is_floor() || !grid.o_idx_list.empty() || grid.has_monster()) {
             continue;
         }
 
-        place_trap(floor, y1, x1);
+        place_trap(floor, pos1);
         break;
     }
 }

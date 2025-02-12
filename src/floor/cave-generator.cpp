@@ -161,10 +161,10 @@ static void make_doors(PlayerType *player_ptr, DungeonData *dd_ptr, dt_type *dt_
 {
     for (size_t i = 0; i < dd_ptr->door_n; i++) {
         dd_ptr->tunnel_pos = dd_ptr->doors[i];
-        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x - 1);
-        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y, dd_ptr->tunnel_pos.x + 1);
-        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y - 1, dd_ptr->tunnel_pos.x);
-        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos.y + 1, dd_ptr->tunnel_pos.x);
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos + Direction(4).vec());
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos + Direction(6).vec());
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos + Direction(8).vec());
+        try_door(player_ptr, dt_ptr, dd_ptr->tunnel_pos + Direction(2).vec());
     }
 }
 
