@@ -387,15 +387,14 @@ void activate_explosive_rune(PlayerType *player_ptr, const Pos2D &pos, const Mon
  * @return 移動が阻害される何か (ドア等)があったらFALSE
  * @todo 少し長いが、これといってブロックとしてまとまった部分もないので暫定でこのままとする
  */
-bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, const Pos2D &pos, int *count)
+bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, std::span<Direction> mm, const Pos2D &pos, int *count)
 {
-    for (int i = 0; mm[i]; i++) {
-        int d = mm[i];
-        if (d == 5) {
-            d = rand_choice(Direction::directions_8()).dir();
+    for (const auto &dir : mm) {
+        if (!dir) {
+            return true;
         }
-
-        const auto pos_neighbor = pos + Direction(d).vec();
+        const auto dir_move = dir.has_direction() ? dir : rand_choice(Direction::directions_8());
+        const auto pos_neighbor = pos + dir_move.vec();
         if (!in_bounds2(*player_ptr->current_floor_ptr, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }

@@ -16,6 +16,7 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include "util/point-2d.h"
+#include <span>
 
 struct turn_flags {
     bool see_m;
@@ -68,5 +69,6 @@ struct coordinate_candidate {
 
 turn_flags *init_turn_flags(bool is_riding, turn_flags *turn_flags_ptr);
 
-void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
-void store_moves_val(int *mm, const Pos2DVec &vec);
+class Direction;
+void store_enemy_approch_direction(std::span<Direction> mm, POSITION y, POSITION x);
+void store_moves_val(std::span<Direction> mm, const Pos2DVec &vec);
