@@ -230,7 +230,7 @@ static void display_monster_list(int col, int row, int per_page, const std::vect
         c_prt(color, (monrace.name.data()), row + i, col);
         const auto &symbol_config = monrace.symbol_config;
         if (per_page == 1) {
-            c_prt(color, format("%02x/%02x", symbol_config.color, symbol_config.character), row + i, (is_wizard || visual_only) ? 56 : 61);
+            c_prt(color, format("%02x/%02x", symbol_config.color, static_cast<uint8_t>(symbol_config.character)), row + i, (is_wizard || visual_only) ? 56 : 61);
         }
 
         if (is_wizard || visual_only) {

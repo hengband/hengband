@@ -192,7 +192,7 @@ Direction get_rep_dir(PlayerType *player_ptr, bool under)
         }
 
         if (under && ((command == '5') || (command == '-') || (command == '.'))) {
-            dir = Direction(5);
+            dir = Direction::self();
             break;
         }
 
@@ -202,7 +202,7 @@ Direction get_rep_dir(PlayerType *player_ptr, bool under)
         }
     }
 
-    if (dir == Direction(5) && !under) {
+    if (dir == Direction::self() && !under) {
         return Direction::none();
     }
 

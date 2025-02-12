@@ -260,7 +260,7 @@ static bool run_test(PlayerType *player_ptr)
             inv = false;
         }
 
-        if (!inv && see_wall(player_ptr, Direction(5), pos)) {
+        if (!inv && see_wall(player_ptr, Direction::self(), pos)) {
             if (find_openarea) {
                 if (i < 0) {
                     find_breakright = true;

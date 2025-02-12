@@ -411,7 +411,7 @@ void do_cmd_run(PlayerType *player_ptr)
 
     if (const auto dir = get_rep_dir(player_ptr)) {
         player_ptr->running = (command_arg ? command_arg : 1000);
-        run_step(player_ptr, Direction(dir));
+        run_step(player_ptr, dir);
     }
 }
 

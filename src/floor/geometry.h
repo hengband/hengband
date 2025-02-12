@@ -53,6 +53,25 @@ public:
     }
 
     /*!
+     * @brief 自身のマスを示す方向クラスのインスタンスを生成する
+     */
+    static constexpr Direction self()
+    {
+        return Direction(5);
+    }
+
+    /*!
+     * @brief 特定のマスをターゲット中であることを示す方向クラスのインスタンスを生成する
+     * @todo 将来的にはできればDirectionクラスにtarget_row/target_colを繰り込みたい
+     */
+    static constexpr Direction targetting()
+    {
+        auto dir = Direction::self();
+        dir.is_targetting_ = true;
+        return dir;
+    }
+
+    /*!
      * @brief 引数に指定した、円周順に方向を示す値から方向クラスのインスタンスを生成する
      *
      * 引数 cdir は南を0とし反時計回りの順。
@@ -136,12 +155,29 @@ public:
     }
 
     /*!
+     * @brief 方向が軸方向(上下左右)のいずれかを示しているかどうかを返す
+     * @return 上下左右ならばtrue、そうでなければfalse
+     */
+    constexpr bool is_axial() const noexcept
+    {
+        return this->dir_ == 2 || this->dir_ == 4 || this->dir_ == 6 || this->dir_ == 8;
+    }
+
+    /*!
      * @brief 方向が斜め方向かどうかを返す
      * @return 斜め方向ならばtrue、そうでなければfalse
      */
     constexpr bool is_diagonal() const noexcept
     {
         return this->dir_ != 5 && (this->dir_ & 0x01);
+    }
+
+    /*!
+     * @brief 特定のマスをターゲット中であるかどうかを返す
+     */
+    constexpr bool is_targetting() const noexcept
+    {
+        return this->dir_ == 5 && this->is_targetting_;
     }
 
     /*!
@@ -182,11 +218,12 @@ private:
     static constexpr std::array<std::optional<int>, 10> DIR_TO_CDIR = { { std::nullopt, 7, 0, 1, 6, std::nullopt, 2, 5, 4, 3 } };
 
     int dir_; //<! 方向ID
+    bool is_targetting_ = false; //<! 特定のマスをターゲット中であるかどうか
 };
 
 constexpr bool operator==(const Direction &dir1, const Direction &dir2) noexcept
 {
-    return dir1.dir() == dir2.dir();
+    return dir1.dir() == dir2.dir() && dir1.is_targetting() == dir2.is_targetting();
 }
 
 /* 以降の定義は直接使用しないようdetail名前空間に入れておく*/
