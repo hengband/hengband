@@ -22,34 +22,33 @@
 #include <string_view>
 #include <unordered_set>
 
-/*
- * Get an "aiming direction" from the user.
- *
- * The "dir" is loaded with 1,2,3,4,6,7,8,9 for "actual direction", and
- * "0" for "current target", and "-1" for "entry aborted".
- *
- * Note that "Force Target", if set, will pre-empt user interaction,
- * if there is a usable target already set.
- *
- * Note that confusion over-rides any (explicit?) user choice.
+/*!
+ * @brief 上下左右および斜め方向、またはターゲットを指定する
+ * @param enable_repeat
+ * true(デフォルト)の場合、前回と同じターゲットの自動指定ができ、繰り返しコマンドの対象となる
+ * falseの場合、かならず方向かターゲットを選択し、繰り返しコマンドの対象とならない。
+ * @return 指定した方向、またはターゲット(座標はグローバル変数target_row/target_colに格納される)
  */
-Direction get_aim_dir(PlayerType *player_ptr)
+Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
 {
-    auto dir = command_dir;
-    bool try_old_target = use_old_target;
+    auto dir = Direction::none();
+    if (enable_repeat) {
+        dir = command_dir;
+        auto try_old_target = use_old_target;
 
-    short code = 0;
-    if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
-        if (code == 5) {
-            try_old_target = true;
-        } else {
-            try_old_target = false;
-            dir = Direction(code);
+        short code = 0;
+        if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
+            if (code == 5) {
+                try_old_target = true;
+            } else {
+                try_old_target = false;
+                dir = Direction(code);
+            }
         }
-    }
 
-    if (try_old_target && target_okay(player_ptr)) {
-        dir = Direction::targetting();
+        if (try_old_target && target_okay(player_ptr)) {
+            dir = Direction::targetting();
+        }
     }
 
     while (!dir) {
@@ -96,7 +95,10 @@ Direction get_aim_dir(PlayerType *player_ptr)
         msg_print(_("あなたは混乱している。", "You are confused."));
     }
 
-    repeat_push(static_cast<short>(command_dir.dir()));
+    if (enable_repeat) {
+        repeat_push(static_cast<short>(command_dir.dir()));
+    }
+
     return dir;
 }
 
