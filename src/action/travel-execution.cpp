@@ -50,13 +50,6 @@ bool Travel::is_ongoing() const
     return this->run > 0;
 }
 
-void Travel::decrement_step()
-{
-    if (this->run > 0) {
-        this->run--;
-    }
-}
-
 void Travel::stop()
 {
     this->run = 0;
@@ -137,13 +130,13 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
  * Travel command
  * @param player_ptr	プレイヤーへの参照ポインタ
  */
-void travel_step(PlayerType *player_ptr)
+void Travel::step(PlayerType *player_ptr)
 {
-    travel.dir = travel_test(player_ptr, travel.dir);
-    if (!travel.dir) {
-        if (!travel.is_started()) {
+    this->dir = travel_test(player_ptr, this->dir);
+    if (!this->dir) {
+        if (!this->is_started()) {
             msg_print(_("道筋が見つかりません！", "No route is found!"));
-            travel.reset_goal();
+            this->reset_goal();
         }
 
         disturb(player_ptr, false, true);
@@ -151,11 +144,11 @@ void travel_step(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    exe_movement(player_ptr, Direction(travel.dir), always_pickup, false);
-    if (player_ptr->get_position() == travel.get_goal()) {
-        travel.reset_goal();
-    } else {
-        travel.decrement_step();
+    exe_movement(player_ptr, Direction(this->dir), always_pickup, false);
+    if (player_ptr->get_position() == this->get_goal()) {
+        this->reset_goal();
+    } else if (this->run > 0) {
+        this->run--;
     }
 }
 

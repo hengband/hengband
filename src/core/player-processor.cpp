@@ -285,7 +285,7 @@ void process_player(PlayerType *player_ptr)
         } else if (player_ptr->running) {
             run_step(player_ptr, Direction::none());
         } else if (travel.is_ongoing()) {
-            travel_step(player_ptr);
+            travel.step(player_ptr);
         } else if (command_rep) {
             command_rep--;
             rfu.set_flag(MainWindowRedrawingFlag::ACTION);

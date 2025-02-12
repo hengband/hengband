@@ -9,6 +9,9 @@
 #include "util/point-2d.h"
 #include <optional>
 
+class FloorType;
+class PlayerType;
+
 /*  A structure type for travel command  */
 class Travel {
 public:
@@ -19,8 +22,8 @@ public:
     void reset_goal();
     bool is_started() const;
     bool is_ongoing() const;
-    void decrement_step();
     void stop();
+    void step(PlayerType *player_ptr);
 
     int cost[MAX_HGT][MAX_WID]{};
     DIRECTION dir{}; /* Running direction */
@@ -32,7 +35,4 @@ private:
 
 extern Travel travel;
 
-class FloorType;
-class PlayerType;
-void travel_step(PlayerType *player_ptr);
 void forget_travel_flow(const FloorType &floor);
