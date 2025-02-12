@@ -233,16 +233,16 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
                 }
             }
 
-            int d = get_keymap_dir(info.ch);
+            const auto dir = get_keymap_dir(info.ch);
             if (isupper(info.ch)) {
                 move_fast = true;
             }
 
-            if (d == 0) {
+            if (!dir) {
                 break;
             }
 
-            auto [dy, dx] = Direction(d).vec();
+            auto [dy, dx] = dir.vec();
             if (move_fast) {
                 int mag = std::min(info.width / 2, info.height / 2);
                 info.pos.y += dy * mag;

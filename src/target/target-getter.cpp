@@ -78,7 +78,7 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
                 dir = Direction::targetting();
             }
         } else {
-            dir = Direction(get_keymap_dir(command));
+            dir = get_keymap_dir(command);
         }
 
         if (!dir) {
@@ -121,7 +121,7 @@ Direction get_direction(PlayerType *player_ptr)
             return Direction::none();
         }
 
-        dir = Direction(get_keymap_dir(*command));
+        dir = get_keymap_dir(*command);
         if (!dir) {
             bell();
         }
@@ -185,7 +185,7 @@ Direction get_rep_dir(PlayerType *player_ptr, bool under)
             break;
         }
 
-        dir = Direction(get_keymap_dir(*command));
+        dir = get_keymap_dir(*command);
         if (!dir) {
             bell();
         }

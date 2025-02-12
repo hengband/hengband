@@ -121,7 +121,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
         }
 
         int eff_width;
-        const auto dir = Direction(get_keymap_dir(ch));
+        const auto dir = get_keymap_dir(ch);
         TERM_COLOR a = (*cur_attr_ptr & 0x7f);
         auto c = *cur_char_ptr;
 
@@ -265,23 +265,23 @@ void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, byte c, 
  */
 void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, IDX *list_cur, int list_cnt)
 {
-    int d;
     int col = *column;
     IDX grp = *grp_cur;
     IDX list = *list_cur;
+    auto dir = Direction::none();
     if (ch == ' ') {
-        d = 3;
+        dir = Direction(3);
     } else if (ch == '-') {
-        d = 9;
+        dir = Direction(9);
     } else {
-        d = get_keymap_dir(ch);
+        dir = get_keymap_dir(ch);
     }
 
-    if (!d) {
+    if (!dir) {
         return;
     }
 
-    const auto vec = Direction(d).vec();
+    const auto vec = dir.vec();
     if ((vec.x > 0) && vec.y) {
         int browser_rows;
         const auto &[wid, hgt] = term_get_size();
