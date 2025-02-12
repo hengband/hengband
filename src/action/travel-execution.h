@@ -6,17 +6,27 @@
 
 #include "floor/floor-base-definitions.h"
 #include "system/angband.h"
+#include "util/point-2d.h"
+#include <optional>
 
 /*  A structure type for travel command  */
-struct travel_type {
-    int run; /* Remaining grid number */
-    int cost[MAX_HGT][MAX_WID];
-    POSITION x; /* Target X */
-    POSITION y; /* Target Y */
-    DIRECTION dir; /* Running direction */
+class Travel {
+public:
+    Travel() = default;
+
+    const std::optional<Pos2D> &get_goal() const;
+    void set_goal(const Pos2D &pos);
+    void reset_goal();
+
+    int run{}; /* Remaining grid number */
+    int cost[MAX_HGT][MAX_WID]{};
+    DIRECTION dir{}; /* Running direction */
+
+private:
+    std::optional<Pos2D> pos_goal; /* Target position */
 };
 
-extern travel_type travel;
+extern Travel travel;
 
 class FloorType;
 class PlayerType;

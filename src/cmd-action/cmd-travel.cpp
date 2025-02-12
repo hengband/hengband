@@ -153,27 +153,34 @@ static void travel_flow(PlayerType *player_ptr, const Pos2D pos)
     flow_head = flow_tail = 0;
 }
 
+static std::optional<Pos2D> decide_travel_goal(PlayerType *player_ptr)
+{
+    const auto &pos_current_goal = travel.get_goal();
+    if (pos_current_goal && pos_current_goal != player_ptr->get_position() && input_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
+        return *pos_current_goal;
+    }
+
+    int x, y;
+    return tgt_pt(player_ptr, &x, &y) ? std::make_optional<Pos2D>(y, x) : std::nullopt;
+}
+
 /*!
  * @brief トラベル処理のメインルーチン
  */
 void do_cmd_travel(PlayerType *player_ptr)
 {
-    int x, y;
-    if ((travel.x != 0) && (travel.y != 0) && (travel.x != player_ptr->x) && (travel.y != player_ptr->y) && input_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
-        y = travel.y;
-        x = travel.x;
-    } else if (!tgt_pt(player_ptr, &x, &y)) {
+    const auto pos = decide_travel_goal(player_ptr);
+    if (!pos) {
         return;
     }
 
-    const Pos2D pos(y, x);
-    if (player_ptr->is_located_at(pos)) {
+    if (player_ptr->is_located_at(*pos)) {
         msg_print(_("すでにそこにいます！", "You are already there!!"));
         return;
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid = floor.get_grid(pos);
+    const auto &grid = floor.get_grid(*pos);
     const auto &terrain = grid.get_terrain();
     const auto is_marked = grid.is_mark();
     const auto is_wall = terrain.flags.has_any_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::CAN_DIG });
@@ -184,15 +191,14 @@ void do_cmd_travel(PlayerType *player_ptr)
     }
 
     forget_travel_flow(*player_ptr->current_floor_ptr);
-    travel_flow(player_ptr, pos);
-    travel.x = x;
-    travel.y = y;
+    travel_flow(player_ptr, *pos);
+    travel.set_goal(*pos);
     travel.run = 255;
     travel.dir = 0;
-    auto dx = std::abs(player_ptr->x - x);
-    auto dy = std::abs(player_ptr->y - y);
-    auto sx = ((x == player_ptr->x) || (dx < dy)) ? 0 : ((x > player_ptr->x) ? 1 : -1);
-    auto sy = ((y == player_ptr->y) || (dy < dx)) ? 0 : ((y > player_ptr->y) ? 1 : -1);
+    auto dx = std::abs(player_ptr->x - pos->x);
+    auto dy = std::abs(player_ptr->y - pos->y);
+    auto sx = ((pos->x == player_ptr->x) || (dx < dy)) ? 0 : ((pos->x > player_ptr->x) ? 1 : -1);
+    auto sy = ((pos->y == player_ptr->y) || (dy < dx)) ? 0 : ((pos->y > player_ptr->y) ? 1 : -1);
     for (const auto &d : Direction::directions()) {
         if (Pos2DVec(sy, sx) == d.vec()) {
             travel.dir = d.dir();

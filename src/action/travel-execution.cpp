@@ -21,7 +21,22 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
-travel_type travel;
+Travel travel{};
+
+const std::optional<Pos2D> &Travel::get_goal() const
+{
+    return this->pos_goal;
+}
+
+void Travel::set_goal(const Pos2D &pos)
+{
+    this->pos_goal = pos;
+}
+
+void Travel::reset_goal()
+{
+    this->pos_goal.reset();
+}
 
 /*!
  * @brief トラベル機能の判定処理 /
@@ -104,7 +119,7 @@ void travel_step(PlayerType *player_ptr)
     if (!travel.dir) {
         if (travel.run == 255) {
             msg_print(_("道筋が見つかりません！", "No route is found!"));
-            travel.y = travel.x = 0;
+            travel.reset_goal();
         }
 
         disturb(player_ptr, false, true);
@@ -113,9 +128,9 @@ void travel_step(PlayerType *player_ptr)
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     exe_movement(player_ptr, Direction(travel.dir), always_pickup, false);
-    if ((player_ptr->y == travel.y) && (player_ptr->x == travel.x)) {
+    if (player_ptr->get_position() == travel.get_goal()) {
         travel.run = 0;
-        travel.y = travel.x = 0;
+        travel.reset_goal();
     } else if (travel.run > 0) {
         travel.run--;
     }
@@ -133,5 +148,5 @@ void forget_travel_flow(const FloorType &floor)
         }
     }
 
-    travel.y = travel.x = 0;
+    travel.reset_goal();
 }
