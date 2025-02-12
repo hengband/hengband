@@ -47,22 +47,14 @@ void call_the_void(PlayerType *player_ptr)
     }
 
     if (do_call) {
-        for (int i = 1; i < 10; i++) {
-            if (i - 5) {
-                fire_ball(player_ptr, AttributeType::ROCKET, i, 175, 2);
-            }
+        for (const auto &dir : Direction::directions_8()) {
+            fire_ball(player_ptr, AttributeType::ROCKET, dir, 175, 2);
         }
-
-        for (int i = 1; i < 10; i++) {
-            if (i - 5) {
-                fire_ball(player_ptr, AttributeType::MANA, i, 175, 3);
-            }
+        for (const auto &dir : Direction::directions_8()) {
+            fire_ball(player_ptr, AttributeType::MANA, dir, 175, 3);
         }
-
-        for (int i = 1; i < 10; i++) {
-            if (i - 5) {
-                fire_ball(player_ptr, AttributeType::NUKE, i, 175, 4);
-            }
+        for (const auto &dir : Direction::directions_8()) {
+            fire_ball(player_ptr, AttributeType::NUKE, dir, 175, 4);
         }
 
         return;

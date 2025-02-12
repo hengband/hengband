@@ -54,8 +54,8 @@ const std::unordered_map<MonsterAbilityType, blue_magic_breath_type> BLUE_MAGIC_
 
 bool cast_blue_magic_breath(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

@@ -121,7 +121,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
         }
 
         int eff_width;
-        int d = get_keymap_dir(ch);
+        const auto dir = Direction(get_keymap_dir(ch));
         TERM_COLOR a = (*cur_attr_ptr & 0x7f);
         auto c = *cur_char_ptr;
 
@@ -131,7 +131,7 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
             eff_width = width;
         }
 
-        auto vec = Direction(d).vec();
+        auto vec = dir.vec();
         if (((a == 0) && (vec.y < 0)) ||
             ((c == 0) && (vec.x < 0)) ||
             ((a == 0x7f) && (vec.y > 0)) ||

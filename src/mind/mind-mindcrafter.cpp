@@ -143,7 +143,6 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
 {
     bool b = false;
     int dam = 0;
-    DIRECTION dir;
     TIME_EFFECT t;
     PLAYER_LEVEL plev = player_ptr->lev;
     switch (spell) {
@@ -178,8 +177,9 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
         }
 
         break;
-    case MindMindcrafterType::NEURAL_BLAST:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    case MindMindcrafterType::NEURAL_BLAST: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -189,6 +189,7 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
             fire_ball(player_ptr, AttributeType::PSI, dir, Dice::roll(3 + ((plev - 1) / 4), (3 + plev / 15)), 0);
         }
         break;
+    }
     case MindMindcrafterType::MINOR_DISPLACEMENT:
         teleport_player(player_ptr, 10, TELEPORT_SPONTANEOUS);
         break;
@@ -197,7 +198,8 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
         break;
     case MindMindcrafterType::DOMINATION:
         if (plev < 30) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return false;
             }
 
@@ -207,13 +209,15 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
         }
 
         break;
-    case MindMindcrafterType::PLUVERISE:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    case MindMindcrafterType::PLUVERISE: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
         fire_ball(player_ptr, AttributeType::TELEKINESIS, dir, Dice::roll(8 + ((plev - 5) / 4), 8), (plev > 20 ? (plev - 20) / 8 + 1 : 0));
         break;
+    }
     case MindMindcrafterType::CHARACTER_ARMOR:
         set_shield(player_ptr, (TIME_EFFECT)plev, false);
         if (plev > 14) {
@@ -261,15 +265,18 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
         (void)set_acceleration(player_ptr, t, false);
         break;
     }
-    case MindMindcrafterType::TELEKINESIS:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    case MindMindcrafterType::TELEKINESIS: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
         fetch_item(player_ptr, dir, plev * 15, false);
         break;
-    case MindMindcrafterType::PSYCHIC_DRAIN:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    }
+    case MindMindcrafterType::PSYCHIC_DRAIN: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -279,13 +286,16 @@ bool cast_mindcrafter_spell(PlayerType *player_ptr, MindMindcrafterType spell)
         }
 
         break;
-    case MindMindcrafterType::PSYCHO_SPEAR:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    }
+    case MindMindcrafterType::PSYCHO_SPEAR: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
         fire_beam(player_ptr, AttributeType::PSY_SPEAR, dir, randint1(plev * 3) + plev * 3);
         break;
+    }
     case MindMindcrafterType::THE_WORLD:
         time_walk(player_ptr);
         break;

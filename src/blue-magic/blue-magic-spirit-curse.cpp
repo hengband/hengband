@@ -30,8 +30,8 @@ const std::unordered_map<MonsterAbilityType, AttributeType> BLUE_MAGIC_SPIRIT_CU
 
 bool cast_blue_magic_spirit_curse(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

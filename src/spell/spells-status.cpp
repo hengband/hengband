@@ -61,7 +61,7 @@
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool heal_monster(PlayerType *player_ptr, DIRECTION dir, int dam)
+bool heal_monster(PlayerType *player_ptr, const Direction &dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     return project_hook(player_ptr, AttributeType::OLD_HEAL, dir, dam, flg);
@@ -74,7 +74,7 @@ bool heal_monster(PlayerType *player_ptr, DIRECTION dir, int dam)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool speed_monster(PlayerType *player_ptr, DIRECTION dir, int power)
+bool speed_monster(PlayerType *player_ptr, const Direction &dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     return project_hook(player_ptr, AttributeType::OLD_SPEED, dir, power, flg);
@@ -87,7 +87,7 @@ bool speed_monster(PlayerType *player_ptr, DIRECTION dir, int power)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool slow_monster(PlayerType *player_ptr, DIRECTION dir, int power)
+bool slow_monster(PlayerType *player_ptr, const Direction &dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     return project_hook(player_ptr, AttributeType::OLD_SLOW, dir, power, flg);
@@ -100,7 +100,7 @@ bool slow_monster(PlayerType *player_ptr, DIRECTION dir, int power)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool sleep_monster(PlayerType *player_ptr, DIRECTION dir, int power)
+bool sleep_monster(PlayerType *player_ptr, const Direction &dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     return project_hook(player_ptr, AttributeType::OLD_SLEEP, dir, power, flg);
@@ -113,7 +113,7 @@ bool sleep_monster(PlayerType *player_ptr, DIRECTION dir, int power)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_monster(PlayerType *player_ptr, DIRECTION dir)
+bool stasis_monster(PlayerType *player_ptr, const Direction &dir)
 {
     return fire_ball_hide(player_ptr, AttributeType::STASIS, dir, player_ptr->lev * 2, 0);
 }
@@ -125,7 +125,7 @@ bool stasis_monster(PlayerType *player_ptr, DIRECTION dir)
  * @return 作用が実際にあった場合TRUEを返す
  * @details 威力はプレイヤーレベル*2に固定
  */
-bool stasis_evil(PlayerType *player_ptr, DIRECTION dir)
+bool stasis_evil(PlayerType *player_ptr, const Direction &dir)
 {
     return fire_ball_hide(player_ptr, AttributeType::STASIS_EVIL, dir, player_ptr->lev * 2, 0);
 }
@@ -137,7 +137,7 @@ bool stasis_evil(PlayerType *player_ptr, DIRECTION dir)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool confuse_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
+bool confuse_monster(PlayerType *player_ptr, const Direction &dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     return project_hook(player_ptr, AttributeType::OLD_CONF, dir, plev, flg);
@@ -150,7 +150,7 @@ bool confuse_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool stun_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
+bool stun_monster(PlayerType *player_ptr, const Direction &dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     return project_hook(player_ptr, AttributeType::STUN, dir, plev, flg);
@@ -163,7 +163,7 @@ bool stun_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
  * @param power 効力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool poly_monster(PlayerType *player_ptr, DIRECTION dir, int power)
+bool poly_monster(PlayerType *player_ptr, const Direction &dir, int power)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     bool tester = (project_hook(player_ptr, AttributeType::OLD_POLY, dir, power, flg));
@@ -179,7 +179,7 @@ bool poly_monster(PlayerType *player_ptr, DIRECTION dir, int power)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool clone_monster(PlayerType *player_ptr, DIRECTION dir)
+bool clone_monster(PlayerType *player_ptr, const Direction &dir)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     return project_hook(player_ptr, AttributeType::OLD_CLONE, dir, 0, flg);
@@ -192,7 +192,7 @@ bool clone_monster(PlayerType *player_ptr, DIRECTION dir)
  * @param plev プレイヤーレベル(=効力)
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fear_monster(PlayerType *player_ptr, DIRECTION dir, PLAYER_LEVEL plev)
+bool fear_monster(PlayerType *player_ptr, const Direction &dir, PLAYER_LEVEL plev)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
     return project_hook(player_ptr, AttributeType::TURN_ALL, dir, plev, flg);

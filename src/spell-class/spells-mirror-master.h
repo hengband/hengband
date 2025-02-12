@@ -4,6 +4,7 @@
 #include <optional>
 #include <string>
 
+class Direction;
 class PlayerType;
 struct ProjectResult;
 class SpellsMirrorMaster {
@@ -15,8 +16,8 @@ public:
     std::optional<std::string> place_mirror();
     bool mirror_concentration();
     void seal_of_mirror(const int dam);
-    void seeker_ray(int dir, int dam);
-    void super_ray(int dir, int dam);
+    void seeker_ray(const Direction &dir, int dam);
+    void super_ray(const Direction &dir, int dam);
 
 private:
     PlayerType *player_ptr;

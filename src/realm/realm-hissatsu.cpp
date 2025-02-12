@@ -64,8 +64,8 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 0:
         if (cast) {
             project_length = 2;
-            int dir;
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -462,8 +462,8 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             int total_damage = 0, basedam, i;
             ItemEntity *o_ptr;
-            int dir;
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));

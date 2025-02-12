@@ -37,7 +37,6 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
 
-    DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
@@ -72,7 +71,8 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
@@ -144,7 +144,8 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);
@@ -256,7 +257,8 @@ std::optional<std::string> do_life_spell(PlayerType *player_ptr, SPELL_IDX spell
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             fire_ball_hide(player_ptr, AttributeType::WOUNDS, dir, dice.roll(), 0);

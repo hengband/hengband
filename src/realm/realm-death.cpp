@@ -41,7 +41,6 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
 
-    DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
@@ -66,7 +65,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -118,7 +118,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -134,7 +135,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -163,7 +165,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -180,7 +183,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -204,7 +208,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -220,7 +225,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -249,7 +255,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -274,7 +281,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             int dam = base + dice.roll();
 
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -342,7 +350,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -358,7 +367,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -398,7 +408,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             int i;
 
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -434,7 +445,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -444,7 +456,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
 
     case 24: {
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -512,7 +525,8 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 

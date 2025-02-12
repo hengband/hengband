@@ -449,7 +449,7 @@ bool unlite_area(PlayerType *player_ptr, int dam, POSITION rad)
  * @param dam 威力
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_line(PlayerType *player_ptr, DIRECTION dir, int dam)
+bool lite_line(PlayerType *player_ptr, const Direction &dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_GRID | PROJECT_KILL;
     return project_hook(player_ptr, AttributeType::LITE_WEAK, dir, dam, flg);

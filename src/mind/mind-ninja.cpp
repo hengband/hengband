@@ -128,14 +128,14 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     }
 
     project_length = 5;
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
     const auto p_pos = player_ptr->get_position();
     auto pos_target = p_pos + Direction(dir).vec() * project_length;
-    if ((dir == 5) && target_okay(player_ptr)) {
+    if (dir.is_targetting() && target_okay(player_ptr)) {
         pos_target = { target_row, target_col };
     }
 
@@ -400,8 +400,8 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
 
         break;
     case MindNinjaType::BIND_MONSTER: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -414,7 +414,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         set_tim_levitation(player_ptr, randint1(20) + 20, false);
         break;
     case MindNinjaType::HIDE_FLAMES:
-        fire_ball(player_ptr, AttributeType::FIRE, 0, 50 + plev, plev / 10 + 2);
+        fire_ball(player_ptr, AttributeType::FIRE, Direction::self(), 50 + plev, plev / 10 + 2);
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         set_oppose_fire(player_ptr, (TIME_EFFECT)plev, false);
         break;
@@ -450,8 +450,8 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         (void)fetch_monster(player_ptr);
         break;
     case MindNinjaType::SMOKE_BALL: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -460,8 +460,8 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
     }
     case MindNinjaType::SWAP_POSITION: {
         project_length = -1;
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             project_length = 0;
             return false;
         }
@@ -478,9 +478,9 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         set_oppose_acid(player_ptr, (TIME_EFFECT)plev, false);
         break;
     case MindNinjaType::HIDE_MIST:
-        fire_ball(player_ptr, AttributeType::POIS, 0, 75 + plev * 2 / 3, plev / 5 + 2);
-        fire_ball(player_ptr, AttributeType::HYPODYNAMIA, 0, 75 + plev * 2 / 3, plev / 5 + 2);
-        fire_ball(player_ptr, AttributeType::CONFUSION, 0, 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, AttributeType::POIS, Direction::self(), 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, AttributeType::HYPODYNAMIA, Direction::self(), 75 + plev * 2 / 3, plev / 5 + 2);
+        fire_ball(player_ptr, AttributeType::CONFUSION, Direction::self(), 75 + plev * 2 / 3, plev / 5 + 2);
         teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
         break;
     case MindNinjaType::PURGATORY_FLAME: {

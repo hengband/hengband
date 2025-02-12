@@ -39,7 +39,6 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
 
-    DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
@@ -102,7 +101,8 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -130,7 +130,8 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -180,7 +181,8 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -208,7 +210,8 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -271,7 +274,8 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -372,7 +376,8 @@ std::optional<std::string> do_sorcery_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 

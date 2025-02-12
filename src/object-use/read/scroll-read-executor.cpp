@@ -366,7 +366,7 @@ bool ScrollReadExecutor::read()
         this->ident = true;
         break;
     case SV_SCROLL_FIRE:
-        fire_ball(this->player_ptr, AttributeType::FIRE, 0, 666, 4);
+        fire_ball(this->player_ptr, AttributeType::FIRE, Direction::self(), 666, 4);
         if (!(is_oppose_fire(this->player_ptr) || has_resist_fire(this->player_ptr) || has_immune_fire(this->player_ptr))) {
             take_hit(this->player_ptr, DAMAGE_NOESCAPE, 50 + randint1(50), _("炎の巻物", "a Scroll of Fire"));
         }
@@ -374,7 +374,7 @@ bool ScrollReadExecutor::read()
         this->ident = true;
         break;
     case SV_SCROLL_ICE:
-        fire_ball(this->player_ptr, AttributeType::ICE, 0, 777, 4);
+        fire_ball(this->player_ptr, AttributeType::ICE, Direction::self(), 777, 4);
         if (!(is_oppose_cold(this->player_ptr) || has_resist_cold(this->player_ptr) || has_immune_cold(this->player_ptr))) {
             take_hit(this->player_ptr, DAMAGE_NOESCAPE, 100 + randint1(100), _("氷の巻物", "a Scroll of Ice"));
         }
@@ -382,7 +382,7 @@ bool ScrollReadExecutor::read()
         this->ident = true;
         break;
     case SV_SCROLL_CHAOS:
-        fire_ball(this->player_ptr, AttributeType::CHAOS, 0, 1000, 4);
+        fire_ball(this->player_ptr, AttributeType::CHAOS, Direction::self(), 1000, 4);
         if (!has_resist_chaos(this->player_ptr)) {
             take_hit(this->player_ptr, DAMAGE_NOESCAPE, 111 + randint1(111), _("ログルスの巻物", "a Scroll of Logrus"));
         }

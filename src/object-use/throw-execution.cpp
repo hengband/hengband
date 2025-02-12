@@ -133,15 +133,15 @@ bool ObjectThrowEntity::calc_throw_grid()
     }
 
     project_length = this->tdis + 1;
-    DIRECTION dir;
-    if (!get_aim_dir(this->player_ptr, &dir)) {
+    const auto dir = get_aim_dir(this->player_ptr);
+    if (!dir) {
         return false;
     }
 
-    const auto vec = Direction(dir).vec();
+    const auto vec = dir.vec();
     this->tx = this->player_ptr->x + 99 * vec.x;
     this->ty = this->player_ptr->y + 99 * vec.y;
-    if ((dir == 5) && target_okay(this->player_ptr)) {
+    if (dir.is_targetting() && target_okay(this->player_ptr)) {
         this->tx = target_col;
         this->ty = target_row;
     }

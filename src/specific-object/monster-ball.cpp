@@ -46,8 +46,8 @@ static bool capture_monster(PlayerType *player_ptr, ItemEntity &item)
 {
     const auto old_target_pet = target_pet;
     target_pet = true;
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         target_pet = old_target_pet;
         return false;
     }

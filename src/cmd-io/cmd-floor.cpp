@@ -71,24 +71,24 @@ void do_cmd_locate(PlayerType *player_ptr)
     while (true) {
         const auto &dirstring = dirstrings[(y2 < y1) ? 0 : ((y2 > y1) ? 2 : 1)][(x2 < x1) ? 0 : ((x2 > x1) ? 2 : 1)];
         const auto prompt = format(fmt, y2 / (hgt / 2), y2 % (hgt / 2), x2 / (wid / 2), x2 % (wid / 2), dirstring.data());
-        auto dir = 0;
-        while (dir == 0) {
+        auto dir = Direction::none();
+        while (!dir) {
             const auto command = input_command(prompt, true);
             if (!command) {
                 break;
             }
 
-            dir = get_keymap_dir(*command);
-            if (dir == 0) {
+            dir = Direction(get_keymap_dir(*command));
+            if (!dir) {
                 bell();
             }
         }
 
-        if (dir == 0) {
+        if (!dir) {
             break;
         }
 
-        const auto vec = Direction(dir).vec();
+        const auto vec = dir.vec();
         if (change_panel(player_ptr, vec.y, vec.x)) {
             y2 = panel_row_min;
             x2 = panel_col_min;

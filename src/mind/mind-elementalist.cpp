@@ -462,8 +462,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
     const auto plev = player_ptr->lev;
     switch (spell) {
     case ElementSpells::BOLT_1ST: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -483,8 +483,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         (void)BadStatusSetter(player_ptr).mod_cut(-10);
         return true;
     case ElementSpells::BOLT_2ND: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -503,8 +503,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     case ElementSpells::BALL_3RD: {
         project_length = 4;
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -515,8 +515,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BALL_1ST: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -526,8 +526,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BREATH_2ND: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -542,8 +542,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::ANNIHILATE: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -551,8 +551,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BOLT_3RD: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -568,8 +568,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BALL_2ND: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -608,8 +608,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::STORM_2ND: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -624,8 +624,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BREATH_1ST: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -635,8 +635,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::STORM_3ND: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -1493,7 +1493,6 @@ bool switch_element_execution(PlayerType *player_ptr)
 {
     auto realm = i2enum<ElementRealmType>(player_ptr->element);
     PLAYER_LEVEL plev = player_ptr->lev;
-    DIRECTION dir;
 
     switch (realm) {
     case ElementRealmType::FIRE:
@@ -1506,13 +1505,15 @@ bool switch_element_execution(PlayerType *player_ptr)
     case ElementRealmType::SKY:
         (void)recharge(player_ptr, 120);
         return true;
-    case ElementRealmType::SEA:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    case ElementRealmType::SEA: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
         (void)wall_to_mud(player_ptr, dir, plev * 3 / 2);
         return true;
+    }
     case ElementRealmType::DARKNESS:
         return door_to_darkness(player_ptr, 15 + plev / 2);
     case ElementRealmType::CHAOS:

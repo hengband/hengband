@@ -45,7 +45,6 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
 
-    DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
@@ -55,7 +54,8 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             return info_damage(dice);
         }
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::ELEC, dir, dice.roll());
@@ -84,7 +84,8 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             return info_power(power);
         }
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             fear_monster(player_ptr, dir, power);
@@ -117,7 +118,8 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             return info_multi_damage_dice(dice);
         }
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             fire_blast(player_ptr, AttributeType::LITE, dir, dice, 10, 3);
@@ -140,7 +142,8 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             return info_power(power);
         }
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             fire_ball(player_ptr, AttributeType::AWAY_EVIL, dir, power, 0);
@@ -163,7 +166,8 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -224,7 +228,8 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             fire_bolt(player_ptr, AttributeType::ELEC, dir, dam);
@@ -252,7 +257,8 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
     }
     case 16: {
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -268,7 +274,8 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             stasis_evil(player_ptr, dir);
@@ -328,7 +335,8 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 

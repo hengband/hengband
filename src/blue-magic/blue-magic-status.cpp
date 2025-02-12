@@ -12,8 +12,8 @@
 
 bool cast_blue_scare(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -24,8 +24,8 @@ bool cast_blue_scare(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 bool cast_blue_blind(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -35,8 +35,8 @@ bool cast_blue_blind(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 bool cast_blue_confusion(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -47,8 +47,8 @@ bool cast_blue_confusion(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 bool cast_blue_slow(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -58,8 +58,8 @@ bool cast_blue_slow(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 bool cast_blue_sleep(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

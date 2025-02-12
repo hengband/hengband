@@ -22,8 +22,8 @@
 
 bool android_inside_weapon(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

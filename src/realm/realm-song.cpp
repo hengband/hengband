@@ -66,7 +66,6 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
     bool cont = mode == SpellProcessType::CONTNUATION;
     bool stop = mode == SpellProcessType::STOP;
 
-    DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
@@ -127,7 +126,8 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
             }
 
             if (cast) {
-                if (!get_aim_dir(player_ptr, &dir)) {
+                const auto dir = get_aim_dir(player_ptr);
+                if (!dir) {
                     return std::nullopt;
                 }
 
@@ -636,7 +636,8 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -814,7 +815,8 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 

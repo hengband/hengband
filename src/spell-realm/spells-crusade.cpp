@@ -37,14 +37,14 @@
  */
 bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
     const auto p_pos = player_ptr->get_position();
-    auto pos_target = p_pos + Direction(dir).vec() * 99;
-    if ((dir == 5) && target_okay(player_ptr)) {
+    auto pos_target = p_pos + dir.vec() * 99;
+    if (dir.is_targetting() && target_okay(player_ptr)) {
         pos_target = { target_col, target_row };
     }
 
@@ -62,7 +62,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
         if (!floor.has_terrain_characteristics(pos_to, TerrainCharacteristics::PROJECT)) {
             break;
         }
-        if ((dir != 5) && floor.get_grid(pos_to).has_monster()) {
+        if (!dir.is_targetting() && floor.get_grid(pos_to).has_monster()) {
             break;
         }
 

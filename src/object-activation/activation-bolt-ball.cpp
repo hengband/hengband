@@ -15,9 +15,9 @@
 
 bool activate_missile_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは眩しいくらいに明るく輝いている...", "It glows extremely brightly..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -27,9 +27,9 @@ bool activate_missile_1(PlayerType *player_ptr)
 
 bool activate_missile_2(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("魔法のトゲが現れた...", "It grows magical spikes..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -39,8 +39,8 @@ bool activate_missile_2(PlayerType *player_ptr)
 
 bool activate_missile_3(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -51,9 +51,9 @@ bool activate_missile_3(PlayerType *player_ptr)
 
 bool activate_bolt_acid_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは酸に覆われた...", "It is covered in acid..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -63,9 +63,9 @@ bool activate_bolt_acid_1(PlayerType *player_ptr)
 
 bool activate_bolt_elec_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは火花に覆われた...", "It is covered in sparks..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -75,9 +75,9 @@ bool activate_bolt_elec_1(PlayerType *player_ptr)
 
 bool activate_bolt_fire_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは炎に覆われた...", "It is covered in fire..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -87,9 +87,9 @@ bool activate_bolt_fire_1(PlayerType *player_ptr)
 
 bool activate_bolt_cold_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -99,9 +99,9 @@ bool activate_bolt_cold_1(PlayerType *player_ptr)
 
 bool activate_bolt_hypodynamia_1(PlayerType *player_ptr, std::string_view name)
 {
-    DIRECTION dir;
     msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name.data());
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -111,9 +111,9 @@ bool activate_bolt_hypodynamia_1(PlayerType *player_ptr, std::string_view name)
 
 bool activate_bolt_hypodynamia_2(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("黒く輝いている...", "It glows black..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -123,8 +123,8 @@ bool activate_bolt_hypodynamia_2(PlayerType *player_ptr)
 
 bool activate_bolt_drain_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -139,8 +139,8 @@ bool activate_bolt_drain_1(PlayerType *player_ptr)
 
 bool activate_bolt_drain_2(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -155,9 +155,9 @@ bool activate_bolt_drain_2(PlayerType *player_ptr)
 
 bool activate_bolt_mana(PlayerType *player_ptr, std::string_view name)
 {
-    DIRECTION dir;
     msg_format(_("%sに魔法のトゲが現れた...", "The %s grows magical spikes..."), name.data());
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -167,9 +167,9 @@ bool activate_bolt_mana(PlayerType *player_ptr, std::string_view name)
 
 bool activate_ball_pois_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは濃緑色に脈動している...", "It throbs deep green..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -179,9 +179,9 @@ bool activate_ball_pois_1(PlayerType *player_ptr)
 
 bool activate_ball_cold_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは霜に覆われた...", "It is covered in frost..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -191,9 +191,9 @@ bool activate_ball_cold_1(PlayerType *player_ptr)
 
 bool activate_ball_cold_2(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは青く激しく輝いた...", "It glows an intense blue..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -203,9 +203,9 @@ bool activate_ball_cold_2(PlayerType *player_ptr)
 
 bool activate_ball_cold_3(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("明るく白色に輝いている...", "It glows bright white..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -215,9 +215,9 @@ bool activate_ball_cold_3(PlayerType *player_ptr)
 
 bool activate_ball_fire_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -227,9 +227,9 @@ bool activate_ball_fire_1(PlayerType *player_ptr)
 
 bool activate_ball_fire_2(PlayerType *player_ptr, std::string_view name)
 {
-    DIRECTION dir;
     msg_format(_("%sから炎が吹き出した...", "The %s rages in fire..."), name.data());
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -239,9 +239,9 @@ bool activate_ball_fire_2(PlayerType *player_ptr, std::string_view name)
 
 bool activate_ball_fire_3(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("深赤色に輝いている...", "It glows deep red..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -251,9 +251,9 @@ bool activate_ball_fire_3(PlayerType *player_ptr)
 
 bool activate_ball_fire_4(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは赤く激しく輝いた...", "It glows an intense red..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -263,9 +263,9 @@ bool activate_ball_fire_4(PlayerType *player_ptr)
 
 bool activate_ball_elec_2(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("電気がパチパチ音を立てた...", "It crackles with electricity..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -275,9 +275,9 @@ bool activate_ball_elec_2(PlayerType *player_ptr)
 
 bool activate_ball_elec_3(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("深青色に輝いている...", "It glows deep blue..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -287,9 +287,9 @@ bool activate_ball_elec_3(PlayerType *player_ptr)
 
 bool activate_ball_acid_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは黒く激しく輝いた...", "It glows an intense black..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -299,9 +299,9 @@ bool activate_ball_acid_1(PlayerType *player_ptr)
 
 bool activate_ball_nuke_1(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("それは緑に激しく輝いた...", "It glows an intense green..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -311,8 +311,8 @@ bool activate_ball_nuke_1(PlayerType *player_ptr)
 
 bool activate_rocket(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -323,9 +323,9 @@ bool activate_rocket(PlayerType *player_ptr)
 
 bool activate_ball_water(PlayerType *player_ptr, std::string_view name)
 {
-    DIRECTION dir;
     msg_format(_("%sが深い青色に鼓動している...", "The %s throbs deep blue..."), name.data());
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -362,9 +362,9 @@ bool activate_ball_lite(PlayerType *player_ptr, std::string_view name)
 
 bool activate_ball_dark(PlayerType *player_ptr, std::string_view name)
 {
-    DIRECTION dir;
     msg_format(_("%sが深い闇に覆われた...", "The %s is covered in pitch-darkness..."), name.data());
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -374,9 +374,9 @@ bool activate_ball_dark(PlayerType *player_ptr, std::string_view name)
 
 bool activate_ball_mana(PlayerType *player_ptr, std::string_view name)
 {
-    DIRECTION dir;
     msg_format(_("%sが青白く光った．．．", "The %s becomes pale..."), name.data());
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

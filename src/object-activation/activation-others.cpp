@@ -59,8 +59,8 @@
 
 bool activate_sunlight(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -71,9 +71,9 @@ bool activate_sunlight(PlayerType *player_ptr)
 
 bool activate_confusion(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -119,9 +119,9 @@ bool activate_aggravation(PlayerType *player_ptr, ItemEntity *o_ptr, std::string
 
 bool activate_stone_mud(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("鼓動している...", "It pulsates..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -152,8 +152,8 @@ bool activate_judgement(PlayerType *player_ptr, std::string_view name)
 
 bool activate_telekinesis(PlayerType *player_ptr, std::string_view name)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -295,7 +295,7 @@ bool activate_whirlwind(PlayerType *player_ptr)
 bool activate_blinding_light(PlayerType *player_ptr, std::string_view name)
 {
     msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name.data());
-    (void)fire_ball(player_ptr, AttributeType::LITE, 0, 300, 6);
+    (void)fire_ball(player_ptr, AttributeType::LITE, Direction::self(), 300, 6);
     confuse_monsters(player_ptr, 3 * player_ptr->lev / 2);
     return true;
 }

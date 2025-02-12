@@ -42,7 +42,6 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
     bool cast = mode == SpellProcessType::CAST;
     bool fail = mode == SpellProcessType::FAIL;
 
-    DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
@@ -120,7 +119,8 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -148,7 +148,8 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -201,18 +202,16 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
 
     case 11: {
         if (cast) {
-            bool result;
-
             /* Temporary enable target_pet option */
             bool old_target_pet = target_pet;
             target_pet = true;
 
-            result = get_aim_dir(player_ptr, &dir);
+            const auto dir = get_aim_dir(player_ptr);
 
             /* Restore target_pet option */
             target_pet = old_target_pet;
 
-            if (!result) {
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -273,17 +272,15 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
 
     case 16: {
         if (cast) {
-            bool result;
-
             /* HACK -- No range limit */
             project_length = -1;
 
-            result = get_aim_dir(player_ptr, &dir);
+            const auto dir = get_aim_dir(player_ptr);
 
             /* Restore range to default */
             project_length = 0;
 
-            if (!result) {
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -393,18 +390,16 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
 
         if (cast) {
-            bool result;
-
             /* Temporary enable target_pet option */
             bool old_target_pet = target_pet;
             target_pet = true;
 
-            result = get_aim_dir(player_ptr, &dir);
+            const auto dir = get_aim_dir(player_ptr);
 
             /* Restore target_pet option */
             target_pet = old_target_pet;
 
-            if (!result) {
+            if (!dir) {
                 return std::nullopt;
             }
 

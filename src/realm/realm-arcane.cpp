@@ -39,7 +39,6 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
 
-    DIRECTION dir;
     PLAYER_LEVEL plev = player_ptr->lev;
 
     switch (spell) {
@@ -51,7 +50,8 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -61,7 +61,8 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
 
     case 1: {
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -120,7 +121,8 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
 
     case 6: {
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -295,7 +297,8 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -311,7 +314,8 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -364,7 +368,8 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -381,7 +386,8 @@ std::optional<std::string> do_arcane_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
 
         if (cast) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 

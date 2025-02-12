@@ -21,13 +21,13 @@
  */
 static bool fire_crimson(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
-    auto [ty, tx] = player_ptr->get_position() + Direction(dir).vec() * 99;
-    if ((dir == 5) && target_okay(player_ptr)) {
+    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
+    if (dir.is_targetting() && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
     }

@@ -59,8 +59,8 @@ static bool cast_blue_dispel(PlayerType *player_ptr)
 
 static bool cast_blue_rocket(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -72,8 +72,8 @@ static bool cast_blue_rocket(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 static bool cast_blue_shoot(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -85,8 +85,8 @@ static bool cast_blue_shoot(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 static bool cast_blue_hand_doom(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -152,8 +152,8 @@ static bool cast_blue_teleport_back(PlayerType *player_ptr)
 
 static bool cast_blue_teleport_away(PlayerType *player_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -163,8 +163,8 @@ static bool cast_blue_teleport_away(PlayerType *player_ptr)
 
 static bool cast_blue_psy_spear(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

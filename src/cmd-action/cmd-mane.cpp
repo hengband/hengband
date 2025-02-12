@@ -373,9 +373,10 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         u_mode = PM_ALLOW_UNIQUE;
     }
 
-    int dir = 0;
+    auto dir = Direction::none();
     if (AIMING_SPELLS.contains(spell)) {
-        if (!get_aim_dir(player_ptr, &dir)) {
+        dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
     }
