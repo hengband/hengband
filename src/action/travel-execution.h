@@ -24,8 +24,9 @@ public:
     bool is_ongoing() const;
     void stop();
     void step(PlayerType *player_ptr);
+    void forget_flow();
 
-    int cost[MAX_HGT][MAX_WID]{};
+    std::array<std::array<int, MAX_WID>, MAX_HGT> costs{};
 
 private:
     std::optional<Pos2D> pos_goal; /* Target position */
@@ -34,5 +35,3 @@ private:
 };
 
 extern Travel travel;
-
-void forget_travel_flow(const FloorType &floor);

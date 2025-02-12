@@ -107,7 +107,7 @@ static void travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int n, bool
 
     auto base_cost = (n % TRAVEL_UNABLE);
     auto cost = base_cost + add_cost;
-    auto &travel_cost = travel.cost[pos.y][pos.x];
+    auto &travel_cost = travel.costs[pos.y][pos.x];
     if (travel_cost <= cost) {
         return;
     }
@@ -146,7 +146,7 @@ static void travel_flow(PlayerType *player_ptr, const Pos2D pos)
 
         for (const auto &d : Direction::directions_8()) {
             const auto pos_neighbor = pos_flow + d.vec();
-            travel_flow_aux(player_ptr, pos_neighbor, travel.cost[pos_flow.y][pos_flow.x], wall);
+            travel_flow_aux(player_ptr, pos_neighbor, travel.costs[pos_flow.y][pos_flow.x], wall);
         }
     }
 
@@ -190,7 +190,7 @@ void do_cmd_travel(PlayerType *player_ptr)
         return;
     }
 
-    forget_travel_flow(*player_ptr->current_floor_ptr);
+    travel.forget_flow();
     travel_flow(player_ptr, *pos);
     travel.set_goal(player_ptr->get_position(), *pos);
 }
