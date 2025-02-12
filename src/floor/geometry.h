@@ -144,6 +144,15 @@ public:
     }
 
     /*!
+     * @brief 方向が軸方向(上下左右)のいずれかを示しているかどうかを返す
+     * @return 上下左右ならばtrue、そうでなければfalse
+     */
+    constexpr bool is_axial() const noexcept
+    {
+        return this->dir_ == 2 || this->dir_ == 4 || this->dir_ == 6 || this->dir_ == 8;
+    }
+
+    /*!
      * @brief 方向が斜め方向かどうかを返す
      * @return 斜め方向ならばtrue、そうでなければfalse
      */
