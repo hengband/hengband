@@ -18,9 +18,8 @@
  * @details
  * The location must be a legal, clean, floor grid.
  */
-void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
+void place_gold(PlayerType *player_ptr, const Pos2D &pos)
 {
-    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
     if (!in_bounds(floor, pos.y, pos.x)) {
@@ -61,12 +60,11 @@ void place_gold(PlayerType *player_ptr, POSITION y, POSITION x)
  * This routine uses "object_level" for the "generation level".\n
  * This routine requires a clean floor grid destination.\n
  */
-void place_object(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
+void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode)
 {
-    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    if (!in_bounds(floor, y, x) || !cave_drop_bold(floor, y, x) || !grid.o_idx_list.empty()) {
+    if (!in_bounds(floor, pos.y, pos.x) || !cave_drop_bold(floor, pos.y, pos.x) || !grid.o_idx_list.empty()) {
         return;
     }
 

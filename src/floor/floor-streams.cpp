@@ -250,7 +250,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     auto x = rand_spread(floor.width / 2, floor.width / 6);
 
     /* Choose a random compass direction */
-    auto dir = rand_choice(Direction::directions_8());
+    Direction dir = rand_choice(Direction::directions_8());
 
     /* Place streamer into dungeon */
     auto dummy = 0;
