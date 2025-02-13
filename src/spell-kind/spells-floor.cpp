@@ -162,7 +162,7 @@ void wiz_dark(PlayerType *player_ptr)
     }
 
     /* Forget travel route when we have forgotten map */
-    forget_travel_flow(*player_ptr->current_floor_ptr);
+    travel.forget_flow();
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {

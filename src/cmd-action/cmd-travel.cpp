@@ -107,7 +107,7 @@ static void travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int n, bool
 
     auto base_cost = (n % TRAVEL_UNABLE);
     auto cost = base_cost + add_cost;
-    auto &travel_cost = travel.cost[pos.y][pos.x];
+    auto &travel_cost = travel.costs[pos.y][pos.x];
     if (travel_cost <= cost) {
         return;
     }
@@ -146,11 +146,22 @@ static void travel_flow(PlayerType *player_ptr, const Pos2D pos)
 
         for (const auto &d : Direction::directions_8()) {
             const auto pos_neighbor = pos_flow + d.vec();
-            travel_flow_aux(player_ptr, pos_neighbor, travel.cost[pos_flow.y][pos_flow.x], wall);
+            travel_flow_aux(player_ptr, pos_neighbor, travel.costs[pos_flow.y][pos_flow.x], wall);
         }
     }
 
     flow_head = flow_tail = 0;
+}
+
+static std::optional<Pos2D> decide_travel_goal(PlayerType *player_ptr)
+{
+    const auto &pos_current_goal = travel.get_goal();
+    if (pos_current_goal && pos_current_goal != player_ptr->get_position() && input_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
+        return *pos_current_goal;
+    }
+
+    int x, y;
+    return tgt_pt(player_ptr, &x, &y) ? std::make_optional<Pos2D>(y, x) : std::nullopt;
 }
 
 /*!
@@ -158,22 +169,18 @@ static void travel_flow(PlayerType *player_ptr, const Pos2D pos)
  */
 void do_cmd_travel(PlayerType *player_ptr)
 {
-    int x, y;
-    if ((travel.x != 0) && (travel.y != 0) && (travel.x != player_ptr->x) && (travel.y != player_ptr->y) && input_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
-        y = travel.y;
-        x = travel.x;
-    } else if (!tgt_pt(player_ptr, &x, &y)) {
+    const auto pos = decide_travel_goal(player_ptr);
+    if (!pos) {
         return;
     }
 
-    const Pos2D pos(y, x);
-    if (player_ptr->is_located_at(pos)) {
+    if (player_ptr->is_located_at(*pos)) {
         msg_print(_("すでにそこにいます！", "You are already there!!"));
         return;
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid = floor.get_grid(pos);
+    const auto &grid = floor.get_grid(*pos);
     const auto &terrain = grid.get_terrain();
     const auto is_marked = grid.is_mark();
     const auto is_wall = terrain.flags.has_any_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::CAN_DIG });
@@ -183,19 +190,7 @@ void do_cmd_travel(PlayerType *player_ptr)
         return;
     }
 
-    forget_travel_flow(*player_ptr->current_floor_ptr);
-    travel_flow(player_ptr, pos);
-    travel.x = x;
-    travel.y = y;
-    travel.run = 255;
-    travel.dir = 0;
-    auto dx = std::abs(player_ptr->x - x);
-    auto dy = std::abs(player_ptr->y - y);
-    auto sx = ((x == player_ptr->x) || (dx < dy)) ? 0 : ((x > player_ptr->x) ? 1 : -1);
-    auto sy = ((y == player_ptr->y) || (dy < dx)) ? 0 : ((y > player_ptr->y) ? 1 : -1);
-    for (const auto &d : Direction::directions()) {
-        if (Pos2DVec(sy, sx) == d.vec()) {
-            travel.dir = d.dir();
-        }
-    }
+    travel.forget_flow();
+    travel_flow(player_ptr, *pos);
+    travel.set_goal(player_ptr->get_position(), *pos);
 }

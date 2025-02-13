@@ -21,7 +21,50 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
-travel_type travel;
+Travel travel{};
+
+const std::optional<Pos2D> &Travel::get_goal() const
+{
+    return this->pos_goal;
+}
+
+void Travel::set_goal(const Pos2D &p_pos, const Pos2D &pos)
+{
+    this->pos_goal = pos;
+    this->run = 255;
+
+    this->dir = 0;
+    auto dx = std::abs(p_pos.x - pos.x);
+    auto dy = std::abs(p_pos.y - pos.y);
+    auto sx = ((pos.x == p_pos.x) || (dx < dy)) ? 0 : ((pos.x > p_pos.x) ? 1 : -1);
+    auto sy = ((pos.y == p_pos.y) || (dy < dx)) ? 0 : ((pos.y > p_pos.y) ? 1 : -1);
+    for (const auto &d : Direction::directions()) {
+        if (Pos2DVec(sy, sx) == d.vec()) {
+            this->dir = d.dir();
+        }
+    }
+}
+
+void Travel::reset_goal()
+{
+    this->pos_goal.reset();
+    this->run = 0;
+}
+
+bool Travel::is_started() const
+{
+    return this->run < 255;
+}
+
+bool Travel::is_ongoing() const
+{
+    return this->run > 0;
+}
+
+void Travel::stop()
+{
+    this->run = 0;
+}
 
 /*!
  * @brief トラベル機能の判定処理 /
@@ -65,11 +108,11 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
         }
     }
 
-    int cost = travel.cost[player_ptr->y][player_ptr->x];
+    int cost = travel.costs[player_ptr->y][player_ptr->x];
     DIRECTION new_dir = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos_neighbor = player_ptr->get_neighbor(d);
-        int dir_cost = travel.cost[pos_neighbor.y][pos_neighbor.x];
+        int dir_cost = travel.costs[pos_neighbor.y][pos_neighbor.x];
         if (dir_cost < cost) {
             new_dir = d.dir();
             cost = dir_cost;
@@ -98,13 +141,13 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
  * Travel command
  * @param player_ptr	プレイヤーへの参照ポインタ
  */
-void travel_step(PlayerType *player_ptr)
+void Travel::step(PlayerType *player_ptr)
 {
-    travel.dir = travel_test(player_ptr, travel.dir);
-    if (!travel.dir) {
-        if (travel.run == 255) {
+    this->dir = travel_test(player_ptr, this->dir);
+    if (!this->dir) {
+        if (!this->is_started()) {
             msg_print(_("道筋が見つかりません！", "No route is found!"));
-            travel.y = travel.x = 0;
+            this->reset_goal();
         }
 
         disturb(player_ptr, false, true);
@@ -112,12 +155,11 @@ void travel_step(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    exe_movement(player_ptr, Direction(travel.dir), always_pickup, false);
-    if ((player_ptr->y == travel.y) && (player_ptr->x == travel.x)) {
-        travel.run = 0;
-        travel.y = travel.x = 0;
-    } else if (travel.run > 0) {
-        travel.run--;
+    exe_movement(player_ptr, Direction(this->dir), always_pickup, false);
+    if (player_ptr->get_position() == this->get_goal()) {
+        this->reset_goal();
+    } else if (this->run > 0) {
+        this->run--;
     }
 }
 
@@ -125,13 +167,10 @@ void travel_step(PlayerType *player_ptr)
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
  * @param player_ptr	プレイヤーへの参照ポインタ
  */
-void forget_travel_flow(const FloorType &floor)
+void Travel::forget_flow()
 {
-    for (POSITION y = 0; y < floor.height; y++) {
-        for (POSITION x = 0; x < floor.width; x++) {
-            travel.cost[y][x] = MAX_SHORT;
-        }
+    for (auto &row : this->costs) {
+        row.fill(MAX_SHORT);
     }
-
-    travel.y = travel.x = 0;
+    this->reset_goal();
 }

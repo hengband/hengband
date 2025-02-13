@@ -453,8 +453,8 @@ void change_floor(PlayerType *player_ptr)
     player_ptr->ambush_flag = false;
     update_floor(player_ptr);
     place_pet(player_ptr);
+    travel.forget_flow();
     auto &floor = *player_ptr->current_floor_ptr;
-    forget_travel_flow(floor);
     update_unique_artifact(floor, new_floor_id);
     player_ptr->floor_id = new_floor_id;
     world.character_dungeon = true;
