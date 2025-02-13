@@ -229,7 +229,7 @@ bool shock_power(PlayerType *player_ptr)
     }
 
     for (int i = 0; i < 5; i++) {
-        pos += Direction(dir).vec();
+        pos += dir.vec();
         if (is_cave_empty_bold(player_ptr, pos.y, pos.x)) {
             pos_target = pos;
         } else {

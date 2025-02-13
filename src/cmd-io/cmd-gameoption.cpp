@@ -210,7 +210,7 @@ static void clear_window_flag(int x, int y)
  */
 static void do_cmd_options_win(PlayerType *player_ptr)
 {
-    int i, j, d;
+    int i, j;
     TERM_LEN y = 0;
     TERM_LEN x = 0;
     char ch;
@@ -286,13 +286,14 @@ static void do_cmd_options_win(PlayerType *player_ptr)
             term_clear();
             break;
         default: {
-            d = get_keymap_dir(ch);
-            const auto vec = Direction(d).vec();
+            const auto dir = get_keymap_dir(ch);
+            if (!dir) {
+                bell();
+                break;
+            }
+            const auto vec = dir.vec();
             x = (x + vec.x + 8) % 8;
             y = (y + vec.y + 16) % 16;
-            if (!d) {
-                bell();
-            }
             break;
         }
         }
@@ -348,9 +349,8 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
 
         move_cursor(k + 2, 50);
         auto ch = inkey();
-        auto dir = get_keymap_dir(ch);
-        if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8)) {
-            ch = I2D(dir);
+        if (const auto dir = get_keymap_dir(ch); dir.is_axial()) {
+            ch = I2D(dir.dir());
         }
 
         const auto &cheat = cheat_info[k];
@@ -661,7 +661,6 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
 
     term_clear();
     while (true) {
-        DIRECTION dir;
         constexpr auto command = _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) ");
         prt(format(command, info.data(), browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
         if (page == GameOptionPage::AUTODESTROY) {
@@ -693,9 +692,8 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
 
         move_cursor(k + 2 + l, 50);
         ch = inkey();
-        dir = get_keymap_dir(ch);
-        if ((dir == 2) || (dir == 4) || (dir == 6) || (dir == 8)) {
-            ch = I2D(dir);
+        if (const auto dir = get_keymap_dir(ch); dir.is_axial()) {
+            ch = I2D(dir.dir());
         }
 
         const auto &option = option_info[opt[k]];
