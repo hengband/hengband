@@ -213,7 +213,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return;
     }
 
-    int mm[8]{};
+    std::vector<Direction> mm(8, Direction::none());
     if (!decide_monster_movement_direction(player_ptr, mm, m_idx, turn_flags_ptr->aware)) {
         return;
     }

@@ -8,6 +8,7 @@
  */
 
 #include "monster/monster-processor-util.h"
+#include "floor/geometry.h"
 #include "monster/monster-status.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -43,41 +44,41 @@ turn_flags *init_turn_flags(bool is_riding, turn_flags *turn_flags_ptr)
  * @param y 移動先Y座標
  * @param x 移動先X座標
  */
-void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
+void store_enemy_approch_direction(std::span<Direction> mm, POSITION y, POSITION x)
 {
     /* North, South, East, West, North-West, North-East, South-West, South-East */
     if ((y < 0) && (x == 0)) {
-        mm[0] = 8;
-        mm[1] = 7;
-        mm[2] = 9;
+        mm[0] = Direction(8);
+        mm[1] = Direction(7);
+        mm[2] = Direction(9);
     } else if ((y > 0) && (x == 0)) {
-        mm[0] = 2;
-        mm[1] = 1;
-        mm[2] = 3;
+        mm[0] = Direction(2);
+        mm[1] = Direction(1);
+        mm[2] = Direction(3);
     } else if ((x > 0) && (y == 0)) {
-        mm[0] = 6;
-        mm[1] = 9;
-        mm[2] = 3;
+        mm[0] = Direction(6);
+        mm[1] = Direction(9);
+        mm[2] = Direction(3);
     } else if ((x < 0) && (y == 0)) {
-        mm[0] = 4;
-        mm[1] = 7;
-        mm[2] = 1;
+        mm[0] = Direction(4);
+        mm[1] = Direction(7);
+        mm[2] = Direction(1);
     } else if ((y < 0) && (x < 0)) {
-        mm[0] = 7;
-        mm[1] = 4;
-        mm[2] = 8;
+        mm[0] = Direction(7);
+        mm[1] = Direction(4);
+        mm[2] = Direction(8);
     } else if ((y < 0) && (x > 0)) {
-        mm[0] = 9;
-        mm[1] = 6;
-        mm[2] = 8;
+        mm[0] = Direction(9);
+        mm[1] = Direction(6);
+        mm[2] = Direction(8);
     } else if ((y > 0) && (x < 0)) {
-        mm[0] = 1;
-        mm[1] = 4;
-        mm[2] = 2;
+        mm[0] = Direction(1);
+        mm[1] = Direction(4);
+        mm[2] = Direction(2);
     } else if ((y > 0) && (x > 0)) {
-        mm[0] = 3;
-        mm[1] = 6;
-        mm[2] = 2;
+        mm[0] = Direction(3);
+        mm[1] = Direction(6);
+        mm[2] = Direction(2);
     }
 }
 
@@ -86,7 +87,7 @@ void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
  * @param mm 移動方向
  * @param vec 移動方向のベクトル
  */
-void store_moves_val(int *mm, const Pos2DVec &vec)
+void store_moves_val(std::span<Direction> mm, const Pos2DVec &vec)
 {
     const Pos2DVec vec_abs(std::abs(vec.y), std::abs(vec.x));
     auto move_val = 0;
@@ -103,140 +104,60 @@ void store_moves_val(int *mm, const Pos2DVec &vec)
         move_val++;
     }
 
+    auto is_left_first = false;
     switch (move_val) {
     case 0: {
-        mm[0] = 9;
-        if (vec_abs.y > vec_abs.x) {
-            mm[1] = 8;
-            mm[2] = 6;
-            mm[3] = 7;
-            mm[4] = 3;
-        } else {
-            mm[1] = 6;
-            mm[2] = 8;
-            mm[3] = 3;
-            mm[4] = 7;
-        }
-
+        mm[0] = Direction(9);
+        is_left_first = vec_abs.y > vec_abs.x;
         break;
     }
     case 1:
     case 9: {
-        mm[0] = 6;
-        if (vec.y < 0) {
-            mm[1] = 3;
-            mm[2] = 9;
-            mm[3] = 2;
-            mm[4] = 8;
-        } else {
-            mm[1] = 9;
-            mm[2] = 3;
-            mm[3] = 8;
-            mm[4] = 2;
-        }
-
+        mm[0] = Direction(6);
+        is_left_first = vec.y >= 0;
         break;
     }
     case 2:
     case 6: {
-        mm[0] = 8;
-        if (vec.x < 0) {
-            mm[1] = 9;
-            mm[2] = 7;
-            mm[3] = 6;
-            mm[4] = 4;
-        } else {
-            mm[1] = 7;
-            mm[2] = 9;
-            mm[3] = 4;
-            mm[4] = 6;
-        }
-
+        mm[0] = Direction(8);
+        is_left_first = vec.x >= 0;
         break;
     }
     case 4: {
-        mm[0] = 7;
-        if (vec_abs.y > vec_abs.x) {
-            mm[1] = 8;
-            mm[2] = 4;
-            mm[3] = 9;
-            mm[4] = 1;
-        } else {
-            mm[1] = 4;
-            mm[2] = 8;
-            mm[3] = 1;
-            mm[4] = 9;
-        }
-
+        mm[0] = Direction(7);
+        is_left_first = vec_abs.y <= vec_abs.x;
         break;
     }
     case 5:
     case 13: {
-        mm[0] = 4;
-        if (vec.y < 0) {
-            mm[1] = 1;
-            mm[2] = 7;
-            mm[3] = 2;
-            mm[4] = 8;
-        } else {
-            mm[1] = 7;
-            mm[2] = 1;
-            mm[3] = 8;
-            mm[4] = 2;
-        }
-
+        mm[0] = Direction(4);
+        is_left_first = vec.y < 0;
         break;
     }
     case 8: {
-        mm[0] = 3;
-        if (vec_abs.y > vec_abs.x) {
-            mm[1] = 2;
-            mm[2] = 6;
-            mm[3] = 1;
-            mm[4] = 9;
-        } else {
-            mm[1] = 6;
-            mm[2] = 2;
-            mm[3] = 9;
-            mm[4] = 1;
-        }
-
+        mm[0] = Direction(3);
+        is_left_first = vec_abs.y <= vec_abs.x;
         break;
     }
     case 10:
     case 14: {
-        mm[0] = 2;
-        if (vec.x < 0) {
-            mm[1] = 3;
-            mm[2] = 1;
-            mm[3] = 6;
-            mm[4] = 4;
-        } else {
-            mm[1] = 1;
-            mm[2] = 3;
-            mm[3] = 4;
-            mm[4] = 6;
-        }
-
+        mm[0] = Direction(2);
+        is_left_first = vec.x < 0;
         break;
     }
     case 12: {
-        mm[0] = 1;
-        if (vec_abs.y > vec_abs.x) {
-            mm[1] = 2;
-            mm[2] = 4;
-            mm[3] = 3;
-            mm[4] = 7;
-        } else {
-            mm[1] = 4;
-            mm[2] = 2;
-            mm[3] = 7;
-            mm[4] = 3;
-        }
-
+        mm[0] = Direction(1);
+        is_left_first = vec_abs.y > vec_abs.x;
         break;
+    default:
+        return;
     }
     }
+
+    mm[1] = mm[0].rotated_45degree(is_left_first ? 1 : -1);
+    mm[2] = mm[0].rotated_45degree(is_left_first ? -1 : 1);
+    mm[3] = mm[0].rotated_45degree(is_left_first ? 2 : -2);
+    mm[4] = mm[0].rotated_45degree(is_left_first ? -2 : 2);
 }
 
 /*!

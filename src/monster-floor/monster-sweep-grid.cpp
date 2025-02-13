@@ -515,7 +515,7 @@ public:
  * @param m_idx 移動するモンスターの参照ID
  * @param mm 移動方向を返す方向IDの参照ポインタ
  */
-MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
+MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, std::span<Direction> mm)
     : player_ptr(player_ptr)
     , m_idx(m_idx)
     , mm(mm)
