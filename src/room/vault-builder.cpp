@@ -33,21 +33,18 @@ static bool is_cave_empty_grid(PlayerType *player_ptr, const Grid &grid)
 }
 
 /*!
- * @brief 特殊な部屋地形向けにモンスターを配置する / Place some sleeping monsters near the given location
+ * @brief 特殊な部屋地形向けにモンスターを配置する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y1 モンスターを配置したいマスの中心Y座標
- * @param x1 モンスターを配置したいマスの中心X座標
+ * @param pos_center 配置したい中心座標
  * @param num 配置したいモンスターの数
- * @details
- * Only really called by some of the "vault" routines.
  */
-void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
+void vault_monsters(PlayerType *player_ptr, const Pos2D &pos_center, int num)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     for (auto k = 0; k < num; k++) {
         for (auto i = 0; i < 9; i++) {
             const auto d = 1;
-            const auto pos = scatter(player_ptr, { y1, x1 }, d, 0);
+            const auto pos = scatter(player_ptr, pos_center, d, 0);
             auto &grid = floor.get_grid(pos);
             if (!is_cave_empty_grid(player_ptr, grid)) {
                 continue;
@@ -61,17 +58,13 @@ void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
 }
 
 /*!
- * @brief 特殊な部屋向けに各種アイテムを配置する / Create up to "num" objects near the given coordinates
+ * @brief 特殊な部屋向けに各種アイテムを配置する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 配置したい中心マスのY座標
- * @param x 配置したい中心マスのX座標
+ * @param pos_center 配置したい中心座標
  * @param num 配置したい数
- * @details
- * Only really called by some of the "vault" routines.
  */
-void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
+void vault_objects(PlayerType *player_ptr, const Pos2D &pos_center, int num)
 {
-    const Pos2D pos_center(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     for (; num > 0; --num) {
         Pos2D pos = pos_center;
