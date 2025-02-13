@@ -51,11 +51,6 @@
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 
-int flow_head = 0;
-int flow_tail = 0;
-POSITION temp2_x[MAX_SHORT];
-POSITION temp2_y[MAX_SHORT];
-
 /*!
  * @brief 地形やその上のアイテムの隠された要素を全て明かす /
  * Search for hidden things
