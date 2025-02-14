@@ -139,26 +139,29 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
              * Random trap and random treasure defined
              * 25% chance for trap and 75% chance for object
              */
+            const Pos2D pos(*qtwg_ptr->y, *qtwg_ptr->x);
             if (evaluate_percent(75)) {
-                place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, 0L);
+                place_object(player_ptr, pos, 0);
             } else {
-                place_trap(floor, *qtwg_ptr->y, *qtwg_ptr->x);
+                place_trap(floor, pos);
             }
 
             floor.object_level = floor.base_level;
         } else if (random & RANDOM_OBJECT) {
             floor.object_level = floor.base_level + item_index;
+            const Pos2D pos(*qtwg_ptr->y, *qtwg_ptr->x);
             if (evaluate_percent(75)) {
-                place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, 0L);
+                place_object(player_ptr, pos, 0);
             } else if (evaluate_percent(80)) {
-                place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, AM_GOOD);
+                place_object(player_ptr, pos, AM_GOOD);
             } else {
-                place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, AM_GOOD | AM_GREAT);
+                place_object(player_ptr, pos, AM_GOOD | AM_GREAT);
             }
 
             floor.object_level = floor.base_level;
         } else if (random & RANDOM_TRAP) {
-            place_trap(floor, *qtwg_ptr->y, *qtwg_ptr->x);
+            const Pos2D pos(*qtwg_ptr->y, *qtwg_ptr->x);
+            place_trap(floor, pos);
         } else if (letter[idx].trap) {
             grid.mimic = grid.feat;
             grid.feat = dungeon.convert_terrain_id(letter[idx].trap);
