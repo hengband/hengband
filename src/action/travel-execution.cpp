@@ -122,60 +122,6 @@ std::optional<int> travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int 
     const auto base_cost = (current_cost % TRAVEL_UNABLE);
     return base_cost + add_cost;
 }
-}
-
-const std::optional<Pos2D> &Travel::get_goal() const
-{
-    return this->pos_goal;
-}
-
-void Travel::set_goal(PlayerType *player_ptr, const Pos2D &pos)
-{
-    this->pos_goal = pos;
-    this->run = 255;
-
-    this->dir = 0;
-    const auto p_pos = player_ptr->get_position();
-    auto dx = std::abs(p_pos.x - pos.x);
-    auto dy = std::abs(p_pos.y - pos.y);
-    auto sx = ((pos.x == p_pos.x) || (dx < dy)) ? 0 : ((pos.x > p_pos.x) ? 1 : -1);
-    auto sy = ((pos.y == p_pos.y) || (dy < dx)) ? 0 : ((pos.y > p_pos.y) ? 1 : -1);
-    for (const auto &d : Direction::directions()) {
-        if (Pos2DVec(sy, sx) == d.vec()) {
-            this->dir = d.dir();
-        }
-    }
-
-    this->forget_flow();
-    this->update_flow(player_ptr);
-}
-
-void Travel::reset_goal()
-{
-    this->pos_goal.reset();
-    this->run = 0;
-    this->forget_flow();
-}
-
-bool Travel::is_started() const
-{
-    return this->run < 255;
-}
-
-bool Travel::is_ongoing() const
-{
-    return this->run > 0;
-}
-
-void Travel::stop()
-{
-    this->run = 0;
-}
-
-int Travel::get_cost(const Pos2D &pos) const
-{
-    return this->costs[pos.y][pos.x];
-}
 
 /*!
  * @brief トラベルの次の移動方向を決定する
@@ -184,7 +130,7 @@ int Travel::get_cost(const Pos2D &pos) const
  * @param costs トラベルの目標到達地点までの行程
  * @return 次の方向
  */
-static DIRECTION decide_travel_step_dir(PlayerType *player_ptr, DIRECTION prev_dir, std::span<const std::array<int, MAX_WID>, MAX_HGT> costs)
+DIRECTION decide_travel_step_dir(PlayerType *player_ptr, DIRECTION prev_dir, std::span<const std::array<int, MAX_WID>, MAX_HGT> costs)
 {
     const auto &blindness = player_ptr->effects()->blindness();
     if (blindness.is_blind() || no_lite(player_ptr)) {
@@ -245,6 +191,60 @@ static DIRECTION decide_travel_step_dir(PlayerType *player_ptr, DIRECTION prev_d
     }
 
     return new_dir;
+}
+}
+
+const std::optional<Pos2D> &Travel::get_goal() const
+{
+    return this->pos_goal;
+}
+
+void Travel::set_goal(PlayerType *player_ptr, const Pos2D &pos)
+{
+    this->pos_goal = pos;
+    this->run = 255;
+
+    this->dir = 0;
+    const auto p_pos = player_ptr->get_position();
+    auto dx = std::abs(p_pos.x - pos.x);
+    auto dy = std::abs(p_pos.y - pos.y);
+    auto sx = ((pos.x == p_pos.x) || (dx < dy)) ? 0 : ((pos.x > p_pos.x) ? 1 : -1);
+    auto sy = ((pos.y == p_pos.y) || (dy < dx)) ? 0 : ((pos.y > p_pos.y) ? 1 : -1);
+    for (const auto &d : Direction::directions()) {
+        if (Pos2DVec(sy, sx) == d.vec()) {
+            this->dir = d.dir();
+        }
+    }
+
+    this->forget_flow();
+    this->update_flow(player_ptr);
+}
+
+void Travel::reset_goal()
+{
+    this->pos_goal.reset();
+    this->run = 0;
+    this->forget_flow();
+}
+
+bool Travel::is_started() const
+{
+    return this->run < 255;
+}
+
+bool Travel::is_ongoing() const
+{
+    return this->run > 0;
+}
+
+void Travel::stop()
+{
+    this->run = 0;
+}
+
+int Travel::get_cost(const Pos2D &pos) const
+{
+    return this->costs[pos.y][pos.x];
 }
 
 /*!
