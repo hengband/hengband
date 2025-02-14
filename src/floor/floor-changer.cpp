@@ -453,7 +453,7 @@ void change_floor(PlayerType *player_ptr)
     player_ptr->ambush_flag = false;
     update_floor(player_ptr);
     place_pet(player_ptr);
-    travel.reset_goal();
+    Travel::get_instance().reset_goal();
     auto &floor = *player_ptr->current_floor_ptr;
     update_unique_artifact(floor, new_floor_id);
     player_ptr->floor_id = new_floor_id;

@@ -26,8 +26,6 @@
 #include <queue>
 #include <vector>
 
-Travel travel{};
-
 namespace {
 constexpr auto TRAVEL_UNABLE = 9999;
 
@@ -192,6 +190,12 @@ DIRECTION decide_travel_step_dir(PlayerType *player_ptr, DIRECTION prev_dir, std
 
     return new_dir;
 }
+}
+
+Travel &Travel::get_instance()
+{
+    static Travel instance{};
+    return instance;
 }
 
 const std::optional<Pos2D> &Travel::get_goal() const

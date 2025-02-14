@@ -15,7 +15,12 @@ class PlayerType;
 /*  A structure type for travel command  */
 class Travel {
 public:
-    Travel() = default;
+    Travel(const Travel &) = delete;
+    Travel &operator=(const Travel &) = delete;
+    Travel(Travel &&) = delete;
+    Travel &operator=(Travel &&) = delete;
+
+    static Travel &get_instance();
 
     const std::optional<Pos2D> &get_goal() const;
     void set_goal(PlayerType *player_ptr, const Pos2D &pos);
@@ -27,6 +32,8 @@ public:
     int get_cost(const Pos2D &pos) const;
 
 private:
+    Travel() = default;
+
     void update_flow(PlayerType *player_ptr);
     void forget_flow();
 
@@ -35,5 +42,3 @@ private:
     DIRECTION dir{}; /* Running direction */
     std::array<std::array<int, MAX_WID>, MAX_HGT> costs{};
 };
-
-extern Travel travel;

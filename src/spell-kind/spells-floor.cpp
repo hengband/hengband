@@ -162,7 +162,7 @@ void wiz_dark(PlayerType *player_ptr)
     }
 
     /* Forget travel route when we have forgotten map */
-    travel.reset_goal();
+    Travel::get_instance().reset_goal();
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {

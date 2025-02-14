@@ -14,7 +14,7 @@
 
 static std::optional<Pos2D> decide_travel_goal(PlayerType *player_ptr)
 {
-    const auto &pos_current_goal = travel.get_goal();
+    const auto &pos_current_goal = Travel::get_instance().get_goal();
     if (pos_current_goal && pos_current_goal != player_ptr->get_position() && input_check(_("トラベルを継続しますか？", "Do you continue to travel? "))) {
         return *pos_current_goal;
     }
@@ -49,5 +49,5 @@ void do_cmd_travel(PlayerType *player_ptr)
         return;
     }
 
-    travel.set_goal(player_ptr, *pos);
+    Travel::get_instance().set_goal(player_ptr, *pos);
 }
