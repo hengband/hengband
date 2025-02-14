@@ -11,6 +11,7 @@ class PlayerType;
 class MonsterSweepGrid {
 public:
     MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, std::span<Direction> mm);
+    MonsterSweepGrid(const MonsterSweepGrid &other);
     virtual ~MonsterSweepGrid() = default;
     PlayerType *player_ptr;
     MONSTER_IDX m_idx;

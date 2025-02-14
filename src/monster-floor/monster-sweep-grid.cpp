@@ -523,6 +523,18 @@ MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, st
 }
 
 /*!
+ * @brief コピーコンストラクタ
+ * @param other コピーするオブジェクト
+ * Apple の clang 15 の問題を回避するために暗黙のコピー コンストラクターを使用しないでください。
+ */
+MonsterSweepGrid::MonsterSweepGrid(const MonsterSweepGrid &other)
+    : player_ptr(other.player_ptr)
+    , m_idx(other.m_idx)
+    , mm(other.mm)
+{
+}
+
+/*!
  * @brief モンスターの移動方向を返す
  * @return 有効方向があった場合TRUEを返す
  * @todo 分割したいが条件が多すぎて適切な関数名と詳細処理を追いきれない……
