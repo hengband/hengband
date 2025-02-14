@@ -188,6 +188,8 @@ const std::map<MonsterAbilityType, concptr> monster_powers_short = {
     { MonsterAbilityType::BO_ICEE, _("極寒", "Ice") },
     { MonsterAbilityType::BO_VOID, _("ヴォイド", "Void") },
     { MonsterAbilityType::BO_ABYSS, _("アビス", "Abyss") },
+    { MonsterAbilityType::BO_METEOR, { _("メテオストライク", "meteor strike") } },
+    { MonsterAbilityType::BO_LITE, { _("スターライトアロー", "starlight arrow") } },
     { MonsterAbilityType::MISSILE, _("マジックミサイル", "Magic missile") },
     { MonsterAbilityType::SCARE, _("恐慌", "Scare") },
     { MonsterAbilityType::BLIND, _("盲目", "Blind") },
