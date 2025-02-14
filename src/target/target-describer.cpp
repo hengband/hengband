@@ -510,7 +510,7 @@ static std::string describe_grid_monster_all(GridExamination *ge_ptr)
 #ifdef JP
     return format("%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", ge_ptr->s1, ge_ptr->name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info,
         (uint)ge_ptr->g_ptr->info, f_idx_str.data(), ge_ptr->g_ptr->dists[GridFlow::NORMAL], ge_ptr->g_ptr->costs[GridFlow::NORMAL], ge_ptr->g_ptr->when,
-        ge_ptr->y, ge_ptr->x, travel.costs[ge_ptr->y][ge_ptr->x]);
+        ge_ptr->y, ge_ptr->x, Travel::get_instance().get_cost({ ge_ptr->y, ge_ptr->x }));
 #else
     return format("%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->name.data(), ge_ptr->info, ge_ptr->g_ptr->info,
         f_idx_str.data(), ge_ptr->g_ptr->dists[GridFlow::NORMAL], ge_ptr->g_ptr->costs[GridFlow::NORMAL], ge_ptr->g_ptr->when, ge_ptr->y, ge_ptr->x);

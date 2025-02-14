@@ -5,9 +5,15 @@
  */
 
 #include "floor/floor-base-definitions.h"
-#include "system/angband.h"
+#include "floor/geometry.h"
 #include "util/point-2d.h"
 #include <optional>
+
+enum class TravelState {
+    STOP, ///< トラベル停止中
+    STANDBY_TO_EXECUTE, ///< トラベル実行開始待機中
+    EXECUTING, ///< トラベル実行中
+};
 
 class FloorType;
 class PlayerType;
@@ -15,24 +21,29 @@ class PlayerType;
 /*  A structure type for travel command  */
 class Travel {
 public:
-    Travel() = default;
+    Travel(const Travel &) = delete;
+    Travel &operator=(const Travel &) = delete;
+    Travel(Travel &&) = delete;
+    Travel &operator=(Travel &&) = delete;
+
+    static Travel &get_instance();
 
     const std::optional<Pos2D> &get_goal() const;
-    void set_goal(const Pos2D &p_pos, const Pos2D &pos);
+    void set_goal(PlayerType *player_ptr, const Pos2D &pos);
     void reset_goal();
-    bool is_started() const;
     bool is_ongoing() const;
     void stop();
     void step(PlayerType *player_ptr);
+    int get_cost(const Pos2D &pos) const;
+
+private:
+    Travel() = default;
+
     void update_flow(PlayerType *player_ptr);
     void forget_flow();
 
-    std::array<std::array<int, MAX_WID>, MAX_HGT> costs{};
-
-private:
     std::optional<Pos2D> pos_goal; /* Target position */
-    int run{}; /* Remaining grid number */
-    DIRECTION dir{}; /* Running direction */
+    TravelState state = TravelState::STOP;
+    Direction dir = Direction::none(); /* Running direction */
+    std::array<std::array<int, MAX_WID>, MAX_HGT> costs{};
 };
-
-extern Travel travel;

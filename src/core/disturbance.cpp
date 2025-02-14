@@ -42,7 +42,7 @@ void disturb(PlayerType *player_ptr, bool stop_search, bool stop_travel)
     }
 
     if (stop_travel) {
-        travel.stop();
+        Travel::get_instance().stop();
         if (center_player && !center_running) {
             verify_panel(player_ptr);
         }

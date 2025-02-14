@@ -85,7 +85,7 @@ static void process_fishing(PlayerType *player_ptr)
 
 bool continuous_action_running(PlayerType *player_ptr)
 {
-    return player_ptr->running || travel.is_ongoing() || command_rep || (player_ptr->action == ACTION_REST) || (player_ptr->action == ACTION_FISH);
+    return player_ptr->running || Travel::get_instance().is_ongoing() || command_rep || (player_ptr->action == ACTION_REST) || (player_ptr->action == ACTION_FISH);
 }
 
 /*!
@@ -284,7 +284,7 @@ void process_player(PlayerType *player_ptr)
             energy.set_player_turn_energy(100);
         } else if (player_ptr->running) {
             run_step(player_ptr, Direction::none());
-        } else if (travel.is_ongoing()) {
+        } else if (auto &travel = Travel::get_instance(); travel.is_ongoing()) {
             travel.step(player_ptr);
         } else if (command_rep) {
             command_rep--;
