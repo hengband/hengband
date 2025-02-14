@@ -5,7 +5,7 @@
  */
 
 #include "floor/floor-base-definitions.h"
-#include "system/angband.h"
+#include "floor/geometry.h"
 #include "util/point-2d.h"
 #include <optional>
 
@@ -39,6 +39,6 @@ private:
 
     std::optional<Pos2D> pos_goal; /* Target position */
     int run{}; /* Remaining grid number */
-    DIRECTION dir{}; /* Running direction */
+    Direction dir = Direction::none(); /* Running direction */
     std::array<std::array<int, MAX_WID>, MAX_HGT> costs{};
 };

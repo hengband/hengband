@@ -128,67 +128,73 @@ std::optional<int> travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int 
  * @param costs トラベルの目標到達地点までの行程
  * @return 次の方向
  */
-DIRECTION decide_travel_step_dir(PlayerType *player_ptr, DIRECTION prev_dir, std::span<const std::array<int, MAX_WID>, MAX_HGT> costs)
+Direction decide_travel_step_dir(PlayerType *player_ptr, const Direction &prev_dir, std::span<const std::array<int, MAX_WID>, MAX_HGT> costs)
 {
+    if (!prev_dir) {
+        return Direction::none();
+    }
+
     const auto &blindness = player_ptr->effects()->blindness();
     if (blindness.is_blind() || no_lite(player_ptr)) {
         msg_print(_("目が見えない！", "You cannot see!"));
-        return 0;
+        return Direction::none();
     }
 
+    const auto p_pos = player_ptr->get_position();
     auto &floor = *player_ptr->current_floor_ptr;
-    if ((disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && !(floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_IN_DETECT)) {
+    const auto &p_grid = floor.get_grid(p_pos);
+    if ((disturb_trap_detect || alert_trap_detect) && player_ptr->dtrap && none_bits(p_grid.info, CAVE_IN_DETECT)) {
         player_ptr->dtrap = false;
-        if (!(floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_UNSAFE)) {
+        if (none_bits(p_grid.info, CAVE_UNSAFE)) {
             if (alert_trap_detect) {
                 msg_print(_("* 注意:この先はトラップの感知範囲外です！ *", "*Leaving trap detect region!*"));
             }
 
             if (disturb_trap_detect) {
-                return 0;
+                return Direction::none();
             }
         }
     }
 
-    int max = (prev_dir & 0x01) + 1;
-    for (int i = -max; i <= max; i++) {
-        DIRECTION dir = cycle[chome[prev_dir] + i];
+    const auto max = prev_dir.is_diagonal() ? 2 : 1;
+    for (auto i = -max; i <= max; i++) {
+        const auto dir = prev_dir.rotated_45degree(i);
         const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = floor.get_grid(pos);
         if (grid.has_monster()) {
             const auto &monster = floor.m_list[grid.m_idx];
             if (monster.ml) {
-                return 0;
+                return Direction::none();
             }
         }
     }
 
-    auto cost = costs[player_ptr->y][player_ptr->x];
-    DIRECTION new_dir = 0;
+    auto cost = costs[p_pos.y][p_pos.x];
+    auto new_direction = Direction::none();
     for (const auto &d : Direction::directions_8()) {
-        const auto pos_neighbor = player_ptr->get_neighbor(d);
+        const auto pos_neighbor = p_pos + d.vec();
         const auto dir_cost = costs[pos_neighbor.y][pos_neighbor.x];
         if (dir_cost < cost) {
-            new_dir = d.dir();
+            new_direction = d;
             cost = dir_cost;
         }
     }
 
-    if (!new_dir) {
-        return 0;
+    if (!new_direction) {
+        return Direction::none();
     }
 
-    const auto pos_new = player_ptr->get_neighbor(new_dir);
+    const auto pos_new = p_pos + new_direction.vec();
     if (!easy_open && floor.has_closed_door_at(pos_new)) {
-        return 0;
+        return Direction::none();
     }
 
-    const auto &grid = floor.get_grid(pos_new);
-    if (!grid.mimic && !trap_can_be_ignored(player_ptr, grid.feat)) {
-        return 0;
+    const auto &grid_new = floor.get_grid(pos_new);
+    if (!grid_new.mimic && !trap_can_be_ignored(player_ptr, grid_new.feat)) {
+        return Direction::none();
     }
 
-    return new_dir;
+    return new_direction;
 }
 }
 
@@ -208,7 +214,7 @@ void Travel::set_goal(PlayerType *player_ptr, const Pos2D &pos)
     this->pos_goal = pos;
     this->run = 255;
 
-    this->dir = 0;
+    this->dir = Direction::none();
     const auto p_pos = player_ptr->get_position();
     auto dx = std::abs(p_pos.x - pos.x);
     auto dy = std::abs(p_pos.y - pos.y);
@@ -216,7 +222,7 @@ void Travel::set_goal(PlayerType *player_ptr, const Pos2D &pos)
     auto sy = ((pos.y == p_pos.y) || (dy < dx)) ? 0 : ((pos.y > p_pos.y) ? 1 : -1);
     for (const auto &d : Direction::directions()) {
         if (Pos2DVec(sy, sx) == d.vec()) {
-            this->dir = d.dir();
+            this->dir = d;
         }
     }
 
@@ -270,7 +276,7 @@ void Travel::step(PlayerType *player_ptr)
     }
 
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
-    exe_movement(player_ptr, Direction(this->dir), always_pickup, false);
+    exe_movement(player_ptr, this->dir, always_pickup, false);
     if (player_ptr->get_position() == this->get_goal()) {
         this->reset_goal();
     } else if (this->run > 0) {
