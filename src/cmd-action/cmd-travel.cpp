@@ -1,11 +1,9 @@
 #include "cmd-action/cmd-travel.h"
 #include "action/travel-execution.h"
 #include "core/asking-player.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "player/player-move.h"
-#include "player/player-status-flags.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -13,145 +11,6 @@
 #include "target/grid-selector.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-
-#define TRAVEL_UNABLE 9999
-
-/*!
- * @brief トラベル処理中に地形に応じた移動コスト基準を返す
- * @param player_ptr	プレイヤーへの参照ポインタ
- * @param y 該当地点のY座標
- * @param x 該当地点のX座標
- * @return コスト値
- */
-static int travel_flow_cost(PlayerType *player_ptr, POSITION y, POSITION x)
-{
-    int cost = 1;
-    const Pos2D pos(y, x);
-    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
-    const auto &terrain = grid.get_terrain();
-    if (terrain.flags.has(TerrainCharacteristics::AVOID_RUN)) {
-        cost += 1;
-    }
-
-    if (terrain.flags.has_all_of({ TerrainCharacteristics::WATER, TerrainCharacteristics::DEEP }) && !player_ptr->levitation) {
-        cost += 5;
-    }
-
-    if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
-        int lava = 2;
-        if (!has_resist_fire(player_ptr)) {
-            lava *= 2;
-        }
-
-        if (!player_ptr->levitation) {
-            lava *= 2;
-        }
-
-        if (terrain.flags.has(TerrainCharacteristics::DEEP)) {
-            lava *= 2;
-        }
-
-        cost += lava;
-    }
-
-    if (grid.is_mark()) {
-        if (terrain.flags.has(TerrainCharacteristics::DOOR)) {
-            cost += 1;
-        }
-
-        if (terrain.flags.has(TerrainCharacteristics::TRAP)) {
-            cost += 10;
-        }
-    }
-
-    return cost;
-}
-
-/*!
- * @brief トラベル処理の到達地点までの行程を得る処理のサブルーチン
- * @param player_ptr	プレイヤーへの参照ポインタ
- * @param y 目標地点のY座標
- * @param x 目標地点のX座標
- * @param n 現在のコスト
- * @param wall プレイヤーが壁の中にいるならばTRUE
- */
-static void travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int n, bool wall)
-{
-    auto &floor = *player_ptr->current_floor_ptr;
-    auto &grid = floor.get_grid(pos);
-    auto &terrain = grid.get_terrain();
-    if (!in_bounds(floor, pos.y, pos.x)) {
-        return;
-    }
-
-    if (floor.is_underground() && !(grid.info & CAVE_KNOWN)) {
-        return;
-    }
-
-    auto add_cost = 1;
-    auto from_wall = (n / TRAVEL_UNABLE);
-    auto is_wall = terrain.flags.has_any_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::CAN_DIG });
-    is_wall |= terrain.flags.has(TerrainCharacteristics::DOOR) && (grid.mimic > 0);
-    auto can_move = terrain.flags.has_not(TerrainCharacteristics::MOVE);
-    can_move &= terrain.flags.has(TerrainCharacteristics::CAN_FLY);
-    can_move &= !player_ptr->levitation;
-    if (is_wall || can_move) {
-        if (!wall || !from_wall) {
-            return;
-        }
-
-        add_cost += TRAVEL_UNABLE;
-    } else {
-        add_cost = travel_flow_cost(player_ptr, pos.y, pos.x);
-    }
-
-    auto base_cost = (n % TRAVEL_UNABLE);
-    auto cost = base_cost + add_cost;
-    auto &travel_cost = travel.costs[pos.y][pos.x];
-    if (travel_cost <= cost) {
-        return;
-    }
-
-    travel_cost = cost;
-    auto old_head = flow_head;
-    temp2_y[flow_head] = pos.y;
-    temp2_x[flow_head] = pos.x;
-    if (++flow_head == MAX_SHORT) {
-        flow_head = 0;
-    }
-
-    if (flow_head == flow_tail) {
-        flow_head = old_head;
-    }
-}
-
-/*!
- * @brief トラベル処理の到達地点までの行程を得る処理のメインルーチン
- * @param player_ptr	プレイヤーへの参照ポインタ
- * @param ty 目標地点のY座標
- * @param tx 目標地点のX座標
- */
-static void travel_flow(PlayerType *player_ptr, const Pos2D pos)
-{
-    flow_head = flow_tail = 0;
-    const auto &terrain = player_ptr->current_floor_ptr->get_grid(player_ptr->get_position()).get_terrain();
-    auto wall = terrain.flags.has(TerrainCharacteristics::MOVE);
-
-    travel_flow_aux(player_ptr, pos, 0, wall);
-    while (flow_head != flow_tail) {
-        const Pos2D pos_flow(temp2_y[flow_tail], temp2_x[flow_tail]);
-        if (++flow_tail == MAX_SHORT) {
-            flow_tail = 0;
-        }
-
-        for (const auto &d : Direction::directions_8()) {
-            const auto pos_neighbor = pos_flow + d.vec();
-            travel_flow_aux(player_ptr, pos_neighbor, travel.costs[pos_flow.y][pos_flow.x], wall);
-        }
-    }
-
-    flow_head = flow_tail = 0;
-}
 
 static std::optional<Pos2D> decide_travel_goal(PlayerType *player_ptr)
 {
@@ -191,6 +50,6 @@ void do_cmd_travel(PlayerType *player_ptr)
     }
 
     travel.forget_flow();
-    travel_flow(player_ptr, *pos);
     travel.set_goal(player_ptr->get_position(), *pos);
+    travel.update_flow(player_ptr);
 }

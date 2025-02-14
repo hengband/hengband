@@ -24,6 +24,7 @@ public:
     bool is_ongoing() const;
     void stop();
     void step(PlayerType *player_ptr);
+    void update_flow(PlayerType *player_ptr);
     void forget_flow();
 
     std::array<std::array<int, MAX_WID>, MAX_HGT> costs{};
