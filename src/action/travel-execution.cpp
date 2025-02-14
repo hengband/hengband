@@ -212,7 +212,6 @@ const std::optional<Pos2D> &Travel::get_goal() const
 void Travel::set_goal(PlayerType *player_ptr, const Pos2D &pos)
 {
     this->pos_goal = pos;
-    this->run = 255;
 
     this->dir = Direction::none();
     const auto p_pos = player_ptr->get_position();
@@ -228,28 +227,24 @@ void Travel::set_goal(PlayerType *player_ptr, const Pos2D &pos)
 
     this->forget_flow();
     this->update_flow(player_ptr);
+    this->state = TravelState::STANDBY_TO_EXECUTE;
 }
 
 void Travel::reset_goal()
 {
     this->pos_goal.reset();
-    this->run = 0;
+    this->state = TravelState::STOP;
     this->forget_flow();
-}
-
-bool Travel::is_started() const
-{
-    return this->run < 255;
 }
 
 bool Travel::is_ongoing() const
 {
-    return this->run > 0;
+    return this->state == TravelState::STANDBY_TO_EXECUTE || this->state == TravelState::EXECUTING;
 }
 
 void Travel::stop()
 {
-    this->run = 0;
+    this->state = TravelState::STOP;
 }
 
 int Travel::get_cost(const Pos2D &pos) const
@@ -266,7 +261,7 @@ void Travel::step(PlayerType *player_ptr)
 {
     this->dir = decide_travel_step_dir(player_ptr, this->dir, this->costs);
     if (!this->dir) {
-        if (!this->is_started()) {
+        if (this->state != TravelState::EXECUTING) {
             msg_print(_("道筋が見つかりません！", "No route is found!"));
             this->reset_goal();
         }
@@ -279,8 +274,8 @@ void Travel::step(PlayerType *player_ptr)
     exe_movement(player_ptr, this->dir, always_pickup, false);
     if (player_ptr->get_position() == this->get_goal()) {
         this->reset_goal();
-    } else if (this->run > 0) {
-        this->run--;
+    } else {
+        this->state = TravelState::EXECUTING;
     }
 }
 
