@@ -129,12 +129,13 @@ const std::optional<Pos2D> &Travel::get_goal() const
     return this->pos_goal;
 }
 
-void Travel::set_goal(const Pos2D &p_pos, const Pos2D &pos)
+void Travel::set_goal(PlayerType *player_ptr, const Pos2D &pos)
 {
     this->pos_goal = pos;
     this->run = 255;
 
     this->dir = 0;
+    const auto p_pos = player_ptr->get_position();
     auto dx = std::abs(p_pos.x - pos.x);
     auto dy = std::abs(p_pos.y - pos.y);
     auto sx = ((pos.x == p_pos.x) || (dx < dy)) ? 0 : ((pos.x > p_pos.x) ? 1 : -1);
@@ -144,12 +145,16 @@ void Travel::set_goal(const Pos2D &p_pos, const Pos2D &pos)
             this->dir = d.dir();
         }
     }
+
+    this->forget_flow();
+    this->update_flow(player_ptr);
 }
 
 void Travel::reset_goal()
 {
     this->pos_goal.reset();
     this->run = 0;
+    this->forget_flow();
 }
 
 bool Travel::is_started() const
@@ -311,5 +316,4 @@ void Travel::forget_flow()
     for (auto &row : this->costs) {
         row.fill(MAX_SHORT);
     }
-    this->reset_goal();
 }

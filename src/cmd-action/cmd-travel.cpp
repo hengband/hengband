@@ -49,7 +49,5 @@ void do_cmd_travel(PlayerType *player_ptr)
         return;
     }
 
-    travel.forget_flow();
-    travel.set_goal(player_ptr->get_position(), *pos);
-    travel.update_flow(player_ptr);
+    travel.set_goal(player_ptr, *pos);
 }
