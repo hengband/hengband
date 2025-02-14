@@ -28,12 +28,6 @@
 
 bool ignore_avoid_run;
 
-/* Allow quick "cycling" through the legal directions */
-byte cycle[MAX_RUN_CYCLES] = { 1, 2, 3, 6, 9, 8, 7, 4, 1, 2, 3, 6, 9, 8, 7, 4, 1 };
-
-/* Map each direction into the "middle" of the "cycle[]" array */
-byte chome[MAX_RUN_CHOME] = { 0, 8, 9, 10, 7, 0, 11, 6, 5, 4 };
-
 /* The direction we are running */
 static Direction find_current = Direction::none();
 
