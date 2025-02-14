@@ -24,8 +24,7 @@ public:
     bool is_ongoing() const;
     void stop();
     void step(PlayerType *player_ptr);
-
-    std::array<std::array<int, MAX_WID>, MAX_HGT> costs{};
+    int get_cost(const Pos2D &pos) const;
 
 private:
     void update_flow(PlayerType *player_ptr);
@@ -34,6 +33,7 @@ private:
     std::optional<Pos2D> pos_goal; /* Target position */
     int run{}; /* Remaining grid number */
     DIRECTION dir{}; /* Running direction */
+    std::array<std::array<int, MAX_WID>, MAX_HGT> costs{};
 };
 
 extern Travel travel;

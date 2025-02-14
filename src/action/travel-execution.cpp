@@ -172,14 +172,19 @@ void Travel::stop()
     this->run = 0;
 }
 
+int Travel::get_cost(const Pos2D &pos) const
+{
+    return this->costs[pos.y][pos.x];
+}
+
 /*!
- * @brief トラベル機能の判定処理 /
- * Test for traveling
- * @param player_ptr	プレイヤーへの参照ポインタ
- * @param prev_dir 前回移動を行った元の方角ID
+ * @brief トラベルの次の移動方向を決定する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param prev_dir 前回移動を行った方向
+ * @param costs トラベルの目標到達地点までの行程
  * @return 次の方向
  */
-static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
+static DIRECTION decide_travel_step_dir(PlayerType *player_ptr, DIRECTION prev_dir, std::span<const std::array<int, MAX_WID>, MAX_HGT> costs)
 {
     const auto &blindness = player_ptr->effects()->blindness();
     if (blindness.is_blind() || no_lite(player_ptr)) {
@@ -214,11 +219,11 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
         }
     }
 
-    int cost = travel.costs[player_ptr->y][player_ptr->x];
+    auto cost = costs[player_ptr->y][player_ptr->x];
     DIRECTION new_dir = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos_neighbor = player_ptr->get_neighbor(d);
-        int dir_cost = travel.costs[pos_neighbor.y][pos_neighbor.x];
+        const auto dir_cost = costs[pos_neighbor.y][pos_neighbor.x];
         if (dir_cost < cost) {
             new_dir = d.dir();
             cost = dir_cost;
@@ -249,7 +254,7 @@ static DIRECTION travel_test(PlayerType *player_ptr, DIRECTION prev_dir)
  */
 void Travel::step(PlayerType *player_ptr)
 {
-    this->dir = travel_test(player_ptr, this->dir);
+    this->dir = decide_travel_step_dir(player_ptr, this->dir, this->costs);
     if (!this->dir) {
         if (!this->is_started()) {
             msg_print(_("道筋が見つかりません！", "No route is found!"));
