@@ -548,7 +548,7 @@ void TargetSetter::sweep_target_grids()
 /*
  * Handle "target" and "look".
  */
-bool target_set(PlayerType *player_ptr, target_type mode)
+Target target_set(PlayerType *player_ptr, target_type mode)
 {
     TargetSetter ts(player_ptr, mode);
     target_who = 0;
@@ -564,5 +564,11 @@ bool target_set(PlayerType *player_ptr, target_type mode)
     };
     rfu.set_flags(flags);
     handle_stuff(player_ptr);
-    return target_who != 0;
+    if (target_who > 0) {
+        return Target::create_monster_target(player_ptr, target_who);
+    }
+    if (target_who < 0) {
+        return Target::create_grid_target(player_ptr, { target_row, target_col });
+    }
+    return Target::none();
 }

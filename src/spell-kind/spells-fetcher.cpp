@@ -108,13 +108,13 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
 
 bool fetch_monster(PlayerType *player_ptr)
 {
-    if (!target_set(player_ptr, TARGET_KILL)) {
+    const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+    if (!pos) {
         return false;
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(target_row, target_col);
-    const auto m_idx = floor.get_grid(pos).m_idx;
+    const auto m_idx = floor.get_grid(*pos).m_idx;
     if (!is_monster(m_idx)) {
         return false;
     }
@@ -122,17 +122,17 @@ bool fetch_monster(PlayerType *player_ptr)
     if (monster.is_riding()) {
         return false;
     }
-    if (!floor.has_los(pos)) {
+    if (!floor.has_los(*pos)) {
         return false;
     }
-    if (!projectable(player_ptr, player_ptr->get_position(), pos)) {
+    if (!projectable(player_ptr, player_ptr->get_position(), *pos)) {
         return false;
     }
 
     const auto m_name = monster_desc(player_ptr, monster, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
-    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { target_row, target_col }, player_ptr->get_position(), 0);
-    auto ty = target_row, tx = target_col;
+    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), *pos, player_ptr->get_position(), 0);
+    auto ty = pos->y, tx = pos->x;
     for (const auto &[ny, nx] : path_g) {
         const Pos2D pos_path(ny, nx);
         const auto &grid = floor.get_grid(pos_path);
@@ -142,13 +142,13 @@ bool fetch_monster(PlayerType *player_ptr)
         }
     }
 
-    floor.get_grid(pos).m_idx = 0;
+    floor.get_grid(*pos).m_idx = 0;
     floor.get_grid({ ty, tx }).m_idx = m_idx;
     monster.fy = ty;
     monster.fx = tx;
     (void)set_monster_csleep(player_ptr, m_idx, 0);
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, target_row, target_col);
+    lite_spot(player_ptr, pos->y, pos->x);
     lite_spot(player_ptr, ty, tx);
     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);

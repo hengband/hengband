@@ -163,11 +163,12 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
             summon_type type;
 
             if (cast) {
-                if (!target_set(player_ptr, TARGET_KILL)) {
+                const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+                if (!pos) {
                     return std::nullopt;
                 }
-                x = target_col;
-                y = target_row;
+                x = pos->x;
+                y = pos->y;
             } else {
                 /* Summons near player when failed */
                 x = player_ptr->x;
