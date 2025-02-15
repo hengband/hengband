@@ -36,9 +36,6 @@
  */
 
 #include "room/rooms-builder.h"
-#include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
-#include "floor/geometry.h"
 #include "grid/door.h"
 #include "grid/grid.h"
 #include "room/cave-filler.h"
@@ -348,7 +345,7 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y, x);
-    if (!in_bounds(floor, pos.y, pos.x)) {
+    if (!floor.contains(pos)) {
         return;
     }
 

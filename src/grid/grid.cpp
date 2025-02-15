@@ -18,11 +18,10 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
 #include "grid/object-placer.h"
 #include "io/screen-util.h"
-#include "mind/mind-ninja.h"
+#include "mind/mind-ninja.h" //!< @todo 相互依存、後で消す.
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-info.h"
 #include "monster/monster-update.h"
@@ -194,7 +193,7 @@ std::optional<Pos2D> new_player_spot(PlayerType *player_ptr)
             continue;
         }
 
-        if (!in_bounds(floor, pos.y, pos.x)) {
+        if (!floor.contains(pos)) {
             continue;
         }
 
@@ -263,7 +262,7 @@ static void update_local_illumination_aux(PlayerType *player_ptr, const Pos2D &p
  */
 void update_local_illumination(PlayerType *player_ptr, const Pos2D &pos)
 {
-    if (!in_bounds(*player_ptr->current_floor_ptr, pos.y, pos.x)) {
+    if (!player_ptr->current_floor_ptr->contains(pos)) {
         return;
     }
 
@@ -711,9 +710,10 @@ void update_flow(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
 
     /* The last way-point is on the map */
-    if (player_ptr->running && in_bounds(floor, flow_y, flow_x)) {
+    const Pos2D flow(flow_y, flow_x);
+    if (player_ptr->running && floor.contains(flow)) {
         /* The way point is in sight - do not update.  (Speedup) */
-        if (floor.grid_array[flow_y][flow_x].info & CAVE_VIEW) {
+        if (floor.get_grid(flow).info & CAVE_VIEW) {
             return;
         }
     }

@@ -5,9 +5,6 @@
  */
 
 #include "room/cave-filler.h"
-#include "dungeon/dungeon-flag-types.h"
-#include "floor//geometry.h"
-#include "floor/cave.h"
 #include "grid/grid.h"
 #include "room/lake-types.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -17,7 +14,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "util/point-2d.h"
 #include <queue>
 
 struct fill_data_type {
@@ -247,7 +243,7 @@ static void cave_fill(PlayerType *player_ptr, const Pos2D &initial_pos)
         for (const auto &d : Direction::directions_8()) {
             const auto pos_to = pos + d.vec();
             auto &grid = floor.get_grid(pos_to);
-            if (!in_bounds(floor, pos_to.y, pos_to.x)) {
+            if (!floor.contains(pos_to)) {
                 grid.info |= CAVE_ICKY;
                 continue;
             }

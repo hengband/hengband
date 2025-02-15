@@ -1,10 +1,7 @@
 #include "grid/feature-generator.h"
 #include "dungeon/dungeon-flag-mask.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"
-#include "floor/geometry.h"
 #include "game-option/cheat-types.h"
 #include "game-option/game-play-options.h"
 #include "grid/door.h"
@@ -166,7 +163,7 @@ static bool possible_doorway(const FloorType &floor, POSITION y, POSITION x)
 void try_door(PlayerType *player_ptr, dt_type *dt_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds(floor, pos.y, pos.x) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
+    if (!floor.contains(pos) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
         return;
     }
 

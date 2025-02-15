@@ -2,7 +2,6 @@
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
-#include "system/artifact-type-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -18,7 +17,7 @@ void place_gold(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    if (!in_bounds(floor, pos.y, pos.x)) {
+    if (!floor.contains(pos)) {
         return;
     }
     if (!cave_drop_bold(floor, pos.y, pos.x)) {
@@ -54,7 +53,7 @@ void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    if (!in_bounds(floor, pos.y, pos.x) || !cave_drop_bold(floor, pos.y, pos.x) || !grid.o_idx_list.empty()) {
+    if (!floor.contains(pos) || !cave_drop_bold(floor, pos.y, pos.x) || !grid.o_idx_list.empty()) {
         return;
     }
 

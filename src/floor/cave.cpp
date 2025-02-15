@@ -18,28 +18,11 @@
 #include "world/world.h"
 
 /*
- * Determines if a map location is fully inside the outer walls
- */
-bool in_bounds(const FloorType &floor, int y, int x)
-{
-    return (y > 0) && (x > 0) && (y < floor.height - 1) && (x < floor.width - 1);
-}
-
-/*
  * Determines if a map location is on or inside the outer walls
  */
 bool in_bounds2(const FloorType &floor, int y, int x)
 {
     return (y >= 0) && (x >= 0) && (y < floor.height) && (x < floor.width);
-}
-
-/*
- * Determines if a map location is on or inside the outer walls
- * (unsigned version)
- */
-bool in_bounds2u(const FloorType &floor, int y, int x)
-{
-    return (y < floor.height) && (x < floor.width);
 }
 
 /*

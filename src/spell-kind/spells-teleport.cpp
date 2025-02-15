@@ -9,29 +9,21 @@
 #include "core/asking-player.h"
 #include "core/speed-table.h"
 #include "dungeon/quest.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
-#include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "monster-floor/monster-move.h"
 #include "monster-race/race-brightness-mask.h"
-#include "monster-race/race-flags-resistance.h"
 #include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
-#include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "mutation/mutation-flag-types.h"
-#include "object-enchant/tr-types.h"
 #include "player-base/player-class.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-launcher.h"
-#include "system/angband-system.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -147,7 +139,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
                 }
             }
 
-            if (!in_bounds(floor, m_pos.y, m_pos.x)) {
+            if (!floor.contains(m_pos)) {
                 continue;
             }
             if (!cave_monster_teleportable_bold(player_ptr, m_idx, m_pos.y, m_pos.x, mode)) {
@@ -229,7 +221,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
                 }
             }
 
-            if (!in_bounds(*player_ptr->current_floor_ptr, m_pos.y, m_pos.x)) {
+            if (!floor.contains(m_pos)) {
                 continue;
             }
             if (!cave_monster_teleportable_bold(player_ptr, m_idx, m_pos.y, m_pos.x, mode)) {
@@ -491,7 +483,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
         while (true) {
             pos.y = rand_spread(ny, dis);
             pos.x = rand_spread(nx, dis);
-            if (in_bounds(floor, pos.y, pos.x)) {
+            if (floor.contains(pos)) {
                 break;
             }
         }

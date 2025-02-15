@@ -8,12 +8,10 @@
 #include "effect/attribute-types.h"
 #include "floor/cave.h"
 #include "floor/line-of-sight.h"
-#include "grid/grid.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
-#include "util/bit-flags-calculator.h"
 
 namespace {
 bool is_prevent_blast(PlayerType *player_ptr, const Pos2D &center, const Pos2D &pos, AttributeType type)
@@ -245,7 +243,7 @@ std::vector<std::pair<int, Pos2D>> breath_shape(PlayerType *player_ptr, const Pr
             for (auto y = pos_breath.y - cdis; y <= pos_breath.y + cdis; y++) {
                 for (auto x = pos_breath.x - cdis; x <= pos_breath.x + cdis; x++) {
                     const Pos2D pos(y, x);
-                    if (!in_bounds(floor, pos.y, pos.x)) {
+                    if (!floor.contains(pos)) {
                         continue;
                     }
                     if (Grid::calc_distance(pos_source, pos) != bdis) {

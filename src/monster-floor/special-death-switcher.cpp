@@ -8,15 +8,11 @@
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-generator.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
-#include "floor/geometry.h"
-#include "game-option/birth-options.h"
-#include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-death-util.h"
@@ -25,7 +21,6 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
 #include "object/object-kind-hook.h"
@@ -33,7 +28,6 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -81,7 +75,7 @@ static void summon_self(PlayerType *player_ptr, MonsterDeath *md_ptr, summon_typ
     auto attempts = 100;
     do {
         m_pos = scatter(player_ptr, md_ptr->get_position(), radius, PROJECT_NONE);
-    } while (!(in_bounds(floor, m_pos.y, m_pos.x) && is_cave_empty_bold2(player_ptr, m_pos.y, m_pos.x)) && --attempts);
+    } while (!(floor.contains(m_pos) && is_cave_empty_bold2(player_ptr, m_pos.y, m_pos.x)) && --attempts);
 
     if (attempts <= 0) {
         return;

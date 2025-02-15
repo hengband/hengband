@@ -12,7 +12,6 @@
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
-#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
@@ -279,7 +278,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
     for (auto y = (y1 - r); y <= (y1 + r); y++) {
         for (auto x = (x1 - r); x <= (x1 + r); x++) {
             const Pos2D pos(y, x);
-            if (!in_bounds(floor, pos.y, pos.x)) {
+            if (!floor.contains(pos)) {
                 continue;
             }
 
@@ -421,7 +420,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
     for (auto y = (y1 - r); y <= (y1 + r); y++) {
         for (auto x = (x1 - r); x <= (x1 + r); x++) {
             const Pos2D pos(y, x);
-            if (!in_bounds(floor, pos.y, pos.x)) {
+            if (!floor.contains(pos)) {
                 continue;
             }
 

@@ -1,8 +1,6 @@
 #include "floor/object-allocator.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
-#include "floor/dungeon-tunnel-util.h"
-#include "floor/floor-allocation-types.h"
 #include "floor/floor-generator-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
@@ -16,7 +14,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
 /*!
@@ -29,7 +26,7 @@ static int next_to_walls(const FloorType &floor, const Pos2D &pos)
     auto k = 0;
     for (const auto &d : Direction::directions_4()) {
         const auto pos_neighbor = pos + d.vec();
-        if (in_bounds(floor, pos_neighbor.y, pos_neighbor.x) && floor.get_grid(pos_neighbor).is_extra()) {
+        if (floor.contains(pos_neighbor) && floor.get_grid(pos_neighbor).is_extra()) {
             k++;
         }
     }

@@ -10,21 +10,10 @@
  */
 
 #include "monster/monster-list.h"
-#include "core/speed-table.h"
-#include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
-#include "floor/floor-object.h"
-#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
-#include "grid/grid.h"
-#include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster/monster-describer.h"
-#include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "pet/pet-fall-off.h"
-#include "player/player-status.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -37,8 +26,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
-#include "util/bit-flags-calculator.h"
-#include "util/probability-table.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <cmath>
@@ -233,7 +220,7 @@ int get_monster_crowd_number(const FloorType &floor, short m_idx)
     auto count = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos = m_pos + d.vec();
-        if (!in_bounds(floor, pos.y, pos.x)) {
+        if (!floor.contains(pos)) {
             continue;
         }
 

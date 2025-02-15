@@ -1,15 +1,10 @@
 #include "spell-realm/spells-chaos.h"
-#include "core/window-redrawer.h"
 #include "dungeon/quest.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
-#include "floor/geometry.h"
 #include "grid/grid.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
-#include "monster/monster-status.h"
 #include "player-info/class-info.h"
 #include "player/player-damage.h"
 #include "spell-kind/spells-floor.h"
@@ -22,7 +17,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -216,7 +210,7 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
                 continue;
             }
 
-            if (!in_bounds(floor, pos.y, pos.x)) {
+            if (!floor.contains(pos)) {
                 continue;
             }
 

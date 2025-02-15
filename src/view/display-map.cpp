@@ -2,16 +2,10 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
-#include "floor/cave.h"
-#include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
-#include "object/object-info.h"
-#include "object/object-mark-types.h"
 #include "player/player-status.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -22,7 +16,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "term/term-color-types.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-symbol.h"
@@ -113,7 +106,7 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
         return true;
     }
 
-    if (in_bounds(floor, pos.y, pos.x) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
+    if (floor.contains(pos) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
         return true;
     }
 
@@ -121,7 +114,7 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
     const auto num_of_walls = std::count_if(dirs.begin(), dirs.end(),
         [&floor, &pos](const auto &d) {
             const auto pos_neighbor = pos + d.vec();
-            if (!in_bounds(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor)) {
                 return true;
             }
 

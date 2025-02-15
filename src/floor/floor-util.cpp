@@ -10,8 +10,6 @@
 #include "floor/floor-object.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
-#include "perception/object-perception.h"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
@@ -23,7 +21,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
-#include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
 /*
@@ -78,7 +75,7 @@ void update_smell(FloorType &floor, const Pos2D &p_pos)
     for (auto y = 0; y < 5; y++) {
         for (auto x = 0; x < 5; x++) {
             const auto pos = p_pos + Pos2DVec(y, x) + Pos2DVec(-2, -2);
-            if (!in_bounds(floor, pos.y, pos.x)) {
+            if (!floor.contains(pos)) {
                 continue;
             }
 
@@ -162,7 +159,7 @@ Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode)
         const auto ny = rand_spread(pos.y, d);
         const auto nx = rand_spread(pos.x, d);
         const Pos2D pos_neighbor(ny, nx);
-        if (!in_bounds(floor, pos_neighbor.y, pos_neighbor.x)) {
+        if (!floor.contains(pos_neighbor)) {
             continue;
         }
         if ((d > 1) && (Grid::calc_distance(pos, pos_neighbor) > d)) {

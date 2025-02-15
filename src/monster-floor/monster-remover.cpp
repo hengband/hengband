@@ -1,13 +1,9 @@
 #include "monster-floor/monster-remover.h"
 #include "core/stuff-handler.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "monster-race/race-brightness-mask.h"
-#include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
-#include "monster/monster-status.h"
-#include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -136,7 +132,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
 void delete_monster(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds(floor, pos.y, pos.x)) {
+    if (!floor.contains(pos)) {
         return;
     }
 
