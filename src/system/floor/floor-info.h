@@ -39,6 +39,11 @@ constexpr auto VIEW_MAX = 1536;
  */
 constexpr auto REDRAW_MAX = 2298;
 
+enum class FloorBoundary {
+    OUTER_WALL_EXCLUSIVE,
+    OUTER_WALL_INCLUSIVE,
+};
+
 enum class DungeonId;
 enum class GridCountKind;
 enum class MonsterTimedEffect : int;
@@ -121,6 +126,7 @@ public:
     bool check_terrain_state(const Pos2D &pos, GridCountKind gck) const;
     bool order_pet_whistle(short index1, short index2) const;
     bool order_pet_dismission(short index1, short index2, short riding_index) const;
+    bool contains(const Pos2D &pos, FloorBoundary fb = FloorBoundary::OUTER_WALL_EXCLUSIVE) const;
 
     ItemEntity make_gold(std::optional<BaseitemKey> bi_key = std::nullopt) const;
     std::optional<ItemEntity> try_make_instant_artifact() const;

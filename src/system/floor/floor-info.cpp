@@ -296,6 +296,18 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
     return index1 < index2;
 }
 
+bool FloorType::contains(const Pos2D &pos, FloorBoundary fb) const
+{
+    switch (fb) {
+    case FloorBoundary::OUTER_WALL_EXCLUSIVE:
+        return (pos.y > 0) && (pos.x > 0) && (pos.y < this->height - 1) && (pos.x < this->width - 1);
+    case FloorBoundary::OUTER_WALL_INCLUSIVE:
+        return (pos.y >= 0) && (pos.x >= 0) && (pos.y < this->height) && (pos.x < this->width);
+    default:
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid LocationDecision is specified! {}", enum2i(fb)));
+    }
+}
+
 /*!
  * @brief 特定の財宝を生成する。指定がない場合、生成階に応じたランダムな財宝を生成する。
  * @param bi_key 財宝を固定生成する場合のBaseitemKey
