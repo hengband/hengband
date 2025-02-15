@@ -1,4 +1,5 @@
 #include "target/target-setter.h"
+#include "action/travel-execution.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/geometry.h"
@@ -62,6 +63,16 @@ TargetSetter::TargetSetter(PlayerType *player_ptr, target_type mode)
     , pos_target(player_ptr->get_position())
     , pos_interests(target_set_prepare(player_ptr, mode))
 {
+}
+
+static bool set_travel_goal(PlayerType *player_ptr, const Pos2D &pos)
+{
+    if (player_ptr->is_located_at(pos) || !Travel::can_travel_to(*player_ptr->current_floor_ptr, pos)) {
+        return false;
+    }
+
+    Travel::get_instance().set_goal(player_ptr, pos);
+    return true;
 }
 
 /*!
@@ -181,6 +192,10 @@ std::string TargetSetter::describe_projectablity() const
         info = _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>");
     }
 
+    if (any_bits(this->mode, TARGET_LOOK)) {
+        info.append(_(" g移", ",g"));
+    }
+
     if (!cheat_sight) {
         return info;
     }
@@ -273,6 +288,9 @@ Direction TargetSetter::switch_target_input()
         this->interest_index = std::nullopt;
         return Direction::none();
     case 'm':
+        return Direction::none();
+    case 'g':
+        this->done = set_travel_goal(this->player_ptr, this->pos_target);
         return Direction::none();
     default: {
         const char queried_command = rogue_like_commands ? 'x' : 'l';
@@ -410,6 +428,9 @@ std::string TargetSetter::describe_grid_wizard() const
 std::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command()
 {
     std::string info = _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>");
+    if (any_bits(this->mode, TARGET_LOOK)) {
+        info.append(_(" g移", ",g"));
+    }
     info.append(this->describe_grid_wizard());
     const auto query = this->examine_target_grid(info, TARGET_LOOK);
     switch (query) {
@@ -459,6 +480,9 @@ std::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command
 
         return std::nullopt;
     }
+    case 'g':
+        this->done = set_travel_goal(this->player_ptr, this->pos_target);
+        return std::nullopt;
     default:
         const auto dir = get_keymap_dir(query);
         if (!dir) {

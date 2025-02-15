@@ -27,6 +27,7 @@ public:
     Travel &operator=(Travel &&) = delete;
 
     static Travel &get_instance();
+    static bool can_travel_to(const FloorType &floor, const Pos2D &pos);
 
     const std::optional<Pos2D> &get_goal() const;
     void set_goal(PlayerType *player_ptr, const Pos2D &pos);
