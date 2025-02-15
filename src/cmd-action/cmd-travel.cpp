@@ -38,7 +38,7 @@ void do_cmd_travel(PlayerType *player_ptr)
         return;
     }
 
-    if (Travel::can_travel_to(*player_ptr->current_floor_ptr, *pos)) {
+    if (!Travel::can_travel_to(*player_ptr->current_floor_ptr, *pos)) {
         msg_print(_("そこには行くことができません！", "You cannot travel there!"));
         return;
     }
