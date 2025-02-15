@@ -195,7 +195,7 @@ static bool random_walk(PlayerType *player_ptr, std::span<Direction> mm, const M
  * @param m_idx モンスターID
  * @return モンスターがペットであればTRUE
  */
-static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
+static bool decide_pet_movement_direction(MonsterSweepGrid *msd, std::span<Direction> mm)
 {
     const auto &monster = msd->player_ptr->current_floor_ptr->m_list[msd->m_idx];
     if (!monster.is_pet()) {
@@ -205,8 +205,8 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
     bool avoid = ((msd->player_ptr->pet_follow_distance < 0) && (monster.cdis <= (0 - msd->player_ptr->pet_follow_distance)));
     bool lonely = (!avoid && (monster.cdis > msd->player_ptr->pet_follow_distance));
     bool distant = (monster.cdis > PET_SEEK_DIST);
-    msd->mm[0] = msd->mm[1] = msd->mm[2] = msd->mm[3] = Direction::self();
-    if (get_enemy_dir(msd->player_ptr, msd->m_idx, msd->mm)) {
+    mm[0] = mm[1] = mm[2] = mm[3] = Direction::self();
+    if (get_enemy_dir(msd->player_ptr, msd->m_idx, mm)) {
         return true;
     }
 
@@ -219,7 +219,7 @@ static bool decide_pet_movement_direction(MonsterSweepGrid *msd)
         msd->player_ptr->pet_follow_distance = PET_SEEK_DIST;
     }
 
-    (void)msd->get_movable_grid();
+    (void)msd->get_movable_grid(mm);
     msd->player_ptr->pet_follow_distance = (int16_t)dis;
     return true;
 }
@@ -251,8 +251,8 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, std::span<Directi
         return true;
     }
 
-    MonsterSweepGrid msd(player_ptr, m_idx, mm);
-    if (decide_pet_movement_direction(&msd)) {
+    MonsterSweepGrid msd(player_ptr, m_idx);
+    if (decide_pet_movement_direction(&msd, mm)) {
         return true;
     }
 
@@ -262,5 +262,5 @@ bool decide_monster_movement_direction(PlayerType *player_ptr, std::span<Directi
         return true;
     }
 
-    return msd.get_movable_grid();
+    return msd.get_movable_grid(mm);
 }

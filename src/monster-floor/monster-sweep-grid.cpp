@@ -513,21 +513,20 @@ public:
  * @brief コンストラクタ
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx 移動するモンスターの参照ID
- * @param mm 移動方向を返す方向IDの参照ポインタ
  */
-MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, std::span<Direction> mm)
+MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx)
     : player_ptr(player_ptr)
     , m_idx(m_idx)
-    , mm(mm)
 {
 }
 
 /*!
  * @brief モンスターの移動方向を返す
+ * @param mm 移動方向を格納する配列への参照
  * @return 有効方向があった場合TRUEを返す
  * @todo 分割したいが条件が多すぎて適切な関数名と詳細処理を追いきれない……
  */
-bool MonsterSweepGrid::get_movable_grid()
+bool MonsterSweepGrid::get_movable_grid(std::span<Direction> mm)
 {
     const auto deciders = MonsterMoveGridDecidersFactory::create_deciders(this->player_ptr, this->m_idx);
     auto pos_move = MonsterMoveGridDecider::evalute_deciders(deciders, this->player_ptr->get_position());
@@ -542,6 +541,6 @@ bool MonsterSweepGrid::get_movable_grid()
         return false;
     }
 
-    store_moves_val(this->mm, vec);
+    store_moves_val(mm, vec);
     return true;
 }
