@@ -483,20 +483,22 @@ void process_special(PlayerType *player_ptr, MONSTER_IDX m_idx)
  */
 bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox)
 {
-    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
     auto &monrace = monster.get_monrace();
-    if (monrace.misc_flags.has_not(MonsterMiscType::MULTIPLY) || (player_ptr->current_floor_ptr->num_repro >= MAX_REPRODUCTION)) {
+    if (monrace.misc_flags.has_not(MonsterMiscType::MULTIPLY) || (floor.num_repro >= MAX_REPRODUCTION)) {
         return false;
     }
 
-    int k = 0;
-    for (POSITION y = oy - 1; y <= oy + 1; y++) {
-        for (POSITION x = ox - 1; x <= ox + 1; x++) {
-            if (!in_bounds2(*player_ptr->current_floor_ptr, y, x)) {
+    auto k = 0;
+    for (auto y = oy - 1; y <= oy + 1; y++) {
+        for (auto x = ox - 1; x <= ox + 1; x++) {
+            const Pos2D pos(y, x);
+            if (!in_bounds2(floor, pos.y, pos.x)) {
                 continue;
             }
 
-            if (player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
+            if (floor.get_grid(pos).has_monster()) {
                 k++;
             }
         }
@@ -507,17 +509,20 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
     }
 
     constexpr auto chance_reproduction = 8;
-    if ((k < 4) && (!k || !randint0(k * chance_reproduction))) {
-        if (auto multiplied_m_idx = multiply_monster(player_ptr, m_idx, false, (monster.is_pet() ? PM_FORCE_PET : 0))) {
-            if (player_ptr->current_floor_ptr->m_list[*multiplied_m_idx].ml && is_original_ap_and_seen(player_ptr, monster)) {
-                monrace.r_misc_flags.set(MonsterMiscType::MULTIPLY);
-            }
-
-            return true;
-        }
+    if ((k >= 4) || ((k > 0) && randint0(k * chance_reproduction))) {
+        return false;
     }
 
-    return false;
+    const auto multiplied_m_idx = multiply_monster(player_ptr, m_idx, false, (monster.is_pet() ? PM_FORCE_PET : 0));
+    if (!multiplied_m_idx) {
+        return false;
+    }
+
+    if (floor.m_list[*multiplied_m_idx].ml && is_original_ap_and_seen(player_ptr, monster)) {
+        monrace.r_misc_flags.set(MonsterMiscType::MULTIPLY);
+    }
+
+    return true;
 }
 
 /*!

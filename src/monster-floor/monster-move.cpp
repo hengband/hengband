@@ -389,19 +389,19 @@ void activate_explosive_rune(PlayerType *player_ptr, const Pos2D &pos, const Mon
  */
 bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterMovementDirectionList &mmdl, const Pos2D &pos, int *count)
 {
+    auto &floor = *player_ptr->current_floor_ptr;
     const auto m_idx = mmdl.get_m_idx();
     for (const auto &dir : mmdl.get_movement_directions()) {
         const auto dir_move = dir.has_direction() ? dir : rand_choice(Direction::directions_8());
         const auto pos_neighbor = pos + dir_move.vec();
-        if (!in_bounds2(*player_ptr->current_floor_ptr, pos_neighbor.y, pos_neighbor.x)) {
+        if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
             continue;
         }
 
-        auto &grid = player_ptr->current_floor_ptr->get_grid(pos_neighbor);
-        auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+        auto &grid = floor.get_grid(pos_neighbor);
+        auto &monster = floor.m_list[m_idx];
         auto &monrace = monster.get_monrace();
-        bool can_cross = monster_can_cross_terrain(player_ptr, grid.feat, monrace, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
-
+        auto can_cross = monster_can_cross_terrain(player_ptr, grid.feat, monrace, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
         if (!process_wall(player_ptr, turn_flags_ptr, monster, pos_neighbor, can_cross)) {
             if (!process_door(player_ptr, turn_flags_ptr, monster, pos_neighbor)) {
                 return false;
@@ -420,7 +420,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         }
 
         if (turn_flags_ptr->is_riding_mon) {
-            const auto &monster_riding = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+            const auto &monster_riding = floor.m_list[player_ptr->riding];
             if (!player_ptr->riding_ryoute && !monster_riding.is_fearful()) {
                 turn_flags_ptr->do_move = false;
             }
@@ -482,12 +482,10 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             }
         }
 
-        bool is_takable_or_killable = !grid.o_idx_list.empty();
+        auto is_takable_or_killable = !grid.o_idx_list.empty();
         is_takable_or_killable &= monrace.behavior_flags.has_any_of({ MonsterBehaviorType::TAKE_ITEM, MonsterBehaviorType::KILL_ITEM });
-
-        bool is_pickup_items = (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) != 0;
+        auto is_pickup_items = (player_ptr->pet_extra_flags & PF_PICKUP_ITEMS) != 0;
         is_pickup_items &= monrace.behavior_flags.has(MonsterBehaviorType::TAKE_ITEM);
-
         is_takable_or_killable &= !monster.is_pet() || is_pickup_items;
         if (!is_takable_or_killable) {
             if (turn_flags_ptr->do_turn) {

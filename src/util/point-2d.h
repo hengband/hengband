@@ -115,6 +115,14 @@ constexpr Point2D<T> operator+(const Point2D<T> &point, const Vector2D<T> &vecto
 }
 
 template <typename T>
+constexpr Point2D<T> operator-(const Point2D<T> &point, const Vector2D<T> &vector)
+{
+    auto result = point;
+    result += vector.inverted();
+    return result;
+}
+
+template <typename T>
 constexpr Point2D<T> operator+(const Vector2D<T> &vector, const Point2D<T> &point)
 {
     return operator+(point, vector);
