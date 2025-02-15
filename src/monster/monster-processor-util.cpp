@@ -39,56 +39,56 @@ turn_flags *init_turn_flags(bool is_riding, turn_flags *turn_flags_ptr)
 }
 
 /*!
- * @brief モンスターの移動方向を保存する
- * @param mm 移動方向
- * @param y 移動先Y座標
- * @param x 移動先X座標
+ * @brief モンスターの移動方向のリストを取得する
+ *
+ * 移動方向の優先度は以下の通り
+ *
+ * 1. vec で指定された方向
+ * 2. vec で指定された方向の左右45度(左右どちらが先かはvecの値による)
+ * 3. ランダムな方向
+ *
+ * @param vec 移動方向のベクトル
+ * @return モンスターの移動方向のリスト
  */
-void store_enemy_approch_direction(std::span<Direction> mm, POSITION y, POSITION x)
+MonsterMovementDirectionList get_enemy_approch_direction(MONSTER_IDX m_idx, const Pos2DVec &vec)
 {
-    /* North, South, East, West, North-West, North-East, South-West, South-East */
-    if ((y < 0) && (x == 0)) {
-        mm[0] = Direction(8);
-        mm[1] = Direction(7);
-        mm[2] = Direction(9);
-    } else if ((y > 0) && (x == 0)) {
-        mm[0] = Direction(2);
-        mm[1] = Direction(1);
-        mm[2] = Direction(3);
-    } else if ((x > 0) && (y == 0)) {
-        mm[0] = Direction(6);
-        mm[1] = Direction(9);
-        mm[2] = Direction(3);
-    } else if ((x < 0) && (y == 0)) {
-        mm[0] = Direction(4);
-        mm[1] = Direction(7);
-        mm[2] = Direction(1);
-    } else if ((y < 0) && (x < 0)) {
-        mm[0] = Direction(7);
-        mm[1] = Direction(4);
-        mm[2] = Direction(8);
-    } else if ((y < 0) && (x > 0)) {
-        mm[0] = Direction(9);
-        mm[1] = Direction(6);
-        mm[2] = Direction(8);
-    } else if ((y > 0) && (x < 0)) {
-        mm[0] = Direction(1);
-        mm[1] = Direction(4);
-        mm[2] = Direction(2);
-    } else if ((y > 0) && (x > 0)) {
-        mm[0] = Direction(3);
-        mm[1] = Direction(6);
-        mm[2] = Direction(2);
+    MonsterMovementDirectionList mmdl(m_idx);
+
+    if ((vec.y < 0) && (vec.x == 0)) { // North
+        mmdl.add_movement_directions({ Direction(8), Direction(7), Direction(9) });
+    } else if ((vec.y > 0) && (vec.x == 0)) { // South
+        mmdl.add_movement_directions({ Direction(2), Direction(1), Direction(3) });
+    } else if ((vec.x > 0) && (vec.y == 0)) { // East
+        mmdl.add_movement_directions({ Direction(6), Direction(9), Direction(3) });
+    } else if ((vec.x < 0) && (vec.y == 0)) { // West
+        mmdl.add_movement_directions({ Direction(4), Direction(7), Direction(1) });
+    } else if ((vec.y < 0) && (vec.x < 0)) { // North-West
+        mmdl.add_movement_directions({ Direction(7), Direction(4), Direction(8) });
+    } else if ((vec.y < 0) && (vec.x > 0)) { // North-East
+        mmdl.add_movement_directions({ Direction(9), Direction(6), Direction(8) });
+    } else if ((vec.y > 0) && (vec.x < 0)) { // South-West
+        mmdl.add_movement_directions({ Direction(1), Direction(4), Direction(2) });
+    } else if ((vec.y > 0) && (vec.x > 0)) { // South-East
+        mmdl.add_movement_directions({ Direction(3), Direction(6), Direction(2) });
     }
+
+    // どの方向にも進めない場合にランダム移動する
+    mmdl.add_movement_direction(Direction::self());
+
+    return mmdl;
 }
 
 /*!
- * @brief get_movable_grid() における移動の方向を保存する
- * @param mm 移動方向
+ * @brief MonsterSweepGrid::get_movable_grid() における移動の方向を取得する
  * @param vec 移動方向のベクトル
+ * @return モンスターの移動方向。vec が (0, 0) の場合は std::nullopt を返す
  */
-void store_moves_val(std::span<Direction> mm, const Pos2DVec &vec)
+std::optional<MonsterMovementDirectionList> get_moves_val(MONSTER_IDX m_idx, const Pos2DVec &vec)
 {
+    if (vec == Pos2DVec(0, 0)) {
+        return std::nullopt;
+    }
+
     const Pos2DVec vec_abs(std::abs(vec.y), std::abs(vec.x));
     auto move_val = 0;
     if (vec.y < 0) {
@@ -104,60 +104,66 @@ void store_moves_val(std::span<Direction> mm, const Pos2DVec &vec)
         move_val++;
     }
 
+    auto dir = Direction::none();
     auto is_left_first = false;
     switch (move_val) {
     case 0: {
-        mm[0] = Direction(9);
+        dir = Direction(9);
         is_left_first = vec_abs.y > vec_abs.x;
         break;
     }
     case 1:
     case 9: {
-        mm[0] = Direction(6);
+        dir = Direction(6);
         is_left_first = vec.y >= 0;
         break;
     }
     case 2:
     case 6: {
-        mm[0] = Direction(8);
+        dir = Direction(8);
         is_left_first = vec.x >= 0;
         break;
     }
     case 4: {
-        mm[0] = Direction(7);
+        dir = Direction(7);
         is_left_first = vec_abs.y <= vec_abs.x;
         break;
     }
     case 5:
     case 13: {
-        mm[0] = Direction(4);
+        dir = Direction(4);
         is_left_first = vec.y < 0;
         break;
     }
     case 8: {
-        mm[0] = Direction(3);
+        dir = Direction(3);
         is_left_first = vec_abs.y <= vec_abs.x;
         break;
     }
     case 10:
     case 14: {
-        mm[0] = Direction(2);
+        dir = Direction(2);
         is_left_first = vec.x < 0;
         break;
     }
     case 12: {
-        mm[0] = Direction(1);
+        dir = Direction(1);
         is_left_first = vec_abs.y > vec_abs.x;
         break;
     default:
-        return;
+        // ここには来ないはず？一応ランダム移動を設定しておく
+        return MonsterMovementDirectionList::random_move(m_idx);
     }
     }
 
-    mm[1] = mm[0].rotated_45degree(is_left_first ? 1 : -1);
-    mm[2] = mm[0].rotated_45degree(is_left_first ? -1 : 1);
-    mm[3] = mm[0].rotated_45degree(is_left_first ? 2 : -2);
-    mm[4] = mm[0].rotated_45degree(is_left_first ? -2 : 2);
+    MonsterMovementDirectionList mmdl(m_idx);
+    mmdl.add_movement_direction(dir);
+    mmdl.add_movement_direction(dir.rotated_45degree(is_left_first ? 1 : -1));
+    mmdl.add_movement_direction(dir.rotated_45degree(is_left_first ? -1 : 1));
+    mmdl.add_movement_direction(dir.rotated_45degree(is_left_first ? 2 : -2));
+    mmdl.add_movement_direction(dir.rotated_45degree(is_left_first ? -2 : 2));
+
+    return mmdl;
 }
 
 /*!

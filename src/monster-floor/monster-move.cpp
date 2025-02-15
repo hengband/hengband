@@ -17,6 +17,7 @@
 #include "grid/grid.h"
 #include "io/files-util.h"
 #include "monster-attack/monster-attack-processor.h"
+#include "monster-floor/monster-movement-direction-list.h"
 #include "monster-floor/monster-object.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-flag-types.h"
@@ -380,19 +381,16 @@ void activate_explosive_rune(PlayerType *player_ptr, const Pos2D &pos, const Mon
  * @brief モンスターの移動に関するメインルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
- * @param m_idx モンスターID
- * @param mm モンスターの移動方向
+ * @param mmdl モンスターの移動方向リスト
  * @param pos モンスターの移動前座標
  * @param count 移動回数 (のはず todo)
  * @return 移動が阻害される何か (ドア等)があったらFALSE
  * @todo 少し長いが、これといってブロックとしてまとまった部分もないので暫定でこのままとする
  */
-bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, std::span<Direction> mm, const Pos2D &pos, int *count)
+bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterMovementDirectionList &mmdl, const Pos2D &pos, int *count)
 {
-    for (const auto &dir : mm) {
-        if (!dir) {
-            return true;
-        }
+    const auto m_idx = mmdl.get_m_idx();
+    for (const auto &dir : mmdl.get_movement_directions()) {
         const auto dir_move = dir.has_direction() ? dir : rand_choice(Direction::directions_8());
         const auto pos_neighbor = pos + dir_move.vec();
         if (!in_bounds2(*player_ptr->current_floor_ptr, pos_neighbor.y, pos_neighbor.x)) {

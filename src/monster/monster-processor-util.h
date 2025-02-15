@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "monster-floor/monster-movement-direction-list.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
 #include "monster-race/race-drop-flags.h"
@@ -16,7 +17,7 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include "util/point-2d.h"
-#include <span>
+#include <optional>
 
 struct turn_flags {
     bool see_m;
@@ -70,5 +71,5 @@ struct coordinate_candidate {
 turn_flags *init_turn_flags(bool is_riding, turn_flags *turn_flags_ptr);
 
 class Direction;
-void store_enemy_approch_direction(std::span<Direction> mm, POSITION y, POSITION x);
-void store_moves_val(std::span<Direction> mm, const Pos2DVec &vec);
+MonsterMovementDirectionList get_enemy_approch_direction(MONSTER_IDX m_idx, const Pos2DVec &vec);
+std::optional<MonsterMovementDirectionList> get_moves_val(MONSTER_IDX m_idx, const Pos2DVec &vec);

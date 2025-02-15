@@ -1,9 +1,9 @@
 #pragma once
 
+#include "monster-floor/monster-movement-direction-list.h"
 #include "system/angband.h"
 #include "util/point-2d.h"
 #include <optional>
-#include <span>
 #include <utility>
 
 class Direction;
@@ -13,5 +13,5 @@ public:
     MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx);
     PlayerType *player_ptr;
     MONSTER_IDX m_idx;
-    bool get_movable_grid(std::span<Direction> mm);
+    std::optional<MonsterMovementDirectionList> get_movable_grid();
 };

@@ -213,13 +213,13 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return;
     }
 
-    std::vector<Direction> mm(8, Direction::none());
-    if (!decide_monster_movement_direction(player_ptr, mm, m_idx, turn_flags_ptr->aware)) {
+    const auto mmdl = decide_monster_movement_direction(player_ptr, m_idx, turn_flags_ptr->aware);
+    if (!mmdl) {
         return;
     }
 
     int count = 0;
-    if (!process_monster_movement(player_ptr, turn_flags_ptr, m_idx, mm, { oy, ox }, &count)) {
+    if (!process_monster_movement(player_ptr, turn_flags_ptr, *mmdl, { oy, ox }, &count)) {
         return;
     }
 
