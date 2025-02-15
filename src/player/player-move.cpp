@@ -63,14 +63,14 @@ static void discover_hidden_things(PlayerType *player_ptr, const Pos2D &pos)
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
     if (grid.mimic && floor.has_trap_at(pos)) {
-        disclose_grid(player_ptr, pos.y, pos.x);
+        disclose_grid(player_ptr, pos);
         msg_print(_("トラップを発見した。", "You have found a trap."));
         disturb(player_ptr, false, true);
     }
 
     if (grid.is_hidden_door()) {
         msg_print(_("隠しドアを発見した。", "You have found a secret door."));
-        disclose_grid(player_ptr, pos.y, pos.x);
+        disclose_grid(player_ptr, pos);
         disturb(player_ptr, false, false);
     }
 
@@ -273,7 +273,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         disturb(player_ptr, false, true);
         if (grid_new.mimic || terrain_new.flags.has(TerrainCharacteristics::SECRET)) {
             msg_print(_("トラップだ！", "You found a trap!"));
-            disclose_grid(player_ptr, player_ptr->y, player_ptr->x);
+            disclose_grid(player_ptr, player_ptr->get_position());
         }
 
         hit_trap(player_ptr, any_bits(mpe_mode, MPE_BREAK_TRAP));

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "system/angband.h"
 #include "util/flag-group.h"
+#include "util/point-2d.h"
 
 // clang-format off
 /*!
@@ -57,6 +57,6 @@ extern const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps;
 
 class FloorType;
 class PlayerType;
-void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x);
-void place_trap(FloorType &floor, POSITION y, POSITION x);
+void disclose_grid(PlayerType *player_ptr, const Pos2D &pos);
+void place_trap(FloorType &floor, const Pos2D &pos);
 void hit_trap(PlayerType *player_ptr, bool break_trap);

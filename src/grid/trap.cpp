@@ -123,42 +123,38 @@ const std::vector<EnumClassFlagGroup<ChestTrapType>> chest_traps = {
 };
 
 /*!
- * @brief マスに存在する隠しトラップを公開する /
- * Disclose an invisible trap
- * @param player
- * @param y 秘匿したいマスのY座標
- * @param x 秘匿したいマスのX座標
+ * @brief マスに存在する隠しトラップを公開する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pos 秘匿したいマスの座標
  */
-void disclose_grid(PlayerType *player_ptr, POSITION y, POSITION x)
+void disclose_grid(PlayerType *player_ptr, const Pos2D &pos)
 {
-    auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
+    auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
 
     if (grid.has(TerrainCharacteristics::SECRET)) {
         /* No longer hidden */
-        cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SECRET);
+        cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::SECRET);
     } else if (grid.mimic) {
         /* No longer hidden */
         grid.mimic = 0;
 
-        note_spot(player_ptr, y, x);
-        lite_spot(player_ptr, y, x);
+        note_spot(player_ptr, pos.y, pos.x);
+        lite_spot(player_ptr, pos.y, pos.x);
     }
 }
 
 /*!
  * @brief マスにトラップを配置する
- * @param y 配置したいマスのY座標
- * @param x 配置したいマスのX座標
+ * @param pos 配置したいマスの座標
  */
-void place_trap(FloorType &floor, POSITION y, POSITION x)
+void place_trap(FloorType &floor, const Pos2D &pos)
 {
-    const Pos2D pos(y, x);
     auto &grid = floor.get_grid(pos);
-    if (!in_bounds(floor, y, x)) {
+    if (!in_bounds(floor, pos.y, pos.x)) {
         return;
     }
 
-    if (!cave_clean_bold(floor, y, x)) {
+    if (!cave_clean_bold(floor, pos.y, pos.x)) {
         return;
     }
 

@@ -159,21 +159,19 @@ static bool possible_doorway(const FloorType &floor, POSITION y, POSITION x)
 }
 
 /*!
- * @brief ドアの設置を試みる / Places door at y, x position if at least 2 walls found
+ * @brief ドアの設置を試みる
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 設置を行いたいマスのY座標
- * @param x 設置を行いたいマスのX座標
+ * @param pos 設置を行いたいマスの座標
  */
-void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
+void try_door(PlayerType *player_ptr, dt_type *dt_ptr, const Pos2D &pos)
 {
-    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds(floor, y, x) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
+    if (!in_bounds(floor, pos.y, pos.x) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
         return;
     }
 
     auto can_place_door = evaluate_percent(dt_ptr->dun_tun_jct);
-    can_place_door &= possible_doorway(floor, y, x);
+    can_place_door &= possible_doorway(floor, pos.y, pos.x);
     can_place_door &= floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_DOORS);
     if (can_place_door) {
         place_random_door(player_ptr, pos, false);

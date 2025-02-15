@@ -827,14 +827,14 @@ void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainChar
         /* Handle gold */
         if (old_terrain.flags.has(TerrainCharacteristics::HAS_GOLD) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_GOLD)) {
             /* Place some gold */
-            place_gold(player_ptr, pos.y, pos.x);
+            place_gold(player_ptr, pos);
             found = true;
         }
 
         /* Handle item */
         if (old_terrain.flags.has(TerrainCharacteristics::HAS_ITEM) && new_terrain.flags.has_not(TerrainCharacteristics::HAS_ITEM) && evaluate_percent(15 - floor.dun_level / 2)) {
             /* Place object */
-            place_object(player_ptr, pos.y, pos.x, 0L);
+            place_object(player_ptr, pos, 0);
             found = true;
         }
 

@@ -33,15 +33,16 @@ static bool detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainChar
         range /= 3;
     }
 
-    bool detect = false;
-    for (POSITION y = 1; y < floor.height - 1; y++) {
-        for (POSITION x = 1; x <= floor.width - 1; x++) {
-            int dist = Grid::calc_distance(player_ptr->get_position(), { y, x });
+    auto detect = false;
+    for (auto y = 1; y < floor.height - 1; y++) {
+        for (auto x = 1; x <= floor.width - 1; x++) {
+            const Pos2D pos(y, x);
+            auto dist = Grid::calc_distance(player_ptr->get_position(), pos);
             if (dist > range) {
                 continue;
             }
 
-            auto &grid = floor.grid_array[y][x];
+            auto &grid = floor.get_grid(pos);
             if (flag == TerrainCharacteristics::TRAP) {
                 /* Mark as detected */
                 if (dist <= range && known) {
@@ -51,14 +52,14 @@ static bool detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainChar
 
                     grid.info &= ~(CAVE_UNSAFE);
 
-                    lite_spot(player_ptr, y, x);
+                    lite_spot(player_ptr, pos.y, pos.x);
                 }
             }
 
             if (grid.has(flag)) {
-                disclose_grid(player_ptr, y, x);
+                disclose_grid(player_ptr, pos);
                 grid.info |= (CAVE_MARK);
-                lite_spot(player_ptr, y, x);
+                lite_spot(player_ptr, pos.y, pos.x);
                 detect = true;
             }
         }
