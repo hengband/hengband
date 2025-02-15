@@ -6,22 +6,18 @@
 
 #include "effect/effect-player.h"
 #include "core/disturbance.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-player-switcher.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player/player-status-flags.h"
-#include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
@@ -29,11 +25,8 @@
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <string>
 
@@ -105,7 +98,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
             const Pos2DVec vec(randint1(3) - 1, randint1(3) - 1);
             pos = monster.get_position() + vec;
             max_attempts--;
-        } while (max_attempts && in_bounds2u(floor, pos.y, pos.x) && !projectable(player_ptr, player_ptr->get_position(), pos));
+        } while (max_attempts && floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(player_ptr, player_ptr->get_position(), pos));
 
         if (max_attempts < 1) {
             pos = monster.get_position();

@@ -26,15 +26,6 @@ bool in_bounds2(const FloorType &floor, int y, int x)
 }
 
 /*
- * Determines if a map location is on or inside the outer walls
- * (unsigned version)
- */
-bool in_bounds2u(const FloorType &floor, int y, int x)
-{
-    return (y < floor.height) && (x < floor.width);
-}
-
-/*
  * Determine if a "legal" grid is an "empty" floor grid
  * Determine if monsters are allowed to move into a grid
  *

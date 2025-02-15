@@ -1,6 +1,5 @@
 #include "effect/effect-processor.h"
 #include "core/stuff-handler.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-feature.h"
 #include "effect/effect-item.h"
@@ -8,9 +7,6 @@
 #include "effect/effect-player.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
-#include "floor/line-of-sight.h"
-#include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "io/cursor.h"
@@ -21,11 +17,8 @@
 #include "monster/monster-description-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-util.h"
-#include "pet/pet-fall-off.h"
 #include "player/player-status.h"
-#include "spell-class/spells-mirror-master.h"
 #include "spell/range-calc.h"
-#include "system/angband-system.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
@@ -36,9 +29,7 @@
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/lore-tracker.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#include <array>
 #include <vector>
 
 namespace {
@@ -290,7 +281,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         pos_refrect.y = pos_source.y - 1 + randint1(3);
                         pos_refrect.x = pos_source.x - 1 + randint1(3);
                         max_attempts--;
-                    } while (max_attempts && in_bounds2u(*player_ptr->current_floor_ptr, pos_refrect.y, pos_refrect.x) && !projectable(player_ptr, pos, pos_refrect));
+                    } while (max_attempts && floor.contains(pos_refrect, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(player_ptr, pos, pos_refrect));
 
                     if (max_attempts < 1) {
                         pos_refrect = pos_source;
