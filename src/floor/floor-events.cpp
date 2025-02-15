@@ -334,18 +334,19 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
-            const auto &grid = floor.get_grid({ y, x });
+            const Pos2D pos(y, x);
+            const auto &grid = floor.get_grid(pos);
             if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::GLOW)) {
                 continue;
             }
 
             for (const auto &d : Direction::directions()) {
-                const auto pos = Pos2D(y, x) + d.vec();
-                if (!in_bounds2(floor, pos.y, pos.x)) {
+                const auto pos_neighbor = pos + d.vec();
+                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 
-                floor.get_grid(pos).info |= CAVE_GLOW;
+                floor.get_grid(pos_neighbor).info |= CAVE_GLOW;
             }
         }
     }
