@@ -28,7 +28,7 @@ void do_cmd_target(PlayerType *player_ptr)
         return;
     }
 
-    if (target_set(player_ptr, TARGET_KILL)) {
+    if (target_set(player_ptr, TARGET_KILL).is_okay()) {
         msg_print(_("ターゲット決定。", "Target Selected."));
     } else {
         msg_print(_("ターゲット解除。", "Target Aborted."));
@@ -47,7 +47,7 @@ void do_cmd_look(PlayerType *player_ptr)
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
-    if (target_set(player_ptr, TARGET_LOOK)) {
+    if (target_set(player_ptr, TARGET_LOOK).is_okay()) {
         msg_print(_("ターゲット決定。", "Target Selected."));
     }
 }

@@ -427,18 +427,18 @@ bool activate_create_ammo(PlayerType *player_ptr)
 bool activate_dispel_magic(PlayerType *player_ptr)
 {
     msg_print(_("鈍い色に光った...", "It glowed in a dull color..."));
-    if (!target_set(player_ptr, TARGET_KILL)) {
+    const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+    if (!pos) {
         return false;
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(target_row, target_col);
-    const auto m_idx = floor.get_grid(pos).m_idx;
+    const auto m_idx = floor.get_grid(*pos).m_idx;
     if (m_idx == 0) {
         return true;
     }
 
-    if (!floor.has_los(pos) || !projectable(player_ptr, player_ptr->get_position(), pos)) {
+    if (!floor.has_los(*pos) || !projectable(player_ptr, player_ptr->get_position(), *pos)) {
         return true;
     }
 

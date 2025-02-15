@@ -42,14 +42,14 @@
 
 static bool cast_blue_dispel(PlayerType *player_ptr)
 {
-    if (!target_set(player_ptr, TARGET_KILL)) {
+    const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+    if (!pos) {
         return false;
     }
 
-    const Pos2D pos(target_row, target_col);
-    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(*pos);
     const auto m_idx = grid.m_idx;
-    if ((m_idx == 0) || !grid.has_los() || !projectable(player_ptr, player_ptr->get_position(), pos)) {
+    if ((m_idx == 0) || !grid.has_los() || !projectable(player_ptr, player_ptr->get_position(), *pos)) {
         return true;
     }
 
@@ -96,10 +96,9 @@ static bool cast_blue_hand_doom(PlayerType *player_ptr, bmc_type *bmc_ptr)
 }
 
 /* 効果が抵抗された場合、返される std::optional には値がありません。*/
-static std::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr)
+static std::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr, const Pos2D &pos)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(target_row, target_col);
     const auto &grid = floor.get_grid(pos);
     if (!grid.has_monster() || !grid.has_los() || !projectable(player_ptr, player_ptr->get_position(), pos)) {
         return std::nullopt;
@@ -135,18 +134,19 @@ static std::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr)
 
 static bool cast_blue_teleport_back(PlayerType *player_ptr)
 {
-    if (!target_set(player_ptr, TARGET_KILL)) {
+    const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+    if (!pos) {
         return false;
     }
 
-    const auto m_name = exe_blue_teleport_back(player_ptr);
+    const auto m_name = exe_blue_teleport_back(player_ptr, *pos);
     if (!m_name) {
         return true;
     }
 
     msg_format(_("%sを引き戻した。", "You command %s to return."), m_name->data());
     teleport_monster_to(
-        player_ptr, player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
+        player_ptr, player_ptr->current_floor_ptr->get_grid(*pos).m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_PASSIVE);
     return true;
 }
 
@@ -176,12 +176,13 @@ static bool cast_blue_psy_spear(PlayerType *player_ptr, bmc_type *bmc_ptr)
 
 static bool cast_blue_make_trap(PlayerType *player_ptr)
 {
-    if (!target_set(player_ptr, TARGET_KILL)) {
+    const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+    if (!pos) {
         return false;
     }
 
     msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackle evilly."));
-    trap_creation(player_ptr, target_row, target_col);
+    trap_creation(player_ptr, pos->y, pos->x);
     return true;
 }
 

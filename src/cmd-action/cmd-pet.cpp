@@ -302,14 +302,15 @@ static void do_name_pet(PlayerType *player_ptr)
 {
     auto old_target_pet = target_pet;
     target_pet = true;
-    if (!target_set(player_ptr, TARGET_KILL)) {
+    const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+    if (!pos) {
         target_pet = old_target_pet;
         return;
     }
 
     target_pet = old_target_pet;
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid = floor.grid_array[target_row][target_col];
+    const auto &grid = floor.get_grid(*pos);
     if (!grid.has_monster()) {
         return;
     }
@@ -682,12 +683,13 @@ void do_cmd_pet(PlayerType *player_ptr)
     }
     case PET_TARGET: {
         project_length = -1;
-        if (!target_set(player_ptr, TARGET_KILL)) {
+        const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+        if (!pos) {
             player_ptr->pet_t_m_idx = 0;
         } else {
-            const auto &grid = player_ptr->current_floor_ptr->grid_array[target_row][target_col];
+            const auto &grid = player_ptr->current_floor_ptr->get_grid(*pos);
             if (grid.has_monster() && (player_ptr->current_floor_ptr->m_list[grid.m_idx].ml)) {
-                player_ptr->pet_t_m_idx = player_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
+                player_ptr->pet_t_m_idx = player_ptr->current_floor_ptr->get_grid(*pos).m_idx;
                 player_ptr->pet_follow_distance = PET_DESTROY_DIST;
             } else {
                 player_ptr->pet_t_m_idx = 0;

@@ -332,14 +332,14 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
         break;
     }
     case MindForceTrainerType::DISPEL_MAGIC: {
-        if (!target_set(player_ptr, TARGET_KILL)) {
+        const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+        if (!pos) {
             return false;
         }
 
-        const Pos2D pos(target_row, target_col);
-        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+        const auto &grid = player_ptr->current_floor_ptr->get_grid(*pos);
         const auto m_idx = grid.m_idx;
-        const auto is_projectable = projectable(player_ptr, player_ptr->get_position(), pos);
+        const auto is_projectable = projectable(player_ptr, player_ptr->get_position(), *pos);
         if ((m_idx == 0) || !grid.has_los() || !is_projectable) {
             break;
         }

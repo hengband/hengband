@@ -1309,6 +1309,7 @@ hengband_SOURCES = \
 	target/target-setter.cpp target/target-setter.h \
 	target/target-sorter.cpp target/target-sorter.h \
 	target/target-types.h \
+	target/target.cpp target/target.h \
 	\
 	term/gameterm.cpp term/gameterm.h \
 	term/screen-processor.cpp term/screen-processor.h \

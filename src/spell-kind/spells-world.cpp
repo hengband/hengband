@@ -223,13 +223,13 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
 bool teleport_level_other(PlayerType *player_ptr)
 {
-    if (!target_set(player_ptr, TARGET_KILL)) {
+    const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+    if (!pos) {
         return false;
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(target_row, target_col);
-    const auto &grid = floor.get_grid(pos);
+    const auto &grid = floor.get_grid(*pos);
     const auto target_m_idx = grid.m_idx;
     if (!target_m_idx) {
         return true;
@@ -237,7 +237,7 @@ bool teleport_level_other(PlayerType *player_ptr)
     if (!grid.has_los()) {
         return true;
     }
-    if (!projectable(player_ptr, player_ptr->get_position(), pos)) {
+    if (!projectable(player_ptr, player_ptr->get_position(), *pos)) {
         return true;
     }
 
