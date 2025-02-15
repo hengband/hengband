@@ -457,7 +457,7 @@ static MULTIPLY calc_shot_damage_with_slay(
  */
 void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SPELL_IDX snipe_type)
 {
-    POSITION y, x, ny, nx, prev_y, prev_x;
+    POSITION y, x, prev_y, prev_x;
     ItemEntity *o_ptr;
 
     AttributeFlags attribute_flags{};
@@ -616,11 +616,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
             /* Calculate the new location (see "project()") */
             const auto pos = mmove2({ y, x }, player_ptr->get_position(), { ty, tx });
-            ny = pos.y;
-            nx = pos.x;
+            const auto pos_impact = pos;
 
             /* Shatter Arrow */
-            auto &grid = floor.get_grid({ ny, nx });
+            auto &grid = floor.get_grid(pos_impact);
             if (snipe_type == SP_KILL_WALL) {
                 if (grid.has(TerrainCharacteristics::HURT_ROCK) && !grid.has_monster()) {
                     if (any_bits(grid.info, (CAVE_MARK))) {
@@ -637,7 +636,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     RedrawingFlagsUpdater::get_instance().set_flags(flags);
 
                     /* Destroy the wall */
-                    cave_alter_feat(player_ptr, ny, nx, TerrainCharacteristics::HURT_ROCK);
+                    cave_alter_feat(player_ptr, pos_impact.y, pos_impact.x, TerrainCharacteristics::HURT_ROCK);
 
                     hit_body = true;
                     break;
@@ -645,7 +644,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             }
 
             /* Stopped by walls/doors */
-            if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECT) && !grid.has_monster()) {
+            if (!floor.has_terrain_characteristics(pos_impact, TerrainCharacteristics::PROJECT) && !grid.has_monster()) {
                 break;
             }
 
@@ -654,22 +653,22 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
             /* Sniper */
             if (snipe_type == SP_LITE) {
-                set_bits(floor.grid_array[ny][nx].info, CAVE_GLOW);
-                note_spot(player_ptr, ny, nx);
-                lite_spot(player_ptr, ny, nx);
+                set_bits(floor.get_grid(pos_impact).info, CAVE_GLOW);
+                note_spot(player_ptr, pos_impact.y, pos_impact.x);
+                lite_spot(player_ptr, pos_impact.y, pos_impact.x);
             }
 
             /* The player can see the (on screen) missile */
-            if (panel_contains(ny, nx) && player_can_see_bold(player_ptr, ny, nx)) {
+            if (panel_contains(pos_impact.y, pos_impact.x) && player_can_see_bold(player_ptr, pos_impact.y, pos_impact.x)) {
                 const auto symbol = fire_item.get_symbol();
 
                 /* Draw, Hilite, Fresh, Pause, Erase */
                 if (delay_factor > 0) {
-                    print_rel(player_ptr, symbol, ny, nx);
-                    move_cursor_relative(ny, nx);
+                    print_rel(player_ptr, symbol, pos_impact.y, pos_impact.x);
+                    move_cursor_relative(pos_impact.y, pos_impact.x);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
-                    lite_spot(player_ptr, ny, nx);
+                    lite_spot(player_ptr, pos_impact.y, pos_impact.x);
                     term_fresh();
                 }
             }
@@ -685,22 +684,22 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             /* Sniper */
             if (snipe_type == SP_KILL_TRAP) {
                 constexpr auto flags = PROJECT_JUMP | PROJECT_HIDE | PROJECT_GRID | PROJECT_ITEM;
-                project(player_ptr, 0, 0, ny, nx, 0, AttributeType::KILL_TRAP, flags);
+                project(player_ptr, 0, 0, pos_impact.y, pos_impact.x, 0, AttributeType::KILL_TRAP, flags);
             }
 
             /* Sniper */
             if (snipe_type == SP_EVILNESS) {
-                reset_bits(floor.grid_array[ny][nx].info, (CAVE_GLOW | CAVE_MARK));
-                note_spot(player_ptr, ny, nx);
-                lite_spot(player_ptr, ny, nx);
+                reset_bits(floor.get_grid(pos_impact).info, (CAVE_GLOW | CAVE_MARK));
+                note_spot(player_ptr, pos_impact.y, pos_impact.x);
+                lite_spot(player_ptr, pos_impact.y, pos_impact.x);
             }
 
             prev_y = y;
             prev_x = x;
 
             /* Save the new location */
-            x = nx;
-            y = ny;
+            x = pos_impact.x;
+            y = pos_impact.y;
 
             /* Monster here, Try to hit it */
             if (floor.grid_array[y][x].has_monster()) {
@@ -807,15 +806,15 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         uint16_t flg = (PROJECT_STOP | PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID);
 
                         sound(SoundKind::EXPLODE); /* No explode sound - use breath fire instead */
-                        project(player_ptr, 0, ((sniper_concent + 1) / 2 + 1), ny, nx, base_dam, AttributeType::MISSILE, flg);
+                        project(player_ptr, 0, ((sniper_concent + 1) / 2 + 1), pos_impact.y, pos_impact.x, base_dam, AttributeType::MISSILE, flg);
                         break;
                     }
 
                     /* Sniper */
                     if (snipe_type == SP_HOLYNESS) {
-                        set_bits(floor.grid_array[ny][nx].info, CAVE_GLOW);
-                        note_spot(player_ptr, ny, nx);
-                        lite_spot(player_ptr, ny, nx);
+                        set_bits(floor.get_grid(pos_impact).info, CAVE_GLOW);
+                        note_spot(player_ptr, pos_impact.y, pos_impact.x);
+                        lite_spot(player_ptr, pos_impact.y, pos_impact.x);
                     }
 
                     /* Hit the monster, check for death */
@@ -852,57 +851,48 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                         /* Sniper */
                         if (snipe_type == SP_RUSH) {
-                            int n = randint1(5) + 3;
-                            int n0 = n;
-                            MONSTER_IDX m_idx = c_mon_ptr->m_idx;
-
+                            auto n = randint1(5) + 3;
+                            const auto n0 = n;
+                            const auto m_idx = c_mon_ptr->m_idx;
                             for (; cur_dis <= tdis;) {
-                                POSITION ox = nx;
-                                POSITION oy = ny;
-
-                                if (!n) {
+                                const Pos2D pos_orig = pos_impact;
+                                if (n == 0) {
                                     break;
                                 }
 
                                 /* Calculate the new location (see "project()") */
-                                const auto pos_to = mmove2({ ny, nx }, player_ptr->get_position(), { ty, tx });
-                                ny = pos_to.y;
-                                nx = pos_to.x;
+                                const auto pos_to = mmove2(pos_impact, player_ptr->get_position(), { ty, tx });
 
                                 /* Stopped by wilderness boundary */
-                                if (!in_bounds2(floor, ny, nx)) {
+                                if (!in_bounds2(floor, pos_to.y, pos_to.x)) {
                                     break;
                                 }
 
                                 /* Stopped by walls/doors */
-                                if (!player_can_enter(player_ptr, floor.grid_array[ny][nx].feat, 0)) {
+                                if (!player_can_enter(player_ptr, floor.get_grid(pos_to).feat, 0)) {
                                     break;
                                 }
 
                                 /* Stopped by monsters */
-                                if (!is_cave_empty_bold(player_ptr, ny, nx)) {
+                                if (!is_cave_empty_bold(player_ptr, pos_to.y, pos_to.x)) {
                                     break;
                                 }
 
-                                floor.grid_array[ny][nx].m_idx = m_idx;
-                                floor.grid_array[oy][ox].m_idx = 0;
-
-                                monster.fx = nx;
-                                monster.fy = ny;
-
+                                floor.get_grid(pos_to).m_idx = m_idx;
+                                floor.get_grid(pos_orig).m_idx = 0;
+                                monster.set_position(pos_to);
                                 update_monster(player_ptr, m_idx, true);
-
                                 if (delay_factor > 0) {
-                                    lite_spot(player_ptr, ny, nx);
-                                    lite_spot(player_ptr, oy, ox);
+                                    lite_spot(player_ptr, pos_to.y, pos_to.x);
+                                    lite_spot(player_ptr, pos_orig.y, pos_orig.x);
                                     term_fresh();
                                     term_xtra(TERM_XTRA_DELAY, delay_factor);
                                 } else if (n == n0) {
-                                    lite_spot(player_ptr, oy, ox);
+                                    lite_spot(player_ptr, pos_orig.y, pos_orig.x);
                                 }
 
-                                x = nx;
-                                y = ny;
+                                x = pos_to.x;
+                                y = pos_to.y;
                                 cur_dis++;
                                 n--;
                             }
