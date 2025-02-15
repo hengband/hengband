@@ -2556,6 +2556,9 @@
     <ClCompile Include="..\..\src\system\floor\wilderness-grid.cpp">
       <Filter>system\floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-movement-direction-list.cpp">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5546,6 +5549,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\floor\wilderness-grid.h">
       <Filter>system\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-movement-direction-list.h">
+      <Filter>monster-floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
