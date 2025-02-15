@@ -2,7 +2,6 @@
 
 class FloorType;
 class PlayerType;
-bool in_bounds(const FloorType &floor, int y, int x);
 bool in_bounds2(const FloorType &floor, int y, int x);
 bool in_bounds2u(const FloorType &floor, int y, int x);
 bool is_cave_empty_bold(PlayerType *player_ptr, int x, int y);

@@ -1,20 +1,16 @@
 #include "floor/object-scanner.h"
 #include "flavor/flavor-describer.h"
-#include "floor/cave.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-util.h"
 #include "io/input-key-requester.h"
 #include "locale/japanese.h"
 #include "object/item-tester-hooker.h"
-#include "object/object-mark-types.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
-#include "util/string-processor.h"
 #include <array>
 
 /*!
@@ -36,7 +32,7 @@ int scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSI
 {
     const Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds(floor, pos.y, pos.x)) {
+    if (!floor.contains(pos)) {
         return 0;
     }
 

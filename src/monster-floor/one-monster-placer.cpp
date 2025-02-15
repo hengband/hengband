@@ -7,9 +7,6 @@
 #include "monster-floor/one-monster-placer.h"
 #include "core/speed-table.h"
 #include "dungeon/quest.h"
-#include "effect/attribute-types.h"
-#include "effect/effect-characteristics.h"
-#include "effect/effect-processor.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
@@ -17,23 +14,17 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/grid.h"
-#include "monster-attack/monster-attack-table.h"
 #include "monster-floor/monster-move.h"
-#include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
 #include "monster-race/race-brightness-mask.h"
-#include "monster-race/race-misc-flags.h"
-#include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-status-setter.h"
-#include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "object/warning.h"
 #include "player/player-status.h"
-#include "system/angband-system.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -41,7 +32,6 @@
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
@@ -233,7 +223,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
     auto &grid = floor.get_grid(pos);
     auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
     const auto &world = AngbandWorld::get_instance();
-    if (world.is_wild_mode() || !in_bounds(floor, pos.y, pos.x) || !MonraceList::is_valid(r_idx)) {
+    if (world.is_wild_mode() || !floor.contains(pos) || !MonraceList::is_valid(r_idx)) {
         return std::nullopt;
     }
 

@@ -10,39 +10,13 @@
  */
 
 #include "mspell/mspell-checker.h"
-#include "blue-magic/blue-magic-checker.h"
-#include "core/disturbance.h"
-#include "dungeon/dungeon-flag-types.h"
-#include "dungeon/quest.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/line-of-sight.h"
-#include "monster-floor/monster-move.h"
 #include "monster-race/race-ability-mask.h"
-#include "monster/monster-describer.h"
-#include "monster/monster-description-types.h"
-#include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
-#include "monster/monster-status.h"
-#include "monster/monster-util.h"
-#include "mspell/assign-monster-spell.h"
-#include "mspell/improper-mspell-remover.h"
-#include "mspell/mspell-judgement.h"
-#include "mspell/mspell-learn-checker.h"
-#include "mspell/mspell-selector.h"
 #include "mspell/mspell-util.h"
-#include "object-enchant/object-curse.h"
-#include "player-info/class-info.h"
-#include "player-info/race-types.h"
-#include "player/attack-defense-types.h"
-#include "spell-kind/spells-world.h"
-#include "spell-realm/spells-hex.h"
-#include "spell/range-calc.h"
-#include "system/angband-system.h"
-#include "system/dungeon/dungeon-definition.h"
-#include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -50,9 +24,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
-#include "util/bit-flags-calculator.h"
-#include "view/display-messages.h"
-#include "world/world.h"
 
 /*!
  * @brief モンスターにとって所定の地点が召還に相応しい地点かどうかを返す。 /
@@ -69,7 +40,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
     for (auto y = y1 - 2; y <= y1 + 2; y++) {
         for (auto x = x1 - 2; x <= x1 + 2; x++) {
             const Pos2D pos(y, x);
-            if (!in_bounds(floor, y, x)) {
+            if (!floor.contains(pos)) {
                 continue;
             }
 

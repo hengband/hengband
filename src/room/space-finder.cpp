@@ -1,6 +1,4 @@
 #include "room/space-finder.h"
-#include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
 #include "grid/grid.h"
 #include "system/dungeon/dungeon-data-definition.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -15,7 +13,7 @@
  */
 static bool get_is_floor(const FloorType &floor, const Pos2D &pos)
 {
-    if (!in_bounds(floor, pos.y, pos.x)) {
+    if (!floor.contains(pos)) {
         return false;
     }
 
@@ -34,7 +32,7 @@ static bool get_is_floor(const FloorType &floor, const Pos2D &pos)
 static void set_floor(PlayerType *player_ptr, const Pos2D &pos)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds(floor, pos.y, pos.x)) {
+    if (!floor.contains(pos)) {
         return;
     }
 

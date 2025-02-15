@@ -1,26 +1,14 @@
 #include "object/warning.h"
-#include "artifact/fixed-art-types.h"
 #include "core/asking-player.h"
 #include "core/disturbance.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "game-option/input-options.h"
-#include "inventory/inventory-slot-types.h"
-#include "monster-attack/monster-attack-effect.h"
 #include "monster-attack/monster-attack-table.h"
-#include "monster-race/race-ability-flags.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
 #include "mspell/mspell-damage-calculator.h"
-#include "mutation/mutation-flag-types.h"
-#include "object-enchant/tr-types.h"
 #include "player-base/player-race.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-resist.h"
-#include "player/special-defense-types.h"
-#include "status/element-resistance.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -31,7 +19,6 @@
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <vector>
 
@@ -357,7 +344,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
         for (auto my = yy - warning_aware_range; my < yy + warning_aware_range + 1; my++) {
             const Pos2D pos_neighbor(my, mx);
             int dam_max0 = 0;
-            if (!in_bounds(floor, my, mx) || (Grid::calc_distance(pos_neighbor, pos) > warning_aware_range)) {
+            if (!floor.contains(pos_neighbor) || (Grid::calc_distance(pos_neighbor, pos) > warning_aware_range)) {
                 continue;
             }
 

@@ -1,8 +1,5 @@
 #include "target/grid-selector.h"
 #include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
-#include "floor/cave.h"
-#include "floor/geometry.h"
 #include "game-option/game-play-options.h"
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
@@ -42,7 +39,7 @@ static std::vector<Pos2D> tgt_pt_prepare(PlayerType *player_ptr)
     for (auto y = 1; y < floor.height; y++) {
         for (auto x = 1; x < floor.width; x++) {
             const Pos2D pos(y, x);
-            if (!in_bounds(floor, pos.y, pos.x)) {
+            if (!floor.contains(pos)) {
                 continue;
             }
 

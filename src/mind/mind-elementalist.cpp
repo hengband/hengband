@@ -5,12 +5,10 @@
 #include "mind/mind-elementalist.h"
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
-#include "cmd-action/cmd-mind.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-processor.h"
@@ -30,14 +28,9 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-explanations-table.h"
 #include "mind/mind-mindcrafter.h"
-#include "monster-race/race-brightness-flags.h"
-#include "monster-race/race-flags-resistance.h"
-#include "monster/monster-describer.h"
-#include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
-#include "player-status/player-status-base.h"
 #include "player/player-status-table.h"
 #include "racial/racial-util.h"
 #include "spell-kind/earthquake.h"
@@ -63,11 +56,7 @@
 #include "target/grid-selector.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
-#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
@@ -1415,7 +1404,7 @@ static bool is_target_grid_dark(const FloorType &floor, const Pos2D &pos)
             if (pos == pos_neighbor) {
                 continue;
             }
-            if (!in_bounds(floor, dy, dx)) {
+            if (!floor.contains(pos_neighbor)) {
                 continue;
             }
 

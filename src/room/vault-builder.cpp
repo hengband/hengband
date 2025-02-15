@@ -1,5 +1,4 @@
 #include "room/vault-builder.h"
-#include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-util.h"
 #include "game-option/cheat-options.h"
@@ -74,7 +73,7 @@ void vault_objects(PlayerType *player_ptr, const Pos2D &pos_center, int num)
                 pos.y = rand_spread(pos_center.y, 2);
                 pos.x = rand_spread(pos_center.x, 3);
                 dummy++;
-                if (!in_bounds(floor, pos.y, pos.x)) {
+                if (!floor.contains(pos)) {
                     continue;
                 }
 
@@ -115,7 +114,7 @@ static void vault_trap_aux(FloorType &floor, const Pos2D &pos_center, const Pos2
             pos.y = rand_spread(pos_center.y, distribution.y);
             pos.x = rand_spread(pos_center.x, distribution.x);
             dummy++;
-            if (!in_bounds(floor, pos.y, pos.x)) {
+            if (!floor.contains(pos)) {
                 continue;
             }
             break;

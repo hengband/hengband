@@ -18,7 +18,6 @@
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-object.h"
-#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
@@ -67,7 +66,7 @@ static void recursive_river(FloorType &floor, const Pos2D &pos_start, const Pos2
 
         Pos2DVec vec_division(dy, dx);
         auto pos = pos_start + vec_division + vec_change;
-        if (!in_bounds(floor, pos.y, pos.x)) {
+        if (!floor.contains(pos)) {
             vec_change = { 0, 0 };
         }
 
@@ -356,7 +355,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
         }
 
         /* Quit before leaving the dungeon */
-        if (!in_bounds(floor, y, x)) {
+        if (!floor.contains({ y, x })) {
             break;
         }
     }
@@ -378,7 +377,7 @@ void place_trees(PlayerType *player_ptr, const Pos2D &pos)
     for (auto x = pos.x - 3; x < pos.x + 4; x++) {
         for (auto y = pos.y - 3; y < pos.y + 4; y++) {
             const Pos2D pos_neighbor(y, x);
-            if (!in_bounds(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor)) {
                 continue;
             }
 

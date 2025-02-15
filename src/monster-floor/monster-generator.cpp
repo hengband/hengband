@@ -57,7 +57,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
     for (auto nx = pos.x - max_distance; nx <= pos.x + max_distance; nx++) {
         for (auto ny = pos.y - max_distance; ny <= pos.y + max_distance; ny++) {
             const Pos2D pos_neighbor(ny, nx);
-            if (!in_bounds(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor)) {
                 continue;
             }
 

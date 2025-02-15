@@ -1,27 +1,20 @@
 #include "mind/mind-ninja.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-item/cmd-throw.h"
-#include "combat/combat-options-type.h"
 #include "core/disturbance.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
-#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
-#include "inventory/inventory-slot-types.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-numbers.h"
 #include "mind/mind-warrior.h"
-#include "monster-race/race-flags-resistance.h"
 #include "monster/monster-describer.h"
-#include "monster/monster-status.h"
 #include "monster/monster-update.h"
-#include "object-enchant/trc-types.h"
 #include "player-attack/player-attack.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
@@ -29,7 +22,6 @@
 #include "player-status/player-energy.h"
 #include "player/attack-defense-types.h"
 #include "player/player-status-flags.h"
-#include "player/special-defense-types.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-fetcher.h"
 #include "spell-kind/spells-floor.h"
@@ -56,7 +48,6 @@
 #include "target/target-checker.h"
 #include "target/target-getter.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -141,7 +132,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
 
     auto tm_idx = 0;
     auto &floor = *player_ptr->current_floor_ptr;
-    if (in_bounds(floor, pos_target.y, pos_target.x)) {
+    if (floor.contains(pos_target)) {
         tm_idx = floor.get_grid(pos_target).m_idx;
     }
 

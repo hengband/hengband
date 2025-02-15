@@ -5,7 +5,6 @@
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
@@ -238,7 +237,7 @@ static void get_out_monster(PlayerType *player_ptr)
         }
 
         auto &grid = floor.get_grid(pos);
-        if (!in_bounds(floor, pos.y, pos.x) || !is_cave_empty_bold(player_ptr, pos.y, pos.x) || grid.is_rune_protection() || grid.is_rune_explosion() || pattern_tile(floor, pos.y, pos.x)) {
+        if (!floor.contains(pos) || !is_cave_empty_bold(player_ptr, pos.y, pos.x) || grid.is_rune_protection() || grid.is_rune_explosion() || pattern_tile(floor, pos.y, pos.x)) {
             continue;
         }
 

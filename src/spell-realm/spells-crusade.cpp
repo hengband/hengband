@@ -7,24 +7,18 @@
 #include "spell-realm/spells-crusade.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
-#include "spell-realm/spells-crusade.h"
 #include "spell/range-calc.h"
-#include "system/angband-system.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <cmath>
 
@@ -90,7 +84,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
             continue;
         }
 
-        auto should_cast = in_bounds(floor, pos_explode.y, pos_explode.x) && !cave_stop_disintegration(floor, pos_explode.y, pos_explode.x);
+        auto should_cast = floor.contains(pos_explode) && !cave_stop_disintegration(floor, pos_explode.y, pos_explode.x);
         should_cast &= in_disintegration_range(floor, pos_target, pos_explode);
         if (!should_cast) {
             continue;

@@ -5,13 +5,9 @@
 
 #include "action/travel-execution.h"
 #include "action/movement-execution.h"
-#include "action/run-execution.h"
 #include "core/disturbance.h"
-#include "floor/cave.h"
-#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/input-options.h"
-#include "game-option/special-options.h"
 #include "grid/grid.h"
 #include "player-status/player-energy.h"
 #include "player/player-move.h"
@@ -91,7 +87,7 @@ std::optional<int> travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
     const auto &terrain = grid.get_terrain();
-    if (!in_bounds(floor, pos.y, pos.x)) {
+    if (!floor.contains(pos)) {
         return std::nullopt;
     }
 

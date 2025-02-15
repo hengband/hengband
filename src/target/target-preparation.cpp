@@ -1,12 +1,5 @@
 #include "target/target-preparation.h"
-#include "floor/cave.h"
 #include "game-option/input-options.h"
-#include "grid/grid.h"
-#include "monster/monster-flag-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
-#include "object/object-mark-types.h"
-#include "system/angband-system.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -71,7 +64,7 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!(in_bounds(floor, pos.y, pos.x))) {
+    if (!(floor.contains(pos))) {
         return false;
     }
 
