@@ -10,10 +10,8 @@ class Direction;
 class PlayerType;
 class MonsterSweepGrid {
 public:
-    MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx, std::span<Direction> mm);
-    virtual ~MonsterSweepGrid() = default;
+    MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx);
     PlayerType *player_ptr;
     MONSTER_IDX m_idx;
-    std::span<Direction> mm;
-    bool get_movable_grid();
+    bool get_movable_grid(std::span<Direction> mm);
 };
