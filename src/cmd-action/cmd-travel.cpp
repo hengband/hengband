@@ -38,13 +38,7 @@ void do_cmd_travel(PlayerType *player_ptr)
         return;
     }
 
-    const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid = floor.get_grid(*pos);
-    const auto &terrain = grid.get_terrain();
-    const auto is_marked = grid.is_mark();
-    const auto is_wall = terrain.flags.has_any_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::CAN_DIG });
-    const auto is_door = terrain.flags.has(TerrainCharacteristics::DOOR) && (grid.mimic > 0);
-    if (is_marked && (is_wall || is_door)) {
+    if (Travel::can_travel_to(*player_ptr->current_floor_ptr, *pos)) {
         msg_print(_("そこには行くことができません！", "You cannot travel there!"));
         return;
     }

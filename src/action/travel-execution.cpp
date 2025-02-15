@@ -204,6 +204,17 @@ Travel &Travel::get_instance()
     return instance;
 }
 
+bool Travel::can_travel_to(const FloorType &floor, const Pos2D &pos)
+{
+    const auto &grid = floor.get_grid(pos);
+    const auto &terrain = grid.get_terrain();
+    const auto is_marked = grid.is_mark();
+    const auto is_wall = terrain.flags.has_any_of({ TerrainCharacteristics::WALL, TerrainCharacteristics::CAN_DIG });
+    const auto is_door = terrain.flags.has(TerrainCharacteristics::DOOR) && (grid.mimic > 0);
+
+    return !is_marked || (!is_wall && !is_door);
+}
+
 const std::optional<Pos2D> &Travel::get_goal() const
 {
     return this->pos_goal;
