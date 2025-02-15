@@ -275,16 +275,16 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 auto &monrace = monster.get_monrace();
                 if ((flag & PROJECT_REFLECTABLE) && grid.m_idx && monrace.misc_flags.has(MonsterMiscType::REFLECTING) && (!monster.is_riding() || !(flag & PROJECT_PLAYER)) && (!src_idx || path_n > 1) && !one_in_(10)) {
 
-                    Pos2D pos_refrect(0, 0);
-                    int max_attempts = 10;
+                    Pos2D pos_reflection(0, 0);
+                    auto max_attempts = 10;
                     do {
-                        pos_refrect.y = pos_source.y - 1 + randint1(3);
-                        pos_refrect.x = pos_source.x - 1 + randint1(3);
+                        pos_reflection.y = pos_source.y - 1 + randint1(3);
+                        pos_reflection.x = pos_source.x - 1 + randint1(3);
                         max_attempts--;
-                    } while (max_attempts && floor.contains(pos_refrect, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(player_ptr, pos, pos_refrect));
+                    } while (max_attempts && floor.contains(pos_reflection, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(player_ptr, pos, pos_reflection));
 
                     if (max_attempts < 1) {
-                        pos_refrect = pos_source;
+                        pos_reflection = pos_source;
                     }
 
                     if (is_seen(player_ptr, monster)) {
@@ -310,7 +310,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         flag |= PROJECT_PLAYER;
                     }
 
-                    project(player_ptr, grid.m_idx, 0, pos_refrect.y, pos_refrect.x, dam, typ, flag);
+                    project(player_ptr, grid.m_idx, 0, pos_reflection.y, pos_reflection.x, dam, typ, flag);
                     continue;
                 }
             }
