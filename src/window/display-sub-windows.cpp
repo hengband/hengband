@@ -460,21 +460,22 @@ void fix_overhead(PlayerType *player_ptr)
  */
 static void display_dungeon(PlayerType *player_ptr)
 {
-    for (auto x = player_ptr->x - game_term->wid / 2 + 1; x <= player_ptr->x + game_term->wid / 2; x++) {
-        for (auto y = player_ptr->y - game_term->hgt / 2 + 1; y <= player_ptr->y + game_term->hgt / 2; y++) {
-            const auto pos_y = y - player_ptr->y + game_term->hgt / 2 - 1;
-            const auto pos_x = x - player_ptr->x + game_term->wid / 2 - 1;
-            if (!in_bounds2(*player_ptr->current_floor_ptr, y, x)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    for (auto x = p_pos.x - game_term->wid / 2 + 1; x <= p_pos.x + game_term->wid / 2; x++) {
+        for (auto y = p_pos.y - game_term->hgt / 2 + 1; y <= p_pos.y + game_term->hgt / 2; y++) {
+            const Pos2D pos(y, x);
+            const auto pos_drawing = pos - p_pos + Pos2DVec(game_term->hgt / 2 - 1, game_term->wid / 2 - 1);
+            if (!in_bounds2(floor, y, x)) {
                 const auto &terrain = TerrainList::get_instance().get_terrain(TerrainTag::NONE);
                 const auto &symbol_foreground = terrain.symbol_configs.at(F_LIT_STANDARD);
-                term_queue_char(pos_x, pos_y, { symbol_foreground, {} });
+                term_queue_char(pos_drawing.x, pos_drawing.y, { symbol_foreground, {} });
                 continue;
             }
 
-            auto symbol_pair = map_info(player_ptr, { y, x });
+            auto symbol_pair = map_info(player_ptr, pos);
             symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
-
-            term_queue_char(pos_x, pos_y, symbol_pair);
+            term_queue_char(pos_drawing.x, pos_drawing.y, symbol_pair);
         }
     }
 }
