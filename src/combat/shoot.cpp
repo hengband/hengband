@@ -648,7 +648,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             /* Sniper */
             if (snipe_type == SP_LITE) {
                 set_bits(floor.get_grid(pos_impact).info, CAVE_GLOW);
-                note_spot(player_ptr, pos_impact.y, pos_impact.x);
+                note_spot(player_ptr, pos_impact);
                 lite_spot(player_ptr, pos_impact.y, pos_impact.x);
             }
 
@@ -684,7 +684,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             /* Sniper */
             if (snipe_type == SP_EVILNESS) {
                 reset_bits(floor.get_grid(pos_impact).info, (CAVE_GLOW | CAVE_MARK));
-                note_spot(player_ptr, pos_impact.y, pos_impact.x);
+                note_spot(player_ptr, pos_impact);
                 lite_spot(player_ptr, pos_impact.y, pos_impact.x);
             }
 
@@ -807,7 +807,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     /* Sniper */
                     if (snipe_type == SP_HOLYNESS) {
                         set_bits(floor.get_grid(pos_impact).info, CAVE_GLOW);
-                        note_spot(player_ptr, pos_impact.y, pos_impact.x);
+                        note_spot(player_ptr, pos_impact);
                         lite_spot(player_ptr, pos_impact.y, pos_impact.x);
                     }
 

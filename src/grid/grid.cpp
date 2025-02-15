@@ -108,7 +108,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
         update_monster(player_ptr, grid.m_idx, false);
     }
 
-    note_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
     lite_spot(player_ptr, pos.y, pos.x);
     if (old_los ^ terrain.flags.has(TerrainCharacteristics::LOS)) {
         static constexpr auto flags = {
@@ -137,7 +137,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
                 update_monster(player_ptr, grid_neighbor.m_idx, false);
             }
 
-            note_spot(player_ptr, pos_neighbor.y, pos_neighbor.x);
+            note_spot(player_ptr, pos_neighbor);
             lite_spot(player_ptr, pos_neighbor.y, pos_neighbor.x);
         }
 
@@ -251,7 +251,7 @@ static void update_local_illumination_aux(PlayerType *player_ptr, const Pos2D &p
         update_monster(player_ptr, grid.m_idx, false);
     }
 
-    note_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
     lite_spot(player_ptr, pos.y, pos.x);
 }
 
@@ -381,9 +381,8 @@ void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny
  * optimized primarily for the most common cases, that is, for the
  * non-marked floor grids.
  */
-void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
+void note_spot(PlayerType *player_ptr, const Pos2D &pos)
 {
-    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
 
@@ -449,7 +448,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
         }
 
         /* Memorize certain non-torch-lit wall grids */
-        else if (check_local_illumination(player_ptr, y, x)) {
+        else if (check_local_illumination(player_ptr, pos.y, pos.x)) {
             grid.info |= (CAVE_MARK);
         }
     }

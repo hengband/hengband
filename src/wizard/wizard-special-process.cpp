@@ -11,12 +11,10 @@
 
 #include "wizard/wizard-special-process.h"
 #include "artifact/fixed-art-generator.h"
-#include "artifact/fixed-art-types.h"
 #include "cmd-io/cmd-save.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -427,7 +425,7 @@ void wiz_create_feature(PlayerType *player_ptr)
         grid.info |= CAVE_GLOW | CAVE_OBJECT;
     }
 
-    note_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
     lite_spot(player_ptr, pos.y, pos.x);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 }

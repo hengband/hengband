@@ -66,10 +66,10 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
             update_monster(this->player_ptr, grid.m_idx, false);
         }
 
-        update_local_illumination(this->player_ptr, { y, x });
+        update_local_illumination(this->player_ptr, pos);
     }
 
-    note_spot(this->player_ptr, y, x);
+    note_spot(this->player_ptr, pos);
     lite_spot(this->player_ptr, y, x);
 }
 
@@ -136,7 +136,7 @@ std::optional<std::string> SpellsMirrorMaster::place_mirror()
     set_bits(grid.info, CAVE_OBJECT | CAVE_GLOW);
     grid.set_terrain_id(TerrainTag::MIRROR, TerrainKind::MIMIC);
 
-    note_spot(this->player_ptr, p_pos.y, p_pos.x);
+    note_spot(this->player_ptr, p_pos);
     lite_spot(this->player_ptr, p_pos.y, p_pos.x);
     update_local_illumination(this->player_ptr, p_pos);
     return std::nullopt;
