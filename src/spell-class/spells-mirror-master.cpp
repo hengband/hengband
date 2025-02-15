@@ -70,7 +70,7 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
     }
 
     note_spot(this->player_ptr, pos);
-    lite_spot(this->player_ptr, y, x);
+    lite_spot(this->player_ptr, pos);
 }
 
 /*!
@@ -137,7 +137,7 @@ std::optional<std::string> SpellsMirrorMaster::place_mirror()
     grid.set_terrain_id(TerrainTag::MIRROR, TerrainKind::MIMIC);
 
     note_spot(this->player_ptr, p_pos);
-    lite_spot(this->player_ptr, p_pos.y, p_pos.x);
+    lite_spot(this->player_ptr, p_pos);
     update_local_illumination(this->player_ptr, p_pos);
     return std::nullopt;
 }
@@ -285,7 +285,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
                     move_cursor_relative(ny, nx);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
-                    lite_spot(this->player_ptr, ny, nx);
+                    lite_spot(this->player_ptr, { ny, nx });
                     term_fresh();
 
                     print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
@@ -387,7 +387,7 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
     term_xtra(TERM_XTRA_DELAY, delay_factor);
 
     for (const auto &pos : drawn_pos_list) {
-        lite_spot(player_ptr, pos.y, pos.x);
+        lite_spot(player_ptr, pos);
     }
 }
 
@@ -449,7 +449,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     auto oy = p_pos.y;
     auto ox = p_pos.x;
     auto visual = false;
-    std::vector<std::pair<int, int>> drawn_pos_list;
+    std::vector<Pos2D> drawn_pos_list;
     for (const auto &[ny, nx] : path_g) {
         if (delay_factor > 0) {
             if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
@@ -457,7 +457,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
                 move_cursor_relative(ny, nx);
                 term_fresh();
                 term_xtra(TERM_XTRA_DELAY, delay_factor);
-                lite_spot(this->player_ptr, ny, nx);
+                lite_spot(this->player_ptr, { ny, nx });
                 term_fresh();
 
                 print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
@@ -476,8 +476,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
         ox = nx;
     }
 
-    for (const auto &[y, x] : drawn_pos_list) {
-        lite_spot(this->player_ptr, y, x);
+    for (const auto &pos : drawn_pos_list) {
+        lite_spot(this->player_ptr, pos);
     }
 
     if (const auto &pos = path_g.back(); floor.get_grid(pos).is_mirror()) {

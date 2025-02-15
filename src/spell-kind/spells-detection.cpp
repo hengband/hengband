@@ -52,14 +52,14 @@ static bool detect_feat_flag(PlayerType *player_ptr, POSITION range, TerrainChar
 
                     grid.info &= ~(CAVE_UNSAFE);
 
-                    lite_spot(player_ptr, pos.y, pos.x);
+                    lite_spot(player_ptr, pos);
                 }
             }
 
             if (grid.has(flag)) {
                 disclose_grid(player_ptr, pos);
                 grid.info |= (CAVE_MARK);
-                lite_spot(player_ptr, pos.y, pos.x);
+                lite_spot(player_ptr, pos);
                 detect = true;
             }
         }
@@ -173,27 +173,25 @@ bool detect_objects_gold(PlayerType *player_ptr, POSITION range)
     }
 
     /* Scan objects */
-    bool detect = false;
-    POSITION y, x;
-    for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
-        auto *o_ptr = &floor.o_list[i];
-
-        if (!o_ptr->is_valid()) {
-            continue;
-        }
-        if (o_ptr->is_held_by_monster()) {
+    auto detect = false;
+    for (short i = 1; i < floor.o_max; i++) {
+        auto &item = floor.o_list[i];
+        if (!item.is_valid()) {
             continue;
         }
 
-        y = o_ptr->iy;
-        x = o_ptr->ix;
-        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range2) {
+        if (item.is_held_by_monster()) {
             continue;
         }
 
-        if (o_ptr->bi_key.tval() == ItemKindType::GOLD) {
-            o_ptr->marked.set(OmType::FOUND);
-            lite_spot(player_ptr, y, x);
+        const auto i_pos = item.get_position();
+        if (Grid::calc_distance(player_ptr->get_position(), i_pos) > range2) {
+            continue;
+        }
+
+        if (item.bi_key.tval() == ItemKindType::GOLD) {
+            item.marked.set(OmType::FOUND);
+            lite_spot(player_ptr, i_pos);
             detect = true;
         }
     }
@@ -226,27 +224,24 @@ bool detect_objects_normal(PlayerType *player_ptr, POSITION range)
         range2 /= 3;
     }
 
-    bool detect = false;
-    for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
-        auto *o_ptr = &floor.o_list[i];
-
-        if (!o_ptr->is_valid()) {
+    auto detect = false;
+    for (short i = 1; i < floor.o_max; i++) {
+        auto &item = floor.o_list[i];
+        if (!item.is_valid()) {
             continue;
         }
-        if (o_ptr->is_held_by_monster()) {
-            continue;
-        }
-
-        POSITION y = o_ptr->iy;
-        POSITION x = o_ptr->ix;
-
-        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range2) {
+        if (item.is_held_by_monster()) {
             continue;
         }
 
-        if (o_ptr->bi_key.tval() != ItemKindType::GOLD) {
-            o_ptr->marked.set(OmType::FOUND);
-            lite_spot(player_ptr, y, x);
+        const auto i_pos = item.get_position();
+        if (Grid::calc_distance(player_ptr->get_position(), i_pos) > range2) {
+            continue;
+        }
+
+        if (item.bi_key.tval() != ItemKindType::GOLD) {
+            item.marked.set(OmType::FOUND);
+            lite_spot(player_ptr, i_pos);
             detect = true;
         }
     }
@@ -297,23 +292,22 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
     }
 
     auto detect = false;
-    for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
-        auto *o_ptr = &floor.o_list[i];
-        if (!o_ptr->is_valid() || o_ptr->is_held_by_monster()) {
+    for (short i = 1; i < floor.o_max; i++) {
+        auto &item = floor.o_list[i];
+        if (!item.is_valid() || item.is_held_by_monster()) {
             continue;
         }
 
-        auto y = o_ptr->iy;
-        auto x = o_ptr->ix;
-        if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
+        const auto i_pos = item.get_position();
+        if (Grid::calc_distance(player_ptr->get_position(), i_pos) > range) {
             continue;
         }
 
-        auto has_bonus = o_ptr->to_a > 0;
-        has_bonus |= o_ptr->to_h + o_ptr->to_d > 0;
-        if (o_ptr->is_fixed_or_random_artifact() || o_ptr->is_ego() || is_object_magically(o_ptr->bi_key.tval()) || o_ptr->is_spell_book() || has_bonus) {
-            o_ptr->marked.set(OmType::FOUND);
-            lite_spot(player_ptr, y, x);
+        auto has_bonus = item.to_a > 0;
+        has_bonus |= item.to_h + item.to_d > 0;
+        if (item.is_fixed_or_random_artifact() || item.is_ego() || is_object_magically(item.bi_key.tval()) || item.is_spell_book() || has_bonus) {
+            item.marked.set(OmType::FOUND);
+            lite_spot(player_ptr, i_pos);
             detect = true;
         }
     }

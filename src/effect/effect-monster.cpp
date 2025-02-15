@@ -753,7 +753,7 @@ bool affect_monster(
         update_monster(player_ptr, target_m_idx, false);
     }
 
-    lite_spot(player_ptr, em_ptr->y, em_ptr->x);
+    lite_spot(player_ptr, em_ptr->get_position());
     if (LoreTracker::get_instance().is_tracking(em_ptr->m_ptr->r_idx) && (em_ptr->seen || !monster_is_valid)) {
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }

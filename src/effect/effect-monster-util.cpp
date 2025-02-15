@@ -62,3 +62,8 @@ bool EffectMonster::is_monster() const
 {
     return this->src_idx > 0;
 }
+
+Pos2D EffectMonster::get_position() const
+{
+    return { this->y, this->x };
+}

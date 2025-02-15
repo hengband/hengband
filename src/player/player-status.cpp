@@ -165,7 +165,7 @@ static void delayed_visual_update(PlayerType *player_ptr)
             note_spot(player_ptr, pos);
         }
 
-        lite_spot(player_ptr, pos.y, pos.x);
+        lite_spot(player_ptr, pos);
         if (grid.has_monster()) {
             update_monster(player_ptr, grid.m_idx, false);
         }

@@ -397,7 +397,7 @@ void ObjectThrowEntity::check_racial_target_seen()
     move_cursor_relative(this->ny[this->cur_dis], this->nx[this->cur_dis]);
     term_fresh();
     term_xtra(TERM_XTRA_DELAY, this->msec);
-    lite_spot(this->player_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis]);
+    lite_spot(this->player_ptr, { this->ny[this->cur_dis], this->nx[this->cur_dis] });
     term_fresh();
 }
 
@@ -517,7 +517,7 @@ void ObjectThrowEntity::process_boomerang_throw()
         move_cursor_relative(this->ny[i], this->nx[i]);
         term_fresh();
         term_xtra(TERM_XTRA_DELAY, this->msec);
-        lite_spot(this->player_ptr, this->ny[i], this->nx[i]);
+        lite_spot(this->player_ptr, { this->ny[i], this->nx[i] });
         term_fresh();
     }
 

@@ -109,7 +109,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
     }
 
     note_spot(player_ptr, pos);
-    lite_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos);
     if (old_los ^ terrain.flags.has(TerrainCharacteristics::LOS)) {
         static constexpr auto flags = {
             StatusRecalculatingFlag::VIEW,
@@ -138,7 +138,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
             }
 
             note_spot(player_ptr, pos_neighbor);
-            lite_spot(player_ptr, pos_neighbor.y, pos_neighbor.x);
+            lite_spot(player_ptr, pos_neighbor);
         }
 
         update_local_illumination(player_ptr, pos_neighbor);
@@ -252,7 +252,7 @@ static void update_local_illumination_aux(PlayerType *player_ptr, const Pos2D &p
     }
 
     note_spot(player_ptr, pos);
-    lite_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos);
 }
 
 /*!
@@ -462,13 +462,13 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
  *
  * This function should only be called on "legal" grids
  */
-void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
+void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
 {
-    if (panel_contains(y, x) && in_bounds2(*player_ptr->current_floor_ptr, y, x)) {
-        auto symbol_pair = map_info(player_ptr, { y, x });
+    if (panel_contains(pos.y, pos.x) && in_bounds2(*player_ptr->current_floor_ptr, pos.y, pos.x)) {
+        auto symbol_pair = map_info(player_ptr, pos);
         symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 
-        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, symbol_pair);
+        term_queue_bigchar(panel_col_of(pos.x), pos.y - panel_row_prt, symbol_pair);
         static constexpr auto flags = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,

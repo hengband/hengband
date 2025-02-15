@@ -248,8 +248,8 @@ bool shock_power(PlayerType *player_ptr)
     monster.fx = pos_target.x;
 
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, pos_origin.y, pos_origin.x);
-    lite_spot(player_ptr, pos_target.y, pos_target.x);
+    lite_spot(player_ptr, pos_origin);
+    lite_spot(player_ptr, pos_target);
 
     if (monrace.brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);

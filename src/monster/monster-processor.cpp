@@ -129,7 +129,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         const auto &grid = floor.get_grid(m_pos);
         choose_chameleon_polymorph(player_ptr, m_idx, grid.get_terrain_id());
         update_monster(player_ptr, m_idx, false);
-        lite_spot(player_ptr, m_pos.y, m_pos.x);
+        lite_spot(player_ptr, m_pos);
         const auto &new_monrace = monster.get_monrace();
 
         if (new_monrace.brightness_flags.has_any_of(ld_mask) || monrace.brightness_flags.has_any_of(ld_mask)) {

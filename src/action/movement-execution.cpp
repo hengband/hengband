@@ -275,7 +275,7 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
                 msg_format("You feel %s %s blocking your way.", is_a_vowel(name[0]) ? "an" : "a", name.data());
 #endif
                 grid.info |= (CAVE_MARK);
-                lite_spot(player_ptr, pos.y, pos.x);
+                lite_spot(player_ptr, pos);
             }
         } else {
             const auto effects = player_ptr->effects();

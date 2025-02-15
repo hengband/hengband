@@ -70,7 +70,7 @@ bool no_lite(PlayerType *player_ptr);
 void print_rel(PlayerType *player_ptr, const DisplaySymbol &symbol, POSITION y, POSITION x);
 void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ);
 void note_spot(PlayerType *player_ptr, const Pos2D &pos);
-void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x);
+void lite_spot(PlayerType *player_ptr, const Pos2D &pos);
 void update_flow(PlayerType *player_ptr);
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainCharacteristics action);
 bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x);

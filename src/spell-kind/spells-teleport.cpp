@@ -169,8 +169,8 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
     monster.set_position(m_pos);
     monster.reset_target();
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, m_pos_orig.y, m_pos_orig.x);
-    lite_spot(player_ptr, m_pos.y, m_pos.x);
+    lite_spot(player_ptr, m_pos_orig);
+    lite_spot(player_ptr, m_pos);
 
     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
@@ -245,8 +245,8 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
     floor.get_grid(m_pos).m_idx = m_idx;
     monster.set_position(m_pos);
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, m_pos_orig.y, m_pos_orig.x);
-    lite_spot(player_ptr, m_pos.y, m_pos.x);
+    lite_spot(player_ptr, m_pos_orig);
+    lite_spot(player_ptr, m_pos);
 
     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);

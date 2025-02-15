@@ -101,7 +101,7 @@ void change_race(PlayerType *player_ptr, PlayerRaceType new_race, concptr effect
         autopick_load_pref(player_ptr, false);
     }
 
-    lite_spot(player_ptr, player_ptr->y, player_ptr->x);
+    lite_spot(player_ptr, player_ptr->get_position());
 }
 
 void do_poly_self(PlayerType *player_ptr)

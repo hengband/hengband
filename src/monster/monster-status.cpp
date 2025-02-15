@@ -443,7 +443,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
     }
 
     update_monster(player_ptr, m_idx, false);
-    lite_spot(player_ptr, monster.fy, monster.fx);
+    lite_spot(player_ptr, monster.get_position());
 
     if (monster.is_riding()) {
         rfu.set_flag(StatusRecalculatingFlag::BONUS);

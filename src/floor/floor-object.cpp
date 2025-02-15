@@ -151,7 +151,7 @@ void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     grid.o_idx_list.clear();
-    lite_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos);
 }
 
 /*!
@@ -216,18 +216,14 @@ void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
  */
 void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
-    ItemEntity *j_ptr;
     auto &floor = *player_ptr->current_floor_ptr;
     excise_object_idx(floor, o_idx);
-    j_ptr = &floor.o_list[o_idx];
-    if (!j_ptr->is_held_by_monster()) {
-        POSITION y, x;
-        y = j_ptr->iy;
-        x = j_ptr->ix;
-        lite_spot(player_ptr, y, x);
+    auto &item = floor.o_list[o_idx];
+    if (!item.is_held_by_monster()) {
+        lite_spot(player_ptr, item.get_position());
     }
 
-    j_ptr->wipe();
+    item.wipe();
     floor.o_cnt--;
     static constexpr auto flags = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
@@ -476,7 +472,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
     }
 
     note_spot(player_ptr, pos_drop);
-    lite_spot(player_ptr, pos_drop.y, pos_drop.x);
+    lite_spot(player_ptr, pos_drop);
     sound(SoundKind::DROP);
 
     const auto is_located = player_ptr->is_located_at(pos_drop);

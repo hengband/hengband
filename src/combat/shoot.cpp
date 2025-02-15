@@ -649,7 +649,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             if (snipe_type == SP_LITE) {
                 set_bits(floor.get_grid(pos_impact).info, CAVE_GLOW);
                 note_spot(player_ptr, pos_impact);
-                lite_spot(player_ptr, pos_impact.y, pos_impact.x);
+                lite_spot(player_ptr, pos_impact);
             }
 
             /* The player can see the (on screen) missile */
@@ -662,7 +662,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     move_cursor_relative(pos_impact.y, pos_impact.x);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
-                    lite_spot(player_ptr, pos_impact.y, pos_impact.x);
+                    lite_spot(player_ptr, pos_impact);
                     term_fresh();
                 }
             }
@@ -685,7 +685,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             if (snipe_type == SP_EVILNESS) {
                 reset_bits(floor.get_grid(pos_impact).info, (CAVE_GLOW | CAVE_MARK));
                 note_spot(player_ptr, pos_impact);
-                lite_spot(player_ptr, pos_impact.y, pos_impact.x);
+                lite_spot(player_ptr, pos_impact);
             }
 
             prev_y = y;
@@ -808,7 +808,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     if (snipe_type == SP_HOLYNESS) {
                         set_bits(floor.get_grid(pos_impact).info, CAVE_GLOW);
                         note_spot(player_ptr, pos_impact);
-                        lite_spot(player_ptr, pos_impact.y, pos_impact.x);
+                        lite_spot(player_ptr, pos_impact);
                     }
 
                     /* Hit the monster, check for death */
@@ -877,12 +877,12 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                 monster.set_position(pos_to);
                                 update_monster(player_ptr, m_idx, true);
                                 if (delay_factor > 0) {
-                                    lite_spot(player_ptr, pos_to.y, pos_to.x);
-                                    lite_spot(player_ptr, pos_orig.y, pos_orig.x);
+                                    lite_spot(player_ptr, pos_to);
+                                    lite_spot(player_ptr, pos_orig);
                                     term_fresh();
                                     term_xtra(TERM_XTRA_DELAY, delay_factor);
                                 } else if (n == n0) {
-                                    lite_spot(player_ptr, pos_orig.y, pos_orig.x);
+                                    lite_spot(player_ptr, pos_orig);
                                 }
 
                                 x = pos_to.x;

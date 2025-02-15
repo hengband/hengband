@@ -250,8 +250,8 @@ bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MO
             floor.get_grid(p_pos_new).m_idx = m_idx_aux;
             monster.set_position(p_pos_new);
             update_monster(player_ptr, m_idx_aux, true);
-            lite_spot(player_ptr, pos.y, pos.x);
-            lite_spot(player_ptr, p_pos_new.y, p_pos_new.x);
+            lite_spot(player_ptr, pos);
+            lite_spot(player_ptr, p_pos_new);
         }
     }
 

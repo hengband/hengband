@@ -290,7 +290,7 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             it = grid.o_idx_list.begin();
         }
 
-        lite_spot(player_ptr, y, x);
+        lite_spot(player_ptr, pos);
     }
 
     return is_item_affected;
