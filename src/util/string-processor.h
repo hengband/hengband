@@ -17,7 +17,7 @@ extern const char hexsym[16];
  */
 extern size_t max_macrotrigger;
 extern std::optional<std::string> macro_template;
-extern concptr macro_modifier_chr;
+extern std::optional<std::string> macro_modifier_chr;
 extern concptr macro_modifier_name[MAX_MACRO_MOD];
 extern concptr macro_trigger_name[MAX_MACRO_TRIG];
 extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];

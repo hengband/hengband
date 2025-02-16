@@ -401,10 +401,10 @@ static bool interpret_z_token(std::string_view line)
 static bool decide_template_modifier(int tok, char **zz)
 {
     if (macro_template) {
-        int macro_modifier_length = strlen(macro_modifier_chr);
+        const size_t macro_modifier_length = macro_modifier_chr ? macro_modifier_chr->length() : 0;
         macro_template.reset();
-        string_free(macro_modifier_chr);
-        for (int i = 0; i < macro_modifier_length; i++) {
+        macro_modifier_chr.reset();
+        for (size_t i = 0; i < macro_modifier_length; i++) {
             string_free(macro_modifier_name[i]);
         }
 
@@ -428,7 +428,7 @@ static bool decide_template_modifier(int tok, char **zz)
     }
 
     macro_template = zz[0];
-    macro_modifier_chr = string_make(zz[1]);
+    macro_modifier_chr = zz[1];
     for (int i = 0; i < zz_length; i++) {
         macro_modifier_name[i] = string_make(zz[2 + i]);
     }
