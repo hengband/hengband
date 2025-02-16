@@ -11,7 +11,7 @@ const char hexsym[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
 size_t max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
 std::optional<std::string> macro_template; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列 */
 std::optional<std::string> macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列 */
-concptr macro_modifier_name[MAX_MACRO_MOD]; /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列ポインタ配列 */
+std::vector<std::string> macro_modifier_names = std::vector<std::string>(MAX_MACRO_MOD); /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列配列 */
 concptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
 concptr macro_trigger_keycode[2][MAX_MACRO_TRIG]; /*!< マクロの内容 */
 
@@ -106,7 +106,6 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     concptr str = *strptr;
     bool mod_status[MAX_MACRO_MOD]{};
 
-    auto len = 0;
     int shiftstatus = 0;
     concptr key_code;
 
@@ -122,10 +121,10 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     /* Examine modifier keys */
     while (true) {
         auto i = 0;
+        size_t len = 0;
         for (; (*macro_modifier_chr)[i] != '\0'; i++) {
-            len = strlen(macro_modifier_name[i]);
-
-            if (!angband_strnicmp(str, macro_modifier_name[i], len)) {
+            len = macro_modifier_names[i].length();
+            if (!angband_strnicmp(str, macro_modifier_names[i].data(), len)) {
                 break;
             }
         }
@@ -140,6 +139,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
         }
     }
 
+    size_t len = 0;
     size_t i = 0;
     for (; i < max_macrotrigger; i++) {
         len = strlen(macro_trigger_name[i]);
@@ -280,7 +280,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
         case '&':
             while ((tmp = angband_strchr(macro_modifier_chr->data(), *str)) != 0) {
                 const auto j = tmp - macro_modifier_chr->data();
-                tmp = macro_modifier_name[j];
+                tmp = macro_modifier_names[j].data();
                 while (*tmp) {
                     *s++ = *tmp++;
                 }

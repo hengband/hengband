@@ -394,18 +394,18 @@ static bool interpret_z_token(std::string_view line)
 
 /*!
  * @brief Tトークンの解釈 / Process "T:<template>:<modifier chr>:<modifier name>:..." for 4 tokens
- * @param buf バッファ
+ * @param num_tokens トークン数
  * @param zz トークン保管文字列
  * @return 解釈に成功したか否か
  */
-static bool decide_template_modifier(int tok, char **zz)
+static bool decide_template_modifier(size_t num_tokens, char **zz)
 {
     if (macro_template) {
         const size_t macro_modifier_length = macro_modifier_chr ? macro_modifier_chr->length() : 0;
         macro_template.reset();
         macro_modifier_chr.reset();
         for (size_t i = 0; i < macro_modifier_length; i++) {
-            string_free(macro_modifier_name[i]);
+            macro_modifier_names[i] = "";
         }
 
         for (size_t i = 0; i < max_macrotrigger; i++) {
@@ -421,16 +421,16 @@ static bool decide_template_modifier(int tok, char **zz)
         return true;
     }
 
-    int zz_length = strlen(zz[1]);
+    size_t zz_length = strlen(zz[1]);
     zz_length = std::min(MAX_MACRO_MOD, zz_length);
-    if (2 + zz_length != tok) {
+    if (2 + zz_length != num_tokens) {
         return false;
     }
 
     macro_template = zz[0];
     macro_modifier_chr = zz[1];
-    for (int i = 0; i < zz_length; i++) {
-        macro_modifier_name[i] = string_make(zz[2 + i]);
+    for (size_t i = 0; i < zz_length; i++) {
+        macro_modifier_names[i] = zz[2 + i];
     }
 
     return true;

@@ -7,18 +7,15 @@
 #include <string_view>
 #include <vector>
 
-#define MAX_MACRO_MOD 12
-#define MAX_MACRO_TRIG 200 /*!< 登録を許すマクロ（トリガー）の最大数 */
+constexpr size_t MAX_MACRO_MOD = 12;
+constexpr size_t MAX_MACRO_TRIG = 200; /*!< 登録を許すマクロ（トリガー）の最大数 */
 
 extern const char hexsym[16];
 
-/*
- * Automatically generated "variable" declarations
- */
 extern size_t max_macrotrigger;
 extern std::optional<std::string> macro_template;
 extern std::optional<std::string> macro_modifier_chr;
-extern concptr macro_modifier_name[MAX_MACRO_MOD];
+extern std::vector<std::string> macro_modifier_names;
 extern concptr macro_trigger_name[MAX_MACRO_TRIG];
 extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
 
