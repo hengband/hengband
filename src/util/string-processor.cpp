@@ -512,11 +512,11 @@ char *angband_strstr(const char *haystack, std::string_view needle)
  *
  * angband_strchr() can handle Kanji strings correctly.
  */
-char *angband_strchr(concptr ptr, char ch)
+char *angband_strchr(const char *ptr, char ch)
 {
     for (; *ptr != '\0'; ptr++) {
         if (*ptr == ch) {
-            return (char *)ptr;
+            return const_cast<char *>(ptr);
         }
 
 #ifdef JP
