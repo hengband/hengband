@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include <optional>
 #include <set>
 #include <string>
 #include <string_view>
@@ -14,8 +15,8 @@ extern const char hexsym[16];
 /*
  * Automatically generated "variable" declarations
  */
-extern int max_macrotrigger;
-extern concptr macro_template;
+extern size_t max_macrotrigger;
+extern std::optional<std::string> macro_template;
 extern concptr macro_modifier_chr;
 extern concptr macro_modifier_name[MAX_MACRO_MOD];
 extern concptr macro_trigger_name[MAX_MACRO_TRIG];

@@ -8,8 +8,8 @@
  */
 const char hexsym[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
-int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
-concptr macro_template = nullptr; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
+size_t max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
+std::optional<std::string> macro_template; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列 */
 concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
 concptr macro_modifier_name[MAX_MACRO_MOD]; /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列ポインタ配列 */
 concptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
@@ -106,22 +106,23 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     concptr str = *strptr;
     bool mod_status[MAX_MACRO_MOD]{};
 
-    int i, len = 0;
+    auto len = 0;
     int shiftstatus = 0;
     concptr key_code;
 
-    if (macro_template == nullptr) {
+    if (!macro_template) {
         return;
     }
 
-    for (i = 0; macro_modifier_chr[i]; i++) {
+    for (auto i = 0; macro_modifier_chr[i]; i++) {
         mod_status[i] = false;
     }
     str++;
 
     /* Examine modifier keys */
     while (true) {
-        for (i = 0; macro_modifier_chr[i]; i++) {
+        auto i = 0;
+        for (; macro_modifier_chr[i]; i++) {
             len = strlen(macro_modifier_name[i]);
 
             if (!angband_strnicmp(str, macro_modifier_name[i], len)) {
@@ -139,7 +140,8 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
         }
     }
 
-    for (i = 0; i < max_macrotrigger; i++) {
+    size_t i = 0;
+    for (; i < max_macrotrigger; i++) {
         len = strlen(macro_trigger_name[i]);
         if (!angband_strnicmp(str, macro_trigger_name[i], len) && ']' == str[len]) {
             break;
@@ -162,8 +164,8 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     str += len;
 
     *s++ = (char)31;
-    for (i = 0; macro_template[i]; i++) {
-        char ch = macro_template[i];
+    for (i = 0; (*macro_template)[i]; i++) {
+        const auto ch = (*macro_template)[i];
         switch (ch) {
         case '&':
             for (int j = 0; macro_modifier_chr[j]; j++) {
@@ -264,8 +266,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
     char *s = *bufptr;
     concptr str = *strptr;
     char key_code[100]{};
-    int i;
-    if (macro_template == nullptr) {
+    if (!macro_template) {
         return false;
     }
 
@@ -273,9 +274,8 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
     *s++ = '[';
 
     concptr tmp;
-    for (i = 0; macro_template[i]; i++) {
-        char ch = macro_template[i];
-
+    for (auto i = 0; (*macro_template)[i] != '\0'; i++) {
+        const auto ch = (*macro_template)[i];
         switch (ch) {
         case '&':
             while ((tmp = angband_strchr(macro_modifier_chr, *str)) != 0) {
@@ -308,7 +308,8 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
         return false;
     }
 
-    for (i = 0; i < max_macrotrigger; i++) {
+    size_t i = 0;
+    for (; i < max_macrotrigger; i++) {
         if (!angband_stricmp(key_code, macro_trigger_keycode[0][i]) || !angband_stricmp(key_code, macro_trigger_keycode[1][i])) {
             break;
         }
