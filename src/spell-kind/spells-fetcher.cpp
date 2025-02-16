@@ -45,7 +45,7 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
     Grid *grid_ptr;
     const auto &system = AngbandSystem::get_instance();
     if (dir.is_targetting() && target_okay(player_ptr)) {
-        const Pos2D pos(target_col, target_row);
+        const Pos2D pos(target_row, target_col);
         if (Grid::calc_distance(p_pos, pos) > system.get_max_range()) {
             msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
             return;
