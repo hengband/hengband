@@ -13,7 +13,10 @@ std::unique_ptr<std::string> macro_template; /*!< Angband設定ファイルのT:
 std::unique_ptr<std::string> macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
 std::vector<std::string> macro_modifier_names = std::vector<std::string>(MAX_MACRO_MOD); /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列配列 */
 std::vector<std::string> macro_trigger_names = std::vector<std::string>(MAX_MACRO_TRIG); /*!< マクロのトリガーコード */
-concptr macro_trigger_keycode[2][MAX_MACRO_TRIG]; /*!< マクロの内容 */
+std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes = {
+    { ShiftStatus::OFF, std::vector<std::string>(MAX_MACRO_TRIG) },
+    { ShiftStatus::ON, std::vector<std::string>(MAX_MACRO_TRIG) },
+}; /*!< マクロの内容 */
 
 /*
  * Convert a decimal to a single digit octal number
@@ -106,9 +109,6 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     concptr str = *strptr;
     bool mod_status[MAX_MACRO_MOD]{};
 
-    int shiftstatus = 0;
-    concptr key_code;
-
     if (!macro_template) {
         return;
     }
@@ -119,6 +119,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     str++;
 
     /* Examine modifier keys */
+    auto shiftstatus = ShiftStatus::OFF;
     while (true) {
         auto i = 0;
         size_t len = 0;
@@ -135,7 +136,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
         str += len;
         mod_status[i] = true;
         if ('S' == (*macro_modifier_chr)[i]) {
-            shiftstatus = 1;
+            shiftstatus = ShiftStatus::ON;
         }
     }
 
@@ -160,7 +161,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
         return;
     }
 
-    key_code = macro_trigger_keycode[shiftstatus][i];
+    const auto &key_code = macro_trigger_keycodes.at(shiftstatus).at(i);
     str += len;
 
     *s++ = (char)31;
@@ -176,8 +177,8 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 
             break;
         case '#':
-            strcpy(s, key_code);
-            s += strlen(key_code);
+            strcpy(s, key_code.data());
+            s += key_code.length();
             break;
         default:
             *s++ = ch;
@@ -310,7 +311,9 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 
     size_t i = 0;
     for (; i < max_macrotrigger; i++) {
-        if (!angband_stricmp(key_code, macro_trigger_keycode[0][i]) || !angband_stricmp(key_code, macro_trigger_keycode[1][i])) {
+        auto is_string_same = angband_stricmp(key_code, macro_trigger_keycodes.at(ShiftStatus::OFF).at(i).data()) == 0;
+        is_string_same |= angband_stricmp(key_code, macro_trigger_keycodes.at(ShiftStatus::ON).at(i).data()) == 0;
+        if (is_string_same) {
             break;
         }
     }
