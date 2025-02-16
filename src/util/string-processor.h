@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include <map>
 #include <optional>
 #include <set>
 #include <string>
@@ -12,12 +13,17 @@ constexpr size_t MAX_MACRO_TRIG = 200; /*!< 登録を許すマクロ（トリガ
 
 extern const char hexsym[16];
 
+enum class ShiftStatus {
+    OFF,
+    ON,
+};
+
 extern size_t max_macrotrigger;
 extern std::optional<std::string> macro_template;
 extern std::optional<std::string> macro_modifier_chr;
 extern std::vector<std::string> macro_modifier_names;
 extern std::vector<std::string> macro_trigger_names;
-extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
+extern std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes;
 
 void text_to_ascii(char *buf, std::string_view sv, size_t bufsize);
 void ascii_to_text(char *buf, std::string_view sv, size_t bufsize);

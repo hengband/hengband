@@ -410,8 +410,8 @@ static bool decide_template_modifier(size_t num_tokens, char **zz)
 
         for (size_t i = 0; i < max_macrotrigger; i++) {
             macro_trigger_names[i] = "";
-            string_free(macro_trigger_keycode[0][i]);
-            string_free(macro_trigger_keycode[1][i]);
+            macro_trigger_keycodes.at(ShiftStatus::OFF).at(i) = "";
+            macro_trigger_keycodes.at(ShiftStatus::ON).at(i) = "";
         }
 
         max_macrotrigger = 0;
@@ -462,13 +462,13 @@ static bool interpret_macro_keycodes(int tok, char **zz)
     }
 
     macro_trigger_names[m] = std::move(t);
-    macro_trigger_keycode[0][m] = string_make(zz[1]);
+    macro_trigger_keycodes.at(ShiftStatus::OFF).at(m) = zz[1];
     if (tok == 3) {
-        macro_trigger_keycode[1][m] = string_make(zz[2]);
+        macro_trigger_keycodes.at(ShiftStatus::ON).at(m) = zz[2];
         return true;
     }
 
-    macro_trigger_keycode[1][m] = string_make(zz[1]);
+    macro_trigger_keycodes.at(ShiftStatus::ON).at(m) = zz[1];
     return true;
 }
 
