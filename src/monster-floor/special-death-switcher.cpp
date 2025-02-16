@@ -8,15 +8,11 @@
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-generator.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
-#include "floor/geometry.h"
-#include "game-option/birth-options.h"
-#include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "monster-floor/monster-death-util.h"
@@ -25,7 +21,6 @@
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
 #include "object/object-kind-hook.h"
@@ -33,7 +28,6 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -81,7 +75,7 @@ static void summon_self(PlayerType *player_ptr, MonsterDeath *md_ptr, summon_typ
     auto attempts = 100;
     do {
         m_pos = scatter(player_ptr, md_ptr->get_position(), radius, PROJECT_NONE);
-    } while (!(in_bounds(&floor, m_pos.y, m_pos.x) && is_cave_empty_bold2(player_ptr, m_pos.y, m_pos.x)) && --attempts);
+    } while (!(floor.contains(m_pos) && is_cave_empty_bold2(player_ptr, m_pos.y, m_pos.x)) && --attempts);
 
     if (attempts <= 0) {
         return;
@@ -111,7 +105,7 @@ static void on_dead_pink_horror(PlayerType *player_ptr, MonsterDeath *md_ptr)
     }
 
     if (notice) {
-        sound(SOUND_SUMMON);
+        sound(SoundKind::SUMMON);
         msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
     }
 }
@@ -124,27 +118,27 @@ static void on_dead_bloodletter(PlayerType *player_ptr, MonsterDeath *md_ptr)
 
     ItemEntity item({ ItemKindType::SWORD, SV_BLADE_OF_CHAOS });
     ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART | md_ptr->mo_mode).execute();
-    (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+    (void)drop_near(player_ptr, &item, md_ptr->get_position());
 }
 
 static void on_dead_raal(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (!md_ptr->drop_chosen_item || (floor_ptr->dun_level <= 9)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (!md_ptr->drop_chosen_item || (floor.dun_level <= 9)) {
         return;
     }
 
     ItemEntity forge;
     auto *q_ptr = &forge;
     q_ptr->wipe();
-    if ((floor_ptr->dun_level > 49) && one_in_(5)) {
+    if ((floor.dun_level > 49) && one_in_(5)) {
         select_baseitem_id_hook = kind_is_good_book;
     } else {
         select_baseitem_id_hook = kind_is_book;
     }
 
     (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-    (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+    (void)drop_near(player_ptr, q_ptr, md_ptr->get_position());
 }
 
 /*!
@@ -193,12 +187,12 @@ static void on_dead_serpent(PlayerType *player_ptr, MonsterDeath *md_ptr)
     ItemEntity item_grond({ ItemKindType::HAFTED, SV_GROND });
     item_grond.fa_id = FixedArtifactId::GROND;
     ItemMagicApplier(player_ptr, &item_grond, -1, AM_GOOD | AM_GREAT).execute();
-    (void)drop_near(player_ptr, &item_grond, -1, md_ptr->md_y, md_ptr->md_x);
+    (void)drop_near(player_ptr, &item_grond, md_ptr->get_position());
 
     ItemEntity item_chaos({ ItemKindType::CROWN, SV_CHAOS });
     item_chaos.fa_id = FixedArtifactId::CHAOS;
     ItemMagicApplier(player_ptr, &item_chaos, -1, AM_GOOD | AM_GREAT).execute();
-    (void)drop_near(player_ptr, &item_chaos, -1, md_ptr->md_y, md_ptr->md_x);
+    (void)drop_near(player_ptr, &item_chaos, md_ptr->get_position());
 }
 
 static void on_dead_death_sword(PlayerType *player_ptr, MonsterDeath *md_ptr)
@@ -208,7 +202,7 @@ static void on_dead_death_sword(PlayerType *player_ptr, MonsterDeath *md_ptr)
     }
 
     ItemEntity item({ ItemKindType::SWORD, randint1(2) });
-    (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+    (void)drop_near(player_ptr, &item, md_ptr->get_position());
 }
 
 static void on_dead_can_angel(PlayerType *player_ptr, MonsterDeath *md_ptr)
@@ -223,7 +217,7 @@ static void on_dead_can_angel(PlayerType *player_ptr, MonsterDeath *md_ptr)
 
     ItemEntity item({ ItemKindType::CHEST, SV_CHEST_KANDUME });
     ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART).execute();
-    (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+    (void)drop_near(player_ptr, &item, md_ptr->get_position());
 }
 
 static void on_dead_aqua_illusion(PlayerType *player_ptr, MonsterDeath *md_ptr)
@@ -247,7 +241,7 @@ static void on_dead_aqua_illusion(PlayerType *player_ptr, MonsterDeath *md_ptr)
 
     if (notice) {
         msg_print(_("泡が弾けた！", "The bubble pops!"));
-        sound(SOUND_SUMMON);
+        sound(SoundKind::SUMMON);
     }
 }
 
@@ -282,9 +276,9 @@ static void on_dead_dragon_centipede(PlayerType *player_ptr, MonsterDeath *md_pt
     }
 
     if (notice) {
-        const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_NONE);
+        const auto m_name = monster_desc(player_ptr, *md_ptr->m_ptr, MD_NONE);
         msg_format(_("%sが再生した！", "The %s reproduced!"), m_name.data());
-        sound(SOUND_SUMMON);
+        sound(SoundKind::SUMMON);
     }
 }
 
@@ -351,7 +345,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr
         }
     }
 
-    (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+    (void)drop_near(player_ptr, q_ptr, md_ptr->get_position());
 }
 
 /*!
@@ -360,7 +354,7 @@ static void on_dead_random_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr
  */
 static void on_dead_manimani(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
-    if (!is_seen(player_ptr, md_ptr->m_ptr)) {
+    if (!is_seen(player_ptr, *md_ptr->m_ptr)) {
         return;
     }
 
@@ -374,7 +368,7 @@ static void drop_specific_item_on_dead(PlayerType *player_ptr, MonsterDeath *md_
     q_ptr->wipe();
     select_baseitem_id_hook = object_hook_pf;
     (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-    (void)drop_near(player_ptr, q_ptr, -1, md_ptr->md_y, md_ptr->md_x);
+    (void)drop_near(player_ptr, q_ptr, md_ptr->get_position());
 }
 
 static void on_dead_chest_mimic(PlayerType *player_ptr, MonsterDeath *md_ptr)
@@ -415,7 +409,7 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, MonsterDeath *md_ptr)
 
     if (notice) {
         msg_print(_("箱の中から新たなミミックが現れた！", "A new mimic appears in the dead mimic!"));
-        sound(SOUND_SUMMON);
+        sound(SoundKind::SUMMON);
     }
 }
 

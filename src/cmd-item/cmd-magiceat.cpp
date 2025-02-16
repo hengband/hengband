@@ -525,7 +525,7 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
         }
 
         msg_print(_("呪文をうまく唱えられなかった！", "You failed to get the magic off!"));
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
         if (randint1(100) >= chance) {
             chg_virtue(player_ptr, Virtue::CHANCE, -1);
         }
@@ -533,8 +533,6 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
 
         return true;
     } else {
-        DIRECTION dir = 0;
-
         switch (bi_key->tval()) {
         case ItemKindType::ROD: {
             const auto sval = bi_key->sval();
@@ -542,8 +540,12 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
                 return false;
             }
 
-            if (bi_key->is_aiming_rod() && !get_aim_dir(player_ptr, &dir)) {
-                return false;
+            auto dir = Direction::none();
+            if (bi_key->is_aiming_rod()) {
+                dir = get_aim_dir(player_ptr);
+                if (!dir) {
+                    return false;
+                }
             }
 
             (void)rod_effect(player_ptr, *sval, dir, &use_charge, powerful);
@@ -559,7 +561,8 @@ bool do_cmd_magic_eater(PlayerType *player_ptr, bool only_browse, bool powerful)
                 return false;
             }
 
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return false;
             }
 

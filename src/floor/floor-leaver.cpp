@@ -5,12 +5,9 @@
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
-#include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
@@ -21,11 +18,11 @@
 #include "pet/pet-util.h"
 #include "save/floor-writer.h"
 #include "spell-class/spells-mirror-master.h"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
@@ -33,7 +30,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -43,34 +39,35 @@ static void check_riding_preservation(PlayerType *player_ptr)
         return;
     }
 
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    if (m_ptr->has_parent()) {
+    const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    if (monster.has_parent()) {
         player_ptr->ride_monster(0);
         player_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
         player_ptr->riding_ryoute = player_ptr->old_riding_ryoute = false;
     } else {
-        party_mon[0] = m_ptr->clone();
+        party_mon[0] = monster.clone();
         delete_monster_idx(player_ptr, player_ptr->riding);
     }
 }
 
-static bool check_pet_preservation_conditions(PlayerType *player_ptr, MonsterEntity *m_ptr)
+static bool check_pet_preservation_conditions(PlayerType *player_ptr, const MonsterEntity &monster)
 {
-    if (reinit_wilderness) {
+    if (WildernessGrids::get_instance().should_reinitialize()) {
         return false;
     }
 
     const auto p_pos = player_ptr->get_position();
-    const auto m_pos = m_ptr->get_position();
+    const auto m_pos = monster.get_position();
     const auto dis = Grid::calc_distance(p_pos, m_pos);
-    if (m_ptr->is_confused() || m_ptr->is_stunned() || m_ptr->is_asleep() || m_ptr->has_parent()) {
+    if (monster.is_confused() || monster.is_stunned() || monster.is_asleep() || monster.has_parent()) {
         return true;
     }
 
-    const auto should_preserve = m_ptr->is_named();
-    auto sight_from_player = player_ptr->current_floor_ptr->has_los(m_pos);
+    const auto should_preserve = monster.is_named();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto sight_from_player = floor.has_los(m_pos);
     sight_from_player &= projectable(player_ptr, p_pos, m_pos);
-    auto sight_from_monster = los(player_ptr, m_ptr->fy, m_ptr->fx, player_ptr->y, player_ptr->x);
+    auto sight_from_monster = los(floor, m_pos, p_pos);
     sight_from_monster &= projectable(player_ptr, m_pos, p_pos);
     if (should_preserve && (sight_from_player || sight_from_monster)) {
         return dis > 3;
@@ -86,8 +83,8 @@ static void sweep_preserving_pet(PlayerType *player_ptr)
     }
 
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1, party_monster_num = 1; (i >= 1) && (party_monster_num < MAX_PARTY_MON); i--) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || !m_ptr->is_pet() || m_ptr->is_riding() || check_pet_preservation_conditions(player_ptr, m_ptr)) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[i];
+        if (!monster.is_valid() || !monster.is_pet() || monster.is_riding() || check_pet_preservation_conditions(player_ptr, monster)) {
             continue;
         }
 
@@ -110,7 +107,7 @@ static void record_pet_diary(PlayerType *player_ptr)
             continue;
         }
 
-        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_MOVED, monster_desc(player_ptr, &monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE));
+        exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_MOVED, monster_desc(player_ptr, monster, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE));
     }
 }
 
@@ -128,14 +125,14 @@ static void preserve_pet(PlayerType *player_ptr)
     sweep_preserving_pet(player_ptr);
     record_pet_diary(player_ptr);
     for (MONSTER_IDX i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        const auto parent_r_idx = player_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx;
-        if (!m_ptr->has_parent() || MonraceList::is_valid(parent_r_idx)) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[i];
+        const auto parent_r_idx = player_ptr->current_floor_ptr->m_list[monster.parent_m_idx].r_idx;
+        if (!monster.has_parent() || MonraceList::is_valid(parent_r_idx)) {
             continue;
         }
 
-        if (is_seen(player_ptr, m_ptr)) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        if (is_seen(player_ptr, monster)) {
+            const auto m_name = monster_desc(player_ptr, monster, 0);
             msg_format(_("%sは消え去った！", "%s^ disappears!"), m_name.data());
         }
 
@@ -199,7 +196,7 @@ static void locate_connected_stairs(PlayerType *player_ptr, FloorType &floor, sa
     if (num == 0) {
         FloorChangeModesStore::get_instace()->set({ FloorChangeMode::RANDOM_PLACE, FloorChangeMode::NO_RETURN });
         auto &grid = floor.get_grid(player_ptr->get_position());
-        if (!feat_uses_special(grid.feat)) {
+        if (!grid.has_special_terrain()) {
             grid.special = 0;
         }
 
@@ -220,16 +217,16 @@ static void get_out_monster(PlayerType *player_ptr)
     auto dis = 1;
     const auto p_pos = player_ptr->get_position();
     auto &floor = *player_ptr->current_floor_ptr;
-    auto &grid = floor.get_grid(p_pos);
-    const auto m_idx = grid.m_idx;
+    auto &p_grid = floor.get_grid(p_pos);
+    const auto m_idx = p_grid.m_idx;
     if (m_idx == 0) {
         return;
     }
 
     while (true) {
-        const auto ny = rand_spread(p_pos.y, dis);
-        const auto nx = rand_spread(p_pos.x, dis);
-        const Pos2D pos_neighbor(ny, nx); //!< @details 乱数引数の評価順を固定.
+        auto y = rand_spread(p_pos.y, dis);
+        auto x = rand_spread(p_pos.x, dis);
+        const Pos2D pos(y, x); //!< @details 乱数引数の評価順を固定.
         tries++;
         if (tries > 10000) {
             return;
@@ -239,16 +236,15 @@ static void get_out_monster(PlayerType *player_ptr)
             dis++;
         }
 
-        auto &grid_neighbor = floor.get_grid(pos_neighbor);
-        if (!in_bounds(&floor, ny, nx) || !is_cave_empty_bold(player_ptr, ny, nx) || grid_neighbor.is_rune_protection() || grid_neighbor.is_rune_explosion() || pattern_tile(&floor, ny, nx)) {
+        auto &grid = floor.get_grid(pos);
+        if (!floor.contains(pos) || !is_cave_empty_bold(player_ptr, pos.y, pos.x) || grid.is_rune_protection() || grid.is_rune_explosion() || pattern_tile(floor, pos.y, pos.x)) {
             continue;
         }
 
+        p_grid.m_idx = 0;
+        grid.m_idx = m_idx;
         auto &monster = floor.m_list[m_idx];
-        grid.m_idx = 0;
-        grid_neighbor.m_idx = m_idx;
-        monster.fy = ny;
-        monster.fx = nx;
+        monster.set_position(pos);
         return;
     }
 }
@@ -274,12 +270,12 @@ static void preserve_info(PlayerType *player_ptr)
     }
 
     for (short i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        if (!m_ptr->is_valid() || (quest_monrace_id != m_ptr->r_idx)) {
+        const auto &monster = floor.m_list[i];
+        if (!monster.is_valid() || (quest_monrace_id != monster.r_idx)) {
             continue;
         }
 
-        const auto &r_ref = m_ptr->get_real_monrace();
+        const auto &r_ref = monster.get_real_monrace();
         if (r_ref.kind_flags.has(MonsterKindType::UNIQUE) || (r_ref.population_flags.has(MonsterPopulationType::NAZGUL))) {
             continue;
         }
@@ -305,17 +301,17 @@ static Grid *set_grid_by_leaving_floor(FloorType &floor, const Pos2D &p_pos)
         return nullptr;
     }
 
-    auto *g_ptr = &floor.get_grid(p_pos);
-    const auto &terrain = g_ptr->get_terrain();
-    if (g_ptr->special && terrain.flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr(g_ptr->special)) {
-        new_floor_id = g_ptr->special;
+    auto &grid = floor.get_grid(p_pos);
+    const auto &terrain = grid.get_terrain();
+    if (grid.special && terrain.flags.has_not(TerrainCharacteristics::SPECIAL) && get_sf_ptr(grid.special)) {
+        new_floor_id = grid.special;
     }
 
     if (terrain.flags.has_all_of({ TerrainCharacteristics::STAIRS, TerrainCharacteristics::SHAFT })) {
         FloorChangeModesStore::get_instace()->set(FloorChangeMode::SHAFT);
     }
 
-    return g_ptr;
+    return &grid;
 }
 
 static void jump_floors(FloorType &floor)
@@ -358,11 +354,10 @@ static void exit_to_wilderness(PlayerType *player_ptr)
         return;
     }
 
-    player_ptr->leaving_dungeon = true;
+    floor.leave_dungeon(true);
     if (!vanilla_town && !lite_town) {
         const auto &dungeon = floor.get_dungeon_definition();
-        player_ptr->wilderness_y = dungeon.dy;
-        player_ptr->wilderness_x = dungeon.dx;
+        WildernessGrids::get_instance().set_player_position(dungeon.get_position());
     }
 
     player_ptr->recall_dungeon = floor.dungeon_id;
@@ -387,15 +382,15 @@ static void kill_saved_floors(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 }
 
-static void refresh_new_floor_id(PlayerType *player_ptr, Grid *g_ptr)
+static void refresh_new_floor_id(PlayerType *player_ptr, Grid *grid_ptr)
 {
     if (new_floor_id != 0) {
         return;
     }
 
     new_floor_id = get_unused_floor_id(player_ptr);
-    if ((g_ptr != nullptr) && !feat_uses_special(g_ptr->feat)) {
-        g_ptr->special = new_floor_id;
+    if ((grid_ptr != nullptr) && !grid_ptr->has_special_terrain()) {
+        grid_ptr->special = new_floor_id;
     }
 }
 
@@ -415,7 +410,7 @@ static void update_upper_lower_or_floor_id(saved_floor_type *sf_ptr)
 
 static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    auto g_ptr = set_grid_by_leaving_floor(*player_ptr->current_floor_ptr, player_ptr->get_position());
+    auto *grid_ptr = set_grid_by_leaving_floor(*player_ptr->current_floor_ptr, player_ptr->get_position());
     jump_floors(*player_ptr->current_floor_ptr);
     exit_to_wilderness(player_ptr);
     kill_saved_floors(player_ptr, sf_ptr);
@@ -423,7 +418,7 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         return;
     }
 
-    refresh_new_floor_id(player_ptr, g_ptr);
+    refresh_new_floor_id(player_ptr, grid_ptr);
     update_upper_lower_or_floor_id(sf_ptr);
     auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has_not(FloorChangeMode::SAVE_FLOORS) || fcms->has(FloorChangeMode::NO_RETURN)) {
@@ -432,9 +427,9 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     get_out_monster(player_ptr);
     sf_ptr->last_visit = AngbandWorld::get_instance().game_turn;
-    forget_lite(player_ptr->current_floor_ptr);
-    forget_view(player_ptr->current_floor_ptr);
-    clear_mon_lite(player_ptr->current_floor_ptr);
+    forget_lite(*player_ptr->current_floor_ptr);
+    forget_view(*player_ptr->current_floor_ptr);
+    clear_mon_lite(*player_ptr->current_floor_ptr);
     if (save_floor(player_ptr, sf_ptr, 0)) {
         return;
     }

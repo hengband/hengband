@@ -18,18 +18,18 @@
  * @param i1 オブジェクト移動元の要素番号
  * @param i2 オブジェクト移動先の要素番号
  */
-static void compact_objects_aux(FloorType *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
+static void compact_objects_aux(FloorType &floor, OBJECT_IDX i1, OBJECT_IDX i2)
 {
     if (i1 == i2) {
         return;
     }
 
     // モンスター所為アイテムリストもしくは床上アイテムリストの要素番号i1をi2に書き換える
-    auto &list = get_o_idx_list_contains(floor_ptr, i1);
+    auto &list = get_o_idx_list_contains(floor, i1);
     std::replace(list.begin(), list.end(), i1, i2);
 
     // 要素番号i1のオブジェクトを要素番号i2に移動し、i1はクリアする
-    floor_ptr->o_list[i2] = std::exchange(floor_ptr->o_list[i1], {});
+    floor.o_list[i2] = std::exchange(floor.o_list[i1], {});
 }
 
 /*!
@@ -62,12 +62,12 @@ void compact_objects(PlayerType *player_ptr, int size)
         rfu.set_flags(flags_swrf);
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     for (int num = 0, cnt = 1; num < size; cnt++) {
         int cur_lev = 5 * cnt;
         int cur_dis = 5 * (20 - cnt);
-        for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
-            o_ptr = &floor_ptr->o_list[i];
+        for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
+            o_ptr = &floor.o_list[i];
 
             if (!o_ptr->is_valid() || (o_ptr->get_baseitem_level() > cur_lev)) {
                 continue;
@@ -75,10 +75,9 @@ void compact_objects(PlayerType *player_ptr, int size)
 
             POSITION y, x;
             if (o_ptr->is_held_by_monster()) {
-                MonsterEntity *m_ptr;
-                m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-                y = m_ptr->fy;
-                x = m_ptr->fx;
+                const auto &monster = floor.m_list[o_ptr->held_m_idx];
+                y = monster.fy;
+                x = monster.fx;
 
                 if (evaluate_percent(90)) {
                     continue;
@@ -106,13 +105,13 @@ void compact_objects(PlayerType *player_ptr, int size)
         }
     }
 
-    for (OBJECT_IDX i = floor_ptr->o_max - 1; i >= 1; i--) {
-        o_ptr = &floor_ptr->o_list[i];
+    for (OBJECT_IDX i = floor.o_max - 1; i >= 1; i--) {
+        o_ptr = &floor.o_list[i];
         if (o_ptr->is_valid()) {
             continue;
         }
 
-        compact_objects_aux(floor_ptr, floor_ptr->o_max - 1, i);
-        floor_ptr->o_max--;
+        compact_objects_aux(floor, floor.o_max - 1, i);
+        floor.o_max--;
     }
 }

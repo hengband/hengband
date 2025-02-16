@@ -1,4 +1,5 @@
 #include "target/target-setter.h"
+#include "action/travel-execution.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/geometry.h"
@@ -26,72 +27,82 @@
 #include "util/string-processor.h"
 #include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
+#include <optional>
 #include <tuple>
 #include <vector>
 
-// "interesting" な座標一覧を記録する配列
-static std::vector<Pos2D> pos_interests;
+class TargetSetter {
+public:
+    TargetSetter(PlayerType *player_ptr, target_type mode);
+    void sweep_target_grids();
 
-// Target Setter.
-struct ts_type {
+private:
+    std::optional<int> pick_nearest_interest_target(const Pos2D &pos, const Direction &dir);
+    std::string describe_projectablity() const;
+    char examine_target_grid(std::string_view info, std::optional<target_type> append_mode = std::nullopt) const;
+    void change_interest_index(int amount);
+    Direction switch_target_input();
+    std::optional<int> check_panel_changed(const Direction &dir);
+    std::optional<int> sweep_targets(const Direction &dir, int panel_row_min_initial, int panel_col_min_initial);
+    bool set_target_grid();
+    std::string describe_grid_wizard() const;
+    std::optional<std::pair<Direction, bool>> switch_next_grid_command();
+    void decide_change_panel(const Direction &dir, bool move_fast);
+
+    PlayerType *player_ptr;
     target_type mode;
-    POSITION y;
-    POSITION x;
-    POSITION y2; // panel_row_min 退避用
-    POSITION x2; // panel_col_min 退避用
-    bool done;
-    bool flag; // 移動コマンド入力時、"interesting" な座標へ飛ぶかどうか
-    char query;
-    char info[80];
-    Grid *g_ptr;
-    TERM_LEN wid, hgt;
-    int m; // "interesting" な座標たちのうち現在ターゲットしているもののインデックス
-    int distance; // カーソルの移動方向 (1,2,3,4,6,7,8,9)
-    int target_num; // target_pick() の結果
-    bool move_fast; // カーソル移動を粗くする(1マスずつ移動しない)
+    Pos2D pos_target;
+    bool done = false;
+    std::vector<Pos2D> pos_interests; // "interesting" な座標一覧を記録する配列
+    std::optional<int> interest_index = 0; // "interesting" な座標一覧のうち現在ターゲットしているもののインデックス
 };
 
-static ts_type *initialize_target_set_type(PlayerType *player_ptr, ts_type *ts_ptr, target_type mode)
+TargetSetter::TargetSetter(PlayerType *player_ptr, target_type mode)
+    : player_ptr(player_ptr)
+    , mode(mode)
+    , pos_target(player_ptr->get_position())
+    , pos_interests(target_set_prepare(player_ptr, mode))
 {
-    ts_ptr->mode = mode;
-    ts_ptr->y = player_ptr->y;
-    ts_ptr->x = player_ptr->x;
-    ts_ptr->done = false;
-    ts_ptr->flag = true;
-    std::tie(ts_ptr->wid, ts_ptr->hgt) = get_screen_size();
-    ts_ptr->m = 0;
-    return ts_ptr;
+}
+
+static bool set_travel_goal(PlayerType *player_ptr, const Pos2D &pos)
+{
+    if (player_ptr->is_located_at(pos) || !Travel::can_travel_to(*player_ptr->current_floor_ptr, pos)) {
+        return false;
+    }
+
+    Travel::get_instance().set_goal(player_ptr, pos);
+    return true;
 }
 
 /*!
  * @brief フォーカスを当てるべきマップ描画の基準座標を指定する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 変更先のフロアY座標
- * @param x 変更先のフロアX座標
+ * @param pos 変更先のフロア座標
  * @details
  * Handle a request to change the current panel
  * Return TRUE if the panel was changed.
  * Also used in do_cmd_locate
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-static bool change_panel_xy(PlayerType *player_ptr, POSITION y, POSITION x)
+static bool change_panel_xy(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto dy = 0;
     auto dx = 0;
     [[maybe_unused]] const auto &[wid, hgt] = get_screen_size();
-    if (y < panel_row_min) {
+    if (pos.y < panel_row_min) {
         dy = -1;
     }
 
-    if (y > panel_row_max) {
+    if (pos.y > panel_row_max) {
         dy = 1;
     }
 
-    if (x < panel_col_min) {
+    if (pos.x < panel_col_min) {
         dx = -1;
     }
 
-    if (x > panel_col_max) {
+    if (pos.x > panel_col_max) {
         dx = 1;
     }
 
@@ -103,491 +114,445 @@ static bool change_panel_xy(PlayerType *player_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief "interesting" な座標たちのうち、(y1,x1) から (dy,dx) 方向にある最も近いもののインデックスを得る。
- * @param y1 現在地座標y
- * @param x1 現在地座標x
- * @param dy 現在地からの向きy [-1,1]
- * @param dx 現在地からの向きx [-1,1]
- * @return 最も近い座標のインデックス。適切なものがない場合 -1
+ * @brief 基準の座標から見て目標の座標が dir の方向±45°の範囲にあるかどうか判定し、その距離を返す
+ *
+ * @param pos_from 基準の座標
+ * @param pos_to 目標の座標
+ * @param dir 方向
+ * @return 距離。目標の座標が dir の方向±45°の範囲にない場合 std::nullopt
  */
-static POSITION_IDX target_pick(const POSITION y1, const POSITION x1, const POSITION dy, const POSITION dx)
+static std::optional<int> calc_target_distance(const Pos2D &pos_from, const Pos2D &pos_to, const Direction &dir)
 {
-    // 最も近いもののインデックスとその距離。
-    POSITION_IDX b_i = -1, b_v = 9999;
+    const auto [dy, dx] = dir.vec();
+    const auto vec = pos_to - pos_from;
+    const Pos2DVec vec_abs(std::abs(vec.y), std::abs(vec.x));
 
-    for (POSITION_IDX i = 0; i < std::ssize(pos_interests); i++) {
-        const auto &[y2, x2] = pos_interests[i];
-
-        // (y1,x1) から (y2,x2) へ向かうベクトル。
-        const POSITION x3 = (x2 - x1);
-        const POSITION y3 = (y2 - y1);
-
-        // (dy,dx) 方向にないものを除外する。
-
-        // dx > 0 のとき、x3 <= 0 なるものは除外。
-        // dx < 0 のとき、x3 >= 0 なるものは除外。
-        if (dx && (x3 * dx <= 0)) {
-            continue;
-        }
-
-        // dy > 0 のとき、y3 <= 0 なるものは除外。
-        // dy < 0 のとき、y3 >= 0 なるものは除外。
-        if (dy && (y3 * dy <= 0)) {
-            continue;
-        }
-
-        const POSITION x4 = std::abs(x3);
-        const POSITION y4 = std::abs(y3);
-
-        // (dy,dx) が (-1,0) or (1,0) のとき、|x3| > |y3| なるものは除外。
-        if (dy && !dx && (x4 > y4)) {
-            continue;
-        }
-
-        // (dy,dx) が (0,-1) or (0,1) のとき、|y3| > |x3| なるものは除外。
-        if (dx && !dy && (y4 > x4)) {
-            continue;
-        }
-
-        // (y1,x1), (y2,x2) 間の距離を求め、最も近いものを更新する。
-        // 距離の定義は v の式を参照。
-        const POSITION_IDX v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
-        if ((b_i >= 0) && (v >= b_v)) {
-            continue;
-        }
-
-        b_i = i;
-        b_v = v;
+    if (dx != 0 && (vec.x * dx <= 0)) {
+        return std::nullopt;
+    }
+    if (dy != 0 && (vec.y * dy <= 0)) {
+        return std::nullopt;
     }
 
-    return b_i;
+    if (dy != 0 && dx == 0 && (vec_abs.x > vec_abs.y)) {
+        return std::nullopt;
+    }
+    if (dx != 0 && dy == 0 && (vec_abs.y > vec_abs.x)) {
+        return std::nullopt;
+    }
+
+    // ターゲット選択用に独自の距離計算を行う
+    const auto a = std::max(vec_abs.y, vec_abs.x);
+    const auto b = std::min(vec_abs.y, vec_abs.x);
+    const auto distance = a + a + b;
+
+    return distance;
 }
 
-static void describe_projectablity(PlayerType *player_ptr, ts_type *ts_ptr)
+/*!
+ * @brief "interesting" な座標一覧のうち、pos から dir 方向にある最も近いもののインデックスを得る。
+ * @param pos 基準座標
+ * @param dir 基準座標からの向き
+ * @return 最も近い座標のインデックス。適切なものがない場合 std::nullopt
+ */
+std::optional<int> TargetSetter::pick_nearest_interest_target(const Pos2D &pos, const Direction &dir)
 {
-    ts_ptr->y = pos_interests[ts_ptr->m].y;
-    ts_ptr->x = pos_interests[ts_ptr->m].x;
-    change_panel_xy(player_ptr, ts_ptr->y, ts_ptr->x);
-    if ((ts_ptr->mode & TARGET_LOOK) == 0) {
-        print_path(player_ptr, ts_ptr->y, ts_ptr->x);
+    std::optional<int> nearest_interest_index;
+    std::optional<int> nearest_distance;
+
+    for (auto i = 0; i < std::ssize(this->pos_interests); i++) {
+        const auto distance = calc_target_distance(pos, this->pos_interests[i], dir);
+        if (!distance) {
+            continue;
+        }
+
+        if (nearest_interest_index && (*distance >= nearest_distance)) {
+            continue;
+        }
+
+        nearest_interest_index = i;
+        nearest_distance = *distance;
     }
 
-    ts_ptr->g_ptr = &player_ptr->current_floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
-    if (target_able(player_ptr, ts_ptr->g_ptr->m_idx)) {
-        angband_strcpy(ts_ptr->info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"), sizeof(ts_ptr->info));
+    return nearest_interest_index;
+}
+
+std::string TargetSetter::describe_projectablity() const
+{
+    change_panel_xy(this->player_ptr, this->pos_target);
+    if ((this->mode & TARGET_LOOK) == 0) {
+        print_path(this->player_ptr, this->pos_target.y, this->pos_target.x);
+    }
+
+    std::string info;
+    const auto &grid = this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
+    if (target_able(this->player_ptr, grid.m_idx)) {
+        info = _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>");
     } else {
-        angband_strcpy(ts_ptr->info, _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>"), sizeof(ts_ptr->info));
+        info = _("q止 p自 o現 +次 -前", "q,p,o,+,-,<dir>");
+    }
+
+    if (any_bits(this->mode, TARGET_LOOK)) {
+        info.append(_(" g移", ",g"));
     }
 
     if (!cheat_sight) {
-        return;
+        return info;
     }
 
+    const auto p_pos = this->player_ptr->get_position();
     const auto cheatinfo = format(" X:%d Y:%d LOS:%d LOP:%d",
-        ts_ptr->x, ts_ptr->y,
-        los(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x),
-        projectable(player_ptr, player_ptr->get_position(), { ts_ptr->y, ts_ptr->x }));
-    angband_strcat(ts_ptr->info, cheatinfo, sizeof(ts_ptr->info));
+        this->pos_target.x, this->pos_target.y,
+        los(*this->player_ptr->current_floor_ptr, p_pos, this->pos_target),
+        projectable(this->player_ptr, p_pos, this->pos_target));
+    return info.append(cheatinfo);
 }
 
-static void menu_target(ts_type *ts_ptr)
+char TargetSetter::examine_target_grid(std::string_view info, std::optional<target_type> append_mode) const
 {
-    if (!use_menu) {
+    const auto target_mode = append_mode ? i2enum<target_type>(this->mode | *append_mode) : this->mode;
+    while (true) {
+        const auto query = examine_grid(this->player_ptr, this->pos_target.y, this->pos_target.x, target_mode, info.data());
+        if (query != '\0') {
+            return (use_menu && (query == '\r')) ? 't' : query;
+        }
+    }
+}
+
+void TargetSetter::change_interest_index(int amount)
+{
+    if (!this->interest_index || this->pos_interests.empty()) {
+        this->interest_index = std::nullopt;
+        return;
+    }
+    *this->interest_index += amount;
+
+    if (*this->interest_index >= 0 && *this->interest_index < std::ssize(this->pos_interests)) {
         return;
     }
 
-    if (ts_ptr->query == '\r') {
-        ts_ptr->query = 't';
+    // wrap around
+    this->interest_index = (*this->interest_index < 0) ? std::ssize(this->pos_interests) - 1 : 0;
+
+    if (!expand_list) {
+        this->done = true;
     }
 }
 
-static void switch_target_input(PlayerType *player_ptr, ts_type *ts_ptr)
+Direction TargetSetter::switch_target_input()
 {
-    ts_ptr->distance = 0;
-    switch (ts_ptr->query) {
+    const auto info = this->describe_projectablity();
+    const auto query = this->examine_target_grid(info);
+    switch (query) {
     case ESCAPE:
     case 'q':
-        ts_ptr->done = true;
-        return;
+        this->done = true;
+        return Direction::none();
     case 't':
     case '.':
     case '5':
-    case '0':
-        if (!target_able(player_ptr, ts_ptr->g_ptr->m_idx)) {
+    case '0': {
+        const auto &grid = this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
+        if (!target_able(this->player_ptr, grid.m_idx)) {
             bell();
-            return;
+            return Direction::none();
         }
 
-        health_track(player_ptr, ts_ptr->g_ptr->m_idx);
-        target_who = ts_ptr->g_ptr->m_idx;
-        target_row = ts_ptr->y;
-        target_col = ts_ptr->x;
-        ts_ptr->done = true;
-        return;
+        health_track(this->player_ptr, grid.m_idx);
+        target_who = grid.m_idx;
+        target_row = this->pos_target.y;
+        target_col = this->pos_target.x;
+        this->done = true;
+        return Direction::none();
+    }
     case ' ':
     case '*':
     case '+':
-        if (++ts_ptr->m != std::ssize(pos_interests)) {
-            return;
-        }
-
-        ts_ptr->m = 0;
-        if (!expand_list) {
-            ts_ptr->done = true;
-        }
-
-        return;
+        this->change_interest_index(1);
+        return Direction::none();
     case '-':
-        if (ts_ptr->m-- != 0) {
-            return;
-        }
-
-        ts_ptr->m = std::ssize(pos_interests) - 1;
-        if (!expand_list) {
-            ts_ptr->done = true;
-        }
-
-        return;
+        this->change_interest_index(-1);
+        return Direction::none();
     case 'p': {
-        verify_panel(player_ptr);
+        verify_panel(this->player_ptr);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         rfu.set_flag(MainWindowRedrawingFlag::MAP);
         rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
-        handle_stuff(player_ptr);
-        pos_interests = target_set_prepare(player_ptr, ts_ptr->mode);
-        ts_ptr->y = player_ptr->y;
-        ts_ptr->x = player_ptr->x;
+        handle_stuff(this->player_ptr);
+        this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
+        this->pos_target = this->player_ptr->get_position();
     }
         [[fallthrough]];
     case 'o':
-        ts_ptr->flag = false;
-        return;
+        this->interest_index = std::nullopt;
+        return Direction::none();
     case 'm':
-        return;
+        return Direction::none();
+    case 'g':
+        this->done = set_travel_goal(this->player_ptr, this->pos_target);
+        return Direction::none();
     default: {
         const char queried_command = rogue_like_commands ? 'x' : 'l';
-        if (ts_ptr->query != queried_command) {
-            ts_ptr->distance = get_keymap_dir(ts_ptr->query);
-            if (ts_ptr->distance == 0) {
+        if (query != queried_command) {
+            const auto dir = get_keymap_dir(query);
+            if (!dir) {
                 bell();
             }
 
-            return;
+            return dir;
         }
 
-        if (++ts_ptr->m != std::ssize(pos_interests)) {
-            return;
-        }
-
-        ts_ptr->m = 0;
-        if (!expand_list) {
-            ts_ptr->done = true;
-        }
-
-        return;
+        this->change_interest_index(1);
+        return Direction::none();
     }
     }
 }
 
 /*!
  * @brief カーソル移動に伴い、描画範囲、"interesting" 座標リスト、現在のターゲットを更新する。
- * @return カーソル移動によって描画範囲が変化したかどうか
+ * @return カーソル移動によって "interesting" な座標が選択されたらそのインデックス、そうでなければ std::nullopt
  */
-static bool check_panel_changed(PlayerType *player_ptr, ts_type *ts_ptr)
+std::optional<int> TargetSetter::check_panel_changed(const Direction &dir)
 {
-    // カーソル移動によって描画範囲が変化しないなら何もせずその旨を返す。
-    if (!change_panel(player_ptr, ddy[ts_ptr->distance], ddx[ts_ptr->distance])) {
-        return false;
-    }
-
     // 描画範囲が変化した場合、"interesting" 座標リストおよび現在のターゲットを更新する必要がある。
 
     // "interesting" 座標を探す起点。
-    // ts_ptr->m が有効な座標を指していればそれを使う。
-    // さもなくば (ts_ptr->y, ts_ptr->x) を使う。
-    int v, u;
-    if (ts_ptr->m < std::ssize(pos_interests)) {
-        v = pos_interests[ts_ptr->m].y;
-        u = pos_interests[ts_ptr->m].x;
-    } else {
-        v = ts_ptr->y;
-        u = ts_ptr->x;
-    }
+    const auto is_point_interest = (this->interest_index && *this->interest_index < std::ssize(this->pos_interests));
+    const auto pos = is_point_interest ? this->pos_interests[*this->interest_index] : this->pos_target;
 
     // 新たな描画範囲を用いて "interesting" 座標リストを更新。
-    pos_interests = target_set_prepare(player_ptr, ts_ptr->mode);
+    this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
 
-    // 新たな "interesting" 座標リストからターゲットを探す。
-    ts_ptr->flag = true;
-    ts_ptr->target_num = target_pick(v, u, ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
-    if (ts_ptr->target_num >= 0) {
-        ts_ptr->m = ts_ptr->target_num;
-    }
-
-    return true;
+    // 新たな "interesting" 座標一覧からターゲットを探す。
+    return pick_nearest_interest_target(pos, dir);
 }
 
 /*!
  * @brief カーソル移動方向に "interesting" な座標がなかったとき、画面外まで探す。
  *
- * 既に "interesting" な座標を発見している場合、この関数は何もしない。
+ * @return 画面外を探し "interesting" な座標が見つかった場合はそのインデックス、それでも見つからなければ std::nullopt
  */
-static void sweep_targets(PlayerType *player_ptr, ts_type *ts_ptr)
+std::optional<int> TargetSetter::sweep_targets(const Direction &dir, int panel_row_min_initial, int panel_col_min_initial)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    while (ts_ptr->flag && (ts_ptr->target_num < 0)) {
+    auto [dy, dx] = dir.vec();
+    while (change_panel(this->player_ptr, dy, dx)) {
         // カーソル移動に伴い、必要なだけ描画範囲を更新。
         // "interesting" 座標リストおよび現在のターゲットも更新。
-        if (check_panel_changed(player_ptr, ts_ptr)) {
-            continue;
-        }
-
-        POSITION dx = ddx[ts_ptr->distance];
-        POSITION dy = ddy[ts_ptr->distance];
-        panel_row_min = ts_ptr->y2;
-        panel_col_min = ts_ptr->x2;
-        panel_bounds_center();
-        rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
-        rfu.set_flag(MainWindowRedrawingFlag::MAP);
-        rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
-        handle_stuff(player_ptr);
-        pos_interests = target_set_prepare(player_ptr, ts_ptr->mode);
-        ts_ptr->flag = false;
-        ts_ptr->x += dx;
-        ts_ptr->y += dy;
-        if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0))) {
-            dx = 0;
-        }
-
-        if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0))) {
-            dy = 0;
-        }
-
-        if ((ts_ptr->y >= panel_row_min + ts_ptr->hgt) || (ts_ptr->y < panel_row_min) || (ts_ptr->x >= panel_col_min + ts_ptr->wid) || (ts_ptr->x < panel_col_min)) {
-            if (change_panel(player_ptr, dy, dx)) {
-                pos_interests = target_set_prepare(player_ptr, ts_ptr->mode);
-            }
-        }
-
-        if (ts_ptr->x >= floor_ptr->width - 1) {
-            ts_ptr->x = floor_ptr->width - 2;
-        } else if (ts_ptr->x <= 0) {
-            ts_ptr->x = 1;
-        }
-
-        if (ts_ptr->y >= floor_ptr->height - 1) {
-            ts_ptr->y = floor_ptr->height - 2;
-        } else if (ts_ptr->y <= 0) {
-            ts_ptr->y = 1;
+        const auto target_index = this->check_panel_changed(dir);
+        if (target_index) {
+            return target_index;
         }
     }
+
+    panel_row_min = panel_row_min_initial;
+    panel_col_min = panel_col_min_initial;
+    panel_bounds_center();
+
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
+    rfu.set_flag(MainWindowRedrawingFlag::MAP);
+    rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
+    handle_stuff(this->player_ptr);
+
+    this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
+
+    auto &[y, x] = this->pos_target;
+    x += dx;
+    y += dy;
+    const auto [wid, hgt] = get_screen_size();
+    if (((x < panel_col_min + wid / 2) && (dx > 0)) || ((x > panel_col_min + wid / 2) && (dx < 0))) {
+        dx = 0;
+    }
+
+    if (((y < panel_row_min + hgt / 2) && (dy > 0)) || ((y > panel_row_min + hgt / 2) && (dy < 0))) {
+        dy = 0;
+    }
+
+    if ((y >= panel_row_min + hgt) || (y < panel_row_min) || (x >= panel_col_min + wid) || (x < panel_col_min)) {
+        if (change_panel(this->player_ptr, dy, dx)) {
+            this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
+        }
+    }
+
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    x = std::clamp(x, 1, floor.width - 2);
+    y = std::clamp(y, 1, floor.height - 2);
+    return std::nullopt;
 }
 
-static bool set_target_grid(PlayerType *player_ptr, ts_type *ts_ptr)
+bool TargetSetter::set_target_grid()
 {
-    if (!ts_ptr->flag || pos_interests.empty()) {
+    if (this->pos_interests.empty() || !this->interest_index) {
         return false;
     }
 
-    describe_projectablity(player_ptr, ts_ptr);
-    fix_floor_item_list(player_ptr, { ts_ptr->y, ts_ptr->x });
+    this->pos_target = this->pos_interests[*this->interest_index];
 
-    while (true) {
-        ts_ptr->query = examine_grid(player_ptr, ts_ptr->y, ts_ptr->x, ts_ptr->mode, ts_ptr->info);
-        if (ts_ptr->query) {
-            break;
-        }
-    }
+    fix_floor_item_list(this->player_ptr, this->pos_target);
 
-    menu_target(ts_ptr);
-    switch_target_input(player_ptr, ts_ptr);
-    if (ts_ptr->distance == 0) {
+    const auto dir = this->switch_target_input();
+    if (!dir) {
         return true;
     }
 
-    ts_ptr->y2 = panel_row_min;
-    ts_ptr->x2 = panel_col_min;
-    {
-        ts_ptr->target_num = target_pick(pos_interests[ts_ptr->m].y, pos_interests[ts_ptr->m].x, ddy[ts_ptr->distance], ddx[ts_ptr->distance]);
+    auto target_index = pick_nearest_interest_target(this->pos_interests[*this->interest_index], dir);
+    if (!target_index) {
+        target_index = this->sweep_targets(dir, panel_row_min, panel_col_min);
     }
-    sweep_targets(player_ptr, ts_ptr);
-    ts_ptr->m = ts_ptr->target_num;
+    this->interest_index = target_index;
     return true;
 }
 
-static void describe_grid_wizard(PlayerType *player_ptr, ts_type *ts_ptr)
+std::string TargetSetter::describe_grid_wizard() const
 {
     if (!cheat_sight) {
-        return;
+        return "";
     }
 
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(this->pos_target);
     constexpr auto fmt = " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d";
-    const auto is_los = los(player_ptr, player_ptr->y, player_ptr->x, ts_ptr->y, ts_ptr->x);
-    const auto is_projectable = projectable(player_ptr, player_ptr->get_position(), { ts_ptr->y, ts_ptr->x });
-    const auto cheatinfo = format(fmt, ts_ptr->x, ts_ptr->y, is_los, is_projectable, ts_ptr->g_ptr->special);
-    angband_strcat(ts_ptr->info, cheatinfo, sizeof(ts_ptr->info));
+    const auto p_pos = this->player_ptr->get_position();
+    const auto is_los = los(floor, p_pos, this->pos_target);
+    const auto is_projectable = projectable(this->player_ptr, p_pos, this->pos_target);
+    const auto cheatinfo = format(fmt, this->pos_target.x, this->pos_target.y, is_los, is_projectable, grid.special);
+    return cheatinfo;
 }
 
-static void switch_next_grid_command(PlayerType *player_ptr, ts_type *ts_ptr)
+/*!
+ * @brief 隣接マスへのターゲット切り替えモードでのコマンドを処理する
+ *
+ * @return 移動方向と早く移動するかどうかのペア。移動しない場合はstd::nullopt
+ */
+std::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command()
 {
-    switch (ts_ptr->query) {
+    std::string info = _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>");
+    if (any_bits(this->mode, TARGET_LOOK)) {
+        info.append(_(" g移", ",g"));
+    }
+    info.append(this->describe_grid_wizard());
+    const auto query = this->examine_target_grid(info, TARGET_LOOK);
+    switch (query) {
     case ESCAPE:
     case 'q':
-        ts_ptr->done = true;
-        break;
+        this->done = true;
+        return std::nullopt;
     case 't':
     case '.':
     case '5':
     case '0':
         target_who = -1;
-        target_row = ts_ptr->y;
-        target_col = ts_ptr->x;
-        ts_ptr->done = true;
-        break;
+        target_row = this->pos_target.y;
+        target_col = this->pos_target.x;
+        this->done = true;
+        return std::nullopt;
     case 'p': {
-        verify_panel(player_ptr);
+        verify_panel(this->player_ptr);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
         rfu.set_flag(MainWindowRedrawingFlag::MAP);
         rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
-        handle_stuff(player_ptr);
-        pos_interests = target_set_prepare(player_ptr, ts_ptr->mode);
-        ts_ptr->y = player_ptr->y;
-        ts_ptr->x = player_ptr->x;
-        break;
+        handle_stuff(this->player_ptr);
+        this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
+        this->pos_target = this->player_ptr->get_position();
+        return std::nullopt;
     }
     case 'o':
         // ターゲット時の「m近」「o現」の切り替え
         // すでに「o現」の時にoを押してもなにも起きない
-        break;
+        return std::nullopt;
     case ' ':
     case '*':
     case '+':
     case '-':
     case 'm': {
-        ts_ptr->flag = true;
-        ts_ptr->m = 0;
-        int bd = 999;
-        for (auto i = 0; i < std::ssize(pos_interests); i++) {
-            const auto t = Grid::calc_distance({ ts_ptr->y, ts_ptr->x }, pos_interests[i]);
-            if (t < bd) {
-                ts_ptr->m = i;
-                bd = t;
-            }
+        const auto begin = this->pos_interests.begin();
+        const auto end = this->pos_interests.end();
+        const auto target = std::min_element(begin, end, [&](const auto &lhs, const auto &rhs) {
+            return Grid::calc_distance(this->pos_target, lhs) < Grid::calc_distance(this->pos_target, rhs);
+        });
+        if (target != end) {
+            this->interest_index = std::distance(this->pos_interests.begin(), target);
+        } else {
+            this->interest_index = std::nullopt;
         }
 
-        if (bd == 999) {
-            ts_ptr->flag = false;
-        }
-
-        break;
+        return std::nullopt;
     }
+    case 'g':
+        this->done = set_travel_goal(this->player_ptr, this->pos_target);
+        return std::nullopt;
     default:
-        ts_ptr->distance = get_keymap_dir(ts_ptr->query);
-        if (isupper(ts_ptr->query)) {
-            ts_ptr->move_fast = true;
-        }
-
-        if (!ts_ptr->distance) {
+        const auto dir = get_keymap_dir(query);
+        if (!dir) {
             bell();
+            return std::nullopt;
         }
 
-        break;
+        const auto move_fast = isupper(query) != 0;
+        return std::make_pair(dir, move_fast);
     }
 }
 
-static void decide_change_panel(PlayerType *player_ptr, ts_type *ts_ptr)
+void TargetSetter::decide_change_panel(const Direction &dir, bool move_fast)
 {
-    if (ts_ptr->distance == 0) {
-        return;
-    }
+    auto [dy, dx] = dir.vec();
+    auto &[y, x] = this->pos_target;
+    const auto [wid, hgt] = get_screen_size();
+    const auto mag = move_fast ? std::min(wid / 2, hgt / 2) : 1;
+    x += dx * mag;
+    y += dy * mag;
 
-    POSITION dx = ddx[ts_ptr->distance];
-    POSITION dy = ddy[ts_ptr->distance];
-    if (ts_ptr->move_fast) {
-        int mag = std::min(ts_ptr->wid / 2, ts_ptr->hgt / 2);
-        ts_ptr->x += dx * mag;
-        ts_ptr->y += dy * mag;
-    } else {
-        ts_ptr->x += dx;
-        ts_ptr->y += dy;
-    }
-
-    if (((ts_ptr->x < panel_col_min + ts_ptr->wid / 2) && (dx > 0)) || ((ts_ptr->x > panel_col_min + ts_ptr->wid / 2) && (dx < 0))) {
+    if (((x < panel_col_min + wid / 2) && (dx > 0)) || ((x > panel_col_min + wid / 2) && (dx < 0))) {
         dx = 0;
     }
 
-    if (((ts_ptr->y < panel_row_min + ts_ptr->hgt / 2) && (dy > 0)) || ((ts_ptr->y > panel_row_min + ts_ptr->hgt / 2) && (dy < 0))) {
+    if (((y < panel_row_min + hgt / 2) && (dy > 0)) || ((y > panel_row_min + hgt / 2) && (dy < 0))) {
         dy = 0;
     }
 
-    auto should_change_panel = ts_ptr->y >= panel_row_min + ts_ptr->hgt;
-    should_change_panel |= ts_ptr->y < panel_row_min;
-    should_change_panel |= ts_ptr->x >= panel_col_min + ts_ptr->wid;
-    should_change_panel |= ts_ptr->x < panel_col_min;
-    if (should_change_panel && change_panel(player_ptr, dy, dx)) {
-        pos_interests = target_set_prepare(player_ptr, ts_ptr->mode);
+    auto should_change_panel = y >= panel_row_min + hgt;
+    should_change_panel |= y < panel_row_min;
+    should_change_panel |= x >= panel_col_min + wid;
+    should_change_panel |= x < panel_col_min;
+    if (should_change_panel && change_panel(this->player_ptr, dy, dx)) {
+        this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (ts_ptr->x >= floor_ptr->width - 1) {
-        ts_ptr->x = floor_ptr->width - 2;
-    } else if (ts_ptr->x <= 0) {
-        ts_ptr->x = 1;
-    }
-
-    if (ts_ptr->y >= floor_ptr->height - 1) {
-        ts_ptr->y = floor_ptr->height - 2;
-    } else if (ts_ptr->y <= 0) {
-        ts_ptr->y = 1;
-    }
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    x = std::clamp(x, 1, floor.width - 2);
+    y = std::clamp(y, 1, floor.height - 2);
 }
 
-static void sweep_target_grids(PlayerType *player_ptr, ts_type *ts_ptr)
+void TargetSetter::sweep_target_grids()
 {
-    while (!ts_ptr->done) {
-        if (set_target_grid(player_ptr, ts_ptr)) {
+    while (!this->done) {
+        if (this->set_target_grid()) {
             continue;
         }
 
-        ts_ptr->move_fast = false;
-        if ((ts_ptr->mode & TARGET_LOOK) == 0) {
-            print_path(player_ptr, ts_ptr->y, ts_ptr->x);
+        if ((this->mode & TARGET_LOOK) == 0) {
+            print_path(this->player_ptr, this->pos_target.y, this->pos_target.x);
         }
 
-        ts_ptr->g_ptr = &player_ptr->current_floor_ptr->grid_array[ts_ptr->y][ts_ptr->x];
-        strcpy(ts_ptr->info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
-        describe_grid_wizard(player_ptr, ts_ptr);
-        fix_floor_item_list(player_ptr, { ts_ptr->y, ts_ptr->x });
+        fix_floor_item_list(this->player_ptr, this->pos_target);
 
-        /* Describe and Prompt (enable "TARGET_LOOK") */
-        const auto target = i2enum<target_type>(ts_ptr->mode | TARGET_LOOK);
-        while ((ts_ptr->query = examine_grid(player_ptr, ts_ptr->y, ts_ptr->x, target, ts_ptr->info)) == 0) {
-            ;
+        if (auto dir_and_velocity = this->switch_next_grid_command(); dir_and_velocity) {
+            const auto &[dir, move_fast] = *dir_and_velocity;
+            this->decide_change_panel(dir, move_fast);
         }
-
-        ts_ptr->distance = 0;
-        if (use_menu && (ts_ptr->query == '\r')) {
-            ts_ptr->query = 't';
-        }
-
-        switch_next_grid_command(player_ptr, ts_ptr);
-        decide_change_panel(player_ptr, ts_ptr);
     }
 }
 
 /*
  * Handle "target" and "look".
  */
-bool target_set(PlayerType *player_ptr, target_type mode)
+Target target_set(PlayerType *player_ptr, target_type mode)
 {
-    ts_type tmp_ts;
-    ts_type *ts_ptr = initialize_target_set_type(player_ptr, &tmp_ts, mode);
+    TargetSetter ts(player_ptr, mode);
     target_who = 0;
-    pos_interests = target_set_prepare(player_ptr, mode);
-    sweep_target_grids(player_ptr, ts_ptr);
+    ts.sweep_target_grids();
     prt("", 0, 0);
     verify_panel(player_ptr);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
@@ -599,5 +564,11 @@ bool target_set(PlayerType *player_ptr, target_type mode)
     };
     rfu.set_flags(flags);
     handle_stuff(player_ptr);
-    return target_who != 0;
+    if (target_who > 0) {
+        return Target::create_monster_target(player_ptr, target_who);
+    }
+    if (target_who < 0) {
+        return Target::create_grid_target(player_ptr, { target_row, target_col });
+    }
+    return Target::none();
 }

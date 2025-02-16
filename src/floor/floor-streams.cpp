@@ -13,18 +13,16 @@
  */
 
 #include "floor/floor-streams.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "floor/floor-generator-util.h"
-#include "floor/floor-generator.h"
 #include "floor/floor-object.h"
-#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/grid.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-info.h"
 #include "room/lake-types.h"
 #include "spell-kind/spells-floor.h"
@@ -35,12 +33,10 @@
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
-#include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include <cmath>
@@ -53,7 +49,7 @@
  * @param tag_shallow 浅い方の地形タグ
  * @param width 基本幅
  */
-static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const Pos2D &pos_end, TerrainTag tag_deep, TerrainTag tag_shallow, int width)
+static void recursive_river(FloorType &floor, const Pos2D &pos_start, const Pos2D &pos_end, TerrainTag tag_deep, TerrainTag tag_shallow, int width)
 {
     const auto length = Grid::calc_distance(pos_start, pos_end);
     if (length > 4) {
@@ -70,14 +66,14 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
 
         Pos2DVec vec_division(dy, dx);
         auto pos = pos_start + vec_division + vec_change;
-        if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+        if (!floor.contains(pos)) {
             vec_change = { 0, 0 };
         }
 
         /* construct river out of two smaller ones */
         pos = pos_start + vec_division + vec_change;
-        recursive_river(floor_ptr, pos_start, pos, tag_deep, tag_shallow, width);
-        recursive_river(floor_ptr, pos, pos_end, tag_deep, tag_shallow, width);
+        recursive_river(floor, pos_start, pos, tag_deep, tag_shallow, width);
+        recursive_river(floor, pos, pos_end, tag_deep, tag_shallow, width);
 
         /* Split the river some of the time - junctions look cool */
         constexpr auto chance_river_junction = 50;
@@ -85,7 +81,7 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
             vec_division *= 8;
             vec_change *= 8;
             const auto pos_junction = pos_start + vec_division + vec_change;
-            recursive_river(floor_ptr, pos, pos_junction, tag_deep, tag_shallow, width - 1);
+            recursive_river(floor, pos, pos_junction, tag_deep, tag_shallow, width - 1);
         }
 
         return;
@@ -102,11 +98,11 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
             for (auto ty = pos.y - width - 1; ty <= pos.y + width + 1; ty++) {
                 for (auto tx = pos.x - width - 1; tx <= pos.x + width + 1; tx++) {
                     const Pos2D pos_target(ty, tx);
-                    if (!in_bounds2(floor_ptr, pos_target.y, pos_target.x)) {
+                    if (!in_bounds2(floor, pos_target.y, pos_target.x)) {
                         continue;
                     }
 
-                    auto &grid = floor_ptr->get_grid(pos_target);
+                    auto &grid = floor.get_grid(pos_target);
                     if (grid.feat == terrains.get_terrain_id(tag_deep)) {
                         continue;
                     }
@@ -139,7 +135,7 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
 
                     /* Lava terrain glows */
                     if (terrains.get_terrain(tag_deep).flags.has(TerrainCharacteristics::LAVA)) {
-                        if (floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
+                        if (floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
                             grid.info |= CAVE_GLOW;
                         }
                     }
@@ -156,13 +152,13 @@ static void recursive_river(FloorType *floor_ptr, const Pos2D &pos_start, const 
 
 /*!
  * @brief ランダムに川/溶岩流をダンジョンに配置する
- * @param floor_ptr フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param dd_ptr ダンジョン生成データへの参照ポインタ
  */
-void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
+void add_river(FloorType &floor, DungeonData *dd_ptr)
 {
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
-    const auto tag_pair = dungeon.decide_river_terrains(floor_ptr->dun_level);
+    const auto &dungeon = floor.get_dungeon_definition();
+    const auto tag_pair = dungeon.decide_river_terrains(floor.dun_level);
     if (!tag_pair) {
         return;
     }
@@ -182,8 +178,8 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
     }
 
     /* Hack -- Choose starting point */
-    const auto y2 = randint1(floor_ptr->height / 2 - 2) + floor_ptr->height / 2;
-    const auto x2 = randint1(floor_ptr->width / 2 - 2) + floor_ptr->width / 2;
+    const auto y2 = randint1(floor.height / 2 - 2) + floor.height / 2;
+    const auto x2 = randint1(floor.width / 2 - 2) + floor.width / 2;
 
     /* Hack -- Choose ending point somewhere on boundary */
     auto y1 = 0;
@@ -191,33 +187,33 @@ void add_river(FloorType *floor_ptr, DungeonData *dd_ptr)
     switch (randint1(4)) {
     case 1: {
         /* top boundary */
-        x1 = randint1(floor_ptr->width - 2) + 1;
+        x1 = randint1(floor.width - 2) + 1;
         y1 = 1;
         break;
     }
     case 2: {
         /* left boundary */
         x1 = 1;
-        y1 = randint1(floor_ptr->height - 2) + 1;
+        y1 = randint1(floor.height - 2) + 1;
         break;
     }
     case 3: {
         /* right boundary */
-        x1 = floor_ptr->width - 1;
-        y1 = randint1(floor_ptr->height - 2) + 1;
+        x1 = floor.width - 1;
+        y1 = randint1(floor.height - 2) + 1;
         break;
     }
     case 4: {
         /* bottom boundary */
-        x1 = randint1(floor_ptr->width - 2) + 1;
-        y1 = floor_ptr->height - 1;
+        x1 = randint1(floor.width - 2) + 1;
+        y1 = floor.height - 1;
         break;
     }
     }
 
     constexpr auto width_rivers = 2;
     const auto wid = randint1(width_rivers);
-    recursive_river(floor_ptr, { y1, x1 }, { y2, x2 }, tag_deep, tag_shallow, wid);
+    recursive_river(floor, { y1, x1 }, { y2, x2 }, tag_deep, tag_shallow, wid);
 
     /* Hack - Save the location as a "room" */
     if (dd_ptr->cent_n < dd_ptr->centers.size()) {
@@ -253,7 +249,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
     auto x = rand_spread(floor.width / 2, floor.width / 6);
 
     /* Choose a random compass direction */
-    auto dir = randint0(8);
+    Direction dir = rand_choice(Direction::directions_8());
 
     /* Place streamer into dungeon */
     auto dummy = 0;
@@ -271,7 +267,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
             while (true) {
                 pos.y = rand_spread(y, d);
                 pos.x = rand_spread(x, d);
-                if (!in_bounds2(&floor, pos.y, pos.x)) {
+                if (!in_bounds2(floor, pos.y, pos.x)) {
                     continue;
                 }
                 break;
@@ -299,9 +295,9 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
             }
 
             const auto &monrace = floor.m_list[grid.m_idx].get_monrace();
-            if (grid.has_monster() && !(streamer.flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, &monrace, 0))) {
+            if (grid.has_monster() && !(streamer.flags.has(TerrainCharacteristics::PLACE) && monster_can_cross_terrain(player_ptr, feat, monrace, 0))) {
                 /* Delete the monster (if any) */
-                delete_monster(player_ptr, pos.y, pos.x);
+                delete_monster(player_ptr, pos);
             }
 
             if (!grid.o_idx_list.empty() && streamer.flags.has_not(TerrainCharacteristics::DROP)) {
@@ -322,7 +318,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                     }
                 }
 
-                delete_all_items_from_floor(player_ptr, pos.y, pos.x);
+                delete_all_items_from_floor(player_ptr, pos);
             }
 
             /* Clear previous contents, add proper vein type */
@@ -351,19 +347,15 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
         }
 
         /* Advance the streamer */
-        y += CCW_DD[dir].y;
-        x += CCW_DD[dir].x;
+        y += dir.vec().y;
+        x += dir.vec().x;
 
         if (one_in_(10)) {
-            if (one_in_(2)) {
-                dir = (dir + 1) % 8;
-            } else {
-                dir = (dir > 0) ? dir - 1 : 7;
-            }
+            dir = dir.rotated_45degree(one_in_(2) ? 1 : -1);
         }
 
         /* Quit before leaving the dungeon */
-        if (!in_bounds(&floor, y, x)) {
+        if (!floor.contains({ y, x })) {
             break;
         }
     }
@@ -385,7 +377,7 @@ void place_trees(PlayerType *player_ptr, const Pos2D &pos)
     for (auto x = pos.x - 3; x < pos.x + 4; x++) {
         for (auto y = pos.y - 3; y < pos.y + 4; y++) {
             const Pos2D pos_neighbor(y, x);
-            if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor)) {
                 continue;
             }
 
@@ -431,11 +423,11 @@ void destroy_level(PlayerType *player_ptr)
 
     /* Drop a few epi-centers (usually about two) */
     POSITION y1, x1;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     for (int n = 0; n < randint1(5); n++) {
         /* Pick an epi-center */
-        x1 = rand_range(5, floor_ptr->width - 1 - 5);
-        y1 = rand_range(5, floor_ptr->height - 1 - 5);
+        x1 = rand_range(5, floor.width - 1 - 5);
+        y1 = rand_range(5, floor.height - 1 - 5);
 
         (void)destroy_area(player_ptr, y1, x1, 15, true);
     }

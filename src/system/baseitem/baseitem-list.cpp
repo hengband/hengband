@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <numeric>
 #include <set>
+#include <span>
 
 namespace {
 constexpr auto INVALID_BI_ID_FORMAT = "Invalid Baseitem ID is specified! %d";
@@ -48,6 +49,12 @@ const BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id) const
     }
 
     return this->baseitems[bi_id];
+}
+
+const BaseitemDefinition &BaseitemList::pick_one_at_random() const
+{
+    const auto candidates = std::span(this->baseitems).subspan(1); // 0番はダミーアイテム
+    return rand_choice(candidates);
 }
 
 /*!

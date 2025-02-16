@@ -54,7 +54,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                         continue;
                     }
 
-                    if (!monster_can_enter(player_ptr, pos.y, pos.x, &monrace, 0)) {
+                    if (!monster_can_enter(player_ptr, pos.y, pos.x, monrace, 0)) {
                         continue;
                     }
 

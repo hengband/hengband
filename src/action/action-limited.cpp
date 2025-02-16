@@ -108,7 +108,7 @@ bool cmd_limit_time_walk(PlayerType *player_ptr)
         }
 
         msg_print(_("止まった時の中ではうまく働かないようだ。", "It shows no reaction."));
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
         return true;
     }
 

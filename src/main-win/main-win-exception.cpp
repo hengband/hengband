@@ -28,7 +28,7 @@ void handle_unexpected_exception(const std::exception &e)
 #if !defined(DISABLE_NET)
     std::wstringstream report_confirm_msg_ss;
     report_confirm_msg_ss
-        << to_wchar(first_line.data()).wc_str() << L"\n\n"
+        << to_wchar(first_line).wc_str() << L"\n\n"
         << _(L"開発チームにエラー情報を送信してよろしいですか？\n", L"Are you sure you want to send the error information to the development team?\n")
         << _(L"※送信されるのはゲーム内の情報のみであり、個人情報が送信されることはありません。\n",
                L"Only in-game information will be sent. No personal information will be sent.\n");

@@ -31,5 +31,5 @@ bool banish_monsters(PlayerType *player_ptr, int dist);
 bool turn_evil(PlayerType *player_ptr, int dam);
 bool turn_monsters(PlayerType *player_ptr, int dam);
 bool deathray_monsters(PlayerType *player_ptr);
-std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity *m_ptr, MonraceDefinition *r_ptr);
+std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity &monster, const MonraceDefinition &monrace);
 bool probing(PlayerType *player_ptr);

@@ -434,9 +434,6 @@
     <ClCompile Include="..\..\src\grid\trap.cpp">
       <Filter>grid</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\grid\feature.cpp">
-      <Filter>grid</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\horror-descriptions.cpp">
       <Filter>monster</Filter>
     </ClCompile>
@@ -707,8 +704,8 @@
     <ClCompile Include="..\..\src\cmd-io\diary-subtitle-table.cpp">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd-io\feeling-table.cpp">
-      <Filter>cmd-io</Filter>
+    <ClCompile Include="..\..\src\floor\dungeon-feeling.cpp">
+      <Filter>floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.cpp">
       <Filter>cmd-action</Filter>
@@ -1010,9 +1007,6 @@
     <ClCompile Include="..\..\src\object-enchant\activation-info-table.cpp">
       <Filter>object-enchant</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-race\monster-race-hook.cpp">
-      <Filter>monster-race</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-sniper.cpp">
       <Filter>mind</Filter>
     </ClCompile>
@@ -1036,9 +1030,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\cmd-io\cmd-lore.cpp">
       <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\view\display-monster-status.cpp">
-      <Filter>view</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-info.cpp">
       <Filter>monster</Filter>
@@ -2556,6 +2547,21 @@
     <ClCompile Include="..\..\src\system\services\dungeon-monrace-service.cpp">
       <Filter>system\services</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\elapsed-time.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\external-lib\fmt\format.cc">
+      <Filter>external-lib\fmt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\floor\wilderness-grid.cpp">
+      <Filter>system\floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-floor\monster-movement-direction-list.cpp">
+      <Filter>monster-floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\target\target.cpp">
+      <Filter>target</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3014,9 +3020,6 @@
     <ClInclude Include="..\..\src\spell\spells-summon.h">
       <Filter>spell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\grid\feature.h">
-      <Filter>grid</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\grid\grid.h">
       <Filter>grid</Filter>
     </ClInclude>
@@ -3311,8 +3314,8 @@
     <ClInclude Include="..\..\src\cmd-io\diary-subtitle-table.h">
       <Filter>cmd-io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd-io\feeling-table.h">
-      <Filter>cmd-io</Filter>
+    <ClInclude Include="..\..\src\floor\dungeon-feeling.h">
+      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h">
       <Filter>cmd-action</Filter>
@@ -3704,9 +3707,6 @@
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster-race\monster-race-hook.h">
-      <Filter>monster-race</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mind\drs-types.h">
       <Filter>mind</Filter>
     </ClInclude>
@@ -3759,9 +3759,6 @@
       <Filter>cmd-io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-symbol.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\view\display-monster-status.h">
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-info.h">
@@ -5406,9 +5403,6 @@
     <ClInclude Include="..\..\src\util\stack-trace.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\external-lib\json.hpp">
-      <Filter>external-lib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\external-lib\include-json.h">
       <Filter>external-lib</Filter>
     </ClInclude>
@@ -5546,6 +5540,24 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\services\dungeon-monrace-service.h">
       <Filter>system\services</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\elapsed-time.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\terrain\terrain-kind.h">
+      <Filter>system\enums\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\enums\terrain\wilderness-terrain.h">
+      <Filter>system\enums\terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\floor\wilderness-grid.h">
+      <Filter>system\floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-floor\monster-movement-direction-list.h">
+      <Filter>monster-floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\target\target.h">
+      <Filter>target</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -5843,6 +5855,9 @@
     </Filter>
     <Filter Include="system\enums\dungeon">
       <UniqueIdentifier>{605bab39-a92d-4c11-ae24-56e39e302f36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external-lib\fmt">
+      <UniqueIdentifier>{de5173c3-9151-46e9-a937-8861a5a14c00}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

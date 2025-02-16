@@ -64,8 +64,8 @@
 static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMutationType attack, bool *fear, bool *mdeath)
 {
     WEIGHT n_weight = 0;
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
 
     Dice dice{};
     concptr atk_desc;
@@ -99,19 +99,19 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
         THROW_EXCEPTION(std::range_error, _("未定義の部位", "undefined body part"));
     }
 
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
     int bonus = player_ptr->to_h_m + (player_ptr->lev * 6 / 5);
     int chance = (player_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
 
-    bool is_hit = (r_ptr->kind_flags.has_not(MonsterKindType::QUANTUM)) || !randint0(2);
-    is_hit &= test_hit_norm(player_ptr, chance, r_ptr->ac, m_ptr->ml);
+    bool is_hit = (monrace.kind_flags.has_not(MonsterKindType::QUANTUM)) || !randint0(2);
+    is_hit &= test_hit_norm(player_ptr, chance, monrace.ac, monster.ml);
     if (!is_hit) {
-        sound(SOUND_MISS);
+        sound(SoundKind::MISS);
         msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name.data());
         return;
     }
 
-    sound(SOUND_HIT);
+    sound(SoundKind::HIT);
     msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name.data(), atk_desc);
 
     auto k = critical_norm(player_ptr, n_weight, bonus, dice.roll(), (int16_t)bonus, HISSATSU_NONE);
@@ -120,17 +120,17 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
         k = 0;
     }
 
-    k = mon_damage_mod(player_ptr, m_ptr, k, false);
-    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, m_ptr->hp - k,
-        m_ptr->maxhp, m_ptr->max_maxhp);
+    k = mon_damage_mod(player_ptr, monster, k, false);
+    msg_format_wizard(player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, monster.hp - k,
+        monster.maxhp, monster.max_maxhp);
     if (k > 0) {
-        anger_monster(player_ptr, m_ptr);
+        anger_monster(player_ptr, monster);
     }
 
     switch (attack) {
     case PlayerMutationType::SCOR_TAIL:
-        project(player_ptr, 0, 0, m_ptr->fy, m_ptr->fx, k, AttributeType::POIS, PROJECT_KILL);
-        *mdeath = !m_ptr->is_valid();
+        project(player_ptr, 0, 0, monster.fy, monster.fx, k, AttributeType::POIS, PROJECT_KILL);
+        *mdeath = !monster.is_valid();
         break;
     case PlayerMutationType::HORNS:
     case PlayerMutationType::BEAK:
@@ -143,7 +143,7 @@ static void natural_attack(PlayerType *player_ptr, MONSTER_IDX m_idx, PlayerMuta
     }
     }
 
-    touch_zap_player(m_ptr, player_ptr);
+    touch_zap_player(monster, player_ptr);
 }
 
 /*!
@@ -172,12 +172,12 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     disturb(player_ptr, false, true);
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (!can_attack_with_main_hand(player_ptr) && !can_attack_with_sub_hand(player_ptr) && player_ptr->muta.has_none_of(mutation_attack_methods)) {
-        sound(SOUND_ATTACK_FAILED);
+        sound(SoundKind::ATTACK_FAILED);
         msg_print(_(format("%s攻撃できない。", (empty_hands(player_ptr, false) == EMPTY_HAND_NONE) ? "両手がふさがって" : ""), "You cannot attack."));
         return false;
     }
 
-    const auto m_name = monster_desc(player_ptr, &monster, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
     const auto effects = player_ptr->effects();
     const auto is_hallucinated = effects->hallucination().is_hallucinated();
     if (monster.ml) {
@@ -196,14 +196,14 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         const auto is_main_hand_zantetsu = player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(zantetsu);
         const auto is_sub_hand_zantetsu = player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(zantetsu);
         if (is_main_hand_zantetsu || is_sub_hand_zantetsu) {
-            sound(SOUND_ATTACK_FAILED);
+            sound(SoundKind::ATTACK_FAILED);
             msg_print(_("拙者、おなごは斬れぬ！", "I can not attack women!"));
             return false;
         }
     }
 
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE)) {
-        sound(SOUND_ATTACK_FAILED);
+        sound(SoundKind::ATTACK_FAILED);
         msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
         return false;
     }
@@ -240,10 +240,10 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
 
     if (effects->fear().is_fearful()) {
         if (monster.ml) {
-            sound(SOUND_ATTACK_FAILED);
+            sound(SoundKind::ATTACK_FAILED);
             msg_format(_("恐くて%sを攻撃できない！", "You are too fearful to attack %s!"), m_name.data());
         } else {
-            sound(SOUND_ATTACK_FAILED);
+            sound(SoundKind::ATTACK_FAILED);
             msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
         }
 
@@ -267,7 +267,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     }
 
     if (player_ptr->riding) {
-        PlayerSkill(player_ptr).gain_riding_skill_exp_on_melee_attack(&monrace);
+        PlayerSkill(player_ptr).gain_riding_skill_exp_on_melee_attack(monrace);
     }
 
     player_ptr->riding_t_m_idx = grid.m_idx;
@@ -289,7 +289,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
     }
 
     if (fear && monster.ml && !mdeath) {
-        sound(SOUND_FLEE);
+        sound(SoundKind::FLEE);
         msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
     }
 

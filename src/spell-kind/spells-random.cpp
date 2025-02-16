@@ -56,15 +56,12 @@ void call_chaos(PlayerType *player_ptr)
         line_chaos = true;
     }
 
-    int dir;
     if (one_in_(6)) {
-        for (int dummy = 1; dummy < 10; dummy++) {
-            if (dummy - 5) {
-                if (line_chaos) {
-                    fire_beam(player_ptr, chaos_type, dummy, 150);
-                } else {
-                    fire_ball(player_ptr, chaos_type, dummy, 150, 2);
-                }
+        for (const auto &dir : Direction::directions_8()) {
+            if (line_chaos) {
+                fire_beam(player_ptr, chaos_type, dir, 150);
+            } else {
+                fire_ball(player_ptr, chaos_type, dir, 150, 2);
             }
         }
 
@@ -72,11 +69,12 @@ void call_chaos(PlayerType *player_ptr)
     }
 
     if (one_in_(3)) {
-        fire_ball(player_ptr, chaos_type, 0, 500, 8);
+        fire_ball(player_ptr, chaos_type, Direction::self(), 500, 8);
         return;
     }
 
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return;
     }
     if (line_chaos) {
@@ -102,7 +100,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
 {
     BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
     bool is_first_curse = true;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     while (is_first_curse || (one_in_(3) && !stop_ty)) {
         is_first_curse = false;
         switch (randint1(34)) {
@@ -175,7 +173,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 8:
         case 9:
         case 18:
-            (*count) += summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor_ptr->dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)) ? 1 : 0;
+            (*count) += summon_specific(player_ptr, player_ptr->y, player_ptr->x, floor.dun_level, SUMMON_NONE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)) ? 1 : 0;
             if (!one_in_(6)) {
                 break;
             }
@@ -225,7 +223,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
             }
             [[fallthrough]];
         case 25:
-            if ((floor_ptr->dun_level > 65) && !stop_ty) {
+            if ((floor.dun_level > 65) && !stop_ty) {
                 (*count) += summon_cyber(player_ptr, player_ptr->y, player_ptr->x);
                 stop_ty = true;
                 break;
@@ -261,7 +259,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
         type = SUMMON_MIMIC;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     switch (randint1(spell) + randint1(8) + 1) {
     case 1:
     case 2:
@@ -325,7 +323,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
         lose_all_info(player_ptr);
         break;
     case 32:
-        fire_ball(player_ptr, AttributeType::CHAOS, 0, spell + 5, 1 + (spell / 10));
+        fire_ball(player_ptr, AttributeType::CHAOS, Direction::self(), spell + 5, 1 + (spell / 10));
         break;
     case 33:
         wall_stone(player_ptr);
@@ -334,7 +332,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
     case 35:
         for (int counter = 0; counter < 8; counter++) {
             (void)summon_specific(
-                player_ptr, player_ptr->y, player_ptr->x, (floor_ptr->dun_level * 3) / 2, i2enum<summon_type>(type), (PM_ALLOW_GROUP | PM_NO_PET));
+                player_ptr, player_ptr->y, player_ptr->x, (floor.dun_level * 3) / 2, i2enum<summon_type>(type), (PM_ALLOW_GROUP | PM_NO_PET));
         }
 
         break;
@@ -364,7 +362,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
  * while keeping the results quite random.  It also allows some potent\n
  * effects only at high level.
  */
-void cast_wonder(PlayerType *player_ptr, DIRECTION dir)
+void cast_wonder(PlayerType *player_ptr, const Direction &dir)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     int die = randint1(100) + plev / 5;

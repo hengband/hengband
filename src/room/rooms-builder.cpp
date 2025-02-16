@@ -36,16 +36,13 @@
  */
 
 #include "room/rooms-builder.h"
-#include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
-#include "floor/geometry.h"
 #include "grid/door.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/cave-filler.h"
 #include "room/door-definition.h"
 #include "room/lake-types.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -66,21 +63,22 @@
  */
 void build_small_room(PlayerType *player_ptr, POSITION x0, POSITION y0)
 {
-    for (POSITION y = y0 - 1; y <= y0 + 1; y++) {
-        place_bold(player_ptr, y, x0 - 1, GB_INNER);
-        place_bold(player_ptr, y, x0 + 1, GB_INNER);
+    const Pos2D pos(y0, x0);
+    for (auto y = y0 - 1; y <= y0 + 1; y++) {
+        place_bold(player_ptr, y, pos.x - 1, GB_INNER);
+        place_bold(player_ptr, y, pos.x + 1, GB_INNER);
     }
 
-    for (POSITION x = x0 - 1; x <= x0 + 1; x++) {
-        place_bold(player_ptr, y0 - 1, x, GB_INNER);
-        place_bold(player_ptr, y0 + 1, x, GB_INNER);
+    for (auto x = x0 - 1; x <= x0 + 1; x++) {
+        place_bold(player_ptr, pos.y - 1, x, GB_INNER);
+        place_bold(player_ptr, pos.y + 1, x, GB_INNER);
     }
 
-    const auto n = randint0(4);
-    place_secret_door(player_ptr, y0 + ddy_ddd[n], x0 + ddx_ddd[n], DOOR_DEFAULT);
+    const auto d = rand_choice(Direction::directions_4());
+    place_secret_door(player_ptr, pos + d.vec());
 
-    player_ptr->current_floor_ptr->grid_array[y0][x0].mimic = 0;
-    place_bold(player_ptr, y0, x0, GB_FLOOR);
+    player_ptr->current_floor_ptr->set_terrain_id_at(pos, TerrainTag::NONE, TerrainKind::MIMIC);
+    place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
 }
 
 /*
@@ -90,13 +88,13 @@ void build_cavern(PlayerType *player_ptr)
 {
     bool light = false;
     bool done = false;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if ((floor_ptr->dun_level <= randint1(50)) && floor_ptr->get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    if ((floor.dun_level <= randint1(50)) && floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS)) {
         light = true;
     }
 
-    POSITION xsize = floor_ptr->width - 1;
-    POSITION ysize = floor_ptr->height - 1;
+    POSITION xsize = floor.width - 1;
+    POSITION ysize = floor.height - 1;
     POSITION x0 = xsize / 2;
     POSITION y0 = ysize / 2;
     xsize = x0 * 2;
@@ -106,7 +104,7 @@ void build_cavern(PlayerType *player_ptr)
         int grd = randint1(4) + 4;
         int roug = randint1(8) * randint1(4);
         int cutoff = xsize / 2;
-        generate_hmap(floor_ptr, y0 + 1, x0 + 1, xsize, ysize, grd, roug, cutoff);
+        generate_hmap(floor, y0 + 1, x0 + 1, xsize, ysize, grd, roug, cutoff);
         done = generate_fracave(player_ptr, y0 + 1, x0 + 1, xsize, ysize, cutoff, light, false);
     }
 }
@@ -121,9 +119,9 @@ void build_lake(PlayerType *player_ptr, int type)
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    int xsize = floor_ptr->width - 1;
-    int ysize = floor_ptr->height - 1;
+    auto &floor = *player_ptr->current_floor_ptr;
+    int xsize = floor.width - 1;
+    int ysize = floor.height - 1;
     int x0 = xsize / 2;
     int y0 = ysize / 2;
     xsize = x0 * 2;
@@ -135,7 +133,7 @@ void build_lake(PlayerType *player_ptr, int type)
         int c3 = 3 * xsize / 4;
         int c1 = randint0(c3 / 2) + randint0(c3 / 2) - 5;
         int c2 = (c1 + c3) / 2;
-        generate_hmap(floor_ptr, y0 + 1, x0 + 1, xsize, ysize, grd, roug, c3);
+        generate_hmap(floor, y0 + 1, x0 + 1, xsize, ysize, grd, roug, c3);
         done = generate_lake(player_ptr, y0 + 1, x0 + 1, xsize, ysize, c1, c2, c3, type);
     }
 }
@@ -167,29 +165,29 @@ void build_room(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1, P
 
     POSITION xsize = x2 - x1;
     POSITION ysize = y2 - y1;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     for (int i = 0; i <= xsize; i++) {
         place_bold(player_ptr, y1, x1 + i, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
         place_bold(player_ptr, y2, x1 + i, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
     }
 
     for (int i = 1; i < ysize; i++) {
         place_bold(player_ptr, y1 + i, x1, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[y1 + i][x1].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[y1 + i][x1].info |= (CAVE_ROOM | CAVE_ICKY);
         place_bold(player_ptr, y1 + i, x2, GB_OUTER_NOPERM);
-        floor_ptr->grid_array[y1 + i][x2].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[y1 + i][x2].info |= (CAVE_ROOM | CAVE_ICKY);
     }
 
     for (POSITION x = 1; x < xsize; x++) {
         for (POSITION y = 1; y < ysize; y++) {
-            auto *g_ptr = &floor_ptr->grid_array[y1 + y][x1 + x];
-            if (g_ptr->is_extra()) {
+            auto &grid = floor.grid_array[y1 + y][x1 + x];
+            if (grid.is_extra()) {
                 place_bold(player_ptr, y1 + y, x1 + x, GB_FLOOR);
-                g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
+                grid.info |= (CAVE_ROOM | CAVE_ICKY);
             } else {
-                g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
+                grid.info |= (CAVE_ROOM | CAVE_ICKY);
             }
         }
     }
@@ -347,7 +345,7 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y, x);
-    if (!in_bounds(&floor, pos.y, pos.x)) {
+    if (!floor.contains(pos)) {
         return;
     }
 

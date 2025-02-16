@@ -399,7 +399,7 @@ static TERM_COLOR mh_attr(int max)
         TERM_L_DARK,
     };
 
-    std::span<const term_color_type> candidates(colors.begin(), max);
+    auto candidates = std::span(colors).first(max);
     return rand_choice(candidates);
 }
 

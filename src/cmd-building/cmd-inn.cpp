@@ -93,7 +93,7 @@ static bool has_a_nightmare(PlayerType *player_ptr)
     msg_print(_("眠りに就くと恐ろしい光景が心をよぎった。", "Horrible visions flit through your mind as you sleep."));
 
     while (true) {
-        sanity_blast(player_ptr, nullptr, false);
+        sanity_blast(player_ptr);
         if (!one_in_(3)) {
             break;
         }

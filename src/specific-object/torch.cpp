@@ -151,55 +151,55 @@ void update_lite(PlayerType *player_ptr)
     std::vector<Pos2D> points;
 
     POSITION p = player_ptr->cur_lite;
-    FloorType *const floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
 
     // 前回照らされていた座標たちを記録。
-    for (int i = 0; i < floor_ptr->lite_n; i++) {
-        const POSITION y = floor_ptr->lite_y[i];
-        const POSITION x = floor_ptr->lite_x[i];
+    for (int i = 0; i < floor.lite_n; i++) {
+        const POSITION y = floor.lite_y[i];
+        const POSITION x = floor.lite_x[i];
 
-        floor_ptr->grid_array[y][x].info &= ~(CAVE_LITE);
-        floor_ptr->grid_array[y][x].info |= CAVE_TEMP;
+        floor.grid_array[y][x].info &= ~(CAVE_LITE);
+        floor.grid_array[y][x].info |= CAVE_TEMP;
 
         points.emplace_back(y, x);
     }
 
-    floor_ptr->lite_n = 0;
+    floor.lite_n = 0;
     if (p >= 1) {
-        cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x);
-        cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x);
-        cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x);
-        cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x + 1);
-        cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x - 1);
-        cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x + 1);
-        cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x - 1);
-        cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x + 1);
-        cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x - 1);
+        cave_lite_hack(floor, player_ptr->y, player_ptr->x);
+        cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x);
+        cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x);
+        cave_lite_hack(floor, player_ptr->y, player_ptr->x + 1);
+        cave_lite_hack(floor, player_ptr->y, player_ptr->x - 1);
+        cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x + 1);
+        cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x - 1);
+        cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x + 1);
+        cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x - 1);
     }
 
     if (p >= 2) {
-        if (cave_los_bold(floor_ptr, player_ptr->y + 1, player_ptr->x)) {
-            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x);
-            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x + 1);
-            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x - 1);
+        if (cave_los_bold(floor, player_ptr->y + 1, player_ptr->x)) {
+            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x);
+            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x + 1);
+            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x - 1);
         }
 
-        if (cave_los_bold(floor_ptr, player_ptr->y - 1, player_ptr->x)) {
-            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x);
-            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x + 1);
-            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x - 1);
+        if (cave_los_bold(floor, player_ptr->y - 1, player_ptr->x)) {
+            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x);
+            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x + 1);
+            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x - 1);
         }
 
-        if (cave_los_bold(floor_ptr, player_ptr->y, player_ptr->x + 1)) {
-            cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x + 2);
-            cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x + 2);
-            cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x + 2);
+        if (cave_los_bold(floor, player_ptr->y, player_ptr->x + 1)) {
+            cave_lite_hack(floor, player_ptr->y, player_ptr->x + 2);
+            cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x + 2);
+            cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x + 2);
         }
 
-        if (cave_los_bold(floor_ptr, player_ptr->y, player_ptr->x - 1)) {
-            cave_lite_hack(floor_ptr, player_ptr->y, player_ptr->x - 2);
-            cave_lite_hack(floor_ptr, player_ptr->y + 1, player_ptr->x - 2);
-            cave_lite_hack(floor_ptr, player_ptr->y - 1, player_ptr->x - 2);
+        if (cave_los_bold(floor, player_ptr->y, player_ptr->x - 1)) {
+            cave_lite_hack(floor, player_ptr->y, player_ptr->x - 2);
+            cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x - 2);
+            cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x - 2);
         }
     }
 
@@ -209,20 +209,20 @@ void update_lite(PlayerType *player_ptr)
             p = 14;
         }
 
-        if (cave_los_bold(floor_ptr, player_ptr->y + 1, player_ptr->x + 1)) {
-            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x + 2);
+        if (cave_los_bold(floor, player_ptr->y + 1, player_ptr->x + 1)) {
+            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x + 2);
         }
 
-        if (cave_los_bold(floor_ptr, player_ptr->y + 1, player_ptr->x - 1)) {
-            cave_lite_hack(floor_ptr, player_ptr->y + 2, player_ptr->x - 2);
+        if (cave_los_bold(floor, player_ptr->y + 1, player_ptr->x - 1)) {
+            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x - 2);
         }
 
-        if (cave_los_bold(floor_ptr, player_ptr->y - 1, player_ptr->x + 1)) {
-            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x + 2);
+        if (cave_los_bold(floor, player_ptr->y - 1, player_ptr->x + 1)) {
+            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x + 2);
         }
 
-        if (cave_los_bold(floor_ptr, player_ptr->y - 1, player_ptr->x - 1)) {
-            cave_lite_hack(floor_ptr, player_ptr->y - 2, player_ptr->x - 2);
+        if (cave_los_bold(floor, player_ptr->y - 1, player_ptr->x - 1)) {
+            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x - 2);
         }
 
         POSITION min_y = player_ptr->y - p;
@@ -231,8 +231,8 @@ void update_lite(PlayerType *player_ptr)
         }
 
         POSITION max_y = player_ptr->y + p;
-        if (max_y > floor_ptr->height - 1) {
-            max_y = floor_ptr->height - 1;
+        if (max_y > floor.height - 1) {
+            max_y = floor.height - 1;
         }
 
         POSITION min_x = player_ptr->x - p;
@@ -241,8 +241,8 @@ void update_lite(PlayerType *player_ptr)
         }
 
         POSITION max_x = player_ptr->x + p;
-        if (max_x > floor_ptr->width - 1) {
-            max_x = floor_ptr->width - 1;
+        if (max_x > floor.width - 1) {
+            max_x = floor.width - 1;
         }
 
         for (POSITION y = min_y; y <= max_y; y++) {
@@ -258,33 +258,33 @@ void update_lite(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (floor_ptr->grid_array[y][x].info & CAVE_VIEW) {
-                    cave_lite_hack(floor_ptr, y, x);
+                if (floor.grid_array[y][x].info & CAVE_VIEW) {
+                    cave_lite_hack(floor, y, x);
                 }
             }
         }
     }
 
-    for (int i = 0; i < floor_ptr->lite_n; i++) {
-        POSITION y = floor_ptr->lite_y[i];
-        POSITION x = floor_ptr->lite_x[i];
-        auto *g_ptr = &floor_ptr->grid_array[y][x];
-        if (g_ptr->info & CAVE_TEMP) {
+    for (int i = 0; i < floor.lite_n; i++) {
+        POSITION y = floor.lite_y[i];
+        POSITION x = floor.lite_x[i];
+        const auto &grid = floor.grid_array[y][x];
+        if (grid.info & CAVE_TEMP) {
             continue;
         }
 
-        cave_note_and_redraw_later(floor_ptr, y, x);
+        cave_note_and_redraw_later(floor, y, x);
     }
 
     // 前回照らされていた座標たちのうち、状態が変わったものについて再描画フラグを立てる。
     for (const auto &[y, x] : points) {
-        auto *g_ptr = &floor_ptr->grid_array[y][x];
-        g_ptr->info &= ~(CAVE_TEMP);
-        if (g_ptr->info & CAVE_LITE) {
+        auto &grid = floor.grid_array[y][x];
+        grid.info &= ~(CAVE_TEMP);
+        if (grid.info & CAVE_LITE) {
             continue;
         }
 
-        cave_redraw_later(floor_ptr, y, x);
+        cave_redraw_later(floor, y, x);
     }
 
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);

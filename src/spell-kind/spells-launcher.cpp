@@ -23,17 +23,16 @@
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad, std::optional<CapturedMonsterType *> cap_mon_ptr)
+bool fire_ball(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad, std::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     if (typ == AttributeType::CHARM_LIVING) {
         flg |= PROJECT_HIDE;
     }
 
-    POSITION tx = player_ptr->x + 99 * ddx[dir];
-    POSITION ty = player_ptr->y + 99 * ddy[dir];
+    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
 
-    if ((dir == 5) && target_okay(player_ptr)) {
+    if (dir.is_targetting() && target_okay(player_ptr)) {
         flg &= ~(PROJECT_STOP);
         tx = target_col;
         ty = target_row;
@@ -57,14 +56,13 @@ bool fire_ball(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_breath(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
+bool fire_breath(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_BREATH;
 
-    auto tx = player_ptr->x + 99 * ddx[dir];
-    auto ty = player_ptr->y + 99 * ddy[dir];
+    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
 
-    if ((dir == 5) && target_okay(player_ptr)) {
+    if (dir.is_targetting() && target_okay(player_ptr)) {
         reset_bits(flg, PROJECT_STOP);
         tx = target_col;
         ty = target_row;
@@ -88,11 +86,10 @@ bool fire_breath(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int d
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
+bool fire_rocket(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad)
 {
-    POSITION tx = player_ptr->x + 99 * ddx[dir];
-    POSITION ty = player_ptr->y + 99 * ddy[dir];
-    if ((dir == 5) && target_okay(player_ptr)) {
+    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
+    if (dir.is_targetting() && target_okay(player_ptr)) {
         tx = target_col;
         ty = target_row;
     }
@@ -116,12 +113,11 @@ bool fire_rocket(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int d
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, POSITION rad)
+bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad)
 {
-    POSITION tx = player_ptr->x + 99 * ddx[dir];
-    POSITION ty = player_ptr->y + 99 * ddy[dir];
+    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
-    if ((dir == 5) && target_okay(player_ptr)) {
+    if (dir.is_targetting() && target_okay(player_ptr)) {
         flg &= ~(PROJECT_STOP);
         tx = target_col;
         ty = target_row;
@@ -165,19 +161,20 @@ bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX src_idx, AttributeType typ,
  * @param dev 回数分散
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, const Dice &dice, int num, int dev)
+bool fire_blast(PlayerType *player_ptr, AttributeType typ, const Direction &dir, const Dice &dice, int num, int dev)
 {
     POSITION ty, tx, y, x;
     POSITION ly, lx;
-    if (dir == 5) {
+    if (dir.is_targetting()) {
         tx = target_col;
         ty = target_row;
 
         lx = 20 * (tx - player_ptr->x) + player_ptr->x;
         ly = 20 * (ty - player_ptr->y) + player_ptr->y;
     } else {
-        ly = ty = player_ptr->y + 20 * ddy[dir];
-        lx = tx = player_ptr->x + 20 * ddx[dir];
+        const auto vec = dir.vec();
+        ly = ty = player_ptr->y + 20 * vec.y;
+        lx = tx = player_ptr->x + 20 * vec.x;
     }
 
     const auto ld = Grid::calc_distance(player_ptr->get_position(), { ly, lx });
@@ -217,7 +214,7 @@ bool fire_blast(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, const 
  * Affect monsters and grids (not objects).
  * </pre>
  */
-bool fire_bolt(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam)
+bool fire_bolt(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
     if (typ != AttributeType::MONSTER_SHOOT) {
@@ -239,7 +236,7 @@ bool fire_bolt(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_beam(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam)
+bool fire_beam(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
     return project_hook(player_ptr, typ, dir, dam, flg);
@@ -259,7 +256,7 @@ bool fire_beam(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType typ, DIRECTION dir, int dam)
+bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType typ, const Direction &dir, int dam)
 {
     if (evaluate_percent(prob)) {
         return (fire_beam(player_ptr, typ, dir, dam));
@@ -277,9 +274,9 @@ bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType ty
  * @param flg フラグ
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(PlayerType *player_ptr, AttributeType typ, DIRECTION dir, int dam, BIT_FLAGS flg)
+bool project_hook(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, BIT_FLAGS flg)
 {
     flg |= (PROJECT_THRU);
-    const auto pos = ((dir == 5) && target_okay(player_ptr)) ? Pos2D(target_row, target_col) : player_ptr->get_neighbor(dir);
+    const auto pos = (dir.is_targetting() && target_okay(player_ptr)) ? Pos2D(target_row, target_col) : player_ptr->get_neighbor(dir);
     return project(player_ptr, 0, 0, pos.y, pos.x, dam, typ, flg).notice;
 }

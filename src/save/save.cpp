@@ -14,7 +14,6 @@
 #include "save/save.h"
 #include "core/object-compressor.h"
 #include "dungeon/quest.h"
-#include "floor/wild.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/report.h"
@@ -28,20 +27,14 @@
 #include "save/lore-writer.h"
 #include "save/player-writer.h"
 #include "save/save-util.h"
-#include "store/store-owners.h"
-#include "store/store-util.h"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
-#include "system/item-entity.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
-#include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
@@ -153,15 +146,18 @@ static bool wr_savefile_new(PlayerType *player_ptr)
         wr_byte((byte)quest.dungeon);
     }
 
-    wr_s32b(player_ptr->wilderness_x);
-    wr_s32b(player_ptr->wilderness_y);
+    const auto &wilderness = WildernessGrids::get_instance();
+    const auto &pos = wilderness.get_player_position();
+    wr_s32b(pos.x);
+    wr_s32b(pos.y);
     wr_bool(world.is_wild_mode());
     wr_bool(player_ptr->ambush_flag);
-    wr_s32b(world.max_wild_x);
-    wr_s32b(world.max_wild_y);
-    for (int i = 0; i < world.max_wild_x; i++) {
-        for (int j = 0; j < world.max_wild_y; j++) {
-            wr_u32b(wilderness[j][i].seed);
+    const auto &area = wilderness.get_area();
+    wr_s32b(area.width());
+    wr_s32b(area.height());
+    for (auto x = 0; x < area.width(); x++) {
+        for (auto y = 0; y < area.height(); y++) {
+            wr_u32b(wilderness.get_grid({ y, x }).get_seed());
         }
     }
 
@@ -224,7 +220,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
 
     wr_s16b(player_ptr->pet_follow_distance);
     wr_s16b(player_ptr->pet_extra_flags);
-    if (screen_dump && (player_ptr->wait_report_score || !player_ptr->is_dead)) {
+    if (AngbandSystem::get_instance().is_awaiting_report_status() || !player_ptr->is_dead) {
         wr_string(screen_dump);
     } else {
         wr_string("");
@@ -287,7 +283,7 @@ static bool save_player_aux(PlayerType *player_ptr, const std::filesystem::path 
     }
 
     auto &world = AngbandWorld::get_instance();
-    counts_write(player_ptr, 0, world.play_time);
+    counts_write(player_ptr, 0, world.play_time.elapsed_sec());
     world.character_saved = true;
     return true;
 }
@@ -312,7 +308,7 @@ bool save_player(PlayerType *player_ptr, SaveType type)
 
     safe_setuid_drop();
     auto &world = AngbandWorld::get_instance();
-    world.update_playtime();
+    world.play_time.update();
     auto result = false;
     if (save_player_aux(player_ptr, savefile_new.data())) {
         std::stringstream ss_old;

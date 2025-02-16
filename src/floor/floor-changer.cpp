@@ -3,6 +3,7 @@
 #include "dungeon/quest-monster-placer.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/dungeon-feeling.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-object.h"
@@ -12,7 +13,6 @@
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"
 #include "load/floor-loader.h"
@@ -57,7 +57,6 @@ static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     msg_print(_("階段は行き止まりだった。", "The staircases come to a dead end..."));
     clear_cave(player_ptr);
     player_ptr->x = player_ptr->y = 0;
-    set_floor_and_wall(DungeonId::WILDERNESS);
     player_ptr->current_floor_ptr->height = SCREEN_HGT;
     player_ptr->current_floor_ptr->width = SCREEN_WID;
     for (POSITION y = 0; y < MAX_HGT; y++) {
@@ -69,7 +68,7 @@ static void build_dead_end(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     player_ptr->y = player_ptr->current_floor_ptr->height / 2;
     player_ptr->x = player_ptr->current_floor_ptr->width / 2;
     place_bold(player_ptr, player_ptr->y, player_ptr->x, GB_FLOOR);
-    wipe_generate_random_floor_flags(player_ptr->current_floor_ptr);
+    wipe_generate_random_floor_flags(*player_ptr->current_floor_ptr);
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has(FloorChangeMode::UP)) {
         sf_ptr->upper_floor_id = 0;
@@ -98,7 +97,7 @@ static std::pair<short, Pos2D> decide_pet_index(PlayerType *player_ptr, const in
         int j;
         for (j = 1000; j > 0; j--) {
             pos = scatter(player_ptr, p_pos, d, PROJECT_NONE);
-            if (monster_can_enter(player_ptr, pos.y, pos.x, &party_mon[current_monster].get_monrace(), 0)) {
+            if (monster_can_enter(player_ptr, pos.y, pos.x, party_mon[current_monster].get_monrace(), 0)) {
                 break;
             }
         }
@@ -114,20 +113,19 @@ static std::pair<short, Pos2D> decide_pet_index(PlayerType *player_ptr, const in
 
 static MonraceDefinition &set_pet_params(PlayerType *player_ptr, const int current_monster, MONSTER_IDX m_idx, const POSITION cy, const POSITION cx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     player_ptr->current_floor_ptr->grid_array[cy][cx].m_idx = m_idx;
-    m_ptr->r_idx = party_mon[current_monster].r_idx;
-    *m_ptr = party_mon[current_monster].clone();
-    m_ptr->fy = cy;
-    m_ptr->fx = cx;
-    m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
-    m_ptr->ml = true;
-    m_ptr->mtimed[MonsterTimedEffect::SLEEP] = 0;
-    m_ptr->hold_o_idx_list.clear();
-    m_ptr->target_y = 0;
-    auto &r_ref = m_ptr->get_real_monrace();
+    auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    monster = party_mon[current_monster].clone();
+    monster.fy = cy;
+    monster.fx = cx;
+    monster.current_floor_ptr = player_ptr->current_floor_ptr;
+    monster.ml = true;
+    monster.mtimed[MonsterTimedEffect::SLEEP] = 0;
+    monster.hold_o_idx_list.clear();
+    monster.target_y = 0;
+    auto &r_ref = monster.get_real_monrace();
     if (!ironman_nightmare) {
-        m_ptr->mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
+        monster.mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);
     }
 
     return r_ref;
@@ -157,9 +155,9 @@ static void place_pet(PlayerType *player_ptr)
         } else {
             const auto &monster = party_mon[current_monster];
             auto &monrace = monster.get_real_monrace();
-            msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), monster_desc(player_ptr, &monster, 0).data());
+            msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), monster_desc(player_ptr, monster, 0).data());
             if (record_named_pet && monster.is_named()) {
-                exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE));
+                exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, monster_desc(player_ptr, monster, MD_INDEF_VISIBLE));
             }
 
             if (monrace.has_entity()) {
@@ -175,7 +173,7 @@ static void place_pet(PlayerType *player_ptr)
 
 /*!
  * @brief ユニークモンスターやアーティファクトの所在フロアを更新する
- * @param floor_ptr 現在フロアへのポインタ
+ * @param floor フロアへの参照
  * @param cur_floor_id 現在のフロアID
  * @details
  * The floor_id and floor_id are not updated correctly
@@ -226,12 +224,13 @@ static void set_player_grid(FloorType &floor, const Pos2D &p_pos)
     }
 
     auto &grid = floor.get_grid(p_pos);
-    if (feat_uses_special(grid.feat)) {
+    if (grid.has_special_terrain()) {
         return;
     }
 
     if (fcms->has_any_of({ FloorChangeMode::DOWN, FloorChangeMode::UP })) {
-        grid.feat = rand_choice(feat_ground_type);
+        const auto &dungeon = floor.get_dungeon_definition();
+        grid.set_terrain_id(dungeon.select_floor_terrain_id());
     }
 
     grid.special = 0;
@@ -387,7 +386,10 @@ static void cut_off_the_upstair(PlayerType *player_ptr)
 {
     const auto &fcms = FloorChangeModesStore::get_instace();
     if (fcms->has(FloorChangeMode::RANDOM_PLACE)) {
-        (void)new_player_spot(player_ptr);
+        if (const auto p_pos = new_player_spot(player_ptr); p_pos) {
+            player_ptr->set_position(*p_pos);
+        }
+
         return;
     }
 
@@ -395,11 +397,11 @@ static void cut_off_the_upstair(PlayerType *player_ptr)
         return;
     }
 
-    if (!player_ptr->effects()->blindness().is_blind()) {
-        msg_print(_("突然階段が塞がれてしまった。", "Suddenly the stairs is blocked!"));
-    } else {
-        msg_print(_("ゴトゴトと何か音がした。", "You hear some noises."));
-    }
+    const auto is_blind = player_ptr->effects()->blindness().is_blind();
+    const auto mes = is_blind
+                         ? _("ゴトゴトと何か音がした。", "You hear some noises.")
+                         : _("突然階段が塞がれてしまった！", "Suddenly the stairs is blocked!");
+    msg_print(mes);
 }
 
 static void update_floor(PlayerType *player_ptr)
@@ -451,17 +453,19 @@ void change_floor(PlayerType *player_ptr)
     player_ptr->ambush_flag = false;
     update_floor(player_ptr);
     place_pet(player_ptr);
-    forget_travel_flow(player_ptr->current_floor_ptr);
-    update_unique_artifact(*player_ptr->current_floor_ptr, new_floor_id);
+    Travel::get_instance().reset_goal();
+    auto &floor = *player_ptr->current_floor_ptr;
+    update_unique_artifact(floor, new_floor_id);
     player_ptr->floor_id = new_floor_id;
     world.character_dungeon = true;
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         wiz_lite(player_ptr, PlayerClass(player_ptr).equals(PlayerClassType::NINJA));
     }
 
-    player_ptr->current_floor_ptr->generated_turn = world.game_turn;
-    player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
-    player_ptr->feeling = 0;
+    floor.generated_turn = world.game_turn;
+    auto &df = DungeonFeeling::get_instance();
+    df.set_turns(floor.generated_turn);
+    df.set_feeling(0);
     auto &fcms = FloorChangeModesStore::get_instace();
     fcms->clear();
     select_floor_music(player_ptr);

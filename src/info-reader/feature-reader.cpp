@@ -1,8 +1,6 @@
 #include "info-reader/feature-reader.h"
 #include "floor/wild.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/trap.h"
 #include "info-reader/feature-info-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
@@ -14,6 +12,8 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <map>
+#include <set>
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る（地形情報向け） /
@@ -88,7 +88,7 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
         const auto &tag = tokens[2];
         terrain.tag = tag;
 
-        //!< @todo 後でif文は消す.
+        //!< @details リテラルで呼ばれていない地形タグ(文字列形式)もあるので残しておく.
         static const auto tag_begin = terrain_tags.begin();
         static const auto tag_end = terrain_tags.end();
         const auto tag_enum = std::find_if(tag_begin, tag_end, [&tag](const auto &x) { return x.first == tag; });
@@ -297,73 +297,6 @@ errr parse_terrains_info(std::string_view buf, angband_header *)
  */
 void init_feat_variables()
 {
-    auto &terrains = TerrainList::get_instance();
-    for (const auto &tag : terrain_tags) {
-        terrains.emplace_tag(tag.first);
-    }
-
-    feat_door[DOOR_DOOR].open = terrains.get_terrain_id_by_tag("OPEN_DOOR");
-    feat_door[DOOR_DOOR].broken = terrains.get_terrain_id_by_tag("BROKEN_DOOR");
-    feat_door[DOOR_DOOR].closed = terrains.get_terrain_id_by_tag("CLOSED_DOOR");
-
-    /* Locked doors */
-    for (auto i = 1; i < MAX_LJ_DOORS; i++) {
-        feat_door[DOOR_DOOR].locked[i - 1] = terrains.get_terrain_id_by_tag(format("LOCKED_DOOR_%d", i));
-    }
-    feat_door[DOOR_DOOR].num_locked = MAX_LJ_DOORS - 1;
-
-    /* Jammed doors */
-    for (auto i = 0; i < MAX_LJ_DOORS; i++) {
-        feat_door[DOOR_DOOR].jammed[i] = terrains.get_terrain_id_by_tag(format("JAMMED_DOOR_%d", i));
-    }
-    feat_door[DOOR_DOOR].num_jammed = MAX_LJ_DOORS;
-
-    /* Glass doors */
-    feat_door[DOOR_GLASS_DOOR].open = terrains.get_terrain_id_by_tag("OPEN_GLASS_DOOR");
-    feat_door[DOOR_GLASS_DOOR].broken = terrains.get_terrain_id_by_tag("BROKEN_GLASS_DOOR");
-    feat_door[DOOR_GLASS_DOOR].closed = terrains.get_terrain_id_by_tag("CLOSED_GLASS_DOOR");
-
-    /* Locked glass doors */
-    for (auto i = 1; i < MAX_LJ_DOORS; i++) {
-        feat_door[DOOR_GLASS_DOOR].locked[i - 1] = terrains.get_terrain_id_by_tag(format("LOCKED_GLASS_DOOR_%d", i));
-    }
-    feat_door[DOOR_GLASS_DOOR].num_locked = MAX_LJ_DOORS - 1;
-
-    /* Jammed glass doors */
-    for (auto i = 0; i < MAX_LJ_DOORS; i++) {
-        feat_door[DOOR_GLASS_DOOR].jammed[i] = terrains.get_terrain_id_by_tag(format("JAMMED_GLASS_DOOR_%d", i));
-    }
-    feat_door[DOOR_GLASS_DOOR].num_jammed = MAX_LJ_DOORS;
-
-    /* Curtains */
-    feat_door[DOOR_CURTAIN].open = terrains.get_terrain_id_by_tag("OPEN_CURTAIN");
-    feat_door[DOOR_CURTAIN].broken = feat_door[DOOR_CURTAIN].open;
-    feat_door[DOOR_CURTAIN].closed = terrains.get_terrain_id_by_tag("CLOSED_CURTAIN");
-    feat_door[DOOR_CURTAIN].locked[0] = feat_door[DOOR_CURTAIN].closed;
-    feat_door[DOOR_CURTAIN].num_locked = 1;
-    feat_door[DOOR_CURTAIN].jammed[0] = feat_door[DOOR_CURTAIN].closed;
-    feat_door[DOOR_CURTAIN].num_jammed = 1;
-
-    /* Normal traps */
-    init_normal_traps();
-
-    /* Special traps */
-    feat_trap_open = terrains.get_terrain_id_by_tag("TRAP_OPEN");
-    feat_trap_armageddon = terrains.get_terrain_id_by_tag("TRAP_ARMAGEDDON");
-    feat_trap_piranha = terrains.get_terrain_id_by_tag("TRAP_PIRANHA");
-
-    /* Pattern */
-    feat_pattern_start = terrains.get_terrain_id_by_tag("PATTERN_START");
-    feat_pattern_1 = terrains.get_terrain_id_by_tag("PATTERN_1");
-    feat_pattern_2 = terrains.get_terrain_id_by_tag("PATTERN_2");
-    feat_pattern_3 = terrains.get_terrain_id_by_tag("PATTERN_3");
-    feat_pattern_4 = terrains.get_terrain_id_by_tag("PATTERN_4");
-    feat_pattern_end = terrains.get_terrain_id_by_tag("PATTERN_END");
-    feat_pattern_old = terrains.get_terrain_id_by_tag("PATTERN_OLD");
-    feat_pattern_exit = terrains.get_terrain_id_by_tag("PATTERN_EXIT");
-    feat_pattern_corrupted = terrains.get_terrain_id_by_tag("PATTERN_CORRUPTED");
-
-    feat_undetected = terrains.get_terrain_id_by_tag("UNDETECTED");
-
+    TerrainList::get_instance().emplace_tags();
     init_wilderness_terrains();
 }

@@ -1,17 +1,15 @@
 #include "wizard/monster-info-spoiler.h"
 #include "io/files-util.h"
-#include "system/angband-system.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
-#include "term/term-color-types.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
-#include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-lore.h"
-#include "view/display-messages.h"
 #include "wizard/spoiler-util.h"
+#include <algorithm>
+#include <fmt/format.h>
 
 /*!
  * @brief シンボル職の記述名を返す
@@ -71,7 +69,7 @@ static std::string attr_to_text(const MonraceDefinition &monrace)
     return _("変な色の", "Icky");
 }
 
-SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonraceDefinition *)> filter_monster)
+SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<bool(const MonraceDefinition &)> filter_monster)
 {
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     std::ofstream ofs(path);
@@ -94,7 +92,7 @@ SpoilerOutputResultType spoil_mon_desc(std::string_view filename, std::function<
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
     for (auto monrace_id : monrace_ids) {
         const auto &monrace = monraces.get_monrace(monrace_id);
-        if (filter_monster && !filter_monster(&monrace)) {
+        if (filter_monster && !filter_monster(monrace)) {
             continue;
         }
 
@@ -178,22 +176,22 @@ SpoilerOutputResultType spoil_mon_info()
             spoil_out("[N] ");
         }
 
-        spoil_out(format(_("%s/%s  (", "%s%s ("), monrace.name.data(), _(monrace.name.en_string().data(), ""))); /* ---)--- */
+        spoil_out(fmt::format(_("{}/{}  (", "{}{} ("), monrace.name, _(monrace.name.en_string(), ""))); /* ---)--- */
         spoil_out(attr_to_text(monrace));
-        spoil_out(format(" '%c')\n", monrace.symbol_definition.character));
+        spoil_out(fmt::format(" '{}')\n", monrace.symbol_definition.character));
         spoil_out("=== ");
-        spoil_out(format("Num:%d  ", enum2i(monrace_id)));
-        spoil_out(format("Lev:%d  ", (int)monrace.level));
-        spoil_out(format("Rar:%d  ", monrace.rarity));
+        spoil_out(fmt::format("Num:{}  ", enum2i(monrace_id)));
+        spoil_out(fmt::format("Lev:{}  ", monrace.level));
+        spoil_out(fmt::format("Rar:{}  ", monrace.rarity));
         spoil_out(format("Spd:%+d  ", monrace.speed - STANDARD_SPEED));
         if (monrace.misc_flags.has(MonsterMiscType::FORCE_MAXHP) || (monrace.hit_dice.sides == 1)) {
-            spoil_out(format("Hp:%d  ", monrace.hit_dice.maxroll()));
+            spoil_out(fmt::format("Hp:{}  ", monrace.hit_dice.maxroll()));
         } else {
-            spoil_out(format("Hp:%s  ", monrace.hit_dice.to_string().data()));
+            spoil_out(fmt::format("Hp:{}  ", monrace.hit_dice.to_string()));
         }
 
-        spoil_out(format("Ac:%d  ", monrace.ac));
-        spoil_out(format("Exp:%ld\n", (long)(monrace.mexp)));
+        spoil_out(fmt::format("Ac:{}  ", monrace.ac));
+        spoil_out(fmt::format("Exp:{}\n", monrace.mexp));
         output_monster_spoiler(monrace_id, roff_func);
         spoil_out({}, true);
     }

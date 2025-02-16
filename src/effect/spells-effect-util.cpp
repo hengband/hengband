@@ -49,7 +49,7 @@ void FallOffHorseEffect::apply() const
     }
 
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    const auto m_name = monster_desc(this->player_ptr, &floor.m_list[player_ptr->riding], 0);
+    const auto m_name = monster_desc(this->player_ptr, floor.m_list[player_ptr->riding], 0);
 
     if (this->shake_off_damage > 0) {
         if (process_fall_off_horse(this->player_ptr, this->shake_off_damage, false)) {

@@ -59,8 +59,8 @@
 
 bool activate_sunlight(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -71,9 +71,9 @@ bool activate_sunlight(PlayerType *player_ptr)
 
 bool activate_confusion(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("様々な色の火花を発している...", "It glows in scintillating colours..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -119,9 +119,9 @@ bool activate_aggravation(PlayerType *player_ptr, ItemEntity *o_ptr, std::string
 
 bool activate_stone_mud(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     msg_print(_("鼓動している...", "It pulsates..."));
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -152,8 +152,8 @@ bool activate_judgement(PlayerType *player_ptr, std::string_view name)
 
 bool activate_telekinesis(PlayerType *player_ptr, std::string_view name)
 {
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
@@ -164,25 +164,23 @@ bool activate_telekinesis(PlayerType *player_ptr, std::string_view name)
 
 bool activate_unique_detection(PlayerType *player_ptr)
 {
-    MonsterEntity *m_ptr;
-    MonraceDefinition *r_ptr;
     msg_print(_("奇妙な場所が頭の中に浮かんだ．．．", "Some strange places show up in your mind. And you see ..."));
     for (int i = player_ptr->current_floor_ptr->m_max - 1; i >= 1; i--) {
-        m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid()) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[i];
+        if (!monster.is_valid()) {
             continue;
         }
 
-        r_ptr = &m_ptr->get_monrace();
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-            msg_format(_("%s． ", "%s. "), r_ptr->name.data());
+        const auto &monrace = monster.get_monrace();
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            msg_format(_("%s． ", "%s. "), monrace.name.data());
         }
 
-        if (m_ptr->r_idx == MonraceId::DIO) {
+        if (monster.r_idx == MonraceId::DIO) {
             msg_print(_("きさま！　見ているなッ！", "You bastard! You're watching me, well watch this!"));
         }
 
-        if (m_ptr->r_idx == MonraceId::SAURON) {
+        if (monster.r_idx == MonraceId::SAURON) {
             msg_print(_("あなたは一瞬、瞼なき御目に凝視される感覚に襲われた！",
                 "For a moment, you had the horrible sensation of being stared at by the lidless eye!"));
         }
@@ -297,7 +295,7 @@ bool activate_whirlwind(PlayerType *player_ptr)
 bool activate_blinding_light(PlayerType *player_ptr, std::string_view name)
 {
     msg_format(_("%sが眩しい光で輝いた...", "The %s gleams with blinding light..."), name.data());
-    (void)fire_ball(player_ptr, AttributeType::LITE, 0, 300, 6);
+    (void)fire_ball(player_ptr, AttributeType::LITE, Direction::self(), 300, 6);
     confuse_monsters(player_ptr, 3 * player_ptr->lev / 2);
     return true;
 }
@@ -429,18 +427,18 @@ bool activate_create_ammo(PlayerType *player_ptr)
 bool activate_dispel_magic(PlayerType *player_ptr)
 {
     msg_print(_("鈍い色に光った...", "It glowed in a dull color..."));
-    if (!target_set(player_ptr, TARGET_KILL)) {
+    const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+    if (!pos) {
         return false;
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(target_row, target_col);
-    const auto m_idx = floor.get_grid(pos).m_idx;
+    const auto m_idx = floor.get_grid(*pos).m_idx;
     if (m_idx == 0) {
         return true;
     }
 
-    if (!floor.has_los(pos) || !projectable(player_ptr, player_ptr->get_position(), pos)) {
+    if (!floor.has_los(*pos) || !projectable(player_ptr, player_ptr->get_position(), *pos)) {
         return true;
     }
 

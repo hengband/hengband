@@ -56,7 +56,7 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
 
     auto &monrace = *pa_ptr->r_ptr;
     if (monrace.resistance_flags.has(MonsterResistanceType::NO_CONF)) {
-        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *pa_ptr->m_ptr)) {
             monrace.r_resistance_flags.set(MonsterResistanceType::NO_CONF);
         }
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
@@ -81,7 +81,7 @@ static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool
 {
     auto &monrace = *pa_ptr->r_ptr;
     if (monrace.resistance_flags.has(MonsterResistanceType::NO_STUN)) {
-        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *pa_ptr->m_ptr)) {
             monrace.resistance_flags.set(MonsterResistanceType::NO_STUN);
         }
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
@@ -105,7 +105,7 @@ static void attack_scare(PlayerType *player_ptr, player_attack_type *pa_ptr, boo
 {
     auto &monrace = *pa_ptr->r_ptr;
     if (monrace.resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
-        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, *pa_ptr->m_ptr)) {
             monrace.resistance_flags.set(MonsterResistanceType::NO_FEAR);
         }
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
@@ -160,7 +160,7 @@ static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     msg_print(_("刃が敵を調査した...", "The blade probed your enemy..."));
     msg_print(nullptr);
-    msg_print(probed_monster_info(player_ptr, pa_ptr->m_ptr, pa_ptr->r_ptr));
+    msg_print(probed_monster_info(player_ptr, *pa_ptr->m_ptr, *pa_ptr->r_ptr));
     msg_print(nullptr);
     const auto mes = MonraceList::get_instance().probe_lore(pa_ptr->r_idx);
     if (mes) {
@@ -177,23 +177,23 @@ static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 static bool judge_tereprt_resistance(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *r_ptr = pa_ptr->r_ptr;
-    if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
+    auto &monrace = *pa_ptr->r_ptr;
+    if (monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_TELEPORT)) {
         return false;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
-        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
-            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+        if (is_original_ap_and_seen(player_ptr, *pa_ptr->m_ptr)) {
+            monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         }
 
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected!"), pa_ptr->m_name);
         return true;
     }
 
-    if (r_ptr->level > randint1(100)) {
-        if (is_original_ap_and_seen(player_ptr, pa_ptr->m_ptr)) {
-            r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
+    if (monrace.level > randint1(100)) {
+        if (is_original_ap_and_seen(player_ptr, *pa_ptr->m_ptr)) {
+            monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_TELEPORT);
         }
 
         msg_format(_("%s^は抵抗力を持っている！", "%s^ resists!"), pa_ptr->m_name);
@@ -230,8 +230,8 @@ static void attack_teleport_away(PlayerType *player_ptr, player_attack_type *pa_
  */
 static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
 {
-    auto *r_ptr = pa_ptr->r_ptr;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || r_ptr->misc_flags.has(MonsterMiscType::QUESTOR) || r_ptr->resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK)) {
+    const auto &monrace = *pa_ptr->r_ptr;
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE) || monrace.misc_flags.has(MonsterMiscType::QUESTOR) || monrace.resistance_flags.has_any_of(RFR_EFF_RESIST_CHAOS_MASK)) {
         return;
     }
 
@@ -244,7 +244,7 @@ static void attack_polymorph(PlayerType *player_ptr, player_attack_type *pa_ptr,
     }
 
     pa_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[pa_ptr->m_idx];
-    angband_strcpy(pa_ptr->m_name, monster_desc(player_ptr, pa_ptr->m_ptr, 0), sizeof(pa_ptr->m_name));
+    angband_strcpy(pa_ptr->m_name, monster_desc(player_ptr, *pa_ptr->m_ptr, 0), sizeof(pa_ptr->m_name));
 }
 
 /*!

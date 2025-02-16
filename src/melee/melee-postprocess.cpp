@@ -12,36 +12,22 @@
 
 #include "melee/melee-postprocess.h"
 #include "core/disturbance.h"
-#include "effect/attribute-types.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
-#include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "monster-attack/monster-attack-table.h"
 #include "monster-floor/monster-death.h"
-#include "monster-floor/monster-move.h"
 #include "monster-floor/monster-remover.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster-race/race-flags-resistance.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-status.h"
 #include "pet/pet-fall-off.h"
-#include "player-info/class-info.h"
-#include "player-info/race-types.h"
-#include "player/player-personality-types.h"
-#include "system/angband-system.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/health-bar-tracker.h"
-#include "util/bit-flags-calculator.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <string>
 
@@ -69,9 +55,9 @@ mam_pp_type::mam_pp_type(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, boo
     , note(note)
     , src_idx(src_idx)
 {
-    this->seen = is_seen(player_ptr, this->m_ptr);
+    this->seen = is_seen(player_ptr, *this->m_ptr);
     this->known = this->m_ptr->cdis <= MAX_PLAYER_SIGHT;
-    this->m_name = monster_desc(player_ptr, m_ptr, 0);
+    this->m_name = monster_desc(player_ptr, *this->m_ptr, 0);
 }
 
 static void prepare_redraw(mam_pp_type *mam_pp_ptr)
@@ -111,8 +97,8 @@ static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
  */
 static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
 {
-    auto *r_ptr = &mam_pp_ptr->m_ptr->get_monrace();
-    if (r_ptr->resistance_flags.has_not(MonsterResistanceType::RESIST_ALL)) {
+    const auto &monrace = mam_pp_ptr->m_ptr->get_monrace();
+    if (monrace.resistance_flags.has_not(MonsterResistanceType::RESIST_ALL)) {
         return false;
     }
 
@@ -148,26 +134,26 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
         return;
     }
 
-    mam_pp_ptr->m_name = monster_desc(player_ptr, mam_pp_ptr->m_ptr, MD_TRUE_NAME);
+    mam_pp_ptr->m_name = monster_desc(player_ptr, *mam_pp_ptr->m_ptr, MD_TRUE_NAME);
     if (!mam_pp_ptr->seen) {
         player_ptr->current_floor_ptr->monster_noise = true;
         return;
     }
 
     if (!mam_pp_ptr->note.empty()) {
-        sound_type kill_sound = mam_pp_ptr->m_ptr->has_living_flag() ? SOUND_KILL : SOUND_N_KILL;
+        const auto kill_sound = mam_pp_ptr->m_ptr->has_living_flag() ? SoundKind::KILL : SoundKind::N_KILL;
         sound(kill_sound);
         msg_format(_("%s^%s", "%s^%s"), mam_pp_ptr->m_name.data(), mam_pp_ptr->note.data());
         return;
     }
 
     if (!mam_pp_ptr->m_ptr->has_living_flag()) {
-        sound(SOUND_N_KILL);
+        sound(SoundKind::N_KILL);
         msg_format(_("%s^は破壊された。", "%s^ is destroyed."), mam_pp_ptr->m_name.data());
         return;
     }
 
-    sound(SOUND_KILL);
+    sound(SoundKind::KILL);
     msg_format(_("%s^は殺された。", "%s^ is killed."), mam_pp_ptr->m_name.data());
 }
 
@@ -224,8 +210,8 @@ static void cancel_fear_by_pain(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
  */
 static void make_monster_fear(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
-    auto *r_ptr = &mam_pp_ptr->m_ptr->get_monrace();
-    if (mam_pp_ptr->m_ptr->is_fearful() || (r_ptr->resistance_flags.has_not(MonsterResistanceType::NO_FEAR))) {
+    const auto &monrace = mam_pp_ptr->m_ptr->get_monrace();
+    if (mam_pp_ptr->m_ptr->is_fearful() || (monrace.resistance_flags.has_not(MonsterResistanceType::NO_FEAR))) {
         return;
     }
 
@@ -251,7 +237,7 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
         return;
     }
 
-    mam_pp_ptr->m_name = monster_desc(player_ptr, mam_pp_ptr->m_ptr, 0);
+    mam_pp_ptr->m_name = monster_desc(player_ptr, *mam_pp_ptr->m_ptr, 0);
     if (mam_pp_ptr->m_ptr->hp > mam_pp_ptr->m_ptr->maxhp / 3) {
         mam_pp_ptr->dam = (mam_pp_ptr->dam + 1) / 2;
     }
@@ -274,14 +260,14 @@ static void fall_off_horse_by_melee(PlayerType *player_ptr, mam_pp_type *mam_pp_
  */
 void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *dead, bool *fear, std::string_view note, MONSTER_IDX src_idx)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &monster = floor.m_list[m_idx];
     mam_pp_type tmp_mam_pp(player_ptr, m_idx, dam, dead, fear, note, src_idx);
     mam_pp_type *mam_pp_ptr = &tmp_mam_pp;
     prepare_redraw(mam_pp_ptr);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
 
-    if (m_ptr->is_riding()) {
+    if (monster.is_riding()) {
         disturb(player_ptr, true, true);
     }
 
@@ -289,7 +275,7 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
         return;
     }
 
-    m_ptr->hp -= dam;
+    monster.hp -= dam;
     if (check_monster_hp(player_ptr, mam_pp_ptr)) {
         return;
     }
@@ -297,10 +283,10 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     *dead = false;
     cancel_fear_by_pain(player_ptr, mam_pp_ptr);
     make_monster_fear(player_ptr, mam_pp_ptr);
-    if ((dam > 0) && !m_ptr->is_pet() && !m_ptr->is_friendly() && (mam_pp_ptr->src_idx != m_idx)) {
-        const auto &m_ref = floor_ptr->m_list[src_idx];
-        if (m_ref.is_pet() && !player_ptr->is_located_at({ m_ptr->target_y, m_ptr->target_x })) {
-            m_ptr->set_target(m_ref.fy, m_ref.fx);
+    if ((dam > 0) && !monster.is_pet() && !monster.is_friendly() && (mam_pp_ptr->src_idx != m_idx)) {
+        const auto &m_ref = floor.m_list[src_idx];
+        if (m_ref.is_pet() && !player_ptr->is_located_at({ monster.target_y, monster.target_x })) {
+            monster.set_target(m_ref.fy, m_ref.fx);
         }
     }
 

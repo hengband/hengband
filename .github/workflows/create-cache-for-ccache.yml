@@ -9,13 +9,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  clang_without_pch_japanese:
-    name: Japanese version with clang (without using pre-compiled headers)
+  clang15_libcpp_without_pch_japanese:
+    name: Japanese version with clang 15 -stdlib=libc++ (without using pre-compiled headers)
+    uses: ./.github/workflows/build-with-autotools.yml
+    with:
+      runner: ubuntu-22.04
+      cxx: clang++-15
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding -stdlib=libc++"
+      configure-opts: "--disable-pch"
+      use-ccache: true
+
+  clang14_without_pch:
+    name: Japanese version with clang 14 (without using pre-compiled headers)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-22.04
       cxx: clang++-14
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding -stdlib=libc++"
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -Wno-invalid-source-encoding"
       configure-opts: "--disable-pch"
       use-ccache: true
 

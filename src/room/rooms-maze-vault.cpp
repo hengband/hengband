@@ -116,11 +116,11 @@ void build_maze_vault(PlayerType *player_ptr, const Pos2D &center, const Pos2DVe
                 grid.info |= CAVE_ICKY;
             }
             if ((x == x1 - 1) || (x == x2 + 1) || (y == y1 - 1) || (y == y2 + 1)) {
-                place_grid(player_ptr, &grid, GB_OUTER);
+                place_grid(player_ptr, grid, GB_OUTER);
             } else if (!is_vault) {
-                place_grid(player_ptr, &grid, GB_EXTRA);
+                place_grid(player_ptr, grid, GB_EXTRA);
             } else {
-                place_grid(player_ptr, &grid, GB_INNER);
+                place_grid(player_ptr, grid, GB_INNER);
             }
 
             if (light) {

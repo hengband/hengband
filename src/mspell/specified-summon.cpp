@@ -87,7 +87,7 @@ MONSTER_NUMBER summon_guardian(PlayerType *player_ptr, POSITION y, POSITION x, i
         simple_monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
 
         if (mon_to_player) {
-            fire_ball_hide(player_ptr, AttributeType::WATER_FLOW, 0, 3, 8);
+            fire_ball_hide(player_ptr, AttributeType::WATER_FLOW, Direction::self(), 3, 8);
         } else if (mon_to_mon) {
             project(player_ptr, t_idx, 8, y, x, 3, AttributeType::WATER_FLOW, PROJECT_GRID | PROJECT_HIDE);
         }

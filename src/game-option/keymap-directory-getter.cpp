@@ -1,44 +1,31 @@
 #include "game-option/keymap-directory-getter.h"
 #include "game-option/input-options.h"
 #include "io/input-key-requester.h"
-#include "system/angband.h"
 #include "util/int-char-converter.h"
 
-/*
- * GH
- * Called from cmd4.c and a few other places. Just extracts
- * a direction from the keymap for ch (the last direction,
- * in fact) byte or char here? I'm thinking that keymaps should
- * generally only apply to single keys, which makes it no more
- * than 128, so a char should suffice... but keymap_act is 256...
+/*!
+ * @brief キー入力された文字に対応する方向を取得する
+ * @param ch キー入力された文字
+ * @return キー入力された文字がが8方向いずれかに対応している場合、その方向を返す。それ以外の場合は無効な状態の方向を返す。
  */
-int get_keymap_dir(char ch)
+Direction get_keymap_dir(char ch)
 {
-    int d = 0;
+    auto dir = Direction::none();
 
     if (isdigit(ch)) {
-        d = D2I(ch);
+        dir = Direction(D2I(ch));
     } else {
-        BIT_FLAGS mode;
-        if (rogue_like_commands) {
-            mode = KEYMAP_MODE_ROGUE;
-        } else {
-            mode = KEYMAP_MODE_ORIG;
+        const auto mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
+        const auto act = keymap_act[mode][(byte)(ch)];
+        if (!act) {
+            return Direction::none();
         }
-
-        concptr act = keymap_act[mode][(byte)(ch)];
-        if (act) {
-            for (auto s = act; *s; ++s) {
-                if (isdigit(*s)) {
-                    d = D2I(*s);
-                }
+        for (auto s = act; *s; ++s) {
+            if (isdigit(*s)) {
+                dir = Direction(D2I(*s));
             }
         }
     }
 
-    if (d == 5) {
-        d = 0;
-    }
-
-    return d;
+    return dir.has_direction() ? dir : Direction::none();
 }

@@ -197,4 +197,6 @@ private:
     std::string build_activation_description_dragon_breath() const;
     uint8_t get_color() const;
     char get_character() const;
+
+    std::string build_item_info_for_debug() const;
 };

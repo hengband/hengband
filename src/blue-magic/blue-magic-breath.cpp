@@ -10,310 +10,65 @@
 #include "monster-race/race-ability-flags.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "spell-kind/spells-launcher.h"
+#include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
+#include <unordered_map>
 
-bool cast_blue_breath_acid(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
+namespace {
+struct blue_magic_breath_type {
+    AttributeType attribute_type;
+    std::string_view message;
+};
 
-    msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_ACID, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::ACID, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
+const std::unordered_map<MonsterAbilityType, blue_magic_breath_type> BLUE_MAGIC_BREATH_TABLE = {
+    { MonsterAbilityType::BR_ACID, { AttributeType::ACID, _("酸のブレスを吐いた。", "You breathe acid.") } },
+    { MonsterAbilityType::BR_ELEC, { AttributeType::ELEC, _("稲妻のブレスを吐いた。", "You breathe lightning.") } },
+    { MonsterAbilityType::BR_FIRE, { AttributeType::FIRE, _("火炎のブレスを吐いた。", "You breathe fire.") } },
+    { MonsterAbilityType::BR_COLD, { AttributeType::COLD, _("冷気のブレスを吐いた。", "You breathe frost.") } },
+    { MonsterAbilityType::BR_POIS, { AttributeType::POIS, _("ガスのブレスを吐いた。", "You breathe gas.") } },
+    { MonsterAbilityType::BR_NETH, { AttributeType::NETHER, _("地獄のブレスを吐いた。", "You breathe nether.") } },
+    { MonsterAbilityType::BR_LITE, { AttributeType::LITE, _("閃光のブレスを吐いた。", "You breathe light.") } },
+    { MonsterAbilityType::BR_DARK, { AttributeType::DARK, _("暗黒のブレスを吐いた。", "You breathe darkness.") } },
+    { MonsterAbilityType::BR_CONF, { AttributeType::CONFUSION, _("混乱のブレスを吐いた。", "You breathe confusion.") } },
+    { MonsterAbilityType::BR_SOUN, { AttributeType::SOUND, _("轟音のブレスを吐いた。", "You breathe sound.") } },
+    { MonsterAbilityType::BR_CHAO, { AttributeType::CHAOS, _("カオスのブレスを吐いた。", "You breathe chaos.") } },
+    { MonsterAbilityType::BR_DISE, { AttributeType::DISENCHANT, _("劣化のブレスを吐いた。", "You breathe disenchantment.") } },
+    { MonsterAbilityType::BR_NEXU, { AttributeType::NEXUS, _("因果混乱のブレスを吐いた。", "You breathe nexus.") } },
+    { MonsterAbilityType::BR_TIME, { AttributeType::TIME, _("時間逆転のブレスを吐いた。", "You breathe time.") } },
+    { MonsterAbilityType::BR_INER, { AttributeType::INERTIAL, _("遅鈍のブレスを吐いた。", "You breathe inertia.") } },
+    { MonsterAbilityType::BR_GRAV, { AttributeType::GRAVITY, _("重力のブレスを吐いた。", "You breathe gravity.") } },
+    { MonsterAbilityType::BR_SHAR, { AttributeType::SHARDS, _("破片のブレスを吐いた。", "You breathe shards.") } },
+    { MonsterAbilityType::BR_PLAS, { AttributeType::PLASMA, _("プラズマのブレスを吐いた。", "You breathe plasma.") } },
+    { MonsterAbilityType::BR_FORC, { AttributeType::FORCE, _("フォースのブレスを吐いた。", "You breathe force.") } },
+    { MonsterAbilityType::BR_MANA, { AttributeType::MANA, _("魔力のブレスを吐いた。", "You breathe mana.") } },
+    { MonsterAbilityType::BR_NUKE, { AttributeType::NUKE, _("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste.") } },
+    { MonsterAbilityType::BR_DISI, { AttributeType::DISINTEGRATE, _("分解のブレスを吐いた。", "You breathe disintegration.") } },
+    { MonsterAbilityType::BR_VOID, { AttributeType::VOID_MAGIC, _("虚無のブレスを吐いた。", "You breathe void.") } },
+    { MonsterAbilityType::BR_ABYSS, { AttributeType::ABYSS, _("深淵のブレスを吐いた。", "You breathe abyss.") } },
+
+};
 }
 
-bool cast_blue_breath_elec(PlayerType *player_ptr, bmc_type *bmc_ptr)
+bool cast_blue_magic_breath(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
-    msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_ELEC, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::ELEC, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_fire(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
+    const auto magic = BLUE_MAGIC_BREATH_TABLE.find(bmc_ptr->spell);
+    if (magic == BLUE_MAGIC_BREATH_TABLE.end()) {
+        const auto message = fmt::format("Unknown blue magic breath: {}", static_cast<int>(bmc_ptr->spell));
+        THROW_EXCEPTION(std::logic_error, message);
     }
 
-    msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_FIRE, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::FIRE, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_cold(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_COLD, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::COLD, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_pois(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_POIS, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::POIS, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_nether(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("地獄のブレスを吐いた。", "You breathe nether."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_NETH, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::NETHER, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_lite(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("閃光のブレスを吐いた。", "You breathe light."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_LITE, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::LITE, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_dark(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("暗黒のブレスを吐いた。", "You breathe darkness."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_DARK, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::DARK, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_conf(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_CONF, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::CONFUSION, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_sound(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_SOUN, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::SOUND, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_chaos(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_CHAO, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::CHAOS, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_disenchant(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_DISE, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::DISENCHANT, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_nexus(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_NEXU, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::NEXUS, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_time(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_TIME, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::TIME, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_inertia(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_INER, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::INERTIAL, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_gravity(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_GRAV, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::GRAVITY, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_shards(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_SHAR, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::SHARDS, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_plasma(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_PLAS, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::PLASMA, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_force(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_FORC, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::FORCE, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_mana(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_MANA, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::MANA, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-bool cast_blue_breath_nuke(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_NUKE, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::NUKE, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-/*!
- * @brief 分解のブレスの青魔法
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param bmc_ptr 青魔法詠唱への参照ポインタ
- * @details 永久の刻は過ぎ去れリ.
- */
-bool cast_blue_breath_disintegration(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("分解のブレスを吐いた。", "You breathe disintegration."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_DISI, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::DISINTEGRATE, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-/*!
- * @brief 虚無のブレスの青魔法
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param bmc_ptr 青魔法詠唱への参照ポインタ
- */
-bool cast_blue_breath_void(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("虚無のブレスを吐いた。", "You breathe void."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_VOID, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::VOID_MAGIC, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
-    return true;
-}
-
-/*!
- * @brief 深淵のブレスの青魔法
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param bmc_ptr 青魔法詠唱への参照ポインタ
- */
-bool cast_blue_breath_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("深淵のブレスを吐いた。", "You breathe abyss."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BR_ABYSS, bmc_ptr->plev, DAM_ROLL);
-    fire_breath(player_ptr, AttributeType::ABYSS, bmc_ptr->dir, bmc_ptr->damage, (bmc_ptr->plev > 40 ? 3 : 2));
+    const auto &[attribute_type, message] = magic->second;
+    msg_print(message);
+    const auto radius = (bmc_ptr->plev > 40 ? 3 : 2);
+    const auto damage = monspell_bluemage_damage(player_ptr, bmc_ptr->spell, bmc_ptr->plev, DAM_ROLL);
+    fire_breath(player_ptr, attribute_type, dir, damage, radius);
     return true;
 }

@@ -39,18 +39,6 @@ void autopick_type::remove(int flag)
 }
 
 /*!
- * @brief Free memory of lines_list.
- */
-void free_text_lines(std::vector<concptr> &lines_list)
-{
-    for (int lines = 0; lines_list[lines]; lines++) {
-        string_free(lines_list[lines]);
-    }
-
-    lines_list.clear();
-}
-
-/*!
  * @brief Find a command by 'key'.
  */
 int get_com_id(char key)
@@ -97,10 +85,9 @@ void auto_inscribe_item(ItemEntity *o_ptr, int idx)
  */
 int count_line(text_body_type *tb)
 {
-    int num_lines;
-    for (num_lines = 0; tb->lines_list[num_lines]; num_lines++) {
-        ;
-    }
-
-    return num_lines;
+    const auto begin = tb->lines_list.begin();
+    const auto it = std::find_if(begin, tb->lines_list.end(), [](const auto &line) {
+        return !line;
+    });
+    return std::distance(begin, it);
 }

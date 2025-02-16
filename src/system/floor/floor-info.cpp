@@ -16,6 +16,7 @@
 #include "system/enums/monrace/monrace-hook-types.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-tag.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -23,6 +24,8 @@
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/services/dungeon-monrace-service.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 #include "world/world.h"
@@ -39,6 +42,11 @@ FloorType::FloorType()
     }
 }
 
+int FloorType::get_level() const
+{
+    return this->dun_level;
+}
+
 Grid &FloorType::get_grid(const Pos2D pos)
 {
     return this->grid_array[pos.y][pos.x];
@@ -47,6 +55,16 @@ Grid &FloorType::get_grid(const Pos2D pos)
 const Grid &FloorType::get_grid(const Pos2D pos) const
 {
     return this->grid_array[pos.y][pos.x];
+}
+
+bool FloorType::is_entering_dungeon() const
+{
+    return this->entering_dungeon;
+}
+
+bool FloorType::is_leaving_dungeon() const
+{
+    return this->leaving_dungeon;
 }
 
 bool FloorType::is_underground() const
@@ -69,7 +87,7 @@ void FloorType::reset_dungeon_index()
     this->set_dungeon_index(DungeonId::WILDERNESS);
 }
 
-DungeonDefinition &FloorType::get_dungeon_definition() const
+const DungeonDefinition &FloorType::get_dungeon_definition() const
 {
     return DungeonList::get_instance().get_dungeon(this->dungeon_id);
 }
@@ -193,18 +211,14 @@ bool FloorType::has_trap_at(const Pos2D &pos) const
  * @param p_pos プレイヤーの現在位置
  * @param gck 判定条件
  * @param under TRUEならばプレイヤーの直下の座標も走査対象にする
- * @return 該当する地形の数と、該当する地形の中から1つの座標
+ * @return 該当する地形の数と、該当する地形の中から1つの方向
  */
-std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCountKind gck, bool under) const
+std::pair<int, Direction> FloorType::count_doors_traps(const Pos2D &p_pos, GridCountKind gck, bool under) const
 {
     auto count = 0;
-    Pos2D pos(0, 0);
-    for (auto d = 0; d < 9; d++) {
-        if ((d == 8) && !under) {
-            continue;
-        }
-
-        Pos2D pos_neighbor = p_pos + Pos2DVec(ddy_ddd[d], ddx_ddd[d]);
+    auto dir = Direction::none();
+    for (const auto &d : under ? Direction::directions() : Direction::directions_8()) {
+        const auto pos_neighbor = p_pos + d.vec();
         if (!this->has_marked_grid_at(pos_neighbor)) {
             continue;
         }
@@ -214,10 +228,10 @@ std::pair<int, Pos2D> FloorType::count_doors_traps(const Pos2D &p_pos, GridCount
         }
 
         ++count;
-        pos = pos_neighbor;
+        dir = d;
     }
 
-    return { count, pos };
+    return { count, dir };
 }
 
 bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
@@ -226,7 +240,7 @@ bool FloorType::check_terrain_state(const Pos2D &pos, GridCountKind gck) const
     switch (gck) {
     case GridCountKind::OPEN: {
         const auto is_open_grid = grid.is_open();
-        const auto is_open_dungeon = this->get_dungeon_definition().is_open(grid.get_feat_mimic());
+        const auto is_open_dungeon = this->get_dungeon_definition().is_open(grid.get_terrain_id(TerrainKind::MIMIC));
         return is_open_grid && is_open_dungeon;
     }
     case GridCountKind::CLOSED_DOOR:
@@ -280,6 +294,18 @@ bool FloorType::order_pet_dismission(short index1, short index2, short riding_in
     }
 
     return index1 < index2;
+}
+
+bool FloorType::contains(const Pos2D &pos, FloorBoundary fb) const
+{
+    switch (fb) {
+    case FloorBoundary::OUTER_WALL_EXCLUSIVE:
+        return (pos.y > 0) && (pos.x > 0) && (pos.y < this->height - 1) && (pos.x < this->width - 1);
+    case FloorBoundary::OUTER_WALL_INCLUSIVE:
+        return (pos.y >= 0) && (pos.x >= 0) && (pos.y < this->height) && (pos.x < this->width);
+    default:
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid LocationDecision is specified! {}", enum2i(fb)));
+    }
 }
 
 /*!
@@ -361,6 +387,69 @@ bool FloorType::filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain 
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
     }
+}
+
+/*!
+ * @brief 基本トラップをランダムに選択する
+ * @return 選択したトラップのタグ (トラップドアでないならばそのタグ)
+ * @details トラップドアは、アリーナ・クエスト・ダンジョンの最下層には設置しない.
+ */
+TerrainTag FloorType::select_random_trap() const
+{
+    const auto &terrains = TerrainList::get_instance();
+    while (true) {
+        const auto tag = terrains.select_normal_trap();
+        if (terrains.get_terrain(tag).flags.has_not(TerrainCharacteristics::MORE)) {
+            return tag;
+        }
+
+        if (this->inside_arena || inside_quest(this->get_quest_id())) {
+            continue;
+        }
+
+        if (this->dun_level >= this->get_dungeon_definition().maxdepth) {
+            continue;
+        }
+
+        return tag;
+    }
+}
+
+MonraceHook FloorType::get_monrace_hook() const
+{
+    if (this->is_underground()) {
+        return MonraceHook::DUNGEON;
+    }
+
+    return WildernessGrids::get_instance().get_monrace_hook();
+}
+
+/*!
+ * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
+ * @return 地勢にあったモンスターの生成条件関数
+ */
+MonraceHookTerrain FloorType::get_monrace_hook_terrain_at(const Pos2D &pos) const
+{
+    const auto &terrain = this->get_grid(pos).get_terrain();
+    if (terrain.flags.has(TerrainCharacteristics::WATER)) {
+        return terrain.flags.has(TerrainCharacteristics::DEEP) ? MonraceHookTerrain::DEEP_WATER : MonraceHookTerrain::SHALLOW_WATER;
+    }
+
+    if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
+        return MonraceHookTerrain::LAVA;
+    }
+
+    return MonraceHookTerrain::FLOOR;
+}
+
+void FloorType::enter_dungeon(bool state)
+{
+    this->entering_dungeon = state;
+}
+
+void FloorType::leave_dungeon(bool state)
+{
+    this->leaving_dungeon = state;
 }
 
 /*!
@@ -557,14 +646,14 @@ void FloorType::place_random_stairs(const Pos2D &pos)
     }
 }
 
-void FloorType::set_terrain_id_at(const Pos2D &pos, TerrainTag tag)
+void FloorType::set_terrain_id_at(const Pos2D &pos, TerrainTag tag, TerrainKind tk)
 {
-    this->get_grid(pos).set_terrain_id(tag);
+    this->get_grid(pos).set_terrain_id(tag, tk);
 }
 
-void FloorType::set_terrain_id_at(const Pos2D &pos, short terrain_id)
+void FloorType::set_terrain_id_at(const Pos2D &pos, short terrain_id, TerrainKind tk)
 {
-    this->get_grid(pos).set_terrain_id(terrain_id);
+    this->get_grid(pos).set_terrain_id(terrain_id, tk);
 }
 
 /*!

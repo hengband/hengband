@@ -33,7 +33,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "player/player-status.h"
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -113,7 +112,7 @@ static Pos2D build_arena(PlayerType *player_ptr)
 
     const Pos2D pos(y_height + 5, xval);
     auto &grid = floor.get_grid(pos);
-    grid.feat = TerrainList::get_instance().get_terrain_id_by_tag("ARENA_GATE");
+    grid.feat = TerrainList::get_instance().get_terrain_id("ARENA_GATE");
     grid.info |= CAVE_GLOW | CAVE_MARK;
     return pos;
 }
@@ -143,7 +142,10 @@ static void generate_challenge_arena(PlayerType *player_ptr)
     }
 
     const auto pos = build_arena(player_ptr);
-    player_place(player_ptr, pos.y, pos.x);
+    if (!player_ptr->try_set_position(pos)) {
+        return;
+    }
+
     auto &entries = ArenaEntryList::get_instance();
     const auto &monrace = entries.get_monrace();
     if (place_specific_monster(player_ptr, player_ptr->y + 5, player_ptr->x, monrace.idx, PM_NO_KAGE | PM_NO_PET)) {
@@ -216,7 +218,7 @@ static Pos2D build_battle(PlayerType *player_ptr)
     }
 
     const Pos2D pos(y_height + 1, xval);
-    floor.get_grid(pos).feat = TerrainList::get_instance().get_terrain_id_by_tag("BUILDING_3");
+    floor.get_grid(pos).feat = TerrainList::get_instance().get_terrain_id("BUILDING_3");
     floor.get_grid(pos).info |= CAVE_GLOW | CAVE_MARK;
     return pos;
 }
@@ -242,7 +244,10 @@ static void generate_gambling_arena(PlayerType *player_ptr)
     }
 
     const auto pos = build_battle(player_ptr);
-    player_place(player_ptr, pos.y, pos.x);
+    if (!player_ptr->try_set_position(pos)) {
+        return;
+    }
+
     const auto &melee_arena = MeleeArena::get_instance();
     for (auto i = 0; i < NUM_GLADIATORS; i++) {
         const auto &gladiator = melee_arena.get_gladiator(i);
@@ -287,8 +292,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
         exe_write_diary_quest(player_ptr, DiaryKind::TO_QUEST, floor.quest_number);
     }
 
-    const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-    get_mon_num_prep_enum(player_ptr, get_monster_hook(pos_wilderness, floor.is_underground()));
+    get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook());
     init_flags = INIT_CREATE_DUNGEON;
     parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID);
 }
@@ -350,18 +354,18 @@ static std::optional<std::string> level_gen(PlayerType *player_ptr)
 /*!
  * @brief フロアに存在する全マスの記憶状態を初期化する / Wipe all unnecessary flags after grid_array generation
  */
-void wipe_generate_random_floor_flags(FloorType *floor_ptr)
+void wipe_generate_random_floor_flags(FloorType &floor)
 {
-    for (auto y = 0; y < floor_ptr->height; y++) {
-        for (auto x = 0; x < floor_ptr->width; x++) {
-            floor_ptr->get_grid({ y, x }).info &= ~(CAVE_MASK);
+    for (auto y = 0; y < floor.height; y++) {
+        for (auto x = 0; x < floor.width; x++) {
+            floor.get_grid({ y, x }).info &= ~(CAVE_MASK);
         }
     }
 
-    if (floor_ptr->is_underground()) {
-        for (auto y = 1; y < floor_ptr->height - 1; y++) {
-            for (auto x = 1; x < floor_ptr->width - 1; x++) {
-                floor_ptr->get_grid({ y, x }).info |= CAVE_UNSAFE;
+    if (floor.is_underground()) {
+        for (auto y = 1; y < floor.height - 1; y++) {
+            for (auto x = 1; x < floor.width - 1; x++) {
+                floor.get_grid({ y, x }).info |= CAVE_UNSAFE;
             }
         }
     }
@@ -393,16 +397,16 @@ void clear_cave(PlayerType *player_ptr)
     precalc_cur_num_of_pet();
     for (POSITION y = 0; y < MAX_HGT; y++) {
         for (POSITION x = 0; x < MAX_WID; x++) {
-            auto *g_ptr = &floor.grid_array[y][x];
-            g_ptr->info = 0;
-            g_ptr->feat = 0;
-            g_ptr->o_idx_list.clear();
-            g_ptr->m_idx = 0;
-            g_ptr->special = 0;
-            g_ptr->mimic = 0;
-            g_ptr->reset_costs();
-            g_ptr->reset_dists();
-            g_ptr->when = 0;
+            auto &grid = floor.grid_array[y][x];
+            grid.info = 0;
+            grid.feat = 0;
+            grid.o_idx_list.clear();
+            grid.m_idx = 0;
+            grid.special = 0;
+            grid.mimic = 0;
+            grid.reset_costs();
+            grid.reset_dists();
+            grid.when = 0;
         }
     }
 
@@ -411,24 +415,24 @@ void clear_cave(PlayerType *player_ptr)
     floor.object_level = floor.base_level;
 }
 
-typedef bool (*IsWallFunc)(const FloorType *, int, int);
+typedef bool (*IsWallFunc)(const FloorType &, int, int);
 
 // (y,x) がプレイヤーが通れない永久地形かどうかを返す。
-static bool is_permanent_blocker(const FloorType *const floor_ptr, const int y, const int x)
+static bool is_permanent_blocker(const FloorType &floor, const int y, const int x)
 {
-    const auto &flags = floor_ptr->get_grid({ y, x }).get_terrain().flags;
+    const auto &flags = floor.get_grid({ y, x }).get_terrain().flags;
     return flags.has(TerrainCharacteristics::PERMANENT) && flags.has_not(TerrainCharacteristics::MOVE);
 }
 
-static void floor_is_connected_dfs(const FloorType *const floor_ptr, const IsWallFunc is_wall, const int y_start, const int x_start, bool *const visited)
+static void floor_is_connected_dfs(const FloorType &floor, const IsWallFunc is_wall, const int y_start, const int x_start, bool *const visited)
 {
     // clang-format off
     static const int DY[8] = { -1, -1, -1,  0, 0,  1, 1, 1 };
     static const int DX[8] = { -1,  0,  1, -1, 1, -1, 0, 1 };
     // clang-format on
 
-    const int h = floor_ptr->height;
-    const int w = floor_ptr->width;
+    const int h = floor.height;
+    const int w = floor.width;
     const int start = w * y_start + x_start;
 
     // 深さ優先探索用のスタック。
@@ -454,7 +458,7 @@ static void floor_is_connected_dfs(const FloorType *const floor_ptr, const IsWal
             if (visited[nxt]) {
                 continue;
             }
-            if (is_wall(floor_ptr, y_nxt, x_nxt)) {
+            if (is_wall(floor, y_nxt, x_nxt)) {
                 continue;
             }
 
@@ -468,12 +472,12 @@ static void floor_is_connected_dfs(const FloorType *const floor_ptr, const IsWal
 // 各セルの8近傍は互いに移動可能とし、is_wall が真を返すセルのみを壁とみなす。
 //
 // 連結成分数が 0 の場合、偽を返す。
-static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFunc is_wall)
+static bool floor_is_connected(const FloorType &floor, const IsWallFunc is_wall)
 {
     static std::array<bool, MAX_HGT * MAX_WID> visited;
 
-    const int h = floor_ptr->height;
-    const int w = floor_ptr->width;
+    const int h = floor.height;
+    const int w = floor.width;
 
     std::fill(begin(visited), end(visited), false);
 
@@ -485,14 +489,14 @@ static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFun
             if (visited[idx]) {
                 continue;
             }
-            if (is_wall(floor_ptr, y, x)) {
+            if (is_wall(floor, y, x)) {
                 continue;
             }
 
             if (++n_component >= 2) {
                 break;
             }
-            floor_is_connected_dfs(floor_ptr, is_wall, y, x, visited.data());
+            floor_is_connected_dfs(floor, is_wall, y, x, visited.data());
         }
     }
 
@@ -507,7 +511,6 @@ static bool floor_is_connected(const FloorType *const floor_ptr, const IsWallFun
 void generate_floor(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    set_floor_and_wall(floor.dungeon_id);
     const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
     for (int num = 0; true; num++) {
         std::optional<std::string> why;
@@ -540,7 +543,7 @@ void generate_floor(PlayerType *player_ptr)
         // 地上、荒野マップ、クエストでは連結性判定は行わない。
         // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
         const auto check_conn = why && floor.is_underground() && !floor.is_in_quest();
-        if (check_conn && !floor_is_connected(&floor, is_permanent_blocker)) {
+        if (check_conn && !floor_is_connected(floor, is_permanent_blocker)) {
             // 一定回数試しても連結にならないなら諦める。
             if (num >= 1000) {
                 plog("cannot generate connected floor. giving up...");
@@ -554,11 +557,11 @@ void generate_floor(PlayerType *player_ptr)
         }
 
         msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why->data());
-        wipe_o_list(&floor);
+        wipe_o_list(floor);
         wipe_monsters_list(player_ptr);
     }
 
     glow_deep_lava_and_bldg(player_ptr);
-    player_ptr->enter_dungeon = false;
-    wipe_generate_random_floor_flags(&floor);
+    floor.enter_dungeon(false);
+    wipe_generate_random_floor_flags(floor);
 }

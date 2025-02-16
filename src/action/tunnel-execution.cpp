@@ -67,7 +67,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
     const auto &terrain_mimic = grid.get_terrain(TerrainKind::MIMIC);
     const auto &name = terrain_mimic.name;
     if (command_rep == 0) {
-        sound(SOUND_DIG);
+        sound(SoundKind::DIG);
     }
 
     if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
@@ -78,7 +78,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
         }
     } else if (terrain.flags.has(TerrainCharacteristics::CAN_DIG)) {
         if (player_ptr->skill_dig > randint0(20 * power)) {
-            sound(SOUND_DIG_THROUGH);
+            sound(SoundKind::DIG_THROUGH);
             msg_format(_("%sをくずした。", "You have removed the %s."), name.data());
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
             RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
@@ -89,7 +89,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
     } else {
         bool tree = terrain_mimic.flags.has(TerrainCharacteristics::TREE);
         if (player_ptr->skill_dig > power + randint0(40 * power)) {
-            sound(SOUND_DIG_THROUGH);
+            sound(SoundKind::DIG_THROUGH);
             if (tree) {
                 msg_format(_("%sを切り払った。", "You have cleared away the %s."), name.data());
             } else {
@@ -98,7 +98,7 @@ bool exe_tunnel(PlayerType *player_ptr, POSITION y, POSITION x)
             }
 
             if (terrain.flags.has(TerrainCharacteristics::GLASS)) {
-                sound(SOUND_GLASS);
+                sound(SoundKind::GLASS);
             }
 
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);

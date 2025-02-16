@@ -2,11 +2,11 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "floor/floor-generator.h"
 #include "game-option/cheat-types.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "room/space-finder.h"
 #include "system/dungeon/dungeon-data-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -50,7 +50,7 @@ bool build_type14(PlayerType *player_ptr, DungeonData *dd_ptr)
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
         for (auto x = x1 - 1; x <= x2 + 1; x++) {
             auto &grid = floor.get_grid({ y, x });
-            place_grid(player_ptr, &grid, GB_FLOOR);
+            place_grid(player_ptr, grid, GB_FLOOR);
             grid.info |= (CAVE_ROOM);
             if (light) {
                 grid.info |= (CAVE_GLOW);
@@ -60,21 +60,21 @@ bool build_type14(PlayerType *player_ptr, DungeonData *dd_ptr)
 
     /* Walls around the room */
     for (auto y = y1 - 1; y <= y2 + 1; y++) {
-        place_grid(player_ptr, &floor.get_grid({ y, x1 - 1 }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y, x2 + 1 }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y, x1 - 1 }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y, x2 + 1 }), GB_OUTER);
     }
 
     for (auto x = x1 - 1; x <= x2 + 1; x++) {
-        place_grid(player_ptr, &floor.get_grid({ y1 - 1, x }), GB_OUTER);
-        place_grid(player_ptr, &floor.get_grid({ y2 + 1, x }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y1 - 1, x }), GB_OUTER);
+        place_grid(player_ptr, floor.get_grid({ y2 + 1, x }), GB_OUTER);
     }
 
-    const auto trap = floor.dun_level < 30 + randint1(30) ? feat_trap_piranha : feat_trap_armageddon;
+    const auto trap = floor.dun_level < 30 + randint1(30) ? TerrainTag::TRAP_PIRANHA : TerrainTag::TRAP_ARMAGEDDON;
     const auto trap_y = rand_spread(center->y, ysize / 4);
     const auto trap_x = rand_spread(center->x, xsize / 4);
     auto &grid = floor.get_grid({ trap_y, trap_x });
     grid.mimic = grid.feat;
-    grid.feat = trap;
+    grid.set_terrain_id(trap);
     constexpr auto fmt = _("%sの部屋が生成されました。", "Room of %s was generated.");
     msg_format_wizard(player_ptr, CHEAT_DUNGEON, fmt, TerrainList::get_instance().get_terrain(trap).name.data());
     return true;

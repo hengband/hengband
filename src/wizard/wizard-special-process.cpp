@@ -12,9 +12,6 @@
 #include "wizard/wizard-special-process.h"
 #include "artifact/fixed-art-generator.h"
 #include "artifact/fixed-art-types.h"
-#include "birth/inventory-initializer.h"
-#include "cmd-io/cmd-dump.h"
-#include "cmd-io/cmd-help.h"
 #include "cmd-io/cmd-save.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
@@ -30,27 +27,15 @@
 #include "game-option/option-types-table.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
-#include "info-reader/fixed-map-parser.h"
-#include "inventory/inventory-object.h"
-#include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
-#include "market/arena.h"
 #include "monster-floor/monster-remover.h"
-#include "monster-floor/monster-summon.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
-#include "monster/smart-learn-types.h"
-#include "mutation/mutation-investor-remover.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
-#include "object-enchant/trc-types.h"
-#include "object-enchant/trg-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
@@ -60,54 +45,36 @@
 #include "player-info/self-info.h"
 #include "player-status/player-energy.h"
 #include "player/digestion-processor.h"
-#include "player/patron.h"
 #include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-spell-status.h"
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"
-#include "spell-kind/spells-detection.h"
-#include "spell-kind/spells-sight.h"
-#include "spell-kind/spells-teleport.h"
 #include "spell-kind/spells-world.h"
-#include "spell/spells-object.h"
 #include "spell/spells-status.h"
-#include "spell/spells-summon.h"
 #include "status/bad-status-setter.h"
-#include "status/experience.h"
-#include "system/angband-system.h"
-#include "system/angband-version.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
-#include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "target/grid-selector.h"
-#include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/candidate-selector.h"
-#include "util/enum-converter.h"
-#include "util/enum-range.h"
-#include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "wizard/spoiler-table.h"
 #include "wizard/tval-descriptions-table.h"
 #include "wizard/wizard-messages.h"
-#include "wizard/wizard-spells.h"
-#include "wizard/wizard-spoiler.h"
 #include "world/world.h"
 #include <algorithm>
 #include <fstream>
@@ -213,7 +180,7 @@ void wiz_create_item(PlayerType *player_ptr)
 
     ItemEntity item(*bi_id);
     ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART).execute();
-    (void)drop_near(player_ptr, &item, -1, player_ptr->y, player_ptr->x);
+    (void)drop_near(player_ptr, &item, player_ptr->get_position());
     msg_print("Allocated.");
 }
 
@@ -228,8 +195,7 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
     const auto &artifact = ArtifactList::get_instance().get_artifact(fa_id);
     ItemEntity item(artifact.bi_key);
     item.fa_id = fa_id;
-    item.mark_as_known();
-    return describe_flavor(player_ptr, item, OD_NAME_ONLY);
+    return describe_flavor(player_ptr, item, OD_NAME_ONLY | OD_STORE);
 }
 
 /**
@@ -452,7 +418,7 @@ void wiz_create_feature(PlayerType *player_ptr)
         return;
     }
 
-    cave_set_feat(player_ptr, y, x, *f_val1);
+    set_terrain_id_to_grid(player_ptr, pos, *f_val1);
     grid.mimic = *f_val2;
     const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     if (terrain.flags.has(TerrainCharacteristics::RUNE_PROTECTION) || terrain.flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
@@ -461,8 +427,8 @@ void wiz_create_feature(PlayerType *player_ptr)
         grid.info |= CAVE_GLOW | CAVE_OBJECT;
     }
 
-    note_spot(player_ptr, y, x);
-    lite_spot(player_ptr, y, x);
+    note_spot(player_ptr, pos.y, pos.x);
+    lite_spot(player_ptr, pos.y, pos.x);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 }
 
@@ -775,7 +741,7 @@ void wiz_zap_surrounding_monsters(PlayerType *player_ptr)
         }
 
         if (record_named_pet && monster.is_named_pet()) {
-            const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+            const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
             exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
@@ -797,7 +763,7 @@ void wiz_zap_floor_monsters(PlayerType *player_ptr)
         }
 
         if (record_named_pet && monster.is_named_pet()) {
-            const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+            const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
             exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
         }
 
@@ -837,19 +803,12 @@ void cheat_death(PlayerType *player_ptr)
     }
 
     floor.reset_dungeon_index();
-    if (lite_town || vanilla_town) {
-        player_ptr->wilderness_y = 1;
-        player_ptr->wilderness_x = 1;
-        if (vanilla_town) {
-            player_ptr->oldpy = 10;
-            player_ptr->oldpx = 34;
-        } else {
-            player_ptr->oldpy = 33;
-            player_ptr->oldpx = 131;
-        }
+    auto &wilderness = WildernessGrids::get_instance();
+    wilderness.initialize_position();
+    if (vanilla_town) {
+        player_ptr->oldpy = 10;
+        player_ptr->oldpx = 34;
     } else {
-        player_ptr->wilderness_y = 48;
-        player_ptr->wilderness_x = 5;
         player_ptr->oldpy = 33;
         player_ptr->oldpx = 131;
     }

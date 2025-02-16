@@ -9,9 +9,7 @@
 #include "artifact/fixed-art-types.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
-#include "grid/trap.h"
 #include "load/angband-version-comparer.h"
 #include "load/item/item-loader-factory.h"
 #include "load/item/item-loader-version-types.h"
@@ -349,142 +347,142 @@ void rd_item_old(ItemEntity *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  */
-void rd_monster_old(PlayerType *player_ptr, MonsterEntity *m_ptr)
+void rd_monster_old(PlayerType *player_ptr, MonsterEntity &monster)
 {
-    m_ptr->r_idx = i2enum<MonraceId>(rd_s16b());
+    monster.r_idx = i2enum<MonraceId>(rd_s16b());
 
     if (h_older_than(1, 0, 12)) {
-        m_ptr->ap_r_idx = m_ptr->r_idx;
+        monster.ap_r_idx = monster.r_idx;
     } else {
-        m_ptr->ap_r_idx = i2enum<MonraceId>(rd_s16b());
+        monster.ap_r_idx = i2enum<MonraceId>(rd_s16b());
     }
 
     if (h_older_than(1, 0, 14)) {
-        auto *r_ptr = &m_ptr->get_monrace();
+        const auto &monrace = monster.get_monrace();
 
-        m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
-        if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-            m_ptr->sub_align |= SUB_ALIGN_EVIL;
+        monster.sub_align = SUB_ALIGN_NEUTRAL;
+        if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
+            monster.sub_align |= SUB_ALIGN_EVIL;
         }
-        if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
-            m_ptr->sub_align |= SUB_ALIGN_GOOD;
+        if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
+            monster.sub_align |= SUB_ALIGN_GOOD;
         }
     } else {
-        m_ptr->sub_align = rd_byte();
+        monster.sub_align = rd_byte();
     }
 
-    m_ptr->fy = rd_byte();
-    m_ptr->fx = rd_byte();
-    m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
+    monster.fy = rd_byte();
+    monster.fx = rd_byte();
+    monster.current_floor_ptr = player_ptr->current_floor_ptr;
 
-    m_ptr->hp = rd_s16b();
-    m_ptr->maxhp = rd_s16b();
+    monster.hp = rd_s16b();
+    monster.maxhp = rd_s16b();
 
     if (h_older_than(1, 0, 5)) {
-        m_ptr->max_maxhp = m_ptr->maxhp;
+        monster.max_maxhp = monster.maxhp;
     } else {
-        m_ptr->max_maxhp = rd_s16b();
+        monster.max_maxhp = rd_s16b();
     }
     if (h_older_than(2, 1, 2, 1)) {
-        m_ptr->dealt_damage = 0;
+        monster.dealt_damage = 0;
     } else {
-        m_ptr->dealt_damage = rd_s32b();
+        monster.dealt_damage = rd_s32b();
     }
 
-    m_ptr->mtimed[MonsterTimedEffect::SLEEP] = rd_s16b();
-    m_ptr->mspeed = rd_byte();
+    monster.mtimed[MonsterTimedEffect::SLEEP] = rd_s16b();
+    monster.mspeed = rd_byte();
 
     if (h_older_than(0, 4, 2)) {
-        m_ptr->energy_need = rd_byte();
+        monster.energy_need = rd_byte();
     } else {
-        m_ptr->energy_need = rd_s16b();
+        monster.energy_need = rd_s16b();
     }
 
     if (h_older_than(1, 0, 13)) {
-        m_ptr->energy_need = 100 - m_ptr->energy_need;
+        monster.energy_need = 100 - monster.energy_need;
     }
 
     if (h_older_than(0, 0, 7)) {
-        m_ptr->mtimed[MonsterTimedEffect::FAST] = 0;
-        m_ptr->mtimed[MonsterTimedEffect::SLOW] = 0;
+        monster.mtimed[MonsterTimedEffect::FAST] = 0;
+        monster.mtimed[MonsterTimedEffect::SLOW] = 0;
     } else {
-        m_ptr->mtimed[MonsterTimedEffect::FAST] = rd_byte();
-        m_ptr->mtimed[MonsterTimedEffect::SLOW] = rd_byte();
+        monster.mtimed[MonsterTimedEffect::FAST] = rd_byte();
+        monster.mtimed[MonsterTimedEffect::SLOW] = rd_byte();
     }
 
-    m_ptr->mtimed[MonsterTimedEffect::STUN] = rd_byte();
-    m_ptr->mtimed[MonsterTimedEffect::CONFUSION] = rd_byte();
-    m_ptr->mtimed[MonsterTimedEffect::FEAR] = rd_byte();
+    monster.mtimed[MonsterTimedEffect::STUN] = rd_byte();
+    monster.mtimed[MonsterTimedEffect::CONFUSION] = rd_byte();
+    monster.mtimed[MonsterTimedEffect::FEAR] = rd_byte();
 
     if (h_older_than(0, 0, 10)) {
-        m_ptr->reset_target();
+        monster.reset_target();
     } else if (h_older_than(0, 0, 11)) {
         strip_bytes(2);
-        m_ptr->reset_target();
+        monster.reset_target();
     } else {
-        m_ptr->target_y = rd_s16b();
-        m_ptr->target_x = rd_s16b();
+        monster.target_y = rd_s16b();
+        monster.target_x = rd_s16b();
     }
 
-    m_ptr->mtimed[MonsterTimedEffect::INVULNERABILITY] = rd_byte();
+    monster.mtimed[MonsterTimedEffect::INVULNERABILITY] = rd_byte();
 
     auto tmp32u = rd_u32b();
-    migrate_bitflag_to_flaggroup(m_ptr->smart, tmp32u);
+    migrate_bitflag_to_flaggroup(monster.smart, tmp32u);
 
     // 3.0.0Alpha10以前のSM_CLONED(ビット位置22)、SM_PET(23)、SM_FRIEDLY(28)をMFLAG2に移行する
     // ビット位置の定義はなくなるので、ビット位置の値をハードコードする。
     std::bitset<32> rd_bits_smart(tmp32u);
-    m_ptr->mflag2[MonsterConstantFlagType::CLONED] = rd_bits_smart[22];
-    m_ptr->mflag2[MonsterConstantFlagType::PET] = rd_bits_smart[23];
-    m_ptr->mflag2[MonsterConstantFlagType::FRIENDLY] = rd_bits_smart[28];
-    m_ptr->smart.reset(i2enum<MonsterSmartLearnType>(22)).reset(i2enum<MonsterSmartLearnType>(23)).reset(i2enum<MonsterSmartLearnType>(28));
+    monster.mflag2[MonsterConstantFlagType::CLONED] = rd_bits_smart[22];
+    monster.mflag2[MonsterConstantFlagType::PET] = rd_bits_smart[23];
+    monster.mflag2[MonsterConstantFlagType::FRIENDLY] = rd_bits_smart[28];
+    monster.smart.reset(i2enum<MonsterSmartLearnType>(22)).reset(i2enum<MonsterSmartLearnType>(23)).reset(i2enum<MonsterSmartLearnType>(28));
 
     if (h_older_than(0, 4, 5)) {
-        m_ptr->exp = 0;
+        monster.exp = 0;
     } else {
-        m_ptr->exp = rd_u32b();
+        monster.exp = rd_u32b();
     }
 
     if (h_older_than(0, 2, 2)) {
-        if (enum2i(m_ptr->r_idx) < 0) {
-            m_ptr->r_idx = i2enum<MonraceId>(0 - enum2i(m_ptr->r_idx));
-            m_ptr->mflag2.set(MonsterConstantFlagType::KAGE);
+        if (enum2i(monster.r_idx) < 0) {
+            monster.r_idx = i2enum<MonraceId>(0 - enum2i(monster.r_idx));
+            monster.mflag2.set(MonsterConstantFlagType::KAGE);
         }
     } else {
         auto tmp8u = rd_byte();
         constexpr auto base = enum2i(MonsterConstantFlagType::KAGE);
-        migrate_bitflag_to_flaggroup(m_ptr->mflag2, tmp8u, base, 7);
+        migrate_bitflag_to_flaggroup(monster.mflag2, tmp8u, base, 7);
     }
 
     if (h_older_than(1, 0, 12)) {
-        if (m_ptr->mflag2.has(MonsterConstantFlagType::KAGE)) {
-            m_ptr->ap_r_idx = MonraceId::KAGE;
+        if (monster.mflag2.has(MonsterConstantFlagType::KAGE)) {
+            monster.ap_r_idx = MonraceId::KAGE;
         }
     }
 
     if (h_older_than(0, 1, 3)) {
-        m_ptr->nickname.clear();
+        monster.nickname.clear();
     } else {
         auto nickname = rd_string();
         if (!nickname.empty()) {
-            m_ptr->nickname = std::move(nickname);
+            monster.nickname = std::move(nickname);
         }
     }
 
     strip_bytes(1);
 }
 
-static void move_RF3_to_RFR(MonraceDefinition *r_ptr, BIT_FLAGS f3, const BIT_FLAGS rf3, const MonsterResistanceType rfr)
+static void move_RF3_to_RFR(MonraceDefinition &monrace, BIT_FLAGS f3, const BIT_FLAGS rf3, const MonsterResistanceType rfr)
 {
     if (f3 & rf3) {
-        r_ptr->resistance_flags.set(rfr);
+        monrace.resistance_flags.set(rfr);
     }
 }
 
-static void move_RF4_BR_to_RFR(MonraceDefinition *r_ptr, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
+static void move_RF4_BR_to_RFR(MonraceDefinition &monrace, BIT_FLAGS f4, const BIT_FLAGS rf4_br, const MonsterResistanceType rfr)
 {
     if (f4 & rf4_br) {
-        r_ptr->resistance_flags.set(rfr);
+        monrace.resistance_flags.set(rfr);
     }
 }
 
@@ -494,42 +492,42 @@ static void move_RF4_BR_to_RFR(MonraceDefinition *r_ptr, BIT_FLAGS f4, const BIT
  * @param r_idx モンスター種族ID
  * @details 本来はr_idxからr_ptrを決定可能だが、互換性を優先するため元コードのままとする
  */
-void set_old_lore(MonraceDefinition *r_ptr, BIT_FLAGS f3, BIT_FLAGS f4, const MonraceId r_idx)
+void set_old_lore(MonraceDefinition &monrace, BIT_FLAGS f3, BIT_FLAGS f4, const MonraceId r_idx)
 {
-    r_ptr->r_resistance_flags.clear();
-    move_RF3_to_RFR(r_ptr, f3, RF3_IM_ACID, MonsterResistanceType::IMMUNE_ACID);
-    move_RF3_to_RFR(r_ptr, f3, RF3_IM_ELEC, MonsterResistanceType::IMMUNE_ELEC);
-    move_RF3_to_RFR(r_ptr, f3, RF3_IM_FIRE, MonsterResistanceType::IMMUNE_FIRE);
-    move_RF3_to_RFR(r_ptr, f3, RF3_IM_COLD, MonsterResistanceType::IMMUNE_COLD);
-    move_RF3_to_RFR(r_ptr, f3, RF3_IM_POIS, MonsterResistanceType::IMMUNE_POISON);
-    move_RF3_to_RFR(r_ptr, f3, RF3_RES_TELE, MonsterResistanceType::RESIST_TELEPORT);
-    move_RF3_to_RFR(r_ptr, f3, RF3_RES_NETH, MonsterResistanceType::RESIST_NETHER);
-    move_RF3_to_RFR(r_ptr, f3, RF3_RES_WATE, MonsterResistanceType::RESIST_WATER);
-    move_RF3_to_RFR(r_ptr, f3, RF3_RES_PLAS, MonsterResistanceType::RESIST_PLASMA);
-    move_RF3_to_RFR(r_ptr, f3, RF3_RES_NEXU, MonsterResistanceType::RESIST_NEXUS);
-    move_RF3_to_RFR(r_ptr, f3, RF3_RES_DISE, MonsterResistanceType::RESIST_DISENCHANT);
-    move_RF3_to_RFR(r_ptr, f3, RF3_RES_ALL, MonsterResistanceType::RESIST_ALL);
+    monrace.r_resistance_flags.clear();
+    move_RF3_to_RFR(monrace, f3, RF3_IM_ACID, MonsterResistanceType::IMMUNE_ACID);
+    move_RF3_to_RFR(monrace, f3, RF3_IM_ELEC, MonsterResistanceType::IMMUNE_ELEC);
+    move_RF3_to_RFR(monrace, f3, RF3_IM_FIRE, MonsterResistanceType::IMMUNE_FIRE);
+    move_RF3_to_RFR(monrace, f3, RF3_IM_COLD, MonsterResistanceType::IMMUNE_COLD);
+    move_RF3_to_RFR(monrace, f3, RF3_IM_POIS, MonsterResistanceType::IMMUNE_POISON);
+    move_RF3_to_RFR(monrace, f3, RF3_RES_TELE, MonsterResistanceType::RESIST_TELEPORT);
+    move_RF3_to_RFR(monrace, f3, RF3_RES_NETH, MonsterResistanceType::RESIST_NETHER);
+    move_RF3_to_RFR(monrace, f3, RF3_RES_WATE, MonsterResistanceType::RESIST_WATER);
+    move_RF3_to_RFR(monrace, f3, RF3_RES_PLAS, MonsterResistanceType::RESIST_PLASMA);
+    move_RF3_to_RFR(monrace, f3, RF3_RES_NEXU, MonsterResistanceType::RESIST_NEXUS);
+    move_RF3_to_RFR(monrace, f3, RF3_RES_DISE, MonsterResistanceType::RESIST_DISENCHANT);
+    move_RF3_to_RFR(monrace, f3, RF3_RES_ALL, MonsterResistanceType::RESIST_ALL);
 
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_LITE, MonsterResistanceType::RESIST_LITE);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_DARK, MonsterResistanceType::RESIST_DARK);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SOUN, MonsterResistanceType::RESIST_SOUND);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_CHAO, MonsterResistanceType::RESIST_CHAOS);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_TIME, MonsterResistanceType::RESIST_TIME);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_INER, MonsterResistanceType::RESIST_INERTIA);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_GRAV, MonsterResistanceType::RESIST_GRAVITY);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_SHAR, MonsterResistanceType::RESIST_SHARDS);
-    move_RF4_BR_to_RFR(r_ptr, f4, RF4_BR_WALL, MonsterResistanceType::RESIST_FORCE);
+    move_RF4_BR_to_RFR(monrace, f4, RF4_BR_LITE, MonsterResistanceType::RESIST_LITE);
+    move_RF4_BR_to_RFR(monrace, f4, RF4_BR_DARK, MonsterResistanceType::RESIST_DARK);
+    move_RF4_BR_to_RFR(monrace, f4, RF4_BR_SOUN, MonsterResistanceType::RESIST_SOUND);
+    move_RF4_BR_to_RFR(monrace, f4, RF4_BR_CHAO, MonsterResistanceType::RESIST_CHAOS);
+    move_RF4_BR_to_RFR(monrace, f4, RF4_BR_TIME, MonsterResistanceType::RESIST_TIME);
+    move_RF4_BR_to_RFR(monrace, f4, RF4_BR_INER, MonsterResistanceType::RESIST_INERTIA);
+    move_RF4_BR_to_RFR(monrace, f4, RF4_BR_GRAV, MonsterResistanceType::RESIST_GRAVITY);
+    move_RF4_BR_to_RFR(monrace, f4, RF4_BR_SHAR, MonsterResistanceType::RESIST_SHARDS);
+    move_RF4_BR_to_RFR(monrace, f4, RF4_BR_WALL, MonsterResistanceType::RESIST_FORCE);
 
     if (f4 & RF4_BR_CONF) {
-        r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_CONF);
+        monrace.r_resistance_flags.set(MonsterResistanceType::NO_CONF);
     }
 
     if (r_idx == MonraceId::STORMBRINGER) {
-        r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
+        monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
     }
 
-    if (r_ptr->r_kind_flags.has(MonsterKindType::ORC)) {
-        r_ptr->r_resistance_flags.set(MonsterResistanceType::RESIST_DARK);
+    if (monrace.r_kind_flags.has(MonsterKindType::ORC)) {
+        monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_DARK);
     }
 }
 
@@ -670,18 +668,18 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
                 /* Old CAVE_IN_MIRROR flag */
                 if (grid.info & CAVE_OBJECT) {
-                    grid.set_mimic_terrain_id(TerrainTag::MIRROR);
+                    grid.set_terrain_id(TerrainTag::MIRROR, TerrainKind::MIMIC);
                 } else if ((grid.feat == OLD_FEAT_RUNE_EXPLOSION) || (grid.feat == OLD_FEAT_RUNE_PROTECTION)) {
                     grid.info |= CAVE_OBJECT;
                     grid.mimic = grid.feat;
                     grid.set_terrain_id(TerrainTag::FLOOR);
                 } else if (grid.info & CAVE_TRAP) {
                     grid.info &= ~CAVE_TRAP;
-                    grid.set_mimic_terrain_id(TerrainTag::FLOOR);
-                    grid.feat = choose_random_trap(&floor);
+                    grid.set_terrain_id(TerrainTag::FLOOR, TerrainKind::MIMIC);
+                    grid.set_terrain_id(floor.select_random_trap());
                 } else if (grid.feat == OLD_FEAT_INVIS) {
                     grid.mimic = grid.feat;
-                    grid.feat = feat_trap_open;
+                    grid.set_terrain_id(TerrainTag::TRAP_OPEN);
                 }
             }
         }
@@ -723,8 +721,8 @@ errr rd_dungeon_old(PlayerType *player_ptr)
 
         auto &item = floor.o_list[item_idx];
         item_loader->rd_item(&item);
-        auto &list = get_o_idx_list_contains(&floor, item_idx);
-        list.add(&floor, item_idx);
+        auto &list = get_o_idx_list_contains(floor, item_idx);
+        list.add(floor, item_idx);
     }
 
     limit = rd_u16b();
@@ -742,7 +740,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
         }
 
         auto &monster = floor.m_list[m_idx];
-        monster_loader->rd_monster(&monster);
+        monster_loader->rd_monster(monster);
         auto &grid = floor.get_grid(monster.get_position());
         grid.m_idx = m_idx;
         monster.get_real_monrace().increment_current_numbers();

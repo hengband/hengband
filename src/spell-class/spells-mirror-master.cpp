@@ -51,21 +51,22 @@ SpellsMirrorMaster::SpellsMirrorMaster(PlayerType *player_ptr)
 
 void SpellsMirrorMaster::remove_mirror(int y, int x)
 {
+    const Pos2D pos(y, x);
     auto &floor = *this->player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor.grid_array[y][x];
-    reset_bits(g_ptr->info, CAVE_OBJECT);
-    g_ptr->mimic = 0;
+    auto &grid = floor.get_grid(pos);
+    reset_bits(grid.info, CAVE_OBJECT);
+    grid.mimic = 0;
     if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
-        reset_bits(g_ptr->info, CAVE_GLOW);
+        reset_bits(grid.info, CAVE_GLOW);
         if (!view_torch_grids) {
-            reset_bits(g_ptr->info, CAVE_MARK);
+            reset_bits(grid.info, CAVE_MARK);
         }
 
-        if (g_ptr->has_monster()) {
-            update_monster(this->player_ptr, g_ptr->m_idx, false);
+        if (grid.has_monster()) {
+            update_monster(this->player_ptr, grid.m_idx, false);
         }
 
-        update_local_illumination(this->player_ptr, y, x);
+        update_local_illumination(this->player_ptr, { y, x });
     }
 
     note_spot(this->player_ptr, y, x);
@@ -79,10 +80,10 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
  */
 void SpellsMirrorMaster::remove_all_mirrors(bool explode)
 {
-    const auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor_ptr->width; x++) {
-        for (auto y = 0; y < floor_ptr->height; y++) {
-            if (!floor_ptr->grid_array[y][x].is_mirror()) {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    for (auto x = 0; x < floor.width; x++) {
+        for (auto y = 0; y < floor.height; y++) {
+            if (!floor.grid_array[y][x].is_mirror()) {
                 continue;
             }
 
@@ -127,17 +128,17 @@ std::optional<std::string> SpellsMirrorMaster::place_mirror()
 {
     const auto p_pos = this->player_ptr->get_position();
     auto &floor = *this->player_ptr->current_floor_ptr;
-    if (!cave_clean_bold(&floor, p_pos.y, p_pos.x)) {
+    if (!cave_clean_bold(floor, p_pos.y, p_pos.x)) {
         return _("床上のアイテムが呪文を跳ね返した。", "The object resists the spell.");
     }
 
     auto &grid = floor.get_grid(p_pos);
     set_bits(grid.info, CAVE_OBJECT | CAVE_GLOW);
-    grid.set_mimic_terrain_id(TerrainTag::MIRROR);
+    grid.set_terrain_id(TerrainTag::MIRROR, TerrainKind::MIMIC);
 
     note_spot(this->player_ptr, p_pos.y, p_pos.x);
     lite_spot(this->player_ptr, p_pos.y, p_pos.x);
-    update_local_illumination(this->player_ptr, p_pos.y, p_pos.x);
+    update_local_illumination(this->player_ptr, p_pos);
     return std::nullopt;
 }
 
@@ -176,10 +177,10 @@ bool SpellsMirrorMaster::mirror_concentration()
  */
 void SpellsMirrorMaster::seal_of_mirror(const int dam)
 {
-    const auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor_ptr->width; x++) {
-        for (auto y = 0; y < floor_ptr->height; y++) {
-            const auto &g_ref = floor_ptr->grid_array[y][x];
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    for (auto x = 0; x < floor.width; x++) {
+        for (auto y = 0; y < floor.height; y++) {
+            const auto &g_ref = floor.grid_array[y][x];
             if (!g_ref.is_mirror()) {
                 continue;
             }
@@ -196,15 +197,15 @@ void SpellsMirrorMaster::seal_of_mirror(const int dam)
     }
 }
 
-void SpellsMirrorMaster::seeker_ray(int dir, int dam)
+void SpellsMirrorMaster::seeker_ray(const Direction &dir, int dam)
 {
-    const auto pos = ((dir == 5) && target_okay(this->player_ptr)) ? Pos2D(target_row, target_col) : this->player_ptr->get_neighbor(dir);
+    const auto pos = (dir.is_targetting() && target_okay(this->player_ptr)) ? Pos2D(target_row, target_col) : this->player_ptr->get_neighbor(dir);
     project_seeker_ray(pos.x, pos.y, dam);
 }
 
-void SpellsMirrorMaster::super_ray(int dir, int dam)
+void SpellsMirrorMaster::super_ray(const Direction &dir, int dam)
 {
-    const auto pos = ((dir == 5) && target_okay(this->player_ptr)) ? Pos2D(target_row, target_col) : this->player_ptr->get_neighbor(dir);
+    const auto pos = (dir.is_targetting() && target_okay(this->player_ptr)) ? Pos2D(target_row, target_col) : this->player_ptr->get_neighbor(dir);
     project_super_ray(pos.x, pos.y, dam);
 }
 
@@ -403,15 +404,15 @@ static bool activate_super_ray_effect(PlayerType *player_ptr, int y, int x, int 
 
     (void)affect_monster(player_ptr, 0, 0, y, x, dam, typ, flag, true);
 
-    const auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto *g_ptr = &floor_ptr->grid_array[project_m_y][project_m_x];
-    const auto *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-    if (project_m_n == 1 && g_ptr->has_monster() && m_ptr->ml) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.grid_array[project_m_y][project_m_x];
+    const auto &monster = floor.m_list[grid.m_idx];
+    if (project_m_n == 1 && grid.has_monster() && monster.ml) {
         if (!player_ptr->effects()->hallucination().is_hallucinated()) {
-            LoreTracker::get_instance().set_trackee(m_ptr->ap_r_idx);
+            LoreTracker::get_instance().set_trackee(monster.ap_r_idx);
         }
 
-        health_track(player_ptr, g_ptr->m_idx);
+        health_track(player_ptr, grid.m_idx);
     }
 
     return notice;
@@ -479,17 +480,14 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
         lite_spot(this->player_ptr, y, x);
     }
 
-    {
-        const auto &pos = path_g.back();
-        if (floor.get_grid(pos).is_mirror()) {
-            this->remove_mirror(pos.y, pos.x);
-            auto project_flag = flag;
-            reset_bits(project_flag, PROJECT_MIRROR);
+    if (const auto &pos = path_g.back(); floor.get_grid(pos).is_mirror()) {
+        this->remove_mirror(pos.y, pos.x);
+        auto project_flag = flag;
+        reset_bits(project_flag, PROJECT_MIRROR);
 
-            const auto length = project_length ? project_length : system.get_max_range();
-            for (const auto &dd : CCW_DD) {
-                second_path_g_list.emplace_back(this->player_ptr, length, pos, pos + dd, project_flag);
-            }
+        const auto length = project_length ? project_length : system.get_max_range();
+        for (const auto &d : Direction::directions_8()) {
+            second_path_g_list.emplace_back(this->player_ptr, length, pos, pos + d.vec(), project_flag);
         }
     }
 

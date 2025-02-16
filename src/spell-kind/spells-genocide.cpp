@@ -62,7 +62,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
         resist = true;
     } else {
         if (record_named_pet && monster.is_named_pet()) {
-            const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+            const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
             exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
         }
 
@@ -70,8 +70,8 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
     }
 
     if (resist && player_cast) {
-        const auto see_m = is_seen(player_ptr, &monster);
-        const auto m_name = monster_desc(player_ptr, &monster, 0);
+        const auto see_m = is_seen(player_ptr, monster);
+        const auto m_name = monster_desc(player_ptr, monster, 0);
         if (see_m) {
             msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), m_name.data());
         }
@@ -175,11 +175,11 @@ bool mass_genocide(PlayerType *player_ptr, int power, bool player_cast)
 
     bool result = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        if (!m_ptr->is_valid()) {
+        const auto &monster = floor.m_list[i];
+        if (!monster.is_valid()) {
             continue;
         }
-        if (m_ptr->cdis > MAX_PLAYER_SIGHT) {
+        if (monster.cdis > MAX_PLAYER_SIGHT) {
             continue;
         }
 
@@ -212,15 +212,15 @@ bool mass_genocide_undead(PlayerType *player_ptr, int power, bool player_cast)
 
     bool result = false;
     for (MONSTER_IDX i = 1; i < floor.m_max; i++) {
-        auto *m_ptr = &floor.m_list[i];
-        auto *r_ptr = &m_ptr->get_monrace();
-        if (!m_ptr->is_valid()) {
+        const auto &monster = floor.m_list[i];
+        const auto &monrace = monster.get_monrace();
+        if (!monster.is_valid()) {
             continue;
         }
-        if (r_ptr->kind_flags.has_not(MonsterKindType::UNDEAD)) {
+        if (monrace.kind_flags.has_not(MonsterKindType::UNDEAD)) {
             continue;
         }
-        if (m_ptr->cdis > MAX_PLAYER_SIGHT) {
+        if (monster.cdis > MAX_PLAYER_SIGHT) {
             continue;
         }
 

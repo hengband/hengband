@@ -12,7 +12,7 @@
 class UndergroundBuilding {
 public:
     UndergroundBuilding();
-    Pos2D pick_door_direction() const;
+    Pos2DVec pick_door_direction() const;
     void set_area(int height, int width, int max_height, int max_width);
     bool is_area_used(const std::vector<std::vector<bool>> &ugarcade_used) const;
     void reserve_area(std::vector<std::vector<bool>> &ugarcade_used) const;

@@ -71,16 +71,16 @@ static void handle_signal_simple(int sig)
     signal_count++;
     if (p_ptr->is_dead) {
         p_ptr->died_from = _("強制終了", "Abortion");
-        forget_lite(p_ptr->current_floor_ptr);
-        forget_view(p_ptr->current_floor_ptr);
-        clear_mon_lite(p_ptr->current_floor_ptr);
+        forget_lite(*p_ptr->current_floor_ptr);
+        forget_view(*p_ptr->current_floor_ptr);
+        clear_mon_lite(*p_ptr->current_floor_ptr);
         close_game(p_ptr);
         quit(_("強制終了", "interrupt"));
     } else if (signal_count >= 5) {
         p_ptr->died_from = _("強制終了中", "Interrupting");
-        forget_lite(p_ptr->current_floor_ptr);
-        forget_view(p_ptr->current_floor_ptr);
-        clear_mon_lite(p_ptr->current_floor_ptr);
+        forget_lite(*p_ptr->current_floor_ptr);
+        forget_view(*p_ptr->current_floor_ptr);
+        clear_mon_lite(*p_ptr->current_floor_ptr);
         p_ptr->playing = false;
         if (!cheat_immortal) {
             p_ptr->is_dead = true;
@@ -127,9 +127,9 @@ static void handle_signal_abort(int sig)
     }
 
     auto &floor = *p_ptr->current_floor_ptr;
-    forget_lite(&floor);
-    forget_view(&floor);
-    clear_mon_lite(&floor);
+    forget_lite(floor);
+    forget_view(floor);
+    clear_mon_lite(floor);
 
     term_erase(0, hgt - 1);
     term_putstr(0, hgt - 1, -1, TERM_RED, _("恐ろしいソフトのバグが飛びかかってきた！", "A gruesome software bug LEAPS out at you!"));
@@ -139,7 +139,7 @@ static void handle_signal_abort(int sig)
     exe_write_diary(floor, DiaryKind::GAMESTART, 0, _("----ゲーム異常終了----", "-- Tried Panic Save and Aborted Game --"));
     term_fresh();
 
-    p_ptr->panic_save = 1;
+    AngbandSystem::get_instance().set_panic_save(true);
     p_ptr->died_from = _("(緊急セーブ)", "(panic save)");
 
     signals_ignore_tstp();

@@ -3,6 +3,7 @@
 #include "room/door-definition.h"
 #include "system/angband-system.h"
 #include "system/enums/grid-flow.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
@@ -49,7 +50,7 @@ short Grid::get_terrain_id(TerrainKind tk) const
     case TerrainKind::NORMAL:
         return this->feat;
     case TerrainKind::MIMIC:
-        return this->get_feat_mimic();
+        return TerrainList::get_instance().get_terrain(this->mimic ? this->mimic : this->feat).mimic;
     case TerrainKind::MIMIC_RAW:
         return this->mimic;
     default:
@@ -165,6 +166,17 @@ bool Grid::is_hidden_door() const
     return is_secret && this->get_terrain().is_closed_door();
 }
 
+bool Grid::is_acceptable_target() const
+{
+    auto is_acceptable = this->has(TerrainCharacteristics::LESS);
+    is_acceptable |= this->has(TerrainCharacteristics::MORE);
+    is_acceptable |= this->has(TerrainCharacteristics::QUEST_ENTER);
+    is_acceptable |= this->has(TerrainCharacteristics::QUEST_EXIT);
+    is_acceptable |= this->has(TerrainCharacteristics::STORE);
+    is_acceptable |= this->has(TerrainCharacteristics::BLDG);
+    return is_acceptable;
+}
+
 bool Grid::has_monster() const
 {
     return is_monster(this->m_idx);
@@ -180,16 +192,6 @@ uint8_t Grid::get_distance(GridFlow gf) const
     return this->dists.at(gf);
 }
 
-/*
- * @brief グリッドのミミック特性地形を返す
- * @param g_ptr グリッドへの参照ポインタ
- * @return 地形情報
- */
-FEAT_IDX Grid::get_feat_mimic() const
-{
-    return TerrainList::get_instance().get_terrain(this->mimic ? this->mimic : this->feat).mimic;
-}
-
 bool Grid::has(TerrainCharacteristics tc) const
 {
     return this->get_terrain().has(tc);
@@ -203,6 +205,20 @@ bool Grid::has(TerrainCharacteristics tc) const
 bool Grid::is_symbol(const int ch) const
 {
     return this->get_terrain().symbol_configs.at(F_LIT_STANDARD).character == ch;
+}
+
+/*!
+ * @brief モンスターにより照明が消されている地形か否かを判定する
+ * @return 照明が消されているか否か
+ */
+bool Grid::is_darkened() const
+{
+    return match_bits(this->info, CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK, CAVE_VIEW | CAVE_MNDK);
+}
+
+bool Grid::has_special_terrain() const
+{
+    return this->get_terrain().flags.has(TerrainCharacteristics::SPECIAL);
 }
 
 void Grid::reset_costs()
@@ -236,7 +252,7 @@ TerrainType &Grid::get_terrain(TerrainKind tk)
     case TerrainKind::NORMAL:
         return terrains.get_terrain(this->feat);
     case TerrainKind::MIMIC:
-        return terrains.get_terrain(this->get_feat_mimic());
+        return terrains.get_terrain(this->get_terrain_id(TerrainKind::MIMIC));
     case TerrainKind::MIMIC_RAW:
         return terrains.get_terrain(this->mimic);
     default:
@@ -251,7 +267,7 @@ const TerrainType &Grid::get_terrain(TerrainKind tk) const
     case TerrainKind::NORMAL:
         return terrains.get_terrain(this->feat);
     case TerrainKind::MIMIC:
-        return terrains.get_terrain(this->get_feat_mimic());
+        return terrains.get_terrain(this->get_terrain_id(TerrainKind::MIMIC));
     case TerrainKind::MIMIC_RAW:
         return terrains.get_terrain(this->mimic);
     default:
@@ -261,7 +277,7 @@ const TerrainType &Grid::get_terrain(TerrainKind tk) const
 
 void Grid::place_closed_curtain()
 {
-    this->feat = feat_door[DOOR_CURTAIN].closed;
+    this->set_terrain_id(Doors::get_instance().get_door(DoorKind::CURTAIN).closed);
     this->info &= ~(CAVE_MASK);
 }
 
@@ -275,17 +291,37 @@ void Grid::add_info(int grid_info)
     this->info |= grid_info;
 }
 
-void Grid::set_terrain_id(short terrain_id)
+//!< @details MIMIC_RAW は入ってこない想定.
+void Grid::set_terrain_id(short terrain_id, TerrainKind tk)
 {
-    this->feat = terrain_id;
+    switch (tk) {
+    case TerrainKind::NORMAL:
+        this->feat = terrain_id;
+        break;
+    case TerrainKind::MIMIC:
+        this->mimic = terrain_id;
+        break;
+    default:
+        THROW_EXCEPTION(std::logic_error, format("Invalid terrain kind is specified! %d", enum2i(tk)));
+    }
 }
 
-void Grid::set_terrain_id(TerrainTag tag)
+void Grid::set_terrain_id(TerrainTag tag, TerrainKind tk)
 {
-    this->feat = TerrainList::get_instance().get_terrain_id(tag);
+    this->set_terrain_id(TerrainList::get_instance().get_terrain_id(tag), tk);
 }
 
-void Grid::set_mimic_terrain_id(TerrainTag tag)
+void Grid::set_door_id(short terrain_id_random)
 {
-    this->mimic = TerrainList::get_instance().get_terrain_id(tag);
+    if (!this->has_los_terrain(TerrainKind::MIMIC_RAW) || this->has_los_terrain()) {
+        return;
+    }
+
+    const auto &terrain_mimic = this->get_terrain(TerrainKind::MIMIC_RAW);
+    if (terrain_mimic.flags.has(TerrainCharacteristics::MOVE) || terrain_mimic.flags.has(TerrainCharacteristics::CAN_FLY)) {
+        const auto terrain_id = one_in_(2) ? this->mimic : terrain_id_random;
+        this->set_terrain_id(terrain_id);
+    }
+
+    this->set_terrain_id(TerrainTag::NONE, TerrainKind::MIMIC);
 }

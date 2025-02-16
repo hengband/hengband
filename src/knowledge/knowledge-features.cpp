@@ -7,7 +7,6 @@
 #include "knowledge/knowledge-features.h"
 #include "core/show-file.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "knowledge/lighting-level-table.h"

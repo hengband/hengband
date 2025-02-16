@@ -24,28 +24,27 @@ mspell_cast_msg_simple::mspell_cast_msg_simple(concptr to_player, concptr to_mon
 
 /*!
  * @brief プレイヤーがモンスターを見ることができるかの判定 /
- * @param floor_ptr 現在フロアへの参照ポインタ
  * @param m_idx モンスターID
  * @return プレイヤーがモンスターを見ることができるならTRUE、そうでなければFALSEを返す。
  */
 bool see_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    MonsterEntity *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    return is_seen(player_ptr, m_ptr);
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    return is_seen(player_ptr, monster);
 }
 
 /*!
  * @brief モンスター2体がプレイヤーの近くに居るかの判定 /
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスターID一体目
  * @param t_idx モンスターID二体目
  * @return モンスター2体のどちらかがプレイヤーの近くに居ればTRUE、どちらも遠ければFALSEを返す。
  */
-bool monster_near_player(FloorType *floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+bool monster_near_player(const FloorType &floor, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-    MonsterEntity *m_ptr = &floor_ptr->m_list[m_idx];
-    MonsterEntity *t_ptr = &floor_ptr->m_list[t_idx];
-    return (m_ptr->cdis <= MAX_PLAYER_SIGHT) || (t_ptr->cdis <= MAX_PLAYER_SIGHT);
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monster_target = floor.m_list[t_idx];
+    return (monster.cdis <= MAX_PLAYER_SIGHT) || (monster_target.cdis <= MAX_PLAYER_SIGHT);
 }
 
 /*!
@@ -61,8 +60,8 @@ bool monster_near_player(FloorType *floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_
 bool monspell_message_base(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg &msgs, bool msg_flag_aux, int target_type)
 {
     bool notice = false;
-    FloorType *floor_ptr = player_ptr->current_floor_ptr;
-    bool known = monster_near_player(floor_ptr, m_idx, t_idx);
+    auto &floor = *player_ptr->current_floor_ptr;
+    bool known = monster_near_player(floor, m_idx, t_idx);
     bool see_either = see_monster(player_ptr, m_idx) || see_monster(player_ptr, t_idx);
     bool mon_to_mon = (target_type == MONSTER_TO_MONSTER);
     bool mon_to_player = (target_type == MONSTER_TO_PLAYER);
@@ -92,7 +91,7 @@ bool monspell_message_base(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
     }
 
     if (mon_to_mon && known && !see_either) {
-        floor_ptr->monster_noise = true;
+        floor.monster_noise = true;
     }
 
     return notice;

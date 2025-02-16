@@ -2,6 +2,7 @@
 #include "action/action-limited.h"
 #include "effect/attribute-types.h"
 #include "floor/floor-object.h"
+#include "floor/geometry.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-use/zaprod-execution.h"
 #include "object/item-tester-hooker.h"
@@ -43,7 +44,7 @@
  * @param powerful 強力発動上の処理ならばTRUE
  * @return 発動により効果内容が確定したならばTRUEを返す
  */
-int rod_effect(PlayerType *player_ptr, int sval, int dir, bool *use_charge, bool powerful)
+int rod_effect(PlayerType *player_ptr, int sval, const Direction &dir, bool *use_charge, bool powerful)
 {
     int ident = false;
     PLAYER_LEVEL lev = powerful ? player_ptr->lev * 2 : player_ptr->lev;
@@ -53,7 +54,7 @@ int rod_effect(PlayerType *player_ptr, int sval, int dir, bool *use_charge, bool
     /* Analyze the rod */
     switch (sval) {
     case SV_ROD_DETECT_TRAP: {
-        if (detect_traps(player_ptr, detect_rad, dir == 0)) {
+        if (detect_traps(player_ptr, detect_rad, !dir)) {
             ident = true;
         }
         break;

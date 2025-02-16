@@ -19,7 +19,6 @@
 #include "floor/floor-save.h"
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
 #include "io/input-key-acceptor.h"
@@ -31,7 +30,6 @@
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-update.h"
 #include "monster/smart-learn-types.h"
 #include "mutation/mutation-calculator.h"
@@ -95,6 +93,7 @@
 #include "status/base-status.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -154,29 +153,28 @@ static player_hand main_attack_hand(PlayerType *player_ptr);
  */
 static void delayed_visual_update(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (int i = 0; i < floor_ptr->redraw_n; i++) {
-        POSITION y = floor_ptr->redraw_y[i];
-        POSITION x = floor_ptr->redraw_x[i];
-        Grid *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
-        if (none_bits(g_ptr->info, CAVE_REDRAW)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    for (int i = 0; i < floor.redraw_n; i++) {
+        POSITION y = floor.redraw_y[i];
+        POSITION x = floor.redraw_x[i];
+        auto &grid = floor.grid_array[y][x];
+        if (none_bits(grid.info, CAVE_REDRAW)) {
             continue;
         }
 
-        if (any_bits(g_ptr->info, CAVE_NOTE)) {
+        if (any_bits(grid.info, CAVE_NOTE)) {
             note_spot(player_ptr, y, x);
         }
 
         lite_spot(player_ptr, y, x);
-        if (g_ptr->has_monster()) {
-            update_monster(player_ptr, g_ptr->m_idx, false);
+        if (grid.has_monster()) {
+            update_monster(player_ptr, grid.m_idx, false);
         }
 
-        reset_bits(g_ptr->info, (CAVE_NOTE | CAVE_REDRAW));
+        reset_bits(grid.info, (CAVE_NOTE | CAVE_REDRAW));
     }
 
-    floor_ptr->redraw_n = 0;
+    floor.redraw_n = 0;
 }
 
 /*!
@@ -194,18 +192,18 @@ static bool is_heavy_shoot(PlayerType *player_ptr, const ItemEntity *o_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 総重量
  */
-WEIGHT calc_inventory_weight(PlayerType *player_ptr)
+int calc_inventory_weight(PlayerType *player_ptr)
 {
-    WEIGHT weight = 0;
-
-    ItemEntity *o_ptr;
+    auto weight = 0;
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
-        if (!o_ptr->is_valid()) {
+        const auto &item = player_ptr->inventory_list[i];
+        if (!item.is_valid()) {
             continue;
         }
-        weight += o_ptr->weight * o_ptr->number;
+
+        weight += item.weight * item.number;
     }
+
     return weight;
 }
 
@@ -1898,7 +1896,7 @@ static bool is_riding_two_hands(PlayerType *player_ptr)
 
 static int16_t calc_riding_bow_penalty(PlayerType *player_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (!player_ptr->riding) {
         return 0;
     }
@@ -1910,7 +1908,7 @@ static int16_t calc_riding_bow_penalty(PlayerType *player_ptr)
             penalty = 5;
         }
     } else {
-        penalty = floor_ptr->m_list[player_ptr->riding].get_monrace().level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;
+        penalty = floor.m_list[player_ptr->riding].get_monrace().level - player_ptr->skill_exp[PlayerSkillKindType::RIDING] / 80;
         penalty += 30;
         if (penalty < 30) {
             penalty = 30;
@@ -2572,12 +2570,13 @@ static int calc_to_weapon_dice_num(PlayerType *player_ptr, INVENTORY_IDX slot)
  * Computes current weight limit.
  * @return 制限重量(ポンド)
  */
-WEIGHT calc_weight_limit(PlayerType *player_ptr)
+int calc_weight_limit(PlayerType *player_ptr)
 {
-    WEIGHT i = (WEIGHT)adj_str_wgt[player_ptr->stat_index[A_STR]] * 50;
+    auto i = adj_str_wgt[player_ptr->stat_index[A_STR]] * 50;
     if (PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
         i = i * 3 / 2;
     }
+
     return i;
 }
 
@@ -2592,7 +2591,7 @@ void update_creature(PlayerType *player_ptr)
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     if (rfu.has(StatusRecalculatingFlag::AUTO_DESTRUCTION)) {
         rfu.reset_flag(StatusRecalculatingFlag::AUTO_DESTRUCTION);
         autopick_delayed_alter(player_ptr);
@@ -2644,12 +2643,12 @@ void update_creature(PlayerType *player_ptr)
 
     if (rfu.has(StatusRecalculatingFlag::UN_LITE)) {
         rfu.reset_flag(StatusRecalculatingFlag::UN_LITE);
-        forget_lite(floor_ptr);
+        forget_lite(floor);
     }
 
     if (rfu.has(StatusRecalculatingFlag::UN_VIEW)) {
         rfu.reset_flag(StatusRecalculatingFlag::UN_VIEW);
-        forget_view(floor_ptr);
+        forget_view(floor);
     }
 
     if (rfu.has(StatusRecalculatingFlag::VIEW)) {
@@ -2694,40 +2693,21 @@ void update_creature(PlayerType *player_ptr)
  */
 bool player_has_no_spellbooks(PlayerType *player_ptr)
 {
-    ItemEntity *o_ptr;
     for (int i = 0; i < INVEN_PACK; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
+        const auto *o_ptr = &player_ptr->inventory_list[i];
         if (o_ptr->is_valid() && check_book_realm(player_ptr, o_ptr->bi_key)) {
             return false;
         }
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    for (const auto this_o_idx : floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-        o_ptr = &floor_ptr->o_list[this_o_idx];
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (const auto this_o_idx : floor.grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
+        const auto *o_ptr = &floor.o_list[this_o_idx];
         if (o_ptr->is_valid() && o_ptr->marked.has(OmType::FOUND) && check_book_realm(player_ptr, o_ptr->bi_key)) {
             return false;
         }
     }
 
-    return true;
-}
-
-/*!
- * @brief プレイヤーを指定座標に配置する / Place the player in the dungeon XXX XXX
- * @param x 配置先X座標
- * @param y 配置先Y座標
- * @return 配置に成功したらTRUE
- */
-bool player_place(PlayerType *player_ptr, POSITION y, POSITION x)
-{
-    if (player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
-        return false;
-    }
-
-    /* Save player location */
-    player_ptr->y = y;
-    player_ptr->x = x;
     return true;
 }
 
@@ -2752,12 +2732,12 @@ void wreck_the_pattern(PlayerType *player_ptr)
     auto to_ruin = randint1(45) + 35;
     while (to_ruin--) {
         const auto pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
-        if (pattern_tile(&floor, pos.y, pos.x) && (floor.get_grid(pos).get_terrain().subtype != PATTERN_TILE_WRECKED)) {
-            cave_set_feat(player_ptr, pos.y, pos.x, feat_pattern_corrupted);
+        if (pattern_tile(floor, pos.y, pos.x) && (floor.get_grid(pos).get_terrain().subtype != PATTERN_TILE_WRECKED)) {
+            set_terrain_id_to_grid(player_ptr, pos, TerrainTag::PATTERN_CORRUPTED);
         }
     }
 
-    cave_set_feat(player_ptr, p_pos.y, p_pos.x, feat_pattern_corrupted);
+    set_terrain_id_to_grid(player_ptr, p_pos, TerrainTag::PATTERN_CORRUPTED);
 }
 
 /*!
@@ -2839,7 +2819,7 @@ void check_experience(PlayerType *player_ptr)
             exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::LEVELUP, player_ptr->lev);
         }
 
-        sound(SOUND_LEVEL);
+        sound(SoundKind::LEVEL);
         msg_format(_("レベル %d にようこそ。", "Welcome to level %d."), player_ptr->lev);
         rfu.set_flags(flags_srf);
         const auto flags_mwrf_levelup = {
@@ -2996,7 +2976,7 @@ int16_t modify_stat_value(int value, int amount)
  * Hack -- Calculates the total number of points earned		-JWT-
  * @details
  */
-long calc_score(PlayerType *player_ptr)
+uint32_t calc_score(PlayerType *player_ptr)
 {
     const auto &entries = ArenaEntryList::get_instance();
     const auto current_entry = entries.get_current_entry();
@@ -3152,10 +3132,9 @@ bool is_chargeman(PlayerType *player_ptr)
     return player_ptr->ppersonality == PERSONALITY_CHARGEMAN;
 }
 
-WEIGHT calc_weapon_weight_limit(PlayerType *player_ptr)
+int calc_weapon_weight_limit(PlayerType *player_ptr)
 {
-    WEIGHT weight = adj_str_hold[player_ptr->stat_index[A_STR]];
-
+    auto weight = adj_str_hold[player_ptr->stat_index[A_STR]];
     if (has_two_handed_weapons(player_ptr)) {
         weight *= 2;
     }
@@ -3163,10 +3142,9 @@ WEIGHT calc_weapon_weight_limit(PlayerType *player_ptr)
     return weight;
 }
 
-WEIGHT calc_bow_weight_limit(PlayerType *player_ptr)
+int calc_bow_weight_limit(PlayerType *player_ptr)
 {
-    WEIGHT weight = adj_str_hold[player_ptr->stat_index[A_STR]];
-
+    auto weight = adj_str_hold[player_ptr->stat_index[A_STR]];
     return weight;
 }
 

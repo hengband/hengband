@@ -10,25 +10,14 @@
  */
 
 #include "monster/monster-list.h"
-#include "core/speed-table.h"
-#include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
-#include "floor/floor-object.h"
-#include "floor/geometry.h"
-#include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
-#include "grid/grid.h"
-#include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster/monster-describer.h"
-#include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "pet/pet-fall-off.h"
-#include "player/player-status.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-allocation.h"
 #include "system/monrace/monrace-definition.h"
@@ -37,8 +26,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/system-variables.h"
-#include "util/bit-flags-calculator.h"
-#include "util/probability-table.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <cmath>
@@ -144,8 +131,8 @@ MonraceId get_mon_num(PlayerType *player_ptr, int min_level, int max_level, uint
     }
 
     if (cheat_hear) {
-        msg_format(_("モンスター第3次候補数:%lu(%d-%dF)%d ", "monster third selection:%lu(%d-%dF)%d "), prob_table.item_count(), min_level, max_level,
-            prob_table.total_prob());
+        constexpr auto fmt = _("モンスター第3次候補数:{}({}-{}F){} ", "monster third selection:{}({}-{}F){} ");
+        msg_print(fmt, prob_table.item_count(), min_level, max_level, prob_table.total_prob());
     }
 
     if (prob_table.empty()) {
@@ -170,7 +157,7 @@ MonraceId get_mon_num(PlayerType *player_ptr, int min_level, int max_level, uint
     return *it;
 }
 
-static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, short m_idx, short terrain_id, const std::optional<short> summoner_m_idx)
+static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, short m_idx, short terrain_id, std::optional<short> summoner_m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
@@ -182,7 +169,7 @@ static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, s
     if (old_unique) {
         level = MonraceList::get_instance().get_monrace(MonraceId::CHAMELEON_K).level;
     } else if (!floor.is_underground()) {
-        level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
+        level = WildernessGrids::get_instance().get_player_grid().get_level();
     } else {
         level = floor.dun_level;
     }
@@ -226,20 +213,18 @@ void choose_chameleon_polymorph(PlayerType *player_ptr, short m_idx, short terra
  * @param m_idx 隣接数を調べたいモンスターのID
  * @return 隣接しているモンスターの数
  */
-int get_monster_crowd_number(const FloorType *floor_ptr, short m_idx)
+int get_monster_crowd_number(const FloorType &floor, short m_idx)
 {
-    auto *m_ptr = &floor_ptr->m_list[m_idx];
-    POSITION my = m_ptr->fy;
-    POSITION mx = m_ptr->fx;
-    int count = 0;
-    for (int i = 0; i < 7; i++) {
-        int ay = my + ddy_ddd[i];
-        int ax = mx + ddx_ddd[i];
-
-        if (!in_bounds(floor_ptr, ay, ax)) {
+    const auto &monster = floor.m_list[m_idx];
+    const auto m_pos = monster.get_position();
+    auto count = 0;
+    for (const auto &d : Direction::directions_8()) {
+        const auto pos = m_pos + d.vec();
+        if (!floor.contains(pos)) {
             continue;
         }
-        if (floor_ptr->grid_array[ay][ax].has_monster()) {
+
+        if (floor.get_grid(pos).has_monster()) {
             count++;
         }
     }

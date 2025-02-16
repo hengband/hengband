@@ -21,21 +21,21 @@
  * @param mult 期待値計算時のdam倍率
  * @return クリティカルを適用したダメージと、クリティカル発生時に表示するメッセージと、クリティカル効果音のタプルを返す
  */
-std::tuple<int, concptr, sound_type> apply_critical_norm_damage(int k, int base_dam, int mult)
+std::tuple<int, std::string, SoundKind> apply_critical_norm_damage(int k, int base_dam, int mult)
 {
     if (k < 400) {
-        return { 2 * base_dam + 5 * mult, _("手ごたえがあった！", "It was a good hit!"), SOUND_GOOD_HIT };
+        return { 2 * base_dam + 5 * mult, _("手ごたえがあった！", "It was a good hit!"), SoundKind::GOOD_HIT };
     }
     if (k < 700) {
-        return { 2 * base_dam + 10 * mult, _("かなりの手ごたえがあった！", "It was a great hit!"), SOUND_GREAT_HIT };
+        return { 2 * base_dam + 10 * mult, _("かなりの手ごたえがあった！", "It was a great hit!"), SoundKind::GREAT_HIT };
     }
     if (k < 900) {
-        return { 3 * base_dam + 15 * mult, _("会心の一撃だ！", "It was a superb hit!"), SOUND_SUPERB_HIT };
+        return { 3 * base_dam + 15 * mult, _("会心の一撃だ！", "It was a superb hit!"), SoundKind::SUPERB_HIT };
     }
     if (k < 1300) {
-        return { 3 * base_dam + 20 * mult, _("最高の会心の一撃だ！", "It was a *GREAT* hit!"), SOUND_STAR_GREAT_HIT };
+        return { 3 * base_dam + 20 * mult, _("最高の会心の一撃だ！", "It was a *GREAT* hit!"), SoundKind::STAR_GREAT_HIT };
     }
-    return { ((7 * base_dam) / 2) + 25 * mult, _("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!"), SOUND_STAR_SUPERB_HIT };
+    return { ((7 * base_dam) / 2) + 25 * mult, _("比類なき最高の会心の一撃だ！", "It was a *SUPERB* hit!"), SoundKind::STAR_SUPERB_HIT };
 }
 
 /*!
@@ -71,7 +71,7 @@ int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int1
         k += randint1(650);
     }
 
-    auto [critical_dam, msg, battle_sound] = apply_critical_norm_damage(k, dam);
+    const auto &[critical_dam, msg, battle_sound] = apply_critical_norm_damage(k, dam);
     sound(battle_sound);
     msg_print(msg);
     return critical_dam;
@@ -87,7 +87,7 @@ int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int1
  */
 static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
+    auto &monrace = pa_ptr->m_ptr->get_monrace();
     int maxhp = pa_ptr->m_ptr->maxhp;
     if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->surprise_attack) ? 15
                                                                                           : 27)) {
@@ -97,9 +97,9 @@ static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
         return;
     }
 
-    const auto no_instantly_death = r_ptr->resistance_flags.has(MonsterResistanceType::NO_INSTANTLY_DEATH);
+    const auto no_instantly_death = monrace.resistance_flags.has(MonsterResistanceType::NO_INSTANTLY_DEATH);
     bool is_weaken = pa_ptr->m_ptr->hp < maxhp / 2;
-    bool is_unique = r_ptr->kind_flags.has(MonsterKindType::UNIQUE) || no_instantly_death;
+    bool is_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE) || no_instantly_death;
     bool is_critical = (is_weaken && one_in_((player_ptr->num_blow[0] + player_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !is_unique);
     if (!is_critical) {
         return;
@@ -107,7 +107,7 @@ static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
 
     if (is_unique || !is_weaken) {
         if (no_instantly_death) {
-            r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
+            monrace.r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
         }
         pa_ptr->attack_damage = std::max(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
         pa_ptr->drain_result *= 2;
@@ -126,15 +126,15 @@ static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
 void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
-    const auto no_instantly_death = r_ptr->resistance_flags.has(MonsterResistanceType::NO_INSTANTLY_DEATH);
+    auto &monrace = pa_ptr->m_ptr->get_monrace();
+    const auto no_instantly_death = monrace.resistance_flags.has(MonsterResistanceType::NO_INSTANTLY_DEATH);
     if ((o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
-        if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE) && !no_instantly_death) {
+        if ((randint1(randint1(monrace.level / 7) + 5) == 1) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE) && !no_instantly_death) {
             pa_ptr->attack_damage = pa_ptr->m_ptr->hp + 1;
             msg_format(_("%sの急所を突き刺した！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
         } else {
             if (no_instantly_death) {
-                r_ptr->r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
+                monrace.r_resistance_flags.set(MonsterResistanceType::NO_INSTANTLY_DEATH);
             }
             pa_ptr->attack_damage = 1;
         }

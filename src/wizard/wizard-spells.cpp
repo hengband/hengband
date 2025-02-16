@@ -13,6 +13,7 @@
 #include "floor/floor-util.h"
 #include "floor/pattern-walk.h"
 #include "io/gf-descriptions.h"
+#include "io/input-key-acceptor.h"
 #include "mind/mind-blue-mage.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-summon.h"
@@ -80,18 +81,19 @@ std::optional<MonraceId> wiz_select_summon_monrace_id(MonraceId monrace_id)
         return monrace_id;
     }
 
-    constexpr auto prompt = "Enter monster symbol character(^M:Search by name, ^I:Input MonsterID): ";
-    const auto symbol = input_command(prompt);
-    if (!symbol) {
+    prt("Enter monster symbol character(^M:Search by name, ^I:Input MonsterID): ", 0, 0);
+    const auto skey = inkey_special(false);
+    prt("", 0, 0);
+    if ((skey & SKEY_MASK) || skey == ESCAPE) {
         return std::nullopt;
     }
 
     const auto &monraces = MonraceList::get_instance();
-    if (*symbol == KTRL('I')) {
+    if (skey == KTRL('I')) {
         return input_numerics("MonsterID", 1, monraces.size() - 1, MonraceId::FILTHY_URCHIN);
     }
 
-    const auto monrace_ids = wiz_collect_monster_candidates(*symbol);
+    const auto monrace_ids = wiz_collect_monster_candidates(static_cast<char>(skey));
     if (monrace_ids.empty()) {
         return std::nullopt;
     }
@@ -362,8 +364,8 @@ void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effe
         return;
     }
 
-    DIRECTION dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return;
     }
     fire_ball(player_ptr, idx, dir, dam, 0);

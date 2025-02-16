@@ -1,5 +1,6 @@
 #include "save/floor-writer.h"
 #include "core/object-compressor.h"
+#include "floor/dungeon-feeling.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
@@ -86,7 +87,7 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     wr_u16b((uint16_t)player_ptr->x);
     wr_u16b((uint16_t)floor.height);
     wr_u16b((uint16_t)floor.width);
-    wr_byte(player_ptr->feeling);
+    wr_byte(static_cast<uint8_t>(DungeonFeeling::get_instance().get_feeling()));
     const auto templates = generate_sorted_grid_templates(floor);
 
     /*** Dump templates ***/
@@ -160,9 +161,9 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
  */
 bool wr_dungeon(PlayerType *player_ptr)
 {
-    forget_lite(player_ptr->current_floor_ptr);
-    forget_view(player_ptr->current_floor_ptr);
-    clear_mon_lite(player_ptr->current_floor_ptr);
+    forget_lite(*player_ptr->current_floor_ptr);
+    forget_view(*player_ptr->current_floor_ptr);
+    clear_mon_lite(*player_ptr->current_floor_ptr);
     static constexpr auto flags = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,

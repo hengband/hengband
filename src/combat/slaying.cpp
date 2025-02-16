@@ -28,7 +28,7 @@
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-MULTIPLY mult_slaying(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr)
+MULTIPLY mult_slaying(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, const MonsterEntity &monster)
 {
     static const struct slay_table_t {
         tr_type slay_flag;
@@ -57,16 +57,16 @@ MULTIPLY mult_slaying(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flag
         { TR_KILL_DRAGON, MonsterKindType::DRAGON, 50 },
     };
 
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = monster.get_monrace();
     for (size_t i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++i) {
         const struct slay_table_t *p = &slay_table[i];
 
-        if (flags.has_not(p->slay_flag) || r_ptr->kind_flags.has_not(p->affect_race_flag)) {
+        if (flags.has_not(p->slay_flag) || monrace.kind_flags.has_not(p->affect_race_flag)) {
             continue;
         }
 
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-            r_ptr->r_kind_flags.set(p->affect_race_flag);
+        if (is_original_ap_and_seen(player_ptr, monster)) {
+            monrace.r_kind_flags.set(p->affect_race_flag);
         }
 
         mult = std::max(mult, p->slay_mult);
@@ -83,7 +83,7 @@ MULTIPLY mult_slaying(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flag
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, MonsterEntity *m_ptr)
+MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags, const MonsterEntity &monster)
 {
     static const struct brand_table_t {
         tr_type brand_flag;
@@ -97,7 +97,7 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags,
         { TR_BRAND_POIS, RFR_EFF_IM_POISON_MASK, MonsterResistanceType::MAX },
     };
 
-    auto *r_ptr = &m_ptr->get_monrace();
+    auto &monrace = monster.get_monrace();
     for (size_t i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++i) {
         const struct brand_table_t *p = &brand_table[i];
 
@@ -106,18 +106,18 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags,
         }
 
         /* Notice immunity */
-        if (r_ptr->resistance_flags.has_any_of(p->resist_mask)) {
-            if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-                r_ptr->r_resistance_flags.set(r_ptr->resistance_flags & p->resist_mask);
+        if (monrace.resistance_flags.has_any_of(p->resist_mask)) {
+            if (is_original_ap_and_seen(player_ptr, monster)) {
+                monrace.r_resistance_flags.set(monrace.resistance_flags & p->resist_mask);
             }
 
             continue;
         }
 
         /* Otherwise, take the damage */
-        if (r_ptr->resistance_flags.has(p->hurt_flag)) {
-            if (is_original_ap_and_seen(player_ptr, m_ptr)) {
-                r_ptr->r_resistance_flags.set(p->hurt_flag);
+        if (monrace.resistance_flags.has(p->hurt_flag)) {
+            if (is_original_ap_and_seen(player_ptr, monster)) {
+                monrace.r_resistance_flags.set(p->hurt_flag);
             }
 
             mult = std::max<short>(mult, 50);
@@ -146,7 +146,7 @@ MULTIPLY mult_brand(PlayerType *player_ptr, MULTIPLY mult, const TrFlags &flags,
  * Note that most brands and slays are x3, except Slay Animal (x2),\n
  * Slay Evil (x2), and Kill dragon (x5).\n
  */
-int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int tdam, MonsterEntity *m_ptr, combat_options mode, bool thrown)
+int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int tdam, const MonsterEntity &monster, combat_options mode, bool thrown)
 {
     auto flags = o_ptr->get_flags();
     torch_flags(o_ptr, flags); /* torches has secret flags */
@@ -183,13 +183,13 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int 
     case ItemKindType::SWORD:
     case ItemKindType::DIGGING:
     case ItemKindType::LITE: {
-        mult = mult_slaying(player_ptr, mult, flags, m_ptr);
+        mult = mult_slaying(player_ptr, mult, flags, monster);
 
-        mult = mult_brand(player_ptr, mult, flags, m_ptr);
+        mult = mult_brand(player_ptr, mult, flags, monster);
 
         PlayerClass pc(player_ptr);
         if (pc.equals(PlayerClassType::SAMURAI)) {
-            mult = mult_hissatsu(player_ptr, mult, flags, m_ptr, mode);
+            mult = mult_hissatsu(player_ptr, mult, flags, monster, mode);
         }
 
         if (!pc.equals(PlayerClassType::SAMURAI) && (flags.has(TR_FORCE_WEAPON)) && (player_ptr->csp > (o_ptr->damage_dice.maxroll() / 5))) {
@@ -198,7 +198,7 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int 
             mult = mult * 3 / 2 + 20;
         }
 
-        if ((o_ptr->is_specific_artifact(FixedArtifactId::NOTHUNG)) && (m_ptr->r_idx == MonraceId::FAFNER)) {
+        if ((o_ptr->is_specific_artifact(FixedArtifactId::NOTHUNG)) && (monster.r_idx == MonraceId::FAFNER)) {
             mult = 150;
         }
         break;

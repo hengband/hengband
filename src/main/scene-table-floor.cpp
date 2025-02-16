@@ -5,6 +5,7 @@
 
 #include "main/scene-table-floor.h"
 #include "dungeon/quest.h"
+#include "floor/dungeon-feeling.h"
 #include "main/music-definitions-table.h"
 #include "system/angband-system.h"
 #include "system/floor/floor-info.h"
@@ -107,16 +108,20 @@ static bool scene_field(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_dungeon_feeling(PlayerType *player_ptr, scene_type *value)
 {
-    const bool enable = (player_ptr->feeling >= 2) && (player_ptr->feeling <= 5);
-    if (enable) {
-        value->type = TERM_XTRA_MUSIC_BASIC;
-
-        if (player_ptr->feeling == 2) {
-            value->val = MUSIC_BASIC_DUN_FEEL2;
-        } else {
-            value->val = MUSIC_BASIC_DUN_FEEL1;
-        }
+    (void)player_ptr; //!< @details 関数ポインタの都合、後で消す.
+    const auto feeling = DungeonFeeling::get_instance().get_feeling();
+    const auto enable = (feeling >= 2) && (feeling <= 5);
+    if (!enable) {
+        return enable;
     }
+
+    value->type = TERM_XTRA_MUSIC_BASIC;
+    if (feeling == 2) {
+        value->val = MUSIC_BASIC_DUN_FEEL2;
+    } else {
+        value->val = MUSIC_BASIC_DUN_FEEL1;
+    }
+
     return enable;
 }
 

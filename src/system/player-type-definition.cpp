@@ -3,6 +3,7 @@
 #include "monster/monster-util.h"
 #include "system/angband-exceptions.h"
 #include "system/floor/floor-info.h"
+#include "system/grid-type-definition.h"
 #include "system/monster-entity.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"
@@ -122,22 +123,33 @@ Pos2D PlayerType::get_position() const
     return Pos2D(this->y, this->x);
 }
 
+Pos2D PlayerType::get_old_position() const
+{
+    return Pos2D(this->oldpy, this->oldpx);
+}
+
 /*!
  * @brief 現在地の隣 (瞬時値)または現在地を返す
  * @param dir 隣を表す方向番号
  * @details プレイヤーが移動する前後の文脈で使用すると不整合を起こすので注意
  * 方向番号による位置取りは以下の通り. 0と5は現在地.
- * 123 ...
- * 456 .@.
  * 789 ...
+ * 456 .@.
+ * 123 ...
  */
 Pos2D PlayerType::get_neighbor(int dir) const
 {
-    if ((dir < 0) || (dir >= static_cast<int>(std::size(ddx)))) {
-        THROW_EXCEPTION(std::logic_error, "Invalid direction is specified!");
-    }
+    return this->get_position() + Direction(dir).vec();
+}
 
-    return Pos2D(this->y + ddy[dir], this->x + ddx[dir]);
+/*!
+ * @brief 現在地の隣 (瞬時値)または現在地を返す
+ * @param dir 隣を表す方向
+ * @attention プレイヤーが移動する前後の文脈で使用すると不整合を起こすので注意
+ */
+Pos2D PlayerType::get_neighbor(const Direction &dir) const
+{
+    return this->get_position() + dir.vec();
 }
 
 bool PlayerType::is_located_at_running_destination() const
@@ -148,6 +160,28 @@ bool PlayerType::is_located_at_running_destination() const
 bool PlayerType::is_located_at(const Pos2D &pos) const
 {
     return (this->y == pos.y) && (this->x == pos.x);
+}
+
+/*!
+ * @brief プレイヤーを指定座標に配置する
+ * @param pos 配置先座標
+ * @return 配置に成功したらTRUE
+ */
+bool PlayerType::try_set_position(const Pos2D &pos)
+{
+    if (this->current_floor_ptr->get_grid(pos).has_monster()) {
+        return false;
+    }
+
+    this->y = pos.y;
+    this->x = pos.x;
+    return true;
+}
+
+void PlayerType::set_position(const Pos2D &pos)
+{
+    this->y = pos.y;
+    this->x = pos.x;
 }
 
 bool PlayerType::in_saved_floor() const

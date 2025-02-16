@@ -105,8 +105,8 @@ void do_cmd_store(PlayerType *player_ptr)
         store.last_visit = world.game_turn;
     }
 
-    forget_lite(&floor);
-    forget_view(&floor);
+    forget_lite(floor);
+    forget_view(floor);
     world.character_icky_depth = 1;
     command_arg = 0;
     command_rep = 0;

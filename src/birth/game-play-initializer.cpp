@@ -22,6 +22,7 @@
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/floor-list.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/inner-game-data.h"
 #include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
@@ -106,16 +107,18 @@ void player_wipe_without_name(PlayerType *player_ptr)
     auto &world = AngbandWorld::get_instance();
     world.total_winner = false;
     player_ptr->timewalk = false;
-    player_ptr->panic_save = 0;
+    auto &system = AngbandSystem::get_instance();
+    system.set_panic_save(false);
 
     world.noscore = 0;
     world.wizard = false;
-    player_ptr->wait_report_score = false;
+    system.set_awaiting_report_score(false);
     player_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     player_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
     DungeonRecords::get_instance().reset_all();
     player_ptr->visit = 1;
     world.set_wild_mode(false);
+    WildernessGrids::get_instance().initialize_position();
 
     player_ptr->max_plv = player_ptr->lev = 1;
     ArenaEntryList::get_instance().reset_entry();

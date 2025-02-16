@@ -15,19 +15,16 @@
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-building/cmd-inn.h"
-#include "cmd-io/cmd-dump.h"
 #include "core/asking-player.h"
 #include "core/scores.h"
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
-#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
-#include "floor/wild.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "locale/language-switcher.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "market/arena-entry.h"
@@ -46,20 +43,16 @@
 #include "market/melee-arena.h"
 #include "market/play-gamble.h"
 #include "market/poker.h"
-#include "mutation/mutation-flag-types.h"
 #include "mutation/mutation-investor-remover.h"
-#include "object-hook/hook-armor.h"
-#include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
 #include "player-status/player-energy.h"
-#include "player/player-personality-types.h"
 #include "spell-kind/spells-perception.h"
 #include "spell-kind/spells-world.h"
 #include "spell/spells-status.h"
 #include "system/angband-exceptions.h"
-#include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
@@ -67,7 +60,6 @@
 #include "system/terrain/terrain-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
-#include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -323,7 +315,8 @@ void do_cmd_building(PlayerType *player_ptr)
     int which = floor.get_grid(p_pos).get_terrain().subtype;
 
     auto &bldg = buildings[which];
-    reinit_wilderness = false;
+    auto &wilderness = WildernessGrids::get_instance();
+    wilderness.set_reinitialization(false);
     const auto &entries = ArenaEntryList::get_instance();
     if ((which == 2) && entries.get_defeated_entry() && !entries.is_player_true_victor()) {
         msg_print(_("「敗者に用はない。」", "'There's no place here for a LOSER like you!'"));
@@ -360,8 +353,8 @@ void do_cmd_building(PlayerType *player_ptr)
 
     player_ptr->oldpy = player_ptr->y;
     player_ptr->oldpx = player_ptr->x;
-    forget_lite(&floor);
-    forget_view(&floor);
+    forget_lite(floor);
+    forget_view(floor);
     world.character_icky_depth++;
 
     command_arg = 0;
@@ -373,7 +366,7 @@ void do_cmd_building(PlayerType *player_ptr)
 
     while (true) {
         prt("", 1, 0);
-        building_prt_gold(player_ptr);
+        building_prt_gold(player_ptr->au);
         const auto command = inkey();
         if (command == ESCAPE) {
             floor.inside_arena = false;
@@ -402,7 +395,7 @@ void do_cmd_building(PlayerType *player_ptr)
     msg_flag = false;
     msg_erase();
 
-    if (reinit_wilderness) {
+    if (wilderness.should_reinitialize()) {
         player_ptr->leaving = true;
     }
 

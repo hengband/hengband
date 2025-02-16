@@ -40,25 +40,25 @@
  */
 static int calc_stun_resistance(player_attack_type *pa_ptr)
 {
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
+    const auto &monrace = pa_ptr->m_ptr->get_monrace();
     int resist_stun = 0;
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         resist_stun += 88;
     }
 
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_STUN)) {
+    if (monrace.resistance_flags.has(MonsterResistanceType::NO_STUN)) {
         resist_stun += 66;
     }
 
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
+    if (monrace.resistance_flags.has(MonsterResistanceType::NO_CONF)) {
         resist_stun += 33;
     }
 
-    if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_SLEEP)) {
+    if (monrace.resistance_flags.has(MonsterResistanceType::NO_SLEEP)) {
         resist_stun += 33;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::UNDEAD) || r_ptr->kind_flags.has(MonsterKindType::NONLIVING)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNDEAD) || monrace.kind_flags.has(MonsterKindType::NONLIVING)) {
         resist_stun += 66;
     }
 
@@ -140,7 +140,7 @@ static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_
     if (pa_ptr->ma_ptr->effect == MA_KNEE) {
         if (monrace.is_male()) {
             msg_format(_("%sに金的膝蹴りをくらわした！", "You hit %s in the groin with your knee!"), pa_ptr->m_name);
-            sound(SOUND_PAIN);
+            sound(SoundKind::PAIN);
             special_effect = MA_KNEE;
         } else {
             msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
@@ -198,7 +198,7 @@ WEIGHT calc_monk_attack_weight(PlayerType *player_ptr)
  */
 static void process_attack_vital_spot(PlayerType *player_ptr, player_attack_type *pa_ptr, int *stun_effect, int *resist_stun, const int special_effect)
 {
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
+    const auto &monrace = pa_ptr->m_ptr->get_monrace();
     if ((special_effect == MA_KNEE) && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
         msg_format(_("%s^は苦痛にうめいている！", "%s^ moans in agony!"), pa_ptr->m_name);
         *stun_effect = 7 + randint1(13);
@@ -207,8 +207,8 @@ static void process_attack_vital_spot(PlayerType *player_ptr, player_attack_type
     }
 
     if ((special_effect == MA_SLOW) && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
-        const auto is_unique = r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE);
-        if (is_unique && (randint1(player_ptr->lev) > r_ptr->level) && (pa_ptr->m_ptr->mspeed > STANDARD_SPEED - 50)) {
+        const auto is_unique = monrace.kind_flags.has_not(MonsterKindType::UNIQUE);
+        if (is_unique && (randint1(player_ptr->lev) > monrace.level) && (pa_ptr->m_ptr->mspeed > STANDARD_SPEED - 50)) {
             msg_format(_("%s^は足をひきずり始めた。", "You've hobbled %s."), pa_ptr->m_name);
             pa_ptr->m_ptr->mspeed -= 10;
         }
@@ -219,15 +219,15 @@ static void process_attack_vital_spot(PlayerType *player_ptr, player_attack_type
  * @brief 朦朧効果を受けたモンスターのステータス表示
  * @param player_ptr プレイヤーの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @param g_ptr グリッドへの参照ポインタ
+ * @param grid グリッドへの参照
  * @param stun_effect 朦朧の残りターン
  * @param resist_stun 朦朧への抵抗値
  */
 static void print_stun_effect(PlayerType *player_ptr, player_attack_type *pa_ptr, const int stun_effect, const int resist_stun)
 {
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
+    const auto &monrace = pa_ptr->m_ptr->get_monrace();
     if (stun_effect && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
-        if (player_ptr->lev > randint1(r_ptr->level + resist_stun + 10)) {
+        if (player_ptr->lev > randint1(monrace.level + resist_stun + 10)) {
             if (set_monster_stunned(player_ptr, pa_ptr->g_ptr->m_idx, stun_effect + pa_ptr->m_ptr->get_remaining_stun())) {
                 msg_format(_("%s^はフラフラになった。", "%s^ is stunned."), pa_ptr->m_name);
             } else {
@@ -241,7 +241,7 @@ static void print_stun_effect(PlayerType *player_ptr, player_attack_type *pa_ptr
  * @brief 強力な素手攻撃ができる職業 (修行僧、狂戦士、練気術師)の素手攻撃処理メインルーチン
  * @param player_ptr プレイヤーの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @param g_ptr グリッドへの参照ポインタ
+ * @param grid グリッドへの参照
  */
 void process_monk_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
@@ -266,8 +266,8 @@ void process_monk_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 
 bool double_attack(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_rep_dir(player_ptr, &dir)) {
+    const auto dir = get_rep_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

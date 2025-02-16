@@ -25,6 +25,7 @@ enum class MonsterAbilityType;
 enum class PlayerSkillKindType;
 enum class RealmType;
 enum class Virtue : short;
+class Direction;
 class FloorType;
 class ItemEntity;
 class TimedEffects;
@@ -65,9 +66,6 @@ public:
     PLAYER_LEVEL lev{}; /* Level */
 
     int16_t town_num{}; /* Current town number */
-
-    POSITION wilderness_x{}; /* Coordinates in the wilderness */
-    POSITION wilderness_y{};
 
     int mhp{}; /* Max hit pts */
     int chp{}; /* Cur hit pts */
@@ -186,9 +184,6 @@ public:
     std::string last_message = ""; /* Last message on death or retirement */
     char history[4][60]{}; /* Textual "history" for the Player */
 
-    uint16_t panic_save{}; /* Panic save */
-
-    bool wait_report_score{}; /* Waiting to report score */
     bool is_dead{}; /* Player is dead */
     bool now_damaged{};
     bool ambush_flag{};
@@ -212,9 +207,6 @@ public:
 
     bool autopick_autoregister{}; /* auto register is in-use or not */
 
-    byte feeling{}; /* Most recent dungeon feeling */
-    int32_t feeling_turn{}; /* The turn of the last dungeon feeling */
-
     std::shared_ptr<ItemEntity[]> inventory_list{}; /* The player's inventory */
     int16_t inven_cnt{}; /* Number of items in inventory */
     int16_t equip_cnt{}; /* Number of items in equipment */
@@ -228,9 +220,7 @@ public:
 
     bool monk_notify_aux{};
 
-    bool leaving_dungeon{}; /* True if player is leaving the dungeon */
     bool teleport_town{};
-    bool enter_dungeon{}; /* Just enter the dungeon */
 
     int16_t new_spells{}; /* Number of spells available */
     int16_t old_spells{};
@@ -391,9 +381,13 @@ public:
     std::string decrease_ability_random();
     std::string decrease_ability_all();
     Pos2D get_position() const;
+    Pos2D get_old_position() const;
     Pos2D get_neighbor(int dir) const;
+    Pos2D get_neighbor(const Direction &dir) const;
     bool is_located_at_running_destination() const;
     bool is_located_at(const Pos2D &pos) const;
+    bool try_set_position(const Pos2D &pos);
+    void set_position(const Pos2D &pos);
     bool in_saved_floor() const;
     int calc_life_rating() const;
     bool try_resist_eldritch_horror() const;

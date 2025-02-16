@@ -100,7 +100,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         if (item.bi_key.tval() == ItemKindType::GOLD) {
             constexpr auto mes = _(" $%d の価値がある%sを見つけた。", "You have found %d gold pieces worth of %s.");
             msg_format(mes, item.pval, item_name.data());
-            sound(SOUND_SELL);
+            sound(SoundKind::SELL);
             player_ptr->au += item.pval;
             rfu.set_flag(MainWindowRedrawingFlag::GOLD);
             rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
@@ -247,14 +247,14 @@ void carry(PlayerType *player_ptr, bool pickup)
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
     rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
     handle_stuff(player_ptr);
-    auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
-    autopick_pickup_items(player_ptr, g_ptr);
+    const auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    autopick_pickup_items(player_ptr, grid);
     if (easy_floor) {
         py_pickup_floor(player_ptr, pickup);
         return;
     }
 
-    for (auto it = g_ptr->o_idx_list.begin(); it != g_ptr->o_idx_list.end();) {
+    for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
         auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
         const auto item_name = describe_flavor(player_ptr, item, 0);
@@ -263,7 +263,7 @@ void carry(PlayerType *player_ptr, bool pickup)
             const auto value = item.pval;
             delete_object_idx(player_ptr, this_o_idx);
             msg_format(_(" $%d の価値がある%sを見つけた。", "You collect %d gold pieces worth of %s."), value, item_name.data());
-            sound(SOUND_SELL);
+            sound(SoundKind::SELL);
             player_ptr->au += value;
             rfu.set_flag(MainWindowRedrawingFlag::GOLD);
             rfu.set_flag(SubWindowRedrawingFlag::PLAYER);

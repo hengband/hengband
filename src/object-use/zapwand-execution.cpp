@@ -49,8 +49,8 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         target_pet = true;
     }
 
-    DIRECTION dir;
-    if (!get_aim_dir(this->player_ptr, &dir)) {
+    const auto dir = get_aim_dir(this->player_ptr);
+    if (!dir) {
         target_pet = old_target_pet;
         return;
     }
@@ -82,7 +82,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         }
 
         msg_print(_("魔法棒をうまく使えなかった。", "You failed to use the wand properly."));
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
         return;
     }
 
@@ -103,7 +103,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    sound(SOUND_ZAP);
+    sound(SoundKind::ZAP);
     auto ident = wand_effect(this->player_ptr, *sval, dir, false, false);
     using Srf = StatusRecalculatingFlag;
     EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
@@ -139,7 +139,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    floor_item_charges(this->player_ptr->current_floor_ptr, 0 - i_idx);
+    floor_item_charges(*this->player_ptr->current_floor_ptr, 0 - i_idx);
 }
 
 bool ObjectZapWandEntity::check_can_zap() const

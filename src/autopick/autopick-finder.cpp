@@ -52,7 +52,7 @@ int find_autopick_list(PlayerType *player_ptr, const ItemEntity *o_ptr)
 /*!
  * @brief Choose an item for search
  */
-bool get_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concptr *search_strp)
+bool get_object_for_search(PlayerType *player_ptr, AutopickSearch &as)
 {
     constexpr auto q = _("どのアイテムを検索しますか? ", "Enter which item? ");
     constexpr auto s = _("アイテムを持っていない。", "You have nothing to enter.");
@@ -62,26 +62,24 @@ bool get_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
         return false;
     }
 
-    *o_handle = o_ptr;
-    string_free(*search_strp);
-    const auto item_name = describe_flavor(player_ptr, **o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    *search_strp = string_make(format("<%s>", item_name.data()).data());
+    as.item_ptr = o_ptr;
+    const auto item_name = describe_flavor(player_ptr, *as.item_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+    as.search_str = format("<%s>", item_name.data());
     return true;
 }
 
 /*!
  * @brief Prepare for search by destroyed object
  */
-bool get_destroyed_object_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concptr *search_strp)
+bool get_destroyed_object_for_search(PlayerType *player_ptr, AutopickSearch &as)
 {
     if (!autopick_last_destroyed_object.is_valid()) {
         return false;
     }
 
-    *o_handle = &autopick_last_destroyed_object;
-    string_free(*search_strp);
-    const auto item_name = describe_flavor(player_ptr, **o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
-    *search_strp = string_make(format("<%s>", item_name.data()).data());
+    as.item_ptr = &autopick_last_destroyed_object;
+    const auto item_name = describe_flavor(player_ptr, *as.item_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+    as.search_str = format("<%s>", item_name.data());
     return true;
 }
 
@@ -92,18 +90,13 @@ bool get_destroyed_object_for_search(PlayerType *player_ptr, ItemEntity **o_hand
  * TERM_YELLOW : Overwrite mode
  * TERM_WHITE : Insert mode
  */
-byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concptr *search_strp)
+AutopickSearch get_string_for_search(PlayerType *player_ptr, const AutopickSearch &as_initial)
 {
-    byte color = TERM_YELLOW;
-    char buf[MAX_NLEN + 20];
-    const int len = 80;
-    if (*search_strp) {
-        strcpy(buf, *search_strp);
-    } else {
-        buf[0] = '\0';
-    }
-
-    if (*o_handle) {
+    AutopickSearch as = as_initial;
+    std::string buf = as.search_str;
+    constexpr auto max_len = 80;
+    uint8_t color = TERM_YELLOW;
+    if (as.item_ptr != nullptr) {
         color = TERM_L_GREEN;
     }
 
@@ -121,185 +114,127 @@ byte get_string_for_search(PlayerType *player_ptr, ItemEntity **o_handle, concpt
         switch (skey) {
         case SKEY_LEFT:
         case KTRL('b'): {
-            int i = 0;
             color = TERM_WHITE;
             if (pos == 0) {
                 break;
             }
 
-            while (true) {
-                int next_pos = i + 1;
-
-#ifdef JP
-                if (iskanji(buf[i])) {
-                    next_pos++;
-                }
-#endif
-                if (next_pos >= pos) {
-                    break;
-                }
-
-                i = next_pos;
-            }
-
-            pos = i;
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            pos = mb_chars.contains(pos - 2) ? pos - 2 : pos - 1;
             break;
         }
-
         case SKEY_RIGHT:
-        case KTRL('f'):
+        case KTRL('f'): {
             color = TERM_WHITE;
-            if ('\0' == buf[pos]) {
+            if (std::cmp_equal(pos, buf.length())) {
                 break;
             }
 
-#ifdef JP
-            if (iskanji(buf[pos])) {
-                pos += 2;
-            } else {
-                pos++;
-            }
-#else
-            pos++;
-#endif
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            pos = mb_chars.contains(pos) ? pos + 2 : pos + 1;
             break;
-
+        }
         case ESCAPE:
-            return 0;
-
+            return as;
         case KTRL('r'):
             back = true;
             [[fallthrough]];
-
         case '\n':
         case '\r':
         case KTRL('s'): {
-            byte ret = back ? -1 : 1;
-            if (*o_handle) {
-                return ret;
+            as.result = back ? AutopickSearchResult::BACK : AutopickSearchResult::FORWARD;
+            if (as.item_ptr != nullptr) {
+                return as;
             }
 
-            string_free(*search_strp);
-            *search_strp = string_make(buf);
-            *o_handle = nullptr;
-            return ret;
+            as.search_str = buf;
+            as.item_ptr = nullptr;
+            return as;
         }
         case KTRL('i'):
-            return get_object_for_search(player_ptr, o_handle, search_strp);
-
+            as.result = get_object_for_search(player_ptr, as) ? AutopickSearchResult::FORWARD : AutopickSearchResult::CANCEL;
+            return as;
         case KTRL('l'):
-            if (get_destroyed_object_for_search(player_ptr, o_handle, search_strp)) {
-                return 1;
+            if (get_destroyed_object_for_search(player_ptr, as)) {
+                as.result = AutopickSearchResult::FORWARD;
+                return as;
             }
-            break;
 
-        case '\010': {
-            int i = 0;
+            break;
+        case '\010': { // Backspace
             color = TERM_WHITE;
             if (pos == 0) {
                 break;
             }
 
-            while (true) {
-                int next_pos = i + 1;
-#ifdef JP
-                if (iskanji(buf[i])) {
-                    next_pos++;
-                }
-#endif
-                if (next_pos >= pos) {
-                    break;
-                }
-
-                i = next_pos;
-            }
-
-            pos = i;
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            const auto delete_bytes = mb_chars.contains(pos - 2) ? 2 : 1;
+            pos -= delete_bytes;
+            buf.erase(pos, delete_bytes);
+            break;
         }
-            [[fallthrough]];
-
-        case 0x7F:
+        case 0x7F: // Delete
         case KTRL('d'): {
-            int dst, src;
             color = TERM_WHITE;
-            if (buf[pos] == '\0') {
+            if (std::cmp_equal(pos, buf.length())) {
                 break;
             }
 
-            src = pos + 1;
-#ifdef JP
-            if (iskanji(buf[pos])) {
-                src++;
-            }
-#endif
-            dst = pos;
-            while ('\0' != (buf[dst++] = buf[src++])) {
-                ;
-            }
-
+            const auto mb_chars = str_find_all_multibyte_chars(buf);
+            const auto delete_bytes = mb_chars.contains(pos) ? 2 : 1;
+            buf.erase(pos, delete_bytes);
             break;
         }
 
         default: {
-            char tmp[100];
-            char c;
             if (skey & SKEY_MASK) {
                 break;
             }
 
-            c = (char)skey;
+            const auto c = static_cast<char>(skey);
             if (color != TERM_WHITE) {
                 if (color == TERM_L_GREEN) {
-                    *o_handle = nullptr;
-                    string_free(*search_strp);
-                    *search_strp = nullptr;
+                    as.item_ptr = nullptr;
+                    as.search_str = "";
                 }
 
-                buf[0] = '\0';
+                pos = 0;
+                buf = "";
                 color = TERM_WHITE;
             }
 
-            strcpy(tmp, buf + pos);
 #ifdef JP
             if (iskanji(c)) {
-                char next;
                 inkey_base = true;
-                next = inkey();
-
-                if (pos + 1 < len) {
-                    buf[pos++] = c;
-                    buf[pos++] = next;
-                } else {
-                    bell();
+                const auto next = inkey();
+                if (std::cmp_less(buf.length(), max_len - 1)) {
+                    buf.insert(pos++, 1, c);
+                    buf.insert(pos++, 1, next);
+                    break;
                 }
-            } else
-#endif
-#ifdef JP
-                if (pos < len && (isprint(c) || iskana(c)))
+            } else if (isprint(c) || iskana(c)) {
 #else
-            if (pos < len && isprint(c))
+            if (isprint(c)) {
 #endif
-            {
-                buf[pos++] = c;
-            } else {
-                bell();
+                if (std::cmp_less(buf.length(), max_len)) {
+                    buf.insert(pos++, 1, c);
+                    break;
+                }
             }
 
-            buf[pos] = '\0';
-            angband_strcat(buf, tmp, len + 1);
-
+            bell();
             break;
         }
         }
 
-        if (*o_handle == nullptr || color == TERM_L_GREEN) {
+        if (as.item_ptr == nullptr || color == TERM_L_GREEN) {
             continue;
         }
 
-        *o_handle = nullptr;
-        buf[0] = '\0';
-        string_free(*search_strp);
-        *search_strp = nullptr;
+        as.item_ptr = nullptr;
+        as.search_str = "";
+        pos = 0;
+        buf = "";
     }
 }
 
@@ -325,7 +260,7 @@ void search_for_object(PlayerType *player_ptr, text_body_type *tb, const ItemEnt
             }
         }
 
-        if (!autopick_new_entry(entry, tb->lines_list[i], false)) {
+        if (!autopick_new_entry(entry, *tb->lines_list[i], false)) {
             continue;
         }
 
@@ -363,14 +298,13 @@ void search_for_object(PlayerType *player_ptr, text_body_type *tb, const ItemEnt
 /*!
  * @brief Search next line matches to the string
  */
-void search_for_string(text_body_type *tb, concptr search_str, bool forward)
+void search_for_string(text_body_type *tb, std::string_view search_str, bool forward)
 {
     int bypassed_cy = -1;
     int bypassed_cx = 0;
 
     int i = tb->cy;
     while (true) {
-        concptr pos;
         if (forward) {
             if (!tb->lines_list[++i]) {
                 break;
@@ -381,7 +315,8 @@ void search_for_string(text_body_type *tb, concptr search_str, bool forward)
             }
         }
 
-        pos = angband_strstr(tb->lines_list[i], search_str);
+        const auto line_data = tb->lines_list[i]->data();
+        const auto *pos = angband_strstr(line_data, search_str);
         if (!pos) {
             continue;
         }
@@ -389,13 +324,13 @@ void search_for_string(text_body_type *tb, concptr search_str, bool forward)
         if ((tb->states[i] & LSTAT_BYPASS) && !(tb->states[i] & LSTAT_EXPRESSION)) {
             if (bypassed_cy == -1) {
                 bypassed_cy = i;
-                bypassed_cx = (int)(pos - tb->lines_list[i]);
+                bypassed_cx = (int)(pos - line_data);
             }
 
             continue;
         }
 
-        tb->cx = (int)(pos - tb->lines_list[i]);
+        tb->cx = (int)(pos - line_data);
         tb->cy = i;
 
         if (bypassed_cy != -1) {

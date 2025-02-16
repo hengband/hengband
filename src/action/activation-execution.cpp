@@ -118,7 +118,7 @@ static bool check_activation_success(ae_type *ae_ptr)
     }
 
     msg_print(_("うまく始動させることができなかった。", "You failed to activate it properly."));
-    sound(SOUND_FAIL);
+    sound(SoundKind::FAIL);
     return false;
 }
 
@@ -210,7 +210,7 @@ void exe_activate(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     }
 
     msg_print(_("始動させた...", "You activate it..."));
-    sound(SOUND_ZAP);
+    sound(SoundKind::ZAP);
     if (ae_ptr->o_ptr->has_activation()) {
         (void)activate_artifact(player_ptr, ae_ptr->o_ptr);
         static constexpr auto flags = {

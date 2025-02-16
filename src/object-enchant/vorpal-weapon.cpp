@@ -22,31 +22,31 @@ static void print_vorpal_message(player_attack_type *pa_ptr, const int magnifica
     switch (magnification) {
     case 2:
         msg_format(_("%sを斬った！", "You gouge %s!"), pa_ptr->m_name);
-        sound(SOUND_GOUGE_HIT);
+        sound(SoundKind::GOUGE_HIT);
         break;
     case 3:
         msg_format(_("%sをぶった斬った！", "You maim %s!"), pa_ptr->m_name);
-        sound(SOUND_MAIM_HIT);
+        sound(SoundKind::MAIM_HIT);
         break;
     case 4:
         msg_format(_("%sをメッタ斬りにした！", "You carve %s!"), pa_ptr->m_name);
-        sound(SOUND_CARVE_HIT);
+        sound(SoundKind::CARVE_HIT);
         break;
     case 5:
         msg_format(_("%sをメッタメタに斬った！", "You cleave %s!"), pa_ptr->m_name);
-        sound(SOUND_CLEAVE_HIT);
+        sound(SoundKind::CLEAVE_HIT);
         break;
     case 6:
         msg_format(_("%sを刺身にした！", "You smite %s!"), pa_ptr->m_name);
-        sound(SOUND_SMITE_HIT);
+        sound(SoundKind::SMITE_HIT);
         break;
     case 7:
         msg_format(_("%sを斬って斬って斬りまくった！", "You eviscerate %s!"), pa_ptr->m_name);
-        sound(SOUND_EVISCERATE_HIT);
+        sound(SoundKind::EVISCERATE_HIT);
         break;
     default:
         msg_format(_("%sを細切れにした！", "You shred %s!"), pa_ptr->m_name);
-        sound(SOUND_SHRED_HIT);
+        sound(SoundKind::SHRED_HIT);
         break;
     }
 }
@@ -94,8 +94,8 @@ void process_vorpal_attack(PlayerType *player_ptr, player_attack_type *pa_ptr, c
     }
 
     pa_ptr->attack_damage *= (int)vorpal_magnification;
-    auto *r_ptr = &pa_ptr->m_ptr->get_monrace();
-    if ((r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ALL) ? pa_ptr->attack_damage / 100 : pa_ptr->attack_damage) > pa_ptr->m_ptr->hp) {
+    const auto &monrace = pa_ptr->m_ptr->get_monrace();
+    if ((monrace.resistance_flags.has(MonsterResistanceType::RESIST_ALL) ? pa_ptr->attack_damage / 100 : pa_ptr->attack_damage) > pa_ptr->m_ptr->hp) {
         msg_format(_("%sを真っ二つにした！", "You cut %s in half!"), pa_ptr->m_name);
     } else {
         print_vorpal_message(pa_ptr, vorpal_magnification);

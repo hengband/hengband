@@ -1,30 +1,23 @@
 #include "realm/realm-hissatsu.h"
 #include "artifact/fixed-art-types.h"
 #include "cmd-action/cmd-attack.h"
-#include "cmd-action/cmd-spell.h"
 #include "cmd-item/cmd-throw.h"
-#include "combat/combat-options-type.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
-#include "dungeon/dungeon-flag-types.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
 #include "floor/geometry.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
 #include "mind/mind-ninja.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-info.h"
 #include "monster/monster-update.h"
-#include "object-enchant/tr-types.h"
 #include "player-info/equipment-info.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
@@ -51,7 +44,6 @@
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -72,8 +64,8 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 0:
         if (cast) {
             project_length = 2;
-            int dir;
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -83,13 +75,13 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
 
     case 1:
         if (cast) {
-            const auto cdir = get_direction_as_cdir(player_ptr);
-            if (!cdir) {
+            const auto dir = get_direction(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
-            const auto attack_to = [player_ptr](int cdir) {
-                const auto pos = player_ptr->get_position() + CCW_DD[cdir];
+            const auto attack_to = [player_ptr](const Direction &dir) {
+                const auto pos = player_ptr->get_neighbor(dir);
                 const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
 
                 if (grid.has_monster()) {
@@ -99,9 +91,9 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 }
             };
 
-            attack_to(*cdir); // 指定方向
-            attack_to((*cdir + 7) % 8); // 指定方向の右
-            attack_to((*cdir + 1) % 8); // 指定方向の左
+            attack_to(dir);
+            attack_to(dir.rotated_45degree(-1));
+            attack_to(dir.rotated_45degree(1));
         }
         break;
 
@@ -116,11 +108,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 3:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             if (player_ptr->current_floor_ptr->get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_FIRE);
             } else {
@@ -139,11 +131,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 5:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             if (player_ptr->current_floor_ptr->get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_MINEUCHI);
             } else {
@@ -172,11 +164,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             }
 
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos_target = player_ptr->get_neighbor(*dir);
+            const auto pos_target = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             const auto &grid_target = floor.get_grid(pos_target);
             if (!grid_target.has_monster()) {
@@ -189,7 +181,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 break;
             }
 
-            const auto pos_opposite = pos_target + Pos2DVec(ddy[*dir], ddx[*dir]);
+            const auto pos_opposite = pos_target + dir.vec();
             const auto &grid_opposite = floor.get_grid(pos_opposite);
             if (player_can_enter(player_ptr, grid_opposite.feat, 0) && !floor.has_trap_at(pos_opposite) && !grid_opposite.m_idx) {
                 msg_print(nullptr);
@@ -201,11 +193,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 8:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_POISON);
@@ -219,11 +211,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 9:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_ZANMA);
@@ -237,11 +229,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 10:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             auto &floor = *player_ptr->current_floor_ptr;
             const auto &grid = floor.get_grid(pos);
             if (grid.has_monster()) {
@@ -254,15 +246,14 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 return "";
             }
             if (grid.has_monster()) {
-                Pos2D target(pos.y, pos.x);
-                Pos2D origin(pos.y, pos.x);
+                auto target = pos;
+                auto origin = pos;
                 const auto m_idx = grid.m_idx;
                 auto &monster = floor.m_list[m_idx];
-                const auto m_name = monster_desc(player_ptr, &monster, 0);
-                Pos2D neighbor(pos.y, pos.x);
+                const auto m_name = monster_desc(player_ptr, monster, 0);
+                auto neighbor = pos;
                 for (auto i = 0; i < 5; i++) {
-                    neighbor.y += ddy[*dir];
-                    neighbor.x += ddx[*dir];
+                    neighbor += dir.vec();
                     if (is_cave_empty_bold(player_ptr, neighbor.y, neighbor.x)) {
                         target = Pos2D(neighbor.y, neighbor.x);
                     } else {
@@ -305,11 +296,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 12:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_HAGAN);
@@ -328,11 +319,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 13:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_COLD);
@@ -346,11 +337,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 14:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_KYUSHO);
@@ -364,11 +355,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 15:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_MAJIN);
@@ -382,11 +373,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 16:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_SUTEMI);
@@ -401,11 +392,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 17:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_ELEC);
@@ -430,9 +421,9 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             short new_cut = current_cut < 300 ? current_cut + 300 : current_cut * 2;
             (void)BadStatusSetter(player_ptr).set_cut(new_cut);
             const auto &floor = *player_ptr->current_floor_ptr;
-            for (auto dir = 0; dir < 8; dir++) {
+            for (const auto &d : Direction::directions_8()) {
                 const auto pos = player_ptr->get_position();
-                const Pos2D pos_ddd(pos.y + ddy_ddd[dir], pos.x + ddx_ddd[dir]);
+                const auto pos_ddd = pos + d.vec();
                 const auto &grid = floor.get_grid(pos_ddd);
                 const auto &monster = floor.m_list[grid.m_idx];
                 if (!grid.has_monster() || (!monster.ml && !floor.has_terrain_characteristics(pos_ddd, TerrainCharacteristics::PROJECT))) {
@@ -444,7 +435,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     continue;
                 }
 
-                const auto m_name = monster_desc(player_ptr, &monster, 0);
+                const auto m_name = monster_desc(player_ptr, monster, 0);
                 msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name.data());
             }
         }
@@ -453,11 +444,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 20:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_QUAKE);
@@ -471,8 +462,8 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
         if (cast) {
             int total_damage = 0, basedam, i;
             ItemEntity *o_ptr;
-            int dir;
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
             msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));
@@ -518,13 +509,13 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 23:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
             auto &floor = *player_ptr->current_floor_ptr;
             for (auto i = 0; i < 3; i++) {
-                const Pos2D pos = player_ptr->get_neighbor(*dir);
+                const Pos2D pos = player_ptr->get_neighbor(dir);
                 auto &grid = floor.get_grid(pos);
 
                 if (grid.has_monster()) {
@@ -543,12 +534,12 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     break;
                 }
 
-                const Pos2D pos_new(pos.y + ddy[*dir], pos.x + ddx[*dir]);
+                const auto pos_new = pos + dir.vec();
                 const auto m_idx = grid.m_idx;
                 auto &monster = floor.m_list[m_idx];
 
                 /* Monster cannot move back? */
-                if (!monster_can_enter(player_ptr, pos_new.y, pos_new.x, &monster.get_monrace(), 0)) {
+                if (!monster_can_enter(player_ptr, pos_new.y, pos_new.x, monster.get_monrace(), 0)) {
                     /* -more- */
                     if (i < 2) {
                         msg_print(nullptr);
@@ -589,11 +580,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 24:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_DRAIN);
@@ -633,7 +624,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 if (!mdeath) {
                     break;
                 }
-                command_dir = 0;
+                command_dir = Direction::none();
 
                 RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
                 handle_stuff(player_ptr);
@@ -674,8 +665,8 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
 
     case 28:
         if (cast) {
-            int dir;
-            if (!get_rep_dir(player_ptr, &dir)) {
+            const auto dir = get_direction(player_ptr);
+            if (!dir) {
                 return std::nullopt;
             }
 
@@ -697,11 +688,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 29:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MELEE)) {
                 msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
@@ -744,11 +735,11 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
     case 30:
         if (cast) {
             const auto dir = get_direction(player_ptr);
-            if (!dir || (dir == 5)) {
+            if (!dir.has_direction()) {
                 return std::nullopt;
             }
 
-            const auto pos = player_ptr->get_neighbor(*dir);
+            const auto pos = player_ptr->get_neighbor(dir);
             const auto &floor = *player_ptr->current_floor_ptr;
             if (floor.get_grid(pos).has_monster()) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_UNDEAD);

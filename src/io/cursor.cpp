@@ -5,7 +5,6 @@
 #include "floor/cave.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "io/screen-util.h"
 #include "player/player-status.h"
 #include "system/angband-system.h"
@@ -44,15 +43,15 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
         return;
     }
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     ProjectionPath path_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), player_ptr->get_position(), { y, x }, PROJECT_PATH | PROJECT_THRU);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);
     handle_stuff(player_ptr);
     for (const auto &pos_path : path_g) {
-        auto *g_ptr = &floor_ptr->get_grid(pos_path);
+        const auto &grid = floor.get_grid(pos_path);
         if (panel_contains(pos_path.y, pos_path.x)) {
             DisplaySymbolPair symbol_pair({ default_color, '\0' }, { default_color, '*' });
-            if (g_ptr->has_monster() && floor_ptr->m_list[g_ptr->m_idx].ml) {
+            if (grid.has_monster() && floor.m_list[grid.m_idx].ml) {
                 symbol_pair = map_info(player_ptr, pos_path);
                 auto &symbol_foreground = symbol_pair.symbol_foreground;
                 if (!symbol_foreground.is_ascii_graphics()) {
@@ -69,7 +68,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
             term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, symbol_pair);
         }
 
-        if (g_ptr->is_mark() && !g_ptr->has(TerrainCharacteristics::PROJECT)) {
+        if (grid.is_mark() && !grid.has(TerrainCharacteristics::PROJECT)) {
             break;
         }
 
@@ -95,16 +94,16 @@ bool change_panel(PlayerType *player_ptr, POSITION dy, POSITION dx)
     POSITION y = panel_row_min + dy * hgt / 2;
     POSITION x = panel_col_min + dx * wid / 2;
 
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    if (y > floor_ptr->height - hgt) {
-        y = floor_ptr->height - hgt;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (y > floor.height - hgt) {
+        y = floor.height - hgt;
     }
     if (y < 0) {
         y = 0;
     }
 
-    if (x > floor_ptr->width - wid) {
-        x = floor_ptr->width - wid;
+    if (x > floor.width - wid) {
+        x = floor.width - wid;
     }
     if (x < 0) {
         x = 0;

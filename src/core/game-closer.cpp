@@ -53,7 +53,7 @@ static void send_world_score_on_closing(PlayerType *player_ptr, bool do_send)
         return;
     }
 
-    player_ptr->wait_report_score = true;
+    AngbandSystem::get_instance().set_awaiting_report_score(true);
     player_ptr->is_dead = false;
     if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {
         msg_print(_("セーブ失敗！", "death save failed!"));
@@ -170,8 +170,8 @@ void close_game(PlayerType *player_ptr)
 
     auto do_send = true;
     if (!cheat_save || input_check(_("死んだデータをセーブしますか？ ", "Save death? "))) {
-        world.update_playtime();
-        world.sf_play_time += world.play_time;
+        world.play_time.update();
+        world.sf_play_time += world.play_time.elapsed_sec();
 
         if (!save_player(player_ptr, SaveType::CLOSE_GAME)) {
             msg_print(_("セーブ失敗！", "death save failed!"));
@@ -185,7 +185,7 @@ void close_game(PlayerType *player_ptr)
     term_clear();
     if (check_score(player_ptr)) {
         send_world_score_on_closing(player_ptr, do_send);
-        if (!player_ptr->wait_report_score) {
+        if (!AngbandSystem::get_instance().is_awaiting_report_status()) {
             (void)top_twenty(player_ptr);
         }
     } else if (highscore_fd >= 0) {

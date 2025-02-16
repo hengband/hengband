@@ -10,9 +10,6 @@
 #include "floor/floor-object.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
-#include "grid/feature.h"
-#include "perception/object-perception.h"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
@@ -24,7 +21,6 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
-#include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
 /*
@@ -52,7 +48,7 @@ static int scent_when = 0;
  * Whenever the age count loops, most of the scent trail is erased and
  * the age of the remainder is recalculated.
  */
-void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
+void update_smell(FloorType &floor, const Pos2D &p_pos)
 {
     /* Create a table that controls the spread of scent */
     const int scent_adjust[5][5] = {
@@ -64,32 +60,34 @@ void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
     };
 
     if (++scent_when == 254) {
-        for (auto y = 0; y < floor_ptr->height; y++) {
-            for (auto x = 0; x < floor_ptr->width; x++) {
-                int w = floor_ptr->grid_array[y][x].when;
-                floor_ptr->grid_array[y][x].when = (w > 128) ? (w - 128) : 0;
+        for (auto y = 0; y < floor.height; y++) {
+            for (auto x = 0; x < floor.width; x++) {
+                const Pos2D pos(y, x);
+                auto &grid = floor.get_grid(pos);
+                int w = grid.when;
+                grid.when = (w > 128) ? (w - 128) : 0;
             }
         }
 
         scent_when = 126;
     }
 
-    for (auto i = 0; i < 5; i++) {
-        for (auto j = 0; j < 5; j++) {
-            const Pos2D pos(i + player_ptr->y - 2, j + player_ptr->x - 2);
-            if (!in_bounds(floor_ptr, pos.y, pos.x)) {
+    for (auto y = 0; y < 5; y++) {
+        for (auto x = 0; x < 5; x++) {
+            const auto pos = p_pos + Pos2DVec(y, x) + Pos2DVec(-2, -2);
+            if (!floor.contains(pos)) {
                 continue;
             }
 
-            auto &grid = floor_ptr->get_grid(pos);
-            auto update_when = !grid.has(TerrainCharacteristics::MOVE) && !floor_ptr->has_closed_door_at(pos);
+            auto &grid = floor.get_grid(pos);
+            auto update_when = !grid.has(TerrainCharacteristics::MOVE) && !floor.has_closed_door_at(pos);
             update_when |= !grid.has_los();
-            update_when |= scent_adjust[i][j] == -1;
+            update_when |= scent_adjust[y][x] == -1;
             if (update_when) {
                 continue;
             }
 
-            grid.when = scent_when + scent_adjust[i][j];
+            grid.when = scent_when + scent_adjust[y][x];
         }
     }
 }
@@ -97,14 +95,14 @@ void update_smell(FloorType *floor_ptr, PlayerType *player_ptr)
 /*
  * Hack -- forget the "flow" information
  */
-void forget_flow(FloorType *floor_ptr)
+void forget_flow(FloorType &floor)
 {
-    for (POSITION y = 0; y < floor_ptr->height; y++) {
-        for (POSITION x = 0; x < floor_ptr->width; x++) {
-            auto &grid = floor_ptr->grid_array[y][x];
+    for (POSITION y = 0; y < floor.height; y++) {
+        for (POSITION x = 0; x < floor.width; x++) {
+            auto &grid = floor.grid_array[y][x];
             grid.reset_costs();
             grid.reset_dists();
-            floor_ptr->grid_array[y][x].when = 0;
+            floor.grid_array[y][x].when = 0;
         }
     }
 }
@@ -114,16 +112,16 @@ void forget_flow(FloorType *floor_ptr)
  * Delete all the items when player leaves the level
  * @note we do NOT visually reflect these (irrelevant) changes
  * @details
- * Hack -- we clear the "g_ptr->o_idx" field for every grid,
- * and the "m_ptr->next_o_idx" field for every monster, since
+ * Hack -- we clear the "grid.o_idx" field for every grid,
+ * and the "monster.next_o_idx" field for every monster, since
  * we know we are clearing every object.  Technically, we only
  * clear those fields for grids/monsters containing objects,
  * and we clear it once for every such object.
  */
-void wipe_o_list(FloorType *floor_ptr)
+void wipe_o_list(FloorType &floor)
 {
-    for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++) {
-        auto *o_ptr = &floor_ptr->o_list[i];
+    for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
+        auto *o_ptr = &floor.o_list[i];
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -134,13 +132,13 @@ void wipe_o_list(FloorType *floor_ptr)
             }
         }
 
-        auto &list = get_o_idx_list_contains(floor_ptr, i);
+        auto &list = get_o_idx_list_contains(floor, i);
         list.clear();
         o_ptr->wipe();
     }
 
-    floor_ptr->o_max = 1;
-    floor_ptr->o_cnt = 0;
+    floor.o_max = 1;
+    floor.o_cnt = 0;
 }
 
 /*
@@ -161,14 +159,14 @@ Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode)
         const auto ny = rand_spread(pos.y, d);
         const auto nx = rand_spread(pos.x, d);
         const Pos2D pos_neighbor(ny, nx);
-        if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
+        if (!floor.contains(pos_neighbor)) {
             continue;
         }
         if ((d > 1) && (Grid::calc_distance(pos, pos_neighbor) > d)) {
             continue;
         }
         if (mode & PROJECT_LOS) {
-            if (los(player_ptr, pos.y, pos.x, pos_neighbor.y, pos_neighbor.x)) {
+            if (los(floor, pos, pos_neighbor)) {
                 return pos_neighbor;
             }
 

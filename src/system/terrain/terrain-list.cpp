@@ -6,10 +6,35 @@
 
 #include "system/terrain/terrain-list.h"
 #include "info-reader/feature-info-tokens-table.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/terrain/terrain-definition.h"
 #include <algorithm>
 
 TerrainList TerrainList::instance{};
+
+TerrainList::TerrainList()
+{
+    this->normal_traps = {
+        TerrainTag::TRAP_TRAPDOOR,
+        TerrainTag::TRAP_PIT,
+        TerrainTag::TRAP_SPIKED_PIT,
+        TerrainTag::TRAP_POISON_PIT,
+        TerrainTag::TRAP_TY_CURSE,
+        TerrainTag::TRAP_TELEPORT,
+        TerrainTag::TRAP_FIRE,
+        TerrainTag::TRAP_ACID,
+        TerrainTag::TRAP_SLOW,
+        TerrainTag::TRAP_LOSE_STR,
+        TerrainTag::TRAP_LOSE_DEX,
+        TerrainTag::TRAP_LOSE_CON,
+        TerrainTag::TRAP_BLIND,
+        TerrainTag::TRAP_CONFUSE,
+        TerrainTag::TRAP_POISON,
+        TerrainTag::TRAP_SLEEP,
+        TerrainTag::TRAP_TRAPS,
+        TerrainTag::TRAP_ALARM,
+    };
+}
 
 TerrainList &TerrainList::get_instance()
 {
@@ -47,7 +72,7 @@ short TerrainList::get_terrain_id(TerrainTag tag) const
  * @throw std::runtime_error 未定義のタグが指定された
  * @return 地形タグに対応するID
  */
-short TerrainList::get_terrain_id_by_tag(std::string_view tag) const
+short TerrainList::get_terrain_id(std::string_view tag) const
 {
     const auto it = std::find_if(this->terrains.begin(), this->terrains.end(),
         [tag](const auto &terrain) {
@@ -58,6 +83,11 @@ short TerrainList::get_terrain_id_by_tag(std::string_view tag) const
     }
 
     return static_cast<short>(std::distance(this->terrains.begin(), it));
+}
+
+TerrainTag TerrainList::select_normal_trap() const
+{
+    return rand_choice(this->normal_traps);
 }
 
 /*!
@@ -74,9 +104,11 @@ void TerrainList::retouch()
     }
 }
 
-void TerrainList::emplace_tag(std::string_view tag)
+void TerrainList::emplace_tags()
 {
-    this->tags.emplace(terrain_tags.at(tag), this->get_terrain_id_by_tag(tag));
+    for (const auto &[tag_str, tag] : terrain_tags) {
+        this->tags.emplace(tag, this->get_terrain_id(tag_str));
+    }
 }
 
 /*!
@@ -90,5 +122,5 @@ std::optional<short> TerrainList::search_real_terrain(std::string_view tag) cons
         return std::nullopt;
     }
 
-    return this->get_terrain_id_by_tag(tag);
+    return this->get_terrain_id(tag);
 }

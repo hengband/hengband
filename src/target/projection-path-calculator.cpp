@@ -2,13 +2,10 @@
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/cave.h"
-#include "spell-class/spells-mirror-master.h"
-#include "system/angband-system.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "util/finalizer.h"
 
 class ProjectionPathHelper {
@@ -86,11 +83,11 @@ static bool project_stop(const FloorType &floor, const Pos2D &p_pos, ProjectionP
     }
 
     if (any_bits(pph_ptr->flag, PROJECT_DISI)) {
-        if (!pph_ptr->positions.empty() && cave_stop_disintegration(&floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
+        if (!pph_ptr->positions.empty() && cave_stop_disintegration(floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
             return true;
         }
     } else if (any_bits(pph_ptr->flag, PROJECT_LOS)) {
-        if (!pph_ptr->positions.empty() && !cave_los_bold(&floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
+        if (!pph_ptr->positions.empty() && !cave_los_bold(floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
             return true;
         }
     } else if (none_bits(pph_ptr->flag, PROJECT_PATH)) {
@@ -110,11 +107,7 @@ static bool project_stop(const FloorType &floor, const Pos2D &p_pos, ProjectionP
         return true;
     }
 
-    if (!in_bounds(&floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
-        return true;
-    }
-
-    return false;
+    return !floor.contains(pph_ptr->pos);
 }
 
 static void calc_frac(ProjectionPathHelper *pph_ptr, bool is_vertical)

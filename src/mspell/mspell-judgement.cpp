@@ -102,11 +102,11 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
     Pos2D pos_breath = pos_source;
     for (const auto &pos : grid_g) {
         if (flg & PROJECT_DISI) {
-            if (cave_stop_disintegration(&floor, pos.y, pos.x)) {
+            if (cave_stop_disintegration(floor, pos.y, pos.x)) {
                 break;
             }
         } else if (flg & PROJECT_LOS) {
-            if (!cave_los_bold(&floor, pos.y, pos.x)) {
+            if (!cave_los_bold(floor, pos.y, pos.x)) {
                 break;
             }
         } else {
@@ -121,20 +121,20 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
 
     auto hit2 = false;
     auto hityou = false;
+    const auto p_pos = player_ptr->get_position();
     if (path_n == 0) {
-        const auto p_pos = player_ptr->get_position();
         if (flg & PROJECT_DISI) {
-            if (in_disintegration_range(&floor, pos_source.y, pos_source.x, pos_target.y, pos_target.x) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
+            if (in_disintegration_range(floor, pos_source, pos_target) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
                 hit2 = true;
             }
-            if (in_disintegration_range(&floor, pos_source.y, pos_source.x, p_pos.y, p_pos.x) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
+            if (in_disintegration_range(floor, pos_source, p_pos) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
                 hityou = true;
             }
         } else if (flg & PROJECT_LOS) {
-            if (los(player_ptr, pos_source.y, pos_source.x, pos_target.y, pos_target.x) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
+            if (los(floor, pos_source, pos_target) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
                 hit2 = true;
             }
-            if (los(player_ptr, pos_source.y, pos_source.x, p_pos.y, p_pos.x) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
+            if (los(floor, pos_source, p_pos) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
                 hityou = true;
             }
         } else {
@@ -146,21 +146,9 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
             }
         }
     } else {
-        auto grids = 0;
-        std::vector<Pos2D> positions(1024, { 0, 0 });
-        std::array<int, 32> gm{};
-        auto gm_rad = rad;
-        //!< @todo Clang 15以降はpositions を直接渡せるようになる.
-        breath_shape(player_ptr, grid_g, path_n, &grids, std::span(positions.begin(), positions.size()), gm, &gm_rad, rad, pos_source, pos_breath, typ);
-        for (auto i = 0; i < grids; i++) {
-            const auto &position = positions[i];
-            if (position == pos_target) {
-                hit2 = true;
-            }
-            if (player_ptr->is_located_at(position)) {
-                hityou = true;
-            }
-        }
+        const auto positions = breath_shape(player_ptr, grid_g, path_n, rad, pos_source, pos_breath, typ);
+        hit2 |= std::any_of(positions.begin(), positions.end(), [&pos_target](const auto &pair) { return pair.second == pos_target; });
+        hityou |= std::any_of(positions.begin(), positions.end(), [&p_pos](const auto &pair) { return pair.second == p_pos; });
     }
 
     if (!hit2 || (is_friend && hityou)) {
@@ -262,9 +250,9 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     const auto &floor_ref = *player_ptr->current_floor_ptr;
-    auto *m_ptr = &floor_ref.m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ACID)) {
+    const auto &monster = floor_ref.m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
+    if (monrace.ability_flags.has(MonsterAbilityType::BR_ACID)) {
         if (!has_immune_acid(player_ptr) && (player_ptr->oppose_acid || music_singing(player_ptr, MUSIC_RESIST))) {
             return true;
         }
@@ -274,7 +262,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_FIRE)) {
+    if (monrace.ability_flags.has(MonsterAbilityType::BR_FIRE)) {
         if (!(PlayerRace(player_ptr).equals(PlayerRaceType::BALROG) && player_ptr->lev > 44)) {
             if (!has_immune_fire(player_ptr) && (player_ptr->oppose_fire || music_singing(player_ptr, MUSIC_RESIST))) {
                 return true;
@@ -286,7 +274,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_ELEC)) {
+    if (monrace.ability_flags.has(MonsterAbilityType::BR_ELEC)) {
         if (!has_immune_elec(player_ptr) && (player_ptr->oppose_elec || music_singing(player_ptr, MUSIC_RESIST))) {
             return true;
         }
@@ -296,7 +284,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (r_ptr->ability_flags.has(MonsterAbilityType::BR_COLD)) {
+    if (monrace.ability_flags.has(MonsterAbilityType::BR_COLD)) {
         if (!has_immune_cold(player_ptr) && (player_ptr->oppose_cold || music_singing(player_ptr, MUSIC_RESIST))) {
             return true;
         }
@@ -306,7 +294,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (r_ptr->ability_flags.has_any_of({ MonsterAbilityType::BR_POIS, MonsterAbilityType::BR_NUKE }) && !(pc.equals(PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
+    if (monrace.ability_flags.has_any_of({ MonsterAbilityType::BR_POIS, MonsterAbilityType::BR_NUKE }) && !(pc.equals(PlayerClassType::NINJA) && (player_ptr->lev > 44))) {
         if (player_ptr->oppose_pois || music_singing(player_ptr, MUSIC_RESIST)) {
             return true;
         }
@@ -324,23 +312,23 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return true;
     }
 
-    if ((player_ptr->special_attack & ATTACK_ACID) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK)) {
+    if ((player_ptr->special_attack & ATTACK_ACID) && monrace.resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK)) {
         return true;
     }
 
-    if ((player_ptr->special_attack & ATTACK_FIRE) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
+    if ((player_ptr->special_attack & ATTACK_FIRE) && monrace.resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
         return true;
     }
 
-    if ((player_ptr->special_attack & ATTACK_ELEC) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK)) {
+    if ((player_ptr->special_attack & ATTACK_ELEC) && monrace.resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK)) {
         return true;
     }
 
-    if ((player_ptr->special_attack & ATTACK_COLD) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK)) {
+    if ((player_ptr->special_attack & ATTACK_COLD) && monrace.resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK)) {
         return true;
     }
 
-    if ((player_ptr->special_attack & ATTACK_POIS) && r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK)) {
+    if ((player_ptr->special_attack & ATTACK_POIS) && monrace.resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK)) {
         return true;
     }
 
@@ -350,7 +338,7 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     constexpr auto threshold = 25;
     const auto threshold_speed = STANDARD_SPEED + threshold;
-    if (player_ptr->lightspeed && (m_ptr->mspeed <= threshold_speed)) {
+    if (player_ptr->lightspeed && (monster.mspeed <= threshold_speed)) {
         return true;
     }
 

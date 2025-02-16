@@ -111,7 +111,7 @@
       <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;..\..\src\external-lib\include;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -149,7 +149,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;..\..\src\external-lib\include;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -175,9 +175,9 @@
       <PreprocessorDefinitions>WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;HAVE_STDINT_H;JP;SJIS;WORLD_SCORE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>EnableAllWarnings</WarningLevel>
-      <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4711;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4711;4738;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;..\..\src\external-lib\include;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -219,9 +219,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4711;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4061;4062;4127;4244;4255;4365;4514;4668;4710;4711;4738;4820;4996;4774;5045;5264;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>..\..\src;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;..\..\src\external-lib\include;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ExceptionHandling>SyncCThrow</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -294,6 +294,9 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
+    <ClCompile Include="..\..\src\external-lib\fmt\format.cc" />
+    <ClCompile Include="..\..\src\monster-floor\monster-movement-direction-list.cpp" />
+    <ClCompile Include="..\..\src\system\floor\wilderness-grid.cpp" />
     <ClCompile Include="..\..\src\system\services\dungeon-monrace-service.cpp" />
     <ClCompile Include="..\..\src\system\services\dungeon-service.cpp" />
     <ClCompile Include="..\..\src\system\floor\floor-list.cpp" />
@@ -656,6 +659,7 @@
     <ClCompile Include="..\..\src\target\target-getter.cpp" />
     <ClCompile Include="..\..\src\target\target-preparation.cpp" />
     <ClCompile Include="..\..\src\target\target-setter.cpp" />
+    <ClCompile Include="..\..\src\target\target.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-acceleration.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-blindness.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-confusion.cpp" />
@@ -672,6 +676,7 @@
     <ClCompile Include="..\..\src\tracking\health-bar-tracker.cpp" />
     <ClCompile Include="..\..\src\tracking\lore-tracker.cpp" />
     <ClCompile Include="..\..\src\util\candidate-selector.cpp" />
+    <ClCompile Include="..\..\src\util\elapsed-time.cpp" />
     <ClCompile Include="..\..\src\util\rng-xoshiro.cpp" />
     <ClCompile Include="..\..\src\util\dice.cpp" />
     <ClCompile Include="..\..\src\util\sha256.cpp" />
@@ -873,7 +878,7 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-zaprod.cpp" />
     <ClCompile Include="..\..\src\cmd-item\cmd-zapwand.cpp" />
     <ClCompile Include="..\..\src\cmd-io\diary-subtitle-table.cpp" />
-    <ClCompile Include="..\..\src\cmd-io\feeling-table.cpp" />
+    <ClCompile Include="..\..\src\floor\dungeon-feeling.cpp" />
     <ClCompile Include="..\..\src\knowledge\lighting-level-table.cpp" />
     <ClCompile Include="..\..\src\knowledge\monster-group-table.cpp" />
     <ClCompile Include="..\..\src\knowledge\item-group-table.cpp" />
@@ -912,7 +917,6 @@
     <ClCompile Include="..\..\src\info-reader\fixed-map-parser.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\dungeon-definition.cpp" />
     <ClCompile Include="..\..\src\locale\english.cpp" />
-    <ClCompile Include="..\..\src\grid\feature.cpp" />
     <ClCompile Include="..\..\src\floor\floor-events.cpp" />
     <ClCompile Include="..\..\src\floor\floor-generator.cpp" />
     <ClCompile Include="..\..\src\floor\floor-save.cpp" />
@@ -942,7 +946,6 @@
     <ClCompile Include="..\..\src\monster-floor\monster-dist-offsets.cpp" />
     <ClCompile Include="..\..\src\monster\monster-processor.cpp" />
     <ClCompile Include="..\..\src\monster\monster-status.cpp" />
-    <ClCompile Include="..\..\src\monster-race\monster-race-hook.cpp" />
     <ClCompile Include="..\..\src\monster-attack\monster-attack-processor.cpp" />
     <ClCompile Include="..\..\src\monster-floor\monster-direction.cpp" />
     <ClCompile Include="..\..\src\monster-floor\monster-move.cpp" />
@@ -1016,7 +1019,10 @@
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\external-lib\include-json.h" />
-    <ClInclude Include="..\..\src\external-lib\json.hpp" />
+    <ClInclude Include="..\..\src\monster-floor\monster-movement-direction-list.h" />
+    <ClInclude Include="..\..\src\system\enums\terrain\terrain-kind.h" />
+    <ClInclude Include="..\..\src\system\enums\terrain\wilderness-terrain.h" />
+    <ClInclude Include="..\..\src\system\floor\wilderness-grid.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-monrace-service.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-service.h" />
     <ClInclude Include="..\..\src\system\enums\dungeon\dungeon-id.h" />
@@ -1489,6 +1495,7 @@
     <ClInclude Include="..\..\src\target\target-preparation.h" />
     <ClInclude Include="..\..\src\target\target-setter.h" />
     <ClInclude Include="..\..\src\target\target-types.h" />
+    <ClInclude Include="..\..\src\target\target.h" />
     <ClInclude Include="..\..\src\term\screen-processor.h" />
     <ClInclude Include="..\..\src\timed-effect\player-blindness.h" />
     <ClInclude Include="..\..\src\timed-effect\player-confusion.h" />
@@ -1510,6 +1517,7 @@
     <ClInclude Include="..\..\src\util\bit-flags-calculator.h" />
     <ClInclude Include="..\..\src\util\buffer-shaper.h" />
     <ClInclude Include="..\..\src\util\candidate-selector.h" />
+    <ClInclude Include="..\..\src\util\elapsed-time.h" />
     <ClInclude Include="..\..\src\util\enum-converter.h" />
     <ClInclude Include="..\..\src\util\enum-range.h" />
     <ClInclude Include="..\..\src\util\finalizer.h" />
@@ -1822,7 +1830,6 @@
     <ClCompile Include="..\..\src\view\display-lore-magics.cpp" />
     <ClCompile Include="..\..\src\view\display-lore-status.cpp" />
     <ClCompile Include="..\..\src\view\display-lore.cpp" />
-    <ClCompile Include="..\..\src\view\display-monster-status.cpp" />
     <ClCompile Include="..\..\src\view\display-player-middle.cpp" />
     <ClCompile Include="..\..\src\view\display-player-stat-info.cpp" />
     <ClCompile Include="..\..\src\view\display-player.cpp" />
@@ -1881,7 +1888,7 @@
     <ClInclude Include="..\..\src\cmd-item\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-zapwand.h" />
     <ClInclude Include="..\..\src\cmd-io\diary-subtitle-table.h" />
-    <ClInclude Include="..\..\src\cmd-io\feeling-table.h" />
+    <ClInclude Include="..\..\src\floor\dungeon-feeling.h" />
     <ClInclude Include="..\..\src\knowledge\lighting-level-table.h" />
     <ClInclude Include="..\..\src\knowledge\monster-group-table.h" />
     <ClInclude Include="..\..\src\knowledge\item-group-table.h" />
@@ -1906,7 +1913,6 @@
     <ClInclude Include="..\..\src\view\display-lore.h" />
     <ClInclude Include="..\..\src\view\display-map.h" />
     <ClInclude Include="..\..\src\view\display-messages.h" />
-    <ClInclude Include="..\..\src\view\display-monster-status.h" />
     <ClInclude Include="..\..\src\view\display-self-info.h" />
     <ClInclude Include="..\..\src\view\display-scores.h" />
     <ClInclude Include="..\..\src\window\display-sub-windows.h" />
@@ -2009,7 +2015,6 @@
     <ClInclude Include="..\..\src\core\speed-table.h" />
     <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h" />
     <ClInclude Include="..\..\src\system\dungeon\dungeon-definition.h" />
-    <ClInclude Include="..\..\src\grid\feature.h" />
     <ClInclude Include="..\..\src\io\files-util.h" />
     <ClInclude Include="..\..\src\floor\floor-events.h" />
     <ClInclude Include="..\..\src\floor\floor-generator.h" />
@@ -2029,7 +2034,6 @@
     <ClInclude Include="..\..\src\monster\monster-processor.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
     <ClInclude Include="..\..\src\system\monster-entity.h" />
-    <ClInclude Include="..\..\src\monster-race\monster-race-hook.h" />
     <ClInclude Include="..\..\src\mutation\mutation-calculator.h" />
     <ClInclude Include="..\..\src\object-enchant\object-boost.h" />
     <ClInclude Include="..\..\src\object-enchant\object-curse.h" />

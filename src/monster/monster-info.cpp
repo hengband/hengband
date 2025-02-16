@@ -40,12 +40,12 @@
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const MonraceDefinition *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const MonraceDefinition &monrace, BIT_FLAGS16 mode)
 {
     const auto &terrain = TerrainList::get_instance().get_terrain(feat);
     if (terrain.flags.has(TerrainCharacteristics::PATTERN)) {
         if (!(mode & CEM_RIDING)) {
-            if (r_ptr->feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
+            if (monrace.feature_flags.has_not(MonsterFeatureType::CAN_FLY)) {
                 return false;
             }
         } else {
@@ -55,14 +55,14 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Monr
         }
     }
 
-    if (terrain.flags.has(TerrainCharacteristics::CAN_FLY) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_FLY)) {
+    if (terrain.flags.has(TerrainCharacteristics::CAN_FLY) && monrace.feature_flags.has(MonsterFeatureType::CAN_FLY)) {
         return true;
     }
-    if (terrain.flags.has(TerrainCharacteristics::CAN_SWIM) && r_ptr->feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
+    if (terrain.flags.has(TerrainCharacteristics::CAN_SWIM) && monrace.feature_flags.has(MonsterFeatureType::CAN_SWIM)) {
         return true;
     }
     if (terrain.flags.has(TerrainCharacteristics::CAN_PASS)) {
-        if (r_ptr->feature_flags.has(MonsterFeatureType::PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr))) {
+        if (monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && (!(mode & CEM_RIDING) || has_pass_wall(player_ptr))) {
             return true;
         }
     }
@@ -71,48 +71,48 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Monr
         return false;
     }
 
-    if (terrain.flags.has(TerrainCharacteristics::MOUNTAIN) && (r_ptr->wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN))) {
+    if (terrain.flags.has(TerrainCharacteristics::MOUNTAIN) && (monrace.wilderness_flags.has(MonsterWildernessType::WILD_MOUNTAIN))) {
         return true;
     }
 
     if (terrain.flags.has(TerrainCharacteristics::WATER)) {
-        if (r_ptr->feature_flags.has_not(MonsterFeatureType::AQUATIC)) {
+        if (monrace.feature_flags.has_not(MonsterFeatureType::AQUATIC)) {
             if (terrain.flags.has(TerrainCharacteristics::DEEP)) {
                 return false;
-            } else if (r_ptr->aura_flags.has(MonsterAuraType::FIRE)) {
+            } else if (monrace.aura_flags.has(MonsterAuraType::FIRE)) {
                 return false;
             }
         }
-    } else if (r_ptr->feature_flags.has(MonsterFeatureType::AQUATIC)) {
+    } else if (monrace.feature_flags.has(MonsterFeatureType::AQUATIC)) {
         return false;
     }
 
     if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
-        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
+        if (monrace.resistance_flags.has_none_of(RFR_EFF_IM_FIRE_MASK)) {
             return false;
         }
     }
 
     if (terrain.flags.has(TerrainCharacteristics::COLD_PUDDLE)) {
-        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK)) {
+        if (monrace.resistance_flags.has_none_of(RFR_EFF_IM_COLD_MASK)) {
             return false;
         }
     }
 
     if (terrain.flags.has(TerrainCharacteristics::ELEC_PUDDLE)) {
-        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK)) {
+        if (monrace.resistance_flags.has_none_of(RFR_EFF_IM_ELEC_MASK)) {
             return false;
         }
     }
 
     if (terrain.flags.has(TerrainCharacteristics::ACID_PUDDLE)) {
-        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK)) {
+        if (monrace.resistance_flags.has_none_of(RFR_EFF_IM_ACID_MASK)) {
             return false;
         }
     }
 
     if (terrain.flags.has(TerrainCharacteristics::POISON_PUDDLE)) {
-        if (r_ptr->resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK)) {
+        if (monrace.resistance_flags.has_none_of(RFR_EFF_IM_POISON_MASK)) {
             return false;
         }
     }
@@ -130,7 +130,7 @@ bool monster_can_cross_terrain(PlayerType *player_ptr, FEAT_IDX feat, const Monr
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const MonraceDefinition *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const MonraceDefinition &monrace, BIT_FLAGS16 mode)
 {
     const Pos2D pos(y, x);
     auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
@@ -141,53 +141,58 @@ bool monster_can_enter(PlayerType *player_ptr, POSITION y, POSITION x, const Mon
         return false;
     }
 
-    return monster_can_cross_terrain(player_ptr, grid.feat, r_ptr, mode);
+    return monster_can_cross_terrain(player_ptr, grid.feat, monrace, mode);
+}
+
+static uint8_t get_recial_sub_align(const MonraceDefinition &monrace)
+{
+    uint8_t sub_align = SUB_ALIGN_NEUTRAL;
+    if (monrace.kind_flags.has(MonsterKindType::EVIL)) {
+        sub_align |= SUB_ALIGN_EVIL;
+    }
+    if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
+        sub_align |= SUB_ALIGN_GOOD;
+    }
+    return sub_align;
 }
 
 /*!
  * @brief モンスターがプレイヤーに対して敵意を抱くかどうかを返す
- * Check if this monster race has "hostile" alignment
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param m_ptr モンスター情報構造体の参照ポインタ
  * @param pa_good プレイヤーの善傾向値
  * @param pa_evil プレイヤーの悪傾向値
- * @param r_ptr モンスター種族情報の構造体参照ポインタ
- * @return プレイヤーに敵意を持つならばTRUEを返す
- * @details
- * If user is player, m_ptr == nullptr.
+ * @param monrace モンスター種族情報の参照
+ * @return プレイヤーに敵意を持つならばtrueを返す
  */
-bool monster_has_hostile_align(PlayerType *player_ptr, const MonsterEntity *m_ptr, int pa_good, int pa_evil, const MonraceDefinition *r_ptr)
+bool monster_has_hostile_to_player(PlayerType *player_ptr, int pa_good, int pa_evil, const MonraceDefinition &monrace)
 {
     byte sub_align1 = SUB_ALIGN_NEUTRAL;
-    byte sub_align2 = SUB_ALIGN_NEUTRAL;
-
-    if (m_ptr) /* For a monster */
-    {
-        sub_align1 = m_ptr->sub_align;
-    } else /* For player */
-    {
-        if (player_ptr->alignment >= pa_good) {
-            sub_align1 |= SUB_ALIGN_GOOD;
-        }
-        if (player_ptr->alignment <= pa_evil) {
-            sub_align1 |= SUB_ALIGN_EVIL;
-        }
+    if (player_ptr->alignment >= pa_good) {
+        sub_align1 |= SUB_ALIGN_GOOD;
+    }
+    if (player_ptr->alignment <= pa_evil) {
+        sub_align1 |= SUB_ALIGN_EVIL;
     }
 
-    /* Racial alignment flags */
-    if (r_ptr->kind_flags.has(MonsterKindType::EVIL)) {
-        sub_align2 |= SUB_ALIGN_EVIL;
-    }
-    if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
-        sub_align2 |= SUB_ALIGN_GOOD;
-    }
-
+    const auto sub_align2 = get_recial_sub_align(monrace);
     return MonsterEntity::check_sub_alignments(sub_align1, sub_align2);
 }
 
-bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr)
+/*!
+ * @brief モンスターが他のモンスターに対して敵意を抱くかどうかを返す
+ * @param monster_other 敵意を抱くか調べる他のモンスターの参照
+ * @param monrace モンスター種族情報の参照
+ * @return monster_other で指定したモンスターに敵意を持つならばtrueを返す
+ */
+bool monster_has_hostile_to_other_monster(const MonsterEntity &monster_other, const MonraceDefinition &monrace)
 {
-    return m_ptr->ml && !player_ptr->effects()->hallucination().is_hallucinated() && m_ptr->is_original_ap();
+    const auto sub_align2 = get_recial_sub_align(monrace);
+    return MonsterEntity::check_sub_alignments(monster_other.sub_align, sub_align2);
+}
+
+bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity &monster)
+{
+    return monster.ml && !player_ptr->effects()->hallucination().is_hallucinated() && monster.is_original_ap();
 }
 
 /*!
@@ -198,6 +203,6 @@ bool is_original_ap_and_seen(PlayerType *player_ptr, const MonsterEntity *m_ptr)
  */
 std::string monster_name(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    return monster_desc(player_ptr, m_ptr, 0x00);
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    return monster_desc(player_ptr, monster, 0x00);
 }

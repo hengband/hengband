@@ -62,8 +62,8 @@ void do_cmd_search(PlayerType *player_ptr)
 
 static bool exe_alter(PlayerType *player_ptr)
 {
-    DIRECTION dir;
-    if (!get_rep_dir(player_ptr, &dir, true)) {
+    const auto dir = get_rep_dir(player_ptr, true);
+    if (!dir) {
         return false;
     }
 

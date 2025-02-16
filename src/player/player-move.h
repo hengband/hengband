@@ -23,11 +23,6 @@
 #define PATTERN_TILE_TELEPORT 7
 #define PATTERN_TILE_WRECKED 8
 
-extern int flow_head;
-extern int flow_tail;
-extern POSITION temp2_x[MAX_SHORT];
-extern POSITION temp2_y[MAX_SHORT];
-
 class PlayerType;
 bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FLAGS mpe_mode);
 bool trap_can_be_ignored(PlayerType *player_ptr, FEAT_IDX feat);

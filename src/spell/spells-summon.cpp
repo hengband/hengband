@@ -259,15 +259,15 @@ int summon_cyber(PlayerType *player_ptr, POSITION y, POSITION x, std::optional<M
 {
     /* Summoned by a monster */
     BIT_FLAGS mode = PM_ALLOW_GROUP;
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (summoner_m_idx) {
-        auto *m_ptr = &floor_ptr->m_list[*summoner_m_idx];
-        if (m_ptr->is_pet()) {
+        const auto &monster = floor.m_list[*summoner_m_idx];
+        if (monster.is_pet()) {
             mode |= PM_FORCE_PET;
         }
     }
 
-    int max_cyber = (floor_ptr->dun_level / 50) + randint1(2);
+    int max_cyber = (floor.dun_level / 50) + randint1(2);
     if (max_cyber > 4) {
         max_cyber = 4;
     }
@@ -309,7 +309,7 @@ void mitokohmon(PlayerType *player_ptr)
             }
 
             const auto m_pos = monster.get_position();
-            if (!los(player_ptr, m_pos.y, m_pos.x, p_pos.y, p_pos.x)) {
+            if (!los(floor, m_pos, p_pos)) {
                 continue;
             }
             if (!projectable(player_ptr, m_pos, p_pos)) {
@@ -445,7 +445,7 @@ int activate_hi_summon(PlayerType *player_ptr, POSITION y, POSITION x, bool can_
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 方向ID
  */
-void cast_invoke_spirits(PlayerType *player_ptr, DIRECTION dir)
+void cast_invoke_spirits(PlayerType *player_ptr, const Direction &dir)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
     int die = randint1(100) + plev / 5;

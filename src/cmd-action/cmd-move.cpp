@@ -10,6 +10,7 @@
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/floor-mode-changer.h"
+#include "floor/geometry.h"
 #include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
@@ -35,6 +36,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -99,7 +101,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
             msg_print(_("上の階に登った。", "You enter the up staircase."));
         }
 
-        sound(SOUND_STAIRWAY);
+        sound(SoundKind::STAIRWAY);
 
         leave_quest_check(player_ptr);
         floor.quest_number = i2enum<QuestId>(grid.special);
@@ -190,7 +192,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         }
     }
 
-    sound(SOUND_STAIRWAY);
+    sound(SoundKind::STAIRWAY);
 
     player_ptr->leaving = true;
 }
@@ -228,7 +230,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
             msg_print(_("下の階に降りた。", "You enter the down staircase."));
         }
 
-        sound(SOUND_STAIRWAY);
+        sound(SoundKind::STAIRWAY);
 
         leave_quest_check(player_ptr);
         leave_tower_check(player_ptr);
@@ -294,7 +296,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
 
     const auto &dungeon = floor.get_dungeon_definition();
     if (!floor.is_underground()) {
-        player_ptr->enter_dungeon = true;
+        floor.enter_dungeon(true);
         down_num = dungeon.mindepth;
     }
 
@@ -320,7 +322,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
             }
         }
 
-        sound(SOUND_STAIRWAY);
+        sound(SoundKind::STAIRWAY);
     }
 
     player_ptr->leaving = true;
@@ -350,12 +352,11 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
     }
 
     auto more = false;
-    int dir;
     const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
-    if (get_rep_dir(player_ptr, &dir)) {
+    if (const auto dir = get_rep_dir(player_ptr)) {
         PlayerEnergy energy(player_ptr);
         energy.set_player_turn_energy(100);
-        if (dir != 5) {
+        if (dir.has_direction()) {
             PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
         }
 
@@ -375,13 +376,13 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
     if (is_wild_mode && !floor.has_terrain_characteristics(p_pos, TerrainCharacteristics::TOWN)) {
-        const auto &wilderness_grid = wilderness[p_pos.y][p_pos.x];
-        auto tmp = 120 + player_ptr->lev * 10 - wilderness_grid.level + 5;
+        const auto wild_level = WildernessGrids::get_instance().get_player_grid().get_level();
+        auto tmp = 120 + player_ptr->lev * 10 - wild_level + 5;
         if (tmp < 1) {
             tmp = 1;
         }
 
-        if (((wilderness_grid.level + 5) > (player_ptr->lev / 2)) && randint0(tmp) < (21 - player_ptr->skill_stl)) {
+        if (((wild_level + 5) > (player_ptr->lev / 2)) && randint0(tmp) < (21 - player_ptr->skill_stl)) {
             msg_print(_("襲撃だ！", "You are ambushed !"));
             player_ptr->oldpy = randint1(MAX_HGT - 2);
             player_ptr->oldpx = randint1(MAX_WID - 2);
@@ -402,14 +403,13 @@ void do_cmd_walk(PlayerType *player_ptr, bool pickup)
  */
 void do_cmd_run(PlayerType *player_ptr)
 {
-    DIRECTION dir;
     if (cmd_limit_confused(player_ptr)) {
         return;
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
 
-    if (get_rep_dir(player_ptr, &dir)) {
+    if (const auto dir = get_rep_dir(player_ptr)) {
         player_ptr->running = (command_arg ? command_arg : 1000);
         run_step(player_ptr, dir);
     }

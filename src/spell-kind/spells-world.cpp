@@ -10,7 +10,6 @@
 #include "dungeon/quest-completion-checker.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/geometry.h"
-#include "floor/wild.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
@@ -30,6 +29,7 @@
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
@@ -62,9 +62,9 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (m_idx <= 0) {
         m_name = _("あなた", "you");
     } else {
-        auto *m_ptr = &floor.m_list[m_idx];
-        m_name = monster_desc(player_ptr, m_ptr, 0);
-        see_m = is_seen(player_ptr, m_ptr);
+        const auto &monster = floor.m_list[m_idx];
+        m_name = monster_desc(player_ptr, monster, 0);
+        see_m = is_seen(player_ptr, monster);
     }
 
     if (floor.can_teleport_level(m_idx != 0)) {
@@ -204,32 +204,32 @@ void teleport_level(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     if (m_idx <= 0) {
-        sound(SOUND_TPLEVEL);
+        sound(SoundKind::TPLEVEL);
         return;
     }
 
-    auto *m_ptr = &floor.m_list[m_idx];
-    QuestCompletionChecker(player_ptr, m_ptr).complete();
-    if (record_named_pet && m_ptr->is_named_pet()) {
-        const auto m2_name = monster_desc(player_ptr, m_ptr, MD_INDEF_VISIBLE);
+    const auto &monster = floor.m_list[m_idx];
+    QuestCompletionChecker(player_ptr, monster).complete();
+    if (record_named_pet && monster.is_named_pet()) {
+        const auto m2_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
         exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
     }
 
     delete_monster_idx(player_ptr, m_idx);
     if (see_m) {
-        sound(SOUND_TPLEVEL);
+        sound(SoundKind::TPLEVEL);
     }
 }
 
 bool teleport_level_other(PlayerType *player_ptr)
 {
-    if (!target_set(player_ptr, TARGET_KILL)) {
+    const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+    if (!pos) {
         return false;
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(target_row, target_col);
-    const auto &grid = floor.get_grid(pos);
+    const auto &grid = floor.get_grid(*pos);
     const auto target_m_idx = grid.m_idx;
     if (!target_m_idx) {
         return true;
@@ -237,13 +237,13 @@ bool teleport_level_other(PlayerType *player_ptr)
     if (!grid.has_los()) {
         return true;
     }
-    if (!projectable(player_ptr, player_ptr->get_position(), pos)) {
+    if (!projectable(player_ptr, player_ptr->get_position(), *pos)) {
         return true;
     }
 
     const auto &monster = floor.m_list[target_m_idx];
     const auto &monrace = monster.get_monrace();
-    const auto m_name = monster_desc(player_ptr, &monster, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
     msg_format(_("%s^の足を指さした。", "You gesture at %s^'s feet."), m_name.data());
 
     auto has_immune = monrace.resistance_flags.has_any_of(RFR_EFF_RESIST_NEXUS_MASK) || monrace.resistance_flags.has(MonsterResistanceType::RESIST_TELEPORT);
@@ -317,13 +317,10 @@ bool tele_town(PlayerType *player_ptr)
         break;
     }
 
-    const auto &world = AngbandWorld::get_instance();
-    for (POSITION y = 0; y < world.max_wild_y; y++) {
-        for (POSITION x = 0; x < world.max_wild_x; x++) {
-            if (wilderness[y][x].town == (key - 'a' + 1)) {
-                player_ptr->wilderness_y = y;
-                player_ptr->wilderness_x = x;
-            }
+    auto &wilderness = WildernessGrids::get_instance();
+    for (const auto &pos : wilderness.get_area()) {
+        if (wilderness.get_grid(pos).matches_town(key - 'a' + 1)) {
+            wilderness.set_player_position(pos);
         }
     }
 

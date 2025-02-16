@@ -166,7 +166,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
             item->mark_as_known();
         }
 
-        (void)drop_near(player_ptr, &*item, -1, player_ptr->y, player_ptr->x);
+        (void)drop_near(player_ptr, &*item, player_ptr->get_position());
     }
 }
 
@@ -181,6 +181,7 @@ void generate_amusement(PlayerType *player_ptr, int num, bool known)
  */
 void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool great)
 {
+    const Pos2D pos(y1, x1);
     auto mode = AM_GOOD | (great ? AM_GREAT : AM_NONE);
     for (auto i = 0; i < num; i++) {
         ItemEntity item;
@@ -188,7 +189,7 @@ void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool
             continue;
         }
 
-        (void)drop_near(player_ptr, &item, -1, y1, x1);
+        (void)drop_near(player_ptr, &item, pos);
     }
 }
 

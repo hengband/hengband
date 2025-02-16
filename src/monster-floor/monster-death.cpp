@@ -5,7 +5,6 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/floor-object.h"
-#include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "main/music-definitions-table.h"
@@ -15,24 +14,16 @@
 #include "monster-floor/monster-death-util.h"
 #include "monster-floor/monster-object.h"
 #include "monster-floor/special-death-switcher.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-flag-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-list.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
 #include "pet/pet-fall-off.h"
 #include "player/patron.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
-#include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -43,19 +34,16 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/services/baseitem-monrace-service.h"
-#include "system/system-variables.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <algorithm>
 
 static void write_pet_death(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
     md_ptr->md_y = md_ptr->m_ptr->fy;
     md_ptr->md_x = md_ptr->m_ptr->fx;
     if (record_named_pet && md_ptr->m_ptr->is_named_pet()) {
-        const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_INDEF_VISIBLE);
+        const auto m_name = monster_desc(player_ptr, *md_ptr->m_ptr, MD_INDEF_VISIBLE);
         exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::NAMED_PET, 3, m_name);
     }
 }
@@ -95,7 +83,7 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
     if (bi_key.is_valid()) {
         ItemEntity item(bi_key);
         ItemMagicApplier(player_ptr, &item, floor.object_level, AM_NO_FIXED_ART).execute();
-        (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+        (void)drop_near(player_ptr, &item, md_ptr->get_position());
     }
 
     if (is_true_victor) {
@@ -107,16 +95,16 @@ static void on_defeat_arena_monster(PlayerType *player_ptr, MonsterDeath *md_ptr
         return;
     }
 
-    const auto m_name = monster_desc(player_ptr, md_ptr->m_ptr, MD_WRONGDOER_NAME);
+    const auto m_name = monster_desc(player_ptr, *md_ptr->m_ptr, MD_WRONGDOER_NAME);
     exe_write_diary(floor, DiaryKind::ARENA, 0, m_name);
 }
 
 static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     auto is_drop_corpse = one_in_(md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) ? 1 : 4);
     is_drop_corpse &= md_ptr->r_ptr->drop_flags.has_any_of({ MonsterDropType::DROP_CORPSE, MonsterDropType::DROP_SKELETON });
-    is_drop_corpse &= !(floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out() || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == AngbandWorld::get_instance().today_mon) && md_ptr->m_ptr->is_pet()));
+    is_drop_corpse &= !(floor.inside_arena || AngbandSystem::get_instance().is_phase_out() || md_ptr->cloned || ((md_ptr->m_ptr->r_idx == AngbandWorld::get_instance().today_mon) && md_ptr->m_ptr->is_pet()));
     if (!is_drop_corpse) {
         return;
     }
@@ -139,9 +127,9 @@ static void drop_corpse(PlayerType *player_ptr, MonsterDeath *md_ptr)
     }
 
     ItemEntity item({ ItemKindType::MONSTER_REMAINS, (corpse ? SV_CORPSE : SV_SKELETON) });
-    ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART).execute();
+    ItemMagicApplier(player_ptr, &item, floor.object_level, AM_NO_FIXED_ART).execute();
     item.pval = enum2i(md_ptr->m_ptr->r_idx);
-    (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+    (void)drop_near(player_ptr, &item, md_ptr->get_position());
 }
 
 /*!
@@ -207,8 +195,8 @@ static void drop_artifacts(PlayerType *player_ptr, MonsterDeath *md_ptr)
     }
 
     drop_artifact_from_unique(player_ptr, md_ptr);
-    const auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     if (md_ptr->r_ptr->misc_flags.has_not(MonsterMiscType::GUARDIAN) || (dungeon.final_guardian != md_ptr->m_ptr->r_idx)) {
         return;
     }
@@ -216,8 +204,8 @@ static void drop_artifacts(PlayerType *player_ptr, MonsterDeath *md_ptr)
     const auto bi_id = drop_dungeon_final_artifact(player_ptr, md_ptr);
     if (bi_id) {
         ItemEntity item(*bi_id);
-        ItemMagicApplier(player_ptr, &item, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
-        (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+        ItemMagicApplier(player_ptr, &item, floor.object_level, AM_NO_FIXED_ART | AM_GOOD).execute();
+        (void)drop_near(player_ptr, &item, md_ptr->get_position());
     }
 
     msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), dungeon.name.data());
@@ -302,7 +290,7 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
             dump_item++;
         }
 
-        (void)drop_near(player_ptr, &item, -1, md_ptr->md_y, md_ptr->md_x);
+        (void)drop_near(player_ptr, &item, md_ptr->get_position());
     }
 
     floor.object_level = floor.base_level;
@@ -375,8 +363,8 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
 
     // プレイヤーしかユニークを倒せないのでここで時間を記録
     if (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && md_ptr->m_ptr->mflag2.has_not(MonsterConstantFlagType::CLONED)) {
-        world.update_playtime();
-        md_ptr->r_ptr->defeat_time = world.play_time;
+        world.play_time.update();
+        md_ptr->r_ptr->defeat_time = world.play_time.elapsed_sec();
         md_ptr->r_ptr->defeat_level = player_ptr->lev;
     }
 
@@ -391,14 +379,14 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
         md_ptr->r_ptr = &md_ptr->m_ptr->get_monrace();
     }
 
-    QuestCompletionChecker(player_ptr, md_ptr->m_ptr).complete();
+    QuestCompletionChecker(player_ptr, *md_ptr->m_ptr).complete();
     on_defeat_arena_monster(player_ptr, md_ptr);
     if (md_ptr->m_ptr->is_riding() && process_fall_off_horse(player_ptr, -1, false)) {
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
     }
 
     drop_corpse(player_ptr, md_ptr);
-    monster_drop_carried_objects(player_ptr, md_ptr->m_ptr);
+    monster_drop_carried_objects(player_ptr, *md_ptr->m_ptr);
     decide_drop_quality(md_ptr);
     switch_special_death(player_ptr, md_ptr, attribute_flags);
     drop_artifacts(player_ptr, md_ptr);

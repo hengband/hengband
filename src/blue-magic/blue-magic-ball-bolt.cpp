@@ -9,360 +9,97 @@
 #include "monster-race/race-ability-flags.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "spell-kind/spells-launcher.h"
+#include "system/angband-exceptions.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
+#include <unordered_map>
 
-bool cast_blue_ball_acid(PlayerType *player_ptr, bmc_type *bmc_ptr)
+namespace {
+struct blue_magic_ball_type {
+    AttributeType attribute_type;
+    int radius;
+    std::string_view message;
+};
+
+const std::unordered_map<MonsterAbilityType, blue_magic_ball_type> BLUE_MAIGC_BALL_TABLE = {
+    { MonsterAbilityType::BA_ACID, { AttributeType::ACID, 2, _("アシッド・ボールの呪文を唱えた。", "You cast an acid ball.") } },
+    { MonsterAbilityType::BA_ELEC, { AttributeType::ELEC, 2, _("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball.") } },
+    { MonsterAbilityType::BA_FIRE, { AttributeType::FIRE, 2, _("ファイア・ボールの呪文を唱えた。", "You cast a fire ball.") } },
+    { MonsterAbilityType::BA_COLD, { AttributeType::COLD, 2, _("アイス・ボールの呪文を唱えた。", "You cast a frost ball.") } },
+    { MonsterAbilityType::BA_POIS, { AttributeType::POIS, 2, _("悪臭雲の呪文を唱えた。", "You cast a stinking cloud.") } },
+    { MonsterAbilityType::BA_NUKE, { AttributeType::NUKE, 2, _("放射能球を放った。", "You cast a ball of radiation.") } },
+    { MonsterAbilityType::BA_NETH, { AttributeType::NETHER, 2, _("地獄球の呪文を唱えた。", "You cast a nether ball.") } },
+    { MonsterAbilityType::BA_CHAO, { AttributeType::CHAOS, 4, _("純ログルスを放った。", "You invoke a raw Logrus.") } },
+    { MonsterAbilityType::BA_WATE, { AttributeType::WATER, 4, _("流れるような身振りをした。", "You gesture fluidly.") } },
+    { MonsterAbilityType::BA_LITE, { AttributeType::LITE, 4, _("スターバーストの呪文を念じた。", "You invoke a starburst.") } },
+    { MonsterAbilityType::BA_DARK, { AttributeType::DARK, 4, _("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm.") } },
+    { MonsterAbilityType::BA_MANA, { AttributeType::MANA, 4, _("魔力の嵐の呪文を念じた。", "You invoke a mana storm.") } },
+    { MonsterAbilityType::BA_VOID, { AttributeType::VOID_MAGIC, 4, _("虚無の嵐の呪文を念じた。", "You invoke a void storm.") } },
+    { MonsterAbilityType::BA_ABYSS, { AttributeType::ABYSS, 4, _("深淵の嵐の呪文を念じた。", "You invoke a abyss storm.") } },
+    { MonsterAbilityType::BA_METEOR, { AttributeType::METEOR, 4, _("メテオスウォームの呪文を念じた。", "You invoke a meteor swarm.") } },
+};
+
+struct blue_magic_bolt_type {
+    AttributeType attribute_type;
+    std::string_view message;
+};
+
+const std::unordered_map<MonsterAbilityType, blue_magic_bolt_type> BLUE_MAGIC_BOLT_TABLE = {
+    { MonsterAbilityType::BO_ACID, { AttributeType::ACID, _("アシッド・ボルトの呪文を唱えた。", "You cast an acid bolt.") } },
+    { MonsterAbilityType::BO_ELEC, { AttributeType::ELEC, _("サンダー・ボルトの呪文を唱えた。", "You cast a lightning bolt.") } },
+    { MonsterAbilityType::BO_FIRE, { AttributeType::FIRE, _("ファイア・ボルトの呪文を唱えた。", "You cast a fire bolt.") } },
+    { MonsterAbilityType::BO_COLD, { AttributeType::COLD, _("アイス・ボルトの呪文を唱えた。", "You cast a frost bolt.") } },
+    { MonsterAbilityType::BO_NETH, { AttributeType::NETHER, _("地獄の矢の呪文を唱えた。", "You cast a nether bolt.") } },
+    { MonsterAbilityType::BO_WATE, { AttributeType::WATER, _("ウォーター・ボルトの呪文を唱えた。", "You cast a water bolt.") } },
+    { MonsterAbilityType::BO_MANA, { AttributeType::MANA, _("魔力の矢の呪文を唱えた。", "You cast a mana bolt.") } },
+    { MonsterAbilityType::BO_PLAS, { AttributeType::PLASMA, _("プラズマ・ボルトの呪文を唱えた。", "You cast a plasma bolt.") } },
+    { MonsterAbilityType::BO_ICEE, { AttributeType::ICE, _("極寒の矢の呪文を唱えた。", "You cast a ice bolt.") } },
+    { MonsterAbilityType::MISSILE, { AttributeType::MISSILE, _("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile.") } },
+    { MonsterAbilityType::BO_ABYSS, { AttributeType::ABYSS, _("アビス・ボルトの呪文を唱えた。", "You cast a abyss bolt.") } },
+    { MonsterAbilityType::BO_VOID, { AttributeType::VOID_MAGIC, _("ヴォイド・ボルトの呪文を唱えた。", "You cast a void bolt.") } },
+    { MonsterAbilityType::BO_METEOR, { AttributeType::METEOR, _("メテオストライクの呪文を唱えた。", "You cast a meteor strike.") } },
+    { MonsterAbilityType::BO_LITE, { AttributeType::LITE, _("スターライトアローの呪文を唱えた。", "You cast a starlight arrow.") } },
+};
+}
+
+bool cast_blue_magic_ball(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
-    msg_print(_("アシッド・ボールの呪文を唱えた。", "You cast an acid ball."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_ACID, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::ACID, bmc_ptr->dir, bmc_ptr->damage, 2);
-    return true;
-}
+    const auto magic = BLUE_MAIGC_BALL_TABLE.find(bmc_ptr->spell);
+    if (magic == BLUE_MAIGC_BALL_TABLE.end()) {
+        const auto message = fmt::format("Unknown blue magic ball: {}", static_cast<int>(bmc_ptr->spell));
+        THROW_EXCEPTION(std::logic_error, message);
+    }
 
-bool cast_blue_ball_elec(PlayerType *player_ptr, bmc_type *bmc_ptr)
+    const auto &[attribute_type, radius, message] = magic->second;
+    msg_print(message);
+    const auto damage = monspell_bluemage_damage(player_ptr, bmc_ptr->spell, bmc_ptr->plev, DAM_ROLL);
+    fire_ball(player_ptr, attribute_type, dir, damage, radius);
+    return true;
+};
+
+bool cast_blue_magic_bolt(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
-    msg_print(_("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_ELEC, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::ELEC, bmc_ptr->dir, bmc_ptr->damage, 2);
-    return true;
-}
-
-bool cast_blue_ball_fire(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
+    const auto magic = BLUE_MAGIC_BOLT_TABLE.find(bmc_ptr->spell);
+    if (magic == BLUE_MAGIC_BOLT_TABLE.end()) {
+        const auto message = fmt::format("Unknown blue magic bolt: {}", static_cast<int>(bmc_ptr->spell));
+        THROW_EXCEPTION(std::logic_error, message);
     }
 
-    msg_print(_("ファイア・ボールの呪文を唱えた。", "You cast a fire ball."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_FIRE, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::FIRE, bmc_ptr->dir, bmc_ptr->damage, 2);
+    const auto &[attribute_type, message] = magic->second;
+    msg_print(message);
+    const auto damage = monspell_bluemage_damage(player_ptr, bmc_ptr->spell, bmc_ptr->plev, DAM_ROLL);
+    fire_bolt(player_ptr, attribute_type, dir, damage);
     return true;
-}
-
-bool cast_blue_ball_cold(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("アイス・ボールの呪文を唱えた。", "You cast a frost ball."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_COLD, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::COLD, bmc_ptr->dir, bmc_ptr->damage, 2);
-    return true;
-}
-
-bool cast_blue_ball_pois(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("悪臭雲の呪文を唱えた。", "You cast a stinking cloud."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_POIS, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::POIS, bmc_ptr->dir, bmc_ptr->damage, 2);
-    return true;
-}
-
-bool cast_blue_ball_nuke(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("放射能球を放った。", "You cast a ball of radiation."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_NUKE, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::NUKE, bmc_ptr->dir, bmc_ptr->damage, 2);
-    return true;
-}
-
-bool cast_blue_ball_nether(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("地獄球の呪文を唱えた。", "You cast a nether ball."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_NETH, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::NETHER, bmc_ptr->dir, bmc_ptr->damage, 2);
-    return true;
-}
-
-bool cast_blue_ball_chaos(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("純ログルスを放った。", "You invoke a raw Logrus."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_CHAO, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::CHAOS, bmc_ptr->dir, bmc_ptr->damage, 4);
-    return true;
-}
-
-/*!
- * @brief ウォーター・ボールの青魔法
- * @brief 分解のブレスの青魔法
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param bmc_ptr 青魔法詠唱への参照ポインタ
- * @details All my worries are blown away.
- */
-bool cast_blue_ball_water(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("流れるような身振りをした。", "You gesture fluidly."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_WATE, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::WATER, bmc_ptr->dir, bmc_ptr->damage, 4);
-    return true;
-}
-
-bool cast_blue_ball_star_burst(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("スターバーストの呪文を念じた。", "You invoke a starburst."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_LITE, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::LITE, bmc_ptr->dir, bmc_ptr->damage, 4);
-    return true;
-}
-
-bool cast_blue_ball_dark_storm(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_DARK, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::DARK, bmc_ptr->dir, bmc_ptr->damage, 4);
-    return true;
-}
-
-bool cast_blue_ball_mana_storm(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("魔力の嵐の呪文を念じた。", "You invoke a mana storm."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_MANA, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::MANA, bmc_ptr->dir, bmc_ptr->damage, 4);
-    return true;
-}
-
-bool cast_blue_ball_void(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("虚無の嵐の呪文を念じた。", "You invoke a void storm."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_VOID, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::VOID_MAGIC, bmc_ptr->dir, bmc_ptr->damage, 4);
-    return true;
-}
-
-bool cast_blue_ball_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("深淵の嵐の呪文を念じた。", "You invoke a abyss storm."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_ABYSS, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::ABYSS, bmc_ptr->dir, bmc_ptr->damage, 4);
-    return true;
-}
-
-bool cast_blue_ball_meteor(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("メテオスウォームの呪文を念じた。", "You invoke a meteor swarm."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BA_METEOR, bmc_ptr->plev, DAM_ROLL);
-    fire_ball(player_ptr, AttributeType::METEOR, bmc_ptr->dir, bmc_ptr->damage, 4);
-    return true;
-}
-
-bool cast_blue_bolt_acid(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("アシッド・ボルトの呪文を唱えた。", "You cast an acid bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_ACID, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::ACID, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_elec(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("サンダー・ボルトの呪文を唱えた。", "You cast a lightning bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_ELEC, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::ELEC, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_fire(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("ファイア・ボルトの呪文を唱えた。", "You cast a fire bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_FIRE, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::FIRE, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_cold(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("アイス・ボルトの呪文を唱えた。", "You cast a frost bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_COLD, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::COLD, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_nether(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("地獄の矢の呪文を唱えた。", "You cast a nether bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_NETH, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::NETHER, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_water(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("ウォーター・ボルトの呪文を唱えた。", "You cast a water bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_WATE, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::WATER, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_mana(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("魔力の矢の呪文を唱えた。", "You cast a mana bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_MANA, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::MANA, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_plasma(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("プラズマ・ボルトの呪文を唱えた。", "You cast a plasma bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_PLAS, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::PLASMA, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_icee(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("極寒の矢の呪文を唱えた。", "You cast a ice bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_ICEE, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::ICE, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_missile(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::MISSILE, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::MISSILE, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_abyss(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("アビス・ボルトの呪文を唱えた。", "You cast a abyss bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_ABYSS, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::ABYSS, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_void(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("ヴォイド・ボルトの呪文を唱えた。", "You cast a void bolt."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_VOID, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::VOID_MAGIC, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-
-bool cast_blue_bolt_meteor(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("メテオストライクの呪文を唱えた。", "You cast a meteor strike."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_METEOR, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::METEOR, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
-bool cast_blue_bolt_lite(PlayerType *player_ptr, bmc_type *bmc_ptr)
-{
-    if (!get_aim_dir(player_ptr, &bmc_ptr->dir)) {
-        return false;
-    }
-
-    msg_print(_("スターライトアローの呪文を唱えた。", "You cast a starlight arrow."));
-    bmc_ptr->damage = monspell_bluemage_damage(player_ptr, MonsterAbilityType::BO_LITE, bmc_ptr->plev, DAM_ROLL);
-    fire_bolt(player_ptr, AttributeType::LITE, bmc_ptr->dir, bmc_ptr->damage);
-    return true;
-}
+};

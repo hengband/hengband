@@ -3,9 +3,10 @@
 #include "spell/spells-util.h"
 #include "system/angband.h"
 
+class Direction;
 class PlayerType;
-bool teleport_monster(PlayerType *player_ptr, DIRECTION dir, int distance);
-bool teleport_swap(PlayerType *player_ptr, DIRECTION dir);
+bool teleport_monster(PlayerType *player_ptr, const Direction &dir, int distance);
+bool teleport_swap(PlayerType *player_ptr, const Direction &dir);
 bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode);
 void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode);
 bool teleport_player_aux(PlayerType *player_ptr, POSITION dis, bool is_quantum_effect, teleport_flags mode);

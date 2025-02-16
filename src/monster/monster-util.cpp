@@ -1,22 +1,19 @@
 #include "monster/monster-util.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
-#include "floor/wild.h"
 #include "game-option/cheat-options.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster-race/monster-kind-mask.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster-race/race-ability-mask.h"
-#include "monster-race/race-flags-resistance.h"
-#include "monster-race/race-misc-flags.h"
 #include "monster/monster-info.h"
 #include "mspell/summon-checker.h"
+#include "room/pit-nest-util.h"
 #include "spell/summon-types.h"
 #include "system/angband-exceptions.h"
-#include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/enums/terrain/wilderness-terrain.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-allocation.h"
 #include "system/monrace/monrace-definition.h"
@@ -25,7 +22,6 @@
 #include "system/player-type-definition.h"
 #include "system/services/dungeon-monrace-service.h"
 #include "system/terrain/terrain-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "wizard/monrace-filter-debug-info.h"
 #include <algorithm>
@@ -132,7 +128,7 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
         };
 
         auto result = std::all_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result &= std::all_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [monrace](const auto &v) { return v == monrace.symbol_definition.character; });
+        result &= std::all_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [&monrace](const auto &v) { return v == monrace.symbol_definition.character; });
         return dungeon.mode == DungeonMode::AND ? result : !result;
     }
     case DungeonMode::OR:
@@ -152,7 +148,7 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
         };
 
         auto result = std::any_of(is_possible.begin(), is_possible.end(), [](const auto &v) { return v; });
-        result |= std::any_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [monrace](const auto &v) { return v == monrace.symbol_definition.character; });
+        result |= std::any_of(dungeon.r_chars.begin(), dungeon.r_chars.end(), [&monrace](const auto &v) { return v == monrace.symbol_definition.character; });
         return dungeon.mode == DungeonMode::OR ? result : !result;
     }
     }
@@ -160,40 +156,10 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
     return true;
 }
 
-MonraceHook get_monster_hook(const Pos2D &pos_wilderness, bool is_underground)
-{
-    if (is_underground) {
-        return MonraceHook::DUNGEON;
-    }
-
-    switch (wilderness[pos_wilderness.y][pos_wilderness.x].terrain) {
-    case TERRAIN_TOWN:
-        return MonraceHook::TOWN;
-    case TERRAIN_DEEP_WATER:
-        return MonraceHook::OCEAN;
-    case TERRAIN_SHALLOW_WATER:
-    case TERRAIN_SWAMP:
-        return MonraceHook::SHORE;
-    case TERRAIN_DIRT:
-    case TERRAIN_DESERT:
-        return MonraceHook::WASTE;
-    case TERRAIN_GRASS:
-        return MonraceHook::GRASS;
-    case TERRAIN_TREES:
-        return MonraceHook::WOOD;
-    case TERRAIN_SHALLOW_LAVA:
-    case TERRAIN_DEEP_LAVA:
-        return MonraceHook::VOLCANO;
-    case TERRAIN_MOUNTAIN:
-        return MonraceHook::MOUNTAIN;
-    default:
-        return MonraceHook::DUNGEON;
-    }
-}
-
 static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_id)
 {
-    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    const auto &monraces = MonraceList::get_instance();
+    const auto &monrace = monraces.get_monrace(monrace_id);
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto is_suitable_for_dungeon = !floor.is_underground() || DungeonMonraceService::is_suitable_for_dungeon(floor.dungeon_id, monrace_id);
     switch (hook) {
@@ -233,8 +199,7 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
             return false;
         }
 
-        const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-        const auto hook_tanuki = get_monster_hook(pos_wilderness, floor.is_underground());
+        const auto hook_tanuki = floor.get_monrace_hook();
         return do_hook(player_ptr, hook_tanuki, monrace_id);
     }
     case MonraceHook::FISHING:
@@ -244,25 +209,25 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::VAULT:
         return is_suitable_for_dungeon && monrace.is_suitable_for_special_room();
     case MonraceHook::CLONE:
-        return vault_aux_clone(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_special_room() && (monrace_id == PitNestFilter::get_instance().get_monrace_id());
     case MonraceHook::JELLY:
-        return vault_aux_jelly(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_jelly_nest();
     case MonraceHook::GOOD:
-        return vault_aux_symbol_g(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_good_nest(PitNestFilter::get_instance().get_monrace_symbol());
     case MonraceHook::EVIL:
-        return vault_aux_symbol_e(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_evil_nest(PitNestFilter::get_instance().get_monrace_symbol());
     case MonraceHook::MIMIC:
-        return vault_aux_mimic(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_mimic_nest();
     case MonraceHook::HORROR:
         return is_suitable_for_dungeon && monrace.is_suitable_for_horror_pit();
     case MonraceHook::KENNEL:
-        return vault_aux_kennel(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_dog_nest();
     case MonraceHook::ANIMAL:
-        return vault_aux_animal(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_animal_nest();
     case MonraceHook::CHAPEL:
-        return vault_aux_chapel_g(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && (monraces.is_angel(monrace_id) || MonraceList::is_chapel(monrace_id)) && monrace.is_suitable_for_chapel_nest();
     case MonraceHook::UNDEAD:
-        return vault_aux_undead(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_undead_nest();
     case MonraceHook::ORC:
         return is_suitable_for_dungeon && monrace.is_suitable_for_orc_pit();
     case MonraceHook::TROLL:
@@ -270,33 +235,14 @@ static bool do_hook(PlayerType *player_ptr, MonraceHook hook, MonraceId monrace_
     case MonraceHook::GIANT:
         return is_suitable_for_dungeon && monrace.is_suitable_for_giant_pit();
     case MonraceHook::DRAGON:
-        return vault_aux_dragon(player_ptr, monrace_id);
+        return is_suitable_for_dungeon && monrace.is_suitable_for_dragon_nest(PitNestFilter::get_instance().get_dragon_breaths());
     case MonraceHook::DEMON:
         return is_suitable_for_dungeon && monrace.is_suitable_for_demon_pit();
     case MonraceHook::DARK_ELF:
-        return is_suitable_for_dungeon && monrace.is_suitable_for_special_room() && MonraceList::is_dark_elf(monrace_id);
+        return is_suitable_for_dungeon && MonraceList::is_dark_elf(monrace_id) && monrace.is_suitable_for_special_room();
     default:
         THROW_EXCEPTION(std::logic_error, format("Invalid monrace hook type is specified! %d", enum2i(hook)));
     }
-}
-
-/*!
- * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
- * @return 地勢にあったモンスターの生成条件関数
- */
-MonraceHookTerrain get_monster_hook2(PlayerType *player_ptr, POSITION y, POSITION x)
-{
-    const Pos2D pos(y, x);
-    const auto &terrain = player_ptr->current_floor_ptr->get_grid(pos).get_terrain();
-    if (terrain.flags.has(TerrainCharacteristics::WATER)) {
-        return terrain.flags.has(TerrainCharacteristics::DEEP) ? MonraceHookTerrain::DEEP_WATER : MonraceHookTerrain::SHALLOW_WATER;
-    }
-
-    if (terrain.flags.has(TerrainCharacteristics::LAVA)) {
-        return MonraceHookTerrain::LAVA;
-    }
-
-    return MonraceHookTerrain::FLOOR;
 }
 
 /*!
@@ -394,12 +340,12 @@ static bool place_monster_can_escort(PlayerType *player_ptr, MonraceId monrace_i
         return false;
     }
 
-    if (monster_has_hostile_align(player_ptr, &escorted_monster, 0, 0, &monrace)) {
+    if (monster_has_hostile_to_other_monster(escorted_monster, monrace)) {
         return false;
     }
 
     if (escorted_monrace.behavior_flags.has(MonsterBehaviorType::FRIENDLY)) {
-        if (monster_has_hostile_align(player_ptr, nullptr, 1, -1, &monrace)) {
+        if (monster_has_hostile_to_player(player_ptr, 1, -1, monrace)) {
             return false;
         }
     }
@@ -484,11 +430,11 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, c
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     if (condition.summoner_m_idx) {
         const auto &monster = floor.m_list[*condition.summoner_m_idx];
-        if (monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace)) {
+        if (monster_has_hostile_to_other_monster(monster, monrace)) {
             return false;
         }
     } else if (any_bits(condition.mode, PM_FORCE_PET)) {
-        if (monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1)) {
+        if (monster_has_hostile_to_player(player_ptr, 10, -10, monrace) && !one_in_(std::abs(player_ptr->alignment) / 2 + 1)) {
             return false;
         }
     }
@@ -502,7 +448,7 @@ static bool summon_specific_okay(PlayerType *player_ptr, MonraceId monrace_id, c
     }
 
     const auto is_like_unique = monrace.kind_flags.has(MonsterKindType::UNIQUE) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
-    if (any_bits(condition.mode, PM_FORCE_PET) && is_like_unique && monster_has_hostile_align(player_ptr, nullptr, 10, -10, &monrace)) {
+    if (any_bits(condition.mode, PM_FORCE_PET) && is_like_unique && monster_has_hostile_to_player(player_ptr, 10, -10, monrace)) {
         return false;
     }
 
@@ -598,7 +544,7 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, const ChameleonT
         return false;
     }
 
-    if (!monster_can_cross_terrain(player_ptr, ct.terrain_id, &monrace, 0)) {
+    if (!monster_can_cross_terrain(player_ptr, ct.terrain_id, monrace, 0)) {
         return false;
     }
 
@@ -606,10 +552,10 @@ static bool monster_hook_chameleon_lord(PlayerType *player_ptr, const ChameleonT
     const auto &monster = floor.m_list[ct.m_idx];
     const auto &old_monrace = monster.get_monrace();
     if (old_monrace.misc_flags.has_not(MonsterMiscType::CHAMELEON)) {
-        return !monster_has_hostile_align(player_ptr, &monster, 0, 0, &monrace);
+        return !monster_has_hostile_to_other_monster(monster, monrace);
     }
 
-    return !ct.summoner_m_idx || !monster_has_hostile_align(player_ptr, &floor.m_list[*ct.summoner_m_idx], 0, 0, &monrace);
+    return !ct.summoner_m_idx || !monster_has_hostile_to_other_monster(floor.m_list[*ct.summoner_m_idx], monrace);
 }
 
 /*!
@@ -639,7 +585,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, const ChameleonTransf
         return false;
     }
 
-    if (!monster_can_cross_terrain(player_ptr, ct.terrain_id, &monrace, 0)) {
+    if (!monster_can_cross_terrain(player_ptr, ct.terrain_id, monrace, 0)) {
         return false;
     }
 
@@ -658,12 +604,11 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, const ChameleonTransf
         if (old_monrace.kind_flags.has_none_of(alignment_mask)) {
             return false;
         }
-    } else if (ct.summoner_m_idx && monster_has_hostile_align(player_ptr, &floor.m_list[*ct.summoner_m_idx], 0, 0, &monrace)) {
+    } else if (ct.summoner_m_idx && monster_has_hostile_to_other_monster(floor.m_list[*ct.summoner_m_idx], monrace)) {
         return false;
     }
 
-    const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-    const auto hook = get_monster_hook(pos_wilderness, floor.is_underground());
+    const auto hook = floor.get_monrace_hook();
     return do_hook(player_ptr, hook, monrace_id);
 }
 

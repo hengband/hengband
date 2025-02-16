@@ -80,10 +80,10 @@ void MonsterAttackPlayer::make_attack_normal()
         return;
     }
 
-    auto *r_ptr = &this->m_ptr->get_monrace();
-    this->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    angband_strcpy(this->m_name, monster_desc(this->player_ptr, this->m_ptr, 0), sizeof(this->m_name));
-    angband_strcpy(this->ddesc, monster_desc(this->player_ptr, this->m_ptr, MD_WRONGDOER_NAME), sizeof(this->ddesc));
+    const auto &monrace = this->m_ptr->get_monrace();
+    this->rlev = ((monrace.level >= 1) ? monrace.level : 1);
+    angband_strcpy(this->m_name, monster_desc(this->player_ptr, *this->m_ptr, 0), sizeof(this->m_name));
+    angband_strcpy(this->ddesc, monster_desc(this->player_ptr, *this->m_ptr, MD_WRONGDOER_NAME), sizeof(this->ddesc));
     if (PlayerClass(this->player_ptr).samurai_stance_is(SamuraiStanceType::IAI)) {
         msg_print(_("相手が襲いかかる前に素早く武器を振るった。", format("You took sen, drew and cut in one motion before %s moved.", this->m_name)));
         if (do_cmd_attack(this->player_ptr, this->m_ptr->fy, this->m_ptr->fx, HISSATSU_IAI)) {
@@ -121,8 +121,8 @@ int MonsterAttackPlayer::stat_value(const int raw)
 
 bool MonsterAttackPlayer::check_no_blow()
 {
-    auto *r_ptr = &this->m_ptr->get_monrace();
-    if (r_ptr->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
+    const auto &monrace = this->m_ptr->get_monrace();
+    if (monrace.behavior_flags.has(MonsterBehaviorType::NEVER_BLOW)) {
         return false;
     }
 
@@ -139,14 +139,14 @@ bool MonsterAttackPlayer::check_no_blow()
  */
 bool MonsterAttackPlayer::process_monster_blows()
 {
-    auto *r_ptr = &this->m_ptr->get_monrace();
+    const auto &monrace = this->m_ptr->get_monrace();
     for (auto ap_cnt = 0; ap_cnt < MAX_NUM_BLOWS; ap_cnt++) {
         this->obvious = false;
         this->damage = 0;
         this->act = nullptr;
-        this->effect = r_ptr->blows[ap_cnt].effect;
-        this->method = r_ptr->blows[ap_cnt].method;
-        this->damage_dice = r_ptr->blows[ap_cnt].damage_dice;
+        this->effect = monrace.blows[ap_cnt].effect;
+        this->method = monrace.blows[ap_cnt].method;
+        this->damage_dice = monrace.blows[ap_cnt].damage_dice;
 
         if (!this->check_monster_continuous_attack()) {
             break;
@@ -209,8 +209,8 @@ bool MonsterAttackPlayer::check_monster_continuous_attack()
         return false;
     }
 
-    auto *r_ptr = &this->m_ptr->get_monrace();
-    if (this->m_ptr->is_pet() && r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && (this->method == RaceBlowMethodType::EXPLODE)) {
+    const auto &monrace = this->m_ptr->get_monrace();
+    if (this->m_ptr->is_pet() && monrace.kind_flags.has(MonsterKindType::UNIQUE) && (this->method == RaceBlowMethodType::EXPLODE)) {
         this->method = RaceBlowMethodType::HIT;
         this->damage_dice.num /= 10;
     }
@@ -267,7 +267,7 @@ bool MonsterAttackPlayer::effect_protecion_from_evil()
         return false;
     }
 
-    if (is_original_ap_and_seen(this->player_ptr, this->m_ptr)) {
+    if (is_original_ap_and_seen(this->player_ptr, *this->m_ptr)) {
         monrace.r_kind_flags.set(MonsterKindType::EVIL);
     }
 
@@ -387,7 +387,7 @@ void MonsterAttackPlayer::monster_explode()
         return;
     }
 
-    sound(SOUND_EXPLODE);
+    sound(SoundKind::EXPLODE);
     MonsterDamageProcessor mdp(this->player_ptr, this->m_idx, this->m_ptr->hp + 1, &this->fear, AttributeType::NONE);
     if (mdp.mon_take_hit("")) {
         this->blinked = false;
@@ -459,8 +459,8 @@ void MonsterAttackPlayer::gain_armor_exp()
         return;
     }
 
-    auto *r_ptr = &this->m_ptr->get_monrace();
-    auto target_level = r_ptr->level;
+    const auto &monrace = this->m_ptr->get_monrace();
+    auto target_level = monrace.level;
     short increment = 0;
     if ((cur / 100) < target_level) {
         auto addition = (cur / 100 + 15) < target_level ? (target_level - (cur / 100 + 15)) : 0;
@@ -480,17 +480,17 @@ void MonsterAttackPlayer::gain_armor_exp()
  */
 void MonsterAttackPlayer::increase_blow_type_seen(const int ap_cnt)
 {
-    if (!is_original_ap_and_seen(this->player_ptr, this->m_ptr) || this->do_silly_attack) {
+    if (!is_original_ap_and_seen(this->player_ptr, *this->m_ptr) || this->do_silly_attack) {
         return;
     }
 
-    auto *r_ptr = &this->m_ptr->get_monrace();
-    if (!this->obvious && (this->damage == 0) && (r_ptr->r_blows[ap_cnt] <= 10)) {
+    auto &monrace = this->m_ptr->get_monrace();
+    if (!this->obvious && (this->damage == 0) && (monrace.r_blows[ap_cnt] <= 10)) {
         return;
     }
 
-    if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR) {
-        r_ptr->r_blows[ap_cnt]++;
+    if (monrace.r_blows[ap_cnt] < MAX_UCHAR) {
+        monrace.r_blows[ap_cnt]++;
     }
 }
 
@@ -501,13 +501,13 @@ void MonsterAttackPlayer::postprocess_monster_blows()
     spell_hex.eyes_on_eyes(this->m_idx, this->get_damage);
     musou_counterattack(this->player_ptr, this);
     this->process_thief_teleport(spell_hex);
-    auto *r_ptr = &this->m_ptr->get_monrace();
-    if (this->player_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !this->player_ptr->current_floor_ptr->inside_arena) {
-        r_ptr->r_deaths++;
+    auto &monrace = this->m_ptr->get_monrace();
+    if (this->player_ptr->is_dead && (monrace.r_deaths < MAX_SHORT) && !this->player_ptr->current_floor_ptr->inside_arena) {
+        monrace.r_deaths++;
     }
 
     if (this->m_ptr->ml && this->fear && this->alive && !this->player_ptr->is_dead) {
-        sound(SOUND_FLEE);
+        sound(SoundKind::FLEE);
         msg_format(_("%s^は恐怖で逃げ出した！", "%s^ flees in terror!"), this->m_name);
     }
 

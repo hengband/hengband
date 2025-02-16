@@ -78,7 +78,7 @@ void ObjectUseEntity::execute()
         }
 
         msg_print(_("杖をうまく使えなかった。", "You failed to use the staff properly."));
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
         return;
     }
 
@@ -99,7 +99,7 @@ void ObjectUseEntity::execute()
         return;
     }
 
-    sound(SOUND_ZAP);
+    sound(SoundKind::ZAP);
     auto ident = staff_effect(this->player_ptr, *o_ptr->bi_key.sval(), &use_charge, false, false, o_ptr->is_aware());
     if (!(o_ptr->is_aware())) {
         chg_virtue(this->player_ptr, Virtue::PATIENCE, -1);
@@ -147,7 +147,7 @@ void ObjectUseEntity::execute()
     if (this->i_idx >= 0) {
         inven_item_charges(this->player_ptr->inventory_list[this->i_idx]);
     } else {
-        floor_item_charges(this->player_ptr->current_floor_ptr, 0 - this->i_idx);
+        floor_item_charges(*this->player_ptr->current_floor_ptr, 0 - this->i_idx);
     }
 }
 

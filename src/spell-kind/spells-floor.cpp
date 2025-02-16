@@ -6,37 +6,24 @@
 
 #include "spell-kind/spells-floor.h"
 #include "action/travel-execution.h"
-#include "cmd-io/cmd-dump.h"
-#include "core/window-redrawer.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
-#include "effect/attribute-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
 #include "floor/floor-object.h"
-#include "floor/floor-save.h"
 #include "floor/floor-util.h"
-#include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
 #include "monster-floor/monster-lite.h"
+#include "monster-floor/monster-remover.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
-#include "monster/smart-learn-types.h"
-#include "object-enchant/special-object-flags.h"
-#include "object/object-mark-types.h"
-#include "perception/object-perception.h"
 #include "player/player-status-flags.h"
-#include "player/special-defense-types.h"
 #include "spell-kind/spells-teleport.h"
 #include "status/bad-status-setter.h"
 #include "system/artifact-type-definition.h"
@@ -51,7 +38,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*
@@ -76,44 +62,40 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 
     /* Scan all normal grids */
     const auto &terrains = TerrainList::get_instance();
-    for (POSITION y = 1; y < floor.height - 1; y++) {
+    for (auto y = 1; y < floor.height - 1; y++) {
         /* Scan all normal grids */
-        for (POSITION x = 1; x < floor.width - 1; x++) {
-            auto *g_ptr = &floor.grid_array[y][x];
+        for (auto x = 1; x < floor.width - 1; x++) {
+            const Pos2D pos(y, x);
+            auto &grid = floor.get_grid(pos);
 
             /* Memorize terrain of the grid */
-            g_ptr->info |= (CAVE_KNOWN);
-
-            /* Feature code (applying "mimic" field) */
-            FEAT_IDX feat = g_ptr->get_feat_mimic();
-            auto *t_ptr = &terrains.get_terrain(feat);
+            grid.info |= (CAVE_KNOWN);
 
             /* Scan all neighbors */
-            for (OBJECT_IDX i = 0; i < 9; i++) {
-                POSITION yy = y + ddy_ddd[i];
-                POSITION xx = x + ddx_ddd[i];
-                g_ptr = &floor.grid_array[yy][xx];
+            for (const auto &d : Direction::directions()) {
+                const auto pos_neighbor = pos + d.vec();
+                auto &grid_neighbor = floor.get_grid(pos_neighbor);
 
                 /* Feature code (applying "mimic" field) */
-                t_ptr = &terrains.get_terrain(g_ptr->get_feat_mimic());
+                const auto &terrain = terrains.get_terrain(grid_neighbor.get_terrain_id(TerrainKind::MIMIC));
 
                 /* Perma-lite the grid */
                 if (floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::DARKNESS) && !ninja) {
-                    g_ptr->info |= (CAVE_GLOW);
+                    grid_neighbor.info |= (CAVE_GLOW);
                 }
 
                 /* Memorize normal features */
-                if (t_ptr->flags.has(TerrainCharacteristics::REMEMBER)) {
+                if (terrain.flags.has(TerrainCharacteristics::REMEMBER)) {
                     /* Memorize the grid */
-                    g_ptr->info |= (CAVE_MARK);
+                    grid_neighbor.info |= (CAVE_MARK);
                 }
 
                 /* Perma-lit grids (newly and previously) */
-                else if (g_ptr->info & CAVE_GLOW) {
+                else if (grid_neighbor.info & CAVE_GLOW) {
                     /* Normally, memorize floors (see above) */
                     if (view_perma_grids && !view_torch_grids) {
                         /* Memorize the grid */
-                        g_ptr->info |= (CAVE_MARK);
+                        grid_neighbor.info |= (CAVE_MARK);
                     }
                 }
             }
@@ -142,11 +124,11 @@ void wiz_dark(PlayerType *player_ptr)
     /* Forget every grid */
     for (POSITION y = 1; y < player_ptr->current_floor_ptr->height - 1; y++) {
         for (POSITION x = 1; x < player_ptr->current_floor_ptr->width - 1; x++) {
-            auto *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
 
             /* Process the grid */
-            g_ptr->info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
-            g_ptr->info |= (CAVE_UNSAFE);
+            grid.info &= ~(CAVE_MARK | CAVE_IN_DETECT | CAVE_KNOWN);
+            grid.info |= (CAVE_UNSAFE);
         }
     }
 
@@ -179,7 +161,7 @@ void wiz_dark(PlayerType *player_ptr)
     }
 
     /* Forget travel route when we have forgotten map */
-    forget_travel_flow(player_ptr->current_floor_ptr);
+    Travel::get_instance().reset_goal();
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
@@ -212,40 +194,40 @@ void map_area(PlayerType *player_ptr, POSITION range)
 
     /* Scan that area */
     const auto &terrains = TerrainList::get_instance();
-    for (POSITION y = 1; y < floor.height - 1; y++) {
-        for (POSITION x = 1; x < floor.width - 1; x++) {
-            if (Grid::calc_distance(player_ptr->get_position(), { y, x }) > range) {
+    for (auto y = 1; y < floor.height - 1; y++) {
+        for (auto x = 1; x < floor.width - 1; x++) {
+            const Pos2D pos(y, x);
+            if (Grid::calc_distance(player_ptr->get_position(), pos) > range) {
                 continue;
             }
 
-            Grid *g_ptr;
-            g_ptr = &floor.grid_array[y][x];
+            auto &grid = floor.get_grid(pos);
 
             /* Memorize terrain of the grid */
-            g_ptr->info |= (CAVE_KNOWN);
+            grid.info |= (CAVE_KNOWN);
 
             /* Feature code (applying "mimic" field) */
-            FEAT_IDX feat = g_ptr->get_feat_mimic();
-            auto *t_ptr = &terrains.get_terrain(feat);
+            const auto mimic_terrain_id = grid.get_terrain_id(TerrainKind::MIMIC);
+            const auto &terrain_mimic = terrains.get_terrain(mimic_terrain_id);
 
             /* Memorize normal features */
-            if (t_ptr->flags.has(TerrainCharacteristics::REMEMBER)) {
+            if (terrain_mimic.flags.has(TerrainCharacteristics::REMEMBER)) {
                 /* Memorize the object */
-                g_ptr->info |= (CAVE_MARK);
+                grid.info |= (CAVE_MARK);
             }
 
             /* Memorize known walls */
-            for (int i = 0; i < 8; i++) {
-                g_ptr = &floor.grid_array[y + ddy_ddd[i]][x + ddx_ddd[i]];
+            for (const auto &d : Direction::directions_8()) {
+                auto &grid_neighbor = floor.get_grid(pos + d.vec());
 
                 /* Feature code (applying "mimic" field) */
-                feat = g_ptr->get_feat_mimic();
-                t_ptr = &terrains.get_terrain(feat);
+                const auto terrain_id = grid_neighbor.get_terrain_id(TerrainKind::MIMIC);
+                const auto &terrain = terrains.get_terrain(terrain_id);
 
                 /* Memorize walls (etc) */
-                if (t_ptr->flags.has(TerrainCharacteristics::REMEMBER)) {
+                if (terrain.flags.has(TerrainCharacteristics::REMEMBER)) {
                     /* Memorize the walls */
-                    g_ptr->info |= (CAVE_MARK);
+                    grid_neighbor.info |= (CAVE_MARK);
                 }
             }
         }
@@ -287,15 +269,16 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
 
     /* Lose monster light */
     if (!in_generate) {
-        clear_mon_lite(&floor);
+        clear_mon_lite(floor);
     }
 
     /* Big area of affect */
+    const auto &dungeon = floor.get_dungeon_definition();
     auto flag = false;
     for (auto y = (y1 - r); y <= (y1 + r); y++) {
         for (auto x = (x1 - r); x <= (x1 + r); x++) {
             const Pos2D pos(y, x);
-            if (!in_bounds(&floor, pos.y, pos.x)) {
+            if (!floor.contains(pos)) {
                 continue;
             }
 
@@ -342,7 +325,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 if (in_generate) /* In generation */
                 {
                     /* Delete the monster (if any) */
-                    delete_monster(player_ptr, pos.y, pos.x);
+                    delete_monster(player_ptr, pos);
                 } else if (monrace.misc_flags.has(MonsterMiscType::QUESTOR)) {
                     /* Heal the monster */
                     monster.hp = monster.maxhp;
@@ -353,12 +336,12 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                     }
                 } else {
                     if (record_named_pet && monster.is_named_pet()) {
-                        const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+                        const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
                         exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
                     }
 
                     /* Delete the monster (if any) */
-                    delete_monster(player_ptr, pos.y, pos.x);
+                    delete_monster(player_ptr, pos);
                 }
             }
 
@@ -381,7 +364,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 }
             }
 
-            delete_all_items_from_floor(player_ptr, pos.y, pos.x);
+            delete_all_items_from_floor(player_ptr, pos);
 
             /* Destroy "non-permanent" grids */
             if (grid.has(TerrainCharacteristics::PERMANENT)) {
@@ -395,16 +378,16 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             {
                 if (t < 20) {
                     /* Create granite wall */
-                    cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
+                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::GRANITE_WALL);
                 } else if (t < 70) {
                     /* Create quartz vein */
-                    cave_set_feat(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
+                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::QUARTZ_VEIN);
                 } else if (t < 100) {
                     /* Create magma vein */
-                    cave_set_feat(player_ptr, pos, TerrainTag::MAGMA_VEIN);
+                    set_terrain_id_to_grid(player_ptr, pos, TerrainTag::MAGMA_VEIN);
                 } else {
                     /* Create floor */
-                    cave_set_feat(player_ptr, pos.y, pos.x, rand_choice(feat_ground_type));
+                    set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
                 }
 
                 continue;
@@ -412,7 +395,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
 
             if (t < 20) {
                 /* Create granite wall */
-                place_grid(player_ptr, &grid, GB_EXTRA);
+                place_grid(player_ptr, grid, GB_EXTRA);
             } else if (t < 70) {
                 /* Create quartz vein */
                 grid.set_terrain_id(TerrainTag::QUARTZ_VEIN);
@@ -421,7 +404,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 grid.set_terrain_id(TerrainTag::MAGMA_VEIN);
             } else {
                 /* Create floor */
-                place_grid(player_ptr, &grid, GB_FLOOR);
+                place_grid(player_ptr, grid, GB_FLOOR);
             }
 
             /* Clear garbage of hidden trap or door */
@@ -437,7 +420,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
     for (auto y = (y1 - r); y <= (y1 + r); y++) {
         for (auto x = (x1 - r); x <= (x1 + r); x++) {
             const Pos2D pos(y, x);
-            if (!in_bounds(&floor, pos.y, pos.x)) {
+            if (!floor.contains(pos)) {
                 continue;
             }
 
@@ -457,9 +440,9 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 continue;
             }
 
-            for (auto i = 0; i < 9; i++) {
-                const Pos2D pos_neighbor(pos.y + ddy_ddd[i], pos.x + ddx_ddd[i]);
-                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+            for (const auto &d : Direction::directions()) {
+                const auto pos_neighbor = pos + d.vec();
+                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 
@@ -479,7 +462,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
         }
     }
 
-    forget_flow(&floor);
+    forget_flow(floor);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::UN_VIEW,

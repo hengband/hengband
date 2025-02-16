@@ -46,7 +46,7 @@ EffectMonster::EffectMonster(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITI
     this->m_caster_ptr = this->is_monster() ? &floor.m_list[this->src_idx] : nullptr;
     this->r_ptr = &this->m_ptr->get_monrace();
     this->seen = this->m_ptr->ml;
-    this->seen_msg = is_seen(player_ptr, this->m_ptr);
+    this->seen_msg = is_seen(player_ptr, *this->m_ptr);
     this->slept = this->m_ptr->is_asleep();
     this->known = (this->m_ptr->cdis <= MAX_PLAYER_SIGHT) || AngbandSystem::get_instance().is_phase_out();
     this->note_dies = this->m_ptr->get_died_message();

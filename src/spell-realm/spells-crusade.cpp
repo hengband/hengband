@@ -7,24 +7,18 @@
 #include "spell-realm/spells-crusade.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
-#include "spell-realm/spells-crusade.h"
 #include "spell/range-calc.h"
-#include "system/angband-system.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
-#include "target/projection-path-calculator.h"
 #include "target/target-checker.h"
 #include "target/target-getter.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <cmath>
 
@@ -37,15 +31,15 @@
  */
 bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
 {
-    int dir;
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 
     const auto p_pos = player_ptr->get_position();
-    auto pos_target = p_pos + Pos2DVec(99 * ddy[dir], 99 * ddx[dir]);
-    if ((dir == 5) && target_okay(player_ptr)) {
-        pos_target = { target_col, target_row };
+    auto pos_target = p_pos + dir.vec() * 99;
+    if (dir.is_targetting() && target_okay(player_ptr)) {
+        pos_target = { target_row, target_col };
     }
 
     auto pos = p_pos;
@@ -62,7 +56,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
         if (!floor.has_terrain_characteristics(pos_to, TerrainCharacteristics::PROJECT)) {
             break;
         }
-        if ((dir != 5) && floor.get_grid(pos_to).has_monster()) {
+        if (!dir.is_targetting() && floor.get_grid(pos_to).has_monster()) {
             break;
         }
 
@@ -90,8 +84,8 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
             continue;
         }
 
-        auto should_cast = in_bounds(&floor, pos_explode.y, pos_explode.x) && !cave_stop_disintegration(&floor, pos_explode.y, pos_explode.x);
-        should_cast &= in_disintegration_range(&floor, pos_target.y, pos_target.x, pos_explode.y, pos_explode.x);
+        auto should_cast = floor.contains(pos_explode) && !cave_stop_disintegration(floor, pos_explode.y, pos_explode.x);
+        should_cast &= in_disintegration_range(floor, pos_target, pos_explode);
         if (!should_cast) {
             continue;
         }

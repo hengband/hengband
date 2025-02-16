@@ -35,18 +35,18 @@
  * @param checker 射線判定の振り分け
  * @return 有効な座標があった場合TRUEを返す
  */
-bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION *yp, POSITION *xp, TerrainCharacteristics f_flag, PathChecker checker)
+bool adjacent_grid_check(PlayerType *player_ptr, const MonsterEntity &monster, POSITION *yp, POSITION *xp, TerrainCharacteristics f_flag, PathChecker checker)
 {
     const Pos2D pos(*yp, *xp);
     static int tonari_y[4][8] = { { -1, -1, -1, 0, 0, 1, 1, 1 }, { -1, -1, -1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, -1, -1, -1 }, { 1, 1, 1, 0, 0, -1, -1, -1 } };
     static int tonari_x[4][8] = { { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 }, { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 } };
 
     int next;
-    if (m_ptr->fy < player_ptr->y && m_ptr->fx < player_ptr->x) {
+    if (monster.fy < player_ptr->y && monster.fx < player_ptr->x) {
         next = 0;
-    } else if (m_ptr->fy < player_ptr->y) {
+    } else if (monster.fy < player_ptr->y) {
         next = 1;
-    } else if (m_ptr->fx < player_ptr->x) {
+    } else if (monster.fx < player_ptr->x) {
         next = 2;
     } else {
         next = 3;
@@ -55,7 +55,8 @@ bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION 
     for (int i = 0; i < 8; i++) {
         const Pos2DVec vec(tonari_y[next][i], tonari_x[next][i]);
         const auto pos_next = pos + vec;
-        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_next);
+        const auto &floor = *player_ptr->current_floor_ptr;
+        const auto &grid = floor.get_grid(pos_next);
         if (!grid.has(f_flag)) {
             continue;
         }
@@ -63,10 +64,10 @@ bool adjacent_grid_check(PlayerType *player_ptr, MonsterEntity *m_ptr, POSITION 
         bool check_result;
         switch (checker) {
         case PathChecker::PROJECTION:
-            check_result = projectable(player_ptr, m_ptr->get_position(), pos_next);
+            check_result = projectable(player_ptr, monster.get_position(), pos_next);
             break;
         case PathChecker::LOS:
-            check_result = los(player_ptr, m_ptr->fy, m_ptr->fx, pos_next.y, pos_next.x);
+            check_result = los(floor, monster.get_position(), pos_next);
             break;
         default:
             THROW_EXCEPTION(std::logic_error, format("Invalid PathChecker is specified! %d", enum2i(checker)));
@@ -90,13 +91,14 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
 
     msa_ptr->y_br_lite = msa_ptr->y;
     msa_ptr->x_br_lite = msa_ptr->x;
-    if (los(player_ptr, msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx, msa_ptr->y_br_lite, msa_ptr->x_br_lite)) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (los(floor, msa_ptr->m_ptr->get_position(), { msa_ptr->y_br_lite, msa_ptr->x_br_lite })) {
         const Pos2D pos(msa_ptr->y_br_lite, msa_ptr->x_br_lite);
-        const auto &terrain = player_ptr->current_floor_ptr->get_grid(pos).get_terrain();
+        const auto &terrain = floor.get_grid(pos).get_terrain();
         if (terrain.flags.has_not(TerrainCharacteristics::LOS) && terrain.flags.has(TerrainCharacteristics::PROJECT) && one_in_(2)) {
             msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         }
-    } else if (!adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, TerrainCharacteristics::LOS, PathChecker::LOS)) {
+    } else if (!adjacent_grid_check(player_ptr, *msa_ptr->m_ptr, &msa_ptr->y_br_lite, &msa_ptr->x_br_lite, TerrainCharacteristics::LOS, PathChecker::LOS)) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
     }
 
@@ -133,7 +135,8 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     light_by_disintegration &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
     const auto pos = msa_ptr->get_position();
     const auto m_pos = msa_ptr->m_ptr->get_position();
-    light_by_disintegration &= in_disintegration_range(player_ptr->current_floor_ptr, m_pos.y, m_pos.x, pos.y, pos.x);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    light_by_disintegration &= in_disintegration_range(floor, m_pos, pos);
     light_by_disintegration &= one_in_(10) || (projectable(player_ptr, pos, m_pos) && one_in_(2));
     if (light_by_disintegration) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
@@ -143,7 +146,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 
     auto light_by_lite = msa_ptr->ability_flags.has(MonsterAbilityType::BR_LITE);
     light_by_lite &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
-    light_by_lite &= los(player_ptr, m_pos.y, m_pos.x, msa_ptr->y, msa_ptr->x);
+    light_by_lite &= los(floor, m_pos, pos);
     light_by_lite &= one_in_(5);
     if (light_by_lite) {
         msa_ptr->do_spell = DO_SPELL_BR_LITE;
@@ -156,7 +159,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     }
 
     const auto pos_breath = get_project_point(player_ptr, m_pos, msa_ptr->get_position(), 0);
-    if ((Grid::calc_distance(pos_breath, pos) <= 3) && los(player_ptr, pos_breath.y, pos_breath.x, pos.y, pos.x) && one_in_(5)) {
+    if ((Grid::calc_distance(pos_breath, pos) <= 3) && los(floor, pos_breath, pos) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
         msa_ptr->success = true;
     }
@@ -204,7 +207,7 @@ bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->success = false;
     check_lite_area_by_mspell(player_ptr, msa_ptr);
     if (!msa_ptr->success) {
-        msa_ptr->success = adjacent_grid_check(player_ptr, msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, TerrainCharacteristics::PROJECT, PathChecker::PROJECTION);
+        msa_ptr->success = adjacent_grid_check(player_ptr, *msa_ptr->m_ptr, &msa_ptr->y, &msa_ptr->x, TerrainCharacteristics::PROJECT, PathChecker::PROJECTION);
     }
 
     decide_lite_breath(msa_ptr);

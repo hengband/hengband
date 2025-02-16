@@ -5,40 +5,31 @@
 #include "core/player-processor.h"
 #include "core/stuff-handler.h"
 #include "core/turn-compensator.h"
-#include "core/window-redrawer.h"
 #include "dungeon/quest.h"
 #include "floor/floor-leaver.h"
-#include "floor/floor-save-util.h"
-#include "floor/floor-save.h"
-#include "floor/wild.h"
-#include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/play-record-options.h"
 #include "hpmp/hp-mp-regenerator.h"
 #include "io/cursor.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
+#include "locale/language-switcher.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-compaction.h"
 #include "monster/monster-processor.h"
-#include "monster/monster-util.h"
 #include "pet/pet-util.h"
 #include "player-base/player-class.h"
-#include "player/special-defense-types.h"
 #include "realm/realm-song-numbers.h"
-#include "realm/realm-song.h"
 #include "spell-realm/spells-song.h"
-#include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-record.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
-#include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"
@@ -109,7 +100,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     command_cmd = 0;
     command_rep = 0;
     command_arg = 0;
-    command_dir = 0;
+    command_dir = Direction::none();
 
     target_who = 0;
     player_ptr->pet_t_m_idx = 0;
@@ -207,11 +198,11 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     floor.monster_level = floor.base_level;
     floor.object_level = floor.base_level;
     world.is_loading_now = true;
-    if (player_ptr->energy_need > 0 && !is_watching && (floor.is_underground() || player_ptr->leaving_dungeon || floor.inside_arena)) {
+    if (player_ptr->energy_need > 0 && !is_watching && (floor.is_underground() || floor.is_leaving_dungeon() || floor.inside_arena)) {
         player_ptr->energy_need = 0;
     }
 
-    player_ptr->leaving_dungeon = false;
+    floor.leave_dungeon(false);
     floor.reset_mproc();
 
     while (true) {
@@ -299,7 +290,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
          * floor, then prepare next floor
          */
         leave_floor(player_ptr);
-        reinit_wilderness = false;
+        WildernessGrids::get_instance().set_reinitialization(false);
     }
 
     write_level = true;

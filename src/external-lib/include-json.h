@@ -6,7 +6,7 @@
 #pragma warning(push, 0)
 #endif
 
-#include "external-lib/json.hpp"
+#include <json.hpp>
 
 #if defined(_MSC_VER)
 #pragma warning(pop)

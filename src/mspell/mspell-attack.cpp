@@ -54,10 +54,10 @@ static void set_no_magic_mask(msa_type *msa_ptr)
 
 static void check_mspell_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto is_in_no_magic_dungeon = floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::NO_MAGIC);
-    is_in_no_magic_dungeon &= floor_ptr->is_underground();
-    is_in_no_magic_dungeon &= !floor_ptr->is_in_quest() || QuestType::is_fixed(floor_ptr->quest_number);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    auto is_in_no_magic_dungeon = floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MAGIC);
+    is_in_no_magic_dungeon &= floor.is_underground();
+    is_in_no_magic_dungeon &= !floor.is_in_quest() || QuestType::is_fixed(floor.quest_number);
     msa_ptr->in_no_magic_dungeon = is_in_no_magic_dungeon;
     if (!msa_ptr->in_no_magic_dungeon || (msa_ptr->r_ptr->behavior_flags.has(MonsterBehaviorType::STUPID))) {
         return;
@@ -113,7 +113,7 @@ static bool check_mspell_non_stupid(PlayerType *player_ptr, msa_type *msa_ptr)
         msa_ptr->ability_flags.reset(RF_ABILITY_SUMMON_MASK);
     }
 
-    if (msa_ptr->ability_flags.has(MonsterAbilityType::RAISE_DEAD) && !raise_possible(player_ptr, msa_ptr->m_ptr)) {
+    if (msa_ptr->ability_flags.has(MonsterAbilityType::RAISE_DEAD) && !raise_possible(player_ptr, *msa_ptr->m_ptr)) {
         msa_ptr->ability_flags.reset(MonsterAbilityType::RAISE_DEAD);
     }
 
@@ -175,7 +175,7 @@ static bool check_mspell_continuation(PlayerType *player_ptr, msa_type *msa_ptr)
         return false;
     }
 
-    msa_ptr->m_name = monster_desc(player_ptr, msa_ptr->m_ptr, 0x00);
+    msa_ptr->m_name = monster_desc(player_ptr, *msa_ptr->m_ptr, 0x00);
     if (!switch_do_spell(player_ptr, msa_ptr) || (msa_ptr->thrown_spell == MonsterAbilityType::MAX)) {
         return false;
     }
@@ -213,7 +213,7 @@ static bool check_thrown_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     // プレイヤーがモンスターを正しく視認できていれば思い出に残る。
     // FIXME: ここで処理するのはおかしいような?
-    msa_ptr->can_remember = is_original_ap_and_seen(player_ptr, msa_ptr->m_ptr);
+    msa_ptr->can_remember = is_original_ap_and_seen(player_ptr, *msa_ptr->m_ptr);
 
     // ターゲットがプレイヤー位置なら直接射線が通っているので常に届く。
     if (player_ptr->is_located_at({ msa_ptr->y, msa_ptr->x })) {

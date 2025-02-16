@@ -20,6 +20,7 @@
 #include "store/store-util.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
@@ -152,8 +153,8 @@ void do_cmd_knowledge_stat(PlayerType *player_ptr)
     }
 
     auto &world = AngbandWorld::get_instance();
-    world.update_playtime();
-    const auto play_time = world.play_time;
+    world.play_time.update();
+    const auto play_time = world.play_time.elapsed_sec();
     const auto all_time = world.sf_play_time + play_time;
     fprintf(fff, _("現在のプレイ時間 : %d:%02d:%02d\n", "Current Play Time is %d:%02d:%02d\n"), play_time / (60 * 60), (play_time / 60) % 60, play_time % 60);
     fprintf(fff, _("合計のプレイ時間 : %d:%02d:%02d\n", "  Total play Time is %d:%02d:%02d\n"), all_time / (60 * 60), (all_time / 60) % 60, all_time % 60);
@@ -188,8 +189,8 @@ void do_cmd_knowledge_stat(PlayerType *player_ptr)
  */
 void do_cmd_knowledge_home(PlayerType *player_ptr)
 {
-    const auto &world = AngbandWorld::get_instance();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, world.max_wild_y, world.max_wild_x);
+    const auto &area = WildernessGrids::get_instance().get_area();
+    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
 
     FILE *fff = nullptr;
     GAME_TEXT file_name[FILE_NAME_SIZE];

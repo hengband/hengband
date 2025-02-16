@@ -1,5 +1,4 @@
 #include "room/vault-builder.h"
-#include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-util.h"
 #include "game-option/cheat-options.h"
@@ -16,40 +15,37 @@
 /*
  * Grid based version of "creature_bold()"
  */
-static bool player_grid(PlayerType *player_ptr, Grid *g_ptr)
+static bool player_grid(PlayerType *player_ptr, const Grid &grid)
 {
-    return g_ptr == &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
+    return &grid == &player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
 }
 
 /*
  * Grid based version of "cave_empty_bold()"
  */
-static bool is_cave_empty_grid(PlayerType *player_ptr, Grid *g_ptr)
+static bool is_cave_empty_grid(PlayerType *player_ptr, const Grid &grid)
 {
-    bool is_empty_grid = g_ptr->has(TerrainCharacteristics::PLACE);
-    is_empty_grid &= !g_ptr->has_monster();
-    is_empty_grid &= !player_grid(player_ptr, g_ptr);
+    bool is_empty_grid = grid.has(TerrainCharacteristics::PLACE);
+    is_empty_grid &= !grid.has_monster();
+    is_empty_grid &= !player_grid(player_ptr, grid);
     return is_empty_grid;
 }
 
 /*!
- * @brief 特殊な部屋地形向けにモンスターを配置する / Place some sleeping monsters near the given location
+ * @brief 特殊な部屋地形向けにモンスターを配置する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y1 モンスターを配置したいマスの中心Y座標
- * @param x1 モンスターを配置したいマスの中心X座標
+ * @param pos_center 配置したい中心座標
  * @param num 配置したいモンスターの数
- * @details
- * Only really called by some of the "vault" routines.
  */
-void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
+void vault_monsters(PlayerType *player_ptr, const Pos2D &pos_center, int num)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     for (auto k = 0; k < num; k++) {
         for (auto i = 0; i < 9; i++) {
             const auto d = 1;
-            const auto pos = scatter(player_ptr, { y1, x1 }, d, 0);
+            const auto pos = scatter(player_ptr, pos_center, d, 0);
             auto &grid = floor.get_grid(pos);
-            if (!is_cave_empty_grid(player_ptr, &grid)) {
+            if (!is_cave_empty_grid(player_ptr, grid)) {
                 continue;
             }
 
@@ -61,28 +57,26 @@ void vault_monsters(PlayerType *player_ptr, POSITION y1, POSITION x1, int num)
 }
 
 /*!
- * @brief 特殊な部屋向けに各種アイテムを配置する / Create up to "num" objects near the given coordinates
+ * @brief 特殊な部屋向けに各種アイテムを配置する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 配置したい中心マスのY座標
- * @param x 配置したい中心マスのX座標
+ * @param pos_center 配置したい中心座標
  * @param num 配置したい数
- * @details
- * Only really called by some of the "vault" routines.
  */
-void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
+void vault_objects(PlayerType *player_ptr, const Pos2D &pos_center, int num)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    auto &floor = *player_ptr->current_floor_ptr;
     for (; num > 0; --num) {
-        int j = y, k = x;
+        Pos2D pos = pos_center;
         int dummy = 0;
         for (int i = 0; i < 11; ++i) {
             while (dummy < SAFE_MAX_ATTEMPTS) {
-                j = rand_spread(y, 2);
-                k = rand_spread(x, 3);
+                pos.y = rand_spread(pos_center.y, 2);
+                pos.x = rand_spread(pos_center.x, 3);
                 dummy++;
-                if (!in_bounds(floor_ptr, j, k)) {
+                if (!floor.contains(pos)) {
                     continue;
                 }
+
                 break;
             }
 
@@ -90,16 +84,15 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
                 msg_print(_("警告！地下室のアイテムを配置できません！", "Warning! Could not place vault object!"));
             }
 
-            Grid *g_ptr;
-            g_ptr = &floor_ptr->grid_array[j][k];
-            if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty()) {
+            const auto &grid = floor.get_grid(pos);
+            if (!grid.is_floor() || !grid.o_idx_list.empty()) {
                 continue;
             }
 
             if (evaluate_percent(75)) {
-                place_object(player_ptr, j, k, 0L);
+                place_object(player_ptr, pos, 0);
             } else {
-                place_gold(player_ptr, j, k);
+                place_gold(player_ptr, pos);
             }
 
             break;
@@ -108,25 +101,20 @@ void vault_objects(PlayerType *player_ptr, POSITION y, POSITION x, int num)
 }
 
 /*!
- * @brief 特殊な部屋向けに各種アイテムを配置する(vault_trapのサブセット) / Place a trap with a given displacement of point
- * @param y トラップを配置したいマスの中心Y座標
- * @param x トラップを配置したいマスの中心X座標
- * @param yd Y方向の配置分散マス数
- * @param xd X方向の配置分散マス数
- * @details
- * Only really called by some of the "vault" routines.
+ * @brief 特殊な部屋向けに各種アイテムを配置する
+ * @param pos_center トラップを配置したいマスの中心座標
+ * @param distribution 配置分散
  */
-static void vault_trap_aux(FloorType *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
+static void vault_trap_aux(FloorType &floor, const Pos2D &pos_center, const Pos2DVec &distribution)
 {
-    Grid *g_ptr;
-    int y1 = y, x1 = x;
-    int dummy = 0;
-    for (int count = 0; count <= 5; count++) {
+    Pos2D pos = pos_center;
+    auto dummy = 0;
+    for (auto count = 0; count <= 5; count++) {
         while (dummy < SAFE_MAX_ATTEMPTS) {
-            y1 = rand_spread(y, yd);
-            x1 = rand_spread(x, xd);
+            pos.y = rand_spread(pos_center.y, distribution.y);
+            pos.x = rand_spread(pos_center.x, distribution.x);
             dummy++;
-            if (!in_bounds(floor_ptr, y1, x1)) {
+            if (!floor.contains(pos)) {
                 continue;
             }
             break;
@@ -136,31 +124,27 @@ static void vault_trap_aux(FloorType *floor_ptr, POSITION y, POSITION x, POSITIO
             msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
         }
 
-        g_ptr = &floor_ptr->grid_array[y1][x1];
-        if (!g_ptr->is_floor() || !g_ptr->o_idx_list.empty() || g_ptr->has_monster()) {
+        const auto &grid = floor.get_grid(pos);
+        if (!grid.is_floor() || !grid.o_idx_list.empty() || grid.has_monster()) {
             continue;
         }
 
-        place_trap(floor_ptr, y1, x1);
+        place_trap(floor, pos);
         break;
     }
 }
 
 /*!
- * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
+ * @brief 特殊な部屋向けに各種アイテムを配置する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y トラップを配置したいマスの中心Y座標
- * @param x トラップを配置したいマスの中心X座標
- * @param yd Y方向の配置分散マス数
- * @param xd X方向の配置分散マス数
+ * @param pos_center トラップを配置したいマスの中心座標
+ * @param distribution 配置分散
  * @param num 配置したいトラップの数
- * @details
- * Only really called by some of the "vault" routines.
  * @todo rooms-normal からしか呼ばれていない、要調整
  */
-void vault_traps(FloorType *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
+void vault_traps(FloorType &floor, const Pos2D &pos_center, const Pos2DVec &distribution, int num)
 {
     for (int i = 0; i < num; i++) {
-        vault_trap_aux(floor_ptr, y, x, yd, xd);
+        vault_trap_aux(floor, pos_center, distribution);
     }
 }

@@ -16,13 +16,13 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param dir 発動の方向ID
  */
-static void exe_ring_of_power(PlayerType *player_ptr, DIRECTION dir)
+static void exe_ring_of_power(PlayerType *player_ptr, const Direction &dir)
 {
     switch (randint1(10)) {
     case 1:
     case 2:
         msg_print(_("あなたは悪性のオーラに包み込まれた。", "You are surrounded by a malignant aura."));
-        sound(SOUND_EVIL);
+        sound(SoundKind::EVIL);
         (void)dec_stat(player_ptr, A_STR, 50, true);
         (void)dec_stat(player_ptr, A_INT, 50, true);
         (void)dec_stat(player_ptr, A_WIS, 50, true);
@@ -55,9 +55,9 @@ static void exe_ring_of_power(PlayerType *player_ptr, DIRECTION dir)
 
 bool activate_ring_of_power(PlayerType *player_ptr, std::string_view name)
 {
-    DIRECTION dir;
     msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name.data());
-    if (!get_aim_dir(player_ptr, &dir)) {
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
         return false;
     }
 

@@ -43,7 +43,6 @@ ObjectZapRodEntity::ObjectZapRodEntity(PlayerType *player_ptr)
  */
 void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
 {
-    DIRECTION dir = 0;
     auto use_charge = true;
     auto *o_ptr = ref_item(this->player_ptr, i_idx);
     if ((i_idx < 0) && (o_ptr->number > 1)) {
@@ -51,8 +50,10 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
+    auto dir = Direction::none();
     if (o_ptr->is_aiming_rod() || !o_ptr->is_aware()) {
-        if (!get_aim_dir(this->player_ptr, &dir)) {
+        dir = get_aim_dir(this->player_ptr);
+        if (!dir) {
             return;
         }
     }
@@ -98,7 +99,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         }
 
         msg_print(_("うまくロッドを使えなかった。", "You failed to use the rod properly."));
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
         return;
     }
 
@@ -119,7 +120,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
         return;
     }
 
-    sound(SOUND_ZAP);
+    sound(SoundKind::ZAP);
     auto ident = rod_effect(this->player_ptr, *o_ptr->bi_key.sval(), dir, &use_charge, false);
     if (use_charge) {
         o_ptr->timeout += base_pval;

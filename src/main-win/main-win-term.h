@@ -6,7 +6,7 @@
 
 #include "system/h-type.h"
 #include "term/z-term.h"
-
+#include <string>
 #include <windows.h>
 
 /*!
@@ -69,7 +69,7 @@ struct term_data {
 
     bool size_hack{};
     bool visible{};
-    concptr font_want{};
+    std::string font_want = "";
     HFONT font_id{};
     int font_wid{}; //!< フォント横幅
     int font_hgt{}; //!< フォント縦幅

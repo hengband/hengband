@@ -13,6 +13,7 @@
 #include "term/z-form.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
+#include <fmt/format.h>
 
 /*!
  * @brief 指定された順位範囲でスコアを並べて表示する / Display the scores in a given range.
@@ -73,7 +74,7 @@ void display_scores(int from, int to, int note, high_score *score)
         term_clear();
         put_str(_("                変愚蛮怒: 勇者の殿堂", "                Hengband Hall of Fame"), 0, 0);
         if (k > 0) {
-            put_str(format(_("( %d 位以下 )", "(from position %d)"), k + 1), 0, 40);
+            put_str(fmt::format(_("( {} 位以下 )", "(from position {})"), k + 1), 0, 40);
         }
 
         for (auto n = 0, j = k; (j < num_scores) && (n < per_screen); place++, j++, n++) {
@@ -135,7 +136,7 @@ void display_scores(int from, int to, int note, high_score *score)
                 class_info.at(pclass).title.data(), clev);
 #endif
             if (mlev > clev) {
-                out_val.append(format(_(" (最高%d)", " (Max %d)"), mlev));
+                out_val.append(fmt::format(_(" (最高{})", " (Max {})"), mlev));
             }
 
             c_put_str(attr, out_val, n * 4 + 2, 0);
@@ -148,24 +149,24 @@ void display_scores(int from, int to, int note, high_score *score)
 
             /* 死亡原因をオリジナルより細かく表示 */
             if (streq(the_score.how, "yet")) {
-                out_val.append(format("  まだ生きている (%d%s)", cdun, "階"));
+                out_val.append(fmt::format("  まだ生きている ({}{})", cdun, "階"));
             } else if (streq(the_score.how, "ripe")) {
-                out_val.append(format("  勝利の後に引退 (%d%s)", cdun, "階"));
+                out_val.append(fmt::format("  勝利の後に引退 ({}{})", cdun, "階"));
             } else if (streq(the_score.how, "Seppuku")) {
-                out_val.append(format("  勝利の後に切腹 (%d%s)", cdun, "階"));
+                out_val.append(fmt::format("  勝利の後に切腹 ({}{})", cdun, "階"));
             } else {
                 codeconv(the_score.how);
                 if (!cdun) {
-                    out_val.append(format("  地上で%sに殺された", the_score.how));
+                    out_val.append(fmt::format("  地上で{}に殺された", the_score.how));
                 } else {
-                    out_val.append(format("  %d階で%sに殺された", cdun, the_score.how));
+                    out_val.append(fmt::format("  {}階で{}に殺された", cdun, the_score.how));
                 }
             }
 #else
             if (!cdun) {
-                out_val = format("               Killed by %s on the surface", the_score.how);
+                out_val = fmt::format("               Killed by {} on the surface", the_score.how);
             } else {
-                out_val = format("               Killed by %s on %s %d", the_score.how, "Dungeon Level", cdun);
+                out_val = fmt::format("               Killed by {} on {} {}", the_score.how, "Dungeon Level", cdun);
             }
 
             if (mdun > cdun) {
@@ -180,9 +181,9 @@ void display_scores(int from, int to, int note, high_score *score)
                 when = alt_when.data();
             }
 
-            out_val = format("        (ユーザー:%s, 日付:%s, 所持金:%s, ターン:%s)", user, when, gold, aged);
+            out_val = fmt::format("        (ユーザー:{}, 日付:{}, 所持金:{}, ターン:{})", user, when, gold, aged);
 #else
-            out_val = format("               (User %s, Date %s, Gold %s, Turn %s).", user, when, gold, aged);
+            out_val = fmt::format("               (User {}, Date {}, Gold {}, Turn {}).", user, when, gold, aged);
 #endif
 
             c_put_str(attr, out_val, n * 4 + 4, 0);

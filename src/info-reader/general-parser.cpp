@@ -92,11 +92,11 @@ std::tuple<errr, int> init_info_txt(FILE *fp, char *buf, angband_header *head, P
 /*!
  * @brief 地形情報の「F:」情報をパースする
  * Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param floor フロアへの参照
  * @param buf 解析文字列
  * @return エラーコード
  */
-parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
+parse_error_type parse_line_feature(const FloorType &floor, char *buf)
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
         return PARSE_ERROR_NONE;
@@ -129,7 +129,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
             letter[index].random |= RANDOM_TRAP;
         } else {
             try {
-                letter[index].trap = terrains.get_terrain_id_by_tag(zz[7]);
+                letter[index].trap = terrains.get_terrain_id(zz[7]);
             } catch (const std::exception &) {
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
             }
@@ -142,9 +142,9 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
                 letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6] + 1));
             }
         } else if (zz[6][0] == '!') {
-            if (floor_ptr->is_in_quest()) {
+            if (floor.is_in_quest()) {
                 const auto &quests = QuestList::get_instance();
-                letter[index].artifact = quests.get_quest(floor_ptr->quest_number).reward_fa_id;
+                letter[index].artifact = quests.get_quest(floor.quest_number).reward_fa_id;
             }
         } else {
             letter[index].artifact = i2enum<FixedArtifactId>(atoi(zz[6]));
@@ -167,9 +167,9 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
                 letter[index].object = (OBJECT_IDX)atoi(zz[4] + 1);
             }
         } else if (zz[4][0] == '!') {
-            if (floor_ptr->is_in_quest()) {
+            if (floor.is_in_quest()) {
                 const auto &quests = QuestList::get_instance();
-                const auto &quest = quests.get_quest(floor_ptr->quest_number);
+                const auto &quest = quests.get_quest(floor.quest_number);
                 if (quest.has_reward()) {
                     const auto &artifact = quest.get_reward();
                     if (artifact.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
@@ -204,7 +204,7 @@ parse_error_type parse_line_feature(FloorType *floor_ptr, char *buf)
             letter[index].random |= RANDOM_FEATURE;
         } else {
             try {
-                letter[index].feature = terrains.get_terrain_id_by_tag(zz[1]);
+                letter[index].feature = terrains.get_terrain_id(zz[1]);
             } catch (const std::exception &) {
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
             }

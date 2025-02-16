@@ -1,8 +1,8 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/point-2d.h"
 
 class PlayerType;
-void delete_monster_idx(PlayerType *player_ptr, MONSTER_IDX i);
+void delete_monster_idx(PlayerType *player_ptr, short m_idx);
 void wipe_monsters_list(PlayerType *player_ptr);
-void delete_monster(PlayerType *player_ptr, POSITION y, POSITION x);
+void delete_monster(PlayerType *player_ptr, const Pos2D &pos);

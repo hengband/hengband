@@ -1,10 +1,8 @@
 #include "effect/effect-feature.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h" // 暫定、後で消す.
 #include "floor/cave.h"
 #include "floor/geometry.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
@@ -13,10 +11,8 @@
 #include "mind/mind-ninja.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "player/special-defense-types.h"
 #include "room/door-definition.h"
 #include "spell-class/spells-mirror-master.h"
-#include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
@@ -38,8 +34,8 @@
  */
 static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    return cave_clean_bold(floor_ptr, pos.y, pos.x) && (floor_ptr->get_grid(pos).m_idx == 0) && !player_ptr->is_located_at(pos);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    return cave_clean_bold(floor, pos.y, pos.x) && (floor.get_grid(pos).m_idx == 0) && !player_ptr->is_located_at(pos);
 }
 
 /*!
@@ -127,7 +123,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
 
         if (message) {
             msg_format(_("木は%s。", "A tree %s"), message);
-            cave_set_feat(player_ptr, pos, one_in_(3) ? TerrainTag::BRAKE : TerrainTag::GRASS);
+            set_terrain_id_to_grid(player_ptr, pos, one_in_(3) ? TerrainTag::BRAKE : TerrainTag::GRASS);
 
             /* Observe */
             if (grid.is_mark()) {
@@ -173,7 +169,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
     }
     case AttributeType::KILL_TRAP: {
         if (grid.is_hidden_door()) {
-            disclose_grid(player_ptr, y, x);
+            disclose_grid(player_ptr, pos);
             if (known) {
                 obvious = true;
             }
@@ -268,14 +264,14 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (player_ptr->is_located_at(pos)) {
             break;
         }
-        cave_set_feat(player_ptr, y, x, feat_door[DOOR_DOOR].closed);
+        set_terrain_id_to_grid(player_ptr, pos, Doors::get_instance().get_door(DoorKind::DOOR).closed);
         if (grid.is_mark()) {
             obvious = true;
         }
         break;
     }
     case AttributeType::MAKE_TRAP: {
-        place_trap(&floor, y, x);
+        place_trap(floor, pos);
         break;
     }
     case AttributeType::MAKE_TREE: {
@@ -285,7 +281,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (player_ptr->is_located_at(pos)) {
             break;
         }
-        cave_set_feat(player_ptr, pos, TerrainTag::TREE);
+        set_terrain_id_to_grid(player_ptr, pos, TerrainTag::TREE);
         if (grid.is_mark()) {
             obvious = true;
         }
@@ -296,7 +292,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             break;
         }
         grid.info |= CAVE_OBJECT;
-        grid.set_mimic_terrain_id(TerrainTag::RUNE_PROTECTION);
+        grid.set_terrain_id(TerrainTag::RUNE_PROTECTION, TerrainKind::MIMIC);
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
         break;
@@ -306,7 +302,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             break;
         }
 
-        cave_set_feat(player_ptr, pos, TerrainTag::GRANITE_WALL);
+        set_terrain_id_to_grid(player_ptr, pos, TerrainTag::GRANITE_WALL);
         break;
     case AttributeType::LAVA_FLOW: {
         if (terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
@@ -316,9 +312,9 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             if (terrain.flags.has_not(TerrainCharacteristics::FLOOR)) {
                 break;
             }
-            cave_set_feat(player_ptr, pos, TerrainTag::SHALLOW_LAVA);
+            set_terrain_id_to_grid(player_ptr, pos, TerrainTag::SHALLOW_LAVA);
         } else if (dam) {
-            cave_set_feat(player_ptr, pos, TerrainTag::DEEP_LAVA);
+            set_terrain_id_to_grid(player_ptr, pos, TerrainTag::DEEP_LAVA);
         }
 
         break;
@@ -331,9 +327,9 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             if (terrain.flags.has_not(TerrainCharacteristics::FLOOR)) {
                 break;
             }
-            cave_set_feat(player_ptr, pos, TerrainTag::SHALLOW_WATER);
+            set_terrain_id_to_grid(player_ptr, pos, TerrainTag::SHALLOW_WATER);
         } else if (dam) {
-            cave_set_feat(player_ptr, pos, TerrainTag::DEEP_WATER);
+            set_terrain_id_to_grid(player_ptr, pos, TerrainTag::DEEP_WATER);
         }
 
         break;
@@ -347,7 +343,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         grid.info |= (CAVE_GLOW);
         note_spot(player_ptr, y, x);
         lite_spot(player_ptr, y, x);
-        update_local_illumination(player_ptr, y, x);
+        update_local_illumination(player_ptr, pos);
 
         if (player_can_see_bold(player_ptr, y, x)) {
             obvious = true;
@@ -371,9 +367,9 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         if (floor.is_underground() || !AngbandWorld::get_instance().is_daytime()) {
-            for (int j = 0; j < 9; j++) {
-                const Pos2D pos_neighbor(y + ddy_ddd[j], x + ddx_ddd[j]);
-                if (!in_bounds2(&floor, pos_neighbor.y, pos_neighbor.x)) {
+            for (const auto &d : Direction::directions()) {
+                const auto pos_neighbor = Pos2D(y, x) + d.vec();
+                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 
@@ -400,7 +396,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
 
         lite_spot(player_ptr, y, x);
 
-        update_local_illumination(player_ptr, y, x);
+        update_local_illumination(player_ptr, pos);
 
         if (player_can_see_bold(player_ptr, y, x)) {
             obvious = true;
@@ -415,7 +411,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
     case AttributeType::ROCKET: {
         if (grid.is_mirror()) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
-            sound(SOUND_GLASS);
+            sound(SoundKind::GLASS);
             SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
             project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
@@ -427,7 +423,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
 
         if (known && (grid.is_mark())) {
             msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain(TerrainKind::MIMIC).name.data());
-            sound(SOUND_GLASS);
+            sound(SoundKind::GLASS);
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);
@@ -437,7 +433,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
     case AttributeType::SOUND: {
         if (grid.is_mirror() && player_ptr->lev < 40) {
             msg_print(_("鏡が割れた！", "The mirror was shattered!"));
-            sound(SOUND_GLASS);
+            sound(SoundKind::GLASS);
             SpellsMirrorMaster(player_ptr).remove_mirror(y, x);
             project(player_ptr, 0, 2, y, x, player_ptr->lev / 2 + 5, AttributeType::SHARDS,
                 (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
@@ -449,7 +445,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
 
         if (known && (grid.is_mark())) {
             msg_format(_("%sが割れた！", "The %s crumbled!"), grid.get_terrain(TerrainKind::MIMIC).name.data());
-            sound(SOUND_GLASS);
+            sound(SoundKind::GLASS);
         }
 
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_ROCK);

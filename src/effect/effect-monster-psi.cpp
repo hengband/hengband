@@ -34,7 +34,7 @@ static bool resisted_psi_because_empty_mind(PlayerType *player_ptr, EffectMonste
 
     em_ptr->dam = 0;
     em_ptr->note = _("には完全な耐性がある！", " is immune.");
-    if (is_original_ap_and_seen(player_ptr, em_ptr->m_ptr)) {
+    if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
         em_ptr->r_ptr->r_misc_flags.set(MonsterMiscType::EMPTY_MIND);
     }
 
@@ -158,7 +158,7 @@ static void effect_monster_psi_resist(PlayerType *player_ptr, EffectMonster *em_
     }
 
     /* Injure +/- confusion */
-    angband_strcpy(em_ptr->killer, monster_desc(player_ptr, em_ptr->m_ptr, MD_WRONGDOER_NAME), sizeof(em_ptr->killer));
+    angband_strcpy(em_ptr->killer, monster_desc(player_ptr, *em_ptr->m_ptr, MD_WRONGDOER_NAME), sizeof(em_ptr->killer));
     take_hit(player_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer);
     effect_monster_psi_reflect_extra_effect(player_ptr, em_ptr);
     em_ptr->dam = 0;
@@ -209,7 +209,7 @@ ProcessResult effect_monster_psi(PlayerType *player_ptr, EffectMonster *em_ptr)
     if (em_ptr->seen) {
         em_ptr->obvious = true;
     }
-    if (!(los(player_ptr, em_ptr->m_ptr->fy, em_ptr->m_ptr->fx, player_ptr->y, player_ptr->x))) {
+    if (!los(*player_ptr->current_floor_ptr, em_ptr->m_ptr->get_position(), player_ptr->get_position())) {
         if (em_ptr->seen_msg) {
             msg_format(_("%sはあなたが見えないので影響されない！", "%s^ can't see you, and isn't affected!"), em_ptr->m_name);
         }
@@ -250,7 +250,7 @@ static void effect_monster_psi_drain_resist(PlayerType *player_ptr, EffectMonste
         return;
     }
 
-    angband_strcpy(em_ptr->killer, monster_desc(player_ptr, em_ptr->m_ptr, MD_WRONGDOER_NAME), sizeof(em_ptr->killer));
+    angband_strcpy(em_ptr->killer, monster_desc(player_ptr, *em_ptr->m_ptr, MD_WRONGDOER_NAME), sizeof(em_ptr->killer));
     if (check_multishadow(player_ptr)) {
         take_hit(player_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer);
         em_ptr->dam = 0;

@@ -1,4 +1,5 @@
 #include "load/floor-loader.h"
+#include "floor/dungeon-feeling.h"
 #include "floor/floor-generator.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save-util.h"
@@ -95,7 +96,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     floor.height = rd_s16b();
     floor.width = rd_s16b();
 
-    player_ptr->feeling = rd_byte();
+    DungeonFeeling::get_instance().set_feeling(rd_byte());
 
     auto limit = rd_u16b();
     std::vector<GridTemplate> templates(limit);
@@ -126,11 +127,11 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         } while (tmp8u == MAX_UCHAR);
 
         for (int i = count; i > 0; i--) {
-            auto *g_ptr = &floor.grid_array[y][x];
-            g_ptr->info = templates[id].info;
-            g_ptr->feat = templates[id].feat;
-            g_ptr->mimic = templates[id].mimic;
-            g_ptr->special = templates[id].special;
+            auto &grid = floor.grid_array[y][x];
+            grid.info = templates[id].info;
+            grid.feat = templates[id].feat;
+            grid.mimic = templates[id].mimic;
+            grid.special = templates[id].special;
 
             if (++x >= xmax) {
                 x = 0;
@@ -175,8 +176,8 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
         auto &item = floor.o_list[item_idx];
         item_loader->rd_item(&item);
-        auto &list = get_o_idx_list_contains(&floor, item_idx);
-        list.add(&floor, item_idx, item.stack_idx);
+        auto &list = get_o_idx_list_contains(floor, item_idx);
+        list.add(floor, item_idx, item.stack_idx);
     }
 
     limit = rd_u16b();
@@ -192,7 +193,7 @@ errr rd_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
         }
 
         auto &monster = floor.m_list[m_idx];
-        monster_loader->rd_monster(&monster);
+        monster_loader->rd_monster(monster);
         auto &grid = floor.get_grid(monster.get_position());
         grid.m_idx = m_idx;
         monster.get_real_monrace().increment_current_numbers();

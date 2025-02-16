@@ -5,12 +5,10 @@
 #include "mind/mind-elementalist.h"
 #include "action/action-limited.h"
 #include "avatar/avatar.h"
-#include "cmd-action/cmd-mind.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-processor.h"
@@ -30,14 +28,9 @@
 #include "main/sound-of-music.h"
 #include "mind/mind-explanations-table.h"
 #include "mind/mind-mindcrafter.h"
-#include "monster-race/race-brightness-flags.h"
-#include "monster-race/race-flags-resistance.h"
-#include "monster/monster-describer.h"
-#include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-status/player-energy.h"
-#include "player-status/player-status-base.h"
 #include "player/player-status-table.h"
 #include "racial/racial-util.h"
 #include "spell-kind/earthquake.h"
@@ -63,11 +56,7 @@
 #include "target/grid-selector.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"
-#include "term/term-color-types.h"
-#include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
-#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
@@ -462,8 +451,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
     const auto plev = player_ptr->lev;
     switch (spell) {
     case ElementSpells::BOLT_1ST: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -483,8 +472,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         (void)BadStatusSetter(player_ptr).mod_cut(-10);
         return true;
     case ElementSpells::BOLT_2ND: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -503,8 +492,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     case ElementSpells::BALL_3RD: {
         project_length = 4;
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -515,8 +504,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BALL_1ST: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -526,8 +515,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BREATH_2ND: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -542,8 +531,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::ANNIHILATE: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -551,8 +540,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BOLT_3RD: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -568,8 +557,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BALL_2ND: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -608,8 +597,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::STORM_2ND: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -624,8 +613,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::BREATH_1ST: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -635,8 +624,8 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
         return true;
     }
     case ElementSpells::STORM_3ND: {
-        int dir;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -877,7 +866,7 @@ static bool check_element_mp_sufficiency(PlayerType *player_ptr, int mana_cost)
 static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, PERCENTAGE chance)
 {
     if (!evaluate_percent(chance)) {
-        sound(SOUND_ZAP);
+        sound(SoundKind::ZAP);
         return cast_element_spell(player_ptr, spell_idx);
     }
 
@@ -886,7 +875,7 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
     }
 
     msg_format(_("魔力の集中に失敗した！", "You failed to focus the elemental power!"));
-    sound(SOUND_FAIL);
+    sound(SoundKind::FAIL);
 
     if (randint1(100) < chance / 2) {
         int plev = player_ptr->lev;
@@ -1025,46 +1014,46 @@ void display_element_spell_list(PlayerType *player_ptr, int y, int x)
  * @param type 魔法攻撃属性
  * @return 効果があるならTRUE、なければFALSE
  */
-static bool is_elemental_genocide_effective(MonraceDefinition *r_ptr, AttributeType type)
+static bool is_elemental_genocide_effective(const MonraceDefinition &monrace, AttributeType type)
 {
     switch (type) {
     case AttributeType::FIRE:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
             return false;
         }
         break;
     case AttributeType::COLD:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
             return false;
         }
         break;
     case AttributeType::ELEC:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
             return false;
         }
         break;
     case AttributeType::ACID:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ACID)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_ACID)) {
             return false;
         }
         break;
     case AttributeType::DARK:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_DARK) || r_ptr->r_resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_DARK) || monrace.r_resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
             return false;
         }
         break;
     case AttributeType::CONFUSION:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::NO_CONF)) {
             return false;
         }
         break;
     case AttributeType::SHARDS:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::RESIST_SHARDS)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_SHARDS)) {
             return false;
         }
         break;
     case AttributeType::POIS:
-        if (r_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_POISON)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::IMMUNE_POISON)) {
             return false;
         }
         break;
@@ -1093,7 +1082,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMo
     }
 
     const auto type = get_element_type(player_ptr->element, 0);
-    const auto is_effective = is_elemental_genocide_effective(em_ptr->r_ptr, type);
+    const auto is_effective = is_elemental_genocide_effective(*em_ptr->r_ptr, type);
     if (!is_effective) {
         if (em_ptr->seen_msg) {
             msg_format(_("%sには効果がなかった。", "%s^ is unaffected."), em_ptr->m_name);
@@ -1395,100 +1384,49 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 }
 
 /*!
- * @todo 宣言だけ。後日適切な場所に移動
- */
-static bool door_to_darkness(PlayerType *player_ptr, POSITION dist);
-
-/*!
- * @brief クラスパワーを実行
- * @param player_ptr プレイヤー情報への参照ポインタ
- * @return 実行したらTRUE、しなかったらFALSE
- */
-bool switch_element_execution(PlayerType *player_ptr)
-{
-    auto realm = i2enum<ElementRealmType>(player_ptr->element);
-    PLAYER_LEVEL plev = player_ptr->lev;
-    DIRECTION dir;
-
-    switch (realm) {
-    case ElementRealmType::FIRE:
-        (void)lite_area(player_ptr, Dice::roll(2, plev / 2), plev / 10);
-        break;
-    case ElementRealmType::ICE:
-        (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, AttributeType::COLD, PROJECT_ITEM);
-        (void)project_all_los(player_ptr, AttributeType::OLD_SLEEP, 20 + plev * 3 / 2);
-        break;
-    case ElementRealmType::SKY:
-        (void)recharge(player_ptr, 120);
-        break;
-    case ElementRealmType::SEA:
-        if (!get_aim_dir(player_ptr, &dir)) {
-            return false;
-        }
-        (void)wall_to_mud(player_ptr, dir, plev * 3 / 2);
-        break;
-    case ElementRealmType::DARKNESS:
-        return door_to_darkness(player_ptr, 15 + plev / 2);
-        break;
-    case ElementRealmType::CHAOS:
-        reserve_alter_reality(player_ptr, randint0(21) + 15);
-        break;
-    case ElementRealmType::EARTH:
-        (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
-        break;
-    case ElementRealmType::DEATH:
-        if (player_ptr->current_floor_ptr->num_repro <= MAX_REPRODUCTION) {
-            player_ptr->current_floor_ptr->num_repro += MAX_REPRODUCTION;
-        }
-        break;
-    default:
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief 指定したマスが暗いかどうか
- * @param f_ptr 階の情報への参照ポインタ
- * @param y 指定のy座標
- * @param x 指定のx座標
+ * @param floor フロアへの参照
+ * @param pos 指定の座標
  * @return 暗いならTRUE、そうでないならFALSE
  */
-static bool is_target_grid_dark(FloorType *f_ptr, POSITION y, POSITION x)
+static bool is_target_grid_dark(const FloorType &floor, const Pos2D &pos)
 {
-    if (any_bits(f_ptr->grid_array[y][x].info, CAVE_MNLT)) {
+    const auto &grid = floor.get_grid(pos);
+    if (any_bits(grid.info, CAVE_MNLT)) {
         return false;
     }
 
-    bool is_dark = false;
-    bool is_lite = any_bits(f_ptr->grid_array[y][x].info, CAVE_GLOW | CAVE_LITE);
-
-    for (int dx = x - 2; dx <= x + 2; dx++) {
-        for (int dy = y - 2; dy <= y + 2; dy++) {
-            if (dx == x && dy == y) {
+    auto is_dark = false;
+    auto is_lite = any_bits(grid.info, CAVE_GLOW | CAVE_LITE);
+    for (auto dx = pos.x - 2; dx <= pos.x + 2; dx++) {
+        for (auto dy = pos.y - 2; dy <= pos.y + 2; dy++) {
+            const Pos2D pos_neighbor(dy, dx);
+            if (pos == pos_neighbor) {
                 continue;
             }
-            if (!in_bounds(f_ptr, dy, dx)) {
-                continue;
-            }
-
-            MONSTER_IDX m_idx = f_ptr->grid_array[dy][dx].m_idx;
-            if (!m_idx) {
+            if (!floor.contains(pos_neighbor)) {
                 continue;
             }
 
-            const auto d = Grid::calc_distance({ dy, dx }, { y, x });
-            const auto &monrace = f_ptr->m_list[m_idx].get_monrace();
+            const auto m_idx = floor.get_grid(pos_neighbor).m_idx;
+            if (m_idx == 0) {
+                continue;
+            }
+
+            const auto d = Grid::calc_distance(pos, pos_neighbor);
+            const auto &monrace = floor.m_list[m_idx].get_monrace();
             if (d <= 1 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_1, MonsterBrightnessType::SELF_LITE_1 })) {
                 return false;
             }
+
             if (d <= 2 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_LITE_2, MonsterBrightnessType::SELF_LITE_2 })) {
                 return false;
             }
+
             if (d <= 1 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_1, MonsterBrightnessType::SELF_DARK_1 })) {
                 is_dark = true;
             }
+
             if (d <= 2 && monrace.brightness_flags.has_any_of({ MonsterBrightnessType::HAS_DARK_2, MonsterBrightnessType::SELF_DARK_2 })) {
                 is_dark = true;
             }
@@ -1502,25 +1440,22 @@ static bool is_target_grid_dark(FloorType *f_ptr, POSITION y, POSITION x)
  * @breif 暗いところ限定での次元の扉
  * @param player_ptr プレイヤー情報への参照ポインタ
  */
-static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
+static bool door_to_darkness(PlayerType *player_ptr, int distance)
 {
-    POSITION y = player_ptr->y;
-    POSITION x = player_ptr->x;
-    FloorType *f_ptr;
-
+    const auto p_pos_orig = player_ptr->get_position();
+    auto p_pos = player_ptr->get_position();
+    const auto &floor = *player_ptr->current_floor_ptr;
     for (int i = 0; i < 3; i++) {
-        if (!tgt_pt(player_ptr, &x, &y)) {
+        if (!tgt_pt(player_ptr, &p_pos.x, &p_pos.y)) {
             return false;
         }
 
-        f_ptr = player_ptr->current_floor_ptr;
-
-        if (Grid::calc_distance({ y, x }, player_ptr->get_position()) > dist) {
+        if (Grid::calc_distance(p_pos, p_pos_orig) > distance) {
             msg_print(_("遠すぎる！", "That is too far!"));
             continue;
         }
 
-        if (!is_cave_empty_bold(player_ptr, y, x) || f_ptr->grid_array[y][x].is_icky()) {
+        if (!is_cave_empty_bold(player_ptr, p_pos.y, p_pos.x) || floor.get_grid(p_pos).is_icky()) {
             msg_print(_("そこには移動できない。", "Can not teleport to there."));
             continue;
         }
@@ -1528,11 +1463,61 @@ static bool door_to_darkness(PlayerType *player_ptr, POSITION dist)
         break;
     }
 
-    bool flag = cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS) && is_target_grid_dark(f_ptr, y, x);
+    const auto flag = cave_player_teleportable_bold(player_ptr, p_pos.y, p_pos.x, TELEPORT_SPONTANEOUS) && is_target_grid_dark(floor, p_pos);
     if (flag) {
-        teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
+        teleport_player_to(player_ptr, p_pos.y, p_pos.x, TELEPORT_SPONTANEOUS);
     } else {
         msg_print(_("闇の扉は開かなかった！", "The door to darkness does not open!"));
     }
+
     return true;
+}
+
+/*!
+ * @brief クラスパワーを実行
+ * @param player_ptr プレイヤー情報への参照ポインタ
+ * @return 実行したらTRUE、しなかったらFALSE
+ */
+bool switch_element_execution(PlayerType *player_ptr)
+{
+    auto realm = i2enum<ElementRealmType>(player_ptr->element);
+    PLAYER_LEVEL plev = player_ptr->lev;
+
+    switch (realm) {
+    case ElementRealmType::FIRE:
+        (void)lite_area(player_ptr, Dice::roll(2, plev / 2), plev / 10);
+        return true;
+    case ElementRealmType::ICE:
+        (void)project(player_ptr, 0, 5, player_ptr->y, player_ptr->x, 1, AttributeType::COLD, PROJECT_ITEM);
+        (void)project_all_los(player_ptr, AttributeType::OLD_SLEEP, 20 + plev * 3 / 2);
+        return true;
+    case ElementRealmType::SKY:
+        (void)recharge(player_ptr, 120);
+        return true;
+    case ElementRealmType::SEA: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
+            return false;
+        }
+
+        (void)wall_to_mud(player_ptr, dir, plev * 3 / 2);
+        return true;
+    }
+    case ElementRealmType::DARKNESS:
+        return door_to_darkness(player_ptr, 15 + plev / 2);
+    case ElementRealmType::CHAOS:
+        reserve_alter_reality(player_ptr, randint0(21) + 15);
+        return true;
+    case ElementRealmType::EARTH:
+        (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
+        return true;
+    case ElementRealmType::DEATH:
+        if (player_ptr->current_floor_ptr->num_repro <= MAX_REPRODUCTION) {
+            player_ptr->current_floor_ptr->num_repro += MAX_REPRODUCTION;
+        }
+
+        return true;
+    default:
+        return false;
+    }
 }

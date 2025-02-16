@@ -152,8 +152,8 @@ bool target_okay(PlayerType *player_ptr)
         return false;
     }
 
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[target_who];
-    target_row = m_ptr->fy;
-    target_col = m_ptr->fx;
+    const auto &monster = player_ptr->current_floor_ptr->m_list[target_who];
+    target_row = monster.fy;
+    target_col = monster.fx;
     return true;
 }

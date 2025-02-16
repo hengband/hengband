@@ -13,7 +13,8 @@
 #include "util/string-processor.h"
 #include "world/world.h"
 #include <algorithm>
-#ifndef JP
+#ifdef JP
+#else
 #include "locale/english.h"
 #endif
 
@@ -115,6 +116,18 @@ bool MonraceDefinition::is_explodable() const
 {
     return std::any_of(std::begin(this->blows), std::end(this->blows),
         [](const auto &blow) { return blow.method == RaceBlowMethodType::EXPLODE; });
+}
+
+/*!
+ * @brief モンスターが表面的に天使かどうかを返す
+ * @return 天使か否か
+ * @details 「Aシンボルだが天使ではないモンスター」もいる。例外リストはMonraceList 側に定義されている
+ */
+bool MonraceDefinition::is_angel_superficially() const
+{
+    auto is_angel = this->symbol_char_is_any_of("A");
+    is_angel |= this->kind_flags.has(MonsterKindType::ANGEL);
+    return is_angel;
 }
 
 /*!
@@ -511,9 +524,9 @@ bool MonraceDefinition::can_entry_arena() const
     return can_entry;
 }
 
-bool MonraceDefinition::is_suitable_for_nightmare(int max_level) const
+bool MonraceDefinition::is_suitable_for_nightmare(int min_level) const
 {
-    return this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR) && (this->level > max_level);
+    return this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR) && (this->level > min_level);
 }
 
 bool MonraceDefinition::is_human() const
@@ -572,6 +585,79 @@ bool MonraceDefinition::is_suitable_for_horror_pit() const
     auto is_suitable = this->is_suitable_for_special_room();
     is_suitable &= this->misc_flags.has(MonsterMiscType::ELDRITCH_HORROR);
     is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) || this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_mimic_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->symbol_char_is_any_of("!$&(/=?[\\|][`~>+");
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_dog_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->symbol_char_is_any_of("CZ");
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_chapel_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::EVIL);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_jelly_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) && this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::EVIL);
+    is_suitable &= this->symbol_char_is_any_of("ijm,");
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_animal_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::ANIMAL);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_undead_nest() const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::UNDEAD);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_dragon_nest(const EnumClassFlagGroup<MonsterAbilityType> &dragon_breaths) const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->kind_flags.has(MonsterKindType::DRAGON);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::UNDEAD);
+    auto flags = RF_ABILITY_BREATH_MASK;
+    flags.reset(dragon_breaths);
+    is_suitable &= this->ability_flags.has_none_of(flags) && this->ability_flags.has_all_of(dragon_breaths);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_good_nest(char symbol) const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) || this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::EVIL);
+    is_suitable &= this->symbol_definition.matches_character(symbol);
+    return is_suitable;
+}
+
+bool MonraceDefinition::is_suitable_for_evil_nest(char symbol) const
+{
+    auto is_suitable = this->is_suitable_for_special_room();
+    is_suitable &= this->behavior_flags.has_not(MonsterBehaviorType::KILL_BODY) || this->behavior_flags.has(MonsterBehaviorType::NEVER_BLOW);
+    is_suitable &= this->kind_flags.has_not(MonsterKindType::GOOD);
+    is_suitable &= this->symbol_definition.matches_character(symbol);
     return is_suitable;
 }
 

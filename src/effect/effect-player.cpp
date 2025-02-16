@@ -6,23 +6,18 @@
 
 #include "effect/effect-player.h"
 #include "core/disturbance.h"
-#include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-player-switcher.h"
-#include "effect/effect-player.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-ninja.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
-#include "monster/monster-util.h"
 #include "player-base/player-class.h"
 #include "player-info/samurai-data-type.h"
 #include "player/player-status-flags.h"
-#include "player/special-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
@@ -30,11 +25,8 @@
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
-#include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <string>
 
@@ -86,7 +78,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
     }
 
     auto max_attempts = 10;
-    sound(SOUND_REFLECT);
+    sound(SoundKind::REFLECT);
 
     std::string mes;
     if (player_ptr->effects()->blindness().is_blind()) {
@@ -106,7 +98,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
             const Pos2DVec vec(randint1(3) - 1, randint1(3) - 1);
             pos = monster.get_position() + vec;
             max_attempts--;
-        } while (max_attempts && in_bounds2u(&floor, pos.y, pos.x) && !projectable(player_ptr, player_ptr->get_position(), pos));
+        } while (max_attempts && floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(player_ptr, player_ptr->get_position(), pos));
 
         if (max_attempts < 1) {
             pos = monster.get_position();
@@ -165,7 +157,7 @@ static void describe_effect_source(PlayerType *player_ptr, EffectPlayerType *ep_
     if (ep_ptr->is_monster()) {
         ep_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[ep_ptr->src_idx];
         ep_ptr->rlev = ep_ptr->m_ptr->get_monrace().level >= 1 ? ep_ptr->m_ptr->get_monrace().level : 1;
-        ep_ptr->m_name = monster_desc(player_ptr, ep_ptr->m_ptr, 0);
+        ep_ptr->m_name = monster_desc(player_ptr, *ep_ptr->m_ptr, 0);
         ep_ptr->killer = src_name;
         return;
     }
@@ -218,7 +210,7 @@ bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name
 
     SpellHex(player_ptr).store_vengeful_damage(ep_ptr->get_damage);
     if ((player_ptr->tim_eyeeye || SpellHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && ep_ptr->is_monster()) {
-        const auto m_name_self = monster_desc(player_ptr, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+        const auto m_name_self = monster_desc(player_ptr, *ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_print(_(format("攻撃が%s自身を傷つけた！", ep_ptr->m_name.data()), format("The attack of %s has wounded %s!", ep_ptr->m_name.data(), m_name_self.data())));
         (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL, std::nullopt);
         if (player_ptr->tim_eyeeye) {

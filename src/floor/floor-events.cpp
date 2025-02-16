@@ -5,6 +5,7 @@
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
+#include "floor/dungeon-feeling.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-options.h"
@@ -124,19 +125,18 @@ static int rating_boost(int delta)
 }
 
 /*!
- * @brief ダンジョンの雰囲気を算出する。
- * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
+ * @brief ダンジョンの雰囲気を算出する
+ * @param floor フロアへの参照
  * @return 算出されたダンジョンの雰囲気ランク
  */
-static byte get_dungeon_feeling(PlayerType *player_ptr)
+static int get_dungeon_feeling(const auto &floor)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
     if (!floor.is_underground()) {
         return 0;
     }
 
-    const int base = 10;
-    int rating = 0;
+    const auto base = 10;
+    auto rating = 0;
     for (short i = 1; i < floor.m_max; i++) {
         const auto &monster = floor.m_list[i];
         auto delta = 0;
@@ -154,10 +154,10 @@ static byte get_dungeon_feeling(PlayerType *player_ptr)
         }
 
         if (monrace.misc_flags.has(MonsterMiscType::HAS_FRIENDS)) {
-            if (5 <= get_monster_crowd_number(&floor, i)) {
+            if (5 <= get_monster_crowd_number(floor, i)) {
                 delta += 1;
             }
-        } else if (2 <= get_monster_crowd_number(&floor, i)) {
+        } else if (2 <= get_monster_crowd_number(floor, i)) {
             delta += 1;
         }
 
@@ -288,7 +288,8 @@ void update_dungeon_feeling(PlayerType *player_ptr)
 
     const auto delay = std::max(10, 150 - player_ptr->skill_fos) * (150 - floor.dun_level) * TURNS_PER_TICK / 100;
     const auto &world = AngbandWorld::get_instance();
-    if (world.game_turn < player_ptr->feeling_turn + delay && !cheat_xtra) {
+    auto &df = DungeonFeeling::get_instance();
+    if (world.game_turn < df.get_turns() + delay && !cheat_xtra) {
         return;
     }
 
@@ -297,7 +298,7 @@ void update_dungeon_feeling(PlayerType *player_ptr)
 
     auto dungeon_quest = (quest_id == QuestId::OBERON);
     dungeon_quest |= (quest_id == QuestId::SERPENT);
-    dungeon_quest |= !(quests.get_quest(quest_id).flags & QUEST_FLAG_PRESET);
+    dungeon_quest |= none_bits(quests.get_quest(quest_id).flags, QUEST_FLAG_PRESET);
 
     auto feeling_quest = inside_quest(quest_id);
     feeling_quest &= QuestType::is_fixed(quest_id);
@@ -305,13 +306,14 @@ void update_dungeon_feeling(PlayerType *player_ptr)
     if (feeling_quest) {
         return;
     }
-    byte new_feeling = get_dungeon_feeling(player_ptr);
-    player_ptr->feeling_turn = world.game_turn;
-    if (player_ptr->feeling == new_feeling) {
+
+    const auto new_feeling = get_dungeon_feeling(floor);
+    df.set_turns(world.game_turn);
+    if (df.get_feeling() == new_feeling) {
         return;
     }
 
-    player_ptr->feeling = new_feeling;
+    df.set_feeling(new_feeling);
     do_cmd_feeling(player_ptr);
     select_floor_music(player_ptr);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::DEPTH);
@@ -332,18 +334,19 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
-            const auto &grid = floor.get_grid({ y, x });
+            const Pos2D pos(y, x);
+            const auto &grid = floor.get_grid(pos);
             if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::GLOW)) {
                 continue;
             }
 
-            for (auto i = 0; i < 9; i++) {
-                const Pos2D pos(y + ddy_ddd[i], x + ddx_ddd[i]);
-                if (!in_bounds2(&floor, pos.y, pos.x)) {
+            for (const auto &d : Direction::directions()) {
+                const auto pos_neighbor = pos + d.vec();
+                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
 
-                floor.get_grid(pos).info |= CAVE_GLOW;
+                floor.get_grid(pos_neighbor).info |= CAVE_GLOW;
             }
         }
     }
@@ -361,37 +364,36 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 /*
  * Actually erase the entire "lite" array, redrawing every grid
  */
-void forget_lite(FloorType *floor_ptr)
+void forget_lite(FloorType &floor)
 {
-    if (!floor_ptr->lite_n) {
+    if (!floor.lite_n) {
         return;
     }
 
-    for (int i = 0; i < floor_ptr->lite_n; i++) {
-        POSITION y = floor_ptr->lite_y[i];
-        POSITION x = floor_ptr->lite_x[i];
-        floor_ptr->grid_array[y][x].info &= ~(CAVE_LITE);
+    for (int i = 0; i < floor.lite_n; i++) {
+        POSITION y = floor.lite_y[i];
+        POSITION x = floor.lite_x[i];
+        floor.grid_array[y][x].info &= ~(CAVE_LITE);
     }
 
-    floor_ptr->lite_n = 0;
+    floor.lite_n = 0;
 }
 
 /*
  * Clear the viewable space
  */
-void forget_view(FloorType *floor_ptr)
+void forget_view(FloorType &floor)
 {
-    if (!floor_ptr->view_n) {
+    if (!floor.view_n) {
         return;
     }
 
-    for (int i = 0; i < floor_ptr->view_n; i++) {
-        POSITION y = floor_ptr->view_y[i];
-        POSITION x = floor_ptr->view_x[i];
-        Grid *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
-        g_ptr->info &= ~(CAVE_VIEW);
+    for (int i = 0; i < floor.view_n; i++) {
+        POSITION y = floor.view_y[i];
+        POSITION x = floor.view_x[i];
+        auto &grid = floor.grid_array[y][x];
+        grid.info &= ~(CAVE_VIEW);
     }
 
-    floor_ptr->view_n = 0;
+    floor.view_n = 0;
 }

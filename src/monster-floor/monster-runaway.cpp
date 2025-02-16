@@ -42,7 +42,7 @@ static bool is_acting_monster(const MonraceId r_idx)
  * @param m_ptr モンスターへの参照ポインタ
  * @param m_name モンスター名称
  */
-static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MonsterEntity *m_ptr, concptr m_name)
+static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, const MonsterEntity &monster, concptr m_name)
 {
     if (turn_flags_ptr->is_riding_mon) {
         msg_format(_("%sはあなたの束縛から脱出した。", "%s^ succeeded to escape from your restriction!"), m_name);
@@ -58,9 +58,9 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
             MonsterSpeakType::SPEAK_FEAR,
         };
 
-        auto speak = m_ptr->get_monrace().speak_flags.has_any_of(flags);
-        speak &= !is_acting_monster(m_ptr->r_idx);
-        const auto m_pos = m_ptr->get_position();
+        auto speak = monster.get_monrace().speak_flags.has_any_of(flags);
+        speak &= !is_acting_monster(monster.r_idx);
+        const auto m_pos = monster.get_position();
         speak &= player_ptr->current_floor_ptr->has_los(m_pos);
         speak &= projectable(player_ptr, m_pos, player_ptr->get_position());
         if (speak) {
@@ -86,10 +86,10 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
  */
 bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx)
 {
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
-    auto *r_ptr = &m_ptr->get_monrace();
-    bool can_runaway = m_ptr->is_pet() || m_ptr->is_friendly();
-    can_runaway &= (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) || (r_ptr->population_flags.has(MonsterPopulationType::NAZGUL));
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
+    bool can_runaway = monster.is_pet() || monster.is_friendly();
+    can_runaway &= (monrace.kind_flags.has(MonsterKindType::UNIQUE)) || (monrace.population_flags.has(MonsterPopulationType::NAZGUL));
     can_runaway &= !AngbandSystem::get_instance().is_phase_out();
     if (!can_runaway) {
         return false;
@@ -97,7 +97,7 @@ bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER
 
     static int riding_pinch = 0;
 
-    if (m_ptr->hp >= m_ptr->maxhp / 3) {
+    if (monster.hp >= monster.maxhp / 3) {
         /* Reset the counter */
         if (turn_flags_ptr->is_riding_mon) {
             riding_pinch = 0;
@@ -106,7 +106,7 @@ bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER
         return false;
     }
 
-    const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
     if (turn_flags_ptr->is_riding_mon && riding_pinch < 2) {
         msg_format(
             _("%sは傷の痛さの余りあなたの束縛から逃れようとしている。", "%s^ seems to be in so much pain and tries to escape from your restriction."), m_name.data());
@@ -115,8 +115,8 @@ bool runaway_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MONSTER
         return false;
     }
 
-    escape_monster(player_ptr, turn_flags_ptr, m_ptr, m_name.data());
-    QuestCompletionChecker(player_ptr, m_ptr).complete();
+    escape_monster(player_ptr, turn_flags_ptr, monster, m_name.data());
+    QuestCompletionChecker(player_ptr, monster).complete();
     delete_monster_idx(player_ptr, m_idx);
     return true;
 }

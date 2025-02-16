@@ -1,5 +1,5 @@
 #include "load/world-loader.h"
-#include "floor/wild.h"
+#include "floor/dungeon-feeling.h"
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "load/load-zangband.h"
@@ -11,6 +11,7 @@
 #include "system/dungeon/dungeon-record.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/wilderness-grid.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
@@ -102,11 +103,13 @@ static void rd_world_info(PlayerType *player_ptr)
     igd.init_turn_limit();
     auto &world = AngbandWorld::get_instance();
     world.dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-    player_ptr->current_floor_ptr->generated_turn = rd_s32b();
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.generated_turn = rd_s32b();
+    auto &df = DungeonFeeling::get_instance();
     if (h_older_than(1, 7, 0, 4)) {
-        player_ptr->feeling_turn = player_ptr->current_floor_ptr->generated_turn;
+        df.set_feeling(floor.generated_turn);
     } else {
-        player_ptr->feeling_turn = rd_s32b();
+        df.set_feeling(rd_s32b());
     }
 
     world.game_turn = rd_s32b();
@@ -154,25 +157,25 @@ void rd_global_configurations(PlayerType *player_ptr)
     auto &system = AngbandSystem::get_instance();
     system.set_seed_flavor(rd_u32b());
     system.set_seed_town(rd_u32b());
-
-    player_ptr->panic_save = rd_u16b();
+    system.set_panic_save(rd_u16b() > 0);
     auto &world = AngbandWorld::get_instance();
     world.total_winner = rd_u16b();
     world.noscore = rd_u16b();
 
     player_ptr->is_dead = rd_bool();
 
-    player_ptr->feeling = rd_byte();
+    DungeonFeeling::get_instance().set_feeling(rd_byte());
     rd_world_info(player_ptr);
 }
 
 void load_wilderness_info(PlayerType *player_ptr)
 {
-    player_ptr->wilderness_x = rd_s32b();
-    player_ptr->wilderness_y = rd_s32b();
+    const auto x = rd_s32b();
+    const auto y = rd_s32b();
+    auto &wilderness = WildernessGrids::get_instance();
+    wilderness.set_player_position({ y, x });
     if (h_older_than(0, 3, 13)) {
-        player_ptr->wilderness_x = 5;
-        player_ptr->wilderness_y = 48;
+        wilderness.initialize_position();
     }
 
     auto &world = AngbandWorld::get_instance();
@@ -193,15 +196,16 @@ errr analyze_wilderness(void)
 {
     const auto wild_x_size = rd_s32b();
     const auto wild_y_size = rd_s32b();
-    auto &world = AngbandWorld::get_instance();
-    if ((wild_x_size > world.max_wild_x) || (wild_y_size > world.max_wild_y)) {
-        load_note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
+    auto &wilderness = WildernessGrids::get_instance();
+    const auto &area = wilderness.get_area();
+    if ((wild_y_size > area.height()) || (wild_x_size > area.width())) {
+        load_note(format(_("荒野が大きすぎる(%d/%d)！", "Wilderness is too big (%d/%d)!"), wild_x_size, wild_y_size));
         return 23;
     }
 
-    for (int i = 0; i < wild_x_size; i++) {
-        for (int j = 0; j < wild_y_size; j++) {
-            wilderness[j][i].seed = rd_u32b();
+    for (auto x = 0; x < wild_x_size; x++) {
+        for (auto y = 0; y < wild_y_size; y++) {
+            wilderness.get_grid({ y, x }).set_seed(rd_u32b());
         }
     }
 

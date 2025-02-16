@@ -17,17 +17,12 @@
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
 #include "util/flag-group.h"
-#include <array>
+#include "util/point-2d.h"
+#include "util/probability-table.h"
 #include <optional>
 #include <string>
 #include <utility>
 #include <vector>
-
-constexpr auto DUNGEON_FEAT_PROB_NUM = 3;
-
-enum class FixedArtifactId : short;
-enum class MonraceId : short;
-enum class MonsterSex;
 
 enum class DungeonMode {
     AND = 1,
@@ -36,12 +31,11 @@ enum class DungeonMode {
     NOR = 4,
 };
 
-struct feat_prob {
-    FEAT_IDX feat{}; /* Feature tile */
-    PERCENTAGE percent{}; /* Chance of type */
-};
-
 /* A structure for the != dungeon types */
+enum class DoorKind;
+enum class FixedArtifactId : short;
+enum class MonraceId : short;
+enum class MonsterSex;
 enum class TerrainCharacteristics;
 enum class TerrainTag;
 class MonraceDefinition;
@@ -50,13 +44,10 @@ public:
     std::string name; /* Name */
     std::string text; /* Description */
 
-    POSITION dy{};
-    POSITION dx{};
-
-    std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> floor{}; /* Floor probability */
-    std::array<feat_prob, DUNGEON_FEAT_PROB_NUM> fill{}; /* Cave wall probability */
-    FEAT_IDX outer_wall{}; /* Outer wall tile */
-    FEAT_IDX inner_wall{}; /* Inner wall tile */
+    ProbabilityTable<short> prob_table_floor{}; /* Floor probability */
+    ProbabilityTable<short> prob_table_wall{}; /* Cave wall probability */
+    short outer_wall{}; /* 外壁の地形ID */
+    short inner_wall{}; /* 内壁の地形ID */
     FEAT_IDX stream1{}; /* stream tile */
     FEAT_IDX stream2{}; /* stream tile */
 
@@ -99,7 +90,6 @@ public:
 
     bool has_river_flag() const;
     bool has_guardian() const;
-    MonraceDefinition &get_guardian();
     const MonraceDefinition &get_guardian() const;
     short convert_terrain_id(short terrain_id, TerrainCharacteristics action) const;
     short convert_terrain_id(short terrain_id) const;
@@ -109,6 +99,18 @@ public:
     std::string describe_depth() const;
     int calc_cavern_terrains() const;
     std::optional<std::pair<TerrainTag, TerrainTag>> decide_river_terrains(int threshold) const;
+    DoorKind select_door_kind() const;
+    short select_floor_terrain_id() const;
+    short select_wall_terrain_id() const;
+    const Pos2D &get_position() const;
 
+    void initialize_position(const Pos2D &pos_tokens);
+
+    //!< @details ここから下は、地形など全ての定義ファイルを読み込んだ後に呼び出される初期化処理.
     void set_guardian_flag();
+
+private:
+    Pos2D pos = { 0, 0 };
+
+    MonraceDefinition &get_guardian();
 };

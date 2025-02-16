@@ -28,16 +28,16 @@
 /*!
  * @brief モンスターがカオス属性へ耐性を示すかどうか
  */
-static bool monster_has_chaos_resist(PlayerType *player_ptr, MonsterEntity *m_ptr)
+static bool monster_has_chaos_resist(PlayerType *player_ptr, const MonsterEntity &monster)
 {
-    auto &monrace = m_ptr->get_monrace();
+    auto &monrace = monster.get_monrace();
     if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_CHAOS)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_resistance_flags.set(MonsterResistanceType::RESIST_CHAOS);
         }
         return true;
     } else if (monrace.kind_flags.has(MonsterKindType::DEMON) && one_in_(3)) {
-        if (is_original_ap_and_seen(player_ptr, m_ptr)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
             monrace.r_kind_flags.set(MonsterKindType::DEMON);
         }
         return true;
@@ -275,7 +275,7 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
         mam_ptr->pt = AttributeType::HUNGRY;
         break;
     case RaceBlowEffectType::CHAOS: {
-        const auto has_resist = monster_has_chaos_resist(player_ptr, mam_ptr->t_ptr);
+        const auto has_resist = monster_has_chaos_resist(player_ptr, *mam_ptr->t_ptr);
         if (has_resist) {
             mam_ptr->damage *= 3;
             mam_ptr->damage /= randint1(6) + 6;
@@ -287,8 +287,8 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
             break;
         }
         if (one_in_(250)) {
-            const auto *floor_ptr = player_ptr->current_floor_ptr;
-            if (floor_ptr->is_underground() && (!floor_ptr->is_in_quest() || !QuestType::is_fixed(floor_ptr->quest_number))) {
+            const auto &floor = *player_ptr->current_floor_ptr;
+            if (floor.is_underground() && (!floor.is_in_quest() || !QuestType::is_fixed(floor.quest_number))) {
                 if (mam_ptr->damage > 23) {
                     msg_print(_("カオスの力でダンジョンが崩れ始める！", "The dungeon tumbles by the chaotic power!"));
                     earthquake(player_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);

@@ -3,6 +3,7 @@
 #include "system/angband.h"
 #include <cstddef>
 #include <filesystem>
+#include <functional>
 #include <initializer_list>
 #include <optional>
 #include <string>

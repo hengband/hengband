@@ -1,10 +1,7 @@
 #include "grid/feature-generator.h"
 #include "dungeon/dungeon-flag-mask.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/dungeon-tunnel-util.h"
-#include "floor/geometry.h"
 #include "game-option/cheat-types.h"
 #include "game-option/game-play-options.h"
 #include "grid/door.h"
@@ -33,19 +30,19 @@ static bool decide_cavern(const FloorType &floor, const DungeonDefinition &dunge
 /*!
  * @brief フロアに破壊地形、洞窟、湖、溶岩、森林等を配置する.
  */
-void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_ptr, DungeonData *dd_ptr)
+void gen_caverns_and_lakes(PlayerType *player_ptr, const DungeonDefinition &dungeon, DungeonData *dd_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     constexpr auto chance_destroyed = 18;
-    if ((floor.dun_level > 30) && one_in_(chance_destroyed * 2) && small_levels && dungeon_ptr->flags.has(DungeonFeatureType::DESTROY)) {
+    if ((floor.dun_level > 30) && one_in_(chance_destroyed * 2) && small_levels && dungeon.flags.has(DungeonFeatureType::DESTROY)) {
         dd_ptr->destroyed = true;
         build_lake(player_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
     }
 
     constexpr auto chance_water = 24;
-    if (one_in_(chance_water) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon_ptr->flags.has_any_of(DF_LAKE_MASK)) {
-        auto count = dungeon_ptr->calc_cavern_terrains();
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_LAVA)) {
+    if (one_in_(chance_water) && !dd_ptr->empty_level && !dd_ptr->destroyed && dungeon.flags.has_any_of(DF_LAKE_MASK)) {
+        auto count = dungeon.calc_cavern_terrains();
+        if (dungeon.flags.has(DungeonFeatureType::LAKE_LAVA)) {
             if ((floor.dun_level > 80) && (randint0(count) < 2)) {
                 dd_ptr->laketype = LAKE_T_LAVA;
             }
@@ -58,7 +55,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
             count--;
         }
 
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_WATER) && !dd_ptr->laketype) {
+        if (dungeon.flags.has(DungeonFeatureType::LAKE_WATER) && !dd_ptr->laketype) {
             if ((floor.dun_level > 50) && randint0(count) < 2) {
                 dd_ptr->laketype = LAKE_T_WATER;
             }
@@ -71,7 +68,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
             count--;
         }
 
-        if (dungeon_ptr->flags.has(DungeonFeatureType::LAKE_RUBBLE) && !dd_ptr->laketype) {
+        if (dungeon.flags.has(DungeonFeatureType::LAKE_RUBBLE) && !dd_ptr->laketype) {
             if ((floor.dun_level > 35) && (randint0(count) < 2)) {
                 dd_ptr->laketype = LAKE_T_CAVE;
             }
@@ -84,7 +81,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
             count--;
         }
 
-        if ((floor.dun_level > 5) && dungeon_ptr->flags.has(DungeonFeatureType::LAKE_TREE) && !dd_ptr->laketype) {
+        if ((floor.dun_level > 5) && dungeon.flags.has(DungeonFeatureType::LAKE_TREE) && !dd_ptr->laketype) {
             dd_ptr->laketype = LAKE_T_AIR_VAULT;
         }
 
@@ -94,7 +91,7 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
         }
     }
 
-    const auto should_build_cavern = decide_cavern(floor, *dungeon_ptr, *dd_ptr);
+    const auto should_build_cavern = decide_cavern(floor, dungeon, *dd_ptr);
     if (should_build_cavern) {
         dd_ptr->cavern = true;
         msg_print_wizard(player_ptr, CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
@@ -117,15 +114,13 @@ void gen_caverns_and_lakes(PlayerType *player_ptr, DungeonDefinition *dungeon_pt
  * grids which are not in rooms.  We might want to also count stairs,\n
  * open doors, closed doors, etc.
  */
-static int next_to_corr(FloorType *floor_ptr, POSITION y1, POSITION x1)
+static int next_to_corr(const FloorType &floor, POSITION y1, POSITION x1)
 {
     int k = 0;
-    for (int i = 0; i < 4; i++) {
-        POSITION y = y1 + ddy_ddd[i];
-        POSITION x = x1 + ddx_ddd[i];
-        Grid *g_ptr;
-        g_ptr = &floor_ptr->grid_array[y][x];
-        if (g_ptr->has(TerrainCharacteristics::WALL) || !g_ptr->is_floor() || g_ptr->is_room()) {
+    for (const auto &d : Direction::directions_4()) {
+        const auto pos = Pos2D(y1, x1) + d.vec();
+        const auto &grid = floor.get_grid(pos);
+        if (grid.has(TerrainCharacteristics::WALL) || !grid.is_floor() || grid.is_room()) {
             continue;
         }
 
@@ -142,18 +137,18 @@ static int next_to_corr(FloorType *floor_ptr, POSITION y1, POSITION x1)
  * @return ドアを設置可能ならばTRUEを返す
  * @details まず垂直方向に、次に水平方向に調べる
  */
-static bool possible_doorway(FloorType *floor_ptr, POSITION y, POSITION x)
+static bool possible_doorway(const FloorType &floor, POSITION y, POSITION x)
 {
-    if (next_to_corr(floor_ptr, y, x) < 2) {
+    if (next_to_corr(floor, y, x) < 2) {
         return false;
     }
 
     constexpr auto wall = TerrainCharacteristics::WALL;
-    if (floor_ptr->has_terrain_characteristics({ y - 1, x }, wall) && floor_ptr->has_terrain_characteristics({ y + 1, x }, wall)) {
+    if (floor.has_terrain_characteristics({ y - 1, x }, wall) && floor.has_terrain_characteristics({ y + 1, x }, wall)) {
         return true;
     }
 
-    if (floor_ptr->has_terrain_characteristics({ y, x - 1 }, wall) && floor_ptr->has_terrain_characteristics({ y, x + 1 }, wall)) {
+    if (floor.has_terrain_characteristics({ y, x - 1 }, wall) && floor.has_terrain_characteristics({ y, x + 1 }, wall)) {
         return true;
     }
 
@@ -161,23 +156,21 @@ static bool possible_doorway(FloorType *floor_ptr, POSITION y, POSITION x)
 }
 
 /*!
- * @brief ドアの設置を試みる / Places door at y, x position if at least 2 walls found
+ * @brief ドアの設置を試みる
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 設置を行いたいマスのY座標
- * @param x 設置を行いたいマスのX座標
+ * @param pos 設置を行いたいマスの座標
  */
-void try_door(PlayerType *player_ptr, dt_type *dt_ptr, POSITION y, POSITION x)
+void try_door(PlayerType *player_ptr, dt_type *dt_ptr, const Pos2D &pos)
 {
-    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds(&floor, y, x) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
+    if (!floor.contains(pos) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
         return;
     }
 
     auto can_place_door = evaluate_percent(dt_ptr->dun_tun_jct);
-    can_place_door &= possible_doorway(&floor, y, x);
+    can_place_door &= possible_doorway(floor, pos.y, pos.x);
     can_place_door &= floor.get_dungeon_definition().flags.has_not(DungeonFeatureType::NO_DOORS);
     if (can_place_door) {
-        place_random_door(player_ptr, y, x, false);
+        place_random_door(player_ptr, pos, false);
     }
 }

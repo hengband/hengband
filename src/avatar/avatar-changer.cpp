@@ -21,9 +21,9 @@
 /*!
  * @brief AvaterChangerコンストラクタ
  */
-AvatarChanger::AvatarChanger(PlayerType *player_ptr, MonsterEntity *m_ptr)
+AvatarChanger::AvatarChanger(PlayerType *player_ptr, const MonsterEntity &monster)
     : player_ptr(player_ptr)
-    , m_ptr(m_ptr)
+    , m_ptr(&monster)
 {
 }
 
@@ -35,7 +35,7 @@ void AvatarChanger::change_virtue()
     this->change_virtue_non_beginner();
     this->change_virtue_unique();
     const auto &r_ref = this->m_ptr->get_real_monrace();
-    if (m_ptr->r_idx == MonraceId::BEGGAR || m_ptr->r_idx == MonraceId::LEPER) {
+    if (this->m_ptr->r_idx == MonraceId::BEGGAR || this->m_ptr->r_idx == MonraceId::LEPER) {
         chg_virtue(this->player_ptr, Virtue::COMPASSION, -1);
     }
 
@@ -86,16 +86,16 @@ void AvatarChanger::change_virtue_non_beginner()
  */
 void AvatarChanger::change_virtue_unique()
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->kind_flags.has_not(MonsterKindType::UNIQUE)) {
+    const auto &monrace = this->m_ptr->get_monrace();
+    if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
 
-    if (r_ptr->kind_flags.has_any_of(alignment_mask)) {
+    if (monrace.kind_flags.has_any_of(alignment_mask)) {
         chg_virtue(this->player_ptr, Virtue::HARMONY, 2);
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::GOOD)) {
+    if (monrace.kind_flags.has(MonsterKindType::GOOD)) {
         chg_virtue(this->player_ptr, Virtue::UNLIFE, 2);
         chg_virtue(this->player_ptr, Virtue::VITALITY, -2);
     }
@@ -111,27 +111,27 @@ void AvatarChanger::change_virtue_unique()
  */
 void AvatarChanger::change_virtue_good_evil()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->kind_flags.has(MonsterKindType::GOOD) && ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100))) {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monrace = this->m_ptr->get_monrace();
+    if (monrace.kind_flags.has(MonsterKindType::GOOD) && ((monrace.level) / 10 + (3 * floor.dun_level) >= randint1(100))) {
         chg_virtue(this->player_ptr, Virtue::UNLIFE, 1);
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::ANGEL)) {
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has(MonsterKindType::ANGEL)) {
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(this->player_ptr, Virtue::FAITH, -2);
-        } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
-            auto change_value = r_ptr->kind_flags.has(MonsterKindType::GOOD) ? -1 : 1;
+        } else if ((monrace.level) / 10 + (3 * floor.dun_level) >= randint1(100)) {
+            auto change_value = monrace.kind_flags.has(MonsterKindType::GOOD) ? -1 : 1;
             chg_virtue(this->player_ptr, Virtue::FAITH, change_value);
         }
 
         return;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::DEMON)) {
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has(MonsterKindType::DEMON)) {
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(this->player_ptr, Virtue::FAITH, 2);
-        } else if ((r_ptr->level) / 10 + (3 * floor_ptr->dun_level) >= randint1(100)) {
+        } else if ((monrace.level) / 10 + (3 * floor.dun_level) >= randint1(100)) {
             chg_virtue(this->player_ptr, Virtue::FAITH, 1);
         }
     }
@@ -142,18 +142,18 @@ void AvatarChanger::change_virtue_good_evil()
  */
 void AvatarChanger::change_virtue_revenge()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
-    if (r_ptr->r_deaths == 0) {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monrace = this->m_ptr->get_monrace();
+    if (monrace.r_deaths == 0) {
         return;
     }
 
-    if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+    if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         chg_virtue(this->player_ptr, Virtue::HONOUR, 10);
         return;
     }
 
-    if ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level) >= randint1(100)) {
+    if ((monrace.level) / 10 + (2 * floor.dun_level) >= randint1(100)) {
         chg_virtue(this->player_ptr, Virtue::HONOUR, 1);
     }
 }
@@ -163,11 +163,11 @@ void AvatarChanger::change_virtue_revenge()
  */
 void AvatarChanger::change_virtue_wild_thief()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &monrace = this->m_ptr->get_monrace();
     auto innocent = true;
     auto thief = false;
-    for (const auto &blow : r_ptr->blows) {
+    for (const auto &blow : monrace.blows) {
         if (blow.damage_dice.num != 0) {
             innocent = false;
         }
@@ -177,17 +177,17 @@ void AvatarChanger::change_virtue_wild_thief()
         }
     }
 
-    if (r_ptr->level > 0) {
+    if (monrace.level > 0) {
         innocent = false;
     }
 
     if (thief) {
-        if (r_ptr->kind_flags.has(MonsterKindType::UNIQUE)) {
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
             chg_virtue(this->player_ptr, Virtue::JUSTICE, 3);
             return;
         }
 
-        if (1 + ((r_ptr->level) / 10 + (2 * floor_ptr->dun_level)) >= randint1(100)) {
+        if (1 + ((monrace.level) / 10 + (2 * floor.dun_level)) >= randint1(100)) {
             chg_virtue(this->player_ptr, Virtue::JUSTICE, 1);
         }
 
@@ -204,10 +204,10 @@ void AvatarChanger::change_virtue_wild_thief()
  */
 void AvatarChanger::change_virtue_good_animal()
 {
-    auto *r_ptr = &m_ptr->get_monrace();
-    auto magic_ability_flags = r_ptr->ability_flags;
+    const auto &monrace = this->m_ptr->get_monrace();
+    auto magic_ability_flags = monrace.ability_flags;
     magic_ability_flags.reset(RF_ABILITY_NOMAGIC_MASK);
-    if (r_ptr->kind_flags.has_not(MonsterKindType::ANIMAL) || r_ptr->kind_flags.has(MonsterKindType::EVIL) || magic_ability_flags.any()) {
+    if (monrace.kind_flags.has_not(MonsterKindType::ANIMAL) || monrace.kind_flags.has(MonsterKindType::EVIL) || magic_ability_flags.any()) {
         return;
     }
 

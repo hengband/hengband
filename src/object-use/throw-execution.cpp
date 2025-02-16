@@ -133,14 +133,15 @@ bool ObjectThrowEntity::calc_throw_grid()
     }
 
     project_length = this->tdis + 1;
-    DIRECTION dir;
-    if (!get_aim_dir(this->player_ptr, &dir)) {
+    const auto dir = get_aim_dir(this->player_ptr);
+    if (!dir) {
         return false;
     }
 
-    this->tx = this->player_ptr->x + 99 * ddx[dir];
-    this->ty = this->player_ptr->y + 99 * ddy[dir];
-    if ((dir == 5) && target_okay(this->player_ptr)) {
+    const auto vec = dir.vec();
+    this->tx = this->player_ptr->x + 99 * vec.x;
+    this->ty = this->player_ptr->y + 99 * vec.y;
+    if (dir.is_targetting() && target_okay(this->player_ptr)) {
         this->tx = target_col;
         this->ty = target_row;
     }
@@ -213,9 +214,9 @@ void ObjectThrowEntity::exe_throw()
             continue;
         }
 
-        auto *floor_ptr = this->player_ptr->current_floor_ptr;
-        this->g_ptr = &floor_ptr->grid_array[this->y][this->x];
-        this->m_ptr = &floor_ptr->m_list[this->g_ptr->m_idx];
+        auto &floor = *this->player_ptr->current_floor_ptr;
+        this->g_ptr = &floor.grid_array[this->y][this->x];
+        this->m_ptr = &floor.m_list[this->g_ptr->m_idx];
         this->m_name = monster_name(this->player_ptr, this->g_ptr->m_idx);
         this->visible = this->m_ptr->ml;
         this->hit_body = true;
@@ -254,23 +255,18 @@ void ObjectThrowEntity::display_potion_throw()
     }
 
     msg_format(_("%sは砕け散った！", "The %s shatters!"), this->o_name.data());
-    if (!potion_smash_effect(this->player_ptr, 0, this->y, this->x, this->q_ptr->bi_id)) {
-        this->do_drop = false;
-        return;
-    }
-
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    auto *angry_m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[this->y][this->x].m_idx];
-    if (!floor_ptr->grid_array[this->y][this->x].has_monster() || !angry_m_ptr->is_friendly() || angry_m_ptr->is_invulnerable()) {
-        this->do_drop = false;
-        return;
-    }
-
-    const auto angry_m_name = monster_desc(this->player_ptr, angry_m_ptr, 0);
-    msg_format(_("%sは怒った！", "%s^ gets angry!"), angry_m_name.data());
-    const auto &grid = floor_ptr->get_grid({ this->y, this->x });
-    floor_ptr->m_list[grid.m_idx].set_hostile();
     this->do_drop = false;
+    if (!potion_smash_effect(this->player_ptr, 0, this->y, this->x, this->q_ptr->bi_id)) {
+        return;
+    }
+
+    if (!this->g_ptr->has_monster() || !this->m_ptr->is_friendly() || this->m_ptr->is_invulnerable()) {
+        return;
+    }
+
+    const auto angry_m_name = monster_desc(this->player_ptr, *this->m_ptr, 0);
+    msg_format(_("%sは怒った！", "%s^ gets angry!"), angry_m_name.data());
+    this->m_ptr->set_hostile();
 }
 
 void ObjectThrowEntity::check_boomerang_throw()
@@ -334,7 +330,7 @@ void ObjectThrowEntity::drop_thrown_item()
     const auto has_terrain_projection = floor.has_terrain_characteristics({ this->y, this->x }, TerrainCharacteristics::PROJECT);
     const auto drop_y = has_terrain_projection ? this->y : this->prev_y;
     const auto drop_x = has_terrain_projection ? this->x : this->prev_x;
-    (void)drop_near(this->player_ptr, this->q_ptr, this->corruption_possibility, drop_y, drop_x);
+    (void)drop_near(this->player_ptr, this->q_ptr, { drop_y, drop_x }, this->corruption_possibility);
 }
 
 bool ObjectThrowEntity::check_what_throw()
@@ -391,14 +387,14 @@ bool ObjectThrowEntity::check_racial_target_bold()
     const auto pos = mmove2({ this->y, this->x }, this->player_ptr->get_position(), { this->ty, this->tx });
     this->ny[this->cur_dis] = pos.y;
     this->nx[this->cur_dis] = pos.x;
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
-    if (floor_ptr->has_terrain_characteristics({ this->ny[this->cur_dis], this->nx[this->cur_dis] }, TerrainCharacteristics::PROJECT)) {
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    if (floor.has_terrain_characteristics({ this->ny[this->cur_dis], this->nx[this->cur_dis] }, TerrainCharacteristics::PROJECT)) {
         return false;
     }
 
     this->hit_wall = true;
     const auto is_figurine = this->q_ptr->bi_key.tval() == ItemKindType::FIGURINE;
-    return is_figurine || this->q_ptr->is_potion() || (floor_ptr->grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
+    return is_figurine || this->q_ptr->is_potion() || (floor.grid_array[this->ny[this->cur_dis]][this->nx[this->cur_dis]].m_idx == 0);
 }
 
 void ObjectThrowEntity::check_racial_target_seen()
@@ -433,7 +429,7 @@ bool ObjectThrowEntity::check_racial_target_monster()
 
 void ObjectThrowEntity::attack_racial_power()
 {
-    if (!test_hit_fire(this->player_ptr, this->chance - this->cur_dis, this->m_ptr, this->m_ptr->ml, this->o_name)) {
+    if (!test_hit_fire(this->player_ptr, this->chance - this->cur_dis, *this->m_ptr, this->m_ptr->ml, this->o_name)) {
         return;
     }
 
@@ -459,11 +455,11 @@ void ObjectThrowEntity::attack_racial_power()
     }
 
     if ((this->tdam > 0) && !this->q_ptr->is_potion()) {
-        anger_monster(this->player_ptr, this->m_ptr);
+        anger_monster(this->player_ptr, *this->m_ptr);
     }
 
     if (fear && this->m_ptr->ml) {
-        sound(SOUND_FLEE);
+        sound(SoundKind::FLEE);
         msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), this->m_name.data());
     }
 }
@@ -491,7 +487,7 @@ void ObjectThrowEntity::calc_racial_power_damage()
 {
     const auto damage_dice = is_active_torch(this->o_ptr) ? Dice(1, 6) : this->q_ptr->damage_dice;
     this->tdam = damage_dice.roll();
-    this->tdam = calc_attack_damage_with_slay(this->player_ptr, this->q_ptr, this->tdam, this->m_ptr, HISSATSU_NONE, true);
+    this->tdam = calc_attack_damage_with_slay(this->player_ptr, this->q_ptr, this->tdam, *this->m_ptr, HISSATSU_NONE, true);
     this->tdam = critical_shot(this->player_ptr, this->q_ptr->weight, this->q_ptr->to_h, 0, this->tdam);
     this->tdam += (this->q_ptr->to_d > 0 ? 1 : -1) * this->q_ptr->to_d;
     if (this->boomerang) {
@@ -512,7 +508,7 @@ void ObjectThrowEntity::calc_racial_power_damage()
         this->tdam = 0;
     }
 
-    this->tdam = mon_damage_mod(this->player_ptr, this->m_ptr, this->tdam, false);
+    this->tdam = mon_damage_mod(this->player_ptr, *this->m_ptr, this->tdam, false);
 }
 
 void ObjectThrowEntity::process_boomerang_throw()

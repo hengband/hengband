@@ -86,7 +86,6 @@
 
 bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command)
 {
-    DIRECTION dir = 0;
     switch (player_ptr->pclass) {
     case PlayerClassType::WARRIOR:
         return sword_dancing(player_ptr);
@@ -120,13 +119,15 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
         msg_print(_("敵を調査した...", "You examine your foes..."));
         probing(player_ptr);
         return true;
-    case PlayerClassType::PALADIN:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    case PlayerClassType::PALADIN: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
         fire_beam(player_ptr, PlayerRealm(player_ptr).realm1().is_good_attribute() ? AttributeType::HOLY_FIRE : AttributeType::HELL_FIRE, dir, player_ptr->lev * 3);
         return true;
+    }
     case PlayerClassType::WARRIOR_MAGE:
         if (command == -3) {
             return comvert_hp_to_mp(player_ptr);
@@ -167,7 +168,8 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
         return clear_mind(player_ptr);
     case PlayerClassType::TOURIST:
         if (command == -3) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return false;
             }
 
@@ -182,7 +184,8 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
         return do_cmd_mane(player_ptr, true);
     case PlayerClassType::BEASTMASTER:
         if (command == -3) {
-            if (!get_aim_dir(player_ptr, &dir)) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
                 return false;
             }
 
@@ -223,7 +226,7 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
 
         if (!player_ptr->effects()->paralysis().is_paralyzed() && !cmd_limit_cast(player_ptr)) {
             handle_stuff(player_ptr);
-            command_dir = 0;
+            command_dir = Direction::none();
             (void)do_cmd_cast(player_ptr);
         }
         return true;
@@ -307,7 +310,6 @@ bool switch_mimic_racial_execution(PlayerType *player_ptr)
 
 bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
 {
-    DIRECTION dir = 0;
     switch (player_ptr->prace) {
     case PlayerRaceType::DWARF:
         msg_print(_("周囲を調べた。", "You examine your surroundings."));
@@ -353,27 +355,32 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         msg_print(_("爆発のルーンを慎重に仕掛けた...", "You carefully set an explosive rune..."));
         (void)create_rune_explosion(player_ptr, player_ptr->y, player_ptr->x);
         return true;
-    case PlayerRaceType::HALF_GIANT:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    case PlayerRaceType::HALF_GIANT: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
         (void)wall_to_mud(player_ptr, dir, 20 + randint1(30));
         return true;
+    }
     case PlayerRaceType::HALF_TITAN:
         msg_print(_("敵を調査した...", "You examine your foes..."));
         (void)probing(player_ptr);
         return true;
-    case PlayerRaceType::CYCLOPS:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    case PlayerRaceType::CYCLOPS: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
         msg_print(_("巨大な岩を投げた。", "You throw a huge boulder."));
         (void)fire_bolt(player_ptr, AttributeType::MISSILE, dir, (3 * player_ptr->lev) / 2);
         return true;
-    case PlayerRaceType::YEEK:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    }
+    case PlayerRaceType::YEEK: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -381,8 +388,10 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         msg_print(_("身の毛もよだつ叫び声を上げた！", "You make a horrible scream!"));
         (void)fear_monster(player_ptr, dir, player_ptr->lev);
         return true;
-    case PlayerRaceType::KLACKON:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    }
+    case PlayerRaceType::KLACKON: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -395,40 +404,48 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         }
 
         return true;
-    case PlayerRaceType::KOBOLD:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    }
+    case PlayerRaceType::KOBOLD: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
         msg_print(_("毒のダーツを投げた。", "You throw a poisoned dart."));
         (void)fire_bolt(player_ptr, AttributeType::POIS, dir, player_ptr->lev);
         return true;
+    }
     case PlayerRaceType::NIBELUNG:
         msg_print(_("周囲を調査した。", "You examine your surroundings."));
         (void)detect_traps(player_ptr, DETECT_RAD_DEFAULT, true);
         (void)detect_doors(player_ptr, DETECT_RAD_DEFAULT);
         (void)detect_stairs(player_ptr, DETECT_RAD_DEFAULT);
         return true;
-    case PlayerRaceType::DARK_ELF:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    case PlayerRaceType::DARK_ELF: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
         msg_print(_("マジック・ミサイルを放った。", "You cast a magic missile."));
         (void)fire_bolt_or_beam(player_ptr, 10, AttributeType::MISSILE, dir, Dice::roll(3 + ((player_ptr->lev - 1) / 5), 4));
         return true;
+    }
     case PlayerRaceType::DRACONIAN:
         return draconian_breath(player_ptr);
-    case PlayerRaceType::MIND_FLAYER:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    case PlayerRaceType::MIND_FLAYER: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
         msg_print(_("あなたは集中し、目が赤く輝いた...", "You concentrate and your eyes glow red..."));
         (void)fire_bolt(player_ptr, AttributeType::PSI, dir, player_ptr->lev);
         return true;
-    case PlayerRaceType::IMP:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    }
+    case PlayerRaceType::IMP: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -441,6 +458,7 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         }
 
         return true;
+    }
     case PlayerRaceType::GOLEM:
         (void)set_shield(player_ptr, randint1(20) + 30, false);
         return true;
@@ -452,8 +470,9 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
     case PlayerRaceType::VAMPIRE:
         (void)vampirism(player_ptr);
         return true;
-    case PlayerRaceType::SPECTRE:
-        if (!get_aim_dir(player_ptr, &dir)) {
+    case PlayerRaceType::SPECTRE: {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -461,6 +480,7 @@ bool switch_race_racial_execution(PlayerType *player_ptr, const int32_t command)
         msg_print(_("あなたはおどろおどろしい叫び声をあげた！", "You emit an eldritch howl!"));
         (void)fear_monster(player_ptr, dir, player_ptr->lev);
         return true;
+    }
     case PlayerRaceType::SPRITE:
         msg_print(_("あなたは魔法の粉を投げつけた...", "You throw some magic dust..."));
         if (player_ptr->lev < 25) {

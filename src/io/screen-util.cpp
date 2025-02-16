@@ -17,7 +17,6 @@
 #include "effect/spells-effect-util.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"

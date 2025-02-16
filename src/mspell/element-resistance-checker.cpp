@@ -77,15 +77,15 @@ static void check_acid_resistance(msr_type *msr_ptr)
     }
 
     if (msr_ptr->smart_flags.has_all_of({ MonsterSmartLearnType::OPP_ACID, MonsterSmartLearnType::RES_ACID })) {
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ACID);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ACID);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ACID);
         }
 
@@ -93,15 +93,15 @@ static void check_acid_resistance(msr_type *msr_ptr)
     }
 
     if (msr_ptr->smart_flags.has_any_of({ MonsterSmartLearnType::OPP_ACID, MonsterSmartLearnType::RES_ACID })) {
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ACID);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ACID);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ACID);
         }
     }
@@ -117,15 +117,15 @@ static void check_elec_resistance(msr_type *msr_ptr)
     }
 
     if (msr_ptr->smart_flags.has_all_of({ MonsterSmartLearnType::OPP_ELEC, MonsterSmartLearnType::RES_ELEC })) {
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ELEC);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ELEC);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ELEC);
         }
 
@@ -133,15 +133,15 @@ static void check_elec_resistance(msr_type *msr_ptr)
     }
 
     if (msr_ptr->smart_flags.has_any_of({ MonsterSmartLearnType::OPP_ELEC, MonsterSmartLearnType::RES_ELEC })) {
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_ELEC);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_ELEC);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ELEC);
         }
     }
@@ -157,15 +157,15 @@ static void check_fire_resistance(msr_type *msr_ptr)
     }
 
     if (msr_ptr->smart_flags.has_all_of({ MonsterSmartLearnType::OPP_FIRE, MonsterSmartLearnType::RES_FIRE })) {
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_FIRE);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_FIRE);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BO_FIRE);
         }
 
@@ -173,15 +173,15 @@ static void check_fire_resistance(msr_type *msr_ptr)
     }
 
     if (msr_ptr->smart_flags.has_any_of({ MonsterSmartLearnType::OPP_FIRE, MonsterSmartLearnType::RES_FIRE })) {
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_FIRE);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_FIRE);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BO_FIRE);
         }
     }
@@ -198,19 +198,19 @@ static void check_cold_resistance(msr_type *msr_ptr)
     }
 
     if (msr_ptr->smart_flags.has_all_of({ MonsterSmartLearnType::OPP_COLD, MonsterSmartLearnType::RES_COLD })) {
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_COLD);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_COLD);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BO_COLD);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ICEE);
         }
 
@@ -218,19 +218,19 @@ static void check_cold_resistance(msr_type *msr_ptr)
     }
 
     if (msr_ptr->smart_flags.has_any_of({ MonsterSmartLearnType::OPP_COLD, MonsterSmartLearnType::RES_COLD })) {
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_COLD);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_COLD);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BO_COLD);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 20)) {
+        if (int_outof(*msr_ptr->r_ptr, 20)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BO_ICEE);
         }
     }
@@ -239,19 +239,19 @@ static void check_cold_resistance(msr_type *msr_ptr)
 static void check_pois_resistance(msr_type *msr_ptr)
 {
     if (msr_ptr->smart_flags.has_all_of({ MonsterSmartLearnType::OPP_POIS, MonsterSmartLearnType::RES_POIS })) {
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_POIS);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 80)) {
+        if (int_outof(*msr_ptr->r_ptr, 80)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_POIS);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 60)) {
+        if (int_outof(*msr_ptr->r_ptr, 60)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_NUKE);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 60)) {
+        if (int_outof(*msr_ptr->r_ptr, 60)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_NUKE);
         }
 
@@ -259,11 +259,11 @@ static void check_pois_resistance(msr_type *msr_ptr)
     }
 
     if (msr_ptr->smart_flags.has_any_of({ MonsterSmartLearnType::OPP_POIS, MonsterSmartLearnType::RES_POIS })) {
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BR_POIS);
         }
 
-        if (int_outof(msr_ptr->r_ptr, 30)) {
+        if (int_outof(*msr_ptr->r_ptr, 30)) {
             msr_ptr->ability_flags.reset(MonsterAbilityType::BA_POIS);
         }
     }

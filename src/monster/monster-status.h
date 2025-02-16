@@ -6,10 +6,10 @@ enum class MonraceId : short;
 class FloorType;
 class PlayerType;
 class MonsterEntity;
-bool monster_is_powerful(FloorType *floor_ptr, MONSTER_IDX m_idx);
-DEPTH monster_level_idx(FloorType *floor_ptr, MONSTER_IDX m_idx);
+bool monster_is_powerful(const FloorType &floor, MONSTER_IDX m_idx);
+DEPTH monster_level_idx(const FloorType &floor, MONSTER_IDX m_idx);
 
-int mon_damage_mod(PlayerType *player_ptr, MonsterEntity *m_ptr, int dam, bool is_psy_spear);
+int mon_damage_mod(PlayerType *player_ptr, const MonsterEntity &monster, int dam, bool is_psy_spear);
 
 void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx);
 void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId s_idx);

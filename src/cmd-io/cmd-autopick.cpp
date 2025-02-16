@@ -18,8 +18,16 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
+#include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
+#include <set>
+
+text_body_type::text_body_type(int cx, int cy)
+    : cx(cx)
+    , cy(cy)
+{
+}
 
 /*
  * Check special key code and get a movement command id
@@ -77,7 +85,7 @@ static int analyze_move_key(text_body_type *tb, uint32_t skey)
         return com_id;
     }
 
-    int len = strlen(tb->lines_list[tb->cy]);
+    const int len = tb->lines_list[tb->cy]->length();
     tb->mark = MARK_MARK | MARK_BY_SHIFT;
     tb->my = tb->cy;
     tb->mx = tb->cx;
@@ -94,6 +102,20 @@ static int analyze_move_key(text_body_type *tb, uint32_t skey)
     return com_id;
 }
 
+void text_body_type::adjust_cursor_column()
+{
+    this->cx = std::max(this->cx, this->rec_cx);
+    this->cx = std::min<int>(this->lines_list[this->cy]->length(), this->cx);
+}
+
+void text_body_type::update_cursor_column_record(int com_id)
+{
+    static const std::set record_cursor_column_commands = { EC_UP, EC_DOWN, EC_PGUP, EC_PGDOWN, EC_TOP, EC_BOTTOM };
+
+    const auto should_record = record_cursor_column_commands.contains(com_id);
+    this->rec_cx = should_record ? std::max(this->cx, this->rec_cx) : 0;
+}
+
 /*
  * In-game editor of Object Auto-picker/Destoryer
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -108,26 +130,13 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     static int32_t old_autosave_turn = 0L;
     ape_quittance quit = APE_QUIT;
 
-    text_body_type text_body;
+    text_body_type text_body(cx_save, cy_save);
     text_body_type *tb = &text_body;
-    tb->changed = false;
-    tb->cx = cx_save;
-    tb->cy = cy_save;
-    tb->upper = tb->left = 0;
-    tb->mark = 0;
-    tb->mx = tb->my = 0;
-    tb->old_cy = tb->old_upper = tb->old_left = -1;
-    tb->old_wid = tb->old_hgt = -1;
-    tb->old_com_id = 0;
-
-    tb->yank.clear();
-    tb->search_o_ptr = nullptr;
-    tb->search_str = nullptr;
-    tb->last_destroyed = nullptr;
     tb->dirty_flags = DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
-    tb->dirty_line = -1;
     tb->filename_mode = PT_DEFAULT;
     auto &world = AngbandWorld::get_instance();
+    world.play_time.pause();
+    const auto unpauser = util::make_finalizer([&world]() { world.play_time.unpause(); });
     if (world.game_turn < old_autosave_turn) {
         while (old_autosave_turn > world.game_turn) {
             old_autosave_turn -= TURNS_PER_TICK * TOWN_DAWN;
@@ -139,7 +148,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         old_autosave_turn = world.game_turn;
     }
 
-    world.update_playtime();
     init_autopick();
     if (autopick_last_destroyed_object.is_valid()) {
         autopick_entry_from_object(player_ptr, entry, &autopick_last_destroyed_object);
@@ -159,6 +167,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
     screen_save();
     while (quit == APE_QUIT) {
         int com_id = 0;
+        tb->adjust_cursor_column();
         draw_text_editor(player_ptr, tb);
         prt(_("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)",
                 "(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)"),
@@ -192,7 +201,6 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
             }
 
             insert_single_letter(tb, key);
-            continue;
         } else {
             com_id = get_com_id((char)key);
         }
@@ -200,6 +208,8 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         if (com_id) {
             quit = do_editor_command(player_ptr, tb, com_id);
         }
+
+        tb->update_cursor_column_record(com_id);
     }
 
     screen_load();
@@ -209,13 +219,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         write_text_lines(filename, tb->lines_list);
     }
 
-    free_text_lines(tb->lines_list);
-    string_free(tb->search_str);
-    string_free(tb->last_destroyed);
-    kill_yank_chain(tb);
-
     process_autopick_file(player_ptr, filename);
-    world.start_time = (uint32_t)time(nullptr);
     cx_save = tb->cx;
     cy_save = tb->cy;
 }

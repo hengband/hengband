@@ -137,12 +137,9 @@ static std::string get_describing_monster_name(const MonsterEntity &monster, con
         }
     }
 
-    const MonraceDefinition *hallu_race = nullptr;
     const auto &monraces = MonraceList::get_instance();
-    do {
-        hallu_race = &monraces.pick_monrace_at_random();
-    } while (hallu_race->kind_flags.has(MonsterKindType::UNIQUE));
-    return hallu_race->name.string();
+    const auto ids = monraces.search([](const auto &monrace) { return monrace.kind_flags.has_not(MonsterKindType::UNIQUE); });
+    return monraces.get_monrace(rand_choice(ids)).name.string();
 }
 
 #ifdef JP
@@ -234,38 +231,38 @@ static std::string add_cameleon_name(const MonsterEntity &monster, const BIT_FLA
  * @param mode 呼称オプション
  * @return std::string 要求されたモンスターの説明を含む文字列
  */
-std::string monster_desc(PlayerType *player_ptr, const MonsterEntity *m_ptr, BIT_FLAGS mode)
+std::string monster_desc(PlayerType *player_ptr, const MonsterEntity &monster, BIT_FLAGS mode)
 {
-    const auto pronoun = decide_monster_personal_pronoun(*m_ptr, mode);
+    const auto pronoun = decide_monster_personal_pronoun(monster, mode);
     if (pronoun) {
         return *pronoun;
     }
 
-    const auto pronoun_self = get_monster_self_pronoun(*m_ptr, mode);
+    const auto pronoun_self = get_monster_self_pronoun(monster, mode);
     if (pronoun_self) {
         return *pronoun_self;
     }
 
     const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
-    const auto name = get_describing_monster_name(*m_ptr, is_hallucinated, mode);
+    const auto name = get_describing_monster_name(monster, is_hallucinated, mode);
     std::stringstream ss;
-    if (m_ptr->is_pet() && !m_ptr->is_original_ap()) {
+    if (monster.is_pet() && !monster.is_original_ap()) {
         ss << _(replace_monster_name_undefined(name), format("%s?", name.data()));
     } else {
-        ss << describe_non_pet(*player_ptr, *m_ptr, name, mode);
+        ss << describe_non_pet(*player_ptr, monster, name, mode);
     }
 
-    if (m_ptr->is_named()) {
-        ss << _("「", " called ") << m_ptr->nickname << _("」", "");
+    if (monster.is_named()) {
+        ss << _("「", " called ") << monster.nickname << _("」", "");
     }
 
-    if (m_ptr->is_riding()) {
+    if (monster.is_riding()) {
         ss << _("(乗馬中)", "(riding)");
     }
 
-    ss << add_cameleon_name(*m_ptr, mode);
-    if (any_bits(mode, MD_IGNORE_HALLU) && !m_ptr->is_original_ap()) {
-        ss << "(" << m_ptr->get_monrace().name << ")";
+    ss << add_cameleon_name(monster, mode);
+    if (any_bits(mode, MD_IGNORE_HALLU) && !monster.is_original_ap()) {
+        ss << "(" << monster.get_monrace().name << ")";
     }
 
     if (any_bits(mode, MD_POSSESSIVE)) {

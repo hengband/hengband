@@ -13,13 +13,9 @@
 #include "game-option/cheat-types.h"
 #include "monster-floor/one-monster-placer.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race-hook.h"
-#include "monster/monster-flag-types.h"
 #include "monster/monster-info.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
-#include "monster/smart-learn-types.h"
-#include "mspell/summon-checker.h"
 #include "spell/summon-types.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
@@ -30,10 +26,8 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "target/projection-path-calculator.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
-#include <optional>
 
 /*!
  * @brief モンスター1体を目標地点に可能な限り近い位置に生成する
@@ -63,7 +57,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
     for (auto nx = pos.x - max_distance; nx <= pos.x + max_distance; nx++) {
         for (auto ny = pos.y - max_distance; ny <= pos.y + max_distance; ny++) {
             const Pos2D pos_neighbor(ny, nx);
-            if (!in_bounds(&floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor)) {
                 continue;
             }
 
@@ -73,7 +67,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
 
             if (MonraceList::is_valid(monrace_id)) {
                 const auto &monrace = monraces.get_monrace(monrace_id);
-                if (!monster_can_enter(player_ptr, pos_neighbor.y, pos_neighbor.x, &monrace, 0)) {
+                if (!monster_can_enter(player_ptr, pos_neighbor.y, pos_neighbor.x, monrace, 0)) {
                     continue;
                 }
             } else {
@@ -81,7 +75,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
                     continue;
                 }
 
-                if (pattern_tile(&floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (pattern_tile(floor, pos_neighbor.y, pos_neighbor.x)) {
                     continue;
                 }
             }
@@ -264,7 +258,7 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
             continue;
         }
 
-        get_mon_num_prep_escort(player_ptr, r_idx, *m_idx, get_monster_hook2(player_ptr, pos_neighbor.y, pos_neighbor.x));
+        get_mon_num_prep_escort(player_ptr, r_idx, *m_idx, player_ptr->current_floor_ptr->get_monrace_hook_terrain_at(pos_neighbor));
         const auto monrace_id = get_mon_num(player_ptr, 0, monrace.level, 0);
         if (!MonraceList::is_valid(monrace_id)) {
             break;
@@ -288,9 +282,9 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
  */
 std::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
+    const Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-    get_mon_num_prep_enum(player_ptr, get_monster_hook(pos_wilderness, floor.is_underground()), get_monster_hook2(player_ptr, y, x));
+    get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook(), floor.get_monrace_hook_terrain_at(pos));
     const auto &monraces = MonraceList::get_instance();
     MonraceId monrace_id;
     do {
@@ -346,8 +340,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
 {
     Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos_wilderness(player_ptr->wilderness_y, player_ptr->wilderness_x);
-    get_mon_num_prep_enum(player_ptr, get_monster_hook(pos_wilderness, floor.is_underground()), get_monster_hook2(player_ptr, pos.y, pos.x));
+    get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook(), floor.get_monrace_hook_terrain_at(pos));
     const auto monrace_id = select_horde_leader_r_idx(player_ptr);
     if (!monrace_id) {
         return false;
@@ -390,14 +383,14 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
  */
 bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    const auto &dungeon = floor_ptr->get_dungeon_definition();
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &dungeon = floor.get_dungeon_definition();
     if (!dungeon.has_guardian()) {
         return def_val;
     }
 
     const auto &monrace = dungeon.get_guardian();
-    auto is_guardian_applicable = dungeon.maxdepth == floor_ptr->dun_level;
+    auto is_guardian_applicable = dungeon.maxdepth == floor.dun_level;
     is_guardian_applicable &= monrace.cur_num < monrace.max_num;
     if (!is_guardian_applicable) {
         return def_val;
@@ -405,13 +398,13 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 
     auto try_count = 4000;
     while (try_count > 0) {
-        const auto pos = Pos2D(randint1(floor_ptr->height - 4), randint1(floor_ptr->width - 4)) + Pos2DVec(2, 2);
+        const auto pos = Pos2D(randint1(floor.height - 4), randint1(floor.width - 4)) + Pos2DVec(2, 2);
         if (!is_cave_empty_bold2(player_ptr, pos.y, pos.x)) {
             try_count++;
             continue;
         }
 
-        if (!monster_can_cross_terrain(player_ptr, floor_ptr->get_grid(pos).feat, &monrace, 0)) {
+        if (!monster_can_cross_terrain(player_ptr, floor.get_grid(pos).feat, monrace, 0)) {
             try_count++;
             continue;
         }

@@ -1,12 +1,5 @@
 #include "target/target-preparation.h"
-#include "floor/cave.h"
 #include "game-option/input-options.h"
-#include "grid/grid.h"
-#include "monster/monster-flag-types.h"
-#include "monster/monster-info.h"
-#include "monster/monster-status.h"
-#include "object/object-mark-types.h"
-#include "system/angband-system.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -71,7 +64,7 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
 static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!(in_bounds(&floor, pos.y, pos.x))) {
+    if (!(floor.contains(pos))) {
         return false;
     }
 
@@ -185,22 +178,22 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
     }
 
     for (MONSTER_IDX i = 1; i < player_ptr->current_floor_ptr->m_max; i++) {
-        auto *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
-        if (!m_ptr->is_valid() || !m_ptr->ml || m_ptr->is_pet()) {
+        const auto &monster = player_ptr->current_floor_ptr->m_list[i];
+        if (!monster.is_valid() || !monster.ml || monster.is_pet()) {
             continue;
         }
 
         // 感知魔法/スキルやESPで感知していない擬態モンスターはモンスター一覧に表示しない
-        if (m_ptr->is_mimicry() && m_ptr->mflag2.has_none_of({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW }) && m_ptr->mflag.has_not(MonsterTemporaryFlagType::ESP)) {
+        if (monster.is_mimicry() && monster.mflag2.has_none_of({ MonsterConstantFlagType::MARK, MonsterConstantFlagType::SHOW }) && monster.mflag.has_not(MonsterTemporaryFlagType::ESP)) {
             continue;
         }
 
         monster_list.push_back(i);
     }
 
-    auto comp_importance = [floor_ptr = player_ptr->current_floor_ptr](MONSTER_IDX idx1, MONSTER_IDX idx2) {
-        const auto &monster1 = floor_ptr->m_list[idx1];
-        const auto &monster2 = floor_ptr->m_list[idx2];
+    auto comp_importance = [&floor = *player_ptr->current_floor_ptr](MONSTER_IDX idx1, MONSTER_IDX idx2) {
+        const auto &monster1 = floor.m_list[idx1];
+        const auto &monster2 = floor.m_list[idx2];
         const auto &monrace1 = monster1.get_appearance_monrace();
         const auto &monrace2 = monster2.get_appearance_monrace();
 

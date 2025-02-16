@@ -7,9 +7,8 @@ class PlayerType;
 class MonsterLoader50 : public MonsterLoaderBase {
 public:
     MonsterLoader50(PlayerType *player_ptr);
-    void rd_monster(MonsterEntity *m_ptr) override;
+    void rd_monster(MonsterEntity &monster) override;
 
 private:
     PlayerType *player_ptr;
-    MonsterEntity *m_ptr = nullptr;
 };

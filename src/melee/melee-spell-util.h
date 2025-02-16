@@ -26,7 +26,7 @@ struct melee_spell_type {
     MonsterAbilityType thrown_spell;
 
     MonsterEntity *m_ptr;
-    MonsterEntity *t_ptr;
+    const MonsterEntity *t_ptr;
     MonraceDefinition *r_ptr;
     bool see_m;
     bool maneable;

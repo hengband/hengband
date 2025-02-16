@@ -7,7 +7,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/special-options.h"
-#include "grid/feature.h"
+#include "grid/grid.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
 #include "player-base/player-race.h"
@@ -21,13 +21,12 @@
 #include "status/experience.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/dungeon/dungeon-id.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
-#include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world-movement-processor.h"
 #include "world/world.h"
@@ -107,7 +106,7 @@ bool pattern_effect(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (!pattern_tile(&floor, p_pos.y, p_pos.x)) {
+    if (!pattern_tile(floor, p_pos.y, p_pos.x)) {
         return false;
     }
 
@@ -124,7 +123,7 @@ bool pattern_effect(PlayerType *player_ptr)
         (void)restore_level(player_ptr);
         (void)cure_critical_wounds(player_ptr, 1000);
 
-        cave_set_feat(player_ptr, player_ptr->y, player_ptr->x, feat_pattern_old);
+        set_terrain_id_to_grid(player_ptr, player_ptr->get_position(), TerrainTag::PATTERN_OLD);
         msg_print(_("「パターン」のこの部分は他の部分より強力でないようだ。", "This section of the Pattern looks less powerful."));
 
         /*

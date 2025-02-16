@@ -8,6 +8,7 @@
  */
 
 #include "monster/monster-processor-util.h"
+#include "floor/geometry.h"
 #include "monster/monster-status.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -38,208 +39,131 @@ turn_flags *init_turn_flags(bool is_riding, turn_flags *turn_flags_ptr)
 }
 
 /*!
- * @brief モンスターの移動方向を保存する
- * @param mm 移動方向
- * @param y 移動先Y座標
- * @param x 移動先X座標
+ * @brief モンスターの移動方向のリストを取得する
+ *
+ * 移動方向の優先度は以下の通り
+ *
+ * 1. vec で指定された方向
+ * 2. vec で指定された方向の左右45度(左右どちらが先かはvecの値による)
+ * 3. ランダムな方向
+ *
+ * @param vec 移動方向のベクトル
+ * @return モンスターの移動方向のリスト
  */
-void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
+MonsterMovementDirectionList get_enemy_approch_direction(MONSTER_IDX m_idx, const Pos2DVec &vec)
 {
-    /* North, South, East, West, North-West, North-East, South-West, South-East */
-    if ((y < 0) && (x == 0)) {
-        mm[0] = 8;
-        mm[1] = 7;
-        mm[2] = 9;
-    } else if ((y > 0) && (x == 0)) {
-        mm[0] = 2;
-        mm[1] = 1;
-        mm[2] = 3;
-    } else if ((x > 0) && (y == 0)) {
-        mm[0] = 6;
-        mm[1] = 9;
-        mm[2] = 3;
-    } else if ((x < 0) && (y == 0)) {
-        mm[0] = 4;
-        mm[1] = 7;
-        mm[2] = 1;
-    } else if ((y < 0) && (x < 0)) {
-        mm[0] = 7;
-        mm[1] = 4;
-        mm[2] = 8;
-    } else if ((y < 0) && (x > 0)) {
-        mm[0] = 9;
-        mm[1] = 6;
-        mm[2] = 8;
-    } else if ((y > 0) && (x < 0)) {
-        mm[0] = 1;
-        mm[1] = 4;
-        mm[2] = 2;
-    } else if ((y > 0) && (x > 0)) {
-        mm[0] = 3;
-        mm[1] = 6;
-        mm[2] = 2;
+    MonsterMovementDirectionList mmdl(m_idx);
+
+    if ((vec.y < 0) && (vec.x == 0)) { // North
+        mmdl.add_movement_directions({ Direction(8), Direction(7), Direction(9) });
+    } else if ((vec.y > 0) && (vec.x == 0)) { // South
+        mmdl.add_movement_directions({ Direction(2), Direction(1), Direction(3) });
+    } else if ((vec.x > 0) && (vec.y == 0)) { // East
+        mmdl.add_movement_directions({ Direction(6), Direction(9), Direction(3) });
+    } else if ((vec.x < 0) && (vec.y == 0)) { // West
+        mmdl.add_movement_directions({ Direction(4), Direction(7), Direction(1) });
+    } else if ((vec.y < 0) && (vec.x < 0)) { // North-West
+        mmdl.add_movement_directions({ Direction(7), Direction(4), Direction(8) });
+    } else if ((vec.y < 0) && (vec.x > 0)) { // North-East
+        mmdl.add_movement_directions({ Direction(9), Direction(6), Direction(8) });
+    } else if ((vec.y > 0) && (vec.x < 0)) { // South-West
+        mmdl.add_movement_directions({ Direction(1), Direction(4), Direction(2) });
+    } else if ((vec.y > 0) && (vec.x > 0)) { // South-East
+        mmdl.add_movement_directions({ Direction(3), Direction(6), Direction(2) });
     }
+
+    // どの方向にも進めない場合にランダム移動する
+    mmdl.add_movement_direction(Direction::self());
+
+    return mmdl;
 }
 
 /*!
- * @brief get_movable_grid() における移動の方向を保存する
- * @param mm 移動方向
- * @param y 移動先Y座標
- * @param x 移動先X座標
+ * @brief MonsterSweepGrid::get_movable_grid() における移動の方向を取得する
+ * @param vec 移動方向のベクトル
+ * @return モンスターの移動方向。vec が (0, 0) の場合は std::nullopt を返す
  */
-void store_moves_val(int *mm, int y, int x)
+std::optional<MonsterMovementDirectionList> get_moves_val(MONSTER_IDX m_idx, const Pos2DVec &vec)
 {
-    POSITION ax = std::abs(x);
-    POSITION ay = std::abs(y);
+    if (vec == Pos2DVec(0, 0)) {
+        return std::nullopt;
+    }
 
-    int move_val = 0;
-    if (y < 0) {
+    const Pos2DVec vec_abs(std::abs(vec.y), std::abs(vec.x));
+    auto move_val = 0;
+    if (vec.y < 0) {
         move_val += 8;
     }
-    if (x > 0) {
+    if (vec.x > 0) {
         move_val += 4;
     }
 
-    if (ay > (ax << 1)) {
+    if (vec_abs.y > (vec_abs.x << 1)) {
         move_val += 2;
-    } else if (ax > (ay << 1)) {
+    } else if (vec_abs.x > (vec_abs.y << 1)) {
         move_val++;
     }
 
+    auto dir = Direction::none();
+    auto is_left_first = false;
     switch (move_val) {
     case 0: {
-        mm[0] = 9;
-        if (ay > ax) {
-            mm[1] = 8;
-            mm[2] = 6;
-            mm[3] = 7;
-            mm[4] = 3;
-        } else {
-            mm[1] = 6;
-            mm[2] = 8;
-            mm[3] = 3;
-            mm[4] = 7;
-        }
-
+        dir = Direction(9);
+        is_left_first = vec_abs.y > vec_abs.x;
         break;
     }
     case 1:
     case 9: {
-        mm[0] = 6;
-        if (y < 0) {
-            mm[1] = 3;
-            mm[2] = 9;
-            mm[3] = 2;
-            mm[4] = 8;
-        } else {
-            mm[1] = 9;
-            mm[2] = 3;
-            mm[3] = 8;
-            mm[4] = 2;
-        }
-
+        dir = Direction(6);
+        is_left_first = vec.y >= 0;
         break;
     }
     case 2:
     case 6: {
-        mm[0] = 8;
-        if (x < 0) {
-            mm[1] = 9;
-            mm[2] = 7;
-            mm[3] = 6;
-            mm[4] = 4;
-        } else {
-            mm[1] = 7;
-            mm[2] = 9;
-            mm[3] = 4;
-            mm[4] = 6;
-        }
-
+        dir = Direction(8);
+        is_left_first = vec.x >= 0;
         break;
     }
     case 4: {
-        mm[0] = 7;
-        if (ay > ax) {
-            mm[1] = 8;
-            mm[2] = 4;
-            mm[3] = 9;
-            mm[4] = 1;
-        } else {
-            mm[1] = 4;
-            mm[2] = 8;
-            mm[3] = 1;
-            mm[4] = 9;
-        }
-
+        dir = Direction(7);
+        is_left_first = vec_abs.y <= vec_abs.x;
         break;
     }
     case 5:
     case 13: {
-        mm[0] = 4;
-        if (y < 0) {
-            mm[1] = 1;
-            mm[2] = 7;
-            mm[3] = 2;
-            mm[4] = 8;
-        } else {
-            mm[1] = 7;
-            mm[2] = 1;
-            mm[3] = 8;
-            mm[4] = 2;
-        }
-
+        dir = Direction(4);
+        is_left_first = vec.y < 0;
         break;
     }
     case 8: {
-        mm[0] = 3;
-        if (ay > ax) {
-            mm[1] = 2;
-            mm[2] = 6;
-            mm[3] = 1;
-            mm[4] = 9;
-        } else {
-            mm[1] = 6;
-            mm[2] = 2;
-            mm[3] = 9;
-            mm[4] = 1;
-        }
-
+        dir = Direction(3);
+        is_left_first = vec_abs.y <= vec_abs.x;
         break;
     }
     case 10:
     case 14: {
-        mm[0] = 2;
-        if (x < 0) {
-            mm[1] = 3;
-            mm[2] = 1;
-            mm[3] = 6;
-            mm[4] = 4;
-        } else {
-            mm[1] = 1;
-            mm[2] = 3;
-            mm[3] = 4;
-            mm[4] = 6;
-        }
-
+        dir = Direction(2);
+        is_left_first = vec.x < 0;
         break;
     }
     case 12: {
-        mm[0] = 1;
-        if (ay > ax) {
-            mm[1] = 2;
-            mm[2] = 4;
-            mm[3] = 3;
-            mm[4] = 7;
-        } else {
-            mm[1] = 4;
-            mm[2] = 2;
-            mm[3] = 7;
-            mm[4] = 3;
-        }
-
+        dir = Direction(1);
+        is_left_first = vec_abs.y > vec_abs.x;
         break;
+    default:
+        // ここには来ないはず？一応ランダム移動を設定しておく
+        return MonsterMovementDirectionList::random_move(m_idx);
     }
     }
+
+    MonsterMovementDirectionList mmdl(m_idx);
+    mmdl.add_movement_direction(dir);
+    mmdl.add_movement_direction(dir.rotated_45degree(is_left_first ? 1 : -1));
+    mmdl.add_movement_direction(dir.rotated_45degree(is_left_first ? -1 : 1));
+    mmdl.add_movement_direction(dir.rotated_45degree(is_left_first ? 2 : -2));
+    mmdl.add_movement_direction(dir.rotated_45degree(is_left_first ? -2 : 2));
+
+    return mmdl;
 }
 
 /*!

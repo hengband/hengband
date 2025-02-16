@@ -39,7 +39,7 @@ void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
         return;
     }
 
-    const auto m_steed_name = monster_desc(player_ptr, &player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
+    const auto m_steed_name = monster_desc(player_ptr, player_ptr->current_floor_ptr->m_list[player_ptr->riding], 0);
     if (process_fall_off_horse(player_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, false)) {
         msg_format(_("%s^から落ちてしまった！", "You have fallen from %s."), m_steed_name.data());
     }
@@ -54,7 +54,7 @@ void check_fall_off_horse(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr
  * @return FALSEなら落馬しないことで確定、TRUEなら処理続行
  * @details レベルの低い乗馬からは落馬しにくい
  */
-static bool calc_fall_off_possibility(PlayerType *player_ptr, const int dam, const bool force, MonraceDefinition *r_ptr)
+static bool calc_fall_off_possibility(PlayerType *player_ptr, const int dam, const bool force, const MonraceDefinition &monrace)
 {
     if (force) {
         return true;
@@ -62,7 +62,7 @@ static bool calc_fall_off_possibility(PlayerType *player_ptr, const int dam, con
 
     auto cur = player_ptr->skill_exp[PlayerSkillKindType::RIDING];
 
-    int fall_off_level = r_ptr->level;
+    int fall_off_level = monrace.level;
     if (player_ptr->riding_ryoute) {
         fall_off_level += 20;
     }
@@ -91,38 +91,36 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     POSITION sy = 0;
     POSITION sx = 0;
     int sn = 0;
-    auto *m_ptr = &player_ptr->current_floor_ptr->m_list[player_ptr->riding];
-    auto *r_ptr = &m_ptr->get_monrace();
+    const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
+    const auto &monrace = monster.get_monrace();
 
     if (!player_ptr->riding || AngbandWorld::get_instance().is_wild_mode()) {
         return false;
     }
 
     if (dam >= 0 || force) {
-        if (!calc_fall_off_possibility(player_ptr, dam, force, r_ptr)) {
+        if (!calc_fall_off_possibility(player_ptr, dam, force, monrace)) {
             return false;
         }
 
         /* Check around the player */
-        for (DIRECTION i = 0; i < 8; i++) {
-            POSITION y = player_ptr->y + ddy_ddd[i];
-            POSITION x = player_ptr->x + ddx_ddd[i];
+        for (const auto &d : Direction::directions_8()) {
+            const auto pos = player_ptr->get_neighbor(d);
 
-            Grid *g_ptr;
-            g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+            const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
 
-            if (g_ptr->has_monster()) {
+            if (grid.has_monster()) {
                 continue;
             }
 
             /* Skip non-empty grids */
-            if (!g_ptr->has(TerrainCharacteristics::MOVE) && !g_ptr->has(TerrainCharacteristics::CAN_FLY)) {
-                if (!can_player_ride_pet(player_ptr, g_ptr, false)) {
+            if (!grid.has(TerrainCharacteristics::MOVE) && !grid.has(TerrainCharacteristics::CAN_FLY)) {
+                if (!can_player_ride_pet(player_ptr, grid, false)) {
                     continue;
                 }
             }
 
-            if (g_ptr->has(TerrainCharacteristics::PATTERN)) {
+            if (grid.has(TerrainCharacteristics::PATTERN)) {
                 continue;
             }
 
@@ -135,14 +133,14 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
             }
 
             /* Save the safe location */
-            sy = y;
-            sx = x;
+            sy = pos.y;
+            sx = pos.x;
         }
 
         if (!sn) {
-            const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+            const auto m_name = monster_desc(player_ptr, monster, 0);
             msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s but bumped into a wall."), m_name.data());
-            take_hit(player_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("壁への衝突", "bumping into a wall"));
+            take_hit(player_ptr, DAMAGE_NOESCAPE, monrace.level + 3, _("壁への衝突", "bumping into a wall"));
             return false;
         }
 
@@ -182,10 +180,10 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
     rfu.set_flags(flags_mwrf);
     auto fall_dam = false;
     if (player_ptr->levitation && !force) {
-        const auto m_name = monster_desc(player_ptr, m_ptr, 0);
+        const auto m_name = monster_desc(player_ptr, monster, 0);
         msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s but make a good landing."), m_name.data());
     } else {
-        take_hit(player_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("落馬", "Falling from riding"));
+        take_hit(player_ptr, DAMAGE_NOESCAPE, monrace.level + 3, _("落馬", "Falling from riding"));
         fall_dam = true;
     }
 

@@ -34,9 +34,9 @@ void rd_extra(PlayerType *player_ptr)
     rd_dummy_monsters(player_ptr);
     auto &world = AngbandWorld::get_instance();
     if (h_older_than(0, 1, 2)) {
-        world.play_time = 0;
+        world.play_time = ElapsedTime();
     } else {
-        world.play_time = rd_u32b();
+        world.play_time = ElapsedTime(rd_u32b());
     }
 
     rd_visited_towns(player_ptr);

@@ -1,30 +1,42 @@
 #pragma once
 
-#include "system/angband.h"
+#include "util/enum-range.h"
+#include <map>
 
-#define DUN_ROOMS_MAX 40 /*!< 部屋生成処理の基本比率(ダンジョンのサイズに比例する) / Max number rate of rooms */
-
-/* Maximum locked/jammed doors */
-#define MAX_LJ_DOORS 8
-
-#define MAX_DOOR_TYPES 3
-
-enum door_kind_type {
-    DOOR_DEFAULT = -1,
-    DOOR_DOOR = 0,
-    DOOR_GLASS_DOOR = 1,
-    DOOR_CURTAIN = 2,
+enum class DoorKind {
+    DOOR = 0,
+    GLASS_DOOR = 1,
+    CURTAIN = 2,
 };
 
-/* A structure type for doors */
-struct door_type {
-    FEAT_IDX open;
-    FEAT_IDX broken;
-    FEAT_IDX closed;
-    FEAT_IDX locked[MAX_LJ_DOORS];
-    FEAT_IDX num_locked;
-    FEAT_IDX jammed[MAX_LJ_DOORS];
-    FEAT_IDX num_jammed;
+enum class TerrainTag;
+class Door {
+public:
+    Door(TerrainTag open, TerrainTag broken, TerrainTag closd, const EnumRangeInclusive<TerrainTag> &locked, const EnumRangeInclusive<TerrainTag> &jammed);
+
+    TerrainTag open{};
+    TerrainTag broken{};
+    TerrainTag closed{};
+    EnumRangeInclusive<TerrainTag> locked;
+    EnumRangeInclusive<TerrainTag> jammed;
 };
 
-extern door_type feat_door[MAX_DOOR_TYPES];
+class Doors {
+public:
+    ~Doors() = default;
+    Doors(const Doors &) = delete;
+    Doors(Doors &&) = delete;
+    Doors &operator=(const Doors &) = delete;
+    Doors &operator=(Doors &&) = delete;
+    static const Doors &get_instance();
+
+    const Door &get_door(DoorKind dk) const;
+    TerrainTag select_locked_tag(DoorKind dk) const;
+    TerrainTag select_jammed_tag(DoorKind dk) const;
+
+private:
+    Doors();
+
+    static Doors instance;
+    std::map<DoorKind, Door> doors;
+};

@@ -32,16 +32,18 @@ static char kanji_colon[] = "：";
 /*!
  * @brief A function to create new entry
  */
-bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
+bool autopick_new_entry(autopick_type *entry, std::string_view str_view, bool allow_default)
 {
-    if (str[0] && str[1] == ':') {
-        switch (str[0]) {
+    if ((str_view.length() > 1) && (str_view[1] == ':')) {
+        switch (str_view[0]) {
         case '?':
         case '%':
         case 'A':
         case 'P':
         case 'C':
             return false;
+        default:
+            break;
         }
     }
 
@@ -50,6 +52,7 @@ bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
     entry->bonus = 0;
 
     byte act = DO_AUTOPICK | DO_DISPLAY;
+    auto str = str_view.data();
     while (true) {
         if ((act & DO_AUTOPICK) && *str == '!') {
             act &= ~DO_AUTOPICK;
@@ -528,7 +531,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
     entry->name = str_tolower(std::string(is_hat_added ? "^" : "").append(item_name));
 }
 
-std::string shape_autopick_key(const std::string &key)
+static std::string shape_autopick_key(const std::string &key)
 {
 #ifdef JP
     return key;
@@ -542,7 +545,7 @@ std::string shape_autopick_key(const std::string &key)
 /*!
  * @brief Reconstruct preference line from entry
  */
-concptr autopick_line_from_entry(const autopick_type &entry)
+std::string autopick_line_from_entry(const autopick_type &entry)
 {
     std::stringstream ss;
     if (!(entry.action & DO_DISPLAY)) {
@@ -721,13 +724,11 @@ concptr autopick_line_from_entry(const autopick_type &entry)
     }
 
     if (entry.insc.empty()) {
-        auto str = ss.str();
-        return string_make(str.data());
+        return ss.str();
     }
 
     ss << '#' << entry.insc;
-    auto str = ss.str();
-    return string_make(str.data());
+    return ss.str();
 }
 
 /*!

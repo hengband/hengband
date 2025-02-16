@@ -1,15 +1,9 @@
 #include "dungeon/quest-completion-checker.h"
-#include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
-#include "grid/feature.h"
 #include "grid/grid.h"
-#include "monster/monster-info.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object-enchant/object-ego.h"
-#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -19,14 +13,12 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"
-#include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include <algorithm>
 
-QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, MonsterEntity *m_ptr)
+QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, const MonsterEntity &monster)
     : player_ptr(player_ptr)
-    , m_ptr(m_ptr)
+    , m_ptr(&monster)
     , quest_idx(QuestId::NONE)
 {
 }
@@ -58,9 +50,9 @@ void QuestCompletionChecker::complete()
     this->make_reward(pos);
 }
 
-static bool check_quest_completion(PlayerType *player_ptr, const QuestType &quest, MonsterEntity *m_ptr)
+static bool check_quest_completion(PlayerType *player_ptr, const QuestType &quest, const MonsterEntity &monster)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
+    const auto &floor = *player_ptr->current_floor_ptr;
     if (quest.status != QuestStatusType::TAKEN) {
         return false;
     }
@@ -69,7 +61,7 @@ static bool check_quest_completion(PlayerType *player_ptr, const QuestType &ques
         return false;
     }
 
-    if ((quest.level != floor_ptr->dun_level)) {
+    if ((quest.level != floor.dun_level)) {
         return false;
     }
 
@@ -84,7 +76,7 @@ static bool check_quest_completion(PlayerType *player_ptr, const QuestType &ques
         return true;
     }
 
-    auto is_target = (quest.type == QuestKindType::RANDOM) && (quest.r_idx == m_ptr->r_idx);
+    auto is_target = (quest.type == QuestKindType::RANDOM) && (quest.r_idx == monster.r_idx);
     if ((quest.type == QuestKindType::KILL_LEVEL) || is_target) {
         return true;
     }
@@ -100,7 +92,7 @@ void QuestCompletionChecker::set_quest_idx()
     if (inside_quest(this->quest_idx)) {
         return;
     }
-    auto q = std::find_if(quests.rbegin(), quests.rend(), [this](auto q) { return check_quest_completion(this->player_ptr, q.second, this->m_ptr); });
+    auto q = std::find_if(quests.rbegin(), quests.rend(), [this](auto q) { return check_quest_completion(this->player_ptr, q.second, *this->m_ptr); });
 
     if (q != quests.rend()) {
         this->quest_idx = q->first;
@@ -208,12 +200,12 @@ void QuestCompletionChecker::complete_tower()
  */
 int QuestCompletionChecker::count_all_hostile_monsters()
 {
-    auto *floor_ptr = this->player_ptr->current_floor_ptr;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
     auto number_mon = 0;
-    for (auto x = 0; x < floor_ptr->width; ++x) {
-        for (auto y = 0; y < floor_ptr->height; ++y) {
-            auto m_idx = floor_ptr->grid_array[y][x].m_idx;
-            if ((m_idx > 0) && floor_ptr->m_list[m_idx].is_hostile()) {
+    for (auto x = 0; x < floor.width; ++x) {
+        for (auto y = 0; y < floor.height; ++y) {
+            auto m_idx = floor.grid_array[y][x].m_idx;
+            if ((m_idx > 0) && floor.m_list[m_idx].is_hostile()) {
                 ++number_mon;
             }
         }
@@ -230,14 +222,14 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
     }
 
     auto &floor = *this->player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor.get_grid(m_pos);
-    while (floor.has_terrain_characteristics(m_pos, TerrainCharacteristics::PERMANENT) || !g_ptr->o_idx_list.empty() || g_ptr->is_object()) {
+    const auto *grid_ptr = &floor.get_grid(m_pos);
+    while (floor.has_terrain_characteristics(m_pos, TerrainCharacteristics::PERMANENT) || !grid_ptr->o_idx_list.empty() || grid_ptr->is_object()) {
         m_pos = scatter(this->player_ptr, m_pos, 1, PROJECT_NONE);
-        g_ptr = &floor.get_grid(m_pos);
+        grid_ptr = &floor.get_grid(m_pos);
     }
 
     msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
-    cave_set_feat(this->player_ptr, m_pos.y, m_pos.x, TerrainList::get_instance().get_terrain_id(TerrainTag::DOWN_STAIR));
+    set_terrain_id_to_grid(this->player_ptr, m_pos, TerrainTag::DOWN_STAIR);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
     return m_pos;
 }
@@ -255,7 +247,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
                 continue;
             }
 
-            (void)drop_near(this->player_ptr, &item, -1, pos.y, pos.x);
+            (void)drop_near(this->player_ptr, &item, pos);
             break;
         }
     }

@@ -890,7 +890,7 @@ void do_cmd_study(PlayerType *player_ptr)
         break;
     }
 
-    sound(SOUND_STUDY);
+    sound(SoundKind::STUDY);
 
     /* One less spell available */
     player_ptr->learned_spells++;
@@ -1057,7 +1057,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         }
 
         msg_format(_("%sをうまく唱えられなかった！", "You failed to get the %s off!"), prayer.data());
-        sound(SOUND_FAIL);
+        sound(SoundKind::FAIL);
 
         switch (use_realm) {
         case RealmType::LIFE:
@@ -1105,7 +1105,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
             wild_magic(player_ptr, spell_id);
         } else if ((tval == ItemKindType::DEATH_BOOK) && (randint1(100) < spell_id)) {
             if ((sval == 3) && one_in_(2)) {
-                sanity_blast(player_ptr, 0, true);
+                sanity_blast(player_ptr, std::nullopt, true);
             } else {
                 msg_print(_("痛い！", "It hurts!"));
                 take_hit(player_ptr, DAMAGE_LOSELIFE, Dice::roll(sval + 1, 6), _("暗黒魔法の逆流", "a miscast Death spell"));

@@ -10,10 +10,8 @@
  */
 
 #include "action/action-limited.h"
-#include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
@@ -22,25 +20,18 @@
 #include "io/input-key-requester.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "monster-race/monster-race-hook.h"
-#include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "player-base/player-class.h"
 #include "player-info/equipment-info.h"
 #include "player-info/samurai-data-type.h"
 #include "player-status/player-energy.h"
-#include "player/attack-defense-types.h"
 #include "player/player-realm.h"
 #include "player/player-spell-status.h"
-#include "player/special-defense-types.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
-#include "status/action-setter.h"
 #include "system/item-entity.h"
-#include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
-#include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 
@@ -341,7 +332,7 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
         return;
     }
 
-    sound(SOUND_ZAP);
+    sound(SoundKind::ZAP);
 
     if (!exe_spell(player_ptr, RealmType::HISSATSU, n, SpellProcessType::CAST)) {
         return;

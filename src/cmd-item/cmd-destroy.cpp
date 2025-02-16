@@ -194,7 +194,7 @@ static void exe_destroy_item(PlayerType *player_ptr, ItemEntity &destroying_item
     destroyed_item.number = amount;
     const auto item_name = describe_flavor(player_ptr, destroyed_item, 0);
     msg_format(_("%sを壊した。", "You destroy %s."), item_name.data());
-    sound(SOUND_DESTITEM);
+    sound(SoundKind::DESTITEM);
     reduce_charges(&destroying_item, amount);
     vary_item(player_ptr, i_idx, -amount);
     process_destroy_magic_book(player_ptr, destroyed_item);

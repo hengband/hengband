@@ -638,31 +638,26 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
     }
     case HEX_SHADOW_MOVE: {
         if (cast) {
-            int i, dir;
             POSITION y, x;
             bool flag;
 
-            for (i = 0; i < 3; i++) {
+            for (auto i = 0; i < 3; i++) {
                 if (!tgt_pt(player_ptr, &x, &y)) {
                     return "";
                 }
 
                 flag = false;
 
-                const auto *floor_ptr = player_ptr->current_floor_ptr;
-                for (dir = 0; dir < 8; dir++) {
-                    int dy = y + ddy_ddd[dir];
-                    int dx = x + ddx_ddd[dir];
-                    if (dir == 5) {
-                        continue;
-                    }
-                    if (floor_ptr->grid_array[dy][dx].has_monster()) {
+                const auto &floor = *player_ptr->current_floor_ptr;
+                for (const auto &d : Direction::directions_8()) {
+                    const auto pos_neighbor = Pos2D(y, x) + d.vec();
+                    if (floor.get_grid(pos_neighbor).has_monster()) {
                         flag = true;
                     }
                 }
 
                 const auto dist = Grid::calc_distance({ y, x }, player_ptr->get_position());
-                if (!is_cave_empty_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].is_icky() || (dist > player_ptr->lev + 2)) {
+                if (!is_cave_empty_bold(player_ptr, y, x) || floor.grid_array[y][x].is_icky() || (dist > player_ptr->lev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;
                 }
@@ -716,14 +711,14 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         if (continuation) {
             spell_hex.set_revenge_turn(1, false);
             if (spell_hex.get_revenge_turn() == 0) {
-                DIRECTION dir;
-
                 if (power) {
-                    command_dir = 0;
+                    command_dir = Direction::none();
 
+                    auto dir = Direction::none();
                     do {
                         msg_print(_("復讐の時だ！", "Time for revenge!"));
-                    } while (!get_aim_dir(player_ptr, &dir));
+                        dir = get_aim_dir(player_ptr);
+                    } while (!dir);
 
                     fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, power, 1);
 

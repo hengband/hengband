@@ -66,8 +66,8 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
     auto &floor = *player_ptr->current_floor_ptr;
     switch (power) {
     case PlayerMutationType::SPIT_ACID: {
-        auto dir = 0;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -77,8 +77,8 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         return true;
     }
     case PlayerMutationType::BR_FIRE: {
-        auto dir = 0;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -88,8 +88,8 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         return true;
     }
     case PlayerMutationType::HYPN_GAZE: {
-        auto dir = 0;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -98,8 +98,8 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         return true;
     }
     case PlayerMutationType::TELEKINES: {
-        auto dir = 0;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -112,8 +112,8 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         teleport_player(player_ptr, 10 + 4 * lvl, TELEPORT_SPONTANEOUS);
         return true;
     case PlayerMutationType::MIND_BLST: {
-        auto dir = 0;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -123,7 +123,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
     }
     case PlayerMutationType::RADIATION:
         msg_print(_("体から放射能が発生した！", "Radiation flows from your body!"));
-        fire_ball(player_ptr, AttributeType::NUKE, 0, (lvl * 2), 3 + (lvl / 20));
+        fire_ball(player_ptr, AttributeType::NUKE, Direction::self(), (lvl * 2), 3 + (lvl / 20));
         return true;
     case PlayerMutationType::VAMPIRISM:
         vampirism(player_ptr);
@@ -142,9 +142,9 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
     case PlayerMutationType::EAT_ROCK:
         return eat_rock(player_ptr);
     case PlayerMutationType::SWAP_POS: {
-        auto dir = 0;
         project_length = -1;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             project_length = 0;
             return false;
         }
@@ -155,7 +155,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
     }
     case PlayerMutationType::SHRIEK:
         stop_mouth(player_ptr);
-        (void)fire_ball(player_ptr, AttributeType::SOUND, 0, 2 * lvl, 8);
+        (void)fire_ball(player_ptr, AttributeType::SOUND, Direction::self(), 2 * lvl, 8);
         (void)aggravate_monsters(player_ptr, 0);
         return true;
     case PlayerMutationType::ILLUMINE:
@@ -241,8 +241,8 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         turn_monsters(player_ptr, lvl * 4);
         return true;
     case PlayerMutationType::LASER_EYE: {
-        auto dir = 0;
-        if (!get_aim_dir(player_ptr, &dir)) {
+        const auto dir = get_aim_dir(player_ptr);
+        if (!dir) {
             return false;
         }
 
@@ -257,7 +257,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
             return false;
         }
 
-        const auto pos = player_ptr->get_neighbor(*dir);
+        const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = floor.get_grid(pos);
         if (!grid.has_monster()) {
             msg_print(_("邪悪な存在を感じとれません！", "You sense no evil there!"));
@@ -275,7 +275,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         can_banish &= monster.mflag2.has_not(MonsterConstantFlagType::NOGENO);
         if (can_banish) {
             if (record_named_pet && monster.is_named_pet()) {
-                const auto m_name = monster_desc(player_ptr, &monster, MD_INDEF_VISIBLE);
+                const auto m_name = monster_desc(player_ptr, monster, MD_INDEF_VISIBLE);
                 exe_write_diary(floor, DiaryKind::NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
             }
 
@@ -297,14 +297,14 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
             return false;
         }
 
-        const auto pos = player_ptr->get_neighbor(*dir);
+        const auto pos = player_ptr->get_neighbor(dir);
         const auto &grid = floor.get_grid(pos);
         if (!grid.has_monster()) {
             msg_print(_("あなたは何もない場所で手を振った。", "You wave your hands in the air."));
             return true;
         }
 
-        fire_bolt(player_ptr, AttributeType::COLD, *dir, 2 * lvl);
+        fire_bolt(player_ptr, AttributeType::COLD, dir, 2 * lvl);
         return true;
     }
     case PlayerMutationType::LAUNCHER:

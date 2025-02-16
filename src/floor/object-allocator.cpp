@@ -1,8 +1,6 @@
 #include "floor/object-allocator.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
-#include "floor/dungeon-tunnel-util.h"
-#include "floor/floor-allocation-types.h"
 #include "floor/floor-generator-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
@@ -16,52 +14,38 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
-#include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
 /*!
- * @brief 上下左右の外壁数をカウントする / Count the number of walls adjacent to the given grid.
- * @param y 基準のy座標
- * @param x 基準のx座標
+ * @brief 上下左右の外壁数をカウントする
+ * @param pos 基準座標
  * @return 隣接する外壁の数
- * @note Assumes "in_bounds()"
- * @details We count only granite walls and permanent walls.
  */
-static int next_to_walls(FloorType *floor_ptr, POSITION y, POSITION x)
+static int next_to_walls(const FloorType &floor, const Pos2D &pos)
 {
-    int k = 0;
-    if (in_bounds(floor_ptr, y + 1, x) && floor_ptr->grid_array[y + 1][x].is_extra()) {
-        k++;
-    }
-
-    if (in_bounds(floor_ptr, y - 1, x) && floor_ptr->grid_array[y - 1][x].is_extra()) {
-        k++;
-    }
-
-    if (in_bounds(floor_ptr, y, x + 1) && floor_ptr->grid_array[y][x + 1].is_extra()) {
-        k++;
-    }
-
-    if (in_bounds(floor_ptr, y, x - 1) && floor_ptr->grid_array[y][x - 1].is_extra()) {
-        k++;
+    auto k = 0;
+    for (const auto &d : Direction::directions_4()) {
+        const auto pos_neighbor = pos + d.vec();
+        if (floor.contains(pos_neighbor) && floor.get_grid(pos_neighbor).is_extra()) {
+            k++;
+        }
     }
 
     return k;
 }
 
 /*!
- * @brief alloc_stairs()の補助として指定の位置に階段を生成できるかの判定を行う / Helper function for alloc_stairs(). Is this a good location for stairs?
+ * @brief alloc_stairs()の補助として指定の位置に階段を生成できるかの判定を行う
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 基準のy座標
- * @param x 基準のx座標
+ * @param pos 基準座標
  * @param walls 最低減隣接させたい外壁の数
  * @return 階段を生成して問題がないならばTRUEを返す。
  */
-static bool alloc_stairs_aux(PlayerType *player_ptr, POSITION y, POSITION x, int walls)
+static bool alloc_stairs_aux(PlayerType *player_ptr, const Pos2D &pos, int walls)
 {
-    auto *floor_ptr = player_ptr->current_floor_ptr;
-    auto *g_ptr = &floor_ptr->grid_array[y][x];
-    if (!g_ptr->is_floor() || pattern_tile(floor_ptr, y, x) || !g_ptr->o_idx_list.empty() || g_ptr->has_monster() || next_to_walls(floor_ptr, y, x) < walls) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
+    if (!grid.is_floor() || pattern_tile(floor, pos.y, pos.x) || !grid.o_idx_list.empty() || grid.has_monster() || next_to_walls(floor, pos) < walls) {
         return false;
     }
 
@@ -111,14 +95,13 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
         return false;
     }
 
-    for (int i = 0; i < num; i++) {
+    for (auto i = 0; i < num; i++) {
         while (true) {
-            Grid *g_ptr;
-            int candidates = 0;
-            const POSITION max_x = floor.width - 1;
-            for (POSITION y = 1; y < floor.height - 1; y++) {
-                for (POSITION x = 1; x < max_x; x++) {
-                    if (alloc_stairs_aux(player_ptr, y, x, walls)) {
+            auto candidates = 0;
+            const auto max_x = floor.width - 1;
+            for (auto y = 1; y < floor.height - 1; y++) {
+                for (auto x = 1; x < max_x; x++) {
+                    if (alloc_stairs_aux(player_ptr, { y, x }, walls)) {
                         candidates++;
                     }
                 }
@@ -133,12 +116,12 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
                 continue;
             }
 
-            int pick = randint1(candidates);
-            POSITION y;
-            POSITION x = max_x;
+            auto pick = randint1(candidates);
+            int y;
+            auto x = max_x;
             for (y = 1; y < floor.height - 1; y++) {
                 for (x = 1; x < floor.width - 1; x++) {
-                    if (alloc_stairs_aux(player_ptr, y, x, walls)) {
+                    if (alloc_stairs_aux(player_ptr, { y, x }, walls)) {
                         pick--;
                         if (pick == 0) {
                             break;
@@ -151,10 +134,10 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
                 }
             }
 
-            g_ptr = &floor.grid_array[y][x];
-            g_ptr->mimic = 0;
-            g_ptr->feat = (i < shaft_num) ? dungeon.convert_terrain_id(feat, TerrainCharacteristics::SHAFT) : feat;
-            g_ptr->info &= ~(CAVE_FLOOR);
+            auto &grid = floor.grid_array[y][x];
+            grid.mimic = 0;
+            grid.feat = (i < shaft_num) ? dungeon.convert_terrain_id(feat, TerrainCharacteristics::SHAFT) : feat;
+            grid.info &= ~(CAVE_FLOOR);
             break;
         }
     }
@@ -208,14 +191,14 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_TRAP:
-            place_trap(&floor, pos.y, pos.x);
+            place_trap(floor, pos);
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_GOLD:
-            place_gold(player_ptr, pos.y, pos.x);
+            place_gold(player_ptr, pos);
             break;
         case ALLOC_TYP_OBJECT:
-            place_object(player_ptr, pos.y, pos.x, 0L);
+            place_object(player_ptr, pos, 0);
             break;
         default:
             break;

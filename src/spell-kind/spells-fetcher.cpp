@@ -3,14 +3,12 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/cave.h"
-#include "floor/geometry.h"
 #include "grid/grid.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-status-setter.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "system/angband-system.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -25,7 +23,6 @@
 #include "target/target-types.h"
 #include "timed-effect/timed-effects.h"
 #include "tracking/lore-tracker.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 /*!
@@ -36,7 +33,7 @@
  * @param wgt 許容重量
  * @param require_los 射線の通りを要求するならばTRUE
  */
-void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
+void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool require_los)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
@@ -45,22 +42,22 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         return;
     }
 
-    Grid *g_ptr;
+    Grid *grid_ptr;
     const auto &system = AngbandSystem::get_instance();
-    if (dir == 5 && target_okay(player_ptr)) {
-        const Pos2D pos(target_col, target_row);
+    if (dir.is_targetting() && target_okay(player_ptr)) {
+        const Pos2D pos(target_row, target_col);
         if (Grid::calc_distance(p_pos, pos) > system.get_max_range()) {
             msg_print(_("そんなに遠くにある物は取れません！", "You can't fetch something that far away!"));
             return;
         }
 
-        g_ptr = &floor.get_grid(pos);
-        if (g_ptr->o_idx_list.empty()) {
+        grid_ptr = &floor.get_grid(pos);
+        if (grid_ptr->o_idx_list.empty()) {
             msg_print(_("そこには何もありません。", "There is no object there."));
             return;
         }
 
-        if (g_ptr->is_icky()) {
+        if (grid_ptr->is_icky()) {
             msg_print(_("アイテムがコントロールを外れて落ちた。", "The item slips from your control."));
             return;
         }
@@ -77,11 +74,11 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
     } else {
         auto pos = p_pos;
         auto is_first_loop = true;
-        g_ptr = &floor.get_grid(pos);
-        while (is_first_loop || g_ptr->o_idx_list.empty()) {
+        grid_ptr = &floor.get_grid(pos);
+        while (is_first_loop || grid_ptr->o_idx_list.empty()) {
             is_first_loop = false;
-            pos += Pos2DVec(ddy[dir], ddx[dir]);
-            g_ptr = &floor.get_grid(pos);
+            pos += dir.vec();
+            grid_ptr = &floor.get_grid(pos);
             if ((Grid::calc_distance(p_pos, pos) > system.get_max_range())) {
                 return;
             }
@@ -92,15 +89,15 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
         }
     }
 
-    auto &item = floor.o_list[g_ptr->o_idx_list.front()];
+    auto &item = floor.o_list[grid_ptr->o_idx_list.front()];
     if (item.weight > wgt) {
         msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
         return;
     }
 
-    const auto item_idx = g_ptr->o_idx_list.front();
-    g_ptr->o_idx_list.pop_front();
-    floor.get_grid(p_pos).o_idx_list.add(&floor, item_idx); /* 'move' it */
+    const auto item_idx = grid_ptr->o_idx_list.front();
+    grid_ptr->o_idx_list.pop_front();
+    floor.get_grid(p_pos).o_idx_list.add(floor, item_idx); /* 'move' it */
     item.set_position(p_pos);
 
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
@@ -111,13 +108,13 @@ void fetch_item(PlayerType *player_ptr, DIRECTION dir, WEIGHT wgt, bool require_
 
 bool fetch_monster(PlayerType *player_ptr)
 {
-    if (!target_set(player_ptr, TARGET_KILL)) {
+    const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
+    if (!pos) {
         return false;
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(target_row, target_col);
-    auto m_idx = floor.get_grid(pos).m_idx;
+    const auto m_idx = floor.get_grid(*pos).m_idx;
     if (!is_monster(m_idx)) {
         return false;
     }
@@ -125,34 +122,33 @@ bool fetch_monster(PlayerType *player_ptr)
     if (monster.is_riding()) {
         return false;
     }
-    if (!floor.has_los(pos)) {
+    if (!floor.has_los(*pos)) {
         return false;
     }
-    if (!projectable(player_ptr, player_ptr->get_position(), pos)) {
+    if (!projectable(player_ptr, player_ptr->get_position(), *pos)) {
         return false;
     }
 
-    const auto m_name = monster_desc(player_ptr, &monster, 0);
+    const auto m_name = monster_desc(player_ptr, monster, 0);
     msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
-    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { target_row, target_col }, player_ptr->get_position(), 0);
-    auto ty = target_row, tx = target_col;
+    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), *pos, player_ptr->get_position(), 0);
+    auto ty = pos->y, tx = pos->x;
     for (const auto &[ny, nx] : path_g) {
         const Pos2D pos_path(ny, nx);
-        auto *g_ptr = &floor.get_grid(pos_path);
-
-        if (in_bounds(&floor, ny, nx) && is_cave_empty_bold(player_ptr, ny, nx) && !g_ptr->is_object() && !pattern_tile(&floor, ny, nx)) {
+        const auto &grid = floor.get_grid(pos_path);
+        if (floor.contains(pos_path) && is_cave_empty_bold(player_ptr, ny, nx) && !grid.is_object() && !pattern_tile(floor, ny, nx)) {
             ty = ny;
             tx = nx;
         }
     }
 
-    floor.get_grid(pos).m_idx = 0;
+    floor.get_grid(*pos).m_idx = 0;
     floor.get_grid({ ty, tx }).m_idx = m_idx;
     monster.fy = ty;
     monster.fx = tx;
     (void)set_monster_csleep(player_ptr, m_idx, 0);
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, target_row, target_col);
+    lite_spot(player_ptr, pos->y, pos->x);
     lite_spot(player_ptr, ty, tx);
     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);

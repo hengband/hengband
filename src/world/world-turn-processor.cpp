@@ -175,8 +175,8 @@ void WorldTurnProcessor::process_monster_arena()
 
 void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
 {
-    auto *wm_ptr = &this->player_ptr->current_floor_ptr->m_list[win_m_idx];
-    const auto m_name = monster_desc(this->player_ptr, wm_ptr, 0);
+    const auto &monster = this->player_ptr->current_floor_ptr->m_list[win_m_idx];
+    const auto m_name = monster_desc(this->player_ptr, monster, 0);
     msg_format(_("%sが勝利した！", "%s won!"), m_name.data());
     msg_print(nullptr);
 

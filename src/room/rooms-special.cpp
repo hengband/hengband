@@ -1,14 +1,11 @@
 #include "room/rooms-special.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "floor//geometry.h"
-#include "floor/floor-generator.h"
 #include "game-option/cheat-types.h"
 #include "grid/door.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
-#include "monster-race/monster-race-hook.h"
 #include "monster/monster-list.h"
 #include "monster/monster-util.h"
 #include "object-enchant/item-apply-magic.h"
@@ -21,31 +18,30 @@
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
-#include "system/system-variables.h"
 #include "wizard/wizard-messages.h"
 
 namespace {
 void place_floor_glass(PlayerType *player_ptr, Grid &grid)
 {
-    place_grid(player_ptr, &grid, GB_FLOOR);
+    place_grid(player_ptr, grid, GB_FLOOR);
     grid.set_terrain_id(TerrainTag::GLASS_FLOOR);
 }
 
 void place_outer_glass(PlayerType *player_ptr, Grid &grid)
 {
-    place_grid(player_ptr, &grid, GB_OUTER);
+    place_grid(player_ptr, grid, GB_OUTER);
     grid.set_terrain_id(TerrainTag::GLASS_WALL);
 }
 
 void place_inner_glass(PlayerType *player_ptr, Grid &grid)
 {
-    place_grid(player_ptr, &grid, GB_INNER);
+    place_grid(player_ptr, grid, GB_INNER);
     grid.set_terrain_id(TerrainTag::GLASS_WALL);
 }
 
 void place_inner_perm_glass(PlayerType *player_ptr, Grid &grid)
 {
-    place_grid(player_ptr, &grid, GB_INNER_PERM);
+    place_grid(player_ptr, grid, GB_INNER_PERM);
     grid.set_terrain_id(TerrainTag::PERMANENT_GLASS_WALL);
 }
 }
@@ -104,39 +100,36 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
         get_mon_num_prep_enum(player_ptr, MonraceHook::GLASS);
 
         /* Place fixed lite berathers */
-        for (auto dir1 = 4; dir1 < 8; dir1++) {
+        for (const auto &d_diag : Direction::directions_diag4()) {
             const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level, 0);
-            const auto y = center->y + 2 * ddy_ddd[dir1];
-            const auto x = center->x + 2 * ddx_ddd[dir1];
+            const auto pos = *center + d_diag.vec() * 2;
             if (MonraceList::is_valid(monrace_id)) {
-                place_specific_monster(player_ptr, y, x, monrace_id, PM_ALLOW_SLEEP);
+                place_specific_monster(player_ptr, pos.y, pos.x, monrace_id, PM_ALLOW_SLEEP);
             }
 
             /* Walls around the breather */
-            for (auto dir2 = 0; dir2 < 8; dir2++) {
-                place_inner_glass(player_ptr, floor.get_grid({ y + ddy_ddd[dir2], x + ddx_ddd[dir2] }));
+            for (const auto &d : Direction::directions_8()) {
+                place_inner_glass(player_ptr, floor.get_grid(pos + d.vec()));
             }
         }
 
         /* Walls around the potion */
-        for (auto dir1 = 0; dir1 < 4; dir1++) {
-            place_inner_perm_glass(player_ptr, floor.get_grid({ center->y + 2 * ddy_ddd[dir1], center->x + 2 * ddx_ddd[dir1] }));
-            floor.get_grid({ center->y + ddy_ddd[dir1], center->x + ddx_ddd[dir1] }).info |= CAVE_ICKY;
+        for (const auto &d : Direction::directions_4()) {
+            place_inner_perm_glass(player_ptr, floor.get_grid(*center + d.vec() * 2));
+            floor.get_grid(*center + d.vec()).info |= CAVE_ICKY;
         }
 
         /* Glass door */
-        const auto dir1 = randint0(4);
-        const auto y = center->y + 2 * ddy_ddd[dir1];
-        const auto x = center->x + 2 * ddx_ddd[dir1];
-        place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
-        const Pos2D pos(y, x);
+        const auto &d = rand_choice(Direction::directions_4());
+        const auto pos = *center + d.vec() * 2;
+        place_secret_door(player_ptr, pos, DoorKind::GLASS_DOOR);
         if (floor.has_closed_door_at(pos)) {
-            floor.get_grid(pos).set_mimic_terrain_id(TerrainTag::GLASS_WALL);
+            floor.get_grid(pos).set_terrain_id(TerrainTag::GLASS_WALL, TerrainKind::MIMIC);
         }
 
         /* Place a potion */
         select_baseitem_id_hook = kind_is_potion;
-        place_object(player_ptr, center->y, center->x, AM_NO_FIXED_ART);
+        place_object(player_ptr, *center, AM_NO_FIXED_ART);
         floor.get_grid(*center).info |= CAVE_ICKY;
     } break;
 
@@ -155,23 +148,23 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
         }
 
         /* Walls around the breather */
-        for (auto dir1 = 0; dir1 < 8; dir1++) {
-            place_inner_glass(player_ptr, floor.get_grid({ center->y + ddy_ddd[dir1], center->x + ddx_ddd[dir1] }));
+        for (const auto &d : Direction::directions_8()) {
+            place_inner_glass(player_ptr, floor.get_grid(*center + d.vec()));
         }
 
         /* Curtains around the breather */
         for (auto y = center->y - 1; y <= center->y + 1; y++) {
-            place_secret_door(player_ptr, y, center->x - 2, DOOR_CURTAIN);
-            place_secret_door(player_ptr, y, center->x + 2, DOOR_CURTAIN);
+            place_secret_door(player_ptr, { y, center->x - 2 }, DoorKind::CURTAIN);
+            place_secret_door(player_ptr, { y, center->x + 2 }, DoorKind::CURTAIN);
         }
 
         for (auto x = center->x - 1; x <= center->x + 1; x++) {
-            place_secret_door(player_ptr, center->y - 2, x, DOOR_CURTAIN);
-            place_secret_door(player_ptr, center->y + 2, x, DOOR_CURTAIN);
+            place_secret_door(player_ptr, { center->y - 2, x }, DoorKind::CURTAIN);
+            place_secret_door(player_ptr, { center->y + 2, x }, DoorKind::CURTAIN);
         }
 
         /* Place an object */
-        place_object(player_ptr, center->y, center->x, AM_NO_FIXED_ART);
+        place_object(player_ptr, *center, AM_NO_FIXED_ART);
         floor.get_grid(*center).info |= CAVE_ICKY;
     } break;
 
@@ -188,33 +181,32 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
             place_inner_glass(player_ptr, floor.get_grid({ center->y + 3, x }));
         }
 
-        for (auto dir1 = 4; dir1 < 8; dir1++) {
-            place_inner_glass(player_ptr, floor.get_grid({ center->y + 2 * ddy_ddd[dir1], center->x + 2 * ddx_ddd[dir1] }));
+        for (const auto &d_diag : Direction::directions_diag4()) {
+            place_inner_glass(player_ptr, floor.get_grid(*center + d_diag.vec() * 2));
         }
 
         get_mon_num_prep_enum(player_ptr, MonraceHook::SHARDS);
 
         /* Place shard berathers */
-        for (auto dir1 = 4; dir1 < 8; dir1++) {
+        for (const auto &d_diag : Direction::directions_diag4()) {
             const auto monrace_id = get_mon_num(player_ptr, 0, floor.dun_level, 0);
-            const auto y = center->y + ddy_ddd[dir1];
-            const auto x = center->x + ddx_ddd[dir1];
+            const auto pos = *center + d_diag.vec();
             if (MonraceList::is_valid(monrace_id)) {
-                place_specific_monster(player_ptr, y, x, monrace_id, 0L);
+                place_specific_monster(player_ptr, pos.y, pos.x, monrace_id, 0L);
             }
         }
 
         /* Place two potions */
         if (one_in_(2)) {
             select_baseitem_id_hook = kind_is_potion;
-            place_object(player_ptr, center->y, center->x - 1, AM_NO_FIXED_ART);
+            place_object(player_ptr, *center + Direction(4).vec(), AM_NO_FIXED_ART);
             select_baseitem_id_hook = kind_is_potion;
-            place_object(player_ptr, center->y, center->x + 1, AM_NO_FIXED_ART);
+            place_object(player_ptr, *center + Direction(6).vec(), AM_NO_FIXED_ART);
         } else {
             select_baseitem_id_hook = kind_is_potion;
-            place_object(player_ptr, center->y - 1, center->x, AM_NO_FIXED_ART);
+            place_object(player_ptr, *center + Direction(8).vec(), AM_NO_FIXED_ART);
             select_baseitem_id_hook = kind_is_potion;
-            place_object(player_ptr, center->y + 1, center->x, AM_NO_FIXED_ART);
+            place_object(player_ptr, *center + Direction(2).vec(), AM_NO_FIXED_ART);
         }
 
         for (auto y = center->y - 2; y <= center->y + 2; y++) {
