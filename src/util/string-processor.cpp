@@ -12,7 +12,7 @@ size_t max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の�
 std::optional<std::string> macro_template; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列 */
 std::optional<std::string> macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列 */
 std::vector<std::string> macro_modifier_names = std::vector<std::string>(MAX_MACRO_MOD); /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列配列 */
-concptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
+std::vector<std::string> macro_trigger_names = std::vector<std::string>(MAX_MACRO_TRIG); /*!< マクロのトリガーコード */
 concptr macro_trigger_keycode[2][MAX_MACRO_TRIG]; /*!< マクロの内容 */
 
 /*
@@ -142,8 +142,8 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     size_t len = 0;
     size_t i = 0;
     for (; i < max_macrotrigger; i++) {
-        len = strlen(macro_trigger_name[i]);
-        if (!angband_strnicmp(str, macro_trigger_name[i], len) && ']' == str[len]) {
+        len = macro_trigger_names[i].length();
+        if (!angband_strnicmp(str, macro_trigger_names[i].data(), len) && str[len] == ']') {
             break;
         }
     }
@@ -319,7 +319,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
         return false;
     }
 
-    tmp = macro_trigger_name[i];
+    tmp = macro_trigger_names[i].data();
     while (*tmp) {
         *s++ = *tmp++;
     }

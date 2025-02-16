@@ -409,7 +409,7 @@ static bool decide_template_modifier(size_t num_tokens, char **zz)
         }
 
         for (size_t i = 0; i < max_macrotrigger; i++) {
-            string_free(macro_trigger_name[i]);
+            macro_trigger_names[i] = "";
             string_free(macro_trigger_keycode[0][i]);
             string_free(macro_trigger_keycode[1][i]);
         }
@@ -444,9 +444,6 @@ static bool decide_template_modifier(size_t num_tokens, char **zz)
  */
 static bool interpret_macro_keycodes(int tok, char **zz)
 {
-    //!< @details 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
-    constexpr auto max_macro_chars = 16128;
-    char buf_aux[max_macro_chars]{};
     if (max_macrotrigger >= MAX_MACRO_TRIG) {
         msg_print(_("マクロトリガーの設定が多すぎます!", "Too many macro triggers!"));
         return false;
@@ -454,17 +451,17 @@ static bool interpret_macro_keycodes(int tok, char **zz)
 
     auto m = max_macrotrigger;
     max_macrotrigger++;
-    auto *t = buf_aux;
-    auto *s = zz[0];
-    while (*s) {
+    std::string t;
+    const auto *s = zz[0];
+    while (*s != '\0') {
         if ('\\' == *s) {
             s++;
         }
-        *t++ = *s++;
+
+        t.push_back(*s++);
     }
 
-    *t = '\0';
-    macro_trigger_name[m] = string_make(buf_aux);
+    macro_trigger_names[m] = std::move(t);
     macro_trigger_keycode[0][m] = string_make(zz[1]);
     if (tok == 3) {
         macro_trigger_keycode[1][m] = string_make(zz[2]);

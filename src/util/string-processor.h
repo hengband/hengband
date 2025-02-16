@@ -16,7 +16,7 @@ extern size_t max_macrotrigger;
 extern std::optional<std::string> macro_template;
 extern std::optional<std::string> macro_modifier_chr;
 extern std::vector<std::string> macro_modifier_names;
-extern concptr macro_trigger_name[MAX_MACRO_TRIG];
+extern std::vector<std::string> macro_trigger_names;
 extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
 
 void text_to_ascii(char *buf, std::string_view sv, size_t bufsize);
