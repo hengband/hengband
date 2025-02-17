@@ -1265,6 +1265,11 @@ int ItemEntity::get_lite_radius() const
     return radius;
 }
 
+Pos2D ItemEntity::get_position() const
+{
+    return { this->iy, this->ix };
+}
+
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
     const auto description = act.build_timeout_description();

@@ -154,19 +154,18 @@ static player_hand main_attack_hand(PlayerType *player_ptr);
 static void delayed_visual_update(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    for (int i = 0; i < floor.redraw_n; i++) {
-        POSITION y = floor.redraw_y[i];
-        POSITION x = floor.redraw_x[i];
-        auto &grid = floor.grid_array[y][x];
+    for (auto i = 0; i < floor.redraw_n; i++) {
+        const Pos2D pos(floor.redraw_y[i], floor.redraw_x[i]);
+        auto &grid = floor.get_grid(pos);
         if (none_bits(grid.info, CAVE_REDRAW)) {
             continue;
         }
 
         if (any_bits(grid.info, CAVE_NOTE)) {
-            note_spot(player_ptr, y, x);
+            note_spot(player_ptr, pos);
         }
 
-        lite_spot(player_ptr, y, x);
+        lite_spot(player_ptr, pos);
         if (grid.has_monster()) {
             update_monster(player_ptr, grid.m_idx, false);
         }

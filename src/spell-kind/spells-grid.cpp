@@ -32,8 +32,8 @@ bool create_rune_protection_one(PlayerType *player_ptr)
     auto &grid = floor.get_grid(p_pos);
     grid.info |= CAVE_OBJECT;
     grid.set_terrain_id(TerrainTag::RUNE_PROTECTION, TerrainKind::MIMIC);
-    note_spot(player_ptr, p_pos.y, p_pos.x);
-    lite_spot(player_ptr, p_pos.y, p_pos.x);
+    note_spot(player_ptr, p_pos);
+    lite_spot(player_ptr, p_pos);
     return true;
 }
 
@@ -57,8 +57,8 @@ bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
     auto &grid = floor.get_grid(pos);
     grid.info |= CAVE_OBJECT;
     grid.set_terrain_id(TerrainTag::RUNE_EXPLOSION, TerrainKind::MIMIC);
-    note_spot(player_ptr, pos.y, pos.x);
-    lite_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
+    lite_spot(player_ptr, pos);
     return true;
 }
 

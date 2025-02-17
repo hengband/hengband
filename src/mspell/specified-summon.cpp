@@ -370,8 +370,8 @@ MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, M
                 floor.get_grid(*attract_position).m_idx = target_m_idx;
                 monster.set_position(*attract_position);
                 update_monster(player_ptr, target_m_idx, true);
-                lite_spot(player_ptr, current_position.y, current_position.x);
-                lite_spot(player_ptr, attract_position->y, attract_position->x);
+                lite_spot(player_ptr, current_position);
+                lite_spot(player_ptr, *attract_position);
 
                 count++;
             }

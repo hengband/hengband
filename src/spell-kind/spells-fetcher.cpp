@@ -102,7 +102,7 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
 
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     msg_format(_("%s^があなたの足元に飛んできた。", "%s^ flies through the air to your feet."), item_name.data());
-    note_spot(player_ptr, p_pos.y, p_pos.x);
+    note_spot(player_ptr, p_pos);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);
 }
 
@@ -130,26 +130,23 @@ bool fetch_monster(PlayerType *player_ptr)
     }
 
     const auto m_name = monster_desc(player_ptr, monster, 0);
-    msg_format(_("%sを引き戻した。", "You pull back %s."), m_name.data());
+    msg_print(_("{}を引き戻した。", "You pull back {}."), m_name);
     ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), *pos, player_ptr->get_position(), 0);
-    auto ty = pos->y, tx = pos->x;
-    for (const auto &[ny, nx] : path_g) {
-        const Pos2D pos_path(ny, nx);
+    Pos2D pos_target = *pos;
+    for (const auto &pos_path : path_g) {
         const auto &grid = floor.get_grid(pos_path);
-        if (floor.contains(pos_path) && is_cave_empty_bold(player_ptr, ny, nx) && !grid.is_object() && !pattern_tile(floor, ny, nx)) {
-            ty = ny;
-            tx = nx;
+        if (floor.contains(pos_path) && is_cave_empty_bold(player_ptr, pos_path.y, pos_path.x) && !grid.is_object() && !pattern_tile(floor, pos_path.y, pos_path.x)) {
+            pos_target = pos_path;
         }
     }
 
     floor.get_grid(*pos).m_idx = 0;
-    floor.get_grid({ ty, tx }).m_idx = m_idx;
-    monster.fy = ty;
-    monster.fx = tx;
+    floor.get_grid(pos_target).m_idx = m_idx;
+    monster.set_position(pos_target);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, pos->y, pos->x);
-    lite_spot(player_ptr, ty, tx);
+    lite_spot(player_ptr, *pos);
+    lite_spot(player_ptr, pos_target);
     if (monster.get_monrace().brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }

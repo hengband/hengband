@@ -1,8 +1,6 @@
 #include "floor/floor-events.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/disturbance.h"
-#include "core/window-redrawer.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
 #include "floor/cave.h"
 #include "floor/dungeon-feeling.h"
@@ -71,13 +69,14 @@ void day_break(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     for (auto y = 0; y < floor.height; y++) {
         for (auto x = 0; x < floor.width; x++) {
-            auto &grid = floor.get_grid({ y, x });
+            const Pos2D pos(y, x);
+            auto &grid = floor.get_grid(pos);
             grid.add_info(CAVE_GLOW);
             if (view_perma_grids) {
                 grid.add_info(CAVE_MARK);
             }
 
-            note_spot(player_ptr, y, x);
+            note_spot(player_ptr, pos);
         }
     }
 
@@ -106,7 +105,7 @@ void night_falls(PlayerType *player_ptr)
             grid.info &= ~(CAVE_GLOW);
             if (terrain.flags.has_not(Tc::REMEMBER)) {
                 grid.info &= ~(CAVE_MARK);
-                note_spot(player_ptr, y, x);
+                note_spot(player_ptr, pos);
             }
         }
 

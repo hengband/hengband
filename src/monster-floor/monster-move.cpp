@@ -260,7 +260,7 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
     grid.info &= ~(CAVE_OBJECT);
     grid.mimic = 0;
     turn_flags_ptr->do_move = true;
-    note_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
     return true;
 }
 
@@ -373,8 +373,8 @@ void activate_explosive_rune(PlayerType *player_ptr, const Pos2D &pos, const Mon
     reset_bits(grid.info, CAVE_OBJECT);
     grid.mimic = 0;
 
-    note_spot(player_ptr, pos.y, pos.x);
-    lite_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
+    lite_spot(player_ptr, pos);
 }
 
 /*!

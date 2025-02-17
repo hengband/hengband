@@ -376,7 +376,7 @@ std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity &monster, 
         }
 
         monster.ap_r_idx = monster.r_idx;
-        lite_spot(player_ptr, monster.fy, monster.fx);
+        lite_spot(player_ptr, monster.get_position());
     }
 
     const auto m_name = monster_desc(player_ptr, monster, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);

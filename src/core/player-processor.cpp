@@ -331,7 +331,7 @@ void process_player(PlayerType *player_ptr)
 
                 // モンスターのシンボル/カラーの更新
                 if (monster.ml && monrace.visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {
-                    lite_spot(player_ptr, monster.fy, monster.fx);
+                    lite_spot(player_ptr, monster.get_position());
                 }
 
                 // 出現して即魔法を使わないようにするフラグを落とす処理
@@ -358,7 +358,7 @@ void process_player(PlayerType *player_ptr)
                             rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
                         }
 
-                        lite_spot(player_ptr, monster.fy, monster.fx);
+                        lite_spot(player_ptr, monster.get_position());
                     }
                 }
             }

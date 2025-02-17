@@ -103,7 +103,7 @@ void print_map(PlayerType *player_ptr)
         }
     }
 
-    lite_spot(player_ptr, player_ptr->y, player_ptr->x);
+    lite_spot(player_ptr, player_ptr->get_position());
     (void)term_set_cursor(v);
 }
 
