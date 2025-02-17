@@ -376,7 +376,7 @@ static void process_game_turn(PlayerType *player_ptr)
         world.character_xtra = true;
         handle_stuff(player_ptr);
         world.character_xtra = false;
-        target_who = 0;
+        Target::clear_last_target();
         health_track(player_ptr, 0);
         forget_lite(floor);
         forget_view(floor);

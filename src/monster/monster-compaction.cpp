@@ -43,8 +43,9 @@ static void compact_monsters_aux(PlayerType *player_ptr, MONSTER_IDX i1, MONSTER
         o_ptr->held_m_idx = i2;
     }
 
-    if (target_who == i1) {
-        target_who = i2;
+    const auto target_m_idx = Target::get_last_target().get_m_idx();
+    if (target_m_idx == i1) {
+        Target::set_last_target(Target::create_monster_target(player_ptr, i2));
     }
 
     if (player_ptr->pet_t_m_idx == i1) {

@@ -133,27 +133,3 @@ void verify_panel(PlayerType *player_ptr)
     };
     rfu.set_flags(flags);
 }
-
-/*
- * Update (if necessary) and verify (if possible) the target.
- * We return TRUE if the target is "okay" and FALSE otherwise.
- */
-bool target_okay(PlayerType *player_ptr)
-{
-    if (target_who < 0) {
-        return true;
-    }
-
-    if (target_who <= 0) {
-        return false;
-    }
-
-    if (!target_able(player_ptr, target_who)) {
-        return false;
-    }
-
-    const auto &monster = player_ptr->current_floor_ptr->m_list[target_who];
-    target_row = monster.fy;
-    target_col = monster.fx;
-    return true;
-}
