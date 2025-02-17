@@ -30,12 +30,9 @@ bool fire_ball(PlayerType *player_ptr, AttributeType typ, const Direction &dir, 
         flg |= PROJECT_HIDE;
     }
 
-    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
-
-    if (dir.is_targetting() && target_okay(player_ptr)) {
+    const auto [ty, tx] = dir.get_target_position(player_ptr->get_position(), 99);
+    if (dir.is_target_okay()) {
         flg &= ~(PROJECT_STOP);
-        tx = target_col;
-        ty = target_row;
     }
 
     return project(player_ptr, 0, rad, ty, tx, dam, typ, flg, cap_mon_ptr).notice;
@@ -60,12 +57,9 @@ bool fire_breath(PlayerType *player_ptr, AttributeType typ, const Direction &dir
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_BREATH;
 
-    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
-
-    if (dir.is_targetting() && target_okay(player_ptr)) {
+    const auto [ty, tx] = dir.get_target_position(player_ptr->get_position(), 99);
+    if (dir.is_target_okay()) {
         reset_bits(flg, PROJECT_STOP);
-        tx = target_col;
-        ty = target_row;
     }
 
     return project(player_ptr, 0, rad, ty, tx, dam, typ, flg).notice;
@@ -88,11 +82,7 @@ bool fire_breath(PlayerType *player_ptr, AttributeType typ, const Direction &dir
  */
 bool fire_rocket(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad)
 {
-    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
-    if (dir.is_targetting() && target_okay(player_ptr)) {
-        tx = target_col;
-        ty = target_row;
-    }
+    const auto [ty, tx] = dir.get_target_position(player_ptr->get_position(), 99);
 
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     return project(player_ptr, 0, rad, ty, tx, dam, typ, flg).notice;
@@ -115,12 +105,10 @@ bool fire_rocket(PlayerType *player_ptr, AttributeType typ, const Direction &dir
  */
 bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad)
 {
-    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
+    const auto [ty, tx] = dir.get_target_position(player_ptr->get_position(), 99);
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
-    if (dir.is_targetting() && target_okay(player_ptr)) {
+    if (dir.is_target_okay()) {
         flg &= ~(PROJECT_STOP);
-        tx = target_col;
-        ty = target_row;
     }
 
     return project(player_ptr, 0, rad, ty, tx, dam, typ, flg).notice;
@@ -163,18 +151,15 @@ bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX src_idx, AttributeType typ,
  */
 bool fire_blast(PlayerType *player_ptr, AttributeType typ, const Direction &dir, const Dice &dice, int num, int dev)
 {
-    POSITION ty, tx, y, x;
+    POSITION y, x;
     POSITION ly, lx;
+    const auto [ty, tx] = dir.get_target_position(player_ptr->get_position(), 20);
     if (dir.is_targetting()) {
-        tx = target_col;
-        ty = target_row;
-
         lx = 20 * (tx - player_ptr->x) + player_ptr->x;
         ly = 20 * (ty - player_ptr->y) + player_ptr->y;
     } else {
-        const auto vec = dir.vec();
-        ly = ty = player_ptr->y + 20 * vec.y;
-        lx = tx = player_ptr->x + 20 * vec.x;
+        ly = ty;
+        lx = tx;
     }
 
     const auto ld = Grid::calc_distance(player_ptr->get_position(), { ly, lx });
@@ -277,6 +262,6 @@ bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType ty
 bool project_hook(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, BIT_FLAGS flg)
 {
     flg |= (PROJECT_THRU);
-    const auto pos = (dir.is_targetting() && target_okay(player_ptr)) ? Pos2D(target_row, target_col) : player_ptr->get_neighbor(dir);
+    const auto pos = dir.get_target_position(player_ptr->get_position());
     return project(player_ptr, 0, 0, pos.y, pos.x, dam, typ, flg).notice;
 }

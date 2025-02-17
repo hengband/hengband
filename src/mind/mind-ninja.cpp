@@ -125,10 +125,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     }
 
     const auto p_pos = player_ptr->get_position();
-    auto pos_target = p_pos + dir.vec() * project_length;
-    if (dir.is_targetting() && target_okay(player_ptr)) {
-        pos_target = { target_row, target_col };
-    }
+    const auto pos_target = dir.get_target_position(p_pos, project_length);
 
     auto tm_idx = 0;
     auto &floor = *player_ptr->current_floor_ptr;

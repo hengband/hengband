@@ -37,10 +37,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
     }
 
     const auto p_pos = player_ptr->get_position();
-    auto pos_target = p_pos + dir.vec() * 99;
-    if (dir.is_targetting() && target_okay(player_ptr)) {
-        pos_target = { target_row, target_col };
-    }
+    auto pos_target = dir.get_target_position(p_pos, 99);
 
     auto pos = p_pos;
     auto &floor = *player_ptr->current_floor_ptr;

@@ -110,7 +110,7 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
         return true;
     }
 
-    constexpr auto dirs = Direction::directions_8();
+    const auto dirs = Direction::directions_8();
     const auto num_of_walls = std::count_if(dirs.begin(), dirs.end(),
         [&floor, &pos](const auto &d) {
             const auto pos_neighbor = pos + d.vec();

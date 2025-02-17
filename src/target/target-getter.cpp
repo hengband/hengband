@@ -47,7 +47,12 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
         }
 
         if (try_old_target && target_okay(player_ptr)) {
-            dir = Direction::targetting();
+            if (target_who > 0) {
+                dir = Direction::targetting(Target(player_ptr, Target::Monster{ target_who }));
+            }
+            if (target_who < 0) {
+                dir = Direction::targetting(Target(player_ptr, Target::Grid{ { target_row, target_col } }));
+            }
         }
     }
 
@@ -75,7 +80,12 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
                 target_set(player_ptr, TARGET_KILL);
             }
             if (target_okay(player_ptr)) {
-                dir = Direction::targetting();
+                if (target_who > 0) {
+                    dir = Direction::targetting(Target(player_ptr, Target::Monster{ target_who }));
+                }
+                if (target_who < 0) {
+                    dir = Direction::targetting(Target(player_ptr, Target::Grid{ { target_row, target_col } }));
+                }
             }
         } else {
             dir = get_keymap_dir(command);

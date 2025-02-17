@@ -26,11 +26,7 @@ static bool fire_crimson(PlayerType *player_ptr)
         return false;
     }
 
-    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
-    if (dir.is_targetting() && target_okay(player_ptr)) {
-        tx = target_col;
-        ty = target_row;
-    }
+    const auto [ty, tx] = dir.get_target_position(player_ptr->get_position(), 99);
 
     int num = 1;
     if (PlayerClass(player_ptr).equals(PlayerClassType::ARCHER)) {

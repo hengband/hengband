@@ -255,11 +255,9 @@ public:
         const auto p_pos = this->player_ptr->get_position();
         const auto m_pos = monster.get_position();
 
-        /// @todo std::views::enumerate
-        constexpr auto directions = Direction::directions_8();
         for (auto i = 0; i < 8; i++) {
             const auto d = (this->m_idx + i) & 7;
-            const auto pos_move = p_pos + directions[d].vec();
+            const auto pos_move = p_pos + Direction::directions_8()[d].vec();
             if (m_pos == pos_move) {
                 // プレイヤーを攻撃する
                 return p_pos;

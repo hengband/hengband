@@ -138,13 +138,9 @@ bool ObjectThrowEntity::calc_throw_grid()
         return false;
     }
 
-    const auto vec = dir.vec();
-    this->tx = this->player_ptr->x + 99 * vec.x;
-    this->ty = this->player_ptr->y + 99 * vec.y;
-    if (dir.is_targetting() && target_okay(this->player_ptr)) {
-        this->tx = target_col;
-        this->ty = target_row;
-    }
+    const auto pos_target = dir.get_target_position(this->player_ptr->get_position(), 99);
+    this->tx = pos_target.x;
+    this->ty = pos_target.y;
 
     project_length = 0;
     return true;

@@ -553,22 +553,16 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     }
 
     /* Predict the "target" location */
-    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
-
-    /* Check for "target request" */
-    if (dir.is_targetting() && target_okay(player_ptr)) {
-        tx = target_col;
-        ty = target_row;
-    }
+    const auto pos_target = dir.get_target_position(player_ptr->get_position(), 99);
 
     /* Get projection path length */
-    ProjectionPath path_g(player_ptr, project_length, player_ptr->get_position(), { ty, tx }, PROJECT_PATH | PROJECT_THRU);
+    ProjectionPath path_g(player_ptr, project_length, player_ptr->get_position(), pos_target, PROJECT_PATH | PROJECT_THRU);
     tdis = path_g.path_num() - 1;
 
     project_length = 0; /* reset to default */
 
     /* Don't shoot at my feet */
-    if (tx == player_ptr->x && ty == player_ptr->y) {
+    if (pos_target == player_ptr->get_position()) {
         PlayerEnergy(player_ptr).reset_player_turn();
 
         /* project_length is already reset to 0 */
@@ -610,12 +604,12 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
         /* Travel until stopped */
         for (auto cur_dis = 0; cur_dis <= tdis;) {
             /* Hack -- Stop at the target */
-            if ((y == ty) && (x == tx)) {
+            if ((y == pos_target.y) && (x == pos_target.x)) {
                 break;
             }
 
             /* Calculate the new location (see "project()") */
-            const auto pos = mmove2({ y, x }, player_ptr->get_position(), { ty, tx });
+            const auto pos = mmove2({ y, x }, player_ptr->get_position(), pos_target);
             const auto pos_impact = pos;
 
             /* Shatter Arrow */
@@ -861,7 +855,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                 }
 
                                 /* Calculate the new location (see "project()") */
-                                const auto pos_to = mmove2(pos_impact, player_ptr->get_position(), { ty, tx });
+                                const auto pos_to = mmove2(pos_impact, player_ptr->get_position(), pos_target);
 
                                 /* Stopped by wilderness boundary */
                                 if (!in_bounds2(floor, pos_to.y, pos_to.x)) {
