@@ -190,11 +190,13 @@ void wiz_summon_horde(PlayerType *player_ptr)
  */
 void wiz_teleport_back(PlayerType *player_ptr)
 {
-    if (!target_who) {
+    const auto target = Target::get_last_target();
+    const auto pos = target.get_position();
+    if (!pos || !target.get_m_idx()) {
         return;
     }
 
-    teleport_player_to(player_ptr, target_row, target_col, TELEPORT_NONMAGICAL);
+    teleport_player_to(player_ptr, pos->y, pos->x, TELEPORT_NONMAGICAL);
 }
 
 /*!

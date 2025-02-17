@@ -53,8 +53,9 @@ void delete_monster_idx(PlayerType *player_ptr, short m_idx)
         (void)set_monster_invulner(player_ptr, m_idx, 0, false);
     }
 
-    if (m_idx == target_who) {
-        target_who = 0;
+    const auto target_m_idx = Target::get_last_target().get_m_idx();
+    if (m_idx == target_m_idx) {
+        Target::clear_last_target();
     }
 
     if (HealthBarTracker::get_instance().is_tracking(m_idx)) {
@@ -118,7 +119,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
     floor.m_cnt = 0;
     floor.reset_mproc_max();
     floor.num_repro = 0;
-    target_who = 0;
+    Target::clear_last_target();
     player_ptr->pet_t_m_idx = 0;
     player_ptr->riding_t_m_idx = 0;
     health_track(player_ptr, 0);
