@@ -37,29 +37,33 @@ static char hexify(uint i)
 /*
  * Convert a octal-digit into a decimal
  */
-static int deoct(char c)
+static char deoct(char c)
 {
     if (isdigit(c)) {
-        return D2I(c);
+        return static_cast<char>(D2I(c));
     }
-    return 0;
+
+    return '\0';
 }
 
 /*
  * Convert a hexidecimal-digit into a decimal
  */
-static int dehex(char c)
+static char dehex(char c)
 {
     if (isdigit(c)) {
-        return D2I(c);
+        return static_cast<char>(D2I(c));
     }
+
     if (islower(c)) {
-        return A2I(c) + 10;
+        return static_cast<char>(A2I(c) + 10);
     }
+
     if (isupper(c)) {
-        return A2I(tolower(c)) + 10;
+        return static_cast<char>(A2I(tolower(c)) + 10);
     }
-    return 0;
+
+    return '\0';
 }
 
 static char force_upper(char a)
@@ -213,41 +217,56 @@ void text_to_ascii(char *buf, std::string_view sv, size_t bufsize)
                 break;
             }
 
-            if (*str == '[') {
+            switch (*str) {
+            case '[':
                 trigger_text_to_ascii(&s, &str);
-            } else {
-                if (*str == 'x') {
-                    *s = 16 * (char)dehex(*++str);
-                    *s++ += (char)dehex(*++str);
-                } else if (*str == '\\') {
-                    *s++ = '\\';
-                } else if (*str == '^') {
-                    *s++ = '^';
-                } else if (*str == 's') {
-                    *s++ = ' ';
-                } else if (*str == 'e') {
-                    *s++ = ESCAPE;
-                } else if (*str == 'b') {
-                    *s++ = '\b';
-                } else if (*str == 'n') {
-                    *s++ = '\n';
-                } else if (*str == 'r') {
-                    *s++ = '\r';
-                } else if (*str == 't') {
-                    *s++ = '\t';
-                } else if (*str == '0') {
-                    *s = 8 * (char)deoct(*++str);
-                    *s++ += (char)deoct(*++str);
-                } else if (*str == '1') {
-                    *s = 64 + 8 * (char)deoct(*++str);
-                    *s++ += (char)deoct(*++str);
-                } else if (*str == '2') {
-                    *s = 64 * 2 + 8 * (char)deoct(*++str);
-                    *s++ += (char)deoct(*++str);
-                } else if (*str == '3') {
-                    *s = 64 * 3 + 8 * (char)deoct(*++str);
-                    *s++ += (char)deoct(*++str);
-                }
+                break;
+            case 'x':
+                *s = 16 * dehex(*++str);
+                *s++ += dehex(*++str);
+                break;
+            case '\\':
+                *s++ = '\\';
+                break;
+            case '^':
+                *s++ = '^';
+                break;
+            case 's':
+                *s++ = ' ';
+                break;
+            case 'e':
+                *s++ = ESCAPE;
+                break;
+            case 'b':
+                *s++ = '\b';
+                break;
+            case 'n':
+                *s++ = '\n';
+                break;
+            case 'r':
+                *s++ = '\r';
+                break;
+            case 't':
+                *s++ = '\t';
+                break;
+            case '0':
+                *s = 8 * deoct(*++str);
+                *s++ += deoct(*++str);
+                break;
+            case '1':
+                *s = 64 + 8 * deoct(*++str);
+                *s++ += deoct(*++str);
+                break;
+            case '2':
+                *s = 64 * 2 + 8 * deoct(*++str);
+                *s++ += deoct(*++str);
+                break;
+            case '3':
+                *s = 64 * 3 + 8 * deoct(*++str);
+                *s++ += deoct(*++str);
+                break;
+            default:
+                break;
             }
 
             str++;
