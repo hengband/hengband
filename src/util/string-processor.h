@@ -1,13 +1,12 @@
 #pragma once
 
+#include <cstdint>
 #include <map>
 #include <optional>
 #include <set>
 #include <string>
 #include <string_view>
 #include <vector>
-
-extern const char hexsym[16];
 
 void text_to_ascii(char *buf, std::string_view sv, size_t bufsize);
 void ascii_to_text(char *buf, std::string_view sv, size_t bufsize);
@@ -31,3 +30,5 @@ std::string str_substr(const char *str, size_t pos = 0, size_t n = std::string_v
 std::string str_toupper(std::string_view str);
 std::string str_tolower(std::string_view str);
 std::set<int> str_find_all_multibyte_chars(std::string_view str);
+char hexify_upper(uint8_t value);
+char hexify_lower(uint8_t value);

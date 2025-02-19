@@ -2,20 +2,18 @@
 #include "io/macro-configurations-store.h"
 #include "system/angband.h"
 #include "util/int-char-converter.h"
+#include <array>
 
-/*!
- * 10進数から16進数への変換テーブル /
- * Global array for converting numbers to uppercase hecidecimal digit
- * This array can also be used to convert a number to an octal digit
- */
-const char hexsym[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+namespace {
+constexpr std::array<char, 16> hex_symbol_table = { { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' } }; //!< 10進数から16進数への変換テーブル
+}
 
 /*
  * Convert a decimal to a single digit octal number
  */
 static char octify(uint32_t i)
 {
-    return hexsym[i % 8];
+    return hex_symbol_table.at(i % 8);
 }
 
 /*
@@ -23,7 +21,7 @@ static char octify(uint32_t i)
  */
 static char hexify(uint32_t i)
 {
-    return hexsym[i % 16];
+    return hex_symbol_table.at(i % 16);
 }
 
 /*
@@ -924,4 +922,14 @@ std::set<int> str_find_all_multibyte_chars([[maybe_unused]] std::string_view str
 #else
     return {};
 #endif
+}
+
+char hexify_upper(uint8_t value)
+{
+    return hex_symbol_table.at(value / 16);
+}
+
+char hexify_lower(uint8_t value)
+{
+    return hex_symbol_table.at(value % 16);
 }
