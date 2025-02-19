@@ -1,5 +1,6 @@
 #include "util/string-processor.h"
 #include "io/macro-configurations-store.h"
+#include "system/angband.h"
 #include "util/int-char-converter.h"
 
 /*!
@@ -12,7 +13,7 @@ const char hexsym[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
 /*
  * Convert a decimal to a single digit octal number
  */
-static char octify(uint i)
+static char octify(uint32_t i)
 {
     return hexsym[i % 8];
 }
@@ -20,7 +21,7 @@ static char octify(uint i)
 /*
  * Convert a decimal to a single digit hex number
  */
-static char hexify(uint i)
+static char hexify(uint32_t i)
 {
     return hexsym[i % 16];
 }
