@@ -6,9 +6,9 @@
 #include "game-option/keymap-directory-getter.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "io/macro-configurations-store.h"
 #include "main/sound-of-music.h"
 #include "term/screen-processor.h"
-#include "util/string-processor.h"
 
 /*!
  * @brief Check if this line is expression or not. And update it if it is.

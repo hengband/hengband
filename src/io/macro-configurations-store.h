@@ -9,6 +9,7 @@
 #include <map>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <vector>
 
 constexpr size_t MAX_MACRO_MOD = 12;
@@ -25,3 +26,6 @@ extern std::optional<std::string> macro_modifier_chr; //!<  &x# で指定され�
 extern std::vector<std::string> macro_modifier_names; //!<  マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列配列
 extern std::vector<std::string> macro_trigger_names; //!< マクロのトリガーコード
 extern std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes; //!<  マクロの内容
+
+void text_to_ascii(char *buf, std::string_view sv, size_t bufsize);
+void ascii_to_text(char *buf, std::string_view sv, size_t bufsize);

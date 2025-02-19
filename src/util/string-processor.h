@@ -8,8 +8,6 @@
 #include <string_view>
 #include <vector>
 
-void text_to_ascii(char *buf, std::string_view sv, size_t bufsize);
-void ascii_to_text(char *buf, std::string_view sv, size_t bufsize);
 size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize);
 size_t angband_strcat(char *buf, std::string_view src, size_t bufsize);
 char *angband_strstr(const char *haystack, std::string_view needle);
@@ -32,3 +30,4 @@ std::string str_tolower(std::string_view str);
 std::set<int> str_find_all_multibyte_chars(std::string_view str);
 char hexify_upper(uint8_t value);
 char hexify_lower(uint8_t value);
+char octify(uint8_t i);
