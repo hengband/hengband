@@ -8,7 +8,6 @@
 #include "system/angband.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
-#include <cstdint>
 
 size_t max_macrotrigger = 0;
 std::optional<std::string> macro_template;
@@ -20,9 +19,7 @@ std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes = {
     { ShiftStatus::ON, std::vector<std::string>(MAX_MACRO_TRIG) },
 };
 
-/*
- * Convert a octal-digit into a decimal
- */
+namespace {
 static char deoct(char c)
 {
     if (isdigit(c)) {
@@ -181,6 +178,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     *bufptr = s;
     *strptr = str; /* where **strptr == ']' */
     return;
+}
 }
 
 /*
@@ -349,7 +347,7 @@ void ascii_to_text(char *buf, std::string_view sv, size_t bufsize)
     auto str = sv.data();
     constexpr auto step_size = 4;
     while (*str && (s + step_size < buffer_end)) {
-        byte i = (byte)(*str++);
+        uint8_t i = *str++;
         if (i == 31) {
             if (!trigger_ascii_to_text(&s, &str)) {
                 *s++ = '^';
