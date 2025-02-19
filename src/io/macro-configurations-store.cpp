@@ -8,6 +8,9 @@
 #include "system/angband.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
+#include <cctype>
+#include <cstdint>
+#include <utility>
 
 size_t max_macrotrigger = 0;
 std::optional<std::string> macro_template;
@@ -32,7 +35,7 @@ char deoct(char c)
 /*
  * Convert a hexidecimal-digit into a decimal
  */
-static char dehex(char c)
+char dehex(char c)
 {
     if (isdigit(c)) {
         return static_cast<char>(D2I(c));
@@ -49,48 +52,21 @@ static char dehex(char c)
     return '\0';
 }
 
-static char force_upper(char a)
+bool streq_case_insensitive(std::string_view a, std::string_view b)
 {
-    return islower(a) ? toupper(a) : a;
-}
-
-static int angband_stricmp(concptr a, concptr b)
-{
-    for (concptr s1 = a, s2 = b; true; s1++, s2++) {
-        char z1 = force_upper(*s1);
-        char z2 = force_upper(*s2);
-        if (z1 < z2) {
-            return -1;
-        }
-        if (z1 > z2) {
-            return 1;
-        }
-        if (!z1) {
-            return 0;
-        }
-    }
-}
-
-static int angband_strnicmp(concptr a, concptr b, int n)
-{
-    for (concptr s1 = a, s2 = b; n > 0; s1++, s2++, n--) {
-        char z1 = force_upper(*s1);
-        char z2 = force_upper(*s2);
-        if (z1 < z2) {
-            return -1;
-        }
-        if (z1 > z2) {
-            return 1;
-        }
-        if (!z1) {
-            return 0;
+    const auto length = std::min(a.length(), b.length());
+    for (size_t i = 0; i < length; i++) {
+        const auto a_up = std::toupper(a.at(i));
+        const auto b_up = std::toupper(b.at(i));
+        if (a_up != b_up) {
+            return false;
         }
     }
 
-    return 0;
+    return true;
 }
 
-static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
+void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 {
     char *s = *bufptr;
     concptr str = *strptr;
@@ -112,7 +88,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
         size_t len = 0;
         for (; (*macro_modifier_chr)[i] != '\0'; i++) {
             len = macro_modifier_names[i].length();
-            if (!angband_strnicmp(str, macro_modifier_names[i].data(), len)) {
+            if (streq_case_insensitive(str, macro_modifier_names[i])) {
                 break;
             }
         }
@@ -131,7 +107,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     size_t i = 0;
     for (; i < max_macrotrigger; i++) {
         len = macro_trigger_names[i].length();
-        if (!angband_strnicmp(str, macro_trigger_names[i].data(), len) && str[len] == ']') {
+        if (streq_case_insensitive(str, macro_trigger_names[i]) && str[len] == ']') {
             break;
         }
     }
@@ -229,8 +205,8 @@ bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 
     size_t i = 0;
     for (; i < max_macrotrigger; i++) {
-        auto is_string_same = angband_stricmp(key_code, macro_trigger_keycodes.at(ShiftStatus::OFF).at(i).data()) == 0;
-        is_string_same |= angband_stricmp(key_code, macro_trigger_keycodes.at(ShiftStatus::ON).at(i).data()) == 0;
+        auto is_string_same = streq_case_insensitive(key_code, macro_trigger_keycodes.at(ShiftStatus::OFF).at(i));
+        is_string_same |= streq_case_insensitive(key_code, macro_trigger_keycodes.at(ShiftStatus::ON).at(i));
         if (is_string_same) {
             break;
         }
