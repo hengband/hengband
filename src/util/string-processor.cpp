@@ -8,12 +8,15 @@
  */
 const char hexsym[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
-int max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
-concptr macro_template = nullptr; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列ポインタ */
-concptr macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列ポインタ */
-concptr macro_modifier_name[MAX_MACRO_MOD]; /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列ポインタ配列 */
-concptr macro_trigger_name[MAX_MACRO_TRIG]; /*!< マクロのトリガーコード */
-concptr macro_trigger_keycode[2][MAX_MACRO_TRIG]; /*!< マクロの内容 */
+size_t max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
+std::optional<std::string> macro_template; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列 */
+std::optional<std::string> macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列 */
+std::vector<std::string> macro_modifier_names = std::vector<std::string>(MAX_MACRO_MOD); /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列配列 */
+std::vector<std::string> macro_trigger_names = std::vector<std::string>(MAX_MACRO_TRIG); /*!< マクロのトリガーコード */
+std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes = {
+    { ShiftStatus::OFF, std::vector<std::string>(MAX_MACRO_TRIG) },
+    { ShiftStatus::ON, std::vector<std::string>(MAX_MACRO_TRIG) },
+}; /*!< マクロの内容 */
 
 /*
  * Convert a decimal to a single digit octal number
@@ -34,29 +37,33 @@ static char hexify(uint i)
 /*
  * Convert a octal-digit into a decimal
  */
-static int deoct(char c)
+static char deoct(char c)
 {
     if (isdigit(c)) {
-        return D2I(c);
+        return static_cast<char>(D2I(c));
     }
-    return 0;
+
+    return '\0';
 }
 
 /*
  * Convert a hexidecimal-digit into a decimal
  */
-static int dehex(char c)
+static char dehex(char c)
 {
     if (isdigit(c)) {
-        return D2I(c);
+        return static_cast<char>(D2I(c));
     }
+
     if (islower(c)) {
-        return A2I(c) + 10;
+        return static_cast<char>(A2I(c) + 10);
     }
+
     if (isupper(c)) {
-        return A2I(tolower(c)) + 10;
+        return static_cast<char>(A2I(tolower(c)) + 10);
     }
-    return 0;
+
+    return '\0';
 }
 
 static char force_upper(char a)
@@ -106,42 +113,42 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     concptr str = *strptr;
     bool mod_status[MAX_MACRO_MOD]{};
 
-    int i, len = 0;
-    int shiftstatus = 0;
-    concptr key_code;
-
-    if (macro_template == nullptr) {
+    if (!macro_template) {
         return;
     }
 
-    for (i = 0; macro_modifier_chr[i]; i++) {
+    for (auto i = 0; (*macro_modifier_chr)[i] != '\0'; i++) {
         mod_status[i] = false;
     }
     str++;
 
     /* Examine modifier keys */
+    auto shiftstatus = ShiftStatus::OFF;
     while (true) {
-        for (i = 0; macro_modifier_chr[i]; i++) {
-            len = strlen(macro_modifier_name[i]);
-
-            if (!angband_strnicmp(str, macro_modifier_name[i], len)) {
+        auto i = 0;
+        size_t len = 0;
+        for (; (*macro_modifier_chr)[i] != '\0'; i++) {
+            len = macro_modifier_names[i].length();
+            if (!angband_strnicmp(str, macro_modifier_names[i].data(), len)) {
                 break;
             }
         }
 
-        if (!macro_modifier_chr[i]) {
+        if ((*macro_modifier_chr)[i] == '\0') {
             break;
         }
         str += len;
         mod_status[i] = true;
-        if ('S' == macro_modifier_chr[i]) {
-            shiftstatus = 1;
+        if ('S' == (*macro_modifier_chr)[i]) {
+            shiftstatus = ShiftStatus::ON;
         }
     }
 
-    for (i = 0; i < max_macrotrigger; i++) {
-        len = strlen(macro_trigger_name[i]);
-        if (!angband_strnicmp(str, macro_trigger_name[i], len) && ']' == str[len]) {
+    size_t len = 0;
+    size_t i = 0;
+    for (; i < max_macrotrigger; i++) {
+        len = macro_trigger_names[i].length();
+        if (!angband_strnicmp(str, macro_trigger_names[i].data(), len) && str[len] == ']') {
             break;
         }
     }
@@ -158,24 +165,24 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
         return;
     }
 
-    key_code = macro_trigger_keycode[shiftstatus][i];
+    const auto &key_code = macro_trigger_keycodes.at(shiftstatus).at(i);
     str += len;
 
     *s++ = (char)31;
-    for (i = 0; macro_template[i]; i++) {
-        char ch = macro_template[i];
+    for (i = 0; (*macro_template)[i]; i++) {
+        const auto ch = (*macro_template)[i];
         switch (ch) {
         case '&':
-            for (int j = 0; macro_modifier_chr[j]; j++) {
+            for (auto j = 0; (*macro_modifier_chr)[j] != '\0'; j++) {
                 if (mod_status[j]) {
-                    *s++ = macro_modifier_chr[j];
+                    *s++ = (*macro_modifier_chr)[j];
                 }
             }
 
             break;
         case '#':
-            strcpy(s, key_code);
-            s += strlen(key_code);
+            strcpy(s, key_code.data());
+            s += key_code.length();
             break;
         default:
             *s++ = ch;
@@ -210,41 +217,56 @@ void text_to_ascii(char *buf, std::string_view sv, size_t bufsize)
                 break;
             }
 
-            if (*str == '[') {
+            switch (*str) {
+            case '[':
                 trigger_text_to_ascii(&s, &str);
-            } else {
-                if (*str == 'x') {
-                    *s = 16 * (char)dehex(*++str);
-                    *s++ += (char)dehex(*++str);
-                } else if (*str == '\\') {
-                    *s++ = '\\';
-                } else if (*str == '^') {
-                    *s++ = '^';
-                } else if (*str == 's') {
-                    *s++ = ' ';
-                } else if (*str == 'e') {
-                    *s++ = ESCAPE;
-                } else if (*str == 'b') {
-                    *s++ = '\b';
-                } else if (*str == 'n') {
-                    *s++ = '\n';
-                } else if (*str == 'r') {
-                    *s++ = '\r';
-                } else if (*str == 't') {
-                    *s++ = '\t';
-                } else if (*str == '0') {
-                    *s = 8 * (char)deoct(*++str);
-                    *s++ += (char)deoct(*++str);
-                } else if (*str == '1') {
-                    *s = 64 + 8 * (char)deoct(*++str);
-                    *s++ += (char)deoct(*++str);
-                } else if (*str == '2') {
-                    *s = 64 * 2 + 8 * (char)deoct(*++str);
-                    *s++ += (char)deoct(*++str);
-                } else if (*str == '3') {
-                    *s = 64 * 3 + 8 * (char)deoct(*++str);
-                    *s++ += (char)deoct(*++str);
-                }
+                break;
+            case 'x':
+                *s = 16 * dehex(*++str);
+                *s++ += dehex(*++str);
+                break;
+            case '\\':
+                *s++ = '\\';
+                break;
+            case '^':
+                *s++ = '^';
+                break;
+            case 's':
+                *s++ = ' ';
+                break;
+            case 'e':
+                *s++ = ESCAPE;
+                break;
+            case 'b':
+                *s++ = '\b';
+                break;
+            case 'n':
+                *s++ = '\n';
+                break;
+            case 'r':
+                *s++ = '\r';
+                break;
+            case 't':
+                *s++ = '\t';
+                break;
+            case '0':
+                *s = 8 * deoct(*++str);
+                *s++ += deoct(*++str);
+                break;
+            case '1':
+                *s = 64 + 8 * deoct(*++str);
+                *s++ += deoct(*++str);
+                break;
+            case '2':
+                *s = 64 * 2 + 8 * deoct(*++str);
+                *s++ += deoct(*++str);
+                break;
+            case '3':
+                *s = 64 * 3 + 8 * deoct(*++str);
+                *s++ += deoct(*++str);
+                break;
+            default:
+                break;
             }
 
             str++;
@@ -264,8 +286,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
     char *s = *bufptr;
     concptr str = *strptr;
     char key_code[100]{};
-    int i;
-    if (macro_template == nullptr) {
+    if (!macro_template) {
         return false;
     }
 
@@ -273,14 +294,13 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
     *s++ = '[';
 
     concptr tmp;
-    for (i = 0; macro_template[i]; i++) {
-        char ch = macro_template[i];
-
+    for (auto i = 0; (*macro_template)[i] != '\0'; i++) {
+        const auto ch = (*macro_template)[i];
         switch (ch) {
         case '&':
-            while ((tmp = angband_strchr(macro_modifier_chr, *str)) != 0) {
-                int j = (int)(tmp - macro_modifier_chr);
-                tmp = macro_modifier_name[j];
+            while ((tmp = angband_strchr(macro_modifier_chr->data(), *str)) != 0) {
+                const auto j = tmp - macro_modifier_chr->data();
+                tmp = macro_modifier_names[j].data();
                 while (*tmp) {
                     *s++ = *tmp++;
                 }
@@ -308,8 +328,11 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
         return false;
     }
 
-    for (i = 0; i < max_macrotrigger; i++) {
-        if (!angband_stricmp(key_code, macro_trigger_keycode[0][i]) || !angband_stricmp(key_code, macro_trigger_keycode[1][i])) {
+    size_t i = 0;
+    for (; i < max_macrotrigger; i++) {
+        auto is_string_same = angband_stricmp(key_code, macro_trigger_keycodes.at(ShiftStatus::OFF).at(i).data()) == 0;
+        is_string_same |= angband_stricmp(key_code, macro_trigger_keycodes.at(ShiftStatus::ON).at(i).data()) == 0;
+        if (is_string_same) {
             break;
         }
     }
@@ -318,7 +341,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
         return false;
     }
 
-    tmp = macro_trigger_name[i];
+    tmp = macro_trigger_names[i].data();
     while (*tmp) {
         *s++ = *tmp++;
     }
@@ -508,11 +531,11 @@ char *angband_strstr(const char *haystack, std::string_view needle)
  *
  * angband_strchr() can handle Kanji strings correctly.
  */
-char *angband_strchr(concptr ptr, char ch)
+char *angband_strchr(const char *ptr, char ch)
 {
     for (; *ptr != '\0'; ptr++) {
         if (*ptr == ch) {
-            return (char *)ptr;
+            return const_cast<char *>(ptr);
         }
 
 #ifdef JP

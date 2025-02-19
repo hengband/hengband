@@ -1,32 +1,35 @@
 #pragma once
 
-#include "system/angband.h"
+#include <map>
+#include <optional>
 #include <set>
 #include <string>
 #include <string_view>
 #include <vector>
 
-#define MAX_MACRO_MOD 12
-#define MAX_MACRO_TRIG 200 /*!< 登録を許すマクロ（トリガー）の最大数 */
+constexpr size_t MAX_MACRO_MOD = 12;
+constexpr size_t MAX_MACRO_TRIG = 200; /*!< 登録を許すマクロ（トリガー）の最大数 */
 
 extern const char hexsym[16];
 
-/*
- * Automatically generated "variable" declarations
- */
-extern int max_macrotrigger;
-extern concptr macro_template;
-extern concptr macro_modifier_chr;
-extern concptr macro_modifier_name[MAX_MACRO_MOD];
-extern concptr macro_trigger_name[MAX_MACRO_TRIG];
-extern concptr macro_trigger_keycode[2][MAX_MACRO_TRIG];
+enum class ShiftStatus {
+    OFF,
+    ON,
+};
+
+extern size_t max_macrotrigger;
+extern std::optional<std::string> macro_template;
+extern std::optional<std::string> macro_modifier_chr;
+extern std::vector<std::string> macro_modifier_names;
+extern std::vector<std::string> macro_trigger_names;
+extern std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes;
 
 void text_to_ascii(char *buf, std::string_view sv, size_t bufsize);
 void ascii_to_text(char *buf, std::string_view sv, size_t bufsize);
 size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize);
 size_t angband_strcat(char *buf, std::string_view src, size_t bufsize);
 char *angband_strstr(const char *haystack, std::string_view needle);
-char *angband_strchr(concptr ptr, char ch);
+char *angband_strchr(const char *ptr, char ch);
 char *ltrim(char *p);
 char *rtrim(char *p);
 int strrncmp(const char *s1, const char *s2, int len);
