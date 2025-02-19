@@ -1,4 +1,5 @@
 #include "util/string-processor.h"
+#include "io/macro-configurations-store.h"
 #include "util/int-char-converter.h"
 
 /*!
@@ -7,16 +8,6 @@
  * This array can also be used to convert a number to an octal digit
  */
 const char hexsym[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-
-size_t max_macrotrigger = 0; /*!< 現在登録中のマクロ(トリガー)の数 */
-std::optional<std::string> macro_template; /*!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列 */
-std::optional<std::string> macro_modifier_chr; /*!< &x# で指定されるマクロトリガーに関する情報を記録する文字列 */
-std::vector<std::string> macro_modifier_names = std::vector<std::string>(MAX_MACRO_MOD); /*!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列配列 */
-std::vector<std::string> macro_trigger_names = std::vector<std::string>(MAX_MACRO_TRIG); /*!< マクロのトリガーコード */
-std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes = {
-    { ShiftStatus::OFF, std::vector<std::string>(MAX_MACRO_TRIG) },
-    { ShiftStatus::ON, std::vector<std::string>(MAX_MACRO_TRIG) },
-}; /*!< マクロの内容 */
 
 /*
  * Convert a decimal to a single digit octal number

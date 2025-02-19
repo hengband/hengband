@@ -632,6 +632,7 @@ hengband_SOURCES = \
 	io/input-key-processor.cpp io/input-key-processor.h \
 	io/input-key-requester.cpp io/input-key-requester.h \
 	io/interpret-pref-file.cpp io/interpret-pref-file.h \
+	io/macro-configurations-store.cpp io/macro-configurations-store.h \
 	io/mutations-dump.cpp io/mutations-dump.h \
 	io/pref-file-expressor.cpp io/pref-file-expressor.h \
 	io/read-pref-file.cpp io/read-pref-file.h \
