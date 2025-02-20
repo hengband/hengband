@@ -20,7 +20,7 @@ std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes = {
 };
 
 namespace {
-static char deoct(char c)
+char deoct(char c)
 {
     if (isdigit(c)) {
         return static_cast<char>(D2I(c));
@@ -179,6 +179,78 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
     *strptr = str; /* where **strptr == ']' */
     return;
 }
+
+bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
+{
+    char *s = *bufptr;
+    concptr str = *strptr;
+    char key_code[100]{};
+    if (!macro_template) {
+        return false;
+    }
+
+    *s++ = '\\';
+    *s++ = '[';
+
+    concptr tmp;
+    for (auto i = 0; (*macro_template)[i] != '\0'; i++) {
+        const auto ch = (*macro_template)[i];
+        switch (ch) {
+        case '&':
+            while ((tmp = angband_strchr(macro_modifier_chr->data(), *str)) != 0) {
+                const auto j = tmp - macro_modifier_chr->data();
+                tmp = macro_modifier_names[j].data();
+                while (*tmp) {
+                    *s++ = *tmp++;
+                }
+                str++;
+            }
+
+            break;
+        case '#': {
+            int j;
+            for (j = 0; *str && *str != '\r'; j++) {
+                key_code[j] = *str++;
+            }
+            key_code[j] = '\0';
+            break;
+        }
+        default:
+            if (ch != *str) {
+                return false;
+            }
+            str++;
+        }
+    }
+
+    if (*str++ != '\r') {
+        return false;
+    }
+
+    size_t i = 0;
+    for (; i < max_macrotrigger; i++) {
+        auto is_string_same = angband_stricmp(key_code, macro_trigger_keycodes.at(ShiftStatus::OFF).at(i).data()) == 0;
+        is_string_same |= angband_stricmp(key_code, macro_trigger_keycodes.at(ShiftStatus::ON).at(i).data()) == 0;
+        if (is_string_same) {
+            break;
+        }
+    }
+
+    if (i == max_macrotrigger) {
+        return false;
+    }
+
+    tmp = macro_trigger_names[i].data();
+    while (*tmp) {
+        *s++ = *tmp++;
+    }
+
+    *s++ = ']';
+
+    *bufptr = s;
+    *strptr = str;
+    return true;
+}
 }
 
 /*
@@ -263,78 +335,6 @@ void text_to_ascii(char *buf, std::string_view sv, size_t bufsize)
     }
 
     *s = '\0';
-}
-
-static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
-{
-    char *s = *bufptr;
-    concptr str = *strptr;
-    char key_code[100]{};
-    if (!macro_template) {
-        return false;
-    }
-
-    *s++ = '\\';
-    *s++ = '[';
-
-    concptr tmp;
-    for (auto i = 0; (*macro_template)[i] != '\0'; i++) {
-        const auto ch = (*macro_template)[i];
-        switch (ch) {
-        case '&':
-            while ((tmp = angband_strchr(macro_modifier_chr->data(), *str)) != 0) {
-                const auto j = tmp - macro_modifier_chr->data();
-                tmp = macro_modifier_names[j].data();
-                while (*tmp) {
-                    *s++ = *tmp++;
-                }
-                str++;
-            }
-
-            break;
-        case '#': {
-            int j;
-            for (j = 0; *str && *str != '\r'; j++) {
-                key_code[j] = *str++;
-            }
-            key_code[j] = '\0';
-            break;
-        }
-        default:
-            if (ch != *str) {
-                return false;
-            }
-            str++;
-        }
-    }
-
-    if (*str++ != '\r') {
-        return false;
-    }
-
-    size_t i = 0;
-    for (; i < max_macrotrigger; i++) {
-        auto is_string_same = angband_stricmp(key_code, macro_trigger_keycodes.at(ShiftStatus::OFF).at(i).data()) == 0;
-        is_string_same |= angband_stricmp(key_code, macro_trigger_keycodes.at(ShiftStatus::ON).at(i).data()) == 0;
-        if (is_string_same) {
-            break;
-        }
-    }
-
-    if (i == max_macrotrigger) {
-        return false;
-    }
-
-    tmp = macro_trigger_names[i].data();
-    while (*tmp) {
-        *s++ = *tmp++;
-    }
-
-    *s++ = ']';
-
-    *bufptr = s;
-    *strptr = str;
-    return true;
 }
 
 /*
