@@ -85,7 +85,8 @@ static void summon_self(PlayerType *player_ptr, MonsterDeath *md_ptr, summon_typ
     }
 
     BIT_FLAGS mode = dead_mode(md_ptr);
-    if (summon_specific(player_ptr, m_pos.y, m_pos.x, 100, type, mode) && player_can_see_bold(player_ptr, m_pos.y, m_pos.x)) {
+    auto real_r_idx = (md_ptr->r_ptr->idx != md_ptr->ap_r_ptr->idx) ? std::make_optional(md_ptr->r_ptr->idx) : std::nullopt;
+    if (summon_specific(player_ptr, m_pos.y, m_pos.x, 100, type, mode, std::nullopt, real_r_idx) && player_can_see_bold(player_ptr, m_pos.y, m_pos.x)) {
         msg_print(message);
     }
 }
@@ -102,7 +103,8 @@ static void on_dead_pink_horror(PlayerType *player_ptr, MonsterDeath *md_ptr)
         POSITION wy = md_ptr->md_y;
         POSITION wx = md_ptr->md_x;
         BIT_FLAGS mode = dead_mode(md_ptr);
-        if (summon_specific(player_ptr, wy, wx, 100, SUMMON_BLUE_HORROR, mode) && player_can_see_bold(player_ptr, wy, wx)) {
+        auto real_r_idx = (md_ptr->r_ptr->idx != md_ptr->ap_r_ptr->idx) ? std::make_optional(md_ptr->r_ptr->idx) : std::nullopt;
+        if (summon_specific(player_ptr, wy, wx, 100, SUMMON_BLUE_HORROR, mode, md_ptr->m_idx, real_r_idx) && player_can_see_bold(player_ptr, wy, wx)) {
             notice = true;
         }
     }
@@ -236,8 +238,9 @@ static void on_dead_aqua_illusion(PlayerType *player_ptr, MonsterDeath *md_ptr)
         POSITION wx = md_ptr->md_x;
         bool pet = md_ptr->m_ptr->is_pet();
         BIT_FLAGS mode = dead_mode(md_ptr);
-        auto smaller_bubble = md_ptr->m_ptr->r_idx - 1;
-        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubble, mode) && player_can_see_bold(player_ptr, wy, wx)) {
+        auto smaller_bubble = md_ptr->ap_r_ptr->idx - 1;
+        auto real_r_idx = (md_ptr->r_ptr->idx != md_ptr->ap_r_ptr->idx) ? std::make_optional(md_ptr->r_ptr->idx) : std::nullopt;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_bubble, mode, real_r_idx) && player_can_see_bold(player_ptr, wy, wx)) {
             notice = true;
         }
     }
@@ -272,8 +275,9 @@ static void on_dead_dragon_centipede(PlayerType *player_ptr, MonsterDeath *md_pt
         bool pet = md_ptr->m_ptr->is_pet();
         BIT_FLAGS mode = dead_mode(md_ptr);
 
-        auto smaller_centipede = md_ptr->m_ptr->r_idx - 1;
-        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_centipede, mode) && player_can_see_bold(player_ptr, wy, wx)) {
+        auto smaller_centipede = md_ptr->ap_r_ptr->idx - 1;
+        auto real_r_idx = (md_ptr->r_ptr->idx != md_ptr->ap_r_ptr->idx) ? std::make_optional(md_ptr->r_ptr->idx) : std::nullopt;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, smaller_centipede, mode, real_r_idx) && player_can_see_bold(player_ptr, wy, wx)) {
             notice = true;
         }
     }
@@ -383,7 +387,7 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, MonsterDeath *md_ptr)
     auto notice = false;
     auto mimic_inside = MonraceList::empty_id();
     auto num_summons = 0;
-    switch (md_ptr->m_ptr->r_idx) {
+    switch (md_ptr->ap_r_ptr->idx) {
     case MonraceId::CHEST_MIMIC_03:
         mimic_inside = MonraceId::CHEST_MIMIC_02;
         num_summons = 1;
@@ -405,13 +409,14 @@ static void on_dead_chest_mimic(PlayerType *player_ptr, MonsterDeath *md_ptr)
         auto wx = md_ptr->md_x;
         auto pet = md_ptr->m_ptr->is_pet();
         BIT_FLAGS mode = dead_mode(md_ptr);
-        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, mimic_inside, (BIT_FLAGS)mode) && player_can_see_bold(player_ptr, wy, wx)) {
+        auto real_r_idx = (md_ptr->r_ptr->idx != md_ptr->ap_r_ptr->idx) ? std::make_optional(md_ptr->r_ptr->idx) : std::nullopt;
+        if (summon_named_creature(player_ptr, (pet ? -1 : md_ptr->m_idx), wy, wx, mimic_inside, (BIT_FLAGS)mode, real_r_idx) && player_can_see_bold(player_ptr, wy, wx)) {
             notice = true;
         }
     }
 
     if (notice) {
-        msg_print(_("箱の中から新たなミミックが現れた！", "A new mimic appears in the dead mimic!"));
+        msg_print(_("箱の中から新たなミミックが現れた！", "A new mimic appears from the chest!"));
         sound(SoundKind::SUMMON);
     }
 }
@@ -481,7 +486,7 @@ static void on_dead_swordfish(PlayerType *player_ptr, MonsterDeath *md_ptr, Attr
 
 void switch_special_death(PlayerType *player_ptr, MonsterDeath *md_ptr, AttributeFlags attribute_flags)
 {
-    switch (md_ptr->m_ptr->r_idx) {
+    switch (md_ptr->ap_r_ptr->idx) {
     case MonraceId::PINK_HORROR:
         on_dead_pink_horror(player_ptr, md_ptr);
         return;
@@ -531,16 +536,19 @@ void switch_special_death(PlayerType *player_ptr, MonsterDeath *md_ptr, Attribut
         on_dead_dragon_centipede(player_ptr, md_ptr);
         return;
     case MonraceId::CAIT_SITH:
-        if (player_ptr->current_floor_ptr->dun_level <= 0) {
+        if (player_ptr->current_floor_ptr->dun_level <= 0 || md_ptr->r_ptr->idx != md_ptr->ap_r_ptr->idx) {
             return;
         }
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
         return;
     case MonraceId::YENDOR_WIZARD_1:
+        if (md_ptr->r_ptr->idx != md_ptr->ap_r_ptr->idx) {
+            return;
+        }
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_amulet);
         return;
     case MonraceId::YENDOR_WIZARD_2:
-        if (player_ptr->current_floor_ptr->dun_level <= 0) {
+        if (player_ptr->current_floor_ptr->dun_level <= 0 || md_ptr->r_ptr->idx != md_ptr->ap_r_ptr->idx) {
             return;
         }
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_amulet);
@@ -549,6 +557,9 @@ void switch_special_death(PlayerType *player_ptr, MonsterDeath *md_ptr, Attribut
         on_dead_manimani(player_ptr, md_ptr);
         return;
     case MonraceId::LOSTRINGIL:
+        if (md_ptr->r_ptr->idx != md_ptr->ap_r_ptr->idx) {
+            return;
+        }
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_sword);
         return;
     case MonraceId::CHEST_MIMIC_03:
