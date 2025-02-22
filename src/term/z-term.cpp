@@ -1875,25 +1875,18 @@ errr term_locate(TERM_LEN *x, TERM_LEN *y)
  * Note that this refers to what will be on the window after the
  * next call to "term_fresh()".  It may or may not already be there.
  */
-errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c)
+DisplaySymbol term_what(int x, int y, const DisplaySymbol &ds)
 {
-    TERM_LEN w = game_term->wid;
-    TERM_LEN h = game_term->hgt;
-
+    const auto width = game_term->wid;
+    const auto height = game_term->hgt;
     x += game_term->offset_x;
     y += game_term->offset_y;
 
-    if ((x < 0) || (x >= w)) {
-        return -1;
-    }
-    if ((y < 0) || (y >= h)) {
-        return -1;
+    if ((x < 0) || (x >= width) || (y < 0) || (y >= height)) {
+        return ds;
     }
 
-    /* Direct access */
-    (*a) = game_term->scr->a[y][x];
-    (*c) = game_term->scr->c[y][x];
-    return 0;
+    return { game_term->scr->a[y][x], game_term->scr->c[y][x] };
 }
 
 /*** Input routines ***/
