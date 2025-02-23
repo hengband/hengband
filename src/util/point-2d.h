@@ -217,8 +217,9 @@ struct Rectangle2D {
         using value_type = Point2D<T>;
         using iterator_category = std::input_iterator_tag;
 
-        constexpr iterator(const Rectangle2D *rect, const value_type &pos_cur) noexcept
-            : rect(rect)
+        constexpr iterator(const Rectangle2D &rect, const value_type &pos_cur) noexcept
+            : pos_top_left(rect.top_left)
+            , pos_bottom_right(rect.bottom_right)
             , pos_cur(pos_cur)
         {
         }
@@ -230,10 +231,10 @@ struct Rectangle2D {
 
         constexpr iterator &operator++() noexcept
         {
-            if (this->pos_cur.x < this->rect->bottom_right.x) {
+            if (this->pos_cur.x < this->pos_bottom_right.x) {
                 ++(this->pos_cur.x);
             } else {
-                this->pos_cur.x = this->rect->top_left.x;
+                this->pos_cur.x = this->pos_top_left.x;
                 ++(this->pos_cur.y);
             }
             return *this;
@@ -245,18 +246,19 @@ struct Rectangle2D {
         }
 
     private:
-        const Rectangle2D *rect;
+        value_type pos_top_left;
+        value_type pos_bottom_right;
         value_type pos_cur;
     };
 
     constexpr iterator begin() const noexcept
     {
-        return iterator(this, this->top_left);
+        return iterator(*this, this->top_left);
     }
 
     constexpr iterator end() const noexcept
     {
-        return iterator(this, Point2D<T>(this->bottom_right.y + 1, this->top_left.x));
+        return iterator(*this, Point2D<T>(this->bottom_right.y + 1, this->top_left.x));
     }
 };
 
