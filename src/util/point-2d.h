@@ -3,7 +3,9 @@
 #include "system/h-type.h"
 #include <algorithm>
 #include <concepts>
+#include <iterator>
 #include <numeric>
+#include <range/v3/range/concepts.hpp>
 #include <type_traits>
 
 /**
@@ -50,6 +52,9 @@ template <typename T>
 struct Point2D {
     T y{};
     T x{};
+
+    constexpr Point2D() = default;
+
     constexpr Point2D(T y, T x)
         : y(y)
         , x(x)
@@ -161,6 +166,9 @@ template <std::integral T>
 struct Rectangle2D {
     Point2D<T> top_left;
     Point2D<T> bottom_right;
+
+    constexpr Rectangle2D() = default;
+
     constexpr Rectangle2D(T y1, T x1, T y2, T x2)
         : top_left(std::min<T>(y1, y2), std::min<T>(x1, x2))
         , bottom_right(std::max<T>(y1, y2), std::max<T>(x1, x2))
@@ -214,8 +222,11 @@ struct Rectangle2D {
     /// @brief 長方形内の座標を走査するイテレータ
     class iterator {
     public:
+        using difference_type = T;
         using value_type = Point2D<T>;
-        using iterator_category = std::input_iterator_tag;
+        using iterator_concept = std::input_iterator_tag;
+
+        constexpr iterator() noexcept = default;
 
         constexpr iterator(const Rectangle2D &rect, const value_type &pos_cur) noexcept
             : pos_top_left(rect.top_left)
@@ -240,6 +251,13 @@ struct Rectangle2D {
             return *this;
         }
 
+        constexpr iterator operator++(int) noexcept
+        {
+            auto old = *this;
+            ++*this;
+            return old;
+        }
+
         constexpr bool operator==(const iterator &other) const noexcept
         {
             return this->pos_cur == other.pos_cur;
@@ -251,6 +269,8 @@ struct Rectangle2D {
         value_type pos_cur;
     };
 
+    using const_iterator = iterator;
+
     constexpr iterator begin() const noexcept
     {
         return iterator(*this, this->top_left);
@@ -261,6 +281,11 @@ struct Rectangle2D {
         return iterator(*this, Point2D<T>(this->bottom_right.y + 1, this->top_left.x));
     }
 };
+
+namespace ranges {
+template <typename T>
+inline constexpr bool enable_view<Rectangle2D<T>> = true;
+}
 
 //! ゲームの平面マップ上の座標位置を表す構造体
 using Pos2D = Point2D<POSITION>;
