@@ -12,6 +12,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
+#include "io/macro-configurations-store.h"
 #include "main/sound-of-music.h"
 #include "player-base/player-class.h"
 #include "save/save.h"
@@ -25,11 +26,6 @@
 #include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
-
-/*
- * Keymaps for each "mode" associated with each keypress.
- */
-concptr keymap_act[KEYMAP_MODES][256];
 
 bool use_menu;
 

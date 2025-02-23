@@ -6,8 +6,6 @@
 #include <optional>
 #include <string>
 
-extern concptr keymap_act[KEYMAP_MODES][256];
-
 extern bool use_menu;
 
 extern COMMAND_CODE command_cmd;
@@ -19,6 +17,7 @@ extern TERM_LEN command_gap;
 extern int16_t command_wrk;
 extern int16_t command_new;
 
+enum keymap_mode : int;
 class PlayerType;
 class SpecialMenuContent;
 class InputKeyRequestor {

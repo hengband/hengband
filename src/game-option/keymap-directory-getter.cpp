@@ -1,6 +1,7 @@
 #include "game-option/keymap-directory-getter.h"
+#include "floor/geometry.h"
 #include "game-option/input-options.h"
-#include "io/input-key-requester.h"
+#include "io/macro-configurations-store.h"
 #include "util/int-char-converter.h"
 
 /*!

@@ -21,6 +21,7 @@
 #include "core/show-file.h"
 #include "game-option/input-options.h"
 #include "game-option/keymap-directory-getter.h"
+#include "io/macro-configurations-store.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "system/player-type-definition.h"

@@ -20,6 +20,13 @@ enum class ShiftStatus {
     ON,
 };
 
+enum keymap_mode : int {
+    KEYMAP_MODE_ORIG = 0, /*!< オリジナルキー配置 / Mode for original keyset commands */
+    KEYMAP_MODE_ROGUE = 1, /*!< ローグライクキー配置 / Mode for roguelike keyset commands */
+    KEYMAP_MODES = 2, /*!< キー配置の数 / Number of keymap modes */
+};
+
+extern const char *keymap_act[KEYMAP_MODES][256];
 extern size_t max_macrotrigger; //!<  現在登録中のマクロ(トリガー)の数
 extern std::optional<std::string> macro_template; //!<  Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列
 extern std::optional<std::string> macro_modifier_chr; //!<  &x# で指定されるマクロトリガーに関する情報を記録する文字列
