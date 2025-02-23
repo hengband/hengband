@@ -435,7 +435,7 @@ static bool draw_white_characters(FILE *fff, int wid, int hgt)
                 break;
             }
 
-            term_draw(x, y, TERM_WHITE, buf[x]);
+            term_draw(x, y, { TERM_WHITE, buf[x] });
         }
     }
 
@@ -453,7 +453,7 @@ static bool draw_white_characters(FILE *fff, int wid, int hgt)
 static void draw_colored_characters(FILE *fff, int wid, int hgt, bool okay)
 {
     DisplaySymbol ds(TERM_DARK, ' ');
-    for (TERM_LEN y = 0; okay; y++) {
+    for (auto y = 0; okay; y++) {
         char buf[1024]{};
         if (!fgets(buf, sizeof(buf), fff)) {
             okay = false;
@@ -466,7 +466,7 @@ static void draw_colored_characters(FILE *fff, int wid, int hgt, bool okay)
             continue;
         }
 
-        for (TERM_LEN x = 0; x < wid - 1; x++) {
+        for (auto x = 0; x < wid - 1; x++) {
             if (buf[x] == '\n' || buf[x] == '\0') {
                 break;
             }
@@ -478,7 +478,7 @@ static void draw_colored_characters(FILE *fff, int wid, int hgt, bool okay)
                 }
             }
 
-            term_draw(x, y, ds.color, ds.character);
+            term_draw(x, y, ds);
         }
     }
 }

@@ -1331,20 +1331,19 @@ errr term_gotoxy(TERM_LEN x, TERM_LEN y)
  * Do not change the cursor position
  * No visual changes until "term_fresh()".
  */
-errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c)
+void term_draw(int x, int y, const DisplaySymbol &symbol)
 {
     if (auto res = term_gotoxy(x, y); res != 0) {
-        return -1;
+        return;
     }
 
     /* Paranoia -- illegal char */
-    if (!c) {
-        return -2;
+    if (symbol.has_character()) {
+        return;
     }
 
     /* Queue it for later */
-    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, { { a, c }, {} });
-    return 0;
+    term_queue_char_aux(game_term->scr->cx, game_term->scr->cy, { symbol, {} });
 }
 
 /*

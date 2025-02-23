@@ -203,7 +203,7 @@ errr term_fresh();
 errr term_fresh_force();
 errr term_set_cursor(int v);
 errr term_gotoxy(TERM_LEN x, TERM_LEN y);
-errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
+void term_draw(int x, int y, const DisplaySymbol &symbol);
 void term_addch(const DisplaySymbol &symbol);
 void term_add_bigch(const DisplaySymbol &symbol);
 errr term_addstr(int n, TERM_COLOR a, std::string_view sv);
