@@ -1782,18 +1782,11 @@ std::pair<int, int> term_get_size()
 /*
  * Extract the current cursor location
  */
-errr term_locate(TERM_LEN *x, TERM_LEN *y)
+std::pair<int, int> term_locate()
 {
-    /* Access the cursor */
-    *x = game_term->scr->cx - game_term->offset_x;
-    *y = game_term->scr->cy - game_term->offset_y;
-
-    /* Warn about "useless" cursor */
-    if (game_term->scr->cu) {
-        return 1;
-    }
-
-    return 0;
+    const auto x = game_term->scr->cx - game_term->offset_x;
+    const auto y = game_term->scr->cy - game_term->offset_y;
+    return { x, y };
 }
 
 /*

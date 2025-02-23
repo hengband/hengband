@@ -216,7 +216,7 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
 
 errr term_get_cursor(int *v);
 std::pair<int, int> term_get_size();
-errr term_locate(TERM_LEN *x, TERM_LEN *y);
+std::pair<int, int> term_locate();
 DisplaySymbol term_what(int x, int y, const DisplaySymbol &ds);
 
 errr term_flush();

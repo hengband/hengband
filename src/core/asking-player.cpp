@@ -50,8 +50,7 @@ std::optional<std::string> askfor(int len, std::string_view initial_value, bool 
      */
     auto color = TERM_YELLOW;
 
-    int y, x;
-    term_locate(&x, &y);
+    auto [x, y] = term_locate();
     if (len < 1) {
         len = 1;
     }

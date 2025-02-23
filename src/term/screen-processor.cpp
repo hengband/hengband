@@ -169,9 +169,7 @@ static std::vector<DisplaySymbol> c_roff_wrap(int x, int y, int w, const char *s
 void c_roff(TERM_COLOR a, std::string_view str)
 {
     const auto &[wid, hgt] = term_get_size();
-    int x, y;
-    (void)term_locate(&x, &y);
-
+    auto [x, y] = term_locate();
     if (y == hgt - 1 && x > wid - 3) {
         return;
     }
