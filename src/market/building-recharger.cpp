@@ -178,7 +178,7 @@ void building_recharge_all(PlayerType *player_ptr)
     auto price = 0;
     auto total_cost = 0;
     for (short i = 0; i < INVEN_PACK; i++) {
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = player_ptr->inventory[i];
         if (!item.can_recharge()) {
             continue;
         }
@@ -230,7 +230,7 @@ void building_recharge_all(PlayerType *player_ptr)
     }
 
     for (short i = 0; i < INVEN_PACK; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory[i];
         if (!o_ptr->can_recharge()) {
             continue;
         }

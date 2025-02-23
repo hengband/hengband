@@ -37,7 +37,7 @@ static void do_cmd_refill_lamp(PlayerType *player_ptr)
     const auto flags = o_ptr->get_flags();
 
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
-    auto *j_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    auto *j_ptr = &player_ptr->inventory[INVEN_LITE];
     const auto flags2 = j_ptr->get_flags();
     j_ptr->fuel += o_ptr->fuel;
     msg_print(_("ランプに油を注いだ。", "You fuel your lamp."));
@@ -73,7 +73,7 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
     const auto flags = o_ptr->get_flags();
 
     PlayerEnergy(player_ptr).set_player_turn_energy(50);
-    auto *j_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    auto *j_ptr = &player_ptr->inventory[INVEN_LITE];
     const auto flags2 = j_ptr->get_flags();
     j_ptr->fuel += o_ptr->fuel + 5;
     msg_print(_("松明を結合した。", "You combine the torches."));
@@ -101,7 +101,7 @@ static void do_cmd_refill_torch(PlayerType *player_ptr)
 void do_cmd_refill(PlayerType *player_ptr)
 {
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU });
-    const auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    const auto *o_ptr = &player_ptr->inventory[INVEN_LITE];
     const auto &bi_key = o_ptr->bi_key;
     if (bi_key.tval() != ItemKindType::LITE) {
         msg_print(_("光源を装備していない。", "You are not wielding a light."));

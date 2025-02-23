@@ -61,7 +61,7 @@ static void drain_muramasa(PlayerType *player_ptr, player_attack_type *pa_ptr, c
         return;
     }
 
-    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     HIT_PROB to_h = o_ptr->to_h;
     int to_d = o_ptr->to_d;
     bool flag = true;
@@ -153,7 +153,7 @@ void process_drain(PlayerType *player_ptr, player_attack_type *pa_ptr, const boo
         return;
     }
 
-    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     if (o_ptr->is_specific_artifact(FixedArtifactId::MURAMASA)) {
         drain_muramasa(player_ptr, pa_ptr, is_human);
     } else {

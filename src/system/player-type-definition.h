@@ -207,7 +207,7 @@ public:
 
     bool autopick_autoregister{}; /* auto register is in-use or not */
 
-    std::shared_ptr<ItemEntity[]> inventory_list{}; /* The player's inventory */
+    std::shared_ptr<ItemEntity[]> inventory{}; /* The player's inventory */
     int16_t inven_cnt{}; /* Number of items in inventory */
     int16_t equip_cnt{}; /* Number of items in equipment */
 

@@ -305,7 +305,7 @@ void do_cmd_bash(PlayerType *player_ptr)
 static bool get_spike(PlayerType *player_ptr, INVENTORY_IDX *ip)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory[i];
         if (!o_ptr->is_valid()) {
             continue;
         }

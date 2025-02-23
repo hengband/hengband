@@ -574,7 +574,7 @@ bool cosmic_cast_off(PlayerType *player_ptr, ItemEntity **o_ptr_ptr)
     /* Cast off activated item */
     INVENTORY_IDX slot;
     for (slot = INVEN_MAIN_HAND; slot <= INVEN_FEET; slot++) {
-        if (o_ptr == &player_ptr->inventory_list[slot]) {
+        if (o_ptr == &player_ptr->inventory[slot]) {
             break;
         }
     }

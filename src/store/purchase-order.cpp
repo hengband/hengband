@@ -93,7 +93,7 @@ static void take_item_from_home(PlayerType *player_ptr, ItemEntity &item_home, I
     distribute_charges(&item_home, &item_inventory, amt);
 
     const auto item_new = store_item_to_inventory(player_ptr, &item_inventory);
-    const auto item_name = describe_flavor(player_ptr, player_ptr->inventory_list[item_new], 0);
+    const auto item_name = describe_flavor(player_ptr, player_ptr->inventory[item_new], 0);
     handle_stuff(player_ptr);
     msg_format(_("%s(%c)を取った。", "You have %s (%c)."), item_name.data(), index_to_label(item_new));
 
@@ -294,7 +294,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     item_new = store_item_to_inventory(player_ptr, &item);
     handle_stuff(player_ptr);
 
-    const auto got_item_name = describe_flavor(player_ptr, player_ptr->inventory_list[item_new], 0);
+    const auto got_item_name = describe_flavor(player_ptr, player_ptr->inventory[item_new], 0);
     msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), got_item_name.data(), index_to_label(item_new));
 
     if (item_store.is_wand_rod()) {

@@ -94,7 +94,7 @@ static bool acid_minus_ac(PlayerType *player_ptr)
     };
 
     const auto slot = rand_choice(candidates);
-    auto &item = player_ptr->inventory_list[slot];
+    auto &item = player_ptr->inventory[slot];
     if (!item.is_valid() || !item.is_protector()) {
         return false;
     }

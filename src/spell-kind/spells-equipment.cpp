@@ -34,7 +34,7 @@ bool apply_disenchant(PlayerType *player_ptr, BIT_FLAGS mode)
     };
 
     const auto t = rand_choice(candidates);
-    auto &item = player_ptr->inventory_list[t];
+    auto &item = player_ptr->inventory[t];
     if (!item.is_valid()) {
         return false;
     }

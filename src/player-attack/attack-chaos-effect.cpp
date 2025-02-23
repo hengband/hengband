@@ -311,7 +311,7 @@ void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, con
         attack_polymorph(player_ptr, pa_ptr, y, x);
     }
 
-    const auto &item = player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    const auto &item = player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     if (item.is_specific_artifact(FixedArtifactId::G_HAMMER)) {
         attack_golden_hammer(player_ptr, pa_ptr);
     }

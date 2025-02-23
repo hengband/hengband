@@ -48,7 +48,7 @@
 bool can_get_item(PlayerType *player_ptr, const ItemTester &item_tester)
 {
     for (int j = 0; j < INVEN_TOTAL; j++) {
-        if (item_tester.okay(&player_ptr->inventory_list[j])) {
+        if (item_tester.okay(&player_ptr->inventory[j])) {
             return true;
         }
     }
@@ -197,7 +197,7 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 #endif
 
     auto slot = store_item_to_inventory(player_ptr, o_ptr);
-    o_ptr = &player_ptr->inventory_list[slot];
+    o_ptr = &player_ptr->inventory[slot];
     delete_object_idx(player_ptr, o_idx);
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         bool old_known = identify_item(player_ptr, o_ptr);

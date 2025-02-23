@@ -38,14 +38,14 @@ ItemEntity *choose_warning_item(PlayerType *player_ptr)
     /* Search Inventory */
     std::vector<int> candidates;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        const auto *o_ptr = &player_ptr->inventory_list[i];
+        const auto *o_ptr = &player_ptr->inventory[i];
         if (o_ptr->get_flags().has(TR_WARNING)) {
             candidates.push_back(i);
         }
     }
 
     /* Choice one of them */
-    return candidates.empty() ? nullptr : &player_ptr->inventory_list[rand_choice(candidates)];
+    return candidates.empty() ? nullptr : &player_ptr->inventory[rand_choice(candidates)];
 }
 
 /*!

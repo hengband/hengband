@@ -39,7 +39,7 @@
 void identify_pack(PlayerType *player_ptr)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory[i];
         if (!o_ptr->is_valid()) {
             continue;
         }

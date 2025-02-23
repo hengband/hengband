@@ -114,7 +114,7 @@ static void get_bare_knuckle_exp(PlayerType *player_ptr, player_attack_type *pa_
  */
 static void get_weapon_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
 
     PlayerSkill(player_ptr).gain_melee_weapon_exp(o_ptr);
 }
@@ -127,7 +127,7 @@ static void get_weapon_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 static void get_attack_exp(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     const auto &monrace = pa_ptr->m_ptr->get_monrace();
-    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     if (!o_ptr->is_valid()) {
         get_bare_knuckle_exp(player_ptr, pa_ptr);
         return;
@@ -156,7 +156,7 @@ static void calc_num_blow(PlayerType *player_ptr, player_attack_type *pa_ptr)
         pa_ptr->num_blow = player_ptr->num_blow[pa_ptr->hand];
     }
 
-    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     if (o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) {
         pa_ptr->num_blow = 1;
     }
@@ -313,7 +313,7 @@ static bool does_weapon_has_flag(BIT_FLAGS &attacker_flags, player_attack_type *
  */
 static void process_weapon_attack(PlayerType *player_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
 {
-    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     const auto num = o_ptr->damage_dice.num + player_ptr->damage_dice_bonus[pa_ptr->hand].num + magical_brand_extra_dice(pa_ptr);
     const auto sides = o_ptr->damage_dice.sides + player_ptr->damage_dice_bonus[pa_ptr->hand].sides;
     pa_ptr->attack_damage = calc_attack_damage_with_slay(player_ptr, o_ptr, Dice::roll(num, sides), *pa_ptr->m_ptr, pa_ptr->mode, false);
@@ -345,7 +345,7 @@ static void process_weapon_attack(PlayerType *player_ptr, player_attack_type *pa
  */
 static void calc_attack_damage(PlayerType *player_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
 {
-    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     pa_ptr->attack_damage = 1;
     if (pa_ptr->monk_attack) {
         process_monk_attack(player_ptr, pa_ptr);
@@ -446,7 +446,7 @@ static bool check_fear_death(PlayerType *player_ptr, player_attack_type *pa_ptr,
         }
     }
 
-    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     if ((o_ptr->is_specific_artifact(FixedArtifactId::ZANTETSU)) && is_lowlevel) {
         msg_print(_("またつまらぬものを斬ってしまった．．．", "Sigh... Another trifling thing I've cut...."));
     }
@@ -465,7 +465,7 @@ static bool check_fear_death(PlayerType *player_ptr, player_attack_type *pa_ptr,
 static void apply_actual_attack(
     PlayerType *player_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool is_zantetsu_nullified, const bool is_ej_nullified)
 {
-    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     int vorpal_chance = (o_ptr->is_specific_artifact(FixedArtifactId::VORPAL_BLADE) || o_ptr->is_specific_artifact(FixedArtifactId::CHAINSWORD)) ? 2 : 4;
 
     sound(SoundKind::HIT);
@@ -541,7 +541,7 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
     angband_strcpy(pa_ptr->m_name, monster_desc(player_ptr, *pa_ptr->m_ptr, 0), sizeof(pa_ptr->m_name));
 
     int chance = calc_attack_quality(player_ptr, pa_ptr);
-    auto *o_ptr = &player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     const auto is_zantetsu_nullified = o_ptr->is_specific_artifact(FixedArtifactId::ZANTETSU) && pa_ptr->r_ptr->symbol_char_is_any_of("j");
     const auto is_ej_nullified = o_ptr->is_specific_artifact(FixedArtifactId::EXCALIBUR_J) && pa_ptr->r_ptr->symbol_char_is_any_of("S");
     calc_num_blow(player_ptr, pa_ptr);
