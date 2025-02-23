@@ -21,6 +21,7 @@
 #include <ostream>
 #include <queue>
 #include <random>
+#include <range/v3/all.hpp>
 #include <set>
 #include <span>
 #include <sstream>
