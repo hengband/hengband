@@ -571,10 +571,9 @@ void process_command(PlayerType *player_ptr)
         do_cmd_player_status(player_ptr);
         break;
     }
-    case '!': {
-        (void)term_user(0);
+    case '!':
+        term_user();
         break;
-    }
     case '"': {
         do_cmd_pref(player_ptr);
         break;

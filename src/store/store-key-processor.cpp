@@ -194,10 +194,9 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
         display_store(player_ptr, store_num);
         break;
     }
-    case '!': {
-        (void)term_user(0);
+    case '!':
+        term_user();
         break;
-    }
     case '"': {
         player_ptr->town_num = old_town_num;
         do_cmd_pref(player_ptr);

@@ -193,7 +193,7 @@ extern term_type *game_term;
 
 class DisplaySymbol;
 class DisplaySymbolPair;
-errr term_user(int n);
+void term_user();
 errr term_xtra(int n, int v);
 
 void term_queue_char(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair);

@@ -168,18 +168,13 @@ void term_win::resize(TERM_LEN w, TERM_LEN h)
 
 /*** External hooks ***/
 
-/*
- * Execute the "Term->user_hook" hook, if available (see above).
- */
-errr term_user(int n)
+void term_user()
 {
-    /* Verify the hook */
     if (!game_term->user_hook) {
-        return -1;
+        return;
     }
 
-    /* Call the hook */
-    return (*game_term->user_hook)(n);
+    (*game_term->user_hook)(0);
 }
 
 /*
