@@ -337,28 +337,29 @@ void set_redrawing_flags()
 /*!
  * @brief 地震処理
  * Induce an "earthquake" of the given radius at the given location.
- * @param player_ptrプレイヤーへの参照ポインタ
- * @param cy 中心Y座標
- * @param cx 中心X座標
- * @param r 効果半径
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param center 中心座標
+ * @param radius 効果半径
  * @param m_idx 地震を起こしたモンスターID(0ならばプレイヤー)
  * @return 効力があった場合TRUEを返す
+ * @note 効果半径は15に制限される。
+ * 現状効果半径が15より大きく設定されているのは自然の脅威による地震(半径 20+(レベル/2)、でかすぎ)のみ。
  */
-bool earthquake(PlayerType *player_ptr, POSITION cy, POSITION cx, POSITION r, MONSTER_IDX m_idx)
+bool earthquake(PlayerType *player_ptr, const Pos2D &center, int radius, MONSTER_IDX m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     if ((floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) || !floor.is_underground()) {
         return false;
     }
 
-    if (r > 15) {
-        r = 15;
+    if (radius > 15) {
+        radius = 15;
     }
 
-    const auto earthquake_area = get_earthquake_area(floor, { cy, cx }, r);
+    const auto earthquake_area = get_earthquake_area(floor, center, radius);
     reset_grid_info(floor, earthquake_area);
 
-    auto pos_collapses = decide_collapse_positions(floor, earthquake_area, { cy, cx });
+    auto pos_collapses = decide_collapse_positions(floor, earthquake_area, center);
     process_hit_to_player(player_ptr, pos_collapses, m_idx);
     process_hit_to_monsters(player_ptr, pos_collapses);
 

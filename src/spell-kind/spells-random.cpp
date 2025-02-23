@@ -108,7 +108,7 @@ bool activate_ty_curse(PlayerType *player_ptr, bool stop_ty, int *count)
         case 29:
             if (!(*count)) {
                 msg_print(_("地面が揺れた...", "The ground trembles..."));
-                earthquake(player_ptr, player_ptr->y, player_ptr->x, 5 + randint0(10), 0);
+                earthquake(player_ptr, player_ptr->get_position(), 5 + randint0(10));
                 if (!one_in_(6)) {
                     break;
                 }
@@ -309,7 +309,7 @@ void wild_magic(PlayerType *player_ptr, int spell)
         aggravate_monsters(player_ptr, 0);
         break;
     case 26:
-        earthquake(player_ptr, player_ptr->y, player_ptr->x, 5, 0);
+        earthquake(player_ptr, player_ptr->get_position(), 5);
         break;
     case 27:
     case 28:
@@ -478,7 +478,7 @@ void cast_wonder(PlayerType *player_ptr, const Direction &dir)
     }
 
     if (die < 104) {
-        earthquake(player_ptr, player_ptr->y, player_ptr->x, 12, 0);
+        earthquake(player_ptr, player_ptr->get_position(), 12);
         return;
     }
 

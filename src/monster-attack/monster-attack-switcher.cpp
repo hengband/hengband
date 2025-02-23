@@ -489,7 +489,7 @@ void switch_monster_blow_to_player(PlayerType *player_ptr, MonsterAttackPlayer *
         monap_ptr->damage -= (monap_ptr->damage * ((monap_ptr->ac < 150) ? monap_ptr->ac : 150) / 250);
         monap_ptr->get_damage += take_hit(player_ptr, DAMAGE_ATTACK, monap_ptr->damage, monap_ptr->ddesc);
         if (monap_ptr->damage > 23 || monap_ptr->explode) {
-            earthquake(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, 8, monap_ptr->m_idx);
+            earthquake(player_ptr, monap_ptr->m_ptr->get_position(), 8, monap_ptr->m_idx);
         }
 
         break;
@@ -566,7 +566,7 @@ void switch_monster_blow_to_player(PlayerType *player_ptr, MonsterAttackPlayer *
             if (floor.is_underground() && (!floor.is_in_quest() || !QuestType::is_fixed(floor.quest_number))) {
                 if (monap_ptr->damage > 23 || monap_ptr->explode) {
                     msg_print(_("カオスの力でダンジョンが崩れ始める！", "The dungeon tumbles by the chaotic power!"));
-                    earthquake(player_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, 8, monap_ptr->m_idx);
+                    earthquake(player_ptr, monap_ptr->m_ptr->get_position(), 8, monap_ptr->m_idx);
                     break;
                 }
             }

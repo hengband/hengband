@@ -248,7 +248,7 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
     case RaceBlowEffectType::SHATTER:
         mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
         if (mam_ptr->damage > 23) {
-            earthquake(player_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);
+            earthquake(player_ptr, mam_ptr->m_ptr->get_position(), 8, mam_ptr->m_idx);
         }
 
         break;
@@ -291,7 +291,7 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
             if (floor.is_underground() && (!floor.is_in_quest() || !QuestType::is_fixed(floor.quest_number))) {
                 if (mam_ptr->damage > 23) {
                     msg_print(_("カオスの力でダンジョンが崩れ始める！", "The dungeon tumbles by the chaotic power!"));
-                    earthquake(player_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);
+                    earthquake(player_ptr, mam_ptr->m_ptr->get_position(), 8, mam_ptr->m_idx);
                 }
             }
         }

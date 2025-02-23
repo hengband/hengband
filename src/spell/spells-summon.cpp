@@ -516,7 +516,7 @@ void cast_invoke_spirits(PlayerType *player_ptr, const Direction &dir)
     } else if (die < 101) {
         hypodynamic_bolt(player_ptr, dir, 100 + plev);
     } else if (die < 104) {
-        earthquake(player_ptr, player_ptr->y, player_ptr->x, 12, 0);
+        earthquake(player_ptr, player_ptr->get_position(), 12);
     } else if (die < 106) {
         (void)destroy_area(player_ptr, player_ptr->y, player_ptr->x, 13 + randint0(5), false);
     } else if (die < 108) {

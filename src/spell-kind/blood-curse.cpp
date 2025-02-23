@@ -31,7 +31,7 @@ void blood_curse_to_enemy(PlayerType *player_ptr, MONSTER_IDX m_idx)
         case 2:
             if (!count) {
                 msg_print(_("地面が揺れた...", "The ground trembles..."));
-                earthquake(player_ptr, monster.fy, monster.fx, 4 + randint0(4), 0);
+                earthquake(player_ptr, monster.get_position(), 4 + randint0(4), 0); // 血の呪いによる地震なのでm_idxではなく0を渡す
                 if (!one_in_(6)) {
                     break;
                 }

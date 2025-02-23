@@ -156,7 +156,7 @@ void cast_shuffle(PlayerType *player_ptr)
 
     if (die < 80) {
         msg_print(_("《塔》だ。", "It's the Tower."));
-        earthquake(player_ptr, player_ptr->y, player_ptr->x, 5, 0);
+        earthquake(player_ptr, player_ptr->get_position(), 5);
         return;
     }
 

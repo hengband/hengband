@@ -1509,7 +1509,7 @@ bool switch_element_execution(PlayerType *player_ptr)
         reserve_alter_reality(player_ptr, randint0(21) + 15);
         return true;
     case ElementRealmType::EARTH:
-        (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
+        (void)earthquake(player_ptr, player_ptr->get_position(), 10);
         return true;
     case ElementRealmType::DEATH:
         if (player_ptr->current_floor_ptr->num_repro <= MAX_REPRODUCTION) {
