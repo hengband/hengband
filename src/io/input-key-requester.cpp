@@ -84,9 +84,9 @@ void InputKeyRequestor::process_input_command()
 
         this->process_command_command(cmd);
         this->process_control_command(cmd);
-        auto act = keymap_actions_map[this->mode][(byte)(cmd)];
+        const auto &act = keymap_actions_map.at(this->mode).at(static_cast<uint8_t>(cmd));
         if (act && !inkey_next) {
-            angband_strcpy(request_command_buffer, act, sizeof(request_command_buffer));
+            angband_strcpy(request_command_buffer, *act, sizeof(request_command_buffer));
             inkey_next = request_command_buffer;
             continue;
         }
@@ -280,12 +280,13 @@ int InputKeyRequestor::get_caret_command() const
 #ifdef JP
     auto caret_command = 0;
     for (auto i = 0; i < 256; i++) {
-        auto s = keymap_actions_map[this->mode][i];
-        if (s == nullptr) {
+        const auto &action_opt = keymap_actions_map.at(this->mode).at(static_cast<uint8_t>(i));
+        if (!action_opt) {
             continue;
         }
 
-        if ((*s == command_cmd) && (*(s + 1) == 0)) {
+        const auto &action = *action_opt;
+        if ((action[0] == command_cmd) && (action[1] == '\0')) {
             caret_command = i;
             break;
         }

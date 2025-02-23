@@ -25,7 +25,7 @@ enum class KeymapMode {
     ROGUE = 1, //!< ローグライクキー配置
 };
 
-extern std::map<KeymapMode, std::vector<const char *>> keymap_actions_map;
+extern std::map<KeymapMode, std::vector<std::optional<std::string>>> keymap_actions_map;
 extern size_t max_macrotrigger; //!< 現在登録中のマクロ(トリガー)の数
 extern std::optional<std::string> macro_template; //!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列
 extern std::optional<std::string> macro_modifier_chr; //!< &x# で指定されるマクロトリガーに関する情報を記録する文字列

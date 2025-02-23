@@ -113,9 +113,8 @@ static errr keymap_dump(std::string_view filename)
     }
 
     auto_dump_printf(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
-    for (int i = 0; i < 256; i++) {
-        concptr act;
-        act = keymap_actions_map[mode][i];
+    for (auto i = 0; i < 256; i++) {
+        const auto &act = keymap_actions_map.at(mode).at(i);
         if (!act) {
             continue;
         }
@@ -123,7 +122,7 @@ static errr keymap_dump(std::string_view filename)
         char buf[1024]{};
         buf[0] = (char)i;
         ascii_to_text(key, buf, sizeof(key));
-        ascii_to_text(buf, act, sizeof(buf));
+        ascii_to_text(buf, *act, sizeof(buf));
         auto_dump_printf(auto_dump_stream, "A:%s\n", buf);
         auto_dump_printf(auto_dump_stream, "C:%d:%s\n", enum2i(mode), key);
     }
@@ -276,14 +275,14 @@ void do_cmd_macros(PlayerType *player_ptr)
             prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
             prt(_("押すキー: ", "Keypress: "), 18, 0);
             do_cmd_macro_aux_keymap(buf);
-            concptr act = keymap_actions_map[mode][(byte)(buf[0])];
+            const auto &act = keymap_actions_map.at(mode).at(static_cast<uint8_t>(buf[0]));
             if (!act) {
                 msg_print(_("キー配置は定義されていません。", "Found no keymap."));
                 break;
             }
 
             // マクロの作成時に参照するためmacro_bufにコピーする
-            angband_strcpy(macro_buf, act, sizeof(macro_buf));
+            angband_strcpy(macro_buf, *act, sizeof(macro_buf));
             // too long macro must die
             char tmp[81]{};
             angband_strcpy(tmp, macro_buf, sizeof(tmp));
@@ -311,8 +310,7 @@ void do_cmd_macros(PlayerType *player_ptr)
             }
 
             text_to_ascii(macro_buf, *ask_result, sizeof(macro_buf));
-            string_free(keymap_actions_map[mode][(byte)(buf[0])]);
-            keymap_actions_map[mode][(byte)(buf[0])] = string_make(macro_buf);
+            keymap_actions_map.at(mode).at(static_cast<uint8_t>(buf[0])) = macro_buf;
             msg_print(_("キー配置を追加しました。", "Added a keymap."));
             break;
         }
@@ -320,8 +318,7 @@ void do_cmd_macros(PlayerType *player_ptr)
             prt(_("コマンド: キー配置の削除", "Command: Remove a keymap"), 16, 0);
             prt(_("押すキー: ", "Keypress: "), 18, 0);
             do_cmd_macro_aux_keymap(buf);
-            string_free(keymap_actions_map[mode][(byte)(buf[0])]);
-            keymap_actions_map[mode][(byte)(buf[0])] = nullptr;
+            keymap_actions_map.at(mode).at(static_cast<uint8_t>(buf[0])).reset();
             msg_print(_("キー配置を削除しました。", "Removed a keymap."));
             break;
         case '0': {

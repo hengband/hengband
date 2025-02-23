@@ -143,9 +143,9 @@ bool insert_keymap_line(text_body_type *tb)
     insert_return_code(tb);
     tb->lines_list[tb->cy] = std::make_unique<std::string>(fmt::format("C:{}:{}", enum2i(mode), tmp));
 
-    concptr act = keymap_actions_map[mode][(byte)(buf[0])];
+    const auto &act = keymap_actions_map.at(mode).at(static_cast<uint8_t>(buf[0]));
     if (act) {
-        ascii_to_text(tmp, act, sizeof(tmp));
+        ascii_to_text(tmp, *act, sizeof(tmp));
     }
 
     insert_return_code(tb);

@@ -17,13 +17,14 @@ Direction get_keymap_dir(char ch)
         dir = Direction(D2I(ch));
     } else {
         const auto mode = rogue_like_commands ? KeymapMode::ROGUE : KeymapMode::ORIGINAL;
-        const auto act = keymap_actions_map[mode][(byte)(ch)];
+        const auto &act = keymap_actions_map.at(mode).at(static_cast<uint8_t>(ch));
         if (!act) {
             return Direction::none();
         }
-        for (auto s = act; *s; ++s) {
-            if (isdigit(*s)) {
-                dir = Direction(D2I(*s));
+
+        for (auto c : *act) {
+            if (isdigit(c)) {
+                dir = Direction(D2I(c));
             }
         }
     }

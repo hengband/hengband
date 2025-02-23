@@ -301,9 +301,8 @@ static bool interpret_c_token(char *buf)
         return false;
     }
 
-    int i = (byte)(tmp[0]);
-    string_free(keymap_actions_map[mode][i]);
-    keymap_actions_map[mode][i] = string_make(macro_buffers.data());
+    const auto i = static_cast<uint8_t>(tmp[0]);
+    keymap_actions_map.at(mode).at(i) = macro_buffers.data();
     return true;
 }
 
