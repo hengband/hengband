@@ -208,7 +208,7 @@ static void describe_grid_monster(PlayerType *player_ptr, GridExamination *ge_pt
         }
 
         std::string acount = evaluate_monster_exp(player_ptr, *ge_ptr->m_ptr);
-        const auto mon_desc = ge_ptr->m_ptr->build_looking_description(false);
+        const auto mon_desc = ge_ptr->m_ptr->build_looking_description(true);
 #ifdef JP
         const auto out_val = format("[%s]%s%s(%s)%s%s [r思 %s%s]", acount.data(), ge_ptr->s1, m_name.data(), mon_desc.data(), ge_ptr->s2, ge_ptr->s3,
             ge_ptr->x_info, ge_ptr->info);
