@@ -235,7 +235,7 @@ errr term_activate(term_type *t);
 errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k);
 
 #ifdef JP
-errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s);
+void term_putstr_v(int x, int y_initial, size_t n, uint8_t color, std::string_view sv);
 #endif
 
 #ifndef WINDOWS

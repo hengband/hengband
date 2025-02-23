@@ -2166,35 +2166,35 @@ errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k)
 /*
  * Move to a location and, using an attr, add a string vertically
  */
-errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s)
+void term_putstr_v(int x, int y_initial, size_t n, uint8_t color, std::string_view sv)
 {
-    errr res;
-    int y0 = y;
-
-    for (int i = 0; i < n && s[i] != 0; i++) {
+    auto y = y_initial;
+    for (size_t i = 0; (i < n) && (i < sv.length()); i++) {
         /* Move first */
-        if ((res = term_gotoxy(x, y0)) != 0) {
-            return res;
+        if (const auto res = term_gotoxy(x, y); (res != 0)) {
+            return;
         }
 
-        if (iskanji(s[i])) {
-            if ((res = term_addstr(2, a, &s[i])) != 0) {
-                return res;
+        if (iskanji(sv[i])) {
+            if (const auto res = term_addstr(2, color, sv.substr(i)); (res != 0)) {
+                return;
             }
+
             i++;
-            y0++;
-            if (s[i] == 0) {
+            y++;
+            if (sv[i] == '\0') {
                 break;
             }
-        } else {
-            if ((res = term_addstr(1, a, &s[i])) != 0) {
-                return res;
-            }
-            y0++;
-        }
-    }
 
-    return 0;
+            continue;
+        }
+
+        if (const auto res = term_addstr(1, color, sv.substr(i)); (res != 0)) {
+            return;
+        }
+
+        y++;
+    }
 }
 #endif
 
