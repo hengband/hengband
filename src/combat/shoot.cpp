@@ -337,7 +337,7 @@ static MULTIPLY calc_shot_damage_with_slay(
             }
 
             auto can_eliminate_smaug = arrow_ptr->is_specific_artifact(FixedArtifactId::BARD_ARROW);
-            can_eliminate_smaug &= player_ptr->inventory_list[INVEN_BOW].is_specific_artifact(FixedArtifactId::BARD);
+            can_eliminate_smaug &= player_ptr->inventory[INVEN_BOW].is_specific_artifact(FixedArtifactId::BARD);
             can_eliminate_smaug &= monster.r_idx == MonraceId::SMAUG;
             if (can_eliminate_smaug) {
                 mult *= 5;
@@ -469,7 +469,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     /* Access the item (if in the pack) */
     auto &floor = *player_ptr->current_floor_ptr;
     if (i_idx >= 0) {
-        o_ptr = &player_ptr->inventory_list[i_idx];
+        o_ptr = &player_ptr->inventory[i_idx];
     } else {
         o_ptr = &floor.o_list[0 - i_idx];
     }
@@ -1026,7 +1026,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, const MonsterEntity &mons
  */
 int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam)
 {
-    const auto &item = player_ptr->inventory_list[INVEN_BOW];
+    const auto &item = player_ptr->inventory[INVEN_BOW];
     const auto bonus = player_ptr->to_h_b + plus_ammo;
     const auto tval = item.bi_key.tval();
     const auto median_skill_exp = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2;
@@ -1087,7 +1087,7 @@ int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus
  */
 int calc_crit_ratio_shot(PlayerType *player_ptr, int plus_ammo, int plus_bow)
 {
-    auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *j_ptr = &player_ptr->inventory[INVEN_BOW];
 
     /* Extract "shot" power */
     auto i = player_ptr->to_h_b + plus_ammo;

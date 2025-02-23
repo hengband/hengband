@@ -592,7 +592,7 @@ std::string describe_flavor(PlayerType *player_ptr, const ItemEntity &item, BIT_
        << describe_accuracy_and_damage_bonus(item, opt);
 
     if (none_bits(mode, OD_DEBUG)) {
-        const auto &bow = player_ptr->inventory_list[INVEN_BOW];
+        const auto &bow = player_ptr->inventory[INVEN_BOW];
         const auto tval = item.bi_key.tval();
         if (bow.is_valid() && (tval == bow.get_arrow_kind())) {
             ss << describe_ammo_detail(player_ptr, item, bow, opt);

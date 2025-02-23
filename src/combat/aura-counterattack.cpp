@@ -196,7 +196,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
     }
 
     int dam = 1;
-    ItemEntity *o_armed_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
+    ItemEntity *o_armed_ptr = &player_ptr->inventory[INVEN_MAIN_HAND];
     auto &monrace = monap_ptr->m_ptr->get_monrace();
     const EnumClassFlagGroup<MonsterResistanceType> resist_flags = { MonsterResistanceType::RESIST_ALL, MonsterResistanceType::RESIST_DARK };
 
@@ -214,7 +214,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
         dam = Dice::floored_expected_value(num, sides) + o_armed_ptr->to_d + player_ptr->to_d[0];
     }
 
-    o_armed_ptr = &player_ptr->inventory_list[INVEN_BODY];
+    o_armed_ptr = &player_ptr->inventory[INVEN_BODY];
     if (o_armed_ptr->is_valid() && o_armed_ptr->is_cursed()) {
         dam *= 2;
     }
@@ -241,7 +241,7 @@ static void aura_shadow_by_monster_attack(PlayerType *player_ptr, MonsterAttackP
 
     /* Some cursed armours gives an extra effect */
     for (int j = 0; j < TABLE_SIZE; j++) {
-        o_armed_ptr = &player_ptr->inventory_list[table[j].slot];
+        o_armed_ptr = &player_ptr->inventory[table[j].slot];
         if (o_armed_ptr->is_valid() && o_armed_ptr->is_cursed() && o_armed_ptr->is_protector()) {
             project(player_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (player_ptr->lev * 2), table[j].type, flg);
         }

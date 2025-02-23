@@ -61,8 +61,8 @@ static void do_curse_on_equip(OBJECT_IDX slot, ItemEntity &item, PlayerType *pla
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (set_anubis_and_chariot(player_ptr) && ((slot == INVEN_MAIN_HAND) || (slot == INVEN_SUB_HAND))) {
 
-        ItemEntity *anubis = &(player_ptr->inventory_list[INVEN_MAIN_HAND]);
-        ItemEntity *chariot = &(player_ptr->inventory_list[INVEN_SUB_HAND]);
+        ItemEntity *anubis = &(player_ptr->inventory[INVEN_MAIN_HAND]);
+        ItemEntity *chariot = &(player_ptr->inventory[INVEN_SUB_HAND]);
 
         anubis->curse_flags.set(CurseTraitType::PERSISTENT_CURSE);
         anubis->curse_flags.set(CurseTraitType::HEAVY_CURSE);
@@ -143,8 +143,8 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     auto slot = wield_slot(player_ptr, o_ptr);
-    const auto o_ptr_mh = &player_ptr->inventory_list[INVEN_MAIN_HAND];
-    const auto o_ptr_sh = &player_ptr->inventory_list[INVEN_SUB_HAND];
+    const auto o_ptr_mh = &player_ptr->inventory[INVEN_MAIN_HAND];
+    const auto o_ptr_sh = &player_ptr->inventory[INVEN_SUB_HAND];
     const auto tval = o_ptr->bi_key.tval();
     switch (tval) {
     case ItemKindType::CAPTURE:
@@ -199,7 +199,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         break;
     case ItemKindType::RING: {
         std::string q;
-        if (player_ptr->inventory_list[INVEN_SUB_RING].is_valid() && player_ptr->inventory_list[INVEN_MAIN_RING].is_valid()) {
+        if (player_ptr->inventory[INVEN_SUB_RING].is_valid() && player_ptr->inventory[INVEN_MAIN_RING].is_valid()) {
             q = _("どちらの指輪と取り替えますか?", "Replace which ring? ");
         } else {
             q = _("どちらの手に装備しますか?", "Equip which hand? ");
@@ -219,8 +219,8 @@ void do_cmd_wield(PlayerType *player_ptr)
         break;
     }
 
-    if (player_ptr->inventory_list[slot].is_cursed()) {
-        const auto item_name = describe_flavor(player_ptr, player_ptr->inventory_list[slot], OD_OMIT_PREFIX | OD_NAME_ONLY);
+    if (player_ptr->inventory[slot].is_cursed()) {
+        const auto item_name = describe_flavor(player_ptr, player_ptr->inventory[slot], OD_OMIT_PREFIX | OD_NAME_ONLY);
 #ifdef JP
         msg_format("%s%sは呪われているようだ。", describe_use(player_ptr, slot), item_name.data());
 #else
@@ -254,9 +254,9 @@ void do_cmd_wield(PlayerType *player_ptr)
     }
 
     sound(SoundKind::WIELD);
-    if (need_switch_wielding && !player_ptr->inventory_list[need_switch_wielding].is_cursed()) {
-        auto &slot_item = player_ptr->inventory_list[slot];
-        auto &switch_item = player_ptr->inventory_list[need_switch_wielding];
+    if (need_switch_wielding && !player_ptr->inventory[need_switch_wielding].is_cursed()) {
+        auto &slot_item = player_ptr->inventory[slot];
+        auto &switch_item = player_ptr->inventory[need_switch_wielding];
         const auto item_name = describe_flavor(player_ptr, switch_item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         std::swap(switch_item, slot_item);
         msg_format(_("%sを%sに構えなおした。", "You wield %s at %s hand."), item_name.data(),
@@ -281,7 +281,7 @@ void do_cmd_wield(PlayerType *player_ptr)
         floor_item_optimize(player_ptr, 0 - i_idx);
     }
 
-    auto &wield_slot_item = player_ptr->inventory_list[slot];
+    auto &wield_slot_item = player_ptr->inventory[slot];
     if (wield_slot_item.is_valid()) {
         (void)inven_takeoff(player_ptr, slot, 255);
     }

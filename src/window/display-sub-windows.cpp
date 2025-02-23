@@ -303,7 +303,7 @@ void fix_pet_list(PlayerType *player_ptr)
  */
 static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tester)
 {
-    if (!player_ptr || !player_ptr->inventory_list) {
+    if (!player_ptr || !player_ptr->inventory) {
         return;
     }
 
@@ -315,7 +315,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
             break;
         }
 
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = player_ptr->inventory[i];
         auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(&item);
         std::string tmp_val = "   ";
 

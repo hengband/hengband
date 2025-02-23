@@ -283,7 +283,7 @@ void ObjectThrowEntity::process_boomerang_back()
             return;
         }
 
-        this->o_ptr = &player_ptr->inventory_list[this->i_idx];
+        this->o_ptr = &player_ptr->inventory[this->i_idx];
         *this->o_ptr = this->q_ptr->clone();
         this->player_ptr->equip_cnt++;
         auto &rfu = RedrawingFlagsUpdater::get_instance();
@@ -321,7 +321,7 @@ bool ObjectThrowEntity::check_what_throw()
 {
     if (this->shuriken >= 0) {
         this->i_idx = this->shuriken;
-        this->o_ptr = &this->player_ptr->inventory_list[this->i_idx];
+        this->o_ptr = &this->player_ptr->inventory[this->i_idx];
         return true;
     }
 
@@ -357,12 +357,12 @@ bool ObjectThrowEntity::check_throw_boomerang()
 
     if (has_melee_weapon(this->player_ptr, INVEN_SUB_HAND)) {
         this->i_idx = INVEN_SUB_HAND;
-        this->o_ptr = &this->player_ptr->inventory_list[this->i_idx];
+        this->o_ptr = &this->player_ptr->inventory[this->i_idx];
         return true;
     }
 
     this->i_idx = INVEN_MAIN_HAND;
-    this->o_ptr = &this->player_ptr->inventory_list[this->i_idx];
+    this->o_ptr = &this->player_ptr->inventory[this->i_idx];
     return true;
 }
 

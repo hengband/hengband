@@ -457,9 +457,9 @@ int monspell_bluemage_damage(PlayerType *player_ptr, MonsterAbilityType ms_type,
     ItemEntity *o_ptr = nullptr;
 
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
-        o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
+        o_ptr = &player_ptr->inventory[INVEN_MAIN_HAND];
     } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
-        o_ptr = &player_ptr->inventory_list[INVEN_SUB_HAND];
+        o_ptr = &player_ptr->inventory[INVEN_SUB_HAND];
     }
 
     const auto shoot_base = o_ptr ? o_ptr->to_d : 0;

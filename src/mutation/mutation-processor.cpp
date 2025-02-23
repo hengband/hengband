@@ -212,7 +212,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             hp_player(player_ptr, 10);
         }
 
-        auto &item = player_ptr->inventory_list[INVEN_LITE];
+        auto &item = player_ptr->inventory[INVEN_LITE];
         if (item.bi_key.tval() == ItemKindType::LITE) {
             if (!item.is_fixed_artifact() && (item.fuel > 0)) {
                 hp_player(player_ptr, item.fuel / 20);
@@ -449,14 +449,14 @@ bool drop_weapons(PlayerType *player_ptr)
     msg_print(nullptr);
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND)) {
         slot = INVEN_MAIN_HAND;
-        o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
+        o_ptr = &player_ptr->inventory[INVEN_MAIN_HAND];
 
         if (has_melee_weapon(player_ptr, INVEN_SUB_HAND) && one_in_(2)) {
-            o_ptr = &player_ptr->inventory_list[INVEN_SUB_HAND];
+            o_ptr = &player_ptr->inventory[INVEN_SUB_HAND];
             slot = INVEN_SUB_HAND;
         }
     } else if (has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
-        o_ptr = &player_ptr->inventory_list[INVEN_SUB_HAND];
+        o_ptr = &player_ptr->inventory[INVEN_SUB_HAND];
         slot = INVEN_SUB_HAND;
     }
 

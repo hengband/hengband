@@ -216,7 +216,7 @@ static std::pair<std::string, TERM_COLOR> likert(int x, int y)
 static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
 {
     ItemEntity *o_ptr;
-    o_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    o_ptr = &player_ptr->inventory[INVEN_BOW];
 
     for (int i = 0; i < 2; i++) {
         int basedam;
@@ -230,7 +230,7 @@ static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
             continue;
         }
 
-        o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND + i];
+        o_ptr = &player_ptr->inventory[INVEN_MAIN_HAND + i];
         if (!calc_weapon_one_hand(o_ptr, i, damage, &basedam)) {
             continue;
         }
@@ -355,7 +355,7 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
 void display_player_various(PlayerType *player_ptr)
 {
     ItemEntity *o_ptr;
-    o_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    o_ptr = &player_ptr->inventory[INVEN_BOW];
     int tmp = player_ptr->to_h_b + o_ptr->to_h;
     int xthb = player_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);
     int shots = 0;

@@ -169,7 +169,7 @@ static void test_inventory_floor(PlayerType *player_ptr, fis_type *fis_ptr, cons
     }
 
     for (int i = 0; i < INVEN_PACK; i++) {
-        if (item_tester.okay(&player_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL)) {
+        if (item_tester.okay(&player_ptr->inventory[i]) || (fis_ptr->mode & USE_FULL)) {
             fis_ptr->max_inven++;
         }
     }
@@ -193,7 +193,7 @@ static void test_equipment_floor(PlayerType *player_ptr, fis_type *fis_ptr, cons
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         if (player_ptr->select_ring_slot ? is_ring_slot(i)
-                                         : item_tester.okay(&player_ptr->inventory_list[i]) || (fis_ptr->mode & USE_FULL)) {
+                                         : item_tester.okay(&player_ptr->inventory[i]) || (fis_ptr->mode & USE_FULL)) {
             fis_ptr->max_equip++;
         }
     }

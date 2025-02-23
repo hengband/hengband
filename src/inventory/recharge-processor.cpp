@@ -56,7 +56,7 @@ void recharge_magic_items(PlayerType *player_ptr)
     bool changed;
 
     for (changed = false, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto &item = player_ptr->inventory_list[i];
+        auto &item = player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;
         }
@@ -82,7 +82,7 @@ void recharge_magic_items(PlayerType *player_ptr)
      * one per turn. -LM-
      */
     for (changed = false, i = 0; i < INVEN_PACK; i++) {
-        auto &item = player_ptr->inventory_list[i];
+        auto &item = player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;
         }

@@ -161,7 +161,7 @@ static void test_inventory(PlayerType *player_ptr, item_selection_type *item_sel
     }
 
     for (int j = 0; j < INVEN_PACK; j++) {
-        if (item_tester.okay(&player_ptr->inventory_list[j]) || (item_selection_ptr->mode & USE_FULL)) {
+        if (item_tester.okay(&player_ptr->inventory[j]) || (item_selection_ptr->mode & USE_FULL)) {
             item_selection_ptr->max_inven++;
         }
     }
@@ -185,7 +185,7 @@ static void test_equipment(PlayerType *player_ptr, item_selection_type *item_sel
 
     for (int j = INVEN_MAIN_HAND; j < INVEN_TOTAL; j++) {
         if (player_ptr->select_ring_slot ? is_ring_slot(j)
-                                         : item_tester.okay(&player_ptr->inventory_list[j]) || (item_selection_ptr->mode & USE_FULL)) {
+                                         : item_tester.okay(&player_ptr->inventory[j]) || (item_selection_ptr->mode & USE_FULL)) {
             item_selection_ptr->max_equip++;
         }
     }

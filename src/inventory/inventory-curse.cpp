@@ -171,7 +171,7 @@ ItemEntity *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
     }
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = &player_ptr->inventory[i];
         if (o_ptr->curse_flags.has(flag)) {
             choices[number] = i;
             number++;
@@ -181,7 +181,7 @@ ItemEntity *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
         choise_cursed_item(flag, o_ptr, choices, &number, i);
     }
 
-    return &player_ptr->inventory_list[choices[randint0(number)]];
+    return &player_ptr->inventory[choices[randint0(number)]];
 }
 
 /*!
@@ -196,7 +196,7 @@ static void curse_teleport(PlayerType *player_ptr)
 
     int i_keep = 0, count = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;
         }
@@ -217,7 +217,7 @@ static void curse_teleport(PlayerType *player_ptr)
         }
     }
 
-    const auto &item = player_ptr->inventory_list[i_keep];
+    const auto &item = player_ptr->inventory[i_keep];
     const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s tries to teleport you."), item_name.data());
     if (input_check_strict(player_ptr, _("テレポートしますか？", "Teleport? "), UserCheck::OKAY_CANCEL)) {
@@ -487,7 +487,7 @@ void execute_cursed_items_effect(PlayerType *player_ptr)
         return;
     }
 
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    auto *o_ptr = &player_ptr->inventory[INVEN_LITE];
     if (!o_ptr->is_specific_artifact(FixedArtifactId::JUDGE)) {
         return;
     }
