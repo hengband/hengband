@@ -1864,7 +1864,6 @@
     <ClCompile Include="..\..\src\term\z-rand.cpp" />
     <ClCompile Include="..\..\src\term\z-term.cpp" />
     <ClCompile Include="..\..\src\term\z-util.cpp" />
-    <ClCompile Include="..\..\src\term\z-virt.cpp" />
     <ClInclude Include="..\..\src\object-activation\activation-switcher.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-others.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-diary.h" />
@@ -2105,7 +2104,6 @@
     <ClInclude Include="..\..\src\term\z-rand.h" />
     <ClInclude Include="..\..\src\term\z-term.h" />
     <ClInclude Include="..\..\src\term\z-util.h" />
-    <ClInclude Include="..\..\src\term\z-virt.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

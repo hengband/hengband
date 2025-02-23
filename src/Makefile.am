@@ -1317,7 +1317,6 @@ hengband_SOURCES = \
 	term/term-color-types.h \
 	term/z-form.cpp term/z-form.h term/z-rand.cpp term/z-rand.h \
 	term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
-	term/z-virt.cpp term/z-virt.h \
 	\
 	timed-effect/player-acceleration.cpp timed-effect/player-acceleration.h \
 	timed-effect/player-blindness.cpp timed-effect/player-blindness.h \

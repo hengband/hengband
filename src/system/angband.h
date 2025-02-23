@@ -21,7 +21,6 @@
 #include "term/z-rand.h"
 #include "term/z-term.h"
 #include "term/z-util.h"
-#include "term/z-virt.h"
 
 #include "locale/language-switcher.h"
 
