@@ -6,6 +6,7 @@
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
+#include "io/macro-configurations-store.h"
 #include "io/read-pref-file.h"
 #include "main/sound-of-music.h"
 #include "system/player-type-definition.h"

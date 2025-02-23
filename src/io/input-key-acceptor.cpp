@@ -4,11 +4,11 @@
 #include "core/window-redrawer.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
+#include "io/macro-configurations-store.h"
 #include "io/signal-handlers.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
-#include "util/string-processor.h"
 #include "world/world.h"
 
 bool inkey_base; /* See the "inkey()" function */

@@ -2036,7 +2036,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
             term_keypress('A');
         }
 
-        int i = LOBYTE(HIWORD(lParam));
+        const auto i = LOBYTE(HIWORD(lParam));
         term_keypress('x');
         switch (wParam) {
         case VK_DIVIDE:
@@ -2080,8 +2080,8 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
             term_keypress('K');
         }
 
-        term_keypress(hexsym[i / 16]);
-        term_keypress(hexsym[i % 16]);
+        term_keypress(hexify_upper(i));
+        term_keypress(hexify_lower(i));
         term_keypress(13);
 
         return 1;

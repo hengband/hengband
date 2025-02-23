@@ -12,6 +12,7 @@
 #include "game-option/option-types-table.h"
 #include "io/gf-descriptions.h"
 #include "io/input-key-requester.h"
+#include "io/macro-configurations-store.h"
 #include "io/tokenizer.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"

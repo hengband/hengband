@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <map>
 #include <optional>
 #include <set>
@@ -7,25 +8,6 @@
 #include <string_view>
 #include <vector>
 
-constexpr size_t MAX_MACRO_MOD = 12;
-constexpr size_t MAX_MACRO_TRIG = 200; /*!< 登録を許すマクロ（トリガー）の最大数 */
-
-extern const char hexsym[16];
-
-enum class ShiftStatus {
-    OFF,
-    ON,
-};
-
-extern size_t max_macrotrigger;
-extern std::optional<std::string> macro_template;
-extern std::optional<std::string> macro_modifier_chr;
-extern std::vector<std::string> macro_modifier_names;
-extern std::vector<std::string> macro_trigger_names;
-extern std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes;
-
-void text_to_ascii(char *buf, std::string_view sv, size_t bufsize);
-void ascii_to_text(char *buf, std::string_view sv, size_t bufsize);
 size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize);
 size_t angband_strcat(char *buf, std::string_view src, size_t bufsize);
 char *angband_strstr(const char *haystack, std::string_view needle);
@@ -46,3 +28,6 @@ std::string str_substr(const char *str, size_t pos = 0, size_t n = std::string_v
 std::string str_toupper(std::string_view str);
 std::string str_tolower(std::string_view str);
 std::set<int> str_find_all_multibyte_chars(std::string_view str);
+char hexify_upper(uint8_t value);
+char hexify_lower(uint8_t value);
+char octify(uint8_t i);
