@@ -20,19 +20,18 @@ enum class ShiftStatus {
     ON,
 };
 
-enum keymap_mode : int {
-    KEYMAP_MODE_ORIG = 0, /*!< オリジナルキー配置 / Mode for original keyset commands */
-    KEYMAP_MODE_ROGUE = 1, /*!< ローグライクキー配置 / Mode for roguelike keyset commands */
-    KEYMAP_MODES = 2, /*!< キー配置の数 / Number of keymap modes */
+enum class KeymapMode {
+    ORIGINAL = 0, //!< オリジナルキー配置
+    ROGUE = 1, //!< ローグライクキー配置
 };
 
-extern const char *keymap_act[KEYMAP_MODES][256];
-extern size_t max_macrotrigger; //!<  現在登録中のマクロ(トリガー)の数
-extern std::optional<std::string> macro_template; //!<  Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列
-extern std::optional<std::string> macro_modifier_chr; //!<  &x# で指定されるマクロトリガーに関する情報を記録する文字列
-extern std::vector<std::string> macro_modifier_names; //!<  マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列配列
+extern std::map<KeymapMode, std::vector<const char *>> keymap_actions_map;
+extern size_t max_macrotrigger; //!< 現在登録中のマクロ(トリガー)の数
+extern std::optional<std::string> macro_template; //!< Angband設定ファイルのT: タグ情報から読み込んだ長いTコードを処理するために利用する文字列
+extern std::optional<std::string> macro_modifier_chr; //!< &x# で指定されるマクロトリガーに関する情報を記録する文字列
+extern std::vector<std::string> macro_modifier_names; //!< マクロ上で取り扱う特殊キーを文字列上で表現するためのフォーマットを記録した文字列配列
 extern std::vector<std::string> macro_trigger_names; //!< マクロのトリガーコード
-extern std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes; //!<  マクロの内容
+extern std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes; //!< マクロの内容
 
 void text_to_ascii(char *buf, std::string_view sv, size_t bufsize);
 void ascii_to_text(char *buf, std::string_view sv, size_t bufsize);

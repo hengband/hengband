@@ -9,6 +9,8 @@
 #include "io/macro-configurations-store.h"
 #include "main/sound-of-music.h"
 #include "term/screen-processor.h"
+#include "util/enum-converter.h"
+#include <fmt/format.h>
 
 /*!
  * @brief Check if this line is expression or not. And update it if it is.
@@ -123,13 +125,8 @@ bool insert_keymap_line(text_body_type *tb)
     if (!can_insert_line(tb, 2)) {
         return false;
     }
-    BIT_FLAGS mode;
-    if (rogue_like_commands) {
-        mode = KEYMAP_MODE_ROGUE;
-    } else {
-        mode = KEYMAP_MODE_ORIG;
-    }
 
+    const auto mode = rogue_like_commands ? KeymapMode::ROGUE : KeymapMode::ORIGINAL;
     flush();
     char buf[2]{};
     buf[0] = inkey();
@@ -144,16 +141,15 @@ bool insert_keymap_line(text_body_type *tb)
 
     tb->cx = 0;
     insert_return_code(tb);
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(format("C:%d:%s", mode, tmp));
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(fmt::format("C:{}:{}", enum2i(mode), tmp));
 
-    concptr act = keymap_act[mode][(byte)(buf[0])];
+    concptr act = keymap_actions_map[mode][(byte)(buf[0])];
     if (act) {
         ascii_to_text(tmp, act, sizeof(tmp));
     }
 
     insert_return_code(tb);
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(format("A:%s", tmp));
-
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(fmt::format("A:{}", tmp));
     return true;
 }
 

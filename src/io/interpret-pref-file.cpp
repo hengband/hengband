@@ -290,8 +290,8 @@ static bool interpret_c_token(char *buf)
         return false;
     }
 
-    int mode = strtol(zz[0], nullptr, 0);
-    if ((mode < 0) || (mode >= KEYMAP_MODES)) {
+    const auto mode = i2enum<KeymapMode>(std::stoi(zz[0], nullptr, 0));
+    if ((mode < KeymapMode::ORIGINAL) || (mode > KeymapMode::ROGUE)) {
         return false;
     }
 
@@ -302,8 +302,8 @@ static bool interpret_c_token(char *buf)
     }
 
     int i = (byte)(tmp[0]);
-    string_free(keymap_act[mode][i]);
-    keymap_act[mode][i] = string_make(macro_buffers.data());
+    string_free(keymap_actions_map[mode][i]);
+    keymap_actions_map[mode][i] = string_make(macro_buffers.data());
     return true;
 }
 

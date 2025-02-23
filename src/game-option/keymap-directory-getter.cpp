@@ -16,8 +16,8 @@ Direction get_keymap_dir(char ch)
     if (isdigit(ch)) {
         dir = Direction(D2I(ch));
     } else {
-        const auto mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
-        const auto act = keymap_act[mode][(byte)(ch)];
+        const auto mode = rogue_like_commands ? KeymapMode::ROGUE : KeymapMode::ORIGINAL;
+        const auto act = keymap_actions_map[mode][(byte)(ch)];
         if (!act) {
             return Direction::none();
         }

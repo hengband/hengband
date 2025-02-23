@@ -43,7 +43,7 @@ static char request_command_buffer[256]{}; /*!< Special buffer to hold the actio
 InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, bool shopping)
     : player_ptr(player_ptr)
     , shopping(shopping)
-    , mode(rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)
+    , mode(rogue_like_commands ? KeymapMode::ROGUE : KeymapMode::ORIGINAL)
     , base_y(player_ptr->y - panel_row_min > 10 ? 2 : 13)
 {
 }
@@ -84,7 +84,7 @@ void InputKeyRequestor::process_input_command()
 
         this->process_command_command(cmd);
         this->process_control_command(cmd);
-        auto act = keymap_act[this->mode][(byte)(cmd)];
+        auto act = keymap_actions_map[this->mode][(byte)(cmd)];
         if (act && !inkey_next) {
             angband_strcpy(request_command_buffer, act, sizeof(request_command_buffer));
             inkey_next = request_command_buffer;
@@ -114,7 +114,7 @@ short InputKeyRequestor::get_command()
     inkey_flag = true;
     term_fresh();
     short cmd = inkey(true);
-    if (!this->shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[this->mode][(byte)(cmd)]) {
+    if (!this->shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_actions_map[this->mode][(byte)(cmd)]) {
         cmd = this->inkey_from_menu();
     }
 
@@ -280,7 +280,7 @@ int InputKeyRequestor::get_caret_command() const
 #ifdef JP
     auto caret_command = 0;
     for (auto i = 0; i < 256; i++) {
-        auto s = keymap_act[this->mode][i];
+        auto s = keymap_actions_map[this->mode][i];
         if (s == nullptr) {
             continue;
         }

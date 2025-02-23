@@ -12,7 +12,10 @@
 #include <cstdint>
 #include <utility>
 
-const char *keymap_act[KEYMAP_MODES][256];
+std::map<KeymapMode, std::vector<const char *>> keymap_actions_map = {
+    { KeymapMode::ORIGINAL, std::vector<const char *>(256) },
+    { KeymapMode::ROGUE, std::vector<const char *>(256) },
+};
 size_t max_macrotrigger = 0;
 std::optional<std::string> macro_template;
 std::optional<std::string> macro_modifier_chr;
