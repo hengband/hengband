@@ -2,6 +2,7 @@
 
 #include <concepts>
 #include <iterator>
+#include <range/v3/range/concepts.hpp>
 #include <type_traits>
 
 /*!
@@ -22,6 +23,8 @@ public:
         using difference_type = int;
         using value_type = EnumType;
         using iterator_concept = std::input_iterator_tag;
+
+        constexpr iterator() noexcept = default;
 
         /*!
          * @brief 引数で与えた列挙値を指すイテレータオブジェクトを生成する
@@ -215,3 +218,10 @@ public:
 private:
     EnumRange<EnumType> range;
 };
+
+namespace ranges {
+template <typename T>
+inline constexpr bool enable_view<EnumRange<T>> = true;
+template <typename T>
+inline constexpr bool enable_view<EnumRangeInclusive<T>> = true;
+}
