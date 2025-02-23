@@ -504,7 +504,7 @@ static void cause_earthquake(PlayerType *player_ptr, player_attack_type *pa_ptr,
         return;
     }
 
-    earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
+    earthquake(player_ptr, player_ptr->get_position(), 10);
     if (!player_ptr->current_floor_ptr->grid_array[y][x].has_monster()) {
         *(pa_ptr->mdeath) = true;
     }

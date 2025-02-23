@@ -269,7 +269,7 @@ int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerf
     }
 
     case SV_STAFF_EARTHQUAKES: {
-        if (earthquake(player_ptr, player_ptr->y, player_ptr->x, (powerful ? 15 : 10), 0)) {
+        if (earthquake(player_ptr, player_ptr->get_position(), (powerful ? 15 : 10))) {
             ident = true;
         } else {
             msg_print(_("ダンジョンが揺れた。", "The dungeon trembles."));
