@@ -455,9 +455,6 @@
     <ClCompile Include="..\..\src\term\z-util.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\z-virt.cpp">
-      <Filter>term</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\floor\wild.cpp">
       <Filter>floor</Filter>
     </ClCompile>
@@ -3048,9 +3045,6 @@
       <Filter>term</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\term\z-util.h">
-      <Filter>term</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\term\z-virt.h">
       <Filter>term</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\wild.h">
