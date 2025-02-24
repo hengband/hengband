@@ -180,15 +180,14 @@ std::string make_screen_dump(PlayerType *player_ptr)
         }
 
         /* Dump each row */
-        TERM_COLOR a = 0, old_a = 0;
-        auto c = ' ';
+        uint8_t old_a = 0;
+        DisplaySymbol ds(0, ' ');
         for (int x = 0; x < wid - 1; x++) {
             int rv, gv, bv;
             concptr cc = nullptr;
-            /* Get the attr/char */
-            (void)(term_what(x, y, &a, &c));
+            ds = term_what(x, y, ds);
 
-            switch (c) {
+            switch (ds.character) {
             case '&':
                 cc = "&amp;";
                 break;
@@ -206,27 +205,27 @@ std::string make_screen_dump(PlayerType *player_ptr)
                 break;
 #ifdef WINDOWS
             case 0x1f:
-                c = '.';
+                ds.character = '.';
                 break;
             case 0x7f:
-                c = (a == 0x09) ? '%' : '#';
+                ds.character = (ds.color == 0x09) ? '%' : '#';
                 break;
 #endif
             }
 
-            a = a & 0x0F;
-            if ((y == 0 && x == 0) || a != old_a) {
-                rv = angband_color_table[a][1];
-                gv = angband_color_table[a][2];
-                bv = angband_color_table[a][3];
+            ds.color = ds.color & 0x0F;
+            if (((y == 0) && (x == 0)) || (ds.color != old_a)) {
+                rv = angband_color_table[ds.color][1];
+                gv = angband_color_table[ds.color][2];
+                bv = angband_color_table[ds.color][3];
                 screen_ss << format("%s<font color=\"#%02x%02x%02x\">", ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
-                old_a = a;
+                old_a = ds.color;
             }
 
             if (cc) {
                 screen_ss << cc;
             } else {
-                screen_ss << c;
+                screen_ss << ds.character;
             }
         }
     }

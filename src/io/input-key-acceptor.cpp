@@ -50,9 +50,8 @@ static bool parse_under = false;
  */
 static void all_term_fresh()
 {
-    TERM_LEN x, y;
     term_activate(angband_terms[0]);
-    term_locate(&x, &y);
+    auto [x, y] = term_locate();
 
     RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
     handle_stuff(p_ptr);
