@@ -5,8 +5,6 @@
  */
 
 #include "monster-floor/monster-sweep-grid.h"
-#include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-safety-hiding.h"
@@ -135,7 +133,7 @@ public:
         std::vector<ScoreAndPos> pos_run_away_candidates;
         for (const auto &d : Direction::directions_8()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
@@ -205,12 +203,12 @@ public:
 
         auto room = 0;
         for (const auto &d : Direction::directions_8()) {
-            const auto pos_p_neighbor = p_pos + d.vec();
-            if (!in_bounds2(floor, pos_p_neighbor.y, pos_p_neighbor.x)) {
+            const auto p_pos_neighbor = p_pos + d.vec();
+            if (!floor.contains(p_pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
-            const auto &grid = floor.get_grid(pos_p_neighbor);
+            const auto &grid = floor.get_grid(p_pos_neighbor);
             if (monster_can_cross_terrain(this->player_ptr, grid.feat, monrace, 0)) {
                 room++;
             }
@@ -263,7 +261,7 @@ public:
                 return p_pos;
             }
 
-            if (!in_bounds2(floor, pos_move.y, pos_move.x) || !monster_can_enter(this->player_ptr, pos_move.y, pos_move.x, monrace, 0)) {
+            if (!floor.contains(pos_move, FloorBoundary::OUTER_WALL_INCLUSIVE) || !monster_can_enter(this->player_ptr, pos_move.y, pos_move.x, monrace, 0)) {
                 continue;
             }
 
@@ -316,7 +314,7 @@ public:
         std::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
@@ -386,7 +384,7 @@ public:
         std::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
@@ -431,7 +429,7 @@ public:
         std::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 

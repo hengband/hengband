@@ -1,6 +1,5 @@
 #include "window/display-sub-windows.h"
 #include "flavor/flavor-describer.h"
-#include "floor/cave.h"
 #include "game-option/option-flags.h"
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
@@ -466,7 +465,7 @@ static void display_dungeon(PlayerType *player_ptr)
         for (auto y = p_pos.y - game_term->hgt / 2 + 1; y <= p_pos.y + game_term->hgt / 2; y++) {
             const Pos2D pos(y, x);
             const auto pos_drawing = pos - p_pos + Pos2DVec(game_term->hgt / 2 - 1, game_term->wid / 2 - 1);
-            if (!in_bounds2(floor, y, x)) {
+            if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 const auto &terrain = TerrainList::get_instance().get_terrain(TerrainTag::NONE);
                 const auto &symbol_foreground = terrain.symbol_configs.at(F_LIT_STANDARD);
                 term_queue_char(pos_drawing.x, pos_drawing.y, { symbol_foreground, {} });

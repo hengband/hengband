@@ -17,7 +17,6 @@
 #include "grid/grid.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "game-option/map-screen-options.h"
 #include "grid/object-placer.h"
 #include "io/screen-util.h"
@@ -75,7 +74,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
         if (terrain.flags.has(TerrainCharacteristics::GLOW) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS)) {
             for (const auto &d : Direction::directions()) {
                 const auto pos_neighbor = pos + d.vec();
-                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                     continue;
                 }
 
@@ -126,7 +125,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
 
     for (const auto &d : Direction::directions()) {
         const auto pos_neighbor = pos + d.vec();
-        if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+        if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
             continue;
         }
 
@@ -464,7 +463,7 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
  */
 void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
 {
-    if (panel_contains(pos.y, pos.x) && in_bounds2(*player_ptr->current_floor_ptr, pos.y, pos.x)) {
+    if (panel_contains(pos.y, pos.x) && player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
         auto symbol_pair = map_info(player_ptr, pos);
         symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 

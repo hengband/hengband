@@ -369,7 +369,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (floor.is_underground() || !AngbandWorld::get_instance().is_daytime()) {
             for (const auto &d : Direction::directions()) {
                 const auto pos_neighbor = Pos2D(y, x) + d.vec();
-                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                     continue;
                 }
 
