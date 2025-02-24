@@ -177,18 +177,13 @@ void term_user()
     (*game_term->user_hook)(0);
 }
 
-/*
- * Execute the "Term->xtra_hook" hook, if available (see above).
- */
-errr term_xtra(int n, int v)
+void term_xtra(int n, int v)
 {
-    /* Verify the hook */
     if (!game_term->xtra_hook) {
-        return -1;
+        return;
     }
 
-    /* Call the hook */
-    return (*game_term->xtra_hook)(n, v);
+    (*game_term->xtra_hook)(n, v);
 }
 
 /*** Fake hooks ***/
@@ -1265,13 +1260,12 @@ errr term_fresh(void)
 /*
  * @brief never_freshの値を無視して強制的にterm_freshを行う。
  */
-errr term_fresh_force(void)
+void term_fresh_force()
 {
-    bool old = game_term->never_fresh;
+    const auto old = game_term->never_fresh;
     game_term->never_fresh = false;
-    errr err = term_fresh();
+    term_fresh();
     game_term->never_fresh = old;
-    return err;
 }
 
 /*** Output routines ***/
