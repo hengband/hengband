@@ -199,7 +199,7 @@ void term_xtra(int n, int v);
 void term_queue_char(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair);
 void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair);
 
-errr term_fresh();
+void term_fresh();
 void term_fresh_force();
 errr term_set_cursor(int v);
 errr term_gotoxy(TERM_LEN x, TERM_LEN y);

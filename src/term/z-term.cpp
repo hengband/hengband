@@ -1023,41 +1023,39 @@ static void term_fresh_row_text(TERM_LEN y, TERM_LEN x1, TERM_LEN x2)
 /*
  * @brief Actually perform all requested changes to the window
  */
-errr term_fresh(void)
+void term_fresh()
 {
-    int w = game_term->wid;
-    int h = game_term->hgt;
-
-    int y1 = game_term->y1;
-    int y2 = game_term->y2;
-
     const auto &old = game_term->old;
     const auto &scr = game_term->scr;
+    const auto w = game_term->wid;
+    const auto h = game_term->hgt;
+    auto y1 = game_term->y1;
+    auto y2 = game_term->y2;
 
     /* Before initialize (Advice from Mr.shimitei)*/
     if (!old || !scr) {
-        return 1;
+        return;
     }
 
     if (game_term->never_fresh) {
-        return 1;
+        return;
     }
 
     /* Do nothing unless "mapped" */
     if (!game_term->mapped_flag) {
-        return 1;
+        return;
     }
 
     /* Trivial Refresh */
     if ((y1 > y2) && (scr->cu == old->cu) && (scr->cv == old->cv) && (scr->cx == old->cx) && (scr->cy == old->cy) && !(game_term->total_erase)) {
         /* Nothing */
-        return 1;
+        return;
     }
 
     /* Handle "total erase" */
     if (game_term->total_erase) {
-        byte na = game_term->attr_blank;
-        char nc = game_term->char_blank;
+        const auto na = game_term->attr_blank;
+        const auto nc = game_term->char_blank;
 
         /* Physically erase the entire window */
         term_xtra(TERM_XTRA_CLEAR, 0);
@@ -1067,7 +1065,7 @@ errr term_fresh(void)
         old->cx = old->cy = 0;
 
         /* Wipe each row */
-        for (TERM_LEN y = 0; y < h; y++) {
+        for (auto y = 0; y < h; y++) {
             auto &aa = old->a[y];
             auto &cc = old->c[y];
 
@@ -1075,7 +1073,7 @@ errr term_fresh(void)
             auto &tcc = old->tc[y];
 
             /* Wipe each column */
-            for (TERM_LEN x = 0; x < w; x++) {
+            for (auto x = 0; x < w; x++) {
                 /* Wipe each grid */
                 aa[x] = na;
                 cc[x] = nc;
@@ -1090,7 +1088,7 @@ errr term_fresh(void)
         game_term->y2 = y2 = h - 1;
 
         /* Redraw every column */
-        for (TERM_LEN y = 0; y < h; y++) {
+        for (auto y = 0; y < h; y++) {
             game_term->x1[y] = 0;
             game_term->x2[y] = w - 1;
         }
@@ -1103,19 +1101,16 @@ errr term_fresh(void)
     if (game_term->soft_cursor) {
         /* Cursor was visible */
         if (!old->cu && old->cv) {
-            int csize = 1;
-            TERM_LEN tx = old->cx;
-            TERM_LEN ty = old->cy;
+            const auto tx = old->cx;
+            const auto ty = old->cy;
 
             const auto &old_aa = old->a[ty];
             const auto &old_cc = old->c[ty];
 
             const auto &old_taa = old->ta[ty];
             const auto &old_tcc = old->tc[ty];
-
-            TERM_COLOR ota = old_taa[tx];
-            char otc = old_tcc[tx];
-
+            DisplaySymbol ot(old_taa[tx], old_tcc[tx]);
+            auto csize = 1;
 #ifdef JP
             if (tx + 1 < game_term->wid && !(old_aa[tx] & AF_TILE1) && iskanji(old_cc[tx])) {
                 csize = 2;
@@ -1123,12 +1118,12 @@ errr term_fresh(void)
 #endif
             /* Use "term_pict()" always */
             if (game_term->always_pict) {
-                (void)((*game_term->pict_hook)(tx, ty, csize, &old_aa[tx], &old_cc[tx], &ota, &otc));
+                (void)((*game_term->pict_hook)(tx, ty, csize, &old_aa[tx], &old_cc[tx], &ot.color, &ot.character));
             }
 
             /* Use "term_pict()" sometimes */
             else if (game_term->higher_pict && (old_aa[tx] & AF_TILE1) && (old_cc[tx] & 0x80)) {
-                (void)((*game_term->pict_hook)(tx, ty, 1, &old_aa[tx], &old_cc[tx], &ota, &otc));
+                (void)((*game_term->pict_hook)(tx, ty, 1, &old_aa[tx], &old_cc[tx], &ot.color, &ot.character));
             }
 
             /*
@@ -1253,8 +1248,6 @@ errr term_fresh(void)
         /* The cursor is visible, display it correctly */
         term_xtra(TERM_XTRA_SHAPE, 1);
     }
-
-    return 0;
 }
 
 /*
