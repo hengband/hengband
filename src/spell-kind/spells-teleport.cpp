@@ -563,28 +563,26 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
 }
 
 /*!
- * @brief 次元の扉処理 /
- * Dimension Door
+ * @brief 次元の扉 (Dimension door)処理
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param x テレポート先のX座標
- * @param y テレポート先のY座標
- * @return 目標に指定通りテレポートできたならばTRUEを返す
+ * @param pos テレポート先座標
+ * @return 目標に指定通りテレポートできたか否か
  */
-bool exe_dimension_door(PlayerType *player_ptr, POSITION x, POSITION y)
+bool exe_dimension_door(PlayerType *player_ptr, const Pos2D &pos)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
 
-    player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
-    auto is_successful = cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS);
-    is_successful &= Grid::calc_distance({ y, x }, player_ptr->get_position()) <= plev / 2 + 10;
+    player_ptr->energy_need += static_cast<short>((60 - plev) * ENERGY_NEED() / 100);
+    auto is_successful = cave_player_teleportable_bold(player_ptr, pos.y, pos.x, TELEPORT_SPONTANEOUS);
+    is_successful &= Grid::calc_distance(pos, player_ptr->get_position()) <= plev / 2 + 10;
     is_successful &= !one_in_(plev / 10 + 10);
     if (!is_successful) {
-        player_ptr->energy_need += (int16_t)((int32_t)(60 - plev) * ENERGY_NEED() / 100L);
+        player_ptr->energy_need += static_cast<short>((60 - plev) * ENERGY_NEED() / 100);
         teleport_player(player_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
         return false;
     }
 
-    teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
+    teleport_player_to(player_ptr, pos.y, pos.x, TELEPORT_SPONTANEOUS);
     return true;
 }
 
@@ -601,7 +599,7 @@ bool dimension_door(PlayerType *player_ptr)
         return false;
     }
 
-    if (exe_dimension_door(player_ptr, pos->x, pos->y)) {
+    if (exe_dimension_door(player_ptr, *pos)) {
         return true;
     }
 
