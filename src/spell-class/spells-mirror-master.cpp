@@ -106,7 +106,7 @@ void SpellsMirrorMaster::remove_all_mirrors(bool explode)
  */
 bool SpellsMirrorMaster::mirror_tunnel()
 {
-    const auto pos = tgt_pt(this->player_ptr);
+    const auto pos = point_target(this->player_ptr);
     if (!pos) {
         return false;
     }

@@ -4,4 +4,4 @@
 #include <optional>
 
 class PlayerType;
-std::optional<Pos2D> tgt_pt(PlayerType *player_ptr);
+std::optional<Pos2D> point_target(PlayerType *player_ptr);

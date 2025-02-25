@@ -641,7 +641,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
 
     case 27:
         if (cast) {
-            const auto pos = tgt_pt(player_ptr);
+            const auto pos = point_target(player_ptr);
             if (!pos) {
                 return std::nullopt;
             }

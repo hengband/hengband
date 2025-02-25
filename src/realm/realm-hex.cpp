@@ -641,7 +641,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             std::optional<Pos2D> pos_target;
             bool flag;
             for (auto i = 0; i < 3; i++) {
-                pos_target = tgt_pt(player_ptr);
+                pos_target = point_target(player_ptr);
                 if (!pos_target) {
                     return "";
                 }

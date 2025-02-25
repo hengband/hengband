@@ -161,7 +161,7 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 指定したらその座標、キャンセルしたらnullopt
  */
-std::optional<Pos2D> tgt_pt(PlayerType *player_ptr)
+std::optional<Pos2D> point_target(PlayerType *player_ptr)
 {
     tgt_pt_info info;
     info.pos = player_ptr->get_position();

@@ -19,7 +19,7 @@ static std::optional<Pos2D> decide_travel_goal(PlayerType *player_ptr)
         return *pos_current_goal;
     }
 
-    return tgt_pt(player_ptr);
+    return point_target(player_ptr);
 }
 
 /*!

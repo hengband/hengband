@@ -596,7 +596,7 @@ bool exe_dimension_door(PlayerType *player_ptr, POSITION x, POSITION y)
  */
 bool dimension_door(PlayerType *player_ptr)
 {
-    const auto pos = tgt_pt(player_ptr);
+    const auto pos = point_target(player_ptr);
     if (!pos) {
         return false;
     }
