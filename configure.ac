@@ -5,6 +5,7 @@ AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_HEADERS(src/autoconf.h)
 AC_CONFIG_SRCDIR(src/main.cpp)
 AM_INIT_AUTOMAKE(tar-pax)
+AM_SILENT_RULES([yes])
 
 AC_ARG_WITH(setgid,
 [  --with-setgid=NAME      install hengband as group NAME],
