@@ -49,6 +49,20 @@ AC_PROG_CXX
 AX_CXX_COMPILE_STDCXX(20, [noext], [mandatory])
 PKG_PROG_PKG_CONFIG
 
+AC_MSG_CHECKING([whether the compiler is Clang])
+AC_COMPILE_IFELSE(
+  [AC_LANG_SOURCE([[
+    #ifdef __clang__
+    int main() { return 0; }
+    #else
+    #error "Not Clang"
+    #endif
+  ]])],
+  [AC_MSG_RESULT([yes]); is_clang=yes],
+  [AC_MSG_RESULT([no]); is_clang=no]
+)
+AM_CONDITIONAL([COMPILER_IS_CLANG], [test "x$is_clang" = "xyes"])
+
 AC_ARG_ENABLE(japanese,
 [  --disable-japanese      build english version], use_japanese=no, [AC_DEFINE(JP, 1, [Enable Japanese]) AC_DEFINE(EUC, 1, [Use Extended Unix Code])])
 
