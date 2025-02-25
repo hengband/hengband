@@ -15,7 +15,7 @@ jobs:
     with:
       runner: ubuntu-22.04
       cxx: clang++-15
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable -stdlib=libc++"
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -stdlib=libc++"
       configure-opts: "--disable-pch"
       use-ccache: true
 
@@ -25,7 +25,7 @@ jobs:
     with:
       runner: ubuntu-22.04
       cxx: clang++-14
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Wno-unused-const-variable"
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       configure-opts: "--disable-pch"
       use-ccache: true
 
