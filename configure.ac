@@ -132,11 +132,31 @@ if test "$have_x" = yes; then
 fi
 
 if test "$use_japanese" != no; then
-  AC_CHECK_PROG(NKF, nkf, yes)
-  if test x"$NKF" != x"yes"; then
-    AC_MSG_ERROR([nkf is not found. Please install nkf.])
+  AC_MSG_CHECKING([whether the compiler supports -fexec-charset=euc-jp-ms])
+  saved_CXXFLAGS="$CXXFLAGS"
+  CXXFLAGS="$CXXFLAGS -fexec-charset=euc-jp-ms"
+  AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM(
+      [],
+      [return 0;]
+    )],
+    [AC_MSG_RESULT([yes])
+      ac_cv_compile_exec_charset=yes],
+    [AC_MSG_RESULT([no])
+      ac_cv_compile_exec_charset=no]
+  )
+  CXXFLAGS="$saved_CXXFLAGS"
+
+  if test x"$ac_cv_compile_exec_charset" = xno; then
+    AC_CHECK_PROG(NKF, nkf, yes)
+    if test x"$NKF" != x"yes"; then
+      AC_MSG_ERROR([nkf is not found. Please install nkf.])
+    fi
   fi
 fi
+
+AM_CONDITIONAL([COMPILER_HAVE_EXEC_CHARSET_EUC_JP_MS], [test x"$use_japanese" != xno -a x"$ac_cv_compile_exec_charset" = xyes])
+AM_CONDITIONAL([USE_NKF], [test x"$use_japanese" != xno -a x"$ac_cv_compile_exec_charset" = xno])
 
 if test "$enable_pch" != no; then
   dnl md5sum, sha224sum, sha256sum, sha384sum, sha512sum and b2sum are
