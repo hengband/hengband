@@ -11,7 +11,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
@@ -392,9 +391,9 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
     auto &floor = *player_ptr->current_floor_ptr;
     const auto m_idx = mmdl.get_m_idx();
     for (const auto &dir : mmdl.get_movement_directions()) {
-        const auto dir_move = dir.has_direction() ? dir : rand_choice(Direction::directions_8());
+        const auto &dir_move = dir.has_direction() ? dir : rand_choice(Direction::directions_8());
         const auto pos_neighbor = pos + dir_move.vec();
-        if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+        if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
             continue;
         }
 

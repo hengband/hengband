@@ -97,7 +97,7 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
         if (floor.is_underground() || !world.is_daytime()) {
             for (const auto &d : Direction::directions()) {
                 const Pos2D pos_neighbor = pos + d.vec();
-                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                     continue;
                 }
 
@@ -204,7 +204,7 @@ static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &point
         if (only_room) {
             return;
         }
-        if (!in_bounds2(floor, pos.y, pos.x)) {
+        if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
             return;
         }
         if (Grid::calc_distance(player_ptr->get_position(), pos) > AngbandSystem::get_instance().get_max_range()) {

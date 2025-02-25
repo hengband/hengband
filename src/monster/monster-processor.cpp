@@ -16,7 +16,6 @@
 #include "avatar/avatar.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/speed-table.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
@@ -494,7 +493,7 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
     for (auto y = oy - 1; y <= oy + 1; y++) {
         for (auto x = ox - 1; x <= ox + 1; x++) {
             const Pos2D pos(y, x);
-            if (!in_bounds2(floor, pos.y, pos.x)) {
+            if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 

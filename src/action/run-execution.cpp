@@ -6,14 +6,10 @@
 #include "action/run-execution.h"
 #include "action/movement-execution.h"
 #include "core/disturbance.h"
-#include "floor/cave.h"
-#include "floor/floor-util.h"
-#include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "object/object-mark-types.h"
 #include "player-status/player-energy.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
@@ -23,7 +19,6 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
-#include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 
 bool ignore_avoid_run;
@@ -52,7 +47,7 @@ static bool see_wall(PlayerType *player_ptr, const Direction &dir, const Pos2D &
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto pos = pos_orig + dir.vec();
-    if (!in_bounds2(floor, pos.y, pos.x)) {
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
         return false;
     }
 
@@ -166,7 +161,7 @@ static bool see_nothing(PlayerType *player_ptr, const Direction &dir, const Pos2
 {
     const auto pos = pos_orig + dir.vec();
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!in_bounds2(floor, pos.y, pos.x)) {
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
         return true;
     }
 

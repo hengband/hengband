@@ -273,7 +273,7 @@ std::vector<std::pair<int, Pos2D>> ball_shape(PlayerType *player_ptr, const Pos2
         for (auto y = center.y - dist; y <= center.y + dist; y++) {
             for (auto x = center.x - dist; x <= center.x + dist; x++) {
                 const Pos2D pos(y, x);
-                if (!in_bounds2(floor, pos.y, pos.x)) {
+                if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                     continue;
                 }
                 if (Grid::calc_distance(center, pos) != dist) {

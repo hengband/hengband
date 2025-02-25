@@ -18,14 +18,6 @@
 #include "world/world.h"
 
 /*
- * Determines if a map location is on or inside the outer walls
- */
-bool in_bounds2(const FloorType &floor, int y, int x)
-{
-    return (y >= 0) && (x >= 0) && (y < floor.height) && (x < floor.width);
-}
-
-/*
  * Determine if a "legal" grid is an "empty" floor grid
  * Determine if monsters are allowed to move into a grid
  *

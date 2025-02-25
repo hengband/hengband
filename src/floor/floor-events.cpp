@@ -2,7 +2,6 @@
 #include "cmd-io/cmd-dump.h"
 #include "core/disturbance.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/dungeon-feeling.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
@@ -341,7 +340,7 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 
             for (const auto &d : Direction::directions()) {
                 const auto pos_neighbor = pos + d.vec();
-                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                     continue;
                 }
 

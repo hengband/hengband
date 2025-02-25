@@ -294,7 +294,7 @@ void glow_earthquake_area(auto &floor, std::span<const Pos2D> area)
         auto &grid = floor.get_grid(pos);
         for (const auto &d : Direction::directions()) {
             const auto pos_neighbor = pos + d.vec();
-            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
