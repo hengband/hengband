@@ -117,7 +117,7 @@ public:
     void set_hostile();
     void make_lore_treasure(int num_item, int num_gold) const;
     void reset_chameleon_polymorph();
-    void set_target(POSITION y, POSITION x);
+    void set_target(const Pos2D &pos);
     void reset_target();
     void set_friendly();
 

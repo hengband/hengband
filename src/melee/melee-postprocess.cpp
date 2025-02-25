@@ -284,9 +284,9 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     cancel_fear_by_pain(player_ptr, mam_pp_ptr);
     make_monster_fear(player_ptr, mam_pp_ptr);
     if ((dam > 0) && !monster.is_pet() && !monster.is_friendly() && (mam_pp_ptr->src_idx != m_idx)) {
-        const auto &m_ref = floor.m_list[src_idx];
-        if (m_ref.is_pet() && !player_ptr->is_located_at({ monster.target_y, monster.target_x })) {
-            monster.set_target(m_ref.fy, m_ref.fx);
+        const auto &monster_src = floor.m_list[src_idx];
+        if (monster_src.is_pet() && !player_ptr->is_located_at({ monster.target_y, monster.target_x })) {
+            monster.set_target(monster_src.get_position());
         }
     }
 

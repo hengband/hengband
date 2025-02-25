@@ -308,6 +308,13 @@ bool FloorType::contains(const Pos2D &pos, FloorBoundary fb) const
     }
 }
 
+bool FloorType::is_empty_at(const Pos2D &pos) const
+{
+    auto is_empty_grid = this->has_terrain_characteristics(pos, TerrainCharacteristics::PLACE);
+    is_empty_grid &= !this->get_grid(pos).has_monster();
+    return is_empty_grid;
+}
+
 /*!
  * @brief 特定の財宝を生成する。指定がない場合、生成階に応じたランダムな財宝を生成する。
  * @param bi_key 財宝を固定生成する場合のBaseitemKey

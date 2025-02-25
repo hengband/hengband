@@ -1445,7 +1445,7 @@ static bool door_to_darkness(PlayerType *player_ptr, int distance)
     const auto p_pos_orig = player_ptr->get_position();
     auto p_pos = player_ptr->get_position();
     const auto &floor = *player_ptr->current_floor_ptr;
-    for (int i = 0; i < 3; i++) {
+    for (auto i = 0; i < 3; i++) {
         if (!tgt_pt(player_ptr, &p_pos.x, &p_pos.y)) {
             return false;
         }
