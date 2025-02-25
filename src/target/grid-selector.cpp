@@ -159,11 +159,9 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
 /*!
  * @brief 位置を指定するプロンプト
  * @param player_ptr プレイヤー情報への参照ポインタ
- * @param x_ptr x座標への参照ポインタ
- * @param y_ptr y座標への参照ポインタ
- * @return 指定したらTRUE、キャンセルしたらFALSE
+ * @return 指定したらその座標、キャンセルしたらnullopt
  */
-bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
+std::optional<Pos2D> tgt_pt(PlayerType *player_ptr)
 {
     tgt_pt_info info;
     info.pos = player_ptr->get_position();
@@ -176,9 +174,9 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
 
     info.ch = 0;
     info.n = 0;
-    bool success = false;
-    while ((info.ch != ESCAPE) && !success) {
-        bool move_fast = false;
+    std::optional<Pos2D> pos_target;
+    while ((info.ch != ESCAPE) && !pos_target) {
+        auto move_fast = false;
         move_cursor_relative(info.pos.y, info.pos.x);
         info.ch = inkey();
         switch (info.ch) {
@@ -190,8 +188,9 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
             if (player_ptr->is_located_at(info.pos)) {
                 info.ch = 0;
             } else {
-                success = true;
+                pos_target = info.pos;
             }
+
             break;
         case '>':
         case '<':
@@ -224,8 +223,9 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
                     if (player_ptr->is_located_at(info.pos)) {
                         info.ch = 0;
                     } else {
-                        success = true;
+                        pos_target = info.pos;
                     }
+
                     break;
                 }
             }
@@ -261,14 +261,15 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
                 change_panel(player_ptr, dy, dx);
             }
 
-            if (info.pos.x >= player_ptr->current_floor_ptr->width - 1) {
-                info.pos.x = player_ptr->current_floor_ptr->width - 2;
+            const auto &floor = *player_ptr->current_floor_ptr;
+            if (info.pos.x >= floor.width - 1) {
+                info.pos.x = floor.width - 2;
             } else if (info.pos.x <= 0) {
                 info.pos.x = 1;
             }
 
-            if (info.pos.y >= player_ptr->current_floor_ptr->height - 1) {
-                info.pos.y = player_ptr->current_floor_ptr->height - 2;
+            if (info.pos.y >= floor.height - 1) {
+                info.pos.y = floor.height - 2;
             } else if (info.pos.y <= 0) {
                 info.pos.y = 1;
             }
@@ -285,7 +286,5 @@ bool tgt_pt(PlayerType *player_ptr, POSITION *x_ptr, POSITION *y_ptr)
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
     rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
     handle_stuff(player_ptr);
-    *y_ptr = info.pos.y;
-    *x_ptr = info.pos.x;
-    return success;
+    return pos_target;
 }

@@ -19,8 +19,7 @@ static std::optional<Pos2D> decide_travel_goal(PlayerType *player_ptr)
         return *pos_current_goal;
     }
 
-    int x, y;
-    return tgt_pt(player_ptr, &x, &y) ? std::make_optional<Pos2D>(y, x) : std::nullopt;
+    return tgt_pt(player_ptr);
 }
 
 /*!

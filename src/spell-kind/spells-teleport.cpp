@@ -596,12 +596,12 @@ bool exe_dimension_door(PlayerType *player_ptr, POSITION x, POSITION y)
  */
 bool dimension_door(PlayerType *player_ptr)
 {
-    DEPTH x = 0, y = 0;
-    if (!tgt_pt(player_ptr, &x, &y)) {
+    const auto pos = tgt_pt(player_ptr);
+    if (!pos) {
         return false;
     }
 
-    if (exe_dimension_door(player_ptr, x, y)) {
+    if (exe_dimension_door(player_ptr, pos->x, pos->y)) {
         return true;
     }
 

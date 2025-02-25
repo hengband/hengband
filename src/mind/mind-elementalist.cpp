@@ -1443,19 +1443,20 @@ static bool is_target_grid_dark(const FloorType &floor, const Pos2D &pos)
 static bool door_to_darkness(PlayerType *player_ptr, int distance)
 {
     const auto p_pos_orig = player_ptr->get_position();
-    auto p_pos = player_ptr->get_position();
+    auto p_pos = std::make_optional(player_ptr->get_position());
     const auto &floor = *player_ptr->current_floor_ptr;
     for (auto i = 0; i < 3; i++) {
-        if (!tgt_pt(player_ptr, &p_pos.x, &p_pos.y)) {
+        p_pos = tgt_pt(player_ptr);
+        if (!p_pos) {
             return false;
         }
 
-        if (Grid::calc_distance(p_pos, p_pos_orig) > distance) {
+        if (Grid::calc_distance(*p_pos, p_pos_orig) > distance) {
             msg_print(_("遠すぎる！", "That is too far!"));
             continue;
         }
 
-        if (!is_cave_empty_bold(player_ptr, p_pos.y, p_pos.x) || floor.get_grid(p_pos).is_icky()) {
+        if (!is_cave_empty_bold(player_ptr, p_pos->y, p_pos->x) || floor.get_grid(*p_pos).is_icky()) {
             msg_print(_("そこには移動できない。", "Can not teleport to there."));
             continue;
         }
@@ -1463,9 +1464,9 @@ static bool door_to_darkness(PlayerType *player_ptr, int distance)
         break;
     }
 
-    const auto flag = cave_player_teleportable_bold(player_ptr, p_pos.y, p_pos.x, TELEPORT_SPONTANEOUS) && is_target_grid_dark(floor, p_pos);
+    const auto flag = cave_player_teleportable_bold(player_ptr, p_pos->y, p_pos->x, TELEPORT_SPONTANEOUS) && is_target_grid_dark(floor, *p_pos);
     if (flag) {
-        teleport_player_to(player_ptr, p_pos.y, p_pos.x, TELEPORT_SPONTANEOUS);
+        teleport_player_to(player_ptr, p_pos->y, p_pos->x, TELEPORT_SPONTANEOUS);
     } else {
         msg_print(_("闇の扉は開かなかった！", "The door to darkness does not open!"));
     }

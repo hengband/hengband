@@ -158,12 +158,12 @@ void wiz_debug_spell(PlayerType *player_ptr)
  */
 void wiz_dimension_door(PlayerType *player_ptr)
 {
-    POSITION x = 0, y = 0;
-    if (!tgt_pt(player_ptr, &x, &y)) {
+    const auto pos = tgt_pt(player_ptr);
+    if (!pos) {
         return;
     }
 
-    teleport_player_to(player_ptr, y, x, TELEPORT_NONMAGICAL);
+    teleport_player_to(player_ptr, pos->y, pos->x, TELEPORT_NONMAGICAL);
 }
 
 /*!
