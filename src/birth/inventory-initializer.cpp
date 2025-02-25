@@ -36,7 +36,7 @@ void wield_all(PlayerType *player_ptr)
     ItemEntity ObjectType_body;
     for (INVENTORY_IDX i_idx = INVEN_PACK - 1; i_idx >= 0; i_idx--) {
         ItemEntity *o_ptr;
-        o_ptr = &player_ptr->inventory[i_idx];
+        o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -49,7 +49,7 @@ void wield_all(PlayerType *player_ptr)
             continue;
         }
 
-        auto &wield_slot_item = player_ptr->inventory[slot];
+        auto &wield_slot_item = *player_ptr->inventory[slot];
         if (wield_slot_item.is_valid()) {
             continue;
         }

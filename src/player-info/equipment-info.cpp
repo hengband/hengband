@@ -16,7 +16,7 @@
  */
 bool has_melee_weapon(PlayerType *player_ptr, int slot)
 {
-    const auto o_ptr = &player_ptr->inventory[slot];
+    const auto o_ptr = player_ptr->inventory[slot].get();
     return o_ptr->is_valid() && o_ptr->is_melee_weapon();
 }
 
@@ -28,10 +28,10 @@ bool has_melee_weapon(PlayerType *player_ptr, int slot)
 BIT_FLAGS16 empty_hands(PlayerType *player_ptr, bool riding_control)
 {
     BIT_FLAGS16 status = EMPTY_HAND_NONE;
-    if (!player_ptr->inventory[INVEN_MAIN_HAND].is_valid()) {
+    if (!player_ptr->inventory[INVEN_MAIN_HAND]->is_valid()) {
         status |= EMPTY_HAND_MAIN;
     }
-    if (!player_ptr->inventory[INVEN_SUB_HAND].is_valid()) {
+    if (!player_ptr->inventory[INVEN_SUB_HAND]->is_valid()) {
         status |= EMPTY_HAND_SUB;
     }
 
@@ -63,19 +63,19 @@ bool heavy_armor(PlayerType *player_ptr)
     }
 
     WEIGHT monk_arm_wgt = 0;
-    if (player_ptr->inventory[INVEN_MAIN_HAND].bi_key.tval() > ItemKindType::SWORD) {
-        monk_arm_wgt += player_ptr->inventory[INVEN_MAIN_HAND].weight;
+    if (player_ptr->inventory[INVEN_MAIN_HAND]->bi_key.tval() > ItemKindType::SWORD) {
+        monk_arm_wgt += player_ptr->inventory[INVEN_MAIN_HAND]->weight;
     }
 
-    if (player_ptr->inventory[INVEN_SUB_HAND].bi_key.tval() > ItemKindType::SWORD) {
-        monk_arm_wgt += player_ptr->inventory[INVEN_SUB_HAND].weight;
+    if (player_ptr->inventory[INVEN_SUB_HAND]->bi_key.tval() > ItemKindType::SWORD) {
+        monk_arm_wgt += player_ptr->inventory[INVEN_SUB_HAND]->weight;
     }
 
-    monk_arm_wgt += player_ptr->inventory[INVEN_BODY].weight;
-    monk_arm_wgt += player_ptr->inventory[INVEN_HEAD].weight;
-    monk_arm_wgt += player_ptr->inventory[INVEN_OUTER].weight;
-    monk_arm_wgt += player_ptr->inventory[INVEN_ARMS].weight;
-    monk_arm_wgt += player_ptr->inventory[INVEN_FEET].weight;
+    monk_arm_wgt += player_ptr->inventory[INVEN_BODY]->weight;
+    monk_arm_wgt += player_ptr->inventory[INVEN_HEAD]->weight;
+    monk_arm_wgt += player_ptr->inventory[INVEN_OUTER]->weight;
+    monk_arm_wgt += player_ptr->inventory[INVEN_ARMS]->weight;
+    monk_arm_wgt += player_ptr->inventory[INVEN_FEET]->weight;
 
     return monk_arm_wgt > (100 + (player_ptr->lev * 4));
 }

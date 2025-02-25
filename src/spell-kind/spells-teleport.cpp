@@ -537,7 +537,7 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
         INVENTORY_IDX i;
 
         for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-            o_ptr = &player_ptr->inventory[i];
+            o_ptr = player_ptr->inventory[i].get();
             if (o_ptr->is_valid() && !o_ptr->is_cursed() && o_ptr->get_flags().has(TR_TELEPORT)) {
                 follow = true;
                 break;

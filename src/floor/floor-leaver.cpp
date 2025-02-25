@@ -284,7 +284,7 @@ static void preserve_info(PlayerType *player_ptr)
     }
 
     for (short i = 0; i < INVEN_PACK; i++) {
-        auto *o_ptr = &player_ptr->inventory[i];
+        auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

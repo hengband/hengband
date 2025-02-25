@@ -32,7 +32,7 @@ void do_cmd_fire(PlayerType *player_ptr, SPELL_IDX snipe_type)
     }
 
     player_ptr->is_fired = false;
-    auto *item_ptr = &player_ptr->inventory[INVEN_BOW];
+    auto *item_ptr = player_ptr->inventory[INVEN_BOW].get();
     const auto tval = item_ptr->bi_key.tval();
     if (tval == ItemKindType::NONE) {
         msg_print(_("射撃用の武器を持っていない。", "You have nothing to fire with."));

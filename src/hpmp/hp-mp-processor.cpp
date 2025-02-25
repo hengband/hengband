@@ -141,9 +141,9 @@ void process_player_hp_mp(PlayerType *player_ptr)
             }
         }
 
-        const auto &item = player_ptr->inventory[INVEN_LITE];
+        const auto &item = *player_ptr->inventory[INVEN_LITE];
         const auto flags = item.get_flags();
-        if ((player_ptr->inventory[INVEN_LITE].bi_key.tval() != ItemKindType::NONE) && flags.has_not(TR_DARK_SOURCE) && !has_resist_lite(player_ptr)) {
+        if ((player_ptr->inventory[INVEN_LITE]->bi_key.tval() != ItemKindType::NONE) && flags.has_not(TR_DARK_SOURCE) && !has_resist_lite(player_ptr)) {
             const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
             msg_format(_("%sがあなたのアンデッドの肉体を焼き焦がした！", "The %s scorches your undead flesh!"), item_name.data());
             cave_no_regen = true;

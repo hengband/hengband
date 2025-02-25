@@ -194,7 +194,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
     }
 
     if (i_idx >= 0) {
-        inven_item_charges(player_ptr->inventory[i_idx]);
+        inven_item_charges(*player_ptr->inventory[i_idx]);
     } else {
         floor_item_charges(*player_ptr->current_floor_ptr, 0 - i_idx);
     }

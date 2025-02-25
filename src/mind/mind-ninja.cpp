@@ -413,7 +413,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
             OBJECT_IDX slot;
 
             for (slot = 0; slot < INVEN_PACK; slot++) {
-                if (player_ptr->inventory[slot].bi_key.tval() == ItemKindType::SPIKE) {
+                if (player_ptr->inventory[slot]->bi_key.tval() == ItemKindType::SPIKE) {
                     break;
                 }
             }

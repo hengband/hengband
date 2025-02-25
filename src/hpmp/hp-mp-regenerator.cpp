@@ -214,7 +214,7 @@ void regenerate_captured_monsters(PlayerType *player_ptr)
 {
     bool heal = false;
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory[i];
+        auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

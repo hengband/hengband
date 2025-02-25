@@ -119,7 +119,7 @@ BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
     ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory[i];
+        o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -719,7 +719,7 @@ void check_no_flowed(PlayerType *player_ptr)
     }
 
     for (int i = 0; i < INVEN_PACK; i++) {
-        const auto &bi_key = player_ptr->inventory[i].bi_key;
+        const auto &bi_key = player_ptr->inventory[i]->bi_key;
         if (bi_key == BaseitemKey(ItemKindType::NATURE_BOOK, 2)) {
             has_sw = true;
         }
@@ -788,7 +788,7 @@ BIT_FLAGS has_warning(PlayerType *player_ptr)
     ItemEntity *o_ptr;
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory[i];
+        o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -1055,7 +1055,7 @@ void update_curses(PlayerType *player_ptr)
     }
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory[i];
+        o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -1165,7 +1165,7 @@ void update_extra_blows(PlayerType *player_ptr)
     const bool two_handed = (melee_type == MELEE_TYPE_WEAPON_TWOHAND || melee_type == MELEE_TYPE_BAREHAND_TWO);
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory[i];
+        o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -1468,7 +1468,7 @@ BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
     ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory[i];
+        o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -1493,7 +1493,7 @@ BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
     ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory[i];
+        o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -1653,9 +1653,9 @@ bool can_attack_with_sub_hand(PlayerType *player_ptr)
 bool has_two_handed_weapons(PlayerType *player_ptr)
 {
     if (can_two_hands_wielding(player_ptr)) {
-        if (can_attack_with_main_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_SUB) && player_ptr->inventory[INVEN_MAIN_HAND].allow_two_hands_wielding()) {
+        if (can_attack_with_main_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_SUB) && player_ptr->inventory[INVEN_MAIN_HAND]->allow_two_hands_wielding()) {
             return true;
-        } else if (can_attack_with_sub_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_MAIN) && player_ptr->inventory[INVEN_SUB_HAND].allow_two_hands_wielding()) {
+        } else if (can_attack_with_sub_hand(player_ptr) && (empty_hands(player_ptr, false) == EMPTY_HAND_MAIN) && player_ptr->inventory[INVEN_SUB_HAND]->allow_two_hands_wielding()) {
             return true;
         }
     }
@@ -1695,7 +1695,7 @@ BIT_FLAGS has_lite(PlayerType *player_ptr)
 bool has_disable_two_handed_bonus(PlayerType *player_ptr, int i)
 {
     if (has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i) && has_two_handed_weapons(player_ptr)) {
-        auto *o_ptr = &player_ptr->inventory[INVEN_MAIN_HAND + i];
+        auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + i].get();
         int limit = calc_weapon_weight_limit(player_ptr);
 
         /* Enable when two hand wields an enough light weapon */
@@ -1714,7 +1714,7 @@ bool has_disable_two_handed_bonus(PlayerType *player_ptr, int i)
  */
 bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
 {
-    const auto *o_ptr = &player_ptr->inventory[INVEN_MAIN_HAND + i];
+    const auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + i].get();
     const auto flags = o_ptr->get_flags();
 
     const auto tval = o_ptr->bi_key.tval();
@@ -1742,7 +1742,7 @@ bool is_wielding_icky_weapon(PlayerType *player_ptr, int i)
  */
 bool is_wielding_icky_riding_weapon(PlayerType *player_ptr, int i)
 {
-    const auto *o_ptr = &player_ptr->inventory[INVEN_MAIN_HAND + i];
+    const auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + i].get();
     const auto flags = o_ptr->get_flags();
     const auto tval = o_ptr->bi_key.tval();
     const auto has_no_weapon = (tval == ItemKindType::NONE) || (tval == ItemKindType::SHIELD);
@@ -1756,12 +1756,12 @@ bool has_not_ninja_weapon(PlayerType *player_ptr, int i)
         return false;
     }
 
-    const auto &item = player_ptr->inventory[INVEN_MAIN_HAND + i];
+    const auto &item = *player_ptr->inventory[INVEN_MAIN_HAND + i];
     const auto tval = item.bi_key.tval();
     const auto sval = *item.bi_key.sval();
     return PlayerClass(player_ptr).equals(PlayerClassType::NINJA) &&
            !((player_ptr->weapon_exp_max[tval][sval] > PlayerSkill::weapon_exp_at(PlayerSkillRank::BEGINNER)) &&
-               (player_ptr->inventory[INVEN_SUB_HAND - i].bi_key.tval() != ItemKindType::SHIELD));
+               (player_ptr->inventory[INVEN_SUB_HAND - i]->bi_key.tval() != ItemKindType::SHIELD));
 }
 
 bool has_not_monk_weapon(PlayerType *player_ptr, int i)
@@ -1770,7 +1770,7 @@ bool has_not_monk_weapon(PlayerType *player_ptr, int i)
         return false;
     }
 
-    const auto &item = player_ptr->inventory[INVEN_MAIN_HAND + i];
+    const auto &item = *player_ptr->inventory[INVEN_MAIN_HAND + i];
     const auto tval = item.bi_key.tval();
     const auto sval = *item.bi_key.sval();
     PlayerClass pc(player_ptr);

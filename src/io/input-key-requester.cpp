@@ -306,7 +306,7 @@ void InputKeyRequestor::sweep_confirmation_equipments()
 {
     auto caret_command = this->get_caret_command();
     for (auto i = enum2i(INVEN_MAIN_HAND); i < INVEN_TOTAL; i++) {
-        auto &item = this->player_ptr->inventory[i];
+        auto &item = *this->player_ptr->inventory[i];
         if (!item.is_valid() || !item.is_inscribed()) {
             continue;
         }

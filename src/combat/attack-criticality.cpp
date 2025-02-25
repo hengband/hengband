@@ -125,7 +125,7 @@ static void ninja_critical(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 void critical_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    auto *o_ptr = &player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    auto *o_ptr = player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand].get();
     auto &monrace = pa_ptr->m_ptr->get_monrace();
     const auto no_instantly_death = monrace.resistance_flags.has(MonsterResistanceType::NO_INSTANTLY_DEATH);
     if ((o_ptr->bi_key == BaseitemKey(ItemKindType::SWORD, SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
