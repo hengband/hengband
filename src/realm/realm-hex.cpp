@@ -636,36 +636,36 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         }
         break;
     }
-    case HEX_SHADOW_MOVE: {
+    case HEX_SHADOW_MOVE:
         if (cast) {
-            POSITION y, x;
+            Pos2D pos(0, 0);
             bool flag;
-
             for (auto i = 0; i < 3; i++) {
-                if (!tgt_pt(player_ptr, &x, &y)) {
+                if (!tgt_pt(player_ptr, &pos.x, &pos.y)) {
                     return "";
                 }
 
                 flag = false;
-
                 const auto &floor = *player_ptr->current_floor_ptr;
                 for (const auto &d : Direction::directions_8()) {
-                    const auto pos_neighbor = Pos2D(y, x) + d.vec();
+                    const auto pos_neighbor = pos + d.vec();
                     if (floor.get_grid(pos_neighbor).has_monster()) {
                         flag = true;
                     }
                 }
 
-                const auto dist = Grid::calc_distance({ y, x }, player_ptr->get_position());
-                if (!is_cave_empty_bold(player_ptr, y, x) || floor.grid_array[y][x].is_icky() || (dist > player_ptr->lev + 2)) {
+                const auto p_pos = player_ptr->get_position();
+                const auto dist = Grid::calc_distance(pos, p_pos);
+                if (!is_cave_empty_bold(player_ptr, pos.y, pos.x) || floor.get_grid(pos).is_icky() || (dist > player_ptr->lev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;
                 }
+
                 break;
             }
 
             if (flag && randint0(player_ptr->lev * player_ptr->lev / 2)) {
-                teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
+                teleport_player_to(player_ptr, pos.y, pos.x, TELEPORT_SPONTANEOUS);
             } else {
                 msg_print(_("おっと！", "Oops!"));
                 teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
@@ -673,8 +673,8 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
             should_continue = false;
         }
+
         break;
-    }
     case HEX_ANTI_MAGIC: {
         power = player_ptr->lev * 3 / 2;
         if (info) {
