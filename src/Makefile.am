@@ -1436,22 +1436,37 @@ EXTRA_DIST = \
 	gcc-wrap
 
 DEFAULT_INCLUDES = \
-	-I$(srcdir) -I$(srcdir)/external-lib/include \
-	-I$(top_builddir)/src -I$(top_builddir)/src/external-lib/include
+	-I. -I$(srcdir) -I$(srcdir)/external-lib/include
 
 CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
-if PCH
-CPPFLAGS += -include ../src/stdafx.h
-endif
 LIBS += $(XFT_LIBS) $(libcurl_LIBS)
-COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CXXCOMPILE = $(srcdir)/gcc-wrap $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CXXFLAGS)
+
+AM_CXXFLAGS =
+
+if COMPILER_HAVE_EXEC_CHARSET_EUC_JP_MS
+AM_CXXFLAGS += -fexec-charset=euc-jp-ms
+endif
+
+if USE_NKF
+CXXCOMPILE_WRAPPER = $(srcdir)/gcc-wrap
+DEFAULT_INCLUDES += -I$(top_builddir)/src -I$(top_builddir)/src/external-lib/include
+if COMPILER_IS_CLANG
+AM_CXXFLAGS += -Wno-invalid-source-encoding
+endif
+if PCH
+PCH_INCLUDES = -include $(top_builddir)/src/stdafx.h
+endif
+else
+if PCH
+PCH_INCLUDES = -include $(srcdir)/stdafx.h
+endif
+endif
+
+CXXCOMPILE = $(strip $(CXXCOMPILE_WRAPPER) $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(PCH_INCLUDES))
 
 if PCH
 stdafx.h.gch: stdafx.h stdafx.cpp Makefile
-	$(CXX) -x c++-header $(CXXFLAGS) $(DEFAULT_INCLUDES) $(srcdir)/stdafx.cpp -o $@
+	$(CXX) -x c++-header $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(srcdir)/stdafx.cpp -o $@
 	if test none != "$(PCH_CHECKSUMMER)" ; then \
 		rm -f "$@".sum ; \
 		$(PCH_CHECKSUMMER) $@ > "$@".sum ; \

@@ -5,6 +5,7 @@ AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_HEADERS(src/autoconf.h)
 AC_CONFIG_SRCDIR(src/main.cpp)
 AM_INIT_AUTOMAKE(tar-pax)
+AM_SILENT_RULES([yes])
 
 AC_ARG_WITH(setgid,
 [  --with-setgid=NAME      install hengband as group NAME],
@@ -47,6 +48,20 @@ AC_LANG(C++)
 AC_PROG_CXX
 AX_CXX_COMPILE_STDCXX(20, [noext], [mandatory])
 PKG_PROG_PKG_CONFIG
+
+AC_MSG_CHECKING([whether the compiler is Clang])
+AC_COMPILE_IFELSE(
+  [AC_LANG_SOURCE([[
+    #ifdef __clang__
+    int main() { return 0; }
+    #else
+    #error "Not Clang"
+    #endif
+  ]])],
+  [AC_MSG_RESULT([yes]); is_clang=yes],
+  [AC_MSG_RESULT([no]); is_clang=no]
+)
+AM_CONDITIONAL([COMPILER_IS_CLANG], [test "x$is_clang" = "xyes"])
 
 AC_ARG_ENABLE(japanese,
 [  --disable-japanese      build english version], use_japanese=no, [AC_DEFINE(JP, 1, [Enable Japanese]) AC_DEFINE(EUC, 1, [Use Extended Unix Code])])
@@ -132,11 +147,31 @@ if test "$have_x" = yes; then
 fi
 
 if test "$use_japanese" != no; then
-  AC_CHECK_PROG(NKF, nkf, yes)
-  if test x"$NKF" != x"yes"; then
-    AC_MSG_ERROR([nkf is not found. Please install nkf.])
+  AC_MSG_CHECKING([whether the compiler supports -fexec-charset=euc-jp-ms])
+  saved_CXXFLAGS="$CXXFLAGS"
+  CXXFLAGS="$CXXFLAGS -fexec-charset=euc-jp-ms"
+  AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM(
+      [],
+      [return 0;]
+    )],
+    [AC_MSG_RESULT([yes])
+      ac_cv_compile_exec_charset=yes],
+    [AC_MSG_RESULT([no])
+      ac_cv_compile_exec_charset=no]
+  )
+  CXXFLAGS="$saved_CXXFLAGS"
+
+  if test x"$ac_cv_compile_exec_charset" = xno; then
+    AC_CHECK_PROG(NKF, nkf, yes)
+    if test x"$NKF" != x"yes"; then
+      AC_MSG_ERROR([nkf is not found. Please install nkf.])
+    fi
   fi
 fi
+
+AM_CONDITIONAL([COMPILER_HAVE_EXEC_CHARSET_EUC_JP_MS], [test x"$use_japanese" != xno -a x"$ac_cv_compile_exec_charset" = xyes])
+AM_CONDITIONAL([USE_NKF], [test x"$use_japanese" != xno -a x"$ac_cv_compile_exec_charset" = xno])
 
 if test "$enable_pch" != no; then
   dnl md5sum, sha224sum, sha256sum, sha384sum, sha512sum and b2sum are
