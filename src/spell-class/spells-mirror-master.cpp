@@ -106,13 +106,12 @@ void SpellsMirrorMaster::remove_all_mirrors(bool explode)
  */
 bool SpellsMirrorMaster::mirror_tunnel()
 {
-    int x;
-    int y;
-    if (!tgt_pt(this->player_ptr, &x, &y)) {
+    const auto pos = point_target(this->player_ptr);
+    if (!pos) {
         return false;
     }
 
-    if (exe_dimension_door(this->player_ptr, x, y)) {
+    if (exe_dimension_door(this->player_ptr, *pos)) {
         return true;
     }
 

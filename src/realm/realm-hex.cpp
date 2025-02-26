@@ -638,25 +638,25 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
     }
     case HEX_SHADOW_MOVE:
         if (cast) {
-            Pos2D pos(0, 0);
+            std::optional<Pos2D> pos_target;
             bool flag;
             for (auto i = 0; i < 3; i++) {
-                if (!tgt_pt(player_ptr, &pos.x, &pos.y)) {
+                pos_target = point_target(player_ptr);
+                if (!pos_target) {
                     return "";
                 }
 
                 flag = false;
                 const auto &floor = *player_ptr->current_floor_ptr;
                 for (const auto &d : Direction::directions_8()) {
-                    const auto pos_neighbor = pos + d.vec();
+                    const auto pos_neighbor = *pos_target + d.vec();
                     if (floor.get_grid(pos_neighbor).has_monster()) {
                         flag = true;
                     }
                 }
 
-                const auto p_pos = player_ptr->get_position();
-                const auto dist = Grid::calc_distance(pos, p_pos);
-                if (!is_cave_empty_bold(player_ptr, pos.y, pos.x) || floor.get_grid(pos).is_icky() || (dist > player_ptr->lev + 2)) {
+                const auto dist = Grid::calc_distance(*pos_target, player_ptr->get_position());
+                if (!is_cave_empty_bold(player_ptr, pos_target->y, pos_target->x) || floor.get_grid(*pos_target).is_icky() || (dist > player_ptr->lev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;
                 }
@@ -665,7 +665,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             }
 
             if (flag && randint0(player_ptr->lev * player_ptr->lev / 2)) {
-                teleport_player_to(player_ptr, pos.y, pos.x, TELEPORT_SPONTANEOUS);
+                teleport_player_to(player_ptr, pos_target->y, pos_target->x, TELEPORT_SPONTANEOUS);
             } else {
                 msg_print(_("おっと！", "Oops!"));
                 teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);

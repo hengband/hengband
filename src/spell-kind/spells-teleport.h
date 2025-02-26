@@ -2,6 +2,7 @@
 
 #include "spell/spells-util.h"
 #include "system/angband.h"
+#include "util/point-2d.h"
 
 class Direction;
 class PlayerType;
@@ -15,4 +16,4 @@ void teleport_player_away(MONSTER_IDX m_idx, PlayerType *player_ptr, POSITION di
 void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, teleport_flags mode);
 void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx);
 bool dimension_door(PlayerType *player_ptr);
-bool exe_dimension_door(PlayerType *player_ptr, POSITION x, POSITION y);
+bool exe_dimension_door(PlayerType *player_ptr, const Pos2D &pos);

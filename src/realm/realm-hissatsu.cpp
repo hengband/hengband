@@ -641,16 +641,15 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
 
     case 27:
         if (cast) {
-            POSITION y, x;
-            if (!tgt_pt(player_ptr, &x, &y)) {
+            const auto pos = point_target(player_ptr);
+            if (!pos) {
                 return std::nullopt;
             }
 
-            const Pos2D pos(y, x);
             const auto p_pos = player_ptr->get_position();
-            const auto is_teleportable = cave_player_teleportable_bold(player_ptr, y, x, TELEPORT_SPONTANEOUS);
-            const auto dist = Grid::calc_distance(pos, p_pos);
-            if (!is_teleportable || (dist > MAX_PLAYER_SIGHT / 2) || !projectable(player_ptr, p_pos, pos)) {
+            const auto is_teleportable = cave_player_teleportable_bold(player_ptr, pos->y, pos->x, TELEPORT_SPONTANEOUS);
+            const auto dist = Grid::calc_distance(*pos, p_pos);
+            if (!is_teleportable || (dist > MAX_PLAYER_SIGHT / 2) || !projectable(player_ptr, p_pos, *pos)) {
                 msg_print(_("失敗！", "You cannot move to that place!"));
                 break;
             }
@@ -658,8 +657,8 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
                 break;
             }
-            project(player_ptr, 0, 0, y, x, HISSATSU_ISSEN, AttributeType::ATTACK, PROJECT_BEAM | PROJECT_KILL);
-            teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
+            project(player_ptr, 0, 0, pos->y, pos->x, HISSATSU_ISSEN, AttributeType::ATTACK, PROJECT_BEAM | PROJECT_KILL);
+            teleport_player_to(player_ptr, pos->y, pos->x, TELEPORT_SPONTANEOUS);
         }
         break;
 

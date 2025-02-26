@@ -398,13 +398,12 @@ void wiz_change_status(PlayerType *player_ptr)
  */
 void wiz_create_feature(PlayerType *player_ptr)
 {
-    POSITION y, x;
-    if (!tgt_pt(player_ptr, &x, &y)) {
+    const auto pos = point_target(player_ptr);
+    if (!pos) {
         return;
     }
 
-    const Pos2D pos(y, x);
-    auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    auto &grid = player_ptr->current_floor_ptr->get_grid(*pos);
     const int max = TerrainList::get_instance().size() - 1;
     const auto f_val1 = input_numerics(_("実地形ID", "FeatureID"), 0, max, grid.feat);
     if (!f_val1) {
@@ -416,7 +415,7 @@ void wiz_create_feature(PlayerType *player_ptr)
         return;
     }
 
-    set_terrain_id_to_grid(player_ptr, pos, *f_val1);
+    set_terrain_id_to_grid(player_ptr, *pos, *f_val1);
     grid.mimic = *f_val2;
     const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     if (terrain.flags.has(TerrainCharacteristics::RUNE_PROTECTION) || terrain.flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
@@ -425,8 +424,8 @@ void wiz_create_feature(PlayerType *player_ptr)
         grid.info |= CAVE_GLOW | CAVE_OBJECT;
     }
 
-    note_spot(player_ptr, pos);
-    lite_spot(player_ptr, pos);
+    note_spot(player_ptr, *pos);
+    lite_spot(player_ptr, *pos);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 }
 
