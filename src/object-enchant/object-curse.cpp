@@ -69,7 +69,7 @@ void curse_equipment(PlayerType *player_ptr, PERCENTAGE chance, PERCENTAGE heavy
         return;
     }
 
-    auto &item = player_ptr->inventory[INVEN_MAIN_HAND + randint0(12)];
+    auto &item = *player_ptr->inventory[INVEN_MAIN_HAND + randint0(12)];
     if (!item.is_valid()) {
         return;
     }

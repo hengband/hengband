@@ -28,7 +28,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX i_idx)
             return;
         }
 
-        const auto &item_sub_hand = player_ptr->inventory[INVEN_SUB_HAND];
+        const auto &item_sub_hand = *player_ptr->inventory[INVEN_SUB_HAND];
         item_name = describe_flavor(player_ptr, item_sub_hand, 0);
 
         if (item_sub_hand.is_cursed()) {
@@ -38,7 +38,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX i_idx)
             return;
         }
 
-        auto &item_main_hand = player_ptr->inventory[INVEN_MAIN_HAND];
+        auto &item_main_hand = *player_ptr->inventory[INVEN_MAIN_HAND];
         item_main_hand = item_sub_hand.clone();
         inven_item_increase(player_ptr, INVEN_SUB_HAND, -item_sub_hand.number);
         inven_item_optimize(player_ptr, INVEN_SUB_HAND);
@@ -55,7 +55,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         return;
     }
 
-    const auto &item_main_hand = player_ptr->inventory[INVEN_MAIN_HAND];
+    const auto &item_main_hand = *player_ptr->inventory[INVEN_MAIN_HAND];
     if (item_main_hand.is_valid()) {
         item_name = describe_flavor(player_ptr, item_main_hand, 0);
     }
@@ -72,7 +72,7 @@ void verify_equip_slot(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         return;
     }
 
-    auto &item_sub_hand = player_ptr->inventory[INVEN_SUB_HAND];
+    auto &item_sub_hand = *player_ptr->inventory[INVEN_SUB_HAND];
     item_sub_hand = item_main_hand.clone();
     inven_item_increase(player_ptr, INVEN_MAIN_HAND, -item_main_hand.number);
     inven_item_optimize(player_ptr, INVEN_MAIN_HAND);

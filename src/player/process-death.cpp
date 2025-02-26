@@ -236,7 +236,7 @@ static void inventory_aware(PlayerType *player_ptr)
 {
     ItemEntity *o_ptr;
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory[i];
+        o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

@@ -47,7 +47,7 @@ void inven_item_charges(const ItemEntity &item)
  */
 void inven_item_describe(PlayerType *player_ptr, short i_idx)
 {
-    const auto &item = player_ptr->inventory[i_idx];
+    const auto &item = *player_ptr->inventory[i_idx];
     const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
     if (item.number <= 0) {

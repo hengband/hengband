@@ -474,7 +474,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND + i)) {
                     break;
                 }
-                o_ptr = &player_ptr->inventory[INVEN_MAIN_HAND + i];
+                o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + i].get();
                 basedam = o_ptr->damage_dice.floored_expected_value_multiplied_by(100);
                 damage = o_ptr->to_d * 100;
 
@@ -706,7 +706,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                     break;
                 }
 
-                const auto &item = player_ptr->inventory[INVEN_MAIN_HAND + i];
+                const auto &item = *player_ptr->inventory[INVEN_MAIN_HAND + i];
                 auto basedam = item.damage_dice.floored_expected_value_multiplied_by(100);
                 auto damage = item.to_d * 100;
 

@@ -19,7 +19,7 @@
  */
 void reduce_lite_life(PlayerType *player_ptr)
 {
-    auto *o_ptr = &player_ptr->inventory[INVEN_LITE];
+    auto *o_ptr = player_ptr->inventory[INVEN_LITE].get();
     if (o_ptr->bi_key.tval() != ItemKindType::LITE) {
         return;
     }

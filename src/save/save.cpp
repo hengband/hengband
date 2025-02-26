@@ -197,7 +197,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     }
 
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        const auto &item = player_ptr->inventory[i];
+        const auto &item = *player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;
         }

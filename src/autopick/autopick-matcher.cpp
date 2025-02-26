@@ -365,7 +365,7 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
          * into an inventory slot.
          * But an item can not be absorbed into itself!
          */
-        if ((&player_ptr->inventory[j] != o_ptr) && player_ptr->inventory[j].is_similar(*o_ptr)) {
+        if ((player_ptr->inventory[j].get() != o_ptr) && player_ptr->inventory[j]->is_similar(*o_ptr)) {
             return true;
         }
     }

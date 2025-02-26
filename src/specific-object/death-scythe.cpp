@@ -147,7 +147,7 @@ void process_death_scythe_reflection(PlayerType *player_ptr, player_attack_type 
     msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
     msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
 
-    auto *o_ptr = &player_ptr->inventory[INVEN_MAIN_HAND + pa_ptr->hand];
+    auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND + pa_ptr->hand].get();
     const auto death_scythe_flags = o_ptr->get_flags();
     const auto num = o_ptr->damage_dice.num + player_ptr->damage_dice_bonus[pa_ptr->hand].num;
     const auto sides = o_ptr->damage_dice.sides + player_ptr->damage_dice_bonus[pa_ptr->hand].sides;

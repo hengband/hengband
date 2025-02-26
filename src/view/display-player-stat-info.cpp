@@ -209,7 +209,7 @@ static void display_equipments_compensation(PlayerType *player_ptr, int row, int
 {
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
-        o_ptr = &player_ptr->inventory[i];
+        o_ptr = player_ptr->inventory[i].get();
         auto flags = o_ptr->get_flags_known();
         for (int stat = 0; stat < A_MAX; stat++) {
             DisplaySymbol symbol(TERM_SLATE, '.');

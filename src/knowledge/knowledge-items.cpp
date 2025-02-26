@@ -67,7 +67,7 @@ auto collect_known_fixed_artifacts(PlayerType *player_ptr)
     }
 
     for (auto i = 0; i < INVEN_TOTAL; i++) {
-        const auto &item = player_ptr->inventory[i];
+        const auto &item = *player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;
         }

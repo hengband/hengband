@@ -144,11 +144,11 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
     // @todo 「特定の武器を装備している」旨のメソッドを別途作る
     constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
     auto is_stormbringer = false;
-    if (player_ptr->inventory[INVEN_MAIN_HAND].is_specific_artifact(stormbringer)) {
+    if (player_ptr->inventory[INVEN_MAIN_HAND]->is_specific_artifact(stormbringer)) {
         is_stormbringer = true;
     }
 
-    if (player_ptr->inventory[INVEN_SUB_HAND].is_specific_artifact(stormbringer)) {
+    if (player_ptr->inventory[INVEN_SUB_HAND]->is_specific_artifact(stormbringer)) {
         is_stormbringer = true;
     }
 

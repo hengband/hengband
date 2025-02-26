@@ -40,7 +40,7 @@ void vary_item(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num)
  */
 void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num)
 {
-    auto *o_ptr = &player_ptr->inventory[i_idx];
+    auto *o_ptr = player_ptr->inventory[i_idx].get();
     num += o_ptr->number;
     if (num > 255) {
         num = 255;
@@ -89,7 +89,7 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
  */
 void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    auto *o_ptr = &player_ptr->inventory[i_idx];
+    auto *o_ptr = player_ptr->inventory[i_idx].get();
     if (!o_ptr->is_valid()) {
         return;
     }
@@ -100,7 +100,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (i_idx >= INVEN_MAIN_HAND) {
         player_ptr->equip_cnt--;
-        (&player_ptr->inventory[i_idx])->wipe();
+        player_ptr->inventory[i_idx]->wipe();
         static constexpr auto flags_srf = {
             StatusRecalculatingFlag::BONUS,
             StatusRecalculatingFlag::TORCH,
@@ -117,10 +117,10 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 
     player_ptr->inven_cnt--;
 
-    auto first = &player_ptr->inventory[i_idx];
-    auto last = &player_ptr->inventory[INVEN_PACK];
+    auto first = player_ptr->inventory.begin() + i_idx;
+    auto last = player_ptr->inventory.begin() + INVEN_PACK;
     std::rotate(first, first + 1, last + 1);
-    last->wipe();
+    (*last)->wipe();
 
     static constexpr auto flags = {
         SubWindowRedrawingFlag::INVENTORY,
@@ -137,7 +137,7 @@ void inven_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
  */
 void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER amt)
 {
-    auto *o_ptr = &player_ptr->inventory[i_idx];
+    auto *o_ptr = player_ptr->inventory[i_idx].get();
     if (amt <= 0) {
         return;
     }
@@ -148,7 +148,7 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
 
     if (i_idx >= INVEN_MAIN_HAND) {
         i_idx = inven_takeoff(player_ptr, i_idx, amt);
-        o_ptr = &player_ptr->inventory[i_idx];
+        o_ptr = player_ptr->inventory[i_idx].get();
     }
 
     auto item = o_ptr->clone();
@@ -177,13 +177,13 @@ void combine_pack(PlayerType *player_ptr)
         combined = false;
 
         for (auto i = enum2i(INVEN_PACK); i > 0; i--) {
-            auto &item1 = player_ptr->inventory[i];
+            auto &item1 = *player_ptr->inventory[i];
             if (!item1.is_valid()) {
                 continue;
             }
 
             for (short j = 0; j < i; j++) {
-                auto &item2 = player_ptr->inventory[j];
+                auto &item2 = *player_ptr->inventory[j];
                 if (!item2.is_valid()) {
                     continue;
                 }
@@ -198,10 +198,10 @@ void combine_pack(PlayerType *player_ptr)
                     flag = true;
                     item2.absorb(item1);
                     player_ptr->inven_cnt--;
-                    auto first = &player_ptr->inventory[i];
-                    auto last = &player_ptr->inventory[INVEN_PACK];
+                    auto first = player_ptr->inventory.begin() + i;
+                    auto last = player_ptr->inventory.begin() + INVEN_PACK;
                     std::rotate(first, first + 1, last + 1);
-                    last->wipe();
+                    (*last)->wipe();
                 } else {
                     int old_num = item1.number;
                     int remain = item2.number + item1.number - max_num;
@@ -240,13 +240,13 @@ void combine_pack(PlayerType *player_ptr)
 void reorder_pack(PlayerType *player_ptr)
 {
     const auto comp = [player_ptr](const auto &item1, const auto &item2) {
-        return object_sort_comp(player_ptr, item1, item2);
+        return object_sort_comp(player_ptr, *item1, *item2);
     };
 
     const auto sort_count = std::min(enum2i(INVEN_PACK), player_ptr->inven_cnt);
 
-    auto first = &player_ptr->inventory[0];
-    auto last = &player_ptr->inventory[sort_count];
+    auto first = player_ptr->inventory.begin();
+    auto last = player_ptr->inventory.begin() + sort_count;
 
     if (std::is_sorted(first, last, comp)) {
         return;
@@ -276,7 +276,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
         SubWindowRedrawingFlag::PLAYER,
     };
     for (j = 0; j < INVEN_PACK; j++) {
-        j_ptr = &player_ptr->inventory[j];
+        j_ptr = player_ptr->inventory[j].get();
         if (!j_ptr->is_valid()) {
             continue;
         }
@@ -295,7 +295,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     for (j = 0; j <= INVEN_PACK; j++) {
-        j_ptr = &player_ptr->inventory[j];
+        j_ptr = player_ptr->inventory[j].get();
         if (!j_ptr->is_valid()) {
             break;
         }
@@ -304,17 +304,18 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     i = j;
     if (i < INVEN_PACK) {
         for (j = 0; j < INVEN_PACK; j++) {
-            if (object_sort_comp(player_ptr, *o_ptr, player_ptr->inventory[j])) {
+            if (object_sort_comp(player_ptr, *o_ptr, *player_ptr->inventory[j])) {
                 break;
             }
         }
 
         i = j;
-        std::rotate(&player_ptr->inventory[i], &player_ptr->inventory[n + 1], &player_ptr->inventory[n + 2]);
+        auto begin = player_ptr->inventory.begin();
+        std::rotate(begin + i, begin + n + 1, begin + n + 2);
     }
 
-    player_ptr->inventory[i] = o_ptr->clone();
-    j_ptr = &player_ptr->inventory[i];
+    *player_ptr->inventory[i] = o_ptr->clone();
+    j_ptr = player_ptr->inventory[i].get();
     j_ptr->held_m_idx = 0;
     j_ptr->iy = j_ptr->ix = 0;
     j_ptr->marked.clear().set(OmType::TOUCHED);
@@ -344,7 +345,7 @@ bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity *o_p
     }
 
     for (int j = 0; j < INVEN_PACK; j++) {
-        auto *j_ptr = &player_ptr->inventory[j];
+        auto *j_ptr = player_ptr->inventory[j].get();
         if (!j_ptr->is_valid()) {
             continue;
         }
@@ -366,7 +367,7 @@ bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity *o_p
  */
 INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER amt)
 {
-    const auto &item_inventory = player_ptr->inventory[i_idx];
+    const auto &item_inventory = *player_ptr->inventory[i_idx];
     if (amt <= 0) {
         return -1;
     }

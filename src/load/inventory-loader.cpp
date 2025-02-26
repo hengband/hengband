@@ -24,9 +24,6 @@ static errr rd_inventory(PlayerType *player_ptr)
     player_ptr->inven_cnt = 0;
     player_ptr->equip_cnt = 0;
 
-    //! @todo std::make_shared の配列対応版は C++20 から
-    player_ptr->inventory = std::shared_ptr<ItemEntity[]>{ new ItemEntity[INVEN_TOTAL] };
-
     int slot = 0;
     auto item_loader = ItemLoaderFactory::create_loader();
     while (true) {
@@ -44,7 +41,7 @@ static errr rd_inventory(PlayerType *player_ptr)
 
         if (n >= INVEN_MAIN_HAND) {
             item.marked.set(OmType::TOUCHED);
-            player_ptr->inventory[n] = std::move(item);
+            *player_ptr->inventory[n] = std::move(item);
             player_ptr->equip_cnt++;
             continue;
         }
@@ -56,7 +53,7 @@ static errr rd_inventory(PlayerType *player_ptr)
 
         n = slot++;
         item.marked.set(OmType::TOUCHED);
-        player_ptr->inventory[n] = std::move(item);
+        *player_ptr->inventory[n] = std::move(item);
         player_ptr->inven_cnt++;
     }
 

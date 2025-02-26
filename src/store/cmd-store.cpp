@@ -157,9 +157,9 @@ void do_cmd_store(PlayerType *player_ptr)
         const auto should_redraw_store_inventory = rfu.has(StatusRecalculatingFlag::BONUS);
         world.character_icky_depth = 1;
         handle_stuff(player_ptr);
-        if (player_ptr->inventory[INVEN_PACK].bi_id) {
+        if (player_ptr->inventory[INVEN_PACK]->bi_id) {
             INVENTORY_IDX i_idx = INVEN_PACK;
-            const auto &item_inventory = player_ptr->inventory[i_idx];
+            const auto &item_inventory = *player_ptr->inventory[i_idx];
             if (store_num != StoreSaleType::HOME) {
                 if (store_num == StoreSaleType::MUSEUM) {
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて博物館から出た...", "Your pack is so full that you flee the Museum..."));

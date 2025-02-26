@@ -307,7 +307,7 @@ PRICE compare_weapons(PlayerType *player_ptr, PRICE bcost)
 
     screen_save();
     clear_bldg(0, 22);
-    auto *i_ptr = &player_ptr->inventory[INVEN_MAIN_HAND];
+    auto *i_ptr = player_ptr->inventory[INVEN_MAIN_HAND].get();
     auto orig_weapon = i_ptr->clone();
 
     constexpr auto first_q = _("第一の武器は？", "What is your first weapon? ");

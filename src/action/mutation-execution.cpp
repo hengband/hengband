@@ -163,7 +163,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         return true;
     case PlayerMutationType::DET_CURSE:
         for (int i = 0; i < INVEN_TOTAL; i++) {
-            auto *o_ptr = &player_ptr->inventory[i];
+            auto *o_ptr = player_ptr->inventory[i].get();
             if (!o_ptr->is_valid() || !o_ptr->is_cursed()) {
                 continue;
             }

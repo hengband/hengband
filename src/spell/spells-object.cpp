@@ -202,7 +202,7 @@ void acquirement(PlayerType *player_ptr, POSITION y1, POSITION x1, int num, bool
 bool curse_armor(PlayerType *player_ptr)
 {
     /* Curse the body armor */
-    auto &item = player_ptr->inventory[INVEN_BODY];
+    auto &item = *player_ptr->inventory[INVEN_BODY];
     if (!item.is_valid()) {
         return false;
     }
@@ -308,7 +308,7 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity *o_ptr)
 void brand_bolts(PlayerType *player_ptr)
 {
     for (auto i = 0; i < INVEN_PACK; i++) {
-        auto *o_ptr = &player_ptr->inventory[i];
+        auto *o_ptr = player_ptr->inventory[i].get();
         if (o_ptr->bi_key.tval() != ItemKindType::BOLT) {
             continue;
         }

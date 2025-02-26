@@ -392,7 +392,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 return "";
             }
 
-            o_ptr = &player_ptr->inventory[i_idx];
+            o_ptr = player_ptr->inventory[i_idx].get();
             const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
             if (!input_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really?"), item_name.data()))) {
                 return "";
@@ -456,7 +456,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
     }
     case HEX_SHADOW_CLOAK: {
         if (cast) {
-            auto *o_ptr = &player_ptr->inventory[INVEN_OUTER];
+            auto *o_ptr = player_ptr->inventory[INVEN_OUTER].get();
 
             if (!o_ptr->is_valid()) {
                 msg_print(_("クロークを身につけていない！", "You are not wearing a cloak."));
@@ -469,7 +469,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             }
         }
         if (continuation) {
-            auto *o_ptr = &player_ptr->inventory[INVEN_OUTER];
+            auto *o_ptr = player_ptr->inventory[INVEN_OUTER].get();
 
             if ((!o_ptr->is_valid()) || (!o_ptr->is_cursed())) {
                 exe_spell(player_ptr, RealmType::HEX, spell, SpellProcessType::STOP);
