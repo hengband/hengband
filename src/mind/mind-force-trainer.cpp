@@ -195,7 +195,7 @@ bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
  */
 bool shock_power(PlayerType *player_ptr)
 {
-    int boost = get_current_ki(player_ptr);
+    auto boost = get_current_ki(player_ptr);
     if (heavy_armor(player_ptr)) {
         boost /= 2;
     }
@@ -208,7 +208,7 @@ bool shock_power(PlayerType *player_ptr)
 
     auto pos = player_ptr->get_neighbor(dir);
     PLAYER_LEVEL plev = player_ptr->lev;
-    int dam = Dice::roll(8 + ((plev - 5) / 4) + boost / 12, 8);
+    const auto dam = Dice::roll(8 + ((plev - 5) / 4) + boost / 12, 8);
     fire_beam(player_ptr, AttributeType::MISSILE, dir, dam);
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
@@ -228,9 +228,10 @@ bool shock_power(PlayerType *player_ptr)
         return true;
     }
 
+    const auto p_pos = player_ptr->get_position();
     for (auto i = 0; i < 5; i++) {
         pos += dir.vec();
-        if (is_cave_empty_bold(player_ptr, pos.y, pos.x)) {
+        if (floor.is_empty_at(pos) && (pos != p_pos)) {
             pos_target = pos;
         } else {
             break;

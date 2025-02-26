@@ -433,6 +433,7 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
         return true;
     }
 
+    const auto p_pos = player_ptr->get_position();
     auto &floor = *player_ptr->current_floor_ptr;
     Pos2D pos(0, 0);
     auto attempts_left = 10000;
@@ -444,7 +445,7 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
                 continue;
             }
         } else {
-            if (!is_cave_empty_bold(player_ptr, pos.y, pos.x)) {
+            if (!floor.is_empty_at(pos) || (pos == p_pos)) {
                 continue;
             }
         }
