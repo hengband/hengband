@@ -75,7 +75,7 @@ static void discover_hidden_things(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
-        auto &item = floor.o_list[this_o_idx];
+        auto &item = *floor.o_list[this_o_idx];
         if (item.bi_key.tval() != ItemKindType::CHEST) {
             continue;
         }

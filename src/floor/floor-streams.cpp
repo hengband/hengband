@@ -302,7 +302,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : grid.o_idx_list) {
-                    auto &item = floor.o_list[this_o_idx];
+                    auto &item = *floor.o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
                     if (item.is_fixed_artifact()) {

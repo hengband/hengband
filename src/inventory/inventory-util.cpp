@@ -49,7 +49,7 @@ bool is_ring_slot(int i)
 bool get_tag_floor(const FloorType &floor, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
     for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++) {
-        auto *o_ptr = &floor.o_list[floor_list[i]];
+        auto *o_ptr = floor.o_list[floor_list[i]].get();
         if (!o_ptr->is_inscribed()) {
             continue;
         }
@@ -70,7 +70,7 @@ bool get_tag_floor(const FloorType &floor, COMMAND_CODE *cp, char tag, FLOOR_IDX
     }
 
     for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++) {
-        auto *o_ptr = &floor.o_list[floor_list[i]];
+        auto *o_ptr = floor.o_list[floor_list[i]].get();
         if (!o_ptr->is_inscribed()) {
             continue;
         }
@@ -207,7 +207,7 @@ bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     if (i_idx >= 0) {
         o_ptr = player_ptr->inventory[i_idx].get();
     } else {
-        o_ptr = &player_ptr->current_floor_ptr->o_list[0 - i_idx];
+        o_ptr = player_ptr->current_floor_ptr->o_list[0 - i_idx].get();
     }
 
     if (!o_ptr->is_inscribed()) {
@@ -281,7 +281,7 @@ INVENTORY_IDX label_to_inventory(PlayerType *player_ptr, int c)
  */
 bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX i_idx)
 {
-    const auto &item = i_idx >= 0 ? *player_ptr->inventory[i_idx] : player_ptr->current_floor_ptr->o_list[0 - i_idx];
+    const auto &item = i_idx >= 0 ? *player_ptr->inventory[i_idx] : *player_ptr->current_floor_ptr->o_list[0 - i_idx];
     const auto item_name = describe_flavor(player_ptr, item, 0);
     std::stringstream ss;
     ss << prompt;

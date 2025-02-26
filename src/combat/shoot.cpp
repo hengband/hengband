@@ -471,7 +471,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     if (i_idx >= 0) {
         o_ptr = player_ptr->inventory[i_idx].get();
     } else {
-        o_ptr = &floor.o_list[0 - i_idx];
+        o_ptr = floor.o_list[0 - i_idx].get();
     }
 
     /* Sniper - Cannot shot a single arrow twice */
@@ -929,7 +929,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             /* Memorize monster */
             fire_item.held_m_idx = m_idx;
 
-            floor.o_list[item_idx] = std::move(fire_item);
+            *floor.o_list[item_idx] = std::move(fire_item);
 
             /* Carry object */
             auto &monster = floor.m_list[m_idx];

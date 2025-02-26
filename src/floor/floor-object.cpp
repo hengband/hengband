@@ -145,7 +145,7 @@ void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos)
 
     auto &grid = floor.get_grid(pos);
     for (const auto this_o_idx : grid.o_idx_list) {
-        auto &item = floor.o_list[this_o_idx];
+        auto &item = *floor.o_list[this_o_idx];
         item.wipe();
         floor.o_cnt--;
     }
@@ -165,7 +165,7 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
 {
     auto &floor = *player_ptr->current_floor_ptr;
 
-    auto *o_ptr = &floor.o_list[i_idx];
+    auto *o_ptr = floor.o_list[i_idx].get();
     num += o_ptr->number;
     if (num > 255) {
         num = 255;
@@ -190,7 +190,7 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
  */
 void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i_idx];
+    auto *o_ptr = player_ptr->current_floor_ptr->o_list[i_idx].get();
     if (!o_ptr->is_valid()) {
         return;
     }
@@ -218,7 +218,7 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     excise_object_idx(floor, o_idx);
-    auto &item = floor.o_list[o_idx];
+    auto &item = *floor.o_list[o_idx];
     if (!item.is_held_by_monster()) {
         lite_spot(player_ptr, item.get_position());
     }
@@ -251,7 +251,7 @@ void excise_object_idx(FloorType &floor, OBJECT_IDX o_idx)
  */
 ObjectIndexList &get_o_idx_list_contains(FloorType &floor, OBJECT_IDX o_idx)
 {
-    auto *o_ptr = &floor.o_list[o_idx];
+    auto *o_ptr = floor.o_list[o_idx].get();
 
     if (o_ptr->is_held_by_monster()) {
         return floor.m_list[o_ptr->held_m_idx].hold_o_idx_list;
@@ -317,7 +317,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
             const auto &grid = floor.get_grid(pos_target);
             auto k = 0;
             for (const auto this_o_idx : grid.o_idx_list) {
-                const auto &item = floor.o_list[this_o_idx];
+                const auto &item = *floor.o_list[this_o_idx];
                 if (item.is_similar(*j_ptr)) {
                     comb = true;
                 }
@@ -433,7 +433,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
     auto is_absorbed = false;
     auto &grid = floor.get_grid(pos_drop);
     for (const auto this_o_idx : grid.o_idx_list) {
-        auto &item = floor.o_list[this_o_idx];
+        auto &item = *floor.o_list[this_o_idx];
         if (item.is_similar(*j_ptr)) {
             item.absorb(*j_ptr);
             is_absorbed = true;
@@ -460,8 +460,8 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
     }
 
     if (!is_absorbed) {
-        floor.o_list[item_idx] = j_ptr->clone();
-        j_ptr = &floor.o_list[item_idx];
+        *floor.o_list[item_idx] = j_ptr->clone();
+        j_ptr = floor.o_list[item_idx].get();
         j_ptr->set_position(pos_drop);
         j_ptr->held_m_idx = 0;
         grid.o_idx_list.add(floor, item_idx);
@@ -498,7 +498,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
  */
 void floor_item_charges(const FloorType &floor, INVENTORY_IDX i_idx)
 {
-    const auto &item = floor.o_list[i_idx];
+    const auto &item = *floor.o_list[i_idx];
     if (!item.is_wand_staff() || !item.is_known()) {
         return;
     }
@@ -526,7 +526,7 @@ void floor_item_charges(const FloorType &floor, INVENTORY_IDX i_idx)
  */
 void floor_item_describe(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    const auto &item = player_ptr->current_floor_ptr->o_list[i_idx];
+    const auto &item = *player_ptr->current_floor_ptr->o_list[i_idx];
     const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
     if (item.number <= 0) {

@@ -5,6 +5,7 @@
 #include "locale/language-switcher.h"
 #include "monster/monster-timed-effects.h"
 #include "object-enchant/item-apply-magic.h"
+#include "range/v3/algorithm/generate_n.hpp"
 #include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-allocation.h"
@@ -29,6 +30,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
 #include "world/world.h"
+#include <range/v3/algorithm.hpp>
 
 FloorType::FloorType()
     : grid_array(MAX_HGT, std::vector<Grid>(MAX_WID))
@@ -36,6 +38,8 @@ FloorType::FloorType()
     , m_list(MAX_FLOOR_MONSTERS)
     , quest_number(QuestId::NONE)
 {
+    ranges::generate(this->o_list, [] { return std::make_shared<ItemEntity>(); });
+
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
         this->mproc_list[mte] = std::vector<short>(MAX_FLOOR_MONSTERS, {});
         this->mproc_max[mte] = 0;
@@ -576,7 +580,7 @@ short FloorType::pop_empty_index_item()
     }
 
     for (short i = 1; i < this->o_max; i++) {
-        if (this->o_list[i].is_valid()) {
+        if (this->o_list[i]->is_valid()) {
             continue;
         }
 
@@ -605,7 +609,7 @@ bool FloorType::is_grid_changeable(const Pos2D &pos) const
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
-        const auto &item = this->o_list[this_o_idx];
+        const auto &item = *this->o_list[this_o_idx];
         if (item.is_fixed_or_random_artifact()) {
             return false;
         }

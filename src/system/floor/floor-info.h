@@ -72,7 +72,7 @@ public:
 
     GAME_TURN generated_turn = 0; /* Turn when level began */
 
-    std::vector<ItemEntity> o_list; /*!< The array of dungeon items [max_o_idx] */
+    std::vector<std::shared_ptr<ItemEntity>> o_list; /*!< The array of dungeon items [max_o_idx] */
     OBJECT_IDX o_max = 0; /* Number of allocated objects */
     OBJECT_IDX o_cnt = 0; /* Number of live objects */
 

@@ -28,8 +28,8 @@ static void compact_objects_aux(FloorType &floor, OBJECT_IDX i1, OBJECT_IDX i2)
     auto &list = get_o_idx_list_contains(floor, i1);
     std::replace(list.begin(), list.end(), i1, i2);
 
-    // 要素番号i1のオブジェクトを要素番号i2に移動し、i1はクリアする
-    floor.o_list[i2] = std::exchange(floor.o_list[i1], {});
+    floor.o_list[i2].swap(floor.o_list[i1]);
+    floor.o_list[i1]->wipe();
 }
 
 /*!
@@ -67,7 +67,7 @@ void compact_objects(PlayerType *player_ptr, int size)
         int cur_lev = 5 * cnt;
         int cur_dis = 5 * (20 - cnt);
         for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
-            o_ptr = &floor.o_list[i];
+            o_ptr = floor.o_list[i].get();
 
             if (!o_ptr->is_valid() || (o_ptr->get_baseitem_level() > cur_lev)) {
                 continue;
@@ -106,7 +106,7 @@ void compact_objects(PlayerType *player_ptr, int size)
     }
 
     for (OBJECT_IDX i = floor.o_max - 1; i >= 1; i--) {
-        o_ptr = &floor.o_list[i];
+        o_ptr = floor.o_list[i].get();
         if (o_ptr->is_valid()) {
             continue;
         }

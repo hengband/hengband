@@ -195,7 +195,7 @@ static void update_unique_artifact(const FloorType &floor, int16_t cur_floor_id)
     }
 
     for (int i = 1; i < floor.o_max; i++) {
-        const auto &o_ref = floor.o_list[i];
+        const auto &o_ref = *floor.o_list[i];
         if (!o_ref.is_valid()) {
             continue;
         }
@@ -308,7 +308,7 @@ static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_p
     GAME_TURN absence_ticks = (world.game_turn - tmp_last_visit) / TURNS_PER_TICK;
     reset_unique_by_floor_change(player_ptr);
     for (MONSTER_IDX i = 1; i < floor.o_max; i++) {
-        const auto *o_ptr = &floor.o_list[i];
+        const auto *o_ptr = floor.o_list[i].get();
         if (!o_ptr->is_valid() || !o_ptr->is_fixed_artifact()) {
             continue;
         }

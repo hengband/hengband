@@ -49,7 +49,7 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
     /* Memorize objects */
     auto &floor = *player_ptr->current_floor_ptr;
     for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
-        auto *o_ptr = &floor.o_list[i];
+        auto *o_ptr = floor.o_list[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -145,7 +145,7 @@ void wiz_dark(PlayerType *player_ptr)
 
     /* Forget all objects */
     for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        auto *o_ptr = &player_ptr->current_floor_ptr->o_list[i];
+        auto *o_ptr = player_ptr->current_floor_ptr->o_list[i].get();
 
         if (!o_ptr->is_valid()) {
             continue;
@@ -348,7 +348,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             if (preserve_mode || in_generate) {
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : grid.o_idx_list) {
-                    const auto &item = floor.o_list[this_o_idx];
+                    const auto &item = *floor.o_list[this_o_idx];
                     if (item.is_fixed_artifact() && (!item.is_known() || in_generate)) {
                         item.get_fixed_artifact().is_generated = false;
 

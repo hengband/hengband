@@ -63,7 +63,7 @@ static bool check_floor_item_tag_aux(PlayerType *player_ptr, fis_type *fis_ptr, 
         return false;
     }
 
-    if (!item_tester.okay(&player_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)]) && ((fis_ptr->mode & USE_FULL) == 0)) {
+    if (!item_tester.okay(player_ptr->current_floor_ptr->o_list[0 - (*fis_ptr->cp)].get()) && ((fis_ptr->mode & USE_FULL) == 0)) {
         return false;
     }
 

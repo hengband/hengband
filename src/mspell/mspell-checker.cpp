@@ -88,7 +88,7 @@ bool raise_possible(PlayerType *player_ptr, const MonsterEntity &monster)
 
             const auto &grid = floor.get_grid(pos);
             for (const auto this_o_idx : grid.o_idx_list) {
-                const auto &item = floor.o_list[this_o_idx];
+                const auto &item = *floor.o_list[this_o_idx];
                 if (item.bi_key.tval() == ItemKindType::MONSTER_REMAINS) {
                     const auto &monrace = item.get_monrace();
                     if (!monster_has_hostile_to_other_monster(monster, monrace)) {
