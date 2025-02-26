@@ -6,19 +6,24 @@
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
 #include "io/screen-util.h"
+#include "system/building-type-definition.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "system/terrain/terrain-definition.h"
 #include "target/target-checker.h"
 #include "target/target-sorter.h"
 #include "term/screen-processor.h"
 #include "timed-effect/timed-effects.h"
+#include "util/candidate-selector.h"
+#include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include <functional>
+#include <range/v3/view.hpp>
 #include <unordered_map>
 #include <vector>
 
@@ -66,6 +71,31 @@ static std::vector<Pos2D> tgt_pt_prepare(PlayerType *player_ptr)
     TargetSorter sorter(p_pos);
     std::stable_sort(positions.begin(), positions.end(), [&sorter](const auto &a, const auto &b) { return sorter.compare_distance(a, b); });
     return positions;
+}
+
+static std::optional<Pos2D> select_building_pos(const auto &floor)
+{
+    const auto is_building_pos = [&](const Pos2D &pos) {
+        return floor.get_grid(pos).has(TerrainCharacteristics::BLDG);
+    };
+    const auto pos_buildings =
+        Rect2D(0, 0, floor.height - 1, floor.width - 1) |
+        ranges::views::filter(is_building_pos) |
+        ranges::to<std::vector>();
+
+    if (pos_buildings.size() <= 1) {
+        return pos_buildings.empty() ? std::nullopt : std::make_optional(pos_buildings.front());
+    }
+
+    CandidateSelector cs(_("施設を選択してください:", "Select a building:"), 15);
+    const auto describer = [&](const Pos2D &pos) {
+        const auto &grid = floor.get_grid(pos);
+        const auto &terrain = grid.get_terrain();
+        return buildings.at(terrain.subtype).name;
+    };
+
+    const auto choice = cs.select(pos_buildings, describer);
+    return choice != pos_buildings.end() ? std::make_optional(*choice) : std::nullopt;
 }
 
 /*!
@@ -120,24 +150,31 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
         return;
     }
 
-    const auto cx = (panel_col_min + panel_col_max) / 2;
-    const auto cy = (panel_row_min + panel_row_max) / 2;
     if (this->ch != this->prev_ch) {
         this->n = 0;
     }
     this->prev_ch = this->ch;
     this->n++;
 
-    const auto size = this->positions.size();
-    for (; this->n < size; ++this->n) {
-        const auto &pos_cur = this->positions.at(this->n);
-        const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_cur);
-        if (this->callback(grid)) {
-            break;
+    if (this->ch == '+') {
+        const auto pos_building = select_building_pos(*player_ptr->current_floor_ptr);
+        if (!pos_building) {
+            return;
+        }
+        this->n = 0;
+        this->pos = *pos_building;
+    } else {
+        for (; this->n < this->positions.size(); ++this->n) {
+            const auto &pos_cur = this->positions.at(this->n);
+            const auto &grid = player_ptr->current_floor_ptr->get_grid(pos_cur);
+            if (this->callback(grid)) {
+                this->pos = this->positions.at(this->n);
+                break;
+            }
         }
     }
 
-    if (this->n == size) {
+    if (this->n == this->positions.size()) {
         this->n = 0;
         this->pos = player_ptr->get_position();
         verify_panel(player_ptr);
@@ -147,7 +184,8 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
         rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
         handle_stuff(player_ptr);
     } else {
-        this->pos = this->positions.at(this->n);
+        const auto cx = (panel_col_min + panel_col_max) / 2;
+        const auto cy = (panel_row_min + panel_row_max) / 2;
         const auto dy = 2 * (this->pos.y - cy) / this->height;
         const auto dx = 2 * (this->pos.x - cx) / this->width;
         if ((dy != 0) || (dx != 0)) {
@@ -169,13 +207,13 @@ std::optional<Pos2D> point_target(PlayerType *player_ptr)
         info.positions = tgt_pt_prepare(player_ptr);
     }
 
-    msg_print(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."));
     msg_flag = false;
 
     info.ch = 0;
     info.n = 0;
     std::optional<Pos2D> pos_target;
     while ((info.ch != ESCAPE) && !pos_target) {
+        prt(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."), 0, 0);
         auto move_fast = false;
         move_cursor_relative(info.pos.y, info.pos.x);
         info.ch = inkey();
