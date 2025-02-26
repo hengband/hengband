@@ -19,23 +19,6 @@
 
 /*
  * Determine if a "legal" grid is an "empty" floor grid
- * Determine if monsters are allowed to move into a grid
- *
- * Line 1 -- forbid non-placement grids
- * Line 2 -- forbid normal monsters
- * Line 3 -- forbid the player
- */
-bool is_cave_empty_bold(PlayerType *player_ptr, int y, int x)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    bool is_empty_grid = floor.has_terrain_characteristics({ y, x }, TerrainCharacteristics::PLACE);
-    is_empty_grid &= !(floor.grid_array[y][x].m_idx);
-    is_empty_grid &= !player_ptr->is_located_at({ y, x });
-    return is_empty_grid;
-}
-
-/*
- * Determine if a "legal" grid is an "empty" floor grid
  * Determine if monster generation is allowed in a grid
  *
  * Line 1 -- forbid non-empty grids
@@ -43,9 +26,10 @@ bool is_cave_empty_bold(PlayerType *player_ptr, int y, int x)
  */
 bool is_cave_empty_bold2(PlayerType *player_ptr, int y, int x)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y, x);
-    bool is_empty_grid = is_cave_empty_bold(player_ptr, y, x);
-    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::TREE);
+    auto is_empty_grid = floor.is_empty_at(pos) && (pos != player_ptr->get_position());
+    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !floor.has_terrain_characteristics(pos, TerrainCharacteristics::TREE);
     return is_empty_grid;
 }
 

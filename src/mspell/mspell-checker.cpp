@@ -35,6 +35,7 @@
  */
 bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
 {
+    const auto p_pos = player_ptr->get_position();
     const auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos1(y1, x1);
     for (auto y = y1 - 2; y <= y1 + 2; y++) {
@@ -52,7 +53,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
                 continue;
             }
 
-            if (is_cave_empty_bold(player_ptr, y, x) && projectable(player_ptr, pos1, pos) && projectable(player_ptr, pos, pos1)) {
+            if (floor.is_empty_at(pos) && (pos != p_pos) && projectable(player_ptr, pos1, pos) && projectable(player_ptr, pos, pos1)) {
                 return true;
             }
         }

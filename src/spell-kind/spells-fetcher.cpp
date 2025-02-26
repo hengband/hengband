@@ -125,17 +125,19 @@ bool fetch_monster(PlayerType *player_ptr)
     if (!floor.has_los(*pos)) {
         return false;
     }
-    if (!projectable(player_ptr, player_ptr->get_position(), *pos)) {
+
+    const auto p_pos = player_ptr->get_position();
+    if (!projectable(player_ptr, p_pos, *pos)) {
         return false;
     }
 
     const auto m_name = monster_desc(player_ptr, monster, 0);
     msg_print(_("{}を引き戻した。", "You pull back {}."), m_name);
-    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), *pos, player_ptr->get_position(), 0);
+    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), *pos, p_pos, 0);
     Pos2D pos_target = *pos;
     for (const auto &pos_path : path_g) {
         const auto &grid = floor.get_grid(pos_path);
-        if (floor.contains(pos_path) && is_cave_empty_bold(player_ptr, pos_path.y, pos_path.x) && !grid.is_object() && !pattern_tile(floor, pos_path.y, pos_path.x)) {
+        if (floor.contains(pos_path) && floor.is_empty_at(pos_path) && (pos_path != p_pos) && !grid.is_object() && !pattern_tile(floor, pos_path.y, pos_path.x)) {
             pos_target = pos_path;
         }
     }

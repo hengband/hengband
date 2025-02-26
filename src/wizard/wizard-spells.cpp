@@ -172,12 +172,13 @@ void wiz_dimension_door(PlayerType *player_ptr)
  */
 void wiz_summon_horde(PlayerType *player_ptr)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
     auto pos = p_pos;
     auto attempts = 1000;
     while (--attempts) {
         pos = scatter(player_ptr, p_pos, 3, PROJECT_NONE);
-        if (is_cave_empty_bold(player_ptr, pos.y, pos.x)) {
+        if (floor.is_empty_at(pos) && (pos != p_pos)) {
             break;
         }
     }

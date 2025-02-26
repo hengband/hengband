@@ -655,8 +655,9 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                     }
                 }
 
-                const auto dist = Grid::calc_distance(*pos_target, player_ptr->get_position());
-                if (!is_cave_empty_bold(player_ptr, pos_target->y, pos_target->x) || floor.get_grid(*pos_target).is_icky() || (dist > player_ptr->lev + 2)) {
+                const auto p_pos = player_ptr->get_position();
+                const auto dist = Grid::calc_distance(*pos_target, p_pos);
+                if (!floor.is_empty_at(*pos_target) || (*pos_target == p_pos) || floor.get_grid(*pos_target).is_icky() || (dist > player_ptr->lev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;
                 }

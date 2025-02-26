@@ -1456,7 +1456,7 @@ static bool door_to_darkness(PlayerType *player_ptr, int distance)
             continue;
         }
 
-        if (!is_cave_empty_bold(player_ptr, p_pos->y, p_pos->x) || floor.get_grid(*p_pos).is_icky()) {
+        if (!floor.is_empty_at(*p_pos) || floor.get_grid(*p_pos).is_icky()) {
             msg_print(_("そこには移動できない。", "Can not teleport to there."));
             continue;
         }
