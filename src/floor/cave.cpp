@@ -11,27 +11,10 @@
 #include "system/angband-system.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
-#include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
-
-/*
- * Determine if a "legal" grid is an "empty" floor grid
- * Determine if monster generation is allowed in a grid
- *
- * Line 1 -- forbid non-empty grids
- * Line 2 -- forbid trees while dungeon generation
- */
-bool is_cave_empty_bold2(PlayerType *player_ptr, int y, int x)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    const Pos2D pos(y, x);
-    auto is_empty_grid = floor.is_empty_at(pos) && (pos != player_ptr->get_position());
-    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !floor.has_terrain_characteristics(pos, TerrainCharacteristics::TREE);
-    return is_empty_grid;
-}
 
 /*
  * Does the grid stop disintegration?
