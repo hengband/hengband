@@ -408,7 +408,7 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
 
     /* Hack -- memorize objects */
     for (const auto this_o_idx : grid.o_idx_list) {
-        auto &item = floor.o_list[this_o_idx];
+        auto &item = *floor.o_list[this_o_idx];
         item.marked.set(OmType::FOUND);
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
     }

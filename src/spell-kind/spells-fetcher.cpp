@@ -89,7 +89,7 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
         }
     }
 
-    auto &item = floor.o_list[grid_ptr->o_idx_list.front()];
+    auto &item = *floor.o_list[grid_ptr->o_idx_list.front()];
     if (item.weight > wgt) {
         msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
         return;

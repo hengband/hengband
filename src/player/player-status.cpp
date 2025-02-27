@@ -2701,7 +2701,7 @@ bool player_has_no_spellbooks(PlayerType *player_ptr)
 
     const auto &floor = *player_ptr->current_floor_ptr;
     for (const auto this_o_idx : floor.grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-        const auto *o_ptr = &floor.o_list[this_o_idx];
+        const auto *o_ptr = floor.o_list[this_o_idx].get();
         if (o_ptr->is_valid() && o_ptr->marked.has(OmType::FOUND) && check_book_realm(player_ptr, o_ptr->bi_key)) {
             return false;
         }

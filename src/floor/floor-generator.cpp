@@ -378,8 +378,8 @@ void wipe_generate_random_floor_flags(FloorType &floor)
 void clear_cave(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    for (auto &item : floor.o_list) {
-        item.wipe();
+    for (auto &item_ptr : floor.o_list) {
+        item_ptr->wipe();
     }
 
     floor.o_max = 1;

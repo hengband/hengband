@@ -57,7 +57,7 @@ qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xm
 static void drop_here(FloorType &floor, ItemEntity &&item, POSITION y, POSITION x)
 {
     const auto item_idx = floor.pop_empty_index_item();
-    auto &dropped_item = floor.o_list[item_idx];
+    auto &dropped_item = *floor.o_list[item_idx];
     dropped_item = std::move(item);
     dropped_item.iy = y;
     dropped_item.ix = x;

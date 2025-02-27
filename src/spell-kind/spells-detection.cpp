@@ -175,7 +175,7 @@ bool detect_objects_gold(PlayerType *player_ptr, POSITION range)
     /* Scan objects */
     auto detect = false;
     for (short i = 1; i < floor.o_max; i++) {
-        auto &item = floor.o_list[i];
+        auto &item = *floor.o_list[i];
         if (!item.is_valid()) {
             continue;
         }
@@ -226,7 +226,7 @@ bool detect_objects_normal(PlayerType *player_ptr, POSITION range)
 
     auto detect = false;
     for (short i = 1; i < floor.o_max; i++) {
-        auto &item = floor.o_list[i];
+        auto &item = *floor.o_list[i];
         if (!item.is_valid()) {
             continue;
         }
@@ -293,7 +293,7 @@ bool detect_objects_magic(PlayerType *player_ptr, POSITION range)
 
     auto detect = false;
     for (short i = 1; i < floor.o_max; i++) {
-        auto &item = floor.o_list[i];
+        auto &item = *floor.o_list[i];
         if (!item.is_valid() || item.is_held_by_monster()) {
             continue;
         }

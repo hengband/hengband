@@ -163,7 +163,7 @@ static int get_dungeon_feeling(const auto &floor)
     }
 
     for (short i = 1; i < floor.o_max; i++) {
-        const auto &item = floor.o_list[i];
+        const auto &item = *floor.o_list[i];
         auto delta = 0;
         if (!item.is_valid() || (item.is_known() && item.marked.has(OmType::TOUCHED)) || ((item.ident & IDENT_SENSE) != 0)) {
             continue;

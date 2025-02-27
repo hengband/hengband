@@ -187,7 +187,7 @@ void update_object_by_monster_movement(PlayerType *player_ptr, turn_flags *turn_
         EnumClassFlagGroup<MonsterKindType> flg_monster_kind;
         EnumClassFlagGroup<MonsterResistanceType> flgr;
         OBJECT_IDX this_o_idx = *it++;
-        auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
+        auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         if (turn_flags_ptr->do_take) {
             const auto tval = item.bi_key.tval();
             if (tval == ItemKindType::GOLD || (tval == ItemKindType::MONSTER_REMAINS) || (tval == ItemKindType::STATUE)) {
@@ -216,7 +216,7 @@ void monster_drop_carried_objects(PlayerType *player_ptr, MonsterEntity &monster
 {
     for (auto it = monster.hold_o_idx_list.begin(); it != monster.hold_o_idx_list.end();) {
         const OBJECT_IDX this_o_idx = *it++;
-        auto drop_item = player_ptr->current_floor_ptr->o_list[this_o_idx].clone();
+        auto drop_item = player_ptr->current_floor_ptr->o_list[this_o_idx]->clone();
         drop_item.held_m_idx = 0;
         delete_object_idx(player_ptr, this_o_idx);
         (void)drop_near(player_ptr, &drop_item, monster.get_position());

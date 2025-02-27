@@ -211,7 +211,7 @@ bool easy_open_door(PlayerType *player_ptr, POSITION y, POSITION x)
 bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX o_idx)
 {
     const Pos2D pos(y, x);
-    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
+    auto *o_ptr = player_ptr->current_floor_ptr->o_list[o_idx].get();
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     int i = player_ptr->skill_dis;
     const auto effects = player_ptr->effects();

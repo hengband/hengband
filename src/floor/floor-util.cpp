@@ -121,7 +121,7 @@ void forget_flow(FloorType &floor)
 void wipe_o_list(FloorType &floor)
 {
     for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
-        auto *o_ptr = &floor.o_list[i];
+        auto *o_ptr = floor.o_list[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

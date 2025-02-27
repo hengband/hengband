@@ -730,7 +730,7 @@ void check_no_flowed(PlayerType *player_ptr)
     }
 
     for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-        o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+        o_ptr = player_ptr->current_floor_ptr->o_list[this_o_idx].get();
 
         if (o_ptr->bi_key == BaseitemKey(ItemKindType::NATURE_BOOK, 2)) {
             has_sw = true;

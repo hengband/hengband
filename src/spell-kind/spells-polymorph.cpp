@@ -124,7 +124,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 
     if (preserve_hold_objects) {
         for (const auto this_o_idx : back_m.hold_o_idx_list) {
-            auto *o_ptr = &floor.o_list[this_o_idx];
+            auto *o_ptr = floor.o_list[this_o_idx].get();
             o_ptr->held_m_idx = *m_idx;
         }
     } else {

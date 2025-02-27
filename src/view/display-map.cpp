@@ -223,7 +223,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
-        const auto &item = floor.o_list[this_o_idx];
+        const auto &item = *floor.o_list[this_o_idx];
         if (item.marked.has_not(OmType::FOUND)) {
             continue;
         }

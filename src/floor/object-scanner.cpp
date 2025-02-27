@@ -38,7 +38,7 @@ int scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSI
 
     auto num = 0;
     for (const auto this_o_idx : floor.get_grid(pos).o_idx_list) {
-        const auto &item = floor.o_list[this_o_idx];
+        const auto &item = *floor.o_list[this_o_idx];
         if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester.okay(&item)) {
             continue;
         }
@@ -114,7 +114,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     floor_num = scan_floor_items(player_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
     auto &floor = *player_ptr->current_floor_ptr;
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {
-        const auto &item = floor.o_list[floor_list[i]];
+        const auto &item = *floor.o_list[floor_list[i]];
         const auto item_name = describe_flavor(player_ptr, item, 0);
         out_index[k] = i;
         const auto tval = item.bi_key.tval();
@@ -145,7 +145,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     prepare_label_string_floor(floor, floor_label, floor_list, floor_num);
     for (j = 0; j < k; j++) {
         m = floor_list[out_index[j]];
-        const auto &item = floor.o_list[m];
+        const auto &item = *floor.o_list[m];
         prt("", j + 1, col ? col - 2 : col);
         std::string head;
         if (use_menu && target_item) {
