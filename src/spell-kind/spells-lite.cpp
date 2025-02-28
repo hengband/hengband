@@ -11,6 +11,7 @@
 #include "monster/monster-update.h"
 #include "spell-kind/spells-launcher.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/enums/terrain/path-checker.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -23,8 +24,6 @@
 #include "world/world.h"
 #include <range/v3/view.hpp>
 #include <vector>
-
-using PassBoldFunc = bool (*)(const FloorType &, POSITION, POSITION);
 
 /*!
  * @brief 指定した座標全てを照らす。
@@ -131,51 +130,74 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
 }
 
 /*!
+ * @brief 指定のマスが光を通さず射線のみを通すかを返す。
+ * @param floor フロアへの参照
+ * @param pos 指定座標
+ * @return 射線を通すならばtrueを返す。
+ */
+static bool cave_pass_dark_bold(const FloorType &floor, const Pos2D &pos)
+{
+    return floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
+}
+
+static bool pass_bold(const FloorType &floor, const Pos2D &pos, PathChecker pc)
+{
+    switch (pc) {
+    case PathChecker::PROJECTION:
+        return cave_pass_dark_bold(floor, pos);
+    case PathChecker::LOS:
+        return cave_los_bold(floor, pos.y, pos.x);
+    default:
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid PathChecker! {}", enum2i(pc)));
+    }
+}
+
+/*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する
  * @param floor フロアへの参照
  * @param pos_center 中心座標
- * @param pass_bold 地形条件を返す関数ポインタ
+ * @param pc 地形条件
  * @return 該当地形の数
  */
-static int next_to_open(const FloorType &floor, const Pos2D &pos_center, const PassBoldFunc pass_bold)
+static int next_to_open(const FloorType &floor, const Pos2D &pos_center, PathChecker pc)
 {
-    int len = 0;
-    int blen = 0;
+    auto len = 0;
+    auto blen = 0;
     for (const auto cdir : ranges::views::iota(0, 8) | ranges::views::cycle | ranges::views::take(16)) {
         const auto pos = pos_center + Direction::from_cdir(cdir).vec();
-        if (!pass_bold(floor, pos.y, pos.x)) {
-            if (len > blen) {
-                blen = len;
-            }
-
-            len = 0;
-        } else {
+        if (pass_bold(floor, pos, pc)) {
             len++;
+            continue;
         }
+
+        if (len > blen) {
+            blen = len;
+        }
+
+        len = 0;
     }
 
     return std::max(len, blen);
 }
 
 /*!
- * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
+ * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する
  * @param floor フロアへの参照
  * @param pos_center 中心座標
- * @param pass_bold 地形条件を返す関数ポインタ
+ * @param pc 地形条件
  * @return 該当地形の数
  */
-static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, const PassBoldFunc pass_bold)
+static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, PathChecker pc)
 {
-    auto c = 0;
+    auto count = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos = pos_center + d.vec();
-
-        if (!pass_bold(floor, pos.y, pos.x)) {
-            c++;
+        if (!pass_bold(floor, pos, pc)) {
+            count++;
         }
     }
 
-    return c;
+    return count;
 }
 
 /*!
@@ -184,9 +206,9 @@ static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, co
  * @param points 座標記録用配列
  * @param pos 部屋内の座標
  * @param only_room 部屋内地形のみをチェック対象にするならば TRUE
- * @param pass_bold 地形条件を返す関数ポインタ
+ * @param pc 地形条件
  */
-static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos, bool only_room, const PassBoldFunc pass_bold)
+static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos, bool only_room, PathChecker pc)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
@@ -216,7 +238,7 @@ static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &point
          * properly.
          * This leaves only a check for 6 bounding walls!
          */
-        if (floor.contains(pos) && pass_bold(floor, pos.y, pos.x) && (next_to_walls_adj(floor, pos, pass_bold) == 6) && (next_to_open(floor, pos, pass_bold) <= 1)) {
+        if (floor.contains(pos) && pass_bold(floor, pos, pc) && (next_to_walls_adj(floor, pos, pc) == 6) && (next_to_open(floor, pos, pc) <= 1)) {
             return;
         }
     }
@@ -227,30 +249,6 @@ static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &point
 }
 
 /*!
- * @brief (y,x) が明るくすべきマスなら points に加える
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param points 座標記録用配列
- * @param y 指定Y座標
- * @param x 指定X座標
- */
-static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos)
-{
-    cave_temp_room_aux(player_ptr, points, pos, false, cave_los_bold);
-}
-
-/*!
- * @brief 指定のマスが光を通さず射線のみを通すかを返す。 / Aux function -- see below
- * @param floor フロアへの参照
- * @param y 指定Y座標
- * @param x 指定X座標
- * @return 射線を通すならばtrueを返す。
- */
-static bool cave_pass_dark_bold(const FloorType &floor, POSITION y, POSITION x)
-{
-    return floor.has_terrain_characteristics({ y, x }, TerrainCharacteristics::PROJECT);
-}
-
-/*!
  * @brief (y,x) が暗くすべきマスなら points に加える
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param y 指定Y座標
@@ -258,7 +256,18 @@ static bool cave_pass_dark_bold(const FloorType &floor, POSITION y, POSITION x)
  */
 static void cave_temp_unlite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos)
 {
-    cave_temp_room_aux(player_ptr, points, pos, true, cave_pass_dark_bold);
+    cave_temp_room_aux(player_ptr, points, pos, true, PathChecker::PROJECTION);
+}
+
+/*!
+ * @brief (y,x) が明るくすべきマスなら points に加える
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param points 座標記録用配列
+ * @param pos 指定座標
+ */
+static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos)
+{
+    cave_temp_room_aux(player_ptr, points, pos, false, PathChecker::LOS);
 }
 
 /*!
@@ -326,22 +335,13 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
     cave_temp_unlite_room_aux(player_ptr, points, { y1, x1 });
     for (size_t i = 0; i < size(points); i++) {
         const auto &point = points[i];
-        const POSITION y = point.y;
-        const POSITION x = point.x;
-
-        if (!cave_pass_dark_bold(floor, y, x)) {
+        if (!cave_pass_dark_bold(floor, point)) {
             continue;
         }
 
-        cave_temp_unlite_room_aux(player_ptr, points, { y + 1, x });
-        cave_temp_unlite_room_aux(player_ptr, points, { y - 1, x });
-        cave_temp_unlite_room_aux(player_ptr, points, { y, x + 1 });
-        cave_temp_unlite_room_aux(player_ptr, points, { y, x - 1 });
-
-        cave_temp_unlite_room_aux(player_ptr, points, { y + 1, x + 1 });
-        cave_temp_unlite_room_aux(player_ptr, points, { y - 1, x - 1 });
-        cave_temp_unlite_room_aux(player_ptr, points, { y - 1, x + 1 });
-        cave_temp_unlite_room_aux(player_ptr, points, { y + 1, x - 1 });
+        for (const auto &d : Direction::directions_8()) {
+            cave_temp_unlite_room_aux(player_ptr, points, point + d.vec());
+        }
     }
 
     // 記録したマスを実際に暗くする。
