@@ -129,18 +129,6 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
     }
 }
 
-static bool pass_bold(const FloorType &floor, const Pos2D &pos, PathChecker pc)
-{
-    switch (pc) {
-    case PathChecker::PROJECTION:
-        return floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
-    case PathChecker::LOS:
-        return floor.has_los_terrain_at(pos);
-    default:
-        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid PathChecker! {}", enum2i(pc)));
-    }
-}
-
 /*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する
  * @param floor フロアへの参照
@@ -154,7 +142,7 @@ static int next_to_open(const FloorType &floor, const Pos2D &pos_center, PathChe
     auto blen = 0;
     for (const auto cdir : ranges::views::iota(0, 8) | ranges::views::cycle | ranges::views::take(16)) {
         const auto pos = pos_center + Direction::from_cdir(cdir).vec();
-        if (pass_bold(floor, pos, pc)) {
+        if (floor.check_path(pos, pc)) {
             len++;
             continue;
         }
@@ -181,7 +169,7 @@ static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, Pa
     auto count = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos = pos_center + d.vec();
-        if (!pass_bold(floor, pos, pc)) {
+        if (!floor.check_path(pos, pc)) {
             count++;
         }
     }
@@ -227,7 +215,7 @@ static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &point
          * properly.
          * This leaves only a check for 6 bounding walls!
          */
-        if (floor.contains(pos) && pass_bold(floor, pos, pc) && (next_to_walls_adj(floor, pos, pc) == 6) && (next_to_open(floor, pos, pc) <= 1)) {
+        if (floor.contains(pos) && floor.check_path(pos, pc) && (next_to_walls_adj(floor, pos, pc) == 6) && (next_to_open(floor, pos, pc) <= 1)) {
             return;
         }
     }
