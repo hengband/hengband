@@ -106,7 +106,7 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
                 break;
             }
         } else if (flg & PROJECT_LOS) {
-            if (!cave_los_bold(floor, pos.y, pos.x)) {
+            if (!floor.has_los_terrain_at(pos)) {
                 break;
             }
         } else {

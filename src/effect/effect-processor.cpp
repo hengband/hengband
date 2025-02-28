@@ -127,7 +127,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 break;
             }
         } else if (flag & PROJECT_LOS) {
-            if (!cave_los_bold(floor, pos.y, pos.x) && (rad > 0)) {
+            if (!floor.has_los_terrain_at(pos) && (rad > 0)) {
                 break;
             }
         } else {

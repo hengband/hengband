@@ -178,7 +178,7 @@ bool FloorType::has_los_at(const Pos2D &pos) const
     return this->get_grid(pos).has_los();
 }
 
-bool FloorType::has_los_terain_at(const Pos2D &pos) const
+bool FloorType::has_los_terrain_at(const Pos2D &pos) const
 {
     return this->get_grid(pos).has_los_terrain();
 }
