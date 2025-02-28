@@ -46,16 +46,9 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
     const auto known = grid.has_los();
     src_idx = is_monster(src_idx) ? src_idx : 0;
     dam = (dam + r) / (r + 1);
-    std::set<OBJECT_IDX> processed_list;
-    for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
-        const OBJECT_IDX this_o_idx = *it++;
-
-        if (auto pit = processed_list.find(this_o_idx); pit != processed_list.end()) {
-            continue;
-        }
-
-        processed_list.insert(this_o_idx);
-
+    std::vector<OBJECT_IDX> delete_i_idx_list;
+    std::vector<short> affected_potions;
+    for (const auto this_o_idx : grid.o_idx_list) {
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         auto ignore = false;
         auto do_kill = false;
@@ -279,18 +272,17 @@ bool affect_item(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITI
             msg_format(_("%sは%s", "The %s%s"), item_name.data(), note_kill);
         }
 
-        const auto bi_id = item.bi_id;
-        const auto is_potion = item.is_potion();
-        delete_object_idx(player_ptr, this_o_idx);
-        if (is_potion) {
-            (void)potion_smash_effect(player_ptr, src_idx, y, x, bi_id);
-
-            // 薬の破壊効果によりリストの次のアイテムが破壊された可能性があるのでリストの最初から処理をやり直す
-            // 処理済みのアイテムは processed_list に登録されており、スキップされる
-            it = grid.o_idx_list.begin();
+        delete_i_idx_list.push_back(this_o_idx);
+        if (item.is_potion()) {
+            affected_potions.push_back(item.bi_id);
         }
 
         lite_spot(player_ptr, pos);
+    }
+
+    delete_items(player_ptr, std::move(delete_i_idx_list));
+    for (const auto bi_id : affected_potions) {
+        (void)potion_smash_effect(player_ptr, src_idx, y, x, bi_id);
     }
 
     return is_item_affected;

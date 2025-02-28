@@ -19,6 +19,7 @@
 #include "target/target-checker.h"
 #include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
+#include <range/v3/view.hpp>
 
 /*!
  * @brief 変身処理向けにモンスターの近隣レベル帯モンスターを返す
@@ -128,10 +129,7 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
             o_ptr->held_m_idx = *m_idx;
         }
     } else {
-        for (auto it = back_m.hold_o_idx_list.begin(); it != back_m.hold_o_idx_list.end();) {
-            OBJECT_IDX this_o_idx = *it++;
-            delete_object_idx(player_ptr, this_o_idx);
-        }
+        delete_items(player_ptr, back_m.hold_o_idx_list | ranges::to_vector);
     }
 
     if (targeted) {

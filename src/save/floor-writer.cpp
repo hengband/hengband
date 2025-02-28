@@ -20,6 +20,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
+#include <range/v3/view.hpp>
 
 namespace {
 /*
@@ -140,10 +141,9 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     /*** Dump objects ***/
-    wr_u16b(floor.o_max);
-    for (int i = 1; i < floor.o_max; i++) {
-        const auto &item = *floor.o_list[i];
-        wr_item(item);
+    wr_u16b(static_cast<uint16_t>(floor.o_list.size()));
+    for (const auto &item_ptr : floor.o_list | ranges::views::drop(1)) {
+        wr_item(*item_ptr);
     }
 
     /*** Dump the monsters ***/
@@ -225,7 +225,6 @@ bool wr_dungeon(PlayerType *player_ptr)
  */
 static bool save_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
 
     auto tmp8u = static_cast<uint8_t>(Rand_external(256));

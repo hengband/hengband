@@ -4,6 +4,7 @@
 #include "system/angband.h"
 #include "util/point-2d.h"
 #include <optional>
+#include <vector>
 
 class ObjectIndexList;
 
@@ -17,6 +18,7 @@ void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
 void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx);
 void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx);
 void excise_object_idx(FloorType &floor, OBJECT_IDX o_idx);
+void delete_items(PlayerType *player_ptr, std::vector<OBJECT_IDX> delete_i_idx_list);
 ObjectIndexList &get_o_idx_list_contains(FloorType &floor, OBJECT_IDX o_idx);
 short drop_near(PlayerType *player_ptr, ItemEntity *o_ptr, const Pos2D &pos, std::optional<int> chance = std::nullopt);
 void floor_item_charges(const FloorType &floor, INVENTORY_IDX i_idx);

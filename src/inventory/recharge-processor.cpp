@@ -115,16 +115,15 @@ void recharge_magic_items(PlayerType *player_ptr)
         wild_regen = 20;
     }
 
-    for (i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        auto *o_ptr = player_ptr->current_floor_ptr->o_list[i].get();
-        if (!o_ptr->is_valid()) {
+    for (const auto &item_ptr : player_ptr->current_floor_ptr->o_list) {
+        if (!item_ptr->is_valid()) {
             continue;
         }
 
-        if ((o_ptr->bi_key.tval() == ItemKindType::ROD) && (o_ptr->timeout)) {
-            o_ptr->timeout -= (TIME_EFFECT)o_ptr->number;
-            if (o_ptr->timeout < 0) {
-                o_ptr->timeout = 0;
+        if ((item_ptr->bi_key.tval() == ItemKindType::ROD) && (item_ptr->timeout)) {
+            item_ptr->timeout -= (TIME_EFFECT)item_ptr->number;
+            if (item_ptr->timeout < 0) {
+                item_ptr->timeout = 0;
             }
         }
     }

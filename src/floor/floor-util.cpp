@@ -22,6 +22,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "world/world.h"
+#include <range/v3/view.hpp>
 
 /*
  * The array of floor [MAX_WID][MAX_HGT].
@@ -120,25 +121,23 @@ void forget_flow(FloorType &floor)
  */
 void wipe_o_list(FloorType &floor)
 {
-    for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
-        auto *o_ptr = floor.o_list[i].get();
-        if (!o_ptr->is_valid()) {
+    for (const auto &[i_idx, item_ptr] : floor.o_list | ranges::views::enumerate) {
+        if (!item_ptr->is_valid()) {
             continue;
         }
 
         if (!AngbandWorld::get_instance().character_dungeon || preserve_mode) {
-            if (o_ptr->is_fixed_artifact() && !o_ptr->is_known()) {
-                o_ptr->get_fixed_artifact().is_generated = false;
+            if (item_ptr->is_fixed_artifact() && !item_ptr->is_known()) {
+                item_ptr->get_fixed_artifact().is_generated = false;
             }
         }
 
-        auto &list = get_o_idx_list_contains(floor, i);
+        auto &list = get_o_idx_list_contains(floor, static_cast<OBJECT_IDX>(i_idx));
         list.clear();
-        o_ptr->wipe();
     }
 
-    floor.o_max = 1;
-    floor.o_cnt = 0;
+    floor.o_list.clear();
+    floor.o_list.push_back(std::make_shared<ItemEntity>()); // 0番にダミーアイテムを用意
 }
 
 /*

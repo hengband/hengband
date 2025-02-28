@@ -92,8 +92,8 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
     int can_pickup = 0;
     auto &o_idx_list = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    for (auto it = o_idx_list.begin(); it != o_idx_list.end();) {
-        const OBJECT_IDX this_o_idx = *it++;
+    std::vector<OBJECT_IDX> delete_i_idx_list;
+    for (const auto this_o_idx : o_idx_list) {
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         const auto item_name = describe_flavor(player_ptr, item, 0);
         disturb(player_ptr, false, false);
@@ -104,7 +104,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
             player_ptr->au += item.pval;
             rfu.set_flag(MainWindowRedrawingFlag::GOLD);
             rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
-            delete_object_idx(player_ptr, this_o_idx);
+            delete_i_idx_list.push_back(this_o_idx);
             continue;
         } else if (item.marked.has(OmType::SUPRESS_MESSAGE)) {
             item.marked.reset(OmType::SUPRESS_MESSAGE);
@@ -118,6 +118,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         floor_num++;
         floor_o_idx = this_o_idx;
     }
+    delete_items(player_ptr, std::move(delete_i_idx_list));
 
     if (!floor_num) {
         return;
@@ -254,14 +255,14 @@ void carry(PlayerType *player_ptr, bool pickup)
         return;
     }
 
-    for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
-        const OBJECT_IDX this_o_idx = *it++;
+    std::vector<OBJECT_IDX> delete_i_idx_list;
+    for (const auto this_o_idx : grid.o_idx_list) {
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         const auto item_name = describe_flavor(player_ptr, item, 0);
         disturb(player_ptr, false, false);
         if (item.bi_key.tval() == ItemKindType::GOLD) {
             const auto value = item.pval;
-            delete_object_idx(player_ptr, this_o_idx);
+            delete_i_idx_list.push_back(this_o_idx);
             msg_format(_(" $%d の価値がある%sを見つけた。", "You collect %d gold pieces worth of %s."), value, item_name.data());
             sound(SoundKind::SELL);
             player_ptr->au += value;
@@ -295,4 +296,5 @@ void carry(PlayerType *player_ptr, bool pickup)
             describe_pickup_item(player_ptr, this_o_idx);
         }
     }
+    delete_items(player_ptr, std::move(delete_i_idx_list));
 }

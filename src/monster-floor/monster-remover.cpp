@@ -14,6 +14,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "tracking/health-bar-tracker.h"
+#include <range/v3/view.hpp>
 
 /*!
  * @brief モンスター配列からモンスターを消去する
@@ -73,10 +74,7 @@ void delete_monster_idx(PlayerType *player_ptr, short m_idx)
     }
 
     floor.get_grid(m_pos).m_idx = 0;
-    for (auto it = monster.hold_o_idx_list.begin(); it != monster.hold_o_idx_list.end();) {
-        const OBJECT_IDX this_o_idx = *it++;
-        delete_object_idx(player_ptr, this_o_idx);
-    }
+    delete_items(player_ptr, monster.hold_o_idx_list | ranges::to_vector);
 
     // 召喚元のモンスターが消滅した時は、召喚されたモンスターのparent_m_idxが
     // 召喚されたモンスター自身のm_idxを指すようにする

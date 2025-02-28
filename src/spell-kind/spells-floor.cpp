@@ -48,15 +48,14 @@ void wiz_lite(PlayerType *player_ptr, bool ninja)
 {
     /* Memorize objects */
     auto &floor = *player_ptr->current_floor_ptr;
-    for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
-        auto *o_ptr = floor.o_list[i].get();
-        if (!o_ptr->is_valid()) {
+    for (auto &item_ptr : floor.o_list) {
+        if (!item_ptr->is_valid()) {
             continue;
         }
-        if (o_ptr->is_held_by_monster()) {
+        if (item_ptr->is_held_by_monster()) {
             continue;
         }
-        o_ptr->marked.set(OmType::FOUND);
+        item_ptr->marked.set(OmType::FOUND);
     }
 
     /* Scan all normal grids */
@@ -144,19 +143,17 @@ void wiz_dark(PlayerType *player_ptr)
     }
 
     /* Forget all objects */
-    for (OBJECT_IDX i = 1; i < player_ptr->current_floor_ptr->o_max; i++) {
-        auto *o_ptr = player_ptr->current_floor_ptr->o_list[i].get();
-
-        if (!o_ptr->is_valid()) {
+    for (auto &item_ptr : player_ptr->current_floor_ptr->o_list) {
+        if (!item_ptr->is_valid()) {
             continue;
         }
-        if (o_ptr->is_held_by_monster()) {
+        if (item_ptr->is_held_by_monster()) {
             continue;
         }
 
         /* Forget the object */
         // 意図としては OmType::TOUCHED を維持しつつ OmType::FOUND を消す事と思われるが一応元のロジックを維持しておく
-        o_ptr->marked &= { OmType::TOUCHED };
+        item_ptr->marked &= { OmType::TOUCHED };
     }
 
     /* Forget travel route when we have forgotten map */
