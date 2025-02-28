@@ -562,7 +562,7 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
 
     const auto can_speak = monster.get_appearance_monrace().speak_flags.any();
     constexpr auto chance_speak = 8;
-    if (!can_speak || !aware || !one_in_(chance_speak) || !floor.has_los({ oy, ox }) || !projectable(player_ptr, pos, player_ptr->get_position())) {
+    if (!can_speak || !aware || !one_in_(chance_speak) || !floor.has_los_at({ oy, ox }) || !projectable(player_ptr, pos, player_ptr->get_position())) {
         return;
     }
 

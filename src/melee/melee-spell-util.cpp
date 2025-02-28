@@ -18,7 +18,7 @@ melee_spell_type::melee_spell_type(PlayerType *player_ptr, MONSTER_IDX m_idx)
     this->t_ptr = nullptr;
     this->r_ptr = &this->m_ptr->get_monrace();
     this->see_m = is_seen(player_ptr, *this->m_ptr);
-    this->maneable = floor.has_los(this->m_ptr->get_position());
+    this->maneable = floor.has_los_at(this->m_ptr->get_position());
     this->pet = this->m_ptr->is_pet();
     const auto &dungeon = floor.get_dungeon_definition();
     const auto is_in_dungeon = floor.is_underground();

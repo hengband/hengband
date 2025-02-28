@@ -279,7 +279,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             const auto &[ny, nx] = *path_g_ite;
 
             if (delay_factor > 0 && !this->player_ptr->effects()->blindness().is_blind()) {
-                if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
+                if (panel_contains(ny, nx) && floor.has_los_at({ ny, nx })) {
                     print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
                     term_fresh();
@@ -360,11 +360,11 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
             const auto &pos = (n == 1) ? center : *std::next(it, -1);
             const auto &pos_new = *it;
 
-            if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
+            if (panel_contains(pos.y, pos.x) && floor.has_los_at(pos)) {
                 print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
                 drawn_pos_list.push_back(pos);
             }
-            if (panel_contains(pos_new.y, pos_new.x) && floor.has_los(pos_new)) {
+            if (panel_contains(pos_new.y, pos_new.x) && floor.has_los_at(pos_new)) {
                 print_bolt_pict(player_ptr, pos.y, pos.x, pos_new.y, pos_new.x, typ);
                 if (std::find(last_pos_list.begin(), last_pos_list.end(), *it) != last_pos_list.end()) {
                     drawn_last_pos_list.push_back(pos_new);
@@ -375,7 +375,7 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
         term_xtra(TERM_XTRA_DELAY, delay_factor);
 
         for (const auto &pos : drawn_last_pos_list) {
-            if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
+            if (panel_contains(pos.y, pos.x) && floor.has_los_at(pos)) {
                 print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
                 drawn_pos_list.push_back(pos);
             }
@@ -451,7 +451,7 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     std::vector<Pos2D> drawn_pos_list;
     for (const auto &[ny, nx] : path_g) {
         if (delay_factor > 0) {
-            if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
+            if (panel_contains(ny, nx) && floor.has_los_at({ ny, nx })) {
                 print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                 move_cursor_relative(ny, nx);
                 term_fresh();

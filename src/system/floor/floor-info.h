@@ -113,7 +113,7 @@ public:
     const DungeonDefinition &get_dungeon_definition() const; //!< @details 定義データなので非const 版の使用は禁止.
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
-    bool has_los(const Pos2D &pos) const;
+    bool has_los_at(const Pos2D &pos) const;
     bool has_terrain_characteristics(const Pos2D &pos, TerrainCharacteristics tc) const;
     bool is_special() const;
     bool can_teleport_level(bool to_player = false) const;

@@ -162,7 +162,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
     }
 
     turn_flags_ptr->did_kill_item = true;
-    if (floor.has_los({ ny, nx })) {
+    if (floor.has_los_at({ ny, nx })) {
         msg_format(_("%s^が%sを破壊した。", "%s^ destroys %s."), m_name.data(), o_name.data());
     }
 

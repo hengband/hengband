@@ -160,7 +160,7 @@ QuestId FloorType::get_quest_id(const int bonus) const
  * @param pos 座標
  * @return LOSフラグを持つか否か
  */
-bool FloorType::has_los(const Pos2D &pos) const
+bool FloorType::has_los_at(const Pos2D &pos) const
 {
     return this->get_grid(pos).has_los();
 }

@@ -438,7 +438,7 @@ bool activate_dispel_magic(PlayerType *player_ptr)
         return true;
     }
 
-    if (!floor.has_los(*pos) || !projectable(player_ptr, player_ptr->get_position(), *pos)) {
+    if (!floor.has_los_at(*pos) || !projectable(player_ptr, player_ptr->get_position(), *pos)) {
         return true;
     }
 
