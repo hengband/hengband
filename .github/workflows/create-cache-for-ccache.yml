@@ -34,7 +34,7 @@ jobs:
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-24.04
-      cxx: g++-13
+      cxx: g++-14
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       configure-opts: "--disable-pch"
       use-ccache: true
@@ -44,7 +44,7 @@ jobs:
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-24.04
-      cxx: g++-13
+      cxx: g++-14
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       configure-opts: "--disable-pch --disable-japanese"
       distcheck: true
