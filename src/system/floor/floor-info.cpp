@@ -319,6 +319,13 @@ bool FloorType::is_empty_at(const Pos2D &pos) const
     return is_empty_grid;
 }
 
+bool FloorType::can_generate_monster_at(const Pos2D &pos) const
+{
+    auto is_empty_grid = this->is_empty_at(pos);
+    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !this->has_terrain_characteristics(pos, TerrainCharacteristics::TREE);
+    return is_empty_grid;
+}
+
 /*!
  * @brief 特定の財宝を生成する。指定がない場合、生成階に応じたランダムな財宝を生成する。
  * @param bi_key 財宝を固定生成する場合のBaseitemKey

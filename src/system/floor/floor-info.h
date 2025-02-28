@@ -128,6 +128,7 @@ public:
     bool order_pet_dismission(short index1, short index2, short riding_index) const;
     bool contains(const Pos2D &pos, FloorBoundary fb = FloorBoundary::OUTER_WALL_EXCLUSIVE) const;
     bool is_empty_at(const Pos2D &pos) const;
+    bool can_generate_monster_at(const Pos2D &pos) const;
 
     ItemEntity make_gold(std::optional<BaseitemKey> bi_key = std::nullopt) const;
     std::optional<ItemEntity> try_make_instant_artifact() const;
