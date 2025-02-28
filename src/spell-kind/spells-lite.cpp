@@ -131,18 +131,16 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
 }
 
 /*!
- * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
+ * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する
  * @param floor フロアへの参照
- * @param cy Y座標
- * @param cx X座標
+ * @param pos_center 中心座標
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_open(const FloorType &floor, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
+static int next_to_open(const FloorType &floor, const Pos2D &pos_center, const PassBoldFunc pass_bold)
 {
     int len = 0;
     int blen = 0;
-    const Pos2D pos_center(cy, cx);
     for (const auto cdir : ranges::views::iota(0, 8) | ranges::views::cycle | ranges::views::take(16)) {
         const auto pos = pos_center + Direction::from_cdir(cdir).vec();
         if (!pass_bold(floor, pos.y, pos.x)) {
@@ -162,16 +160,15 @@ static int next_to_open(const FloorType &floor, const POSITION cy, const POSITIO
 /*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する / Determine how much contiguous open space this grid is next to
  * @param floor フロアへの参照
- * @param cy Y座標
- * @param cx X座標
+ * @param pos_center 中心座標
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_walls_adj(const FloorType &floor, const POSITION cy, const POSITION cx, const PassBoldFunc pass_bold)
+static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, const PassBoldFunc pass_bold)
 {
     auto c = 0;
     for (const auto &d : Direction::directions_8()) {
-        const auto pos = Pos2D(cy, cx) + d.vec();
+        const auto pos = pos_center + d.vec();
 
         if (!pass_bold(floor, pos.y, pos.x)) {
             c++;
@@ -182,11 +179,10 @@ static int next_to_walls_adj(const FloorType &floor, const POSITION cy, const PO
 }
 
 /*!
- * @brief (y,x) が指定条件を満たすなら points に加える
+ * @brief pos が指定条件を満たすなら points に加える
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param points 座標記録用配列
- * @param y 部屋内のy座標1点
- * @param x 部屋内のx座標1点
+ * @param pos 部屋内の座標
  * @param only_room 部屋内地形のみをチェック対象にするならば TRUE
  * @param pass_bold 地形条件を返す関数ポインタ
  */
@@ -220,7 +216,7 @@ static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &point
          * properly.
          * This leaves only a check for 6 bounding walls!
          */
-        if (floor.contains(pos) && pass_bold(floor, pos.y, pos.x) && (next_to_walls_adj(floor, pos.y, pos.x, pass_bold) == 6) && (next_to_open(floor, pos.y, pos.x, pass_bold) <= 1)) {
+        if (floor.contains(pos) && pass_bold(floor, pos.y, pos.x) && (next_to_walls_adj(floor, pos, pass_bold) == 6) && (next_to_open(floor, pos, pass_bold) <= 1)) {
             return;
         }
     }
