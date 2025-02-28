@@ -45,7 +45,8 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    ProjectionPath path_g(floor, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), p_pos, p_pos, pos, PROJECT_PATH | PROJECT_THRU);
+    const auto range = project_length != 0 ? project_length : AngbandSystem::get_instance().get_max_range();
+    ProjectionPath path_g(floor, range, p_pos, p_pos, pos, PROJECT_PATH | PROJECT_THRU);
     RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MAP);
     handle_stuff(player_ptr);
     for (const auto &pos_path : path_g) {
