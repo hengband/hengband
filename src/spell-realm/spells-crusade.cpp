@@ -81,7 +81,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
             continue;
         }
 
-        auto should_cast = floor.contains(pos_explode) && !cave_stop_disintegration(floor, pos_explode.y, pos_explode.x);
+        auto should_cast = floor.contains(pos_explode) && !floor.can_block_disintegration_at(pos_explode);
         should_cast &= in_disintegration_range(floor, pos_target, pos_explode);
         if (!should_cast) {
             continue;

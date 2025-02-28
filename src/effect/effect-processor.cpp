@@ -123,7 +123,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     auto &floor = *player_ptr->current_floor_ptr;
     for (const auto &pos : path_g) {
         if (flag & PROJECT_DISI) {
-            if (cave_stop_disintegration(*player_ptr->current_floor_ptr, pos.y, pos.x) && (rad > 0)) {
+            if (floor.can_block_disintegration_at(pos) && (rad > 0)) {
                 break;
             }
         } else if (flag & PROJECT_LOS) {

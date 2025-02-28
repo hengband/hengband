@@ -83,7 +83,7 @@ static bool project_stop(const FloorType &floor, const Pos2D &p_pos, ProjectionP
     }
 
     if (any_bits(pph_ptr->flag, PROJECT_DISI)) {
-        if (!pph_ptr->positions.empty() && cave_stop_disintegration(floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
+        if (!pph_ptr->positions.empty() && floor.can_block_disintegration_at(pph_ptr->pos)) {
             return true;
         }
     } else if (any_bits(pph_ptr->flag, PROJECT_LOS)) {

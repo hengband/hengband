@@ -17,18 +17,6 @@
 #include "world/world.h"
 
 /*
- * Does the grid stop disintegration?
- */
-bool cave_stop_disintegration(const FloorType &floor, int y, int x)
-{
-    const Pos2D pos(y, x);
-    const auto can_stop = !floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
-    auto is_bold = !floor.has_terrain_characteristics(pos, TerrainCharacteristics::HURT_DISI);
-    is_bold |= floor.has_terrain_characteristics(pos, TerrainCharacteristics::PERMANENT);
-    return can_stop && is_bold;
-}
-
-/*
  * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
  * @param floor フロアへの参照
  * @param y 指定Y座標
