@@ -239,15 +239,15 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
     case 't':
         teleport_player(player_ptr, 100, TELEPORT_SPONTANEOUS);
         return true;
-    case 'u':
-        for (int y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-            for (int x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-                player_ptr->current_floor_ptr->grid_array[y][x].info |= CAVE_GLOW | CAVE_MARK;
-            }
+    case 'u': {
+        auto &floor = *player_ptr->current_floor_ptr;
+        for (const auto &pos : floor.get_area()) {
+            floor.get_grid(pos).info |= CAVE_GLOW | CAVE_MARK;
         }
 
         wiz_lite(player_ptr, false);
         return true;
+    }
     case 'w':
         wiz_lite(player_ptr, PlayerClass(player_ptr).equals(PlayerClassType::NINJA));
         return true;

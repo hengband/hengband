@@ -457,79 +457,73 @@ void wilderness_gen(PlayerType *player_ptr)
     floor.get_grid({ MAX_HGT - 1, 0 }).mimic = border.bottom_left;
     floor.get_grid({ MAX_HGT - 1, MAX_WID - 1 }).mimic = border.bottom_right;
     const auto &world = AngbandWorld::get_instance();
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            if (world.is_daytime()) {
-                grid.info |= CAVE_GLOW;
-                if (view_perma_grids) {
-                    grid.info |= CAVE_MARK;
-                }
-
-                continue;
-            }
-
-            const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
-            auto can_darken = !grid.is_mirror();
-            can_darken &= terrain.flags.has_none_of({ TerrainCharacteristics::QUEST_ENTER, TerrainCharacteristics::ENTRANCE });
-            if (can_darken) {
-                grid.info &= ~(CAVE_GLOW);
-                if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
-                    grid.info &= ~(CAVE_MARK);
-                }
-
-                continue;
-            }
-
-            if (terrain.flags.has_not(TerrainCharacteristics::ENTRANCE)) {
-                continue;
-            }
-
+    for (const auto &pos : floor.get_area()) {
+        auto &grid = floor.get_grid(pos);
+        if (world.is_daytime()) {
             grid.info |= CAVE_GLOW;
             if (view_perma_grids) {
                 grid.info |= CAVE_MARK;
             }
+
+            continue;
+        }
+
+        const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+        auto can_darken = !grid.is_mirror();
+        can_darken &= terrain.flags.has_none_of({ TerrainCharacteristics::QUEST_ENTER, TerrainCharacteristics::ENTRANCE });
+        if (can_darken) {
+            grid.info &= ~(CAVE_GLOW);
+            if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
+                grid.info &= ~(CAVE_MARK);
+            }
+
+            continue;
+        }
+
+        if (terrain.flags.has_not(TerrainCharacteristics::ENTRANCE)) {
+            continue;
+        }
+
+        grid.info |= CAVE_GLOW;
+        if (view_perma_grids) {
+            grid.info |= CAVE_MARK;
         }
     }
 
     if (player_ptr->teleport_town) {
-        for (auto y = 0; y < floor.height; y++) {
-            for (auto x = 0; x < floor.width; x++) {
-                auto &grid = floor.get_grid({ y, x });
-                const auto &terrain = grid.get_terrain();
-                if (terrain.flags.has_not(TerrainCharacteristics::BLDG)) {
-                    continue;
-                }
-
-                if ((terrain.subtype != 4) && !((player_ptr->town_num == 1) && (terrain.subtype == 0))) {
-                    continue;
-                }
-
-                if (grid.has_monster()) {
-                    delete_monster_idx(player_ptr, grid.m_idx);
-                }
-
-                player_ptr->oldpy = y;
-                player_ptr->oldpx = x;
+        for (const auto &pos : floor.get_area()) {
+            auto &grid = floor.get_grid(pos);
+            const auto &terrain = grid.get_terrain();
+            if (terrain.flags.has_not(TerrainCharacteristics::BLDG)) {
+                continue;
             }
+
+            if ((terrain.subtype != 4) && !((player_ptr->town_num == 1) && (terrain.subtype == 0))) {
+                continue;
+            }
+
+            if (grid.has_monster()) {
+                delete_monster_idx(player_ptr, grid.m_idx);
+            }
+
+            player_ptr->oldpy = pos.y;
+            player_ptr->oldpx = pos.x;
         }
 
         player_ptr->teleport_town = false;
     } else if (floor.is_leaving_dungeon()) {
-        for (auto y = 0; y < floor.height; y++) {
-            for (auto x = 0; x < floor.width; x++) {
-                auto &grid = floor.get_grid({ y, x });
-                if (!grid.has(TerrainCharacteristics::ENTRANCE)) {
-                    continue;
-                }
-
-                if (grid.has_monster()) {
-                    delete_monster_idx(player_ptr, grid.m_idx);
-                }
-
-                player_ptr->oldpy = y;
-                player_ptr->oldpx = x;
+        for (const auto &pos : floor.get_area()) {
+            auto &grid = floor.get_grid(pos);
+            if (!grid.has(TerrainCharacteristics::ENTRANCE)) {
+                continue;
             }
+
+            if (grid.has_monster()) {
+                delete_monster_idx(player_ptr, grid.m_idx);
+            }
+
+            player_ptr->oldpy = pos.y;
+            player_ptr->oldpx = pos.x;
         }
 
         player_ptr->teleport_town = false;

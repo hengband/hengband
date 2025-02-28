@@ -35,6 +35,7 @@
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
+#include <range/v3/algorithm.hpp>
 
 /*!
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -124,16 +125,11 @@ static bool check_quest_placeable(const FloorType &floor, MonraceId r_idx)
     if (r_idx != quest.r_idx) {
         return true;
     }
-    int number_mon = 0;
-    for (int i2 = 0; i2 < floor.width; ++i2) {
-        for (int j2 = 0; j2 < floor.height; j2++) {
-            auto quest_monster = floor.grid_array[j2][i2].has_monster();
-            quest_monster &= (floor.m_list[floor.grid_array[j2][i2].m_idx].r_idx == quest.r_idx);
-            if (quest_monster) {
-                number_mon++;
-            }
-        }
-    }
+    const auto has_quest_monrace = [&](const Pos2D &pos) {
+        const auto &grid = floor.get_grid(pos);
+        return grid.has_monster() && (floor.m_list[grid.m_idx].r_idx == quest.r_idx);
+    };
+    const auto number_mon = ranges::count_if(floor.get_area(), has_quest_monrace);
 
     if (number_mon + quest.cur_num >= quest.max_num) {
         return false;

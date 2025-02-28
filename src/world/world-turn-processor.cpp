@@ -46,6 +46,7 @@
 #include "window/main-window-row-column.h"
 #include "world/world-movement-processor.h"
 #include "world/world.h"
+#include <range/v3/view.hpp>
 
 WorldTurnProcessor::WorldTurnProcessor(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -143,20 +144,18 @@ void WorldTurnProcessor::process_monster_arena()
         return;
     }
 
-    auto win_m_idx = 0;
-    auto number_mon = 0;
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor.width; ++x) {
-        for (auto y = 0; y < floor.height; y++) {
-            const auto &grid = floor.get_grid({ y, x });
-            if (grid.has_monster() && !floor.m_list[grid.m_idx].is_riding()) {
-                number_mon++;
-                win_m_idx = grid.m_idx;
-            }
-        }
-    }
+    const auto monster_exists = [&](const Pos2D &pos) {
+        const auto &grid = floor.get_grid(pos);
+        return grid.has_monster() && !floor.m_list[grid.m_idx].is_riding();
+    };
+    const auto to_m_idx = [&](const Pos2D &pos) { return floor.get_grid(pos).m_idx; };
+    const auto m_idxs = floor.get_area() |
+                        ranges::views::filter(monster_exists) |
+                        ranges::views::transform(to_m_idx) |
+                        ranges::to_vector;
 
-    if (number_mon == 0) {
+    if (m_idxs.empty()) {
         msg_print(_("相打ちに終わりました。", "Nothing survived."));
         msg_print(nullptr);
         this->player_ptr->energy_need = 0;
@@ -165,8 +164,8 @@ void WorldTurnProcessor::process_monster_arena()
         return;
     }
 
-    if (number_mon == 1) {
-        process_monster_arena_winner(win_m_idx);
+    if (m_idxs.size() == 1) {
+        process_monster_arena_winner(m_idxs.front());
         return;
     }
 

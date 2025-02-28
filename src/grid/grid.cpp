@@ -717,12 +717,10 @@ void update_flow(PlayerType *player_ptr)
     }
 
     /* Erase all of the current flow information */
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            auto &grid = floor.grid_array[y][x];
-            grid.reset_costs();
-            grid.reset_dists();
-        }
+    for (const auto &pos : floor.get_area()) {
+        auto &grid = floor.get_grid(pos);
+        grid.reset_costs();
+        grid.reset_dists();
     }
 
     /* Save player position */

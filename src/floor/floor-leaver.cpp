@@ -152,38 +152,36 @@ static void locate_connected_stairs(PlayerType *player_ptr, FloorType &floor, sa
     int y_table[20]{};
     auto num = 0;
     const auto &fcms = FloorChangeModesStore::get_instace();
-    for (POSITION y = 0; y < floor.height; y++) {
-        for (POSITION x = 0; x < floor.width; x++) {
-            const auto &grid = floor.get_grid({ y, x });
-            const auto &terrain = grid.get_terrain();
-            auto ok = false;
-            if (fcms->has(FloorChangeMode::UP)) {
-                if (terrain.flags.has_all_of({ TerrainCharacteristics::LESS, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
-                    ok = true;
-                    if (grid.special && grid.special == sf_ptr->upper_floor_id) {
-                        sx = x;
-                        sy = y;
-                    }
-                }
-            } else if (fcms->has(FloorChangeMode::DOWN)) {
-                if (terrain.flags.has_all_of({ TerrainCharacteristics::MORE, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
-                    ok = true;
-                    if (grid.special && grid.special == sf_ptr->lower_floor_id) {
-                        sx = x;
-                        sy = y;
-                    }
-                }
-            } else {
-                if (terrain.flags.has(TerrainCharacteristics::BLDG)) {
-                    ok = true;
+    for (const auto &pos : floor.get_area()) {
+        const auto &grid = floor.get_grid(pos);
+        const auto &terrain = grid.get_terrain();
+        auto ok = false;
+        if (fcms->has(FloorChangeMode::UP)) {
+            if (terrain.flags.has_all_of({ TerrainCharacteristics::LESS, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
+                ok = true;
+                if (grid.special && grid.special == sf_ptr->upper_floor_id) {
+                    sx = pos.x;
+                    sy = pos.y;
                 }
             }
+        } else if (fcms->has(FloorChangeMode::DOWN)) {
+            if (terrain.flags.has_all_of({ TerrainCharacteristics::MORE, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
+                ok = true;
+                if (grid.special && grid.special == sf_ptr->lower_floor_id) {
+                    sx = pos.x;
+                    sy = pos.y;
+                }
+            }
+        } else {
+            if (terrain.flags.has(TerrainCharacteristics::BLDG)) {
+                ok = true;
+            }
+        }
 
-            if (ok && (num < 20)) {
-                x_table[num] = x;
-                y_table[num] = y;
-                num++;
-            }
+        if (ok && (num < 20)) {
+            x_table[num] = pos.x;
+            y_table[num] = pos.y;
+            num++;
         }
     }
 

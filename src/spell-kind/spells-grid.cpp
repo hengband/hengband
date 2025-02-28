@@ -110,26 +110,23 @@ void stair_creation(PlayerType *player_ptr)
 
     const auto &dungeon = floor.get_dungeon_definition();
     if (dest_floor_id) {
-        for (auto y = 0; y < floor.height; y++) {
-            for (auto x = 0; x < floor.width; x++) {
-                const Pos2D pos(y, x);
-                auto &grid = floor.get_grid(pos);
-                if (!grid.special) {
-                    continue;
-                }
-
-                if (grid.has_special_terrain()) {
-                    continue;
-                }
-
-                if (grid.special != dest_floor_id) {
-                    continue;
-                }
-
-                /* Remove old stairs */
-                grid.special = 0;
-                set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
+        for (const auto &pos : floor.get_area()) {
+            auto &grid = floor.get_grid(pos);
+            if (!grid.special) {
+                continue;
             }
+
+            if (grid.has_special_terrain()) {
+                continue;
+            }
+
+            if (grid.special != dest_floor_id) {
+                continue;
+            }
+
+            /* Remove old stairs */
+            grid.special = 0;
+            set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
         }
     } else {
         dest_floor_id = get_unused_floor_id(player_ptr);

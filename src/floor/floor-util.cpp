@@ -61,13 +61,10 @@ void update_smell(FloorType &floor, const Pos2D &p_pos)
     };
 
     if (++scent_when == 254) {
-        for (auto y = 0; y < floor.height; y++) {
-            for (auto x = 0; x < floor.width; x++) {
-                const Pos2D pos(y, x);
-                auto &grid = floor.get_grid(pos);
-                int w = grid.when;
-                grid.when = (w > 128) ? (w - 128) : 0;
-            }
+        for (const auto &pos : floor.get_area()) {
+            auto &grid = floor.get_grid(pos);
+            int w = grid.when;
+            grid.when = (w > 128) ? (w - 128) : 0;
         }
 
         scent_when = 126;
@@ -98,13 +95,11 @@ void update_smell(FloorType &floor, const Pos2D &p_pos)
  */
 void forget_flow(FloorType &floor)
 {
-    for (POSITION y = 0; y < floor.height; y++) {
-        for (POSITION x = 0; x < floor.width; x++) {
-            auto &grid = floor.grid_array[y][x];
-            grid.reset_costs();
-            grid.reset_dists();
-            floor.grid_array[y][x].when = 0;
-        }
+    for (const auto &pos : floor.get_area()) {
+        auto &grid = floor.get_grid(pos);
+        grid.reset_costs();
+        grid.reset_dists();
+        grid.when = 0;
     }
 }
 

@@ -114,15 +114,9 @@ static void erase_wall(FloorType &floor, const Pos2D &pos)
  */
 static void erase_all_walls(FloorType &floor)
 {
-    for (auto x = 0; x < floor.width; x++) {
-        erase_wall(floor, { 0, x });
-        erase_wall(floor, { floor.height - 1, x });
-    }
-
-    for (auto y = 1; y < (floor.height - 1); y++) {
-        erase_wall(floor, { y, 0 });
-        erase_wall(floor, { y, floor.width - 1 });
-    }
+    floor.get_area().each_edge([&](const Pos2D &pos) {
+        erase_wall(floor, pos);
+    });
 }
 
 /*!
@@ -141,24 +135,21 @@ bool vanish_dungeon(PlayerType *player_ptr)
         return false;
     }
 
-    for (auto y = 1; y < floor.height - 1; y++) {
-        for (auto x = 1; x < floor.width - 1; x++) {
-            const Pos2D pos(y, x);
-            auto &grid = floor.get_grid(pos);
-            const auto &terrrain = grid.get_terrain();
-            grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
-            const auto &monster = floor.m_list[grid.m_idx];
-            if (grid.has_monster() && monster.is_asleep()) {
-                (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
-                if (monster.ml) {
-                    const auto m_name = monster_desc(player_ptr, monster, 0);
-                    msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
-                }
+    for (const auto &pos : floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
+        auto &grid = floor.get_grid(pos);
+        const auto &terrrain = grid.get_terrain();
+        grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
+        const auto &monster = floor.m_list[grid.m_idx];
+        if (grid.has_monster() && monster.is_asleep()) {
+            (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
+            if (monster.ml) {
+                const auto m_name = monster_desc(player_ptr, monster, 0);
+                msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
             }
+        }
 
-            if (terrrain.flags.has(TerrainCharacteristics::HURT_DISI)) {
-                cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::HURT_DISI);
-            }
+        if (terrrain.flags.has(TerrainCharacteristics::HURT_DISI)) {
+            cave_alter_feat(player_ptr, pos.y, pos.x, TerrainCharacteristics::HURT_DISI);
         }
     }
 

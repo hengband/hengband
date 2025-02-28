@@ -15,6 +15,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "wizard/wizard-messages.h"
+#include <range/v3/view.hpp>
 
 /*!
  * @brief 上下左右の外壁数をカウントする
@@ -97,17 +98,13 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 
     for (auto i = 0; i < num; i++) {
         while (true) {
-            auto candidates = 0;
-            const auto max_x = floor.width - 1;
-            for (auto y = 1; y < floor.height - 1; y++) {
-                for (auto x = 1; x < max_x; x++) {
-                    if (alloc_stairs_aux(player_ptr, { y, x }, walls)) {
-                        candidates++;
-                    }
-                }
-            }
+            const auto can_alloc_stair = [&](const Pos2D &pos) { return alloc_stairs_aux(player_ptr, pos, walls); };
+            const auto pos_candidates =
+                floor.get_area(FloorBoundary::OUTER_WALL_INCLUSIVE) |
+                ranges::views::filter(can_alloc_stair) |
+                ranges::to_vector;
 
-            if (!candidates) {
+            if (pos_candidates.empty()) {
                 if (walls <= 0) {
                     return false;
                 }
@@ -116,25 +113,8 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
                 continue;
             }
 
-            auto pick = randint1(candidates);
-            int y;
-            auto x = max_x;
-            for (y = 1; y < floor.height - 1; y++) {
-                for (x = 1; x < floor.width - 1; x++) {
-                    if (alloc_stairs_aux(player_ptr, { y, x }, walls)) {
-                        pick--;
-                        if (pick == 0) {
-                            break;
-                        }
-                    }
-                }
-
-                if (pick == 0) {
-                    break;
-                }
-            }
-
-            auto &grid = floor.grid_array[y][x];
+            const auto &pos_stair = rand_choice(pos_candidates);
+            auto &grid = floor.get_grid(pos_stair);
             grid.mimic = 0;
             grid.feat = (i < shaft_num) ? dungeon.convert_terrain_id(feat, TerrainCharacteristics::SHAFT) : feat;
             grid.info &= ~(CAVE_FLOOR);
