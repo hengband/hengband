@@ -707,7 +707,7 @@ bool decide_process_continue(PlayerType *player_ptr, MonsterEntity &monster)
     }
 
     auto should_continue = (monster.cdis <= MAX_PLAYER_SIGHT) || AngbandSystem::get_instance().is_phase_out();
-    should_continue &= player_ptr->current_floor_ptr->has_los({ monster.fy, monster.fx }) || has_aggravate(player_ptr);
+    should_continue &= player_ptr->current_floor_ptr->has_los_at({ monster.fy, monster.fx }) || has_aggravate(player_ptr);
     if (should_continue) {
         return true;
     }

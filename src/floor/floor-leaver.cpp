@@ -65,7 +65,7 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, const Mons
 
     const auto should_preserve = monster.is_named();
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto sight_from_player = floor.has_los(m_pos);
+    auto sight_from_player = floor.has_los_at(m_pos);
     sight_from_player &= projectable(player_ptr, p_pos, m_pos);
     auto sight_from_monster = los(floor, m_pos, p_pos);
     sight_from_monster &= projectable(player_ptr, m_pos, p_pos);

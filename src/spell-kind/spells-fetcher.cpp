@@ -63,7 +63,7 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
         }
 
         if (require_los) {
-            if (!floor.has_los(pos)) {
+            if (!floor.has_los_at(pos)) {
                 msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
                 return;
             } else if (!projectable(player_ptr, p_pos, pos)) {
@@ -122,7 +122,7 @@ bool fetch_monster(PlayerType *player_ptr)
     if (monster.is_riding()) {
         return false;
     }
-    if (!floor.has_los(*pos)) {
+    if (!floor.has_los_at(*pos)) {
         return false;
     }
 

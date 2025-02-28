@@ -396,7 +396,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
     rfu.set_flags(flags);
     world.timewalk_m_idx = 0;
     const auto m_pos = monster.get_position();
-    auto should_output_message = floor.has_los(m_pos);
+    auto should_output_message = floor.has_los_at(m_pos);
     should_output_message &= projectable(player_ptr, player_ptr->get_position(), m_pos);
     if (vs_player || should_output_message) {
         std::string mes;
