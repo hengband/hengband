@@ -252,7 +252,7 @@ std::vector<std::pair<int, Pos2D>> breath_shape(PlayerType *player_ptr, const Pr
                     if (Grid::calc_distance(pos_breath, pos) != cdis) {
                         continue;
                     }
-                    if (is_prevent_blast(player_ptr, pos_source, pos, typ)) {
+                    if (is_prevent_blast(player_ptr, pos_breath, pos, typ)) {
                         continue;
                     }
 
