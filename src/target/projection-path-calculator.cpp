@@ -220,10 +220,8 @@ static void calc_diagonal_projection(const FloorType &floor, const Pos2D &p_pos,
  * @param pos_dst 終点座標
  * @param flag フラグ群
  */
-ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &pos_src, const Pos2D &pos_dst, uint32_t flag)
+ProjectionPath::ProjectionPath(const FloorType &floor, int range, const Pos2D &p_pos, const Pos2D &pos_src, const Pos2D &pos_dst, uint32_t flag)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
-    const auto p_pos = player_ptr->get_position();
     if (pos_src == pos_dst) {
         return;
     }
@@ -249,7 +247,8 @@ ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &p
  */
 bool projectable(PlayerType *player_ptr, const Pos2D &pos1, const Pos2D &pos2)
 {
-    ProjectionPath grid_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), pos1, pos2, 0);
+    const auto range = project_length ? project_length : AngbandSystem::get_instance().get_max_range();
+    ProjectionPath grid_g(*player_ptr->current_floor_ptr, range, player_ptr->get_position(), pos1, pos2, 0);
     if (grid_g.path_num() == 0) {
         return true;
     }

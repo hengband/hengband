@@ -46,13 +46,13 @@
  */
 bool direct_beam(PlayerType *player_ptr, const MonsterEntity &monster, const Pos2D &pos_target)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
     const auto pos_source = monster.get_position();
-    ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), pos_source, pos_target, PROJECT_THRU);
+    ProjectionPath grid_g(floor, AngbandSystem::get_instance().get_max_range(), player_ptr->get_position(), pos_source, pos_target, PROJECT_THRU);
     if (grid_g.path_num()) {
         return false;
     }
 
-    const auto &floor = *player_ptr->current_floor_ptr;
     const auto is_friend = monster.is_pet();
     auto hit2 = false;
     for (const auto &pos : grid_g) {
@@ -97,7 +97,7 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), pos_source, pos_target, flg);
+    ProjectionPath grid_g(floor, AngbandSystem::get_instance().get_max_range(), player_ptr->get_position(), pos_source, pos_target, flg);
     auto path_n = 0;
     Pos2D pos_breath = pos_source;
     for (const auto &pos : grid_g) {
@@ -168,10 +168,11 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
  */
 Pos2D get_project_point(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D &pos_target_initial, BIT_FLAGS flags)
 {
-    ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), pos_source, pos_target_initial, flags);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    ProjectionPath path_g(floor, AngbandSystem::get_instance().get_max_range(), player_ptr->get_position(), pos_source, pos_target_initial, flags);
     Pos2D pos_target = pos_source;
     for (const auto &pos : path_g) {
-        if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
+        if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
             break;
         }
 
