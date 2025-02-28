@@ -43,4 +43,7 @@ struct msa_type {
     EnumClassFlagGroup<MonsterAbilityType> ability_flags;
 
     Pos2D get_position() const;
+    void set_position(const Pos2D &pos);
+    Pos2D get_position_lite() const;
+    void set_position_lite(const Pos2D &pos);
 };
