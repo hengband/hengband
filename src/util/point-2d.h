@@ -209,13 +209,13 @@ struct Rectangle2D {
     template <std::invocable<Point2D<T>> F>
     void each_edge(F &&f) const
     {
-        for (auto y = this->top_left.y; y <= this->bottom_right.y; ++y) {
-            f(Point2D<T>(y, top_left.x));
-            f(Point2D<T>(y, bottom_right.x));
-        }
         for (auto x = this->top_left.x; x <= this->bottom_right.x; ++x) {
             f(Point2D<T>(top_left.y, x));
             f(Point2D<T>(bottom_right.y, x));
+        }
+        for (auto y = this->top_left.y + 1; y <= this->bottom_right.y - 1; ++y) {
+            f(Point2D<T>(y, top_left.x));
+            f(Point2D<T>(y, bottom_right.x));
         }
     }
 
