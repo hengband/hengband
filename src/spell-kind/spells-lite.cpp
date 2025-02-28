@@ -129,22 +129,11 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
     }
 }
 
-/*!
- * @brief 指定のマスが光を通さず射線のみを通すかを返す。
- * @param floor フロアへの参照
- * @param pos 指定座標
- * @return 射線を通すならばtrueを返す。
- */
-static bool cave_pass_dark_bold(const FloorType &floor, const Pos2D &pos)
-{
-    return floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
-}
-
 static bool pass_bold(const FloorType &floor, const Pos2D &pos, PathChecker pc)
 {
     switch (pc) {
     case PathChecker::PROJECTION:
-        return cave_pass_dark_bold(floor, pos);
+        return floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
     case PathChecker::LOS:
         return cave_los_bold(floor, pos.y, pos.x);
     default:
@@ -322,30 +311,25 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 指定Y座標
  * @param x1 指定X座標
+ * @details (y1,x1) を起点として暗くするマスを記録していく. 実質幅優先探索.
  */
 void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 {
-    // 暗くするマスを記録する配列。
-    std::vector<Pos2D> points;
-
+    std::vector<Pos2D> positions;
     const auto &floor = *player_ptr->current_floor_ptr;
-
-    // (y1,x1) を起点として暗くするマスを記録していく。
-    // 実質幅優先探索。
-    cave_temp_unlite_room_aux(player_ptr, points, { y1, x1 });
-    for (size_t i = 0; i < size(points); i++) {
-        const auto &point = points[i];
-        if (!cave_pass_dark_bold(floor, point)) {
+    cave_temp_unlite_room_aux(player_ptr, positions, { y1, x1 });
+    for (size_t i = 0; i < size(positions); i++) {
+        const Pos2D pos = positions[i];
+        if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
             continue;
         }
 
         for (const auto &d : Direction::directions_8()) {
-            cave_temp_unlite_room_aux(player_ptr, points, point + d.vec());
+            cave_temp_unlite_room_aux(player_ptr, positions, pos + d.vec());
         }
     }
 
-    // 記録したマスを実際に暗くする。
-    cave_temp_room_unlite(player_ptr, points);
+    cave_temp_room_unlite(player_ptr, positions);
 }
 
 /*!
