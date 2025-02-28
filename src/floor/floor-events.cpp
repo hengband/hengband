@@ -162,20 +162,19 @@ static int get_dungeon_feeling(const auto &floor)
         rating += rating_boost(delta);
     }
 
-    for (short i = 1; i < floor.o_max; i++) {
-        const auto &item = *floor.o_list[i];
+    for (const auto &item_ptr : floor.o_list) {
         auto delta = 0;
-        if (!item.is_valid() || (item.is_known() && item.marked.has(OmType::TOUCHED)) || ((item.ident & IDENT_SENSE) != 0)) {
+        if (!item_ptr->is_valid() || (item_ptr->is_known() && item_ptr->marked.has(OmType::TOUCHED)) || ((item_ptr->ident & IDENT_SENSE) != 0)) {
             continue;
         }
 
-        if (item.is_ego()) {
-            const auto &ego = item.get_ego();
+        if (item_ptr->is_ego()) {
+            const auto &ego = item_ptr->get_ego();
             delta += ego.rating * base;
         }
 
-        if (item.is_fixed_or_random_artifact()) {
-            const auto cost = object_value_real(&item);
+        if (item_ptr->is_fixed_or_random_artifact()) {
+            const auto cost = object_value_real(item_ptr.get());
             delta += 10 * base;
             if (cost > 10000L) {
                 delta += 10 * base;
@@ -194,40 +193,40 @@ static int get_dungeon_feeling(const auto &floor)
             }
         }
 
-        if (item.bi_key.tval() == ItemKindType::DRAG_ARMOR) {
+        if (item_ptr->bi_key.tval() == ItemKindType::DRAG_ARMOR) {
             delta += 30 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD)) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD)) {
             delta += 5 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES)) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES)) {
             delta += 5 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE)) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE)) {
             delta += 5 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM)) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM)) {
             delta += 5 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::RING, SV_RING_SPEED) && !item.is_cursed()) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_SPEED) && !item_ptr->is_cursed()) {
             delta += 25 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY) && !item.is_cursed()) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY) && !item_ptr->is_cursed()) {
             delta += 15 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_THE_MAGI) && !item.is_cursed()) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_THE_MAGI) && !item_ptr->is_cursed()) {
             delta += 15 * base;
         }
 
-        const auto item_level = item.get_baseitem_level();
-        if (!item.is_cursed() && !item.is_broken() && item_level > floor.dun_level) {
+        const auto item_level = item_ptr->get_baseitem_level();
+        if (!item_ptr->is_cursed() && !item_ptr->is_broken() && item_level > floor.dun_level) {
             delta += (item_level - floor.dun_level) * base;
         }
 

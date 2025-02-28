@@ -23,6 +23,7 @@
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
+#include "range/v3/range/conversion.hpp"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-allocation.h"
 #include "system/floor/floor-info.h"
@@ -36,6 +37,8 @@
 #include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
+#include <range/v3/algorithm.hpp>
+#include <range/v3/view.hpp>
 
 /*!
  * @brief デバッグ時にアイテム生成情報をメッセージに出力する / Cheat -- describe a created object for the user
@@ -143,14 +146,9 @@ void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos)
         return;
     }
 
-    auto &grid = floor.get_grid(pos);
-    for (const auto this_o_idx : grid.o_idx_list) {
-        auto &item = *floor.o_list[this_o_idx];
-        item.wipe();
-        floor.o_cnt--;
-    }
+    const auto &grid = floor.get_grid(pos);
+    delete_items(player_ptr, grid.o_idx_list | ranges::to_vector);
 
-    grid.o_idx_list.clear();
     lite_spot(player_ptr, pos);
 }
 
@@ -218,13 +216,18 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     excise_object_idx(floor, o_idx);
-    auto &item = *floor.o_list[o_idx];
-    if (!item.is_held_by_monster()) {
-        lite_spot(player_ptr, item.get_position());
+    auto &item_ptr = floor.o_list[o_idx];
+    if (!item_ptr->is_held_by_monster()) {
+        lite_spot(player_ptr, item_ptr->get_position());
     }
 
-    item.wipe();
-    floor.o_cnt--;
+    // 最後尾のアイテムを削除対象の要素に移動することで配列を詰める
+    const auto back_i_idx = static_cast<OBJECT_IDX>(floor.o_list.size() - 1);
+    auto &list = get_o_idx_list_contains(floor, back_i_idx);
+    ranges::replace(list, back_i_idx, o_idx);
+    item_ptr = floor.o_list.back();
+    floor.o_list.pop_back();
+
     static constexpr auto flags = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
@@ -241,6 +244,24 @@ void excise_object_idx(FloorType &floor, OBJECT_IDX o_idx)
 {
     auto &list = get_o_idx_list_contains(floor, o_idx);
     list.remove(o_idx);
+}
+
+/*!
+ * @brief 複数のアイテムを削除する
+ * @param delete_i_idx_list 削除するアイテムの参照IDのリスト
+ */
+void delete_items(PlayerType *player_ptr, std::vector<OBJECT_IDX> delete_i_idx_list)
+{
+    while (!delete_i_idx_list.empty()) {
+        const OBJECT_IDX delete_i_idx = delete_i_idx_list.back();
+        delete_i_idx_list.pop_back();
+
+        // 最後尾のアイテムがdelete_i_idxの位置に移動するので削除リストも更新する
+        const auto back_i_idx = static_cast<OBJECT_IDX>(player_ptr->current_floor_ptr->o_list.size() - 1);
+        ranges::replace(delete_i_idx_list, back_i_idx, delete_i_idx);
+
+        delete_object_idx(player_ptr, delete_i_idx);
+    }
 }
 
 /*!

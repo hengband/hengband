@@ -579,20 +579,9 @@ short FloorType::pop_empty_index_monster()
  */
 short FloorType::pop_empty_index_item()
 {
-    if (this->o_max < MAX_FLOOR_ITEMS) {
-        const auto i = this->o_max;
-        this->o_max++;
-        this->o_cnt++;
-        return i;
-    }
-
-    for (short i = 1; i < this->o_max; i++) {
-        if (this->o_list[i]->is_valid()) {
-            continue;
-        }
-
-        this->o_cnt++;
-        return i;
+    if (this->o_list.size() < MAX_FLOOR_ITEMS) {
+        this->o_list.push_back(std::make_shared<ItemEntity>());
+        return static_cast<short>(this->o_list.size() - 1);
     }
 
     if (AngbandWorld::get_instance().character_dungeon) {

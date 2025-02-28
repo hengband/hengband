@@ -10,27 +10,8 @@
 #include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <range/v3/view.hpp>
 #include <utility>
-
-/*!
- * @brief グローバルオブジェクト配列の要素番号i1のオブジェクトを要素番号i2に移動する /
- * Move an object from index i1 to index i2 in the object list
- * @param i1 オブジェクト移動元の要素番号
- * @param i2 オブジェクト移動先の要素番号
- */
-static void compact_objects_aux(FloorType &floor, OBJECT_IDX i1, OBJECT_IDX i2)
-{
-    if (i1 == i2) {
-        return;
-    }
-
-    // モンスター所為アイテムリストもしくは床上アイテムリストの要素番号i1をi2に書き換える
-    auto &list = get_o_idx_list_contains(floor, i1);
-    std::replace(list.begin(), list.end(), i1, i2);
-
-    floor.o_list[i2].swap(floor.o_list[i1]);
-    floor.o_list[i1]->wipe();
-}
 
 /*!
  * @brief グローバルオブジェクト配列から優先度の低いものを削除し、データを圧縮する。 /
@@ -50,7 +31,6 @@ static void compact_objects_aux(FloorType &floor, OBJECT_IDX i1, OBJECT_IDX i2)
  */
 void compact_objects(PlayerType *player_ptr, int size)
 {
-    ItemEntity *o_ptr;
     if (size) {
         msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
         auto &rfu = RedrawingFlagsUpdater::get_instance();
@@ -66,16 +46,15 @@ void compact_objects(PlayerType *player_ptr, int size)
     for (int num = 0, cnt = 1; num < size; cnt++) {
         int cur_lev = 5 * cnt;
         int cur_dis = 5 * (20 - cnt);
-        for (OBJECT_IDX i = 1; i < floor.o_max; i++) {
-            o_ptr = floor.o_list[i].get();
-
-            if (!o_ptr->is_valid() || (o_ptr->get_baseitem_level() > cur_lev)) {
+        std::vector<OBJECT_IDX> delete_i_idx_list;
+        for (const auto &[i_idx, item_ptr] : floor.o_list | ranges::views::enumerate) {
+            if (!item_ptr->is_valid() || (item_ptr->get_baseitem_level() > cur_lev)) {
                 continue;
             }
 
             POSITION y, x;
-            if (o_ptr->is_held_by_monster()) {
-                const auto &monster = floor.m_list[o_ptr->held_m_idx];
+            if (item_ptr->is_held_by_monster()) {
+                const auto &monster = floor.m_list[item_ptr->held_m_idx];
                 y = monster.fy;
                 x = monster.fx;
 
@@ -83,8 +62,8 @@ void compact_objects(PlayerType *player_ptr, int size)
                     continue;
                 }
             } else {
-                y = o_ptr->iy;
-                x = o_ptr->ix;
+                y = item_ptr->iy;
+                x = item_ptr->ix;
             }
 
             if ((cur_dis > 0) && (Grid::calc_distance(player_ptr->get_position(), { y, x }) < cur_dis)) {
@@ -92,7 +71,7 @@ void compact_objects(PlayerType *player_ptr, int size)
             }
 
             int chance = 90;
-            if (o_ptr->is_fixed_or_random_artifact() && (cnt < 1000)) {
+            if (item_ptr->is_fixed_or_random_artifact() && (cnt < 1000)) {
                 chance = 100;
             }
 
@@ -100,18 +79,10 @@ void compact_objects(PlayerType *player_ptr, int size)
                 continue;
             }
 
-            delete_object_idx(player_ptr, i);
+            delete_i_idx_list.push_back(static_cast<OBJECT_IDX>(i_idx));
             num++;
         }
-    }
 
-    for (OBJECT_IDX i = floor.o_max - 1; i >= 1; i--) {
-        o_ptr = floor.o_list[i].get();
-        if (o_ptr->is_valid()) {
-            continue;
-        }
-
-        compact_objects_aux(floor, floor.o_max - 1, i);
-        floor.o_max--;
+        delete_items(player_ptr, std::move(delete_i_idx_list));
     }
 }

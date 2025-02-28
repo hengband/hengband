@@ -378,12 +378,9 @@ void wipe_generate_random_floor_flags(FloorType &floor)
 void clear_cave(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    for (auto &item_ptr : floor.o_list) {
-        item_ptr->wipe();
-    }
+    floor.o_list.clear();
+    floor.o_list.push_back(std::make_shared<ItemEntity>()); // 0番にダミーアイテムを用意
 
-    floor.o_max = 1;
-    floor.o_cnt = 0;
     MonraceList::get_instance().reset_current_numbers();
     for (auto &monster : floor.m_list) {
         monster.wipe();
@@ -532,7 +529,7 @@ void generate_floor(PlayerType *player_ptr)
             why = level_gen(player_ptr);
         }
 
-        if (floor.o_max >= MAX_FLOOR_ITEMS) {
+        if (floor.o_list.size() >= MAX_FLOOR_ITEMS) {
             why = _("アイテムが多すぎる", "too many objects");
         } else if (floor.m_max >= MAX_FLOOR_MONSTERS) {
             why = _("モンスターが多すぎる", "too many monsters");
