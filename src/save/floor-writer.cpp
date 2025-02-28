@@ -225,7 +225,6 @@ bool wr_dungeon(PlayerType *player_ptr)
  */
 static bool save_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
 
     auto tmp8u = static_cast<uint8_t>(Rand_external(256));
