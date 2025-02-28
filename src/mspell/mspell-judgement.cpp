@@ -102,7 +102,7 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
     Pos2D pos_breath = pos_source;
     for (const auto &pos : grid_g) {
         if (flg & PROJECT_DISI) {
-            if (cave_stop_disintegration(floor, pos.y, pos.x)) {
+            if (floor.can_block_disintegration_at(pos)) {
                 break;
             }
         } else if (flg & PROJECT_LOS) {

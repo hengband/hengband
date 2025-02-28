@@ -326,6 +326,14 @@ bool FloorType::can_generate_monster_at(const Pos2D &pos) const
     return is_empty_grid;
 }
 
+bool FloorType::can_block_disintegration_at(const Pos2D &pos) const
+{
+    const auto can_reach = this->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
+    auto can_disintegrate = this->has_terrain_characteristics(pos, TerrainCharacteristics::HURT_DISI);
+    can_disintegrate &= !this->has_terrain_characteristics(pos, TerrainCharacteristics::PERMANENT);
+    return !can_reach || !can_disintegrate;
+}
+
 /*!
  * @brief 特定の財宝を生成する。指定がない場合、生成階に応じたランダムな財宝を生成する。
  * @param bi_key 財宝を固定生成する場合のBaseitemKey
