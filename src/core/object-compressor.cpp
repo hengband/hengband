@@ -8,14 +8,56 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "term/z-rand.h"
 #include "view/display-messages.h"
-#include <algorithm>
 #include <range/v3/view.hpp>
 #include <utility>
 
+namespace {
+class ItemCompactionChecker {
+public:
+    ItemCompactionChecker(PlayerType *player_ptr, int try_count)
+        : player_ptr(player_ptr)
+        , try_count(try_count)
+        , level_threshold(5 * try_count)
+        , distance_threshold(5 * (20 - try_count))
+    {
+    }
+
+    bool can_delete_for_compaction(const ItemEntity &item) const
+    {
+        if (!item.is_valid() || (item.get_baseitem_level() > this->level_threshold)) {
+            return false;
+        }
+
+        if (item.is_held_by_monster() && evaluate_percent(90)) {
+            return false;
+        }
+
+        const auto &floor = *player_ptr->current_floor_ptr;
+        const auto pos = item.is_held_by_monster() ? floor.m_list[item.held_m_idx].get_position() : item.get_position();
+
+        if (Grid::calc_distance(player_ptr->get_position(), pos) < this->distance_threshold) {
+            return false;
+        }
+
+        if (item.is_fixed_or_random_artifact() && (try_count < 1000)) {
+            return false;
+        }
+
+        return evaluate_percent(10);
+    }
+
+private:
+    PlayerType *player_ptr;
+    int try_count;
+    int level_threshold;
+    int distance_threshold;
+};
+}
+
 /*!
- * @brief グローバルオブジェクト配列から優先度の低いものを削除し、データを圧縮する。 /
- * Compact and Reorder the object list.
+ * @brief アイテム配列から優先度の低いものを削除する。
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param size 最低でも減らしたいオブジェクト数の水準
  * @details
@@ -43,46 +85,16 @@ void compact_objects(PlayerType *player_ptr, int size)
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    for (int num = 0, cnt = 1; num < size; cnt++) {
-        int cur_lev = 5 * cnt;
-        int cur_dis = 5 * (20 - cnt);
+    for (auto deleted_num = 0, try_count = 1; deleted_num < size; try_count++) {
+        const ItemCompactionChecker icc(player_ptr, try_count);
         std::vector<OBJECT_IDX> delete_i_idx_list;
         for (const auto &[i_idx, item_ptr] : floor.o_list | ranges::views::enumerate) {
-            if (!item_ptr->is_valid() || (item_ptr->get_baseitem_level() > cur_lev)) {
-                continue;
+            if (icc.can_delete_for_compaction(*item_ptr)) {
+                delete_i_idx_list.push_back(static_cast<OBJECT_IDX>(i_idx));
             }
-
-            POSITION y, x;
-            if (item_ptr->is_held_by_monster()) {
-                const auto &monster = floor.m_list[item_ptr->held_m_idx];
-                y = monster.fy;
-                x = monster.fx;
-
-                if (evaluate_percent(90)) {
-                    continue;
-                }
-            } else {
-                y = item_ptr->iy;
-                x = item_ptr->ix;
-            }
-
-            if ((cur_dis > 0) && (Grid::calc_distance(player_ptr->get_position(), { y, x }) < cur_dis)) {
-                continue;
-            }
-
-            int chance = 90;
-            if (item_ptr->is_fixed_or_random_artifact() && (cnt < 1000)) {
-                chance = 100;
-            }
-
-            if (evaluate_percent(chance)) {
-                continue;
-            }
-
-            delete_i_idx_list.push_back(static_cast<OBJECT_IDX>(i_idx));
-            num++;
         }
 
+        deleted_num += delete_i_idx_list.size();
         delete_items(player_ptr, std::move(delete_i_idx_list));
     }
 }
