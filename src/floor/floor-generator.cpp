@@ -277,10 +277,8 @@ static void generate_gambling_arena(PlayerType *player_ptr)
 static void generate_fixed_floor(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            place_bold(player_ptr, y, x, GB_SOLID_PERM);
-        }
+    for (const auto &pos : floor.get_area()) {
+        place_bold(player_ptr, pos.y, pos.x, GB_SOLID_PERM);
     }
 
     const auto &quests = QuestList::get_instance();
@@ -356,17 +354,13 @@ static std::optional<std::string> level_gen(PlayerType *player_ptr)
  */
 void wipe_generate_random_floor_flags(FloorType &floor)
 {
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            floor.get_grid({ y, x }).info &= ~(CAVE_MASK);
-        }
+    for (const auto &pos : floor.get_area()) {
+        floor.get_grid(pos).info &= ~(CAVE_MASK);
     }
 
     if (floor.is_underground()) {
-        for (auto y = 1; y < floor.height - 1; y++) {
-            for (auto x = 1; x < floor.width - 1; x++) {
-                floor.get_grid({ y, x }).info |= CAVE_UNSAFE;
-            }
+        for (const auto &pos : floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
+            floor.get_grid(pos).info |= CAVE_UNSAFE;
         }
     }
 }

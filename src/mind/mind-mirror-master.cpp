@@ -45,8 +45,10 @@
 #include "target/target-getter.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "util/point-2d.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <range/v3/algorithm.hpp>
 
 /*
  * @brief Multishadow effects is determined by turn
@@ -79,24 +81,21 @@ bool binding_field(PlayerType *player_ptr, int dam)
     const auto max_range = AngbandSystem::get_instance().get_max_range();
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    for (auto x = 0; x < floor.width; x++) {
-        for (auto y = 0; y < floor.height; y++) {
-            const Pos2D pos(y, x);
-            const auto &grid = floor.get_grid(pos);
-            if (!grid.is_mirror()) {
-                continue;
-            }
-
-            const auto dist = Grid::calc_distance(p_pos, pos);
-            const auto is_projectable = projectable(player_ptr, p_pos, pos);
-            if ((dist == 0) || (dist > max_range) || !grid.has_los() || !is_projectable) {
-                continue;
-            }
-
-            mirror_y[mirror_num] = y;
-            mirror_x[mirror_num] = x;
-            mirror_num++;
+    for (const auto &pos : floor.get_area()) {
+        const auto &grid = floor.get_grid(pos);
+        if (!grid.is_mirror()) {
+            continue;
         }
+
+        const auto dist = Grid::calc_distance(p_pos, pos);
+        const auto is_projectable = projectable(player_ptr, p_pos, pos);
+        if ((dist == 0) || (dist > max_range) || !grid.has_los() || !is_projectable) {
+            continue;
+        }
+
+        mirror_y[mirror_num] = pos.y;
+        mirror_x[mirror_num] = pos.x;
+        mirror_num++;
     }
 
     if (mirror_num < 2) {
@@ -346,16 +345,8 @@ bool set_dustrobe(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
  */
 static int number_of_mirrors(const FloorType &floor)
 {
-    int val = 0;
-    for (POSITION x = 0; x < floor.width; x++) {
-        for (POSITION y = 0; y < floor.height; y++) {
-            if (floor.grid_array[y][x].is_mirror()) {
-                val++;
-            }
-        }
-    }
-
-    return val;
+    const auto has_mirror = [&](const Pos2D &pos) { return floor.get_grid(pos).is_mirror(); };
+    return ranges::count_if(floor.get_area(), has_mirror);
 }
 
 /*!
@@ -369,7 +360,6 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
     PLAYER_LEVEL plev = player_ptr->lev;
     int tmp;
     TIME_EFFECT t;
-    POSITION x, y;
     const auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     switch (spell) {
     case MindMirrorMasterType::MIRROR_SEEING:
@@ -446,12 +436,10 @@ bool cast_mirror_spell(PlayerType *player_ptr, MindMirrorMasterType spell)
         break;
     }
     case MindMirrorMasterType::SLEEPING_MIRROR:
-        for (x = 0; x < player_ptr->current_floor_ptr->width; x++) {
-            for (y = 0; y < player_ptr->current_floor_ptr->height; y++) {
-                if (player_ptr->current_floor_ptr->grid_array[y][x].is_mirror()) {
-                    project(player_ptr, 0, 2, y, x, (int)plev, AttributeType::OLD_SLEEP,
-                        (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
-                }
+        for (const auto &pos : player_ptr->current_floor_ptr->get_area()) {
+            if (player_ptr->current_floor_ptr->get_grid(pos).is_mirror()) {
+                project(player_ptr, 0, 2, pos.y, pos.x, (int)plev, AttributeType::OLD_SLEEP,
+                    (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI));
             }
         }
 

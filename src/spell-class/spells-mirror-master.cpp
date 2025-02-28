@@ -43,6 +43,7 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <map>
+#include <range/v3/view.hpp>
 
 SpellsMirrorMaster::SpellsMirrorMaster(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -81,20 +82,18 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
 void SpellsMirrorMaster::remove_all_mirrors(bool explode)
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor.width; x++) {
-        for (auto y = 0; y < floor.height; y++) {
-            if (!floor.grid_array[y][x].is_mirror()) {
-                continue;
-            }
-
-            this->remove_mirror(y, x);
-            if (!explode) {
-                continue;
-            }
-
-            constexpr BIT_FLAGS projection = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
-            project(this->player_ptr, 0, 2, y, x, this->player_ptr->lev / 2 + 5, AttributeType::SHARDS, projection);
+    for (const auto &pos : floor.get_area()) {
+        if (!floor.get_grid(pos).is_mirror()) {
+            continue;
         }
+
+        this->remove_mirror(pos.y, pos.x);
+        if (!explode) {
+            continue;
+        }
+
+        constexpr BIT_FLAGS projection = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
+        project(this->player_ptr, 0, 2, pos.y, pos.x, this->player_ptr->lev / 2 + 5, AttributeType::SHARDS, projection);
     }
 }
 
@@ -177,21 +176,19 @@ bool SpellsMirrorMaster::mirror_concentration()
 void SpellsMirrorMaster::seal_of_mirror(const int dam)
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor.width; x++) {
-        for (auto y = 0; y < floor.height; y++) {
-            const auto &g_ref = floor.grid_array[y][x];
-            if (!g_ref.is_mirror()) {
-                continue;
-            }
+    for (const auto &pos : floor.get_area()) {
+        const auto &g_ref = floor.get_grid(pos);
+        if (!g_ref.is_mirror()) {
+            continue;
+        }
 
-            constexpr BIT_FLAGS flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP;
-            if (!affect_monster(this->player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, flags, true)) {
-                continue;
-            }
+        constexpr BIT_FLAGS flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP;
+        if (!affect_monster(this->player_ptr, 0, 0, pos.y, pos.x, dam, AttributeType::GENOCIDE, flags, true)) {
+            continue;
+        }
 
-            if (!g_ref.has_monster()) {
-                this->remove_mirror(y, x);
-            }
+        if (!g_ref.has_monster()) {
+            this->remove_mirror(pos.y, pos.x);
         }
     }
 }
@@ -215,16 +212,9 @@ void SpellsMirrorMaster::super_ray(const Direction &dir, int dam)
  */
 Pos2D SpellsMirrorMaster::get_next_mirror_position(const Pos2D &pos_current) const
 {
-    std::vector<Pos2D> mirror_positions;
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor.width; x++) {
-        for (auto y = 0; y < floor.height; y++) {
-            const Pos2D pos(y, x);
-            if (floor.get_grid(pos).is_mirror()) {
-                mirror_positions.push_back(pos);
-            }
-        }
-    }
+    const auto has_mirror = [&](const Pos2D &pos) { return floor.get_grid(pos).is_mirror(); };
+    const auto mirror_positions = floor.get_area() | ranges::views::filter(has_mirror) | ranges::to_vector;
 
     if (!mirror_positions.empty()) {
         return rand_choice(mirror_positions);

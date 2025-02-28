@@ -41,30 +41,27 @@ static std::vector<Pos2D> tgt_pt_prepare(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
     const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
-    for (auto y = 1; y < floor.height; y++) {
-        for (auto x = 1; x < floor.width; x++) {
-            const Pos2D pos(y, x);
-            if (!floor.contains(pos)) {
-                continue;
-            }
+    for (const auto &pos : floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
+        if (!floor.contains(pos)) {
+            continue;
+        }
 
-            if (pos == p_pos) {
-                positions.push_back(pos);
-                continue;
-            }
+        if (pos == p_pos) {
+            positions.push_back(pos);
+            continue;
+        }
 
-            if (is_hallucinated) {
-                continue;
-            }
+        if (is_hallucinated) {
+            continue;
+        }
 
-            const auto &grid = floor.get_grid(pos);
-            if (!grid.is_mark()) {
-                continue;
-            }
+        const auto &grid = floor.get_grid(pos);
+        if (!grid.is_mark()) {
+            continue;
+        }
 
-            if (grid.is_acceptable_target()) {
-                positions.push_back(pos);
-            }
+        if (grid.is_acceptable_target()) {
+            positions.push_back(pos);
         }
     }
 
@@ -73,13 +70,13 @@ static std::vector<Pos2D> tgt_pt_prepare(PlayerType *player_ptr)
     return positions;
 }
 
-static std::optional<Pos2D> select_building_pos(const auto &floor)
+static std::optional<Pos2D> select_building_pos(const FloorType &floor)
 {
     const auto is_building_pos = [&](const Pos2D &pos) {
         return floor.get_grid(pos).has(TerrainCharacteristics::BLDG);
     };
     const auto pos_buildings =
-        Rect2D(0, 0, floor.height - 1, floor.width - 1) |
+        floor.get_area() |
         ranges::views::filter(is_building_pos) |
         ranges::to<std::vector>();
 

@@ -66,17 +66,14 @@ void day_break(PlayerType *player_ptr)
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            const Pos2D pos(y, x);
-            auto &grid = floor.get_grid(pos);
-            grid.add_info(CAVE_GLOW);
-            if (view_perma_grids) {
-                grid.add_info(CAVE_MARK);
-            }
-
-            note_spot(player_ptr, pos);
+    for (const auto &pos : floor.get_area()) {
+        auto &grid = floor.get_grid(pos);
+        grid.add_info(CAVE_GLOW);
+        if (view_perma_grids) {
+            grid.add_info(CAVE_MARK);
         }
+
+        note_spot(player_ptr, pos);
     }
 
     update_sun_light(player_ptr);
@@ -91,25 +88,22 @@ void night_falls(PlayerType *player_ptr)
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            const Pos2D pos(y, x);
-            auto &grid = floor.get_grid(pos);
-            const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
-            using Tc = TerrainCharacteristics;
-            if (grid.is_mirror() || terrain.flags.has(Tc::QUEST_ENTER) || terrain.flags.has(Tc::ENTRANCE)) {
-                continue;
-            }
-
-            grid.info &= ~(CAVE_GLOW);
-            if (terrain.flags.has_not(Tc::REMEMBER)) {
-                grid.info &= ~(CAVE_MARK);
-                note_spot(player_ptr, pos);
-            }
+    for (const auto &pos : floor.get_area()) {
+        auto &grid = floor.get_grid(pos);
+        const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+        using Tc = TerrainCharacteristics;
+        if (grid.is_mirror() || terrain.flags.has(Tc::QUEST_ENTER) || terrain.flags.has(Tc::ENTRANCE)) {
+            continue;
         }
 
-        glow_deep_lava_and_bldg(player_ptr);
+        grid.info &= ~(CAVE_GLOW);
+        if (terrain.flags.has_not(Tc::REMEMBER)) {
+            grid.info &= ~(CAVE_MARK);
+            note_spot(player_ptr, pos);
+        }
     }
+
+    glow_deep_lava_and_bldg(player_ptr);
 
     update_sun_light(player_ptr);
 }
@@ -329,22 +323,19 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         return;
     }
 
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            const Pos2D pos(y, x);
-            const auto &grid = floor.get_grid(pos);
-            if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::GLOW)) {
+    for (const auto &pos : floor.get_area()) {
+        const auto &grid = floor.get_grid(pos);
+        if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::GLOW)) {
+            continue;
+        }
+
+        for (const auto &d : Direction::directions()) {
+            const auto pos_neighbor = pos + d.vec();
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
-            for (const auto &d : Direction::directions()) {
-                const auto pos_neighbor = pos + d.vec();
-                if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
-                    continue;
-                }
-
-                floor.get_grid(pos_neighbor).info |= CAVE_GLOW;
-            }
+            floor.get_grid(pos_neighbor).info |= CAVE_GLOW;
         }
     }
 

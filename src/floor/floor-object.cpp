@@ -404,16 +404,10 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
 
     auto &artifact = j_ptr->get_fixed_artifact();
     if (!has_floor_space) {
-        auto candidates = 0;
-        for (auto ty = 1; ty < floor.height - 1; ty++) {
-            for (auto tx = 1; tx < floor.width - 1; tx++) {
-                if (cave_drop_bold(floor, ty, tx)) {
-                    candidates++;
-                }
-            }
-        }
+        const auto can_drop = [&](const Pos2D &pos) { return cave_drop_bold(floor, pos.y, pos.x); };
+        const auto pos_drop_candidates = floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE) | ranges::views::filter(can_drop) | ranges::to_vector;
 
-        if (!candidates) {
+        if (pos_drop_candidates.empty()) {
 #ifdef JP
             msg_format("%sは消えた。", item_name.data());
 #else
@@ -433,22 +427,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
             return 0;
         }
 
-        auto pick = randint1(candidates);
-        for (auto ty = 1; ty < floor.height - 1; ty++) {
-            for (auto tx = 1; tx < floor.width - 1; tx++) {
-                if (cave_drop_bold(floor, ty, tx)) {
-                    pick--;
-                    if (pick == 0) {
-                        pos_drop = { ty, tx };
-                        break;
-                    }
-                }
-            }
-
-            if (pick == 0) {
-                break;
-            }
-        }
+        pos_drop = rand_choice(pos_drop_candidates);
     }
 
     auto is_absorbed = false;

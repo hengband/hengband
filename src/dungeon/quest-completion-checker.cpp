@@ -15,6 +15,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "view/display-messages.h"
 #include <algorithm>
+#include <range/v3/algorithm.hpp>
 
 QuestCompletionChecker::QuestCompletionChecker(PlayerType *player_ptr, const MonsterEntity &monster)
     : player_ptr(player_ptr)
@@ -201,17 +202,12 @@ void QuestCompletionChecker::complete_tower()
 int QuestCompletionChecker::count_all_hostile_monsters()
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    auto number_mon = 0;
-    for (auto x = 0; x < floor.width; ++x) {
-        for (auto y = 0; y < floor.height; ++y) {
-            auto m_idx = floor.grid_array[y][x].m_idx;
-            if ((m_idx > 0) && floor.m_list[m_idx].is_hostile()) {
-                ++number_mon;
-            }
-        }
-    }
+    const auto hostile_monster_exists = [&floor](const Pos2D &pos) {
+        const auto &grid = floor.get_grid(pos);
+        return grid.has_monster() && floor.m_list[grid.m_idx].is_hostile();
+    };
 
-    return number_mon;
+    return ranges::count_if(floor.get_area(), hostile_monster_exists);
 }
 
 Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
