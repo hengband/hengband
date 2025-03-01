@@ -352,18 +352,6 @@ bool FloorType::can_block_disintegration_at(const Pos2D &pos) const
     return !can_reach || !can_disintegrate;
 }
 
-bool FloorType::check_path(const Pos2D &pos, TerrainCharacteristics tc) const
-{
-    switch (tc) {
-    case TerrainCharacteristics::PROJECTION:
-        return this->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION);
-    case TerrainCharacteristics::LOS:
-        return this->has_los_terrain_at(pos);
-    default:
-        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid PathChecker! {}", enum2i(tc)));
-    }
-}
-
 /*!
  * @brief 特定の財宝を生成する。指定がない場合、生成階に応じたランダムな財宝を生成する。
  * @param bi_key 財宝を固定生成する場合のBaseitemKey

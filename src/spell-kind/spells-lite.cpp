@@ -135,13 +135,13 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
  * @param tc 地形条件
  * @return 該当地形の数
  */
-static int next_to_open(const FloorType &floor, const Pos2D &pos_center, TerrainCharacteristics tc)
+static int next_to_open(const FloorType &floor, const Pos2D &pos_center)
 {
     auto len = 0;
     auto blen = 0;
     for (const auto cdir : ranges::views::iota(0, 8) | ranges::views::cycle | ranges::views::take(16)) {
         const auto pos = pos_center + Direction::from_cdir(cdir).vec();
-        if (floor.check_path(pos, tc)) {
+        if (floor.has_los_terrain_at(pos)) {
             len++;
             continue;
         }
@@ -160,15 +160,14 @@ static int next_to_open(const FloorType &floor, const Pos2D &pos_center, Terrain
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する
  * @param floor フロアへの参照
  * @param pos_center 中心座標
- * @param tc 地形条件
  * @return 該当地形の数
  */
-static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, TerrainCharacteristics tc)
+static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center)
 {
     auto count = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos = pos_center + d.vec();
-        if (!floor.check_path(pos, tc)) {
+        if (!floor.has_los_terrain_at(pos)) {
             count++;
         }
     }
@@ -209,7 +208,7 @@ static bool cave_temp_room_aux(const FloorType &floor, const Pos2D &pos, const P
         return false;
     }
 
-    if (floor.contains(pos) && floor.check_path(pos, tc) && (next_to_walls_adj(floor, pos, tc) == 6) && (next_to_open(floor, pos, tc) <= 1)) {
+    if (floor.contains(pos) && floor.has_los_terrain_at(pos) && (next_to_walls_adj(floor, pos) == 6) && (next_to_open(floor, pos) <= 1)) {
         return false;
     }
 
