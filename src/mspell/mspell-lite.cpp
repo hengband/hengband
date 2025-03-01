@@ -38,8 +38,14 @@
  */
 static std::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const MonsterEntity &monster, const Pos2D &pos, TerrainCharacteristics tc)
 {
-    constexpr int tonari_y[4][8] = { { -1, -1, -1, 0, 0, 1, 1, 1 }, { -1, -1, -1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, -1, -1, -1 }, { 1, 1, 1, 0, 0, -1, -1, -1 } };
-    constexpr int tonari_x[4][8] = { { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 }, { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 } };
+    constexpr std::array<std::array<int, 8>, 4> directions = {
+        {
+            { 7, 8, 9, 4, 6, 1, 2, 3 },
+            { 9, 8, 7, 6, 4, 3, 2, 1 },
+            { 1, 2, 3, 4, 6, 7, 8, 9 },
+            { 3, 2, 1, 6, 4, 9, 8, 7 },
+        }
+    };
 
     int next;
     if (monster.fy < player_ptr->y && monster.fx < player_ptr->x) {
@@ -53,9 +59,8 @@ static std::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const Mo
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    for (auto i = 0; i < 8; i++) {
-        const Pos2DVec vec(tonari_y[next][i], tonari_x[next][i]);
-        const auto pos_next = pos + vec;
+    for (const auto direction : directions.at(next)) {
+        const auto pos_next = pos + Direction(direction).vec();
         if (!floor.has_terrain_characteristics(pos_next, tc)) {
             continue;
         }
