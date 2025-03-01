@@ -17,18 +17,6 @@
 #include "world/world.h"
 
 /*
- * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
- * @param floor フロアへの参照
- * @param y 指定Y座標
- * @param x 指定X座標
- * @return 光を通すならばtrueを返す。
- */
-bool cave_los_bold(const FloorType &floor, int y, int x)
-{
-    return floor.get_grid({ y, x }).has_los_terrain();
-}
-
-/*
  * Determine if a "legal" grid is a "clean" floor grid
  * Determine if terrain-change spells are allowed in a grid.
  *

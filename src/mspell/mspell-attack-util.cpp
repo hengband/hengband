@@ -21,3 +21,20 @@ Pos2D msa_type::get_position() const
 {
     return Pos2D(this->y, this->x);
 }
+
+void msa_type::set_position(const Pos2D &pos)
+{
+    this->y = pos.y;
+    this->x = pos.x;
+}
+
+Pos2D msa_type::get_position_lite() const
+{
+    return Pos2D(this->y_br_lite, this->x_br_lite);
+}
+
+void msa_type::set_position_lite(const Pos2D &pos)
+{
+    this->y_br_lite = pos.y;
+    this->x_br_lite = pos.x;
+}

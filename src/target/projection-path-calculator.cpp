@@ -87,7 +87,7 @@ static bool project_stop(const FloorType &floor, const Pos2D &p_pos, ProjectionP
             return true;
         }
     } else if (any_bits(pph_ptr->flag, PROJECT_LOS)) {
-        if (!pph_ptr->positions.empty() && !cave_los_bold(floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
+        if (!pph_ptr->positions.empty() && !floor.has_los_terrain_at(pph_ptr->pos)) {
             return true;
         }
     } else if (none_bits(pph_ptr->flag, PROJECT_PATH)) {

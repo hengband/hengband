@@ -50,6 +50,7 @@ enum class MonsterTimedEffect : int;
 enum class MonraceHook;
 enum class MonraceHookTerrain;
 enum class MonraceId : short;
+enum class PathChecker;
 enum class QuestId : short;
 enum class TerrainCharacteristics;
 enum class TerrainTag;
@@ -115,7 +116,7 @@ public:
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
     bool has_los_at(const Pos2D &pos) const;
-    bool has_los_terain_at(const Pos2D &pos) const;
+    bool has_los_terrain_at(const Pos2D &pos) const;
     bool has_terrain_characteristics(const Pos2D &pos, TerrainCharacteristics tc) const;
     bool is_special() const;
     bool can_teleport_level(bool to_player = false) const;
@@ -130,6 +131,7 @@ public:
     bool is_empty_at(const Pos2D &pos) const;
     bool can_generate_monster_at(const Pos2D &pos) const;
     bool can_block_disintegration_at(const Pos2D &pos) const;
+    bool check_path(const Pos2D &pos, PathChecker pc) const;
 
     ItemEntity make_gold(std::optional<BaseitemKey> bi_key = std::nullopt) const;
     std::optional<ItemEntity> try_make_instant_artifact() const;

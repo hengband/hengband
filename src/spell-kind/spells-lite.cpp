@@ -130,29 +130,6 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
 }
 
 /*!
- * @brief 指定のマスが光を通さず射線のみを通すかを返す。
- * @param floor フロアへの参照
- * @param pos 指定座標
- * @return 射線を通すならばtrueを返す。
- */
-static bool cave_pass_dark_bold(const FloorType &floor, const Pos2D &pos)
-{
-    return floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
-}
-
-static bool pass_bold(const FloorType &floor, const Pos2D &pos, PathChecker pc)
-{
-    switch (pc) {
-    case PathChecker::PROJECTION:
-        return cave_pass_dark_bold(floor, pos);
-    case PathChecker::LOS:
-        return cave_los_bold(floor, pos.y, pos.x);
-    default:
-        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid PathChecker! {}", enum2i(pc)));
-    }
-}
-
-/*!
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する
  * @param floor フロアへの参照
  * @param pos_center 中心座標
@@ -165,7 +142,7 @@ static int next_to_open(const FloorType &floor, const Pos2D &pos_center, PathChe
     auto blen = 0;
     for (const auto cdir : ranges::views::iota(0, 8) | ranges::views::cycle | ranges::views::take(16)) {
         const auto pos = pos_center + Direction::from_cdir(cdir).vec();
-        if (pass_bold(floor, pos, pc)) {
+        if (floor.check_path(pos, pc)) {
             len++;
             continue;
         }
@@ -192,7 +169,7 @@ static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, Pa
     auto count = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos = pos_center + d.vec();
-        if (!pass_bold(floor, pos, pc)) {
+        if (!floor.check_path(pos, pc)) {
             count++;
         }
     }
@@ -238,7 +215,7 @@ static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &point
          * properly.
          * This leaves only a check for 6 bounding walls!
          */
-        if (floor.contains(pos) && pass_bold(floor, pos, pc) && (next_to_walls_adj(floor, pos, pc) == 6) && (next_to_open(floor, pos, pc) <= 1)) {
+        if (floor.contains(pos) && floor.check_path(pos, pc) && (next_to_walls_adj(floor, pos, pc) == 6) && (next_to_open(floor, pos, pc) <= 1)) {
             return;
         }
     }
@@ -271,45 +248,32 @@ static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &
 }
 
 /*!
- * @brief (y1,x1) を含む全ての部屋を照らす。 / Illuminate any room containing the given location.
+ * @brief (y1,x1) を含む全ての部屋を照らす。
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 指定Y座標
  * @param x1 指定X座標
+ * @details (y1,x1) を起点として明るくするマスを記録していく. 実質幅優先探索.
  *
  * NOTE: 部屋に限らないかも?
  */
 void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 {
-    // 明るくするマスを記録する配列。
-    std::vector<Pos2D> points;
-
+    std::vector<Pos2D> positions;
     const auto &floor = *player_ptr->current_floor_ptr;
-
-    // (y1,x1) を起点として明るくするマスを記録していく。
-    // 実質幅優先探索。
-    cave_temp_lite_room_aux(player_ptr, points, { y1, x1 });
-    for (size_t i = 0; i < size(points); i++) {
-        const auto &point = points[i];
-        const POSITION y = point.y;
-        const POSITION x = point.x;
-
-        if (!cave_los_bold(floor, y, x)) {
+    cave_temp_lite_room_aux(player_ptr, positions, { y1, x1 });
+    for (size_t i = 0; i < positions.size(); i++) {
+        const Pos2D pos = positions[i];
+        if (!floor.has_los_terrain_at(pos)) {
             continue;
         }
 
-        cave_temp_lite_room_aux(player_ptr, points, { y + 1, x });
-        cave_temp_lite_room_aux(player_ptr, points, { y - 1, x });
-        cave_temp_lite_room_aux(player_ptr, points, { y, x + 1 });
-        cave_temp_lite_room_aux(player_ptr, points, { y, x - 1 });
-
-        cave_temp_lite_room_aux(player_ptr, points, { y + 1, x + 1 });
-        cave_temp_lite_room_aux(player_ptr, points, { y - 1, x - 1 });
-        cave_temp_lite_room_aux(player_ptr, points, { y - 1, x + 1 });
-        cave_temp_lite_room_aux(player_ptr, points, { y + 1, x - 1 });
+        for (const auto &d : Direction::directions_8()) {
+            cave_temp_lite_room_aux(player_ptr, positions, pos + d.vec());
+        }
     }
 
     // 記録したマスを実際に明るくする。
-    cave_temp_room_lite(player_ptr, points);
+    cave_temp_room_lite(player_ptr, positions);
 
     // 超隠密状態の更新。
     if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
@@ -322,30 +286,25 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param y1 指定Y座標
  * @param x1 指定X座標
+ * @details (y1,x1) を起点として暗くするマスを記録していく. 実質幅優先探索.
  */
 void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 {
-    // 暗くするマスを記録する配列。
-    std::vector<Pos2D> points;
-
+    std::vector<Pos2D> positions;
     const auto &floor = *player_ptr->current_floor_ptr;
-
-    // (y1,x1) を起点として暗くするマスを記録していく。
-    // 実質幅優先探索。
-    cave_temp_unlite_room_aux(player_ptr, points, { y1, x1 });
-    for (size_t i = 0; i < size(points); i++) {
-        const auto &point = points[i];
-        if (!cave_pass_dark_bold(floor, point)) {
+    cave_temp_unlite_room_aux(player_ptr, positions, { y1, x1 });
+    for (size_t i = 0; i < positions.size(); i++) {
+        const Pos2D pos = positions[i];
+        if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
             continue;
         }
 
         for (const auto &d : Direction::directions_8()) {
-            cave_temp_unlite_room_aux(player_ptr, points, point + d.vec());
+            cave_temp_unlite_room_aux(player_ptr, positions, pos + d.vec());
         }
     }
 
-    // 記録したマスを実際に暗くする。
-    cave_temp_room_unlite(player_ptr, points);
+    cave_temp_room_unlite(player_ptr, positions);
 }
 
 /*!
