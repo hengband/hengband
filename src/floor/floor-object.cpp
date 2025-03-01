@@ -38,6 +38,7 @@
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
 #include <range/v3/algorithm.hpp>
+#include <range/v3/functional.hpp>
 #include <range/v3/view.hpp>
 
 /*!
@@ -248,18 +249,14 @@ void excise_object_idx(FloorType &floor, OBJECT_IDX o_idx)
 
 /*!
  * @brief 複数のアイテムを削除する
+ * @details 処理中に削除対象のインデックスが変わらないようにするため、削除対象のインデックスは降順にソートして処理される
  * @param delete_i_idx_list 削除するアイテムの参照IDのリスト
  */
 void delete_items(PlayerType *player_ptr, std::vector<OBJECT_IDX> delete_i_idx_list)
 {
-    while (!delete_i_idx_list.empty()) {
-        const OBJECT_IDX delete_i_idx = delete_i_idx_list.back();
-        delete_i_idx_list.pop_back();
+    ranges::sort(delete_i_idx_list, ranges::greater{});
 
-        // 最後尾のアイテムがdelete_i_idxの位置に移動するので削除リストも更新する
-        const auto back_i_idx = static_cast<OBJECT_IDX>(player_ptr->current_floor_ptr->o_list.size() - 1);
-        ranges::replace(delete_i_idx_list, back_i_idx, delete_i_idx);
-
+    for (const auto delete_i_idx : delete_i_idx_list) {
         delete_object_idx(player_ptr, delete_i_idx);
     }
 }
