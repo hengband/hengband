@@ -178,73 +178,46 @@ static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, Pa
 }
 
 /*!
- * @brief pos が指定条件を満たすなら points に加える
+ * @brief pos が指定条件を満たすかをチェックする
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param points 座標記録用配列
  * @param pos 部屋内の座標
- * @param only_room 部屋内地形のみをチェック対象にするならば TRUE
- * @param pc 地形条件
+ * @param pc 明るくするならLOS、暗くするならPROJECTION
+ * @return 明るくするか暗くするならtrue、何もしないならfalse
+ * @details The reason why it is ==6 instead of >5 is that 8 is impossible due to the check for cave_bold above.
+ * 7 lights dead-end corridors (you need to do this for the checkboard interesting rooms, so that the boundary is lit properly.
+ * This leaves only a check for 6 bounding walls!
  */
-static void cave_temp_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos, bool only_room, PathChecker pc)
+static bool cave_temp_room_aux(PlayerType *player_ptr, const Pos2D &pos, PathChecker pc)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-
-    // 既に points に追加済みなら何もしない。
-    if (grid.info & (CAVE_TEMP)) {
-        return;
+    if (any_bits(grid.info, CAVE_TEMP)) {
+        return false;
     }
 
-    if (!(grid.info & (CAVE_ROOM))) {
-        if (only_room) {
-            return;
-        }
-        if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
-            return;
-        }
-        if (Grid::calc_distance(player_ptr->get_position(), pos) > AngbandSystem::get_instance().get_max_range()) {
-            return;
-        }
-
-        /* Verify this grid */
-        /*
-         * The reason why it is ==6 instead of >5 is that 8 is impossible
-         * due to the check for cave_bold above.
-         * 7 lights dead-end corridors (you need to do this for the
-         * checkboard interesting rooms, so that the boundary is lit
-         * properly.
-         * This leaves only a check for 6 bounding walls!
-         */
-        if (floor.contains(pos) && floor.check_path(pos, pc) && (next_to_walls_adj(floor, pos, pc) == 6) && (next_to_open(floor, pos, pc) <= 1)) {
-            return;
-        }
+    if (any_bits(grid.info, CAVE_ROOM)) {
+        grid.info |= CAVE_TEMP;
+        return true;
     }
 
-    // (y,x) を points に追加し、追加済みフラグを立てる。
-    points.push_back(pos);
-    grid.info |= (CAVE_TEMP);
-}
+    if (pc == PathChecker::PROJECTION) {
+        return false;
+    }
 
-/*!
- * @brief (y,x) が暗くすべきマスなら points に加える
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param y 指定Y座標
- * @param x 指定X座標
- */
-static void cave_temp_unlite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos)
-{
-    cave_temp_room_aux(player_ptr, points, pos, true, PathChecker::PROJECTION);
-}
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+        return false;
+    }
 
-/*!
- * @brief (y,x) が明るくすべきマスなら points に加える
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param points 座標記録用配列
- * @param pos 指定座標
- */
-static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &points, const Pos2D &pos)
-{
-    cave_temp_room_aux(player_ptr, points, pos, false, PathChecker::LOS);
+    if (Grid::calc_distance(player_ptr->get_position(), pos) > AngbandSystem::get_instance().get_max_range()) {
+        return false;
+    }
+
+    if (floor.contains(pos) && floor.check_path(pos, pc) && (next_to_walls_adj(floor, pos, pc) == 6) && (next_to_open(floor, pos, pc) <= 1)) {
+        return false;
+    }
+
+    grid.info |= CAVE_TEMP;
+    return true;
 }
 
 /*!
@@ -258,9 +231,13 @@ static void cave_temp_lite_room_aux(PlayerType *player_ptr, std::vector<Pos2D> &
  */
 void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 {
+    const Pos2D pos_initial(y1, x1);
     std::vector<Pos2D> positions;
     const auto &floor = *player_ptr->current_floor_ptr;
-    cave_temp_lite_room_aux(player_ptr, positions, { y1, x1 });
+    if (cave_temp_room_aux(player_ptr, pos_initial, PathChecker::LOS)) {
+        positions.push_back(pos_initial);
+    }
+
     for (size_t i = 0; i < positions.size(); i++) {
         const Pos2D pos = positions[i];
         if (!floor.has_los_terrain_at(pos)) {
@@ -268,14 +245,14 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
         }
 
         for (const auto &d : Direction::directions_8()) {
-            cave_temp_lite_room_aux(player_ptr, positions, pos + d.vec());
+            const auto pos_neighbor = pos + d.vec();
+            if (cave_temp_room_aux(player_ptr, pos_neighbor, PathChecker::LOS)) {
+                positions.push_back(pos_neighbor);
+            }
         }
     }
 
-    // 記録したマスを実際に明るくする。
     cave_temp_room_lite(player_ptr, positions);
-
-    // 超隠密状態の更新。
     if (floor.grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) {
         set_superstealth(player_ptr, false);
     }
@@ -290,9 +267,13 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
  */
 void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 {
+    const Pos2D pos_initial(y1, x1);
     std::vector<Pos2D> positions;
     const auto &floor = *player_ptr->current_floor_ptr;
-    cave_temp_unlite_room_aux(player_ptr, positions, { y1, x1 });
+    if (cave_temp_room_aux(player_ptr, pos_initial, PathChecker::PROJECTION)) {
+        positions.push_back(pos_initial);
+    }
+
     for (size_t i = 0; i < positions.size(); i++) {
         const Pos2D pos = positions[i];
         if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
@@ -300,7 +281,10 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
         }
 
         for (const auto &d : Direction::directions_8()) {
-            cave_temp_unlite_room_aux(player_ptr, positions, pos + d.vec());
+            const auto pos_neighbor = pos + d.vec();
+            if (cave_temp_room_aux(player_ptr, pos_neighbor, PathChecker::PROJECTION)) {
+                positions.push_back(pos_neighbor);
+            }
         }
     }
 
