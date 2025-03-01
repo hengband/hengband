@@ -187,16 +187,14 @@ static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, Pa
  * 7 lights dead-end corridors (you need to do this for the checkboard interesting rooms, so that the boundary is lit properly.
  * This leaves only a check for 6 bounding walls!
  */
-static bool cave_temp_room_aux(PlayerType *player_ptr, const Pos2D &pos, PathChecker pc)
+static bool cave_temp_room_aux(const FloorType &floor, const Pos2D &pos, const Pos2D &p_pos, PathChecker pc)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
     if (any_bits(grid.info, CAVE_TEMP)) {
         return false;
     }
 
     if (any_bits(grid.info, CAVE_ROOM)) {
-        grid.info |= CAVE_TEMP;
         return true;
     }
 
@@ -208,7 +206,7 @@ static bool cave_temp_room_aux(PlayerType *player_ptr, const Pos2D &pos, PathChe
         return false;
     }
 
-    if (Grid::calc_distance(player_ptr->get_position(), pos) > AngbandSystem::get_instance().get_max_range()) {
+    if (Grid::calc_distance(p_pos, pos) > AngbandSystem::get_instance().get_max_range()) {
         return false;
     }
 
@@ -216,7 +214,6 @@ static bool cave_temp_room_aux(PlayerType *player_ptr, const Pos2D &pos, PathChe
         return false;
     }
 
-    grid.info |= CAVE_TEMP;
     return true;
 }
 
@@ -233,8 +230,10 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 {
     const Pos2D pos_initial(y1, x1);
     std::vector<Pos2D> positions;
-    const auto &floor = *player_ptr->current_floor_ptr;
-    if (cave_temp_room_aux(player_ptr, pos_initial, PathChecker::LOS)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    if (cave_temp_room_aux(floor, pos_initial, p_pos, PathChecker::LOS)) {
+        floor.get_grid(pos_initial).info |= CAVE_TEMP;
         positions.push_back(pos_initial);
     }
 
@@ -246,7 +245,8 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 
         for (const auto &d : Direction::directions_8()) {
             const auto pos_neighbor = pos + d.vec();
-            if (cave_temp_room_aux(player_ptr, pos_neighbor, PathChecker::LOS)) {
+            if (cave_temp_room_aux(floor, pos_neighbor, p_pos, PathChecker::LOS)) {
+                floor.get_grid(pos_neighbor).info |= CAVE_TEMP;
                 positions.push_back(pos_neighbor);
             }
         }
@@ -269,8 +269,10 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 {
     const Pos2D pos_initial(y1, x1);
     std::vector<Pos2D> positions;
-    const auto &floor = *player_ptr->current_floor_ptr;
-    if (cave_temp_room_aux(player_ptr, pos_initial, PathChecker::PROJECTION)) {
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    if (cave_temp_room_aux(floor, pos_initial, p_pos, PathChecker::PROJECTION)) {
+        floor.get_grid(pos_initial).info |= CAVE_TEMP;
         positions.push_back(pos_initial);
     }
 
@@ -282,7 +284,8 @@ void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 
         for (const auto &d : Direction::directions_8()) {
             const auto pos_neighbor = pos + d.vec();
-            if (cave_temp_room_aux(player_ptr, pos_neighbor, PathChecker::PROJECTION)) {
+            if (cave_temp_room_aux(floor, pos_neighbor, p_pos, PathChecker::PROJECTION)) {
+                floor.get_grid(pos_neighbor).info |= CAVE_TEMP;
                 positions.push_back(pos_neighbor);
             }
         }
