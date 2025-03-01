@@ -5559,9 +5559,6 @@
     <ClInclude Include="..\..\src\io\macro-configurations-store.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\system\enums\terrain\path-checker.h">
-      <Filter>system\enums\terrain</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

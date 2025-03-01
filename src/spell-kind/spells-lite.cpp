@@ -11,7 +11,6 @@
 #include "monster/monster-update.h"
 #include "spell-kind/spells-launcher.h"
 #include "system/dungeon/dungeon-definition.h"
-#include "system/enums/terrain/path-checker.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -133,16 +132,16 @@ static void cave_temp_room_unlite(PlayerType *player_ptr, const std::vector<Pos2
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する
  * @param floor フロアへの参照
  * @param pos_center 中心座標
- * @param pc 地形条件
+ * @param tc 地形条件
  * @return 該当地形の数
  */
-static int next_to_open(const FloorType &floor, const Pos2D &pos_center, PathChecker pc)
+static int next_to_open(const FloorType &floor, const Pos2D &pos_center, TerrainCharacteristics tc)
 {
     auto len = 0;
     auto blen = 0;
     for (const auto cdir : ranges::views::iota(0, 8) | ranges::views::cycle | ranges::views::take(16)) {
         const auto pos = pos_center + Direction::from_cdir(cdir).vec();
-        if (floor.check_path(pos, pc)) {
+        if (floor.check_path(pos, tc)) {
             len++;
             continue;
         }
@@ -161,15 +160,15 @@ static int next_to_open(const FloorType &floor, const Pos2D &pos_center, PathChe
  * @brief 周辺に関数ポインタの条件に該当する地形がいくつあるかを計算する
  * @param floor フロアへの参照
  * @param pos_center 中心座標
- * @param pc 地形条件
+ * @param tc 地形条件
  * @return 該当地形の数
  */
-static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, PathChecker pc)
+static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, TerrainCharacteristics tc)
 {
     auto count = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos = pos_center + d.vec();
-        if (!floor.check_path(pos, pc)) {
+        if (!floor.check_path(pos, tc)) {
             count++;
         }
     }
@@ -181,13 +180,13 @@ static int next_to_walls_adj(const FloorType &floor, const Pos2D &pos_center, Pa
  * @brief pos が指定条件を満たすかをチェックする
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos 部屋内の座標
- * @param pc 明るくするならLOS、暗くするならPROJECTION
+ * @param tc 明るくするならLOS、暗くするならPROJECTION
  * @return 明るくするか暗くするならtrue、何もしないならfalse
  * @details The reason why it is ==6 instead of >5 is that 8 is impossible due to the check for cave_bold above.
  * 7 lights dead-end corridors (you need to do this for the checkboard interesting rooms, so that the boundary is lit properly.
  * This leaves only a check for 6 bounding walls!
  */
-static bool cave_temp_room_aux(const FloorType &floor, const Pos2D &pos, const Pos2D &p_pos, PathChecker pc)
+static bool cave_temp_room_aux(const FloorType &floor, const Pos2D &pos, const Pos2D &p_pos, TerrainCharacteristics tc)
 {
     auto &grid = floor.get_grid(pos);
     if (any_bits(grid.info, CAVE_TEMP)) {
@@ -198,7 +197,7 @@ static bool cave_temp_room_aux(const FloorType &floor, const Pos2D &pos, const P
         return true;
     }
 
-    if (pc == PathChecker::PROJECTION) {
+    if (tc == TerrainCharacteristics::PROJECTION) {
         return false;
     }
 
@@ -210,7 +209,7 @@ static bool cave_temp_room_aux(const FloorType &floor, const Pos2D &pos, const P
         return false;
     }
 
-    if (floor.contains(pos) && floor.check_path(pos, pc) && (next_to_walls_adj(floor, pos, pc) == 6) && (next_to_open(floor, pos, pc) <= 1)) {
+    if (floor.contains(pos) && floor.check_path(pos, tc) && (next_to_walls_adj(floor, pos, tc) == 6) && (next_to_open(floor, pos, tc) <= 1)) {
         return false;
     }
 
@@ -228,7 +227,7 @@ void lite_room(PlayerType *player_ptr, const Pos2D &pos_start)
     std::vector<Pos2D> positions;
     auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (cave_temp_room_aux(floor, pos_start, p_pos, PathChecker::LOS)) {
+    if (cave_temp_room_aux(floor, pos_start, p_pos, TerrainCharacteristics::LOS)) {
         floor.get_grid(pos_start).info |= CAVE_TEMP;
         positions.push_back(pos_start);
     }
@@ -241,7 +240,7 @@ void lite_room(PlayerType *player_ptr, const Pos2D &pos_start)
 
         for (const auto &d : Direction::directions_8()) {
             const auto pos_neighbor = pos + d.vec();
-            if (cave_temp_room_aux(floor, pos_neighbor, p_pos, PathChecker::LOS)) {
+            if (cave_temp_room_aux(floor, pos_neighbor, p_pos, TerrainCharacteristics::LOS)) {
                 floor.get_grid(pos_neighbor).info |= CAVE_TEMP;
                 positions.push_back(pos_neighbor);
             }
@@ -265,7 +264,7 @@ void unlite_room(PlayerType *player_ptr, const Pos2D &pos_start)
     std::vector<Pos2D> positions;
     auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (cave_temp_room_aux(floor, pos_start, p_pos, PathChecker::PROJECTION)) {
+    if (cave_temp_room_aux(floor, pos_start, p_pos, TerrainCharacteristics::PROJECTION)) {
         floor.get_grid(pos_start).info |= CAVE_TEMP;
         positions.push_back(pos_start);
     }
@@ -278,7 +277,7 @@ void unlite_room(PlayerType *player_ptr, const Pos2D &pos_start)
 
         for (const auto &d : Direction::directions_8()) {
             const auto pos_neighbor = pos + d.vec();
-            if (cave_temp_room_aux(floor, pos_neighbor, p_pos, PathChecker::PROJECTION)) {
+            if (cave_temp_room_aux(floor, pos_neighbor, p_pos, TerrainCharacteristics::PROJECTION)) {
                 floor.get_grid(pos_neighbor).info |= CAVE_TEMP;
                 positions.push_back(pos_neighbor);
             }

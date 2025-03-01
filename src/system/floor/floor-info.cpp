@@ -15,7 +15,6 @@
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/grid-count-kind.h"
 #include "system/enums/monrace/monrace-hook-types.h"
-#include "system/enums/terrain/path-checker.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/wilderness-grid.h"
@@ -353,15 +352,15 @@ bool FloorType::can_block_disintegration_at(const Pos2D &pos) const
     return !can_reach || !can_disintegrate;
 }
 
-bool FloorType::check_path(const Pos2D &pos, PathChecker pc) const
+bool FloorType::check_path(const Pos2D &pos, TerrainCharacteristics tc) const
 {
-    switch (pc) {
-    case PathChecker::PROJECTION:
+    switch (tc) {
+    case TerrainCharacteristics::PROJECTION:
         return this->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION);
-    case PathChecker::LOS:
+    case TerrainCharacteristics::LOS:
         return this->has_los_terrain_at(pos);
     default:
-        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid PathChecker! {}", enum2i(pc)));
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid PathChecker! {}", enum2i(tc)));
     }
 }
 
