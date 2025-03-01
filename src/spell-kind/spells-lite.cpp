@@ -272,7 +272,7 @@ void unlite_room(PlayerType *player_ptr, const Pos2D &pos_start)
 
     for (size_t i = 0; i < positions.size(); i++) {
         const Pos2D pos = positions[i];
-        if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+        if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
             continue;
         }
 
@@ -307,7 +307,7 @@ bool starlight(PlayerType *player_ptr, bool magic)
         auto attempts = 1000;
         while (attempts--) {
             pos = scatter(player_ptr, p_pos, 4, PROJECT_LOS);
-            if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+            if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
                 continue;
             }
 

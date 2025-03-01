@@ -13,7 +13,7 @@
  */
 const std::unordered_map<std::string_view, TerrainCharacteristics> f_info_flags = {
     { "LOS", TerrainCharacteristics::LOS },
-    { "PROJECT", TerrainCharacteristics::PROJECT },
+    { "PROJECTION", TerrainCharacteristics::PROJECTION },
     { "MOVE", TerrainCharacteristics::MOVE },
     { "PLACE", TerrainCharacteristics::PLACE },
     { "DROP", TerrainCharacteristics::DROP },

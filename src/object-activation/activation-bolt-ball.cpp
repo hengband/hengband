@@ -344,7 +344,7 @@ bool activate_ball_lite(PlayerType *player_ptr, std::string_view name)
         Pos2D pos(0, 0);
         while (attempts--) {
             pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
-            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
                 continue;
             }
 

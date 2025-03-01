@@ -581,7 +581,7 @@ static bool cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx)
             auto attempts = 1000;
             while (attempts--) {
                 pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
-                if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+                if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
                     continue;
                 }
 

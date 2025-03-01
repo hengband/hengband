@@ -197,7 +197,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         }
 
         using Tc = TerrainCharacteristics;
-        if ((player_ptr->action == ACTION_HAYAGAKE) && (terrain_new.flags.has_not(Tc::PROJECT) || (!player_ptr->levitation && terrain_new.flags.has(Tc::DEEP)))) {
+        if ((player_ptr->action == ACTION_HAYAGAKE) && (terrain_new.flags.has_not(Tc::PROJECTION) || (!player_ptr->levitation && terrain_new.flags.has(Tc::DEEP)))) {
             msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
             set_action(player_ptr, ACTION_NONE);
         }

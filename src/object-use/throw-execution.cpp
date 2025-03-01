@@ -311,7 +311,7 @@ void ObjectThrowEntity::drop_thrown_item()
     }
 
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    const auto has_terrain_projection = floor.has_terrain_characteristics({ this->y, this->x }, TerrainCharacteristics::PROJECT);
+    const auto has_terrain_projection = floor.has_terrain_characteristics({ this->y, this->x }, TerrainCharacteristics::PROJECTION);
     const auto drop_y = has_terrain_projection ? this->y : this->prev_y;
     const auto drop_x = has_terrain_projection ? this->x : this->prev_x;
     (void)drop_near(this->player_ptr, this->q_ptr, { drop_y, drop_x }, this->corruption_possibility);
@@ -372,7 +372,7 @@ bool ObjectThrowEntity::check_racial_target_bold()
     this->ny[this->cur_dis] = pos.y;
     this->nx[this->cur_dis] = pos.x;
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    if (floor.has_terrain_characteristics({ this->ny[this->cur_dis], this->nx[this->cur_dis] }, TerrainCharacteristics::PROJECT)) {
+    if (floor.has_terrain_characteristics({ this->ny[this->cur_dis], this->nx[this->cur_dis] }, TerrainCharacteristics::PROJECTION)) {
         return false;
     }
 

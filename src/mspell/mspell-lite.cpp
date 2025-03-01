@@ -67,7 +67,7 @@ static std::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const Mo
 
         bool check_result;
         switch (tc) {
-        case TerrainCharacteristics::PROJECT:
+        case TerrainCharacteristics::PROJECTION:
             check_result = projectable(player_ptr, monster.get_position(), pos_next);
             break;
         case TerrainCharacteristics::LOS:
@@ -97,7 +97,7 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
     const auto pos_lite = msa_ptr->get_position_lite();
     if (los(floor, msa_ptr->m_ptr->get_position(), pos_lite)) {
         const auto &terrain = floor.get_grid(pos_lite).get_terrain();
-        if (terrain.flags.has_not(TerrainCharacteristics::LOS) && terrain.flags.has(TerrainCharacteristics::PROJECT) && one_in_(2)) {
+        if (terrain.flags.has_not(TerrainCharacteristics::LOS) && terrain.flags.has(TerrainCharacteristics::PROJECTION) && one_in_(2)) {
             msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         }
     } else {
@@ -121,7 +121,7 @@ static void feature_projection(const FloorType &floor, msa_type *msa_ptr)
 {
     const Pos2D pos(msa_ptr->y, msa_ptr->x);
     const auto &terrain = floor.get_grid(pos).get_terrain();
-    if (terrain.flags.has(TerrainCharacteristics::PROJECT)) {
+    if (terrain.flags.has(TerrainCharacteristics::PROJECTION)) {
         return;
     }
 
@@ -214,7 +214,7 @@ bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->success = false;
     check_lite_area_by_mspell(player_ptr, msa_ptr);
     if (!msa_ptr->success) {
-        const auto pos = adjacent_grid_check(player_ptr, *msa_ptr->m_ptr, msa_ptr->get_position(), TerrainCharacteristics::PROJECT);
+        const auto pos = adjacent_grid_check(player_ptr, *msa_ptr->m_ptr, msa_ptr->get_position(), TerrainCharacteristics::PROJECTION);
         msa_ptr->success = pos.has_value();
         if (pos) {
             msa_ptr->set_position(*pos);

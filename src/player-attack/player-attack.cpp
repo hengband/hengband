@@ -596,7 +596,7 @@ void massacre(PlayerType *player_ptr)
         const auto pos = player_ptr->get_neighbor(d);
         const auto &grid = floor.get_grid(pos);
         const auto &monster = floor.m_list[grid.m_idx];
-        if (grid.has_monster() && (monster.ml || floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT))) {
+        if (grid.has_monster() && (monster.ml || floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION))) {
             do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
         }
     }

@@ -99,17 +99,17 @@ static void update_monster_dark(
         return;
     }
 
-    if (!grid.has_los_terrain() && !grid.has(TerrainCharacteristics::PROJECT)) {
+    if (!grid.has_los_terrain() && !grid.has(TerrainCharacteristics::PROJECTION)) {
         if (((pos.y < p_pos.y) && (pos.y > monster_lite.m_pos.y)) || ((pos.y > p_pos.y) && (pos.y < monster_lite.m_pos.y))) {
             const auto dpf = p_pos.y - monster_lite.m_pos.y;
             const auto d = pos.y - monster_lite.m_pos.y;
             const auto midpoint = monster_lite.m_pos.x + ((p_pos.x - monster_lite.m_pos.x) * std::abs(d)) / std::abs(dpf);
             if (pos.x < midpoint) {
-                if (!floor.has_los_terrain_at(pos + Direction(6).vec()) && !floor.has_terrain_characteristics({ pos.y, pos.x + 1 }, TerrainCharacteristics::PROJECT)) {
+                if (!floor.has_los_terrain_at(pos + Direction(6).vec()) && !floor.has_terrain_characteristics({ pos.y, pos.x + 1 }, TerrainCharacteristics::PROJECTION)) {
                     return;
                 }
             } else if (pos.x > midpoint) {
-                if (!floor.has_los_terrain_at(pos + Direction(4).vec()) && !floor.has_terrain_characteristics({ pos.y, pos.x - 1 }, TerrainCharacteristics::PROJECT)) {
+                if (!floor.has_los_terrain_at(pos + Direction(4).vec()) && !floor.has_terrain_characteristics({ pos.y, pos.x - 1 }, TerrainCharacteristics::PROJECTION)) {
                     return;
                 }
             } else if (monster_lite.mon_invis) {
@@ -122,11 +122,11 @@ static void update_monster_dark(
             const auto d = pos.x - monster_lite.m_pos.x;
             const auto midpoint = monster_lite.m_pos.y + ((p_pos.y - monster_lite.m_pos.y) * std::abs(d)) / std::abs(dpf);
             if (pos.y < midpoint) {
-                if (!floor.has_los_terrain_at(pos + Direction(2).vec()) && !floor.has_terrain_characteristics({ pos.y + 1, pos.x }, TerrainCharacteristics::PROJECT)) {
+                if (!floor.has_los_terrain_at(pos + Direction(2).vec()) && !floor.has_terrain_characteristics({ pos.y + 1, pos.x }, TerrainCharacteristics::PROJECTION)) {
                     return;
                 }
             } else if (pos.y > midpoint) {
-                if (!floor.has_los_terrain_at(pos + Direction(8).vec()) && !floor.has_terrain_characteristics({ pos.y - 1, pos.x }, TerrainCharacteristics::PROJECT)) {
+                if (!floor.has_los_terrain_at(pos + Direction(8).vec()) && !floor.has_terrain_characteristics({ pos.y - 1, pos.x }, TerrainCharacteristics::PROJECTION)) {
                     return;
                 }
             } else if (monster_lite.mon_invis) {
@@ -212,7 +212,7 @@ void update_mon_lite(PlayerType *player_ptr)
                 }
 
                 add_mon_lite = update_monster_dark;
-                tc = TerrainCharacteristics::PROJECT;
+                tc = TerrainCharacteristics::PROJECTION;
                 rad = -rad;
             }
 

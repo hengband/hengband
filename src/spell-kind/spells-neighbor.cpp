@@ -132,7 +132,7 @@ void wall_breaker(PlayerType *player_ptr)
         Pos2D pos(0, 0);
         while (attempts--) {
             pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
-            if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+            if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
                 continue;
             }
 

@@ -183,7 +183,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
                     symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
                 }
             } else if (is_darkened && !is_blind) {
-                if (terrain_mimic_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECT })) {
+                if (terrain_mimic_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECTION })) {
                     terrain_mimic_ptr = &terrains.get_terrain(tag_unsafe);
                     symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_STANDARD);
                 } else if (view_granite_lite && view_bright_lite) {

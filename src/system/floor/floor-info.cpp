@@ -347,7 +347,7 @@ bool FloorType::can_generate_monster_at(const Pos2D &pos) const
 
 bool FloorType::can_block_disintegration_at(const Pos2D &pos) const
 {
-    const auto can_reach = this->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
+    const auto can_reach = this->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION);
     auto can_disintegrate = this->has_terrain_characteristics(pos, TerrainCharacteristics::HURT_DISI);
     can_disintegrate &= !this->has_terrain_characteristics(pos, TerrainCharacteristics::PERMANENT);
     return !can_reach || !can_disintegrate;
@@ -357,7 +357,7 @@ bool FloorType::check_path(const Pos2D &pos, PathChecker pc) const
 {
     switch (pc) {
     case PathChecker::PROJECTION:
-        return this->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
+        return this->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION);
     case PathChecker::LOS:
         return this->has_los_terrain_at(pos);
     default:
