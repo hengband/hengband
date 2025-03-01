@@ -218,23 +218,19 @@ static bool cave_temp_room_aux(const FloorType &floor, const Pos2D &pos, const P
 }
 
 /*!
- * @brief (y1,x1) を含む全ての部屋を照らす。
+ * @brief 起点座標が含まれる部屋を照らす (部屋でない場合は起点周辺)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y1 指定Y座標
- * @param x1 指定X座標
- * @details (y1,x1) を起点として明るくするマスを記録していく. 実質幅優先探索.
- *
- * NOTE: 部屋に限らないかも?
+ * @param pos_start 起点座標
+ * @details pos_start を起点として明るくするマスを記録していく. 実質幅優先探索.
  */
-void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
+void lite_room(PlayerType *player_ptr, const Pos2D &pos_start)
 {
-    const Pos2D pos_initial(y1, x1);
     std::vector<Pos2D> positions;
     auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (cave_temp_room_aux(floor, pos_initial, p_pos, PathChecker::LOS)) {
-        floor.get_grid(pos_initial).info |= CAVE_TEMP;
-        positions.push_back(pos_initial);
+    if (cave_temp_room_aux(floor, pos_start, p_pos, PathChecker::LOS)) {
+        floor.get_grid(pos_start).info |= CAVE_TEMP;
+        positions.push_back(pos_start);
     }
 
     for (size_t i = 0; i < positions.size(); i++) {
@@ -259,21 +255,19 @@ void lite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
 }
 
 /*!
- * @brief (y1,x1) を含む全ての部屋を暗くする。 / Darken all rooms containing the given location
+ * @brief 起点座標が含まれる部屋を暗くする (部屋でない場合は起点周辺)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param y1 指定Y座標
- * @param x1 指定X座標
- * @details (y1,x1) を起点として暗くするマスを記録していく. 実質幅優先探索.
+ * @param pos_start 指定座標
+ * @details pos_start を起点として暗くするマスを記録していく. 実質幅優先探索.
  */
-void unlite_room(PlayerType *player_ptr, const POSITION y1, const POSITION x1)
+void unlite_room(PlayerType *player_ptr, const Pos2D &pos_start)
 {
-    const Pos2D pos_initial(y1, x1);
     std::vector<Pos2D> positions;
     auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (cave_temp_room_aux(floor, pos_initial, p_pos, PathChecker::PROJECTION)) {
-        floor.get_grid(pos_initial).info |= CAVE_TEMP;
-        positions.push_back(pos_initial);
+    if (cave_temp_room_aux(floor, pos_start, p_pos, PathChecker::PROJECTION)) {
+        floor.get_grid(pos_start).info |= CAVE_TEMP;
+        positions.push_back(pos_start);
     }
 
     for (size_t i = 0; i < positions.size(); i++) {
@@ -330,13 +324,13 @@ bool starlight(PlayerType *player_ptr, bool magic)
 }
 
 /*!
- * @brief プレイヤー位置を中心にLITE_WEAK属性を通じた照明処理を行う / Hack -- call light around the player Affect all monsters in the projection radius
+ * @brief プレイヤー位置を中心にLITE_WEAK属性を通じた照明処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 威力
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool lite_area(PlayerType *player_ptr, int dam, POSITION rad)
+bool lite_area(PlayerType *player_ptr, int dam, int rad)
 {
     if (player_ptr->current_floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS)) {
         msg_print(_("ダンジョンが光を吸収した。", "The darkness of this dungeon absorbs your light."));
@@ -350,19 +344,19 @@ bool lite_area(PlayerType *player_ptr, int dam, POSITION rad)
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
     (void)project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, AttributeType::LITE_WEAK, flg);
 
-    lite_room(player_ptr, player_ptr->y, player_ptr->x);
+    lite_room(player_ptr, player_ptr->get_position());
 
     return true;
 }
 
 /*!
- * @brief プレイヤー位置を中心にLITE_DARK属性を通じた消灯処理を行う / Hack -- call light around the player Affect all monsters in the projection radius
+ * @brief プレイヤー位置を中心にLITE_DARK属性を通じた消灯処理を行う
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param dam 威力
  * @param rad 効果半径
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool unlite_area(PlayerType *player_ptr, int dam, POSITION rad)
+bool unlite_area(PlayerType *player_ptr, int dam, int rad)
 {
     if (!player_ptr->effects()->blindness().is_blind()) {
         msg_print(_("暗闇が辺りを覆った。", "Darkness surrounds you."));
@@ -371,7 +365,7 @@ bool unlite_area(PlayerType *player_ptr, int dam, POSITION rad)
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_KILL;
     (void)project(player_ptr, 0, rad, player_ptr->y, player_ptr->x, dam, AttributeType::DARK_WEAK, flg);
 
-    unlite_room(player_ptr, player_ptr->y, player_ptr->x);
+    unlite_room(player_ptr, player_ptr->get_position());
 
     return true;
 }
