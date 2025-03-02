@@ -89,7 +89,7 @@ void save_prev_data(PlayerType *player_ptr, birther *birther_ptr)
     birther_ptr->ppersonality = player_ptr->ppersonality;
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
-        birther_ptr->realm1 = player_ptr->element;
+        birther_ptr->realm1 = static_cast<int16_t>(player_ptr->element);
         birther_ptr->realm2 = 0;
     } else {
         PlayerRealm pr(player_ptr);

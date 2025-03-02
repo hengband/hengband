@@ -5,6 +5,7 @@
 #include <string_view>
 
 enum class ElementRealmType {
+    NONE = 0,
     FIRE = 1,
     ICE = 2,
     SKY = 3,

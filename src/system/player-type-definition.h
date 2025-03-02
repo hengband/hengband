@@ -43,7 +43,7 @@ public:
     player_personality_type ppersonality{}; /* Personality index */
     RealmType realm1{}; /* First magic realm */
     RealmType realm2{}; /* Second magic realm */
-    int16_t element{}; //!< 元素使い領域番号 / Elementalist system index
+    int element{}; //!< 元素使い領域番号 / Elementalist system index
 
     Dice hit_dice{}; /* Hit dice */
     uint16_t expfact{}; /* Experience factor
