@@ -427,7 +427,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 const auto pos_ddd = pos + d.vec();
                 const auto &grid = floor.get_grid(pos_ddd);
                 const auto &monster = floor.m_list[grid.m_idx];
-                if (!grid.has_monster() || (!monster.ml && !floor.has_terrain_characteristics(pos_ddd, TerrainCharacteristics::PROJECT))) {
+                if (!grid.has_monster() || (!monster.ml && !floor.has_terrain_characteristics(pos_ddd, TerrainCharacteristics::PROJECTION))) {
                     continue;
                 }
 
@@ -726,7 +726,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 total_damage += (damage / 100);
             }
 
-            const auto is_bold = floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT);
+            const auto is_bold = floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION);
             constexpr auto flags = PROJECT_KILL | PROJECT_JUMP | PROJECT_ITEM;
             project(player_ptr, 0, (is_bold ? 5 : 0), pos.y, pos.x, total_damage * 3 / 2, AttributeType::METEOR, flags);
         }

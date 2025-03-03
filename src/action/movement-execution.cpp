@@ -59,7 +59,7 @@ static bool boundary_floor(const Grid &grid, const TerrainType &terrain, const T
     auto is_boundary_floor = grid.mimic > 0;
     is_boundary_floor &= terrain.is_permanent_wall();
     is_boundary_floor &= terrain_mimic.flags.has_any_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY });
-    is_boundary_floor &= terrain_mimic.flags.has(TerrainCharacteristics::PROJECT);
+    is_boundary_floor &= terrain_mimic.flags.has(TerrainCharacteristics::PROJECTION);
     is_boundary_floor &= terrain_mimic.flags.has_not(TerrainCharacteristics::OPEN);
     return is_boundary_floor;
 }

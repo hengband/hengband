@@ -91,7 +91,7 @@ static bool project_stop(const FloorType &floor, const Pos2D &p_pos, ProjectionP
             return true;
         }
     } else if (none_bits(pph_ptr->flag, PROJECT_PATH)) {
-        if (!pph_ptr->positions.empty() && !floor.has_terrain_characteristics(pph_ptr->pos, TerrainCharacteristics::PROJECT)) {
+        if (!pph_ptr->positions.empty() && !floor.has_terrain_characteristics(pph_ptr->pos, TerrainCharacteristics::PROJECTION)) {
             return true;
         }
     }

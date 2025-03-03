@@ -379,6 +379,7 @@ MonsterSpellResult spell_RF6_TELE_LEVEL(PlayerType *player_ptr, MONSTER_IDX m_id
  */
 MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
+    const Pos2D pos(y, x);
     mspell_cast_msg_blind msg;
     concptr msg_done;
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -433,10 +434,10 @@ MonsterSpellResult spell_RF6_DARKNESS(PlayerType *player_ptr, POSITION y, POSITI
     } else if (monster_to_monster) {
         if (can_use_lite_area) {
             (void)project(player_ptr, m_idx, 3, y, x, 0, AttributeType::LITE_WEAK, PROJECT_GRID | PROJECT_KILL);
-            lite_room(player_ptr, y, x);
+            lite_room(player_ptr, pos);
         } else {
             (void)project(player_ptr, m_idx, 3, y, x, 0, AttributeType::DARK_WEAK, PROJECT_GRID | PROJECT_KILL);
-            unlite_room(player_ptr, y, x);
+            unlite_room(player_ptr, pos);
         }
     }
 

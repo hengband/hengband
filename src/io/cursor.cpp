@@ -68,7 +68,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
             term_queue_bigchar(panel_col_of(pos_path.x), pos_path.y - panel_row_prt, symbol_pair);
         }
 
-        if (grid.is_mark() && !grid.has(TerrainCharacteristics::PROJECT)) {
+        if (grid.is_mark() && !grid.has(TerrainCharacteristics::PROJECTION)) {
             break;
         }
 

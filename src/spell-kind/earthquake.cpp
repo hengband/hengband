@@ -269,7 +269,7 @@ void destruct_earthquake_area(PlayerType *player_ptr, std::span<const Pos2D> pos
     for (const auto &pos : pos_collapses | ranges::views::filter(is_changeable)) {
         delete_all_items_from_floor(player_ptr, pos);
 
-        if (floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+        if (floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
             set_terrain_id_to_grid(player_ptr, pos, pt.pick_one_at_random());
         } else {
             set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());

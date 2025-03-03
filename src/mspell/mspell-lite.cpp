@@ -16,7 +16,6 @@
 #include "spell/range-calc.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
-#include "system/enums/terrain/path-checker.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -25,6 +24,8 @@
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
+#include "util/point-2d.h"
+#include <optional>
 
 /*!
  * @brief モンスターがプレイヤーにダメージを与えるための最適な座標を算出する
@@ -35,10 +36,16 @@
  * @param checker 射線判定の振り分け
  * @return 有効な座標があった場合はその座標、なかったらnullopt
  */
-std::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const MonsterEntity &monster, const Pos2D &pos, TerrainCharacteristics tc, PathChecker checker)
+static std::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const MonsterEntity &monster, const Pos2D &pos, TerrainCharacteristics tc)
 {
-    constexpr int tonari_y[4][8] = { { -1, -1, -1, 0, 0, 1, 1, 1 }, { -1, -1, -1, 0, 0, 1, 1, 1 }, { 1, 1, 1, 0, 0, -1, -1, -1 }, { 1, 1, 1, 0, 0, -1, -1, -1 } };
-    constexpr int tonari_x[4][8] = { { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 }, { -1, 0, 1, -1, 1, -1, 0, 1 }, { 1, 0, -1, 1, -1, 1, 0, -1 } };
+    constexpr std::array<std::array<int, 8>, 4> directions = {
+        {
+            { 7, 8, 9, 4, 6, 1, 2, 3 },
+            { 9, 8, 7, 6, 4, 3, 2, 1 },
+            { 1, 2, 3, 4, 6, 7, 8, 9 },
+            { 3, 2, 1, 6, 4, 9, 8, 7 },
+        }
+    };
 
     int next;
     if (monster.fy < player_ptr->y && monster.fx < player_ptr->x) {
@@ -52,23 +59,22 @@ std::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const MonsterEn
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    for (auto i = 0; i < 8; i++) {
-        const Pos2DVec vec(tonari_y[next][i], tonari_x[next][i]);
-        const auto pos_next = pos + vec;
+    for (const auto direction : directions.at(next)) {
+        const auto pos_next = pos + Direction(direction).vec();
         if (!floor.has_terrain_characteristics(pos_next, tc)) {
             continue;
         }
 
         bool check_result;
-        switch (checker) {
-        case PathChecker::PROJECTION:
+        switch (tc) {
+        case TerrainCharacteristics::PROJECTION:
             check_result = projectable(player_ptr, monster.get_position(), pos_next);
             break;
-        case PathChecker::LOS:
+        case TerrainCharacteristics::LOS:
             check_result = los(floor, monster.get_position(), pos_next);
             break;
         default:
-            THROW_EXCEPTION(std::logic_error, format("Invalid PathChecker is specified! %d", enum2i(checker)));
+            THROW_EXCEPTION(std::logic_error, format("Invalid PathChecker is specified! %d", enum2i(tc)));
         }
 
         if (check_result) {
@@ -91,11 +97,11 @@ void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)
     const auto pos_lite = msa_ptr->get_position_lite();
     if (los(floor, msa_ptr->m_ptr->get_position(), pos_lite)) {
         const auto &terrain = floor.get_grid(pos_lite).get_terrain();
-        if (terrain.flags.has_not(TerrainCharacteristics::LOS) && terrain.flags.has(TerrainCharacteristics::PROJECT) && one_in_(2)) {
+        if (terrain.flags.has_not(TerrainCharacteristics::LOS) && terrain.flags.has(TerrainCharacteristics::PROJECTION) && one_in_(2)) {
             msa_ptr->ability_flags.reset(MonsterAbilityType::BR_LITE);
         }
     } else {
-        const auto pos = adjacent_grid_check(player_ptr, *msa_ptr->m_ptr, pos_lite, TerrainCharacteristics::LOS, PathChecker::LOS);
+        const auto pos = adjacent_grid_check(player_ptr, *msa_ptr->m_ptr, pos_lite, TerrainCharacteristics::LOS);
         if (pos) {
             msa_ptr->set_position_lite(*pos);
         } else {
@@ -115,7 +121,7 @@ static void feature_projection(const FloorType &floor, msa_type *msa_ptr)
 {
     const Pos2D pos(msa_ptr->y, msa_ptr->x);
     const auto &terrain = floor.get_grid(pos).get_terrain();
-    if (terrain.flags.has(TerrainCharacteristics::PROJECT)) {
+    if (terrain.flags.has(TerrainCharacteristics::PROJECTION)) {
         return;
     }
 
@@ -208,7 +214,7 @@ bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
     msa_ptr->success = false;
     check_lite_area_by_mspell(player_ptr, msa_ptr);
     if (!msa_ptr->success) {
-        const auto pos = adjacent_grid_check(player_ptr, *msa_ptr->m_ptr, msa_ptr->get_position(), TerrainCharacteristics::PROJECT, PathChecker::PROJECTION);
+        const auto pos = adjacent_grid_check(player_ptr, *msa_ptr->m_ptr, msa_ptr->get_position(), TerrainCharacteristics::PROJECTION);
         msa_ptr->success = pos.has_value();
         if (pos) {
             msa_ptr->set_position(*pos);

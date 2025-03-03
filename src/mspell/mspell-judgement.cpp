@@ -110,7 +110,7 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
                 break;
             }
         } else {
-            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
                 break;
             }
         }
@@ -171,7 +171,7 @@ Pos2D get_project_point(PlayerType *player_ptr, const Pos2D &pos_source, const P
     ProjectionPath path_g(player_ptr, AngbandSystem::get_instance().get_max_range(), pos_source, pos_target_initial, flags);
     Pos2D pos_target = pos_source;
     for (const auto &pos : path_g) {
-        if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+        if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
             break;
         }
 

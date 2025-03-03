@@ -1279,7 +1279,6 @@ hengband_SOURCES = \
 	system/enums/dungeon/dungeon-id.h \
 	system/enums/monrace/monrace-hook-types.h \
 	system/enums/monrace/monrace-id.h \
-	system/enums/terrain/path-checker.h \
 	system/enums/terrain/terrain-characteristics.h \
 	system/enums/terrain/terrain-kind.h \
 	system/enums/terrain/terrain-tag.h \

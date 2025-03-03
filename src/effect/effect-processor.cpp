@@ -131,7 +131,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                 break;
             }
         } else {
-            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT) && (rad > 0)) {
+            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION) && (rad > 0)) {
                 break;
             }
         }

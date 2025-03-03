@@ -6,7 +6,7 @@
  */
 enum class TerrainCharacteristics {
     LOS = 0, /*!< 視界が通る地形である */
-    PROJECT = 1, /*!< 飛び道具が通過できる地形である */
+    PROJECTION = 1, /*!< 飛び道具が通過できる地形である */
     MOVE = 2, /*!< 移動可能な地形である */
     PLACE = 3, /*!< モンスター配置をしても良い地形である(cave_empty_bold/cave_empty_gridで利用) */
     DROP = 4, /*!< アイテムを落としてよい地形である */

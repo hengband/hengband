@@ -32,8 +32,8 @@ void call_the_void(PlayerType *player_ptr)
     for (const auto &d : Direction::directions()) {
         const auto p_pos_neighbor = player_ptr->get_neighbor(d);
         const auto &grid = floor.get_grid(p_pos_neighbor);
-        if (!grid.has(TerrainCharacteristics::PROJECT)) {
-            if (!grid.mimic || grid.get_terrain(TerrainKind::MIMIC_RAW).flags.has_not(TerrainCharacteristics::PROJECT) || !grid.get_terrain().is_permanent_wall()) {
+        if (!grid.has(TerrainCharacteristics::PROJECTION)) {
+            if (!grid.mimic || grid.get_terrain(TerrainKind::MIMIC_RAW).flags.has_not(TerrainCharacteristics::PROJECTION) || !grid.get_terrain().is_permanent_wall()) {
                 do_call = false;
                 break;
             }
@@ -206,7 +206,7 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
             }
 
             const auto is_projectable = projectable(player_ptr, p_pos, pos);
-            if (!is_projectable || !floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+            if (!is_projectable || !floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
                 continue;
             }
 

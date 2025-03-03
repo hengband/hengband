@@ -83,7 +83,7 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
                 return;
             }
 
-            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+            if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
                 return;
             }
         }
