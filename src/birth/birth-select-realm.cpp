@@ -293,10 +293,10 @@ bool get_player_realms(PlayerType *player_ptr)
         if (!realm) {
             return false;
         }
-        player_ptr->element = *realm;
+        player_ptr->element_realm = *realm;
 
         put_str(_("魔法        :", "Magic       :"), 6, 1);
-        c_put_str(TERM_L_BLUE, get_element_title(player_ptr->element), 6, 15);
+        c_put_str(TERM_L_BLUE, get_element_title(player_ptr->element_realm), 6, 15);
         return true;
     }
 

@@ -83,8 +83,8 @@ static std::optional<std::pair<AttributeType, std::string>> decide_breath_kind(P
 
         return std::pair(AttributeType::SOUND, _("轟音", "sound"));
     case PlayerClassType::ELEMENTALIST: {
-        const auto type = get_element_type(player_ptr->element, 0);
-        const std::string name(get_element_name(player_ptr->element, 0));
+        const auto type = get_element_type(player_ptr->element_realm, 0);
+        const std::string name(get_element_name(player_ptr->element_realm, 0));
         return std::pair(type, name);
     }
     default:

@@ -41,7 +41,7 @@ static void rd_realms(PlayerType *player_ptr)
     pr.reset();
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
-        player_ptr->element = i2enum<ElementRealmType>(rd_byte());
+        player_ptr->element_realm = i2enum<ElementRealmType>(rd_byte());
         (void)rd_byte();
         return;
     }

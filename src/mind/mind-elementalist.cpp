@@ -315,7 +315,7 @@ AttributeType get_element_type(ElementRealmType realm, int n)
  */
 static AttributeType get_element_spells_type(PlayerType *player_ptr, int n)
 {
-    const auto &realm = element_types.at(player_ptr->element);
+    const auto &realm = element_types.at(player_ptr->element_realm);
     const auto t = realm.type.at(n);
     if (realm.extra.find(t) != realm.extra.end()) {
         if (evaluate_percent(player_ptr->lev * 2)) {
@@ -354,7 +354,7 @@ const std::string &get_element_name(ElementRealmType realm, int n)
  */
 static std::string get_element_tip(PlayerType *player_ptr, int spell_idx)
 {
-    auto realm = player_ptr->element;
+    auto realm = player_ptr->element_realm;
     auto spell = i2enum<ElementSpells>(spell_idx);
     auto elem = element_powers.at(spell).elem;
     return format(element_tips.at(spell).data(), element_types.at(realm).name[elem].data());
@@ -876,7 +876,7 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
     if (randint1(100) < chance / 2) {
         int plev = player_ptr->lev;
         msg_print(_("元素の力が制御できない氾流となって解放された！", "The elemental power surges from you in an uncontrollable torrent!"));
-        const auto element = get_element_types(player_ptr->element)[0];
+        const auto element = get_element_types(player_ptr->element_realm)[0];
         constexpr auto flags = PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
         project(player_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, player_ptr->y, player_ptr->x, plev * 2, element, flags);
         player_ptr->csp = std::max(0, player_ptr->csp - player_ptr->msp * 10 / (20 + randint1(10)));
@@ -990,7 +990,7 @@ void display_element_spell_list(PlayerType *player_ptr, int y, int x)
         }
 
         const auto elem = get_elemental_elem(player_ptr, i);
-        const auto name = format(spell.name, get_element_name(player_ptr->element, elem).data());
+        const auto name = format(spell.name, get_element_name(player_ptr->element_realm, elem).data());
 
         const auto mana_cost = decide_element_mana_cost(player_ptr, spell);
         const auto chance = decide_element_chance(player_ptr, spell);
@@ -1068,7 +1068,7 @@ static bool is_elemental_genocide_effective(const MonraceDefinition &monrace, At
  */
 ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    const auto &name = get_element_name(player_ptr->element, 0);
+    const auto &name = get_element_name(player_ptr->element_realm, 0);
     if (em_ptr->seen_msg) {
         msg_format(_("%sが%sを包み込んだ。", "The %s surrounds %s."), name.data(), em_ptr->m_name);
     }
@@ -1077,7 +1077,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMo
         em_ptr->obvious = true;
     }
 
-    const auto type = get_element_type(player_ptr->element, 0);
+    const auto type = get_element_type(player_ptr->element_realm, 0);
     const auto is_effective = is_elemental_genocide_effective(*em_ptr->r_ptr, type);
     if (!is_effective) {
         if (em_ptr->seen_msg) {
@@ -1115,7 +1115,7 @@ bool has_element_resist(PlayerType *player_ptr, ElementRealmType realm, PLAYER_L
         return false;
     }
 
-    return (player_ptr->element == realm) && (player_ptr->lev >= lev);
+    return (player_ptr->element_realm == realm) && (player_ptr->lev >= lev);
 }
 
 /*!
@@ -1296,7 +1296,7 @@ void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     auto plev = player_ptr->lev;
     rpi_type rpi;
-    switch (player_ptr->element) {
+    switch (player_ptr->element_realm) {
     case ElementRealmType::FIRE:
         rpi = rpi_type(_("ライト・エリア", "Light area"));
         rpi.text = _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
@@ -1477,7 +1477,7 @@ bool switch_element_execution(PlayerType *player_ptr)
 {
     PLAYER_LEVEL plev = player_ptr->lev;
 
-    switch (player_ptr->element) {
+    switch (player_ptr->element_realm) {
     case ElementRealmType::FIRE:
         (void)lite_area(player_ptr, Dice::roll(2, plev / 2), plev / 10);
         return true;

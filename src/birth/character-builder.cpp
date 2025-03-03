@@ -74,8 +74,8 @@ static void write_birth_diary(PlayerType *player_ptr)
         exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_realm);
     }
 
-    if (player_ptr->element != ElementRealmType::NONE) {
-        const auto mes_element = format(_("%s元素系統に%sを選択した。", "%schose %s system."), indent, get_element_title(player_ptr->element).data());
+    if (player_ptr->element_realm != ElementRealmType::NONE) {
+        const auto mes_element = format(_("%s元素系統に%sを選択した。", "%schose %s system."), indent, get_element_title(player_ptr->element_realm).data());
         exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, mes_element);
     }
 
