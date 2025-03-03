@@ -29,6 +29,7 @@
 #include "io/files-util.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
+#include "mind/mind-elementalist.h"
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -38,6 +39,7 @@
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
+#include "player-info/class-types.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player-info/self-info.h"
@@ -66,7 +68,6 @@
 #include "system/terrain/terrain-list.h"
 #include "target/grid-selector.h"
 #include "util/angband-files.h"
-#include "util/bit-flags-calculator.h"
 #include "util/candidate-selector.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -560,6 +561,16 @@ static void change_birth_flags()
     rfu.set_flags(flags_mwrf);
 }
 
+static std::optional<ElementRealmType> wiz_select_element_realm()
+{
+    constexpr EnumRange element_realms(ElementRealmType::FIRE, ElementRealmType::MAX);
+    CandidateSelector cs("Which realm: ", 15);
+    const auto describe_realm = [](auto realm) { return get_element_title(enum2i(realm)); };
+
+    const auto chosen_realm = cs.select(element_realms, describe_realm);
+    return (chosen_realm != element_realms.end()) ? std::make_optional(*chosen_realm) : std::nullopt;
+}
+
 static std::optional<RealmType> wiz_select_realm(const RealmChoices &choices, const std::string &msg)
 {
     if (choices.count() <= 1) {
@@ -575,8 +586,17 @@ static std::optional<RealmType> wiz_select_realm(const RealmChoices &choices, co
     return (choice != candidates.end()) ? std::make_optional(*choice) : std::nullopt;
 }
 
-static std::optional<std::pair<RealmType, RealmType>> wiz_select_realms(PlayerClassType pclass)
+static std::optional<std::tuple<RealmType, RealmType, ElementRealmType>> wiz_select_realms(PlayerClassType pclass)
 {
+    if (pclass == PlayerClassType::ELEMENTALIST) {
+        const auto realm = wiz_select_element_realm();
+        if (!realm) {
+            return std::nullopt;
+        }
+
+        return std::make_tuple(RealmType::NONE, RealmType::NONE, *realm);
+    }
+
     const auto realm1 = wiz_select_realm(PlayerRealm::get_realm1_choices(pclass), "1st realm: ");
     if (!realm1) {
         return std::nullopt;
@@ -596,7 +616,7 @@ static std::optional<std::pair<RealmType, RealmType>> wiz_select_realms(PlayerCl
         return std::nullopt;
     }
 
-    return std::make_pair(*realm1, *realm2);
+    return std::make_tuple(*realm1, *realm2, ElementRealmType::NONE);
 }
 
 /*!
@@ -645,9 +665,11 @@ void wiz_reset_class(PlayerType *player_ptr)
     PlayerClass(player_ptr).init_specific_data();
     PlayerRealm pr(player_ptr);
     pr.reset();
-    if (chosen_realms->first != RealmType::NONE) {
-        pr.set(chosen_realms->first, chosen_realms->second);
+    const auto &[realm1, realm2, element_realm] = *chosen_realms;
+    if (realm1 != RealmType::NONE) {
+        pr.set(realm1, realm2);
     }
+    player_ptr->element = enum2i(element_realm);
     PlayerSpellStatus pss(player_ptr);
     pss.realm1().initialize();
     pss.realm2().initialize();
@@ -669,9 +691,11 @@ void wiz_reset_realms(PlayerType *player_ptr)
 
     PlayerRealm pr(player_ptr);
     pr.reset();
-    if (chosen_realms->first != RealmType::NONE) {
-        pr.set(chosen_realms->first, chosen_realms->second);
+    const auto &[realm1, realm2, element_realm] = *chosen_realms;
+    if (realm1 != RealmType::NONE) {
+        pr.set(realm1, realm2);
     }
+    player_ptr->element = enum2i(element_realm);
     PlayerSpellStatus pss(player_ptr);
     pss.realm1().initialize();
     pss.realm2().initialize();
