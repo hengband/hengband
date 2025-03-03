@@ -565,9 +565,8 @@ static std::optional<ElementRealmType> wiz_select_element_realm()
 {
     constexpr EnumRange element_realms(ElementRealmType::FIRE, ElementRealmType::MAX);
     CandidateSelector cs("Which realm: ", 15);
-    const auto describe_realm = [](auto realm) { return get_element_title(enum2i(realm)); };
 
-    const auto chosen_realm = cs.select(element_realms, describe_realm);
+    const auto chosen_realm = cs.select(element_realms, get_element_title);
     return (chosen_realm != element_realms.end()) ? std::make_optional(*chosen_realm) : std::nullopt;
 }
 
@@ -669,7 +668,7 @@ void wiz_reset_class(PlayerType *player_ptr)
     if (realm1 != RealmType::NONE) {
         pr.set(realm1, realm2);
     }
-    player_ptr->element = enum2i(element_realm);
+    player_ptr->element = element_realm;
     PlayerSpellStatus pss(player_ptr);
     pss.realm1().initialize();
     pss.realm2().initialize();
@@ -695,7 +694,7 @@ void wiz_reset_realms(PlayerType *player_ptr)
     if (realm1 != RealmType::NONE) {
         pr.set(realm1, realm2);
     }
-    player_ptr->element = enum2i(element_realm);
+    player_ptr->element = element_realm;
     PlayerSpellStatus pss(player_ptr);
     pss.realm1().initialize();
     pss.realm2().initialize();

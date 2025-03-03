@@ -15,7 +15,6 @@
 #include <string>
 
 constexpr auto TOTAL_REALM_NUM = std::ssize(MAGIC_REALM_RANGE) + std::ssize(TECHNIC_REALM_RANGE);
-constexpr byte REALM_SELECT_CANCEL = 255;
 
 struct birth_realm_type {
     birth_realm_type();
@@ -290,10 +289,11 @@ bool get_player_realms(PlayerType *player_ptr)
     pr.reset();
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
-        player_ptr->element = select_element_realm(player_ptr);
-        if (player_ptr->element == REALM_SELECT_CANCEL) {
+        const auto realm = select_element_realm(player_ptr);
+        if (!realm) {
             return false;
         }
+        player_ptr->element = *realm;
 
         put_str(_("魔法        :", "Magic       :"), 6, 1);
         c_put_str(TERM_L_BLUE, get_element_title(player_ptr->element), 6, 15);
