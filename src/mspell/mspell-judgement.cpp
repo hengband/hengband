@@ -160,16 +160,16 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
 
 /*!
  * @brief モンスターが特殊能力の目標地点を決める処理
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
+ * @param p_pos プレイヤーの現在座標
  * @param pos_source 始点座標
  * @param pos_target_initial 目標座標の初期値
  * @param flg 判定のフラグ配列
  * @return 目標座標
  */
-Pos2D get_project_point(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D &pos_target_initial, BIT_FLAGS flags)
+Pos2D get_project_point(const FloorType &floor, const Pos2D &p_pos, const Pos2D &pos_source, const Pos2D &pos_target_initial, BIT_FLAGS flags)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
-    ProjectionPath path_g(floor, AngbandSystem::get_instance().get_max_range(), player_ptr->get_position(), pos_source, pos_target_initial, flags);
+    ProjectionPath path_g(floor, AngbandSystem::get_instance().get_max_range(), p_pos, pos_source, pos_target_initial, flags);
     Pos2D pos_target = pos_source;
     for (const auto &pos : path_g) {
         if (!floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {

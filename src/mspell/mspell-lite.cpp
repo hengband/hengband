@@ -165,7 +165,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
         return;
     }
 
-    const auto pos_breath = get_project_point(player_ptr, m_pos, msa_ptr->get_position(), 0);
+    const auto pos_breath = get_project_point(floor, player_ptr->get_position(), m_pos, msa_ptr->get_position(), 0);
     if ((Grid::calc_distance(pos_breath, pos) <= 3) && los(floor, pos_breath, pos) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
         msa_ptr->success = true;
