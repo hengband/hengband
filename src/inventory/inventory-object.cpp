@@ -302,7 +302,7 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 
     i = j;
-    if (i < INVEN_PACK) {
+    if (i < INVEN_PACK && n >= 0) {
         for (j = 0; j < INVEN_PACK; j++) {
             if (object_sort_comp(player_ptr, *o_ptr, *player_ptr->inventory[j])) {
                 break;
