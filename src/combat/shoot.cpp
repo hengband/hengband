@@ -553,16 +553,17 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     }
 
     /* Predict the "target" location */
-    const auto pos_target = dir.get_target_position(player_ptr->get_position(), 99);
+    const auto p_pos = player_ptr->get_position();
+    const auto pos_target = dir.get_target_position(p_pos, 99);
 
     /* Get projection path length */
-    ProjectionPath path_g(player_ptr, project_length, player_ptr->get_position(), pos_target, PROJECT_PATH | PROJECT_THRU);
+    ProjectionPath path_g(floor, project_length, p_pos, p_pos, pos_target, PROJECT_PATH | PROJECT_THRU);
     tdis = path_g.path_num() - 1;
 
     project_length = 0; /* reset to default */
 
     /* Don't shoot at my feet */
-    if (pos_target == player_ptr->get_position()) {
+    if (pos_target == p_pos) {
         PlayerEnergy(player_ptr).reset_player_turn();
 
         /* project_length is already reset to 0 */
@@ -845,8 +846,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
 
                         /* Sniper */
                         if (snipe_type == SP_RUSH) {
+                            //!< @details プレイヤーの場所が同一であることが保証できないので変数を再宣言する.
+                            const auto p_pos1 = player_ptr->get_position();
                             auto n = randint1(5) + 3;
-                            const auto p_pos = player_ptr->get_position();
                             const auto n0 = n;
                             const auto m_idx = c_mon_ptr->m_idx;
                             for (; cur_dis <= tdis;) {
@@ -869,7 +871,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                 }
 
                                 /* Stopped by monsters */
-                                if (!floor.is_empty_at(pos_to) || (pos_to == p_pos)) {
+                                if (!floor.is_empty_at(pos_to) || (pos_to == p_pos1)) {
                                     break;
                                 }
 

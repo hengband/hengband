@@ -133,7 +133,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
         tm_idx = floor.get_grid(pos_target).m_idx;
     }
 
-    ProjectionPath path_g(player_ptr, project_length, player_ptr->get_position(), pos_target, PROJECT_STOP | PROJECT_KILL);
+    ProjectionPath path_g(floor, project_length, p_pos, p_pos, pos_target, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
     if (path_g.path_num() == 0) {
         return true;
