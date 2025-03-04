@@ -29,7 +29,7 @@ static void wr_relams(PlayerType *player_ptr)
 {
     PlayerRealm pr(player_ptr);
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
-        wr_byte((byte)player_ptr->element);
+        wr_byte((byte)player_ptr->element_realm);
     } else {
         wr_byte((byte)pr.realm1().to_enum());
     }

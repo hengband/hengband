@@ -98,12 +98,12 @@ static void display_player_basic_info(PlayerType *player_ptr)
 static void display_magic_realms(PlayerType *player_ptr)
 {
     PlayerRealm pr(player_ptr);
-    if (!pr.realm1().is_available() && player_ptr->element == 0) {
+    if (!pr.realm1().is_available() && player_ptr->element_realm == ElementRealmType::NONE) {
         return;
     }
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
-        display_player_one_line(ENTRY_REALM, get_element_title(player_ptr->element), TERM_L_BLUE);
+        display_player_one_line(ENTRY_REALM, get_element_title(player_ptr->element_realm), TERM_L_BLUE);
         return;
     }
 

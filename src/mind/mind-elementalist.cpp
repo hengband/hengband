@@ -279,46 +279,43 @@ static element_text_list element_texts = {
 
 /*!
  * @brief 元素魔法の領域名を返す
- * @param realm_idx 領域番号
+ * @param realm 領域
  * @return 領域名
  */
-const std::string &get_element_title(int realm_idx)
+const std::string &get_element_title(ElementRealmType realm)
 {
-    auto realm = i2enum<ElementRealmType>(realm_idx);
     return element_types.at(realm).title;
 }
 
 /*!
  * @brief 元素魔法領域の属性リストを返す
- * @param realm_idx 領域番号
+ * @param realm 領域
  * @return 領域で使用できる属性リスト
  */
-static const std::array<AttributeType, 3> &get_element_types(int realm_idx)
+static const std::array<AttributeType, 3> &get_element_types(ElementRealmType realm)
 {
-    auto realm = i2enum<ElementRealmType>(realm_idx);
     return element_types.at(realm).type;
 }
 
 /*!
  * @brief 元素魔法領域のn番目の属性を返す
- * @param realm_idx 領域番号
+ * @param realm 領域
  * @param n 属性の何番目か
  * @return 属性タイプ
  */
-AttributeType get_element_type(int realm_idx, int n)
+AttributeType get_element_type(ElementRealmType realm, int n)
 {
-    return get_element_types(realm_idx).at(n);
+    return get_element_types(realm).at(n);
 }
 
 /*!
  * @brief 元素魔法領域のn番目の呪文用の属性を返す
- * @param realm_idx 領域番号
  * @param n 属性の何番目か
  * @return 属性タイプ
  */
 static AttributeType get_element_spells_type(PlayerType *player_ptr, int n)
 {
-    const auto &realm = element_types.at(i2enum<ElementRealmType>(player_ptr->element));
+    const auto &realm = element_types.at(player_ptr->element_realm);
     const auto t = realm.type.at(n);
     if (realm.extra.find(t) != realm.extra.end()) {
         if (evaluate_percent(player_ptr->lev * 2)) {
@@ -330,24 +327,23 @@ static AttributeType get_element_spells_type(PlayerType *player_ptr, int n)
 
 /*!
  * @brief 元素魔法領域の属性名リストを返す
- * @param realm_idx 領域番号
+ * @param realm 領域
  * @return 領域で使用できる属性の名称リスト
  */
-static const std::array<std::string, 3> &get_element_names(int realm_idx)
+static const std::array<std::string, 3> &get_element_names(ElementRealmType realm)
 {
-    const auto realm = i2enum<ElementRealmType>(realm_idx);
     return element_types.at(realm).name;
 }
 
 /*!
  * @brief 元素魔法領域のn番目の属性名を返す
- * @param realm_idx 領域番号
+ * @param realm 領域
  * @param n 属性の何番目か
  * @return 属性名
  */
-const std::string &get_element_name(int realm_idx, int n)
+const std::string &get_element_name(ElementRealmType realm, int n)
 {
-    return get_element_names(realm_idx).at(n);
+    return get_element_names(realm).at(n);
 }
 
 /*!
@@ -358,7 +354,7 @@ const std::string &get_element_name(int realm_idx, int n)
  */
 static std::string get_element_tip(PlayerType *player_ptr, int spell_idx)
 {
-    auto realm = i2enum<ElementRealmType>(player_ptr->element);
+    auto realm = player_ptr->element_realm;
     auto spell = i2enum<ElementSpells>(spell_idx);
     auto elem = element_powers.at(spell).elem;
     return format(element_tips.at(spell).data(), element_types.at(realm).name[elem].data());
@@ -880,7 +876,7 @@ static bool try_cast_element_spell(PlayerType *player_ptr, SPELL_IDX spell_idx, 
     if (randint1(100) < chance / 2) {
         int plev = player_ptr->lev;
         msg_print(_("元素の力が制御できない氾流となって解放された！", "The elemental power surges from you in an uncontrollable torrent!"));
-        const auto element = get_element_types(player_ptr->element)[0];
+        const auto element = get_element_types(player_ptr->element_realm)[0];
         constexpr auto flags = PROJECT_JUMP | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
         project(player_ptr, PROJECT_WHO_UNCTRL_POWER, 2 + plev / 10, player_ptr->y, player_ptr->x, plev * 2, element, flags);
         player_ptr->csp = std::max(0, player_ptr->csp - player_ptr->msp * 10 / (20 + randint1(10)));
@@ -994,7 +990,7 @@ void display_element_spell_list(PlayerType *player_ptr, int y, int x)
         }
 
         const auto elem = get_elemental_elem(player_ptr, i);
-        const auto name = format(spell.name, get_element_name(player_ptr->element, elem).data());
+        const auto name = format(spell.name, get_element_name(player_ptr->element_realm, elem).data());
 
         const auto mana_cost = decide_element_mana_cost(player_ptr, spell);
         const auto chance = decide_element_chance(player_ptr, spell);
@@ -1072,7 +1068,7 @@ static bool is_elemental_genocide_effective(const MonraceDefinition &monrace, At
  */
 ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMonster *em_ptr)
 {
-    const auto &name = get_element_name(player_ptr->element, 0);
+    const auto &name = get_element_name(player_ptr->element_realm, 0);
     if (em_ptr->seen_msg) {
         msg_format(_("%sが%sを包み込んだ。", "The %s surrounds %s."), name.data(), em_ptr->m_name);
     }
@@ -1081,7 +1077,7 @@ ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMo
         em_ptr->obvious = true;
     }
 
-    const auto type = get_element_type(player_ptr->element, 0);
+    const auto type = get_element_type(player_ptr->element_realm, 0);
     const auto is_effective = is_elemental_genocide_effective(*em_ptr->r_ptr, type);
     if (!is_effective) {
         if (em_ptr->seen_msg) {
@@ -1119,8 +1115,7 @@ bool has_element_resist(PlayerType *player_ptr, ElementRealmType realm, PLAYER_L
         return false;
     }
 
-    auto prealm = i2enum<ElementRealmType>(player_ptr->element);
-    return (prealm == realm) && (player_ptr->lev >= lev);
+    return (player_ptr->element_realm == realm) && (player_ptr->lev >= lev);
 }
 
 /*!
@@ -1187,12 +1182,13 @@ static int interpret_realm_select_key(int cs, int n, char c)
 /*!
  * @brief 領域選択ループ処理
  * @param player_ptr プレイヤー情報への参照ポインタ
+ * @param realm 選択中の領域
  * @param n 最後尾の位置
  * @return 領域番号
  */
-static int get_element_realm(PlayerType *player_ptr, int is, int n)
+static std::optional<ElementRealmType> get_element_realm(PlayerType *player_ptr, ElementRealmType realm, int n)
 {
-    int cs = std::max(0, is);
+    int cs = std::max(0, enum2i(realm) - 1);
     int os = cs;
     int k;
 
@@ -1208,7 +1204,7 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
         cs = interpret_realm_select_key(cs, n, c);
 
         if (c == 'S') {
-            return 255;
+            return std::nullopt;
         }
 
         if (c == ' ' || c == '\r' || c == '\n') {
@@ -1249,7 +1245,7 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
     }
 
     display_realm_cursor(cs, n, TERM_YELLOW);
-    return cs + 1;
+    return i2enum<ElementRealmType>(cs + 1);
 }
 
 /*!
@@ -1257,12 +1253,12 @@ static int get_element_realm(PlayerType *player_ptr, int is, int n)
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 領域番号
  */
-byte select_element_realm(PlayerType *player_ptr)
+std::optional<ElementRealmType> select_element_realm(PlayerType *player_ptr)
 {
     clear_from(10);
 
     constexpr auto realm_max = enum2i(ElementRealmType::MAX);
-    int realm_idx = 1;
+    auto realm = std::make_optional(ElementRealmType::FIRE);
     int row = 16;
     while (1) {
         put_str(
@@ -1273,13 +1269,12 @@ byte select_element_realm(PlayerType *player_ptr)
             display_realm_cursor(i, realm_max - 1, TERM_WHITE);
         }
 
-        realm_idx = get_element_realm(player_ptr, realm_idx - 1, realm_max - 1);
-        if (realm_idx == 255) {
+        realm = get_element_realm(player_ptr, *realm, realm_max - 1);
+        if (!realm) {
             break;
         }
 
-        auto realm = i2enum<ElementRealmType>(realm_idx);
-        display_wrap_around(element_texts.at(realm), 74, row, 3);
+        display_wrap_around(element_texts.at(*realm), 74, row, 3);
 
         if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::DEFAULT_Y)) {
             break;
@@ -1289,7 +1284,7 @@ byte select_element_realm(PlayerType *player_ptr)
     }
 
     clear_from(10);
-    return (byte)realm_idx;
+    return realm;
 }
 
 /*!
@@ -1300,9 +1295,8 @@ byte select_element_realm(PlayerType *player_ptr)
 void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr)
 {
     auto plev = player_ptr->lev;
-    auto realm = i2enum<ElementRealmType>(player_ptr->element);
     rpi_type rpi;
-    switch (realm) {
+    switch (player_ptr->element_realm) {
     case ElementRealmType::FIRE:
         rpi = rpi_type(_("ライト・エリア", "Light area"));
         rpi.text = _("光源が照らしている範囲か部屋全体を永久に明るくする。", "Lights up nearby area and the inside of a room permanently.");
@@ -1481,10 +1475,9 @@ static bool door_to_darkness(PlayerType *player_ptr, int distance)
  */
 bool switch_element_execution(PlayerType *player_ptr)
 {
-    auto realm = i2enum<ElementRealmType>(player_ptr->element);
     PLAYER_LEVEL plev = player_ptr->lev;
 
-    switch (realm) {
+    switch (player_ptr->element_realm) {
     case ElementRealmType::FIRE:
         (void)lite_area(player_ptr, Dice::roll(2, plev / 2), plev / 10);
         return true;
