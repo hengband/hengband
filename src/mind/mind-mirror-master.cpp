@@ -88,7 +88,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
         }
 
         const auto dist = Grid::calc_distance(p_pos, pos);
-        const auto is_projectable = projectable(player_ptr, p_pos, pos);
+        const auto is_projectable = projectable(floor, p_pos, p_pos, pos);
         if ((dist == 0) || (dist > max_range) || !grid.has_los() || !is_projectable) {
             continue;
         }
@@ -147,7 +147,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (floor.has_los_at(pos) && projectable(player_ptr, p_pos, pos)) {
+            if (floor.has_los_at(pos) && projectable(floor, p_pos, p_pos, pos)) {
                 if (!(player_ptr->effects()->blindness().is_blind()) && panel_contains(y, x)) {
                     print_bolt_pict(player_ptr, y, x, y, x, AttributeType::MANA);
                     move_cursor_relative(y, x);
@@ -173,7 +173,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (floor.has_los_at(pos) && projectable(player_ptr, p_pos, pos)) {
+            if (floor.has_los_at(pos) && projectable(floor, p_pos, p_pos, pos)) {
                 (void)affect_feature(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
             }
         }
@@ -194,7 +194,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (floor.has_los_at(pos) && projectable(player_ptr, p_pos, pos)) {
+            if (floor.has_los_at(pos) && projectable(floor, p_pos, p_pos, pos)) {
                 (void)affect_item(player_ptr, 0, 0, y, x, dam, AttributeType::MANA);
             }
         }
@@ -215,7 +215,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
                 continue;
             }
 
-            if (floor.has_los_at(pos) && projectable(player_ptr, p_pos, pos)) {
+            if (floor.has_los_at(pos) && projectable(floor, p_pos, p_pos, pos)) {
                 constexpr auto flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP;
                 (void)affect_monster(player_ptr, 0, 0, y, x, dam, AttributeType::MANA, flags, true);
             }

@@ -138,10 +138,10 @@ bool breath_direct(PlayerType *player_ptr, const Pos2D &pos_source, const Pos2D 
                 hityou = true;
             }
         } else {
-            if (projectable(player_ptr, pos_source, pos_target) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
+            if (projectable(floor, p_pos, pos_source, pos_target) && (Grid::calc_distance(pos_source, pos_target) <= rad)) {
                 hit2 = true;
             }
-            if (projectable(player_ptr, pos_source, p_pos) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
+            if (projectable(floor, p_pos, pos_source, p_pos) && (Grid::calc_distance(pos_source, p_pos) <= rad)) {
                 hityou = true;
             }
         }

@@ -5,7 +5,6 @@
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
-#include "system/player-type-definition.h"
 #include "util/finalizer.h"
 
 class ProjectionPathHelper {
@@ -245,10 +244,10 @@ ProjectionPath::ProjectionPath(const FloorType &floor, int range, const Pos2D &p
  *
  * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
  */
-bool projectable(PlayerType *player_ptr, const Pos2D &pos1, const Pos2D &pos2)
+bool projectable(const FloorType &floor, const Pos2D &p_pos, const Pos2D &pos1, const Pos2D &pos2)
 {
     const auto range = project_length ? project_length : AngbandSystem::get_instance().get_max_range();
-    ProjectionPath grid_g(*player_ptr->current_floor_ptr, range, player_ptr->get_position(), pos1, pos2, 0);
+    ProjectionPath grid_g(floor, range, p_pos, pos1, pos2, 0);
     if (grid_g.path_num() == 0) {
         return true;
     }

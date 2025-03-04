@@ -27,7 +27,7 @@ bool is_prevent_blast(PlayerType *player_ptr, const Pos2D &center, const Pos2D &
         return !in_disintegration_range(floor, center, pos);
     default:
         /* Others are stopped by walls */
-        return !projectable(player_ptr, center, pos);
+        return !projectable(floor, player_ptr->get_position(), center, pos);
     }
 }
 }

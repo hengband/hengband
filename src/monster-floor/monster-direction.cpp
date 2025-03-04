@@ -58,6 +58,7 @@ static bool decide_pet_approch_direction(PlayerType *player_ptr, const MonsterEn
 static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x)
 {
     auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
     const auto &monster_from = floor.m_list[m_idx];
     const auto &monrace = monster_from.get_monrace();
     for (int i = start; ((i < start + floor.m_max) && (i > start - floor.m_max)); i += plus) {
@@ -90,7 +91,7 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
                 continue;
             }
         } else {
-            if (!projectable(player_ptr, m_pos_from, m_pos_to)) {
+            if (!projectable(floor, p_pos, m_pos_from, m_pos_to)) {
                 continue;
             }
         }

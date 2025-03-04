@@ -171,7 +171,7 @@ public:
         const auto is_enemies = monster.is_hostile_to_melee(floor.m_list[t_m_idx]);
         const auto m_pos = monster.get_position();
         const auto is_los = los(floor, m_pos, pos_target);
-        const auto is_projectable = projectable(this->player_ptr, m_pos, pos_target);
+        const auto is_projectable = projectable(floor, this->player_ptr->get_position(), m_pos, pos_target);
         if (is_enemies && is_los && is_projectable) {
             return pos_target;
         }
@@ -295,8 +295,7 @@ public:
         const auto &monrace = monster.get_monrace();
         const auto p_pos = this->player_ptr->get_position();
         const auto m_pos = monster.get_position();
-
-        if (projectable(this->player_ptr, m_pos, p_pos)) {
+        if (projectable(floor, p_pos, m_pos, p_pos)) {
             return std::nullopt;
         }
 
@@ -345,7 +344,7 @@ public:
                 continue;
             }
 
-            if (!projectable(this->player_ptr, pos_neighbor, p_pos)) {
+            if (!projectable(floor, p_pos, pos_neighbor, p_pos)) {
                 continue;
             }
 
@@ -468,8 +467,8 @@ public:
         const auto no_flow = monster.mflag2.has(MonsterConstantFlagType::NOFLOW) && (m_grid.get_cost(gf) > 2);
         const auto can_pass_wall = monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && (!monster.is_riding() || has_pass_wall(player_ptr));
         const auto can_kill_wall = monrace.feature_flags.has(MonsterFeatureType::KILL_WALL) && !monster.is_riding();
-        const auto is_visible_from_player = m_grid.has_los() && projectable(player_ptr, p_pos, m_pos);
-        const auto can_see_player = los(floor, m_pos, p_pos) && projectable(player_ptr, m_pos, p_pos);
+        const auto is_visible_from_player = m_grid.has_los() && projectable(floor, p_pos, p_pos, m_pos);
+        const auto can_see_player = los(floor, m_pos, p_pos) && projectable(floor, p_pos, m_pos, p_pos);
 
         std::vector<std::unique_ptr<const MonsterMoveGridDecider>> deciders;
 

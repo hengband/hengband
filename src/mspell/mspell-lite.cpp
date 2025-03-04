@@ -59,6 +59,8 @@ static std::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const Mo
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    const auto m_pos = monster.get_position();
     for (const auto direction : directions.at(next)) {
         const auto pos_next = pos + Direction(direction).vec();
         if (!floor.has_terrain_characteristics(pos_next, tc)) {
@@ -68,10 +70,10 @@ static std::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const Mo
         bool check_result;
         switch (tc) {
         case TerrainCharacteristics::PROJECTION:
-            check_result = projectable(player_ptr, monster.get_position(), pos_next);
+            check_result = projectable(floor, p_pos, m_pos, pos_next);
             break;
         case TerrainCharacteristics::LOS:
-            check_result = los(floor, monster.get_position(), pos_next);
+            check_result = los(floor, m_pos, pos_next);
             break;
         default:
             THROW_EXCEPTION(std::logic_error, format("Invalid PathChecker is specified! %d", enum2i(tc)));
@@ -141,10 +143,11 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
     auto light_by_disintegration = msa_ptr->ability_flags.has(MonsterAbilityType::BR_DISI);
     light_by_disintegration &= msa_ptr->m_ptr->cdis < system.get_max_range() / 2;
     const auto pos = msa_ptr->get_position();
+    const auto p_pos = player_ptr->get_position();
     const auto m_pos = msa_ptr->m_ptr->get_position();
     const auto &floor = *player_ptr->current_floor_ptr;
     light_by_disintegration &= in_disintegration_range(floor, m_pos, pos);
-    light_by_disintegration &= one_in_(10) || (projectable(player_ptr, pos, m_pos) && one_in_(2));
+    light_by_disintegration &= one_in_(10) || (projectable(floor, p_pos, pos, m_pos) && one_in_(2));
     if (light_by_disintegration) {
         msa_ptr->do_spell = DO_SPELL_BR_DISI;
         msa_ptr->success = true;
@@ -165,7 +168,7 @@ static void check_lite_area_by_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
         return;
     }
 
-    const auto pos_breath = get_project_point(floor, player_ptr->get_position(), m_pos, msa_ptr->get_position(), 0);
+    const auto pos_breath = get_project_point(floor, p_pos, m_pos, msa_ptr->get_position(), 0);
     if ((Grid::calc_distance(pos_breath, pos) <= 3) && los(floor, pos_breath, pos) && one_in_(5)) {
         msa_ptr->do_spell = DO_SPELL_BA_LITE;
         msa_ptr->success = true;
@@ -206,8 +209,9 @@ static void decide_lite_breath(msa_type *msa_ptr)
 
 bool decide_lite_projection(PlayerType *player_ptr, msa_type *msa_ptr)
 {
-    if (projectable(player_ptr, msa_ptr->m_ptr->get_position(), msa_ptr->get_position())) {
-        feature_projection(*player_ptr->current_floor_ptr, msa_ptr);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    if (projectable(floor, player_ptr->get_position(), msa_ptr->m_ptr->get_position(), msa_ptr->get_position())) {
+        feature_projection(floor, msa_ptr);
         return true;
     }
 

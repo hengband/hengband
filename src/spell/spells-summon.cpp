@@ -312,7 +312,7 @@ void mitokohmon(PlayerType *player_ptr)
             if (!los(floor, m_pos, p_pos)) {
                 continue;
             }
-            if (!projectable(player_ptr, m_pos, p_pos)) {
+            if (!projectable(floor, p_pos, m_pos, p_pos)) {
                 continue;
             }
             count++;

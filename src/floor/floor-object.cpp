@@ -310,6 +310,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
     auto bs = -1;
     auto bn = 0;
     auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
     auto has_floor_space = false;
     for (auto dy = -3; dy <= 3; dy++) {
         for (auto dx = -3; dx <= 3; dx++) {
@@ -324,7 +325,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
             if (!floor.contains(pos_target)) {
                 continue;
             }
-            if (!projectable(player_ptr, pos, pos_target)) {
+            if (!projectable(floor, p_pos, pos, pos_target)) {
                 continue;
             }
 
