@@ -216,6 +216,11 @@ bool Grid::is_darkened() const
     return match_bits(this->info, CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK, CAVE_VIEW | CAVE_MNDK);
 }
 
+bool Grid::is_clean() const
+{
+    return this->has(TerrainCharacteristics::FLOOR) && !this->is_object() && this->o_idx_list.empty();
+}
+
 bool Grid::has_special_terrain() const
 {
     return this->get_terrain().flags.has(TerrainCharacteristics::SPECIAL);

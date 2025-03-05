@@ -128,6 +128,7 @@ public:
     bool order_pet_dismission(short index1, short index2, short riding_index) const;
     bool contains(const Pos2D &pos, FloorBoundary fb = FloorBoundary::OUTER_WALL_EXCLUSIVE) const;
     bool is_empty_at(const Pos2D &pos) const;
+    bool is_clean_at(const Pos2D &pos) const;
     bool can_generate_monster_at(const Pos2D &pos) const;
     bool can_block_disintegration_at(const Pos2D &pos) const;
 

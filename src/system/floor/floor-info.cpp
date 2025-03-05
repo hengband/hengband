@@ -337,6 +337,11 @@ bool FloorType::is_empty_at(const Pos2D &pos) const
     return is_empty_grid;
 }
 
+bool FloorType::is_clean_at(const Pos2D &pos) const
+{
+    return this->get_grid(pos).is_clean();
+}
+
 bool FloorType::can_generate_monster_at(const Pos2D &pos) const
 {
     auto is_empty_grid = this->is_empty_at(pos);
