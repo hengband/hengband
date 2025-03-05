@@ -35,7 +35,7 @@
 static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    return cave_clean_bold(floor, pos.y, pos.x) && (floor.get_grid(pos).m_idx == 0) && !player_ptr->is_located_at(pos);
+    return floor.is_clean_at(pos) && floor.get_grid(pos).has_monster() && !player_ptr->is_located_at(pos);
 }
 
 /*!
