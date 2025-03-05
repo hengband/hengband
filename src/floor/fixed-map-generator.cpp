@@ -5,7 +5,6 @@
 #include "floor/floor-object.h"
 #include "floor/wild.h"
 #include "grid/object-placer.h"
-#include "grid/trap.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
@@ -143,7 +142,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             if (evaluate_percent(75)) {
                 place_object(player_ptr, pos, 0);
             } else {
-                place_trap(floor, pos);
+                floor.place_trap_at(pos);
             }
 
             floor.object_level = floor.base_level;
@@ -161,7 +160,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             floor.object_level = floor.base_level;
         } else if (random & RANDOM_TRAP) {
             const Pos2D pos(*qtwg_ptr->y, *qtwg_ptr->x);
-            place_trap(floor, pos);
+            floor.place_trap_at(pos);
         } else if (letter[idx].trap) {
             grid.mimic = grid.feat;
             grid.feat = dungeon.convert_terrain_id(letter[idx].trap);

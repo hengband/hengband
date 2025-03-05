@@ -3,7 +3,6 @@
 #include "floor/floor-util.h"
 #include "game-option/cheat-options.h"
 #include "grid/object-placer.h"
-#include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "system/enums/terrain/terrain-characteristics.h"
@@ -129,7 +128,7 @@ static void vault_trap_aux(FloorType &floor, const Pos2D &pos_center, const Pos2
             continue;
         }
 
-        place_trap(floor, pos);
+        floor.place_trap_at(pos);
         break;
     }
 }

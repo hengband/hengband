@@ -695,6 +695,25 @@ void FloorType::set_terrain_id_at(const Pos2D &pos, short terrain_id, TerrainKin
 }
 
 /*!
+ * @brief マスにトラップを配置する
+ * @param pos 配置したいマスの座標
+ */
+void FloorType::place_trap_at(const Pos2D &pos)
+{
+    auto &grid = this->get_grid(pos);
+    if (!this->contains(pos)) {
+        return;
+    }
+
+    if (!this->is_clean_at(pos)) {
+        return;
+    }
+
+    grid.mimic = grid.feat;
+    grid.set_terrain_id(this->select_random_trap());
+}
+
+/*!
  * @brief アイテムの抽選回数をランダムに決定する
  * @return 抽選回数
  * @details 40 % で1回、50 % で2回、10 % で3回.

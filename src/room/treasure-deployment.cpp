@@ -7,7 +7,6 @@
 #include "room/treasure-deployment.h"
 #include "floor/cave.h"
 #include "grid/object-placer.h"
-#include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
@@ -74,7 +73,7 @@ void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &cent
             place_object(player_ptr, pos, 0);
             return;
         }
-        place_trap(floor, pos);
+        floor.place_trap_at(pos);
         return;
     }
 
@@ -82,7 +81,7 @@ void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &cent
         floor.monster_level = floor.base_level + 5;
         place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
         floor.monster_level = floor.base_level;
-        place_trap(floor, pos);
+        floor.place_trap_at(pos);
         return;
     }
 
@@ -101,7 +100,7 @@ void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &cent
     }
 
     if (value < 50) {
-        place_trap(floor, pos);
+        floor.place_trap_at(pos);
         return;
     }
 
@@ -111,7 +110,7 @@ void deploy_treasure(PlayerType *player_ptr, FloorType &floor, const Pos2D &cent
     }
 
     if (one_in_(2)) {
-        place_trap(floor, pos);
+        floor.place_trap_at(pos);
         return;
     }
 

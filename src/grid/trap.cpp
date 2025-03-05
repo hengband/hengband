@@ -135,25 +135,6 @@ void disclose_grid(PlayerType *player_ptr, const Pos2D &pos)
 }
 
 /*!
- * @brief マスにトラップを配置する
- * @param pos 配置したいマスの座標
- */
-void place_trap(FloorType &floor, const Pos2D &pos)
-{
-    auto &grid = floor.get_grid(pos);
-    if (!floor.contains(pos)) {
-        return;
-    }
-
-    if (!floor.is_clean_at(pos)) {
-        return;
-    }
-
-    grid.mimic = grid.feat;
-    grid.set_terrain_id(floor.select_random_trap());
-}
-
-/*!
  * @brief プレイヤーへのトラップ命中判定 /
  * Determine if a trap affects the player.
  * @param power 基本回避難度

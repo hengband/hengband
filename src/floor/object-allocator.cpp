@@ -5,7 +5,6 @@
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/object-placer.h"
-#include "grid/trap.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
@@ -171,7 +170,7 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_TRAP:
-            place_trap(floor, pos);
+            floor.place_trap_at(pos);
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_GOLD:

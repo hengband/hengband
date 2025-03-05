@@ -154,6 +154,7 @@ public:
     void place_random_stairs(const Pos2D &pos);
     void set_terrain_id_at(const Pos2D &pos, TerrainTag tag, TerrainKind tk = TerrainKind::NORMAL);
     void set_terrain_id_at(const Pos2D &pos, short terrain_id, TerrainKind tk = TerrainKind::NORMAL);
+    void place_trap_at(const Pos2D &pos);
 
 private:
     static int decide_selection_count();

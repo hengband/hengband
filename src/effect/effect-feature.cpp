@@ -271,7 +271,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::MAKE_TRAP: {
-        place_trap(floor, pos);
+        floor.place_trap_at(pos);
         break;
     }
     case AttributeType::MAKE_TREE: {
