@@ -62,7 +62,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
                 continue;
             }
 
-            if (!projectable(player_ptr, pos, pos_neighbor)) {
+            if (!projectable(floor, p_pos, pos, pos_neighbor)) {
                 continue;
             }
 

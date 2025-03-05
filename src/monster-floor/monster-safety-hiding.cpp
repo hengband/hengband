@@ -55,7 +55,7 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
             }
         }
 
-        if (projectable(player_ptr, p_pos, pos)) {
+        if (projectable(floor, p_pos, p_pos, pos)) {
             continue;
         }
 
@@ -114,18 +114,19 @@ std::optional<Pos2D> find_safety(PlayerType *player_ptr, short m_idx)
 static void sweep_hiding_candidate(
     PlayerType *player_ptr, const MonsterEntity &monster, std::span<const Pos2DVec> offsets, coordinate_candidate &candidate)
 {
+    const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monrace = monster.get_monrace();
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();
     for (const auto &vec : offsets) {
         const auto pos = m_pos + vec;
-        if (!player_ptr->current_floor_ptr->contains(pos)) {
+        if (!floor.contains(pos)) {
             continue;
         }
         if (!monster_can_enter(player_ptr, pos.y, pos.x, monrace, 0)) {
             continue;
         }
-        if (projectable(player_ptr, p_pos, pos) || !clean_shot(player_ptr, monster.fy, monster.fx, pos.y, pos.x, false)) {
+        if (projectable(floor, p_pos, p_pos, pos) || !clean_shot(player_ptr, monster.fy, monster.fx, pos.y, pos.x, false)) {
             continue;
         }
 

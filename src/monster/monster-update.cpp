@@ -509,10 +509,11 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         monster.mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
     }
 
+    const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();
-    const auto projectable_from_monster = projectable(player_ptr, m_pos, p_pos);
-    const auto projectable_from_player = projectable(player_ptr, p_pos, m_pos);
+    const auto projectable_from_monster = projectable(floor, p_pos, m_pos, p_pos);
+    const auto projectable_from_player = projectable(floor, p_pos, p_pos, m_pos);
     if (disturb_near && projectable_from_monster && projectable_from_player) {
         if (disturb_pets || monster.is_hostile()) {
             disturb(player_ptr, true, true);

@@ -113,7 +113,8 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     /* Calculate the projection path */
     const auto &system = AngbandSystem::get_instance();
     const auto range = project_length != 0 ? project_length : AngbandSystem::get_instance().get_max_range();
-    ProjectionPath path_g(*player_ptr->current_floor_ptr, range, player_ptr->get_position(), pos_source, pos_target, flag);
+    auto &floor = *player_ptr->current_floor_ptr;
+    ProjectionPath path_g(floor, range, player_ptr->get_position(), pos_source, pos_target, flag);
     handle_stuff(player_ptr);
 
     auto k = 0;
@@ -121,7 +122,6 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     auto visual = false;
     auto see_s_msg = true;
     const auto is_blind = player_ptr->effects()->blindness().is_blind();
-    auto &floor = *player_ptr->current_floor_ptr;
     for (const auto &pos : path_g) {
         if (flag & PROJECT_DISI) {
             if (floor.can_block_disintegration_at(pos) && (rad > 0)) {
@@ -239,9 +239,10 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
 
     update_creature(player_ptr);
 
+    const auto p_pos = player_ptr->get_position();
     if (flag & PROJECT_KILL) {
-        see_s_msg = is_monster(src_idx) ? is_seen(player_ptr, player_ptr->current_floor_ptr->m_list[src_idx])
-                                        : (is_player(src_idx) ? true : (player_can_see_bold(player_ptr, pos_source.y, pos_source.x) && projectable(player_ptr, player_ptr->get_position(), pos_source)));
+        see_s_msg = is_monster(src_idx) ? is_seen(player_ptr, floor.m_list[src_idx])
+                                        : (is_player(src_idx) ? true : (player_can_see_bold(player_ptr, pos_source.y, pos_source.x) && projectable(floor, p_pos, p_pos, pos_source)));
     }
 
     if (flag & (PROJECT_GRID)) {
@@ -282,7 +283,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         pos_reflection.y = pos_source.y - 1 + randint1(3);
                         pos_reflection.x = pos_source.x - 1 + randint1(3);
                         max_attempts--;
-                    } while (max_attempts && floor.contains(pos_reflection, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(player_ptr, pos, pos_reflection));
+                    } while (max_attempts && floor.contains(pos_reflection, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(floor, p_pos, pos, pos_reflection));
 
                     if (max_attempts < 1) {
                         pos_reflection = pos_source;

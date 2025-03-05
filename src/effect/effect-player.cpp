@@ -90,6 +90,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
     }
 
     msg_print(mes);
+    const auto p_pos = player_ptr->get_position();
     Pos2D pos(0, 0);
     if (ep_ptr->is_monster()) {
         const auto &floor = *player_ptr->current_floor_ptr;
@@ -98,14 +99,14 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
             const Pos2DVec vec(randint1(3) - 1, randint1(3) - 1);
             pos = monster.get_position() + vec;
             max_attempts--;
-        } while (max_attempts && floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(player_ptr, player_ptr->get_position(), pos));
+        } while (max_attempts && floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(floor, p_pos, p_pos, pos));
 
         if (max_attempts < 1) {
             pos = monster.get_position();
         }
     } else {
         const Pos2DVec vec(randint1(3) - 1, randint1(3) - 1);
-        pos = player_ptr->get_position() + vec;
+        pos = p_pos + vec;
     }
 
     (*project)(player_ptr, 0, 0, pos.y, pos.x, ep_ptr->dam, ep_ptr->attribute, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), std::nullopt);

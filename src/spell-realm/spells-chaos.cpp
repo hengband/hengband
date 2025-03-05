@@ -205,7 +205,7 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
                 continue;
             }
 
-            const auto is_projectable = projectable(player_ptr, p_pos, pos);
+            const auto is_projectable = projectable(floor, p_pos, p_pos, pos);
             if (!is_projectable || !floor.has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
                 continue;
             }

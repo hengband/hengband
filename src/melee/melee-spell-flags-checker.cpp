@@ -32,8 +32,9 @@ static void decide_melee_spell_target(PlayerType *player_ptr, melee_spell_type *
     }
 
     ms_ptr->target_idx = player_ptr->pet_t_m_idx;
-    ms_ptr->t_ptr = &player_ptr->current_floor_ptr->m_list[ms_ptr->target_idx];
-    if ((ms_ptr->m_idx == ms_ptr->target_idx) || !projectable(player_ptr, ms_ptr->m_ptr->get_position(), ms_ptr->t_ptr->get_position())) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    ms_ptr->t_ptr = &floor.m_list[ms_ptr->target_idx];
+    if ((ms_ptr->m_idx == ms_ptr->target_idx) || !projectable(floor, player_ptr->get_position(), ms_ptr->m_ptr->get_position(), ms_ptr->t_ptr->get_position())) {
         ms_ptr->target_idx = 0;
     }
 }
@@ -58,7 +59,7 @@ static void decide_indirection_melee_spell(PlayerType *player_ptr, melee_spell_t
         return;
     }
 
-    if (projectable(player_ptr, monster_from.get_position(), monster_to.get_position())) {
+    if (projectable(floor, player_ptr->get_position(), monster_from.get_position(), monster_to.get_position())) {
         return;
     }
 
@@ -72,7 +73,7 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
     }
 
     int start;
-    int plus = 1;
+    auto plus = 1;
     const auto &floor = *player_ptr->current_floor_ptr;
     if (AngbandSystem::get_instance().is_phase_out()) {
         start = randint1(floor.m_max - 1) + floor.m_max;
@@ -83,9 +84,10 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
         start = floor.m_max + 1;
     }
 
+    const auto p_pos = player_ptr->get_position();
     for (int i = start; ((i < start + floor.m_max) && (i > start - floor.m_max)); i += plus) {
-        MONSTER_IDX dummy = (i % floor.m_max);
-        if (!dummy) {
+        short dummy = i % floor.m_max;
+        if (dummy == 0) {
             continue;
         }
 
@@ -94,7 +96,7 @@ static bool check_melee_spell_projection(PlayerType *player_ptr, melee_spell_typ
         const auto &monster_from = *ms_ptr->m_ptr;
         const auto &monster_to = *ms_ptr->t_ptr;
         const auto is_enemies = monster_from.is_hostile_to_melee(monster_to);
-        const auto is_projectable = projectable(player_ptr, monster_from.get_position(), monster_to.get_position());
+        const auto is_projectable = projectable(floor, p_pos, monster_from.get_position(), monster_to.get_position());
         if (!monster_to.is_valid() || (ms_ptr->m_idx == ms_ptr->target_idx) || !is_enemies || !is_projectable) {
             continue;
         }
@@ -162,7 +164,7 @@ static void check_melee_spell_distance(PlayerType *player_ptr, melee_spell_type 
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = ms_ptr->m_ptr->get_position();
     const auto pos_real = get_project_point(floor, p_pos, m_pos, ms_ptr->get_position(), 0L);
-    auto should_preserve = !projectable(player_ptr, pos_real, p_pos);
+    auto should_preserve = !projectable(floor, p_pos, pos_real, p_pos);
     should_preserve &= ms_ptr->ability_flags.has(MonsterAbilityType::BA_LITE);
     should_preserve &= Grid::calc_distance(pos_real, p_pos) <= 4;
     should_preserve &= los(*player_ptr->current_floor_ptr, pos_real, p_pos);
@@ -205,7 +207,7 @@ static void check_melee_spell_rocket(PlayerType *player_ptr, melee_spell_type *m
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = ms_ptr->m_ptr->get_position();
     const auto pos_real = get_project_point(floor, p_pos, m_pos, ms_ptr->get_position(), PROJECT_STOP);
-    if (projectable(player_ptr, pos_real, p_pos) && (Grid::calc_distance(pos_real, p_pos) <= 2)) {
+    if (projectable(floor, p_pos, pos_real, p_pos) && (Grid::calc_distance(pos_real, p_pos) <= 2)) {
         ms_ptr->ability_flags.reset(MonsterAbilityType::ROCKET);
     }
 }

@@ -53,7 +53,7 @@ bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam)
         }
 
         const auto m_pos = monster.get_position();
-        if (!floor.has_los_at(m_pos) || !projectable(player_ptr, p_pos, m_pos)) {
+        if (!floor.has_los_at(m_pos) || !projectable(floor, p_pos, p_pos, m_pos)) {
             continue;
         }
 

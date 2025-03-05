@@ -338,9 +338,11 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
             return false;
         }
 
-        const auto &grid = player_ptr->current_floor_ptr->get_grid(*pos);
+        const auto &floor = *player_ptr->current_floor_ptr;
+        const auto &grid = floor.get_grid(*pos);
         const auto m_idx = grid.m_idx;
-        const auto is_projectable = projectable(player_ptr, player_ptr->get_position(), *pos);
+        const auto p_pos = player_ptr->get_position();
+        const auto is_projectable = projectable(floor, p_pos, p_pos, *pos);
         if ((m_idx == 0) || !grid.has_los() || !is_projectable) {
             break;
         }
