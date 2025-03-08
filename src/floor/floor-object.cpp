@@ -329,7 +329,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
                 continue;
             }
 
-            if (!cave_drop_bold(floor, pos_target.y, pos_target.x)) {
+            if (!floor.can_drop_item_at(pos_target)) {
                 continue;
             }
 
@@ -393,7 +393,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
         }
 
         pos_drop = pos_target;
-        if (!cave_drop_bold(floor, pos_drop.y, pos_drop.x)) {
+        if (!floor.can_drop_item_at(pos_drop)) {
             continue;
         }
 
@@ -402,7 +402,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std
 
     auto &artifact = j_ptr->get_fixed_artifact();
     if (!has_floor_space) {
-        const auto can_drop = [&](const Pos2D &pos) { return cave_drop_bold(floor, pos.y, pos.x); };
+        const auto can_drop = [&](const Pos2D &pos) { return floor.can_drop_item_at(pos); };
         const auto pos_drop_candidates = floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE) | ranges::views::filter(can_drop) | ranges::to_vector;
 
         if (pos_drop_candidates.empty()) {

@@ -16,19 +16,6 @@
 #include "util/bit-flags-calculator.h"
 #include "world/world.h"
 
-/*
- * Determine if an object can be dropped on a "legal" grid
- *
- * Line 1 -- forbid non-drops
- * Line 2 -- forbid object terrains
- */
-bool cave_drop_bold(const FloorType &floor, int y, int x)
-{
-    const Pos2D pos(y, x);
-    const auto &grid = floor.get_grid(pos);
-    return floor.has_terrain_characteristics(pos, TerrainCharacteristics::DROP) && !grid.is_object();
-}
-
 bool pattern_tile(const FloorType &floor, int y, int x)
 {
     const Pos2D pos(y, x);
