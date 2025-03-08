@@ -852,13 +852,13 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                             const auto n0 = n;
                             const auto m_idx = c_mon_ptr->m_idx;
                             for (; cur_dis <= tdis;) {
-                                const Pos2D pos_orig = pos_impact;
+                                const Pos2D pos_orig = { y, x };
                                 if (n == 0) {
                                     break;
                                 }
 
                                 /* Calculate the new location (see "project()") */
-                                const auto pos_to = mmove2(pos_impact, player_ptr->get_position(), pos_target);
+                                const auto pos_to = mmove2(pos_orig, player_ptr->get_position(), pos_target);
 
                                 /* Stopped by wilderness boundary */
                                 if (!floor.contains(pos_to, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
