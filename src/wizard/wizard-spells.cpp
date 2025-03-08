@@ -9,7 +9,6 @@
 #include "core/asking-player.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "floor/pattern-walk.h"
 #include "io/gf-descriptions.h"

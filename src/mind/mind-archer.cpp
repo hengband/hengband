@@ -3,7 +3,6 @@
 #include "autopick/autopick.h"
 #include "core/asking-player.h"
 #include "flavor/flavor-describer.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"

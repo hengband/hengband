@@ -3,7 +3,6 @@
 #include "core/disturbance.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/floor-mode-changer.h"
 #include "game-option/birth-options.h"
 #include "game-option/special-options.h"

@@ -1,6 +1,5 @@
 #include "spell-kind/earthquake.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "game-option/play-record-options.h"
 #include "game-option/text-display-options.h"

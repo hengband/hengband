@@ -1,7 +1,6 @@
 #include "spell-kind/spells-lite.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "game-option/map-screen-options.h"
 #include "grid/grid.h"

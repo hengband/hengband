@@ -1,5 +1,4 @@
 #include "grid/object-placer.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "system/floor/floor-info.h"

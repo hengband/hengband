@@ -13,7 +13,6 @@
 #include "effect/effect-monster-util.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/game-option-page.h"

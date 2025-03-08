@@ -3,7 +3,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "hpmp/hp-mp-processor.h"
 #include "monster-floor/monster-summon.h"

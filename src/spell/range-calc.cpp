@@ -6,7 +6,6 @@
 
 #include "spell/range-calc.h"
 #include "effect/attribute-types.h"
-#include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"

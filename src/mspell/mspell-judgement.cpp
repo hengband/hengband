@@ -12,7 +12,6 @@
 #include "mspell/mspell-judgement.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
-#include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "main/sound-definitions-table.h"
 #include "monster-race/race-flags-resistance.h"

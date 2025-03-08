@@ -9,7 +9,6 @@
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "game-option/disturbance-options.h"
 #include "spell/range-calc.h"
 #include "system/enums/terrain/terrain-characteristics.h"

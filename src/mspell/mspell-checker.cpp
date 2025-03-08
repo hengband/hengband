@@ -12,7 +12,6 @@
 #include "mspell/mspell-checker.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster/monster-info.h"

@@ -1,6 +1,5 @@
 #include "floor/object-allocator.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"

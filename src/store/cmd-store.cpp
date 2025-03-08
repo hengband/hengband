@@ -3,7 +3,6 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
-#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"

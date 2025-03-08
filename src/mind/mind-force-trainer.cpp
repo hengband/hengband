@@ -4,7 +4,6 @@
 #include "core/stuff-handler.h"
 #include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"

@@ -7,7 +7,6 @@
 
 #include "monster-floor/monster-generator.h"
 #include "effect/effect-characteristics.h"
-#include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"

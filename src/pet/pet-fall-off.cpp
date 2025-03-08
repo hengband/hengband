@@ -7,7 +7,6 @@
 #include "pet/pet-fall-off.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "monster-attack/monster-attack-player.h"

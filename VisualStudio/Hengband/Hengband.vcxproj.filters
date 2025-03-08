@@ -1580,9 +1580,6 @@
     <ClCompile Include="..\..\src\racial\racial-switcher.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\cave.cpp">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\save\save.cpp">
       <Filter>save</Filter>
     </ClCompile>
@@ -4378,9 +4375,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h">
       <Filter>dungeon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor\cave.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\save\save.h">
       <Filter>save</Filter>

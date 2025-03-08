@@ -1,6 +1,5 @@
 #include "specific-object/torch.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-ninja.h"

@@ -3,7 +3,6 @@
 #include "core/disturbance.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster/monster-describer.h"

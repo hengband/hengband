@@ -1,6 +1,5 @@
 #include "monster-floor/monster-lite.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-lite-util.h"
 #include "monster-race/race-brightness-flags.h"
