@@ -2,7 +2,6 @@
 #include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "grid/grid.h"
 #include "monster-race/race-brightness-mask.h"
 #include "monster/monster-describer.h"
@@ -18,7 +17,6 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
-#include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
 #include "timed-effect/timed-effects.h"
@@ -137,7 +135,7 @@ bool fetch_monster(PlayerType *player_ptr)
     Pos2D pos_target = *pos;
     for (const auto &pos_path : path_g) {
         const auto &grid = floor.get_grid(pos_path);
-        if (floor.contains(pos_path) && floor.is_empty_at(pos_path) && (pos_path != p_pos) && !grid.is_object() && !pattern_tile(floor, pos_path.y, pos_path.x)) {
+        if (floor.contains(pos_path) && floor.is_empty_at(pos_path) && (pos_path != p_pos) && !grid.is_object() && !grid.has(TerrainCharacteristics::PATTERN)) {
             pos_target = pos_path;
         }
     }

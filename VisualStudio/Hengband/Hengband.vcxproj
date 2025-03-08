@@ -407,7 +407,6 @@
     <ClCompile Include="..\..\src\flavor\named-item-describer.cpp" />
     <ClCompile Include="..\..\src\flavor\tval-description-switcher.cpp" />
     <ClCompile Include="..\..\src\floor\cave-generator.cpp" />
-    <ClCompile Include="..\..\src\floor\cave.cpp" />
     <ClCompile Include="..\..\src\floor\dungeon-tunnel-util.cpp" />
     <ClCompile Include="..\..\src\floor\fixed-map-generator.cpp" />
     <ClCompile Include="..\..\src\floor\floor-changer.cpp" />
@@ -1206,7 +1205,6 @@
     <ClInclude Include="..\..\src\flavor\object-flavor-types.h" />
     <ClInclude Include="..\..\src\flavor\tval-description-switcher.h" />
     <ClInclude Include="..\..\src\floor\cave-generator.h" />
-    <ClInclude Include="..\..\src\floor\cave.h" />
     <ClInclude Include="..\..\src\floor\floor-changer.h" />
     <ClInclude Include="..\..\src\floor\floor-leaver.h" />
     <ClInclude Include="..\..\src\floor\floor-mode-changer.h" />

@@ -9,7 +9,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "melee/melee-postprocess.h"

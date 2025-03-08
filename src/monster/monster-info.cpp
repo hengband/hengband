@@ -10,7 +10,6 @@
  */
 
 #include "monster/monster-info.h"
-#include "floor/cave.h"
 #include "floor/wild.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-resistance-mask.h"

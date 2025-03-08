@@ -536,7 +536,6 @@ hengband_SOURCES = \
 	flavor/object-flavor.cpp flavor/object-flavor.h \
 	flavor/tval-description-switcher.cpp flavor/tval-description-switcher.h \
 	\
-	floor/cave.cpp floor/cave.h \
 	floor/cave-generator.cpp floor/cave-generator.h \
 	floor/dungeon-feeling.cpp floor/dungeon-feeling.h \
 	floor/dungeon-tunnel-util.cpp floor/dungeon-tunnel-util.h \

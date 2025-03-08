@@ -1,5 +1,4 @@
 #include "floor/line-of-sight.h"
-#include "floor/cave.h"
 #include "system/floor/floor-info.h"
 
 /*!

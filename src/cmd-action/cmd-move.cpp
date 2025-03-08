@@ -8,7 +8,6 @@
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"

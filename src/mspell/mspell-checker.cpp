@@ -12,11 +12,11 @@
 #include "mspell/mspell-checker.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster/monster-info.h"
 #include "mspell/mspell-util.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -49,7 +49,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
                 continue;
             }
 
-            if (pattern_tile(floor, y, x)) {
+            if (floor.has_terrain_characteristics(pos, TerrainCharacteristics::PATTERN)) {
                 continue;
             }
 

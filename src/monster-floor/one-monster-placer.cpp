@@ -9,7 +9,6 @@
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "floor/floor-save-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
@@ -26,6 +25,7 @@
 #include "object/warning.h"
 #include "player/player-status.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -223,7 +223,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
         return std::nullopt;
     }
 
-    if (none_bits(mode, PM_IGNORE_TERRAIN) && (pattern_tile(floor, pos.y, pos.x) || !monster_can_enter(player_ptr, pos.y, pos.x, monrace, 0))) {
+    if (none_bits(mode, PM_IGNORE_TERRAIN) && (grid.has(TerrainCharacteristics::PATTERN) || !monster_can_enter(player_ptr, pos.y, pos.x, monrace, 0))) {
         return std::nullopt;
     }
 

@@ -14,7 +14,6 @@
 #include "effect/effect-processor.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "inventory/inventory-slot-types.h"

@@ -6,7 +6,6 @@
 
 #include "mspell/mspell-lite.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster-race/race-brightness-mask.h"

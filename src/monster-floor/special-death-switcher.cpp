@@ -10,7 +10,6 @@
 #include "artifact/random-art-generator.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
 #include "main/sound-definitions-table.h"

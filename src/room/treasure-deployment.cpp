@@ -5,7 +5,6 @@
  */
 
 #include "room/treasure-deployment.h"
-#include "floor/cave.h"
 #include "grid/object-placer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"

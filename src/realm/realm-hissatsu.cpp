@@ -7,7 +7,6 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"

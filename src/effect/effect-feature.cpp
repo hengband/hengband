@@ -1,7 +1,6 @@
 #include "effect/effect-feature.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h" // 暫定、後で消す.
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "grid/trap.h"

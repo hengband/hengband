@@ -13,7 +13,6 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/effect-characteristics.h"
-#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-leaver.h"
 #include "floor/floor-save.h"
@@ -2731,7 +2730,7 @@ void wreck_the_pattern(PlayerType *player_ptr)
     auto to_ruin = randint1(45) + 35;
     while (to_ruin--) {
         const auto pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
-        if (pattern_tile(floor, pos.y, pos.x) && (floor.get_grid(pos).get_terrain().subtype != PATTERN_TILE_WRECKED)) {
+        if (floor.has_terrain_characteristics(pos, TerrainCharacteristics::PATTERN) && (floor.get_grid(pos).get_terrain().subtype != PATTERN_TILE_WRECKED)) {
             set_terrain_id_to_grid(player_ptr, pos, TerrainTag::PATTERN_CORRUPTED);
         }
     }

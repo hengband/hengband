@@ -357,6 +357,11 @@ bool FloorType::can_block_disintegration_at(const Pos2D &pos) const
     return !can_reach || !can_disintegrate;
 }
 
+bool FloorType::can_drop_item_at(const Pos2D &pos) const
+{
+    return this->get_grid(pos).can_drop_item();
+}
+
 /*!
  * @brief 特定の財宝を生成する。指定がない場合、生成階に応じたランダムな財宝を生成する。
  * @param bi_key 財宝を固定生成する場合のBaseitemKey

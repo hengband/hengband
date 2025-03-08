@@ -1,6 +1,5 @@
 #include "specific-object/chest.h"
 #include "effect/attribute-types.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "grid/trap.h"

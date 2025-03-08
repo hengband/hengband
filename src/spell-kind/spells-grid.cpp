@@ -1,6 +1,5 @@
 #include "spell-kind/spells-grid.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
