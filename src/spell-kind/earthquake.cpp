@@ -152,18 +152,17 @@ void process_hit_to_player(PlayerType *player_ptr, std::span<const Pos2D> pos_co
     process_player_damage_undodged(player_ptr, m_idx);
 }
 
-bool can_monster_dodge_to(PlayerType *player_ptr, const Pos2D &pos, std::span<const Pos2D> collapsing_positions)
+bool can_monster_dodge_to(const FloorType &floor, const Pos2D &p_pos, const Pos2D &pos, std::span<const Pos2D> collapsing_positions)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
-    auto can_dodge = floor.is_empty_at(pos) && (pos != player_ptr->get_position());
+    auto can_dodge = floor.is_empty_at(pos) && (pos != p_pos);
     can_dodge &= !grid.is_rune_protection() && !grid.is_rune_explosion();
     can_dodge &= !grid.has(TerrainCharacteristics::PATTERN);
     can_dodge &= !ranges::contains(collapsing_positions, pos);
     return can_dodge;
 }
 
-std::optional<Pos2D> decide_monster_dodge_position(PlayerType *player_ptr, const MonsterEntity &monster, std::span<const Pos2D> pos_collapses)
+std::optional<Pos2D> decide_monster_dodge_position(const FloorType &floor, const Pos2D &p_pos, const MonsterEntity &monster, std::span<const Pos2D> pos_collapses)
 {
     if (monster.get_monrace().behavior_flags.has(MonsterBehaviorType::NEVER_MOVE)) {
         return std::nullopt;
@@ -172,7 +171,7 @@ std::optional<Pos2D> decide_monster_dodge_position(PlayerType *player_ptr, const
     const auto pos_candidates =
         Direction::directions_8() |
         ranges::views::transform([&](const auto &d) { return monster.get_position() + d.vec(); }) |
-        ranges::views::filter([&](const auto &pos) { return can_monster_dodge_to(player_ptr, pos, pos_collapses); }) |
+        ranges::views::filter([&](const auto &pos) { return can_monster_dodge_to(floor, p_pos, pos, pos_collapses); }) |
         ranges::to<std::vector<Pos2D>>();
 
     return pos_candidates.empty() ? std::nullopt : std::make_optional(rand_choice(pos_candidates));
@@ -218,7 +217,8 @@ bool process_monster_damage(PlayerType *player_ptr, MonsterEntity &monster, bool
 
 void process_hit_to_monster(PlayerType *player_ptr, MonsterEntity &monster, std::span<const Pos2D> pos_collapses)
 {
-    const auto pos_dodge = decide_monster_dodge_position(player_ptr, monster, pos_collapses);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto pos_dodge = decide_monster_dodge_position(floor, player_ptr->get_position(), monster, pos_collapses);
     const auto m_name = monster_desc(player_ptr, monster, 0);
     if (!ignore_unview || is_seen(player_ptr, monster)) {
         msg_format(_("%s^は苦痛で泣きわめいた！", "%s^ wails out in pain!"), m_name.data());
