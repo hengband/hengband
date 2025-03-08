@@ -131,6 +131,7 @@ public:
     bool is_clean_at(const Pos2D &pos) const;
     bool can_generate_monster_at(const Pos2D &pos) const;
     bool can_block_disintegration_at(const Pos2D &pos) const;
+    bool can_drop_item_at(const Pos2D &pos) const;
 
     ItemEntity make_gold(std::optional<BaseitemKey> bi_key = std::nullopt) const;
     std::optional<ItemEntity> try_make_instant_artifact() const;

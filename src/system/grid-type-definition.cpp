@@ -221,6 +221,11 @@ bool Grid::is_clean() const
     return this->has(TerrainCharacteristics::FLOOR) && !this->is_object() && this->o_idx_list.empty();
 }
 
+bool Grid::can_drop_item() const
+{
+    return this->has(TerrainCharacteristics::DROP) && !this->is_object();
+}
+
 bool Grid::has_special_terrain() const
 {
     return this->get_terrain().flags.has(TerrainCharacteristics::SPECIAL);
