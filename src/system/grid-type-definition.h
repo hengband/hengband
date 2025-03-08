@@ -95,6 +95,7 @@ public:
     bool has(TerrainCharacteristics tc) const;
     bool is_symbol(const int ch) const;
     bool is_darkened() const;
+    bool is_clean() const;
     bool has_special_terrain() const;
     void reset_costs();
     void reset_dists();

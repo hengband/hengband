@@ -25,19 +25,6 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-/*
- * Determine if a "legal" grid is an "naked" floor grid
- *
- * Line 1 -- forbid non-clean gird
- * Line 2 -- forbid monsters
- * Line 3 -- forbid the player
- */
-static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    return cave_clean_bold(floor, pos.y, pos.x) && (floor.get_grid(pos).m_idx == 0) && !player_ptr->is_located_at(pos);
-}
-
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系による地形効果処理 / We are called from "project()" to "damage" terrain features
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -258,10 +245,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::MAKE_DOOR: {
-        if (!cave_naked_bold(player_ptr, pos)) {
-            break;
-        }
-        if (player_ptr->is_located_at(pos)) {
+        if (!floor.is_clean_at(pos) || floor.get_grid(pos).has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
         set_terrain_id_to_grid(player_ptr, pos, Doors::get_instance().get_door(DoorKind::DOOR).closed);
@@ -271,16 +255,14 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::MAKE_TRAP: {
-        place_trap(floor, pos);
+        floor.place_trap_at(pos);
         break;
     }
     case AttributeType::MAKE_TREE: {
-        if (!cave_naked_bold(player_ptr, pos)) {
+        if (!floor.is_clean_at(pos) || floor.get_grid(pos).has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
-        if (player_ptr->is_located_at(pos)) {
-            break;
-        }
+
         set_terrain_id_to_grid(player_ptr, pos, TerrainTag::TREE);
         if (grid.is_mark()) {
             obvious = true;
@@ -288,9 +270,10 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::MAKE_RUNE_PROTECTION: {
-        if (!cave_naked_bold(player_ptr, pos)) {
+        if (!floor.is_clean_at(pos) || floor.get_grid(pos).has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
+
         grid.info |= CAVE_OBJECT;
         grid.set_terrain_id(TerrainTag::RUNE_PROTECTION, TerrainKind::MIMIC);
         note_spot(player_ptr, pos);
@@ -298,7 +281,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
     case AttributeType::STONE_WALL:
-        if (!cave_naked_bold(player_ptr, pos) || player_ptr->is_located_at(pos)) {
+        if (!floor.is_clean_at(pos) || floor.get_grid(pos).has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
 

@@ -17,21 +17,6 @@
 #include "world/world.h"
 
 /*
- * Determine if a "legal" grid is a "clean" floor grid
- * Determine if terrain-change spells are allowed in a grid.
- *
- * Line 1 -- forbid non-floors
- * Line 2 -- forbid object terrains
- * Line 3 -- forbid normal objects
- */
-bool cave_clean_bold(const FloorType &floor, int y, int x)
-{
-    const Pos2D pos(y, x);
-    const auto &grid = floor.get_grid(pos);
-    return floor.has_terrain_characteristics(pos, TerrainCharacteristics::FLOOR) && !grid.is_object() && grid.o_idx_list.empty();
-}
-
-/*
  * Determine if an object can be dropped on a "legal" grid
  *
  * Line 1 -- forbid non-drops
