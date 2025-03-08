@@ -153,14 +153,14 @@ void process_hit_to_player(PlayerType *player_ptr, std::span<const Pos2D> pos_co
     process_player_damage_undodged(player_ptr, m_idx);
 }
 
-bool can_monster_dodge_to(PlayerType *player_ptr, const Pos2D &pos_dodge, std::span<const Pos2D> pos_collapses)
+bool can_monster_dodge_to(PlayerType *player_ptr, const Pos2D &pos, std::span<const Pos2D> collapsing_positions)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid_dodge = floor.get_grid(pos_dodge);
-    auto can_dodge = floor.is_empty_at(pos_dodge) && (pos_dodge != player_ptr->get_position());
-    can_dodge &= !grid_dodge.is_rune_protection() && !grid_dodge.is_rune_explosion();
-    can_dodge &= !pattern_tile(floor, pos_dodge.y, pos_dodge.x);
-    can_dodge &= !ranges::contains(pos_collapses, pos_dodge);
+    const auto &grid = floor.get_grid(pos);
+    auto can_dodge = floor.is_empty_at(pos) && (pos != player_ptr->get_position());
+    can_dodge &= !grid.is_rune_protection() && !grid.is_rune_explosion();
+    can_dodge &= !grid.has(TerrainCharacteristics::PATTERN);
+    can_dodge &= !ranges::contains(collapsing_positions, pos);
     return can_dodge;
 }
 

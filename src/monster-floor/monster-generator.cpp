@@ -19,6 +19,7 @@
 #include "spell/summon-types.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -76,7 +77,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
                     continue;
                 }
 
-                if (pattern_tile(floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (floor.has_terrain_characteristics(pos_neighbor, TerrainCharacteristics::PATTERN)) {
                     continue;
                 }
             }

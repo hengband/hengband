@@ -45,7 +45,7 @@ static bool alloc_stairs_aux(PlayerType *player_ptr, const Pos2D &pos, int walls
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
-    if (!grid.is_floor() || pattern_tile(floor, pos.y, pos.x) || !grid.o_idx_list.empty() || grid.has_monster() || next_to_walls(floor, pos) < walls) {
+    if (!grid.is_floor() || grid.has(TerrainCharacteristics::PATTERN) || !grid.o_idx_list.empty() || grid.has_monster() || next_to_walls(floor, pos) < walls) {
         return false;
     }
 

@@ -106,7 +106,8 @@ bool pattern_effect(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (!pattern_tile(floor, p_pos.y, p_pos.x)) {
+    const auto &grid = floor.get_grid(p_pos);
+    if (!grid.has(TerrainCharacteristics::PATTERN)) {
         return false;
     }
 
@@ -115,8 +116,7 @@ bool pattern_effect(PlayerType *player_ptr)
         wreck_the_pattern(player_ptr);
     }
 
-    int pattern_type = floor.get_grid(p_pos).get_terrain().subtype;
-    switch (pattern_type) {
+    switch (grid.get_terrain().subtype) {
     case PATTERN_TILE_END:
         (void)BadStatusSetter(player_ptr).hallucination(0);
         (void)restore_all_status(player_ptr);
