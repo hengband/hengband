@@ -35,7 +35,7 @@
  * @brief オブジェクト選択のモード設定
  * @param item_selection_ptr アイテム選択への参照ポインタ
  */
-static void check_item_selection_mode(item_selection_type *item_selection_ptr)
+static void check_item_selection_mode(ItemSelection *item_selection_ptr)
 {
     if (item_selection_ptr->mode & USE_EQUIP) {
         item_selection_ptr->equip = true;
@@ -57,16 +57,15 @@ static void check_item_selection_mode(item_selection_type *item_selection_ptr)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static bool check_item_tag_aux(PlayerType *player_ptr, item_selection_type *item_selection_ptr, const ItemTester &item_tester)
+static bool check_item_tag_aux(PlayerType *player_ptr, ItemSelection *item_selection_ptr, const ItemTester &item_tester)
 {
-    if (!item_selection_ptr->floor || (*item_selection_ptr->cp >= 0)) {
+    if (!item_selection_ptr->floor || (item_selection_ptr->cp >= 0)) {
         return false;
     }
 
-    ItemEntity *o_ptr;
-    item_selection_ptr->k = 0 - (*item_selection_ptr->cp);
-    o_ptr = player_ptr->current_floor_ptr->o_list[item_selection_ptr->k].get();
-    if (!item_tester.okay(o_ptr) && ((item_selection_ptr->mode & USE_FULL) == 0)) {
+    item_selection_ptr->k = -item_selection_ptr->cp;
+    const auto &item = *player_ptr->current_floor_ptr->o_list[item_selection_ptr->k];
+    if (!item_tester.okay(&item) && ((item_selection_ptr->mode & USE_FULL) == 0)) {
         return false;
     }
 
@@ -81,17 +80,18 @@ static bool check_item_tag_aux(PlayerType *player_ptr, item_selection_type *item
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_item_tag_inventory(PlayerType *player_ptr, item_selection_type *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
+static bool check_item_tag_inventory(PlayerType *player_ptr, ItemSelection *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
 {
-    auto should_check = !item_selection_ptr->inven || (*item_selection_ptr->cp < 0) || (*item_selection_ptr->cp >= INVEN_PACK);
-    should_check &= !item_selection_ptr->equip || (*item_selection_ptr->cp < INVEN_MAIN_HAND) || (*item_selection_ptr->cp >= INVEN_TOTAL);
+    auto &cp = item_selection_ptr->cp;
+    auto should_check = !item_selection_ptr->inven || (cp < 0) || (cp >= INVEN_PACK);
+    should_check &= !item_selection_ptr->equip || (cp < INVEN_MAIN_HAND) || (cp >= INVEN_TOTAL);
     if (should_check) {
         return false;
     }
 
     if (*prev_tag && command_cmd) {
         auto flag = false;
-        const auto use_flag = (*item_selection_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
+        const auto use_flag = (cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
         flag |= !get_tag(player_ptr, &item_selection_ptr->k, *prev_tag, use_flag, item_tester);
         flag |= !get_item_okay(player_ptr, item_selection_ptr->k, item_tester);
 
@@ -106,12 +106,12 @@ static bool check_item_tag_inventory(PlayerType *player_ptr, item_selection_type
             return false;
         }
 
-        *item_selection_ptr->cp = item_selection_ptr->k;
+        cp = item_selection_ptr->k;
         command_cmd = 0;
         return true;
     }
 
-    if (!get_item_okay(player_ptr, *item_selection_ptr->cp, item_tester)) {
+    if (!get_item_okay(player_ptr, cp, item_tester)) {
         return false;
     }
 
@@ -126,13 +126,13 @@ static bool check_item_tag_inventory(PlayerType *player_ptr, item_selection_type
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_item_tag(PlayerType *player_ptr, item_selection_type *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
+static bool check_item_tag(PlayerType *player_ptr, ItemSelection *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
 {
-    if (!repeat_pull(item_selection_ptr->cp)) {
+    if (!repeat_pull(&item_selection_ptr->cp)) {
         return false;
     }
 
-    if (item_selection_ptr->mode & USE_FORCE && (*item_selection_ptr->cp == INVEN_FORCE)) {
+    if (item_selection_ptr->mode & USE_FORCE && (item_selection_ptr->cp == INVEN_FORCE)) {
         command_cmd = 0;
         return true;
     }
@@ -149,7 +149,7 @@ static bool check_item_tag(PlayerType *player_ptr, item_selection_type *item_sel
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr アイテム選択への参照ポインタ
  */
-static void test_inventory(PlayerType *player_ptr, item_selection_type *item_selection_ptr, const ItemTester &item_tester)
+static void test_inventory(PlayerType *player_ptr, ItemSelection *item_selection_ptr, const ItemTester &item_tester)
 {
     if (!item_selection_ptr->inven) {
         item_selection_ptr->i2 = -1;
@@ -172,7 +172,7 @@ static void test_inventory(PlayerType *player_ptr, item_selection_type *item_sel
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param fis_ptr アイテム選択への参照ポインタ
  */
-static void test_equipment(PlayerType *player_ptr, item_selection_type *item_selection_ptr, const ItemTester &item_tester)
+static void test_equipment(PlayerType *player_ptr, ItemSelection *item_selection_ptr, const ItemTester &item_tester)
 {
     if (!item_selection_ptr->equip) {
         item_selection_ptr->e2 = -1;
@@ -213,74 +213,73 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         return get_item_floor(player_ptr, cp, pmt, str, mode, item_tester);
     }
 
-    item_selection_type tmp_selection;
-    item_selection_type *item_selection_ptr = initialize_item_selection_type(&tmp_selection, cp, mode);
-    check_item_selection_mode(item_selection_ptr);
-    if (check_item_tag(player_ptr, item_selection_ptr, &prev_tag, item_tester)) {
-        *cp = *item_selection_ptr->cp;
+    ItemSelection item_selection(mode);
+    check_item_selection_mode(&item_selection);
+    if (check_item_tag(player_ptr, &item_selection, &prev_tag, item_tester)) {
+        *cp = item_selection.cp;
         return true;
     }
 
     msg_print(nullptr);
-    item_selection_ptr->done = false;
-    item_selection_ptr->item = false;
-    item_selection_ptr->i1 = 0;
-    item_selection_ptr->i2 = INVEN_PACK - 1;
-    test_inventory(player_ptr, item_selection_ptr, item_tester);
-    while ((item_selection_ptr->i1 <= item_selection_ptr->i2) && (!get_item_okay(player_ptr, item_selection_ptr->i1, item_tester))) {
-        item_selection_ptr->i1++;
+    item_selection.done = false;
+    item_selection.item = false;
+    item_selection.i1 = 0;
+    item_selection.i2 = INVEN_PACK - 1;
+    test_inventory(player_ptr, &item_selection, item_tester);
+    while ((item_selection.i1 <= item_selection.i2) && (!get_item_okay(player_ptr, item_selection.i1, item_tester))) {
+        item_selection.i1++;
     }
 
-    while ((item_selection_ptr->i1 <= item_selection_ptr->i2) && (!get_item_okay(player_ptr, item_selection_ptr->i2, item_tester))) {
-        item_selection_ptr->i2--;
+    while ((item_selection.i1 <= item_selection.i2) && (!get_item_okay(player_ptr, item_selection.i2, item_tester))) {
+        item_selection.i2--;
     }
 
-    item_selection_ptr->e1 = INVEN_MAIN_HAND;
-    item_selection_ptr->e2 = INVEN_TOTAL - 1;
-    test_equipment(player_ptr, item_selection_ptr, item_tester);
-    while ((item_selection_ptr->e1 <= item_selection_ptr->e2) && (!get_item_okay(player_ptr, item_selection_ptr->e1, item_tester))) {
-        item_selection_ptr->e1++;
+    item_selection.e1 = INVEN_MAIN_HAND;
+    item_selection.e2 = INVEN_TOTAL - 1;
+    test_equipment(player_ptr, &item_selection, item_tester);
+    while ((item_selection.e1 <= item_selection.e2) && (!get_item_okay(player_ptr, item_selection.e1, item_tester))) {
+        item_selection.e1++;
     }
 
-    while ((item_selection_ptr->e1 <= item_selection_ptr->e2) && (!get_item_okay(player_ptr, item_selection_ptr->e2, item_tester))) {
-        item_selection_ptr->e2--;
+    while ((item_selection.e1 <= item_selection.e2) && (!get_item_okay(player_ptr, item_selection.e2, item_tester))) {
+        item_selection.e2--;
     }
 
-    if (item_selection_ptr->equip && has_two_handed_weapons(player_ptr) && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
+    if (item_selection.equip && has_two_handed_weapons(player_ptr) && !(item_selection.mode & IGNORE_BOTHHAND_SLOT)) {
         if (can_attack_with_main_hand(player_ptr)) {
-            if (item_selection_ptr->e2 < INVEN_SUB_HAND) {
-                item_selection_ptr->e2 = INVEN_SUB_HAND;
+            if (item_selection.e2 < INVEN_SUB_HAND) {
+                item_selection.e2 = INVEN_SUB_HAND;
             }
         } else if (can_attack_with_sub_hand(player_ptr)) {
-            item_selection_ptr->e1 = INVEN_MAIN_HAND;
+            item_selection.e1 = INVEN_MAIN_HAND;
         }
     }
 
-    if (item_selection_ptr->floor) {
+    if (item_selection.floor) {
         for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
             ItemEntity *o_ptr;
             o_ptr = player_ptr->current_floor_ptr->o_list[this_o_idx].get();
-            if ((item_tester.okay(o_ptr) || (item_selection_ptr->mode & USE_FULL)) && o_ptr->marked.has(OmType::FOUND)) {
-                item_selection_ptr->allow_floor = true;
+            if ((item_tester.okay(o_ptr) || (item_selection.mode & USE_FULL)) && o_ptr->marked.has(OmType::FOUND)) {
+                item_selection.allow_floor = true;
             }
         }
     }
 
-    if (!item_selection_ptr->allow_floor && (item_selection_ptr->i1 > item_selection_ptr->i2) && (item_selection_ptr->e1 > item_selection_ptr->e2)) {
+    if (!item_selection.allow_floor && (item_selection.i1 > item_selection.i2) && (item_selection.e1 > item_selection.e2)) {
         command_see = false;
-        item_selection_ptr->oops = true;
-        item_selection_ptr->done = true;
+        item_selection.oops = true;
+        item_selection.done = true;
 
-        if (item_selection_ptr->mode & USE_FORCE) {
-            *item_selection_ptr->cp = INVEN_FORCE;
-            item_selection_ptr->item = true;
+        if (item_selection.mode & USE_FORCE) {
+            item_selection.cp = INVEN_FORCE;
+            item_selection.item = true;
         }
     } else {
-        if (command_see && command_wrk && item_selection_ptr->equip) {
+        if (command_see && command_wrk && item_selection.equip) {
             command_wrk = true;
-        } else if (item_selection_ptr->inven) {
+        } else if (item_selection.inven) {
             command_wrk = false;
-        } else if (item_selection_ptr->equip) {
+        } else if (item_selection.equip) {
             command_wrk = true;
         } else {
             command_wrk = false;
@@ -301,7 +300,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         SubWindowRedrawingFlag::EQUIPMENT,
     };
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    while (!item_selection_ptr->done) {
+    while (!item_selection.done) {
         COMMAND_CODE get_item_label = 0;
         int ni = 0;
         int ne = 0;
@@ -321,7 +320,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
         if ((command_wrk && ni && !ne) || (!command_wrk && !ni && ne)) {
             toggle_inventory_equipment();
-            item_selection_ptr->toggle = !item_selection_ptr->toggle;
+            item_selection.toggle = !item_selection.toggle;
         }
 
         rfu.set_flags(flags);
@@ -329,79 +328,79 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
         if (!command_wrk) {
             if (command_see) {
-                get_item_label = show_inventory(player_ptr, item_selection_ptr->menu_line, item_selection_ptr->mode, item_tester);
+                get_item_label = show_inventory(player_ptr, item_selection.menu_line, item_selection.mode, item_tester);
             }
         } else {
             if (command_see) {
-                get_item_label = show_equipment(player_ptr, item_selection_ptr->menu_line, item_selection_ptr->mode, item_tester);
+                get_item_label = show_equipment(player_ptr, item_selection.menu_line, item_selection.mode, item_tester);
             }
         }
 
         if (!command_wrk) {
-            angband_strcpy(item_selection_ptr->out_val, _("持ち物:", "Inven:"), sizeof(item_selection_ptr->out_val));
-            if ((item_selection_ptr->i1 <= item_selection_ptr->i2) && !use_menu) {
-                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection_ptr->i1), index_to_label(item_selection_ptr->i2));
-                angband_strcat(item_selection_ptr->out_val, tmp_val, sizeof(item_selection_ptr->out_val));
+            angband_strcpy(item_selection.out_val, _("持ち物:", "Inven:"), sizeof(item_selection.out_val));
+            if ((item_selection.i1 <= item_selection.i2) && !use_menu) {
+                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection.i1), index_to_label(item_selection.i2));
+                angband_strcat(item_selection.out_val, tmp_val, sizeof(item_selection.out_val));
             }
 
             if (!command_see && !use_menu) {
-                angband_strcat(item_selection_ptr->out_val, _(" '*'一覧,", " * to see,"), sizeof(item_selection_ptr->out_val));
+                angband_strcat(item_selection.out_val, _(" '*'一覧,", " * to see,"), sizeof(item_selection.out_val));
             }
 
-            if (item_selection_ptr->equip) {
+            if (item_selection.equip) {
                 const auto tmp_val = format(_(" %s 装備品,", " %s for Equip,"), use_menu ? _("'4'or'6'", "4 or 6") : _("'/'", "/"));
-                angband_strcat(item_selection_ptr->out_val, tmp_val, sizeof(item_selection_ptr->out_val));
+                angband_strcat(item_selection.out_val, tmp_val, sizeof(item_selection.out_val));
             }
         } else {
-            angband_strcpy(item_selection_ptr->out_val, _("装備品:", "Equip:"), sizeof(item_selection_ptr->out_val));
-            if ((item_selection_ptr->e1 <= item_selection_ptr->e2) && !use_menu) {
-                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection_ptr->e1), index_to_label(item_selection_ptr->e2));
-                angband_strcat(item_selection_ptr->out_val, tmp_val, sizeof(item_selection_ptr->out_val));
+            angband_strcpy(item_selection.out_val, _("装備品:", "Equip:"), sizeof(item_selection.out_val));
+            if ((item_selection.e1 <= item_selection.e2) && !use_menu) {
+                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection.e1), index_to_label(item_selection.e2));
+                angband_strcat(item_selection.out_val, tmp_val, sizeof(item_selection.out_val));
             }
 
             if (!command_see && !use_menu) {
-                angband_strcat(item_selection_ptr->out_val, _(" '*'一覧,", " * to see,"), sizeof(item_selection_ptr->out_val));
+                angband_strcat(item_selection.out_val, _(" '*'一覧,", " * to see,"), sizeof(item_selection.out_val));
             }
 
-            if (item_selection_ptr->inven) {
+            if (item_selection.inven) {
                 const auto tmp_val = format(_(" %s 持ち物,", " %s for Inven,"), use_menu ? _("'4'or'6'", "4 or 6") : _("'/'", "'/'"));
-                angband_strcat(item_selection_ptr->out_val, tmp_val, sizeof(item_selection_ptr->out_val));
+                angband_strcat(item_selection.out_val, tmp_val, sizeof(item_selection.out_val));
             }
         }
 
-        if (item_selection_ptr->allow_floor) {
-            angband_strcat(item_selection_ptr->out_val, _(" '-'床上,", " - for floor,"), sizeof(item_selection_ptr->out_val));
+        if (item_selection.allow_floor) {
+            angband_strcat(item_selection.out_val, _(" '-'床上,", " - for floor,"), sizeof(item_selection.out_val));
         }
 
-        if (item_selection_ptr->mode & USE_FORCE) {
-            angband_strcat(item_selection_ptr->out_val, _(" 'w'練気術,", " w for the Force,"), sizeof(item_selection_ptr->out_val));
+        if (item_selection.mode & USE_FORCE) {
+            angband_strcat(item_selection.out_val, _(" 'w'練気術,", " w for the Force,"), sizeof(item_selection.out_val));
         }
 
-        angband_strcat(item_selection_ptr->out_val, " ESC", sizeof(item_selection_ptr->out_val));
-        prt(format("(%s) %s", item_selection_ptr->out_val, pmt), 0, 0);
-        item_selection_ptr->which = inkey();
+        angband_strcat(item_selection.out_val, " ESC", sizeof(item_selection.out_val));
+        prt(format("(%s) %s", item_selection.out_val, pmt), 0, 0);
+        item_selection.which = inkey();
         if (use_menu) {
-            int max_line = (command_wrk ? item_selection_ptr->max_equip : item_selection_ptr->max_inven);
-            switch (item_selection_ptr->which) {
+            int max_line = (command_wrk ? item_selection.max_equip : item_selection.max_inven);
+            switch (item_selection.which) {
             case ESCAPE:
             case 'z':
             case 'Z':
             case '0': {
-                item_selection_ptr->done = true;
+                item_selection.done = true;
                 break;
             }
 
             case '8':
             case 'k':
             case 'K': {
-                item_selection_ptr->menu_line += (max_line - 1);
+                item_selection.menu_line += (max_line - 1);
                 break;
             }
 
             case '2':
             case 'j':
             case 'J': {
-                item_selection_ptr->menu_line++;
+                item_selection.menu_line++;
                 break;
             }
 
@@ -411,7 +410,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             case 'H':
             case 'l':
             case 'L': {
-                if (!item_selection_ptr->inven || !item_selection_ptr->equip) {
+                if (!item_selection.inven || !item_selection.equip) {
                     bell();
                     break;
                 }
@@ -422,9 +421,9 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 }
 
                 command_wrk = !command_wrk;
-                max_line = (command_wrk ? item_selection_ptr->max_equip : item_selection_ptr->max_inven);
-                if (item_selection_ptr->menu_line > max_line) {
-                    item_selection_ptr->menu_line = max_line;
+                max_line = (command_wrk ? item_selection.max_equip : item_selection.max_inven);
+                if (item_selection.menu_line > max_line) {
+                    item_selection.menu_line = max_line;
                 }
 
                 break;
@@ -435,7 +434,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             case '\r':
             case '\n': {
                 if (command_wrk == USE_FLOOR) {
-                    *item_selection_ptr->cp = -get_item_label;
+                    item_selection.cp = -get_item_label;
                 } else {
                     if (!get_item_okay(player_ptr, get_item_label, item_tester)) {
                         bell();
@@ -443,37 +442,37 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                     }
 
                     if (!get_item_allow(player_ptr, get_item_label)) {
-                        item_selection_ptr->done = true;
+                        item_selection.done = true;
                         break;
                     }
 
-                    *item_selection_ptr->cp = get_item_label;
+                    item_selection.cp = get_item_label;
                 }
 
-                item_selection_ptr->item = true;
-                item_selection_ptr->done = true;
+                item_selection.item = true;
+                item_selection.done = true;
                 break;
             }
             case 'w': {
-                if (item_selection_ptr->mode & USE_FORCE) {
-                    *item_selection_ptr->cp = INVEN_FORCE;
-                    item_selection_ptr->item = true;
-                    item_selection_ptr->done = true;
+                if (item_selection.mode & USE_FORCE) {
+                    item_selection.cp = INVEN_FORCE;
+                    item_selection.item = true;
+                    item_selection.done = true;
                     break;
                 }
             }
             }
 
-            if (item_selection_ptr->menu_line > max_line) {
-                item_selection_ptr->menu_line -= max_line;
+            if (item_selection.menu_line > max_line) {
+                item_selection.menu_line -= max_line;
             }
 
             continue;
         }
 
-        switch (item_selection_ptr->which) {
+        switch (item_selection.which) {
         case ESCAPE: {
-            item_selection_ptr->done = true;
+            item_selection.done = true;
             break;
         }
         case '*':
@@ -490,7 +489,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             break;
         }
         case '/': {
-            if (!item_selection_ptr->inven || !item_selection_ptr->equip) {
+            if (!item_selection.inven || !item_selection.equip) {
                 bell();
                 break;
             }
@@ -504,26 +503,26 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             break;
         }
         case '-': {
-            if (item_selection_ptr->allow_floor) {
+            if (item_selection.allow_floor) {
                 for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
                     ItemEntity *o_ptr;
                     o_ptr = player_ptr->current_floor_ptr->o_list[this_o_idx].get();
-                    if (!item_tester.okay(o_ptr) && !(item_selection_ptr->mode & USE_FULL)) {
+                    if (!item_tester.okay(o_ptr) && !(item_selection.mode & USE_FULL)) {
                         continue;
                     }
 
-                    item_selection_ptr->k = 0 - this_o_idx;
-                    if ((other_query_flag && !verify(player_ptr, _("本当に", "Try"), item_selection_ptr->k)) || !get_item_allow(player_ptr, item_selection_ptr->k)) {
+                    item_selection.k = 0 - this_o_idx;
+                    if ((other_query_flag && !verify(player_ptr, _("本当に", "Try"), item_selection.k)) || !get_item_allow(player_ptr, item_selection.k)) {
                         continue;
                     }
 
-                    *item_selection_ptr->cp = item_selection_ptr->k;
-                    item_selection_ptr->item = true;
-                    item_selection_ptr->done = true;
+                    item_selection.cp = item_selection.k;
+                    item_selection.item = true;
+                    item_selection.done = true;
                     break;
                 }
 
-                if (item_selection_ptr->done) {
+                if (item_selection.done) {
                     break;
                 }
             }
@@ -541,37 +540,37 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         case '7':
         case '8':
         case '9': {
-            if (!get_tag(player_ptr, &item_selection_ptr->k, item_selection_ptr->which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester)) {
+            if (!get_tag(player_ptr, &item_selection.k, item_selection.which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester)) {
                 bell();
                 break;
             }
 
-            if ((item_selection_ptr->k < INVEN_MAIN_HAND) ? !item_selection_ptr->inven : !item_selection_ptr->equip) {
+            if ((item_selection.k < INVEN_MAIN_HAND) ? !item_selection.inven : !item_selection.equip) {
                 bell();
                 break;
             }
 
-            if (!get_item_okay(player_ptr, item_selection_ptr->k, item_tester)) {
+            if (!get_item_okay(player_ptr, item_selection.k, item_tester)) {
                 bell();
                 break;
             }
 
-            if (!get_item_allow(player_ptr, item_selection_ptr->k)) {
-                item_selection_ptr->done = true;
+            if (!get_item_allow(player_ptr, item_selection.k)) {
+                item_selection.done = true;
                 break;
             }
 
-            *item_selection_ptr->cp = item_selection_ptr->k;
-            item_selection_ptr->item = true;
-            item_selection_ptr->done = true;
-            item_selection_ptr->cur_tag = item_selection_ptr->which;
+            item_selection.cp = item_selection.k;
+            item_selection.item = true;
+            item_selection.done = true;
+            item_selection.cur_tag = item_selection.which;
             break;
         }
         case 'w': {
-            if (item_selection_ptr->mode & USE_FORCE) {
-                *item_selection_ptr->cp = INVEN_FORCE;
-                item_selection_ptr->item = true;
-                item_selection_ptr->done = true;
+            if (item_selection.mode & USE_FORCE) {
+                item_selection.cp = INVEN_FORCE;
+                item_selection.item = true;
+                item_selection.done = true;
                 break;
             }
         }
@@ -579,55 +578,55 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         default: {
             bool tag_not_found = false;
 
-            if (!get_tag(player_ptr, &item_selection_ptr->k, item_selection_ptr->which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester)) {
+            if (!get_tag(player_ptr, &item_selection.k, item_selection.which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester)) {
                 tag_not_found = true;
-            } else if ((item_selection_ptr->k < INVEN_MAIN_HAND) ? !item_selection_ptr->inven : !item_selection_ptr->equip) {
+            } else if ((item_selection.k < INVEN_MAIN_HAND) ? !item_selection.inven : !item_selection.equip) {
                 tag_not_found = true;
             }
 
             if (!tag_not_found) {
-                item_selection_ptr->cur_tag = item_selection_ptr->which;
+                item_selection.cur_tag = item_selection.which;
             } else {
-                auto which = (char)tolower(item_selection_ptr->which);
+                auto which = (char)tolower(item_selection.which);
 
                 if (!command_wrk) {
                     if (which == '(') {
-                        item_selection_ptr->k = item_selection_ptr->i1;
+                        item_selection.k = item_selection.i1;
                     } else if (which == ')') {
-                        item_selection_ptr->k = item_selection_ptr->i2;
+                        item_selection.k = item_selection.i2;
                     } else {
-                        item_selection_ptr->k = label_to_inventory(player_ptr, which);
+                        item_selection.k = label_to_inventory(player_ptr, which);
                     }
                 } else {
                     if (which == '(') {
-                        item_selection_ptr->k = item_selection_ptr->e1;
+                        item_selection.k = item_selection.e1;
                     } else if (which == ')') {
-                        item_selection_ptr->k = item_selection_ptr->e2;
+                        item_selection.k = item_selection.e2;
                     } else {
-                        item_selection_ptr->k = label_to_equipment(player_ptr, which);
+                        item_selection.k = label_to_equipment(player_ptr, which);
                     }
                 }
             }
 
-            if (!get_item_okay(player_ptr, item_selection_ptr->k, item_tester)) {
+            if (!get_item_okay(player_ptr, item_selection.k, item_tester)) {
                 bell();
                 break;
             }
 
-            auto ver = tag_not_found && isupper(item_selection_ptr->which);
-            if (ver && !verify(player_ptr, _("本当に", "Try"), item_selection_ptr->k)) {
-                item_selection_ptr->done = true;
+            auto ver = tag_not_found && isupper(item_selection.which);
+            if (ver && !verify(player_ptr, _("本当に", "Try"), item_selection.k)) {
+                item_selection.done = true;
                 break;
             }
 
-            if (!get_item_allow(player_ptr, item_selection_ptr->k)) {
-                item_selection_ptr->done = true;
+            if (!get_item_allow(player_ptr, item_selection.k)) {
+                item_selection.done = true;
                 break;
             }
 
-            *item_selection_ptr->cp = item_selection_ptr->k;
-            item_selection_ptr->item = true;
-            item_selection_ptr->done = true;
+            item_selection.cp = item_selection.k;
+            item_selection.item = true;
+            item_selection.done = true;
             break;
         }
         }
@@ -638,24 +637,27 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         command_see = false;
     }
 
-    if (item_selection_ptr->toggle) {
+    if (item_selection.toggle) {
         toggle_inventory_equipment();
     }
 
     rfu.set_flags(flags);
     handle_stuff(player_ptr);
     prt("", 0, 0);
-    if (item_selection_ptr->oops && str) {
+    if (item_selection.oops && str) {
         msg_print(str);
     }
 
-    if (item_selection_ptr->item) {
-        repeat_push(*item_selection_ptr->cp);
-        if (command_cmd) {
-            prev_tag = item_selection_ptr->cur_tag;
-        }
-        command_cmd = 0;
+    if (!item_selection.item) {
+        return false;
     }
 
-    return item_selection_ptr->item;
+    repeat_push(item_selection.cp);
+    if (command_cmd) {
+        prev_tag = item_selection.cur_tag;
+    }
+
+    command_cmd = 0;
+    *cp = item_selection.cp;
+    return true;
 }

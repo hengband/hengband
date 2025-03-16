@@ -282,7 +282,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         fis.done = true;
 
         if (fis.force) {
-            *cp = INVEN_FORCE;
+            fis.cp = INVEN_FORCE;
             fis.item = true;
         }
     } else {
@@ -597,7 +597,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             case '\r':
             case '\n': {
                 if (command_wrk == USE_FLOOR) {
-                    *cp = -get_item_label;
+                    fis.cp = -get_item_label;
                 } else {
                     if (!get_item_okay(player_ptr, get_item_label, item_tester)) {
                         bell();
@@ -609,7 +609,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                         break;
                     }
 
-                    *cp = get_item_label;
+                    fis.cp = get_item_label;
                 }
 
                 fis.item = true;
@@ -618,7 +618,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             }
             case 'w': {
                 if (fis.force) {
-                    *cp = INVEN_FORCE;
+                    fis.cp = INVEN_FORCE;
                     fis.item = true;
                     fis.done = true;
                     break;
@@ -724,7 +724,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                         break;
                     }
 
-                    *cp = fis.k;
+                    fis.cp = fis.k;
                     fis.item = true;
                     fis.done = true;
                     break;
@@ -778,7 +778,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 break;
             }
 
-            *cp = fis.k;
+            fis.cp = fis.k;
             fis.item = true;
             fis.done = true;
             fis.cur_tag = fis.which;
@@ -786,7 +786,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         }
         case 'w': {
             if (fis.force) {
-                *cp = INVEN_FORCE;
+                fis.cp = INVEN_FORCE;
                 fis.item = true;
                 fis.done = true;
                 break;
