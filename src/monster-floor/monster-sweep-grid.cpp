@@ -117,7 +117,7 @@ public:
         const auto no_flow = monster.mflag2.has(MonsterConstantFlagType::NOFLOW) && (floor.get_grid(m_pos).get_cost(monrace.get_grid_flow_type()) > 2);
 
         // 単に反対側に逃げる(あまり賢くない方法)場合の移動先
-        const auto pos_run_away_simple = m_pos + (pos_move - m_pos);
+        const auto pos_run_away_simple = m_pos + (m_pos - pos_move);
         if (monster.is_pet() || no_flow) {
             return pos_run_away_simple;
         }
