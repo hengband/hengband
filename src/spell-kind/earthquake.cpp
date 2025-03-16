@@ -91,20 +91,20 @@ std::optional<Pos2D> decide_player_dodge_posistion(PlayerType *player_ptr, std::
     return pos_candidates.empty() ? std::nullopt : std::make_optional(rand_choice(pos_candidates));
 }
 
-std::string build_killer_on_earthquake(const auto &floor, int m_idx)
+std::string build_killer_on_earthquake(PlayerType *player_ptr, int m_idx)
 {
     if (m_idx <= 0) {
         return _("地震", "an earthquake");
     }
 
-    const auto &monster = floor.m_list[m_idx];
-    const auto m_name = monster_desc(nullptr, monster, MD_WRONGDOER_NAME);
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto m_name = monster_desc(player_ptr, monster, MD_WRONGDOER_NAME);
     return format(_("%sの起こした地震", "an earthquake caused by %s"), m_name.data());
 }
 
 void process_player_damage_undodged(PlayerType *player_ptr, int m_idx)
 {
-    const auto killer = build_killer_on_earthquake(*player_ptr->current_floor_ptr, m_idx);
+    const auto killer = build_killer_on_earthquake(player_ptr, m_idx);
     constexpr auto direct_hit_damage = 200;
     msg_print(_("あなたはひどい怪我を負った！", "You are severely crushed!"));
     /// FIXME: 避けた時はスタン値が増加するのに直撃時は増加していない。バグ？
@@ -125,7 +125,7 @@ void process_player_damage_dodged(PlayerType *player_ptr, int m_idx)
         return;
     }
 
-    const auto killer = build_killer_on_earthquake(*player_ptr->current_floor_ptr, m_idx);
+    const auto killer = build_killer_on_earthquake(player_ptr, m_idx);
     BadStatusSetter(player_ptr).mod_stun(randnum1<short>(50));
     take_hit(player_ptr, DAMAGE_ATTACK, Dice::roll(10, 4), killer);
 }
