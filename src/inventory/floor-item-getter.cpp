@@ -36,6 +36,8 @@
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
+#include <fmt/format.h>
+#include <sstream>
 
 /*!
  * @brief 床上アイテムへにタグ付けがされているかの調査処理 (のはず)
@@ -358,102 +360,100 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             }
         }
 
+        std::stringstream ss;
         if (command_wrk == USE_INVEN) {
-            angband_strcpy(fis.out_val, _("持ち物:", "Inven:"), sizeof(fis.out_val));
+            ss << _("持ち物:", "Inven:");
             if (!use_menu) {
-                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis.i1), index_to_label(fis.i2));
-                angband_strcat(fis.out_val, tmp_val, sizeof(fis.out_val));
+                ss << fmt::format(_("{}-{},'(',')',", " {}-{},'(',')',"), index_to_label(fis.i1), index_to_label(fis.i2));
             }
 
             if (!command_see && !use_menu) {
-                angband_strcat(fis.out_val, _(" '*'一覧,", " * to see,"), sizeof(fis.out_val));
+                ss << _(" '*'一覧,", " * to see,");
             }
 
             if (fis.allow_equip) {
                 if (!use_menu) {
-                    angband_strcat(fis.out_val, _(" '/' 装備品,", " / for Equip,"), sizeof(fis.out_val));
+                    ss << _(" '/' 装備品,", " / for Equip,");
                 } else if (fis.allow_floor) {
-                    angband_strcat(fis.out_val, _(" '6' 装備品,", " 6 for Equip,"), sizeof(fis.out_val));
+                    ss << _(" '6' 装備品,", " 6 for Equip,");
                 } else {
-                    angband_strcat(fis.out_val, _(" '4'or'6' 装備品,", " 4 or 6 for Equip,"), sizeof(fis.out_val));
+                    ss << _(" '4'or'6' 装備品,", " 4 or 6 for Equip,");
                 }
             }
 
             if (fis.allow_floor) {
                 if (!use_menu) {
-                    angband_strcat(fis.out_val, _(" '-'床上,", " - for floor,"), sizeof(fis.out_val));
+                    ss << _(" '-'床上,", " - for floor,");
                 } else if (fis.allow_equip) {
-                    angband_strcat(fis.out_val, _(" '4' 床上,", " 4 for floor,"), sizeof(fis.out_val));
+                    ss << _(" '4' 床上,", " 4 for floor,");
                 } else {
-                    angband_strcat(fis.out_val, _(" '4'or'6' 床上,", " 4 or 6 for floor,"), sizeof(fis.out_val));
+                    ss << _(" '4'or'6' 床上,", " 4 or 6 for floor,");
                 }
             }
         } else if (command_wrk == (USE_EQUIP)) {
-            angband_strcpy(fis.out_val, _("装備品:", "Equip:"), sizeof(fis.out_val));
+            ss << _("装備品:", "Equip:");
             if (!use_menu) {
-                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(fis.e1), index_to_label(fis.e2));
-                angband_strcat(fis.out_val, tmp_val, sizeof(fis.out_val));
+                ss << fmt::format(_("{}-{},'(',')',", " {}-{},'(',')',"), index_to_label(fis.e1), index_to_label(fis.e2));
             }
 
             if (!command_see && !use_menu) {
-                angband_strcat(fis.out_val, _(" '*'一覧,", " * to see,"), sizeof(fis.out_val));
+                ss << _(" '*'一覧,", " * to see,");
             }
 
             if (fis.allow_inven) {
                 if (!use_menu) {
-                    angband_strcat(fis.out_val, _(" '/' 持ち物,", " / for Inven,"), sizeof(fis.out_val));
+                    ss << _(" '/' 持ち物,", " / for Inven,");
                 } else if (fis.allow_floor) {
-                    angband_strcat(fis.out_val, _(" '4' 持ち物,", " 4 for Inven,"), sizeof(fis.out_val));
+                    ss << _(" '4' 持ち物,", " 4 for Inven,");
                 } else {
-                    angband_strcat(fis.out_val, _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,"), sizeof(fis.out_val));
+                    ss << _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,");
                 }
             }
 
             if (fis.allow_floor) {
                 if (!use_menu) {
-                    angband_strcat(fis.out_val, _(" '-'床上,", " - for floor,"), sizeof(fis.out_val));
+                    ss << _(" '-'床上,", " - for floor,");
                 } else if (fis.allow_inven) {
-                    angband_strcat(fis.out_val, _(" '6' 床上,", " 6 for floor,"), sizeof(fis.out_val));
+                    ss << _(" '6' 床上,", " 6 for floor,");
                 } else {
-                    angband_strcat(fis.out_val, _(" '4'or'6' 床上,", " 4 or 6 for floor,"), sizeof(fis.out_val));
+                    ss << _(" '4'or'6' 床上,", " 4 or 6 for floor,");
                 }
             }
         } else if (command_wrk == USE_FLOOR) {
-            angband_strcpy(fis.out_val, _("床上:", "Floor:"), sizeof(fis.out_val));
+            ss << _("床上:", "Floor:");
             if (!use_menu) {
-                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), fis.n1, fis.n2);
-                angband_strcat(fis.out_val, tmp_val, sizeof(fis.out_val));
+                ss << fmt::format(_("{}-{},'(',')',", " {}-{},'(',')',"), fis.n1, fis.n2);
             }
 
             if (!command_see && !use_menu) {
-                angband_strcat(fis.out_val, _(" '*'一覧,", " * to see,"), sizeof(fis.out_val));
+                ss << _(" '*'一覧,", " * to see,");
             }
 
             if (use_menu) {
                 if (fis.allow_inven && fis.allow_equip) {
-                    angband_strcat(fis.out_val, _(" '4' 装備品, '6' 持ち物,", " 4 for Equip, 6 for Inven,"), sizeof(fis.out_val));
+                    ss << _(" '4' 装備品, '6' 持ち物,", " 4 for Equip, 6 for Inven,");
                 } else if (fis.allow_inven) {
-                    angband_strcat(fis.out_val, _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,"), sizeof(fis.out_val));
+                    ss << _(" '4'or'6' 持ち物,", " 4 or 6 for Inven,");
                 } else if (fis.allow_equip) {
-                    angband_strcat(fis.out_val, _(" '4'or'6' 装備品,", " 4 or 6 for Equip,"), sizeof(fis.out_val));
+                    ss << _(" '4'or'6' 装備品,", " 4 or 6 for Equip,");
                 }
             } else if (fis.allow_inven) {
-                angband_strcat(fis.out_val, _(" '/' 持ち物,", " / for Inven,"), sizeof(fis.out_val));
+                ss << _(" '/' 持ち物,", " / for Inven,");
             } else if (fis.allow_equip) {
-                angband_strcat(fis.out_val, _(" '/'装備品,", " / for Equip,"), sizeof(fis.out_val));
+                ss << _(" '/'装備品,", " / for Equip,");
             }
 
             if (command_see && !use_menu) {
-                angband_strcat(fis.out_val, _(" Enter 次,", " Enter for scroll down,"), sizeof(fis.out_val));
+                ss << _(" Enter 次,", " Enter for scroll down,");
             }
         }
 
         if (fis.force) {
-            angband_strcat(fis.out_val, _(" 'w'練気術,", " w for the Force,"), sizeof(fis.out_val));
+            ss << _(" 'w'練気術,", " w for the Force,");
         }
 
-        angband_strcat(fis.out_val, " ESC", sizeof(fis.out_val));
-        prt(format("(%s) %s", fis.out_val, pmt), 0, 0);
+        ss << " ESC";
+        prt(fmt::format("({}) {}", ss.str(), pmt), 0, 0);
         fis.which = inkey();
         if (use_menu) {
             int max_line = 1;

@@ -28,7 +28,6 @@ public:
     bool allow_inven = false;
     bool allow_floor = false;
     bool toggle = false;
-    char out_val[160]{};
     int floor_num = 0;
     short floor_list[23]{};
     int floor_top = 0;
