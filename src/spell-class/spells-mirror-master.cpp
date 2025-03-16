@@ -125,11 +125,11 @@ std::optional<std::string> SpellsMirrorMaster::place_mirror()
 {
     const auto p_pos = this->player_ptr->get_position();
     auto &floor = *this->player_ptr->current_floor_ptr;
-    if (!floor.is_clean_at(p_pos)) {
+    auto &grid = floor.get_grid(p_pos);
+    if (!grid.is_clean()) {
         return _("床上のアイテムが呪文を跳ね返した。", "The object resists the spell.");
     }
 
-    auto &grid = floor.get_grid(p_pos);
     set_bits(grid.info, CAVE_OBJECT | CAVE_GLOW);
     grid.set_terrain_id(TerrainTag::MIRROR, TerrainKind::MIMIC);
 

@@ -80,21 +80,21 @@ static bool project_stop(const FloorType &floor, const Pos2D &p_pos, ProjectionP
         return true;
     }
 
+    const auto &grid = floor.get_grid(pph_ptr->pos);
     if (any_bits(pph_ptr->flag, PROJECT_DISI)) {
-        if (!pph_ptr->positions.empty() && floor.can_block_disintegration_at(pph_ptr->pos)) {
+        if (!pph_ptr->positions.empty() && grid.can_block_disintegration()) {
             return true;
         }
     } else if (any_bits(pph_ptr->flag, PROJECT_LOS)) {
-        if (!pph_ptr->positions.empty() && !floor.has_los_terrain_at(pph_ptr->pos)) {
+        if (!pph_ptr->positions.empty() && !grid.has_los_terrain()) {
             return true;
         }
     } else if (none_bits(pph_ptr->flag, PROJECT_PATH)) {
-        if (!pph_ptr->positions.empty() && !floor.has_terrain_characteristics(pph_ptr->pos, TerrainCharacteristics::PROJECTION)) {
+        if (!pph_ptr->positions.empty() && !grid.has(TerrainCharacteristics::PROJECTION)) {
             return true;
         }
     }
 
-    const auto &grid = floor.get_grid(pph_ptr->pos);
     if (any_bits(pph_ptr->flag, PROJECT_MIRROR)) {
         if (!pph_ptr->positions.empty() && grid.is_mirror()) {
             return true;

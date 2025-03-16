@@ -8,6 +8,7 @@
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
+#include "world/world.h"
 
 Grid::Grid()
 {
@@ -216,6 +217,13 @@ bool Grid::is_darkened() const
     return match_bits(this->info, CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK, CAVE_VIEW | CAVE_MNDK);
 }
 
+bool Grid::is_empty() const
+{
+    auto is_empty_grid = this->has(TerrainCharacteristics::PLACE);
+    is_empty_grid &= !this->has_monster();
+    return is_empty_grid;
+}
+
 bool Grid::is_clean() const
 {
     return this->has(TerrainCharacteristics::FLOOR) && !this->is_object() && this->o_idx_list.empty();
@@ -229,6 +237,21 @@ bool Grid::can_drop_item() const
 bool Grid::has_special_terrain() const
 {
     return this->get_terrain().flags.has(TerrainCharacteristics::SPECIAL);
+}
+
+bool Grid::can_block_disintegration() const
+{
+    const auto can_reach = this->has(TerrainCharacteristics::PROJECTION);
+    auto can_disintegrate = this->has(TerrainCharacteristics::HURT_DISI);
+    can_disintegrate &= !this->has(TerrainCharacteristics::PERMANENT);
+    return !can_reach || !can_disintegrate;
+}
+
+bool Grid::can_generate_monster() const
+{
+    auto is_empty_grid = this->is_empty();
+    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !this->has(TerrainCharacteristics::TREE);
+    return is_empty_grid;
 }
 
 void Grid::reset_costs()

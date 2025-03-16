@@ -5,8 +5,6 @@
 #include "locale/language-switcher.h"
 #include "monster/monster-timed-effects.h"
 #include "object-enchant/item-apply-magic.h"
-#include "range/v3/algorithm/generate_n.hpp"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-allocation.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -300,8 +298,8 @@ bool FloorType::order_pet_whistle(short index1, short index2) const
  */
 bool FloorType::order_pet_dismission(short index1, short index2, short riding_index) const
 {
-    const auto &monster1 = this->m_list[index1];
-    const auto &monster2 = this->m_list[index2];
+    const auto &monster1 = this->m_list.at(index1);
+    const auto &monster2 = this->m_list.at(index2);
     if (index1 == riding_index) {
         return true;
     }
@@ -332,29 +330,17 @@ bool FloorType::contains(const Pos2D &pos, FloorBoundary fb) const
 
 bool FloorType::is_empty_at(const Pos2D &pos) const
 {
-    auto is_empty_grid = this->has_terrain_characteristics(pos, TerrainCharacteristics::PLACE);
-    is_empty_grid &= !this->get_grid(pos).has_monster();
-    return is_empty_grid;
-}
-
-bool FloorType::is_clean_at(const Pos2D &pos) const
-{
-    return this->get_grid(pos).is_clean();
+    return this->get_grid(pos).is_empty();
 }
 
 bool FloorType::can_generate_monster_at(const Pos2D &pos) const
 {
-    auto is_empty_grid = this->is_empty_at(pos);
-    is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !this->has_terrain_characteristics(pos, TerrainCharacteristics::TREE);
-    return is_empty_grid;
+    return this->get_grid(pos).can_generate_monster();
 }
 
 bool FloorType::can_block_disintegration_at(const Pos2D &pos) const
 {
-    const auto can_reach = this->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION);
-    auto can_disintegrate = this->has_terrain_characteristics(pos, TerrainCharacteristics::HURT_DISI);
-    can_disintegrate &= !this->has_terrain_characteristics(pos, TerrainCharacteristics::PERMANENT);
-    return !can_reach || !can_disintegrate;
+    return this->get_grid(pos).can_block_disintegration();
 }
 
 bool FloorType::can_drop_item_at(const Pos2D &pos) const
@@ -656,7 +642,7 @@ bool FloorType::is_grid_changeable(const Pos2D &pos) const
  */
 void FloorType::place_random_stairs(const Pos2D &pos)
 {
-    const auto &grid = this->get_grid(pos);
+    auto &grid = this->get_grid(pos);
     if (!grid.is_floor() || !grid.o_idx_list.empty()) {
         return;
     }
@@ -680,12 +666,12 @@ void FloorType::place_random_stairs(const Pos2D &pos)
     }
 
     if (up_stairs) {
-        this->set_terrain_id_at(pos, TerrainTag::UP_STAIR);
+        grid.set_terrain_id(TerrainTag::UP_STAIR);
         return;
     }
 
     if (down_stairs) {
-        this->set_terrain_id_at(pos, TerrainTag::DOWN_STAIR);
+        grid.set_terrain_id(TerrainTag::DOWN_STAIR);
     }
 }
 
@@ -705,12 +691,12 @@ void FloorType::set_terrain_id_at(const Pos2D &pos, short terrain_id, TerrainKin
  */
 void FloorType::place_trap_at(const Pos2D &pos)
 {
-    auto &grid = this->get_grid(pos);
     if (!this->contains(pos)) {
         return;
     }
 
-    if (!this->is_clean_at(pos)) {
+    auto &grid = this->get_grid(pos);
+    if (!grid.is_clean()) {
         return;
     }
 

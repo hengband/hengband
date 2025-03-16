@@ -490,9 +490,9 @@ void describe_autopick_en(char *buff, const autopick_type &entry, autopick_descr
     if (describer->insc) {
         strncat(buff, format("and inscribe \"%s\"", describer->insc).data(), 80);
 
-        if (angband_strstr(describer->insc, "%all")) {
+        if (str_find(describer->insc, "%all")) {
             strcat(buff, ", replacing %all with code string representing all abilities,");
-        } else if (angband_strstr(describer->insc, "%")) {
+        } else if (str_find(describer->insc, "%")) {
             strcat(buff, ", replacing % with code string representing extra random abilities,");
         }
 

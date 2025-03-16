@@ -354,46 +354,45 @@ void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, At
 void monster_death(PlayerType *player_ptr, MONSTER_IDX m_idx, bool drop_item, AttributeFlags attribute_flags)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    MonsterDeath tmp_md(floor, m_idx, drop_item);
-    MonsterDeath *md_ptr = &tmp_md;
+    MonsterDeath md(floor, m_idx, drop_item);
     auto &world = AngbandWorld::get_instance();
     if ((world.timewalk_m_idx > 0) && world.timewalk_m_idx == m_idx) {
         world.timewalk_m_idx = 0;
     }
 
     // プレイヤーしかユニークを倒せないのでここで時間を記録
-    if (md_ptr->r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && md_ptr->m_ptr->mflag2.has_not(MonsterConstantFlagType::CLONED)) {
+    if (md.r_ptr->kind_flags.has(MonsterKindType::UNIQUE) && md.m_ptr->mflag2.has_not(MonsterConstantFlagType::CLONED)) {
         world.play_time.update();
-        md_ptr->r_ptr->defeat_time = world.play_time.elapsed_sec();
-        md_ptr->r_ptr->defeat_level = player_ptr->lev;
+        md.r_ptr->defeat_time = world.play_time.elapsed_sec();
+        md.r_ptr->defeat_level = player_ptr->lev;
     }
 
-    if (md_ptr->r_ptr->brightness_flags.has_any_of(ld_mask)) {
+    if (md.r_ptr->brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
 
-    write_pet_death(player_ptr, md_ptr);
-    on_dead_explosion(player_ptr, md_ptr);
-    if (md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        md_ptr->m_ptr->reset_chameleon_polymorph();
-        md_ptr->r_ptr = &md_ptr->m_ptr->get_monrace();
+    write_pet_death(player_ptr, &md);
+    on_dead_explosion(player_ptr, &md);
+    if (md.m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+        md.m_ptr->reset_chameleon_polymorph();
+        md.r_ptr = &md.m_ptr->get_monrace();
     }
 
-    QuestCompletionChecker(player_ptr, *md_ptr->m_ptr).complete();
-    on_defeat_arena_monster(player_ptr, md_ptr);
-    if (md_ptr->m_ptr->is_riding() && process_fall_off_horse(player_ptr, -1, false)) {
+    QuestCompletionChecker(player_ptr, *md.m_ptr).complete();
+    on_defeat_arena_monster(player_ptr, &md);
+    if (md.m_ptr->is_riding() && process_fall_off_horse(player_ptr, -1, false)) {
         msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
     }
 
-    drop_corpse(player_ptr, md_ptr);
-    monster_drop_carried_objects(player_ptr, *md_ptr->m_ptr);
-    decide_drop_quality(md_ptr);
-    switch_special_death(player_ptr, md_ptr, attribute_flags);
-    drop_artifacts(player_ptr, md_ptr);
-    const auto drop_numbers = decide_drop_numbers(md_ptr, drop_item, floor.inside_arena);
-    floor.object_level = (floor.dun_level + md_ptr->r_ptr->level) / 2;
-    drop_items_golds(player_ptr, md_ptr, drop_numbers);
-    if ((md_ptr->r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR)) || AngbandSystem::get_instance().is_phase_out() || (md_ptr->m_ptr->r_idx != MonraceId::SERPENT) || md_ptr->cloned) {
+    drop_corpse(player_ptr, &md);
+    monster_drop_carried_objects(player_ptr, *md.m_ptr);
+    decide_drop_quality(&md);
+    switch_special_death(player_ptr, &md, attribute_flags);
+    drop_artifacts(player_ptr, &md);
+    const auto drop_numbers = decide_drop_numbers(&md, drop_item, floor.inside_arena);
+    floor.object_level = (floor.dun_level + md.r_ptr->level) / 2;
+    drop_items_golds(player_ptr, &md, drop_numbers);
+    if ((md.r_ptr->misc_flags.has_not(MonsterMiscType::QUESTOR)) || AngbandSystem::get_instance().is_phase_out() || (md.m_ptr->r_idx != MonraceId::SERPENT) || md.cloned) {
         return;
     }
 

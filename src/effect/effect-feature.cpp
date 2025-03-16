@@ -243,22 +243,22 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         break;
     }
-    case AttributeType::MAKE_DOOR: {
-        if (!floor.is_clean_at(pos) || floor.get_grid(pos).has_monster() || player_ptr->is_located_at(pos)) {
+    case AttributeType::MAKE_DOOR:
+        if (!grid.is_clean() || grid.has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
+
         set_terrain_id_to_grid(player_ptr, pos, Doors::get_instance().get_door(DoorKind::DOOR).closed);
         if (grid.is_mark()) {
             obvious = true;
         }
+
         break;
-    }
-    case AttributeType::MAKE_TRAP: {
+    case AttributeType::MAKE_TRAP:
         floor.place_trap_at(pos);
         break;
-    }
-    case AttributeType::MAKE_TREE: {
-        if (!floor.is_clean_at(pos) || floor.get_grid(pos).has_monster() || player_ptr->is_located_at(pos)) {
+    case AttributeType::MAKE_TREE:
+        if (!grid.is_clean() || grid.has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
 
@@ -266,10 +266,10 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (grid.is_mark()) {
             obvious = true;
         }
+
         break;
-    }
-    case AttributeType::MAKE_RUNE_PROTECTION: {
-        if (!floor.is_clean_at(pos) || floor.get_grid(pos).has_monster() || player_ptr->is_located_at(pos)) {
+    case AttributeType::MAKE_RUNE_PROTECTION:
+        if (!grid.is_clean() || grid.has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
 
@@ -278,9 +278,8 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         note_spot(player_ptr, pos);
         lite_spot(player_ptr, pos);
         break;
-    }
     case AttributeType::STONE_WALL:
-        if (!floor.is_clean_at(pos) || floor.get_grid(pos).has_monster() || player_ptr->is_located_at(pos)) {
+        if (!grid.is_clean() || grid.has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
 

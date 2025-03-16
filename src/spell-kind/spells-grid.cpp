@@ -23,12 +23,12 @@ bool create_rune_protection_one(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (!floor.is_clean_at(p_pos)) {
+    auto &grid = floor.get_grid(p_pos);
+    if (!grid.is_clean()) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
-    auto &grid = floor.get_grid(p_pos);
     grid.info |= CAVE_OBJECT;
     grid.set_terrain_id(TerrainTag::RUNE_PROTECTION, TerrainKind::MIMIC);
     note_spot(player_ptr, p_pos);
@@ -48,12 +48,12 @@ bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.is_clean_at(pos)) {
+    auto &grid = floor.get_grid(pos);
+    if (!grid.is_clean()) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
-    auto &grid = floor.get_grid(pos);
     grid.info |= CAVE_OBJECT;
     grid.set_terrain_id(TerrainTag::RUNE_EXPLOSION, TerrainKind::MIMIC);
     note_spot(player_ptr, pos);
