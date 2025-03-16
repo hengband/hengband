@@ -217,6 +217,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     item_selection_type *item_selection_ptr = initialize_item_selection_type(&tmp_selection, cp, mode);
     check_item_selection_mode(item_selection_ptr);
     if (check_item_tag(player_ptr, item_selection_ptr, &prev_tag, item_tester)) {
+        *cp = *item_selection_ptr->cp;
         return true;
     }
 

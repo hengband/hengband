@@ -3,38 +3,40 @@
 #include "object/tval-types.h"
 #include "system/angband.h"
 
-/* Floor Item Selection*/
-struct fis_type {
-    COMMAND_CODE *cp;
-    BIT_FLAGS mode;
-    char n1;
-    char n2;
-    char which;
-    COMMAND_CODE i1;
-    COMMAND_CODE i2;
-    COMMAND_CODE e1;
-    COMMAND_CODE e2;
-    COMMAND_CODE k;
-    bool done;
-    bool item;
-    bool oops;
+class FloorItemSelection {
+public:
+    FloorItemSelection(uint32_t mode);
+
+    uint32_t mode;
     bool equip;
     bool inven;
     bool floor;
     bool force;
-    bool allow_equip;
-    bool allow_inven;
-    bool allow_floor;
-    bool toggle;
-    char out_val[160];
-    ITEM_NUMBER floor_num;
-    OBJECT_IDX floor_list[23];
-    int floor_top;
-    TERM_LEN min_width;
     int menu_line;
-    int max_inven;
-    int max_equip;
-    char cur_tag;
+    short cp = 0;
+    char n1 = ' ';
+    char n2 = ' ';
+    char which = ' ';
+    short i1 = 0;
+    short i2 = 0;
+    short e1 = 0;
+    short e2 = 0;
+    short k = 0;
+    bool done = false;
+    bool item = false;
+    bool oops = false;
+    bool allow_equip = false;
+    bool allow_inven = false;
+    bool allow_floor = false;
+    bool toggle = false;
+    char out_val[160]{};
+    int floor_num = 0;
+    short floor_list[23]{};
+    int floor_top = 0;
+    int min_width = 0;
+    int max_inven = 0;
+    int max_equip = 0;
+    char cur_tag = '\0';
 };
 
 struct item_selection_type {
@@ -61,5 +63,4 @@ struct item_selection_type {
     char cur_tag;
 };
 
-fis_type *initialize_fis_type(fis_type *fis_ptr, COMMAND_CODE *cp, BIT_FLAGS mode);
 item_selection_type *initialize_item_selection_type(item_selection_type *item_selection_ptr, COMMAND_CODE *cp, BIT_FLAGS mode);
