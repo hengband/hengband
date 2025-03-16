@@ -8,9 +8,10 @@
 #ifndef FMT_BASE_H_
 #define FMT_BASE_H_
 
+// MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく.
 #if defined(_MSC_VER)
-// MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく
 #pragma warning(push, 0)
+#pragma warning(disable : 6294)
 #endif
 
 #if defined(FMT_IMPORT_STD) && !defined(FMT_MODULE)
