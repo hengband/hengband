@@ -58,7 +58,6 @@ public:
     bool floor = false;
     bool allow_floor = false;
     bool toggle = false;
-    char out_val[160]{};
     int max_inven = 0;
     int max_equip = 0;
     char cur_tag = '\0';

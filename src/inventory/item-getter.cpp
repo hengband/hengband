@@ -30,6 +30,8 @@
 #include "view/display-inventory.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
+#include <fmt/format.h>
+#include <sstream>
 
 /*!
  * @brief オブジェクト選択のモード設定
@@ -336,48 +338,45 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             }
         }
 
+        std::stringstream ss;
         if (!command_wrk) {
-            angband_strcpy(item_selection.out_val, _("持ち物:", "Inven:"), sizeof(item_selection.out_val));
+            ss << _("持ち物:", "Inven:");
             if ((item_selection.i1 <= item_selection.i2) && !use_menu) {
-                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection.i1), index_to_label(item_selection.i2));
-                angband_strcat(item_selection.out_val, tmp_val, sizeof(item_selection.out_val));
+                ss << fmt::format(_("{}-{},'(',')',", " {}-{},'(',')',"), index_to_label(item_selection.i1), index_to_label(item_selection.i2));
             }
 
             if (!command_see && !use_menu) {
-                angband_strcat(item_selection.out_val, _(" '*'一覧,", " * to see,"), sizeof(item_selection.out_val));
+                ss << _(" '*'一覧,", " * to see,");
             }
 
             if (item_selection.equip) {
-                const auto tmp_val = format(_(" %s 装備品,", " %s for Equip,"), use_menu ? _("'4'or'6'", "4 or 6") : _("'/'", "/"));
-                angband_strcat(item_selection.out_val, tmp_val, sizeof(item_selection.out_val));
+                ss << fmt::format(_(" {} 装備品,", " {} for Equip,"), use_menu ? _("'4'or'6'", "4 or 6") : _("'/'", "/"));
             }
         } else {
-            angband_strcpy(item_selection.out_val, _("装備品:", "Equip:"), sizeof(item_selection.out_val));
+            ss << _("装備品:", "Equip:");
             if ((item_selection.e1 <= item_selection.e2) && !use_menu) {
-                const auto tmp_val = format(_("%c-%c,'(',')',", " %c-%c,'(',')',"), index_to_label(item_selection.e1), index_to_label(item_selection.e2));
-                angband_strcat(item_selection.out_val, tmp_val, sizeof(item_selection.out_val));
+                ss << fmt::format(_("{}-{},'(',')',", " {}-{},'(',')',"), index_to_label(item_selection.e1), index_to_label(item_selection.e2));
             }
 
             if (!command_see && !use_menu) {
-                angband_strcat(item_selection.out_val, _(" '*'一覧,", " * to see,"), sizeof(item_selection.out_val));
+                ss << _(" '*'一覧,", " * to see,");
             }
 
             if (item_selection.inven) {
-                const auto tmp_val = format(_(" %s 持ち物,", " %s for Inven,"), use_menu ? _("'4'or'6'", "4 or 6") : _("'/'", "'/'"));
-                angband_strcat(item_selection.out_val, tmp_val, sizeof(item_selection.out_val));
+                ss << fmt::format(_(" {} 持ち物,", " {} for Inven,"), use_menu ? _("'4'or'6'", "4 or 6") : _("'/'", "'/'"));
             }
         }
 
         if (item_selection.allow_floor) {
-            angband_strcat(item_selection.out_val, _(" '-'床上,", " - for floor,"), sizeof(item_selection.out_val));
+            ss << _(" '-'床上,", " - for floor,");
         }
 
         if (item_selection.mode & USE_FORCE) {
-            angband_strcat(item_selection.out_val, _(" 'w'練気術,", " w for the Force,"), sizeof(item_selection.out_val));
+            ss << _(" 'w'練気術,", " w for the Force,");
         }
 
-        angband_strcat(item_selection.out_val, " ESC", sizeof(item_selection.out_val));
-        prt(format("(%s) %s", item_selection.out_val, pmt), 0, 0);
+        ss << " ESC";
+        prt(fmt::format("({}) {}", ss.str(), pmt), 0, 0);
         item_selection.which = inkey();
         if (use_menu) {
             int max_line = (command_wrk ? item_selection.max_equip : item_selection.max_inven);
