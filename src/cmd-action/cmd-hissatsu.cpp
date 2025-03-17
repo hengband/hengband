@@ -61,15 +61,14 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     PLAYER_LEVEL plev = player_ptr->lev;
     char choice;
     concptr p = _("必殺剣", "special attack");
-    COMMAND_CODE code;
     int menu_line = (use_menu ? 1 : 0);
 
     /* Assume cancelled */
     *sn = (-1);
 
     /* Get the spell, if available */
-    if (repeat_pull(&code)) {
-        *sn = (SPELL_IDX)code;
+    if (const auto code = repeat_pull(); code) {
+        *sn = *code;
         /* Verify the spell */
         if (0 <= *sn && *sn < 32 && PlayerRealm::get_spell_info(RealmType::HISSATSU, *sn).slevel <= plev) {
             /* Success */

@@ -35,9 +35,9 @@ enum ammo_creation_type {
 
 static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL plev)
 {
-    COMMAND_CODE code;
-    if (repeat_pull(&code)) {
-        type = i2enum<ammo_creation_type>(code);
+    const auto code = repeat_pull();
+    if (code) {
+        type = i2enum<ammo_creation_type>(*code);
         switch (type) {
         case AMMO_SHOT:
         case AMMO_ARROW:
