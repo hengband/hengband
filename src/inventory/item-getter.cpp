@@ -32,6 +32,7 @@
 #include "window/display-sub-windows.h"
 #include <fmt/format.h>
 #include <sstream>
+#include <tl/optional.hpp>
 
 /*!
  * @brief オブジェクト選択のモード設定
@@ -76,25 +77,24 @@ static bool check_item_tag_aux(PlayerType *player_ptr, ItemSelection *item_selec
 }
 
 /*!
- * @brief インベントリのアイテムにタグ付けがされているかの調査処理 (のはず)
+ * @brief インベントリのアイテムにタグ付けがされているかの調査
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param item_selection_ptr アイテム選択への参照ポインタ
+ * @param i_idx 選択したアイテムのインベントリ番号
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
- * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ * @return 前回のタグと違うものを選んだらそのタグ、アイテムが妥当ならば入力値の番号、それ以外はnullopt
  */
-static bool check_item_tag_inventory(PlayerType *player_ptr, ItemSelection *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
+static tl::optional<short> check_item_tag_inventory(PlayerType *player_ptr, ItemSelection *item_selection_ptr, short i_idx, char *prev_tag, const ItemTester &item_tester)
 {
-    auto &cp = item_selection_ptr->cp;
-    auto should_check = !item_selection_ptr->inven || (cp < 0) || (cp >= INVEN_PACK);
-    should_check &= !item_selection_ptr->equip || (cp < INVEN_MAIN_HAND) || (cp >= INVEN_TOTAL);
+    auto should_check = !item_selection_ptr->inven || (i_idx < 0) || (i_idx >= INVEN_PACK);
+    should_check &= !item_selection_ptr->equip || (i_idx < INVEN_MAIN_HAND) || (i_idx >= INVEN_TOTAL);
     if (should_check) {
-        return false;
+        return tl::nullopt;
     }
 
     if (*prev_tag && command_cmd) {
-        auto flag = false;
-        const auto use_flag = (cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
-        flag |= !get_tag(player_ptr, &item_selection_ptr->k, *prev_tag, use_flag, item_tester);
+        const auto use_flag = (i_idx >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
+        auto flag = !get_tag(player_ptr, &item_selection_ptr->k, *prev_tag, use_flag, item_tester);
         flag |= !get_item_okay(player_ptr, item_selection_ptr->k, item_tester);
 
         if (item_selection_ptr->k < INVEN_MAIN_HAND) {
@@ -105,20 +105,19 @@ static bool check_item_tag_inventory(PlayerType *player_ptr, ItemSelection *item
 
         if (flag) {
             *prev_tag = '\0';
-            return false;
+            return tl::nullopt;
         }
 
-        cp = item_selection_ptr->k;
         command_cmd = 0;
-        return true;
+        return item_selection_ptr->k;
     }
 
-    if (!get_item_okay(player_ptr, cp, item_tester)) {
-        return false;
+    if (!get_item_okay(player_ptr, i_idx, item_tester)) {
+        return tl::nullopt;
     }
 
     command_cmd = 0;
-    return true;
+    return i_idx;
 }
 
 /*!
@@ -145,7 +144,13 @@ static bool check_item_tag(PlayerType *player_ptr, ItemSelection *item_selection
         return true;
     }
 
-    return check_item_tag_inventory(player_ptr, item_selection_ptr, prev_tag, item_tester);
+    const auto cp = check_item_tag_inventory(player_ptr, item_selection_ptr, item_selection_ptr->cp, prev_tag, item_tester);
+    if (!cp) {
+        return false;
+    }
+
+    item_selection_ptr->cp = *cp;
+    return true;
 }
 
 /*!
