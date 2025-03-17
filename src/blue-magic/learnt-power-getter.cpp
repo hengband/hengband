@@ -42,12 +42,12 @@
  */
 static std::optional<MonsterAbilityType> check_blue_magic_repeat()
 {
-    COMMAND_CODE code;
-    if (!repeat_pull(&code)) {
+    const auto code = repeat_pull();
+    if (!code) {
         return std::nullopt;
     }
 
-    if (auto spell = static_cast<MonsterAbilityType>(code);
+    if (auto spell = i2enum<MonsterAbilityType>(*code);
         monster_powers.find(spell) != monster_powers.end()) {
         return spell;
     }

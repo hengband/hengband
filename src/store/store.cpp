@@ -152,9 +152,9 @@ int store_check_num(const ItemEntity *o_ptr, StoreSaleType store_num)
  */
 std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe_unused]] StoreSaleType store_num)
 {
-    short repeat_command;
-    if (repeat_pull(&repeat_command) && (repeat_command >= min) && (repeat_command <= max)) {
-        return repeat_command;
+    const auto code = repeat_pull();
+    if ((code >= min) && (code <= max)) {
+        return code;
     }
 
     msg_print(nullptr);
