@@ -55,20 +55,20 @@ static void check_item_selection_mode(ItemSelection *item_selection_ptr)
 
 /*!
  * @brief アイテムへにタグ付けがされているかの調査処理 (のはず)
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @param item_selection_ptr アイテムへの参照ポインタ
  * @param i_idx 選択したアイテムのインベントリ番号
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static bool check_item_tag_aux(PlayerType *player_ptr, ItemSelection *item_selection_ptr, short i_idx, const ItemTester &item_tester)
+static bool check_item_tag_aux(const FloorType &floor, ItemSelection *item_selection_ptr, short i_idx, const ItemTester &item_tester)
 {
     if (!item_selection_ptr->floor || (i_idx >= 0)) {
         return false;
     }
 
     item_selection_ptr->k = -i_idx;
-    const auto &item = *player_ptr->current_floor_ptr->o_list[item_selection_ptr->k];
+    const auto &item = *floor.o_list[item_selection_ptr->k];
     if (!item_tester.okay(&item) && ((item_selection_ptr->mode & USE_FULL) == 0)) {
         return false;
     }
@@ -126,32 +126,25 @@ static tl::optional<short> check_item_tag_inventory(PlayerType *player_ptr, Item
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item_selection_ptr アイテムへの参照ポインタ
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
- * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ * @return 繰り返しコマンドでなければnullopt、インベントリのアイテムならばインベントリのチェック結果次第、それ以外は繰り返しコマンドに保存されたインデックス
  */
-static bool check_item_tag(PlayerType *player_ptr, ItemSelection *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
+static tl::optional<short> check_item_tag(PlayerType *player_ptr, ItemSelection *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
 {
     const auto code = repeat_pull();
     if (!code) {
-        return false;
+        return tl::nullopt;
     }
 
-    item_selection_ptr->cp = *code;
-    if (item_selection_ptr->mode & USE_FORCE && (item_selection_ptr->cp == INVEN_FORCE)) {
+    if (item_selection_ptr->mode & USE_FORCE && (*code == INVEN_FORCE)) {
         command_cmd = 0;
-        return true;
+        return code;
     }
 
-    if (check_item_tag_aux(player_ptr, item_selection_ptr, item_selection_ptr->cp, item_tester)) {
-        return true;
+    if (check_item_tag_aux(*player_ptr->current_floor_ptr, item_selection_ptr, *code, item_tester)) {
+        return code;
     }
 
-    const auto cp = check_item_tag_inventory(player_ptr, item_selection_ptr, item_selection_ptr->cp, prev_tag, item_tester);
-    if (!cp) {
-        return false;
-    }
-
-    item_selection_ptr->cp = *cp;
-    return true;
+    return check_item_tag_inventory(player_ptr, item_selection_ptr, *code, prev_tag, item_tester);
 }
 
 /*!
@@ -225,8 +218,9 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
     ItemSelection item_selection(mode);
     check_item_selection_mode(&item_selection);
-    if (check_item_tag(player_ptr, &item_selection, &prev_tag, item_tester)) {
-        *cp = item_selection.cp;
+    const auto i_idx_opt = check_item_tag(player_ptr, &item_selection, &prev_tag, item_tester);
+    if (i_idx_opt) {
+        *cp = *i_idx_opt;
         return true;
     }
 
@@ -267,9 +261,8 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
     if (item_selection.floor) {
         for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-            ItemEntity *o_ptr;
-            o_ptr = player_ptr->current_floor_ptr->o_list[this_o_idx].get();
-            if ((item_tester.okay(o_ptr) || (item_selection.mode & USE_FULL)) && o_ptr->marked.has(OmType::FOUND)) {
+            const auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
+            if ((item_tester.okay(&item) || (item_selection.mode & USE_FULL)) && item.marked.has(OmType::FOUND)) {
                 item_selection.allow_floor = true;
             }
         }
