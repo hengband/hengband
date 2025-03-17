@@ -57,16 +57,17 @@ static void check_item_selection_mode(ItemSelection *item_selection_ptr)
  * @brief アイテムへにタグ付けがされているかの調査処理 (のはず)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param item_selection_ptr アイテムへの参照ポインタ
+ * @param i_idx 選択したアイテムのインベントリ番号
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static bool check_item_tag_aux(PlayerType *player_ptr, ItemSelection *item_selection_ptr, const ItemTester &item_tester)
+static bool check_item_tag_aux(PlayerType *player_ptr, ItemSelection *item_selection_ptr, short i_idx, const ItemTester &item_tester)
 {
-    if (!item_selection_ptr->floor || (item_selection_ptr->cp >= 0)) {
+    if (!item_selection_ptr->floor || (i_idx >= 0)) {
         return false;
     }
 
-    item_selection_ptr->k = -item_selection_ptr->cp;
+    item_selection_ptr->k = -i_idx;
     const auto &item = *player_ptr->current_floor_ptr->o_list[item_selection_ptr->k];
     if (!item_tester.okay(&item) && ((item_selection_ptr->mode & USE_FULL) == 0)) {
         return false;
@@ -140,7 +141,7 @@ static bool check_item_tag(PlayerType *player_ptr, ItemSelection *item_selection
         return true;
     }
 
-    if (check_item_tag_aux(player_ptr, item_selection_ptr, item_tester)) {
+    if (check_item_tag_aux(player_ptr, item_selection_ptr, item_selection_ptr->cp, item_tester)) {
         return true;
     }
 
