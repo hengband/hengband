@@ -33,50 +33,61 @@
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
+#include <range/v3/view.hpp>
 #include <sstream>
 
 /*!
- * @brief Auto-destroy marked item
- */
-static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX i_idx)
-{
-    const auto *o_ptr = ref_item(player_ptr, i_idx);
-    if (!o_ptr->is_valid() || o_ptr->marked.has_not(OmType::AUTODESTROY)) {
-        return;
-    }
-
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
-    if (i_idx >= 0) {
-        inven_item_increase(player_ptr, i_idx, -(o_ptr->number));
-        inven_item_optimize(player_ptr, i_idx);
-    } else {
-        delete_object_idx(player_ptr, 0 - i_idx);
-    }
-
-    msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), item_name.data());
-}
-
-/*!
- * @brief Auto-destroy marked items in inventry and on floor
+ * @brief プレイヤーの持ち物から自動破壊マークの付いたアイテムを全て破壊する
  * @details
  * Scan inventry in reverse order to prevent
  * skipping after inven_item_optimize()
  */
-void autopick_delayed_alter(PlayerType *player_ptr)
+static void autopick_delayed_alter_inventory(PlayerType *player_ptr)
 {
     for (INVENTORY_IDX i_idx = INVEN_TOTAL - 1; i_idx >= 0; i_idx--) {
-        autopick_delayed_alter_aux(player_ptr, i_idx);
-    }
+        const auto *item_ptr = ref_item(player_ptr, i_idx);
+        if (!item_ptr->is_valid() || item_ptr->marked.has_not(OmType::AUTODESTROY)) {
+            continue;
+        }
 
-    const auto p_pos = player_ptr->get_position();
-    auto &grid = player_ptr->current_floor_ptr->get_grid(p_pos);
-    for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
-        INVENTORY_IDX i_idx = *it++;
-        autopick_delayed_alter_aux(player_ptr, -i_idx);
+        const auto item_name = describe_flavor(player_ptr, *item_ptr, 0);
+        msg_print(_("{}を自動破壊します。", "Auto-destroying {}."), item_name);
+        inven_item_increase(player_ptr, i_idx, -(item_ptr->number));
+        inven_item_optimize(player_ptr, i_idx);
     }
+}
+
+/*!
+ * @brief プレイヤーの足元にあるアイテムから自動破壊マークの付いたアイテムを全て破壊する
+ */
+static void autopick_delayed_alter_floor(PlayerType *player_ptr)
+{
+    const auto p_pos = player_ptr->get_position();
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(p_pos);
+    const auto is_autodestroy_item = [&](auto i_idx) {
+        const auto *item_ptr = ref_item(player_ptr, -i_idx);
+        return item_ptr->is_valid() && item_ptr->marked.has(OmType::AUTODESTROY);
+    };
+
+    auto delete_i_idx_list = grid.o_idx_list | ranges::views::filter(is_autodestroy_item) | ranges::to_vector;
+    for (const auto i_idx : delete_i_idx_list) {
+        const auto *item_ptr = ref_item(player_ptr, -i_idx);
+        const auto item_name = describe_flavor(player_ptr, *item_ptr, 0);
+        msg_print(_("{}を自動破壊します。", "Auto-destroying {}."), item_name);
+    }
+    delete_items(player_ptr, std::move(delete_i_idx_list));
+}
+
+/*!
+ * @brief Auto-destroy marked items in inventry and on floor
+ */
+void autopick_delayed_alter(PlayerType *player_ptr)
+{
+    autopick_delayed_alter_inventory(player_ptr);
+    autopick_delayed_alter_floor(player_ptr);
 
     // PW_FLOOR_ITEM_LISTは遅れるので即時更新
-    fix_floor_item_list(player_ptr, p_pos);
+    fix_floor_item_list(player_ptr, player_ptr->get_position());
 }
 
 /*!
