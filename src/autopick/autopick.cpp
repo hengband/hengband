@@ -101,8 +101,9 @@ void autopick_alter_item(PlayerType *player_ptr, INVENTORY_IDX i_idx, bool destr
  */
 void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
 {
-    for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
-        OBJECT_IDX this_o_idx = *it++;
+    std::vector<OBJECT_IDX> delete_i_idx_list;
+
+    for (const auto this_o_idx : grid.o_idx_list) {
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         int idx = find_autopick_list(player_ptr, &item);
         auto_inscribe_item(&item, idx);
@@ -121,6 +122,7 @@ void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
 
         if (!(autopick_list[idx].action & DO_QUERY_AUTOPICK)) {
             describe_pickup_item(player_ptr, this_o_idx);
+            delete_i_idx_list.push_back(this_o_idx);
             continue;
         }
 
@@ -137,5 +139,8 @@ void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
         }
 
         describe_pickup_item(player_ptr, this_o_idx);
+        delete_i_idx_list.push_back(this_o_idx);
     }
+
+    delete_items(player_ptr, std::move(delete_i_idx_list));
 }

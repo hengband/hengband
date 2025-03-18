@@ -76,6 +76,7 @@ static bool py_pickup_floor_aux(PlayerType *player_ptr)
     }
 
     describe_pickup_item(player_ptr, this_o_idx);
+    delete_object_idx(player_ptr, this_o_idx);
     return true;
 }
 
@@ -158,19 +159,15 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         return;
     }
 
-    if (!carry_query_flag) {
-        describe_pickup_item(player_ptr, floor_o_idx);
-        return;
-    }
-
     const auto &item = *player_ptr->current_floor_ptr->o_list[floor_o_idx];
     const auto item_name = describe_flavor(player_ptr, item, 0);
     const auto prompt = format(_("%sを拾いますか? ", "Pick up %s? "), item_name.data());
-    if (!input_check(prompt)) {
+    if (carry_query_flag && !input_check(prompt)) {
         return;
     }
 
     describe_pickup_item(player_ptr, floor_o_idx);
+    delete_object_idx(player_ptr, floor_o_idx);
 }
 
 /*!
@@ -199,7 +196,6 @@ void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 
     auto slot = store_item_to_inventory(player_ptr, o_ptr);
     o_ptr = player_ptr->inventory[slot].get();
-    delete_object_idx(player_ptr, o_idx);
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
         bool old_known = identify_item(player_ptr, o_ptr);
         autopick_alter_item(player_ptr, slot, (bool)(destroy_identify && !old_known));
@@ -294,6 +290,7 @@ void carry(PlayerType *player_ptr, bool pickup)
 
         if (is_pickup_successful) {
             describe_pickup_item(player_ptr, this_o_idx);
+            delete_i_idx_list.push_back(this_o_idx);
         }
     }
     delete_items(player_ptr, std::move(delete_i_idx_list));
