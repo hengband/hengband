@@ -272,7 +272,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     object_aware(player_ptr, item);
 
     msg_print(_("{}を ${}で購入しました。", "You bought {} for {} gold."), purchased_item_name, price);
-    angband_strcpy(record_o_name, purchased_item_name, MAX_NLEN);
+    record_item_name = purchased_item_name;
     record_turn = world.game_turn;
     const auto &floor = *player_ptr->current_floor_ptr;
     if (record_buy) {

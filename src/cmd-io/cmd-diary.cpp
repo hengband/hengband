@@ -17,6 +17,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <sstream>
 #include <string>
 
@@ -57,11 +58,11 @@ static void add_diary_note(const FloorType &floor)
  */
 static void do_cmd_last_get(const FloorType &floor)
 {
-    if (record_o_name[0] == '\0') {
+    if (record_item_name.empty()) {
         return;
     }
 
-    const auto record = format(_("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
+    const auto record = fmt::format(_("{}の入手を記録します。", "Do you really want to record getting {}? "), record_item_name);
     if (!input_check(record)) {
         return;
     }
@@ -69,7 +70,7 @@ static void do_cmd_last_get(const FloorType &floor)
     auto &world = AngbandWorld::get_instance();
     const auto turn_tmp = world.game_turn;
     world.game_turn = record_turn;
-    const auto mes = format(_("%sを手に入れた。", "discover %s."), record_o_name);
+    const auto mes = fmt::format(_("{}を手に入れた。", "discover {}."), record_item_name);
     exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, mes);
     world.game_turn = turn_tmp;
 }

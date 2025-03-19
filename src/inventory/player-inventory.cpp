@@ -225,10 +225,10 @@ void process_player_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
         }
     }
 
-    angband_strcpy(record_o_name, old_item_name, old_item_name.length());
+    record_item_name = old_item_name;
 #else
     msg_format("You have %s (%c).", item_name.data(), index_to_label(slot));
-    angband_strcpy(record_o_name, item_name, item_name.length());
+    record_item_name = item_name;
 #endif
     record_turn = AngbandWorld::get_instance().game_turn;
     check_find_art_quest_completion(player_ptr, o_ptr);
