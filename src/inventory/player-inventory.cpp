@@ -75,7 +75,7 @@ static bool py_pickup_floor_aux(PlayerType *player_ptr)
         return false;
     }
 
-    describe_pickup_item(player_ptr, this_o_idx);
+    process_player_pickup_item(player_ptr, this_o_idx);
     return true;
 }
 
@@ -159,7 +159,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
     }
 
     if (!carry_query_flag) {
-        describe_pickup_item(player_ptr, floor_o_idx);
+        process_player_pickup_item(player_ptr, floor_o_idx);
         return;
     }
 
@@ -170,12 +170,11 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         return;
     }
 
-    describe_pickup_item(player_ptr, floor_o_idx);
+    process_player_pickup_item(player_ptr, floor_o_idx);
 }
 
 /*!
- * @brief プレイヤーがオブジェクトを拾った際のメッセージ表示処理 /
- * Helper routine for py_pickup() and py_pickup_floor().
+ * @brief プレイヤーがアイテムを拾う処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_idx 取得したオブジェクトの参照ID
  * @details
@@ -186,7 +185,7 @@ void py_pickup_floor(PlayerType *player_ptr, bool pickup)
  * Add the given dungeon object to the character's inventory.\n
  * Delete the object afterwards.\n
  */
-void describe_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
+void process_player_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
     auto *o_ptr = player_ptr->current_floor_ptr->o_list[o_idx].get();
 #ifdef JP
@@ -293,7 +292,7 @@ void carry(PlayerType *player_ptr, bool pickup)
         }
 
         if (is_pickup_successful) {
-            describe_pickup_item(player_ptr, this_o_idx);
+            process_player_pickup_item(player_ptr, this_o_idx);
         }
     }
     delete_items(player_ptr, std::move(delete_i_idx_list));
