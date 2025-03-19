@@ -254,14 +254,14 @@ void carry(PlayerType *player_ptr, bool pickup)
         return;
     }
 
-    std::vector<OBJECT_IDX> delete_i_idx_list;
-    for (const auto this_o_idx : grid.o_idx_list) {
+    for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
+        const auto this_o_idx = *it++;
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         const auto item_name = describe_flavor(player_ptr, item, 0);
         disturb(player_ptr, false, false);
         if (item.bi_key.tval() == ItemKindType::GOLD) {
             const auto value = item.pval;
-            delete_i_idx_list.push_back(this_o_idx);
+            delete_object_idx(player_ptr, this_o_idx);
             msg_format(_(" $%d の価値がある%sを見つけた。", "You collect %d gold pieces worth of %s."), value, item_name.data());
             sound(SoundKind::SELL);
             player_ptr->au += value;
@@ -295,5 +295,4 @@ void carry(PlayerType *player_ptr, bool pickup)
             process_player_pickup_item(player_ptr, this_o_idx);
         }
     }
-    delete_items(player_ptr, std::move(delete_i_idx_list));
 }
