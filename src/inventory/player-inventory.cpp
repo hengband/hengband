@@ -39,6 +39,7 @@
 #include "flavor/flavor-util.h"
 #endif
 #include <fmt/format.h>
+#include <range/v3/all.hpp>
 
 /*!
  * @brief 規定の処理にできるアイテムがプレイヤーの利用可能範囲内にあるかどうかを返す /
@@ -101,24 +102,54 @@ static void py_pickup_all_golds_on_floor(PlayerType *player_ptr, const Grid &gri
     }
 }
 
-/*!
- * @brief 床上のアイテムを拾う選択用サブルーチン
- * @return プレイヤーによりアイテムが選択されたならTRUEを返す。
- */
-static bool py_pickup_floor_aux(PlayerType *player_ptr)
+static void py_pickup_single_item(PlayerType *player_ptr, short i_idx, bool pickup)
 {
-    short this_o_idx;
-    short i_idx;
-    constexpr auto q = _("どれを拾いますか？", "Get which item? ");
-    constexpr auto s = _("もうザックには床にあるどのアイテムも入らない。", "You no longer have any room for the objects on the floor.");
-    if (choose_object(player_ptr, &i_idx, q, s, (USE_FLOOR), FuncItemTester(check_store_item_to_inventory, player_ptr))) {
-        this_o_idx = 0 - i_idx;
-    } else {
-        return false;
+    const auto &item = *player_ptr->current_floor_ptr->o_list[i_idx];
+    const auto item_name = describe_flavor(player_ptr, item, 0);
+
+    if (!pickup) {
+        msg_print(_("{}がある。", "You see {}."), item_name);
+        return;
     }
 
-    process_player_pickup_item(player_ptr, this_o_idx);
-    return true;
+    if (!check_store_item_to_inventory(player_ptr, &item)) {
+        msg_print(_("ザックには{}を入れる隙間がない。", "You have no room for {}."), item_name);
+        return;
+    }
+
+    if (query_pickup(item_name)) {
+        process_player_pickup_item(player_ptr, i_idx);
+    }
+}
+
+static void py_pickup_multiple_items(PlayerType *player_ptr, bool pickup)
+{
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(player_ptr->get_position());
+
+    if (!pickup) {
+        const auto count_of_items = grid.o_idx_list.size();
+        msg_print(_("{} 個のアイテムの山がある。", "You see a pile of {} items."), count_of_items);
+        return;
+    }
+
+    const auto tester = FuncItemTester(check_store_item_to_inventory, player_ptr);
+    const auto can_pickup = [&](auto i_idx) { return tester.okay(floor.o_list.at(i_idx).get()); };
+    const auto count_of_pickable_items = ranges::count_if(grid.o_idx_list, can_pickup);
+    if (count_of_pickable_items == 0) {
+        msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));
+        return;
+    }
+
+    for (auto pick_count = 0; pick_count < count_of_pickable_items; ++pick_count) {
+        constexpr auto q = _("どれを拾いますか？", "Get which item? ");
+        constexpr auto s = _("もうザックには床にあるどのアイテムも入らない。", "You no longer have any room for the objects on the floor.");
+        short i_idx;
+        if (!choose_object(player_ptr, &i_idx, q, s, (USE_FLOOR), tester)) {
+            break;
+        }
+        process_player_pickup_item(player_ptr, -i_idx);
+    }
 }
 
 /*!
@@ -129,67 +160,26 @@ static bool py_pickup_floor_aux(PlayerType *player_ptr)
  */
 static void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 {
-    int floor_num = 0;
-    OBJECT_IDX floor_o_idx = 0;
-    int can_pickup = 0;
-    auto &o_idx_list = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list;
-    for (const auto this_o_idx : o_idx_list) {
-        auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
-        if (item.marked.has(OmType::SUPRESS_MESSAGE)) {
-            item.marked.reset(OmType::SUPRESS_MESSAGE);
-            continue;
-        }
+    const auto &o_list = player_ptr->current_floor_ptr->o_list;
+    const auto exclude_marked_as_skip = ranges::views::remove_if([&](auto i_idx) { return o_list.at(i_idx)->marked.has(OmType::SUPRESS_MESSAGE); });
+    const auto &grid = player_ptr->current_floor_ptr->get_grid(player_ptr->get_position());
 
-        if (check_store_item_to_inventory(player_ptr, &item)) {
-            can_pickup++;
-        }
+    const auto i_idx_list = grid.o_idx_list | exclude_marked_as_skip | ranges::to_vector;
+    const auto count_of_items = i_idx_list.size();
 
-        floor_num++;
-        floor_o_idx = this_o_idx;
+    for (const auto i_idx : grid.o_idx_list) {
+        o_list.at(i_idx)->marked.reset(OmType::SUPRESS_MESSAGE);
     }
 
-    if (!floor_num) {
+    switch (count_of_items) {
+    case 0:
         return;
-    }
-
-    if (!pickup) {
-        if (floor_num == 1) {
-            const auto &item = *player_ptr->current_floor_ptr->o_list[floor_o_idx];
-            const auto item_name = describe_flavor(player_ptr, item, 0);
-            msg_format(_("%sがある。", "You see %s."), item_name.data());
-        } else {
-            msg_format(_("%d 個のアイテムの山がある。", "You see a pile of %d items."), floor_num);
-        }
-
+    case 1:
+        py_pickup_single_item(player_ptr, i_idx_list.front(), pickup);
         return;
-    }
-
-    if (!can_pickup) {
-        if (floor_num == 1) {
-            const auto &item = *player_ptr->current_floor_ptr->o_list[floor_o_idx];
-            const auto item_name = describe_flavor(player_ptr, item, 0);
-            msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
-        } else {
-            msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));
-        }
-
+    default:
+        py_pickup_multiple_items(player_ptr, pickup);
         return;
-    }
-
-    if (floor_num != 1) {
-        while (can_pickup--) {
-            if (!py_pickup_floor_aux(player_ptr)) {
-                break;
-            }
-        }
-
-        return;
-    }
-
-    const auto &item = *player_ptr->current_floor_ptr->o_list[floor_o_idx];
-    const auto item_name = describe_flavor(player_ptr, item, 0);
-    if (query_pickup(item_name)) {
-        process_player_pickup_item(player_ptr, floor_o_idx);
     }
 }
 
@@ -291,18 +281,6 @@ void carry(PlayerType *player_ptr, bool pickup)
             continue;
         }
 
-        if (!pickup) {
-            msg_format(_("%sがある。", "You see %s."), item_name.data());
-            continue;
-        }
-
-        if (!check_store_item_to_inventory(player_ptr, &item)) {
-            msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
-            continue;
-        }
-
-        if (query_pickup(item_name)) {
-            process_player_pickup_item(player_ptr, this_o_idx);
-        }
+        py_pickup_single_item(player_ptr, this_o_idx, pickup);
     }
 }
