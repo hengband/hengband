@@ -96,7 +96,6 @@ static void py_pickup_floor(PlayerType *player_ptr, bool pickup)
     for (const auto this_o_idx : o_idx_list) {
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         const auto item_name = describe_flavor(player_ptr, item, 0);
-        disturb(player_ptr, false, false);
         if (item.bi_key.tval() == ItemKindType::GOLD) {
             constexpr auto mes = _(" $%d の価値がある%sを見つけた。", "You have found %d gold pieces worth of %s.");
             msg_format(mes, item.pval, item_name.data());
@@ -249,6 +248,11 @@ void carry(PlayerType *player_ptr, bool pickup)
     handle_stuff(player_ptr);
     const auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     autopick_pickup_items(player_ptr, grid);
+
+    if (!grid.o_idx_list.empty()) {
+        disturb(player_ptr, false, false);
+    }
+
     if (easy_floor) {
         py_pickup_floor(player_ptr, pickup);
         return;
@@ -258,7 +262,6 @@ void carry(PlayerType *player_ptr, bool pickup)
         const auto this_o_idx = *it++;
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         const auto item_name = describe_flavor(player_ptr, item, 0);
-        disturb(player_ptr, false, false);
         if (item.bi_key.tval() == ItemKindType::GOLD) {
             const auto value = item.pval;
             delete_object_idx(player_ptr, this_o_idx);
