@@ -239,7 +239,7 @@ static void reset_world_info(PlayerType *player_ptr)
     world.timewalk_m_idx = 0;
     player_ptr->now_damaged = false;
     now_message = 0;
-    record_o_name[0] = '\0';
+    record_item_name.clear();
 }
 
 static void generate_wilderness(PlayerType *player_ptr)
