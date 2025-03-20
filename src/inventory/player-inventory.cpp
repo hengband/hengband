@@ -59,6 +59,30 @@ bool can_get_item(PlayerType *player_ptr, const ItemTester &item_tester)
     return floor_num != 0;
 }
 
+static void py_pickup_all_golds_on_floor(PlayerType *player_ptr, const Grid &grid)
+{
+    for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
+        const auto i_idx = *it++;
+        auto &item = *player_ptr->current_floor_ptr->o_list[i_idx];
+        if (item.bi_key.tval() != ItemKindType::GOLD) {
+            continue;
+        }
+
+        const auto value = item.pval;
+        const auto item_name = describe_flavor(player_ptr, item, 0);
+        player_ptr->au += value;
+
+        msg_print(_(" ${} の価値がある{}を見つけた。", "You have found {} gold pieces worth of {}."), value, item_name);
+        sound(SoundKind::SELL);
+
+        delete_object_idx(player_ptr, i_idx);
+
+        auto &rfu = RedrawingFlagsUpdater::get_instance();
+        rfu.set_flag(MainWindowRedrawingFlag::GOLD);
+        rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
+    }
+}
+
 /*!
  * @brief 床上のアイテムを拾う選択用サブルーチン
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。
@@ -91,21 +115,9 @@ static void py_pickup_floor(PlayerType *player_ptr, bool pickup)
     OBJECT_IDX floor_o_idx = 0;
     int can_pickup = 0;
     auto &o_idx_list = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list;
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    std::vector<OBJECT_IDX> delete_i_idx_list;
     for (const auto this_o_idx : o_idx_list) {
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
-        const auto item_name = describe_flavor(player_ptr, item, 0);
-        if (item.bi_key.tval() == ItemKindType::GOLD) {
-            constexpr auto mes = _(" $%d の価値がある%sを見つけた。", "You have found %d gold pieces worth of %s.");
-            msg_format(mes, item.pval, item_name.data());
-            sound(SoundKind::SELL);
-            player_ptr->au += item.pval;
-            rfu.set_flag(MainWindowRedrawingFlag::GOLD);
-            rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
-            delete_i_idx_list.push_back(this_o_idx);
-            continue;
-        } else if (item.marked.has(OmType::SUPRESS_MESSAGE)) {
+        if (item.marked.has(OmType::SUPRESS_MESSAGE)) {
             item.marked.reset(OmType::SUPRESS_MESSAGE);
             continue;
         }
@@ -117,7 +129,6 @@ static void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         floor_num++;
         floor_o_idx = this_o_idx;
     }
-    delete_items(player_ptr, std::move(delete_i_idx_list));
 
     if (!floor_num) {
         return;
@@ -253,6 +264,8 @@ void carry(PlayerType *player_ptr, bool pickup)
         disturb(player_ptr, false, false);
     }
 
+    py_pickup_all_golds_on_floor(player_ptr, grid);
+
     if (easy_floor) {
         py_pickup_floor(player_ptr, pickup);
         return;
@@ -262,16 +275,6 @@ void carry(PlayerType *player_ptr, bool pickup)
         const auto this_o_idx = *it++;
         auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         const auto item_name = describe_flavor(player_ptr, item, 0);
-        if (item.bi_key.tval() == ItemKindType::GOLD) {
-            const auto value = item.pval;
-            delete_object_idx(player_ptr, this_o_idx);
-            msg_format(_(" $%d の価値がある%sを見つけた。", "You collect %d gold pieces worth of %s."), value, item_name.data());
-            sound(SoundKind::SELL);
-            player_ptr->au += value;
-            rfu.set_flag(MainWindowRedrawingFlag::GOLD);
-            rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
-            continue;
-        }
 
         if (item.marked.has(OmType::SUPRESS_MESSAGE)) {
             item.marked.reset(OmType::SUPRESS_MESSAGE);
