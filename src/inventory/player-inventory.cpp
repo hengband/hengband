@@ -38,6 +38,7 @@
 #include "artifact/fixed-art-types.h"
 #include "flavor/flavor-util.h"
 #endif
+#include <fmt/format.h>
 
 /*!
  * @brief 規定の処理にできるアイテムがプレイヤーの利用可能範囲内にあるかどうかを返す /
@@ -57,6 +58,23 @@ bool can_get_item(PlayerType *player_ptr, const ItemTester &item_tester)
     OBJECT_IDX floor_list[23];
     ITEM_NUMBER floor_num = scan_floor_items(player_ptr, floor_list, player_ptr->y, player_ptr->x, mode, item_tester);
     return floor_num != 0;
+}
+
+/*!
+ * @brief アイテムを拾うかどうかをプレイヤーに尋ねる
+ *
+ * @param item_name アイテム名
+ * @return プレイヤーの応答が「拾う」ならtrue、「拾わない」ならfalseを返す
+ * ただし、オプション設定のcarry_query_flagが「いいえ」の場合は問い合わせをせず拾うので、常にtrueを返す
+ */
+static bool query_pickup(std::string_view item_name)
+{
+    if (!carry_query_flag) {
+        return true;
+    }
+
+    const auto prompt = fmt::format(_("{}を拾いますか? ", "Pick up {}? "), item_name);
+    return input_check(prompt);
 }
 
 static void py_pickup_all_golds_on_floor(PlayerType *player_ptr, const Grid &grid)
@@ -168,19 +186,11 @@ static void py_pickup_floor(PlayerType *player_ptr, bool pickup)
         return;
     }
 
-    if (!carry_query_flag) {
-        process_player_pickup_item(player_ptr, floor_o_idx);
-        return;
-    }
-
     const auto &item = *player_ptr->current_floor_ptr->o_list[floor_o_idx];
     const auto item_name = describe_flavor(player_ptr, item, 0);
-    const auto prompt = format(_("%sを拾いますか? ", "Pick up %s? "), item_name.data());
-    if (!input_check(prompt)) {
-        return;
+    if (query_pickup(item_name)) {
+        process_player_pickup_item(player_ptr, floor_o_idx);
     }
-
-    process_player_pickup_item(player_ptr, floor_o_idx);
 }
 
 /*!
@@ -291,13 +301,7 @@ void carry(PlayerType *player_ptr, bool pickup)
             continue;
         }
 
-        int is_pickup_successful = true;
-        if (carry_query_flag) {
-            const auto prompt = format(_("%sを拾いますか? ", "Pick up %s? "), item_name.data());
-            is_pickup_successful = input_check(prompt);
-        }
-
-        if (is_pickup_successful) {
+        if (query_pickup(item_name)) {
             process_player_pickup_item(player_ptr, this_o_idx);
         }
     }
