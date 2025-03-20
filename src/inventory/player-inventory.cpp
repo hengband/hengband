@@ -85,7 +85,7 @@ static bool py_pickup_floor_aux(PlayerType *player_ptr)
  * @details
  * This is called by py_pickup() when easy_floor is TRUE.
  */
-void py_pickup_floor(PlayerType *player_ptr, bool pickup)
+static void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 {
     int floor_num = 0;
     OBJECT_IDX floor_o_idx = 0;
