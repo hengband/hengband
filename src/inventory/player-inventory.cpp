@@ -184,64 +184,76 @@ static void py_pickup_floor(PlayerType *player_ptr, bool pickup)
 }
 
 /*!
+ * @brief プレイヤーがアイテムを拾った際のメッセージを表示する
+ *
+ * アイテムを拾った際に「２つのケーキを持っている」(英語版では "You have two cakes.") と
+ * アイテムを拾った後の合計のみの表示がオリジナルだが、違和感があるという指摘をうけたので、
+ * 日本語版ではゲームオプションの plain_pickup が「いいえ」の場合、「2つのケーキを拾った」もしくは
+ * 「2つ拾って、3つのケーキを持っている」(もともと同じアイテムを持っていてスタックした場合)
+ * というふうに表示する。
+ *
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param picked_item 拾ったアイテムの参照
+ * @param picked_slot_item 拾ったアイテムを格納したスロットの参照
+ * @param slot 拾ったアイテムを格納したスロットのID
+ */
+static void print_pickup_message(PlayerType *player_ptr, [[maybe_unused]] const ItemEntity &picked_item, const ItemEntity &picked_slot_item, short slot)
+{
+    const auto item_name = describe_flavor(player_ptr, picked_slot_item, 0);
+    const auto item_name_with_label = fmt::format(_("{}({})", "{} ({})"), item_name, index_to_label(slot));
+
+#ifdef JP
+    if (picked_slot_item.is_specific_artifact(FixedArtifactId::CRIMSON) && (player_ptr->ppersonality == PERSONALITY_COMBAT)) {
+        msg_print("こうして、{}は『クリムゾン』を手に入れた。", player_ptr->name);
+        msg_print("しかし今、『混沌のサーペント』の放ったモンスターが、");
+        msg_print("{}に襲いかかる．．．", player_ptr->name);
+        return;
+    }
+
+    if (plain_pickup) {
+        msg_print("{}を持っている。", item_name_with_label);
+        return;
+    }
+
+    if (picked_slot_item.number > picked_item.number) {
+        const auto picked_count_str = describe_count_with_counter_suffix(picked_item);
+        msg_print("{}拾って、{}を持っている。", picked_count_str, item_name_with_label);
+        return;
+    }
+
+    msg_print("{}を拾った。", item_name_with_label);
+#else
+    msg_print("You have {}.", item_name_with_label);
+#endif
+}
+
+/*!
  * @brief プレイヤーがアイテムを拾う処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_idx 取得したオブジェクトの参照ID
- * @details
- * アイテムを拾った際に「２つのケーキを持っている」
- * "You have two cakes." とアイテムを拾った後の合計のみの表示がオリジナルだが、
- * 違和感があるという指摘をうけたので、「～を拾った、～を持っている」という表示にかえてある。
- * そのための配列。
- * Add the given dungeon object to the character's inventory.\n
- * Delete the object afterwards.\n
  */
 void process_player_pickup_item(PlayerType *player_ptr, OBJECT_IDX o_idx)
 {
-    auto *o_ptr = player_ptr->current_floor_ptr->o_list[o_idx].get();
-#ifdef JP
-    const auto old_item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
-    const auto picked_count_str = describe_count_with_counter_suffix(*o_ptr);
-    const auto picked_count = o_ptr->number;
-#else
-    (void)o_ptr;
-#endif
+    // delete_object_idx()で配列から削除した後にも使用するためshared_ptrをコピーする
+    const std::shared_ptr<ItemEntity> picked_item_ptr = player_ptr->current_floor_ptr->o_list[o_idx];
 
-    auto slot = store_item_to_inventory(player_ptr, o_ptr);
-    o_ptr = player_ptr->inventory[slot].get();
+    const auto slot = store_item_to_inventory(player_ptr, picked_item_ptr.get());
     delete_object_idx(player_ptr, o_idx);
+
+    auto &picked_slot_item = *player_ptr->inventory[slot];
     if (player_ptr->ppersonality == PERSONALITY_MUNCHKIN) {
-        bool old_known = identify_item(player_ptr, o_ptr);
-        autopick_alter_item(player_ptr, slot, (bool)(destroy_identify && !old_known));
-        if (o_ptr->marked.has(OmType::AUTODESTROY)) {
+        const auto old_known = identify_item(player_ptr, &picked_slot_item);
+        autopick_alter_item(player_ptr, slot, destroy_identify && !old_known);
+        if (picked_slot_item.marked.has(OmType::AUTODESTROY)) {
             return;
         }
     }
 
-    const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
-#ifdef JP
-    if (o_ptr->is_specific_artifact(FixedArtifactId::CRIMSON) && (player_ptr->ppersonality == PERSONALITY_COMBAT)) {
-        msg_format("こうして、%sは『クリムゾン』を手に入れた。", player_ptr->name);
-        msg_print("しかし今、『混沌のサーペント』の放ったモンスターが、");
-        msg_format("%sに襲いかかる．．．", player_ptr->name);
-    } else {
-        if (plain_pickup) {
-            msg_format("%s(%c)を持っている。", item_name.data(), index_to_label(slot));
-        } else {
-            if (o_ptr->number > picked_count) {
-                msg_format("%s拾って、%s(%c)を持っている。", picked_count_str.data(), item_name.data(), index_to_label(slot));
-            } else {
-                msg_format("%s(%c)を拾った。", item_name.data(), index_to_label(slot));
-            }
-        }
-    }
+    print_pickup_message(player_ptr, *picked_item_ptr, picked_slot_item, slot);
 
-    record_item_name = old_item_name;
-#else
-    msg_format("You have %s (%c).", item_name.data(), index_to_label(slot));
-    record_item_name = item_name;
-#endif
+    record_item_name = describe_flavor(player_ptr, *picked_item_ptr, OD_NAME_ONLY);
     record_turn = AngbandWorld::get_instance().game_turn;
-    check_find_art_quest_completion(player_ptr, o_ptr);
+    check_find_art_quest_completion(player_ptr, &picked_slot_item);
 }
 
 /*!
