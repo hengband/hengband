@@ -376,6 +376,35 @@ std::string str_erase(std::string str, std::string_view erase_chars)
     return str;
 }
 
+/**
+ * @brief 文字列 str に含まれる文字列 old_str をすべて new_str に置き換える
+ *
+ * 一致する文字列が重複している場合は、前方を優先する。
+ *
+ * @param str 操作の対象とする文字列
+ * @param old_str 置き換える文字列
+ * @param new_str 置き換え後の文字列
+ * @return std::string 指定した文字をすべて削除した文字列
+ */
+std::string str_replace(std::string_view str, std::string_view old_str, std::string_view new_str)
+{
+    const auto mb_char_indexes = str_find_all_multibyte_chars(str);
+    std::stringstream ss;
+
+    for (size_t pos = 0; (pos = str.find(old_str, pos)) != std::string_view::npos;) {
+        if (mb_char_indexes.contains(pos - 1)) {
+            ++pos;
+            continue;
+        }
+        ss << str.substr(0, pos) << new_str;
+        str.remove_prefix(pos + old_str.length());
+        pos = 0;
+    }
+    ss << str;
+
+    return ss.str();
+}
+
 static std::pair<size_t, size_t> adjust_substr_pos(std::string_view sv, size_t pos, size_t n)
 {
     const auto start = std::min(pos, sv.length());
