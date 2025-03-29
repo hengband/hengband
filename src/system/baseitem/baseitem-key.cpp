@@ -6,6 +6,7 @@
 
 #include "system/baseitem/baseitem-key.h"
 #include "object/tval-types.h"
+#include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
@@ -13,6 +14,7 @@
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-protector-types.h"
+#include "sv-definition/sv-ring-types.h"
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -583,6 +585,17 @@ bool BaseitemKey::are_both_statue(const BaseitemKey &other) const
     }
 
     return (this->subtype_value != SV_PHOTO) || (other.subtype_value != SV_PHOTO);
+}
+
+bool BaseitemKey::is_special() const
+{
+    auto is_special = *this == BaseitemKey(ItemKindType::AMULET, SV_AMULET_RESISTANCE);
+    is_special |= *this == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY);
+    is_special |= *this == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD);
+    is_special |= *this == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM);
+    is_special |= *this == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES);
+    is_special |= *this == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE);
+    return is_special;
 }
 
 bool BaseitemKey::is_mushrooms() const

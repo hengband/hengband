@@ -175,6 +175,7 @@ public:
     MonraceId get_monrace_id() const;
     int get_lite_radius() const;
     Pos2D get_position() const;
+    bool is_special(ItemKindType tval) const;
 
     void mark_as_known();
     void mark_as_tried() const;

@@ -1275,6 +1275,19 @@ Pos2D ItemEntity::get_position() const
     return { this->iy, this->ix };
 }
 
+/*!
+ * @brief 特殊なアイテムかどうかを調べる
+ * @param tval アイテム主分類番号
+ * @return 特殊なアイテムならTRUE
+ */
+bool ItemEntity::is_special(ItemKindType tval) const
+{
+    const auto bi_key_special = BaseitemKey(tval, this->bi_key.sval());
+    auto is_special = bi_key_special.is_special();
+    is_special |= this->is_fixed_or_random_artifact();
+    return (this->is_wearable() && this->is_ego()) || is_special;
+}
+
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
     const auto description = act.build_timeout_description();

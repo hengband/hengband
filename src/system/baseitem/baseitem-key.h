@@ -85,6 +85,7 @@ public:
     bool is_corpse() const;
     bool is_monster() const;
     bool are_both_statue(const BaseitemKey &other) const;
+    bool is_special() const;
 
 private:
     ItemKindType type_value;

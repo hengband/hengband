@@ -16,9 +16,6 @@
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "store/store-util.h"
-#include "sv-definition/sv-amulet-types.h"
-#include "sv-definition/sv-protector-types.h"
-#include "sv-definition/sv-ring-types.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/item-entity.h"
@@ -60,25 +57,6 @@ static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
 }
 
 /*!
- * @brief 特殊なアイテムかどうかを調べる
- * @param item アイテムへの参照
- * @param tval アイテム主分類番号
- * @return 特殊なアイテムならTRUE
- */
-static bool determine_spcial_item_type(const ItemEntity &item, ItemKindType tval)
-{
-    const auto bi_key = BaseitemKey(tval, item.bi_key.sval());
-    auto is_special_item_type = bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_RESISTANCE);
-    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY);
-    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD);
-    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM);
-    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES);
-    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE);
-    is_special_item_type |= item.is_fixed_or_random_artifact();
-    return (item.is_wearable() && item.is_ego()) || is_special_item_type;
-}
-
-/*!
  * @brief アイテムに耐性の表示をする必要があるかを判定する
  * @param item アイテムへの参照
  * @param tval アイテム主分類番号
@@ -95,7 +73,7 @@ static bool check_item_knowledge(const ItemEntity &item, ItemKindType tval)
     if (!item.is_known()) {
         return false;
     }
-    if (!determine_spcial_item_type(item, tval)) {
+    if (!item.is_special(tval)) {
         return false;
     }
 
