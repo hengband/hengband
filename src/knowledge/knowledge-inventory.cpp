@@ -23,26 +23,30 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
+#include <fmt/format.h>
 #include <sstream>
+#include <string>
+#include <string_view>
 
-static concptr inven_res_label = _(
+namespace {
+constexpr std::string_view INVENTORY_RESISTANCE_LABELS = _(
     "                               酸電火冷毒閃暗破轟獄因沌劣 盲恐乱麻視経感遅活浮",
     "                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSiHlEpSdRgLv");
-
-#define IM_FLAG_STR _("＊", "* ")
-#define HAS_FLAG_STR _("＋", "+ ")
-#define NO_FLAG_STR _("・", ". ")
+constexpr auto RESISTANCE_EXISTENCE = _("＋", "+ ");
+constexpr auto RESISTANCE_ABSENCE = _("・", ". ");
+}
 
 /*!
- * @brief 4元素耐性を表示する
- * @param immunity 4元素耐性の種類 (二重？)
+ * @brief 4元素耐性(免疫も含)を表示する
+ * @param immunity 4元素耐性の種類
  * @param resistance 4元素耐性
  * @param flags 耐性配列へのポインタ
  * @param fff 一時ファイルへのポインタ
  */
 static void print_im_or_res_flag(tr_type immunity, tr_type resistance, const TrFlags &flags, FILE *fff)
 {
-    fputs(flags.has(immunity) ? IM_FLAG_STR : (flags.has(resistance) ? HAS_FLAG_STR : NO_FLAG_STR), fff);
+    constexpr auto immunity_flag_strength = _("＊", "* ");
+    fmt::print(fff, "{}", flags.has(immunity) ? immunity_flag_strength : (flags.has(resistance) ? RESISTANCE_EXISTENCE : RESISTANCE_ABSENCE));
 }
 
 /*!
@@ -53,7 +57,7 @@ static void print_im_or_res_flag(tr_type immunity, tr_type resistance, const TrF
  */
 static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
 {
-    fputs(flags.has(tr) ? HAS_FLAG_STR : NO_FLAG_STR, fff);
+    fmt::print(fff, "{}", flags.has(tr) ? RESISTANCE_EXISTENCE : RESISTANCE_ABSENCE);
 }
 
 /*!
@@ -104,7 +108,7 @@ static void display_identified_resistances_flag(const ItemEntity &item, FILE *ff
     print_flag(TR_RES_CHAOS, flags, fff);
     print_flag(TR_RES_DISEN, flags, fff);
 
-    fputs(" ", fff);
+    fmt::print(fff, " ");
 
     print_flag(TR_RES_BLIND, flags, fff);
     print_flag(TR_RES_FEAR, flags, fff);
@@ -117,7 +121,7 @@ static void display_identified_resistances_flag(const ItemEntity &item, FILE *ff
     print_flag(TR_REGEN, flags, fff);
     print_flag(TR_LEVITATION, flags, fff);
 
-    fputc('\n', fff);
+    fmt::println(fff, "");
 }
 
 /*!
@@ -139,9 +143,9 @@ static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, co
         ss << ' ';
     }
 
-    fprintf(fff, "%s %s", where, ss.str().data());
+    fmt::print(fff, "{} {}", where, ss.str());
     if (!item.is_fully_known()) {
-        fputs(_("-------不明--------------- -------不明---------\n", "-------unknown------------ -------unknown------\n"), fff);
+        fmt::println(fff, _("-------不明--------------- -------不明---------", "-------unknown------------ -------unknown------"));
         return;
     }
 
@@ -158,7 +162,7 @@ static void add_res_label(int *label_number, FILE *fff)
     (*label_number)++;
     if (*label_number == 9) {
         *label_number = 0;
-        fprintf(fff, "%s\n", inven_res_label);
+        fmt::println(fff, INVENTORY_RESISTANCE_LABELS);
     }
 }
 
@@ -174,11 +178,11 @@ static void reset_label_number(int *label_number, FILE *fff)
     }
 
     for (; *label_number < 9; (*label_number)++) {
-        fputc('\n', fff);
+        fmt::println(fff, "");
     }
 
     *label_number = 0;
-    fprintf(fff, "%s\n", inven_res_label);
+    fmt::println(fff, INVENTORY_RESISTANCE_LABELS);
 }
 
 /*!
@@ -260,7 +264,7 @@ void do_cmd_knowledge_inventory(PlayerType *player_ptr)
         return;
     }
 
-    fprintf(fff, "%s\n", inven_res_label);
+    fmt::println(fff, INVENTORY_RESISTANCE_LABELS);
     int label_number = 0;
     for (auto tval : TV_WEARABLE_RANGE) {
         reset_label_number(&label_number, fff);
