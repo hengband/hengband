@@ -108,7 +108,7 @@ static void display_identified_resistances_flag(const ItemEntity &item, FILE *ff
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
  * @details 28文字ちょうどになるまで右側をスペースでパディングする
  */
-static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, const ItemEntity &item, char *where)
+static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, const ItemEntity &item, std::string_view where)
 {
     constexpr auto max_item_length = 26;
     std::stringstream ss;
@@ -170,15 +170,13 @@ static void reset_label_number(int *label_number, FILE *fff)
  */
 static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
-    char where[32];
-    strcpy(where, _("装", "E "));
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         const auto &item = *player_ptr->inventory[i];
         if (!item.has_knowledge(tval)) {
             continue;
         }
 
-        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, where);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, _("装", "E "));
         add_res_label(label_number, fff);
     }
 }
@@ -192,15 +190,13 @@ static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindT
  */
 static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
-    char where[32];
-    strcpy(where, _("持", "I "));
     for (int i = 0; i < INVEN_PACK; i++) {
         const auto &item = *player_ptr->inventory[i];
         if (!item.has_knowledge(tval)) {
             continue;
         }
 
-        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, where);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, _("持", "I "));
         add_res_label(label_number, fff);
     }
 }
@@ -215,15 +211,13 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
 static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
 {
     const auto &store = towns_info[1].get_store(StoreSaleType::HOME);
-    char where[32];
-    strcpy(where, _("家", "H "));
     for (int i = 0; i < store.stock_num; i++) {
         const auto &item = *store.stock[i];
         if (!item.has_knowledge(tval)) {
             continue;
         }
 
-        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, where);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, _("家", "H "));
         add_res_label(label_number, fff);
     }
 }
