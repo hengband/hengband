@@ -29,6 +29,7 @@
 #include <string_view>
 
 namespace {
+constexpr auto MAX_LINES_PER_LABEL = 8; //!< @brief ラベルを表示する行間隔. 0スタートで8が9行目.
 constexpr std::string_view INVENTORY_RESISTANCE_LABELS = _(
     "                               酸電火冷毒閃暗破轟獄因沌劣 盲恐乱麻視経感遅活浮",
     "                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSiHlEpSdRgLv");
@@ -130,34 +131,34 @@ static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, co
 
 /*!
  * @brief 9行おきにラベルを追加する
- * @param label_number 現在の行数
+ * @param label_number 現在の行番号 (0スタートのため、8が9行目)
  * @param fff 一時ファイルへの参照ポインタ
  */
-static void add_res_label(int *label_number, FILE *fff)
+static int add_res_label(int label_number, FILE *fff)
 {
-    (*label_number)++;
-    if (*label_number == 9) {
-        *label_number = 0;
+    if (label_number == MAX_LINES_PER_LABEL) {
         fmt::println(fff, INVENTORY_RESISTANCE_LABELS);
+        return 0;
     }
+
+    return label_number + 1;
 }
 
 /*!
- * @brief 9行ごとに行数をリセットする
- * @param label_number 現在の行数
+ * @brief 耐性ラベルの表示行数を調整し、必要に応じて改行で埋めてヘッダを出力する
+ * @param label_number 行番号
  * @param fff 一時ファイルへの参照ポインタ
  */
-static void reset_label_number(int *label_number, FILE *fff)
+static void pad_and_print_header(int label_number, FILE *fff)
 {
-    if (*label_number == 0) {
+    if (label_number == 0) {
         return;
     }
 
-    for (; *label_number < 9; (*label_number)++) {
+    for (auto i = label_number; i <= MAX_LINES_PER_LABEL; i++) {
         fmt::println(fff, "");
     }
 
-    *label_number = 0;
     fmt::println(fff, INVENTORY_RESISTANCE_LABELS);
 }
 
@@ -167,18 +168,22 @@ static void reset_label_number(int *label_number, FILE *fff)
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
+ * @return 画面表示後の行数
  */
-static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
+static int show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int label_number_initial, FILE *fff)
 {
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    auto label_number = label_number_initial;
+    for (short i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         const auto &item = *player_ptr->inventory[i];
         if (!item.has_knowledge(tval)) {
             continue;
         }
 
         do_cmd_knowledge_inventory_aux(player_ptr, fff, item, _("装", "E "));
-        add_res_label(label_number, fff);
+        label_number = add_res_label(label_number, fff);
     }
+
+    return label_number;
 }
 
 /*!
@@ -187,18 +192,22 @@ static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindT
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
+ * @return 画面表示後の行数
  */
-static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
+static int show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int label_number_initial, FILE *fff)
 {
-    for (int i = 0; i < INVEN_PACK; i++) {
+    auto label_number = label_number_initial;
+    for (short i = 0; i < INVEN_PACK; i++) {
         const auto &item = *player_ptr->inventory[i];
         if (!item.has_knowledge(tval)) {
             continue;
         }
 
         do_cmd_knowledge_inventory_aux(player_ptr, fff, item, _("持", "I "));
-        add_res_label(label_number, fff);
+        label_number = add_res_label(label_number, fff);
     }
+
+    return label_number;
 }
 
 /*!
@@ -207,19 +216,23 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
+ * @return 画面表示後の行数
  */
-static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
+static int show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int label_number_initial, FILE *fff)
 {
+    auto label_number = label_number_initial;
     const auto &store = towns_info[1].get_store(StoreSaleType::HOME);
-    for (int i = 0; i < store.stock_num; i++) {
+    for (short i = 0; i < store.stock_num; i++) {
         const auto &item = *store.stock[i];
         if (!item.has_knowledge(tval)) {
             continue;
         }
 
         do_cmd_knowledge_inventory_aux(player_ptr, fff, item, _("家", "H "));
-        add_res_label(label_number, fff);
+        label_number = add_res_label(label_number, fff);
     }
+
+    return label_number;
 }
 
 /*
@@ -235,12 +248,12 @@ void do_cmd_knowledge_inventory(PlayerType *player_ptr)
     }
 
     fmt::println(fff, INVENTORY_RESISTANCE_LABELS);
-    int label_number = 0;
+    auto label_number = 0;
     for (auto tval : TV_WEARABLE_RANGE) {
-        reset_label_number(&label_number, fff);
-        show_wearing_equipment_resistances(player_ptr, tval, &label_number, fff);
-        show_holding_equipment_resistances(player_ptr, tval, &label_number, fff);
-        show_home_equipment_resistances(player_ptr, tval, &label_number, fff);
+        pad_and_print_header(label_number, fff);
+        label_number = show_wearing_equipment_resistances(player_ptr, tval, 0, fff);
+        label_number = show_holding_equipment_resistances(player_ptr, tval, label_number, fff);
+        label_number = show_home_equipment_resistances(player_ptr, tval, label_number, fff);
     }
 
     angband_fclose(fff);
