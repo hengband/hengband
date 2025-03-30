@@ -1276,16 +1276,16 @@ Pos2D ItemEntity::get_position() const
 }
 
 /*!
- * @brief 特殊なアイテムかどうかを調べる
+ * @brief アイテムに耐性の表示をする必要があるかを判定する
  * @param tval アイテム主分類番号
- * @return 特殊なアイテムならTRUE
+ * @return 必要があるならTRUE
  */
-bool ItemEntity::is_special(ItemKindType tval) const
+bool ItemEntity::has_knowledge(ItemKindType tval) const
 {
-    const auto bi_key_special = BaseitemKey(tval, this->bi_key.sval());
-    auto is_special = bi_key_special.is_special();
-    is_special |= this->is_fixed_or_random_artifact();
-    return (this->is_wearable() && this->is_ego()) || is_special;
+    return this->is_valid() &&
+           (this->bi_key.tval() == tval) &&
+           this->is_known() &&
+           this->is_special();
 }
 
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
@@ -1604,6 +1604,17 @@ char ItemEntity::get_character() const
     const auto &baseitem = this->get_baseitem();
     const auto flavor = baseitem.flavor;
     return flavor ? BaseitemList::get_instance().get_baseitem(flavor).symbol_config.character : baseitem.symbol_config.character;
+}
+
+/*!
+ * @brief 特殊なアイテムかどうかを調べる
+ * @return 特殊なアイテムならTRUE
+ */
+bool ItemEntity::is_special() const
+{
+    auto is_special = this->bi_key.is_special();
+    is_special |= this->is_fixed_or_random_artifact();
+    return (this->is_wearable() && this->is_ego()) || is_special;
 }
 
 std::string ItemEntity::build_item_info_for_debug() const

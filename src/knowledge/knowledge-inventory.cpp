@@ -61,30 +61,6 @@ static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
 }
 
 /*!
- * @brief アイテムに耐性の表示をする必要があるかを判定する
- * @param item アイテムへの参照
- * @param tval アイテム主分類番号
- * @return 必要があるならTRUE
- */
-static bool check_item_knowledge(const ItemEntity &item, ItemKindType tval)
-{
-    if (!item.is_valid()) {
-        return false;
-    }
-    if (item.bi_key.tval() != tval) {
-        return false;
-    }
-    if (!item.is_known()) {
-        return false;
-    }
-    if (!item.is_special(tval)) {
-        return false;
-    }
-
-    return true;
-}
-
-/*!
  * @brief 鑑定済アイテムの耐性を表示する
  * @param item アイテムへの参照
  * @param fff 一時ファイルへの参照ポインタ
@@ -198,7 +174,7 @@ static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindT
     strcpy(where, _("装", "E "));
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         const auto &item = *player_ptr->inventory[i];
-        if (!check_item_knowledge(item, tval)) {
+        if (!item.has_knowledge(tval)) {
             continue;
         }
 
@@ -220,7 +196,7 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
     strcpy(where, _("持", "I "));
     for (int i = 0; i < INVEN_PACK; i++) {
         const auto &item = *player_ptr->inventory[i];
-        if (!check_item_knowledge(item, tval)) {
+        if (!item.has_knowledge(tval)) {
             continue;
         }
 
@@ -243,7 +219,7 @@ static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType
     strcpy(where, _("家", "H "));
     for (int i = 0; i < store.stock_num; i++) {
         const auto &item = *store.stock[i];
-        if (!check_item_knowledge(item, tval)) {
+        if (!item.has_knowledge(tval)) {
             continue;
         }
 
