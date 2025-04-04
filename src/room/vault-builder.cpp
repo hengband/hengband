@@ -49,8 +49,11 @@ void vault_monsters(PlayerType *player_ptr, const Pos2D &pos_center, int num)
             }
 
             floor.monster_level = floor.base_level + 2;
-            (void)place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+            const auto has_placed = place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
             floor.monster_level = floor.base_level;
+            if (has_placed) {
+                break;
+            }
         }
     }
 }
