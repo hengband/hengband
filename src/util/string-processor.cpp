@@ -1,9 +1,13 @@
 #include "util/string-processor.h"
 #include "system/angband.h"
 #include <array>
+#include <range/v3/all.hpp>
 
 namespace {
 constexpr std::array<char, 16> hex_symbol_table = { { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' } }; //!< 10進数から16進数への変換テーブル
+
+constexpr auto trim_front = ranges::views::drop_while([](char c) { return c == ' ' || c == '\t'; });
+constexpr auto trim_back = ranges::views::reverse | trim_front | ranges::views::reverse;
 }
 
 /*
@@ -230,14 +234,7 @@ bool str_find(const std::string &src, std::string_view find)
  */
 std::string str_trim(std::string_view str)
 {
-    const auto start_pos = str.find_first_not_of(" \t");
-    const auto end_pos = str.find_last_not_of(" \t");
-
-    if (start_pos == std::string_view::npos || end_pos == std::string_view::npos) {
-        return std::string();
-    }
-
-    return std::string(str.substr(start_pos, end_pos - start_pos + 1));
+    return str | trim_front | trim_back | ranges::to<std::string>();
 }
 
 /**
@@ -252,13 +249,7 @@ std::string str_trim(std::string_view str)
  */
 std::string str_rtrim(std::string_view str)
 {
-    const auto end_pos = str.find_last_not_of(" \t");
-
-    if (end_pos == std::string_view::npos) {
-        return std::string();
-    }
-
-    return std::string(str.substr(0, end_pos + 1));
+    return str | trim_back | ranges::to<std::string>();
 }
 
 /**
@@ -273,13 +264,7 @@ std::string str_rtrim(std::string_view str)
  */
 std::string str_ltrim(std::string_view str)
 {
-    const auto start_pos = str.find_first_not_of(" \t");
-
-    if (start_pos == std::string_view::npos) {
-        return std::string();
-    }
-
-    return std::string(str.substr(start_pos));
+    return str | trim_front | ranges::to<std::string>();
 }
 
 /**
