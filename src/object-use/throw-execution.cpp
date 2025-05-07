@@ -40,6 +40,7 @@
 #include "player/player-status-table.h"
 #include "racial/racial-android.h"
 #include "specific-object/torch.h"
+#include "system/angband-exceptions.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -55,6 +56,19 @@
 #include "view/display-messages.h"
 #include "view/object-describer.h"
 #include "wizard/wizard-messages.h"
+
+ObjectThrowHitMonster::ObjectThrowHitMonster(PlayerType *player_ptr, POSITION y, POSITION x)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid({ y, x });
+    if (!grid.has_monster() || std::cmp_greater_equal(grid.m_idx, floor.m_list.size())) {
+        THROW_EXCEPTION(std::logic_error, "Invalid monster index");
+    }
+
+    this->m_idx = grid.m_idx;
+    this->m_ptr = &floor.m_list[grid.m_idx];
+    this->m_name = monster_name(player_ptr, grid.m_idx);
+}
 
 ObjectThrowEntity::ObjectThrowEntity(PlayerType *player_ptr, ItemEntity *q_ptr, const int delay_factor_val, const int mult, const bool boomerang, const OBJECT_IDX shuriken)
     : q_ptr(q_ptr)
@@ -197,12 +211,7 @@ void ObjectThrowEntity::exe_throw()
             continue;
         }
 
-        auto &floor = *this->player_ptr->current_floor_ptr;
-        this->g_ptr = &floor.grid_array[this->y][this->x];
-        this->m_ptr = &floor.m_list[this->g_ptr->m_idx];
-        this->m_name = monster_name(this->player_ptr, this->g_ptr->m_idx);
-        this->visible = this->m_ptr->ml;
-        this->hit_body = true;
+        this->hit_monster = ObjectThrowHitMonster(this->player_ptr, this->y, this->x);
         this->attack_racial_power();
         break;
     }
@@ -232,7 +241,7 @@ void ObjectThrowEntity::display_potion_throw()
         return;
     }
 
-    if (!this->hit_body && !this->hit_wall && (randint1(100) >= this->corruption_possibility)) {
+    if (!this->hit_monster && !this->hit_wall && (randint1(100) >= this->corruption_possibility)) {
         this->corruption_possibility = 0;
         return;
     }
@@ -243,13 +252,18 @@ void ObjectThrowEntity::display_potion_throw()
         return;
     }
 
-    if (!this->g_ptr->has_monster() || !this->m_ptr->is_friendly() || this->m_ptr->is_invulnerable()) {
+    if (!this->hit_monster) {
         return;
     }
 
-    const auto angry_m_name = monster_desc(this->player_ptr, *this->m_ptr, 0);
+    auto &monster = *this->hit_monster->m_ptr;
+    if (!monster.is_friendly() || monster.is_invulnerable()) {
+        return;
+    }
+
+    const auto angry_m_name = monster_desc(this->player_ptr, monster, 0);
     msg_format(_("%sは怒った！", "%s^ gets angry!"), angry_m_name.data());
-    this->m_ptr->set_hostile();
+    monster.set_hostile();
 }
 
 void ObjectThrowEntity::check_boomerang_throw()
@@ -314,6 +328,11 @@ void ObjectThrowEntity::drop_thrown_item()
     const auto drop_y = has_terrain_projection ? this->y : this->prev_y;
     const auto drop_x = has_terrain_projection ? this->x : this->prev_x;
     (void)drop_near(this->player_ptr, this->q_ptr, { drop_y, drop_x }, this->corruption_possibility);
+}
+
+bool ObjectThrowEntity::has_hit_monster() const
+{
+    return this->hit_monster.has_value();
 }
 
 bool ObjectThrowEntity::check_what_throw()
@@ -412,14 +431,19 @@ bool ObjectThrowEntity::check_racial_target_monster()
 
 void ObjectThrowEntity::attack_racial_power()
 {
-    if (!test_hit_fire(this->player_ptr, this->chance - this->cur_dis, *this->m_ptr, this->m_ptr->ml, this->o_name)) {
+    if (!this->hit_monster) {
+        return;
+    }
+
+    auto &monster = *this->hit_monster->m_ptr;
+    if (!test_hit_fire(this->player_ptr, this->chance - this->cur_dis, monster, monster.ml, this->o_name)) {
         return;
     }
 
     this->display_attack_racial_power();
     this->calc_racial_power_damage();
     msg_format_wizard(this->player_ptr, CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), this->tdam,
-        this->m_ptr->hp - this->tdam, this->m_ptr->maxhp, this->m_ptr->max_maxhp);
+        monster.hp - this->tdam, monster.maxhp, monster.max_maxhp);
 
     auto fear = false;
     AttributeFlags attribute_flags{};
@@ -428,49 +452,54 @@ void ObjectThrowEntity::attack_racial_power()
         attribute_flags.set(AttributeType::FIRE);
     }
 
-    MonsterDamageProcessor mdp(this->player_ptr, this->g_ptr->m_idx, this->tdam, &fear, attribute_flags);
-    if (mdp.mon_take_hit(this->m_ptr->get_died_message())) {
+    MonsterDamageProcessor mdp(this->player_ptr, this->hit_monster->m_idx, this->tdam, &fear, attribute_flags);
+    if (mdp.mon_take_hit(monster.get_died_message())) {
         return;
     }
-    const auto pain_message = this->m_ptr->get_pain_message(this->m_name, this->tdam);
+    const auto pain_message = monster.get_pain_message(this->hit_monster->m_name, this->tdam);
     if (pain_message) {
         msg_print(*pain_message);
     }
 
     if ((this->tdam > 0) && !this->q_ptr->is_potion()) {
-        anger_monster(this->player_ptr, *this->m_ptr);
+        anger_monster(this->player_ptr, monster);
     }
 
-    if (fear && this->m_ptr->ml) {
+    if (fear && monster.ml) {
         sound(SoundKind::FLEE);
-        msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), this->m_name.data());
+        msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), this->hit_monster->m_name.data());
     }
 }
 
 void ObjectThrowEntity::display_attack_racial_power()
 {
-    if (!this->visible) {
+    if (!this->hit_monster) {
+        return;
+    }
+
+    if (!this->hit_monster->m_ptr->ml) {
         msg_format(_("%sが敵を捕捉した。", "The %s finds a mark."), this->o_name.data());
         return;
     }
 
-    msg_format(_("%sが%sに命中した。", "The %s hits %s."), this->o_name.data(), this->m_name.data());
-    if (!this->m_ptr->ml) {
-        return;
-    }
+    msg_format(_("%sが%sに命中した。", "The %s hits %s."), this->o_name.data(), this->hit_monster->m_name.data());
 
     if (!this->player_ptr->effects()->hallucination().is_hallucinated()) {
-        LoreTracker::get_instance().set_trackee(this->m_ptr->ap_r_idx);
+        LoreTracker::get_instance().set_trackee(this->hit_monster->m_ptr->ap_r_idx);
     }
 
-    health_track(this->player_ptr, this->g_ptr->m_idx);
+    health_track(this->player_ptr, this->hit_monster->m_idx);
 }
 
 void ObjectThrowEntity::calc_racial_power_damage()
 {
+    if (!this->hit_monster) {
+        return;
+    }
+
     const auto damage_dice = is_active_torch(this->o_ptr) ? Dice(1, 6) : this->q_ptr->damage_dice;
     this->tdam = damage_dice.roll();
-    this->tdam = calc_attack_damage_with_slay(this->player_ptr, this->q_ptr, this->tdam, *this->m_ptr, HISSATSU_NONE, true);
+    this->tdam = calc_attack_damage_with_slay(this->player_ptr, this->q_ptr, this->tdam, *this->hit_monster->m_ptr, HISSATSU_NONE, true);
     this->tdam = critical_shot(this->player_ptr, this->q_ptr->weight, this->q_ptr->to_h, 0, this->tdam);
     this->tdam += (this->q_ptr->to_d > 0 ? 1 : -1) * this->q_ptr->to_d;
     if (this->boomerang) {
@@ -491,7 +520,7 @@ void ObjectThrowEntity::calc_racial_power_damage()
         this->tdam = 0;
     }
 
-    this->tdam = mon_damage_mod(this->player_ptr, *this->m_ptr, this->tdam, false);
+    this->tdam = mon_damage_mod(this->player_ptr, *this->hit_monster->m_ptr, this->tdam, false);
 }
 
 void ObjectThrowEntity::process_boomerang_throw()
