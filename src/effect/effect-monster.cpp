@@ -74,6 +74,9 @@ static ProcessResult is_affective(EffectMonster *em_ptr)
     if (em_ptr->m_ptr->hp < 0) {
         return ProcessResult::PROCESS_FALSE;
     }
+    if (em_ptr->m_ptr->mflag.has_not(MonsterTemporaryFlagType::PRESENT_AT_TURN_START)) {
+        return ProcessResult::PROCESS_FALSE;
+    }
     if (em_ptr->is_monster() || !em_ptr->m_ptr->is_riding()) {
         return ProcessResult::PROCESS_TRUE;
     }

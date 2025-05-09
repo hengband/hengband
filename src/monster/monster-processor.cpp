@@ -169,6 +169,8 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
     auto &monrace = monster.get_monrace();
 
+    mark_monsters_present(player_ptr);
+
     turn_flags_ptr->aware = process_stealth(player_ptr, m_idx);
     if (vanish_summoned_children(player_ptr, m_idx, turn_flags_ptr->see_m)) {
         return;
@@ -612,12 +614,12 @@ bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MO
  * Most of the rest of the time is spent in "update_view()" and "lite_spot()",\n
  * especially when the player is running.\n
  *\n
- * Note the special "MFLAG_BORN" flag, which allows us to ignore "fresh"\n
- * monsters while they are still being "born".  A monster is "fresh" only\n
+ * Note the special "PRESENT_AT_TURN_START" flag.  Monsters without that flag\n
+ * are "fresh" and are still being "born".  A monster is "fresh" only\n
  * during the game turn in which it is created, and we use the "hack_m_idx" to\n
  * determine if the monster is yet to be processed during the game turn.\n
  *\n
- * Note the special "MFLAG_PREVENT_MAGIC" flag, which allows the player to get one\n
+ * Note the special "PREVENT_MAGIC" flag, which allows the player to get one\n
  * move before any "nasty" monsters get to use their spell attacks.\n
  *\n
  * Note that when the "knowledge" about the currently tracked monster\n

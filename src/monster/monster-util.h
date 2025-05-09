@@ -54,5 +54,6 @@ public:
 };
 void get_mon_num_prep_chameleon(PlayerType *player_ptr, const ChameleonTransformation &ct);
 void get_mon_num_prep_bounty(PlayerType *player_ptr);
+void mark_monsters_present(PlayerType *player_ptr);
 bool is_player(MONSTER_IDX m_idx);
 bool is_monster(MONSTER_IDX m_idx);
