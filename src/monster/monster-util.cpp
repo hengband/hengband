@@ -690,6 +690,23 @@ void get_mon_num_prep_bounty(PlayerType *player_ptr)
     }
 }
 
+/*!
+ * @brief モンスターにPRESENT_AT_TURN_STARTを設定する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
+void mark_monsters_present(PlayerType *player_ptr)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
+
+    for (MONSTER_IDX m_idx = floor.m_max - 1; m_idx >= 1; m_idx--) {
+        auto &monster = floor.m_list[m_idx];
+        if (!monster.is_valid()) {
+            continue;
+        }
+        monster.mflag.set(MonsterTemporaryFlagType::PRESENT_AT_TURN_START);
+    }
+}
+
 bool is_player(MONSTER_IDX m_idx)
 {
     return m_idx == 0;
