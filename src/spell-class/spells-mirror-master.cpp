@@ -15,7 +15,6 @@
 #include "effect/effect-monster.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
@@ -43,6 +42,7 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <map>
+#include <range/v3/view.hpp>
 
 SpellsMirrorMaster::SpellsMirrorMaster(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -66,11 +66,11 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
             update_monster(this->player_ptr, grid.m_idx, false);
         }
 
-        update_local_illumination(this->player_ptr, { y, x });
+        update_local_illumination(this->player_ptr, pos);
     }
 
-    note_spot(this->player_ptr, y, x);
-    lite_spot(this->player_ptr, y, x);
+    note_spot(this->player_ptr, pos);
+    lite_spot(this->player_ptr, pos);
 }
 
 /*!
@@ -81,20 +81,18 @@ void SpellsMirrorMaster::remove_mirror(int y, int x)
 void SpellsMirrorMaster::remove_all_mirrors(bool explode)
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor.width; x++) {
-        for (auto y = 0; y < floor.height; y++) {
-            if (!floor.grid_array[y][x].is_mirror()) {
-                continue;
-            }
-
-            this->remove_mirror(y, x);
-            if (!explode) {
-                continue;
-            }
-
-            constexpr BIT_FLAGS projection = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
-            project(this->player_ptr, 0, 2, y, x, this->player_ptr->lev / 2 + 5, AttributeType::SHARDS, projection);
+    for (const auto &pos : floor.get_area()) {
+        if (!floor.get_grid(pos).is_mirror()) {
+            continue;
         }
+
+        this->remove_mirror(pos.y, pos.x);
+        if (!explode) {
+            continue;
+        }
+
+        constexpr BIT_FLAGS projection = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
+        project(this->player_ptr, 0, 2, pos.y, pos.x, this->player_ptr->lev / 2 + 5, AttributeType::SHARDS, projection);
     }
 }
 
@@ -106,13 +104,12 @@ void SpellsMirrorMaster::remove_all_mirrors(bool explode)
  */
 bool SpellsMirrorMaster::mirror_tunnel()
 {
-    int x;
-    int y;
-    if (!tgt_pt(this->player_ptr, &x, &y)) {
+    const auto pos = point_target(this->player_ptr);
+    if (!pos) {
         return false;
     }
 
-    if (exe_dimension_door(this->player_ptr, x, y)) {
+    if (exe_dimension_door(this->player_ptr, *pos)) {
         return true;
     }
 
@@ -128,16 +125,16 @@ std::optional<std::string> SpellsMirrorMaster::place_mirror()
 {
     const auto p_pos = this->player_ptr->get_position();
     auto &floor = *this->player_ptr->current_floor_ptr;
-    if (!cave_clean_bold(floor, p_pos.y, p_pos.x)) {
+    auto &grid = floor.get_grid(p_pos);
+    if (!grid.is_clean()) {
         return _("床上のアイテムが呪文を跳ね返した。", "The object resists the spell.");
     }
 
-    auto &grid = floor.get_grid(p_pos);
     set_bits(grid.info, CAVE_OBJECT | CAVE_GLOW);
     grid.set_terrain_id(TerrainTag::MIRROR, TerrainKind::MIMIC);
 
-    note_spot(this->player_ptr, p_pos.y, p_pos.x);
-    lite_spot(this->player_ptr, p_pos.y, p_pos.x);
+    note_spot(this->player_ptr, p_pos);
+    lite_spot(this->player_ptr, p_pos);
     update_local_illumination(this->player_ptr, p_pos);
     return std::nullopt;
 }
@@ -178,34 +175,32 @@ bool SpellsMirrorMaster::mirror_concentration()
 void SpellsMirrorMaster::seal_of_mirror(const int dam)
 {
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor.width; x++) {
-        for (auto y = 0; y < floor.height; y++) {
-            const auto &g_ref = floor.grid_array[y][x];
-            if (!g_ref.is_mirror()) {
-                continue;
-            }
+    for (const auto &pos : floor.get_area()) {
+        const auto &g_ref = floor.get_grid(pos);
+        if (!g_ref.is_mirror()) {
+            continue;
+        }
 
-            constexpr BIT_FLAGS flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP;
-            if (!affect_monster(this->player_ptr, 0, 0, y, x, dam, AttributeType::GENOCIDE, flags, true)) {
-                continue;
-            }
+        constexpr BIT_FLAGS flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP;
+        if (!affect_monster(this->player_ptr, 0, 0, pos.y, pos.x, dam, AttributeType::GENOCIDE, flags, true)) {
+            continue;
+        }
 
-            if (!g_ref.has_monster()) {
-                this->remove_mirror(y, x);
-            }
+        if (!g_ref.has_monster()) {
+            this->remove_mirror(pos.y, pos.x);
         }
     }
 }
 
 void SpellsMirrorMaster::seeker_ray(const Direction &dir, int dam)
 {
-    const auto pos = (dir.is_targetting() && target_okay(this->player_ptr)) ? Pos2D(target_row, target_col) : this->player_ptr->get_neighbor(dir);
+    const auto pos = dir.get_target_position(this->player_ptr->get_position());
     project_seeker_ray(pos.x, pos.y, dam);
 }
 
 void SpellsMirrorMaster::super_ray(const Direction &dir, int dam)
 {
-    const auto pos = (dir.is_targetting() && target_okay(this->player_ptr)) ? Pos2D(target_row, target_col) : this->player_ptr->get_neighbor(dir);
+    const auto pos = dir.get_target_position(this->player_ptr->get_position());
     project_super_ray(pos.x, pos.y, dam);
 }
 
@@ -216,16 +211,9 @@ void SpellsMirrorMaster::super_ray(const Direction &dir, int dam)
  */
 Pos2D SpellsMirrorMaster::get_next_mirror_position(const Pos2D &pos_current) const
 {
-    std::vector<Pos2D> mirror_positions;
     const auto &floor = *this->player_ptr->current_floor_ptr;
-    for (auto x = 0; x < floor.width; x++) {
-        for (auto y = 0; y < floor.height; y++) {
-            const Pos2D pos(y, x);
-            if (floor.get_grid(pos).is_mirror()) {
-                mirror_positions.push_back(pos);
-            }
-        }
-    }
+    const auto has_mirror = [&](const Pos2D &pos) { return floor.get_grid(pos).is_mirror(); };
+    const auto mirror_positions = floor.get_area() | ranges::views::filter(has_mirror) | ranges::to_vector;
 
     if (!mirror_positions.empty()) {
         return rand_choice(mirror_positions);
@@ -267,9 +255,10 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     project_m_y = 0;
     auto visual = false;
     auto &tracker = LoreTracker::get_instance();
-    const auto max_range = AngbandSystem::get_instance().get_max_range();
+    const auto p_pos = this->player_ptr->get_position();
+    const auto range = project_length != 0 ? project_length : AngbandSystem::get_instance().get_max_range();
     while (true) {
-        ProjectionPath path_g(this->player_ptr, (project_length ? project_length : max_range), { y1, x1 }, { y2, x2 }, flag);
+        ProjectionPath path_g(floor, range, p_pos, { y1, x1 }, { y2, x2 }, flag);
 
         if (path_g.path_num() == 0) {
             break;
@@ -280,12 +269,12 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             const auto &[ny, nx] = *path_g_ite;
 
             if (delay_factor > 0 && !this->player_ptr->effects()->blindness().is_blind()) {
-                if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
+                if (panel_contains(ny, nx) && floor.has_los_at({ ny, nx })) {
                     print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
-                    lite_spot(this->player_ptr, ny, nx);
+                    lite_spot(this->player_ptr, { ny, nx });
                     term_fresh();
 
                     print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
@@ -361,11 +350,11 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
             const auto &pos = (n == 1) ? center : *std::next(it, -1);
             const auto &pos_new = *it;
 
-            if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
+            if (panel_contains(pos.y, pos.x) && floor.has_los_at(pos)) {
                 print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
                 drawn_pos_list.push_back(pos);
             }
-            if (panel_contains(pos_new.y, pos_new.x) && floor.has_los(pos_new)) {
+            if (panel_contains(pos_new.y, pos_new.x) && floor.has_los_at(pos_new)) {
                 print_bolt_pict(player_ptr, pos.y, pos.x, pos_new.y, pos_new.x, typ);
                 if (std::find(last_pos_list.begin(), last_pos_list.end(), *it) != last_pos_list.end()) {
                     drawn_last_pos_list.push_back(pos_new);
@@ -376,7 +365,7 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
         term_xtra(TERM_XTRA_DELAY, delay_factor);
 
         for (const auto &pos : drawn_last_pos_list) {
-            if (panel_contains(pos.y, pos.x) && floor.has_los(pos)) {
+            if (panel_contains(pos.y, pos.x) && floor.has_los_at(pos)) {
                 print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
                 drawn_pos_list.push_back(pos);
             }
@@ -387,7 +376,7 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
     term_xtra(TERM_XTRA_DELAY, delay_factor);
 
     for (const auto &pos : drawn_pos_list) {
-        lite_spot(player_ptr, pos.y, pos.x);
+        lite_spot(player_ptr, pos);
     }
 }
 
@@ -435,7 +424,8 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
 
     /* Calculate the projection path */
     const auto &system = AngbandSystem::get_instance();
-    ProjectionPath path_g(this->player_ptr, (project_length ? project_length : system.get_max_range()), p_pos, pos_target, flag);
+    auto range = project_length != 0 ? project_length : system.get_max_range(); //!< @details 変数スコープが長く同一値を保証できないので後で再代入する.
+    ProjectionPath path_g(floor, range, p_pos, p_pos, pos_target, flag);
     std::vector<ProjectionPath> second_path_g_list;
     handle_stuff(this->player_ptr);
 
@@ -449,15 +439,15 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     auto oy = p_pos.y;
     auto ox = p_pos.x;
     auto visual = false;
-    std::vector<std::pair<int, int>> drawn_pos_list;
+    std::vector<Pos2D> drawn_pos_list;
     for (const auto &[ny, nx] : path_g) {
         if (delay_factor > 0) {
-            if (panel_contains(ny, nx) && floor.has_los({ ny, nx })) {
+            if (panel_contains(ny, nx) && floor.has_los_at({ ny, nx })) {
                 print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                 move_cursor_relative(ny, nx);
                 term_fresh();
                 term_xtra(TERM_XTRA_DELAY, delay_factor);
-                lite_spot(this->player_ptr, ny, nx);
+                lite_spot(this->player_ptr, { ny, nx });
                 term_fresh();
 
                 print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
@@ -469,15 +459,15 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
             }
         }
 
-        if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECT)) {
+        if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECTION)) {
             break;
         }
         oy = ny;
         ox = nx;
     }
 
-    for (const auto &[y, x] : drawn_pos_list) {
-        lite_spot(this->player_ptr, y, x);
+    for (const auto &pos : drawn_pos_list) {
+        lite_spot(this->player_ptr, pos);
     }
 
     if (const auto &pos = path_g.back(); floor.get_grid(pos).is_mirror()) {
@@ -485,9 +475,9 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
         auto project_flag = flag;
         reset_bits(project_flag, PROJECT_MIRROR);
 
-        const auto length = project_length ? project_length : system.get_max_range();
+        range = project_length != 0 ? project_length : system.get_max_range();
         for (const auto &d : Direction::directions_8()) {
-            second_path_g_list.emplace_back(this->player_ptr, length, pos, pos + d.vec(), project_flag);
+            second_path_g_list.emplace_back(floor, range, p_pos, pos, pos + d.vec(), project_flag);
         }
     }
 

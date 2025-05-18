@@ -9,7 +9,6 @@
 #include "grid/door.h"
 #include "grid/grid.h"
 #include "grid/object-placer.h"
-#include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
@@ -360,7 +359,7 @@ static void build_vault(
                 if (evaluate_percent(75)) {
                     place_object(player_ptr, pos, 0);
                 } else {
-                    place_trap(floor, pos);
+                    floor.place_trap_at(pos);
                 }
 
                 break;
@@ -384,7 +383,7 @@ static void build_vault(
                 place_secret_door(player_ptr, pos, DoorKind::CURTAIN);
                 break;
             case '^':
-                place_trap(floor, pos);
+                floor.place_trap_at(pos);
                 break;
             case 'S':
                 floor.set_terrain_id_at(pos, TerrainTag::BLACK_MARKET);

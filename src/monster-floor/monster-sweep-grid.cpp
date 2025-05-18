@@ -5,8 +5,6 @@
  */
 
 #include "monster-floor/monster-sweep-grid.h"
-#include "floor/cave.h"
-#include "floor/geometry.h"
 #include "floor/line-of-sight.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-safety-hiding.h"
@@ -119,7 +117,7 @@ public:
         const auto no_flow = monster.mflag2.has(MonsterConstantFlagType::NOFLOW) && (floor.get_grid(m_pos).get_cost(monrace.get_grid_flow_type()) > 2);
 
         // 単に反対側に逃げる(あまり賢くない方法)場合の移動先
-        const auto pos_run_away_simple = m_pos + (pos_move - m_pos);
+        const auto pos_run_away_simple = m_pos + (m_pos - pos_move);
         if (monster.is_pet() || no_flow) {
             return pos_run_away_simple;
         }
@@ -135,7 +133,7 @@ public:
         std::vector<ScoreAndPos> pos_run_away_candidates;
         for (const auto &d : Direction::directions_8()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
@@ -173,7 +171,7 @@ public:
         const auto is_enemies = monster.is_hostile_to_melee(floor.m_list[t_m_idx]);
         const auto m_pos = monster.get_position();
         const auto is_los = los(floor, m_pos, pos_target);
-        const auto is_projectable = projectable(this->player_ptr, m_pos, pos_target);
+        const auto is_projectable = projectable(floor, this->player_ptr->get_position(), m_pos, pos_target);
         if (is_enemies && is_los && is_projectable) {
             return pos_target;
         }
@@ -205,12 +203,12 @@ public:
 
         auto room = 0;
         for (const auto &d : Direction::directions_8()) {
-            const auto pos_p_neighbor = p_pos + d.vec();
-            if (!in_bounds2(floor, pos_p_neighbor.y, pos_p_neighbor.x)) {
+            const auto p_pos_neighbor = p_pos + d.vec();
+            if (!floor.contains(p_pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
-            const auto &grid = floor.get_grid(pos_p_neighbor);
+            const auto &grid = floor.get_grid(p_pos_neighbor);
             if (monster_can_cross_terrain(this->player_ptr, grid.feat, monrace, 0)) {
                 room++;
             }
@@ -255,17 +253,15 @@ public:
         const auto p_pos = this->player_ptr->get_position();
         const auto m_pos = monster.get_position();
 
-        /// @todo std::views::enumerate
-        constexpr auto directions = Direction::directions_8();
         for (auto i = 0; i < 8; i++) {
             const auto d = (this->m_idx + i) & 7;
-            const auto pos_move = p_pos + directions[d].vec();
+            const auto pos_move = p_pos + Direction::directions_8()[d].vec();
             if (m_pos == pos_move) {
                 // プレイヤーを攻撃する
                 return p_pos;
             }
 
-            if (!in_bounds2(floor, pos_move.y, pos_move.x) || !monster_can_enter(this->player_ptr, pos_move.y, pos_move.x, monrace, 0)) {
+            if (!floor.contains(pos_move, FloorBoundary::OUTER_WALL_INCLUSIVE) || !monster_can_enter(this->player_ptr, pos_move.y, pos_move.x, monrace, 0)) {
                 continue;
             }
 
@@ -299,8 +295,7 @@ public:
         const auto &monrace = monster.get_monrace();
         const auto p_pos = this->player_ptr->get_position();
         const auto m_pos = monster.get_position();
-
-        if (projectable(this->player_ptr, m_pos, p_pos)) {
+        if (projectable(floor, p_pos, m_pos, p_pos)) {
             return std::nullopt;
         }
 
@@ -318,7 +313,7 @@ public:
         std::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
@@ -349,7 +344,7 @@ public:
                 continue;
             }
 
-            if (!projectable(this->player_ptr, pos_neighbor, p_pos)) {
+            if (!projectable(floor, p_pos, pos_neighbor, p_pos)) {
                 continue;
             }
 
@@ -388,7 +383,7 @@ public:
         std::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
@@ -433,7 +428,7 @@ public:
         std::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
-            if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
@@ -472,8 +467,8 @@ public:
         const auto no_flow = monster.mflag2.has(MonsterConstantFlagType::NOFLOW) && (m_grid.get_cost(gf) > 2);
         const auto can_pass_wall = monrace.feature_flags.has(MonsterFeatureType::PASS_WALL) && (!monster.is_riding() || has_pass_wall(player_ptr));
         const auto can_kill_wall = monrace.feature_flags.has(MonsterFeatureType::KILL_WALL) && !monster.is_riding();
-        const auto is_visible_from_player = m_grid.has_los() && projectable(player_ptr, p_pos, m_pos);
-        const auto can_see_player = los(floor, m_pos, p_pos) && projectable(player_ptr, m_pos, p_pos);
+        const auto is_visible_from_player = m_grid.has_los() && projectable(floor, p_pos, p_pos, m_pos);
+        const auto can_see_player = los(floor, m_pos, p_pos) && projectable(floor, p_pos, m_pos, p_pos);
 
         std::vector<std::unique_ptr<const MonsterMoveGridDecider>> deciders;
 

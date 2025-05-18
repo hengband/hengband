@@ -53,6 +53,11 @@ struct um_type {
     bool easy;
     bool in_darkness;
     bool full;
+
+    Pos2D get_position()
+    {
+        return { this->fy, this->fx };
+    }
 };
 
 /*!
@@ -87,8 +92,8 @@ bool update_riding_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, M
     monster.fx = nx;
     update_monster(player_ptr, m_idx, true);
 
-    lite_spot(player_ptr, oy, ox);
-    lite_spot(player_ptr, ny, nx);
+    lite_spot(player_ptr, { oy, ox });
+    lite_spot(player_ptr, { ny, nx });
     return true;
 }
 
@@ -441,7 +446,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
         update_specific_race_telepathy(player_ptr, um_ptr);
     }
 
-    if (!player_ptr->current_floor_ptr->has_los({ um_ptr->fy, um_ptr->fx }) || player_ptr->effects()->blindness().is_blind()) {
+    if (!player_ptr->current_floor_ptr->has_los_at({ um_ptr->fy, um_ptr->fx }) || player_ptr->effects()->blindness().is_blind()) {
         return;
     }
 
@@ -482,7 +487,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
     }
 
     monster.ml = true;
-    lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
+    lite_spot(player_ptr, um_ptr->get_position());
 
     HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
     if (monster.is_riding()) {
@@ -504,10 +509,11 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         monster.mflag.set(MonsterTemporaryFlagType::SANITY_BLAST);
     }
 
+    const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();
-    const auto projectable_from_monster = projectable(player_ptr, m_pos, p_pos);
-    const auto projectable_from_player = projectable(player_ptr, p_pos, m_pos);
+    const auto projectable_from_monster = projectable(floor, p_pos, m_pos, p_pos);
+    const auto projectable_from_player = projectable(floor, p_pos, p_pos, m_pos);
     if (disturb_near && projectable_from_monster && projectable_from_player) {
         if (disturb_pets || monster.is_hostile()) {
             disturb(player_ptr, true, true);
@@ -522,7 +528,7 @@ static void update_visible_monster(PlayerType *player_ptr, um_type *um_ptr, MONS
     }
 
     um_ptr->m_ptr->ml = false;
-    lite_spot(player_ptr, um_ptr->fy, um_ptr->fx);
+    lite_spot(player_ptr, um_ptr->get_position());
 
     HealthBarTracker::get_instance().set_flag_if_tracking(m_idx);
     if (um_ptr->m_ptr->is_riding()) {

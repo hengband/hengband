@@ -124,7 +124,7 @@ static void set_slay_info(self_info_type *self_ptr)
 
 void set_weapon_effect_info(PlayerType *player_ptr, self_info_type *self_ptr)
 {
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_MAIN_HAND];
+    auto *o_ptr = player_ptr->inventory[INVEN_MAIN_HAND].get();
     if (!o_ptr->is_valid()) {
         return;
     }

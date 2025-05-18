@@ -536,7 +536,6 @@ hengband_SOURCES = \
 	flavor/object-flavor.cpp flavor/object-flavor.h \
 	flavor/tval-description-switcher.cpp flavor/tval-description-switcher.h \
 	\
-	floor/cave.cpp floor/cave.h \
 	floor/cave-generator.cpp floor/cave-generator.h \
 	floor/dungeon-feeling.cpp floor/dungeon-feeling.h \
 	floor/dungeon-tunnel-util.cpp floor/dungeon-tunnel-util.h \
@@ -632,6 +631,7 @@ hengband_SOURCES = \
 	io/input-key-processor.cpp io/input-key-processor.h \
 	io/input-key-requester.cpp io/input-key-requester.h \
 	io/interpret-pref-file.cpp io/interpret-pref-file.h \
+	io/macro-configurations-store.cpp io/macro-configurations-store.h \
 	io/mutations-dump.cpp io/mutations-dump.h \
 	io/pref-file-expressor.cpp io/pref-file-expressor.h \
 	io/read-pref-file.cpp io/read-pref-file.h \
@@ -1316,7 +1316,6 @@ hengband_SOURCES = \
 	term/term-color-types.h \
 	term/z-form.cpp term/z-form.h term/z-rand.cpp term/z-rand.h \
 	term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
-	term/z-virt.cpp term/z-virt.h \
 	\
 	timed-effect/player-acceleration.cpp timed-effect/player-acceleration.h \
 	timed-effect/player-blindness.cpp timed-effect/player-blindness.h \
@@ -1436,22 +1435,37 @@ EXTRA_DIST = \
 	gcc-wrap
 
 DEFAULT_INCLUDES = \
-	-I$(srcdir) -I$(srcdir)/external-lib/include \
-	-I$(top_builddir)/src -I$(top_builddir)/src/external-lib/include
+	-I. -I$(srcdir) -I$(srcdir)/external-lib/include
 
 CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
-if PCH
-CPPFLAGS += -include ../src/stdafx.h
-endif
 LIBS += $(XFT_LIBS) $(libcurl_LIBS)
-COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CXXCOMPILE = $(srcdir)/gcc-wrap $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CXXFLAGS)
+
+AM_CXXFLAGS =
+
+if COMPILER_HAVE_EXEC_CHARSET_EUC_JP_MS
+AM_CXXFLAGS += -fexec-charset=euc-jp-ms
+endif
+
+if USE_NKF
+CXXCOMPILE_WRAPPER = $(srcdir)/gcc-wrap
+DEFAULT_INCLUDES += -I$(top_builddir)/src -I$(top_builddir)/src/external-lib/include
+if COMPILER_IS_CLANG
+AM_CXXFLAGS += -Wno-invalid-source-encoding
+endif
+if PCH
+PCH_INCLUDES = -include $(top_builddir)/src/stdafx.h
+endif
+else
+if PCH
+PCH_INCLUDES = -include $(srcdir)/stdafx.h
+endif
+endif
+
+CXXCOMPILE = $(strip $(CXXCOMPILE_WRAPPER) $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(PCH_INCLUDES))
 
 if PCH
 stdafx.h.gch: stdafx.h stdafx.cpp Makefile
-	$(CXX) -x c++-header $(CXXFLAGS) $(DEFAULT_INCLUDES) $(srcdir)/stdafx.cpp -o $@
+	$(CXX) -x c++-header $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(srcdir)/stdafx.cpp -o $@
 	if test none != "$(PCH_CHECKSUMMER)" ; then \
 		rm -f "$@".sum ; \
 		$(PCH_CHECKSUMMER) $@ > "$@".sum ; \

@@ -13,5 +13,5 @@ bool record_danger; /* Record hitpoint warning */
 bool record_arena; /* Record on_defeat_arena_monster victories */
 bool record_ident; /* Record first identified items */
 bool record_named_pet; /* Record information about named pets */
-char record_o_name[MAX_NLEN];
+std::string record_item_name;
 GAME_TURN record_turn;

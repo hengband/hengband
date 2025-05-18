@@ -293,7 +293,7 @@ void do_cmd_use(PlayerType *player_ptr)
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
-        exe_fire(player_ptr, i_idx, &player_ptr->inventory_list[INVEN_BOW], SP_NONE);
+        exe_fire(player_ptr, i_idx, player_ptr->inventory[INVEN_BOW].get(), SP_NONE);
         break;
     default:
         exe_activate(player_ptr, i_idx);

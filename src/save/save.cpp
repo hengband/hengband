@@ -49,7 +49,6 @@
  */
 static bool wr_savefile_new(PlayerType *player_ptr)
 {
-    compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
 
     uint32_t now = (uint32_t)time((time_t *)0);
@@ -197,7 +196,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     }
 
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = *player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;
         }

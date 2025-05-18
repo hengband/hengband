@@ -11,12 +11,10 @@
 
 #include "wizard/wizard-special-process.h"
 #include "artifact/fixed-art-generator.h"
-#include "artifact/fixed-art-types.h"
 #include "cmd-io/cmd-save.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
-#include "core/window-redrawer.h"
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -31,6 +29,7 @@
 #include "io/files-util.h"
 #include "io/input-key-requester.h"
 #include "io/write-diary.h"
+#include "mind/mind-elementalist.h"
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -40,6 +39,7 @@
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "player-info/class-info.h"
+#include "player-info/class-types.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
 #include "player-info/self-info.h"
@@ -68,7 +68,6 @@
 #include "system/terrain/terrain-list.h"
 #include "target/grid-selector.h"
 #include "util/angband-files.h"
-#include "util/bit-flags-calculator.h"
 #include "util/candidate-selector.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
@@ -400,13 +399,12 @@ void wiz_change_status(PlayerType *player_ptr)
  */
 void wiz_create_feature(PlayerType *player_ptr)
 {
-    POSITION y, x;
-    if (!tgt_pt(player_ptr, &x, &y)) {
+    const auto pos = point_target(player_ptr);
+    if (!pos) {
         return;
     }
 
-    const Pos2D pos(y, x);
-    auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    auto &grid = player_ptr->current_floor_ptr->get_grid(*pos);
     const int max = TerrainList::get_instance().size() - 1;
     const auto f_val1 = input_numerics(_("実地形ID", "FeatureID"), 0, max, grid.feat);
     if (!f_val1) {
@@ -418,7 +416,7 @@ void wiz_create_feature(PlayerType *player_ptr)
         return;
     }
 
-    set_terrain_id_to_grid(player_ptr, pos, *f_val1);
+    set_terrain_id_to_grid(player_ptr, *pos, *f_val1);
     grid.mimic = *f_val2;
     const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     if (terrain.flags.has(TerrainCharacteristics::RUNE_PROTECTION) || terrain.flags.has(TerrainCharacteristics::RUNE_EXPLOSION)) {
@@ -427,8 +425,8 @@ void wiz_create_feature(PlayerType *player_ptr)
         grid.info |= CAVE_GLOW | CAVE_OBJECT;
     }
 
-    note_spot(player_ptr, pos.y, pos.x);
-    lite_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, *pos);
+    lite_spot(player_ptr, *pos);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
 }
 
@@ -563,6 +561,15 @@ static void change_birth_flags()
     rfu.set_flags(flags_mwrf);
 }
 
+static std::optional<ElementRealmType> wiz_select_element_realm()
+{
+    constexpr EnumRange element_realms(ElementRealmType::FIRE, ElementRealmType::MAX);
+    CandidateSelector cs("Which realm: ", 15);
+
+    const auto chosen_realm = cs.select(element_realms, get_element_title);
+    return (chosen_realm != element_realms.end()) ? std::make_optional(*chosen_realm) : std::nullopt;
+}
+
 static std::optional<RealmType> wiz_select_realm(const RealmChoices &choices, const std::string &msg)
 {
     if (choices.count() <= 1) {
@@ -578,8 +585,17 @@ static std::optional<RealmType> wiz_select_realm(const RealmChoices &choices, co
     return (choice != candidates.end()) ? std::make_optional(*choice) : std::nullopt;
 }
 
-static std::optional<std::pair<RealmType, RealmType>> wiz_select_realms(PlayerClassType pclass)
+static std::optional<std::tuple<RealmType, RealmType, ElementRealmType>> wiz_select_realms(PlayerClassType pclass)
 {
+    if (pclass == PlayerClassType::ELEMENTALIST) {
+        const auto realm = wiz_select_element_realm();
+        if (!realm) {
+            return std::nullopt;
+        }
+
+        return std::make_tuple(RealmType::NONE, RealmType::NONE, *realm);
+    }
+
     const auto realm1 = wiz_select_realm(PlayerRealm::get_realm1_choices(pclass), "1st realm: ");
     if (!realm1) {
         return std::nullopt;
@@ -599,7 +615,7 @@ static std::optional<std::pair<RealmType, RealmType>> wiz_select_realms(PlayerCl
         return std::nullopt;
     }
 
-    return std::make_pair(*realm1, *realm2);
+    return std::make_tuple(*realm1, *realm2, ElementRealmType::NONE);
 }
 
 /*!
@@ -648,9 +664,11 @@ void wiz_reset_class(PlayerType *player_ptr)
     PlayerClass(player_ptr).init_specific_data();
     PlayerRealm pr(player_ptr);
     pr.reset();
-    if (chosen_realms->first != RealmType::NONE) {
-        pr.set(chosen_realms->first, chosen_realms->second);
+    const auto &[realm1, realm2, element_realm] = *chosen_realms;
+    if (realm1 != RealmType::NONE) {
+        pr.set(realm1, realm2);
     }
+    player_ptr->element_realm = element_realm;
     PlayerSpellStatus pss(player_ptr);
     pss.realm1().initialize();
     pss.realm2().initialize();
@@ -672,9 +690,11 @@ void wiz_reset_realms(PlayerType *player_ptr)
 
     PlayerRealm pr(player_ptr);
     pr.reset();
-    if (chosen_realms->first != RealmType::NONE) {
-        pr.set(chosen_realms->first, chosen_realms->second);
+    const auto &[realm1, realm2, element_realm] = *chosen_realms;
+    if (realm1 != RealmType::NONE) {
+        pr.set(realm1, realm2);
     }
+    player_ptr->element_realm = element_realm;
     PlayerSpellStatus pss(player_ptr);
     pss.realm1().initialize();
     pss.realm2().initialize();

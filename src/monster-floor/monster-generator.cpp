@@ -7,7 +7,6 @@
 
 #include "monster-floor/monster-generator.h"
 #include "effect/effect-characteristics.h"
-#include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "game-option/cheat-options.h"
 #include "game-option/cheat-types.h"
@@ -19,6 +18,7 @@
 #include "spell/summon-types.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -51,6 +51,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
         return std::nullopt;
     }
 
+    const auto p_pos = player_ptr->get_position();
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
     auto dist = 0;
@@ -61,7 +62,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
                 continue;
             }
 
-            if (!projectable(player_ptr, pos, pos_neighbor)) {
+            if (!projectable(floor, p_pos, pos, pos_neighbor)) {
                 continue;
             }
 
@@ -71,11 +72,11 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
                     continue;
                 }
             } else {
-                if (!is_cave_empty_bold2(player_ptr, pos_neighbor.y, pos_neighbor.x)) {
+                if (!floor.can_generate_monster_at(pos_neighbor) || (p_pos == pos_neighbor)) {
                     continue;
                 }
 
-                if (pattern_tile(floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (floor.has_terrain_characteristics(pos_neighbor, TerrainCharacteristics::PATTERN)) {
                     continue;
                 }
             }
@@ -149,7 +150,8 @@ std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX 
 static void place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center, MonraceId monrace_id, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
-    const auto floor_level = player_ptr->current_floor_ptr->dun_level;
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto floor_level = floor.dun_level;
     auto extra = 0;
     if (monrace.level > floor_level) {
         extra = monrace.level - floor_level;
@@ -176,12 +178,13 @@ static void place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center,
     const size_t total_size = total_int;
     std::vector<Pos2D> positions;
     positions.push_back(pos_center);
+    const auto p_pos = player_ptr->get_position();
     for (size_t n = 0; (n < positions.size()) && (positions.size() < total_size); n++) {
         for (auto i = 0; (i < 8) && (positions.size() < total_size); i++) {
             //!< @details 要素数が変わると参照がダングリング状態になるので毎回取得する必要がある.
             const auto &pos_neighbor = positions.at(n);
             const auto pos = scatter(player_ptr, pos_neighbor, 4, PROJECT_NONE);
-            if (!is_cave_empty_bold2(player_ptr, pos.y, pos.x)) {
+            if (!floor.can_generate_monster_at(pos) || (p_pos == pos)) {
                 continue;
             }
 
@@ -251,10 +254,12 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
         return m_idx;
     }
 
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
     for (auto i = 0; i < 32; i++) {
         constexpr auto d = 3;
         const auto pos_neighbor = scatter(player_ptr, pos, d, PROJECT_NONE);
-        if (!is_cave_empty_bold2(player_ptr, pos_neighbor.y, pos_neighbor.x)) {
+        if (!floor.can_generate_monster_at(pos_neighbor) || (p_pos == pos_neighbor)) {
             continue;
         }
 
@@ -396,10 +401,11 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
         return def_val;
     }
 
+    const auto p_pos = player_ptr->get_position();
     auto try_count = 4000;
     while (try_count > 0) {
         const auto pos = Pos2D(randint1(floor.height - 4), randint1(floor.width - 4)) + Pos2DVec(2, 2);
-        if (!is_cave_empty_bold2(player_ptr, pos.y, pos.x)) {
+        if (!floor.can_generate_monster_at(pos) || (p_pos == pos)) {
             try_count++;
             continue;
         }
@@ -433,25 +439,24 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
         return true;
     }
 
+    const auto p_pos = player_ptr->get_position();
     auto &floor = *player_ptr->current_floor_ptr;
-    auto y = 0;
-    auto x = 0;
+    Pos2D pos(0, 0);
     auto attempts_left = 10000;
     while (attempts_left--) {
-        y = randint0(floor.height);
-        x = randint0(floor.width);
-
+        pos.y = randint0(floor.height);
+        pos.x = randint0(floor.width);
         if (floor.is_underground()) {
-            if (!is_cave_empty_bold2(player_ptr, y, x)) {
+            if (!floor.can_generate_monster_at(pos) || (p_pos == pos)) {
                 continue;
             }
         } else {
-            if (!is_cave_empty_bold(player_ptr, y, x)) {
+            if (!floor.is_empty_at(pos) || (pos == p_pos)) {
                 continue;
             }
         }
 
-        const auto dist = Grid::calc_distance({ y, x }, player_ptr->get_position());
+        const auto dist = Grid::calc_distance(pos, p_pos);
         if ((min_dis < dist) && (dist <= max_dis)) {
             break;
         }
@@ -466,14 +471,8 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
     }
 
     if (randint1(5000) <= floor.dun_level) {
-        if (alloc_horde(player_ptr, y, x, summon_specific)) {
-            return true;
-        }
-    } else {
-        if (place_random_monster(player_ptr, y, x, (mode | PM_ALLOW_GROUP))) {
-            return true;
-        }
+        return alloc_horde(player_ptr, pos.y, pos.x, summon_specific);
     }
 
-    return false;
+    return place_random_monster(player_ptr, pos.y, pos.x, (mode | PM_ALLOW_GROUP)).has_value();
 }

@@ -39,7 +39,7 @@
 void identify_pack(PlayerType *player_ptr)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -85,7 +85,7 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
         SubWindowRedrawingFlag::FOUND_ITEMS,
     };
     rfu.set_flags(flags_swrf);
-    angband_strcpy(record_o_name, known_item_name, MAX_NLEN);
+    record_item_name = known_item_name;
     record_turn = AngbandWorld::get_instance().game_turn;
 
     const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);

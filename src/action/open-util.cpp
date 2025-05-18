@@ -24,7 +24,7 @@ short chest_check(const FloorType &floor, const Pos2D &pos, bool trapped)
 {
     const auto &grid = floor.get_grid(pos);
     for (const auto this_o_idx : grid.o_idx_list) {
-        const auto &item = floor.o_list[this_o_idx];
+        const auto &item = *floor.o_list[this_o_idx];
         const auto is_empty = trapped || (item.pval == 0);
         const auto trapped_only = trapped && (item.pval > 0);
         if ((item.bi_key.tval() == ItemKindType::CHEST) && (!is_empty || trapped_only)) {
@@ -51,7 +51,7 @@ std::pair<int, Direction> count_chests(PlayerType *player_ptr, bool trapped)
             continue;
         }
 
-        const auto &item = player_ptr->current_floor_ptr->o_list[o_idx];
+        const auto &item = *player_ptr->current_floor_ptr->o_list[o_idx];
         if (item.pval == 0) {
             continue;
         }

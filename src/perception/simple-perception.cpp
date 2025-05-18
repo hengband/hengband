@@ -35,7 +35,7 @@
  */
 static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool heavy)
 {
-    auto &item = player_ptr->inventory_list[slot];
+    auto &item = *player_ptr->inventory[slot];
     if (any_bits(item.ident, IDENT_SENSE) || item.is_known()) {
         return;
     }
@@ -280,7 +280,7 @@ void sense_inventory1(PlayerType *player_ptr)
     }
 
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
-        o_ptr = &player_ptr->inventory_list[i];
+        o_ptr = player_ptr->inventory[i].get();
 
         if (!o_ptr->is_valid()) {
             continue;
@@ -409,7 +409,7 @@ void sense_inventory2(PlayerType *player_ptr)
 
     for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
         bool okay = false;
-        o_ptr = &player_ptr->inventory_list[i];
+        o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

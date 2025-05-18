@@ -3,6 +3,7 @@
 #include "birth/birth-util.h"
 #include "birth/game-play-initializer.h"
 #include "io/input-key-acceptor.h"
+#include "mind/mind-elementalist.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
@@ -89,7 +90,7 @@ void save_prev_data(PlayerType *player_ptr, birther *birther_ptr)
     birther_ptr->ppersonality = player_ptr->ppersonality;
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
-        birther_ptr->realm1 = player_ptr->element;
+        birther_ptr->realm1 = static_cast<int16_t>(player_ptr->element_realm);
         birther_ptr->realm2 = 0;
     } else {
         PlayerRealm pr(player_ptr);
@@ -142,7 +143,7 @@ void load_prev_data(PlayerType *player_ptr, bool swap)
     PlayerRealm pr(player_ptr);
     pr.reset();
     if (PlayerClass(player_ptr).equals(PlayerClassType::ELEMENTALIST)) {
-        player_ptr->element = previous_char.realm1;
+        player_ptr->element_realm = i2enum<ElementRealmType>(previous_char.realm1);
     } else {
         const auto realm1 = i2enum<RealmType>(previous_char.realm1);
         const auto realm2 = i2enum<RealmType>(previous_char.realm2);

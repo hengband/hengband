@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include "util/point-2d.h"
 #include <string>
 
 enum class AttributeType;
@@ -51,4 +52,5 @@ public:
 
     bool is_player() const;
     bool is_monster() const;
+    Pos2D get_position() const;
 };

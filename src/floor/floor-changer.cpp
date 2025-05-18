@@ -48,6 +48,7 @@
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <algorithm>
+#include <range/v3/view.hpp>
 
 /*!
  * @brief 階段移動先のフロアが生成できない時に簡単な行き止まりマップを作成する / Builds the dead end
@@ -148,7 +149,7 @@ static void place_pet(PlayerType *player_ptr)
         if (m_idx != 0) {
             const auto &monrace = set_pet_params(player_ptr, current_monster, m_idx, pos.y, pos.x);
             update_monster(player_ptr, m_idx, true);
-            lite_spot(player_ptr, pos.y, pos.x);
+            lite_spot(player_ptr, pos);
             if (monrace.misc_flags.has(MonsterMiscType::MULTIPLY)) {
                 floor.num_repro++;
             }
@@ -194,14 +195,13 @@ static void update_unique_artifact(const FloorType &floor, int16_t cur_floor_id)
         }
     }
 
-    for (int i = 1; i < floor.o_max; i++) {
-        const auto &o_ref = floor.o_list[i];
-        if (!o_ref.is_valid()) {
+    for (const auto &item_ptr : floor.o_list) {
+        if (!item_ptr->is_valid()) {
             continue;
         }
 
-        if (o_ref.is_fixed_artifact()) {
-            o_ref.get_fixed_artifact().floor_id = cur_floor_id;
+        if (item_ptr->is_fixed_artifact()) {
+            item_ptr->get_fixed_artifact().floor_id = cur_floor_id;
         }
     }
 }
@@ -307,19 +307,20 @@ static void allocate_loaded_floor(PlayerType *player_ptr, saved_floor_type *sf_p
 
     GAME_TURN absence_ticks = (world.game_turn - tmp_last_visit) / TURNS_PER_TICK;
     reset_unique_by_floor_change(player_ptr);
-    for (MONSTER_IDX i = 1; i < floor.o_max; i++) {
-        const auto *o_ptr = &floor.o_list[i];
-        if (!o_ptr->is_valid() || !o_ptr->is_fixed_artifact()) {
+    std::vector<OBJECT_IDX> delete_i_idx_list;
+    for (const auto &[i_idx, item_ptr] : floor.o_list | ranges::views::enumerate) {
+        if (!item_ptr->is_valid() || !item_ptr->is_fixed_artifact()) {
             continue;
         }
 
-        auto &artifact = o_ptr->get_fixed_artifact();
+        auto &artifact = item_ptr->get_fixed_artifact();
         if (artifact.floor_id == new_floor_id) {
             artifact.is_generated = true;
         } else {
-            delete_object_idx(player_ptr, i);
+            delete_i_idx_list.push_back(static_cast<OBJECT_IDX>(i_idx));
         }
     }
+    delete_items(player_ptr, std::move(delete_i_idx_list));
 
     (void)place_quest_monsters(player_ptr);
     GAME_TURN alloc_times = absence_ticks / alloc_chance;

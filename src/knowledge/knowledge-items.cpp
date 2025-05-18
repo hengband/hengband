@@ -52,22 +52,20 @@ auto collect_known_fixed_artifacts(PlayerType *player_ptr)
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            const auto &grid = floor.get_grid({ y, x });
-            for (const auto this_o_idx : grid.o_idx_list) {
-                const auto &item = floor.o_list[this_o_idx];
-                if (!item.is_fixed_artifact() || item.is_known()) {
-                    continue;
-                }
-
-                fa_ids.erase(item.fa_id);
+    for (const auto &pos : floor.get_area()) {
+        const auto &grid = floor.get_grid(pos);
+        for (const auto this_o_idx : grid.o_idx_list) {
+            const auto &item = *floor.o_list[this_o_idx];
+            if (!item.is_fixed_artifact() || item.is_known()) {
+                continue;
             }
+
+            fa_ids.erase(item.fa_id);
         }
     }
 
     for (auto i = 0; i < INVEN_TOTAL; i++) {
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = *player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;
         }

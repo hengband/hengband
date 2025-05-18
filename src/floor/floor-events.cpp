@@ -1,10 +1,7 @@
 #include "floor/floor-events.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/disturbance.h"
-#include "core/window-redrawer.h"
-#include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/dungeon-feeling.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
@@ -69,16 +66,14 @@ void day_break(PlayerType *player_ptr)
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            auto &grid = floor.get_grid({ y, x });
-            grid.add_info(CAVE_GLOW);
-            if (view_perma_grids) {
-                grid.add_info(CAVE_MARK);
-            }
-
-            note_spot(player_ptr, y, x);
+    for (const auto &pos : floor.get_area()) {
+        auto &grid = floor.get_grid(pos);
+        grid.add_info(CAVE_GLOW);
+        if (view_perma_grids) {
+            grid.add_info(CAVE_MARK);
         }
+
+        note_spot(player_ptr, pos);
     }
 
     update_sun_light(player_ptr);
@@ -93,25 +88,22 @@ void night_falls(PlayerType *player_ptr)
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            const Pos2D pos(y, x);
-            auto &grid = floor.get_grid(pos);
-            const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
-            using Tc = TerrainCharacteristics;
-            if (grid.is_mirror() || terrain.flags.has(Tc::QUEST_ENTER) || terrain.flags.has(Tc::ENTRANCE)) {
-                continue;
-            }
-
-            grid.info &= ~(CAVE_GLOW);
-            if (terrain.flags.has_not(Tc::REMEMBER)) {
-                grid.info &= ~(CAVE_MARK);
-                note_spot(player_ptr, y, x);
-            }
+    for (const auto &pos : floor.get_area()) {
+        auto &grid = floor.get_grid(pos);
+        const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+        using Tc = TerrainCharacteristics;
+        if (grid.is_mirror() || terrain.flags.has(Tc::QUEST_ENTER) || terrain.flags.has(Tc::ENTRANCE)) {
+            continue;
         }
 
-        glow_deep_lava_and_bldg(player_ptr);
+        grid.info &= ~(CAVE_GLOW);
+        if (terrain.flags.has_not(Tc::REMEMBER)) {
+            grid.info &= ~(CAVE_MARK);
+            note_spot(player_ptr, pos);
+        }
     }
+
+    glow_deep_lava_and_bldg(player_ptr);
 
     update_sun_light(player_ptr);
 }
@@ -164,20 +156,19 @@ static int get_dungeon_feeling(const auto &floor)
         rating += rating_boost(delta);
     }
 
-    for (short i = 1; i < floor.o_max; i++) {
-        const auto &item = floor.o_list[i];
+    for (const auto &item_ptr : floor.o_list) {
         auto delta = 0;
-        if (!item.is_valid() || (item.is_known() && item.marked.has(OmType::TOUCHED)) || ((item.ident & IDENT_SENSE) != 0)) {
+        if (!item_ptr->is_valid() || (item_ptr->is_known() && item_ptr->marked.has(OmType::TOUCHED)) || ((item_ptr->ident & IDENT_SENSE) != 0)) {
             continue;
         }
 
-        if (item.is_ego()) {
-            const auto &ego = item.get_ego();
+        if (item_ptr->is_ego()) {
+            const auto &ego = item_ptr->get_ego();
             delta += ego.rating * base;
         }
 
-        if (item.is_fixed_or_random_artifact()) {
-            const auto cost = object_value_real(&item);
+        if (item_ptr->is_fixed_or_random_artifact()) {
+            const auto cost = object_value_real(item_ptr.get());
             delta += 10 * base;
             if (cost > 10000L) {
                 delta += 10 * base;
@@ -196,40 +187,40 @@ static int get_dungeon_feeling(const auto &floor)
             }
         }
 
-        if (item.bi_key.tval() == ItemKindType::DRAG_ARMOR) {
+        if (item_ptr->bi_key.tval() == ItemKindType::DRAG_ARMOR) {
             delta += 30 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD)) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD)) {
             delta += 5 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES)) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES)) {
             delta += 5 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE)) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE)) {
             delta += 5 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM)) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM)) {
             delta += 5 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::RING, SV_RING_SPEED) && !item.is_cursed()) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_SPEED) && !item_ptr->is_cursed()) {
             delta += 25 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY) && !item.is_cursed()) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY) && !item_ptr->is_cursed()) {
             delta += 15 * base;
         }
 
-        if (item.bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_THE_MAGI) && !item.is_cursed()) {
+        if (item_ptr->bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_THE_MAGI) && !item_ptr->is_cursed()) {
             delta += 15 * base;
         }
 
-        const auto item_level = item.get_baseitem_level();
-        if (!item.is_cursed() && !item.is_broken() && item_level > floor.dun_level) {
+        const auto item_level = item_ptr->get_baseitem_level();
+        if (!item_ptr->is_cursed() && !item_ptr->is_broken() && item_level > floor.dun_level) {
             delta += (item_level - floor.dun_level) * base;
         }
 
@@ -332,22 +323,19 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
         return;
     }
 
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            const Pos2D pos(y, x);
-            const auto &grid = floor.get_grid(pos);
-            if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::GLOW)) {
+    for (const auto &pos : floor.get_area()) {
+        const auto &grid = floor.get_grid(pos);
+        if (grid.get_terrain(TerrainKind::MIMIC).flags.has_not(TerrainCharacteristics::GLOW)) {
+            continue;
+        }
+
+        for (const auto &d : Direction::directions()) {
+            const auto pos_neighbor = pos + d.vec();
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
-            for (const auto &d : Direction::directions()) {
-                const auto pos_neighbor = pos + d.vec();
-                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
-                    continue;
-                }
-
-                floor.get_grid(pos_neighbor).info |= CAVE_GLOW;
-            }
+            floor.get_grid(pos_neighbor).info |= CAVE_GLOW;
         }
     }
 

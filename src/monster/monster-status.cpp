@@ -122,7 +122,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
             }
 
             /* Handle "sight" and "aggravation" */
-            else if ((monster.cdis <= MAX_PLAYER_SIGHT) && floor.has_los({ monster.fy, monster.fx })) {
+            else if ((monster.cdis <= MAX_PLAYER_SIGHT) && floor.has_los_at({ monster.fy, monster.fx })) {
                 is_wakeup = true;
             }
         }
@@ -443,7 +443,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
     }
 
     update_monster(player_ptr, m_idx, false);
-    lite_spot(player_ptr, monster.fy, monster.fx);
+    lite_spot(player_ptr, monster.get_position());
 
     if (monster.is_riding()) {
         rfu.set_flag(StatusRecalculatingFlag::BONUS);

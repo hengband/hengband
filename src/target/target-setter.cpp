@@ -35,6 +35,10 @@ class TargetSetter {
 public:
     TargetSetter(PlayerType *player_ptr, target_type mode);
     void sweep_target_grids();
+    const Target &get_target() const
+    {
+        return this->target;
+    }
 
 private:
     std::optional<int> pick_nearest_interest_target(const Pos2D &pos, const Direction &dir);
@@ -55,6 +59,7 @@ private:
     bool done = false;
     std::vector<Pos2D> pos_interests; // "interesting" な座標一覧を記録する配列
     std::optional<int> interest_index = 0; // "interesting" な座標一覧のうち現在ターゲットしているもののインデックス
+    Target target = Target::none();
 };
 
 TargetSetter::TargetSetter(PlayerType *player_ptr, target_type mode)
@@ -184,8 +189,9 @@ std::string TargetSetter::describe_projectablity() const
         print_path(this->player_ptr, this->pos_target.y, this->pos_target.x);
     }
 
+    const auto &floor = *this->player_ptr->current_floor_ptr;
     std::string info;
-    const auto &grid = this->player_ptr->current_floor_ptr->get_grid(this->pos_target);
+    const auto &grid = floor.get_grid(this->pos_target);
     if (target_able(this->player_ptr, grid.m_idx)) {
         info = _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>");
     } else {
@@ -204,7 +210,7 @@ std::string TargetSetter::describe_projectablity() const
     const auto cheatinfo = format(" X:%d Y:%d LOS:%d LOP:%d",
         this->pos_target.x, this->pos_target.y,
         los(*this->player_ptr->current_floor_ptr, p_pos, this->pos_target),
-        projectable(this->player_ptr, p_pos, this->pos_target));
+        projectable(floor, p_pos, p_pos, this->pos_target));
     return info.append(cheatinfo);
 }
 
@@ -259,9 +265,7 @@ Direction TargetSetter::switch_target_input()
         }
 
         health_track(this->player_ptr, grid.m_idx);
-        target_who = grid.m_idx;
-        target_row = this->pos_target.y;
-        target_col = this->pos_target.x;
+        this->target = Target::create_monster_target(this->player_ptr, grid.m_idx);
         this->done = true;
         return Direction::none();
     }
@@ -415,7 +419,7 @@ std::string TargetSetter::describe_grid_wizard() const
     constexpr auto fmt = " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d";
     const auto p_pos = this->player_ptr->get_position();
     const auto is_los = los(floor, p_pos, this->pos_target);
-    const auto is_projectable = projectable(this->player_ptr, p_pos, this->pos_target);
+    const auto is_projectable = projectable(floor, p_pos, p_pos, this->pos_target);
     const auto cheatinfo = format(fmt, this->pos_target.x, this->pos_target.y, is_los, is_projectable, grid.special);
     return cheatinfo;
 }
@@ -442,9 +446,7 @@ std::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command
     case '.':
     case '5':
     case '0':
-        target_who = -1;
-        target_row = this->pos_target.y;
-        target_col = this->pos_target.x;
+        this->target = Target::create_grid_target(this->player_ptr, this->pos_target);
         this->done = true;
         return std::nullopt;
     case 'p': {
@@ -469,11 +471,11 @@ std::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command
     case 'm': {
         const auto begin = this->pos_interests.begin();
         const auto end = this->pos_interests.end();
-        const auto target = std::min_element(begin, end, [&](const auto &lhs, const auto &rhs) {
+        const auto interest = std::min_element(begin, end, [&](const auto &lhs, const auto &rhs) {
             return Grid::calc_distance(this->pos_target, lhs) < Grid::calc_distance(this->pos_target, rhs);
         });
-        if (target != end) {
-            this->interest_index = std::distance(this->pos_interests.begin(), target);
+        if (interest != end) {
+            this->interest_index = std::distance(this->pos_interests.begin(), interest);
         } else {
             this->interest_index = std::nullopt;
         }
@@ -551,7 +553,6 @@ void TargetSetter::sweep_target_grids()
 Target target_set(PlayerType *player_ptr, target_type mode)
 {
     TargetSetter ts(player_ptr, mode);
-    target_who = 0;
     ts.sweep_target_grids();
     prt("", 0, 0);
     verify_panel(player_ptr);
@@ -564,11 +565,6 @@ Target target_set(PlayerType *player_ptr, target_type mode)
     };
     rfu.set_flags(flags);
     handle_stuff(player_ptr);
-    if (target_who > 0) {
-        return Target::create_monster_target(player_ptr, target_who);
-    }
-    if (target_who < 0) {
-        return Target::create_grid_target(player_ptr, { target_row, target_col });
-    }
-    return Target::none();
+    Target::set_last_target(ts.get_target());
+    return ts.get_target();
 }

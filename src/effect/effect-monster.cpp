@@ -74,6 +74,9 @@ static ProcessResult is_affective(EffectMonster *em_ptr)
     if (em_ptr->m_ptr->hp < 0) {
         return ProcessResult::PROCESS_FALSE;
     }
+    if (em_ptr->m_ptr->mflag.has_not(MonsterTemporaryFlagType::PRESENT_AT_TURN_START)) {
+        return ProcessResult::PROCESS_FALSE;
+    }
     if (em_ptr->is_monster() || !em_ptr->m_ptr->is_riding()) {
         return ProcessResult::PROCESS_TRUE;
     }
@@ -639,15 +642,15 @@ static void postprocess_by_effected_pet(PlayerType *player_ptr, EffectMonster *e
 
     if (em_ptr->is_player()) {
         if (!(em_ptr->flag & PROJECT_NO_HANGEKI)) {
-            monster.set_target(monster_target_y, monster_target_x);
+            monster.set_target({ monster_target_y, monster_target_x });
         }
 
         return;
     }
 
-    const auto &m_caster_ref = *em_ptr->m_caster_ptr;
-    if (em_ptr->is_monster() && m_caster_ref.is_pet() && !player_ptr->is_located_at({ monster.target_y, monster.target_x })) {
-        monster.set_target(m_caster_ref.fy, m_caster_ref.fx);
+    const auto &caster = *em_ptr->m_caster_ptr;
+    if (em_ptr->is_monster() && caster.is_pet() && !player_ptr->is_located_at(monster.get_target_position())) {
+        monster.set_target(caster.get_position());
     }
 }
 
@@ -753,7 +756,7 @@ bool affect_monster(
         update_monster(player_ptr, target_m_idx, false);
     }
 
-    lite_spot(player_ptr, em_ptr->y, em_ptr->x);
+    lite_spot(player_ptr, em_ptr->get_position());
     if (LoreTracker::get_instance().is_tracking(em_ptr->m_ptr->r_idx) && (em_ptr->seen || !monster_is_valid)) {
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
     }

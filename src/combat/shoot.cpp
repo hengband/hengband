@@ -9,7 +9,6 @@
 #include "effect/spells-effect-util.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "game-option/cheat-types.h"
@@ -337,7 +336,7 @@ static MULTIPLY calc_shot_damage_with_slay(
             }
 
             auto can_eliminate_smaug = arrow_ptr->is_specific_artifact(FixedArtifactId::BARD_ARROW);
-            can_eliminate_smaug &= player_ptr->inventory_list[INVEN_BOW].is_specific_artifact(FixedArtifactId::BARD);
+            can_eliminate_smaug &= player_ptr->inventory[INVEN_BOW]->is_specific_artifact(FixedArtifactId::BARD);
             can_eliminate_smaug &= monster.r_idx == MonraceId::SMAUG;
             if (can_eliminate_smaug) {
                 mult *= 5;
@@ -469,9 +468,9 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     /* Access the item (if in the pack) */
     auto &floor = *player_ptr->current_floor_ptr;
     if (i_idx >= 0) {
-        o_ptr = &player_ptr->inventory_list[i_idx];
+        o_ptr = player_ptr->inventory[i_idx].get();
     } else {
-        o_ptr = &floor.o_list[0 - i_idx];
+        o_ptr = floor.o_list[0 - i_idx].get();
     }
 
     /* Sniper - Cannot shot a single arrow twice */
@@ -553,22 +552,17 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     }
 
     /* Predict the "target" location */
-    auto [ty, tx] = player_ptr->get_position() + dir.vec() * 99;
-
-    /* Check for "target request" */
-    if (dir.is_targetting() && target_okay(player_ptr)) {
-        tx = target_col;
-        ty = target_row;
-    }
+    const auto p_pos = player_ptr->get_position();
+    const auto pos_target = dir.get_target_position(p_pos, 99);
 
     /* Get projection path length */
-    ProjectionPath path_g(player_ptr, project_length, player_ptr->get_position(), { ty, tx }, PROJECT_PATH | PROJECT_THRU);
+    ProjectionPath path_g(floor, project_length, p_pos, p_pos, pos_target, PROJECT_PATH | PROJECT_THRU);
     tdis = path_g.path_num() - 1;
 
     project_length = 0; /* reset to default */
 
     /* Don't shoot at my feet */
-    if (tx == player_ptr->x && ty == player_ptr->y) {
+    if (pos_target == p_pos) {
         PlayerEnergy(player_ptr).reset_player_turn();
 
         /* project_length is already reset to 0 */
@@ -610,12 +604,12 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
         /* Travel until stopped */
         for (auto cur_dis = 0; cur_dis <= tdis;) {
             /* Hack -- Stop at the target */
-            if ((y == ty) && (x == tx)) {
+            if ((y == pos_target.y) && (x == pos_target.x)) {
                 break;
             }
 
             /* Calculate the new location (see "project()") */
-            const auto pos = mmove2({ y, x }, player_ptr->get_position(), { ty, tx });
+            const auto pos = mmove2({ y, x }, player_ptr->get_position(), pos_target);
             const auto pos_impact = pos;
 
             /* Shatter Arrow */
@@ -644,7 +638,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             }
 
             /* Stopped by walls/doors */
-            if (!floor.has_terrain_characteristics(pos_impact, TerrainCharacteristics::PROJECT) && !grid.has_monster()) {
+            if (!floor.has_terrain_characteristics(pos_impact, TerrainCharacteristics::PROJECTION) && !grid.has_monster()) {
                 break;
             }
 
@@ -654,8 +648,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             /* Sniper */
             if (snipe_type == SP_LITE) {
                 set_bits(floor.get_grid(pos_impact).info, CAVE_GLOW);
-                note_spot(player_ptr, pos_impact.y, pos_impact.x);
-                lite_spot(player_ptr, pos_impact.y, pos_impact.x);
+                note_spot(player_ptr, pos_impact);
+                lite_spot(player_ptr, pos_impact);
             }
 
             /* The player can see the (on screen) missile */
@@ -668,7 +662,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     move_cursor_relative(pos_impact.y, pos_impact.x);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
-                    lite_spot(player_ptr, pos_impact.y, pos_impact.x);
+                    lite_spot(player_ptr, pos_impact);
                     term_fresh();
                 }
             }
@@ -690,8 +684,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             /* Sniper */
             if (snipe_type == SP_EVILNESS) {
                 reset_bits(floor.get_grid(pos_impact).info, (CAVE_GLOW | CAVE_MARK));
-                note_spot(player_ptr, pos_impact.y, pos_impact.x);
-                lite_spot(player_ptr, pos_impact.y, pos_impact.x);
+                note_spot(player_ptr, pos_impact);
+                lite_spot(player_ptr, pos_impact);
             }
 
             prev_y = y;
@@ -813,8 +807,8 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                     /* Sniper */
                     if (snipe_type == SP_HOLYNESS) {
                         set_bits(floor.get_grid(pos_impact).info, CAVE_GLOW);
-                        note_spot(player_ptr, pos_impact.y, pos_impact.x);
-                        lite_spot(player_ptr, pos_impact.y, pos_impact.x);
+                        note_spot(player_ptr, pos_impact);
+                        lite_spot(player_ptr, pos_impact);
                     }
 
                     /* Hit the monster, check for death */
@@ -847,24 +841,26 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                             msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), m_name.data());
                         }
 
-                        monster.set_target(player_ptr->y, player_ptr->x);
+                        monster.set_target(player_ptr->get_position());
 
                         /* Sniper */
                         if (snipe_type == SP_RUSH) {
+                            //!< @details プレイヤーの場所が同一であることが保証できないので変数を再宣言する.
+                            const auto p_pos1 = player_ptr->get_position();
                             auto n = randint1(5) + 3;
                             const auto n0 = n;
                             const auto m_idx = c_mon_ptr->m_idx;
                             for (; cur_dis <= tdis;) {
-                                const Pos2D pos_orig = pos_impact;
+                                const Pos2D pos_orig = { y, x };
                                 if (n == 0) {
                                     break;
                                 }
 
                                 /* Calculate the new location (see "project()") */
-                                const auto pos_to = mmove2(pos_impact, player_ptr->get_position(), { ty, tx });
+                                const auto pos_to = mmove2(pos_orig, player_ptr->get_position(), pos_target);
 
                                 /* Stopped by wilderness boundary */
-                                if (!in_bounds2(floor, pos_to.y, pos_to.x)) {
+                                if (!floor.contains(pos_to, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                                     break;
                                 }
 
@@ -874,7 +870,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                 }
 
                                 /* Stopped by monsters */
-                                if (!is_cave_empty_bold(player_ptr, pos_to.y, pos_to.x)) {
+                                if (!floor.is_empty_at(pos_to) || (pos_to == p_pos1)) {
                                     break;
                                 }
 
@@ -883,12 +879,12 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                                 monster.set_position(pos_to);
                                 update_monster(player_ptr, m_idx, true);
                                 if (delay_factor > 0) {
-                                    lite_spot(player_ptr, pos_to.y, pos_to.x);
-                                    lite_spot(player_ptr, pos_orig.y, pos_orig.x);
+                                    lite_spot(player_ptr, pos_to);
+                                    lite_spot(player_ptr, pos_orig);
                                     term_fresh();
                                     term_xtra(TERM_XTRA_DELAY, delay_factor);
                                 } else if (n == n0) {
-                                    lite_spot(player_ptr, pos_orig.y, pos_orig.x);
+                                    lite_spot(player_ptr, pos_orig);
                                 }
 
                                 x = pos_to.x;
@@ -934,12 +930,12 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             /* Memorize monster */
             fire_item.held_m_idx = m_idx;
 
-            floor.o_list[item_idx] = std::move(fire_item);
+            *floor.o_list[item_idx] = std::move(fire_item);
 
             /* Carry object */
             auto &monster = floor.m_list[m_idx];
             monster.hold_o_idx_list.add(floor, item_idx);
-        } else if (floor.has_terrain_characteristics(pos_impact, TerrainCharacteristics::PROJECT)) {
+        } else if (floor.has_terrain_characteristics(pos_impact, TerrainCharacteristics::PROJECTION)) {
             /* Drop (or break) near that location */
             (void)drop_near(player_ptr, &fire_item, pos_impact, j);
         } else {
@@ -1032,7 +1028,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, const MonsterEntity &mons
  */
 int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus_bow, int dam)
 {
-    const auto &item = player_ptr->inventory_list[INVEN_BOW];
+    const auto &item = *player_ptr->inventory[INVEN_BOW];
     const auto bonus = player_ptr->to_h_b + plus_ammo;
     const auto tval = item.bi_key.tval();
     const auto median_skill_exp = PlayerSkill::weapon_exp_at(PlayerSkillRank::MASTER) / 2;
@@ -1093,7 +1089,7 @@ int critical_shot(PlayerType *player_ptr, WEIGHT weight, int plus_ammo, int plus
  */
 int calc_crit_ratio_shot(PlayerType *player_ptr, int plus_ammo, int plus_bow)
 {
-    auto *j_ptr = &player_ptr->inventory_list[INVEN_BOW];
+    auto *j_ptr = player_ptr->inventory[INVEN_BOW].get();
 
     /* Extract "shot" power */
     auto i = player_ptr->to_h_b + plus_ammo;

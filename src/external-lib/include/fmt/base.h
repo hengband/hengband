@@ -8,9 +8,10 @@
 #ifndef FMT_BASE_H_
 #define FMT_BASE_H_
 
+// MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく.
 #if defined(_MSC_VER)
-// MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく
 #pragma warning(push, 0)
+#pragma warning(disable : 6294)
 #endif
 
 #if defined(FMT_IMPORT_STD) && !defined(FMT_MODULE)
@@ -1616,12 +1617,23 @@ FMT_CONSTEXPR FMT_INLINE auto parse_replacement_field(const Char* begin,
   return begin + 1;
 }
 
+FMT_CONSTEXPR bool is_sjis_multibyte_char(char c) {
+  const auto ch = static_cast<unsigned char>(c);
+  return (0x81 <= ch && ch <= 0x9f) || (0xe0 <= ch && ch <= 0xfc);
+}
+
 template <typename Char, typename Handler>
 FMT_CONSTEXPR void parse_format_string(basic_string_view<Char> fmt,
                                        Handler&& handler) {
   auto begin = fmt.data(), end = begin + fmt.size();
   auto p = begin;
   while (p != end) {
+#ifdef WINDOWS
+    if (is_sjis_multibyte_char(*p)) {
+      p += 2;
+      continue;
+    }
+#endif
     auto c = *p++;
     if (c == '{') {
       handler.on_text(begin, p - 1);

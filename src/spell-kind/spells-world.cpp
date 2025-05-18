@@ -231,13 +231,12 @@ bool teleport_level_other(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(*pos);
     const auto target_m_idx = grid.m_idx;
-    if (!target_m_idx) {
+    if ((target_m_idx == 0) || !grid.has_los()) {
         return true;
     }
-    if (!grid.has_los()) {
-        return true;
-    }
-    if (!projectable(player_ptr, player_ptr->get_position(), *pos)) {
+
+    const auto p_pos = player_ptr->get_position();
+    if (!projectable(floor, p_pos, p_pos, *pos)) {
         return true;
     }
 

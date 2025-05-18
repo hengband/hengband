@@ -109,7 +109,7 @@ static void move_item_to_monster(PlayerType *player_ptr, MonsterAttackPlayer *mo
         return;
     }
 
-    auto &item = player_ptr->current_floor_ptr->o_list[o_idx];
+    auto &item = *player_ptr->current_floor_ptr->o_list[o_idx];
     item = monap_ptr->o_ptr->clone();
     item.number = 1;
     if (monap_ptr->o_ptr->is_wand_rod()) {
@@ -132,7 +132,7 @@ void process_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     for (int i = 0; i < 10; i++) {
         auto i_idx = randnum0<short>(INVEN_PACK);
-        monap_ptr->o_ptr = &player_ptr->inventory_list[i_idx];
+        monap_ptr->o_ptr = player_ptr->inventory[i_idx].get();
         if (!monap_ptr->o_ptr->is_valid()) {
             continue;
         }
@@ -162,7 +162,7 @@ void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     for (int i = 0; i < 10; i++) {
         auto i_idx = randnum0<short>(INVEN_PACK);
-        monap_ptr->o_ptr = &player_ptr->inventory_list[i_idx];
+        monap_ptr->o_ptr = player_ptr->inventory[i_idx].get();
         if (!monap_ptr->o_ptr->is_valid()) {
             continue;
         }

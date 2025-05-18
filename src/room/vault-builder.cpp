@@ -3,7 +3,6 @@
 #include "floor/floor-util.h"
 #include "game-option/cheat-options.h"
 #include "grid/object-placer.h"
-#include "grid/trap.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/place-monster-types.h"
 #include "system/enums/terrain/terrain-characteristics.h"
@@ -50,8 +49,11 @@ void vault_monsters(PlayerType *player_ptr, const Pos2D &pos_center, int num)
             }
 
             floor.monster_level = floor.base_level + 2;
-            (void)place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+            const auto has_placed = place_random_monster(player_ptr, pos.y, pos.x, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
             floor.monster_level = floor.base_level;
+            if (has_placed) {
+                break;
+            }
         }
     }
 }
@@ -129,7 +131,7 @@ static void vault_trap_aux(FloorType &floor, const Pos2D &pos_center, const Pos2
             continue;
         }
 
-        place_trap(floor, pos);
+        floor.place_trap_at(pos);
         break;
     }
 }

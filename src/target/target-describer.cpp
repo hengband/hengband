@@ -3,7 +3,6 @@
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "floor/object-scanner.h"
 #include "game-option/input-options.h"
@@ -208,7 +207,7 @@ static void describe_grid_monster(PlayerType *player_ptr, GridExamination *ge_pt
         }
 
         std::string acount = evaluate_monster_exp(player_ptr, *ge_ptr->m_ptr);
-        const auto mon_desc = ge_ptr->m_ptr->build_looking_description(false);
+        const auto mon_desc = ge_ptr->m_ptr->build_looking_description(true);
 #ifdef JP
         const auto out_val = format("[%s]%s%s(%s)%s%s [r思 %s%s]", acount.data(), ge_ptr->s1, m_name.data(), mon_desc.data(), ge_ptr->s2, ge_ptr->s3,
             ge_ptr->x_info, ge_ptr->info);
@@ -248,7 +247,7 @@ static void describe_monster_person(GridExamination *ge_ptr)
 static short describe_monster_item(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     for (const auto this_o_idx : ge_ptr->m_ptr->hold_o_idx_list) {
-        const auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
         const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
@@ -317,7 +316,7 @@ static short describe_footing(PlayerType *player_ptr, GridExamination *ge_ptr)
         return CONTINUOUS_DESCRIPTION;
     }
 
-    const auto &item = player_ptr->current_floor_ptr->o_list[ge_ptr->floor_list[0]];
+    const auto &item = *player_ptr->current_floor_ptr->o_list[ge_ptr->floor_list[0]];
     const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
     const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
@@ -440,7 +439,7 @@ static short describe_footing_sight(PlayerType *player_ptr, GridExamination *ge_
 static int16_t sweep_footing_items(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
     for (const auto this_o_idx : ge_ptr->g_ptr->o_idx_list) {
-        const auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         const auto ret = describe_footing_sight(player_ptr, ge_ptr, item);
         if (within_char_util(ret)) {
             return (char)ret;

@@ -7,7 +7,6 @@
 #include "pet/pet-fall-off.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "monster-attack/monster-attack-player.h"
@@ -88,9 +87,6 @@ static bool calc_fall_off_possibility(PlayerType *player_ptr, const int dam, con
  */
 bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
 {
-    POSITION sy = 0;
-    POSITION sx = 0;
-    int sn = 0;
     const auto &monster = player_ptr->current_floor_ptr->m_list[player_ptr->riding];
     const auto &monrace = monster.get_monrace();
 
@@ -98,12 +94,14 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         return false;
     }
 
+    Pos2D pos_safe(0, 0);
     if (dam >= 0 || force) {
         if (!calc_fall_off_possibility(player_ptr, dam, force, monrace)) {
             return false;
         }
 
         /* Check around the player */
+        auto num_safe_grids = 0;
         for (const auto &d : Direction::directions_8()) {
             const auto pos = player_ptr->get_neighbor(d);
 
@@ -124,32 +122,26 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
                 continue;
             }
 
-            /* Count "safe" grids */
-            sn++;
+            num_safe_grids++;
 
             /* Randomize choice */
-            if (randint0(sn) > 0) {
+            if (randint0(num_safe_grids) > 0) {
                 continue;
             }
 
-            /* Save the safe location */
-            sy = pos.y;
-            sx = pos.x;
+            pos_safe = pos;
         }
 
-        if (!sn) {
+        if (!num_safe_grids) {
             const auto m_name = monster_desc(player_ptr, monster, 0);
             msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s but bumped into a wall."), m_name.data());
             take_hit(player_ptr, DAMAGE_NOESCAPE, monrace.level + 3, _("壁への衝突", "bumping into a wall"));
             return false;
         }
 
-        POSITION old_y = player_ptr->y;
-        POSITION old_x = player_ptr->x;
-        player_ptr->y = sy;
-        player_ptr->x = sx;
-        lite_spot(player_ptr, old_y, old_x);
-        lite_spot(player_ptr, player_ptr->y, player_ptr->x);
+        lite_spot(player_ptr, player_ptr->get_position());
+        player_ptr->set_position(pos_safe);
+        lite_spot(player_ptr, player_ptr->get_position());
         verify_panel(player_ptr);
     }
 
@@ -187,7 +179,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         fall_dam = true;
     }
 
-    if (sy && !player_ptr->is_dead) {
+    if ((pos_safe.y > 0) && !player_ptr->is_dead) {
         (void)move_player_effect(player_ptr, player_ptr->y, player_ptr->x, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
     }
 

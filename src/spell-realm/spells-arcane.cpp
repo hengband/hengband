@@ -14,7 +14,7 @@
 void phlogiston(PlayerType *player_ptr)
 {
     short max_flog = 0;
-    auto *o_ptr = &player_ptr->inventory_list[INVEN_LITE];
+    auto *o_ptr = player_ptr->inventory[INVEN_LITE].get();
     const auto &bi_key = o_ptr->bi_key;
     if (bi_key == BaseitemKey(ItemKindType::LITE, SV_LITE_LANTERN)) {
         max_flog = FUEL_LAMP;

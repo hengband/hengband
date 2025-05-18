@@ -1,5 +1,4 @@
 #include "grid/object-placer.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "grid/grid.h"
 #include "system/floor/floor-info.h"
@@ -20,7 +19,7 @@ void place_gold(PlayerType *player_ptr, const Pos2D &pos)
     if (!floor.contains(pos)) {
         return;
     }
-    if (!cave_drop_bold(floor, pos.y, pos.x)) {
+    if (!floor.can_drop_item_at(pos)) {
         return;
     }
     if (!grid.o_idx_list.empty()) {
@@ -35,11 +34,11 @@ void place_gold(PlayerType *player_ptr, const Pos2D &pos)
 
     item.iy = pos.y;
     item.ix = pos.x;
-    floor.o_list[item_idx] = std::move(item);
+    *floor.o_list[item_idx] = std::move(item);
     grid.o_idx_list.add(floor, item_idx);
 
-    note_spot(player_ptr, pos.y, pos.x);
-    lite_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
+    lite_spot(player_ptr, pos);
 }
 
 /*!
@@ -53,7 +52,7 @@ void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
-    if (!floor.contains(pos) || !cave_drop_bold(floor, pos.y, pos.x) || !grid.o_idx_list.empty()) {
+    if (!floor.contains(pos) || !floor.can_drop_item_at(pos) || !grid.o_idx_list.empty()) {
         return;
     }
 
@@ -62,7 +61,7 @@ void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode)
         return;
     }
 
-    auto &item = floor.o_list[item_idx];
+    auto &item = *floor.o_list[item_idx];
     item.wipe();
     if (!make_object(player_ptr, &item, mode)) {
         return;
@@ -72,6 +71,6 @@ void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode)
     item.ix = pos.x;
     grid.o_idx_list.add(floor, item_idx);
 
-    note_spot(player_ptr, pos.y, pos.x);
-    lite_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
+    lite_spot(player_ptr, pos);
 }

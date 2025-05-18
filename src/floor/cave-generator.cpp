@@ -43,30 +43,20 @@ static void check_arena_floor(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     if (!dd_ptr->empty_level) {
-        for (POSITION y = 0; y < floor.height; y++) {
-            for (POSITION x = 0; x < floor.width; x++) {
-                place_bold(player_ptr, y, x, GB_EXTRA);
-            }
+        for (const auto &pos : floor.get_area()) {
+            place_bold(player_ptr, pos.y, pos.x, GB_EXTRA);
         }
 
         return;
     }
 
-    for (POSITION y = 0; y < floor.height; y++) {
-        for (POSITION x = 0; x < floor.width; x++) {
-            place_bold(player_ptr, y, x, GB_FLOOR);
-        }
+    for (const auto &pos : floor.get_area()) {
+        place_bold(player_ptr, pos.y, pos.x, GB_FLOOR);
     }
 
-    for (POSITION x = 0; x < floor.width; x++) {
-        place_bold(player_ptr, 0, x, GB_EXTRA);
-        place_bold(player_ptr, floor.height - 1, x, GB_EXTRA);
-    }
-
-    for (POSITION y = 1; y < (floor.height - 1); y++) {
-        place_bold(player_ptr, y, 0, GB_EXTRA);
-        place_bold(player_ptr, y, floor.width - 1, GB_EXTRA);
-    }
+    floor.get_area().each_edge([&](const Pos2D &pos) {
+        place_bold(player_ptr, pos.y, pos.x, GB_EXTRA);
+    });
 }
 
 static void place_cave_contents(PlayerType *player_ptr, DungeonData *dd_ptr, const DungeonDefinition &dungeon)
@@ -284,15 +274,9 @@ static void place_bound_perm_wall(PlayerType *player_ptr, Grid &grid)
 static void make_perm_walls(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    for (POSITION x = 0; x < floor.width; x++) {
-        place_bound_perm_wall(player_ptr, floor.get_grid({ 0, x }));
-        place_bound_perm_wall(player_ptr, floor.get_grid({ floor.height - 1, x }));
-    }
-
-    for (POSITION y = 1; y < (floor.height - 1); y++) {
-        place_bound_perm_wall(player_ptr, floor.get_grid({ y, 0 }));
-        place_bound_perm_wall(player_ptr, floor.get_grid({ y, floor.width - 1 }));
-    }
+    floor.get_area().each_edge([&](const Pos2D &pos) {
+        place_bound_perm_wall(player_ptr, floor.get_grid(pos));
+    });
 }
 
 static bool check_place_necessary_objects(PlayerType *player_ptr, DungeonData *dd_ptr)
@@ -383,10 +367,8 @@ static void decide_grid_glowing(FloorType &floor, DungeonData *dd_ptr, const Dun
         return;
     }
 
-    for (POSITION y = 0; y < floor.height; y++) {
-        for (POSITION x = 0; x < floor.width; x++) {
-            floor.grid_array[y][x].info |= CAVE_GLOW;
-        }
+    for (const auto &pos : floor.get_area()) {
+        floor.get_grid(pos).add_info(CAVE_GLOW);
     }
 }
 

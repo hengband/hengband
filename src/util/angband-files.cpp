@@ -83,7 +83,7 @@ std::filesystem::path path_parse(const std::filesystem::path &path)
      * Replace "~user/" by the home directory of the user named "user"
      * Replace "~/" by the home directory of the current user
      */
-    const auto &file = path.string();
+    const auto file = path.string();
     if (file.empty() || (file[0] != '~')) {
         return file;
     }

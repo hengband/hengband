@@ -15,7 +15,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
@@ -75,7 +74,7 @@ static void discover_hidden_things(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
-        auto &item = floor.o_list[this_o_idx];
+        auto &item = *floor.o_list[this_o_idx];
         if (item.bi_key.tval() != ItemKindType::CHEST) {
             continue;
         }
@@ -154,8 +153,8 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
             }
         }
 
-        lite_spot(player_ptr, pos_old.y, pos_old.x);
-        lite_spot(player_ptr, pos_new.y, pos_new.x);
+        lite_spot(player_ptr, pos_old);
+        lite_spot(player_ptr, pos_new);
         verify_panel(player_ptr);
         if (mpe_mode & MPE_FORGET_FLOW) {
             forget_flow(floor);
@@ -197,7 +196,7 @@ bool move_player_effect(PlayerType *player_ptr, POSITION ny, POSITION nx, BIT_FL
         }
 
         using Tc = TerrainCharacteristics;
-        if ((player_ptr->action == ACTION_HAYAGAKE) && (terrain_new.flags.has_not(Tc::PROJECT) || (!player_ptr->levitation && terrain_new.flags.has(Tc::DEEP)))) {
+        if ((player_ptr->action == ACTION_HAYAGAKE) && (terrain_new.flags.has_not(Tc::PROJECTION) || (!player_ptr->levitation && terrain_new.flags.has(Tc::DEEP)))) {
             msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
             set_action(player_ptr, ACTION_NONE);
         }

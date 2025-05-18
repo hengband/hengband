@@ -105,6 +105,7 @@ void process_player(PlayerType *player_ptr)
 
     if (player_ptr->invoking_midnight_curse) {
         int count = 0;
+        mark_monsters_present(player_ptr);
         activate_ty_curse(player_ptr, false, &count);
         player_ptr->invoking_midnight_curse = false;
     }
@@ -292,6 +293,7 @@ void process_player(PlayerType *player_ptr)
             handle_stuff(player_ptr);
             msg_flag = false;
             prt("", 0, 0);
+            mark_monsters_present(player_ptr);
             process_command(player_ptr);
         } else {
             move_cursor_relative(player_ptr->y, player_ptr->x);
@@ -306,6 +308,7 @@ void process_player(PlayerType *player_ptr)
             can_save = true;
             InputKeyRequestor(player_ptr, false).request_command();
             can_save = false;
+            mark_monsters_present(player_ptr);
             process_command(player_ptr);
         }
 
@@ -331,7 +334,7 @@ void process_player(PlayerType *player_ptr)
 
                 // モンスターのシンボル/カラーの更新
                 if (monster.ml && monrace.visual_flags.has_any_of({ MonsterVisualType::MULTI_COLOR, MonsterVisualType::SHAPECHANGER })) {
-                    lite_spot(player_ptr, monster.fy, monster.fx);
+                    lite_spot(player_ptr, monster.get_position());
                 }
 
                 // 出現して即魔法を使わないようにするフラグを落とす処理
@@ -358,7 +361,7 @@ void process_player(PlayerType *player_ptr)
                             rfu.set_flag(MainWindowRedrawingFlag::UHEALTH);
                         }
 
-                        lite_spot(player_ptr, monster.fy, monster.fx);
+                        lite_spot(player_ptr, monster.get_position());
                     }
                 }
             }

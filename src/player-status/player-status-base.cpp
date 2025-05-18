@@ -211,7 +211,7 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 {
     BIT_FLAGS flags = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -234,7 +234,7 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
 {
     BIT_FLAGS flags = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &this->player_ptr->inventory_list[i];
+        auto *o_ptr = this->player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -259,7 +259,7 @@ int16_t PlayerStatusBase::equipments_bonus()
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     int16_t bonus = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        const auto *o_ptr = &player_ptr->inventory_list[i];
+        const auto *o_ptr = player_ptr->inventory[i].get();
         const auto o_flags = o_ptr->get_flags();
         if (!o_ptr->is_valid()) {
             continue;

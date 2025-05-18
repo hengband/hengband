@@ -59,7 +59,7 @@ static bool boundary_floor(const Grid &grid, const TerrainType &terrain, const T
     auto is_boundary_floor = grid.mimic > 0;
     is_boundary_floor &= terrain.is_permanent_wall();
     is_boundary_floor &= terrain_mimic.flags.has_any_of({ TerrainCharacteristics::MOVE, TerrainCharacteristics::CAN_FLY });
-    is_boundary_floor &= terrain_mimic.flags.has(TerrainCharacteristics::PROJECT);
+    is_boundary_floor &= terrain_mimic.flags.has(TerrainCharacteristics::PROJECTION);
     is_boundary_floor &= terrain_mimic.flags.has_not(TerrainCharacteristics::OPEN);
     return is_boundary_floor;
 }
@@ -144,11 +144,11 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
     // @todo 「特定の武器を装備している」旨のメソッドを別途作る
     constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
     auto is_stormbringer = false;
-    if (player_ptr->inventory_list[INVEN_MAIN_HAND].is_specific_artifact(stormbringer)) {
+    if (player_ptr->inventory[INVEN_MAIN_HAND]->is_specific_artifact(stormbringer)) {
         is_stormbringer = true;
     }
 
-    if (player_ptr->inventory_list[INVEN_SUB_HAND].is_specific_artifact(stormbringer)) {
+    if (player_ptr->inventory[INVEN_SUB_HAND]->is_specific_artifact(stormbringer)) {
         is_stormbringer = true;
     }
 
@@ -275,7 +275,7 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
                 msg_format("You feel %s %s blocking your way.", is_a_vowel(name[0]) ? "an" : "a", name.data());
 #endif
                 grid.info |= (CAVE_MARK);
-                lite_spot(player_ptr, pos.y, pos.x);
+                lite_spot(player_ptr, pos);
             }
         } else {
             const auto effects = player_ptr->effects();

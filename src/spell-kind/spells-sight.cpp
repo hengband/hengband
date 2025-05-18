@@ -53,7 +53,7 @@ bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam)
         }
 
         const auto m_pos = monster.get_position();
-        if (!floor.has_los(m_pos) || !projectable(player_ptr, p_pos, m_pos)) {
+        if (!floor.has_los_at(m_pos) || !projectable(floor, p_pos, p_pos, m_pos)) {
             continue;
         }
 
@@ -235,7 +235,7 @@ void aggravate_monsters(PlayerType *player_ptr, MONSTER_IDX src_idx)
             }
         }
 
-        if (floor.has_los({ monster.fy, monster.fx }) && !monster.is_pet()) {
+        if (floor.has_los_at({ monster.fy, monster.fx }) && !monster.is_pet()) {
             (void)set_monster_fast(player_ptr, i, monster.get_remaining_acceleration() + 100);
             speed = true;
         }
@@ -376,7 +376,7 @@ std::string probed_monster_info(PlayerType *player_ptr, MonsterEntity &monster, 
         }
 
         monster.ap_r_idx = monster.r_idx;
-        lite_spot(player_ptr, monster.fy, monster.fx);
+        lite_spot(player_ptr, monster.get_position());
     }
 
     const auto m_name = monster_desc(player_ptr, monster, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
@@ -446,7 +446,7 @@ bool probing(PlayerType *player_ptr)
         if (!monster.is_valid()) {
             continue;
         }
-        if (!floor.has_los({ monster.fy, monster.fx })) {
+        if (!floor.has_los_at({ monster.fy, monster.fx })) {
             continue;
         }
         if (!monster.ml) {

@@ -167,7 +167,7 @@ bool PlayerSkill::valid_weapon_exp(int weapon_exp)
  */
 PlayerSkillRank PlayerSkill::riding_skill_rank(int riding_exp)
 {
-    if (riding_exp < RIDING_EXP_BEGINNER) {
+    if (RIDING_EXP_UNSKILLED <= riding_exp && riding_exp < RIDING_EXP_BEGINNER) {
         return PlayerSkillRank::UNSKILLED;
     } else if (riding_exp < RIDING_EXP_SKILLED) {
         return PlayerSkillRank::BEGINNER;

@@ -38,14 +38,14 @@ ItemEntity *choose_warning_item(PlayerType *player_ptr)
     /* Search Inventory */
     std::vector<int> candidates;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        const auto *o_ptr = &player_ptr->inventory_list[i];
+        const auto *o_ptr = player_ptr->inventory[i].get();
         if (o_ptr->get_flags().has(TR_WARNING)) {
             candidates.push_back(i);
         }
     }
 
     /* Choice one of them */
-    return candidates.empty() ? nullptr : &player_ptr->inventory_list[rand_choice(candidates)];
+    return candidates.empty() ? nullptr : player_ptr->inventory[rand_choice(candidates)].get();
 }
 
 /*!
@@ -339,6 +339,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
     static int old_damage = 0;
 
     auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
     const auto &dungeon = floor.get_dungeon_definition();
     for (auto mx = xx - warning_aware_range; mx < xx + warning_aware_range + 1; mx++) {
         for (auto my = yy - warning_aware_range; my < yy + warning_aware_range + 1; my++) {
@@ -366,7 +367,7 @@ bool process_warning(PlayerType *player_ptr, POSITION xx, POSITION yy)
             const auto &monrace = monster.get_monrace();
 
             /* Monster spells (only powerful ones)*/
-            if (projectable(player_ptr, pos_neighbor, pos)) {
+            if (projectable(floor, p_pos, pos_neighbor, pos)) {
                 const auto flags = monrace.ability_flags;
 
                 if (dungeon.flags.has_not(DungeonFeatureType::NO_MAGIC)) {

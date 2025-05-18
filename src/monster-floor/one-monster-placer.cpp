@@ -9,7 +9,6 @@
 #include "dungeon/quest.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "floor/floor-save-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
@@ -26,6 +25,7 @@
 #include "object/warning.h"
 #include "player/player-status.h"
 #include "system/enums/monrace/monrace-id.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monrace/monrace-definition.h"
@@ -35,6 +35,7 @@
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include "world/world.h"
+#include <range/v3/algorithm.hpp>
 
 /*!
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -124,16 +125,11 @@ static bool check_quest_placeable(const FloorType &floor, MonraceId r_idx)
     if (r_idx != quest.r_idx) {
         return true;
     }
-    int number_mon = 0;
-    for (int i2 = 0; i2 < floor.width; ++i2) {
-        for (int j2 = 0; j2 < floor.height; j2++) {
-            auto quest_monster = floor.grid_array[j2][i2].has_monster();
-            quest_monster &= (floor.m_list[floor.grid_array[j2][i2].m_idx].r_idx == quest.r_idx);
-            if (quest_monster) {
-                number_mon++;
-            }
-        }
-    }
+    const auto has_quest_monrace = [&](const Pos2D &pos) {
+        const auto &grid = floor.get_grid(pos);
+        return grid.has_monster() && (floor.m_list[grid.m_idx].r_idx == quest.r_idx);
+    };
+    const auto number_mon = ranges::count_if(floor.get_area(), has_quest_monrace);
 
     if (number_mon + quest.cur_num >= quest.max_num) {
         return false;
@@ -167,7 +163,7 @@ static bool check_procection_rune(PlayerType *player_ptr, MonraceId monrace_id, 
     reset_bits(grid.info, CAVE_MARK);
     reset_bits(grid.info, CAVE_OBJECT);
     grid.mimic = 0;
-    note_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
     return true;
 }
 
@@ -227,7 +223,7 @@ std::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y,
         return std::nullopt;
     }
 
-    if (none_bits(mode, PM_IGNORE_TERRAIN) && (pattern_tile(floor, pos.y, pos.x) || !monster_can_enter(player_ptr, pos.y, pos.x, monrace, 0))) {
+    if (none_bits(mode, PM_IGNORE_TERRAIN) && (grid.has(TerrainCharacteristics::PATTERN) || !monster_can_enter(player_ptr, pos.y, pos.x, monrace, 0))) {
         return std::nullopt;
     }
 

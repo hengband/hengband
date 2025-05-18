@@ -1,6 +1,5 @@
 #include "spell-kind/spells-grid.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
@@ -24,16 +23,16 @@ bool create_rune_protection_one(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    if (!cave_clean_bold(floor, p_pos.y, p_pos.x)) {
+    auto &grid = floor.get_grid(p_pos);
+    if (!grid.is_clean()) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
-    auto &grid = floor.get_grid(p_pos);
     grid.info |= CAVE_OBJECT;
     grid.set_terrain_id(TerrainTag::RUNE_PROTECTION, TerrainKind::MIMIC);
-    note_spot(player_ptr, p_pos.y, p_pos.x);
-    lite_spot(player_ptr, p_pos.y, p_pos.x);
+    note_spot(player_ptr, p_pos);
+    lite_spot(player_ptr, p_pos);
     return true;
 }
 
@@ -49,16 +48,16 @@ bool create_rune_explosion(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!cave_clean_bold(floor, pos.y, pos.x)) {
+    auto &grid = floor.get_grid(pos);
+    if (!grid.is_clean()) {
         msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
         return false;
     }
 
-    auto &grid = floor.get_grid(pos);
     grid.info |= CAVE_OBJECT;
     grid.set_terrain_id(TerrainTag::RUNE_EXPLOSION, TerrainKind::MIMIC);
-    note_spot(player_ptr, pos.y, pos.x);
-    lite_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
+    lite_spot(player_ptr, pos);
     return true;
 }
 
@@ -110,26 +109,23 @@ void stair_creation(PlayerType *player_ptr)
 
     const auto &dungeon = floor.get_dungeon_definition();
     if (dest_floor_id) {
-        for (auto y = 0; y < floor.height; y++) {
-            for (auto x = 0; x < floor.width; x++) {
-                const Pos2D pos(y, x);
-                auto &grid = floor.get_grid(pos);
-                if (!grid.special) {
-                    continue;
-                }
-
-                if (grid.has_special_terrain()) {
-                    continue;
-                }
-
-                if (grid.special != dest_floor_id) {
-                    continue;
-                }
-
-                /* Remove old stairs */
-                grid.special = 0;
-                set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
+        for (const auto &pos : floor.get_area()) {
+            auto &grid = floor.get_grid(pos);
+            if (!grid.special) {
+                continue;
             }
+
+            if (grid.has_special_terrain()) {
+                continue;
+            }
+
+            if (grid.special != dest_floor_id) {
+                continue;
+            }
+
+            /* Remove old stairs */
+            grid.special = 0;
+            set_terrain_id_to_grid(player_ptr, pos, dungeon.select_floor_terrain_id());
         }
     } else {
         dest_floor_id = get_unused_floor_id(player_ptr);

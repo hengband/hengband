@@ -1,7 +1,6 @@
 #include "mspell/specified-summon.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "grid/grid.h"
 #include "monster-floor/monster-generator.h"
@@ -194,14 +193,15 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
     }
 
     msg_print(nullptr);
-
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
     auto count = 0;
     for (auto k = 0; k < 30; k++) {
-        if (!summon_possible(player_ptr, pos_scat.y, pos_scat.x) || !is_cave_empty_bold(player_ptr, pos_scat.y, pos_scat.x)) {
+        if (!summon_possible(player_ptr, pos_scat.y, pos_scat.x) || !floor.is_empty_at(pos_scat) || (pos_scat == p_pos)) {
             int j;
             for (j = 100; j > 0; j--) {
                 pos_scat = scatter(player_ptr, pos, 2, PROJECT_NONE);
-                if (is_cave_empty_bold(player_ptr, pos_scat.y, pos_scat.x)) {
+                if (floor.is_empty_at(pos_scat) && (pos_scat != p_pos)) {
                     break;
                 }
             }
@@ -211,7 +211,7 @@ MONSTER_NUMBER summon_NAZGUL(PlayerType *player_ptr, POSITION y, POSITION x, MON
             }
         }
 
-        if (!is_cave_empty_bold(player_ptr, pos_scat.y, pos_scat.x)) {
+        if (!floor.is_empty_at(pos_scat) || (pos_scat == p_pos)) {
             continue;
         }
 
@@ -370,8 +370,8 @@ MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, M
                 floor.get_grid(*attract_position).m_idx = target_m_idx;
                 monster.set_position(*attract_position);
                 update_monster(player_ptr, target_m_idx, true);
-                lite_spot(player_ptr, current_position.y, current_position.x);
-                lite_spot(player_ptr, attract_position->y, attract_position->x);
+                lite_spot(player_ptr, current_position);
+                lite_spot(player_ptr, *attract_position);
 
                 count++;
             }

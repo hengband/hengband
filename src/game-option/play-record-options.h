@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include <string>
 
 extern bool record_fix_art; /* Record fixed artifacts */
 extern bool record_rand_art; /* Record random artifacts */
@@ -16,5 +17,5 @@ extern bool record_arena; /* Record on_defeat_arena_monster victories */
 extern bool record_ident; /* Record first identified items */
 extern bool record_named_pet; /* Record information about named pets */
 
-extern char record_o_name[MAX_NLEN];
+extern std::string record_item_name; ///< 最後に取得したアイテムの名前(プレイ記録用)
 extern GAME_TURN record_turn;

@@ -16,7 +16,6 @@
 #include "avatar/avatar.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/speed-table.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
 #include "game-option/play-record-options.h"
@@ -129,7 +128,7 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         const auto &grid = floor.get_grid(m_pos);
         choose_chameleon_polymorph(player_ptr, m_idx, grid.get_terrain_id());
         update_monster(player_ptr, m_idx, false);
-        lite_spot(player_ptr, m_pos.y, m_pos.x);
+        lite_spot(player_ptr, m_pos);
         const auto &new_monrace = monster.get_monrace();
 
         if (new_monrace.brightness_flags.has_any_of(ld_mask) || monrace.brightness_flags.has_any_of(ld_mask)) {
@@ -169,6 +168,8 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     auto &monrace = monster.get_monrace();
+
+    mark_monsters_present(player_ptr);
 
     turn_flags_ptr->aware = process_stealth(player_ptr, m_idx);
     if (vanish_summoned_children(player_ptr, m_idx, turn_flags_ptr->see_m)) {
@@ -494,7 +495,7 @@ bool decide_monster_multiplication(PlayerType *player_ptr, MONSTER_IDX m_idx, PO
     for (auto y = oy - 1; y <= oy + 1; y++) {
         for (auto x = ox - 1; x <= ox + 1; x++) {
             const Pos2D pos(y, x);
-            if (!in_bounds2(floor, pos.y, pos.x)) {
+            if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                 continue;
             }
 
@@ -547,7 +548,7 @@ bool cast_spell(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware)
         const auto t_m_idx = floor.get_grid(pos_to).m_idx;
         const auto &monster_to = floor.m_list[t_m_idx];
         const auto pos_from = monster_from.get_position();
-        const auto is_projectable = projectable(player_ptr, pos_from, pos_to);
+        const auto is_projectable = projectable(floor, player_ptr->get_position(), pos_from, pos_to);
         if (t_m_idx && monster_from.is_hostile_to_melee(monster_to) && is_projectable) {
             counter_attack = true;
         }
@@ -613,12 +614,12 @@ bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MO
  * Most of the rest of the time is spent in "update_view()" and "lite_spot()",\n
  * especially when the player is running.\n
  *\n
- * Note the special "MFLAG_BORN" flag, which allows us to ignore "fresh"\n
- * monsters while they are still being "born".  A monster is "fresh" only\n
+ * Note the special "PRESENT_AT_TURN_START" flag.  Monsters without that flag\n
+ * are "fresh" and are still being "born".  A monster is "fresh" only\n
  * during the game turn in which it is created, and we use the "hack_m_idx" to\n
  * determine if the monster is yet to be processed during the game turn.\n
  *\n
- * Note the special "MFLAG_PREVENT_MAGIC" flag, which allows the player to get one\n
+ * Note the special "PREVENT_MAGIC" flag, which allows the player to get one\n
  * move before any "nasty" monsters get to use their spell attacks.\n
  *\n
  * Note that when the "knowledge" about the currently tracked monster\n
@@ -708,7 +709,7 @@ bool decide_process_continue(PlayerType *player_ptr, MonsterEntity &monster)
     }
 
     auto should_continue = (monster.cdis <= MAX_PLAYER_SIGHT) || AngbandSystem::get_instance().is_phase_out();
-    should_continue &= player_ptr->current_floor_ptr->has_los({ monster.fy, monster.fx }) || has_aggravate(player_ptr);
+    should_continue &= player_ptr->current_floor_ptr->has_los_at({ monster.fy, monster.fx }) || has_aggravate(player_ptr);
     if (should_continue) {
         return true;
     }

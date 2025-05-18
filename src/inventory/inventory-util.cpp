@@ -49,7 +49,7 @@ bool is_ring_slot(int i)
 bool get_tag_floor(const FloorType &floor, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
     for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++) {
-        auto *o_ptr = &floor.o_list[floor_list[i]];
+        auto *o_ptr = floor.o_list[floor_list[i]].get();
         if (!o_ptr->is_inscribed()) {
             continue;
         }
@@ -70,7 +70,7 @@ bool get_tag_floor(const FloorType &floor, COMMAND_CODE *cp, char tag, FLOOR_IDX
     }
 
     for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++) {
-        auto *o_ptr = &floor.o_list[floor_list[i]];
+        auto *o_ptr = floor.o_list[floor_list[i]].get();
         if (!o_ptr->is_inscribed()) {
             continue;
         }
@@ -124,7 +124,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
     }
 
     for (COMMAND_CODE i = start; i <= end; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid() || !o_ptr->is_inscribed()) {
             continue;
         }
@@ -149,7 +149,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
     }
 
     for (COMMAND_CODE i = start; i <= end; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid() || !o_ptr->is_inscribed()) {
             continue;
         }
@@ -188,7 +188,7 @@ bool get_item_okay(PlayerType *player_ptr, OBJECT_IDX i, const ItemTester &item_
         return is_ring_slot(i);
     }
 
-    return item_tester.okay(&player_ptr->inventory_list[i]);
+    return item_tester.okay(player_ptr->inventory[i].get());
 }
 
 /*!
@@ -205,9 +205,9 @@ bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 
     ItemEntity *o_ptr;
     if (i_idx >= 0) {
-        o_ptr = &player_ptr->inventory_list[i_idx];
+        o_ptr = player_ptr->inventory[i_idx].get();
     } else {
-        o_ptr = &player_ptr->current_floor_ptr->o_list[0 - i_idx];
+        o_ptr = player_ptr->current_floor_ptr->o_list[0 - i_idx].get();
     }
 
     if (!o_ptr->is_inscribed()) {
@@ -246,7 +246,7 @@ INVENTORY_IDX label_to_equipment(PlayerType *player_ptr, int c)
         return is_ring_slot(i) ? i : -1;
     }
 
-    if (!player_ptr->inventory_list[i].bi_id) {
+    if (!player_ptr->inventory[i]->bi_id) {
         return -1;
     }
 
@@ -265,7 +265,7 @@ INVENTORY_IDX label_to_inventory(PlayerType *player_ptr, int c)
 {
     INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
-    if ((i < 0) || (i > INVEN_PACK) || !player_ptr->inventory_list[i].is_valid()) {
+    if ((i < 0) || (i > INVEN_PACK) || !player_ptr->inventory[i]->is_valid()) {
         return -1;
     }
 
@@ -281,7 +281,7 @@ INVENTORY_IDX label_to_inventory(PlayerType *player_ptr, int c)
  */
 bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX i_idx)
 {
-    const auto &item = i_idx >= 0 ? player_ptr->inventory_list[i_idx] : player_ptr->current_floor_ptr->o_list[0 - i_idx];
+    const auto &item = i_idx >= 0 ? *player_ptr->inventory[i_idx] : *player_ptr->current_floor_ptr->o_list[0 - i_idx];
     const auto item_name = describe_flavor(player_ptr, item, 0);
     std::stringstream ss;
     ss << prompt;

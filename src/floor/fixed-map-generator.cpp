@@ -5,7 +5,6 @@
 #include "floor/floor-object.h"
 #include "floor/wild.h"
 #include "grid/object-placer.h"
-#include "grid/trap.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
@@ -57,7 +56,7 @@ qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xm
 static void drop_here(FloorType &floor, ItemEntity &&item, POSITION y, POSITION x)
 {
     const auto item_idx = floor.pop_empty_index_item();
-    auto &dropped_item = floor.o_list[item_idx];
+    auto &dropped_item = *floor.o_list[item_idx];
     dropped_item = std::move(item);
     dropped_item.iy = y;
     dropped_item.ix = x;
@@ -143,7 +142,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             if (evaluate_percent(75)) {
                 place_object(player_ptr, pos, 0);
             } else {
-                place_trap(floor, pos);
+                floor.place_trap_at(pos);
             }
 
             floor.object_level = floor.base_level;
@@ -161,7 +160,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
             floor.object_level = floor.base_level;
         } else if (random & RANDOM_TRAP) {
             const Pos2D pos(*qtwg_ptr->y, *qtwg_ptr->x);
-            place_trap(floor, pos);
+            floor.place_trap_at(pos);
         } else if (letter[idx].trap) {
             grid.mimic = grid.feat;
             grid.feat = dungeon.convert_terrain_id(letter[idx].trap);

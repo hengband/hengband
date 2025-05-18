@@ -32,6 +32,7 @@
 Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
 {
     auto dir = Direction::none();
+    auto target = Target::get_last_target();
     if (enable_repeat) {
         dir = command_dir;
         auto try_old_target = use_old_target;
@@ -46,14 +47,14 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
             }
         }
 
-        if (try_old_target && target_okay(player_ptr)) {
-            dir = Direction::targetting();
+        if (try_old_target && target.is_okay()) {
+            dir = Direction::targetting(target);
         }
     }
 
     while (!dir) {
         const auto prompt =
-            target_okay(player_ptr)
+            target.is_okay()
                 ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
                 : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
 
@@ -72,10 +73,10 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
         static const std::unordered_set target_commands = { '*', ' ', '\r', 'T', 't', '.', '5', '0', '*' };
         if (target_commands.contains(command)) {
             if (select_new_target_commands.contains(command)) {
-                target_set(player_ptr, TARGET_KILL);
+                target = target_set(player_ptr, TARGET_KILL);
             }
-            if (target_okay(player_ptr)) {
-                dir = Direction::targetting();
+            if (target.is_okay()) {
+                dir = Direction::targetting(target);
             }
         } else {
             dir = get_keymap_dir(command);

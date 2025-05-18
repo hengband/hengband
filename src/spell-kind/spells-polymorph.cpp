@@ -19,6 +19,7 @@
 #include "target/target-checker.h"
 #include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
+#include <range/v3/view.hpp>
 
 /*!
  * @brief 変身処理向けにモンスターの近隣レベル帯モンスターを返す
@@ -72,7 +73,8 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
     auto &monster = floor.m_list[grid.m_idx];
     MonraceId new_r_idx;
     MonraceId old_r_idx = monster.r_idx;
-    bool targeted = target_who == grid.m_idx;
+    const auto target_m_idx = Target::get_last_target().get_m_idx();
+    const auto targeted = target_m_idx == grid.m_idx;
     auto health_tracked = HealthBarTracker::get_instance().is_tracking(grid.m_idx);
 
     if (floor.inside_arena || AngbandSystem::get_instance().is_phase_out()) {
@@ -123,18 +125,19 @@ bool polymorph_monster(PlayerType *player_ptr, POSITION y, POSITION x)
 
     if (preserve_hold_objects) {
         for (const auto this_o_idx : back_m.hold_o_idx_list) {
-            auto *o_ptr = &floor.o_list[this_o_idx];
+            auto *o_ptr = floor.o_list[this_o_idx].get();
             o_ptr->held_m_idx = *m_idx;
         }
     } else {
-        for (auto it = back_m.hold_o_idx_list.begin(); it != back_m.hold_o_idx_list.end();) {
-            OBJECT_IDX this_o_idx = *it++;
-            delete_object_idx(player_ptr, this_o_idx);
-        }
+        delete_items(player_ptr, back_m.hold_o_idx_list | ranges::to_vector);
     }
 
     if (targeted) {
-        target_who = m_idx.value_or(0);
+        if (m_idx) {
+            Target::set_last_target(Target::create_monster_target(player_ptr, *m_idx));
+        } else {
+            Target::clear_last_target();
+        }
     }
     if (health_tracked) {
         health_track(player_ptr, m_idx.value_or(0));

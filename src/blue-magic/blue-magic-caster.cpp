@@ -47,9 +47,11 @@ static bool cast_blue_dispel(PlayerType *player_ptr)
         return false;
     }
 
-    const auto &grid = player_ptr->current_floor_ptr->get_grid(*pos);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(*pos);
     const auto m_idx = grid.m_idx;
-    if ((m_idx == 0) || !grid.has_los() || !projectable(player_ptr, player_ptr->get_position(), *pos)) {
+    const auto p_pos = player_ptr->get_position();
+    if ((m_idx == 0) || !grid.has_los() || !projectable(floor, p_pos, p_pos, *pos)) {
         return true;
     }
 
@@ -100,7 +102,8 @@ static std::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr,
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
-    if (!grid.has_monster() || !grid.has_los() || !projectable(player_ptr, player_ptr->get_position(), pos)) {
+    const auto p_pos = player_ptr->get_position();
+    if (!grid.has_monster() || !grid.has_los() || !projectable(floor, p_pos, p_pos, pos)) {
         return std::nullopt;
     }
 

@@ -110,7 +110,7 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
         return true;
     }
 
-    constexpr auto dirs = Direction::directions_8();
+    const auto dirs = Direction::directions_8();
     const auto num_of_walls = std::count_if(dirs.begin(), dirs.end(),
         [&floor, &pos](const auto &d) {
             const auto pos_neighbor = pos + d.vec();
@@ -183,7 +183,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
                     symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
                 }
             } else if (is_darkened && !is_blind) {
-                if (terrain_mimic_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECT })) {
+                if (terrain_mimic_ptr->flags.has_all_of({ TerrainCharacteristics::LOS, TerrainCharacteristics::PROJECTION })) {
                     terrain_mimic_ptr = &terrains.get_terrain(tag_unsafe);
                     symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_STANDARD);
                 } else if (view_granite_lite && view_bright_lite) {
@@ -223,7 +223,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
-        const auto &item = floor.o_list[this_o_idx];
+        const auto &item = *floor.o_list[this_o_idx];
         if (item.marked.has_not(OmType::FOUND)) {
             continue;
         }

@@ -103,7 +103,7 @@ void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
 {
     for (auto it = grid.o_idx_list.begin(); it != grid.o_idx_list.end();) {
         OBJECT_IDX this_o_idx = *it++;
-        auto &item = player_ptr->current_floor_ptr->o_list[this_o_idx];
+        auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
         int idx = find_autopick_list(player_ptr, &item);
         auto_inscribe_item(&item, idx);
         if ((idx < 0) || (autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)) == 0) {
@@ -120,7 +120,7 @@ void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
         }
 
         if (!(autopick_list[idx].action & DO_QUERY_AUTOPICK)) {
-            describe_pickup_item(player_ptr, this_o_idx);
+            process_player_pickup_item(player_ptr, this_o_idx);
             continue;
         }
 
@@ -136,6 +136,6 @@ void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
             continue;
         }
 
-        describe_pickup_item(player_ptr, this_o_idx);
+        process_player_pickup_item(player_ptr, this_o_idx);
     }
 }

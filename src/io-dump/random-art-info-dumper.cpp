@@ -82,12 +82,12 @@ void spoil_random_artifact(PlayerType *player_ptr)
     for (const auto &[tval_list, name] : group_artifact_list) {
         for (auto tval : tval_list) {
             for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-                auto &item = player_ptr->inventory_list[i];
+                auto &item = *player_ptr->inventory[i];
                 spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
 
             for (int i = 0; i < INVEN_PACK; i++) {
-                auto &item = player_ptr->inventory_list[i];
+                auto &item = *player_ptr->inventory[i];
                 spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
 

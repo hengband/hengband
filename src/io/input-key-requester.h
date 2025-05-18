@@ -6,8 +6,6 @@
 #include <optional>
 #include <string>
 
-extern concptr keymap_act[KEYMAP_MODES][256];
-
 extern bool use_menu;
 
 extern COMMAND_CODE command_cmd;
@@ -19,6 +17,7 @@ extern TERM_LEN command_gap;
 extern int16_t command_wrk;
 extern int16_t command_new;
 
+enum class KeymapMode;
 class PlayerType;
 class SpecialMenuContent;
 class InputKeyRequestor {
@@ -29,7 +28,7 @@ public:
 private:
     PlayerType *player_ptr;
     bool shopping;
-    keymap_mode mode;
+    KeymapMode mode;
     int base_y;
     int base_x = 15;
     int menu_num = 0;

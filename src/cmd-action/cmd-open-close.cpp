@@ -48,7 +48,7 @@ static bool exe_open_chest(PlayerType *player_ptr, const Pos2D &pos, OBJECT_IDX 
 {
     auto flag = true;
     auto more = false;
-    auto *o_ptr = &player_ptr->current_floor_ptr->o_list[o_idx];
+    auto *o_ptr = player_ptr->current_floor_ptr->o_list[o_idx].get();
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     if (o_ptr->pval > 0) {
         flag = false;
@@ -305,7 +305,7 @@ void do_cmd_bash(PlayerType *player_ptr)
 static bool get_spike(PlayerType *player_ptr, INVENTORY_IDX *ip)
 {
     for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

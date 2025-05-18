@@ -70,7 +70,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
         return true;
     }
     case MindBerserkerType::QUAKE:
-        earthquake(player_ptr, player_ptr->y, player_ptr->x, 8 + randint0(5), 0);
+        earthquake(player_ptr, player_ptr->get_position(), 8 + randint0(5));
         return true;
     case MindBerserkerType::MASSACRE:
         massacre(player_ptr);

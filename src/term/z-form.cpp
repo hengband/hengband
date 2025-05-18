@@ -81,7 +81,6 @@
 
 #include "term/z-form.h"
 #include "term/z-util.h"
-#include "term/z-virt.h"
 #include <span>
 #include <vector>
 

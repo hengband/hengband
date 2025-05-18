@@ -18,6 +18,7 @@
 #include <string>
 
 enum class DungeonId;
+enum class ElementRealmType;
 enum class ItemKindType : short;
 enum class MimicKindType;
 enum class MonraceId : short;
@@ -43,7 +44,7 @@ public:
     player_personality_type ppersonality{}; /* Personality index */
     RealmType realm1{}; /* First magic realm */
     RealmType realm2{}; /* Second magic realm */
-    int16_t element{}; //!< 元素使い領域番号 / Elementalist system index
+    ElementRealmType element_realm{}; //!< 元素使い領域
 
     Dice hit_dice{}; /* Hit dice */
     uint16_t expfact{}; /* Experience factor
@@ -207,7 +208,7 @@ public:
 
     bool autopick_autoregister{}; /* auto register is in-use or not */
 
-    std::shared_ptr<ItemEntity[]> inventory_list{}; /* The player's inventory */
+    std::vector<std::shared_ptr<ItemEntity>> inventory{}; /* The player's inventory */
     int16_t inven_cnt{}; /* Number of items in inventory */
     int16_t equip_cnt{}; /* Number of items in equipment */
 

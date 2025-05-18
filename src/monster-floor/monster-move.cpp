@@ -11,7 +11,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
@@ -260,7 +259,7 @@ static bool process_protection_rune(PlayerType *player_ptr, turn_flags *turn_fla
     grid.info &= ~(CAVE_OBJECT);
     grid.mimic = 0;
     turn_flags_ptr->do_move = true;
-    note_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
     return true;
 }
 
@@ -373,8 +372,8 @@ void activate_explosive_rune(PlayerType *player_ptr, const Pos2D &pos, const Mon
     reset_bits(grid.info, CAVE_OBJECT);
     grid.mimic = 0;
 
-    note_spot(player_ptr, pos.y, pos.x);
-    lite_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
+    lite_spot(player_ptr, pos);
 }
 
 /*!
@@ -392,9 +391,9 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
     auto &floor = *player_ptr->current_floor_ptr;
     const auto m_idx = mmdl.get_m_idx();
     for (const auto &dir : mmdl.get_movement_directions()) {
-        const auto dir_move = dir.has_direction() ? dir : rand_choice(Direction::directions_8());
+        const auto &dir_move = dir.has_direction() ? dir : rand_choice(Direction::directions_8());
         const auto pos_neighbor = pos + dir_move.vec();
-        if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+        if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
             continue;
         }
 
@@ -469,13 +468,13 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
             break;
         }
 
-        const auto &ap_r_ref = monster.get_appearance_monrace();
+        const auto &apparent_monrace = monster.get_appearance_monrace();
         const auto p_pos = player_ptr->get_position(); //!< @details 関数が長すぎてプレイヤーの座標が不変であることを保証できない.
         const auto m_pos = monster.get_position();
-        const auto is_projectable = projectable(player_ptr, p_pos, m_pos);
+        const auto is_projectable = projectable(floor, p_pos, p_pos, m_pos);
         const auto can_see = disturb_near && monster.mflag.has(MonsterTemporaryFlagType::VIEW) && is_projectable;
-        const auto is_high_level = disturb_high && (ap_r_ref.r_tkills > 0) && (ap_r_ref.level >= player_ptr->lev);
-        const auto is_unknown_level = disturb_unknown && (ap_r_ref.r_tkills == 0);
+        const auto is_high_level = disturb_high && (apparent_monrace.r_tkills > 0) && (apparent_monrace.level >= player_ptr->lev);
+        const auto is_unknown_level = disturb_unknown && (apparent_monrace.r_tkills == 0);
         if (monster.ml && (disturb_move || can_see || is_high_level || is_unknown_level)) {
             if (monster.is_hostile()) {
                 disturb(player_ptr, false, true);
@@ -561,9 +560,10 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
         msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
     }
 
-    const auto can_speak = monster.get_appearance_monrace().speak_flags.any();
     constexpr auto chance_speak = 8;
-    if (!can_speak || !aware || !one_in_(chance_speak) || !floor.has_los({ oy, ox }) || !projectable(player_ptr, pos, player_ptr->get_position())) {
+    const auto p_pos = player_ptr->get_position();
+    const auto can_speak = monster.get_appearance_monrace().speak_flags.any();
+    if (!can_speak || !aware || !one_in_(chance_speak) || !floor.has_los_at({ oy, ox }) || !projectable(floor, p_pos, pos, p_pos)) {
         return;
     }
 

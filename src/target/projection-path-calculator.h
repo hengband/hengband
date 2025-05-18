@@ -4,12 +4,12 @@
 #include <cstdint>
 #include <vector>
 
-class PlayerType;
+class FloorType;
 class ProjectionPath {
 public:
     using pp_const_iterator = std::vector<Pos2D>::const_iterator;
 
-    ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &pos_src, const Pos2D &pos_dst, uint32_t flag);
+    ProjectionPath(const FloorType &floor, int range, const Pos2D &p_pos, const Pos2D &pos_src, const Pos2D &pos_dst, uint32_t flag);
     pp_const_iterator begin() const;
     pp_const_iterator end() const;
     const Pos2D &front() const;
@@ -21,4 +21,4 @@ private:
     std::vector<Pos2D> positions;
 };
 
-bool projectable(PlayerType *player_ptr, const Pos2D &pos1, const Pos2D &pos2);
+bool projectable(const FloorType &floor, const Pos2D &p_pos, const Pos2D &pos1, const Pos2D &pos2);

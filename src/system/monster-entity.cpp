@@ -503,22 +503,21 @@ std::optional<bool> MonsterEntity::order_pet_hp(const MonsterEntity &other) cons
 }
 
 /*!
- * @brief モンスターの目標地点をセットする / Set the target of counter attack
- * @param y 目標y座標
- * @param x 目標x座標
+ * @brief モンスターの目標地点をセットする
+ * @param pos 目標座標
  */
-void MonsterEntity::set_target(POSITION y, POSITION x)
+void MonsterEntity::set_target(const Pos2D &pos)
 {
-    this->target_y = y;
-    this->target_x = x;
+    this->target_y = pos.y;
+    this->target_x = pos.x;
 }
 
 /*!
- * @brief モンスターの目標地点をリセットする / Reset the target of counter attack
+ * @brief モンスターの目標地点をリセットする
  */
 void MonsterEntity::reset_target()
 {
-    this->set_target(0, 0);
+    this->set_target({ 0, 0 });
 }
 
 /*!

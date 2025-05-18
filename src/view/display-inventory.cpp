@@ -40,7 +40,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     const auto &[wid, hgt] = term_get_size();
     auto len = wid - col - 1;
     for (i = 0; i < INVEN_PACK; i++) {
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = *player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;
         }
@@ -50,7 +50,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
 
     prepare_label_string(player_ptr, inven_label, USE_INVEN, item_tester);
     for (k = 0, i = 0; i < z; i++) {
-        auto &item = player_ptr->inventory_list[i];
+        auto &item = *player_ptr->inventory[i];
         if (!item_tester.okay(&item) && !(mode & USE_FULL)) {
             continue;
         }
@@ -86,7 +86,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     int j;
     for (j = 0; j < k; j++) {
         i = out_index[j];
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = *player_ptr->inventory[i];
         prt("", j + 1, col ? col - 2 : col);
         std::string head;
         if (use_menu && target_item) {
@@ -137,13 +137,13 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
 {
     int i, z = 0;
     TERM_COLOR attr = TERM_WHITE;
-    if (!player_ptr || !player_ptr->inventory_list) {
+    if (!player_ptr || player_ptr->inventory.empty()) {
         return;
     }
 
     const auto &[wid, hgt] = term_get_size();
     for (i = 0; i < INVEN_PACK; i++) {
-        auto o_ptr = &player_ptr->inventory_list[i];
+        auto o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -155,7 +155,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
             break;
         }
 
-        auto &item = player_ptr->inventory_list[i];
+        auto &item = *player_ptr->inventory[i];
         auto do_disp = item_tester.okay(&item);
         std::string label = "   ";
         if (do_disp) {

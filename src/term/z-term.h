@@ -193,18 +193,17 @@ extern term_type *game_term;
 
 class DisplaySymbol;
 class DisplaySymbolPair;
-errr term_user(int n);
-errr term_xtra(int n, int v);
+void term_user();
+void term_xtra(int n, int v);
 
 void term_queue_char(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair);
 void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair);
-void term_queue_line(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR *a, char *c, TERM_COLOR *ta, char *tc);
 
-errr term_fresh();
-errr term_fresh_force();
+void term_fresh();
+void term_fresh_force();
 errr term_set_cursor(int v);
 errr term_gotoxy(TERM_LEN x, TERM_LEN y);
-errr term_draw(TERM_LEN x, TERM_LEN y, TERM_COLOR a, char c);
+void term_draw(int x, int y, const DisplaySymbol &symbol);
 void term_addch(const DisplaySymbol &symbol);
 void term_add_bigch(const DisplaySymbol &symbol);
 errr term_addstr(int n, TERM_COLOR a, std::string_view sv);
@@ -217,8 +216,8 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
 
 errr term_get_cursor(int *v);
 std::pair<int, int> term_get_size();
-errr term_locate(TERM_LEN *x, TERM_LEN *y);
-errr term_what(TERM_LEN x, TERM_LEN y, TERM_COLOR *a, char *c);
+std::pair<int, int> term_locate();
+DisplaySymbol term_what(int x, int y, const DisplaySymbol &ds);
 
 errr term_flush();
 errr term_key_push(int k);
@@ -236,7 +235,7 @@ errr term_activate(term_type *t);
 errr term_init(term_type *t, TERM_LEN w, TERM_LEN h, int k);
 
 #ifdef JP
-errr term_putstr_v(TERM_LEN x, TERM_LEN y, int n, byte a, concptr s);
+void term_putstr_v(int x, int y_initial, size_t n, uint8_t color, std::string_view sv);
 #endif
 
 #ifndef WINDOWS

@@ -3,7 +3,9 @@
 #include "system/h-type.h"
 #include <algorithm>
 #include <concepts>
+#include <iterator>
 #include <numeric>
+#include <range/v3/range/concepts.hpp>
 #include <type_traits>
 
 /**
@@ -50,6 +52,9 @@ template <typename T>
 struct Point2D {
     T y{};
     T x{};
+
+    constexpr Point2D() = default;
+
     constexpr Point2D(T y, T x)
         : y(y)
         , x(x)
@@ -161,6 +166,9 @@ template <std::integral T>
 struct Rectangle2D {
     Point2D<T> top_left;
     Point2D<T> bottom_right;
+
+    constexpr Rectangle2D() = default;
+
     constexpr Rectangle2D(T y1, T x1, T y2, T x2)
         : top_left(std::min<T>(y1, y2), std::min<T>(x1, x2))
         , bottom_right(std::max<T>(y1, y2), std::max<T>(x1, x2))
@@ -201,24 +209,28 @@ struct Rectangle2D {
     template <std::invocable<Point2D<T>> F>
     void each_edge(F &&f) const
     {
-        for (auto y = this->top_left.y; y <= this->bottom_right.y; ++y) {
-            f(Point2D<T>(y, top_left.x));
-            f(Point2D<T>(y, bottom_right.x));
-        }
         for (auto x = this->top_left.x; x <= this->bottom_right.x; ++x) {
             f(Point2D<T>(top_left.y, x));
             f(Point2D<T>(bottom_right.y, x));
+        }
+        for (auto y = this->top_left.y + 1; y <= this->bottom_right.y - 1; ++y) {
+            f(Point2D<T>(y, top_left.x));
+            f(Point2D<T>(y, bottom_right.x));
         }
     }
 
     /// @brief 長方形内の座標を走査するイテレータ
     class iterator {
     public:
+        using difference_type = T;
         using value_type = Point2D<T>;
-        using iterator_category = std::input_iterator_tag;
+        using iterator_concept = std::input_iterator_tag;
 
-        constexpr iterator(const Rectangle2D *rect, const value_type &pos_cur) noexcept
-            : rect(rect)
+        constexpr iterator() noexcept = default;
+
+        constexpr iterator(const Rectangle2D &rect, const value_type &pos_cur) noexcept
+            : pos_top_left(rect.top_left)
+            , pos_bottom_right(rect.bottom_right)
             , pos_cur(pos_cur)
         {
         }
@@ -230,13 +242,20 @@ struct Rectangle2D {
 
         constexpr iterator &operator++() noexcept
         {
-            if (this->pos_cur.x < this->rect->bottom_right.x) {
+            if (this->pos_cur.x < this->pos_bottom_right.x) {
                 ++(this->pos_cur.x);
             } else {
-                this->pos_cur.x = this->rect->top_left.x;
+                this->pos_cur.x = this->pos_top_left.x;
                 ++(this->pos_cur.y);
             }
             return *this;
+        }
+
+        constexpr iterator operator++(int) noexcept
+        {
+            auto old = *this;
+            ++*this;
+            return old;
         }
 
         constexpr bool operator==(const iterator &other) const noexcept
@@ -245,20 +264,28 @@ struct Rectangle2D {
         }
 
     private:
-        const Rectangle2D *rect;
+        value_type pos_top_left;
+        value_type pos_bottom_right;
         value_type pos_cur;
     };
 
+    using const_iterator = iterator;
+
     constexpr iterator begin() const noexcept
     {
-        return iterator(this, this->top_left);
+        return iterator(*this, this->top_left);
     }
 
     constexpr iterator end() const noexcept
     {
-        return iterator(this, Point2D<T>(this->bottom_right.y + 1, this->top_left.x));
+        return iterator(*this, Point2D<T>(this->bottom_right.y + 1, this->top_left.x));
     }
 };
+
+namespace ranges {
+template <typename T>
+inline constexpr bool enable_view<Rectangle2D<T>> = true;
+}
 
 //! ゲームの平面マップ上の座標位置を表す構造体
 using Pos2D = Point2D<POSITION>;

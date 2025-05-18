@@ -17,7 +17,6 @@
 #include "grid/grid.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "game-option/map-screen-options.h"
 #include "grid/object-placer.h"
 #include "io/screen-util.h"
@@ -75,7 +74,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
         if (terrain.flags.has(TerrainCharacteristics::GLOW) && dungeon.flags.has_not(DungeonFeatureType::DARKNESS)) {
             for (const auto &d : Direction::directions()) {
                 const auto pos_neighbor = pos + d.vec();
-                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                     continue;
                 }
 
@@ -108,8 +107,8 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
         update_monster(player_ptr, grid.m_idx, false);
     }
 
-    note_spot(player_ptr, pos.y, pos.x);
-    lite_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
+    lite_spot(player_ptr, pos);
     if (old_los ^ terrain.flags.has(TerrainCharacteristics::LOS)) {
         static constexpr auto flags = {
             StatusRecalculatingFlag::VIEW,
@@ -126,7 +125,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
 
     for (const auto &d : Direction::directions()) {
         const auto pos_neighbor = pos + d.vec();
-        if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+        if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
             continue;
         }
 
@@ -137,8 +136,8 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
                 update_monster(player_ptr, grid_neighbor.m_idx, false);
             }
 
-            note_spot(player_ptr, pos_neighbor.y, pos_neighbor.x);
-            lite_spot(player_ptr, pos_neighbor.y, pos_neighbor.x);
+            note_spot(player_ptr, pos_neighbor);
+            lite_spot(player_ptr, pos_neighbor);
         }
 
         update_local_illumination(player_ptr, pos_neighbor);
@@ -251,8 +250,8 @@ static void update_local_illumination_aux(PlayerType *player_ptr, const Pos2D &p
         update_monster(player_ptr, grid.m_idx, false);
     }
 
-    note_spot(player_ptr, pos.y, pos.x);
-    lite_spot(player_ptr, pos.y, pos.x);
+    note_spot(player_ptr, pos);
+    lite_spot(player_ptr, pos);
 }
 
 /*!
@@ -381,9 +380,8 @@ void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny
  * optimized primarily for the most common cases, that is, for the
  * non-marked floor grids.
  */
-void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
+void note_spot(PlayerType *player_ptr, const Pos2D &pos)
 {
-    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
 
@@ -410,7 +408,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
 
     /* Hack -- memorize objects */
     for (const auto this_o_idx : grid.o_idx_list) {
-        auto &item = floor.o_list[this_o_idx];
+        auto &item = *floor.o_list[this_o_idx];
         item.marked.set(OmType::FOUND);
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
     }
@@ -449,7 +447,7 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
         }
 
         /* Memorize certain non-torch-lit wall grids */
-        else if (check_local_illumination(player_ptr, y, x)) {
+        else if (check_local_illumination(player_ptr, pos.y, pos.x)) {
             grid.info |= (CAVE_MARK);
         }
     }
@@ -463,13 +461,13 @@ void note_spot(PlayerType *player_ptr, POSITION y, POSITION x)
  *
  * This function should only be called on "legal" grids
  */
-void lite_spot(PlayerType *player_ptr, POSITION y, POSITION x)
+void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
 {
-    if (panel_contains(y, x) && in_bounds2(*player_ptr->current_floor_ptr, y, x)) {
-        auto symbol_pair = map_info(player_ptr, { y, x });
+    if (panel_contains(pos.y, pos.x) && player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+        auto symbol_pair = map_info(player_ptr, pos);
         symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 
-        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, symbol_pair);
+        term_queue_bigchar(panel_col_of(pos.x), pos.y - panel_row_prt, symbol_pair);
         static constexpr auto flags = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,
@@ -719,12 +717,10 @@ void update_flow(PlayerType *player_ptr)
     }
 
     /* Erase all of the current flow information */
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            auto &grid = floor.grid_array[y][x];
-            grid.reset_costs();
-            grid.reset_dists();
-        }
+    for (const auto &pos : floor.get_area()) {
+        auto &grid = floor.get_grid(pos);
+        grid.reset_costs();
+        grid.reset_dists();
     }
 
     /* Save player position */

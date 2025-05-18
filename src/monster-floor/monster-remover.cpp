@@ -14,6 +14,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/target-checker.h"
 #include "tracking/health-bar-tracker.h"
+#include <range/v3/view.hpp>
 
 /*!
  * @brief モンスター配列からモンスターを消去する
@@ -53,8 +54,9 @@ void delete_monster_idx(PlayerType *player_ptr, short m_idx)
         (void)set_monster_invulner(player_ptr, m_idx, 0, false);
     }
 
-    if (m_idx == target_who) {
-        target_who = 0;
+    const auto target_m_idx = Target::get_last_target().get_m_idx();
+    if (m_idx == target_m_idx) {
+        Target::clear_last_target();
     }
 
     if (HealthBarTracker::get_instance().is_tracking(m_idx)) {
@@ -72,10 +74,7 @@ void delete_monster_idx(PlayerType *player_ptr, short m_idx)
     }
 
     floor.get_grid(m_pos).m_idx = 0;
-    for (auto it = monster.hold_o_idx_list.begin(); it != monster.hold_o_idx_list.end();) {
-        const OBJECT_IDX this_o_idx = *it++;
-        delete_object_idx(player_ptr, this_o_idx);
-    }
+    delete_items(player_ptr, monster.hold_o_idx_list | ranges::to_vector);
 
     // 召喚元のモンスターが消滅した時は、召喚されたモンスターのparent_m_idxが
     // 召喚されたモンスター自身のm_idxを指すようにする
@@ -88,7 +87,7 @@ void delete_monster_idx(PlayerType *player_ptr, short m_idx)
 
     monster = {};
     floor.m_cnt--;
-    lite_spot(player_ptr, m_pos.y, m_pos.x);
+    lite_spot(player_ptr, m_pos);
     if (monrace.brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
     }
@@ -118,7 +117,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
     floor.m_cnt = 0;
     floor.reset_mproc_max();
     floor.num_repro = 0;
-    target_who = 0;
+    Target::clear_last_target();
     player_ptr->pet_t_m_idx = 0;
     player_ptr->riding_t_m_idx = 0;
     health_track(player_ptr, 0);

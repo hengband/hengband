@@ -5,7 +5,6 @@
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
 #include "game-option/disturbance-options.h"
@@ -125,10 +124,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     }
 
     const auto p_pos = player_ptr->get_position();
-    auto pos_target = p_pos + dir.vec() * project_length;
-    if (dir.is_targetting() && target_okay(player_ptr)) {
-        pos_target = { target_row, target_col };
-    }
+    const auto pos_target = dir.get_target_position(p_pos, project_length);
 
     auto tm_idx = 0;
     auto &floor = *player_ptr->current_floor_ptr;
@@ -136,7 +132,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
         tm_idx = floor.get_grid(pos_target).m_idx;
     }
 
-    ProjectionPath path_g(player_ptr, project_length, player_ptr->get_position(), pos_target, PROJECT_STOP | PROJECT_KILL);
+    ProjectionPath path_g(floor, project_length, p_pos, p_pos, pos_target, PROJECT_STOP | PROJECT_KILL);
     project_length = 0;
     if (path_g.path_num() == 0) {
         return true;
@@ -147,7 +143,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
     auto moved = false;
     for (const auto &pos : path_g) {
         const auto &grid_new = floor.get_grid(pos);
-        if (is_cave_empty_bold(player_ptr, pos.y, pos.x) && player_can_enter(player_ptr, grid_new.feat, 0)) {
+        if (floor.is_empty_at(pos) && (pos != p_pos) && player_can_enter(player_ptr, grid_new.feat, 0)) {
             p_pos_new = pos;
             continue;
         }
@@ -281,7 +277,7 @@ bool hayagake(PlayerType *player_ptr)
 
     const auto &grid = player_ptr->current_floor_ptr->get_grid(player_ptr->get_position());
     const auto &terrain = grid.get_terrain();
-    if (terrain.flags.has_not(TerrainCharacteristics::PROJECT) || (!player_ptr->levitation && terrain.flags.has(TerrainCharacteristics::DEEP))) {
+    if (terrain.flags.has_not(TerrainCharacteristics::PROJECTION) || (!player_ptr->levitation && terrain.flags.has(TerrainCharacteristics::DEEP))) {
         msg_print(_("ここでは素早く動けない。", "You cannot run in here."));
     } else {
         set_action(player_ptr, ACTION_HAYAGAKE);
@@ -416,7 +412,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
             OBJECT_IDX slot;
 
             for (slot = 0; slot < INVEN_PACK; slot++) {
-                if (player_ptr->inventory_list[slot].bi_key.tval() == ItemKindType::SPIKE) {
+                if (player_ptr->inventory[slot]->bi_key.tval() == ItemKindType::SPIKE) {
                     break;
                 }
             }

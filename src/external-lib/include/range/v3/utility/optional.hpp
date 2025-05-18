@@ -14,6 +14,12 @@
 #ifndef RANGES_V3_UTILITY_OPTIONAL_HPP
 #define RANGES_V3_UTILITY_OPTIONAL_HPP
 
+// MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく.
+#if defined(_MSC_VER)
+#pragma warning(push, 0)
+#pragma warning(disable : 26495)
+#endif
+
 #include <exception>
 #include <initializer_list>
 #include <memory>
@@ -992,5 +998,9 @@ namespace ranges
 } // namespace ranges
 
 #include <range/v3/detail/epilogue.hpp>
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 #endif

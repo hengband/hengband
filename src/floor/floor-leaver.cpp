@@ -1,6 +1,5 @@
 #include "floor/floor-leaver.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save-util.h"
@@ -65,10 +64,10 @@ static bool check_pet_preservation_conditions(PlayerType *player_ptr, const Mons
 
     const auto should_preserve = monster.is_named();
     const auto &floor = *player_ptr->current_floor_ptr;
-    auto sight_from_player = floor.has_los(m_pos);
-    sight_from_player &= projectable(player_ptr, p_pos, m_pos);
+    auto sight_from_player = floor.has_los_at(m_pos);
+    sight_from_player &= projectable(floor, p_pos, p_pos, m_pos);
     auto sight_from_monster = los(floor, m_pos, p_pos);
-    sight_from_monster &= projectable(player_ptr, m_pos, p_pos);
+    sight_from_monster &= projectable(floor, p_pos, m_pos, p_pos);
     if (should_preserve && (sight_from_player || sight_from_monster)) {
         return dis > 3;
     }
@@ -152,38 +151,36 @@ static void locate_connected_stairs(PlayerType *player_ptr, FloorType &floor, sa
     int y_table[20]{};
     auto num = 0;
     const auto &fcms = FloorChangeModesStore::get_instace();
-    for (POSITION y = 0; y < floor.height; y++) {
-        for (POSITION x = 0; x < floor.width; x++) {
-            const auto &grid = floor.get_grid({ y, x });
-            const auto &terrain = grid.get_terrain();
-            auto ok = false;
-            if (fcms->has(FloorChangeMode::UP)) {
-                if (terrain.flags.has_all_of({ TerrainCharacteristics::LESS, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
-                    ok = true;
-                    if (grid.special && grid.special == sf_ptr->upper_floor_id) {
-                        sx = x;
-                        sy = y;
-                    }
-                }
-            } else if (fcms->has(FloorChangeMode::DOWN)) {
-                if (terrain.flags.has_all_of({ TerrainCharacteristics::MORE, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
-                    ok = true;
-                    if (grid.special && grid.special == sf_ptr->lower_floor_id) {
-                        sx = x;
-                        sy = y;
-                    }
-                }
-            } else {
-                if (terrain.flags.has(TerrainCharacteristics::BLDG)) {
-                    ok = true;
+    for (const auto &pos : floor.get_area()) {
+        const auto &grid = floor.get_grid(pos);
+        const auto &terrain = grid.get_terrain();
+        auto ok = false;
+        if (fcms->has(FloorChangeMode::UP)) {
+            if (terrain.flags.has_all_of({ TerrainCharacteristics::LESS, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
+                ok = true;
+                if (grid.special && grid.special == sf_ptr->upper_floor_id) {
+                    sx = pos.x;
+                    sy = pos.y;
                 }
             }
+        } else if (fcms->has(FloorChangeMode::DOWN)) {
+            if (terrain.flags.has_all_of({ TerrainCharacteristics::MORE, TerrainCharacteristics::STAIRS }) && terrain.flags.has_not(TerrainCharacteristics::SPECIAL)) {
+                ok = true;
+                if (grid.special && grid.special == sf_ptr->lower_floor_id) {
+                    sx = pos.x;
+                    sy = pos.y;
+                }
+            }
+        } else {
+            if (terrain.flags.has(TerrainCharacteristics::BLDG)) {
+                ok = true;
+            }
+        }
 
-            if (ok && (num < 20)) {
-                x_table[num] = x;
-                y_table[num] = y;
-                num++;
-            }
+        if (ok && (num < 20)) {
+            x_table[num] = pos.x;
+            y_table[num] = pos.y;
+            num++;
         }
     }
 
@@ -237,7 +234,7 @@ static void get_out_monster(PlayerType *player_ptr)
         }
 
         auto &grid = floor.get_grid(pos);
-        if (!floor.contains(pos) || !is_cave_empty_bold(player_ptr, pos.y, pos.x) || grid.is_rune_protection() || grid.is_rune_explosion() || pattern_tile(floor, pos.y, pos.x)) {
+        if (!floor.contains(pos) || !floor.is_empty_at(pos) || (pos == p_pos) || grid.is_rune_protection() || grid.is_rune_explosion() || grid.has(TerrainCharacteristics::PATTERN)) {
             continue;
         }
 
@@ -284,7 +281,7 @@ static void preserve_info(PlayerType *player_ptr)
     }
 
     for (short i = 0; i < INVEN_PACK; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

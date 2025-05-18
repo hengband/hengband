@@ -94,7 +94,7 @@ static bool acid_minus_ac(PlayerType *player_ptr)
     };
 
     const auto slot = rand_choice(candidates);
-    auto &item = player_ptr->inventory_list[slot];
+    auto &item = *player_ptr->inventory[slot];
     if (!item.is_valid() || !item.is_protector()) {
         return false;
     }
@@ -501,7 +501,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
 #ifdef JP
                 if (winning_seppuku) {
-                    int i, len;
+                    int i;
                     int w = game_term->wid;
                     int h = game_term->hgt;
                     int msg_pos_x[9] = { 5, 7, 9, 12, 14, 17, 19, 21, 23 };
@@ -526,12 +526,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                     i = 0;
                     while (i < 9) {
                         str2 = angband_strstr(str, " ");
-                        if (str2 == nullptr) {
-                            len = strlen(str);
-                        } else {
-                            len = str2 - str;
-                        }
-
+                        size_t len = (str2 == nullptr) ? strlen(str) : str2 - str;
                         if (len != 0) {
                             term_putstr_v(w * 3 / 4 - 2 - msg_pos_x[i] * 2, msg_pos_y[i], len, TERM_WHITE, str);
                             if (str2 == nullptr) {

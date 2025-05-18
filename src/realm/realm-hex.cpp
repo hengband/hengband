@@ -14,7 +14,6 @@
 #include "effect/effect-processor.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "inventory/inventory-slot-types.h"
@@ -392,7 +391,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
                 return "";
             }
 
-            o_ptr = &player_ptr->inventory_list[i_idx];
+            o_ptr = player_ptr->inventory[i_idx].get();
             const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_NAME_ONLY);
             if (!input_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really?"), item_name.data()))) {
                 return "";
@@ -456,7 +455,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
     }
     case HEX_SHADOW_CLOAK: {
         if (cast) {
-            auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
+            auto *o_ptr = player_ptr->inventory[INVEN_OUTER].get();
 
             if (!o_ptr->is_valid()) {
                 msg_print(_("クロークを身につけていない！", "You are not wearing a cloak."));
@@ -469,7 +468,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
             }
         }
         if (continuation) {
-            auto *o_ptr = &player_ptr->inventory_list[INVEN_OUTER];
+            auto *o_ptr = player_ptr->inventory[INVEN_OUTER].get();
 
             if ((!o_ptr->is_valid()) || (!o_ptr->is_cursed())) {
                 exe_spell(player_ptr, RealmType::HEX, spell, SpellProcessType::STOP);
@@ -636,36 +635,37 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         }
         break;
     }
-    case HEX_SHADOW_MOVE: {
+    case HEX_SHADOW_MOVE:
         if (cast) {
-            POSITION y, x;
+            std::optional<Pos2D> pos_target;
             bool flag;
-
             for (auto i = 0; i < 3; i++) {
-                if (!tgt_pt(player_ptr, &x, &y)) {
+                pos_target = point_target(player_ptr);
+                if (!pos_target) {
                     return "";
                 }
 
                 flag = false;
-
                 const auto &floor = *player_ptr->current_floor_ptr;
                 for (const auto &d : Direction::directions_8()) {
-                    const auto pos_neighbor = Pos2D(y, x) + d.vec();
+                    const auto pos_neighbor = *pos_target + d.vec();
                     if (floor.get_grid(pos_neighbor).has_monster()) {
                         flag = true;
                     }
                 }
 
-                const auto dist = Grid::calc_distance({ y, x }, player_ptr->get_position());
-                if (!is_cave_empty_bold(player_ptr, y, x) || floor.grid_array[y][x].is_icky() || (dist > player_ptr->lev + 2)) {
+                const auto p_pos = player_ptr->get_position();
+                const auto dist = Grid::calc_distance(*pos_target, p_pos);
+                if (!floor.is_empty_at(*pos_target) || (*pos_target == p_pos) || floor.get_grid(*pos_target).is_icky() || (dist > player_ptr->lev + 2)) {
                     msg_print(_("そこには移動できない。", "Can not teleport to there."));
                     continue;
                 }
+
                 break;
             }
 
             if (flag && randint0(player_ptr->lev * player_ptr->lev / 2)) {
-                teleport_player_to(player_ptr, y, x, TELEPORT_SPONTANEOUS);
+                teleport_player_to(player_ptr, pos_target->y, pos_target->x, TELEPORT_SPONTANEOUS);
             } else {
                 msg_print(_("おっと！", "Oops!"));
                 teleport_player(player_ptr, 30, TELEPORT_SPONTANEOUS);
@@ -673,8 +673,8 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
             should_continue = false;
         }
+
         break;
-    }
     case HEX_ANTI_MAGIC: {
         power = player_ptr->lev * 3 / 2;
         if (info) {

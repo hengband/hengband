@@ -1,11 +1,9 @@
 #include "floor/object-allocator.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "game-option/birth-options.h"
 #include "game-option/cheat-types.h"
 #include "grid/object-placer.h"
-#include "grid/trap.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
@@ -15,6 +13,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "wizard/wizard-messages.h"
+#include <range/v3/view.hpp>
 
 /*!
  * @brief 上下左右の外壁数をカウントする
@@ -45,7 +44,7 @@ static bool alloc_stairs_aux(PlayerType *player_ptr, const Pos2D &pos, int walls
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
-    if (!grid.is_floor() || pattern_tile(floor, pos.y, pos.x) || !grid.o_idx_list.empty() || grid.has_monster() || next_to_walls(floor, pos) < walls) {
+    if (!grid.is_floor() || grid.has(TerrainCharacteristics::PATTERN) || !grid.o_idx_list.empty() || grid.has_monster() || next_to_walls(floor, pos) < walls) {
         return false;
     }
 
@@ -97,17 +96,13 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
 
     for (auto i = 0; i < num; i++) {
         while (true) {
-            auto candidates = 0;
-            const auto max_x = floor.width - 1;
-            for (auto y = 1; y < floor.height - 1; y++) {
-                for (auto x = 1; x < max_x; x++) {
-                    if (alloc_stairs_aux(player_ptr, { y, x }, walls)) {
-                        candidates++;
-                    }
-                }
-            }
+            const auto can_alloc_stair = [&](const Pos2D &pos) { return alloc_stairs_aux(player_ptr, pos, walls); };
+            const auto pos_candidates =
+                floor.get_area(FloorBoundary::OUTER_WALL_INCLUSIVE) |
+                ranges::views::filter(can_alloc_stair) |
+                ranges::to_vector;
 
-            if (!candidates) {
+            if (pos_candidates.empty()) {
                 if (walls <= 0) {
                     return false;
                 }
@@ -116,25 +111,8 @@ bool alloc_stairs(PlayerType *player_ptr, FEAT_IDX feat, int num, int walls)
                 continue;
             }
 
-            auto pick = randint1(candidates);
-            int y;
-            auto x = max_x;
-            for (y = 1; y < floor.height - 1; y++) {
-                for (x = 1; x < floor.width - 1; x++) {
-                    if (alloc_stairs_aux(player_ptr, { y, x }, walls)) {
-                        pick--;
-                        if (pick == 0) {
-                            break;
-                        }
-                    }
-                }
-
-                if (pick == 0) {
-                    break;
-                }
-            }
-
-            auto &grid = floor.grid_array[y][x];
+            const auto &pos_stair = rand_choice(pos_candidates);
+            auto &grid = floor.get_grid(pos_stair);
             grid.mimic = 0;
             grid.feat = (i < shaft_num) ? dungeon.convert_terrain_id(feat, TerrainCharacteristics::SHAFT) : feat;
             grid.info &= ~(CAVE_FLOOR);
@@ -191,7 +169,7 @@ void alloc_object(PlayerType *player_ptr, dap_type set, dungeon_allocation_type 
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_TRAP:
-            place_trap(floor, pos);
+            floor.place_trap_at(pos);
             floor.get_grid(pos).info &= ~(CAVE_FLOOR);
             break;
         case ALLOC_TYP_GOLD:

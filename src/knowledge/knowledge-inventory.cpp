@@ -215,7 +215,7 @@ static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindT
     char where[32];
     strcpy(where, _("装", "E "));
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = *player_ptr->inventory[i];
         if (!check_item_knowledge(item, tval)) {
             continue;
         }
@@ -237,7 +237,7 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
     char where[32];
     strcpy(where, _("持", "I "));
     for (int i = 0; i < INVEN_PACK; i++) {
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = *player_ptr->inventory[i];
         if (!check_item_knowledge(item, tval)) {
             continue;
         }

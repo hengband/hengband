@@ -12,11 +12,11 @@
 #include "mspell/mspell-checker.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/line-of-sight.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster/monster-info.h"
 #include "mspell/mspell-util.h"
+#include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item-entity.h"
@@ -35,6 +35,7 @@
  */
 bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
 {
+    const auto p_pos = player_ptr->get_position();
     const auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos1(y1, x1);
     for (auto y = y1 - 2; y <= y1 + 2; y++) {
@@ -48,11 +49,11 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
                 continue;
             }
 
-            if (pattern_tile(floor, y, x)) {
+            if (floor.has_terrain_characteristics(pos, TerrainCharacteristics::PATTERN)) {
                 continue;
             }
 
-            if (is_cave_empty_bold(player_ptr, y, x) && projectable(player_ptr, pos1, pos) && projectable(player_ptr, pos, pos1)) {
+            if (floor.is_empty_at(pos) && (pos != p_pos) && projectable(floor, p_pos, pos1, pos) && projectable(floor, p_pos, pos, pos1)) {
                 return true;
             }
         }
@@ -70,6 +71,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
  */
 bool raise_possible(PlayerType *player_ptr, const MonsterEntity &monster)
 {
+    const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();
     const auto &floor = *player_ptr->current_floor_ptr;
     for (auto xx = m_pos.x - 5; xx <= m_pos.x + 5; xx++) {
@@ -81,13 +83,13 @@ bool raise_possible(PlayerType *player_ptr, const MonsterEntity &monster)
             if (!los(floor, m_pos, pos)) {
                 continue;
             }
-            if (!projectable(player_ptr, m_pos, pos)) {
+            if (!projectable(floor, p_pos, m_pos, pos)) {
                 continue;
             }
 
             const auto &grid = floor.get_grid(pos);
             for (const auto this_o_idx : grid.o_idx_list) {
-                const auto &item = floor.o_list[this_o_idx];
+                const auto &item = *floor.o_list[this_o_idx];
                 if (item.bi_key.tval() == ItemKindType::MONSTER_REMAINS) {
                     const auto &monrace = item.get_monrace();
                     if (!monster_has_hostile_to_other_monster(monster, monrace)) {
@@ -124,7 +126,7 @@ bool raise_possible(PlayerType *player_ptr, const MonsterEntity &monster)
 bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    ProjectionPath grid_g(player_ptr, AngbandSystem::get_instance().get_max_range(), { y1, x1 }, { y2, x2 }, 0);
+    ProjectionPath grid_g(floor, AngbandSystem::get_instance().get_max_range(), player_ptr->get_position(), { y1, x1 }, { y2, x2 }, 0);
     if (grid_g.path_num() == 0) {
         return false;
     }

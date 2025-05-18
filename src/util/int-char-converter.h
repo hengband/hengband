@@ -1,6 +1,6 @@
 #pragma once
 
-#include "system/angband.h"
+#include <cstdint>
 
 /*
  * Allow use of "ASCII" and "EBCDIC" for "indexes", "digits",

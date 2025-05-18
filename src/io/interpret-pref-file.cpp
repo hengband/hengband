@@ -12,6 +12,7 @@
 #include "game-option/option-types-table.h"
 #include "io/gf-descriptions.h"
 #include "io/input-key-requester.h"
+#include "io/macro-configurations-store.h"
 #include "io/tokenizer.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
@@ -289,8 +290,8 @@ static bool interpret_c_token(char *buf)
         return false;
     }
 
-    int mode = strtol(zz[0], nullptr, 0);
-    if ((mode < 0) || (mode >= KEYMAP_MODES)) {
+    const auto mode = i2enum<KeymapMode>(std::stoi(zz[0], nullptr, 0));
+    if ((mode < KeymapMode::ORIGINAL) || (mode > KeymapMode::ROGUE)) {
         return false;
     }
 
@@ -300,9 +301,8 @@ static bool interpret_c_token(char *buf)
         return false;
     }
 
-    int i = (byte)(tmp[0]);
-    string_free(keymap_act[mode][i]);
-    keymap_act[mode][i] = string_make(macro_buffers.data());
+    const auto i = static_cast<uint8_t>(tmp[0]);
+    keymap_actions_map.at(mode).at(i) = macro_buffers.data();
     return true;
 }
 
@@ -394,25 +394,24 @@ static bool interpret_z_token(std::string_view line)
 
 /*!
  * @brief Tトークンの解釈 / Process "T:<template>:<modifier chr>:<modifier name>:..." for 4 tokens
- * @param buf バッファ
+ * @param num_tokens トークン数
  * @param zz トークン保管文字列
  * @return 解釈に成功したか否か
  */
-static bool decide_template_modifier(int tok, char **zz)
+static bool decide_template_modifier(size_t num_tokens, char **zz)
 {
-    if (macro_template != nullptr) {
-        int macro_modifier_length = strlen(macro_modifier_chr);
-        string_free(macro_template);
-        macro_template = nullptr;
-        string_free(macro_modifier_chr);
-        for (int i = 0; i < macro_modifier_length; i++) {
-            string_free(macro_modifier_name[i]);
+    if (macro_template) {
+        const size_t macro_modifier_length = macro_modifier_chr ? macro_modifier_chr->length() : 0;
+        macro_template.reset();
+        macro_modifier_chr.reset();
+        for (size_t i = 0; i < macro_modifier_length; i++) {
+            macro_modifier_names[i] = "";
         }
 
-        for (int i = 0; i < max_macrotrigger; i++) {
-            string_free(macro_trigger_name[i]);
-            string_free(macro_trigger_keycode[0][i]);
-            string_free(macro_trigger_keycode[1][i]);
+        for (size_t i = 0; i < max_macrotrigger; i++) {
+            macro_trigger_names[i] = "";
+            macro_trigger_keycodes.at(ShiftStatus::OFF).at(i) = "";
+            macro_trigger_keycodes.at(ShiftStatus::ON).at(i) = "";
         }
 
         max_macrotrigger = 0;
@@ -422,16 +421,16 @@ static bool decide_template_modifier(int tok, char **zz)
         return true;
     }
 
-    int zz_length = strlen(zz[1]);
+    size_t zz_length = strlen(zz[1]);
     zz_length = std::min(MAX_MACRO_MOD, zz_length);
-    if (2 + zz_length != tok) {
+    if (2 + zz_length != num_tokens) {
         return false;
     }
 
-    macro_template = string_make(zz[0]);
-    macro_modifier_chr = string_make(zz[1]);
-    for (int i = 0; i < zz_length; i++) {
-        macro_modifier_name[i] = string_make(zz[2 + i]);
+    macro_template = zz[0];
+    macro_modifier_chr = zz[1];
+    for (size_t i = 0; i < zz_length; i++) {
+        macro_modifier_names[i] = zz[2 + i];
     }
 
     return true;
@@ -445,9 +444,6 @@ static bool decide_template_modifier(int tok, char **zz)
  */
 static bool interpret_macro_keycodes(int tok, char **zz)
 {
-    //!< @details 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
-    constexpr auto max_macro_chars = 16128;
-    char buf_aux[max_macro_chars]{};
     if (max_macrotrigger >= MAX_MACRO_TRIG) {
         msg_print(_("マクロトリガーの設定が多すぎます!", "Too many macro triggers!"));
         return false;
@@ -455,24 +451,24 @@ static bool interpret_macro_keycodes(int tok, char **zz)
 
     auto m = max_macrotrigger;
     max_macrotrigger++;
-    auto *t = buf_aux;
-    auto *s = zz[0];
-    while (*s) {
+    std::string t;
+    const auto *s = zz[0];
+    while (*s != '\0') {
         if ('\\' == *s) {
             s++;
         }
-        *t++ = *s++;
+
+        t.push_back(*s++);
     }
 
-    *t = '\0';
-    macro_trigger_name[m] = string_make(buf_aux);
-    macro_trigger_keycode[0][m] = string_make(zz[1]);
+    macro_trigger_names[m] = std::move(t);
+    macro_trigger_keycodes.at(ShiftStatus::OFF).at(m) = zz[1];
     if (tok == 3) {
-        macro_trigger_keycode[1][m] = string_make(zz[2]);
+        macro_trigger_keycodes.at(ShiftStatus::ON).at(m) = zz[2];
         return true;
     }
 
-    macro_trigger_keycode[1][m] = string_make(zz[1]);
+    macro_trigger_keycodes.at(ShiftStatus::ON).at(m) = zz[1];
     return true;
 }
 

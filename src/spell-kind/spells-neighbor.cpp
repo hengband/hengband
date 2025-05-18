@@ -2,7 +2,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "grid/grid.h"
 #include "spell-kind/earthquake.h"
@@ -132,7 +131,7 @@ void wall_breaker(PlayerType *player_ptr)
         Pos2D pos(0, 0);
         while (attempts--) {
             pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
-            if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECT)) {
+            if (!player_ptr->current_floor_ptr->has_terrain_characteristics(pos, TerrainCharacteristics::PROJECTION)) {
                 continue;
             }
 
@@ -147,7 +146,7 @@ void wall_breaker(PlayerType *player_ptr)
     }
 
     if (randint1(100) > 30) {
-        earthquake(player_ptr, player_ptr->y, player_ptr->x, 1, 0);
+        earthquake(player_ptr, player_ptr->get_position(), 1);
         return;
     }
 

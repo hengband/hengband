@@ -81,7 +81,7 @@ void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         ItemEntity *o_ptr;
-        o_ptr = &player_ptr->inventory_list[i];
+        o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

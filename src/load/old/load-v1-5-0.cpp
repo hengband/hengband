@@ -719,7 +719,7 @@ errr rd_dungeon_old(PlayerType *player_ptr)
             return 152;
         }
 
-        auto &item = floor.o_list[item_idx];
+        auto &item = *floor.o_list[item_idx];
         item_loader->rd_item(&item);
         auto &list = get_o_idx_list_contains(floor, item_idx);
         list.add(floor, item_idx);

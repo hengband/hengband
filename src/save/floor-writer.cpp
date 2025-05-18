@@ -20,6 +20,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
+#include <range/v3/view.hpp>
 
 namespace {
 /*
@@ -35,25 +36,23 @@ namespace {
 std::vector<GridTemplate> generate_sorted_grid_templates(const FloorType &floor)
 {
     std::vector<GridTemplate> templates;
-    for (auto y = 0; y < floor.height; y++) {
-        for (auto x = 0; x < floor.width; x++) {
-            const auto &grid = floor.get_grid({ y, x });
-            int i;
-            const int size = std::ssize(templates);
-            for (i = 0; i < size; i++) {
-                auto &gt = templates[i];
-                if (gt.matches(grid)) {
-                    gt.occurrence++;
-                    break;
-                }
+    for (const auto &pos : floor.get_area()) {
+        const auto &grid = floor.get_grid(pos);
+        int i;
+        const int size = std::ssize(templates);
+        for (i = 0; i < size; i++) {
+            auto &gt = templates[i];
+            if (gt.matches(grid)) {
+                gt.occurrence++;
+                break;
             }
-
-            if (i < size) {
-                continue;
-            }
-
-            templates.emplace_back(grid.info, grid.feat, grid.mimic, grid.special, static_cast<uint16_t>(1));
         }
+
+        if (i < size) {
+            continue;
+        }
+
+        templates.emplace_back(grid.info, grid.feat, grid.mimic, grid.special, static_cast<uint16_t>(1));
     }
 
     std::stable_sort(templates.begin(), templates.end(),
@@ -101,32 +100,30 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     byte count = 0;
     uint16_t prev_u16b = 0;
-    for (int y = 0; y < floor.height; y++) {
-        for (int x = 0; x < floor.width; x++) {
-            const auto &grid = floor.get_grid({ y, x });
-            uint i;
-            for (i = 0; i < templates.size(); i++) {
-                if (templates[i].matches(grid)) {
-                    break;
-                }
+    for (const auto &pos : floor.get_area()) {
+        const auto &grid = floor.get_grid(pos);
+        uint i;
+        for (i = 0; i < templates.size(); i++) {
+            if (templates[i].matches(grid)) {
+                break;
             }
-
-            uint16_t tmp16u = (uint16_t)i;
-            if ((tmp16u == prev_u16b) && (count != MAX_UCHAR)) {
-                count++;
-                continue;
-            }
-
-            wr_byte((byte)count);
-            while (prev_u16b >= MAX_UCHAR) {
-                wr_byte(MAX_UCHAR);
-                prev_u16b -= MAX_UCHAR;
-            }
-
-            wr_byte((byte)prev_u16b);
-            prev_u16b = tmp16u;
-            count = 1;
         }
+
+        uint16_t tmp16u = (uint16_t)i;
+        if ((tmp16u == prev_u16b) && (count != MAX_UCHAR)) {
+            count++;
+            continue;
+        }
+
+        wr_byte((byte)count);
+        while (prev_u16b >= MAX_UCHAR) {
+            wr_byte(MAX_UCHAR);
+            prev_u16b -= MAX_UCHAR;
+        }
+
+        wr_byte((byte)prev_u16b);
+        prev_u16b = tmp16u;
+        count = 1;
     }
 
     if (count > 0) {
@@ -140,10 +137,9 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     }
 
     /*** Dump objects ***/
-    wr_u16b(floor.o_max);
-    for (int i = 1; i < floor.o_max; i++) {
-        const auto &item = floor.o_list[i];
-        wr_item(item);
+    wr_u16b(static_cast<uint16_t>(floor.o_list.size()));
+    for (const auto &item_ptr : floor.o_list | ranges::views::drop(1)) {
+        wr_item(*item_ptr);
     }
 
     /*** Dump the monsters ***/
@@ -225,7 +221,6 @@ bool wr_dungeon(PlayerType *player_ptr)
  */
 static bool save_floor_aux(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    compact_objects(player_ptr, 0);
     compact_monsters(player_ptr, 0);
 
     auto tmp8u = static_cast<uint8_t>(Rand_external(256));

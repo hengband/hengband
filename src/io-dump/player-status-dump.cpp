@@ -1,5 +1,6 @@
 #include "io-dump/player-status-dump.h"
 #include "view/display-player.h"
+#include "view/display-symbol.h"
 
 /*!
  * @brief 画面番号を指定してダンプする
@@ -21,15 +22,14 @@ static void dump_player_status_with_screen_num(PlayerType *player_ptr, FILE *fff
     for (auto y = start_y; y < end_y; y++) {
         TERM_LEN x;
         for (x = 0; x < 79; x++) {
-            TERM_COLOR a;
-            char c;
-            (void)(term_what(x, y, &a, &c));
+            DisplaySymbol ds;
+            ds = term_what(x, y, ds);
             if (!change_color) {
-                buf[x] = c;
+                buf[x] = ds.character;
                 continue;
             }
 
-            buf[x] = a < 128 ? c : ' ';
+            buf[x] = ds.color < 128 ? ds.character : ' ';
         }
 
         buf[x] = '\0';

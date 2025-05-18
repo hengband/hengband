@@ -42,7 +42,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     const auto &[wid, hgt] = term_get_size();
     auto len = wid - col - 1;
     for (k = 0, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = *player_ptr->inventory[i];
         auto only_slot = !(player_ptr->select_ring_slot ? is_ring_slot(i) : (item_tester.okay(&item) || any_bits(mode, USE_FULL)));
         auto is_any_hand = (i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr);
         is_any_hand |= (i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr);
@@ -90,7 +90,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     prepare_label_string(player_ptr, equip_label, USE_EQUIP, item_tester);
     for (j = 0; j < k; j++) {
         i = out_index[j];
-        const auto &item = player_ptr->inventory_list[i];
+        const auto &item = *player_ptr->inventory[i];
         prt("", j + 1, col ? col - 2 : col);
         std::string head;
         if (use_menu && target_item) {

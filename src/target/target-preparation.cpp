@@ -51,7 +51,8 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return true;
     }
 
-    if (!projectable(player_ptr, player_ptr->get_position(), monster.get_position())) {
+    const auto p_pos = player_ptr->get_position();
+    if (!projectable(floor, p_pos, p_pos, monster.get_position())) {
         return false;
     }
 
@@ -85,7 +86,7 @@ static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
-        const auto &item = floor.o_list[this_o_idx];
+        const auto &item = *floor.o_list[this_o_idx];
         if (item.marked.has(OmType::FOUND)) {
             return true;
         }

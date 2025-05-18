@@ -72,9 +72,7 @@ public:
 
     GAME_TURN generated_turn = 0; /* Turn when level began */
 
-    std::vector<ItemEntity> o_list; /*!< The array of dungeon items [max_o_idx] */
-    OBJECT_IDX o_max = 0; /* Number of allocated objects */
-    OBJECT_IDX o_cnt = 0; /* Number of live objects */
+    std::vector<std::shared_ptr<ItemEntity>> o_list; /*!< The array of dungeon items [max_o_idx] */
 
     std::vector<MonsterEntity> m_list; /*!< The array of dungeon monsters [max_m_idx] */
     MONSTER_IDX m_max = 0; /* Number of allocated monsters */
@@ -106,6 +104,7 @@ public:
     int get_level() const;
     Grid &get_grid(const Pos2D pos);
     const Grid &get_grid(const Pos2D pos) const;
+    Rect2D get_area(FloorBoundary fb = FloorBoundary::OUTER_WALL_INCLUSIVE) const;
     bool is_entering_dungeon() const;
     bool is_leaving_dungeon() const;
     bool is_underground() const;
@@ -115,7 +114,8 @@ public:
     const DungeonDefinition &get_dungeon_definition() const; //!< @details 定義データなので非const 版の使用は禁止.
     QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
-    bool has_los(const Pos2D &pos) const;
+    bool has_los_at(const Pos2D &pos) const;
+    bool has_los_terrain_at(const Pos2D &pos) const;
     bool has_terrain_characteristics(const Pos2D &pos, TerrainCharacteristics tc) const;
     bool is_special() const;
     bool can_teleport_level(bool to_player = false) const;
@@ -127,6 +127,10 @@ public:
     bool order_pet_whistle(short index1, short index2) const;
     bool order_pet_dismission(short index1, short index2, short riding_index) const;
     bool contains(const Pos2D &pos, FloorBoundary fb = FloorBoundary::OUTER_WALL_EXCLUSIVE) const;
+    bool is_empty_at(const Pos2D &pos) const;
+    bool can_generate_monster_at(const Pos2D &pos) const;
+    bool can_block_disintegration_at(const Pos2D &pos) const;
+    bool can_drop_item_at(const Pos2D &pos) const;
 
     ItemEntity make_gold(std::optional<BaseitemKey> bi_key = std::nullopt) const;
     std::optional<ItemEntity> try_make_instant_artifact() const;
@@ -150,6 +154,7 @@ public:
     void place_random_stairs(const Pos2D &pos);
     void set_terrain_id_at(const Pos2D &pos, TerrainTag tag, TerrainKind tk = TerrainKind::NORMAL);
     void set_terrain_id_at(const Pos2D &pos, short terrain_id, TerrainKind tk = TerrainKind::NORMAL);
+    void place_trap_at(const Pos2D &pos);
 
 private:
     static int decide_selection_count();

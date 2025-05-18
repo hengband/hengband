@@ -2,8 +2,10 @@
 
 #include "system/angband-exceptions.h"
 #include "system/angband.h"
+#include "target/target.h"
 #include "util/point-2d.h"
 #include <array>
+#include <optional>
 #include <span>
 #include <utility>
 
@@ -17,6 +19,17 @@
  */
 #define TEMP_MAX 2298
 
+/*!
+ * @brief 方向クラス
+ * @todo
+ * メンバにstd::unique_ptrを持つTargetクラスを取り込んだことにより、
+ * std::unique_ptrがconstexprに対応するのはC++23からであるため、
+ * C++20ではこのクラスもconstexprに対応できなくなった。
+ * 将来的にC++23を導入した際には再度constexprに対応させたい。
+ * なお、DirectionにTargetを持たせずDirectionかTargetを持つ上位の
+ * Aimのようなクラスを作るのが設計的には理想的ではあるが、
+ * 影響範囲が大きく現状労力に見合わなそう。
+ */
 class Direction {
 public:
     /*!
@@ -36,7 +49,7 @@ public:
      *
      * @param dir 方向ID
      */
-    constexpr explicit Direction(int dir)
+    explicit Direction(int dir)
         : dir_(dir)
     {
         if ((dir < 0) || std::cmp_greater_equal(dir, DIR_TO_VEC.size())) {
@@ -47,7 +60,7 @@ public:
     /*!
      * @brief 無効な方向を示す方向クラスのインスタンスを生成する
      */
-    static constexpr Direction none()
+    static Direction none()
     {
         return Direction(0);
     }
@@ -55,19 +68,18 @@ public:
     /*!
      * @brief 自身のマスを示す方向クラスのインスタンスを生成する
      */
-    static constexpr Direction self()
+    static Direction self()
     {
         return Direction(5);
     }
 
     /*!
      * @brief 特定のマスをターゲット中であることを示す方向クラスのインスタンスを生成する
-     * @todo 将来的にはできればDirectionクラスにtarget_row/target_colを繰り込みたい
      */
-    static constexpr Direction targetting()
+    static Direction targetting(const Target &target)
     {
         auto dir = Direction::self();
-        dir.is_targetting_ = true;
+        dir.target = target;
         return dir;
     }
 
@@ -84,9 +96,9 @@ public:
      *
      * @param cdir 円周順に方向を示す値
      */
-    static constexpr Direction from_cdir(int cdir)
+    static Direction from_cdir(int cdir)
     {
-        constexpr std::array<Direction, 8> DIRECTIONS_8_CCW = {
+        static const std::array<Direction, 8> DIRECTIONS_8_CCW = {
             { Direction(2), Direction(3), Direction(6), Direction(9), Direction(8), Direction(7), Direction(4), Direction(1) }
         };
 
@@ -173,11 +185,38 @@ public:
     }
 
     /*!
-     * @brief 特定のマスをターゲット中であるかどうかを返す
+     * @brief 特定のマスかモンスターをターゲット中であるかどうかを返す
      */
     constexpr bool is_targetting() const noexcept
     {
-        return this->dir_ == 5 && this->is_targetting_;
+        return this->dir_ == 5 && this->target.has_value();
+    }
+
+    /*!
+     * @brief 特定のマスかモンスターをターゲット中であり、かつターゲットが有効かどうかを返す
+     */
+    constexpr bool is_target_okay() const
+    {
+        return this->is_targetting() && this->target->is_okay();
+    }
+
+    /*!
+     * @brief ターゲットの座標を返す
+     *
+     * 特定のマスかモンスターをターゲット中の場合はその座標を返す。ただしターゲットが有効でない場合は基準座標を返す。
+     * 単に方向を指定している場合は引数で指定した基準座標からその方向へlengthマス分進んだ座標を返す。
+     *
+     * @param pos (方向の場合の)基準座標
+     * @param length (方向の場合の)基準座標からの距離。デフォルトは1(隣接マス)
+     * @return ターゲットの座標
+     */
+    Pos2D get_target_position(const Pos2D &pos, int length = 1) const
+    {
+        if (this->is_targetting()) {
+            return this->target->get_position().value_or(pos);
+        }
+
+        return pos + this->vec() * length;
     }
 
     /*!
@@ -188,7 +227,7 @@ public:
      * @param delta 回転させる回数。正の値で反時計回り、負の値で時計回りに回転する。
      * @return 回転させた方向を示す方向クラスのインスタンス
      */
-    constexpr Direction rotated_45degree(int delta) const
+    Direction rotated_45degree(int delta) const
     {
         const auto cdir = this->cdir();
         if (!cdir) {
@@ -218,7 +257,7 @@ private:
     static constexpr std::array<std::optional<int>, 10> DIR_TO_CDIR = { { std::nullopt, 7, 0, 1, 6, std::nullopt, 2, 5, 4, 3 } };
 
     int dir_; //<! 方向ID
-    bool is_targetting_ = false; //<! 特定のマスをターゲット中であるかどうか
+    std::optional<Target> target; //<! ターゲット
 };
 
 constexpr bool operator==(const Direction &dir1, const Direction &dir2) noexcept
@@ -229,12 +268,12 @@ constexpr bool operator==(const Direction &dir1, const Direction &dir2) noexcept
 /* 以降の定義は直接使用しないようdetail名前空間に入れておく*/
 namespace detail {
 /// 下・上・右・左・右下・左下・右上・左上・中央の順にDirectionクラスのインスタンスを保持する配列
-constexpr std::array<Direction, 9> DIRECTIONS = {
+inline const std::array<Direction, 9> DIRECTIONS = {
     { Direction(2), Direction(8), Direction(6), Direction(4), Direction(3), Direction(1), Direction(9), Direction(7), Direction(5) }
 };
 
 /// DIRECTIONSの要素を逆順にした配列
-constexpr std::array<Direction, 9> REVERSE_DIRECTIONS = {
+inline const std::array<Direction, 9> REVERSE_DIRECTIONS = {
     { Direction(5), Direction(7), Direction(9), Direction(1), Direction(3), Direction(4), Direction(6), Direction(8), Direction(2) }
 };
 }

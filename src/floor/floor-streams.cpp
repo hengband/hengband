@@ -15,7 +15,6 @@
 #include "floor/floor-streams.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "floor/floor-generator-util.h"
 #include "floor/floor-object.h"
 #include "game-option/birth-options.h"
@@ -98,7 +97,7 @@ static void recursive_river(FloorType &floor, const Pos2D &pos_start, const Pos2
             for (auto ty = pos.y - width - 1; ty <= pos.y + width + 1; ty++) {
                 for (auto tx = pos.x - width - 1; tx <= pos.x + width + 1; tx++) {
                     const Pos2D pos_target(ty, tx);
-                    if (!in_bounds2(floor, pos_target.y, pos_target.x)) {
+                    if (!floor.contains(pos_target, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                         continue;
                     }
 
@@ -260,16 +259,15 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
         constexpr auto stream_density = 5;
         for (auto i = 0; i < stream_density; i++) {
             constexpr auto stream_width = 5;
-            int d = stream_width;
-
-            /* Pick a nearby grid */
+            const auto d = stream_width;
             Pos2D pos(y, x);
             while (true) {
                 pos.y = rand_spread(y, d);
                 pos.x = rand_spread(x, d);
-                if (!in_bounds2(floor, pos.y, pos.x)) {
+                if (!floor.contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                     continue;
                 }
+
                 break;
             }
 
@@ -304,7 +302,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
 
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : grid.o_idx_list) {
-                    auto &item = floor.o_list[this_o_idx];
+                    auto &item = *floor.o_list[this_o_idx];
 
                     /* Hack -- Preserve unknown artifacts */
                     if (item.is_fixed_artifact()) {

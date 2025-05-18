@@ -26,7 +26,6 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-processor.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "floor/floor-changer.h"
 #include "floor/floor-events.h"
 #include "floor/floor-leaver.h"
@@ -240,7 +239,7 @@ static void reset_world_info(PlayerType *player_ptr)
     world.timewalk_m_idx = 0;
     player_ptr->now_damaged = false;
     now_message = 0;
-    record_o_name[0] = '\0';
+    record_item_name.clear();
 }
 
 static void generate_wilderness(PlayerType *player_ptr)
@@ -376,7 +375,7 @@ static void process_game_turn(PlayerType *player_ptr)
         world.character_xtra = true;
         handle_stuff(player_ptr);
         world.character_xtra = false;
-        target_who = 0;
+        Target::clear_last_target();
         health_track(player_ptr, 0);
         forget_lite(floor);
         forget_view(floor);

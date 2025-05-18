@@ -447,8 +447,8 @@ void MonsterAttackPlayer::describe_attack_evasion()
 
 void MonsterAttackPlayer::gain_armor_exp()
 {
-    const auto o_ptr_mh = &this->player_ptr->inventory_list[INVEN_MAIN_HAND];
-    const auto o_ptr_sh = &this->player_ptr->inventory_list[INVEN_SUB_HAND];
+    const auto o_ptr_mh = this->player_ptr->inventory[INVEN_MAIN_HAND].get();
+    const auto o_ptr_sh = this->player_ptr->inventory[INVEN_SUB_HAND].get();
     if (!o_ptr_mh->is_protector() && !o_ptr_sh->is_protector()) {
         return;
     }

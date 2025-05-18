@@ -145,7 +145,7 @@ void ObjectUseEntity::execute()
     }
 
     if (this->i_idx >= 0) {
-        inven_item_charges(this->player_ptr->inventory_list[this->i_idx]);
+        inven_item_charges(*this->player_ptr->inventory[this->i_idx]);
     } else {
         floor_item_charges(*this->player_ptr->current_floor_ptr, 0 - this->i_idx);
     }

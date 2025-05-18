@@ -10,7 +10,6 @@
 #include "artifact/random-art-generator.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/floor-object.h"
 #include "floor/floor-util.h"
 #include "main/sound-definitions-table.h"
@@ -71,13 +70,17 @@ static void summon_self(PlayerType *player_ptr, MonsterDeath *md_ptr, summon_typ
         return;
     }
 
+    const auto p_pos = player_ptr->get_position();
     auto m_pos = md_ptr->get_position();
-    auto attempts = 100;
-    do {
+    auto attempts = 0;
+    for (; attempts < 100; attempts++) {
         m_pos = scatter(player_ptr, md_ptr->get_position(), radius, PROJECT_NONE);
-    } while (!(floor.contains(m_pos) && is_cave_empty_bold2(player_ptr, m_pos.y, m_pos.x)) && --attempts);
+        if (floor.contains(m_pos) && floor.can_generate_monster_at(m_pos) && (p_pos != m_pos)) {
+            break;
+        }
+    }
 
-    if (attempts <= 0) {
+    if (attempts == 100) {
         return;
     }
 

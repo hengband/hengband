@@ -1,7 +1,6 @@
 #include "effect/effect-feature.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h" // 暫定、後で消す.
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
@@ -24,19 +23,6 @@
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-
-/*
- * Determine if a "legal" grid is an "naked" floor grid
- *
- * Line 1 -- forbid non-clean gird
- * Line 2 -- forbid monsters
- * Line 3 -- forbid the player
- */
-static bool cave_naked_bold(PlayerType *player_ptr, const Pos2D &pos)
-{
-    const auto &floor = *player_ptr->current_floor_ptr;
-    return cave_clean_bold(floor, pos.y, pos.x) && (floor.get_grid(pos).m_idx == 0) && !player_ptr->is_located_at(pos);
-}
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系による地形効果処理 / We are called from "project()" to "damage" terrain features
@@ -198,7 +184,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         grid.info &= ~(CAVE_UNSAFE);
-        lite_spot(player_ptr, y, x);
+        lite_spot(player_ptr, pos);
         obvious = true;
         break;
     }
@@ -217,7 +203,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         grid.info &= ~(CAVE_UNSAFE);
-        lite_spot(player_ptr, y, x);
+        lite_spot(player_ptr, pos);
         obvious = true;
         break;
     }
@@ -232,8 +218,8 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::SPIKE);
         grid.mimic = old_mimic;
 
-        note_spot(player_ptr, y, x);
-        lite_spot(player_ptr, y, x);
+        note_spot(player_ptr, pos);
+        lite_spot(player_ptr, pos);
 
         if (!known || terrain_mimic.flags.has_not(TerrainCharacteristics::OPEN)) {
             break;
@@ -257,48 +243,43 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::FLOW);
         break;
     }
-    case AttributeType::MAKE_DOOR: {
-        if (!cave_naked_bold(player_ptr, pos)) {
+    case AttributeType::MAKE_DOOR:
+        if (!grid.is_clean() || grid.has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
-        if (player_ptr->is_located_at(pos)) {
-            break;
-        }
+
         set_terrain_id_to_grid(player_ptr, pos, Doors::get_instance().get_door(DoorKind::DOOR).closed);
         if (grid.is_mark()) {
             obvious = true;
         }
+
         break;
-    }
-    case AttributeType::MAKE_TRAP: {
-        place_trap(floor, pos);
+    case AttributeType::MAKE_TRAP:
+        floor.place_trap_at(pos);
         break;
-    }
-    case AttributeType::MAKE_TREE: {
-        if (!cave_naked_bold(player_ptr, pos)) {
+    case AttributeType::MAKE_TREE:
+        if (!grid.is_clean() || grid.has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
-        if (player_ptr->is_located_at(pos)) {
-            break;
-        }
+
         set_terrain_id_to_grid(player_ptr, pos, TerrainTag::TREE);
         if (grid.is_mark()) {
             obvious = true;
         }
+
         break;
-    }
-    case AttributeType::MAKE_RUNE_PROTECTION: {
-        if (!cave_naked_bold(player_ptr, pos)) {
+    case AttributeType::MAKE_RUNE_PROTECTION:
+        if (!grid.is_clean() || grid.has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
+
         grid.info |= CAVE_OBJECT;
         grid.set_terrain_id(TerrainTag::RUNE_PROTECTION, TerrainKind::MIMIC);
-        note_spot(player_ptr, y, x);
-        lite_spot(player_ptr, y, x);
+        note_spot(player_ptr, pos);
+        lite_spot(player_ptr, pos);
         break;
-    }
     case AttributeType::STONE_WALL:
-        if (!cave_naked_bold(player_ptr, pos) || player_ptr->is_located_at(pos)) {
+        if (!grid.is_clean() || grid.has_monster() || player_ptr->is_located_at(pos)) {
             break;
         }
 
@@ -341,8 +322,8 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         }
 
         grid.info |= (CAVE_GLOW);
-        note_spot(player_ptr, y, x);
-        lite_spot(player_ptr, y, x);
+        note_spot(player_ptr, pos);
+        lite_spot(player_ptr, pos);
         update_local_illumination(player_ptr, pos);
 
         if (player_can_see_bold(player_ptr, y, x)) {
@@ -369,7 +350,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (floor.is_underground() || !AngbandWorld::get_instance().is_daytime()) {
             for (const auto &d : Direction::directions()) {
                 const auto pos_neighbor = Pos2D(y, x) + d.vec();
-                if (!in_bounds2(floor, pos_neighbor.y, pos_neighbor.x)) {
+                if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
                     continue;
                 }
 
@@ -391,10 +372,10 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER) || has_element_resist(player_ptr, ElementRealmType::DARKNESS, 1)) {
             /* Forget */
             grid.info &= ~(CAVE_MARK);
-            note_spot(player_ptr, y, x);
+            note_spot(player_ptr, pos);
         }
 
-        lite_spot(player_ptr, y, x);
+        lite_spot(player_ptr, pos);
 
         update_local_illumination(player_ptr, pos);
 
@@ -469,6 +450,6 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         break;
     }
 
-    lite_spot(player_ptr, y, x);
+    lite_spot(player_ptr, pos);
     return obvious;
 }

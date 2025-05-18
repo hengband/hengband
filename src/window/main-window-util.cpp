@@ -1,7 +1,6 @@
 #include "window/main-window-util.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
@@ -103,7 +102,7 @@ void print_map(PlayerType *player_ptr)
         }
     }
 
-    lite_spot(player_ptr, player_ptr->y, player_ptr->x);
+    lite_spot(player_ptr, player_ptr->get_position());
     (void)term_set_cursor(v);
 }
 

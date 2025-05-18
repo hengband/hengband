@@ -93,7 +93,7 @@ bool ScrollReadExecutor::read()
             k = INVEN_SUB_HAND;
         }
 
-        if (k && curse_weapon_object(this->player_ptr, false, &this->player_ptr->inventory_list[k])) {
+        if (k && curse_weapon_object(this->player_ptr, false, this->player_ptr->inventory[k].get())) {
             this->ident = true;
         }
 
@@ -241,12 +241,16 @@ bool ScrollReadExecutor::read()
         map_area(this->player_ptr, DETECT_RAD_MAP);
         this->ident = true;
         break;
-    case SV_SCROLL_DETECT_GOLD:
-        if (detect_treasure(this->player_ptr, DETECT_RAD_DEFAULT) || detect_objects_gold(this->player_ptr, DETECT_RAD_DEFAULT)) {
+    case SV_SCROLL_DETECT_GOLD: {
+        const auto detected_treasure = detect_treasure(this->player_ptr, DETECT_RAD_DEFAULT);
+        const auto detected_gold = detect_objects_gold(this->player_ptr, DETECT_RAD_DEFAULT);
+
+        if (detected_treasure || detected_gold) {
             this->ident = true;
         }
 
         break;
+    }
     case SV_SCROLL_DETECT_ITEM:
         if (detect_objects_normal(this->player_ptr, DETECT_RAD_DEFAULT)) {
             this->ident = true;
@@ -259,12 +263,16 @@ bool ScrollReadExecutor::read()
         }
 
         break;
-    case SV_SCROLL_DETECT_DOOR:
-        if (detect_doors(this->player_ptr, DETECT_RAD_DEFAULT) || detect_stairs(this->player_ptr, DETECT_RAD_DEFAULT)) {
+    case SV_SCROLL_DETECT_DOOR: {
+        const auto detected_doors = detect_doors(this->player_ptr, DETECT_RAD_DEFAULT);
+        const auto detected_stairs = detect_stairs(this->player_ptr, DETECT_RAD_DEFAULT);
+
+        if (detected_doors || detected_stairs) {
             this->ident = true;
         }
 
         break;
+    }
     case SV_SCROLL_DETECT_INVIS:
         if (detect_monsters_invis(this->player_ptr, DETECT_RAD_DEFAULT)) {
             this->ident = true;

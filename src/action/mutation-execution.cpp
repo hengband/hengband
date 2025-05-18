@@ -163,7 +163,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         return true;
     case PlayerMutationType::DET_CURSE:
         for (int i = 0; i < INVEN_TOTAL; i++) {
-            auto *o_ptr = &player_ptr->inventory_list[i];
+            auto *o_ptr = player_ptr->inventory[i].get();
             if (!o_ptr->is_valid() || !o_ptr->is_cursed()) {
                 continue;
             }
@@ -221,7 +221,7 @@ bool exe_mutation_power(PlayerType *player_ptr, PlayerMutationType power)
         return true;
     }
     case PlayerMutationType::EARTHQUAKE:
-        (void)earthquake(player_ptr, player_ptr->y, player_ptr->x, 10, 0);
+        (void)earthquake(player_ptr, player_ptr->get_position(), 10);
         return true;
     case PlayerMutationType::EAT_MAGIC:
         return eat_magic(player_ptr, player_ptr->lev * 2);

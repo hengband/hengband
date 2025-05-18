@@ -1,11 +1,9 @@
 #include "target/projection-path-calculator.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
-#include "system/player-type-definition.h"
 #include "util/finalizer.h"
 
 class ProjectionPathHelper {
@@ -82,21 +80,21 @@ static bool project_stop(const FloorType &floor, const Pos2D &p_pos, ProjectionP
         return true;
     }
 
+    const auto &grid = floor.get_grid(pph_ptr->pos);
     if (any_bits(pph_ptr->flag, PROJECT_DISI)) {
-        if (!pph_ptr->positions.empty() && cave_stop_disintegration(floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
+        if (!pph_ptr->positions.empty() && grid.can_block_disintegration()) {
             return true;
         }
     } else if (any_bits(pph_ptr->flag, PROJECT_LOS)) {
-        if (!pph_ptr->positions.empty() && !cave_los_bold(floor, pph_ptr->pos.y, pph_ptr->pos.x)) {
+        if (!pph_ptr->positions.empty() && !grid.has_los_terrain()) {
             return true;
         }
     } else if (none_bits(pph_ptr->flag, PROJECT_PATH)) {
-        if (!pph_ptr->positions.empty() && !floor.has_terrain_characteristics(pph_ptr->pos, TerrainCharacteristics::PROJECT)) {
+        if (!pph_ptr->positions.empty() && !grid.has(TerrainCharacteristics::PROJECTION)) {
             return true;
         }
     }
 
-    const auto &grid = floor.get_grid(pph_ptr->pos);
     if (any_bits(pph_ptr->flag, PROJECT_MIRROR)) {
         if (!pph_ptr->positions.empty() && grid.is_mirror()) {
             return true;
@@ -220,10 +218,8 @@ static void calc_diagonal_projection(const FloorType &floor, const Pos2D &p_pos,
  * @param pos_dst 終点座標
  * @param flag フラグ群
  */
-ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &pos_src, const Pos2D &pos_dst, uint32_t flag)
+ProjectionPath::ProjectionPath(const FloorType &floor, int range, const Pos2D &p_pos, const Pos2D &pos_src, const Pos2D &pos_dst, uint32_t flag)
 {
-    const auto &floor = *player_ptr->current_floor_ptr;
-    const auto p_pos = player_ptr->get_position();
     if (pos_src == pos_dst) {
         return;
     }
@@ -247,9 +243,10 @@ ProjectionPath::ProjectionPath(PlayerType *player_ptr, int range, const Pos2D &p
  *
  * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
  */
-bool projectable(PlayerType *player_ptr, const Pos2D &pos1, const Pos2D &pos2)
+bool projectable(const FloorType &floor, const Pos2D &p_pos, const Pos2D &pos1, const Pos2D &pos2)
 {
-    ProjectionPath grid_g(player_ptr, (project_length ? project_length : AngbandSystem::get_instance().get_max_range()), pos1, pos2, 0);
+    const auto range = project_length ? project_length : AngbandSystem::get_instance().get_max_range();
+    ProjectionPath grid_g(floor, range, p_pos, pos1, pos2, 0);
     if (grid_g.path_num() == 0) {
         return true;
     }

@@ -3,7 +3,6 @@
 #include "core/disturbance.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "dungeon/quest.h"
-#include "floor/cave.h"
 #include "monster-floor/monster-move.h"
 #include "monster-race/race-ability-mask.h"
 #include "monster/monster-describer.h"
@@ -265,7 +264,7 @@ static bool check_thrown_mspell(PlayerType *player_ptr, msa_type *msa_ptr)
 static void check_mspell_imitation(PlayerType *player_ptr, msa_type *msa_ptr)
 {
     const auto seen = (!player_ptr->effects()->blindness().is_blind() && msa_ptr->m_ptr->ml);
-    const auto can_imitate = player_ptr->current_floor_ptr->has_los({ msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx });
+    const auto can_imitate = player_ptr->current_floor_ptr->has_los_at({ msa_ptr->m_ptr->fy, msa_ptr->m_ptr->fx });
     PlayerClass pc(player_ptr);
     if (!seen || !can_imitate || (AngbandWorld::get_instance().timewalk_m_idx != 0) || !pc.equals(PlayerClassType::IMITATOR)) {
         return;

@@ -1,6 +1,7 @@
 #include "game-option/keymap-directory-getter.h"
+#include "floor/geometry.h"
 #include "game-option/input-options.h"
-#include "io/input-key-requester.h"
+#include "io/macro-configurations-store.h"
 #include "util/int-char-converter.h"
 
 /*!
@@ -15,14 +16,15 @@ Direction get_keymap_dir(char ch)
     if (isdigit(ch)) {
         dir = Direction(D2I(ch));
     } else {
-        const auto mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
-        const auto act = keymap_act[mode][(byte)(ch)];
+        const auto mode = rogue_like_commands ? KeymapMode::ROGUE : KeymapMode::ORIGINAL;
+        const auto &act = keymap_actions_map.at(mode).at(static_cast<uint8_t>(ch));
         if (!act) {
             return Direction::none();
         }
-        for (auto s = act; *s; ++s) {
-            if (isdigit(*s)) {
-                dir = Direction(D2I(*s));
+
+        for (auto c : *act) {
+            if (isdigit(c)) {
+                dir = Direction(D2I(c));
             }
         }
     }

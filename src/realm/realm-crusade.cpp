@@ -3,7 +3,6 @@
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "floor/floor-util.h"
 #include "hpmp/hp-mp-processor.h"
 #include "monster-floor/monster-summon.h"
@@ -27,6 +26,7 @@
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "util/dice.h"
@@ -465,13 +465,14 @@ std::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX sp
             auto sp_sides = 20 + plev;
             auto sp_base = plev;
             crusade(player_ptr);
+            const auto &floor = *player_ptr->current_floor_ptr;
             const auto p_pos = player_ptr->get_position();
             for (auto i = 0; i < 12; i++) {
                 auto attempt = 10;
                 Pos2D pos(0, 0);
                 while (attempt--) {
                     pos = scatter(player_ptr, p_pos, 4, PROJECT_NONE);
-                    if (is_cave_empty_bold2(player_ptr, pos.y, pos.x)) {
+                    if (floor.can_generate_monster_at(pos) && (p_pos != pos)) {
                         break;
                     }
                 }

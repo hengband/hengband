@@ -5,7 +5,6 @@
 #include "locale/language-switcher.h"
 #include "monster/monster-timed-effects.h"
 #include "object-enchant/item-apply-magic.h"
-#include "system/angband-system.h"
 #include "system/artifact-type-definition.h"
 #include "system/baseitem/baseitem-allocation.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -28,7 +27,9 @@
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-range.h"
+#include "util/point-2d.h"
 #include "world/world.h"
+#include <range/v3/algorithm.hpp>
 
 FloorType::FloorType()
     : grid_array(MAX_HGT, std::vector<Grid>(MAX_WID))
@@ -36,6 +37,8 @@ FloorType::FloorType()
     , m_list(MAX_FLOOR_MONSTERS)
     , quest_number(QuestId::NONE)
 {
+    ranges::generate(this->o_list, [] { return std::make_shared<ItemEntity>(); });
+
     for (const auto mte : MONSTER_TIMED_EFFECT_RANGE) {
         this->mproc_list[mte] = std::vector<short>(MAX_FLOOR_MONSTERS, {});
         this->mproc_max[mte] = 0;
@@ -55,6 +58,18 @@ Grid &FloorType::get_grid(const Pos2D pos)
 const Grid &FloorType::get_grid(const Pos2D pos) const
 {
     return this->grid_array[pos.y][pos.x];
+}
+
+Rect2D FloorType::get_area(FloorBoundary fb) const
+{
+    switch (fb) {
+    case FloorBoundary::OUTER_WALL_EXCLUSIVE:
+        return Rect2D(1, 1, this->height - 2, this->width - 2);
+    case FloorBoundary::OUTER_WALL_INCLUSIVE:
+        return Rect2D(0, 0, this->height - 1, this->width - 1);
+    default:
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid FloorBoundary is specified!: {}", enum2i(fb)));
+    }
 }
 
 bool FloorType::is_entering_dungeon() const
@@ -156,9 +171,14 @@ QuestId FloorType::get_quest_id(const int bonus) const
  * @param pos 座標
  * @return LOSフラグを持つか否か
  */
-bool FloorType::has_los(const Pos2D &pos) const
+bool FloorType::has_los_at(const Pos2D &pos) const
 {
     return this->get_grid(pos).has_los();
+}
+
+bool FloorType::has_los_terrain_at(const Pos2D &pos) const
+{
+    return this->get_grid(pos).has_los_terrain();
 }
 
 bool FloorType::has_terrain_characteristics(const Pos2D &pos, TerrainCharacteristics tc) const
@@ -278,8 +298,8 @@ bool FloorType::order_pet_whistle(short index1, short index2) const
  */
 bool FloorType::order_pet_dismission(short index1, short index2, short riding_index) const
 {
-    const auto &monster1 = this->m_list[index1];
-    const auto &monster2 = this->m_list[index2];
+    const auto &monster1 = this->m_list.at(index1);
+    const auto &monster2 = this->m_list.at(index2);
     if (index1 == riding_index) {
         return true;
     }
@@ -306,6 +326,26 @@ bool FloorType::contains(const Pos2D &pos, FloorBoundary fb) const
     default:
         THROW_EXCEPTION(std::logic_error, fmt::format("Invalid LocationDecision is specified! {}", enum2i(fb)));
     }
+}
+
+bool FloorType::is_empty_at(const Pos2D &pos) const
+{
+    return this->get_grid(pos).is_empty();
+}
+
+bool FloorType::can_generate_monster_at(const Pos2D &pos) const
+{
+    return this->get_grid(pos).can_generate_monster();
+}
+
+bool FloorType::can_block_disintegration_at(const Pos2D &pos) const
+{
+    return this->get_grid(pos).can_block_disintegration();
+}
+
+bool FloorType::can_drop_item_at(const Pos2D &pos) const
+{
+    return this->get_grid(pos).can_drop_item();
 }
 
 /*!
@@ -561,20 +601,9 @@ short FloorType::pop_empty_index_monster()
  */
 short FloorType::pop_empty_index_item()
 {
-    if (this->o_max < MAX_FLOOR_ITEMS) {
-        const auto i = this->o_max;
-        this->o_max++;
-        this->o_cnt++;
-        return i;
-    }
-
-    for (short i = 1; i < this->o_max; i++) {
-        if (this->o_list[i].is_valid()) {
-            continue;
-        }
-
-        this->o_cnt++;
-        return i;
+    if (this->o_list.size() < MAX_FLOOR_ITEMS) {
+        this->o_list.push_back(std::make_shared<ItemEntity>());
+        return static_cast<short>(this->o_list.size() - 1);
     }
 
     if (AngbandWorld::get_instance().character_dungeon) {
@@ -598,7 +627,7 @@ bool FloorType::is_grid_changeable(const Pos2D &pos) const
     }
 
     for (const auto this_o_idx : grid.o_idx_list) {
-        const auto &item = this->o_list[this_o_idx];
+        const auto &item = *this->o_list[this_o_idx];
         if (item.is_fixed_or_random_artifact()) {
             return false;
         }
@@ -613,7 +642,7 @@ bool FloorType::is_grid_changeable(const Pos2D &pos) const
  */
 void FloorType::place_random_stairs(const Pos2D &pos)
 {
-    const auto &grid = this->get_grid(pos);
+    auto &grid = this->get_grid(pos);
     if (!grid.is_floor() || !grid.o_idx_list.empty()) {
         return;
     }
@@ -637,12 +666,12 @@ void FloorType::place_random_stairs(const Pos2D &pos)
     }
 
     if (up_stairs) {
-        this->set_terrain_id_at(pos, TerrainTag::UP_STAIR);
+        grid.set_terrain_id(TerrainTag::UP_STAIR);
         return;
     }
 
     if (down_stairs) {
-        this->set_terrain_id_at(pos, TerrainTag::DOWN_STAIR);
+        grid.set_terrain_id(TerrainTag::DOWN_STAIR);
     }
 }
 
@@ -654,6 +683,25 @@ void FloorType::set_terrain_id_at(const Pos2D &pos, TerrainTag tag, TerrainKind 
 void FloorType::set_terrain_id_at(const Pos2D &pos, short terrain_id, TerrainKind tk)
 {
     this->get_grid(pos).set_terrain_id(terrain_id, tk);
+}
+
+/*!
+ * @brief マスにトラップを配置する
+ * @param pos 配置したいマスの座標
+ */
+void FloorType::place_trap_at(const Pos2D &pos)
+{
+    if (!this->contains(pos)) {
+        return;
+    }
+
+    auto &grid = this->get_grid(pos);
+    if (!grid.is_clean()) {
+        return;
+    }
+
+    grid.mimic = grid.feat;
+    grid.set_terrain_id(this->select_random_trap());
 }
 
 /*!

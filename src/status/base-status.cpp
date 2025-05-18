@@ -305,7 +305,7 @@ bool lose_all_info(PlayerType *player_ptr)
     chg_virtue(player_ptr, Virtue::KNOWLEDGE, -5);
     chg_virtue(player_ptr, Virtue::ENLIGHTEN, -5);
     for (int i = 0; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = &player_ptr->inventory_list[i];
+        auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid() || o_ptr->is_fully_known()) {
             continue;
         }

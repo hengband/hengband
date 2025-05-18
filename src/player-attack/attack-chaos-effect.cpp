@@ -260,7 +260,7 @@ static void attack_golden_hammer(PlayerType *player_ptr, player_attack_type *pa_
         return;
     }
 
-    auto &item = floor.o_list[monster.hold_o_idx_list.front()];
+    auto &item = *floor.o_list[monster.hold_o_idx_list.front()];
     const auto item_name = describe_flavor(player_ptr, item, OD_NAME_ONLY);
     item.held_m_idx = 0;
     item.marked.clear().set(OmType::TOUCHED);
@@ -311,7 +311,7 @@ void change_monster_stat(PlayerType *player_ptr, player_attack_type *pa_ptr, con
         attack_polymorph(player_ptr, pa_ptr, y, x);
     }
 
-    const auto &item = player_ptr->inventory_list[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
+    const auto &item = *player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand];
     if (item.is_specific_artifact(FixedArtifactId::G_HAMMER)) {
         attack_golden_hammer(player_ptr, pa_ptr);
     }

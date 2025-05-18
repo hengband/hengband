@@ -1,6 +1,5 @@
 #include "specific-object/torch.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "floor/cave.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-ninja.h"
@@ -72,7 +71,7 @@ void update_lite_radius(PlayerType *player_ptr)
 {
     player_ptr->cur_lite = 0;
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        const auto *o_ptr = &player_ptr->inventory_list[i];
+        const auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -165,6 +164,7 @@ void update_lite(PlayerType *player_ptr)
     }
 
     floor.lite_n = 0;
+    const auto p_pos = player_ptr->get_position();
     if (p >= 1) {
         cave_lite_hack(floor, player_ptr->y, player_ptr->x);
         cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x);
@@ -178,25 +178,25 @@ void update_lite(PlayerType *player_ptr)
     }
 
     if (p >= 2) {
-        if (cave_los_bold(floor, player_ptr->y + 1, player_ptr->x)) {
+        if (floor.has_los_terrain_at(p_pos + Direction(2).vec())) {
             cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x);
             cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x + 1);
             cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x - 1);
         }
 
-        if (cave_los_bold(floor, player_ptr->y - 1, player_ptr->x)) {
+        if (floor.has_los_terrain_at(p_pos + Direction(8).vec())) {
             cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x);
             cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x + 1);
             cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x - 1);
         }
 
-        if (cave_los_bold(floor, player_ptr->y, player_ptr->x + 1)) {
+        if (floor.has_los_terrain_at(p_pos + Direction(6).vec())) {
             cave_lite_hack(floor, player_ptr->y, player_ptr->x + 2);
             cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x + 2);
             cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x + 2);
         }
 
-        if (cave_los_bold(floor, player_ptr->y, player_ptr->x - 1)) {
+        if (floor.has_los_terrain_at(p_pos + Direction(4).vec())) {
             cave_lite_hack(floor, player_ptr->y, player_ptr->x - 2);
             cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x - 2);
             cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x - 2);
@@ -209,46 +209,46 @@ void update_lite(PlayerType *player_ptr)
             p = 14;
         }
 
-        if (cave_los_bold(floor, player_ptr->y + 1, player_ptr->x + 1)) {
+        if (floor.has_los_terrain_at(p_pos + Direction(3).vec())) {
             cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x + 2);
         }
 
-        if (cave_los_bold(floor, player_ptr->y + 1, player_ptr->x - 1)) {
+        if (floor.has_los_terrain_at(p_pos + Direction(1).vec())) {
             cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x - 2);
         }
 
-        if (cave_los_bold(floor, player_ptr->y - 1, player_ptr->x + 1)) {
+        if (floor.has_los_terrain_at(p_pos + Direction(9).vec())) {
             cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x + 2);
         }
 
-        if (cave_los_bold(floor, player_ptr->y - 1, player_ptr->x - 1)) {
+        if (floor.has_los_terrain_at(p_pos + Direction(7).vec())) {
             cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x - 2);
         }
 
-        POSITION min_y = player_ptr->y - p;
+        auto min_y = player_ptr->y - p;
         if (min_y < 0) {
             min_y = 0;
         }
 
-        POSITION max_y = player_ptr->y + p;
+        auto max_y = player_ptr->y + p;
         if (max_y > floor.height - 1) {
             max_y = floor.height - 1;
         }
 
-        POSITION min_x = player_ptr->x - p;
+        auto min_x = player_ptr->x - p;
         if (min_x < 0) {
             min_x = 0;
         }
 
-        POSITION max_x = player_ptr->x + p;
+        auto max_x = player_ptr->x + p;
         if (max_x > floor.width - 1) {
             max_x = floor.width - 1;
         }
 
-        for (POSITION y = min_y; y <= max_y; y++) {
-            for (POSITION x = min_x; x <= max_x; x++) {
-                int dy = (player_ptr->y > y) ? (player_ptr->y - y) : (y - player_ptr->y);
-                int dx = (player_ptr->x > x) ? (player_ptr->x - x) : (x - player_ptr->x);
+        for (auto y = min_y; y <= max_y; y++) {
+            for (auto x = min_x; x <= max_x; x++) {
+                const auto dy = (player_ptr->y > y) ? (player_ptr->y - y) : (y - player_ptr->y);
+                const auto dx = (player_ptr->x > x) ? (player_ptr->x - x) : (x - player_ptr->x);
                 if ((dy <= 2) && (dx <= 2)) {
                     continue;
                 }
@@ -258,17 +258,17 @@ void update_lite(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (floor.grid_array[y][x].info & CAVE_VIEW) {
+                if (floor.get_grid({ y, x }).info & CAVE_VIEW) {
                     cave_lite_hack(floor, y, x);
                 }
             }
         }
     }
 
-    for (int i = 0; i < floor.lite_n; i++) {
-        POSITION y = floor.lite_y[i];
-        POSITION x = floor.lite_x[i];
-        const auto &grid = floor.grid_array[y][x];
+    for (auto i = 0; i < floor.lite_n; i++) {
+        const auto y = floor.lite_y[i];
+        const auto x = floor.lite_x[i];
+        const auto &grid = floor.get_grid({ y, x });
         if (grid.info & CAVE_TEMP) {
             continue;
         }
@@ -278,7 +278,7 @@ void update_lite(PlayerType *player_ptr)
 
     // 前回照らされていた座標たちのうち、状態が変わったものについて再描画フラグを立てる。
     for (const auto &[y, x] : points) {
-        auto &grid = floor.grid_array[y][x];
+        auto &grid = floor.get_grid({ y, x });
         grid.info &= ~(CAVE_TEMP);
         if (grid.info & CAVE_LITE) {
             continue;

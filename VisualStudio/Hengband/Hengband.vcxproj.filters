@@ -455,9 +455,6 @@
     <ClCompile Include="..\..\src\term\z-util.cpp">
       <Filter>term</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term\z-virt.cpp">
-      <Filter>term</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\floor\wild.cpp">
       <Filter>floor</Filter>
     </ClCompile>
@@ -1583,9 +1580,6 @@
     <ClCompile Include="..\..\src\racial\racial-switcher.cpp">
       <Filter>racial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor\cave.cpp">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\save\save.cpp">
       <Filter>save</Filter>
     </ClCompile>
@@ -2562,6 +2556,9 @@
     <ClCompile Include="..\..\src\target\target.cpp">
       <Filter>target</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\macro-configurations-store.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -3045,9 +3042,6 @@
       <Filter>term</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\term\z-util.h">
-      <Filter>term</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\term\z-virt.h">
       <Filter>term</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\floor\wild.h">
@@ -4382,9 +4376,6 @@
     <ClInclude Include="..\..\src\dungeon\dungeon-flag-types.h">
       <Filter>dungeon</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\floor\cave.h">
-      <Filter>floor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\save\save.h">
       <Filter>save</Filter>
     </ClInclude>
@@ -5558,6 +5549,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\target\target.h">
       <Filter>target</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\macro-configurations-store.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

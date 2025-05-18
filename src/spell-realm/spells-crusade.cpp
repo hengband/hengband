@@ -9,7 +9,6 @@
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
-#include "floor/cave.h"
 #include "game-option/disturbance-options.h"
 #include "spell/range-calc.h"
 #include "system/enums/terrain/terrain-characteristics.h"
@@ -37,10 +36,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
     }
 
     const auto p_pos = player_ptr->get_position();
-    auto pos_target = p_pos + dir.vec() * 99;
-    if (dir.is_targetting() && target_okay(player_ptr)) {
-        pos_target = { target_row, target_col };
-    }
+    auto pos_target = dir.get_target_position(p_pos, 99);
 
     auto pos = p_pos;
     auto &floor = *player_ptr->current_floor_ptr;
@@ -53,7 +49,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
         if (AngbandSystem::get_instance().get_max_range() <= Grid::calc_distance(p_pos, pos_to)) {
             break;
         }
-        if (!floor.has_terrain_characteristics(pos_to, TerrainCharacteristics::PROJECT)) {
+        if (!floor.has_terrain_characteristics(pos_to, TerrainCharacteristics::PROJECTION)) {
             break;
         }
         if (!dir.is_targetting() && floor.get_grid(pos_to).has_monster()) {
@@ -84,7 +80,7 @@ bool cast_wrath_of_the_god(PlayerType *player_ptr, int dam, POSITION rad)
             continue;
         }
 
-        auto should_cast = floor.contains(pos_explode) && !cave_stop_disintegration(floor, pos_explode.y, pos_explode.x);
+        auto should_cast = floor.contains(pos_explode) && !floor.can_block_disintegration_at(pos_explode);
         should_cast &= in_disintegration_range(floor, pos_target, pos_explode);
         if (!should_cast) {
             continue;

@@ -173,6 +173,7 @@ public:
     int get_baseitem_cost() const;
     MonraceId get_monrace_id() const;
     int get_lite_radius() const;
+    Pos2D get_position() const;
 
     void mark_as_known();
     void mark_as_tried() const;

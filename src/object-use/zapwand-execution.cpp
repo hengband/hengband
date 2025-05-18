@@ -135,7 +135,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
     rfu.set_flags(flags_srf);
     o_ptr->pval--;
     if (i_idx >= 0) {
-        inven_item_charges(this->player_ptr->inventory_list[i_idx]);
+        inven_item_charges(*this->player_ptr->inventory[i_idx]);
         return;
     }
 

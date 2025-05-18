@@ -12,6 +12,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/cursor.h"
 #include "io/input-key-acceptor.h"
+#include "io/macro-configurations-store.h"
 #include "main/sound-of-music.h"
 #include "player-base/player-class.h"
 #include "save/save.h"
@@ -25,11 +26,6 @@
 #include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
-
-/*
- * Keymaps for each "mode" associated with each keypress.
- */
-concptr keymap_act[KEYMAP_MODES][256];
 
 bool use_menu;
 
@@ -47,7 +43,7 @@ static char request_command_buffer[256]{}; /*!< Special buffer to hold the actio
 InputKeyRequestor::InputKeyRequestor(PlayerType *player_ptr, bool shopping)
     : player_ptr(player_ptr)
     , shopping(shopping)
-    , mode(rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)
+    , mode(rogue_like_commands ? KeymapMode::ROGUE : KeymapMode::ORIGINAL)
     , base_y(player_ptr->y - panel_row_min > 10 ? 2 : 13)
 {
 }
@@ -88,9 +84,9 @@ void InputKeyRequestor::process_input_command()
 
         this->process_command_command(cmd);
         this->process_control_command(cmd);
-        auto act = keymap_act[this->mode][(byte)(cmd)];
+        const auto &act = keymap_actions_map.at(this->mode).at(static_cast<uint8_t>(cmd));
         if (act && !inkey_next) {
-            angband_strcpy(request_command_buffer, act, sizeof(request_command_buffer));
+            angband_strcpy(request_command_buffer, *act, sizeof(request_command_buffer));
             inkey_next = request_command_buffer;
             continue;
         }
@@ -118,7 +114,7 @@ short InputKeyRequestor::get_command()
     inkey_flag = true;
     term_fresh();
     short cmd = inkey(true);
-    if (!this->shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_act[this->mode][(byte)(cmd)]) {
+    if (!this->shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X')) && !keymap_actions_map[this->mode][(byte)(cmd)]) {
         cmd = this->inkey_from_menu();
     }
 
@@ -284,12 +280,13 @@ int InputKeyRequestor::get_caret_command() const
 #ifdef JP
     auto caret_command = 0;
     for (auto i = 0; i < 256; i++) {
-        auto s = keymap_act[this->mode][i];
-        if (s == nullptr) {
+        const auto &action_opt = keymap_actions_map.at(this->mode).at(static_cast<uint8_t>(i));
+        if (!action_opt) {
             continue;
         }
 
-        if ((*s == command_cmd) && (*(s + 1) == 0)) {
+        const auto &action = *action_opt;
+        if ((action[0] == command_cmd) && (action[1] == '\0')) {
             caret_command = i;
             break;
         }
@@ -309,7 +306,7 @@ void InputKeyRequestor::sweep_confirmation_equipments()
 {
     auto caret_command = this->get_caret_command();
     for (auto i = enum2i(INVEN_MAIN_HAND); i < INVEN_TOTAL; i++) {
-        auto &item = this->player_ptr->inventory_list[i];
+        auto &item = *this->player_ptr->inventory[i];
         if (!item.is_valid() || !item.is_inscribed()) {
             continue;
         }

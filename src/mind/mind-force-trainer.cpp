@@ -4,7 +4,6 @@
 #include "core/stuff-handler.h"
 #include "effect/attribute-types.h"
 #include "effect/spells-effect-util.h"
-#include "floor/cave.h"
 #include "floor/geometry.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
@@ -195,7 +194,7 @@ bool set_tim_sh_force(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
  */
 bool shock_power(PlayerType *player_ptr)
 {
-    int boost = get_current_ki(player_ptr);
+    auto boost = get_current_ki(player_ptr);
     if (heavy_armor(player_ptr)) {
         boost /= 2;
     }
@@ -208,7 +207,7 @@ bool shock_power(PlayerType *player_ptr)
 
     auto pos = player_ptr->get_neighbor(dir);
     PLAYER_LEVEL plev = player_ptr->lev;
-    int dam = Dice::roll(8 + ((plev - 5) / 4) + boost / 12, 8);
+    const auto dam = Dice::roll(8 + ((plev - 5) / 4) + boost / 12, 8);
     fire_beam(player_ptr, AttributeType::MISSILE, dir, dam);
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
@@ -228,9 +227,10 @@ bool shock_power(PlayerType *player_ptr)
         return true;
     }
 
-    for (int i = 0; i < 5; i++) {
+    const auto p_pos = player_ptr->get_position();
+    for (auto i = 0; i < 5; i++) {
         pos += dir.vec();
-        if (is_cave_empty_bold(player_ptr, pos.y, pos.x)) {
+        if (floor.is_empty_at(pos) && (pos != p_pos)) {
             pos_target = pos;
         } else {
             break;
@@ -248,8 +248,8 @@ bool shock_power(PlayerType *player_ptr)
     monster.fx = pos_target.x;
 
     update_monster(player_ptr, m_idx, true);
-    lite_spot(player_ptr, pos_origin.y, pos_origin.x);
-    lite_spot(player_ptr, pos_target.y, pos_target.x);
+    lite_spot(player_ptr, pos_origin);
+    lite_spot(player_ptr, pos_target);
 
     if (monrace.brightness_flags.has_any_of(ld_mask)) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::MONSTER_LITE);
@@ -337,9 +337,11 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
             return false;
         }
 
-        const auto &grid = player_ptr->current_floor_ptr->get_grid(*pos);
+        const auto &floor = *player_ptr->current_floor_ptr;
+        const auto &grid = floor.get_grid(*pos);
         const auto m_idx = grid.m_idx;
-        const auto is_projectable = projectable(player_ptr, player_ptr->get_position(), *pos);
+        const auto p_pos = player_ptr->get_position();
+        const auto is_projectable = projectable(floor, p_pos, p_pos, *pos);
         if ((m_idx == 0) || !grid.has_los() || !is_projectable) {
             break;
         }
