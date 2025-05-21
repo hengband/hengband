@@ -1,7 +1,7 @@
 #pragma once
 
-#include "system/angband.h"
+#include <optional>
 
-void repeat_push(COMMAND_CODE what);
-bool repeat_pull(COMMAND_CODE *what);
+void repeat_push(short command);
+std::optional<short> repeat_pull();
 void repeat_check();

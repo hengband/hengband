@@ -37,13 +37,13 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
         dir = command_dir;
         auto try_old_target = use_old_target;
 
-        short code = 0;
-        if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
+        const auto code = repeat_pull();
+        if (code && Direction::is_valid_dir(*code)) {
             if (code == 5) {
                 try_old_target = true;
             } else {
                 try_old_target = false;
-                dir = Direction(code);
+                dir = Direction(*code);
             }
         }
 
@@ -109,10 +109,10 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
  */
 Direction get_direction(PlayerType *player_ptr)
 {
-    auto dir = command_dir;
-    short code = 0;
-    if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
-        dir = Direction(code);
+    Direction dir = command_dir;
+    const auto code = repeat_pull();
+    if (code && Direction::is_valid_dir(*code)) {
+        dir = Direction(*code);
     }
 
     constexpr auto prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
@@ -167,10 +167,10 @@ Direction get_direction(PlayerType *player_ptr)
  */
 Direction get_rep_dir(PlayerType *player_ptr, bool under)
 {
-    auto dir = command_dir;
-    short code = 0;
-    if (repeat_pull(&code) && Direction::is_valid_dir(code)) {
-        dir = Direction(code);
+    Direction dir = command_dir;
+    const auto code = repeat_pull();
+    if (code && Direction::is_valid_dir(*code)) {
+        dir = Direction(*code);
     }
 
     const auto prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
