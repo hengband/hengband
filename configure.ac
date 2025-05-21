@@ -47,7 +47,7 @@ dnl Checks for programs.
 AC_LANG(C++)
 AC_PROG_CXX
 saved_CXXFLAGS="$CXXFLAGS"
-CXXFLAGS=$(echo "$CXXFLAGS" | sed 's/-Werror//g')
+CXXFLAGS=$(echo "$CXXFLAGS" | sed 's/-Werror[[^ ]]*//g')
 AX_CXX_COMPILE_STDCXX(20, [noext], [mandatory])
 CXXFLAGS="$saved_CXXFLAGS"
 PKG_PROG_PKG_CONFIG
