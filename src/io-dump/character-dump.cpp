@@ -346,7 +346,7 @@ static void dump_aux_monsters(FILE *fff)
 #endif
 
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
-    fmt::println(fff, _("\n《上位{}体のユニーク・モンスター", "\n< Unique monsters top {} >"), std::min(uniq_total, 10));
+    fmt::println(fff, _("\n《上位{}体のユニーク・モンスター》", "\n< Unique monsters top {} >"), std::min(uniq_total, 10));
     for (auto it = monrace_ids.rbegin(); it != monrace_ids.rend() && std::distance(monrace_ids.rbegin(), it) < 10; it++) {
         const auto &monrace = monraces.get_monrace(*it);
         const auto defeat_level = monrace.defeat_level;
