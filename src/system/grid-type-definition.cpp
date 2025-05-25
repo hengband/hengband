@@ -244,7 +244,7 @@ bool Grid::can_block_disintegration() const
     const auto can_reach = this->has(TerrainCharacteristics::PROJECTION);
     auto can_disintegrate = this->has(TerrainCharacteristics::HURT_DISI);
     can_disintegrate &= !this->has(TerrainCharacteristics::PERMANENT);
-    return !can_reach || !can_disintegrate;
+    return !can_reach && !can_disintegrate;
 }
 
 bool Grid::can_generate_monster() const
