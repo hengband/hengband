@@ -1,5 +1,5 @@
 %define version 3.0.1.27
-%define release 1
+%define release 2
 
 Summary: hengband %{version}
 Name: hengband
@@ -12,7 +12,7 @@ Source: hengband-%{version}.tar.gz
 Requires: ncurses-libs libstdc++ libcurl libX11
 BuildRequires: autoconf automake gcc-c++ ncurses-devel libcurl-devel nkf libX11-devel
 
-Requires: %{name}-data
+Requires: %{name}-data = %{version}
 
 %package data
 
@@ -21,7 +21,7 @@ Summary: %{name}-data %{version}
 %package en
 
 Requires: ncurses-libs libstdc++ libcurl libX11
-Requires: %{name}-data
+Requires: %{name}-data = %{version}
 Summary: %{name}-en %{version}
 
 %description
@@ -154,6 +154,9 @@ exit 0
 %license lib/help/jlicense.txt THIRD-PARTY-NOTICES.txt
 
 %changelog
+* Mon May 26 2025 whitehara <white@vx-xv.com>
+- Add specified version dependencies between hengband,en and hengband-data
+
 * Wed May 21 2025 whitehara <white@vx-xv.com>
 - hengband RPM 3.0.1.27(Beta)
 
