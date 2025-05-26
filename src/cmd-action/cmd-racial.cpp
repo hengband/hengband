@@ -372,8 +372,12 @@ static bool racial_power_process_input(PlayerType *player_ptr, rc_type *rc_ptr)
  */
 static bool racial_power_select_power(PlayerType *player_ptr, rc_type *rc_ptr)
 {
-    if (repeat_pull(&rc_ptr->command_code) && rc_ptr->command_code >= 0 && rc_ptr->command_code < rc_ptr->power_count()) {
-        return true;
+    const auto code = repeat_pull();
+    if (code) {
+        rc_ptr->command_code = *code;
+        if ((rc_ptr->command_code >= 0) && (rc_ptr->command_code < rc_ptr->power_count())) {
+            return true;
+        }
     }
 
     screen_save();

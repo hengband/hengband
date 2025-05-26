@@ -262,10 +262,11 @@ static int get_snipe_power(PlayerType *player_ptr, COMMAND_CODE *sn, bool only_b
 
     /* Repeat previous command */
     /* Get the spell, if available */
-    if (repeat_pull(sn)) {
+    const auto code = repeat_pull();
+    if (code) {
         /* Verify the spell */
+        *sn = *code;
         if ((snipe_powers[*sn].min_lev <= plev) && (snipe_powers[*sn].mana_cost <= sniper_data->concent)) {
-            /* Success */
             return true;
         }
     }
