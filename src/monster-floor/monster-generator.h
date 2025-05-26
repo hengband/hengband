@@ -7,7 +7,7 @@
 enum summon_type : int;
 enum class MonraceId : short;
 class PlayerType;
-using summon_specific_pf = std::optional<MONSTER_IDX>(PlayerType *, POSITION, POSITION, DEPTH, summon_type, BIT_FLAGS, std::optional<MONSTER_IDX>);
+using summon_specific_pf = std::optional<MONSTER_IDX>(PlayerType *, POSITION, POSITION, DEPTH, summon_type, BIT_FLAGS, std::optional<MONSTER_IDX>, std::optional<MonraceId>);
 
 std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, const Pos2D &pos, int max_distance);
 std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
