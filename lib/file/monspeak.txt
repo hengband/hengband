@@ -916,6 +916,11 @@ says, 'Because you are an obstructor for my revenge... Can you vanish from me?'
 is looking for a certain person to take everything from that person...
 murmurs the grudge against the person called Saori.
 
+N:1385:Mary, the creeping doll
+says, 'I'm Mary. Now I'm at garbage dump.'
+says, 'I'm Mary. Now I'm in front of your house.'
+says, 'I'm Mary. Now I'm behind you.'
+
 N:*:Default lines
 cackles evilly.
 cackles diabolically.
