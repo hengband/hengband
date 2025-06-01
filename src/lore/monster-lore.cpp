@@ -122,6 +122,10 @@ static void set_race_flags(lore_type *lore_ptr)
     if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::FORCE_MAXHP)) {
         lore_ptr->misc_flags.set(MonsterMiscType::FORCE_MAXHP);
     }
+
+    if (lore_ptr->r_ptr->misc_flags.has(MonsterMiscType::STALKER)) {
+        lore_ptr->misc_flags.set(MonsterMiscType::STALKER);
+    }
 }
 
 /*!
