@@ -87,8 +87,8 @@ void sweep_monster_process(PlayerType *player_ptr);
 bool decide_process_continue(PlayerType *player_ptr, MonsterEntity &monster);
 bool process_stalking(PlayerType *player_ptr, MONSTER_IDX m_idx);
 
-const int STALKER_CHANCE_DENOMINATOR = 32; //!< モンスターが背後に忍び寄る確率分母
-const int STALKER_DISTANCE_THRESHOLD = 20; //!< モンスターが背後に忍び寄る距離の閾値
+constexpr auto STALKER_CHANCE_DENOMINATOR = 32; //!< モンスターが背後に忍び寄る確率分母
+constexpr auto STALKER_DISTANCE_THRESHOLD = 20; //!< モンスターが背後に忍び寄る距離の閾値
 
 /*!
  * @brief モンスター単体の1ターン行動処理メインルーチン /
