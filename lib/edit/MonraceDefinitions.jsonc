@@ -87,7 +87,7 @@
       "FORCE_DEPTH", "FORCE_MAXHP", "FRIENDS", "ESCORT", "ESCORTS", "RIDING", "INVISIBLE", "COLD_BLOOD",
       "KAGE", "CHAMELEON", "TANUKI", "NO_QUEST", "ELDRITCH_HORROR", "MULTIPLY", "REGENERATE", "POWERFUL",
       "REFLECTING", "QUESTOR", "EMPTY_MIND", "WEIRD_MIND"
-      "DIMINISH_MAX_DAMAGE"
+      "DIMINISH_MAX_DAMAGE", "STALKER"
       ###
 
       "skill": { モンスターの発動型能力設定
@@ -82212,7 +82212,8 @@
         "CAN_FLY",
         "NO_CONF",
         "NO_SLEEP",
-        "POWERFUL"
+        "POWERFUL",
+        "STALKER"
       ],
       "skill": {
         "probability": "1_IN_2",
@@ -88527,6 +88528,51 @@
       "flavor": {
         "ja": "それは白い宝石の塊で、何千もの小さな足で前によろめき歩く。",
         "en": "It is a pile of white jewels, shambling forward on thousands of tiny legs."
+      }
+    },
+    {
+      "id": 1385,
+      "name": {
+        "ja": "忍び寄る人形『メリー』",
+        "en": "Mary, the creeping doll"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Dark Gray"
+      },
+      "speed": 0,
+      "hit_point": "1d6",
+      "vision": 999,
+      "armor_class": 0,
+      "alertness": 0,
+      "level": 0,
+      "rarity": 3,
+      "exp": 12,
+      "blows": [
+        {
+          "method": "TOUCH",
+          "effect": "TERRIFY"
+        }
+      ],
+      "flags": [
+        "UNIQUE",
+        "FORCE_MAXHP",
+        "WILD_TOWN",
+        "SPEAK_ALL",
+        "ONLY_GOLD",
+        "DROP_4D2",
+        "EMPTY_MIND",
+        "IM_ELEC",
+        "IM_COLD",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "STALKER"
+      ],
+      "flavor": {
+        "ja": "ゴミ捨て場に横たわっていたはずの人形だ。誰かが動かしたのだろうか。",
+        "en": "The doll was lying in a rubbish dump. Did someone move it?"
       }
     }
   ]

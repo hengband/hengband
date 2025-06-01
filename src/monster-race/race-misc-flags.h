@@ -22,5 +22,6 @@ enum class MonsterMiscType {
     EMPTY_MIND = 18,
     WEIRD_MIND = 19,
     GUARDIAN = 20,
+    STALKER = 21,
     MAX
 };
