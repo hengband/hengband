@@ -50474,7 +50474,33 @@
       "flavor": {
         "ja": "響き渡る金属的な足音がこの巨大な、半悪魔半機械の怪物の到来を告げる。その火力には何者もかなわない。",
         "en": "Reverberant metal steps announce the arrival of this huge creature, half demon half machine. It has an unsurpassable firepower."
-      }
+      },
+      "message": [
+        {
+          "action" : "WALK_CLOSERANGE",
+          "chance" : 20,
+          "message":{
+            "ja" : "近くで重厚な足音が聞こえた。",
+            "en" : "You hear heavy steps nearby."
+          }
+        },
+        {
+          "action" : "WALK_MIDDLERANGE",
+          "chance" : 20,
+          "message":{
+            "ja" : "重厚な足音が聞こえた。",
+            "en" : "You hear heavy steps."
+          }
+        },
+        {
+          "action" : "WALK_LONGRANGE",
+          "chance" : 40,
+          "message":{
+            "ja" : "遠くで重厚な足音が聞こえた。",
+            "en" : "You hear heavy steps in the distance."
+          }
+        }
+      ]
     },
     //#JZ#
     //#JZ#死の女王ヘラ
@@ -88573,7 +88599,41 @@
       "flavor": {
         "ja": "ゴミ捨て場に横たわっていたはずの人形だ。誰かが動かしたのだろうか。",
         "en": "The doll was lying in a rubbish dump. Did someone move it?"
-      }
+      },
+      "message": [
+        {
+          "action" : "MESSAGE_STALKER",
+          "chance" : 1,
+          "message":{
+            "ja" : "「わたしメリーさん。今、あなたの後ろに居るの。」",
+            "en" : "'I'm Mary. Now I'm behind you.'"
+          }
+        },
+        {
+          "action" : "WALK_CLOSERANGE",
+          "chance" : 10,
+          "message":{
+            "ja" : "電話だ。「わたしメリーさん。今、あなたの家の前に居るの。」",
+            "en" : "You get a call. 'I'm Mary. Now I'm in front of your house.'"
+          }
+        },
+        {
+          "action" : "WALK_MIDDLERANGE",
+          "chance" : 10,
+          "message":{
+            "ja" : "電話だ。「わたしメリーさん。今、雑貨屋の前に居るの。」",
+            "en" : "You get a call. 'I'm Mary. Now I'm in front of the general store.'"
+          }
+        },
+        {
+          "action" : "WALK_LONGRANGE",
+          "chance" : 20,
+          "message":{
+            "ja" : "電話だ。「わたしメリーさん。今、ゴミ捨て場に居るの。」",
+            "en" : "You get a call. 'I'm Mary. Now I'm at garbage dump.'"
+          }
+        }
+      ]
     }
   ]
 }

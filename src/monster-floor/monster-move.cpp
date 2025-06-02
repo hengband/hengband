@@ -536,6 +536,22 @@ static std::string_view get_speak_filename(const MonsterEntity &monster)
 }
 
 /*!
+ * @brief 姿の見えないモンスターのメッセージを表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param message 対応するメッセージ
+ * @param aware 実際にメッセージが発生したらTRUE
+ */
+void process_sound(PlayerType *player_ptr, MonsterMessage message)
+{
+    if (one_in_(message.chance)) {
+        if (disturb_minor) {
+            disturb(player_ptr, false, false);
+        }
+        msg_print(message.message);
+    }
+}
+
+/*!
  * @brief モンスターを喋らせたり足音を立てたりする
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
@@ -552,12 +568,27 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[m_idx];
-    constexpr auto chance_noise = 20;
-    if (monster.ap_r_idx == MonraceId::CYBER && one_in_(chance_noise) && !monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
-        if (disturb_minor) {
-            disturb(player_ptr, false, false);
+    const auto &messages = monster.get_monrace().get_messages();
+    if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT / 2)) {
+        const auto message_close = messages.find(MonsterMessageType::WALK_CLOSERANGE);
+        if (message_close != messages.end()) {
+            process_sound(player_ptr, message_close->second);
+            return;
         }
-        msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
+    }
+    if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
+        const auto message_middle = messages.find(MonsterMessageType::WALK_MIDDLERANGE);
+        if (message_middle != messages.end()) {
+            process_sound(player_ptr, message_middle->second);
+            return;
+        }
+    }
+    if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT * 2)) {
+        const auto message_long = messages.find(MonsterMessageType::WALK_LONGRANGE);
+        if (message_long != messages.end()) {
+            process_sound(player_ptr, message_long->second);
+            return;
+        }
     }
 
     constexpr auto chance_speak = 8;

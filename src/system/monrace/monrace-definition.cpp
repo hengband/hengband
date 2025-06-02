@@ -36,6 +36,12 @@ DropArtifact::DropArtifact(FixedArtifactId fa_id, int chance)
 {
 }
 
+MonsterMessage::MonsterMessage(int chance, std::string message)
+    : chance(chance)
+    , message(message)
+{
+}
+
 Reinforce::Reinforce(MonraceId monrace_id, Dice dice)
     : monrace_id(monrace_id)
     , dice(dice)
@@ -329,6 +335,11 @@ bool MonraceDefinition::has_reinforce() const
     const auto it = std::find_if(this->reinforces.begin(), end,
         [](const auto &reinforce) { return reinforce.is_valid(); });
     return it != end;
+}
+
+const std::unordered_map<MonsterMessageType, MonsterMessage> &MonraceDefinition::get_messages() const
+{
+    return this->messages;
 }
 
 const std::vector<DropArtifact> &MonraceDefinition::get_drop_artifacts() const
@@ -772,6 +783,11 @@ void MonraceDefinition::make_lore_treasure(int num_item, int num_gold)
     if (this->drop_flags.has(MonsterDropType::DROP_GREAT)) {
         this->r_drop_flags.set(MonsterDropType::DROP_GREAT);
     }
+}
+
+void MonraceDefinition::set_message(MonsterMessageType message_type, int chance, std::string message)
+{
+    this->messages.insert(std::make_pair(message_type, MonsterMessage(chance, message)));
 }
 
 void MonraceDefinition::emplace_drop_artifact(FixedArtifactId fa_id, int chance)

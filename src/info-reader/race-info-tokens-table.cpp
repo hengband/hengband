@@ -408,6 +408,19 @@ const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags 
     { "SPEAK_SPAWN", MonsterSpeakType::SPEAK_SPAWN },
 };
 
+const std::unordered_map<std::string_view, MonsterMessageType> r_info_message_flags = {
+    { "SPEAK_ALL", MonsterMessageType::SPEAK_ALL },
+    { "SPEAK_BATTLE", MonsterMessageType::SPEAK_BATTLE },
+    { "SPEAK_FEAR", MonsterMessageType::SPEAK_FEAR },
+    { "SPEAK_FRIEND", MonsterMessageType::SPEAK_FRIEND },
+    { "SPEAK_DEATH", MonsterMessageType::SPEAK_DEATH },
+    { "SPEAK_SPAWN", MonsterMessageType::SPEAK_SPAWN },
+    { "WALK_CLOSERANGE", MonsterMessageType::WALK_CLOSERANGE },
+    { "WALK_MIDDLERANGE", MonsterMessageType::WALK_MIDDLERANGE },
+    { "WALK_LONGRANGE", MonsterMessageType::WALK_LONGRANGE },
+    { "MESSAGE_STALKER", MonsterMessageType::MESSAGE_STALKER },
+};
+
 const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightness_flags = {
     { "HAS_LITE_1", MonsterBrightnessType::HAS_LITE_1 },
     { "SELF_LITE_1", MonsterBrightnessType::SELF_LITE_1 },

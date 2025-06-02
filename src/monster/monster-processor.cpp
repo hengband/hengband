@@ -772,7 +772,14 @@ bool process_stalking(PlayerType *player_ptr, MONSTER_IDX m_idx)
     disturb(player_ptr, true, true);
 
     if (see_monster(player_ptr, m_idx)) {
-        msg_format(_("%s^があなたの傍に忍び寄った。", "%s^ crept up beside you."), m_name.data());
+
+        const auto messages = monster.get_monrace().get_messages();
+        const auto message_stalker = messages.find(MonsterMessageType::MESSAGE_STALKER);
+        if (message_stalker != messages.end()) {
+            msg_print(message_stalker->second.message);
+        } else {
+            msg_format(_("%s^があなたの傍に忍び寄った。", "%s^ crept up beside you."), m_name.data());
+        }
     }
 
     return true;
