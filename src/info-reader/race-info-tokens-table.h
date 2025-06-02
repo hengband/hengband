@@ -15,6 +15,7 @@ enum class MonsterPopulationType;
 enum class MonsterResistanceType;
 enum class MonsterSex;
 enum class MonsterSpeakType;
+enum class MonsterMessageType;
 enum class MonsterSpecialType;
 enum class MonsterVisualType;
 enum class MonsterWildernessType;
@@ -34,6 +35,7 @@ extern const std::unordered_map<std::string_view, MonsterWildernessType> r_info_
 extern const std::unordered_map<std::string_view, MonsterFeatureType> r_info_feature_flags;
 extern const std::unordered_map<std::string_view, MonsterPopulationType> r_info_population_flags;
 extern const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags;
+extern const std::unordered_map<std::string_view, MonsterMessageType> r_info_message_flags;
 extern const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightness_flags;
 extern const std::unordered_map<std::string_view, MonsterSex> r_info_sex;
 extern const std::unordered_map<std::string_view, MonsterSpecialType> r_info_special_flags;

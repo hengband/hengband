@@ -536,6 +536,21 @@ static std::string_view get_speak_filename(const MonsterEntity &monster)
 }
 
 /*!
+ * @brief 姿の見えないモンスターのメッセージを表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param message 対応するメッセージ
+ */
+void process_sound(PlayerType *player_ptr, const std::string &message, const int chance)
+{
+    if (one_in_(chance)) {
+        if (disturb_minor) {
+            disturb(player_ptr, false, false);
+        }
+        msg_print(message);
+    }
+}
+
+/*!
  * @brief モンスターを喋らせたり足音を立てたりする
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
@@ -552,12 +567,33 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[m_idx];
-    constexpr auto chance_noise = 20;
-    if (monster.ap_r_idx == MonraceId::CYBER && one_in_(chance_noise) && !monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
-        if (disturb_minor) {
-            disturb(player_ptr, false, false);
+    const auto &monrace = monster.get_monrace();
+
+    if (player_ptr->skill_srh > randint1(100)) {
+        if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT / 2)) {
+            const auto message = monrace.get_message(MonsterMessageType::WALK_CLOSERANGE);
+            const auto message_chance = monrace.get_message_chance(MonsterMessageType::WALK_CLOSERANGE);
+            if (message && message_chance) {
+                process_sound(player_ptr, message.value(), message_chance.value());
+                return;
+            }
         }
-        msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
+        if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
+            const auto message = monrace.get_message(MonsterMessageType::WALK_MIDDLERANGE);
+            const auto message_chance = monrace.get_message_chance(MonsterMessageType::WALK_MIDDLERANGE);
+            if (message && message_chance) {
+                process_sound(player_ptr, message.value(), message_chance.value());
+                return;
+            }
+        }
+        if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT * 2)) {
+            const auto message = monrace.get_message(MonsterMessageType::WALK_LONGRANGE);
+            const auto message_chance = monrace.get_message_chance(MonsterMessageType::WALK_LONGRANGE);
+            if (message && message_chance) {
+                process_sound(player_ptr, message.value(), message_chance.value());
+                return;
+            }
+        }
     }
 
     constexpr auto chance_speak = 8;

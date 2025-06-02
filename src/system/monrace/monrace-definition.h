@@ -47,6 +47,13 @@ public:
     Dice damage_dice;
 };
 
+class MonsterMessage {
+public:
+    MonsterMessage(int chance, std::string message);
+    int chance;
+    std::string message;
+};
+
 class MonraceDefinition;
 class Reinforce {
 public:
@@ -160,6 +167,8 @@ public:
     int calc_capture_value() const;
     std::string build_eldritch_horror_message(std::string_view description) const;
     bool has_reinforce() const;
+    const std::optional<std::string> get_message(const MonsterMessageType message_type) const;
+    const std::optional<int> get_message_chance(const MonsterMessageType message_type) const;
     const std::vector<DropArtifact> &get_drop_artifacts() const;
     const std::vector<Reinforce> &get_reinforces() const;
     bool can_generate() const;
@@ -206,6 +215,7 @@ public:
     void init_sex(uint32_t value);
     std::optional<std::string> probe_lore();
     void make_lore_treasure(int num_item, int num_drop);
+    void set_message(MonsterMessageType message_type, int chance, std::string message);
     void emplace_drop_artifact(FixedArtifactId fa_id, int percentage);
     void emplace_reinforce(MonraceId monrace_id, const Dice &dice);
 
@@ -227,6 +237,7 @@ public:
     void increment_tkills();
 
 private:
+    std::unordered_map<MonsterMessageType, MonsterMessage> messages; //!< メッセージリスト
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
     std::vector<Reinforce> reinforces; //!< 指定護衛リスト
     MonsterSex sex{}; //!< 性別 / Sex
