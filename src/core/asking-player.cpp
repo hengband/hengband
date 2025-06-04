@@ -326,9 +326,8 @@ std::optional<char> input_command(std::string_view prompt, bool z_escape)
  */
 int input_quantity(int max, std::string_view initial_prompt)
 {
-    int amt;
     if (command_arg) {
-        amt = command_arg;
+        int amt = command_arg;
         command_arg = 0;
         if (amt > max) {
             amt = max;
@@ -337,19 +336,9 @@ int input_quantity(int max, std::string_view initial_prompt)
         return amt;
     }
 
-    short code;
-    auto result = repeat_pull(&code);
-    amt = code;
-    if ((max != 1) && result) {
-        if (amt > max) {
-            return max;
-        }
-
-        if (amt < 0) {
-            return 0;
-        }
-
-        return amt;
+    const auto code = repeat_pull();
+    if ((max != 1) && code) {
+        return std::clamp<int>(*code, 0, max);
     }
 
     std::string prompt;
@@ -365,11 +354,12 @@ int input_quantity(int max, std::string_view initial_prompt)
         return 0;
     }
 
+    int amt;
     if (isalpha((*input_amount)[0])) {
         amt = max;
     } else {
         try {
-            amt = std::clamp<int>(std::stoi(*input_amount), 0, max);
+            amt = std::clamp(std::stoi(*input_amount), 0, max);
         } catch (const std::exception &) {
             amt = 0;
         }

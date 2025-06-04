@@ -699,13 +699,12 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
     TERM_LEN y = 1;
     TERM_LEN x = 10;
     PLAYER_LEVEL plev = player_ptr->lev;
-    COMMAND_CODE code;
     bool flag, redraw;
     int menu_line = (use_menu ? 1 : 0);
 
     *sn = -1;
-    if (repeat_pull(&code)) {
-        *sn = (SPELL_IDX)code;
+    if (const auto code = repeat_pull(); code) {
+        *sn = *code;
         if (get_elemental_info(player_ptr, *sn).min_lev <= plev) {
             return true;
         }

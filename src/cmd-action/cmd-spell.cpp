@@ -319,12 +319,11 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
     SPELL_IDX spell = -1;
     int num = 0;
     SPELL_IDX spells[64]{};
-    COMMAND_CODE code;
     int menu_line = (use_menu ? 1 : 0);
 
     /* Get the spell, if available */
-    if (repeat_pull(&code)) {
-        *sn = (SPELL_IDX)code;
+    if (const auto code = repeat_pull(); code) {
+        *sn = *code;
         /* Verify the spell */
         if (spell_okay(player_ptr, *sn, learned, false, use_realm)) {
             /* Success */
@@ -526,33 +525,26 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
  */
 static void confirm_use_force(PlayerType *player_ptr, bool browse_only)
 {
-    char which;
-    COMMAND_CODE code;
-
-    /* Get the item index */
-    if (repeat_pull(&code) && (code == INVEN_FORCE)) {
+    if (const auto code = repeat_pull(); code == INVEN_FORCE) {
         browse_only ? do_cmd_mind_browse(player_ptr) : do_cmd_mind(player_ptr);
         return;
     }
 
-    /* Show the prompt */
     prt(_("('w'練気術, ESC) 'w'かESCを押してください。 ", "(w for the Force, ESC) Hit 'w' or ESC. "), 0, 0);
-
+    char which;
     while (true) {
-        /* Get a key */
         which = inkey();
-
         if (which == ESCAPE) {
             break;
-        } else if (which == 'w') {
+        }
+
+        if (which == 'w') {
             repeat_push(INVEN_FORCE);
             break;
         }
     }
 
-    /* Clear the prompt line */
     prt("", 0, 0);
-
     if (which == 'w') {
         browse_only ? do_cmd_mind_browse(player_ptr) : do_cmd_mind(player_ptr);
     }
