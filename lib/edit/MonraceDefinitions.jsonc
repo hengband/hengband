@@ -88626,11 +88626,27 @@
           }
         },
         {
+          "action": "WALK_MIDDLERANGE",
+          "chance": 10,
+          "message": {
+            "ja": "電話だ。「わたしメリーさん。今、宿屋の前に居るの。」",
+            "en": "You get a call. 'I'm Mary. Now I'm in front of the inn.'"
+          }
+        },
+        {
           "action": "WALK_LONGRANGE",
           "chance": 20,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、ゴミ捨て場に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm at garbage dump.'"
+          }
+        },
+        {
+          "action": "WALK_LONGRANGE",
+          "chance": 20,
+          "message": {
+            "ja": "電話だ。「わたしメリーさん。今、街の入口に居るの。」",
+            "en": "You get a call. 'I'm Mary. Now I'm at the entrance to the town.'"
           }
         }
       ]

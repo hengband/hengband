@@ -572,25 +572,22 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     if (player_ptr->skill_srh > randint1(100)) {
         if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT / 2)) {
             const auto message = monrace.get_message(MonsterMessageType::WALK_CLOSERANGE);
-            const auto message_chance = monrace.get_message_chance(MonsterMessageType::WALK_CLOSERANGE);
-            if (message && message_chance) {
-                process_sound(player_ptr, message.value(), message_chance.value());
+            if (message) {
+                process_sound(player_ptr, message.value().get_message(), message.value().get_message_chance());
                 return;
             }
         }
         if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
             const auto message = monrace.get_message(MonsterMessageType::WALK_MIDDLERANGE);
-            const auto message_chance = monrace.get_message_chance(MonsterMessageType::WALK_MIDDLERANGE);
-            if (message && message_chance) {
-                process_sound(player_ptr, message.value(), message_chance.value());
+            if (message) {
+                process_sound(player_ptr, message.value().get_message(), message.value().get_message_chance());
                 return;
             }
         }
         if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT * 2)) {
             const auto message = monrace.get_message(MonsterMessageType::WALK_LONGRANGE);
-            const auto message_chance = monrace.get_message_chance(MonsterMessageType::WALK_LONGRANGE);
-            if (message && message_chance) {
-                process_sound(player_ptr, message.value(), message_chance.value());
+            if (message) {
+                process_sound(player_ptr, message.value().get_message(), message.value().get_message_chance());
                 return;
             }
         }

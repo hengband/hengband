@@ -1,6 +1,7 @@
 #pragma once
 
 #include "locale/localized-string.h"
+#include "monrace-message.h"
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
@@ -45,13 +46,6 @@ public:
     RaceBlowMethodType method{};
     RaceBlowEffectType effect{};
     Dice damage_dice;
-};
-
-class MonsterMessage {
-public:
-    MonsterMessage(int chance, std::string message);
-    int chance;
-    std::string message;
 };
 
 class MonraceDefinition;
@@ -167,8 +161,7 @@ public:
     int calc_capture_value() const;
     std::string build_eldritch_horror_message(std::string_view description) const;
     bool has_reinforce() const;
-    const std::optional<std::string> get_message(const MonsterMessageType message_type) const;
-    const std::optional<int> get_message_chance(const MonsterMessageType message_type) const;
+    const std::optional<MonsterMessage> get_message(const MonsterMessageType message_type) const;
     const std::vector<DropArtifact> &get_drop_artifacts() const;
     const std::vector<Reinforce> &get_reinforces() const;
     bool can_generate() const;
@@ -237,7 +230,6 @@ public:
     void increment_tkills();
 
 private:
-    std::unordered_map<MonsterMessageType, MonsterMessage> messages; //!< メッセージリスト
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
     std::vector<Reinforce> reinforces; //!< 指定護衛リスト
     MonsterSex sex{}; //!< 性別 / Sex
