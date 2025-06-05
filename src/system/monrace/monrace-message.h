@@ -47,10 +47,12 @@ public:
     static MonraceMessageList &get_instance();
     tl::optional<const MonsterMessage &> get_message(const int monrace_id, const MonsterMessageType message_type) const;
     void emplace(const int monrace_id, const MonsterMessageType message_type, const int chance, std::string_view message_str);
+    void emplace_default(const MonsterMessageType message_type, const int chance, std::string_view message_str);
 
 private:
     MonraceMessageList() = default;
     static MonraceMessageList instance;
 
     std::map<int, MonraceMessage> messages;
+    MonraceMessage default_messages;
 };

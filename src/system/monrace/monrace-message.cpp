@@ -67,7 +67,12 @@ tl::optional<const MonsterMessage &> MonraceMessageList::get_message(const int m
 {
     auto message = this->messages.find(monrace_id);
     if (message == this->messages.end()) {
-        return tl::nullopt;
+        return this->default_messages.get_message(message_type);
     }
     return message->second.get_message(message_type);
+}
+
+void MonraceMessageList::emplace_default(const MonsterMessageType message_type, const int chance, std::string_view message_str)
+{
+    this->default_messages.emplace(message_type, chance, message_str);
 }

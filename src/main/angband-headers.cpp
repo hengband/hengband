@@ -11,6 +11,7 @@ angband_header class_skills_header; /*!< プレイヤー職業技能情報のヘ
 angband_header dungeons_header; /*!< ダンジョン情報のヘッダ構造体 */
 angband_header egos_header; /*!< アイテムエゴ情報のヘッダ構造体 */
 angband_header monraces_header; /*!< モンスター種族情報のヘッダ構造体 */
+angband_header monster_messages_header; /*!< モンスターメッセージのヘッダ構造体 */
 angband_header spells_header; /*!< 呪文情報のヘッダ構造体 */
 angband_header terrains_header; /*!< 地形情報のヘッダ構造体 */
 angband_header vaults_header; /*!< Vault情報のヘッダ構造体 */

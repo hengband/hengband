@@ -448,6 +448,7 @@
     <ClCompile Include="..\..\src\info-reader\baseitem-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\baseitem-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\magic-reader.cpp" />
+    <ClCompile Include="..\..\src\info-reader\message-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\race-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\skill-reader.cpp" />
@@ -1251,6 +1252,7 @@
     <ClInclude Include="..\..\src\info-reader\baseitem-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\baseitem-reader.h" />
     <ClInclude Include="..\..\src\info-reader\magic-reader.h" />
+    <ClInclude Include="..\..\src\info-reader\message-reader.h" />
     <ClInclude Include="..\..\src\info-reader\parse-error-types.h" />
     <ClInclude Include="..\..\src\info-reader\race-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\race-reader.h" />

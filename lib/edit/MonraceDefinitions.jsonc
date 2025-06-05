@@ -88605,8 +88605,8 @@
           "action": "MESSAGE_STALKER",
           "chance": 1,
           "message": {
-            "ja": "電話だ。「わたしメリーさん。今、あなたの後ろに居るの。」",
-            "en": "You get a call. 'I'm Mary. Now I'm behind you.'"
+            "ja": "から電話だ。「わたしメリーさん。今、あなたの後ろに居るの。」",
+            "en": "is calling you. 'I'm Mary. Now I'm behind you.'"
           }
         },
         {
