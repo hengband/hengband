@@ -512,6 +512,8 @@ hengband_SOURCES = \
 	external-lib/include/range/v3/range.hpp \
 	external-lib/include/meta/meta.hpp \
 	external-lib/include/meta/meta_fwd.hpp \
+	external-lib/include/tl/expected.hpp \
+	external-lib/include/tl/optional.hpp \
 	external-lib/include/fmt/core.h \
 	external-lib/include/fmt/ranges.h \
 	external-lib/include/fmt/compile.h \
