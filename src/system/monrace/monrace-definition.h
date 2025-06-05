@@ -22,6 +22,7 @@
 #include "view/display-symbol.h"
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <vector>
 
 /*! モンスターが1ターンに攻撃する最大回数 (射撃を含む) / The maximum number of times a monster can attack in a turn (including SHOOT) */
@@ -161,7 +162,7 @@ public:
     int calc_capture_value() const;
     std::string build_eldritch_horror_message(std::string_view description) const;
     bool has_reinforce() const;
-    const std::optional<MonsterMessage> get_message(const MonsterMessageType message_type) const;
+    tl::optional<const MonsterMessage &> get_message(const MonsterMessageType message_type) const;
     const std::vector<DropArtifact> &get_drop_artifacts() const;
     const std::vector<Reinforce> &get_reinforces() const;
     bool can_generate() const;

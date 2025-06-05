@@ -2,8 +2,8 @@
 
 #include "monster-race/race-speak-flags.h"
 #include <map>
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 #include <vector>
 
 class MonsterMessage {
@@ -19,7 +19,7 @@ private:
 
 class MonsterMessageList {
 public:
-    const std::optional<MonsterMessage> get_message() const;
+    tl::optional<const MonsterMessage &> get_message() const;
     void emplace(MonsterMessage message);
 
 private:
@@ -28,7 +28,7 @@ private:
 
 class MonraceMessage {
 public:
-    const std::optional<MonsterMessage> get_message(MonsterMessageType message_type) const;
+    tl::optional<const MonsterMessage &> get_message(MonsterMessageType message_type) const;
     void emplace(const MonsterMessageType message_type, const int chance, const std::string &message_str);
 
 private:
@@ -44,7 +44,7 @@ public:
     ~MonraceMessageList() = default;
 
     static MonraceMessageList &get_instance();
-    const std::optional<MonsterMessage> get_message(const int monrace_id, const MonsterMessageType message_type) const;
+    tl::optional<const MonsterMessage &> get_message(const int monrace_id, const MonsterMessageType message_type) const;
     void emplace(const int monrace_id, const MonsterMessageType message_type, const int chance, const std::string &message_str);
 
 private:
