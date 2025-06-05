@@ -1292,6 +1292,7 @@ hengband_SOURCES = \
 	system/monrace/monrace-allocation.cpp system/monrace/monrace-allocation.h \
 	system/monrace/monrace-definition.cpp system/monrace/monrace-definition.h \
 	system/monrace/monrace-list.cpp system/monrace/monrace-list.h \
+	system/monrace/monrace-message.cpp system/monrace/monrace-message.h \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
 	system/services/dungeon-service.cpp system/services/dungeon-service.h \

@@ -9,6 +9,7 @@
 #include "player-ability/player-ability-types.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-message.h"
 #include "term/gameterm.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
@@ -444,7 +445,7 @@ static errr set_mon_message(const nlohmann::json &message_data, MonraceDefinitio
             return err;
         }
 
-        monrace.set_message(action->second, chance, str);
+        MonraceMessageList::get_instance().emplace((int)monrace.idx, action->second, chance, str);
     }
     return PARSE_ERROR_NONE;
 }
