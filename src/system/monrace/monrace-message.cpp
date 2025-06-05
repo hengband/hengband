@@ -24,14 +24,13 @@ void MonsterMessageList::emplace(MonsterMessage message)
     this->messages.emplace_back(std::move(message));
 }
 
-const std::optional<MonsterMessage> MonsterMessageList::get_message() const
+tl::optional<const MonsterMessage &> MonsterMessageList::get_message() const
 {
     if (this->messages.empty()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
-    const auto size = this->messages.size();
-    return this->messages[randint1(size) - 1];
+    return rand_choice(this->messages);
 }
 
 void MonraceMessage::emplace(const MonsterMessageType message_type, const int chance, const std::string &message_str)
@@ -46,11 +45,11 @@ void MonraceMessage::emplace(const MonsterMessageType message_type, const int ch
     message->second.emplace(MonsterMessage(chance, message_str));
 }
 
-const std::optional<MonsterMessage> MonraceMessage::get_message(MonsterMessageType message_type) const
+tl::optional<const MonsterMessage &> MonraceMessage::get_message(MonsterMessageType message_type) const
 {
     const auto &message = this->messages.find(message_type);
     if (message == this->messages.end()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
     return message->second.get_message();
 }
@@ -74,11 +73,11 @@ void MonraceMessageList::emplace(const int monrace_id, const MonsterMessageType 
     message->second.emplace(message_type, chance, message_str);
 }
 
-const std::optional<MonsterMessage> MonraceMessageList::get_message(const int monrace_id, const MonsterMessageType message_type) const
+tl::optional<const MonsterMessage &> MonraceMessageList::get_message(const int monrace_id, const MonsterMessageType message_type) const
 {
     auto message = this->messages.find(monrace_id);
     if (message == this->messages.end()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
     return message->second.get_message(message_type);
 }
