@@ -26,6 +26,7 @@
 #include "target/target-checker.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <optional>
 
 /*!
  * @brief モンスターから直接攻撃を受けた時に落馬するかどうかを判定し、判定アウトならば落馬させる
@@ -94,14 +95,14 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         return false;
     }
 
-    Pos2D pos_safe(0, 0);
+    std::optional<Pos2D> pos_fall_off;
     if (dam >= 0 || force) {
         if (!calc_fall_off_possibility(player_ptr, dam, force, monrace)) {
             return false;
         }
 
         /* Check around the player */
-        auto num_safe_grids = 0;
+        auto num_fall_off_grids = 0;
         for (const auto &d : Direction::directions_8()) {
             const auto pos = player_ptr->get_neighbor(d);
 
@@ -122,17 +123,17 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
                 continue;
             }
 
-            num_safe_grids++;
+            num_fall_off_grids++;
 
             /* Randomize choice */
-            if (randint0(num_safe_grids) > 0) {
+            if (randint0(num_fall_off_grids) > 0) {
                 continue;
             }
 
-            pos_safe = pos;
+            pos_fall_off = pos;
         }
 
-        if (!num_safe_grids) {
+        if (!pos_fall_off) {
             const auto m_name = monster_desc(player_ptr, monster, 0);
             msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s but bumped into a wall."), m_name.data());
             take_hit(player_ptr, DAMAGE_NOESCAPE, monrace.level + 3, _("壁への衝突", "bumping into a wall"));
@@ -140,8 +141,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         }
 
         lite_spot(player_ptr, player_ptr->get_position());
-        player_ptr->set_position(pos_safe);
-        lite_spot(player_ptr, player_ptr->get_position());
+        lite_spot(player_ptr, *pos_fall_off);
         verify_panel(player_ptr);
     }
 
@@ -179,8 +179,8 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         fall_dam = true;
     }
 
-    if ((pos_safe.y > 0) && !player_ptr->is_dead) {
-        (void)move_player_effect(player_ptr, player_ptr->y, player_ptr->x, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
+    if (pos_fall_off && !player_ptr->is_dead) {
+        (void)move_player_effect(player_ptr, pos_fall_off->y, pos_fall_off->x, MPE_DONT_PICKUP | MPE_DONT_SWAP_MON);
     }
 
     return fall_dam;
