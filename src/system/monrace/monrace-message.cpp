@@ -3,7 +3,7 @@
 #include <optional>
 #include <vector>
 
-MonsterMessage::MonsterMessage(int chance, std::string message)
+MonsterMessage::MonsterMessage(int chance, std::string_view message)
     : chance(chance)
     , message(message)
 {
@@ -19,9 +19,9 @@ const std::string &MonsterMessage::get_message() const
     return this->message;
 }
 
-void MonsterMessageList::emplace(MonsterMessage message)
+void MonsterMessageList::emplace(const int chance, std::string_view message_str)
 {
-    this->messages.emplace_back(std::move(message));
+    this->messages.emplace_back(chance, message_str);
 }
 
 tl::optional<const MonsterMessage &> MonsterMessageList::get_message() const
@@ -33,16 +33,11 @@ tl::optional<const MonsterMessage &> MonsterMessageList::get_message() const
     return rand_choice(this->messages);
 }
 
-void MonraceMessage::emplace(const MonsterMessageType message_type, const int chance, const std::string &message_str)
+void MonraceMessage::emplace(const MonsterMessageType message_type, const int chance, std::string_view message_str)
 {
-    const auto &message = this->messages.find(message_type);
-    if (message == this->messages.end()) {
-        auto list = MonsterMessageList();
-        list.emplace(MonsterMessage(chance, message_str));
-        this->messages.emplace(message_type, list);
-        return;
-    }
-    message->second.emplace(MonsterMessage(chance, message_str));
+    // map::operator[] はキーが存在しない場合にデフォルトコンストラクタでオブジェクトを生成する。これは意図した動作である。
+    auto &message = this->messages[message_type];
+    message.emplace(chance, message_str);
 }
 
 tl::optional<const MonsterMessage &> MonraceMessage::get_message(MonsterMessageType message_type) const
@@ -61,16 +56,11 @@ MonraceMessageList &MonraceMessageList::get_instance()
     return instance;
 }
 
-void MonraceMessageList::emplace(const int monrace_id, const MonsterMessageType message_type, const int chance, const std::string &message_str)
+void MonraceMessageList::emplace(const int monrace_id, const MonsterMessageType message_type, const int chance, std::string_view message_str)
 {
-    const auto &message = this->messages.find(monrace_id);
-    if (message == this->messages.end()) {
-        auto monrace_message = MonraceMessage();
-        monrace_message.emplace(message_type, chance, message_str);
-        this->messages.emplace(monrace_id, monrace_message);
-        return;
-    }
-    message->second.emplace(message_type, chance, message_str);
+    // map::operator[] はキーが存在しない場合にデフォルトコンストラクタでオブジェクトを生成する。これは意図した動作である。
+    auto &message = this->messages[monrace_id];
+    message.emplace(message_type, chance, message_str);
 }
 
 tl::optional<const MonsterMessage &> MonraceMessageList::get_message(const int monrace_id, const MonsterMessageType message_type) const
