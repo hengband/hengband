@@ -45,7 +45,7 @@ void building_recharge(PlayerType *player_ptr)
      */
     if (!o_ptr->is_known()) {
         msg_format(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
-        msg_print(nullptr);
+        msg_erase();
         if ((player_ptr->au >= 50) && input_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? "))) {
             player_ptr->au -= 50;
             identify_item(player_ptr, o_ptr);
@@ -215,13 +215,13 @@ void building_recharge_all(PlayerType *player_ptr)
 
     if (!total_cost) {
         msg_print(_("充填する必要はありません。", "No need to recharge."));
-        msg_print(nullptr);
+        msg_erase();
         return;
     }
 
     if (player_ptr->au < total_cost) {
         msg_format(_("すべてのアイテムを再充填するには＄%d 必要です！", "You need %d gold to recharge all items!"), total_cost);
-        msg_print(nullptr);
+        msg_erase();
         return;
     }
 
@@ -265,7 +265,7 @@ void building_recharge_all(PlayerType *player_ptr)
     }
 
     msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
-    msg_print(nullptr);
+    msg_erase();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags = {
         StatusRecalculatingFlag::COMBINATION,

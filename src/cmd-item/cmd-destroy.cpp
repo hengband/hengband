@@ -52,7 +52,7 @@ static bool check_destory_item(PlayerType *player_ptr, const ItemEntity &destroy
     const auto item_name = describe_flavor(player_ptr, destroying_item, OD_OMIT_PREFIX);
     constexpr auto fmt = _("本当に%sを壊しますか? [y/n/Auto]", "Really destroy %s? [y/n/Auto]");
     const auto msg = format(fmt, item_name.data());
-    msg_print(nullptr);
+    msg_erase();
     message_add(msg);
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
     window_stuff(player_ptr);

@@ -81,7 +81,7 @@ void file_character(PlayerType *player_ptr, std::string_view filename)
     constexpr auto error_msg = _("キャラクタ情報のファイルへの書き出しに失敗しました！", "Character dump failed!");
     if (!fff) {
         msg_print(error_msg);
-        msg_print(nullptr);
+        msg_erase();
         return;
     }
 
@@ -92,13 +92,13 @@ void file_character(PlayerType *player_ptr, std::string_view filename)
     if (ferror(fff)) {
         angband_fclose(fff);
         msg_print(error_msg);
-        msg_print(nullptr);
+        msg_erase();
         return;
     }
 
     angband_fclose(fff);
     msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
-    msg_print(nullptr);
+    msg_erase();
 }
 
 /*!

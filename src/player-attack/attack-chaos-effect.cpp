@@ -159,13 +159,13 @@ static void attack_dispel(PlayerType *player_ptr, player_attack_type *pa_ptr)
 static void attack_probe(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
     msg_print(_("刃が敵を調査した...", "The blade probed your enemy..."));
-    msg_print(nullptr);
+    msg_erase();
     msg_print(probed_monster_info(player_ptr, *pa_ptr->m_ptr, *pa_ptr->r_ptr));
-    msg_print(nullptr);
+    msg_erase();
     const auto mes = MonraceList::get_instance().probe_lore(pa_ptr->r_idx);
     if (mes) {
         msg_print(*mes);
-        msg_print(nullptr);
+        msg_erase();
     }
 }
 

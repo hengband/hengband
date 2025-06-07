@@ -45,7 +45,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
     constexpr auto fmt = _("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily.");
     const auto &filename = path.string();
     msg_format(fmt, filename.data());
-    msg_print(nullptr);
+    msg_erase();
     *disable_diary = true;
     return false;
 }

@@ -42,7 +42,7 @@ static bool clear_auto_register(std::string_view player_base_name)
     if (!tmp_fff) {
         fclose(pref_fff);
         msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 
@@ -169,7 +169,7 @@ bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
     if (!pref_fff) {
         const auto filename_pref = path_pref.string();
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), filename_pref.data());
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 

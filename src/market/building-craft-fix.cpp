@@ -125,7 +125,7 @@ static void display_repair_success_message(PlayerType *player_ptr, const ItemEnt
 #else
     msg_format("Repaired into %s for %d gold.", item_name.data(), cost);
 #endif
-    msg_print(nullptr);
+    msg_erase();
 }
 
 /*!
@@ -166,7 +166,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
 
     if (player_ptr->au < cost) {
         msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), item_name.data());
-        msg_print(nullptr);
+        msg_erase();
         return 0;
     }
 

@@ -183,7 +183,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
             const auto pos_opposite = pos_target + dir.vec();
             const auto &grid_opposite = floor.get_grid(pos_opposite);
             if (player_can_enter(player_ptr, grid_opposite.feat, 0) && !floor.has_trap_at(pos_opposite) && !grid_opposite.m_idx) {
-                msg_print(nullptr);
+                msg_erase();
                 (void)move_player_effect(player_ptr, pos_opposite.y, pos_opposite.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
             }
         }
@@ -542,7 +542,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
                 if (!monster_can_enter(player_ptr, pos_new.y, pos_new.x, monster.get_monrace(), 0)) {
                     /* -more- */
                     if (i < 2) {
-                        msg_print(nullptr);
+                        msg_erase();
                     }
                     continue;
                 }
@@ -571,7 +571,7 @@ std::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX s
 
                 /* -more- */
                 if (i < 2) {
-                    msg_print(nullptr);
+                    msg_erase();
                 }
             }
         }

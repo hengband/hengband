@@ -456,7 +456,7 @@ bool probing(PlayerType *player_ptr)
         if (!probe) {
             msg_print(_("調査中...", "Probing..."));
         }
-        msg_print(nullptr);
+        msg_erase();
 
         const auto probe_result = probed_monster_info(player_ptr, monster, monrace);
         prt(probe_result, 0, 0);
@@ -470,7 +470,7 @@ bool probing(PlayerType *player_ptr)
         const auto mes = monrace.probe_lore();
         if (mes) {
             msg_print(*mes);
-            msg_print(nullptr);
+            msg_erase();
             if (LoreTracker::get_instance().is_tracking(monster.r_idx)) {
                 RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);
             }

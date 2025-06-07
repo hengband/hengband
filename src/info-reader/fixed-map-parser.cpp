@@ -283,7 +283,7 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
             concptr oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
             msg_format("Error %d (%s) at line %d of '%s'.", err, oops, num, name.data());
             msg_format(_("'%s'を解析中。", "Parsing '%s'."), line_str->data());
-            msg_print(nullptr);
+            msg_erase();
             break;
         }
     }

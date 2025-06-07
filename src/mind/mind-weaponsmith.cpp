@@ -148,7 +148,7 @@ static void drain_essence(PlayerType *player_ptr)
 
         for (const auto &[essence, amount] : drain_result) {
             auto essence_name = Smith::get_essence_name(essence);
-            msg_print(nullptr);
+            msg_erase();
             msg_format("%s...%d%s", essence_name, amount, _("。", ". "));
         }
     }

@@ -232,7 +232,7 @@ static bool bldg_process_command(PlayerType *player_ptr, const building_type &bl
         }
 
         msg_print(_("治すべき突然変異が無い。", "You have no mutations."));
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
     case BACT_MELEE_ARENA:

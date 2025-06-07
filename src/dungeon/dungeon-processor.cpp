@@ -161,7 +161,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
             melee_arena.update_gladiators(player_ptr);
         } else {
             msg_print(_("試合開始！", "Ready..Fight!"));
-            msg_print(nullptr);
+            msg_erase();
         }
     }
 

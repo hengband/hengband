@@ -396,13 +396,13 @@ void process_player_hp_mp(PlayerType *player_ptr)
     if ((player_ptr->csp == 0) && (player_ptr->csp_frac == 0)) {
         while (upkeep_factor > 100) {
             msg_print(_("こんなに多くのペットを制御できない！", "Too many pets to control at once!"));
-            msg_print(nullptr);
+            msg_erase();
             do_cmd_pet_dismiss(player_ptr);
 
             upkeep_factor = calculate_upkeep(player_ptr);
 
             msg_format(_("維持ＭＰは %d%%", "Upkeep: %d%% mana."), upkeep_factor);
-            msg_print(nullptr);
+            msg_erase();
         }
     }
 

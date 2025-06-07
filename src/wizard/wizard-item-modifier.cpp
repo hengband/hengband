@@ -493,7 +493,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
 
         constexpr auto q = "Rolls: %d  Correct: %d  Matches: %d  Better: %d  Worse: %d  Other: %d";
         msg_format("Creating a lot of %s items. Base level = %d.", quality.data(), player_ptr->current_floor_ptr->dun_level);
-        msg_print(nullptr);
+        msg_erase();
         auto correct = 0;
         auto matches = 0;
         auto better = 0;
@@ -539,7 +539,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
         }
 
         msg_format(q, count, correct, matches, better, worse, other);
-        msg_print(nullptr);
+        msg_erase();
     }
 
     if (o_ptr->is_fixed_artifact()) {

@@ -98,7 +98,7 @@ static void do_cmd_erase_diary()
         msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), filename.data());
     }
 
-    msg_print(nullptr);
+    msg_erase();
 }
 
 /*!

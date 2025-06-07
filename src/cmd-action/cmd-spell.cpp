@@ -739,7 +739,7 @@ void do_cmd_study(PlayerType *player_ptr)
     msg_format("You can learn %d new %s%s.", player_ptr->new_spells, spell_category.data(), (player_ptr->new_spells == 1 ? "" : "s"));
 #endif
 
-    msg_print(nullptr);
+    msg_erase();
 
     /* Restrict choices to "useful" books */
     auto item_tester = get_learnable_spellbook_tester(player_ptr);

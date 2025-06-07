@@ -157,7 +157,7 @@ void WorldTurnProcessor::process_monster_arena()
 
     if (m_idxs.empty()) {
         msg_print(_("相打ちに終わりました。", "Nothing survived."));
-        msg_print(nullptr);
+        msg_erase();
         this->player_ptr->energy_need = 0;
         auto &melee_arena = MeleeArena::get_instance();
         melee_arena.update_gladiators(player_ptr);
@@ -177,7 +177,7 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
     const auto &monster = this->player_ptr->current_floor_ptr->m_list[win_m_idx];
     const auto m_name = monster_desc(this->player_ptr, monster, 0);
     msg_format(_("%sが勝利した！", "%s won!"), m_name.data());
-    msg_print(nullptr);
+    msg_erase();
 
     auto &melee_arena = MeleeArena::get_instance();
     if (melee_arena.matches_bet_number(win_m_idx - 1)) {
@@ -189,7 +189,7 @@ void WorldTurnProcessor::process_monster_arena_winner(int win_m_idx)
         msg_print(_("残念でした。", "You lost gold."));
     }
 
-    msg_print(nullptr);
+    msg_erase();
     this->player_ptr->energy_need = 0;
     melee_arena.update_gladiators(this->player_ptr);
 }
@@ -203,7 +203,7 @@ void WorldTurnProcessor::process_monster_arena_draw()
 
     msg_print(_("申し訳ありませんが、この勝負は引き分けとさせていただきます。", "Sorry, but this battle ended in a draw."));
     this->player_ptr->au += MeleeArena::get_instance().get_payback(true);
-    msg_print(nullptr);
+    msg_erase();
     this->player_ptr->energy_need = 0;
     auto &melee_arena = MeleeArena::get_instance();
     melee_arena.update_gladiators(player_ptr);

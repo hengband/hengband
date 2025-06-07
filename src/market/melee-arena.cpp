@@ -58,7 +58,7 @@ bool melee_arena_comm(PlayerType *player_ptr)
     /* No money */
     if (player_ptr->au <= 1) {
         msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！", "Hey! You don't have gold - get out of here!"));
-        msg_print(nullptr);
+        msg_erase();
         screen_load();
         return false;
     }
@@ -99,12 +99,12 @@ bool melee_arena_comm(PlayerType *player_ptr)
 
     if (wager > player_ptr->au) {
         msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
-        msg_print(nullptr);
+        msg_erase();
         screen_load();
         return false;
     }
 
-    msg_print(nullptr);
+    msg_erase();
     melee_arena.set_wager(*wager);
     player_ptr->au -= *wager;
     reset_tim_flags(player_ptr);

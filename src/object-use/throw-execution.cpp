@@ -94,7 +94,7 @@ bool ObjectThrowEntity::check_can_throw()
     const auto is_spike = this->o_ptr->bi_key.tval() == ItemKindType::SPIKE;
     if (this->player_ptr->current_floor_ptr->inside_arena && !this->boomerang && !is_spike) {
         msg_print(_("アリーナではアイテムを使えない！", "You're in the arena now. This is hand-to-hand!"));
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 

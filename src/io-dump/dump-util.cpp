@@ -180,7 +180,7 @@ bool open_temporary_file(FILE **fff, char *file_name)
     }
 
     msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-    msg_print(nullptr);
+    msg_erase();
     return false;
 }
 

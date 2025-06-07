@@ -310,10 +310,10 @@ static bool on_read_save_data_not_supported(PlayerType *player_ptr, bool *new_ga
     auto mes_not_play = _("このセーブデータの続きをプレイすることはできません。", "You can't play the rest of the game from this save data.");
     auto mes_check_restart = _("最初からプレイを始めますか？(モンスターの思い出は引き継がれます)", "Play from the beginning? (Monster recalls will be inherited.) ");
     msg_print(mes_not_play);
-    msg_print(nullptr);
+    msg_erase();
     if (!input_check(mes_check_restart)) {
         msg_print(_("ゲームを終了します。", "Exit the game."));
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 
@@ -356,7 +356,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
 #ifndef WINDOWS
     if (access(savefile_str.data(), 0) < 0) {
         msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
-        msg_print(nullptr);
+        msg_erase();
         *new_game = true;
         return true;
     }
@@ -415,7 +415,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
 
     if (err) {
         msg_format("%s: %s", what, savefile_str.data());
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 
@@ -448,7 +448,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
         auto &system = AngbandSystem::get_instance();
         constexpr auto fmt = _("エラー(%s)がバージョン %s 用セーブファイル読み込み中に発生。", "Error (%s) reading %s savefile.");
         msg_format(fmt, what, system.build_version_expression(VersionExpression::WITH_EXTRA).data());
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 

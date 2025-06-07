@@ -157,7 +157,7 @@ std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe
         return code;
     }
 
-    msg_print(nullptr);
+    msg_erase();
     const auto lo = I2A(min);
     const auto hi = (max > 25) ? toupper(I2A(max - 26)) : I2A(max);
 #ifdef JP

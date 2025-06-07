@@ -327,7 +327,7 @@ static void do_name_pet(PlayerType *player_ptr)
     }
 
     msg_format(_("%sに名前をつける。", "Name %s."), monster_desc(player_ptr, monster, 0).data());
-    msg_print(nullptr);
+    msg_erase();
 
     auto old_name = false;
     std::string initial_name("");

@@ -327,7 +327,7 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
         }
         /* Warning */
         msg_print(_("ＭＰが足りません。", "You do not have enough mana to use this power."));
-        msg_print(nullptr);
+        msg_erase();
         return;
     }
 

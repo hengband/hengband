@@ -219,7 +219,7 @@ void do_cmd_inscribe(PlayerType *player_ptr)
 
     const auto item_name = describe_flavor(player_ptr, *o_ptr, OD_OMIT_INSCRIPTION);
     msg_format(_("%sに銘を刻む。", "Inscribing %s."), item_name.data());
-    msg_print(nullptr);
+    msg_erase();
     const auto initial_inscription = o_ptr->is_inscribed() ? *o_ptr->inscription : "";
     const auto input_inscription = input_string(_("銘: ", "Inscription: "), MAX_INSCRIPTION, initial_inscription);
     if (!input_inscription) {

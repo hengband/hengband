@@ -224,7 +224,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         return true;
     }
 
-    msg_print(nullptr);
+    msg_erase();
     item_selection.done = false;
     item_selection.item = false;
     item_selection.i1 = 0;

@@ -107,7 +107,7 @@ void QuestList::initialize()
         std::stringstream ss;
         ss << _("ファイル読み込みエラー: ", "File loading error: ") << r.what();
         msg_print(ss.str());
-        msg_print(nullptr);
+        msg_erase();
         quit(_("クエスト初期化エラー", "Error of quests initializing"));
     }
 }
@@ -205,7 +205,7 @@ void complete_quest(PlayerType *player_ptr, QuestId quest_id)
 
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST_CLEAR);
     msg_print(_("クエストを達成した！", "You just completed your quest!"));
-    msg_print(nullptr);
+    msg_erase();
 }
 
 /*!
@@ -249,7 +249,7 @@ void quest_discovery(QuestId quest_id)
 #endif
 
     msg_print(rand_choice(quest_entered_messages));
-    msg_print(nullptr);
+    msg_erase();
     if (num_subjugation != 1) {
         msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), num_subjugation, name.data());
         return;
