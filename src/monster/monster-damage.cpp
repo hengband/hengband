@@ -247,9 +247,7 @@ void MonsterDamageProcessor::dying_scream(std::string_view m_name)
 
     const auto death_message = r_ref.get_message(MonsterMessageType::SPEAK_DEATH);
     if (death_message) {
-        if (one_in_(death_message->get_message_chance())) {
-            msg_format("%s^ %s", m_name.data(), death_message->get_message().data());
-        }
+        msg_format("%s^ %s", m_name.data(), death_message->data());
     }
 
 #ifdef WORLD_SCORE

@@ -539,14 +539,12 @@ static std::optional<MonsterMessageType> get_speak_type(const MonsterEntity &mon
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param message 対応するメッセージ
  */
-void process_sound(PlayerType *player_ptr, const std::string &message, const int chance)
+void process_sound(PlayerType *player_ptr, std::string_view message)
 {
-    if (one_in_(chance)) {
-        if (disturb_minor) {
-            disturb(player_ptr, false, false);
-        }
-        msg_print(message);
+    if (disturb_minor) {
+        disturb(player_ptr, false, false);
     }
+    msg_print(message);
 }
 
 /*!
@@ -572,23 +570,23 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
         if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT / 2)) {
             const auto message = monrace.get_message(MonsterMessageType::WALK_CLOSERANGE);
             if (message) {
-                process_sound(player_ptr, message->get_message(), message->get_message_chance());
-                return;
+                process_sound(player_ptr, *message);
             }
+            return;
         }
         if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
             const auto message = monrace.get_message(MonsterMessageType::WALK_MIDDLERANGE);
             if (message) {
-                process_sound(player_ptr, message->get_message(), message->get_message_chance());
-                return;
+                process_sound(player_ptr, *message);
             }
+            return;
         }
         if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT * 2)) {
             const auto message = monrace.get_message(MonsterMessageType::WALK_LONGRANGE);
             if (message) {
-                process_sound(player_ptr, message->get_message(), message->get_message_chance());
-                return;
+                process_sound(player_ptr, *message);
             }
+            return;
         }
     }
 
@@ -606,9 +604,6 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
 
     const auto monmessage = monrace.get_message(*message_type);
     if (monmessage) {
-        if (!one_in_(monmessage->get_message_chance())) {
-            return;
-        }
-        msg_format(_("%s^%s", "%s^ %s"), m_name.data(), monmessage->get_message().data());
+        msg_format(_("%s^%s", "%s^ %s"), m_name.data(), monmessage->data());
     }
 }

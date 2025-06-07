@@ -292,9 +292,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         sound(SoundKind::REFLECT);
                         const auto reflect_message = monrace.get_message(MonsterMessageType::MESSAGE_REFLECT);
                         if (reflect_message) {
-                            if (one_in_(reflect_message->get_message_chance())) {
-                                msg_print(reflect_message->get_message());
-                            }
+                            msg_print(*reflect_message);
                         }
                     } else if (!is_monster(src_idx)) {
                         sound(SoundKind::REFLECT);
