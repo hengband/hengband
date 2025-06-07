@@ -240,7 +240,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     COMMAND_CODE item_new;
     const auto purchased_item_name = describe_flavor(player_ptr, item, 0);
     msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), purchased_item_name.data(), I2A(item_num));
-    msg_print(nullptr);
+    msg_erase();
 
     const auto &world = AngbandWorld::get_instance();
     auto res = prompt_to_buy(player_ptr, &item, store_num);

@@ -170,7 +170,7 @@ bool QuaffEffects::influence(const ItemEntity &item)
         return this->star_enlightenment();
     case SV_POTION_SELF_KNOWLEDGE:
         msg_print(_("自分自身のことが少しは分かった気がする...", "You begin to know yourself a little better..."));
-        msg_print(nullptr);
+        msg_erase();
         self_knowledge(this->player_ptr);
         return true;
     case SV_POTION_EXPERIENCE:
@@ -438,7 +438,7 @@ bool QuaffEffects::star_enlightenment()
     msg_print(_("更なる啓蒙を感じた...", "You begin to feel more enlightened..."));
     chg_virtue(this->player_ptr, Virtue::KNOWLEDGE, 1);
     chg_virtue(this->player_ptr, Virtue::ENLIGHTEN, 2);
-    msg_print(nullptr);
+    msg_erase();
     wiz_lite(this->player_ptr, false);
     (void)do_inc_stat(this->player_ptr, A_INT);
     (void)do_inc_stat(this->player_ptr, A_WIS);
@@ -524,7 +524,7 @@ bool QuaffEffects::neo_tsuyoshi()
 bool QuaffEffects::tsuyoshi()
 {
     msg_print(_("「オクレ兄さん！」", "Brother OKURE!"));
-    msg_print(nullptr);
+    msg_erase();
     this->player_ptr->tsuyoshi = 1;
     (void)set_tsuyoshi(this->player_ptr, 0, true);
     if (!has_resist_chaos(this->player_ptr)) {

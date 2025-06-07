@@ -42,7 +42,7 @@ static std::optional<int> process_ostensible_arena_victory()
     prt("", 10, 0);
     prt("", 11, 0);
     msg_print(_("スペースキーで続行", "Press the space bar to continue"));
-    msg_print(nullptr);
+    msg_erase();
     entries.increment_entry();
     return 1000000;
 }
@@ -50,14 +50,14 @@ static std::optional<int> process_ostensible_arena_victory()
 static bool check_battle_metal_babble(PlayerType *player_ptr)
 {
     msg_print(_("最強の挑戦者が君に決闘を申し込んできた。", "The strongest challenger throws down the gauntlet to your feet."));
-    msg_print(nullptr);
+    msg_erase();
     if (!input_check(_("受けて立つかね？", "Do you take up the gauntlet? "))) {
         msg_print(_("失望したよ。", "We are disappointed."));
         return false;
     }
 
     msg_print(_("挑戦者「死ぬがよい。」", "The challenger says, 'Die, maggots.'"));
-    msg_print(nullptr);
+    msg_erase();
 
     AngbandWorld::get_instance().set_arena(false);
     reset_tim_flags(player_ptr);
@@ -83,7 +83,7 @@ static bool go_to_arena(PlayerType *player_ptr)
     const auto arena_record = ArenaEntryList::get_instance().check_arena_record();
     if (arena_record == ArenaRecord::METAL_BABBLE) {
         msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。", "You enter the arena briefly and bask in your glory."));
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 
@@ -93,7 +93,7 @@ static bool go_to_arena(PlayerType *player_ptr)
 
     if (player_ptr->riding && !PlayerClass(player_ptr).is_tamer()) {
         msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。", "You don't have permission to enter with pet."));
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 

@@ -426,13 +426,13 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
                 const auto &baseitem = baseitems.lookup_baseitem({ tval, sval });
                 if (item.charge > baseitem.pval * (item.count - 1) * EATER_ROD_CHARGE) {
                     msg_print(_("その魔法はまだ充填している最中だ。", "The magic is still charging."));
-                    msg_print(nullptr);
+                    msg_erase();
                     continue;
                 }
             } else {
                 if (item.charge < EATER_CHARGE) {
                     msg_print(_("その魔法は使用回数が切れている。", "The magic has no charges left."));
-                    msg_print(nullptr);
+                    msg_erase();
                     continue;
                 }
             }

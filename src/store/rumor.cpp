@@ -184,7 +184,7 @@ public:
         auto &dungeon_record = DungeonRecords::get_instance().get_record(dungeon_rumor.dungeon_id);
         if (!dungeon_record.has_entered()) {
             dungeon_record.set_max_level(dungeon.mindepth);
-            msg_print(nullptr);
+            msg_erase();
             msg_print(_("{}に帰還できるようになった。", "You can recall to {}."), dungeon.name);
         }
     }
@@ -197,7 +197,7 @@ public:
         const uint32_t visit = (1U << (town_rumor.t_idx - 1));
         if ((town_rumor.t_idx != SECRET_TOWN) && !(player_ptr->visit & visit)) {
             player_ptr->visit |= visit;
-            msg_print(nullptr);
+            msg_erase();
             msg_print(_("{}に行ったことがある気がする。", "You feel you have been to {}."), town_name);
         }
     }

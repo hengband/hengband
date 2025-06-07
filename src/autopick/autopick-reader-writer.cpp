@@ -121,7 +121,7 @@ static void prepare_default_pickpref(std::string_view player_base_name)
         msg_print(message);
     }
 
-    msg_print(nullptr);
+    msg_erase();
     const auto path_user = path_build(ANGBAND_DIR_USER, filename);
     auto *user_fp = angband_fopen(path_user, FileOpenMode::WRITE);
     if (!user_fp) {

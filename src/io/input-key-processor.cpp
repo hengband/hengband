@@ -114,7 +114,7 @@ bool enter_wizard_mode(const FloorType &floor)
 
         msg_print(_("ウィザードモードはデバッグと実験のためのモードです。 ", "Wizard mode is for debugging and experimenting."));
         msg_print(_("一度ウィザードモードに入るとスコアは記録されません。", "The game will not be scored if you enter wizard mode."));
-        msg_print(nullptr);
+        msg_erase();
         if (!input_check(_("本当にウィザードモードに入りたいのですか? ", "Are you sure you want to enter wizard mode? "))) {
             return false;
         }
@@ -144,7 +144,7 @@ static bool enter_debug_mode(const FloorType &floor)
 
         msg_print(_("デバッグ・コマンドはデバッグと実験のためのコマンドです。 ", "The debug commands are for debugging and experimenting."));
         msg_print(_("デバッグ・コマンドを使うとスコアは記録されません。", "The game will not be scored if you use debug commands."));
-        msg_print(nullptr);
+        msg_erase();
         if (!input_check(_("本当にデバッグ・コマンドを使いますか? ", "Are you sure you want to use debug commands? "))) {
             return false;
         }
@@ -412,7 +412,7 @@ void process_command(PlayerType *player_ptr)
         non_magic_class |= pc.equals(PlayerClassType::SMITH);
         if (floor.is_underground() && dungeon.flags.has(DungeonFeatureType::NO_MAGIC) && !non_magic_class) {
             msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
-            msg_print(nullptr);
+            msg_erase();
             break;
         }
 

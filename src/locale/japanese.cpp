@@ -602,7 +602,7 @@ size_t guess_convert_to_system_encoding(char *strbuf, int buflen)
         const auto sys_str = utf8_to_sys(strbuf);
         if (!sys_str || std::ssize(*sys_str) >= buflen) {
             msg_print("警告:文字コードの変換に失敗しました");
-            msg_print(nullptr);
+            msg_erase();
             return std::string_view(strbuf).length();
         }
 

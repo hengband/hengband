@@ -32,7 +32,7 @@ bool hit_and_away(PlayerType *player_ptr)
     }
 
     msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
-    msg_print(nullptr);
+    msg_erase();
     return false;
 }
 

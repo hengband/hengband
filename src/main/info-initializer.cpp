@@ -105,7 +105,7 @@ static void init_info(std::string_view filename, angband_header &head, InfoType 
 #endif
         msg_format(_("レコード %d は '%s' エラーがあります。", "Record %d contains a '%s' error."), error_idx, oops);
         msg_format(_("構文 '%s'。", "Parsing '%s'."), buf);
-        msg_print(nullptr);
+        msg_erase();
         quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
     }
 
@@ -147,7 +147,7 @@ static void init_json(std::string_view filename, std::string_view keyname, angba
     for (auto &element : json_object[keyname]) {
         const auto error_code = parser(element, &head);
         if (error_code != PARSE_ERROR_NONE) {
-            msg_print(nullptr);
+            msg_erase();
             quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
         }
     }

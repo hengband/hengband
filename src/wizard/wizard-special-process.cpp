@@ -714,7 +714,7 @@ void wiz_dump_options()
     std::ofstream ofs(path);
     if (ofs.bad()) {
         msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename.data());
-        msg_print(nullptr);
+        msg_erase();
         return;
     }
 
@@ -801,7 +801,7 @@ void cheat_death(PlayerType *player_ptr)
     auto &world = AngbandWorld::get_instance();
     world.noscore |= 0x0001;
     msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
-    msg_print(nullptr);
+    msg_erase();
 
     player_ptr->is_dead = false;
     (void)life_stream(player_ptr, false, false);

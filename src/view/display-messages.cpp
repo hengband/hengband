@@ -210,11 +210,6 @@ static void msg_flush(PlayerType *player_ptr, int x)
     term_erase(0, 0);
 }
 
-void msg_erase(void)
-{
-    msg_print(nullptr);
-}
-
 static int split_length(std::string_view sv, int max)
 {
     auto split = max;
@@ -270,11 +265,11 @@ static int split_length(std::string_view sv, int max)
  *
  * Note that we must be very careful about using the
  * "msg_print()" functions without explicitly calling the special
- * "msg_print(nullptr)" function, since this may result in the loss
+ * "msg_erase()" function, since this may result in the loss
  * of information if the screen is cleared, or if anything is
  * displayed on the top line.
  *
- * Note that "msg_print(nullptr)" will clear the top line
+ * Note that "msg_erase()" will clear the top line
  * even if no messages are pending.  This is probably a hack.
  * @todo ここのp_ptrを削除するのは破滅的に作業が増えるので保留
  */
@@ -331,7 +326,7 @@ void msg_print(std::string_view msg)
     }
 }
 
-void msg_print(std::nullptr_t)
+void msg_erase()
 {
     if (AngbandWorld::get_instance().timewalk_m_idx) {
         return;

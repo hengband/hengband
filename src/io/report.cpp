@@ -114,7 +114,7 @@ static errr make_dump(PlayerType *player_ptr, std::ostream &stream)
 #else
         msg_format("Failed to create temporary file %s.", file_name);
 #endif
-        msg_print(nullptr);
+        msg_erase();
         return 1;
     }
 
@@ -154,7 +154,7 @@ std::string make_screen_dump(PlayerType *player_ptr)
     bool old_use_graphics = use_graphics;
     if (old_use_graphics) {
         /* Clear -more- prompt first */
-        msg_print(nullptr);
+        msg_erase();
 
         use_graphics = false;
         reset_visuals(player_ptr);

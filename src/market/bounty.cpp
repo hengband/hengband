@@ -203,7 +203,7 @@ bool exchange_cash(PlayerType *player_ptr)
     }
 
     msg_print(_("賞金を得られそうなものは持っていなかった。", "You have nothing."));
-    msg_print(nullptr);
+    msg_erase();
     return false;
 }
 

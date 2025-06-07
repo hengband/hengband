@@ -181,7 +181,7 @@ std::optional<std::string> askfor(int len, std::string_view initial_value, bool 
  */
 std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value, bool numpad_cursor)
 {
-    msg_print(nullptr);
+    msg_erase();
     prt(prompt, 0, 0);
     const auto ask_result = askfor(len, initial_value, numpad_cursor);
     prt("", 0, 0);
@@ -241,7 +241,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
         num_more = 0;
     }
 
-    msg_print(nullptr);
+    msg_erase();
 
     prt(buf, 0, 0);
     if (mode.has_not(UserCheck::NO_HISTORY) && player_ptr->playing) {
@@ -300,7 +300,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
  */
 std::optional<char> input_command(std::string_view prompt, bool z_escape)
 {
-    msg_print(nullptr);
+    msg_erase();
     prt(prompt, 0, 0);
     char command;
     if (get_com_no_macros) {
@@ -348,7 +348,7 @@ int input_quantity(int max, std::string_view initial_prompt)
         prompt = format(_("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
     }
 
-    msg_print(nullptr);
+    msg_erase();
     const auto input_amount = input_string(prompt, 6, "1", false);
     if (!input_amount) {
         return 0;

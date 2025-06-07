@@ -222,7 +222,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         return true;
     }
 
-    msg_print(nullptr);
+    msg_erase();
     handle_stuff(player_ptr);
     test_inventory_floor(player_ptr, &fis, item_tester);
     fis.done = false;

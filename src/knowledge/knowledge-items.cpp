@@ -225,7 +225,7 @@ static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
     }
 
     msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
-    msg_print(nullptr);
+    msg_erase();
 }
 
 /**

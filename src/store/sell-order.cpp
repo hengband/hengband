@@ -125,7 +125,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
     if ((store_num != StoreSaleType::HOME) && (store_num != StoreSaleType::MUSEUM)) {
         const auto item_name = describe_flavor(player_ptr, selling_item, 0);
         msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), item_name.data(), index_to_label(i_idx));
-        msg_print(nullptr);
+        msg_erase();
 
         auto res = prompt_to_sell(player_ptr, &selling_item, store_num);
         placed = res.has_value();

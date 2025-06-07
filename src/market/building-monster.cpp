@@ -150,7 +150,7 @@ bool research_mon(PlayerType *player_ptr)
                 const auto mes = monraces.probe_lore(monrace_id);
                 if (mes) {
                     msg_print(*mes);
-                    msg_print(nullptr);
+                    msg_erase();
                 }
 
                 tracker.set_trackee(monrace_id);
