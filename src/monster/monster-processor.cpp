@@ -774,7 +774,7 @@ bool process_stalking(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (see_monster(player_ptr, m_idx)) {
         const auto message_stalker = monrace.get_message(MonsterMessageType::MESSAGE_STALKER);
         if (message_stalker) {
-            msg_format(_("%s^%s", "%s^ %s"), m_name.data(), message_stalker->get_message().data());
+            msg_format(_("%s^%s", "%s^ %s"), m_name.data(), message_stalker->data());
         }
     }
 
