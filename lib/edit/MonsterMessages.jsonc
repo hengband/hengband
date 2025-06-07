@@ -3416,7 +3416,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             ""
@@ -3432,7 +3432,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「にくむ、にくむ、にくむぅぅぅ！」"
@@ -3448,7 +3448,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「それってひどくない？」"
@@ -3464,7 +3464,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "にあなたは言った 「これはオリンピックじゃないんだ」"
@@ -3480,7 +3480,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「覚えておけ！今度会った時は貴様が堆屍穴に行く番だ！」"
@@ -3496,7 +3496,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「Ｍ＄帝国は永遠に不滅だ！」"
@@ -3514,7 +3514,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「主よ、この罪深き者に天罰をお与え下さい！」"
@@ -3530,7 +3530,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「フフフ、私はまた甦るだろう…人間の心に暗黒がある限り。ハハハハ！」"
@@ -3546,7 +3546,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "は辺りにログルスの残り香を撒き散らした！"
@@ -3562,7 +3562,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「おーのー。」"
@@ -3578,7 +3578,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「ば，ばかなッ！このディオが．．．このディオがァァァァ～～～～！！」"
@@ -3594,7 +3594,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「この私がぁ！」"
@@ -3610,7 +3610,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "を削除します。"
@@ -3626,7 +3626,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「すべての人々に．．．平和を．．．」"
@@ -3642,7 +3642,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「ユリアーーーーーーーーーー！！！」"
@@ -3658,7 +3658,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "は無慈悲な冒険者によって殺されてしまった。14へ行け。"
@@ -3674,7 +3674,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "は手榴弾を抱えて自爆した！"
@@ -3690,7 +3690,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "は自分の胸の秘孔を突いた！「我が生涯に一片の悔いなし！」"
@@ -3706,7 +3706,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「ああん，やっぱり変愚って難しいよ！」"
@@ -3722,7 +3722,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「おおお………」"
@@ -3738,7 +3738,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「応援、ありがとー！！ 」"
@@ -3754,7 +3754,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「ア゛ア゛ア゛ア゛ァ゛ァ゛ァ゛ァ゛ァ゛！！！！！！！！」"
@@ -3770,7 +3770,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "！お許し下さい！"
@@ -3786,7 +3786,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "の大脳がうどん玉の如くこぼれ落ちた。"
@@ -3802,7 +3802,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「何で僕がーー！」"
@@ -3818,7 +3818,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「あし…な……」"
@@ -3834,7 +3834,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "の身体はあなたの闘気でサイコロ状に切り刻まれた！"
@@ -3850,7 +3850,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「ドヴ＠ーキン、やめろぉ！」"
@@ -3866,7 +3866,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "の勇気が世界を救うと信じて…！　ご愛読ありがとうございました！"
@@ -3882,7 +3882,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "はお星さまになった！"
@@ -3898,7 +3898,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「オレのそばに近寄るなああーーーーーーーーッ！！！！！！」"
@@ -3914,7 +3914,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "は「ヤッダーバァアァァァァアアアアア！！！」と叫んで、ゴミ収集車にぶち込まれた。"
@@ -3930,7 +3930,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「リンギルが！　俺のリンギルが！！」"
@@ -3946,7 +3946,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「お助けください、父よ、父なるヨグ=ソトートよ！」"
@@ -3962,7 +3962,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「なぜ…私のプラズマ・パワーが負けるのだ…全身を改造したのに」"
@@ -3978,7 +3978,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "を撃破した。FINAL ZONE IS OVER."
@@ -3994,7 +3994,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「ラフィーの戦いは…これで終わりじゃない…うん」"
@@ -4010,7 +4010,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "は「まだ…まだあの女を…」と涙ながらに最期の言葉を紡ぎ、ヘイローが砕け散ってそのまま倒れた。"
@@ -7295,7 +7295,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'We hates, hates, hatesss!'"
@@ -7311,7 +7311,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'It's appalling.'"
@@ -7327,7 +7327,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'Oh, basely done! I had hoped for better of thee!'"
@@ -7343,7 +7343,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'I'll get even! Next time I see you, Death is yours!'"
@@ -7359,7 +7359,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'Empire Micro$oft is eternal!'"
@@ -7377,7 +7377,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'My God, Please visit a punishment upon this unrighteous sinner!'"
@@ -7393,7 +7393,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'Faugh, I'll be back...so long as human psyche has a blackness. Ho-ho.'"
@@ -7409,7 +7409,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "sprinkled the remaining incense from Logrus!"
@@ -7425,7 +7425,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says shiftlessly, 'Oh. No.'"
@@ -7441,7 +7441,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "shouts, 'This CAN'T be happening! I am Dying....!!!!!'"
@@ -7457,7 +7457,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "shouts, 'This CAN'T be happening!'"
@@ -7473,7 +7473,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "is deleted."
@@ -7489,7 +7489,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'I desire peace ... for all people... '"
@@ -7505,7 +7505,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "shouts, 'JuliaAAAAAAA!!!'"
@@ -7521,7 +7521,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "is killed by a cruel venturer. Go to 14."
@@ -7537,7 +7537,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "blew himself up with grenades!"
@@ -7553,7 +7553,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "points at himself and shouts, 'I finished my life with no regrets!'"
@@ -7569,7 +7569,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'Ah, Hengband is too difficult!'"
@@ -7585,7 +7585,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "'s body is chopped into dice by your fighting spirit!"
@@ -7601,7 +7601,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "screams, 'Dov@hkiin! No!!'"
@@ -7617,7 +7617,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "'s editor says, 'Believe that Yamato's bravery will save the world...!  Thank you for reading!'"
@@ -7633,7 +7633,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "became a constellation!"
@@ -7649,7 +7649,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'Don't get close to me Ahhhhhhh!!!!!!'"
@@ -7665,7 +7665,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "shouts, \"Yadder Baaaaaaaaaaaa!!!\" and is thrown into a garbage truck."
@@ -7681,7 +7681,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "shouts, 'Ringil! My Ringil!!'"
@@ -7697,7 +7697,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'Please help me, Father, Father Yog-Sothoth!'"
@@ -7713,7 +7713,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'Why... my plasma power loses... even though I remodeled my whole body...'"
@@ -7729,7 +7729,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "is destroyed.  FINAL ZONE IS OVER."
@@ -7745,7 +7745,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "says, 'My battle... isn't over yet... Nope.'"
@@ -7761,7 +7761,7 @@
             "message": [
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "en": [
                             "sobs and says, 'I... I haven't wreaked my revenge on her yet... no...' Her halo breaks, and then she falls down."
@@ -8293,7 +8293,7 @@
                 },
                 {
                     "action": "SPEAK_DEATH",
-                    "chance": 8,
+                    "chance": 1,
                     "message": {
                         "ja": [
                             "「グアァァァ！」"

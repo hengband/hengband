@@ -245,9 +245,11 @@ void MonsterDamageProcessor::dying_scream(std::string_view m_name)
         return;
     }
 
-    const auto death_mes = get_random_line(_("mondeath_j.txt", "mondeath.txt"), enum2i(monster.r_idx));
-    if (death_mes) {
-        msg_format("%s^ %s", m_name.data(), death_mes->data());
+    const auto death_message = r_ref.get_message(MonsterMessageType::SPEAK_DEATH);
+    if (death_message) {
+        if (one_in_(death_message->get_message_chance())) {
+            msg_format("%s^ %s", m_name.data(), death_message->get_message().data());
+        }
     }
 
 #ifdef WORLD_SCORE
