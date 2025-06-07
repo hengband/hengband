@@ -55897,7 +55897,17 @@
       "flavor": {
         "ja": "石仮面の力で不死の吸血鬼となったディオは冒険者を餌としか見ていない。『ザ・ワールド』に気をつけろ！「奴のスタンドの正体は分からないが、至近距離でしか使えないことは確かだッ」",
         "en": "Dio, who became an immortal vampire with the help of a stone mask, looks only at the adventurer.  Watch out for The World, Dio's stand or visual manifestation of his life energy:  \"I don't know what his stand is, but it is certain that it can only be used at close range.\""
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_REFLECT",
+          "chance": 1,
+          "message": {
+            "ja": "ディオ・ブランドーは指一本で攻撃を弾き返した！",
+            "en": "Dio Brando deflected the attack with just one finger!"
+          }
+        }
+      ]
     },
     {
       "id": 879,
@@ -59847,7 +59857,17 @@
       "flavor": {
         "ja": "一子相伝とされる北斗神拳の伝承者だ。力が全てを支配すると思われた時代にあって愛に生き、愛のために戦っている。",
         "en": "He is the rightful master of the martial art, Hokuto Shinken.  At a time when power seems to be everything, he lives in love and fights for love."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_REFLECT",
+          "chance": 1,
+          "message": {
+            "ja": "「北斗神拳奥義・二指真空把！」",
+            "en": "The twofingergrasp of nil space!"
+          }
+        }
+      ]
     },
     {
       "id": 937,
@@ -65056,7 +65076,17 @@
       "flavor": {
         "ja": "ラオウは北斗神拳伝承者ケンシロウの義兄であり北斗神拳の使い手である。激動の闇の時代に、己の信念で新たな時代を築こうとした。",
         "en": "Raou is the eldest of four honorary brothers, another being Kenshirou, who were trained by the master of Hokuto Shinken, a martial art.  Headstrong, Raou tries to forge a new order through conquest in a turbulent dark era."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_REFLECT",
+          "chance": 1,
+          "message": {
+            "ja": "「北斗神拳奥義・二指真空把！」",
+            "en": "The twofingergrasp of nil space!"
+          }
+        }
+      ]
     },
     //#
     //# ジュリアンのやつのコピー。名前？

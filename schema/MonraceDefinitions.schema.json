@@ -717,7 +717,8 @@
                                         "WALK_CLOSERANGE",
                                         "WALK_MIDDLERANGE",
                                         "WALK_LONGRANGE",
-                                        "MESSAGE_STALKER"
+                                        "MESSAGE_STALKER",
+                                        "MESSAGE_REFLECT"
                                     ]
                                 },
                                 "chance": {

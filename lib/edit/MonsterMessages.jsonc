@@ -8314,6 +8314,18 @@
                             "crept up beside you."
                         ]
                     }
+                },
+                {
+                    "action": "MESSAGE_REFLECT",
+                    "chance": 1,
+                    "message": {
+                        "ja": [
+                            "攻撃は跳ね返った！"
+                        ],
+                        "en": [
+                            "The attack bounces!"
+                        ]
+                    }
                 }
             ]
         }
