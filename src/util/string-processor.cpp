@@ -524,6 +524,28 @@ std::string str_tolower(std::string_view str)
 }
 
 /*!
+ * @brief 文字列の最初の文字を大文字に変換する
+ *
+ * @param str 変換元の文字列
+ * @return 変換後の文字列
+ */
+std::string str_upcase_first(std::string_view str)
+{
+    if (str.empty()) {
+        return {};
+    }
+
+    std::string result_str(str);
+
+    const auto first_char = static_cast<unsigned char>(result_str[0]);
+    if (isalpha(first_char)) {
+        result_str[0] = static_cast<char>(toupper(first_char));
+    }
+
+    return result_str;
+}
+
+/*!
  * @brief 文字列に含まれるすべてのマルチバイト文字のインデックスを取得する
  *
  * @param str 文字列
