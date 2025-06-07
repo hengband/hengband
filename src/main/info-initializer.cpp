@@ -15,6 +15,7 @@
 #include "info-reader/general-parser.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/magic-reader.h"
+#include "info-reader/message-reader.h"
 #include "info-reader/race-reader.h"
 #include "info-reader/skill-reader.h"
 #include "info-reader/vault-reader.h"
@@ -234,6 +235,15 @@ void init_monrace_definitions()
 {
     init_header(&monraces_header);
     init_json("MonraceDefinitions.jsonc", "monsters", monraces_header, MonraceList::get_instance(), parse_monraces_info);
+}
+
+/*!
+ * @brief モンスターメッセージ読み込みのメインルーチン
+ */
+void init_monster_message_definitions()
+{
+    init_header(&monster_messages_header);
+    init_json("MonsterMessages.jsonc", "groups", monster_messages_header, MonraceMessageList::get_instance(), parse_monster_messages_info);
 }
 
 /*!

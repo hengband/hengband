@@ -562,6 +562,7 @@ static std::string get_check_sum()
         &dungeons_header,
         &egos_header,
         &monraces_header,
+        &monster_messages_header,
         &terrains_header,
         &vaults_header,
     };

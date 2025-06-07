@@ -11,6 +11,7 @@ void init_class_skills_info();
 void init_dungeons_info();
 void init_egos_info();
 void init_monrace_definitions();
+void init_monster_message_definitions();
 void init_terrains_info();
 void init_spell_info();
 void init_vaults_info();

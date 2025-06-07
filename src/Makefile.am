@@ -603,6 +603,7 @@ hengband_SOURCES = \
 	info-reader/info-reader-util.cpp info-reader/info-reader-util.h \
 	info-reader/json-reader-util.cpp info-reader/json-reader-util.h \
 	info-reader/magic-reader.cpp info-reader/magic-reader.h \
+	info-reader/message-reader.cpp info-reader/message-reader.h \
 	info-reader/parse-error-types.h \
 	info-reader/race-info-tokens-table.cpp info-reader/race-info-tokens-table.h \
 	info-reader/race-reader.cpp info-reader/race-reader.h \
