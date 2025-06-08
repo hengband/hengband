@@ -38,6 +38,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 static bool check_hp_for_terrain_destruction(const TerrainType &terrain, const MonsterEntity &monster)
@@ -539,7 +540,7 @@ static std::optional<MonsterMessageType> get_speak_type(const MonsterEntity &mon
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param message 対応するメッセージ
  */
-void process_sound(PlayerType *player_ptr, std::string_view message)
+void show_sound_message(PlayerType *player_ptr, std::string_view message)
 {
     if (disturb_minor) {
         disturb(player_ptr, false, false);
@@ -548,14 +549,56 @@ void process_sound(PlayerType *player_ptr, std::string_view message)
 }
 
 /*!
- * @brief モンスターを喋らせたり足音を立てたりする
+ * @brief モンスターの足音を立てる
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ */
+void process_sound(PlayerType *player_ptr, MONSTER_IDX m_idx)
+{
+    if (AngbandSystem::get_instance().is_phase_out()) {
+        return;
+    }
+
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
+
+    if (monster.ml || player_ptr->skill_srh < randint1(100)) {
+        return;
+    }
+
+    if (monster.cdis <= MAX_PLAYER_SIGHT / 2) {
+        const auto message = monrace.get_message(MonsterMessageType::WALK_CLOSERANGE);
+        if (message) {
+            show_sound_message(player_ptr, *message);
+        }
+        return;
+    }
+    if (monster.cdis <= MAX_PLAYER_SIGHT) {
+        const auto message = monrace.get_message(MonsterMessageType::WALK_MIDDLERANGE);
+        if (message) {
+            show_sound_message(player_ptr, *message);
+        }
+        return;
+    }
+    if (monster.cdis <= MAX_PLAYER_SIGHT * 2) {
+        const auto message = monrace.get_message(MonsterMessageType::WALK_LONGRANGE);
+        if (message) {
+            show_sound_message(player_ptr, *message);
+        }
+        return;
+    }
+}
+
+/*!
+ * @brief モンスターを喋らせる
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param oy モンスターが元々いたY座標
  * @param ox モンスターが元々いたX座標
  * @param aware モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  */
-void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
+void process_speak(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
 {
     const Pos2D pos(oy, ox);
     if (AngbandSystem::get_instance().is_phase_out()) {
@@ -565,31 +608,6 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[m_idx];
     const auto &monrace = monster.get_monrace();
-
-    if (player_ptr->skill_srh > randint1(100)) {
-        if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT / 2)) {
-            const auto message = monrace.get_message(MonsterMessageType::WALK_CLOSERANGE);
-            if (message) {
-                process_sound(player_ptr, *message);
-            }
-            return;
-        }
-        if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
-            const auto message = monrace.get_message(MonsterMessageType::WALK_MIDDLERANGE);
-            if (message) {
-                process_sound(player_ptr, *message);
-            }
-            return;
-        }
-        if (!monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT * 2)) {
-            const auto message = monrace.get_message(MonsterMessageType::WALK_LONGRANGE);
-            if (message) {
-                process_sound(player_ptr, *message);
-            }
-            return;
-        }
-    }
-
     const auto p_pos = player_ptr->get_position();
     const auto can_speak = monster.get_appearance_monrace().speak_flags.any();
     if (!can_speak || !aware || !floor.has_los_at({ oy, ox }) || !projectable(floor, p_pos, pos, p_pos)) {
@@ -602,8 +620,8 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
         return;
     }
 
-    const auto monmessage = monrace.get_message(*message_type);
-    if (monmessage) {
-        msg_format(_("%s^%s", "%s^ %s"), m_name.data(), monmessage->data());
+    const auto monster_message = monrace.get_message(*message_type);
+    if (monster_message) {
+        msg_print(_("{}{}", "{} {}"), str_upcase_first(m_name), *monster_message);
     }
 }
