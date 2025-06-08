@@ -221,7 +221,8 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     process_special(player_ptr, m_idx);
-    process_speak_sound(player_ptr, m_idx, oy, ox, turn_flags_ptr->aware);
+    process_sound(player_ptr, m_idx);
+    process_speak(player_ptr, m_idx, oy, ox, turn_flags_ptr->aware);
     if (cast_spell(player_ptr, m_idx, turn_flags_ptr->aware)) {
         return;
     }
