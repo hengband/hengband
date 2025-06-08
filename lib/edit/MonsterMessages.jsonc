@@ -8327,6 +8327,31 @@
                             "The attack bounces!"
                         ]
                     }
+                },
+                {
+                    "action": "MESSAGE_TIMESTOP",
+                    "chance": 1,
+                    "message": {
+                        "ja": [
+                            "は時を止めた！"
+                        ],
+                        "en": [
+                            "stops the time!"
+                        ]
+                    }
+                },
+                {
+                    "action": "MESSAGE_TIMESTART",
+                    "chance": 1,
+                    "use_name": false,
+                    "message": {
+                        "ja": [
+                            "「時は動きだす…」"
+                        ],
+                        "en": [
+                            "You feel time flowing around you once more."
+                        ]
+                    }
                 }
             ]
         }

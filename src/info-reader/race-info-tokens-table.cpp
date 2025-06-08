@@ -420,6 +420,8 @@ const std::unordered_map<std::string_view, MonsterMessageType> r_info_message_fl
     { "WALK_LONGRANGE", MonsterMessageType::WALK_LONGRANGE },
     { "MESSAGE_STALKER", MonsterMessageType::MESSAGE_STALKER },
     { "MESSAGE_REFLECT", MonsterMessageType::MESSAGE_REFLECT },
+    { "MESSAGE_TIMESTOP", MonsterMessageType::MESSAGE_TIMESTOP },
+    { "MESSAGE_TIMESTART", MonsterMessageType::MESSAGE_TIMESTART },
 };
 
 const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightness_flags = {
