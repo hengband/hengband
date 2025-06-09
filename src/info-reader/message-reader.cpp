@@ -98,6 +98,15 @@ static errr set_mon_message(const nlohmann::json &group_data)
             return err;
         }
 
+        bool use_name = true;
+        const auto use_name_iter = message.value().find("use_name");
+        if (use_name_iter != message.value().end()) {
+            const auto &use_name_data = use_name_iter.value();
+            if (auto err = info_set_bool(use_name_data, use_name, false)) {
+                return err;
+            }
+        }
+
         const auto language_iter = message.value().find("message");
         if (language_iter == message.value().end() || !language_iter->is_object()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -142,10 +151,10 @@ static errr set_mon_message(const nlohmann::json &group_data)
 #endif
             if (has_id_list) {
                 for (auto id : id_list) {
-                    MonraceMessageList::get_instance().emplace(id, action->second, chance, str);
+                    MonraceMessageList::get_instance().emplace(id, action->second, chance, use_name, str);
                 }
             } else {
-                MonraceMessageList::get_instance().emplace_default(action->second, chance, str);
+                MonraceMessageList::get_instance().emplace_default(action->second, chance, use_name, str);
             }
         }
     }

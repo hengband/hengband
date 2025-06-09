@@ -162,7 +162,7 @@ public:
     int calc_capture_value() const;
     std::string build_eldritch_horror_message(std::string_view description) const;
     bool has_reinforce() const;
-    std::optional<std::string_view> get_message(const MonsterMessageType message_type) const;
+    std::optional<std::string> get_message(std::string_view monster_name, const MonsterMessageType message_type) const;
     const std::vector<DropArtifact> &get_drop_artifacts() const;
     const std::vector<Reinforce> &get_reinforces() const;
     bool can_generate() const;

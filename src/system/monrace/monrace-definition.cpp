@@ -332,9 +332,9 @@ bool MonraceDefinition::has_reinforce() const
     return it != end;
 }
 
-std::optional<std::string_view> MonraceDefinition::get_message(const MonsterMessageType message_type) const
+std::optional<std::string> MonraceDefinition::get_message(std::string_view monster_name, const MonsterMessageType message_type) const
 {
-    return MonraceMessageList::get_instance().get_message((int)this->idx, message_type);
+    return MonraceMessageList::get_instance().get_message((int)this->idx, monster_name, message_type);
 }
 
 const std::vector<DropArtifact> &MonraceDefinition::get_drop_artifacts() const

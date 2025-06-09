@@ -38,7 +38,6 @@
 #include "system/terrain/terrain-definition.h"
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 static bool check_hp_for_terrain_destruction(const TerrainType &terrain, const MonsterEntity &monster)
@@ -566,23 +565,24 @@ void process_sound(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (monster.ml || player_ptr->skill_srh < randint1(100)) {
         return;
     }
+    const auto m_name = std::string(_("それ", "It"));
 
     if (monster.cdis <= MAX_PLAYER_SIGHT / 2) {
-        const auto message = monrace.get_message(MonsterMessageType::WALK_CLOSERANGE);
+        const auto message = monrace.get_message(m_name, MonsterMessageType::WALK_CLOSERANGE);
         if (message) {
             show_sound_message(player_ptr, *message);
         }
         return;
     }
     if (monster.cdis <= MAX_PLAYER_SIGHT) {
-        const auto message = monrace.get_message(MonsterMessageType::WALK_MIDDLERANGE);
+        const auto message = monrace.get_message(m_name, MonsterMessageType::WALK_MIDDLERANGE);
         if (message) {
             show_sound_message(player_ptr, *message);
         }
         return;
     }
     if (monster.cdis <= MAX_PLAYER_SIGHT * 2) {
-        const auto message = monrace.get_message(MonsterMessageType::WALK_LONGRANGE);
+        const auto message = monrace.get_message(m_name, MonsterMessageType::WALK_LONGRANGE);
         if (message) {
             show_sound_message(player_ptr, *message);
         }
@@ -620,8 +620,8 @@ void process_speak(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSIT
         return;
     }
 
-    const auto monster_message = monrace.get_message(*message_type);
+    const auto monster_message = monrace.get_message(m_name, *message_type);
     if (monster_message) {
-        msg_print(_("{}{}", "{} {}"), str_upcase_first(m_name), *monster_message);
+        msg_print(*monster_message);
     }
 }
