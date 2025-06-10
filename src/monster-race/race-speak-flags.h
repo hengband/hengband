@@ -22,5 +22,7 @@ enum class MonsterMessageType {
     WALK_LONGRANGE = 8,
     MESSAGE_STALKER = 9,
     MESSAGE_REFLECT = 10,
+    MESSAGE_TIMESTOP = 11,
+    MESSAGE_TIMESTART = 12,
     MAX
 };

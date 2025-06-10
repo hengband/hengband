@@ -50479,7 +50479,7 @@
         {
           "action": "WALK_CLOSERANGE",
           "chance": 20,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "近くで重厚な足音が聞こえた。",
             "en": "You hear heavy steps nearby."
@@ -50488,7 +50488,7 @@
         {
           "action": "WALK_MIDDLERANGE",
           "chance": 20,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "重厚な足音が聞こえた。",
             "en": "You hear heavy steps."
@@ -50497,7 +50497,7 @@
         {
           "action": "WALK_LONGRANGE",
           "chance": 40,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "遠くで重厚な足音が聞こえた。",
             "en": "You hear heavy steps in the distance."
@@ -55909,6 +55909,15 @@
             "ja": "は指一本で攻撃を弾き返した！",
             "en": "deflected the attack with just one finger!"
           }
+        },
+        {
+          "action": "MESSAGE_TIMESTOP",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "「『ザ・ワールド』！　時は止まった！」",
+            "en": "Dio Brando yells 'The World! Time has stopped!'"
+          }
         }
       ]
     },
@@ -56055,7 +56064,18 @@
       "flavor": {
         "ja": "時間と空間を自在に操る超能力者。冷静沈着で、常に余裕の笑みを浮かべている。だが、その仮面の下には冷血な魂が宿り、自分自身の欲望の為なら手段を選ばない。すべてにおいて計算高く、しかもその真意を悟らせることは決してない。 ",
         "en": "He has psychic powers that allow him to freely manipulate time and space.  He keeps calm and is always smiling, but beneath that mask is a cold-blooded soul."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_TIMESTOP",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "「時よ！」",
+            "en": "Richard Wong, Master of Time yells 'Time!'"
+          }
+        }
+      ]
     },
     {
       "id": 881,
@@ -59865,7 +59885,7 @@
         {
           "action": "MESSAGE_REFLECT",
           "chance": 1,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "「北斗神拳奥義・二指真空把！」",
             "en": "The twofingergrasp of nil space!"
@@ -65085,7 +65105,7 @@
         {
           "action": "MESSAGE_REFLECT",
           "chance": 1,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "「北斗神拳奥義・二指真空把！」",
             "en": "The twofingergrasp of nil space!"
@@ -82751,7 +82771,27 @@
       "flavor": {
         "ja": "イタリアを中心に活動するギャング組織「パッショーネ」のボス。何人たりとも自分の過去や情報を探ることを許さず、組織にも一切顔を出さないという臆病ともとれてしまうほどの用心深さから、その正体を知る者は最高幹部も含めて全くいない。「誰だろうとわたしの永遠の絶頂をおびやかす者は許さない 決して 確実に消え去ってもらう」",
         "en": "He leads the gang organization, \"Passione\", which is mainly active in Italy.  He doesn't allow anyone, including the top executives in his gang, to explore his past or seek out information about himself.  With that obsession for secrecy, he gives all orders remotely or via multiple proxies so his true identity will not be revealed."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_TIMESTOP",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "『キング・クリムゾン』！",
+            "en": "Diavolo yells 'King Crison!'"
+          }
+        },
+        {
+          "action": "MESSAGE_TIMESTART",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "これが我が『キング・クリムゾン』の能力！　『時間を消し去って』飛び越えさせた…！！",
+            "en": "This is the ability of my 'King Crimson'! 'Erase the time' and let it jump over... !!"
+          }
+        }
+      ]
     },
     {
       "id": 1292,
@@ -88638,7 +88678,7 @@
         {
           "action": "MESSAGE_STALKER",
           "chance": 1,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、あなたの後ろに居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm behind you.'"
@@ -88647,7 +88687,7 @@
         {
           "action": "WALK_CLOSERANGE",
           "chance": 10,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、あなたの家の前に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm in front of your house.'"
@@ -88656,7 +88696,7 @@
         {
           "action": "WALK_MIDDLERANGE",
           "chance": 10,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、雑貨屋の前に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm in front of the general store.'"
@@ -88665,7 +88705,7 @@
         {
           "action": "WALK_MIDDLERANGE",
           "chance": 10,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、宿屋の前に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm in front of the inn.'"
@@ -88674,7 +88714,7 @@
         {
           "action": "WALK_LONGRANGE",
           "chance": 20,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、ゴミ捨て場に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm at garbage dump.'"
@@ -88683,7 +88723,7 @@
         {
           "action": "WALK_LONGRANGE",
           "chance": 20,
-          "use_name" : false,
+          "use_name": false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、街の入口に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm at the entrance to the town.'"
