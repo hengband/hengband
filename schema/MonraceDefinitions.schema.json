@@ -727,6 +727,10 @@
                                     "minimum": 1,
                                     "maximum": 100
                                 },
+                                "use_name": {
+                                    "type": "boolean",
+                                    "description": "メッセージの先頭にモンスター名を表示する。"
+                                },
                                 "message": {
                                     "type": "object",
                                     "description": "メッセージ",

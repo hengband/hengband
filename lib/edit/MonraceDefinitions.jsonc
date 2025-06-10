@@ -50479,6 +50479,7 @@
         {
           "action": "WALK_CLOSERANGE",
           "chance": 20,
+          "use_name" : false,
           "message": {
             "ja": "近くで重厚な足音が聞こえた。",
             "en": "You hear heavy steps nearby."
@@ -50487,6 +50488,7 @@
         {
           "action": "WALK_MIDDLERANGE",
           "chance": 20,
+          "use_name" : false,
           "message": {
             "ja": "重厚な足音が聞こえた。",
             "en": "You hear heavy steps."
@@ -50495,6 +50497,7 @@
         {
           "action": "WALK_LONGRANGE",
           "chance": 40,
+          "use_name" : false,
           "message": {
             "ja": "遠くで重厚な足音が聞こえた。",
             "en": "You hear heavy steps in the distance."
@@ -55903,8 +55906,8 @@
           "action": "MESSAGE_REFLECT",
           "chance": 1,
           "message": {
-            "ja": "ディオ・ブランドーは指一本で攻撃を弾き返した！",
-            "en": "Dio Brando deflected the attack with just one finger!"
+            "ja": "は指一本で攻撃を弾き返した！",
+            "en": "deflected the attack with just one finger!"
           }
         }
       ]
@@ -59862,6 +59865,7 @@
         {
           "action": "MESSAGE_REFLECT",
           "chance": 1,
+          "use_name" : false,
           "message": {
             "ja": "「北斗神拳奥義・二指真空把！」",
             "en": "The twofingergrasp of nil space!"
@@ -65081,6 +65085,7 @@
         {
           "action": "MESSAGE_REFLECT",
           "chance": 1,
+          "use_name" : false,
           "message": {
             "ja": "「北斗神拳奥義・二指真空把！」",
             "en": "The twofingergrasp of nil space!"
@@ -88633,14 +88638,16 @@
         {
           "action": "MESSAGE_STALKER",
           "chance": 1,
+          "use_name" : false,
           "message": {
-            "ja": "から電話だ。「わたしメリーさん。今、あなたの後ろに居るの。」",
-            "en": "is calling you. 'I'm Mary. Now I'm behind you.'"
+            "ja": "電話だ。「わたしメリーさん。今、あなたの後ろに居るの。」",
+            "en": "You get a call. 'I'm Mary. Now I'm behind you.'"
           }
         },
         {
           "action": "WALK_CLOSERANGE",
           "chance": 10,
+          "use_name" : false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、あなたの家の前に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm in front of your house.'"
@@ -88649,6 +88656,7 @@
         {
           "action": "WALK_MIDDLERANGE",
           "chance": 10,
+          "use_name" : false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、雑貨屋の前に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm in front of the general store.'"
@@ -88657,6 +88665,7 @@
         {
           "action": "WALK_MIDDLERANGE",
           "chance": 10,
+          "use_name" : false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、宿屋の前に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm in front of the inn.'"
@@ -88665,6 +88674,7 @@
         {
           "action": "WALK_LONGRANGE",
           "chance": 20,
+          "use_name" : false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、ゴミ捨て場に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm at garbage dump.'"
@@ -88673,6 +88683,7 @@
         {
           "action": "WALK_LONGRANGE",
           "chance": 20,
+          "use_name" : false,
           "message": {
             "ja": "電話だ。「わたしメリーさん。今、街の入口に居るの。」",
             "en": "You get a call. 'I'm Mary. Now I'm at the entrance to the town.'"

@@ -8318,6 +8318,7 @@
                 {
                     "action": "MESSAGE_REFLECT",
                     "chance": 1,
+                    "use_name": false,
                     "message": {
                         "ja": [
                             "攻撃は跳ね返った！"

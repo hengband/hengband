@@ -68,7 +68,6 @@
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
 #include "tracking/lore-tracker.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 
@@ -774,9 +773,9 @@ bool process_stalking(PlayerType *player_ptr, MONSTER_IDX m_idx)
     disturb(player_ptr, true, true);
 
     if (see_monster(player_ptr, m_idx)) {
-        const auto message_stalker = monrace.get_message(MonsterMessageType::MESSAGE_STALKER);
+        const auto message_stalker = monrace.get_message(m_name, MonsterMessageType::MESSAGE_STALKER);
         if (message_stalker) {
-            msg_print(_("{}{}", "{} {}"), str_upcase_first(m_name), *message_stalker);
+            msg_print(*message_stalker);
         }
     }
 

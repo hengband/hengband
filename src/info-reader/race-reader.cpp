@@ -440,12 +440,21 @@ static errr set_mon_message(const nlohmann::json &message_data, MonraceDefinitio
             return err;
         }
 
+        bool use_name = true;
+        const auto use_name_iter = message.value().find("use_name");
+        if (use_name_iter != message.value().end()) {
+            const auto &use_name_data = use_name_iter.value();
+            if (auto err = info_set_bool(use_name_data, use_name, false)) {
+                return err;
+            }
+        }
+
         std::string str;
         if (auto err = info_set_string(message.value()["message"], str, false)) {
             return err;
         }
 
-        MonraceMessageList::get_instance().emplace((int)monrace.idx, action->second, chance, str);
+        MonraceMessageList::get_instance().emplace((int)monrace.idx, action->second, chance, use_name, str);
     }
     return PARSE_ERROR_NONE;
 }

@@ -289,8 +289,9 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                     }
 
                     if (is_seen(player_ptr, monster)) {
+                        const auto m_name = monster.ml ? monster_desc(player_ptr, monster, 0) : std::string(_("それ", "It"));
                         sound(SoundKind::REFLECT);
-                        const auto reflect_message = monrace.get_message(MonsterMessageType::MESSAGE_REFLECT);
+                        const auto reflect_message = monrace.get_message(m_name, MonsterMessageType::MESSAGE_REFLECT);
                         if (reflect_message) {
                             msg_print(*reflect_message);
                         }
