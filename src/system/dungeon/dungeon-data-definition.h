@@ -1,8 +1,8 @@
 #pragma once
 
 #include "util/point-2d.h"
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 #include <vector>
 
 /*
@@ -43,5 +43,5 @@ public:
     int alloc_object_num = 0;
     int alloc_monster_num = 0;
 
-    std::optional<std::string> why;
+    tl::optional<std::string> why;
 };

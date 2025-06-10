@@ -78,7 +78,7 @@ std::vector<Pos2D> decide_collapse_positions(const FloorType &floor, std::span<c
     return pos_collapses;
 }
 
-std::optional<Pos2D> decide_player_dodge_posistion(PlayerType *player_ptr, std::span<const Pos2D> pos_collapses)
+tl::optional<Pos2D> decide_player_dodge_posistion(PlayerType *player_ptr, std::span<const Pos2D> pos_collapses)
 {
     const auto is_collapsed_pos = [&](const auto &pos) { return ranges::contains(pos_collapses, pos); };
     const auto pos_candidates =
@@ -88,7 +88,7 @@ std::optional<Pos2D> decide_player_dodge_posistion(PlayerType *player_ptr, std::
         ranges::views::filter(std::not_fn(is_collapsed_pos)) |
         ranges::to<std::vector<Pos2D>>();
 
-    return pos_candidates.empty() ? std::nullopt : std::make_optional(rand_choice(pos_candidates));
+    return pos_candidates.empty() ? tl::nullopt : tl::make_optional(rand_choice(pos_candidates));
 }
 
 std::string build_killer_on_earthquake(PlayerType *player_ptr, int m_idx)
@@ -162,10 +162,10 @@ bool can_monster_dodge_to(const FloorType &floor, const Pos2D &p_pos, const Pos2
     return can_dodge;
 }
 
-std::optional<Pos2D> decide_monster_dodge_position(const FloorType &floor, const Pos2D &p_pos, const MonsterEntity &monster, std::span<const Pos2D> pos_collapses)
+tl::optional<Pos2D> decide_monster_dodge_position(const FloorType &floor, const Pos2D &p_pos, const MonsterEntity &monster, std::span<const Pos2D> pos_collapses)
 {
     if (monster.get_monrace().behavior_flags.has(MonsterBehaviorType::NEVER_MOVE)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const auto pos_candidates =
@@ -174,7 +174,7 @@ std::optional<Pos2D> decide_monster_dodge_position(const FloorType &floor, const
         ranges::views::filter([&](const auto &pos) { return can_monster_dodge_to(floor, p_pos, pos, pos_collapses); }) |
         ranges::to<std::vector<Pos2D>>();
 
-    return pos_candidates.empty() ? std::nullopt : std::make_optional(rand_choice(pos_candidates));
+    return pos_candidates.empty() ? tl::nullopt : tl::make_optional(rand_choice(pos_candidates));
 }
 
 void move_monster_to(PlayerType *player_ptr, MonsterEntity &monster, const Pos2D &pos_to)

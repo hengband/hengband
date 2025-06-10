@@ -1,6 +1,6 @@
 #pragma once
 
-#include <optional>
+#include <tl/optional.hpp>
 #include <unordered_map>
 #include <vector>
 
@@ -52,10 +52,10 @@ enum class PlayerRaceFoodType {
 struct player_race_condition {
     tr_type type{};
     PLAYER_LEVEL level{};
-    std::optional<PlayerClassType> pclass{};
+    tl::optional<PlayerClassType> pclass{};
     bool not_class{};
 
-    player_race_condition(tr_type t, PLAYER_LEVEL l = 1, const std::optional<PlayerClassType> &c = std::nullopt, bool nc = false)
+    player_race_condition(tr_type t, PLAYER_LEVEL l = 1, const tl::optional<PlayerClassType> &c = tl::nullopt, bool nc = false)
         : type(t)
         , level(l)
         , pclass(c)

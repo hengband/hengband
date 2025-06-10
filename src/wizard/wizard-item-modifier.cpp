@@ -547,7 +547,7 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
     }
 }
 
-static std::optional<ItemEntity> wiz_apply_magic_to_item(PlayerType *player_ptr, char command, short bi_id)
+static tl::optional<ItemEntity> wiz_apply_magic_to_item(PlayerType *player_ptr, char command, short bi_id)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     switch (tolower(command)) {
@@ -586,7 +586,7 @@ static std::optional<ItemEntity> wiz_apply_magic_to_item(PlayerType *player_ptr,
         return item;
     }
     default:
-        return std::nullopt;
+        return tl::nullopt;
     }
 }
 

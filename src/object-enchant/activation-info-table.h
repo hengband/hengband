@@ -1,7 +1,7 @@
 #pragma once
 
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 #include <vector>
 
 enum class RandomArtActType : short;
@@ -11,11 +11,11 @@ public:
     RandomArtActType index;
     int level;
     int value;
-    std::optional<int> constant; // 発動間隔の最低ターン数
+    tl::optional<int> constant; // 発動間隔の最低ターン数
     int dice; // 発動間隔の追加ターン数
     std::string desc;
 
-    std::optional<std::string> build_timeout_description() const;
+    tl::optional<std::string> build_timeout_description() const;
 };
 
 extern const std::vector<ActivationType> activation_info;

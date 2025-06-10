@@ -4,7 +4,7 @@
 #include "info-reader/parse-error-types.h"
 #include "system/angband.h"
 #include <concepts>
-#include <optional>
+#include <tl/optional.hpp>
 #include <utility>
 
 class Dice;
@@ -31,7 +31,7 @@ errr info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_require
  * @return エラーコード
  */
 template <IntegralOrEnum T>
-errr info_set_integer(const nlohmann::json &json, T &data, bool is_required, std::optional<Range> range = std::nullopt)
+errr info_set_integer(const nlohmann::json &json, T &data, bool is_required, tl::optional<Range> range = tl::nullopt)
 {
     if (json.is_null()) {
         return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;

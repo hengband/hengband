@@ -100,11 +100,11 @@ struct AmusementRewardItemVisitor {
     {
     }
 
-    std::optional<ItemEntity> operator()(const FixedArtifactId &fa_id) const
+    tl::optional<ItemEntity> operator()(const FixedArtifactId &fa_id) const
     {
         const auto &artifact = ArtifactList::get_instance().get_artifact(fa_id);
         if (artifact.is_generated) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         ItemEntity item(artifact.bi_key);
@@ -114,14 +114,14 @@ struct AmusementRewardItemVisitor {
         return item;
     }
 
-    std::optional<ItemEntity> operator()(const BaseitemKey &bi_key) const
+    tl::optional<ItemEntity> operator()(const BaseitemKey &bi_key) const
     {
         ItemEntity item(bi_key);
         ItemMagicApplier(player_ptr, &item, 1, AM_NO_FIXED_ART).execute();
 
         if (this->flag == AmusementFlagType::NO_UNIQUE) {
             if (item.has_monrace() && item.get_monrace().kind_flags.has(MonsterKindType::UNIQUE)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
 

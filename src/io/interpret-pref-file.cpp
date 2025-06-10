@@ -26,7 +26,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 
-std::optional<std::string> histpref_buf;
+tl::optional<std::string> histpref_buf;
 
 /*!
  * @brief 生い立ちメッセージの内容をバッファに加える。 / Hook function for reading the histpref.prf file.

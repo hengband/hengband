@@ -180,12 +180,12 @@ static bool find_space_aux(DungeonData *dd_ptr, const Pos2D &max_block_size, con
  * Return TRUE and values for the center of the room if all went well.\n
  * Otherwise, return FALSE.\n
  */
-std::optional<Pos2D> find_space(PlayerType *player_ptr, DungeonData *dd_ptr, int height, int width)
+tl::optional<Pos2D> find_space(PlayerType *player_ptr, DungeonData *dd_ptr, int height, int width)
 {
     const auto blocks_high = 1 + ((height - 1) / BLOCK_HGT);
     const auto blocks_wide = 1 + ((width - 1) / BLOCK_WID);
     if ((dd_ptr->row_rooms < blocks_high) || (dd_ptr->col_rooms < blocks_wide)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     auto candidates = 0;
@@ -199,7 +199,7 @@ std::optional<Pos2D> find_space(PlayerType *player_ptr, DungeonData *dd_ptr, int
     }
 
     if (candidates == 0) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     auto block_y = 0;

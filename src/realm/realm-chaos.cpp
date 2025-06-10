@@ -32,9 +32,9 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は std::nullopt を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は tl::nullopt を返す。
  */
-std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+tl::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
@@ -52,7 +52,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_bolt_or_beam(player_ptr, beam_chance(player_ptr) - 10, AttributeType::MISSILE, dir, dice.roll());
@@ -112,7 +112,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::MISSILE, dir, dice.roll() + base, rad);
@@ -135,7 +135,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::FIRE, dir, dice.roll());
@@ -152,7 +152,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::DISINTEGRATE, dir, dice.roll(), 0);
@@ -180,7 +180,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
 
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             cast_wonder(player_ptr, dir);
@@ -197,7 +197,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::CHAOS, dir, dice.roll());
@@ -228,7 +228,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_beam(player_ptr, AttributeType::MANA, dir, dice.roll());
@@ -246,7 +246,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::FIRE, dir, dam, rad);
@@ -263,7 +263,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
@@ -290,7 +290,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::CHAOS, dir, dam, rad);
@@ -307,7 +307,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             poly_monster(player_ptr, dir, plev);
@@ -336,7 +336,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         }
         if (cast) {
             if (!recharge(player_ptr, power)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;
@@ -352,7 +352,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::DISINTEGRATE, dir, dam, rad);
@@ -383,7 +383,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             msg_print(_("ロケット発射！", "You launch a rocket!"));
@@ -413,7 +413,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
             fire_beam(player_ptr, AttributeType::GRAVITY, dir, dice.roll());
         }
@@ -458,7 +458,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
     case 28: {
         if (cast) {
             if (!input_check(_("変身します。よろしいですか？", "You will polymorph yourself. Are you sure? "))) {
-                return std::nullopt;
+                return tl::nullopt;
             }
             do_poly_self(player_ptr);
         }
@@ -475,7 +475,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
             fire_ball(player_ptr, AttributeType::MANA, dir, dam, rad);
         }
@@ -492,7 +492,7 @@ std::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::CHAOS, dir, dam, rad);

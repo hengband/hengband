@@ -400,7 +400,7 @@ static int calcutate_capturable_hp(PlayerType *player_ptr, const MonsterEntity &
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param em_ptr 効果情報への参照ポインタ
  */
-static void effect_monster_captured(PlayerType *player_ptr, EffectMonster *em_ptr, std::optional<CapturedMonsterType *> tmp_cap_mon_ptr)
+static void effect_monster_captured(PlayerType *player_ptr, EffectMonster *em_ptr, tl::optional<CapturedMonsterType *> tmp_cap_mon_ptr)
 {
     if (em_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
         em_ptr->m_ptr->reset_chameleon_polymorph();
@@ -427,7 +427,7 @@ static void effect_monster_captured(PlayerType *player_ptr, EffectMonster *em_pt
  * @param em_ptr 効果情報への参照ポインタ
  * @return 効果発動結果
  */
-ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
+ProcessResult effect_monster_capture(PlayerType *player_ptr, EffectMonster *em_ptr, tl::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     const auto &quests = QuestList::get_instance();
     const auto &floor = *player_ptr->current_floor_ptr;

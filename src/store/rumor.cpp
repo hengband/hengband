@@ -49,16 +49,16 @@ static short get_rumor_num(std::string_view zz, short max_idx)
 /*!
  * @brief 噂の、町やモンスターを表すトークンを得る
  * @param rumor rumor.txt (rumor_j.txt)の1行
- * @return トークン群の配列を返す。フィールドの数が合わない場合はstd::nulloptを返す。
+ * @return トークン群の配列を返す。フィールドの数が合わない場合はtl::nulloptを返す。
  * @todo tmp_tokensを使わず単なるsplitにすればもっと簡略化できそう
  */
-static std::optional<std::vector<std::string>> get_rumor_tokens(std::string rumor)
+static tl::optional<std::vector<std::string>> get_rumor_tokens(std::string rumor)
 {
     constexpr auto num_tokens = 3;
     char *tmp_tokens[num_tokens];
     if (tokenize(rumor.data() + 2, num_tokens, tmp_tokens, TOKENIZE_CHECKQUOTE) != num_tokens) {
         msg_print(_("この情報は間違っている。", "This information is wrong."));
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     std::vector<std::string> tokens(std::begin(tmp_tokens), std::end(tmp_tokens));

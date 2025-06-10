@@ -329,7 +329,7 @@ std::string MonsterEntity::get_died_message() const
  * @brief モンスターにダメージを与えた際の述語メッセージを返す
  * @return ダメージを受けたモンスターの述語
  */
-std::optional<std::string> MonsterEntity::get_pain_message(std::string_view monster_name, int damage) const
+tl::optional<std::string> MonsterEntity::get_pain_message(std::string_view monster_name, int damage) const
 {
     auto &monrace = this->get_monrace();
     return MonsterPainDescriber(monrace.idx, monrace.symbol_definition.character, monster_name).describe(this->hp, damage, this->ml);
@@ -365,7 +365,7 @@ std::pair<TERM_COLOR, int> MonsterEntity::get_hp_bar_data() const
     return { TERM_RED, len };
 }
 
-std::optional<bool> MonsterEntity::order_pet_whistle(const MonsterEntity &other) const
+tl::optional<bool> MonsterEntity::order_pet_whistle(const MonsterEntity &other) const
 {
     const auto is_ordered_name = this->order_pet_named(other);
     if (is_ordered_name) {
@@ -382,7 +382,7 @@ std::optional<bool> MonsterEntity::order_pet_whistle(const MonsterEntity &other)
     return this->order_pet_hp(other);
 }
 
-std::optional<bool> MonsterEntity::order_pet_dismission(const MonsterEntity &other) const
+tl::optional<bool> MonsterEntity::order_pet_dismission(const MonsterEntity &other) const
 {
     const auto is_ordered_name = this->order_pet_named(other);
     if (is_ordered_name) {
@@ -476,7 +476,7 @@ void MonsterEntity::make_lore_treasure(int num_item, int num_gold) const
     }
 }
 
-std::optional<bool> MonsterEntity::order_pet_named(const MonsterEntity &other) const
+tl::optional<bool> MonsterEntity::order_pet_named(const MonsterEntity &other) const
 {
     if (this->is_named() && !other.is_named()) {
         return true;
@@ -486,10 +486,10 @@ std::optional<bool> MonsterEntity::order_pet_named(const MonsterEntity &other) c
         return false;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
-std::optional<bool> MonsterEntity::order_pet_hp(const MonsterEntity &other) const
+tl::optional<bool> MonsterEntity::order_pet_hp(const MonsterEntity &other) const
 {
     if (this->hp > other.hp) {
         return true;
@@ -499,7 +499,7 @@ std::optional<bool> MonsterEntity::order_pet_hp(const MonsterEntity &other) cons
         return false;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 /*!

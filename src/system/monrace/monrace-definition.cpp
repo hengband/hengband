@@ -156,7 +156,7 @@ std::string MonraceDefinition::get_died_message() const
     return is_explodable ? _("は爆発して粉々になった。", " explodes into tiny shreds.") : _("を倒した。", " is destroyed.");
 }
 
-std::optional<bool> MonraceDefinition::order_level(const MonraceDefinition &other) const
+tl::optional<bool> MonraceDefinition::order_level(const MonraceDefinition &other) const
 {
     if (this->level > other.level) {
         return true;
@@ -166,7 +166,7 @@ std::optional<bool> MonraceDefinition::order_level(const MonraceDefinition &othe
         return false;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 bool MonraceDefinition::order_level_strictly(const MonraceDefinition &other) const
@@ -174,7 +174,7 @@ bool MonraceDefinition::order_level_strictly(const MonraceDefinition &other) con
     return this->level > other.level;
 }
 
-std::optional<bool> MonraceDefinition::order_pet(const MonraceDefinition &other) const
+tl::optional<bool> MonraceDefinition::order_pet(const MonraceDefinition &other) const
 {
     if (this->kind_flags.has(MonsterKindType::UNIQUE) && other.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return true;
@@ -332,7 +332,7 @@ bool MonraceDefinition::has_reinforce() const
     return it != end;
 }
 
-std::optional<std::string> MonraceDefinition::get_message(std::string_view monster_name, const MonsterMessageType message_type) const
+tl::optional<std::string> MonraceDefinition::get_message(std::string_view monster_name, const MonsterMessageType message_type) const
 {
     return MonraceMessageList::get_instance().get_message((int)this->idx, monster_name, message_type);
 }
@@ -677,7 +677,7 @@ void MonraceDefinition::init_sex(uint32_t value)
     this->sex = sex_tmp;
 }
 
-std::optional<std::string> MonraceDefinition::probe_lore()
+tl::optional<std::string> MonraceDefinition::probe_lore()
 {
     auto n = false;
     if (this->r_wake != MAX_UCHAR) {
@@ -750,7 +750,7 @@ std::optional<std::string> MonraceDefinition::probe_lore()
 
     this->r_can_evolve = true;
     if (n == 0) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
 #ifdef JP

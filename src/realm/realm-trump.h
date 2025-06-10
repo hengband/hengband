@@ -2,8 +2,8 @@
 
 #include "spell/spells-util.h"
 #include "system/angband.h"
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 
 class PlayerType;
-std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode);
+tl::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode);

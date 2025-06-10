@@ -33,13 +33,13 @@ static cfg_key make_cfg_key(int type, int val)
  * @brief 登録されている中からランダムに選択する
  * @param type the "actions" value of "term_xtra()". see:z-term.h TERM_XTRA_xxxxx
  * @param val the 2nd parameter of "term_xtra()"
- * @return キーに対応する値、複数のファイル名の中からからランダムに返す。登録されていない場合はstd::nulloptを返す。
+ * @return キーに対応する値、複数のファイル名の中からからランダムに返す。登録されていない場合はtl::nulloptを返す。
  */
-std::optional<std::string> CfgData::get_rand(int key1_type, int key2_val) const
+tl::optional<std::string> CfgData::get_rand(int key1_type, int key2_val) const
 {
     const auto it = this->map.find(make_cfg_key(key1_type, key2_val));
     if (it == this->map.end()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const auto &filenames = it->second;
@@ -85,8 +85,8 @@ CfgData CfgReader::read_sections(std::initializer_list<cfg_section> sections) co
     const auto cfg_path_str = this->cfg_path.string();
 
     for (auto &section : sections) {
-        std::optional<std::string> read_key;
-        for (auto index = 0; (read_key = section.key_at(index)) != std::nullopt; ++index) {
+        tl::optional<std::string> read_key;
+        for (auto index = 0; (read_key = section.key_at(index)) != tl::nullopt; ++index) {
             char buf[MAIN_WIN_MAX_PATH]{};
             if (GetPrivateProfileStringA(section.section_name.data(), read_key->data(), "", buf, MAIN_WIN_MAX_PATH, cfg_path_str.data()) == 0) {
                 continue;

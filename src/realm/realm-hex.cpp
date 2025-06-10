@@ -59,9 +59,9 @@
  * @brief 呪術領域魔法の各処理を行う
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST / SPELL_CONT / SpellProcessType::STOP)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST / SPELL_CONT / SpellProcessType::STOP 時は std::nullopt を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST / SPELL_CONT / SpellProcessType::STOP 時は tl::nullopt を返す。
  */
-std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessType mode)
+tl::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type spell, SpellProcessType mode)
 {
     auto info = mode == SpellProcessType::INFO;
     auto cast = mode == SpellProcessType::CAST;
@@ -215,7 +215,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
             if (spell_hex.get_revenge_turn() > 0) {
                 msg_print(_("すでに我慢をしている。", "You are already biding your time for vengeance."));
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             spell_hex.set_revenge_type(SpellHexRevengeType::PATIENCE);
@@ -366,7 +366,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
         }
         if (cast) {
             if (!recharge(player_ptr, power)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
             should_continue = false;
         }
@@ -459,10 +459,10 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
             if (!o_ptr->is_valid()) {
                 msg_print(_("クロークを身につけていない！", "You are not wearing a cloak."));
-                return std::nullopt;
+                return tl::nullopt;
             } else if (!o_ptr->is_cursed()) {
                 msg_print(_("クロークは呪われていない！", "Your cloak is not cursed."));
-                return std::nullopt;
+                return tl::nullopt;
             } else {
                 msg_print(_("影のオーラを身にまとった。", "You are enveloped by a shadowy aura!"));
             }
@@ -637,7 +637,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
     }
     case HEX_SHADOW_MOVE:
         if (cast) {
-            std::optional<Pos2D> pos_target;
+            tl::optional<Pos2D> pos_target;
             bool flag;
             for (auto i = 0; i < 3; i++) {
                 pos_target = point_target(player_ptr);
@@ -699,7 +699,7 @@ std::optional<std::string> do_hex_spell(PlayerType *player_ptr, spell_hex_type s
 
             if (spell_hex.get_revenge_turn() > 0) {
                 msg_print(_("すでに復讐は宣告済みだ。", "You've already declared your revenge."));
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             spell_hex.set_revenge_type(SpellHexRevengeType::REVENGE);

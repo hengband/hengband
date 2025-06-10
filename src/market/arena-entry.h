@@ -1,7 +1,7 @@
 #pragma once
 
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 #include <vector>
 
 enum class ArenaRecord {
@@ -24,7 +24,7 @@ public:
     int get_max_entries() const;
     int get_true_max_entries() const;
     int get_current_entry() const;
-    std::optional<int> get_defeated_entry() const;
+    tl::optional<int> get_defeated_entry() const;
     bool is_player_victor() const;
     bool is_player_true_victor() const;
     const BaseitemKey &get_bi_key() const;
@@ -44,5 +44,5 @@ private:
 
     static ArenaEntryList instance;
     int current_entry = 0; //!< 現在の対戦相手.
-    std::optional<int> defeated_entry; //!< 負けた相手. 無敗ならnullopt. v1.5.0.1以前の敗北済セーブデータは0固定.
+    tl::optional<int> defeated_entry; //!< 負けた相手. 無敗ならnullopt. v1.5.0.1以前の敗北済セーブデータは0固定.
 };

@@ -34,7 +34,7 @@
 #include "view/display-store.h"
 #include "view/object-describer.h"
 #include <fmt/format.h>
-#include <optional>
+#include <tl/optional.hpp>
 
 /*!
  * @brief プレイヤーが売却する時の確認プロンプト / Prompt to sell for the price
@@ -42,7 +42,7 @@
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @return 売るなら(true,売値)、売らないなら(false,0)のタプル
  */
-static std::optional<int> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
+static tl::optional<int> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
 {
     auto price_ask = price_item(player_ptr, o_ptr->calc_price(), ot_ptr->inflate, true, store_num);
 
@@ -53,7 +53,7 @@ static std::optional<int> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_p
         return price_ask;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 /*!

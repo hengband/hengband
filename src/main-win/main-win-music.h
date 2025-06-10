@@ -2,13 +2,13 @@
 
 #include <array>
 #include <filesystem>
-#include <optional>
+#include <tl/optional.hpp>
 #include <windows.h>
 
 class CfgData;
 extern bool use_pause_music_inactive;
 extern std::filesystem::path ANGBAND_DIR_XTRA_MUSIC;
-extern std::optional<CfgData> music_cfg_data;
+extern tl::optional<CfgData> music_cfg_data;
 
 namespace main_win_music {
 void load_music_prefs();

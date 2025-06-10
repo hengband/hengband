@@ -341,12 +341,12 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
  * - プレイヤーが無敵状態もしくは時間停止スキルを使用中: TERM_WHITE
  * - プレイヤーが幽体化スキルを使用中: TERM_L_DARK
  *
- * @return 単色表示色。単色表示を行わない場合はstd::nullopt
+ * @return 単色表示色。単色表示を行わない場合はtl::nullopt
  */
-std::optional<uint8_t> get_monochrome_display_color(PlayerType *player_ptr)
+tl::optional<uint8_t> get_monochrome_display_color(PlayerType *player_ptr)
 {
     if (use_graphics) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (AngbandWorld::get_instance().timewalk_m_idx) {
@@ -359,5 +359,5 @@ std::optional<uint8_t> get_monochrome_display_color(PlayerType *player_ptr)
         return TERM_L_DARK;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }

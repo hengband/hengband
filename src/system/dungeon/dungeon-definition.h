@@ -19,8 +19,8 @@
 #include "util/flag-group.h"
 #include "util/point-2d.h"
 #include "util/probability-table.h"
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 #include <utility>
 #include <vector>
 
@@ -98,7 +98,7 @@ public:
     std::string build_entrance_message() const;
     std::string describe_depth() const;
     int calc_cavern_terrains() const;
-    std::optional<std::pair<TerrainTag, TerrainTag>> decide_river_terrains(int threshold) const;
+    tl::optional<std::pair<TerrainTag, TerrainTag>> decide_river_terrains(int threshold) const;
     DoorKind select_door_kind() const;
     short select_floor_terrain_id() const;
     short select_wall_terrain_id() const;

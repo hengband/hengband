@@ -617,12 +617,12 @@ void wilderness_gen_small(PlayerType *player_ptr)
  * @param pos_parsing 解析対象の座標
  * @return エラーコードと座標のペア。エラー時は座標は無効値。Dタグの時だけ更新の可能性があり、それ以外はpos_parsingをそのまま返却
  */
-std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *line, int xmin, int xmax, const Pos2D &pos_parsing)
+std::pair<parse_error_type, tl::optional<Pos2D>> parse_line_wilderness(char *line, int xmin, int xmax, const Pos2D &pos_parsing)
 {
     auto &letters = WildernessLetters::get_instance();
     letters.initialize();
     if (!std::string_view(line).starts_with("W:")) {
-        return { PARSE_ERROR_GENERIC, std::nullopt };
+        return { PARSE_ERROR_GENERIC, tl::nullopt };
     }
 
     Pos2D pos = pos_parsing;
@@ -644,7 +644,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         char *zz[33];
         const auto num = tokenize(line + 4, 6, zz, 0);
         if (num <= 1) {
-            return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
+            return { PARSE_ERROR_TOO_FEW_ARGUMENTS, tl::nullopt };
         }
 
         const int index = zz[0][0];
@@ -697,19 +697,19 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
 
         char *zz[33];
         if (tokenize(line + 4, 2, zz, 0) != 2) {
-            return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
+            return { PARSE_ERROR_TOO_FEW_ARGUMENTS, tl::nullopt };
         }
 
         wilderness.set_starting_player_position({ std::stoi(zz[0]), std::stoi(zz[1]) });
         wilderness.initialize_position();
         if (!wilderness.is_player_in_bounds()) {
-            return { PARSE_ERROR_OUT_OF_BOUNDS, std::nullopt };
+            return { PARSE_ERROR_OUT_OF_BOUNDS, tl::nullopt };
         }
 
         break;
     }
     default:
-        return { PARSE_ERROR_UNDEFINED_DIRECTIVE, std::nullopt };
+        return { PARSE_ERROR_UNDEFINED_DIRECTIVE, tl::nullopt };
     }
 
     for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {

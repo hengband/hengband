@@ -2,7 +2,7 @@
 
 #include "effect/attribute-types.h"
 #include "system/angband.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 class MonsterEntity;
 class FallOffHorseEffect;
@@ -30,7 +30,7 @@ struct ProjectResult;
 class CapturedMonsterType;
 class PlayerType;
 using project_func = ProjectResult (*)(
-    PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION rad, POSITION y, POSITION x, int dam, AttributeType typ, BIT_FLAGS flag, std::optional<CapturedMonsterType *> cap_mon_ptr);
+    PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION rad, POSITION y, POSITION x, int dam, AttributeType typ, BIT_FLAGS flag, tl::optional<CapturedMonsterType *> cap_mon_ptr);
 
 bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name, int r, POSITION y, POSITION x, int dam, AttributeType typ, BIT_FLAGS flag,
     FallOffHorseEffect &fall_off_horse_effect, project_func project);

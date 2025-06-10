@@ -2,7 +2,7 @@
 
 #include "util/point-2d.h"
 #include <memory>
-#include <optional>
+#include <tl/optional.hpp>
 
 class PlayerType;
 class Target {
@@ -20,8 +20,8 @@ public:
     static void clear_last_target();
 
     bool is_okay() const;
-    std::optional<Pos2D> get_position() const;
-    std::optional<short> get_m_idx() const;
+    tl::optional<Pos2D> get_position() const;
+    tl::optional<short> get_m_idx() const;
 
 private:
     Target();

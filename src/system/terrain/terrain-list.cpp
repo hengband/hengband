@@ -114,12 +114,12 @@ void TerrainList::emplace_tags()
 /*!
  * @brief 地形タグからIDを得る
  * @param tag タグ文字列のオフセット
- * @return 地形ID。該当がないならstd::nullopt
+ * @return 地形ID。該当がないならtl::nullopt
  */
-std::optional<short> TerrainList::search_real_terrain(std::string_view tag) const
+tl::optional<short> TerrainList::search_real_terrain(std::string_view tag) const
 {
     if (tag.empty()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return this->get_terrain_id(tag);

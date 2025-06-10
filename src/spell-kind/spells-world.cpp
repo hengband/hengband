@@ -360,7 +360,7 @@ void reserve_alter_reality(PlayerType *player_ptr, TIME_EFFECT turns)
  * @param col コンソールX座標
  * @return 選択されたダンジョンID、ダンジョンに全く入ったことがなかったりキャンセルしたりした場合はnullopt
  */
-static std::optional<DungeonId> choose_dungeon(std::string_view note, int row, int col)
+static tl::optional<DungeonId> choose_dungeon(std::string_view note, int row, int col)
 {
     const auto &dungeon_records = DungeonRecords::get_instance();
     if (lite_town || vanilla_town || ironman_downward) {
@@ -372,7 +372,7 @@ static std::optional<DungeonId> choose_dungeon(std::string_view note, int row, i
         constexpr auto fmt = _("まだ%sに入ったことはない。", "You haven't entered %s yet.");
         msg_format(fmt, dungeons.get_dungeon(DungeonId::ANGBAND).name.data());
         msg_erase();
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     screen_save();
@@ -392,7 +392,7 @@ static std::optional<DungeonId> choose_dungeon(std::string_view note, int row, i
         const auto key = inkey();
         if ((key == ESCAPE) || ids.empty()) {
             screen_load();
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         if ((key >= 'a') && (key < static_cast<char>('a' + ids.size()))) {

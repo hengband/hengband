@@ -32,8 +32,8 @@
 #include "view/display-store.h"
 #include "world/world.h"
 #include <fmt/format.h>
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 
 /*!
  * @brief プレイヤーが購入する時の値切り処理メインルーチン /
@@ -44,7 +44,7 @@
  * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
-static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
+static tl::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
 {
     auto price_ask = price_item(player_ptr, o_ptr->calc_price(), ot_ptr->inflate, false, store_num);
 
@@ -54,7 +54,7 @@ static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_
         return price_ask;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 /*!
@@ -62,7 +62,7 @@ static std::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_
  * @param i 店舗インベントリストック数
  * @return 選択したらtrue、しなかったらfalse
  */
-static std::optional<short> show_store_select_item(const int i, StoreSaleType store_num)
+static tl::optional<short> show_store_select_item(const int i, StoreSaleType store_num)
 {
     std::string prompt;
     switch (store_num) {

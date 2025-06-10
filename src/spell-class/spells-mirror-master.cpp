@@ -121,7 +121,7 @@ bool SpellsMirrorMaster::mirror_tunnel()
  * @brief 鏡設置処理
  * @return 設置に成功したらnullopt、失敗したらエラーメッセージ
  */
-std::optional<std::string> SpellsMirrorMaster::place_mirror()
+tl::optional<std::string> SpellsMirrorMaster::place_mirror()
 {
     const auto p_pos = this->player_ptr->get_position();
     auto &floor = *this->player_ptr->current_floor_ptr;
@@ -136,7 +136,7 @@ std::optional<std::string> SpellsMirrorMaster::place_mirror()
     note_spot(this->player_ptr, p_pos);
     lite_spot(this->player_ptr, p_pos);
     update_local_illumination(this->player_ptr, p_pos);
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 /*!

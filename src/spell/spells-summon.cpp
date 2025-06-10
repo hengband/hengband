@@ -255,7 +255,7 @@ bool summon_kin_player(PlayerType *player_ptr, DEPTH level, POSITION y, POSITION
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  * @return 作用が実際にあった場合TRUEを返す
  */
-int summon_cyber(PlayerType *player_ptr, POSITION y, POSITION x, std::optional<MONSTER_IDX> summoner_m_idx)
+int summon_cyber(PlayerType *player_ptr, POSITION y, POSITION x, tl::optional<MONSTER_IDX> summoner_m_idx)
 {
     /* Summoned by a monster */
     BIT_FLAGS mode = PM_ALLOW_GROUP;

@@ -133,13 +133,13 @@ bool SpellHex::stop_spells_with_selection()
  * Item2: 選択が完了したらtrue、キャンセルならばfalse
  * Item3: 選択した呪文番号 (a～d、lの5択)
  */
-std::pair<bool, std::optional<char>> SpellHex::select_spell_stopping(std::string_view prompt)
+std::pair<bool, tl::optional<char>> SpellHex::select_spell_stopping(std::string_view prompt)
 {
     while (true) {
         this->display_casting_spells_list();
         const auto choice_opt = input_command(prompt, true);
         if (!choice_opt) {
-            return { false, std::nullopt };
+            return { false, tl::nullopt };
         }
 
         auto choice = *choice_opt;

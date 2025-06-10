@@ -1,9 +1,9 @@
 #pragma once
 
 #include "system/angband.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 class EffectMonster;
 class CapturedMonsterType;
 class PlayerType;
-ProcessResult switch_effects_monster(PlayerType *player_ptr, EffectMonster *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr = std::nullopt);
+ProcessResult switch_effects_monster(PlayerType *player_ptr, EffectMonster *em_ptr, tl::optional<CapturedMonsterType *> cap_mon_ptr = tl::nullopt);

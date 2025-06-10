@@ -24,7 +24,7 @@
 #include "target/projection-path-calculator.h"
 #include "util/bit-flags-calculator.h"
 #include "util/point-2d.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 /*!
  * @brief モンスターがプレイヤーにダメージを与えるための最適な座標を算出する
@@ -35,7 +35,7 @@
  * @param checker 射線判定の振り分け
  * @return 有効な座標があった場合はその座標、なかったらnullopt
  */
-static std::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const MonsterEntity &monster, const Pos2D &pos, TerrainCharacteristics tc)
+static tl::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const MonsterEntity &monster, const Pos2D &pos, TerrainCharacteristics tc)
 {
     constexpr std::array<std::array<int, 8>, 4> directions = {
         {
@@ -83,7 +83,7 @@ static std::optional<Pos2D> adjacent_grid_check(PlayerType *player_ptr, const Mo
         }
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 void decide_lite_range(PlayerType *player_ptr, msa_type *msa_ptr)

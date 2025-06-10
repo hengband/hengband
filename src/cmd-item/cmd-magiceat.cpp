@@ -83,14 +83,14 @@
 #include "view/display-messages.h"
 #include "view/display-util.h"
 #include <algorithm>
-#include <optional>
+#include <tl/optional.hpp>
 
 /*!
  * @brief 魔道具術師の取り込んだ魔力一覧から選択/閲覧する /
  * @param only_browse 閲覧するだけならばTRUE
  * @return 選択したアイテムのベースアイテムキー、キャンセルならばnullopt
  */
-static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool only_browse)
+static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool only_browse)
 {
     bool flag, request_list;
     auto tval = ItemKindType::NONE;
@@ -128,7 +128,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             case 'z':
             case 'Z':
                 screen_load();
-                return std::nullopt;
+                return tl::nullopt;
             case '2':
             case 'j':
             case 'J':
@@ -160,7 +160,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
         while (true) {
             const auto choice = input_command(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), true);
             if (!choice) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             if (choice == 'A' || choice == 'a') {
@@ -186,7 +186,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             [](const auto &item) { return item.count > 0; });
         it == item_group.end()) {
         msg_print(_("その種類の魔法は覚えていない！", "You don't have that type of magic!"));
-        return std::nullopt;
+        return tl::nullopt;
     } else {
         if (use_menu) {
             menu_line = 1 + std::distance(std::begin(item_group), it);
@@ -316,7 +316,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
             switch (*choice) {
             case '0': {
                 screen_load();
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             case '8':
@@ -456,7 +456,7 @@ static std::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, boo
     screen_load();
 
     if (!flag) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     COMMAND_CODE base = 0;

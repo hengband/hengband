@@ -3,8 +3,8 @@
 #include "system/angband.h"
 #include <filesystem>
 #include <functional>
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 
 #if !defined(DISABLE_NET)
 
@@ -30,11 +30,11 @@ public:
      */
     using GetRequestProgressHandler = std::function<bool(Progress)>;
 
-    std::optional<Response> get(const std::string &url, GetRequestProgressHandler progress_handler = {});
-    std::optional<Response> get(const std::string &url, const std::filesystem::path &path, GetRequestProgressHandler progress_handler = {});
-    std::optional<Response> post(const std::string &url, const std::string &post_data, const std::string &media_type);
+    tl::optional<Response> get(const std::string &url, GetRequestProgressHandler progress_handler = {});
+    tl::optional<Response> get(const std::string &url, const std::filesystem::path &path, GetRequestProgressHandler progress_handler = {});
+    tl::optional<Response> post(const std::string &url, const std::string &post_data, const std::string &media_type);
 
-    std::optional<std::string> user_agent;
+    tl::optional<std::string> user_agent;
 };
 
 }

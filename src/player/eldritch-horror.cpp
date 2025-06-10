@@ -49,10 +49,10 @@ static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m
 
 /*!
  * @brief ELDRITCH_HORRORによるプレイヤーの精神破壊処理
- * @param m_idx ELDRITCH_HORRORを引き起こしたモンスターの参照ID。薬・罠・魔法の影響ならstd::nullopt。(デフォルト: std::nullopt)
+ * @param m_idx ELDRITCH_HORRORを引き起こしたモンスターの参照ID。薬・罠・魔法の影響ならtl::nullopt。(デフォルト: tl::nullopt)
  * @param necro 暗黒領域魔法の詠唱失敗によるものならばtrueを指定する (デフォルト: false)
  */
-void sanity_blast(PlayerType *player_ptr, std::optional<short> m_idx, bool necro)
+void sanity_blast(PlayerType *player_ptr, tl::optional<short> m_idx, bool necro)
 {
     const auto &world = AngbandWorld::get_instance();
     if (AngbandSystem::get_instance().is_phase_out() || !world.character_dungeon) {

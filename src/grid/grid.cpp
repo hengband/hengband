@@ -153,7 +153,7 @@ void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terr
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return 配置に成功したらその座標、失敗したらnullopt
  */
-std::optional<Pos2D> new_player_spot(PlayerType *player_ptr)
+tl::optional<Pos2D> new_player_spot(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     auto max_attempts = 10000;
@@ -205,7 +205,7 @@ std::optional<Pos2D> new_player_spot(PlayerType *player_ptr)
     }
 
     if (max_attempts < 1) { /* Should be -1, actually if we failed... */
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return pos;

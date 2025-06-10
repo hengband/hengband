@@ -56,9 +56,9 @@ static void start_singing(PlayerType *player_ptr, SPELL_IDX spell, int32_t song)
  * @param mode 処理内容 (NAME / SPELL_DESC / INFO / CAST / FAIL / SPELL_CONT / STOP)
  * @return
  * NAME / SPELL_DESC / INFO 時には文字列を返す.
- * CAST / FAIL / SPELL_CONT / STOP 時は std::nullopt を返す.
+ * CAST / FAIL / SPELL_CONT / STOP 時は tl::nullopt を返す.
  */
-std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
@@ -128,7 +128,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
             if (cast) {
                 const auto dir = get_aim_dir(player_ptr);
                 if (!dir) {
-                    return std::nullopt;
+                    return tl::nullopt;
                 }
 
                 fire_bolt(player_ptr, AttributeType::SOUND, dir, dice.roll());
@@ -638,7 +638,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_beam(player_ptr, AttributeType::SOUND, dir, dice.roll());
@@ -817,7 +817,7 @@ std::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::SOUND, dir, dice.roll(), rad);

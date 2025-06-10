@@ -78,7 +78,7 @@ private:
     int back_chance{};
     std::string o2_name{};
     bool super_boomerang{};
-    std::optional<ObjectThrowHitMonster> hit_monster{};
+    tl::optional<ObjectThrowHitMonster> hit_monster{};
 
     bool check_what_throw();
     bool check_throw_boomerang();

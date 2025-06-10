@@ -17,8 +17,8 @@
 #include "util/dice.h"
 #include "util/flag-group.h"
 #include "util/point-2d.h"
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 #include <vector>
 
 enum class FixedArtifactId : short;
@@ -63,8 +63,8 @@ public:
 
     byte smith_hit = 0; /*!< 鍛冶をした結果上昇した命中値 */
     byte smith_damage = 0; /*!< 鍛冶をした結果上昇したダメージ */
-    std::optional<SmithEffectType> smith_effect; //!< 鍛冶で付与された効果
-    std::optional<RandomArtActType> smith_act_idx; //!< 鍛冶で付与された発動効果のID
+    tl::optional<SmithEffectType> smith_effect; //!< 鍛冶で付与された効果
+    tl::optional<RandomArtActType> smith_act_idx; //!< 鍛冶で付与された発動効果のID
 
     HIT_PROB to_h{}; /*!< Plusses to hit */
     int to_d{}; /*!< Plusses to damage */
@@ -75,8 +75,8 @@ public:
     TIME_EFFECT timeout{}; /*!< Timeout Counter */
     byte ident{}; /*!< Special flags  */
     EnumClassFlagGroup<OmType> marked{}; /*!< Object is marked */
-    std::optional<std::string> inscription{}; /*!< Inscription */
-    std::optional<std::string> randart_name{}; /*!< Artifact name (random artifacts) */
+    tl::optional<std::string> inscription{}; /*!< Inscription */
+    tl::optional<std::string> randart_name{}; /*!< Artifact name (random artifacts) */
     byte feeling{}; /*!< Game generated inscription number (eg, pseudo-id) */
 
     TrFlags art_flags{}; /*!< Extra Flags for ego and artifacts */

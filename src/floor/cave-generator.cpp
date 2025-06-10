@@ -377,7 +377,7 @@ static void decide_grid_glowing(FloorType &floor, DungeonData *dd_ptr, const Dun
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return ダンジョン生成が全て無事に成功したらnullopt、何かエラーがあったらその文字列
  */
-std::optional<std::string> cave_gen(PlayerType *player_ptr)
+tl::optional<std::string> cave_gen(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     reset_lite_area(floor);
@@ -409,5 +409,5 @@ std::optional<std::string> cave_gen(PlayerType *player_ptr)
     }
 
     decide_grid_glowing(floor, &dd, dungeon);
-    return std::nullopt;
+    return tl::nullopt;
 }

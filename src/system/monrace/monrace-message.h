@@ -2,7 +2,6 @@
 
 #include "monster-race/race-speak-flags.h"
 #include <map>
-#include <optional>
 #include <string>
 #include <string_view>
 #include <tl/optional.hpp>
@@ -11,7 +10,7 @@
 class MonsterMessage {
 public:
     MonsterMessage(int chance, bool use_name, std::string_view message);
-    std::optional<std::string_view> get_message() const;
+    tl::optional<std::string_view> get_message() const;
     bool start_with_monname() const;
 
 private:
@@ -48,7 +47,7 @@ public:
     ~MonraceMessageList() = default;
 
     static MonraceMessageList &get_instance();
-    std::optional<std::string> get_message(const int monrace_id, std::string_view monrace_name, const MonsterMessageType message_type);
+    tl::optional<std::string> get_message(const int monrace_id, std::string_view monrace_name, const MonsterMessageType message_type);
     void emplace(const int monrace_id, const MonsterMessageType message_type, const int chance, bool use_name, std::string_view message_str);
     void emplace_default(const MonsterMessageType message_type, const int chance, bool use_name, std::string_view message_str);
 

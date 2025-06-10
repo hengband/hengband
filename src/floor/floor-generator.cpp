@@ -301,7 +301,7 @@ static void generate_fixed_floor(PlayerType *player_ptr)
  * @param concptr
  * @return フロアの生成に成功したらTRUE
  */
-static std::optional<std::string> level_gen(PlayerType *player_ptr)
+static tl::optional<std::string> level_gen(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
@@ -504,7 +504,7 @@ void generate_floor(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     const auto is_wild_mode = AngbandWorld::get_instance().is_wild_mode();
     for (int num = 0; true; num++) {
-        std::optional<std::string> why;
+        tl::optional<std::string> why;
         clear_cave(player_ptr);
         player_ptr->x = player_ptr->y = 0;
         if (floor.inside_arena) {
