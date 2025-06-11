@@ -109,7 +109,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
         pos = p_pos + vec;
     }
 
-    (*project)(player_ptr, 0, 0, pos.y, pos.x, ep_ptr->dam, ep_ptr->attribute, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), std::nullopt);
+    (*project)(player_ptr, 0, 0, pos.y, pos.x, ep_ptr->dam, ep_ptr->attribute, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), tl::nullopt);
     disturb(player_ptr, true, true);
     return true;
 }
@@ -213,7 +213,7 @@ bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name
     if ((player_ptr->tim_eyeeye || SpellHex(player_ptr).is_spelling_specific(HEX_EYE_FOR_EYE)) && (ep_ptr->get_damage > 0) && !player_ptr->is_dead && ep_ptr->is_monster()) {
         const auto m_name_self = monster_desc(player_ptr, *ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_print(_(format("攻撃が%s自身を傷つけた！", ep_ptr->m_name.data()), format("The attack of %s has wounded %s!", ep_ptr->m_name.data(), m_name_self.data())));
-        (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL, std::nullopt);
+        (*project)(player_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, AttributeType::MISSILE, PROJECT_KILL, tl::nullopt);
         if (player_ptr->tim_eyeeye) {
             set_tim_eyeeye(player_ptr, player_ptr->tim_eyeeye - 5, true);
         }

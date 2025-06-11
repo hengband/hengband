@@ -21,9 +21,9 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "view/display-symbol.h"
-#include <optional>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 
 // Encode the screen colors
 static char hack[17] = "dwsorgbuDWvyRGBU";

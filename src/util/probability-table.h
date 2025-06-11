@@ -5,9 +5,9 @@
 #include <algorithm>
 #include <exception>
 #include <numeric>
-#include <optional>
 #include <random>
 #include <stdexcept>
+#include <tl/optional.hpp>
 #include <tuple>
 #include <vector>
 
@@ -148,5 +148,5 @@ private:
     /** 項目のIDと確率のセットを格納する配列 */
     std::vector<std::tuple<IdType, int>> item_list_;
 
-    mutable std::optional<std::discrete_distribution<>> dist_;
+    mutable tl::optional<std::discrete_distribution<>> dist_;
 };

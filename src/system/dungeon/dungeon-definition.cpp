@@ -153,7 +153,7 @@ int DungeonDefinition::calc_cavern_terrains() const
  * @param threshold 川生成の確率閾値 (深いフロアほど生成率が高い)
  * @return 川地形の生成条件が満たされたら地形タグの組み合わせ (深/浅)、満たされなかったらnullopt
  */
-std::optional<std::pair<TerrainTag, TerrainTag>> DungeonDefinition::decide_river_terrains(int threshold) const
+tl::optional<std::pair<TerrainTag, TerrainTag>> DungeonDefinition::decide_river_terrains(int threshold) const
 {
     if (this->flags.has(DungeonFeatureType::WATER_RIVER) && (randint1(MAX_DEPTH * 2) - 1 > threshold)) {
         return std::make_pair<TerrainTag, TerrainTag>(TerrainTag::DEEP_WATER, TerrainTag::SHALLOW_WATER);
@@ -173,7 +173,7 @@ std::optional<std::pair<TerrainTag, TerrainTag>> DungeonDefinition::decide_river
     }
 
     if (tags.empty()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return rand_choice(tags);

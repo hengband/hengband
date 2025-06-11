@@ -122,7 +122,7 @@ static void make_description_of_affecred_monster(PlayerType *player_ptr, EffectM
  * 完全な耐性を持っていたら、一部属性を除いて影響は及ぼさない
  * デバッグ属性、モンスター打撃、モンスター射撃であれば貫通する
  */
-static ProcessResult exe_affect_monster_by_effect(PlayerType *player_ptr, EffectMonster *em_ptr, std::optional<CapturedMonsterType *> cap_mon_ptr)
+static ProcessResult exe_affect_monster_by_effect(PlayerType *player_ptr, EffectMonster *em_ptr, tl::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     const std::vector<AttributeType> effect_arrtibute = {
         AttributeType::OLD_CLONE,
@@ -727,7 +727,7 @@ static void exe_affect_monster_postprocess(PlayerType *player_ptr, EffectMonster
  */
 bool affect_monster(
     PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITION y, POSITION x, int dam, AttributeType attribute, BIT_FLAGS flag, bool see_s_msg,
-    std::optional<CapturedMonsterType *> cap_mon_ptr, FallOffHorseEffect *fall_off_horse_effect)
+    tl::optional<CapturedMonsterType *> cap_mon_ptr, FallOffHorseEffect *fall_off_horse_effect)
 {
     EffectMonster tmp_effect(player_ptr, src_idx, r, y, x, dam, attribute, flag, see_s_msg);
     auto *em_ptr = &tmp_effect;

@@ -5,7 +5,7 @@
 #include <concepts>
 #include <cstdint>
 #include <iterator>
-#include <optional>
+#include <tl/optional.hpp>
 #include <type_traits>
 
 template <typename T>
@@ -516,9 +516,9 @@ public:
     /**
      * @brief フラグ集合のONになっているフラグのうち最初のフラグを返す
      *
-     * @return フラグ集合のONになっているフラグのうち最初のフラグ。但し一つもONになっているフラグがなければ std::nullopt
+     * @return フラグ集合のONになっているフラグのうち最初のフラグ。但し一つもONになっているフラグがなければ tl::nullopt
      */
-    [[nodiscard]] std::optional<FlagType> first() const noexcept
+    [[nodiscard]] tl::optional<FlagType> first() const noexcept
     {
         for (size_t i = 0; i < bs_.size(); i++) {
             if (bs_.test(i)) {
@@ -526,7 +526,7 @@ public:
             }
         }
 
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     /**

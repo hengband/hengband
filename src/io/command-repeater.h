@@ -1,7 +1,7 @@
 #pragma once
 
-#include <optional>
+#include <tl/optional.hpp>
 
 void repeat_push(short command);
-std::optional<short> repeat_pull();
+tl::optional<short> repeat_pull();
 void repeat_check();

@@ -163,7 +163,7 @@ void PitNestFilter::set_dragon_breaths()
  * @param nest_types nest定義のマップ
  * @return 選択されたnestのID、選択失敗した場合nullopt.
  */
-std::optional<NestKind> pick_nest_type(const FloorType &floor, const std::map<NestKind, nest_pit_type> &nest_types)
+tl::optional<NestKind> pick_nest_type(const FloorType &floor, const std::map<NestKind, nest_pit_type> &nest_types)
 {
     ProbabilityTable<NestKind> table;
     for (const auto &[nest_kind, nest] : nest_types) {
@@ -179,7 +179,7 @@ std::optional<NestKind> pick_nest_type(const FloorType &floor, const std::map<Ne
     }
 
     if (table.empty()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return table.pick_one_at_random();
@@ -191,7 +191,7 @@ std::optional<NestKind> pick_nest_type(const FloorType &floor, const std::map<Ne
  * @param pit_types pit定義のマップ
  * @return 選択されたpitのID、選択失敗した場合nullopt.
  */
-std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitKind, nest_pit_type> &pit_types)
+tl::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitKind, nest_pit_type> &pit_types)
 {
     ProbabilityTable<PitKind> table;
     for (const auto &[pit_kind, pit] : pit_types) {
@@ -207,7 +207,7 @@ std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitK
     }
 
     if (table.empty()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return table.pick_one_at_random();
@@ -221,7 +221,7 @@ std::optional<PitKind> pick_pit_type(const FloorType &floor, const std::map<PitK
  * @return モンスター種族ID (見つからなかったらnullopt)
  * @details Nestにはそのフロアの通常レベルより11高いモンスターを中心に選ぶ
  */
-std::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align, int boost)
+tl::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, MonsterEntity &align, int boost)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
@@ -236,8 +236,8 @@ std::optional<MonraceId> select_pit_nest_monrace_id(PlayerType *player_ptr, Mons
             return monrace_id;
         }
 
-        return std::nullopt;
+        return tl::nullopt;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }

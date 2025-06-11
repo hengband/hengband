@@ -20,18 +20,18 @@
 #include "tracking/lore-tracker.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 /*!
  * @brief 優勝時のメッセージを表示し、賞金を与える
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return まだ優勝していないか、挑戦者モンスターとの戦いではFALSE
  */
-static std::optional<int> process_ostensible_arena_victory()
+static tl::optional<int> process_ostensible_arena_victory()
 {
     auto &entries = ArenaEntryList::get_instance();
     if (!entries.is_player_victor()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     clear_bldg(5, 19);

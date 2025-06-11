@@ -1184,7 +1184,7 @@ static int interpret_realm_select_key(int cs, int n, char c)
  * @param n 最後尾の位置
  * @return 領域番号
  */
-static std::optional<ElementRealmType> get_element_realm(PlayerType *player_ptr, ElementRealmType realm, int n)
+static tl::optional<ElementRealmType> get_element_realm(PlayerType *player_ptr, ElementRealmType realm, int n)
 {
     int cs = std::max(0, enum2i(realm) - 1);
     int os = cs;
@@ -1202,7 +1202,7 @@ static std::optional<ElementRealmType> get_element_realm(PlayerType *player_ptr,
         cs = interpret_realm_select_key(cs, n, c);
 
         if (c == 'S') {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         if (c == ' ' || c == '\r' || c == '\n') {
@@ -1251,12 +1251,12 @@ static std::optional<ElementRealmType> get_element_realm(PlayerType *player_ptr,
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 領域番号
  */
-std::optional<ElementRealmType> select_element_realm(PlayerType *player_ptr)
+tl::optional<ElementRealmType> select_element_realm(PlayerType *player_ptr)
 {
     clear_from(10);
 
     constexpr auto realm_max = enum2i(ElementRealmType::MAX);
-    auto realm = std::make_optional(ElementRealmType::FIRE);
+    auto realm = tl::make_optional(ElementRealmType::FIRE);
     int row = 16;
     while (1) {
         put_str(
@@ -1435,7 +1435,7 @@ static bool is_target_grid_dark(const FloorType &floor, const Pos2D &pos)
 static bool door_to_darkness(PlayerType *player_ptr, int distance)
 {
     const auto p_pos_orig = player_ptr->get_position();
-    auto p_pos = std::make_optional(player_ptr->get_position());
+    auto p_pos = tl::make_optional(player_ptr->get_position());
     const auto &floor = *player_ptr->current_floor_ptr;
     for (auto i = 0; i < 3; i++) {
         p_pos = point_target(player_ptr);

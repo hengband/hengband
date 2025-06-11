@@ -189,13 +189,13 @@ MonsterPainDescriber::MonsterPainDescriber(MonraceId r_idx, char symbol, std::st
  * @param dam モンスターが受けたダメージ
  * @return std::string ダメージを受けたモンスターの様子を表す文字列。表示すべき様子が無い場合はnullopt。
  */
-std::optional<std::string> MonsterPainDescriber::describe(int now_hp, int took_damage, bool visible)
+tl::optional<std::string> MonsterPainDescriber::describe(int now_hp, int took_damage, bool visible)
 {
     if (took_damage == 0) {
         if (visible) {
             return format(_("%s^はダメージを受けていない。", "%s^ is unharmed."), this->m_name.data());
         }
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const auto oldhp = now_hp + took_damage;
@@ -210,5 +210,5 @@ std::optional<std::string> MonsterPainDescriber::describe(int now_hp, int took_d
         return format("%s^%s", this->m_name.data(), msg.data());
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }

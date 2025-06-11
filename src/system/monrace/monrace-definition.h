@@ -20,9 +20,9 @@
 #include "util/dice.h"
 #include "util/flag-group.h"
 #include "view/display-symbol.h"
-#include <optional>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <vector>
 
 /*! モンスターが1ターンに攻撃する最大回数 (射撃を含む) / The maximum number of times a monster can attack in a turn (including SHOOT) */
@@ -151,9 +151,9 @@ public:
     bool is_angel_superficially() const;
     bool symbol_char_is_any_of(std::string_view symbol_characters) const;
     std::string get_died_message() const;
-    std::optional<bool> order_level(const MonraceDefinition &other) const;
+    tl::optional<bool> order_level(const MonraceDefinition &other) const;
     bool order_level_strictly(const MonraceDefinition &other) const;
-    std::optional<bool> order_pet(const MonraceDefinition &other) const;
+    tl::optional<bool> order_pet(const MonraceDefinition &other) const;
     std::string get_pronoun_of_summoned_kin() const;
     const MonraceDefinition &get_next() const;
     bool is_bounty(bool unachieved_only) const;
@@ -162,7 +162,7 @@ public:
     int calc_capture_value() const;
     std::string build_eldritch_horror_message(std::string_view description) const;
     bool has_reinforce() const;
-    std::optional<std::string> get_message(std::string_view monster_name, const MonsterMessageType message_type) const;
+    tl::optional<std::string> get_message(std::string_view monster_name, const MonsterMessageType message_type) const;
     const std::vector<DropArtifact> &get_drop_artifacts() const;
     const std::vector<Reinforce> &get_reinforces() const;
     bool can_generate() const;
@@ -207,7 +207,7 @@ public:
     bool is_suitable_for_evil_nest(char symbol) const;
 
     void init_sex(uint32_t value);
-    std::optional<std::string> probe_lore();
+    tl::optional<std::string> probe_lore();
     void make_lore_treasure(int num_item, int num_drop);
     void emplace_drop_artifact(FixedArtifactId fa_id, int percentage);
     void emplace_reinforce(MonraceId monrace_id, const Dice &dice);

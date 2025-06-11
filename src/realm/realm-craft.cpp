@@ -25,9 +25,9 @@
  * @brief 匠領域魔法の各処理を行う
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は std::nullopt を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は tl::nullopt を返す。
  */
-std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+tl::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
@@ -212,7 +212,7 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         if (cast) {
             if (!choose_ele_attack(player_ptr, base + dice.roll())) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;
@@ -318,7 +318,7 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
     case 24: {
         if (cast) {
             if (!mundane_spell(player_ptr, true)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;
@@ -332,7 +332,7 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
     case 26: {
         if (cast) {
             if (!identify_fully(player_ptr, false)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;
@@ -340,7 +340,7 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
     case 27: {
         if (cast) {
             if (!enchant_spell(player_ptr, randint0(4) + 1, randint0(4) + 1, 0)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;
@@ -348,7 +348,7 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
     case 28: {
         if (cast) {
             if (!enchant_spell(player_ptr, 0, 0, randint0(3) + 2)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;
@@ -375,7 +375,7 @@ std::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         if (cast) {
             if (!choose_ele_immune(player_ptr, base + dice.roll())) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;

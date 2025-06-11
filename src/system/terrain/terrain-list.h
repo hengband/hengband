@@ -8,8 +8,8 @@
 
 #include "util/abstract-vector-wrapper.h"
 #include <map>
-#include <optional>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <vector>
 
 enum class TerrainTag;
@@ -46,5 +46,5 @@ private:
         return this->terrains;
     }
 
-    std::optional<short> search_real_terrain(std::string_view tag) const;
+    tl::optional<short> search_real_terrain(std::string_view tag) const;
 };

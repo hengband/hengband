@@ -34,9 +34,9 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は std::nullopt を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は tl::nullopt を返す。
  */
-std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+tl::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
@@ -67,7 +67,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             /*
@@ -120,7 +120,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::POIS, dir, dam, rad);
@@ -137,7 +137,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             sleep_monster(player_ptr, dir, plev);
@@ -167,7 +167,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fear_monster(player_ptr, dir, plev);
@@ -185,7 +185,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             control_one_undead(player_ptr, dir, plev);
@@ -210,7 +210,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::HYPODYNAMIA, dir, dice.roll() + base, rad);
@@ -227,7 +227,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::NETHER, dir, dice.roll());
@@ -257,7 +257,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball_hide(player_ptr, AttributeType::GENOCIDE, dir, power, 0);
@@ -283,7 +283,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
 
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             if (hypodynamic_bolt(player_ptr, dir, dam)) {
@@ -352,7 +352,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             cast_invoke_spirits(player_ptr, dir);
@@ -369,7 +369,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::DARK, dir, dice.roll());
@@ -410,7 +410,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
 
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             chg_virtue(player_ptr, Virtue::SACRIFICE, -1);
@@ -447,7 +447,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::DARK, dir, dam, rad);
@@ -458,7 +458,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             death_ray(player_ptr, dir, plev);
@@ -475,11 +475,11 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             if (randint1(50) > plev) {
                 if (!ident_spell(player_ptr, false)) {
-                    return std::nullopt;
+                    return tl::nullopt;
                 }
             } else {
                 if (!identify_fully(player_ptr, false)) {
-                    return std::nullopt;
+                    return tl::nullopt;
                 }
             }
         }
@@ -527,7 +527,7 @@ std::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_ball(player_ptr, AttributeType::HELL_FIRE, dir, dam, rad);

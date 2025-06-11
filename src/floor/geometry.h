@@ -5,8 +5,8 @@
 #include "target/target.h"
 #include "util/point-2d.h"
 #include <array>
-#include <optional>
 #include <span>
+#include <tl/optional.hpp>
 #include <utility>
 
 /*!
@@ -150,9 +150,9 @@ public:
 
     /*!
      * @brief 円周順に方向を示す値を取得する
-     * @return 円周順に方向を示す値。示す値がない(方向IDが0もしくは5)場合はstd::nulloptを返す
+     * @return 円周順に方向を示す値。示す値がない(方向IDが0もしくは5)場合はtl::nulloptを返す
      */
-    constexpr std::optional<int> cdir() const
+    constexpr tl::optional<int> cdir() const
     {
         return DIR_TO_CDIR[this->dir_];
     }
@@ -254,10 +254,10 @@ private:
     };
 
     /// 方向IDに対応する円周順に方向を示す値の定義
-    static constexpr std::array<std::optional<int>, 10> DIR_TO_CDIR = { { std::nullopt, 7, 0, 1, 6, std::nullopt, 2, 5, 4, 3 } };
+    static constexpr std::array<tl::optional<int>, 10> DIR_TO_CDIR = { { tl::nullopt, 7, 0, 1, 6, tl::nullopt, 2, 5, 4, 3 } };
 
     int dir_; //<! 方向ID
-    std::optional<Target> target; //<! ターゲット
+    tl::optional<Target> target; //<! ターゲット
 };
 
 constexpr bool operator==(const Direction &dir1, const Direction &dir2) noexcept

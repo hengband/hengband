@@ -26,7 +26,7 @@
 #include "target/target-checker.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 /*!
  * @brief モンスターから直接攻撃を受けた時に落馬するかどうかを判定し、判定アウトならば落馬させる
@@ -95,7 +95,7 @@ bool process_fall_off_horse(PlayerType *player_ptr, int dam, bool force)
         return false;
     }
 
-    std::optional<Pos2D> pos_fall_off;
+    tl::optional<Pos2D> pos_fall_off;
     if (dam >= 0 || force) {
         if (!calc_fall_off_possibility(player_ptr, dam, force, monrace)) {
             return false;

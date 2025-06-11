@@ -62,7 +62,7 @@ Pos2D decide_source_position(PlayerType *player_ptr, MONSTER_IDX src_idx, const 
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
 ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITION rad, const POSITION target_y, const POSITION target_x, const int dam,
-    const AttributeType typ, BIT_FLAGS flag, std::optional<CapturedMonsterType *> cap_mon_ptr)
+    const AttributeType typ, BIT_FLAGS flag, tl::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     monster_target_y = player_ptr->y;
     monster_target_x = player_ptr->x;

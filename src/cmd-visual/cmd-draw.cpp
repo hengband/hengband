@@ -21,7 +21,7 @@
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "world/world.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン
@@ -98,7 +98,7 @@ void do_cmd_redraw(PlayerType *player_ptr)
     }
 }
 
-static std::optional<int> input_status_command(PlayerType *player_ptr, int page)
+static tl::optional<int> input_status_command(PlayerType *player_ptr, int page)
 {
     auto c = inkey();
     switch (c) {
@@ -124,7 +124,7 @@ static std::optional<int> input_status_command(PlayerType *player_ptr, int page)
     case 'h':
         return page + 1;
     case ESCAPE:
-        return std::nullopt;
+        return tl::nullopt;
     default:
         bell();
         return page;

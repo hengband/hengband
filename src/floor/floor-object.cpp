@@ -54,7 +54,7 @@ static void object_mention(PlayerType *player_ptr, ItemEntity &item)
     msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), item_name.data());
 }
 
-static int get_base_floor(const FloorType &floor, BIT_FLAGS mode, std::optional<int> rq_mon_level)
+static int get_base_floor(const FloorType &floor, BIT_FLAGS mode, tl::optional<int> rq_mon_level)
 {
     if (any_bits(mode, AM_GREAT)) {
         if (rq_mon_level) {
@@ -89,7 +89,7 @@ static void set_ammo_quantity(ItemEntity *j_ptr)
  * @param rq_mon_level ランダムクエスト討伐対象のレベル。ランダムクエスト以外の生成であれば無効値
  * @return アイテムの生成成功可否
  */
-bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, std::optional<int> rq_mon_level)
+bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, tl::optional<int> rq_mon_level)
 {
     const auto apply = [player_ptr, j_ptr, mode] {
         ItemMagicApplier(player_ptr, j_ptr, player_ptr->current_floor_ptr->object_level, mode).execute();
@@ -284,7 +284,7 @@ ObjectIndexList &get_o_idx_list_contains(FloorType &floor, OBJECT_IDX o_idx)
  * @param pos 配置したい座標
  * @param chance 投擲物の消滅率(%)。投擲物以外はnullopt
  */
-short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, std::optional<int> chance)
+short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl::optional<int> chance)
 {
 #ifdef JP
 #else

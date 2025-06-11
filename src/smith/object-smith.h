@@ -5,7 +5,7 @@
 #include "object-enchant/tr-flags.h"
 
 #include <memory>
-#include <optional>
+#include <tl/optional.hpp>
 #include <unordered_map>
 
 class ItemEntity;
@@ -39,8 +39,8 @@ public:
     static int get_essence_consumption(SmithEffectType effect, const ItemEntity *o_ptr = nullptr);
     static std::unique_ptr<ItemTester> get_item_tester(SmithEffectType effect);
     static TrFlags get_effect_tr_flags(SmithEffectType effect);
-    static std::optional<RandomArtActType> object_activation(const ItemEntity *o_ptr);
-    static std::optional<SmithEffectType> object_effect(const ItemEntity *o_ptr);
+    static tl::optional<RandomArtActType> object_activation(const ItemEntity *o_ptr);
+    static tl::optional<SmithEffectType> object_effect(const ItemEntity *o_ptr);
 
     int get_essence_num_of_posessions(SmithEssenceType essence) const;
     DrainEssenceResult drain_essence(ItemEntity *o_ptr);
@@ -51,7 +51,7 @@ public:
     static constexpr int ESSENCE_AMOUNT_MAX = 20000;
 
 private:
-    static std::optional<const ISmithInfo *> find_smith_info(SmithEffectType effect);
+    static tl::optional<const ISmithInfo *> find_smith_info(SmithEffectType effect);
 
     static const std::vector<SmithEssenceType> essence_list_order;
     static const std::unordered_map<SmithEssenceType, concptr> essence_to_name;

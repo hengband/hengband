@@ -9,9 +9,9 @@
 #include "util/abstract-map-wrapper.h"
 #include <functional>
 #include <map>
-#include <optional>
 #include <set>
 #include <string>
+#include <tl/optional.hpp>
 #include <vector>
 
 enum class MonraceId : short;
@@ -57,7 +57,7 @@ public:
 
     void reset_current_numbers();
     void reset_all_visuals();
-    std::optional<std::string> probe_lore(MonraceId monrace_id);
+    tl::optional<std::string> probe_lore(MonraceId monrace_id);
     void kill_unique_monster(MonraceId monrace_id);
 
 private:

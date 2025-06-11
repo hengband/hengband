@@ -22,7 +22,7 @@
  * @param mode 求める処理
  * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はnullptrを返す。
  */
-std::optional<std::string> exe_spell(PlayerType *player_ptr, RealmType realm, SPELL_IDX spell, SpellProcessType mode)
+tl::optional<std::string> exe_spell(PlayerType *player_ptr, RealmType realm, SPELL_IDX spell, SpellProcessType mode)
 {
     switch (realm) {
     case RealmType::LIFE:
@@ -52,6 +52,6 @@ std::optional<std::string> exe_spell(PlayerType *player_ptr, RealmType realm, SP
     case RealmType::HEX:
         return do_hex_spell(player_ptr, i2enum<spell_hex_type>(spell), mode);
     default:
-        return std::nullopt;
+        return tl::nullopt;
     }
 }

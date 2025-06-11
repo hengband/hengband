@@ -4,7 +4,7 @@
 #include "util/int-char-converter.h"
 #include "world/world.h"
 
-SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType menu_condition, std::optional<PlayerClassType> class_condition, std::optional<bool> wild_mode)
+SpecialMenuContent::SpecialMenuContent(concptr name, byte window, byte number, SpecialMenuType menu_condition, tl::optional<PlayerClassType> class_condition, tl::optional<bool> wild_mode)
     : name(name)
     , window(window)
     , number(number)
@@ -20,18 +20,18 @@ bool SpecialMenuContent::matches_current_wild_mode() const
 }
 
 const std::vector<SpecialMenuContent> special_menu_info = {
-    SpecialMenuContent(_("超能力/特殊能力", "MindCraft/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::MINDCRAFTER, std::nullopt),
-    SpecialMenuContent(_("ものまね/特殊能力", "Imitation/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::IMITATOR, std::nullopt),
-    SpecialMenuContent(_("歌/特殊能力", "Song/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::BARD, std::nullopt),
-    SpecialMenuContent(_("必殺技/特殊能力", "Technique/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::SAMURAI, std::nullopt),
-    SpecialMenuContent(_("練気術/魔法/特殊能力", "Mind/Magic/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::FORCETRAINER, std::nullopt),
-    SpecialMenuContent(_("技/特殊能力", "BrutalPower/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::BERSERKER, std::nullopt),
-    SpecialMenuContent(_("技術/特殊能力", "Technique/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::SMITH, std::nullopt),
-    SpecialMenuContent(_("鏡魔法/特殊能力", "MirrorMagic/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::MIRROR_MASTER, std::nullopt),
-    SpecialMenuContent(_("忍術/特殊能力", "Ninjutsu/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::NINJA, std::nullopt),
-    SpecialMenuContent(_("広域マップ(<)", "Enter global map(<)"), 2, 6, SpecialMenuType::WILD, std::nullopt, false),
-    SpecialMenuContent(_("通常マップ(>)", "Enter local map(>)"), 2, 7, SpecialMenuType::WILD, std::nullopt, true),
-    SpecialMenuContent("", 0, 0, SpecialMenuType::NONE, std::nullopt, std::nullopt),
+    SpecialMenuContent(_("超能力/特殊能力", "MindCraft/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::MINDCRAFTER, tl::nullopt),
+    SpecialMenuContent(_("ものまね/特殊能力", "Imitation/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::IMITATOR, tl::nullopt),
+    SpecialMenuContent(_("歌/特殊能力", "Song/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::BARD, tl::nullopt),
+    SpecialMenuContent(_("必殺技/特殊能力", "Technique/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::SAMURAI, tl::nullopt),
+    SpecialMenuContent(_("練気術/魔法/特殊能力", "Mind/Magic/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::FORCETRAINER, tl::nullopt),
+    SpecialMenuContent(_("技/特殊能力", "BrutalPower/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::BERSERKER, tl::nullopt),
+    SpecialMenuContent(_("技術/特殊能力", "Technique/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::SMITH, tl::nullopt),
+    SpecialMenuContent(_("鏡魔法/特殊能力", "MirrorMagic/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::MIRROR_MASTER, tl::nullopt),
+    SpecialMenuContent(_("忍術/特殊能力", "Ninjutsu/Special"), 0, 0, SpecialMenuType::CLASS, PlayerClassType::NINJA, tl::nullopt),
+    SpecialMenuContent(_("広域マップ(<)", "Enter global map(<)"), 2, 6, SpecialMenuType::WILD, tl::nullopt, false),
+    SpecialMenuContent(_("通常マップ(>)", "Enter local map(>)"), 2, 7, SpecialMenuType::WILD, tl::nullopt, true),
+    SpecialMenuContent("", 0, 0, SpecialMenuType::NONE, tl::nullopt, tl::nullopt),
 };
 
 menu_content menu_info[MAX_COMMAND_MENU_NUM][MAX_COMMAND_PER_SCREEN] = {

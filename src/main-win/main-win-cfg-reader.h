@@ -5,8 +5,8 @@
 #include <filesystem>
 #include <functional>
 #include <initializer_list>
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 #include <unordered_map>
 #include <vector>
 
@@ -33,7 +33,7 @@ struct cfg_section {
      * Returns a reference to the name of the key at a specified action-val* in the section.
      * *action-val : the 2nd parameter of "term_xtra()"
      */
-    std::function<std::optional<std::string>(int)> key_at;
+    std::function<tl::optional<std::string>(int)> key_at;
     //! 1つでもデータを読み込めた場合にtrueを設定する。（nullptrの場合を除く）
     bool *has_data = nullptr;
 };
@@ -42,7 +42,7 @@ class CfgData {
 public:
     CfgData() = default;
 
-    std::optional<std::string> get_rand(int key1_type, int key2_val) const;
+    tl::optional<std::string> get_rand(int key1_type, int key2_val) const;
     bool has_key(int key1_type, int key2_val) const;
     void insert(int key1_type, int key2_val, cfg_values &&value);
 

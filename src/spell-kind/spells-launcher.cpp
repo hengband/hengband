@@ -23,7 +23,7 @@
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad, std::optional<CapturedMonsterType *> cap_mon_ptr)
+bool fire_ball(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad, tl::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     if (typ == AttributeType::CHARM_LIVING) {

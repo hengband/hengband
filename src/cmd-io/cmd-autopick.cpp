@@ -162,7 +162,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
         }
     }
 
-    TermCenteredOffsetSetter tcos(std::nullopt, std::nullopt);
+    TermCenteredOffsetSetter tcos(tl::nullopt, tl::nullopt);
 
     screen_save();
     while (quit == APE_QUIT) {

@@ -6,9 +6,9 @@
 #include <array>
 #include <concepts>
 #include <limits>
-#include <optional>
 #include <sstream>
 #include <string>
+#include <tl/optional.hpp>
 
 /// @note clang-formatによるconceptの整形が安定していないので抑制しておく
 // clang-format off
@@ -96,7 +96,7 @@ public:
     }
 
 private:
-    static std::pair<size_t, std::optional<size_t>> process_input(char cmd, size_t current_page, size_t page_max);
+    static std::pair<size_t, tl::optional<size_t>> process_input(char cmd, size_t current_page, size_t page_max);
 
     template <SizedContainer Candidates, Describer<typename Candidates::value_type> F>
     void display_page(size_t page, const Candidates &candidates, F &&describe_candidate)

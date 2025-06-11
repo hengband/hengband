@@ -48,15 +48,15 @@ public:
         : player_ptr(player_ptr)
     {
     }
-    std::optional<Pos2D> operator()(std::monostate) const
+    tl::optional<Pos2D> operator()(std::monostate) const
     {
-        return std::nullopt;
+        return tl::nullopt;
     }
-    std::optional<Pos2D> operator()(const TargetGrid &target_grid) const
+    tl::optional<Pos2D> operator()(const TargetGrid &target_grid) const
     {
         return target_grid.pos;
     }
-    std::optional<Pos2D> operator()(const TargetMonster &target_monster) const
+    tl::optional<Pos2D> operator()(const TargetMonster &target_monster) const
     {
         const auto &monster = this->player_ptr->current_floor_ptr->m_list[target_monster.m_idx];
         return monster.get_position();
@@ -70,15 +70,15 @@ class MonsterIndexGetter {
 public:
     MonsterIndexGetter() = default;
 
-    std::optional<short> operator()(std::monostate) const
+    tl::optional<short> operator()(std::monostate) const
     {
-        return std::nullopt;
+        return tl::nullopt;
     }
-    std::optional<short> operator()(const TargetGrid &) const
+    tl::optional<short> operator()(const TargetGrid &) const
     {
-        return std::nullopt;
+        return tl::nullopt;
     }
-    std::optional<short> operator()(const TargetMonster &target_monster) const
+    tl::optional<short> operator()(const TargetMonster &target_monster) const
     {
         return target_monster.m_idx;
     }
@@ -190,14 +190,14 @@ bool Target::is_okay() const
 /*!
  * @brief ターゲットの座標を取得する
  * @return
- * なにもターゲットしていない場合はstd::nullopt
+ * なにもターゲットしていない場合はtl::nullopt
  * 特定のマスをターゲットしている場合はその座標
- * モンスターをターゲットしている場合target_able()==trueであればモンスターの座標、そうでなければstd::nullopt
+ * モンスターをターゲットしている場合target_able()==trueであればモンスターの座標、そうでなければtl::nullopt
  */
-std::optional<Pos2D> Target::get_position() const
+tl::optional<Pos2D> Target::get_position() const
 {
     if (!this->is_okay()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
     return std::visit(PositionGettor(this->impl->player_ptr), this->impl->target);
 }
@@ -205,10 +205,10 @@ std::optional<Pos2D> Target::get_position() const
 /*!
  * @brief ターゲットのモンスター参照IDを取得する
  * @return
- * モンスターをターゲットしていない場合はstd::nullopt
+ * モンスターをターゲットしていない場合はtl::nullopt
  * モンスターをターゲットしている場合はそのモンスター参照ID
  */
-std::optional<short> Target::get_m_idx() const
+tl::optional<short> Target::get_m_idx() const
 {
     return std::visit(MonsterIndexGetter(), this->impl->target);
 }

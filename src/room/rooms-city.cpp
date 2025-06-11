@@ -28,7 +28,7 @@ const std::vector<StoreSaleType> stores = {
 /*
  * Precalculate buildings' location of underground arcade
  */
-std::optional<std::vector<UndergroundBuilding>> precalc_ugarcade(int town_hgt, int town_wid)
+tl::optional<std::vector<UndergroundBuilding>> precalc_ugarcade(int town_hgt, int town_wid)
 {
     const auto n = std::ssize(stores);
     std::vector<UndergroundBuilding> underground_buildings(n);
@@ -54,7 +54,7 @@ std::optional<std::vector<UndergroundBuilding>> precalc_ugarcade(int town_hgt, i
     }
 
     if (i != n) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return underground_buildings;

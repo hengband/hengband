@@ -16,6 +16,11 @@
 #ifndef TL_EXPECTED_HPP
 #define TL_EXPECTED_HPP
 
+// MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく.
+#if defined(_MSC_VER)
+#pragma warning(push, 0)
+#endif
+
 #define TL_EXPECTED_VERSION_MAJOR 1
 #define TL_EXPECTED_VERSION_MINOR 1
 #define TL_EXPECTED_VERSION_PATCH 0
@@ -2440,5 +2445,10 @@ void swap(expected<T, E> &lhs,
   lhs.swap(rhs);
 }
 } // namespace tl
+
+// MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく.
+#if defined(_MSC_VER)
+#pragma warning(push, 0)
+#endif
 
 #endif

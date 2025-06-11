@@ -150,7 +150,7 @@ int store_check_num(const ItemEntity *o_ptr, StoreSaleType store_num)
  * @return アイテムを選択したらそのインデックス ('a'等)、キャンセルしたらnullopt
  * 繰り返しコマンドの時は前回の前回のインデックス
  */
-std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe_unused]] StoreSaleType store_num)
+tl::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe_unused]] StoreSaleType store_num)
 {
     const auto code = repeat_pull();
     if ((code >= min) && (code <= max)) {
@@ -167,14 +167,14 @@ std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe
     const auto prompt = format("(Items %c-%c, ESC to exit) %s", lo, hi, fmt.data());
 #endif
 
-    std::optional<char> command;
+    tl::optional<char> command;
     while (true) {
         const auto command_alpha = input_command(prompt);
         if (!command_alpha) {
             break;
         }
 
-        std::optional<int> command_num;
+        tl::optional<int> command_num;
         if (islower(*command_alpha)) {
             command_num = A2I(*command_alpha);
         } else if (isupper(*command_alpha)) {
@@ -191,7 +191,7 @@ std::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe
 
     prt("", 0, 0);
     if (!command) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     repeat_push(*command);

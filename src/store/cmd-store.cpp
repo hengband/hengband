@@ -55,7 +55,7 @@ void do_cmd_store(PlayerType *player_ptr)
     if (AngbandWorld::get_instance().is_wild_mode()) {
         return;
     }
-    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, tl::nullopt);
     const auto &[wid, hgt] = term_get_size();
     xtra_stock = std::min(14 + 26, ((hgt > MAIN_TERM_MIN_ROWS) ? (hgt - MAIN_TERM_MIN_ROWS) : 0));
     store_bottom = MIN_STOCK + xtra_stock;

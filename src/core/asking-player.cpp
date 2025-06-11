@@ -41,7 +41,7 @@
  * ESCAPE clears the buffer and the window and returns FALSE.
  * RETURN accepts the current buffer contents and returns TRUE.
  */
-std::optional<std::string> askfor(int len, std::string_view initial_value, bool numpad_cursor)
+tl::optional<std::string> askfor(int len, std::string_view initial_value, bool numpad_cursor)
 {
     /*
      * Text color
@@ -104,7 +104,7 @@ std::optional<std::string> askfor(int len, std::string_view initial_value, bool 
             pos = buf.length();
             break;
         case ESCAPE:
-            return std::nullopt;
+            return tl::nullopt;
         case '\n':
         case '\r':
             return buf;
@@ -179,7 +179,7 @@ std::optional<std::string> askfor(int len, std::string_view initial_value, bool 
  *
  * We clear the input, and return FALSE, on "ESCAPE".
  */
-std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value, bool numpad_cursor)
+tl::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value, bool numpad_cursor)
 {
     msg_erase();
     prt(prompt, 0, 0);
@@ -298,7 +298,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
  *
  * Returns TRUE unless the character is "Escape"
  */
-std::optional<char> input_command(std::string_view prompt, bool z_escape)
+tl::optional<char> input_command(std::string_view prompt, bool z_escape)
 {
     msg_erase();
     prt(prompt, 0, 0);
@@ -312,7 +312,7 @@ std::optional<char> input_command(std::string_view prompt, bool z_escape)
     prt("", 0, 0);
     const auto is_z = (command == 'z') || (command == 'Z');
     if ((command == ESCAPE) || (z_escape && is_z)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return command;
@@ -384,7 +384,7 @@ void pause_line(int row)
     prt("", row, 0);
 }
 
-std::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value)
+tl::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value)
 {
     std::stringstream ss;
     ss << prompt << "(" << min << "-" << max << "): ";
@@ -392,7 +392,7 @@ std::optional<int> input_integer(std::string_view prompt, int min, int max, int 
     while (true) {
         const auto input_str = input_string(ss.str(), digit, std::to_string(initial_value), false);
         if (!input_str) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         try {

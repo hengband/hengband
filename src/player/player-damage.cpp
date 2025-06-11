@@ -467,7 +467,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
                 msg_erase();
             } else {
-                std::optional<std::string> death_message_opt;
+                tl::optional<std::string> death_message_opt;
                 if (winning_seppuku) {
                     death_message_opt = get_random_line(_("seppuku_j.txt", "seppuku.txt"), 0);
                 } else {

@@ -90,7 +90,7 @@ static coordinate_candidate sweep_safe_coordinate(PlayerType *player_ptr, MONSTE
  *\n
  * Return TRUE if a safe location is available.\n
  */
-std::optional<Pos2D> find_safety(PlayerType *player_ptr, short m_idx)
+tl::optional<Pos2D> find_safety(PlayerType *player_ptr, short m_idx)
 {
     for (auto d = 1; d < 10; d++) {
         const auto candidate = sweep_safe_coordinate(player_ptr, m_idx, DIST_OFFSETS[d], d);
@@ -101,7 +101,7 @@ std::optional<Pos2D> find_safety(PlayerType *player_ptr, short m_idx)
         return candidate.pos;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 /*!
@@ -144,7 +144,7 @@ static void sweep_hiding_candidate(
  * @param m_idx モンスターの参照ID
  * @return 有効なマスがあった場合、その座標。なかったらnullopt
  */
-std::optional<Pos2D> find_hiding(PlayerType *player_ptr, short m_idx)
+tl::optional<Pos2D> find_hiding(PlayerType *player_ptr, short m_idx)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     coordinate_candidate candidate;
@@ -158,5 +158,5 @@ std::optional<Pos2D> find_hiding(PlayerType *player_ptr, short m_idx)
         return candidate.pos;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }

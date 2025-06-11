@@ -23,9 +23,9 @@ void repeat_push(short command)
     ++repeat_index;
 }
 
-std::optional<short> repeat_pull()
+tl::optional<short> repeat_pull()
 {
-    return repeat_index == repeat_counter ? std::nullopt : std::make_optional(repeat_keys[repeat_index++]);
+    return repeat_index == repeat_counter ? tl::nullopt : tl::make_optional(repeat_keys[repeat_index++]);
 }
 
 void repeat_check()

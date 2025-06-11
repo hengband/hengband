@@ -12,13 +12,13 @@
 #include <cstdint>
 #include <utility>
 
-std::map<KeymapMode, std::vector<std::optional<std::string>>> keymap_actions_map = {
-    { KeymapMode::ORIGINAL, std::vector<std::optional<std::string>>(256) },
-    { KeymapMode::ROGUE, std::vector<std::optional<std::string>>(256) },
+std::map<KeymapMode, std::vector<tl::optional<std::string>>> keymap_actions_map = {
+    { KeymapMode::ORIGINAL, std::vector<tl::optional<std::string>>(256) },
+    { KeymapMode::ROGUE, std::vector<tl::optional<std::string>>(256) },
 };
 size_t max_macrotrigger = 0;
-std::optional<std::string> macro_template;
-std::optional<std::string> macro_modifier_chr;
+tl::optional<std::string> macro_template;
+tl::optional<std::string> macro_modifier_chr;
 std::vector<std::string> macro_modifier_names = std::vector<std::string>(MAX_MACRO_MOD);
 std::vector<std::string> macro_trigger_names = std::vector<std::string>(MAX_MACRO_TRIG);
 std::map<ShiftStatus, std::vector<std::string>> macro_trigger_keycodes = {

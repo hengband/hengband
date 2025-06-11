@@ -315,7 +315,7 @@ void InputKeyRequestor::sweep_confirmation_equipments()
     }
 }
 
-void InputKeyRequestor::confirm_command(const std::optional<std::string> &inscription, const int caret_command)
+void InputKeyRequestor::confirm_command(const tl::optional<std::string> &inscription, const int caret_command)
 {
     if (!inscription) {
         return;

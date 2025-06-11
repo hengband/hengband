@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <optional>
+#include <tl/optional.hpp>
 #include <vector>
 
 inline constexpr int EATER_ITEM_GROUP_SIZE = 256; //!< 魔道具1種あたりの最大数
@@ -29,7 +29,7 @@ public:
     std::vector<MagicEaterDatum> rods{}; //!< ロッドのデータ
     inline static std::vector<MagicEaterDataList::MagicEaterDatum> none{}; //!< いずれの魔道具でもないダミー
 
-    std::optional<BaseitemKey> check_magic_eater_spell_repeat() const;
+    tl::optional<BaseitemKey> check_magic_eater_spell_repeat() const;
     std::vector<MagicEaterDatum> &get_item_group(ItemKindType tval);
 
 private:

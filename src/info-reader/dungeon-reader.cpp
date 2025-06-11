@@ -107,7 +107,7 @@ static bool grab_one_spell_monster_flag(DungeonDefinition &dungeon, std::string_
     return false;
 }
 
-static std::optional<ProbabilityTable<short>> parse_terrain_probability(std::span<const std::string> tokens)
+static tl::optional<ProbabilityTable<short>> parse_terrain_probability(std::span<const std::string> tokens)
 {
     const auto &terrains = TerrainList::get_instance();
     ProbabilityTable<short> prob_table;
@@ -118,7 +118,7 @@ static std::optional<ProbabilityTable<short>> parse_terrain_probability(std::spa
             const auto prob = static_cast<short>(std::stoi(tokens[i + 1]));
             prob_table.entry_item(terrain_id, prob);
         } catch (const std::exception &) {
-            return std::nullopt;
+            return tl::nullopt;
         }
     }
 

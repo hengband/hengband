@@ -1,9 +1,9 @@
 #pragma once
 
 #include "system/angband.h"
-#include <optional>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 
 #ifdef JP
 
@@ -22,8 +22,8 @@ void sjis2euc(char *str);
 void euc2sjis(char *str);
 CharacterEncoding codeconv(char *str);
 bool iskanji2(concptr s, int x);
-std::optional<std::string> sys_to_utf8(std::string_view str);
-std::optional<std::string> utf8_to_sys(std::string_view utf8_str);
+tl::optional<std::string> sys_to_utf8(std::string_view str);
+tl::optional<std::string> utf8_to_sys(std::string_view utf8_str);
 size_t guess_convert_to_system_encoding(char *strbuf, int buflen);
 
 int lb_to_kg_integer(int x);
@@ -60,9 +60,9 @@ constexpr bool is_kinsoku(std::string_view)
     return false;
 }
 
-inline std::optional<std::string> sys_to_utf8(std::string_view str)
+inline tl::optional<std::string> sys_to_utf8(std::string_view str)
 {
-    return std::make_optional<std::string>(str);
+    return tl::make_optional<std::string>(str);
 }
 
 #endif

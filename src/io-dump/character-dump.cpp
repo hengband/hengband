@@ -583,7 +583,7 @@ static std::string get_check_sum()
  */
 void make_character_dump(PlayerType *player_ptr, FILE *fff)
 {
-    TermCenteredOffsetSetter tos(MAIN_TERM_MIN_COLS, std::nullopt);
+    TermCenteredOffsetSetter tos(MAIN_TERM_MIN_COLS, tl::nullopt);
 
     constexpr auto fmt = _("  [{} キャラクタ情報]\n", "  [{} Character Dump]\n");
     fmt::println(fff, fmt, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL));

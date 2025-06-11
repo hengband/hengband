@@ -21,9 +21,9 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "util/string-processor.h"
-#include <optional>
 #include <sstream>
 #include <string>
+#include <tl/optional.hpp>
 
 #ifdef JP
 static char kanji_colon[] = "：";
@@ -243,7 +243,7 @@ bool autopick_new_entry(autopick_type *entry, std::string_view str_view, bool al
         }
     }
 
-    std::optional<int> previous_flag = std::nullopt;
+    tl::optional<int> previous_flag = tl::nullopt;
     if (MATCH_KEY2(KEY_ARTIFACT)) {
         entry->add(FLG_ARTIFACT);
         previous_flag = FLG_ARTIFACT;

@@ -71,7 +71,7 @@ static bool display_player_info(PlayerType *player_ptr, int mode)
     }
 
     if (mode == 5) {
-        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
+        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, tl::nullopt);
         do_cmd_knowledge_mutations(player_ptr);
         return true;
     }
@@ -168,11 +168,11 @@ static void display_player_stats(PlayerType *player_ptr)
  * @param statmsg メッセージバッファ
  * @return 生きていたらFALSE、死んでいたらTRUE
  */
-static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
+static tl::optional<std::string> search_death_cause(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     if (!player_ptr->is_dead) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (AngbandWorld::get_instance().total_winner) {
@@ -220,11 +220,11 @@ static std::optional<std::string> search_death_cause(PlayerType *player_ptr)
  * @param statmsg メッセージバッファ
  * @return クエスト内であればTRUE、いなければFALSE
  */
-static std::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
+static tl::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     if (!floor.is_in_quest() || !QuestType::is_fixed(floor.quest_number)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     quest_text_lines.clear();
@@ -279,7 +279,7 @@ static std::string decide_current_floor(PlayerType *player_ptr)
  * Mode 4 = mutations.
  * Mode 5 = ??? (コード上の定義より6で割った余りは5になりうるが元のコメントに記載なし).
  */
-std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
+tl::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
 {
     auto has_any_mutation = (player_ptr->muta.any() || has_good_luck(player_ptr)) && display_mutations;
     auto mode = has_any_mutation ? tmp_mode % 6 : tmp_mode % 5;
@@ -288,7 +288,7 @@ std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
         clear_from(0);
     }
     if (display_player_info(player_ptr, mode)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     display_player_basic_info(player_ptr);
@@ -302,7 +302,7 @@ std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
     if (mode == 0) {
         display_player_middle(player_ptr);
         display_player_various(player_ptr);
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
@@ -312,7 +312,7 @@ std::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
 
     auto statmsg = decide_current_floor(player_ptr);
     if (statmsg.empty()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     constexpr auto chars_per_line = 60;

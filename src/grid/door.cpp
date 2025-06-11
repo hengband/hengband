@@ -54,7 +54,7 @@ void add_door(PlayerType *player_ptr, const Pos2D &pos)
  * @param pos 配置先座標
  * @param door_kind ドア種別
  */
-void place_secret_door(PlayerType *player_ptr, const Pos2D &pos, std::optional<DoorKind> door_kind_initial)
+void place_secret_door(PlayerType *player_ptr, const Pos2D &pos, tl::optional<DoorKind> door_kind_initial)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();

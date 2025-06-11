@@ -14,10 +14,10 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include <optional>
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 
 // @todo 性別をEnumFlags に切り替えたら引数の型も変えること.
 static int get_monster_pronoun_kind(const MonraceDefinition &monrace, const bool pron)
@@ -90,12 +90,12 @@ static std::string get_monster_personal_pronoun(const int kind, const BIT_FLAGS 
     }
 }
 
-static std::optional<std::string> decide_monster_personal_pronoun(const MonsterEntity &monster, const BIT_FLAGS mode)
+static tl::optional<std::string> decide_monster_personal_pronoun(const MonsterEntity &monster, const BIT_FLAGS mode)
 {
     const auto seen = any_bits(mode, MD_ASSUME_VISIBLE) || (none_bits(mode, MD_ASSUME_HIDDEN) && monster.ml);
     const auto pron = (seen && any_bits(mode, MD_PRON_VISIBLE)) || (!seen && any_bits(mode, MD_PRON_HIDDEN));
     if (seen && !pron) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const auto &monrace = monster.get_appearance_monrace();
@@ -103,12 +103,12 @@ static std::optional<std::string> decide_monster_personal_pronoun(const MonsterE
     return get_monster_personal_pronoun(kind, mode);
 }
 
-static std::optional<std::string> get_monster_self_pronoun(const MonsterEntity &monster, const BIT_FLAGS mode)
+static tl::optional<std::string> get_monster_self_pronoun(const MonsterEntity &monster, const BIT_FLAGS mode)
 {
     const auto &monrace = monster.get_appearance_monrace();
     constexpr BIT_FLAGS self = MD_POSSESSIVE | MD_OBJECTIVE;
     if (!match_bits(mode, self, self)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (monrace.is_female()) {
@@ -161,12 +161,12 @@ static std::string replace_monster_name_undefined(std::string_view name)
 }
 #endif
 
-static std::optional<std::string> get_fake_monster_name(const PlayerType &player, const MonsterEntity &monster, const std::string &name, const BIT_FLAGS mode)
+static tl::optional<std::string> get_fake_monster_name(const PlayerType &player, const MonsterEntity &monster, const std::string &name, const BIT_FLAGS mode)
 {
     const auto &monrace = monster.get_appearance_monrace();
     const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) || (is_hallucinated && none_bits(mode, MD_IGNORE_HALLU))) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON) && none_bits(mode, MD_TRUE_NAME)) {

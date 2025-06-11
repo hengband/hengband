@@ -7,18 +7,18 @@
 #pragma once
 
 #include "object/tval-types.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 enum class ItemKindType : short;
 class BaseitemKey {
 public:
     constexpr BaseitemKey()
         : type_value(ItemKindType::NONE)
-        , subtype_value(std::nullopt)
+        , subtype_value(tl::nullopt)
     {
     }
 
-    constexpr BaseitemKey(const ItemKindType type_value, const std::optional<int> &subtype_value = std::nullopt)
+    constexpr BaseitemKey(const ItemKindType type_value, const tl::optional<int> &subtype_value = tl::nullopt)
         : type_value(type_value)
         , subtype_value(subtype_value)
     {
@@ -47,7 +47,7 @@ public:
     }
 
     ItemKindType tval() const;
-    std::optional<int> sval() const;
+    tl::optional<int> sval() const;
     bool is_valid() const;
     bool is(ItemKindType tval) const;
     ItemKindType get_arrow_kind() const;
@@ -88,7 +88,7 @@ public:
 
 private:
     ItemKindType type_value;
-    std::optional<int> subtype_value;
+    tl::optional<int> subtype_value;
 
     bool is_mushrooms() const;
 };

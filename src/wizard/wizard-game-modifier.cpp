@@ -155,7 +155,7 @@ void wiz_restore_monster_max_num(MonraceId monrace_id)
     }
 
     auto &monrace = monraces.get_monrace(monrace_id);
-    std::optional<int> max_num;
+    tl::optional<int> max_num;
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         max_num = MAX_UNIQUE_NUM;
     } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {

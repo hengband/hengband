@@ -335,7 +335,7 @@ static std::vector<condition_layout_info> get_condition_layout_info(const Monste
  */
 void print_health(PlayerType *player_ptr, bool riding)
 {
-    std::optional<short> monster_idx;
+    tl::optional<short> monster_idx;
     int row, col;
 
     if (riding) {

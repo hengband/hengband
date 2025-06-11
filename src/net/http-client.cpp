@@ -12,7 +12,7 @@ namespace {
 
     constexpr auto HTTP_CONNECTION_TIMEOUT = 10; //!< HTTP接続タイムアウト時間(秒)
 
-    void setup_http_option(libcurl::EasySession &session, const std::optional<std::string> &user_agent)
+    void setup_http_option(libcurl::EasySession &session, const tl::optional<std::string> &user_agent)
     {
         if (user_agent) {
             session.setopt(CURLOPT_USERAGENT, user_agent->data());
@@ -25,17 +25,17 @@ namespace {
 
     class GetRequest {
     public:
-        GetRequest(const std::string &url, const std::optional<std::string> &user_agent = {})
+        GetRequest(const std::string &url, const tl::optional<std::string> &user_agent = {})
             : url(url)
             , user_agent(user_agent)
         {
         }
 
-        std::optional<int> perform()
+        tl::optional<int> perform()
         {
             libcurl::EasySession session;
             if (!session.is_valid()) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             session.common_setup(this->url, HTTP_CONNECTION_TIMEOUT);
@@ -50,7 +50,7 @@ namespace {
             }
 
             if (!session.perform()) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             long status;
@@ -63,7 +63,7 @@ namespace {
 
     private:
         std::string url;
-        std::optional<std::string> user_agent;
+        tl::optional<std::string> user_agent;
     };
 }
 
@@ -71,9 +71,9 @@ namespace {
  * @brief HTTP GETリクエストを送信する
  * @param url リクエストの送信先URL
  * @param progress_handler 進捗状況を受け取るコールバック関数
- * @return 送信に成功した場合Responseオブジェクト、失敗した場合std::nullopt
+ * @return 送信に成功した場合Responseオブジェクト、失敗した場合tl::nullopt
  */
-std::optional<Response> Client::get(const std::string &url, GetRequestProgressHandler progress_handler)
+tl::optional<Response> Client::get(const std::string &url, GetRequestProgressHandler progress_handler)
 {
     Response response{};
 
@@ -86,11 +86,11 @@ std::optional<Response> Client::get(const std::string &url, GetRequestProgressHa
 
     const auto status_opt = request.perform();
     if (!status_opt) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     response.status = *status_opt;
-    return std::make_optional(std::move(response));
+    return tl::make_optional(std::move(response));
 }
 
 /*!
@@ -101,9 +101,9 @@ std::optional<Response> Client::get(const std::string &url, GetRequestProgressHa
  * @param url リクエストの送信先URL
  * @param path ファイルの保存先パス
  * @param progress_handler 進捗状況を受け取るコールバック関数
- * @return 送信に成功した場合Responseオブジェクト、失敗した場合std::nullopt
+ * @return 送信に成功した場合Responseオブジェクト、失敗した場合tl::nullopt
  */
-std::optional<Response> Client::get(const std::string &url, const std::filesystem::path &path, GetRequestProgressHandler progress_handler)
+tl::optional<Response> Client::get(const std::string &url, const std::filesystem::path &path, GetRequestProgressHandler progress_handler)
 {
     std::ofstream ofs(path, std::ios::binary);
 
@@ -116,7 +116,7 @@ std::optional<Response> Client::get(const std::string &url, const std::filesyste
 
     const auto status_opt = request.perform();
     if (!status_opt) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return Response{ *status_opt, path.string() };
@@ -127,16 +127,16 @@ std::optional<Response> Client::get(const std::string &url, const std::filesyste
  * @param url リクエストの送信先URL
  * @param post_data POSTデータ本体
  * @param media_type POSTデータのメディアタイプ(Content-Typeヘッダの内容)
- * @return 送信に成功した場合Responseオブジェクト、失敗した場合std::nullopt
+ * @return 送信に成功した場合Responseオブジェクト、失敗した場合tl::nullopt
  */
-std::optional<Response> Client::post(const std::string &url, const std::string &post_data, const std::string &media_type)
+tl::optional<Response> Client::post(const std::string &url, const std::string &post_data, const std::string &media_type)
 {
     libcurl::EasySession session;
     libcurl::SList headers;
     headers.append(format("Content-Type: %s", media_type.data()));
 
     if (!session.is_valid() || !headers.is_valid()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     session.common_setup(url, HTTP_CONNECTION_TIMEOUT);
@@ -160,11 +160,11 @@ std::optional<Response> Client::post(const std::string &url, const std::string &
     session.receiver_setup(std::move(receiver));
 
     if (!session.perform()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     session.getinfo(CURLINFO_RESPONSE_CODE, &response.status);
-    return std::make_optional(std::move(response));
+    return tl::make_optional(std::move(response));
 }
 
 }

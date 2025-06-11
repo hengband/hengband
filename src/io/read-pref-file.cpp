@@ -313,7 +313,7 @@ bool read_histpref(PlayerType *player_ptr)
         err = process_histpref_file(player_ptr, _("histedit.prf", "histpref.prf"));
     }
 
-    const auto finalizer = util::make_finalizer([]() { histpref_buf = std::nullopt; });
+    const auto finalizer = util::make_finalizer([]() { histpref_buf = tl::nullopt; });
     if (err) {
         msg_print(_("生い立ち設定ファイルの読み込みに失敗しました。", "Failed to load background history preference."));
         msg_erase();

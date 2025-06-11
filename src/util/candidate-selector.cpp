@@ -26,7 +26,7 @@ CandidateSelector::CandidateSelector(const std::string &prompt, int start_col)
     this->set_max_per_page();
 }
 
-std::pair<size_t, std::optional<size_t>> CandidateSelector::process_input(char cmd, size_t current_page, size_t page_max)
+std::pair<size_t, tl::optional<size_t>> CandidateSelector::process_input(char cmd, size_t current_page, size_t page_max)
 {
     switch (cmd) {
     case ' ':
@@ -48,7 +48,7 @@ std::pair<size_t, std::optional<size_t>> CandidateSelector::process_input(char c
         current_page %= page_max;
     }
 
-    return { current_page, std::nullopt };
+    return { current_page, tl::nullopt };
 }
 
 /*!

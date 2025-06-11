@@ -107,12 +107,12 @@ void file_character(PlayerType *player_ptr, std::string_view filename)
  * @param entry 特定条件時のN:タグヘッダID
  * @return ファイルから取得した行 (但しファイルがなかったり異常値ならばnullopt)
  */
-std::optional<std::string> get_random_line(concptr file_name, int entry)
+tl::optional<std::string> get_random_line(concptr file_name, int entry)
 {
     const auto path = path_build(ANGBAND_DIR_FILE, file_name);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
     if (!fp) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     int test;
@@ -123,7 +123,7 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
         const auto line_str = angband_fgets(fp);
         if (!line_str) {
             angband_fclose(fp);
-            return std::nullopt;
+            return tl::nullopt;
         }
         const auto *buf = line_str->data();
 
@@ -151,14 +151,14 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
         } else {
             msg_format("Error in line %d of %s!", line_num, file_name);
             angband_fclose(fp);
-            return std::nullopt;
+            return tl::nullopt;
         }
     }
 
     auto counter = 0;
-    std::optional<std::string> line{};
+    tl::optional<std::string> line{};
     while (true) {
-        std::optional<std::string> buf;
+        tl::optional<std::string> buf;
         while (true) {
             buf = angband_fgets(fp);
             if (!buf) {
@@ -198,13 +198,13 @@ std::optional<std::string> get_random_line(concptr file_name, int entry)
  * @return ファイルから取得した行 (但しファイルがなかったり異常値ならばnullopt)
  * @details
  */
-std::optional<std::string> get_random_line_ja_only(concptr file_name, int entry, int count)
+tl::optional<std::string> get_random_line_ja_only(concptr file_name, int entry, int count)
 {
-    std::optional<std::string> line;
+    tl::optional<std::string> line;
     for (auto i = 0; i < count; i++) {
         line = get_random_line(file_name, entry);
         if (!line) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         auto is_kanji = false;

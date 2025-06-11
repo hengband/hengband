@@ -4,9 +4,9 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include <cstdint>
-#include <optional>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <vector>
 
 using RealmChoices = EnumClassFlagGroup<RealmType>;
@@ -23,7 +23,7 @@ public:
     static const LocalizedString &get_name(RealmType realm);
     static std::string_view get_explanation(RealmType realm);
     static std::string_view get_subinfo(RealmType realm);
-    static const magic_type &get_spell_info(RealmType realm, int spell_id, std::optional<PlayerClassType> pclass = std::nullopt);
+    static const magic_type &get_spell_info(RealmType realm, int spell_id, tl::optional<PlayerClassType> pclass = tl::nullopt);
     static const std::string &get_spell_name(RealmType realm, int spell_id);
     static const std::string &get_spell_description(RealmType realm, int spell_id);
     static ItemKindType get_book(RealmType realm);

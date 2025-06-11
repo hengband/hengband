@@ -11,9 +11,9 @@
 #include "system/angband.h"
 #include "system/h-basic.h"
 #include <memory>
-#include <optional>
 #include <stack>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <utility>
 #include <vector>
 
@@ -75,8 +75,8 @@ struct term_type {
     TERM_LEN wid{}; //!< Window Width(max 255)
     TERM_LEN hgt{}; //!< Window Height(max 255)
 
-    std::optional<TERM_LEN> centered_wid{};
-    std::optional<TERM_LEN> centered_hgt{};
+    tl::optional<TERM_LEN> centered_wid{};
+    tl::optional<TERM_LEN> centered_hgt{};
 
     TERM_LEN offset_x{};
     TERM_LEN offset_y{};
@@ -119,7 +119,7 @@ struct term_type {
 
 class TermOffsetSetter {
 public:
-    TermOffsetSetter(std::optional<TERM_LEN> x, std::optional<TERM_LEN> y);
+    TermOffsetSetter(tl::optional<TERM_LEN> x, tl::optional<TERM_LEN> y);
     ~TermOffsetSetter();
     TermOffsetSetter(const TermOffsetSetter &) = delete;
     TermOffsetSetter &operator=(const TermOffsetSetter &) = delete;
@@ -134,7 +134,7 @@ private:
 
 class TermCenteredOffsetSetter {
 public:
-    TermCenteredOffsetSetter(std::optional<TERM_LEN> width, std::optional<TERM_LEN> height);
+    TermCenteredOffsetSetter(tl::optional<TERM_LEN> width, tl::optional<TERM_LEN> height);
     ~TermCenteredOffsetSetter();
     TermCenteredOffsetSetter(const TermCenteredOffsetSetter &) = delete;
     TermCenteredOffsetSetter &operator=(const TermCenteredOffsetSetter &) = delete;
@@ -142,10 +142,10 @@ public:
     TermCenteredOffsetSetter &operator=(TermCenteredOffsetSetter &&) = delete;
 
 private:
-    std::optional<TermOffsetSetter> tos;
+    tl::optional<TermOffsetSetter> tos;
     term_type *term;
-    std::optional<TERM_LEN> orig_centered_wid;
-    std::optional<TERM_LEN> orig_centered_hgt;
+    tl::optional<TERM_LEN> orig_centered_wid;
+    tl::optional<TERM_LEN> orig_centered_hgt;
 };
 
 /**** Available Constants ****/
@@ -209,7 +209,7 @@ void term_add_bigch(const DisplaySymbol &symbol);
 errr term_addstr(int n, TERM_COLOR a, std::string_view sv);
 void term_putch(TERM_LEN x, TERM_LEN y, const DisplaySymbol &symbol);
 errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv);
-errr term_erase(TERM_LEN x, TERM_LEN y, std::optional<int> n_opt = std::nullopt);
+errr term_erase(TERM_LEN x, TERM_LEN y, tl::optional<int> n_opt = tl::nullopt);
 errr term_clear();
 errr term_redraw();
 errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);

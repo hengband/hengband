@@ -46,9 +46,9 @@
 #include <cstdint>
 #include <filesystem>
 #include <memory>
-#include <optional>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 
 namespace util {
 
@@ -74,7 +74,7 @@ public:
     void final_bits(std::byte message_bits, size_t length);
     Digest digest();
 
-    static std::optional<Digest> compute_filehash(const std::filesystem::path &path);
+    static tl::optional<Digest> compute_filehash(const std::filesystem::path &path);
 
 private:
     struct Impl;

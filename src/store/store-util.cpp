@@ -154,11 +154,11 @@ static bool store_item_sort_comp(const ItemEntity &item1, const ItemEntity &item
  * @param item 加えたいオブジェクトの構造体参照ポインタ
  * @return 収めた先の商品インデックス. 但し無価値アイテムはnullopt (店頭に並べない)
  */
-std::optional<int> Store::carry(ItemEntity &item)
+tl::optional<int> Store::carry(ItemEntity &item)
 {
     const auto value = item.calc_price();
     if (value <= 0) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     item.ident |= IDENT_FULL_KNOWN;
@@ -173,7 +173,7 @@ std::optional<int> Store::carry(ItemEntity &item)
     }
 
     if (this->stock_num >= this->stock_size) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const auto first = this->stock.begin();

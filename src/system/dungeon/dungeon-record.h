@@ -9,8 +9,8 @@
 #include "util/abstract-map-wrapper.h"
 #include <map>
 #include <memory>
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 #include <vector>
 
 class DungeonRecord {
@@ -23,8 +23,8 @@ public:
     void reset();
 
 private:
-    std::optional<int> max_max_level; //!< @details 将来の拡張. 帰還時に浅いフロアを指定しても維持する.
-    std::optional<int> max_level; //!< @details 帰還時に浅いフロアを指定すると書き換わる.
+    tl::optional<int> max_max_level; //!< @details 将来の拡張. 帰還時に浅いフロアを指定しても維持する.
+    tl::optional<int> max_level; //!< @details 帰還時に浅いフロアを指定すると書き換わる.
 };
 
 enum class DungeonId;

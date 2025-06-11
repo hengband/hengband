@@ -157,7 +157,7 @@ MonraceId get_mon_num(PlayerType *player_ptr, int min_level, int max_level, uint
     return *it;
 }
 
-static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, short m_idx, short terrain_id, std::optional<short> summoner_m_idx)
+static tl::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, short m_idx, short terrain_id, tl::optional<short> summoner_m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
@@ -180,7 +180,7 @@ static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, s
 
     const auto new_monrace_id = get_mon_num(player_ptr, 0, level, PM_CHAMELEON);
     if (!MonraceList::is_valid(new_monrace_id)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return new_monrace_id;
@@ -193,7 +193,7 @@ static std::optional<MonraceId> polymorph_of_chameleon(PlayerType *player_ptr, s
  * @param grid カメレオンの足元の地形
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
  */
-void choose_chameleon_polymorph(PlayerType *player_ptr, short m_idx, short terrain_id, std::optional<short> summoner_m_idx)
+void choose_chameleon_polymorph(PlayerType *player_ptr, short m_idx, short terrain_id, tl::optional<short> summoner_m_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];

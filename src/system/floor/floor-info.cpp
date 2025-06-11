@@ -113,7 +113,7 @@ const DungeonDefinition &FloorType::get_dungeon_definition() const
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QuestId FloorType::get_random_quest_id(std::optional<int> level_opt) const
+QuestId FloorType::get_random_quest_id(tl::optional<int> level_opt) const
 {
     if (this->dungeon_id != DungeonId::ANGBAND) {
         return QuestId::NONE;
@@ -354,7 +354,7 @@ bool FloorType::can_drop_item_at(const Pos2D &pos) const
  * @return 財宝データで初期化したアイテム
  * @details 生成レベルが0になったら1に補正する
  */
-ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
+ItemEntity FloorType::make_gold(tl::optional<BaseitemKey> bi_key) const
 {
     ItemEntity item;
     if (bi_key) {
@@ -375,10 +375,10 @@ ItemEntity FloorType::make_gold(std::optional<BaseitemKey> bi_key) const
  * @details 地上生成は禁止、生成制限がある場合も禁止、個々のアーティファクト生成条件及び生成確率を潜り抜けなければ生成失敗とする
  * 最初に潜り抜けたINSTA_ART型の固定アーティファクトを生成し、以後はチェックせずスキップする
  */
-std::optional<ItemEntity> FloorType::try_make_instant_artifact() const
+tl::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 {
     if (!this->is_underground() || (select_baseitem_id_hook != nullptr)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return ArtifactList::get_instance().try_make_instant_artifact(this->object_level);
@@ -526,7 +526,7 @@ void FloorType::reset_mproc_max()
  * @param mte モンスターの時限ステータスID
  * @return 残りターン値
  */
-std::optional<int> FloorType::get_mproc_index(short m_idx, MonsterTimedEffect mte)
+tl::optional<int> FloorType::get_mproc_index(short m_idx, MonsterTimedEffect mte)
 {
     const auto &cur_mproc_list = this->mproc_list[mte];
     for (auto i = this->mproc_max[mte] - 1; i >= 0; i--) {
@@ -535,7 +535,7 @@ std::optional<int> FloorType::get_mproc_index(short m_idx, MonsterTimedEffect mt
         }
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 /*!

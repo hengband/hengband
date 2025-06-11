@@ -512,7 +512,7 @@ static bool can_speak(const MonraceDefinition &ap_r_ref, MonsterSpeakType mon_sp
     return can_speak_all || can_speak_specific;
 }
 
-static std::optional<MonsterMessageType> get_speak_type(const MonsterEntity &monster)
+static tl::optional<MonsterMessageType> get_speak_type(const MonsterEntity &monster)
 {
     const auto &ap_monrace = monster.get_appearance_monrace();
     if (monster.is_fearful() && can_speak(ap_monrace, MonsterSpeakType::SPEAK_FEAR)) {
@@ -531,7 +531,7 @@ static std::optional<MonsterMessageType> get_speak_type(const MonsterEntity &mon
         return MonsterMessageType::SPEAK_BATTLE;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 /*!

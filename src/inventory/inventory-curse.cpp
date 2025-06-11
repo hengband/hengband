@@ -33,8 +33,8 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 
 // clang-format off
 namespace {

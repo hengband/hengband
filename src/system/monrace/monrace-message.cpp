@@ -2,7 +2,6 @@
 #include "locale/language-switcher.h"
 #include "term/z-rand.h"
 #include "util/string-processor.h"
-#include <optional>
 #include <tl/optional.hpp>
 #include <vector>
 
@@ -13,13 +12,13 @@ MonsterMessage::MonsterMessage(int chance, bool use_name, std::string_view messa
 {
 }
 
-std::optional<std::string_view> MonsterMessage::get_message() const
+tl::optional<std::string_view> MonsterMessage::get_message() const
 {
     if (this->chance < 1) {
-        return std::nullopt;
+        return tl::nullopt;
     }
     if (!one_in_(this->chance)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
     return this->message;
 }
@@ -71,17 +70,17 @@ MonraceMessageList &MonraceMessageList::get_instance()
     return instance;
 }
 
-std::optional<std::string> MonraceMessageList::get_message(const int monrace_id, std::string_view monrace_name, const MonsterMessageType message_type)
+tl::optional<std::string> MonraceMessageList::get_message(const int monrace_id, std::string_view monrace_name, const MonsterMessageType message_type)
 {
     auto message_obj = this->get_message_obj(monrace_id, message_type);
 
     if (!message_obj) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     auto message_str = message_obj->get_message();
     if (!message_str) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (message_obj->start_with_monname()) {

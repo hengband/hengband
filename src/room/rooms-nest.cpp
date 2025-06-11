@@ -16,7 +16,7 @@
 #include "wizard/wizard-messages.h"
 #include <algorithm>
 #include <array>
-#include <optional>
+#include <tl/optional.hpp>
 #include <vector>
 
 namespace {
@@ -38,14 +38,14 @@ const std::map<NestKind, nest_pit_type> nest_types = {
     { NestKind::UNDEAD, { _("アンデッド", "undead"), MonraceHook::UNDEAD, PitNestHook::NONE, 75, 5 } },
 };
 
-std::optional<std::array<NestMonsterInfo, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
+tl::optional<std::array<NestMonsterInfo, NUM_NEST_MON_TYPE>> pick_nest_monraces(PlayerType *player_ptr, MonsterEntity &align)
 {
     std::array<NestMonsterInfo, NUM_NEST_MON_TYPE> nest_mon_info_list{};
     const auto &monraces = MonraceList::get_instance();
     for (auto &nest_mon_info : nest_mon_info_list) {
         const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, 11);
         if (!monrace_id) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         const auto &monrace = monraces.get_monrace(*monrace_id);

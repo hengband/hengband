@@ -80,30 +80,30 @@ static bool check_destory_item(PlayerType *player_ptr, const ItemEntity &destroy
     }
 }
 
-static std::optional<SelectionResult> select_destroying_item(PlayerType *player_ptr, bool force_destroy)
+static tl::optional<SelectionResult> select_destroying_item(PlayerType *player_ptr, bool force_destroy)
 {
     short i_idx;
     constexpr auto q = _("どのアイテムを壊しますか? ", "Destroy which item? ");
     constexpr auto s = _("壊せるアイテムを持っていない。", "You have nothing to destroy.");
     auto *o_ptr = choose_object(player_ptr, &i_idx, q, s, USE_INVEN | USE_FLOOR);
     if (o_ptr == nullptr) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (!force_destroy && !check_destory_item(player_ptr, *o_ptr, i_idx)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (o_ptr->number <= 1) {
-        return std::make_optional<SelectionResult>(o_ptr, i_idx, 1);
+        return tl::make_optional<SelectionResult>(o_ptr, i_idx, 1);
     }
 
     const auto amt = input_quantity(o_ptr->number);
     if (amt <= 0) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
-    return std::make_optional<SelectionResult>(o_ptr, i_idx, amt);
+    return tl::make_optional<SelectionResult>(o_ptr, i_idx, amt);
 }
 
 /*!

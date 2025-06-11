@@ -34,11 +34,11 @@ std::vector<MagicEaterDataList::MagicEaterDatum> &MagicEaterDataList::get_item_g
     }
 }
 
-std::optional<BaseitemKey> MagicEaterDataList::check_magic_eater_spell_repeat() const
+tl::optional<BaseitemKey> MagicEaterDataList::check_magic_eater_spell_repeat() const
 {
     const auto code = repeat_pull();
     if (!code) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     auto tval = ItemKindType::NONE;
@@ -53,7 +53,7 @@ std::optional<BaseitemKey> MagicEaterDataList::check_magic_eater_spell_repeat() 
     const auto &item_group = this->get_item_group(tval);
     auto sval = *code % EATER_ITEM_GROUP_SIZE;
     if (sval >= static_cast<int>(item_group.size())) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     auto &item = item_group[sval];
@@ -66,7 +66,7 @@ std::optional<BaseitemKey> MagicEaterDataList::check_magic_eater_spell_repeat() 
             return BaseitemKey(tval, sval);
         }
 
-        return std::nullopt;
+        return tl::nullopt;
     }
     case ItemKindType::STAFF:
     case ItemKindType::WAND:
@@ -74,9 +74,9 @@ std::optional<BaseitemKey> MagicEaterDataList::check_magic_eater_spell_repeat() 
             return BaseitemKey(tval, sval);
         }
 
-        return std::nullopt;
+        return tl::nullopt;
     default:
-        return std::nullopt;
+        return tl::nullopt;
     }
 }
 

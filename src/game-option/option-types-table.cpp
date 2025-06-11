@@ -13,7 +13,7 @@
 #include "locale/language-switcher.h"
 #include <utility>
 
-GameOption::GameOption(bool *value, bool norm, uint8_t set, uint8_t bits, std::string &&text, std::string &&description, const std::optional<GameOptionPage> &page)
+GameOption::GameOption(bool *value, bool norm, uint8_t set, uint8_t bits, std::string &&text, std::string &&description, const tl::optional<GameOptionPage> &page)
     : value(value)
     , default_value(norm)
     , flag_position(set)

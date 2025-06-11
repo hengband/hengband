@@ -26,7 +26,7 @@ std::filesystem::path ANGBAND_DIR_XTRA_SOUND;
 /*
  * "sound.cfg" data
  */
-std::optional<CfgData> sound_cfg_data;
+tl::optional<CfgData> sound_cfg_data;
 
 /*!
  * 効果音データ
@@ -188,11 +188,11 @@ static bool play_sound_impl(const std::filesystem::path &path, int volume)
  * @param buf 使用しない
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> sound_key_at(int index)
+static tl::optional<std::string> sound_key_at(int index)
 {
     const auto sk = i2enum<SoundKind>(index);
     if (sk >= SoundKind::MAX) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return sound_names.at(sk);

@@ -4,7 +4,7 @@
 
 #include "object-enchant/tr-flags.h"
 
-#include <optional>
+#include <tl/optional.hpp>
 #include <vector>
 
 enum class SmithEffectType : int16_t;

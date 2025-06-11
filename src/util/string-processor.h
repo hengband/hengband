@@ -2,10 +2,10 @@
 
 #include <cstdint>
 #include <map>
-#include <optional>
 #include <set>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <vector>
 
 size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize);

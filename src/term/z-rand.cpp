@@ -15,8 +15,8 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
-#include <optional>
 #include <random>
+#include <tl/optional.hpp>
 
 /*
  * Angband 2.7.9 introduced a new (optimized) random number generator,
@@ -134,7 +134,7 @@ int32_t Rand_external(int32_t m)
         return 0;
     }
 
-    static std::optional<Xoshiro128StarStar> urbg_external;
+    static tl::optional<Xoshiro128StarStar> urbg_external;
 
     if (!urbg_external) {
         /* Initialize with new seed */

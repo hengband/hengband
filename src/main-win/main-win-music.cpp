@@ -41,7 +41,7 @@ std::filesystem::path ANGBAND_DIR_XTRA_MUSIC;
 /*
  * "music.cfg" data
  */
-std::optional<CfgData> music_cfg_data;
+tl::optional<CfgData> music_cfg_data;
 
 namespace main_win_music {
 
@@ -51,10 +51,10 @@ namespace main_win_music {
  * @param buf 使用しない
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> basic_key_at(int index)
+static tl::optional<std::string> basic_key_at(int index)
 {
     if (index >= MUSIC_BASIC_MAX) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return angband_music_basic_name[index];
@@ -66,10 +66,10 @@ static std::optional<std::string> basic_key_at(int index)
  * @param buf バッファ
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> dungeon_key_at(int index)
+static tl::optional<std::string> dungeon_key_at(int index)
 {
     if (index >= static_cast<int>(DungeonList::get_instance().size())) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return format("dungeon%03d", index);
@@ -81,11 +81,11 @@ static std::optional<std::string> dungeon_key_at(int index)
  * @param buf バッファ
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> quest_key_at(int index)
+static tl::optional<std::string> quest_key_at(int index)
 {
     const auto &quests = QuestList::get_instance();
     if (index > enum2i(quests.rbegin()->first)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return format("quest%03d", index);
@@ -97,10 +97,10 @@ static std::optional<std::string> quest_key_at(int index)
  * @param buf バッファ
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> town_key_at(int index)
+static tl::optional<std::string> town_key_at(int index)
 {
     if (index >= static_cast<int>(towns_info.size())) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return format("town%03d", index);
@@ -112,10 +112,10 @@ static std::optional<std::string> town_key_at(int index)
  * @param buf バッファ
  * @return 対応するキー名を返す
  */
-static std::optional<std::string> monster_key_at(int index)
+static tl::optional<std::string> monster_key_at(int index)
 {
     if (index >= static_cast<int>(MonraceList::get_instance().size())) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return format("monster%04d", index);
