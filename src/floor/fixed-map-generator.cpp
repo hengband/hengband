@@ -425,13 +425,13 @@ parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtw
 
     if (qtwg_ptr->buf[0] == 'W') {
         const Pos2D pos_initial(*qtwg_ptr->y, *qtwg_ptr->x);
-        const auto &[parse_result_W, pos] = parse_line_wilderness(qtwg_ptr->buf, qtwg_ptr->xmin, qtwg_ptr->xmax, pos_initial);
-        if (parse_result_W == PARSE_ERROR_NONE) {
+        const auto pos = parse_line_wilderness(qtwg_ptr->buf, qtwg_ptr->xmin, qtwg_ptr->xmax, pos_initial);
+        if (pos) {
             *qtwg_ptr->y = pos->y;
             *qtwg_ptr->x = pos->x;
         }
 
-        return parse_result_W;
+        return pos.error_or(PARSE_ERROR_NONE);
     }
 
     if (parse_qtw_P(player_ptr, qtwg_ptr, zz)) {
