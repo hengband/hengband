@@ -17,6 +17,11 @@
 #ifndef TL_OPTIONAL_HPP
 #define TL_OPTIONAL_HPP
 
+// MSVCの警告レベルを最大に設定してあるため大量の警告を出力してしまうので警告を抑制しておく.
+#if defined(_MSC_VER)
+#pragma warning(push, 0)
+#endif
+
 #define TL_OPTIONAL_VERSION_MAJOR 1
 #define TL_OPTIONAL_VERSION_MINOR 1
 #define TL_OPTIONAL_VERSION_PATCH 0
@@ -2058,5 +2063,9 @@ template <class T> struct hash<tl::optional<T>> {
   }
 };
 } // namespace std
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 #endif
