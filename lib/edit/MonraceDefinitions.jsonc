@@ -61546,7 +61546,17 @@
       "flavor": {
         "ja": "銀河ボディビルコンテスト十連続グランドチャンピオン。必殺技はボ帝ビルカッター。",
         "en": "This muscle-bound man with a horned helmet has won the Great Galaxy Bodybuiling championship ten times in a row.  He is eager to prevent anyone from challenging his title.  He's also know for his signature move, the Bo Emperor Building Cutter."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_BREATH_SHARDS",
+          "chance": 1,
+          "message": {
+            "ja": "「ボ帝ビルカッター！！！」",
+            "en": "shouts, 'Boty-Build cutter!!!'"
+          }
+        }
+      ]
     },
     {
       "id": 964,
@@ -61773,7 +61783,17 @@
       "flavor": {
         "ja": "お前のものは俺のもの。俺のものは俺のもの。",
         "en": "What's yours is mine, and what's mine is mine."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_BREATH_SOUND",
+          "chance": 1,
+          "message": {
+            "ja": "「ボォエ～～～～～～」",
+            "en": "sings, 'Booooeeeeee'"
+          }
+        }
+      ]
     },
     {
       "id": 968,
@@ -65109,6 +65129,22 @@
           "message": {
             "ja": "「北斗神拳奥義・二指真空把！」",
             "en": "The twofingergrasp of nil space!"
+          }
+        },
+        {
+          "action": "MESSAGE_BREATH_FORCE",
+          "chance": 1,
+          "message": {
+            "ja": "「北斗剛掌波！！」",
+            "en": "says, 'Hokuto Goh-Sho-Ha!!'"
+          }
+        },
+        {
+          "action": "MESSAGE_BREATH_FORCE",
+          "chance": 1,
+          "message": {
+            "ja": "「受けてみい！！天将奔烈！！！」",
+            "en": "says, 'Tensho-Honretsu!!'"
           }
         }
       ]
