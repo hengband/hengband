@@ -720,7 +720,10 @@
                                         "MESSAGE_STALKER",
                                         "MESSAGE_REFLECT",
                                         "MESSAGE_TIMESTOP",
-                                        "MESSAGE_TIMESTART"
+                                        "MESSAGE_TIMESTART",
+                                        "MESSAGE_BREATH_SOUND",
+                                        "MESSAGE_BREATH_SHARDS",
+                                        "MESSAGE_BREATH_FORCE"
                                     ]
                                 },
                                 "chance": {
