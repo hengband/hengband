@@ -226,7 +226,7 @@ const std::unordered_map<std::string_view, MonsterResistanceType> r_info_flagsr 
     { "RES_FIRE", MonsterResistanceType::RESIST_FIRE },
     { "IM_FIRE", MonsterResistanceType::IMMUNE_FIRE },
     { "HURT_COLD", MonsterResistanceType::HURT_COLD },
-    { "RES_COLD", MonsterResistanceType::RESIST_FIRE },
+    { "RES_COLD", MonsterResistanceType::RESIST_COLD },
     { "IM_COLD", MonsterResistanceType::IMMUNE_COLD },
     { "HURT_POIS", MonsterResistanceType::HURT_POISON },
     { "RES_POIS", MonsterResistanceType::RESIST_POISON },
