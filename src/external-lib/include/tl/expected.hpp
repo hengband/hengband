@@ -2044,6 +2044,19 @@ public:
                   "T must be move-constructible and convertible to from U&&");
     return bool(*this) ? std::move(**this) : static_cast<T>(std::forward<U>(v));
   }
+
+  template <class G> constexpr E error_or(G &&e) const & {
+    static_assert(std::is_copy_constructible<E>::value &&
+                      std::is_convertible<G &&, E>::value,
+                  "E must be copy-constructible and convertible to from G&&");
+    return bool(*this) ? static_cast<E>(std::forward<G>(e)) : error();
+  }
+  template <class G> TL_EXPECTED_11_CONSTEXPR E error_or(G &&e) && {
+    static_assert(std::is_move_constructible<E>::value &&
+                      std::is_convertible<G &&, E>::value,
+                  "E must be move-constructible and convertible to from G&&");
+    return bool(*this) ? static_cast<E>(std::forward<G>(e)) : std::move(error());
+  }
 };
 
 namespace detail {
