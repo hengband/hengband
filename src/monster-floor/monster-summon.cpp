@@ -35,18 +35,18 @@ static bool is_dead_summoning(summon_type type)
  * @param type 召喚種別
  * @param mode 生成オプション
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
- * @return 召喚に成功したらモンスターID、失敗したらstd::nullopt
+ * @return 召喚に成功したらモンスターID、失敗したらtl::nullopt
  */
-std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
+tl::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode, tl::optional<MONSTER_IDX> summoner_m_idx)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     if (floor.inside_arena) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const auto pos = mon_scatter(player_ptr, MonraceList::empty_id(), { y1, x1 }, 2);
     if (!pos) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const auto hook = floor.get_monrace_hook_terrain_at(*pos);
@@ -56,7 +56,7 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
     const auto dlev = floor.is_underground() ? floor.get_level() : WildernessGrids::get_instance().get_player_grid().get_level();
     const auto r_idx = get_mon_num(player_ptr, 0, (dlev + lev) / 2 + 5, mode);
     if (!MonraceList::is_valid(r_idx)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (is_dead_summoning(type)) {
@@ -65,7 +65,7 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
 
     auto summoned_m_idx = place_specific_monster(player_ptr, pos->y, pos->x, r_idx, mode, summoner_m_idx);
     if (!summoned_m_idx) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     bool notice = false;
@@ -97,9 +97,9 @@ std::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, 
  * @param ox 目標地点x座標
  * @param r_idx 生成するモンスター種族ID
  * @param mode 生成オプション
- * @return 召喚に成功したらモンスターID、失敗したらstd::nullopt
+ * @return 召喚に成功したらモンスターID、失敗したらtl::nullopt
  */
-std::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonraceId r_idx, BIT_FLAGS mode)
+tl::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonraceId r_idx, BIT_FLAGS mode)
 {
     if (!MonraceList::is_valid(r_idx) || (r_idx >= static_cast<MonraceId>(MonraceList::get_instance().size()))) {
         return false;
@@ -114,6 +114,6 @@ std::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER
         return false;
     }
 
-    const auto summon_who = is_monster(src_idx) ? std::make_optional(src_idx) : std::nullopt;
+    const auto summon_who = is_monster(src_idx) ? tl::make_optional(src_idx) : tl::nullopt;
     return place_specific_monster(player_ptr, pos->y, pos->x, r_idx, (mode | PM_NO_KAGE), summon_who);
 }

@@ -9,7 +9,7 @@
 #include "util/point-2d.h"
 #include <array>
 #include <map>
-#include <optional>
+#include <tl/optional.hpp>
 #include <utility>
 #include <vector>
 
@@ -112,7 +112,7 @@ public:
     void set_dungeon_index(DungeonId id);
     void reset_dungeon_index();
     const DungeonDefinition &get_dungeon_definition() const; //!< @details 定義データなので非const 版の使用は禁止.
-    QuestId get_random_quest_id(std::optional<int> level_opt = std::nullopt) const;
+    QuestId get_random_quest_id(tl::optional<int> level_opt = tl::nullopt) const;
     QuestId get_quest_id(const int bonus = 0) const;
     bool has_los_at(const Pos2D &pos) const;
     bool has_los_terrain_at(const Pos2D &pos) const;
@@ -132,8 +132,8 @@ public:
     bool can_block_disintegration_at(const Pos2D &pos) const;
     bool can_drop_item_at(const Pos2D &pos) const;
 
-    ItemEntity make_gold(std::optional<BaseitemKey> bi_key = std::nullopt) const;
-    std::optional<ItemEntity> try_make_instant_artifact() const;
+    ItemEntity make_gold(tl::optional<BaseitemKey> bi_key = tl::nullopt) const;
+    tl::optional<ItemEntity> try_make_instant_artifact() const;
     short select_baseitem_id(int level_initial, uint32_t mode) const;
     bool filter_monrace_terrain(MonraceId monrace_id, MonraceHookTerrain hook) const;
     TerrainTag select_random_trap() const;
@@ -144,7 +144,7 @@ public:
     void leave_dungeon(bool state);
     void reset_mproc();
     void reset_mproc_max();
-    std::optional<int> get_mproc_index(short m_idx, MonsterTimedEffect mte);
+    tl::optional<int> get_mproc_index(short m_idx, MonsterTimedEffect mte);
     void add_mproc(short m_idx, MonsterTimedEffect mte);
     void remove_mproc(short m_idx, MonsterTimedEffect mte);
 

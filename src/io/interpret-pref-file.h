@@ -1,9 +1,9 @@
 #pragma once
 
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 
-extern std::optional<std::string> histpref_buf;
+extern tl::optional<std::string> histpref_buf;
 
 class PlayerType;
 int interpret_pref_file(PlayerType *player_ptr, char *buf);

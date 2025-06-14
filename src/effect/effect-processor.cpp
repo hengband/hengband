@@ -62,7 +62,7 @@ Pos2D decide_source_position(PlayerType *player_ptr, MONSTER_IDX src_idx, const 
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
 ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITION rad, const POSITION target_y, const POSITION target_x, const int dam,
-    const AttributeType typ, BIT_FLAGS flag, std::optional<CapturedMonsterType *> cap_mon_ptr)
+    const AttributeType typ, BIT_FLAGS flag, tl::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     monster_target_y = player_ptr->y;
     monster_target_x = player_ptr->x;
@@ -289,13 +289,11 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                     }
 
                     if (is_seen(player_ptr, monster)) {
+                        const auto m_name = monster.ml ? monster_desc(player_ptr, monster, 0) : std::string(_("それ", "It"));
                         sound(SoundKind::REFLECT);
-                        if ((monster.r_idx == MonraceId::KENSHIROU) || (monster.r_idx == MonraceId::RAOU)) {
-                            msg_print(_("「北斗神拳奥義・二指真空把！」", "The attack bounces!"));
-                        } else if (monster.r_idx == MonraceId::DIO) {
-                            msg_print(_("ディオ・ブランドーは指一本で攻撃を弾き返した！", "The attack bounces!"));
-                        } else {
-                            msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
+                        const auto reflect_message = monrace.get_message(m_name, MonsterMessageType::MESSAGE_REFLECT);
+                        if (reflect_message) {
+                            msg_print(*reflect_message);
                         }
                     } else if (!is_monster(src_idx)) {
                         sound(SoundKind::REFLECT);

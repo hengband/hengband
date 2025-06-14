@@ -1,7 +1,7 @@
 #pragma once
 
 #include "util/point-2d.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 class PlayerType;
-std::optional<Pos2D> point_target(PlayerType *player_ptr);
+tl::optional<Pos2D> point_target(PlayerType *player_ptr);

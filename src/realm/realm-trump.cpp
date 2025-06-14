@@ -34,9 +34,9 @@
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param spell 魔法ID
  * @param mode 処理内容 (SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO / SpellProcessType::CAST)
- * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は std::nullopt を返す。
+ * @return SpellProcessType::NAME / SPELL_DESC / SpellProcessType::INFO 時には文字列を返す。SpellProcessType::CAST時は tl::nullopt を返す。
  */
-std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
+tl::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell, SpellProcessType mode)
 {
     bool info = mode == SpellProcessType::INFO;
     bool cast = mode == SpellProcessType::CAST;
@@ -81,7 +81,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
     case 3: {
         if (cast) {
             if (!reset_recall(player_ptr)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;
@@ -121,7 +121,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fire_beam(player_ptr, AttributeType::AWAY_ALL, dir, power);
@@ -150,7 +150,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             const auto dir = get_aim_dir(player_ptr);
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             fetch_item(player_ptr, dir, weight, false);
@@ -165,7 +165,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
             if (cast) {
                 const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
                 if (!pos) {
-                    return std::nullopt;
+                    return tl::nullopt;
                 }
                 x = pos->x;
                 y = pos->y;
@@ -213,7 +213,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
             target_pet = old_target_pet;
 
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             speed_monster(player_ptr, dir, plev);
@@ -223,7 +223,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
     case 12: {
         if (cast) {
             if (!input_check(_("本当に他の階にテレポートしますか？", "Are you sure? (Teleport Level)"))) {
-                return std::nullopt;
+                return tl::nullopt;
             }
             teleport_level(player_ptr, 0);
         }
@@ -239,7 +239,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             msg_print(_("次元の扉が開いた。目的地を選んで下さい。", "You open a dimensional gate. Choose a destination."));
             if (!dimension_door(player_ptr)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;
@@ -254,7 +254,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
 
         if (cast) {
             if (!recall_player(player_ptr, dice.roll() + base)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;
@@ -282,7 +282,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
             project_length = 0;
 
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             teleport_swap(player_ptr, dir);
@@ -378,7 +378,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
     case 25: {
         if (cast) {
             if (!identify_fully(player_ptr, false)) {
-                return std::nullopt;
+                return tl::nullopt;
             }
         }
     } break;
@@ -401,7 +401,7 @@ std::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spel
             target_pet = old_target_pet;
 
             if (!dir) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             heal_monster(player_ptr, dir, heal);

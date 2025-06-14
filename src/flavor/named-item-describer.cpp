@@ -122,10 +122,10 @@ static std::string describe_unique_name_before_body_ja(const ItemEntity &item, c
     return "";
 }
 
-static std::optional<std::string> describe_random_artifact_name_after_body_ja(const ItemEntity &item)
+static tl::optional<std::string> describe_random_artifact_name_after_body_ja(const ItemEntity &item)
 {
     if (!item.is_random_artifact()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const std::string_view name_sv = *item.randart_name;

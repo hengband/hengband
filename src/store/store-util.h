@@ -4,7 +4,7 @@
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include <memory>
-#include <optional>
+#include <tl/optional.hpp>
 #include <vector>
 
 constexpr DEPTH STORE_OBJ_STD_LEVEL = 5; //!< 通常店舗の標準階層レベル / Magic Level for normal stores
@@ -54,7 +54,7 @@ public:
     void optimize_item(short i_idx);
     void delete_item();
     std::vector<short> collect_same_magic_device_pvals(ItemEntity &item);
-    std::optional<int> carry(ItemEntity &item);
+    tl::optional<int> carry(ItemEntity &item);
 };
 
 extern Store *st_ptr;

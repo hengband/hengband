@@ -48,7 +48,7 @@ ItemKindType BaseitemKey::tval() const
     return this->type_value;
 }
 
-std::optional<int> BaseitemKey::sval() const
+tl::optional<int> BaseitemKey::sval() const
 {
     return this->subtype_value;
 }

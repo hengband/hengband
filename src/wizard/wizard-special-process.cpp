@@ -77,9 +77,9 @@
 #include "world/world.h"
 #include <algorithm>
 #include <fstream>
-#include <optional>
 #include <span>
 #include <sstream>
+#include <tl/optional.hpp>
 #include <tuple>
 #include <vector>
 
@@ -97,15 +97,15 @@ void wiz_cure_all(PlayerType *player_ptr)
     msg_print("You're fully cured by wizard command.");
 }
 
-static std::optional<tval_desc> wiz_select_tval()
+static tl::optional<tval_desc> wiz_select_tval()
 {
     CandidateSelector cs(_("アイテム種別を選んで下さい", "Get what type of object? "), 15);
     const auto choice = cs.select(tval_desc_list, [](const auto &tval) { return tval.desc; });
 
-    return (choice != tval_desc_list.end()) ? std::make_optional(*choice) : std::nullopt;
+    return (choice != tval_desc_list.end()) ? tl::make_optional(*choice) : tl::nullopt;
 }
 
-static std::optional<short> wiz_select_sval(const tval_desc &td)
+static tl::optional<short> wiz_select_sval(const tval_desc &td)
 {
     std::vector<short> bi_ids;
     for (const auto &baseitem : BaseitemList::get_instance()) {
@@ -122,7 +122,7 @@ static std::optional<short> wiz_select_sval(const tval_desc &td)
     const auto &baseitems = BaseitemList::get_instance();
     const auto choice = cs.select(bi_ids,
         [&baseitems](short bi_id) { return baseitems.get_baseitem(bi_id).stripped_name(); });
-    return (choice != bi_ids.end()) ? std::make_optional(*choice) : std::nullopt;
+    return (choice != bi_ids.end()) ? tl::make_optional(*choice) : tl::nullopt;
 }
 
 /*!
@@ -134,11 +134,11 @@ static std::optional<short> wiz_select_sval(const tval_desc &td)
  * This function returns the bi_id of an object type, or zero if failed
  * List up to 50 choices in three columns
  */
-static std::optional<short> wiz_create_itemtype()
+static tl::optional<short> wiz_create_itemtype()
 {
     auto selection = wiz_select_tval();
     if (!selection) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return wiz_select_sval(*selection);
@@ -201,15 +201,15 @@ static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArt
  * @brief 固定アーティファクトをリストから選択する
  *
  * @param fa_ids 選択する候補となる固定アーティファクトのIDのリスト
- * @return 選択した固定アーティファクトのIDを返す。但しキャンセルした場合は std::nullopt を返す。
+ * @return 選択した固定アーティファクトのIDを返す。但しキャンセルした場合は tl::nullopt を返す。
  */
-static std::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *player_ptr, const std::vector<FixedArtifactId> &fa_ids)
+static tl::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *player_ptr, const std::vector<FixedArtifactId> &fa_ids)
 {
     CandidateSelector cs("Which artifact: ", 15);
 
     auto describe_artifact = [player_ptr](FixedArtifactId fa_id) { return wiz_make_named_artifact_desc(player_ptr, fa_id); };
     const auto it = cs.select(fa_ids, describe_artifact);
-    return (it != fa_ids.end()) ? std::make_optional(*it) : std::nullopt;
+    return (it != fa_ids.end()) ? tl::make_optional(*it) : tl::nullopt;
 }
 
 /**
@@ -246,7 +246,7 @@ void wiz_create_named_art(PlayerType *player_ptr)
         put_str(ss.str(), i + 1, 15);
     }
 
-    std::optional<FixedArtifactId> created_fa_id;
+    tl::optional<FixedArtifactId> created_fa_id;
     while (!created_fa_id) {
         const auto command = input_command("Kind of artifact: ");
         if (!command) {
@@ -434,7 +434,7 @@ void wiz_create_feature(PlayerType *player_ptr)
  * @brief デバッグ帰還のダンジョンを選ぶ
  * @param player_ptr プレイヤーへの参照ポインタ
  */
-static std::optional<DungeonId> select_debugging_dungeon()
+static tl::optional<DungeonId> select_debugging_dungeon()
 {
     const auto &dungeons = DungeonList::get_instance();
     auto describer = [&](DungeonId id) { return dungeons.get_dungeon(id).name; };
@@ -442,7 +442,7 @@ static std::optional<DungeonId> select_debugging_dungeon()
     CandidateSelector cs("Jump to which dungeon: ", 15);
     const auto choice = cs.select(DUNGEON_IDS, describer);
 
-    return (choice != DUNGEON_IDS.end()) ? std::make_optional(*choice) : std::nullopt;
+    return (choice != DUNGEON_IDS.end()) ? tl::make_optional(*choice) : tl::nullopt;
 }
 
 /*
@@ -451,7 +451,7 @@ static std::optional<DungeonId> select_debugging_dungeon()
  * @param dungeon_id ダンジョン番号
  * @return レベルを選択したらその値、キャンセルならnullopt
  */
-static std::optional<int> select_debugging_floor(const FloorType &floor, DungeonId dungeon_id)
+static tl::optional<int> select_debugging_floor(const FloorType &floor, DungeonId dungeon_id)
 {
     const auto &dungeon = DungeonList::get_instance().get_dungeon(dungeon_id);
     const auto max_depth = dungeon.maxdepth;
@@ -561,16 +561,16 @@ static void change_birth_flags()
     rfu.set_flags(flags_mwrf);
 }
 
-static std::optional<ElementRealmType> wiz_select_element_realm()
+static tl::optional<ElementRealmType> wiz_select_element_realm()
 {
     constexpr EnumRange element_realms(ElementRealmType::FIRE, ElementRealmType::MAX);
     CandidateSelector cs("Which realm: ", 15);
 
     const auto chosen_realm = cs.select(element_realms, get_element_title);
-    return (chosen_realm != element_realms.end()) ? std::make_optional(*chosen_realm) : std::nullopt;
+    return (chosen_realm != element_realms.end()) ? tl::make_optional(*chosen_realm) : tl::nullopt;
 }
 
-static std::optional<RealmType> wiz_select_realm(const RealmChoices &choices, const std::string &msg)
+static tl::optional<RealmType> wiz_select_realm(const RealmChoices &choices, const std::string &msg)
 {
     if (choices.count() <= 1) {
         return choices.first().value_or(RealmType::NONE);
@@ -582,15 +582,15 @@ static std::optional<RealmType> wiz_select_realm(const RealmChoices &choices, co
 
     CandidateSelector cs(msg, 15);
     const auto choice = cs.select(candidates, describe_realm);
-    return (choice != candidates.end()) ? std::make_optional(*choice) : std::nullopt;
+    return (choice != candidates.end()) ? tl::make_optional(*choice) : tl::nullopt;
 }
 
-static std::optional<std::tuple<RealmType, RealmType, ElementRealmType>> wiz_select_realms(PlayerClassType pclass)
+static tl::optional<std::tuple<RealmType, RealmType, ElementRealmType>> wiz_select_realms(PlayerClassType pclass)
 {
     if (pclass == PlayerClassType::ELEMENTALIST) {
         const auto realm = wiz_select_element_realm();
         if (!realm) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         return std::make_tuple(RealmType::NONE, RealmType::NONE, *realm);
@@ -598,7 +598,7 @@ static std::optional<std::tuple<RealmType, RealmType, ElementRealmType>> wiz_sel
 
     const auto realm1 = wiz_select_realm(PlayerRealm::get_realm1_choices(pclass), "1st realm: ");
     if (!realm1) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     auto realm2_choices = PlayerRealm::get_realm2_choices(pclass).reset(*realm1);
@@ -612,7 +612,7 @@ static std::optional<std::tuple<RealmType, RealmType, ElementRealmType>> wiz_sel
 
     const auto realm2 = wiz_select_realm(realm2_choices, "2nd realm: ");
     if (!realm2) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return std::make_tuple(*realm1, *realm2, ElementRealmType::NONE);
@@ -714,7 +714,7 @@ void wiz_dump_options()
     std::ofstream ofs(path);
     if (ofs.bad()) {
         msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename.data());
-        msg_print(nullptr);
+        msg_erase();
         return;
     }
 
@@ -801,7 +801,7 @@ void cheat_death(PlayerType *player_ptr)
     auto &world = AngbandWorld::get_instance();
     world.noscore |= 0x0001;
     msg_print(_("ウィザードモードに念を送り、死を欺いた。", "You invoke wizard mode and cheat death."));
-    msg_print(nullptr);
+    msg_erase();
 
     player_ptr->is_dead = false;
     (void)life_stream(player_ptr, false, false);

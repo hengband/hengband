@@ -28,6 +28,7 @@
 #include "view/display-messages.h"
 #include "view/display-util.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <sstream>
 #include <string>
 
@@ -66,18 +67,16 @@ static void display_essence(PlayerType *player_ptr)
         for (auto i = 1U; i <= row_count + 1; i++) {
             prt("", i, 0);
         }
-        prt(_("エッセンス   個数     エッセンス   個数     エッセンス   個数", "Essence      Num      Essence      Num      Essence      Num "), 1, 8);
 
-        for (auto num = 0U, ei = page * essence_num_per_page;
-             num < essence_num_per_page && ei < essences.size();
-             ++num, ++ei) {
+        prt(_("エッセンス   個数     エッセンス   個数     エッセンス   個数", "Essence      Num      Essence      Num      Essence      Num "), 1, 8);
+        for (auto num = 0U, ei = page * essence_num_per_page; (num < essence_num_per_page) && (ei < essences.size()); ++num, ++ei) {
             auto name = Smith::get_essence_name(essences[ei]);
             auto amount = smith.get_essence_num_of_posessions(essences[ei]);
             prt(format("%-11s %5d", name, amount), 2 + num % row_count, 8 + (num / row_count) * column_width);
         }
-        prt(format(_("現在所持しているエッセンス %d/%d", "List of all essences you have. %d/%d"), (page + 1), page_max), 0, 0);
 
-        auto key = inkey();
+        prt(fmt::format(_("現在所持しているエッセンス {}/{}", "List of all essences you have. {}/{}"), (page + 1), page_max), 0, 0);
+        const auto key = inkey();
         if (key == ESCAPE) {
             break;
         }
@@ -100,8 +99,8 @@ static void display_essence(PlayerType *player_ptr)
             page = 0;
         }
     }
+
     screen_load();
-    return;
 }
 
 static void set_smith_redrawing_flags()
@@ -149,7 +148,7 @@ static void drain_essence(PlayerType *player_ptr)
 
         for (const auto &[essence, amount] : drain_result) {
             auto essence_name = Smith::get_essence_name(essence);
-            msg_print(nullptr);
+            msg_erase();
             msg_format("%s...%d%s", essence_name, amount, _("。", ". "));
         }
     }
@@ -165,7 +164,6 @@ static void drain_essence(PlayerType *player_ptr)
  */
 static COMMAND_CODE choose_essence(void)
 {
-    COMMAND_CODE mode = 0;
     char choice;
     COMMAND_CODE menu_line = (use_menu ? 1 : 0);
 
@@ -175,24 +173,24 @@ static COMMAND_CODE choose_essence(void)
     concptr menu_name[] = { "Brand weapon", "Resistance", "Ability", "Magic number", "Slay", "ESP", "Others", "Activation" };
 #endif
     const COMMAND_CODE mode_max = 8;
-
-    if (repeat_pull(&mode) && 1 <= mode && mode <= mode_max) {
+    auto mode = repeat_pull().value_or(0);
+    if ((1 <= mode) && (mode <= mode_max)) {
         return mode;
     }
-    mode = 0;
+
     if (use_menu) {
         screen_save();
-
-        while (!mode) {
+        while (mode == 0) {
             int i;
-            for (i = 0; i < mode_max; i++)
+            for (i = 0; i < mode_max; i++) {
 #ifdef JP
                 prt(format(" %s %s", (menu_line == 1 + i) ? "》" : "  ", menu_name[i]), 2 + i, 14);
-            prt("どの種類のエッセンス付加を行いますか？", 0, 0);
 #else
                 prt(format(" %s %s", (menu_line == 1 + i) ? "> " : "  ", menu_name[i]), 2 + i, 14);
-            prt("Choose from menu.", 0, 0);
 #endif
+            }
+
+            prt(_("どの種類のエッセンス付加を行いますか？", "Choose from menu."), 0, 0);
 
             choice = inkey();
             switch (choice) {
@@ -225,7 +223,7 @@ static COMMAND_CODE choose_essence(void)
         screen_load();
     } else {
         screen_save();
-        while (!mode) {
+        while (mode == 0) {
             for (short i = 0; i < mode_max; i++) {
                 prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
             }
@@ -242,7 +240,7 @@ static COMMAND_CODE choose_essence(void)
             }
 
             if ('a' <= choice && choice <= 'a' + (char)mode_max - 1) {
-                mode = (int)choice - 'a' + 1;
+                mode = choice - 'a' + 1;
             }
         }
         screen_load();
@@ -326,13 +324,11 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
     const int page_max = (smith_effect_list.size() - 1) / effect_num_per_page + 1;
 
     COMMAND_CODE i = -1;
-    COMMAND_CODE effect_idx;
+    auto effect_index = repeat_pull().value_or(-1);
     bool flag;
-    if (!repeat_pull(&effect_idx) || effect_idx < 0 || effect_idx >= smith_effect_list_max) {
+    if (effect_index < 0 || effect_index >= smith_effect_list_max) {
         flag = false;
-
         screen_save();
-
         while (!flag) {
             std::string prompt;
             if (page_max > 1) {
@@ -420,9 +416,9 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
                 i = A2I(*choice);
             }
 
-            effect_idx = page * effect_num_per_page + i;
+            effect_index = page * effect_num_per_page + i;
             /* Totally Illegal */
-            if ((effect_idx < 0) || (effect_idx >= smith_effect_list_max) || smith.get_addable_count(smith_effect_list[effect_idx]) <= 0) {
+            if ((effect_index < 0) || (effect_index >= smith_effect_list_max) || smith.get_addable_count(smith_effect_list[effect_index]) <= 0) {
                 bell();
                 continue;
             }
@@ -437,10 +433,10 @@ static void add_essence(PlayerType *player_ptr, SmithCategoryType mode)
             return;
         }
 
-        repeat_push(effect_idx);
+        repeat_push(effect_index);
     }
 
-    auto effect = smith_effect_list[effect_idx];
+    const auto effect = smith_effect_list[effect_index];
 
     auto item_tester = Smith::get_item_tester(effect);
 
@@ -548,7 +544,6 @@ static void erase_essence(PlayerType *player_ptr)
  */
 void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
 {
-    COMMAND_CODE mode = 0;
     COMMAND_CODE menu_line = (use_menu ? 1 : 0);
     if (!only_browse) {
         if (cmd_limit_confused(player_ptr)) {
@@ -564,7 +559,8 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
         }
     }
 
-    if (!(repeat_pull(&mode) && (1 <= mode) && (mode <= 5))) {
+    auto mode = repeat_pull().value_or(0);
+    if ((1 > mode) || (mode > 5)) {
         if (only_browse) {
             screen_save();
         }

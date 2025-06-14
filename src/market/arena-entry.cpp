@@ -107,7 +107,7 @@ int ArenaEntryList::get_current_entry() const
     return this->current_entry;
 }
 
-std::optional<int> ArenaEntryList::get_defeated_entry() const
+tl::optional<int> ArenaEntryList::get_defeated_entry() const
 {
     return this->defeated_entry;
 }
@@ -207,7 +207,7 @@ void ArenaEntryList::increment_entry()
 void ArenaEntryList::reset_entry()
 {
     this->current_entry = 0;
-    this->defeated_entry = std::nullopt;
+    this->defeated_entry = tl::nullopt;
 }
 
 void ArenaEntryList::set_defeated_entry()
@@ -223,7 +223,7 @@ void ArenaEntryList::load_current_entry(int entry)
 void ArenaEntryList::load_defeated_entry(int entry)
 {
     if (entry < 0) {
-        this->defeated_entry = std::nullopt;
+        this->defeated_entry = tl::nullopt;
         return;
     }
 

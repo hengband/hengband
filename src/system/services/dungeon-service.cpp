@@ -67,11 +67,11 @@ int DungeonService::find_max_level()
     return max_level;
 }
 
-std::optional<std::string> DungeonService::check_first_entrance(DungeonId dungeon_id)
+tl::optional<std::string> DungeonService::check_first_entrance(DungeonId dungeon_id)
 {
     const auto &record = DungeonRecords::get_instance().get_record(dungeon_id);
     if (record.has_entered()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return DungeonList::get_instance().get_dungeon(dungeon_id).build_entrance_message();

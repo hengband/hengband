@@ -502,7 +502,7 @@ void MonraceList::reset_all_visuals()
     }
 }
 
-std::optional<std::string> MonraceList::probe_lore(MonraceId monrace_id)
+tl::optional<std::string> MonraceList::probe_lore(MonraceId monrace_id)
 {
     if (LoreTracker::get_instance().is_tracking(monrace_id)) {
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MONSTER_LORE);

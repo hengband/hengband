@@ -15,6 +15,7 @@
 #include "info-reader/general-parser.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/magic-reader.h"
+#include "info-reader/message-reader.h"
 #include "info-reader/race-reader.h"
 #include "info-reader/skill-reader.h"
 #include "info-reader/vault-reader.h"
@@ -104,7 +105,7 @@ static void init_info(std::string_view filename, angband_header &head, InfoType 
 #endif
         msg_format(_("レコード %d は '%s' エラーがあります。", "Record %d contains a '%s' error."), error_idx, oops);
         msg_format(_("構文 '%s'。", "Parsing '%s'."), buf);
-        msg_print(nullptr);
+        msg_erase();
         quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
     }
 
@@ -146,7 +147,7 @@ static void init_json(std::string_view filename, std::string_view keyname, angba
     for (auto &element : json_object[keyname]) {
         const auto error_code = parser(element, &head);
         if (error_code != PARSE_ERROR_NONE) {
-            msg_print(nullptr);
+            msg_erase();
             quit_fmt(_("'%s'ファイルにエラー", "Error in '%s' file."), filename.data());
         }
     }
@@ -234,6 +235,15 @@ void init_monrace_definitions()
 {
     init_header(&monraces_header);
     init_json("MonraceDefinitions.jsonc", "monsters", monraces_header, MonraceList::get_instance(), parse_monraces_info);
+}
+
+/*!
+ * @brief モンスターメッセージ読み込みのメインルーチン
+ */
+void init_monster_message_definitions()
+{
+    init_header(&monster_messages_header);
+    init_json("MonsterMessages.jsonc", "groups", monster_messages_header, MonraceMessageList::get_instance(), parse_monster_messages_info);
 }
 
 /*!

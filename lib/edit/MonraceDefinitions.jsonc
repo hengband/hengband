@@ -87,7 +87,7 @@
       "FORCE_DEPTH", "FORCE_MAXHP", "FRIENDS", "ESCORT", "ESCORTS", "RIDING", "INVISIBLE", "COLD_BLOOD",
       "KAGE", "CHAMELEON", "TANUKI", "NO_QUEST", "ELDRITCH_HORROR", "MULTIPLY", "REGENERATE", "POWERFUL",
       "REFLECTING", "QUESTOR", "EMPTY_MIND", "WEIRD_MIND"
-      "DIMINISH_MAX_DAMAGE"
+      "DIMINISH_MAX_DAMAGE", "STALKER"
       ###
 
       "skill": { モンスターの発動型能力設定
@@ -50474,7 +50474,36 @@
       "flavor": {
         "ja": "響き渡る金属的な足音がこの巨大な、半悪魔半機械の怪物の到来を告げる。その火力には何者もかなわない。",
         "en": "Reverberant metal steps announce the arrival of this huge creature, half demon half machine. It has an unsurpassable firepower."
-      }
+      },
+      "message": [
+        {
+          "action": "WALK_CLOSERANGE",
+          "chance": 20,
+          "use_name": false,
+          "message": {
+            "ja": "近くで重厚な足音が聞こえた。",
+            "en": "You hear heavy steps nearby."
+          }
+        },
+        {
+          "action": "WALK_MIDDLERANGE",
+          "chance": 20,
+          "use_name": false,
+          "message": {
+            "ja": "重厚な足音が聞こえた。",
+            "en": "You hear heavy steps."
+          }
+        },
+        {
+          "action": "WALK_LONGRANGE",
+          "chance": 40,
+          "use_name": false,
+          "message": {
+            "ja": "遠くで重厚な足音が聞こえた。",
+            "en": "You hear heavy steps in the distance."
+          }
+        }
+      ]
     },
     //#JZ#
     //#JZ#死の女王ヘラ
@@ -55871,7 +55900,26 @@
       "flavor": {
         "ja": "石仮面の力で不死の吸血鬼となったディオは冒険者を餌としか見ていない。『ザ・ワールド』に気をつけろ！「奴のスタンドの正体は分からないが、至近距離でしか使えないことは確かだッ」",
         "en": "Dio, who became an immortal vampire with the help of a stone mask, looks only at the adventurer.  Watch out for The World, Dio's stand or visual manifestation of his life energy:  \"I don't know what his stand is, but it is certain that it can only be used at close range.\""
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_REFLECT",
+          "chance": 1,
+          "message": {
+            "ja": "は指一本で攻撃を弾き返した！",
+            "en": "deflected the attack with just one finger!"
+          }
+        },
+        {
+          "action": "MESSAGE_TIMESTOP",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "「『ザ・ワールド』！　時は止まった！」",
+            "en": "Dio Brando yells 'The World! Time has stopped!'"
+          }
+        }
+      ]
     },
     {
       "id": 879,
@@ -56016,7 +56064,18 @@
       "flavor": {
         "ja": "時間と空間を自在に操る超能力者。冷静沈着で、常に余裕の笑みを浮かべている。だが、その仮面の下には冷血な魂が宿り、自分自身の欲望の為なら手段を選ばない。すべてにおいて計算高く、しかもその真意を悟らせることは決してない。 ",
         "en": "He has psychic powers that allow him to freely manipulate time and space.  He keeps calm and is always smiling, but beneath that mask is a cold-blooded soul."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_TIMESTOP",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "「時よ！」",
+            "en": "Richard Wong, Master of Time yells 'Time!'"
+          }
+        }
+      ]
     },
     {
       "id": 881,
@@ -57103,6 +57162,7 @@
         "FORCE_MAXHP",
         "DROP_1D2",
         "SMART",
+        "RES_COLD",
         "DROP_CORPSE",
         "DROP_SKELETON",
         "CAN_SWIM"
@@ -59821,7 +59881,18 @@
       "flavor": {
         "ja": "一子相伝とされる北斗神拳の伝承者だ。力が全てを支配すると思われた時代にあって愛に生き、愛のために戦っている。",
         "en": "He is the rightful master of the martial art, Hokuto Shinken.  At a time when power seems to be everything, he lives in love and fights for love."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_REFLECT",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "「北斗神拳奥義・二指真空把！」",
+            "en": "The twofingergrasp of nil space!"
+          }
+        }
+      ]
     },
     {
       "id": 937,
@@ -61476,7 +61547,17 @@
       "flavor": {
         "ja": "銀河ボディビルコンテスト十連続グランドチャンピオン。必殺技はボ帝ビルカッター。",
         "en": "This muscle-bound man with a horned helmet has won the Great Galaxy Bodybuiling championship ten times in a row.  He is eager to prevent anyone from challenging his title.  He's also know for his signature move, the Bo Emperor Building Cutter."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_BREATH_SHARDS",
+          "chance": 1,
+          "message": {
+            "ja": "「ボ帝ビルカッター！！！」",
+            "en": "shouts, 'Boty-Build cutter!!!'"
+          }
+        }
+      ]
     },
     {
       "id": 964,
@@ -61703,7 +61784,17 @@
       "flavor": {
         "ja": "お前のものは俺のもの。俺のものは俺のもの。",
         "en": "What's yours is mine, and what's mine is mine."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_BREATH_SOUND",
+          "chance": 1,
+          "message": {
+            "ja": "「ボォエ～～～～～～」",
+            "en": "sings, 'Booooeeeeee'"
+          }
+        }
+      ]
     },
     {
       "id": 968,
@@ -65030,7 +65121,34 @@
       "flavor": {
         "ja": "ラオウは北斗神拳伝承者ケンシロウの義兄であり北斗神拳の使い手である。激動の闇の時代に、己の信念で新たな時代を築こうとした。",
         "en": "Raou is the eldest of four honorary brothers, another being Kenshirou, who were trained by the master of Hokuto Shinken, a martial art.  Headstrong, Raou tries to forge a new order through conquest in a turbulent dark era."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_REFLECT",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "「北斗神拳奥義・二指真空把！」",
+            "en": "The twofingergrasp of nil space!"
+          }
+        },
+        {
+          "action": "MESSAGE_BREATH_FORCE",
+          "chance": 1,
+          "message": {
+            "ja": "「北斗剛掌波！！」",
+            "en": "says, 'Hokuto Goh-Sho-Ha!!'"
+          }
+        },
+        {
+          "action": "MESSAGE_BREATH_FORCE",
+          "chance": 1,
+          "message": {
+            "ja": "「受けてみい！！天将奔烈！！！」",
+            "en": "says, 'Tensho-Honretsu!!'"
+          }
+        }
+      ]
     },
     //#
     //# ジュリアンのやつのコピー。名前？
@@ -82212,7 +82330,8 @@
         "CAN_FLY",
         "NO_CONF",
         "NO_SLEEP",
-        "POWERFUL"
+        "POWERFUL",
+        "STALKER"
       ],
       "skill": {
         "probability": "1_IN_2",
@@ -82689,7 +82808,27 @@
       "flavor": {
         "ja": "イタリアを中心に活動するギャング組織「パッショーネ」のボス。何人たりとも自分の過去や情報を探ることを許さず、組織にも一切顔を出さないという臆病ともとれてしまうほどの用心深さから、その正体を知る者は最高幹部も含めて全くいない。「誰だろうとわたしの永遠の絶頂をおびやかす者は許さない 決して 確実に消え去ってもらう」",
         "en": "He leads the gang organization, \"Passione\", which is mainly active in Italy.  He doesn't allow anyone, including the top executives in his gang, to explore his past or seek out information about himself.  With that obsession for secrecy, he gives all orders remotely or via multiple proxies so his true identity will not be revealed."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_TIMESTOP",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "『キング・クリムゾン』！",
+            "en": "Diavolo yells 'King Crison!'"
+          }
+        },
+        {
+          "action": "MESSAGE_TIMESTART",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "これが我が『キング・クリムゾン』の能力！　『時間を消し去って』飛び越えさせた…！！",
+            "en": "This is the ability of my 'King Crimson'! 'Erase the time' and let it jump over... !!"
+          }
+        }
+      ]
     },
     {
       "id": 1292,
@@ -88528,6 +88667,106 @@
         "ja": "それは白い宝石の塊で、何千もの小さな足で前によろめき歩く。",
         "en": "It is a pile of white jewels, shambling forward on thousands of tiny legs."
       }
+    },
+    {
+      "id": 1385,
+      "name": {
+        "ja": "忍び寄る人形『メリー』",
+        "en": "Mary, the creeping doll"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Dark Gray"
+      },
+      "speed": 0,
+      "hit_point": "1d6",
+      "vision": 999,
+      "armor_class": 0,
+      "alertness": 0,
+      "level": 0,
+      "rarity": 3,
+      "exp": 12,
+      "blows": [
+        {
+          "method": "TOUCH",
+          "effect": "TERRIFY"
+        }
+      ],
+      "flags": [
+        "UNIQUE",
+        "FORCE_MAXHP",
+        "WILD_TOWN",
+        "ONLY_GOLD",
+        "DROP_4D2",
+        "EMPTY_MIND",
+        "IM_ELEC",
+        "IM_COLD",
+        "NO_CONF",
+        "NO_SLEEP",
+        "NO_FEAR",
+        "NONLIVING",
+        "STALKER"
+      ],
+      "flavor": {
+        "ja": "ゴミ捨て場に横たわっていたはずの人形だ。誰かが動かしたのだろうか。",
+        "en": "The doll was lying in a rubbish dump. Did someone move it?"
+      },
+      "message": [
+        {
+          "action": "MESSAGE_STALKER",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "電話だ。「わたしメリーさん。今、あなたの後ろに居るの。」",
+            "en": "You get a call. 'I'm Mary. Now I'm behind you.'"
+          }
+        },
+        {
+          "action": "WALK_CLOSERANGE",
+          "chance": 10,
+          "use_name": false,
+          "message": {
+            "ja": "電話だ。「わたしメリーさん。今、あなたの家の前に居るの。」",
+            "en": "You get a call. 'I'm Mary. Now I'm in front of your house.'"
+          }
+        },
+        {
+          "action": "WALK_MIDDLERANGE",
+          "chance": 10,
+          "use_name": false,
+          "message": {
+            "ja": "電話だ。「わたしメリーさん。今、雑貨屋の前に居るの。」",
+            "en": "You get a call. 'I'm Mary. Now I'm in front of the general store.'"
+          }
+        },
+        {
+          "action": "WALK_MIDDLERANGE",
+          "chance": 10,
+          "use_name": false,
+          "message": {
+            "ja": "電話だ。「わたしメリーさん。今、宿屋の前に居るの。」",
+            "en": "You get a call. 'I'm Mary. Now I'm in front of the inn.'"
+          }
+        },
+        {
+          "action": "WALK_LONGRANGE",
+          "chance": 20,
+          "use_name": false,
+          "message": {
+            "ja": "電話だ。「わたしメリーさん。今、ゴミ捨て場に居るの。」",
+            "en": "You get a call. 'I'm Mary. Now I'm at garbage dump.'"
+          }
+        },
+        {
+          "action": "WALK_LONGRANGE",
+          "chance": 20,
+          "use_name": false,
+          "message": {
+            "ja": "電話だ。「わたしメリーさん。今、街の入口に居るの。」",
+            "en": "You get a call. 'I'm Mary. Now I'm at the entrance to the town.'"
+          }
+        }
+      ]
     }
   ]
 }

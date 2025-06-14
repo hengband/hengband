@@ -130,10 +130,12 @@ static bool check_item_tag_inventory(PlayerType *player_ptr, ItemSelection *item
  */
 static bool check_item_tag(PlayerType *player_ptr, ItemSelection *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
 {
-    if (!repeat_pull(&item_selection_ptr->cp)) {
+    const auto code = repeat_pull();
+    if (!code) {
         return false;
     }
 
+    item_selection_ptr->cp = *code;
     if (item_selection_ptr->mode & USE_FORCE && (item_selection_ptr->cp == INVEN_FORCE)) {
         command_cmd = 0;
         return true;
@@ -222,7 +224,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         return true;
     }
 
-    msg_print(nullptr);
+    msg_erase();
     item_selection.done = false;
     item_selection.item = false;
     item_selection.i1 = 0;

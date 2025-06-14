@@ -38,7 +38,7 @@
  * @return 生成成功ならば結果生成位置座標、失敗ならばnullopt
  *
  */
-std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, const Pos2D &pos, int max_distance)
+tl::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, const Pos2D &pos, int max_distance)
 {
     constexpr auto max_distance_permitted = 10;
     std::vector<Pos2D> places;
@@ -48,7 +48,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
 
     std::vector<int> numbers(max_distance_permitted);
     if (max_distance >= max_distance_permitted) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const auto p_pos = player_ptr->get_position();
@@ -99,7 +99,7 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
     }
 
     if (i >= max_distance_permitted) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return places[i];
@@ -111,17 +111,17 @@ std::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, c
  * @param m_idx 増殖するモンスター情報ID
  * @param clone クローン・モンスター処理ならばtrue
  * @param mode 生成オプション
- * @return 生成に成功したらモンスターID、失敗したらstd::nullopt
+ * @return 生成に成功したらモンスターID、失敗したらtl::nullopt
  * @details
  * Note that "reproduction" REQUIRES empty space.
  */
-std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
+tl::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     const auto pos = mon_scatter(player_ptr, monster.r_idx, monster.get_position(), 1);
     if (!pos) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (monster.mflag2.has(MonsterConstantFlagType::NOPET)) {
@@ -130,7 +130,7 @@ std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX 
 
     const auto multiplied_m_idx = place_specific_monster(player_ptr, pos->y, pos->x, monster.r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY), m_idx);
     if (!multiplied_m_idx) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (clone || monster.mflag2.has(MonsterConstantFlagType::CLONED)) {
@@ -147,7 +147,7 @@ std::optional<MONSTER_IDX> multiply_monster(PlayerType *player_ptr, MONSTER_IDX 
  * @param mode 生成オプション
  * @param summoner_m_idx モンスターの召喚による場合、召喚主のモンスターID
  */
-static void place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center, MonraceId monrace_id, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
+static void place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center, MonraceId monrace_id, BIT_FLAGS mode, tl::optional<MONSTER_IDX> summoner_m_idx)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -204,10 +204,10 @@ static void place_monster_group(PlayerType *player_ptr, const Pos2D &pos_center,
  * @param r_idx 生成するモンスターの種族ID
  * @param mode 生成オプション
  * @param summoner_m_idx モンスターの召喚による場合、召喚主のモンスターID
- * @return 生成に成功したらモンスターID、失敗したらstd::nullopt
+ * @return 生成に成功したらモンスターID、失敗したらtl::nullopt
  * @details 護衛も一緒に生成する
  */
-std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITION y, POSITION x, MonraceId r_idx, BIT_FLAGS mode, std::optional<MONSTER_IDX> summoner_m_idx)
+tl::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITION y, POSITION x, MonraceId r_idx, BIT_FLAGS mode, tl::optional<MONSTER_IDX> summoner_m_idx)
 {
     const Pos2D pos(y, x);
     const auto &monrace = MonraceList::get_instance().get_monrace(r_idx);
@@ -217,7 +217,7 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
 
     const auto m_idx = place_monster_one(player_ptr, y, x, r_idx, mode, summoner_m_idx);
     if (!m_idx) {
-        return std::nullopt;
+        return tl::nullopt;
     }
     if (!(mode & PM_ALLOW_GROUP)) {
         return m_idx;
@@ -283,9 +283,9 @@ std::optional<MONSTER_IDX> place_specific_monster(PlayerType *player_ptr, POSITI
  * @param y 生成地点y座標
  * @param x 生成地点x座標
  * @param mode 生成オプション
- * @return 生成に成功したらモンスターID、失敗したらstd::nullopt
+ * @return 生成に成功したらモンスターID、失敗したらtl::nullopt
  */
-std::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
+tl::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
     const Pos2D pos(y, x);
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -296,7 +296,7 @@ std::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION
         monrace_id = get_mon_num(player_ptr, 0, floor.monster_level, PM_NONE);
     } while ((mode & PM_NO_QUEST) && monraces.get_monrace(monrace_id).misc_flags.has(MonsterMiscType::NO_QUEST));
     if (!MonraceList::is_valid(monrace_id)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     auto try_become_jural = one_in_(5) || !floor.is_underground();
@@ -310,14 +310,14 @@ std::optional<MONSTER_IDX> place_random_monster(PlayerType *player_ptr, POSITION
     return place_specific_monster(player_ptr, y, x, monrace_id, mode);
 }
 
-static std::optional<MonraceId> select_horde_leader_r_idx(PlayerType *player_ptr)
+static tl::optional<MonraceId> select_horde_leader_r_idx(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
     for (auto attempts = 1000; attempts > 0; --attempts) {
         const auto monrace_id = get_mon_num(player_ptr, 0, floor.monster_level, PM_NONE);
         if (!MonraceList::is_valid(monrace_id)) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         if (monraces.get_monrace(monrace_id).kind_flags.has(MonsterKindType::UNIQUE)) {
@@ -331,7 +331,7 @@ static std::optional<MonraceId> select_horde_leader_r_idx(PlayerType *player_ptr
         return monrace_id;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 /*!

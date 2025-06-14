@@ -138,7 +138,7 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
         const auto &name_str = name.string();
         msg_format(_("ファイル'%s'の%d行でエラー番号%dのエラー。", "Error %d in line %d of file '%s'."), _(name_str.data(), err), line, _(err, name_str.data()));
         msg_format(_("('%s'を解析中)", "Parsing '%s'"), error_line.data());
-        msg_print(nullptr);
+        msg_erase();
     }
 
     angband_fclose(fp);
@@ -242,7 +242,7 @@ bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_v
     if (!fpp) {
         const auto &path_str = path.string();
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), path_str.data());
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 
@@ -313,16 +313,16 @@ bool read_histpref(PlayerType *player_ptr)
         err = process_histpref_file(player_ptr, _("histedit.prf", "histpref.prf"));
     }
 
-    const auto finalizer = util::make_finalizer([]() { histpref_buf = std::nullopt; });
+    const auto finalizer = util::make_finalizer([]() { histpref_buf = tl::nullopt; });
     if (err) {
         msg_print(_("生い立ち設定ファイルの読み込みに失敗しました。", "Failed to load background history preference."));
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 
     if (!histpref_buf || histpref_buf->empty()) {
         msg_print(_("有効な生い立ち設定はこのファイルにありません。", "There does not exist valid background history preference."));
-        msg_print(nullptr);
+        msg_erase();
         return false;
     }
 

@@ -11,7 +11,7 @@
 #include "spell/spells-util.h"
 #include "system/angband.h"
 #include "util/point-2d.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 enum class AttributeType;
 class Grid;
@@ -63,7 +63,7 @@ enum class TerrainCharacteristics;
 enum class TerrainTag;
 void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, TerrainTag tag);
 void set_terrain_id_to_grid(PlayerType *player_ptr, const Pos2D &pos, short terrain_id);
-std::optional<Pos2D> new_player_spot(PlayerType *player_ptr);
+tl::optional<Pos2D> new_player_spot(PlayerType *player_ptr);
 bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode);
 void update_local_illumination(PlayerType *player_ptr, const Pos2D &pos);
 bool no_lite(PlayerType *player_ptr);

@@ -82,7 +82,7 @@ void redraw_stuff(PlayerType *player_ptr)
 
     if (rfu.has(MainWindowRedrawingFlag::WIPE)) {
         rfu.reset_flag(MainWindowRedrawingFlag::WIPE);
-        msg_print(nullptr);
+        msg_erase();
         term_clear();
     }
 

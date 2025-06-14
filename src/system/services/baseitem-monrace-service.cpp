@@ -47,7 +47,7 @@ EnumClassFlagGroup<MonsterDropType> make_fixed_gold_drop_flags()
  * @param flags ドロップ関連フラグリスト
  * @return 特定の財宝を落とすならそのアイテムのBaseitemKey、一般的な財宝ドロップならばnullopt
  */
-std::optional<BaseitemKey> BaseitemMonraceService::lookup_fixed_gold_drop(const EnumClassFlagGroup<MonsterDropType> &flags)
+tl::optional<BaseitemKey> BaseitemMonraceService::lookup_fixed_gold_drop(const EnumClassFlagGroup<MonsterDropType> &flags)
 {
     for (const auto &pair : FIXED_GOLD_DROPS) {
         if (flags.has_not(pair.first)) {
@@ -56,10 +56,10 @@ std::optional<BaseitemKey> BaseitemMonraceService::lookup_fixed_gold_drop(const 
         return pair.second;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
-std::optional<std::string> BaseitemMonraceService::check_specific_drop_gold_flags_duplication()
+tl::optional<std::string> BaseitemMonraceService::check_specific_drop_gold_flags_duplication()
 {
     const auto specific_gold_drop_flags = make_fixed_gold_drop_flags();
 
@@ -74,5 +74,5 @@ std::optional<std::string> BaseitemMonraceService::check_specific_drop_gold_flag
         }
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }

@@ -40,12 +40,12 @@ term_type *game_term = nullptr;
  *
  * 引数でずらすX座標オフセット、Y座標オフセットをそれぞれ指定する。
  * 正方向のオフセットのみ有効。負の値が指定された場合、オフセット位置は 0 とする。
- * 指定された座標が std::nullopt の場合、現在のオフセットを維持する。
+ * 指定された座標が tl::nullopt の場合、現在のオフセットを維持する。
  *
  * @param x X座標オフセット
  * @param y Y座標オフセット
  */
-TermOffsetSetter::TermOffsetSetter(std::optional<TERM_LEN> x, std::optional<TERM_LEN> y)
+TermOffsetSetter::TermOffsetSetter(tl::optional<TERM_LEN> x, tl::optional<TERM_LEN> y)
     : term(game_term)
     , orig_offset_x(game_term != nullptr ? game_term->offset_x : 0)
     , orig_offset_y(game_term != nullptr ? game_term->offset_y : 0)
@@ -78,15 +78,15 @@ TermOffsetSetter::~TermOffsetSetter()
  * 表示に使用する領域の大きさを指定し、その領域が画面中央に表示されるように座標をずらす。
  * 引数で領域の横幅、縦幅をそれぞれ指定する。
  * 画面の幅より大きな値が指定された場合はオフセット 0 になる。
- * 指定された幅が std::nullopt の場合、画面の幅全体を使用する（オフセット 0 になる）。
+ * 指定された幅が tl::nullopt の場合、画面の幅全体を使用する（オフセット 0 になる）。
  *
  * @param width 表示に使用する領域の横幅
  * @param height 表示に使用する領域の縦幅
  */
-TermCenteredOffsetSetter::TermCenteredOffsetSetter(std::optional<TERM_LEN> width, std::optional<TERM_LEN> height)
+TermCenteredOffsetSetter::TermCenteredOffsetSetter(tl::optional<TERM_LEN> width, tl::optional<TERM_LEN> height)
     : term(game_term)
-    , orig_centered_wid(game_term != nullptr ? game_term->centered_wid : std::nullopt)
-    , orig_centered_hgt(game_term != nullptr ? game_term->centered_hgt : std::nullopt)
+    , orig_centered_wid(game_term != nullptr ? game_term->centered_wid : tl::nullopt)
+    , orig_centered_hgt(game_term != nullptr ? game_term->centered_hgt : tl::nullopt)
 {
     if (game_term == nullptr) {
         return;
@@ -96,8 +96,8 @@ TermCenteredOffsetSetter::TermCenteredOffsetSetter(std::optional<TERM_LEN> width
     const auto offset_y = height ? (game_term->hgt - *height) / 2 : 0;
     this->tos.emplace(offset_x, offset_y);
 
-    game_term->centered_wid = (width < game_term->wid) ? width : std::nullopt;
-    game_term->centered_hgt = (height < game_term->hgt) ? height : std::nullopt;
+    game_term->centered_wid = (width < game_term->wid) ? width : tl::nullopt;
+    game_term->centered_hgt = (height < game_term->hgt) ? height : tl::nullopt;
 }
 
 TermCenteredOffsetSetter::~TermCenteredOffsetSetter()
@@ -1504,7 +1504,7 @@ errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view s
 /*
  * Place cursor at (x,y), and clear the next "n" chars
  */
-errr term_erase(TERM_LEN x, TERM_LEN y, std::optional<int> n_opt)
+errr term_erase(TERM_LEN x, TERM_LEN y, tl::optional<int> n_opt)
 {
     TERM_LEN w = game_term->wid;
     /* int h = Term->hgt; */

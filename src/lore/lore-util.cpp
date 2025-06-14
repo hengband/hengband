@@ -129,10 +129,10 @@ std::vector<lore_msg> lore_type::build_speed_description() const
     return texts;
 }
 
-std::optional<std::vector<lore_msg>> lore_type::build_kill_unique_description() const
+tl::optional<std::vector<lore_msg>> lore_type::build_kill_unique_description() const
 {
     if (this->kind_flags.has_not(MonsterKindType::UNIQUE)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     std::vector<lore_msg> texts;

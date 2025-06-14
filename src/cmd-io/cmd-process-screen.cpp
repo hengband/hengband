@@ -21,9 +21,9 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "view/display-symbol.h"
-#include <optional>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 
 // Encode the screen colors
 static char hack[17] = "dwsorgbuDWvyRGBU";
@@ -228,7 +228,7 @@ void exe_cmd_save_screen_html(const std::filesystem::path &path, bool need_messa
     }
 
     msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
-    msg_print(nullptr);
+    msg_erase();
     screen_load();
 }
 
@@ -244,7 +244,7 @@ static void exe_cmd_save_screen_html_with_naming()
     }
 
     const auto path = path_build(ANGBAND_DIR_USER, *filename);
-    msg_print(nullptr);
+    msg_erase();
     exe_cmd_save_screen_html(path, true);
 }
 
@@ -287,7 +287,7 @@ static bool check_screen_text_can_open(FILE *fff, const std::string_view filenam
     }
 
     msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename.data());
-    msg_print(nullptr);
+    msg_erase();
     return false;
 }
 
@@ -336,7 +336,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
     fprintf(fff, "\n");
     angband_fclose(fff);
     msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
-    msg_print(nullptr);
+    msg_erase();
     screen_load();
     return true;
 }
@@ -495,7 +495,7 @@ void do_cmd_load_screen(void)
     if (!fff) {
         const auto filename = path.string();
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), filename.data());
-        msg_print(nullptr);
+        msg_erase();
         return;
     }
 

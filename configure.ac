@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(hengband, 3.0.1.27-Beta)
+AC_INIT(hengband, 3.0.1.28-Beta)
 
 AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_HEADERS(src/autoconf.h)
@@ -47,7 +47,7 @@ dnl Checks for programs.
 AC_LANG(C++)
 AC_PROG_CXX
 saved_CXXFLAGS="$CXXFLAGS"
-CXXFLAGS=$(echo "$CXXFLAGS" | sed 's/-Werror//g')
+CXXFLAGS=$(echo "$CXXFLAGS" | sed 's/-Werror[[^ ]]*//g')
 AX_CXX_COMPILE_STDCXX(20, [noext], [mandatory])
 CXXFLAGS="$saved_CXXFLAGS"
 PKG_PROG_PKG_CONFIG

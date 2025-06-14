@@ -80,19 +80,19 @@ int travel_flow_cost(PlayerType *player_ptr, const Pos2D &pos)
  * @param pos 隣接するマスの座標
  * @param current_cost 現在のマスのコスト
  * @param wall プレイヤーが壁の中にいるならばTRUE
- * @return 隣接するマスのコスト。移動不可ならばstd::nullopt
+ * @return 隣接するマスのコスト。移動不可ならばtl::nullopt
  */
-std::optional<int> travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int current_cost, bool wall)
+tl::optional<int> travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int current_cost, bool wall)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
     const auto &terrain = grid.get_terrain();
     if (!floor.contains(pos)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (floor.is_underground() && !(grid.info & CAVE_KNOWN)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const auto from_wall = (current_cost / TRAVEL_UNABLE);
@@ -105,7 +105,7 @@ std::optional<int> travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int 
     auto add_cost = 1;
     if (is_wall || can_move) {
         if (!wall || !from_wall) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         add_cost += TRAVEL_UNABLE;
@@ -211,7 +211,7 @@ bool Travel::can_travel_to(const FloorType &floor, const Pos2D &pos)
     return !is_marked || (!is_wall && !is_door);
 }
 
-const std::optional<Pos2D> &Travel::get_goal() const
+const tl::optional<Pos2D> &Travel::get_goal() const
 {
     return this->pos_goal;
 }

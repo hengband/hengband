@@ -79,7 +79,7 @@ class MonsterMoveGridDecider {
 public:
     MonsterMoveGridDecider() = default;
     virtual ~MonsterMoveGridDecider() = default;
-    virtual std::optional<Pos2D> decide_move_grid() const = 0;
+    virtual tl::optional<Pos2D> decide_move_grid() const = 0;
 
     /*!
      * @brief モンスターの移動先を決定する
@@ -158,14 +158,14 @@ public:
     {
     }
 
-    std::optional<Pos2D> decide_move_grid() const override
+    tl::optional<Pos2D> decide_move_grid() const override
     {
         const auto &floor = *this->player_ptr->current_floor_ptr;
         const auto &monster = floor.m_list[this->m_idx];
         const auto pos_target = monster.get_target_position();
         const auto t_m_idx = floor.get_grid(pos_target).m_idx;
         if (t_m_idx <= 0) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         const auto is_enemies = monster.is_hostile_to_melee(floor.m_list[t_m_idx]);
@@ -176,7 +176,7 @@ public:
             return pos_target;
         }
 
-        return std::nullopt;
+        return tl::nullopt;
     }
 
 private:
@@ -195,7 +195,7 @@ public:
     {
     }
 
-    std::optional<Pos2D> decide_move_grid() const override
+    tl::optional<Pos2D> decide_move_grid() const override
     {
         const auto &floor = *this->player_ptr->current_floor_ptr;
         const auto &monrace = floor.m_list[this->m_idx].get_monrace();
@@ -223,7 +223,7 @@ public:
         }
 
         if (room >= (8 * (this->player_ptr->chp + this->player_ptr->csp)) / (this->player_ptr->mhp + this->player_ptr->msp)) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         return find_hiding(this->player_ptr, this->m_idx);
@@ -245,7 +245,7 @@ public:
     {
     }
 
-    std::optional<Pos2D> decide_move_grid() const override
+    tl::optional<Pos2D> decide_move_grid() const override
     {
         const auto &floor = *this->player_ptr->current_floor_ptr;
         const auto &monster = floor.m_list[this->m_idx];
@@ -288,7 +288,7 @@ public:
     {
     }
 
-    std::optional<Pos2D> decide_move_grid() const override
+    tl::optional<Pos2D> decide_move_grid() const override
     {
         const auto &floor = *this->player_ptr->current_floor_ptr;
         const auto &monster = floor.m_list[this->m_idx];
@@ -296,7 +296,7 @@ public:
         const auto p_pos = this->player_ptr->get_position();
         const auto m_pos = monster.get_position();
         if (projectable(floor, p_pos, m_pos, p_pos)) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         const auto gf = monrace.get_grid_flow_type();
@@ -310,7 +310,7 @@ public:
         const auto can_kill_wall = monrace.feature_flags.has(MonsterFeatureType::KILL_WALL) && !monster.is_riding();
 
         auto best = 999;
-        std::optional<Pos2D> pos_move;
+        tl::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
             if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
@@ -320,7 +320,7 @@ public:
             // プレイヤーに隣接している場合最初のprojectableで除外されるため
             // ここで判定する必要はないはずだが、元のコードで判定しているので一応残しておく
             if (p_pos == pos_neighbor) {
-                return std::nullopt;
+                return tl::nullopt;
             }
 
             const auto &grid = floor.get_grid(pos_neighbor);
@@ -371,7 +371,7 @@ public:
     {
     }
 
-    std::optional<Pos2D> decide_move_grid() const override
+    tl::optional<Pos2D> decide_move_grid() const override
     {
         const auto &floor = *this->player_ptr->current_floor_ptr;
         const auto &monster = floor.m_list[this->m_idx];
@@ -380,7 +380,7 @@ public:
         const auto m_pos = monster.get_position();
 
         auto best = 999;
-        std::optional<Pos2D> pos_move;
+        tl::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
             if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
@@ -417,7 +417,7 @@ public:
     {
     }
 
-    std::optional<Pos2D> decide_move_grid() const override
+    tl::optional<Pos2D> decide_move_grid() const override
     {
         const auto &floor = *this->player_ptr->current_floor_ptr;
         const auto &monster = floor.m_list[this->m_idx];
@@ -425,7 +425,7 @@ public:
         const auto m_pos = monster.get_position();
 
         auto best = 0;
-        std::optional<Pos2D> pos_move;
+        tl::optional<Pos2D> pos_move;
         for (const auto &d : Direction::directions_8_reverse()) {
             const auto pos_neighbor = m_pos + d.vec();
             if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
@@ -517,10 +517,10 @@ MonsterSweepGrid::MonsterSweepGrid(PlayerType *player_ptr, MONSTER_IDX m_idx)
 
 /*!
  * @brief モンスターの移動方向のリストを返す
- * @return 移動方向のリスト。移動できない場合はstd::nullopt
+ * @return 移動方向のリスト。移動できない場合はtl::nullopt
  * @todo 分割したいが条件が多すぎて適切な関数名と詳細処理を追いきれない……
  */
-std::optional<MonsterMovementDirectionList> MonsterSweepGrid::get_movable_grid()
+tl::optional<MonsterMovementDirectionList> MonsterSweepGrid::get_movable_grid()
 {
     const auto deciders = MonsterMoveGridDecidersFactory::create_deciders(this->player_ptr, this->m_idx);
     auto pos_move = MonsterMoveGridDecider::evalute_deciders(deciders, this->player_ptr->get_position());

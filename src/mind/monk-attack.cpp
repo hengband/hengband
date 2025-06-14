@@ -276,7 +276,7 @@ bool double_attack(PlayerType *player_ptr)
     const auto has_monster = grid.has_monster();
     if (!has_monster) {
         msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
-        msg_print(nullptr);
+        msg_erase();
         return true;
     }
 

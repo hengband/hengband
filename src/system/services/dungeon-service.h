@@ -8,8 +8,8 @@
 #pragma once
 
 #include <memory>
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 #include <vector>
 
 enum class DungeonMessageFormat {
@@ -26,6 +26,6 @@ public:
     DungeonService() = delete;
     static int decide_gradiator_level();
     static int find_max_level();
-    static std::optional<std::string> check_first_entrance(DungeonId dungeon_id);
+    static tl::optional<std::string> check_first_entrance(DungeonId dungeon_id);
     static std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf);
 };

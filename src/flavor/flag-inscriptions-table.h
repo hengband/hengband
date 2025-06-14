@@ -1,6 +1,6 @@
 #pragma once
 
-#include <optional>
+#include <tl/optional.hpp>
 #include <vector>
 
 #include "locale/localized-string.h"
@@ -12,7 +12,7 @@ enum tr_type : int32_t;
 
 /*! オブジェクトの特性表示記号テーブルの構造体 / Structs and tables for Auto Inscription for flags */
 struct flag_insc_table {
-    flag_insc_table(LocalizedString &&inscription, tr_type flag, const std::optional<tr_type> &except_flag = std::nullopt)
+    flag_insc_table(LocalizedString &&inscription, tr_type flag, const tl::optional<tr_type> &except_flag = tl::nullopt)
         : inscription(std::move(inscription))
         , flag(flag)
         , except_flag(except_flag)
@@ -21,7 +21,7 @@ struct flag_insc_table {
 
     LocalizedString inscription;
     tr_type flag;
-    std::optional<tr_type> except_flag;
+    tl::optional<tr_type> except_flag;
 };
 
 extern const concptr game_inscriptions[MAX_GAME_INSCRIPTIONS];

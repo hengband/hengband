@@ -70,7 +70,7 @@ static std::vector<Pos2D> tgt_pt_prepare(PlayerType *player_ptr)
     return positions;
 }
 
-static std::optional<Pos2D> select_building_pos(const FloorType &floor)
+static tl::optional<Pos2D> select_building_pos(const FloorType &floor)
 {
     const auto is_building_pos = [&](const Pos2D &pos) {
         return floor.get_grid(pos).has(TerrainCharacteristics::BLDG);
@@ -81,7 +81,7 @@ static std::optional<Pos2D> select_building_pos(const FloorType &floor)
         ranges::to<std::vector>();
 
     if (pos_buildings.size() <= 1) {
-        return pos_buildings.empty() ? std::nullopt : std::make_optional(pos_buildings.front());
+        return pos_buildings.empty() ? tl::nullopt : tl::make_optional(pos_buildings.front());
     }
 
     CandidateSelector cs(_("施設を選択してください:", "Select a building:"), 15);
@@ -92,7 +92,7 @@ static std::optional<Pos2D> select_building_pos(const FloorType &floor)
     };
 
     const auto choice = cs.select(pos_buildings, describer);
-    return choice != pos_buildings.end() ? std::make_optional(*choice) : std::nullopt;
+    return choice != pos_buildings.end() ? tl::make_optional(*choice) : tl::nullopt;
 }
 
 /*!
@@ -196,7 +196,7 @@ void tgt_pt_info::move_to_symbol(PlayerType *player_ptr)
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @return 指定したらその座標、キャンセルしたらnullopt
  */
-std::optional<Pos2D> point_target(PlayerType *player_ptr)
+tl::optional<Pos2D> point_target(PlayerType *player_ptr)
 {
     tgt_pt_info info;
     info.pos = player_ptr->get_position();
@@ -208,7 +208,7 @@ std::optional<Pos2D> point_target(PlayerType *player_ptr)
 
     info.ch = 0;
     info.n = 0;
-    std::optional<Pos2D> pos_target;
+    tl::optional<Pos2D> pos_target;
     while ((info.ch != ESCAPE) && !pos_target) {
         prt(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."), 0, 0);
         auto move_fast = false;

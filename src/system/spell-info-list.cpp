@@ -15,7 +15,7 @@ SpellInfoList &SpellInfoList::get_instance()
     return instance;
 }
 
-std::optional<short> SpellInfoList::get_spell_id(RealmType realm, std::string_view spell_tag) const
+tl::optional<short> SpellInfoList::get_spell_id(RealmType realm, std::string_view spell_tag) const
 {
     const auto &spells = this->spell_list[enum2i(realm)];
     const auto result = std::find_if(spells.begin(), spells.end(), [spell_tag](auto &spell_info) {
@@ -23,7 +23,7 @@ std::optional<short> SpellInfoList::get_spell_id(RealmType realm, std::string_vi
     });
 
     if (result == spells.end()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
     return (*result).idx;
 }

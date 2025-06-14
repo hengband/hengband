@@ -17,7 +17,7 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include "util/point-2d.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 struct turn_flags {
     bool see_m;
@@ -72,4 +72,4 @@ turn_flags *init_turn_flags(bool is_riding, turn_flags *turn_flags_ptr);
 
 class Direction;
 MonsterMovementDirectionList get_enemy_approch_direction(MONSTER_IDX m_idx, const Pos2DVec &vec);
-std::optional<MonsterMovementDirectionList> get_moves_val(MONSTER_IDX m_idx, const Pos2DVec &vec);
+tl::optional<MonsterMovementDirectionList> get_moves_val(MONSTER_IDX m_idx, const Pos2DVec &vec);

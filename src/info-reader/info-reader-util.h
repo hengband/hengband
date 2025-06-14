@@ -4,9 +4,9 @@
 #include "util/bit-flags-calculator.h"
 #include <concepts>
 #include <map>
-#include <optional>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <unordered_map>
 #include <utility>
 
@@ -45,12 +45,12 @@ concept DictIndexedBy = requires(T t, Key k) {
  * @return 見つけたら定数を返す。見つからなければnulloptを返す
  */
 template <typename Key, DictIndexedBy<Key> Dict>
-std::optional<typename Dict::mapped_type> info_get_const(const Dict &dict, Key &&what)
+tl::optional<typename Dict::mapped_type> info_get_const(const Dict &dict, Key &&what)
 {
     if (auto it = dict.find(what); it != dict.end()) {
         return it->second;
     }
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 /*!

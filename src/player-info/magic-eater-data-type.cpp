@@ -34,26 +34,26 @@ std::vector<MagicEaterDataList::MagicEaterDatum> &MagicEaterDataList::get_item_g
     }
 }
 
-std::optional<BaseitemKey> MagicEaterDataList::check_magic_eater_spell_repeat() const
+tl::optional<BaseitemKey> MagicEaterDataList::check_magic_eater_spell_repeat() const
 {
-    short sn;
-    if (!repeat_pull(&sn)) {
-        return std::nullopt;
+    const auto code = repeat_pull();
+    if (!code) {
+        return tl::nullopt;
     }
 
     auto tval = ItemKindType::NONE;
-    if (EATER_STAFF_BASE <= sn && sn < EATER_STAFF_BASE + EATER_ITEM_GROUP_SIZE) {
+    if (EATER_STAFF_BASE <= code && code < EATER_STAFF_BASE + EATER_ITEM_GROUP_SIZE) {
         tval = ItemKindType::STAFF;
-    } else if (EATER_WAND_BASE <= sn && sn < EATER_WAND_BASE + EATER_ITEM_GROUP_SIZE) {
+    } else if (EATER_WAND_BASE <= code && code < EATER_WAND_BASE + EATER_ITEM_GROUP_SIZE) {
         tval = ItemKindType::WAND;
-    } else if (EATER_ROD_BASE <= sn && sn < EATER_ROD_BASE + EATER_ITEM_GROUP_SIZE) {
+    } else if (EATER_ROD_BASE <= code && code < EATER_ROD_BASE + EATER_ITEM_GROUP_SIZE) {
         tval = ItemKindType::ROD;
     }
 
     const auto &item_group = this->get_item_group(tval);
-    auto sval = sn % EATER_ITEM_GROUP_SIZE;
+    auto sval = *code % EATER_ITEM_GROUP_SIZE;
     if (sval >= static_cast<int>(item_group.size())) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     auto &item = item_group[sval];
@@ -66,7 +66,7 @@ std::optional<BaseitemKey> MagicEaterDataList::check_magic_eater_spell_repeat() 
             return BaseitemKey(tval, sval);
         }
 
-        return std::nullopt;
+        return tl::nullopt;
     }
     case ItemKindType::STAFF:
     case ItemKindType::WAND:
@@ -74,9 +74,9 @@ std::optional<BaseitemKey> MagicEaterDataList::check_magic_eater_spell_repeat() 
             return BaseitemKey(tval, sval);
         }
 
-        return std::nullopt;
+        return tl::nullopt;
     default:
-        return std::nullopt;
+        return tl::nullopt;
     }
 }
 

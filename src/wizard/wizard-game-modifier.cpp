@@ -132,7 +132,7 @@ void wiz_complete_quest(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     if (!floor.is_in_quest()) {
         msg_print("No current quest");
-        msg_print(nullptr);
+        msg_erase();
         return;
     }
 
@@ -155,7 +155,7 @@ void wiz_restore_monster_max_num(MonraceId monrace_id)
     }
 
     auto &monrace = monraces.get_monrace(monrace_id);
-    std::optional<int> max_num;
+    tl::optional<int> max_num;
     if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
         max_num = MAX_UNIQUE_NUM;
     } else if (monrace.population_flags.has(MonsterPopulationType::NAZGUL)) {
@@ -164,7 +164,7 @@ void wiz_restore_monster_max_num(MonraceId monrace_id)
 
     if (!max_num) {
         msg_print(_("出現数に制限がないモンスターです。", "This monster can appear any time."));
-        msg_print(nullptr);
+        msg_erase();
         return;
     }
 
@@ -175,5 +175,5 @@ void wiz_restore_monster_max_num(MonraceId monrace_id)
     std::stringstream ss;
     ss << monrace.name << _("の出現数を復元しました。", " can appear again now.");
     msg_print(ss.str());
-    msg_print(nullptr);
+    msg_erase();
 }

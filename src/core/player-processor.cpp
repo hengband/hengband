@@ -65,7 +65,7 @@ static void process_fishing(PlayerType *player_ptr)
         const auto wild_level = WildernessGrids::get_instance().get_player_grid().get_level();
         const auto level = floor.is_underground() ? floor.dun_level : wild_level;
         const auto r_idx = get_mon_num(player_ptr, 0, level, PM_NONE);
-        msg_print(nullptr);
+        msg_erase();
         if (MonraceList::is_valid(r_idx) && one_in_(2)) {
             const auto pos = player_ptr->get_neighbor(player_ptr->fishing_dir);
             if (auto m_idx = place_specific_monster(player_ptr, pos.y, pos.x, r_idx, PM_NO_KAGE)) {
@@ -392,7 +392,7 @@ void process_player(PlayerType *player_ptr)
                 };
                 rfu.set_flags(flags_swrf);
                 msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
-                msg_print(nullptr);
+                msg_erase();
                 player_ptr->timewalk = false;
                 player_ptr->energy_need = ENERGY_NEED();
 

@@ -151,6 +151,10 @@ void display_monster_constitutions(lore_type *lore_ptr)
     if (lore_ptr->misc_flags.has(MonsterMiscType::RIDING)) {
         hook_c_roff(TERM_SLATE, format(_("%s^に乗ることができる。", "%s^ is suitable for riding.  "), Who::who(lore_ptr->msex).data()));
     }
+
+    if (lore_ptr->misc_flags.has(MonsterMiscType::STALKER)) {
+        hook_c_roff(TERM_L_RED, format(_("%s^はプレイヤーの背後に忍び寄ることがある。", "%s^ stalks the player.  "), Who::who(lore_ptr->msex).data()));
+    }
 }
 
 void display_monster_concrete_weakness(lore_type *lore_ptr)

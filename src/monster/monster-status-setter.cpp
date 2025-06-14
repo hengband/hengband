@@ -342,30 +342,18 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     auto &world = AngbandWorld::get_instance();
+    const auto &monrace = monster.get_real_monrace();
     if (world.timewalk_m_idx) {
         return false;
     }
 
     if (vs_player) {
         const auto m_name = monster_desc(player_ptr, monster, 0);
-        std::string mes;
-        switch (monster.r_idx) {
-        case MonraceId::DIO:
-            mes = _("「『ザ・ワールド』！　時は止まった！」", format("%s yells 'The World! Time has stopped!'", m_name.data()));
-            break;
-        case MonraceId::WONG:
-            mes = _("「時よ！」", format("%s yells 'Time!'", m_name.data()));
-            break;
-        case MonraceId::DIAVOLO:
-            mes = _("『キング・クリムゾン』！", format("%s yells 'King Crison!'", m_name.data()));
-            break;
-        default:
-            mes = format(_("%sは時を止めた！", "%s stops the time!"), m_name.data());
-            break;
+        const auto time_message = monrace.get_message(m_name, MonsterMessageType::MESSAGE_TIMESTOP);
+        if (time_message) {
+            msg_print(*time_message);
         }
-
-        msg_print(mes);
-        msg_print(nullptr);
+        msg_erase();
     }
 
     world.timewalk_m_idx = m_idx;
@@ -400,19 +388,12 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
     auto should_output_message = floor.has_los_at(m_pos);
     should_output_message &= projectable(floor, p_pos, p_pos, m_pos);
     if (vs_player || should_output_message) {
-        std::string mes;
-        switch (monster.r_idx) {
-        case MonraceId::DIAVOLO:
-            mes = _("これが我が『キング・クリムゾン』の能力！　『時間を消し去って』飛び越えさせた…！！",
-                "This is the ability of my 'King Crimson'! 'Erase the time' and let it jump over... !!");
-            break;
-        default:
-            mes = _("「時は動きだす…」", "You feel time flowing around you once more.");
-            break;
+        const auto m_name = monster_desc(player_ptr, monster, 0);
+        const auto time_message = monrace.get_message(m_name, MonsterMessageType::MESSAGE_TIMESTART);
+        if (time_message) {
+            msg_print(*time_message);
         }
-
-        msg_print(mes);
-        msg_print(nullptr);
+        msg_erase();
     }
 
     handle_stuff(player_ptr);

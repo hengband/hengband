@@ -34,7 +34,7 @@
 #include "view/display-store.h"
 #include "view/object-describer.h"
 #include <fmt/format.h>
-#include <optional>
+#include <tl/optional.hpp>
 
 /*!
  * @brief プレイヤーが売却する時の確認プロンプト / Prompt to sell for the price
@@ -42,7 +42,7 @@
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @return 売るなら(true,売値)、売らないなら(false,0)のタプル
  */
-static std::optional<int> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
+static tl::optional<int> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
 {
     auto price_ask = price_item(player_ptr, o_ptr->calc_price(), ot_ptr->inflate, true, store_num);
 
@@ -53,7 +53,7 @@ static std::optional<int> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_p
         return price_ask;
     }
 
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 /*!
@@ -125,7 +125,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
     if ((store_num != StoreSaleType::HOME) && (store_num != StoreSaleType::MUSEUM)) {
         const auto item_name = describe_flavor(player_ptr, selling_item, 0);
         msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), item_name.data(), index_to_label(i_idx));
-        msg_print(nullptr);
+        msg_erase();
 
         auto res = prompt_to_sell(player_ptr, &selling_item, store_num);
         placed = res.has_value();

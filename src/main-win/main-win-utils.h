@@ -5,9 +5,9 @@
  */
 
 #include <filesystem>
-#include <optional>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <vector>
 #include <windows.h>
 
@@ -27,7 +27,7 @@ public:
             this->buf = std::vector<WCHAR>(size + 1);
             if (::MultiByteToWideChar(932, 0, src.data(), src.length(), this->buf->data(), this->buf->size()) == 0) {
                 // fail
-                this->buf = std::nullopt;
+                this->buf = tl::nullopt;
             }
         }
     }
@@ -43,7 +43,7 @@ public:
     }
 
 protected:
-    std::optional<std::vector<WCHAR>> buf;
+    tl::optional<std::vector<WCHAR>> buf;
 };
 
 /*!
@@ -62,7 +62,7 @@ public:
             this->buf = std::vector<char>(size + 1);
             if (::WideCharToMultiByte(932, 0, src, -1, this->buf->data(), this->buf->size(), NULL, NULL) == 0) {
                 // fail
-                this->buf = std::nullopt;
+                this->buf = tl::nullopt;
             }
         }
     }
@@ -78,10 +78,10 @@ public:
     }
 
 protected:
-    std::optional<std::vector<char>> buf;
+    tl::optional<std::vector<char>> buf;
 };
 
 bool is_already_running();
 void save_screen_as_html(HWND hWnd);
 void open_dir_in_explorer(const std::filesystem::path &path);
-std::optional<std::filesystem::path> get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &path_dir, const std::filesystem::path &path_file, DWORD max_name_size);
+tl::optional<std::filesystem::path> get_open_filename(OPENFILENAMEW *ofn, const std::filesystem::path &path_dir, const std::filesystem::path &path_file, DWORD max_name_size);

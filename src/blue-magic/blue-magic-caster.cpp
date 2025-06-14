@@ -97,14 +97,14 @@ static bool cast_blue_hand_doom(PlayerType *player_ptr, bmc_type *bmc_ptr)
     return true;
 }
 
-/* 効果が抵抗された場合、返される std::optional には値がありません。*/
-static std::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr, const Pos2D &pos)
+/* 効果が抵抗された場合、返される tl::optional には値がありません。*/
+static tl::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr, const Pos2D &pos)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
     const auto p_pos = player_ptr->get_position();
     if (!grid.has_monster() || !grid.has_los() || !projectable(floor, p_pos, p_pos, pos)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const auto &monster = floor.m_list[grid.m_idx];
@@ -120,7 +120,7 @@ static std::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr,
         }
 
         msg_format(_("%sには効果がなかった！", "%s is unaffected!"), m_name.data());
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (monrace.level <= randint1(100)) {
@@ -132,7 +132,7 @@ static std::optional<std::string> exe_blue_teleport_back(PlayerType *player_ptr,
     }
 
     msg_format(_("%sには耐性がある！", "%s resists!"), m_name.data());
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 static bool cast_blue_teleport_back(PlayerType *player_ptr)

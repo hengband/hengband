@@ -520,7 +520,8 @@
                                 "EMPTY_MIND",
                                 "WEIRD_MIND",
                                 "DIMINISH_MAX_DAMAGE",
-                                "BUNBUN_STRIKER"
+                                "BUNBUN_STRIKER",
+                                "STALKER"
                             ]
                         }
                     },
@@ -687,6 +688,72 @@
                             "en": {
                                 "type": "string",
                                 "description": "English Flavor Text"
+                            }
+                        }
+                    },
+                    "message": {
+                        "type": "array",
+                        "description": "メッセージ",
+                        "items": {
+                            "type": "object",
+                            "maxItems": 3,
+                            "additionalProperties": false,
+                            "required": [
+                                "action",
+                                "chance",
+                                "message"
+                            ],
+                            "properties": {
+                                "action": {
+                                    "type": "string",
+                                    "description": "メッセージトリガーとなる行動",
+                                    "enum": [
+                                        "SPEAK_ALL",
+                                        "SPEAK_BATTLE",
+                                        "SPEAK_FEAR",
+                                        "SPEAK_FRIEND",
+                                        "SPEAK_DEATH",
+                                        "SPEAK_SPAWN",
+                                        "WALK_CLOSERANGE",
+                                        "WALK_MIDDLERANGE",
+                                        "WALK_LONGRANGE",
+                                        "MESSAGE_STALKER",
+                                        "MESSAGE_REFLECT",
+                                        "MESSAGE_TIMESTOP",
+                                        "MESSAGE_TIMESTART",
+                                        "MESSAGE_BREATH_SOUND",
+                                        "MESSAGE_BREATH_SHARDS",
+                                        "MESSAGE_BREATH_FORCE"
+                                    ]
+                                },
+                                "chance": {
+                                    "type": "integer",
+                                    "description": "メッセージ発生率。1/chanceで機能する。",
+                                    "minimum": 1,
+                                    "maximum": 100
+                                },
+                                "use_name": {
+                                    "type": "boolean",
+                                    "description": "メッセージの先頭にモンスター名を表示する。"
+                                },
+                                "message": {
+                                    "type": "object",
+                                    "description": "メッセージ",
+                                    "additionalProperties": false,
+                                    "required": [
+                                        "ja"
+                                    ],
+                                    "properties": {
+                                        "ja": {
+                                            "type": "string",
+                                            "description": "日本語メッセージ"
+                                        },
+                                        "en": {
+                                            "type": "string",
+                                            "description": "English Message"
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

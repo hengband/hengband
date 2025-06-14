@@ -226,7 +226,7 @@ const std::unordered_map<std::string_view, MonsterResistanceType> r_info_flagsr 
     { "RES_FIRE", MonsterResistanceType::RESIST_FIRE },
     { "IM_FIRE", MonsterResistanceType::IMMUNE_FIRE },
     { "HURT_COLD", MonsterResistanceType::HURT_COLD },
-    { "RES_COLD", MonsterResistanceType::RESIST_FIRE },
+    { "RES_COLD", MonsterResistanceType::RESIST_COLD },
     { "IM_COLD", MonsterResistanceType::IMMUNE_COLD },
     { "HURT_POIS", MonsterResistanceType::HURT_POISON },
     { "RES_POIS", MonsterResistanceType::RESIST_POISON },
@@ -408,6 +408,25 @@ const std::unordered_map<std::string_view, MonsterSpeakType> r_info_speak_flags 
     { "SPEAK_SPAWN", MonsterSpeakType::SPEAK_SPAWN },
 };
 
+const std::unordered_map<std::string_view, MonsterMessageType> r_info_message_flags = {
+    { "SPEAK_ALL", MonsterMessageType::SPEAK_ALL },
+    { "SPEAK_BATTLE", MonsterMessageType::SPEAK_BATTLE },
+    { "SPEAK_FEAR", MonsterMessageType::SPEAK_FEAR },
+    { "SPEAK_FRIEND", MonsterMessageType::SPEAK_FRIEND },
+    { "SPEAK_DEATH", MonsterMessageType::SPEAK_DEATH },
+    { "SPEAK_SPAWN", MonsterMessageType::SPEAK_SPAWN },
+    { "WALK_CLOSERANGE", MonsterMessageType::WALK_CLOSERANGE },
+    { "WALK_MIDDLERANGE", MonsterMessageType::WALK_MIDDLERANGE },
+    { "WALK_LONGRANGE", MonsterMessageType::WALK_LONGRANGE },
+    { "MESSAGE_STALKER", MonsterMessageType::MESSAGE_STALKER },
+    { "MESSAGE_REFLECT", MonsterMessageType::MESSAGE_REFLECT },
+    { "MESSAGE_TIMESTOP", MonsterMessageType::MESSAGE_TIMESTOP },
+    { "MESSAGE_TIMESTART", MonsterMessageType::MESSAGE_TIMESTART },
+    { "MESSAGE_BREATH_SOUND", MonsterMessageType::MESSAGE_BREATH_SOUND },
+    { "MESSAGE_BREATH_SHARDS", MonsterMessageType::MESSAGE_BREATH_SHARDS },
+    { "MESSAGE_BREATH_FORCE", MonsterMessageType::MESSAGE_BREATH_FORCE },
+};
+
 const std::unordered_map<std::string_view, MonsterBrightnessType> r_info_brightness_flags = {
     { "HAS_LITE_1", MonsterBrightnessType::HAS_LITE_1 },
     { "SELF_LITE_1", MonsterBrightnessType::SELF_LITE_1 },
@@ -440,6 +459,7 @@ const std::unordered_map<std::string_view, MonsterMiscType> r_info_misc_flags = 
     { "QUESTOR", MonsterMiscType::QUESTOR },
     { "EMPTY_MIND", MonsterMiscType::EMPTY_MIND },
     { "WEIRD_MIND", MonsterMiscType::WEIRD_MIND },
+    { "STALKER", MonsterMiscType::STALKER },
 };
 
 const std::unordered_map<std::string_view, MonsterSex> r_info_sex = {

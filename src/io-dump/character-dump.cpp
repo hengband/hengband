@@ -346,7 +346,7 @@ static void dump_aux_monsters(FILE *fff)
 #endif
 
     std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
-    fmt::println(fff, _("\n《上位{}体のユニーク・モンスター", "\n< Unique monsters top {} >"), std::min(uniq_total, 10));
+    fmt::println(fff, _("\n《上位{}体のユニーク・モンスター》", "\n< Unique monsters top {} >"), std::min(uniq_total, 10));
     for (auto it = monrace_ids.rbegin(); it != monrace_ids.rend() && std::distance(monrace_ids.rbegin(), it) < 10; it++) {
         const auto &monrace = monraces.get_monrace(*it);
         const auto defeat_level = monrace.defeat_level;
@@ -562,6 +562,7 @@ static std::string get_check_sum()
         &dungeons_header,
         &egos_header,
         &monraces_header,
+        &monster_messages_header,
         &terrains_header,
         &vaults_header,
     };
@@ -582,7 +583,7 @@ static std::string get_check_sum()
  */
 void make_character_dump(PlayerType *player_ptr, FILE *fff)
 {
-    TermCenteredOffsetSetter tos(MAIN_TERM_MIN_COLS, std::nullopt);
+    TermCenteredOffsetSetter tos(MAIN_TERM_MIN_COLS, tl::nullopt);
 
     constexpr auto fmt = _("  [{} キャラクタ情報]\n", "  [{} Character Dump]\n");
     fmt::println(fff, fmt, AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL));

@@ -11,29 +11,24 @@ static int repeat_counter = 0;
 static int repeat_index = 0;
 
 /* Saved "stuff" */
-static COMMAND_CODE repeat_keys[REPEAT_MAX];
+static short repeat_keys[REPEAT_MAX];
 
-void repeat_push(COMMAND_CODE what)
+void repeat_push(short command)
 {
     if (repeat_counter == REPEAT_MAX) {
         return;
     }
 
-    repeat_keys[repeat_counter++] = what;
+    repeat_keys[repeat_counter++] = command;
     ++repeat_index;
 }
 
-bool repeat_pull(COMMAND_CODE *what)
+tl::optional<short> repeat_pull()
 {
-    if (repeat_index == repeat_counter) {
-        return false;
-    }
-
-    *what = repeat_keys[repeat_index++];
-    return true;
+    return repeat_index == repeat_counter ? tl::nullopt : tl::make_optional(repeat_keys[repeat_index++]);
 }
 
-void repeat_check(void)
+void repeat_check()
 {
     if (command_cmd == ESCAPE) {
         return;
@@ -48,16 +43,14 @@ void repeat_check(void)
         return;
     }
 
-    COMMAND_CODE what;
     if (command_cmd == 'n') {
         repeat_index = 0;
-        if (repeat_pull(&what)) {
-            command_cmd = what;
+        if (const auto code = repeat_pull(); code) {
+            command_cmd = *code;
         }
     } else {
         repeat_counter = 0;
         repeat_index = 0;
-        what = command_cmd;
-        repeat_push(what);
+        repeat_push(command_cmd);
     }
 }

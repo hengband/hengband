@@ -3,8 +3,8 @@
 #include "floor/geometry.h"
 #include "game-option/keymap-directory-getter.h"
 #include "system/angband.h"
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 
 extern bool use_menu;
 
@@ -48,7 +48,7 @@ private:
     void change_shopping_command() const;
     int get_caret_command() const;
     void sweep_confirmation_equipments();
-    void confirm_command(const std::optional<std::string> &inscription, const int caret_command);
+    void confirm_command(const tl::optional<std::string> &inscription, const int caret_command);
 
     void make_commands_frame() const;
     std::string switch_special_menu_condition(const SpecialMenuContent &special_menu) const;

@@ -106,9 +106,9 @@ static void decide_enemy_approch_direction(PlayerType *player_ptr, MONSTER_IDX m
  * Calculate the direction to the next enemy
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
- * @return 方向が確定した場合移動方向のリスト、接近する敵がそもそもいない場合std::nullopt
+ * @return 方向が確定した場合移動方向のリスト、接近する敵がそもそもいない場合tl::nullopt
  */
-static std::optional<MonsterMovementDirectionList> get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx)
+static tl::optional<MonsterMovementDirectionList> get_enemy_dir(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[m_idx];
@@ -135,7 +135,7 @@ static std::optional<MonsterMovementDirectionList> get_enemy_dir(PlayerType *pla
         decide_enemy_approch_direction(player_ptr, m_idx, start, plus, &y, &x);
 
         if ((x == 0) && (y == 0)) {
-            return std::nullopt;
+            return tl::nullopt;
         }
     }
 
@@ -185,13 +185,13 @@ static bool random_walk(PlayerType *player_ptr, const MonsterEntity &monster)
  * @brief ペットの移動方向のリストを決定する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @return ペットであれば移動方向のリスト、そうでなければstd::nullopt
+ * @return ペットであれば移動方向のリスト、そうでなければtl::nullopt
  */
-static std::optional<MonsterMovementDirectionList> decide_pet_movement_direction(PlayerType *player_ptr, MONSTER_IDX m_idx)
+static tl::optional<MonsterMovementDirectionList> decide_pet_movement_direction(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     if (!monster.is_pet()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (const auto mmdl = get_enemy_dir(player_ptr, m_idx)) {
@@ -222,9 +222,9 @@ static std::optional<MonsterMovementDirectionList> decide_pet_movement_direction
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param aware モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
- * @return 移動方向のリスト。移動しない場合はstd::nullopt
+ * @return 移動方向のリスト。移動しない場合はtl::nullopt
  */
-std::optional<MonsterMovementDirectionList> decide_monster_movement_direction(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware)
+tl::optional<MonsterMovementDirectionList> decide_monster_movement_direction(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     const auto &monrace = monster.get_monrace();

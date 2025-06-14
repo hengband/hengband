@@ -9,6 +9,7 @@
 #include "player-ability/player-ability-types.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-message.h"
 #include "term/gameterm.h"
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
@@ -410,6 +411,55 @@ static errr set_mon_skills(const nlohmann::json &skill_data, MonraceDefinition &
 }
 
 /*!
+ * @brief JSON Objectからモンスターのメッセージをセットする
+ * @param message_data メッセージ情報の格納されたJSON Object
+ * @param monrace 保管先のモンスター種族構造体
+ * @return エラーコード
+ */
+static errr set_mon_message(const nlohmann::json &message_data, MonraceDefinition &monrace)
+{
+    if (message_data.is_null()) {
+        return PARSE_ERROR_NONE;
+    }
+    if (!message_data.is_array()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    for (auto &message : message_data.items()) {
+        const auto &action_str = message.value()["action"];
+        if (action_str.is_null()) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+        const auto action = r_info_message_flags.find(action_str.get<std::string>());
+        if (action == r_info_message_flags.end()) {
+            return PARSE_ERROR_INVALID_FLAG;
+        }
+
+        int chance;
+        if (auto err = info_set_integer(message.value()["chance"], chance, true, Range(1, 100))) {
+            return err;
+        }
+
+        bool use_name = true;
+        const auto use_name_iter = message.value().find("use_name");
+        if (use_name_iter != message.value().end()) {
+            const auto &use_name_data = use_name_iter.value();
+            if (auto err = info_set_bool(use_name_data, use_name, false)) {
+                return err;
+            }
+        }
+
+        std::string str;
+        if (auto err = info_set_string(message.value()["message"], str, false)) {
+            return err;
+        }
+
+        MonraceMessageList::get_instance().emplace((int)monrace.idx, action->second, chance, use_name, str);
+    }
+    return PARSE_ERROR_NONE;
+}
+
+/*!
  * @brief モンスター種族情報(JSON Object)のパース関数
  * @param mon_data モンスターデータの格納されたJSON Object
  * @param head ヘッダ構造体
@@ -531,6 +581,11 @@ errr parse_monraces_info(nlohmann::json &mon_data, angband_header *)
     err = info_set_string(mon_data["flavor"], monrace.text, false);
     if (err) {
         msg_format(_("モンスター説明文読込失敗。ID: '%d'。", "Failed to load monster flavor text. ID: '%d'."), error_idx);
+        return err;
+    }
+    err = set_mon_message(mon_data["message"], monrace);
+    if (err) {
+        msg_format(_("モンスターメッセージ読込失敗。ID: '%d'。", "Failed to load monster message. ID: '%d'."), error_idx);
         return err;
     }
 

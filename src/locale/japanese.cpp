@@ -535,33 +535,33 @@ static bool utf8_to_sys(std::string_view str, char *sys_str_buffer, size_t sys_s
  * @brief システムの文字コードからUTF-8に変換する
  * @param str システムの文字コードの文字列
  * @return UTF-8に変換した文字列
- *         変換に失敗した場合はstd::nullopt
+ *         変換に失敗した場合はtl::nullopt
  */
-std::optional<std::string> sys_to_utf8(std::string_view str)
+tl::optional<std::string> sys_to_utf8(std::string_view str)
 {
 #if defined(EUC)
     std::string utf8str(str.length() * 2 + 1, '\0');
     const auto len = euc_to_utf8(str.data(), str.length(), utf8str.data(), utf8str.size());
 
-    return (len >= 0) ? std::make_optional(std::move(utf8str.erase(len))) : std::nullopt;
+    return (len >= 0) ? tl::make_optional(std::move(utf8str.erase(len))) : tl::nullopt;
 #elif defined(SJIS) && defined(WINDOWS)
     /* SJIS(CP932) -> UTF-16 */
     std::vector<WCHAR> utf16buf(str.length());
     const auto utf16_len = MultiByteToWideChar(932, 0, str.data(), str.size(), utf16buf.data(), utf16buf.size());
     if (utf16_len == 0) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     /* UTF-16 -> UTF-8 */
     std::vector<char> utf8buf(str.length() * 2 + 1);
     const auto utf8_len = WideCharToMultiByte(CP_UTF8, 0, utf16buf.data(), utf16_len, utf8buf.data(), utf8buf.size(), nullptr, nullptr);
     if (utf8_len == 0) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
-    return std::make_optional<std::string>(utf8buf.data(), utf8_len);
+    return tl::make_optional<std::string>(utf8buf.data(), utf8_len);
 #else
-    return std::nullopt;
+    return tl::nullopt;
 #endif
 }
 
@@ -570,18 +570,18 @@ std::optional<std::string> sys_to_utf8(std::string_view str)
  *
  * @param str UTF-8の文字列
  * @return システムの文字コードに変換した文字列
- *         変換に失敗した場合はstd::nullopt
+ *         変換に失敗した場合はtl::nullopt
  */
-std::optional<std::string> utf8_to_sys(std::string_view str)
+tl::optional<std::string> utf8_to_sys(std::string_view str)
 {
     // UTF-8 -> SJIS or EUC でバイト長が増えることはないので、終端文字分を含めて元の文字列と同じ長さを確保しておけばよい
     std::vector<char> sys_str_buf(str.length() + 1);
 
     if (!utf8_to_sys(str, sys_str_buf.data(), sys_str_buf.size())) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
-    return std::make_optional<std::string>(sys_str_buf.data());
+    return tl::make_optional<std::string>(sys_str_buf.data());
 }
 
 /*!
@@ -602,7 +602,7 @@ size_t guess_convert_to_system_encoding(char *strbuf, int buflen)
         const auto sys_str = utf8_to_sys(strbuf);
         if (!sys_str || std::ssize(*sys_str) >= buflen) {
             msg_print("警告:文字コードの変換に失敗しました");
-            msg_print(nullptr);
+            msg_erase();
             return std::string_view(strbuf).length();
         }
 

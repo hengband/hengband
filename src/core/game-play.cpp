@@ -389,7 +389,7 @@ static void process_game_turn(PlayerType *player_ptr)
             wipe_monsters_list(player_ptr);
         }
 
-        msg_print(nullptr);
+        msg_erase();
         load_game = false;
         decide_arena_death(player_ptr);
         if (player_ptr->is_dead) {

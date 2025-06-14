@@ -15,9 +15,9 @@
 #include "system/angband.h"
 #include "term/term-color-types.h"
 #include "util/flag-group.h"
-#include <optional>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -87,7 +87,7 @@ struct lore_type {
     bool is_details_known() const;
     bool is_blow_damage_known(int num_blow) const;
 
-    std::optional<std::vector<lore_msg>> build_kill_unique_description() const;
+    tl::optional<std::vector<lore_msg>> build_kill_unique_description() const;
     std::string build_revenge_description(bool has_defeated) const;
     std::vector<lore_msg> build_speed_description() const;
 

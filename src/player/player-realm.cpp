@@ -116,7 +116,7 @@ std::string_view PlayerRealm::get_subinfo(RealmType realm)
     THROW_EXCEPTION(std::invalid_argument, format("Invalid realm: %d", enum2i(realm)));
 }
 
-const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, std::optional<PlayerClassType> pclass)
+const magic_type &PlayerRealm::get_spell_info(RealmType realm, int spell_id, tl::optional<PlayerClassType> pclass)
 {
     if (spell_id < 0 || 32 <= spell_id) {
         THROW_EXCEPTION(std::invalid_argument, format("Invalid spell id: %d", spell_id));

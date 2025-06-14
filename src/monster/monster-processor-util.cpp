@@ -81,12 +81,12 @@ MonsterMovementDirectionList get_enemy_approch_direction(MONSTER_IDX m_idx, cons
 /*!
  * @brief MonsterSweepGrid::get_movable_grid() における移動の方向を取得する
  * @param vec 移動方向のベクトル
- * @return モンスターの移動方向。vec が (0, 0) の場合は std::nullopt を返す
+ * @return モンスターの移動方向。vec が (0, 0) の場合は tl::nullopt を返す
  */
-std::optional<MonsterMovementDirectionList> get_moves_val(MONSTER_IDX m_idx, const Pos2DVec &vec)
+tl::optional<MonsterMovementDirectionList> get_moves_val(MONSTER_IDX m_idx, const Pos2DVec &vec)
 {
     if (vec == Pos2DVec(0, 0)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     const Pos2DVec vec_abs(std::abs(vec.y), std::abs(vec.x));

@@ -758,7 +758,7 @@ bool ItemEntity::is_corpse() const
 
 bool ItemEntity::is_inscribed() const
 {
-    return this->inscription != std::nullopt;
+    return this->inscription != tl::nullopt;
 }
 
 /*!

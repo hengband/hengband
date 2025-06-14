@@ -27,7 +27,7 @@
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
-#include <optional>
+#include <tl/optional.hpp>
 
 /*!
  * @brief キャラクタのビジュアルIDを変更する際の対象指定
@@ -37,12 +37,12 @@
  * @return 新しいビジュアルID
  */
 template <typename T>
-static std::optional<T> input_new_visual_id(int i, T initial_visual_id, int max)
+static tl::optional<T> input_new_visual_id(int i, T initial_visual_id, int max)
 {
     if (iscntrl(i)) {
         const auto new_visual_id = input_integer("Input new number", 0, max - 1, initial_visual_id);
         if (!new_visual_id) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         return static_cast<T>(*new_visual_id);
@@ -319,7 +319,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    std::optional<short> new_baseitem_id;
+                    tl::optional<short> new_baseitem_id;
                     const auto previous_bi_id = bi_id;
                     while (true) {
                         new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<short>(baseitems.size()));
@@ -405,7 +405,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    std::optional<short> new_terrain_id;
+                    tl::optional<short> new_terrain_id;
                     const auto previous_terrain_id = terrain_id;
                     while (true) {
                         new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<short>(TerrainList::get_instance().size()));

@@ -2,8 +2,8 @@
 
 #include "realm/realm-hex-numbers.h"
 #include "system/angband.h"
-#include <optional>
 #include <string_view>
+#include <tl/optional.hpp>
 #include <utility>
 
 enum class SpellHexRevengeType : byte {
@@ -45,7 +45,7 @@ private:
     std::vector<int> casting_spells;
     std::shared_ptr<spell_hex_data_type> spell_hex_data;
 
-    std::pair<bool, std::optional<char>> select_spell_stopping(std::string_view prompt);
+    std::pair<bool, tl::optional<char>> select_spell_stopping(std::string_view prompt);
     void display_casting_spells_list();
     bool process_mana_cost(const bool need_restart);
     bool check_restart();

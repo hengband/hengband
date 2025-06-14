@@ -225,7 +225,7 @@ static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
     }
 
     msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
-    msg_print(nullptr);
+    msg_erase();
 }
 
 /**
@@ -233,7 +233,7 @@ static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
  */
 void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool visual_only, short direct_k_idx)
 {
-    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, std::nullopt);
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, tl::nullopt);
 
     short object_old, object_top;
     std::vector<short> grp_idx;

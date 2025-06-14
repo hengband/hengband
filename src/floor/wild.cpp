@@ -615,14 +615,14 @@ void wilderness_gen_small(PlayerType *player_ptr)
  * @param xmin 広域地形マップを読み込みたいx座標の開始位置
  * @param xmax 広域地形マップを読み込みたいx座標の終了位置
  * @param pos_parsing 解析対象の座標
- * @return エラーコードと座標のペア。エラー時は座標は無効値。Dタグの時だけ更新の可能性があり、それ以外はpos_parsingをそのまま返却
+ * @return 解析結果の座標。解析エラー時はエラーの種類。座標はDタグの時だけ更新の可能性があり、それ以外はpos_parsingをそのまま返却する。
  */
-std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *line, int xmin, int xmax, const Pos2D &pos_parsing)
+tl::expected<Pos2D, parse_error_type> parse_line_wilderness(char *line, int xmin, int xmax, const Pos2D &pos_parsing)
 {
     auto &letters = WildernessLetters::get_instance();
     letters.initialize();
     if (!std::string_view(line).starts_with("W:")) {
-        return { PARSE_ERROR_GENERIC, std::nullopt };
+        return tl::unexpected(PARSE_ERROR_GENERIC);
     }
 
     Pos2D pos = pos_parsing;
@@ -631,12 +631,12 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         /* Process "W:F:<letter>:<terrain>:<town>:<road>:<name> */
 #ifdef JP
     case 'E':
-        return { PARSE_ERROR_NONE, pos_parsing };
+        return pos_parsing;
     case 'F':
     case 'J':
 #else
     case 'J':
-        return { PARSE_ERROR_NONE, pos_parsing };
+        return pos_parsing;
     case 'F':
     case 'E':
 #endif
@@ -644,7 +644,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         char *zz[33];
         const auto num = tokenize(line + 4, 6, zz, 0);
         if (num <= 1) {
-            return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
+            return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
 
         const int index = zz[0][0];
@@ -697,19 +697,19 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
 
         char *zz[33];
         if (tokenize(line + 4, 2, zz, 0) != 2) {
-            return { PARSE_ERROR_TOO_FEW_ARGUMENTS, std::nullopt };
+            return tl::unexpected(PARSE_ERROR_TOO_FEW_ARGUMENTS);
         }
 
         wilderness.set_starting_player_position({ std::stoi(zz[0]), std::stoi(zz[1]) });
         wilderness.initialize_position();
         if (!wilderness.is_player_in_bounds()) {
-            return { PARSE_ERROR_OUT_OF_BOUNDS, std::nullopt };
+            return tl::unexpected(PARSE_ERROR_OUT_OF_BOUNDS);
         }
 
         break;
     }
     default:
-        return { PARSE_ERROR_UNDEFINED_DIRECTIVE, std::nullopt };
+        return tl::unexpected(PARSE_ERROR_UNDEFINED_DIRECTIVE);
     }
 
     for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
@@ -724,7 +724,7 @@ std::pair<parse_error_type, std::optional<Pos2D>> parse_line_wilderness(char *li
         }
     }
 
-    return { PARSE_ERROR_NONE, pos };
+    return pos;
 }
 
 /*!

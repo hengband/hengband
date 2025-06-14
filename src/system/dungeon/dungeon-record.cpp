@@ -42,8 +42,8 @@ void DungeonRecord::set_max_level(int level)
 
 void DungeonRecord::reset()
 {
-    this->max_level = std::nullopt;
-    this->max_max_level = std::nullopt;
+    this->max_level = tl::nullopt;
+    this->max_max_level = tl::nullopt;
 }
 
 DungeonRecords DungeonRecords::instance{};

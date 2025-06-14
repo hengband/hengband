@@ -6,14 +6,14 @@
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 #include <utility>
 
-static std::optional<std::pair<AttributeType, std::string>> decide_breath_kind(PlayerType *player_ptr)
+static tl::optional<std::pair<AttributeType, std::string>> decide_breath_kind(PlayerType *player_ptr)
 {
     if (randint1(100) >= player_ptr->lev) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     switch (player_ptr->pclass) {
@@ -88,7 +88,7 @@ static std::optional<std::pair<AttributeType, std::string>> decide_breath_kind(P
         return std::pair(type, name);
     }
     default:
-        return std::nullopt;
+        return tl::nullopt;
     }
 }
 

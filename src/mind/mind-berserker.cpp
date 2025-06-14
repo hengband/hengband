@@ -54,7 +54,7 @@ bool cast_berserk_spell(PlayerType *player_ptr, MindBerserkerType spell)
         const auto pos_new = pos + dir.vec();
         const auto &grid_new = floor.get_grid(pos_new);
         if (player_can_enter(player_ptr, grid_new.feat, 0) && !floor.has_trap_at(pos_new) && !grid_new.has_monster()) {
-            msg_print(nullptr);
+            msg_erase();
             (void)move_player_effect(player_ptr, pos_new.y, pos_new.x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
         }
 

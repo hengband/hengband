@@ -37,7 +37,7 @@ bool BasicSmithInfo::add_essence(PlayerType *, ItemEntity *o_ptr, int) const
 
 void BasicSmithInfo::erase_essence(ItemEntity *o_ptr) const
 {
-    o_ptr->smith_effect = std::nullopt;
+    o_ptr->smith_effect = tl::nullopt;
     if (o_ptr->get_flags().has_none_of(TR_PVAL_FLAG_MASK)) {
         o_ptr->pval = 0;
     }
@@ -104,7 +104,7 @@ bool ActivationSmithInfo::add_essence(PlayerType *, ItemEntity *o_ptr, int) cons
 
 void ActivationSmithInfo::erase_essence(ItemEntity *o_ptr) const
 {
-    o_ptr->smith_act_idx = std::nullopt;
+    o_ptr->smith_act_idx = tl::nullopt;
 }
 
 bool ActivationSmithInfo::can_give_smith_effect(const ItemEntity *o_ptr) const

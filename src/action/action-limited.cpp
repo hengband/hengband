@@ -27,7 +27,7 @@ bool cmd_limit_cast(PlayerType *player_ptr)
     const auto &floor = *player_ptr->current_floor_ptr;
     if (floor.is_underground() && (floor.get_dungeon_definition().flags.has(DungeonFeatureType::NO_MAGIC))) {
         msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
-        msg_print(nullptr);
+        msg_erase();
         return true;
     }
 
@@ -78,7 +78,7 @@ bool cmd_limit_arena(PlayerType *player_ptr)
 {
     if (player_ptr->current_floor_ptr->inside_arena) {
         msg_print(_("アリーナが魔法を吸収した！", "The arena absorbs all attempted magic!"));
-        msg_print(nullptr);
+        msg_erase();
         return true;
     }
 

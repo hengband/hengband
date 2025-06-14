@@ -2,8 +2,8 @@
 
 #include "effect/attribute-types.h"
 #include "system/angband.h"
-#include <optional>
 #include <string>
+#include <tl/optional.hpp>
 
 enum class ElementRealmType {
     NONE = 0,
@@ -30,6 +30,6 @@ void do_cmd_element_browse(PlayerType *player_ptr);
 void display_element_spell_list(PlayerType *player_ptr, int y = 1, int x = 1);
 ProcessResult effect_monster_elemental_genocide(PlayerType *player_ptr, EffectMonster *em_ptr);
 bool has_element_resist(PlayerType *player_ptr, ElementRealmType realm, PLAYER_LEVEL lev);
-std::optional<ElementRealmType> select_element_realm(PlayerType *player_ptr);
+tl::optional<ElementRealmType> select_element_realm(PlayerType *player_ptr);
 void switch_element_racial(PlayerType *player_ptr, rc_type *rc_ptr);
 bool switch_element_execution(PlayerType *player_ptr);

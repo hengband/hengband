@@ -512,38 +512,93 @@ static bool can_speak(const MonraceDefinition &ap_r_ref, MonsterSpeakType mon_sp
     return can_speak_all || can_speak_specific;
 }
 
-static std::string_view get_speak_filename(const MonsterEntity &monster)
+static tl::optional<MonsterMessageType> get_speak_type(const MonsterEntity &monster)
 {
     const auto &ap_monrace = monster.get_appearance_monrace();
     if (monster.is_fearful() && can_speak(ap_monrace, MonsterSpeakType::SPEAK_FEAR)) {
-        return _("monfear_j.txt", "monfear.txt");
+        return MonsterMessageType::SPEAK_FEAR;
     }
 
-    constexpr auto monspeak_txt(_("monspeak_j.txt", "monspeak.txt"));
     if (monster.is_pet() && can_speak(ap_monrace, MonsterSpeakType::SPEAK_BATTLE)) {
-        return monspeak_txt;
+        return MonsterMessageType::SPEAK_BATTLE;
     }
 
     if (monster.is_friendly() && can_speak(ap_monrace, MonsterSpeakType::SPEAK_FRIEND)) {
-        return _("monfrien_j.txt", "monfrien.txt");
+        return MonsterMessageType::SPEAK_FRIEND;
     }
 
     if (can_speak(ap_monrace, MonsterSpeakType::SPEAK_BATTLE)) {
-        return monspeak_txt;
+        return MonsterMessageType::SPEAK_BATTLE;
     }
 
-    return "";
+    return tl::nullopt;
 }
 
 /*!
- * @brief モンスターを喋らせたり足音を立てたりする
+ * @brief 姿の見えないモンスターのメッセージを表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param message 対応するメッセージ
+ */
+void show_sound_message(PlayerType *player_ptr, std::string_view message)
+{
+    if (disturb_minor) {
+        disturb(player_ptr, false, false);
+    }
+    msg_print(message);
+}
+
+/*!
+ * @brief モンスターの足音を立てる
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ */
+void process_sound(PlayerType *player_ptr, MONSTER_IDX m_idx)
+{
+    if (AngbandSystem::get_instance().is_phase_out()) {
+        return;
+    }
+
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
+
+    if (monster.ml || player_ptr->skill_srh < randint1(100)) {
+        return;
+    }
+    const auto m_name = std::string(_("それ", "It"));
+
+    if (monster.cdis <= MAX_PLAYER_SIGHT / 2) {
+        const auto message = monrace.get_message(m_name, MonsterMessageType::WALK_CLOSERANGE);
+        if (message) {
+            show_sound_message(player_ptr, *message);
+        }
+        return;
+    }
+    if (monster.cdis <= MAX_PLAYER_SIGHT) {
+        const auto message = monrace.get_message(m_name, MonsterMessageType::WALK_MIDDLERANGE);
+        if (message) {
+            show_sound_message(player_ptr, *message);
+        }
+        return;
+    }
+    if (monster.cdis <= MAX_PLAYER_SIGHT * 2) {
+        const auto message = monrace.get_message(m_name, MonsterMessageType::WALK_LONGRANGE);
+        if (message) {
+            show_sound_message(player_ptr, *message);
+        }
+        return;
+    }
+}
+
+/*!
+ * @brief モンスターを喋らせる
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param oy モンスターが元々いたY座標
  * @param ox モンスターが元々いたX座標
  * @param aware モンスターがプレイヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  */
-void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
+void process_speak(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
 {
     const Pos2D pos(oy, ox);
     if (AngbandSystem::get_instance().is_phase_out()) {
@@ -552,29 +607,21 @@ void process_speak_sound(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy,
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[m_idx];
-    constexpr auto chance_noise = 20;
-    if (monster.ap_r_idx == MonraceId::CYBER && one_in_(chance_noise) && !monster.ml && (monster.cdis <= MAX_PLAYER_SIGHT)) {
-        if (disturb_minor) {
-            disturb(player_ptr, false, false);
-        }
-        msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
-    }
-
-    constexpr auto chance_speak = 8;
+    const auto &monrace = monster.get_monrace();
     const auto p_pos = player_ptr->get_position();
     const auto can_speak = monster.get_appearance_monrace().speak_flags.any();
-    if (!can_speak || !aware || !one_in_(chance_speak) || !floor.has_los_at({ oy, ox }) || !projectable(floor, p_pos, pos, p_pos)) {
+    if (!can_speak || !aware || !floor.has_los_at({ oy, ox }) || !projectable(floor, p_pos, pos, p_pos)) {
         return;
     }
 
     const auto m_name = monster.ml ? monster_desc(player_ptr, monster, 0) : std::string(_("それ", "It"));
-    auto filename = get_speak_filename(monster);
-    if (filename.empty()) {
+    const auto message_type = get_speak_type(monster);
+    if (!message_type) {
         return;
     }
 
-    const auto monmessage = get_random_line(filename.data(), enum2i(monster.ap_r_idx));
-    if (monmessage) {
-        msg_format(_("%s^%s", "%s^ %s"), m_name.data(), monmessage->data());
+    const auto monster_message = monrace.get_message(m_name, *message_type);
+    if (monster_message) {
+        msg_print(*monster_message);
     }
 }

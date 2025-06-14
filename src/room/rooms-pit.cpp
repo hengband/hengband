@@ -75,14 +75,14 @@ const std::vector<TrappedMonster> place_table_trapped_pit = {
 };
 // clang-format on
 
-std::optional<std::array<MonraceId, NUM_PIT_MONRACES>> pick_pit_monraces(PlayerType *player_ptr, MonsterEntity &align, int boost = 0)
+tl::optional<std::array<MonraceId, NUM_PIT_MONRACES>> pick_pit_monraces(PlayerType *player_ptr, MonsterEntity &align, int boost = 0)
 {
     std::array<MonraceId, NUM_PIT_MONRACES> whats{};
     const auto &monraces = MonraceList::get_instance();
     for (auto &what : whats) {
         const auto monrace_id = select_pit_nest_monrace_id(player_ptr, align, boost);
         if (!monrace_id) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         const auto &monrace = monraces.get_monrace(*monrace_id);

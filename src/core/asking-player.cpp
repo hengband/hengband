@@ -41,7 +41,7 @@
  * ESCAPE clears the buffer and the window and returns FALSE.
  * RETURN accepts the current buffer contents and returns TRUE.
  */
-std::optional<std::string> askfor(int len, std::string_view initial_value, bool numpad_cursor)
+tl::optional<std::string> askfor(int len, std::string_view initial_value, bool numpad_cursor)
 {
     /*
      * Text color
@@ -104,7 +104,7 @@ std::optional<std::string> askfor(int len, std::string_view initial_value, bool 
             pos = buf.length();
             break;
         case ESCAPE:
-            return std::nullopt;
+            return tl::nullopt;
         case '\n':
         case '\r':
             return buf;
@@ -179,9 +179,9 @@ std::optional<std::string> askfor(int len, std::string_view initial_value, bool 
  *
  * We clear the input, and return FALSE, on "ESCAPE".
  */
-std::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value, bool numpad_cursor)
+tl::optional<std::string> input_string(std::string_view prompt, int len, std::string_view initial_value, bool numpad_cursor)
 {
-    msg_print(nullptr);
+    msg_erase();
     prt(prompt, 0, 0);
     const auto ask_result = askfor(len, initial_value, numpad_cursor);
     prt("", 0, 0);
@@ -241,7 +241,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
         num_more = 0;
     }
 
-    msg_print(nullptr);
+    msg_erase();
 
     prt(buf, 0, 0);
     if (mode.has_not(UserCheck::NO_HISTORY) && player_ptr->playing) {
@@ -298,9 +298,9 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
  *
  * Returns TRUE unless the character is "Escape"
  */
-std::optional<char> input_command(std::string_view prompt, bool z_escape)
+tl::optional<char> input_command(std::string_view prompt, bool z_escape)
 {
-    msg_print(nullptr);
+    msg_erase();
     prt(prompt, 0, 0);
     char command;
     if (get_com_no_macros) {
@@ -312,7 +312,7 @@ std::optional<char> input_command(std::string_view prompt, bool z_escape)
     prt("", 0, 0);
     const auto is_z = (command == 'z') || (command == 'Z');
     if ((command == ESCAPE) || (z_escape && is_z)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return command;
@@ -326,9 +326,8 @@ std::optional<char> input_command(std::string_view prompt, bool z_escape)
  */
 int input_quantity(int max, std::string_view initial_prompt)
 {
-    int amt;
     if (command_arg) {
-        amt = command_arg;
+        int amt = command_arg;
         command_arg = 0;
         if (amt > max) {
             amt = max;
@@ -337,19 +336,9 @@ int input_quantity(int max, std::string_view initial_prompt)
         return amt;
     }
 
-    short code;
-    auto result = repeat_pull(&code);
-    amt = code;
-    if ((max != 1) && result) {
-        if (amt > max) {
-            return max;
-        }
-
-        if (amt < 0) {
-            return 0;
-        }
-
-        return amt;
+    const auto code = repeat_pull();
+    if ((max != 1) && code) {
+        return std::clamp<int>(*code, 0, max);
     }
 
     std::string prompt;
@@ -359,17 +348,18 @@ int input_quantity(int max, std::string_view initial_prompt)
         prompt = format(_("いくつですか (1-%d): ", "Quantity (1-%d): "), max);
     }
 
-    msg_print(nullptr);
+    msg_erase();
     const auto input_amount = input_string(prompt, 6, "1", false);
     if (!input_amount) {
         return 0;
     }
 
+    int amt;
     if (isalpha((*input_amount)[0])) {
         amt = max;
     } else {
         try {
-            amt = std::clamp<int>(std::stoi(*input_amount), 0, max);
+            amt = std::clamp(std::stoi(*input_amount), 0, max);
         } catch (const std::exception &) {
             amt = 0;
         }
@@ -394,7 +384,7 @@ void pause_line(int row)
     prt("", row, 0);
 }
 
-std::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value)
+tl::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value)
 {
     std::stringstream ss;
     ss << prompt << "(" << min << "-" << max << "): ";
@@ -402,7 +392,7 @@ std::optional<int> input_integer(std::string_view prompt, int min, int max, int 
     while (true) {
         const auto input_str = input_string(ss.str(), digit, std::to_string(initial_value), false);
         if (!input_str) {
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         try {

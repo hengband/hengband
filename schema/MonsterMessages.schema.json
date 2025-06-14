@@ -1,0 +1,108 @@
+{
+    "type": "object",
+    "additionalProperties": false,
+    "description": "MonsterMessageの定義",
+    "properties": {
+        "versions": {
+            "type": "number",
+            "description": "Version情報"
+        },
+        "groups": {
+            "type": "array",
+            "description": "MonsterMessageグループを格納する配列",
+            "items": {
+                "type": "object",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "id_list": {
+                        "type": "array",
+                        "description": "適用するモンスターID一覧",
+                        "items": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 9999
+                        }
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "グループ名"
+                    },
+                    "message": {
+                        "type": "array",
+                        "description": "メッセージ",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "action",
+                                "chance",
+                                "message"
+                            ],
+                            "properties": {
+                                "action": {
+                                    "type": "string",
+                                    "description": "メッセージトリガーとなる行動",
+                                    "enum": [
+                                        "SPEAK_ALL",
+                                        "SPEAK_BATTLE",
+                                        "SPEAK_FEAR",
+                                        "SPEAK_FRIEND",
+                                        "SPEAK_DEATH",
+                                        "SPEAK_SPAWN",
+                                        "WALK_CLOSERANGE",
+                                        "WALK_MIDDLERANGE",
+                                        "WALK_LONGRANGE",
+                                        "MESSAGE_STALKER",
+                                        "MESSAGE_REFLECT",
+                                        "MESSAGE_TIMESTOP",
+                                        "MESSAGE_TIMESTART",
+                                        "MESSAGE_BREATH_SOUND",
+                                        "MESSAGE_BREATH_SHARDS",
+                                        "MESSAGE_BREATH_FORCE"
+                                    ]
+                                },
+                                "chance": {
+                                    "type": "integer",
+                                    "description": "メッセージ発生率。1/chanceで機能する。",
+                                    "minimum": 1,
+                                    "maximum": 100
+                                },
+                                "use_name": {
+                                    "type": "boolean",
+                                    "description": "メッセージの先頭にモンスター名を表示する。"
+                                },
+                                "message": {
+                                    "type": "object",
+                                    "description": "メッセージ",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "ja": {
+                                            "type": "array",
+                                            "description": "日本語メッセージ",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "en": {
+                                            "type": "array",
+                                            "description": "English Message",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "required": [
+        "versions",
+        "groups"
+    ]
+}

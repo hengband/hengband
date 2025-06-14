@@ -27,7 +27,7 @@
 #include "util/string-processor.h"
 #include "window/display-sub-windows.h"
 #include "window/main-window-util.h"
-#include <optional>
+#include <tl/optional.hpp>
 #include <tuple>
 #include <vector>
 
@@ -41,16 +41,16 @@ public:
     }
 
 private:
-    std::optional<int> pick_nearest_interest_target(const Pos2D &pos, const Direction &dir);
+    tl::optional<int> pick_nearest_interest_target(const Pos2D &pos, const Direction &dir);
     std::string describe_projectablity() const;
-    char examine_target_grid(std::string_view info, std::optional<target_type> append_mode = std::nullopt) const;
+    char examine_target_grid(std::string_view info, tl::optional<target_type> append_mode = tl::nullopt) const;
     void change_interest_index(int amount);
     Direction switch_target_input();
-    std::optional<int> check_panel_changed(const Direction &dir);
-    std::optional<int> sweep_targets(const Direction &dir, int panel_row_min_initial, int panel_col_min_initial);
+    tl::optional<int> check_panel_changed(const Direction &dir);
+    tl::optional<int> sweep_targets(const Direction &dir, int panel_row_min_initial, int panel_col_min_initial);
     bool set_target_grid();
     std::string describe_grid_wizard() const;
-    std::optional<std::pair<Direction, bool>> switch_next_grid_command();
+    tl::optional<std::pair<Direction, bool>> switch_next_grid_command();
     void decide_change_panel(const Direction &dir, bool move_fast);
 
     PlayerType *player_ptr;
@@ -58,7 +58,7 @@ private:
     Pos2D pos_target;
     bool done = false;
     std::vector<Pos2D> pos_interests; // "interesting" な座標一覧を記録する配列
-    std::optional<int> interest_index = 0; // "interesting" な座標一覧のうち現在ターゲットしているもののインデックス
+    tl::optional<int> interest_index = 0; // "interesting" な座標一覧のうち現在ターゲットしているもののインデックス
     Target target = Target::none();
 };
 
@@ -124,26 +124,26 @@ static bool change_panel_xy(PlayerType *player_ptr, const Pos2D &pos)
  * @param pos_from 基準の座標
  * @param pos_to 目標の座標
  * @param dir 方向
- * @return 距離。目標の座標が dir の方向±45°の範囲にない場合 std::nullopt
+ * @return 距離。目標の座標が dir の方向±45°の範囲にない場合 tl::nullopt
  */
-static std::optional<int> calc_target_distance(const Pos2D &pos_from, const Pos2D &pos_to, const Direction &dir)
+static tl::optional<int> calc_target_distance(const Pos2D &pos_from, const Pos2D &pos_to, const Direction &dir)
 {
     const auto [dy, dx] = dir.vec();
     const auto vec = pos_to - pos_from;
     const Pos2DVec vec_abs(std::abs(vec.y), std::abs(vec.x));
 
     if (dx != 0 && (vec.x * dx <= 0)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
     if (dy != 0 && (vec.y * dy <= 0)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     if (dy != 0 && dx == 0 && (vec_abs.x > vec_abs.y)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
     if (dx != 0 && dy == 0 && (vec_abs.y > vec_abs.x)) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     // ターゲット選択用に独自の距離計算を行う
@@ -158,12 +158,12 @@ static std::optional<int> calc_target_distance(const Pos2D &pos_from, const Pos2
  * @brief "interesting" な座標一覧のうち、pos から dir 方向にある最も近いもののインデックスを得る。
  * @param pos 基準座標
  * @param dir 基準座標からの向き
- * @return 最も近い座標のインデックス。適切なものがない場合 std::nullopt
+ * @return 最も近い座標のインデックス。適切なものがない場合 tl::nullopt
  */
-std::optional<int> TargetSetter::pick_nearest_interest_target(const Pos2D &pos, const Direction &dir)
+tl::optional<int> TargetSetter::pick_nearest_interest_target(const Pos2D &pos, const Direction &dir)
 {
-    std::optional<int> nearest_interest_index;
-    std::optional<int> nearest_distance;
+    tl::optional<int> nearest_interest_index;
+    tl::optional<int> nearest_distance;
 
     for (auto i = 0; i < std::ssize(this->pos_interests); i++) {
         const auto distance = calc_target_distance(pos, this->pos_interests[i], dir);
@@ -214,7 +214,7 @@ std::string TargetSetter::describe_projectablity() const
     return info.append(cheatinfo);
 }
 
-char TargetSetter::examine_target_grid(std::string_view info, std::optional<target_type> append_mode) const
+char TargetSetter::examine_target_grid(std::string_view info, tl::optional<target_type> append_mode) const
 {
     const auto target_mode = append_mode ? i2enum<target_type>(this->mode | *append_mode) : this->mode;
     while (true) {
@@ -228,7 +228,7 @@ char TargetSetter::examine_target_grid(std::string_view info, std::optional<targ
 void TargetSetter::change_interest_index(int amount)
 {
     if (!this->interest_index || this->pos_interests.empty()) {
-        this->interest_index = std::nullopt;
+        this->interest_index = tl::nullopt;
         return;
     }
     *this->interest_index += amount;
@@ -289,7 +289,7 @@ Direction TargetSetter::switch_target_input()
     }
         [[fallthrough]];
     case 'o':
-        this->interest_index = std::nullopt;
+        this->interest_index = tl::nullopt;
         return Direction::none();
     case 'm':
         return Direction::none();
@@ -315,9 +315,9 @@ Direction TargetSetter::switch_target_input()
 
 /*!
  * @brief カーソル移動に伴い、描画範囲、"interesting" 座標リスト、現在のターゲットを更新する。
- * @return カーソル移動によって "interesting" な座標が選択されたらそのインデックス、そうでなければ std::nullopt
+ * @return カーソル移動によって "interesting" な座標が選択されたらそのインデックス、そうでなければ tl::nullopt
  */
-std::optional<int> TargetSetter::check_panel_changed(const Direction &dir)
+tl::optional<int> TargetSetter::check_panel_changed(const Direction &dir)
 {
     // 描画範囲が変化した場合、"interesting" 座標リストおよび現在のターゲットを更新する必要がある。
 
@@ -335,9 +335,9 @@ std::optional<int> TargetSetter::check_panel_changed(const Direction &dir)
 /*!
  * @brief カーソル移動方向に "interesting" な座標がなかったとき、画面外まで探す。
  *
- * @return 画面外を探し "interesting" な座標が見つかった場合はそのインデックス、それでも見つからなければ std::nullopt
+ * @return 画面外を探し "interesting" な座標が見つかった場合はそのインデックス、それでも見つからなければ tl::nullopt
  */
-std::optional<int> TargetSetter::sweep_targets(const Direction &dir, int panel_row_min_initial, int panel_col_min_initial)
+tl::optional<int> TargetSetter::sweep_targets(const Direction &dir, int panel_row_min_initial, int panel_col_min_initial)
 {
     auto [dy, dx] = dir.vec();
     while (change_panel(this->player_ptr, dy, dx)) {
@@ -382,7 +382,7 @@ std::optional<int> TargetSetter::sweep_targets(const Direction &dir, int panel_r
     const auto &floor = *this->player_ptr->current_floor_ptr;
     x = std::clamp(x, 1, floor.width - 2);
     y = std::clamp(y, 1, floor.height - 2);
-    return std::nullopt;
+    return tl::nullopt;
 }
 
 bool TargetSetter::set_target_grid()
@@ -427,9 +427,9 @@ std::string TargetSetter::describe_grid_wizard() const
 /*!
  * @brief 隣接マスへのターゲット切り替えモードでのコマンドを処理する
  *
- * @return 移動方向と早く移動するかどうかのペア。移動しない場合はstd::nullopt
+ * @return 移動方向と早く移動するかどうかのペア。移動しない場合はtl::nullopt
  */
-std::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command()
+tl::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command()
 {
     std::string info = _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>");
     if (any_bits(this->mode, TARGET_LOOK)) {
@@ -441,14 +441,14 @@ std::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command
     case ESCAPE:
     case 'q':
         this->done = true;
-        return std::nullopt;
+        return tl::nullopt;
     case 't':
     case '.':
     case '5':
     case '0':
         this->target = Target::create_grid_target(this->player_ptr, this->pos_target);
         this->done = true;
-        return std::nullopt;
+        return tl::nullopt;
     case 'p': {
         verify_panel(this->player_ptr);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
@@ -458,12 +458,12 @@ std::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command
         handle_stuff(this->player_ptr);
         this->pos_interests = target_set_prepare(this->player_ptr, this->mode);
         this->pos_target = this->player_ptr->get_position();
-        return std::nullopt;
+        return tl::nullopt;
     }
     case 'o':
         // ターゲット時の「m近」「o現」の切り替え
         // すでに「o現」の時にoを押してもなにも起きない
-        return std::nullopt;
+        return tl::nullopt;
     case ' ':
     case '*':
     case '+':
@@ -477,19 +477,19 @@ std::optional<std::pair<Direction, bool>> TargetSetter::switch_next_grid_command
         if (interest != end) {
             this->interest_index = std::distance(this->pos_interests.begin(), interest);
         } else {
-            this->interest_index = std::nullopt;
+            this->interest_index = tl::nullopt;
         }
 
-        return std::nullopt;
+        return tl::nullopt;
     }
     case 'g':
         this->done = set_travel_goal(this->player_ptr, this->pos_target);
-        return std::nullopt;
+        return tl::nullopt;
     default:
         const auto dir = get_keymap_dir(query);
         if (!dir) {
             bell();
-            return std::nullopt;
+            return tl::nullopt;
         }
 
         const auto move_fast = isupper(query) != 0;

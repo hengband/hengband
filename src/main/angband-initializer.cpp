@@ -194,6 +194,9 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         quit(*error);
     }
 
+    init_note(_("[データの初期化中... (メッセージ)]", "[Initializing arrays... (messages)]"));
+    init_monster_message_definitions();
+
     init_note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
     init_dungeons_info();
 

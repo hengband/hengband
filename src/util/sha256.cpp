@@ -288,13 +288,13 @@ void SHA256::Impl::pad_message(std::byte pad_byte)
  * @brief ファイルのSHA-256ハッシュ値を計算する
  *
  * @param path ファイルパス
- * @return ハッシュ値を返す。ファイルの読み込みに失敗した場合はstd::nulloptを返す。
+ * @return ハッシュ値を返す。ファイルの読み込みに失敗した場合はtl::nulloptを返す。
  */
-std::optional<SHA256::Digest> SHA256::compute_filehash(const std::filesystem::path &path)
+tl::optional<SHA256::Digest> SHA256::compute_filehash(const std::filesystem::path &path)
 {
     std::ifstream ifs(path, std::ios::binary);
     if (!ifs) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     SHA256 hash;
@@ -306,7 +306,7 @@ std::optional<SHA256::Digest> SHA256::compute_filehash(const std::filesystem::pa
     }
 
     if (ifs.bad()) {
-        return std::nullopt;
+        return tl::nullopt;
     }
 
     return hash.digest();

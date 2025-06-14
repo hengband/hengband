@@ -139,10 +139,12 @@ static bool check_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSele
  */
 static bool check_floor_item_tag(PlayerType *player_ptr, FloorItemSelection *fis_ptr, char *prev_tag, const ItemTester &item_tester)
 {
-    if (!repeat_pull(&fis_ptr->cp)) {
+    const auto code = repeat_pull();
+    if (!code) {
         return false;
     }
 
+    fis_ptr->cp = *code;
     if (fis_ptr->force && (fis_ptr->cp == INVEN_FORCE)) {
         command_cmd = 0;
         return true;
@@ -220,7 +222,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         return true;
     }
 
-    msg_print(nullptr);
+    msg_erase();
     handle_stuff(player_ptr);
     test_inventory_floor(player_ptr, &fis, item_tester);
     fis.done = false;

@@ -38,7 +38,7 @@ void flush(void)
  */
 void screen_save()
 {
-    msg_print(nullptr);
+    msg_erase();
 
     term_save();
 
@@ -53,7 +53,7 @@ void screen_save()
  */
 void screen_load(ScreenLoadOptType opt)
 {
-    msg_print(nullptr);
+    msg_erase();
     auto &world = AngbandWorld::get_instance();
     switch (opt) {
     case ScreenLoadOptType::ONE:
@@ -230,7 +230,7 @@ void roff(std::string_view str)
 void clear_from(int row)
 {
     for (int y = row; y < game_term->hgt; y++) {
-        TermOffsetSetter tos(0, std::nullopt);
+        TermOffsetSetter tos(0, tl::nullopt);
         term_erase(0, y);
     }
 }

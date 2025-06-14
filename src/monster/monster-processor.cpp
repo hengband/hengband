@@ -15,6 +15,7 @@
 #include "monster/monster-processor.h"
 #include "avatar/avatar.h"
 #include "cmd-io/cmd-dump.h"
+#include "core/disturbance.h"
 #include "core/speed-table.h"
 #include "floor/geometry.h"
 #include "game-option/birth-options.h"
@@ -45,6 +46,7 @@
 #include "monster/monster-util.h"
 #include "mspell/mspell-attack.h"
 #include "mspell/mspell-judgement.h"
+#include "mspell/mspell-util.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
 #include "player-base/player-class.h"
@@ -53,6 +55,7 @@
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/special-defense-types.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/summon-types.h"
 #include "system/angband-system.h"
@@ -82,6 +85,10 @@ bool process_monster_fear(PlayerType *player_ptr, turn_flags *turn_flags_ptr, MO
 
 void sweep_monster_process(PlayerType *player_ptr);
 bool decide_process_continue(PlayerType *player_ptr, MonsterEntity &monster);
+bool process_stalking(PlayerType *player_ptr, MONSTER_IDX m_idx);
+
+constexpr auto STALKER_CHANCE_DENOMINATOR = 32; //!< モンスターが背後に忍び寄る確率分母
+constexpr auto STALKER_DISTANCE_THRESHOLD = 20; //!< モンスターが背後に忍び寄る距離の閾値
 
 /*!
  * @brief モンスター単体の1ターン行動処理メインルーチン /
@@ -196,6 +203,10 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return;
     }
 
+    if (process_stalking(player_ptr, m_idx)) {
+        return;
+    }
+
     if (turn_flags_ptr->is_riding_mon) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
@@ -209,7 +220,8 @@ void process_monster(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     process_special(player_ptr, m_idx);
-    process_speak_sound(player_ptr, m_idx, oy, ox, turn_flags_ptr->aware);
+    process_sound(player_ptr, m_idx);
+    process_speak(player_ptr, m_idx, oy, ox, turn_flags_ptr->aware);
     if (cast_spell(player_ptr, m_idx, turn_flags_ptr->aware)) {
         return;
     }
@@ -719,4 +731,53 @@ bool decide_process_continue(PlayerType *player_ptr, MonsterEntity &monster)
     }
 
     return false;
+}
+
+bool process_stalking(PlayerType *player_ptr, MONSTER_IDX m_idx)
+{
+    auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    const auto &monrace = monster.get_monrace();
+
+    // モンスターが背後に忍び寄るフラグを持っていないなら何もしない
+    if (monrace.misc_flags.has_not(MonsterMiscType::STALKER)) {
+        return false;
+    }
+
+    // モンスターからプレイヤーの距離が空いているなら何もしない
+    if (monster.cdis > STALKER_DISTANCE_THRESHOLD) {
+        return false;
+    }
+
+    // モンスターが恐怖しているならば寄ってこない
+    if (monster.is_fearful()) {
+        return false;
+    }
+
+    // 確率で寄ってくる
+    if (!one_in_(STALKER_CHANCE_DENOMINATOR)) {
+        return false;
+    }
+
+    const auto m_name = monster_name(player_ptr, m_idx);
+
+    // 呪術魔法によりテレポートが阻害されているならば寄ってこない
+    if (SpellHex(player_ptr).check_hex_barrier(m_idx, HEX_ANTI_TELE)) {
+        if (see_monster(player_ptr, m_idx)) {
+            msg_format(_("魔法のバリアが%s^のテレポートを邪魔した。", "Magic barrier obstructs teleporting of %s^."), m_name.data());
+        }
+        return false;
+    }
+
+    teleport_monster_to(player_ptr, m_idx, player_ptr->y, player_ptr->x, 100, TELEPORT_SPONTANEOUS);
+
+    disturb(player_ptr, true, true);
+
+    if (see_monster(player_ptr, m_idx)) {
+        const auto message_stalker = monrace.get_message(m_name, MonsterMessageType::MESSAGE_STALKER);
+        if (message_stalker) {
+            msg_print(*message_stalker);
+        }
+    }
+
+    return true;
 }

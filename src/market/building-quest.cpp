@@ -98,7 +98,7 @@ void castle_quest(PlayerType *player_ptr)
 
         clear_bldg(4, 18);
         msg_print(_("放棄しました。", "You gave up."));
-        msg_print(nullptr);
+        msg_erase();
         record_quest_final_status(&quest, player_ptr->lev, QuestStatusType::FAILED);
     }
 
