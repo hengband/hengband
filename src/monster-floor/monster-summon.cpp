@@ -9,6 +9,7 @@
 #include "spell/summon-types.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/wilderness-grid.h"
+#include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -35,9 +36,10 @@ static bool is_dead_summoning(summon_type type)
  * @param type 召喚種別
  * @param mode 生成オプション
  * @param summoner_m_idx モンスターの召喚による場合、召喚者のモンスターID
+ * @param real_r_idx 設定されている場合、最初にtypeで決定されたモンスター種として機能するカメレオン（モンスター種IDがreal_r_idx）を召喚します。
  * @return 召喚に成功したらモンスターID、失敗したらtl::nullopt
  */
-tl::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode, tl::optional<MONSTER_IDX> summoner_m_idx)
+tl::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, POSITION x1, DEPTH lev, summon_type type, BIT_FLAGS mode, tl::optional<MONSTER_IDX> summoner_m_idx, tl::optional<MonraceId> real_r_idx)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     if (floor.inside_arena) {
@@ -66,6 +68,15 @@ tl::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, P
     auto summoned_m_idx = place_specific_monster(player_ptr, pos->y, pos->x, r_idx, mode, summoner_m_idx);
     if (!summoned_m_idx) {
         return tl::nullopt;
+    }
+    if (real_r_idx) {
+        auto &summoned = player_ptr->current_floor_ptr->m_list[summoned_m_idx.value()];
+        summoned.ap_r_idx = r_idx;
+        summoned.r_idx = real_r_idx.value();
+        summoned.mflag2.set(MonsterConstantFlagType::CHAMELEON);
+        if (MonraceList::get_instance().get_monrace(real_r_idx.value()).kind_flags.has(MonsterKindType::UNIQUE)) {
+            summoned.mflag2.set(MonsterConstantFlagType::CLONED);
+        }
     }
 
     bool notice = false;
@@ -97,9 +108,10 @@ tl::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, P
  * @param ox 目標地点x座標
  * @param r_idx 生成するモンスター種族ID
  * @param mode 生成オプション
+ * @param real_r_idx 設定されている場合、最初は r_idx で設定されたモンスター種として機能するカメレオン (モンスター種 ID real_r_idx) を召喚します
  * @return 召喚に成功したらモンスターID、失敗したらtl::nullopt
  */
-tl::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonraceId r_idx, BIT_FLAGS mode)
+tl::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonraceId r_idx, BIT_FLAGS mode, tl::optional<MonraceId> real_r_idx)
 {
     if (!MonraceList::is_valid(r_idx) || (r_idx >= static_cast<MonraceId>(MonraceList::get_instance().size()))) {
         return false;
@@ -115,5 +127,18 @@ tl::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER_
     }
 
     const auto summon_who = is_monster(src_idx) ? tl::make_optional(src_idx) : tl::nullopt;
-    return place_specific_monster(player_ptr, pos->y, pos->x, r_idx, (mode | PM_NO_KAGE), summon_who);
+    auto summoned_m_idx = place_specific_monster(player_ptr, pos->y, pos->x, r_idx, (mode | PM_NO_KAGE), summon_who);
+    if (!summoned_m_idx) {
+        return false;
+    }
+    if (real_r_idx) {
+        auto &summoned = player_ptr->current_floor_ptr->m_list[summoned_m_idx.value()];
+        summoned.ap_r_idx = r_idx;
+        summoned.r_idx = real_r_idx.value();
+        summoned.mflag2.set(MonsterConstantFlagType::CHAMELEON);
+        if (MonraceList::get_instance().get_monrace(real_r_idx.value()).kind_flags.has(MonsterKindType::UNIQUE)) {
+            summoned.mflag2.set(MonsterConstantFlagType::CLONED);
+        }
+    }
+    return summoned_m_idx;
 }

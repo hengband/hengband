@@ -365,7 +365,7 @@ bool alloc_horde(PlayerType *player_ptr, POSITION y, POSITION x, summon_specific
     const auto &monentity = floor.m_list[m_idx];
     for (auto attempts = randint1(10) + 5; attempts > 0; attempts--) {
         const auto pos_scat = scatter(player_ptr, pos, 5, PROJECT_NONE);
-        (void)(*summon_specific)(player_ptr, pos_scat.y, pos_scat.x, floor.dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, m_idx);
+        (void)(*summon_specific)(player_ptr, pos_scat.y, pos_scat.x, floor.dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP, m_idx, tl::nullopt);
         pos = pos_scat;
     }
 
