@@ -723,7 +723,8 @@
                                         "MESSAGE_TIMESTART",
                                         "MESSAGE_BREATH_SOUND",
                                         "MESSAGE_BREATH_SHARDS",
-                                        "MESSAGE_BREATH_FORCE"
+                                        "MESSAGE_BREATH_FORCE",
+                                        "MESSAGE_DETECT_UNIQUE"
                                     ]
                                 },
                                 "chance": {

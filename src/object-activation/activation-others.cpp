@@ -176,13 +176,9 @@ bool activate_unique_detection(PlayerType *player_ptr)
             msg_format(_("%s． ", "%s. "), monrace.name.data());
         }
 
-        if (monster.r_idx == MonraceId::DIO) {
-            msg_print(_("きさま！　見ているなッ！", "You bastard! You're watching me, well watch this!"));
-        }
-
-        if (monster.r_idx == MonraceId::SAURON) {
-            msg_print(_("あなたは一瞬、瞼なき御目に凝視される感覚に襲われた！",
-                "For a moment, you had the horrible sensation of being stared at by the lidless eye!"));
+        const auto message = monrace.get_message(monrace.name, MonsterMessageType::MESSAGE_DETECT_UNIQUE);
+        if (message) {
+            msg_print(*message);
         }
     }
 
