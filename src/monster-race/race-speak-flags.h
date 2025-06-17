@@ -27,5 +27,6 @@ enum class MonsterMessageType {
     MESSAGE_BREATH_SOUND = 13,
     MESSAGE_BREATH_SHARDS = 14,
     MESSAGE_BREATH_FORCE = 15,
+    MESSAGE_DETECT_UNIQUE = 16,
     MAX
 };

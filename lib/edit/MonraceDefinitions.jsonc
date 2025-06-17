@@ -54282,7 +54282,18 @@
       "flavor": {
         "ja": "彼はモルゴスの最も強力な召使で、恐るべき呪文を使いこなす上に高い防御力も持っている。一つの指輪を創造したのは彼である。その瞳は力に輝き、冒険者の魂を破壊しようと狙っている。また彼は多くの手下を従えており、滅多に単独では戦わない。",
         "en": "Mighty in spells and enchantments, he created the One Ring.  His eyes glow with power and his gaze seeks to destroy your soul.  He has many servants, and rarely fights without them."
-      }
+      },
+      "message": [
+        {
+          "action": "MESSAGE_DETECT_UNIQUE",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "あなたは一瞬、瞼なき御目に凝視される感覚に襲われた！",
+            "en": "For a moment, you had the horrible sensation of being stared at by the lidless eye!"
+          }
+        }
+      ]
     },
     //#JZ#
     {
@@ -55917,6 +55928,15 @@
           "message": {
             "ja": "「『ザ・ワールド』！　時は止まった！」",
             "en": "Dio Brando yells 'The World! Time has stopped!'"
+          }
+        },
+        {
+          "action": "MESSAGE_DETECT_UNIQUE",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "きさま！　見ているなッ！",
+            "en": "You bastard! You're watching me, well watch this!"
           }
         }
       ]
