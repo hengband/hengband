@@ -691,6 +691,52 @@
                             }
                         }
                     },
+                    "final_summon": {
+                        "type": "array",
+                        "description": "死亡時召喚",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "id",
+                                "probability",
+                                "min_num",
+                                "max_num",
+                                "radius"
+                            ],
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "召喚するモンスターID",
+                                    "minimum": 1,
+                                    "maximum": 9999
+                                },
+                                "probability": {
+                                    "type": "integer",
+                                    "description": "召喚する確率。probability/100で召喚する。",
+                                    "minimum": 1,
+                                    "maximum": 100
+                                },
+                                "min_num": {
+                                    "type": "integer",
+                                    "description": "召喚数の下限",
+                                    "minimum": 0,
+                                    "maximum": 99
+                                },
+                                "max_num": {
+                                    "type": "integer",
+                                    "description": "召喚数の上限",
+                                    "minimum": 1,
+                                    "maximum": 99
+                                },
+                                "radius": {
+                                    "type": "integer",
+                                    "description": "召喚先の距離",
+                                    "minimum": 1,
+                                    "maximum": 20
+                                }
+                            }
+                        }
+                    },
                     "message": {
                         "type": "array",
                         "description": "メッセージ",

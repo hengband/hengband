@@ -12333,7 +12333,27 @@
       "flavor": {
         "ja": "<ティーンチ>の下僕の、叫ぶ醜い小型の悪魔だ。",
         "en": "An ugly screaming little demon servant of Tzeentch."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 189, /* Blue Horror */
+          "probability": 100,
+          "min_num": 2,
+          "max_num": 2,
+          "radius": 1
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "ピンク・ホラーは分裂した！",
+            "en": "The Pink horror divides!"
+          }
+        }
+      ]
     },
     //#JZ#
     {
@@ -40538,7 +40558,27 @@
       "flavor": {
         "ja": "勇猛で野蛮な戦士で、刺つきの大きな棍棒で武装し、真紅のオーラに包まれている。彼らの一人が倒れた時、どこからともなく別の一人が現れてその後を継ぐ。",
         "en": "Fierce, barbaric warriors, armed with great spiked clubs, and surrounded in an aura of scarlet. Whenever one of them is slain, another appears out of nowhere to take his place."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 693, /* 暁の戦士 */
+          "probability": 85,
+          "min_num": 1,
+          "max_num": 1,
+          "radius": 20
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "新たな戦士が現れた！",
+            "en": "A new warrior steps forth!"
+          }
+        }
+      ]
     },
     {
       "id": 694,
@@ -60854,7 +60894,27 @@
           "S_MONSTERS",
           "TPORT"
         ]
-      }
+      },
+      "final_summon": [
+        {
+          "id": 945, /* 怒りの魔王『炎のバイケタル』 */
+          "probability": 100,
+          "min_num": 1,
+          "max_num": 1,
+          "radius": 1
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "「ハァッハッハッハ！！私がバイケタルだ！！」",
+            "en": "Uwa-hahaha!  *I* am Biketal!"
+          }
+        }
+      ]
     },
     //# Description in English by Nick Keulmann
     {
@@ -73522,7 +73582,27 @@
       "flavor": {
         "ja": "不気味な動きをする、やや大きな泡だ。潰すと小さな泡になる。",
         "en": "It is a medium-sized bubble that makes a weird movement.  When it is squashed, it becomes small bubbles."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1151, /* 小さな泡 */
+          "probability": 100,
+          "min_num": 4,
+          "max_num": 4,
+          "radius": 5
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "泡が弾けた！",
+            "en": "The bubble pops!"
+          }
+        }
+      ]
     },
     //# 倒すとやや大きな泡×4に分裂する
     {
@@ -73565,7 +73645,27 @@
       "flavor": {
         "ja": "不気味な動きをする大きな泡だ。潰しても中々なくならない。",
         "en": "It is a large bubble that makes a weird movement.  When it is squashed, it becomes medium bubbles."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1152, /* やや大きな泡 */
+          "probability": 100,
+          "min_num": 4,
+          "max_num": 4,
+          "radius": 5
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "泡が弾けた！",
+            "en": "The bubble pops!"
+          }
+        }
+      ]
     },
     //# 倒すと大きな泡×4に分裂する
     {
@@ -73608,7 +73708,27 @@
       "flavor": {
         "ja": "不気味な動きをする巨大な泡だ。逃げるか潰すか二つに一つだ！",
         "en": "It is an extra large bubble that makes a weird movement.  You must decide whether to run away or squash them all!"
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1153, /* 大きな泡 */
+          "probability": 100,
+          "min_num": 4,
+          "max_num": 4,
+          "radius": 5
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "泡が弾けた！",
+            "en": "The bubble pops!"
+          }
+        }
+      ]
     },
     {
       "id": 1155,
@@ -73719,7 +73839,27 @@
       "flavor": {
         "ja": "不気味な動きをして撃ち返してくる、やや大きな泡だ。潰すと小さな泡になる。",
         "en": "It is a medium-sized bubble that makes a weird movement and shoots you back.  When it is squashed, it becomes small bubbles."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1155, /* 二周目の小さな泡 */
+          "probability": 100,
+          "min_num": 4,
+          "max_num": 4,
+          "radius": 5
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "泡が弾けた！",
+            "en": "The bubble pops!"
+          }
+        }
+      ]
     },
     //# 倒すとやや大きな泡×4に分裂する
     {
@@ -73774,7 +73914,27 @@
       "flavor": {
         "ja": "不気味な動きをして撃ち返してくる大きな泡だ。潰しても中々なくならない。",
         "en": "It is a large bubble that makes a weird movement and shoots you back.  When it is squashed, it becomes medium bubbles."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1156, /* 二周目のやや大きな泡 */
+          "probability": 100,
+          "min_num": 4,
+          "max_num": 4,
+          "radius": 5
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "泡が弾けた！",
+            "en": "The bubble pops!"
+          }
+        }
+      ]
     },
     //# 倒すと大きな泡×4に分裂する
     {
@@ -73829,7 +73989,27 @@
       "flavor": {
         "ja": "不気味な動きをして撃ち返してくる巨大な泡だ。逃げるか潰すか二つに一つだ！",
         "en": "It is an extra large bubble that makes a weird movement and shoots you back!  You must decide whether to run away or squash them all!"
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1157, /* 二周目の大きな泡 */
+          "probability": 100,
+          "min_num": 4,
+          "max_num": 4,
+          "radius": 5
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "泡が弾けた！",
+            "en": "The bubble pops!"
+          }
+        }
+      ]
     },
     //# 実質召喚専用にしたいのでRarはかなり高め
     {
@@ -73971,7 +74151,27 @@
       "flavor": {
         "ja": "トーテムポール状に積み上がったモアイだ。倒してもきりがない。",
         "en": "It is a Moai piled up like a totem pole.  There is no end in destroying it."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1161, /* トーテムモアイ */
+          "probability": 87,
+          "min_num": 1,
+          "max_num": 1,
+          "radius": 5
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "新たなモアイが現れた！",
+            "en": "A new moai steps forth!"
+          }
+        }
+      ]
     },
     //# プチモアイのみ召喚
     {
@@ -80477,7 +80677,26 @@
       "flavor": {
         "ja": "巨大な百足の正体は多数の巨大生物が合体した生物だった。百足龍虫から分離した群体は独立した龍虫として活動を始める。",
         "en": "Dragon centipedes are formed from the combination of many insects.  Those centipedes can break apart:  each piece becomes an independent dragon worm."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1255, /* 単龍虫 */
+          "probability": 100,
+          "min_num": 2,
+          "max_num": 2,
+          "radius": 1
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "message": {
+            "ja": "が再生した！",
+            "en": "reproduced!"
+          }
+        }
+      ]
     },
     {
       "id": 1257,
@@ -80552,7 +80771,26 @@
       "flavor": {
         "ja": "巨大生物の最終進化形態、ビルよりも高く長い全長を持つ雄大なムカデだ。無数の突起から土砂降りのように酸を降り注がせる。",
         "en": "It is the final evolution of a dragon insect, a magnificent centipede that is taller and longer than the WTC.  It pours acid like a downpour from countless protrusions."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1256, /* 龍虫 */
+          "probability": 100,
+          "min_num": 2,
+          "max_num": 2,
+          "radius": 1
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "message": {
+            "ja": "が再生した！",
+            "en": "reproduced!"
+          }
+        }
+      ]
     },
     {
       "id": 1258,
@@ -82768,7 +83006,27 @@
       "flavor": {
         "ja": "臆病で鈍臭いがさっぱりした性格の少年。よく「電話」をしている。",
         "en": "He is a timid, dull and refreshing boy.  He often makes \"phone calls\"."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1291, /* 『ディアボロ』 */
+          "probability": 100,
+          "min_num": 1,
+          "max_num": 1,
+          "radius": 1
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」",
+            "en": "This is a 'trial'. I took it as a 'trial' to overcome in the past."
+          }
+        }
+      ]
     },
     {
       "id": 1291,
@@ -85857,7 +86115,27 @@
       "flavor": {
         "ja": "放置された箱に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物で、愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。",
         "en": "This strange creature, transformed into an image of a strange creature that is transformed into an abandoned box, waits for a stupid adventurer to get close to its poisonous claws."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 965, /* ミミック(ミミック(箱)の像)*/
+          "probability": 100,
+          "min_num": 1,
+          "max_num": 1,
+          "radius": 1
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "箱の中から新たなミミックが現れた！",
+            "en": "A new mimic appears in the dead mimic!"
+          }
+        }
+      ]
     },
     {
       "id": 1339,
@@ -85923,7 +86201,27 @@
       "flavor": {
         "ja": "放置された箱に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物で、愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。",
         "en": "This strange creature, transformed into an image of a strange creature that is transformed into an abandoned box, waits for a stupid adventurer to get close to its poisonous claws."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1338, /* ミミック(ミミック(ミミック(箱)の像)の像) */
+          "probability": 100,
+          "min_num": 1,
+          "max_num": 1,
+          "radius": 1
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "箱の中から新たなミミックが現れた！",
+            "en": "A new mimic appears in the dead mimic!"
+          }
+        }
+      ]
     },
     {
       "id": 1340,
@@ -85989,7 +86287,27 @@
       "flavor": {
         "ja": "放置された箱に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物の像に化けている奇妙な生物で、愚かな冒険者がその毒のある爪の射程に入るのを待ち構えている。",
         "en": "This strange creature, transformed into an image of a strange creature that is transformed into an abandoned box, waits for a stupid adventurer to get close to its poisonous claws."
-      }
+      },
+      "final_summon": [
+        {
+          "id": 1339, /* ミミック(ミミック(ミミック(ミミック(箱)の像)の像)の像) */
+          "probability": 100,
+          "min_num": 2,
+          "max_num": 3,
+          "radius": 1
+        }
+      ],
+      "message": [
+        {
+          "action": "SPEAK_SPAWN",
+          "chance": 1,
+          "use_name": false,
+          "message": {
+            "ja": "箱の中から新たなミミックが現れた！",
+            "en": "A new mimic appears in the dead mimic!"
+          }
+        }
+      ]
     },
     {
       "id": 1341,
