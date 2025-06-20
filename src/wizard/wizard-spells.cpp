@@ -11,6 +11,7 @@
 #include "effect/effect-processor.h"
 #include "floor/floor-util.h"
 #include "floor/pattern-walk.h"
+#include "grid/grid.h"
 #include "io/gf-descriptions.h"
 #include "io/input-key-acceptor.h"
 #include "mind/mind-blue-mage.h"
@@ -34,6 +35,7 @@
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
 #include "target/target-checker.h"
@@ -102,6 +104,17 @@ tl::optional<MonraceId> wiz_select_summon_monrace_id()
     return (choice != monrace_ids.end()) ? tl::make_optional(*choice) : tl::nullopt;
 }
 
+void wiz_select_chameleon_polymorph(MonsterEntity &monster)
+{
+    msg_print("Please select a monster to polymorph into.");
+    msg_erase();
+
+    if (const auto polymorph_monrace_id = wiz_select_summon_monrace_id()) {
+        monster.r_idx = *polymorph_monrace_id;
+        monster.ap_r_idx = *polymorph_monrace_id;
+    }
+}
+
 void wiz_summon_specific_monster_common(PlayerType *player_ptr, MonraceId monrace_id, BIT_FLAGS mode)
 {
     const auto summon_monrace_id = MonraceList::is_valid(monrace_id) ? monrace_id : wiz_select_summon_monrace_id();
@@ -109,9 +122,24 @@ void wiz_summon_specific_monster_common(PlayerType *player_ptr, MonraceId monrac
         return;
     }
 
-    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, *summon_monrace_id, mode);
+    const auto index_to_monster = [player_ptr](auto index) -> MonsterEntity & {
+        return player_ptr->current_floor_ptr->m_list[index];
+    };
+    auto monster =
+        summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, *summon_monrace_id, mode)
+            .transform(index_to_monster);
+    if (!monster) {
+        msg_print_wizard(player_ptr, 1, "Monster isn't summoned correctly...");
+        return;
+    }
+
+    if (monster->mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
+        wiz_select_chameleon_polymorph(*monster);
+    }
+
+    lite_spot(player_ptr, monster->get_position());
 }
-}
+} // namespace
 
 /*!
  * @brief コマンド入力により任意にスペル効果を起こす / Wizard spells
@@ -278,7 +306,7 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
 /*!
  * @brief モンスターを種族IDを指定して自然生成と同じように召喚する /
  * Summon a creature of the specified type
- * @param mornace_id モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
+ * @param monrace_id モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
  * @details
  * This function is rather dangerous
  */
@@ -302,7 +330,7 @@ void wiz_summon_pet(PlayerType *player_ptr, MonraceId monrace_id)
 /*!
  * @brief モンスターを種族IDを指定してクローン召喚（口寄せ）する /
  * Summon a creature of the specified type
- * @param r_idx モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
+ * @param monrace_id モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
  */
 void wiz_summon_clone(PlayerType *player_ptr, MonraceId monrace_id)
 {
