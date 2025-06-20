@@ -27,12 +27,14 @@ static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
     byte state = 0;
     for (auto y = 0; tb->lines_list[y]; y++) {
         std::string_view s(*tb->lines_list[y]);
-        tb->states[y] = state;
         if (!s.starts_with("?:")) {
+            tb->states[y] = state;
             continue;
         }
 
-        if (s.substr(2) == "$AUTOREGISTER") {
+        s.remove_prefix(2);
+
+        if (s == "$AUTOREGISTER") {
             state |= LSTAT_AUTOREGISTER;
         }
 
