@@ -14,6 +14,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <fmt/format.h>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -151,13 +152,13 @@ static std::string get_describing_monster_name(const MonsterEntity &monster, con
  */
 static std::string replace_monster_name_undefined(std::string_view name)
 {
-    if (name.ends_with("』")) {
-        constexpr auto ja_char_length = 2;
-        const auto name_without_brackets = name.substr(0, name.length() - ja_char_length);
-        return format("%s？』", name_without_brackets.data());
+    constexpr std::string_view closing_quotation = "』";
+    if (name.ends_with(closing_quotation)) {
+        name.remove_suffix(closing_quotation.length());
+        return fmt::format("{}？{}", name, closing_quotation);
     }
 
-    return format("%s？", name.data());
+    return fmt::format("{}？", name);
 }
 #endif
 
