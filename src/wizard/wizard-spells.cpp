@@ -74,12 +74,8 @@ std::vector<MonraceId> wiz_collect_monster_candidates(char symbol)
     return monraces.search_by_symbol(symbol, false);
 }
 
-tl::optional<MonraceId> wiz_select_summon_monrace_id(MonraceId monrace_id)
+tl::optional<MonraceId> wiz_select_summon_monrace_id()
 {
-    if (MonraceList::is_valid(monrace_id)) {
-        return monrace_id;
-    }
-
     prt("Enter monster symbol character(^M:Search by name, ^I:Input MonsterID): ", 0, 0);
     const auto skey = inkey_special(false);
     prt("", 0, 0);
@@ -104,6 +100,16 @@ tl::optional<MonraceId> wiz_select_summon_monrace_id(MonraceId monrace_id)
     const auto choice = cs.select(monrace_ids, describer);
 
     return (choice != monrace_ids.end()) ? tl::make_optional(*choice) : tl::nullopt;
+}
+
+void wiz_summon_specific_monster_common(PlayerType *player_ptr, MonraceId monrace_id, BIT_FLAGS mode)
+{
+    const auto summon_monrace_id = MonraceList::is_valid(monrace_id) ? monrace_id : wiz_select_summon_monrace_id();
+    if (!summon_monrace_id) {
+        return;
+    }
+
+    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, *summon_monrace_id, mode);
 }
 }
 
@@ -272,35 +278,25 @@ void wiz_summon_random_monster(PlayerType *player_ptr, int num)
 /*!
  * @brief モンスターを種族IDを指定して自然生成と同じように召喚する /
  * Summon a creature of the specified type
- * @param r_idx モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
+ * @param mornace_id モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
  * @details
  * This function is rather dangerous
  */
-void wiz_summon_specific_monster(PlayerType *player_ptr, const MonraceId r_idx)
+void wiz_summon_specific_monster(PlayerType *player_ptr, MonraceId monrace_id)
 {
-    const auto new_monrace_id = wiz_select_summon_monrace_id(r_idx);
-    if (!new_monrace_id) {
-        return;
-    }
-
-    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, *new_monrace_id, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
+    wiz_summon_specific_monster_common(player_ptr, monrace_id, PM_ALLOW_SLEEP | PM_ALLOW_GROUP);
 }
 
 /*!
  * @brief モンスターを種族IDを指定してペット召喚する /
  * Summon a creature of the specified type
- * @param r_idx モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
+ * @param monrace_id モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
  * @details
  * This function is rather dangerous
  */
-void wiz_summon_pet(PlayerType *player_ptr, const MonraceId r_idx)
+void wiz_summon_pet(PlayerType *player_ptr, MonraceId monrace_id)
 {
-    const auto new_monrace_id = wiz_select_summon_monrace_id(r_idx);
-    if (!new_monrace_id) {
-        return;
-    }
-
-    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, *new_monrace_id, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
+    wiz_summon_specific_monster_common(player_ptr, monrace_id, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET);
 }
 
 /*!
@@ -308,15 +304,11 @@ void wiz_summon_pet(PlayerType *player_ptr, const MonraceId r_idx)
  * Summon a creature of the specified type
  * @param r_idx モンスター種族ID（回数指定コマンド'0'で指定した回数がIDになる）
  */
-void wiz_summon_clone(PlayerType *player_ptr, const MonraceId r_idx)
+void wiz_summon_clone(PlayerType *player_ptr, MonraceId monrace_id)
 {
-    const auto new_monrace_id = wiz_select_summon_monrace_id(r_idx);
-    if (!new_monrace_id) {
-        return;
-    }
-
-    (void)summon_named_creature(player_ptr, 0, player_ptr->y, player_ptr->x, *new_monrace_id, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_CLONE);
+    wiz_summon_specific_monster_common(player_ptr, monrace_id, PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_CLONE);
 }
+
 /*!
  * @brief ターゲットを指定して指定ダメージ・指定属性・半径0のボールを放つ
  * @param dam ダメージ量
