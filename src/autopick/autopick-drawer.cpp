@@ -16,7 +16,9 @@
 #include "view/display-util.h"
 #include <tuple>
 
-#define DESCRIPT_HGT 3
+constexpr auto DESCRIPT_HGT = 3;
+constexpr std::string_view EXPRESSION_DIRECTIVE_PREFIX = "?:";
+constexpr std::string_view AUTOREGISTER_DIRECTIVE = "$AUTOREGISTER";
 
 static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
 {
@@ -27,14 +29,14 @@ static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
     byte state = 0;
     for (auto y = 0; tb->lines_list[y]; y++) {
         std::string_view s(*tb->lines_list[y]);
-        if (!s.starts_with("?:")) {
+        if (!s.starts_with(EXPRESSION_DIRECTIVE_PREFIX)) {
             tb->states[y] = state;
             continue;
         }
 
-        s.remove_prefix(2);
+        s.remove_prefix(EXPRESSION_DIRECTIVE_PREFIX.length());
 
-        if (s == "$AUTOREGISTER") {
+        if (s == AUTOREGISTER_DIRECTIVE) {
             state |= LSTAT_AUTOREGISTER;
         }
 
