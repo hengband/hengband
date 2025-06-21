@@ -157,7 +157,8 @@ public:
     bool is_target_of(QuestId quest_id) const;
     BaseitemDefinition &get_baseitem() const;
     EgoItemDefinition &get_ego() const;
-    ArtifactType &get_fixed_artifact() const;
+    ArtifactType &get_fixed_artifact();
+    const ArtifactType &get_fixed_artifact() const;
     TrFlags get_flags() const;
     TrFlags get_flags_known() const;
     std::string explain_activation() const;
