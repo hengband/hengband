@@ -47,7 +47,6 @@ void place_gold(PlayerType *player_ptr, const Pos2D &pos)
  * @param pos 配置したい座標
  * @param mode オプションフラグ
  * @param restrict ベースアイテム制約関数。see BaseitemAllocationTable::set_restriction()
- * @return 生成に成功したらTRUEを返す。
  */
 void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode, BaseitemRestrict restrict)
 {
@@ -62,14 +61,14 @@ void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode, Basei
         return;
     }
 
-    auto &item = *floor.o_list[item_idx];
-    item.wipe();
-    if (!make_object(player_ptr, &item, mode, restrict)) {
+    auto item = make_object(player_ptr, mode, restrict);
+    if (!item) {
         return;
     }
 
-    item.iy = pos.y;
-    item.ix = pos.x;
+    item->iy = pos.y;
+    item->ix = pos.x;
+    *floor.o_list[item_idx] = std::move(*item);
     grid.o_idx_list.add(floor, item_idx);
 
     note_spot(player_ptr, pos);

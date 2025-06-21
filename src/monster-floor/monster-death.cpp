@@ -276,21 +276,18 @@ static void drop_items_golds(PlayerType *player_ptr, MonsterDeath *md_ptr, int d
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &monraces = MonraceList::get_instance();
     for (auto i = 0; i < drop_numbers; i++) {
-        ItemEntity item;
         if (md_ptr->do_gold && (!md_ptr->do_item || one_in_(2))) {
             const auto &monrace = monraces.get_monrace(md_ptr->m_ptr->r_idx);
             const auto bi_key = BaseitemMonraceService::lookup_fixed_gold_drop(monrace.drop_flags);
-            item = floor.make_gold(bi_key);
+            auto item = floor.make_gold(bi_key);
+            (void)drop_near(player_ptr, &item, md_ptr->get_position());
             dump_gold++;
         } else {
-            if (!make_object(player_ptr, &item, md_ptr->mo_mode)) {
-                continue;
+            if (auto item = make_object(player_ptr, md_ptr->mo_mode)) {
+                (void)drop_near(player_ptr, &*item, md_ptr->get_position());
+                dump_item++;
             }
-
-            dump_item++;
         }
-
-        (void)drop_near(player_ptr, &item, md_ptr->get_position());
     }
 
     floor.object_level = floor.base_level;

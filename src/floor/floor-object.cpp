@@ -84,19 +84,18 @@ static void set_ammo_quantity(ItemEntity *j_ptr)
  * @brief 生成階に応じたベースアイテムの生成を行う。
  * Attempt to make an object (normal or good/great)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
  * @param mode オプションフラグ
  * @param restrict ベースアイテム制約関数。see BaseitemAllocationTable::set_restriction()
  * @param rq_mon_level ランダムクエスト討伐対象のレベル。ランダムクエスト以外の生成であれば無効値
- * @return アイテムの生成成功可否
+ * @return 生成したアイテム。ベースアイテム制約やアイテム生成レベルなどの要因で生成に失敗した場合はtl::nullopt。
  */
-bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, BaseitemRestrict restrict, tl::optional<int> rq_mon_level)
+tl::optional<ItemEntity> make_object(PlayerType *player_ptr, BIT_FLAGS mode, BaseitemRestrict restrict, tl::optional<int> rq_mon_level)
 {
-    const auto apply = [player_ptr, j_ptr, mode] {
-        ItemMagicApplier(player_ptr, j_ptr, player_ptr->current_floor_ptr->object_level, mode).execute();
-        set_ammo_quantity(j_ptr);
+    const auto apply_magic_to = [player_ptr, mode](ItemEntity &item) {
+        ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->object_level, mode).execute();
+        set_ammo_quantity(&item);
         if (cheat_peek) {
-            object_mention(player_ptr, *j_ptr);
+            object_mention(player_ptr, item);
         }
     };
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -105,9 +104,8 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, Base
     if (!restrict && one_in_(prob)) {
         auto fa_opt = floor.try_make_instant_artifact();
         if (fa_opt) {
-            *j_ptr = std::move(*fa_opt);
-            apply();
-            return true;
+            apply_magic_to(*fa_opt);
+            return fa_opt;
         }
     }
 
@@ -128,12 +126,12 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, Base
     }
 
     if (bi_id == 0) {
-        return false;
+        return tl::nullopt;
     }
 
-    j_ptr->generate(bi_id);
-    apply();
-    return true;
+    ItemEntity item(bi_id);
+    apply_magic_to(item);
+    return item;
 }
 
 /*!

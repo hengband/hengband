@@ -331,7 +331,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             if (preserve_mode || in_generate) {
                 /* Scan all objects in the grid */
                 for (const auto this_o_idx : grid.o_idx_list) {
-                    const auto &item = *floor.o_list[this_o_idx];
+                    auto &item = *floor.o_list[this_o_idx];
                     if (item.is_fixed_artifact() && (!item.is_known() || in_generate)) {
                         item.get_fixed_artifact().is_generated = false;
 
