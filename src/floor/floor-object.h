@@ -2,6 +2,7 @@
 
 #include "object/item-tester-hooker.h"
 #include "system/angband.h"
+#include "system/baseitem/baseitem-allocation.h"
 #include "util/point-2d.h"
 #include <tl/optional.hpp>
 #include <vector>
@@ -12,7 +13,7 @@ class FloorType;
 class ItemEntity;
 class PlayerType;
 class ItemTester;
-bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, tl::optional<int> rq_mon_level = tl::nullopt);
+bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, BaseitemRestrict restrict = nullptr, tl::optional<int> rq_mon_level = tl::nullopt);
 void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos);
 void floor_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER num);
 void floor_item_optimize(PlayerType *player_ptr, INVENTORY_IDX i_idx);

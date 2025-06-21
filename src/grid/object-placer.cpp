@@ -46,9 +46,10 @@ void place_gold(PlayerType *player_ptr, const Pos2D &pos)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos 配置したい座標
  * @param mode オプションフラグ
+ * @param restrict ベースアイテム制約関数。see BaseitemAllocationTable::set_restriction()
  * @return 生成に成功したらTRUEを返す。
  */
-void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode)
+void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode, BaseitemRestrict restrict)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(pos);
@@ -63,7 +64,7 @@ void place_object(PlayerType *player_ptr, const Pos2D &pos, uint32_t mode)
 
     auto &item = *floor.o_list[item_idx];
     item.wipe();
-    if (!make_object(player_ptr, &item, mode)) {
+    if (!make_object(player_ptr, &item, mode, restrict)) {
         return;
     }
 

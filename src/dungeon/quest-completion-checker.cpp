@@ -238,7 +238,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
         while (true) {
             item.wipe();
             const auto &monrace = this->m_ptr->get_monrace();
-            (void)make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT, monrace.level);
+            (void)make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT, nullptr, monrace.level);
             if (!this->check_quality(item)) {
                 continue;
             }

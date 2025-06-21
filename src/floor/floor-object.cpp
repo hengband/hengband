@@ -86,10 +86,11 @@ static void set_ammo_quantity(ItemEntity *j_ptr)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
  * @param mode オプションフラグ
+ * @param restrict ベースアイテム制約関数。see BaseitemAllocationTable::set_restriction()
  * @param rq_mon_level ランダムクエスト討伐対象のレベル。ランダムクエスト以外の生成であれば無効値
  * @return アイテムの生成成功可否
  */
-bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, tl::optional<int> rq_mon_level)
+bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, BaseitemRestrict restrict, tl::optional<int> rq_mon_level)
 {
     const auto apply = [player_ptr, j_ptr, mode] {
         ItemMagicApplier(player_ptr, j_ptr, player_ptr->current_floor_ptr->object_level, mode).execute();
@@ -101,7 +102,7 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, tl::
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
     const auto base = get_base_floor(floor, mode, rq_mon_level);
-    if (one_in_(prob)) {
+    if (!restrict && one_in_(prob)) {
         auto fa_opt = floor.try_make_instant_artifact();
         if (fa_opt) {
             *j_ptr = std::move(*fa_opt);
@@ -110,19 +111,20 @@ bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, tl::
         }
     }
 
-    if (any_bits(mode, AM_GOOD) && !select_baseitem_id_hook) {
-        select_baseitem_id_hook = kind_is_good;
+    if (any_bits(mode, AM_GOOD) && !restrict) {
+        restrict = kind_is_good;
     }
 
     auto &table = BaseitemAllocationTable::get_instance();
-    if (select_baseitem_id_hook) {
-        table.prepare_allocation();
+    if (restrict) {
+        // 制約が指定されている場合、ここで制約を加え、次のfloor.select_baseitem_id()で制約を使用する
+        table.set_restriction(restrict);
     }
 
     const auto bi_id = floor.select_baseitem_id(base, mode);
-    if (select_baseitem_id_hook) {
-        select_baseitem_id_hook = nullptr;
-        table.prepare_allocation();
+    if (restrict) {
+        // 他で影響がないように、制約を解除しておく
+        table.reset_restriction();
     }
 
     if (bi_id == 0) {
