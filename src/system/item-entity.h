@@ -37,8 +37,8 @@ class MonraceDefinition;
 class ItemEntity {
 public:
     ItemEntity();
-    ItemEntity(short bi_id);
-    ItemEntity(const BaseitemKey &bi_key);
+    explicit ItemEntity(short bi_id);
+    explicit ItemEntity(const BaseitemKey &bi_key);
     ItemEntity(ItemEntity &&) = default;
     ItemEntity &operator=(ItemEntity &&) = default;
 
