@@ -132,11 +132,11 @@ static void on_dead_raal(PlayerType *player_ptr, MonsterDeath *md_ptr)
         return;
     }
 
-    ItemEntity item;
     const auto restrict = ((floor.dun_level > 49) && one_in_(5)) ? kind_is_good_book : kind_is_book;
 
-    (void)make_object(player_ptr, &item, md_ptr->mo_mode, restrict);
-    (void)drop_near(player_ptr, &item, md_ptr->get_position());
+    if (auto item = make_object(player_ptr, md_ptr->mo_mode, restrict)) {
+        (void)drop_near(player_ptr, &*item, md_ptr->get_position());
+    }
 }
 
 /*!
@@ -283,21 +283,22 @@ static void on_dead_dragon_centipede(PlayerType *player_ptr, MonsterDeath *md_pt
 /*!
  * @brief 装備品の生成を試みる
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param q_ptr 生成中アイテムへの参照ポインタ
  * @param drop_mode ドロップ品の質
  * @param restrict ベースアイテム制約関数。特になければnullptrで良い
- * @return 生成したアイテムが装備品ならtrue、それ以外ならfalse
+ * @return 生成した装備品。生成に失敗した場合はtl::nulloptを返す。
  * @todo 汎用的に使えそうだがどこかにいいファイルはないか？
  */
-static bool make_equipment(PlayerType *player_ptr, ItemEntity *q_ptr, const BIT_FLAGS drop_mode, BaseitemRestrict restrict)
+static tl::optional<ItemEntity> make_equipment(PlayerType *player_ptr, const BIT_FLAGS drop_mode, BaseitemRestrict restrict)
 {
-    q_ptr->wipe();
-    (void)make_object(player_ptr, q_ptr, drop_mode, restrict);
-    if (restrict) {
-        return true;
+    if (!restrict) {
+        // アイテムの制約を指定しない場合は、すべての装備品から選ぶ
+        restrict = [](short bi_id) {
+            const auto &item = BaseitemList::get_instance().get_baseitem(bi_id);
+            return item.bi_key.is_wearable() && (item.bi_key.tval() != ItemKindType::CARD);
+        };
     }
 
-    return q_ptr->is_wearable() && (q_ptr->bi_key.tval() != ItemKindType::CARD);
+    return make_object(player_ptr, drop_mode, restrict);
 }
 
 /*!
@@ -312,34 +313,33 @@ static bool make_equipment(PlayerType *player_ptr, ItemEntity *q_ptr, const BIT_
  */
 static void on_dead_random_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr, BaseitemRestrict restrict)
 {
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    auto drop_mode = md_ptr->mo_mode | AM_NO_FIXED_ART;
+    const auto drop_mode = md_ptr->mo_mode | AM_NO_FIXED_ART;
     while (true) {
-        if (!make_equipment(player_ptr, q_ptr, drop_mode, restrict)) {
+        auto item = make_equipment(player_ptr, drop_mode, restrict);
+        if (!item) {
+            return;
+        }
+
+        if (item->is_random_artifact()) {
+            (void)drop_near(player_ptr, &*item, md_ptr->get_position());
+            return;
+        }
+
+        if (item->is_ego()) {
             continue;
         }
 
-        if (q_ptr->is_random_artifact()) {
-            break;
-        }
-
-        if (q_ptr->is_ego()) {
-            continue;
-        }
-
-        (void)become_random_artifact(player_ptr, q_ptr, false);
-        auto is_good_random_art = !q_ptr->is_cursed();
-        is_good_random_art &= q_ptr->to_h > 0;
-        is_good_random_art &= q_ptr->to_d > 0;
-        is_good_random_art &= q_ptr->to_a > 0;
-        is_good_random_art &= q_ptr->pval > 0;
+        (void)become_random_artifact(player_ptr, &*item, false);
+        auto is_good_random_art = !item->is_cursed();
+        is_good_random_art &= item->to_h > 0;
+        is_good_random_art &= item->to_d > 0;
+        is_good_random_art &= item->to_a > 0;
+        is_good_random_art &= item->pval > 0;
         if (is_good_random_art) {
-            break;
+            (void)drop_near(player_ptr, &*item, md_ptr->get_position());
+            return;
         }
     }
-
-    (void)drop_near(player_ptr, q_ptr, md_ptr->get_position());
 }
 
 /*!
@@ -357,9 +357,9 @@ static void on_dead_manimani(PlayerType *player_ptr, MonsterDeath *md_ptr)
 
 static void drop_specific_item_on_dead(PlayerType *player_ptr, MonsterDeath *md_ptr, BaseitemRestrict restrict)
 {
-    ItemEntity item;
-    (void)make_object(player_ptr, &item, md_ptr->mo_mode, restrict);
-    (void)drop_near(player_ptr, &item, md_ptr->get_position());
+    if (auto item = make_object(player_ptr, md_ptr->mo_mode, restrict)) {
+        (void)drop_near(player_ptr, &*item, md_ptr->get_position());
+    }
 }
 
 static void on_dead_chest_mimic(PlayerType *player_ptr, MonsterDeath *md_ptr)
