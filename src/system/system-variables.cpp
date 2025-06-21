@@ -25,8 +25,3 @@ concptr ANGBAND_SYS = "xxx";
 concptr ANGBAND_KEYBOARD = _("JAPAN", "0");
 concptr ANGBAND_GRAF = "ascii";
 init_flags_type init_flags; //!< @todo このグローバル変数何とかしたい
-
-/*!
- * Function hook to restrict "get_obj_index_prep()" function
- */
-bool (*select_baseitem_id_hook)(short bi_id);

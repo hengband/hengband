@@ -134,16 +134,27 @@ bool BaseitemAllocationTable::order_level(int index1, int index2) const
 
 /*!
  * @brief オブジェクト生成テーブルに生成制約を加える
- * @todo select_baseitem_id_hook グローバル関数ポインタは引数化して除去する
+ * @param restrict 制約を加える関数。この関数がtrueを返すベースアイテムのみを生成対象とする。
+ *                 nullptrを指定した場合は制約なしで生成する(reset_restriction()と実質同じ)。
  */
-void BaseitemAllocationTable::prepare_allocation()
+void BaseitemAllocationTable::set_restriction(BaseitemRestrict restrict)
 {
     for (auto &entry : this->entries) {
-        if (!select_baseitem_id_hook || (*select_baseitem_id_hook)(entry.index)) {
+        if (!restrict || restrict(entry.index)) {
             entry.prob2 = entry.prob1;
         } else {
             entry.prob2 = 0;
         }
+    }
+}
+
+/*!
+ * @brief オブジェクト生成テーブルの生成制約を解除する
+ */
+void BaseitemAllocationTable::reset_restriction()
+{
+    for (auto &entry : this->entries) {
+        entry.prob2 = entry.prob1;
     }
 }
 

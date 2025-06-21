@@ -28,6 +28,7 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact-type-definition.h"
+#include "system/baseitem/baseitem-allocation.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/item-entity.h"
@@ -131,17 +132,11 @@ static void on_dead_raal(PlayerType *player_ptr, MonsterDeath *md_ptr)
         return;
     }
 
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    q_ptr->wipe();
-    if ((floor.dun_level > 49) && one_in_(5)) {
-        select_baseitem_id_hook = kind_is_good_book;
-    } else {
-        select_baseitem_id_hook = kind_is_book;
-    }
+    ItemEntity item;
+    const auto restrict = ((floor.dun_level > 49) && one_in_(5)) ? kind_is_good_book : kind_is_book;
 
-    (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-    (void)drop_near(player_ptr, q_ptr, md_ptr->get_position());
+    (void)make_object(player_ptr, &item, md_ptr->mo_mode, restrict);
+    (void)drop_near(player_ptr, &item, md_ptr->get_position());
 }
 
 /*!
@@ -285,47 +280,43 @@ static void on_dead_dragon_centipede(PlayerType *player_ptr, MonsterDeath *md_pt
     }
 }
 
-/*
+/*!
  * @brief 装備品の生成を試みる
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param q_ptr 生成中アイテムへの参照ポインタ
  * @param drop_mode ドロップ品の質
- * @param is_object_hook_null アイテム種別が何でもありならtrue、指定されていればfalse
+ * @param restrict ベースアイテム制約関数。特になければnullptrで良い
  * @return 生成したアイテムが装備品ならtrue、それ以外ならfalse
  * @todo 汎用的に使えそうだがどこかにいいファイルはないか？
  */
-static bool make_equipment(PlayerType *player_ptr, ItemEntity *q_ptr, const BIT_FLAGS drop_mode, const bool is_object_hook_null)
+static bool make_equipment(PlayerType *player_ptr, ItemEntity *q_ptr, const BIT_FLAGS drop_mode, BaseitemRestrict restrict)
 {
     q_ptr->wipe();
-    (void)make_object(player_ptr, q_ptr, drop_mode);
-    if (!is_object_hook_null) {
+    (void)make_object(player_ptr, q_ptr, drop_mode, restrict);
+    if (restrict) {
         return true;
     }
 
     return q_ptr->is_wearable() && (q_ptr->bi_key.tval() != ItemKindType::CARD);
 }
 
-/*
+/*!
  * @brief 死亡時ドロップとしてランダムアーティファクトのみを生成する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param md_ptr モンスター撃破構造体への参照ポインタ
- * @param hook_pf アイテム種別指定、特になければnullptrで良い
+ * @param restrict ベースアイテム制約関数。特になければnullptrで良い
  * @return なし
  * @details
  * 最初のアイテム生成でいきなり☆が生成された場合を除き、中途半端な☆ (例：呪われている)は生成しない.
  * このルーチンで★は生成されないので、★生成フラグのキャンセルも不要
  */
-static void on_dead_random_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr, bool (*hook_pf)(short bi_id))
+static void on_dead_random_artifact(PlayerType *player_ptr, MonsterDeath *md_ptr, BaseitemRestrict restrict)
 {
     ItemEntity forge;
     auto *q_ptr = &forge;
-    auto is_object_hook_null = hook_pf == nullptr;
     auto drop_mode = md_ptr->mo_mode | AM_NO_FIXED_ART;
     while (true) {
-        // make_object() の中でアイテム種別をキャンセルしている
-        // よってこのwhileループ中へ入れないと、引数で指定していない種別のアイテムが選ばれる可能性がある
-        select_baseitem_id_hook = hook_pf;
-        if (!make_equipment(player_ptr, q_ptr, drop_mode, is_object_hook_null)) {
+        if (!make_equipment(player_ptr, q_ptr, drop_mode, restrict)) {
             continue;
         }
 
@@ -364,14 +355,11 @@ static void on_dead_manimani(PlayerType *player_ptr, MonsterDeath *md_ptr)
     msg_print(_("どこからか声が聞こえる…「ハロー！　そして…グッドバイ！」", "Heard a voice from somewhere... 'Hello! And... good bye!'"));
 }
 
-static void drop_specific_item_on_dead(PlayerType *player_ptr, MonsterDeath *md_ptr, bool (*object_hook_pf)(short bi_id))
+static void drop_specific_item_on_dead(PlayerType *player_ptr, MonsterDeath *md_ptr, BaseitemRestrict restrict)
 {
-    ItemEntity forge;
-    auto *q_ptr = &forge;
-    q_ptr->wipe();
-    select_baseitem_id_hook = object_hook_pf;
-    (void)make_object(player_ptr, q_ptr, md_ptr->mo_mode);
-    (void)drop_near(player_ptr, q_ptr, md_ptr->get_position());
+    ItemEntity item;
+    (void)make_object(player_ptr, &item, md_ptr->mo_mode, restrict);
+    (void)drop_near(player_ptr, &item, md_ptr->get_position());
 }
 
 static void on_dead_chest_mimic(PlayerType *player_ptr, MonsterDeath *md_ptr)
