@@ -267,7 +267,8 @@ void delete_items(PlayerType *player_ptr, std::vector<OBJECT_IDX> delete_i_idx_l
  */
 void delete_items(PlayerType *player_ptr, ObjectIndexList &o_idx_list)
 {
-    delete_items(player_ptr, o_idx_list | ranges::to_vector);
+    auto delete_i_idx_list = o_idx_list | ranges::to_vector;
+    delete_items(player_ptr, std::move(delete_i_idx_list));
 }
 
 /*!
