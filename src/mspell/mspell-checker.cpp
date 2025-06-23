@@ -53,7 +53,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
                 continue;
             }
 
-            if (floor.is_empty_at(pos) && (pos != p_pos) && projectable(floor, p_pos, pos1, pos) && projectable(floor, p_pos, pos, pos1)) {
+            if (floor.is_empty_at(pos) && (pos != p_pos) && projectable(floor, pos1, pos) && projectable(floor, pos, pos1)) {
                 return true;
             }
         }
@@ -71,7 +71,6 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
  */
 bool raise_possible(PlayerType *player_ptr, const MonsterEntity &monster)
 {
-    const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();
     const auto &floor = *player_ptr->current_floor_ptr;
     for (auto xx = m_pos.x - 5; xx <= m_pos.x + 5; xx++) {
@@ -83,7 +82,7 @@ bool raise_possible(PlayerType *player_ptr, const MonsterEntity &monster)
             if (!los(floor, m_pos, pos)) {
                 continue;
             }
-            if (!projectable(floor, p_pos, m_pos, pos)) {
+            if (!projectable(floor, m_pos, pos)) {
                 continue;
             }
 

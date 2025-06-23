@@ -21,4 +21,4 @@ private:
     std::vector<Pos2D> positions;
 };
 
-bool projectable(const FloorType &floor, const Pos2D &p_pos, const Pos2D &pos1, const Pos2D &pos2);
+bool projectable(const FloorType &floor, const Pos2D &pos_src, const Pos2D &pos_dst);

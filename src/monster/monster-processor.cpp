@@ -560,7 +560,7 @@ bool cast_spell(PlayerType *player_ptr, MONSTER_IDX m_idx, bool aware)
         const auto t_m_idx = floor.get_grid(pos_to).m_idx;
         const auto &monster_to = floor.m_list[t_m_idx];
         const auto pos_from = monster_from.get_position();
-        const auto is_projectable = projectable(floor, player_ptr->get_position(), pos_from, pos_to);
+        const auto is_projectable = projectable(floor, pos_from, pos_to);
         if (t_m_idx && monster_from.is_hostile_to_melee(monster_to) && is_projectable) {
             counter_attack = true;
         }

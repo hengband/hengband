@@ -238,19 +238,22 @@ ProjectionPath::ProjectionPath(const FloorType &floor, int range, const Pos2D &p
 }
 
 /*
- * Determine if a bolt spell cast from (y1,x1) to (y2,x2) will arrive
+ * Determine if a bolt spell cast from pos_src to pos_dst will arrive
  * at the final destination, assuming no monster gets in the way.
  *
- * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
+ * This is slightly (but significantly) different from "los(floor, pos_src, pos_dst)".
  */
-bool projectable(const FloorType &floor, const Pos2D &p_pos, const Pos2D &pos1, const Pos2D &pos2)
+bool projectable(const FloorType &floor, const Pos2D &pos_src, const Pos2D &pos_dst)
 {
     const auto range = project_length ? project_length : AngbandSystem::get_instance().get_max_range();
-    ProjectionPath grid_g(floor, range, p_pos, pos1, pos2, 0);
+    // ProjectionPathのp_posはflagにPROJECT_STOPが設定されている時のみ使用される
+    // ここではflagが0なのでダミーを渡せば良い
+    constexpr auto p_pos_dummy = Pos2D(0, 0);
+    ProjectionPath grid_g(floor, range, p_pos_dummy, pos_src, pos_dst, 0);
     if (grid_g.path_num() == 0) {
         return true;
     }
 
     const auto &pos = grid_g.back();
-    return pos == pos2;
+    return pos == pos_dst;
 }

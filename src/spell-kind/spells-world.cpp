@@ -236,7 +236,7 @@ bool teleport_level_other(PlayerType *player_ptr)
     }
 
     const auto p_pos = player_ptr->get_position();
-    if (!projectable(floor, p_pos, p_pos, *pos)) {
+    if (!projectable(floor, p_pos, *pos)) {
         return true;
     }
 

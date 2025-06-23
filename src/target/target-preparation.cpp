@@ -52,7 +52,7 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
     }
 
     const auto p_pos = player_ptr->get_position();
-    if (!projectable(floor, p_pos, p_pos, monster.get_position())) {
+    if (!projectable(floor, p_pos, monster.get_position())) {
         return false;
     }
 
