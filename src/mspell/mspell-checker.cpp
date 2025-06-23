@@ -125,7 +125,7 @@ bool raise_possible(PlayerType *player_ptr, const MonsterEntity &monster)
 bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    ProjectionPath grid_g(floor, AngbandSystem::get_instance().get_max_range(), player_ptr->get_position(), { y1, x1 }, { y2, x2 }, 0);
+    ProjectionPath grid_g(floor, AngbandSystem::get_instance().get_max_range(), { y1, x1 }, { y2, x2 });
     if (grid_g.path_num() == 0) {
         return false;
     }

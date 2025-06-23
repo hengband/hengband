@@ -212,8 +212,9 @@ static void calc_diagonal_projection(const FloorType &floor, const Pos2D &p_pos,
 
 /*!
  * @brief 始点から終点への直線経路を返す
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @param range 距離
+ * @param p_pos プレイヤーの座標
  * @param pos_src 始点座標
  * @param pos_dst 終点座標
  * @param flag フラグ群
@@ -237,6 +238,20 @@ ProjectionPath::ProjectionPath(const FloorType &floor, int range, const Pos2D &p
     calc_diagonal_projection(floor, p_pos, &pph);
 }
 
+/*!
+ * @brief 始点から終点への直線経路を返す(フラグ指定なし)
+ * @param floor フロアへの参照
+ * @param range 距離
+ * @param pos_src 始点座標
+ * @param pos_dst 終点座標
+ * @details プレイヤーの座標はPROJECT_STOPフラグが設定されている時のみ使用されるため、フラグ指定無しの場合は不要。
+ * したがってダミー座標を渡しておく。
+ */
+ProjectionPath::ProjectionPath(const FloorType &floor, int range, const Pos2D &pos_src, const Pos2D &pos_dst)
+    : ProjectionPath(floor, range, { 0, 0 } /* dummy */, pos_src, pos_dst, 0)
+{
+}
+
 /*
  * Determine if a bolt spell cast from pos_src to pos_dst will arrive
  * at the final destination, assuming no monster gets in the way.
@@ -246,10 +261,7 @@ ProjectionPath::ProjectionPath(const FloorType &floor, int range, const Pos2D &p
 bool projectable(const FloorType &floor, const Pos2D &pos_src, const Pos2D &pos_dst)
 {
     const auto range = project_length ? project_length : AngbandSystem::get_instance().get_max_range();
-    // ProjectionPathのp_posはflagにPROJECT_STOPが設定されている時のみ使用される
-    // ここではflagが0なのでダミーを渡せば良い
-    constexpr auto p_pos_dummy = Pos2D(0, 0);
-    ProjectionPath grid_g(floor, range, p_pos_dummy, pos_src, pos_dst, 0);
+    ProjectionPath grid_g(floor, range, pos_src, pos_dst);
     if (grid_g.path_num() == 0) {
         return true;
     }
