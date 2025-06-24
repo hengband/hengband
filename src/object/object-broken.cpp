@@ -346,7 +346,7 @@ bool potion_smash_effect(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION y
  * @param o_ptr 矢弾のオブジェクト構造体参照ポインタ
  * @return 破損確率(%)
  * @details
- * Note that artifacts never break, see the "drop_near()" function.
+ * Note that artifacts never break, see the "drop_ammo_near()" function.
  */
 PERCENTAGE breakage_chance(PlayerType *player_ptr, ItemEntity *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type)
 {

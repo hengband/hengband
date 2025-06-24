@@ -92,7 +92,7 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     constexpr auto sv_wooden_statue = 0;
     ItemEntity item({ ItemKindType::STATUE, sv_wooden_statue });
     item.pval = enum2i(MonraceId::NINJA);
-    (void)drop_near(player_ptr, &item, p_pos_orig);
+    (void)drop_near(player_ptr, item, p_pos_orig);
 
     if (success) {
         msg_print(_("攻撃を受ける前に素早く身をひるがえした。", "You have turned around just before the attack hit you."));

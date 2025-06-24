@@ -240,7 +240,7 @@ void QuestCompletionChecker::make_reward(const Pos2D pos)
                 continue;
             }
 
-            (void)drop_near(this->player_ptr, &*item, pos);
+            (void)drop_near(this->player_ptr, *item, pos);
             break;
         }
     }
