@@ -7,7 +7,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -34,7 +34,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -65,7 +65,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -82,7 +82,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -127,7 +127,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -157,7 +157,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -178,7 +178,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -220,7 +220,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -239,7 +239,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -264,7 +264,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -286,7 +286,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -306,7 +306,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -326,7 +326,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -354,7 +354,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -388,7 +388,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -410,7 +410,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -435,7 +435,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -465,7 +465,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -489,7 +489,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -507,7 +507,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -531,7 +531,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -550,7 +550,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -569,7 +569,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -585,7 +585,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -603,7 +603,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -621,7 +621,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -639,7 +639,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -658,7 +658,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -675,7 +675,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -695,7 +695,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -714,7 +714,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -735,7 +735,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -754,7 +754,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -771,7 +771,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -794,7 +794,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -815,7 +815,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -832,7 +832,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -863,7 +863,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -888,7 +888,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -910,7 +910,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -927,7 +927,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -945,7 +945,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -963,7 +963,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -981,7 +981,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -999,7 +999,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1015,7 +1015,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1032,7 +1032,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1050,7 +1050,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1068,7 +1068,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1105,7 +1105,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1132,7 +1132,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1155,7 +1155,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1181,7 +1181,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1209,7 +1209,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1237,7 +1237,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1256,7 +1256,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1284,7 +1284,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1328,7 +1328,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1353,7 +1353,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1375,7 +1375,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1395,7 +1395,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1418,7 +1418,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1435,7 +1435,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1454,7 +1454,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1472,7 +1472,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1492,7 +1492,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1517,7 +1517,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1536,7 +1536,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1558,7 +1558,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1584,7 +1584,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1600,7 +1600,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1621,7 +1621,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1639,7 +1639,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1658,7 +1658,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1680,7 +1680,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1711,7 +1711,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1732,7 +1732,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1753,7 +1753,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1791,7 +1791,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1814,7 +1814,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1834,7 +1834,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1851,7 +1851,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1868,7 +1868,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1886,7 +1886,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1905,7 +1905,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1922,7 +1922,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1939,7 +1939,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -1985,7 +1985,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -2004,7 +2004,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -2023,7 +2023,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -2042,7 +2042,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -2063,7 +2063,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -2083,7 +2083,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
@@ -4233,7 +4233,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4260,7 +4260,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4299,7 +4299,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4316,7 +4316,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4351,7 +4351,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4372,7 +4372,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4414,7 +4414,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4433,7 +4433,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4458,7 +4458,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4480,7 +4480,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4500,7 +4500,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4520,7 +4520,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4549,7 +4549,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4583,7 +4583,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4605,7 +4605,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4630,7 +4630,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4660,7 +4660,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4684,7 +4684,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4702,7 +4702,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4726,7 +4726,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4745,7 +4745,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4763,7 +4763,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4779,7 +4779,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4797,7 +4797,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4815,7 +4815,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4833,7 +4833,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4852,7 +4852,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4869,7 +4869,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4889,7 +4889,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4908,7 +4908,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4929,7 +4929,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4948,7 +4948,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4965,7 +4965,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -4988,7 +4988,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5009,7 +5009,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5026,7 +5026,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5057,7 +5057,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5082,7 +5082,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5104,7 +5104,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5121,7 +5121,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5139,7 +5139,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5157,7 +5157,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5175,7 +5175,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5193,7 +5193,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5209,7 +5209,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5226,7 +5226,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5244,7 +5244,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5262,7 +5262,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5299,7 +5299,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5333,7 +5333,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5356,7 +5356,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5382,7 +5382,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5410,7 +5410,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5437,7 +5437,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5456,7 +5456,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5484,7 +5484,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5512,7 +5512,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5537,7 +5537,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5559,7 +5559,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5579,7 +5579,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5596,7 +5596,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5615,7 +5615,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5633,7 +5633,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5658,7 +5658,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5677,7 +5677,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5699,7 +5699,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5730,7 +5730,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5751,7 +5751,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5772,7 +5772,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5811,7 +5811,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5834,7 +5834,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5853,7 +5853,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5870,7 +5870,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5887,7 +5887,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5904,7 +5904,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5923,7 +5923,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5940,7 +5940,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -5957,7 +5957,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -6005,7 +6005,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -6024,7 +6024,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -6043,7 +6043,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -6062,7 +6062,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -6083,7 +6083,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -6103,7 +6103,7 @@
             ],
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "en": [
@@ -7933,7 +7933,7 @@
             "name": "DEFAULT",
             "message": [
                 {
-                    "action": "SPEAK_BATTLE",
+                    "action": "SPEAK_ALL",
                     "chance": 8,
                     "message": {
                         "ja": [
