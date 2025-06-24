@@ -293,10 +293,9 @@ ObjectIndexList &get_o_idx_list_contains(FloorType &floor, OBJECT_IDX o_idx)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param drop_item 落としたいアイテムへの参照
  * @param pos 配置したい座標
- * @param chance 投擲物の消滅率(%)。投擲物以外はnullopt
  * @param show_drop_message 足下に転がってきたアイテムのメッセージを表示するかどうか (デフォルトは表示する)
  */
-short drop_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos, tl::optional<int> chance, bool show_drop_message)
+short drop_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos, bool show_drop_message)
 {
 #ifdef JP
 #else
@@ -304,18 +303,6 @@ short drop_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos,
 #endif
     const auto &world = AngbandWorld::get_instance();
     const auto item_name = describe_flavor(player_ptr, drop_item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (!drop_item.is_fixed_or_random_artifact() && chance && evaluate_percent(*chance)) {
-#ifdef JP
-        msg_format("%sは消えた。", item_name.data());
-#else
-        msg_format("The %s disappear%s.", item_name.data(), (plural ? "" : "s"));
-#endif
-        if (world.wizard) {
-            msg_print(_("(破損)", "(breakage)"));
-        }
-
-        return 0;
-    }
 
     Pos2D pos_drop = pos; //!< @details 実際に落ちる座標.
     auto bs = -1;
@@ -497,6 +484,33 @@ short drop_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos,
     }
 
     return item_idx;
+}
+
+/*!
+ * @brief 矢弾アイテムを所定の位置に落とす。(指定した確率で壊れて消滅する)
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param drop_item 落としたいアイテムへの参照
+ * @param pos 配置したい座標
+ * @param destruction_chance 消滅率(%)
+ */
+void drop_ammo_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos, int destruction_chance)
+{
+    if (!drop_item.is_fixed_or_random_artifact() && evaluate_percent(destruction_chance)) {
+        const auto item_name = describe_flavor(player_ptr, drop_item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+#ifdef JP
+        msg_print("{}は消えた。", item_name);
+#else
+        const auto plural = (drop_item.number != 1);
+        msg_print("The {} disappear{}.", item_name, (plural ? "" : "s"));
+#endif
+        if (AngbandWorld::get_instance().wizard) {
+            msg_print(_("(破損)", "(breakage)"));
+        }
+
+        return;
+    }
+
+    (void)drop_near(player_ptr, drop_item, pos, true);
 }
 
 /*!
