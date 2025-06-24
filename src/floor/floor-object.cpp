@@ -146,8 +146,8 @@ void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos)
         return;
     }
 
-    const auto &grid = floor.get_grid(pos);
-    delete_items(player_ptr, grid.o_idx_list | ranges::to_vector);
+    auto &grid = floor.get_grid(pos);
+    delete_items(player_ptr, grid.o_idx_list);
 
     lite_spot(player_ptr, pos);
 }
@@ -258,6 +258,17 @@ void delete_items(PlayerType *player_ptr, std::vector<OBJECT_IDX> delete_i_idx_l
     for (const auto delete_i_idx : delete_i_idx_list) {
         delete_object_idx(player_ptr, delete_i_idx);
     }
+}
+
+/*!
+ * @brief ObjectIndexListが管理しているアイテムをすべて削除する
+ * @param o_idx_list 管理しているアイテムをすべて削除するObjectIndexListオブジェクト
+ * @details 結果としてo_idx_listは空になるので、あえて引数は非const参照としている
+ */
+void delete_items(PlayerType *player_ptr, ObjectIndexList &o_idx_list)
+{
+    auto delete_i_idx_list = o_idx_list | ranges::to_vector;
+    delete_items(player_ptr, std::move(delete_i_idx_list));
 }
 
 /*!
