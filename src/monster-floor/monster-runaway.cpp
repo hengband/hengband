@@ -64,7 +64,7 @@ static void escape_monster(PlayerType *player_ptr, turn_flags *turn_flags_ptr, c
         const auto p_pos = player_ptr->get_position();
         const auto m_pos = monster.get_position();
         speak &= player_ptr->current_floor_ptr->has_los_at(m_pos);
-        speak &= projectable(floor, p_pos, m_pos, p_pos);
+        speak &= projectable(floor, m_pos, p_pos);
         if (speak) {
             msg_format(_("%s^「ピンチだ！退却させてもらう！」", "%s^ says 'It is the pinch! I will retreat'."), m_name);
         }

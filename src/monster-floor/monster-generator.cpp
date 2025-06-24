@@ -62,7 +62,7 @@ tl::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, co
                 continue;
             }
 
-            if (!projectable(floor, p_pos, pos, pos_neighbor)) {
+            if (!projectable(floor, pos, pos_neighbor)) {
                 continue;
             }
 

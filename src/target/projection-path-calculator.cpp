@@ -212,8 +212,9 @@ static void calc_diagonal_projection(const FloorType &floor, const Pos2D &p_pos,
 
 /*!
  * @brief 始点から終点への直線経路を返す
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @param range 距離
+ * @param p_pos プレイヤーの座標
  * @param pos_src 始点座標
  * @param pos_dst 終点座標
  * @param flag フラグ群
@@ -237,20 +238,34 @@ ProjectionPath::ProjectionPath(const FloorType &floor, int range, const Pos2D &p
     calc_diagonal_projection(floor, p_pos, &pph);
 }
 
+/*!
+ * @brief 始点から終点への直線経路を返す(フラグ指定なし)
+ * @param floor フロアへの参照
+ * @param range 距離
+ * @param pos_src 始点座標
+ * @param pos_dst 終点座標
+ * @details プレイヤーの座標はPROJECT_STOPフラグが設定されている時のみ使用されるため、フラグ指定無しの場合は不要。
+ * したがってダミー座標を渡しておく。
+ */
+ProjectionPath::ProjectionPath(const FloorType &floor, int range, const Pos2D &pos_src, const Pos2D &pos_dst)
+    : ProjectionPath(floor, range, { 0, 0 } /* dummy */, pos_src, pos_dst, 0)
+{
+}
+
 /*
- * Determine if a bolt spell cast from (y1,x1) to (y2,x2) will arrive
+ * Determine if a bolt spell cast from pos_src to pos_dst will arrive
  * at the final destination, assuming no monster gets in the way.
  *
- * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
+ * This is slightly (but significantly) different from "los(floor, pos_src, pos_dst)".
  */
-bool projectable(const FloorType &floor, const Pos2D &p_pos, const Pos2D &pos1, const Pos2D &pos2)
+bool projectable(const FloorType &floor, const Pos2D &pos_src, const Pos2D &pos_dst)
 {
     const auto range = project_length ? project_length : AngbandSystem::get_instance().get_max_range();
-    ProjectionPath grid_g(floor, range, p_pos, pos1, pos2, 0);
+    ProjectionPath grid_g(floor, range, pos_src, pos_dst);
     if (grid_g.path_num() == 0) {
         return true;
     }
 
     const auto &pos = grid_g.back();
-    return pos == pos2;
+    return pos == pos_dst;
 }

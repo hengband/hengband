@@ -471,7 +471,7 @@ bool process_monster_movement(PlayerType *player_ptr, turn_flags *turn_flags_ptr
         const auto &apparent_monrace = monster.get_appearance_monrace();
         const auto p_pos = player_ptr->get_position(); //!< @details 関数が長すぎてプレイヤーの座標が不変であることを保証できない.
         const auto m_pos = monster.get_position();
-        const auto is_projectable = projectable(floor, p_pos, p_pos, m_pos);
+        const auto is_projectable = projectable(floor, p_pos, m_pos);
         const auto can_see = disturb_near && monster.mflag.has(MonsterTemporaryFlagType::VIEW) && is_projectable;
         const auto is_high_level = disturb_high && (apparent_monrace.r_tkills > 0) && (apparent_monrace.level >= player_ptr->lev);
         const auto is_unknown_level = disturb_unknown && (apparent_monrace.r_tkills == 0);
@@ -610,7 +610,7 @@ void process_speak(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION oy, POSIT
     const auto &monrace = monster.get_monrace();
     const auto p_pos = player_ptr->get_position();
     const auto can_speak = monster.get_appearance_monrace().speak_flags.any();
-    if (!can_speak || !aware || !floor.has_los_at({ oy, ox }) || !projectable(floor, p_pos, pos, p_pos)) {
+    if (!can_speak || !aware || !floor.has_los_at({ oy, ox }) || !projectable(floor, pos, p_pos)) {
         return;
     }
 

@@ -649,7 +649,7 @@ tl::optional<std::string> do_hissatsu_spell(PlayerType *player_ptr, SPELL_IDX sp
             const auto p_pos = player_ptr->get_position();
             const auto is_teleportable = cave_player_teleportable_bold(player_ptr, pos->y, pos->x, TELEPORT_SPONTANEOUS);
             const auto dist = Grid::calc_distance(*pos, p_pos);
-            if (!is_teleportable || (dist > MAX_PLAYER_SIGHT / 2) || !projectable(*player_ptr->current_floor_ptr, p_pos, p_pos, *pos)) {
+            if (!is_teleportable || (dist > MAX_PLAYER_SIGHT / 2) || !projectable(*player_ptr->current_floor_ptr, p_pos, *pos)) {
                 msg_print(_("失敗！", "You cannot move to that place!"));
                 break;
             }

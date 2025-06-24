@@ -445,7 +445,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
                 }
 
                 /* Require line of projection */
-                if (!projectable(floor, p_pos, p_pos, pos)) {
+                if (!projectable(floor, p_pos, pos)) {
                     continue;
                 }
 

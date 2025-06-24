@@ -241,7 +241,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     const auto p_pos = player_ptr->get_position();
     if (flag & PROJECT_KILL) {
         see_s_msg = is_monster(src_idx) ? is_seen(player_ptr, floor.m_list[src_idx])
-                                        : (is_player(src_idx) ? true : (player_can_see_bold(player_ptr, pos_source.y, pos_source.x) && projectable(floor, p_pos, p_pos, pos_source)));
+                                        : (is_player(src_idx) ? true : (player_can_see_bold(player_ptr, pos_source.y, pos_source.x) && projectable(floor, p_pos, pos_source)));
     }
 
     if (flag & (PROJECT_GRID)) {
@@ -282,7 +282,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
                         pos_reflection.y = pos_source.y - 1 + randint1(3);
                         pos_reflection.x = pos_source.x - 1 + randint1(3);
                         max_attempts--;
-                    } while (max_attempts && floor.contains(pos_reflection, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(floor, p_pos, pos, pos_reflection));
+                    } while (max_attempts && floor.contains(pos_reflection, FloorBoundary::OUTER_WALL_INCLUSIVE) && !projectable(floor, pos, pos_reflection));
 
                     if (max_attempts < 1) {
                         pos_reflection = pos_source;

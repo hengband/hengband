@@ -141,6 +141,6 @@ bool is_seen(PlayerType *player_ptr, const MonsterEntity &monster)
     is_inside_view |= AngbandSystem::get_instance().is_phase_out();
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();
-    is_inside_view |= player_can_see_bold(player_ptr, m_pos.y, m_pos.x) && projectable(*player_ptr->current_floor_ptr, p_pos, p_pos, m_pos);
+    is_inside_view |= player_can_see_bold(player_ptr, m_pos.y, m_pos.x) && projectable(*player_ptr->current_floor_ptr, p_pos, m_pos);
     return monster.ml && is_inside_view;
 }
