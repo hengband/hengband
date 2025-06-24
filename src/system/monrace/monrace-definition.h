@@ -240,6 +240,7 @@ public:
     void increment_tkills();
 
     void emplace_final_summon(MonraceId id, int probability, int min_num, int max_num, int radius);
+    const std::vector<MonsterSummon> &get_final_summons() const;
 
 private:
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト

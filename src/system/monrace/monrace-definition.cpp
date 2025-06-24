@@ -954,6 +954,11 @@ void MonraceDefinition::emplace_final_summon(MonraceId id, int probability, int 
     this->final_summons.emplace_back(MonsterSummon(id, probability, min_num, max_num, radius));
 }
 
+const std::vector<MonsterSummon> &MonraceDefinition::get_final_summons() const
+{
+    return this->final_summons;
+}
+
 /*!
  * @brief モンスター闘技場 (ギャンブル)に出場できるかを返す
  * @return 出場可不可
