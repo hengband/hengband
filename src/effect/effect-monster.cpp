@@ -689,7 +689,7 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, EffectMonster *e
     ItemEntity item({ ItemKindType::STATUE, SV_PHOTO });
     item.pval = em_ptr->photo;
     item.ident |= (IDENT_FULL_KNOWN);
-    (void)drop_near(player_ptr, &item, player_ptr->get_position());
+    (void)drop_near(player_ptr, item, player_ptr->get_position());
 }
 
 /*!

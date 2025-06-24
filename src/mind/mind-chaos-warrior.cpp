@@ -71,5 +71,5 @@ void acquire_chaos_weapon(PlayerType *player_ptr)
     item.to_d = 3 + randint1(player_ptr->current_floor_ptr->dun_level) % 10;
     one_resistance(&item);
     item.ego_idx = EgoType::CHAOTIC;
-    (void)drop_near(player_ptr, &item, player_ptr->get_position());
+    (void)drop_near(player_ptr, item, player_ptr->get_position());
 }

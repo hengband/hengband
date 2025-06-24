@@ -107,7 +107,7 @@ tl::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spel
         if (cast) {
             msg_print(_("食料を生成した。", "A food ration is produced."));
             ItemEntity item({ ItemKindType::FOOD, SV_FOOD_RATION });
-            (void)drop_near(player_ptr, &item, player_ptr->get_position());
+            (void)drop_near(player_ptr, item, player_ptr->get_position());
         }
     } break;
 

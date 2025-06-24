@@ -83,7 +83,7 @@ void Chest::open(bool scatter, const Pos2D &pos, short item_idx)
 
         if (!scatter) {
             /* Normally, drop object near the chest. */
-            (void)drop_near(this->player_ptr, &item_inner_chest, pos);
+            (void)drop_near(this->player_ptr, item_inner_chest, pos);
             continue;
         }
 
@@ -96,7 +96,7 @@ void Chest::open(bool scatter, const Pos2D &pos, short item_idx)
                 continue;
             }
 
-            (void)drop_near(this->player_ptr, &item_inner_chest, pos_random);
+            (void)drop_near(this->player_ptr, item_inner_chest, pos_random);
             break;
         }
     }

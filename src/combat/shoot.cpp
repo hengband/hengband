@@ -937,10 +937,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             monster.hold_o_idx_list.add(floor, item_idx);
         } else if (floor.has_terrain_characteristics(pos_impact, TerrainCharacteristics::PROJECTION)) {
             /* Drop (or break) near that location */
-            (void)drop_near(player_ptr, &fire_item, pos_impact, j);
+            (void)drop_near(player_ptr, fire_item, pos_impact, j);
         } else {
             /* Drop (or break) near that location */
-            (void)drop_near(player_ptr, &fire_item, { prev_y, prev_x }, j);
+            (void)drop_near(player_ptr, fire_item, { prev_y, prev_x }, j);
         }
 
         /* Sniper - Repeat shooting when double shots */
