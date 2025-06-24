@@ -294,8 +294,9 @@ ObjectIndexList &get_o_idx_list_contains(FloorType &floor, OBJECT_IDX o_idx)
  * @param j_ptr 落としたいアイテムへの参照ポインタ
  * @param pos 配置したい座標
  * @param chance 投擲物の消滅率(%)。投擲物以外はnullopt
+ * @param show_drop_message 足下に転がってきたアイテムのメッセージを表示するかどうか (デフォルトは表示する)
  */
-short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl::optional<int> chance)
+short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl::optional<int> chance, bool show_drop_message)
 {
 #ifdef JP
 #else
@@ -491,7 +492,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl:
         RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }
 
-    if (chance && is_located) {
+    if (show_drop_message && is_located) {
         msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
     }
 
