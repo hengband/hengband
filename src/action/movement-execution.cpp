@@ -141,17 +141,6 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
 
     const auto &monster = floor.m_list[grid.m_idx];
 
-    // @todo 「特定の武器を装備している」旨のメソッドを別途作る
-    constexpr auto stormbringer = FixedArtifactId::STORMBRINGER;
-    auto is_stormbringer = false;
-    if (player_ptr->inventory[INVEN_MAIN_HAND]->is_specific_artifact(stormbringer)) {
-        is_stormbringer = true;
-    }
-
-    if (player_ptr->inventory[INVEN_SUB_HAND]->is_specific_artifact(stormbringer)) {
-        is_stormbringer = true;
-    }
-
     auto &terrain = grid.get_terrain();
     auto p_can_kill_walls = has_kill_wall(player_ptr);
     p_can_kill_walls &= terrain.flags.has(TerrainCharacteristics::HURT_DISI);
@@ -181,7 +170,7 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
                 health_track(player_ptr, grid.m_idx);
             }
 
-            if ((is_stormbringer && (randint1(1000) > 666)) || PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
+            if ((player_ptr->is_wielding(FixedArtifactId::STORMBRINGER) && (randint1(1000) > 666)) || PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER)) {
                 do_cmd_attack(player_ptr, pos.y, pos.x, HISSATSU_NONE);
                 can_move = false;
             } else if (monster_can_cross_terrain(player_ptr, floor.get_grid(player_ptr->get_position()).feat, monrace, 0)) {
