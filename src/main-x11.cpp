@@ -2249,6 +2249,22 @@ static window_setting get_window_setting(int window_no)
         .y_inner_border = getenv_int(fmt::format("ANGBAND_X11_IBOY_{}", window_no)).and_then(allow_positive).value_or(1),
     };
 
+    if (const auto str = getenv(fmt::format("ANGBAND_X11_WINDOW_{}", window_no).data())) {
+        const auto vals = str_split(str, ',', true);
+        if (vals.size() >= 2) {
+            ws.cols = str_to_int(vals[0]).and_then(allow_positive).value_or(TERM_DEFAULT_COLS);
+            ws.rows = str_to_int(vals[1]).and_then(allow_positive).value_or(TERM_DEFAULT_ROWS);
+        }
+        if (vals.size() >= 4) {
+            ws.x_pos = str_to_int(vals[2]).value_or(-1);
+            ws.y_pos = str_to_int(vals[3]).value_or(-1);
+        }
+        if (vals.size() >= 6) {
+            ws.x_inner_border = str_to_int(vals[4]).and_then(allow_positive).value_or(1);
+            ws.y_inner_border = str_to_int(vals[5]).and_then(allow_positive).value_or(1);
+        }
+    }
+
     // メインウィンドウは最小サイズを制限する
     if (window_no == 0) {
         ws.cols = std::max(ws.cols, MAIN_TERM_MIN_COLS);
