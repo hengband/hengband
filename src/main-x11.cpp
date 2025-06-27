@@ -2218,6 +2218,15 @@ static void game_term_nuke_x11(term_type *)
     XCloseDisplay(Metadpy->dpy);
 }
 
+static tl::optional<int> getenv_int(const std::string &key)
+{
+    if (const auto val = getenv(key.data())) {
+        return str_to_int(val);
+    }
+
+    return tl::nullopt;
+}
+
 struct window_setting {
     int x_pos;
     int y_pos;
@@ -2229,44 +2238,21 @@ struct window_setting {
 
 static window_setting get_window_setting(int window_no)
 {
-    window_setting ws = { -1, -1, TERM_DEFAULT_COLS, TERM_DEFAULT_ROWS, 1, 1 };
+    const auto allow_positive = [](int val) { return val > 0 ? tl::make_optional(val) : tl::nullopt; };
 
-    if (const auto str = getenv(fmt::format("ANGBAND_X11_AT_X_{}", window_no).data())) {
-        ws.x_pos = atoi(str);
-    }
-    if (const auto str = getenv(fmt::format("ANGBAND_X11_AT_Y_{}", window_no).data())) {
-        ws.y_pos = atoi(str);
-    }
-    if (const auto str = getenv(fmt::format("ANGBAND_X11_COLS_{}", window_no).data())) {
-        const auto val = atoi(str);
-        if (val > 0) {
-            ws.cols = val;
-        }
-    }
-    if (const auto str = getenv(fmt::format("ANGBAND_X11_ROWS_{}", window_no).data())) {
-        const auto val = atoi(str);
-        if (val > 0) {
-            ws.rows = val;
-        }
-    }
+    window_setting ws = {
+        .x_pos = getenv_int(fmt::format("ANGBAND_X11_AT_X_{}", window_no)).value_or(-1),
+        .y_pos = getenv_int(fmt::format("ANGBAND_X11_AT_Y_{}", window_no)).value_or(-1),
+        .cols = getenv_int(fmt::format("ANGBAND_X11_COLS_{}", window_no)).and_then(allow_positive).value_or(TERM_DEFAULT_COLS),
+        .rows = getenv_int(fmt::format("ANGBAND_X11_ROWS_{}", window_no)).and_then(allow_positive).value_or(TERM_DEFAULT_ROWS),
+        .x_inner_border = getenv_int(fmt::format("ANGBAND_X11_IBOX_{}", window_no)).and_then(allow_positive).value_or(1),
+        .y_inner_border = getenv_int(fmt::format("ANGBAND_X11_IBOY_{}", window_no)).and_then(allow_positive).value_or(1),
+    };
 
     // メインウィンドウは最小サイズを制限する
     if (window_no == 0) {
         ws.cols = std::max(ws.cols, MAIN_TERM_MIN_COLS);
         ws.rows = std::max(ws.rows, MAIN_TERM_MIN_ROWS);
-    }
-
-    if (const auto str = getenv(fmt::format("ANGBAND_X11_IBOX_{}", window_no).data())) {
-        const auto val = atoi(str);
-        if (val > 0) {
-            ws.x_inner_border = val;
-        }
-    }
-    if (const auto str = getenv(fmt::format("ANGBAND_X11_IBOY_{}", window_no).data())) {
-        const auto val = atoi(str);
-        if (val > 0) {
-            ws.y_inner_border = val;
-        }
     }
 
     return ws;
