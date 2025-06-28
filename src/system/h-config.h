@@ -71,8 +71,8 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
     #endif
   #else
     #ifdef JP
-      #define DEFAULT_X11_FONT "-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--24-*-*-*-*-*-jisx0208.1983-0"
-      #define DEFAULT_X11_FONT_SUB "-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1,-*-*-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0"
+      #define DEFAULT_X11_FONT "12x24,-*-*-medium-r-normal--24-*-*-*-*-*-jisx0208.1983-0"
+      #define DEFAULT_X11_FONT_SUB "8x16,-*-*-medium-r-normal--16-*-*-*-*-*-jisx0208.1983-0"
     #else
       #define DEFAULT_X11_FONT "-*-*-medium-r-normal--24-*-*-*-*-*-iso8859-1"
       #define DEFAULT_X11_FONT_SUB "-*-*-medium-r-normal--16-*-*-*-*-*-iso8859-1"
