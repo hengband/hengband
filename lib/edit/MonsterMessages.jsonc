@@ -2100,6 +2100,23 @@
         },
         {
             "id_list": [
+                1387 /*亡霊『はらへりじじい』*/
+            ],
+            "message": [
+                {
+                    "action": "SPEAK_ALL",
+                    "chance": 8,
+                    "message": {
+                        "ja": [
+                            "「おにぎりをくれぇ！ おにぎりをくれぇぇーー！」",
+                            "「うはっ、うはははははーーーーーー！」"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id_list": [
                 8 /*Farmer Maggot*/
             ],
             "message": [
@@ -6113,6 +6130,23 @@
                             "says, 'Because you are an obstructor for my revenge... Can you vanish from me?'",
                             "is looking for a certain person to take everything from that person...",
                             "murmurs the grudge against the person called Saori."
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "id_list": [
+                1387 /*Hungry old man, the ghost*/
+            ],
+            "message": [
+                {
+                    "action": "SPEAK_ALL",
+                    "chance": 8,
+                    "message": {
+                        "en": [
+                            "says, 'Give me food! Give me food!'",
+                            "says, 'Uh, Uhhhhhhhhhhhhhhhhhhh!'"
                         ]
                     }
                 }

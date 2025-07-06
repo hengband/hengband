@@ -21,3 +21,4 @@ MONSTER_NUMBER summon_YENDER_WIZARD(PlayerType *player_ptr, POSITION y, POSITION
 MONSTER_NUMBER summon_THUNDERS(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_PLASMA(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx);
 MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, MONSTER_IDX m_idx);
+MONSTER_NUMBER summon_POLYGON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx);
