@@ -2239,17 +2239,20 @@ struct window_setting {
 static window_setting get_window_setting(int window_no)
 {
     const auto allow_positive = [](int val) { return val > 0 ? tl::make_optional(val) : tl::nullopt; };
+    const auto create_config_key = [window_no](auto key) { return fmt::format("ANGBAND_X11_{}_{}", key, window_no); };
+    const auto get_config = [&](auto key) { return getenv(create_config_key(key).data()); };
+    const auto get_config_as_int = [&](auto key) { return getenv_int(create_config_key(key)); };
 
     window_setting ws = {
-        .x_pos = getenv_int(fmt::format("ANGBAND_X11_AT_X_{}", window_no)).value_or(-1),
-        .y_pos = getenv_int(fmt::format("ANGBAND_X11_AT_Y_{}", window_no)).value_or(-1),
-        .cols = getenv_int(fmt::format("ANGBAND_X11_COLS_{}", window_no)).and_then(allow_positive).value_or(TERM_DEFAULT_COLS),
-        .rows = getenv_int(fmt::format("ANGBAND_X11_ROWS_{}", window_no)).and_then(allow_positive).value_or(TERM_DEFAULT_ROWS),
-        .x_inner_border = getenv_int(fmt::format("ANGBAND_X11_IBOX_{}", window_no)).and_then(allow_positive).value_or(1),
-        .y_inner_border = getenv_int(fmt::format("ANGBAND_X11_IBOY_{}", window_no)).and_then(allow_positive).value_or(1),
+        .x_pos = get_config_as_int("AT_X").value_or(-1),
+        .y_pos = get_config_as_int("AT_Y").value_or(-1),
+        .cols = get_config_as_int("COLS").and_then(allow_positive).value_or(TERM_DEFAULT_COLS),
+        .rows = get_config_as_int("ROWS").and_then(allow_positive).value_or(TERM_DEFAULT_ROWS),
+        .x_inner_border = get_config_as_int("IBOX").and_then(allow_positive).value_or(1),
+        .y_inner_border = get_config_as_int("IBOY").and_then(allow_positive).value_or(1),
     };
 
-    if (const auto str = getenv(fmt::format("ANGBAND_X11_WINDOW_{}", window_no).data())) {
+    if (const auto str = get_config("WINDOW")) {
         const auto vals = str_split(str, ',', true);
         if (vals.size() >= 2) {
             ws.cols = str_to_int(vals[0]).and_then(allow_positive).value_or(TERM_DEFAULT_COLS);
@@ -2277,7 +2280,8 @@ static window_setting get_window_setting(int window_no)
 /*
  * Initialize a term_data
  */
-static errr term_data_init(term_data *td, int i)
+static errr
+term_data_init(term_data *td, int i)
 {
     term_type *t = &td->t;
 
