@@ -46,10 +46,12 @@
 static BIT_FLAGS dead_mode(MonsterDeath *md_ptr)
 {
     bool pet = md_ptr->m_ptr->is_pet();
-    bool clone = md_ptr->m_ptr->mflag2.has(MonsterConstantFlagType::CLONED);
     BIT_FLAGS mode = pet ? PM_FORCE_PET : PM_NONE;
-    if (clone) {
+    if (md_ptr->cloned) {
         mode = mode | PM_CLONE;
+    }
+    if (md_ptr->is_chameleon) {
+        mode = mode | PM_CHAMELEON_FINAL_SUMMON;
     }
 
     return mode;
@@ -67,6 +69,16 @@ static tl::optional<bool> final_summon(PlayerType *player_ptr, MonsterDeath *md_
     const auto &floor = *player_ptr->current_floor_ptr;
     if (floor.inside_arena || AngbandSystem::get_instance().is_phase_out() || !evaluate_percent(summon_data.probability)) {
         return tl::nullopt;
+    }
+    if (md_ptr->is_chameleon) {
+        const auto &monraces = MonraceList::get_instance();
+        if (!MonraceList::is_valid(summon_data.id) || (summon_data.id >= static_cast<MonraceId>(monraces.size()))) {
+            return tl::nullopt;
+        }
+        const auto &monrace = monraces.get_monrace(summon_data.id);
+        if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+            return tl::nullopt;
+        }
     }
     bool notice = false;
     const auto summon_num = rand_range(summon_data.min_num, summon_data.max_num);
@@ -334,7 +346,7 @@ static void on_dead_swordfish(PlayerType *player_ptr, MonsterDeath *md_ptr, Attr
 
 void switch_special_death(PlayerType *player_ptr, MonsterDeath *md_ptr, AttributeFlags attribute_flags)
 {
-    auto &monrace = MonraceList::get_instance().get_monrace(md_ptr->r_ptr->idx);
+    auto &monrace = MonraceList::get_instance().get_monrace(md_ptr->ap_r_ptr->idx);
     const auto &summon_list = monrace.get_final_summons();
     if (!summon_list.empty()) {
         auto do_message = false;
@@ -353,7 +365,7 @@ void switch_special_death(PlayerType *player_ptr, MonsterDeath *md_ptr, Attribut
         return;
     }
 
-    switch (md_ptr->m_ptr->r_idx) {
+    switch (md_ptr->ap_r_ptr->idx) {
     case MonraceId::BLOODLETTER:
         on_dead_bloodletter(player_ptr, md_ptr);
         return;
@@ -382,16 +394,19 @@ void switch_special_death(PlayerType *player_ptr, MonsterDeath *md_ptr, Attribut
         (void)project(player_ptr, md_ptr->m_idx, 3, md_ptr->md_y, md_ptr->md_x, Dice::roll(20, 10), AttributeType::FIRE, PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL);
         return;
     case MonraceId::CAIT_SITH:
-        if (player_ptr->current_floor_ptr->dun_level <= 0) {
+        if (player_ptr->current_floor_ptr->dun_level <= 0 || md_ptr->is_chameleon) {
             return;
         }
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_boots);
         return;
     case MonraceId::YENDOR_WIZARD_1:
+        if (md_ptr->is_chameleon) {
+            return;
+        }
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_amulet);
         return;
     case MonraceId::YENDOR_WIZARD_2:
-        if (player_ptr->current_floor_ptr->dun_level <= 0) {
+        if (player_ptr->current_floor_ptr->dun_level <= 0 || md_ptr->is_chameleon) {
             return;
         }
         drop_specific_item_on_dead(player_ptr, md_ptr, kind_is_amulet);
@@ -400,6 +415,9 @@ void switch_special_death(PlayerType *player_ptr, MonsterDeath *md_ptr, Attribut
         on_dead_manimani(player_ptr, md_ptr);
         return;
     case MonraceId::LOSTRINGIL:
+        if (md_ptr->is_chameleon) {
+            return;
+        }
         on_dead_random_artifact(player_ptr, md_ptr, kind_is_sword);
         return;
     case MonraceId::SWORDFISH:

@@ -249,6 +249,10 @@ tl::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y, 
         monster.r_idx = r_idx;
         choose_chameleon_polymorph(player_ptr, grid.m_idx, grid.get_terrain_id(), summoner_m_idx);
         monster.mflag2.set(MonsterConstantFlagType::CHAMELEON);
+    } else if (any_bits(mode, PM_CHAMELEON_FINAL_SUMMON)) {
+        monster.r_idx = r_idx;
+        monster.ap_r_idx = r_idx;
+        monster.mflag2.set(MonsterConstantFlagType::CHAMELEON);
     } else {
         monster.r_idx = r_idx;
         if (any_bits(mode, PM_KAGE) && none_bits(mode, PM_FORCE_PET)) {
