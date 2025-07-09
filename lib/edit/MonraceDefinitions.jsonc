@@ -89105,6 +89105,116 @@
           }
         }
       ]
+    },
+    {
+      "id": 1386,
+      "name": {
+        "ja": "まわるポリゴン",
+        "en": "Polygon Spin"
+      },
+      "symbol": {
+        "character": "g",
+        "color": "Light Brown"
+      },
+      "speed": 0,
+      "hit_point": "33d8",
+      "vision": 20,
+      "armor_class": 40,
+      "alertness": 50,
+      "level": 15,
+      "rarity": 3,
+      "exp": 70,
+      "blows": [
+        {
+          "method": "HIT",
+          "effect": "HURT",
+          "damage_dice": "4d4"
+        },
+        {
+          "method": "SHOW",
+          "effect": "HUNGRY",
+          "damage_dice": "500d1"
+        }
+      ],
+      "flags": [
+        "DROP_60",
+        "EVIL",
+        "NONLIVING",
+        "NO_FEAR",
+        "COLD_BLOOD"
+      ],
+      "flavor": {
+        "ja": "踊りながらハラヘリーの呪文を唱え、お腹を空かせてくる。",
+        "en": "While dancing, they chanted a hunger spell to make you hungry."
+      }
+    },
+    {
+      "id": 1387,
+      "name": {
+        "ja": "亡霊『はらへりじじい』",
+        "en": "Hungry old man, the ghost"
+      },
+      "symbol": {
+        "character": "G",
+        "color": "Orange"
+      },
+      "speed": 0,
+      "hit_point": "33d10",
+      "vision": 20,
+      "armor_class": 35,
+      "alertness": 50,
+      "level": 17,
+      "rarity": 3,
+      "exp": 220,
+      "sex": "MALE",
+      "blows": [
+        {
+          "method": "WAIL",
+          "effect": "EAT_FOOD"
+        },
+        {
+          "method": "WAIL",
+          "effect": "EAT_FOOD"
+        },
+        {
+          "method": "MOAN",
+          "effect": "EAT_FOOD"
+        }
+      ],
+      "flags": [
+        "UNIQUE",
+        "FORCE_MAXHP",
+        "SPEAK_ALL",
+        "DROP_60",
+        "DROP_GOOD",
+        "UNDEAD",
+        "HUMAN",
+        "NO_FEAR",
+        "NO_CONF",
+        "RES_CHAO",
+        "RES_NEXU",
+        "RES_DISE",
+        "RAND_50",
+        "CAN_FLY",
+        "PASS_WALL",
+        "COLD_BLOOD"
+      ],
+      "skill": {
+        "probability": "1_IN_5",
+        "list": [
+          "S_KIN"
+        ]
+      },
+      "escorts": [
+        {
+          "escorts_id": 1386,
+          "escort_num": "8d1"
+        }
+      ],
+      "flavor": {
+        "ja": "餓死した老人の亡霊だ。あなたの事を食料をくれなかった冒険者と勘違いしている。",
+        "en": "It is the ghost of an old man who died of starvation. He mistakes you for an adventurer who didn't give him food."
+      }
     }
   ]
 }
