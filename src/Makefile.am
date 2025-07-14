@@ -192,7 +192,7 @@ hengband_SOURCES = \
 	effect/effect-characteristics.h \
 	\
 	external-lib/include-json.h \
-	external-lib/include/json.hpp \
+	external-lib/include/nlohmann/json.hpp \
 	external-lib/include/std/detail/associated_types.hpp \
 	external-lib/include/std/iterator \
 	external-lib/include/concepts/compare.hpp \
