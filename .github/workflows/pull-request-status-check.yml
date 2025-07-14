@@ -27,7 +27,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
-      - run: sh ./.github/scripts/check-format.sh
+      - name: Check the format of the cpp source and header files
+        run: sh ./.github/scripts/check-cpp-format.sh
+      - name: Check the format of the json/jsonc files
+        run: sh ./.github/scripts/check-json-format.sh
 
   build_test_clang15_libcpp_without_pch:
     name: Build Japanese version with clang 15 -stdlib=libc++ (without using pre-compiled headers)
