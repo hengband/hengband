@@ -140,7 +140,7 @@ static void init_json(std::string_view filename, std::string_view keyname, angba
 
     std::istreambuf_iterator<char> ifs_iter(ifs);
     std::istreambuf_iterator<char> ifs_end;
-    auto json_object = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true);
+    auto json_object = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true, true);
 
     error_idx = -1;
 
