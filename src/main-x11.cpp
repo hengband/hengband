@@ -112,6 +112,7 @@
 #include "view/display-symbol.h"
 #include <algorithm>
 #include <filesystem>
+#include <fmt/format.h>
 #include <map>
 #include <memory>
 #include <span>
@@ -2217,30 +2218,76 @@ static void game_term_nuke_x11(term_type *)
     XCloseDisplay(Metadpy->dpy);
 }
 
+static tl::optional<int> getenv_int(const std::string &key)
+{
+    if (const auto val = getenv(key.data())) {
+        return str_to_int(val);
+    }
+
+    return tl::nullopt;
+}
+
+struct window_setting {
+    int x_pos;
+    int y_pos;
+    int cols;
+    int rows;
+    int x_inner_border;
+    int y_inner_border;
+};
+
+static window_setting get_window_setting(int window_no)
+{
+    const auto allow_positive = [](int val) { return val > 0 ? tl::make_optional(val) : tl::nullopt; };
+    const auto create_config_key = [window_no](auto key) { return fmt::format("ANGBAND_X11_{}_{}", key, window_no); };
+    const auto get_config = [&](auto key) { return getenv(create_config_key(key).data()); };
+    const auto get_config_as_int = [&](auto key) { return getenv_int(create_config_key(key)); };
+
+    window_setting ws = {
+        .x_pos = get_config_as_int("AT_X").value_or(-1),
+        .y_pos = get_config_as_int("AT_Y").value_or(-1),
+        .cols = get_config_as_int("COLS").and_then(allow_positive).value_or(TERM_DEFAULT_COLS),
+        .rows = get_config_as_int("ROWS").and_then(allow_positive).value_or(TERM_DEFAULT_ROWS),
+        .x_inner_border = get_config_as_int("IBOX").and_then(allow_positive).value_or(1),
+        .y_inner_border = get_config_as_int("IBOY").and_then(allow_positive).value_or(1),
+    };
+
+    if (const auto str = get_config("WINDOW")) {
+        const auto vals = str_split(str, ',', true);
+        if (vals.size() >= 2) {
+            ws.cols = str_to_int(vals[0]).and_then(allow_positive).value_or(TERM_DEFAULT_COLS);
+            ws.rows = str_to_int(vals[1]).and_then(allow_positive).value_or(TERM_DEFAULT_ROWS);
+        }
+        if (vals.size() >= 4) {
+            ws.x_pos = str_to_int(vals[2]).value_or(-1);
+            ws.y_pos = str_to_int(vals[3]).value_or(-1);
+        }
+        if (vals.size() >= 6) {
+            ws.x_inner_border = str_to_int(vals[4]).and_then(allow_positive).value_or(1);
+            ws.y_inner_border = str_to_int(vals[5]).and_then(allow_positive).value_or(1);
+        }
+    }
+
+    // メインウィンドウは最小サイズを制限する
+    if (window_no == 0) {
+        ws.cols = std::max(ws.cols, MAIN_TERM_MIN_COLS);
+        ws.rows = std::max(ws.rows, MAIN_TERM_MIN_ROWS);
+    }
+
+    return ws;
+}
+
 /*
  * Initialize a term_data
  */
-static errr term_data_init(term_data *td, int i)
+static errr
+term_data_init(term_data *td, int i)
 {
     term_type *t = &td->t;
 
     concptr name = angband_term_name[i];
 
     concptr font;
-    int x = 0;
-    int y = 0;
-
-    int cols = TERM_DEFAULT_COLS;
-    int rows = TERM_DEFAULT_ROWS;
-
-    int ox = 1;
-    int oy = 1;
-
-    int wid, hgt, num;
-
-    concptr str;
-
-    int val;
 
     XClassHint *ch;
 
@@ -2289,55 +2336,18 @@ static errr term_data_init(term_data *td, int i)
         }
     }
 
-    str = getenv(format("ANGBAND_X11_AT_X_%d", i).data());
-    x = (str != nullptr) ? atoi(str) : -1;
-
-    str = getenv(format("ANGBAND_X11_AT_Y_%d", i).data());
-    y = (str != nullptr) ? atoi(str) : -1;
-
-    str = getenv(format("ANGBAND_X11_COLS_%d", i).data());
-    val = (str != nullptr) ? atoi(str) : -1;
-    if (val > 0) {
-        cols = val;
-    }
-
-    str = getenv(format("ANGBAND_X11_ROWS_%d", i).data());
-    val = (str != nullptr) ? atoi(str) : -1;
-    if (val > 0) {
-        rows = val;
-    }
-
-    if (!i) {
-        if (cols < MAIN_TERM_MIN_COLS) {
-            cols = MAIN_TERM_MIN_COLS;
-        }
-        if (rows < MAIN_TERM_MIN_ROWS) {
-            rows = MAIN_TERM_MIN_ROWS;
-        }
-    }
-
-    str = getenv(format("ANGBAND_X11_IBOX_%d", i).data());
-    val = (str != nullptr) ? atoi(str) : -1;
-    if (val > 0) {
-        ox = val;
-    }
-
-    str = getenv(format("ANGBAND_X11_IBOY_%d", i).data());
-    val = (str != nullptr) ? atoi(str) : -1;
-    if (val > 0) {
-        oy = val;
-    }
+    const auto ws = get_window_setting(i);
 
     td->fnt = std::make_unique<infofnt>();
     Infofnt_set(td->fnt.get());
     Infofnt_init_data(font);
 
-    num = ((i == 0) ? 1024 : 16);
-    wid = cols * td->fnt->wid + (ox + ox);
-    hgt = rows * td->fnt->hgt + (oy + oy);
+    const auto num = ((i == 0) ? 1024 : 16);
+    const auto wid = ws.cols * td->fnt->wid + ws.x_inner_border * 2;
+    const auto hgt = ws.rows * td->fnt->hgt + ws.y_inner_border * 2;
     td->win = std::make_unique<infowin>();
     Infowin_set(td->win.get());
-    Infowin_init_top(x, y, wid, hgt, 0, Metadpy->fg, Metadpy->bg);
+    Infowin_init_top(ws.x_pos, ws.y_pos, wid, hgt, 0, Metadpy->fg, Metadpy->bg);
 
 #if defined(USE_XIM)
     Infowin_set_mask(ExposureMask | StructureNotifyMask | KeyPressMask | PointerMotionMask | ButtonPressMask | ButtonReleaseMask | FocusChangeMask);
@@ -2346,8 +2356,8 @@ static errr term_data_init(term_data *td, int i)
 #endif
 
     Infowin_set_name(name);
-    Infowin->ox = ox;
-    Infowin->oy = oy;
+    Infowin->ox = ws.x_inner_border;
+    Infowin->oy = ws.y_inner_border;
     ch = XAllocClassHint();
 
     if (ch == nullptr) {
@@ -2370,24 +2380,24 @@ static errr term_data_init(term_data *td, int i)
 
     if (i == 0) {
         sh->flags = PMinSize | PMaxSize;
-        sh->min_width = MAIN_TERM_MIN_COLS * td->fnt->wid + (ox + ox);
-        sh->min_height = MAIN_TERM_MIN_ROWS * td->fnt->hgt + (oy + oy);
-        sh->max_width = 255 * td->fnt->wid + (ox + ox);
-        sh->max_height = 255 * td->fnt->hgt + (oy + oy);
+        sh->min_width = MAIN_TERM_MIN_COLS * td->fnt->wid + ws.x_inner_border * 2;
+        sh->min_height = MAIN_TERM_MIN_ROWS * td->fnt->hgt + ws.y_inner_border * 2;
+        sh->max_width = 255 * td->fnt->wid + ws.x_inner_border * 2;
+        sh->max_height = 255 * td->fnt->hgt + ws.y_inner_border * 2;
     } else {
         sh->flags = PMinSize | PMaxSize;
-        sh->min_width = td->fnt->wid + (ox + ox);
-        sh->min_height = td->fnt->hgt + (oy + oy);
-        sh->max_width = 256 * td->fnt->wid + (ox + ox);
-        sh->max_height = 256 * td->fnt->hgt + (oy + oy);
+        sh->min_width = td->fnt->wid + ws.x_inner_border * 2;
+        sh->min_height = td->fnt->hgt + ws.y_inner_border * 2;
+        sh->max_width = 256 * td->fnt->wid + ws.x_inner_border * 2;
+        sh->max_height = 256 * td->fnt->hgt + ws.y_inner_border * 2;
     }
 
     sh->flags |= PResizeInc;
     sh->width_inc = td->fnt->wid;
     sh->height_inc = td->fnt->hgt;
     sh->flags |= PBaseSize;
-    sh->base_width = (ox + ox);
-    sh->base_height = (oy + oy);
+    sh->base_width = ws.x_inner_border * 2;
+    sh->base_height = ws.y_inner_border * 2;
     XSetWMNormalHints(Metadpy->dpy, Infowin->win, sh);
     XFree(sh);
     Infowin_map();
@@ -2403,11 +2413,11 @@ static errr term_data_init(term_data *td, int i)
     XFree(wh);
 #endif
 
-    if ((x >= 0) && (y >= 0)) {
-        Infowin_impell(x, y);
+    if ((ws.x_pos >= 0) && (ws.y_pos >= 0)) {
+        Infowin_impell(ws.x_pos, ws.y_pos);
     }
 
-    term_init(t, cols, rows, num);
+    term_init(t, ws.cols, ws.rows, num);
     t->soft_cursor = true;
     t->attr_blank = TERM_WHITE;
     t->char_blank = ' ';
