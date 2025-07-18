@@ -1,1 +1,9 @@
 printWidth: 100
+overrides:
+  # VSCodeのPrettier拡張が使用する古いバージョンのPrettierに対応するためのワークアラウンド
+  # 拡張子jsoncのファイルに対し強制的にjson5パーサを指定することで、trailingCommaの設定が確実に有効になる
+  - files: "**/*.jsonc"
+    options:
+      parser: json5
+      trailingComma: all
+      quoteProps: preserve
