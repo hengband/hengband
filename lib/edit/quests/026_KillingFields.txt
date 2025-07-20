@@ -57,8 +57,14 @@ F:b:FLOOR:8:333
 # Floor with Timebomb
 F:c:FLOOR:8:567
 
+# Floor with Bouncing mine
+F:!:FLOOR:8:889
+
 # Floor with the boss monster
 F:M:FLOOR:12:723
+
+# Floor with minotaur
+F:m:FLOOR:12:641
 
 # Trap
 F:^:FLOOR:8:0:0:0:0:*
@@ -72,26 +78,32 @@ F:s:FLOOR:12
 # Wall
 F:#:GRANITE:8
 
+# potion of healing
+F:1:FLOOR:12:0:242
+
+# staff of destruction
+F:2:FLOOR:12:0:307
+
 
 # Dungeon layout
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 D:XTTTTTTT.TTTT..X^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^X
 D:XTT.TT.TT.T..T.XWW.............^XXXXX^...................^XXXXX^...^X
-D:XT.T........T..XXXXXXXXXX......^XwwwX^^^^^^^^^^^^^^^^^^^^^XwwwX^...^X
+D:XT.T........T..XXXXXXXXXX.!....^XwwwX^^^^^^^^^^^^^^^^^^^^^XwwwX^...^X
 D:XTT.......TXXXXX...............^XwwsXXXXXXXXXXXXXXXXXXXXXXXswwX^...^X
 D:XT.T.......X...X....X.X.X.XXXXXXXXXsssssssssssssssssssssssssXXX^...^X
-D:XTTT....XXXX.XcX....X.X.X.......^^XXsssssssXXXsssssssssssssXX^^^...^X
-D:XT...W..X.cb.XbX....X.X.XbbXbbXb..^XssssssXXMXXsssssssssssXX^^.....^X
-D:XT.TT...X.XXXX.X....X.X.XXXXXXX...^XsssssXXsssXXssssssssssX^^WWW..XXX
+D:XTTT....XXXX.XcX....X.X.X.......^^XXsssssssXXXsssssssssssssXX^^^.!.^X
+D:XT...W..X.cb.XbX....X.X.XbbXbbXb..^XssssssXXMXXsssssssmsssXX^^.....^X
+D:XT.TT...X.XXXX.X....X.X.XXXXXXX...^XssmssXX1s1XXssssssssssX^^WWW..XXX
 D:XTTT....X...WX.X....X.X...........^XssssssXXsXXsssssssssssXXXXXXXXX^X
-D:XT<....WXXXX.X^X^...X.XXXXXXXXXXb.^XsssssssssXXsssssssssss#c^^^^^^^^X
-D:XT.........X^XX^^...X.cbb......Xb.^XsssssXXsssXXssssssssssXXXXXXXXX^X
-D:XTTaT......XX^XX^...Xccbb......X.^^XssssssXXsXXsssssssssssX^^.WW...^X
-D:XTTTTT.XXXXX..WX^...Xbbbb......X^^XXsssssssXXXssssssssssssXX^^^.c^.^X
+D:XT<....WXXXX.X^X^...X.XXXXXXXXXXb.^XsssssssssXXssssmssssss#c^^^^^^^^X
+D:XT.........X^XX^^...X.cbb......Xb!^XsssssXXss2XXssssssssssXXXXXXXXX^X
+D:XTTaT......XX^XX^...Xccbb......X.^^XssmsssXXsXXsssssssssssX^^.WW...^X
+D:XTTTTT.XXXXX..WX^...Xbbbb......X^^XXsssssssXXXssssssssmsssXX^^^.c^.^X
 D:XTTTT..X......WX....Xbbb.......XXXXssssssssssssssssssssssssXXX^....^X
-D:XTTT...X......WXXXXXXXXX.......^XwwsXXXXXXXXXXXXXXXXXXXXXXswwX^.^..^X
-D:XTTTTT.X..b...WXa........b.....^XwwwX^^^^^^^^^^^^^^^^^^^^XwwwX^..^.^X
-D:XTTTTTTX..XXXXXXa...........^..^XXXXX^W.W.W.W......W.W.W^XXXXX^....^X
+D:XTTT...X.!....WXXXXXXXXX.......^XwwsXXXXXXXXXXXXXXXXXXXXXXswwX^.^..^X
+D:XTTTTT.X..b...WXa......!.b.....^XwwwX^^^^^^^^^^^^^^^^^^^^XwwwX^..^.^X
+D:XTTTTTTX..XXXXXXa...........^..^XXXXX^!.W.W.W.W....W.W.W^XXXXX^....^X
 D:XTTT...XcX.....Xa..^..^........^^^^^^^....^......^....c.^^^^^^^.^..^X
 D:XT.....XXX.XXX.Xa....^.....^...................^...^...............^X
 D:XT.......X.....Xa........^.....^...b.......^...^.....^....^..^..a..^X
