@@ -32,6 +32,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
+#include "util/finalizer.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
@@ -257,6 +258,8 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
     ranges::replace(list, back_i_idx, o_idx);
     item_ptr = floor.o_list.back();
     floor.o_list.pop_back();
+
+    floor.prevent_repeat_floor_item_idx = true;
 
     static constexpr auto flags = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
@@ -551,6 +554,8 @@ ItemEntity *choose_object(PlayerType *player_ptr, short *initial_i_idx, concptr 
     if (initial_i_idx) {
         *initial_i_idx = INVEN_NONE;
     }
+
+    const auto enable_repeat = util::make_finalizer([&] { player_ptr->current_floor_ptr->prevent_repeat_floor_item_idx = false; });
 
     FixItemTesterSetter setter(item_tester);
     short i_idx;

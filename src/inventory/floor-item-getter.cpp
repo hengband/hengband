@@ -54,15 +54,21 @@ static bool check_floor_item_tag_aux(PlayerType *player_ptr, FloorItemSelection 
         return false;
     }
 
+    const auto &floor = *player_ptr->current_floor_ptr;
+
     if (*prev_tag && command_cmd) {
         fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
-        if (get_tag_floor(*player_ptr->current_floor_ptr, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
+        if (get_tag_floor(floor, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
             cp = -fis_ptr->floor_list[fis_ptr->k];
             command_cmd = 0;
             return true;
         }
 
         *prev_tag = '\0';
+        return false;
+    }
+
+    if (floor.prevent_repeat_floor_item_idx || std::cmp_greater_equal(-cp, floor.o_list.size())) {
         return false;
     }
 
