@@ -336,7 +336,7 @@ static MULTIPLY calc_shot_damage_with_slay(
             }
 
             auto can_eliminate_smaug = arrow_ptr->is_specific_artifact(FixedArtifactId::BARD_ARROW);
-            can_eliminate_smaug &= player_ptr->inventory[INVEN_BOW]->is_specific_artifact(FixedArtifactId::BARD);
+            can_eliminate_smaug &= player_ptr->is_wielding(FixedArtifactId::BARD);
             can_eliminate_smaug &= monster.r_idx == MonraceId::SMAUG;
             if (can_eliminate_smaug) {
                 mult *= 5;
@@ -937,10 +937,10 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             monster.hold_o_idx_list.add(floor, item_idx);
         } else if (floor.has_terrain_characteristics(pos_impact, TerrainCharacteristics::PROJECTION)) {
             /* Drop (or break) near that location */
-            (void)drop_near(player_ptr, &fire_item, pos_impact, j);
+            drop_ammo_near(player_ptr, fire_item, pos_impact, j);
         } else {
             /* Drop (or break) near that location */
-            (void)drop_near(player_ptr, &fire_item, { prev_y, prev_x }, j);
+            drop_ammo_near(player_ptr, fire_item, { prev_y, prev_x }, j);
         }
 
         /* Sniper - Repeat shooting when double shots */

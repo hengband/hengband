@@ -48,6 +48,8 @@ static void monster_attack_show(MonsterAttackPlayer *monap_ptr)
 #endif
     if (monap_ptr->m_ptr->r_idx == MonraceId::JAIAN) {
         show_jaian_song(monap_ptr);
+    } else if (monap_ptr->m_ptr->r_idx == MonraceId::POLYGON_SPIN) {
+        monap_ptr->act = _("はハラヘリーを唱えた。", "chanted a hunger spell.");
     } else {
         if (one_in_(3)) {
             monap_ptr->act = _("は♪僕らは楽しい家族♪と歌っている。", "sings 'We are a happy family.'");

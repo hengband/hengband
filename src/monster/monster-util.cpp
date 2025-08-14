@@ -601,7 +601,7 @@ static bool monster_hook_chameleon(PlayerType *player_ptr, const ChameleonTransf
             return false;
         }
 
-        if (old_monrace.kind_flags.has_none_of(alignment_mask)) {
+        if (old_monrace.kind_flags.has_none_of(alignment_mask) && monrace.kind_flags.has_any_of(alignment_mask)) {
             return false;
         }
     } else if (ct.summoner_m_idx && monster_has_hostile_to_other_monster(floor.m_list[*ct.summoner_m_idx], monrace)) {

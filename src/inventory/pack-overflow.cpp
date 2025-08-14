@@ -31,7 +31,7 @@ void pack_overflow(PlayerType *player_ptr)
 
     const auto item_name = describe_flavor(player_ptr, item, 0);
     msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), item_name.data(), index_to_label(INVEN_PACK));
-    (void)drop_near(player_ptr, &item, player_ptr->get_position());
+    (void)drop_near(player_ptr, item, player_ptr->get_position(), false);
 
     vary_item(player_ptr, INVEN_PACK, -255);
     handle_stuff(player_ptr);

@@ -148,7 +148,6 @@ void wipe_o_list(FloorType &floor)
 Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto p_pos = player_ptr->get_position();
     while (true) {
         const auto ny = rand_spread(pos.y, d);
         const auto nx = rand_spread(pos.x, d);
@@ -167,7 +166,7 @@ Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode)
             continue;
         }
 
-        if (projectable(floor, p_pos, pos, pos_neighbor)) {
+        if (projectable(floor, pos, pos_neighbor)) {
             return pos_neighbor;
         }
     }

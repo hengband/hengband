@@ -202,6 +202,9 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
     case MonraceId::LAFFEY_II:
         count += summon_LAFFEY_II(player_ptr, Pos2D(y, x), m_idx);
         break;
+    case MonraceId::HUNGRY_OLD_MAN:
+        count += summon_POLYGON(player_ptr, y, x, m_idx);
+        break;
     default:
         count += summon_Kin(player_ptr, y, x, rlev, m_idx);
         break;

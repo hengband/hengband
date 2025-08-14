@@ -411,6 +411,46 @@ static errr set_mon_skills(const nlohmann::json &skill_data, MonraceDefinition &
 }
 
 /*!
+ * @brief JSON Objectからモンスターの死亡時召喚情報をセットする
+ * @param summon_data 死亡時召喚情報の格納されたJSON Object
+ * @param monrace 保管先のモンスター種族構造体
+ * @return エラーコード
+ */
+static errr set_mon_final_summons(const nlohmann::json &summon_data, MonraceDefinition &monrace)
+{
+    if (summon_data.is_null()) {
+        return PARSE_ERROR_NONE;
+    }
+    if (!summon_data.is_array()) {
+        return PARSE_ERROR_INVALID_TYPE;
+    }
+
+    for (auto &summon_item : summon_data) {
+        int id, probability, min_num, max_num, radius;
+        if (auto err = info_set_integer(summon_item["id"], id, true, Range(1, 9999))) {
+            return err;
+        }
+        if (auto err = info_set_integer(summon_item["probability"], probability, true, Range(1, 100))) {
+            return err;
+        }
+        if (auto err = info_set_integer(summon_item["min_num"], min_num, true, Range(0, 99))) {
+            return err;
+        }
+        if (auto err = info_set_integer(summon_item["max_num"], max_num, true, Range(1, 99))) {
+            return err;
+        }
+        if (min_num > max_num) {
+            return PARSE_ERROR_INVALID_VALUE;
+        }
+        if (auto err = info_set_integer(summon_item["radius"], radius, true, Range(1, 20))) {
+            return err;
+        }
+        monrace.emplace_final_summon(i2enum<MonraceId>(id), probability, min_num, max_num, radius);
+    }
+    return PARSE_ERROR_NONE;
+}
+
+/*!
  * @brief JSON Objectからモンスターのメッセージをセットする
  * @param message_data メッセージ情報の格納されたJSON Object
  * @param monrace 保管先のモンスター種族構造体
@@ -576,6 +616,11 @@ errr parse_monraces_info(nlohmann::json &mon_data, angband_header *)
     err = set_mon_skills(mon_data["skill"], monrace);
     if (err) {
         msg_format(_("モンスター発動能力情報読込失敗。ID: '%d'。", "Failed to load monster skill data. ID: '%d'."), error_idx);
+        return err;
+    }
+    err = set_mon_final_summons(mon_data["final_summon"], monrace);
+    if (err) {
+        msg_format(_("モンスター死亡時召喚情報読込失敗。ID: '%d'。", "Failed to load final summon data. ID: '%d'."), error_idx);
         return err;
     }
     err = info_set_string(mon_data["flavor"], monrace.text, false);

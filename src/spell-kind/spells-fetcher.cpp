@@ -64,7 +64,7 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
             if (!floor.has_los_at(pos)) {
                 msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
                 return;
-            } else if (!projectable(floor, p_pos, p_pos, pos)) {
+            } else if (!projectable(floor, p_pos, pos)) {
                 msg_print(_("そこは壁の向こうです。", "You have no direct line of sight to that location."));
                 return;
             }
@@ -125,13 +125,13 @@ bool fetch_monster(PlayerType *player_ptr)
     }
 
     const auto p_pos = player_ptr->get_position();
-    if (!projectable(floor, p_pos, p_pos, *pos)) {
+    if (!projectable(floor, p_pos, *pos)) {
         return false;
     }
 
     const auto m_name = monster_desc(player_ptr, monster, 0);
     msg_print(_("{}を引き戻した。", "You pull back {}."), m_name);
-    ProjectionPath path_g(floor, AngbandSystem::get_instance().get_max_range(), p_pos, *pos, p_pos, 0);
+    ProjectionPath path_g(floor, AngbandSystem::get_instance().get_max_range(), *pos, p_pos);
     Pos2D pos_target = *pos;
     for (const auto &pos_path : path_g) {
         const auto &grid = floor.get_grid(pos_path);

@@ -149,7 +149,7 @@ bool MonsterDamageProcessor::process_dead_exp_virtue(std::string_view note, cons
     this->show_kill_message(note, m_name);
     this->show_bounty_message(m_name);
     monster_death(this->player_ptr, this->m_idx, true, this->attribute_flags);
-    this->summon_special_unique();
+    delete_monster_idx(this->player_ptr, this->m_idx);
     this->get_exp_from_mon(exp_mon, exp_mon.max_maxhp * 2);
     *this->fear = false;
     return true;
@@ -406,50 +406,6 @@ void MonsterDamageProcessor::set_redraw()
     HealthBarTracker::get_instance().set_flag_if_tracking(this->m_idx);
     if (monster.is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
-    }
-}
-
-/*
- * @brief 特定ユニークを倒した時に更にユニークを特殊召喚する処理
- * @param m_ptr ダメージを与えた特定ユニークの構造体参照ポインタ
- */
-void MonsterDamageProcessor::summon_special_unique()
-{
-    const auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
-    bool is_special_summon = monster.r_idx == MonraceId::IKETA;
-    is_special_summon |= monster.r_idx == MonraceId::DOPPIO;
-    if (!is_special_summon || this->player_ptr->current_floor_ptr->inside_arena || AngbandSystem::get_instance().is_phase_out()) {
-        delete_monster_idx(this->player_ptr, this->m_idx);
-        return;
-    }
-
-    auto dummy_y = monster.fy;
-    auto dummy_x = monster.fx;
-    auto mode = (BIT_FLAGS)0;
-    if (monster.is_pet()) {
-        mode |= PM_FORCE_PET;
-    }
-
-    MonraceId new_unique_idx;
-    concptr mes;
-    switch (monster.r_idx) {
-    case MonraceId::IKETA:
-        new_unique_idx = MonraceId::BIKETAL;
-        mes = _("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!");
-        break;
-    case MonraceId::DOPPIO:
-        new_unique_idx = MonraceId::DIAVOLO;
-        mes = _("「これは『試練』だ　過去に打ち勝てという『試練』とオレは受けとった」", "This is a 'trial'. I took it as a 'trial' to overcome in the past.");
-        break;
-    default: // バグでなければ入らない.
-        new_unique_idx = MonraceList::empty_id();
-        mes = "";
-        break;
-    }
-
-    delete_monster_idx(this->player_ptr, this->m_idx);
-    if (summon_named_creature(this->player_ptr, 0, dummy_y, dummy_x, new_unique_idx, mode)) {
-        msg_print(mes);
     }
 }
 

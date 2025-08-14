@@ -232,18 +232,15 @@ Pos2D QuestCompletionChecker::make_stairs(const bool create_stairs)
 
 void QuestCompletionChecker::make_reward(const Pos2D pos)
 {
-    auto dun_level = this->player_ptr->current_floor_ptr->dun_level;
-    for (auto i = 0; i < (dun_level / 15) + 1; i++) {
-        ItemEntity item;
-        while (true) {
-            item.wipe();
-            const auto &monrace = this->m_ptr->get_monrace();
-            (void)make_object(this->player_ptr, &item, AM_GOOD | AM_GREAT, monrace.level);
-            if (!this->check_quality(item)) {
+    const auto drop_num = this->player_ptr->current_floor_ptr->dun_level / 15 + 1;
+    const auto &monrace = this->m_ptr->get_monrace();
+    for (auto i = 0; i < drop_num; i++) {
+        while (auto item = make_object(this->player_ptr, AM_GOOD | AM_GREAT, nullptr, monrace.level)) {
+            if (!this->check_quality(*item)) {
                 continue;
             }
 
-            (void)drop_near(this->player_ptr, &item, pos);
+            (void)drop_near(this->player_ptr, *item, pos);
             break;
         }
     }

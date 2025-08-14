@@ -103,7 +103,14 @@ tl::optional<const MonsterMessage &> MonraceMessageList::get_message_obj(const i
         return this->default_messages.get_message_obj(message_type);
     }
     if (!message_iter->second.has_message(message_type)) {
-        return this->default_messages.get_message_obj(message_type);
+        switch (message_type) {
+        case MonsterMessageType::SPEAK_BATTLE:
+        case MonsterMessageType::SPEAK_FEAR:
+        case MonsterMessageType::SPEAK_FRIEND:
+            return this->get_message_obj(monrace_id, MonsterMessageType::SPEAK_ALL);
+        default:
+            return this->default_messages.get_message_obj(message_type);
+        }
     }
     return message_iter->second.get_message_obj(message_type);
 }

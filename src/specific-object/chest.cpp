@@ -73,13 +73,17 @@ void Chest::open(bool scatter, const Pos2D &pos, short item_idx)
         ItemEntity item_inner_chest;
         if (small && one_in_(4)) {
             item_inner_chest = floor.make_gold();
-        } else if (!make_object(this->player_ptr, &item_inner_chest, mode)) {
-            continue;
+        } else {
+            auto item = make_object(this->player_ptr, mode);
+            if (!item) {
+                continue;
+            }
+            item_inner_chest = std::move(*item);
         }
 
         if (!scatter) {
             /* Normally, drop object near the chest. */
-            (void)drop_near(this->player_ptr, &item_inner_chest, pos);
+            (void)drop_near(this->player_ptr, item_inner_chest, pos);
             continue;
         }
 
@@ -92,7 +96,7 @@ void Chest::open(bool scatter, const Pos2D &pos, short item_idx)
                 continue;
             }
 
-            (void)drop_near(this->player_ptr, &item_inner_chest, pos_random);
+            (void)drop_near(this->player_ptr, item_inner_chest, pos_random);
             break;
         }
     }

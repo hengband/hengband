@@ -386,7 +386,7 @@ bool set_monster_timewalk(PlayerType *player_ptr, MONSTER_IDX m_idx, int num, bo
     const auto p_pos = player_ptr->get_position();
     const auto m_pos = monster.get_position();
     auto should_output_message = floor.has_los_at(m_pos);
-    should_output_message &= projectable(floor, p_pos, p_pos, m_pos);
+    should_output_message &= projectable(floor, p_pos, m_pos);
     if (vs_player || should_output_message) {
         const auto m_name = monster_desc(player_ptr, monster, 0);
         const auto time_message = monrace.get_message(m_name, MonsterMessageType::MESSAGE_TIMESTART);

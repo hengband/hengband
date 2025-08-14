@@ -382,3 +382,14 @@ MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, M
     }
     return count;
 }
+
+MONSTER_NUMBER summon_POLYGON(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+{
+    auto count = 0;
+    auto num = 2 + randint1(3);
+    for (auto k = 0; k < num; k++) {
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::POLYGON_SPIN, PM_NONE) ? 1 : 0;
+    }
+
+    return count;
+}

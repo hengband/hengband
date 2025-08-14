@@ -28,5 +28,3 @@ extern init_flags_type init_flags;
 extern concptr ANGBAND_SYS;
 extern concptr ANGBAND_KEYBOARD;
 extern concptr ANGBAND_GRAF;
-
-extern bool (*select_baseitem_id_hook)(short bi_id);

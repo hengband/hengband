@@ -118,22 +118,22 @@ static void wiz_item_drop(PlayerType *player_ptr, const int num_items, const Enu
     }
 
     for (auto i = 0; i < num_items; i++) {
-        ItemEntity item;
-        if (!make_object(player_ptr, &item, mode)) {
+        auto item = make_object(player_ptr, mode);
+        if (!item) {
             continue;
         }
 
-        if (is_cursed && !item.is_cursed()) {
+        if (is_cursed && !item->is_cursed()) {
             i--;
             continue;
         }
 
-        if (appliance.has(ItemMagicAppliance::EGO) && !item.is_ego()) {
+        if (appliance.has(ItemMagicAppliance::EGO) && !item->is_ego()) {
             i--;
             continue;
         }
 
-        if (!drop_near(player_ptr, &item, player_ptr->get_position())) {
+        if (!drop_near(player_ptr, *item, player_ptr->get_position())) {
             msg_print_wizard(player_ptr, 0, "No item dropping space!");
             return;
         }
@@ -512,26 +512,26 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
                 term_fresh();
             }
 
-            ItemEntity item;
-            if (!make_object(player_ptr, &item, mode)) {
+            auto item = make_object(player_ptr, mode);
+            if (!item) {
                 continue;
             }
 
-            if (item.is_fixed_artifact()) {
-                item.get_fixed_artifact().is_generated = false;
+            if (item->is_fixed_artifact()) {
+                item->get_fixed_artifact().is_generated = false;
             }
 
-            if (o_ptr->bi_key != item.bi_key) {
+            if (o_ptr->bi_key != item->bi_key) {
                 continue;
             }
 
             correct++;
-            const auto is_same_fixed_artifact_idx = o_ptr->is_specific_artifact(item.fa_id);
-            if ((item.pval == o_ptr->pval) && (item.to_a == o_ptr->to_a) && (item.to_h == o_ptr->to_h) && (item.to_d == o_ptr->to_d) && is_same_fixed_artifact_idx) {
+            const auto is_same_fixed_artifact_idx = o_ptr->is_specific_artifact(item->fa_id);
+            if ((item->pval == o_ptr->pval) && (item->to_a == o_ptr->to_a) && (item->to_h == o_ptr->to_h) && (item->to_d == o_ptr->to_d) && is_same_fixed_artifact_idx) {
                 matches++;
-            } else if ((item.pval >= o_ptr->pval) && (item.to_a >= o_ptr->to_a) && (item.to_h >= o_ptr->to_h) && (item.to_d >= o_ptr->to_d)) {
+            } else if ((item->pval >= o_ptr->pval) && (item->to_a >= o_ptr->to_a) && (item->to_h >= o_ptr->to_h) && (item->to_d >= o_ptr->to_d)) {
                 better++;
-            } else if ((item.pval <= o_ptr->pval) && (item.to_a <= o_ptr->to_a) && (item.to_h <= o_ptr->to_h) && (item.to_d <= o_ptr->to_d)) {
+            } else if ((item->pval <= o_ptr->pval) && (item->to_a <= o_ptr->to_a) && (item->to_h <= o_ptr->to_h) && (item->to_d <= o_ptr->to_d)) {
                 worse++;
             } else {
                 other++;
@@ -1118,7 +1118,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
                 } while (!item.is_random_artifact() || item.is_ego() || item.is_cursed());
 
                 if (item.is_random_artifact()) {
-                    drop_near(player_ptr, &item, player_ptr->get_position());
+                    drop_near(player_ptr, item, player_ptr->get_position());
                 }
             } else {
                 wishing_puff_of_smoke();
@@ -1192,7 +1192,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             item.art_flags.set(TR_IGNORE_FIRE);
         }
 
-        (void)drop_near(player_ptr, &item, player_ptr->get_position());
+        (void)drop_near(player_ptr, item, player_ptr->get_position());
         return res;
     }
 

@@ -3122,7 +3122,7 @@ bool is_shero(PlayerType *player_ptr)
 
 bool is_echizen(PlayerType *player_ptr)
 {
-    return (player_ptr->ppersonality == PERSONALITY_COMBAT) || (player_ptr->inventory[INVEN_BOW]->is_specific_artifact(FixedArtifactId::CRIMSON));
+    return (player_ptr->ppersonality == PERSONALITY_COMBAT) || player_ptr->is_wielding(FixedArtifactId::CRIMSON);
 }
 
 bool is_chargeman(PlayerType *player_ptr)

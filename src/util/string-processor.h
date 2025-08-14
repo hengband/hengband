@@ -30,6 +30,7 @@ std::string str_toupper(std::string_view str);
 std::string str_tolower(std::string_view str);
 std::string str_upcase_first(std::string_view str);
 std::set<int> str_find_all_multibyte_chars(std::string_view str);
+tl::optional<int> str_to_int(std::string_view str, int base = 10);
 char hexify_upper(uint8_t value);
 char hexify_lower(uint8_t value);
 char octify(uint8_t i);

@@ -372,12 +372,12 @@ ItemEntity FloorType::make_gold(tl::optional<BaseitemKey> bi_key) const
 /*!
  * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する
  * @return 生成したアイテム (失敗したらnullopt)
- * @details 地上生成は禁止、生成制限がある場合も禁止、個々のアーティファクト生成条件及び生成確率を潜り抜けなければ生成失敗とする
+ * @details 地上生成は禁止、個々のアーティファクト生成条件及び生成確率を潜り抜けなければ生成失敗とする
  * 最初に潜り抜けたINSTA_ART型の固定アーティファクトを生成し、以後はチェックせずスキップする
  */
 tl::optional<ItemEntity> FloorType::try_make_instant_artifact() const
 {
-    if (!this->is_underground() || (select_baseitem_id_hook != nullptr)) {
+    if (!this->is_underground()) {
         return tl::nullopt;
     }
 

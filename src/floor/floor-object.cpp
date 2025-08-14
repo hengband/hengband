@@ -32,6 +32,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/projection-path-calculator.h"
+#include "util/finalizer.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
 #include "wizard/wizard-messages.h"
@@ -81,57 +82,87 @@ static void set_ammo_quantity(ItemEntity *j_ptr)
 }
 
 /*!
+ * @brief アイテム消失処理を行う
+ *
+ * アイテムが消失した旨のメッセージを表示し、それが未知のアーティファクトで
+ * 保存モードが有効な場合はアーティファクトの生成済みフラグを解除する。
+ *
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param disappearing_item 消失するアイテム
+ * @param reason 消失理由の文字列
+ */
+static void handle_item_disappearance(PlayerType *player_ptr, ItemEntity &disappearing_item, std::string_view reason)
+{
+    const auto item_name = describe_flavor(player_ptr, disappearing_item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+#ifdef JP
+    msg_print("{}は消えた。", item_name);
+#else
+    const auto plural = (disappearing_item.number != 1);
+    msg_print("The {} disappear{}.", item_name, (plural ? "" : "s"));
+#endif
+
+    if (AngbandWorld::get_instance().wizard) {
+        msg_print("({})", reason);
+    }
+
+    if (disappearing_item.is_fixed_artifact() && !disappearing_item.is_known() && preserve_mode) {
+        auto &artifact = disappearing_item.get_fixed_artifact();
+        artifact.is_generated = false;
+    }
+}
+
+/*!
  * @brief 生成階に応じたベースアイテムの生成を行う。
  * Attempt to make an object (normal or good/great)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param j_ptr 生成結果を収めたいオブジェクト構造体の参照ポインタ
  * @param mode オプションフラグ
+ * @param restrict ベースアイテム制約関数。see BaseitemAllocationTable::set_restriction()
  * @param rq_mon_level ランダムクエスト討伐対象のレベル。ランダムクエスト以外の生成であれば無効値
- * @return アイテムの生成成功可否
+ * @return 生成したアイテム。ベースアイテム制約やアイテム生成レベルなどの要因で生成に失敗した場合はtl::nullopt。
  */
-bool make_object(PlayerType *player_ptr, ItemEntity *j_ptr, BIT_FLAGS mode, tl::optional<int> rq_mon_level)
+tl::optional<ItemEntity> make_object(PlayerType *player_ptr, BIT_FLAGS mode, BaseitemRestrict restrict, tl::optional<int> rq_mon_level)
 {
-    const auto apply = [player_ptr, j_ptr, mode] {
-        ItemMagicApplier(player_ptr, j_ptr, player_ptr->current_floor_ptr->object_level, mode).execute();
-        set_ammo_quantity(j_ptr);
+    const auto apply_magic_to = [player_ptr, mode](ItemEntity &item) {
+        ItemMagicApplier(player_ptr, &item, player_ptr->current_floor_ptr->object_level, mode).execute();
+        set_ammo_quantity(&item);
         if (cheat_peek) {
-            object_mention(player_ptr, *j_ptr);
+            object_mention(player_ptr, item);
         }
     };
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto prob = any_bits(mode, AM_GOOD) ? 10 : 1000;
     const auto base = get_base_floor(floor, mode, rq_mon_level);
-    if (one_in_(prob)) {
+    if (!restrict && one_in_(prob)) {
         auto fa_opt = floor.try_make_instant_artifact();
         if (fa_opt) {
-            *j_ptr = std::move(*fa_opt);
-            apply();
-            return true;
+            apply_magic_to(*fa_opt);
+            return fa_opt;
         }
     }
 
-    if (any_bits(mode, AM_GOOD) && !select_baseitem_id_hook) {
-        select_baseitem_id_hook = kind_is_good;
+    if (any_bits(mode, AM_GOOD) && !restrict) {
+        restrict = kind_is_good;
     }
 
     auto &table = BaseitemAllocationTable::get_instance();
-    if (select_baseitem_id_hook) {
-        table.prepare_allocation();
+    if (restrict) {
+        // 制約が指定されている場合、ここで制約を加え、次のfloor.select_baseitem_id()で制約を使用する
+        table.set_restriction(restrict);
     }
 
     const auto bi_id = floor.select_baseitem_id(base, mode);
-    if (select_baseitem_id_hook) {
-        select_baseitem_id_hook = nullptr;
-        table.prepare_allocation();
+    if (restrict) {
+        // 他で影響がないように、制約を解除しておく
+        table.reset_restriction();
     }
 
     if (bi_id == 0) {
-        return false;
+        return tl::nullopt;
     }
 
-    j_ptr->generate(bi_id);
-    apply();
-    return true;
+    ItemEntity item(bi_id);
+    apply_magic_to(item);
+    return item;
 }
 
 /*!
@@ -146,8 +177,8 @@ void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos)
         return;
     }
 
-    const auto &grid = floor.get_grid(pos);
-    delete_items(player_ptr, grid.o_idx_list | ranges::to_vector);
+    auto &grid = floor.get_grid(pos);
+    delete_items(player_ptr, grid.o_idx_list);
 
     lite_spot(player_ptr, pos);
 }
@@ -228,6 +259,8 @@ void delete_object_idx(PlayerType *player_ptr, OBJECT_IDX o_idx)
     item_ptr = floor.o_list.back();
     floor.o_list.pop_back();
 
+    floor.prevent_repeat_floor_item_idx = true;
+
     static constexpr auto flags = {
         SubWindowRedrawingFlag::FLOOR_ITEMS,
         SubWindowRedrawingFlag::FOUND_ITEMS,
@@ -261,6 +294,17 @@ void delete_items(PlayerType *player_ptr, std::vector<OBJECT_IDX> delete_i_idx_l
 }
 
 /*!
+ * @brief ObjectIndexListが管理しているアイテムをすべて削除する
+ * @param o_idx_list 管理しているアイテムをすべて削除するObjectIndexListオブジェクト
+ * @details 結果としてo_idx_listは空になるので、あえて引数は非const参照としている
+ */
+void delete_items(PlayerType *player_ptr, ObjectIndexList &o_idx_list)
+{
+    auto delete_i_idx_list = o_idx_list | ranges::to_vector;
+    delete_items(player_ptr, std::move(delete_i_idx_list));
+}
+
+/*!
  * @brief 指定したOBJECT_IDXを含むリスト(モンスター所持リスト or 床上スタックリスト)への参照を得る
  * @param floo_ptr 現在フロアへの参照ポインタ
  * @param o_idx 参照を得るリストに含まれるOBJECT_IDX
@@ -280,36 +324,19 @@ ObjectIndexList &get_o_idx_list_contains(FloorType &floor, OBJECT_IDX o_idx)
 /*!
  * @brief アイテムを所定の位置に落とす。
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param j_ptr 落としたいアイテムへの参照ポインタ
+ * @param drop_item 落としたいアイテムへの参照
  * @param pos 配置したい座標
- * @param chance 投擲物の消滅率(%)。投擲物以外はnullopt
+ * @param show_drop_message 足下に転がってきたアイテムのメッセージを表示するかどうか (デフォルトは表示する)
  */
-short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl::optional<int> chance)
+short drop_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos, bool show_drop_message)
 {
-#ifdef JP
-#else
-    const auto plural = (j_ptr->number != 1);
-#endif
     const auto &world = AngbandWorld::get_instance();
-    const auto item_name = describe_flavor(player_ptr, *j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-    if (!j_ptr->is_fixed_or_random_artifact() && chance && evaluate_percent(*chance)) {
-#ifdef JP
-        msg_format("%sは消えた。", item_name.data());
-#else
-        msg_format("The %s disappear%s.", item_name.data(), (plural ? "" : "s"));
-#endif
-        if (world.wizard) {
-            msg_print(_("(破損)", "(breakage)"));
-        }
-
-        return 0;
-    }
+    const auto item_name = describe_flavor(player_ptr, drop_item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
     Pos2D pos_drop = pos; //!< @details 実際に落ちる座標.
     auto bs = -1;
     auto bn = 0;
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto p_pos = player_ptr->get_position();
     auto has_floor_space = false;
     for (auto dy = -3; dy <= 3; dy++) {
         for (auto dx = -3; dx <= 3; dx++) {
@@ -324,7 +351,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl:
             if (!floor.contains(pos_target)) {
                 continue;
             }
-            if (!projectable(floor, p_pos, pos, pos_target)) {
+            if (!projectable(floor, pos, pos_target)) {
                 continue;
             }
 
@@ -335,8 +362,8 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl:
             const auto &grid = floor.get_grid(pos_target);
             auto k = 0;
             for (const auto this_o_idx : grid.o_idx_list) {
-                const auto &item = *floor.o_list[this_o_idx];
-                if (item.is_similar(*j_ptr)) {
+                const auto &floor_item = *floor.o_list[this_o_idx];
+                if (floor_item.is_similar(drop_item)) {
                     comb = true;
                 }
 
@@ -370,16 +397,8 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl:
         }
     }
 
-    if (!has_floor_space && !j_ptr->is_fixed_or_random_artifact()) {
-#ifdef JP
-        msg_format("%sは消えた。", item_name.data());
-#else
-        msg_format("The %s disappear%s.", item_name.data(), (plural ? "" : "s"));
-#endif
-        if (world.wizard) {
-            msg_print(_("(床スペースがない)", "(no floor space)"));
-        }
-
+    if (!has_floor_space && !drop_item.is_fixed_or_random_artifact()) {
+        handle_item_disappearance(player_ptr, drop_item, _("床スペースがない", "no floor space"));
         return 0;
     }
 
@@ -399,28 +418,12 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl:
         has_floor_space = true;
     }
 
-    auto &artifact = j_ptr->get_fixed_artifact();
     if (!has_floor_space) {
         const auto can_drop = [&](const Pos2D &pos) { return floor.can_drop_item_at(pos); };
         const auto pos_drop_candidates = floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE) | ranges::views::filter(can_drop) | ranges::to_vector;
 
         if (pos_drop_candidates.empty()) {
-#ifdef JP
-            msg_format("%sは消えた。", item_name.data());
-#else
-            msg_format("The %s disappear%s.", item_name.data(), (plural ? "" : "s"));
-#endif
-
-            if (world.wizard) {
-                msg_print(_("(床スペースがない)", "(no floor space)"));
-            }
-
-            if (preserve_mode) {
-                if (j_ptr->is_fixed_artifact() && !j_ptr->is_known()) {
-                    artifact.is_generated = false;
-                }
-            }
-
+            handle_item_disappearance(player_ptr, drop_item, _("床スペースがない", "no floor space"));
             return 0;
         }
 
@@ -430,9 +433,9 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl:
     auto is_absorbed = false;
     auto &grid = floor.get_grid(pos_drop);
     for (const auto this_o_idx : grid.o_idx_list) {
-        auto &item = *floor.o_list[this_o_idx];
-        if (item.is_similar(*j_ptr)) {
-            item.absorb(*j_ptr);
+        auto &floor_item = *floor.o_list[this_o_idx];
+        if (floor_item.is_similar(drop_item)) {
+            floor_item.absorb(drop_item);
             is_absorbed = true;
             break;
         }
@@ -440,31 +443,20 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl:
 
     short item_idx = is_absorbed ? 0 : floor.pop_empty_index_item();
     if (!is_absorbed && (item_idx == 0)) {
-#ifdef JP
-        msg_format("%sは消えた。", item_name.data());
-#else
-        msg_format("The %s disappear%s.", item_name.data(), (plural ? "" : "s"));
-#endif
-        if (world.wizard) {
-            msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
-        }
-
-        if (j_ptr->is_fixed_artifact()) {
-            artifact.is_generated = false;
-        }
-
+        handle_item_disappearance(player_ptr, drop_item, _("アイテムが多過ぎる", "too many items"));
         return 0;
     }
 
     if (!is_absorbed) {
-        *floor.o_list[item_idx] = j_ptr->clone();
-        j_ptr = floor.o_list[item_idx].get();
-        j_ptr->set_position(pos_drop);
-        j_ptr->held_m_idx = 0;
+        auto &floor_item = *floor.o_list[item_idx];
+        floor_item = drop_item.clone();
+        floor_item.set_position(pos_drop);
+        floor_item.held_m_idx = 0;
         grid.o_idx_list.add(floor, item_idx);
     }
 
-    if (j_ptr->is_fixed_artifact() && world.character_dungeon) {
+    if (drop_item.is_fixed_artifact() && world.character_dungeon) {
+        auto &artifact = drop_item.get_fixed_artifact();
         artifact.floor_id = player_ptr->floor_id;
     }
 
@@ -481,11 +473,28 @@ short drop_near(PlayerType *player_ptr, ItemEntity *j_ptr, const Pos2D &pos, tl:
         RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }
 
-    if (chance && is_located) {
+    if (show_drop_message && is_located) {
         msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
     }
 
     return item_idx;
+}
+
+/*!
+ * @brief 矢弾アイテムを所定の位置に落とす。(指定した確率で壊れて消滅する)
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param drop_item 落としたいアイテムへの参照
+ * @param pos 配置したい座標
+ * @param destruction_chance 消滅率(%)
+ */
+void drop_ammo_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos, int destruction_chance)
+{
+    if (!drop_item.is_fixed_or_random_artifact() && evaluate_percent(destruction_chance)) {
+        handle_item_disappearance(player_ptr, drop_item, _("破損", "breakage"));
+        return;
+    }
+
+    (void)drop_near(player_ptr, drop_item, pos, true);
 }
 
 /*!
@@ -545,6 +554,8 @@ ItemEntity *choose_object(PlayerType *player_ptr, short *initial_i_idx, concptr 
     if (initial_i_idx) {
         *initial_i_idx = INVEN_NONE;
     }
+
+    const auto enable_repeat = util::make_finalizer([&] { player_ptr->current_floor_ptr->prevent_repeat_floor_item_idx = false; });
 
     FixItemTesterSetter setter(item_tester);
     short i_idx;

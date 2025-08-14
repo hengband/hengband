@@ -341,7 +341,7 @@ bool cast_force_spell(PlayerType *player_ptr, MindForceTrainerType spell)
         const auto &grid = floor.get_grid(*pos);
         const auto m_idx = grid.m_idx;
         const auto p_pos = player_ptr->get_position();
-        const auto is_projectable = projectable(floor, p_pos, p_pos, *pos);
+        const auto is_projectable = projectable(floor, p_pos, *pos);
         if ((m_idx == 0) || !grid.has_los() || !is_projectable) {
             break;
         }

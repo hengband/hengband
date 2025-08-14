@@ -210,7 +210,7 @@ std::string TargetSetter::describe_projectablity() const
     const auto cheatinfo = format(" X:%d Y:%d LOS:%d LOP:%d",
         this->pos_target.x, this->pos_target.y,
         los(*this->player_ptr->current_floor_ptr, p_pos, this->pos_target),
-        projectable(floor, p_pos, p_pos, this->pos_target));
+        projectable(floor, p_pos, this->pos_target));
     return info.append(cheatinfo);
 }
 
@@ -419,7 +419,7 @@ std::string TargetSetter::describe_grid_wizard() const
     constexpr auto fmt = " X:%d Y:%d LOS:%d LOP:%d SPECIAL:%d";
     const auto p_pos = this->player_ptr->get_position();
     const auto is_los = los(floor, p_pos, this->pos_target);
-    const auto is_projectable = projectable(floor, p_pos, p_pos, this->pos_target);
+    const auto is_projectable = projectable(floor, p_pos, this->pos_target);
     const auto cheatinfo = format(fmt, this->pos_target.x, this->pos_target.y, is_los, is_projectable, grid.special);
     return cheatinfo;
 }

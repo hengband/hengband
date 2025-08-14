@@ -75,6 +75,21 @@ bool PlayerType::is_fully_healthy() const
     return is_fully_healthy;
 }
 
+/*!
+ * @brief 指定した固定アーティファクトを装備しているかどうか調べる
+ *
+ * @param fa_id 固定アーティファクトのID
+ * @return 装備していればtrue、そうでなければfalse
+ */
+bool PlayerType::is_wielding(FixedArtifactId fa_id) const
+{
+    return ranges::any_of(INVEN_WIELDING_SLOTS,
+        [&](auto slot) {
+            const auto &item = this->inventory[slot];
+            return item->is_valid() && item->is_specific_artifact(fa_id);
+        });
+}
+
 /*
  * @brief ランダムに1つアビリティスコアを減少させる
  * @return アビリティスコア減少メッセージ

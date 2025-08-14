@@ -19,6 +19,7 @@
 
 enum class DungeonId;
 enum class ElementRealmType;
+enum class FixedArtifactId : short;
 enum class ItemKindType : short;
 enum class MimicKindType;
 enum class MonraceId : short;
@@ -379,6 +380,7 @@ public:
     void ride_monster(MONSTER_IDX m_idx);
     std::shared_ptr<TimedEffects> effects() const;
     bool is_fully_healthy() const;
+    bool is_wielding(FixedArtifactId fa_id) const;
     std::string decrease_ability_random();
     std::string decrease_ability_all();
     Pos2D get_position() const;

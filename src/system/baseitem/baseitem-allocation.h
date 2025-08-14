@@ -8,6 +8,9 @@
 
 #include "util/abstract-vector-wrapper.h"
 #include "util/probability-table.h"
+#include <functional>
+
+using BaseitemRestrict = std::function<bool(short bi_id)>;
 
 /*
  * An entry for the object/monster allocation functions
@@ -50,7 +53,8 @@ public:
     short draw_lottery(int level, uint32_t mode, int count) const;
     bool order_level(int index1, int index2) const;
 
-    void prepare_allocation();
+    void set_restriction(BaseitemRestrict restrict);
+    void reset_restriction();
 
 private:
     static BaseitemAllocationTable instance;
