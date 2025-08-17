@@ -4492,14 +4492,6 @@
             ],
           },
         },
-        {
-          "action": "SPEAK_FRIEND",
-          "chance": 8,
-          "message": {
-            "ja": [""],
-            "en": [""],
-          },
-        },
       ],
     },
   ],
