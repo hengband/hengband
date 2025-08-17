@@ -765,8 +765,12 @@ tl::optional<std::string> MonraceDefinition::probe_lore()
 #ifdef JP
     return format("%sについてさらに詳しくなった気がする。", this->name.data());
 #else
+    const char *preamble = "You now know more about ";
+    if (this->kind_flags.has(MonsterKindType::UNIQUE)) {
+        return format("%s%s.", preamble, this->name.data());
+    }
     const auto nm = pluralize(this->name);
-    return format("You now know more about %s.", nm.data());
+    return format("%s%s.", preamble, nm.data());
 #endif
 }
 
