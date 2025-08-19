@@ -198,6 +198,29 @@ AC_FUNC_STRFTIME
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(gethostname mkdir select socket strtol mkstemp usleep)
 
+dnl On Linux, backtrace() may need additional linker flags to produce useful
+dnl symbol names.  With the GNU linker, the necessary option is
+dnl --export-dynamic or, if using the compiler to do the linking, -rdynamic.
+dnl Use -rdynamic on any platform where it is accepted.  If a platform
+dnl requires linking additional libraries to use backtrace(), this may have
+dnl to be modified as it only accounts for FreeBSD/NetBSD/OpenBSD where
+dnl libexecinfo needs to be linked to have access to backtrace().
+AC_SEARCH_LIBS([backtrace], [execinfo],
+  [AC_LINK_IFELSE(
+    [AC_LANG_SOURCE([[
+      #include <execinfo.h>
+      int main() { void *a[100]; int n; n = (int)backtrace(a, 100); return (n != 0) ? 0 : 1; }
+    ]])],
+    [AC_DEFINE([HAVE_BACKTRACE], [1], [Define if backtrace and backtrace_symbols exist.])
+    ac_save_LDFLAGS="$LDFLAGS"
+    LDFLAGS="$LDFLAGS -rdynamic"
+    AC_LINK_IFELSE(
+      [AC_LANG_SOURCE([[
+        int main() { return 0; }
+      ]])],
+      [],
+      [LDFLAGS="$ac_save_LDFLAGS"])])])
+
 AC_CONFIG_FILES(Makefile src/Makefile lib/Makefile lib/apex/Makefile \
 	lib/bone/Makefile lib/data/Makefile \
 	lib/edit/Makefile lib/edit/quests/Makefile lib/edit/towns/Makefile \
