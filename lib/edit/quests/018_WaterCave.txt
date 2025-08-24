@@ -84,6 +84,9 @@ F:n:DEEP_WATER:12:944
 # Deep water with Small Kraken
 F:o:DEEP_WATER:12:903
 
+# Shallow water with Siren
+F:s:SHALLOW_WATER:12:1272
+
 # Steel Helm
 F:A:SHALLOW_WATER:12:0:97
 
@@ -91,16 +94,16 @@ F:A:SHALLOW_WATER:12:0:97
 F:B:SHALLOW_WATER:12:0:93
 
 # Cesti
-F:C:SHALLOW_WATER:12:0:127
+F:C:DEEP_WATER:12:0:127
 
 # Blade of Chaos
-F:E:SHALLOW_WATER:12:0:36
+F:E:DEEP_WATER:12:0:36
 
-# Object 10 levels out of depth on no-tele Shallow water 
-F:O:SHALLOW_WATER:12:0:*10
+# Object 10 levels out of depth on no-tele Deep water 
+F:O:DEEP_WATER:12:0:*10
 
 # MAGMA VEIN
-F:#:MAGMA_VEIN_ON_SHALLOW_WATER:12
+F:#:MAGMA_VEIN_ON_DEEP_WATER:12
 
 #RUBBLE
 F:%:RUBBLE_ON_SHALLOW_WATER:12
@@ -111,30 +114,33 @@ F:.:SHALLOW_WATER:12
 # no-tele Deep water
 F:~:DEEP_WATER:12
 
+# teleport-able Shallow water
+F:-:SHALLOW_WATER:8
+
 # no-tele Quest exit
 F:<:QUEST_EXIT:12
 
 # Dungeon
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-D:XXVVVh%#o#~XOX~~~~XhXX<k~~XX
-D:X.XXXX#.X%X%XkXXXX~X~XXXXX~X
-D:XX.hX.X....~XXXX~nX%~#~Xh~XX
-D:X.XX%....f....~~~~f~~~~XXX~X
-D:X.X..a..#.....~~~~~#~~g~~X~X
-D:X.XX...#...c.XX~c~~~#~~~XX~X
-D:X.#...#...#.XmmX~#~~~#~~~X~X
-D:XX.#.f...#.XmVVmX~#~~~f~#nXX
-D:XnX.#...d.Xm%mm%mX~e~~~#~X~X
-D:XXX#.##..XmVmllmVmX~~##~#XXX
-D:XnX.#...d.Xm%mm%mX~e~~~#~XnX
-D:XX.#.f...#.XmVVmX~#~~~f~#~XX
-D:X.#...#...#.XmmX~#~~~#~~~X~X
-D:X.XX...#...#.XX~c~~~#~~~XX~X
-D:X.X..b..#.....~~~~~#~~g~~X~X
-D:X.XX%....f....~~~~f~~~~XXX~X
-D:XX.hX.n.....XXX#X~X~~X~Xh~XX
-D:X.XXXXX.XXXXXXEn%X%X~#XXXX~X
-D:XX.OOkX#o~~n#CXjXnXh#XiAB#XX
+D:XX~~h~X#o~~XOX~~~hX~XX<k~~XX
+D:X~XXXX~~X#X~XkXXX~~X~XXXXX~X
+D:XX~hX~~X~~~.XXXXnXX#.#~Xh~XX
+D:X~XX#~~~..~~~~~~.~f.~~~XXX~X
+D:X~X~~a~%~.~..XX.~~.~~~g~~#.X
+D:X~XX~~~~.~.~X-sX~.~~#~~~X.~X
+D:X~#.f~~~~.~.X--X.~~~~~~~.X~X
+D:Xn~~.XXXXX.X----XXXXXXX.X~nX
+D:XX~~Xs------%mm%------s%~~XX
+D:XXX~#X------mllm------X.#XXX
+D:XnX~~~XX----%mm%----XX~~.XnX
+D:X~~#~d~.XX-------X~...~~#.XX
+D:X~#~~~..~XX---X---X...#~~X.X
+D:X~XX~.~.X---XX-----X~~..X~kX
+D:X~Xb.~~X--XX~~XX--sX~~g~.X~X
+D:X~XX#~~XsX~~..~~XXX.~~~~XX~X
+D:XX~hX~n.%.~~XXX#X~~~.X~Xh~XX
+D:X~XXXXX~XXXXXXEn#X~~~#XXXX~X
+D:XX~OOkX~~k~~#CXjXnXh#XiOO#XX
 D:XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 # Starting position
