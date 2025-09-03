@@ -137,7 +137,7 @@ std::pair<bool, tl::optional<char>> SpellHex::select_spell_stopping(std::string_
 {
     while (true) {
         this->display_casting_spells_list();
-        const auto choice_opt = input_command(prompt, true);
+        const auto choice_opt = input_command(prompt);
         if (!choice_opt) {
             return { false, tl::nullopt };
         }

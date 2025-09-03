@@ -228,7 +228,7 @@ static COMMAND_CODE choose_essence(void)
                 prt(format("  %c) %s", 'a' + i, menu_name[i]), 2 + i, 14);
             }
 
-            const auto new_choice = input_command(_("何を付加しますか:", "Command :"), true);
+            const auto new_choice = input_command(_("何を付加しますか:", "Command :"));
             if (!new_choice) {
                 screen_load();
                 return 0;
@@ -624,7 +624,7 @@ void do_cmd_kaji(PlayerType *player_ptr, bool only_browse)
                     prt(_("  d) エッセンス付加", "  d) Add essence"), 5, 14);
                     prt(_("  e) 武器/防具強化", "  e) Enchant weapon/armor"), 6, 14);
                     std::string prompt = _(format("どの能力を%sますか:", only_browse ? "調べ" : "使い"), "Command :");
-                    const auto choice = input_command(prompt, true);
+                    const auto choice = input_command(prompt);
                     if (!choice) {
                         screen_load();
                         return;

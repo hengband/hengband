@@ -158,7 +158,7 @@ static tl::optional<BaseitemKey> select_magic_eater(PlayerType *player_ptr, bool
         screen_load();
     } else {
         while (true) {
-            const auto choice = input_command(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"), true);
+            const auto choice = input_command(_("[A] 杖, [B] 魔法棒, [C] ロッド:", "[A] staff, [B] wand, [C] rod:"));
             if (!choice) {
                 return tl::nullopt;
             }

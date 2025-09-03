@@ -73,7 +73,7 @@ void do_cmd_locate(PlayerType *player_ptr)
         const auto prompt = format(fmt, y2 / (hgt / 2), y2 % (hgt / 2), x2 / (wid / 2), x2 % (wid / 2), dirstring.data());
         auto dir = Direction::none();
         while (!dir) {
-            const auto command = input_command(prompt, true);
+            const auto command = input_command(prompt);
             if (!command) {
                 break;
             }

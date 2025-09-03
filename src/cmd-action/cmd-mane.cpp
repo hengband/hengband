@@ -239,7 +239,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
         if (choice == ESCAPE) {
             choice = ' ';
         } else {
-            const auto new_choice = input_command(prompt, true);
+            const auto new_choice = input_command(prompt);
             if (!new_choice) {
                 break;
             }

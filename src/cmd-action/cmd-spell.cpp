@@ -395,7 +395,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
         if (choice == ESCAPE) {
             choice = ' ';
         } else {
-            const auto new_choice = input_command(prompt, true);
+            const auto new_choice = input_command(prompt);
             if (!new_choice) {
                 break;
             }

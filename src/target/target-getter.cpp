@@ -58,7 +58,7 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
                 ? _("方向 ('5'でターゲットへ, '*'でターゲット再選択, ESCで中断)? ", "Direction ('5' for target, '*' to re-target, Escape to cancel)? ")
                 : _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
 
-        const auto command_opt = input_command(prompt, true);
+        const auto command_opt = input_command(prompt);
         if (!command_opt) {
             project_length = 0;
             return Direction::none();
@@ -117,7 +117,7 @@ Direction get_direction(PlayerType *player_ptr)
 
     constexpr auto prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (!dir) {
-        const auto command = input_command(prompt, true);
+        const auto command = input_command(prompt);
         if (!command) {
             return Direction::none();
         }
@@ -176,7 +176,7 @@ Direction get_rep_dir(PlayerType *player_ptr, bool under)
     const auto prompt = under ? _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ")
                               : _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
     while (!dir) {
-        const auto command = input_command(prompt, true);
+        const auto command = input_command(prompt);
         if (!command) {
             return Direction::none();
         }
