@@ -368,8 +368,8 @@ static tl::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerTyp
     while (!selected_spell) {
         auto choice = '\0';
         if (!first_show_list) {
-            const auto choice_opt = input_command(prompt, true);
-            if (!choice_opt) {
+            const auto choice_opt = input_command(prompt, false);
+            if (!choice_opt.has_value()) {
                 break;
             }
 
