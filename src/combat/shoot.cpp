@@ -1189,18 +1189,18 @@ int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, i
     if (impact) {
         // 強撃クリティカル(クリティカル強度: weight + d650 + d650)のときの期待値
         auto sum = 0;
-        for (auto d = 2; d <= 650 * 2; ++d) { // d650 + d650 で出る 2～1300 について計算する
-            const auto count = (d <= 650 + 1) ? (d - 1) : (650 * 2 - d + 1); // d650 + d650 で出る 650*650 通りのうちdが出るパターンの数
+        for (auto d = 2; d <= CRITICAL_DIE_SIDES * 2; ++d) { // d650 + d650 で出る 2～1300 について計算する
+            const auto count = (d <= CRITICAL_DIE_SIDES + 1) ? (d - 1) : (CRITICAL_DIE_SIDES * 2 - d + 1); // d650 + d650 で出る 650*650 通りのうちdが出るパターンの数
             sum += std::get<0>(apply_critical_norm_damage(weight + d, dam, mult)) * count;
         }
-        num = sum / (650 * 650);
+        num = sum / (CRITICAL_DIE_SIDES * CRITICAL_DIE_SIDES);
     } else {
         // 通常クリティカル(クリティカル強度: weight + d650)のときの期待値
         auto sum = 0;
-        for (auto d = 1; d <= 650; ++d) {
+        for (auto d = 1; d <= CRITICAL_DIE_SIDES; ++d) {
             sum += std::get<0>(apply_critical_norm_damage(weight + d, dam, mult));
         }
-        num = sum / 650;
+        num = sum / CRITICAL_DIE_SIDES;
     }
 
     int pow = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) ? 4444 : 5000;

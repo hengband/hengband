@@ -6,6 +6,8 @@
 #include <string>
 #include <tuple>
 
+constexpr auto CRITICAL_DIE_SIDES = 650; //<! クリティカル時に武器重量に上乗せするダイスの面数
+
 struct player_attack_type;
 class PlayerType;
 std::tuple<int, std::string, SoundKind> apply_critical_norm_damage(int k, int base_dam, int mult = 1);

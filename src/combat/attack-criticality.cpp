@@ -66,9 +66,9 @@ int critical_norm(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, int1
         return dam;
     }
 
-    int k = weight + randint1(650);
+    auto k = weight + randint1(CRITICAL_DIE_SIDES);
     if (impact || (mode == HISSATSU_MAJIN) || (mode == HISSATSU_3DAN)) {
-        k += randint1(650);
+        k += randint1(CRITICAL_DIE_SIDES);
     }
 
     const auto &[critical_dam, msg, battle_sound] = apply_critical_norm_damage(k, dam);
