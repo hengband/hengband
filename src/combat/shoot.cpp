@@ -1184,25 +1184,23 @@ int calc_expect_crit(PlayerType *player_ptr, WEIGHT weight, int plus, int dam, i
         i = 0;
     }
 
-    // 通常ダメージdam、武器重量weightでクリティカルが発生した時のクリティカルダメージ期待値
-    auto calc_weight_expect_dam = [](int dam, WEIGHT weight, int mult) {
-        int sum = 0;
-        for (int d = 1; d <= 650; ++d) {
-            int k = weight + d;
-            sum += std::get<0>(apply_critical_norm_damage(k, dam, mult));
-        }
-        return sum / 650;
-    };
-
-    uint32_t num = 0;
+    auto num = 0;
 
     if (impact) {
-        for (int d = 1; d <= 650; ++d) {
-            num += calc_weight_expect_dam(dam, weight + d, mult);
+        // 強撃クリティカル(クリティカル強度: weight + d650 + d650)のときの期待値
+        auto sum = 0;
+        for (auto d = 2; d <= 650 * 2; ++d) { // d650 + d650 で出る 2～1300 について計算する
+            const auto count = (d <= 650 + 1) ? (d - 1) : (650 * 2 - d + 1); // d650 + d650 で出る 650*650 通りのうちdが出るパターンの数
+            sum += std::get<0>(apply_critical_norm_damage(weight + d, dam, mult)) * count;
         }
-        num /= 650;
+        num = sum / (650 * 650);
     } else {
-        num += calc_weight_expect_dam(dam, weight, mult);
+        // 通常クリティカル(クリティカル強度: weight + d650)のときの期待値
+        auto sum = 0;
+        for (auto d = 1; d <= 650; ++d) {
+            sum += std::get<0>(apply_critical_norm_damage(weight + d, dam, mult));
+        }
+        num = sum / 650;
     }
 
     int pow = PlayerClass(player_ptr).equals(PlayerClassType::NINJA) ? 4444 : 5000;
