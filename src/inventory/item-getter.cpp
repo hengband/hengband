@@ -268,13 +268,14 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
     }
 
+    short i_idx = 0;
     if (!item_selection.allow_floor && (item_selection.i1 > item_selection.i2) && (item_selection.e1 > item_selection.e2)) {
         command_see = false;
         item_selection.oops = true;
         item_selection.done = true;
 
         if (item_selection.mode & USE_FORCE) {
-            item_selection.cp = INVEN_FORCE;
+            i_idx = INVEN_FORCE;
             item_selection.item = true;
         }
     } else {
@@ -434,7 +435,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             case '\r':
             case '\n': {
                 if (command_wrk == USE_FLOOR) {
-                    item_selection.cp = -get_item_label;
+                    i_idx = -get_item_label;
                 } else {
                     if (!get_item_okay(player_ptr, get_item_label, item_tester)) {
                         bell();
@@ -446,7 +447,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                         break;
                     }
 
-                    item_selection.cp = get_item_label;
+                    i_idx = get_item_label;
                 }
 
                 item_selection.item = true;
@@ -455,7 +456,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             }
             case 'w': {
                 if (item_selection.mode & USE_FORCE) {
-                    item_selection.cp = INVEN_FORCE;
+                    i_idx = INVEN_FORCE;
                     item_selection.item = true;
                     item_selection.done = true;
                     break;
@@ -516,7 +517,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                         continue;
                     }
 
-                    item_selection.cp = item_selection.k;
+                    i_idx = item_selection.k;
                     item_selection.item = true;
                     item_selection.done = true;
                     break;
@@ -560,7 +561,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 break;
             }
 
-            item_selection.cp = item_selection.k;
+            i_idx = item_selection.k;
             item_selection.item = true;
             item_selection.done = true;
             item_selection.cur_tag = item_selection.which;
@@ -568,7 +569,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
         case 'w': {
             if (item_selection.mode & USE_FORCE) {
-                item_selection.cp = INVEN_FORCE;
+                i_idx = INVEN_FORCE;
                 item_selection.item = true;
                 item_selection.done = true;
                 break;
@@ -624,7 +625,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 break;
             }
 
-            item_selection.cp = item_selection.k;
+            i_idx = item_selection.k;
             item_selection.item = true;
             item_selection.done = true;
             break;
@@ -652,12 +653,12 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         return false;
     }
 
-    repeat_push(item_selection.cp);
+    repeat_push(i_idx);
     if (command_cmd) {
         prev_tag = item_selection.cur_tag;
     }
 
     command_cmd = 0;
-    *cp = item_selection.cp;
+    *cp = i_idx;
     return true;
 }

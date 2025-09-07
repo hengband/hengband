@@ -42,7 +42,6 @@ public:
     ItemSelection(uint32_t mode);
     uint32_t mode;
     int menu_line;
-    short cp = 0;
     char which = '\0';
     short k = 0;
     short i1 = 0;
