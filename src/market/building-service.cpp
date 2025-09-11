@@ -82,7 +82,7 @@ bool is_member(PlayerType *player_ptr, const building_type &bldg)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
  */
-void display_buikding_service(PlayerType *player_ptr, const building_type &bldg)
+void display_building_service(PlayerType *player_ptr, const building_type &bldg)
 {
     byte action_color;
 
