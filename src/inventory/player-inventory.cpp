@@ -55,9 +55,9 @@ bool can_get_item(PlayerType *player_ptr, const ItemTester &item_tester)
         }
     }
 
-    constexpr auto mode = SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED;
     OBJECT_IDX floor_list[23];
-    ITEM_NUMBER floor_num = scan_floor_items(player_ptr, floor_list, player_ptr->y, player_ptr->x, mode, item_tester);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    ITEM_NUMBER floor_num = scan_floor_items(floor, floor_list, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
     return floor_num != 0;
 }
 

@@ -70,6 +70,10 @@ public:
 
     bool matches_terrain(TerrainTag tag) const;
     void set_terrain_id(TerrainTag tag);
+    Pos2D get_position() const
+    {
+        return { this->y, this->x };
+    }
 };
 
 GridExamination::GridExamination(FloorType &floor, POSITION y, POSITION x, target_type mode, concptr info)
@@ -131,13 +135,13 @@ static std::string evaluate_monster_exp(PlayerType *player_ptr, const MonsterEnt
     return format("%03ld", (long int)num);
 }
 
-static void describe_scan_result(PlayerType *player_ptr, GridExamination *ge_ptr)
+static void describe_scan_result(const FloorType &floor, GridExamination *ge_ptr)
 {
     if (!easy_floor) {
         return;
     }
 
-    ge_ptr->floor_num = scan_floor_items(player_ptr, ge_ptr->floor_list, ge_ptr->y, ge_ptr->x, SCAN_FLOOR_ONLY_MARKED, AllMatchItemTester());
+    ge_ptr->floor_num = scan_floor_items(floor, ge_ptr->floor_list, ge_ptr->get_position(), { ScanFloorMode::ONLY_MARKED }, AllMatchItemTester());
     if (ge_ptr->floor_num > 0) {
         ge_ptr->x_info = _("x物 ", "x,");
     }
@@ -528,9 +532,10 @@ static std::string describe_grid_monster_all(GridExamination *ge_ptr)
  */
 char examine_grid(PlayerType *player_ptr, const POSITION y, const POSITION x, target_type mode, concptr info)
 {
-    GridExamination tmp_eg(*player_ptr->current_floor_ptr, y, x, mode, info);
+    auto &floor = *player_ptr->current_floor_ptr;
+    GridExamination tmp_eg(floor, y, x, mode, info);
     GridExamination *ge_ptr = &tmp_eg;
-    describe_scan_result(player_ptr, ge_ptr);
+    describe_scan_result(floor, ge_ptr);
     describe_target(player_ptr, ge_ptr);
     ProcessResult next_target = describe_hallucinated_target(player_ptr, ge_ptr);
     switch (next_target) {

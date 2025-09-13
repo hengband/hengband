@@ -56,7 +56,7 @@ static std::pair<tl::optional<short>, char> check_floor_item_tag_aux(PlayerType 
 
     const auto &floor = *player_ptr->current_floor_ptr;
     if ((prev_tag != '\0') && command_cmd) {
-        fis.floor_num = scan_floor_items(player_ptr, fis.floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+        fis.floor_num = scan_floor_items(floor, fis.floor_list, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
         if (get_tag_floor(floor, &fis.k, prev_tag, fis.floor_list, fis.floor_num)) {
             command_cmd = 0;
             return { -fis.floor_list[fis.k], prev_tag };
@@ -270,8 +270,8 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
     fis.floor_num = 0;
     if (fis.floor) {
-        constexpr auto options = SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED;
-        fis.floor_num = scan_floor_items(player_ptr, fis.floor_list, player_ptr->y, player_ptr->x, options, item_tester);
+        const auto &floor = *player_ptr->current_floor_ptr;
+        fis.floor_num = scan_floor_items(floor, fis.floor_list, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
     }
 
     if ((mode & USE_INVEN) && (fis.i1 <= fis.i2)) {
@@ -678,8 +678,8 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
             rfu.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
             window_stuff(player_ptr);
-            constexpr auto options = SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED;
-            fis.floor_num = scan_floor_items(player_ptr, fis.floor_list, player_ptr->y, player_ptr->x, options, item_tester);
+            const auto &floor = *player_ptr->current_floor_ptr;
+            fis.floor_num = scan_floor_items(floor, fis.floor_list, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
             if (command_see) {
                 screen_load();
                 screen_save();

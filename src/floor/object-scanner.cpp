@@ -14,24 +14,16 @@
 #include <array>
 
 /*!
- * @brief 床に落ちているオブジェクトの数を返す / scan floor items
+ * @brief 床に落ちているオブジェクトの数を返す
+ * @param floor フロアへの参照
  * @param items オブジェクトのIDリストを返すための配列参照ポインタ
- * @param y 走査するフロアのY座標
- * @param x 走査するフロアのX座標
+ * @param pos 走査するフロアの座標
  * @param mode オプションフラグ
  * @return 対象のマスに落ちているアイテム数
- * @details
- * Return a list of o_list[] indexes of items at the given floor
- * location. Valid flags are:
- *
- *		mode & 0x01 -- Item tester
- *		mode & 0x02 -- Marked items only
- *		mode & 0x04 -- Stop after first
+ * @details Return a list of o_list[] indexes of items at the given floor location.
  */
-int scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester &item_tester)
+int scan_floor_items(const FloorType &floor, OBJECT_IDX *items, const Pos2D &pos, EnumClassFlagGroup<ScanFloorMode> mode, const ItemTester &item_tester)
 {
-    const Pos2D pos(y, x);
-    const auto &floor = *player_ptr->current_floor_ptr;
     if (!floor.contains(pos)) {
         return 0;
     }
@@ -39,11 +31,11 @@ int scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSI
     auto num = 0;
     for (const auto this_o_idx : floor.get_grid(pos).o_idx_list) {
         const auto &item = *floor.o_list[this_o_idx];
-        if ((mode & SCAN_FLOOR_ITEM_TESTER) && !item_tester.okay(&item)) {
+        if (mode.has(ScanFloorMode::ITEM_TESTER) && !item_tester.okay(&item)) {
             continue;
         }
 
-        if ((mode & SCAN_FLOOR_ONLY_MARKED) && item.marked.has_not(OmType::FOUND)) {
+        if (mode.has(ScanFloorMode::ONLY_MARKED) && item.marked.has_not(OmType::FOUND)) {
             continue;
         }
 
@@ -52,7 +44,7 @@ int scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSI
         }
 
         num++;
-        if (mode & SCAN_FLOOR_AT_MOST_ONE) {
+        if (mode.has(ScanFloorMode::AT_MOST_ONE)) {
             break;
         }
     }
@@ -99,6 +91,7 @@ static std::string prepare_label_string_floor(const FloorType &floor, FLOOR_IDX 
  */
 COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester &item_tester)
 {
+    const Pos2D pos(y, x);
     COMMAND_CODE i, m;
     int j, k, l;
     COMMAND_CODE out_index[23]{};
@@ -106,12 +99,11 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     std::array<std::string, 23> descriptions{};
     COMMAND_CODE target_item_label = 0;
     OBJECT_IDX floor_list[23]{};
-    ITEM_NUMBER floor_num;
     auto dont_need_to_show_weights = true;
     const auto &[wid, hgt] = term_get_size();
     auto len = std::max((*min_width), 20);
-    floor_num = scan_floor_items(player_ptr, floor_list, y, x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
     auto &floor = *player_ptr->current_floor_ptr;
+    const auto floor_num = scan_floor_items(floor, floor_list, pos, { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
     for (k = 0, i = 0; i < floor_num && i < 23; i++) {
         const auto &item = *floor.o_list[floor_list[i]];
         const auto item_name = describe_flavor(player_ptr, item, 0);
