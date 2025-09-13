@@ -48,20 +48,24 @@ bool is_ring_slot(int i)
  */
 bool get_tag_floor(const FloorType &floor, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
-    for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++) {
-        auto *o_ptr = floor.o_list[floor_list[i]].get();
-        if (!o_ptr->is_inscribed()) {
+    for (short i = 0; i < floor_num && i < 23; i++) {
+        const auto &item = *floor.o_list[floor_list[i]];
+        if (!item.is_inscribed()) {
             continue;
         }
 
-        auto s = angband_strchr(o_ptr->inscription->data(), '@');
+        auto s = extract_suffix(*item.inscription, '@');
         while (s) {
-            if ((s[1] == command_cmd) && (s[2] == tag)) {
+            if (s->length() <= 2) {
+                break;
+            }
+
+            if ((s->at(1) == command_cmd) && (s->at(2) == tag)) {
                 *cp = i;
                 return true;
             }
 
-            s = angband_strchr(s + 1, '@');
+            s = extract_suffix(s->substr(1), '@');
         }
     }
 
@@ -69,20 +73,24 @@ bool get_tag_floor(const FloorType &floor, COMMAND_CODE *cp, char tag, FLOOR_IDX
         return false;
     }
 
-    for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++) {
-        auto *o_ptr = floor.o_list[floor_list[i]].get();
-        if (!o_ptr->is_inscribed()) {
+    for (short i = 0; i < floor_num && i < 23; i++) {
+        const auto &item = *floor.o_list[floor_list[i]];
+        if (!item.is_inscribed()) {
             continue;
         }
 
-        auto s = angband_strchr(o_ptr->inscription->data(), '@');
+        auto s = extract_suffix(*item.inscription, '@');
         while (s) {
-            if (s[1] == tag) {
+            if (s->length() <= 1) {
+                break;
+            }
+
+            if (s->at(1) == tag) {
                 *cp = i;
                 return true;
             }
 
-            s = angband_strchr(s + 1, '@');
+            s = extract_suffix(s->substr(1), '@');
         }
     }
 

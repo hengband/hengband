@@ -42,21 +42,21 @@
 
 /*!
  * @brief 床上アイテムへにタグ付けがされているかの調査処理 (のはず)
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
+ * @param p_pos プレイヤーの座標
  * @param fis 床上アイテムへの参照
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return 選択したアイテムインデックス (なければnullopt)とタグの組
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static std::pair<tl::optional<short>, char> check_floor_item_tag_aux(PlayerType *player_ptr, FloorItemSelection &fis, short i_idx, char prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> check_floor_item_tag_aux(const FloorType &floor, const Pos2D &p_pos, FloorItemSelection &fis, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
     if (!fis.floor || (i_idx >= 0)) {
         return { tl::nullopt, prev_tag };
     }
 
-    const auto &floor = *player_ptr->current_floor_ptr;
     if ((prev_tag != '\0') && command_cmd) {
-        fis.floor_list = scan_floor_items(floor, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
+        fis.floor_list = scan_floor_items(floor, p_pos, { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
         if (get_tag_floor(floor, &fis.k, prev_tag, fis.floor_list.data(), fis.floor_list.size())) {
             command_cmd = 0;
             return { -fis.floor_list[fis.k], prev_tag };
@@ -153,7 +153,9 @@ static bool check_floor_item_tag(PlayerType *player_ptr, FloorItemSelection *fis
         return true;
     }
 
-    const auto &[floor_item_indice, tag] = check_floor_item_tag_aux(player_ptr, *fis_ptr, *code, *prev_tag, item_tester);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto p_pos = player_ptr->get_position();
+    const auto &[floor_item_indice, tag] = check_floor_item_tag_aux(floor, p_pos, *fis_ptr, *code, *prev_tag, item_tester);
     *prev_tag = tag;
     if (floor_item_indice) {
         fis_ptr->cp = *floor_item_indice;
