@@ -14,21 +14,19 @@
 #include <array>
 
 /*!
- * @brief 床に落ちているオブジェクトの数を返す
+ * @brief 床に落ちているオブジェクトのインデックス群を返す
  * @param floor フロアへの参照
- * @param items オブジェクトのIDリストを返すための配列参照ポインタ
  * @param pos 走査するフロアの座標
  * @param mode オプションフラグ
  * @return 対象のマスに落ちているアイテム数
- * @details Return a list of o_list[] indexes of items at the given floor location.
  */
-int scan_floor_items(const FloorType &floor, OBJECT_IDX *items, const Pos2D &pos, EnumClassFlagGroup<ScanFloorMode> mode, const ItemTester &item_tester)
+std::vector<short> scan_floor_items(const FloorType &floor, const Pos2D &pos, EnumClassFlagGroup<ScanFloorMode> mode, const ItemTester &item_tester)
 {
     if (!floor.contains(pos)) {
-        return 0;
+        return {};
     }
 
-    auto num = 0;
+    std::vector<short> items;
     for (const auto this_o_idx : floor.get_grid(pos).o_idx_list) {
         const auto &item = *floor.o_list[this_o_idx];
         if (mode.has(ScanFloorMode::ITEM_TESTER) && !item_tester.okay(&item)) {
@@ -39,34 +37,29 @@ int scan_floor_items(const FloorType &floor, OBJECT_IDX *items, const Pos2D &pos
             continue;
         }
 
-        if (num < 23) {
-            items[num] = this_o_idx;
-        }
-
-        num++;
+        items.push_back(this_o_idx);
         if (mode.has(ScanFloorMode::AT_MOST_ONE)) {
             break;
         }
     }
 
-    return num;
+    return items;
 }
 
 /*!
  * @brief タグIDにあわせてタグアルファベットのリストを返す(床上アイテム用)
  * @param floor フロアへの参照
- * @param floor_list 床上アイテムの配列
- * @param floor_num  floor_listの内、有効な要素数
+ * @param floor_item_index 床上アイテムインデックス群
  * @return タグアルファベットのリスト
  */
-static std::string prepare_label_string_floor(const FloorType &floor, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
+static std::string prepare_label_string_floor(const FloorType &floor, std::vector<short> &floor_item_index)
 {
     constexpr std::string_view alphabet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     std::string tag_chars(alphabet);
     for (size_t i = 0; i < tag_chars.length(); i++) {
         short fii_num; //!< floor_list の要素番号
         const auto tag_char = alphabet[i];
-        if (!get_tag_floor(floor, &fii_num, tag_char, floor_list, floor_num)) {
+        if (!get_tag_floor(floor, &fii_num, tag_char, floor_item_index.data(), floor_item_index.size())) {
             continue;
         }
 
@@ -92,19 +85,20 @@ static std::string prepare_label_string_floor(const FloorType &floor, FLOOR_IDX 
 COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester &item_tester)
 {
     const Pos2D pos(y, x);
-    COMMAND_CODE i, m;
-    int j, k, l;
-    COMMAND_CODE out_index[23]{};
-    TERM_COLOR out_color[23]{};
-    std::array<std::string, 23> descriptions{};
+    constexpr auto max_items = 23; //!< @todo 1マスに落ちているアイテムの最大数. ヘッダに移したい.
+    COMMAND_CODE m;
+    int j, l;
+    COMMAND_CODE out_index[max_items]{};
+    TERM_COLOR out_color[max_items]{};
+    std::array<std::string, max_items> descriptions{};
     COMMAND_CODE target_item_label = 0;
-    OBJECT_IDX floor_list[23]{};
     auto dont_need_to_show_weights = true;
     const auto &[wid, hgt] = term_get_size();
     auto len = std::max((*min_width), 20);
     auto &floor = *player_ptr->current_floor_ptr;
-    const auto floor_num = scan_floor_items(floor, floor_list, pos, { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
-    for (k = 0, i = 0; i < floor_num && i < 23; i++) {
+    auto floor_list = scan_floor_items(floor, pos, { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
+    auto k = 0;
+    for (size_t i = 0; (i < floor_list.size()) && (i < max_items); i++) {
         const auto &item = *floor.o_list[floor_list[i]];
         const auto item_name = describe_flavor(player_ptr, item, 0);
         out_index[k] = i;
@@ -133,7 +127,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
 
     *min_width = len;
     int col = (len > wid - 4) ? 0 : (wid - len - 1);
-    const auto floor_label = prepare_label_string_floor(floor, floor_list, floor_num);
+    const auto floor_label = prepare_label_string_floor(floor, floor_list);
     for (j = 0; j < k; j++) {
         m = floor_list[out_index[j]];
         const auto &item = *floor.o_list[m];

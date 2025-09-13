@@ -4,6 +4,7 @@
 #include "system/angband.h"
 #include "util/flag-group.h"
 #include "util/point-2d.h"
+#include <vector>
 
 /*!
  * @brief scan_floor_items() の動作を指定するフラグたち。
@@ -18,5 +19,5 @@ enum class ScanFloorMode {
 class FloorType;
 class PlayerType;
 class ItemTester;
-int scan_floor_items(const FloorType &floor, OBJECT_IDX *items, const Pos2D &pos, EnumClassFlagGroup<ScanFloorMode> mode, const ItemTester &item_tester);
+std::vector<short> scan_floor_items(const FloorType &floor, const Pos2D &pos, EnumClassFlagGroup<ScanFloorMode> mode, const ItemTester &item_tester);
 COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester &item_tester);

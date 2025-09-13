@@ -38,6 +38,8 @@
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
 #include "world/world.h"
+#include <fmt/format.h>
+#include <vector>
 #ifdef JP
 #else
 #include "locale/english.h"
@@ -59,8 +61,7 @@ public:
     concptr s3 = "";
     concptr x_info = "";
     char query = '\001';
-    OBJECT_IDX floor_list[23]{};
-    ITEM_NUMBER floor_num = 0;
+    std::vector<short> floor_list;
     Grid *g_ptr;
     MonsterEntity *m_ptr;
     OBJECT_IDX next_o_idx = 0;
@@ -131,8 +132,8 @@ static std::string evaluate_monster_exp(PlayerType *player_ptr, const MonsterEnt
 
     s64b_div(&exp_adv, &exp_adv_frac, exp_mon, exp_mon_frac);
 
-    auto num = std::min<uint>(999, exp_adv_frac);
-    return format("%03ld", (long int)num);
+    const auto num = std::min<uint32_t>(999, exp_adv_frac);
+    return fmt::format("{:03}", num);
 }
 
 static void describe_scan_result(const FloorType &floor, GridExamination *ge_ptr)
@@ -141,8 +142,8 @@ static void describe_scan_result(const FloorType &floor, GridExamination *ge_ptr
         return;
     }
 
-    ge_ptr->floor_num = scan_floor_items(floor, ge_ptr->floor_list, ge_ptr->get_position(), { ScanFloorMode::ONLY_MARKED }, AllMatchItemTester());
-    if (ge_ptr->floor_num > 0) {
+    ge_ptr->floor_list = scan_floor_items(floor, ge_ptr->get_position(), { ScanFloorMode::ONLY_MARKED }, AllMatchItemTester());
+    if (!ge_ptr->floor_list.empty()) {
         ge_ptr->x_info = _("x物 ", "x,");
     }
 }
@@ -316,7 +317,7 @@ static short describe_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
 
 static short describe_footing(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    if (ge_ptr->floor_num != 1) {
+    if (ge_ptr->floor_list.size() != 1) {
         return CONTINUOUS_DESCRIPTION;
     }
 
@@ -340,9 +341,9 @@ static short describe_footing_items(GridExamination *ge_ptr)
     }
 
 #ifdef JP
-    const auto out_val = format("%s %d個のアイテム%s%s ['x'で一覧, %s]", ge_ptr->s1, (int)ge_ptr->floor_num, ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
+    const auto out_val = fmt::format("{} {}個のアイテム{}{} ['x'で一覧, {}]", ge_ptr->s1, ge_ptr->floor_list.size(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
-    const auto out_val = format("%s%s%sa pile of %d items [x,%s]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, (int)ge_ptr->floor_num, ge_ptr->info);
+    const auto out_val = fmt::format("{}{}{}a pile of {} items [x,{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->floor_list.size(), ge_ptr->info);
 #endif
     prt(out_val, 0, 0);
     move_cursor_relative(ge_ptr->y, ge_ptr->x);
@@ -362,9 +363,9 @@ static char describe_footing_many_items(PlayerType *player_ptr, GridExamination 
         (void)show_floor_items(player_ptr, 0, ge_ptr->y, ge_ptr->x, min_width, AllMatchItemTester());
         show_gold_on_floor = false;
 #ifdef JP
-        const auto out_val = format("%s %d個のアイテム%s%s [Enterで次へ, %s]", ge_ptr->s1, (int)ge_ptr->floor_num, ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
+        const auto out_val = fmt::format("{} {}個のアイテム{}{} [Enterで次へ, {}]", ge_ptr->s1, ge_ptr->floor_list.size(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
-        const auto out_val = format("%s%s%sa pile of %d items [Enter,%s]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, (int)ge_ptr->floor_num, ge_ptr->info);
+        const auto out_val = fmt::format("{}{}{}a pile of {} items [Enter,{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->floor_list.size(), ge_ptr->info);
 #endif
         prt(out_val, 0, 0);
         ge_ptr->query = inkey();
@@ -386,7 +387,7 @@ static char describe_footing_many_items(PlayerType *player_ptr, GridExamination 
 
 static short loop_describing_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    if (ge_ptr->floor_num == 0) {
+    if (ge_ptr->floor_list.empty()) {
         return CONTINUOUS_DESCRIPTION;
     }
 
