@@ -38,46 +38,43 @@
 #include "window/display-sub-windows.h"
 #include <fmt/format.h>
 #include <sstream>
+#include <tl/optional.hpp>
 
 /*!
  * @brief 床上アイテムへにタグ付けがされているかの調査処理 (のはず)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param fis 床上アイテムへの参照
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
- * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ * @return 選択したアイテムインデックス (なければnullopt)とタグの組
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static bool check_floor_item_tag_aux(PlayerType *player_ptr, FloorItemSelection *fis_ptr, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> check_floor_item_tag_aux(PlayerType *player_ptr, FloorItemSelection &fis, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
-    auto &cp = fis_ptr->cp;
-    if (!fis_ptr->floor || (cp >= 0)) {
-        return false;
+    if (!fis.floor || (i_idx >= 0)) {
+        return { tl::nullopt, prev_tag };
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-
-    if (*prev_tag && command_cmd) {
-        fis_ptr->floor_num = scan_floor_items(player_ptr, fis_ptr->floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
-        if (get_tag_floor(floor, &fis_ptr->k, *prev_tag, fis_ptr->floor_list, fis_ptr->floor_num)) {
-            cp = -fis_ptr->floor_list[fis_ptr->k];
+    if ((prev_tag != '\0') && command_cmd) {
+        fis.floor_num = scan_floor_items(player_ptr, fis.floor_list, player_ptr->y, player_ptr->x, SCAN_FLOOR_ITEM_TESTER | SCAN_FLOOR_ONLY_MARKED, item_tester);
+        if (get_tag_floor(floor, &fis.k, prev_tag, fis.floor_list, fis.floor_num)) {
             command_cmd = 0;
-            return true;
+            return { -fis.floor_list[fis.k], prev_tag };
         }
 
-        *prev_tag = '\0';
-        return false;
+        return { tl::nullopt, '\0' };
     }
 
-    if (floor.prevent_repeat_floor_item_idx || std::cmp_greater_equal(-cp, floor.o_list.size())) {
-        return false;
+    if (floor.prevent_repeat_floor_item_idx || std::cmp_greater_equal(-i_idx, floor.o_list.size())) {
+        return { tl::nullopt, prev_tag };
     }
 
-    if (!item_tester.okay(player_ptr->current_floor_ptr->o_list[-cp].get()) && ((fis_ptr->mode & USE_FULL) == 0)) {
-        return false;
+    if (!item_tester.okay(floor.o_list[-i_idx].get()) && ((fis.mode & USE_FULL) == 0)) {
+        return { tl::nullopt, prev_tag };
     }
 
     command_cmd = 0;
-    return true;
+    return { i_idx, prev_tag };
 }
 
 /*!
@@ -156,7 +153,10 @@ static bool check_floor_item_tag(PlayerType *player_ptr, FloorItemSelection *fis
         return true;
     }
 
-    if (check_floor_item_tag_aux(player_ptr, fis_ptr, prev_tag, item_tester)) {
+    const auto &[floor_item_indice, tag] = check_floor_item_tag_aux(player_ptr, *fis_ptr, *code, *prev_tag, item_tester);
+    *prev_tag = tag;
+    if (floor_item_indice) {
+        fis_ptr->cp = *floor_item_indice;
         return true;
     }
 
