@@ -61,31 +61,31 @@ int scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSI
 }
 
 /*!
- * @brief タグIDにあわせてタグアルファベットのリストを返す(床上アイテム用) /
- * Move around label characters with correspond tags (floor version)
- * @param label ラベルリストを取得する文字列参照ポインタ
+ * @brief タグIDにあわせてタグアルファベットのリストを返す(床上アイテム用)
+ * @param floor フロアへの参照
  * @param floor_list 床上アイテムの配列
- * @param floor_num  床上アイテムの配列ID
+ * @param floor_num  floor_listの内、有効な要素数
+ * @return タグアルファベットのリスト
  */
-/*
- */
-static void prepare_label_string_floor(const FloorType &floor, char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
+static std::string prepare_label_string_floor(const FloorType &floor, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
-    concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    strcpy(label, alphabet_chars);
-    for (int i = 0; i < 52; i++) {
-        COMMAND_CODE index;
-        auto c = alphabet_chars[i];
-        if (!get_tag_floor(floor, &index, c, floor_list, floor_num)) {
+    constexpr std::string_view alphabet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    std::string tag_chars(alphabet);
+    for (size_t i = 0; i < tag_chars.length(); i++) {
+        short fii_num; //!< floor_list の要素番号
+        const auto tag_char = alphabet[i];
+        if (!get_tag_floor(floor, &fii_num, tag_char, floor_list, floor_num)) {
             continue;
         }
 
-        if (label[i] == c) {
-            label[i] = ' ';
+        if (tag_chars[i] == tag_char) {
+            tag_chars[i] = ' ';
         }
 
-        label[index] = c;
+        tag_chars[fii_num] = tag_char;
     }
+
+    return tag_chars;
 }
 
 /*!
@@ -107,7 +107,6 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     COMMAND_CODE target_item_label = 0;
     OBJECT_IDX floor_list[23]{};
     ITEM_NUMBER floor_num;
-    char floor_label[52 + 1]{};
     auto dont_need_to_show_weights = true;
     const auto &[wid, hgt] = term_get_size();
     auto len = std::max((*min_width), 20);
@@ -142,7 +141,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
 
     *min_width = len;
     int col = (len > wid - 4) ? 0 : (wid - len - 1);
-    prepare_label_string_floor(floor, floor_label, floor_list, floor_num);
+    const auto floor_label = prepare_label_string_floor(floor, floor_list, floor_num);
     for (j = 0; j < k; j++) {
         m = floor_list[out_index[j]];
         const auto &item = *floor.o_list[m];
@@ -156,7 +155,7 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
                 head = "   ";
             }
         } else {
-            head = format("%c)", floor_label[j]);
+            head = fmt::format("{})", floor_label[j]);
         }
 
         put_str(head, j + 1, col);
