@@ -57,7 +57,9 @@ static std::pair<tl::optional<short>, char> check_floor_item_tag_aux(const Floor
 
     if ((prev_tag != '\0') && command_cmd) {
         fis.floor_list = scan_floor_items(floor, p_pos, { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
-        if (get_tag_floor(floor, &fis.k, prev_tag, fis.floor_list.data(), fis.floor_list.size())) {
+        const auto floor_item_idx = get_tag_floor(floor, prev_tag, fis.floor_list);
+        if (floor_item_idx) {
+            fis.k = *floor_item_idx;
             command_cmd = 0;
             return { -fis.floor_list[fis.k], prev_tag };
         }
@@ -774,8 +776,9 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     break;
                 }
             } else {
-                if (get_tag_floor(*player_ptr->current_floor_ptr, &fis.k, fis.which, fis.floor_list.data(), fis.floor_list.size())) {
-                    fis.k = -fis.floor_list[fis.k];
+                const auto floor_item_idx = get_tag_floor(*player_ptr->current_floor_ptr, fis.which, fis.floor_list);
+                if (floor_item_idx) {
+                    fis.k = -fis.floor_list[*floor_item_idx];
                 } else {
                     bell();
                     break;
@@ -816,8 +819,9 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     fis.cur_tag = fis.which;
                 }
             } else {
-                if (get_tag_floor(*player_ptr->current_floor_ptr, &fis.k, fis.which, fis.floor_list.data(), fis.floor_list.size())) {
-                    fis.k = -fis.floor_list[fis.k];
+                const auto floor_item_idx = get_tag_floor(*player_ptr->current_floor_ptr, fis.which, fis.floor_list);
+                if (floor_item_idx) {
+                    fis.k = -fis.floor_list[*floor_item_idx];
                     fis.cur_tag = fis.which;
                 } else {
                     tag_not_found = true;

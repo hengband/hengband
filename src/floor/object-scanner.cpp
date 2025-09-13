@@ -52,14 +52,14 @@ std::vector<short> scan_floor_items(const FloorType &floor, const Pos2D &pos, En
  * @param floor_item_index 床上アイテムインデックス群
  * @return タグアルファベットのリスト
  */
-static std::string prepare_label_string_floor(const FloorType &floor, std::vector<short> &floor_item_index)
+static std::string prepare_label_string_floor(const FloorType &floor, const std::vector<short> &floor_item_index)
 {
     constexpr std::string_view alphabet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
     std::string tag_chars(alphabet);
     for (size_t i = 0; i < tag_chars.length(); i++) {
-        short fii_num; //!< floor_list の要素番号
         const auto tag_char = alphabet[i];
-        if (!get_tag_floor(floor, &fii_num, tag_char, floor_item_index.data(), floor_item_index.size())) {
+        const auto fii_num = get_tag_floor(floor, tag_char, floor_item_index);
+        if (!fii_num) {
             continue;
         }
 
@@ -67,7 +67,7 @@ static std::string prepare_label_string_floor(const FloorType &floor, std::vecto
             tag_chars[i] = ' ';
         }
 
-        tag_chars[fii_num] = tag_char;
+        tag_chars[*fii_num] = tag_char;
     }
 
     return tag_chars;

@@ -31,25 +31,16 @@ bool is_ring_slot(int i)
 }
 
 /*!
- * @brief 床オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
- * Find the "first" inventory object with the given "tag".
- * @param cp 対応するタグIDを与える参照ポインタ
+ * @brief 床上のアイテムで該当するタグのある要素番号を返す
+ * @param floor フロアへの参照
  * @param tag 該当するオブジェクトがあるかを調べたいタグ
- * @param floor_list 床上アイテムの配列
- * @param floor_num  床上アイテムの配列ID
- * @return タグに該当するオブジェクトがあるならTRUEを返す
- * @details
- * A "tag" is a numeral "n" appearing as "@n" anywhere in the\n
- * inscription of an object.  Alphabetical characters don't work as a\n
- * tag in this form.\n
- *\n
- * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
- * and "x" is the "current" command_cmd code.\n
+ * @param floor_item_index 床上アイテムの配列
+ * @return タグに該当するアイテムがあればfloor_item_indexの要素番号、なければnullopt
  */
-bool get_tag_floor(const FloorType &floor, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
+tl::optional<short> get_tag_floor(const FloorType &floor, char tag, const std::vector<short> &floor_item_index)
 {
-    for (short i = 0; i < floor_num && i < 23; i++) {
-        const auto &item = *floor.o_list[floor_list[i]];
+    for (size_t i = 0; i < floor_item_index.size(); i++) {
+        const auto &item = *floor.o_list[floor_item_index[i]];
         if (!item.is_inscribed()) {
             continue;
         }
@@ -61,8 +52,7 @@ bool get_tag_floor(const FloorType &floor, COMMAND_CODE *cp, char tag, FLOOR_IDX
             }
 
             if ((s->at(1) == command_cmd) && (s->at(2) == tag)) {
-                *cp = i;
-                return true;
+                return static_cast<short>(i);
             }
 
             s = extract_suffix(s->substr(1), '@');
@@ -70,11 +60,11 @@ bool get_tag_floor(const FloorType &floor, COMMAND_CODE *cp, char tag, FLOOR_IDX
     }
 
     if (tag < '0' || '9' < tag) {
-        return false;
+        return tl::nullopt;
     }
 
-    for (short i = 0; i < floor_num && i < 23; i++) {
-        const auto &item = *floor.o_list[floor_list[i]];
+    for (size_t i = 0; i < floor_item_index.size(); i++) {
+        const auto &item = *floor.o_list[floor_item_index[i]];
         if (!item.is_inscribed()) {
             continue;
         }
@@ -86,15 +76,14 @@ bool get_tag_floor(const FloorType &floor, COMMAND_CODE *cp, char tag, FLOOR_IDX
             }
 
             if (s->at(1) == tag) {
-                *cp = i;
-                return true;
+                return static_cast<short>(i);
             }
 
             s = extract_suffix(s->substr(1), '@');
         }
     }
 
-    return false;
+    return tl::nullopt;
 }
 
 /*!
