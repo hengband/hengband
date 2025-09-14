@@ -270,28 +270,30 @@ bool verify(PlayerType *player_ptr, concptr prompt, INVENTORY_IDX i_idx)
 }
 
 /*!
- * @brief タグIDにあわせてタグアルファベットのリストを返す /
- * Move around label characters with correspond tags
+ * @brief タグIDにあわせてタグアルファベットのリストを返す
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param label ラベルリストを取得する文字列参照ポインタ
  * @param mode 所持品リストか装備品リストかの切り替え
+ * @param item_tester アイテムの絞り込み条件
+ * @return 有効なラベルリスト
  */
-void prepare_label_string(PlayerType *player_ptr, char *label, BIT_FLAGS mode, const ItemTester &item_tester)
+std::string prepare_label_string(PlayerType *player_ptr, BIT_FLAGS mode, const ItemTester &item_tester)
 {
-    concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    int offset = match_bits(mode, USE_EQUIP, USE_EQUIP) ? INVEN_MAIN_HAND : 0;
-    strcpy(label, alphabet_chars);
-    for (int i = 0; i < 52; i++) {
-        COMMAND_CODE index;
-        auto c = alphabet_chars[i];
-        if (!get_tag(player_ptr, &index, c, mode, item_tester)) {
+    constexpr std::string_view alphabet("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    std::string tag_chars(alphabet);
+    const auto offset = match_bits(mode, USE_EQUIP, USE_EQUIP) ? INVEN_MAIN_HAND : 0;
+    for (size_t i = 0; i < tag_chars.length(); i++) {
+        short i_idx;
+        const auto tag_char = alphabet[i];
+        if (!get_tag(player_ptr, &i_idx, tag_char, mode, item_tester)) {
             continue;
         }
 
-        if (label[i] == c) {
-            label[i] = ' ';
+        if (tag_chars[i] == tag_char) {
+            tag_chars[i] = ' ';
         }
 
-        label[index - offset] = c;
+        tag_chars[i_idx - offset] = tag_char;
     }
+
+    return tag_chars;
 }
