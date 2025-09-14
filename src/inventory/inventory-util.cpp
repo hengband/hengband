@@ -65,9 +65,20 @@ tl::optional<short> get_tag_floor(const FloorType &floor, char tag, const std::v
     return floor_item_indice;
 }
 
+static tl::optional<std::pair<short, short>> get_inventory_range(BIT_FLAGS mode)
+{
+    switch (mode) {
+    case USE_EQUIP:
+        return std::make_pair(INVEN_MAIN_HAND, INVEN_TOTAL);
+    case USE_INVEN:
+        return std::make_pair(static_cast<short>(0), INVEN_PACK);
+    default:
+        return tl::nullopt;
+    }
+}
+
 /*!
- * @brief 所持/装備オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
- * Find the "first" inventory object with the given "tag".
+ * @brief 所持/装備オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param cp 対応するタグIDを与える参照ポインタ
  * @param tag 該当するオブジェクトがあるかを調べたいタグ
@@ -83,65 +94,55 @@ tl::optional<short> get_tag_floor(const FloorType &floor, char tag, const std::v
  */
 bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, const ItemTester &item_tester)
 {
-    COMMAND_CODE start, end;
-    switch (mode) {
-    case USE_EQUIP:
-        start = INVEN_MAIN_HAND;
-        end = INVEN_TOTAL - 1;
-        break;
-
-    case USE_INVEN:
-        start = 0;
-        end = INVEN_PACK - 1;
-        break;
-
-    default:
+    const auto range = get_inventory_range(mode);
+    if (!range) {
         return false;
     }
 
-    for (COMMAND_CODE i = start; i <= end; i++) {
-        auto *o_ptr = player_ptr->inventory[i].get();
-        if (!o_ptr->is_valid() || !o_ptr->is_inscribed()) {
+    const auto &[start, end] = *range;
+    for (auto i = start; i < end; i++) {
+        const auto &item = *player_ptr->inventory[i];
+        if (!item.is_valid() || !item.is_inscribed()) {
             continue;
         }
 
-        if (!item_tester.okay(o_ptr) && !(mode & USE_FULL)) {
+        if (!item_tester.okay(&item) && !(mode & USE_FULL)) {
             continue;
         }
 
-        auto s = angband_strchr(o_ptr->inscription->data(), '@');
+        auto s = extract_suffix(*item.inscription, '@');
         while (s) {
-            if ((s[1] == command_cmd) && (s[2] == tag)) {
+            if ((s->at(1) == command_cmd) && (s->at(2) == tag)) {
                 *cp = i;
                 return true;
             }
 
-            s = angband_strchr(s + 1, '@');
+            s = extract_suffix(s->substr(1), '@');
         }
     }
 
-    if (tag < '0' || '9' < tag) {
+    if (!is_numeric(tag)) {
         return false;
     }
 
-    for (COMMAND_CODE i = start; i <= end; i++) {
-        auto *o_ptr = player_ptr->inventory[i].get();
-        if (!o_ptr->is_valid() || !o_ptr->is_inscribed()) {
+    for (auto i = start; i < end; i++) {
+        const auto &item = *player_ptr->inventory[i];
+        if (!item.is_valid() || !item.is_inscribed()) {
             continue;
         }
 
-        if (!item_tester.okay(o_ptr) && !(mode & USE_FULL)) {
+        if (!item_tester.okay(&item) && !(mode & USE_FULL)) {
             continue;
         }
 
-        auto s = angband_strchr(o_ptr->inscription->data(), '@');
+        auto s = extract_suffix(*item.inscription, '@');
         while (s) {
-            if (s[1] == tag) {
+            if (s->at(1) == tag) {
                 *cp = i;
                 return true;
             }
 
-            s = angband_strchr(s + 1, '@');
+            s = extract_suffix(s->substr(1), '@');
         }
     }
 
