@@ -37,7 +37,6 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     TERM_COLOR out_color[23]{};
     std::array<std::string, 23> out_desc{};
     COMMAND_CODE target_item_label = 0;
-    char equip_label[52 + 1];
     auto col = command_gap;
     const auto &[wid, hgt] = term_get_size();
     auto len = wid - col - 1;
@@ -87,7 +86,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     }
 
     col = (len > wid - _(6, 4)) ? 0 : (wid - len - 1);
-    prepare_label_string(player_ptr, equip_label, USE_EQUIP, item_tester);
+    const auto equip_label = prepare_label_string(player_ptr, USE_EQUIP, item_tester);
     for (j = 0; j < k; j++) {
         i = out_index[j];
         const auto &item = *player_ptr->inventory[i];
