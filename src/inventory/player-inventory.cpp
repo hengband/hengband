@@ -56,8 +56,8 @@ bool can_get_item(PlayerType *player_ptr, const ItemTester &item_tester)
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
-    const auto floor_list = scan_floor_items(floor, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
-    return !floor_list.empty();
+    const auto floor_item_index = scan_floor_items(floor, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
+    return !floor_item_index.empty();
 }
 
 /*!

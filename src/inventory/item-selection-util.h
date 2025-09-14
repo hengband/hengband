@@ -29,7 +29,7 @@ public:
     bool allow_inven = false;
     bool allow_floor = false;
     bool toggle = false;
-    std::vector<short> floor_list;
+    std::vector<short> floor_item_index;
     int floor_top = 0;
     int min_width = 0;
     int max_inven = 0;

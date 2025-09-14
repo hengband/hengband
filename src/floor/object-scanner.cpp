@@ -96,10 +96,10 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
     const auto &[wid, hgt] = term_get_size();
     auto len = std::max((*min_width), 20);
     auto &floor = *player_ptr->current_floor_ptr;
-    auto floor_list = scan_floor_items(floor, pos, { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
+    auto floor_item_index = scan_floor_items(floor, pos, { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
     auto k = 0;
-    for (size_t i = 0; (i < floor_list.size()) && (i < max_items); i++) {
-        const auto &item = *floor.o_list[floor_list[i]];
+    for (size_t i = 0; (i < floor_item_index.size()) && (i < max_items); i++) {
+        const auto &item = *floor.o_list[floor_item_index[i]];
         const auto item_name = describe_flavor(player_ptr, item, 0);
         out_index[k] = i;
         const auto tval = item.bi_key.tval();
@@ -127,9 +127,9 @@ COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION 
 
     *min_width = len;
     int col = (len > wid - 4) ? 0 : (wid - len - 1);
-    const auto floor_label = prepare_label_string_floor(floor, floor_list);
+    const auto floor_label = prepare_label_string_floor(floor, floor_item_index);
     for (j = 0; j < k; j++) {
-        m = floor_list[out_index[j]];
+        m = floor_item_index[out_index[j]];
         const auto &item = *floor.o_list[m];
         prt("", j + 1, col ? col - 2 : col);
         std::string head;

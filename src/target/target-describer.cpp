@@ -61,7 +61,7 @@ public:
     concptr s3 = "";
     concptr x_info = "";
     char query = '\001';
-    std::vector<short> floor_list;
+    std::vector<short> floor_item_index;
     Grid *g_ptr;
     MonsterEntity *m_ptr;
     OBJECT_IDX next_o_idx = 0;
@@ -142,8 +142,8 @@ static void describe_scan_result(const FloorType &floor, GridExamination *ge_ptr
         return;
     }
 
-    ge_ptr->floor_list = scan_floor_items(floor, ge_ptr->get_position(), { ScanFloorMode::ONLY_MARKED }, AllMatchItemTester());
-    if (!ge_ptr->floor_list.empty()) {
+    ge_ptr->floor_item_index = scan_floor_items(floor, ge_ptr->get_position(), { ScanFloorMode::ONLY_MARKED }, AllMatchItemTester());
+    if (!ge_ptr->floor_item_index.empty()) {
         ge_ptr->x_info = _("x物 ", "x,");
     }
 }
@@ -317,11 +317,11 @@ static short describe_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
 
 static short describe_footing(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    if (ge_ptr->floor_list.size() != 1) {
+    if (ge_ptr->floor_item_index.size() != 1) {
         return CONTINUOUS_DESCRIPTION;
     }
 
-    const auto &item = *player_ptr->current_floor_ptr->o_list[ge_ptr->floor_list[0]];
+    const auto &item = *player_ptr->current_floor_ptr->o_list[ge_ptr->floor_item_index[0]];
     const auto item_name = describe_flavor(player_ptr, item, 0);
 #ifdef JP
     const auto out_val = format("%s%s%s%s[%s]", ge_ptr->s1, item_name.data(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
@@ -341,9 +341,9 @@ static short describe_footing_items(GridExamination *ge_ptr)
     }
 
 #ifdef JP
-    const auto out_val = fmt::format("{} {}個のアイテム{}{} ['x'で一覧, {}]", ge_ptr->s1, ge_ptr->floor_list.size(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
+    const auto out_val = fmt::format("{} {}個のアイテム{}{} ['x'で一覧, {}]", ge_ptr->s1, ge_ptr->floor_item_index.size(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
-    const auto out_val = fmt::format("{}{}{}a pile of {} items [x,{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->floor_list.size(), ge_ptr->info);
+    const auto out_val = fmt::format("{}{}{}a pile of {} items [x,{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->floor_item_index.size(), ge_ptr->info);
 #endif
     prt(out_val, 0, 0);
     move_cursor_relative(ge_ptr->y, ge_ptr->x);
@@ -363,9 +363,9 @@ static char describe_footing_many_items(PlayerType *player_ptr, GridExamination 
         (void)show_floor_items(player_ptr, 0, ge_ptr->y, ge_ptr->x, min_width, AllMatchItemTester());
         show_gold_on_floor = false;
 #ifdef JP
-        const auto out_val = fmt::format("{} {}個のアイテム{}{} [Enterで次へ, {}]", ge_ptr->s1, ge_ptr->floor_list.size(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
+        const auto out_val = fmt::format("{} {}個のアイテム{}{} [Enterで次へ, {}]", ge_ptr->s1, ge_ptr->floor_item_index.size(), ge_ptr->s2, ge_ptr->s3, ge_ptr->info);
 #else
-        const auto out_val = fmt::format("{}{}{}a pile of {} items [Enter,{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->floor_list.size(), ge_ptr->info);
+        const auto out_val = fmt::format("{}{}{}a pile of {} items [Enter,{}]", ge_ptr->s1, ge_ptr->s2, ge_ptr->s3, ge_ptr->floor_item_index.size(), ge_ptr->info);
 #endif
         prt(out_val, 0, 0);
         ge_ptr->query = inkey();
@@ -387,7 +387,7 @@ static char describe_footing_many_items(PlayerType *player_ptr, GridExamination 
 
 static short loop_describing_grid(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    if (ge_ptr->floor_list.empty()) {
+    if (ge_ptr->floor_item_index.empty()) {
         return CONTINUOUS_DESCRIPTION;
     }
 

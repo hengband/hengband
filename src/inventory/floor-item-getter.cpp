@@ -56,12 +56,12 @@ static std::pair<tl::optional<short>, char> check_floor_item_tag_aux(const Floor
     }
 
     if ((prev_tag != '\0') && command_cmd) {
-        fis.floor_list = scan_floor_items(floor, p_pos, { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
-        const auto floor_item_idx = get_tag_floor(floor, prev_tag, fis.floor_list);
+        fis.floor_item_index = scan_floor_items(floor, p_pos, { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
+        const auto floor_item_idx = get_tag_floor(floor, prev_tag, fis.floor_item_index);
         if (floor_item_idx) {
             fis.k = *floor_item_idx;
             command_cmd = 0;
-            return { -fis.floor_list[fis.k], prev_tag };
+            return { -fis.floor_item_index[fis.k], prev_tag };
         }
 
         return { tl::nullopt, '\0' };
@@ -274,7 +274,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
     if (fis.floor) {
         const auto &floor = *player_ptr->current_floor_ptr;
-        fis.floor_list = scan_floor_items(floor, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
+        fis.floor_item_index = scan_floor_items(floor, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
     }
 
     if ((mode & USE_INVEN) && (fis.i1 <= fis.i2)) {
@@ -285,7 +285,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         fis.allow_equip = true;
     }
 
-    if ((mode & USE_FLOOR) && !fis.floor_list.empty()) {
+    if ((mode & USE_FLOOR) && !fis.floor_item_index.empty()) {
         fis.allow_floor = true;
     }
 
@@ -363,7 +363,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             }
         } else if (command_wrk == USE_FLOOR) {
             int j = fis.floor_top;
-            fis.k = std::min(fis.floor_top + 23, static_cast<int>(fis.floor_list.size())) - 1;
+            fis.k = std::min(fis.floor_top + 23, static_cast<int>(fis.floor_item_index.size())) - 1;
             fis.n1 = I2A(j - fis.floor_top); // TODO: 常に'0'になる。どんな意図でこのようなコードになっているのか不明.
             fis.n2 = I2A(fis.k - fis.floor_top);
             if (command_see) {
@@ -473,7 +473,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             } else if (command_wrk == USE_EQUIP) {
                 max_line = fis.max_equip;
             } else if (command_wrk == USE_FLOOR) {
-                max_line = std::min(23, static_cast<int>(fis.floor_list.size()));
+                max_line = std::min(23, static_cast<int>(fis.floor_item_index.size()));
             }
             switch (fis.which) {
             case ESCAPE:
@@ -540,7 +540,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 } else if (command_wrk == USE_EQUIP) {
                     max_line = fis.max_equip;
                 } else if (command_wrk == USE_FLOOR) {
-                    max_line = std::min(23, static_cast<int>(fis.floor_list.size()));
+                    max_line = std::min(23, static_cast<int>(fis.floor_item_index.size()));
                 }
 
                 if (fis.menu_line > max_line) {
@@ -594,7 +594,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 } else if (command_wrk == USE_EQUIP) {
                     max_line = fis.max_equip;
                 } else if (command_wrk == USE_FLOOR) {
-                    max_line = std::min(23, static_cast<int>(fis.floor_list.size()));
+                    max_line = std::min(23, static_cast<int>(fis.floor_item_index.size()));
                 }
 
                 if (fis.menu_line > max_line) {
@@ -674,7 +674,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 break;
             }
 
-            const auto next_o_idx = fis.floor_list[1];
+            const auto next_o_idx = fis.floor_item_index[1];
             while (grid.o_idx_list.front() != next_o_idx) {
                 grid.o_idx_list.rotate(*player_ptr->current_floor_ptr);
             }
@@ -682,7 +682,7 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             rfu.set_flag(SubWindowRedrawingFlag::FLOOR_ITEMS);
             window_stuff(player_ptr);
             const auto &floor = *player_ptr->current_floor_ptr;
-            fis.floor_list = scan_floor_items(floor, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
+            fis.floor_item_index = scan_floor_items(floor, player_ptr->get_position(), { ScanFloorMode::ITEM_TESTER, ScanFloorMode::ONLY_MARKED }, item_tester);
             if (command_see) {
                 screen_load();
                 screen_save();
@@ -727,9 +727,9 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                 break;
             }
 
-            if (fis.floor_list.size() == 1) {
+            if (fis.floor_item_index.size() == 1) {
                 if ((command_wrk == (USE_FLOOR)) || (!carry_query_flag)) {
-                    fis.k = -fis.floor_list[0];
+                    fis.k = -fis.floor_item_index[0];
                     if (!get_item_allow(player_ptr, fis.k)) {
                         fis.done = true;
                         break;
@@ -776,9 +776,9 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     break;
                 }
             } else {
-                const auto floor_item_idx = get_tag_floor(*player_ptr->current_floor_ptr, fis.which, fis.floor_list);
+                const auto floor_item_idx = get_tag_floor(*player_ptr->current_floor_ptr, fis.which, fis.floor_item_index);
                 if (floor_item_idx) {
-                    fis.k = -fis.floor_list[*floor_item_idx];
+                    fis.k = -fis.floor_item_index[*floor_item_idx];
                 } else {
                     bell();
                     break;
@@ -819,9 +819,9 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     fis.cur_tag = fis.which;
                 }
             } else {
-                const auto floor_item_idx = get_tag_floor(*player_ptr->current_floor_ptr, fis.which, fis.floor_list);
+                const auto floor_item_idx = get_tag_floor(*player_ptr->current_floor_ptr, fis.which, fis.floor_item_index);
                 if (floor_item_idx) {
-                    fis.k = -fis.floor_list[*floor_item_idx];
+                    fis.k = -fis.floor_item_index[*floor_item_idx];
                     fis.cur_tag = fis.which;
                 } else {
                     tag_not_found = true;
@@ -851,16 +851,16 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
                     if (which == '(') {
                         fis.k = 0;
                     } else if (which == ')') {
-                        fis.k = fis.floor_list.size() - 1;
+                        fis.k = fis.floor_item_index.size() - 1;
                     } else {
                         fis.k = islower(which) ? A2I(which) : -1;
                     }
-                    if (fis.k < 0 || fis.k >= static_cast<short>(fis.floor_list.size()) || fis.k >= 23) {
+                    if (fis.k < 0 || fis.k >= static_cast<short>(fis.floor_item_index.size()) || fis.k >= 23) {
                         bell();
                         break;
                     }
 
-                    fis.k = 0 - fis.floor_list[fis.k];
+                    fis.k = 0 - fis.floor_item_index[fis.k];
                 }
             }
 
