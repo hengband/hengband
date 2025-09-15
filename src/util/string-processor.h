@@ -36,3 +36,4 @@ tl::optional<std::string_view> extract_suffix(std::string_view str, std::string_
 char hexify_upper(uint8_t value);
 char hexify_lower(uint8_t value);
 char octify(uint8_t i);
+bool is_numeric(char c);

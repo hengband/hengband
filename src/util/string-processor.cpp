@@ -638,3 +638,8 @@ char octify(uint8_t i)
 {
     return hex_symbol_table.at(i % 8);
 }
+
+bool is_numeric(char c)
+{
+    return (c >= '0') && (c <= '9');
+}

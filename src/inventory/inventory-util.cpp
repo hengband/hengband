@@ -39,6 +39,7 @@ bool is_ring_slot(int i)
  */
 tl::optional<short> get_tag_floor(const FloorType &floor, char tag, const std::vector<short> &floor_item_index)
 {
+    tl::optional<short> floor_item_indice;
     for (size_t i = 0; i < floor_item_index.size(); i++) {
         const auto &item = *floor.o_list[floor_item_index[i]];
         if (!item.is_inscribed()) {
@@ -47,43 +48,21 @@ tl::optional<short> get_tag_floor(const FloorType &floor, char tag, const std::v
 
         auto s = extract_suffix(*item.inscription, '@');
         while (s) {
-            if (s->length() <= 2) {
-                break;
+            // コマンドと同じタグならそれで決まり.
+            if ((s->length() > 2) && (s->at(1) == command_cmd) && (s->at(2) == tag)) {
+                return static_cast<short>(i);
             }
 
-            if ((s->at(1) == command_cmd) && (s->at(2) == tag)) {
-                return static_cast<short>(i);
+            // その他のタグは一旦保持して次のタグを探す.
+            if (!floor_item_indice && is_numeric(tag) && (s->length() > 1) && (s->at(1) == tag)) {
+                floor_item_indice = static_cast<short>(i);
             }
 
             s = extract_suffix(s->substr(1), '@');
         }
     }
 
-    if (tag < '0' || '9' < tag) {
-        return tl::nullopt;
-    }
-
-    for (size_t i = 0; i < floor_item_index.size(); i++) {
-        const auto &item = *floor.o_list[floor_item_index[i]];
-        if (!item.is_inscribed()) {
-            continue;
-        }
-
-        auto s = extract_suffix(*item.inscription, '@');
-        while (s) {
-            if (s->length() <= 1) {
-                break;
-            }
-
-            if (s->at(1) == tag) {
-                return static_cast<short>(i);
-            }
-
-            s = extract_suffix(s->substr(1), '@');
-        }
-    }
-
-    return tl::nullopt;
+    return floor_item_indice;
 }
 
 /*!
