@@ -109,33 +109,26 @@ static std::pair<tl::optional<short>, char> get_floor_item_tag_inventory(PlayerT
 /*!
  * @brief インベントリのアイテムにタグ付けがされているかの調査処理 (のはず)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param fis 床上アイテムへの参照
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection *fis_ptr, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> check_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection &fis, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
-    if ((!fis_ptr->inven || (fis_ptr->cp < 0) || (fis_ptr->cp >= INVEN_PACK)) && (!fis_ptr->equip || (fis_ptr->cp < INVEN_MAIN_HAND) || (fis_ptr->cp >= INVEN_TOTAL))) {
-        return false;
+    if ((!fis.inven || (i_idx < 0) || (i_idx >= INVEN_PACK)) && (!fis.equip || (i_idx < INVEN_MAIN_HAND) || (i_idx >= INVEN_TOTAL))) {
+        return { tl::nullopt, prev_tag };
     }
 
-    if ((*prev_tag != '\0') && command_cmd) {
-        const auto &[i_idx, tag] = get_floor_item_tag_inventory(player_ptr, *fis_ptr, fis_ptr->cp, *prev_tag, item_tester);
-        *prev_tag = tag;
-        if (!i_idx) {
-            return false;
-        }
-
-        fis_ptr->cp = *i_idx;
-        return true;
+    if ((prev_tag != '\0') && command_cmd) {
+        return get_floor_item_tag_inventory(player_ptr, fis, i_idx, prev_tag, item_tester);
     }
 
-    if (get_item_okay(player_ptr, fis_ptr->cp, item_tester)) {
+    if (get_item_okay(player_ptr, i_idx, item_tester)) {
         command_cmd = 0;
-        return true;
+        return { i_idx, prev_tag };
     }
 
-    return false;
+    return { tl::nullopt, prev_tag };
 }
 
 /*!
@@ -160,14 +153,21 @@ static bool check_floor_item_tag(PlayerType *player_ptr, FloorItemSelection *fis
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    const auto &[floor_item_indice, tag] = check_floor_item_tag_aux(floor, p_pos, *fis_ptr, *code, *prev_tag, item_tester);
-    *prev_tag = tag;
+    const auto &[floor_item_indice, tag_floor] = check_floor_item_tag_aux(floor, p_pos, *fis_ptr, *code, *prev_tag, item_tester);
+    *prev_tag = tag_floor;
     if (floor_item_indice) {
         fis_ptr->cp = *floor_item_indice;
         return true;
     }
 
-    return check_floor_item_tag_inventory(player_ptr, fis_ptr, prev_tag, item_tester);
+    const auto &[i_idx, tag_inventory] = check_floor_item_tag_inventory(player_ptr, *fis_ptr, fis_ptr->cp, *prev_tag, item_tester);
+    *prev_tag = tag_inventory;
+    if (!i_idx) {
+        return false;
+    }
+
+    fis_ptr->cp = *i_idx;
+    return true;
 }
 
 /*!
