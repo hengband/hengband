@@ -134,40 +134,30 @@ static std::pair<tl::optional<short>, char> check_floor_item_tag_inventory(Playe
 /*!
  * @brief 床上アイテムにタグ付けがされているかの調査処理 (のはず)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param fis 床上アイテムへの参照
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_floor_item_tag(PlayerType *player_ptr, FloorItemSelection *fis_ptr, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> check_floor_item_tag(PlayerType *player_ptr, FloorItemSelection &fis, char prev_tag, const ItemTester &item_tester)
 {
     const auto code = repeat_pull();
     if (!code) {
-        return false;
+        return { tl::nullopt, prev_tag };
     }
 
-    fis_ptr->cp = *code;
-    if (fis_ptr->force && (fis_ptr->cp == INVEN_FORCE)) {
+    if (fis.force && (*code == INVEN_FORCE)) {
         command_cmd = 0;
-        return true;
+        return { *code, prev_tag };
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    const auto &[floor_item_indice, tag_floor] = check_floor_item_tag_aux(floor, p_pos, *fis_ptr, *code, *prev_tag, item_tester);
-    *prev_tag = tag_floor;
+    const auto &[floor_item_indice, tag_floor] = check_floor_item_tag_aux(floor, p_pos, fis, *code, prev_tag, item_tester);
     if (floor_item_indice) {
-        fis_ptr->cp = *floor_item_indice;
-        return true;
+        return { *floor_item_indice, tag_floor };
     }
 
-    const auto &[i_idx, tag_inventory] = check_floor_item_tag_inventory(player_ptr, *fis_ptr, fis_ptr->cp, *prev_tag, item_tester);
-    *prev_tag = tag_inventory;
-    if (!i_idx) {
-        return false;
-    }
-
-    fis_ptr->cp = *i_idx;
-    return true;
+    return check_floor_item_tag_inventory(player_ptr, fis, *code, tag_floor, item_tester);
 }
 
 /*!
@@ -230,8 +220,10 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
 {
     FloorItemSelection fis(mode);
     static char prev_tag = '\0';
-    if (check_floor_item_tag(player_ptr, &fis, &prev_tag, item_tester)) {
-        *cp = fis.cp;
+    const auto &[i_idx, tag] = check_floor_item_tag(player_ptr, fis, prev_tag, item_tester);
+    prev_tag = tag;
+    if (i_idx) {
+        *cp = *i_idx;
         return true;
     }
 
