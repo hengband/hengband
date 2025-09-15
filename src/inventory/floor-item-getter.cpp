@@ -82,32 +82,28 @@ static std::pair<tl::optional<short>, char> check_floor_item_tag_aux(const Floor
 /*!
  * @brief インベントリのアイテムにタグ付けを試みる
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param fis 床上アイテムへの参照
+ * @param i_idx 選択したアイテムのインベントリ番号
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool get_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection *fis_ptr, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> get_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection &fis, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
-    bool flag = false;
-    item_use_flag use_flag = (fis_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
-
-    flag |= !get_tag(player_ptr, &fis_ptr->k, *prev_tag, use_flag, item_tester);
-    flag |= !get_item_okay(player_ptr, fis_ptr->k, item_tester);
-
-    if (fis_ptr->k < INVEN_MAIN_HAND) {
-        flag |= !fis_ptr->inven;
+    const auto use_flag = (i_idx >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
+    auto flag = !get_tag(player_ptr, &fis.k, prev_tag, use_flag, item_tester);
+    flag |= !get_item_okay(player_ptr, fis.k, item_tester);
+    if (fis.k < INVEN_MAIN_HAND) {
+        flag |= !fis.inven;
     } else {
-        flag |= !fis_ptr->equip;
+        flag |= !fis.equip;
     }
 
     if (flag) {
-        *prev_tag = '\0';
-        return false;
+        return { tl::nullopt, '\0' };
     }
 
-    fis_ptr->cp = fis_ptr->k;
     command_cmd = 0;
-    return true;
+    return { fis.k, prev_tag };
 }
 
 /*!
@@ -124,7 +120,14 @@ static bool check_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSele
     }
 
     if ((*prev_tag != '\0') && command_cmd) {
-        return get_floor_item_tag_inventory(player_ptr, fis_ptr, prev_tag, item_tester);
+        const auto &[i_idx, tag] = get_floor_item_tag_inventory(player_ptr, *fis_ptr, fis_ptr->cp, *prev_tag, item_tester);
+        *prev_tag = tag;
+        if (!i_idx) {
+            return false;
+        }
+
+        fis_ptr->cp = *i_idx;
+        return true;
     }
 
     if (get_item_okay(player_ptr, fis_ptr->cp, item_tester)) {
