@@ -38,7 +38,6 @@
 #include "window/display-sub-windows.h"
 #include <fmt/format.h>
 #include <sstream>
-#include <tl/optional.hpp>
 
 /*!
  * @brief 床上アイテムへにタグ付けがされているかの調査処理 (のはず)
@@ -216,15 +215,14 @@ static void test_equipment_floor(PlayerType *player_ptr, FloorItemSelection *fis
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, const ItemTester &item_tester)
+tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt, std::string_view str, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     FloorItemSelection fis(mode);
     static char prev_tag = '\0';
     const auto &[i_idx, tag] = check_floor_item_tag(player_ptr, fis, prev_tag, item_tester);
     prev_tag = tag;
     if (i_idx) {
-        *cp = *i_idx;
-        return true;
+        return *i_idx;
     }
 
     msg_erase();
@@ -901,12 +899,12 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
     rfu.set_flags(flags);
     handle_stuff(player_ptr);
     prt("", 0, 0);
-    if (fis.oops && str) {
+    if (fis.oops && !str.empty()) {
         msg_print(str);
     }
 
     if (!fis.item) {
-        return false;
+        return tl::nullopt;
     }
 
     repeat_push(fis.cp);
@@ -915,6 +913,5 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
     }
 
     command_cmd = 0;
-    *cp = fis.cp;
-    return true;
+    return fis.cp;
 }
