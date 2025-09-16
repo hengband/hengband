@@ -92,61 +92,40 @@ static tl::optional<std::pair<short, short>> get_inventory_range(BIT_FLAGS mode)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, const ItemTester &item_tester)
+tl::optional<short> get_tag(PlayerType *player_ptr, char tag, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     const auto range = get_inventory_range(mode);
     if (!range) {
-        return false;
+        return tl::nullopt;
     }
 
     const auto &[start, end] = *range;
+    tl::optional<short> i_idx;
     for (auto i = start; i < end; i++) {
         const auto &item = *player_ptr->inventory[i];
         if (!item.is_valid() || !item.is_inscribed()) {
             continue;
         }
 
-        if (!item_tester.okay(&item) && !(mode & USE_FULL)) {
+        if (!item_tester.okay(&item) && none_bits(mode, USE_FULL)) {
             continue;
         }
 
-        auto s = extract_suffix(*item.inscription, '@');
-        while (s) {
-            if ((s->length() > 2) && (s->at(1) == command_cmd) && (s->at(2) == tag)) {
-                *cp = i;
-                return true;
+        auto sv = extract_suffix(*item.inscription, '@');
+        while (sv) {
+            if ((sv->length() > 2) && (sv->at(1) == command_cmd) && (sv->at(2) == tag)) {
+                return i;
             }
 
-            s = extract_suffix(s->substr(1), '@');
-        }
-    }
-
-    if (!is_numeric(tag)) {
-        return false;
-    }
-
-    for (auto i = start; i < end; i++) {
-        const auto &item = *player_ptr->inventory[i];
-        if (!item.is_valid() || !item.is_inscribed()) {
-            continue;
-        }
-
-        if (!item_tester.okay(&item) && !(mode & USE_FULL)) {
-            continue;
-        }
-
-        auto s = extract_suffix(*item.inscription, '@');
-        while (s) {
-            if ((s->length() > 1) && (s->at(1) == tag)) {
-                *cp = i;
-                return true;
+            if (!i_idx && is_numeric(tag) && (sv->length() > 1) && (sv->at(1) == tag)) {
+                i_idx = i;
             }
 
-            s = extract_suffix(s->substr(1), '@');
+            sv = extract_suffix(sv->substr(1), '@');
         }
     }
 
-    return false;
+    return i_idx;
 }
 
 /*!
@@ -282,9 +261,9 @@ std::string prepare_label_string(PlayerType *player_ptr, BIT_FLAGS mode, const I
     std::string tag_chars(alphabet);
     const auto offset = match_bits(mode, USE_EQUIP, USE_EQUIP) ? INVEN_MAIN_HAND : 0;
     for (size_t i = 0; i < tag_chars.length(); i++) {
-        short i_idx;
         const auto tag_char = alphabet[i];
-        if (!get_tag(player_ptr, &i_idx, tag_char, mode, item_tester)) {
+        const auto i_idx = get_tag(player_ptr, tag_char, mode, item_tester);
+        if (!i_idx) {
             continue;
         }
 
@@ -292,7 +271,7 @@ std::string prepare_label_string(PlayerType *player_ptr, BIT_FLAGS mode, const I
             tag_chars[i] = ' ';
         }
 
-        tag_chars[i_idx - offset] = tag_char;
+        tag_chars[*i_idx - offset] = tag_char;
     }
 
     return tag_chars;

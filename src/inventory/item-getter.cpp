@@ -95,16 +95,16 @@ static tl::optional<short> check_item_tag_inventory(PlayerType *player_ptr, Item
 
     if (*prev_tag && command_cmd) {
         const auto use_flag = (i_idx >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
-        auto flag = !get_tag(player_ptr, &item_selection_ptr->k, *prev_tag, use_flag, item_tester);
-        flag |= !get_item_okay(player_ptr, item_selection_ptr->k, item_tester);
-
-        if (item_selection_ptr->k < INVEN_MAIN_HAND) {
-            flag |= !item_selection_ptr->inven;
-        } else {
-            flag |= !item_selection_ptr->equip;
+        const auto i_idx_opt = get_tag(player_ptr, *prev_tag, use_flag, item_tester);
+        if (!i_idx_opt) {
+            *prev_tag = '\0';
+            return tl::nullopt;
         }
 
-        if (flag) {
+        item_selection_ptr->k = *i_idx_opt;
+        if (!get_item_okay(player_ptr, item_selection_ptr->k, item_tester) ||
+            (item_selection_ptr->k < INVEN_MAIN_HAND && !item_selection_ptr->inven) ||
+            (item_selection_ptr->k >= INVEN_MAIN_HAND && !item_selection_ptr->equip)) {
             *prev_tag = '\0';
             return tl::nullopt;
         }
@@ -541,11 +541,13 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         case '7':
         case '8':
         case '9': {
-            if (!get_tag(player_ptr, &item_selection.k, item_selection.which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester)) {
+            const auto i_idx_opt = get_tag(player_ptr, item_selection.which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester);
+            if (!i_idx_opt) {
                 bell();
                 break;
             }
 
+            item_selection.k = *i_idx_opt;
             if ((item_selection.k < INVEN_MAIN_HAND) ? !item_selection.inven : !item_selection.equip) {
                 bell();
                 break;
@@ -577,35 +579,26 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
             [[fallthrough]];
         default: {
-            bool tag_not_found = false;
-
-            if (!get_tag(player_ptr, &item_selection.k, item_selection.which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester)) {
-                tag_not_found = true;
-            } else if ((item_selection.k < INVEN_MAIN_HAND) ? !item_selection.inven : !item_selection.equip) {
-                tag_not_found = true;
+            auto is_tag_found = false;
+            const auto i_idx_opt = get_tag(player_ptr, item_selection.which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester);
+            if (i_idx_opt) {
+                item_selection.k = *i_idx_opt;
+                const auto is_inventory = item_selection.k < INVEN_MAIN_HAND;
+                if ((is_inventory && item_selection.inven) || (!is_inventory && item_selection.equip)) {
+                    is_tag_found = true;
+                }
             }
 
-            if (!tag_not_found) {
+            if (!is_tag_found) {
                 item_selection.cur_tag = item_selection.which;
             } else {
-                auto which = (char)tolower(item_selection.which);
-
-                if (!command_wrk) {
-                    if (which == '(') {
-                        item_selection.k = item_selection.i1;
-                    } else if (which == ')') {
-                        item_selection.k = item_selection.i2;
-                    } else {
-                        item_selection.k = label_to_inventory(player_ptr, which);
-                    }
+                const auto which = static_cast<char>(tolower(item_selection.which));
+                if (which == '(') {
+                    item_selection.k = command_wrk ? item_selection.e1 : item_selection.i1;
+                } else if (which == ')') {
+                    item_selection.k = command_wrk ? item_selection.e2 : item_selection.i2;
                 } else {
-                    if (which == '(') {
-                        item_selection.k = item_selection.e1;
-                    } else if (which == ')') {
-                        item_selection.k = item_selection.e2;
-                    } else {
-                        item_selection.k = label_to_equipment(player_ptr, which);
-                    }
+                    item_selection.k = label_to_inventory(player_ptr, which);
                 }
             }
 
@@ -614,8 +607,8 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 break;
             }
 
-            auto ver = tag_not_found && isupper(item_selection.which);
-            if (ver && !verify(player_ptr, _("本当に", "Try"), item_selection.k)) {
+            const auto should_verify = !is_tag_found && isupper(item_selection.which);
+            if (should_verify && !verify(player_ptr, _("本当に", "Try"), item_selection.k)) {
                 item_selection.done = true;
                 break;
             }
