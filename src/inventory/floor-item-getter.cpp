@@ -90,15 +90,20 @@ static std::pair<tl::optional<short>, char> check_floor_item_tag_aux(const Floor
 static std::pair<tl::optional<short>, char> get_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection &fis, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
     const auto use_flag = (i_idx >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
-    auto flag = !get_tag(player_ptr, &fis.k, prev_tag, use_flag, item_tester);
-    flag |= !get_item_okay(player_ptr, fis.k, item_tester);
-    if (fis.k < INVEN_MAIN_HAND) {
-        flag |= !fis.inven;
-    } else {
-        flag |= !fis.equip;
+    auto i_idx_opt = get_tag(player_ptr, prev_tag, use_flag, item_tester);
+    auto is_item_not_found = !i_idx_opt.has_value();
+    if (i_idx_opt) {
+        fis.k = *i_idx_opt;
     }
 
-    if (flag) {
+    is_item_not_found |= !get_item_okay(player_ptr, fis.k, item_tester);
+    if (fis.k < INVEN_MAIN_HAND) {
+        is_item_not_found |= !fis.inven;
+    } else {
+        is_item_not_found |= !fis.equip;
+    }
+
+    if (is_item_not_found) {
         return { tl::nullopt, '\0' };
     }
 
@@ -761,11 +766,13 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         case '8':
         case '9': {
             if (command_wrk != USE_FLOOR) {
-                if (!get_tag(player_ptr, &fis.k, fis.which, command_wrk, item_tester)) {
+                const auto i_idx = get_tag(player_ptr, fis.which, command_wrk, item_tester);
+                if (!i_idx) {
                     bell();
                     break;
                 }
 
+                fis.k = *i_idx;
                 if ((fis.k < INVEN_MAIN_HAND) ? !fis.inven : !fis.equip) {
                     bell();
                     break;
@@ -809,10 +816,14 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             bool tag_not_found = false;
 
             if (command_wrk != USE_FLOOR) {
-                if (!get_tag(player_ptr, &fis.k, fis.which, command_wrk, item_tester)) {
+                const auto i_idx = get_tag(player_ptr, fis.which, command_wrk, item_tester);
+                if (!i_idx) {
                     tag_not_found = true;
-                } else if ((fis.k < INVEN_MAIN_HAND) ? !fis.inven : !fis.equip) {
-                    tag_not_found = true;
+                } else {
+                    fis.k = *i_idx;
+                    if ((fis.k < INVEN_MAIN_HAND) ? !fis.inven : !fis.equip) {
+                        tag_not_found = true;
+                    }
                 }
 
                 if (!tag_not_found) {

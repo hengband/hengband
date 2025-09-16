@@ -92,11 +92,11 @@ static tl::optional<std::pair<short, short>> get_inventory_range(BIT_FLAGS mode)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, const ItemTester &item_tester)
+tl::optional<short> get_tag(PlayerType *player_ptr, char tag, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     const auto range = get_inventory_range(mode);
     if (!range) {
-        return false;
+        return tl::nullopt;
     }
 
     const auto &[start, end] = *range;
@@ -113,8 +113,7 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
         auto s = extract_suffix(*item.inscription, '@');
         while (s) {
             if ((s->at(1) == command_cmd) && (s->at(2) == tag)) {
-                *cp = i;
-                return true;
+                return i;
             }
 
             s = extract_suffix(s->substr(1), '@');
@@ -138,15 +137,14 @@ bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode,
         auto s = extract_suffix(*item.inscription, '@');
         while (s) {
             if (s->at(1) == tag) {
-                *cp = i;
-                return true;
+                return i;
             }
 
             s = extract_suffix(s->substr(1), '@');
         }
     }
 
-    return false;
+    return tl::nullopt;
 }
 
 /*!
@@ -282,9 +280,9 @@ std::string prepare_label_string(PlayerType *player_ptr, BIT_FLAGS mode, const I
     std::string tag_chars(alphabet);
     const auto offset = match_bits(mode, USE_EQUIP, USE_EQUIP) ? INVEN_MAIN_HAND : 0;
     for (size_t i = 0; i < tag_chars.length(); i++) {
-        short i_idx;
         const auto tag_char = alphabet[i];
-        if (!get_tag(player_ptr, &i_idx, tag_char, mode, item_tester)) {
+        const auto i_idx = get_tag(player_ptr, tag_char, mode, item_tester);
+        if (!i_idx) {
             continue;
         }
 
@@ -292,7 +290,7 @@ std::string prepare_label_string(PlayerType *player_ptr, BIT_FLAGS mode, const I
             tag_chars[i] = ' ';
         }
 
-        tag_chars[i_idx - offset] = tag_char;
+        tag_chars[*i_idx - offset] = tag_char;
     }
 
     return tag_chars;

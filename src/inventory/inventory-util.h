@@ -10,7 +10,7 @@ class PlayerType;
 class ItemTester;
 bool is_ring_slot(int i);
 tl::optional<short> get_tag_floor(const FloorType &floor, char tag, const std::vector<short> &floor_item_index);
-bool get_tag(PlayerType *player_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, const ItemTester &item_tester);
+tl::optional<short> get_tag(PlayerType *player_ptr, char tag, BIT_FLAGS mode, const ItemTester &item_tester);
 bool get_item_okay(PlayerType *player_ptr, OBJECT_IDX i, const ItemTester &item_tester);
 bool get_item_allow(PlayerType *player_ptr, INVENTORY_IDX i_idx);
 INVENTORY_IDX label_to_equipment(PlayerType *player_ptr, int c);
