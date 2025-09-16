@@ -217,7 +217,10 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 {
     static char prev_tag = '\0';
     if (easy_floor || use_menu) {
-        return get_item_floor(player_ptr, cp, pmt, str, mode, item_tester);
+        if (const auto floor_item_indice = get_item_floor(player_ptr, pmt, str, mode, item_tester); floor_item_indice) {
+            *cp = *floor_item_indice;
+            return true;
+        }
     }
 
     ItemSelection item_selection(mode);
@@ -264,8 +267,9 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     }
 
     if (item_selection.floor) {
-        for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-            const auto &item = *player_ptr->current_floor_ptr->o_list[this_o_idx];
+        const auto &floor = *player_ptr->current_floor_ptr;
+        for (const auto this_o_idx : floor.get_grid(player_ptr->get_position()).o_idx_list) {
+            const auto &item = *floor.o_list[this_o_idx];
             if ((item_tester.okay(&item) || (item_selection.mode & USE_FULL)) && item.marked.has(OmType::FOUND)) {
                 item_selection.allow_floor = true;
             }
@@ -509,10 +513,10 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
         case '-': {
             if (item_selection.allow_floor) {
-                for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-                    ItemEntity *o_ptr;
-                    o_ptr = player_ptr->current_floor_ptr->o_list[this_o_idx].get();
-                    if (!item_tester.okay(o_ptr) && !(item_selection.mode & USE_FULL)) {
+                const auto &floor = *player_ptr->current_floor_ptr;
+                for (const auto this_o_idx : floor.get_grid(player_ptr->get_position()).o_idx_list) {
+                    const auto &item = *floor.o_list[this_o_idx];
+                    if (!item_tester.okay(&item) && !(item_selection.mode & USE_FULL)) {
                         continue;
                     }
 
