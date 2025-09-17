@@ -335,22 +335,22 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
  * @brief アイテムを拾う際にザックから溢れずに済むかを判定する /
  * Check if we have space for an item in the pack without overflow
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
+ * @param item 拾いたいアイテムへの参照
  * @return 溢れずに済むならTRUEを返す
  */
-bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity *o_ptr)
+bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity &item)
 {
     if (player_ptr->inven_cnt < INVEN_PACK) {
         return true;
     }
 
     for (int j = 0; j < INVEN_PACK; j++) {
-        auto *j_ptr = player_ptr->inventory[j].get();
-        if (!j_ptr->is_valid()) {
+        const auto &item_inventory = *player_ptr->inventory[j];
+        if (!item_inventory.is_valid()) {
             continue;
         }
 
-        if (j_ptr->is_similar(*o_ptr)) {
+        if (item_inventory.is_similar(item)) {
             return true;
         }
     }

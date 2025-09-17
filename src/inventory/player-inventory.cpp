@@ -50,7 +50,7 @@
 bool can_get_item(PlayerType *player_ptr, const ItemTester &item_tester)
 {
     for (int j = 0; j < INVEN_TOTAL; j++) {
-        if (item_tester.okay(player_ptr->inventory[j].get())) {
+        if (item_tester.okay(*player_ptr->inventory[j])) {
             return true;
         }
     }
@@ -111,7 +111,7 @@ static void py_pickup_single_item(PlayerType *player_ptr, short i_idx, bool pick
         return;
     }
 
-    if (!check_store_item_to_inventory(player_ptr, &item)) {
+    if (!check_store_item_to_inventory(player_ptr, item)) {
         msg_print(_("ザックには{}を入れる隙間がない。", "You have no room for {}."), item_name);
         return;
     }
@@ -133,7 +133,7 @@ static void py_pickup_multiple_items(PlayerType *player_ptr, bool pickup)
     }
 
     const auto tester = FuncItemTester(check_store_item_to_inventory, player_ptr);
-    const auto can_pickup = [&](auto i_idx) { return tester.okay(floor.o_list.at(i_idx).get()); };
+    const auto can_pickup = [&](auto i_idx) { return tester.okay(*floor.o_list.at(i_idx)); };
     const auto count_of_pickable_items = ranges::count_if(grid.o_idx_list, can_pickup);
     if (count_of_pickable_items == 0) {
         msg_print(_("ザックには床にあるどのアイテムも入らない。", "You have no room for any of the objects on the floor."));

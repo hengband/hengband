@@ -106,7 +106,7 @@ tl::optional<short> get_tag(PlayerType *player_ptr, char tag, BIT_FLAGS mode, co
             continue;
         }
 
-        if (!item_tester.okay(&item) && !(mode & USE_FULL)) {
+        if (!item_tester.okay(item) && !(mode & USE_FULL)) {
             continue;
         }
 
@@ -130,7 +130,7 @@ tl::optional<short> get_tag(PlayerType *player_ptr, char tag, BIT_FLAGS mode, co
             continue;
         }
 
-        if (!item_tester.okay(&item) && !(mode & USE_FULL)) {
+        if (!item_tester.okay(item) && !(mode & USE_FULL)) {
             continue;
         }
 
@@ -163,7 +163,7 @@ bool get_item_okay(PlayerType *player_ptr, OBJECT_IDX i, const ItemTester &item_
         return is_ring_slot(i);
     }
 
-    return item_tester.okay(player_ptr->inventory[i].get());
+    return item_tester.okay(*player_ptr->inventory[i]);
 }
 
 /*!

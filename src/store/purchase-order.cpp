@@ -202,7 +202,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
      */
     reduce_charges(&item, item_store.number - amt);
     item.number = amt;
-    if (!check_store_item_to_inventory(player_ptr, &item)) {
+    if (!check_store_item_to_inventory(player_ptr, item)) {
         msg_print(_("そんなにアイテムを持てない。", "You cannot carry that many different items."));
         return;
     }
@@ -227,7 +227,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
      */
     reduce_charges(&item, item_store.number - amt);
     item.number = amt;
-    if (!check_store_item_to_inventory(player_ptr, &item)) {
+    if (!check_store_item_to_inventory(player_ptr, item)) {
         msg_print(_("ザックにそのアイテムを入れる隙間がない。", "You cannot carry that many items."));
         return;
     }

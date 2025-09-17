@@ -70,7 +70,7 @@ static std::pair<tl::optional<short>, char> check_floor_item_tag_aux(const Floor
         return { tl::nullopt, prev_tag };
     }
 
-    if (!item_tester.okay(floor.o_list[-i_idx].get()) && ((fis.mode & USE_FULL) == 0)) {
+    if (!item_tester.okay(*floor.o_list[-i_idx]) && ((fis.mode & USE_FULL) == 0)) {
         return { tl::nullopt, prev_tag };
     }
 
@@ -186,7 +186,7 @@ static void test_inventory_floor(PlayerType *player_ptr, FloorItemSelection *fis
     }
 
     for (int i = 0; i < INVEN_PACK; i++) {
-        if (item_tester.okay(player_ptr->inventory[i].get()) || (fis_ptr->mode & USE_FULL)) {
+        if (item_tester.okay(*player_ptr->inventory[i]) || (fis_ptr->mode & USE_FULL)) {
             fis_ptr->max_inven++;
         }
     }
@@ -210,7 +210,7 @@ static void test_equipment_floor(PlayerType *player_ptr, FloorItemSelection *fis
 
     for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         if (player_ptr->select_ring_slot ? is_ring_slot(i)
-                                         : item_tester.okay(player_ptr->inventory[i].get()) || (fis_ptr->mode & USE_FULL)) {
+                                         : item_tester.okay(*player_ptr->inventory[i]) || (fis_ptr->mode & USE_FULL)) {
             fis_ptr->max_equip++;
         }
     }

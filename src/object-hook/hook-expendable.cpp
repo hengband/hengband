@@ -17,25 +17,24 @@
 #include "util/string-processor.h"
 
 /*!
- * @brief オブジェクトをプレイヤーが食べることができるかを判定する /
- * Hook to determine if an object is eatable
- * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
+ * @brief オブジェクトをプレイヤーが食べることができるかを判定する
+ * @param item 判定対象アイテムへの参照
  * @return 食べることが可能ならばTRUEを返す
  */
-bool item_tester_hook_eatable(PlayerType *player_ptr, const ItemEntity *o_ptr)
+bool item_tester_hook_eatable(PlayerType *player_ptr, const ItemEntity &item)
 {
-    const auto tval = o_ptr->bi_key.tval();
+    const auto tval = item.bi_key.tval();
     if (tval == ItemKindType::FOOD) {
         return true;
     }
 
     auto food_type = PlayerRace(player_ptr).food();
     if (food_type == PlayerRaceFoodType::MANA) {
-        if (o_ptr->is_wand_staff()) {
+        if (item.is_wand_staff()) {
             return true;
         }
     } else if (food_type == PlayerRaceFoodType::CORPSE) {
-        if (o_ptr->is_corpse() && o_ptr->get_monrace().is_human()) {
+        if (item.is_corpse() && item.get_monrace().is_human()) {
             return true;
         }
     }
@@ -49,9 +48,9 @@ bool item_tester_hook_eatable(PlayerType *player_ptr, const ItemEntity *o_ptr)
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 飲むことが可能ならばTRUEを返す
  */
-bool item_tester_hook_quaff(PlayerType *player_ptr, const ItemEntity *o_ptr)
+bool item_tester_hook_quaff(PlayerType *player_ptr, const ItemEntity &item)
 {
-    const auto &bi_key = o_ptr->bi_key;
+    const auto &bi_key = item.bi_key;
     if (bi_key.tval() == ItemKindType::POTION) {
         return true;
     }

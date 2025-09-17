@@ -49,7 +49,7 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     const auto inven_label = prepare_label_string(player_ptr, USE_INVEN, item_tester);
     for (k = 0, i = 0; i < z; i++) {
         auto &item = *player_ptr->inventory[i];
-        if (!item_tester.okay(&item) && !(mode & USE_FULL)) {
+        if (!item_tester.okay(item) && !(mode & USE_FULL)) {
             continue;
         }
 
@@ -154,7 +154,7 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
         }
 
         auto &item = *player_ptr->inventory[i];
-        auto do_disp = item_tester.okay(&item);
+        auto do_disp = item_tester.okay(item);
         std::string label = "   ";
         if (do_disp) {
             label[0] = index_to_label(i);

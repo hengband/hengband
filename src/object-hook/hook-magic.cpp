@@ -17,9 +17,9 @@
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return 利用可能ならばTRUEを返す
  */
-bool item_tester_hook_use(PlayerType *player_ptr, const ItemEntity *o_ptr)
+bool item_tester_hook_use(PlayerType *player_ptr, const ItemEntity &item)
 {
-    const auto tval = o_ptr->bi_key.tval();
+    const auto tval = item.bi_key.tval();
     if (tval == player_ptr->tval_ammo) {
         return true;
     }
@@ -34,12 +34,12 @@ bool item_tester_hook_use(PlayerType *player_ptr, const ItemEntity *o_ptr)
     case ItemKindType::FOOD:
         return true;
     default:
-        if (!o_ptr->is_known()) {
+        if (!item.is_known()) {
             return false;
         }
 
         for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-            if ((player_ptr->inventory[i].get() == o_ptr) && o_ptr->get_flags().has(TR_ACTIVATE)) {
+            if ((player_ptr->inventory[i].get() == &item) && item.get_flags().has(TR_ACTIVATE)) {
                 return true;
             }
         }
@@ -53,9 +53,9 @@ bool item_tester_hook_use(PlayerType *player_ptr, const ItemEntity *o_ptr)
  * @param o_ptr 判定したいオブ会ジェクトの構造体参照ポインタ
  * @return 学習できる魔道書ならばTRUEを返す
  */
-bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
+bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity &item)
 {
-    if (!o_ptr->is_spell_book()) {
+    if (!item.is_spell_book()) {
         return false;
     }
 
@@ -70,7 +70,7 @@ bool item_tester_learn_spell(PlayerType *player_ptr, const ItemEntity *o_ptr)
         }
     }
 
-    const auto tval = o_ptr->bi_key.tval();
+    const auto tval = item.bi_key.tval();
     if ((tval == ItemKindType::MUSIC_BOOK) && pc.equals(PlayerClassType::BARD)) {
         return true;
     }

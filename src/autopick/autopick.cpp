@@ -112,7 +112,7 @@ void autopick_pickup_items(PlayerType *player_ptr, const Grid &grid)
         }
 
         disturb(player_ptr, false, false);
-        if (!check_store_item_to_inventory(player_ptr, &item)) {
+        if (!check_store_item_to_inventory(player_ptr, item)) {
             const auto item_name = describe_flavor(player_ptr, item, 0);
             msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), item_name.data());
             item.marked.set(OmType::SUPRESS_MESSAGE);

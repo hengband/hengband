@@ -335,7 +335,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
 
         ItemEntity item(bi_id);
         ItemMagicApplier(player_ptr, &item, level, AM_NO_FIXED_ART).execute();
-        if (!store_will_buy(player_ptr, &item, store_num)) {
+        if (!store_will_buy(player_ptr, item, store_num)) {
             continue;
         }
 

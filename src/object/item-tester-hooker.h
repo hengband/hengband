@@ -20,14 +20,14 @@ public:
     ItemTester &operator=(ItemTester &&) = default;
     virtual ~ItemTester() = default;
 
-    bool okay(const ItemEntity *o_ptr) const;
+    bool okay(const ItemEntity &item) const;
     virtual std::unique_ptr<ItemTester> clone() const = 0;
 
 protected:
     ItemTester() = default;
 
 private:
-    virtual bool okay_impl(const ItemEntity *o_ptr) const = 0;
+    virtual bool okay_impl(const ItemEntity &item) const = 0;
 };
 
 /**
@@ -52,7 +52,7 @@ public:
     AllMatchItemTester() = default;
 
 private:
-    virtual bool okay_impl(const ItemEntity *) const
+    virtual bool okay_impl(const ItemEntity &) const
     {
         return true;
     }
@@ -66,7 +66,7 @@ public:
     explicit TvalItemTester(ItemKindType tval);
 
 private:
-    virtual bool okay_impl(const ItemEntity *o_ptr) const;
+    virtual bool okay_impl(const ItemEntity &item) const;
 
     ItemKindType tval;
 };
@@ -76,15 +76,13 @@ private:
  */
 class FuncItemTester : public CloneableItemTester<FuncItemTester> {
 public:
-    using TestMemberFunctionPtr = bool (ItemEntity::*)() const;
-    explicit FuncItemTester(TestMemberFunctionPtr test_func);
-    explicit FuncItemTester(std::function<bool(const ItemEntity *)> test_func);
-    explicit FuncItemTester(std::function<bool(PlayerType *, const ItemEntity *)> test_func, PlayerType *player_ptr);
-    explicit FuncItemTester(std::function<bool(PlayerType *, const ItemEntity *, StoreSaleType)> test_func, PlayerType *player_ptr, StoreSaleType store_num);
+    explicit FuncItemTester(std::function<bool(const ItemEntity &)> test_func);
+    explicit FuncItemTester(std::function<bool(PlayerType *, const ItemEntity &)> test_func, PlayerType *player_ptr);
+    explicit FuncItemTester(std::function<bool(PlayerType *, const ItemEntity &, StoreSaleType)> test_func, PlayerType *player_ptr, StoreSaleType store_num);
 
 private:
-    virtual bool okay_impl(const ItemEntity *o_ptr) const;
+    virtual bool okay_impl(const ItemEntity &item) const;
 
-    std::function<bool(PlayerType *, const ItemEntity *)> test_func;
+    std::function<bool(PlayerType *, const ItemEntity &)> test_func;
     PlayerType *player_ptr = nullptr;
 };

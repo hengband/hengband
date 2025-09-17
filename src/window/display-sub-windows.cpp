@@ -315,7 +315,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         }
 
         const auto &item = *player_ptr->inventory[i];
-        auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(&item);
+        auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(item);
         std::string tmp_val = "   ";
 
         if (do_disp) {

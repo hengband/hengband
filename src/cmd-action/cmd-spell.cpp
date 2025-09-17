@@ -552,7 +552,7 @@ static void confirm_use_force(PlayerType *player_ptr, bool browse_only)
 
 static FuncItemTester get_castable_spellbook_tester(PlayerType *player_ptr)
 {
-    return FuncItemTester([](auto p_ptr, auto o_ptr) { return check_book_realm(p_ptr, o_ptr->bi_key); }, player_ptr);
+    return FuncItemTester([](auto *p_ptr, auto &item) { return check_book_realm(p_ptr, item.bi_key); }, player_ptr);
 }
 
 static FuncItemTester get_learnable_spellbook_tester(PlayerType *player_ptr)

@@ -10,15 +10,15 @@
  * @param o_ptr 判定するアイテムの情報参照ポインタ
  * @return 並ならばTRUEを返す
  */
-bool object_is_nameless_weapon_armour(const ItemEntity *o_ptr)
+bool object_is_nameless_weapon_armour(const ItemEntity &item)
 {
     /* Require weapon or armour */
-    if (!o_ptr->is_weapon_armour_ammo()) {
+    if (!item.is_weapon_armour_ammo()) {
         return false;
     }
 
     /* Require nameless object if the object is well known */
-    if (o_ptr->is_known() && !o_ptr->is_nameless()) {
+    if (item.is_known() && !item.is_nameless()) {
         return false;
     }
 

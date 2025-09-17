@@ -29,7 +29,7 @@ std::vector<short> scan_floor_items(const FloorType &floor, const Pos2D &pos, co
     std::vector<short> items;
     for (const auto this_o_idx : floor.get_grid(pos).o_idx_list) {
         const auto &item = *floor.o_list[this_o_idx];
-        if (mode.has(ScanFloorMode::ITEM_TESTER) && !item_tester.okay(&item)) {
+        if (mode.has(ScanFloorMode::ITEM_TESTER) && !item_tester.okay(item)) {
             continue;
         }
 

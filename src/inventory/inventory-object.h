@@ -11,5 +11,5 @@ void drop_from_inventory(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
 void combine_pack(PlayerType *player_ptr);
 void reorder_pack(PlayerType *player_ptr);
 int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr);
-bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity *o_ptr);
+bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity &item);
 INVENTORY_IDX inven_takeoff(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBER amt);

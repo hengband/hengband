@@ -215,17 +215,17 @@ static bool switch_store_check(const ItemEntity &item, StoreSaleType store_num)
  * Note that a shop-keeper must refuse to buy "worthless" items
  */
 
-bool store_will_buy(PlayerType *, const ItemEntity *o_ptr, StoreSaleType store_num)
+bool store_will_buy(PlayerType *, const ItemEntity &item, StoreSaleType store_num)
 {
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
         return true;
     }
 
-    if (!switch_store_check(*o_ptr, store_num)) {
+    if (!switch_store_check(item, store_num)) {
         return false;
     }
 
-    return o_ptr->calc_price() > 0;
+    return item.calc_price() > 0;
 }
 
 static int mass_lite_produce(const PRICE cost)

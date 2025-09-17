@@ -69,7 +69,7 @@ static bool check_item_tag_aux(const FloorType &floor, ItemSelection *item_selec
 
     item_selection_ptr->k = -i_idx;
     const auto &item = *floor.o_list[item_selection_ptr->k];
-    if (!item_tester.okay(&item) && ((item_selection_ptr->mode & USE_FULL) == 0)) {
+    if (!item_tester.okay(item) && ((item_selection_ptr->mode & USE_FULL) == 0)) {
         return false;
     }
 
@@ -168,7 +168,7 @@ static void test_inventory(PlayerType *player_ptr, ItemSelection *item_selection
     }
 
     for (int j = 0; j < INVEN_PACK; j++) {
-        if (item_tester.okay(player_ptr->inventory[j].get()) || (item_selection_ptr->mode & USE_FULL)) {
+        if (item_tester.okay(*player_ptr->inventory[j]) || (item_selection_ptr->mode & USE_FULL)) {
             item_selection_ptr->max_inven++;
         }
     }
@@ -192,7 +192,7 @@ static void test_equipment(PlayerType *player_ptr, ItemSelection *item_selection
 
     for (int j = INVEN_MAIN_HAND; j < INVEN_TOTAL; j++) {
         if (player_ptr->select_ring_slot ? is_ring_slot(j)
-                                         : item_tester.okay(player_ptr->inventory[j].get()) || (item_selection_ptr->mode & USE_FULL)) {
+                                         : item_tester.okay(*player_ptr->inventory[j]) || (item_selection_ptr->mode & USE_FULL)) {
             item_selection_ptr->max_equip++;
         }
     }
@@ -270,7 +270,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         const auto &floor = *player_ptr->current_floor_ptr;
         for (const auto this_o_idx : floor.get_grid(player_ptr->get_position()).o_idx_list) {
             const auto &item = *floor.o_list[this_o_idx];
-            if ((item_tester.okay(&item) || (item_selection.mode & USE_FULL)) && item.marked.has(OmType::FOUND)) {
+            if ((item_tester.okay(item) || (item_selection.mode & USE_FULL)) && item.marked.has(OmType::FOUND)) {
                 item_selection.allow_floor = true;
             }
         }
@@ -516,7 +516,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 const auto &floor = *player_ptr->current_floor_ptr;
                 for (const auto this_o_idx : floor.get_grid(player_ptr->get_position()).o_idx_list) {
                     const auto &item = *floor.o_list[this_o_idx];
-                    if (!item_tester.okay(&item) && !(item_selection.mode & USE_FULL)) {
+                    if (!item_tester.okay(item) && !(item_selection.mode & USE_FULL)) {
                         continue;
                     }
 
