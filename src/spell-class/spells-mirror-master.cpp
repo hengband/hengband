@@ -264,12 +264,14 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             break;
         }
 
-        for (auto path_g_ite = path_g.begin(); path_g_ite != path_g.end(); path_g_ite++) {
-            const auto &[oy, ox] = *(path_g_ite == path_g.begin() ? path_g.begin() : path_g_ite - 1);
-            const auto &[ny, nx] = *path_g_ite;
+        for (auto path_g_itr = path_g.begin(); path_g_itr != path_g.end(); path_g_itr++) {
+            const auto &pos_dst = *path_g_itr;
+            const auto &pos_src = *(path_g_itr == path_g.begin() ? path_g.begin() : path_g_itr - 1);
+            const auto &[oy, ox] = pos_src;
+            const auto &[ny, nx] = pos_dst;
 
             if (delay_factor > 0 && !this->player_ptr->effects()->blindness().is_blind()) {
-                if (panel_contains(ny, nx) && floor.has_los_at({ ny, nx })) {
+                if (panel_contains(pos_dst) && floor.has_los_at(pos_dst)) {
                     print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                     move_cursor_relative(ny, nx);
                     term_fresh();
@@ -350,11 +352,11 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
             const auto &pos = (n == 1) ? center : *std::next(it, -1);
             const auto &pos_new = *it;
 
-            if (panel_contains(pos.y, pos.x) && floor.has_los_at(pos)) {
+            if (panel_contains(pos) && floor.has_los_at(pos)) {
                 print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
                 drawn_pos_list.push_back(pos);
             }
-            if (panel_contains(pos_new.y, pos_new.x) && floor.has_los_at(pos_new)) {
+            if (panel_contains(pos_new) && floor.has_los_at(pos_new)) {
                 print_bolt_pict(player_ptr, pos.y, pos.x, pos_new.y, pos_new.x, typ);
                 if (std::find(last_pos_list.begin(), last_pos_list.end(), *it) != last_pos_list.end()) {
                     drawn_last_pos_list.push_back(pos_new);
@@ -365,7 +367,7 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
         term_xtra(TERM_XTRA_DELAY, delay_factor);
 
         for (const auto &pos : drawn_last_pos_list) {
-            if (panel_contains(pos.y, pos.x) && floor.has_los_at(pos)) {
+            if (panel_contains(pos) && floor.has_los_at(pos)) {
                 print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
                 drawn_pos_list.push_back(pos);
             }
@@ -440,14 +442,15 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     auto ox = p_pos.x;
     auto visual = false;
     std::vector<Pos2D> drawn_pos_list;
-    for (const auto &[ny, nx] : path_g) {
+    for (const auto &pos_dst : path_g) {
+        const auto &[ny, nx] = pos_dst;
         if (delay_factor > 0) {
-            if (panel_contains(ny, nx) && floor.has_los_at({ ny, nx })) {
+            if (panel_contains(pos_dst) && floor.has_los_at(pos_dst)) {
                 print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
                 move_cursor_relative(ny, nx);
                 term_fresh();
                 term_xtra(TERM_XTRA_DELAY, delay_factor);
-                lite_spot(this->player_ptr, { ny, nx });
+                lite_spot(this->player_ptr, pos_dst);
                 term_fresh();
 
                 print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);

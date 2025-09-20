@@ -329,7 +329,7 @@ bool no_lite(PlayerType *player_ptr)
 void print_rel(PlayerType *player_ptr, const DisplaySymbol &symbol, POSITION y, POSITION x)
 {
     /* Only do "legal" locations */
-    if (panel_contains(y, x)) {
+    if (panel_contains({ y, x })) {
         const auto color = get_monochrome_display_color(player_ptr).value_or(symbol.color);
         term_queue_bigchar(panel_col_of(x), y - panel_row_prt, { { color, symbol.character }, {} });
     }
@@ -463,7 +463,7 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
  */
 void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
 {
-    if (panel_contains(pos.y, pos.x) && player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+    if (panel_contains(pos) && player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
         auto symbol_pair = map_info(player_ptr, pos);
         symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 

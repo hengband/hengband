@@ -653,7 +653,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
             }
 
             /* The player can see the (on screen) missile */
-            if (panel_contains(pos_impact.y, pos_impact.x) && player_can_see_bold(player_ptr, pos_impact.y, pos_impact.x)) {
+            if (panel_contains(pos_impact) && player_can_see_bold(player_ptr, pos_impact.y, pos_impact.x)) {
                 const auto symbol = fire_item.get_symbol();
 
                 /* Draw, Hilite, Fresh, Pause, Erase */
