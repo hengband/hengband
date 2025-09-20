@@ -1,6 +1,5 @@
 #include "floor/geometry.h"
 #include "game-option/text-display-options.h"
-#include "grid/grid.h"
 #include "system/angband-system.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -83,7 +82,7 @@ bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     /* Check for "local" illumination */
-    return check_local_illumination(floor, player_ptr->get_position(), pos);
+    return floor.is_illuminated_at(player_ptr->get_position(), pos);
 }
 
 /*
