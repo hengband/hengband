@@ -1,5 +1,4 @@
 #include "store/rumor.h"
-#include "artifact/fixed-art-types.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "io/files-util.h"
@@ -15,7 +14,6 @@
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
-#include "system/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
@@ -31,19 +29,22 @@
 #include <utility>
 #include <variant>
 
+namespace {
 /*!
  * @brief 固定アーティファクト、モンスター、町 をランダムに1つ選ぶ
  * @param zz 検索文字列
  * @param max_idx briefに挙げた各リストにおける最大数
  * @details rumor.txt (rumor_j.txt) の定義により、常にランダム ("*")。但し拡張性のため固定値の場合も残す.
  */
-static short get_rumor_num(std::string_view zz, short max_idx)
+template <typename T, typename U>
+T get_rumor_num(std::string_view zz, U max_idx)
+    requires(std::is_integral_v<T> || std::is_enum_v<T>) && (std::is_integral_v<U> || std::is_enum_v<U>)
 {
     if (zz == "*") {
-        return randnum1<short>(max_idx);
+        return randnum1<T>(max_idx);
     }
 
-    return static_cast<short>(std::atoi(zz.data()));
+    return static_cast<T>(std::atoi(zz.data()));
 }
 
 /*!
@@ -52,7 +53,7 @@ static short get_rumor_num(std::string_view zz, short max_idx)
  * @return トークン群の配列を返す。フィールドの数が合わない場合はtl::nulloptを返す。
  * @todo tmp_tokensを使わず単なるsplitにすればもっと簡略化できそう
  */
-static tl::optional<std::vector<std::string>> get_rumor_tokens(std::string rumor)
+tl::optional<std::vector<std::string>> get_rumor_tokens(std::string rumor)
 {
     constexpr auto num_tokens = 3;
     char *tmp_tokens[num_tokens];
@@ -64,6 +65,7 @@ static tl::optional<std::vector<std::string>> get_rumor_tokens(std::string rumor
     std::vector<std::string> tokens(std::begin(tmp_tokens), std::end(tmp_tokens));
     return tokens;
 }
+}
 
 class ArtifactRumor {
 public:
@@ -71,8 +73,7 @@ public:
     {
         const auto &artifact_id = tokens[1];
         const auto &artifacts = ArtifactList::get_instance();
-        const auto max_idx = enum2i(artifacts.rbegin()->first);
-        this->fa_id = i2enum<FixedArtifactId>(get_rumor_num(artifact_id, max_idx));
+        this->fa_id = get_rumor_num<FixedArtifactId>(artifact_id, artifacts.rbegin()->first);
         const auto &artifact = artifacts.get_artifact(this->fa_id);
         this->bi_id = BaseitemList::get_instance().lookup_baseitem_id(artifact.bi_key);
     }
@@ -89,8 +90,7 @@ public:
 
         // @details プレイヤーもダミーで入っているので、1つ引いておかないと数が合わなくなる.
         auto &monraces = MonraceList::get_instance();
-        const auto monraces_size = static_cast<short>(monraces.size() - 1);
-        this->monrace_id = i2enum<MonraceId>(get_rumor_num(monster_name, monraces_size));
+        this->monrace_id = get_rumor_num<MonraceId>(monster_name, monraces.size() - 1);
     }
 
     MonraceId monrace_id{};
@@ -113,7 +113,7 @@ public:
     {
         const auto &town_name = tokens[1];
         while (true) {
-            this->t_idx = get_rumor_num(town_name, VALID_TOWNS);
+            this->t_idx = get_rumor_num<int>(town_name, VALID_TOWNS);
             if (!towns_info[this->t_idx].name.empty()) {
                 return;
             }
@@ -179,13 +179,14 @@ public:
     {
         const auto &dungeons = DungeonList::get_instance();
         const auto &dungeon = dungeons.get_dungeon(dungeon_rumor.dungeon_id);
-        this->print_rumor(dungeon.name);
+        const auto &dungeon_name = dungeon.name;
+        this->print_rumor(dungeon_name);
 
         auto &dungeon_record = DungeonRecords::get_instance().get_record(dungeon_rumor.dungeon_id);
         if (!dungeon_record.has_entered()) {
             dungeon_record.set_max_level(dungeon.mindepth);
             msg_erase();
-            msg_print(_("{}に帰還できるようになった。", "You can recall to {}."), dungeon.name);
+            msg_print(_("{}に帰還できるようになった。", "You can recall to {}."), dungeon_name);
         }
     }
 
