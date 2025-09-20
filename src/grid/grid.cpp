@@ -212,24 +212,24 @@ tl::optional<Pos2D> new_player_spot(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 指定された座標のマスが現在照らされているかを返す。 / Check for "local" illumination
- * @param y y座標
- * @param x x座標
- * @return 指定された座標に照明がかかっているならTRUEを返す。。
+ * @brief 指定された座標のマスが現在照らされているかを調べる.
+ * @param floor フロアへの参照
+ * @param p_pos プレイヤーの現在位置
+ * @param pos 指定座標
+ * @return 指定された座標に照明がかかっているならTRUEを返す.
  */
-bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
+bool check_local_illumination(const FloorType &floor, const Pos2D &p_pos, const Pos2D &pos)
 {
-    const auto yy = (y < player_ptr->y) ? (y + 1) : (y > player_ptr->y) ? (y - 1)
-                                                                        : y;
-    const auto xx = (x < player_ptr->x) ? (x + 1) : (x > player_ptr->x) ? (x - 1)
-                                                                        : x;
-    const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid_yyxx = floor.grid_array[yy][xx];
-    const auto &grid_yxx = floor.grid_array[y][xx];
-    const auto &grid_yyx = floor.grid_array[yy][x];
-    auto is_illuminated = grid_yyxx.has_los_terrain(TerrainKind::MIMIC) && (grid_yyxx.info & CAVE_GLOW);
-    is_illuminated |= grid_yxx.has_los_terrain(TerrainKind::MIMIC) && (grid_yxx.info & CAVE_GLOW);
-    is_illuminated |= grid_yyx.has_los_terrain(TerrainKind::MIMIC) && (grid_yyx.info & CAVE_GLOW);
+    const auto yy = (pos.y < p_pos.y) ? (pos.y + 1) : (pos.y > p_pos.y) ? (pos.y - 1)
+                                                                        : pos.y;
+    const auto xx = (pos.x < p_pos.x) ? (pos.x + 1) : (pos.x > p_pos.x) ? (pos.x - 1)
+                                                                        : pos.x;
+    const auto &grid_yyxx = floor.get_grid({ yy, xx });
+    const auto &grid_yxx = floor.get_grid({ pos.y, xx });
+    const auto &grid_yyx = floor.get_grid({ yy, pos.x });
+    auto is_illuminated = grid_yyxx.has_los_terrain(TerrainKind::MIMIC) && any_bits(grid_yyxx.info, CAVE_GLOW);
+    is_illuminated |= grid_yxx.has_los_terrain(TerrainKind::MIMIC) && any_bits(grid_yxx.info, CAVE_GLOW);
+    is_illuminated |= grid_yyx.has_los_terrain(TerrainKind::MIMIC) && any_bits(grid_yyx.info, CAVE_GLOW);
     return is_illuminated;
 }
 
@@ -447,7 +447,7 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
         }
 
         /* Memorize certain non-torch-lit wall grids */
-        else if (check_local_illumination(player_ptr, pos.y, pos.x)) {
+        else if (check_local_illumination(floor, player_ptr->get_position(), pos)) {
             grid.info |= (CAVE_MARK);
         }
     }
