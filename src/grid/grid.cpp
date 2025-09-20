@@ -335,10 +335,10 @@ void print_rel(PlayerType *player_ptr, const DisplaySymbol &symbol, const Pos2D 
     }
 }
 
-void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
+void print_bolt_pict(PlayerType *player_ptr, const Pos2D &pos_src, const Pos2D &pos_dst, AttributeType typ)
 {
-    const auto symbol = bolt_pict(y, x, ny, nx, typ);
-    print_rel(player_ptr, symbol, { ny, nx });
+    const auto symbol = bolt_pict(pos_src, pos_dst, typ);
+    print_rel(player_ptr, symbol, pos_dst);
 }
 
 /*!

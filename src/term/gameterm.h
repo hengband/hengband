@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include "util/point-2d.h"
 #include <array>
 #include <map>
 #include <string>
@@ -33,4 +34,4 @@ extern TERM_COLOR color_char_to_attr(char c);
 extern const std::unordered_map<std::string_view, TERM_COLOR> color_list;
 
 class DisplaySymbol;
-DisplaySymbol bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ);
+DisplaySymbol bolt_pict(const Pos2D &pos_src, const Pos2D &pos_dst, AttributeType typ);
