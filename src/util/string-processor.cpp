@@ -592,6 +592,38 @@ tl::optional<int> str_to_int(std::string_view str, int base)
     return tl::nullopt;
 }
 
+/*!
+ * @brief 文字列から指定した文字以降の部分文字列を抽出する
+ * @param str 抽出対象の文字列
+ * @param find 検索する文字
+ * @return 部分文字列
+ * @details 現時点ではシフトJISのダメ文字は考慮しない (必要に応じて拡張する)
+ */
+tl::optional<std::string_view> extract_suffix(std::string_view str, char find)
+{
+    if (const auto pos = str.find(find); pos != std::string_view::npos) {
+        return str.substr(pos);
+    }
+
+    return tl::nullopt;
+}
+
+/*!
+ * @brief 文字列から指定した文字列以降の部分文字列を抽出する
+ * @param str 抽出対象の文字列
+ * @param find 検索する文字列
+ * @return 部分文字列
+ * @details 現時点ではシフトJISのダメ文字は考慮しない (必要に応じて拡張する)
+ */
+tl::optional<std::string_view> extract_suffix(std::string_view str, std::string_view find)
+{
+    if (const auto pos = str.find(find); pos != std::string_view::npos) {
+        return str.substr(pos);
+    }
+
+    return tl::nullopt;
+}
+
 char hexify_upper(uint8_t value)
 {
     return hex_symbol_table.at(value / 16);
@@ -605,4 +637,9 @@ char hexify_lower(uint8_t value)
 char octify(uint8_t i)
 {
     return hex_symbol_table.at(i % 8);
+}
+
+bool is_numeric(char c)
+{
+    return (c >= '0') && (c <= '9');
 }

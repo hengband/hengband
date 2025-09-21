@@ -147,7 +147,7 @@ bool autopick_new_entry(autopick_type *entry, std::string_view str_view, bool al
                 ptr++;
             }
 
-            while ('0' <= *ptr && *ptr <= '9') {
+            while (is_numeric(*ptr)) {
                 entry->dice = 10 * entry->dice + (*ptr - '0');
                 ptr++;
                 k++;
@@ -170,7 +170,7 @@ bool autopick_new_entry(autopick_type *entry, std::string_view str_view, bool al
                 ptr++;
             }
 
-            while ('0' <= *ptr && *ptr <= '9') {
+            while (is_numeric(*ptr)) {
                 entry->bonus = 10 * entry->bonus + (*ptr - '0');
                 ptr++;
                 k++;

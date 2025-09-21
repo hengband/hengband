@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
 
 class FloorItemSelection {
 public:
@@ -28,8 +29,7 @@ public:
     bool allow_inven = false;
     bool allow_floor = false;
     bool toggle = false;
-    int floor_num = 0;
-    short floor_list[23]{};
+    std::vector<short> floor_item_index;
     int floor_top = 0;
     int min_width = 0;
     int max_inven = 0;

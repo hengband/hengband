@@ -178,7 +178,7 @@ char InputKeyRequestor::input_repeat_num()
             continue;
         }
 
-        if ((cmd >= '0') && (cmd <= '9')) {
+        if (is_numeric(cmd)) {
             if (command_arg >= 1000) {
                 bell();
                 command_arg = 9999;
