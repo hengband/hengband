@@ -302,6 +302,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     if (player_ptr->sutemi) {
         damage *= 2;
     }
+
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::IAI)) {
         damage += (damage + 4) / 5;
     }
@@ -356,6 +357,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     if (player_ptr->chp < -9999) {
         player_ptr->chp = -9999;
     }
+
     if (damage_type == DAMAGE_GENO && player_ptr->chp < 0) {
         damage += player_ptr->chp;
         player_ptr->chp = 0;
@@ -364,7 +366,6 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::HP);
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
-
     if (damage_type != DAMAGE_GENO && player_ptr->chp == 0) {
         chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
         chg_virtue(player_ptr, Virtue::CHANCE, 2);
@@ -430,6 +431,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                     hit_from.remove_prefix(4);
                 }
             }
+
             player_ptr->died_from = fmt::format("{}{}{}", hallucintion_state, hit_from, paralysis_state);
 #endif
         }
@@ -440,7 +442,6 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));
         } else {
             std::string place;
-
             if (floor.inside_arena) {
                 place = _("アリーナ", "in the Arena");
             } else if (!floor.is_underground()) {
@@ -513,15 +514,13 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
 #ifdef JP
         if (is_seppuku_by_won) {
-            int i;
-            int w = game_term->wid;
-            int h = game_term->hgt;
-            int msg_pos_x[9] = { 5, 7, 9, 12, 14, 17, 19, 21, 23 };
-            int msg_pos_y[9] = { 3, 4, 5, 4, 5, 4, 5, 6, 4 };
+            const auto w = game_term->wid;
+            const auto h = game_term->hgt;
+            constexpr std::array<Pos2D, 9> msg_positions = { { { 3, 5 }, { 4, 7 }, { 5, 9 }, { 4, 12 }, { 5, 14 }, { 4, 17 }, { 5, 19 }, { 6, 21 }, { 4, 23 } } };
             term_clear();
 
             /* 桜散る */
-            for (i = 0; i < 40; i++) {
+            for (auto i = 0; i < 40; i++) {
                 term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
             }
 
@@ -535,17 +534,18 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 *str2 = '\0';
             }
 
-            i = 0;
+            auto i = 0;
             while (i < 9) {
                 str2 = angband_strstr(str, " ");
                 size_t len = (str2 == nullptr) ? strlen(str) : str2 - str;
                 if (len != 0) {
-                    term_putstr_v(w * 3 / 4 - 2 - msg_pos_x[i] * 2, msg_pos_y[i], len, TERM_WHITE, str);
+                    term_putstr_v(w * 3 / 4 - 2 - msg_positions[i].x * 2, msg_positions[i].y, len, TERM_WHITE, str);
                     if (str2 == nullptr) {
                         break;
                     }
                     i++;
                 }
+
                 str = str2 + 1;
                 if (*str == 0) {
                     break;
@@ -558,9 +558,12 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             screen_dump = make_screen_dump(player_ptr);
 #endif
             (void)inkey();
-        } else
-#endif
+        } else {
             msg_print(death_message);
+        }
+#else
+        msg_print(death_message);
+#endif
         return damage;
     }
 
