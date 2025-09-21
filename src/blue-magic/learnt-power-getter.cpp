@@ -122,7 +122,7 @@ static tl::optional<BlueMagicType> select_blue_magic_kind_by_symbol()
     constexpr auto candidate_desc = _("[A]ボルト, [B]ボール, [C]ブレス, [D]召喚, [E]その他:",
         "[A] bolt, [B] ball, [C] breath, [D] summoning, [E] others:");
     while (true) {
-        const auto command = input_command(candidate_desc, true);
+        const auto command = input_command(candidate_desc);
         if (!command) {
             return tl::nullopt;
         }
@@ -368,7 +368,7 @@ static tl::optional<MonsterAbilityType> select_learnt_spells_by_symbol(PlayerTyp
     while (!selected_spell) {
         auto choice = '\0';
         if (!first_show_list) {
-            const auto choice_opt = input_command(prompt, true);
+            const auto choice_opt = input_command(prompt);
             if (!choice_opt) {
                 break;
             }
@@ -432,7 +432,7 @@ static tl::optional<MonsterAbilityType> select_learnt_spells_by_menu(PlayerType 
     while (!selected_spell) {
         describe_blue_magic_name(player_ptr, menu_line, bluemage_data, spells);
 
-        const auto choice = input_command(prompt, true);
+        const auto choice = input_command(prompt);
         if (!choice) {
             break;
         }

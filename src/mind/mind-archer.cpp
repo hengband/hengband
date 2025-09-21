@@ -59,7 +59,7 @@ static bool select_ammo_creation_type(ammo_creation_type &type, PLAYER_LEVEL ple
     }
 
     while (type == AMMO_NONE) {
-        const auto ch = input_command(prompt, true);
+        const auto ch = input_command(prompt);
         if (!ch) {
             return false;
         }

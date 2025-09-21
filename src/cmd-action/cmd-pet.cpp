@@ -544,7 +544,7 @@ void do_cmd_pet(PlayerType *player_ptr)
             if (choice == ESCAPE) {
                 choice = ' ';
             } else {
-                const auto new_choice = input_command(prompt, true);
+                const auto new_choice = input_command(prompt);
                 if (!new_choice) {
                     break;
                 }

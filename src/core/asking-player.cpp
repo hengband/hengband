@@ -298,7 +298,7 @@ bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumCla
  *
  * Returns TRUE unless the character is "Escape"
  */
-tl::optional<char> input_command(std::string_view prompt, bool z_escape)
+tl::optional<char> input_command(std::string_view prompt)
 {
     msg_erase();
     prt(prompt, 0, 0);
@@ -310,8 +310,7 @@ tl::optional<char> input_command(std::string_view prompt, bool z_escape)
     }
 
     prt("", 0, 0);
-    const auto is_z = (command == 'z') || (command == 'Z');
-    if ((command == ESCAPE) || (z_escape && is_z)) {
+    if (command == ESCAPE) {
         return tl::nullopt;
     }
 
