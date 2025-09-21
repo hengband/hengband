@@ -66,6 +66,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <sstream>
 #include <string>
 
@@ -292,8 +293,8 @@ static void death_save(PlayerType *player_ptr)
  */
 int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_view hit_from)
 {
-    int old_chp = player_ptr->chp;
-    int warning = (player_ptr->mhp * hitpoint_warn / 10);
+    const auto old_chp = player_ptr->chp;
+    const auto hp_warning_threshold = (player_ptr->mhp * hitpoint_warn / 10);
     if (player_ptr->is_dead) {
         return 0;
     }
@@ -372,7 +373,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     const auto &floor = *player_ptr->current_floor_ptr;
     auto &world = AngbandWorld::get_instance();
     if (player_ptr->chp < 0 && !cheat_immortal) {
-        bool android = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID);
+        const auto is_android = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID);
         sound(SoundKind::DEATH);
         chg_virtue(player_ptr, Virtue::SACRIFICE, 10);
         handle_stuff(player_ptr);
@@ -385,7 +386,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             auto &entries = ArenaEntryList::get_instance();
             entries.set_defeated_entry();
             const auto &m_name = entries.get_monrace().name;
-            msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name.data());
+            msg_print(_("あなたは{}の前に敗れ去った。", "You are beaten by {}."), m_name);
             msg_erase();
             if (record_arena) {
                 exe_write_diary(floor, DiaryKind::ARENA, 0, m_name);
@@ -396,17 +397,16 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         }
 
         const auto q_idx = floor.get_quest_id();
-        const auto seppuku = hit_from == "Seppuku";
-        const auto winning_seppuku = world.total_winner && seppuku;
-
+        const auto is_seppuku = hit_from == "Seppuku";
+        const auto is_seppuku_by_won = world.total_winner && is_seppuku;
         play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 
 #ifdef WORLD_SCORE
         screen_dump = make_screen_dump(player_ptr);
 #endif
-        if (seppuku) {
+        if (is_seppuku) {
             player_ptr->died_from = hit_from;
-            if (!winning_seppuku) {
+            if (!is_seppuku_by_won) {
                 player_ptr->died_from = _("切腹", "Seppuku");
             }
         } else {
@@ -417,9 +417,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 paralysis_state = player_ptr->free_act ? _("彫像状態で", " while being the statue") : _("麻痺状態で", " while paralyzed");
             }
 
-            auto hallucintion_state = is_hallucinated ? _("幻覚に歪んだ", "hallucinatingly distorted ") : "";
+            const auto hallucintion_state = is_hallucinated ? _("幻覚に歪んだ", "hallucinatingly distorted ") : "";
 #ifdef JP
-            player_ptr->died_from = format("%s%s%s", paralysis_state, hallucintion_state, hit_from.data());
+            player_ptr->died_from = fmt::format("{}{}{}", paralysis_state, hallucintion_state, hit_from);
 #else
             if (is_hallucinated) {
                 if (hit_from.starts_with("a ") || hit_from.starts_with("A ")) {
@@ -430,12 +430,12 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                     hit_from.remove_prefix(4);
                 }
             }
-            player_ptr->died_from = format("%s%s%s", hallucintion_state, hit_from.data(), paralysis_state);
+            player_ptr->died_from = fmt::format("{}{}{}", hallucintion_state, hit_from, paralysis_state);
 #endif
         }
 
         world.total_winner = false;
-        if (winning_seppuku) {
+        if (is_seppuku_by_won) {
             world.add_retired_class(player_ptr->pclass);
             exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));
         } else {
@@ -448,13 +448,13 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             } else if (inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))) {
                 place = _("クエスト", "in a quest");
             } else {
-                place = format(_("%d階", "on level %d"), static_cast<int>(floor.dun_level));
+                place = fmt::format(_("{}階", "on level {}"), floor.dun_level);
             }
 
 #ifdef JP
-            const auto note = format("%sで%sに殺された。", place.data(), player_ptr->died_from.data());
+            const auto note = fmt::format("{}で{}に殺された。", place, player_ptr->died_from);
 #else
-            const auto note = format("killed by %s %s.", player_ptr->died_from.data(), place.data());
+            const auto note = fmt::format("killed by {} {}.", player_ptr->died_from, place);
 #endif
             exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, note);
         }
@@ -471,16 +471,16 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         player_ptr->last_message = "";
         if (!last_words) {
 #ifdef JP
-            msg_format("あなたは%sました。", android ? "壊れ" : "死に");
+            msg_print("あなたは{}ました。", is_android ? "壊れ" : "死に");
 #else
-            msg_print(android ? "You are broken." : "You die.");
+            msg_print(is_android ? "You are broken." : "You die.");
 #endif
             msg_erase();
             return damage;
         }
 
         tl::optional<std::string> death_message_opt;
-        if (winning_seppuku) {
+        if (is_seppuku_by_won) {
             death_message_opt = get_random_line(_("seppuku_j.txt", "seppuku.txt"), 0);
         } else {
             death_message_opt = get_random_line(_("death_j.txt", "death.txt"), 0);
@@ -488,7 +488,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
         auto &death_message = *death_message_opt;
         constexpr auto max_last_words = 1024;
-        const auto prompt = winning_seppuku ? _("辞世の句: ", "Haiku: ") : _("断末魔の叫び: ", "Last words: ");
+        const auto prompt = is_seppuku_by_won ? _("辞世の句: ", "Haiku: ") : _("断末魔の叫び: ", "Last words: ");
         while (true) {
             const auto input_last_words = input_string(prompt, max_last_words, death_message);
             if (!input_last_words) {
@@ -503,16 +503,16 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
         if (death_message.empty()) {
 #ifdef JP
-            death_message = format("あなたは%sました。", android ? "壊れ" : "死に");
+            death_message = fmt::format("あなたは{}ました。", is_android ? "壊れ" : "死に");
 #else
-            death_message = android ? "You are broken." : "You die.";
+            death_message = is_android ? "You are broken." : "You die.";
 #endif
         } else {
             player_ptr->last_message = death_message;
         }
 
 #ifdef JP
-        if (winning_seppuku) {
+        if (is_seppuku_by_won) {
             int i;
             int w = game_term->wid;
             int h = game_term->hgt;
@@ -565,13 +565,13 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     }
 
     handle_stuff(player_ptr);
-    if (player_ptr->chp < warning) {
-        if (old_chp > warning) {
+    if (player_ptr->chp < hp_warning_threshold) {
+        if (old_chp > hp_warning_threshold) {
             bell();
         }
 
         sound(SoundKind::WARN);
-        if (record_danger && (old_chp > warning)) {
+        if (record_danger && (old_chp > hp_warning_threshold)) {
             if (player_ptr->effects()->hallucination().is_hallucinated() && damage_type == DAMAGE_ATTACK) {
                 hit_from = _("何か", "something");
             }
@@ -592,7 +592,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         flush();
     }
 
-    if (world.is_wild_mode() && !player_ptr->leaving && (player_ptr->chp < std::max(warning, player_ptr->mhp / 5))) {
+    if (world.is_wild_mode() && !player_ptr->leaving && (player_ptr->chp < std::max(hp_warning_threshold, player_ptr->mhp / 5))) {
         change_wild_mode(player_ptr, false);
     }
 
