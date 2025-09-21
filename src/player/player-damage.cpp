@@ -513,58 +513,61 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         }
 
 #ifdef JP
-        if (is_seppuku_by_won) {
-            const auto w = game_term->wid;
-            const auto h = game_term->hgt;
-            constexpr std::array<Pos2D, 9> msg_positions = { { { 3, 5 }, { 4, 7 }, { 5, 9 }, { 4, 12 }, { 5, 14 }, { 4, 17 }, { 5, 19 }, { 6, 21 }, { 4, 23 } } };
-            term_clear();
+        if (!is_seppuku_by_won) {
+            msg_print(death_message);
+            return damage;
+        }
 
-            /* 桜散る */
-            for (auto i = 0; i < 40; i++) {
-                term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
-            }
+        const auto w = game_term->wid;
+        const auto h = game_term->hgt;
+        constexpr std::array<Pos2D, 9> msg_positions = { { { 3, 5 }, { 4, 7 }, { 5, 9 }, { 4, 12 }, { 5, 14 }, { 4, 17 }, { 5, 19 }, { 6, 21 }, { 4, 23 } } };
+        term_clear();
 
-            auto str = death_message.data();
-            if (strncmp(str, "「", 2) == 0) {
-                str += 2;
-            }
+        /* 桜散る */
+        for (auto i = 0; i < 40; i++) {
+            term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
+        }
 
-            auto *str2 = angband_strstr(str, "」");
-            if (str2 != nullptr) {
-                *str2 = '\0';
-            }
+        auto str = death_message.data();
+        if (strncmp(str, "「", 2) == 0) {
+            str += 2;
+        }
 
-            auto i = 0;
-            while (i < 9) {
-                str2 = angband_strstr(str, " ");
-                size_t len = (str2 == nullptr) ? strlen(str) : str2 - str;
-                if (len != 0) {
-                    term_putstr_v(w * 3 / 4 - 2 - msg_positions[i].x * 2, msg_positions[i].y, len, TERM_WHITE, str);
-                    if (str2 == nullptr) {
-                        break;
-                    }
-                    i++;
-                }
+        auto *str2 = angband_strstr(str, "」");
+        if (str2 != nullptr) {
+            *str2 = '\0';
+        }
 
-                str = str2 + 1;
-                if (*str == 0) {
+        auto i = 0;
+        while (i < 9) {
+            str2 = angband_strstr(str, " ");
+            size_t len = (str2 == nullptr) ? strlen(str) : str2 - str;
+            if (len != 0) {
+                term_putstr_v(w * 3 / 4 - 2 - msg_positions[i].x * 2, msg_positions[i].y, len, TERM_WHITE, str);
+                if (str2 == nullptr) {
                     break;
                 }
+
+                i++;
             }
 
-            term_putstr(w - 1, h - 1, 1, TERM_WHITE, " ");
-            flush();
-#ifdef WORLD_SCORE
-            screen_dump = make_screen_dump(player_ptr);
-#endif
-            (void)inkey();
-        } else {
-            msg_print(death_message);
+            str = str2 + 1;
+            if (*str == 0) {
+                break;
+            }
         }
+
+        term_putstr(w - 1, h - 1, 1, TERM_WHITE, " ");
+        flush();
+#ifdef WORLD_SCORE
+        screen_dump = make_screen_dump(player_ptr);
+#endif
+        (void)inkey();
+        return damage;
 #else
         msg_print(death_message);
-#endif
         return damage;
+#endif
     }
 
     handle_stuff(player_ptr);
