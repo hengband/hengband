@@ -269,6 +269,18 @@ int cold_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura
     return get_damage;
 }
 
+/*!
+ * @brief プレイヤーの死亡時強制セーブ処理
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
+static void death_save(PlayerType *player_ptr)
+{
+    exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
+    if (!cheat_save && !save_player(player_ptr, SaveType::CLOSE_GAME)) {
+        msg_print(_("セーブ失敗！", "death save failed!"));
+    }
+}
+
 /*
  * Decreases players hit points and sets death flag if necessary
  *
@@ -361,12 +373,6 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     auto &world = AngbandWorld::get_instance();
     if (player_ptr->chp < 0 && !cheat_immortal) {
         bool android = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID);
-
-        /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
-        if (!cheat_save && !save_player(player_ptr, SaveType::CLOSE_GAME)) {
-            msg_print(_("セーブ失敗！", "death save failed!"));
-        }
-
         sound(SoundKind::DEATH);
         chg_virtue(player_ptr, Virtue::SACRIFICE, 10);
         handle_stuff(player_ptr);
@@ -385,6 +391,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 exe_write_diary(floor, DiaryKind::ARENA, 0, m_name);
             }
 
+            death_save(player_ptr);
             return damage;
         }
 
@@ -454,6 +461,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
         exe_write_diary(floor, DiaryKind::GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
         exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
+        death_save(player_ptr);
         flush();
         if (input_check_strict(player_ptr, _("画面を保存しますか？", "Dump the screen? "), UserCheck::NO_HISTORY)) {
             do_cmd_save_screen(player_ptr);
