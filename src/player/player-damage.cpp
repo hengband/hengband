@@ -66,6 +66,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <sstream>
 #include <string>
 
@@ -269,6 +270,18 @@ int cold_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura
     return get_damage;
 }
 
+/*!
+ * @brief プレイヤーの死亡時強制セーブ処理
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
+static void death_save(PlayerType *player_ptr)
+{
+    exe_write_diary(*player_ptr->current_floor_ptr, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
+    if (!cheat_save && !save_player(player_ptr, SaveType::CLOSE_GAME)) {
+        msg_print(_("セーブ失敗！", "death save failed!"));
+    }
+}
+
 /*
  * Decreases players hit points and sets death flag if necessary
  *
@@ -280,8 +293,8 @@ int cold_dam(PlayerType *player_ptr, int dam, std::string_view kb_str, bool aura
  */
 int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_view hit_from)
 {
-    int old_chp = player_ptr->chp;
-    int warning = (player_ptr->mhp * hitpoint_warn / 10);
+    const auto old_chp = player_ptr->chp;
+    const auto hp_warning_threshold = (player_ptr->mhp * hitpoint_warn / 10);
     if (player_ptr->is_dead) {
         return 0;
     }
@@ -289,6 +302,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     if (player_ptr->sutemi) {
         damage *= 2;
     }
+
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::IAI)) {
         damage += (damage + 4) / 5;
     }
@@ -343,6 +357,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     if (player_ptr->chp < -9999) {
         player_ptr->chp = -9999;
     }
+
     if (damage_type == DAMAGE_GENO && player_ptr->chp < 0) {
         damage += player_ptr->chp;
         player_ptr->chp = 0;
@@ -351,7 +366,6 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::HP);
     rfu.set_flag(SubWindowRedrawingFlag::PLAYER);
-
     if (damage_type != DAMAGE_GENO && player_ptr->chp == 0) {
         chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
         chg_virtue(player_ptr, Virtue::CHANCE, 2);
@@ -360,13 +374,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
     const auto &floor = *player_ptr->current_floor_ptr;
     auto &world = AngbandWorld::get_instance();
     if (player_ptr->chp < 0 && !cheat_immortal) {
-        bool android = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID);
-
-        /* 死んだ時に強制終了して死を回避できなくしてみた by Habu */
-        if (!cheat_save && !save_player(player_ptr, SaveType::CLOSE_GAME)) {
-            msg_print(_("セーブ失敗！", "death save failed!"));
-        }
-
+        const auto is_android = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID);
         sound(SoundKind::DEATH);
         chg_virtue(player_ptr, Virtue::SACRIFICE, 10);
         handle_stuff(player_ptr);
@@ -379,190 +387,190 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             auto &entries = ArenaEntryList::get_instance();
             entries.set_defeated_entry();
             const auto &m_name = entries.get_monrace().name;
-            msg_format(_("あなたは%sの前に敗れ去った。", "You are beaten by %s."), m_name.data());
+            msg_print(_("あなたは{}の前に敗れ去った。", "You are beaten by {}."), m_name);
             msg_erase();
             if (record_arena) {
                 exe_write_diary(floor, DiaryKind::ARENA, 0, m_name);
             }
-        } else {
-            const auto q_idx = floor.get_quest_id();
-            const auto seppuku = hit_from == "Seppuku";
-            const auto winning_seppuku = world.total_winner && seppuku;
 
-            play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
+            death_save(player_ptr);
+            return damage;
+        }
+
+        const auto q_idx = floor.get_quest_id();
+        const auto is_seppuku = hit_from == "Seppuku";
+        const auto is_seppuku_by_won = world.total_winner && is_seppuku;
+        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_GAMEOVER);
 
 #ifdef WORLD_SCORE
-            screen_dump = make_screen_dump(player_ptr);
+        screen_dump = make_screen_dump(player_ptr);
 #endif
-            if (seppuku) {
-                player_ptr->died_from = hit_from;
-                if (!winning_seppuku) {
-                    player_ptr->died_from = _("切腹", "Seppuku");
-                }
-            } else {
-                const auto effects = player_ptr->effects();
-                const auto is_hallucinated = effects->hallucination().is_hallucinated();
-                auto paralysis_state = "";
-                if (effects->paralysis().is_paralyzed()) {
-                    paralysis_state = player_ptr->free_act ? _("彫像状態で", " while being the statue") : _("麻痺状態で", " while paralyzed");
-                }
-
-                auto hallucintion_state = is_hallucinated ? _("幻覚に歪んだ", "hallucinatingly distorted ") : "";
-#ifdef JP
-                player_ptr->died_from = format("%s%s%s", paralysis_state, hallucintion_state, hit_from.data());
-#else
-                if (is_hallucinated) {
-                    if (hit_from.starts_with("a ") || hit_from.starts_with("A ")) {
-                        hit_from.remove_prefix(2);
-                    } else if (hit_from.starts_with("an ") || hit_from.starts_with("An ")) {
-                        hit_from.remove_prefix(3);
-                    } else if (hit_from.starts_with("the ") || hit_from.starts_with("The ")) {
-                        hit_from.remove_prefix(4);
-                    }
-                }
-                player_ptr->died_from = format("%s%s%s", hallucintion_state, hit_from.data(), paralysis_state);
-#endif
+        if (is_seppuku) {
+            player_ptr->died_from = hit_from;
+            if (!is_seppuku_by_won) {
+                player_ptr->died_from = _("切腹", "Seppuku");
+            }
+        } else {
+            const auto effects = player_ptr->effects();
+            const auto is_hallucinated = effects->hallucination().is_hallucinated();
+            auto paralysis_state = "";
+            if (effects->paralysis().is_paralyzed()) {
+                paralysis_state = player_ptr->free_act ? _("彫像状態で", " while being the statue") : _("麻痺状態で", " while paralyzed");
             }
 
-            world.total_winner = false;
-            if (winning_seppuku) {
-                world.add_retired_class(player_ptr->pclass);
-                exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));
-            } else {
-                std::string place;
-
-                if (floor.inside_arena) {
-                    place = _("アリーナ", "in the Arena");
-                } else if (!floor.is_underground()) {
-                    place = _("地上", "on the surface");
-                } else if (inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))) {
-                    place = _("クエスト", "in a quest");
-                } else {
-                    place = format(_("%d階", "on level %d"), static_cast<int>(floor.dun_level));
-                }
-
+            const auto hallucintion_state = is_hallucinated ? _("幻覚に歪んだ", "hallucinatingly distorted ") : "";
 #ifdef JP
-                const auto note = format("%sで%sに殺された。", place.data(), player_ptr->died_from.data());
 #else
-                const auto note = format("killed by %s %s.", player_ptr->died_from.data(), place.data());
-#endif
-                exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, note);
-            }
-
-            exe_write_diary(floor, DiaryKind::GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-            exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
-            flush();
-            if (input_check_strict(player_ptr, _("画面を保存しますか？", "Dump the screen? "), UserCheck::NO_HISTORY)) {
-                do_cmd_save_screen(player_ptr);
-            }
-
-            flush();
-            player_ptr->last_message = "";
-            if (!last_words) {
-#ifdef JP
-                msg_format("あなたは%sました。", android ? "壊れ" : "死に");
-#else
-                msg_print(android ? "You are broken." : "You die.");
-#endif
-
-                msg_erase();
-            } else {
-                tl::optional<std::string> death_message_opt;
-                if (winning_seppuku) {
-                    death_message_opt = get_random_line(_("seppuku_j.txt", "seppuku.txt"), 0);
-                } else {
-                    death_message_opt = get_random_line(_("death_j.txt", "death.txt"), 0);
-                }
-
-                auto &death_message = *death_message_opt;
-                constexpr auto max_last_words = 1024;
-                const auto prompt = winning_seppuku ? _("辞世の句: ", "Haiku: ") : _("断末魔の叫び: ", "Last words: ");
-                while (true) {
-                    const auto input_last_words = input_string(prompt, max_last_words, death_message);
-                    if (!input_last_words) {
-                        continue;
-                    }
-
-                    if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::NO_HISTORY)) {
-                        death_message = *input_last_words;
+            if (is_hallucinated) {
+                for (const std::string_view prefix : { "a ", "A ", "an ", "An ", "the ", "The " }) {
+                    if (hit_from.starts_with(prefix)) {
+                        hit_from.remove_prefix(prefix.length());
                         break;
                     }
                 }
+            }
+#endif
+            player_ptr->died_from = fmt::format(_("{0}{1}{2}", "{1}{2}{0}"), paralysis_state, hallucintion_state, hit_from);
+        }
 
-                if (death_message.empty()) {
+        world.total_winner = false;
+        if (is_seppuku_by_won) {
+            world.add_retired_class(player_ptr->pclass);
+            exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));
+        } else {
+            std::string place;
+            if (floor.inside_arena) {
+                place = _("アリーナ", "in the Arena");
+            } else if (!floor.is_underground()) {
+                place = _("地上", "on the surface");
+            } else if (inside_quest(q_idx) && (QuestType::is_fixed(q_idx) && !((q_idx == QuestId::OBERON) || (q_idx == QuestId::SERPENT)))) {
+                place = _("クエスト", "in a quest");
+            } else {
+                place = fmt::format(_("{}階", "on level {}"), floor.dun_level);
+            }
+
+            const auto note = fmt::format(_("{0}で{1}に殺された。", "killed by {1} {0}."), place, player_ptr->died_from);
+            exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, note);
+        }
+
+        exe_write_diary(floor, DiaryKind::GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+        exe_write_diary(floor, DiaryKind::DESCRIPTION, 1, "\n\n\n\n");
+        death_save(player_ptr);
+        flush();
+        if (input_check_strict(player_ptr, _("画面を保存しますか？", "Dump the screen? "), UserCheck::NO_HISTORY)) {
+            do_cmd_save_screen(player_ptr);
+        }
+
+        flush();
+        player_ptr->last_message = "";
+        if (!last_words) {
 #ifdef JP
-                    death_message = format("あなたは%sました。", android ? "壊れ" : "死に");
+            msg_print("あなたは{}ました。", is_android ? "壊れ" : "死に");
 #else
-                    death_message = android ? "You are broken." : "You die.";
+            msg_print(is_android ? "You are broken." : "You die.");
 #endif
-                } else {
-                    player_ptr->last_message = death_message;
-                }
+            msg_erase();
+            return damage;
+        }
 
-#ifdef JP
-                if (winning_seppuku) {
-                    int i;
-                    int w = game_term->wid;
-                    int h = game_term->hgt;
-                    int msg_pos_x[9] = { 5, 7, 9, 12, 14, 17, 19, 21, 23 };
-                    int msg_pos_y[9] = { 3, 4, 5, 4, 5, 4, 5, 6, 4 };
-                    term_clear();
+        tl::optional<std::string> death_message_opt;
+        if (is_seppuku_by_won) {
+            death_message_opt = get_random_line(_("seppuku_j.txt", "seppuku.txt"), 0);
+        } else {
+            death_message_opt = get_random_line(_("death_j.txt", "death.txt"), 0);
+        }
 
-                    /* 桜散る */
-                    for (i = 0; i < 40; i++) {
-                        term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
-                    }
+        auto &death_message = *death_message_opt;
+        constexpr auto max_last_words = 1024;
+        const auto prompt = is_seppuku_by_won ? _("辞世の句: ", "Haiku: ") : _("断末魔の叫び: ", "Last words: ");
+        while (true) {
+            const auto input_last_words = input_string(prompt, max_last_words, death_message);
+            if (!input_last_words) {
+                continue;
+            }
 
-                    auto str = death_message.data();
-                    if (strncmp(str, "「", 2) == 0) {
-                        str += 2;
-                    }
-
-                    auto *str2 = angband_strstr(str, "」");
-                    if (str2 != nullptr) {
-                        *str2 = '\0';
-                    }
-
-                    i = 0;
-                    while (i < 9) {
-                        str2 = angband_strstr(str, " ");
-                        size_t len = (str2 == nullptr) ? strlen(str) : str2 - str;
-                        if (len != 0) {
-                            term_putstr_v(w * 3 / 4 - 2 - msg_pos_x[i] * 2, msg_pos_y[i], len, TERM_WHITE, str);
-                            if (str2 == nullptr) {
-                                break;
-                            }
-                            i++;
-                        }
-                        str = str2 + 1;
-                        if (*str == 0) {
-                            break;
-                        }
-                    }
-
-                    term_putstr(w - 1, h - 1, 1, TERM_WHITE, " ");
-                    flush();
-#ifdef WORLD_SCORE
-                    screen_dump = make_screen_dump(player_ptr);
-#endif
-                    (void)inkey();
-                } else
-#endif
-                    msg_print(death_message);
+            if (input_check_strict(player_ptr, _("よろしいですか？", "Are you sure? "), UserCheck::NO_HISTORY)) {
+                death_message = *input_last_words;
+                break;
             }
         }
 
+        if (death_message.empty()) {
+#ifdef JP
+            death_message = fmt::format("あなたは{}ました。", is_android ? "壊れ" : "死に");
+#else
+            death_message = is_android ? "You are broken." : "You die.";
+#endif
+        } else {
+            player_ptr->last_message = death_message;
+        }
+
+#ifdef JP
+        if (!is_seppuku_by_won) {
+            msg_print(death_message);
+            return damage;
+        }
+
+        const auto w = game_term->wid;
+        const auto h = game_term->hgt;
+        constexpr std::array<Pos2D, 9> msg_positions = { { { 3, 5 }, { 4, 7 }, { 5, 9 }, { 4, 12 }, { 5, 14 }, { 4, 17 }, { 5, 19 }, { 6, 21 }, { 4, 23 } } };
+        term_clear();
+
+        /* 桜散る */
+        for (auto i = 0; i < 40; i++) {
+            term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
+        }
+
+        auto str = death_message.data();
+        if (strncmp(str, "「", 2) == 0) {
+            str += 2;
+        }
+
+        auto *str2 = angband_strstr(str, "」");
+        if (str2 != nullptr) {
+            *str2 = '\0';
+        }
+
+        auto i = 0;
+        while (i < 9) {
+            str2 = angband_strstr(str, " ");
+            size_t len = (str2 == nullptr) ? strlen(str) : str2 - str;
+            if (len != 0) {
+                term_putstr_v(w * 3 / 4 - 2 - msg_positions[i].x * 2, msg_positions[i].y, len, TERM_WHITE, str);
+                if (str2 == nullptr) {
+                    break;
+                }
+
+                i++;
+            }
+
+            str = str2 + 1;
+            if (*str == 0) {
+                break;
+            }
+        }
+
+        term_putstr(w - 1, h - 1, 1, TERM_WHITE, " ");
+        flush();
+#ifdef WORLD_SCORE
+        screen_dump = make_screen_dump(player_ptr);
+#endif
+        (void)inkey();
         return damage;
+#else
+        msg_print(death_message);
+        return damage;
+#endif
     }
 
     handle_stuff(player_ptr);
-    if (player_ptr->chp < warning) {
-        if (old_chp > warning) {
+    if (player_ptr->chp < hp_warning_threshold) {
+        if (old_chp > hp_warning_threshold) {
             bell();
         }
 
         sound(SoundKind::WARN);
-        if (record_danger && (old_chp > warning)) {
+        if (record_danger && (old_chp > hp_warning_threshold)) {
             if (player_ptr->effects()->hallucination().is_hallucinated() && damage_type == DAMAGE_ATTACK) {
                 hit_from = _("何か", "something");
             }
@@ -583,7 +591,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         flush();
     }
 
-    if (world.is_wild_mode() && !player_ptr->leaving && (player_ptr->chp < std::max(warning, player_ptr->mhp / 5))) {
+    if (world.is_wild_mode() && !player_ptr->leaving && (player_ptr->chp < std::max(hp_warning_threshold, player_ptr->mhp / 5))) {
         change_wild_mode(player_ptr, false);
     }
 
