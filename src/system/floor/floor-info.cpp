@@ -349,6 +349,27 @@ bool FloorType::can_drop_item_at(const Pos2D &pos) const
 }
 
 /*!
+ * @brief 指定された座標のマスが現在照らされているかを調べる.
+ * @param p_pos プレイヤーの現在位置
+ * @param pos 指定座標
+ * @return 指定された座標に照明がかかっているならTRUEを返す.
+ */
+bool FloorType::is_illuminated_at(const Pos2D &p_pos, const Pos2D &pos) const
+{
+    const auto yy = (pos.y < p_pos.y) ? (pos.y + 1) : (pos.y > p_pos.y) ? (pos.y - 1)
+                                                                        : pos.y;
+    const auto xx = (pos.x < p_pos.x) ? (pos.x + 1) : (pos.x > p_pos.x) ? (pos.x - 1)
+                                                                        : pos.x;
+    const auto &grid_yyxx = this->get_grid({ yy, xx });
+    const auto &grid_yxx = this->get_grid({ pos.y, xx });
+    const auto &grid_yyx = this->get_grid({ yy, pos.x });
+    auto is_illuminated = grid_yyxx.has_los_terrain(TerrainKind::MIMIC) && any_bits(grid_yyxx.info, CAVE_GLOW);
+    is_illuminated |= grid_yxx.has_los_terrain(TerrainKind::MIMIC) && any_bits(grid_yxx.info, CAVE_GLOW);
+    is_illuminated |= grid_yyx.has_los_terrain(TerrainKind::MIMIC) && any_bits(grid_yyx.info, CAVE_GLOW);
+    return is_illuminated;
+}
+
+/*!
  * @brief 特定の財宝を生成する。指定がない場合、生成階に応じたランダムな財宝を生成する。
  * @param bi_key 財宝を固定生成する場合のBaseitemKey
  * @return 財宝データで初期化したアイテム

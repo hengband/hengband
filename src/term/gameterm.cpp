@@ -548,61 +548,32 @@ static TERM_COLOR spell_color(AttributeType type)
 }
 
 /*!
- * @brief 始点から終点にかけた方向毎にボルトのキャラクタを返す /
- * Find the attr/char pair to use for a spell effect
- * @param y 始点Y座標
- * @param x 始点X座標
- * @param ny 終点Y座標
- * @param nx 終点X座標
+ * @brief 始点から終点にかけた方向毎にボルトのキャラクタを返す
+ * @param pos_src 始点座標
+ * @param pos_dst 終点座標
  * @param typ 魔法の効果属性
  * @return 方向キャラID
- * @details
- * <pre>
- * It is moving (or has moved) from (x,y) to (nx,ny).
- * If the distance is not "one", we (may) return "*".
- * </pre>
  */
-DisplaySymbol bolt_pict(POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
+DisplaySymbol bolt_pict(const Pos2D &pos_src, const Pos2D &pos_dst, AttributeType typ)
 {
-    /* No motion (*) */
     int base;
-    if ((ny == y) && (nx == x)) {
-        base = 0x30;
+    if (pos_dst == pos_src) {
+        base = 0x30; // No motion (*)
+    } else if (pos_dst.x == pos_src.x) {
+        base = 0x40; // Vertical (|)
+    } else if (pos_dst.y == pos_src.y) {
+        base = 0x50; // Horizontal (-)
+    } else if ((pos_dst.y - pos_src.y) == (pos_src.x - pos_dst.x)) {
+        base = 0x60; // Diagonal (/)
+    } else if ((pos_dst.y - pos_src.y) == (pos_dst.x - pos_src.x)) {
+        base = 0x70; // Diagonal (\)
+    } else {
+        base = 0x30; // Weird (*)
     }
 
-    /* Vertical (|) */
-    else if (nx == x) {
-        base = 0x40;
-    }
-
-    /* Horizontal (-) */
-    else if (ny == y) {
-        base = 0x50;
-    }
-
-    /* Diagonal (/) */
-    else if ((ny - y) == (x - nx)) {
-        base = 0x60;
-    }
-
-    /* Diagonal (\) */
-    else if ((ny - y) == (nx - x)) {
-        base = 0x70;
-    }
-
-    /* Weird (*) */
-    else {
-        base = 0x30;
-    }
-
-    /* Basic spell color */
     const auto k = spell_color(typ);
-
-    /* Obtain attr/char */
     const auto a = misc_to_attr[base + k];
     const auto c = misc_to_char[base + k];
-
-    /* Create pict */
     return { a, c };
 }
 

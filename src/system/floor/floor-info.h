@@ -132,6 +132,7 @@ public:
     bool can_generate_monster_at(const Pos2D &pos) const;
     bool can_block_disintegration_at(const Pos2D &pos) const;
     bool can_drop_item_at(const Pos2D &pos) const;
+    bool is_illuminated_at(const Pos2D &p_pos, const Pos2D &pos) const;
 
     ItemEntity make_gold(tl::optional<BaseitemKey> bi_key = tl::nullopt) const;
     tl::optional<ItemEntity> try_make_instant_artifact() const;

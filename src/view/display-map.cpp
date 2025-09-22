@@ -4,7 +4,6 @@
 #include "autopick/autopick-util.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
-#include "grid/grid.h"
 #include "player/player-status.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
@@ -201,7 +200,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
                         symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
                     } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
                         symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
-                    } else if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::LOS) && !check_local_illumination(player_ptr, pos.y, pos.x)) {
+                    } else if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::LOS) && !floor.is_illuminated_at(player_ptr->get_position(), pos)) {
                         symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
                     }
                 }

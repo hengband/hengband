@@ -212,28 +212,6 @@ tl::optional<Pos2D> new_player_spot(PlayerType *player_ptr)
 }
 
 /*!
- * @brief 指定された座標のマスが現在照らされているかを返す。 / Check for "local" illumination
- * @param y y座標
- * @param x x座標
- * @return 指定された座標に照明がかかっているならTRUEを返す。。
- */
-bool check_local_illumination(PlayerType *player_ptr, POSITION y, POSITION x)
-{
-    const auto yy = (y < player_ptr->y) ? (y + 1) : (y > player_ptr->y) ? (y - 1)
-                                                                        : y;
-    const auto xx = (x < player_ptr->x) ? (x + 1) : (x > player_ptr->x) ? (x - 1)
-                                                                        : x;
-    const auto &floor = *player_ptr->current_floor_ptr;
-    const auto &grid_yyxx = floor.grid_array[yy][xx];
-    const auto &grid_yxx = floor.grid_array[y][xx];
-    const auto &grid_yyx = floor.grid_array[yy][x];
-    auto is_illuminated = grid_yyxx.has_los_terrain(TerrainKind::MIMIC) && (grid_yyxx.info & CAVE_GLOW);
-    is_illuminated |= grid_yxx.has_los_terrain(TerrainKind::MIMIC) && (grid_yxx.info & CAVE_GLOW);
-    is_illuminated |= grid_yyx.has_los_terrain(TerrainKind::MIMIC) && (grid_yyx.info & CAVE_GLOW);
-    return is_illuminated;
-}
-
-/*!
  * @brief 対象座標のマスの照明状態を更新する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos 更新したいマスの座標
@@ -326,19 +304,19 @@ bool no_lite(PlayerType *player_ptr)
 /*
  * Place an attr/char pair at the given map coordinate, if legal.
  */
-void print_rel(PlayerType *player_ptr, const DisplaySymbol &symbol, POSITION y, POSITION x)
+void print_rel(PlayerType *player_ptr, const DisplaySymbol &symbol, const Pos2D &pos)
 {
     /* Only do "legal" locations */
-    if (panel_contains(y, x)) {
+    if (panel_contains(pos)) {
         const auto color = get_monochrome_display_color(player_ptr).value_or(symbol.color);
-        term_queue_bigchar(panel_col_of(x), y - panel_row_prt, { { color, symbol.character }, {} });
+        term_queue_bigchar(panel_col_of(pos.x), pos.y - panel_row_prt, { { color, symbol.character }, {} });
     }
 }
 
-void print_bolt_pict(PlayerType *player_ptr, POSITION y, POSITION x, POSITION ny, POSITION nx, AttributeType typ)
+void print_bolt_pict(PlayerType *player_ptr, const Pos2D &pos_src, const Pos2D &pos_dst, AttributeType typ)
 {
-    const auto symbol = bolt_pict(y, x, ny, nx, typ);
-    print_rel(player_ptr, symbol, ny, nx);
+    const auto symbol = bolt_pict(pos_src, pos_dst, typ);
+    print_rel(player_ptr, symbol, pos_dst);
 }
 
 /*!
@@ -447,7 +425,7 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
         }
 
         /* Memorize certain non-torch-lit wall grids */
-        else if (check_local_illumination(player_ptr, pos.y, pos.x)) {
+        else if (floor.is_illuminated_at(player_ptr->get_position(), pos)) {
             grid.info |= (CAVE_MARK);
         }
     }
@@ -463,7 +441,7 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
  */
 void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
 {
-    if (panel_contains(pos.y, pos.x) && player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+    if (panel_contains(pos) && player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
         auto symbol_pair = map_info(player_ptr, pos);
         symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 

@@ -401,7 +401,7 @@ bool ObjectThrowEntity::check_racial_target_bold()
 
 void ObjectThrowEntity::check_racial_target_seen()
 {
-    if (!panel_contains(this->ny[this->cur_dis], this->nx[this->cur_dis]) || !player_can_see_bold(this->player_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis])) {
+    if (!panel_contains({ this->ny[this->cur_dis], this->nx[this->cur_dis] }) || !player_can_see_bold(this->player_ptr, this->ny[this->cur_dis], this->nx[this->cur_dis])) {
         term_xtra(TERM_XTRA_DELAY, this->msec);
         return;
     }
@@ -411,7 +411,7 @@ void ObjectThrowEntity::check_racial_target_seen()
     }
 
     const auto symbol = this->q_ptr->get_symbol();
-    print_rel(this->player_ptr, symbol, this->ny[this->cur_dis], this->nx[this->cur_dis]);
+    print_rel(this->player_ptr, symbol, { this->ny[this->cur_dis], this->nx[this->cur_dis] });
     move_cursor_relative(this->ny[this->cur_dis], this->nx[this->cur_dis]);
     term_fresh();
     term_xtra(TERM_XTRA_DELAY, this->msec);
@@ -531,7 +531,7 @@ void ObjectThrowEntity::process_boomerang_throw()
     }
 
     for (auto i = this->cur_dis - 1; i > 0; i--) {
-        if (!panel_contains(this->ny[i], this->nx[i]) || !player_can_see_bold(this->player_ptr, this->ny[i], this->nx[i])) {
+        if (!panel_contains({ this->ny[i], this->nx[i] }) || !player_can_see_bold(this->player_ptr, this->ny[i], this->nx[i])) {
             term_xtra(TERM_XTRA_DELAY, this->msec);
             continue;
         }
@@ -541,7 +541,7 @@ void ObjectThrowEntity::process_boomerang_throw()
         }
 
         const auto symbol = this->q_ptr->get_symbol();
-        print_rel(this->player_ptr, symbol, this->ny[i], this->nx[i]);
+        print_rel(this->player_ptr, symbol, { this->ny[i], this->nx[i] });
         move_cursor_relative(this->ny[i], this->nx[i]);
         term_fresh();
         term_xtra(TERM_XTRA_DELAY, this->msec);
