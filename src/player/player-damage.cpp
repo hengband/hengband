@@ -420,20 +420,17 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
             const auto hallucintion_state = is_hallucinated ? _("幻覚に歪んだ", "hallucinatingly distorted ") : "";
 #ifdef JP
-            player_ptr->died_from = fmt::format("{}{}{}", paralysis_state, hallucintion_state, hit_from);
 #else
             if (is_hallucinated) {
-                if (hit_from.starts_with("a ") || hit_from.starts_with("A ")) {
-                    hit_from.remove_prefix(2);
-                } else if (hit_from.starts_with("an ") || hit_from.starts_with("An ")) {
-                    hit_from.remove_prefix(3);
-                } else if (hit_from.starts_with("the ") || hit_from.starts_with("The ")) {
-                    hit_from.remove_prefix(4);
+                for (const std::string_view prefix : { "a ", "A ", "an ", "An ", "the ", "The " }) {
+                    if (hit_from.starts_with(prefix)) {
+                        hit_from.remove_prefix(prefix.length());
+                        break;
+                    }
                 }
             }
-
-            player_ptr->died_from = fmt::format("{}{}{}", hallucintion_state, hit_from, paralysis_state);
 #endif
+            player_ptr->died_from = fmt::format(_("{0}{1}{2}", "{1}{2}{0}"), paralysis_state, hallucintion_state, hit_from);
         }
 
         world.total_winner = false;
@@ -452,11 +449,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
                 place = fmt::format(_("{}階", "on level {}"), floor.dun_level);
             }
 
-#ifdef JP
-            const auto note = fmt::format("{}で{}に殺された。", place, player_ptr->died_from);
-#else
-            const auto note = fmt::format("killed by {} {}.", player_ptr->died_from, place);
-#endif
+            const auto note = fmt::format(_("{0}で{1}に殺された。", "killed by {1} {0}."), place, player_ptr->died_from);
             exe_write_diary(floor, DiaryKind::DESCRIPTION, 0, note);
         }
 
