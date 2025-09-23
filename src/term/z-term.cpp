@@ -1596,22 +1596,20 @@ void term_erase(int x, int y, tl::optional<int> n_opt)
  *
  * Note the use of the special "total_erase" code
  */
-errr term_clear(void)
+void term_clear()
 {
-    TERM_LEN w = game_term->wid;
-    TERM_LEN h = game_term->hgt;
-
-    TERM_COLOR na = game_term->attr_blank;
-    char nc = game_term->char_blank;
+    const auto w = game_term->wid;
+    const auto h = game_term->hgt;
+    DisplaySymbol ds(game_term->attr_blank, game_term->char_blank);
 
     /* Cursor usable */
     game_term->scr->cu = 0;
 
-    /* Cursor to the top left */
-    game_term->scr->cx = game_term->scr->cy = 0;
+    game_term->scr->cx = 0;
+    game_term->scr->cy = 0;
 
     /* Wipe each row */
-    for (TERM_LEN y = 0; y < h; y++) {
+    for (auto y = 0; y < h; y++) {
         auto &scr_aa = game_term->scr->a[y];
         auto &scr_cc = game_term->scr->c[y];
 
@@ -1619,9 +1617,9 @@ errr term_clear(void)
         auto &scr_tcc = game_term->scr->tc[y];
 
         /* Wipe each column */
-        for (TERM_LEN x = 0; x < w; x++) {
-            scr_aa[x] = na;
-            scr_cc[x] = nc;
+        for (auto x = 0; x < w; x++) {
+            scr_aa[x] = ds.color;
+            scr_cc[x] = ds.character;
 
             scr_taa[x] = 0;
             scr_tcc[x] = 0;
@@ -1636,9 +1634,7 @@ errr term_clear(void)
     game_term->y1 = 0;
     game_term->y2 = h - 1;
 
-    /* Force "total erase" */
     game_term->total_erase = true;
-    return 0;
 }
 
 /*
