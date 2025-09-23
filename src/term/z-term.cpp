@@ -1640,12 +1640,10 @@ void term_clear()
 /*
  * Redraw (and refresh) the whole window.
  */
-errr term_redraw(void)
+void term_redraw()
 {
-    /* Force "total erase" */
     game_term->total_erase = true;
     term_fresh();
-    return 0;
 }
 
 /*
