@@ -56,20 +56,20 @@ static void check_item_selection_mode(ItemSelection *item_selection_ptr)
 /*!
  * @brief アイテムへにタグ付けがされているかの調査処理 (のはず)
  * @param floor フロアへの参照
- * @param item_selection_ptr アイテムへの参照ポインタ
+ * @param item_selection アイテム選択構造体への参照
  * @param i_idx 選択したアイテムのインベントリ番号
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static bool check_item_tag_aux(const FloorType &floor, ItemSelection *item_selection_ptr, short i_idx, const ItemTester &item_tester)
+static bool check_item_tag_aux(const FloorType &floor, ItemSelection &item_selection, short i_idx, const ItemTester &item_tester)
 {
-    if (!item_selection_ptr->floor || (i_idx >= 0)) {
+    if (!item_selection.floor || (i_idx >= 0)) {
         return false;
     }
 
-    item_selection_ptr->k = -i_idx;
-    const auto &item = *floor.o_list[item_selection_ptr->k];
-    if (!item_tester.okay(&item) && ((item_selection_ptr->mode & USE_FULL) == 0)) {
+    item_selection.k = -i_idx;
+    const auto &item = *floor.o_list[item_selection.k];
+    if (!item_tester.okay(&item) && ((item_selection.mode & USE_FULL) == 0)) {
         return false;
     }
 
@@ -80,71 +80,69 @@ static bool check_item_tag_aux(const FloorType &floor, ItemSelection *item_selec
 /*!
  * @brief インベントリのアイテムにタグ付けがされているかの調査
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param item_selection_ptr アイテム選択への参照ポインタ
+ * @param item_selection アイテム選択選択構造体への参照
  * @param i_idx 選択したアイテムのインベントリ番号
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
- * @return 前回のタグと違うものを選んだらそのタグ、アイテムが妥当ならば入力値の番号、それ以外はnullopt
+ * @return タグとインデックスの組
  */
-static tl::optional<short> check_item_tag_inventory(PlayerType *player_ptr, ItemSelection *item_selection_ptr, short i_idx, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> check_item_tag_inventory(PlayerType *player_ptr, ItemSelection &item_selection, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
-    auto should_check = !item_selection_ptr->inven || (i_idx < 0) || (i_idx >= INVEN_PACK);
-    should_check &= !item_selection_ptr->equip || (i_idx < INVEN_MAIN_HAND) || (i_idx >= INVEN_TOTAL);
+    auto should_check = !item_selection.inven || (i_idx < 0) || (i_idx >= INVEN_PACK);
+    should_check &= !item_selection.equip || (i_idx < INVEN_MAIN_HAND) || (i_idx >= INVEN_TOTAL);
     if (should_check) {
-        return tl::nullopt;
+        return { tl::nullopt, prev_tag };
     }
 
-    if (*prev_tag && command_cmd) {
+    if ((prev_tag != '\0') && command_cmd) {
         const auto use_flag = (i_idx >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
-        const auto i_idx_opt = get_tag(player_ptr, *prev_tag, use_flag, item_tester);
+        const auto i_idx_opt = get_tag(player_ptr, prev_tag, use_flag, item_tester);
         if (!i_idx_opt) {
-            *prev_tag = '\0';
-            return tl::nullopt;
+            return { tl::nullopt, '\0' };
         }
 
-        item_selection_ptr->k = *i_idx_opt;
-        if (!get_item_okay(player_ptr, item_selection_ptr->k, item_tester) ||
-            (item_selection_ptr->k < INVEN_MAIN_HAND && !item_selection_ptr->inven) ||
-            (item_selection_ptr->k >= INVEN_MAIN_HAND && !item_selection_ptr->equip)) {
-            *prev_tag = '\0';
-            return tl::nullopt;
+        item_selection.k = *i_idx_opt;
+        if (!get_item_okay(player_ptr, item_selection.k, item_tester) ||
+            (item_selection.k < INVEN_MAIN_HAND && !item_selection.inven) ||
+            (item_selection.k >= INVEN_MAIN_HAND && !item_selection.equip)) {
+            return { tl::nullopt, '\0' };
         }
 
         command_cmd = 0;
-        return item_selection_ptr->k;
+        return { item_selection.k, prev_tag };
     }
 
     if (!get_item_okay(player_ptr, i_idx, item_tester)) {
-        return tl::nullopt;
+        return { tl::nullopt, prev_tag };
     }
 
     command_cmd = 0;
-    return i_idx;
+    return { i_idx, prev_tag };
 }
 
 /*!
  * @brief アイテムにタグ付けがされているかの調査処理 (のはず)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param item_selection_ptr アイテムへの参照ポインタ
+ * @param item_selection アイテム選択構造体への参照
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
- * @return 繰り返しコマンドでなければnullopt、インベントリのアイテムならばインベントリのチェック結果次第、それ以外は繰り返しコマンドに保存されたインデックス
+ * @return タグとインデックスの組
  */
-static tl::optional<short> check_item_tag(PlayerType *player_ptr, ItemSelection *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> check_item_tag(PlayerType *player_ptr, ItemSelection &item_selection, char prev_tag, const ItemTester &item_tester)
 {
     const auto code = repeat_pull();
     if (!code) {
-        return tl::nullopt;
+        return { tl::nullopt, prev_tag };
     }
 
-    if (item_selection_ptr->mode & USE_FORCE && (*code == INVEN_FORCE)) {
+    if (item_selection.mode & USE_FORCE && (*code == INVEN_FORCE)) {
         command_cmd = 0;
-        return code;
+        return { code, prev_tag };
     }
 
-    if (check_item_tag_aux(*player_ptr->current_floor_ptr, item_selection_ptr, *code, item_tester)) {
-        return code;
+    if (check_item_tag_aux(*player_ptr->current_floor_ptr, item_selection, *code, item_tester)) {
+        return { code, prev_tag };
     }
 
-    return check_item_tag_inventory(player_ptr, item_selection_ptr, *code, prev_tag, item_tester);
+    return check_item_tag_inventory(player_ptr, item_selection, *code, prev_tag, item_tester);
 }
 
 /*!
@@ -224,7 +222,8 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
     ItemSelection item_selection(mode);
     check_item_selection_mode(&item_selection);
-    const auto i_idx_opt = check_item_tag(player_ptr, &item_selection, &prev_tag, item_tester);
+    const auto &[i_idx_opt, new_tag] = check_item_tag(player_ptr, item_selection, prev_tag, item_tester);
+    prev_tag = new_tag;
     if (i_idx_opt) {
         *cp = *i_idx_opt;
         return true;
