@@ -1647,20 +1647,25 @@ void term_redraw()
 }
 
 /*
- * Redraw part of a window.
+ * @brief Redraw part of a window.
+ *
+ * 今のところX11からしか呼ばれていない.
  */
-errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
+void term_redraw_section(int x1, int y1, int x2, int y2)
 {
     /* Bounds checking */
     if (y2 >= game_term->hgt) {
         y2 = game_term->hgt - 1;
     }
+
     if (x2 >= game_term->wid) {
         x2 = game_term->wid - 1;
     }
+
     if (y1 < 0) {
         y1 = 0;
     }
+
     if (x1 < 0) {
         x1 = 0;
     }
@@ -1670,11 +1675,10 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
     game_term->y2 = y2;
 
     /* Set the x limits */
-    for (int i = game_term->y1; i <= game_term->y2; i++) {
+    for (auto i = game_term->y1; i <= game_term->y2; i++) {
+        auto x1j = x1;
+        auto x2j = x2;
 #ifdef JP
-        TERM_LEN x1j = x1;
-        TERM_LEN x2j = x2;
-
         if (x1j > 0) {
             if (game_term->scr->a[i][x1j] & AF_KANJI2) {
                 x1j--;
@@ -1686,33 +1690,19 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
                 x2j++;
             }
         }
-
+#endif
         game_term->x1[i] = x1j;
         game_term->x2[i] = x2j;
 
-        auto &g_ptr = game_term->old->c[i];
-
         /* Clear the section so it is redrawn */
-        for (int j = x1j; j <= x2j; j++) {
+        auto &g_ptr = game_term->old->c[i];
+        for (auto j = x1j; j <= x2j; j++) {
             /* Hack - set the old character to "none" */
             g_ptr[j] = 0;
         }
-#else
-        game_term->x1[i] = x1;
-        game_term->x2[i] = x2;
-
-        auto &g_ptr = game_term->old->c[i];
-
-        /* Clear the section so it is redrawn */
-        for (int j = x1; j <= x2; j++) {
-            /* Hack - set the old character to "none" */
-            g_ptr[j] = 0;
-        }
-#endif
     }
 
     term_fresh();
-    return 0;
 }
 
 /*** Access routines ***/

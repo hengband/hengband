@@ -212,7 +212,7 @@ void term_putstr(int x, int y, int n, TERM_COLOR a, std::string_view sv);
 void term_erase(int x, int y, tl::optional<int> n_opt = tl::nullopt);
 void term_clear();
 void term_redraw();
-errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
+void term_redraw_section(int x1, int y1, int x2, int y2);
 
 int term_get_cursor();
 std::pair<int, int> term_get_size();
