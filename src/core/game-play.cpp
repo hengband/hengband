@@ -108,7 +108,7 @@ static void restore_windows(PlayerType *player_ptr)
         }
     }
 
-    (void)term_set_cursor(0);
+    term_set_cursor(false);
 }
 
 static void send_waiting_record(PlayerType *player_ptr)

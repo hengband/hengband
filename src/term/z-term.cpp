@@ -1266,16 +1266,9 @@ void term_fresh_force()
 /*
  * Set the cursor visibility
  */
-errr term_set_cursor(int v)
+void term_set_cursor(bool v)
 {
-    /* Already done */
-    if (game_term->scr->cv == (bool)v) {
-        return 1;
-    }
-
-    /* Change */
-    game_term->scr->cv = (bool)v;
-    return 0;
+    game_term->scr->cv = v;
 }
 
 /*
@@ -1746,11 +1739,9 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
 /*
  * Extract the cursor visibility
  */
-errr term_get_cursor(int *v)
+int term_get_cursor()
 {
-    /* Extract visibility */
-    (*v) = game_term->scr->cv;
-    return 0;
+    return game_term->scr->cv;
 }
 
 /*

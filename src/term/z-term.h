@@ -201,7 +201,7 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_
 
 void term_fresh();
 void term_fresh_force();
-errr term_set_cursor(int v);
+void term_set_cursor(bool v);
 errr term_gotoxy(TERM_LEN x, TERM_LEN y);
 void term_draw(int x, int y, const DisplaySymbol &symbol);
 void term_addch(const DisplaySymbol &symbol);
@@ -214,7 +214,7 @@ errr term_clear();
 errr term_redraw();
 errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2);
 
-errr term_get_cursor(int *v);
+int term_get_cursor();
 std::pair<int, int> term_get_size();
 std::pair<int, int> term_locate();
 DisplaySymbol term_what(int x, int y, const DisplaySymbol &ds);
