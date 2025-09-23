@@ -35,25 +35,6 @@
 #include <tl/optional.hpp>
 
 /*!
- * @brief オブジェクト選択のモード設定
- * @param item_selection_ptr アイテム選択への参照ポインタ
- */
-static void check_item_selection_mode(ItemSelection *item_selection_ptr)
-{
-    if (item_selection_ptr->mode & USE_EQUIP) {
-        item_selection_ptr->equip = true;
-    }
-
-    if (item_selection_ptr->mode & USE_INVEN) {
-        item_selection_ptr->inven = true;
-    }
-
-    if (item_selection_ptr->mode & USE_FLOOR) {
-        item_selection_ptr->floor = true;
-    }
-}
-
-/*!
  * @brief アイテムへにタグ付けがされているかの調査処理 (のはず)
  * @param floor フロアへの参照
  * @param item_selection アイテム選択構造体への参照
@@ -148,12 +129,12 @@ static std::pair<tl::optional<short>, char> check_item_tag(PlayerType *player_pt
 /*!
  * @brief インベントリ内のアイテムが妥当かを判定する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr アイテム選択への参照ポインタ
+ * @param fis_ptr アイテム選択構造体への参照
  */
-static void test_inventory(PlayerType *player_ptr, ItemSelection *item_selection_ptr, const ItemTester &item_tester)
+static void test_inventory(PlayerType *player_ptr, ItemSelection &item_selection, const ItemTester &item_tester)
 {
-    if (!item_selection_ptr->inven) {
-        item_selection_ptr->i2 = -1;
+    if (!item_selection.inven) {
+        item_selection.i2 = -1;
         return;
     }
 
@@ -162,8 +143,8 @@ static void test_inventory(PlayerType *player_ptr, ItemSelection *item_selection
     }
 
     for (int j = 0; j < INVEN_PACK; j++) {
-        if (item_tester.okay(player_ptr->inventory[j].get()) || (item_selection_ptr->mode & USE_FULL)) {
-            item_selection_ptr->max_inven++;
+        if (item_tester.okay(player_ptr->inventory[j].get()) || any_bits(item_selection.mode, USE_FULL)) {
+            item_selection.max_inven++;
         }
     }
 }
@@ -171,12 +152,12 @@ static void test_inventory(PlayerType *player_ptr, ItemSelection *item_selection
 /*!
  * @brief 装備品が妥当かを判定する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr アイテム選択への参照ポインタ
+ * @param fis_ptr アイテム選択構造体への参照
  */
-static void test_equipment(PlayerType *player_ptr, ItemSelection *item_selection_ptr, const ItemTester &item_tester)
+static void test_equipment(PlayerType *player_ptr, ItemSelection &item_selection, const ItemTester &item_tester)
 {
-    if (!item_selection_ptr->equip) {
-        item_selection_ptr->e2 = -1;
+    if (!item_selection.equip) {
+        item_selection.e2 = -1;
         return;
     }
 
@@ -186,13 +167,13 @@ static void test_equipment(PlayerType *player_ptr, ItemSelection *item_selection
 
     for (int j = INVEN_MAIN_HAND; j < INVEN_TOTAL; j++) {
         if (player_ptr->select_ring_slot ? is_ring_slot(j)
-                                         : item_tester.okay(player_ptr->inventory[j].get()) || (item_selection_ptr->mode & USE_FULL)) {
-            item_selection_ptr->max_equip++;
+                                         : item_tester.okay(player_ptr->inventory[j].get()) || (item_selection.mode & USE_FULL)) {
+            item_selection.max_equip++;
         }
     }
 
-    if (has_two_handed_weapons(player_ptr) && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        item_selection_ptr->max_equip++;
+    if (has_two_handed_weapons(player_ptr) && !(item_selection.mode & IGNORE_BOTHHAND_SLOT)) {
+        item_selection.max_equip++;
     }
 }
 
@@ -221,7 +202,6 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     }
 
     ItemSelection item_selection(mode);
-    check_item_selection_mode(&item_selection);
     const auto &[i_idx_opt, new_tag] = check_item_tag(player_ptr, item_selection, prev_tag, item_tester);
     prev_tag = new_tag;
     if (i_idx_opt) {
@@ -234,7 +214,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     item_selection.item = false;
     item_selection.i1 = 0;
     item_selection.i2 = INVEN_PACK - 1;
-    test_inventory(player_ptr, &item_selection, item_tester);
+    test_inventory(player_ptr, item_selection, item_tester);
     while ((item_selection.i1 <= item_selection.i2) && (!get_item_okay(player_ptr, item_selection.i1, item_tester))) {
         item_selection.i1++;
     }
@@ -245,7 +225,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
     item_selection.e1 = INVEN_MAIN_HAND;
     item_selection.e2 = INVEN_TOTAL - 1;
-    test_equipment(player_ptr, &item_selection, item_tester);
+    test_equipment(player_ptr, item_selection, item_tester);
     while ((item_selection.e1 <= item_selection.e2) && (!get_item_okay(player_ptr, item_selection.e1, item_tester))) {
         item_selection.e1++;
     }

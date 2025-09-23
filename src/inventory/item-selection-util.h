@@ -42,6 +42,9 @@ public:
     ItemSelection(uint32_t mode);
     uint32_t mode;
     int menu_line;
+    bool equip;
+    bool inven;
+    bool floor;
     char which = '\0';
     short k = 0;
     short i1 = 0;
@@ -51,9 +54,6 @@ public:
     bool done = false;
     bool item = false;
     bool oops = false;
-    bool equip = false;
-    bool inven = false;
-    bool floor = false;
     bool allow_floor = false;
     bool toggle = false;
     int max_inven = 0;
