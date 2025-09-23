@@ -1463,7 +1463,7 @@ errr term_addstr(int n, TERM_COLOR a, std::string_view sv)
 /*
  * Move to a location and, using an attr, add a char
  */
-void term_putch(TERM_LEN x, TERM_LEN y, const DisplaySymbol &symbol)
+void term_putch(int x, int y, const DisplaySymbol &symbol)
 {
     /* Move first */
     if (term_gotoxy(x, y) != 0) {
@@ -1489,20 +1489,17 @@ void term_putstr(int x, int y, int n, TERM_COLOR a, std::string_view sv)
 /*
  * Place cursor at (x,y), and clear the next "n" chars
  */
-errr term_erase(TERM_LEN x, TERM_LEN y, tl::optional<int> n_opt)
+void term_erase(int x, int y, tl::optional<int> n_opt)
 {
-    TERM_LEN w = game_term->wid;
-    /* int h = Term->hgt; */
-
-    TERM_LEN x1 = -1;
-    TERM_LEN x2 = -1;
-
-    int na = game_term->attr_blank;
-    int nc = game_term->char_blank;
+    const auto w = game_term->wid;
+    const auto na = game_term->attr_blank;
+    const auto nc = game_term->char_blank;
+    auto x1 = -1;
+    auto x2 = -1;
 
     /* Place cursor */
-    if (term_gotoxy(x, y)) {
-        return -1;
+    if (term_gotoxy(x, y) != 0) {
+        return;
     }
 
     x = game_term->scr->cx;
@@ -1592,8 +1589,6 @@ errr term_erase(TERM_LEN x, TERM_LEN y, tl::optional<int> n_opt)
             game_term->x2[y] = x2;
         }
     }
-
-    return 0;
 }
 
 /*
