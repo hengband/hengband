@@ -208,7 +208,7 @@ void term_addch(const DisplaySymbol &symbol);
 void term_add_bigch(const DisplaySymbol &symbol);
 errr term_addstr(int n, TERM_COLOR a, std::string_view sv);
 void term_putch(TERM_LEN x, TERM_LEN y, const DisplaySymbol &symbol);
-errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv);
+void term_putstr(int x, int y, int n, TERM_COLOR a, std::string_view sv);
 errr term_erase(TERM_LEN x, TERM_LEN y, tl::optional<int> n_opt = tl::nullopt);
 errr term_clear();
 errr term_redraw();

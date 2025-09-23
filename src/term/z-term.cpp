@@ -1477,21 +1477,13 @@ void term_putch(TERM_LEN x, TERM_LEN y, const DisplaySymbol &symbol)
 /*
  * Move to a location and, using an attr, add a string
  */
-errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv)
+void term_putstr(int x, int y, int n, TERM_COLOR a, std::string_view sv)
 {
-    errr res;
-
-    /* Move first */
-    if ((res = term_gotoxy(x, y)) != 0) {
-        return res;
+    if (term_gotoxy(x, y) != 0) {
+        return;
     }
 
-    /* Then add the string */
-    if ((res = term_addstr(n, a, sv)) != 0) {
-        return res;
-    }
-
-    return 0;
+    term_addstr(n, a, sv);
 }
 
 /*
