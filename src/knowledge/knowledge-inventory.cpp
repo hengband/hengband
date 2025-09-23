@@ -16,9 +16,6 @@
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "store/store-util.h"
-#include "sv-definition/sv-amulet-types.h"
-#include "sv-definition/sv-protector-types.h"
-#include "sv-definition/sv-ring-types.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/item-entity.h"
@@ -26,26 +23,31 @@
 #include "util/angband-files.h"
 #include "util/bit-flags-calculator.h"
 #include "util/string-processor.h"
+#include <fmt/format.h>
 #include <sstream>
+#include <string>
+#include <string_view>
 
-static concptr inven_res_label = _(
+namespace {
+constexpr auto MAX_LINES_PER_LABEL = 8; //!< @brief ラベルを表示する行間隔. 0スタートで8が9行目.
+constexpr std::string_view INVENTORY_RESISTANCE_LABELS = _(
     "                               酸電火冷毒閃暗破轟獄因沌劣 盲恐乱麻視経感遅活浮",
     "                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSiHlEpSdRgLv");
-
-#define IM_FLAG_STR _("＊", "* ")
-#define HAS_FLAG_STR _("＋", "+ ")
-#define NO_FLAG_STR _("・", ". ")
+constexpr auto RESISTANCE_EXISTENCE = _("＋", "+ ");
+constexpr auto RESISTANCE_ABSENCE = _("・", ". ");
+}
 
 /*!
- * @brief 4元素耐性を表示する
- * @param immunity 4元素耐性の種類 (二重？)
+ * @brief 4元素耐性(免疫も含)を表示する
+ * @param immunity 4元素耐性の種類
  * @param resistance 4元素耐性
  * @param flags 耐性配列へのポインタ
  * @param fff 一時ファイルへのポインタ
  */
 static void print_im_or_res_flag(tr_type immunity, tr_type resistance, const TrFlags &flags, FILE *fff)
 {
-    fputs(flags.has(immunity) ? IM_FLAG_STR : (flags.has(resistance) ? HAS_FLAG_STR : NO_FLAG_STR), fff);
+    constexpr auto immunity_flag_strength = _("＊", "* ");
+    fmt::print(fff, "{}", flags.has(immunity) ? immunity_flag_strength : (flags.has(resistance) ? RESISTANCE_EXISTENCE : RESISTANCE_ABSENCE));
 }
 
 /*!
@@ -56,50 +58,7 @@ static void print_im_or_res_flag(tr_type immunity, tr_type resistance, const TrF
  */
 static void print_flag(tr_type tr, const TrFlags &flags, FILE *fff)
 {
-    fputs(flags.has(tr) ? HAS_FLAG_STR : NO_FLAG_STR, fff);
-}
-
-/*!
- * @brief 特殊なアイテムかどうかを調べる
- * @param item アイテムへの参照
- * @param tval アイテム主分類番号
- * @return 特殊なアイテムならTRUE
- */
-static bool determine_spcial_item_type(const ItemEntity &item, ItemKindType tval)
-{
-    const auto bi_key = BaseitemKey(tval, item.bi_key.sval());
-    auto is_special_item_type = bi_key == BaseitemKey(ItemKindType::AMULET, SV_AMULET_RESISTANCE);
-    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::RING, SV_RING_LORDLY);
-    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::SHIELD, SV_DRAGON_SHIELD);
-    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::HELM, SV_DRAGON_HELM);
-    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::GLOVES, SV_SET_OF_DRAGON_GLOVES);
-    is_special_item_type |= bi_key == BaseitemKey(ItemKindType::BOOTS, SV_PAIR_OF_DRAGON_GREAVE);
-    is_special_item_type |= item.is_fixed_or_random_artifact();
-    return (item.is_wearable() && item.is_ego()) || is_special_item_type;
-}
-
-/*!
- * @brief アイテムに耐性の表示をする必要があるかを判定する
- * @param item アイテムへの参照
- * @param tval アイテム主分類番号
- * @return 必要があるならTRUE
- */
-static bool check_item_knowledge(const ItemEntity &item, ItemKindType tval)
-{
-    if (!item.is_valid()) {
-        return false;
-    }
-    if (item.bi_key.tval() != tval) {
-        return false;
-    }
-    if (!item.is_known()) {
-        return false;
-    }
-    if (!determine_spcial_item_type(item, tval)) {
-        return false;
-    }
-
-    return true;
+    fmt::print(fff, "{}", flags.has(tr) ? RESISTANCE_EXISTENCE : RESISTANCE_ABSENCE);
 }
 
 /*!
@@ -126,7 +85,7 @@ static void display_identified_resistances_flag(const ItemEntity &item, FILE *ff
     print_flag(TR_RES_CHAOS, flags, fff);
     print_flag(TR_RES_DISEN, flags, fff);
 
-    fputs(" ", fff);
+    fmt::print(fff, " ");
 
     print_flag(TR_RES_BLIND, flags, fff);
     print_flag(TR_RES_FEAR, flags, fff);
@@ -139,7 +98,7 @@ static void display_identified_resistances_flag(const ItemEntity &item, FILE *ff
     print_flag(TR_REGEN, flags, fff);
     print_flag(TR_LEVITATION, flags, fff);
 
-    fputc('\n', fff);
+    fmt::println(fff, "");
 }
 
 /*!
@@ -150,7 +109,7 @@ static void display_identified_resistances_flag(const ItemEntity &item, FILE *ff
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
  * @details 28文字ちょうどになるまで右側をスペースでパディングする
  */
-static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, const ItemEntity &item, char *where)
+static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, const ItemEntity &item, std::string_view where)
 {
     constexpr auto max_item_length = 26;
     std::stringstream ss;
@@ -161,9 +120,9 @@ static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, co
         ss << ' ';
     }
 
-    fprintf(fff, "%s %s", where, ss.str().data());
+    fmt::print(fff, "{} {}", where, ss.str());
     if (!item.is_fully_known()) {
-        fputs(_("-------不明--------------- -------不明---------\n", "-------unknown------------ -------unknown------\n"), fff);
+        fmt::println(fff, _("-------不明--------------- -------不明---------", "-------unknown------------ -------unknown------"));
         return;
     }
 
@@ -172,35 +131,35 @@ static void do_cmd_knowledge_inventory_aux(PlayerType *player_ptr, FILE *fff, co
 
 /*!
  * @brief 9行おきにラベルを追加する
- * @param label_number 現在の行数
+ * @param label_number 現在の行番号 (0スタートのため、8が9行目)
  * @param fff 一時ファイルへの参照ポインタ
  */
-static void add_res_label(int *label_number, FILE *fff)
+static int add_res_label(int label_number, FILE *fff)
 {
-    (*label_number)++;
-    if (*label_number == 9) {
-        *label_number = 0;
-        fprintf(fff, "%s\n", inven_res_label);
+    if (label_number == MAX_LINES_PER_LABEL) {
+        fmt::println(fff, INVENTORY_RESISTANCE_LABELS);
+        return 0;
     }
+
+    return label_number + 1;
 }
 
 /*!
- * @brief 9行ごとに行数をリセットする
- * @param label_number 現在の行数
+ * @brief 耐性ラベルの表示行数を調整し、必要に応じて改行で埋めてヘッダを出力する
+ * @param label_number 行番号
  * @param fff 一時ファイルへの参照ポインタ
  */
-static void reset_label_number(int *label_number, FILE *fff)
+static void pad_and_print_header(int label_number, FILE *fff)
 {
-    if (*label_number == 0) {
+    if (label_number == 0) {
         return;
     }
 
-    for (; *label_number < 9; (*label_number)++) {
-        fputc('\n', fff);
+    for (auto i = label_number; i <= MAX_LINES_PER_LABEL; i++) {
+        fmt::println(fff, "");
     }
 
-    *label_number = 0;
-    fprintf(fff, "%s\n", inven_res_label);
+    fmt::println(fff, INVENTORY_RESISTANCE_LABELS);
 }
 
 /*!
@@ -209,20 +168,22 @@ static void reset_label_number(int *label_number, FILE *fff)
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
+ * @return 画面表示後の行数
  */
-static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
+static int show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int label_number_initial, FILE *fff)
 {
-    char where[32];
-    strcpy(where, _("装", "E "));
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    auto label_number = label_number_initial;
+    for (short i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
         const auto &item = *player_ptr->inventory[i];
-        if (!check_item_knowledge(item, tval)) {
+        if (!item.has_knowledge(tval)) {
             continue;
         }
 
-        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, where);
-        add_res_label(label_number, fff);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, _("装", "E "));
+        label_number = add_res_label(label_number, fff);
     }
+
+    return label_number;
 }
 
 /*!
@@ -231,20 +192,22 @@ static void show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindT
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
+ * @return 画面表示後の行数
  */
-static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
+static int show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int label_number_initial, FILE *fff)
 {
-    char where[32];
-    strcpy(where, _("持", "I "));
-    for (int i = 0; i < INVEN_PACK; i++) {
+    auto label_number = label_number_initial;
+    for (short i = 0; i < INVEN_PACK; i++) {
         const auto &item = *player_ptr->inventory[i];
-        if (!check_item_knowledge(item, tval)) {
+        if (!item.has_knowledge(tval)) {
             continue;
         }
 
-        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, where);
-        add_res_label(label_number, fff);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, _("持", "I "));
+        label_number = add_res_label(label_number, fff);
     }
+
+    return label_number;
 }
 
 /*!
@@ -253,21 +216,23 @@ static void show_holding_equipment_resistances(PlayerType *player_ptr, ItemKindT
  * @param tval アイテム主分類番号
  * @param label_number 現在の行数
  * @param fff ファイルへの参照ポインタ
+ * @return 画面表示後の行数
  */
-static void show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int *label_number, FILE *fff)
+static int show_home_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int label_number_initial, FILE *fff)
 {
+    auto label_number = label_number_initial;
     const auto &store = towns_info[1].get_store(StoreSaleType::HOME);
-    char where[32];
-    strcpy(where, _("家", "H "));
-    for (int i = 0; i < store.stock_num; i++) {
+    for (short i = 0; i < store.stock_num; i++) {
         const auto &item = *store.stock[i];
-        if (!check_item_knowledge(item, tval)) {
+        if (!item.has_knowledge(tval)) {
             continue;
         }
 
-        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, where);
-        add_res_label(label_number, fff);
+        do_cmd_knowledge_inventory_aux(player_ptr, fff, item, _("家", "H "));
+        label_number = add_res_label(label_number, fff);
     }
+
+    return label_number;
 }
 
 /*
@@ -282,13 +247,13 @@ void do_cmd_knowledge_inventory(PlayerType *player_ptr)
         return;
     }
 
-    fprintf(fff, "%s\n", inven_res_label);
-    int label_number = 0;
+    fmt::println(fff, INVENTORY_RESISTANCE_LABELS);
+    auto label_number = 0;
     for (auto tval : TV_WEARABLE_RANGE) {
-        reset_label_number(&label_number, fff);
-        show_wearing_equipment_resistances(player_ptr, tval, &label_number, fff);
-        show_holding_equipment_resistances(player_ptr, tval, &label_number, fff);
-        show_home_equipment_resistances(player_ptr, tval, &label_number, fff);
+        pad_and_print_header(label_number, fff);
+        label_number = show_wearing_equipment_resistances(player_ptr, tval, 0, fff);
+        label_number = show_holding_equipment_resistances(player_ptr, tval, label_number, fff);
+        label_number = show_home_equipment_resistances(player_ptr, tval, label_number, fff);
     }
 
     angband_fclose(fff);
