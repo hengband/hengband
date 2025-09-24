@@ -692,6 +692,18 @@ void FloorType::reset_lite_area()
     this->view_n = 0;
 }
 
+void FloorType::set_lite_at(const Pos2D &pos)
+{
+    auto &grid = this->get_grid(pos);
+    if (grid.is_lite()) {
+        return;
+    }
+
+    grid.info |= CAVE_LITE;
+    this->lite_y[this->lite_n] = pos.y;
+    this->lite_x[this->lite_n++] = pos.x;
+}
+
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ

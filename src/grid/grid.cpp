@@ -1061,24 +1061,6 @@ void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type g
 }
 
 /*
- * This function allows us to efficiently add a grid to the "lite" array,
- * note that we are never called for illegal grids, or for grids which
- * have already been placed into the "lite" array, and we are never
- * called when the "lite" array is full.
- */
-void cave_lite_hack(FloorType &floor, POSITION y, POSITION x)
-{
-    auto &grid = floor.grid_array[y][x];
-    if (grid.is_lite()) {
-        return;
-    }
-
-    grid.info |= CAVE_LITE;
-    floor.lite_y[floor.lite_n] = y;
-    floor.lite_x[floor.lite_n++] = x;
-}
-
-/*
  * For delayed visual update
  */
 void cave_redraw_later(FloorType &floor, POSITION y, POSITION x)

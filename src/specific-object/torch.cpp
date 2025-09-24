@@ -166,40 +166,40 @@ void update_lite(PlayerType *player_ptr)
     floor.lite_n = 0;
     const auto p_pos = player_ptr->get_position();
     if (p >= 1) {
-        cave_lite_hack(floor, player_ptr->y, player_ptr->x);
-        cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x);
-        cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x);
-        cave_lite_hack(floor, player_ptr->y, player_ptr->x + 1);
-        cave_lite_hack(floor, player_ptr->y, player_ptr->x - 1);
-        cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x + 1);
-        cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x - 1);
-        cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x + 1);
-        cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x - 1);
+        floor.set_lite_at(p_pos);
+        floor.set_lite_at(p_pos + Direction(2).vec());
+        floor.set_lite_at(p_pos + Direction(8).vec());
+        floor.set_lite_at(p_pos + Direction(6).vec());
+        floor.set_lite_at(p_pos + Direction(4).vec());
+        floor.set_lite_at(p_pos + Direction(3).vec());
+        floor.set_lite_at(p_pos + Direction(1).vec());
+        floor.set_lite_at(p_pos + Direction(9).vec());
+        floor.set_lite_at(p_pos + Direction(7).vec());
     }
 
     if (p >= 2) {
         if (floor.has_los_terrain_at(p_pos + Direction(2).vec())) {
-            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x);
-            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x + 1);
-            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x - 1);
+            floor.set_lite_at(p_pos + Direction(2).vec() * 2);
+            floor.set_lite_at(p_pos + Direction(2).vec() * 2 + Direction(6).vec());
+            floor.set_lite_at(p_pos + Direction(2).vec() * 2 + Direction(4).vec());
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(8).vec())) {
-            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x);
-            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x + 1);
-            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x - 1);
+            floor.set_lite_at(p_pos + Direction(8).vec() * 2);
+            floor.set_lite_at(p_pos + Direction(8).vec() * 2 + Direction(6).vec());
+            floor.set_lite_at(p_pos + Direction(8).vec() * 2 + Direction(4).vec());
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(6).vec())) {
-            cave_lite_hack(floor, player_ptr->y, player_ptr->x + 2);
-            cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x + 2);
-            cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x + 2);
+            floor.set_lite_at(p_pos + Direction(6).vec() * 2);
+            floor.set_lite_at(p_pos + Direction(6).vec() * 2 + Direction(2).vec());
+            floor.set_lite_at(p_pos + Direction(6).vec() * 2 + Direction(8).vec());
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(4).vec())) {
-            cave_lite_hack(floor, player_ptr->y, player_ptr->x - 2);
-            cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x - 2);
-            cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x - 2);
+            floor.set_lite_at(p_pos + Direction(4).vec() * 2);
+            floor.set_lite_at(p_pos + Direction(4).vec() * 2 + Direction(2).vec());
+            floor.set_lite_at(p_pos + Direction(4).vec() * 2 + Direction(8).vec());
         }
     }
 
@@ -210,19 +210,19 @@ void update_lite(PlayerType *player_ptr)
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(3).vec())) {
-            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x + 2);
+            floor.set_lite_at(p_pos + Direction(3).vec() * 2);
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(1).vec())) {
-            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x - 2);
+            floor.set_lite_at(p_pos + Direction(1).vec() * 2);
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(9).vec())) {
-            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x + 2);
+            floor.set_lite_at(p_pos + Direction(9).vec() * 2);
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(7).vec())) {
-            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x - 2);
+            floor.set_lite_at(p_pos + Direction(7).vec() * 2);
         }
 
         auto min_y = player_ptr->y - p;
@@ -258,8 +258,9 @@ void update_lite(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (floor.get_grid({ y, x }).info & CAVE_VIEW) {
-                    cave_lite_hack(floor, y, x);
+                const auto pos = Pos2D(y, x);
+                if (floor.get_grid(pos).info & CAVE_VIEW) {
+                    floor.set_lite_at(pos);
                 }
             }
         }
