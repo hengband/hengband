@@ -1,7 +1,6 @@
 #include "player/player-view.h"
 #include "floor/line-of-sight.h"
 #include "game-option/map-screen-options.h"
-#include "grid/grid.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
@@ -360,13 +359,14 @@ void update_view(PlayerType *player_ptr)
     for (n = 0; n < floor.view_n; n++) {
         y = floor.view_y[n];
         x = floor.view_x[n];
-        auto &grid = floor.grid_array[y][x];
+        const Pos2D pos(y, x);
+        auto &grid = floor.get_grid(pos);
         grid.info &= ~(CAVE_XTRA);
         if (grid.info & CAVE_TEMP) {
             continue;
         }
 
-        cave_note_and_redraw_later(floor, y, x);
+        floor.set_note_and_redraw_at(pos);
     }
 
     for (const auto &pos : points) {

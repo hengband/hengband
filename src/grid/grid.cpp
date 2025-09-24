@@ -1059,13 +1059,3 @@ void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type g
     auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
     place_grid(player_ptr, grid, gb_type);
 }
-
-/*
- * For delayed visual update
- */
-void cave_note_and_redraw_later(FloorType &floor, POSITION y, POSITION x)
-{
-    const Pos2D pos(y, x);
-    floor.get_grid(pos).info |= CAVE_NOTE;
-    floor.set_redraw_at(pos);
-}

@@ -729,6 +729,12 @@ void FloorType::set_view_at(const Pos2D &pos)
     this->view_n++;
 }
 
+void FloorType::set_note_and_redraw_at(const Pos2D &pos)
+{
+    this->get_grid(pos).info |= CAVE_NOTE;
+    this->set_redraw_at(pos);
+}
+
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ

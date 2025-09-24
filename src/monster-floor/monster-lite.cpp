@@ -1,6 +1,5 @@
 #include "monster-floor/monster-lite.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "grid/grid.h"
 #include "monster-floor/monster-lite-util.h"
 #include "monster-race/race-brightness-flags.h"
 #include "monster/monster-status.h"
@@ -303,16 +302,17 @@ void update_mon_lite(PlayerType *player_ptr)
     for (auto i = 0; i < floor.mon_lite_n; i++) {
         const auto fx = floor.mon_lite_x[i];
         const auto fy = floor.mon_lite_y[i];
-        const auto &grid = floor.get_grid({ fy, fx });
+        const auto pos = Pos2D(fy, fx);
+        const auto &grid = floor.get_grid(pos);
         if (grid.info & CAVE_TEMP) {
             if ((grid.info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW) {
-                cave_note_and_redraw_later(floor, fy, fx);
+                floor.set_note_and_redraw_at(pos);
             }
         } else if ((grid.info & (CAVE_VIEW | CAVE_MNDK)) == CAVE_VIEW) {
-            cave_note_and_redraw_later(floor, fy, fx);
+            floor.set_note_and_redraw_at(pos);
         }
 
-        points.emplace_back(fy, fx);
+        points.push_back(pos);
     }
 
     floor.mon_lite_n = 0;
@@ -321,10 +321,10 @@ void update_mon_lite(PlayerType *player_ptr)
         const auto &grid = floor.get_grid(pos);
         if (grid.info & CAVE_MNLT) {
             if ((grid.info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW) {
-                cave_note_and_redraw_later(floor, pos.y, pos.x);
+                floor.set_note_and_redraw_at(pos);
             }
         } else if ((grid.info & (CAVE_VIEW | CAVE_XTRA)) == CAVE_VIEW) {
-            cave_note_and_redraw_later(floor, pos.y, pos.x);
+            floor.set_note_and_redraw_at(pos);
         }
 
         floor.mon_lite_x[floor.mon_lite_n] = pos.x;

@@ -1,6 +1,5 @@
 #include "specific-object/torch.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-ninja.h"
 #include "object-enchant/object-ego.h"
@@ -269,12 +268,13 @@ void update_lite(PlayerType *player_ptr)
     for (auto i = 0; i < floor.lite_n; i++) {
         const auto y = floor.lite_y[i];
         const auto x = floor.lite_x[i];
-        const auto &grid = floor.get_grid({ y, x });
+        const Pos2D pos(y, x);
+        const auto &grid = floor.get_grid(pos);
         if (grid.info & CAVE_TEMP) {
             continue;
         }
 
-        cave_note_and_redraw_later(floor, y, x);
+        floor.set_note_and_redraw_at(pos);
     }
 
     // 前回照らされていた座標たちのうち、状態が変わったものについて再描画フラグを立てる。
