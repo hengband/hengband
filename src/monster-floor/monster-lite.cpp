@@ -294,23 +294,8 @@ void update_mon_lite(PlayerType *player_ptr)
     }
 
     const auto end_temp = std::size(points);
-    for (auto i = 0; i < floor.mon_lite_n; i++) {
-        const auto fx = floor.mon_lite_x[i];
-        const auto fy = floor.mon_lite_y[i];
-        const auto pos = Pos2D(fy, fx);
-        const auto &grid = floor.get_grid(pos);
-        if (grid.info & CAVE_TEMP) {
-            if ((grid.info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW) {
-                floor.set_note_and_redraw_at(pos);
-            }
-        } else if ((grid.info & (CAVE_VIEW | CAVE_MNDK)) == CAVE_VIEW) {
-            floor.set_note_and_redraw_at(pos);
-        }
-
-        points.push_back(pos);
-    }
-
-    floor.mon_lite_n = 0;
+    const auto points_mon_lite = floor.collect_temp_mon_lite();
+    points.insert(points.end(), points_mon_lite.begin(), points_mon_lite.end());
     for (size_t i = 0; i < end_temp; i++) {
         const auto &pos = points[i];
         const auto &grid = floor.get_grid(pos);

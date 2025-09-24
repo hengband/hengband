@@ -810,6 +810,29 @@ std::vector<Pos2D> FloorType::reset_view()
     return points;
 }
 
+std::vector<Pos2D> FloorType::collect_temp_mon_lite()
+{
+    std::vector<Pos2D> points;
+    for (auto i = 0; i < this->mon_lite_n; i++) {
+        const auto fx = this->mon_lite_x[i];
+        const auto fy = this->mon_lite_y[i];
+        const auto pos = Pos2D(fy, fx);
+        const auto &grid = this->get_grid(pos);
+        if (grid.info & CAVE_TEMP) {
+            if ((grid.info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW) {
+                this->set_note_and_redraw_at(pos);
+            }
+        } else if ((grid.info & (CAVE_VIEW | CAVE_MNDK)) == CAVE_VIEW) {
+            this->set_note_and_redraw_at(pos);
+        }
+
+        points.push_back(pos);
+    }
+
+    this->mon_lite_n = 0;
+    return points;
+}
+
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ
