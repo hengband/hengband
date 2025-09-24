@@ -157,9 +157,10 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
  */
 bool wr_dungeon(PlayerType *player_ptr)
 {
-    forget_lite(*player_ptr->current_floor_ptr);
-    forget_view(*player_ptr->current_floor_ptr);
-    clear_mon_lite(*player_ptr->current_floor_ptr);
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.forget_lite();
+    forget_view(floor);
+    clear_mon_lite(floor);
     static constexpr auto flags = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
@@ -170,7 +171,7 @@ bool wr_dungeon(PlayerType *player_ptr)
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     wr_s16b(max_floor_id);
-    wr_byte((byte)player_ptr->current_floor_ptr->dungeon_id);
+    wr_byte(static_cast<uint8_t>(floor.dungeon_id));
     if (!player_ptr->in_saved_floor()) {
         /* No array elements */
         wr_byte(0);

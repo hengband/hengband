@@ -635,6 +635,24 @@ short FloorType::pop_empty_index_item()
 }
 
 /*!
+ * @brief ターン経過に伴いグリッドの灯りを消去する
+ */
+void FloorType::forget_lite()
+{
+    if (this->lite_n == 0) {
+        return;
+    }
+
+    for (auto i = 0; i < this->lite_n; i++) {
+        const auto y = this->lite_y[i];
+        const auto x = this->lite_x[i];
+        this->grid_array[y][x].info &= ~(CAVE_LITE);
+    }
+
+    this->lite_n = 0;
+}
+
+/*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos 指定座標

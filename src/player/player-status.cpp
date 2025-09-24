@@ -2641,7 +2641,7 @@ void update_creature(PlayerType *player_ptr)
 
     if (rfu.has(StatusRecalculatingFlag::UN_LITE)) {
         rfu.reset_flag(StatusRecalculatingFlag::UN_LITE);
-        forget_lite(floor);
+        floor.forget_lite();
     }
 
     if (rfu.has(StatusRecalculatingFlag::UN_VIEW)) {

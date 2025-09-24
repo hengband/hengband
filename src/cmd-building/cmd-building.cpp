@@ -353,7 +353,7 @@ void do_cmd_building(PlayerType *player_ptr)
 
     player_ptr->oldpy = player_ptr->y;
     player_ptr->oldpx = player_ptr->x;
-    forget_lite(floor);
+    floor.forget_lite();
     forget_view(floor);
     world.character_icky_depth++;
 

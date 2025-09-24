@@ -377,7 +377,7 @@ static void process_game_turn(PlayerType *player_ptr)
         world.character_xtra = false;
         Target::clear_last_target();
         health_track(player_ptr, 0);
-        forget_lite(floor);
+        floor.forget_lite();
         forget_view(floor);
         clear_mon_lite(floor);
         if (!player_ptr->playing && !player_ptr->is_dead) {

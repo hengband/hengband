@@ -350,24 +350,6 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
 }
 
 /*
- * Actually erase the entire "lite" array, redrawing every grid
- */
-void forget_lite(FloorType &floor)
-{
-    if (!floor.lite_n) {
-        return;
-    }
-
-    for (int i = 0; i < floor.lite_n; i++) {
-        POSITION y = floor.lite_y[i];
-        POSITION x = floor.lite_x[i];
-        floor.grid_array[y][x].info &= ~(CAVE_LITE);
-    }
-
-    floor.lite_n = 0;
-}
-
-/*
  * Clear the viewable space
  */
 void forget_view(FloorType &floor)
