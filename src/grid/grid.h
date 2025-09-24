@@ -78,4 +78,3 @@ bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION 
 void place_grid(PlayerType *player_ptr, Grid &grid, grid_bold_type pg_type);
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
 void cave_note_and_redraw_later(FloorType &floor, POSITION y, POSITION x);
-void cave_view_hack(FloorType &floor, POSITION y, POSITION x);

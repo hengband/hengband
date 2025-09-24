@@ -1069,16 +1069,3 @@ void cave_note_and_redraw_later(FloorType &floor, POSITION y, POSITION x)
     floor.get_grid(pos).info |= CAVE_NOTE;
     floor.set_redraw_at(pos);
 }
-
-void cave_view_hack(FloorType &floor, POSITION y, POSITION x)
-{
-    auto &grid = floor.grid_array[y][x];
-    if (grid.is_view()) {
-        return;
-    }
-
-    grid.info |= CAVE_VIEW;
-    floor.view_y[floor.view_n] = y;
-    floor.view_x[floor.view_n] = x;
-    floor.view_n++;
-}

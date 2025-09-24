@@ -28,6 +28,7 @@
  */
 static bool update_view_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
+    const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
     Grid *g1_c_ptr;
     Grid *g2_c_ptr;
@@ -51,27 +52,27 @@ static bool update_view_aux(PlayerType *player_ptr, POSITION y, POSITION x, POSI
     bool z2 = (v2 && (g2_c_ptr->info & CAVE_XTRA));
     if (z1 && z2) {
         grid.info |= CAVE_XTRA;
-        cave_view_hack(floor, y, x);
+        floor.set_view_at(pos);
         return wall;
     }
 
     if (z1) {
-        cave_view_hack(floor, y, x);
+        floor.set_view_at(pos);
         return wall;
     }
 
     if (v1 && v2) {
-        cave_view_hack(floor, y, x);
+        floor.set_view_at(pos);
         return wall;
     }
 
     if (wall) {
-        cave_view_hack(floor, y, x);
+        floor.set_view_at(pos);
         return wall;
     }
 
     if (los(floor, player_ptr->get_position(), { y, x })) {
-        cave_view_hack(floor, y, x);
+        floor.set_view_at(pos);
         return wall;
     }
 
@@ -136,14 +137,14 @@ void update_view(PlayerType *player_ptr)
         x = player_ptr->x;
         auto &grid = floor.grid_array[y][x];
         grid.info |= CAVE_XTRA;
-        cave_view_hack(floor, y, x);
+        floor.set_view_at({ y, x });
     }
 
     z = full * 2 / 3;
     for (d = 1; d <= z; d++) {
         auto &grid = floor.grid_array[y + d][x + d];
         grid.info |= CAVE_XTRA;
-        cave_view_hack(floor, y + d, x + d);
+        floor.set_view_at(Pos2D(y, x) + Pos2DVec(d, d));
         if (!grid.has_los_terrain()) {
             break;
         }
@@ -152,7 +153,7 @@ void update_view(PlayerType *player_ptr)
     for (d = 1; d <= z; d++) {
         auto &grid = floor.grid_array[y + d][x - d];
         grid.info |= CAVE_XTRA;
-        cave_view_hack(floor, y + d, x - d);
+        floor.set_view_at(Pos2D(y, x) + Pos2DVec(d, -d));
         if (!grid.has_los_terrain()) {
             break;
         }
@@ -161,7 +162,7 @@ void update_view(PlayerType *player_ptr)
     for (d = 1; d <= z; d++) {
         auto &grid = floor.grid_array[y - d][x + d];
         grid.info |= CAVE_XTRA;
-        cave_view_hack(floor, y - d, x + d);
+        floor.set_view_at(Pos2D(y, x) + Pos2DVec(-d, d));
         if (!grid.has_los_terrain()) {
             break;
         }
@@ -170,7 +171,7 @@ void update_view(PlayerType *player_ptr)
     for (d = 1; d <= z; d++) {
         auto &grid = floor.grid_array[y - d][x - d];
         grid.info |= CAVE_XTRA;
-        cave_view_hack(floor, y - d, x - d);
+        floor.set_view_at(Pos2D(y, x) + Pos2DVec(-d, -d));
         if (!grid.has_los_terrain()) {
             break;
         }
@@ -179,7 +180,7 @@ void update_view(PlayerType *player_ptr)
     for (d = 1; d <= full; d++) {
         auto &grid = floor.grid_array[y + d][x];
         grid.info |= CAVE_XTRA;
-        cave_view_hack(floor, y + d, x);
+        floor.set_view_at(Pos2D(y, x) + Pos2DVec(d, 0));
         if (!grid.has_los_terrain()) {
             break;
         }
@@ -189,7 +190,7 @@ void update_view(PlayerType *player_ptr)
     for (d = 1; d <= full; d++) {
         auto &grid = floor.grid_array[y - d][x];
         grid.info |= CAVE_XTRA;
-        cave_view_hack(floor, y - d, x);
+        floor.set_view_at(Pos2D(y, x) + Pos2DVec(-d, 0));
         if (!grid.has_los_terrain()) {
             break;
         }
@@ -199,7 +200,7 @@ void update_view(PlayerType *player_ptr)
     for (d = 1; d <= full; d++) {
         auto &grid = floor.grid_array[y][x + d];
         grid.info |= CAVE_XTRA;
-        cave_view_hack(floor, y, x + d);
+        floor.set_view_at(Pos2D(y, x) + Pos2DVec(0, d));
         if (!grid.has_los_terrain()) {
             break;
         }
@@ -209,7 +210,7 @@ void update_view(PlayerType *player_ptr)
     for (d = 1; d <= full; d++) {
         auto &grid = floor.grid_array[y][x - d];
         grid.info |= CAVE_XTRA;
-        cave_view_hack(floor, y, x - d);
+        floor.set_view_at(Pos2D(y, x) + Pos2DVec(0, -d));
         if (!grid.has_los_terrain()) {
             break;
         }
