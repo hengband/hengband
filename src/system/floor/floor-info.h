@@ -147,6 +147,7 @@ public:
     void forget_lite();
     void forget_view();
     void forget_mon_lite();
+    void reset_mon_lite();
     void reset_lite_area();
     void set_lite_at(const Pos2D &pos);
     void set_redraw_at(const Pos2D &pos);

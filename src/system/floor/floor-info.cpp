@@ -684,6 +684,17 @@ void FloorType::forget_mon_lite()
     this->mon_lite_n = 0;
 }
 
+void FloorType::reset_mon_lite()
+{
+    for (auto i = 0; i < this->mon_lite_n; i++) {
+        const auto y = this->mon_lite_y[i];
+        const auto x = this->mon_lite_x[i];
+        auto &grid = this->get_grid({ y, x });
+        grid.add_info((grid.info & CAVE_MNLT) ? CAVE_TEMP : CAVE_XTRA);
+        grid.info &= ~(CAVE_MNLT | CAVE_MNDK);
+    }
+}
+
 void FloorType::reset_lite_area()
 {
     this->lite_n = 0;

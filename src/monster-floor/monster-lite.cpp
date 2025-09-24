@@ -153,12 +153,7 @@ void update_mon_lite(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
     const auto dis_lim = (dungeon.flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto) ? (MAX_PLAYER_SIGHT / 2 + 1) : (MAX_PLAYER_SIGHT + 3);
-    for (auto i = 0; i < floor.mon_lite_n; i++) {
-        auto &grid = floor.get_grid({ floor.mon_lite_y[i], floor.mon_lite_x[i] });
-        grid.add_info((grid.info & CAVE_MNLT) ? CAVE_TEMP : CAVE_XTRA);
-        grid.info &= ~(CAVE_MNLT | CAVE_MNDK);
-    }
-
+    floor.reset_mon_lite();
     const auto &world = AngbandWorld::get_instance();
     const auto p_pos = player_ptr->get_position();
     if (!world.timewalk_m_idx) {
