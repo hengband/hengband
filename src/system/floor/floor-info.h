@@ -82,10 +82,6 @@ public:
     std::map<MonsterTimedEffect, std::vector<short>> mproc_list; /*!< The array to process dungeon monsters[max_m_idx] */
     std::map<MonsterTimedEffect, short> mproc_max; /*!< Number of monsters to be processed */
 
-    POSITION_IDX lite_n = 0; //!< Array of grids lit by player lite
-    std::array<POSITION, LITE_MAX> lite_y{};
-    std::array<POSITION, LITE_MAX> lite_x{};
-
     POSITION_IDX mon_lite_n = 0; //!< Array of grids lit by player lite
     std::array<POSITION, MON_LITE_MAX> mon_lite_y{};
     std::array<POSITION, MON_LITE_MAX> mon_lite_x{};
@@ -160,6 +156,7 @@ public:
     void set_redraw_at(const Pos2D &pos);
     void set_view_at(const Pos2D &pos);
     void set_note_and_redraw_at(const Pos2D &pos);
+    void set_note_and_redraw();
     std::vector<Pos2D> reset_lite();
     bool is_grid_changeable(const Pos2D &pos) const;
     void place_random_stairs(const Pos2D &pos);
@@ -172,4 +169,8 @@ private:
 
     bool entering_dungeon = false;
     bool leaving_dungeon = false;
+
+    short lite_n = 0; //!< Array of grids lit by player lite
+    std::array<int, LITE_MAX> lite_y{};
+    std::array<int, LITE_MAX> lite_x{};
 };

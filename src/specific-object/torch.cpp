@@ -250,19 +250,8 @@ void update_lite(PlayerType *player_ptr)
         }
     }
 
-    for (auto i = 0; i < floor.lite_n; i++) {
-        const auto y = floor.lite_y[i];
-        const auto x = floor.lite_x[i];
-        const Pos2D pos(y, x);
-        const auto &grid = floor.get_grid(pos);
-        if (grid.info & CAVE_TEMP) {
-            continue;
-        }
-
-        floor.set_note_and_redraw_at(pos);
-    }
-
     // 前回照らされていた座標たちのうち、状態が変わったものについて再描画フラグを立てる。
+    floor.set_note_and_redraw();
     for (const auto &pos : points) {
         auto &grid = floor.get_grid(pos);
         grid.info &= ~(CAVE_TEMP);

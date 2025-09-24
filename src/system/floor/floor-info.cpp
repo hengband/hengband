@@ -735,6 +735,20 @@ void FloorType::set_note_and_redraw_at(const Pos2D &pos)
     this->set_redraw_at(pos);
 }
 
+void FloorType::set_note_and_redraw()
+{
+    for (auto i = 0; i < this->lite_n; i++) {
+        const auto y = this->lite_y[i];
+        const auto x = this->lite_x[i];
+        const Pos2D pos(y, x);
+        if (this->get_grid(pos).info & CAVE_TEMP) {
+            continue;
+        }
+
+        this->set_note_and_redraw_at(pos);
+    }
+}
+
 // 前回照らされていた座標たちを記録。
 std::vector<Pos2D> FloorType::reset_lite()
 {
