@@ -735,6 +735,24 @@ void FloorType::set_note_and_redraw_at(const Pos2D &pos)
     this->set_redraw_at(pos);
 }
 
+// 前回照らされていた座標たちを記録。
+std::vector<Pos2D> FloorType::reset_lite()
+{
+    std::vector<Pos2D> points;
+    for (auto i = 0; i < this->lite_n; i++) {
+        const auto y = this->lite_y[i];
+        const auto x = this->lite_x[i];
+        const Pos2D pos(y, x);
+        auto &grid = this->get_grid(pos);
+        grid.info &= ~(CAVE_LITE);
+        grid.info |= CAVE_TEMP;
+        points.push_back(pos);
+    }
+
+    this->lite_n = 0;
+    return points;
+}
+
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ

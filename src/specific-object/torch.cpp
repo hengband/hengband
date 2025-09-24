@@ -145,24 +145,9 @@ void update_lite_radius(PlayerType *player_ptr)
  */
 void update_lite(PlayerType *player_ptr)
 {
-    // 前回照らされていた座標たちを格納する配列。
-    std::vector<Pos2D> points;
-
     POSITION p = player_ptr->cur_lite;
     auto &floor = *player_ptr->current_floor_ptr;
-
-    // 前回照らされていた座標たちを記録。
-    for (int i = 0; i < floor.lite_n; i++) {
-        const POSITION y = floor.lite_y[i];
-        const POSITION x = floor.lite_x[i];
-
-        floor.grid_array[y][x].info &= ~(CAVE_LITE);
-        floor.grid_array[y][x].info |= CAVE_TEMP;
-
-        points.emplace_back(y, x);
-    }
-
-    floor.lite_n = 0;
+    const auto points = floor.reset_lite();
     const auto p_pos = player_ptr->get_position();
     if (p >= 1) {
         floor.set_lite_at(p_pos);
