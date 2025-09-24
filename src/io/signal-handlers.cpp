@@ -8,7 +8,6 @@
 #include "io/signal-handlers.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/game-closer.h"
-#include "floor/floor-events.h"
 #include "game-option/cheat-options.h"
 #include "io/write-diary.h"
 #include "monster-floor/monster-lite.h"
@@ -74,14 +73,14 @@ static void handle_signal_simple(int sig)
     if (p_ptr->is_dead) {
         p_ptr->died_from = _("強制終了", "Abortion");
         floor.forget_lite();
-        forget_view(floor);
+        floor.forget_view();
         clear_mon_lite(floor);
         close_game(p_ptr);
         quit(_("強制終了", "interrupt"));
     } else if (signal_count >= 5) {
         p_ptr->died_from = _("強制終了中", "Interrupting");
         floor.forget_lite();
-        forget_view(floor);
+        floor.forget_view();
         clear_mon_lite(floor);
         p_ptr->playing = false;
         if (!cheat_immortal) {
@@ -130,7 +129,7 @@ static void handle_signal_abort(int sig)
 
     auto &floor = *p_ptr->current_floor_ptr;
     floor.forget_lite();
-    forget_view(floor);
+    floor.forget_view();
     clear_mon_lite(floor);
 
     term_erase(0, hgt - 1);

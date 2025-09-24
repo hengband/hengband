@@ -3,7 +3,6 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
-#include "floor/floor-events.h"
 #include "game-option/birth-options.h"
 #include "game-option/input-options.h"
 #include "inventory/inventory-object.h"
@@ -105,7 +104,7 @@ void do_cmd_store(PlayerType *player_ptr)
     }
 
     floor.forget_lite();
-    forget_view(floor);
+    floor.forget_view();
     world.character_icky_depth = 1;
     command_arg = 0;
     command_rep = 0;

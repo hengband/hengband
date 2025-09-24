@@ -348,22 +348,3 @@ void glow_deep_lava_and_bldg(PlayerType *player_ptr)
     rfu.set_flags(flags_srf);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
 }
-
-/*
- * Clear the viewable space
- */
-void forget_view(FloorType &floor)
-{
-    if (!floor.view_n) {
-        return;
-    }
-
-    for (int i = 0; i < floor.view_n; i++) {
-        POSITION y = floor.view_y[i];
-        POSITION x = floor.view_x[i];
-        auto &grid = floor.grid_array[y][x];
-        grid.info &= ~(CAVE_VIEW);
-    }
-
-    floor.view_n = 0;
-}

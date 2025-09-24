@@ -1,7 +1,6 @@
 #include "save/floor-writer.h"
 #include "core/object-compressor.h"
 #include "floor/dungeon-feeling.h"
-#include "floor/floor-events.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "grid/grid.h"
@@ -159,7 +158,7 @@ bool wr_dungeon(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     floor.forget_lite();
-    forget_view(floor);
+    floor.forget_view();
     clear_mon_lite(floor);
     static constexpr auto flags = {
         StatusRecalculatingFlag::VIEW,

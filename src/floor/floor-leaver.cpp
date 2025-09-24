@@ -1,6 +1,5 @@
 #include "floor/floor-leaver.h"
 #include "dungeon/quest.h"
-#include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
@@ -426,7 +425,7 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
     get_out_monster(player_ptr);
     sf_ptr->last_visit = AngbandWorld::get_instance().game_turn;
     floor.forget_lite();
-    forget_view(floor);
+    floor.forget_view();
     clear_mon_lite(floor);
     if (save_floor(player_ptr, sf_ptr, 0)) {
         return;

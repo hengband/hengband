@@ -27,7 +27,6 @@
 #include "dungeon/dungeon-processor.h"
 #include "dungeon/quest.h"
 #include "floor/floor-changer.h"
-#include "floor/floor-events.h"
 #include "floor/floor-leaver.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save.h"
@@ -378,7 +377,7 @@ static void process_game_turn(PlayerType *player_ptr)
         Target::clear_last_target();
         health_track(player_ptr, 0);
         floor.forget_lite();
-        forget_view(floor);
+        floor.forget_view();
         clear_mon_lite(floor);
         if (!player_ptr->playing && !player_ptr->is_dead) {
             break;

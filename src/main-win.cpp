@@ -90,7 +90,6 @@
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
-#include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
@@ -1634,7 +1633,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             msg_flag = false;
             auto &floor = *player_ptr->current_floor_ptr;
             floor.forget_lite();
-            forget_view(floor);
+            floor.forget_view();
             clear_mon_lite(floor);
 
             term_key_push(SPECIAL_KEY_QUIT);
@@ -2430,7 +2429,7 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
         msg_flag = false;
         auto &floor = *p_ptr->current_floor_ptr;
         floor.forget_lite();
-        forget_view(floor);
+        floor.forget_view();
         clear_mon_lite(floor);
         term_key_push(SPECIAL_KEY_QUIT);
         return 0;

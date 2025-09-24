@@ -653,6 +653,24 @@ void FloorType::forget_lite()
 }
 
 /*!
+ * @brief ターン経過に伴いプレイヤーの視界を消去する
+ */
+void FloorType::forget_view()
+{
+    if (this->view_n == 0) {
+        return;
+    }
+
+    for (auto i = 0; i < this->view_n; i++) {
+        const auto y = this->view_y[i];
+        const auto x = this->view_x[i];
+        this->grid_array[y][x].info &= ~(CAVE_VIEW);
+    }
+
+    this->view_n = 0;
+}
+
+/*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos 指定座標

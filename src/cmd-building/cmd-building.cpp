@@ -20,7 +20,6 @@
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
-#include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -354,7 +353,7 @@ void do_cmd_building(PlayerType *player_ptr)
     player_ptr->oldpy = player_ptr->y;
     player_ptr->oldpx = player_ptr->x;
     floor.forget_lite();
-    forget_view(floor);
+    floor.forget_view();
     world.character_icky_depth++;
 
     command_arg = 0;
