@@ -296,27 +296,7 @@ void update_mon_lite(PlayerType *player_ptr)
     const auto end_temp = std::size(points);
     const auto points_mon_lite = floor.collect_temp_mon_lite();
     points.insert(points.end(), points_mon_lite.begin(), points_mon_lite.end());
-    for (size_t i = 0; i < end_temp; i++) {
-        const auto &pos = points[i];
-        const auto &grid = floor.get_grid(pos);
-        if (grid.info & CAVE_MNLT) {
-            if ((grid.info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW) {
-                floor.set_note_and_redraw_at(pos);
-            }
-        } else if ((grid.info & (CAVE_VIEW | CAVE_XTRA)) == CAVE_VIEW) {
-            floor.set_note_and_redraw_at(pos);
-        }
-
-        floor.mon_lite_x[floor.mon_lite_n] = pos.x;
-        floor.mon_lite_y[floor.mon_lite_n] = pos.y;
-        floor.mon_lite_n++;
-    }
-
-    for (size_t i = end_temp; i < std::size(points); i++) {
-        const auto &pos = points[i];
-        floor.get_grid(pos).info &= ~(CAVE_TEMP | CAVE_XTRA);
-    }
-
+    floor.set_mon_lite(points, end_temp);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);
     player_ptr->monlite = (floor.get_grid(p_pos).info & CAVE_MNLT) != 0;
     const auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
