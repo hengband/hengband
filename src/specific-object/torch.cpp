@@ -278,14 +278,14 @@ void update_lite(PlayerType *player_ptr)
     }
 
     // 前回照らされていた座標たちのうち、状態が変わったものについて再描画フラグを立てる。
-    for (const auto &[y, x] : points) {
-        auto &grid = floor.get_grid({ y, x });
+    for (const auto &pos : points) {
+        auto &grid = floor.get_grid(pos);
         grid.info &= ~(CAVE_TEMP);
         if (grid.info & CAVE_LITE) {
             continue;
         }
 
-        cave_redraw_later(floor, y, x);
+        floor.set_redraw_at(pos);
     }
 
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);

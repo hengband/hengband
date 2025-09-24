@@ -704,6 +704,18 @@ void FloorType::set_lite_at(const Pos2D &pos)
     this->lite_x[this->lite_n++] = pos.x;
 }
 
+void FloorType::set_redraw_at(const Pos2D &pos)
+{
+    auto &grid = this->get_grid(pos);
+    if (grid.is_redraw()) {
+        return;
+    }
+
+    grid.info |= CAVE_REDRAW;
+    this->redraw_y[this->redraw_n] = pos.y;
+    this->redraw_x[this->redraw_n++] = pos.x;
+}
+
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ

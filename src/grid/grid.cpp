@@ -1063,25 +1063,11 @@ void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type g
 /*
  * For delayed visual update
  */
-void cave_redraw_later(FloorType &floor, POSITION y, POSITION x)
-{
-    auto &grid = floor.grid_array[y][x];
-    if (grid.is_redraw()) {
-        return;
-    }
-
-    grid.info |= CAVE_REDRAW;
-    floor.redraw_y[floor.redraw_n] = y;
-    floor.redraw_x[floor.redraw_n++] = x;
-}
-
-/*
- * For delayed visual update
- */
 void cave_note_and_redraw_later(FloorType &floor, POSITION y, POSITION x)
 {
-    floor.grid_array[y][x].info |= CAVE_NOTE;
-    cave_redraw_later(floor, y, x);
+    const Pos2D pos(y, x);
+    floor.get_grid(pos).info |= CAVE_NOTE;
+    floor.set_redraw_at(pos);
 }
 
 void cave_view_hack(FloorType &floor, POSITION y, POSITION x)

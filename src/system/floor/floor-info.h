@@ -157,6 +157,7 @@ public:
     void forget_mon_lite();
     void reset_lite_area();
     void set_lite_at(const Pos2D &pos);
+    void set_redraw_at(const Pos2D &pos);
     bool is_grid_changeable(const Pos2D &pos) const;
     void place_random_stairs(const Pos2D &pos);
     void set_terrain_id_at(const Pos2D &pos, TerrainTag tag, TerrainKind tk = TerrainKind::NORMAL);

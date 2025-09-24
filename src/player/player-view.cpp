@@ -368,14 +368,14 @@ void update_view(PlayerType *player_ptr)
         cave_note_and_redraw_later(floor, y, x);
     }
 
-    for (const auto &[py, px] : points) {
-        auto &grid = floor.grid_array[py][px];
+    for (const auto &pos : points) {
+        auto &grid = floor.get_grid(pos);
         grid.info &= ~(CAVE_TEMP);
         if (grid.info & CAVE_VIEW) {
             continue;
         }
 
-        cave_redraw_later(floor, py, px);
+        floor.set_redraw_at(pos);
     }
 
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);
