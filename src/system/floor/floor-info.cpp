@@ -684,6 +684,14 @@ void FloorType::forget_mon_lite()
     this->mon_lite_n = 0;
 }
 
+void FloorType::reset_lite_area()
+{
+    this->lite_n = 0;
+    this->mon_lite_n = 0;
+    this->redraw_n = 0;
+    this->view_n = 0;
+}
+
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ

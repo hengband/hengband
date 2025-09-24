@@ -31,14 +31,6 @@
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"
 
-static void reset_lite_area(FloorType &floor)
-{
-    floor.lite_n = 0;
-    floor.mon_lite_n = 0;
-    floor.redraw_n = 0;
-    floor.view_n = 0;
-}
-
 static void check_arena_floor(PlayerType *player_ptr, DungeonData *dd_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
@@ -380,7 +372,7 @@ static void decide_grid_glowing(FloorType &floor, DungeonData *dd_ptr, const Dun
 tl::optional<std::string> cave_gen(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    reset_lite_area(floor);
+    floor.reset_lite_area();
     get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook());
 
     DungeonData dd({ floor.height, floor.width });
