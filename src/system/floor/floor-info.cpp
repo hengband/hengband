@@ -767,6 +767,22 @@ std::vector<Pos2D> FloorType::reset_lite()
     return points;
 }
 
+std::vector<Pos2D> FloorType::reset_view()
+{
+    std::vector<Pos2D> points;
+    for (auto i = 0; i < this->view_n; i++) {
+        const auto y = this->view_y[i];
+        const auto x = this->view_x[i];
+        const Pos2D pos(y, x);
+        auto &grid = this->get_grid(pos);
+        grid.info &= ~(CAVE_VIEW);
+        grid.info |= CAVE_TEMP;
+        points.push_back(pos);
+    }
+    this->view_n = 0;
+    return points;
+}
+
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ

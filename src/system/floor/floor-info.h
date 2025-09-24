@@ -158,6 +158,7 @@ public:
     void set_note_and_redraw_at(const Pos2D &pos);
     void set_note_and_redraw();
     std::vector<Pos2D> reset_lite();
+    std::vector<Pos2D> reset_view();
     bool is_grid_changeable(const Pos2D &pos) const;
     void place_random_stairs(const Pos2D &pos);
     void set_terrain_id_at(const Pos2D &pos, TerrainTag tag, TerrainKind tk = TerrainKind::NORMAL);
