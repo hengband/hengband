@@ -52,7 +52,6 @@
 #include "market/bounty.h"
 #include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"
-#include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-util.h"
@@ -378,7 +377,7 @@ static void process_game_turn(PlayerType *player_ptr)
         health_track(player_ptr, 0);
         floor.forget_lite();
         floor.forget_view();
-        clear_mon_lite(floor);
+        floor.forget_mon_lite();
         if (!player_ptr->playing && !player_ptr->is_dead) {
             break;
         }

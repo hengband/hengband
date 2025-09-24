@@ -7,7 +7,6 @@
 #include "io/files-util.h"
 #include "io/uid-checker.h"
 #include "load/floor-loader.h"
-#include "monster-floor/monster-lite.h"
 #include "monster/monster-compaction.h"
 #include "save/item-writer.h"
 #include "save/monster-entity-writer.h"
@@ -159,7 +158,7 @@ bool wr_dungeon(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     floor.forget_lite();
     floor.forget_view();
-    clear_mon_lite(floor);
+    floor.forget_mon_lite();
     static constexpr auto flags = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,

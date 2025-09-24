@@ -10,7 +10,6 @@
 #include "core/game-closer.h"
 #include "game-option/cheat-options.h"
 #include "io/write-diary.h"
-#include "monster-floor/monster-lite.h"
 #include "save/save.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
@@ -74,14 +73,14 @@ static void handle_signal_simple(int sig)
         p_ptr->died_from = _("強制終了", "Abortion");
         floor.forget_lite();
         floor.forget_view();
-        clear_mon_lite(floor);
+        floor.forget_mon_lite();
         close_game(p_ptr);
         quit(_("強制終了", "interrupt"));
     } else if (signal_count >= 5) {
         p_ptr->died_from = _("強制終了中", "Interrupting");
         floor.forget_lite();
         floor.forget_view();
-        clear_mon_lite(floor);
+        floor.forget_mon_lite();
         p_ptr->playing = false;
         if (!cheat_immortal) {
             p_ptr->is_dead = true;
@@ -130,7 +129,7 @@ static void handle_signal_abort(int sig)
     auto &floor = *p_ptr->current_floor_ptr;
     floor.forget_lite();
     floor.forget_view();
-    clear_mon_lite(floor);
+    floor.forget_mon_lite();
 
     term_erase(0, hgt - 1);
     term_putstr(0, hgt - 1, -1, TERM_RED, _("恐ろしいソフトのバグが飛びかかってきた！", "A gruesome software bug LEAPS out at you!"));

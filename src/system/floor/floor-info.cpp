@@ -671,6 +671,20 @@ void FloorType::forget_view()
 }
 
 /*!
+ * @brief ターン経過に伴いモンスターの灯りを消去する
+ */
+void FloorType::forget_mon_lite()
+{
+    for (auto i = 0; i < this->mon_lite_n; i++) {
+        const auto y = this->mon_lite_y[i];
+        const auto x = this->mon_lite_x[i];
+        this->grid_array[y][x].info &= ~(CAVE_MNLT | CAVE_MNDK);
+    }
+
+    this->mon_lite_n = 0;
+}
+
+/*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos 指定座標

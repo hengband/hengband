@@ -109,7 +109,6 @@
 #include "main-win/main-win-utils.h"
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
-#include "monster-floor/monster-lite.h"
 #include "save/save.h"
 #include "system/angband.h"
 #include "system/floor/floor-info.h"
@@ -1634,7 +1633,7 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             auto &floor = *player_ptr->current_floor_ptr;
             floor.forget_lite();
             floor.forget_view();
-            clear_mon_lite(floor);
+            floor.forget_mon_lite();
 
             term_key_push(SPECIAL_KEY_QUIT);
             break;
@@ -2430,7 +2429,7 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
         auto &floor = *p_ptr->current_floor_ptr;
         floor.forget_lite();
         floor.forget_view();
-        clear_mon_lite(floor);
+        floor.forget_mon_lite();
         term_key_push(SPECIAL_KEY_QUIT);
         return 0;
     }

@@ -358,17 +358,3 @@ void update_mon_lite(PlayerType *player_ptr)
 
     player_ptr->old_monlite = player_ptr->monlite;
 }
-
-/*!
- * @brief 画面切り替え等でモンスターの灯りを消去する
- * @param floor フロアへの参照
- */
-void clear_mon_lite(FloorType &floor)
-{
-    for (int i = 0; i < floor.mon_lite_n; i++) {
-        auto &grid = floor.grid_array[floor.mon_lite_y[i]][floor.mon_lite_x[i]];
-        grid.info &= ~(CAVE_MNLT | CAVE_MNDK);
-    }
-
-    floor.mon_lite_n = 0;
-}
