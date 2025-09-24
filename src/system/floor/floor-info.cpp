@@ -729,6 +729,22 @@ void FloorType::set_view_at(const Pos2D &pos)
     this->view_n++;
 }
 
+void FloorType::set_view()
+{
+    for (auto i = 0; i < this->view_n; i++) {
+        const auto y = this->view_y[i];
+        const auto x = this->view_x[i];
+        const Pos2D pos(y, x);
+        auto &grid = this->get_grid(pos);
+        grid.info &= ~(CAVE_XTRA);
+        if (grid.info & CAVE_TEMP) {
+            continue;
+        }
+
+        this->set_note_and_redraw_at(pos);
+    }
+}
+
 void FloorType::set_note_and_redraw_at(const Pos2D &pos)
 {
     this->get_grid(pos).info |= CAVE_NOTE;

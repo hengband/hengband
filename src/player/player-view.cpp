@@ -339,19 +339,7 @@ void update_view(PlayerType *player_ptr)
         }
     }
 
-    for (auto i = 0; i < floor.view_n; i++) {
-        y = floor.view_y[i];
-        x = floor.view_x[i];
-        const Pos2D pos(y, x);
-        auto &grid = floor.get_grid(pos);
-        grid.info &= ~(CAVE_XTRA);
-        if (grid.info & CAVE_TEMP) {
-            continue;
-        }
-
-        floor.set_note_and_redraw_at(pos);
-    }
-
+    floor.set_view();
     for (const auto &pos : points) {
         auto &grid = floor.get_grid(pos);
         grid.info &= ~(CAVE_TEMP);

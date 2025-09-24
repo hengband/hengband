@@ -86,10 +86,6 @@ public:
     std::array<POSITION, MON_LITE_MAX> mon_lite_y{};
     std::array<POSITION, MON_LITE_MAX> mon_lite_x{};
 
-    POSITION_IDX view_n = 0; //!< Array of grids viewable to the player
-    std::array<POSITION, VIEW_MAX> view_y{};
-    std::array<POSITION, VIEW_MAX> view_x{};
-
     POSITION_IDX redraw_n = 0; //!< Array of grids for delayed visual updating
     std::array<POSITION, REDRAW_MAX> redraw_y{};
     std::array<POSITION, REDRAW_MAX> redraw_x{};
@@ -155,6 +151,7 @@ public:
     void set_lite_at(const Pos2D &pos);
     void set_redraw_at(const Pos2D &pos);
     void set_view_at(const Pos2D &pos);
+    void set_view();
     void set_note_and_redraw_at(const Pos2D &pos);
     void set_note_and_redraw();
     std::vector<Pos2D> reset_lite();
@@ -174,4 +171,8 @@ private:
     short lite_n = 0; //!< Array of grids lit by player lite
     std::array<int, LITE_MAX> lite_y{};
     std::array<int, LITE_MAX> lite_x{};
+
+    short view_n = 0; //!< Array of grids viewable to the player
+    std::array<int, VIEW_MAX> view_y{};
+    std::array<int, VIEW_MAX> view_x{};
 };
