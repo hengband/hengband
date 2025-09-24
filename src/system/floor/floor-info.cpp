@@ -50,12 +50,12 @@ int FloorType::get_level() const
     return this->dun_level;
 }
 
-Grid &FloorType::get_grid(const Pos2D pos)
+Grid &FloorType::get_grid(const Pos2D &pos)
 {
     return this->grid_array[pos.y][pos.x];
 }
 
-const Grid &FloorType::get_grid(const Pos2D pos) const
+const Grid &FloorType::get_grid(const Pos2D &pos) const
 {
     return this->grid_array[pos.y][pos.x];
 }
