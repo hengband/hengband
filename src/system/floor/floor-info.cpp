@@ -109,7 +109,6 @@ const DungeonDefinition &FloorType::get_dungeon_definition() const
 
 /*!
  * @brief 新しく入ったダンジョンの階層に固定されているランダムクエストを探し出しIDを返す。
- * @param player_ptr プレイヤーへの参照ポインタ
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
@@ -137,11 +136,10 @@ QuestId FloorType::get_random_quest_id(tl::optional<int> level_opt) const
 
 /*!
  * @brief 新しく入ったダンジョンの階層に固定されている一般のクエストを探し出しIDを返す.
- * @param player_ptr プレイヤーへの参照ポインタ
  * @param bonus 検索対象になる階へのボーナス。通常0
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QuestId FloorType::get_quest_id(const int bonus) const
+QuestId FloorType::get_quest_id(int bonus) const
 {
     const auto &quests = QuestList::get_instance();
     if (this->is_in_quest()) {
@@ -776,7 +774,6 @@ void FloorType::set_note_and_redraw()
     }
 }
 
-// 前回照らされていた座標たちを記録。
 std::vector<Pos2D> FloorType::reset_lite()
 {
     std::vector<Pos2D> points;
@@ -874,7 +871,6 @@ void FloorType::set_mon_lite(const std::vector<Pos2D> &points, size_t end_temp)
 
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
- * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos 指定座標
  * @return 永久地形でなく、かつ該当のマスにアーティファクトが存在しないならばtrue、永久地形かアーティファクトが存在するならばfalse。
  */
