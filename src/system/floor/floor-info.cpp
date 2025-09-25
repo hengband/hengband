@@ -833,6 +833,21 @@ std::vector<Pos2D> FloorType::collect_temp_mon_lite()
     return points;
 }
 
+std::vector<Pos2D> FloorType::collect_redraw_points()
+{
+    std::vector<Pos2D> points;
+    for (auto i = 0; i < this->redraw_n; i++) {
+        const Pos2D pos(this->redraw_y[i], this->redraw_x[i]);
+        auto &grid = this->get_grid(pos);
+        if (any_bits(grid.info, CAVE_REDRAW)) {
+            points.push_back(pos);
+        }
+    }
+
+    this->redraw_n = 0;
+    return points;
+}
+
 void FloorType::set_mon_lite(const std::vector<Pos2D> &points, size_t end_temp)
 {
     for (size_t i = 0; i < end_temp; i++) {
