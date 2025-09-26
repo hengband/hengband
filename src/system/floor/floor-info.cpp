@@ -704,7 +704,7 @@ void FloorType::reset_lite_area()
 void FloorType::set_lite_at(const Pos2D &pos)
 {
     auto &grid = this->get_grid(pos);
-    if (grid.is_lite()) {
+    if (grid.is_lite() || (this->lite_n >= LITE_MAX)) {
         return;
     }
 
@@ -716,7 +716,7 @@ void FloorType::set_lite_at(const Pos2D &pos)
 void FloorType::set_redraw_at(const Pos2D &pos)
 {
     auto &grid = this->get_grid(pos);
-    if (grid.is_redraw()) {
+    if (grid.is_redraw() || (this->redraw_n >= REDRAW_MAX)) {
         return;
     }
 
@@ -728,7 +728,7 @@ void FloorType::set_redraw_at(const Pos2D &pos)
 void FloorType::set_view_at(const Pos2D &pos)
 {
     auto &grid = this->get_grid(pos);
-    if (grid.is_view()) {
+    if (grid.is_view() || (this->view_n >= VIEW_MAX)) {
         return;
     }
 
