@@ -703,6 +703,10 @@ void FloorType::reset_lite_area()
 
 void FloorType::set_lite_at(const Pos2D &pos)
 {
+    if (!this->contains(pos)) {
+        return;
+    }
+
     auto &grid = this->get_grid(pos);
     if (grid.is_lite() || (this->lite_n >= LITE_MAX)) {
         return;
@@ -715,6 +719,10 @@ void FloorType::set_lite_at(const Pos2D &pos)
 
 void FloorType::set_redraw_at(const Pos2D &pos)
 {
+    if (!this->contains(pos)) {
+        return;
+    }
+
     auto &grid = this->get_grid(pos);
     if (grid.is_redraw() || (this->redraw_n >= REDRAW_MAX)) {
         return;
@@ -727,6 +735,10 @@ void FloorType::set_redraw_at(const Pos2D &pos)
 
 void FloorType::set_view_at(const Pos2D &pos)
 {
+    if (!this->contains(pos)) {
+        return;
+    }
+
     auto &grid = this->get_grid(pos);
     if (grid.is_view() || (this->view_n >= VIEW_MAX)) {
         return;
@@ -752,12 +764,6 @@ void FloorType::set_view()
 
         this->set_note_and_redraw_at(pos);
     }
-}
-
-void FloorType::set_note_and_redraw_at(const Pos2D &pos)
-{
-    this->get_grid(pos).info |= CAVE_NOTE;
-    this->set_redraw_at(pos);
 }
 
 void FloorType::set_note_and_redraw()
@@ -978,4 +984,10 @@ int FloorType::decide_selection_count()
     }
 
     return count;
+}
+
+void FloorType::set_note_and_redraw_at(const Pos2D &pos)
+{
+    this->get_grid(pos).info |= CAVE_NOTE;
+    this->set_redraw_at(pos);
 }
