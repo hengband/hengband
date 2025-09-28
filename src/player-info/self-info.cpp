@@ -164,6 +164,10 @@ static void set_special_attack_info(PlayerType *player_ptr, self_info_type *self
     if (player_ptr->special_attack & ATTACK_POIS) {
         self_ptr->info_list.emplace_back(_("あなたの手は毒に覆われている。", "You can strike the enemy with poison."));
     }
+
+    if (player_ptr->special_attack & ATTACK_HOLY) {
+        self_ptr->info_list.emplace_back(_("あなたの手は聖なる光に覆われている。", "You can strike the enemy with holy."));
+    }
 }
 
 static void set_esp_info(PlayerType *player_ptr, self_info_type *self_ptr)

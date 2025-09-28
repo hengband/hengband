@@ -167,6 +167,9 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int 
         if (player_ptr->special_attack & (ATTACK_POIS)) {
             flags.set(TR_BRAND_POIS);
         }
+        if (player_ptr->special_attack & (ATTACK_HOLY)) {
+            flags.set(TR_SLAY_EVIL);
+        }
     }
 
     if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) {
@@ -257,7 +260,9 @@ AttributeFlags melee_attribute(PlayerType *player_ptr, ItemEntity *o_ptr, combat
     if (player_ptr->special_attack & (ATTACK_POIS)) {
         flags.set(TR_BRAND_POIS);
     }
-
+    if (player_ptr->special_attack & (ATTACK_HOLY)) {
+        flags.set(TR_SLAY_EVIL);
+    }
     if (SpellHex(player_ptr).is_spelling_specific(HEX_RUNESWORD)) {
         flags.set(TR_SLAY_GOOD);
     }

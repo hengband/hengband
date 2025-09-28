@@ -637,6 +637,10 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_ATTKPOIS);
     }
 
+    if (player_ptr->special_attack & ATTACK_HOLY) {
+        ADD_BAR_FLAG(BAR_ATTKHOLY);
+    }
+
     if (ninja_data && ninja_data->s_stealth) {
         ADD_BAR_FLAG(BAR_SUPERSTEALTH);
     }

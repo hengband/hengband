@@ -59,6 +59,11 @@ bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
         msg_print(_("毒で攻撃できなくなった。", "Your temporary poison brand fades away."));
     }
 
+    if ((player_ptr->special_attack & (ATTACK_HOLY)) && (attack_type != ATTACK_HOLY)) {
+        player_ptr->special_attack &= ~(ATTACK_HOLY);
+        msg_print(_("聖なる力で攻撃できなくなった。", "Your temporary holy power fades away."));
+    }
+
     if ((v) && (attack_type)) {
         player_ptr->special_attack |= (attack_type);
         player_ptr->ele_attack = v;
@@ -78,6 +83,9 @@ bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
             break;
         case ATTACK_POIS:
             element = _("毒", "poison your enemies!");
+            break;
+        case ATTACK_HOLY:
+            element = _("聖なる力", "holy power to your enemies!");
             break;
         default: // @todo 本来はruntime_error を飛ばすべきだが、既存コードと同じように動くことを優先した.
             element = _("(なし)", "do nothing special.");
