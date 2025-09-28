@@ -459,7 +459,7 @@ tl::optional<std::string> do_nature_spell(PlayerType *player_ptr, SPELL_IDX spel
 
     case 30: {
         if (cast) {
-            brand_weapon(player_ptr, randint0(2));
+            brand_weapon(player_ptr, (BrandType)randint0(2));
         }
     } break;
 

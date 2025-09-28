@@ -322,7 +322,7 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
 
     case 21: {
         if (cast) {
-            brand_weapon(player_ptr, 13);
+            brand_weapon(player_ptr, BrandType::KILL_EVIL);
         }
     } break;
 

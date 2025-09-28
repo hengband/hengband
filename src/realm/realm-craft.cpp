@@ -355,7 +355,7 @@ tl::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell
 
     case 29: {
         if (cast) {
-            brand_weapon(player_ptr, randint0(18));
+            brand_weapon(player_ptr, (BrandType)randint0(18));
         }
     } break;
 

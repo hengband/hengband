@@ -393,7 +393,7 @@ tl::optional<std::string> do_chaos_spell(PlayerType *player_ptr, SPELL_IDX spell
 
     case 22: {
         if (cast) {
-            brand_weapon(player_ptr, 2);
+            brand_weapon(player_ptr, BrandType::CHAOTIC);
         }
     } break;
 

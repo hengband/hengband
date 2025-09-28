@@ -342,7 +342,7 @@ tl::optional<std::string> do_trump_spell(PlayerType *player_ptr, SPELL_IDX spell
 
     case 21: {
         if (cast) {
-            brand_weapon(player_ptr, 5);
+            brand_weapon(player_ptr, BrandType::TRUMP);
         }
     } break;
 

@@ -266,7 +266,7 @@ tl::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spell
 
     case 12: {
         if (cast) {
-            brand_weapon(player_ptr, 3);
+            brand_weapon(player_ptr, BrandType::BRAND_POISON);
         }
     } break;
 
@@ -394,7 +394,7 @@ tl::optional<std::string> do_death_spell(PlayerType *player_ptr, SPELL_IDX spell
 
     case 20: {
         if (cast) {
-            brand_weapon(player_ptr, 4);
+            brand_weapon(player_ptr, BrandType::VAMPIRIC);
         }
     } break;
 

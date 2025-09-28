@@ -519,9 +519,9 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
 /*!
  * @brief 武器へのエゴ付加処理
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param brand_type エゴ化ID(EgoDefinitionsとは連動していない)
+ * @param BrandType エゴ化ID(EgoDefinitionsとは連動していない)
  */
-void brand_weapon(PlayerType *player_ptr, int brand_type)
+void brand_weapon(PlayerType *player_ptr, BrandType BrandType)
 {
     constexpr auto q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
     constexpr auto s = _("強化できる武器がない。", "You have nothing to enchant.");
@@ -550,8 +550,8 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
 
     const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     concptr act = nullptr;
-    switch (brand_type) {
-    case 17:
+    switch (BrandType) {
+    case BrandType::SHARPNESS_OR_EARTHQUAKE:
         if (o_ptr->bi_key.tval() == ItemKindType::SWORD) {
             act = _("は鋭さを増した！", "becomes very sharp!");
             o_ptr->ego_idx = EgoType::SHARPNESS;
@@ -566,72 +566,72 @@ void brand_weapon(PlayerType *player_ptr, int brand_type)
         }
 
         break;
-    case 16:
+    case BrandType::KILL_HUMAN:
         act = _("は人間の血を求めている！", "seems to be looking for humans!");
         o_ptr->ego_idx = EgoType::KILL_HUMAN;
         break;
-    case 15:
+    case BrandType::BRAND_ELEC:
         act = _("は電撃に覆われた！", "covered with lightning!");
         o_ptr->ego_idx = EgoType::BRAND_ELEC;
         break;
-    case 14:
+    case BrandType::BRAND_ACID:
         act = _("は酸に覆われた！", "coated with acid!");
         o_ptr->ego_idx = EgoType::BRAND_ACID;
         break;
-    case 13:
+    case BrandType::KILL_EVIL:
         act = _("は邪悪なる怪物を求めている！", "seems to be looking for evil monsters!");
         o_ptr->ego_idx = EgoType::KILL_EVIL;
         break;
-    case 12:
+    case BrandType::KILL_DEMON:
         act = _("は異世界の住人の肉体を求めている！", "seems to be looking for demons!");
         o_ptr->ego_idx = EgoType::KILL_DEMON;
         break;
-    case 11:
+    case BrandType::KILL_UNDEAD:
         act = _("は屍を求めている！", "seems to be looking for undead!");
         o_ptr->ego_idx = EgoType::KILL_UNDEAD;
         break;
-    case 10:
+    case BrandType::KILL_ANIMAL:
         act = _("は動物の血を求めている！", "seems to be looking for animals!");
         o_ptr->ego_idx = EgoType::KILL_ANIMAL;
         break;
-    case 9:
+    case BrandType::KILL_DRAGON:
         act = _("はドラゴンの血を求めている！", "seems to be looking for dragons!");
         o_ptr->ego_idx = EgoType::KILL_DRAGON;
         break;
-    case 8:
+    case BrandType::KILL_TROLL:
         act = _("はトロルの血を求めている！", "seems to be looking for troll!s");
         o_ptr->ego_idx = EgoType::KILL_TROLL;
         break;
-    case 7:
+    case BrandType::KILL_ORC:
         act = _("はオークの血を求めている！", "seems to be looking for orcs!");
         o_ptr->ego_idx = EgoType::KILL_ORC;
         break;
-    case 6:
+    case BrandType::KILL_GIANT:
         act = _("は巨人の血を求めている！", "seems to be looking for giants!");
         o_ptr->ego_idx = EgoType::KILL_GIANT;
         break;
-    case 5:
+    case BrandType::TRUMP:
         act = _("は非常に不安定になったようだ。", "seems very unstable now.");
         o_ptr->ego_idx = EgoType::TRUMP;
         o_ptr->pval = randnum1<short>(2);
         break;
-    case 4:
+    case BrandType::VAMPIRIC:
         act = _("は血を求めている！", "thirsts for blood!");
         o_ptr->ego_idx = EgoType::VAMPIRIC;
         break;
-    case 3:
+    case BrandType::BRAND_POISON:
         act = _("は毒に覆われた。", "is coated with poison.");
         o_ptr->ego_idx = EgoType::BRAND_POIS;
         break;
-    case 2:
+    case BrandType::CHAOTIC:
         act = _("は純ログルスに飲み込まれた。", "is engulfed in raw Logrus!");
         o_ptr->ego_idx = EgoType::CHAOTIC;
         break;
-    case 1:
+    case BrandType::BRAND_FIRE:
         act = _("は炎のシールドに覆われた！", "is covered in a fiery shield!");
         o_ptr->ego_idx = EgoType::BRAND_FIRE;
         break;
-    default:
+    case BrandType::BRAND_COLD:
         act = _("は深く冷たいブルーに輝いた！", "glows deep, icy blue!");
         o_ptr->ego_idx = EgoType::BRAND_COLD;
         break;
