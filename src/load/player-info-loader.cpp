@@ -423,6 +423,24 @@ static void set_timed_effects(PlayerType *player_ptr)
     }
 
     player_ptr->tim_res_nether = rd_s16b();
+
+    if (h_older_than(3, 0, 1, 29)) {
+        set_zangband_tim_res(player_ptr);
+    } else {
+        player_ptr->tim_res_lite = rd_s16b();
+        player_ptr->tim_res_dark = rd_s16b();
+        player_ptr->tim_res_shard = rd_s16b();
+        player_ptr->tim_res_blind = rd_s16b();
+        player_ptr->tim_res_conf = rd_s16b();
+        player_ptr->tim_res_sound = rd_s16b();
+        player_ptr->tim_res_nexus = rd_s16b();
+        player_ptr->tim_res_chaos = rd_s16b();
+        player_ptr->tim_res_disenchant = rd_s16b();
+        player_ptr->tim_res_water = rd_s16b();
+        player_ptr->tim_res_fear = rd_s16b();
+        player_ptr->tim_res_curse = rd_s16b();
+    }
+
     if (h_older_than(0, 4, 11)) {
         set_zangband_mimic(player_ptr);
     } else {

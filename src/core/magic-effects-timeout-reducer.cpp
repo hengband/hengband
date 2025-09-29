@@ -109,6 +109,54 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_tim_res_time(player_ptr, player_ptr->tim_res_time - 1, true);
     }
 
+    if (player_ptr->tim_res_lite) {
+        (void)set_tim_res_lite(player_ptr, player_ptr->tim_res_lite - 1, true);
+    }
+
+    if (player_ptr->tim_res_dark) {
+        (void)set_tim_res_dark(player_ptr, player_ptr->tim_res_dark - 1, true);
+    }
+
+    if (player_ptr->tim_res_shard) {
+        (void)set_tim_res_shard(player_ptr, player_ptr->tim_res_shard - 1, true);
+    }
+
+    if (player_ptr->tim_res_blind) {
+        (void)set_tim_res_blind(player_ptr, player_ptr->tim_res_blind - 1, true);
+    }
+
+    if (player_ptr->tim_res_conf) {
+        (void)set_tim_res_conf(player_ptr, player_ptr->tim_res_conf - 1, true);
+    }
+
+    if (player_ptr->tim_res_sound) {
+        (void)set_tim_res_sound(player_ptr, player_ptr->tim_res_sound - 1, true);
+    }
+
+    if (player_ptr->tim_res_nexus) {
+        (void)set_tim_res_nexus(player_ptr, player_ptr->tim_res_nexus - 1, true);
+    }
+
+    if (player_ptr->tim_res_chaos) {
+        (void)set_tim_res_chaos(player_ptr, player_ptr->tim_res_chaos - 1, true);
+    }
+
+    if (player_ptr->tim_res_disenchant) {
+        (void)set_tim_res_disenchant(player_ptr, player_ptr->tim_res_disenchant - 1, true);
+    }
+
+    if (player_ptr->tim_res_water) {
+        (void)set_tim_res_water(player_ptr, player_ptr->tim_res_water - 1, true);
+    }
+
+    if (player_ptr->tim_res_fear) {
+        (void)set_tim_res_fear(player_ptr, player_ptr->tim_res_fear - 1, true);
+    }
+
+    if (player_ptr->tim_res_curse) {
+        (void)set_tim_res_curse(player_ptr, player_ptr->tim_res_curse - 1, true);
+    }
+
     if (player_ptr->tim_reflect) {
         (void)set_tim_reflect(player_ptr, player_ptr->tim_reflect - 1, true);
     }

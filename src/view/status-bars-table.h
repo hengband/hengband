@@ -79,8 +79,21 @@ enum bar_definition_type {
     BAR_ESP_EVIL = 66, /*!< 下部ステータス表示: 邪悪感知 */
     BAR_NIGHTSIGHT = 67, /*!< 下部ステータス表示: 暗視 */
     BAR_ATTKHOLY = 68, /*!< 下部ステータス表示: 破邪 */
+    BAR_RESLITE = 69, /*!< 下部ステータス表示: 耐光 */
+    BAR_RESDARK = 70, /*!< 下部ステータス表示: 耐暗 */
+    BAR_RESSHARD = 71, /*!< 下部ステータス表示: 耐破 */
+    BAR_RESBLIND = 72, /*!< 下部ステータス表示: 耐盲 */
+    BAR_RESCONF = 73, /*!< 下部ステータス表示: 耐混乱 */
+    BAR_RESSOUND = 74, /*!< 下部ステータス表示: 耐轟音 */
+    BAR_RESNEXUS = 75, /*!< 下部ステータス表示: 耐因混 */
+    BAR_RESCHAOS = 76, /*!< 下部ステータス表示: 耐カオス */
+    BAR_RESDISEN = 77, /*!< 下部ステータス表示: 耐劣化 */
+    BAR_RESWATER = 78, /*!< 下部ステータス表示: 耐水 */
+    BAR_RESFEAR = 79, /*!< 下部ステータス表示: 耐恐怖 */
+    BAR_RESCURSE = 80, /*!< 下部ステータス表示: 耐呪力 */
+
 };
 
-#define MAX_STAT_BARS 70
+#define MAX_STAT_BARS 82
 
 extern stat_bar stat_bars[MAX_STAT_BARS];

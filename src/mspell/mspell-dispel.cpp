@@ -51,6 +51,18 @@ static void dispel_player(PlayerType *player_ptr)
     (void)set_pass_wall(player_ptr, 0, true);
     (void)set_tim_res_nether(player_ptr, 0, true);
     (void)set_tim_res_time(player_ptr, 0, true);
+    (void)set_tim_res_lite(player_ptr, 0, true);
+    (void)set_tim_res_dark(player_ptr, 0, true);
+    (void)set_tim_res_shard(player_ptr, 0, true);
+    (void)set_tim_res_blind(player_ptr, 0, true);
+    (void)set_tim_res_conf(player_ptr, 0, true);
+    (void)set_tim_res_sound(player_ptr, 0, true);
+    (void)set_tim_res_nexus(player_ptr, 0, true);
+    (void)set_tim_res_chaos(player_ptr, 0, true);
+    (void)set_tim_res_disenchant(player_ptr, 0, true);
+    (void)set_tim_res_water(player_ptr, 0, true);
+    (void)set_tim_res_fear(player_ptr, 0, true);
+    (void)set_tim_res_curse(player_ptr, 0, true);
     (void)set_tim_reflect(player_ptr, 0, true);
     (void)set_multishadow(player_ptr, 0, true);
     (void)set_dustrobe(player_ptr, 0, true);

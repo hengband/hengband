@@ -209,6 +209,18 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->tsubureru);
     wr_s16b(player_ptr->magicdef);
     wr_s16b(player_ptr->tim_res_nether);
+    wr_s16b(player_ptr->tim_res_lite);
+    wr_s16b(player_ptr->tim_res_dark);
+    wr_s16b(player_ptr->tim_res_shard);
+    wr_s16b(player_ptr->tim_res_blind);
+    wr_s16b(player_ptr->tim_res_conf);
+    wr_s16b(player_ptr->tim_res_sound);
+    wr_s16b(player_ptr->tim_res_nexus);
+    wr_s16b(player_ptr->tim_res_chaos);
+    wr_s16b(player_ptr->tim_res_disenchant);
+    wr_s16b(player_ptr->tim_res_water);
+    wr_s16b(player_ptr->tim_res_fear);
+    wr_s16b(player_ptr->tim_res_curse);
     wr_s16b(player_ptr->tim_res_time);
     wr_byte((byte)player_ptr->mimic_form);
     wr_s16b(player_ptr->tim_mimic);

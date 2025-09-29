@@ -129,6 +129,22 @@ void set_zangband_bounty_uniques(PlayerType *player_ptr)
     }
 }
 
+void set_zangband_tim_res(PlayerType *player_ptr)
+{
+    player_ptr->tim_res_lite = 0;
+    player_ptr->tim_res_dark = 0;
+    player_ptr->tim_res_shard = 0;
+    player_ptr->tim_res_blind = 0;
+    player_ptr->tim_res_conf = 0;
+    player_ptr->tim_res_sound = 0;
+    player_ptr->tim_res_nexus = 0;
+    player_ptr->tim_res_chaos = 0;
+    player_ptr->tim_res_disenchant = 0;
+    player_ptr->tim_res_water = 0;
+    player_ptr->tim_res_fear = 0;
+    player_ptr->tim_res_curse = 0;
+}
+
 void set_zangband_mimic(PlayerType *player_ptr)
 {
     player_ptr->tim_res_time = 0;

@@ -1310,7 +1310,7 @@ BIT_FLAGS has_resist_conf(PlayerType *player_ptr)
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
-    if (player_ptr->ult_res || player_ptr->magicdef) {
+    if (player_ptr->ult_res || player_ptr->magicdef || player_ptr->tim_res_conf) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1321,7 +1321,7 @@ BIT_FLAGS has_resist_sound(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_SOUND);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_sound) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1332,7 +1332,7 @@ BIT_FLAGS has_resist_lite(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_LITE);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_lite) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1354,7 +1354,7 @@ BIT_FLAGS has_resist_dark(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DARK) | common_cause_flags(player_ptr, TR_IM_DARK);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_dark) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1365,7 +1365,7 @@ BIT_FLAGS has_resist_chaos(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_CHAOS);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_chaos) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1376,7 +1376,7 @@ BIT_FLAGS has_resist_disen(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DISEN);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_disenchant) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1387,7 +1387,7 @@ BIT_FLAGS has_resist_shard(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_SHARDS);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_shard) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1398,7 +1398,7 @@ BIT_FLAGS has_resist_nexus(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_NEXUS);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_nexus) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1413,7 +1413,7 @@ BIT_FLAGS has_resist_blind(PlayerType *player_ptr)
         result |= FLAG_CAUSE_PERSONALITY;
     }
 
-    if (player_ptr->ult_res || player_ptr->magicdef) {
+    if (player_ptr->ult_res || player_ptr->magicdef || player_ptr->tim_res_blind) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1446,7 +1446,7 @@ BIT_FLAGS has_resist_water(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_WATER);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_water) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1462,7 +1462,7 @@ BIT_FLAGS has_resist_curse(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_CURSE);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_curse) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1527,7 +1527,7 @@ BIT_FLAGS has_resist_fear(PlayerType *player_ptr)
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (is_hero(player_ptr) || is_shero(player_ptr) || player_ptr->ult_res) {
+    if (is_hero(player_ptr) || is_shero(player_ptr) || player_ptr->ult_res || player_ptr->tim_res_fear) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 

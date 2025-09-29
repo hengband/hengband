@@ -120,6 +120,18 @@ public:
     TIME_EFFECT tsubureru{};
     TIME_EFFECT magicdef{};
     TIME_EFFECT tim_res_nether{}; /* Timed -- Nether resistance */
+    TIME_EFFECT tim_res_lite{}; /* Timed -- Lite resistance */
+    TIME_EFFECT tim_res_dark{}; /* Timed -- Dark resistance */
+    TIME_EFFECT tim_res_shard{}; /* Timed -- Shard resistance */
+    TIME_EFFECT tim_res_blind{}; /* Timed -- Blind resistance */
+    TIME_EFFECT tim_res_conf{}; /* Timed -- Confusion resistance */
+    TIME_EFFECT tim_res_sound{}; /* Timed -- Sound resistance */
+    TIME_EFFECT tim_res_nexus{}; /* Timed -- Nexus resistance */
+    TIME_EFFECT tim_res_chaos{}; /* Timed -- Chaos resistance */
+    TIME_EFFECT tim_res_disenchant{}; /* Timed -- Disenchantment resistance */
+    TIME_EFFECT tim_res_water{}; /* Timed -- Water resistance */
+    TIME_EFFECT tim_res_fear{}; /* Timed -- Fear resistance */
+    TIME_EFFECT tim_res_curse{}; /* Timed -- Curse resistance */
     TIME_EFFECT tim_res_time{}; /* Timed -- Time resistance */
     MimicKindType mimic_form{};
     TIME_EFFECT tim_mimic{};

@@ -10,6 +10,7 @@ void set_zangband_realm(PlayerType *player_ptr);
 void set_zangband_skill(PlayerType *player_ptr);
 void set_zangband_race(PlayerType *player_ptr);
 void set_zangband_bounty_uniques(PlayerType *player_ptr);
+void set_zangband_tim_res(PlayerType *player_ptr);
 void set_zangband_mimic(PlayerType *player_ptr);
 void set_zangband_holy_aura(PlayerType *player_ptr);
 void set_zangband_reflection(PlayerType *player_ptr);
