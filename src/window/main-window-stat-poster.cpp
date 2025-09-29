@@ -714,6 +714,10 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_RESCURSE);
     }
 
+    if (player_ptr->tim_emission) {
+        ADD_BAR_FLAG(BAR_EMISSION);
+    }
+
     add_hex_status_flags(player_ptr, bar_flags);
     TERM_LEN col = 0, num = 0;
     for (int i = 0; stat_bars[i].sstr; i++) {

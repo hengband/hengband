@@ -143,6 +143,8 @@ public:
     TIME_EFFECT tim_reflect{}; /* Timed -- Reflect */
     TIME_EFFECT multishadow{}; /* Timed -- Multi-shadow */
     TIME_EFFECT dustrobe{}; /* Timed -- Robe of dust */
+    
+    TIME_EFFECT tim_emission{}; /* Timed -- Player Emission */
 
     bool timewalk{};
 

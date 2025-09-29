@@ -24,3 +24,4 @@ void set_zangband_quest(PlayerType *player_ptr, QuestType *const q_ptr, const Qu
 void set_zangband_class(PlayerType *player_ptr);
 void set_zangband_learnt_spells(PlayerType *player_ptr);
 void set_zangband_pet(PlayerType *player_ptr);
+void set_zangband_tim_crusade(PlayerType *player_ptr);

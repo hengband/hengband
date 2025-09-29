@@ -465,6 +465,12 @@ static void set_timed_effects(PlayerType *player_ptr)
         player_ptr->multishadow = rd_s16b();
         player_ptr->dustrobe = rd_s16b();
     }
+
+    if (h_older_than(3, 0, 1, 29)) {
+        set_zangband_tim_crusade(player_ptr);
+    } else {
+        player_ptr->tim_emission = rd_s16b();
+    }
 }
 
 static void set_mutations(PlayerType *player_ptr)

@@ -91,9 +91,10 @@ enum bar_definition_type {
     BAR_RESWATER = 78, /*!< 下部ステータス表示: 耐水 */
     BAR_RESFEAR = 79, /*!< 下部ステータス表示: 耐恐怖 */
     BAR_RESCURSE = 80, /*!< 下部ステータス表示: 耐呪力 */
+    BAR_EMISSION = 81, /*!< 下部ステータス表示: 発光 */
 
 };
 
-#define MAX_STAT_BARS 82
+#define MAX_STAT_BARS 83
 
 extern stat_bar stat_bars[MAX_STAT_BARS];

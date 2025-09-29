@@ -96,6 +96,10 @@ void update_lite_radius(PlayerType *player_ptr)
         player_ptr->cur_lite++;
     }
 
+    if (player_ptr->tim_emission > 0) {
+        player_ptr->cur_lite += player_ptr->lev / 5;
+    }
+
     if (player_ptr->cur_lite > 14) {
         player_ptr->cur_lite = 14;
     }

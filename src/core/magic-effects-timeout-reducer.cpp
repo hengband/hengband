@@ -253,6 +253,10 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_oppose_pois(player_ptr, player_ptr->oppose_pois - 1, true);
     }
 
+    if (player_ptr->tim_emission) {
+        (void)set_tim_emission(player_ptr, player_ptr->tim_emission - 1, true);
+    }
+
     if (player_ptr->ult_res) {
         (void)set_ultimate_res(player_ptr, player_ptr->ult_res - 1, true);
     }

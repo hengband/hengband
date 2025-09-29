@@ -88,6 +88,7 @@ static void dispel_player(PlayerType *player_ptr)
     (void)set_mimic(player_ptr, 0, MimicKindType::NONE, true);
     (void)set_ele_attack(player_ptr, 0, 0);
     (void)set_ele_immune(player_ptr, 0, 0);
+    (void)set_tim_emission(player_ptr, 0, true);
 
     if (player_ptr->special_attack & ATTACK_CONFUSE) {
         player_ptr->special_attack &= ~(ATTACK_CONFUSE);
