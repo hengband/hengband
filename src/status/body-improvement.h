@@ -19,3 +19,4 @@ bool set_tim_regen(PlayerType *player_ptr, short v, bool do_dec);
 bool set_tim_reflect(PlayerType *player_ptr, short v, bool do_dec);
 bool set_pass_wall(PlayerType *player_ptr, short v, bool do_dec);
 bool set_tim_emission(PlayerType *player_ptr, short v, bool do_dec);
+bool set_tim_exorcism(PlayerType *player_ptr, short v, bool do_dec);

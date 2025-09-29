@@ -145,6 +145,7 @@ public:
     TIME_EFFECT dustrobe{}; /* Timed -- Robe of dust */
     
     TIME_EFFECT tim_emission{}; /* Timed -- Player Emission */
+    TIME_EFFECT tim_exorcism{}; /* Timed -- Exorcism */
 
     bool timewalk{};
 

@@ -92,9 +92,10 @@ enum bar_definition_type {
     BAR_RESFEAR = 79, /*!< 下部ステータス表示: 耐恐怖 */
     BAR_RESCURSE = 80, /*!< 下部ステータス表示: 耐呪力 */
     BAR_EMISSION = 81, /*!< 下部ステータス表示: 発光 */
+    BAR_EXORCISM = 82, /*!< 下部ステータス表示: 浄化 */
 
 };
 
-#define MAX_STAT_BARS 83
+#define MAX_STAT_BARS 84
 
 extern stat_bar stat_bars[MAX_STAT_BARS];

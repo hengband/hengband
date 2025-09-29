@@ -81,6 +81,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->multishadow = 0;
     player_ptr->dustrobe = 0;
     player_ptr->tim_emission = 0;
+    player_ptr->tim_exorcism = 0;
     player_ptr->action = ACTION_NONE;
 
     player_ptr->oppose_acid = 0; /* Timed -- oppose acid */

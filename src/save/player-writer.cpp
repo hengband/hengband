@@ -232,6 +232,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->multishadow);
     wr_s16b(player_ptr->dustrobe);
     wr_s16b(player_ptr->tim_emission);
+    wr_s16b(player_ptr->tim_exorcism);
 
     wr_s16b(player_ptr->chaos_patron);
     wr_FlagGroup(player_ptr->muta, wr_byte);

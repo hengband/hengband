@@ -35,6 +35,21 @@ void decide_blood_sucking(PlayerType *player_ptr, player_attack_type *pa_ptr)
 }
 
 /*!
+ * @brief 浄化(悪魔・アンデッドモンスターからの吸血)をできるか判定する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ */
+void decide_exorcism(PlayerType *player_ptr, player_attack_type *pa_ptr)
+{
+    bool is_exxorcism = player_ptr->tim_exorcism > 0;
+    if (!is_exxorcism) {
+        return;
+    }
+
+    pa_ptr->can_drain = pa_ptr->m_ptr->has_demon_flag() || pa_ptr->m_ptr->has_undead_flag();
+}
+
+/*!
  * @brief 吸血量を計算する
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  */
