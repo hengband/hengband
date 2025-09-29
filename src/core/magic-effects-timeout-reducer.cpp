@@ -261,6 +261,10 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_tim_exorcism(player_ptr, player_ptr->tim_exorcism - 1, true);
     }
 
+    if (player_ptr->tim_imm_dark) {
+        (void)set_tim_imm_dark(player_ptr, player_ptr->tim_imm_dark - 1, true);
+    }
+
     if (player_ptr->ult_res) {
         (void)set_ultimate_res(player_ptr, player_ptr->ult_res - 1, true);
     }

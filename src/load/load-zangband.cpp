@@ -307,4 +307,5 @@ void set_zangband_tim_crusade(PlayerType *player_ptr)
 {
     player_ptr->tim_emission = 0;
     player_ptr->tim_exorcism = 0;
+    player_ptr->tim_imm_dark = 0;
 }

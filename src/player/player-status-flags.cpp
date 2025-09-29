@@ -1354,7 +1354,7 @@ BIT_FLAGS has_resist_dark(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DARK) | common_cause_flags(player_ptr, TR_IM_DARK);
 
-    if (player_ptr->ult_res || player_ptr->tim_res_dark) {
+    if (player_ptr->ult_res || player_ptr->tim_res_dark || player_ptr->tim_imm_dark) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1590,7 +1590,7 @@ BIT_FLAGS has_immune_dark(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_DARK);
 
-    if (player_ptr->wraith_form) {
+    if (player_ptr->wraith_form || player_ptr->tim_imm_dark) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 

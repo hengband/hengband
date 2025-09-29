@@ -471,6 +471,7 @@ static void set_timed_effects(PlayerType *player_ptr)
     } else {
         player_ptr->tim_emission = rd_s16b();
         player_ptr->tim_exorcism = rd_s16b();
+        player_ptr->tim_imm_dark = rd_s16b();
     }
 }
 

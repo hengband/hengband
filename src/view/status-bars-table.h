@@ -93,9 +93,10 @@ enum bar_definition_type {
     BAR_RESCURSE = 80, /*!< 下部ステータス表示: 耐呪力 */
     BAR_EMISSION = 81, /*!< 下部ステータス表示: 発光 */
     BAR_EXORCISM = 82, /*!< 下部ステータス表示: 浄化 */
+    BAR_IMMDARK = 83, /*!< 下部ステータス表示: 暗黒免疫 */
 
 };
 
-#define MAX_STAT_BARS 84
+#define MAX_STAT_BARS 85
 
 extern stat_bar stat_bars[MAX_STAT_BARS];

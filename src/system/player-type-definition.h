@@ -147,6 +147,8 @@ public:
     TIME_EFFECT tim_emission{}; /* Timed -- Player Emission */
     TIME_EFFECT tim_exorcism{}; /* Timed -- Exorcism */
 
+    TIME_EFFECT tim_imm_dark{}; /* Timed -- Darkness immunity */
+
     bool timewalk{};
 
 #define COMMAND_ARG_REST_UNTIL_DONE -2 /*!<休憩コマンド引数 … 必要な分だけ回復 */

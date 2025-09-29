@@ -40,4 +40,5 @@ stat_bar stat_bars[MAX_STAT_BARS] = { { TERM_YELLOW, _("つ", "Ts"), _("つよ�
     { TERM_L_DARK, _("劣", "Di"), _("耐劣化", "RDis") }, { TERM_L_DARK, _("水", "Wa"), _("耐水", "RWtr") },
     { TERM_L_DARK, _("怖", "Fe"), _("耐恐怖", "RFea") }, { TERM_L_DARK, _("呪", "Cu"), _("耐呪い", "RCrs") },
     { TERM_L_WHITE, _("輝", "Em"), _("発光", "Emission") }, { TERM_WHITE, _("浄", "Ex"), _("浄化", "Exocsm") },
+    { TERM_L_DARK, _("暗", "ID"), _("暗免疫", "ImmDark") },
     { 0, nullptr, nullptr } };

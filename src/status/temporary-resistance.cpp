@@ -632,3 +632,40 @@ bool set_tim_res_curse(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     handle_stuff(player_ptr);
     return true;
 }
+
+bool set_tim_imm_dark(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
+{
+    bool notice = false;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
+    if (player_ptr->is_dead) {
+        return false;
+    }
+    if (v) {
+        if (player_ptr->tim_imm_dark && !do_dec) {
+            if (player_ptr->tim_imm_dark > v) {
+                return false;
+            }
+        } else if (!player_ptr->tim_imm_dark) {
+            msg_print(_("暗黒の力に対して完全な耐性がついた気がする！", "You feel dark-immunity!"));
+            notice = true;
+        }
+    } else {
+        if (player_ptr->tim_imm_dark) {
+            msg_print(_("暗黒の力に対する完全な耐性を喪った気がする。", "You feel lose dark-immunity"));
+            notice = true;
+        }
+    }
+    player_ptr->tim_imm_dark = v;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    if (!notice) {
+        return false;
+    }
+    if (disturb_state) {
+        disturb(player_ptr, false, false);
+    }
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    handle_stuff(player_ptr);
+    return true;
+}
