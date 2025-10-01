@@ -3825,30 +3825,18 @@
             },
             {
               "spell_id": 2,
-              "spell_tag": "Remove_Fear",
+              "spell_tag": "Unbarring_Ways",
               "name": {
-                "ja": "恐怖除去",
-                "en": "Remove Fear",
+                "ja": "開かれた道",
+                "en": "Unbarring Ways",
               },
               "description": {
-                "ja": "恐怖を取り除く。",
-                "en": "Removes fear.",
+                "ja": "一直線上の全ての罠と扉を破壊する。",
+                "en": "Fires a beam which destroy traps and doors.",
               },
             },
             {
               "spell_id": 3,
-              "spell_tag": "Scare_Monster",
-              "name": {
-                "ja": "威圧",
-                "en": "Scare Monster",
-              },
-              "description": {
-                "ja": "モンスター1体を恐怖させる。抵抗されると無効。",
-                "en": "Attempts to scare a monster.",
-              },
-            },
-            {
-              "spell_id": 4,
               "spell_tag": "Sanctuary",
               "name": {
                 "ja": "聖域",
@@ -3857,6 +3845,18 @@
               "description": {
                 "ja": "隣接した全てのモンスターを眠らせる。抵抗されると無効。",
                 "en": "Attempts to put to sleep monsters in the adjacent squares.",
+              },
+            },
+            {
+              "spell_id": 4,
+              "spell_tag": "Heroism",
+              "name": {
+                "ja": "士気高揚",
+                "en": "Heroism",
+              },
+              "description": {
+                "ja": "一定時間、ヒーロー気分になる。",
+                "en": "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.",
               },
             },
             {
@@ -3905,6 +3905,30 @@
           "spells": [
             {
               "spell_id": 8,
+              "spell_tag": "Cool_Pose",
+              "name": {
+                "ja": "かっこいいポーズ",
+                "en": "Cool Pose",
+              },
+              "description": {
+                "ja": "一定時間、光源範囲を増やす。",
+                "en": "Gives more lights up.",
+              },
+            },
+            {
+              "spell_id": 9,
+              "spell_tag": "Resist_Lite_and_Dark",
+              "name": {
+                "ja": "耐光耐暗",
+                "en": "Resist Lite and Dark",
+              },
+              "description": {
+                "ja": "一定時間、閃光と暗黒に対する耐性を得る。",
+                "en": "Gives resistance to lite and darkness.",
+              },
+            },
+            {
+              "spell_id": 10,
               "spell_tag": "Scatter_Evil",
               "name": {
                 "ja": "邪悪飛ばし",
@@ -3916,7 +3940,19 @@
               },
             },
             {
-              "spell_id": 9,
+              "spell_id": 11,
+              "spell_tag": "Sunny_Side_Up",
+              "name": {
+                "ja": "サニー・サイド・アップ",
+                "en": "Sunny Side Up",
+              },
+              "description": {
+                "ja": "閃光のボルトもしくはビームを放つ。",
+                "en": "Fires a bolt or beam of lite.",
+              },
+            },
+            {
+              "spell_id": 12,
               "spell_tag": "Holy_Orb",
               "name": {
                 "ja": "聖なる光球",
@@ -3928,19 +3964,7 @@
               },
             },
             {
-              "spell_id": 10,
-              "spell_tag": "Exorcism",
-              "name": {
-                "ja": "悪魔払い",
-                "en": "Exorcism",
-              },
-              "description": {
-                "ja": "視界内の全てのアンデッド及び悪魔にダメージを与え、邪悪なモンスターを恐怖させる。",
-                "en": "Damages all undead and demons in sight, and scares all evil monsters in sight.",
-              },
-            },
-            {
-              "spell_id": 11,
+              "spell_id": 13,
               "spell_tag": "Remove_Curse",
               "name": {
                 "ja": "解呪",
@@ -3952,19 +3976,7 @@
               },
             },
             {
-              "spell_id": 12,
-              "spell_tag": "Sense_Unseen",
-              "name": {
-                "ja": "透明視認",
-                "en": "Sense Unseen",
-              },
-              "description": {
-                "ja": "一定時間、透明なものが見えるようになる。",
-                "en": "Gives see invisible for a while.",
-              },
-            },
-            {
-              "spell_id": 13,
+              "spell_id": 14,
               "spell_tag": "Protection_from_Evil",
               "name": {
                 "ja": "対邪悪結界",
@@ -3973,18 +3985,6 @@
               "description": {
                 "ja": "邪悪なモンスターの攻撃を防ぐバリアを張る。",
                 "en": "Gives aura which protects you from evil monster's physical attack.",
-              },
-            },
-            {
-              "spell_id": 14,
-              "spell_tag": "Judgment_Thunder",
-              "name": {
-                "ja": "裁きの雷",
-                "en": "Judgment Thunder",
-              },
-              "description": {
-                "ja": "強力な電撃のボルトを放つ。",
-                "en": "Fires a powerful bolt of lightning.",
               },
             },
             {
@@ -4009,18 +4009,6 @@
           "spells": [
             {
               "spell_id": 16,
-              "spell_tag": "Unbarring_Ways",
-              "name": {
-                "ja": "開かれた道",
-                "en": "Unbarring Ways",
-              },
-              "description": {
-                "ja": "一直線上の全ての罠と扉を破壊する。",
-                "en": "Fires a beam which destroy traps and doors.",
-              },
-            },
-            {
-              "spell_id": 17,
               "spell_tag": "Arrest",
               "name": {
                 "ja": "封魔",
@@ -4032,7 +4020,7 @@
               },
             },
             {
-              "spell_id": 18,
+              "spell_id": 17,
               "spell_tag": "Holy_Aura",
               "name": {
                 "ja": "聖なるオーラ",
@@ -4044,43 +4032,43 @@
               },
             },
             {
-              "spell_id": 19,
-              "spell_tag": "Dispel_Undead_and_Demons",
+              "spell_id": 18,
+              "spell_tag": "Exorcism",
               "name": {
-                "ja": "アンデッド&悪魔退散",
-                "en": "Dispel Undead & Demons",
+                "ja": "悪魔祓い",
+                "en": "Exorcism",
               },
               "description": {
-                "ja": "視界内の全てのアンデッド及び悪魔にダメージを与える。",
-                "en": "Damages all undead and demons in sight.",
+                "ja": "攻撃したアンデッド及び悪魔の体力を吸いとり、自分の体力を回復させる。",
+                "en": "Attacks with vampiric strikes that absorb HP from undead and demons and heal you. Has no effect on living monsters.",
+              },
+            },
+            {
+              "spell_id": 19,
+              "spell_tag": "Dispel_Curse",
+              "name": {
+                "ja": "呪い退散",
+                "en": "Dispel Curse",
+              },
+              "description": {
+                "ja": "アイテムにかかった強力な呪いを解除する。",
+                "en": "Removes normal and heavy curses from equipped items.",
               },
             },
             {
               "spell_id": 20,
-              "spell_tag": "Dispel_Evil",
+              "spell_tag": "Judgment_Thunder",
               "name": {
-                "ja": "邪悪退散",
-                "en": "Dispel Evil",
+                "ja": "裁きの雷",
+                "en": "Judgment Thunder",
               },
               "description": {
-                "ja": "視界内の全ての邪悪なモンスターにダメージを与える。",
-                "en": "Damages all evil monsters in sight.",
+                "ja": "強力な電撃のボルトを放つ。",
+                "en": "Fires a powerful bolt of lightning.",
               },
             },
             {
               "spell_id": 21,
-              "spell_tag": "Holy_Blade",
-              "name": {
-                "ja": "聖なる刃",
-                "en": "Holy Blade",
-              },
-              "description": {
-                "ja": "通常の武器に滅邪の属性をつける。",
-                "en": "Makes current weapon especially deadly against evil monsters.",
-              },
-            },
-            {
-              "spell_id": 22,
               "spell_tag": "Star_Burst",
               "name": {
                 "ja": "スターバースト",
@@ -4092,7 +4080,7 @@
               },
             },
             {
-              "spell_id": 23,
+              "spell_id": 22,
               "spell_tag": "Summon_Angel",
               "name": {
                 "ja": "天使召喚",
@@ -4101,6 +4089,18 @@
               "description": {
                 "ja": "天使を1体召喚する。",
                 "en": "Summons an angel.",
+              },
+            },
+            {
+              "spell_id": 23,
+              "spell_tag": "Circle_of_Protection_Black",
+              "name": {
+                "ja": "黒の防御円",
+                "en": "Circle of Protection Black",
+              },
+              "description": {
+                "ja": "一定時間、暗黒に対する免疫を得る。",
+                "en": "Gives an immunity to darkness for a while.",
               },
             },
           ],
@@ -4113,30 +4113,6 @@
           "spells": [
             {
               "spell_id": 24,
-              "spell_tag": "Heroism",
-              "name": {
-                "ja": "士気高揚",
-                "en": "Heroism",
-              },
-              "description": {
-                "ja": "一定時間、ヒーロー気分になる。",
-                "en": "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.",
-              },
-            },
-            {
-              "spell_id": 25,
-              "spell_tag": "Dispel_Curse",
-              "name": {
-                "ja": "呪い退散",
-                "en": "Dispel Curse",
-              },
-              "description": {
-                "ja": "アイテムにかかった強力な呪いを解除する。",
-                "en": "Removes normal and heavy curses from equipped items.",
-              },
-            },
-            {
-              "spell_id": 26,
               "spell_tag": "Banish_Evil",
               "name": {
                 "ja": "邪悪追放",
@@ -4148,7 +4124,19 @@
               },
             },
             {
-              "spell_id": 27,
+              "spell_id": 25,
+              "spell_tag": "Holy_Blade",
+              "name": {
+                "ja": "聖なる刃",
+                "en": "Holy Blade",
+              },
+              "description": {
+                "ja": "通常の武器に滅邪の属性をつけ、一定時間、武器に破邪の属性をつける。武器を持たないと使えない。",
+                "en": "Makes current weapon especially deadly against evil monsters. And causes current weapon to temporarily do additional damage to evil. You must be wielding one or more weapons.",
+              },
+            },
+            {
+              "spell_id": 26,
               "spell_tag": "Armageddon",
               "name": {
                 "ja": "ハルマゲドン",
@@ -4160,7 +4148,7 @@
               },
             },
             {
-              "spell_id": 28,
+              "spell_id": 27,
               "spell_tag": "An_Eye_for_an_Eye",
               "name": {
                 "ja": "目には目を",
@@ -4169,6 +4157,18 @@
               "description": {
                 "ja": "一定時間、自分がダメージを受けたときに攻撃を行ったモンスターに対して同等のダメージを与える。",
                 "en": "Gives special aura for a while. When you are attacked by a monster, the monster is injured with same amount of damage as you took.",
+              },
+            },
+            {
+              "spell_id": 28,
+              "spell_tag": "Dispel_Enchant",
+              "name": {
+                "ja": "魔力消去",
+                "en": "Dispel Enchant",
+              },
+              "description": {
+                "ja": "モンスターにかかっている魔法を打ち消す。",
+                "en": "Dispels magic affecting target monster.",
               },
             },
             {

@@ -521,7 +521,7 @@ bool enchant_spell(PlayerType *player_ptr, HIT_PROB num_hit, int num_dam, ARMOUR
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param BrandType エゴ化ID(EgoDefinitionsとは連動していない)
  */
-void brand_weapon(PlayerType *player_ptr, BrandType BrandType)
+void brand_weapon(PlayerType *player_ptr, BrandType brandType)
 {
     constexpr auto q = _("どの武器を強化しますか? ", "Enchant which weapon? ");
     constexpr auto s = _("強化できる武器がない。", "You have nothing to enchant.");
@@ -550,7 +550,7 @@ void brand_weapon(PlayerType *player_ptr, BrandType BrandType)
 
     const auto item_name = describe_flavor(player_ptr, *o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     concptr act = nullptr;
-    switch (BrandType) {
+    switch (brandType) {
     case BrandType::SHARPNESS_OR_EARTHQUAKE:
         if (o_ptr->bi_key.tval() == ItemKindType::SWORD) {
             act = _("は鋭さを増した！", "becomes very sharp!");

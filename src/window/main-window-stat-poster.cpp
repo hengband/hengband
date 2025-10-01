@@ -697,8 +697,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_RESCHAOS);
     }
 
-    if (player_ptr->tim_res_disenchant
-        ) {
+    if (player_ptr->tim_res_disenchant) {
         ADD_BAR_FLAG(BAR_RESDISEN);
     }
 

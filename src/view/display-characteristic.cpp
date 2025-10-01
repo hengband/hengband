@@ -191,9 +191,6 @@ static void process_light_equipment_characteristics(PlayerType *player_ptr, all_
         char_stat.syms.emplace_back("#");
         char_stat.has_tim = true;
         return;
-    } else {
-        char_stat.syms.emplace_back(".");
-        return;
     }
 
     char_stat.syms.emplace_back(".");

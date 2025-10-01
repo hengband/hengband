@@ -138,15 +138,13 @@ public:
     TIME_EFFECT tim_sh_fire{};
     TIME_EFFECT tim_sh_holy{};
     TIME_EFFECT tim_eyeeye{};
-
     /* for mirror master */
     TIME_EFFECT tim_reflect{}; /* Timed -- Reflect */
     TIME_EFFECT multishadow{}; /* Timed -- Multi-shadow */
     TIME_EFFECT dustrobe{}; /* Timed -- Robe of dust */
-    
+    /* for crusade */
     TIME_EFFECT tim_emission{}; /* Timed -- Player Emission */
     TIME_EFFECT tim_exorcism{}; /* Timed -- Exorcism */
-
     TIME_EFFECT tim_imm_dark{}; /* Timed -- Darkness immunity */
 
     bool timewalk{};

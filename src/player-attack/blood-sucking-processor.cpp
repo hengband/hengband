@@ -41,8 +41,8 @@ void decide_blood_sucking(PlayerType *player_ptr, player_attack_type *pa_ptr)
  */
 void decide_exorcism(PlayerType *player_ptr, player_attack_type *pa_ptr)
 {
-    bool is_exxorcism = player_ptr->tim_exorcism > 0;
-    if (!is_exxorcism) {
+    bool is_exorcism = player_ptr->tim_exorcism > 0;
+    if (!is_exorcism) {
         return;
     }
 

@@ -1,4 +1,5 @@
 #include "realm/realm-crusade.h"
+#include "blue-magic/blue-magic-caster.h"
 #include "cmd-action/cmd-spell.h"
 #include "effect/attribute-types.h"
 #include "effect/effect-characteristics.h"
@@ -9,6 +10,7 @@
 #include "monster-floor/place-monster-types.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
+#include "player/attack-defense-types.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-curse-removal.h"
 #include "spell-kind/spells-detection.h"
@@ -17,6 +19,7 @@
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"
 #include "spell-kind/spells-teleport.h"
+#include "spell-realm/spells-craft.h"
 #include "spell-realm/spells-crusade.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-object.h"
@@ -26,6 +29,7 @@
 #include "status/body-improvement.h"
 #include "status/buff-setter.h"
 #include "status/sight-setter.h"
+#include "status/temporary-resistance.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
@@ -72,33 +76,37 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 2:
+    case 2: {
         if (cast) {
-            (void)BadStatusSetter(player_ptr).set_fear(0);
-        }
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
+                return tl::nullopt;
+            }
 
-        break;
+            destroy_door(player_ptr, dir);
+        }
+    } break;
+
     case 3: {
         PLAYER_LEVEL power = plev;
         if (info) {
             return info_power(power);
         }
         if (cast) {
-            const auto dir = get_aim_dir(player_ptr);
-            if (!dir) {
-                return tl::nullopt;
-            }
-            fear_monster(player_ptr, dir, power);
+            sleep_monsters_touch(player_ptr);
         }
     } break;
 
     case 4: {
-        PLAYER_LEVEL power = plev;
+        int base = 25;
+        const Dice dice(1, 25);
+
         if (info) {
-            return info_power(power);
+            return info_duration(base, dice);
         }
+
         if (cast) {
-            sleep_monsters_touch(player_ptr);
+            (void)heroism(player_ptr, dice.roll() + base);
         }
     } break;
 
@@ -126,17 +134,44 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 7:
+    case 7: {
         if (cast) {
             BadStatusSetter bss(player_ptr);
             (void)bss.set_cut(0);
             (void)bss.set_poison(0);
             (void)bss.set_stun(0);
         }
-
-        break;
+    } break;
 
     case 8: {
+        int base = 20;
+        const Dice dice(1, 20);
+
+        if (info) {
+            return info_duration(base, dice);
+        }
+
+        if (cast) {
+            set_tim_emission(player_ptr, dice.roll() + base, false);
+        }
+    } break;
+
+    case 9: {
+        int base = 20;
+        const Dice dice(1, 20);
+
+        if (info) {
+            return info_duration(base, dice);
+        }
+
+        if (cast) {
+            set_tim_res_lite(player_ptr, dice.roll() + base, false);
+            set_tim_res_dark(player_ptr, dice.roll() + base, false);
+        }
+
+    } break;
+
+    case 10: {
         int power = MAX_PLAYER_SIGHT * 5;
         if (info) {
             return info_power(power);
@@ -150,7 +185,24 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 9: {
+    case 11: {
+        const Dice dice(6 + (plev - 5) / 4, 8);
+
+        if (info) {
+            return info_damage(dice);
+        }
+
+        if (cast) {
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
+                return tl::nullopt;
+            }
+
+            fire_bolt_or_beam(player_ptr, beam_chance(player_ptr), AttributeType::LITE, dir, dice.roll());
+        }
+    } break;
+
+    case 12: {
         const Dice dice(3, 6);
         POSITION rad = (plev < 30) ? 2 : 3;
         int base;
@@ -175,39 +227,13 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 10: {
-        const Dice dice(1, plev);
-        int power = plev;
-        if (info) {
-            return info_damage(dice);
-        }
-        if (cast) {
-            dispel_undead(player_ptr, dice.roll());
-            dispel_demons(player_ptr, dice.roll());
-            turn_evil(player_ptr, power);
-        }
-    } break;
-
-    case 11: {
+    case 13: {
         if (cast) {
             (void)remove_curse(player_ptr);
         }
     } break;
 
-    case 12: {
-        int base = 24;
-        const Dice dice(1, 24);
-
-        if (info) {
-            return info_duration(base, dice);
-        }
-
-        if (cast) {
-            set_tim_invis(player_ptr, dice.roll() + base, false);
-        }
-    } break;
-
-    case 13: {
+    case 14: {
         int base = 25;
         const Dice dice(1, 3 * plev);
 
@@ -217,22 +243,6 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         if (cast) {
             BodyImprovement(player_ptr).set_protection(dice.roll() + base);
-        }
-    } break;
-
-    case 14: {
-        int dam = plev * 5;
-
-        if (info) {
-            return info_damage(dam);
-        }
-
-        if (cast) {
-            const auto dir = get_aim_dir(player_ptr);
-            if (!dir) {
-                return tl::nullopt;
-            }
-            fire_bolt(player_ptr, AttributeType::ELEC, dir, dam);
         }
     } break;
 
@@ -256,17 +266,6 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         break;
     }
     case 16: {
-        if (cast) {
-            const auto dir = get_aim_dir(player_ptr);
-            if (!dir) {
-                return tl::nullopt;
-            }
-
-            destroy_door(player_ptr, dir);
-        }
-    } break;
-
-    case 17: {
         int power = plev * 2;
 
         if (info) {
@@ -282,7 +281,7 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 18: {
+    case 17: {
         int base = 20;
         const Dice dice(1, 20);
 
@@ -295,38 +294,42 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 19: {
-        const Dice dice(1, plev * 4);
+    case 18: {
+        int base = 20;
+        const Dice dice(1, 20);
 
         if (info) {
-            return info_damage(dice);
+            return info_duration(base, dice);
         }
 
         if (cast) {
-            dispel_undead(player_ptr, dice.roll());
-            dispel_demons(player_ptr, dice.roll());
+            set_tim_exorcism(player_ptr, dice.roll() + base, false);
+        }
+    } break;
+
+    case 19: {
+        if (cast) {
+            (void)remove_all_curse(player_ptr);
         }
     } break;
 
     case 20: {
-        const Dice dice(1, plev * 4);
+        int dam = plev * 5;
 
         if (info) {
-            return info_damage(dice);
+            return info_damage(dam);
         }
 
         if (cast) {
-            dispel_evil(player_ptr, dice.roll());
+            const auto dir = get_aim_dir(player_ptr);
+            if (!dir) {
+                return tl::nullopt;
+            }
+            fire_bolt(player_ptr, AttributeType::ELEC, dir, dam);
         }
     } break;
 
     case 21: {
-        if (cast) {
-            brand_weapon(player_ptr, BrandType::KILL_EVIL);
-        }
-    } break;
-
-    case 22: {
         int dam = 100 + plev * 2;
         POSITION rad = 4;
 
@@ -344,7 +347,7 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 23: {
+    case 22: {
         if (cast) {
             bool pet = !one_in_(3);
             uint32_t flg = 0L;
@@ -368,26 +371,20 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 24: {
-        int base = 25;
-        const Dice dice(1, 25);
+    case 23: {
+        int base = 20;
+        const Dice dice(1, 20);
 
         if (info) {
             return info_duration(base, dice);
         }
 
         if (cast) {
-            (void)heroism(player_ptr, dice.roll() + base);
+            set_tim_imm_dark(player_ptr, dice.roll() + base, false);
         }
     } break;
 
-    case 25: {
-        if (cast) {
-            (void)remove_all_curse(player_ptr);
-        }
-    } break;
-
-    case 26: {
+    case 24: {
         int power = 100;
 
         if (info) {
@@ -401,7 +398,22 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 27: {
+    case 25: {
+        int base = player_ptr->lev / 2;
+        const Dice dice(1, player_ptr->lev / 2);
+
+        if (info) {
+            return info_duration(base, dice);
+        }
+
+        if (cast) {
+            set_ele_attack(player_ptr, ATTACK_HOLY, dice.roll() + base);
+            brand_weapon(player_ptr, BrandType::KILL_EVIL);
+        }
+
+    } break;
+
+    case 26: {
         int base = 12;
         const Dice dice(1, 4);
 
@@ -410,7 +422,7 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
         }
     } break;
 
-    case 28: {
+    case 27: {
         int base = 10;
         const Dice dice(1, 10);
 
@@ -420,6 +432,12 @@ tl::optional<std::string> do_crusade_spell(PlayerType *player_ptr, SPELL_IDX spe
 
         if (cast) {
             set_tim_eyeeye(player_ptr, dice.roll() + base, false);
+        }
+    } break;
+
+    case 28: {
+        if (cast) {
+            cast_blue_dispel(player_ptr);
         }
     } break;
 
