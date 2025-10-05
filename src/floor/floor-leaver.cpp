@@ -1,6 +1,5 @@
 #include "floor/floor-leaver.h"
 #include "dungeon/quest.h"
-#include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
@@ -10,7 +9,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
-#include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -407,8 +405,9 @@ static void update_upper_lower_or_floor_id(saved_floor_type *sf_ptr)
 
 static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 {
-    auto *grid_ptr = set_grid_by_leaving_floor(*player_ptr->current_floor_ptr, player_ptr->get_position());
-    jump_floors(*player_ptr->current_floor_ptr);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto *grid_ptr = set_grid_by_leaving_floor(floor, player_ptr->get_position());
+    jump_floors(floor);
     exit_to_wilderness(player_ptr);
     kill_saved_floors(player_ptr, sf_ptr);
     if (!player_ptr->in_saved_floor()) {
@@ -424,9 +423,9 @@ static void exe_leave_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
 
     get_out_monster(player_ptr);
     sf_ptr->last_visit = AngbandWorld::get_instance().game_turn;
-    forget_lite(*player_ptr->current_floor_ptr);
-    forget_view(*player_ptr->current_floor_ptr);
-    clear_mon_lite(*player_ptr->current_floor_ptr);
+    floor.forget_lite();
+    floor.forget_view();
+    floor.forget_mon_lite();
     if (save_floor(player_ptr, sf_ptr, 0)) {
         return;
     }

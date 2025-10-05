@@ -1,6 +1,5 @@
 #include "specific-object/torch.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "mind/mind-ninja.h"
 #include "object-enchant/object-ego.h"
@@ -146,60 +145,45 @@ void update_lite_radius(PlayerType *player_ptr)
  */
 void update_lite(PlayerType *player_ptr)
 {
-    // 前回照らされていた座標たちを格納する配列。
-    std::vector<Pos2D> points;
-
     POSITION p = player_ptr->cur_lite;
     auto &floor = *player_ptr->current_floor_ptr;
-
-    // 前回照らされていた座標たちを記録。
-    for (int i = 0; i < floor.lite_n; i++) {
-        const POSITION y = floor.lite_y[i];
-        const POSITION x = floor.lite_x[i];
-
-        floor.grid_array[y][x].info &= ~(CAVE_LITE);
-        floor.grid_array[y][x].info |= CAVE_TEMP;
-
-        points.emplace_back(y, x);
-    }
-
-    floor.lite_n = 0;
+    const auto points = floor.reset_lite();
     const auto p_pos = player_ptr->get_position();
     if (p >= 1) {
-        cave_lite_hack(floor, player_ptr->y, player_ptr->x);
-        cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x);
-        cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x);
-        cave_lite_hack(floor, player_ptr->y, player_ptr->x + 1);
-        cave_lite_hack(floor, player_ptr->y, player_ptr->x - 1);
-        cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x + 1);
-        cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x - 1);
-        cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x + 1);
-        cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x - 1);
+        floor.set_lite_at(p_pos);
+        floor.set_lite_at(p_pos + Direction(2).vec());
+        floor.set_lite_at(p_pos + Direction(8).vec());
+        floor.set_lite_at(p_pos + Direction(6).vec());
+        floor.set_lite_at(p_pos + Direction(4).vec());
+        floor.set_lite_at(p_pos + Direction(3).vec());
+        floor.set_lite_at(p_pos + Direction(1).vec());
+        floor.set_lite_at(p_pos + Direction(9).vec());
+        floor.set_lite_at(p_pos + Direction(7).vec());
     }
 
     if (p >= 2) {
         if (floor.has_los_terrain_at(p_pos + Direction(2).vec())) {
-            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x);
-            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x + 1);
-            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x - 1);
+            floor.set_lite_at(p_pos + Direction(2).vec() * 2);
+            floor.set_lite_at(p_pos + Direction(2).vec() * 2 + Direction(6).vec());
+            floor.set_lite_at(p_pos + Direction(2).vec() * 2 + Direction(4).vec());
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(8).vec())) {
-            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x);
-            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x + 1);
-            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x - 1);
+            floor.set_lite_at(p_pos + Direction(8).vec() * 2);
+            floor.set_lite_at(p_pos + Direction(8).vec() * 2 + Direction(6).vec());
+            floor.set_lite_at(p_pos + Direction(8).vec() * 2 + Direction(4).vec());
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(6).vec())) {
-            cave_lite_hack(floor, player_ptr->y, player_ptr->x + 2);
-            cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x + 2);
-            cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x + 2);
+            floor.set_lite_at(p_pos + Direction(6).vec() * 2);
+            floor.set_lite_at(p_pos + Direction(6).vec() * 2 + Direction(2).vec());
+            floor.set_lite_at(p_pos + Direction(6).vec() * 2 + Direction(8).vec());
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(4).vec())) {
-            cave_lite_hack(floor, player_ptr->y, player_ptr->x - 2);
-            cave_lite_hack(floor, player_ptr->y + 1, player_ptr->x - 2);
-            cave_lite_hack(floor, player_ptr->y - 1, player_ptr->x - 2);
+            floor.set_lite_at(p_pos + Direction(4).vec() * 2);
+            floor.set_lite_at(p_pos + Direction(4).vec() * 2 + Direction(2).vec());
+            floor.set_lite_at(p_pos + Direction(4).vec() * 2 + Direction(8).vec());
         }
     }
 
@@ -210,19 +194,19 @@ void update_lite(PlayerType *player_ptr)
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(3).vec())) {
-            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x + 2);
+            floor.set_lite_at(p_pos + Direction(3).vec() * 2);
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(1).vec())) {
-            cave_lite_hack(floor, player_ptr->y + 2, player_ptr->x - 2);
+            floor.set_lite_at(p_pos + Direction(1).vec() * 2);
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(9).vec())) {
-            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x + 2);
+            floor.set_lite_at(p_pos + Direction(9).vec() * 2);
         }
 
         if (floor.has_los_terrain_at(p_pos + Direction(7).vec())) {
-            cave_lite_hack(floor, player_ptr->y - 2, player_ptr->x - 2);
+            floor.set_lite_at(p_pos + Direction(7).vec() * 2);
         }
 
         auto min_y = player_ptr->y - p;
@@ -258,33 +242,24 @@ void update_lite(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (floor.get_grid({ y, x }).info & CAVE_VIEW) {
-                    cave_lite_hack(floor, y, x);
+                const auto pos = Pos2D(y, x);
+                if (floor.get_grid(pos).info & CAVE_VIEW) {
+                    floor.set_lite_at(pos);
                 }
             }
         }
     }
 
-    for (auto i = 0; i < floor.lite_n; i++) {
-        const auto y = floor.lite_y[i];
-        const auto x = floor.lite_x[i];
-        const auto &grid = floor.get_grid({ y, x });
-        if (grid.info & CAVE_TEMP) {
-            continue;
-        }
-
-        cave_note_and_redraw_later(floor, y, x);
-    }
-
     // 前回照らされていた座標たちのうち、状態が変わったものについて再描画フラグを立てる。
-    for (const auto &[y, x] : points) {
-        auto &grid = floor.get_grid({ y, x });
+    floor.set_note_and_redraw();
+    for (const auto &pos : points) {
+        auto &grid = floor.get_grid(pos);
         grid.info &= ~(CAVE_TEMP);
         if (grid.info & CAVE_LITE) {
             continue;
         }
 
-        cave_redraw_later(floor, y, x);
+        floor.set_redraw_at(pos);
     }
 
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);

@@ -8,11 +8,10 @@
 #include "io/signal-handlers.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/game-closer.h"
-#include "floor/floor-events.h"
 #include "game-option/cheat-options.h"
 #include "io/write-diary.h"
-#include "monster-floor/monster-lite.h"
 #include "save/save.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
@@ -69,18 +68,19 @@ static void handle_signal_simple(int sig)
     }
 
     signal_count++;
+    auto &floor = *p_ptr->current_floor_ptr;
     if (p_ptr->is_dead) {
         p_ptr->died_from = _("強制終了", "Abortion");
-        forget_lite(*p_ptr->current_floor_ptr);
-        forget_view(*p_ptr->current_floor_ptr);
-        clear_mon_lite(*p_ptr->current_floor_ptr);
+        floor.forget_lite();
+        floor.forget_view();
+        floor.forget_mon_lite();
         close_game(p_ptr);
         quit(_("強制終了", "interrupt"));
     } else if (signal_count >= 5) {
         p_ptr->died_from = _("強制終了中", "Interrupting");
-        forget_lite(*p_ptr->current_floor_ptr);
-        forget_view(*p_ptr->current_floor_ptr);
-        clear_mon_lite(*p_ptr->current_floor_ptr);
+        floor.forget_lite();
+        floor.forget_view();
+        floor.forget_mon_lite();
         p_ptr->playing = false;
         if (!cheat_immortal) {
             p_ptr->is_dead = true;
@@ -127,9 +127,9 @@ static void handle_signal_abort(int sig)
     }
 
     auto &floor = *p_ptr->current_floor_ptr;
-    forget_lite(floor);
-    forget_view(floor);
-    clear_mon_lite(floor);
+    floor.forget_lite();
+    floor.forget_view();
+    floor.forget_mon_lite();
 
     term_erase(0, hgt - 1);
     term_putstr(0, hgt - 1, -1, TERM_RED, _("恐ろしいソフトのバグが飛びかかってきた！", "A gruesome software bug LEAPS out at you!"));

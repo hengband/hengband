@@ -13,7 +13,6 @@
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/effect-characteristics.h"
-#include "floor/floor-events.h"
 #include "floor/floor-leaver.h"
 #include "floor/floor-save.h"
 #include "floor/floor-util.h"
@@ -153,13 +152,9 @@ static player_hand main_attack_hand(PlayerType *player_ptr);
 static void delayed_visual_update(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    for (auto i = 0; i < floor.redraw_n; i++) {
-        const Pos2D pos(floor.redraw_y[i], floor.redraw_x[i]);
+    const auto points = floor.collect_redraw_points();
+    for (const auto &pos : points) {
         auto &grid = floor.get_grid(pos);
-        if (none_bits(grid.info, CAVE_REDRAW)) {
-            continue;
-        }
-
         if (any_bits(grid.info, CAVE_NOTE)) {
             note_spot(player_ptr, pos);
         }
@@ -171,8 +166,6 @@ static void delayed_visual_update(PlayerType *player_ptr)
 
         reset_bits(grid.info, (CAVE_NOTE | CAVE_REDRAW));
     }
-
-    floor.redraw_n = 0;
 }
 
 /*!
@@ -2641,12 +2634,12 @@ void update_creature(PlayerType *player_ptr)
 
     if (rfu.has(StatusRecalculatingFlag::UN_LITE)) {
         rfu.reset_flag(StatusRecalculatingFlag::UN_LITE);
-        forget_lite(floor);
+        floor.forget_lite();
     }
 
     if (rfu.has(StatusRecalculatingFlag::UN_VIEW)) {
         rfu.reset_flag(StatusRecalculatingFlag::UN_VIEW);
-        forget_view(floor);
+        floor.forget_view();
     }
 
     if (rfu.has(StatusRecalculatingFlag::VIEW)) {

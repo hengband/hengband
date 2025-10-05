@@ -90,7 +90,6 @@
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
-#include "floor/floor-events.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
@@ -110,9 +109,9 @@
 #include "main-win/main-win-utils.h"
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
-#include "monster-floor/monster-lite.h"
 #include "save/save.h"
 #include "system/angband.h"
+#include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
@@ -1631,9 +1630,10 @@ static void process_menus(PlayerType *player_ptr, WORD wCmd)
             }
 
             msg_flag = false;
-            forget_lite(*player_ptr->current_floor_ptr);
-            forget_view(*player_ptr->current_floor_ptr);
-            clear_mon_lite(*player_ptr->current_floor_ptr);
+            auto &floor = *player_ptr->current_floor_ptr;
+            floor.forget_lite();
+            floor.forget_view();
+            floor.forget_mon_lite();
 
             term_key_push(SPECIAL_KEY_QUIT);
             break;
@@ -2426,9 +2426,10 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
         }
 
         msg_flag = false;
-        forget_lite(*p_ptr->current_floor_ptr);
-        forget_view(*p_ptr->current_floor_ptr);
-        clear_mon_lite(*p_ptr->current_floor_ptr);
+        auto &floor = *p_ptr->current_floor_ptr;
+        floor.forget_lite();
+        floor.forget_view();
+        floor.forget_mon_lite();
         term_key_push(SPECIAL_KEY_QUIT);
         return 0;
     }

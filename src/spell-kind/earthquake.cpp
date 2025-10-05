@@ -6,7 +6,6 @@
 #include "grid/grid.h"
 #include "io/write-diary.h"
 #include "mind/mind-ninja.h"
-#include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster/monster-describer.h"
 #include "monster/monster-description-types.h"
@@ -256,7 +255,7 @@ void process_hit_to_monsters(PlayerType *player_ptr, std::span<const Pos2D> pos_
 void destruct_earthquake_area(PlayerType *player_ptr, std::span<const Pos2D> pos_collapses)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    clear_mon_lite(floor);
+    floor.forget_mon_lite();
     const auto &dungeon = floor.get_dungeon_definition();
     const auto is_changeable = [&](const auto &pos) { return floor.is_grid_changeable(pos); };
 
