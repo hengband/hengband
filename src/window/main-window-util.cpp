@@ -74,10 +74,8 @@ void print_map(PlayerType *player_ptr)
     wid -= COL_MAP + 2;
     hgt -= ROW_MAP + 2;
 
-    int v;
-    (void)term_get_cursor(&v);
-
-    (void)term_set_cursor(0);
+    const auto v = term_get_cursor();
+    term_set_cursor(false);
 
     const auto &floor = *player_ptr->current_floor_ptr;
     POSITION xmin = (0 < panel_col_min) ? panel_col_min : 0;
@@ -103,7 +101,7 @@ void print_map(PlayerType *player_ptr)
     }
 
     lite_spot(player_ptr, player_ptr->get_position());
-    (void)term_set_cursor(v);
+    term_set_cursor(v != 0);
 }
 
 /*!
