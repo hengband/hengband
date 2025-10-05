@@ -38,7 +38,6 @@
 #include "window/display-sub-windows.h"
 #include <fmt/format.h>
 #include <sstream>
-#include <tl/optional.hpp>
 
 /*!
  * @brief 床上アイテムへにタグ付けがされているかの調査処理 (のはず)
@@ -82,89 +81,82 @@ static std::pair<tl::optional<short>, char> check_floor_item_tag_aux(const Floor
 /*!
  * @brief インベントリのアイテムにタグ付けを試みる
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param fis 床上アイテムへの参照
+ * @param i_idx 選択したアイテムのインベントリ番号
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool get_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection *fis_ptr, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> get_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection &fis, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
-    bool flag = false;
-    item_use_flag use_flag = (fis_ptr->cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
-
-    flag |= !get_tag(player_ptr, &fis_ptr->k, *prev_tag, use_flag, item_tester);
-    flag |= !get_item_okay(player_ptr, fis_ptr->k, item_tester);
-
-    if (fis_ptr->k < INVEN_MAIN_HAND) {
-        flag |= !fis_ptr->inven;
-    } else {
-        flag |= !fis_ptr->equip;
+    const auto use_flag = (i_idx >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
+    const auto i_idx_opt = get_tag(player_ptr, prev_tag, use_flag, item_tester);
+    if (!i_idx_opt) {
+        return { tl::nullopt, '\0' };
     }
 
-    if (flag) {
-        *prev_tag = '\0';
-        return false;
+    fis.k = *i_idx_opt;
+    if (!get_item_okay(player_ptr, fis.k, item_tester) ||
+        (fis.k < INVEN_MAIN_HAND && !fis.inven) ||
+        (fis.k >= INVEN_MAIN_HAND && !fis.equip)) {
+        return { tl::nullopt, '\0' };
     }
 
-    fis_ptr->cp = fis_ptr->k;
     command_cmd = 0;
-    return true;
+    return { fis.k, prev_tag };
 }
 
 /*!
  * @brief インベントリのアイテムにタグ付けがされているかの調査処理 (のはず)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param fis 床上アイテムへの参照
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection *fis_ptr, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> check_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection &fis, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
-    if ((!fis_ptr->inven || (fis_ptr->cp < 0) || (fis_ptr->cp >= INVEN_PACK)) && (!fis_ptr->equip || (fis_ptr->cp < INVEN_MAIN_HAND) || (fis_ptr->cp >= INVEN_TOTAL))) {
-        return false;
+    if ((!fis.inven || (i_idx < 0) || (i_idx >= INVEN_PACK)) && (!fis.equip || (i_idx < INVEN_MAIN_HAND) || (i_idx >= INVEN_TOTAL))) {
+        return { tl::nullopt, prev_tag };
     }
 
-    if ((*prev_tag != '\0') && command_cmd) {
-        return get_floor_item_tag_inventory(player_ptr, fis_ptr, prev_tag, item_tester);
+    if ((prev_tag != '\0') && command_cmd) {
+        return get_floor_item_tag_inventory(player_ptr, fis, i_idx, prev_tag, item_tester);
     }
 
-    if (get_item_okay(player_ptr, fis_ptr->cp, item_tester)) {
+    if (get_item_okay(player_ptr, i_idx, item_tester)) {
         command_cmd = 0;
-        return true;
+        return { i_idx, prev_tag };
     }
 
-    return false;
+    return { tl::nullopt, prev_tag };
 }
 
 /*!
  * @brief 床上アイテムにタグ付けがされているかの調査処理 (のはず)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param fis 床上アイテムへの参照
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  */
-static bool check_floor_item_tag(PlayerType *player_ptr, FloorItemSelection *fis_ptr, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> check_floor_item_tag(PlayerType *player_ptr, FloorItemSelection &fis, char prev_tag, const ItemTester &item_tester)
 {
     const auto code = repeat_pull();
     if (!code) {
-        return false;
+        return { tl::nullopt, prev_tag };
     }
 
-    fis_ptr->cp = *code;
-    if (fis_ptr->force && (fis_ptr->cp == INVEN_FORCE)) {
+    if (fis.force && (*code == INVEN_FORCE)) {
         command_cmd = 0;
-        return true;
+        return { *code, prev_tag };
     }
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
-    const auto &[floor_item_indice, tag] = check_floor_item_tag_aux(floor, p_pos, *fis_ptr, *code, *prev_tag, item_tester);
-    *prev_tag = tag;
+    const auto &[floor_item_indice, tag_floor] = check_floor_item_tag_aux(floor, p_pos, fis, *code, prev_tag, item_tester);
     if (floor_item_indice) {
-        fis_ptr->cp = *floor_item_indice;
-        return true;
+        return { *floor_item_indice, tag_floor };
     }
 
-    return check_floor_item_tag_inventory(player_ptr, fis_ptr, prev_tag, item_tester);
+    return check_floor_item_tag_inventory(player_ptr, fis, *code, tag_floor, item_tester);
 }
 
 /*!
@@ -223,13 +215,14 @@ static void test_equipment_floor(PlayerType *player_ptr, FloorItemSelection *fis
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, const ItemTester &item_tester)
+tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt, std::string_view str, BIT_FLAGS mode, const ItemTester &item_tester)
 {
     FloorItemSelection fis(mode);
     static char prev_tag = '\0';
-    if (check_floor_item_tag(player_ptr, &fis, &prev_tag, item_tester)) {
-        *cp = fis.cp;
-        return true;
+    const auto &[i_idx, tag] = check_floor_item_tag(player_ptr, fis, prev_tag, item_tester);
+    prev_tag = tag;
+    if (i_idx) {
+        return *i_idx;
     }
 
     msg_erase();
@@ -761,11 +754,13 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
         case '8':
         case '9': {
             if (command_wrk != USE_FLOOR) {
-                if (!get_tag(player_ptr, &fis.k, fis.which, command_wrk, item_tester)) {
+                const auto i_idx = get_tag(player_ptr, fis.which, command_wrk, item_tester);
+                if (!i_idx) {
                     bell();
                     break;
                 }
 
+                fis.k = *i_idx;
                 if ((fis.k < INVEN_MAIN_HAND) ? !fis.inven : !fis.equip) {
                     bell();
                     break;
@@ -809,10 +804,14 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
             bool tag_not_found = false;
 
             if (command_wrk != USE_FLOOR) {
-                if (!get_tag(player_ptr, &fis.k, fis.which, command_wrk, item_tester)) {
+                const auto i_idx = get_tag(player_ptr, fis.which, command_wrk, item_tester);
+                if (!i_idx) {
                     tag_not_found = true;
-                } else if ((fis.k < INVEN_MAIN_HAND) ? !fis.inven : !fis.equip) {
-                    tag_not_found = true;
+                } else {
+                    fis.k = *i_idx;
+                    if ((fis.k < INVEN_MAIN_HAND) ? !fis.inven : !fis.equip) {
+                        tag_not_found = true;
+                    }
                 }
 
                 if (!tag_not_found) {
@@ -900,12 +899,12 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
     rfu.set_flags(flags);
     handle_stuff(player_ptr);
     prt("", 0, 0);
-    if (fis.oops && str) {
+    if (fis.oops && !str.empty()) {
         msg_print(str);
     }
 
     if (!fis.item) {
-        return false;
+        return tl::nullopt;
     }
 
     repeat_push(fis.cp);
@@ -914,6 +913,5 @@ bool get_item_floor(PlayerType *player_ptr, COMMAND_CODE *cp, concptr pmt, concp
     }
 
     command_cmd = 0;
-    *cp = fis.cp;
-    return true;
+    return fis.cp;
 }

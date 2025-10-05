@@ -20,7 +20,7 @@
  * @param mode オプションフラグ
  * @return 対象のマスに落ちているアイテム数
  */
-std::vector<short> scan_floor_items(const FloorType &floor, const Pos2D &pos, EnumClassFlagGroup<ScanFloorMode> mode, const ItemTester &item_tester)
+std::vector<short> scan_floor_items(const FloorType &floor, const Pos2D &pos, const EnumClassFlagGroup<ScanFloorMode> &mode, const ItemTester &item_tester)
 {
     if (!floor.contains(pos)) {
         return {};
