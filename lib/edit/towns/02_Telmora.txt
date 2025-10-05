@@ -211,10 +211,10 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:26
 F:b:BUILDING_1:3:0:0:0:0:NONE:26
 
 # Quest 26 rewarding, continue with quest 15,
-# Reward is a Potion of Life
+# Reward is a Staff of Destruction
 ?:[EQU $QUEST26 3]
 F:b:BUILDING_1:3:0:0:0:0:NONE:15
-F:!:FLOOR:3:0:420
+F:!:FLOOR:3:0:307
 
 # Quest 26 finished, continue with quest 15
 ?:[EQU $QUEST26 4]
