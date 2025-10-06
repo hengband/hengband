@@ -249,6 +249,10 @@ bool dispel_check(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return true;
     }
 
+    if (player_ptr->mimic_form == MimicKindType::DEMIGOD) {
+        return true;
+    }
+
     const auto &floor_ref = *player_ptr->current_floor_ptr;
     const auto &monster = floor_ref.m_list[m_idx];
     const auto &monrace = monster.get_monrace();

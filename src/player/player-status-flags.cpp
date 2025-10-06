@@ -469,6 +469,8 @@ BIT_FLAGS get_player_flags(PlayerType *player_ptr, tr_type tr_flag)
         return check_equipment_flags(player_ptr, tr_flag);
     case TR_VUL_CURSE:
         return has_vuln_curse(player_ptr);
+    case TR_IM_LITE:
+        return has_immune_lite(player_ptr);
 
     case TR_FLAG_MAX:
         break;
@@ -1319,9 +1321,9 @@ BIT_FLAGS has_resist_sound(PlayerType *player_ptr)
 
 BIT_FLAGS has_resist_lite(PlayerType *player_ptr)
 {
-    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_LITE);
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_LITE) | common_cause_flags(player_ptr, TR_IM_LITE);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_lite || player_ptr->mimic_form == MimicKindType::DEMIGOD) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1343,7 +1345,7 @@ BIT_FLAGS has_resist_dark(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_RES_DARK) | common_cause_flags(player_ptr, TR_IM_DARK);
 
-    if (player_ptr->ult_res) {
+    if (player_ptr->ult_res || player_ptr->tim_res_dark || player_ptr->tim_imm_dark) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1516,7 +1518,7 @@ BIT_FLAGS has_resist_fear(PlayerType *player_ptr)
         result |= FLAG_CAUSE_MUTATION;
     }
 
-    if (is_hero(player_ptr) || is_shero(player_ptr) || player_ptr->ult_res) {
+    if (is_hero(player_ptr) || is_shero(player_ptr) || player_ptr->ult_res || player_ptr->tim_res_fear) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
@@ -1579,10 +1581,19 @@ BIT_FLAGS has_immune_dark(PlayerType *player_ptr)
 {
     BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_DARK);
 
-    if (player_ptr->wraith_form) {
+    if (player_ptr->wraith_form || player_ptr->tim_imm_dark) {
         result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
     }
 
+    return result;
+}
+
+BIT_FLAGS has_immune_lite(PlayerType *player_ptr)
+{
+    BIT_FLAGS result = common_cause_flags(player_ptr, TR_IM_LITE);
+    if (player_ptr->mimic_form == MimicKindType::DEMIGOD) {
+        result |= FLAG_CAUSE_MAGIC_TIME_EFFECT;
+    }
     return result;
 }
 

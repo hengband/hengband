@@ -11,6 +11,7 @@
 #include "player/attack-defense-types.h"
 #include "realm/realm-hex-numbers.h"
 #include "specific-object/torch.h"
+#include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/item-entity.h"
@@ -173,8 +174,22 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int 
         flags.set(TR_SLAY_GOOD);
     }
 
+    if (has_slay_demon_from_exorcism(player_ptr)) {
+        flags.set(TR_SLAY_DEMON);
+    }
+    if (has_kill_demon_from_exorcism(player_ptr)) {
+        flags.set(TR_KILL_DEMON);
+    }
+    if (has_slay_undead_from_exorcism(player_ptr)) {
+        flags.set(TR_SLAY_UNDEAD);
+    }
+    if (has_kill_undead_from_exorcism(player_ptr)) {
+        flags.set(TR_KILL_UNDEAD);
+    }
+
     MULTIPLY mult = 10;
     switch (o_ptr->bi_key.tval()) {
+    case ItemKindType::NONE:
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT:
@@ -200,6 +215,11 @@ int calc_attack_damage_with_slay(PlayerType *player_ptr, ItemEntity *o_ptr, int 
 
         if ((o_ptr->is_specific_artifact(FixedArtifactId::NOTHUNG)) && (monster.r_idx == MonraceId::FAFNER)) {
             mult = 150;
+        }
+
+        /* 素手攻撃はスレイによる強化を半減させる */
+        if (o_ptr->bi_key.tval() == ItemKindType::NONE) {
+            mult = (mult - 10) / 2 + 10;
         }
         break;
     }

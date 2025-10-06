@@ -62,12 +62,18 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->tsuyoshi = 0;
     player_ptr->tim_pass_wall = 0;
     player_ptr->tim_res_nether = 0;
+    player_ptr->tim_res_lite = 0;
+    player_ptr->tim_res_dark = 0;
+    player_ptr->tim_res_fear = 0;
     player_ptr->tim_res_time = 0;
     player_ptr->tim_mimic = 0;
     player_ptr->mimic_form = MimicKindType::NONE;
     player_ptr->tim_reflect = 0;
     player_ptr->multishadow = 0;
     player_ptr->dustrobe = 0;
+    player_ptr->tim_emission = 0;
+    player_ptr->tim_exorcism = 0;
+    player_ptr->tim_imm_dark = 0;
     player_ptr->action = ACTION_NONE;
 
     player_ptr->oppose_acid = 0; /* Timed -- oppose acid */

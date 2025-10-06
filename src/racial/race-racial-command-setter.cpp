@@ -32,6 +32,12 @@ void set_mimic_racial_command(PlayerType *player_ptr, rc_type *rc_ptr)
         rpi.fail = 9;
         rc_ptr->add_power(rpi, RC_IDX_RACE_0);
         return;
+    case MimicKindType::ANGEL:
+        return;
+    case MimicKindType::DEMIGOD:
+        return;
+    default:
+        return;
     }
 }
 

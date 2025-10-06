@@ -1664,6 +1664,14 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
     case MimicKindType::VAMPIRE:
         ac += 10;
         break;
+    case MimicKindType::ANGEL:
+        ac += 10;
+        break;
+    case MimicKindType::DEMIGOD:
+        ac += 20;
+        break;
+    default:
+        break;
     }
 
     PlayerClass pc(player_ptr);

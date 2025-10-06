@@ -661,6 +661,30 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_EYEEYE);
     }
 
+    if (player_ptr->tim_res_lite) {
+        ADD_BAR_FLAG(BAR_RESLITE);
+    }
+
+    if (player_ptr->tim_res_dark) {
+        ADD_BAR_FLAG(BAR_RESDARK);
+    }
+
+    if (player_ptr->tim_res_fear) {
+        ADD_BAR_FLAG(BAR_RESFEAR);
+    }
+
+    if (player_ptr->tim_emission) {
+        ADD_BAR_FLAG(BAR_EMISSION);
+    }
+
+    if (player_ptr->tim_exorcism) {
+        ADD_BAR_FLAG(BAR_EXORCISM);
+    }
+
+    if (player_ptr->tim_imm_dark) {
+        ADD_BAR_FLAG(BAR_IMMDARK);
+    }
+
     add_hex_status_flags(player_ptr, bar_flags);
     TERM_LEN col = 0, num = 0;
     for (int i = 0; stat_bars[i].sstr; i++) {

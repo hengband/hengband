@@ -8,3 +8,4 @@ enum class MonsterAbilityType;
 
 class PlayerType;
 bool cast_learned_spell(PlayerType *player_ptr, MonsterAbilityType spell, const bool success);
+bool cast_blue_dispel(PlayerType *player_ptr);

@@ -51,6 +51,9 @@ static void dispel_player(PlayerType *player_ptr)
     (void)set_pass_wall(player_ptr, 0, true);
     (void)set_tim_res_nether(player_ptr, 0, true);
     (void)set_tim_res_time(player_ptr, 0, true);
+    (void)set_tim_res_lite(player_ptr, 0, true);
+    (void)set_tim_res_dark(player_ptr, 0, true);
+    (void)set_tim_res_fear(player_ptr, 0, true);
     (void)set_tim_reflect(player_ptr, 0, true);
     (void)set_multishadow(player_ptr, 0, true);
     (void)set_dustrobe(player_ptr, 0, true);
@@ -76,6 +79,9 @@ static void dispel_player(PlayerType *player_ptr)
     (void)set_mimic(player_ptr, 0, MimicKindType::NONE, true);
     (void)set_ele_attack(player_ptr, 0, 0);
     (void)set_ele_immune(player_ptr, 0, 0);
+    (void)set_tim_emission(player_ptr, 0, true);
+    (void)set_tim_exorcism(player_ptr, 0, true);
+    (void)set_tim_imm_dark(player_ptr, 0, true);
 
     if (player_ptr->special_attack & ATTACK_CONFUSE) {
         player_ptr->special_attack &= ~(ATTACK_CONFUSE);

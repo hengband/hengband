@@ -5,6 +5,7 @@
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
+#include "player-info/race-info.h"
 #include "player/special-defense-types.h"
 #include "sv-definition/sv-lite-types.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -87,16 +88,28 @@ void update_lite_radius(PlayerType *player_ptr)
         player_ptr->cur_lite += o_ptr->get_lite_radius();
     }
 
-    if (player_ptr->current_floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS) && player_ptr->cur_lite > 1) {
-        player_ptr->cur_lite = 1;
-    }
-
     if (player_ptr->cur_lite <= 0 && player_ptr->lite) {
         player_ptr->cur_lite++;
     }
 
     if (player_ptr->cur_lite > 14) {
         player_ptr->cur_lite = 14;
+    }
+
+    if (player_ptr->mimic_form == MimicKindType::ANGEL) {
+        player_ptr->cur_lite += 3;
+    }
+
+    if (player_ptr->mimic_form == MimicKindType::DEMIGOD) {
+        player_ptr->cur_lite += 6;
+    }
+
+    if (player_ptr->tim_emission > 0) {
+        player_ptr->cur_lite += player_ptr->lev / 5;
+    }
+
+    if (player_ptr->current_floor_ptr->get_dungeon_definition().flags.has(DungeonFeatureType::DARKNESS) && player_ptr->cur_lite > 1) {
+        player_ptr->cur_lite = 1;
     }
 
     if (player_ptr->cur_lite < 0) {

@@ -376,6 +376,10 @@ bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mod
         info[i++] = _("それは暗黒に対する完全な免疫を授ける。", "It provides immunity to dark.");
     }
 
+    if (flags.has(TR_IM_LITE)) {
+        info[i++] = _("それは閃光に対する完全な免疫を授ける。", "It provides immunity to light.");
+    }
+
     if (flags.has(TR_VUL_LITE)) {
         info[i++] = _("それは閃光に対する弱点を授ける。", "It provides vulnerability to light.");
     }
@@ -416,7 +420,7 @@ bool screen_object(PlayerType *player_ptr, const ItemEntity &item, BIT_FLAGS mod
         info[i++] = _("それは毒への耐性を授ける。", "It provides resistance to poison.");
     }
 
-    if (flags.has(TR_RES_LITE) && flags.has_not(TR_VUL_LITE)) {
+    if (flags.has(TR_RES_LITE) && flags.has_not(TR_VUL_LITE) && flags.has_not(TR_IM_LITE)) {
         info[i++] = _("それは閃光への耐性を授ける。", "It provides resistance to light.");
     }
 

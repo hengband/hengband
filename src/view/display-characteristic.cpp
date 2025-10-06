@@ -57,6 +57,7 @@ static std::unordered_map<tr_type, tr_type> flag_to_greater_flag = {
     { TR_RES_ELEC, TR_IM_ELEC },
     { TR_RES_FIRE, TR_IM_FIRE },
     { TR_RES_DARK, TR_IM_DARK },
+    { TR_RES_LITE, TR_IM_LITE },
     { TR_SLAY_EVIL, TR_KILL_EVIL },
     { TR_SLAY_GOOD, TR_KILL_GOOD },
     { TR_SLAY_HUMAN, TR_KILL_HUMAN },
@@ -185,6 +186,12 @@ static void process_light_equipment_characteristics(PlayerType *player_ptr, all_
             char_stat.has_res = true;
             return;
         }
+    }
+
+    if (player_ptr->tim_emission > 0) {
+        char_stat.syms.emplace_back("#");
+        char_stat.has_tim = true;
+        return;
     }
 
     char_stat.syms.emplace_back(".");

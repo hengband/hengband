@@ -354,6 +354,7 @@ const std::vector<essence_drain_type> Smith::essence_drain_info_table = {
     { TR_SELF_COLD, { SmithEssenceType::BRAND_COLD, SmithEssenceType::RES_COLD }, 10 },
     { TR_PERSISTENT_CURSE, {}, -1 },
     { TR_VUL_CURSE, {}, -1 },
+    { TR_IM_LITE, {}, 0 },
 };
 
 namespace {

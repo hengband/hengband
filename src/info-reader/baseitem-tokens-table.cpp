@@ -174,6 +174,7 @@ const std::unordered_map<std::string_view, tr_type> baseitem_flags = {
     { "SELF_ELEC", TR_SELF_ELEC },
     { "PERSISTENT_CURSE", TR_PERSISTENT_CURSE },
     { "VUL_CURSE", TR_VUL_CURSE },
+    { "IM_LITE", TR_IM_LITE },
 };
 
 /*!
