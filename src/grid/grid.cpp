@@ -239,7 +239,7 @@ static void update_local_illumination_aux(PlayerType *player_ptr, const Pos2D &p
  */
 void update_local_illumination(PlayerType *player_ptr, const Pos2D &pos)
 {
-    if (!player_ptr->current_floor_ptr->contains(pos)) {
+    if (!player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         return;
     }
 
