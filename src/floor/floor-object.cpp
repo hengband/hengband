@@ -173,7 +173,7 @@ tl::optional<ItemEntity> make_object(PlayerType *player_ptr, BIT_FLAGS mode, Bas
 void delete_all_items_from_floor(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.contains(pos)) {
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         return;
     }
 
@@ -348,7 +348,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos,
             }
 
             const auto pos_target = pos + vec;
-            if (!floor.contains(pos_target)) {
+            if (!floor.contains(pos_target, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 continue;
             }
             if (!projectable(floor, pos, pos_target)) {
@@ -406,7 +406,7 @@ short drop_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &pos,
         const auto ty = rand_spread(pos_drop.y, 1);
         const auto tx = rand_spread(pos_drop.x, 1);
         Pos2D pos_target(ty, tx); //!< @details 乱数引数の評価順を固定する.
-        if (!floor.contains(pos_target)) {
+        if (!floor.contains(pos_target, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
             continue;
         }
 

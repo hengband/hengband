@@ -43,7 +43,7 @@ static std::vector<Pos2D> tgt_pt_prepare(PlayerType *player_ptr)
     const auto p_pos = player_ptr->get_position();
     const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
     for (const auto &pos : floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
-        if (!floor.contains(pos)) {
+        if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
             continue;
         }
 

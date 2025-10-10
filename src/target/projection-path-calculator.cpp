@@ -105,7 +105,7 @@ static bool project_stop(const FloorType &floor, const Pos2D &p_pos, ProjectionP
         return true;
     }
 
-    return !floor.contains(pph_ptr->pos);
+    return !floor.contains(pph_ptr->pos, FloorBoundary::OUTER_WALL_EXCLUSIVE);
 }
 
 static void calc_frac(ProjectionPathHelper *pph_ptr, bool is_vertical)

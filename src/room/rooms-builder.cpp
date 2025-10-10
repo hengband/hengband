@@ -345,7 +345,7 @@ void add_outer_wall(PlayerType *player_ptr, POSITION x, POSITION y, int light, P
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const Pos2D pos(y, x);
-    if (!floor.contains(pos)) {
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         return;
     }
 

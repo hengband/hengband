@@ -242,7 +242,7 @@ std::vector<std::pair<int, Pos2D>> breath_shape(PlayerType *player_ptr, const Pr
             for (auto y = pos_breath.y - cdis; y <= pos_breath.y + cdis; y++) {
                 for (auto x = pos_breath.x - cdis; x <= pos_breath.x + cdis; x++) {
                     const Pos2D pos(y, x);
-                    if (!floor.contains(pos)) {
+                    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                         continue;
                     }
                     if (Grid::calc_distance(pos_source, pos) != bdis) {
