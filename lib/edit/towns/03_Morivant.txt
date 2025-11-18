@@ -104,16 +104,20 @@ F:b:BUILDING_1:3:0:0:0:0:NONE:21
 ?:[AND [EQU $QUEST24 3 4] [LEQ $QUEST19 3] ]
 F:b:BUILDING_1:3
 
+# Quest 24 failed
+?:[EQU $QUEST24 5]
+F:b:BUILDING_1:3:0:0:0:0:NONE:24
+
 # "Quest 24 - The Rise and Fall of Micro$oft" failed
 # "Quest 19 - Doom Quest 1" already finished
 # Continue with "Quest 21 - Doom Quest 2
-?:[AND [EQU $QUEST24 5 6] ] [GEQ $QUEST19 4] ]
+?:[AND [EQU $QUEST24 6] [GEQ $QUEST19 4] ]
 F:b:BUILDING_1:3:0:0:0:0:NONE:21
 
 # "Quest 24 - The Rise and Fall of Micro$oft" failed
 # "Quest 19 - Doom Quest 1" unfinished
 # No new quest available
-?:[AND [EQU $QUEST24 5 6] [LEQ $QUEST19 3] ]
+?:[AND [EQU $QUEST24 6] [LEQ $QUEST19 3] ]
 F:b:BUILDING_1:3
 
 ?:1

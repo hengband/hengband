@@ -85,7 +85,7 @@
 
 # 破滅のクエスト2
 ?:[EQU $QUEST_NUMBER 21]
-%:quests/021_DoomQuest2.txt 
+%:quests/021_DoomQuest2.txt
 
 # オークのキャンプ
 ?:[EQU $QUEST_NUMBER 22]
