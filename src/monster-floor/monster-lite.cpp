@@ -1,6 +1,5 @@
 #include "monster-floor/monster-lite.h"
 #include "dungeon/dungeon-flag-types.h"
-#include "grid/grid.h"
 #include "monster-floor/monster-lite-util.h"
 #include "monster-race/race-brightness-flags.h"
 #include "monster/monster-status.h"
@@ -154,12 +153,7 @@ void update_mon_lite(PlayerType *player_ptr)
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &dungeon = floor.get_dungeon_definition();
     const auto dis_lim = (dungeon.flags.has(DungeonFeatureType::DARKNESS) && !player_ptr->see_nocto) ? (MAX_PLAYER_SIGHT / 2 + 1) : (MAX_PLAYER_SIGHT + 3);
-    for (auto i = 0; i < floor.mon_lite_n; i++) {
-        auto &grid = floor.get_grid({ floor.mon_lite_y[i], floor.mon_lite_x[i] });
-        grid.add_info((grid.info & CAVE_MNLT) ? CAVE_TEMP : CAVE_XTRA);
-        grid.info &= ~(CAVE_MNLT | CAVE_MNDK);
-    }
-
+    floor.reset_mon_lite();
     const auto &world = AngbandWorld::get_instance();
     const auto p_pos = player_ptr->get_position();
     if (!world.timewalk_m_idx) {
@@ -300,43 +294,9 @@ void update_mon_lite(PlayerType *player_ptr)
     }
 
     const auto end_temp = std::size(points);
-    for (auto i = 0; i < floor.mon_lite_n; i++) {
-        const auto fx = floor.mon_lite_x[i];
-        const auto fy = floor.mon_lite_y[i];
-        const auto &grid = floor.get_grid({ fy, fx });
-        if (grid.info & CAVE_TEMP) {
-            if ((grid.info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW) {
-                cave_note_and_redraw_later(floor, fy, fx);
-            }
-        } else if ((grid.info & (CAVE_VIEW | CAVE_MNDK)) == CAVE_VIEW) {
-            cave_note_and_redraw_later(floor, fy, fx);
-        }
-
-        points.emplace_back(fy, fx);
-    }
-
-    floor.mon_lite_n = 0;
-    for (size_t i = 0; i < end_temp; i++) {
-        const auto &pos = points[i];
-        const auto &grid = floor.get_grid(pos);
-        if (grid.info & CAVE_MNLT) {
-            if ((grid.info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW) {
-                cave_note_and_redraw_later(floor, pos.y, pos.x);
-            }
-        } else if ((grid.info & (CAVE_VIEW | CAVE_XTRA)) == CAVE_VIEW) {
-            cave_note_and_redraw_later(floor, pos.y, pos.x);
-        }
-
-        floor.mon_lite_x[floor.mon_lite_n] = pos.x;
-        floor.mon_lite_y[floor.mon_lite_n] = pos.y;
-        floor.mon_lite_n++;
-    }
-
-    for (size_t i = end_temp; i < std::size(points); i++) {
-        const auto &pos = points[i];
-        floor.get_grid(pos).info &= ~(CAVE_TEMP | CAVE_XTRA);
-    }
-
+    const auto points_mon_lite = floor.collect_temp_mon_lite();
+    points.insert(points.end(), points_mon_lite.begin(), points_mon_lite.end());
+    floor.set_mon_lite(points, end_temp);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::DELAY_VISIBILITY);
     player_ptr->monlite = (floor.get_grid(p_pos).info & CAVE_MNLT) != 0;
     const auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
@@ -357,18 +317,4 @@ void update_mon_lite(PlayerType *player_ptr)
     }
 
     player_ptr->old_monlite = player_ptr->monlite;
-}
-
-/*!
- * @brief 画面切り替え等でモンスターの灯りを消去する
- * @param floor フロアへの参照
- */
-void clear_mon_lite(FloorType &floor)
-{
-    for (int i = 0; i < floor.mon_lite_n; i++) {
-        auto &grid = floor.grid_array[floor.mon_lite_y[i]][floor.mon_lite_x[i]];
-        grid.info &= ~(CAVE_MNLT | CAVE_MNDK);
-    }
-
-    floor.mon_lite_n = 0;
 }

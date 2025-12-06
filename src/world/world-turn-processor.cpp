@@ -126,7 +126,7 @@ void WorldTurnProcessor::process_downward()
 {
     /* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
     auto &floor = *this->player_ptr->current_floor_ptr;
-    if (!ironman_downward || (floor.dungeon_id == DungeonId::ANGBAND) || !floor.is_underground()) {
+    if (!ironman_downward || (floor.dungeon_id == DungeonId::ANGBAND) || !floor.is_underground() || floor.is_in_quest()) {
         return;
     }
 

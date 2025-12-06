@@ -2,17 +2,22 @@
 
 #include "object/tval-types.h"
 #include "system/angband.h"
+#include "util/flag-group.h"
+#include "util/point-2d.h"
+#include <vector>
 
 /*!
  * @brief scan_floor_items() の動作を指定するフラグたち。
  */
-enum scan_floor_mode {
-    SCAN_FLOOR_ITEM_TESTER = 1U << 0, /*!< item_tester_hook によるフィルタリングを適用する */
-    SCAN_FLOOR_ONLY_MARKED = 1U << 1, /*!< マークされたアイテムのみを対象とする */
-    SCAN_FLOOR_AT_MOST_ONE = 1U << 2, /*!< 高々1つのアイテムしか取得しない */
+enum class ScanFloorMode {
+    ITEM_TESTER = 0, /*!< item_tester_hook によるフィルタリングを適用する */
+    ONLY_MARKED = 1, /*!< マークされたアイテムのみを対象とする */
+    AT_MOST_ONE = 2, /*!< 高々1つのアイテムしか取得しない */
+    MAX,
 };
 
+class FloorType;
 class PlayerType;
 class ItemTester;
-int scan_floor_items(PlayerType *player_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, const ItemTester &item_tester);
+std::vector<short> scan_floor_items(const FloorType &floor, const Pos2D &pos, const EnumClassFlagGroup<ScanFloorMode> &mode, const ItemTester &item_tester);
 COMMAND_CODE show_floor_items(PlayerType *player_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, const ItemTester &item_tester);

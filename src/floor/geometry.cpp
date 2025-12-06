@@ -1,6 +1,5 @@
 #include "floor/geometry.h"
 #include "game-option/text-display-options.h"
-#include "grid/grid.h"
 #include "system/angband-system.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -53,7 +52,8 @@ bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     const Pos2D pos(y, x);
-    const auto &grid = player_ptr->current_floor_ptr->get_grid(pos);
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
 
     /* Note that "torch-lite" yields "illumination" */
     if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
@@ -82,7 +82,7 @@ bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x)
     }
 
     /* Check for "local" illumination */
-    return check_local_illumination(player_ptr, y, x);
+    return floor.is_illuminated_at(player_ptr->get_position(), pos);
 }
 
 /*

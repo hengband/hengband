@@ -16,5 +16,8 @@ FloorItemSelection::FloorItemSelection(uint32_t mode)
 ItemSelection::ItemSelection(uint32_t mode)
     : mode(mode)
     , menu_line(use_menu ? 1 : 0)
+    , equip(any_bits(mode, USE_EQUIP))
+    , inven(any_bits(mode, USE_INVEN))
+    , floor(any_bits(mode, USE_FLOOR))
 {
 }

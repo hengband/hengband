@@ -27,7 +27,6 @@
 #include "dungeon/dungeon-processor.h"
 #include "dungeon/quest.h"
 #include "floor/floor-changer.h"
-#include "floor/floor-events.h"
 #include "floor/floor-leaver.h"
 #include "floor/floor-mode-changer.h"
 #include "floor/floor-save.h"
@@ -36,7 +35,6 @@
 #include "game-option/input-options.h"
 #include "game-option/play-record-options.h"
 #include "game-option/runtime-arguments.h"
-#include "grid/grid.h"
 #include "info-reader/fixed-map-parser.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
@@ -53,7 +51,6 @@
 #include "market/bounty.h"
 #include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"
-#include "monster-floor/monster-lite.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
 #include "monster/monster-util.h"
@@ -108,7 +105,7 @@ static void restore_windows(PlayerType *player_ptr)
         }
     }
 
-    (void)term_set_cursor(0);
+    term_set_cursor(false);
 }
 
 static void send_waiting_record(PlayerType *player_ptr)
@@ -377,9 +374,9 @@ static void process_game_turn(PlayerType *player_ptr)
         world.character_xtra = false;
         Target::clear_last_target();
         health_track(player_ptr, 0);
-        forget_lite(floor);
-        forget_view(floor);
-        clear_mon_lite(floor);
+        floor.forget_lite();
+        floor.forget_view();
+        floor.forget_mon_lite();
         if (!player_ptr->playing && !player_ptr->is_dead) {
             break;
         }

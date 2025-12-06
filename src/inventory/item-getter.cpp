@@ -32,42 +32,25 @@
 #include "window/display-sub-windows.h"
 #include <fmt/format.h>
 #include <sstream>
-
-/*!
- * @brief オブジェクト選択のモード設定
- * @param item_selection_ptr アイテム選択への参照ポインタ
- */
-static void check_item_selection_mode(ItemSelection *item_selection_ptr)
-{
-    if (item_selection_ptr->mode & USE_EQUIP) {
-        item_selection_ptr->equip = true;
-    }
-
-    if (item_selection_ptr->mode & USE_INVEN) {
-        item_selection_ptr->inven = true;
-    }
-
-    if (item_selection_ptr->mode & USE_FLOOR) {
-        item_selection_ptr->floor = true;
-    }
-}
+#include <tl/optional.hpp>
 
 /*!
  * @brief アイテムへにタグ付けがされているかの調査処理 (のはず)
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param item_selection_ptr アイテムへの参照ポインタ
+ * @param floor フロアへの参照
+ * @param item_selection アイテム選択構造体への参照
+ * @param i_idx 選択したアイテムのインベントリ番号
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す
  * @todo 適切な関数名をどうしても付けられなかったので暫定でauxとした
  */
-static bool check_item_tag_aux(PlayerType *player_ptr, ItemSelection *item_selection_ptr, const ItemTester &item_tester)
+static bool check_item_tag_aux(const FloorType &floor, ItemSelection &item_selection, short i_idx, const ItemTester &item_tester)
 {
-    if (!item_selection_ptr->floor || (item_selection_ptr->cp >= 0)) {
+    if (!item_selection.floor || (i_idx >= 0)) {
         return false;
     }
 
-    item_selection_ptr->k = -item_selection_ptr->cp;
-    const auto &item = *player_ptr->current_floor_ptr->o_list[item_selection_ptr->k];
-    if (!item_tester.okay(&item) && ((item_selection_ptr->mode & USE_FULL) == 0)) {
+    item_selection.k = -i_idx;
+    const auto &item = *floor.o_list[item_selection.k];
+    if (!item_tester.okay(&item) && ((item_selection.mode & USE_FULL) == 0)) {
         return false;
     }
 
@@ -76,87 +59,82 @@ static bool check_item_tag_aux(PlayerType *player_ptr, ItemSelection *item_selec
 }
 
 /*!
- * @brief インベントリのアイテムにタグ付けがされているかの調査処理 (のはず)
+ * @brief インベントリのアイテムにタグ付けがされているかの調査
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr 床上アイテムへの参照ポインタ
+ * @param item_selection アイテム選択選択構造体への参照
+ * @param i_idx 選択したアイテムのインベントリ番号
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
- * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ * @return タグとインデックスの組
  */
-static bool check_item_tag_inventory(PlayerType *player_ptr, ItemSelection *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> check_item_tag_inventory(PlayerType *player_ptr, ItemSelection &item_selection, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
-    auto &cp = item_selection_ptr->cp;
-    auto should_check = !item_selection_ptr->inven || (cp < 0) || (cp >= INVEN_PACK);
-    should_check &= !item_selection_ptr->equip || (cp < INVEN_MAIN_HAND) || (cp >= INVEN_TOTAL);
+    auto should_check = !item_selection.inven || (i_idx < 0) || (i_idx >= INVEN_PACK);
+    should_check &= !item_selection.equip || (i_idx < INVEN_MAIN_HAND) || (i_idx >= INVEN_TOTAL);
     if (should_check) {
-        return false;
+        return { tl::nullopt, prev_tag };
     }
 
-    if (*prev_tag && command_cmd) {
-        auto flag = false;
-        const auto use_flag = (cp >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
-        flag |= !get_tag(player_ptr, &item_selection_ptr->k, *prev_tag, use_flag, item_tester);
-        flag |= !get_item_okay(player_ptr, item_selection_ptr->k, item_tester);
-
-        if (item_selection_ptr->k < INVEN_MAIN_HAND) {
-            flag |= !item_selection_ptr->inven;
-        } else {
-            flag |= !item_selection_ptr->equip;
+    if ((prev_tag != '\0') && command_cmd) {
+        const auto use_flag = (i_idx >= INVEN_MAIN_HAND) ? USE_EQUIP : USE_INVEN;
+        const auto i_idx_opt = get_tag(player_ptr, prev_tag, use_flag, item_tester);
+        if (!i_idx_opt) {
+            return { tl::nullopt, '\0' };
         }
 
-        if (flag) {
-            *prev_tag = '\0';
-            return false;
+        item_selection.k = *i_idx_opt;
+        if (!get_item_okay(player_ptr, item_selection.k, item_tester) ||
+            (item_selection.k < INVEN_MAIN_HAND && !item_selection.inven) ||
+            (item_selection.k >= INVEN_MAIN_HAND && !item_selection.equip)) {
+            return { tl::nullopt, '\0' };
         }
 
-        cp = item_selection_ptr->k;
         command_cmd = 0;
-        return true;
+        return { item_selection.k, prev_tag };
     }
 
-    if (!get_item_okay(player_ptr, cp, item_tester)) {
-        return false;
+    if (!get_item_okay(player_ptr, i_idx, item_tester)) {
+        return { tl::nullopt, prev_tag };
     }
 
     command_cmd = 0;
-    return true;
+    return { i_idx, prev_tag };
 }
 
 /*!
  * @brief アイテムにタグ付けがされているかの調査処理 (のはず)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param item_selection_ptr アイテムへの参照ポインタ
+ * @param item_selection アイテム選択構造体への参照
  * @param prev_tag 前回選択したアイテムのタグ (のはず)
- * @return プレイヤーによりアイテムが選択されたならTRUEを返す
+ * @return タグとインデックスの組
  */
-static bool check_item_tag(PlayerType *player_ptr, ItemSelection *item_selection_ptr, char *prev_tag, const ItemTester &item_tester)
+static std::pair<tl::optional<short>, char> check_item_tag(PlayerType *player_ptr, ItemSelection &item_selection, char prev_tag, const ItemTester &item_tester)
 {
     const auto code = repeat_pull();
     if (!code) {
-        return false;
+        return { tl::nullopt, prev_tag };
     }
 
-    item_selection_ptr->cp = *code;
-    if (item_selection_ptr->mode & USE_FORCE && (item_selection_ptr->cp == INVEN_FORCE)) {
+    if (item_selection.mode & USE_FORCE && (*code == INVEN_FORCE)) {
         command_cmd = 0;
-        return true;
+        return { code, prev_tag };
     }
 
-    if (check_item_tag_aux(player_ptr, item_selection_ptr, item_tester)) {
-        return true;
+    if (check_item_tag_aux(*player_ptr->current_floor_ptr, item_selection, *code, item_tester)) {
+        return { code, prev_tag };
     }
 
-    return check_item_tag_inventory(player_ptr, item_selection_ptr, prev_tag, item_tester);
+    return check_item_tag_inventory(player_ptr, item_selection, *code, prev_tag, item_tester);
 }
 
 /*!
  * @brief インベントリ内のアイテムが妥当かを判定する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr アイテム選択への参照ポインタ
+ * @param fis_ptr アイテム選択構造体への参照
  */
-static void test_inventory(PlayerType *player_ptr, ItemSelection *item_selection_ptr, const ItemTester &item_tester)
+static void test_inventory(PlayerType *player_ptr, ItemSelection &item_selection, const ItemTester &item_tester)
 {
-    if (!item_selection_ptr->inven) {
-        item_selection_ptr->i2 = -1;
+    if (!item_selection.inven) {
+        item_selection.i2 = -1;
         return;
     }
 
@@ -165,8 +143,8 @@ static void test_inventory(PlayerType *player_ptr, ItemSelection *item_selection
     }
 
     for (int j = 0; j < INVEN_PACK; j++) {
-        if (item_tester.okay(player_ptr->inventory[j].get()) || (item_selection_ptr->mode & USE_FULL)) {
-            item_selection_ptr->max_inven++;
+        if (item_tester.okay(player_ptr->inventory[j].get()) || any_bits(item_selection.mode, USE_FULL)) {
+            item_selection.max_inven++;
         }
     }
 }
@@ -174,12 +152,12 @@ static void test_inventory(PlayerType *player_ptr, ItemSelection *item_selection
 /*!
  * @brief 装備品が妥当かを判定する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param fis_ptr アイテム選択への参照ポインタ
+ * @param fis_ptr アイテム選択構造体への参照
  */
-static void test_equipment(PlayerType *player_ptr, ItemSelection *item_selection_ptr, const ItemTester &item_tester)
+static void test_equipment(PlayerType *player_ptr, ItemSelection &item_selection, const ItemTester &item_tester)
 {
-    if (!item_selection_ptr->equip) {
-        item_selection_ptr->e2 = -1;
+    if (!item_selection.equip) {
+        item_selection.e2 = -1;
         return;
     }
 
@@ -189,13 +167,13 @@ static void test_equipment(PlayerType *player_ptr, ItemSelection *item_selection
 
     for (int j = INVEN_MAIN_HAND; j < INVEN_TOTAL; j++) {
         if (player_ptr->select_ring_slot ? is_ring_slot(j)
-                                         : item_tester.okay(player_ptr->inventory[j].get()) || (item_selection_ptr->mode & USE_FULL)) {
-            item_selection_ptr->max_equip++;
+                                         : item_tester.okay(player_ptr->inventory[j].get()) || (item_selection.mode & USE_FULL)) {
+            item_selection.max_equip++;
         }
     }
 
-    if (has_two_handed_weapons(player_ptr) && !(item_selection_ptr->mode & IGNORE_BOTHHAND_SLOT)) {
-        item_selection_ptr->max_equip++;
+    if (has_two_handed_weapons(player_ptr) && !(item_selection.mode & IGNORE_BOTHHAND_SLOT)) {
+        item_selection.max_equip++;
     }
 }
 
@@ -214,13 +192,20 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 {
     static char prev_tag = '\0';
     if (easy_floor || use_menu) {
-        return get_item_floor(player_ptr, cp, pmt, str, mode, item_tester);
+        const auto floor_item_indice = get_item_floor(player_ptr, pmt, str, mode, item_tester);
+        if (floor_item_indice) {
+            *cp = *floor_item_indice;
+            return true;
+        }
+
+        return false;
     }
 
     ItemSelection item_selection(mode);
-    check_item_selection_mode(&item_selection);
-    if (check_item_tag(player_ptr, &item_selection, &prev_tag, item_tester)) {
-        *cp = item_selection.cp;
+    const auto &[i_idx_opt, new_tag] = check_item_tag(player_ptr, item_selection, prev_tag, item_tester);
+    prev_tag = new_tag;
+    if (i_idx_opt) {
+        *cp = *i_idx_opt;
         return true;
     }
 
@@ -229,7 +214,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     item_selection.item = false;
     item_selection.i1 = 0;
     item_selection.i2 = INVEN_PACK - 1;
-    test_inventory(player_ptr, &item_selection, item_tester);
+    test_inventory(player_ptr, item_selection, item_tester);
     while ((item_selection.i1 <= item_selection.i2) && (!get_item_okay(player_ptr, item_selection.i1, item_tester))) {
         item_selection.i1++;
     }
@@ -240,7 +225,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
     item_selection.e1 = INVEN_MAIN_HAND;
     item_selection.e2 = INVEN_TOTAL - 1;
-    test_equipment(player_ptr, &item_selection, item_tester);
+    test_equipment(player_ptr, item_selection, item_tester);
     while ((item_selection.e1 <= item_selection.e2) && (!get_item_okay(player_ptr, item_selection.e1, item_tester))) {
         item_selection.e1++;
     }
@@ -260,22 +245,24 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
     }
 
     if (item_selection.floor) {
-        for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-            ItemEntity *o_ptr;
-            o_ptr = player_ptr->current_floor_ptr->o_list[this_o_idx].get();
-            if ((item_tester.okay(o_ptr) || (item_selection.mode & USE_FULL)) && o_ptr->marked.has(OmType::FOUND)) {
+        const auto &floor = *player_ptr->current_floor_ptr;
+        for (const auto this_o_idx : floor.get_grid(player_ptr->get_position()).o_idx_list) {
+            const auto &item = *floor.o_list[this_o_idx];
+            if ((item_tester.okay(&item) || (item_selection.mode & USE_FULL)) && item.marked.has(OmType::FOUND)) {
                 item_selection.allow_floor = true;
+                break;
             }
         }
     }
 
+    short i_idx = 0;
     if (!item_selection.allow_floor && (item_selection.i1 > item_selection.i2) && (item_selection.e1 > item_selection.e2)) {
         command_see = false;
         item_selection.oops = true;
         item_selection.done = true;
 
         if (item_selection.mode & USE_FORCE) {
-            item_selection.cp = INVEN_FORCE;
+            i_idx = INVEN_FORCE;
             item_selection.item = true;
         }
     } else {
@@ -435,7 +422,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             case '\r':
             case '\n': {
                 if (command_wrk == USE_FLOOR) {
-                    item_selection.cp = -get_item_label;
+                    i_idx = -get_item_label;
                 } else {
                     if (!get_item_okay(player_ptr, get_item_label, item_tester)) {
                         bell();
@@ -447,7 +434,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                         break;
                     }
 
-                    item_selection.cp = get_item_label;
+                    i_idx = get_item_label;
                 }
 
                 item_selection.item = true;
@@ -456,7 +443,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
             }
             case 'w': {
                 if (item_selection.mode & USE_FORCE) {
-                    item_selection.cp = INVEN_FORCE;
+                    i_idx = INVEN_FORCE;
                     item_selection.item = true;
                     item_selection.done = true;
                     break;
@@ -505,10 +492,10 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
         case '-': {
             if (item_selection.allow_floor) {
-                for (const auto this_o_idx : player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].o_idx_list) {
-                    ItemEntity *o_ptr;
-                    o_ptr = player_ptr->current_floor_ptr->o_list[this_o_idx].get();
-                    if (!item_tester.okay(o_ptr) && !(item_selection.mode & USE_FULL)) {
+                const auto &floor = *player_ptr->current_floor_ptr;
+                for (const auto this_o_idx : floor.get_grid(player_ptr->get_position()).o_idx_list) {
+                    const auto &item = *floor.o_list[this_o_idx];
+                    if (!item_tester.okay(&item) && !(item_selection.mode & USE_FULL)) {
                         continue;
                     }
 
@@ -517,7 +504,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                         continue;
                     }
 
-                    item_selection.cp = item_selection.k;
+                    i_idx = item_selection.k;
                     item_selection.item = true;
                     item_selection.done = true;
                     break;
@@ -541,11 +528,13 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         case '7':
         case '8':
         case '9': {
-            if (!get_tag(player_ptr, &item_selection.k, item_selection.which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester)) {
+            const auto i_idx_opt = get_tag(player_ptr, item_selection.which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester);
+            if (!i_idx_opt) {
                 bell();
                 break;
             }
 
+            item_selection.k = *i_idx_opt;
             if ((item_selection.k < INVEN_MAIN_HAND) ? !item_selection.inven : !item_selection.equip) {
                 bell();
                 break;
@@ -561,7 +550,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 break;
             }
 
-            item_selection.cp = item_selection.k;
+            i_idx = item_selection.k;
             item_selection.item = true;
             item_selection.done = true;
             item_selection.cur_tag = item_selection.which;
@@ -569,7 +558,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
         case 'w': {
             if (item_selection.mode & USE_FORCE) {
-                item_selection.cp = INVEN_FORCE;
+                i_idx = INVEN_FORCE;
                 item_selection.item = true;
                 item_selection.done = true;
                 break;
@@ -577,35 +566,26 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         }
             [[fallthrough]];
         default: {
-            bool tag_not_found = false;
-
-            if (!get_tag(player_ptr, &item_selection.k, item_selection.which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester)) {
-                tag_not_found = true;
-            } else if ((item_selection.k < INVEN_MAIN_HAND) ? !item_selection.inven : !item_selection.equip) {
-                tag_not_found = true;
+            auto is_tag_found = false;
+            const auto i_idx_opt = get_tag(player_ptr, item_selection.which, command_wrk ? USE_EQUIP : USE_INVEN, item_tester);
+            if (i_idx_opt) {
+                item_selection.k = *i_idx_opt;
+                const auto is_inventory = item_selection.k < INVEN_MAIN_HAND;
+                if ((is_inventory && item_selection.inven) || (!is_inventory && item_selection.equip)) {
+                    is_tag_found = true;
+                }
             }
 
-            if (!tag_not_found) {
+            if (!is_tag_found) {
                 item_selection.cur_tag = item_selection.which;
             } else {
-                auto which = (char)tolower(item_selection.which);
-
-                if (!command_wrk) {
-                    if (which == '(') {
-                        item_selection.k = item_selection.i1;
-                    } else if (which == ')') {
-                        item_selection.k = item_selection.i2;
-                    } else {
-                        item_selection.k = label_to_inventory(player_ptr, which);
-                    }
+                const auto which = static_cast<char>(tolower(item_selection.which));
+                if (which == '(') {
+                    item_selection.k = command_wrk ? item_selection.e1 : item_selection.i1;
+                } else if (which == ')') {
+                    item_selection.k = command_wrk ? item_selection.e2 : item_selection.i2;
                 } else {
-                    if (which == '(') {
-                        item_selection.k = item_selection.e1;
-                    } else if (which == ')') {
-                        item_selection.k = item_selection.e2;
-                    } else {
-                        item_selection.k = label_to_equipment(player_ptr, which);
-                    }
+                    item_selection.k = label_to_inventory(player_ptr, which);
                 }
             }
 
@@ -614,8 +594,8 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 break;
             }
 
-            auto ver = tag_not_found && isupper(item_selection.which);
-            if (ver && !verify(player_ptr, _("本当に", "Try"), item_selection.k)) {
+            const auto should_verify = !is_tag_found && isupper(item_selection.which);
+            if (should_verify && !verify(player_ptr, _("本当に", "Try"), item_selection.k)) {
                 item_selection.done = true;
                 break;
             }
@@ -625,7 +605,7 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
                 break;
             }
 
-            item_selection.cp = item_selection.k;
+            i_idx = item_selection.k;
             item_selection.item = true;
             item_selection.done = true;
             break;
@@ -653,12 +633,12 @@ bool get_item(PlayerType *player_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
         return false;
     }
 
-    repeat_push(item_selection.cp);
+    repeat_push(i_idx);
     if (command_cmd) {
         prev_tag = item_selection.cur_tag;
     }
 
     command_cmd = 0;
-    *cp = item_selection.cp;
+    *cp = i_idx;
     return true;
 }

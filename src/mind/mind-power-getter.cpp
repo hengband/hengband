@@ -149,7 +149,7 @@ bool MindPowerGetter::decide_mind_choice(std::string_view prompt, const bool onl
         if (this->choice == ESCAPE) {
             this->choice = ' ';
         } else {
-            const auto command = input_command(prompt, true);
+            const auto command = input_command(prompt);
             if (!command) {
                 break;
             }

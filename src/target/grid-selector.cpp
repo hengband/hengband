@@ -20,6 +20,7 @@
 #include "util/candidate-selector.h"
 #include "util/finalizer.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include <functional>
@@ -133,6 +134,10 @@ struct tgt_pt_info {
     std::function<bool(const Grid &)> callback{}; //<! 条件判定コールバック
 
     void move_to_symbol(PlayerType *player_ptr);
+    bool is_ch_numeric() const
+    {
+        return is_numeric(this->ch);
+    }
 };
 
 /*!
@@ -245,7 +250,7 @@ tl::optional<Pos2D> point_target(PlayerType *player_ptr)
         }
         default: {
             if (rogue_like_commands) {
-                if (info.ch >= '0' && info.ch <= '9') {
+                if (info.is_ch_numeric()) {
                     if (info.ch != '0') {
                         info.ch -= 16;
                     }

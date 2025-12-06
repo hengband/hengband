@@ -20,7 +20,7 @@ tl::optional<std::string> input_string(std::string_view prompt, int len, std::st
 bool input_check(std::string_view prompt);
 bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, UserCheck one_mode);
 bool input_check_strict(PlayerType *player_ptr, std::string_view prompt, EnumClassFlagGroup<UserCheck> mode);
-tl::optional<char> input_command(std::string_view prompt, bool z_escape = false);
+tl::optional<char> input_command(std::string_view prompt);
 int input_quantity(int max, std::string_view initial_prompt = "");
 void pause_line(int row);
 tl::optional<int> input_integer(std::string_view prompt, int min, int max, int initial_value = 0);

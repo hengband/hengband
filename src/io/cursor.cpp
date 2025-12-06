@@ -50,7 +50,7 @@ void print_path(PlayerType *player_ptr, POSITION y, POSITION x)
     handle_stuff(player_ptr);
     for (const auto &pos_path : path_g) {
         const auto &grid = floor.get_grid(pos_path);
-        if (panel_contains(pos_path.y, pos_path.x)) {
+        if (panel_contains(pos_path)) {
             DisplaySymbolPair symbol_pair({ default_color, '\0' }, { default_color, '*' });
             if (grid.has_monster() && floor.m_list[grid.m_idx].ml) {
                 symbol_pair = map_info(player_ptr, pos_path);

@@ -50,12 +50,12 @@ int FloorType::get_level() const
     return this->dun_level;
 }
 
-Grid &FloorType::get_grid(const Pos2D pos)
+Grid &FloorType::get_grid(const Pos2D &pos)
 {
     return this->grid_array[pos.y][pos.x];
 }
 
-const Grid &FloorType::get_grid(const Pos2D pos) const
+const Grid &FloorType::get_grid(const Pos2D &pos) const
 {
     return this->grid_array[pos.y][pos.x];
 }
@@ -109,7 +109,6 @@ const DungeonDefinition &FloorType::get_dungeon_definition() const
 
 /*!
  * @brief 新しく入ったダンジョンの階層に固定されているランダムクエストを探し出しIDを返す。
- * @param player_ptr プレイヤーへの参照ポインタ
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
@@ -137,11 +136,10 @@ QuestId FloorType::get_random_quest_id(tl::optional<int> level_opt) const
 
 /*!
  * @brief 新しく入ったダンジョンの階層に固定されている一般のクエストを探し出しIDを返す.
- * @param player_ptr プレイヤーへの参照ポインタ
  * @param bonus 検索対象になる階へのボーナス。通常0
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QuestId FloorType::get_quest_id(const int bonus) const
+QuestId FloorType::get_quest_id(int bonus) const
 {
     const auto &quests = QuestList::get_instance();
     if (this->is_in_quest()) {
@@ -346,6 +344,27 @@ bool FloorType::can_block_disintegration_at(const Pos2D &pos) const
 bool FloorType::can_drop_item_at(const Pos2D &pos) const
 {
     return this->get_grid(pos).can_drop_item();
+}
+
+/*!
+ * @brief 指定された座標のマスが現在照らされているかを調べる.
+ * @param p_pos プレイヤーの現在位置
+ * @param pos 指定座標
+ * @return 指定された座標に照明がかかっているならTRUEを返す.
+ */
+bool FloorType::is_illuminated_at(const Pos2D &p_pos, const Pos2D &pos) const
+{
+    const auto yy = (pos.y < p_pos.y) ? (pos.y + 1) : (pos.y > p_pos.y) ? (pos.y - 1)
+                                                                        : pos.y;
+    const auto xx = (pos.x < p_pos.x) ? (pos.x + 1) : (pos.x > p_pos.x) ? (pos.x - 1)
+                                                                        : pos.x;
+    const auto &grid_yyxx = this->get_grid({ yy, xx });
+    const auto &grid_yxx = this->get_grid({ pos.y, xx });
+    const auto &grid_yyx = this->get_grid({ yy, pos.x });
+    auto is_illuminated = grid_yyxx.has_los_terrain(TerrainKind::MIMIC) && any_bits(grid_yyxx.info, CAVE_GLOW);
+    is_illuminated |= grid_yxx.has_los_terrain(TerrainKind::MIMIC) && any_bits(grid_yxx.info, CAVE_GLOW);
+    is_illuminated |= grid_yyx.has_los_terrain(TerrainKind::MIMIC) && any_bits(grid_yyx.info, CAVE_GLOW);
+    return is_illuminated;
 }
 
 /*!
@@ -614,8 +633,250 @@ short FloorType::pop_empty_index_item()
 }
 
 /*!
+ * @brief ターン経過に伴いグリッドの灯りを消去する
+ */
+void FloorType::forget_lite()
+{
+    if (this->lite_n == 0) {
+        return;
+    }
+
+    for (auto i = 0; i < this->lite_n; i++) {
+        const auto y = this->lite_y[i];
+        const auto x = this->lite_x[i];
+        this->grid_array[y][x].info &= ~(CAVE_LITE);
+    }
+
+    this->lite_n = 0;
+}
+
+/*!
+ * @brief ターン経過に伴いプレイヤーの視界を消去する
+ */
+void FloorType::forget_view()
+{
+    if (this->view_n == 0) {
+        return;
+    }
+
+    for (auto i = 0; i < this->view_n; i++) {
+        const auto y = this->view_y[i];
+        const auto x = this->view_x[i];
+        this->grid_array[y][x].info &= ~(CAVE_VIEW);
+    }
+
+    this->view_n = 0;
+}
+
+/*!
+ * @brief ターン経過に伴いモンスターの灯りを消去する
+ */
+void FloorType::forget_mon_lite()
+{
+    for (auto i = 0; i < this->mon_lite_n; i++) {
+        const auto y = this->mon_lite_y[i];
+        const auto x = this->mon_lite_x[i];
+        this->grid_array[y][x].info &= ~(CAVE_MNLT | CAVE_MNDK);
+    }
+
+    this->mon_lite_n = 0;
+}
+
+void FloorType::reset_mon_lite()
+{
+    for (auto i = 0; i < this->mon_lite_n; i++) {
+        const auto y = this->mon_lite_y[i];
+        const auto x = this->mon_lite_x[i];
+        auto &grid = this->get_grid({ y, x });
+        grid.add_info((grid.info & CAVE_MNLT) ? CAVE_TEMP : CAVE_XTRA);
+        grid.info &= ~(CAVE_MNLT | CAVE_MNDK);
+    }
+}
+
+void FloorType::reset_lite_area()
+{
+    this->lite_n = 0;
+    this->mon_lite_n = 0;
+    this->redraw_n = 0;
+    this->view_n = 0;
+}
+
+void FloorType::set_lite_at(const Pos2D &pos)
+{
+    if (!this->contains(pos)) {
+        return;
+    }
+
+    auto &grid = this->get_grid(pos);
+    if (grid.is_lite() || (this->lite_n >= LITE_MAX)) {
+        return;
+    }
+
+    grid.info |= CAVE_LITE;
+    this->lite_y[this->lite_n] = pos.y;
+    this->lite_x[this->lite_n++] = pos.x;
+}
+
+void FloorType::set_redraw_at(const Pos2D &pos)
+{
+    if (!this->contains(pos)) {
+        return;
+    }
+
+    auto &grid = this->get_grid(pos);
+    if (grid.is_redraw() || (this->redraw_n >= REDRAW_MAX)) {
+        return;
+    }
+
+    grid.info |= CAVE_REDRAW;
+    this->redraw_y[this->redraw_n] = pos.y;
+    this->redraw_x[this->redraw_n++] = pos.x;
+}
+
+void FloorType::set_view_at(const Pos2D &pos)
+{
+    if (!this->contains(pos)) {
+        return;
+    }
+
+    auto &grid = this->get_grid(pos);
+    if (grid.is_view() || (this->view_n >= VIEW_MAX)) {
+        return;
+    }
+
+    grid.info |= CAVE_VIEW;
+    this->view_y[this->view_n] = pos.y;
+    this->view_x[this->view_n] = pos.x;
+    this->view_n++;
+}
+
+void FloorType::set_view()
+{
+    for (auto i = 0; i < this->view_n; i++) {
+        const auto y = this->view_y[i];
+        const auto x = this->view_x[i];
+        const Pos2D pos(y, x);
+        auto &grid = this->get_grid(pos);
+        grid.info &= ~(CAVE_XTRA);
+        if (grid.info & CAVE_TEMP) {
+            continue;
+        }
+
+        this->set_note_and_redraw_at(pos);
+    }
+}
+
+void FloorType::set_note_and_redraw()
+{
+    for (auto i = 0; i < this->lite_n; i++) {
+        const auto y = this->lite_y[i];
+        const auto x = this->lite_x[i];
+        const Pos2D pos(y, x);
+        if (this->get_grid(pos).info & CAVE_TEMP) {
+            continue;
+        }
+
+        this->set_note_and_redraw_at(pos);
+    }
+}
+
+std::vector<Pos2D> FloorType::reset_lite()
+{
+    std::vector<Pos2D> points;
+    for (auto i = 0; i < this->lite_n; i++) {
+        const auto y = this->lite_y[i];
+        const auto x = this->lite_x[i];
+        const Pos2D pos(y, x);
+        auto &grid = this->get_grid(pos);
+        grid.info &= ~(CAVE_LITE);
+        grid.info |= CAVE_TEMP;
+        points.push_back(pos);
+    }
+
+    this->lite_n = 0;
+    return points;
+}
+
+std::vector<Pos2D> FloorType::reset_view()
+{
+    std::vector<Pos2D> points;
+    for (auto i = 0; i < this->view_n; i++) {
+        const auto y = this->view_y[i];
+        const auto x = this->view_x[i];
+        const Pos2D pos(y, x);
+        auto &grid = this->get_grid(pos);
+        grid.info &= ~(CAVE_VIEW);
+        grid.info |= CAVE_TEMP;
+        points.push_back(pos);
+    }
+    this->view_n = 0;
+    return points;
+}
+
+std::vector<Pos2D> FloorType::collect_temp_mon_lite()
+{
+    std::vector<Pos2D> points;
+    for (auto i = 0; i < this->mon_lite_n; i++) {
+        const auto fx = this->mon_lite_x[i];
+        const auto fy = this->mon_lite_y[i];
+        const auto pos = Pos2D(fy, fx);
+        const auto &grid = this->get_grid(pos);
+        if (grid.info & CAVE_TEMP) {
+            if ((grid.info & (CAVE_VIEW | CAVE_MNLT)) == CAVE_VIEW) {
+                this->set_note_and_redraw_at(pos);
+            }
+        } else if ((grid.info & (CAVE_VIEW | CAVE_MNDK)) == CAVE_VIEW) {
+            this->set_note_and_redraw_at(pos);
+        }
+
+        points.push_back(pos);
+    }
+
+    this->mon_lite_n = 0;
+    return points;
+}
+
+std::vector<Pos2D> FloorType::collect_redraw_points()
+{
+    std::vector<Pos2D> points;
+    for (auto i = 0; i < this->redraw_n; i++) {
+        const Pos2D pos(this->redraw_y[i], this->redraw_x[i]);
+        auto &grid = this->get_grid(pos);
+        if (any_bits(grid.info, CAVE_REDRAW)) {
+            points.push_back(pos);
+        }
+    }
+
+    this->redraw_n = 0;
+    return points;
+}
+
+void FloorType::set_mon_lite(const std::vector<Pos2D> &points, size_t end_temp)
+{
+    for (size_t i = 0; i < end_temp; i++) {
+        const auto &pos = points[i];
+        const auto &grid = this->get_grid(pos);
+        if (grid.info & CAVE_MNLT) {
+            if ((grid.info & (CAVE_VIEW | CAVE_TEMP)) == CAVE_VIEW) {
+                this->set_note_and_redraw_at(pos);
+            }
+        } else if ((grid.info & (CAVE_VIEW | CAVE_XTRA)) == CAVE_VIEW) {
+            this->set_note_and_redraw_at(pos);
+        }
+
+        this->mon_lite_x[this->mon_lite_n] = pos.x;
+        this->mon_lite_y[this->mon_lite_n] = pos.y;
+        this->mon_lite_n++;
+    }
+
+    for (size_t i = end_temp; i < std::size(points); i++) {
+        const auto &pos = points[i];
+        this->get_grid(pos).info &= ~(CAVE_TEMP | CAVE_XTRA);
+    }
+}
+
+/*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。
- * @param player_ptr プレイヤーへの参照ポインタ
  * @param pos 指定座標
  * @return 永久地形でなく、かつ該当のマスにアーティファクトが存在しないならばtrue、永久地形かアーティファクトが存在するならばfalse。
  */
@@ -723,4 +984,10 @@ int FloorType::decide_selection_count()
     }
 
     return count;
+}
+
+void FloorType::set_note_and_redraw_at(const Pos2D &pos)
+{
+    this->get_grid(pos).info |= CAVE_NOTE;
+    this->set_redraw_at(pos);
 }

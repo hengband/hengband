@@ -81,8 +81,8 @@ F:#:GRANITE:8
 # potion of healing
 F:1:FLOOR:12:0:242
 
-# staff of destruction
-F:2:FLOOR:12:0:307
+# Potion of Life
+F:2:FLOOR:12:0:420
 
 
 # Dungeon layout

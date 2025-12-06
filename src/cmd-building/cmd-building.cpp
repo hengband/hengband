@@ -20,7 +20,6 @@
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"
 #include "core/stuff-handler.h"
-#include "floor/floor-events.h"
 #include "floor/floor-mode-changer.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-requester.h"
@@ -353,15 +352,15 @@ void do_cmd_building(PlayerType *player_ptr)
 
     player_ptr->oldpy = player_ptr->y;
     player_ptr->oldpx = player_ptr->x;
-    forget_lite(floor);
-    forget_view(floor);
+    floor.forget_lite();
+    floor.forget_view();
     world.character_icky_depth++;
 
     command_arg = 0;
     command_rep = 0;
     command_new = 0;
 
-    display_buikding_service(player_ptr, bldg);
+    display_building_service(player_ptr, bldg);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
 
     while (true) {

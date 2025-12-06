@@ -1,14 +1,12 @@
 #include "save/floor-writer.h"
 #include "core/object-compressor.h"
 #include "floor/dungeon-feeling.h"
-#include "floor/floor-events.h"
 #include "floor/floor-save-util.h"
 #include "floor/floor-save.h"
 #include "grid/grid.h"
 #include "io/files-util.h"
 #include "io/uid-checker.h"
 #include "load/floor-loader.h"
-#include "monster-floor/monster-lite.h"
 #include "monster/monster-compaction.h"
 #include "save/item-writer.h"
 #include "save/monster-entity-writer.h"
@@ -157,9 +155,10 @@ void wr_saved_floor(PlayerType *player_ptr, saved_floor_type *sf_ptr)
  */
 bool wr_dungeon(PlayerType *player_ptr)
 {
-    forget_lite(*player_ptr->current_floor_ptr);
-    forget_view(*player_ptr->current_floor_ptr);
-    clear_mon_lite(*player_ptr->current_floor_ptr);
+    auto &floor = *player_ptr->current_floor_ptr;
+    floor.forget_lite();
+    floor.forget_view();
+    floor.forget_mon_lite();
     static constexpr auto flags = {
         StatusRecalculatingFlag::VIEW,
         StatusRecalculatingFlag::LITE,
@@ -170,7 +169,7 @@ bool wr_dungeon(PlayerType *player_ptr)
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     wr_s16b(max_floor_id);
-    wr_byte((byte)player_ptr->current_floor_ptr->dungeon_id);
+    wr_byte(static_cast<uint8_t>(floor.dungeon_id));
     if (!player_ptr->in_saved_floor()) {
         /* No array elements */
         wr_byte(0);

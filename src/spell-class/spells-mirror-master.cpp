@@ -264,20 +264,19 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
             break;
         }
 
-        for (auto path_g_ite = path_g.begin(); path_g_ite != path_g.end(); path_g_ite++) {
-            const auto &[oy, ox] = *(path_g_ite == path_g.begin() ? path_g.begin() : path_g_ite - 1);
-            const auto &[ny, nx] = *path_g_ite;
-
+        for (auto path_g_itr = path_g.begin(); path_g_itr != path_g.end(); path_g_itr++) {
+            const auto &pos_dst = *path_g_itr;
+            const auto &pos_src = *(path_g_itr == path_g.begin() ? path_g.begin() : path_g_itr - 1);
             if (delay_factor > 0 && !this->player_ptr->effects()->blindness().is_blind()) {
-                if (panel_contains(ny, nx) && floor.has_los_at({ ny, nx })) {
-                    print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
-                    move_cursor_relative(ny, nx);
+                if (panel_contains(pos_dst) && floor.has_los_at(pos_dst)) {
+                    print_bolt_pict(this->player_ptr, pos_src, pos_dst, typ);
+                    move_cursor_relative(pos_dst.y, pos_dst.x);
                     term_fresh();
                     term_xtra(TERM_XTRA_DELAY, delay_factor);
-                    lite_spot(this->player_ptr, { ny, nx });
+                    lite_spot(this->player_ptr, pos_dst);
                     term_fresh();
 
-                    print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
+                    print_bolt_pict(this->player_ptr, pos_dst, pos_dst, typ);
 
                     visual = true;
                 } else if (visual) {
@@ -285,7 +284,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
                 }
             }
 
-            if (affect_item(this->player_ptr, 0, 0, ny, nx, dam, typ)) {
+            if (affect_item(this->player_ptr, 0, 0, pos_dst.y, pos_dst.x, dam, typ)) {
                 res.notice = true;
             }
         }
@@ -350,12 +349,12 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
             const auto &pos = (n == 1) ? center : *std::next(it, -1);
             const auto &pos_new = *it;
 
-            if (panel_contains(pos.y, pos.x) && floor.has_los_at(pos)) {
-                print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
+            if (panel_contains(pos) && floor.has_los_at(pos)) {
+                print_bolt_pict(player_ptr, pos, pos, typ);
                 drawn_pos_list.push_back(pos);
             }
-            if (panel_contains(pos_new.y, pos_new.x) && floor.has_los_at(pos_new)) {
-                print_bolt_pict(player_ptr, pos.y, pos.x, pos_new.y, pos_new.x, typ);
+            if (panel_contains(pos_new) && floor.has_los_at(pos_new)) {
+                print_bolt_pict(player_ptr, pos, pos_new, typ);
                 if (std::find(last_pos_list.begin(), last_pos_list.end(), *it) != last_pos_list.end()) {
                     drawn_last_pos_list.push_back(pos_new);
                 }
@@ -365,8 +364,8 @@ static void draw_super_ray_pict(PlayerType *player_ptr, const std::map<int, std:
         term_xtra(TERM_XTRA_DELAY, delay_factor);
 
         for (const auto &pos : drawn_last_pos_list) {
-            if (panel_contains(pos.y, pos.x) && floor.has_los_at(pos)) {
-                print_bolt_pict(player_ptr, pos.y, pos.x, pos.y, pos.x, typ);
+            if (panel_contains(pos) && floor.has_los_at(pos)) {
+                print_bolt_pict(player_ptr, pos, pos, typ);
                 drawn_pos_list.push_back(pos);
             }
         }
@@ -436,34 +435,31 @@ void SpellsMirrorMaster::project_super_ray(int target_x, int target_y, int dam)
     project_m_n = 0;
     project_m_x = 0;
     project_m_y = 0;
-    auto oy = p_pos.y;
-    auto ox = p_pos.x;
+    Pos2D pos_src = p_pos;
     auto visual = false;
     std::vector<Pos2D> drawn_pos_list;
-    for (const auto &[ny, nx] : path_g) {
+    for (const auto &pos_dst : path_g) {
         if (delay_factor > 0) {
-            if (panel_contains(ny, nx) && floor.has_los_at({ ny, nx })) {
-                print_bolt_pict(this->player_ptr, oy, ox, ny, nx, typ);
-                move_cursor_relative(ny, nx);
+            if (panel_contains(pos_dst) && floor.has_los_at(pos_dst)) {
+                print_bolt_pict(this->player_ptr, pos_src, pos_dst, typ);
+                move_cursor_relative(pos_dst.y, pos_dst.x);
                 term_fresh();
                 term_xtra(TERM_XTRA_DELAY, delay_factor);
-                lite_spot(this->player_ptr, { ny, nx });
+                lite_spot(this->player_ptr, pos_dst);
                 term_fresh();
-
-                print_bolt_pict(this->player_ptr, ny, nx, ny, nx, typ);
-
-                drawn_pos_list.emplace_back(ny, nx);
+                print_bolt_pict(this->player_ptr, pos_dst, pos_dst, typ);
+                drawn_pos_list.push_back(pos_dst);
                 visual = true;
             } else if (visual) {
                 term_xtra(TERM_XTRA_DELAY, delay_factor);
             }
         }
 
-        if (!floor.has_terrain_characteristics({ ny, nx }, TerrainCharacteristics::PROJECTION)) {
+        if (!floor.has_terrain_characteristics(pos_dst, TerrainCharacteristics::PROJECTION)) {
             break;
         }
-        oy = ny;
-        ox = nx;
+
+        pos_src = pos_dst;
     }
 
     for (const auto &pos : drawn_pos_list) {

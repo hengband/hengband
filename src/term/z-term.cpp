@@ -1266,16 +1266,9 @@ void term_fresh_force()
 /*
  * Set the cursor visibility
  */
-errr term_set_cursor(int v)
+void term_set_cursor(bool v)
 {
-    /* Already done */
-    if (game_term->scr->cv == (bool)v) {
-        return 1;
-    }
-
-    /* Change */
-    game_term->scr->cv = (bool)v;
-    return 0;
+    game_term->scr->cv = v;
 }
 
 /*
@@ -1470,7 +1463,7 @@ errr term_addstr(int n, TERM_COLOR a, std::string_view sv)
 /*
  * Move to a location and, using an attr, add a char
  */
-void term_putch(TERM_LEN x, TERM_LEN y, const DisplaySymbol &symbol)
+void term_putch(int x, int y, const DisplaySymbol &symbol)
 {
     /* Move first */
     if (term_gotoxy(x, y) != 0) {
@@ -1484,40 +1477,29 @@ void term_putch(TERM_LEN x, TERM_LEN y, const DisplaySymbol &symbol)
 /*
  * Move to a location and, using an attr, add a string
  */
-errr term_putstr(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::string_view sv)
+void term_putstr(int x, int y, int n, TERM_COLOR a, std::string_view sv)
 {
-    errr res;
-
-    /* Move first */
-    if ((res = term_gotoxy(x, y)) != 0) {
-        return res;
+    if (term_gotoxy(x, y) != 0) {
+        return;
     }
 
-    /* Then add the string */
-    if ((res = term_addstr(n, a, sv)) != 0) {
-        return res;
-    }
-
-    return 0;
+    term_addstr(n, a, sv);
 }
 
 /*
  * Place cursor at (x,y), and clear the next "n" chars
  */
-errr term_erase(TERM_LEN x, TERM_LEN y, tl::optional<int> n_opt)
+void term_erase(int x, int y, tl::optional<int> n_opt)
 {
-    TERM_LEN w = game_term->wid;
-    /* int h = Term->hgt; */
-
-    TERM_LEN x1 = -1;
-    TERM_LEN x2 = -1;
-
-    int na = game_term->attr_blank;
-    int nc = game_term->char_blank;
+    const auto w = game_term->wid;
+    const auto na = game_term->attr_blank;
+    const auto nc = game_term->char_blank;
+    auto x1 = -1;
+    auto x2 = -1;
 
     /* Place cursor */
-    if (term_gotoxy(x, y)) {
-        return -1;
+    if (term_gotoxy(x, y) != 0) {
+        return;
     }
 
     x = game_term->scr->cx;
@@ -1607,8 +1589,6 @@ errr term_erase(TERM_LEN x, TERM_LEN y, tl::optional<int> n_opt)
             game_term->x2[y] = x2;
         }
     }
-
-    return 0;
 }
 
 /*
@@ -1616,22 +1596,20 @@ errr term_erase(TERM_LEN x, TERM_LEN y, tl::optional<int> n_opt)
  *
  * Note the use of the special "total_erase" code
  */
-errr term_clear(void)
+void term_clear()
 {
-    TERM_LEN w = game_term->wid;
-    TERM_LEN h = game_term->hgt;
-
-    TERM_COLOR na = game_term->attr_blank;
-    char nc = game_term->char_blank;
+    const auto w = game_term->wid;
+    const auto h = game_term->hgt;
+    DisplaySymbol ds(game_term->attr_blank, game_term->char_blank);
 
     /* Cursor usable */
     game_term->scr->cu = 0;
 
-    /* Cursor to the top left */
-    game_term->scr->cx = game_term->scr->cy = 0;
+    game_term->scr->cx = 0;
+    game_term->scr->cy = 0;
 
     /* Wipe each row */
-    for (TERM_LEN y = 0; y < h; y++) {
+    for (auto y = 0; y < h; y++) {
         auto &scr_aa = game_term->scr->a[y];
         auto &scr_cc = game_term->scr->c[y];
 
@@ -1639,9 +1617,9 @@ errr term_clear(void)
         auto &scr_tcc = game_term->scr->tc[y];
 
         /* Wipe each column */
-        for (TERM_LEN x = 0; x < w; x++) {
-            scr_aa[x] = na;
-            scr_cc[x] = nc;
+        for (auto x = 0; x < w; x++) {
+            scr_aa[x] = ds.color;
+            scr_cc[x] = ds.character;
 
             scr_taa[x] = 0;
             scr_tcc[x] = 0;
@@ -1656,37 +1634,38 @@ errr term_clear(void)
     game_term->y1 = 0;
     game_term->y2 = h - 1;
 
-    /* Force "total erase" */
     game_term->total_erase = true;
-    return 0;
 }
 
 /*
  * Redraw (and refresh) the whole window.
  */
-errr term_redraw(void)
+void term_redraw()
 {
-    /* Force "total erase" */
     game_term->total_erase = true;
     term_fresh();
-    return 0;
 }
 
 /*
- * Redraw part of a window.
+ * @brief Redraw part of a window.
+ *
+ * 今のところX11からしか呼ばれていない.
  */
-errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
+void term_redraw_section(int x1, int y1, int x2, int y2)
 {
     /* Bounds checking */
     if (y2 >= game_term->hgt) {
         y2 = game_term->hgt - 1;
     }
+
     if (x2 >= game_term->wid) {
         x2 = game_term->wid - 1;
     }
+
     if (y1 < 0) {
         y1 = 0;
     }
+
     if (x1 < 0) {
         x1 = 0;
     }
@@ -1696,11 +1675,10 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
     game_term->y2 = y2;
 
     /* Set the x limits */
-    for (int i = game_term->y1; i <= game_term->y2; i++) {
+    for (auto i = game_term->y1; i <= game_term->y2; i++) {
+        auto x1j = x1;
+        auto x2j = x2;
 #ifdef JP
-        TERM_LEN x1j = x1;
-        TERM_LEN x2j = x2;
-
         if (x1j > 0) {
             if (game_term->scr->a[i][x1j] & AF_KANJI2) {
                 x1j--;
@@ -1712,33 +1690,19 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
                 x2j++;
             }
         }
-
+#endif
         game_term->x1[i] = x1j;
         game_term->x2[i] = x2j;
 
-        auto &g_ptr = game_term->old->c[i];
-
         /* Clear the section so it is redrawn */
-        for (int j = x1j; j <= x2j; j++) {
+        auto &g_ptr = game_term->old->c[i];
+        for (auto j = x1j; j <= x2j; j++) {
             /* Hack - set the old character to "none" */
             g_ptr[j] = 0;
         }
-#else
-        game_term->x1[i] = x1;
-        game_term->x2[i] = x2;
-
-        auto &g_ptr = game_term->old->c[i];
-
-        /* Clear the section so it is redrawn */
-        for (int j = x1; j <= x2; j++) {
-            /* Hack - set the old character to "none" */
-            g_ptr[j] = 0;
-        }
-#endif
     }
 
     term_fresh();
-    return 0;
 }
 
 /*** Access routines ***/
@@ -1746,11 +1710,9 @@ errr term_redraw_section(TERM_LEN x1, TERM_LEN y1, TERM_LEN x2, TERM_LEN y2)
 /*
  * Extract the cursor visibility
  */
-errr term_get_cursor(int *v)
+int term_get_cursor()
 {
-    /* Extract visibility */
-    (*v) = game_term->scr->cv;
-    return 0;
+    return game_term->scr->cv;
 }
 
 /*

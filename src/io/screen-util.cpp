@@ -104,7 +104,7 @@ std::pair<int, int> get_screen_size()
  * Determines if a map location is currently "on screen" -RAK-
  * Note that "panel_contains(Y,X)" always implies "in_bounds2(Y,X)".
  */
-bool panel_contains(int y, int x)
+bool panel_contains(const Pos2D &pos)
 {
-    return (y >= panel_row_min) && (y <= panel_row_max) && (x >= panel_col_min) && (x <= panel_col_max);
+    return (pos.y >= panel_row_min) && (pos.y <= panel_row_max) && (pos.x >= panel_col_min) && (pos.x <= panel_col_max);
 }

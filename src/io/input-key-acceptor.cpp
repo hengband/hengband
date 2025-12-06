@@ -222,13 +222,12 @@ char inkey(bool do_all_term_refresh)
         term_flush();
     }
 
-    int v;
-    (void)term_get_cursor(&v);
+    const auto v = term_get_cursor();
 
     /* Show the cursor if waiting, except sometimes in "command" mode */
     auto &world = AngbandWorld::get_instance();
     if (!inkey_scan && (!inkey_flag || hilite_player || world.character_icky_depth > 0)) {
-        (void)term_set_cursor(1);
+        term_set_cursor(true);
     }
 
     term_activate(angband_terms[0]);
@@ -299,7 +298,7 @@ char inkey(bool do_all_term_refresh)
     }
 
     term_activate(old);
-    term_set_cursor(v);
+    term_set_cursor(v != 0);
     inkey_base = inkey_xtra = inkey_flag = inkey_scan = false;
     return ch;
 }
