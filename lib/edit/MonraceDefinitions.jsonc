@@ -85465,5 +85465,44 @@
         "probability": "1_IN_4",
       },
     },
+    {
+      "id": 1392,
+      "name": {
+        "ja": "毒チワワ",
+        "en": "Poison Chihuahua",
+      },
+      "symbol": {
+        "character": "C",
+        "color": "Violet",
+      },
+      "speed": 5,
+      "hit_point": "3d5",
+      "vision": 40,
+      "armor_class": 12,
+      "alertness": 0,
+      "level": 4,
+      "rarity": 3,
+      "exp": 24,
+      "next_exp": 0,
+      "next_mon": 0,
+      "escorts": [],
+      "blows": [
+        {
+          "method": "BITE",
+          "effect": "POISON",
+          "damage_dice": "1d4",
+        },
+        {
+          "method": "BITE",
+          "effect": "POISON",
+          "damage_dice": "1d4",
+        },
+      ],
+      "flavor": {
+        "ja": "魔界の貴族に人気の可愛らしいペットだ。だが一噛みで一般人を殺せる毒を持つ。",
+        "en": "A beloved pet among the nobility of the demon realm. Yet it possesses venom potent enough to kill a commoner with a single bite.",
+      },
+      "flags": ["BASH_DOOR", "DROP_SKELETON", "DROP_CORPSE", "ANIMAL", "DEMON"],
+    },
   ],
 }
