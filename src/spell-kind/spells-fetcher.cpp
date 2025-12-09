@@ -135,7 +135,7 @@ bool fetch_monster(PlayerType *player_ptr)
     Pos2D pos_target = *pos;
     for (const auto &pos_path : path_g) {
         const auto &grid = floor.get_grid(pos_path);
-        if (floor.contains(pos_path) && floor.is_empty_at(pos_path) && (pos_path != p_pos) && !grid.is_object() && !grid.has(TerrainCharacteristics::PATTERN)) {
+        if (floor.contains(pos_path, FloorBoundary::OUTER_WALL_EXCLUSIVE) && floor.is_empty_at(pos_path) && (pos_path != p_pos) && !grid.is_object() && !grid.has(TerrainCharacteristics::PATTERN)) {
             pos_target = pos_path;
         }
     }

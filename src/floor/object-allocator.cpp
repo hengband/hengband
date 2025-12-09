@@ -25,7 +25,7 @@ static int next_to_walls(const FloorType &floor, const Pos2D &pos)
     auto k = 0;
     for (const auto &d : Direction::directions_4()) {
         const auto pos_neighbor = pos + d.vec();
-        if (floor.contains(pos_neighbor) && floor.get_grid(pos_neighbor).is_extra()) {
+        if (floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_EXCLUSIVE) && floor.get_grid(pos_neighbor).is_extra()) {
             k++;
         }
     }

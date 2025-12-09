@@ -105,7 +105,7 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
         return true;
     }
 
-    if (floor.contains(pos) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
+    if (floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
         return true;
     }
 
@@ -113,7 +113,7 @@ static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
     const auto num_of_walls = std::count_if(dirs.begin(), dirs.end(),
         [&floor, &pos](const auto &d) {
             const auto pos_neighbor = pos + d.vec();
-            if (!floor.contains(pos_neighbor)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 return true;
             }
 

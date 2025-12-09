@@ -41,7 +41,7 @@ bool summon_possible(PlayerType *player_ptr, POSITION y1, POSITION x1)
     for (auto y = y1 - 2; y <= y1 + 2; y++) {
         for (auto x = x1 - 2; x <= x1 + 2; x++) {
             const Pos2D pos(y, x);
-            if (!floor.contains(pos)) {
+            if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 continue;
             }
 

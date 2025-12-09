@@ -22,7 +22,7 @@
  */
 std::vector<short> scan_floor_items(const FloorType &floor, const Pos2D &pos, const EnumClassFlagGroup<ScanFloorMode> &mode, const ItemTester &item_tester)
 {
-    if (!floor.contains(pos)) {
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         return {};
     }
 

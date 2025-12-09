@@ -130,7 +130,7 @@ void wipe_monsters_list(PlayerType *player_ptr)
 void delete_monster(PlayerType *player_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.contains(pos)) {
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         return;
     }
 

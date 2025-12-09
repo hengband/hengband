@@ -232,7 +232,7 @@ static void get_out_monster(PlayerType *player_ptr)
         }
 
         auto &grid = floor.get_grid(pos);
-        if (!floor.contains(pos) || !floor.is_empty_at(pos) || (pos == p_pos) || grid.is_rune_protection() || grid.is_rune_explosion() || grid.has(TerrainCharacteristics::PATTERN)) {
+        if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE) || !floor.is_empty_at(pos) || (pos == p_pos) || grid.is_rune_protection() || grid.is_rune_explosion() || grid.has(TerrainCharacteristics::PATTERN)) {
             continue;
         }
 

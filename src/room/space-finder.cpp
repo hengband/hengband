@@ -13,7 +13,7 @@
  */
 static bool get_is_floor(const FloorType &floor, const Pos2D &pos)
 {
-    if (!floor.contains(pos)) {
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         return false;
     }
 
@@ -32,7 +32,7 @@ static bool get_is_floor(const FloorType &floor, const Pos2D &pos)
 static void set_floor(PlayerType *player_ptr, const Pos2D &pos)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.contains(pos)) {
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         return;
     }
 
