@@ -283,3 +283,99 @@ bool set_pass_wall(PlayerType *player_ptr, short v, bool do_dec)
     handle_stuff(player_ptr);
     return true;
 }
+
+/*!
+ * @brief 一時的光源強化の継続時間をセットする / Set "tim_emission", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ */
+bool set_tim_emission(PlayerType *player_ptr, short v, bool do_dec)
+{
+    auto notice = false;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
+
+    if (player_ptr->is_dead) {
+        return false;
+    }
+
+    if (v) {
+        if (player_ptr->tim_emission && !do_dec) {
+            if (player_ptr->tim_emission > v) {
+                return false;
+            }
+        } else if (!player_ptr->tim_emission) {
+            msg_print(_("体が発光した。", "Your body emit light."));
+            notice = true;
+        }
+    } else {
+        if (player_ptr->tim_emission) {
+            msg_print(_("体の光が消え去った。", "Your body stopped emitting light."));
+            notice = true;
+        }
+    }
+
+    player_ptr->tim_emission = v;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    if (!notice) {
+        return false;
+    }
+
+    if (disturb_state) {
+        disturb(player_ptr, false, false);
+    }
+
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    rfu.set_flag(StatusRecalculatingFlag::TORCH);
+    handle_stuff(player_ptr);
+    return true;
+}
+/*!
+ * @brief 一時的悪魔祓いの継続時間をセットする / Set "tim_exorcism", notice observable changes
+ * @param v 継続時間
+ * @param do_dec 現在の継続時間より長い値のみ上書きする
+ * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
+ */
+bool set_tim_exorcism(PlayerType *player_ptr, short v, bool do_dec)
+{
+    auto notice = false;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
+
+    if (player_ptr->is_dead) {
+        return false;
+    }
+
+    if (v) {
+        if (player_ptr->tim_exorcism && !do_dec) {
+            if (player_ptr->tim_exorcism > v) {
+                return false;
+            }
+        } else if (!player_ptr->tim_exorcism) {
+            msg_print(_("浄化の力を得た気がする。", "You feel you become an exorcist."));
+            notice = true;
+        }
+    } else {
+        if (player_ptr->tim_exorcism) {
+            msg_print(_("浄化の力を失った。", "You are no longer exorcist."));
+            notice = true;
+        }
+    }
+
+    player_ptr->tim_exorcism = v;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    if (!notice) {
+        return false;
+    }
+
+    if (disturb_state) {
+        disturb(player_ptr, false, false);
+    }
+
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    handle_stuff(player_ptr);
+    return true;
+}

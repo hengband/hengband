@@ -38,6 +38,7 @@
 #include "player/eldritch-horror.h"
 #include "player/player-skill.h"
 #include "spell-kind/spells-random.h"
+#include "spell-realm/spells-crusade.h"
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/action-setter.h"
@@ -434,6 +435,14 @@ void process_upkeep_with_speed(PlayerType *player_ptr)
     while (player_ptr->enchant_energy_need <= 0) {
         if (!load) {
             check_music(player_ptr);
+        }
+
+        if (!load) {
+            check_emission(player_ptr);
+        }
+
+        if (!load) {
+            check_demigod(player_ptr);
         }
 
         SpellHex spell_hex(player_ptr);

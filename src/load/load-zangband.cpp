@@ -129,6 +129,13 @@ void set_zangband_bounty_uniques(PlayerType *player_ptr)
     }
 }
 
+void set_zangband_tim_res(PlayerType *player_ptr)
+{
+    player_ptr->tim_res_lite = 0;
+    player_ptr->tim_res_dark = 0;
+    player_ptr->tim_res_fear = 0;
+}
+
 void set_zangband_mimic(PlayerType *player_ptr)
 {
     player_ptr->tim_res_time = 0;
@@ -285,4 +292,11 @@ void set_zangband_pet(PlayerType *player_ptr)
     if (rd_byte() != 0) {
         player_ptr->pet_extra_flags |= PF_BALL_SPELL;
     }
+}
+
+void set_zangband_tim_crusade(PlayerType *player_ptr)
+{
+    player_ptr->tim_emission = 0;
+    player_ptr->tim_exorcism = 0;
+    player_ptr->tim_imm_dark = 0;
 }

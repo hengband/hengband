@@ -10,6 +10,7 @@ void set_zangband_realm(PlayerType *player_ptr);
 void set_zangband_skill(PlayerType *player_ptr);
 void set_zangband_race(PlayerType *player_ptr);
 void set_zangband_bounty_uniques(PlayerType *player_ptr);
+void set_zangband_tim_res(PlayerType *player_ptr);
 void set_zangband_mimic(PlayerType *player_ptr);
 void set_zangband_holy_aura(PlayerType *player_ptr);
 void set_zangband_reflection(PlayerType *player_ptr);
@@ -23,3 +24,4 @@ void set_zangband_quest(PlayerType *player_ptr, QuestType *const q_ptr, const Qu
 void set_zangband_class(PlayerType *player_ptr);
 void set_zangband_learnt_spells(PlayerType *player_ptr);
 void set_zangband_pet(PlayerType *player_ptr);
+void set_zangband_tim_crusade(PlayerType *player_ptr);

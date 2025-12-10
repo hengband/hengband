@@ -8,10 +8,12 @@
 #include "mind/monk-attack.h"
 #include "cmd-action/cmd-attack.h"
 #include "combat/attack-criticality.h"
+#include "combat/slaying.h"
 #include "core/speed-table.h"
 #include "core/stuff-handler.h"
 #include "floor/geometry.h"
 #include "game-option/cheat-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-force-trainer.h"
@@ -249,9 +251,11 @@ void process_monk_attack(PlayerType *player_ptr, player_attack_type *pa_ptr)
     int max_blow_selection_times = calc_max_blow_selection_times(player_ptr);
     int min_level = select_blow(player_ptr, pa_ptr, max_blow_selection_times);
 
+    auto *o_ptr = player_ptr->inventory[enum2i(INVEN_MAIN_HAND) + pa_ptr->hand].get();
     const auto num = pa_ptr->ma_ptr->damage_dice.num + player_ptr->damage_dice_bonus[pa_ptr->hand].num;
     const auto sides = pa_ptr->ma_ptr->damage_dice.sides + player_ptr->damage_dice_bonus[pa_ptr->hand].sides;
-    pa_ptr->attack_damage = Dice::roll(num, sides);
+    pa_ptr->attack_damage = calc_attack_damage_with_slay(player_ptr, o_ptr, Dice::roll(num, sides), *pa_ptr->m_ptr, pa_ptr->mode, false);
+
     if (player_ptr->special_attack & ATTACK_SUIKEN) {
         pa_ptr->attack_damage *= 2;
     }

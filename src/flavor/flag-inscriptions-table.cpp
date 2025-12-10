@@ -38,7 +38,8 @@ const std::vector<flag_insc_table> flag_insc_immune = {
     { { "電", "El" }, TR_IM_ELEC },
     { { "火", "Fi" }, TR_IM_FIRE },
     { { "冷", "Co" }, TR_IM_COLD },
-    { { "暗", "Dk" }, TR_IM_DARK }
+    { { "暗", "Dk" }, TR_IM_DARK },
+    { { "閃", "Li" }, TR_IM_LITE },
 };
 
 /*! オブジェクトの特性表示記号テーブルの定義(弱点) */

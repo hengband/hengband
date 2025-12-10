@@ -87,6 +87,12 @@ void PlayerAlignment::update_alignment()
         break;
     case MimicKindType::VAMPIRE:
         break;
+    case MimicKindType::ANGEL:
+        this->bias_good_alignment(200);
+        break;
+    case MimicKindType::DEMIGOD:
+        this->bias_good_alignment(200);
+        break;
     default:
         THROW_EXCEPTION(std::logic_error, "Invalid MimicKindType was specified!");
     }

@@ -222,6 +222,12 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             }
         }
 
+        if (player_ptr->tim_emission > 0) {
+            hp_player(player_ptr, player_ptr->tim_emission);
+            set_tim_emission(player_ptr, 0, true);
+            msg_print(_("あなたは自身の光をエネルギーとして吸収した！", "You absorb energy from your own light!"));
+        }
+
         /*
          * Unlite the area (radius 10) around player and
          * do 50 points damage to every affected monster
