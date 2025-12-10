@@ -309,8 +309,11 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
         }
     }
 
-    if (entry.has(FLG_UNREADABLE) && check_book_realm(player_ptr, bi_key)) {
-        return false;
+    if (entry.has(FLG_UNREADABLE)) {
+        const auto unreadable_book = bi_key.is_spell_book() && !check_book_realm(player_ptr, bi_key);
+        if (!unreadable_book) {
+            return false;
+        }
     }
 
     PlayerClass pc(player_ptr);

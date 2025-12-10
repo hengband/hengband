@@ -72,7 +72,7 @@ void update_smell(FloorType &floor, const Pos2D &p_pos)
     for (auto y = 0; y < 5; y++) {
         for (auto x = 0; x < 5; x++) {
             const auto pos = p_pos + Pos2DVec(y, x) + Pos2DVec(-2, -2);
-            if (!floor.contains(pos)) {
+            if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 continue;
             }
 
@@ -152,7 +152,7 @@ Pos2D scatter(PlayerType *player_ptr, const Pos2D &pos, int d, uint32_t mode)
         const auto ny = rand_spread(pos.y, d);
         const auto nx = rand_spread(pos.x, d);
         const Pos2D pos_neighbor(ny, nx);
-        if (!floor.contains(pos_neighbor)) {
+        if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
             continue;
         }
         if ((d > 1) && (Grid::calc_distance(pos, pos_neighbor) > d)) {

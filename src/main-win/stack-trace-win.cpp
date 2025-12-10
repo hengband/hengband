@@ -86,8 +86,12 @@ std::string StackTrace::dump() const
 {
     std::ostringstream oss;
     for (auto frame_no = 0; const auto &frame : this->frames) {
-        oss << '#' << frame_no++ << ' '
-            << (frame.symbol_name.empty() ? "(No symbol)" : frame.symbol_name + "()");
+        oss << '#' << frame_no++ << ' ';
+        if (frame.symbol_name.empty()) {
+            oss << "(No symbol)";
+        } else {
+            oss << frame.symbol_name << "()";
+        }
         if (!frame.file.empty()) {
             oss << " at " << frame.file << ':' << frame.line_num;
         }

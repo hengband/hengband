@@ -87,7 +87,7 @@ tl::optional<int> travel_flow_aux(PlayerType *player_ptr, const Pos2D pos, int c
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
     const auto &terrain = grid.get_terrain();
-    if (!floor.contains(pos)) {
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         return tl::nullopt;
     }
 

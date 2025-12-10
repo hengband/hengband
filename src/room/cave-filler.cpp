@@ -243,7 +243,7 @@ static void cave_fill(PlayerType *player_ptr, const Pos2D &initial_pos)
         for (const auto &d : Direction::directions_8()) {
             const auto pos_to = pos + d.vec();
             auto &grid = floor.get_grid(pos_to);
-            if (!floor.contains(pos_to)) {
+            if (!floor.contains(pos_to, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 grid.info |= CAVE_ICKY;
                 continue;
             }

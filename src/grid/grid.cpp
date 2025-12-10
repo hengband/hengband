@@ -192,7 +192,7 @@ tl::optional<Pos2D> new_player_spot(PlayerType *player_ptr)
             continue;
         }
 
-        if (!floor.contains(pos)) {
+        if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
             continue;
         }
 
@@ -239,7 +239,7 @@ static void update_local_illumination_aux(PlayerType *player_ptr, const Pos2D &p
  */
 void update_local_illumination(PlayerType *player_ptr, const Pos2D &pos)
 {
-    if (!player_ptr->current_floor_ptr->contains(pos)) {
+    if (!player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         return;
     }
 
@@ -687,7 +687,7 @@ void update_flow(PlayerType *player_ptr)
 
     /* The last way-point is on the map */
     const Pos2D flow(flow_y, flow_x);
-    if (player_ptr->running && floor.contains(flow)) {
+    if (player_ptr->running && floor.contains(flow, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         /* The way point is in sight - do not update.  (Speedup) */
         if (floor.get_grid(flow).info & CAVE_VIEW) {
             return;

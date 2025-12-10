@@ -220,7 +220,7 @@ int get_monster_crowd_number(const FloorType &floor, short m_idx)
     auto count = 0;
     for (const auto &d : Direction::directions_8()) {
         const auto pos = m_pos + d.vec();
-        if (!floor.contains(pos)) {
+        if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
             continue;
         }
 
