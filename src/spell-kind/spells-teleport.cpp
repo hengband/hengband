@@ -139,7 +139,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
                 }
             }
 
-            if (!floor.contains(m_pos)) {
+            if (!floor.contains(m_pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 continue;
             }
             if (!cave_monster_teleportable_bold(player_ptr, m_idx, m_pos.y, m_pos.x, mode)) {
@@ -221,7 +221,7 @@ void teleport_monster_to(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION ty,
                 }
             }
 
-            if (!floor.contains(m_pos)) {
+            if (!floor.contains(m_pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 continue;
             }
             if (!cave_monster_teleportable_bold(player_ptr, m_idx, m_pos.y, m_pos.x, mode)) {
@@ -483,7 +483,7 @@ void teleport_player_to(PlayerType *player_ptr, POSITION ny, POSITION nx, telepo
         while (true) {
             pos.y = rand_spread(ny, dis);
             pos.x = rand_spread(nx, dis);
-            if (floor.contains(pos)) {
+            if (floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 break;
             }
         }

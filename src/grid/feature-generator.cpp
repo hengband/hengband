@@ -163,7 +163,7 @@ static bool possible_doorway(const FloorType &floor, POSITION y, POSITION x)
 void try_door(PlayerType *player_ptr, dt_type *dt_ptr, const Pos2D &pos)
 {
     auto &floor = *player_ptr->current_floor_ptr;
-    if (!floor.contains(pos) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
+    if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE) || floor.has_terrain_characteristics(pos, TerrainCharacteristics::WALL) || floor.get_grid(pos).is_room()) {
         return;
     }
 

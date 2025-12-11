@@ -259,7 +259,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
     for (auto y = (y1 - r); y <= (y1 + r); y++) {
         for (auto x = (x1 - r); x <= (x1 + r); x++) {
             const Pos2D pos(y, x);
-            if (!floor.contains(pos)) {
+            if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 continue;
             }
 
@@ -401,7 +401,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
     for (auto y = (y1 - r); y <= (y1 + r); y++) {
         for (auto x = (x1 - r); x <= (x1 + r); x++) {
             const Pos2D pos(y, x);
-            if (!floor.contains(pos)) {
+            if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 continue;
             }
 

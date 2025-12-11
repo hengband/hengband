@@ -128,7 +128,7 @@ bool rush_attack(PlayerType *player_ptr, bool *mdeath)
 
     auto tm_idx = 0;
     auto &floor = *player_ptr->current_floor_ptr;
-    if (floor.contains(pos_target)) {
+    if (floor.contains(pos_target, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         tm_idx = floor.get_grid(pos_target).m_idx;
     }
 

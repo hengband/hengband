@@ -65,7 +65,7 @@ static void recursive_river(FloorType &floor, const Pos2D &pos_start, const Pos2
 
         Pos2DVec vec_division(dy, dx);
         auto pos = pos_start + vec_division + vec_change;
-        if (!floor.contains(pos)) {
+        if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
             vec_change = { 0, 0 };
         }
 
@@ -353,7 +353,7 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
         }
 
         /* Quit before leaving the dungeon */
-        if (!floor.contains({ y, x })) {
+        if (!floor.contains({ y, x }, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
             break;
         }
     }
@@ -375,7 +375,7 @@ void place_trees(PlayerType *player_ptr, const Pos2D &pos)
     for (auto x = pos.x - 3; x < pos.x + 4; x++) {
         for (auto y = pos.y - 3; y < pos.y + 4; y++) {
             const Pos2D pos_neighbor(y, x);
-            if (!floor.contains(pos_neighbor)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 continue;
             }
 

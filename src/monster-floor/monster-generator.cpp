@@ -58,7 +58,7 @@ tl::optional<Pos2D> mon_scatter(PlayerType *player_ptr, MonraceId monrace_id, co
     for (auto nx = pos.x - max_distance; nx <= pos.x + max_distance; nx++) {
         for (auto ny = pos.y - max_distance; ny <= pos.y + max_distance; ny++) {
             const Pos2D pos_neighbor(ny, nx);
-            if (!floor.contains(pos_neighbor)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 continue;
             }
 

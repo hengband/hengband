@@ -207,7 +207,7 @@ static bool cave_temp_room_aux(const FloorType &floor, const Pos2D &pos, const P
         return false;
     }
 
-    if (floor.contains(pos) && floor.has_los_terrain_at(pos) && (next_to_walls_adj(floor, pos) == 6) && (next_to_open(floor, pos) <= 1)) {
+    if (floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE) && floor.has_los_terrain_at(pos) && (next_to_walls_adj(floor, pos) == 6) && (next_to_open(floor, pos) <= 1)) {
         return false;
     }
 

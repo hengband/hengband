@@ -35,7 +35,7 @@ namespace {
 std::vector<Pos2D> get_earthquake_area(FloorType &floor, const Pos2D &center, int radius)
 {
     const auto is_eathquake_area = [&](const Pos2D &pos) {
-        return floor.contains(pos) && Grid::calc_distance(center, pos) <= radius;
+        return floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE) && Grid::calc_distance(center, pos) <= radius;
     };
 
     return Rect2D(center, Pos2DVec(radius, radius)) |

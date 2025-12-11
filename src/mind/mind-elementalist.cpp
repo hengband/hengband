@@ -1396,7 +1396,7 @@ static bool is_target_grid_dark(const FloorType &floor, const Pos2D &pos)
             if (pos == pos_neighbor) {
                 continue;
             }
-            if (!floor.contains(pos_neighbor)) {
+            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                 continue;
             }
 

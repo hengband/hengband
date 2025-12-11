@@ -440,7 +440,7 @@ void hit_trap(PlayerType *player_ptr, bool break_trap)
             const auto num = levs[std::min(lev / 10, 9)];
             for (auto i = 0; i < num; i++) {
                 const Pos2D pos(rand_spread(p_pos.y, 5), rand_spread(p_pos.x, 7));
-                if (!floor.contains(pos)) {
+                if (!floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
                     continue;
                 }
 
