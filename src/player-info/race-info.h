@@ -20,6 +20,9 @@ enum class MimicKindType {
     DEMON = 1,
     DEMON_LORD = 2,
     VAMPIRE = 3,
+    ANGEL = 4,
+    DEMIGOD = 5,
+    MAX
 };
 
 /*!

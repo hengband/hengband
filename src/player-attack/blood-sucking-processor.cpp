@@ -10,6 +10,7 @@
 #include "hpmp/hp-mp-processor.h"
 #include "inventory/inventory-slot-types.h"
 #include "player-attack/player-attack.h"
+#include "player-info/equipment-info.h"
 #include "spell-realm/spells-hex.h"
 #include "system/item-entity.h"
 #include "system/monster-entity.h"
@@ -32,6 +33,21 @@ void decide_blood_sucking(PlayerType *player_ptr, player_attack_type *pa_ptr)
     }
 
     pa_ptr->can_drain = pa_ptr->m_ptr->has_living_flag();
+}
+
+/*!
+ * @brief 浄化(悪魔・アンデッドモンスターからの吸血)をできるか判定する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ */
+void decide_exorcism(PlayerType *player_ptr, player_attack_type *pa_ptr)
+{
+    auto is_exorcism = player_ptr->tim_exorcism > 0;
+    if (!is_exorcism) {
+        return;
+    }
+
+    pa_ptr->can_drain |= pa_ptr->m_ptr->has_demon_flag() || pa_ptr->m_ptr->has_undead_flag();
 }
 
 /*!
@@ -131,7 +147,11 @@ static void drain_result(PlayerType *player_ptr, player_attack_type *pa_ptr, boo
     }
 
     if (*drain_msg) {
-        msg_format(_("刃が%sから生命力を吸い取った！", "Your weapon drains life from %s!"), pa_ptr->m_name);
+        if (has_melee_weapon(player_ptr, pa_ptr->hand)) {
+            msg_format(_("刃が%sから生命力を吸い取った！", "Your weapon drains life from %s!"), pa_ptr->m_name);
+        } else {
+            msg_format(_("手が%sから生命力を吸い取った！", "Your hands drain life from %s!"), pa_ptr->m_name);
+        }
         *drain_msg = false;
     }
 

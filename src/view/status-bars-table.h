@@ -78,8 +78,14 @@ enum bar_definition_type {
     BAR_CURE = 65, /*!< 下部ステータス表示: 回復 */
     BAR_ESP_EVIL = 66, /*!< 下部ステータス表示: 邪悪感知 */
     BAR_NIGHTSIGHT = 67, /*!< 下部ステータス表示: 暗視 */
+    BAR_RESLITE = 68, /*!< 下部ステータス表示: 耐光 */
+    BAR_RESDARK = 69, /*!< 下部ステータス表示: 耐暗 */
+    BAR_RESFEAR = 70, /*!< 下部ステータス表示: 耐恐怖 */
+    BAR_EMISSION = 71, /*!< 下部ステータス表示: 発光 */
+    BAR_EXORCISM = 72, /*!< 下部ステータス表示: 浄化 */
+    BAR_IMMDARK = 73, /*!< 下部ステータス表示: 暗黒免疫 */
 };
 
-#define MAX_STAT_BARS 69
+#define MAX_STAT_BARS 75
 
 extern stat_bar stat_bars[MAX_STAT_BARS];

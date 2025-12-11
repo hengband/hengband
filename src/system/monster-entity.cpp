@@ -297,6 +297,30 @@ bool MonsterEntity::has_living_flag(bool is_apperance) const
 }
 
 /*!
+ * @brief モンスターが悪魔かどうかを返す
+ * @param is_apperance たぬき、カメレオン、各種誤認ならtrue
+ * @return 悪魔ならばtrue
+ * @todo kind_flags をMonsterEntityへコピーする (将来的なモンスター仕様の拡張)
+ */
+bool MonsterEntity::has_demon_flag(bool is_apperance) const
+{
+    const auto &monrace = is_apperance ? this->get_appearance_monrace() : this->get_monrace();
+    return monrace.has_demon_flag();
+}
+
+/*!
+ * @brief モンスターがアンデッドかどうかを返す
+ * @param is_apperance たぬき、カメレオン、各種誤認ならtrue
+ * @return アンデッドならばtrue
+ * @todo kind_flags をMonsterEntityへコピーする (将来的なモンスター仕様の拡張)
+ */
+bool MonsterEntity::has_undead_flag(bool is_apperance) const
+{
+    const auto &monrace = is_apperance ? this->get_appearance_monrace() : this->get_monrace();
+    return monrace.has_undead_flag();
+}
+
+/*!
  * @brief モンスターが自爆するか否か
  * @return 自爆するならtrue
  */

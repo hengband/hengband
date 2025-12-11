@@ -33,4 +33,7 @@ stat_bar stat_bars[MAX_STAT_BARS] = { { TERM_YELLOW, _("つ", "Ts"), _("つよ�
     { TERM_SLATE, _("宣", "Rv"), _("宣告", "Revenge") }, { TERM_L_DARK, _("剣", "Rs"), _("魔剣化", "RuneSword") },
     { TERM_RED, _("吸", "Vm"), _("吸血打撃", "Vampiric") }, { TERM_WHITE, _("回", "Cu"), _("回復", "Cure") },
     { TERM_L_DARK, _("感", "ET"), _("邪悪感知", "EvilTele") }, { TERM_VIOLET, _("視", "NSi"), _("暗視", "NgtSgt") },
+    { TERM_WHITE, _("光", "Li"), _("耐光", "RLit") }, { TERM_L_DARK, _("暗", "Da"), _("耐暗", "RDar") },
+    { TERM_L_DARK, _("怖", "Fe"), _("耐恐怖", "RFea") }, { TERM_L_WHITE, _("輝", "Em"), _("発光", "Emission") },
+    { TERM_WHITE, _("浄", "Ex"), _("浄化", "Exocsm") }, { TERM_L_DARK, _("暗", "ID"), _("暗免疫", "ImmDark") },
     { 0, nullptr, nullptr } };

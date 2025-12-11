@@ -134,6 +134,7 @@ BIT_FLAGS has_immune_elec(PlayerType *player_ptr);
 BIT_FLAGS has_immune_fire(PlayerType *player_ptr);
 BIT_FLAGS has_immune_cold(PlayerType *player_ptr);
 BIT_FLAGS has_immune_dark(PlayerType *player_ptr);
+BIT_FLAGS has_immune_lite(PlayerType *player_ptr);
 bool can_attack_with_main_hand(PlayerType *player_ptr);
 bool can_attack_with_sub_hand(PlayerType *player_ptr);
 bool has_two_handed_weapons(PlayerType *player_ptr);

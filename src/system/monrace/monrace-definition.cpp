@@ -119,6 +119,24 @@ bool MonraceDefinition::has_living_flag() const
 }
 
 /*!
+ * @brief モンスターが悪魔かどうかを返す
+ * @return 悪魔ならばtrue
+ */
+bool MonraceDefinition::has_demon_flag() const
+{
+    return this->kind_flags.has(MonsterKindType::DEMON);
+}
+
+/*!
+ * @brief モンスターがアンデッドかどうかを返す
+ * @return アンデッドならばtrue
+ */
+bool MonraceDefinition::has_undead_flag() const
+{
+    return this->kind_flags.has(MonsterKindType::UNDEAD);
+}
+
+/*!
  * @brief モンスターが自爆するか否か
  * @return 自爆するならtrue
  */

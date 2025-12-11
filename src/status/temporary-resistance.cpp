@@ -140,6 +140,125 @@ bool set_tim_res_nether(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     return true;
 }
 
+bool set_tim_res_lite(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
+{
+    auto notice = false;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
+    if (player_ptr->is_dead) {
+        return false;
+    }
+
+    if (v) {
+        if (player_ptr->tim_res_lite && !do_dec) {
+            if (player_ptr->tim_res_lite > v) {
+                return false;
+            }
+        } else if (!player_ptr->tim_res_lite) {
+            msg_print(_("閃光の力に対して耐性がついた気がする！", "You feel lite-resistant!"));
+            notice = true;
+        }
+    } else {
+        if (player_ptr->tim_res_lite) {
+            msg_print(_("閃光の力に対する耐性が薄れた気がする。", "You feel less lite-resistant"));
+            notice = true;
+        }
+    }
+
+    player_ptr->tim_res_lite = v;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    if (!notice) {
+        return false;
+    }
+
+    if (disturb_state) {
+        disturb(player_ptr, false, false);
+    }
+
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    handle_stuff(player_ptr);
+    return true;
+}
+
+bool set_tim_res_dark(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
+{
+    auto notice = false;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
+    if (player_ptr->is_dead) {
+        return false;
+    }
+
+    if (v) {
+        if (player_ptr->tim_res_dark && !do_dec) {
+            if (player_ptr->tim_res_dark > v) {
+                return false;
+            }
+        } else if (!player_ptr->tim_res_dark) {
+            msg_print(_("暗黒の力に対して耐性がついた気がする！", "You feel dark-resistant!"));
+            notice = true;
+        }
+    } else {
+        if (player_ptr->tim_res_dark) {
+            msg_print(_("暗黒の力に対する耐性が薄れた気がする。", "You feel less dark-resistant"));
+            notice = true;
+        }
+    }
+
+    player_ptr->tim_res_dark = v;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    if (!notice) {
+        return false;
+    }
+
+    if (disturb_state) {
+        disturb(player_ptr, false, false);
+    }
+
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    handle_stuff(player_ptr);
+    return true;
+}
+
+bool set_tim_res_fear(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
+{
+    auto notice = false;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
+    if (player_ptr->is_dead) {
+        return false;
+    }
+    if (v) {
+        if (player_ptr->tim_res_fear && !do_dec) {
+            if (player_ptr->tim_res_fear > v) {
+                return false;
+            }
+        } else if (!player_ptr->tim_res_fear) {
+            msg_print(_("恐怖の力に対して耐性がついた気がする！", "You feel fear-resistant!"));
+            notice = true;
+        }
+    } else {
+        if (player_ptr->tim_res_fear) {
+            msg_print(_("恐怖の力に対する耐性が薄れた気がする。", "You feel less fear-resistant"));
+            notice = true;
+        }
+    }
+    player_ptr->tim_res_fear = v;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    if (!notice) {
+        return false;
+    }
+    if (disturb_state) {
+        disturb(player_ptr, false, false);
+    }
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    handle_stuff(player_ptr);
+    return true;
+}
+
 bool set_tim_res_time(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
@@ -176,6 +295,43 @@ bool set_tim_res_time(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         disturb(player_ptr, false, false);
     }
 
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    handle_stuff(player_ptr);
+    return true;
+}
+
+bool set_tim_imm_dark(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
+{
+    auto notice = false;
+    v = (v > 10000) ? 10000 : (v < 0) ? 0
+                                      : v;
+    if (player_ptr->is_dead) {
+        return false;
+    }
+    if (v) {
+        if (player_ptr->tim_imm_dark && !do_dec) {
+            if (player_ptr->tim_imm_dark > v) {
+                return false;
+            }
+        } else if (!player_ptr->tim_imm_dark) {
+            msg_print(_("暗黒の力に対して完全な耐性がついた気がする！", "You feel dark-immunity!"));
+            notice = true;
+        }
+    } else {
+        if (player_ptr->tim_imm_dark) {
+            msg_print(_("暗黒の力に対する完全な耐性を喪った気がする。", "You feel lose dark-immunity"));
+            notice = true;
+        }
+    }
+    player_ptr->tim_imm_dark = v;
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
+    if (!notice) {
+        return false;
+    }
+    if (disturb_state) {
+        disturb(player_ptr, false, false);
+    }
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
     return true;

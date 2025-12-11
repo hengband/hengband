@@ -157,6 +157,8 @@ public:
     bool is_male() const;
     bool is_female() const;
     bool has_living_flag() const;
+    bool has_demon_flag() const;
+    bool has_undead_flag() const;
     bool is_explodable() const;
     bool is_angel_superficially() const;
     bool symbol_char_is_any_of(std::string_view symbol_characters) const;

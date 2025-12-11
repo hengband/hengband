@@ -40,7 +40,7 @@
 #include "target/target-types.h"
 #include "view/display-messages.h"
 
-static bool cast_blue_dispel(PlayerType *player_ptr)
+bool cast_blue_dispel(PlayerType *player_ptr)
 {
     const auto pos = target_set(player_ptr, TARGET_KILL).get_position();
     if (!pos) {

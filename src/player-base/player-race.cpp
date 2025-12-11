@@ -77,6 +77,8 @@ const player_race_info *PlayerRace::get_info() const
     case MimicKindType::DEMON:
     case MimicKindType::DEMON_LORD:
     case MimicKindType::VAMPIRE:
+    case MimicKindType::ANGEL:
+    case MimicKindType::DEMIGOD:
         return &mimic_info.at(this->player_ptr->mimic_form);
     default:
         THROW_EXCEPTION(std::logic_error, "Invalid MimicKindType was specified!");
@@ -166,6 +168,10 @@ int16_t PlayerRace::speed() const
         return result + 5;
     case MimicKindType::VAMPIRE:
         return result + 3;
+    case MimicKindType::ANGEL:
+        return result + 3;
+    case MimicKindType::DEMIGOD:
+        return result + 5;
     default:
         THROW_EXCEPTION(std::logic_error, "Invalid MimicKindType was specified!");
     }

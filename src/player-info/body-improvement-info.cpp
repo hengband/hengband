@@ -2,6 +2,7 @@
 #include "player-info/self-info-util.h"
 #include "player/player-status-flags.h"
 #include "player/player-status.h"
+#include "spell-realm/spells-crusade.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
 
@@ -167,5 +168,24 @@ void set_body_improvement_info_4(PlayerType *player_ptr, self_info_type *self_pt
 
     if (has_resist_time(player_ptr)) {
         self_ptr->info_list.emplace_back(_("あなたは時間逆転への耐性を持っている。", "You are resistant to time."));
+    }
+}
+
+/*!< @todo 並び順の都合で連番を付ける。 */
+void set_body_improvement_info_5(PlayerType *player_ptr, self_info_type *self_ptr)
+{
+    if (player_ptr->tim_exorcism > 0) {
+        if (has_kill_demon_from_exorcism(player_ptr)) {
+            self_ptr->info_list.emplace_back(_("あなたはデーモンの天敵である。", "You are a great bane of demons."));
+        } else if (has_slay_demon_from_exorcism(player_ptr)) {
+            self_ptr->info_list.emplace_back(_("あなたはデーモンに対して神聖なる力を発揮する。", "You strikes at demons with holy wrath."));
+        }
+        self_ptr->info_list.emplace_back(_("あなたはデーモンのエネルギーを吸い取る。", "You drain energy from demons."));
+        if (has_kill_undead_from_exorcism(player_ptr)) {
+            self_ptr->info_list.emplace_back(_("あなたはアンデッドの天敵である。", "You are a great bane of undeads."));
+        } else if (has_slay_undead_from_exorcism(player_ptr)) {
+            self_ptr->info_list.emplace_back(_("あなたはアンデッドに対して神聖なる力を発揮する。", "You strikes at undead with holy wrath."));
+        }
+        self_ptr->info_list.emplace_back(_("あなたはアンデッドのエネルギーを吸い取る。", "You drain energy from undead."));
     }
 }

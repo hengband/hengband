@@ -275,6 +275,7 @@ void self_knowledge(PlayerType *player_ptr)
     set_status_sustain_info(player_ptr, self_ptr);
     set_equipment_influence(player_ptr, self_ptr);
     set_weapon_effect_info(player_ptr, self_ptr);
+    set_body_improvement_info_5(player_ptr, self_ptr);
     display_self_info(self_ptr);
 }
 
