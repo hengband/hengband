@@ -28,12 +28,14 @@
 #include "system/floor/floor-info.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
+#include "system/inner-game-data.h"
 #include "system/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/z-form.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 
 int store_top = 0;
 int store_bottom = 0;
@@ -58,6 +60,8 @@ int16_t store_get_stock_max(StoreSaleType sst, bool powerup)
     switch (sst) {
     case StoreSaleType::HOME:
         return powerup ? STORE_INVEN_MAX * 10 : STORE_INVEN_MAX;
+    case StoreSaleType::BLACK:
+        return STORE_INVEN_MAX * 50;
     case StoreSaleType::MUSEUM:
         return STORE_INVEN_MAX * 50;
     default:
@@ -140,6 +144,21 @@ int store_check_num(const ItemEntity *o_ptr, StoreSaleType store_num)
     }
 
     return check_free_space(store_num);
+}
+
+/*!
+ * @brief 店舗のレベルを返す。日数で成長する。(現状BMのみ使用)
+ * @param store_num 店舗の種類
+ * @return 店舗レベル。BM以外1、BMは日数(MAX1000)
+ */
+int store_level(StoreSaleType store_num)
+{
+    if (store_num != StoreSaleType::BLACK) {
+        return 1;
+    }
+
+    const auto &[day, hour, min] = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
+    return std::min(day, 1000);
 }
 
 /*!
@@ -315,12 +334,14 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
         return;
     }
 
+    const int bm_boost = 25 + store_level(store_num) / 4;
     const owner_type *ow_ptr = &owners.at(store_num)[st_ptr->owner];
     for (int tries = 0; tries < 4; tries++) {
         short bi_id;
         DEPTH level;
         if (store_num == StoreSaleType::BLACK) {
-            level = 25 + randint0(25);
+            level = bm_boost + randint0(25);
+            level = std::min(128, level);
             bi_id = player_ptr->current_floor_ptr->select_baseitem_id(level, 0x00000000);
             if (bi_id == 0) {
                 continue;
@@ -406,8 +427,14 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
         }
     }
 
+    const int level = store_level(store_num);
+    const int store_max_keep = (store_num == StoreSaleType::BLACK) ? STORE_MAX_KEEP * (level + 60) / 20 : STORE_MAX_KEEP;
+    const int store_min_keep = (store_num == StoreSaleType::BLACK) ? STORE_MIN_KEEP * (level + 60) / 20 : STORE_MIN_KEEP;
+    const int store_turnover = (store_num == StoreSaleType::BLACK) ? STORE_TURNOVER * (level + 60) / 20 : STORE_TURNOVER;
+    chance = (store_num == StoreSaleType::BLACK) ? chance * (level + 60) / 20 : chance;
+
     INVENTORY_IDX j = st_ptr->stock_num;
-    int remain = STORE_TURNOVER + std::max(0, j - STORE_MAX_KEEP);
+    int remain = store_turnover + std::max(0, j - store_max_keep);
     int turn_over = 1;
     for (int i = 0; i < chance; i++) {
         auto n = randint0(remain);
@@ -416,18 +443,18 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
     }
 
     j = j - turn_over;
-    if (j > STORE_MAX_KEEP) {
-        j = STORE_MAX_KEEP;
+    if (j > store_max_keep) {
+        j = store_max_keep;
     }
-    if (j < STORE_MIN_KEEP) {
-        j = STORE_MIN_KEEP;
+    if (j < store_min_keep) {
+        j = store_min_keep;
     }
 
     while (st_ptr->stock_num > j) {
         st_ptr->delete_item();
     }
 
-    remain = STORE_MAX_KEEP - st_ptr->stock_num;
+    remain = store_max_keep - st_ptr->stock_num;
     turn_over = 1;
     for (int i = 0; i < chance; i++) {
         auto n = randint0(remain);
@@ -436,11 +463,11 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
     }
 
     j = st_ptr->stock_num + turn_over;
-    if (j > STORE_MAX_KEEP) {
-        j = STORE_MAX_KEEP;
+    if (j > store_max_keep) {
+        j = store_max_keep;
     }
-    if (j < STORE_MIN_KEEP) {
-        j = STORE_MIN_KEEP;
+    if (j < store_min_keep) {
+        j = store_min_keep;
     }
     if (j >= st_ptr->stock_size) {
         j = st_ptr->stock_size - 1;
@@ -448,7 +475,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
 
     for (size_t k = 0; k < st_ptr->regular.size(); k++) {
         store_create(player_ptr, st_ptr->regular[k], store_num);
-        if (st_ptr->stock_num >= STORE_MAX_KEEP) {
+        if (st_ptr->stock_num >= store_max_keep) {
             break;
         }
     }
