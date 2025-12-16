@@ -240,6 +240,10 @@ PERCENTAGE calc_lite_damage_rate(PlayerType *player_ptr, rate_calc_type_mode mod
 {
     PERCENTAGE per = 100;
 
+    if (has_immune_lite(player_ptr)) {
+        return 0;
+    }
+
     PlayerRace race(player_ptr);
 
     if (race.tr_flags().has(TR_VUL_LITE)) {
