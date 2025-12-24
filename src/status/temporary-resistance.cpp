@@ -46,7 +46,7 @@ bool set_tim_levitation(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     if (disturb_state) {
-        disturb(player_ptr, false, false);
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
