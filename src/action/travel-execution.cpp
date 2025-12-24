@@ -61,7 +61,7 @@ int travel_flow_cost(PlayerType *player_ptr, const Pos2D &pos)
         cost += lava;
     }
 
-    if (grid.is_mark()) {
+    if (!grid.is_hidden()) {
         if (terrain.flags.has(TerrainCharacteristics::DOOR)) {
             cost += 1;
         }
