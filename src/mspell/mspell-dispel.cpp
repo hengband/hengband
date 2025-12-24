@@ -44,7 +44,7 @@ static void dispel_player(PlayerType *player_ptr)
     (void)set_blessed(player_ptr, 0, true);
     (void)set_tsuyoshi(player_ptr, 0, true);
     (void)set_hero(player_ptr, 0, true);
-    (void)set_shero(player_ptr, 0, true);
+    (void)set_berserk(player_ptr, 0, true);
     BodyImprovement(player_ptr).set_protection(0, true);
     (void)set_invuln(player_ptr, 0, true);
     (void)set_wraith_form(player_ptr, 0, true);
