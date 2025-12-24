@@ -71,7 +71,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         disturb(player_ptr, false, true);
         msg_print(_("ウガァァア！", "RAAAAGHH!"));
         msg_print(_("激怒の発作に襲われた！", "You feel a fit of rage coming over you!"));
-        (void)set_shero(player_ptr, 10 + randint1(player_ptr->lev), false);
+        (void)set_berserk(player_ptr, 10 + randint1(player_ptr->lev), false);
         (void)bss.set_fear(0);
     }
 

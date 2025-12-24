@@ -532,7 +532,7 @@ static void rd_player_status(PlayerType *player_ptr)
     rd_energy(player_ptr);
     rd_status(player_ptr);
     player_ptr->hero = rd_s16b();
-    player_ptr->shero = rd_s16b();
+    player_ptr->berserk = rd_s16b();
     player_ptr->shield = rd_s16b();
     player_ptr->blessed = rd_s16b();
     player_ptr->tim_invis = rd_s16b();

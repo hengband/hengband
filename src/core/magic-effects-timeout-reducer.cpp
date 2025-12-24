@@ -173,8 +173,8 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_hero(player_ptr, player_ptr->hero - 1, true);
     }
 
-    if (player_ptr->shero) {
-        (void)set_shero(player_ptr, player_ptr->shero - 1, true);
+    if (player_ptr->berserk) {
+        (void)set_berserk(player_ptr, player_ptr->berserk - 1, true);
     }
 
     if (player_ptr->blessed) {

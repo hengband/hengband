@@ -125,6 +125,11 @@ bool Grid::is_mark() const
     return any_bits(this->info, CAVE_MARK);
 }
 
+bool Grid::is_hidden() const
+{
+    return this->mimic > 0;
+}
+
 bool Grid::is_mirror() const
 {
     return this->is_object() && TerrainList::get_instance().get_terrain(this->mimic).flags.has(TerrainCharacteristics::MIRROR);

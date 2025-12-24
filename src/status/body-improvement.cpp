@@ -1,4 +1,5 @@
 #include "status/body-improvement.h"
+#include "action/travel-execution.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/speed-table.h"
@@ -68,8 +69,8 @@ void BodyImprovement::set_protection(short v, bool is_decrease)
         return;
     }
 
-    if (disturb_state) {
-        disturb(this->player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     handle_stuff(this->player_ptr);
@@ -131,8 +132,8 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -179,8 +180,8 @@ bool set_tim_regen(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -227,8 +228,8 @@ bool set_tim_reflect(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -275,8 +276,8 @@ bool set_pass_wall(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -323,8 +324,8 @@ bool set_tim_emission(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -371,8 +372,8 @@ bool set_tim_exorcism(PlayerType *player_ptr, short v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);

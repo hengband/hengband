@@ -1,4 +1,5 @@
 #include "status/buff-setter.h"
+#include "action/travel-execution.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/speed-table.h"
@@ -43,7 +44,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->invuln = 0; /* Timed -- Invulnerable */
     player_ptr->ult_res = 0;
     player_ptr->hero = 0; /* Timed -- Heroism */
-    player_ptr->shero = 0; /* Timed -- Super Heroism */
+    player_ptr->berserk = 0; /* Timed -- Super Heroism */
     player_ptr->shield = 0; /* Timed -- Shield Spell */
     player_ptr->blessed = 0; /* Timed -- Blessed */
     player_ptr->tim_invis = 0; /* Timed -- Invisibility */
@@ -153,8 +154,8 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);
@@ -205,8 +206,8 @@ bool set_shield(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -253,8 +254,8 @@ bool set_magicdef(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -301,8 +302,8 @@ bool set_blessed(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -349,8 +350,8 @@ bool set_hero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     static constexpr auto flags = {
@@ -408,7 +409,7 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
         return false;
     }
 
-    if (disturb_state) {
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
         disturb(player_ptr, false, true);
     }
 
@@ -433,7 +434,7 @@ bool set_mimic(PlayerType *player_ptr, TIME_EFFECT v, MimicKindType mimic_race_i
  * @param do_dec FALSEの場合現在の継続時間より長い値のみ上書きする
  * @return ステータスに影響を及ぼす変化があった場合TRUEを返す。
  */
-bool set_shero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
+bool set_berserk(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 {
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0
@@ -449,30 +450,30 @@ bool set_shero(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
     }
 
     if (v) {
-        if (player_ptr->shero && !do_dec) {
-            if (player_ptr->shero > v) {
+        if (player_ptr->berserk && !do_dec) {
+            if (player_ptr->berserk > v) {
                 return false;
             }
-        } else if (!player_ptr->shero) {
+        } else if (!player_ptr->berserk) {
             msg_print(_("殺戮マシーンになった気がする！", "You feel like a killing machine!"));
             notice = true;
         }
     } else {
-        if (player_ptr->shero) {
+        if (player_ptr->berserk) {
             msg_print(_("野蛮な気持ちが消え失せた。", "You feel less berserk."));
             notice = true;
         }
     }
 
-    player_ptr->shero = v;
+    player_ptr->berserk = v;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     static constexpr auto flags = {
@@ -537,8 +538,8 @@ bool set_wraith_form(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -591,8 +592,8 @@ bool set_tsuyoshi(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     static constexpr auto flags = {

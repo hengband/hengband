@@ -3118,7 +3118,7 @@ bool is_hero(PlayerType *player_ptr)
 
 bool is_shero(PlayerType *player_ptr)
 {
-    return player_ptr->shero || PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER);
+    return player_ptr->berserk || PlayerClass(player_ptr).equals(PlayerClassType::BERSERKER);
 }
 
 bool is_echizen(PlayerType *player_ptr)

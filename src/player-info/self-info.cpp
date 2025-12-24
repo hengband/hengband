@@ -355,7 +355,7 @@ void report_magics(PlayerType *player_ptr)
     }
 
     if (is_shero(player_ptr)) {
-        info.emplace_back(report_magics_aux(player_ptr->shero),
+        info.emplace_back(report_magics_aux(player_ptr->berserk),
             _("あなたは戦闘狂だ", "You are in a battle rage"));
     }
 

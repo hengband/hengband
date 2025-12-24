@@ -5,6 +5,7 @@
  */
 
 #include "spell-realm/spells-crusade.h"
+#include "action/travel-execution.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
@@ -65,8 +66,8 @@ bool set_tim_sh_holy(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);
@@ -115,8 +116,8 @@ bool set_tim_eyeeye(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     rfu.set_flag(StatusRecalculatingFlag::BONUS);

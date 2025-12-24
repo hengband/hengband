@@ -182,7 +182,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->invuln);
     wr_s16b(player_ptr->ult_res);
     wr_s16b(player_ptr->hero);
-    wr_s16b(player_ptr->shero);
+    wr_s16b(player_ptr->berserk);
     wr_s16b(player_ptr->shield);
     wr_s16b(player_ptr->blessed);
     wr_s16b(player_ptr->tim_invis);

@@ -82,6 +82,7 @@ public:
     bool is_view() const;
     bool is_object() const;
     bool is_mark() const;
+    bool is_hidden() const;
     bool is_mirror() const;
     bool is_rune_protection() const;
     bool is_rune_explosion() const;
