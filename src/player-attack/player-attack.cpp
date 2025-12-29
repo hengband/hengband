@@ -538,7 +538,7 @@ void exe_player_attack_to_monster(PlayerType *player_ptr, POSITION y, POSITION x
     get_attack_exp(player_ptr, pa_ptr);
 
     /* Disturb the monster */
-    (void)set_monster_csleep(player_ptr, pa_ptr->m_idx, 0);
+    (void)set_monster_csleep(*player_ptr->current_floor_ptr, pa_ptr->m_idx, 0);
     angband_strcpy(pa_ptr->m_name, monster_desc(player_ptr, *pa_ptr->m_ptr, 0), sizeof(pa_ptr->m_name));
 
     int chance = calc_attack_quality(player_ptr, pa_ptr);

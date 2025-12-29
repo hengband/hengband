@@ -196,7 +196,7 @@ static void cancel_fear_by_pain(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
     const auto &m_ref = *mam_pp_ptr->m_ptr;
     const auto dam = mam_pp_ptr->dam;
-    if (!m_ref.is_fearful() || (dam <= 0) || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, m_ref.get_remaining_fear() - randint1(dam / 4))) {
+    if (!m_ref.is_fearful() || (dam <= 0) || !set_monster_monfear(*player_ptr->current_floor_ptr, mam_pp_ptr->m_idx, m_ref.get_remaining_fear() - randint1(dam / 4))) {
         return;
     }
 
@@ -223,7 +223,7 @@ static void make_monster_fear(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 
     *(mam_pp_ptr->fear) = true;
     (void)set_monster_monfear(
-        player_ptr, mam_pp_ptr->m_idx, (randint1(10) + (((mam_pp_ptr->dam >= mam_pp_ptr->m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
+        *player_ptr->current_floor_ptr, mam_pp_ptr->m_idx, (randint1(10) + (((mam_pp_ptr->dam >= mam_pp_ptr->m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
 }
 
 /*!
@@ -265,7 +265,7 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     mam_pp_type tmp_mam_pp(player_ptr, m_idx, dam, dead, fear, note, src_idx);
     mam_pp_type *mam_pp_ptr = &tmp_mam_pp;
     prepare_redraw(mam_pp_ptr);
-    (void)set_monster_csleep(player_ptr, m_idx, 0);
+    (void)set_monster_csleep(*player_ptr->current_floor_ptr, m_idx, 0);
 
     if (monster.is_riding()) {
         disturb(player_ptr, true, true);

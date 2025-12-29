@@ -338,7 +338,7 @@ void describe_monster_missed_monster(PlayerType *player_ptr, mam_type *mam_ptr)
     case RaceBlowMethodType::CRUSH:
     case RaceBlowMethodType::ENGULF:
     case RaceBlowMethodType::CHARGE: {
-        (void)set_monster_csleep(player_ptr, mam_ptr->t_idx, 0);
+        (void)set_monster_csleep(*player_ptr->current_floor_ptr, mam_ptr->t_idx, 0);
         if (mam_ptr->see_m) {
 #ifdef JP
             msg_format("%sは%s^の攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);

@@ -230,7 +230,7 @@ static void print_stun_effect(PlayerType *player_ptr, player_attack_type *pa_ptr
     const auto &monrace = pa_ptr->m_ptr->get_monrace();
     if (stun_effect && ((pa_ptr->attack_damage + player_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
         if (player_ptr->lev > randint1(monrace.level + resist_stun + 10)) {
-            if (set_monster_stunned(player_ptr, pa_ptr->g_ptr->m_idx, stun_effect + pa_ptr->m_ptr->get_remaining_stun())) {
+            if (set_monster_stunned(*player_ptr->current_floor_ptr, pa_ptr->g_ptr->m_idx, stun_effect + pa_ptr->m_ptr->get_remaining_stun())) {
                 msg_format(_("%s^はフラフラになった。", "%s^ is stunned."), pa_ptr->m_name);
             } else {
                 msg_format(_("%s^はさらにフラフラになった。", "%s^ is more stunned."), pa_ptr->m_name);

@@ -143,7 +143,7 @@ bool process_monster_attack_to_monster(PlayerType *player_ptr, turn_flags *turn_
     if (do_move_body) {
         turn_flags_ptr->do_move = true;
         turn_flags_ptr->did_move_body = true;
-        (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
+        (void)set_monster_csleep(*player_ptr->current_floor_ptr, grid.m_idx, 0);
     }
 
     return false;

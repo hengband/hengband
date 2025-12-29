@@ -143,7 +143,7 @@ bool fetch_monster(PlayerType *player_ptr)
     floor.get_grid(*pos).m_idx = 0;
     floor.get_grid(pos_target).m_idx = m_idx;
     monster.set_position(pos_target);
-    (void)set_monster_csleep(player_ptr, m_idx, 0);
+    (void)set_monster_csleep(floor, m_idx, 0);
     update_monster(player_ptr, m_idx, true);
     lite_spot(player_ptr, *pos);
     lite_spot(player_ptr, pos_target);

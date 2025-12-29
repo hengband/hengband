@@ -61,14 +61,13 @@ void anger_monster(PlayerType *player_ptr, MonsterEntity &monster)
 
 /*!
  * @brief モンスターの睡眠状態値をセットする。0で起きる
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
  */
-bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
+bool set_monster_csleep(FloorType &floor, MONSTER_IDX m_idx, int v)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 10000) ? 10000 : (v < 0) ? 0
@@ -107,14 +106,13 @@ bool set_monster_csleep(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 
 /*!
  * @brief モンスターの加速状態値をセット
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
  */
-bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
+bool set_monster_fast(FloorType &floor, MONSTER_IDX m_idx, int v)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
@@ -136,7 +134,7 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
         return false;
     }
 
-    if (monster.is_riding() && !player_ptr->leaving) {
+    if (monster.is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
@@ -145,14 +143,13 @@ bool set_monster_fast(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 
 /*
  * @brief モンスターの原則状態値をセット
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
  */
-bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
+bool set_monster_slow(FloorType &floor, MONSTER_IDX m_idx, int v)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
@@ -174,7 +171,7 @@ bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
         return false;
     }
 
-    if (monster.is_riding() && !player_ptr->leaving) {
+    if (monster.is_riding()) {
         RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     }
 
@@ -183,14 +180,13 @@ bool set_monster_slow(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 
 /*!
  * @brief モンスターの朦朧状態値をセット
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
  */
-bool set_monster_stunned(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
+bool set_monster_stunned(FloorType &floor, MONSTER_IDX m_idx, int v)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
@@ -213,14 +209,13 @@ bool set_monster_stunned(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 
 /*!
  * @brief モンスターの混乱状態値をセット
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
  */
-bool set_monster_confused(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
+bool set_monster_confused(FloorType &floor, MONSTER_IDX m_idx, int v)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
@@ -243,14 +238,13 @@ bool set_monster_confused(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 
 /*!
  * @brief モンスターの恐慌状態値をセット
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @return 別途更新処理が必要な場合TRUEを返す
  */
-bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
+bool set_monster_monfear(FloorType &floor, MONSTER_IDX m_idx, int v)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0
@@ -285,15 +279,14 @@ bool set_monster_monfear(PlayerType *player_ptr, MONSTER_IDX m_idx, int v)
 
 /*!
  * @brief モンスターの無敵状態値をセット
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param floor フロアへの参照
  * @param m_idx モンスター参照ID
  * @param v セットする値
  * @param energy_need TRUEならば無敵解除時に行動ターン消費を行う
  * @return 別途更新処理が必要な場合TRUEを返す
  */
-bool set_monster_invulner(PlayerType *player_ptr, MONSTER_IDX m_idx, int v, bool energy_need)
+bool set_monster_invulner(FloorType &floor, MONSTER_IDX m_idx, int v, bool energy_need)
 {
-    auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     bool notice = false;
     v = (v > 200) ? 200 : (v < 0) ? 0

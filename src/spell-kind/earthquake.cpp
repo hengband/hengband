@@ -194,7 +194,7 @@ bool process_monster_damage(PlayerType *player_ptr, MonsterEntity &monster, bool
     auto &floor = *player_ptr->current_floor_ptr;
     auto &grid = floor.get_grid(monster.get_position());
     const auto damage = (has_dodged ? Dice::roll(4, 8) : (monster.hp + 1));
-    (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
+    (void)set_monster_csleep(floor, grid.m_idx, 0);
     monster.hp -= damage;
     if (monster.hp >= 0) {
         return false;

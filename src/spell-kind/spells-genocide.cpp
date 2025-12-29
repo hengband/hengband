@@ -77,7 +77,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
         }
 
         if (monster.is_asleep()) {
-            (void)set_monster_csleep(player_ptr, m_idx, 0);
+            (void)set_monster_csleep(*player_ptr->current_floor_ptr, m_idx, 0);
             if (monster.ml) {
                 msg_format(_("%s^が目を覚ました。", "%s^ wakes up."), m_name.data());
             }

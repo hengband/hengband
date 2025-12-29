@@ -239,7 +239,7 @@ static void process_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
-    (void)set_monster_csleep(player_ptr, mam_ptr->t_idx, 0);
+    (void)set_monster_csleep(*player_ptr->current_floor_ptr, mam_ptr->t_idx, 0);
     redraw_health_bar(mam_ptr);
     describe_melee_method(player_ptr, mam_ptr);
     describe_silly_melee(mam_ptr);
@@ -277,7 +277,7 @@ static void explode_monster_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     sound(SoundKind::EXPLODE);
-    (void)set_monster_invulner(player_ptr, mam_ptr->m_idx, 0, false);
+    (void)set_monster_invulner(*player_ptr->current_floor_ptr, mam_ptr->m_idx, 0, false);
     mon_take_hit_mon(player_ptr, mam_ptr->m_idx, mam_ptr->m_ptr->hp + 1, &mam_ptr->dead, &mam_ptr->fear,
         _("は爆発して粉々になった。", " explodes into tiny shreds."), mam_ptr->m_idx);
     mam_ptr->blinked = false;

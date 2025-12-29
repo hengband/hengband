@@ -156,7 +156,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         /* Monster wakes up "a little bit" */
 
         /* Still asleep */
-        if (!set_monster_csleep(player_ptr, m_idx, monster.get_remaining_sleep() - d)) {
+        if (!set_monster_csleep(floor, m_idx, monster.get_remaining_sleep() - d)) {
             /* Notice the "not waking up" */
             if (is_original_ap_and_seen(player_ptr, monster)) {
                 /* Hack -- Count the ignores */
@@ -185,7 +185,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
     }
     case MonsterTimedEffect::FAST:
         /* Reduce by one, note if expires */
-        if (set_monster_fast(player_ptr, m_idx, monster.get_remaining_acceleration() - 1)) {
+        if (set_monster_fast(floor, m_idx, monster.get_remaining_acceleration() - 1)) {
             if (is_seen(player_ptr, monster)) {
                 const auto m_name = monster_desc(player_ptr, monster, 0);
                 msg_format(_("%s^はもう加速されていない。", "%s^ is no longer fast."), m_name.data());
@@ -195,7 +195,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         break;
     case MonsterTimedEffect::SLOW:
         /* Reduce by one, note if expires */
-        if (set_monster_slow(player_ptr, m_idx, monster.get_remaining_deceleration() - 1)) {
+        if (set_monster_slow(floor, m_idx, monster.get_remaining_deceleration() - 1)) {
             if (is_seen(player_ptr, monster)) {
                 const auto m_name = monster_desc(player_ptr, monster, 0);
                 msg_format(_("%s^はもう減速されていない。", "%s^ is no longer slow."), m_name.data());
@@ -207,7 +207,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
         int rlev = monster.get_monrace().level;
 
         /* Recover from stun */
-        if (set_monster_stunned(player_ptr, m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (monster.get_remaining_stun() - 1))) {
+        if (set_monster_stunned(floor, m_idx, (randint0(10000) <= rlev * rlev) ? 0 : (monster.get_remaining_stun() - 1))) {
             /* Message if visible */
             if (is_seen(player_ptr, monster)) {
                 const auto m_name = monster_desc(player_ptr, monster, 0);
@@ -219,7 +219,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
     }
     case MonsterTimedEffect::CONFUSION: {
         /* Reduce the confusion */
-        if (!set_monster_confused(player_ptr, m_idx, monster.get_remaining_confusion() - randint1(monster.get_monrace().level / 20 + 1))) {
+        if (!set_monster_confused(floor, m_idx, monster.get_remaining_confusion() - randint1(monster.get_monrace().level / 20 + 1))) {
             break;
         }
 
@@ -233,7 +233,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
     }
     case MonsterTimedEffect::FEAR: {
         /* Reduce the fear */
-        if (!set_monster_monfear(player_ptr, m_idx, monster.get_remaining_fear() - randint1(monster.get_monrace().level / 20 + 1))) {
+        if (!set_monster_monfear(floor, m_idx, monster.get_remaining_fear() - randint1(monster.get_monrace().level / 20 + 1))) {
             break;
         }
 
@@ -256,7 +256,7 @@ static void process_monsters_mtimed_aux(PlayerType *player_ptr, MONSTER_IDX m_id
     }
     case MonsterTimedEffect::INVULNERABILITY: {
         /* Reduce by one, note if expires */
-        if (!set_monster_invulner(player_ptr, m_idx, monster.get_remaining_invulnerability() - 1, true)) {
+        if (!set_monster_invulner(floor, m_idx, monster.get_remaining_invulnerability() - 1, true)) {
             break;
         }
 
@@ -305,21 +305,22 @@ void process_monsters_mtimed(PlayerType *player_ptr, MonsterTimedEffect mte)
  */
 void dispel_monster_status(PlayerType *player_ptr, MONSTER_IDX m_idx)
 {
-    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    auto &floor = *player_ptr->current_floor_ptr;
+    const auto &monster = floor.m_list[m_idx];
     const auto m_name = monster_desc(player_ptr, monster, 0);
-    if (set_monster_invulner(player_ptr, m_idx, 0, true)) {
+    if (set_monster_invulner(floor, m_idx, 0, true)) {
         if (monster.ml) {
             msg_format(_("%sはもう無敵ではない。", "%s^ is no longer invulnerable."), m_name.data());
         }
     }
 
-    if (set_monster_fast(player_ptr, m_idx, 0)) {
+    if (set_monster_fast(floor, m_idx, 0)) {
         if (monster.ml) {
             msg_format(_("%sはもう加速されていない。", "%s^ is no longer fast."), m_name.data());
         }
     }
 
-    if (set_monster_slow(player_ptr, m_idx, 0)) {
+    if (set_monster_slow(floor, m_idx, 0)) {
         if (monster.ml) {
             msg_format(_("%sはもう減速されていない。", "%s^ is no longer slow."), m_name.data());
         }

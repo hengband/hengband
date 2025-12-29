@@ -98,9 +98,9 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->timewalk = false;
 
     if (player_ptr->riding) {
-        (void)set_monster_fast(player_ptr, player_ptr->riding, 0);
-        (void)set_monster_slow(player_ptr, player_ptr->riding, 0);
-        (void)set_monster_invulner(player_ptr, player_ptr->riding, 0, false);
+        (void)set_monster_fast(*player_ptr->current_floor_ptr, player_ptr->riding, 0);
+        (void)set_monster_slow(*player_ptr->current_floor_ptr, player_ptr->riding, 0);
+        (void)set_monster_invulner(*player_ptr->current_floor_ptr, player_ptr->riding, 0, false);
     }
 
     if (PlayerClass(player_ptr).equals(PlayerClassType::BARD)) {

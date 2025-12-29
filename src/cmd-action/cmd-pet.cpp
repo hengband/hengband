@@ -262,7 +262,7 @@ bool do_cmd_riding(PlayerType *player_ptr, bool force)
 
         if (monster.is_asleep()) {
             const auto m_name = monster_desc(player_ptr, monster, 0);
-            (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
+            (void)set_monster_csleep(*player_ptr->current_floor_ptr, grid.m_idx, 0);
             msg_format(_("%sを起こした。", "You have woken %s up."), m_name.data());
         }
 
