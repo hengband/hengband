@@ -1,4 +1,5 @@
 #include "spell-realm/spells-craft.h"
+#include "action/travel-execution.h"
 #include "avatar/avatar.h"
 #include "core/disturbance.h"
 #include "core/stuff-handler.h"
@@ -88,7 +89,7 @@ bool set_ele_attack(PlayerType *player_ptr, uint32_t attack_type, TIME_EFFECT v)
         msg_format(mes, element.data());
     }
 
-    if (disturb_state) {
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
         disturb(player_ptr, false, false);
     }
 
@@ -164,8 +165,8 @@ bool set_ele_immune(PlayerType *player_ptr, uint32_t immune_type, TIME_EFFECT v)
         msg_format(_("%sの攻撃を受けつけなくなった！", "For a while, you are immune to %s"), element.data());
     }
 
-    if (disturb_state) {
-        disturb(player_ptr, false, false);
+    if (disturb_state || Travel::get_instance().is_ongoing()) {
+        disturb(player_ptr, false, true);
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();

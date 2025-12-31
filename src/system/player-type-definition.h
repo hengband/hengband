@@ -92,7 +92,7 @@ public:
     TIME_EFFECT invuln{}; /* Timed -- Invulnerable */
     TIME_EFFECT ult_res{}; /* Timed -- Ultimate Resistance */
     TIME_EFFECT hero{}; /* Timed -- Heroism */
-    TIME_EFFECT shero{}; /* Timed -- Super Heroism */
+    TIME_EFFECT berserk{}; /* Timed -- Super Heroism */
     TIME_EFFECT shield{}; /* Timed -- Shield Spell */
     TIME_EFFECT blessed{}; /* Timed -- Blessed */
     TIME_EFFECT tim_invis{}; /* Timed -- See Invisible */
