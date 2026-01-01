@@ -121,7 +121,7 @@ int rod_effect(PlayerType *player_ptr, int sval, const Direction &dir, bool *use
         if (true_healing(player_ptr, 0)) {
             ident = true;
         }
-        if (set_shero(player_ptr, 0, true)) {
+        if (set_berserk(player_ptr, 0, true)) {
             ident = true;
         }
         break;

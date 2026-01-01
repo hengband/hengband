@@ -735,7 +735,7 @@ void FloorType::set_redraw_at(const Pos2D &pos)
 
 void FloorType::set_view_at(const Pos2D &pos)
 {
-    if (!this->contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
+    if (!this->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
         return;
     }
 

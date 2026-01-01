@@ -198,7 +198,7 @@ int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerf
 
     case SV_STAFF_CURING: {
         ident = true_healing(player_ptr, 0);
-        if (set_shero(player_ptr, 0, true)) {
+        if (set_berserk(player_ptr, 0, true)) {
             ident = true;
         }
         break;
@@ -216,7 +216,7 @@ int staff_effect(PlayerType *player_ptr, int sval, bool *use_charge, bool powerf
             ident = true;
         }
         ident |= restore_mana(player_ptr, false);
-        if (set_shero(player_ptr, 0, true)) {
+        if (set_berserk(player_ptr, 0, true)) {
             ident = true;
         }
         break;
