@@ -1099,9 +1099,57 @@ static errr game_term_text_gcu(int x, int y, int n, byte a, concptr s)
     if (text_len < 0) {
         return -1;
     }
-#endif
+
+#ifdef MACOS_TERMINAL_UTF8
+    char corrected_text[2048];
+    int j = 0;
+
+    // UTF-8 byte sequences for ambiguous-width characters
+    // ★ (U+2605): E2 98 85
+    // ☆ (U+2606): E2 98 86
+    // … (U+2026): E2 80 A6
+    constexpr unsigned char LEADING_BYTE = 0xe2;
+    constexpr unsigned char STAR_SECOND_BYTE = 0x98;
+    constexpr unsigned char BLACK_STAR_THIRD_BYTE = 0x85;
+    constexpr unsigned char WHITE_STAR_THIRD_BYTE = 0x86;
+    constexpr unsigned char ELLIPSIS_SECOND_BYTE = 0x80;
+    constexpr unsigned char ELLIPSIS_THIRD_BYTE = 0xa6;
+
+    for (int i = 0; i < text_len;) {
+        // Safety break: ensure there is enough space for a 3-byte char + a space.
+        if (j >= static_cast<int>(sizeof(corrected_text)) - 4) {
+            break;
+        }
+
+        if (i + 2 < text_len && static_cast<unsigned char>(text[i]) == LEADING_BYTE) {
+            const auto c2 = static_cast<unsigned char>(text[i + 1]);
+            const auto c3 = static_cast<unsigned char>(text[i + 2]);
+
+            const bool is_star = (c2 == STAR_SECOND_BYTE) && (c3 == BLACK_STAR_THIRD_BYTE || c3 == WHITE_STAR_THIRD_BYTE);
+            const bool is_ellipsis = (c2 == ELLIPSIS_SECOND_BYTE) && (c3 == ELLIPSIS_THIRD_BYTE);
+
+            if (is_star || is_ellipsis) {
+                corrected_text[j++] = text[i++];
+                corrected_text[j++] = text[i++];
+                corrected_text[j++] = text[i++];
+                corrected_text[j++] = ' '; // Force space after target character
+                continue;
+            }
+        }
+
+        corrected_text[j++] = text[i++];
+    }
     /* Add the text */
-    curses::waddnstr(td->win, _(text, s), _(text_len, n));
+    curses::waddnstr(td->win, corrected_text, j);
+#else
+    /* Add the text normally */
+    curses::waddnstr(td->win, text, text_len);
+#endif
+
+#else /* JP */
+    /* Add the text (Non-JP build) */
+    curses::waddnstr(td->win, s, n);
+#endif
 
     /* Success */
     return 0;
