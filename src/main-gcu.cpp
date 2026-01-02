@@ -162,6 +162,7 @@
 #include "io/exit-panic.h"
 #include "io/files-util.h"
 #include "locale/japanese.h"
+#include "locale/utf-8.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "system/angband-version.h"
@@ -174,6 +175,7 @@
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include "view/display-map.h"
+#include <algorithm>
 #include <filesystem>
 #include <map>
 #include <string>
@@ -1099,9 +1101,53 @@ static errr game_term_text_gcu(int x, int y, int n, byte a, concptr s)
     if (text_len < 0) {
         return -1;
     }
+
+#ifdef MACOS_TERMINAL_UTF8
+    std::string corrected_text;
+    corrected_text.reserve(text_len + text_len / 3); // 3バイト文字が4バイトになることを考慮
+
+    // macOSのターミナルで文字幅が正しく計算されないUTF-8文字の後にスペースを挿入する
+    static constexpr std::string_view AMBIGUOUS_WIDTH_CHARS[] = {
+        { reinterpret_cast<const char *>(u8"★"), sizeof(u8"★") - 1 },
+        { reinterpret_cast<const char *>(u8"☆"), sizeof(u8"☆") - 1 },
+        { reinterpret_cast<const char *>(u8"…"), sizeof(u8"…") - 1 },
+    };
+
+    for (int i = 0; i < text_len;) {
+        const std::string_view *matched_amb_char = nullptr;
+        for (const auto &amb_char : AMBIGUOUS_WIDTH_CHARS) {
+            if (static_cast<size_t>(text_len - i) >= amb_char.length() &&
+                std::string_view(&text[i], amb_char.length()) == amb_char) {
+                matched_amb_char = &amb_char;
+                break;
+            }
+        }
+
+        if (matched_amb_char) {
+            corrected_text.append(*matched_amb_char);
+            corrected_text.push_back(' ');
+            i += matched_amb_char->length();
+        } else {
+            int char_len = utf8_next_char_byte_length(&text[i]);
+
+            // 不正なシーケンス、または文字が途中で切れている場合は1バイト文字として扱います。
+            if (char_len == 0 || char_len > (text_len - i)) {
+                char_len = 1;
+            }
+            corrected_text.append(&text[i], char_len);
+            i += char_len;
+        }
+    } /* Add the text */
+    curses::waddnstr(td->win, corrected_text.c_str(), corrected_text.length());
+#else
+    /* Add the text normally */
+    curses::waddnstr(td->win, text, text_len);
 #endif
-    /* Add the text */
-    curses::waddnstr(td->win, _(text, s), _(text_len, n));
+
+#else /* JP */
+    /* Add the text (Non-JP build) */
+    curses::waddnstr(td->win, s, n);
+#endif
 
     /* Success */
     return 0;

@@ -52,6 +52,13 @@ AX_CXX_COMPILE_STDCXX(20, [noext], [mandatory])
 CXXFLAGS="$saved_CXXFLAGS"
 PKG_PROG_PKG_CONFIG
 
+dnl Detect macOS host
+AC_CANONICAL_HOST
+is_macos=no
+case "${host_os}" in
+  darwin*) is_macos=yes ;;
+esac
+
 AC_MSG_CHECKING([whether the compiler is Clang])
 AC_COMPILE_IFELSE(
   [AC_LANG_SOURCE([[
@@ -86,15 +93,22 @@ AM_CONDITIONAL([PCH], [test x$enable_pch = xyes])
 
 dnl Checks for libraries.
 dnl Replace `main' with a function in -lncurses:
-AC_CHECK_LIB(ncursesw, initscr, [AC_DEFINE(USE_GCU, 1, [Allow -mGCU environment]) AC_DEFINE(USE_NCURSES, 1, [Use ncurses]) LIBS="$LIBS -lncursesw"])
+use_ncurses=no
+ncurses_actions="AC_DEFINE(USE_GCU, 1, [Allow -mGCU environment]) AC_DEFINE(USE_NCURSES, 1, [Use ncurses]) use_ncurses=yes"
+AC_CHECK_LIB(ncursesw, initscr, [$ncurses_actions LIBS="$LIBS -lncursesw"])
 if test "$ac_cv_lib_ncursesw_initscr" != yes; then
-  AC_CHECK_LIB(ncurses, initscr, [AC_DEFINE(USE_GCU, 1, [Allow -mGCU environment]) AC_DEFINE(USE_NCURSES, 1, [Use ncurses]) LIBS="$LIBS -lncurses"])
+  AC_CHECK_LIB(ncurses, initscr, [$ncurses_actions LIBS="$LIBS -lncurses"]) 
   if test "$ac_cv_lib_ncurses_initscr" != yes; then
     AC_CHECK_LIB(curses, initscr, [AC_DEFINE(USE_GCU, 1, [Allow -mGCU environment]) LIBS="$LIBS -lcurses"])
     if test "$ac_cv_lib_curses_initscr" != yes; then
       AC_CHECK_LIB(termcap, tgetent, [AC_DEFINE(USE_CAP, 1, [Allow -mCAP environment]) LIBS="$LIBS -ltermcap"])
     fi
   fi
+fi
+
+dnl Define MACOS_TERMINAL_UTF8 for macOS ncurses builds
+if test "x$is_macos" = "xyes" && test "x$use_ncurses" = "xyes"; then
+  AC_DEFINE(MACOS_TERMINAL_UTF8, 1, [Enable width fix for macOS terminal])
 fi
 
 AC_CHECK_LIB(iconv, iconv_open)
