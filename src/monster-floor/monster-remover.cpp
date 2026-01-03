@@ -32,25 +32,25 @@ void delete_monster_idx(PlayerType *player_ptr, short m_idx)
     }
 
     if (monster.is_asleep()) {
-        (void)set_monster_csleep(player_ptr, m_idx, 0);
+        (void)set_monster_csleep(floor, m_idx, 0);
     }
     if (monster.is_accelerated()) {
-        (void)set_monster_fast(player_ptr, m_idx, 0);
+        (void)set_monster_fast(floor, m_idx, 0);
     }
     if (monster.is_decelerated()) {
-        (void)set_monster_slow(player_ptr, m_idx, 0);
+        (void)set_monster_slow(floor, m_idx, 0);
     }
     if (monster.is_stunned()) {
-        (void)set_monster_stunned(player_ptr, m_idx, 0);
+        (void)set_monster_stunned(floor, m_idx, 0);
     }
     if (monster.is_confused()) {
-        (void)set_monster_confused(player_ptr, m_idx, 0);
+        (void)set_monster_confused(floor, m_idx, 0);
     }
     if (monster.is_fearful()) {
-        (void)set_monster_monfear(player_ptr, m_idx, 0);
+        (void)set_monster_monfear(floor, m_idx, 0);
     }
     if (monster.is_invulnerable()) {
-        (void)set_monster_invulner(player_ptr, m_idx, 0, false);
+        (void)set_monster_invulner(floor, m_idx, 0, false);
     }
 
     const auto target_m_idx = Target::get_last_target().get_m_idx();

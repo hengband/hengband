@@ -65,7 +65,7 @@ static void attack_confuse(PlayerType *player_ptr, player_attack_type *pa_ptr, b
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else {
         msg_format(_("%s^は混乱したようだ。", "%s^ appears confused."), pa_ptr->m_name);
-        (void)set_monster_confused(player_ptr, pa_ptr->m_idx, pa_ptr->m_ptr->get_remaining_confusion() + 10 + randint0(player_ptr->lev) / 5);
+        (void)set_monster_confused(*player_ptr->current_floor_ptr, pa_ptr->m_idx, pa_ptr->m_ptr->get_remaining_confusion() + 10 + randint0(player_ptr->lev) / 5);
     }
 }
 
@@ -89,7 +89,7 @@ static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else {
         msg_format(_("%s^は朦朧としたようだ。", "%s^ appears stunned."), pa_ptr->m_name);
-        (void)set_monster_stunned(player_ptr, pa_ptr->m_idx, pa_ptr->m_ptr->get_remaining_stun() + 10 + randint0(player_ptr->lev) / 5);
+        (void)set_monster_stunned(*player_ptr->current_floor_ptr, pa_ptr->m_idx, pa_ptr->m_ptr->get_remaining_stun() + 10 + randint0(player_ptr->lev) / 5);
     }
 }
 
@@ -113,7 +113,7 @@ static void attack_scare(PlayerType *player_ptr, player_attack_type *pa_ptr, boo
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else {
         msg_format(_("%s^は恐怖して逃げ出した！", "%s^ flees in terror!"), pa_ptr->m_name);
-        (void)set_monster_monfear(player_ptr, pa_ptr->m_idx, pa_ptr->m_ptr->get_remaining_fear() + 10 + randint0(player_ptr->lev) / 5);
+        (void)set_monster_monfear(*player_ptr->current_floor_ptr, pa_ptr->m_idx, pa_ptr->m_ptr->get_remaining_fear() + 10 + randint0(player_ptr->lev) / 5);
     }
 }
 

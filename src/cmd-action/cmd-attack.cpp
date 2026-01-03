@@ -233,7 +233,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
             msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
         }
 
-        (void)set_monster_csleep(player_ptr, grid.m_idx, 0);
+        (void)set_monster_csleep(*player_ptr->current_floor_ptr, grid.m_idx, 0);
         return false;
     }
 

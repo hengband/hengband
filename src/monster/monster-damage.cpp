@@ -118,7 +118,7 @@ bool MonsterDamageProcessor::genocide_chaos_patron()
     }
 
     this->set_redraw();
-    (void)set_monster_csleep(this->player_ptr, this->m_idx, 0);
+    (void)set_monster_csleep(*this->player_ptr->current_floor_ptr, this->m_idx, 0);
     set_superstealth(this->player_ptr, false);
 
     return this->m_idx == 0;
@@ -414,7 +414,7 @@ void MonsterDamageProcessor::add_monster_fear()
     const auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     if (monster.is_fearful() && (this->dam > 0)) {
         auto fear_remining = monster.get_remaining_fear() - randint1(this->dam);
-        if (set_monster_monfear(this->player_ptr, this->m_idx, fear_remining)) {
+        if (set_monster_monfear(*this->player_ptr->current_floor_ptr, this->m_idx, fear_remining)) {
             *this->fear = false;
         }
     }
@@ -432,5 +432,5 @@ void MonsterDamageProcessor::add_monster_fear()
     *this->fear = true;
     auto fear_condition = (this->dam >= monster.hp) && (percentage > 7);
     auto fear_value = randint1(10) + (fear_condition ? 20 : (11 - percentage) * 5);
-    (void)set_monster_monfear(this->player_ptr, this->m_idx, fear_value);
+    (void)set_monster_monfear(*this->player_ptr->current_floor_ptr, this->m_idx, fear_value);
 }

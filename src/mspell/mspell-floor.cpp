@@ -68,7 +68,7 @@ MonsterSpellResult spell_RF4_SHRIEK(MONSTER_IDX m_idx, PlayerType *player_ptr, M
     if (target_type == MONSTER_TO_PLAYER) {
         aggravate_monsters(player_ptr, m_idx);
     } else if (target_type == MONSTER_TO_MONSTER) {
-        set_monster_csleep(player_ptr, t_idx, 0);
+        set_monster_csleep(*player_ptr->current_floor_ptr, t_idx, 0);
     }
 
     return result;
@@ -216,7 +216,7 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     }
 
     if (resists_tele) {
-        set_monster_csleep(player_ptr, t_idx, 0);
+        set_monster_csleep(*player_ptr->current_floor_ptr, t_idx, 0);
         return res;
     }
 
@@ -225,7 +225,7 @@ MonsterSpellResult spell_RF6_TELE_TO(PlayerType *player_ptr, MONSTER_IDX m_idx, 
     } else {
         teleport_monster_to(player_ptr, t_idx, monster.fy, monster.fx, 100, TELEPORT_PASSIVE);
     }
-    set_monster_csleep(player_ptr, t_idx, 0);
+    set_monster_csleep(*player_ptr->current_floor_ptr, t_idx, 0);
 
     return res;
 }
@@ -296,7 +296,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
     }
 
     if (resists_tele) {
-        set_monster_csleep(player_ptr, t_idx, 0);
+        set_monster_csleep(*player_ptr->current_floor_ptr, t_idx, 0);
         return res;
     }
 
@@ -305,7 +305,7 @@ MonsterSpellResult spell_RF6_TELE_AWAY(PlayerType *player_ptr, MONSTER_IDX m_idx
     } else {
         teleport_away(player_ptr, t_idx, MAX_PLAYER_SIGHT * 2 + 5, TELEPORT_PASSIVE);
     }
-    set_monster_csleep(player_ptr, t_idx, 0);
+    set_monster_csleep(*player_ptr->current_floor_ptr, t_idx, 0);
 
     return res;
 }

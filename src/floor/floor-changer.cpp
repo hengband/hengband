@@ -276,12 +276,12 @@ static void reset_unique_by_floor_change(PlayerType *player_ptr)
 
         if (!monster.is_pet()) {
             monster.hp = monster.maxhp = monster.max_maxhp;
-            (void)set_monster_fast(player_ptr, i, 0);
-            (void)set_monster_slow(player_ptr, i, 0);
-            (void)set_monster_stunned(player_ptr, i, 0);
-            (void)set_monster_confused(player_ptr, i, 0);
-            (void)set_monster_monfear(player_ptr, i, 0);
-            (void)set_monster_invulner(player_ptr, i, 0, false);
+            (void)set_monster_fast(floor, i, 0);
+            (void)set_monster_slow(floor, i, 0);
+            (void)set_monster_stunned(floor, i, 0);
+            (void)set_monster_confused(floor, i, 0);
+            (void)set_monster_monfear(floor, i, 0);
+            (void)set_monster_invulner(floor, i, 0, false);
         }
 
         const auto &monrace = monster.get_real_monrace();

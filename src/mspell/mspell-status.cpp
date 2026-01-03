@@ -122,7 +122,7 @@ void spell_badstatus_message_to_mons(PlayerType *player_ptr, MONSTER_IDX m_idx, 
         }
     }
 
-    set_monster_csleep(player_ptr, t_idx, 0);
+    set_monster_csleep(*player_ptr->current_floor_ptr, t_idx, 0);
 }
 
 /*!
@@ -287,7 +287,7 @@ MonsterSpellResult spell_RF5_SCARE(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        set_monster_monfear(player_ptr, t_idx, monster_target.get_remaining_fear() + randint0(4) + 4);
+        set_monster_monfear(*player_ptr->current_floor_ptr, t_idx, monster_target.get_remaining_fear() + randint0(4) + 4);
     }
 
     return res;
@@ -352,7 +352,7 @@ MonsterSpellResult spell_RF5_BLIND(MONSTER_IDX m_idx, PlayerType *player_ptr, MO
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_confused(player_ptr, t_idx, monster_target.get_remaining_confusion() + 12 + randint0(4));
+        (void)set_monster_confused(*player_ptr->current_floor_ptr, t_idx, monster_target.get_remaining_confusion() + 12 + randint0(4));
     }
 
     return res;
@@ -410,7 +410,7 @@ MonsterSpellResult spell_RF5_CONF(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_confused(player_ptr, t_idx, monster_target.get_remaining_confusion() + 12 + randint0(4));
+        (void)set_monster_confused(*player_ptr->current_floor_ptr, t_idx, monster_target.get_remaining_confusion() + 12 + randint0(4));
     }
 
     return res;
@@ -466,7 +466,7 @@ MonsterSpellResult spell_RF5_HOLD(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, (bool)resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        (void)set_monster_csleep(player_ptr, t_idx, 500);
+        (void)set_monster_csleep(*player_ptr->current_floor_ptr, t_idx, 500);
     }
 
     return res;
@@ -495,7 +495,7 @@ MonsterSpellResult spell_RF6_HASTE(PlayerType *player_ptr, MONSTER_IDX m_idx, MO
 
     monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->effects()->blindness().is_blind(), target_type);
 
-    if (set_monster_fast(player_ptr, m_idx, monster.get_remaining_acceleration() + 100)) {
+    if (set_monster_fast(*player_ptr->current_floor_ptr, m_idx, monster.get_remaining_acceleration() + 100)) {
         if (target_type == MONSTER_TO_PLAYER || (target_type == MONSTER_TO_MONSTER && see_m)) {
             msg_format(_("%s^の動きが速くなった。", "%s^ starts moving faster."), m_name.data());
         }
@@ -563,7 +563,7 @@ MonsterSpellResult spell_RF5_SLOW(MONSTER_IDX m_idx, PlayerType *player_ptr, MON
     spell_badstatus_message_to_mons(player_ptr, m_idx, t_idx, msg, resist, saving_throw);
 
     if (!resist && !saving_throw) {
-        set_monster_slow(player_ptr, t_idx, monster_target.get_remaining_deceleration() + 50);
+        set_monster_slow(*player_ptr->current_floor_ptr, t_idx, monster_target.get_remaining_deceleration() + 50);
     }
 
     return res;
@@ -623,7 +623,7 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
         return res;
     }
 
-    (void)set_monster_monfear(player_ptr, m_idx, 0);
+    (void)set_monster_monfear(*player_ptr->current_floor_ptr, m_idx, 0);
 
     if (see_monster(player_ptr, m_idx)) {
         const auto m_name = monster_name(player_ptr, m_idx);
@@ -670,7 +670,7 @@ MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx,
     }
 
     if (!monster.is_invulnerable()) {
-        (void)set_monster_invulner(player_ptr, m_idx, randint1(4) + 4, false);
+        (void)set_monster_invulner(*player_ptr->current_floor_ptr, m_idx, randint1(4) + 4, false);
     }
 
     return MonsterSpellResult::make_valid();
