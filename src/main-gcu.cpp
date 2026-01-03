@@ -1099,9 +1099,48 @@ static errr game_term_text_gcu(int x, int y, int n, byte a, concptr s)
     if (text_len < 0) {
         return -1;
     }
-#endif
+
+#ifdef MACOS_TERMINAL_UTF8
+    char corrected_text[2048];
+    int j = 0;
+
+    for (int i = 0; i < text_len;) {
+        // Safety break before writing
+        if (j >= (int)sizeof(corrected_text) - 4) {
+            break;
+        }
+
+        // Standard C-style UTF-8 3-byte sequence check for macOS terminal display correction
+        // Target characters: ★ (0xE2 0x98 0x85), ☆ (0xE2 0x98 0x86), … (0xE2 0x80 0xA6)
+        bool is_target = false;
+        if (i + 2 < text_len && (unsigned char)text[i] == 0xe2) {
+            unsigned char c2 = (unsigned char)text[i + 1];
+            unsigned char c3 = (unsigned char)text[i + 2];
+            if ((c2 == 0x98 && (c3 == 0x85 || c3 == 0x86)) || (c2 == 0x80 && c3 == 0xa6)) {
+                is_target = true;
+            }
+        }
+
+        if (is_target) {
+            corrected_text[j++] = text[i++];
+            corrected_text[j++] = text[i++];
+            corrected_text[j++] = text[i++];
+            corrected_text[j++] = ' ';
+        } else {
+            corrected_text[j++] = text[i++];
+        }
+    }
     /* Add the text */
-    curses::waddnstr(td->win, _(text, s), _(text_len, n));
+    curses::waddnstr(td->win, corrected_text, j);
+#else
+    /* Add the text normally */
+    curses::waddnstr(td->win, text, text_len);
+#endif
+
+#else /* JP */
+    /* Add the text (Non-JP build) */
+    curses::waddnstr(td->win, s, n);
+#endif
 
     /* Success */
     return 0;
