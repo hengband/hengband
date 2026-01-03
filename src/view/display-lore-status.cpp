@@ -208,21 +208,31 @@ void display_monster_concrete_resistances(lore_type *lore_ptr)
 {
     if (lore_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ACID)) {
         lore_ptr->lore_msgs.emplace_back(_("酸", "acid"), TERM_GREEN);
+    } else if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ACID)) {
+        lore_ptr->lore_msgs.emplace_back(_("酸", "acid"), TERM_GREEN);
     }
 
     if (lore_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_ELEC)) {
+        lore_ptr->lore_msgs.emplace_back(_("稲妻", "lightning"), TERM_BLUE);
+    } else if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_ELEC)) {
         lore_ptr->lore_msgs.emplace_back(_("稲妻", "lightning"), TERM_BLUE);
     }
 
     if (lore_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_FIRE)) {
         lore_ptr->lore_msgs.emplace_back(_("炎", "fire"), TERM_RED);
+    } else if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_FIRE)) {
+        lore_ptr->lore_msgs.emplace_back(_("炎", "fire"), TERM_RED);
     }
 
     if (lore_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_COLD)) {
         lore_ptr->lore_msgs.emplace_back(_("冷気", "cold"), TERM_L_WHITE);
+    } else if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_COLD)) {
+        lore_ptr->lore_msgs.emplace_back(_("冷気", "cold"), TERM_L_WHITE);
     }
 
     if (lore_ptr->resistance_flags.has(MonsterResistanceType::IMMUNE_POISON)) {
+        lore_ptr->lore_msgs.emplace_back(_("毒", "poison"), TERM_L_GREEN);
+    } else if (lore_ptr->resistance_flags.has(MonsterResistanceType::RESIST_POISON)) {
         lore_ptr->lore_msgs.emplace_back(_("毒", "poison"), TERM_L_GREEN);
     }
 
