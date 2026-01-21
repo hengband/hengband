@@ -75,5 +75,5 @@ void update_flow(PlayerType *player_ptr);
 void cave_alter_feat(PlayerType *player_ptr, POSITION y, POSITION x, TerrainCharacteristics action);
 bool cave_monster_teleportable_bold(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode);
 bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION x, teleport_flags mode);
-void place_grid(PlayerType *player_ptr, Grid &grid, grid_bold_type pg_type);
+void place_grid(FloorType &floor, Grid &grid, grid_bold_type pg_type);
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);

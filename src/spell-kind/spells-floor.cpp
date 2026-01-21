@@ -376,7 +376,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
 
             if (t < 20) {
                 /* Create granite wall */
-                place_grid(player_ptr, grid, GB_EXTRA);
+                place_grid(floor, grid, GB_EXTRA);
             } else if (t < 70) {
                 /* Create quartz vein */
                 grid.set_terrain_id(TerrainTag::QUARTZ_VEIN);
@@ -385,7 +385,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
                 grid.set_terrain_id(TerrainTag::MAGMA_VEIN);
             } else {
                 /* Create floor */
-                place_grid(player_ptr, grid, GB_FLOOR);
+                place_grid(floor, grid, GB_FLOOR);
             }
 
             /* Clear garbage of hidden trap or door */

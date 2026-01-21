@@ -967,9 +967,9 @@ bool player_can_enter(PlayerType *player_ptr, FEAT_IDX feature, BIT_FLAGS16 mode
     return true;
 }
 
-void place_grid(PlayerType *player_ptr, Grid &grid, grid_bold_type gb_type)
+void place_grid(FloorType &floor, Grid &grid, grid_bold_type gb_type)
 {
-    const auto &dungeon = player_ptr->current_floor_ptr->get_dungeon_definition();
+    const auto &dungeon = floor.get_dungeon_definition();
     switch (gb_type) {
     case GB_FLOOR: {
         grid.set_terrain_id(dungeon.select_floor_terrain_id());
@@ -1050,12 +1050,13 @@ void place_grid(PlayerType *player_ptr, Grid &grid, grid_bold_type gb_type)
     }
 
     if (grid.has_monster()) {
-        delete_monster_idx(player_ptr, grid.m_idx);
+        delete_monster_idx(p_ptr, grid.m_idx);
     }
 }
 
 void place_bold(PlayerType *player_ptr, POSITION y, POSITION x, grid_bold_type gb_type)
 {
-    auto &grid = player_ptr->current_floor_ptr->grid_array[y][x];
-    place_grid(player_ptr, grid, gb_type);
+    auto &floor = *player_ptr->current_floor_ptr;
+    auto &grid = floor.grid_array[y][x];
+    place_grid(floor, grid, gb_type);
 }
