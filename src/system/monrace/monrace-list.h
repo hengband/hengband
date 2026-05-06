@@ -12,10 +12,11 @@
 #include <set>
 #include <string>
 #include <tl/optional.hpp>
+#include <utility>
 #include <vector>
 
 enum class MonraceId : short;
-
+class LocalizedString;
 class MonraceDefinition;
 class MonraceList : public util::AbstractMapWrapper<MonraceId, std::shared_ptr<MonraceDefinition>> {
 public:
@@ -53,6 +54,8 @@ public:
     const MonraceDefinition &pick_monrace_at_random() const;
     int calc_defeat_count() const;
     MonraceId select_figurine(int max_level) const;
+    const std::vector<std::pair<MonraceId, LocalizedString>> &get_normal_monster_names() const;
+    const std::vector<std::pair<MonraceId, LocalizedString>> &get_unique_monster_names() const;
 
     void reset_current_numbers();
     void reset_all_visuals();
