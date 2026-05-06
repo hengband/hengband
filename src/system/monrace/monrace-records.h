@@ -20,6 +20,7 @@ public:
     static MonraceRecords &get_instance();
 
     void initialize(size_t size);
+    std::shared_ptr<MonraceRecord> get_record(MonraceId monrace_id);
     std::shared_ptr<const MonraceRecord> get_record(MonraceId monrace_id) const;
 
     bool has_been_seen(MonraceId monrace_id) const;
