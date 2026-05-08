@@ -13,6 +13,8 @@
 #include "player-info/race-types.h"
 #include "player/digestion-processor.h"
 #include "player/eldritch-horror.h"
+#include "rumor/rumor-rarity.h"
+#include "rumor/rumor-service.h"
 #include "status/bad-status-setter.h"
 #include "store/rumor.h"
 #include "system/inner-game-data.h"
@@ -210,16 +212,33 @@ static bool stay_inn(PlayerType *player_ptr)
  * Resting at night is also a quick way to restock stores -KMW-
  * @todo 悪夢を見る前後に全回復しているが、何か意図がある？
  */
-bool inn_comm(PlayerType *player_ptr, int cmd)
+bool inn_comm(PlayerType *player_ptr, int cmd, int cost)
 {
     switch (cmd) {
     case BACT_FOOD:
         return buy_food(player_ptr);
     case BACT_REST:
         return stay_inn(player_ptr);
-    case BACT_RUMORS:
-        display_rumor(player_ptr, true);
+    case BACT_RUMORS: {
+        constexpr auto high_rarity_rumor_threshold = 100;
+        if (cost >= high_rarity_rumor_threshold) {
+            const auto &rumor = RumorService::pick_rumor(RumorRarity::HIGH);
+            display_selected_rumor(rumor);
+            return true;
+        }
+
+        constexpr auto medium_rarity_rumor_threshold = 10;
+        if (cost >= medium_rarity_rumor_threshold) {
+            const auto &rumor = RumorService::pick_rumor(RumorRarity::MEDIUM);
+            display_selected_rumor(rumor);
+            return true;
+        }
+
+        // V3.2.0.4時点で1～9$を取られる宿屋の噂はなく、デッドコード.
+        const auto &rumor = RumorService::pick_rumor(RumorRarity::LOW);
+        display_selected_rumor(rumor);
         return true;
+    }
     default:
         //!< @todo リファクタリング前のコードもTRUEだった、FALSEにすべきでは.
         return true;

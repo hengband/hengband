@@ -1138,6 +1138,7 @@ hengband_SOURCES = \
 	\
 	rumor/rumor-definition.cpp rumor/rumor-definition.h \
 	rumor/rumor-list.cpp rumor/rumor-list.h \
+	rumor/rumor-rarity.h \
 	rumor/rumor-service.cpp rumor/rumor-service.h \
 	\
 	save/artifact-record-writer.cpp save/artifact-record-writer.h \

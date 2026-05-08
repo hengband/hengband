@@ -3,6 +3,7 @@
 #include "locale/character-encoding.h"
 #include "locale/language-switcher.h"
 #include "rumor/rumor-definition.h"
+#include "rumor/rumor-rarity.h"
 #include "system/angband-exceptions.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"

@@ -54,6 +54,7 @@ public:
     const MonraceDefinition &pick_monrace_at_random() const;
     int calc_defeat_count() const;
     MonraceId select_figurine(int max_level) const;
+    const LocalizedString &get_name(MonraceId monrace_id) const;
     const std::vector<std::pair<MonraceId, LocalizedString>> &get_normal_monster_names() const;
     const std::vector<std::pair<MonraceId, LocalizedString>> &get_unique_monster_names() const;
 

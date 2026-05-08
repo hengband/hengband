@@ -5658,6 +5658,9 @@
     <ClInclude Include="..\..\src\rumor\rumor-service.h">
       <Filter>rumor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\rumor\rumor-rarity.h">
+      <Filter>rumor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -1,5 +1,9 @@
 #pragma once
 
+#include <tl/optional.hpp>
+
+enum class RumorRarity;
+class RumorDefinition;
 class RumorService {
 public:
     RumorService() = delete;
@@ -10,4 +14,5 @@ public:
 
     static void initialize();
     static void retouch();
+    static const RumorDefinition &pick_rumor(tl::optional<RumorRarity> rarity);
 };

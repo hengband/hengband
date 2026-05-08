@@ -6,6 +6,7 @@
 
 constexpr size_t VALID_TOWNS = 6; // @details 旧海底都市クエストのマップを除外する. 有効な町に差し替え完了したら不要になるので注意.
 
+enum class TownId;
 class TownList : public util::AbstractVectorWrapper<TownInfo> {
 public:
     TownList(TownList &&) = delete;
@@ -20,6 +21,8 @@ public:
     void overwrite_town_name();
     const TownInfo &get_town(size_t index) const;
     TownInfo &get_town(size_t index);
+    const TownInfo &get_town(TownId town_id) const;
+    TownInfo &get_town(TownId town_id);
     bool is_all_initialized() const;
 
 private:

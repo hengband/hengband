@@ -1,6 +1,7 @@
 #pragma once
 
 #include "util/abstract-map-wrapper.h"
+#include <string>
 
 enum class FixedArtifactId : short;
 class ArtifactDefinition;
@@ -11,13 +12,14 @@ public:
     ArtifactList(ArtifactList &&) = delete;
     ArtifactList &operator=(const ArtifactList &) = delete;
     ArtifactList &operator=(ArtifactList &&) = delete;
-    ~ArtifactList() = default;
+    virtual ~ArtifactList() override = default;
 
     static ArtifactList &get_instance();
     const ArtifactDefinition &get_artifact(const FixedArtifactId fa_id) const;
 
     bool order(const FixedArtifactId id1, const FixedArtifactId id2) const;
     void emplace(const FixedArtifactId fa_id, ArtifactDefinition &&artifact);
+    std::string get_full_name(const FixedArtifactId fa_id) const;
 
 private:
     ArtifactList() = default;
@@ -30,4 +32,6 @@ private:
     {
         return this->artifacts;
     }
+
+    void validate_fa_id(const FixedArtifactId fa_id) const;
 };

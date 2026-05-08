@@ -1,8 +1,12 @@
 #include "rumor/rumor-service.h"
+#include "game-option/birth-options.h"
 #include "io/files-util.h"
+#include "rumor/rumor-definition.h"
 #include "rumor/rumor-list.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/monrace/monrace-list.h"
 #include "util/angband-files.h"
+#include "world/world.h"
 
 /*!
  * @brief 噂に関する初期化のファサード
@@ -29,4 +33,26 @@ void RumorService::retouch()
     rumors.add_deep_artifacts();
     rumors.validate();
     rumors.make_table();
+}
+
+const RumorDefinition &RumorService::pick_rumor(tl::optional<RumorRarity> rarity)
+{
+    const auto &rumors = RumorList::get_instance();
+    while (true) {
+        const auto &rumor = rarity ? rumors.select_rumor(*rarity) : rumors.select_random_rumor();
+        const auto rumor_type = rumor.get_type();
+        if ((rumor_type == RumorType::TOWN) && (lite_town || vanilla_town)) {
+            continue;
+        }
+
+        const auto &world = AngbandWorld::get_instance();
+        if (!world.total_winner && (rumor_type == RumorType::DEEP_DUNGEON)) {
+            const auto dungeon_id = std::get<DungeonId>(rumor.get_id());
+            if ((dungeon_id == DungeonId::HEAVEN) || (dungeon_id == DungeonId::HELL)) {
+                continue;
+            }
+        }
+
+        return rumor;
+    }
 }

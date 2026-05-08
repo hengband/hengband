@@ -423,6 +423,11 @@ MonraceId MonraceList::select_figurine(int max_level) const
     }
 }
 
+const LocalizedString &MonraceList::get_name(MonraceId monrace_id) const
+{
+    return this->get_monrace(monrace_id).name;
+}
+
 const std::vector<std::pair<MonraceId, LocalizedString>> &MonraceList::get_normal_monster_names() const
 {
     static std::vector<std::pair<MonraceId, LocalizedString>> normal_monster_names;
