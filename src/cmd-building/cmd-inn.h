@@ -1,4 +1,4 @@
 #pragma once
 
 class PlayerType;
-bool inn_comm(PlayerType *player_ptr, int cmd);
+bool inn_comm(PlayerType *player_ptr, int cmd, int cost);

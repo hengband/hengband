@@ -2,20 +2,18 @@
 #include "avatar/avatar.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
+#include "rumor/rumor-list.h"
 #include "store/rumor.h"
 #include "store/store-owner-comments.h"
 #include "store/store-util.h"
 #include "view/display-messages.h"
 
-#define RUMOR_CHANCE 8
-
 /*!
- * @brief 取引成功時の店主のメッセージ処理 /
+ * @brief 取引成功時の店主のメッセージ処理
  * ブラックマーケットのときは別のメッセージを出す
- * Successful haggle.
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store_num 店舗の種類
  */
-void store_owner_says_comment(PlayerType *player_ptr, StoreSaleType store_num)
+void store_owner_says_comment(int price, StoreSaleType store_num)
 {
     if (store_num == StoreSaleType::BLACK) {
         msg_print(rand_choice(comment_1_B));
@@ -23,10 +21,22 @@ void store_owner_says_comment(PlayerType *player_ptr, StoreSaleType store_num)
         msg_print(rand_choice(comment_1));
     }
 
-    if (one_in_(RUMOR_CHANCE)) {
-        msg_print(_("店主は耳うちした:", "The shopkeeper whispers something into your ear:"));
-        display_rumor(player_ptr, true);
+    constexpr auto rumor_chance = 8;
+    if (!one_in_(rumor_chance)) {
+        return;
     }
+
+    msg_print(_("店主は耳うちした:", "The shopkeeper whispers something into your ear:"));
+    RumorRarity rt;
+    if (price >= 2500) {
+        rt = RumorRarity::HIGH;
+    } else if (price >= 50) {
+        rt = RumorRarity::MEDIUM;
+    } else {
+        rt = RumorRarity::LOW;
+    }
+
+    display_random_rumor(rt);
 }
 
 /*!

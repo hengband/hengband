@@ -13,6 +13,7 @@
 #include "player-info/race-types.h"
 #include "player/digestion-processor.h"
 #include "player/eldritch-horror.h"
+#include "rumor/rumor-list.h"
 #include "status/bad-status-setter.h"
 #include "store/rumor.h"
 #include "system/inner-game-data.h"
@@ -210,7 +211,7 @@ static bool stay_inn(PlayerType *player_ptr)
  * Resting at night is also a quick way to restock stores -KMW-
  * @todo 悪夢を見る前後に全回復しているが、何か意図がある？
  */
-bool inn_comm(PlayerType *player_ptr, int cmd)
+bool inn_comm(PlayerType *player_ptr, int cmd, int cost)
 {
     switch (cmd) {
     case BACT_FOOD:
@@ -218,7 +219,17 @@ bool inn_comm(PlayerType *player_ptr, int cmd)
     case BACT_REST:
         return stay_inn(player_ptr);
     case BACT_RUMORS:
-        display_rumor(player_ptr, true);
+        if (cost >= 100) {
+            display_random_rumor(RumorRarity::HIGH);
+            return true;
+        }
+
+        if (cost >= 10) {
+            display_random_rumor(RumorRarity::MEDIUM);
+            return true;
+        }
+
+        display_random_rumor(RumorRarity::LOW);
         return true;
     default:
         //!< @todo リファクタリング前のコードもTRUEだった、FALSEにすべきでは.

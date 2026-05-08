@@ -1,6 +1,7 @@
 #include "system/artifact/artifact-list.h"
 #include "artifact/fixed-art-types.h"
 #include "system/artifact/artifact-definition.h"
+#include "util/enum-converter.h"
 
 ArtifactList ArtifactList::instance{};
 
@@ -46,4 +47,21 @@ bool ArtifactList::order(const FixedArtifactId id1, const FixedArtifactId id2) c
 void ArtifactList::emplace(const FixedArtifactId fa_id, ArtifactDefinition &&artifact)
 {
     this->artifacts.emplace(fa_id, std::move(artifact));
+}
+
+std::string ArtifactList::get_full_name(const FixedArtifactId fa_id) const
+{
+    this->validate_fa_id(fa_id);
+    if (fa_id == FixedArtifactId::NONE) {
+        return "";
+    }
+
+    return this->artifacts.at(fa_id).build_full_name();
+}
+
+void ArtifactList::validate_fa_id(const FixedArtifactId fa_id) const
+{
+    if (fa_id < FixedArtifactId::NONE || fa_id > i2enum<FixedArtifactId>(this->artifacts.size())) {
+        THROW_EXCEPTION(std::out_of_range, "Invalid FixedArtifactId: " + std::to_string(static_cast<int>(fa_id)));
+    }
 }

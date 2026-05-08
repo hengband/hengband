@@ -1,4 +1,6 @@
 #pragma once
 
-class PlayerType;
-void display_rumor(PlayerType *player_ptr, bool ex);
+#include <tl/optional.hpp>
+
+enum class RumorRarity;
+void display_random_rumor(tl::optional<RumorRarity> rarity = tl::nullopt);
