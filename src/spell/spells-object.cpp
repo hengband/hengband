@@ -36,7 +36,7 @@
 #include "system/artifact/artifact-record.h"
 #include "system/baseitem/baseitem-key.h"
 #include "system/floor/floor-info.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"

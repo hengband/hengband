@@ -4,7 +4,7 @@
 #include "player-ability/player-ability-types.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/floor/floor-info.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 

@@ -33,7 +33,7 @@
 #include "status/experience.h"
 #include "sv-definition/sv-wand-types.h"
 #include "system/baseitem/baseitem-key.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "term/screen-processor.h"

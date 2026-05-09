@@ -32,7 +32,7 @@
 #include "status/buff-setter.h"
 #include "status/element-resistance.h"
 #include "status/sight-setter.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "target/target-getter.h"

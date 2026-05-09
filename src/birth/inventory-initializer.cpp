@@ -25,7 +25,7 @@
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem/baseitem-list.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include <tuple>
 
 /*!

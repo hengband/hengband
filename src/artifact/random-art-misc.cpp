@@ -8,7 +8,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
 #include "object/tval-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "util/bit-flags-calculator.h"
 
 static bool invest_misc_ranger(ItemEntity *o_ptr)

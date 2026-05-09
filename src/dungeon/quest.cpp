@@ -17,7 +17,7 @@
 #include "system/artifact/artifact-record.h"
 #include "system/floor/floor-info.h" // @todo 相互参照、将来的に削除する.
 #include "system/grid-type-definition.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"

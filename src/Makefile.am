@@ -1265,7 +1265,6 @@ hengband_SOURCES = \
 	system/h-basic.h system/h-config.h \
 	system/h-system.h system/h-type.h \
 	system/inner-game-data.cpp system/inner-game-data.h \
-	system/item-entity.cpp system/item-entity.h \
 	system/monster-entity.cpp system/monster-entity.h \
 	system/player-type-definition.cpp system/player-type-definition.h \
 	system/redrawing-flags-updater.cpp system/redrawing-flags-updater.h \
@@ -1304,6 +1303,8 @@ hengband_SOURCES = \
 	system/floor/town-list.cpp system/floor/town-list.h \
 	system/floor/town-records.cpp system/floor/town-records.h \
 	system/floor/wilderness-grid.cpp system/floor/wilderness-grid.h \
+	\
+	system/item/item-entity.cpp system/item/item-entity.h \
 	\
 	system/monrace/monrace-allocation.cpp system/monrace/monrace-allocation.h \
 	system/monrace/monrace-definition.cpp system/monrace/monrace-definition.h \

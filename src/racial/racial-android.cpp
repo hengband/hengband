@@ -15,7 +15,7 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/artifact/artifact-definition.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "target/target-getter.h"
 #include "view/display-messages.h"

@@ -9,7 +9,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-boost.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 
 /*!
  * @brief 鈍器強化クラスのコンストラクタ

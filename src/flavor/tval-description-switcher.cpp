@@ -12,7 +12,7 @@
 #include "object/tval-types.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"

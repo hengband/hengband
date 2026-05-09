@@ -12,7 +12,7 @@
 #include "sv-definition/sv-lite-types.h"
 #include "system/angband.h"
 #include "system/baseitem/baseitem-definition.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"

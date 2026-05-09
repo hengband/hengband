@@ -8,7 +8,7 @@
 #include "player-info/race-info.h"
 #include "player-info/samurai-data-type.h"
 #include "player/special-defense-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 

@@ -6,7 +6,7 @@
 #include "main/sound-of-music.h"
 #include "monster-race/race-flags-resistance.h"
 #include "player-attack/player-attack.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"

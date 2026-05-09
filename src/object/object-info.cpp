@@ -15,7 +15,7 @@
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "system/floor/floor-info.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "util/int-char-converter.h"
 
 /*!

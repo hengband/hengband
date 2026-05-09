@@ -30,7 +30,7 @@
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "sv-definition/sv-rod-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 #include "world/world.h"

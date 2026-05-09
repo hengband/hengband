@@ -9,7 +9,7 @@ ArtifactDefinition::ArtifactDefinition()
 {
 }
 
-bool ArtifactDefinition::can_generate(const BaseitemKey &generaing_bi_key) const
+bool ArtifactDefinition::can_generate(const BaseitemKey &generating_bi_key) const
 {
     if (this->gen_flags.has(ItemGenerationTraitType::QUESTITEM)) {
         return false;
@@ -19,7 +19,7 @@ bool ArtifactDefinition::can_generate(const BaseitemKey &generaing_bi_key) const
         return false;
     }
 
-    return this->bi_key == generaing_bi_key;
+    return this->bi_key == generating_bi_key;
 }
 
 bool ArtifactDefinition::is_instant_artifact() const

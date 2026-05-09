@@ -25,7 +25,7 @@
 #include "player-base/player-class.h"
 #include "player-info/sniper-data-type.h"
 #include "player-status/player-energy.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"

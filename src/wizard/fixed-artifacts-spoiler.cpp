@@ -3,7 +3,7 @@
 #include "system/angband-system.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"

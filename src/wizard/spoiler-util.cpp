@@ -1,5 +1,5 @@
 #include "wizard/spoiler-util.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include <fstream>
 
 const char item_separator = ',';

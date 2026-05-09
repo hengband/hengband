@@ -9,7 +9,7 @@
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player/player-realm.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 

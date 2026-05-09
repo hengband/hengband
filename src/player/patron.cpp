@@ -24,7 +24,7 @@
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "system/floor/floor-info.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "view/display-messages.h"
 
 std::vector<Patron> patron_list = {

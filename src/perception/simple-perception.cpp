@@ -21,7 +21,7 @@
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/player-status-flags.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"

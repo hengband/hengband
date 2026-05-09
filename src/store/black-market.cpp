@@ -3,7 +3,7 @@
 #include "store/store-util.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 
 /*!
  * @brief ブラックマーケット用の無価値品の排除判定

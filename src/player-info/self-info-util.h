@@ -1,6 +1,6 @@
 #pragma once
 
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include <string>
 #include <vector>
 

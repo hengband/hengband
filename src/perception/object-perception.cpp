@@ -4,7 +4,7 @@
 #include "game-option/play-record-options.h"
 #include "io/write-diary.h"
 #include "system/baseitem/baseitem-definition.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*!

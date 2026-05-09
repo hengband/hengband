@@ -22,7 +22,7 @@
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 
 /*!
  * @brief 恐怖の仮面への特殊処理

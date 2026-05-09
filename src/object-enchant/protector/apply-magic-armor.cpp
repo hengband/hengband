@@ -9,7 +9,7 @@
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
 #include "object/tval-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "view/display-messages.h"
 
 /*

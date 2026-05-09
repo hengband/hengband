@@ -6,7 +6,7 @@
 #include "object-enchant/object-ego.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-lite-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"

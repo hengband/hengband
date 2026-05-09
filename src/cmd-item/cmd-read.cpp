@@ -18,7 +18,7 @@
 #include "player/attack-defense-types.h"
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "world/world.h"
 

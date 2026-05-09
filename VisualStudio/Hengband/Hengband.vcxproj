@@ -665,7 +665,7 @@
     <ClCompile Include="..\..\src\store\service-checker.cpp" />
     <ClCompile Include="..\..\src\system\angband-version.cpp" />
     <ClCompile Include="..\..\src\system\monster-entity.cpp" />
-    <ClCompile Include="..\..\src\system\item-entity.cpp" />
+    <ClCompile Include="..\..\src\system\item\item-entity.cpp" />
     <ClCompile Include="..\..\src\system\monrace\monrace-definition.cpp" />
     <ClCompile Include="..\..\src\system\monrace\monrace-message.cpp" />
     <ClCompile Include="..\..\src\system\player-type-definition.cpp" />
@@ -1685,7 +1685,7 @@
     <ClInclude Include="..\..\src\game-option\game-option-page.h" />
     <ClInclude Include="..\..\src\system\monrace\monrace-definition.h" />
     <ClInclude Include="..\..\src\system\monrace\monrace-message.h" />
-    <ClInclude Include="..\..\src\system\item-entity.h" />
+    <ClInclude Include="..\..\src\system\item\item-entity.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
     <ClInclude Include="..\..\src\realm\realm-hex-numbers.h" />

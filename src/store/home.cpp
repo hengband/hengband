@@ -8,7 +8,7 @@
 #include "store/store-util.h"
 #include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/object-sort.h"
 #include <algorithm>

@@ -16,7 +16,7 @@
 #include "player/permanent-resistances.h"
 #include "player/race-resistances.h"
 #include "player/temporary-resistances.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"

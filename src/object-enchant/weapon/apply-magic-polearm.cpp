@@ -8,7 +8,7 @@
 #include "floor/floor-base-definitions.h"
 #include "inventory/inventory-slot-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 
 /*!
  * @brief 長柄/斧強化クラスのコンストラクタ

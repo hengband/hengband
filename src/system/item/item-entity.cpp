@@ -6,7 +6,7 @@
  * @details オブジェクトの状態を変更するメソッドは道半ば
  */
 
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "artifact/fixed-art-types.h"
 #include "artifact/random-art-bias-types.h"
 #include "artifact/random-art-effects.h"

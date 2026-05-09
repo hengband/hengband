@@ -10,7 +10,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "player-base/player-class.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "wizard/wizard-messages.h"

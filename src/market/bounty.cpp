@@ -19,7 +19,7 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-other-types.h"
 #include "system/floor/floor-info.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"

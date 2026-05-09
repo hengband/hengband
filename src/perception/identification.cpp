@@ -16,7 +16,7 @@
 #include "system/artifact/artifact-definition.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"

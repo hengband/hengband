@@ -11,7 +11,7 @@
 #include "player/player-status-flags.h"
 #include "specific-object/death-scythe.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"

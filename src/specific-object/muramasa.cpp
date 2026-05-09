@@ -3,7 +3,7 @@
 #include "core/asking-player.h"
 #include "spell/spells-object.h"
 #include "status/base-status.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
 

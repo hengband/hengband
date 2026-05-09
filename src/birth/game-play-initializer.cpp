@@ -26,7 +26,7 @@
 #include "system/floor/town-records.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/inner-game-data.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"

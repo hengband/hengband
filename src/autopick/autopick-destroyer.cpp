@@ -24,7 +24,7 @@
 #include "player-info/race-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-wand-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"

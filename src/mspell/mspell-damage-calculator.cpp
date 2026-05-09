@@ -5,7 +5,7 @@
 #include "monster/monster-status.h"
 #include "player-info/equipment-info.h"
 #include "system/floor/floor-info.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"

@@ -7,7 +7,7 @@
 #include "object-enchant/protector/apply-magic-dragon-armor.h"
 #include "artifact/random-art-generator.h"
 #include "object-enchant/protector/abstract-protector-enchanter.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 
 /*

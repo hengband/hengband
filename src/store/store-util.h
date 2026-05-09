@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system/enums/store-sale-type.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
 #include <memory>

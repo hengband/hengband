@@ -14,7 +14,7 @@
 #include "player/special-defense-types.h"
 #include "status/action-setter.h"
 #include "sv-definition/sv-lite-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"

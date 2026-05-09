@@ -5,7 +5,7 @@
 #include "system/artifact/artifact-record.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 
 tl::optional<FixedArtifactId> ArtifactService::find_generatable_fixed_artifact(const BaseitemKey &bi_key, int dungeon_level)
 {

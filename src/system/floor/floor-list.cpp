@@ -1,6 +1,6 @@
 #include "system/floor/floor-list.h"
 #include "system/grid-type-definition.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 
 FloorList FloorList::instance{};

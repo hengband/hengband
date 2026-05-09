@@ -21,7 +21,7 @@
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"
 #include "system/angband-system.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"

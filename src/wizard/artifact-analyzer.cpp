@@ -7,7 +7,7 @@
 #include "object-enchant/trg-types.h"
 #include "object/object-info.h"
 #include "system/artifact/artifact-definition.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"

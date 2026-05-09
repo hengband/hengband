@@ -9,7 +9,7 @@
 #include "smith/smith-info.h"
 #include "smith/smith-tables.h"
 #include "smith/smith-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include <algorithm>
 #include <sstream>

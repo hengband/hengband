@@ -5,7 +5,7 @@
  */
 
 #include "tracking/baseitem-tracker.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/redrawing-flags-updater.h"
 
 BaseitemTracker BaseitemTracker::instance{};

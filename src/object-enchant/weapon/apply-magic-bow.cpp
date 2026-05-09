@@ -7,7 +7,7 @@
 #include "object-enchant/weapon/apply-magic-bow.h"
 #include "artifact/random-art-generator.h"
 #include "inventory/inventory-slot-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 
 /*!
  * @brief 弓強化クラスのコンストラクタ

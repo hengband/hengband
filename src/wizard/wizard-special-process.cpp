@@ -63,7 +63,7 @@
 #include "system/floor/floor-info.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/grid-type-definition.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/redrawing-flags-updater.h"
 #include "system/terrain/terrain-definition.h"

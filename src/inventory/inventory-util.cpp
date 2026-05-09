@@ -13,7 +13,7 @@
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
 #include "system/floor/floor-info.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/int-char-converter.h"

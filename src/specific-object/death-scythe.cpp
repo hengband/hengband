@@ -18,7 +18,7 @@
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
 #include "status/element-resistance.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"

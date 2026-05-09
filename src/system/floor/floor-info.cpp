@@ -20,7 +20,7 @@
 #include "system/floor/wilderness-grid.h"
 #include "system/gamevalue.h"
 #include "system/grid-type-definition.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"

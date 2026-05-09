@@ -26,7 +26,7 @@
 #include "status/experience.h"
 #include "status/shape-changer.h"
 #include "system/enums/monrace/monrace-id.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "timed-effect/timed-effects.h"

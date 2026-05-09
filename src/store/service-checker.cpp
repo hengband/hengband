@@ -7,7 +7,7 @@
 #include "sv-definition/sv-rod-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"

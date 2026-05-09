@@ -14,7 +14,7 @@
 #include "player/special-defense-types.h"
 #include "specific-object/torch.h"
 #include "status/action-setter.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "world/world.h"

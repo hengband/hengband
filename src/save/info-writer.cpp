@@ -11,7 +11,7 @@
 #include "store/store-util.h"
 #include "system/angband-system.h"
 #include "system/angband.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "util/enum-converter.h"
 #include "world/world.h"
 

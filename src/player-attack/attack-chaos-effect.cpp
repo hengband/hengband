@@ -28,7 +28,7 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell-realm/spells-hex.h"
 #include "system/floor/floor-info.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monster-entity.h"

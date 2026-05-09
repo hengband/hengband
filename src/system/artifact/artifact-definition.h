@@ -43,6 +43,6 @@ public:
     RARITY rarity{}; /*! レアリティ / Artifact rarity */
     RandomArtActType act_idx{}; /*! 発動能力ID / Activative ability index */
 
-    bool can_generate(const BaseitemKey &bi_key) const;
+    bool can_generate(const BaseitemKey &generating_bi_key) const;
     bool is_instant_artifact() const;
 };

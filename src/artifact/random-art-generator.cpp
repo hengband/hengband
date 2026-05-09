@@ -30,7 +30,7 @@
 #include "perception/object-perception.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem/baseitem-definition.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"

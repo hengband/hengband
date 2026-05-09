@@ -29,7 +29,7 @@
 #include "player/player-spell-status.h"
 #include "spell/spells-execution.h"
 #include "spell/technic-info-table.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"

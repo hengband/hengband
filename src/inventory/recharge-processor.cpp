@@ -7,7 +7,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "object/tval-types.h"
 #include "system/floor/floor-info.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/string-processor.h"

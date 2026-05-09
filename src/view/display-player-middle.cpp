@@ -22,7 +22,7 @@
 #include "sv-definition/sv-bow-types.h"
 #include "system/floor/floor-info.h"
 #include "system/inner-game-data.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"

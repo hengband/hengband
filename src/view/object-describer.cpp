@@ -8,7 +8,7 @@
 #include "player-base/player-class.h"
 #include "player/player-realm.h"
 #include "spell/spell-info.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/term-color-types.h"
 #include "tracking/baseitem-tracker.h"

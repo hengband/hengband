@@ -3,7 +3,7 @@
 #include "object/tval-types.h"
 #include "smith/smith-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/item-entity.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 
 ISmithInfo::ISmithInfo(SmithEffectType effect, concptr name, SmithCategoryType category,
