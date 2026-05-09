@@ -108,7 +108,7 @@ void ItemEntity::generate(short new_bi_id)
     }
 
     if (this->is_worthless()) {
-        this->ident.set(SpecialItemFlag::BROKEN);
+        this->identification_flags.set(SpecialItemFlag::BROKEN);
     }
 
     if (baseitem.gen_flags.has(ItemGenerationTraitType::CURSED)) {
@@ -378,7 +378,7 @@ bool ItemEntity::is_valid() const
 
 bool ItemEntity::is_broken() const
 {
-    return this->ident.has(SpecialItemFlag::BROKEN);
+    return this->identification_flags.has(SpecialItemFlag::BROKEN);
 }
 
 bool ItemEntity::is_cursed() const
@@ -398,12 +398,12 @@ bool ItemEntity::is_held_by_monster() const
 bool ItemEntity::is_known() const
 {
     const auto &baseitem = this->get_baseitem();
-    return this->ident.has(SpecialItemFlag::KNOWN) || (baseitem.easy_know && baseitem.aware);
+    return this->identification_flags.has(SpecialItemFlag::KNOWN) || (baseitem.easy_know && baseitem.aware);
 }
 
 bool ItemEntity::is_fully_known() const
 {
-    return this->ident.has(SpecialItemFlag::FULL_KNOWN);
+    return this->identification_flags.has(SpecialItemFlag::FULL_KNOWN);
 }
 
 /*!
@@ -626,7 +626,7 @@ int ItemEntity::calc_price() const
 
         value = object_value_real(this);
     } else {
-        if (this->ident.has(SpecialItemFlag::SENSE) && is_worthless) {
+        if (this->identification_flags.has(SpecialItemFlag::SENSE) && is_worthless) {
             return 0;
         }
 
@@ -1023,7 +1023,7 @@ int ItemEntity::is_similar_part(const ItemEntity &other) const
     case ItemKindType::SCROLL:
         break;
     case ItemKindType::STAFF:
-        if ((this->ident.has_not(SpecialItemFlag::EMPTY) && !this->is_known()) || (other.ident.has_not(SpecialItemFlag::EMPTY) && !other.is_known())) {
+        if ((this->identification_flags.has_not(SpecialItemFlag::EMPTY) && !this->is_known()) || (other.identification_flags.has_not(SpecialItemFlag::EMPTY) && !other.is_known())) {
             return 0;
         }
 
@@ -1033,7 +1033,7 @@ int ItemEntity::is_similar_part(const ItemEntity &other) const
 
         break;
     case ItemKindType::WAND:
-        if ((this->ident.has_not(SpecialItemFlag::EMPTY) && !this->is_known()) || (other.ident.has_not(SpecialItemFlag::EMPTY) && !other.is_known())) {
+        if ((this->identification_flags.has_not(SpecialItemFlag::EMPTY) && !this->is_known()) || (other.identification_flags.has_not(SpecialItemFlag::EMPTY) && !other.is_known())) {
             return 0;
         }
 
@@ -1118,7 +1118,7 @@ int ItemEntity::is_similar_part(const ItemEntity &other) const
         return 0;
     }
 
-    if (this->ident.has(SpecialItemFlag::BROKEN) != other.ident.has(SpecialItemFlag::BROKEN)) {
+    if (this->identification_flags.has(SpecialItemFlag::BROKEN) != other.identification_flags.has(SpecialItemFlag::BROKEN)) {
         return 0;
     }
 
@@ -1342,9 +1342,9 @@ std::string ItemEntity::build_activation_description() const
 void ItemEntity::mark_as_known()
 {
     this->feeling = FEEL_NONE;
-    this->ident.reset(SpecialItemFlag::SENSE);
-    this->ident.reset(SpecialItemFlag::EMPTY);
-    this->ident.set(SpecialItemFlag::KNOWN);
+    this->identification_flags.reset(SpecialItemFlag::SENSE);
+    this->identification_flags.reset(SpecialItemFlag::EMPTY);
+    this->identification_flags.set(SpecialItemFlag::KNOWN);
 }
 
 /*!
@@ -1395,13 +1395,13 @@ void ItemEntity::absorb(ItemEntity &other)
         this->mark_as_known();
     }
 
-    if (this->ident.has(SpecialItemFlag::STORE) != other.ident.has(SpecialItemFlag::STORE)) {
-        this->ident.reset(SpecialItemFlag::STORE);
-        other.ident.reset(SpecialItemFlag::STORE);
+    if (this->identification_flags.has(SpecialItemFlag::STORE) != other.identification_flags.has(SpecialItemFlag::STORE)) {
+        this->identification_flags.reset(SpecialItemFlag::STORE);
+        other.identification_flags.reset(SpecialItemFlag::STORE);
     }
 
     if (other.is_fully_known()) {
-        this->ident.set(SpecialItemFlag::FULL_KNOWN);
+        this->identification_flags.set(SpecialItemFlag::FULL_KNOWN);
     }
 
     if (other.is_inscribed()) {
@@ -1434,47 +1434,47 @@ void ItemEntity::set_fixed_artifact_generated(bool new_state) const
 
 void ItemEntity::set_special_flag(SpecialItemFlag flag)
 {
-    this->ident.set(flag);
+    this->identification_flags.set(flag);
 }
 
 void ItemEntity::reset_special_flag(SpecialItemFlag flag)
 {
-    this->ident.reset(flag);
+    this->identification_flags.reset(flag);
 }
 
 void ItemEntity::set_special_flags(const EnumClassFlagGroup<SpecialItemFlag> &flags)
 {
-    this->ident.set(flags);
+    this->identification_flags.set(flags);
 }
 
 void ItemEntity::reset_special_flags(const EnumClassFlagGroup<SpecialItemFlag> &flags)
 {
-    this->ident.reset(flags);
+    this->identification_flags.reset(flags);
 }
 
 bool ItemEntity::has_special_flag(SpecialItemFlag flag) const
 {
-    return this->ident.has(flag);
+    return this->identification_flags.has(flag);
 }
 
 bool ItemEntity::has_not_special_flag(SpecialItemFlag flag) const
 {
-    return this->ident.has_not(flag);
+    return this->identification_flags.has_not(flag);
 }
 
 bool ItemEntity::any_special_flag() const
 {
-    return this->ident.any();
+    return this->identification_flags.any();
 }
 
 const EnumClassFlagGroup<SpecialItemFlag> &ItemEntity::get_special_flags() const
 {
-    return this->ident;
+    return this->identification_flags;
 }
 
 void ItemEntity::load_special_flags(const EnumClassFlagGroup<SpecialItemFlag> &flags)
 {
-    this->ident = flags;
+    this->identification_flags = flags;
 }
 
 /*!
