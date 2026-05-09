@@ -16,7 +16,6 @@
 #include "floor/floor-object.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
-#include "object-enchant/special-object-flags.h"
 #include "player-base/player-class.h"
 #include "specific-object/bloody-moon.h"
 #include "system/artifact/artifact-definition.h"
@@ -183,7 +182,7 @@ static void fixed_artifact_random_abilities(PlayerType *player_ptr, const Artifa
 static void invest_curse_to_fixed_artifact(const ArtifactDefinition &artifact, ItemEntity *o_ptr)
 {
     if (!artifact.cost) {
-        set_bits(o_ptr->ident, IDENT_BROKEN);
+        o_ptr->set_special_flag(SpecialItemFlag::BROKEN);
     }
 
     if (artifact.gen_flags.has(ItemGenerationTraitType::CURSED)) {

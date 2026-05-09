@@ -14,7 +14,6 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/item-feeling.h"
-#include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "object/object-stack.h"
@@ -149,7 +148,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             identify_item(player_ptr, item.get());
             auto sold_item = item->clone();
             sold_item.number = amt;
-            sold_item.ident |= IDENT_STORE;
+            sold_item.set_special_flag(SpecialItemFlag::STORE);
 
             if (item->is_wand_rod()) {
                 sold_item.pval = item->pval * amt / item->number;
@@ -196,7 +195,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         }
 
         identify_item(player_ptr, &selling_item);
-        selling_item.ident |= IDENT_FULL_KNOWN;
+        selling_item.set_special_flag(SpecialItemFlag::FULL_KNOWN);
 
         distribute_charges(item.get(), &selling_item, amt);
         msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), museum_item_name.data(), index_to_label(i_idx));

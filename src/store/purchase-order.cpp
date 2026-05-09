@@ -12,7 +12,6 @@
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "object-enchant/item-feeling.h"
-#include "object-enchant/special-object-flags.h"
 #include "object/object-info.h"
 #include "object/object-stack.h"
 #include "perception/object-perception.h"
@@ -289,7 +288,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
 
     item.inscription.reset();
     item.feeling = FEEL_NONE;
-    item.ident &= ~(IDENT_STORE);
+    item.reset_special_flag(SpecialItemFlag::STORE);
 
     const auto idx = find_autopick_list(player_ptr, &item);
     auto_inscribe_item(&item, idx);

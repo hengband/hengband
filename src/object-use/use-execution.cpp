@@ -13,7 +13,6 @@
 #include "inventory/inventory-object.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-use/item-use-checker.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
@@ -88,7 +87,7 @@ void ObjectUseEntity::execute()
         }
 
         msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
-        item->ident |= IDENT_EMPTY;
+        item->set_special_flag(SpecialItemFlag::EMPTY);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         static constexpr auto flags = {
             StatusRecalculatingFlag::COMBINATION,

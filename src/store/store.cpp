@@ -14,7 +14,6 @@
 #include "main/sound-of-music.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
-#include "object-enchant/special-object-flags.h"
 #include "object/object-stack.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
@@ -379,7 +378,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
         }
 
         item.mark_as_known();
-        item.ident |= IDENT_STORE;
+        item.set_special_flag(SpecialItemFlag::STORE);
         if (tval == ItemKindType::CHEST) {
             continue;
         }

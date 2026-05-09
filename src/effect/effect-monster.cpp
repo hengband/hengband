@@ -33,7 +33,6 @@
 #include "monster/monster-status.h"
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
-#include "object-enchant/special-object-flags.h"
 #include "spell-kind/blood-curse.h"
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
@@ -688,7 +687,7 @@ static void postprocess_by_taking_photo(PlayerType *player_ptr, EffectMonster *e
 
     ItemEntity item({ ItemKindType::STATUE, SV_PHOTO });
     item.pval = em_ptr->photo;
-    item.ident |= (IDENT_FULL_KNOWN);
+    item.set_special_flag(SpecialItemFlag::FULL_KNOWN);
     (void)drop_near(player_ptr, item, player_ptr->get_position());
 }
 

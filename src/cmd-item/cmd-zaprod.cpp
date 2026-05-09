@@ -3,7 +3,6 @@
 #include "effect/attribute-types.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-use/zaprod-execution.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"

@@ -20,7 +20,6 @@
 #include "core/window-redrawer.h"
 #include "flavor/object-flavor.h"
 #include "game-option/cheat-types.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-armor.h"
 #include "object-hook/hook-weapon.h"
@@ -390,7 +389,7 @@ static std::string name_unnatural_random_artifact(PlayerType *player_ptr, ItemEn
     constexpr auto prompt = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
     object_aware(player_ptr, *o_ptr);
     o_ptr->mark_as_known();
-    o_ptr->ident |= IDENT_FULL_KNOWN;
+    o_ptr->set_special_flag(SpecialItemFlag::FULL_KNOWN);
     o_ptr->randart_name.reset();
     (void)screen_object(player_ptr, *o_ptr, 0L);
 

@@ -4,7 +4,6 @@
 #include "game-option/birth-options.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/item-feeling.h"
-#include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
 #include "player/player-status-flags.h"
 #include "spell-kind/spells-floor.h"
@@ -311,9 +310,7 @@ bool lose_all_info(PlayerType *player_ptr)
         }
 
         o_ptr->feeling = FEEL_NONE;
-        o_ptr->ident &= ~(IDENT_EMPTY);
-        o_ptr->ident &= ~(IDENT_KNOWN);
-        o_ptr->ident &= ~(IDENT_SENSE);
+        o_ptr->reset_special_flags({ SpecialItemFlag::EMPTY, SpecialItemFlag::KNOWN, SpecialItemFlag::SENSE });
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();

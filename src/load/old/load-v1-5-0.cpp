@@ -104,7 +104,11 @@ void rd_item_old(ItemEntity *o_ptr)
     o_ptr->damage_dice.num = rd_byte();
     o_ptr->damage_dice.sides = rd_byte();
 
-    o_ptr->ident = rd_byte();
+    auto tmp8u = rd_byte();
+    EnumClassFlagGroup<SpecialItemFlag> flags;
+    migrate_bitflag_to_flaggroup(flags, tmp8u);
+    o_ptr->load_special_flags(flags);
+
     rd_FlagGroup_bytes(o_ptr->marked, rd_byte, 1);
 
     for (int i = 0, count = (h_older_than(1, 3, 0, 0) ? 3 : 4); i < count; i++) {
@@ -121,7 +125,7 @@ void rd_item_old(ItemEntity *o_ptr)
     if (h_older_than(1, 0, 11)) {
         // バージョン 1.0.11 以前は tr_type の 93, 94, 95 は現在と違い呪い等の別の用途で使用されていたので番号をハードコーディングする
         o_ptr->curse_flags.clear();
-        if (o_ptr->ident & 0x40) {
+        if (o_ptr->has_special_flag(SpecialItemFlag::XXX06)) {
             o_ptr->curse_flags.set(CurseTraitType::CURSED);
             if (o_ptr->art_flags.has(i2enum<tr_type>(94))) {
                 o_ptr->curse_flags.set(CurseTraitType::HEAVY_CURSE);

@@ -12,7 +12,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "inventory/player-inventory.h"
 #include "io/write-diary.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-perception.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-tester-hooker.h"
@@ -59,7 +58,7 @@ void identify_pack(PlayerType *player_ptr)
 bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
     const auto known_item_name = describe_flavor(player_ptr, *o_ptr, 0);
-    const auto old_known = any_bits(o_ptr->ident, IDENT_KNOWN);
+    const auto old_known = o_ptr->has_special_flag(SpecialItemFlag::KNOWN);
     if (!o_ptr->is_fully_known()) {
         if (o_ptr->is_fixed_or_random_artifact() || one_in_(5)) {
             chg_virtue(player_ptr, Virtue::KNOWLEDGE, 1);
@@ -180,7 +179,7 @@ bool identify_fully(PlayerType *player_ptr, bool only_equip)
     }
 
     auto old_known = identify_item(player_ptr, item.get());
-    item->ident |= (IDENT_FULL_KNOWN);
+    item->set_special_flag(SpecialItemFlag::FULL_KNOWN);
     window_stuff(player_ptr);
     const auto item_name = describe_flavor(player_ptr, *item, 0);
     if (i_idx >= INVEN_MAIN_HAND) {

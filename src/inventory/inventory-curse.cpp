@@ -10,7 +10,6 @@
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-curse.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "perception/object-perception.h"

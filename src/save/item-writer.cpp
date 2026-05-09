@@ -59,7 +59,7 @@ static BIT_FLAGS write_item_flags(const ItemEntity &item)
         set_bits(flags, SaveDataItemFlagType::DS);
     }
 
-    if (item.ident) {
+    if (item.any_special_flag()) {
         set_bits(flags, SaveDataItemFlagType::IDENT);
     }
 
@@ -167,7 +167,7 @@ static void write_item_info(const ItemEntity &item, const BIT_FLAGS flags)
     }
 
     if (any_bits(flags, SaveDataItemFlagType::IDENT)) {
-        wr_byte(item.ident);
+        wr_FlagGroup(item.get_special_flags(), wr_byte);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::MARKED)) {

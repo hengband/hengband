@@ -1053,6 +1053,7 @@
     <ClInclude Include="..\..\src\system\artifact\artifact-list.h" />
     <ClInclude Include="..\..\src\system\floor\town-records.h" />
     <ClInclude Include="..\..\src\system\floor\wilderness-grid.h" />
+    <ClInclude Include="..\..\src\system\item\special-item-flags.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-monrace-service.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-service.h" />
     <ClInclude Include="..\..\src\system\enums\dungeon\dungeon-id.h" />
@@ -1687,7 +1688,6 @@
     <ClInclude Include="..\..\src\system\monrace\monrace-message.h" />
     <ClInclude Include="..\..\src\system\item\item-entity.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
-    <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
     <ClInclude Include="..\..\src\realm\realm-hex-numbers.h" />
     <ClInclude Include="..\..\src\realm\realm-song-numbers.h" />
     <ClInclude Include="..\..\src\spell-kind\earthquake.h" />

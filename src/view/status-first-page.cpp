@@ -13,7 +13,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "mind/monk-attack.h"
 #include "mutation/mutation-flag-types.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
 #include "perception/object-perception.h"

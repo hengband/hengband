@@ -11,10 +11,8 @@
 #include "floor/floor-object.h"
 #include "game-option/auto-destruction-options.h"
 #include "hpmp/hp-mp-processor.h"
-#include "mind/mind-mindcrafter.h"
 #include "mind/mind-numbers.h"
 #include "object-enchant/item-feeling.h"
-#include "object-enchant/special-object-flags.h"
 #include "object/item-use-flags.h"
 #include "object/object-mark-types.h"
 #include "perception/object-perception.h"
@@ -78,7 +76,7 @@ bool psychometry(PlayerType *player_ptr)
     msg_format("You feel that the %s %s %s...", item_name.data(), ((item->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
-    set_bits(item->ident, IDENT_SENSE);
+    item->set_special_flag(SpecialItemFlag::SENSE);
     item->feeling = feel;
     item->marked.set(OmType::TOUCHED);
 

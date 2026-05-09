@@ -14,7 +14,6 @@
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "knowledge/item-group-table.h"
-#include "object-enchant/special-object-flags.h"
 #include "object/tval-types.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
@@ -106,7 +105,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         constexpr auto template_basename = _("     %s\n", "     The %s\n");
         ItemEntity item(artifact.bi_key);
         item.fa_id = fa_id;
-        item.ident |= IDENT_STORE;
+        item.set_special_flag(SpecialItemFlag::STORE);
         const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
         fprintf(fff, template_basename, item_name.data());
     }
@@ -220,7 +219,7 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
 static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
 {
     ItemEntity item(bi_id);
-    item.ident |= IDENT_KNOWN;
+    item.set_special_flag(SpecialItemFlag::KNOWN);
     handle_stuff(player_ptr);
     if (screen_object(player_ptr, item, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) {
         return;

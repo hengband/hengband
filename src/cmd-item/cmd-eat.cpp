@@ -14,7 +14,6 @@
 #include "inventory/inventory-object.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-expendable.h"
 #include "object/item-tester-hooker.h"
 #include "object/item-use-flags.h"
@@ -166,7 +165,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (o_ptr->pval == 0) {
         msg_format(_("この%sにはもう魔力が残っていない。", "The %s has no charges left."), staff);
-        o_ptr->ident |= IDENT_EMPTY;
+        o_ptr->set_special_flag(SpecialItemFlag::EMPTY);
         rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
         return true;
     }

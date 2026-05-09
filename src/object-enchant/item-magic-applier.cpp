@@ -10,7 +10,6 @@
 #include "object-enchant/enchanter-factory.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/object-curse.h"
-#include "object-enchant/special-object-flags.h"
 #include "player/player-status-flags.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -204,7 +203,7 @@ void ItemMagicApplier::apply_cursed()
     }
 
     if (this->o_ptr->is_worthless()) {
-        set_bits(this->o_ptr->ident, IDENT_BROKEN);
+        this->o_ptr->set_special_flag(SpecialItemFlag::BROKEN);
     }
 
     const auto &baseitem = this->o_ptr->get_baseitem();

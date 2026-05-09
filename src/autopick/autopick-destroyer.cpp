@@ -12,7 +12,6 @@
 #include "game-option/auto-destruction-options.h"
 #include "game-option/input-options.h"
 #include "object-enchant/object-ego.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-expendable.h"
 #include "object-hook/hook-weapon.h"
 #include "object/object-mark-types.h"

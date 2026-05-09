@@ -10,7 +10,6 @@
 #include "flavor/object-flavor-types.h"
 #include "inventory/inventory-slot-types.h"
 #include "io-dump/dump-util.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/tval-types.h"

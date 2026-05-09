@@ -16,7 +16,6 @@
 #include "mind/mind-sniper.h"
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trg-types.h"
 #include "object/tval-types.h"
@@ -444,7 +443,7 @@ static std::string describe_item_feeling(const ItemEntity &item, const describe_
         return game_inscriptions[item.feeling];
     }
 
-    if (item.is_cursed() && (opt.known || any_bits(item.ident, IDENT_SENSE))) {
+    if (item.is_cursed() && (opt.known || item.has_special_flag(SpecialItemFlag::SENSE))) {
         return _("呪われている", "cursed");
     }
 
@@ -453,11 +452,11 @@ static std::string describe_item_feeling(const ItemEntity &item, const describe_
     unidentifiable |= tval == ItemKindType::AMULET;
     unidentifiable |= tval == ItemKindType::LITE;
     unidentifiable |= tval == ItemKindType::FIGURINE;
-    if (unidentifiable && opt.aware && !opt.known && none_bits(item.ident, IDENT_SENSE)) {
+    if (unidentifiable && opt.aware && !opt.known && item.has_not_special_flag(SpecialItemFlag::SENSE)) {
         return _("未鑑定", "unidentified");
     }
 
-    if (!opt.known && any_bits(item.ident, IDENT_EMPTY)) {
+    if (!opt.known && item.has_special_flag(SpecialItemFlag::EMPTY)) {
         return _("空", "empty");
     }
 
@@ -492,7 +491,7 @@ static std::string describe_player_inscription(const ItemEntity &item)
 
 static std::string describe_item_discount(const ItemEntity &item, bool hide_discount)
 {
-    if ((item.discount == 0) || (hide_discount && none_bits(item.ident, IDENT_STORE))) {
+    if ((item.discount == 0) || (hide_discount && item.has_not_special_flag(SpecialItemFlag::STORE))) {
         return "";
     }
 
@@ -555,7 +554,7 @@ static describe_option_type decide_describe_option(const ItemEntity &item, BIT_F
         opt.flavor = false;
     }
 
-    if (any_bits(mode, OD_STORE) || any_bits(item.ident, IDENT_STORE)) {
+    if (any_bits(mode, OD_STORE) || item.has_special_flag(SpecialItemFlag::STORE)) {
         opt.flavor = false;
         opt.aware = true;
         opt.known = true;

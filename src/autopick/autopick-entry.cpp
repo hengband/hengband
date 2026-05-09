@@ -8,7 +8,6 @@
 #include "floor/floor-object.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/object-ego.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-hook/hook-weapon.h"
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
@@ -349,7 +348,7 @@ void autopick_entry_from_object(PlayerType *player_ptr, autopick_type *entry, co
         entry->add(FLG_UNAWARE);
         is_hat_added = true;
     } else if (!o_ptr->is_known()) {
-        if (!(o_ptr->ident & IDENT_SENSE)) {
+        if (o_ptr->has_not_special_flag(SpecialItemFlag::SENSE)) {
             entry->add(FLG_UNIDENTIFIED);
             is_hat_added = true;
         } else {

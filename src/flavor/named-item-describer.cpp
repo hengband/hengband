@@ -7,7 +7,6 @@
 #include "locale/english.h"
 #include "mind/mind-weaponsmith.h"
 #include "object-enchant/object-ego.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
 #include "perception/object-perception.h"
 #include "system/artifact/artifact-definition.h"

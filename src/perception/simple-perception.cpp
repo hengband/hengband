@@ -17,7 +17,6 @@
 #include "inventory/inventory-describer.h"
 #include "inventory/inventory-slot-types.h"
 #include "mutation/mutation-flag-types.h"
-#include "object-enchant/special-object-flags.h"
 #include "object/object-info.h"
 #include "perception/object-perception.h"
 #include "player/player-status-flags.h"
@@ -36,7 +35,7 @@
 static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool heavy)
 {
     auto &item = *player_ptr->inventory[slot];
-    if (any_bits(item.ident, IDENT_SENSE) || item.is_known()) {
+    if (item.has_special_flag(SpecialItemFlag::SENSE) || item.is_known()) {
         return;
     }
 
@@ -114,7 +113,7 @@ static void sense_inventory_aux(PlayerType *player_ptr, INVENTORY_IDX slot, bool
 #endif
     }
 
-    item.ident |= (IDENT_SENSE);
+    item.set_special_flag(SpecialItemFlag::SENSE);
     item.feeling = feel;
 
     autopick_alter_item(player_ptr, slot, destroy_feeling);

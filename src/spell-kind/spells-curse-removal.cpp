@@ -2,7 +2,6 @@
 #include "core/window-redrawer.h"
 #include "inventory/inventory-slot-types.h"
 #include "object-enchant/item-feeling.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
@@ -36,7 +35,7 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
         }
 
         o_ptr->curse_flags.clear();
-        o_ptr->ident |= IDENT_SENSE;
+        o_ptr->set_special_flag(SpecialItemFlag::SENSE);
         o_ptr->feeling = FEEL_NONE;
         rfu.set_flag(StatusRecalculatingFlag::BONUS);
         rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);

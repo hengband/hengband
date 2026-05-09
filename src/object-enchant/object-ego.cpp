@@ -7,7 +7,6 @@
 #include "artifact/random-art-effects.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-curse.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-enchant/trc-types.h"
 #include "object-hook/hook-weapon.h"
 #include "object/tval-types.h"
@@ -259,7 +258,7 @@ void apply_ego(ItemEntity *o_ptr, DEPTH lev)
     ego_interpret_extra_abilities(o_ptr, ego, gen_flags);
 
     if (!ego.cost) {
-        o_ptr->ident |= (IDENT_BROKEN);
+        o_ptr->set_special_flag(SpecialItemFlag::BROKEN);
     }
 
     ego_invest_curse(o_ptr, gen_flags);

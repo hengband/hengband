@@ -949,7 +949,7 @@ hengband_SOURCES = \
 	object-enchant/object-curse.cpp object-enchant/object-curse.h \
 	object-enchant/object-ego.cpp object-enchant/object-ego.h \
 	object-enchant/item-apply-magic.h object-enchant/item-feeling.h \
-	object-enchant/old-ego-extra-values.h object-enchant/special-object-flags.h \
+	object-enchant/old-ego-extra-values.h \
 	object-enchant/tr-flags.h \
 	object-enchant/tr-types.h object-enchant/trc-types.h \
 	object-enchant/trg-types.h \
@@ -1305,6 +1305,7 @@ hengband_SOURCES = \
 	system/floor/wilderness-grid.cpp system/floor/wilderness-grid.h \
 	\
 	system/item/item-entity.cpp system/item/item-entity.h \
+	system/item/special-item-flags.h \
 	\
 	system/monrace/monrace-allocation.cpp system/monrace/monrace-allocation.h \
 	system/monrace/monrace-definition.cpp system/monrace/monrace-definition.h \

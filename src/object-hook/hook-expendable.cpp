@@ -2,7 +2,6 @@
 #include "artifact/fixed-art-types.h"
 #include "core/window-redrawer.h"
 #include "object-enchant/item-feeling.h"
-#include "object-enchant/special-object-flags.h"
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-race.h"
@@ -78,7 +77,7 @@ bool can_player_destroy_object(ItemEntity *o_ptr)
         }
 
         o_ptr->feeling = feel;
-        o_ptr->ident |= IDENT_SENSE;
+        o_ptr->set_special_flag(SpecialItemFlag::SENSE);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
         rfu.set_flag(StatusRecalculatingFlag::COMBINATION);
         static constexpr auto flags = {

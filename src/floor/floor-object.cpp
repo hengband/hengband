@@ -18,7 +18,6 @@
 #include "main/sound-of-music.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-magic-applier.h"
-#include "object-enchant/special-object-flags.h"
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
@@ -50,7 +49,7 @@ static void object_mention(PlayerType *player_ptr, ItemEntity &item)
 {
     object_aware(player_ptr, item);
     item.mark_as_known();
-    item.ident |= (IDENT_FULL_KNOWN);
+    item.set_special_flag(SpecialItemFlag::FULL_KNOWN);
     const auto item_name = describe_flavor(player_ptr, item, 0);
     msg_format_wizard(player_ptr, CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), item_name.data());
 }

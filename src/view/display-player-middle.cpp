@@ -5,7 +5,6 @@
 #include "inventory/inventory-slot-types.h"
 #include "mind/stances-table.h"
 #include "monster/monster-status.h"
-#include "object-enchant/special-object-flags.h"
 #include "object/tval-types.h"
 #include "perception/object-perception.h"
 #include "player-base/player-class.h"

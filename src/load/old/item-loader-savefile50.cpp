@@ -16,6 +16,7 @@
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
+#include "util/flag-group.h"
 
 /*!
  * @brief アイテムオブジェクトを読み込む(v3.0.0 Savefile ver50まで)
@@ -56,7 +57,20 @@ void ItemLoader50::rd_item(ItemEntity *o_ptr)
     o_ptr->ac = any_bits(flags, SaveDataItemFlagType::AC) ? rd_s16b() : 0;
     o_ptr->damage_dice.num = any_bits(flags, SaveDataItemFlagType::DD) ? rd_byte() : 0;
     o_ptr->damage_dice.sides = any_bits(flags, SaveDataItemFlagType::DS) ? rd_byte() : 0;
-    o_ptr->ident = any_bits(flags, SaveDataItemFlagType::IDENT) ? rd_byte() : 0;
+    if (loading_savefile_version_is_older_than(25)) {
+        const auto tmp8u = any_bits(flags, SaveDataItemFlagType::IDENT) ? rd_byte() : 0;
+        EnumClassFlagGroup<SpecialItemFlag> sif_flags;
+        migrate_bitflag_to_flaggroup(sif_flags, tmp8u);
+        o_ptr->load_special_flags(sif_flags);
+    } else {
+        EnumClassFlagGroup<SpecialItemFlag> sif_flags;
+        if (any_bits(flags, SaveDataItemFlagType::IDENT)) {
+            rd_FlagGroup(sif_flags, rd_byte);
+        }
+
+        o_ptr->load_special_flags(sif_flags);
+    }
+
     o_ptr->marked.clear();
     if (any_bits(flags, SaveDataItemFlagType::MARKED)) {
         rd_FlagGroup_bytes(o_ptr->marked, rd_byte, 1);

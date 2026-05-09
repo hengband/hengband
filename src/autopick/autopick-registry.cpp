@@ -14,7 +14,6 @@
 #include "flavor/flavor-describer.h"
 #include "io/files-util.h"
 #include "object-enchant/item-feeling.h"
-#include "object-enchant/special-object-flags.h"
 #include "perception/object-perception.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
@@ -127,7 +126,7 @@ bool autopick_autoregister(PlayerType *player_ptr, const ItemEntity *o_ptr)
         return false;
     }
 
-    if ((o_ptr->is_known() && o_ptr->is_fixed_or_random_artifact()) || ((o_ptr->ident & IDENT_SENSE) && (o_ptr->feeling == FEEL_TERRIBLE || o_ptr->feeling == FEEL_SPECIAL))) {
+    if ((o_ptr->is_known() && o_ptr->is_fixed_or_random_artifact()) || (o_ptr->has_special_flag(SpecialItemFlag::SENSE) && (o_ptr->feeling == FEEL_TERRIBLE || o_ptr->feeling == FEEL_SPECIAL))) {
         const auto item_name = describe_flavor(player_ptr, *o_ptr, 0);
         msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), item_name.data());
         return false;

@@ -6,7 +6,6 @@
 
 #include "store/store-util.h"
 #include "object-enchant/item-feeling.h"
-#include "object-enchant/special-object-flags.h"
 #include "object/object-value.h"
 #include "object/tval-types.h"
 #include "system/item/item-entity.h"
@@ -161,7 +160,7 @@ tl::optional<int> Store::carry(ItemEntity &item)
         return tl::nullopt;
     }
 
-    item.ident |= IDENT_FULL_KNOWN;
+    item.set_special_flag(SpecialItemFlag::FULL_KNOWN);
     item.inscription.reset();
     item.feeling = FEEL_NONE;
     for (auto slot = 0; slot < this->stock_num; slot++) {

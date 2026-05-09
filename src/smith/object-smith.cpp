@@ -1,5 +1,4 @@
 #include "smith/object-smith.h"
-#include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-flags.h"
 #include "object-enchant/tr-types.h"
 #include "object/item-tester-hooker.h"
@@ -356,7 +355,7 @@ Smith::DrainEssenceResult Smith::drain_essence(ItemEntity *o_ptr)
         o_ptr->timeout = old_o.timeout;
     }
 
-    o_ptr->ident |= (IDENT_FULL_KNOWN);
+    o_ptr->set_special_flag(SpecialItemFlag::FULL_KNOWN);
     object_aware(player_ptr, *o_ptr);
     o_ptr->mark_as_known();
 
