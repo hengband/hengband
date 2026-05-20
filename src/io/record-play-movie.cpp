@@ -223,17 +223,19 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
     }
 
     if (string_is_repeat(str, len)) {
-        while (len > SPLIT_MAX) {
-            insert_ringbuf(format("n%c%c%c%c%c", x + 1, y + 1, SPLIT_MAX, col, *str));
-            x += SPLIT_MAX;
-            len -= SPLIT_MAX;
-        }
+        auto rb_x = x;
+        auto rb_len = len;
+        while (rb_len > SPLIT_MAX) {
+            insert_ringbuf(format("n%c%c%c%c%c", rb_x + 1, y + 1, SPLIT_MAX, col, *str));
+            rb_x += SPLIT_MAX;
+            rb_len -= SPLIT_MAX;
+            }
 
         std::string formatted_text;
-        if (len > 1) {
-            formatted_text = format("n%c%c%c%c%c", x + 1, y + 1, len, col, *str);
+        if (rb_len > 1) {
+            formatted_text = format("n%c%c%c%c%c", rb_x + 1, y + 1, rb_len, col, *str);
         } else {
-            formatted_text = format("s%c%c%c%c", x + 1, y + 1, col, *str);
+            formatted_text = format("s%c%c%c%c", rb_x + 1, y + 1, col, *str);
         }
 
         insert_ringbuf(formatted_text);
@@ -247,26 +249,30 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
 #else
     const auto *payload = str;
 #endif
-    while (len > SPLIT_MAX) {
+    auto rb_x = x;
+    auto rb_len = len;
+    while (rb_len > SPLIT_MAX) {
         auto split_len = _(find_split(payload, SPLIT_MAX), SPLIT_MAX);
-        insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, split_len, col), std::string_view(payload, split_len));
-        x += split_len;
-        len -= split_len;
+        insert_ringbuf(format("t%c%c%c%c", rb_x + 1, y + 1, split_len, col), std::string_view(payload, split_len));
+        rb_x += split_len;
+        rb_len -= split_len;
         payload += split_len;
     }
 
-    insert_ringbuf(format("t%c%c%c%c", x + 1, y + 1, len, col), std::string_view(payload, len));
+    insert_ringbuf(format("t%c%c%c%c", rb_x + 1, y + 1, rb_len, col), std::string_view(payload, rb_len));
     return (*old_text_hook)(x, y, len, col, str);
 }
 
 static errr send_wipe_to_chuukei_server(int x, int y, int len)
 {
-    while (len > SPLIT_MAX) {
-        insert_ringbuf(format("w%c%c%c", x + 1, y + 1, SPLIT_MAX));
-        x += SPLIT_MAX;
-        len -= SPLIT_MAX;
+    auto rb_x = x;
+    auto rb_len = len;
+    while (rb_len > SPLIT_MAX) {
+        insert_ringbuf(format("w%c%c%c", rb_x + 1, y + 1, SPLIT_MAX));
+        rb_x += SPLIT_MAX;
+        rb_len -= SPLIT_MAX;
     }
-    insert_ringbuf(format("w%c%c%c", x + 1, y + 1, len));
+    insert_ringbuf(format("w%c%c%c", rb_x + 1, y + 1, rb_len));
 
     return (*old_wipe_hook)(x, y, len);
 }
