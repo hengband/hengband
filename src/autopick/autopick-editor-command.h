@@ -7,6 +7,7 @@ enum ape_quittance {
     APE_QUIT_AND_SAVE = 2
 };
 
+enum class EditorCommandId;
 class PlayerType;
 struct text_body_type;
-ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int com_id);
+ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, EditorCommandId com_id);
