@@ -28,7 +28,6 @@
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
@@ -243,7 +242,7 @@ void do_cmd_feeling(PlayerType *player_ptr)
     }
 
     if (player_ptr->town_num && !floor.is_underground()) {
-        if (towns_info[player_ptr->town_num].get_name() == _("荒野", "wilderness")) {
+        if (TownList::get_instance().get_town(player_ptr->town_num).get_name() == _("荒野", "wilderness")) {
             msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
             return;
         }

@@ -21,9 +21,9 @@
 #include "system/enums/grid-flow.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/grid-type-definition.h"
+#include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
@@ -485,7 +485,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
     }
 
     if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::TOWN)) {
-        return towns_info[ge_ptr->g_ptr->special].get_name();
+        return TownList::get_instance().get_town(ge_ptr->g_ptr->special).get_name();
     }
 
     if (AngbandWorld::get_instance().is_wild_mode() && (ge_ptr->matches_terrain(TerrainTag::FLOOR))) {

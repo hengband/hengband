@@ -34,7 +34,6 @@
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/enums/terrain/wilderness-terrain.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/floor/town-records.h"
 #include "system/floor/wilderness-grid.h"
@@ -683,7 +682,7 @@ tl::expected<Pos2D, parse_error_type> parse_line_wilderness(char *line, int xmin
             int id = s[0];
             const auto &letter = letters.get_grid(id);
             wilderness.get_grid(pos).initialize(letter);
-            towns_info[letter.get_town()].init_name(letter.get_name());
+            TownList::get_instance().get_town(letter.get_town()).init_name(letter.get_name());
         }
 
         pos.y++;

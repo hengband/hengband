@@ -12,7 +12,6 @@
 #include "system/artifact/artifact-definition.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
@@ -192,7 +191,7 @@ std::string map_name(PlayerType *player_ptr)
     } else if (AngbandSystem::get_instance().is_phase_out()) {
         return _("闘技場", "Monster Arena");
     } else if (!floor.is_underground() && player_ptr->town_num) {
-        return towns_info[player_ptr->town_num].get_name();
+        return TownList::get_instance().get_town(player_ptr->town_num).get_name();
     } else {
         return floor.get_dungeon_definition().name;
     }
