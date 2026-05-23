@@ -231,7 +231,8 @@ void do_cmd_version()
  */
 void do_cmd_feeling(PlayerType *player_ptr)
 {
-    if (AngbandWorld::get_instance().is_wild_mode()) {
+    const auto &world = AngbandWorld::get_instance();
+    if (world.is_wild_mode()) {
         return;
     }
 
@@ -241,8 +242,8 @@ void do_cmd_feeling(PlayerType *player_ptr)
         return;
     }
 
-    if (player_ptr->town_num && !floor.is_underground()) {
-        if (TownList::get_instance().get_town(player_ptr->town_num).get_name() == _("荒野", "wilderness")) {
+    if (world.is_in_any_town() && !floor.is_underground()) {
+        if (world.get_town().get_name() == _("荒野", "wilderness")) {
             msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
             return;
         }

@@ -184,15 +184,24 @@ std::string map_name(PlayerType *player_ptr)
     is_fixed_quest &= any_bits(quests.get_quest(floor.quest_number).flags, QUEST_FLAG_PRESET);
     if (is_fixed_quest) {
         return _("クエスト", "Quest");
-    } else if (AngbandWorld::get_instance().is_wild_mode()) {
-        return _("地上", "Surface");
-    } else if (floor.inside_arena) {
-        return _("アリーナ", "Arena");
-    } else if (AngbandSystem::get_instance().is_phase_out()) {
-        return _("闘技場", "Monster Arena");
-    } else if (!floor.is_underground() && player_ptr->town_num) {
-        return TownList::get_instance().get_town(player_ptr->town_num).get_name();
-    } else {
-        return floor.get_dungeon_definition().name;
     }
+
+    if (AngbandWorld::get_instance().is_wild_mode()) {
+        return _("地上", "Surface");
+    }
+
+    if (floor.inside_arena) {
+        return _("アリーナ", "Arena");
+    }
+
+    if (AngbandSystem::get_instance().is_phase_out()) {
+        return _("闘技場", "Monster Arena");
+    }
+
+    const auto &world = AngbandWorld::get_instance();
+    if (!floor.is_underground() && world.is_in_any_town()) {
+        return world.get_town().get_name();
+    }
+
+    return floor.get_dungeon_definition().name;
 }

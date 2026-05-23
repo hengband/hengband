@@ -71,17 +71,18 @@ static bool scene_quest_basic(PlayerType *player_ptr, scene_type *value)
 
 static bool scene_town(PlayerType *player_ptr, scene_type *value)
 {
-    const auto enable = !player_ptr->current_floor_ptr->is_underground() && (player_ptr->town_num > 0);
+    const auto &world = AngbandWorld::get_instance();
+    const auto enable = !player_ptr->current_floor_ptr->is_underground() && world.is_in_any_town();
     if (enable) {
         value->type = TERM_XTRA_MUSIC_TOWN;
-        value->val = player_ptr->town_num;
+        value->val = world.get_town_index();
     }
     return enable;
 }
 
 static bool scene_town_basic(PlayerType *player_ptr, scene_type *value)
 {
-    const auto enable = !player_ptr->current_floor_ptr->is_underground() && (player_ptr->town_num > 0);
+    const auto enable = !player_ptr->current_floor_ptr->is_underground() && AngbandWorld::get_instance().is_in_any_town();
     if (enable) {
         value->type = TERM_XTRA_MUSIC_BASIC;
         value->val = MUSIC_BASIC_TOWN;

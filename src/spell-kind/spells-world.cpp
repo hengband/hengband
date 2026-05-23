@@ -276,11 +276,12 @@ bool tele_town(PlayerType *player_ptr)
     clear_bldg(4, 10);
 
     auto num = 0;
+    const auto &world = AngbandWorld::get_instance();
     const auto &towns = TownList::get_instance();
     const auto towns_size = towns.size();
     const auto &town_records = TownRecords::get_instance();
     for (size_t i = 1; i < towns_size; i++) {
-        if ((i == VALID_TOWNS) || (i == SECRET_TOWN) || (i == static_cast<size_t>(player_ptr->town_num)) || !town_records.has_visited(i2enum<TownId>(i - 1))) {
+        if ((i == VALID_TOWNS) || (i == SECRET_TOWN) || (i == world.get_town_index()) || !town_records.has_visited(i2enum<TownId>(i - 1))) {
             continue;
         }
 
@@ -310,8 +311,8 @@ bool tele_town(PlayerType *player_ptr)
             continue;
         }
 
-        const auto town_num = key - 'a' + 1;
-        if ((town_num == player_ptr->town_num) || (town_num == VALID_TOWNS) || (town_num == SECRET_TOWN) || !town_records.has_visited(i2enum<TownId>(key - 'a'))) {
+        const size_t town_num = key - 'a' + 1;
+        if ((town_num == world.get_town_index()) || (town_num == VALID_TOWNS) || (town_num == SECRET_TOWN) || !town_records.has_visited(i2enum<TownId>(key - 'a'))) {
             continue;
         }
 

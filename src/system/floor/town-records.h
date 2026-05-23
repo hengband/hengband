@@ -2,7 +2,7 @@
 
 #include "util/flag-group.h"
 
-constexpr auto SECRET_TOWN = 5; // @details ズルの町番号.
+constexpr size_t SECRET_TOWN = 5; // @details ズルの町番号.
 
 enum class TownId {
     OUTPOST = 0,

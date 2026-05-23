@@ -35,6 +35,7 @@
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "window/display-sub-windows.h"
+#include "world/world.h"
 
 /* Set this to leave the store */
 bool leave_store = false;
@@ -58,6 +59,7 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
         command_cmd = 'x';
     }
 
+    auto &world = AngbandWorld::get_instance();
     switch (command_cmd) {
     case ESCAPE: {
         leave_store = true;
@@ -188,9 +190,9 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
         break;
     }
     case 'C': {
-        player_ptr->town_num = old_town_num;
+        world.set_town_index(old_town_num);
         do_cmd_player_status(player_ptr);
-        player_ptr->town_num = inner_town_num;
+        world.set_town_index(inner_town_num);
         display_store(player_ptr, store_num);
         break;
     }
@@ -198,27 +200,27 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
         term_user();
         break;
     case '"': {
-        player_ptr->town_num = old_town_num;
+        world.set_town_index(old_town_num);
         do_cmd_pref(player_ptr);
-        player_ptr->town_num = inner_town_num;
+        world.set_town_index(inner_town_num);
         break;
     }
     case '@': {
-        player_ptr->town_num = old_town_num;
+        world.set_town_index(old_town_num);
         do_cmd_macros(player_ptr);
-        player_ptr->town_num = inner_town_num;
+        world.set_town_index(inner_town_num);
         break;
     }
     case '%': {
-        player_ptr->town_num = old_town_num;
+        world.set_town_index(old_town_num);
         do_cmd_visuals(player_ptr);
-        player_ptr->town_num = inner_town_num;
+        world.set_town_index(inner_town_num);
         break;
     }
     case '&': {
-        player_ptr->town_num = old_town_num;
+        world.set_town_index(old_town_num);
         do_cmd_colors(player_ptr);
-        player_ptr->town_num = inner_town_num;
+        world.set_town_index(inner_town_num);
         break;
     }
     case '=': {

@@ -13,6 +13,7 @@ constexpr auto MAX_BOUNTY = 20;
 enum class PlayerClassType : short;
 enum class PlayerRaceType;
 class MonraceDefinition;
+class TownInfo;
 class AngbandWorld {
 public:
     ~AngbandWorld() = default;
@@ -61,12 +62,18 @@ public:
     bool is_player_true_winner() const;
     void pass_game_turn_by_stay();
     std::string format_real_playtime() const;
+    bool is_in_any_town() const;
+    size_t get_town_index() const;
+    void set_town_index(size_t index);
+    const TownInfo &get_town() const;
+    TownInfo &get_town();
     void set_gametime();
 
 private:
     AngbandWorld() = default;
     static AngbandWorld instance;
 
-    bool is_out_arena = false; // アリーナ外部にいる時だけtrue.
+    bool is_out_arena = false; //!< アリーナ外部にいる時だけtrue.
     bool wild_mode = false;
+    size_t current_town_index = 0; //!< プレイヤーが現在いる町のインデックス.
 };
