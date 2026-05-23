@@ -284,7 +284,7 @@ bool tele_town(PlayerType *player_ptr)
             continue;
         }
 
-        const auto buf = format("%c) %-20s", I2A(i - 1), towns_info[i].name.data());
+        const auto buf = format("%c) %-20s", I2A(i - 1), towns_info[i].get_name().data());
         prt(buf, 5 + i, 5);
         num++;
     }

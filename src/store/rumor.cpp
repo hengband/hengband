@@ -115,7 +115,7 @@ public:
         const auto &town_name = tokens[1];
         while (true) {
             this->t_idx = get_rumor_num<int>(town_name, VALID_TOWNS);
-            if (!towns_info[this->t_idx].name.empty()) {
+            if (!towns_info[this->t_idx].get_name().empty()) {
                 return;
             }
         }
@@ -193,7 +193,7 @@ public:
 
     void operator()(const TownRumor &town_rumor)
     {
-        const auto &town_name = towns_info[town_rumor.t_idx].name;
+        const auto &town_name = towns_info[town_rumor.t_idx].get_name();
         this->print_rumor(town_name);
 
         const auto town_id = i2enum<TownId>(town_rumor.t_idx - 1);

@@ -13,12 +13,14 @@ class TownInfo {
 public:
     TownInfo() = default;
 
-    std::string name;
+    void init_name(std::string_view name);
+    const std::string &get_name() const;
 
     Store &get_store(StoreSaleType sst);
     const Store &get_store(StoreSaleType sst) const;
     Store &emplace(StoreSaleType sst);
 
 private:
+    std::string town_name;
     std::map<StoreSaleType, Store> stores;
 };
