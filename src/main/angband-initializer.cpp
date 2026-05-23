@@ -214,11 +214,11 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     init_note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
     init_class_skills_info();
 
-    init_note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
-    init_wilderness();
-
     init_note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
     TownList::get_instance().initialize();
+
+    init_note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
+    init_wilderness();
 
     init_note(_("[配列を初期化しています... (建物)]", "[Initializing arrays... (buildings)]"));
     init_buildings();

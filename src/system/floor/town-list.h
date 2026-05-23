@@ -20,6 +20,7 @@ public:
 
     const TownInfo &get_town(size_t index) const;
     TownInfo &get_town(size_t index);
+    bool is_all_initialized() const;
 
 private:
     TownList() = default;

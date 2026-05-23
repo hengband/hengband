@@ -7,6 +7,7 @@
 #include "util/angband-files.h"
 #include <filesystem>
 #include <fmt/format.h>
+#include <range/v3/view.hpp>
 #include <set>
 #include <string>
 
@@ -57,6 +58,17 @@ TownInfo &TownList::get_town(size_t index)
     }
 
     return this->towns[index];
+}
+
+bool TownList::is_all_initialized() const
+{
+    for (const auto &town : this->towns | ranges::views::drop(1) | ranges::views::take(VALID_TOWNS - 1)) {
+        if (town.get_name().empty()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /*!
