@@ -67,7 +67,7 @@ static void rd_store(PlayerType *player_ptr, int town_number_initial, StoreSaleT
 {
     const auto is_old_version = h_older_than(0, 3, 3) && (store_number == StoreSaleType::HOME);
     const auto town_number = is_old_version ? 1 : town_number_initial;
-    auto &store = towns_info[town_number].get_store(store_number);
+    auto &store = TownList::get_instance().get_town(town_number).get_store(store_number);
     auto sort = is_old_version && (store.stock_num > 0);
     store.store_open = rd_s32b();
     store.insult_cur = rd_s16b();

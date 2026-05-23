@@ -24,6 +24,7 @@
 #include "market/building-initializer.h"
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/floor/town-list.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/services/baseitem-monrace-service.h"
 #include "system/system-variables.h"
@@ -213,7 +214,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     init_wilderness();
 
     init_note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
-    init_towns();
+    TownList::get_instance().initialize();
 
     init_note(_("[配列を初期化しています... (建物)]", "[Initializing arrays... (buildings)]"));
     init_buildings();

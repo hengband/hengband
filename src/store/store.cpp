@@ -266,12 +266,14 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
  */
 void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
 {
-    auto owner_num = owners.at(store_num).size();
-    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) || (owner_num <= (uint16_t)towns_info.size())) {
+    auto &towns = TownList::get_instance();
+    const auto towns_size = towns.size();
+    const auto owner_num = owners.at(store_num).size();
+    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) || (owner_num <= towns_size)) {
         return;
     }
 
-    st_ptr = &towns_info[player_ptr->town_num].get_store(store_num);
+    st_ptr = &towns.get_town(player_ptr->town_num).get_store(store_num);
     int j = st_ptr->owner;
     while (true) {
         st_ptr->owner = randnum0<uint8_t>(owner_num);
@@ -280,14 +282,13 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
             continue;
         }
 
-        int i;
-        const int towns_size = towns_info.size();
+        size_t i;
         for (i = 1; i < towns_size; i++) {
-            if (i == player_ptr->town_num) {
+            if (i == static_cast<size_t>(player_ptr->town_num)) {
                 continue;
             }
 
-            if (st_ptr->owner == towns_info[i].get_store(store_num).owner) {
+            if (st_ptr->owner == towns.get_town(i).get_store(store_num).owner) {
                 break;
             }
         }
@@ -413,7 +414,7 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
         return;
     }
 
-    st_ptr = &towns_info[town_num].get_store(store_num);
+    st_ptr = &TownList::get_instance().get_town(town_num).get_store(store_num);
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
@@ -485,16 +486,16 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
 }
 
 /*!
- * @brief 店舗情報を初期化する /
- * Initialize the stores
+ * @brief 店舗情報を初期化する
  * @param town_num 町のID
  * @param store_num 店舗種類のID
  */
-void store_init(int town_num, StoreSaleType store_num)
+void store_init(size_t town_num, StoreSaleType store_num)
 {
-    int owner_num = owners.at(store_num).size();
-    st_ptr = &towns_info[town_num].get_store(store_num);
-    const int towns_size = towns_info.size();
+    const auto owner_num = owners.at(store_num).size();
+    auto &towns = TownList::get_instance();
+    st_ptr = &towns.get_town(town_num).get_store(store_num);
+    const auto towns_size = towns.size();
     while (true) {
         st_ptr->owner = randnum0<uint8_t>(owner_num);
 
@@ -502,12 +503,12 @@ void store_init(int town_num, StoreSaleType store_num)
             break;
         }
 
-        int i;
+        size_t i;
         for (i = 1; i < towns_size; i++) {
             if (i == town_num) {
                 continue;
             }
-            if (st_ptr->owner == towns_info[i].get_store(store_num).owner) {
+            if (st_ptr->owner == towns.get_town(i).get_store(store_num).owner) {
                 break;
             }
         }

@@ -99,7 +99,7 @@ static tl::optional<std::string> quest_key_at(int index)
  */
 static tl::optional<std::string> town_key_at(int index)
 {
-    if (index >= static_cast<int>(towns_info.size())) {
+    if (index >= static_cast<int>(TownList::get_instance().size())) {
         return tl::nullopt;
     }
 

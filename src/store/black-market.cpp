@@ -29,7 +29,7 @@ bool black_market_crap(int town_num, const ItemEntity &item)
         return false;
     }
 
-    const auto &town = towns_info[town_num];
+    const auto &town = TownList::get_instance().get_town(town_num);
     for (auto sst : STORE_SALE_TYPE_LIST) {
         if ((sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM)) {
             continue;

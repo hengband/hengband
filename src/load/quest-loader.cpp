@@ -17,8 +17,8 @@
 
 errr load_town(void)
 {
-    auto max_towns_load = rd_u16b();
-    if (max_towns_load <= towns_info.size()) {
+    size_t max_towns_load = rd_u16b();
+    if (max_towns_load <= TownList::get_instance().size()) {
         return 0;
     }
 

@@ -175,7 +175,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             }
 
             inven_item_optimize(player_ptr, i_idx);
-            auto &store = towns_info[player_ptr->town_num].get_store(store_num);
+            auto &store = TownList::get_instance().get_town(player_ptr->town_num).get_store(store_num);
             const auto item_pos = store.carry(sold_item);
             if (item_pos) {
                 store_top = (*item_pos / store_bottom) * store_bottom;

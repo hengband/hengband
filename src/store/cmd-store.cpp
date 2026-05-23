@@ -84,7 +84,8 @@ void do_cmd_store(PlayerType *player_ptr)
     }
 
     inner_town_num = player_ptr->town_num;
-    auto &town = towns_info[player_ptr->town_num];
+    auto &towns = TownList::get_instance();
+    auto &town = towns.get_town(player_ptr->town_num);
     auto &store = town.get_store(store_num);
     auto &world = AngbandWorld::get_instance();
     if ((store.store_open >= world.game_turn) || ironman_shops) {
@@ -111,7 +112,7 @@ void do_cmd_store(PlayerType *player_ptr)
     command_new = 0;
     get_com_no_macros = true;
     cur_store_feat = grid.feat;
-    st_ptr = &towns_info[player_ptr->town_num].get_store(store_num);
+    st_ptr = &store;
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     store_top = 0;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
