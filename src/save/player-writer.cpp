@@ -127,7 +127,7 @@ void wr_player(PlayerType *player_ptr)
         wr_u32b(gladiator.odds);
     }
 
-    wr_s16b(player_ptr->town_num);
+    wr_s16b(static_cast<int16_t>(world.get_town_index()));
     const auto &entries = ArenaEntryList::get_instance();
     wr_s16b(static_cast<int16_t>(entries.get_current_entry()));
     const auto defeated_entry = entries.get_defeated_entry();

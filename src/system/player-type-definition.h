@@ -67,8 +67,6 @@ public:
 
     PLAYER_LEVEL lev{}; /* Level */
 
-    int16_t town_num{}; /* Current town number */
-
     int mhp{}; /* Max hit pts */
     int chp{}; /* Cur hit pts */
     uint32_t chp_frac{}; /* Cur hit frac (times 2^16) */

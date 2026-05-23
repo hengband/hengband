@@ -279,7 +279,8 @@ static void rd_arena(PlayerType *player_ptr)
         set_gambling_monsters();
     }
 
-    player_ptr->town_num = rd_s16b();
+    auto &world = AngbandWorld::get_instance();
+    world.set_town_index(rd_s16b());
     auto &entries = ArenaEntryList::get_instance();
     entries.load_current_entry(rd_s16b());
     if (h_older_than(1, 5, 0, 1)) {
@@ -298,7 +299,7 @@ static void rd_arena(PlayerType *player_ptr)
     }
 
     rd_phase_out(player_ptr);
-    AngbandWorld::get_instance().set_arena(rd_bool());
+    world.set_arena(rd_bool());
     strip_bytes(1);
 
     player_ptr->oldpx = rd_s16b();

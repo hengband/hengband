@@ -24,6 +24,7 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include "world/world.h"
 #include <algorithm>
 #include <sstream>
 #include <string>
@@ -195,7 +196,7 @@ static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp,
         *tpn = '\0';
         v = tmp_player_name;
     } else if (streq(b + 1, "TOWN")) {
-        v = std::to_string(player_ptr->town_num);
+        v = std::to_string(AngbandWorld::get_instance().get_town_index());
     } else if (streq(b + 1, "LEVEL")) {
         v = std::to_string(player_ptr->lev);
     } else if (streq(b + 1, "QUEST_NUMBER")) {

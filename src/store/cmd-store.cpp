@@ -51,7 +51,8 @@
  */
 void do_cmd_store(PlayerType *player_ptr)
 {
-    if (AngbandWorld::get_instance().is_wild_mode()) {
+    auto &world = AngbandWorld::get_instance();
+    if (world.is_wild_mode()) {
         return;
     }
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, tl::nullopt);
@@ -74,23 +75,21 @@ void do_cmd_store(PlayerType *player_ptr)
     //   ため、それを糊塗するためのグローバル変数。
     //   この辺はリファクタしたい。
     const auto store_num = grid.get_terrain().store_sale_type;
-    old_town_num = player_ptr->town_num;
+    old_town_num = world.get_town_index();
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
-        player_ptr->town_num = 1;
+        world.set_town_index(1);
     }
 
     if (floor.is_underground()) {
-        player_ptr->town_num = VALID_TOWNS;
+        world.set_town_index(VALID_TOWNS);
     }
 
-    inner_town_num = player_ptr->town_num;
-    auto &towns = TownList::get_instance();
-    auto &town = towns.get_town(player_ptr->town_num);
+    inner_town_num = world.get_town_index();
+    auto &town = world.get_town();
     auto &store = town.get_store(store_num);
-    auto &world = AngbandWorld::get_instance();
     if ((store.store_open >= world.game_turn) || ironman_shops) {
         msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
-        player_ptr->town_num = old_town_num;
+        world.set_town_index(old_town_num);
         return;
     }
 
@@ -100,7 +99,7 @@ void do_cmd_store(PlayerType *player_ptr)
     }
 
     if (maintain_num > 0) {
-        store_maintenance(player_ptr, player_ptr->town_num, store_num, maintain_num);
+        store_maintenance(player_ptr, world.get_town_index(), store_num, maintain_num);
         store.last_visit = world.game_turn;
     }
 
@@ -195,7 +194,7 @@ void do_cmd_store(PlayerType *player_ptr)
     }
 
     // 現在地の偽装を解除。
-    player_ptr->town_num = old_town_num;
+    world.set_town_index(old_town_num);
 
     select_floor_music(player_ptr);
     PlayerEnergy(player_ptr).set_player_turn_energy(100);

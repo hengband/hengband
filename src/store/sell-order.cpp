@@ -26,12 +26,12 @@
 #include "store/store-owners.h"
 #include "store/store.h"
 #include "system/floor/town-info.h"
-#include "system/floor/town-list.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "view/object-describer.h"
+#include "world/world.h"
 #include <fmt/format.h>
 #include <tl/optional.hpp>
 
@@ -175,7 +175,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             }
 
             inven_item_optimize(player_ptr, i_idx);
-            auto &store = TownList::get_instance().get_town(player_ptr->town_num).get_store(store_num);
+            auto &store = AngbandWorld::get_instance().get_town().get_store(store_num);
             const auto item_pos = store.carry(sold_item);
             if (item_pos) {
                 store_top = (*item_pos / store_bottom) * store_bottom;

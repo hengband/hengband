@@ -40,8 +40,8 @@ int store_top = 0;
 int store_bottom = 0;
 int xtra_stock = 0;
 const owner_type *ot_ptr = nullptr;
-int16_t old_town_num = 0;
-int16_t inner_town_num = 0;
+size_t old_town_num = 0;
+size_t inner_town_num = 0;
 
 /* We store the current "store feat" here so everyone can access it */
 short cur_store_feat;
@@ -264,7 +264,7 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
  * @param which 店舗種類のID
  * @todo init_store()と処理を一部統合＆ランダム選択を改善。
  */
-void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
+void store_shuffle(StoreSaleType store_num)
 {
     auto &towns = TownList::get_instance();
     const auto towns_size = towns.size();
@@ -273,7 +273,8 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    st_ptr = &towns.get_town(player_ptr->town_num).get_store(store_num);
+    auto &world = AngbandWorld::get_instance();
+    st_ptr = &world.get_town().get_store(store_num);
     int j = st_ptr->owner;
     while (true) {
         st_ptr->owner = randnum0<uint8_t>(owner_num);
@@ -284,7 +285,7 @@ void store_shuffle(PlayerType *player_ptr, StoreSaleType store_num)
 
         size_t i;
         for (i = 1; i < towns_size; i++) {
-            if (i == static_cast<size_t>(player_ptr->town_num)) {
+            if (i == world.get_town_index()) {
                 continue;
             }
 
@@ -334,8 +335,9 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
         return;
     }
 
+    const auto &world = AngbandWorld::get_instance();
     const int bm_boost = 25 + store_level(store_num) / 4;
-    const owner_type *ow_ptr = &owners.at(store_num)[st_ptr->owner];
+    const auto &owner = owners.at(store_num)[st_ptr->owner];
     for (int tries = 0; tries < 4; tries++) {
         short bi_id;
         DEPTH level;
@@ -348,10 +350,10 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
             }
         } else if (fix_k_idx > 0) {
             bi_id = fix_k_idx;
-            level = rand_range(1, ow_ptr->level);
+            level = rand_range(1, owner.level);
         } else {
             bi_id = rand_choice(st_ptr->table);
-            level = rand_range(1, ow_ptr->level);
+            level = rand_range(1, owner.level);
         }
 
         ItemEntity item(bi_id);
@@ -385,7 +387,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
         }
 
         if (store_num == StoreSaleType::BLACK) {
-            if (black_market_crap(player_ptr->town_num, item) || (item.calc_price() < 10)) {
+            if (black_market_crap(world.get_town_index(), item) || (item.calc_price() < 10)) {
                 continue;
             }
         } else {
@@ -414,13 +416,14 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
         return;
     }
 
+    const auto &world = AngbandWorld::get_instance();
     st_ptr = &TownList::get_instance().get_town(town_num).get_store(store_num);
     ot_ptr = &owners.at(store_num)[st_ptr->owner];
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
         for (INVENTORY_IDX j = st_ptr->stock_num - 1; j >= 0; j--) {
             auto &item = *st_ptr->stock[j];
-            if (black_market_crap(player_ptr->town_num, item)) {
+            if (black_market_crap(world.get_town_index(), item)) {
                 st_ptr->increase_item(j, 0 - item.number);
                 st_ptr->optimize_item(j);
             }

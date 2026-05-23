@@ -304,7 +304,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
             msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), terrain.name.data());
         }
 
-        store_shuffle(this->player_ptr, store_sale_type);
+        store_shuffle(store_sale_type);
         break;
     }
 }
