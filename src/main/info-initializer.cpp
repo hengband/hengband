@@ -35,6 +35,8 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/floor/town-info.h"
+#include "system/floor/town-list.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -268,7 +270,9 @@ void init_vaults_info()
 
 static bool read_wilderness_definition(std::ifstream &ifs)
 {
+    auto &towns = TownList::get_instance();
     auto &wilderness = WildernessGrids::get_instance();
+    auto is_wilderness_size_initialized = false;
     std::string line;
     while (!ifs.eof()) {
         if (!std::getline(ifs, line)) {
@@ -280,6 +284,20 @@ static bool read_wilderness_definition(std::ifstream &ifs)
         }
 
         const auto &splits = str_split(line, ':');
+        if (splits[0] == "W" && (splits[1] == _("J", "E"))) {
+            if (splits.size() != 8) {
+                return false;
+            }
+
+            const auto town_num = std::stoi(splits[2]);
+            towns.get_town(town_num).init_name(utf8_to_local(splits[7]));
+            if (towns.is_all_initialized() && is_wilderness_size_initialized) {
+                return true;
+            }
+
+            continue;
+        }
+
         if ((splits.size() != 3) || (splits[0] != "M")) {
             continue;
         }
@@ -295,7 +313,7 @@ static bool read_wilderness_definition(std::ifstream &ifs)
         if (wilderness.is_height_initialized() && wilderness.is_width_initialized()) {
             wilderness.initialize_grids();
             wilderness.set_ambushes(false);
-            return true;
+            is_wilderness_size_initialized = true;
         }
     }
 
