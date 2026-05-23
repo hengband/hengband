@@ -485,7 +485,7 @@ static std::string decide_target_floor(PlayerType *player_ptr, GridExamination *
     }
 
     if (ge_ptr->terrain_ptr->flags.has(TerrainCharacteristics::TOWN)) {
-        return towns_info[ge_ptr->g_ptr->special].name;
+        return towns_info[ge_ptr->g_ptr->special].get_name();
     }
 
     if (AngbandWorld::get_instance().is_wild_mode() && (ge_ptr->matches_terrain(TerrainTag::FLOOR))) {

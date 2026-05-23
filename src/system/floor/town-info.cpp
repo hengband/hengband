@@ -1,5 +1,15 @@
 #include "system/floor/town-info.h"
 
+void TownInfo::init_name(std::string_view name)
+{
+    this->town_name = name;
+}
+
+const std::string &TownInfo::get_name() const
+{
+    return this->town_name;
+}
+
 Store &TownInfo::get_store(StoreSaleType sst)
 {
     return this->stores.at(sst);

@@ -683,7 +683,7 @@ tl::expected<Pos2D, parse_error_type> parse_line_wilderness(char *line, int xmin
             int id = s[0];
             const auto &letter = letters.get_grid(id);
             wilderness.get_grid(pos).initialize(letter);
-            towns_info[letter.get_town()].name = letter.get_name();
+            towns_info[letter.get_town()].init_name(letter.get_name());
         }
 
         pos.y++;

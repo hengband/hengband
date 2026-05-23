@@ -192,7 +192,7 @@ std::string map_name(PlayerType *player_ptr)
     } else if (AngbandSystem::get_instance().is_phase_out()) {
         return _("闘技場", "Monster Arena");
     } else if (!floor.is_underground() && player_ptr->town_num) {
-        return towns_info[player_ptr->town_num].name;
+        return towns_info[player_ptr->town_num].get_name();
     } else {
         return floor.get_dungeon_definition().name;
     }
