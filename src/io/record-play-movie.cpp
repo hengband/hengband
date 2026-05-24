@@ -37,6 +37,7 @@
 #define RECVBUF_SIZE 1024
 /* 「n」、「t」、および「w」コマンドでは、長さが「signed char」に配置されるときに負の値を回避するために、これよりも長い長さを使用しないでください。 */
 static constexpr auto SPLIT_MAX = 127;
+static constexpr auto SPLIT_SIZE = SPLIT_MAX + 1;
 
 static long epoch_time; /* バッファ開始時刻 */
 static int browse_delay; /* 表示するまでの時間(100ms単位)(この間にラグを吸収する) */
@@ -57,6 +58,10 @@ static struct {
     int rptr = 0;
     int inlen = 0;
 } ring;
+
+namespace {
+std::pair<int, int> playback_xy_offset = { 0, 0 };
+}
 
 /*
  * Original hooks
@@ -84,6 +89,7 @@ static void init_buffer(void)
     ring.wptr = ring.rptr = ring.inlen = 0;
     fresh_queue.time[0] = 0;
     ring.buf.resize(RINGBUF_SIZE);
+    playback_xy_offset = { 0, 0 };
 }
 
 /* 現在の時間を100ms単位で取得する */
@@ -215,10 +221,28 @@ static int find_split(concptr str, int len)
 }
 #endif
 
+/*!
+ * @brief レコードに書き込もうとしている座標情報から、x,yのオフセット値を更新するレコードを送信する
+ * @param x 判定するX座標
+ * @param y 判定するY座標
+ * @force_update trueなら算出されたオフセットが前回呼び出し時と同値でも書き込む
+ */
+static void send_offset_update(const TERM_LEN x, const TERM_LEN y, bool force_update = false)
+{
+    static std::pair<int, int> last_xy_offset = { 0, 0 };
+
+    std::pair<int, int> recording_xy_offset = { x / SPLIT_SIZE, y / SPLIT_SIZE };
+    if (recording_xy_offset != last_xy_offset || force_update) {
+        insert_ringbuf(format("o%c%c", recording_xy_offset.first + 1, recording_xy_offset.second + 1));
+        last_xy_offset = recording_xy_offset;
+    }
+}
+
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
 {
     if (len == 1) {
-        insert_ringbuf(format("s%c%c%c%c", x + 1, y + 1, col, *str));
+        send_offset_update(x, y);
+        insert_ringbuf(format("s%c%c%c%c", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *str));
         return (*old_text_hook)(x, y, len, col, str);
     }
 
@@ -226,18 +250,20 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
         auto rb_x = x;
         auto rb_len = len;
         while (rb_len > SPLIT_MAX) {
-            insert_ringbuf(format("n%c%c%c%c%c", rb_x + 1, y + 1, SPLIT_MAX, col, *str));
+            send_offset_update(rb_x, y);
+            insert_ringbuf(format("n%c%c%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, SPLIT_MAX, col, *str));
             rb_x += SPLIT_MAX;
             rb_len -= SPLIT_MAX;
-            }
+        }
 
         std::string formatted_text;
         if (rb_len > 1) {
-            formatted_text = format("n%c%c%c%c%c", rb_x + 1, y + 1, rb_len, col, *str);
+            formatted_text = format("n%c%c%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len, col, *str);
         } else {
-            formatted_text = format("s%c%c%c%c", rb_x + 1, y + 1, col, *str);
+            formatted_text = format("s%c%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, col, *str);
         }
 
+        send_offset_update(rb_x, y);
         insert_ringbuf(formatted_text);
         return (*old_text_hook)(x, y, len, col, str);
     }
@@ -253,13 +279,15 @@ static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_CO
     auto rb_len = len;
     while (rb_len > SPLIT_MAX) {
         auto split_len = _(find_split(payload, SPLIT_MAX), SPLIT_MAX);
-        insert_ringbuf(format("t%c%c%c%c", rb_x + 1, y + 1, split_len, col), std::string_view(payload, split_len));
+        send_offset_update(rb_x, y);
+        insert_ringbuf(format("t%c%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, split_len, col), std::string_view(payload, split_len));
         rb_x += split_len;
         rb_len -= split_len;
         payload += split_len;
     }
 
-    insert_ringbuf(format("t%c%c%c%c", rb_x + 1, y + 1, rb_len, col), std::string_view(payload, rb_len));
+    send_offset_update(rb_x, y);
+    insert_ringbuf(format("t%c%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len, col), std::string_view(payload, rb_len));
     return (*old_text_hook)(x, y, len, col, str);
 }
 
@@ -268,11 +296,13 @@ static errr send_wipe_to_chuukei_server(int x, int y, int len)
     auto rb_x = x;
     auto rb_len = len;
     while (rb_len > SPLIT_MAX) {
-        insert_ringbuf(format("w%c%c%c", rb_x + 1, y + 1, SPLIT_MAX));
+        send_offset_update(rb_x, y);
+        insert_ringbuf(format("w%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, SPLIT_MAX));
         rb_x += SPLIT_MAX;
         rb_len -= SPLIT_MAX;
     }
-    insert_ringbuf(format("w%c%c%c", rb_x + 1, y + 1, rb_len));
+    send_offset_update(rb_x, y);
+    insert_ringbuf(format("w%c%c%c", (rb_x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1, rb_len));
 
     return (*old_wipe_hook)(x, y, len);
 }
@@ -297,14 +327,16 @@ static errr send_xtra_to_chuukei_server(int n, int v)
 
 static errr send_curs_to_chuukei_server(int x, int y)
 {
-    insert_ringbuf(format("c%c%c", x + 1, y + 1));
+    send_offset_update(x, y);
+    insert_ringbuf(format("c%c%c", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1));
 
     return (*old_curs_hook)(x, y);
 }
 
 static errr send_bigcurs_to_chuukei_server(int x, int y)
 {
-    insert_ringbuf(format("C%c%c", x + 1, y + 1));
+    send_offset_update(x, y);
+    insert_ringbuf(format("C%c%c", (x % SPLIT_SIZE) + 1, (y % SPLIT_SIZE) + 1));
 
     return (*old_bigcurs_hook)(x, y);
 }
@@ -379,6 +411,7 @@ void prepare_movie_hooks(PlayerType *player_ptr)
 
     movie_mode = 1;
     prepare_chuukei_hooks();
+    send_offset_update(0, 0, true);
     do_cmd_redraw(player_ptr);
 }
 
@@ -541,6 +574,16 @@ static bool flush_ringbuf_client()
         auto id = buf[0];
         auto x = static_cast<uint8_t>(buf[1]) - 1;
         auto y = static_cast<uint8_t>(buf[2]) - 1;
+        switch (id) {
+        case 't':
+        case 'n':
+        case 's':
+        case 'w':
+        case 'c':
+        case 'C':
+            x += playback_xy_offset.first * SPLIT_SIZE;
+            y += playback_xy_offset.second * SPLIT_SIZE;
+        }
         int len = static_cast<uint8_t>(buf[3]);
         uint8_t col = buf[4];
         char *mesg;
@@ -585,10 +628,13 @@ static bool flush_ringbuf_client()
             }
 
             break;
+        case 'o':
+            playback_xy_offset = { x, y };
+            break;
         case 's': /* 一文字 */
             update_term_size(x, y, 1);
             (void)((*angband_terms[0]->text_hook)(x, y, 1, (byte)col, mesg));
-            std::copy_n(&game_term->scr->c[y][x], 1, mesg);
+            std::copy_n(mesg, 1, &game_term->scr->c[y][x]);
             game_term->scr->a[y][x] = col;
             break;
         case 'w':
