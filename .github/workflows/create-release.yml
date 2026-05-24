@@ -11,7 +11,7 @@ on:
 jobs:
   publish-release-page:
     name: Publish Release Page
-    runs-on: windows-2022
+    runs-on: windows-2025-vs2026
     steps:
       - uses: actions/checkout@v3
         with:
@@ -41,6 +41,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: Hengband-*.zip
+          fail_on_unmatched_files: true
           name: ${{ steps.get_version.outputs.version }}
           tag_name: ${{ steps.get_version.outputs.version }}
           generate_release_notes: true

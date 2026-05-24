@@ -13,9 +13,12 @@ function BuildPackage ($package_name, $package_unique_files, $build_conf) {
     # バイナリをリビルド
     MSBuild.exe .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=$build_conf
 
-    if ($LASTEXITCODE -ne 0) {
-        # ビルド失敗ならスクリプトを中断する
-        exit
+    # ビルド失敗ならスクリプトを中断する ($? も併用して MSBuild の起動失敗にも対応)
+    if (-not $? -or $LASTEXITCODE -ne 0) {
+        if ($LASTEXITCODE -eq $null) {
+            exit 1
+        }
+        exit $LASTEXITCODE
     }
 
     # 作業用テンポラリフォルダ
