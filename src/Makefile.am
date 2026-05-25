@@ -1310,6 +1310,8 @@ hengband_SOURCES = \
 	system/monrace/monrace-definition.cpp system/monrace/monrace-definition.h \
 	system/monrace/monrace-list.cpp system/monrace/monrace-list.h \
 	system/monrace/monrace-message.cpp system/monrace/monrace-message.h \
+	system/monrace/monrace-record.cpp system/monrace/monrace-record.h \
+	system/monrace/monrace-records.cpp system/monrace/monrace-records.h \
 	\
 	system/services/baseitem-monrace-service.cpp system/services/baseitem-monrace-service.h \
 	system/services/dungeon-service.cpp system/services/dungeon-service.h \
