@@ -2,12 +2,27 @@
 
 void TownInfo::init_name(std::string_view name)
 {
-    this->town_name = name;
+    if (this->town_name.empty()) {
+        this->town_name = name;
+        return;
+    }
+
+    this->town_alias = name;
+}
+
+void TownInfo::overwrite_town_name()
+{
+    this->town_name = this->town_alias;
 }
 
 const std::string &TownInfo::get_name() const
 {
     return this->town_name;
+}
+
+bool TownInfo::is_alias_initialized() const
+{
+    return !this->town_alias.empty();
 }
 
 Store &TownInfo::get_store(StoreSaleType sst)

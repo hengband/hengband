@@ -1425,6 +1425,7 @@ hengband_SOURCES = \
 	wizard/wizard-spoiler.cpp wizard/wizard-spoiler.h\
 	wizard/wizard-special-process.cpp wizard/wizard-special-process.h \
 	\
+	world/town-info-service.cpp world/town-info-service.h \
 	world/world.cpp world/world.h \
 	world/world-movement-processor.cpp world/world-movement-processor.h \
 	world/world-turn-processor.cpp world/world-turn-processor.h

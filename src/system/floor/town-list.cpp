@@ -68,7 +68,7 @@ bool TownList::is_all_initialized() const
         }
     }
 
-    return true;
+    return this->towns[1].is_alias_initialized();
 }
 
 /*!
@@ -110,4 +110,9 @@ void TownList::initialize()
             }
         }
     }
+}
+
+void TownList::overwrite_town_name()
+{
+    this->towns[1].overwrite_town_name();
 }
