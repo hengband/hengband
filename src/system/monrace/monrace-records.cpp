@@ -36,20 +36,36 @@ std::shared_ptr<const MonraceRecord> MonraceRecords::get_record(MonraceId monrac
 
 bool MonraceRecords::has_been_seen(MonraceId monrace_id) const
 {
+    if (monrace_id == MonraceId::PLAYER) {
+        return false;
+    }
+
     return this->records.at(monrace_id)->has_been_seen();
 }
 
 void MonraceRecords::increment_seen_count(MonraceId monrace_id)
 {
+    if (monrace_id == MonraceId::PLAYER) {
+        return;
+    }
+
     this->records.at(monrace_id)->increment_seen_count();
 }
 
 short MonraceRecords::get_seen_count(MonraceId monrace_id) const
 {
+    if (monrace_id == MonraceId::PLAYER) {
+        return 0;
+    }
+
     return this->records.at(monrace_id)->get_seen_count();
 }
 
 void MonraceRecords::set_seen_count(MonraceId monrace_id, short count)
 {
+    if (monrace_id == MonraceId::PLAYER) {
+        return;
+    }
+
     this->records.at(monrace_id)->set_seen_count(count);
 }

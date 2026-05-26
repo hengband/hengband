@@ -319,6 +319,7 @@
     <ClCompile Include="..\..\src\system\floor\wilderness-grid.cpp" />
     <ClCompile Include="..\..\src\system\monrace\monrace-record.cpp" />
     <ClCompile Include="..\..\src\system\monrace\monrace-records.cpp" />
+    <ClCompile Include="..\..\src\system\monrace\monrace-service.cpp" />
     <ClCompile Include="..\..\src\system\services\dungeon-monrace-service.cpp" />
     <ClCompile Include="..\..\src\system\services\dungeon-service.cpp" />
     <ClCompile Include="..\..\src\system\floor\floor-list.cpp" />
@@ -1058,6 +1059,7 @@
     <ClInclude Include="..\..\src\system\item\identification-flags.h" />
     <ClInclude Include="..\..\src\system\monrace\monrace-record.h" />
     <ClInclude Include="..\..\src\system\monrace\monrace-records.h" />
+    <ClInclude Include="..\..\src\system\monrace\monrace-service.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-monrace-service.h" />
     <ClInclude Include="..\..\src\system\services\dungeon-service.h" />
     <ClInclude Include="..\..\src\system\enums\dungeon\dungeon-id.h" />

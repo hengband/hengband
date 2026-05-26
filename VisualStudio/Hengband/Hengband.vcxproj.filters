@@ -2586,6 +2586,9 @@
     <ClCompile Include="..\..\src\system\monrace\monrace-records.cpp">
       <Filter>system\monrace</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\monrace\monrace-service.cpp">
+      <Filter>system\monrace</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5608,6 +5611,9 @@
       <Filter>system\monrace</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\monrace\monrace-records.h">
+      <Filter>system\monrace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\monrace\monrace-service.h">
       <Filter>system\monrace</Filter>
     </ClInclude>
   </ItemGroup>
