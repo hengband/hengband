@@ -5,6 +5,7 @@
 #include "monster-race/race-sex.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-records.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 
@@ -45,6 +46,7 @@ lore_type::lore_type(MonraceId monrace_id, monster_lore_mode mode)
 {
     this->nightmare = ironman_nightmare && (mode != MONSTER_LORE_DEBUG);
     this->monrace = MonraceList::get_instance().get_monrace_shared(monrace_id);
+    this->record = MonraceRecords::get_instance().get_record(monrace_id);
     this->speed = this->nightmare ? this->monrace->speed + 5 : this->monrace->speed;
     this->drop_gold = this->monrace->r_drop_gold;
     this->drop_item = this->monrace->r_drop_item;

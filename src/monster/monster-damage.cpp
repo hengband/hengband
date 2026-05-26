@@ -30,6 +30,7 @@
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-records.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -164,19 +165,15 @@ void MonsterDamageProcessor::death_special_flag_monster()
     auto &monster = this->player_ptr->current_floor_ptr->m_list[this->m_idx];
     auto monrace_id = monster.r_idx;
     auto &monrace = monster.get_monrace();
+    auto &monrace_records = MonraceRecords::get_instance();
     if (monrace.misc_flags.has(MonsterMiscType::TANUKI)) {
         monster.ap_r_idx = monrace_id;
-        if (monrace.r_sights < MAX_SHORT) {
-            monrace.r_sights++;
-        }
+        monrace_records.increment_seen_count(monrace_id);
     }
 
     if (monster.mflag2.has(MonsterConstantFlagType::CHAMELEON)) {
-        auto &real_monrace = monster.get_real_monrace();
         monrace_id = monster.get_real_monrace_id();
-        if (real_monrace.r_sights < MAX_SHORT) {
-            real_monrace.r_sights++;
-        }
+        monrace_records.increment_seen_count(monrace_id);
     }
 
     if (monster.mflag2.has(MonsterConstantFlagType::CLONED)) {

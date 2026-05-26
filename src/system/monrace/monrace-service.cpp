@@ -2,6 +2,7 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-records.h"
 #include "util/string-processor.h"
 
 /*!
@@ -14,12 +15,13 @@
 std::vector<MonraceId> MonraceService::search(const std::function<bool(const MonraceDefinition &)> &filter, bool is_known_only)
 {
     std::vector<MonraceId> result_ids;
+    const auto &records = MonraceRecords::get_instance();
     for (const auto &[id, monrace] : MonraceList::get_instance()) {
         if (!monrace->is_valid()) {
             continue;
         }
 
-        if (is_known_only && (monrace->r_sights == 0)) {
+        if (is_known_only && !records.has_been_seen(id)) {
             continue;
         }
 

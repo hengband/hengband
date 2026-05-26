@@ -128,6 +128,7 @@ public:
     void set_target(const Pos2D &pos);
     void reset_target();
     void set_friendly();
+    void increment_seen_count() const;
 
 private:
     MonsterEntity(const MonsterEntity &) = default;

@@ -6,9 +6,11 @@
 
 #include "knowledge/knowledge-uniques.h"
 #include "core/show-file.h"
+#include "game-option/cheat-options.h"
 #include "io-dump/dump-util.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-records.h"
 #include "system/player-type-definition.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
@@ -35,8 +37,13 @@ UniqueList::UniqueList(bool is_alive)
 
 void UniqueList::sweep()
 {
-    auto &monraces = MonraceList::get_instance();
+    const auto &monraces = MonraceList::get_instance();
+    const auto &records = MonraceRecords::get_instance();
     for (auto &[monrace_id, monrace] : monraces) {
+        if (!cheat_know && !records.has_been_seen(monrace_id)) {
+            continue;
+        }
+
         if (!monrace->is_valid() || !monrace->should_display(this->is_alive)) {
             continue;
         }
