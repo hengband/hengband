@@ -31,10 +31,12 @@ private:
     MonraceRecords() = default;
 
     static MonraceRecords instance;
-    std::map<MonraceId, std::shared_ptr<MonraceRecord>> records;
 
+    std::map<MonraceId, std::shared_ptr<MonraceRecord>> records;
     std::map<MonraceId, std::shared_ptr<MonraceRecord>> &get_inner_container() override
     {
         return this->records;
     }
+
+    void check_monrace_id(MonraceId monrace_id) const;
 };
