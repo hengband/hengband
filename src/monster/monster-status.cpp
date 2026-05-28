@@ -17,6 +17,7 @@
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-service.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -424,7 +425,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
         const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
         if (!ignore_unview || player_can_see_bold(player_ptr, monster.fy, monster.fx)) {
             if (is_hallucinated) {
-                const auto ids = monraces.search([](const auto &monrace) { return monrace.kind_flags.has_not(MonsterKindType::UNIQUE); });
+                const auto ids = MonraceService::search([](const auto &monrace) { return monrace.kind_flags.has_not(MonsterKindType::UNIQUE); });
                 const auto &monrace_hallucinated = monraces.get_monrace(rand_choice(ids));
                 auto mes_evolution = _("%sは%sに進化した。", "%s^ evolved into %s.");
                 auto mes_degeneration = _("%sは%sに退化した。", "%s^ degenerated into %s.");

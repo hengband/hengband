@@ -7,6 +7,8 @@
 #include "system/angband.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-record.h"
+#include "system/monrace/monrace-records.h"
 #include "system/system-variables.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -331,7 +333,8 @@ static void migrate_old_behavior_flags(MonraceDefinition &monrace, BIT_FLAGS old
  */
 static void rd_lore(MonraceDefinition &monrace, const MonraceId r_idx)
 {
-    monrace.r_sights = rd_s16b();
+    auto &records = MonraceRecords::get_instance();
+    records.set_seen_count(r_idx, rd_s16b());
     monrace.r_deaths = rd_s16b();
     monrace.r_pkills = rd_s16b();
 

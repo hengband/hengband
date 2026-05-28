@@ -34,6 +34,7 @@
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-service.h"
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "target/grid-selector.h"
@@ -61,18 +62,16 @@ const std::vector<debug_spell_command> debug_spell_commands_list = {
 
 std::vector<MonraceId> wiz_collect_monster_candidates(char symbol)
 {
-    const auto &monraces = MonraceList::get_instance();
-
-    if (symbol == KTRL('M')) {
-        const auto monster_name = input_string("Monster name: ", MAX_MONSTER_NAME);
-        if (!monster_name || monster_name->empty()) {
-            return {};
-        }
-
-        return monraces.search_by_name(*monster_name, false);
+    if (symbol != KTRL('M')) {
+        return MonraceService::search_by_symbol(symbol, false);
     }
 
-    return monraces.search_by_symbol(symbol, false);
+    const auto monster_name = input_string("Monster name: ", MAX_MONSTER_NAME);
+    if (!monster_name || monster_name->empty()) {
+        return {};
+    }
+
+    return MonraceService::search_by_name(*monster_name, false);
 }
 
 tl::optional<MonraceId> wiz_select_summon_monrace_id()

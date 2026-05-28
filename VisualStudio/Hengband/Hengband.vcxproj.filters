@@ -2580,6 +2580,15 @@
     <ClCompile Include="..\..\src\info-reader\definition-hash-data.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\monrace\monrace-record.cpp">
+      <Filter>system\monrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\monrace\monrace-records.cpp">
+      <Filter>system\monrace</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\monrace\monrace-service.cpp">
+      <Filter>system\monrace</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5597,6 +5606,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\definition-hash-data.h">
       <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\monrace\monrace-record.h">
+      <Filter>system\monrace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\monrace\monrace-records.h">
+      <Filter>system\monrace</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\monrace\monrace-service.h">
+      <Filter>system\monrace</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

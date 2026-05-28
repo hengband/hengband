@@ -8,6 +8,7 @@
 #include "system/enums/monrace/monrace-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-records.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/term-color-types.h"
 #include "tracking/lore-tracker.h"
@@ -575,6 +576,11 @@ void MonsterEntity::reset_target()
 void MonsterEntity::set_friendly()
 {
     this->mflag2.set(MonsterConstantFlagType::FRIENDLY);
+}
+
+void MonsterEntity::increment_seen_count() const
+{
+    MonraceRecords::get_instance().increment_seen_count(this->r_idx);
 }
 
 bool MonsterEntity::is_riding() const
