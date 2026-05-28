@@ -1,5 +1,11 @@
 #pragma once
 
+/*!
+ * @brief 町の記録を管理するクラス
+ * @author Hourier
+ * @date 2026/05/29
+ */
+
 #include "util/flag-group.h"
 
 constexpr size_t SECRET_TOWN = 5; // @details ズルの町番号.
@@ -23,8 +29,8 @@ public:
 
     static TownRecords &get_instance();
 
-    bool has_visited(TownId id) const;
-    void set_visited(TownId id);
+    bool has_visited(TownId town_id) const;
+    void set_visited(TownId town_id);
     void initialize();
 
     void set_ids(const EnumClassFlagGroup<TownId> &loaded_data); //!< for load only.
@@ -36,4 +42,6 @@ private:
     static TownRecords instance;
 
     EnumClassFlagGroup<TownId> visited_ids;
+
+    void validate_town_id(TownId town_id) const;
 };

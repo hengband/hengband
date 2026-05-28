@@ -1,5 +1,5 @@
 /*!
- * @brief ダンジョンにおける集合論的モデルの定義
+ * @brief ダンジョンにおける集合論的リポジトリの定義
  * @author Hourier
  * @date 2024/12/01
  */
@@ -28,12 +28,14 @@ public:
 
 private:
     DungeonList() = default;
+
     static DungeonList instance;
 
     std::map<DungeonId, std::shared_ptr<DungeonDefinition>> dungeons;
-
     std::map<DungeonId, std::shared_ptr<DungeonDefinition>> &get_inner_container() override
     {
         return this->dungeons;
     }
+
+    void validate_dungeon_id(DungeonId dungeon_id) const;
 };

@@ -34,13 +34,13 @@ MonraceRecords &MonraceRecords::get_instance()
 
 std::shared_ptr<const MonraceRecord> MonraceRecords::get_record(MonraceId monrace_id) const
 {
-    this->check_monrace_id(monrace_id);
+    this->validate_monrace_id(monrace_id);
     return this->records.at(monrace_id);
 }
 
 bool MonraceRecords::has_been_seen(MonraceId monrace_id) const
 {
-    this->check_monrace_id(monrace_id);
+    this->validate_monrace_id(monrace_id);
     if (monrace_id == MonraceId::PLAYER) {
         return false;
     }
@@ -50,17 +50,17 @@ bool MonraceRecords::has_been_seen(MonraceId monrace_id) const
 
 void MonraceRecords::increment_seen_count(MonraceId monrace_id)
 {
-    this->check_monrace_id(monrace_id);
+    this->validate_monrace_id(monrace_id);
     if (monrace_id == MonraceId::PLAYER) {
         return;
     }
 
-    this->records.at(monrace_id)->increment_seen_count();
+    this->records[monrace_id]->increment_seen_count();
 }
 
 short MonraceRecords::get_seen_count(MonraceId monrace_id) const
 {
-    this->check_monrace_id(monrace_id);
+    this->validate_monrace_id(monrace_id);
     if (monrace_id == MonraceId::PLAYER) {
         return 0;
     }
@@ -70,17 +70,17 @@ short MonraceRecords::get_seen_count(MonraceId monrace_id) const
 
 void MonraceRecords::set_seen_count(MonraceId monrace_id, short count)
 {
-    this->check_monrace_id(monrace_id);
+    this->validate_monrace_id(monrace_id);
     if (monrace_id == MonraceId::PLAYER) {
         return;
     }
 
-    this->records.at(monrace_id)->set_seen_count(count);
+    this->records[monrace_id]->set_seen_count(count);
 }
 
-void MonraceRecords::check_monrace_id(MonraceId monrace_id) const
+void MonraceRecords::validate_monrace_id(MonraceId monrace_id) const
 {
-    if ((monrace_id < MonraceId::PLAYER) || (enum2i(monrace_id) >= static_cast<short>(this->records.size()))) {
-        THROW_EXCEPTION(std::out_of_range, fmt::format("Invalid monrace_id: {}", enum2i(monrace_id)));
+    if ((monrace_id < MonraceId::PLAYER) || monrace_id >= i2enum<MonraceId>(this->records.size())) {
+        THROW_EXCEPTION(std::out_of_range, fmt::format("Invalid Monrace ID: {}", enum2i(monrace_id)));
     }
 }

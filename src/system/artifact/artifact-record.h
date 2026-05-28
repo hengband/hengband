@@ -62,11 +62,14 @@ public:
 
 private:
     ArtifactRecords() = default;
-    static ArtifactRecords instance;
-    std::map<FixedArtifactId, ArtifactRecord> records;
 
+    static ArtifactRecords instance;
+
+    std::map<FixedArtifactId, ArtifactRecord> records;
     std::map<FixedArtifactId, ArtifactRecord> &get_inner_container() override
     {
         return this->records;
     }
+
+    void validate_fixed_artifact_id(FixedArtifactId fa_id) const;
 };

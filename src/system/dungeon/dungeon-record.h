@@ -48,11 +48,14 @@ public:
 
 private:
     DungeonRecords();
-    static DungeonRecords instance;
-    std::map<DungeonId, std::shared_ptr<DungeonRecord>> records;
 
+    static DungeonRecords instance;
+
+    std::map<DungeonId, std::shared_ptr<DungeonRecord>> records;
     std::map<DungeonId, std::shared_ptr<DungeonRecord>> &get_inner_container() override
     {
         return this->records;
     }
+
+    void validate_dungeon_id(DungeonId dungeon_id) const;
 };
