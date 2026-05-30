@@ -28,15 +28,15 @@ TempFile::TempFile()
 
     this->path = temp_file_path;
 #else
-    auto temp_str = (temp_dir / "tempfile_XXXXXX").string();
-    const auto fd = mkstemp(&temp_str[0]);
+    auto temp_file_path = (temp_dir / "tempfile_XXXXXX").string();
+    const auto fd = mkstemp(&temp_file_path[0]);
     if (fd == -1) {
         THROW_EXCEPTION(std::runtime_error, "Failed to generate temporary file name with mkstemp");
     }
 
     fchmod(fd, S_IRUSR | S_IWUSR);
     close(fd);
-    this->path = temp_str;
+    this->path = temp_file_path;
 #endif
 }
 
