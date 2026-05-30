@@ -3,12 +3,16 @@
 #include <filesystem>
 #include <string>
 #include <string_view>
-#include <vector>
 #include <tl/optional.hpp>
+#include <vector>
 
 class TempFile {
 public:
     TempFile();
+    TempFile(const TempFile &) = delete;
+    TempFile(TempFile &&) = delete;
+    TempFile &operator=(const TempFile &) = delete;
+    TempFile &operator=(TempFile &&) = delete;
     ~TempFile();
 
     const std::filesystem::path &get_path() const;
@@ -19,8 +23,5 @@ public:
 
 private:
     std::filesystem::path path;
-    size_t current_line_index;
-
-    void create_empty_file() const;
-    void set_permissions() const;
+    std::ifstream ifs;
 };

@@ -13,6 +13,7 @@
 #include "inventory/inventory-slot-types.h"
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
+#include "io/temp-file.h"
 #include "knowledge/item-group-table.h"
 #include "object/tval-types.h"
 #include "perception/identification.h"
@@ -34,6 +35,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fmt/format.h>
 #include <numeric>
 #include <set>
 #include <vector>
@@ -92,27 +94,20 @@ auto collect_known_fixed_artifacts(PlayerType *player_ptr)
  */
 void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 {
-    FILE *fff = nullptr;
-    GAME_TEXT file_name[FILE_NAME_SIZE];
-    if (!open_temporary_file(&fff, file_name)) {
-        return;
-    }
-
+    TempFile temp_file;
     const auto &artifacts = ArtifactList::get_instance();
     const auto fa_ids = collect_known_fixed_artifacts(player_ptr);
     for (const auto fa_id : fa_ids) {
         const auto &artifact = artifacts.get_artifact(fa_id);
-        constexpr auto template_basename = _("     %s\n", "     The %s\n");
+        constexpr auto template_basename = _("     {}", "     The {}");
         ItemEntity item(artifact.bi_key);
         item.fa_id = fa_id;
         item.set_identification_flag(IdentificationFlag::STORE);
         const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        fprintf(fff, template_basename, item_name.data());
+        temp_file.write_line(fmt::format(template_basename, item_name));
     }
 
-    angband_fclose(fff);
-    FileDisplayer(player_ptr->name).display(true, file_name, 0, 0, _("既知の伝説のアイテム", "Artifacts Seen"));
-    fd_kill(file_name);
+    FileDisplayer(player_ptr->name).display(true, temp_file.get_path().string(), 0, 0, _("既知の伝説のアイテム", "Artifacts Seen"));
 }
 
 /*!

@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
-#include <stdexcept>
+#include <system_error>
 #ifdef _WIN32
 #include <io.h>
 #include <windows.h>
@@ -17,36 +17,38 @@ TempFile::TempFile()
 #ifdef _WIN32
     char win_temp[MAX_PATH]{};
     GetTempPathA(MAX_PATH, win_temp);
-    std::filesystem::path temp_dir = win_temp;
-
-    auto temp_str = (temp_dir / "tempfile_XXXXXX").string();
-    const auto *result = _mktemp(&temp_str[0]);
-    if (result == nullptr) {
-        THROW_EXCEPTION(std::runtime_error, "Failed to generate temporary file name with _mktemp");
+    char temp_file_path[MAX_PATH]{};
+    if (GetTempFileNameA(win_temp, "tmp", 0, temp_file_path) == 0) {
+        THROW_EXCEPTION(std::runtime_error, "Failed to generate temporary file name with GetTempFileNameA");
     }
 
-    this->path = std::filesystem::path(temp_str);
+    this->path = temp_file_path;
+    this->ifs = std::ifstream(this->path);
 #else
     const auto *tmp_dir_env = std::getenv("TMPDIR");
     std::filesystem::path temp_dir = tmp_dir_env ? tmp_dir_env : "/tmp";
 
     auto temp_str = (temp_dir / "tempfile_XXXXXX").string();
     const auto fd = mkstemp(&temp_str[0]);
-    if (fd != -1) {
-        close(fd);
+    if (fd == -1) {
+        THROW_EXCEPTION(std::runtime_error, "Failed to generate temporary file name with mkstemp");
     }
 
+    close(fd);
     this->path = std::filesystem::path(temp_str);
+    this->ifs = std::ifstream(this->path);
 #endif
-
-    this->create_empty_file();
-    this->set_permissions();
 }
 
 TempFile::~TempFile()
 {
+    if (this->ifs && this->ifs.is_open()) {
+        this->ifs.close();
+    }
+
     if (!this->path.empty()) {
-        std::filesystem::remove(this->path);
+        std::error_code ec;
+        std::filesystem::remove(this->path, ec);
     }
 }
 
@@ -70,24 +72,13 @@ void TempFile::write_line(std::string_view line) const
  */
 tl::optional<std::string> TempFile::read_line()
 {
-    std::ifstream ifs(this->path);
-    if (!ifs) {
+    if (!this->ifs) {
         THROW_EXCEPTION(std::runtime_error, "Cannot open file for reading");
     }
 
     std::string line;
-    size_t line_num = 0;
-    while (std::getline(ifs, line)) {
-        if (line_num == this->current_line_index) {
-            this->current_line_index++;
-            return line;
-        }
-
-        line_num++;
-    }
-
-    this->current_line_index = line_num;
-    return tl::nullopt;
+    std::getline(this->ifs, line);
+    return this->ifs ? tl::make_optional(line) : tl::nullopt;
 }
 
 void TempFile::write_lines(const std::vector<std::string> &lines) const
@@ -108,32 +99,14 @@ void TempFile::write_lines(const std::vector<std::string> &lines) const
 std::vector<std::string> TempFile::read_all()
 {
     std::vector<std::string> lines;
-    std::ifstream ifs(this->path);
-    if (!ifs) {
+    if (!this->ifs) {
         THROW_EXCEPTION(std::runtime_error, "Cannot open file for reading");
     }
 
     std::string line;
-    while (std::getline(ifs, line)) {
+    while (std::getline(this->ifs, line)) {
         lines.push_back(line);
     }
 
-    this->current_line_index = lines.size(); // 全部読んだら終端に合わせる
     return lines;
-}
-
-void TempFile::create_empty_file() const
-{
-    std::ofstream ofs(this->path, std::ios::out);
-    if (!ofs) {
-        THROW_EXCEPTION(std::runtime_error, "Failed to create temporary file");
-    }
-}
-
-void TempFile::set_permissions() const
-{
-#ifdef _WIN32
-#else
-    chmod(this->path.string().data(), 0666);
-#endif
 }
