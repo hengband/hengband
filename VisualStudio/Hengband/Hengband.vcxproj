@@ -310,6 +310,7 @@
     <ClCompile Include="..\..\src\external-lib\fmt\format.cc" />
     <ClCompile Include="..\..\src\info-reader\definition-hash-data.cpp" />
     <ClCompile Include="..\..\src\io\macro-configurations-store.cpp" />
+    <ClCompile Include="..\..\src\io\temp-file.cpp" />
     <ClCompile Include="..\..\src\monster-floor\monster-movement-direction-list.cpp" />
     <ClCompile Include="..\..\src\player-info\bluemage-data.cpp" />
     <ClCompile Include="..\..\src\system\artifact\artifact-list.cpp" />
@@ -1042,6 +1043,7 @@
     <ClInclude Include="..\..\src\action\run-execution.h" />
     <ClInclude Include="..\..\src\external-lib\include-json.h" />
     <ClInclude Include="..\..\src\io\macro-configurations-store.h" />
+    <ClInclude Include="..\..\src\io\temp-file.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-movement-direction-list.h" />
     <ClInclude Include="..\..\src\system\enums\store-sale-type.h" />
     <ClInclude Include="..\..\src\system\enums\terrain\building-type.h" />

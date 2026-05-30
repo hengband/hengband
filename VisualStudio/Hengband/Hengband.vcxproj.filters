@@ -2592,6 +2592,9 @@
     <ClCompile Include="..\..\src\world\town-info-service.cpp">
       <Filter>world</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\temp-file.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5621,6 +5624,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\world\town-info-service.h">
       <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\temp-file.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
