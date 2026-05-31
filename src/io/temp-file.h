@@ -1,9 +1,7 @@
 #pragma once
 
 #include <filesystem>
-#include <fstream>
 #include <string>
-#include <string_view>
 #include <tl/optional.hpp>
 #include <vector>
 
@@ -18,9 +16,11 @@ public:
     ~TempFile();
 
     const std::filesystem::path &get_path() const;
-    std::vector<std::string> read_all() const;
-    void write_lines(const std::vector<std::string> &lines) const;
+    const tl::optional<std::string> &get_error_message() const;
+    std::vector<std::string> read_all();
+    void write_lines(const std::vector<std::string> &lines);
 
 private:
     std::filesystem::path path;
+    tl::optional<std::string> error_message;
 };

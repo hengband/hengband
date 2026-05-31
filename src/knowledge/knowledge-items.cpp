@@ -95,6 +95,11 @@ auto collect_known_fixed_artifacts(PlayerType *player_ptr)
 void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
 {
     TempFile temp_file;
+    if (const auto &error_message = temp_file.get_error_message(); error_message) {
+        msg_print(*error_message);
+        return;
+    }
+
     std::vector<std::string> lines;
     const auto &artifacts = ArtifactList::get_instance();
     const auto fa_ids = collect_known_fixed_artifacts(player_ptr);
@@ -109,6 +114,11 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
     }
 
     temp_file.write_lines(lines);
+    if (const auto &error_message = temp_file.get_error_message(); error_message) {
+        msg_print(*error_message);
+        return;
+    }
+
     FileDisplayer(player_ptr->name).display(true, temp_file.get_path().string(), 0, 0, _("既知の伝説のアイテム", "Artifacts Seen"));
 }
 
