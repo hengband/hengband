@@ -5,7 +5,6 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/inner-game-data.h"
 #include "system/item/item-entity.h"
@@ -54,9 +53,10 @@ void prevent_turn_overflow(PlayerType *player_ptr)
         df.set_turns(1);
     }
 
-    for (size_t i = 1; i < towns_info.size(); i++) {
+    auto &towns = TownList::get_instance();
+    for (size_t i = 1; i < towns.size(); i++) {
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            auto &store = towns_info[i].get_store(sst);
+            auto &store = towns.get_town(i).get_store(sst);
             if (store.last_visit > -10L * TURNS_PER_TICK * STORE_TICKS) {
                 store.last_visit -= rollback_turns;
                 if (store.last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) {

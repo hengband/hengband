@@ -35,6 +35,7 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/floor/town-list.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -268,7 +269,9 @@ void init_vaults_info()
 
 static bool read_wilderness_definition(std::ifstream &ifs)
 {
+    auto &towns = TownList::get_instance();
     auto &wilderness = WildernessGrids::get_instance();
+    auto is_wilderness_size_initialized = false;
     std::string line;
     while (!ifs.eof()) {
         if (!std::getline(ifs, line)) {
@@ -280,21 +283,31 @@ static bool read_wilderness_definition(std::ifstream &ifs)
         }
 
         const auto &splits = str_split(line, ':');
-        if ((splits.size() != 3) || (splits[0] != "M")) {
+        if ((splits.size() == 8) && (splits[0] == "W") && (splits[1] == _("J", "E"))) {
+            const auto town_num = std::stoi(splits[5]);
+            const auto town_name = utf8_to_local(splits[7]);
+            towns.get_town(town_num).init_name(town_name);
             continue;
         }
 
-        if (splits[1] == "WX") {
-            wilderness.initialize_width(std::stoi(splits[2]));
-        } else if (splits[1] == "WY") {
-            wilderness.initialize_height(std::stoi(splits[2]));
-        } else {
-            return false;
+        if ((splits.size() == 3) && (splits[0] == "M")) {
+            if (splits[1] == "WX") {
+                wilderness.initialize_width(std::stoi(splits[2]));
+            } else if (splits[1] == "WY") {
+                wilderness.initialize_height(std::stoi(splits[2]));
+            } else {
+                return false;
+            }
+
+            if (wilderness.is_height_initialized() && wilderness.is_width_initialized()) {
+                wilderness.initialize_grids();
+                wilderness.set_ambushes(false);
+                is_wilderness_size_initialized = true;
+                continue;
+            }
         }
 
-        if (wilderness.is_height_initialized() && wilderness.is_width_initialized()) {
-            wilderness.initialize_grids();
-            wilderness.set_ambushes(false);
+        if (towns.is_all_initialized() && is_wilderness_size_initialized) {
             return true;
         }
     }

@@ -2,6 +2,7 @@
 #include "core/asking-player.h"
 #include "market/arena-entry.h"
 #include "player-info/race-types.h"
+#include "system/floor/town-list.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -122,6 +123,31 @@ std::string AngbandWorld::format_real_playtime() const
     const auto min = (playtime / 60) % 60;
     const auto sec = playtime % 60;
     return format("%.2u:%.2u:%.2u", hour, min, sec);
+}
+
+bool AngbandWorld::is_in_any_town() const
+{
+    return this->current_town_index > 0;
+}
+
+size_t AngbandWorld::get_town_index() const
+{
+    return this->current_town_index;
+}
+
+void AngbandWorld::set_town_index(size_t index)
+{
+    this->current_town_index = index;
+}
+
+const TownInfo &AngbandWorld::get_town() const
+{
+    return TownList::get_instance().get_town(this->current_town_index);
+}
+
+TownInfo &AngbandWorld::get_town()
+{
+    return TownList::get_instance().get_town(this->current_town_index);
 }
 
 /*!

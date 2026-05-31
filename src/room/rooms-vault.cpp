@@ -23,7 +23,6 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"

@@ -91,6 +91,7 @@
 #include "view/display-player.h"
 #include "window/main-window-util.h"
 #include "wizard/wizard-special-process.h"
+#include "world/town-info-service.h"
 #include "world/world.h"
 
 static void restore_windows(PlayerType *player_ptr)
@@ -237,6 +238,7 @@ static void reset_world_info(PlayerType *player_ptr)
     player_ptr->now_damaged = false;
     now_message = 0;
     record_item_name.clear();
+    TownInfoService::overwrite_town_name();
 }
 
 static void generate_wilderness(PlayerType *player_ptr)

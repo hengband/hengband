@@ -32,7 +32,6 @@
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/inner-game-data.h"
@@ -105,7 +104,9 @@ static bool wr_savefile_new(PlayerType *player_ptr)
         wr_perception(bi_id);
     }
 
-    tmp16u = static_cast<uint16_t>(towns_info.size());
+    const auto &towns = TownList::get_instance();
+    const auto towns_size = static_cast<uint16_t>(towns.size());
+    tmp16u = towns_size;
     wr_u16b(tmp16u);
 
     const auto &quests = QuestList::get_instance();
@@ -202,14 +203,13 @@ static bool wr_savefile_new(PlayerType *player_ptr)
     }
 
     wr_u16b(0xFFFF);
-    tmp16u = static_cast<uint16_t>(towns_info.size());
-    wr_u16b(tmp16u);
+    wr_u16b(towns_size);
 
     tmp16u = MAX_STORES;
     wr_u16b(tmp16u);
-    for (size_t i = 1; i < towns_info.size(); i++) {
+    for (uint16_t i = 1; i < towns_size; i++) {
         for (auto sst : STORE_SALE_TYPE_LIST) {
-            wr_store(&towns_info[i].get_store(sst));
+            wr_store(towns.get_town(i).get_store(sst));
         }
     }
 

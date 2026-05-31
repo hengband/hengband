@@ -1,4 +1,3 @@
-
 /*!
  * @file unix-music.cpp
  * @brief unix用のBGM処理
@@ -35,7 +34,6 @@
 #include "main/sound-of-music.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/monrace/monrace-list.h"
 #include "term/z-term.h"
@@ -131,7 +129,7 @@ static tl::optional<std::string> quest_key_at(int index)
  */
 static tl::optional<std::string> town_key_at(int index)
 {
-    if (index >= static_cast<int>(towns_info.size())) {
+    if (index >= static_cast<int>(TownList::get_instance().size())) {
         return tl::nullopt;
     }
 

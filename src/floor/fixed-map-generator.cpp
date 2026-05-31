@@ -23,7 +23,6 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"

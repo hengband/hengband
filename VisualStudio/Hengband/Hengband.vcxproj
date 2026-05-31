@@ -1888,6 +1888,7 @@
     <ClCompile Include="..\..\src\wizard\wizard-spells.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.cpp" />
     <ClCompile Include="..\..\src\wizard\wizard-special-process.cpp" />
+    <ClCompile Include="..\..\src\world\town-info-service.cpp" />
     <ClCompile Include="..\..\src\world\world.cpp" />
     <ClCompile Include="..\..\src\world\world-movement-processor.cpp" />
     <ClCompile Include="..\..\src\world\world-turn-processor.cpp" />
@@ -2031,6 +2032,7 @@
     <ClInclude Include="..\..\src\view\status-first-page.h" />
     <ClInclude Include="..\..\src\wizard\wizard-special-process.h" />
     <ClInclude Include="..\..\src\wizard\wizard-spoiler.h" />
+    <ClInclude Include="..\..\src\world\town-info-service.h" />
     <ClInclude Include="..\..\src\world\world-movement-processor.h" />
     <ClInclude Include="..\..\src\world\world-turn-processor.h" />
     <ClInclude Include="..\..\src\locale\localized-string.h" />
