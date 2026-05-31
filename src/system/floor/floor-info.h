@@ -184,8 +184,9 @@ private:
     static std::pair<int, int> select_floor_size_small();
     static tl::optional<std::pair<int, int>> select_floor_size_small_option();
     static std::pair<int, int> select_floor_size_large();
+    static tl::optional<std::pair<int, int>> select_floor_size_large_option();
     static std::pair<int, int> select_floor_size_normal();
-    static std::pair<int, int> pick_block_size(size_t size);
+    static std::pair<int, int> pick_block_size(size_t size, int min_area, int max_area);
     static int calc_blocks(const std::pair<int, int> &block);
 
     void set_note_and_redraw_at(const Pos2D &pos);

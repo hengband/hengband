@@ -1112,10 +1112,11 @@ tl::optional<std::pair<int, int>> FloorType::select_floor_size_small_option()
     }
 
     const auto min_area = allow_smallest_floor ? MIN_AREA_BLOCKS : MIN_AREA_BLOCKS * 2;
+    const auto max_area = MEDIUM_AREA_BLOCKS;
     const auto size = dungeon_blocks.size() - 1; // 効率上げのため、最大サイズのフロアを最初から除外する.
     auto is_retried_always_small = true;
     while (true) {
-        const auto selection = pick_block_size(size);
+        const auto selection = pick_block_size(size, min_area, max_area);
         const auto area = calc_blocks(selection);
         if (area > MEDIUM_AREA_BLOCKS) {
             continue;
@@ -1138,13 +1139,17 @@ tl::optional<std::pair<int, int>> FloorType::select_floor_size_small_option()
  */
 std::pair<int, int> FloorType::select_floor_size_large()
 {
-    constexpr auto max_blocks_num = dungeon_blocks.size() - 1;
-    while (true) {
-        const auto selection = dungeon_blocks.at(randint1(max_blocks_num));
-        if (calc_blocks(selection) >= MEDIUM_AREA_BLOCKS) {
-            return selection;
-        }
+    const auto max_area = allow_largest_floor ? MAX_AREA_BLOCKS : MAX_AREA_BLOCKS - 1;
+    return pick_block_size(dungeon_blocks.size(), MEDIUM_AREA_BLOCKS, max_area);
+}
+
+tl::optional<std::pair<int, int>> FloorType::select_floor_size_large_option()
+{
+    if (!always_large_floor) {
+        return tl::nullopt;
     }
+
+    return select_floor_size_large();
 }
 
 /*!
@@ -1155,10 +1160,11 @@ std::pair<int, int> FloorType::select_floor_size_large()
 std::pair<int, int> FloorType::select_floor_size_normal()
 {
     const auto min_area = allow_smallest_floor ? MIN_AREA_BLOCKS : MIN_AREA_BLOCKS * 2;
+    const auto max_area = allow_largest_floor ? MAX_AREA_BLOCKS : MAX_AREA_BLOCKS - 1;
     const auto size = dungeon_blocks.size();
     auto is_retried = true;
     while (true) {
-        const auto selection = pick_block_size(size);
+        const auto selection = pick_block_size(size, min_area, max_area);
         const auto area = calc_blocks(selection);
         if (is_retried && ((area == min_area) || (area == MAX_AREA_BLOCKS))) {
             is_retried = false;
@@ -1169,13 +1175,13 @@ std::pair<int, int> FloorType::select_floor_size_normal()
     }
 }
 
-std::pair<int, int> FloorType::pick_block_size(size_t size)
+std::pair<int, int> FloorType::pick_block_size(size_t size, int min_area, int max_area)
 {
-    const auto min_size = allow_smallest_floor ? MIN_AREA_BLOCKS : MIN_AREA_BLOCKS * 2;
     while (true) {
         const auto block_num = randnum0<size_t>(size);
         const auto selection = dungeon_blocks.at(block_num);
-        if (calc_blocks(selection) >= min_size) {
+        const auto area = calc_blocks(selection);
+        if ((area >= min_area) && (area <= max_area)) {
             return selection;
         }
     }
@@ -1206,7 +1212,7 @@ tl::optional<std::pair<int, int>> FloorType::try_select_largest_floor() const
     }
 
     constexpr auto chance_small_floor = 3;
-    auto is_largest = !always_small_floor;
+    auto is_largest = allow_largest_floor && !always_small_floor;
     is_largest &= dungeon.flags.has_none_of({ DungeonFeatureType::SMALLEST, DungeonFeatureType::SMALL });
     is_largest &= one_in_(chance_small_floor);
     if (is_largest) {
@@ -1230,7 +1236,7 @@ tl::optional<std::pair<int, int>> FloorType::try_select_smallest_floor() const
     }
 
     constexpr auto chance_large_floor = 3;
-    auto is_smallest = allow_smallest_floor;
+    auto is_smallest = allow_smallest_floor && !always_large_floor;
     is_smallest &= dungeon.flags.has_none_of({ DungeonFeatureType::LARGEST, DungeonFeatureType::LARGE });
     is_smallest &= one_in_(chance_large_floor);
     if (is_smallest) {
@@ -1270,6 +1276,10 @@ std::pair<int, int> FloorType::select_floor_size() const
     }
 
     if (const auto selection = select_floor_size_small_option(); selection) {
+        return *selection;
+    }
+
+    if (const auto selection = select_floor_size_large_option(); selection) {
         return *selection;
     }
 

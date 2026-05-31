@@ -75,9 +75,9 @@ enum class GameOptionType : int {
 
     SHOW_ITEM_GRAPH = 64,
     BOUND_WALLS_PERM = 65,
-    // 66
+    ALLOW_LARGEST_FLOOR = 66,
     ALWAYS_SMALL_FLOOR = 67,
-    // 68
+    ALWAYS_LARGE_FLOOR = 68,
     TARGET_PET = 69,
     AUTO_MORE = 70,
     COMMAND_MENU = 71,
