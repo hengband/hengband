@@ -161,15 +161,13 @@ void load_music_prefs()
 {
     CfgReader reader(ANGBAND_DIR_XTRA_MUSIC, { "music_debug.cfg", "music.cfg" });
 
-    // clang-format off
     music_cfg_data = reader.read_sections({
         { "Basic", TERM_XTRA_MUSIC_BASIC, basic_key_at },
         { "Dungeon", TERM_XTRA_MUSIC_DUNGEON, dungeon_key_at },
         { "Quest", TERM_XTRA_MUSIC_QUEST, quest_key_at },
         { "Town", TERM_XTRA_MUSIC_TOWN, town_key_at },
-        { "Monster", TERM_XTRA_MUSIC_MONSTER, monster_key_at, &has_monster_music }
-        });
-    // clang-format on
+        { "Monster", TERM_XTRA_MUSIC_MONSTER, monster_key_at, &has_monster_music },
+    });
 
     if (!has_monster_music) {
         int type = TERM_XTRA_MUSIC_BASIC;

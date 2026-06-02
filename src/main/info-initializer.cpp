@@ -58,13 +58,10 @@
 
 namespace {
 
-/// @note clang-formatによるconceptの整形が安定していないので抑制しておく
-// clang-format off
 template <typename T>
 concept HasShrinkToFit = requires(T t) {
     t.shrink_to_fit();
 };
-// clang-format on
 
 /*!
  * @brief 各種設定データをlib/edit/のテキストから読み込み

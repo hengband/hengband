@@ -35,7 +35,6 @@
 #include <string>
 #include <tl/optional.hpp>
 
-// clang-format off
 namespace {
 const EnumClassFlagGroup<CurseTraitType> TRC_P_FLAG_MASK({
     CurseTraitType::TY_CURSE,
@@ -51,12 +50,13 @@ const EnumClassFlagGroup<CurseTraitType> TRC_P_FLAG_MASK({
     CurseTraitType::DRAIN_MANA,
     CurseTraitType::CALL_UNDEAD,
     CurseTraitType::BERS_RAGE,
-    CurseTraitType::PERSISTENT_CURSE });
+    CurseTraitType::PERSISTENT_CURSE,
+});
 const EnumClassFlagGroup<CurseSpecialTraitType> TRCS_P_FLAG_MASK({
     CurseSpecialTraitType::TELEPORT_SELF,
-    CurseSpecialTraitType::CHAINSWORD });
+    CurseSpecialTraitType::CHAINSWORD,
+});
 }
-// clang-format on
 
 static bool is_specific_curse(CurseTraitType flag)
 {

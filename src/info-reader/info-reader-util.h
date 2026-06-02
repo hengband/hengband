@@ -22,8 +22,6 @@ RandomArtActType grab_one_activation_flag(std::string_view what);
 void append_english_text(std::string &text, std::string_view add);
 #endif
 
-/// @note clang-formatによるconceptの整形が安定していないので抑制しておく
-// clang-format off
 /*!
  * @brief 型Keyをキーとして持つような連想配列型のコンセプト
  * std::mapやstd::unordered_mapなどが該当する
@@ -36,7 +34,6 @@ concept DictIndexedBy = requires(T t, Key k) {
     { t.find(k)->second } -> std::convertible_to<typename T::mapped_type>;
     { t.end() } -> std::same_as<typename T::iterator>;
 };
-// clang-format on
 
 /*!
  * @brief info文字列から定数を取得し、それを返す

@@ -1,6 +1,5 @@
 #include "info-reader/baseitem-tokens-table.h"
 
-// clang-format off
 /*!
  * オブジェクト基本特性トークンの定義 /
  * Object flags
@@ -212,4 +211,3 @@ const std::unordered_map<std::string_view, ItemGenerationTraitType> baseitem_gen
     { "ADD_DICE", ItemGenerationTraitType::ADD_DICE },
     { "DOUBLED_DICE", ItemGenerationTraitType::DOUBLED_DICE },
 };
-// clang-format on
