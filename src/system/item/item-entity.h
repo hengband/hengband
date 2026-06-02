@@ -192,7 +192,7 @@ public:
     bool has_identification_flag(IdentificationFlag flag) const;
     bool has_not_identification_flag(IdentificationFlag flag) const;
     bool any_identification_flag() const;
-    const EnumClassFlagGroup<IdentificationFlag> &get_special_flags() const; //!< セーブとデバッグ専用.
+    const EnumClassFlagGroup<IdentificationFlag> &get_identification_flags() const; //!< セーブとデバッグ専用.
     void load_identification_flags(const EnumClassFlagGroup<IdentificationFlag> &flags); //!< ロード専用.
 
 private:
