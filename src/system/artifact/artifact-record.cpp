@@ -24,6 +24,11 @@ bool ArtifactRecord::get_known() const
     return this->is_known;
 }
 
+bool ArtifactRecord::get_quest_reward() const
+{
+    return this->is_quest_reward;
+}
+
 bool ArtifactRecord::can_generate() const
 {
     return !this->is_generated && !this->is_quest_reward;
@@ -119,6 +124,16 @@ bool ArtifactRecords::get_known(FixedArtifactId fa_id) const
     }
 
     return this->records.at(fa_id).get_known();
+}
+
+bool ArtifactRecords::get_quest_reward(FixedArtifactId fa_id) const
+{
+    this->validate_fixed_artifact_id(fa_id);
+    if (fa_id == FixedArtifactId::NONE) {
+        return false;
+    }
+
+    return this->records.at(fa_id).get_quest_reward();
 }
 
 bool ArtifactRecords::can_generate(FixedArtifactId fa_id) const

@@ -12,10 +12,12 @@
 #include "load/load.h"
 #include "core/asking-player.h"
 #include "game-option/birth-options.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/files-util.h"
 #include "io/report.h"
 #include "io/uid-checker.h"
 #include "load/angband-version-comparer.h"
+#include "load/artifact-record-loader.h"
 #include "load/dummy-loader.h"
 #include "load/dungeon-loader.h"
 #include "load/extra-loader.h"
@@ -42,18 +44,75 @@
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
+#include "system/artifact/artifact-list.h"
+#include "system/artifact/artifact-record.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
+#include "system/floor/floor-info.h"
+#include "system/grid-type-definition.h"
 #include "system/inner-game-data.h"
+#include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "util/angband-files.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
+
+namespace {
+/*!
+ * @brief 既知の固定アーティファクトIDを収集する（V26未満のセーブデータ用）
+ */
+auto collect_known_fixed_artifacts_old(PlayerType *player_ptr)
+{
+    const auto &artifacts = ArtifactList::get_instance();
+    const auto comparer = [&artifacts](auto id1, auto id2) { return artifacts.order(id1, id2); };
+    std::set<FixedArtifactId, decltype(comparer)> fa_ids(comparer);
+    for (const auto &[fa_id, record] : ArtifactRecords::get_instance()) {
+        if (!record.get_generated()) {
+            continue;
+        }
+
+        fa_ids.insert(fa_id);
+    }
+
+    const auto &floor = *player_ptr->current_floor_ptr;
+    for (const auto &pos : floor.get_area()) {
+        const auto &grid = floor.get_grid(pos);
+        for (const auto this_o_idx : grid.o_idx_list) {
+            const auto &item = *floor.o_list[this_o_idx];
+            if (!item.is_fixed_artifact() || item.is_known()) {
+                continue;
+            }
+
+            fa_ids.erase(item.fa_id);
+        }
+    }
+
+    for (auto i = 0; i < INVEN_TOTAL; i++) {
+        const auto &item = *player_ptr->inventory[i];
+        if (!item.is_valid()) {
+            continue;
+        }
+
+        if (!item.is_fixed_artifact()) {
+            continue;
+        }
+
+        if (item.is_known()) {
+            continue;
+        }
+
+        fa_ids.erase(item.fa_id);
+    }
+
+    return fa_ids;
+}
+}
 
 /*!
  * @brief 変愚蛮怒 v2.1.3で追加された街とクエストについて読み込む
@@ -191,6 +250,16 @@ static errr verify_encoded_checksum()
     return 11;
 }
 
+static errr verify_savedata()
+{
+    const auto checksum_result = verify_checksum();
+    if (checksum_result != 0) {
+        return checksum_result;
+    }
+
+    return verify_encoded_checksum();
+}
+
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
  * @return エラーコード
@@ -214,7 +283,10 @@ static errr exe_reading_savefile(PlayerType *player_ptr)
     }
 
     load_note(_("クエスト情報をロードしました", "Loaded Quests"));
-    item_loader->load_artifact();
+    if (loading_savefile_version_is_older_than(26)) {
+        item_loader->load_artifact_older_than_26();
+    }
+
     load_player_world(player_ptr);
     auto load_hp_result = load_hp(player_ptr);
     if (load_hp_result != 0) {
@@ -261,12 +333,20 @@ static errr exe_reading_savefile(PlayerType *player_ptr)
         remove_water_cave(player_ptr);
     }
 
-    auto checksum_result = verify_checksum();
-    if (checksum_result != 0) {
-        return checksum_result;
+    if (loading_savefile_version_is_older_than(26)) {
+        auto &artifact_records = ArtifactRecords::get_instance();
+        const auto known_fixed_artifacts = collect_known_fixed_artifacts_old(player_ptr);
+        for (const auto fa_id : known_fixed_artifacts) {
+            artifact_records.set_generated(fa_id, true);
+            artifact_records.set_known(fa_id);
+            artifact_records.set_identified(fa_id);
+        }
+
+        return verify_savedata();
     }
 
-    return verify_encoded_checksum();
+    rd_artifact_records();
+    return verify_savedata();
 }
 
 /*!

@@ -70,10 +70,10 @@ static void load_quest_details(PlayerType *player_ptr, QuestId loading_quest_id)
         determine_random_questor(player_ptr, quests.get_quest(loading_quest_id));
     }
 
-    quests.get_quest(loading_quest_id).reset_reward();
+    quests.reset_reward(loading_quest_id);
     const auto reward_fa_id = i2enum<FixedArtifactId>(rd_s16b());
     if (reward_fa_id != FixedArtifactId::NONE) {
-        quests.get_quest(loading_quest_id).set_reward(reward_fa_id);
+        quests.set_reward(loading_quest_id, reward_fa_id);
     }
 
     quests.set_flags(loading_quest_id, rd_byte());

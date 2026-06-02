@@ -18,6 +18,7 @@ public:
     bool get_generated() const;
     bool get_identified() const;
     bool get_known() const;
+    bool get_quest_reward() const;
     bool can_generate() const;
 
     void set_floor_id(const tl::optional<short> &id);
@@ -51,6 +52,7 @@ public:
     bool get_generated(FixedArtifactId fa_id) const;
     bool get_identified(FixedArtifactId fa_id) const;
     bool get_known(FixedArtifactId fa_id) const;
+    bool get_quest_reward(FixedArtifactId fa_id) const;
     bool can_generate(FixedArtifactId fa_id) const;
 
     void set_floor_id(FixedArtifactId fa_id, const tl::optional<short> &id);

@@ -672,6 +672,7 @@ hengband_SOURCES = \
 	knowledge/monster-group-table.cpp knowledge/monster-group-table.h \
 	\
 	load/angband-version-comparer.cpp load/angband-version-comparer.h \
+	load/artifact-record-loader.cpp load/artifact-record-loader.h \
 	load/birth-loader.cpp load/birth-loader.h \
 	load/dummy-loader.cpp load/dummy-loader.h \
 	load/dungeon-loader.cpp load/dungeon-loader.h \
@@ -1136,6 +1137,7 @@ hengband_SOURCES = \
 	room/treasure-deployment.cpp room/treasure-deployment.h \
 	room/vault-builder.cpp room/vault-builder.h \
 	\
+	save/artifact-record-writer.cpp save/artifact-record-writer.h \
 	save/floor-writer.cpp save/floor-writer.h \
 	save/info-writer.cpp save/info-writer.h \
 	save/item-writer.cpp save/item-writer.h \
