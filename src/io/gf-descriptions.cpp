@@ -5,7 +5,6 @@
 #include "io/gf-descriptions.h"
 #include "effect/attribute-types.h"
 
-//clang-format off
 const std::vector<named_num> gf_descriptions = {
     { "GF_ELEC", AttributeType::ELEC },
     { "GF_POIS", AttributeType::POIS },
@@ -113,5 +112,3 @@ const std::vector<named_num> gf_descriptions = {
     { "GF_MONSTER_SHOOT", AttributeType::MONSTER_SHOOT },
     { "GF_MONSTER_MELEE", AttributeType::MONSTER_MELEE },
 };
-
-//clang-format on
