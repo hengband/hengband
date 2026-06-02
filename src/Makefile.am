@@ -643,6 +643,7 @@ hengband_SOURCES = \
 	io/report.cpp io/report.h \
 	io/screen-util.cpp io/screen-util.h \
 	io/signal-handlers.cpp io/signal-handlers.h \
+	io/temp-file.cpp io/temp-file.h \
 	io/tokenizer.cpp io/tokenizer.h \
 	io/uid-checker.cpp io/uid-checker.h \
 	io/write-diary.cpp io/write-diary.h \
