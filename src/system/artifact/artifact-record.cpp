@@ -1,6 +1,8 @@
 #include "system/artifact/artifact-record.h"
 #include "artifact/fixed-art-types.h"
+#include "system/angband-exceptions.h"
 #include "util/enum-converter.h"
+#include <fmt/format.h>
 
 const tl::optional<short> &ArtifactRecord::get_floor_id() const
 {
@@ -61,6 +63,18 @@ ArtifactRecords &ArtifactRecords::get_instance()
 
 void ArtifactRecords::initialize(size_t size)
 {
+    if (!this->records.empty()) {
+        for (auto &[_, record] : this->records) {
+            record.set_floor_id(tl::nullopt);
+            record.set_generated(false);
+            record.set_identified(false);
+            record.set_known(false);
+            record.set_quest_reward(false);
+        }
+
+        return;
+    }
+
     for (size_t i = 1; i <= size; i++) {
         this->records.emplace(i2enum<FixedArtifactId>(i), ArtifactRecord());
     }
@@ -68,6 +82,7 @@ void ArtifactRecords::initialize(size_t size)
 
 const tl::optional<short> &ArtifactRecords::get_floor_id(FixedArtifactId fa_id) const
 {
+    this->validate_fixed_artifact_id(fa_id);
     if (fa_id == FixedArtifactId::NONE) {
         static tl::optional<short> dummy;
         return dummy;
@@ -78,6 +93,7 @@ const tl::optional<short> &ArtifactRecords::get_floor_id(FixedArtifactId fa_id) 
 
 bool ArtifactRecords::get_generated(FixedArtifactId fa_id) const
 {
+    this->validate_fixed_artifact_id(fa_id);
     if (fa_id == FixedArtifactId::NONE) {
         return false;
     }
@@ -87,6 +103,7 @@ bool ArtifactRecords::get_generated(FixedArtifactId fa_id) const
 
 bool ArtifactRecords::get_identified(FixedArtifactId fa_id) const
 {
+    this->validate_fixed_artifact_id(fa_id);
     if (fa_id == FixedArtifactId::NONE) {
         return false;
     }
@@ -96,6 +113,7 @@ bool ArtifactRecords::get_identified(FixedArtifactId fa_id) const
 
 bool ArtifactRecords::get_known(FixedArtifactId fa_id) const
 {
+    this->validate_fixed_artifact_id(fa_id);
     if (fa_id == FixedArtifactId::NONE) {
         return false;
     }
@@ -105,6 +123,7 @@ bool ArtifactRecords::get_known(FixedArtifactId fa_id) const
 
 bool ArtifactRecords::can_generate(FixedArtifactId fa_id) const
 {
+    this->validate_fixed_artifact_id(fa_id);
     if (fa_id == FixedArtifactId::NONE) {
         return false;
     }
@@ -114,47 +133,52 @@ bool ArtifactRecords::can_generate(FixedArtifactId fa_id) const
 
 void ArtifactRecords::set_floor_id(FixedArtifactId fa_id, const tl::optional<short> &id)
 {
+    this->validate_fixed_artifact_id(fa_id);
     if (fa_id == FixedArtifactId::NONE) {
         return;
     }
 
-    this->records.at(fa_id).set_floor_id(id);
+    this->records[fa_id].set_floor_id(id);
 }
 
 void ArtifactRecords::set_generated(FixedArtifactId fa_id, bool new_state)
 {
+    this->validate_fixed_artifact_id(fa_id);
     if (fa_id == FixedArtifactId::NONE) {
         return;
     }
 
-    return this->records.at(fa_id).set_generated(new_state);
+    return this->records[fa_id].set_generated(new_state);
 }
 
 void ArtifactRecords::set_identified(FixedArtifactId fa_id, bool new_state)
 {
+    this->validate_fixed_artifact_id(fa_id);
     if (fa_id == FixedArtifactId::NONE) {
         return;
     }
 
-    return this->records.at(fa_id).set_identified(new_state);
+    return this->records[fa_id].set_identified(new_state);
 }
 
 void ArtifactRecords::set_known(FixedArtifactId fa_id, bool new_state)
 {
+    this->validate_fixed_artifact_id(fa_id);
     if (fa_id == FixedArtifactId::NONE) {
         return;
     }
 
-    return this->records.at(fa_id).set_known(new_state);
+    return this->records[fa_id].set_known(new_state);
 }
 
 void ArtifactRecords::set_quest_reward(FixedArtifactId fa_id, bool new_state)
 {
+    this->validate_fixed_artifact_id(fa_id);
     if (fa_id == FixedArtifactId::NONE) {
         return;
     }
 
-    return this->records.at(fa_id).set_quest_reward(new_state);
+    return this->records[fa_id].set_quest_reward(new_state);
 }
 
 void ArtifactRecords::reset_all_without_knowledge()
@@ -164,5 +188,12 @@ void ArtifactRecords::reset_all_without_knowledge()
         record.set_generated(false);
         record.set_identified(false);
         record.set_quest_reward(false);
+    }
+}
+
+void ArtifactRecords::validate_fixed_artifact_id(FixedArtifactId fa_id) const
+{
+    if ((fa_id < FixedArtifactId::NONE) || (enum2i(fa_id) > static_cast<short>(this->records.size()))) {
+        THROW_EXCEPTION(std::out_of_range, fmt::format("Invalid Fixed Artifact ID: {}", enum2i(fa_id)));
     }
 }

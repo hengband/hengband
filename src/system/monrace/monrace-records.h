@@ -1,7 +1,7 @@
 #pragma once
 
 /*!
- * @brief モンスター種族に関するプレイ中の動的な記録を集合論的に取り扱うクラス
+ * @brief モンスター種族に関するプレイ中の動的な記録を集合論的に取り扱うリポジトリ
  * @author Hourier
  * @date 2026/05/26
  */
@@ -38,5 +38,5 @@ private:
         return this->records;
     }
 
-    void check_monrace_id(MonraceId monrace_id) const;
+    void validate_monrace_id(MonraceId monrace_id) const;
 };
