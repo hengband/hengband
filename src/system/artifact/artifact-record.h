@@ -9,6 +9,7 @@
 
 #include "util/abstract-map-wrapper.h"
 #include <tl/optional.hpp>
+#include <vector>
 
 class ArtifactRecord {
 public:
@@ -36,7 +37,6 @@ private:
 };
 
 enum class FixedArtifactId : short;
-class ArtifactRecord;
 class ArtifactRecords : public util::AbstractMapWrapper<FixedArtifactId, ArtifactRecord> {
 public:
     ArtifactRecords(ArtifactRecords &&) = delete;
@@ -61,6 +61,9 @@ public:
     void set_known(FixedArtifactId fa_id, bool new_state = true);
     void set_quest_reward(FixedArtifactId fa_id, bool new_state);
     void reset_all_without_knowledge();
+
+    std::vector<FixedArtifactId> collect_known_ids() const;
+    std::vector<FixedArtifactId> collect_identified_ids() const;
 
 private:
     ArtifactRecords() = default;

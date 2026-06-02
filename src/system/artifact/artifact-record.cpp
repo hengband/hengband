@@ -212,3 +212,27 @@ void ArtifactRecords::validate_fixed_artifact_id(FixedArtifactId fa_id) const
         THROW_EXCEPTION(std::out_of_range, fmt::format("Invalid Fixed Artifact ID: {}", enum2i(fa_id)));
     }
 }
+
+std::vector<FixedArtifactId> ArtifactRecords::collect_known_ids() const
+{
+    std::vector<FixedArtifactId> result;
+    for (const auto &[fa_id, record] : this->records) {
+        if (record.get_known()) {
+            result.push_back(fa_id);
+        }
+    }
+
+    return result;
+}
+
+std::vector<FixedArtifactId> ArtifactRecords::collect_identified_ids() const
+{
+    std::vector<FixedArtifactId> result;
+    for (const auto &[fa_id, record] : this->records) {
+        if (record.get_identified()) {
+            result.push_back(fa_id);
+        }
+    }
+
+    return result;
+}

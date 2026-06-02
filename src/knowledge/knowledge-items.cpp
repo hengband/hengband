@@ -10,89 +10,38 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
-#include "inventory/inventory-slot-types.h"
 #include "io-dump/dump-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/temp-file.h"
 #include "knowledge/item-group-table.h"
-#include "object/tval-types.h"
 #include "perception/identification.h"
-#include "perception/object-perception.h"
+#include "system/angband-exceptions.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
 #include "system/floor/floor-info.h"
-#include "system/grid-type-definition.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "tracking/baseitem-tracker.h"
-#include "util/angband-files.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
 #include <fmt/format.h>
+#include <memory>
 #include <numeric>
-#include <set>
+#include <string>
 #include <vector>
 
-namespace {
-auto collect_known_fixed_artifacts(PlayerType *player_ptr)
-{
-    const auto &artifacts = ArtifactList::get_instance();
-    const auto comparer = [&artifacts](auto id1, auto id2) { return artifacts.order(id1, id2); };
-    std::set<FixedArtifactId, decltype(comparer)> fa_ids(comparer);
-    for (const auto &[fa_id, record] : ArtifactRecords::get_instance()) {
-        if (!record.get_generated()) {
-            continue;
-        }
-
-        fa_ids.insert(fa_id);
-    }
-
-    const auto &floor = *player_ptr->current_floor_ptr;
-    for (const auto &pos : floor.get_area()) {
-        const auto &grid = floor.get_grid(pos);
-        for (const auto this_o_idx : grid.o_idx_list) {
-            const auto &item = *floor.o_list[this_o_idx];
-            if (!item.is_fixed_artifact() || item.is_known()) {
-                continue;
-            }
-
-            fa_ids.erase(item.fa_id);
-        }
-    }
-
-    for (auto i = 0; i < INVEN_TOTAL; i++) {
-        const auto &item = *player_ptr->inventory[i];
-        if (!item.is_valid()) {
-            continue;
-        }
-
-        if (!item.is_fixed_artifact()) {
-            continue;
-        }
-
-        if (item.is_known()) {
-            continue;
-        }
-
-        fa_ids.erase(item.fa_id);
-    }
-
-    return fa_ids;
-}
-}
-
 /*!
- * @brief Check the status of "artifacts"
+ * @brief 入手済の固定アーティファクト一覧を一時ファイルへ保存して表示する
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param mode 表示モード
  */
-void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
+void do_cmd_knowledge_artifacts(PlayerType *player_ptr, ArtifactKnowledgeMode mode)
 {
     TempFile temp_file;
     if (const auto &error_message = temp_file.get_error_message(); error_message) {
@@ -100,9 +49,27 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         return;
     }
 
-    std::vector<std::string> lines;
+    const auto &records = ArtifactRecords::get_instance();
+    std::vector<FixedArtifactId> fa_ids;
+    std::string title;
+    switch (mode) {
+    case ArtifactKnowledgeMode::KNOWN:
+        fa_ids = records.collect_known_ids();
+        title = _("既知の伝説のアイテム", "Known Artifacts");
+        break;
+    case ArtifactKnowledgeMode::IDENTIFIED:
+        fa_ids = records.collect_identified_ids();
+        title = _("鑑定済の伝説のアイテム", "Identified Artifacts");
+        break;
+    default:
+        THROW_EXCEPTION(std::logic_error, fmt::format("Invalid ArtifactKnowledgeMode: {}", enum2i(mode)));
+    }
+
     const auto &artifacts = ArtifactList::get_instance();
-    const auto fa_ids = collect_known_fixed_artifacts(player_ptr);
+    std::stable_sort(fa_ids.begin(), fa_ids.end(), [&artifacts](auto x, auto y) {
+        return artifacts.order(x, y);
+    });
+    std::vector<std::string> lines;
     for (const auto fa_id : fa_ids) {
         const auto &artifact = artifacts.get_artifact(fa_id);
         constexpr auto template_basename = _("     {}", "     The {}");
@@ -119,7 +86,7 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr)
         return;
     }
 
-    FileDisplayer(player_ptr->name).display(true, temp_file.get_path().string(), 0, 0, _("既知の伝説のアイテム", "Artifacts Seen"));
+    FileDisplayer(player_ptr->name).display(true, temp_file.get_path().string(), 0, 0, title);
 }
 
 /*!

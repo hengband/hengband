@@ -20,6 +20,7 @@
 #include "object/object-mark-types.h"
 #include "perception/identification.h"
 #include "perception/object-perception.h"
+#include "system/artifact/artifact-record.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -68,6 +69,11 @@ bool identify_item(PlayerType *player_ptr, ItemEntity *o_ptr)
     object_aware(player_ptr, *o_ptr);
     o_ptr->mark_as_known();
     o_ptr->marked.set(OmType::TOUCHED);
+    if (o_ptr->is_fixed_artifact()) {
+        auto &records = ArtifactRecords::get_instance();
+        records.set_known(o_ptr->fa_id);
+        records.set_identified(o_ptr->fa_id);
+    }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
