@@ -165,6 +165,16 @@ void QuestList::set_flags(QuestId id, uint32_t flags)
     this->quests.at(id).flags = flags;
 }
 
+void QuestList::set_reward(QuestId id, FixedArtifactId fa_id)
+{
+    this->quests.at(id).set_reward(fa_id);
+}
+
+void QuestList::reset_reward(QuestId id)
+{
+    this->quests.at(id).reset_reward();
+}
+
 bool QuestList::is_quest_equals(QuestId id, QuestKindType type) const
 {
     return this->quests.at(id).type == type;

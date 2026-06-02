@@ -28,8 +28,10 @@ void ItemLoaderBase::load_item()
 
 /*!
  * @brief 固定アーティファクトの出現情報をロードする.
+ *
+ * セーブファイルバージョン26未満専用.
  */
-void ItemLoaderBase::load_artifact()
+void ItemLoaderBase::load_artifact_older_than_26()
 {
     auto &records = ArtifactRecords::get_instance();
     auto loading_max_a_idx = rd_u16b();
@@ -44,5 +46,5 @@ void ItemLoaderBase::load_artifact()
         }
     }
 
-    load_note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
+    load_note(_("伝説のアイテム(旧版)をロードしました", "Loaded Artifacts (old versions)"));
 }
