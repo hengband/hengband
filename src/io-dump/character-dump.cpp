@@ -48,6 +48,7 @@
 #include "world/world.h"
 #include <fmt/format.h>
 #include <numeric>
+#include <range/v3/algorithm.hpp>
 #include <range/v3/view.hpp>
 #include <string>
 
@@ -348,16 +349,26 @@ static void dump_aux_monsters(FILE *fff)
     fmt::println(fff, "You have defeated {} {} including {} unique monster{} in total.", norm_total, norm_total == 1 ? "enemy" : "enemies", uniq_total, (uniq_total == 1 ? "" : "s"));
 #endif
 
-    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
-    fmt::println(fff, _("\n《上位{}体のユニーク・モンスター》", "\n< Unique monsters top {} >"), std::min(uniq_total, 10));
-    for (auto it = monrace_ids.rbegin(); it != monrace_ids.rend() && std::distance(monrace_ids.rbegin(), it) < 10; it++) {
-        const auto &monrace = monraces.get_monrace(*it);
+    ranges::stable_sort(monrace_ids, [&monraces](auto x, auto y) { return monraces.order(x, y); });
+    ranges::reverse(monrace_ids);
+
+    const auto id_to_monrace = [&monraces](auto id) -> const MonraceDefinition & { return monraces.get_monrace(id); };
+    const auto top_display_num = std::min(uniq_total, 10);
+    const auto top_monraces = monrace_ids | ranges::views::take(top_display_num) | ranges::views::transform(id_to_monrace);
+    const auto max_defeat_time = ranges::max(top_monraces | ranges::views::transform(&MonraceDefinition::defeat_time));
+    const auto max_hour_digits = count_digits(max_defeat_time / (60 * 60));
+
+    fmt::println(fff, _("\n《上位{}体のユニーク・モンスター》", "\n< Unique monsters top {} >"), top_display_num);
+    for (const auto &monrace : top_monraces) {
         const auto defeat_level = monrace.defeat_level;
         const auto defeat_time = monrace.defeat_time;
         std::string defeat_info;
         if ((defeat_level > 0) && (defeat_time > 0)) {
-            constexpr auto fmt = _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d");
-            defeat_info = format(fmt, defeat_level, defeat_time / (60 * 60), (defeat_time / 60) % 60, defeat_time % 60);
+            const auto defeat_hour = defeat_time / (60 * 60);
+            const auto defeat_minute = (defeat_time / 60) % 60;
+            const auto defeat_second = defeat_time % 60;
+            constexpr auto fmt = _(" - レベル{:2} - {:>{}}:{:02}:{:02}", " - level {:2} - {:>{}}:{:02}:{:02}");
+            defeat_info = fmt::format(fmt, defeat_level, defeat_hour, max_hour_digits, defeat_minute, defeat_second);
         }
 
         const auto names = str_separate(monrace.name, 40);
