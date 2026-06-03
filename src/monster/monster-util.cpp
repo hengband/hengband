@@ -1,5 +1,4 @@
 #include "monster/monster-util.h"
-#include "dungeon/quest.h"
 #include "game-option/cheat-options.h"
 #include "grid/grid.h"
 #include "monster-floor/place-monster-types.h"
@@ -12,6 +11,7 @@
 #include "spell/summon-types.h"
 #include "system/angband-exceptions.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/quest-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/wilderness-terrain.h"
 #include "system/floor/floor-info.h"

@@ -6,7 +6,6 @@
 
 #include "melee/melee-switcher.h"
 #include "core/disturbance.h"
-#include "dungeon/quest.h"
 #include "effect/attribute-types.h"
 #include "melee/melee-util.h"
 #include "monster-attack/monster-attack-effect.h"
@@ -19,6 +18,7 @@
 #include "spell-kind/spells-polymorph.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-util.h"
+#include "system/dungeon/quest-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"

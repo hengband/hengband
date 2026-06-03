@@ -19,6 +19,7 @@
 #include "player/player-realm.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
+#include "system/dungeon/quest-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
