@@ -27,8 +27,8 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <fstream>
-#include <sstream>
 #include <string>
 
 static concptr variant = "ZANGBAND";
@@ -295,6 +295,18 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
     return err;
 }
 
+static std::ifstream create_ifs_quest_list(std::string_view file_name)
+{
+    const auto path = path_build(ANGBAND_DIR_EDIT, file_name);
+    std::ifstream ifs(path);
+    if (ifs) {
+        return ifs;
+    }
+
+    constexpr auto fmt = _("ファイルが見つかりません ({})", "File is not found ({})");
+    THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file_name));
+}
+
 /*!
  * @brief ファイルからパースして作成したクエスト番号配列を返す
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -310,22 +322,14 @@ std::set<QuestId> parse_quest_info(std::string_view file_name)
         }
 
         if (key_list.find(quest_id) != key_list.end()) {
-            std::stringstream ss;
-            ss << _("重複したQuestID ", "Duplicated Quest Id ") << enum2i(quest_id) << '(' << file_name << ", L" << line_num << ')';
-            THROW_EXCEPTION(std::runtime_error, ss.str());
+            constexpr auto fmt = _("重複したQuestID {} ({}の{}行目)", "Duplicated Quest Id {} ({} line {})");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, enum2i(quest_id), file_name, line_num));
         }
 
         key_list.insert(quest_id);
     };
 
-    const auto path = path_build(ANGBAND_DIR_EDIT, file_name);
-    std::ifstream ifs(path);
-    if (!ifs) {
-        std::stringstream ss;
-        ss << _("ファイルが見つかりません (", "File is not found (") << file_name << ')';
-        THROW_EXCEPTION(std::runtime_error, ss.str());
-    }
-
+    auto ifs = create_ifs_quest_list(file_name);
     std::string line;
     auto line_num = 0;
     while (std::getline(ifs, line)) {
@@ -354,9 +358,8 @@ std::set<QuestId> parse_quest_info(std::string_view file_name)
     }
 
     if (ifs.bad() || (ifs.fail() && !ifs.eof())) {
-        std::stringstream ss;
-        ss << _("ファイルの読み込みに失敗しました (", "Failed to read file (") << file_name << ')';
-        THROW_EXCEPTION(std::runtime_error, ss.str());
+        constexpr auto fmt = _("ファイルの読み込みに失敗しました ({})", "Failed to read file ({})");
+        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file_name));
     }
 
     return key_list;
