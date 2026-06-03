@@ -2598,6 +2598,9 @@
     <ClCompile Include="..\..\src\system\dungeon\quest-definition.cpp">
       <Filter>system\dungeon</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\dungeon\quest-list.cpp">
+      <Filter>system\dungeon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5632,6 +5635,9 @@
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\dungeon\quest-definition.h">
+      <Filter>system\dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\dungeon\quest-list.h">
       <Filter>system\dungeon</Filter>
     </ClInclude>
   </ItemGroup>

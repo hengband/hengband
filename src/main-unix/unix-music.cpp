@@ -27,13 +27,14 @@
  */
 
 #include "main-unix/unix-music.h"
-#include "dungeon/quest.h"
 #include "main-unix/unix-cfg-reader.h"
 #include "main/music-definitions-table.h"
 #include "main/scene-table.h"
 #include "main/sound-of-music.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/town-list.h"
 #include "system/monrace/monrace-list.h"
 #include "term/z-term.h"

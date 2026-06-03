@@ -16,6 +16,7 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/town-list.h"
 #include "system/monrace/monrace-list.h"
 #include "term/z-term.h"
