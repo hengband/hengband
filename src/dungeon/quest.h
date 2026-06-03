@@ -128,6 +128,8 @@ public:
     REAL_TIME comptime = 0; /*!< クリア時ゲーム時間 /  quest clear time*/
 
     static bool is_fixed(QuestId quest_idx);
+
+	void reset();
     bool has_reward() const;
     tl::optional<FixedArtifactId> get_reward() const;
     short get_reward_bi_id() const;
@@ -151,6 +153,7 @@ public:
     static QuestList &get_instance();
 
     void initialize();
+    void reset_all();
     QuestType &get_quest(QuestId id);
     const QuestType &get_quest(QuestId id) const;
     std::vector<QuestId> get_sorted_quest_ids() const;

@@ -55,6 +55,18 @@ bool QuestType::is_fixed(QuestId quest_id)
     return (enum2i(quest_id) < MIN_RANDOM_QUEST) || (enum2i(quest_id) > MAX_RANDOM_QUEST);
 }
 
+void QuestType::reset()
+{
+    this->status = QuestStatusType::UNTAKEN;
+    this->cur_num = 0;
+    this->max_num = 0;
+    this->type = QuestKindType::NONE;
+    this->level = 0;
+    this->r_idx = MonraceList::empty_id();
+    this->complev = 0;
+    this->comptime = 0;
+}
+
 bool QuestType::has_reward() const
 {
     return this->reward_fa_id.has_value();
@@ -161,6 +173,13 @@ void QuestList::initialize()
         msg_print(ss.str());
         msg_erase();
         quit(_("クエスト初期化エラー", "Error of quests initializing"));
+    }
+}
+
+void QuestList::reset_all()
+{
+    for (auto &[_, quest] : this->quests) {
+        quest.reset();
     }
 }
 
