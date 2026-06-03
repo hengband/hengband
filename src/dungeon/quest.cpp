@@ -182,6 +182,41 @@ std::vector<QuestId> QuestList::get_sorted_quest_ids() const
     return quest_ids;
 }
 
+void QuestList::set_defeated_monster(QuestId id, short numbers)
+{
+    this->quests.at(id).cur_num = numbers;
+}
+
+void QuestList::set_max_monster(QuestId id, short numbers)
+{
+    this->quests.at(id).max_num = numbers;
+}
+
+void QuestList::set_type(QuestId id, QuestKindType type)
+{
+    this->quests.at(id).type = type;
+}
+
+void QuestList::set_monrace_id(QuestId id, MonraceId monrace_id)
+{
+    this->quests.at(id).r_idx = monrace_id;
+}
+
+void QuestList::set_flags(QuestId id, BIT_FLAGS flags)
+{
+    this->quests.at(id).flags = flags;
+}
+
+bool QuestList::is_quest_equals(QuestId id, QuestKindType type) const
+{
+    return this->quests.at(id).type == type;
+}
+
+bool QuestList::is_bounty_valid(QuestId id) const
+{
+    return this->quests.at(id).get_bounty().is_valid();
+}
+
 bool QuestList::order_completed(QuestId id1, QuestId id2) const
 {
     const auto &quest1 = this->get_quest(id1);
