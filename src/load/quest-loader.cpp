@@ -57,25 +57,25 @@ static void load_quest_completion(QuestType *q_ptr)
     }
 }
 
-static void load_quest_details(PlayerType *player_ptr, QuestType *q_ptr, const QuestId loading_quest_id)
+static void load_quest_details(PlayerType *player_ptr, QuestId loading_quest_id)
 {
-    q_ptr->cur_num = rd_s16b();
-    q_ptr->max_num = rd_s16b();
-    q_ptr->type = i2enum<QuestKindType>(rd_s16b());
+    auto &quests = QuestList::get_instance();
+    quests.set_defeated_monster(loading_quest_id, rd_s16b());
+    quests.set_max_monster(loading_quest_id, rd_s16b());
+    quests.set_type(loading_quest_id, i2enum<QuestKindType>(rd_s16b()));
 
-    q_ptr->r_idx = i2enum<MonraceId>(rd_s16b());
-    if ((q_ptr->type == QuestKindType::RANDOM) && !q_ptr->get_bounty().is_valid()) {
-        auto &quests = QuestList::get_instance();
+    quests.set_monrace_id(loading_quest_id, i2enum<MonraceId>(rd_s16b()));
+    if ((quests.is_quest_equals(loading_quest_id, QuestKindType::RANDOM)) && !quests.is_bounty_valid(loading_quest_id)) {
         determine_random_questor(player_ptr, quests.get_quest(loading_quest_id));
     }
 
-    q_ptr->reset_reward();
+    quests.get_quest(loading_quest_id).reset_reward();
     const auto reward_fa_id = i2enum<FixedArtifactId>(rd_s16b());
     if (reward_fa_id != FixedArtifactId::NONE) {
-        q_ptr->set_reward(reward_fa_id);
+        quests.get_quest(loading_quest_id).set_reward(reward_fa_id);
     }
 
-    q_ptr->flags = rd_byte();
+    quests.set_flags(loading_quest_id, rd_byte());
 }
 
 static bool is_missing_id_ver_16(const QuestId q_idx)
@@ -171,7 +171,7 @@ void analyze_quests(PlayerType *player_ptr, const uint16_t max_quests_load, cons
             continue;
         }
 
-        load_quest_details(player_ptr, &quest, quest_id);
+        load_quest_details(player_ptr, quest_id);
         if (h_older_than(0, 3, 11)) {
             set_zangband_quest(player_ptr, &quest, quest_id, old_inside_quest);
         } else {

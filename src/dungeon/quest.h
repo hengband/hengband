@@ -155,6 +155,14 @@ public:
     const QuestType &get_quest(QuestId id) const;
     std::vector<QuestId> get_sorted_quest_ids() const;
 
+    void set_defeated_monster(QuestId id, short numbers);
+    void set_max_monster(QuestId id, short numbers);
+    void set_type(QuestId id, QuestKindType type);
+    void set_monrace_id(QuestId id, MonraceId monrace_id);
+    void set_flags(QuestId id, BIT_FLAGS flags);
+    bool is_quest_equals(QuestId id, QuestKindType type) const;
+    bool is_bounty_valid(QuestId id) const;
+
 private:
     static QuestList instance;
     std::map<QuestId, QuestType> quests;
