@@ -29,6 +29,7 @@
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/dungeon/quest-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
