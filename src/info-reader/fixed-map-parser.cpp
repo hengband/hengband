@@ -17,6 +17,7 @@
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
+#include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
@@ -26,6 +27,7 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <fstream>
 #include <string>
 
 static concptr variant = "ZANGBAND";
@@ -243,31 +245,29 @@ static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp,
 parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, int ymin, int xmin, int ymax, int xmax)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, name);
-    auto *fp = angband_fopen(path, FileOpenMode::READ);
-    if (fp == nullptr) {
+    std::ifstream ifs(path);
+    if (!ifs) {
         return PARSE_ERROR_GENERIC;
     }
 
-    int num = -1;
+    auto num = 0;
     parse_error_type err = PARSE_ERROR_NONE;
     bool bypass = false;
-    int x = xmin;
-    int y = ymin;
+    auto x = xmin;
+    auto y = ymin;
     qtwg_type tmp_qg;
     qtwg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, ymin, xmin, ymax, xmax, &y, &x);
-    while (true) {
-        auto line_str = angband_fgets(fp);
-        if (!line_str) {
-            break;
-        }
+    std::string line;
+    while (std::getline(ifs, line)) {
         num++;
-        if (line_str->empty() || iswspace(line_str->front()) || line_str->starts_with(('#'))) {
+        line = utf8_to_local(line);
+        if (line.empty() || (std::isspace(line.front()) != 0) || line.starts_with('#')) {
             continue;
         }
 
-        if (line_str->starts_with("?:")) {
+        if (line.starts_with("?:")) {
             char f;
-            auto *s = line_str->data() + 2;
+            auto *s = line.data() + 2;
             auto v = parse_fixed_map_expression(player_ptr, &s, &f);
             bypass = v == "0";
             continue;
@@ -277,17 +277,21 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
             continue;
         }
 
-        qg_ptr->buf = line_str->data();
+        qg_ptr->buf = line.data();
         err = generate_fixed_map_floor(player_ptr, qg_ptr, parse_fixed_map);
         if (err != PARSE_ERROR_NONE) {
-            concptr oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-            msg_format("Error %d (%s) at line %d of '%s'.", err, oops, num, name.data());
-            msg_format(_("'%s'を解析中。", "Parsing '%s'."), line_str->data());
+            const auto oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
+            msg_print("Error {} ({}) at line {} of '{}'.", enum2i(err), oops, num, name);
+            msg_print(_("'{}'を解析中。", "Parsing '{}'."), line);
             msg_erase();
             break;
         }
     }
 
-    angband_fclose(fp);
-    return err;
+    if (ifs.bad() || (ifs.fail() && !ifs.eof())) {
+        constexpr auto fmt = _("ファイルの読み込みに失敗しました ({})", "Failed to read file ({})");
+        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string()));
+    }
+
+    return PARSE_ERROR_NONE;
 }
