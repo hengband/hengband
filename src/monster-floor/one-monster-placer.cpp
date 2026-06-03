@@ -25,6 +25,7 @@
 #include "object/warning.h"
 #include "player/player-status.h"
 #include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/floor/floor-info.h"

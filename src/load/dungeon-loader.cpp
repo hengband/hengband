@@ -8,6 +8,7 @@
 #include "load/old/load-v1-5-0.h"
 #include "save/floor-writer.h"
 #include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/floor-info.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"

@@ -1282,6 +1282,7 @@ hengband_SOURCES = \
 	system/dungeon/dungeon-list.cpp system/dungeon/dungeon-list.h \
 	system/dungeon/dungeon-record.cpp system/dungeon/dungeon-record.h \
 	system/dungeon/quest-definition.cpp system/dungeon/quest-definition.h \
+	system/dungeon/quest-list.cpp system/dungeon/quest-list.h \
 	\
 	system/enums/grid-flow.h \
 	system/enums/grid-count-kind.h \

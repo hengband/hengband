@@ -30,6 +30,7 @@
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
 #include "system/inner-game-data.h"

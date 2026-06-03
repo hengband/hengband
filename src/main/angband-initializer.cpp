@@ -22,7 +22,7 @@
 #include "main/info-initializer.h"
 #include "market/building-initializer.h"
 #include "system/angband-system.h"
-#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/town-list.h"
 #include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-records.h"

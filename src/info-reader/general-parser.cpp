@@ -14,6 +14,7 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/system-variables.h"

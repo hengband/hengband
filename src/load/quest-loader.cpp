@@ -8,6 +8,7 @@
 #include "system/angband-exceptions.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
 #include "system/monrace/monrace-definition.h"

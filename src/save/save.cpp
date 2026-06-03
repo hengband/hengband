@@ -31,6 +31,7 @@
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
 #include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
 #include "system/floor/wilderness-grid.h"

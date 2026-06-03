@@ -5,6 +5,7 @@
 #include "grid/grid.h"
 #include "object-enchant/item-apply-magic.h"
 #include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
