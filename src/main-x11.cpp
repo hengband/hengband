@@ -908,9 +908,9 @@ static void Infofnt_text_std_xft_draw_str(int px, int py, const XftColor &fg, co
 {
     int offset = 0;
     while (str < str_end) {
-        const int byte_len = utf8_next_char_byte_length(str);
+        const int byte_len = utf8_next_char_byte_length(std::string_view(str, str_end - str));
 
-        if (byte_len == 0 || str + byte_len > str_end) {
+        if (byte_len == 0) {
             return;
         }
 
