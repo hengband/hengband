@@ -14,16 +14,17 @@ MonraceRecords MonraceRecords::instance{};
  */
 void MonraceRecords::initialize(size_t size)
 {
-    if (!this->records.empty()) {
-        for (auto &[_, record] : this->records) {
-            record->reset_all();
+    if (this->records.size() < size) {
+        this->records.reserve(size);
+        while (this->records.size() < size) {
+            this->records.emplace_back(std::make_shared<MonraceRecord>());
         }
-
-        return;
+    } else if (this->records.size() > size) {
+        this->records.resize(size);
     }
 
-    for (size_t i = 0; i < size; i++) {
-        this->records.emplace(static_cast<MonraceId>(i), std::make_shared<MonraceRecord>());
+    for (auto &record : this->records) {
+        record->reset_all();
     }
 }
 
@@ -34,53 +35,60 @@ MonraceRecords &MonraceRecords::get_instance()
 
 std::shared_ptr<const MonraceRecord> MonraceRecords::get_record(MonraceId monrace_id) const
 {
-    this->validate_monrace_id(monrace_id);
-    return this->records.at(monrace_id);
+    return this->get_record_ref(monrace_id);
 }
 
 bool MonraceRecords::has_been_seen(MonraceId monrace_id) const
 {
-    this->validate_monrace_id(monrace_id);
     if (monrace_id == MonraceId::PLAYER) {
         return false;
     }
 
-    return this->records.at(monrace_id)->has_been_seen();
+    return this->get_record_ref(monrace_id)->has_been_seen();
 }
 
 void MonraceRecords::increment_seen_count(MonraceId monrace_id)
 {
-    this->validate_monrace_id(monrace_id);
     if (monrace_id == MonraceId::PLAYER) {
         return;
     }
 
-    this->records[monrace_id]->increment_seen_count();
+    this->get_record_ref(monrace_id)->increment_seen_count();
 }
 
 short MonraceRecords::get_seen_count(MonraceId monrace_id) const
 {
-    this->validate_monrace_id(monrace_id);
     if (monrace_id == MonraceId::PLAYER) {
         return 0;
     }
 
-    return this->records.at(monrace_id)->get_seen_count();
+    return this->get_record_ref(monrace_id)->get_seen_count();
 }
 
 void MonraceRecords::set_seen_count(MonraceId monrace_id, short count)
 {
-    this->validate_monrace_id(monrace_id);
     if (monrace_id == MonraceId::PLAYER) {
         return;
     }
 
-    this->records[monrace_id]->set_seen_count(count);
+    this->get_record_ref(monrace_id)->set_seen_count(count);
+}
+
+std::shared_ptr<MonraceRecord> &MonraceRecords::get_record_ref(MonraceId monrace_id)
+{
+    this->validate_monrace_id(monrace_id);
+    return this->records[enum2i(monrace_id)];
+}
+
+const std::shared_ptr<MonraceRecord> &MonraceRecords::get_record_ref(MonraceId monrace_id) const
+{
+    this->validate_monrace_id(monrace_id);
+    return this->records[enum2i(monrace_id)];
 }
 
 void MonraceRecords::validate_monrace_id(MonraceId monrace_id) const
 {
-    if ((monrace_id < MonraceId::PLAYER) || monrace_id >= i2enum<MonraceId>(this->records.size())) {
+    if ((monrace_id <= MonraceId::PLAYER) || monrace_id >= i2enum<MonraceId>(this->records.size())) {
         THROW_EXCEPTION(std::out_of_range, fmt::format("Invalid Monrace ID: {}", enum2i(monrace_id)));
     }
 }
