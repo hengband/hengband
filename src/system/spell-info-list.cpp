@@ -1,7 +1,10 @@
 #include "system/spell-info-list.h"
-#include "info-reader/spell-reader.h"
 #include "realm/realm-types.h"
+#include "system/angband-exceptions.h"
 #include <algorithm>
+#include <fmt/format.h>
+#include <stdexcept>
+#include <utility>
 
 SpellInfoList SpellInfoList::instance{};
 
@@ -33,7 +36,17 @@ const SpellInfo &SpellInfoList::get_spell_info(RealmType realm, int spell_id) co
     return this->spell_list[enum2i(realm)][spell_id];
 }
 
-int SpellInfoList::parse(nlohmann::json &spell_data)
+void SpellInfoList::set_spell_info(RealmType realm, int spell_id, SpellInfo &&spell_info)
 {
-    return parse_spell_info(spell_data, this->spell_list);
+    const auto realm_index = enum2i(realm);
+    if (realm_index < 0 || realm_index >= static_cast<int>(this->spell_list.size())) {
+        THROW_EXCEPTION(std::out_of_range, fmt::format("Invalid realm: {}", realm_index));
+    }
+
+    auto &spells = this->spell_list[realm_index];
+    if (spell_id < 0 || spell_id >= static_cast<int>(spells.size())) {
+        THROW_EXCEPTION(std::out_of_range, fmt::format("Invalid spell ID: {}", spell_id));
+    }
+
+    spells[spell_id] = std::move(spell_info);
 }
