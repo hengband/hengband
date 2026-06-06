@@ -1,5 +1,4 @@
 #include "spell-realm/spells-chaos.h"
-#include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "grid/grid.h"
@@ -10,6 +9,7 @@
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/quest-definition.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/monster-entity.h"

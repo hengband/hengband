@@ -4,7 +4,6 @@
  */
 
 #include "main-win/main-win-music.h"
-#include "dungeon/quest.h"
 #include "main-win/main-win-cfg-reader.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-mci.h"
@@ -16,6 +15,8 @@
 #include "main/sound-of-music.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/town-list.h"
 #include "system/monrace/monrace-list.h"
 #include "term/z-term.h"

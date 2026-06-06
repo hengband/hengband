@@ -10,7 +10,6 @@
  */
 
 #include "floor/floor-generator.h"
-#include "dungeon/quest.h"
 #include "floor/cave-generator.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h" //!< @todo precalc_cur_num_of_pet() が依存している、違和感.
@@ -27,6 +26,8 @@
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"

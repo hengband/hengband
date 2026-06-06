@@ -4,13 +4,14 @@
  * @author deskull
  */
 #include "floor/floor-util.h"
-#include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-object.h"
 #include "floor/line-of-sight.h"
 #include "game-option/birth-options.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/dungeon/dungeon-definition.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
 #include "system/grid-type-definition.h"

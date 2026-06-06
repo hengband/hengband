@@ -20,6 +20,8 @@
 #include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/floor-list.h"
@@ -52,18 +54,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
         player_ptr->history[i][0] = '\0';
     }
 
-    auto &quests = QuestList::get_instance();
-    for (auto &[quest_id, quest] : quests) {
-        quest.status = QuestStatusType::UNTAKEN;
-        quest.cur_num = 0;
-        quest.max_num = 0;
-        quest.type = QuestKindType::NONE;
-        quest.level = 0;
-        quest.r_idx = MonraceList::empty_id();
-        quest.complev = 0;
-        quest.comptime = 0;
-    }
-
+    QuestList::get_instance().reset_all();
     player_ptr->inven_cnt = 0;
     player_ptr->equip_cnt = 0;
     for (int i = 0; i < INVEN_TOTAL; i++) {

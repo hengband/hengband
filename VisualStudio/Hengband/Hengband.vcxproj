@@ -316,6 +316,8 @@
     <ClCompile Include="..\..\src\system\artifact\artifact-list.cpp" />
     <ClCompile Include="..\..\src\system\artifact\artifact-record.cpp" />
     <ClCompile Include="..\..\src\system\artifact\artifact-service.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon\quest-definition.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon\quest-list.cpp" />
     <ClCompile Include="..\..\src\system\floor\town-records.cpp" />
     <ClCompile Include="..\..\src\system\floor\wilderness-grid.cpp" />
     <ClCompile Include="..\..\src\system\monrace\monrace-record.cpp" />
@@ -1045,6 +1047,8 @@
     <ClInclude Include="..\..\src\io\macro-configurations-store.h" />
     <ClInclude Include="..\..\src\io\temp-file.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-movement-direction-list.h" />
+    <ClInclude Include="..\..\src\system\dungeon\quest-definition.h" />
+    <ClInclude Include="..\..\src\system\dungeon\quest-list.h" />
     <ClInclude Include="..\..\src\system\enums\store-sale-type.h" />
     <ClInclude Include="..\..\src\system\enums\terrain\building-type.h" />
     <ClInclude Include="..\..\src\system\enums\terrain\pattern-tile-type.h" />

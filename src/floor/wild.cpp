@@ -10,7 +10,6 @@
 
 #include "floor/wild.h"
 #include "core/asking-player.h"
-#include "dungeon/quest.h"
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
 #include "info-reader/fixed-map-parser.h"
@@ -29,6 +28,8 @@
 #include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/building-type.h"
 #include "system/enums/terrain/terrain-tag.h"

@@ -11,7 +11,6 @@
 
 #include "load/load.h"
 #include "core/asking-player.h"
-#include "dungeon/quest.h"
 #include "game-option/birth-options.h"
 #include "io/files-util.h"
 #include "io/report.h"
@@ -43,6 +42,8 @@
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/inner-game-data.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
