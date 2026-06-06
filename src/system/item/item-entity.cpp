@@ -1469,7 +1469,7 @@ bool ItemEntity::any_identification_flag() const
     return this->identification_flags.any();
 }
 
-const EnumClassFlagGroup<IdentificationFlag> &ItemEntity::get_special_flags() const
+const EnumClassFlagGroup<IdentificationFlag> &ItemEntity::get_identification_flags() const
 {
     return this->identification_flags;
 }

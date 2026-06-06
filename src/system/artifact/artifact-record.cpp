@@ -24,6 +24,11 @@ bool ArtifactRecord::get_known() const
     return this->is_known;
 }
 
+bool ArtifactRecord::get_quest_reward() const
+{
+    return this->is_quest_reward;
+}
+
 bool ArtifactRecord::can_generate() const
 {
     return !this->is_generated && !this->is_quest_reward;
@@ -121,6 +126,16 @@ bool ArtifactRecords::get_known(FixedArtifactId fa_id) const
     return this->records.at(fa_id).get_known();
 }
 
+bool ArtifactRecords::get_quest_reward(FixedArtifactId fa_id) const
+{
+    this->validate_fixed_artifact_id(fa_id);
+    if (fa_id == FixedArtifactId::NONE) {
+        return false;
+    }
+
+    return this->records.at(fa_id).get_quest_reward();
+}
+
 bool ArtifactRecords::can_generate(FixedArtifactId fa_id) const
 {
     this->validate_fixed_artifact_id(fa_id);
@@ -196,4 +211,28 @@ void ArtifactRecords::validate_fixed_artifact_id(FixedArtifactId fa_id) const
     if ((fa_id < FixedArtifactId::NONE) || (enum2i(fa_id) > static_cast<short>(this->records.size()))) {
         THROW_EXCEPTION(std::out_of_range, fmt::format("Invalid Fixed Artifact ID: {}", enum2i(fa_id)));
     }
+}
+
+std::vector<FixedArtifactId> ArtifactRecords::collect_known_ids() const
+{
+    std::vector<FixedArtifactId> result;
+    for (const auto &[fa_id, record] : this->records) {
+        if (record.get_known()) {
+            result.push_back(fa_id);
+        }
+    }
+
+    return result;
+}
+
+std::vector<FixedArtifactId> ArtifactRecords::collect_identified_ids() const
+{
+    std::vector<FixedArtifactId> result;
+    for (const auto &[fa_id, record] : this->records) {
+        if (record.get_identified()) {
+            result.push_back(fa_id);
+        }
+    }
+
+    return result;
 }

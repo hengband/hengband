@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <vector>
 
+enum class FixedArtifactId : short;
 enum class MonraceId : short;
 enum class QuestId : short;
 enum class QuestKindType : short;
@@ -27,6 +28,8 @@ public:
     void set_type(QuestId id, QuestKindType type);
     void set_monrace_id(QuestId id, MonraceId monrace_id);
     void set_flags(QuestId id, uint32_t flags);
+    void set_reward(QuestId id, FixedArtifactId fa_id);
+    void reset_reward(QuestId id);
     bool is_quest_equals(QuestId id, QuestKindType type) const;
     bool is_bounty_valid(QuestId id) const;
 

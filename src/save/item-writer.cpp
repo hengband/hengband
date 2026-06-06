@@ -167,7 +167,7 @@ static void write_item_info(const ItemEntity &item, const BIT_FLAGS flags)
     }
 
     if (any_bits(flags, SaveDataItemFlagType::IDENT)) {
-        wr_FlagGroup(item.get_special_flags(), wr_byte);
+        wr_FlagGroup(item.get_identification_flags(), wr_byte);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::MARKED)) {

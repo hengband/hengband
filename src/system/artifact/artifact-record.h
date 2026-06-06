@@ -9,6 +9,7 @@
 
 #include "util/abstract-map-wrapper.h"
 #include <tl/optional.hpp>
+#include <vector>
 
 class ArtifactRecord {
 public:
@@ -18,6 +19,7 @@ public:
     bool get_generated() const;
     bool get_identified() const;
     bool get_known() const;
+    bool get_quest_reward() const;
     bool can_generate() const;
 
     void set_floor_id(const tl::optional<short> &id);
@@ -35,7 +37,6 @@ private:
 };
 
 enum class FixedArtifactId : short;
-class ArtifactRecord;
 class ArtifactRecords : public util::AbstractMapWrapper<FixedArtifactId, ArtifactRecord> {
 public:
     ArtifactRecords(ArtifactRecords &&) = delete;
@@ -51,6 +52,7 @@ public:
     bool get_generated(FixedArtifactId fa_id) const;
     bool get_identified(FixedArtifactId fa_id) const;
     bool get_known(FixedArtifactId fa_id) const;
+    bool get_quest_reward(FixedArtifactId fa_id) const;
     bool can_generate(FixedArtifactId fa_id) const;
 
     void set_floor_id(FixedArtifactId fa_id, const tl::optional<short> &id);
@@ -59,6 +61,9 @@ public:
     void set_known(FixedArtifactId fa_id, bool new_state = true);
     void set_quest_reward(FixedArtifactId fa_id, bool new_state);
     void reset_all_without_knowledge();
+
+    std::vector<FixedArtifactId> collect_known_ids() const;
+    std::vector<FixedArtifactId> collect_identified_ids() const;
 
 private:
     ArtifactRecords() = default;
