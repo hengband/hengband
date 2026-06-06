@@ -1,6 +1,5 @@
 #include "load/load-util.h"
 #include "locale/character-encoding.h"
-#include "locale/japanese.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 

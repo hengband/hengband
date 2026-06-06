@@ -5,6 +5,7 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
+#include "locale/character-encoding.h"
 #include "object-enchant/trg-types.h"
 #include "player-info/class-types.h"
 #include "player-info/race-types.h"

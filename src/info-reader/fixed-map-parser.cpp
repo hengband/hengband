@@ -13,6 +13,7 @@
 #include "game-option/runtime-arguments.h"
 #include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
+#include "locale/character-encoding.h"
 #include "main/init-error-messages-table.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"

@@ -1,5 +1,6 @@
 #include "system/dungeon/quest-list.h"
 #include "io/files-util.h"
+#include "locale/character-encoding.h"
 #include "system/angband-exceptions.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/monrace/monrace-definition.h"

@@ -2,7 +2,7 @@
 #include "core/score-util.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
-#include "locale/japanese.h"
+#include "locale/character-encoding.h"
 #include "player-info/class-info.h"
 #include "player/player-personality.h"
 #include "player/race-info-table.h"

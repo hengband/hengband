@@ -161,7 +161,7 @@
 #include "game-option/special-options.h"
 #include "io/exit-panic.h"
 #include "io/files-util.h"
-#include "locale/japanese.h"
+#include "locale/character-encoding.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "system/angband-version.h"

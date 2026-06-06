@@ -1,5 +1,5 @@
 #include "main-win/main-win-exception.h"
-#include "locale/japanese.h"
+#include "locale/character-encoding.h"
 #include "main-win/main-win-utils.h"
 #include "net/report-error.h"
 #include <sstream>
