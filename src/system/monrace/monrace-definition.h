@@ -1,7 +1,6 @@
 #pragma once
 
 #include "locale/localized-string.h"
-#include "monrace-message.h"
 #include "monster-race/monster-aura-types.h"
 #include "monster-race/race-ability-flags.h"
 #include "monster-race/race-behavior-flags.h"
@@ -17,6 +16,7 @@
 #include "monster-race/race-visual-flags.h"
 #include "monster-race/race-wilderness-flags.h"
 #include "system/angband.h"
+#include "system/monrace/monrace-message.h"
 #include "util/dice.h"
 #include "util/flag-group.h"
 #include "view/display-symbol.h"

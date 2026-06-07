@@ -11,9 +11,9 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "locale/language-switcher.h"
+#include "util/enum-converter.h"
 #include "util/flag-group.h"
 #include <stdexcept>
-#include <util/enum-converter.h>
 #include <utility>
 
 GameOption::GameOption(bool *value, bool norm, GameOptionType type, std::string &&text, std::string &&description, const tl::optional<GameOptionPage> &page)
