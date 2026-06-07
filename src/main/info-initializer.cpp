@@ -161,7 +161,10 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
 void init_artifacts_info()
 {
     auto &artifacts = ArtifactList::get_instance();
-    init_json("ArtifactDefinitions.jsonc", "artifacts", DefinitionHashDataType::ARTIFACTS, ArtifactList::get_instance(), parse_artifacts_info);
+    auto parser = [](nlohmann::json &art_data) {
+        return ArtifactReader(art_data).read();
+    };
+    init_json("ArtifactDefinitions.jsonc", "artifacts", DefinitionHashDataType::ARTIFACTS, ArtifactList::get_instance(), parser);
     ArtifactRecords::get_instance().initialize(artifacts.size());
 }
 
