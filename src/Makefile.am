@@ -528,6 +528,7 @@ hengband_SOURCES = \
 	external-lib/include/fmt/std.h \
 	external-lib/include/fmt/printf.h \
 	external-lib/include/fmt/ostream.h \
+	external-lib/include/xoshiro.h \
 	external-lib/fmt/format.cc \
 	\
 	flavor/flag-inscriptions-table.cpp flavor/flag-inscriptions-table.h \
