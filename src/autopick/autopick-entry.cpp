@@ -294,15 +294,6 @@ bool autopick_new_entry(autopick_type *entry, std::string_view line_input, bool 
         entry->action = act;
         entry->insc = std::move(inscription);
     });
-    if (!previous_flag) {
-        if (sv.empty()) {
-            entry->add(FLG_ITEMS);
-            previous_flag = FLG_ITEMS;
-        }
-
-        return true;
-    }
-
     if (sv.starts_with(':')) {
         sv.remove_prefix(1);
         sv = ltrim_sv(sv);
@@ -316,6 +307,15 @@ bool autopick_new_entry(autopick_type *entry, std::string_view line_input, bool 
         return true;
     }
 #endif
+
+    if (!previous_flag) {
+        if (sv.empty()) {
+            entry->add(FLG_ITEMS);
+            previous_flag = FLG_ITEMS;
+        }
+
+        return true;
+    }
 
     if (sv.empty()) {
         return true;

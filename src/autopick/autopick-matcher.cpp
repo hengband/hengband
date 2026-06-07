@@ -346,13 +346,15 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
         return false;
     }
 
-    if (entry.name[0] == '^') {
-        if (!item_name.starts_with(std::string_view(entry.name).substr(1))) {
-            return false;
-        }
-    } else {
-        if (!str_find(std::string(item_name), entry.name)) {
-            return false;
+    if (!entry.name.empty()) {
+        if (entry.name[0] == '^') {
+            if (!item_name.starts_with(std::string_view(entry.name).substr(1))) {
+                return false;
+            }
+        } else {
+            if (!str_find(std::string(item_name), entry.name)) {
+                return false;
+            }
         }
     }
 
