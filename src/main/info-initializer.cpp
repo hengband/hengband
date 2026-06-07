@@ -18,6 +18,7 @@
 #include "info-reader/message-reader.h"
 #include "info-reader/race-reader.h"
 #include "info-reader/skill-reader.h"
+#include "info-reader/spell-reader.h"
 #include "info-reader/terrain-reader.h"
 #include "info-reader/vault-reader.h"
 #include "io/files-util.h"
@@ -248,7 +249,7 @@ void init_spell_info()
     auto &spell_info_list = SpellInfoList::get_instance();
     spell_info_list.initialize();
     auto parser = [&spell_info_list](nlohmann::json &spell_data) {
-        return spell_info_list.parse(spell_data);
+        return parse_spell_info(spell_data, spell_info_list);
     };
     init_json("SpellDefinitions.jsonc", "realms", DefinitionHashDataType::SPELLS, spell_info_list, parser);
 }

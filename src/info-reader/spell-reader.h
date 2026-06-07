@@ -1,8 +1,8 @@
 #pragma once
 
-#include "external-lib/include-json.h"
 #include "system/angband.h"
-#include <vector>
+#include <external-lib/include-json.h>
 
-class SpellInfo;
-errr parse_spell_info(nlohmann::json &spell_data, std::vector<std::vector<SpellInfo>> &spell_list);
+class SpellInfoList;
+
+errr parse_spell_info(nlohmann::json &spell_data, SpellInfoList &spell_info_list);
