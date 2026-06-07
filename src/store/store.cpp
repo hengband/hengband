@@ -34,6 +34,7 @@
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <tl/optional.hpp>
 
 int store_top = 0;
 int store_bottom = 0;

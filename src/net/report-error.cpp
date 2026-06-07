@@ -1,5 +1,5 @@
 #include "external-lib/include-json.h"
-#include "locale/japanese.h"
+#include "locale/character-encoding.h"
 #include "net/http-client.h"
 #include "system/angband-system.h"
 #include <sstream>

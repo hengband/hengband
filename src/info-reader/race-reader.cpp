@@ -4,7 +4,7 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
-#include "locale/japanese.h"
+#include "locale/character-encoding.h"
 #include "player-ability/player-ability-types.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"

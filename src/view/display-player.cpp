@@ -46,6 +46,7 @@
 #include "world/world.h"
 #include <sstream>
 #include <string>
+#include <tl/optional.hpp>
 
 /*!
  * @brief

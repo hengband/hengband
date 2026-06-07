@@ -1,5 +1,5 @@
 #include "util/angband-files.h"
-#include "locale/japanese.h"
+#include "locale/character-encoding.h"
 #include "system/angband-exceptions.h"
 #include "util/string-processor.h"
 #ifdef WINDOWS

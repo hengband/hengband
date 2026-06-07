@@ -5,7 +5,7 @@
  */
 
 #include "main-unix/unix-cfg-reader.h"
-#include "locale/japanese.h"
+#include "locale/character-encoding.h"
 #include "main/sound-definitions-table.h"
 #include "term/z-term.h"
 #include "util/angband-files.h"
