@@ -1,9 +1,9 @@
 #pragma once
 
-#include "external-lib/include-json.h"
 #include "info-reader/parse-error-types.h"
 #include "system/angband.h"
 #include <concepts>
+#include <external-lib/include-json.h>
 #include <tl/optional.hpp>
 #include <utility>
 
