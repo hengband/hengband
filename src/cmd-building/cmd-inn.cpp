@@ -202,14 +202,8 @@ static bool stay_inn(PlayerType *player_ptr)
  * @brief 宿屋を利用する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param cmd 宿屋の利用施設ID
+ * @param cost 噂を聞くのに払った金額
  * @return 施設の利用が実際に行われたらTRUE
- * @details inn commands
- * Note that resting for the night was a perfect way to avoid player
- * ghosts in the town *if* you could only make it to the inn in time (-:
- * Now that the ghosts are temporarily disabled in 2.8.X, this function
- * will not be that useful.  I will keep it in the hopes the player
- * ghost code does become a reality again. Does help to avoid filthy urchins.
- * Resting at night is also a quick way to restock stores -KMW-
  * @todo 悪夢を見る前後に全回復しているが、何か意図がある？
  */
 bool inn_comm(PlayerType *player_ptr, int cmd, int cost)
