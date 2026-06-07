@@ -614,7 +614,7 @@
       "id": 15,
       "name": {
         "ja": "パランティアの石",
-        "en": "Palantir~ of Westernesse",
+        "en": "Palantir of Westernesse",
       },
       "base_item": {
         "type_value": 39,
@@ -5384,7 +5384,7 @@
       "id": 141,
       "name": {
         "ja": "プラチナイェンダー印エクスプレスカード",
-        "en": "& Platinum Yendorian Express Card~",
+        "en": "Platinum Yendorian Express Card",
       },
       "base_item": {
         "type_value": 50,
@@ -6184,7 +6184,7 @@
       "id": 165,
       "name": {
         "ja": "ガラスの靴",
-        "en": "Pair~ of Glass Slippers",
+        "en": "Pair of Glass Slippers",
       },
       "base_item": {
         "type_value": 30,
