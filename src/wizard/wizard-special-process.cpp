@@ -187,31 +187,17 @@ void wiz_create_item(PlayerType *player_ptr)
     msg_print("Allocated.");
 }
 
-/*!
- * @brief 指定したIDの固定アーティファクトの名称を取得する
- *
- * @param fa_id 固定アーティファクトのID
- * @return 固定アーティファクトの名称(Ex. ★ロング・ソード『リンギル』)を保持する std::string オブジェクト
- */
-static std::string wiz_make_named_artifact_desc(PlayerType *player_ptr, FixedArtifactId fa_id)
-{
-    const auto &artifact = ArtifactList::get_instance().get_artifact(fa_id);
-    ItemEntity item(artifact.bi_key);
-    item.fa_id = fa_id;
-    return describe_flavor(player_ptr, item, OD_NAME_ONLY | OD_STORE);
-}
-
 /**
  * @brief 固定アーティファクトをリストから選択する
  *
  * @param fa_ids 選択する候補となる固定アーティファクトのIDのリスト
  * @return 選択した固定アーティファクトのIDを返す。但しキャンセルした場合は tl::nullopt を返す。
  */
-static tl::optional<FixedArtifactId> wiz_select_named_artifact(PlayerType *player_ptr, const std::vector<FixedArtifactId> &fa_ids)
+static tl::optional<FixedArtifactId> wiz_select_named_artifact(const std::vector<FixedArtifactId> &fa_ids)
 {
     CandidateSelector cs("Which artifact: ", 15);
-
-    auto describe_artifact = [player_ptr](FixedArtifactId fa_id) { return wiz_make_named_artifact_desc(player_ptr, fa_id); };
+    const auto &artifacts = ArtifactList::get_instance();
+    const auto describe_artifact = [&artifacts](auto fa_id) { return artifacts.get_artifact(fa_id).build_full_name(); };
     const auto it = cs.select(fa_ids, describe_artifact);
     return (it != fa_ids.end()) ? tl::make_optional(*it) : tl::nullopt;
 }
@@ -264,8 +250,8 @@ void wiz_create_named_art(PlayerType *player_ptr)
         }
 
         auto fa_ids = wiz_collect_group_fa_ids(group_artifact_list[idx]);
-        std::sort(fa_ids.begin(), fa_ids.end(), [](FixedArtifactId id1, FixedArtifactId id2) { return ArtifactList::get_instance().order(id1, id2); });
-        created_fa_id = wiz_select_named_artifact(player_ptr, fa_ids);
+        std::sort(fa_ids.begin(), fa_ids.end(), [](auto id1, auto id2) { return ArtifactList::get_instance().order(id1, id2); });
+        created_fa_id = wiz_select_named_artifact(fa_ids);
     }
 
     screen_load();

@@ -177,6 +177,7 @@ public:
     int get_lite_radius() const;
     Pos2D get_position() const;
     bool has_knowledge(ItemKindType tval) const;
+    std::string get_fixed_artifact_name() const;
 
     void mark_as_known();
     void mark_as_tried() const;

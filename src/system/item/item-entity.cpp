@@ -1296,6 +1296,15 @@ bool ItemEntity::has_knowledge(ItemKindType tval) const
            this->is_special();
 }
 
+std::string ItemEntity::get_fixed_artifact_name() const
+{
+    if (this->fa_id == FixedArtifactId::NONE) {
+        return "";
+    }
+
+    return ArtifactList::get_instance().get_artifact(this->fa_id).build_full_name();
+}
+
 std::string ItemEntity::build_timeout_description(const ActivationType &act) const
 {
     const auto description = act.build_timeout_description();

@@ -46,8 +46,6 @@ bool ArtifactDefinition::is_instant_artifact() const
  * 例1：『ナルサンク』 → ダガー『ナルサンク』
  * 例2：シヴァの化身の → シヴァの化身の軟革ブーツ
  *
- * 「★」の要不要は表示したい箇所によって変わるので、このメソッドでは付けない.
- *
  * English version:
  * If the artifact has the FULL_NAME flag, return it as is.
  * All fixed artifacts with "The", then it starts capital always; there must not be any name starting other than "The", such as "the".
@@ -61,18 +59,19 @@ bool ArtifactDefinition::is_instant_artifact() const
 std::string ArtifactDefinition::build_full_name() const
 {
 #ifdef JP
+    std::string full_name("★");
     if (this->flags.has(tr_type::TR_FULL_NAME)) {
-        return this->name;
+        return full_name.append(this->name);
     }
 
     constexpr auto start = "『";
     const auto is_preposition = this->name.starts_with(start);
     const auto &baseitems = BaseitemList::get_instance();
     if (is_preposition) {
-        return baseitems.lookup_baseitem(this->bi_key).name + this->name;
+        return full_name.append(baseitems.lookup_baseitem(this->bi_key).name).append(this->name);
     }
 
-    return this->name + baseitems.lookup_baseitem(this->bi_key).name;
+    return full_name.append(this->name).append(baseitems.lookup_baseitem(this->bi_key).name);
 #else
     constexpr auto definite_article = "The";
     if (this->flags.has(tr_type::TR_FULL_NAME)) {
