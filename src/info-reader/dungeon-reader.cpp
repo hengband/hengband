@@ -1,6 +1,5 @@
 #include "info-reader/dungeon-reader.h"
 #include "artifact/fixed-art-types.h"
-#include "external-lib/include-json.h"
 #include "info-reader/dungeon-info-tokens-table.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"

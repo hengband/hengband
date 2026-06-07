@@ -1,8 +1,8 @@
 #pragma once
 
-#include "external-lib/include-json.h"
 #include "object-enchant/object-ego.h"
 #include "system/angband.h"
+#include <external-lib/include-json.h>
 #include <fstream>
 #include <functional>
 #include <string>

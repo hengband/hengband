@@ -4,7 +4,6 @@
  */
 
 #include "main/info-initializer.h"
-#include "external-lib/include-json.h"
 #include "floor/wild.h"
 #include "info-reader/artifact-reader.h"
 #include "info-reader/baseitem-reader.h"
@@ -48,6 +47,7 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <external-lib/include-json.h>
 #include <fmt/format.h>
 #include <fstream>
 #include <functional>
