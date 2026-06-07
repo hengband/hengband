@@ -45,4 +45,5 @@ public:
 
     bool can_generate(const BaseitemKey &generating_bi_key) const;
     bool is_instant_artifact() const;
+    std::string build_full_name() const;
 };
