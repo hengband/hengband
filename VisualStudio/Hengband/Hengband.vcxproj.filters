@@ -2208,9 +2208,6 @@
     <ClCompile Include="..\..\src\object-use\zapwand-execution.cpp">
       <Filter>object-use</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\rng-xoshiro.cpp">
-      <Filter>util</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\load\old\load-v1-5-0.cpp">
       <Filter>load\old</Filter>
     </ClCompile>
@@ -5135,9 +5132,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-info\ninja-data-type.h">
       <Filter>player-info</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\util\rng-xoshiro.h">
-      <Filter>util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster-race\monster-aura-types.h">
       <Filter>monster-race</Filter>

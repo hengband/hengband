@@ -52,19 +52,7 @@
 
 void Rand_state_init(void)
 {
-    using element_type = Xoshiro128StarStar::state_type::value_type;
-    constexpr auto a = std::numeric_limits<element_type>::min();
-    constexpr auto b = std::numeric_limits<element_type>::max();
-
-    std::random_device rd;
-    std::uniform_int_distribution<element_type> dist(a, b);
-
-    Xoshiro128StarStar::state_type state{};
-    do {
-        std::generate(state.begin(), state.end(), [&dist, &rd] { return dist(rd); });
-    } while (std::all_of(state.begin(), state.end(), [](auto s) { return s == 0; }));
-
-    AngbandSystem::get_instance().get_rng().set_state(state);
+    AngbandSystem::get_instance().get_rng().seed();
 }
 
 int rand_range(int a, int b)
@@ -134,14 +122,8 @@ int32_t Rand_external(int32_t m)
         return 0;
     }
 
-    static tl::optional<Xoshiro128StarStar> urbg_external;
-
-    if (!urbg_external) {
-        /* Initialize with new seed */
-        auto seed = static_cast<uint32_t>(time(nullptr));
-        urbg_external = Xoshiro128StarStar(seed);
-    }
+    static xso::rng32 urbg_external;
 
     std::uniform_int_distribution<> d(0, m - 1);
-    return d(*urbg_external);
+    return d(urbg_external);
 }

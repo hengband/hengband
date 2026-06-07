@@ -16,8 +16,8 @@
 void initialize_items_flavor()
 {
     auto &system = AngbandSystem::get_instance();
-    const Xoshiro128StarStar rng_backup = system.get_rng();
-    Xoshiro128StarStar flavor_rng(system.get_seed_flavor());
+    const xso::rng32 rng_backup = system.get_rng();
+    xso::rng32 flavor_rng(system.get_seed_flavor());
     system.set_rng(flavor_rng);
     auto &baseitems = BaseitemList::get_instance();
     for (auto &baseitem : baseitems) {

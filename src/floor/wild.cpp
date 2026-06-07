@@ -211,8 +211,8 @@ static void generate_wilderness_area(FloorType &floor, const WildernessGrid &wg,
     }
 
     auto &system = AngbandSystem::get_instance();
-    const Xoshiro128StarStar rng_backup = system.get_rng();
-    Xoshiro128StarStar wilderness_rng(wg.get_seed());
+    const xso::rng32 rng_backup = system.get_rng();
+    xso::rng32 wilderness_rng(wg.get_seed());
     system.set_rng(wilderness_rng);
     if (!corner) {
         for (auto y = 0; y < MAX_HGT; y++) {
@@ -340,8 +340,8 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
     }
 
     auto &system = AngbandSystem::get_instance();
-    const Xoshiro128StarStar rng_backup = system.get_rng();
-    Xoshiro128StarStar wilderness_rng(wg.get_seed());
+    const xso::rng32 rng_backup = system.get_rng();
+    xso::rng32 wilderness_rng(wg.get_seed());
     system.set_rng(wilderness_rng);
     const Pos2D pos_entrance(rand_range(6, floor.height - 6), rand_range(6, floor.width - 6));
     floor.get_grid(pos_entrance).set_terrain_id(TerrainTag::ENTRANCE);
