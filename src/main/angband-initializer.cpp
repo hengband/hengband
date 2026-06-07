@@ -31,10 +31,10 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "time.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <time.h>
 
 /*!
  * @brief 各データファイルを読み取るためのパスを取得する.
