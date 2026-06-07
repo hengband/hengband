@@ -1045,7 +1045,6 @@
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
-    <ClInclude Include="..\..\src\external-lib\include-json.h" />
     <ClInclude Include="..\..\src\io\macro-configurations-store.h" />
     <ClInclude Include="..\..\src\io\temp-file.h" />
     <ClInclude Include="..\..\src\load\artifact-record-loader.h" />
