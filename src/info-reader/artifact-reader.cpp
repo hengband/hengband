@@ -14,7 +14,22 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
-ArtifactReader::ArtifactReader(nlohmann::json &art_data)
+namespace {
+
+const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_view key)
+{
+    static const nlohmann::json null_json;
+    if (!json.is_object()) {
+        return null_json;
+    }
+
+    const auto it = json.find(key);
+    return it != json.end() ? *it : null_json;
+}
+
+}
+
+ArtifactReader::ArtifactReader(const nlohmann::json &art_data)
     : art_data(art_data)
 {
 }
@@ -26,12 +41,12 @@ ArtifactReader::ArtifactReader(nlohmann::json &art_data)
  */
 int ArtifactReader::read() const
 {
-    if (!this->art_data["id"].is_number_integer()) {
+    if (!get_json_value(this->art_data, "id").is_number_integer()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto int_id = this->art_data["id"].get<int>();
-    if (int_id < error_idx) {
+    const auto int_id = get_json_value(this->art_data, "id").get<int>();
+    if (int_id <= error_idx) {
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
     const auto artifact_id = i2enum<FixedArtifactId>(int_id);
@@ -43,7 +58,7 @@ int ArtifactReader::read() const
     artifact.flags.set(TR_IGNORE_FIRE);
     artifact.flags.set(TR_IGNORE_COLD);
 
-    if (auto err = info_set_string(this->art_data["name"], artifact.name, true)) {
+    if (auto err = info_set_string(get_json_value(this->art_data, "name"), artifact.name, true)) {
         msg_format(_("アーティファクトの名称読込失敗。ID: '%d'。", "Failed to load artifact name. ID: '%d'."), error_idx);
         return err;
     }
@@ -51,43 +66,43 @@ int ArtifactReader::read() const
         msg_format(_("アーティファクトのベースアイテム読込失敗。ID: '%d'。", "Failed to load base item of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(this->art_data["parameter_value"], artifact.pval, false, Range(-128, 128))) {
+    if (auto err = info_set_integer(get_json_value(this->art_data, "parameter_value"), artifact.pval, false, Range(-128, 128))) {
         msg_format(_("アーティファクトのパラメータ値読込失敗。ID: '%d'。", "Failed to load parameter value of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(this->art_data["level"], artifact.level, true, Range(0, 128))) {
+    if (auto err = info_set_integer(get_json_value(this->art_data, "level"), artifact.level, true, Range(0, 128))) {
         msg_format(_("アーティファクトのレベル読込失敗。ID: '%d'。", "Failed to load level of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(this->art_data["rarity"], artifact.rarity, true)) {
+    if (auto err = info_set_integer(get_json_value(this->art_data, "rarity"), artifact.rarity, true)) {
         msg_format(_("アーティファクトの希少度読込失敗。ID: '%d'。", "Failed to load rarity of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(this->art_data["weight"], artifact.weight, true, Range(0, 9999))) {
+    if (auto err = info_set_integer(get_json_value(this->art_data, "weight"), artifact.weight, true, Range(0, 9999))) {
         msg_format(_("アーティファクトの重量読込失敗。ID: '%d'。", "Failed to load weight of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(this->art_data["cost"], artifact.cost, true, Range(0, 99999999))) {
+    if (auto err = info_set_integer(get_json_value(this->art_data, "cost"), artifact.cost, true, Range(0, 99999999))) {
         msg_format(_("アーティファクトの売値読込失敗。ID: '%d'。", "Failed to load cost of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(this->art_data["base_ac"], artifact.ac, false, Range(-99, 99))) {
+    if (auto err = info_set_integer(get_json_value(this->art_data, "base_ac"), artifact.ac, false, Range(-99, 99))) {
         msg_format(_("アーティファクトのベースAC読込失敗。ID: '%d'。", "Failed to load base AC of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_dice(this->art_data["base_dice"], artifact.damage_dice, false)) {
+    if (auto err = info_set_dice(get_json_value(this->art_data, "base_dice"), artifact.damage_dice, false)) {
         msg_format(_("アーティファクトのベースダイス読込失敗。ID: '%d'。", "Failed to load base dice of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(this->art_data["hit_bonus"], artifact.to_h, false, Range(-99, 99))) {
+    if (auto err = info_set_integer(get_json_value(this->art_data, "hit_bonus"), artifact.to_h, false, Range(-99, 99))) {
         msg_format(_("アーティファクトの命中補正値読込失敗。ID: '%d'。", "Failed to load hit bonus of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(this->art_data["damage_bonus"], artifact.to_d, false, Range(-99, 99))) {
-        msg_format(_("アーティファクトの命中補正値読込失敗。ID: '%d'。", "Failed to load damage bonus of artifact. ID: '%d'."), error_idx);
+    if (auto err = info_set_integer(get_json_value(this->art_data, "damage_bonus"), artifact.to_d, false, Range(-99, 99))) {
+        msg_format(_("アーティファクトのダメージ補正値読込失敗。ID: '%d'。", "Failed to load damage bonus of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(this->art_data["ac_bonus"], artifact.to_a, false, Range(-99, 99))) {
+    if (auto err = info_set_integer(get_json_value(this->art_data, "ac_bonus"), artifact.to_a, false, Range(-99, 99))) {
         msg_format(_("アーティファクトのAC補正値読込失敗。ID: '%d'。", "Failed to load AC bonus of artifact. ID: '%d'."), error_idx);
         return err;
     }
@@ -99,7 +114,7 @@ int ArtifactReader::read() const
         msg_format(_("アーティファクトの能力フラグ読込失敗。ID: '%d'。", "Failed to load ability flags of artifact. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_string(this->art_data["flavor"], artifact.text, false)) {
+    if (auto err = info_set_string(get_json_value(this->art_data, "flavor"), artifact.text, false)) {
         msg_format(_("アーティファクトのフレーバーテキスト読込失敗。ID: '%d'。", "Failed to load flavor text of artifact. ID: '%d'."), error_idx);
         return err;
     }
@@ -137,18 +152,18 @@ bool ArtifactReader::grab_one_artifact_flag(ArtifactDefinition &artifact, std::s
  */
 int ArtifactReader::set_art_baseitem(ArtifactDefinition &artifact) const
 {
-    auto &baseitem_data = this->art_data["base_item"];
+    const auto &baseitem_data = get_json_value(this->art_data, "base_item");
     if (baseitem_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
     ItemKindType type_value;
-    if (auto err = info_set_integer(baseitem_data["type_value"], type_value, true, Range(0, 128))) {
+    if (auto err = info_set_integer(get_json_value(baseitem_data, "type_value"), type_value, true, Range(0, 128))) {
         return err;
     }
 
     int subtype_value;
-    if (auto err = info_set_integer(baseitem_data["subtype_value"], subtype_value, true, Range(0, 128))) {
+    if (auto err = info_set_integer(get_json_value(baseitem_data, "subtype_value"), subtype_value, true, Range(0, 128))) {
         return err;
     }
 
@@ -164,9 +179,12 @@ int ArtifactReader::set_art_baseitem(ArtifactDefinition &artifact) const
  */
 int ArtifactReader::set_art_activate(ArtifactDefinition &artifact) const
 {
-    const auto &act_data = this->art_data["activate"];
-    if (!act_data.is_string()) {
+    const auto &act_data = get_json_value(this->art_data, "activate");
+    if (act_data.is_null()) {
         return PARSE_ERROR_NONE;
+    }
+    if (!act_data.is_string()) {
+        return PARSE_ERROR_INVALID_TYPE;
     }
 
     auto activation = grab_one_activation_flag(act_data.get<std::string>());
@@ -187,7 +205,7 @@ int ArtifactReader::set_art_activate(ArtifactDefinition &artifact) const
  */
 int ArtifactReader::set_art_flags(ArtifactDefinition &artifact) const
 {
-    const auto &flag_data = this->art_data["flags"];
+    const auto &flag_data = get_json_value(this->art_data, "flags");
     if (flag_data.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -196,6 +214,9 @@ int ArtifactReader::set_art_flags(ArtifactDefinition &artifact) const
     }
 
     for (auto &flag : flag_data) {
+        if (!flag.is_string()) {
+            return PARSE_ERROR_INVALID_FLAG;
+        }
         if (!this->grab_one_artifact_flag(artifact, flag.get<std::string>())) {
             return PARSE_ERROR_INVALID_FLAG;
         }

@@ -7,7 +7,7 @@ class ArtifactDefinition;
 
 class ArtifactReader {
 public:
-    explicit ArtifactReader(nlohmann::json &art_data);
+    explicit ArtifactReader(const nlohmann::json &art_data);
     ArtifactReader(const ArtifactReader &) = delete;
     ArtifactReader(ArtifactReader &&) = delete;
     ArtifactReader &operator=(const ArtifactReader &) = delete;
@@ -21,5 +21,5 @@ private:
     int set_art_activate(ArtifactDefinition &artifact) const;
     int set_art_flags(ArtifactDefinition &artifact) const;
 
-    nlohmann::json &art_data;
+    const nlohmann::json &art_data;
 };
