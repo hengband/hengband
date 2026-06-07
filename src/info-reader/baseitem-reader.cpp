@@ -21,13 +21,18 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
+BaseitemReader::BaseitemReader(nlohmann::json &baseitem_data)
+    : baseitem_data(baseitem_data)
+{
+}
+
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(ベースアイテム用)
  * @param baseitem 保管先ベースアイテムへの参照
  * @param what 参照元の文字列
  * @return 見つけたらtrue
  */
-static bool grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::string_view what)
+bool BaseitemReader::grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::string_view what) const
 {
     if (TrFlags::grab_one_flag(baseitem.flags, baseitem_flags, what)) {
         return true;
@@ -47,8 +52,9 @@ static bool grab_one_baseitem_flag(BaseitemDefinition &baseitem, std::string_vie
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_symbol(const nlohmann::json &symbol_data, BaseitemDefinition &baseitem)
+int BaseitemReader::set_baseitem_symbol(BaseitemDefinition &baseitem) const
 {
+    const auto &symbol_data = this->baseitem_data["symbol"];
     if (symbol_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
@@ -81,18 +87,19 @@ static errr set_baseitem_symbol(const nlohmann::json &symbol_data, BaseitemDefin
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_kind(nlohmann::json &baseitem_data, BaseitemDefinition &baseitem)
+int BaseitemReader::set_baseitem_kind(BaseitemDefinition &baseitem) const
 {
-    if (baseitem_data.is_null()) {
+    auto &itemkind_data = this->baseitem_data["itemkind"];
+    if (itemkind_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
     ItemKindType type_value;
-    if (auto err = info_set_integer(baseitem_data["type_value"], type_value, true, Range(0, 128))) {
+    if (auto err = info_set_integer(itemkind_data["type_value"], type_value, true, Range(0, 128))) {
         return err;
     }
     int subtype_value;
-    if (auto err = info_set_integer(baseitem_data["subtype_value"], subtype_value, true, Range(0, 128))) {
+    if (auto err = info_set_integer(itemkind_data["subtype_value"], subtype_value, true, Range(0, 128))) {
         return err;
     }
 
@@ -106,8 +113,9 @@ static errr set_baseitem_kind(nlohmann::json &baseitem_data, BaseitemDefinition 
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_parameter_value(const nlohmann::json &pval_data, BaseitemDefinition &baseitem)
+int BaseitemReader::set_baseitem_parameter_value(BaseitemDefinition &baseitem) const
 {
+    const auto &pval_data = this->baseitem_data["parameter_value"];
     if (auto err = info_set_integer(pval_data, baseitem.pval, false, Range(-9999, 9999))) {
         return err;
     }
@@ -124,8 +132,9 @@ static errr set_baseitem_parameter_value(const nlohmann::json &pval_data, Baseit
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_allocations(nlohmann::json &allocations_data, BaseitemDefinition &baseitem)
+int BaseitemReader::set_baseitem_allocations(BaseitemDefinition &baseitem) const
 {
+    auto &allocations_data = this->baseitem_data["allocations"];
     if (allocations_data.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -153,8 +162,9 @@ static errr set_baseitem_allocations(nlohmann::json &allocations_data, BaseitemD
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_activate(const nlohmann::json &act_data, BaseitemDefinition &baseitem)
+int BaseitemReader::set_baseitem_activate(BaseitemDefinition &baseitem) const
 {
+    const auto &act_data = this->baseitem_data["activate"];
     if (!act_data.is_string()) {
         return PARSE_ERROR_NONE;
     }
@@ -175,8 +185,9 @@ static errr set_baseitem_activate(const nlohmann::json &act_data, BaseitemDefini
  * @param baseitem 保管先のベースアイテム情報インスタンス
  * @return エラーコード
  */
-static errr set_baseitem_flags(const nlohmann::json &flag_data, BaseitemDefinition &baseitem)
+int BaseitemReader::set_baseitem_flags(BaseitemDefinition &baseitem) const
 {
+    const auto &flag_data = this->baseitem_data["flags"];
     if (flag_data.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -185,7 +196,7 @@ static errr set_baseitem_flags(const nlohmann::json &flag_data, BaseitemDefiniti
     }
 
     for (auto &flag : flag_data) {
-        if (!grab_one_baseitem_flag(baseitem, flag.get<std::string>())) {
+        if (!this->grab_one_baseitem_flag(baseitem, flag.get<std::string>())) {
             return PARSE_ERROR_INVALID_FLAG;
         }
     }
@@ -197,13 +208,13 @@ static errr set_baseitem_flags(const nlohmann::json &flag_data, BaseitemDefiniti
  * @param item_data ベースアイテムデータの格納されたJSON Object
  * @return エラーコード
  */
-int parse_baseitems_info(nlohmann::json &item_data)
+int BaseitemReader::read() const
 {
-    if (!item_data["id"].is_number_integer()) {
+    if (!this->baseitem_data["id"].is_number_integer()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto item_id = item_data["id"].get<int>();
+    const auto item_id = this->baseitem_data["id"].get<int>();
     if (item_id < error_idx) {
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
@@ -217,71 +228,71 @@ int parse_baseitems_info(nlohmann::json &item_data)
     auto &baseitem = baseitems.get_baseitem(short_id);
     baseitem.idx = short_id;
 
-    if (auto err = info_set_string(item_data["name"], baseitem.name, true)) {
+    if (auto err = info_set_string(this->baseitem_data["name"], baseitem.name, true)) {
         msg_format(_("アイテムの名称読込失敗。ID: '%d'。", "Failed to load item name. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_string(item_data["flavor_name"], baseitem.flavor_name, false)) {
+    if (auto err = info_set_string(this->baseitem_data["flavor_name"], baseitem.flavor_name, false)) {
         msg_format(_("アイテム未識別名の読込失敗。ID: '%d'。", "Failed to load item unidentified name. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_string(item_data["flavor"], baseitem.text, false)) {
+    if (auto err = info_set_string(this->baseitem_data["flavor"], baseitem.text, false)) {
         msg_format(_("アイテムのフレーバーテキスト読込失敗。ID: '%d'。", "Failed to load flavor text of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_symbol(item_data["symbol"], baseitem)) {
+    if (auto err = this->set_baseitem_symbol(baseitem)) {
         msg_format(_("アイテムのシンボル読込失敗。ID: '%d'。", "Failed to load symbol of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_kind(item_data["itemkind"], baseitem)) {
+    if (auto err = this->set_baseitem_kind(baseitem)) {
         msg_format(_("アイテム種別の読込失敗。ID: '%d'。", "Failed to load kind of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_parameter_value(item_data["parameter_value"], baseitem)) {
+    if (auto err = this->set_baseitem_parameter_value(baseitem)) {
         msg_format(_("アイテムのパラメータ値読込失敗。ID: '%d'。", "Failed to load prameter value of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(item_data["level"], baseitem.level, true, Range(0, 128))) {
+    if (auto err = info_set_integer(this->baseitem_data["level"], baseitem.level, true, Range(0, 128))) {
         msg_format(_("アイテムのレベル読込失敗。ID: '%d'。", "Failed to load level of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(item_data["weight"], baseitem.weight, true, Range(0, 9999))) {
+    if (auto err = info_set_integer(this->baseitem_data["weight"], baseitem.weight, true, Range(0, 9999))) {
         msg_format(_("アイテムの重量読込失敗。ID: '%d'。", "Failed to load weight of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(item_data["cost"], baseitem.cost, true, Range(0, 99999999))) {
+    if (auto err = info_set_integer(this->baseitem_data["cost"], baseitem.cost, true, Range(0, 99999999))) {
         msg_format(_("アイテムの売値読込失敗。ID: '%d'。", "Failed to load cost of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(item_data["base_ac"], baseitem.ac, false, Range(-99, 99))) {
+    if (auto err = info_set_integer(this->baseitem_data["base_ac"], baseitem.ac, false, Range(-99, 99))) {
         msg_format(_("アイテムのベースAC読込失敗。ID: '%d'。", "Failed to load base AC of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_dice(item_data["base_dice"], baseitem.damage_dice, false)) {
+    if (auto err = info_set_dice(this->baseitem_data["base_dice"], baseitem.damage_dice, false)) {
         msg_format(_("アイテムのベースダイス読込失敗。ID: '%d'。", "Failed to load base dice of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(item_data["hit_bonus"], baseitem.to_h, false, Range(-99, 99))) {
+    if (auto err = info_set_integer(this->baseitem_data["hit_bonus"], baseitem.to_h, false, Range(-99, 99))) {
         msg_format(_("アイテムの命中補正値読込失敗。ID: '%d'。", "Failed to load hit bonus of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(item_data["damage_bonus"], baseitem.to_d, false, Range(-99, 99))) {
+    if (auto err = info_set_integer(this->baseitem_data["damage_bonus"], baseitem.to_d, false, Range(-99, 99))) {
         msg_format(_("アイテムの命中補正値読込失敗。ID: '%d'。", "Failed to load damage bonus of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_integer(item_data["ac_bonus"], baseitem.to_a, false, Range(-99, 99))) {
+    if (auto err = info_set_integer(this->baseitem_data["ac_bonus"], baseitem.to_a, false, Range(-99, 99))) {
         msg_format(_("アイテムのAC補正値読込失敗。ID: '%d'。", "Failed to load AC bonus of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_allocations(item_data["allocations"], baseitem)) {
+    if (auto err = this->set_baseitem_allocations(baseitem)) {
         msg_format(_("アイテムの生成情報読込失敗。ID: '%d'。", "Failed to load generation info of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_activate(item_data["activate"], baseitem)) {
+    if (auto err = this->set_baseitem_activate(baseitem)) {
         msg_format(_("アイテムの生成情報読込失敗。ID: '%d'。", "Failed to load activation of item. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = set_baseitem_flags(item_data["flags"], baseitem)) {
+    if (auto err = this->set_baseitem_flags(baseitem)) {
         msg_format(_("アイテムの生成情報読込失敗。ID: '%d'。", "Failed to load flags of item. ID: '%d'."), error_idx);
         return err;
     }
