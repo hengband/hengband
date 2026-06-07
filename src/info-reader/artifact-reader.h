@@ -1,5 +1,5 @@
 #pragma once
 
-#include <external-lib/include-json.h>
+#include <nlohmann/json.hpp>
 
 int parse_artifacts_info(nlohmann::json &element);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
-#include <external-lib/include-json.h>
+#include <nlohmann/json.hpp>
 
 class SpellInfoList;
 

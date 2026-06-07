@@ -2,7 +2,7 @@
 #include "locale/character-encoding.h"
 #include "net/http-client.h"
 #include "system/angband-system.h"
-#include <external-lib/include-json.h>
+#include <nlohmann/json.hpp>
 #include <sstream>
 #include <string_view>
 

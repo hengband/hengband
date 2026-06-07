@@ -47,10 +47,10 @@
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
-#include <external-lib/include-json.h>
 #include <fmt/format.h>
 #include <fstream>
 #include <functional>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
 #include <sys/stat.h>
