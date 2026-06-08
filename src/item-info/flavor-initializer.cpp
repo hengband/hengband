@@ -9,6 +9,7 @@
 #include "system/angband-system.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "util/finalizer.h"
 
 /*!
  * @brief ゲーム開始時に行われるベースアイテムの初期化ルーチン
@@ -16,9 +17,6 @@
 void initialize_items_flavor()
 {
     auto &system = AngbandSystem::get_instance();
-    const xso::rng32 rng_backup = system.get_rng();
-    xso::rng32 flavor_rng(system.get_seed_flavor());
-    system.set_rng(flavor_rng);
     auto &baseitems = BaseitemList::get_instance();
     for (auto &baseitem : baseitems) {
         if (baseitem.flavor_name.empty()) {
@@ -28,8 +26,13 @@ void initialize_items_flavor()
         baseitem.flavor = baseitem.idx;
     }
 
-    baseitems.shuffle_flavors();
-    system.set_rng(rng_backup);
+    {
+        const auto restore_rng = util::make_finalizer([&system, rng_backup = system.get_rng()]() { system.set_rng(rng_backup); });
+        xso::rng32 flavor_rng(system.get_seed_flavor());
+        system.set_rng(flavor_rng);
+        baseitems.shuffle_flavors();
+    }
+
     for (auto &baseitem : baseitems) {
         if (!baseitem.is_valid()) {
             continue;
