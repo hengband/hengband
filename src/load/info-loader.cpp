@@ -76,7 +76,7 @@ void rd_version_info(void)
 void rd_randomizer(void)
 {
     strip_bytes(4);
-    std::array<uint32_t, 4> state{};
+    std::array<uint32_t, xso::rng32::word_count()> state{};
     for (auto &s : state) {
         s = rd_u32b();
     }
