@@ -11,7 +11,7 @@
 #include <cassert>
 #include <chrono>
 #include <concepts>
-#include <format>
+#include <fmt/format.h>
 #include <iostream>
 #include <iterator>
 #include <random>
@@ -61,7 +61,7 @@ public:
     static constexpr result_type max() noexcept { return std::numeric_limits<result_type>::max(); }
 
     /// Returns a name for this generator.
-    static constexpr auto xso_name() { return std::format("{}{}", State::xso_name(), Scrambler::xso_name()); }
+    static constexpr auto xso_name() { return fmt::format("{}{}", State::xso_name(), Scrambler::xso_name()); }
 
     /// @brief Default constructor seeds the full state randomly.
     /// @note  This will produce a high quality stream of random outputs that are different on each run.
@@ -327,7 +327,7 @@ public:
     /// @brief Returns a name for this state.
     static constexpr auto xso_name()
     {
-        return std::format("xoshiro<{}x{},{},{}>", N, std::numeric_limits<T>::digits, A, B);
+        return fmt::format("xoshiro<{}x{},{},{}>", N, std::numeric_limits<T>::digits, A, B);
     }
 
     /// @brief Read-only access to the i'th state word.
@@ -428,7 +428,7 @@ public:
     /// @brief Returns a name for this state.
     static constexpr auto xso_name()
     {
-        return std::format("xoroshiro<{}x{},{},{},{}>", N, std::numeric_limits<T>::digits, A, B, C);
+        return fmt::format("xoroshiro<{}x{},{},{},{}>", N, std::numeric_limits<T>::digits, A, B, C);
     }
 
     /// @brief Read-only access to the i'th state word.
@@ -552,7 +552,7 @@ struct star {
     constexpr auto operator()(const auto& state) const { return state[w] * S; }
 
     /// @brief Returns a name for this scrambler.
-    static constexpr auto xso_name() { return std::format("star<{:x},{}>", S, w); }
+    static constexpr auto xso_name() { return fmt::format("star<{:x},{}>", S, w); }
 };
 
 /// @brief  The "**" scrambler returns a scrambled version of one of the state words.
@@ -564,7 +564,7 @@ struct star_star {
     constexpr auto operator()(const auto& state) const { return std::rotl(state[w] * S, R) * T; }
 
     /// @brief Returns a name for this scrambler.
-    static constexpr auto xso_name() { return std::format("star_star<{:x},{},{}>", S, R, w); }
+    static constexpr auto xso_name() { return fmt::format("star_star<{:x},{},{}>", S, R, w); }
 };
 
 /// @brief  The "+" scrambler returns the sum of two of the state words.
@@ -575,7 +575,7 @@ struct plus {
     constexpr auto operator()(const auto& state) const { return state[w0] + state[w1]; }
 
     /// @brief Returns a name for this scrambler.
-    static constexpr auto xso_name() { return std::format("plus<{},{}>", w0, w1); }
+    static constexpr auto xso_name() { return fmt::format("plus<{},{}>", w0, w1); }
 };
 
 /// @brief  The "++" scrambler returns a scrambled version of two of the state words.
@@ -587,7 +587,7 @@ struct plus_plus {
     constexpr auto operator()(const auto& state) const { return std::rotl(state[w0] + state[w1], R) + state[w0]; }
 
     /// @brief Returns a name for this scrambler.
-    static constexpr auto xso_name() { return std::format("plus_plus<{},{},{}>", R, w0, w1); }
+    static constexpr auto xso_name() { return fmt::format("plus_plus<{},{},{}>", R, w0, w1); }
 };
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -1146,14 +1146,14 @@ concept has_xso_name_class_method = requires {
     { T::xso_name() } -> std::convertible_to<std::string>;
 };
 
-/// @brief Connect our classes to @c std::format and friends by specializing the @c std:formatter struct.
+/// @brief Connect our classes to @c fmt::format and friends by specializing the @c fmt::formatter struct.
 /// @note  This uses the fact that our classes have a class method @c xso_name() that returns a string.
-/// @note  Specializations of @c std::formatter are always in the @c std namespace.
+/// @note  Specializations of @c fmt::formatter are always in the @c fmt namespace.
 template<has_xso_name_class_method T>
-struct std::formatter<T> {
+struct fmt::formatter<T> {
 
     /// @brief Parse the format specifier -- currently only handle the default empty specifier
-    constexpr auto parse(const std::format_parse_context& ctx)
+    constexpr auto parse(const fmt::format_parse_context& ctx)
     {
         auto it = ctx.begin();
         assert(it == ctx.end() || *it == '}');
@@ -1164,7 +1164,7 @@ struct std::formatter<T> {
     template<class FormatContext>
     auto format(const T&, FormatContext& ctx) const
     {
-        return std::format_to(ctx.out(), "{}", T::xso_name());
+        return fmt::format_to(ctx.out(), "{}", T::xso_name());
     }
 };
 
