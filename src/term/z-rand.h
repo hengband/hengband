@@ -120,7 +120,7 @@ int32_t Rand_external(int32_t m);
 
 template <typename T>
 concept DistributionProducer = requires(T &dist) {
-    { dist(std::declval<Xoshiro128StarStar &>()) } -> std::same_as<typename T::result_type>;
+    { dist(std::declval<xso::rng32 &>()) } -> std::same_as<typename T::result_type>;
 };
 
 /*!

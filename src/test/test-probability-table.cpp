@@ -86,7 +86,7 @@ static int test_main()
 {
     std::random_device rd;
     std::mt19937 mt(rd());
-    Xoshiro128StarStar xoshiro(rd());
+    xso::rng32 xoshiro;
 
     AngbandSystem::get_instance().set_rng(xoshiro);
 

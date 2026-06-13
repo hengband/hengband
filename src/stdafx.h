@@ -36,3 +36,4 @@
 #include <utility>
 #include <variant>
 #include <vector>
+#include <xoshiro.h>
