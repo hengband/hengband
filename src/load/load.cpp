@@ -81,16 +81,18 @@ auto collect_known_fixed_artifacts_old(PlayerType *player_ptr)
         fa_ids.insert(fa_id);
     }
 
-    const auto &floor = *player_ptr->current_floor_ptr;
-    for (const auto &pos : floor.get_area()) {
-        const auto &grid = floor.get_grid(pos);
-        for (const auto this_o_idx : grid.o_idx_list) {
-            const auto &item = *floor.o_list[this_o_idx];
-            if (!item.is_fixed_artifact() || item.is_known()) {
-                continue;
-            }
+    if (!player_ptr->is_dead) {
+        const auto &floor = *player_ptr->current_floor_ptr;
+        for (const auto &pos : floor.get_area()) {
+            const auto &grid = floor.get_grid(pos);
+            for (const auto this_o_idx : grid.o_idx_list) {
+                const auto &item = *floor.o_list[this_o_idx];
+                if (!item.is_fixed_artifact() || item.is_known()) {
+                    continue;
+                }
 
-            fa_ids.erase(item.fa_id);
+                fa_ids.erase(item.fa_id);
+            }
         }
     }
 
