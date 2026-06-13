@@ -3,6 +3,17 @@
 #include "locale/character-encoding.h"
 #include "util/dice.h"
 
+const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_view key)
+{
+    static const nlohmann::json null_json;
+    if (!json.is_object()) {
+        return null_json;
+    }
+
+    const auto it = json.find(key);
+    return it != json.end() ? *it : null_json;
+}
+
 /*!
  * @brief JSON Objectから文字列をセットする
  *
@@ -23,13 +34,16 @@ errr info_set_string(const nlohmann::json &json, std::string &data, bool is_requ
     }
 
     if (!json.is_object()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        return PARSE_ERROR_INVALID_TYPE;
     }
 
 #ifdef JP
     const auto &ja_str = json.find("ja");
     if (ja_str == json.end()) {
         return unexist_result;
+    }
+    if (!ja_str->is_string()) {
+        return PARSE_ERROR_INVALID_TYPE;
     }
     auto ja_str_sys = utf8_to_sys(ja_str->get<std::string>());
     if (!ja_str_sys) {
@@ -40,6 +54,9 @@ errr info_set_string(const nlohmann::json &json, std::string &data, bool is_requ
     const auto &en_str = json.find("en");
     if (en_str == json.end()) {
         return unexist_result;
+    }
+    if (!en_str->is_string()) {
+        return PARSE_ERROR_INVALID_TYPE;
     }
     data = en_str->get<std::string>();
 #endif
@@ -57,8 +74,11 @@ errr info_set_string(const nlohmann::json &json, std::string &data, bool is_requ
  */
 errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required)
 {
-    if (json.is_null() || !json.is_string()) {
+    if (json.is_null()) {
         return is_required ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_NONE;
+    }
+    if (!json.is_string()) {
+        return PARSE_ERROR_INVALID_TYPE;
     }
 
     try {

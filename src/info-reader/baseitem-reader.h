@@ -7,7 +7,8 @@ class BaseitemDefinition;
 
 class BaseitemReader {
 public:
-    explicit BaseitemReader(nlohmann::json &baseitem_data);
+    explicit BaseitemReader(const nlohmann::json &baseitem_data);
+    BaseitemReader(nlohmann::json &&) = delete;
     BaseitemReader(const BaseitemReader &) = delete;
     BaseitemReader(BaseitemReader &&) = delete;
     BaseitemReader &operator=(const BaseitemReader &) = delete;
@@ -24,5 +25,5 @@ private:
     int set_baseitem_activate(BaseitemDefinition &baseitem) const;
     int set_baseitem_flags(BaseitemDefinition &baseitem) const;
 
-    nlohmann::json &baseitem_data;
+    const nlohmann::json &baseitem_data;
 };
