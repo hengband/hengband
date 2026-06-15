@@ -87,15 +87,13 @@ static errr set_book_data(const nlohmann::json &spell_data, SpellInfoList &spell
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (auto &element : book_obj.items()) {
-        auto &book = element.value();
-        auto &spells_obj = book["spells"];
+    for (const auto &book : book_obj) {
+        const auto &spells_obj = book["spells"];
         if (spells_obj.is_null()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        for (auto &spell_element : spells_obj.items()) {
-            auto &spell = spell_element.value();
+        for (const auto &spell : spells_obj) {
             if (auto err = set_spell_data(spell, spell_info_list, realm)) {
                 return err;
             }

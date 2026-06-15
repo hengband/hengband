@@ -265,12 +265,11 @@ int BaseitemReader::set_baseitem_allocations(BaseitemDefinition &baseitem) const
         return PARSE_ERROR_INVALID_TYPE;
     }
 
-    for (auto i = 0U; auto &element : allocations_data.items()) {
+    for (auto i = 0U; const auto &alloc : allocations_data) {
         if (i >= baseitem.alloc_tables.size()) {
             return PARSE_ERROR_OUT_OF_BOUNDS;
         }
 
-        const auto &alloc = element.value();
         if (!alloc.is_object()) {
             return PARSE_ERROR_INVALID_TYPE;
         }
