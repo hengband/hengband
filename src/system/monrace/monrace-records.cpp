@@ -33,6 +33,11 @@ MonraceRecords &MonraceRecords::get_instance()
     return instance;
 }
 
+std::shared_ptr<MonraceRecord> MonraceRecords::get_record(MonraceId monrace_id)
+{
+    return this->get_record_ref(monrace_id);
+}
+
 std::shared_ptr<const MonraceRecord> MonraceRecords::get_record(MonraceId monrace_id) const
 {
     return this->get_record_ref(monrace_id);

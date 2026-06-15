@@ -11,6 +11,7 @@
 #include "tracking/lore-tracker.h"
 #include "util/probability-table.h"
 #include <algorithm>
+#include <range/v3/view.hpp>
 
 namespace {
 const std::set<MonraceId> DARK_ELF_RACES = {
@@ -420,6 +421,43 @@ MonraceId MonraceList::select_figurine(int max_level) const
 
         return monrace_id;
     }
+}
+
+const LocalizedString &MonraceList::get_name(MonraceId monrace_id) const
+{
+    return this->get_monrace(monrace_id).name;
+}
+
+const std::vector<std::pair<MonraceId, LocalizedString>> &MonraceList::get_normal_monster_names() const
+{
+    static std::vector<std::pair<MonraceId, LocalizedString>> normal_monster_names;
+    if (!normal_monster_names.empty()) {
+        return normal_monster_names;
+    }
+
+    for (const auto &[id, monrace] : this->monraces | ranges::views::drop(1)) {
+        if (monrace->kind_flags.has_not(MonsterKindType::UNIQUE) && monrace->population_flags.has_not(MonsterPopulationType::NAZGUL)) {
+            normal_monster_names.emplace_back(id, monrace->name);
+        }
+    }
+
+    return normal_monster_names;
+}
+
+const std::vector<std::pair<MonraceId, LocalizedString>> &MonraceList::get_unique_monster_names() const
+{
+    static std::vector<std::pair<MonraceId, LocalizedString>> unique_monster_names;
+    if (!unique_monster_names.empty()) {
+        return unique_monster_names;
+    }
+
+    for (const auto &[id, monrace] : this->monraces | ranges::views::drop(1)) {
+        if (monrace->kind_flags.has(MonsterKindType::UNIQUE) || monrace->population_flags.has(MonsterPopulationType::NAZGUL)) {
+            unique_monster_names.emplace_back(id, monrace->name);
+        }
+    }
+
+    return unique_monster_names;
 }
 
 /*!
