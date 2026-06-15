@@ -108,7 +108,7 @@ static void display_uniques(UniqueList *unique_list_ptr, FILE *fff)
     for (auto monrace_id : unique_list_ptr->monrace_ids) {
         const auto &monrace = monraces.get_monrace(monrace_id);
         std::string details;
-        if (monrace.defeat_level && monrace.defeat_time) {
+        if (!unique_list_ptr->is_alive && monrace.defeat_level && monrace.defeat_time) {
             details = format(_(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d"), monrace.defeat_level, monrace.defeat_time / (60 * 60),
                 (monrace.defeat_time / 60) % 60, monrace.defeat_time % 60);
         }
