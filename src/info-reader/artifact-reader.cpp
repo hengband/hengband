@@ -14,21 +14,6 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 
-namespace {
-
-const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_view key)
-{
-    static const nlohmann::json null_json;
-    if (!json.is_object()) {
-        return null_json;
-    }
-
-    const auto it = json.find(key);
-    return it != json.end() ? *it : null_json;
-}
-
-}
-
 ArtifactReader::ArtifactReader(const nlohmann::json &art_data)
     : art_data(art_data)
 {
