@@ -23,6 +23,7 @@
 #include "market/building-initializer.h"
 #include "rumor/rumor-service.h"
 #include "system/angband-system.h"
+#include "system/baseitem/baseitem-service.h"
 #include "system/dungeon/quest-list.h"
 #include "system/floor/town-list.h"
 #include "system/monrace/monrace-list.h"
@@ -184,6 +185,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
     init_baseitems_info();
+    BaseitemService::initialize_baseitem_configs();
 
     init_note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
     init_artifacts_info();

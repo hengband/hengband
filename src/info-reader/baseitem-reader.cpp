@@ -196,8 +196,8 @@ int BaseitemReader::set_baseitem_symbol(BaseitemDefinition &baseitem) const
     if (color->second > 127) {
         return PARSE_ERROR_GENERIC;
     }
-    baseitem.symbol_definition = DisplaySymbol(color->second, character.front());
 
+    baseitem.init_symbol(DisplaySymbol(color->second, character.front()));
     return PARSE_ERROR_NONE;
 }
 

@@ -33,6 +33,19 @@ BaseitemList &BaseitemList::get_instance()
     return instance;
 }
 
+bool BaseitemList::is_valid(short bi_id) const
+{
+    if (bi_id == 0) {
+        return false;
+    }
+
+    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
+        THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
+    }
+
+    return this->baseitems.at(bi_id).is_valid();
+}
+
 BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id)
 {
     if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
@@ -85,13 +98,6 @@ const BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_ke
 {
     const auto bi_id = this->lookup_baseitem_id(bi_key);
     return this->baseitems[bi_id];
-}
-
-void BaseitemList::reset_all_visuals()
-{
-    for (auto &baseitem : this->baseitems) {
-        baseitem.reset_visual();
-    }
 }
 
 /*!

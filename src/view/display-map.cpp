@@ -5,6 +5,8 @@
 #include "game-option/map-screen-options.h"
 #include "game-option/special-options.h"
 #include "player/player-status.h"
+#include "system/baseitem/baseitem-config.h"
+#include "system/baseitem/baseitem-service.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -39,8 +41,7 @@ const std::string image_monsters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
 DisplaySymbol image_object()
 {
     if (use_graphics) {
-        const auto &baseitem = BaseitemList::get_instance().pick_one_at_random();
-        return baseitem.symbol_config;
+        return BaseitemService::pick_one_at_random().get_symbol();
     }
 
     const auto color = randnum1<uint8_t>(15);

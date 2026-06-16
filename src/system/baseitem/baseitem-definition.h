@@ -55,7 +55,6 @@ public:
     };
 
     std::array<alloc_table, 4> alloc_tables{}; /*!< ベースアイテムの生成テーブル */
-    DisplaySymbol symbol_definition; //!< 定義上のシンボル (色/文字).
     bool easy_know{}; /*!< ベースアイテムが初期からベース名を判断可能かどうか / This object is always known (if aware) */
     RandomArtActType act_idx{}; /*!< 発動能力のID /  Activative ability index */
 
@@ -64,9 +63,12 @@ public:
     bool order_cost(const BaseitemDefinition &other) const;
     void decide_easy_know();
 
-    /* @todo ここから下はBaseitemDefinitions.txt に依存しないミュータブルなフィールド群なので、将来的に分離予定 */
+    const DisplaySymbol &get_symbol() const;
+    void init_symbol(const DisplaySymbol &ds);
+    void init_color(uint8_t color);
+    void init_character(char character);
 
-    DisplaySymbol symbol_config; //!< ユーザ個別の設定シンボル (色/文字).
+    /* @todo ここから下はBaseitemDefinitions.txt に依存しないミュータブルなフィールド群なので、将来的に分離予定 */
 
     short flavor{}; /*!< 未鑑定名の何番目を当てるか(0は未鑑定名なし) / Special object flavor (or zero) */
     bool aware{}; /*!< ベースアイテムが鑑定済かどうか /  The player is "aware" of the item's effects */
@@ -74,5 +76,7 @@ public:
 
     void mark_trial(bool state);
     void mark_awareness(bool state);
-    void reset_visual();
+
+private:
+    DisplaySymbol symbol_definition; //!< 定義上のシンボル (色/文字).
 };

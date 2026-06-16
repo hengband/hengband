@@ -19,6 +19,8 @@
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
+#include "system/baseitem/baseitem-config.h"
+#include "system/baseitem/baseitem-configs.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
@@ -158,28 +160,29 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
 {
     const auto is_wizard = AngbandWorld::get_instance().wizard;
     const auto &baseitems = BaseitemList::get_instance();
+    const auto &baseitem_configs = BaseitemConfigs::get_instance();
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
-        const short bi_id = object_idx[object_top + i];
+        const auto bi_id = object_idx[object_top + i];
         const auto &baseitem = baseitems.get_baseitem(bi_id);
         TERM_COLOR attr = ((baseitem.aware || visual_only) ? TERM_WHITE : TERM_SLATE);
         byte cursor = ((baseitem.aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
         const auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems.get_baseitem(baseitem.flavor) : baseitem;
+        const auto &flavor_config = !visual_only && baseitem.flavor ? baseitem_configs.get_config(baseitem.flavor) : baseitem_configs.get_config(bi_id);
 
         attr = ((i + object_top == object_cur) ? cursor : attr);
         const auto is_flavor_only = (baseitem.flavor != 0) && (visual_only || !baseitem.aware);
-        const auto o_name = is_flavor_only ? flavor_baseitem.flavor_name : baseitem.stripped_name();
-        c_prt(attr, o_name.data(), row + i, col);
-        const auto &symbol_config = flavor_baseitem.symbol_config;
+        const auto item_name = is_flavor_only ? flavor_baseitem.flavor_name : baseitem.stripped_name();
+        c_prt(attr, item_name.data(), row + i, col);
         if (per_page == 1) {
-            c_prt(attr, format("%02x/%02x", symbol_config.color, symbol_config.character), row + i, (is_wizard || visual_only) ? 64 : 68);
+            c_prt(attr, format("%02x/%02x", flavor_config.get_color(), flavor_config.get_character()), row + i, (is_wizard || visual_only) ? 64 : 68);
         }
 
         if (is_wizard || visual_only) {
             c_prt(attr, format("%d", bi_id), row + i, 70);
         }
 
-        term_queue_bigchar(use_bigtile ? 76 : 77, row + i, { symbol_config, {} });
+        term_queue_bigchar(use_bigtile ? 76 : 77, row + i, { flavor_config.get_symbol(), {} });
     }
 
     for (; i < per_page; i++) {
@@ -241,15 +244,17 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_cnt = 0;
     } else {
         auto &baseitem = baseitems.get_baseitem(direct_k_idx);
-        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems.get_baseitem(baseitem.flavor) : baseitem;
+        auto &baseitem_configs = BaseitemConfigs::get_instance();
+        auto &flavor_config = !visual_only && baseitem.flavor ? baseitem_configs.get_config(baseitem.flavor) : baseitem_configs.get_config(direct_k_idx);
         object_idx[0] = direct_k_idx;
         object_old = direct_k_idx;
         object_cnt = 1;
         object_idx[1] = -1;
         const auto height = browser_rows - 1;
-        auto &symbol_config = flavor_baseitem.symbol_config;
-        (void)visual_mode_command(
-            'v', &visual_list, height, width, &attr_top, &char_left, &symbol_config.color, &symbol_config.character, need_redraw);
+        auto color = flavor_config.get_color();
+        auto character = flavor_config.get_character();
+        (void)visual_mode_command('v', &visual_list, height, width, &attr_top, &char_left, &color, &character, need_redraw);
+        flavor_config.set_symbol({ color, character });
     }
 
     mode = visual_only ? 0x02 : 0x00;
@@ -334,9 +339,6 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_visual_list(max_length + 3, 7, browser_rows - 1, wid - (max_length + 3), attr_top, char_left);
         }
 
-        auto &baseitem = baseitems.get_baseitem(object_idx[object_cur]);
-        auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems.get_baseitem(baseitem.flavor) : baseitem;
-
 #ifdef JP
         prt(format("<方向>%s%s%s, ESC", (!visual_list && !visual_only) ? ", 'r'で詳細を見る" : "", visual_list ? ", ENTERで決定" : ", 'v'でシンボル変更",
                 (symbols_cb.symbol != DisplaySymbol()) ? ", 'c', 'p'でペースト" : ", 'c'でコピー"),
@@ -347,20 +349,25 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             hgt - 1, 0);
 #endif
 
+        const auto bi_id = object_idx[object_cur];
         if (!visual_only) {
             if (object_cnt) {
-                tracker.set_trackee(object_idx[object_cur]);
+                tracker.set_trackee(bi_id);
             }
 
-            if (object_old != object_idx[object_cur]) {
+            if (object_old != bi_id) {
                 handle_stuff(player_ptr);
-                object_old = object_idx[object_cur];
+                object_old = bi_id;
             }
         }
 
-        auto &symbol_config = flavor_baseitem.symbol_config;
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
+        auto &baseitem_configs = BaseitemConfigs::get_instance();
+        auto &baseitem_config = !visual_only && baseitem.flavor ? baseitem_configs.get_config(baseitem.flavor) : baseitem_configs.get_config(bi_id);
+        auto color = baseitem_config.get_color();
+        auto character = baseitem_config.get_character();
         if (visual_list) {
-            place_visual_list_cursor(max_length + 3, 7, symbol_config.color, symbol_config.character, attr_top, char_left);
+            place_visual_list_cursor(max_length + 3, 7, color, character, attr_top, char_left);
         } else if (!column) {
             term_gotoxy(0, 6 + (grp_cur - grp_top));
         } else {
@@ -369,8 +376,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
 
         char ch = inkey();
         const auto height = browser_rows - 1;
-        if (visual_mode_command(
-                ch, &visual_list, height, width, &attr_top, &char_left, &symbol_config.color, &symbol_config.character, need_redraw)) {
+        if (visual_mode_command(ch, &visual_list, height, width, &attr_top, &char_left, &color, &character, need_redraw)) {
+            baseitem_config.set_symbol({ color, character });
             if (direct_k_idx >= 0) {
                 switch (ch) {
                 case '\n':

@@ -10,7 +10,6 @@
 BaseitemDefinition::BaseitemDefinition()
     : bi_key(ItemKindType::NONE)
     , symbol_definition(DisplaySymbol(0, '\0'))
-    , symbol_config(DisplaySymbol(0, '\0'))
 {
 }
 
@@ -106,6 +105,26 @@ void BaseitemDefinition::decide_easy_know()
     }
 }
 
+const DisplaySymbol &BaseitemDefinition::get_symbol() const
+{
+    return this->symbol_definition;
+}
+
+void BaseitemDefinition::init_symbol(const DisplaySymbol &ds)
+{
+    this->symbol_definition = ds;
+}
+
+void BaseitemDefinition::init_color(uint8_t color)
+{
+    this->symbol_definition.color = color;
+}
+
+void BaseitemDefinition::init_character(char character)
+{
+    this->symbol_definition.character = character;
+}
+
 /*!
  * @brief 試行状態を変える
  * @param state trueなら試行済、falseなら未試行に変える
@@ -122,9 +141,4 @@ void BaseitemDefinition::mark_trial(bool state)
 void BaseitemDefinition::mark_awareness(bool state)
 {
     this->aware = state;
-}
-
-void BaseitemDefinition::reset_visual()
-{
-    this->symbol_config = this->symbol_definition;
 }
