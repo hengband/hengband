@@ -22,7 +22,7 @@ BaseitemDefinition::BaseitemDefinition()
  */
 bool BaseitemDefinition::is_valid() const
 {
-    return (this->idx > 0) && !this->name.empty();
+    return !this->name.empty() && (this->name != _("何", "something"));
 }
 
 /*!

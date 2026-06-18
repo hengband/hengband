@@ -65,8 +65,6 @@ int BaseitemReader::read() const
     }
     const short short_id = static_cast<short>(item_id);
     auto &baseitem = baseitems.get_baseitem(short_id);
-    baseitem.idx = short_id;
-
     if (auto err = info_set_string(get_json_value(this->baseitem_data, "name"), baseitem.name, true)) {
         msg_print(_("アイテムの名称読込失敗。ID: '{}'。", "Failed to load item name. ID: '{}'."), error_idx);
         return err;

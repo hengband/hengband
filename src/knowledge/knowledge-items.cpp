@@ -126,7 +126,9 @@ static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FL
 {
     short object_cnt = 0;
     const auto group_tval = ITEM_KINDS_GROUP[grp_cur];
-    for (const auto &baseitem : BaseitemList::get_instance()) {
+    const auto &baseitems = BaseitemList::get_instance();
+    for (short bi_id = 0; bi_id < static_cast<short>(baseitems.size()); bi_id++) {
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
         if (baseitem.name.empty() || !check_baseitem_chance(mode, baseitem)) {
             continue;
         }
@@ -134,12 +136,12 @@ static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FL
         const auto tval = baseitem.bi_key.tval();
         if (group_tval == ItemKindType::LIFE_BOOK) {
             if (baseitem.bi_key.is_spell_book()) {
-                object_idx[object_cnt++] = baseitem.idx;
+                object_idx[object_cnt++] = bi_id;
             } else {
                 continue;
             }
         } else if (tval == group_tval) {
-            object_idx[object_cnt++] = baseitem.idx;
+            object_idx[object_cnt++] = bi_id;
         } else {
             continue;
         }

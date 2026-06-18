@@ -162,10 +162,11 @@ short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
 const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_keys_cache() const
 {
     static std::map<BaseitemKey, short> cache;
-    for (const auto &baseitem : this->baseitems) {
+    for (short bi_id = 0; bi_id < static_cast<short>(this->baseitems.size()); bi_id++) {
+        const auto &baseitem = this->baseitems.at(bi_id);
         if (baseitem.is_valid()) {
             const auto &bi_key = baseitem.bi_key;
-            cache[bi_key] = baseitem.idx;
+            cache[bi_key] = bi_id;
         }
     }
 

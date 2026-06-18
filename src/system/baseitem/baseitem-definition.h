@@ -25,8 +25,6 @@ public:
     BaseitemDefinition(BaseitemDefinition &&) = default;
     BaseitemDefinition &operator=(BaseitemDefinition &&) = delete;
 
-    short idx{};
-
     std::string name; /*!< ベースアイテム名 */
     std::string text; /*!< 解説テキスト */
     std::string flavor_name; /*!< 未確定名 */

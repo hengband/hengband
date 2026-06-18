@@ -165,13 +165,13 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 if (baseitem.flavor == 0) {
                     item_name = baseitem.stripped_name();
                 } else {
-                    ItemEntity dummy(baseitem.idx);
+                    ItemEntity dummy(bi_id);
                     item_name = describe_flavor(player_ptr, dummy, OD_FORCE_FLAVOR);
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", item_name.data());
                 const auto &config = baseitem_configs.get_config(bi_id);
-                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)baseitem.idx, config.get_color(), static_cast<uint8_t>(config.get_character()));
+                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", bi_id, config.get_color(), static_cast<uint8_t>(config.get_character()));
                 bi_id++;
             }
 

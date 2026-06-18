@@ -1002,25 +1002,27 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     std::vector<EgoType> ego_ids;
     if (exam_base) {
         auto max_len = 0;
-        for (const auto &baseitem : BaseitemList::get_instance()) {
+        const auto &baseitems = BaseitemList::get_instance();
+        for (short bi_id = 0; bi_id < static_cast<short>(baseitems.size()); bi_id++) {
+            const auto &baseitem = baseitems.get_baseitem(bi_id);
             if (!baseitem.is_valid()) {
                 continue;
             }
 
-            ItemEntity item(baseitem.idx);
+            ItemEntity item(bi_id);
 #ifdef JP
             const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 #else
             const auto item_name = str_tolower(describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE)));
 #endif
             if (cheat_xtra) {
-                msg_format("Matching object No.%d %s", baseitem.idx, item_name.data());
+                msg_format("Matching object No.%d %s", bi_id, item_name.data());
             }
 
             const int len = item_name.length();
             if (std::string(pray_chars).find(item_name) != std::string::npos) {
                 if (len > max_len) {
-                    baseitem_ids.push_back(baseitem.idx);
+                    baseitem_ids.push_back(bi_id);
                     max_len = len;
                 }
             }
