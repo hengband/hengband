@@ -65,8 +65,6 @@ int BaseitemReader::read() const
     }
     const short short_id = static_cast<short>(item_id);
     auto &baseitem = baseitems.get_baseitem(short_id);
-    baseitem.idx = short_id;
-
     if (auto err = info_set_string(get_json_value(this->baseitem_data, "name"), baseitem.name, true)) {
         msg_print(_("アイテムの名称読込失敗。ID: '{}'。", "Failed to load item name. ID: '{}'."), error_idx);
         return err;
@@ -196,8 +194,8 @@ int BaseitemReader::set_baseitem_symbol(BaseitemDefinition &baseitem) const
     if (color->second > 127) {
         return PARSE_ERROR_GENERIC;
     }
-    baseitem.symbol_definition = DisplaySymbol(color->second, character.front());
 
+    baseitem.init_symbol(DisplaySymbol(color->second, character.front()));
     return PARSE_ERROR_NONE;
 }
 

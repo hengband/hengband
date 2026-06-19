@@ -10,20 +10,19 @@
 BaseitemDefinition::BaseitemDefinition()
     : bi_key(ItemKindType::NONE)
     , symbol_definition(DisplaySymbol(0, '\0'))
-    , symbol_config(DisplaySymbol(0, '\0'))
 {
 }
 
 /*!
  * @brief 正常なベースアイテムかを判定する
  * @return 正常なベースアイテムか否か
- * @details ID 0は「何か」という異常アイテム
+ * @details ID 0は「異常アイテム」という名前の文字通り異常アイテムであり、個別に弾く
  * その他、ベースアイテムIDは歴史的事情により歯抜けが多数あり、それらは名前が空欄になるようにオブジェクトを生成している
  * @todo v3.1以降で歯抜けを埋めるようにベースアイテムを追加していきたい (詳細未定)
  */
 bool BaseitemDefinition::is_valid() const
 {
-    return (this->idx > 0) && !this->name.empty();
+    return !this->name.empty() && (this->name != _("異常アイテム", "Invalid item"));
 }
 
 /*!
@@ -106,6 +105,26 @@ void BaseitemDefinition::decide_easy_know()
     }
 }
 
+const DisplaySymbol &BaseitemDefinition::get_symbol() const
+{
+    return this->symbol_definition;
+}
+
+void BaseitemDefinition::init_symbol(const DisplaySymbol &ds)
+{
+    this->symbol_definition = ds;
+}
+
+void BaseitemDefinition::init_color(uint8_t color)
+{
+    this->symbol_definition.color = color;
+}
+
+void BaseitemDefinition::init_character(char character)
+{
+    this->symbol_definition.character = character;
+}
+
 /*!
  * @brief 試行状態を変える
  * @param state trueなら試行済、falseなら未試行に変える
@@ -122,9 +141,4 @@ void BaseitemDefinition::mark_trial(bool state)
 void BaseitemDefinition::mark_awareness(bool state)
 {
     this->aware = state;
-}
-
-void BaseitemDefinition::reset_visual()
-{
-    this->symbol_config = this->symbol_definition;
 }

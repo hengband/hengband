@@ -13,6 +13,8 @@
 #include "knowledge/knowledge-monsters.h"
 #include "knowledge/lighting-level-table.h"
 #include "main/sound-of-music.h"
+#include "system/baseitem/baseitem-config.h"
+#include "system/baseitem/baseitem-configs.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/item/item-entity.h"
@@ -151,8 +153,11 @@ void do_cmd_visuals(PlayerType *player_ptr)
             }
 
             auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
+            const auto &baseitem_configs = BaseitemConfigs::get_instance();
+            short bi_id = 0;
             for (const auto &baseitem : BaseitemList::get_instance()) {
                 if (!baseitem.is_valid()) {
+                    bi_id++;
                     continue;
                 }
 
@@ -160,13 +165,14 @@ void do_cmd_visuals(PlayerType *player_ptr)
                 if (baseitem.flavor == 0) {
                     item_name = baseitem.stripped_name();
                 } else {
-                    ItemEntity dummy(baseitem.idx);
+                    ItemEntity dummy(bi_id);
                     item_name = describe_flavor(player_ptr, dummy, OD_FORCE_FLAVOR);
                 }
 
                 auto_dump_printf(auto_dump_stream, "# %s\n", item_name.data());
-                const auto &symbol_config = baseitem.symbol_config;
-                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", (int)baseitem.idx, symbol_config.color, static_cast<uint8_t>(symbol_config.character));
+                const auto &config = baseitem_configs.get_config(bi_id);
+                auto_dump_printf(auto_dump_stream, "K:%d:0x%02X/0x%02X\n\n", bi_id, config.get_color(), static_cast<uint8_t>(config.get_character()));
+                bi_id++;
             }
 
             close_auto_dump(&auto_dump_stream, mark);
@@ -287,21 +293,22 @@ void do_cmd_visuals(PlayerType *player_ptr)
             static auto choice_msg = _("アイテムの[色/文字]を変更します", "Change object attr/chars");
             static short bi_id = 0;
             prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
-            auto &baseitems = BaseitemList::get_instance();
+            const auto &baseitems = BaseitemList::get_instance();
+            auto &baseitem_configs = BaseitemConfigs::get_instance();
             while (true) {
                 auto &baseitem = baseitems.get_baseitem(bi_id);
                 int c;
-                const auto &symbol_definition = baseitem.symbol_definition;
-                auto &symbol_config = baseitem.symbol_config;
+                const auto &symbol_definition = baseitem.get_symbol();
+                auto &config = baseitem_configs.get_config(bi_id);
                 term_putstr(5, 17, -1, TERM_WHITE,
                     format(
                         _("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"), bi_id, (!baseitem.flavor ? baseitem.name : baseitem.flavor_name).data()));
                 term_putstr(10, 19, -1, TERM_WHITE, format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), symbol_definition.color, symbol_definition.character));
                 term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
                 term_queue_bigchar(43, 19, { symbol_definition, {} });
-                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), symbol_config.color, symbol_config.character));
+                term_putstr(10, 20, -1, TERM_WHITE, format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), config.get_color(), config.get_character()));
                 term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
-                term_queue_bigchar(43, 20, { symbol_config, {} });
+                term_queue_bigchar(43, 20, { config.get_symbol(), {} });
                 term_putstr(0, 22, -1, TERM_WHITE, _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
                 const auto ch = inkey();
@@ -337,22 +344,22 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     break;
                 }
                 case 'a': {
-                    const auto visual_id = input_new_visual_id(ch, symbol_config.color, 256);
+                    const auto visual_id = input_new_visual_id(ch, config.get_color(), 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    baseitem.symbol_config.color = *visual_id;
+                    config.update_color(*visual_id);
                     need_redraw = true;
                     break;
                 }
                 case 'c': {
-                    const auto visual_id = input_new_visual_id(ch, symbol_config.character, 256);
+                    const auto visual_id = input_new_visual_id(ch, config.get_character(), 256);
                     if (!visual_id) {
                         break;
                     }
 
-                    baseitem.symbol_config.character = *visual_id;
+                    config.update_character(*visual_id);
                     need_redraw = true;
                     break;
                 }

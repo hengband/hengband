@@ -18,12 +18,13 @@ void initialize_items_flavor()
 {
     auto &system = AngbandSystem::get_instance();
     auto &baseitems = BaseitemList::get_instance();
-    for (auto &baseitem : baseitems) {
+    for (short bi_id = 0; bi_id < static_cast<short>(baseitems.size()); bi_id++) {
+        auto &baseitem = baseitems.get_baseitem(bi_id);
         if (baseitem.flavor_name.empty()) {
             continue;
         }
 
-        baseitem.flavor = baseitem.idx;
+        baseitem.flavor = bi_id;
     }
 
     {

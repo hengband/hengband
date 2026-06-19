@@ -2613,6 +2613,15 @@
     <ClCompile Include="..\..\src\rumor\rumor-service.cpp">
       <Filter>rumor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-config.cpp">
+      <Filter>system\baseitem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-configs.cpp">
+      <Filter>system\baseitem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-service.cpp">
+      <Filter>system\baseitem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5660,6 +5669,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\rumor\rumor-rarity.h">
       <Filter>rumor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-config.h">
+      <Filter>system\baseitem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-configs.h">
+      <Filter>system\baseitem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-service.h">
+      <Filter>system\baseitem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

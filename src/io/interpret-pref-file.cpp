@@ -15,6 +15,8 @@
 #include "io/macro-configurations-store.h"
 #include "io/tokenizer.h"
 #include "locale/language-switcher.h"
+#include "system/baseitem/baseitem-config.h"
+#include "system/baseitem/baseitem-configs.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/monrace/monrace-definition.h"
@@ -89,19 +91,19 @@ static bool interpret_k_token(std::string_view buf)
     const auto i = static_cast<short>(std::stoi(tokens[0], nullptr, 0));
     const auto color = static_cast<uint8_t>(std::stoi(tokens[1], nullptr, 0));
     const auto character = static_cast<char>(std::stoi(tokens[2], nullptr, 0));
-    auto &baseitems = BaseitemList::get_instance();
-    if (i >= static_cast<int>(baseitems.size())) {
+    auto &baseitem_configs = BaseitemConfigs::get_instance();
+    if (i >= static_cast<int>(baseitem_configs.size())) {
         return false;
     }
 
     /* Allow TERM_DARK text */
-    auto &baseitem = baseitems.get_baseitem(i);
+    auto &baseitem_config = baseitem_configs.get_config(i);
     if ((color > 0) || (((character & 0x80) == 0) && (character != '\0'))) {
-        baseitem.symbol_config.color = color;
+        baseitem_config.update_color(color);
     }
 
     if (character != '\0') {
-        baseitem.symbol_config.character = character;
+        baseitem_config.update_character(character);
     }
 
     return true;
@@ -233,11 +235,11 @@ static bool interpret_u_token(std::string_view buf)
     for (auto &baseitem : BaseitemList::get_instance()) {
         if (baseitem.is_valid() && (baseitem.bi_key.tval() == tval)) {
             if (color) {
-                baseitem.symbol_definition.color = color;
+                baseitem.init_color(color);
             }
 
             if (character) {
-                baseitem.symbol_definition.character = character;
+                baseitem.init_character(character);
             }
         }
     }
