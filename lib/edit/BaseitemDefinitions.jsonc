@@ -81,8 +81,8 @@
     {
       "id": 0,
       "name": {
-        "ja": "何",
-        "en": "something",
+        "ja": "異常アイテム",
+        "en": "Invalid item",
       },
       "symbol": {
         "character": "&",
