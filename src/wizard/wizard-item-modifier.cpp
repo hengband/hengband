@@ -1022,8 +1022,12 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
             const int len = item_name.length();
             if (std::string(pray_chars).find(item_name) != std::string::npos) {
                 if (len > max_len) {
-                    baseitem_ids.push_back(bi_id);
+                    baseitem_ids.clear();
                     max_len = len;
+                }
+
+                if (len == max_len) {
+                    baseitem_ids.push_back(bi_id);
                 }
             }
         }
