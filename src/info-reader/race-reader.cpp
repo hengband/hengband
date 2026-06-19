@@ -236,13 +236,13 @@ static errr set_mon_artifacts(nlohmann::json &artifact_data, MonraceDefinition &
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (auto &artifact : artifact_data.items()) {
+    for (const auto &artifact : artifact_data) {
         FixedArtifactId fa_id;
-        if (auto err = info_set_integer(artifact.value()["drop_artifact_id"], fa_id, true, Range(0, 1024))) {
+        if (auto err = info_set_integer(artifact["drop_artifact_id"], fa_id, true, Range(0, 1024))) {
             return err;
         }
         int chance;
-        if (auto err = info_set_integer(artifact.value()["drop_probability"], chance, true, Range(1, 100))) {
+        if (auto err = info_set_integer(artifact["drop_probability"], chance, true, Range(1, 100))) {
             return err;
         }
 
@@ -266,14 +266,14 @@ static errr set_mon_escorts(nlohmann::json &escort_data, MonraceDefinition &monr
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (const auto &escort : escort_data.items()) {
+    for (const auto &escort : escort_data) {
         MonraceId monrace_id;
-        if (auto err = info_set_integer(escort.value()["escorts_id"], monrace_id, true, Range(0, 8192))) {
+        if (auto err = info_set_integer(escort["escorts_id"], monrace_id, true, Range(0, 8192))) {
             return err;
         }
 
         Dice dice;
-        if (auto err = info_set_dice(escort.value()["escort_num"], dice, true)) {
+        if (auto err = info_set_dice(escort["escort_num"], dice, true)) {
             return err;
         }
 
@@ -298,13 +298,13 @@ static errr set_mon_blows(nlohmann::json &blow_data, MonraceDefinition &monrace)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (auto blow_num = 0; auto &blow : blow_data.items()) {
+    for (auto blow_num = 0; auto &blow : blow_data) {
         if (blow_num > 5) {
             return PARSE_ERROR_GENERIC;
         }
 
-        const auto &blow_method = blow.value()["method"];
-        const auto &blow_effect = blow.value()["effect"];
+        const auto &blow_method = blow["method"];
+        const auto &blow_effect = blow["effect"];
         if (blow_method.is_null() || blow_effect.is_null()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -322,7 +322,7 @@ static errr set_mon_blows(nlohmann::json &blow_data, MonraceDefinition &monrace)
         mon_blow.method = rbm->second;
         mon_blow.effect = rbe->second;
 
-        if (auto err = info_set_dice(blow.value()["damage_dice"], mon_blow.damage_dice, false)) {
+        if (auto err = info_set_dice(blow["damage_dice"], mon_blow.damage_dice, false)) {
             return err;
         }
 
@@ -346,8 +346,8 @@ static errr set_mon_flags(const nlohmann::json &flag_data, MonraceDefinition &mo
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (auto &flag : flag_data.items()) {
-        if (!grab_one_basic_flag(monrace, flag.value().get<std::string>())) {
+    for (const auto &flag : flag_data) {
+        if (!grab_one_basic_flag(monrace, flag.get<std::string>())) {
             return PARSE_ERROR_INVALID_FLAG;
         }
     }
@@ -464,8 +464,8 @@ static errr set_mon_message(const nlohmann::json &message_data, MonraceDefinitio
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (auto &message : message_data.items()) {
-        const auto &action_str = message.value()["action"];
+    for (const auto &message : message_data) {
+        const auto &action_str = message["action"];
         if (action_str.is_null()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -475,13 +475,13 @@ static errr set_mon_message(const nlohmann::json &message_data, MonraceDefinitio
         }
 
         int chance;
-        if (auto err = info_set_integer(message.value()["chance"], chance, true, Range(1, 100))) {
+        if (auto err = info_set_integer(message["chance"], chance, true, Range(1, 100))) {
             return err;
         }
 
         bool use_name = true;
-        const auto use_name_iter = message.value().find("use_name");
-        if (use_name_iter != message.value().end()) {
+        const auto use_name_iter = message.find("use_name");
+        if (use_name_iter != message.end()) {
             const auto &use_name_data = use_name_iter.value();
             if (auto err = info_set_bool(use_name_data, use_name, false)) {
                 return err;
@@ -489,7 +489,7 @@ static errr set_mon_message(const nlohmann::json &message_data, MonraceDefinitio
         }
 
         std::string str;
-        if (auto err = info_set_string(message.value()["message"], str, false)) {
+        if (auto err = info_set_string(message["message"], str, false)) {
             return err;
         }
 

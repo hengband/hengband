@@ -194,9 +194,8 @@ static errr set_realm_data(const nlohmann::json &class_data, player_magic &magic
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (auto &element : class_data["realms"].items()) {
-        auto &realm = element.value();
-        auto &realm_name_obj = realm["name"];
+    for (const auto &realm : class_data["realms"]) {
+        const auto &realm_name_obj = realm["name"];
         if (!realm_name_obj.is_string()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -207,13 +206,13 @@ static errr set_realm_data(const nlohmann::json &class_data, player_magic &magic
         }
 
         const auto realm_id = realm_name->second;
-        auto &spells_info_obj = realm["spells_info"];
+        const auto &spells_info_obj = realm["spells_info"];
         if (spells_info_obj.is_null()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        for (auto &spell_info : spells_info_obj.items()) {
-            if (auto err = set_spell_data(spell_info.value(), magics_info, realm_id)) {
+        for (const auto &spell : spells_info_obj) {
+            if (auto err = set_spell_data(spell, magics_info, realm_id)) {
                 msg_format(_("呪文データ読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);
                 return err;
             }
