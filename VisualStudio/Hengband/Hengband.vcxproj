@@ -324,6 +324,8 @@
     <ClCompile Include="..\..\src\system\artifact\artifact-service.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-config.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-configs.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-record.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-records.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-service.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\quest-definition.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\quest-list.cpp" />
@@ -1060,6 +1062,8 @@
     <ClInclude Include="..\..\src\monster-floor\monster-movement-direction-list.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-config.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-configs.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-record.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-records.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-service.h" />
     <ClInclude Include="..\..\src\system\dungeon\quest-definition.h" />
     <ClInclude Include="..\..\src\system\dungeon\quest-list.h" />
