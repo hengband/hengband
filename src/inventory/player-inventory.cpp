@@ -49,7 +49,7 @@
  */
 bool can_get_item(PlayerType *player_ptr, const ItemTester &item_tester)
 {
-    for (int j = 0; j < INVEN_TOTAL; j++) {
+    for (const auto j : INVEN_ALL_SLOTS) {
         if (item_tester.okay(player_ptr->inventory[j].get())) {
             return true;
         }

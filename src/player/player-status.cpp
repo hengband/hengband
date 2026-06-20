@@ -187,7 +187,7 @@ static bool is_heavy_shoot(PlayerType *player_ptr, const ItemEntity *o_ptr)
 int calc_inventory_weight(PlayerType *player_ptr)
 {
     auto weight = 0;
-    for (int i = 0; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_ALL_SLOTS) {
         const auto &item = *player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;

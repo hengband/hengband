@@ -278,7 +278,7 @@ void sense_inventory1(PlayerType *player_ptr)
         heavy = true;
     }
 
-    for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_ALL_SLOTS) {
         o_ptr = player_ptr->inventory[i].get();
 
         if (!o_ptr->is_valid()) {
@@ -406,7 +406,7 @@ void sense_inventory2(PlayerType *player_ptr)
         break;
     }
 
-    for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_ALL_SLOTS) {
         bool okay = false;
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {

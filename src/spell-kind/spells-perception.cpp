@@ -38,7 +38,7 @@
  */
 void identify_pack(PlayerType *player_ptr)
 {
-    for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_ALL_SLOTS) {
         auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;

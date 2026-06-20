@@ -33,6 +33,7 @@
 #include "term/screen-processor.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
+#include <range/v3/view.hpp>
 #include <sstream>
 
 /*!
@@ -64,7 +65,7 @@ static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX i_i
  */
 void autopick_delayed_alter(PlayerType *player_ptr)
 {
-    for (INVENTORY_IDX i_idx = INVEN_TOTAL - 1; i_idx >= 0; i_idx--) {
+    for (const auto i_idx : INVEN_ALL_SLOTS | ranges::views::reverse) {
         autopick_delayed_alter_aux(player_ptr, i_idx);
     }
 

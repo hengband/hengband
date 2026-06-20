@@ -213,7 +213,7 @@ void regenerate_monsters(PlayerType *player_ptr)
 void regenerate_captured_monsters(PlayerType *player_ptr)
 {
     bool heal = false;
-    for (int i = 0; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_ALL_SLOTS) {
         auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
