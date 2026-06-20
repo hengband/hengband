@@ -238,6 +238,16 @@ public:
         return range.size();
     }
 
+    /*!
+     * @brief 閉区間の範囲を半開区間の EnumRange に変換する
+     *
+     * @return 同じ範囲を表す EnumRange<EnumType>
+     */
+    constexpr EnumRange<EnumType> to_enum_range() const noexcept
+    {
+        return range;
+    }
+
 private:
     EnumRange<EnumType> range;
 };
