@@ -20,9 +20,9 @@ public:
     class iterator {
     public:
         // std::iterator_traits に対応するための定義
-        using difference_type = int;
+        using difference_type = ptrdiff_t;
         using value_type = EnumType;
-        using iterator_concept = std::input_iterator_tag;
+        using iterator_concept = std::bidirectional_iterator_tag;
 
         constexpr iterator() noexcept = default;
 
@@ -66,6 +66,29 @@ public:
         {
             auto old = *this;
             ++*this;
+            return old;
+        }
+
+        /*!
+         * @brief イテレータを前置デクリメントする
+         *
+         * @return *this の参照
+         */
+        constexpr iterator &operator--() noexcept
+        {
+            --index;
+            return *this;
+        }
+
+        /*!
+         * @brief イテレータを後置デクリメントする
+         *
+         * @return インクリメント前のイテレータのコピー
+         */
+        constexpr iterator operator--(int) noexcept
+        {
+            auto old = *this;
+            --*this;
             return old;
         }
 
