@@ -4,6 +4,7 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "term/z-rand.h"
+#include "view/display-symbol.h"
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view.hpp>
 
@@ -39,4 +40,10 @@ const BaseitemConfig &BaseitemService::pick_one_at_random()
             return baseitem_configs.get_config(bi_id);
         }
     }
+}
+
+const DisplaySymbol &BaseitemService::get_dummy_symbol()
+{
+    static const auto ds = BaseitemConfigs::get_instance().get_config(0).get_symbol();
+    return ds;
 }

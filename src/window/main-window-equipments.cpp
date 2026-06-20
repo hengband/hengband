@@ -11,6 +11,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-info.h"
 #include "player/player-status-flags.h"
+#include "system/baseitem/baseitem-service.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/gameterm.h"
@@ -87,6 +88,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
 
     col = (len > wid - _(6, 4)) ? 0 : (wid - len - 1);
     const auto equip_label = prepare_label_string(player_ptr, USE_EQUIP, item_tester);
+    const auto &empty_symbol = BaseitemService::get_dummy_symbol();
     for (j = 0; j < k; j++) {
         i = out_index[j];
         const auto &item = *player_ptr->inventory[i];
@@ -108,7 +110,8 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
         put_str(head, j + 1, col);
         int cur_col = col + 3;
         if (show_item_graph) {
-            term_queue_bigchar(cur_col, j + 1, { item.get_symbol(), {} });
+            const auto ds = item.is_valid() ? item.get_symbol() : empty_symbol;
+            term_queue_bigchar(cur_col, j + 1, { ds, {} });
             if (use_bigtile) {
                 cur_col++;
             }

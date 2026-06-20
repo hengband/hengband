@@ -21,6 +21,7 @@
 #include "system/artifact/artifact-record.h"
 #include "system/baseitem/baseitem-config.h"
 #include "system/baseitem/baseitem-configs.h"
+#include "system/baseitem/baseitem-service.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
@@ -163,6 +164,7 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
     const auto is_wizard = AngbandWorld::get_instance().wizard;
     const auto &baseitems = BaseitemList::get_instance();
     const auto &baseitem_configs = BaseitemConfigs::get_instance();
+    const auto &empty_symbol = BaseitemService::get_dummy_symbol();
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
         const auto bi_id = object_idx[object_top + i];
@@ -184,7 +186,8 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
             c_prt(attr, format("%d", bi_id), row + i, 70);
         }
 
-        term_queue_bigchar(use_bigtile ? 76 : 77, row + i, { flavor_config.get_symbol(), {} });
+        const auto ds = flavor_baseitem.is_valid() ? flavor_config.get_symbol() : empty_symbol;
+        term_queue_bigchar(use_bigtile ? 76 : 77, row + i, { ds, {} });
     }
 
     for (; i < per_page; i++) {
