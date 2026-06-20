@@ -38,7 +38,7 @@ N: 4:BIAS_COLD
 'Snow Avalanche'
 'Freeze!'
 'Freezing Blade'
-'Icy Clow'
+'Icy Claw'
 'Nimloth'
 'Bigfoot'
 of Liquid Helium
@@ -59,13 +59,13 @@ N: 5:BIAS_ACID
 N:12:BIAS_CHAOS
 'Koch'
 'Julia'
-'Cotortion Blade'
+'Contortion Blade'
 'Protean Edge'
 'cHaOs rEgIoN'
 'Schrodinger'
 'Mandelbrot'
 'Kaleidoscope'
-'Randamizer'
+'Randomizer'
 'Shapechanger'
 of Change
 of Logrus
@@ -103,7 +103,7 @@ of Holy Smoke
 N: 9:BIAS_DEX
 N:16:BIAS_ROGUE
 'Whirlwind'
-'Cat's Clow'
+'Cat's Claw'
 'Sands of Time'
 'Raid'
 'Elusiveness'
