@@ -111,7 +111,7 @@ static void calc_blow_un_power(PlayerType *player_ptr, MonsterAttackPlayer *mona
 
     int max_draining_item = is_magic_mastery ? 5 : 10;
     for (int i = 0; i < max_draining_item; i++) {
-        auto i_idx = randnum0<short>(INVEN_PACK);
+        const auto i_idx = rand_choice(INVEN_PACK_SLOTS);
         monap_ptr->o_ptr = player_ptr->inventory[i_idx].get();
         if (!monap_ptr->o_ptr->is_valid()) {
             continue;

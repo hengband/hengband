@@ -114,7 +114,8 @@ static std::pair<tl::optional<short>, char> get_floor_item_tag_inventory(PlayerT
  */
 static std::pair<tl::optional<short>, char> check_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection &fis, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
-    if ((!fis.inven || (i_idx < 0) || (i_idx >= INVEN_PACK)) && (!fis.equip || (i_idx < INVEN_MAIN_HAND) || (i_idx >= INVEN_TOTAL))) {
+    const auto slot = i2enum<inventory_slot_type>(i_idx);
+    if ((!fis.inven || !INVEN_PACK_SLOTS.contains(slot)) && (!fis.equip || !INVEN_WIELDING_SLOTS.contains(slot))) {
         return { tl::nullopt, prev_tag };
     }
 

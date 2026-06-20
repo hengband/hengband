@@ -333,8 +333,8 @@ tl::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
  */
 void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
-    const auto max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
-    for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
+    const auto range = (mode & DP_WP) ? EnumRangeInclusive(INVEN_MAIN_HAND, INVEN_BOW) : INVEN_WIELDING_SLOTS;
+    for (const auto i : range) {
         const auto &item = *player_ptr->inventory[i];
         auto symbol = item.get_symbol();
         if (!equippy_chars || !item.is_valid()) {
