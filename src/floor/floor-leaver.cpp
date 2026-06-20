@@ -278,7 +278,7 @@ static void preserve_info(PlayerType *player_ptr)
         delete_monster_idx(player_ptr, i);
     }
 
-    for (short i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;

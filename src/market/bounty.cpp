@@ -30,6 +30,7 @@
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
+#include <range/v3/view.hpp>
 
 /*!
  * @brief 賞金首の引き換え処理 / Get prize
@@ -65,7 +66,7 @@ bool exchange_cash(PlayerType *player_ptr)
         vary_item(player_ptr, i, -item.number);
     }
 
-    for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         const auto &item = *player_ptr->inventory[i];
         if (!item.is_corpse()) {
             continue;
@@ -88,7 +89,7 @@ bool exchange_cash(PlayerType *player_ptr)
         vary_item(player_ptr, i, -item.number);
     }
 
-    for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         const auto &item = *player_ptr->inventory[i];
         if (item.bi_key != BaseitemKey(ItemKindType::MONSTER_REMAINS, SV_SKELETON)) {
             continue;
@@ -112,7 +113,7 @@ bool exchange_cash(PlayerType *player_ptr)
     }
 
     auto &world = AngbandWorld::get_instance();
-    for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         const auto &item = *player_ptr->inventory[i];
         const auto &monrace = world.get_today_bounty();
         if (!item.is_corpse() || (item.get_monrace().name != monrace.name)) {
@@ -132,7 +133,7 @@ bool exchange_cash(PlayerType *player_ptr)
         vary_item(player_ptr, i, -item.number);
     }
 
-    for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         const auto &item = *player_ptr->inventory[i];
         const auto &monrace = world.get_today_bounty();
         if ((item.bi_key != BaseitemKey(ItemKindType::MONSTER_REMAINS, SV_SKELETON)) || (item.get_monrace().name != monrace.name)) {
@@ -157,7 +158,7 @@ bool exchange_cash(PlayerType *player_ptr)
             continue;
         }
 
-        for (INVENTORY_IDX i = INVEN_PACK - 1; i >= 0; i--) {
+        for (const auto i : INVEN_PACK_SLOTS | ranges::views::reverse) {
             auto &item = *player_ptr->inventory[i];
             if ((item.bi_key.tval() != ItemKindType::MONSTER_REMAINS) || (item.get_monrace().idx != monrace_id)) {
                 continue;

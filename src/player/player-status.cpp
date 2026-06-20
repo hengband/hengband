@@ -2693,7 +2693,7 @@ void update_creature(PlayerType *player_ptr)
  */
 bool player_has_no_spellbooks(PlayerType *player_ptr)
 {
-    for (int i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         const auto *o_ptr = player_ptr->inventory[i].get();
         if (o_ptr->is_valid() && check_book_realm(player_ptr, o_ptr->bi_key)) {
             return false;

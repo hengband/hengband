@@ -80,7 +80,7 @@ void recharge_magic_items(PlayerType *player_ptr)
      * one per turn. -LM-
      */
     changed = false;
-    for (int i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         auto &item = *player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;

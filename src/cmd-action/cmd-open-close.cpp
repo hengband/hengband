@@ -304,7 +304,7 @@ void do_cmd_bash(PlayerType *player_ptr)
  */
 static bool get_spike(PlayerType *player_ptr, INVENTORY_IDX *ip)
 {
-    for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         auto *o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;

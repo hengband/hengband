@@ -175,7 +175,7 @@ static void test_inventory_floor(PlayerType *player_ptr, FloorItemSelection *fis
         return;
     }
 
-    for (int i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         if (item_tester.okay(player_ptr->inventory[i].get()) || (fis_ptr->mode & USE_FULL)) {
             fis_ptr->max_inven++;
         }

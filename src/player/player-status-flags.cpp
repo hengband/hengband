@@ -720,7 +720,7 @@ void check_no_flowed(PlayerType *player_ptr)
         return;
     }
 
-    for (int i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         const auto &bi_key = player_ptr->inventory[i]->bi_key;
         if (bi_key == BaseitemKey(ItemKindType::NATURE_BOOK, 2)) {
             has_sw = true;

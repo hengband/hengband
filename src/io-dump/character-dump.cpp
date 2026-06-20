@@ -511,7 +511,7 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
     }
 
     fmt::println(fff, _("  [キャラクタの持ち物]\n", "  [Character Inventory]\n"));
-    for (auto i = 0; i < INVEN_PACK; i++) {
+    for (const auto i : INVEN_PACK_SLOTS) {
         if (!player_ptr->inventory[i]->is_valid()) {
             break;
         }

@@ -86,7 +86,7 @@ void spoil_random_artifact(PlayerType *player_ptr)
                 spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
 
-            for (int i = 0; i < INVEN_PACK; i++) {
+            for (const auto i : INVEN_PACK_SLOTS) {
                 auto &item = *player_ptr->inventory[i];
                 spoil_random_artifact_aux(player_ptr, item, tval, ofs);
             }
