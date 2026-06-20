@@ -113,9 +113,9 @@ static tl::optional<short> wiz_select_sval(const tval_desc &td)
 {
     std::vector<short> bi_ids;
     const auto &baseitems = BaseitemList::get_instance();
-    for (short bi_id = 0; bi_id < static_cast<short>(baseitems.size()); bi_id++) {
+    for (short bi_id : baseitems.collect_valid_bi_ids()) {
         const auto &baseitem = baseitems.get_baseitem(bi_id);
-        if (!baseitem.is_valid() || baseitem.bi_key.tval() != td.tval) {
+        if (baseitem.bi_key.tval() != td.tval) {
             continue;
         }
 
@@ -524,9 +524,9 @@ void wiz_jump_to_dungeon(PlayerType *player_ptr)
 void wiz_learn_items_all(PlayerType *player_ptr)
 {
     const auto &baseitems = BaseitemList::get_instance();
-    for (short bi_id = 0; bi_id < static_cast<short>(baseitems.size()); bi_id++) {
+    for (short bi_id : baseitems.collect_valid_bi_ids()) {
         const auto &baseitem = baseitems.get_baseitem(bi_id);
-        if (baseitem.is_valid() && baseitem.level <= command_arg) {
+        if (baseitem.level <= command_arg) {
             ItemEntity item(bi_id);
             object_aware(player_ptr, item);
         }

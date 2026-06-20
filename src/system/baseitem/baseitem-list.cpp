@@ -16,6 +16,7 @@
 #include "util/string-processor.h"
 #include <algorithm>
 #include <numeric>
+#include <range/v3/view.hpp>
 #include <set>
 #include <span>
 
@@ -68,6 +69,22 @@ const BaseitemDefinition &BaseitemList::pick_one_at_random() const
 {
     const auto candidates = std::span(this->baseitems).subspan(1); // 0番はダミーアイテム
     return rand_choice(candidates);
+}
+
+const std::vector<short> &BaseitemList::collect_valid_bi_ids() const
+{
+    static std::vector<short> bi_ids;
+    if (!bi_ids.empty()) {
+        return bi_ids;
+    }
+
+    for (const auto &[bi_id, baseitem] : *this | ranges::views::enumerate) {
+        if (baseitem.is_valid()) {
+            bi_ids.push_back(static_cast<short>(bi_id));
+        }
+    }
+
+    return bi_ids;
 }
 
 /*!
@@ -162,12 +179,9 @@ short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
 const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_keys_cache() const
 {
     static std::map<BaseitemKey, short> cache;
-    for (short bi_id = 0; bi_id < static_cast<short>(this->baseitems.size()); bi_id++) {
-        const auto &baseitem = this->baseitems.at(bi_id);
-        if (baseitem.is_valid()) {
-            const auto &bi_key = baseitem.bi_key;
-            cache[bi_key] = bi_id;
-        }
+    for (short bi_id : this->collect_valid_bi_ids()) {
+        const auto &bi_key = this->baseitems.at(bi_id).bi_key;
+        cache[bi_key] = bi_id;
     }
 
     return cache;
@@ -180,12 +194,10 @@ const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_keys_cache() c
 const std::map<ItemKindType, std::vector<int>> &BaseitemList::create_baseitem_subtypes_cache() const
 {
     static std::map<ItemKindType, std::vector<int>> cache;
-    for (const auto &baseitem : this->baseitems) {
-        if (baseitem.is_valid()) {
-            const auto &bi_key = baseitem.bi_key;
-            const auto tval = bi_key.tval();
-            cache[tval].push_back(*bi_key.sval());
-        }
+    for (short bi_id : this->collect_valid_bi_ids()) {
+        const auto &bi_key = this->baseitems.at(bi_id).bi_key;
+        const auto tval = bi_key.tval();
+        cache[tval].push_back(*bi_key.sval());
     }
 
     return cache;

@@ -18,7 +18,7 @@ void initialize_items_flavor()
 {
     auto &system = AngbandSystem::get_instance();
     auto &baseitems = BaseitemList::get_instance();
-    for (short bi_id = 0; bi_id < static_cast<short>(baseitems.size()); bi_id++) {
+    for (short bi_id : baseitems.collect_valid_bi_ids()) {
         auto &baseitem = baseitems.get_baseitem(bi_id);
         if (baseitem.flavor_name.empty()) {
             continue;

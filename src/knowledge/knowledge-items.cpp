@@ -128,9 +128,9 @@ static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FL
     short object_cnt = 0;
     const auto group_tval = ITEM_KINDS_GROUP[grp_cur];
     const auto &baseitems = BaseitemList::get_instance();
-    for (short bi_id = 0; bi_id < static_cast<short>(baseitems.size()); bi_id++) {
+    for (auto bi_id : baseitems.collect_valid_bi_ids()) {
         const auto &baseitem = baseitems.get_baseitem(bi_id);
-        if (baseitem.name.empty() || !check_baseitem_chance(mode, baseitem)) {
+        if (!check_baseitem_chance(mode, baseitem)) {
             continue;
         }
 
