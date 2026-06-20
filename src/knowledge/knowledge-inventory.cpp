@@ -171,7 +171,7 @@ static void pad_and_print_header(int label_number, FILE *fff)
 static int show_wearing_equipment_resistances(PlayerType *player_ptr, ItemKindType tval, int label_number_initial, FILE *fff)
 {
     auto label_number = label_number_initial;
-    for (short i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         const auto &item = *player_ptr->inventory[i];
         if (!item.has_knowledge(tval)) {
             continue;

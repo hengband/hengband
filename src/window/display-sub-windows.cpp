@@ -4,6 +4,7 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-describer.h"
+#include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "locale/japanese.h"
 #include "main/sound-of-music.h"
@@ -310,7 +311,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
     const auto &[wid, hgt] = term_get_size();
     const auto &empty_symbol = BaseitemService::get_dummy_symbol();
     byte attr = TERM_WHITE;
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         int cur_row = i - INVEN_MAIN_HAND;
         if (cur_row >= hgt) {
             break;

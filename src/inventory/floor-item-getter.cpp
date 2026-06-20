@@ -198,7 +198,7 @@ static void test_equipment_floor(PlayerType *player_ptr, FloorItemSelection *fis
         return;
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         if (player_ptr->select_ring_slot ? is_ring_slot(i)
                                          : item_tester.okay(player_ptr->inventory[i].get()) || (fis_ptr->mode & USE_FULL)) {
             fis_ptr->max_equip++;

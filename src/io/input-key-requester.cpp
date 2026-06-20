@@ -305,7 +305,7 @@ int InputKeyRequestor::get_caret_command() const
 void InputKeyRequestor::sweep_confirmation_equipments()
 {
     auto caret_command = this->get_caret_command();
-    for (auto i = enum2i(INVEN_MAIN_HAND); i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         auto &item = *this->player_ptr->inventory[i];
         if (!item.is_valid() || !item.is_inscribed()) {
             continue;

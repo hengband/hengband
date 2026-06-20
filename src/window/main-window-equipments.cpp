@@ -32,7 +32,6 @@
  */
 COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS mode, const ItemTester &item_tester)
 {
-    COMMAND_CODE i;
     int j, k, l;
     COMMAND_CODE out_index[23]{};
     TERM_COLOR out_color[23]{};
@@ -41,7 +40,8 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     auto col = command_gap;
     const auto &[wid, hgt] = term_get_size();
     auto len = wid - col - 1;
-    for (k = 0, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    k = 0;
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         const auto &item = *player_ptr->inventory[i];
         auto only_slot = !(player_ptr->select_ring_slot ? is_ring_slot(i) : (item_tester.okay(&item) || any_bits(mode, USE_FULL)));
         auto is_any_hand = (i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr);
@@ -90,7 +90,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     const auto equip_label = prepare_label_string(player_ptr, USE_EQUIP, item_tester);
     const auto &empty_symbol = BaseitemService::get_dummy_symbol();
     for (j = 0; j < k; j++) {
-        i = out_index[j];
+        const auto i = out_index[j];
         const auto &item = *player_ptr->inventory[i];
         prt("", j + 1, col ? col - 2 : col);
         std::string head;

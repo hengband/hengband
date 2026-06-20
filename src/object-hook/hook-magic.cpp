@@ -38,7 +38,7 @@ bool item_tester_hook_use(PlayerType *player_ptr, const ItemEntity *o_ptr)
             return false;
         }
 
-        for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+        for (const auto i : INVEN_WIELDING_SLOTS) {
             if ((player_ptr->inventory[i].get() == o_ptr) && o_ptr->get_flags().has(TR_ACTIVATE)) {
                 return true;
             }

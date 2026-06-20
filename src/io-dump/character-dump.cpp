@@ -496,7 +496,7 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
 {
     if (player_ptr->equip_cnt) {
         fmt::println(fff, _("  [キャラクタの装備]\n", "  [Character Equipment]\n"));
-        for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+        for (const auto i : INVEN_WIELDING_SLOTS) {
             auto item_name = describe_flavor(player_ptr, *player_ptr->inventory[i], 0);
             auto is_two_handed = ((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr));
             is_two_handed |= ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr));

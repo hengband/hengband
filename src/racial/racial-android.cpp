@@ -63,7 +63,7 @@ void calc_android_exp(PlayerType *player_ptr)
         return;
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         auto *o_ptr = player_ptr->inventory[i].get();
         uint32_t value, exp;
         DEPTH level = std::max(o_ptr->get_baseitem_level() - 8, 1);

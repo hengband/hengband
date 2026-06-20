@@ -118,7 +118,7 @@ BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
 {
     ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
@@ -127,7 +127,7 @@ BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
         const auto flags = o_ptr->get_flags();
 
         if (flags.has(tr_flag)) {
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
         }
     }
     return result;
@@ -789,7 +789,7 @@ BIT_FLAGS has_warning(PlayerType *player_ptr)
     BIT_FLAGS result = 0L;
     ItemEntity *o_ptr;
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
@@ -799,7 +799,7 @@ BIT_FLAGS has_warning(PlayerType *player_ptr)
 
         if (flags.has(TR_WARNING)) {
             if (!o_ptr->is_inscribed() || !angband_strchr(o_ptr->inscription->data(), '$')) {
-                set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+                set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
             }
         }
     }
@@ -1056,7 +1056,7 @@ void update_curses(PlayerType *player_ptr)
         player_ptr->cursed.set(CurseTraitType::AGGRAVATE);
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
@@ -1166,7 +1166,7 @@ void update_extra_blows(PlayerType *player_ptr)
     const melee_type melee_type = player_melee_type(player_ptr);
     const bool two_handed = (melee_type == MELEE_TYPE_WEAPON_TWOHAND || melee_type == MELEE_TYPE_BAREHAND_TWO);
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
@@ -1469,7 +1469,7 @@ BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
 {
     ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
@@ -1478,7 +1478,7 @@ BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
         const auto flags = o_ptr->get_flags();
 
         if (flags.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) {
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
         }
     }
 
@@ -1494,7 +1494,7 @@ BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
 {
     ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
@@ -1503,7 +1503,7 @@ BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
         const auto flags = o_ptr->get_flags();
 
         if ((flags.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
         }
     }
 

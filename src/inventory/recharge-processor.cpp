@@ -52,10 +52,8 @@ static void recharged_notice(PlayerType *player_ptr, const ItemEntity &item)
  */
 void recharge_magic_items(PlayerType *player_ptr)
 {
-    int i;
-    bool changed;
-
-    for (changed = false, i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    bool changed = false;
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         auto &item = *player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;
@@ -81,7 +79,8 @@ void recharge_magic_items(PlayerType *player_ptr)
      * and each charging rod in a stack decreases the stack's timeout by
      * one per turn. -LM-
      */
-    for (changed = false, i = 0; i < INVEN_PACK; i++) {
+    changed = false;
+    for (int i = 0; i < INVEN_PACK; i++) {
         auto &item = *player_ptr->inventory[i];
         if (!item.is_valid()) {
             continue;

@@ -19,6 +19,7 @@
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-object.h"
+#include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
@@ -949,7 +950,7 @@ short calc_num_fire(PlayerType *player_ptr, const ItemEntity *o_ptr)
 {
     int extra_shots = 0;
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         ItemEntity *q_ptr;
         q_ptr = player_ptr->inventory[i].get();
         if (!q_ptr->is_valid()) {
@@ -1069,7 +1070,7 @@ static ACTION_SKILL_POWER calc_device_ability(PlayerType *player_ptr)
     pow = tmp_rp_ptr->r_dev + player_class.c_dev + player_personality.a_dev;
     pow += ((player_class.x_dev * player_ptr->lev / 10) + (ap_ptr->a_dev * player_ptr->lev / 50));
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         ItemEntity *o_ptr;
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
@@ -1197,7 +1198,7 @@ static ACTION_SKILL_POWER calc_search(PlayerType *player_ptr)
     pow = tmp_rp_ptr->r_srh + player_class.c_srh + player_personality.a_srh;
     pow += (player_class.x_srh * player_ptr->lev / 10);
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         ItemEntity *o_ptr;
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
@@ -1246,7 +1247,7 @@ static ACTION_SKILL_POWER calc_search_freq(PlayerType *player_ptr)
     pow = tmp_rp_ptr->r_fos + player_class.c_fos + player_personality.a_fos;
     pow += (player_class.x_fos * player_ptr->lev / 10);
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         ItemEntity *o_ptr;
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
@@ -1382,7 +1383,7 @@ static ACTION_SKILL_POWER calc_skill_dig(PlayerType *player_ptr)
         pow += (100 + player_ptr->lev * 8);
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
@@ -1600,7 +1601,7 @@ static int16_t calc_to_magic_chance(PlayerType *player_ptr)
         chance += 5;
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         ItemEntity *o_ptr;
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
@@ -1625,7 +1626,7 @@ static ARMOUR_CLASS calc_base_ac(PlayerType *player_ptr)
         return 0;
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         ItemEntity *o_ptr;
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
@@ -1683,7 +1684,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
         ac -= 50;
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         const auto *o_ptr = player_ptr->inventory[i].get();
         const auto flags = o_ptr->get_flags();
         if (!o_ptr->is_valid()) {
@@ -2077,7 +2078,7 @@ static short calc_to_damage(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_
         }
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         int bonus_to_d = 0;
         o_ptr = player_ptr->inventory[i].get();
         const auto has_melee = has_melee_weapon(player_ptr, i);
@@ -2317,7 +2318,7 @@ static short calc_to_hit(PlayerType *player_ptr, INVENTORY_IDX slot, bool is_rea
     }
 
     /* Bonuses from inventory */
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         auto *o_ptr = player_ptr->inventory[i].get();
 
         /* Ignore empty hands, handed weapons, bows and capture balls */
@@ -2458,7 +2459,7 @@ static int16_t calc_to_hit_bow(PlayerType *player_ptr, bool is_real_value)
     }
 
     // 武器以外の装備による修正
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         int bonus_to_h;
         o_ptr = player_ptr->inventory[i].get();
         const auto has_melee = has_melee_weapon(player_ptr, i);
@@ -2494,7 +2495,7 @@ static int16_t calc_to_damage_misc(PlayerType *player_ptr)
 
     int16_t to_dam = 0;
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
@@ -2524,7 +2525,7 @@ static int16_t calc_to_hit_misc(PlayerType *player_ptr)
 
     int16_t to_hit = 0;
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
+    for (const auto i : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i].get();
         if (!o_ptr->is_valid()) {
             continue;
