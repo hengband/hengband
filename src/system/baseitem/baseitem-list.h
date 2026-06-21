@@ -45,6 +45,7 @@ private:
         return this->baseitems;
     }
 
+    void validate(short bi_id) const;
     short exe_lookup(const BaseitemKey &bi_key) const;
     const std::map<BaseitemKey, short> &create_baseitem_keys_cache() const;
     const std::map<ItemKindType, std::vector<int>> &create_baseitem_subtypes_cache() const;

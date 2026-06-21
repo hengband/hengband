@@ -10,16 +10,16 @@
 #include "system/baseitem/baseitem-key.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
-#include "util/string-processor.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <numeric>
 #include <range/v3/view.hpp>
 #include <set>
 #include <span>
 
 namespace {
-constexpr auto INVALID_BI_ID_FORMAT = "Invalid Baseitem ID is specified! %d";
-constexpr auto INVALID_BASEITEM_KEY = "Invalid Baseitem Key is specified! Type: %d, Subtype: %d";
+constexpr auto INVALID_BI_ID_FORMAT = "Invalid Baseitem ID is specified! {}";
+constexpr auto INVALID_BASEITEM_KEY = "Invalid Baseitem Key is specified! Type: {}, Subtype: {}";
 }
 
 BaseitemList BaseitemList::instance{};
@@ -33,12 +33,8 @@ BaseitemList &BaseitemList::get_instance()
 
 bool BaseitemList::is_valid(short bi_id) const
 {
-    if (bi_id == 0) {
+    if ((bi_id <= 0) || (bi_id >= static_cast<short>(this->size()))) {
         return false;
-    }
-
-    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
-        THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
     }
 
     return this->baseitems.at(bi_id).is_valid();
@@ -46,19 +42,13 @@ bool BaseitemList::is_valid(short bi_id) const
 
 BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id)
 {
-    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
-        THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
-    }
-
+    this->validate(bi_id);
     return this->baseitems[bi_id];
 }
 
 const BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id) const
 {
-    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
-        THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
-    }
-
+    this->validate(bi_id);
     return this->baseitems[bi_id];
 }
 
@@ -114,6 +104,13 @@ const BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_ke
     return this->baseitems[bi_id];
 }
 
+void BaseitemList::validate(short bi_id) const
+{
+    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->size()))) {
+        THROW_EXCEPTION(std::logic_error, fmt::format(INVALID_BI_ID_FORMAT, bi_id));
+    }
+}
+
 /*!
  * @brief ベースアイテムキーに対応するベースアイテムのIDを検索する
  * @param key 検索したいベースアイテムキー
@@ -125,7 +122,7 @@ short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
     static const auto &cache = this->create_baseitem_keys_cache();
     const auto it = cache.find(bi_key);
     if (it == cache.end()) {
-        THROW_EXCEPTION(std::runtime_error, format(INVALID_BASEITEM_KEY, enum2i(bi_key.tval()), *bi_key.sval()));
+        THROW_EXCEPTION(std::runtime_error, fmt::format(INVALID_BASEITEM_KEY, enum2i(bi_key.tval()), *bi_key.sval()));
     }
 
     return it->second;
