@@ -237,7 +237,10 @@ void init_feat_variables()
  */
 void init_monrace_definitions()
 {
-    init_json("MonraceDefinitions.jsonc", "monsters", DefinitionHashDataType::MONRACES, MonraceList::get_instance(), parse_monraces_info);
+    auto parser = [](nlohmann::json &monrace_data) {
+        return RaceReader(monrace_data).read();
+    };
+    init_json("MonraceDefinitions.jsonc", "monsters", DefinitionHashDataType::MONRACES, MonraceList::get_instance(), parser);
 }
 
 /*!
