@@ -34,10 +34,6 @@ public:
     short lookup_baseitem_id(const BaseitemKey &bi_key) const;
     const BaseitemDefinition &lookup_baseitem(const BaseitemKey &bi_key) const;
 
-    void reset_identification_flags();
-    void mark_common_items_as_aware();
-    void shuffle_flavors();
-
 private:
     BaseitemList() = default;
 
@@ -54,5 +50,4 @@ private:
     const std::map<ItemKindType, std::vector<int>> &create_baseitem_subtypes_cache() const;
 
     BaseitemDefinition &lookup_baseitem(const BaseitemKey &bi_key);
-    void shuffle_flavors(ItemKindType tval);
 };

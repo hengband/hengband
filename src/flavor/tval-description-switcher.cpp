@@ -12,6 +12,7 @@
 #include "object/tval-types.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-record.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "util/bit-flags-calculator.h"
@@ -91,10 +92,12 @@ static std::pair<std::string, std::string> describe_corpse(const ItemEntity &ite
  */
 static std::string flavor_name_of(const ItemEntity &item, const describe_option_type &opt)
 {
+    const auto &baseitems = BaseitemList::get_instance();
     const auto &baseitem = item.get_baseitem();
+    const auto &record = item.get_baseitem_record();
     return any_bits(opt.mode, OD_FORCE_FLAVOR)
                ? baseitem.flavor_name
-               : BaseitemList::get_instance().get_baseitem(baseitem.flavor).flavor_name;
+               : baseitems.get_baseitem(record.get_appearance_id()).flavor_name;
 }
 
 static std::pair<std::string, std::string> describe_amulet(const ItemEntity &item, const describe_option_type &opt)

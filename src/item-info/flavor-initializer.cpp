@@ -9,6 +9,9 @@
 #include "system/angband-system.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-record.h"
+#include "system/baseitem/baseitem-records.h"
+#include "system/baseitem/baseitem-service.h"
 #include "util/finalizer.h"
 
 /*!
@@ -18,31 +21,30 @@ void initialize_items_flavor()
 {
     auto &system = AngbandSystem::get_instance();
     auto &baseitems = BaseitemList::get_instance();
+    auto &baseitem_records = BaseitemRecords::get_instance();
     for (short bi_id : baseitems.collect_valid_bi_ids()) {
-        auto &baseitem = baseitems.get_baseitem(bi_id);
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
         if (baseitem.flavor_name.empty()) {
             continue;
         }
 
-        baseitem.flavor = bi_id;
+        auto &baseitem_record = baseitem_records.get_record(bi_id);
+        baseitem_record.set_appearance_id(bi_id);
     }
 
     {
         const auto restore_rng = util::make_finalizer([&system, rng_backup = system.get_rng()]() { system.set_rng(rng_backup); });
         xso::rng32 flavor_rng(system.get_seed_flavor());
         system.set_rng(flavor_rng);
-        baseitems.shuffle_flavors();
+        BaseitemService::shuffle_flavors();
     }
 
-    for (auto &baseitem : baseitems) {
-        if (!baseitem.is_valid()) {
-            continue;
-        }
-
-        if (!baseitem.flavor) {
+    for (short bi_id : baseitems.collect_valid_bi_ids()) {
+        auto &baseitem = baseitem_records.get_record(bi_id);
+        if (!baseitem.is_apparent()) {
             baseitem.mark_awareness(true);
         }
 
-        baseitem.decide_easy_know();
+        baseitems.get_baseitem(bi_id).decide_easy_know();
     }
 }

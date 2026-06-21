@@ -26,7 +26,7 @@
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
-#include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-record.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
@@ -274,8 +274,8 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
             continue;
         }
 
-        auto &baseitem = o_ptr->get_baseitem();
-        baseitem.mark_awareness(true); //!< @note 記録には残さない.
+        auto &baseitem_record = o_ptr->get_baseitem_record();
+        baseitem_record.mark_awareness(true); //!< @note 記録には残さない.
         o_ptr->set_identification_flags({ IdentificationFlag::KNOWN, IdentificationFlag::FULL_KNOWN });
         o_ptr->marked.set(OmType::TOUCHED);
     }

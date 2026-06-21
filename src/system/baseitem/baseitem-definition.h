@@ -66,15 +66,6 @@ public:
     void init_color(uint8_t color);
     void init_character(char character);
 
-    /* @todo ここから下はBaseitemDefinitions.txt に依存しないミュータブルなフィールド群なので、将来的に分離予定 */
-
-    short flavor{}; /*!< 未鑑定名の何番目を当てるか(0は未鑑定名なし) / Special object flavor (or zero) */
-    bool aware{}; /*!< ベースアイテムが鑑定済かどうか /  The player is "aware" of the item's effects */
-    bool tried{}; /*!< ベースアイテムを未鑑定のまま試したことがあるか /  The player has "tried" one of the items */
-
-    void mark_trial(bool state);
-    void mark_awareness(bool state);
-
 private:
     DisplaySymbol symbol_definition; //!< 定義上のシンボル (色/文字).
 };

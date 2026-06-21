@@ -5,9 +5,6 @@
  */
 
 #include "system/baseitem/baseitem-list.h"
-#include "object/tval-types.h"
-#include "sv-definition/sv-potion-types.h"
-#include "sv-definition/sv-staff-types.h"
 #include "system/angband-exceptions.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-key.h"
@@ -118,44 +115,6 @@ const BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_ke
 }
 
 /*!
- * @brief ベースアイテムの鑑定済みフラグをリセットする
- * @details 不具合対策で0からリセットする(セーブは0から)
- */
-void BaseitemList::reset_identification_flags()
-{
-    for (auto &baseitem : this->baseitems) {
-        baseitem.mark_trial(false);
-        baseitem.mark_awareness(false);
-    }
-}
-
-/*!
- * @brief 未鑑定アイテム種別の内、ゲーム開始時から鑑定済とするアイテムの鑑定済フラグをONにする
- * @todo 食料用の杖は該当種族 (ゴーレム/骸骨/ゾンビ/幽霊)では鑑定済だが、本来はこのメソッドで鑑定済にすべき.
- */
-void BaseitemList::mark_common_items_as_aware()
-{
-    std::vector<BaseitemKey> bi_keys;
-    bi_keys.emplace_back(ItemKindType::POTION, SV_POTION_WATER);
-    bi_keys.emplace_back(ItemKindType::STAFF, SV_STAFF_NOTHING);
-    for (const auto &bi_key : bi_keys) {
-        this->lookup_baseitem(bi_key).mark_awareness(true);
-    }
-}
-
-void BaseitemList::shuffle_flavors()
-{
-    this->shuffle_flavors(ItemKindType::RING);
-    this->shuffle_flavors(ItemKindType::AMULET);
-    this->shuffle_flavors(ItemKindType::STAFF);
-    this->shuffle_flavors(ItemKindType::WAND);
-    this->shuffle_flavors(ItemKindType::ROD);
-    this->shuffle_flavors(ItemKindType::FOOD);
-    this->shuffle_flavors(ItemKindType::POTION);
-    this->shuffle_flavors(ItemKindType::SCROLL);
-}
-
-/*!
  * @brief ベースアイテムキーに対応するベースアイテムのIDを検索する
  * @param key 検索したいベースアイテムキー
  * @return ベースアイテムID
@@ -207,31 +166,4 @@ BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
 {
     const auto bi_id = this->lookup_baseitem_id(bi_key);
     return this->baseitems[bi_id];
-}
-
-/*!
- * @brief ベースアイテムの未確定名を共通tval間でシャッフルする
- * @param tval シャッフルしたいtval
- * @details 巻物、各種魔道具などに利用される。
- */
-void BaseitemList::shuffle_flavors(ItemKindType tval)
-{
-    std::vector<std::reference_wrapper<short>> flavors;
-    for (auto &baseitem : this->baseitems) {
-        if (baseitem.bi_key.tval() != tval) {
-            continue;
-        }
-
-        if (baseitem.flavor == 0) {
-            continue;
-        }
-
-        if (baseitem.flags.has(TR_FIXED_FLAVOR)) {
-            continue;
-        }
-
-        flavors.push_back(baseitem.flavor);
-    }
-
-    rand_shuffle(flavors.begin(), flavors.end());
 }

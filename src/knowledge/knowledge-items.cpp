@@ -21,6 +21,8 @@
 #include "system/artifact/artifact-record.h"
 #include "system/baseitem/baseitem-config.h"
 #include "system/baseitem/baseitem-configs.h"
+#include "system/baseitem/baseitem-record.h"
+#include "system/baseitem/baseitem-records.h"
 #include "system/baseitem/baseitem-service.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
@@ -96,15 +98,16 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr, ArtifactKnowledgeMode mo
  * @brief ベースアイテムの出現率チェック処理
  * @param mode グループ化モード (0x02 表示専用)
  * @param baseitem ベースアイテムへの参照
+ * @param baseitem_record ベースアイテム記録への参照
  * @return collect_objects() の処理を続行するか否か
  */
-static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemDefinition &baseitem)
+static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemDefinition &baseitem, const BaseitemRecord &record)
 {
     if (mode & 0x02) {
         return true;
     }
 
-    if (!AngbandWorld::get_instance().wizard && ((baseitem.flavor == 0) || !baseitem.aware)) {
+    if (!AngbandWorld::get_instance().wizard && (!record.is_apparent() || !record.is_aware())) {
         return false;
     }
 
@@ -128,9 +131,11 @@ static short collect_objects(int grp_cur, std::vector<short> &object_idx, BIT_FL
     short object_cnt = 0;
     const auto group_tval = ITEM_KINDS_GROUP[grp_cur];
     const auto &baseitems = BaseitemList::get_instance();
+    const auto &baseitem_records = BaseitemRecords::get_instance();
     for (auto bi_id : baseitems.collect_valid_bi_ids()) {
         const auto &baseitem = baseitems.get_baseitem(bi_id);
-        if (!check_baseitem_chance(mode, baseitem)) {
+        const auto &baseitem_record = baseitem_records.get_record(bi_id);
+        if (!check_baseitem_chance(mode, baseitem, baseitem_record)) {
             continue;
         }
 
@@ -163,19 +168,24 @@ static void display_object_list(int col, int row, int per_page, const std::vecto
 {
     const auto is_wizard = AngbandWorld::get_instance().wizard;
     const auto &baseitems = BaseitemList::get_instance();
+    const auto &baseitem_records = BaseitemRecords::get_instance();
     const auto &baseitem_configs = BaseitemConfigs::get_instance();
     const auto &empty_symbol = BaseitemService::get_dummy_symbol();
     int i;
     for (i = 0; i < per_page && (object_idx[object_top + i] >= 0); i++) {
         const auto bi_id = object_idx[object_top + i];
         const auto &baseitem = baseitems.get_baseitem(bi_id);
-        TERM_COLOR attr = ((baseitem.aware || visual_only) ? TERM_WHITE : TERM_SLATE);
-        byte cursor = ((baseitem.aware || visual_only) ? TERM_L_BLUE : TERM_BLUE);
-        const auto &flavor_baseitem = !visual_only && baseitem.flavor ? baseitems.get_baseitem(baseitem.flavor) : baseitem;
-        const auto &flavor_config = !visual_only && baseitem.flavor ? baseitem_configs.get_config(baseitem.flavor) : baseitem_configs.get_config(bi_id);
+        const auto &baseitem_record = baseitem_records.get_record(bi_id);
+        const auto &baseitem_config = baseitem_configs.get_config(bi_id);
+        TERM_COLOR attr = ((baseitem_record.is_aware() || visual_only) ? TERM_WHITE : TERM_SLATE);
+        byte cursor = ((baseitem_record.is_aware() || visual_only) ? TERM_L_BLUE : TERM_BLUE);
+        const auto has_flavor = baseitem_record.is_apparent();
+        const auto appearance_id = baseitem_record.get_appearance_id();
+        const auto &flavor_baseitem = !visual_only && has_flavor ? baseitems.get_baseitem(appearance_id) : baseitem;
+        const auto &flavor_config = !visual_only && has_flavor ? baseitem_configs.get_config(appearance_id) : baseitem_config;
 
         attr = ((i + object_top == object_cur) ? cursor : attr);
-        const auto is_flavor_only = (baseitem.flavor != 0) && (visual_only || !baseitem.aware);
+        const auto is_flavor_only = has_flavor && (visual_only || !baseitem_record.is_aware());
         const auto item_name = is_flavor_only ? flavor_baseitem.flavor_name : baseitem.stripped_name();
         c_prt(attr, item_name.data(), row + i, col);
         if (per_page == 1) {
@@ -248,9 +258,9 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_old = -1;
         object_cnt = 0;
     } else {
-        auto &baseitem = baseitems.get_baseitem(direct_k_idx);
+        const auto &baseitem_record = BaseitemRecords::get_instance().get_record(direct_k_idx);
         auto &baseitem_configs = BaseitemConfigs::get_instance();
-        auto &flavor_config = !visual_only && baseitem.flavor ? baseitem_configs.get_config(baseitem.flavor) : baseitem_configs.get_config(direct_k_idx);
+        auto &flavor_config = !visual_only && baseitem_record.is_apparent() ? baseitem_configs.get_config(baseitem_record.get_appearance_id()) : baseitem_configs.get_config(direct_k_idx);
         object_idx[0] = direct_k_idx;
         object_old = direct_k_idx;
         object_cnt = 1;
@@ -366,9 +376,9 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             }
         }
 
-        const auto &baseitem = baseitems.get_baseitem(bi_id);
+        const auto &baseitem_record = BaseitemRecords::get_instance().get_record(bi_id);
         auto &baseitem_configs = BaseitemConfigs::get_instance();
-        auto &baseitem_config = !visual_only && baseitem.flavor ? baseitem_configs.get_config(baseitem.flavor) : baseitem_configs.get_config(bi_id);
+        auto &baseitem_config = !visual_only && baseitem_record.is_apparent() ? baseitem_configs.get_config(baseitem_record.get_appearance_id()) : baseitem_configs.get_config(bi_id);
         auto color = baseitem_config.get_color();
         auto character = baseitem_config.get_character();
         if (visual_list) {

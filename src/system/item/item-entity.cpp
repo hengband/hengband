@@ -31,6 +31,8 @@
 #include "system/baseitem/baseitem-configs.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-record.h"
+#include "system/baseitem/baseitem-records.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
 #include "system/enums/monrace/monrace-id.h"
@@ -402,7 +404,8 @@ bool ItemEntity::is_held_by_monster() const
 bool ItemEntity::is_known() const
 {
     const auto &baseitem = this->get_baseitem();
-    return this->identification_flags.has(IdentificationFlag::KNOWN) || (baseitem.easy_know && baseitem.aware);
+    const auto &baseitem_record = this->get_baseitem_record();
+    return this->identification_flags.has(IdentificationFlag::KNOWN) || (baseitem.easy_know && baseitem_record.is_aware());
 }
 
 bool ItemEntity::is_fully_known() const
@@ -416,7 +419,7 @@ bool ItemEntity::is_fully_known() const
  */
 bool ItemEntity::is_aware() const
 {
-    return this->get_baseitem().aware;
+    return this->get_baseitem_record().is_aware();
 }
 
 /*
@@ -425,7 +428,7 @@ bool ItemEntity::is_aware() const
  */
 bool ItemEntity::is_tried() const
 {
-    return this->get_baseitem().tried;
+    return this->get_baseitem_record().is_tried();
 }
 
 /*!
@@ -832,6 +835,11 @@ bool ItemEntity::is_target_of(QuestId quest_id) const
 BaseitemDefinition &ItemEntity::get_baseitem() const
 {
     return BaseitemList::get_instance().get_baseitem(this->bi_id);
+}
+
+BaseitemRecord &ItemEntity::get_baseitem_record() const
+{
+    return BaseitemRecords::get_instance().get_record(this->bi_id);
 }
 
 EgoItemDefinition &ItemEntity::get_ego() const
@@ -1365,7 +1373,7 @@ void ItemEntity::mark_as_known()
  */
 void ItemEntity::mark_as_tried() const
 {
-    this->get_baseitem().mark_trial(true);
+    this->get_baseitem_record().mark_trial(true);
 }
 
 void ItemEntity::set_position(const Pos2D &pos)
@@ -1630,8 +1638,7 @@ std::string ItemEntity::build_activation_description_dragon_breath() const
 uint8_t ItemEntity::get_color() const
 {
     const auto &basitem_configs = BaseitemConfigs::get_instance();
-    const auto &baseitem = this->get_baseitem();
-    const auto flavor = baseitem.flavor;
+    const auto flavor = this->get_baseitem_record().get_appearance_id();
     if (flavor != 0) {
         return basitem_configs.get_color(flavor);
     }
@@ -1656,8 +1663,7 @@ uint8_t ItemEntity::get_color() const
  */
 char ItemEntity::get_character() const
 {
-    const auto &baseitem = this->get_baseitem();
-    const auto flavor = baseitem.flavor;
+    const auto flavor = this->get_baseitem_record().get_appearance_id();
     const auto &configs = BaseitemConfigs::get_instance();
     return flavor > 0 ? configs.get_character(flavor) : configs.get_character(this->bi_id);
 }
