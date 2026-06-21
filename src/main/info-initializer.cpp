@@ -245,7 +245,10 @@ void init_monrace_definitions()
  */
 void init_monster_message_definitions()
 {
-    init_json("MonsterMessages.jsonc", "groups", DefinitionHashDataType::MONSTER_MESSAGES, MonraceMessageList::get_instance(), parse_monster_messages_info);
+    auto parser = [](nlohmann::json &message_data) {
+        return MessageReader(message_data).read();
+    };
+    init_json("MonsterMessages.jsonc", "groups", DefinitionHashDataType::MONSTER_MESSAGES, MonraceMessageList::get_instance(), parser);
 }
 
 /*!

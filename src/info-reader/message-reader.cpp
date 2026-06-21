@@ -14,6 +14,25 @@
 #include "view/display-messages.h"
 #include <string>
 
+MessageReader::MessageReader(const nlohmann::json &message_data)
+    : message_data(message_data)
+{
+}
+
+/*!
+ * @brief モンスターメッセージ情報(JSON Object)のパース関数
+ * @return エラーコード
+ */
+int MessageReader::read() const
+{
+    if (auto err = this->set_mon_message()) {
+        msg_format(_("モンスターメッセージ読込失敗。", "Failed to load monster message."));
+        return err;
+    }
+
+    return PARSE_ERROR_NONE;
+}
+
 /*!
  * @brief JSON Objectからid群をセットする
  * @param id_list_data id群情報の格納されたJSON Object
@@ -41,16 +60,16 @@ static errr set_id_list(const nlohmann::json &id_list_data, std::vector<int> &id
 
 /*!
  * @brief JSON Objectからモンスターのメッセージをセットする
- * @param message_data メッセージ情報の格納されたJSON Object
  * @return エラーコード
  */
-static errr set_mon_message(const nlohmann::json &group_data)
+int MessageReader::set_mon_message() const
 {
+    const auto &group_data = this->message_data;
     const auto message_iter = group_data.find("message");
     if (message_iter == group_data.end() || !message_iter->is_array()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
-    const auto &message_data = message_iter.value();
+    const auto &message_array = message_iter.value();
     auto id_list = std::vector<int>();
 
     const auto id_list_iter = group_data.find("id_list");
@@ -62,21 +81,22 @@ static errr set_mon_message(const nlohmann::json &group_data)
             return id_err;
         }
     } else {
-        if (!group_data["name"].is_string()) {
+        const auto &name_obj = get_json_value(group_data, "name");
+        if (!name_obj.is_string()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        const auto group_name = group_data["name"].get<std::string>();
+        const auto group_name = name_obj.get<std::string>();
         if (group_name != "DEFAULT") {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
     }
 
-    if (!message_data.is_array()) {
+    if (!message_array.is_array()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (const auto &message : message_data) {
+    for (const auto &message : message_array) {
         const auto action_iter = message.find("action");
         if (action_iter == message.end() || !action_iter->is_string()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -157,23 +177,5 @@ static errr set_mon_message(const nlohmann::json &group_data)
             }
         }
     }
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief モンスターメッセージ情報(JSON Object)のパース関数
- * @param mon_data モンスターメッセージの格納されたJSON Object
- * @param head ヘッダ構造体
- * @return エラーコード
- */
-int parse_monster_messages_info(nlohmann::json &message_data)
-{
-    errr err;
-    err = set_mon_message(message_data);
-    if (err) {
-        msg_format(_("モンスターメッセージ読込失敗。", "Failed to load monster message."));
-        return err;
-    }
-
     return PARSE_ERROR_NONE;
 }
