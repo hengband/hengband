@@ -9,6 +9,7 @@
 #include "system/baseitem/baseitem-record.h"
 #include "system/baseitem/baseitem-records.h"
 #include "term/z-rand.h"
+#include "util/finalizer.h"
 #include "view/display-symbol.h"
 #include <functional>
 #include <range/v3/algorithm/for_each.hpp>
@@ -86,6 +87,41 @@ void BaseitemService::mark_common_items_as_aware()
     for (const auto &bi_key : bi_keys) {
         const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
         baseitem_records.get_record(bi_id).mark_awareness(true);
+    }
+}
+
+/*!
+ * @brief ゲーム開始時に行われるベースアイテムの初期化ルーチン
+ */
+void BaseitemService::initialize_items_flavor()
+{
+    auto &system = AngbandSystem::get_instance();
+    auto &baseitems = BaseitemList::get_instance();
+    auto &baseitem_records = BaseitemRecords::get_instance();
+    for (short bi_id : baseitems.collect_valid_bi_ids()) {
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
+        if (baseitem.flavor_name.empty()) {
+            continue;
+        }
+
+        auto &baseitem_record = baseitem_records.get_record(bi_id);
+        baseitem_record.set_appearance_id(bi_id);
+    }
+
+    {
+        const auto restore_rng = util::make_finalizer([&system, rng_backup = system.get_rng()]() { system.set_rng(rng_backup); });
+        xso::rng32 flavor_rng(system.get_seed_flavor());
+        system.set_rng(flavor_rng);
+        BaseitemService::shuffle_flavors();
+    }
+
+    for (short bi_id : baseitems.collect_valid_bi_ids()) {
+        auto &baseitem_record = baseitem_records.get_record(bi_id);
+        if (!baseitem_record.is_apparent()) {
+            baseitem_record.mark_awareness(true);
+        }
+
+        baseitems.get_baseitem(bi_id).decide_easy_know();
     }
 }
 

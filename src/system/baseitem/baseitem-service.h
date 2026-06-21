@@ -17,6 +17,7 @@ public:
     static const DisplaySymbol &get_dummy_symbol();
     static void shuffle_flavors();
     static void mark_common_items_as_aware();
+    static void initialize_items_flavor();
 
 private:
     static void shuffle_flavors(ItemKindType tval);

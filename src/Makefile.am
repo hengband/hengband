@@ -655,8 +655,6 @@ hengband_SOURCES = \
 	io-dump/random-art-info-dumper.cpp io-dump/random-art-info-dumper.h \
 	io-dump/special-class-dump.cpp io-dump/special-class-dump.h \
 	\
-	item-info/flavor-initializer.cpp item-info/flavor-initializer.h \
-	\
 	knowledge/item-group-table.cpp knowledge/item-group-table.h \
 	knowledge/knowledge-autopick.cpp knowledge/knowledge-autopick.h \
 	knowledge/knowledge-experiences.cpp knowledge/knowledge-experiences.h \
