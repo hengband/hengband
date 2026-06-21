@@ -8,8 +8,8 @@
 
 void set_equipment_influence(PlayerType *player_ptr, self_info_type *self_ptr)
 {
-    for (int k = INVEN_MAIN_HAND; k < INVEN_TOTAL; k++) {
-        auto *o_ptr = player_ptr->inventory[k].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        auto *o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

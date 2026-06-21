@@ -9,6 +9,7 @@
 #include "floor/floor-util.h"
 #include "game-option/disturbance-options.h"
 #include "grid/grid.h"
+#include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
 #include "mind/mind-mirror-master.h"
@@ -50,6 +51,7 @@
 #include "target/target-getter.h"
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
+#include <range/v3/algorithm.hpp>
 
 /*!
  * @brief 変わり身処理
@@ -414,15 +416,11 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
         return rush_attack(player_ptr, nullptr);
     case MindNinjaType::SYURIKEN_SPREADING: {
         for (int i = 0; i < 8; i++) {
-            OBJECT_IDX slot;
+            const auto it = ranges::find_if(INVEN_PACK_SLOTS, [&](const auto s) {
+                return player_ptr->inventory[s]->bi_key.tval() == ItemKindType::SPIKE;
+            });
 
-            for (slot = 0; slot < INVEN_PACK; slot++) {
-                if (player_ptr->inventory[slot]->bi_key.tval() == ItemKindType::SPIKE) {
-                    break;
-                }
-            }
-
-            if (slot == INVEN_PACK) {
+            if (it == INVEN_PACK_SLOTS.end()) {
                 if (!i) {
                     msg_print(_("くさびを持っていない。", "You have no Iron Spikes."));
                 } else {
@@ -432,7 +430,7 @@ bool cast_ninja_spell(PlayerType *player_ptr, MindNinjaType spell)
                 return false;
             }
 
-            (void)ThrowCommand(player_ptr).do_cmd_throw(1, false, slot);
+            (void)ThrowCommand(player_ptr).do_cmd_throw(1, false, enum2i(*it));
             PlayerEnergy(player_ptr).set_player_turn_energy(100);
         }
 

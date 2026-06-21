@@ -19,8 +19,8 @@ static int exe_curse_removal(PlayerType *player_ptr, int all)
 {
     auto count = 0;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        auto *o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid() || !o_ptr->is_cursed()) {
             continue;
         }

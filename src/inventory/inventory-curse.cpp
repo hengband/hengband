@@ -169,15 +169,15 @@ ItemEntity *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
         return nullptr;
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        auto *o_ptr = player_ptr->inventory[i_idx].get();
         if (o_ptr->curse_flags.has(flag)) {
-            choices[number] = i;
+            choices[number] = i_idx;
             number++;
             continue;
         }
 
-        choise_cursed_item(flag, o_ptr, choices, &number, i);
+        choise_cursed_item(flag, o_ptr, choices, &number, i_idx);
     }
 
     return player_ptr->inventory[choices[randint0(number)]].get();
@@ -194,8 +194,8 @@ static void curse_teleport(PlayerType *player_ptr)
     }
 
     int i_keep = 0, count = 0;
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        const auto &item = *player_ptr->inventory[i];
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        const auto &item = *player_ptr->inventory[i_idx];
         if (!item.is_valid()) {
             continue;
         }
@@ -212,7 +212,7 @@ static void curse_teleport(PlayerType *player_ptr)
 
         count++;
         if (one_in_(count)) {
-            i_keep = i;
+            i_keep = i_idx;
         }
     }
 

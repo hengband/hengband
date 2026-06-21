@@ -26,6 +26,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/baseitem/baseitem-list.h"
 #include "system/item/item-entity.h"
+#include <range/v3/view.hpp>
 #include <tuple>
 
 /*!
@@ -33,7 +34,7 @@
  */
 void wield_all(PlayerType *player_ptr)
 {
-    for (INVENTORY_IDX i_idx = INVEN_PACK - 1; i_idx >= 0; i_idx--) {
+    for (const auto i_idx : INVEN_PACK_SLOTS | ranges::views::reverse) {
         const auto &item = *player_ptr->inventory[i_idx];
         if (!item.is_valid()) {
             continue;

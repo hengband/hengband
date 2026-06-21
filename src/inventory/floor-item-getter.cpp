@@ -114,7 +114,8 @@ static std::pair<tl::optional<short>, char> get_floor_item_tag_inventory(PlayerT
  */
 static std::pair<tl::optional<short>, char> check_floor_item_tag_inventory(PlayerType *player_ptr, FloorItemSelection &fis, short i_idx, char prev_tag, const ItemTester &item_tester)
 {
-    if ((!fis.inven || (i_idx < 0) || (i_idx >= INVEN_PACK)) && (!fis.equip || (i_idx < INVEN_MAIN_HAND) || (i_idx >= INVEN_TOTAL))) {
+    const auto slot = i2enum<inventory_slot_type>(i_idx);
+    if ((!fis.inven || !INVEN_PACK_SLOTS.contains(slot)) && (!fis.equip || !INVEN_WIELDING_SLOTS.contains(slot))) {
         return { tl::nullopt, prev_tag };
     }
 
@@ -175,8 +176,8 @@ static void test_inventory_floor(PlayerType *player_ptr, FloorItemSelection *fis
         return;
     }
 
-    for (int i = 0; i < INVEN_PACK; i++) {
-        if (item_tester.okay(player_ptr->inventory[i].get()) || (fis_ptr->mode & USE_FULL)) {
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        if (item_tester.okay(player_ptr->inventory[i_idx].get()) || (fis_ptr->mode & USE_FULL)) {
             fis_ptr->max_inven++;
         }
     }
@@ -198,9 +199,9 @@ static void test_equipment_floor(PlayerType *player_ptr, FloorItemSelection *fis
         return;
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        if (player_ptr->select_ring_slot ? is_ring_slot(i)
-                                         : item_tester.okay(player_ptr->inventory[i].get()) || (fis_ptr->mode & USE_FULL)) {
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        if (player_ptr->select_ring_slot ? is_ring_slot(i_idx)
+                                         : item_tester.okay(player_ptr->inventory[i_idx].get()) || (fis_ptr->mode & USE_FULL)) {
             fis_ptr->max_equip++;
         }
     }

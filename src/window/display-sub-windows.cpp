@@ -4,6 +4,7 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-describer.h"
+#include "inventory/inventory-slot-types.h"
 #include "inventory/inventory-util.h"
 #include "locale/japanese.h"
 #include "main/sound-of-music.h"
@@ -310,18 +311,18 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
     const auto &[wid, hgt] = term_get_size();
     const auto &empty_symbol = BaseitemService::get_dummy_symbol();
     byte attr = TERM_WHITE;
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        int cur_row = i - INVEN_MAIN_HAND;
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        int cur_row = i_idx - INVEN_MAIN_HAND;
         if (cur_row >= hgt) {
             break;
         }
 
-        const auto &item = *player_ptr->inventory[i];
-        auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i) : item_tester.okay(&item);
+        const auto &item = *player_ptr->inventory[i_idx];
+        auto do_disp = player_ptr->select_ring_slot ? is_ring_slot(i_idx) : item_tester.okay(&item);
         std::string tmp_val = "   ";
 
         if (do_disp) {
-            tmp_val[0] = index_to_label(i);
+            tmp_val[0] = index_to_label(i_idx);
             tmp_val[1] = ')';
         }
 
@@ -330,8 +331,8 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
         term_putstr(0, cur_row, cur_col, TERM_WHITE, tmp_val);
 
         std::string item_name;
-        auto is_two_handed = (i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr);
-        is_two_handed |= (i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr);
+        auto is_two_handed = (i_idx == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr);
+        is_two_handed |= (i_idx == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr);
         if (is_two_handed && has_two_handed_weapons(player_ptr)) {
             item_name = _("(武器を両手持ち)", "(wielding with two-hands)");
             attr = TERM_WHITE;
@@ -364,7 +365,7 @@ static void display_equipment(PlayerType *player_ptr, const ItemTester &item_tes
 
         if (show_labels) {
             term_putstr(wid - 20, cur_row, -1, TERM_WHITE, " <-- ");
-            prt(mention_use(player_ptr, i), cur_row, wid - 15);
+            prt(mention_use(player_ptr, i_idx), cur_row, wid - 15);
         }
     }
 

@@ -175,8 +175,8 @@ void building_recharge_all(PlayerType *player_ptr)
 
     auto price = 0;
     auto total_cost = 0;
-    for (short i = 0; i < INVEN_PACK; i++) {
-        const auto &item = *player_ptr->inventory[i];
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        const auto &item = *player_ptr->inventory[i_idx];
         if (!item.can_recharge()) {
             continue;
         }
@@ -227,15 +227,15 @@ void building_recharge_all(PlayerType *player_ptr)
         return;
     }
 
-    for (short i = 0; i < INVEN_PACK; i++) {
-        auto *o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        auto *o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->can_recharge()) {
             continue;
         }
 
         if (!o_ptr->is_known()) {
             identify_item(player_ptr, o_ptr);
-            autopick_alter_item(player_ptr, i, false);
+            autopick_alter_item(player_ptr, i_idx, false);
         }
 
         const auto base_pval = o_ptr->get_baseitem_pval();

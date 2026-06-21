@@ -210,15 +210,15 @@ void PlayerStatusBase::set_locals()
 BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 {
     BIT_FLAGS flags = 0;
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        auto *o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
 
         const auto o_flags = o_ptr->get_flags();
         if (o_flags.has(check_flag)) {
-            set_bits(flags, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+            set_bits(flags, convert_inventory_slot_type_to_flag_cause(i_idx));
         }
     }
 
@@ -233,8 +233,8 @@ BIT_FLAGS PlayerStatusBase::equipments_flags(tr_type check_flag)
 BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
 {
     BIT_FLAGS flags = 0;
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = this->player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        auto *o_ptr = this->player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -242,7 +242,7 @@ BIT_FLAGS PlayerStatusBase::equipments_bad_flags(tr_type check_flag)
         const auto o_flags = o_ptr->get_flags();
         if (o_flags.has(check_flag)) {
             if (o_ptr->pval < 0) {
-                set_bits(flags, convert_inventory_slot_type_to_flag_cause(i2enum<inventory_slot_type>(i)));
+                set_bits(flags, convert_inventory_slot_type_to_flag_cause(i_idx));
             }
         }
     }
@@ -258,8 +258,8 @@ int16_t PlayerStatusBase::equipments_bonus()
 {
     this->set_locals(); /* 計算前に値のセット。派生クラスの値がセットされる。*/
     int16_t bonus = 0;
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        const auto *o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        const auto *o_ptr = player_ptr->inventory[i_idx].get();
         const auto o_flags = o_ptr->get_flags();
         if (!o_ptr->is_valid()) {
             continue;

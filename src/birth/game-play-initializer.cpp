@@ -57,8 +57,8 @@ void player_wipe_without_name(PlayerType *player_ptr)
     QuestList::get_instance().reset_all();
     player_ptr->inven_cnt = 0;
     player_ptr->equip_cnt = 0;
-    for (int i = 0; i < INVEN_TOTAL; i++) {
-        player_ptr->inventory[i]->wipe();
+    for (const auto i_idx : INVEN_ALL_SLOTS) {
+        player_ptr->inventory[i_idx]->wipe();
     }
 
     ArtifactRecords::get_instance().reset_all_without_knowledge();

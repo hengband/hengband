@@ -238,8 +238,8 @@ void print_tomb(PlayerType *player_ptr)
 static void inventory_aware(PlayerType *player_ptr)
 {
     ItemEntity *o_ptr;
-    for (int i = 0; i < INVEN_TOTAL; i++) {
-        o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_ALL_SLOTS) {
+        o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

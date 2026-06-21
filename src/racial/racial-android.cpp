@@ -63,12 +63,12 @@ void calc_android_exp(PlayerType *player_ptr)
         return;
     }
 
-    for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        auto *o_ptr = player_ptr->inventory[i_idx].get();
         uint32_t value, exp;
         DEPTH level = std::max(o_ptr->get_baseitem_level() - 8, 1);
 
-        if ((i == INVEN_MAIN_RING) || (i == INVEN_SUB_RING) || (i == INVEN_NECK) || (i == INVEN_LITE)) {
+        if ((i_idx == INVEN_MAIN_RING) || (i_idx == INVEN_SUB_RING) || (i_idx == INVEN_NECK) || (i_idx == INVEN_LITE)) {
             continue;
         }
         if (!o_ptr->is_valid()) {
@@ -154,12 +154,12 @@ void calc_android_exp(PlayerType *player_ptr)
                 exp += (value - 100000L) / 4 * level;
             }
         }
-        if ((((i == INVEN_MAIN_HAND) || (i == INVEN_SUB_HAND)) && (has_melee_weapon(player_ptr, i))) || (i == INVEN_BOW)) {
+        if ((((i_idx == INVEN_MAIN_HAND) || (i_idx == INVEN_SUB_HAND)) && (has_melee_weapon(player_ptr, i_idx))) || (i_idx == INVEN_BOW)) {
             total_exp += exp / 48;
         } else {
             total_exp += exp / 16;
         }
-        if (i == INVEN_BODY) {
+        if (i_idx == INVEN_BODY) {
             total_exp += exp / 32;
         }
     }

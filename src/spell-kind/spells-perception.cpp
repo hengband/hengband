@@ -38,14 +38,14 @@
  */
 void identify_pack(PlayerType *player_ptr)
 {
-    for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++) {
-        auto *o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_ALL_SLOTS) {
+        auto *o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
 
         identify_item(player_ptr, o_ptr);
-        autopick_alter_item(player_ptr, i, false);
+        autopick_alter_item(player_ptr, i_idx, false);
     }
 }
 

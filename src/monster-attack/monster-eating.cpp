@@ -131,7 +131,7 @@ static void move_item_to_monster(PlayerType *player_ptr, MonsterAttackPlayer *mo
 void process_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     for (int i = 0; i < 10; i++) {
-        auto i_idx = randnum0<short>(INVEN_PACK);
+        const auto i_idx = rand_choice(INVEN_PACK_SLOTS);
         monap_ptr->o_ptr = player_ptr->inventory[i_idx].get();
         if (!monap_ptr->o_ptr->is_valid()) {
             continue;
@@ -161,7 +161,7 @@ void process_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 void process_eat_food(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
     for (int i = 0; i < 10; i++) {
-        auto i_idx = randnum0<short>(INVEN_PACK);
+        const auto i_idx = rand_choice(INVEN_PACK_SLOTS);
         monap_ptr->o_ptr = player_ptr->inventory[i_idx].get();
         if (!monap_ptr->o_ptr->is_valid()) {
             continue;
