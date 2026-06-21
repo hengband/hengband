@@ -278,8 +278,8 @@ void sense_inventory1(PlayerType *player_ptr)
         heavy = true;
     }
 
-    for (const auto i : INVEN_ALL_SLOTS) {
-        o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_ALL_SLOTS) {
+        o_ptr = player_ptr->inventory[i_idx].get();
 
         if (!o_ptr->is_valid()) {
             continue;
@@ -315,7 +315,7 @@ void sense_inventory1(PlayerType *player_ptr)
             continue;
         }
 
-        if ((i < INVEN_MAIN_HAND) && (0 != randint0(5))) {
+        if ((i_idx < INVEN_MAIN_HAND) && (0 != randint0(5))) {
             continue;
         }
 
@@ -323,7 +323,7 @@ void sense_inventory1(PlayerType *player_ptr)
             heavy = true;
         }
 
-        sense_inventory_aux(player_ptr, i, heavy);
+        sense_inventory_aux(player_ptr, i_idx, heavy);
     }
 }
 
@@ -406,9 +406,9 @@ void sense_inventory2(PlayerType *player_ptr)
         break;
     }
 
-    for (const auto i : INVEN_ALL_SLOTS) {
+    for (const auto i_idx : INVEN_ALL_SLOTS) {
         bool okay = false;
-        o_ptr = player_ptr->inventory[i].get();
+        o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -430,11 +430,11 @@ void sense_inventory2(PlayerType *player_ptr)
             continue;
         }
 
-        if ((i < INVEN_MAIN_HAND) && (0 != randint0(5))) {
+        if ((i_idx < INVEN_MAIN_HAND) && (0 != randint0(5))) {
             continue;
         }
 
-        sense_inventory_aux(player_ptr, i, true);
+        sense_inventory_aux(player_ptr, i_idx, true);
     }
 }
 

@@ -276,18 +276,18 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::PLAYER,
     };
-    for (const auto j : INVEN_PACK_SLOTS) {
-        j_ptr = player_ptr->inventory[j].get();
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        j_ptr = player_ptr->inventory[i_idx].get();
         if (!j_ptr->is_valid()) {
             continue;
         }
 
-        n = enum2i(j);
+        n = enum2i(i_idx);
         if (j_ptr->is_similar(*o_ptr)) {
             j_ptr->absorb(*o_ptr);
             rfu.set_flag(StatusRecalculatingFlag::BONUS);
             rfu.set_flags(flags_swrf);
-            return enum2i(j);
+            return enum2i(i_idx);
         }
     }
 
@@ -343,8 +343,8 @@ bool check_store_item_to_inventory(PlayerType *player_ptr, const ItemEntity *o_p
         return true;
     }
 
-    for (const auto j : INVEN_PACK_SLOTS) {
-        auto *j_ptr = player_ptr->inventory[j].get();
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        auto *j_ptr = player_ptr->inventory[i_idx].get();
         if (!j_ptr->is_valid()) {
             continue;
         }

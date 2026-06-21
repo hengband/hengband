@@ -38,8 +38,8 @@ bool item_tester_hook_use(PlayerType *player_ptr, const ItemEntity *o_ptr)
             return false;
         }
 
-        for (const auto i : INVEN_WIELDING_SLOTS) {
-            if ((player_ptr->inventory[i].get() == o_ptr) && o_ptr->get_flags().has(TR_ACTIVATE)) {
+        for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+            if ((player_ptr->inventory[i_idx].get() == o_ptr) && o_ptr->get_flags().has(TR_ACTIVATE)) {
                 return true;
             }
         }

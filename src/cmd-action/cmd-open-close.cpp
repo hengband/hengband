@@ -304,14 +304,14 @@ void do_cmd_bash(PlayerType *player_ptr)
  */
 static bool get_spike(PlayerType *player_ptr, INVENTORY_IDX *ip)
 {
-    for (const auto i : INVEN_PACK_SLOTS) {
-        auto *o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        auto *o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
 
         if (o_ptr->bi_key.tval() == ItemKindType::SPIKE) {
-            *ip = i;
+            *ip = i_idx;
             return true;
         }
     }

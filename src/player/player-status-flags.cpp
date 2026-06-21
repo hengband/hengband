@@ -118,8 +118,8 @@ BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
 {
     ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
-    for (const auto i : INVEN_WIELDING_SLOTS) {
-        o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -127,7 +127,7 @@ BIT_FLAGS check_equipment_flags(PlayerType *player_ptr, tr_type tr_flag)
         const auto flags = o_ptr->get_flags();
 
         if (flags.has(tr_flag)) {
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i_idx));
         }
     }
     return result;
@@ -720,8 +720,8 @@ void check_no_flowed(PlayerType *player_ptr)
         return;
     }
 
-    for (const auto i : INVEN_PACK_SLOTS) {
-        const auto &bi_key = player_ptr->inventory[i]->bi_key;
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        const auto &bi_key = player_ptr->inventory[i_idx]->bi_key;
         if (bi_key == BaseitemKey(ItemKindType::NATURE_BOOK, 2)) {
             has_sw = true;
         }
@@ -789,8 +789,8 @@ BIT_FLAGS has_warning(PlayerType *player_ptr)
     BIT_FLAGS result = 0L;
     ItemEntity *o_ptr;
 
-    for (const auto i : INVEN_WIELDING_SLOTS) {
-        o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -799,7 +799,7 @@ BIT_FLAGS has_warning(PlayerType *player_ptr)
 
         if (flags.has(TR_WARNING)) {
             if (!o_ptr->is_inscribed() || !angband_strchr(o_ptr->inscription->data(), '$')) {
-                set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
+                set_bits(result, convert_inventory_slot_type_to_flag_cause(i_idx));
             }
         }
     }
@@ -1056,8 +1056,8 @@ void update_curses(PlayerType *player_ptr)
         player_ptr->cursed.set(CurseTraitType::AGGRAVATE);
     }
 
-    for (const auto i : INVEN_WIELDING_SLOTS) {
-        o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -1166,17 +1166,17 @@ void update_extra_blows(PlayerType *player_ptr)
     const melee_type melee_type = player_melee_type(player_ptr);
     const bool two_handed = (melee_type == MELEE_TYPE_WEAPON_TWOHAND || melee_type == MELEE_TYPE_BAREHAND_TWO);
 
-    for (const auto i : INVEN_WIELDING_SLOTS) {
-        o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
 
         const auto flags = o_ptr->get_flags();
         if (flags.has(TR_BLOWS)) {
-            if ((i == INVEN_MAIN_HAND || i == INVEN_MAIN_RING) && !two_handed) {
+            if ((i_idx == INVEN_MAIN_HAND || i_idx == INVEN_MAIN_RING) && !two_handed) {
                 player_ptr->extra_blows[0] += o_ptr->pval;
-            } else if ((i == INVEN_SUB_HAND || i == INVEN_SUB_RING) && !two_handed) {
+            } else if ((i_idx == INVEN_SUB_HAND || i_idx == INVEN_SUB_RING) && !two_handed) {
                 player_ptr->extra_blows[1] += o_ptr->pval;
             } else {
                 player_ptr->extra_blows[0] += o_ptr->pval;
@@ -1469,8 +1469,8 @@ BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
 {
     ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
-    for (const auto i : INVEN_WIELDING_SLOTS) {
-        o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -1478,7 +1478,7 @@ BIT_FLAGS has_vuln_curse(PlayerType *player_ptr)
         const auto flags = o_ptr->get_flags();
 
         if (flags.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) {
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i_idx));
         }
     }
 
@@ -1494,8 +1494,8 @@ BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
 {
     ItemEntity *o_ptr;
     BIT_FLAGS result = 0L;
-    for (const auto i : INVEN_WIELDING_SLOTS) {
-        o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
@@ -1503,7 +1503,7 @@ BIT_FLAGS has_heavy_vuln_curse(PlayerType *player_ptr)
         const auto flags = o_ptr->get_flags();
 
         if ((flags.has(TR_VUL_CURSE) || o_ptr->curse_flags.has(CurseTraitType::VUL_CURSE)) && o_ptr->curse_flags.has(CurseTraitType::HEAVY_CURSE)) {
-            set_bits(result, convert_inventory_slot_type_to_flag_cause(i));
+            set_bits(result, convert_inventory_slot_type_to_flag_cause(i_idx));
         }
     }
 

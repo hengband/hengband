@@ -41,11 +41,11 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     const auto &[wid, hgt] = term_get_size();
     auto len = wid - col - 1;
     k = 0;
-    for (const auto i : INVEN_WIELDING_SLOTS) {
-        const auto &item = *player_ptr->inventory[i];
-        auto only_slot = !(player_ptr->select_ring_slot ? is_ring_slot(i) : (item_tester.okay(&item) || any_bits(mode, USE_FULL)));
-        auto is_any_hand = (i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr);
-        is_any_hand |= (i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr);
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        const auto &item = *player_ptr->inventory[i_idx];
+        auto only_slot = !(player_ptr->select_ring_slot ? is_ring_slot(i_idx) : (item_tester.okay(&item) || any_bits(mode, USE_FULL)));
+        auto is_any_hand = (i_idx == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr);
+        is_any_hand |= (i_idx == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr);
         auto is_two_handed = is_any_hand && has_two_handed_weapons(player_ptr);
         only_slot &= !is_two_handed || any_bits(mode, IGNORE_BOTHHAND_SLOT);
         if (only_slot) {
@@ -61,7 +61,7 @@ COMMAND_CODE show_equipment(PlayerType *player_ptr, int target_item, BIT_FLAGS m
             out_color[k] = tval_to_attr[enum2i(item.bi_key.tval()) % 128];
         }
 
-        out_index[k] = i;
+        out_index[k] = i_idx;
         if (item.timeout) {
             out_color[k] = TERM_L_DARK;
         }

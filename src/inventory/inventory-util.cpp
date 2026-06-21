@@ -99,9 +99,9 @@ tl::optional<short> get_tag(PlayerType *player_ptr, char tag, BIT_FLAGS mode, co
         return tl::nullopt;
     }
 
-    tl::optional<short> i_idx;
-    for (const auto i : *range) {
-        const auto &item = *player_ptr->inventory[i];
+    tl::optional<short> result;
+    for (const auto i_idx : *range) {
+        const auto &item = *player_ptr->inventory[i_idx];
         if (!item.is_valid() || !item.is_inscribed()) {
             continue;
         }
@@ -113,18 +113,18 @@ tl::optional<short> get_tag(PlayerType *player_ptr, char tag, BIT_FLAGS mode, co
         auto sv = extract_suffix(*item.inscription, '@');
         while (sv) {
             if ((sv->length() > 2) && (sv->at(1) == command_cmd) && (sv->at(2) == tag)) {
-                return i;
+                return i_idx;
             }
 
-            if (!i_idx && is_numeric(tag) && (sv->length() > 1) && (sv->at(1) == tag)) {
-                i_idx = i;
+            if (!result && is_numeric(tag) && (sv->length() > 1) && (sv->at(1) == tag)) {
+                result = i_idx;
             }
 
             sv = extract_suffix(sv->substr(1), '@');
         }
     }
 
-    return i_idx;
+    return result;
 }
 
 /*!

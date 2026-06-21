@@ -82,9 +82,9 @@ void known_obj_immunity(PlayerType *player_ptr, TrFlags &flags)
 {
     flags.clear();
 
-    for (const auto i : INVEN_WIELDING_SLOTS) {
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
         ItemEntity *o_ptr;
-        o_ptr = player_ptr->inventory[i].get();
+        o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }

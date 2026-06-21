@@ -256,9 +256,9 @@ bool exe_cmd_debug(PlayerType *player_ptr, char cmd)
         gain_exp(player_ptr, command_arg ? command_arg : (player_ptr->exp + 1));
         return true;
     case 'X':
-        for (const auto i : INVEN_ALL_SLOTS | ranges::views::reverse) {
-            if (player_ptr->inventory[i]->is_valid()) {
-                drop_from_inventory(player_ptr, i, 999);
+        for (const auto i_idx : INVEN_ALL_SLOTS | ranges::views::reverse) {
+            if (player_ptr->inventory[i_idx]->is_valid()) {
+                drop_from_inventory(player_ptr, i_idx, 999);
             }
         }
 

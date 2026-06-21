@@ -36,13 +36,13 @@ COMMAND_CODE show_inventory(PlayerType *player_ptr, int target_item, BIT_FLAGS m
     auto col = command_gap;
     const auto &[wid, hgt] = term_get_size();
     auto len = wid - col - 1;
-    for (const auto i : INVEN_PACK_SLOTS) {
-        const auto &item = *player_ptr->inventory[i];
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        const auto &item = *player_ptr->inventory[i_idx];
         if (!item.is_valid()) {
             continue;
         }
 
-        z = enum2i(i) + 1;
+        z = enum2i(i_idx) + 1;
     }
 
     COMMAND_CODE i;
@@ -140,12 +140,12 @@ void display_inventory(PlayerType *player_ptr, const ItemTester &item_tester)
     }
 
     const auto &[wid, hgt] = term_get_size();
-    for (const auto i : INVEN_PACK_SLOTS) {
-        auto o_ptr = player_ptr->inventory[i].get();
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        auto o_ptr = player_ptr->inventory[i_idx].get();
         if (!o_ptr->is_valid()) {
             continue;
         }
-        z = enum2i(i) + 1;
+        z = enum2i(i_idx) + 1;
     }
 
     for (auto i = 0; i < z; i++) {

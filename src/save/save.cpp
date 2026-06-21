@@ -182,13 +182,13 @@ static bool wr_savefile_new(PlayerType *player_ptr)
         wr_byte(static_cast<byte>(spell_id));
     }
 
-    for (const auto i : INVEN_ALL_SLOTS) {
-        const auto &item = *player_ptr->inventory[i];
+    for (const auto i_idx : INVEN_ALL_SLOTS) {
+        const auto &item = *player_ptr->inventory[i_idx];
         if (!item.is_valid()) {
             continue;
         }
 
-        wr_u16b((uint16_t)i);
+        wr_u16b((uint16_t)i_idx);
         wr_item(item);
     }
 

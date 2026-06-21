@@ -34,10 +34,10 @@ std::shared_ptr<ItemEntity> choose_warning_item(PlayerType *player_ptr)
     }
 
     std::vector<int> candidates;
-    for (const auto i : INVEN_WIELDING_SLOTS) {
-        const auto &item = player_ptr->inventory[i];
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        const auto &item = player_ptr->inventory[i_idx];
         if (item->get_flags().has(TR_WARNING)) {
-            candidates.push_back(i);
+            candidates.push_back(i_idx);
         }
     }
 

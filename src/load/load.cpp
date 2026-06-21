@@ -96,8 +96,8 @@ auto collect_known_fixed_artifacts_old(PlayerType *player_ptr)
         }
     }
 
-    for (const auto i : INVEN_ALL_SLOTS) {
-        const auto &item = *player_ptr->inventory[i];
+    for (const auto i_idx : INVEN_ALL_SLOTS) {
+        const auto &item = *player_ptr->inventory[i_idx];
         if (!item.is_valid()) {
             continue;
         }

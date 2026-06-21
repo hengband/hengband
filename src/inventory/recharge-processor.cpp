@@ -53,8 +53,8 @@ static void recharged_notice(PlayerType *player_ptr, const ItemEntity &item)
 void recharge_magic_items(PlayerType *player_ptr)
 {
     bool changed = false;
-    for (const auto i : INVEN_WIELDING_SLOTS) {
-        auto &item = *player_ptr->inventory[i];
+    for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+        auto &item = *player_ptr->inventory[i_idx];
         if (!item.is_valid()) {
             continue;
         }
@@ -80,8 +80,8 @@ void recharge_magic_items(PlayerType *player_ptr)
      * one per turn. -LM-
      */
     changed = false;
-    for (const auto i : INVEN_PACK_SLOTS) {
-        auto &item = *player_ptr->inventory[i];
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        auto &item = *player_ptr->inventory[i_idx];
         if (!item.is_valid()) {
             continue;
         }
