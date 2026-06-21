@@ -333,7 +333,7 @@ tl::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
  */
 void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
-    const auto range = (mode & DP_WP) ? EnumRangeInclusive(INVEN_MAIN_HAND, INVEN_BOW) : INVEN_WIELDING_SLOTS;
+    const auto range = (mode & DP_WP) ? INVEN_WEAPON_SLOTS : INVEN_WIELDING_SLOTS;
     for (const auto i_idx : range) {
         const auto &item = *player_ptr->inventory[i_idx];
         auto symbol = item.get_symbol();
