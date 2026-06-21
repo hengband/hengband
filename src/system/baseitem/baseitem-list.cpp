@@ -40,16 +40,16 @@ bool BaseitemList::is_valid(short bi_id) const
     return this->baseitems.at(bi_id).is_valid();
 }
 
-BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id)
+BaseitemDefinition &BaseitemList::get_baseitem(short bi_id)
 {
     this->validate(bi_id);
     return this->baseitems[bi_id];
 }
 
-const BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id) const
+const BaseitemDefinition &BaseitemList::get_baseitem(short bi_id) const
 {
     this->validate(bi_id);
-    return this->baseitems[bi_id];
+    return this->baseitems.at(bi_id);
 }
 
 const BaseitemDefinition &BaseitemList::pick_one_at_random() const

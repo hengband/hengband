@@ -832,7 +832,7 @@ bool ItemEntity::is_target_of(QuestId quest_id) const
     return quest.is_reward_target(this->bi_key);
 }
 
-BaseitemDefinition &ItemEntity::get_baseitem() const
+const BaseitemDefinition &ItemEntity::get_baseitem() const
 {
     return BaseitemList::get_instance().get_baseitem(this->bi_id);
 }

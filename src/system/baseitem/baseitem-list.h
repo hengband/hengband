@@ -26,8 +26,8 @@ public:
     static BaseitemList &get_instance();
 
     bool is_valid(short bi_id) const;
-    BaseitemDefinition &get_baseitem(const short bi_id);
-    const BaseitemDefinition &get_baseitem(const short bi_id) const;
+    BaseitemDefinition &get_baseitem(short bi_id); // 初期化専用.
+    const BaseitemDefinition &get_baseitem(short bi_id) const;
     const BaseitemDefinition &pick_one_at_random() const;
     const std::vector<short> &collect_valid_bi_ids() const;
 
