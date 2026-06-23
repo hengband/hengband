@@ -134,7 +134,9 @@ void BaseitemService::shuffle_flavors(ItemKindType tval)
 {
     const auto &baseitems = BaseitemList::get_instance();
     auto &baseitem_records = BaseitemRecords::get_instance();
-    std::vector<std::reference_wrapper<short>> flavors;
+
+    std::vector<short> target_bi_ids;
+    std::vector<short> flavor_values;
     for (auto bi_id : baseitems.collect_valid_bi_ids()) {
         const auto &baseitem = baseitems.get_baseitem(bi_id);
         auto &baseitem_record = baseitem_records.get_record(bi_id);
@@ -150,8 +152,12 @@ void BaseitemService::shuffle_flavors(ItemKindType tval)
             continue;
         }
 
-        flavors.push_back(baseitem_record.get_appearance_id_ref());
+        target_bi_ids.push_back(bi_id);
+        flavor_values.push_back(baseitem_record.get_appearance_id());
     }
 
-    rand_shuffle(flavors.begin(), flavors.end());
+    rand_shuffle(flavor_values.begin(), flavor_values.end());
+    for (const auto &[bi_id, flavor_value] : ranges::views::zip(target_bi_ids, flavor_values)) {
+        baseitem_records.get_record(bi_id).set_appearance_id(flavor_value);
+    }
 }

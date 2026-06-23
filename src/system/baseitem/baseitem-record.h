@@ -10,7 +10,6 @@ public:
 
     bool is_apparent() const;
     short get_appearance_id() const;
-    short &get_appearance_id_ref();
     void set_appearance_id(short new_appearance_id);
 
     bool is_tried() const;

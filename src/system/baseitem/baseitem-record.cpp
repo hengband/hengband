@@ -16,11 +16,6 @@ short BaseitemRecord::get_appearance_id() const
     return this->appearance_id;
 }
 
-short &BaseitemRecord::get_appearance_id_ref()
-{
-    return this->appearance_id;
-}
-
 void BaseitemRecord::set_appearance_id(short new_appearance_id)
 {
     this->appearance_id = new_appearance_id;
