@@ -465,6 +465,11 @@ int DungeonReader::set_dungeon_final_floor(DungeonDefinition &dungeon) const
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
+    if (final_floor_obj.contains("artifact") && !final_floor_obj.contains("guardian")) {
+        msg_print(_("final_floor.artifactを指定する場合はguardianも必要です。", "final_floor.guardian is required when final_floor.artifact is specified."));
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
     if (final_floor_obj.contains("guardian")) {
         if (auto err = info_set_enum_from_integer_checked(get_json_value(final_floor_obj, "guardian"), dungeon.final_guardian, "final_floor.guardian", [](MonraceId monrace_id) {
                 const auto &monraces = MonraceList::get_instance();
