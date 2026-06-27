@@ -232,9 +232,9 @@
                     "blows": {
                         "type": "array",
                         "description": "物理攻撃",
+                        "maxItems": 4,
                         "items": {
                             "type": "object",
-                            "maxItems": 4,
                             "additionalProperties": false,
                             "required": [
                                 "method",
@@ -554,7 +554,7 @@
                             "probability": {
                                 "type": "string",
                                 "description": "能力使用確率",
-                                "pattern": "1_IN_[1-9][0-9]*"
+                                "pattern": "^1_IN_([1-9][0-9]?|100)$"
                             },
                             "shoot": {
                                 "type": "string",
