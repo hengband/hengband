@@ -5,7 +5,6 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
-#include "io/tokenizer.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
@@ -19,7 +18,6 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <exception>
 #include <memory>

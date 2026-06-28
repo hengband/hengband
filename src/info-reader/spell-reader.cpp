@@ -4,7 +4,6 @@
 #include "info-reader/parse-error-types.h"
 #include "system/spell-info-list.h"
 #include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 SpellReader::SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_info_list)
