@@ -43,7 +43,6 @@
 #include "io/screen-util.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
-#include "item-info/flavor-initializer.h"
 #include "load/load.h"
 #include "main/sound-of-music.h"
 #include "market/arena-entry.h"
@@ -72,6 +71,7 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
+#include "system/baseitem/baseitem-service.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
@@ -281,7 +281,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     panel_row_min = floor.height;
     panel_col_min = floor.width;
 
-    initialize_items_flavor();
+    BaseitemService::initialize_items_flavor();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
     term_fresh();
     generate_wilderness(player_ptr);

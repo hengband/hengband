@@ -324,6 +324,8 @@
     <ClCompile Include="..\..\src\system\artifact\artifact-service.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-config.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-configs.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-record.cpp" />
+    <ClCompile Include="..\..\src\system\baseitem\baseitem-records.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-service.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\quest-definition.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\quest-list.cpp" />
@@ -335,7 +337,6 @@
     <ClCompile Include="..\..\src\system\services\dungeon-monrace-service.cpp" />
     <ClCompile Include="..\..\src\system\services\dungeon-service.cpp" />
     <ClCompile Include="..\..\src\system\floor\floor-list.cpp" />
-    <ClCompile Include="..\..\src\item-info\flavor-initializer.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-base.cpp" />
     <ClCompile Include="..\..\src\load\item\item-loader-factory.cpp" />
     <ClCompile Include="..\..\src\load\monster\monster-loader-factory.cpp" />
@@ -1060,6 +1061,8 @@
     <ClInclude Include="..\..\src\monster-floor\monster-movement-direction-list.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-config.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-configs.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-record.h" />
+    <ClInclude Include="..\..\src\system\baseitem\baseitem-records.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-service.h" />
     <ClInclude Include="..\..\src\system\dungeon\quest-definition.h" />
     <ClInclude Include="..\..\src\system\dungeon\quest-list.h" />
@@ -1086,7 +1089,6 @@
     <ClInclude Include="..\..\src\system\enums\dungeon\dungeon-id.h" />
     <ClInclude Include="..\..\src\system\enums\monrace\monrace-hook-types.h" />
     <ClInclude Include="..\..\src\system\floor\floor-list.h" />
-    <ClInclude Include="..\..\src\item-info\flavor-initializer.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-version-types.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-base.h" />
     <ClInclude Include="..\..\src\load\item\item-loader-factory.h" />

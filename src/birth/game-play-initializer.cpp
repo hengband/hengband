@@ -15,8 +15,7 @@
 #include "player/player-spell-status.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-record.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-records.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
@@ -62,7 +61,7 @@ void player_wipe_without_name(PlayerType *player_ptr)
     }
 
     ArtifactRecords::get_instance().reset_all_without_knowledge();
-    BaseitemList::get_instance().reset_identification_flags();
+    BaseitemRecords::get_instance().reset_identification_flags();
     for (auto &[_, monrace] : MonraceList::get_instance()) {
         if (!monrace->is_valid()) {
             continue;

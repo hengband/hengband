@@ -186,6 +186,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
     init_baseitems_info();
     BaseitemService::initialize_baseitem_configs();
+    BaseitemService::initialize_baseitem_records();
 
     init_note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
     init_artifacts_info();

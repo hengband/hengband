@@ -26,16 +26,13 @@ public:
     static BaseitemList &get_instance();
 
     bool is_valid(short bi_id) const;
-    BaseitemDefinition &get_baseitem(const short bi_id);
-    const BaseitemDefinition &get_baseitem(const short bi_id) const;
+    BaseitemDefinition &get_baseitem(short bi_id); // 初期化専用.
+    const BaseitemDefinition &get_baseitem(short bi_id) const;
     const BaseitemDefinition &pick_one_at_random() const;
+    const std::vector<short> &collect_valid_bi_ids() const;
 
     short lookup_baseitem_id(const BaseitemKey &bi_key) const;
     const BaseitemDefinition &lookup_baseitem(const BaseitemKey &bi_key) const;
-
-    void reset_identification_flags();
-    void mark_common_items_as_aware();
-    void shuffle_flavors();
 
 private:
     BaseitemList() = default;
@@ -48,10 +45,10 @@ private:
         return this->baseitems;
     }
 
+    void validate(short bi_id) const;
     short exe_lookup(const BaseitemKey &bi_key) const;
     const std::map<BaseitemKey, short> &create_baseitem_keys_cache() const;
     const std::map<ItemKindType, std::vector<int>> &create_baseitem_subtypes_cache() const;
 
     BaseitemDefinition &lookup_baseitem(const BaseitemKey &bi_key);
-    void shuffle_flavors(ItemKindType tval);
 };

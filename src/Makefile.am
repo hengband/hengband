@@ -655,8 +655,6 @@ hengband_SOURCES = \
 	io-dump/random-art-info-dumper.cpp io-dump/random-art-info-dumper.h \
 	io-dump/special-class-dump.cpp io-dump/special-class-dump.h \
 	\
-	item-info/flavor-initializer.cpp item-info/flavor-initializer.h \
-	\
 	knowledge/item-group-table.cpp knowledge/item-group-table.h \
 	knowledge/knowledge-autopick.cpp knowledge/knowledge-autopick.h \
 	knowledge/knowledge-experiences.cpp knowledge/knowledge-experiences.h \
@@ -1284,6 +1282,8 @@ hengband_SOURCES = \
 	system/baseitem/baseitem-definition.cpp system/baseitem/baseitem-definition.h \
 	system/baseitem/baseitem-key.cpp system/baseitem/baseitem-key.h \
 	system/baseitem/baseitem-list.cpp system/baseitem/baseitem-list.h \
+	system/baseitem/baseitem-record.cpp system/baseitem/baseitem-record.h \
+	system/baseitem/baseitem-records.cpp system/baseitem/baseitem-records.h \
 	system/baseitem/baseitem-service.cpp system/baseitem/baseitem-service.h \
 	\
 	system/dungeon/dungeon-data-definition.cpp system/dungeon/dungeon-data-definition.h \

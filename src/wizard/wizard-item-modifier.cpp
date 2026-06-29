@@ -26,9 +26,7 @@
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
-#include "system/baseitem/baseitem-allocation.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-record.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
@@ -276,8 +274,8 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
             continue;
         }
 
-        auto &baseitem = o_ptr->get_baseitem();
-        baseitem.mark_awareness(true); //!< @note 記録には残さない.
+        auto &baseitem_record = o_ptr->get_baseitem_record();
+        baseitem_record.mark_awareness(true); //!< @note 記録には残さない.
         o_ptr->set_identification_flags({ IdentificationFlag::KNOWN, IdentificationFlag::FULL_KNOWN });
         o_ptr->marked.set(OmType::TOUCHED);
     }
@@ -1003,12 +1001,7 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     if (exam_base) {
         auto max_len = 0;
         const auto &baseitems = BaseitemList::get_instance();
-        for (short bi_id = 0; bi_id < static_cast<short>(baseitems.size()); bi_id++) {
-            const auto &baseitem = baseitems.get_baseitem(bi_id);
-            if (!baseitem.is_valid()) {
-                continue;
-            }
-
+        for (short bi_id : baseitems.collect_valid_bi_ids()) {
             ItemEntity item(bi_id);
 #ifdef JP
             const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));

@@ -124,21 +124,3 @@ void BaseitemDefinition::init_character(char character)
 {
     this->symbol_definition.character = character;
 }
-
-/*!
- * @brief 試行状態を変える
- * @param state trueなら試行済、falseなら未試行に変える
- */
-void BaseitemDefinition::mark_trial(bool state)
-{
-    this->tried = state;
-}
-
-/*!
- * @brief 鑑定状態を変える
- * @param state trueなら鑑定済、falseなら未鑑定に変える
- */
-void BaseitemDefinition::mark_awareness(bool state)
-{
-    this->aware = state;
-}

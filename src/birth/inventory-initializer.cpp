@@ -24,7 +24,7 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-service.h"
 #include "system/item/item-entity.h"
 #include <range/v3/view.hpp>
 #include <tuple>
@@ -261,5 +261,5 @@ void player_outfit(PlayerType *player_ptr)
         add_outfit(player_ptr, item);
     }
 
-    BaseitemList::get_instance().mark_common_items_as_aware();
+    BaseitemService::mark_common_items_as_aware();
 }
