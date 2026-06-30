@@ -191,6 +191,9 @@ hengband_SOURCES = \
 	effect/effect-processor.cpp effect/effect-processor.h \
 	effect/effect-characteristics.h \
 	\
+	effect/attribute/abstract-attribute.cpp effect/attribute/abstract-attribute.h \
+	effect/attribute/attribute-factory.cpp effect/attribute/attribute-factory.h \
+	\
 	external-lib/include/nlohmann/json.hpp \
 	external-lib/include/simpleini/SimpleIni.h \
 	external-lib/include/std/detail/associated_types.hpp \

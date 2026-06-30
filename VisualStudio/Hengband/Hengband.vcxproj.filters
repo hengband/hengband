@@ -2625,6 +2625,9 @@
     <ClCompile Include="..\..\src\system\baseitem\baseitem-records.cpp">
       <Filter>system\baseitem</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\attribute\abstract-attribute.cpp">
+      <Filter>effect\attribute</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5685,6 +5688,9 @@
     <ClInclude Include="..\..\src\system\baseitem\baseitem-records.h">
       <Filter>system\baseitem</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\effect\attribute\abstract-attribute.h">
+      <Filter>effect\attribute</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -5990,6 +5996,9 @@
     </Filter>
     <Filter Include="rumor">
       <UniqueIdentifier>{c62f5f7a-ab76-464e-ad5b-3342523e5520}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="effect\attribute">
+      <UniqueIdentifier>{d877e48c-731b-4798-a896-912436c35e52}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

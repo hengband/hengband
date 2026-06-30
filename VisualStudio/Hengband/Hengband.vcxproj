@@ -307,6 +307,8 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-tunnel.cpp" />
     <ClCompile Include="..\..\src\action\movement-execution.cpp" />
     <ClCompile Include="..\..\src\core\score-util.cpp" />
+    <ClCompile Include="..\..\src\effect\attribute\abstract-attribute.cpp" />
+    <ClCompile Include="..\..\src\effect\attribute\attribute-factory.cpp" />
     <ClCompile Include="..\..\src\external-lib\fmt\format.cc" />
     <ClCompile Include="..\..\src\info-reader\definition-hash-data.cpp" />
     <ClCompile Include="..\..\src\rumor\rumor-definition.cpp" />
@@ -1051,6 +1053,8 @@
     <ClInclude Include="..\..\src\action\open-close-execution.h" />
     <ClInclude Include="..\..\src\action\open-util.h" />
     <ClInclude Include="..\..\src\action\run-execution.h" />
+    <ClInclude Include="..\..\src\effect\attribute\abstract-attribute.h" />
+    <ClInclude Include="..\..\src\effect\attribute\attribute-factory.h" />
     <ClInclude Include="..\..\src\rumor\rumor-definition.h" />
     <ClInclude Include="..\..\src\rumor\rumor-list.h" />
     <ClInclude Include="..\..\src\rumor\rumor-rarity.h" />
