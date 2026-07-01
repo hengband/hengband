@@ -55,14 +55,14 @@ Pos2D decide_source_position(PlayerType *player_ptr, MONSTER_IDX src_idx, const 
  * @param target_x 目標X座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or
  * player)
- * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param typ 効果属性(後々下記の属性クラスに置き換えていく) / Type of damage to apply to monsters (and objects) (later to be replaced by the following class of type)
  * @param flag 効果フラグ / Extra bit flags (see PROJECT_xxxx)
- * @param monspell 効果元のモンスター魔法ID
+ * @param attribute_ptr 効果属性のクラス / Class of the effect attribute
  * @todo 似たような処理が山ほど並んでいる、何とかならないものか
  * @todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  */
 ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITION rad, const POSITION target_y, const POSITION target_x, const int dam,
-    const AttributeType typ, BIT_FLAGS flag, tl::optional<CapturedMonsterType *> cap_mon_ptr)
+    const AttributeType typ, BIT_FLAGS flag, const std::shared_ptr<AbstractAttribute> &attribute_ptr, tl::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     monster_target_y = player_ptr->y;
     monster_target_x = player_ptr->x;
@@ -247,7 +247,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     if (flag & (PROJECT_GRID)) {
         for (const auto &[dist, pos] : positions) {
             const auto effective_dist = breath ? dist_to_line(pos, pos_source, pos_impact) : dist;
-            if (affect_feature(player_ptr, src_idx, effective_dist, pos.y, pos.x, dam, typ)) {
+            if (affect_feature(player_ptr, src_idx, effective_dist, pos.y, pos.x, dam, typ, attribute_ptr)) {
                 res.notice = true;
             }
         }

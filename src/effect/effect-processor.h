@@ -14,6 +14,7 @@ struct ProjectResult {
 class CapturedMonsterType;
 class EffectPlayerType;
 class PlayerType;
+class AbstractAttribute;
 ProjectResult project(
     PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITION rad, POSITION y, POSITION x, const int dam, const AttributeType typ,
-    BIT_FLAGS flag, tl::optional<CapturedMonsterType *> cap_mon_ptr = tl::nullopt);
+    BIT_FLAGS flag, const std::shared_ptr<AbstractAttribute> &attribute_ptr = nullptr, tl::optional<CapturedMonsterType *> cap_mon_ptr = tl::nullopt);

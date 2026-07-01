@@ -7,7 +7,8 @@
 class MonraceDefinition;
 class MonsterEntity;
 class PlayerType;
-bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam);
+class AbstractAttribute;
+bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam, std::shared_ptr<AbstractAttribute> attribute = nullptr);
 bool speed_monsters(PlayerType *player_ptr);
 bool slow_monsters(PlayerType *player_ptr, int power);
 bool sleep_monsters(PlayerType *player_ptr, int power);

@@ -29,8 +29,9 @@ public:
 struct ProjectResult;
 class CapturedMonsterType;
 class PlayerType;
+class AbstractAttribute;
 using project_func = ProjectResult (*)(
-    PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION rad, POSITION y, POSITION x, int dam, AttributeType typ, BIT_FLAGS flag, tl::optional<CapturedMonsterType *> cap_mon_ptr);
+    PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION rad, POSITION y, POSITION x, int dam, AttributeType typ, BIT_FLAGS flag, const std::shared_ptr<AbstractAttribute> &attribute_ptr, tl::optional<CapturedMonsterType *> cap_mon_ptr);
 
 bool affect_player(MONSTER_IDX src_idx, PlayerType *player_ptr, concptr src_name, int r, POSITION y, POSITION x, int dam, AttributeType typ, BIT_FLAGS flag,
     FallOffHorseEffect &fall_off_horse_effect, project_func project);

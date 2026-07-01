@@ -54,7 +54,7 @@ static bool capture_monster(PlayerType *player_ptr, ItemEntity &item)
 
     target_pet = old_target_pet;
     CapturedMonsterType cap_mon;
-    if (!fire_ball(player_ptr, AttributeType::CAPTURE, dir, 0, 0, &cap_mon)) {
+    if (!fire_ball(player_ptr, AttributeType::CAPTURE, dir, 0, 0, nullptr, &cap_mon)) {
         return true;
     }
 
