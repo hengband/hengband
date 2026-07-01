@@ -9,6 +9,7 @@
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon-flag-types.h"
 #include "effect/attribute-types.h"
+#include "effect/attribute/abstract-attribute.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-feature.h"
 #include "effect/effect-item.h"
@@ -43,6 +44,20 @@
 #include <algorithm>
 #include <map>
 #include <range/v3/view.hpp>
+
+namespace {
+class SeekerRayAttribute : public AbstractAttribute {
+public:
+    bool affect_feature(PlayerType *const player_ptr, const MONSTER_IDX, const TerrainType &terrain, Grid &grid, const Pos2D &pos, const int, const bool) override
+    {
+        auto tree_destroyed = this->destroy_tree(player_ptr, terrain, grid, pos, _("粉砕された", "was crushed."));
+        if (tree_destroyed != ProcessResult::PROCESS_CONTINUE) {
+            return tree_destroyed == ProcessResult::PROCESS_TRUE;
+        }
+        return false;
+    }
+};
+}
 
 SpellsMirrorMaster::SpellsMirrorMaster(PlayerType *player_ptr)
     : player_ptr(player_ptr)
@@ -257,6 +272,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
     auto &tracker = LoreTracker::get_instance();
     const auto p_pos = this->player_ptr->get_position();
     const auto range = project_length != 0 ? project_length : AngbandSystem::get_instance().get_max_range();
+    auto seeker_ray_type = std::make_shared<SeekerRayAttribute>();
     while (true) {
         ProjectionPath path_g(floor, range, p_pos, { y1, x1 }, { y2, x2 }, flag);
 
@@ -303,7 +319,7 @@ void SpellsMirrorMaster::project_seeker_ray(int target_x, int target_y, int dam)
                 health_track(this->player_ptr, grid.m_idx);
             }
 
-            (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ);
+            (void)affect_feature(this->player_ptr, 0, 0, py, px, dam, typ, seeker_ray_type);
         }
 
         const auto &[y, x] = path_g.back();

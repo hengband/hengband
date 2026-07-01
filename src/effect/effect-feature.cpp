@@ -99,7 +99,6 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         case AttributeType::METEOR:
         case AttributeType::CHAOS:
         case AttributeType::MANA:
-        case AttributeType::SEEKER:
         case AttributeType::SUPER_RAY:
         case AttributeType::SHARDS:
         case AttributeType::ROCKET:
@@ -158,7 +157,6 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
     case AttributeType::METEOR:
     case AttributeType::CHAOS:
     case AttributeType::MANA:
-    case AttributeType::SEEKER:
     case AttributeType::SUPER_RAY: {
         break;
     }
