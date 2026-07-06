@@ -168,16 +168,16 @@ void build_room(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1, P
     auto &floor = *player_ptr->current_floor_ptr;
     for (int i = 0; i <= xsize; i++) {
         place_bold(player_ptr, y1, x1 + i, GB_OUTER_NOPERM);
-        floor.grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
         place_bold(player_ptr, y2, x1 + i, GB_OUTER_NOPERM);
-        floor.grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
     }
 
     for (int i = 1; i < ysize; i++) {
         place_bold(player_ptr, y1 + i, x1, GB_OUTER_NOPERM);
-        floor.grid_array[y1 + i][x1].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[y1 + i][x1].info |= (CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
         place_bold(player_ptr, y1 + i, x2, GB_OUTER_NOPERM);
-        floor.grid_array[y1 + i][x2].info |= (CAVE_ROOM | CAVE_ICKY);
+        floor.grid_array[y1 + i][x2].info |= (CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
     }
 
     for (POSITION x = 1; x < xsize; x++) {
@@ -185,9 +185,9 @@ void build_room(PlayerType *player_ptr, POSITION x1, POSITION x2, POSITION y1, P
             auto &grid = floor.grid_array[y1 + y][x1 + x];
             if (grid.is_extra()) {
                 place_bold(player_ptr, y1 + y, x1 + x, GB_FLOOR);
-                grid.info |= (CAVE_ROOM | CAVE_ICKY);
+                grid.info |= (CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
             } else {
-                grid.info |= (CAVE_ROOM | CAVE_ICKY);
+                grid.info |= (CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
             }
         }
     }

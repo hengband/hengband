@@ -95,7 +95,7 @@ static void erase_wall(FloorType &floor, const Pos2D &pos)
 {
     auto &grid = floor.get_grid(pos);
     const auto &terrain = grid.get_terrain(TerrainKind::MIMIC_RAW);
-    grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
+    grid.info &= ~(CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
     if ((grid.mimic == 0) || terrain.flags.has_not(TerrainCharacteristics::CAN_DISINTEGRATE)) {
         return;
     }
@@ -138,7 +138,7 @@ bool vanish_dungeon(PlayerType *player_ptr)
     for (const auto &pos : floor.get_area(FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         auto &grid = floor.get_grid(pos);
         const auto &terrrain = grid.get_terrain();
-        grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
+        grid.info &= ~(CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
         const auto &monster = floor.m_list[grid.m_idx];
         if (grid.has_monster() && monster.is_asleep()) {
             (void)set_monster_csleep(floor, grid.m_idx, 0);

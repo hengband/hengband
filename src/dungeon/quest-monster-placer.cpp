@@ -63,7 +63,7 @@ bool place_quest_monsters(PlayerType *player_ptr)
                         continue;
                     }
 
-                    if (grid.is_icky()) {
+                    if (grid.is_no_teleport_dest()) {
                         continue;
                     } else {
                         break;
