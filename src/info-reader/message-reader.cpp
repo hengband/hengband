@@ -4,13 +4,7 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "locale/character-encoding.h"
-#include "player-ability/player-ability-types.h"
-#include "system/monrace/monrace-definition.h"
-#include "system/monrace/monrace-list.h"
 #include "system/monrace/monrace-message.h"
-#include "term/gameterm.h"
-#include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <string>
 

@@ -6,7 +6,6 @@
 #include "player-info/class-info.h"
 #include "system/spell-info-list.h"
 #include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 namespace {

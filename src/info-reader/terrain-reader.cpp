@@ -7,7 +7,6 @@
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "util/dice.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <algorithm>
 #include <cstdint>

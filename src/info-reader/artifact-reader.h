@@ -8,6 +8,7 @@ class ArtifactDefinition;
 class ArtifactReader {
 public:
     explicit ArtifactReader(const nlohmann::json &art_data);
+    ArtifactReader(nlohmann::json &&) = delete;
     ArtifactReader(const ArtifactReader &) = delete;
     ArtifactReader(ArtifactReader &&) = delete;
     ArtifactReader &operator=(const ArtifactReader &) = delete;

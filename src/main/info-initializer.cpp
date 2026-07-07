@@ -70,13 +70,13 @@ concept HasShrinkToFit = requires(T t) {
  * Initialize the "*_info" array
  * @param filename ファイル名(拡張子txt)
  * @param head 処理に用いるヘッダ構造体
- * @param info データ保管先の構造体ポインタ
+ * @param definition_list データ保管先の構造体ポインタ
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-template <typename InfoType>
-void init_info(std::string_view filename, DefinitionHashDataType dhdt, InfoType &info, Parser parser, std::function<void()> retouch = nullptr)
+template <typename DefinitionList>
+void init_info(std::string_view filename, DefinitionHashDataType dhdt, DefinitionList &definition_list, Parser parser, std::function<void()> retouch = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     auto ifs = std::ifstream(path);
@@ -98,8 +98,8 @@ void init_info(std::string_view filename, DefinitionHashDataType dhdt, InfoType 
         quit(fmt::format(_("'{}'ファイルにエラー", "Error in '{}' file."), filename));
     }
 
-    if constexpr (HasShrinkToFit<InfoType>) {
-        info.shrink_to_fit();
+    if constexpr (HasShrinkToFit<DefinitionList>) {
+        definition_list.shrink_to_fit();
     }
 
     if (retouch) {
@@ -112,13 +112,13 @@ void init_info(std::string_view filename, DefinitionHashDataType dhdt, InfoType 
  * Load data from lib/edit/.jsonc
  * @param filename ファイル名(拡張子jsonc)
  * @param head 処理に用いるヘッダ構造体
- * @param info データ保管先の構造体ポインタ
+ * @param definition_list データ保管先の構造体ポインタ
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-template <typename InfoType>
-void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, InfoType &info, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr)
+template <typename DefinitionList>
+void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     std::ifstream ifs(path);
@@ -145,13 +145,24 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
     sha256.update(json_object.dump());
     DefinitionHashData::get_instance().set_digest(dhdt, sha256.digest());
 
-    if constexpr (HasShrinkToFit<InfoType>) {
-        info.shrink_to_fit();
+    if constexpr (HasShrinkToFit<DefinitionList>) {
+        definition_list.shrink_to_fit();
     }
 
     if (retouch) {
         retouch();
     }
+}
+
+/*!
+ * @brief Readerクラスを用いてlib/edit/.jsoncを読み込む
+ * @details init_jsonのjson_parserに「JSON要素からReaderを構築してread()する」定型ラムダを与える処理を共通化したもの。
+ */
+template <typename Reader, typename DefinitionList>
+void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr)
+{
+    auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
+    init_json(filename, keyname, dhdt, definition_list, parser, retouch);
 }
 }
 
@@ -161,10 +172,7 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
 void init_artifacts_info()
 {
     auto &artifacts = ArtifactList::get_instance();
-    auto parser = [](nlohmann::json &art_data) {
-        return ArtifactReader(art_data).read();
-    };
-    init_json("ArtifactDefinitions.jsonc", "artifacts", DefinitionHashDataType::ARTIFACTS, ArtifactList::get_instance(), parser);
+    init_json_reader<ArtifactReader>("ArtifactDefinitions.jsonc", "artifacts", DefinitionHashDataType::ARTIFACTS, artifacts);
     ArtifactRecords::get_instance().initialize(artifacts.size());
 }
 
@@ -173,10 +181,7 @@ void init_artifacts_info()
  */
 void init_baseitems_info()
 {
-    auto parser = [](nlohmann::json &baseitem_data) {
-        return BaseitemReader(baseitem_data).read();
-    };
-    init_json("BaseitemDefinitions.jsonc", "baseitems", DefinitionHashDataType::BASEITEMS, BaseitemList::get_instance(), parser);
+    init_json_reader<BaseitemReader>("BaseitemDefinitions.jsonc", "baseitems", DefinitionHashDataType::BASEITEMS, BaseitemList::get_instance());
 }
 
 /*!
@@ -185,10 +190,7 @@ void init_baseitems_info()
 void init_class_magics_info()
 {
     class_magics_info.assign(PLAYER_CLASS_TYPE_MAX, {});
-    auto parser = [](nlohmann::json &class_data) {
-        return MagicReader(class_data).read();
-    };
-    init_json("ClassMagicDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_MAGICS, class_magics_info, parser);
+    init_json_reader<MagicReader>("ClassMagicDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_MAGICS, class_magics_info);
 }
 
 /*!
@@ -206,10 +208,7 @@ void init_class_skills_info()
 void init_dungeons_info()
 {
     auto &dungeons = DungeonList::get_instance();
-    auto parser = [](nlohmann::json &dungeon_data) {
-        return DungeonReader(dungeon_data).read();
-    };
-    init_json("DungeonDefinitions.jsonc", "dungeons", DefinitionHashDataType::DUNGEONS, dungeons, parser, [&dungeons] { dungeons.retouch(); });
+    init_json_reader<DungeonReader>("DungeonDefinitions.jsonc", "dungeons", DefinitionHashDataType::DUNGEONS, dungeons, [&dungeons] { dungeons.retouch(); });
 }
 
 /*!
@@ -226,10 +225,7 @@ void init_egos_info()
 void init_terrains_info()
 {
     auto &terrains = TerrainList::get_instance();
-    auto parser = [](nlohmann::json &terrain_data) {
-        return TerrainReader(terrain_data).read();
-    };
-    init_json("TerrainDefinitions.jsonc", "terrains", DefinitionHashDataType::TERRAINS, terrains, parser, [&terrains] { terrains.retouch(); });
+    init_json_reader<TerrainReader>("TerrainDefinitions.jsonc", "terrains", DefinitionHashDataType::TERRAINS, terrains, [&terrains] { terrains.retouch(); });
 }
 
 /*!
@@ -246,10 +242,7 @@ void init_feat_variables()
  */
 void init_monrace_definitions()
 {
-    auto parser = [](nlohmann::json &monrace_data) {
-        return RaceReader(monrace_data).read();
-    };
-    init_json("MonraceDefinitions.jsonc", "monsters", DefinitionHashDataType::MONRACES, MonraceList::get_instance(), parser);
+    init_json_reader<RaceReader>("MonraceDefinitions.jsonc", "monsters", DefinitionHashDataType::MONRACES, MonraceList::get_instance());
 }
 
 /*!
@@ -257,10 +250,7 @@ void init_monrace_definitions()
  */
 void init_monster_message_definitions()
 {
-    auto parser = [](nlohmann::json &message_data) {
-        return MessageReader(message_data).read();
-    };
-    init_json("MonsterMessages.jsonc", "groups", DefinitionHashDataType::MONSTER_MESSAGES, MonraceMessageList::get_instance(), parser);
+    init_json_reader<MessageReader>("MonsterMessages.jsonc", "groups", DefinitionHashDataType::MONSTER_MESSAGES, MonraceMessageList::get_instance());
 }
 
 /*!

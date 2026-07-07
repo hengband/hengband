@@ -51,23 +51,6 @@ tl::optional<typename Dict::mapped_type> info_get_const(const Dict &dict, Key &&
 }
 
 /*!
- * @brief infoフラグ文字列をフラグビットに変換する
- * @param flags ビットフラグ変数
- * @param dict フラグ文字列変換表
- * @param what フラグ文字列
- * @return 見つけたらtrue
- */
-template <typename Key, DictIndexedBy<Key> Dict>
-bool info_grab_one_flag(uint32_t &flags, const Dict &dict, Key &&what)
-{
-    if (auto it = dict.find(what); it != dict.end()) {
-        set_bits(flags, it->second);
-        return true;
-    }
-    return false;
-}
-
-/*!
  * @brief info文字列を定数に変換する
  * @param buf 格納変数
  * @param dict 定数文字列変換表
