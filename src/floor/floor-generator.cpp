@@ -506,7 +506,7 @@ void generate_floor(PlayerType *player_ptr)
         // 狂戦士でのプレイに支障をきたしうるので再生成する。
         // 地上、荒野マップ、クエストでは連結性判定は行わない。
         // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
-        const auto check_conn = why && floor.is_underground() && !floor.is_in_quest();
+        const auto check_conn = !why && floor.is_underground() && !floor.is_in_quest();
         if (check_conn && !floor_is_connected(floor, is_permanent_blocker)) {
             // 一定回数試しても連結にならないなら諦める。
             if (num >= 1000) {
