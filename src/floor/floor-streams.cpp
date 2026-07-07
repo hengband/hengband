@@ -140,7 +140,7 @@ static void recursive_river(FloorType &floor, const Pos2D &pos_start, const Pos2
                     }
 
                     /* Hack -- don't teleport here */
-                    grid.info |= CAVE_ICKY;
+                    grid.info |= CAVE_NO_TELEPORT_DEST;
                 }
             }
 
@@ -380,7 +380,7 @@ void place_trees(PlayerType *player_ptr, const Pos2D &pos)
             }
 
             auto &grid = floor.get_grid(pos_neighbor);
-            if (any_bits(grid.info, CAVE_ICKY) || !grid.o_idx_list.empty()) {
+            if (any_bits(grid.info, CAVE_NO_TELEPORT_DEST) || !grid.o_idx_list.empty()) {
                 continue;
             }
 

@@ -197,7 +197,7 @@ tl::optional<Pos2D> new_player_spot(PlayerType *player_ptr)
         }
 
         /* Refuse to start on anti-teleport grids */
-        if (grid.is_icky()) {
+        if (grid.is_no_teleport_dest()) {
             continue;
         }
 
@@ -566,7 +566,7 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
  * and should be illuminated by "lite room" and "darkness" spells.
  *
  *
- * A grid may be marked as "CAVE_ICKY" which means it is part of a "vault",
+ * A grid may be marked as "CAVE_NO_TELEPORT_DEST" which means it is part of a "vault",
  * and should be unavailable for "teleportation" destinations.
  *
  *
@@ -891,7 +891,7 @@ bool cave_player_teleportable_bold(PlayerType *player_ptr, POSITION y, POSITION 
     }
 
     /* No magical teleporting into vaults and such */
-    if (!(mode & TELEPORT_NONMAGICAL) && grid.is_icky()) {
+    if (!(mode & TELEPORT_NONMAGICAL) && grid.is_no_teleport_dest()) {
         return false;
     }
     const auto &floor = *player_ptr->current_floor_ptr;

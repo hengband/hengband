@@ -91,7 +91,7 @@ void generate_inner_room(PlayerType *player_ptr, const Pos2D &center, Rect2D &re
     });
 
     for (const auto &pos : inner_rectangle) {
-        floor.get_grid(pos).add_info(CAVE_ICKY);
+        floor.get_grid(pos).add_info(CAVE_NO_TELEPORT_DEST);
     }
 
     /* Place a secret door */

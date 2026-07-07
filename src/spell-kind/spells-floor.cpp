@@ -274,7 +274,7 @@ bool destroy_area(PlayerType *player_ptr, const POSITION y1, const POSITION x1, 
             auto &grid = floor.get_grid(pos);
 
             /* Lose room and vault */
-            grid.info &= ~(CAVE_ROOM | CAVE_ICKY);
+            grid.info &= ~(CAVE_ROOM | CAVE_NO_TELEPORT_DEST);
 
             /* Lose light and knowledge */
             grid.info &= ~(CAVE_MARK | CAVE_GLOW | CAVE_KNOWN);

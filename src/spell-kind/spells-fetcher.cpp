@@ -55,7 +55,7 @@ void fetch_item(PlayerType *player_ptr, const Direction &dir, WEIGHT wgt, bool r
             return;
         }
 
-        if (grid_ptr->is_icky()) {
+        if (grid_ptr->is_no_teleport_dest()) {
             msg_print(_("アイテムがコントロールを外れて落ちた。", "The item slips from your control."));
             return;
         }

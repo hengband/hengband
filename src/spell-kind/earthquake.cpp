@@ -49,7 +49,7 @@ void reset_grid_info(FloorType &floor, std::span<const Pos2D> area)
 {
     for (const auto &pos : area) {
         auto &grid = floor.get_grid(pos);
-        grid.info &= ~(CAVE_ROOM | CAVE_ICKY | CAVE_UNSAFE);
+        grid.info &= ~(CAVE_ROOM | CAVE_NO_TELEPORT_DEST | CAVE_UNSAFE);
         grid.info &= ~(CAVE_GLOW | CAVE_MARK | CAVE_KNOWN);
     }
 }
