@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "id": 10,
+  "name": {
+    "ja": "仙術エネルギー特異点",
+    "en": "Node of Sorcery",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 65,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "仙術魔法の賢者たちが、近くの湿地に仙術エネルギーの特異点の存在を確認",
+          "した。我々仙術魔法の塔がその魔力の所有権を得られるように、おまえは",
+          "その特異点の場所を見つけてそこに巣食うモンスターを片づけてくるのだ。",
+        ],
+        "en": [
+          "The Wizards of Sorcery have discovered a magical Node of Sorcery ",
+          "in a damp area nearby. You must seek the Node and dispatch ",
+          "its guardians so that the Tower of Sorcery can claim the ",
+          "mystical energies of the Node.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["よくやった。強力な魔法書を外に置いておいた。"],
+        "en": ["You have done well. A powerful spellbook awaits you outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "立ち去れ、無能な馬鹿者め！魔法の特異点の次元エネルギーは",
+          "消え去って永遠に失われたのだぞ！お前はせっかくのチャンスを",
+          "棒にふったのだ。",
+        ],
+        "en": [
+          "Begone, incompetent fool! The dimensional energies of the ",
+          "mystic Node have faded away and are lost forever! You had",
+          "your chance and botched the job. ",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "a": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM"],
+      "monster": 269,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 152,
+    },
+    "c": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 385,
+    },
+    "d": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM"],
+      "monster": 526,
+    },
+    "e": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM"],
+      "monster": 1199,
+    },
+    "#": {
+      "terrain": "GRANITE",
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXVVVVVVVVVVVVVVVVVVVVVVVVVVVXX",
+    "XVVVVVVVVVVVVVaaaVVVVVVVVVVVVVX",
+    "XVVaVVVVVVVVVVVVVVVVVVVVVVVaVVX",
+    "X.Vaa#########VaV#########aaV.X",
+    "X..V#########VaaaV#########V..X",
+    "X..V###ccbbbbbVaVbbbbbcc###V..X",
+    "X..V##ccb.............bcc##V..X",
+    "X..V##...#############...##V..X",
+    "X..V##..##...........##..##V..X",
+    "X..V##..#.....VdV.....#..##V..X",
+    "X..V##..#....VdedV....#..##V..X",
+    "X..V##......VdeeedV......##V..X",
+    "X..V##..#....VdedV....#..##V..X",
+    "X..V##..#.....VdV.....#..##V..X",
+    "X..V##b.##...........##bb##V..X",
+    "X..V###b.###.......###bb###V..X",
+    "X..V###ccbbbbbbbbbbbbbcc###V..X",
+    "X..V####cbbbbbbbbbbbbbc####V..X",
+    "X..V#######################V..X",
+    "X..VV#####################VV..X",
+    "X...VVVVVVVVVVVVVVVVVVVVVVV...X",
+    "X.....VVVVVVVVVVVVVVVVVVV.....X",
+    "X<...........................XX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 23,
+    "x": 1,
+  },
+}

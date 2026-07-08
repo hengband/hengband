@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "id": 5,
+  "name": {
+    "ja": "塔",
+    "en": "The Tower",
+  },
+  "definition": {
+    "type": "TOWER",
+    "level": 40,
+    "flags": ["PRESET", "TOWER"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "街の外にある塔はかつて街の守備に使われていました。",
+          "今ではたくさんのモンスターが住み付いているようです。",
+          "どうかモンスターどもを一掃して塔を取り戻してください！",
+        ],
+        "en": [
+          "The tower outside the town was once used for defence of the city.",
+          "Now many monsters seem to be dwelling there.",
+          "Please clear it and return to us!",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "STAGE_COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "街の外にある塔はかつて街の守備に使われていました。",
+          "今ではたくさんのモンスターが住み付いているようです。",
+          "どうかモンスターどもを一掃して塔を取り戻してください！",
+        ],
+        "en": [
+          "The tower outside the town was once used for defence of the city.",
+          "Now many monsters seem to be dwelling there.",
+          "Please clear it and return to us!",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "塔の怪物を一掃して下さって有難うございます。この街の司書のアスティヌス、",
+          "武器匠の水庵、モンスター仙人のロリエンに話を付けておいたので、",
+          "今後これらの店では格安でサービスを受けられるでしょう。",
+          "加えて、ささやかなお礼を外に用意しておきました。",
+        ],
+        "en": [
+          "Thank you for cleaning the tower of all these strange creatures.",
+          "I've talked with Astinus, the local librarian, Suiyan, the local",
+          "weaponmaster, and Lorien, the local beastmaster. They will offer you",
+          "a special discount price when they serve you, and a small reward",
+          "awaits you outside.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "この仕事はあなたには難しかったようですね。他の冒険者を雇って",
+          "残りのモンスターを退治しますから、もういいですよ。",
+        ],
+        "en": [
+          "It seems like this task was too difficult for you.  Good that I",
+          "hired another adventurer to clean up the remaining monsters.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "<": {
+      "terrain": "QUEST_UP",
+      "caveInfo": ["ROOM"],
+      "trap": "NONE",
+      "special": 6,
+    },
+    ">": {
+      "terrain": "QUEST_DOWN",
+      "caveInfo": ["ROOM"],
+    },
+    "#": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 884,
+    },
+    "d": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 461,
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+    },
+    "@": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 40,
+    },
+  },
+  "map": [
+    "XXXXXXXXXXX",
+    "X>.....d..X",
+    "XXXXXXXXX@X",
+    "X.....d.X.X",
+    "X.XXXXX.X.X",
+    "XdX<XXX.X#X",
+    "X.X.....X.X",
+    "X.XXXXXXX.X",
+    "X..#....@.X",
+    "XXXXXXXXXXX",
+  ],
+  "startVariants": [
+    {
+      "leavingQuest": 0,
+      "y": 1,
+      "x": 1,
+    },
+  ],
+}

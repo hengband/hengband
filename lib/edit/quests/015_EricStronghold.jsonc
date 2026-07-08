@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "id": 15,
+  "name": {
+    "ja": "エリックの要塞",
+    "en": "Eric's Stronghold",
+  },
+  "definition": {
+    "type": "KILL_LEVEL",
+    "level": 70,
+    "maxNum": 1,
+    "monster": 813,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "アンバーの正しき支配者であったオベロン王が姿を消した時、王子",
+          "エリックは自分の王位を主張するためにすぐさま行動を起こした。",
+          "エリックは今や安全な要塞の中で自分の戴冠式を待っている。",
+          "あなたは彼が戴冠する前に彼を消し去らねばならない。さもなくば",
+          "他のアンバーの王子たちは彼に服従させられ、エリックは無敵に",
+          "なってしまうのだ！",
+        ],
+        "en": [
+          "When Oberon, the rightful ruler of Amber, disappeared, Eric ",
+          "did not waste much time making his claim for the throne.",
+          "Eric is waiting for his own coronation in a secure stronghold.",
+          "You must eliminate him before he is crowned, or other Amberites",
+          "may feel to obliged to obey him -- and he'll be invincible!",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["よくやった。礼を受けとってくれ。"],
+        "en": ["You have done well. Please accept this reward."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "エリックは今やアンバーの王だ。オベロンが帰ってきて再び玉座に",
+          "つくかもしれないが、帰ってこないかもしれない。あなたは任務に",
+          "失敗し、かの裏切り者が今やアンバーの最高支配者になってしまったのだ。",
+        ],
+        "en": [
+          "Eric is now the King of Amber. Maybe Oberon will come back and",
+          "take the crown, or maybe not. You have failed your mission",
+          "and the traitor has become the supreme ruler of Amber.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "W": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM"],
+    },
+    "T": {
+      "terrain": "TREE",
+    },
+    "#": {
+      "terrain": "GRANITE",
+    },
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 442,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 485,
+    },
+    "c": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 498,
+    },
+    "d": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 597,
+    },
+    "e": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 636,
+    },
+    "f": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 638,
+    },
+    "g": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 699,
+    },
+    "h": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 737,
+    },
+    "E": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 813,
+      "object": {
+        "random": true,
+      },
+    },
+    "^": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "trap": {
+        "random": true,
+      },
+    },
+    "$": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+      "trap": {
+        "random": true,
+      },
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTX",
+    "XTTTTTTTTTTT...........T..TT.TTTTTTTTTTTTTTTTTTTTTTTTT.TTT...........TTTTX",
+    "XTTTTTTTTT......WWWWW...T..TTTTT.T..TT.TTTTTT.TT.TTT....T...WWWWW......TTX",
+    "XTTTTTTT.......WW#a#WW.......T............TT...............WW#a#WW....T.TX",
+    "XTTTT<TT.......W##c##WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW##e##W...TT.TX",
+    "XTTT.TT........W#aaa###########.#################.###########aaa#W..TTTTTX",
+    "XTT.TT...TT....WafdaD^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^DadafW...TT.TX",
+    "XTT....TTT.....W#aaa##############D##########################aaa#W....TTTX",
+    "XT......TTT....W##e##^^^^^^^^^^^^DbD^^^^^^^^^^^^^^#****c#gg###c##W..TTTTTX",
+    "XT....TTT.TT...WW####^############D#############^^#####D#gg#b#D#WW...TTTTX",
+    "XT.........TT...WW#a#^#......Dggggggggggggggggg#^^^^^^^^Dgg#bbb#W...TT.TTX",
+    "XT.....TT.TT.....W#D#^#...###############################DD##D##W..TT..TTX",
+    "XT......TTT.......D^^^#####***DhheeddgggDgggfgggegggdgggDccD***#W..TT...TX",
+    "XT........TT......D^^^#####**EDhheeddgggDgggfgggegggdgggDccD***#W.TT....TX",
+    "XTTT.......T.....W#D#^#...###############################DD##D##W.TT...TTX",
+    "XTTTT...........WW#a#^#......Dggggggggggggggggg#^^^^^^^^Dgg#bbb#W..TT.TTTX",
+    "XTT......T.....WW####^############D#############^^#####D#gg#b#D#WW..TTTTTX",
+    "XT..TT....T....W##c##^^^^^^^^^^^^DbD^^^^^^^^^^^^^^#****c#gg###d##W...TTTTX",
+    "XT.TT..T.TT....W#aaa##############D##########################aaa#W....TTTX",
+    "XTTTT..TTT.....WafdaD^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^DacfaW...TTTTX",
+    "XTTTTTTTT......W#aaa###########.#################.###########aaa#W...TTTTX",
+    "XT..TTTT.......W##e##WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW##e##W..TTTTTX",
+    "XTT..TT........WW###WW............TTT......................WW#a#WW.TTTTTTX",
+    "XTTTTTTTT.......WWWWW.....TTT...TTT.TTTTTT..TTT.TTTT..TTT...WWWWW..TTTTTTX",
+    "XTTTTTTTTTTT.TT........TTTT....TT.TTTTTT.TTTT.TTTT.TTTTTTTT.......TTTTTTTX",
+    "XTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 5,
+    "x": 5,
+  },
+}

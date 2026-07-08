@@ -1,0 +1,353 @@
+{
+  "version": 1,
+  "id": 27,
+  "name": {
+    "ja": "古い城",
+    "en": "The Old Castle",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 50,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "街の古城が邪悪なモンスターどもに占拠されてしまいました。",
+          "強力なアンデッド、邪悪な魔術師、ドラゴン、さらにはタイタンまでもが",
+          "中にいると噂されています。城への入口はここの東の広い平地にあります。",
+          "中にいる全てのモンスターを倒して下さい。報酬はとても価値のある",
+          "アイテムです。",
+        ],
+        "en": [
+          "The old castle has been taken over by evil beings.  Mighty undead,",
+          "evil spell casters, dragons, and even titans are rumored to be",
+          "in there.  The entrance to the old castle is in a large clearing ",
+          "east of here.  Destroy ALL the monsters within the castle, and your",
+          "reward will be an artifact of great value.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["素晴らしい!! お礼を外に置いておきました。"],
+        "en": ["Impressive!! Your reward is waiting for you outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": ["この仕事はあなたには難しかったようですね。"],
+        "en": ["It seems like this task was too difficult for you."],
+      },
+    },
+  ],
+  "legend": {
+    "5": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": {
+        "random": true,
+        "oodLevel": 0,
+      },
+    },
+    "r": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 426,
+    },
+    "w": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 448,
+    },
+    "g": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 464,
+    },
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 497,
+    },
+    "P": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 520,
+    },
+    "M": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 522,
+    },
+    "G": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 530,
+    },
+    "o": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 538,
+    },
+    "x": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM"],
+      "monster": 544,
+    },
+    "R": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 555,
+    },
+    "m": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 557,
+    },
+    "d": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 567,
+    },
+    "O": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 575,
+    },
+    "C": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 577,
+    },
+    "H": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 597,
+    },
+    "l": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 611,
+    },
+    "L": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 623,
+    },
+    "t": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 702,
+    },
+    "E": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 636,
+    },
+    "S": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 638,
+    },
+    "K": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 643,
+    },
+    "N": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 756,
+    },
+    "A": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 652,
+    },
+    "I": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 1180,
+    },
+    "z": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 701,
+    },
+    "Z": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 1187,
+    },
+    ",": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    " ": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+    },
+    "]": {
+      "terrain": "RUBBLE",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "s": {
+      "terrain": "GRANITE",
+      "caveInfo": ["ROOM"],
+      "trap": "CLOSED_DOOR",
+    },
+    "u": {
+      "terrain": "GRANITE",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "trap": "CLOSED_DOOR",
+    },
+    "U": {
+      "terrain": "CLOSED_DOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    ";": {
+      "terrain": "RUBBLE",
+      "caveInfo": ["ROOM"],
+    },
+    "|": {
+      "terrain": "LOCKED_DOOR_7",
+      "caveInfo": ["ROOM"],
+    },
+    "c": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 332,
+    },
+    "p": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 336,
+    },
+    "n": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 381,
+    },
+    "i": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 385,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 423,
+    },
+    "f": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 514,
+    },
+    "y": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 606,
+    },
+    "k": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 648,
+    },
+    "B": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 656,
+    },
+    "Y": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 419,
+    },
+    "e": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 177,
+    },
+    "h": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": {
+        "random": true,
+        "oodLevel": 0,
+      },
+    },
+    "q": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": {
+        "random": true,
+        "oodLevel": 0,
+      },
+    },
+    "j": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": {
+        "random": true,
+        "oodLevel": 7,
+      },
+    },
+    "Q": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": {
+        "random": true,
+        "oodLevel": 7,
+      },
+    },
+    "v": {
+      "terrain": "LOCKED_DOOR_7",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XxxWWWWWWxX%sTTTTTT%XX%XXX%X%X,<,X%XTT  sM      M%%%TThTTXXX%XXX%%%%hTX",
+    "XWWWWWWWWXXR%%%%%%%sXX%%%%XX%X,,,X%XT  XXXX    XXX%%T   TXXX%XXX%%T  TX",
+    "XxxX  XXXXR%      %R%XXX%XX%XX]]]X%XjThXM        %%%%%D%%%%X%X% D    TX",
+    "XxXX  %%%%%   w w  %%XX%%%%XXX,P,X%XXXXXXX              %%%X%X  %%  hTX",
+    "XXX     s D    w   %%XX%XXX%%XDDDX%Xh sM           %%%% O %% O %%%C%%%X",
+    "XXX   %%%%%   w w  %%XX%%%XX%g   g%XXXXXX         %%  %%%    %X%%h   TX",
+    "XX%   %%%%%%      %R%XXXX%%%       %%%XX%r        D   I%%%  %%Xj    TTX",
+    "XX%   %%%%%%%    %%%%XTTT%%%d     d%%%%XX%%%s%XXXX%%%%%%X%% %%X%%%s%%%X",
+    "XX%%  %%%%%%%%r  D %%XT  sL         L%%%XX%  XX%%%%%%%%XX%%s%%%%%% %%%X",
+    "XX    XXXXXX%%%%%X  %XTTT%%%d     d%%%%%%%%   ; %%XXXXXX%      %%XsXXXX",
+    "XX    XqqqqX%%%%%X%  %%%%%L         L%%%XXXXX%%   %%%%%            %%%X",
+    "XX    |,,,QXXXXXXX%%  %%%%%%d     d%%%%XXThTX%%%% s%%              %%%X",
+    "XXz   XqqqqXpmfmiX%%%    sL         L%%X%T TXX%%%%%                 %YX",
+    "XX%%  XXXXXXcenekX%%%%%%%%%%       %%%%%%%s%%XX t D              Z  % X",
+    "XX%%%  %%%%XmbBymX%%%%%%%  D       D              D                 DhX",
+    "XX%%  %%%%%X%%s%%X%%%%%%   D G   G D              D                 DhX",
+    "XX%%%  %%%%%%    XX%%%     %%%DDD%%%%%%%s%%%%%% t D              Z  % X",
+    "XX%%%%  %         %%N     %%%%   %%%%%%T T%%%%%%%%%                 %YX",
+    "XX%%%  %% E        D    %%%%%% K %%%XXX   XXXXXXXX%%%              %%%X",
+    "X%o    %% S        D N%%%%%%%%DDD%%%%%ThThT%%%%%%%%%%%%           %%%%X",
+    "X     o%%         %%%%%%%%%% a   a %%XXXXXXXXXXXXXXXXX%%%      %%XXXXXX",
+    "X   %%%%XXX%%     %%%ThhT%%%   a   s ;|;|;;;;%%%%%%%%%%%%%%%%s%%%X,,,5X",
+    "X  %%%%TTTX%%%%%s%%%%%DD%%%%   A   %XXXuXXXXXXXXXXXXXXXXXXX%%    v,,,,X",
+    "X    s TTT% r %   %H      H%  a a  %X5,,,X,,,,,,,,X5,,X,,,XXXXXXXX,,,,X",
+    "X%l  %%%%%%   %%s%%        %%%%s%%%%XX,,,U,,,X,,,,X,,,X,,,,,,,,,,,,,,,X",
+    "X%%                   %%         %%%X5,,,X,,,X5,,,,,,,U,,,X5,,X,,,X,,5X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 1,
+    "x": 31,
+  },
+}

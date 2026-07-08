@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "id": 12,
+  "name": {
+    "ja": "自然魔術の特異点",
+    "en": "Node of Nature",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 65,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "自然魔法の賢者たちが、近くの森に自然エネルギーの特異点の存在を確認",
+          "した。我々自然魔法の塔がその魔力の所有権を得られるように、おまえは",
+          "その特異点の場所を見つけてそこに巣食うモンスターを片づけてくるのだ。",
+        ],
+        "en": [
+          "The Wizards of Nature have discovered a magical Node of ",
+          "Nature in a nearby forest. You must seek the Node and ",
+          "dispatch its guardians so that the Tower of Nature can ",
+          "claim the mystical energies of the Node.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["よくやった。強力な魔法書を外に置いておいた。"],
+        "en": ["You have done well. A powerful spellbook awaits you outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "立ち去れ、無能な馬鹿者め！魔法の特異点の次元エネルギーは",
+          "消え去って永遠に失われたのだぞ！お前はせっかくのチャンスを",
+          "棒にふったのだ。",
+        ],
+        "en": [
+          "Begone, incompetent fool! The dimensional energies of the ",
+          "mystic Node have faded away and are lost forever! You had",
+          "your chance and botched the job. ",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    ".": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+    },
+    "a": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 173,
+    },
+    "b": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 453,
+    },
+    "c": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 175,
+    },
+    "d": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 525,
+    },
+    "e": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 1191,
+    },
+    "g": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 558,
+    },
+    "h": {
+      "terrain": "TREE",
+      "caveInfo": ["ROOM"],
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhX",
+    "Xhhhhhh...................hhhhhhX",
+    "Xhhhh..........hgh..........hhhhX",
+    "Xhhh..aaa.hhhhhbbbhhhhh.aaa..hhhX",
+    "Xhhaachhhhhhhhh...hhhhhhhhhcaahhX",
+    "Xhccchhhhhhhhh..h..hhhhhhhhhccchX",
+    "Xh..hhhhbbdd...hhh..ddbbbhhhh..hX",
+    "Xh..hhhbbdd...hhhhh..ddbbbhhh..hX",
+    "Xh..hhhddghhhhhhhhhhhhhgddhhh..hX",
+    "Xh..hhh..hhh.........hhh..hhh..hX",
+    "Xh.hhhh..hh....hhhe...hh..hhhh.hX",
+    "Xh.hhhh..h....hhehh....h..hhhh.hX",
+    "Xh.hhhh..g...hheeehh...g..hhhh.hX",
+    "Xh.hhhh..h....hhehh....h..hhhh.hX",
+    "Xh.hhhh..hh...ehhh....hh..hhhh.hX",
+    "Xh..hhhddhhh.........hhhddhhh..hX",
+    "Xh..hhhhbdhhh.......hhhdbhhhh..hX",
+    "Xh..hhhhgbd...........dbghhhh..hX",
+    "Xhccchhhhgbd.hhhhhhh.dbghhhhc..hX",
+    "Xhacahhhhhhhhhhhhhhhhhhhhhhhc..hX",
+    "Xhha..hhhhhhhhhhhhhhhhhhhhhacahhX",
+    "Xhh.....hhhhhhhhhhhhhhhhh...a.hhX",
+    "Xh..........hhhhhhhhh.......hhhhX",
+    "Xh<........................hhhhhX",
+    "XhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 24,
+    "x": 2,
+  },
+}

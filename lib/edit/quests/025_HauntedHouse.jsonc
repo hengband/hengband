@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "id": 25,
+  "name": {
+    "ja": "幽霊屋敷",
+    "en": "Haunted House",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 48,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "街の城壁の南西の角にある、古い草吹きの家で何か悪いことが起こっています。",
+          "その家は呪われていて、人々を近寄せないといわれています。",
+          "我々はその家に住み着いている悪霊を退治してくれる人を探しています。",
+        ],
+        "en": [
+          "There is something evil going on in the old, thatched house",
+          "near the south-west corner of the city wall. People say that",
+          "the house is haunted and refuse to go near it. We need someone",
+          "to exorcise the evil spirits that are infesting the house.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "本当に良くやってくれました！我々住民はようやく安心することが出来ます。",
+          "お礼として、邪悪な者どもを更に効果的に感知することができるアイテムを",
+          "差し上げます。",
+        ],
+        "en": [
+          "Well done, indeed! Our citizens can finally sigh in relief.",
+          "As a reward, we would like to give you something that will",
+          "help you sense the enemy even more efficiently!",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "あぁ、何てザマでしょう！",
+          "幸運にも、この街を通りがかったたくさんの巡礼者たちは",
+          "聖なる街への巡礼の途中である、超エリートパラディンであることが",
+          "分かりました。そして彼らは修行の一環として、屋敷の亡霊どもを",
+          "追い払ってくださいました。彼らは報酬について尋ねさえしません",
+          "でしたよ。あなたも彼らを見つけて爪のアカでも煎じて飲ませて",
+          "もらってはいかがですか？",
+        ],
+        "en": [
+          "Bah, what a loser!",
+          "Fortunately, a bunch of pilgrims who were passing by turned",
+          "out to be ultra-elite paladins on their pilgrimage to the",
+          "holy city, and -- as a spiritual exercise -- the cleaned up",
+          "the house without even asking for a reward. Maybe you should",
+          "try to find them, you could learn a thing or two from them.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "!": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+      "trap": {
+        "random": true,
+      },
+    },
+    "Z": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 739,
+    },
+    "?": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 557,
+    },
+    "I": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 571,
+    },
+    "Q": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 480,
+    },
+    "=": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM"],
+    },
+    "s": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "#": {
+      "terrain": "GRANITE",
+      "caveInfo": ["ROOM"],
+    },
+    "S": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 665,
+    },
+    "j": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 748,
+    },
+    ">": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 439,
+    },
+    "t": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 466,
+    },
+    "T": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 705,
+    },
+    "^": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "trap": {
+        "random": true,
+      },
+    },
+    "m": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 202,
+      "trap": {
+        "random": true,
+      },
+    },
+    "C": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 508,
+    },
+    "V": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 623,
+    },
+    "G": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 690,
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "X..D!..D^^^m^^m^^^D...........X",
+    "X..X.t.X^^^^^^^^^^X...........X",
+    "X!XXXXXXXXXXXXXXXXX...........X",
+    "XDX...............X.!!!!!!!!!.X",
+    "X.................X.!XXXXXXX!.X",
+    "X..XXX..........==X.!XXXXXXX!.X",
+    "X.XXZX..........=IX.!!!!!!!!!.X",
+    "X.XssX.====.===.=IX...........X",
+    "XDX#XX.=?Q=.=Q=.=IXT..........X",
+    "X..XXXDXXXXDXXXDXXXXXXXXDXXXXXX",
+    "X..X^....XSSSX...XjD^^^^^^^^D!X",
+    "X..X..!..XSSSX.!.XXX^...G..^XXX",
+    "X<.XC...CXSSSX.V.X!D^^^^^^^^D>X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 13,
+    "x": 1,
+  },
+}

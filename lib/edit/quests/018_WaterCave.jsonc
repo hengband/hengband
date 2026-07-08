@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "id": 18,
+  "name": {
+    "ja": "湖の洞窟",
+    "en": "Water Cave",
+  },
+  "definition": {
+    "type": "FIND_EXIT",
+    "level": 35,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "最近湖の近くに洞窟の入口が現れました。どうか中を調べて何があるか見て",
+          "きて下さい。ただし、洞窟の入口はあまり安定してないようなので",
+          "気をつけて下さい！",
+        ],
+        "en": [
+          "A tunnel opening has recently been exposed on",
+          "the shore of our lake. Please investigate and",
+          "discover what is inside. Be careful! The",
+          "tunnel entrance does not appear to be very",
+          "stable.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "人々が洞窟に間違って入らないようにトンネルを閉鎖しておきました。",
+          "どうぞ外にある我々からの贈物を受けとって下さい。",
+        ],
+        "en": [
+          "We have closed the tunnel to prevent anybody from",
+          "getting trapped in the cavern. Please accept the",
+          "gift that awaits you outside as an reward for your",
+          "help.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": ["この仕事はあなたには難しかったようですね。"],
+        "en": ["It seems like this task was too difficult for you."],
+      },
+    },
+  ],
+  "legend": {
+    "a": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 160,
+    },
+    "b": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 220,
+    },
+    "c": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 266,
+    },
+    "d": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 292,
+    },
+    "e": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 346,
+    },
+    "f": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 386,
+    },
+    "g": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 406,
+    },
+    "h": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 482,
+    },
+    "i": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 740,
+    },
+    "j": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 775,
+      "object": 418,
+    },
+    "k": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 443,
+    },
+    "l": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 88,
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+    },
+    "m": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 40,
+    },
+    "n": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 944,
+    },
+    "o": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 903,
+    },
+    "s": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 1272,
+    },
+    "A": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 97,
+    },
+    "B": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 93,
+    },
+    "C": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 127,
+    },
+    "E": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 36,
+    },
+    "O": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+    },
+    "#": {
+      "terrain": "MAGMA_VEIN_ON_DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "%": {
+      "terrain": "RUBBLE_ON_SHALLOW_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    ".": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "~": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "-": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM"],
+    },
+    "<": {
+      "terrain": "QUEST_EXIT",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XX~~h~X#o~~XOX~~~hX~XX<k~~XX",
+    "X~XXXX~~X#X~XkXXX~~X~XXXXX~X",
+    "XX~hX~~X~~~.XXXXnXX#.#~Xh~XX",
+    "X~XX#~~~..~~~~~~.~f.~~~XXX~X",
+    "X~X~~a~%~.~..XX.~~.~~~g~~#.X",
+    "X~XX~~~~.~.~X-sX~.~~#~~~X.~X",
+    "X~#.f~~~~.~.X--X.~~~~~~~.X~X",
+    "Xn~~.XXXXX.X----XXXXXXX.X~nX",
+    "XX~~Xs------%mm%------s%~~XX",
+    "XXX~#X------mllm------X.#XXX",
+    "XnX~~~XX----%mm%----XX~~.XnX",
+    "X~~#~d~.XX-------X~...~~#.XX",
+    "X~#~~~..~XX---X---X...#~~X.X",
+    "X~XX~.~.X---XX-----X~~..X~kX",
+    "X~Xb.~~X--XX~~XX--sX~~g~.X~X",
+    "X~XX#~~XsX~~..~~XXX.~~~~XX~X",
+    "XX~hX~n.%.~~XXX#X~~~.X~Xh~XX",
+    "X~XXXXX~XXXXXXEn#X~~~#XXXX~X",
+    "XX~OOkX~~k~~#CXjXnXh#XiOO#XX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 1,
+    "x": 2,
+  },
+}

@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "id": 1,
+  "name": {
+    "ja": "盗賊の隠れ家",
+    "en": "Thieves Hideout",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 5,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "強盗たちが街の人々を襲っています！彼らは城壁の外の小さな",
+          "塚に住んでいて、街道を行く人々を襲うのです。あげくの果てに",
+          "は街に潜んで金品を強奪しています。どうか彼らの隠れ家",
+          "に行って悪党どもを倒して来て下さい。",
+        ],
+        "en": [
+          "There are thieves robbing my people! They live in a small",
+          "burrow outside the city walls robbing people as they pass",
+          "on the roads. They even sneak inside the town to mug and",
+          "pillage! Your task is to go to the burrow and kill these",
+          "ruffians.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "盗賊どもを退治して下さって有難うございます！",
+          "ささやかなお礼を外に用意しておきました。",
+        ],
+        "en": ["Thank you for killing the band of thieves! A small reward", "awaits you outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "この仕事はあなたには難しかったようですね。他の冒険者を雇って",
+          "残りの盗賊を退治しますから、もういいですよ。",
+        ],
+        "en": [
+          "It seems like this task was too difficult for you.  Good that I",
+          "hired another adventurer to clean up the remaining thieves.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 44,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 150,
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXX",
+    "X....a....X..TX",
+    "X.........D...X",
+    "X.........Xb..X",
+    "XXXXX.....XXXXX",
+    "XT..D........aX",
+    "X.b.X.........X",
+    "XXXXX.........X",
+    "X<..D.........X",
+    "XXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 8,
+    "x": 1,
+  },
+}
