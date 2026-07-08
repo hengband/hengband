@@ -240,6 +240,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     const auto &[wid, hgt] = term_get_size();
     auto browser_rows = hgt - 8;
     auto &baseitems = BaseitemList::get_instance();
+    auto &baseitem_configs = BaseitemConfigs::get_instance();
     std::vector<short> object_idx(baseitems.size());
 
     const auto max_element = std::max_element(ITEM_KIND_NAMES_GROUP.begin(), ITEM_KIND_NAMES_GROUP.end(),
@@ -258,9 +259,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         object_old = -1;
         object_cnt = 0;
     } else {
-        const auto &baseitem_record = BaseitemRecords::get_instance().get_record(direct_k_idx);
-        auto &baseitem_configs = BaseitemConfigs::get_instance();
-        auto &flavor_config = !visual_only && baseitem_record.is_apparent() ? baseitem_configs.get_config(baseitem_record.get_appearance_id()) : baseitem_configs.get_config(direct_k_idx);
+        auto &flavor_config = visual_only ? baseitem_configs.get_config(direct_k_idx) : BaseitemService::get_flavor_config(direct_k_idx);
         object_idx[0] = direct_k_idx;
         object_old = direct_k_idx;
         object_cnt = 1;
@@ -376,11 +375,9 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             }
         }
 
-        const auto &baseitem_record = BaseitemRecords::get_instance().get_record(bi_id);
-        auto &baseitem_configs = BaseitemConfigs::get_instance();
-        auto &baseitem_config = !visual_only && baseitem_record.is_apparent() ? baseitem_configs.get_config(baseitem_record.get_appearance_id()) : baseitem_configs.get_config(bi_id);
-        auto color = baseitem_config.get_color();
-        auto character = baseitem_config.get_character();
+        auto &flavor_config = visual_only ? baseitem_configs.get_config(direct_k_idx) : BaseitemService::get_flavor_config(direct_k_idx);
+        auto color = flavor_config.get_color();
+        auto character = flavor_config.get_character();
         if (visual_list) {
             place_visual_list_cursor(max_length + 3, 7, color, character, attr_top, char_left);
         } else if (!column) {
@@ -392,8 +389,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         char ch = inkey();
         const auto height = browser_rows - 1;
         if (visual_mode_command(ch, &visual_list, height, width, &attr_top, &char_left, &color, &character, need_redraw)) {
-            baseitem_config.set_symbol({ color, character });
-            if (direct_k_idx >= 0) {
+            flavor_config.set_symbol({ color, character });
+            if (bi_id >= 0) {
                 switch (ch) {
                 case '\n':
                 case '\r':

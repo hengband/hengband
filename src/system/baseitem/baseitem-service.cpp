@@ -126,6 +126,21 @@ void BaseitemService::initialize_items_flavor()
 }
 
 /*!
+ * @brief 指定されたベースアイテムのフレーバー設定を取得する
+ *
+ * 未鑑定名を持たないベースアイテムの場合は、指定されたベースアイテムのフレーバー設定を返す.
+ * 未鑑定名を持つベースアイテムの場合は、その名前が指し示すベースアイテムのフレーバー設定を返す.
+ * @param bi_id アイテムID
+ * @return フレーバー設定への参照
+ */
+BaseitemConfig &BaseitemService::get_flavor_config(short bi_id)
+{
+    const auto &baseitem_record = BaseitemRecords::get_instance().get_record(bi_id);
+    auto &baseitem_configs = BaseitemConfigs::get_instance();
+    return baseitem_record.is_apparent() ? baseitem_configs.get_config(baseitem_record.get_appearance_id()) : baseitem_configs.get_config(bi_id);
+}
+
+/*!
  * @brief ベースアイテムの未確定名を共通tval間でシャッフルする
  * @param tval シャッフルしたいtval
  * @details 巻物、各種魔道具などに利用される。

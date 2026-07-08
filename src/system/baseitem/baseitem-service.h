@@ -18,6 +18,7 @@ public:
     static void shuffle_flavors();
     static void mark_common_items_as_aware();
     static void initialize_items_flavor();
+    static BaseitemConfig &get_flavor_config(short bi_id);
 
 private:
     static void shuffle_flavors(ItemKindType tval);
