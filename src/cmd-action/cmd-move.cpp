@@ -110,8 +110,7 @@ void do_cmd_go_up(PlayerType *player_ptr)
         auto &quest = quests.get_quest(quest_id);
         if (quest.status == QuestStatusType::UNTAKEN) {
             if (quest.type != QuestKindType::RANDOM) {
-                init_flags = INIT_ASSIGN;
-                parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
+                assign_json_quest_metadata(floor.quest_number);
             }
 
             quest.status = QuestStatusType::TAKEN;
@@ -241,8 +240,7 @@ void do_cmd_go_down(PlayerType *player_ptr)
         auto &quest = quests.get_quest(floor.quest_number);
         if (quest.status == QuestStatusType::UNTAKEN) {
             if (quest.type != QuestKindType::RANDOM) {
-                init_flags = INIT_ASSIGN;
-                parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
+                assign_json_quest_metadata(floor.quest_number);
             }
 
             quest.status = QuestStatusType::TAKEN;

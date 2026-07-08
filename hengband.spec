@@ -142,7 +142,7 @@ exit 0
 %attr(664 root,games) %config(noreplace) %{_datadir}/games/%{name}/lib/apex/scores.raw
 %{_datadir}/games/%{name}/lib/edit/*.txt
 %{_datadir}/games/%{name}/lib/edit/*.jsonc
-%{_datadir}/games/%{name}/lib/edit/quests/*.txt
+%{_datadir}/games/%{name}/lib/edit/quests/*.jsonc
 %{_datadir}/games/%{name}/lib/edit/towns/*.txt
 %{_datadir}/games/%{name}/lib/file/*.txt
 %{_datadir}/games/%{name}/lib/file/books/*.txt

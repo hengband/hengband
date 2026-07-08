@@ -137,13 +137,11 @@ void player_wipe_without_name(PlayerType *player_ptr)
  */
 void init_dungeon_quests(PlayerType *player_ptr)
 {
-    init_flags = INIT_ASSIGN;
     auto &floor = *player_ptr->current_floor_ptr;
     auto &quests = QuestList::get_instance();
-    floor.quest_number = QuestId::RANDOM_QUEST1;
-    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     floor.quest_number = QuestId::NONE;
     for (auto quest_id : RANDOM_QUEST_ID_RANGE) {
+        assign_json_quest_metadata(quest_id);
         auto &quest = quests.get_quest(quest_id);
         quest.status = QuestStatusType::TAKEN;
         determine_random_questor(player_ptr, quest);
@@ -152,13 +150,10 @@ void init_dungeon_quests(PlayerType *player_ptr)
         quest.max_num = 1;
     }
 
-    init_flags = INIT_ASSIGN;
-    floor.quest_number = QuestId::OBERON;
-    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
+    assign_json_quest_metadata(QuestId::OBERON);
     quests.get_quest(QuestId::OBERON).status = QuestStatusType::TAKEN;
 
-    floor.quest_number = QuestId::SERPENT;
-    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
+    assign_json_quest_metadata(QuestId::SERPENT);
     quests.get_quest(QuestId::SERPENT).status = QuestStatusType::TAKEN;
     floor.quest_number = QuestId::NONE;
 }
