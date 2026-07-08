@@ -1,0 +1,457 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "Quest.schema.jsonc",
+  "title": "Quest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "id", "name", "definition"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "id": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 49
+    },
+    "name": {
+      "$ref": "#/$defs/localizedText"
+    },
+    "definition": {
+      "$ref": "#/$defs/definition"
+    },
+    "descriptions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/descriptionBlock"
+      }
+    },
+    "legend": {
+      "type": "object",
+      "description": "Map symbol (single character) -> grid definition. Local to this quest; does not touch the global letter[] table.",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/gridDefinition"
+      }
+    },
+    "map": {
+      "$ref": "#/$defs/mapRows"
+    },
+    "mapVariants": {
+      "type": "array",
+      "description": "Random layout variants (legacy $RANDOMn). One is chosen uniformly at floor generation.",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/mapRows"
+      }
+    },
+    "start": {
+      "$ref": "#/$defs/position"
+    },
+    "startVariants": {
+      "type": "array",
+      "description": "Player start position selected by the quest being left (legacy $LEAVING_QUEST).",
+      "items": {
+        "$ref": "#/$defs/startVariant"
+      }
+    }
+  },
+  "$defs": {
+    "localizedText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ja", "en"],
+      "properties": {
+        "ja": {
+          "type": "string"
+        },
+        "en": {
+          "type": "string"
+        }
+      }
+    },
+    "localizedLines": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ja", "en"],
+      "description": "Multi-line localized text; one array element per displayed screen row (legacy per-line Q:T).",
+      "properties": {
+        "ja": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "en": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "level"],
+      "properties": {
+        "type": {
+          "enum": [
+            "NONE",
+            "KILL_LEVEL",
+            "KILL_ANY_LEVEL",
+            "FIND_ARTIFACT",
+            "FIND_EXIT",
+            "KILL_NUMBER",
+            "KILL_ALL",
+            "RANDOM",
+            "TOWER"
+          ]
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "dungeon": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "DungeonId; 0 = none/quest-local floor."
+        },
+        "monster": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "MonraceId of the quest target (r_idx); 0 = none."
+        },
+        "numMon": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "maxNum": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Required kill count (KILL_NUMBER)."
+        },
+        "flags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["SILENT", "PRESET", "ONCE", "TOWER"]
+          }
+        },
+        "reward": {
+          "$ref": "#/$defs/reward"
+        }
+      }
+    },
+    "reward": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Artifact reward. Use `artifact` for a fixed one, or `artifacts` for a random pick among still-ungenerated ones (legacy Q:R).",
+      "minProperties": 1,
+      "maxProperties": 1,
+      "properties": {
+        "artifact": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "descriptionBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["when", "text"],
+      "properties": {
+        "when": {
+          "$ref": "#/$defs/condition"
+        },
+        "text": {
+          "$ref": "#/$defs/localizedLines"
+        }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Quest-status/type predicate deciding when a description block is shown (legacy ?:[...] over $QUESTnn / $QUEST_TYPEnn).",
+      "properties": {
+        "statusAtMost": {
+          "$ref": "#/$defs/questStatus",
+          "description": "Legacy [LEQ $QUESTnn s]: shown while status <= s."
+        },
+        "status": {
+          "$ref": "#/$defs/questStatus",
+          "description": "Legacy [EQU $QUESTnn s]: shown when status == s."
+        },
+        "questType": {
+          "$ref": "#/$defs/questKind",
+          "description": "Legacy [EQU $QUEST_TYPEnn t]: additionally require this quest type."
+        }
+      }
+    },
+    "questStatus": {
+      "enum": [
+        "UNTAKEN",
+        "TAKEN",
+        "COMPLETED",
+        "REWARDED",
+        "FINISHED",
+        "FAILED",
+        "FAILED_DONE",
+        "STAGE_COMPLETED"
+      ]
+    },
+    "questKind": {
+      "enum": [
+        "NONE",
+        "KILL_LEVEL",
+        "KILL_ANY_LEVEL",
+        "FIND_ARTIFACT",
+        "FIND_EXIT",
+        "KILL_NUMBER",
+        "KILL_ALL",
+        "RANDOM",
+        "TOWER"
+      ]
+    },
+    "mapRows": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 66,
+      "description": "Dungeon layout, one string per row (at most MAX_HGT=66 rows of MAX_WID=198 characters; floor generation writes rows unchecked, so the cap guards out-of-bounds access). Each character is looked up in `legend` (falling back to the shared quest-preference symbols).",
+      "items": {
+        "type": "string",
+        "maxLength": 198
+      }
+    },
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["y", "x"],
+      "properties": {
+        "y": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "x": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "startVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["y", "x"],
+      "properties": {
+        "leavingQuest": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "QuestId being left ($LEAVING_QUEST); omit for the default/fallback entry."
+        },
+        "y": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "x": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "gridDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "terrain": {
+          "type": "string",
+          "description": "TerrainTag name (e.g. FLOOR, PERMANENT), or \"*\" for a random feature."
+        },
+        "caveInfo": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["MARK", "GLOW", "NO_TELEPORT_DEST", "ROOM", "LITE"]
+          }
+        },
+        "monster": {
+          "$ref": "#/$defs/monsterSpec"
+        },
+        "object": {
+          "$ref": "#/$defs/objectSpec"
+        },
+        "ego": {
+          "$ref": "#/$defs/egoSpec"
+        },
+        "artifact": {
+          "$ref": "#/$defs/artifactSpec"
+        },
+        "trap": {
+          "$ref": "#/$defs/trapSpec"
+        },
+        "special": {
+          "type": "integer"
+        }
+      }
+    },
+    "monsterSpec": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "description": "MonraceId."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["random"],
+          "properties": {
+            "random": {
+              "const": true
+            },
+            "oodLevel": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Out-of-depth level boost (legacy *N)."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cloneOf"],
+          "properties": {
+            "cloneOf": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Place a clone of this MonraceId (legacy cN)."
+            }
+          }
+        }
+      ]
+    },
+    "objectSpec": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "description": "BaseitemId."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["random"],
+          "properties": {
+            "random": {
+              "const": true
+            },
+            "oodLevel": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Out-of-depth object level boost (legacy *N)."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["questReward"],
+          "properties": {
+            "questReward": {
+              "const": true,
+              "description": "Drop this quest's reward item (legacy !)."
+            }
+          }
+        }
+      ]
+    },
+    "egoSpec": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "description": "EgoType id."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["random"],
+          "properties": {
+            "random": {
+              "const": true
+            },
+            "id": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      ]
+    },
+    "artifactSpec": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "description": "FixedArtifactId."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["random"],
+          "properties": {
+            "random": {
+              "const": true
+            },
+            "id": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["questReward"],
+          "properties": {
+            "questReward": {
+              "const": true,
+              "description": "Use this quest's reward artifact (legacy !)."
+            }
+          }
+        }
+      ]
+    },
+    "trapSpec": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "TerrainTag name of the trap."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["random"],
+          "properties": {
+            "random": {
+              "const": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}
