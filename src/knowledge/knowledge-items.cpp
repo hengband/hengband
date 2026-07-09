@@ -224,14 +224,11 @@ static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
 /**
  * @brief Display known objects
  */
-void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool visual_only, short direct_k_idx)
+void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool visual_only, short bi_id)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, tl::nullopt);
 
-    short object_old, object_top;
     std::vector<short> grp_idx;
-    int object_cnt;
-
     bool visual_list = false;
     TERM_COLOR attr_top = 0;
     byte char_left = 0;
@@ -241,29 +238,24 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     auto browser_rows = hgt - 8;
     auto &baseitems = BaseitemList::get_instance();
     auto &baseitem_configs = BaseitemConfigs::get_instance();
-    std::vector<short> object_idx(baseitems.size());
+    std::vector<short> bi_ids(baseitems.size());
 
     const auto max_element = std::max_element(ITEM_KIND_NAMES_GROUP.begin(), ITEM_KIND_NAMES_GROUP.end(),
         [](auto x, auto y) { return x.length() < y.length(); });
     const int max_length = max_element->length();
     const auto width = wid - (max_length + 3);
-    if (direct_k_idx < 0) {
+    if (bi_id < 0) {
         mode = visual_only ? 0x03 : 0x01;
         const auto size = static_cast<short>(ITEM_KIND_NAMES_GROUP.size());
         for (short i = 0; i < size; i++) {
-            if (collect_objects(i, object_idx, mode)) {
+            if (collect_objects(i, bi_ids, mode)) {
                 grp_idx.push_back(i);
             }
         }
-
-        object_old = -1;
-        object_cnt = 0;
     } else {
-        auto &flavor_config = visual_only ? baseitem_configs.get_config(direct_k_idx) : BaseitemService::get_flavor_config(direct_k_idx);
-        object_idx[0] = direct_k_idx;
-        object_old = direct_k_idx;
-        object_cnt = 1;
-        object_idx[1] = -1;
+        auto &flavor_config = visual_only ? baseitem_configs.get_config(bi_id) : BaseitemService::get_flavor_config(bi_id);
+        bi_ids[0] = bi_id;
+        bi_ids[1] = -1;
         const auto height = browser_rows - 1;
         auto color = flavor_config.get_color();
         auto character = flavor_config.get_character();
@@ -272,13 +264,16 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     }
 
     mode = visual_only ? 0x02 : 0x00;
-    IDX old_grp_cur = -1;
-    IDX grp_cur = 0;
-    IDX grp_top = 0;
-    IDX object_cur = object_top = 0;
-    bool flag = false;
-    bool redraw = true;
-    int column = 0;
+    auto object_cnt = bi_id < 0 ? 0 : 1;
+    short previous_bi_id = bi_id < 0 ? -1 : bi_id;
+    short old_grp_cur = -1;
+    short grp_cur = 0;
+    short grp_top = 0;
+    short top_bi_id = 0;
+    short current_bi_id = 0;
+    auto flag = false;
+    auto redraw = true;
+    auto column = 0;
     auto &tracker = BaseitemTracker::get_instance();
     const auto &world = AngbandWorld::get_instance();
     const auto &symbols_cb = DisplaySymbolsClipboard::get_instance();
@@ -288,7 +283,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
 
 #ifdef JP
             prt(format("%s - アイテム", !visual_only ? "知識" : "表示"), 2, 0);
-            if (direct_k_idx < 0) {
+            if (bi_id < 0) {
                 prt("グループ", 4, 0);
             }
             prt("名前", 4, max_length + 3);
@@ -298,7 +293,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             prt("文字", 4, 74);
 #else
             prt(format("%s - objects", !visual_only ? "Knowledge" : "Visuals"), 2, 0);
-            if (direct_k_idx < 0) {
+            if (bi_id < 0) {
                 prt("Group", 4, 0);
             }
             prt("Name", 4, max_length + 3);
@@ -312,7 +307,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
                 term_putch(i, 5, { TERM_WHITE, '=' });
             }
 
-            if (direct_k_idx < 0) {
+            if (bi_id < 0) {
                 for (IDX i = 0; i < browser_rows; i++) {
                     term_putch(max_length + 1, 6 + i, { TERM_WHITE, '|' });
                 }
@@ -321,7 +316,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             redraw = false;
         }
 
-        if (direct_k_idx < 0) {
+        if (bi_id < 0) {
             if (grp_cur < grp_top) {
                 grp_top = grp_cur;
             }
@@ -333,23 +328,23 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_group_list(max_length, browser_rows, grp_idx, tmp_texts, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                object_cnt = collect_objects(grp_idx[grp_cur], object_idx, mode);
+                object_cnt = collect_objects(grp_idx[grp_cur], bi_ids, mode);
             }
 
-            while (object_cur < object_top) {
-                object_top = std::max<short>(0, object_top - browser_rows / 2);
+            while (current_bi_id < top_bi_id) {
+                top_bi_id = std::max<short>(0, top_bi_id - browser_rows / 2);
             }
 
-            while (object_cur >= object_top + browser_rows) {
-                object_top = std::min<short>(object_cnt - browser_rows, object_top + browser_rows / 2);
+            while (current_bi_id >= top_bi_id + browser_rows) {
+                top_bi_id = std::min<short>(object_cnt - browser_rows, top_bi_id + browser_rows / 2);
             }
         }
 
         if (!visual_list) {
-            display_object_list(max_length + 3, 6, browser_rows, object_idx, object_cur, object_top, visual_only);
+            display_object_list(max_length + 3, 6, browser_rows, bi_ids, current_bi_id, top_bi_id, visual_only);
         } else {
-            object_top = object_cur;
-            display_object_list(max_length + 3, 6, 1, object_idx, object_cur, object_top, visual_only);
+            top_bi_id = current_bi_id;
+            display_object_list(max_length + 3, 6, 1, bi_ids, current_bi_id, top_bi_id, visual_only);
             display_visual_list(max_length + 3, 7, browser_rows - 1, wid - (max_length + 3), attr_top, char_left);
         }
 
@@ -363,19 +358,19 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             hgt - 1, 0);
 #endif
 
-        const auto bi_id = object_idx[object_cur];
+        const auto bi_id_cursor = bi_ids[current_bi_id];
         if (!visual_only) {
             if (object_cnt) {
-                tracker.set_trackee(bi_id);
+                tracker.set_trackee(bi_id_cursor);
             }
 
-            if (object_old != bi_id) {
+            if (previous_bi_id != bi_id_cursor) {
                 handle_stuff(player_ptr);
-                object_old = bi_id;
+                previous_bi_id = bi_id_cursor;
             }
         }
 
-        auto &flavor_config = visual_only ? baseitem_configs.get_config(direct_k_idx) : BaseitemService::get_flavor_config(direct_k_idx);
+        auto &flavor_config = visual_only ? baseitem_configs.get_config(bi_id_cursor) : BaseitemService::get_flavor_config(bi_id_cursor);
         auto color = flavor_config.get_color();
         auto character = flavor_config.get_character();
         if (visual_list) {
@@ -383,7 +378,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         } else if (!column) {
             term_gotoxy(0, 6 + (grp_cur - grp_top));
         } else {
-            term_gotoxy(max_length + 3, 6 + (object_cur - object_top));
+            term_gotoxy(max_length + 3, 6 + (current_bi_id - top_bi_id));
         }
 
         char ch = inkey();
@@ -411,7 +406,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         case 'R':
         case 'r': {
             if (!visual_list && !visual_only && (grp_idx.size() > 0)) {
-                desc_obj_fake(player_ptr, object_idx[object_cur]);
+                desc_obj_fake(player_ptr, bi_ids[current_bi_id]);
                 redraw = true;
             }
 
@@ -419,7 +414,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         }
 
         default: {
-            browser_cursor(ch, &column, &grp_cur, std::ssize(grp_idx), &object_cur, object_cnt);
+            browser_cursor(ch, &column, &grp_cur, std::ssize(grp_idx), &current_bi_id, object_cnt);
             break;
         }
         }
