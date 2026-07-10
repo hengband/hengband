@@ -298,6 +298,7 @@
     <ClCompile Include="..\..\src\blue-magic\blue-magic-util.cpp" />
     <ClCompile Include="..\..\src\blue-magic\learnt-info.cpp" />
     <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.cpp" />
+    <ClCompile Include="..\..\src\bot\bot-json-output.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-move.cpp" />
     <ClCompile Include="..\..\src\cmd-action\cmd-open-close.cpp" />
@@ -1192,6 +1193,7 @@
     <ClInclude Include="..\..\src\blue-magic\blue-magic-util.h" />
     <ClInclude Include="..\..\src\blue-magic\learnt-info.h" />
     <ClInclude Include="..\..\src\blue-magic\learnt-power-getter.h" />
+    <ClInclude Include="..\..\src\bot\bot-json-output.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-move.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-open-close.h" />
