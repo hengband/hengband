@@ -2628,6 +2628,9 @@
     <ClCompile Include="..\..\src\effect\attribute\abstract-attribute.cpp">
       <Filter>effect\attribute</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\attribute\fire-attribute.cpp">
+      <Filter>effect\attribute</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -5689,6 +5692,9 @@
       <Filter>system\baseitem</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\effect\attribute\abstract-attribute.h">
+      <Filter>effect\attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\effect\attribute\fire-attribute.h">
       <Filter>effect\attribute</Filter>
     </ClInclude>
   </ItemGroup>

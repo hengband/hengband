@@ -167,6 +167,8 @@ hengband_SOURCES = \
 	dungeon/quest-completion-checker.cpp dungeon/quest-completion-checker.h \
 	dungeon/quest-monster-placer.cpp dungeon/quest-monster-placer.h \
 	\
+	effect/attribute/fire-attribute.cpp effect/attribute/fire-attribute.h
+	\
 	effect/attribute-types.h \
 	effect/effect-feature.cpp effect/effect-feature.h \
 	effect/effect-item.cpp effect/effect-item.h \
@@ -193,6 +195,7 @@ hengband_SOURCES = \
 	\
 	effect/attribute/abstract-attribute.cpp effect/attribute/abstract-attribute.h \
 	effect/attribute/attribute-factory.cpp effect/attribute/attribute-factory.h \
+	effect/attribute/fire-attribute.cpp effect/attribute/fire-attribute.h \
 	\
 	external-lib/include/nlohmann/json.hpp \
 	external-lib/include/simpleini/SimpleIni.h \
