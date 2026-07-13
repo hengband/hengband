@@ -9,8 +9,8 @@ class MSpellData;
 
 class MSpellAttackOther : public AbstractMSpellAttack {
 public:
-    MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType)> fire);
-    MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType)> fire);
+    MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType, const std::shared_ptr<AbstractAttribute> &)> fire);
+    MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType, const std::shared_ptr<AbstractAttribute> &)> fire);
     ~MSpellAttackOther() = default;
     MSpellAttackOther(const MSpellAttackOther &) = delete;
     MSpellAttackOther(MSpellAttackOther &&) = default;

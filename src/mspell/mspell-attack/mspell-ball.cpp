@@ -118,16 +118,16 @@ const std::unordered_map<MonsterAbilityType, MSpellData> ball_list = {
 
 MSpellBall::MSpellBall(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterAbilityType ability, POSITION rad, int target_type)
     : AbstractMSpellAttack(player_ptr, m_idx, ability, get_mspell_data(ball_list, ability), target_type,
-          [=](auto y, auto x, int dam, auto attribute) {
-              return ball(player_ptr, y, x, m_idx, attribute, dam, rad, target_type);
+          [=](auto y, auto x, int dam, auto attribute, auto attribute_ptr) {
+              return ball(player_ptr, y, x, m_idx, attribute, dam, rad, target_type, attribute_ptr);
           })
 {
 }
 
 MSpellBall::MSpellBall(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, MonsterAbilityType ability, POSITION rad, int target_type)
     : AbstractMSpellAttack(player_ptr, m_idx, t_idx, ability, get_mspell_data(ball_list, ability), target_type,
-          [=](auto y, auto x, int dam, auto attribute) {
-              return ball(player_ptr, y, x, m_idx, attribute, dam, rad, target_type);
+          [=](auto y, auto x, int dam, auto attribute, auto attribute_ptr) {
+              return ball(player_ptr, y, x, m_idx, attribute, dam, rad, target_type, attribute_ptr);
           })
 {
 }

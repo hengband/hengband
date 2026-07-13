@@ -6,7 +6,6 @@
 
 #include "effect/effect-player.h"
 #include "core/disturbance.h"
-#include "effect/attribute/abstract-attribute.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-player-switcher.h"
 #include "effect/effect-processor.h"

@@ -8,6 +8,7 @@
 #include <functional>
 
 class PlayerType;
+class AbstractAttribute;
 class AbstractMSpellAttack {
 public:
     virtual ~AbstractMSpellAttack() = default;
@@ -18,13 +19,13 @@ public:
     MonsterSpellResult shoot(POSITION y, POSITION x);
 
 protected:
-    AbstractMSpellAttack(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType)> fire);
-    AbstractMSpellAttack(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType)> fire);
+    AbstractMSpellAttack(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType, const std::shared_ptr<AbstractAttribute> &)> fire);
+    AbstractMSpellAttack(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType, const std::shared_ptr<AbstractAttribute> &)> fire);
     PlayerType *player_ptr;
     MONSTER_IDX m_idx;
     MONSTER_IDX t_idx;
     MonsterAbilityType ability;
     MSpellData data;
     int target_type;
-    std::function<ProjectResult(POSITION, POSITION, int, AttributeType)> fire;
+    std::function<ProjectResult(POSITION, POSITION, int, AttributeType, const std::shared_ptr<AbstractAttribute> &)> fire;
 };
