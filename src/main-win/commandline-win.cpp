@@ -65,7 +65,13 @@ void CommandLine::handle(void)
     if (argv) {
         for (int i = 1; i < argc; i++) {
             fwprintf(stdout, L"argv[%d] : %s\n", i, argv[i]);
-            if (wcscmp(argv[i], L"--debug-console") == 0) {
+            if (wcscmp(argv[i], L"-o") == 0) {
+                arg_force_original = true;
+                continue;
+            } else if (wcscmp(argv[i], L"-r") == 0) {
+                arg_force_roguelike = true;
+                continue;
+            } else if (wcscmp(argv[i], L"--debug-console") == 0) {
                 create_console();
                 continue;
             } else if (wcscmp(argv[i], L"--output-spoilers") == 0) {
