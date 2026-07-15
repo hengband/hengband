@@ -264,6 +264,7 @@ nlohmann::json make_nearby_grids_json(const PlayerType &player)
 {
     const auto &floor = *player.current_floor_ptr;
     auto grids = nlohmann::json::array();
+    grids.get_ref<nlohmann::json::array_t &>().reserve(static_cast<std::size_t>(floor.height) * floor.width);
     // Emit the player's entire memorised map (marked tiles) plus the current
     // view — not just a small window. The town is fully known from the start
     // (so the bot can see the dungeon entrance immediately, like the player),
