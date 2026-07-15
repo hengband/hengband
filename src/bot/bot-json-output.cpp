@@ -4,10 +4,14 @@
 #include "game-option/runtime-arguments.h"
 #include "inventory/inventory-slot-types.h"
 #include "locale/character-encoding.h"
+#include "object-enchant/item-feeling.h"
 #include "object/tval-types.h"
+#include "player-ability/player-ability-types.h"
 #include "player-base/player-race.h"
 #include "player-info/race-info.h"
 #include "player/digestion-processor.h"
+#include "player/player-skill.h"
+#include "player/player-status-flags.h"
 #include "store/pricing.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
@@ -16,12 +20,16 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/store-sale-type.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-kind.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/town-records.h"
 #include "system/grid-type-definition.h"
+#include "system/item/identification-flags.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monster-entity.h"
@@ -38,7 +46,33 @@
 namespace {
 constexpr std::streamoff BOT_JSON_OUTPUT_MAX_BYTES = 256LL * 1024 * 1024;
 
-nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos, bool can_see_monsters)
+const char *pseudo_feeling_name(item_feel_type feeling)
+{
+    switch (feeling) {
+    case FEEL_BROKEN:
+        return "broken";
+    case FEEL_TERRIBLE:
+        return "terrible";
+    case FEEL_WORTHLESS:
+        return "worthless";
+    case FEEL_CURSED:
+        return "cursed";
+    case FEEL_UNCURSED:
+        return "uncursed";
+    case FEEL_AVERAGE:
+        return "average";
+    case FEEL_GOOD:
+        return "good";
+    case FEEL_EXCELLENT:
+        return "excellent";
+    case FEEL_SPECIAL:
+        return "special";
+    default:
+        return "none";
+    }
+}
+
+nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos)
 {
     const auto &grid = floor.get_grid(pos);
     const auto is_known = grid.is_mark() || grid.is_view();
@@ -61,7 +95,10 @@ nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos, bool can
     MONSTER_IDX visible_monster_index = 0;
     // Keep this in lockstep with make_visible_monsters_json(): ESP-only monsters
     // are deliberately excluded because the bot interface exposes direct sight.
-    if (can_see_monsters && grid.is_view() && grid.has_monster()) {
+    // A hallucinating player still SEES a monster at its real tile (the map draws
+    // a random symbol there), so the position is emitted regardless — only the
+    // monster's identity is redacted, over in make_visible_monsters_json().
+    if (grid.is_view() && grid.has_monster()) {
         const auto &monster = floor.m_list[grid.m_idx];
         if (monster.is_valid() && monster.ml) {
             visible_monster_index = grid.m_idx;
@@ -103,6 +140,7 @@ nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos, bool can
                          { "down_stairs", has_terrain(TerrainCharacteristics::DOWN_STAIRS) },
                          { "entrance", has_terrain(TerrainCharacteristics::ENTRANCE) },
                          { "quest_enter", has_terrain(TerrainCharacteristics::QUEST_ENTER) },
+                         { "quest_exit", has_terrain(TerrainCharacteristics::QUEST_EXIT) },
                          { "store", is_store },
                          { "can_dig", has_terrain(TerrainCharacteristics::CAN_DIG) },
                          { "has_gold", has_terrain(TerrainCharacteristics::HAS_GOLD) },
@@ -117,9 +155,44 @@ nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos, bool can
     if (has_terrain(TerrainCharacteristics::ENTRANCE)) {
         result["entrance_dungeon_id"] = grid.special;
     }
+    if (has_terrain(TerrainCharacteristics::QUEST_ENTER) || has_terrain(TerrainCharacteristics::QUEST_EXIT)) {
+        result["quest_id"] = grid.special;
+    }
     if (has_terrain(TerrainCharacteristics::BLDG)) {
         result["building_type"] = enum2i(terrain.building_type);
+        result["building_special"] = grid.special;
     }
+    return result;
+}
+
+nlohmann::json make_quests_json()
+{
+    auto result = nlohmann::json::array();
+    const auto &quests = QuestList::get_instance();
+    for (const auto quest_id : quests.get_sorted_quest_ids()) {
+        const auto &quest = quests.get_quest(quest_id);
+        result.push_back({
+            { "id", enum2i(quest_id) },
+            { "name", quest.name },
+            { "status", enum2i(quest.status) },
+            { "type", enum2i(quest.type) },
+            { "level", quest.level },
+            { "dungeon_id", enum2i(quest.dungeon) },
+            { "r_idx", enum2i(quest.r_idx) },
+            { "cur_num", quest.cur_num },
+            { "max_num", quest.max_num },
+            { "num_mon", quest.num_mon },
+            { "flags", quest.flags },
+            { "complev", quest.complev },
+            { "comptime", quest.comptime },
+            { "fixed", QuestType::is_fixed(quest_id) },
+            { "has_reward", quest.has_reward() },
+            { "reward_artifact_id", quest.get_reward().has_value() ? nlohmann::json(enum2i(*quest.get_reward())) : nlohmann::json(nullptr) },
+            { "reward_baseitem_id", quest.get_reward_bi_id() },
+            { "reward_instant_artifact", quest.is_reward_instant_artifact() },
+        });
+    }
+
     return result;
 }
 
@@ -146,14 +219,26 @@ const char *monster_health_band(const MonsterEntity &monster)
 nlohmann::json make_visible_monsters_json(const PlayerType &player)
 {
     auto monsters = nlohmann::json::array();
-    if (player.effects()->hallucination().is_hallucinated()) {
-        return monsters;
-    }
-
     const auto &floor = *player.current_floor_ptr;
+    const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
     for (MONSTER_IDX m_idx = 1; m_idx < floor.m_max; ++m_idx) {
         const auto &monster = floor.m_list[m_idx];
         if (!monster.is_valid() || !monster.ml || !floor.get_grid(monster.get_position()).is_view()) {
+            continue;
+        }
+
+        // While hallucinating, the player sees SOMETHING at the tile but cannot
+        // tell what it is or how hurt it is (the map shows a random symbol).
+        // Emit the position-bearing index and friend/foe only; redact identity,
+        // health, and status so the bot defends against an unknown threat rather
+        // than reading true stats it could not perceive.
+        if (is_hallucinated) {
+            monsters.push_back({
+                { "index", m_idx },
+                { "hallucinated", true },
+                { "friendly", monster.is_friendly() },
+                { "pet", monster.is_pet() },
+            });
             continue;
         }
 
@@ -178,7 +263,6 @@ nlohmann::json make_visible_monsters_json(const PlayerType &player)
 nlohmann::json make_nearby_grids_json(const PlayerType &player)
 {
     const auto &floor = *player.current_floor_ptr;
-    const auto can_see_monsters = !player.effects()->hallucination().is_hallucinated();
     auto grids = nlohmann::json::array();
     // Emit the player's entire memorised map (marked tiles) plus the current
     // view — not just a small window. The town is fully known from the start
@@ -193,7 +277,7 @@ nlohmann::json make_nearby_grids_json(const PlayerType &player)
                 continue;
             }
 
-            grids.push_back(make_grid_json(floor, { y, x }, can_see_monsters));
+            grids.push_back(make_grid_json(floor, { y, x }));
         }
     }
 
@@ -211,6 +295,61 @@ nlohmann::json make_player_status_json(const PlayerType &player)
         { "cut", player.effects()->cut().is_cut() },
         { "paralyzed", player.effects()->paralysis().is_paralyzed() },
         { "hallucinated", player.effects()->hallucination().is_hallucinated() },
+    };
+}
+
+nlohmann::json make_player_stats_json(const PlayerType &player)
+{
+    // Current vs maximal natural value per ability. The character sheet shows both
+    // (a drained stat renders reduced / recoloured), so this reveals nothing the
+    // player cannot already read on screen. drained = cur < max tells the bot which
+    // stat to restore.
+    auto stat = [&player](int index) {
+        return nlohmann::json{
+            { "cur", player.stat_cur[index] },
+            { "max", player.stat_max[index] },
+            { "use", player.stat_use[index] },
+            { "index", player.stat_index[index] },
+            { "drained", player.stat_cur[index] < player.stat_max[index] },
+        };
+    };
+    return {
+        { "str", stat(A_STR) },
+        { "int", stat(A_INT) },
+        { "wis", stat(A_WIS) },
+        { "dex", stat(A_DEX) },
+        { "con", stat(A_CON) },
+        { "chr", stat(A_CHR) },
+    };
+}
+
+nlohmann::json make_player_abilities_json(PlayerType *player_ptr)
+{
+    // Resistances / ESP / free action the character actually has, aggregated from
+    // race, class, mutations and every worn item — exactly what the 'C'haracter
+    // screen shows, so this reveals nothing hidden. The bot gates its dive depth on
+    // these (the depth-requirement table lives in the bot's AGENTS.md). Each query
+    // returns BIT_FLAGS; non-zero means the ability is present.
+    return {
+        { "resist_fire", has_resist_fire(player_ptr) != 0 },
+        { "resist_cold", has_resist_cold(player_ptr) != 0 },
+        { "resist_elec", has_resist_elec(player_ptr) != 0 },
+        { "resist_acid", has_resist_acid(player_ptr) != 0 },
+        { "resist_pois", has_resist_pois(player_ptr) != 0 },
+        { "resist_conf", has_resist_conf(player_ptr) != 0 },
+        { "resist_chaos", has_resist_chaos(player_ptr) != 0 },
+        { "resist_blind", has_resist_blind(player_ptr) != 0 },
+        { "resist_fear", has_resist_fear(player_ptr) != 0 },
+        { "resist_neth", has_resist_neth(player_ptr) != 0 },
+        { "resist_nexus", has_resist_nexus(player_ptr) != 0 },
+        { "resist_sound", has_resist_sound(player_ptr) != 0 },
+        { "resist_shard", has_resist_shard(player_ptr) != 0 },
+        { "resist_disen", has_resist_disen(player_ptr) != 0 },
+        { "resist_lite", has_resist_lite(player_ptr) != 0 },
+        { "resist_dark", has_resist_dark(player_ptr) != 0 },
+        { "telepathy", has_esp_telepathy(player_ptr) != 0 },
+        { "free_action", has_free_act(player_ptr) != 0 },
+        { "see_invisible", has_see_inv(player_ptr) != 0 },
     };
 }
 
@@ -245,6 +384,10 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
         { "known", item.is_known() },
         { "fully_known", item.is_fully_known() },
         { "is_equipment", item.is_equipment() },
+        { "weight", item.weight },
+        // This matches the player's bounty knowledge: daily targets only count
+        // after they have been learned, while the fixed wanted list is public.
+        { "is_bounty", item.is_bounty() },
     };
 
     // Match what the normal item description reveals. An unaware flavor does
@@ -252,6 +395,9 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
     // charges, pval-derived values, or remaining fuel.
     if (item.is_aware()) {
         result["sval"] = item.bi_key.sval().value_or(-1);
+    }
+    if (item.has_identification_flag(IdentificationFlag::SENSE)) {
+        result["pseudo_feeling"] = pseudo_feeling_name(static_cast<item_feel_type>(item.feeling));
     }
     if (item.is_known()) {
         result["charges"] = item.pval;
@@ -278,6 +424,14 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
             }
         }
         result["known_flags"] = std::move(known_flags);
+        if (item.is_melee_weapon()) {
+            const auto tval = item.bi_key.tval();
+            const auto sval = item.bi_key.sval();
+            const auto exp_it = player_ptr->weapon_exp.find(tval);
+            if (sval && exp_it != player_ptr->weapon_exp.end()) {
+                result["weapon_proficiency"] = exp_it->second[*sval];
+            }
+        }
     }
 
     return result;
@@ -404,6 +558,18 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
     const auto &world = AngbandWorld::get_instance();
     const auto &dungeons = DungeonList::get_instance();
     const auto &dungeon_records = DungeonRecords::get_instance();
+    auto entered_dungeon_ids = nlohmann::json::array();
+    auto conquered_dungeon_ids = nlohmann::json::array();
+    for (const auto dungeon_id : dungeon_records.collect_entered_dungeon_ids()) {
+        entered_dungeon_ids.push_back(enum2i(dungeon_id));
+        // A conquered dungeon's final guardian is dead — its best drop is already
+        // taken. The bot uses this (fair-play: the player knows which dungeons they
+        // have cleared) to steer toward an UNCONQUERED dungeon it can safely clear
+        // for the guardian's equipment.
+        if (dungeons.get_dungeon(dungeon_id).is_conquered()) {
+            conquered_dungeon_ids.push_back(enum2i(dungeon_id));
+        }
+    }
     return {
         { "type", "player_turn" },
         { "turn", world.game_turn },
@@ -422,7 +588,17 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                         { "recalling", player.word_recall != 0 },
                         { "food_type", enum2i(PlayerRace(player_ptr).food()) },
                         { "class_id", enum2i(player.pclass) },
+                        { "race_id", enum2i(player.prace) },
+                        { "personality_id", enum2i(player.ppersonality) },
                         { "ac", player.dis_ac + player.dis_to_a },
+                        { "skills", {
+                                        { "melee", player.skill_thn },
+                                        { "saving", player.skill_sav },
+                                        { "device", player.skill_dev },
+                                        { "stealth", player.skill_stl },
+                                        { "two_weapon", player.skill_exp.at(PlayerSkillKindType::TWO_WEAPON) },
+                                        { "shield", player.skill_exp.at(PlayerSkillKindType::SHIELD) },
+                                    } },
                         { "melee", {
                                        { "main_hand_blows", player.num_blow[0] },
                                        { "sub_hand_blows", player.num_blow[1] },
@@ -432,6 +608,8 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                                        { "sub_hand_to_d", player.dis_to_d[1] },
                                    } },
                         { "status", make_player_status_json(player) },
+                        { "stats", make_player_stats_json(player) },
+                        { "abilities", make_player_abilities_json(player_ptr) },
                     } },
         { "floor", {
                        { "dungeon_id", enum2i(floor.dungeon_id) },
@@ -440,11 +618,38 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                        { "height", floor.height },
                        { "inside_arena", floor.inside_arena },
                        { "quest_id", enum2i(floor.quest_number) },
+                       { "town_id", world.is_in_any_town() ? static_cast<int>(world.get_town_index()) - 1 : -1 },
+                       { "town_index", world.is_in_any_town() ? static_cast<int>(world.get_town_index()) : 0 },
+                       // True only while standing ON an actual town tile. Gate on
+                       // dun_level == 0: is_in_any_town() (current_town_index > 0)
+                       // is NOT cleared on entering a dungeon, so on its own it
+                       // reads true in the dungeon too. On the surface it still
+                       // separates the town from the open, out-of-depth wilderness
+                       // tile (both share dungeon_id 0 / level 0).
+                       { "in_town", floor.dun_level == 0 && world.is_in_any_town() },
                    } },
         { "progress", {
                           { "recall_dungeon_id", enum2i(player.recall_dungeon) },
+                          { "entered_dungeon_ids", std::move(entered_dungeon_ids) },
+                          { "conquered_dungeon_ids", std::move(conquered_dungeon_ids) },
+                          // Deepest level reached in the recall-target dungeon: this
+                          // is exactly where Word of Recall lands and what the player
+                          // sees on the character screen, so it reveals nothing hidden.
+                          // The bot uses it to seed its deepest-level watermark, which
+                          // otherwise resets to 1 on every restart.
+                          { "recall_depth", dungeon_records.get_record(player.recall_dungeon).get_max_level() },
                           { "yeek_cave_conquered", dungeons.get_dungeon(DungeonId::GALGALS).is_conquered() },
-                          { "angband_recall_unlocked", dungeon_records.get_record(DungeonId::ANGBAND).has_entered() },
+                          // Whether the player can Word-of-Recall into Angband. A
+                          // dungeon becomes recallable once its record has a max
+                          // level (> 0): set either by physically entering it, or
+                          // by hearing its rumor at the inn, which calls
+                          // set_max_level(mindepth) and tells the player "You can
+                          // recall to Angband." has_entered() alone missed the
+                          // rumor-unlock case, so the bot never noticed the unlock
+                          // and looped reading rumors. This is player-visible state,
+                          // not hidden information.
+                          { "angband_recall_unlocked", dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() > 0 },
+                          { "quests", make_quests_json() },
                       } },
         { "nearby_grids", make_nearby_grids_json(player) },
         { "visible_monsters", make_visible_monsters_json(player) },
