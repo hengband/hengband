@@ -1468,7 +1468,7 @@ EXTRA_DIST = \
 	gcc-wrap
 
 DEFAULT_INCLUDES = \
-	-I. -I$(srcdir) -I$(srcdir)/external-lib/include
+	-I. -I$(srcdir) -isystem $(srcdir)/external-lib/include
 
 CPPFLAGS += $(XFT_CFLAGS) $(libcurl_CFLAGS)
 LIBS += $(XFT_LIBS) $(libcurl_LIBS)
@@ -1481,7 +1481,7 @@ endif
 
 if USE_NKF
 CXXCOMPILE_WRAPPER = $(srcdir)/gcc-wrap
-DEFAULT_INCLUDES += -I$(top_builddir)/src -I$(top_builddir)/src/external-lib/include
+DEFAULT_INCLUDES += -I$(top_builddir)/src -isystem $(top_builddir)/src/external-lib/include
 if COMPILER_IS_CLANG
 AM_CXXFLAGS += -Wno-invalid-source-encoding
 endif
