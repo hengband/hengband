@@ -664,7 +664,7 @@ tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt,
                 break;
             }
 
-            if (grid.o_idx_list.size() < 2) {
+            if (fis.floor_item_index.size() < 2) {
                 break;
             }
 
