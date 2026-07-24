@@ -304,10 +304,11 @@ void decide_monster_attack_effect(PlayerType *player_ptr, mam_type *mam_ptr)
 
         if (!has_resist) {
             if (one_in_(2)) {
-                msg_format(_(("%s^はどこかへ消えていった！"), ("%s^ disappears!")), mam_ptr->t_name);
                 if (mam_ptr->t_ptr->is_riding()) {
+                    msg_format(_("%s^はテレポートした！", "%s^ teleports away!"), mam_ptr->t_name);
                     teleport_player_away(mam_ptr->m_idx, player_ptr, 50, false);
                 } else {
+                    msg_format(_("%s^はどこかへ消えていった！", "%s^ disappears!"), mam_ptr->t_name);
                     teleport_away(player_ptr, mam_ptr->t_idx, 50, TELEPORT_PASSIVE);
                 }
             } else {
