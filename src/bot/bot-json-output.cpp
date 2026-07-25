@@ -27,6 +27,7 @@
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-kind.h"
 #include "system/floor/floor-info.h"
+#include "system/floor/town-list.h"
 #include "system/floor/town-records.h"
 #include "system/grid-type-definition.h"
 #include "system/item/identification-flags.h"
@@ -109,6 +110,15 @@ nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos)
         const auto &item = *floor.o_list[o_idx];
         return item.is_valid() && item.marked.has(OmType::FOUND);
     });
+    auto visible_object_tvals = nlohmann::json::array();
+    for (const auto o_idx : grid.o_idx_list) {
+        const auto &item = *floor.o_list[o_idx];
+        if (item.is_valid() && item.marked.has(OmType::FOUND)) {
+            // The object-class glyph is visible even when flavor and charges are
+            // unknown. MANA races use this to prioritize edible devices.
+            visible_object_tvals.push_back(enum2i(item.bi_key.tval()));
+        }
+    }
 
     const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
     const auto has_terrain = [&terrain](TerrainCharacteristics flag) { return terrain.flags.has(flag); };
@@ -120,6 +130,7 @@ nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos)
         { "terrain_id", grid.get_terrain_id(TerrainKind::MIMIC) },
         { "monster_index", visible_monster_index },
         { "object_count", visible_object_count },
+        { "object_tvals", std::move(visible_object_tvals) },
         { "flags", {
                        { "mark", grid.is_mark() },
                        { "cave_known", (grid.info & CAVE_KNOWN) != 0 },
@@ -143,6 +154,8 @@ nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos)
                          { "quest_exit", has_terrain(TerrainCharacteristics::QUEST_EXIT) },
                          { "store", is_store },
                          { "can_dig", has_terrain(TerrainCharacteristics::CAN_DIG) },
+                         { "tunnel", has_terrain(TerrainCharacteristics::TUNNEL) },
+                         { "permanent", has_terrain(TerrainCharacteristics::PERMANENT) },
                          { "has_gold", has_terrain(TerrainCharacteristics::HAS_GOLD) },
                          { "building", has_terrain(TerrainCharacteristics::BLDG) },
                      } },
@@ -409,6 +422,11 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
         result["is_artifact"] = item.is_fixed_or_random_artifact();
         result["is_cursed"] = item.is_cursed();
         result["is_broken"] = item.is_broken();
+        // Player-authored inscription (the {...} tag). The player sets and
+        // sees it, so exposing it is fair-play. The bot uses it as durable,
+        // savefile-persistent memory (e.g. tagging a confirmed HEAVY_CURSE
+        // item so a restart does not re-attempt normal remove-curse).
+        result["inscription"] = item.is_inscribed() ? *item.inscription : "";
         result["to_h"] = item.to_h;
         result["to_d"] = item.to_d;
         result["to_a"] = item.to_a;
@@ -425,7 +443,7 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
             }
         }
         result["known_flags"] = std::move(known_flags);
-        if (item.is_melee_weapon()) {
+        if (item.is_melee_weapon() || item.bi_key.tval() == ItemKindType::BOW) {
             const auto tval = item.bi_key.tval();
             const auto sval = item.bi_key.sval();
             const auto exp_it = player_ptr->weapon_exp.find(tval);
@@ -542,6 +560,12 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
                 { "known", true },
                 { "fully_known", true },
                 { "price", price },
+                // Shop stock is fully identified and its listing already shows
+                // charges/fuel to the player, so exposing pval reveals nothing
+                // hidden. Without it a MANA race can never evaluate charge food
+                // (every shelf wand/staff read as 0 charges).
+                { "pval", item.pval },
+                { "charges", item.pval },
             });
         }
     }
@@ -560,9 +584,14 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
     const auto &dungeons = DungeonList::get_instance();
     const auto &dungeon_records = DungeonRecords::get_instance();
     auto entered_dungeon_ids = nlohmann::json::array();
+    auto dungeon_recall_depths = nlohmann::json::object();
     auto conquered_dungeon_ids = nlohmann::json::array();
     for (const auto dungeon_id : dungeon_records.collect_entered_dungeon_ids()) {
-        entered_dungeon_ids.push_back(enum2i(dungeon_id));
+        const auto dungeon_id_value = enum2i(dungeon_id);
+        const auto recall_depth = dungeon_records.get_record(dungeon_id).get_max_level();
+        entered_dungeon_ids.push_back(dungeon_id_value);
+        const auto dungeon_id_key = std::to_string(dungeon_id_value);
+        dungeon_recall_depths.emplace(dungeon_id_key, recall_depth);
         // A conquered dungeon's final guardian is dead — its best drop is already
         // taken. The bot uses this (fair-play: the player knows which dungeons they
         // have cleared) to steer toward an UNCONQUERED dungeon it can safely clear
@@ -594,6 +623,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                         { "ac", player.dis_ac + player.dis_to_a },
                         { "skills", {
                                         { "melee", player.skill_thn },
+                                        { "shooting", player.skill_thb },
                                         { "saving", player.skill_sav },
                                         { "device", player.skill_dev },
                                         { "stealth", player.skill_stl },
@@ -632,6 +662,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
         { "progress", {
                           { "recall_dungeon_id", enum2i(player.recall_dungeon) },
                           { "entered_dungeon_ids", std::move(entered_dungeon_ids) },
+                          { "dungeon_recall_depths", std::move(dungeon_recall_depths) },
                           { "conquered_dungeon_ids", std::move(conquered_dungeon_ids) },
                           // Deepest level reached in the recall-target dungeon: this
                           // is exactly where Word of Recall lands and what the player
@@ -650,6 +681,23 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                           // and looped reading rumors. This is player-visible state,
                           // not hidden information.
                           { "angband_recall_unlocked", dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() > 0 },
+                          // Towns the player knows the way to: marked visited by
+                          // physically entering them or by hearing the town's rumor
+                          // at the inn ("You know the way to ..."). The inn's
+                          // "Teleport to other town" menu lists exactly these towns,
+                          // so this mirrors player-visible state. IDs follow the
+                          // floor.town_id convention (town_index - 1).
+                          { "visited_town_ids", [] {
+                               std::vector<int> ids;
+                               const auto &records = TownRecords::get_instance();
+                               const auto towns_size = TownList::get_instance().size();
+                               for (size_t i = 1; i < towns_size; i++) {
+                                   if (records.has_visited(i2enum<TownId>(i - 1))) {
+                                       ids.push_back(static_cast<int>(i) - 1);
+                                   }
+                               }
+                               return ids;
+                           }() },
                           { "quests", make_quests_json() },
                       } },
         { "nearby_grids", make_nearby_grids_json(player) },
