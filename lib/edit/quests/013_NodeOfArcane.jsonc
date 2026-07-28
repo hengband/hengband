@@ -1,0 +1,217 @@
+{
+  "version": 1,
+  "id": 13,
+  "name": {
+    "ja": "秘術の特異点",
+    "en": "Node of Arcane",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 65,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "秘術の頂に至った観光客たちが、近くの森に燃素の特異点の存在を確認した。",
+          "おまえはその特異点の場所を見つけ燃素を汲み上げてくるのだ。",
+        ],
+        "en": [
+          "Tourists who reached the summit of the mystery confirmed the presence of a burning element singularity in the nearby forest.",
+          "You must find the location of the singularity and pump up the flammable element.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["よくやった。強力な魔法書を外に置いておいた。"],
+        "en": ["You have done well. A powerful spellbook awaits you outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "立ち去れ、観光客にも劣る無能め！",
+          "永久機関となるべき燃素は消え去って永遠に失われたのだぞ！",
+          "お前はせっかくのチャンスを棒にふったのだ。",
+        ],
+        "en": [
+          "Walk away, you incompetent, no better than a tourist!",
+          "The fuel element, which should have been a permanent institution, has vanished and been lost forever!",
+          "You have squandered your chance.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    ".": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+    },
+    "a": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 227,
+    },
+    "b": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 303,
+    },
+    "c": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 305,
+    },
+    "d": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 306,
+    },
+    "e": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 510,
+    },
+    "f": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 512,
+    },
+    "g": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 514,
+    },
+    "h": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 525,
+    },
+    "i": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 526,
+    },
+    "j": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 537,
+    },
+    "k": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 545,
+    },
+    "l": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 570,
+    },
+    "m": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 579,
+    },
+    "n": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 582,
+    },
+    "o": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 584,
+    },
+    "p": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 786,
+    },
+    "q": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 866,
+    },
+    "r": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 1141,
+    },
+    "s": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 1142,
+    },
+    "t": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 1143,
+    },
+    "u": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 1144,
+    },
+    "v": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 1145,
+    },
+    "w": {
+      "terrain": "GRASS",
+      "caveInfo": ["ROOM"],
+      "monster": 1310,
+    },
+    "y": {
+      "terrain": "MOUNTAIN_WALL",
+    },
+    "z": {
+      "terrain": "TREE",
+      "caveInfo": ["ROOM"],
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzX",
+    "Xzzzzzz...................zzzzzzX",
+    "Xzzzz..........z.z..........zzzzX",
+    "Xzzz......zzzzzdddzzzzz......zzzX",
+    "Xzz...zzzzyyyyz...zyyyyzzzz...zzX",
+    "Xz...zyyyzzzzz..z..zzzzzyyyz...zX",
+    "Xz..zyyyznnn...zyz...nnnzyyyz..zX",
+    "Xz..zyyznmw...zyyyz..dwmnzyyz..zX",
+    "Xz..zyyznwzzzzzzzzzzzzzwnzyyz..zX",
+    "Xz..zyz.nzyz...ete...zyzn.zyz..zX",
+    "Xz.zyyz..zz..fqzzzqf..zz..zyyz.zX",
+    "Xzazyyz..z...izzpzzk...z..zyyzczX",
+    "Xzazyyz.hsj..rzpppzv..jsh.zyyzczX",
+    "Xzazyyz..z...izzpzzk...z..zyyzczX",
+    "Xz.zyyz..zz..fqzzzqf..zz..zyyz.zX",
+    "Xz..zyz.nzyz...lul...zyzn.zyz..zX",
+    "Xz..zyyznwzzz.......zzzwnzyyz..zX",
+    "Xz..zyyznmw...........wmnzyyz..zX",
+    "Xz...zyyznnn.zzzzzzz.nnnzyyz...zX",
+    "Xz...zyyyzzzzyyyyyyyzzzzyyyz...zX",
+    "Xzz...zzyyyyyyyyyyyyyyyyyzz...zzX",
+    "Xzz.....zzzzyyyyyyyyyzzzz.....zzX",
+    "Xz..........zzzzzzzzz.......zzzzX",
+    "Xz<............bbb.........zzzzzX",
+    "XzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 24,
+    "x": 2,
+  },
+}

@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "id": 6,
+  "name": {
+    "ja": "塔",
+    "en": "The Tower 2",
+  },
+  "definition": {
+    "type": "TOWER",
+    "level": 40,
+    "flags": ["SILENT", "PRESET", "TOWER"],
+  },
+  "legend": {
+    "#": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 884,
+    },
+    "d": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 561,
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+    },
+    "@": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 40,
+    },
+    ">": {
+      "terrain": "QUEST_DOWN",
+      "caveInfo": ["ROOM"],
+    },
+    "<": {
+      "terrain": "QUEST_UP",
+      "caveInfo": ["ROOM"],
+      "trap": "NONE",
+      "special": 7,
+    },
+  },
+  "map": [
+    "XXXXXXXXX",
+    "X..@.#..X",
+    "X.XXXXX.X",
+    "X.X..dX@X",
+    "X.X.X.X.X",
+    "XdX>X.XdX",
+    "X.XXX.X.X",
+    "X.#.@.X<X",
+    "XXXXXXXXX",
+  ],
+  "startVariants": [
+    {
+      "leavingQuest": 5,
+      "y": 5,
+      "x": 3,
+    },
+  ],
+}

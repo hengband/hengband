@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "id": 22,
+  "name": {
+    "ja": "オークのキャンプ",
+    "en": "Orc Camp",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 15,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "この厄介なご時勢、ご多分にもれずこの静かな街にもオークの侵略隊が",
+          "これまでになく接近しています。この街の南にある谷で、我々の斥候が",
+          "オークの侵略軍を発見しました。彼らはアングウィルに全勢力で最終的",
+          "な侵攻をするための準備をしています。我々の軍勢は他の場所へ派遣し",
+          "てしまっています。どうかオークどもが街に達する前に追い払って下さい。",
+        ],
+        "en": [
+          "The marauding orcs approach ever closer to our quiet town, as",
+          "is happening all over in these troubled times.  To the south",
+          "lies a valley where our scouts have found an orc raiding party,",
+          "preparing to overrun Angwil once and for all.  Our forces are",
+          "committed elsewhere; please repel this threat before they reach",
+          "our borders.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "協力して下さり有難うございます。この感謝の印をお受けとり下さい。",
+          "また近い将来助けていただくことになるかもしれません。",
+          "よろしくお願いします。",
+        ],
+        "en": [
+          "Thank you for your assistance.  Please accept this token of our",
+          "appreciation.  We may have need for your help in future, as well.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": ["既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！"],
+        "en": ["I've sent out someone else to do the job.  Now leave me alone!"],
+      },
+    },
+  ],
+  "legend": {
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 118,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 149,
+    },
+    "c": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 162,
+    },
+    "d": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 215,
+    },
+    "e": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 244,
+    },
+    "f": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 285,
+    },
+    "g": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 251,
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXX..<.........XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXX..................c...........XXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXX...aaa.aa.a...............................XXXXXXXXXXXXXXX",
+    "XXXXXXXXXXX.....aaa.a.a...............b...b.b..b.....XXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXX..................XX......................XXXXXXXXXXXXXXXX",
+    "XXXXXXXXXX.........aaaa.....XXXX............e..........XXXXXXXXXXXXXX",
+    "XXXXXXXXXXX................XXXX.........................XXXXXXXXXXXXX",
+    "XXXgggXXXXXXX........f......XXXXX.......................XXXXXXXXXXXXX",
+    "XXXXXg.XXXX......c........XXXXXX......a.a..............g...XXXXXXXXXX",
+    "XXXXX..XXX.................XXX......b.....a..............XXXXXXXXXXXX",
+    "XXXXXXee.XXXX.......b.bb.b............c.c.........f.......XXXXXXXXXXX",
+    "XXXXX...............................b.....b............XXXXXXXXXXXXXX",
+    "XXXX...............e..................e.b......XXXXXX....XXXXXXXXXXXX",
+    "XXXX..f....................................XXXXXXXXXXX....XXXXXXXXXXX",
+    "XX...................XXXXXXXXX..........bbbb.XXXXXXXXXX.......g.XXXXX",
+    "XXXXXXX.............XXXXXXXXXXXbb.b.......eeee.XXXXXX.............XXX",
+    "XXXXXXXX.............XXXXXXXXX..........bbbbdbbbb..................XX",
+    "XXXXXXXX..................................bbbbb..f...............XXXX",
+    "XXXXXXXXXXX......e.e........c............f....................XXXXXXX",
+    "XXXXXXXXXXXXXX..........................................XXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXX...................................XXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 1,
+    "x": 33,
+  },
+}

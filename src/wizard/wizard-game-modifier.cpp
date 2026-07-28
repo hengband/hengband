@@ -115,9 +115,11 @@ void wiz_enter_quest(PlayerType *player_ptr)
         return;
     }
 
-    init_flags = i2enum<init_flags_type>(INIT_SHOW_TEXT | INIT_ASSIGN);
     player_ptr->current_floor_ptr->quest_number = *quest_id;
-    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
+    // 旧 INIT_ASSIGN 相当: メタデータ確立と報酬解決 (Vault 等の報酬アーティファクト予約) を
+    // status を TAKEN にする前 (UNTAKEN のうち) に行う。抜けると報酬セルが空のまま生成される。
+    assign_json_quest_metadata(*quest_id);
+    populate_quest_text_lines(*quest_id);
     auto &quest = quests.get_quest(*quest_id);
     quest.status = QuestStatusType::TAKEN;
     if (quest.dungeon == DungeonId::WILDERNESS) {

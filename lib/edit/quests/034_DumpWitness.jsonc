@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "id": 34,
+  "name": {
+    "ja": "もの言えぬ証人",
+    "en": "Dump Witness",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 5,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "この建物の裏の一軒家で冒険者が不審な死に方をしているとの報告がありました。",
+          "窓にも扉にも鍵がかかっており、殺戮者はまだ内部に潜んでいると思われます。",
+          "どうかあの家に潜む脅威を排除して下さい。",
+          "中の物はガラクタばかりのはずですが、必要なら持っていって下さって構いません。",
+        ],
+        "en": [
+          "Adventurers are dead in the building behind this one.",
+          "All windows and doors are locked.",
+          "We guess the murderer still hides in the house.",
+          "Your task is to clean everything up in the room.",
+          "There should be only junk inside, but you can take it if you want.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "怪物どもを退治して下さって有難うございます！",
+          "ささやかなお礼を外に用意しておきました。",
+        ],
+        "en": ["Thank you for cleaning the room! A small reward", "awaits you outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "この仕事はあなたには難しかったようですね。他の冒険者を雇って",
+          "残りの怪物を退治しますから、もういいですよ。",
+        ],
+        "en": [
+          "It seems like this task was too difficult for you.  Good that I",
+          "hired another adventurer to clean up the remaining monsters.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "1": {
+      "terrain": "LOCKED_DOOR_7",
+      "caveInfo": ["ROOM"],
+    },
+    "2": {
+      "terrain": "OPEN_DOOR",
+      "caveInfo": ["ROOM"],
+    },
+    "3": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "GLOW"],
+      "object": 247,
+    },
+    "4": {
+      "terrain": "LOCKED_GLASS_DOOR_7",
+      "caveInfo": ["ROOM"],
+    },
+    "5": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "GLOW"],
+      "object": 348,
+    },
+    "6": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "GLOW"],
+      "object": 347,
+    },
+    "7": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "GLOW"],
+      "object": 488,
+    },
+    "+": {
+      "terrain": "JAMMED_GLASS_DOOR_7",
+      "caveInfo": ["ROOM"],
+    },
+    " ": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "GLOW"],
+    },
+    "&": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 338,
+    },
+    "~": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 344,
+    },
+    "%": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "GLOW"],
+      "object": 395,
+    },
+    "(": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "GLOW"],
+      "monster": 243,
+    },
+    "|": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 107,
+    },
+    "I": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 174,
+    },
+    "!": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "GLOW"],
+      "object": 241,
+    },
+    "?": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 186,
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXX",
+    "X...................<X",
+    "X...........X++++++X.X",
+    "X...........XI~~~~~X.X",
+    "X.XXXX++++XXXX4444XX.X",
+    "X.X    %           X.X",
+    "X.+   3 3     %    +.X",
+    "X.+ 3         3(   +.X",
+    "X.X  XXDXXXXX % %  +.X",
+    "X.X  X %2~X|D    3 +5X",
+    "X.X  XXDX&X~2      X6X",
+    "X.1  X??X|X~D%!!   X7X",
+    "XXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 1,
+    "x": 20,
+  },
+}

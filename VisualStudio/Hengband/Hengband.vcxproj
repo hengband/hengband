@@ -328,6 +328,7 @@
     <ClCompile Include="..\..\src\system\baseitem\baseitem-records.cpp" />
     <ClCompile Include="..\..\src\system\baseitem\baseitem-service.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\quest-definition.cpp" />
+    <ClCompile Include="..\..\src\system\dungeon\quest-fixed-map.cpp" />
     <ClCompile Include="..\..\src\system\dungeon\quest-list.cpp" />
     <ClCompile Include="..\..\src\system\floor\town-records.cpp" />
     <ClCompile Include="..\..\src\system\floor\wilderness-grid.cpp" />
@@ -475,6 +476,7 @@
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\dungeon-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\ego-reader.cpp" />
+    <ClCompile Include="..\..\src\info-reader\quest-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\feature-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\general-parser.cpp" />
     <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp" />
@@ -1065,6 +1067,7 @@
     <ClInclude Include="..\..\src\system\baseitem\baseitem-records.h" />
     <ClInclude Include="..\..\src\system\baseitem\baseitem-service.h" />
     <ClInclude Include="..\..\src\system\dungeon\quest-definition.h" />
+    <ClInclude Include="..\..\src\system\dungeon\quest-fixed-map.h" />
     <ClInclude Include="..\..\src\system\dungeon\quest-list.h" />
     <ClInclude Include="..\..\src\save\artifact-record-writer.h" />
     <ClInclude Include="..\..\src\system\enums\store-sale-type.h" />
@@ -1301,6 +1304,7 @@
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-reader.h" />
     <ClInclude Include="..\..\src\info-reader\ego-reader.h" />
+    <ClInclude Include="..\..\src\info-reader\quest-reader.h" />
     <ClInclude Include="..\..\src\info-reader\feature-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\general-parser.h" />
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h" />

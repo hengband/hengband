@@ -1,0 +1,152 @@
+{
+  "version": 1,
+  "id": 16,
+  "name": {
+    "ja": "モンサルヴァト城への侵攻",
+    "en": "Assault on Montsalvat",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 40,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "聖杯の騎士団と名乗る、あの忌々しい偽善者どもは頭痛の種だ。もうこれ以上",
+          "我慢ならん！彼らのモンサルヴァト城に乗り込んで、誰がボスなのかを教えてやれ！",
+        ],
+        "en": [
+          "Those annoying do-gooders who call themselves the knights of",
+          "the Holy Grail are a pain in our flesh. We can tolerate them",
+          "no longer! You must storm their Castle Monsalvat and show them",
+          "who's the boss!",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["よくやった。礼を受けとってくれ。"],
+        "en": ["You have done well. Please accept this reward."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "があああ！この弱虫のヘナチョコの泣き虫が！貴様のヘマが",
+          "我らの強いギルドにどれだけ泥を塗ったか分かっているのか？",
+          "あの呪われた聖杯の騎士どもが貴様をボロゾウキンにしたと聞いたら、",
+          "一体誰が我ら死の騎士団を恐がるというのだ！消えろ！今すぐ！",
+        ],
+        "en": [
+          "Aaaargghh! You wimp, you feeble cry-baby! Do you have any idea ",
+          "of the disgrace you have brought to our mighty guild? Who's going to",
+          "fear Death Knights anymore when they hear how those Knights of the",
+          "accursed Holy Grail wiped the floor with you? Get lost! GO! NOW!",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "1": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 330,
+    },
+    "2": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 331,
+    },
+    "3": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 332,
+    },
+    "4": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 333,
+    },
+    ";": {
+      "terrain": "GRASS",
+    },
+    "T": {
+      "terrain": "TREE",
+    },
+    "#": {
+      "terrain": "GRANITE",
+    },
+    "p": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 45,
+    },
+    "P": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 225,
+    },
+    "l": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 97,
+    },
+    "L": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 699,
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTX",
+    "XTT;TTT<;TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTX",
+    "XTTTT;.................;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;TTTTTTTTTTTTTTTTTTTTTTTTTTX",
+    "XTT;;..;;;;;;;;;TT;;;;....................................;;;;TTT;;;;TTTTTTTTTTTTTTTTX",
+    "XTTT;.;;;TT;;;;TTTT;;T;;XXXXXT;;;;;;;;;;TT;;;;;TTTT;;;;;;............;T;T;TTTTTTTTTTTX",
+    "XT....;;TTTT;TTTTTT;TTT;XlllXTT;;;;;;;TTXXXXXXXXXTTTTT;;;;;;;;;;;;;;......;;;TTTTTTTTX",
+    "XT.;;;;TTTTTTTTTTTTTTT;;X...XTTTTTT;TTTTX.......XTTTTTTTT;;TTT;T;T;;T;;;;........TTTTX",
+    "XT.;XXXXXXXXXXXXXXXXXXXXXlllXXXXXXXXXXXXX.......XXXXXXXXXXXXXXXXXXXXXXXXX;;;.;;;.;TTTX",
+    "XT.;Xl..............p...p...p...p...p...........D.......................X;;;;;;;.TTTTX",
+    "XT.;Xl..X...X...X...X...X...X...X...X...X.......XXXXXXXXXXX....XXXXX....XXXXXXXX.;TTTX",
+    "XT.;XX............................PP...........XXpppppppppp....XPLPX....X112211X.;;TTX",
+    "XT.;;Xp..............................XX........Xlllllllllll....XPLPX....X123321X.;;TTX",
+    "XT.llDp..............................XX........Xlllllllllll....XLLLD....D234432X.;;;TX",
+    "XT.;;Xp...........................PP.XX........Xlllllllllll....XPLPX....X123321X.;;;TX",
+    "XT.;XX.........................................XXpppppppppp....XPLPX....X112211X.;;TTX",
+    "XT.;Xl..X...X...X...X...X...X...X...X...X.......XXXXXXXXXXX....XXXXX....XXXXXXXX.;;TTX",
+    "XT.;Xl..............p...p...p...p...p...........D.......................X;;;;;;;.;;;TX",
+    "XT.;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX......XXXXXXXXXXXXXXXXX..XXXXXX;;;;;;;.;;TTX",
+    "XT.;;;;;;;;;TTTTTTTTX....................X......XTTTTTTTT;;;;;;XLLLLX;;;;;;TT;;;.;;TTX",
+    "XT........;;T;TTTTTTX.XXXXXXXXDXXXXXXXXX.X......XTTTTTTT;;T;;;;XLLLLX;;;;;TTTT;;.;TTTX",
+    "XTTT;;;;;.;T;TTTTT;TX.XllllllllllllllllX.XXXXXXXXTTTTTTTT;;;;;XXXXXXXX;;TTTTTT;;.;;TTX",
+    "XTTTTT;;;.;;TTT;TTTTX.XllllllllllllllllX.XTTTTTTTTT;TXXXXXX;;;;X;;;;X;;;;TTT;;;;.;;;TX",
+    "XTTTTTTT;.;TTTTT;TTTX.XllllllllllllllllX.XTTTTTTT;;TXX....XX;;;;;;;;TTT;;;;;;....;;TTX",
+    "XTTTTTTT;.;;T;TTTTTTX.XlllLLLllLLLlllllX.XTTTTT;;;TXXlllll.XX;;;;;TTTTT;;;;;;.;;;;;TTX",
+    "XTTTTT;;;.;;;TTTTTTTX.XlllLLLllLLLlllllX.XXXXXXXXXXX.lpppl..XX;TTTTT;;;;;;;;;.;;;TTTTX",
+    "XTTT;;;WWWW;;;TTTTTTX.XllllllllllllllllX.............lppPl...D................;TTTTTTX",
+    "XTT;;;WWWWW;;TTTTTTTX.XllllllllllllllllX.XXXXXXXXXXX.lllll..XX;TTTTT;;;;;;;TTTTTTTTTTX",
+    "XTT;;WWWWWWW;TTTTTTTX.XllllllllllllllllX.X;;;;;;;;;XX......XX;;;TTT;;;;;TTTTTTTTTTTTTX",
+    "XTT;;;WWWWW;TTTTTTTTX.XXXXXXXXXXXXXXXXXX.X;;;TTT;;;;XX....XX;;;;;;;;;TTTTTTTTTTTTTTTTX",
+    "XTTT;;;WWW;;TTTTTTTTX....................X;;TTTT;T;;;XXXXXX;;;;;;;;TTTTTTTTTTTTTTTTTTX",
+    "XT;TTT;;;;;TTTTTTTTTXXXXXXXXXXXXXXXXXXXXXX;TTTTTT;T;;;;;;;;;;;;TTTTTTTTTTTTTTTTTTTTTTX",
+    "XTTTTT;TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTX",
+    "XTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 5,
+    "x": 5,
+  },
+}

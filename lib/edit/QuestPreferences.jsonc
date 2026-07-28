@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  // 全クエストマップ共通のベース凡例。各クエスト JSONC の legend が上書きする前に
+  // グローバル letter[] へ読み込まれる (旧 QuestPreferences.txt の F: 行に対応)。
+  "legend": {
+    // 永久壁
+    "X": {
+      "terrain": "PERMANENT",
+      "caveInfo": ["ROOM"],
+    },
+    // 床 + ランダム物品
+    "T": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": {
+        "random": true,
+      },
+    },
+    // 床
+    ".": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+    },
+    // 閉じた扉
+    "D": {
+      "terrain": "CLOSED_DOOR",
+      "caveInfo": ["ROOM"],
+    },
+    // 上り階段
+    "<": {
+      "terrain": "UP_STAIR",
+      "caveInfo": ["ROOM"],
+    },
+    // 深い水
+    "W": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM"],
+    },
+    // 浅い水
+    "V": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM"],
+    },
+    // 花崗岩の壁
+    "%": {
+      "terrain": "GRANITE",
+      "caveInfo": ["ROOM"],
+    },
+    // 床 + モンスター(9階層 out-of-depth) + 物品(7階層 out-of-depth)
+    "9": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "random": true,
+        "oodLevel": 9,
+      },
+      "object": {
+        "random": true,
+        "oodLevel": 7,
+      },
+    },
+    // 床 + モンスター(11階層 out-of-depth)
+    "@": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "random": true,
+        "oodLevel": 11,
+      },
+    },
+    // ランダムな罠または物品 (旧仕様: 罠25% / 物品75% はエンジン側でハードコード)
+    "*": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": {
+        "random": true,
+      },
+      "trap": {
+        "random": true,
+      },
+    },
+  },
+}

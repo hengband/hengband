@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "id": 30,
+  "name": {
+    "ja": "テングとデスソード",
+    "en": "Tengu and Death Swords",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 25,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "魔法道具店の店主が新しい盗賊ギルドを開業しようとしているらしい。",
+          "俺には競争相手は要らない。ここに魔法道具店の裏の宝物庫の鍵がある。",
+          "お前がその中の全ての物を壊してくれば褒美をやる。",
+          "場所は魔法道具店の裏だ。",
+        ],
+        "en": [
+          "The Magic Shop's owner is thinking of opening another Thieves Guild. ",
+          "I do not need the competition, here is the key to the Magic Shop's",
+          "back treasure room.  Destroy everything you find there and you will",
+          "be rewarded.  The quest is located behind the Magic Shop.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["よくやった。報酬は外に置いてある。"],
+        "en": ["You have done well, your reward is outside the door."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "このクエストには失敗したようだが、見つけたアイテムはお前のものだ。",
+          "次のクエストに進め。",
+        ],
+        "en": [
+          "You have failed this quest, but keep what you have found. ",
+          "Proceed to the next quest.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "1": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 107,
+      "object": {
+        "random": true,
+        "oodLevel": 1,
+      },
+    },
+    "|": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 107,
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+    },
+    "u": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 194,
+    },
+    "j": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 286,
+    },
+    "$": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 522,
+    },
+    " ": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+    },
+    "x": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "^": {
+      "terrain": "TRAP_ALARM",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXX",
+    "XxxxxxxxxxxxxxxxxxxxX",
+    "Xxjxxxxx^^^^^xxxxxjxX",
+    "Xxx%%%%%%DDD%%%%%%xxX",
+    "Xxx%             %xxX",
+    "Xxx%  | u | u |  %xxX",
+    "Xxx%             %xxX",
+    "Xxx%  u 1 1 1 u  %xxX",
+    "Xxx%             %xxX",
+    "Xxx%  | 1 $ 1 |  %xxX",
+    "Xxx%             %xxX",
+    "Xxx%  u 1 1 1 u  %xxX",
+    "Xxx%             %xxX",
+    "Xxx%  | u | u |  %xxX",
+    "Xxx%             %xxX",
+    "Xxx%%%%%%%%%%%%%%%xxX",
+    "Xxjxxxxxx^^^xxxxxxjxX",
+    "Xxxxxxxxx^<^xxxxxxxxX",
+    "XXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 17,
+    "x": 10,
+  },
+}

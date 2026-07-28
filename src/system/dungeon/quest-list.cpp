@@ -1,98 +1,22 @@
 #include "system/dungeon/quest-list.h"
+#include "info-reader/parse-error-types.h"
+#include "info-reader/quest-reader.h"
 #include "io/files-util.h"
-#include "locale/character-encoding.h"
 #include "system/angband-exceptions.h"
 #include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-fixed-map.h"
 #include "system/monrace/monrace-definition.h"
 #include "util/angband-files.h"
-#include "util/string-processor.h"
+#include "util/enum-converter.h"
 #include <algorithm>
+#include <filesystem>
 #include <fmt/format.h>
 #include <fstream>
-#include <set>
+#include <iterator>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
-
-namespace {
-std::ifstream create_ifs_quest_list(std::string_view file_name)
-{
-    const auto path = path_build(ANGBAND_DIR_EDIT, file_name);
-    std::ifstream ifs(path);
-    if (ifs) {
-        return ifs;
-    }
-
-    constexpr auto fmt = _("ファイルが見つかりません ({})", "File is not found ({})");
-    THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file_name));
-}
-
-class QuestListParser {
-public:
-    QuestListParser() = default;
-    std::set<QuestId> parse(std::string_view file_name)
-    {
-        this->key_list.clear();
-        this->parse_recursively(file_name);
-        return this->key_list;
-    }
-
-private:
-    std::set<QuestId> key_list;
-
-    void parse_recursively(std::string_view file_name);
-};
-
-void QuestListParser::parse_recursively(std::string_view file_name)
-{
-    auto ifs = create_ifs_quest_list(file_name);
-    std::string line;
-    auto line_num = 0;
-    while (std::getline(ifs, line)) {
-        line_num++;
-        if (line.empty() || line.starts_with('#')) {
-            continue;
-        }
-
-        line = utf8_to_local(line);
-        const auto tokens = str_split(line, ':', true);
-        if (tokens.empty()) {
-            continue;
-        }
-
-        switch (tokens[0][0]) {
-        case 'Q': {
-            if (tokens.size() < 3) {
-                continue;
-            }
-
-            const auto is_quest_none = _(tokens[1].starts_with('$'), !tokens[1].starts_with('$')) || (tokens[2] != "N");
-            const auto quest_number = is_quest_none ? QuestId::NONE : i2enum<QuestId>(std::stoi(tokens[1].substr(_(0, 1))));
-            if (quest_number == QuestId::NONE) {
-                break;
-            }
-
-            if (this->key_list.find(quest_number) != this->key_list.end()) {
-                constexpr auto fmt = _("重複したQuestID {} ({}の{}行目)", "Duplicated Quest Id {} ({} line {})");
-                THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, enum2i(quest_number), file_name, line_num));
-            }
-
-            this->key_list.insert(quest_number);
-            break;
-        }
-        case '%': {
-            if (tokens.size() < 2) {
-                continue;
-            }
-
-            this->parse_recursively(tokens[1]);
-            break;
-        }
-        default:
-            break;
-        }
-    }
-}
-}
+#include <vector>
 
 QuestList QuestList::instance{};
 
@@ -107,19 +31,148 @@ QuestList &QuestList::get_instance()
  */
 void QuestList::initialize()
 {
-    const auto quest_numbers = QuestListParser().parse(QUEST_DEFINITION_LIST);
-    QuestType quest{};
-    quest.status = QuestStatusType::UNTAKEN;
-    this->quests.emplace(QuestId::NONE, quest);
-    for (const auto q : quest_numbers) {
-        this->quests.emplace(q, quest);
+    QuestType none_quest{};
+    none_quest.status = QuestStatusType::UNTAKEN;
+    this->quests.emplace(QuestId::NONE, none_quest);
+
+    // 全クエスト共通のベース凡例を先に読み込む (各クエスト legend がこれを letter[] 上で上書きする)
+    this->load_base_legend();
+    // 各クエストのエントリは load_json_quests が JSONC から作成する
+    this->load_json_quests();
+}
+
+/*!
+ * @brief lib/edit/QuestPreferences.jsonc の共通ベース凡例 (X/./%/D/< など) を読み込む
+ * @details 旧 QuestPreferences.txt の F: 行に相当。各クエストのフロア生成時、個別 legend を
+ * letter[] へ上書きする前のベースとして QuestFixedMapList に保持する。
+ */
+void QuestList::load_base_legend()
+{
+    const auto path = path_build(ANGBAND_DIR_EDIT, "QuestPreferences.jsonc");
+    std::ifstream ifs(path);
+    if (!ifs) {
+        constexpr auto fmt = _("ベース凡例ファイルをオープンできません ({})", "Cannot open base legend file ({})");
+        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string()));
+    }
+
+    nlohmann::json data;
+    try {
+        std::istreambuf_iterator<char> ifs_iter(ifs);
+        std::istreambuf_iterator<char> ifs_end;
+        data = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true, true);
+    } catch (const std::exception &e) {
+        constexpr auto fmt = _("ベース凡例ファイルの解析に失敗しました ({}): {}", "Failed to parse base legend file ({}): {}");
+        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), e.what()));
+    }
+
+    const auto legend_it = data.find("legend");
+    if ((legend_it == data.end()) || !legend_it->is_object()) {
+        constexpr auto fmt = _("ベース凡例ファイルに legend がありません ({})", "Base legend file has no legend ({})");
+        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string()));
+    }
+
+    std::map<char, QuestLegendCell> base_legend;
+    for (const auto &[symbol, cell_data] : legend_it->items()) {
+        // 記号は1文字キー (QuestReader::set_legend と同じ制約)。空キーは symbol.front() が未定義動作、
+        // 複数文字キーは先頭文字への暗黙切り詰めになるため弾く。
+        if (symbol.size() != 1) {
+            constexpr auto fmt = _("ベース凡例のキーが1文字ではありません ({}): '{}'", "Base legend key is not a single character ({}): '{}'");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), symbol));
+        }
+
+        QuestLegendCell cell;
+        if (const auto err = parse_quest_legend_cell(cell_data, cell); err != PARSE_ERROR_NONE) {
+            constexpr auto fmt = _("ベース凡例 '{}' にエラーがあります ({}): コード {}", "Error in base legend '{}' ({}): code {}");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, symbol, path.string(), static_cast<int>(err)));
+        }
+
+        base_legend.insert_or_assign(symbol.front(), cell);
+    }
+
+    QuestFixedMapList::get_instance().set_base_legend(std::move(base_legend));
+}
+
+/*!
+ * @brief lib/edit/quests/ 以下の各 .jsonc を読み込み、メタデータを QuestType に、
+ * 地形レイアウトを QuestFixedMapList に格納する
+ * @details
+ * 全固定クエストは JSONC で定義される (NONE を除く全エントリをここで作成する)。ディレクトリや
+ * ファイルが欠落している場合は不完全なクエスト表のまま進めず、初期化エラーとして送出する
+ * (でないと後続の新規ゲーム生成が get_quest() の std::map::at で分かりにくく落ちる)。
+ */
+void QuestList::load_json_quests()
+{
+    const auto quests_dir = path_build(ANGBAND_DIR_EDIT, "quests");
+    std::error_code ec;
+    if (!std::filesystem::is_directory(quests_dir, ec)) {
+        constexpr auto fmt = _("クエストデータのディレクトリが見つかりません ({})", "Quest data directory not found ({})");
+        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, quests_dir.string()));
+    }
+
+    std::vector<std::filesystem::path> files;
+    for (const auto &entry : std::filesystem::directory_iterator(quests_dir)) {
+        const auto &path = entry.path();
+        if (entry.is_regular_file() && (path.extension() == ".jsonc")) {
+            files.push_back(path);
+        }
+    }
+    std::stable_sort(files.begin(), files.end());
+    if (files.empty()) {
+        constexpr auto fmt = _("クエストデータ (*.jsonc) が見つかりません ({})", "No quest data (*.jsonc) found ({})");
+        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, quests_dir.string()));
+    }
+
+    auto &fixed_maps = QuestFixedMapList::get_instance();
+    for (const auto &file : files) {
+        std::ifstream ifs(file);
+        if (!ifs) {
+            constexpr auto fmt = _("クエストファイルをオープンできません ({})", "Cannot open quest file ({})");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string()));
+        }
+
+        nlohmann::json quest_data;
+        try {
+            std::istreambuf_iterator<char> ifs_iter(ifs);
+            std::istreambuf_iterator<char> ifs_end;
+            quest_data = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true, true);
+        } catch (const std::exception &e) {
+            constexpr auto fmt = _("クエストファイルの解析に失敗しました ({}): {}", "Failed to parse quest file ({}): {}");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), e.what()));
+        }
+
+        const auto id_it = quest_data.find("id");
+        if ((id_it == quest_data.end()) || !id_it->is_number_integer()) {
+            constexpr auto fmt = _("クエストファイルに id がありません ({})", "Quest file has no valid id ({})");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string()));
+        }
+
+        const auto quest_id = i2enum<QuestId>(id_it->get<int>());
+        // スキーマはファイル横断の一意性を表現できないため、重複 id はここで検出する
+        // (見逃すと2つ目のファイルが既存エントリへ追記され、偽のマップバリアント化等の破損を起こす)。
+        if (this->quests.contains(quest_id)) {
+            constexpr auto fmt = _("クエストIDが重複しています ({}): id {}", "Duplicated quest id ({}): id {}");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), id_it->get<int>()));
+        }
+
+        auto &quest = this->quests[quest_id];
+        auto &fixed_map = fixed_maps.emplace(quest_id);
+        if (const auto err = QuestReader(quest_data, quest, fixed_map).read(); err != PARSE_ERROR_NONE) {
+            constexpr auto fmt = _("クエストファイルにエラーがあります ({}): コード {}", "Error in quest file ({}): code {}");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), static_cast<int>(err)));
+        }
+
+        apply_quest_metadata(fixed_map, quest);
     }
 }
 
 void QuestList::reset_all()
 {
-    for (auto &[_, quest] : this->quests) {
+    const auto &fixed_maps = QuestFixedMapList::get_instance();
+    for (auto &[quest_id, quest] : this->quests) {
         quest.reset();
+        if (const auto fixed_map = fixed_maps.find(quest_id); fixed_map) {
+            apply_quest_metadata(*fixed_map, quest);
+        }
     }
 }
 

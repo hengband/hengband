@@ -31,6 +31,5 @@ constexpr short MAX_FLOOR_MONSTERS = 1024; /*!< 1フロアに存在可能な最�
  */
 constexpr auto MAX_REPRODUCTION = 100;
 
-constexpr auto QUEST_DEFINITION_LIST = "QuestDefinitionList.txt";
 constexpr auto TOWN_DEFINITION_LIST = "TownDefinitionList.txt";
 constexpr auto WILDERNESS_DEFINITION = "WildernessDefinition.txt";

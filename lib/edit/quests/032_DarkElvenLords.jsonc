@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "id": 32,
+  "name": {
+    "ja": "ダークエルフの王",
+    "en": "Dark Elven Lords Quest",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 25,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "ダークエルフの王の小集団がこの街に小さな店を建てました。",
+          "私には商売敵は必要ありません。店の中の全員を殺して下さい。",
+          "報酬ははずみます。その店はこの建物の裏にあります。",
+          "たくさん護衛がいますから注意して下さい。",
+        ],
+        "en": [
+          "A small group of Dark Elven Lords have set up a small shop",
+          "in town.  I do not need any competition, so kill everything ",
+          "in their shop.  You will be very well rewarded.  There shop",
+          "is located in a building behind this one.  They are well",
+          "guarded so be careful.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["ありがとうございます！外にお礼が置いてあります。"],
+        "en": ["Thank you!  Your reward is waiting outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": ["このクエストはあなたの手におえなかったようですね。他のを試して下さい。"],
+        "en": ["The quest was more than you could handle.  Try another one.   "],
+      },
+    },
+  ],
+  "legend": {
+    "y": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 263,
+    },
+    "P": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 321,
+    },
+    "g": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 323,
+    },
+    "#": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 326,
+    },
+    "h": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 348,
+    },
+    " ": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+    },
+  },
+  "map": [
+    "XXXXXXXXX",
+    "X       X",
+    "X h h h X",
+    "X       X",
+    "X h   h X",
+    "X       X",
+    "XP P g gX",
+    "XDDD%DDDX",
+    "X   %   X",
+    "Xy y%# #X",
+    "Xy y%# #X",
+    "Xy y%# #X",
+    "X   %   X",
+    "X   %   X",
+    "XDDD%DDDX",
+    "XP P%g gX",
+    "X       X",
+    "X       X",
+    "X  %%%  X",
+    "X   <   X",
+    "XXXXXXXXX",
+  ],
+  "start": {
+    "y": 19,
+    "x": 4,
+  },
+}

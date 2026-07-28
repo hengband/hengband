@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "id": 29,
+  "name": {
+    "ja": "ミミックの財宝",
+    "en": "The Mimic's Treasure",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 25,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "ブラックマーケットの店主が新しい盗賊ギルドを開業しようとしているらしい。",
+          "俺には競争相手は要らない。ここにブラックマーケットの裏の宝物庫の鍵がある。",
+          "お前がその中の全ての物を壊してくれば褒美をやる。",
+          "場所はブラックマーケットの裏だ。",
+        ],
+        "en": [
+          "The Black Market's owner is thinking of opening another Thieves Guild. ",
+          "I do not need the competition, here is the key to the Black Market's",
+          "treasure room.  Destroy everything you find there and you will",
+          "be rewarded.  The quest is located in the Black Market building.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["よくやった。報酬は外に置いてある。"],
+        "en": ["You have done well, your reward is outside the door.  "],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "このクエストには失敗したようだが、見つけたアイテムはお前のものだ。",
+          "次のクエストに進め。",
+        ],
+        "en": [
+          "You have failed this quest, but keep what you have found.  ",
+          "Proceed to the next quest.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    ".": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 247,
+    },
+    "!": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 310,
+    },
+    "+": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 311,
+    },
+    "~": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 353,
+    },
+    " ": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+    },
+    ",": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "O": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXX",
+    "XOOO%!O!%!O!%OOOX",
+    "XOTO%OOO%OOO%OTOX",
+    "XT~T%O~O%O~O%T~TX",
+    "X+++%+++%+++%+++X",
+    "X,,,%,,,%,,,%,,,X",
+    "X,,           ,,X",
+    "X   % . % . %   X",
+    "X   %   %   %   X",
+    "X . %   %   % . X",
+    "X               X",
+    "XDD%%%%%%%%%%%DDX",
+    "X               X",
+    "X       <       X",
+    "XXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 13,
+    "x": 8,
+  },
+}

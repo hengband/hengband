@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "id": 11,
+  "name": {
+    "ja": "カオスの特異点",
+    "en": "Node of Chaos",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 65,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "カオス魔法の賢者たちが、近くの火山にカオスエネルギーの特異点の存在を確認",
+          "した。我々カオス魔法の塔がその魔力の所有権を得られるように、おまえは",
+          "その特異点の場所を見つけてそこに巣食うモンスターを片づけてくるのだ。",
+        ],
+        "en": [
+          "The Wizards of Chaos have discovered a magical Node of",
+          "Chaos in a nearby volcano. You must seek the Node and",
+          "dispatch its guardians so that the Tower of Chaos can",
+          "claim the mystical energies of the Node.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["よくやった。強力な魔法書を外に置いておいた。"],
+        "en": ["You have done well. A powerful spellbook awaits you outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "立ち去れ、無能な馬鹿者め！魔法の特異点の次元エネルギーは",
+          "消え去って永遠に失われたのだぞ！お前はせっかくのチャンスを",
+          "棒にふったのだ。",
+        ],
+        "en": [
+          "Begone, incompetent fool! The dimensional energies of the ",
+          "mystic Node have faded away and are lost forever! You had",
+          "your chance and botched the job. ",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "GLOW"],
+      "monster": 574,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "GLOW"],
+      "monster": 829,
+    },
+    "c": {
+      "terrain": "SHALLOW_LAVA",
+      "caveInfo": ["ROOM", "GLOW"],
+      "monster": 510,
+    },
+    "d": {
+      "terrain": "SHALLOW_LAVA",
+      "caveInfo": ["ROOM", "GLOW"],
+      "monster": 584,
+    },
+    "e": {
+      "terrain": "DEEP_LAVA",
+      "caveInfo": ["ROOM", "GLOW"],
+      "monster": 1193,
+    },
+    "l": {
+      "terrain": "DEEP_LAVA",
+      "caveInfo": ["GLOW"],
+    },
+    "i": {
+      "terrain": "SHALLOW_LAVA",
+      "caveInfo": ["GLOW"],
+    },
+    "h": {
+      "terrain": "MOUNTAIN_WALL",
+    },
+  },
+  "map": [
+    "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+    "hhllllliiiiiillllliiiiiiillllhh",
+    "hllliiiciiiiiillliiiiiciiilillh",
+    "hliiiicdciiiiiiiiiiiicdciiiiilh",
+    "h.iiihhhhhhhhhccchhhhhhhhhiii.h",
+    "h..ihhhhhhhhhcdddchhhhhhhhhi..h",
+    "h..ihhh...aaaacccaaaa...hhhi..h",
+    "h..ihh....aaaabbbaaaa....hhi..h",
+    "h..ihh...hhhhhhhhhhhhh...hhi..h",
+    "h..ihh..hh...........hh..hhi..h",
+    "h..ihh..h.....cdc.....h..hhi..h",
+    "h..ihh..hb...cdedc...bh..hhi..h",
+    "h..ihh..bbb.cdeeedc.bbb..hhi..h",
+    "h..ihh..hb...cdedc...bh..hhi..h",
+    "h..ihh..h.....cdc.....h..hhi..h",
+    "h..ihh..hh...........hh..hhi..h",
+    "h..ihhh..hhh.......hhh..hhhi..h",
+    "h..ihhh..aaaaaaaaaaaaa..hhhi..h",
+    "h..ihhhh.aaaaabbbaaaaa.hhhhi..h",
+    "h..ihhhhhhhhhhhhhhhhhhhhhhhi..h",
+    "h..iihhhhhhhhhhhhhhhhhhhhhii..h",
+    "h...iiiiiiiiiiiiiiiiiiiiiii...h",
+    "h.....iiiiiiiiiiiiiiiiiii.....h",
+    "h<...........................hh",
+    "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+  ],
+  "start": {
+    "y": 23,
+    "x": 1,
+  },
+}

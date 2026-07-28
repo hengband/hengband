@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "id": 2,
+  "name": {
+    "ja": "下水道",
+    "en": "The Sewer",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 15,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "街の地下の下水道の様子が最近おかしいです。この素晴らしい",
+          "街の地下に怪物が棲んでいると言う噂が流れています。どうか",
+          "害虫どもを駆除し、下水道を（汚くても）もとの状態に",
+          "戻して下さい。",
+        ],
+        "en": [
+          "The sewer underneath the city has been acting strange",
+          "lately. There are rumors of monsters living beneath our",
+          "fair city. I need you to exterminate the vermin and",
+          "bring the sewer back to its normal, if dirty, self.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["お見事です。お礼を外に用意しておきました。"],
+        "en": ["A reward for your good work awaits you outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "あなたが下水道を一掃するのに失敗したので、",
+          "地元のドルイド教会に応援を頼む羽目になりましたよ。",
+        ],
+        "en": [
+          "I had to call help from a local druid, since you failed to",
+          "clean out the sewer.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 86,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 202,
+    },
+    "c": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM"],
+      "monster": 120,
+    },
+    "d": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM"],
+      "monster": 918,
+    },
+    "e": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 270,
+    },
+    "f": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 252,
+    },
+    "g": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 175,
+    },
+    "h": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 153,
+    },
+    "i": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 42,
+    },
+    "j": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 213,
+    },
+    "k": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM"],
+      "monster": 944,
+    },
+    "l": {
+      "terrain": "SHALLOW_WATER",
+      "caveInfo": ["ROOM"],
+      "monster": 885,
+    },
+    "m": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM"],
+      "monster": 1044,
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "Xa..<.............%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%X",
+    "XVlVVVlVVVVVVVVVV.........%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%X",
+    "Xa.....a........VVVVVVVVV.....................%%%%%%%%%%%%%%%%%%%%%%X",
+    "X%%%%%%%%%%%%%%.........VVVVVVVVVVVVVVVVVVVVV...........WWWWW%%%%%%%X",
+    "X%%%%%%%%%%%%%%%%%%%%%%..V.%................VVVVVVVV...WWWWWWW%%%%%%X",
+    "X%%%%%%%%%%%%%%%%%%%%%%%.V.%%%%%%%%%%%%%%%%........VVVVWWWWWWW%%%%%%X",
+    "X%%%%%%%%%%%%%%%%%%%%%%%.V.........bb%%%%%%%%%%%%%h....WWWWWWW%%%%%%X",
+    "X%%%%%%%%%%%%%%%%%%%%%%%.VVVVVVVVVVVb%%%%%%%%%%%%%%%%%%kWWWW%%%%%%%%X",
+    "X%%%%%%%%%%%%%%%%%%%%%%%.......WWWWV.%%%%%%WWWWW%%%%%%%%%%%%%%%%W%%%X",
+    "X%%%%%dVd%%%%%%%%%%%%%i........WWWWV.%%%%%%WWWWW%%%%%%%%%%%%..WWW.%%X",
+    "X%%%%%.V.%%%%%%%%%%%%%.VVVVVVVVVVVVV.%%%%%%%WWWW%%%%%%%%%%%%j..WW.%%X",
+    "X%%%%%.V.%%%%%%%%%%%%..V.............%%%%%%%.WWf%%%%%%%%%%%.....k.%%X",
+    "X%%%%%%V%%%%%%%%%%%%%.VV.%%%%%%%%%%%%%%%%%%%%...%%%%%%%%%%%%.%%.%%%%X",
+    "X%%%%%%V%%%%%%%%%%%...V..%%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%.%%%%X",
+    "X%%%%%%V%%%%%%%%%%%.VVV.%%%%%%%%%%%%%%%%%%%%%%.%%%%%%%%%%%%%%%%.%%%%X",
+    "X%%%%%%lVVVVVVcVVVVVV....e..........%%%%%%%%%%.%%%%%%%%%%%%%%%%.%%%%X",
+    "X%%%%%%%%%%%%%%%%%%.VVVVVVVVVVVVVVV..................%%%%%%%%%%.%%%%X",
+    "X%%%%%%%%%%%%%%%%%%..V............VVVVVVVVVVVVlVVVVV.%%%%%%%%%%.%%%%X",
+    "X%%%%%%%%%%mW%%%%%%%%V%%%%%%%%%%%..................V............%%%%X",
+    "X%%%%%%%%%%WW%%%%%%%%V%%%%%%%%%%%%%%%%%%%%%%%%%%%%.VVVVVVVVVVVl.....X",
+    "X%%%%%%%%%%VVVVVVVVVVV%%%%%%%%%%%%%%%%%%%%%%%%%%%%gggggg......VVVVV.X",
+    "X%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%.......X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 1,
+    "x": 4,
+  },
+}

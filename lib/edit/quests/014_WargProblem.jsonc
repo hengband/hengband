@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "id": 14,
+  "name": {
+    "ja": "ワーグを殱滅せよ",
+    "en": "Warg problem",
+  },
+  "definition": {
+    "type": "KILL_LEVEL",
+    "level": 5,
+    "maxNum": 16,
+    "monster": 257,
+    "dungeon": 2,
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "我々の偵察隊から、イークの洞穴に多数のワーグがいるとの",
+          "報告が入りました。地下５階に彼らを配置したのが",
+          "誰かは分かりませんが、その目的はダンジョン内部の我々の前哨基地への",
+          "補給を妨害することだと思われます。もし補給路を確保していただければ、",
+          "あなたにささやかな報酬を提供します。",
+        ],
+        "en": [
+          "Our scouts report a large number of Wargs in the dungeon.",
+          "We don't know who set them on guard at 250 feet, but we",
+          "think their task is to hinder resupply of our outposts",
+          "in the dungeon. We offer you a small reward if you clear",
+          "the path for the supplies.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "ほとんどの物資はダンジョン内の我々の部隊に送ってしまったので",
+          "大したお礼は出来ませんが、外にささやかなお礼を置いておきました。",
+        ],
+        "en": [
+          "Since most of the supplies have been send to our troops",
+          "in the dungeon, we can only give you a small reward.",
+          "It awaits you outside.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "おめおめと尻尾を巻いて逃げ帰るとは、これではどちらが",
+          "犬かわかりませんね！ペットシッターが必要なようですね。",
+        ],
+        "en": [
+          "Are *you* a dog, sneaked away with your tail between ",
+          "your legs? I need a pet sitter for you, i think.",
+          "It awaits you outside.",
+        ],
+      },
+    },
+  ],
+}

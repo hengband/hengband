@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "id": 20,
+  "name": {
+    "ja": "謎の障気",
+    "en": "Vapor Quest",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 25,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "何か奇妙なことが宿屋の地下で起こっているようです。",
+          "宿屋の主人ケレボールは、地下室の中の奇妙な蒸気とオーラが",
+          "生きているもの全てを追い出したと言っています。カナリアを",
+          "鳥カゴに入れて置いてみたところ、ものの数分で死んでしまいました。",
+          "奇妙な臭いは調査員が戻った時には消えてしまいましたが、その時突然",
+          "あたかも空気そのものが襲ってきたと感じたそうです！どうか、何が起",
+          "きているのか確かめてきて下さい。",
+        ],
+        "en": [
+          "Something curious has taken root beneath our Inn.  Celebor,",
+          "the innkeeper, has reported strange vapors and auras in the",
+          "basement that drive out all living things.  A caged canary was",
+          "placed there to test the air quality; it died within minutes,",
+          "though the strange scents had vanished when the investigators",
+          "returned.  Then, suddenly, it was as if the air itself attacked!",
+          "Please see if you can detect what is amiss.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "全く奇妙な話です。おどろおどろしい気が集まる場所には、更に恐ろしい",
+          "魔物がいるものです。おそらく今回の件は来たるべき危機の凶兆なので",
+          "しょう。あなたの助けが再び必要となる日がそのうち来ると思います。",
+          "外に置いてあるお礼は、この地に広がろうとしている邪悪なものを見つける",
+          "のに役立つでしょう。",
+        ],
+        "en": [
+          "Strange tidings indeed.  Where eldritch vapors gather, more ",
+          "dangerous creatures are often nearby.  Perhaps this is an ill",
+          "omen of dangers yet to come...  We may be in need of your services",
+          "again soon; the gift waiting outside may help you detect what",
+          "evils plague this land.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": ["既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！"],
+        "en": ["I've sent out someone else to do the job.  Now leave me alone!"],
+      },
+    },
+  ],
+  "legend": {
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 144,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 184,
+    },
+    "c": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 227,
+    },
+    "d": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 247,
+    },
+    "e": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 282,
+    },
+    "f": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 326,
+    },
+    "g": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 333,
+    },
+    "h": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 365,
+    },
+    "i": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 402,
+    },
+    "j": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 625,
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "X.T...........T.%T.....%.....T..D....%..D..%.jX",
+    "X..haiahaiahai..%%.....%.hhhh..%%i...%..%.TD.TX",
+    "X................%%...j%.hhhh.%%.....%.%%%%%%%X",
+    "X%%%D%%%%%%%%D%%%%%%...%...g.%%..Ti..%.%hhhhhhX",
+    "X.................%%%D%%%%%D%%%i..i..%.%%%%%D%X",
+    "X..............j..%...........%i...i.%g%......X",
+    "X.................%...........%..i...%.%..T...X",
+    "X%%%%%%%gg%%%%%%%%%......a....%%%%%%%%.%%%D%%%X",
+    "X%%%%%%%..%....c.....................%.D......X",
+    "X%%TT%%%..%............fff...........%.%%%%%%%X",
+    "X%%dd%%%T.%......d..d..%%f..a..e.e...%.%......X",
+    "X%....%%..%....a.......%%f...........%.D......X",
+    "X%....%%..%............fff...........%.%......X",
+    "X%..a.%%..%.....................e....%.%......X",
+    "X%....%%..%...............c..........%.%..T...X",
+    "X%....%%..%%%%%%%%%...........%%%%%%%%.%%%%%%%X",
+    "X%.a..%%..%...T...%...........%f..........%.a.X",
+    "X%....%%..D......T%....bbb....%f.....e....%...X",
+    "X%....%%..%%%%%%%%%%%%%%D%%%%%%f.....e....%...X",
+    "X%....%%e.........%.....d.....%f....e.....%.c.X",
+    "X%.i..%%....c.....%...........%f....e.e...%...X",
+    "X%....%%e.........%...........%f..........%...X",
+    "X%....%%..........%...c.......%f..........D...X",
+    "X%....%%%%%D%%%%%%%...........%%..........%...X",
+    "X%....bb.....%.a..D...........D....e......%.T.X",
+    "X%....bb.....%....%.bbbbbbbbb.%%...e......%...X",
+    "X%....%%%....D....%.bbbbbbbbb.%f......e...%.c.X",
+    "X%....%%%....%.a..%...........%f......e...%...X",
+    "X%....he.....%....%...........%f...e......%...X",
+    "X%....ab.....%.c..%...<.......%f..........%..cX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 30,
+    "x": 23,
+  },
+}

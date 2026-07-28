@@ -208,9 +208,7 @@ void set_zangband_quest(PlayerType *player_ptr, QuestType *const q_ptr, const Qu
         return;
     }
 
-    init_flags = INIT_ASSIGN;
-    player_ptr->current_floor_ptr->quest_number = loading_quest_index;
-    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
+    assign_json_quest_metadata(loading_quest_index);
     player_ptr->current_floor_ptr->quest_number = old_inside_quest;
 }
 

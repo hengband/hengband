@@ -1,0 +1,235 @@
+{
+  "version": 1,
+  "id": 33,
+  "name": {
+    "ja": "クローン地獄",
+    "en": "The Cloning Pits",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 45,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "ここ数年、我々は強い剣闘士の軍勢を作るため、特別に強力な生物の",
+          "クローンを作って来ました。しかしクローン研究所で何か非常にまずい",
+          "ことが起きてしまいました。どうか全てのクローンを破壊して下さい。",
+          "報酬ははずみます。内部の自動保安システムは止まってしまったため、",
+          "クローンは魔法やテレポートや召喚をすることが出来ます。",
+          "保安ロボットである『究極ダンジョンクリーナー』も暴走してしまった",
+          "ので、それらも破壊して下さい。浮遊と強力な飛び道具が必要になる",
+          "でしょう。入口は宿屋の裏の建物にあります。",
+        ],
+        "en": [
+          "For the past few years we have been cloning exceptionally powerful ",
+          "creatures for gladiatorial combat.  Something has gone very wrong in ",
+          "the Cloning Pits. Please eliminate ALL the clones, you will be well",
+          "rewarded.  The active security systems have stopped working. The",
+          "clones can use magic, teleport, summon, etc..   \"The Ultimate Dungeon ",
+          "Cleaner\" security bots are no longer controlled, so you will ",
+          "eliminate them too.  Levitation and a good distance weapon are",
+          "needed.  The entrance to the pits is in a building behind the inn.  ",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["素晴らしい!! お礼を外に置いておきました。"],
+        "en": ["Impressive!! Your reward is waiting for you outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": ["この仕事はあなたには難しかったようですね。"],
+        "en": ["It seems like this task was too difficult for you."],
+      },
+    },
+  ],
+  "legend": {
+    "5": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "random": true,
+        "oodLevel": 5,
+      },
+    },
+    "c": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 55,
+      },
+    },
+    "f": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 57,
+      },
+    },
+    "I": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 393,
+      },
+    },
+    "R": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 441,
+      },
+    },
+    "g": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 451,
+      },
+    },
+    "S": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 489,
+      },
+    },
+    "O": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 431,
+      },
+    },
+    "M": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 495,
+      },
+    },
+    "P": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 506,
+      },
+    },
+    "p": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 517,
+      },
+    },
+    "t": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 177,
+      },
+    },
+    "r": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 551,
+      },
+    },
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 581,
+      },
+    },
+    "u": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": {
+        "cloneOf": 595,
+      },
+    },
+    " ": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+    },
+    "|": {
+      "terrain": "LOCKED_DOOR_7",
+      "caveInfo": ["ROOM"],
+    },
+    "E": {
+      "terrain": "TREE",
+      "caveInfo": ["MARK"],
+    },
+    "L": {
+      "terrain": "DEEP_LAVA",
+      "caveInfo": ["GLOW", "MARK"],
+    },
+    "C": {
+      "terrain": "DARK_PIT",
+      "caveInfo": ["MARK"],
+    },
+    "Y": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 419,
+    },
+    "e": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": 25,
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "X                    |              | |  | |              |                    X",
+    "X  O  E         O    |   r          | |  | |       M      |      P       E  P  X",
+    "X        O         %%%         EE   %%%gg%%%   EE         %%%                  X",
+    "X   E              %       E        LCW  WCL        E       % P            E   X",
+    "X            O     %  r   E  r      LCW  WCL     M   E   M  %    P    P        X",
+    "X                  %      E         LCW  WCL         E      %                  X",
+    "X   O      %%%%%%%%%   r            LCW  WCL                %%%%%%%%%          X",
+    "X        %%%                       LLCW  WCLL      M                %%%        X",
+    "X||%%%%%%%   r       EE E         LLCCW  WCCLL          E EE    M     %%%%%%%||X",
+    "X  %                              LCCWW  WWCCL                              %  X",
+    "X  %LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLCWW    WWCLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL%  X",
+    "X  %CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCW %%%% WCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC%  X",
+    "X||%WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW %<|| WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW%||X",
+    "X  g                                  %%%%                                  g  X",
+    "X  g                                                                        g  X",
+    "XEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE%%||%%EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEX",
+    "XCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC%%E  E%%CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCX",
+    "XEEEEEEEEEEEEEECEEEEEEEEEEECEEEEEEEE%CE  EC%EEEEEEEECEEEEEEEEEEECEEEEEEEEEEEEEEX",
+    "X%%%%%%%%%%%% ECE %%%%%%% ECE %%%%%%%CE  EC%%%%%%% ECE %%%%%%% ECE %%%%%%%%%%%%X",
+    "X  5 % S  S % ECE % I   % ECE % p   %CE  EC% u   % ECE % R   % ECE % a  a % 5  X",
+    "X    %      % ECE %   I % ECE %   p %CE  EC%   u % ECE %   R % ECE %      %    X",
+    "X 5      S  % ECE % I   % ECE % p   %CE  EC% u   % ECE % R   % ECE %  a      5 X",
+    "X   5       % ECE %     % ECE %     %CEttEC%     % ECE %     % ECE %       5   X",
+    "X%%%%%    %%% ECE %%   %% ECE %%   %%CE  EC%%   %% ECE %%   %% ECE %%%    %%%%%X",
+    "Xccc |        ECE         ECE        CEttEC        ECE         ECE        | fffX",
+    "Xccc |        ECE         ECE                      ECE         ECE        | fffX",
+    "X%%%%%        ECE         ECE         %%%%         ECE         ECE        %%%%%X",
+    "Xeee %                               %%YY%%                               % eeeX",
+    "Xeee |                               |    |                               | eeeX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 13,
+    "x": 39,
+  },
+}

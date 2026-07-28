@@ -38,6 +38,9 @@ private:
     std::map<QuestId, QuestType> quests;
     QuestList() = default;
 
+    void load_base_legend(); //!< lib/edit/QuestPreferences.jsonc の共通ベース凡例を読み込む
+    void load_json_quests(); //!< lib/edit/quests/*.jsonc を読み込みメタデータとレイアウトを構築する
+
     std::map<QuestId, QuestType> &get_inner_container() override
     {
         return this->quests;

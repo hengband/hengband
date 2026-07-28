@@ -163,9 +163,6 @@ int exe_write_diary_quest(PlayerType *player_ptr, DiaryKind dk, QuestId quest_id
     const auto old_quest = floor.quest_number;
     const auto &quests = QuestList::get_instance();
     const auto &quest = quests.get_quest(quest_id);
-    floor.quest_number = (quest.type == QuestKindType::RANDOM) ? QuestId::NONE : quest_id;
-    init_flags = INIT_NAME_ONLY;
-    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     floor.quest_number = old_quest;
 
     const auto &[q_idx, note_level] = write_floor(floor);
