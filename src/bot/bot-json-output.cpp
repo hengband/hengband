@@ -38,6 +38,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
+#include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
 #include <fstream>
@@ -46,6 +47,7 @@
 
 namespace {
 constexpr std::streamoff BOT_JSON_OUTPUT_MAX_BYTES = 256LL * 1024 * 1024;
+constexpr int BOT_JSON_MAX_MESSAGES = 32;
 
 const char *pseudo_feeling_name(item_feel_type feeling)
 {
@@ -296,6 +298,37 @@ nlohmann::json make_nearby_grids_json(const PlayerType &player)
     }
 
     return grids;
+}
+
+nlohmann::json make_recent_messages_json()
+{
+    static auto previous_message_count = int32_t{ 0 };
+    static auto previous_latest_message = std::string{};
+    static auto initialized = false;
+
+    auto messages = nlohmann::json::array();
+    const auto current_message_count = message_num();
+    const auto latest_message = current_message_count > 0 ? *message_str(0) : std::string{};
+    if (!initialized) {
+        initialized = true;
+        previous_message_count = current_message_count;
+        previous_latest_message = latest_message;
+        return messages;
+    }
+
+    auto recent_message_count = std::max<int32_t>(0, current_message_count - previous_message_count);
+    if ((recent_message_count == 0) && (latest_message != previous_latest_message)) {
+        recent_message_count = std::min<int32_t>(1, current_message_count);
+    }
+
+    recent_message_count = std::min<int32_t>(recent_message_count, BOT_JSON_MAX_MESSAGES);
+    for (auto age = recent_message_count; age-- > 0;) {
+        messages.push_back(sys_to_utf8(*message_str(age)).value_or("<encoding-error>"));
+    }
+
+    previous_message_count = current_message_count;
+    previous_latest_message = latest_message;
+    return messages;
 }
 
 nlohmann::json make_player_status_json(const PlayerType &player)
@@ -702,6 +735,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                       } },
         { "nearby_grids", make_nearby_grids_json(player) },
         { "visible_monsters", make_visible_monsters_json(player) },
+        { "messages", make_recent_messages_json() },
         { "inventory", make_inventory_json(player_ptr) },
         { "equipment", make_equipment_json(player_ptr) },
     };
