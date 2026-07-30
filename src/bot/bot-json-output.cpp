@@ -299,11 +299,44 @@ nlohmann::json make_visible_monsters_json(const PlayerType &player)
     const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
     for (MONSTER_IDX m_idx = 1; m_idx < floor.m_max; ++m_idx) {
         const auto &monster = floor.m_list[m_idx];
+        // The always-on visible list is deliberately direct-sight-only. ESP and
+        // detection perceptions belong in detected_monsters, while look follows
+        // the command's broader ml-only gate; do not unify these three gates.
         if (!monster.is_valid() || !monster.ml || !floor.get_grid(monster.get_position()).is_view()) {
             continue;
         }
 
         monsters.push_back(make_visible_monster_json(m_idx, monster, is_hallucinated));
+    }
+
+    return monsters;
+}
+
+nlohmann::json make_detected_monsters_json(const PlayerType &player)
+{
+    auto monsters = nlohmann::json::array();
+    const auto &floor = *player.current_floor_ptr;
+    const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
+    for (MONSTER_IDX m_idx = 1; m_idx < floor.m_max; ++m_idx) {
+        const auto &monster = floor.m_list[m_idx];
+        // This list is deliberately the ml-but-not-direct-sight partition. The
+        // sight-only visible list and the look command's ml-only record have
+        // different consumers; do not unify these three gates.
+        if (!monster.is_valid() || !monster.ml) {
+            continue;
+        }
+
+        const auto &pos = monster.get_position();
+        if (floor.get_grid(pos).is_view()) {
+            continue;
+        }
+
+        auto monster_json = make_visible_monster_json(m_idx, monster, is_hallucinated);
+        monster_json["y"] = pos.y;
+        monster_json["x"] = pos.x;
+        monster_json["esp"] = monster.mflag.has(MonsterTemporaryFlagType::ESP);
+        monster_json["detected"] = monster.mflag2.has(MonsterConstantFlagType::MARK);
+        monsters.push_back(std::move(monster_json));
     }
 
     return monsters;
@@ -541,7 +574,8 @@ nlohmann::json make_look_json(PlayerType *player_ptr)
         // target_set_accept() uses ml alone, so telepathy/ESP-visible monsters
         // are included as fair-play information the player can read on screen.
         // The always-on visible_monsters field intentionally remains narrower,
-        // requiring direct sight; do not unify these two gates.
+        // and detected_monsters is its through-wall partition; do not unify
+        // these three gates.
         if (grid.has_monster()) {
             const auto &monster = floor.m_list[grid.m_idx];
             if (monster.is_valid() && monster.ml) {
@@ -837,6 +871,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                       } },
         { "nearby_grids", make_nearby_grids_json(player) },
         { "visible_monsters", make_visible_monsters_json(player) },
+        { "detected_monsters", make_detected_monsters_json(player) },
         { "messages", make_recent_messages_json() },
         { "inventory", make_inventory_json(player_ptr) },
         { "equipment", make_equipment_json(player_ptr) },
