@@ -1,13 +1,12 @@
 #include "bot/bot-json-output.h"
+#include "artifact/fixed-art-types.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-util.h"
 #include "avatar/avatar.h"
-#include "artifact/fixed-art-types.h"
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
-#include "floor/geometry.h"
 #include "game-option/runtime-arguments.h"
 #include "inventory/inventory-slot-types.h"
 #include "locale/character-encoding.h"
@@ -15,31 +14,31 @@
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
 #include "player-ability/player-ability-types.h"
-#include "player-base/player-race.h"
 #include "player-base/player-class.h"
-#include "player-info/race-info.h"
+#include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
-#include "player/player-realm.h"
-#include "player/permanent-resistances.h"
-#include "player/race-resistances.h"
-#include "player/temporary-resistances.h"
+#include "player-info/race-info.h"
 #include "player/digestion-processor.h"
+#include "player/permanent-resistances.h"
+#include "player/player-realm.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
+#include "player/race-resistances.h"
+#include "player/temporary-resistances.h"
+#include "spell/technic-info-table.h"
 #include "store/pricing.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
-#include "spell/technic-info-table.h"
 #include "sv-definition/sv-bow-types.h"
-#include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-definition.h"
+#include "system/artifact/artifact-list.h"
 #include "system/artifact/artifact-record.h"
-#include "system/baseitem/baseitem-record.h"
-#include "system/baseitem/baseitem-list.h"
-#include "system/baseitem/baseitem-records.h"
 #include "system/baseitem/baseitem-key.h"
+#include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-record.h"
+#include "system/baseitem/baseitem-records.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
@@ -49,6 +48,7 @@
 #include "system/enums/store-sale-type.h"
 #include "system/enums/terrain/terrain-characteristics.h"
 #include "system/enums/terrain/terrain-kind.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-list.h"
 #include "system/floor/town-records.h"
@@ -66,6 +66,7 @@
 #include "target/target-types.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
+#include "view/display-map.h"
 #include "view/display-messages.h"
 #include "view/status-first-page.h"
 #include "window/main-window-util.h"
@@ -105,10 +106,28 @@ const char *pseudo_feeling_name(item_feel_type feeling)
     }
 }
 
-nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos)
+bool is_grid_perceivable(const PlayerType &player, const Pos2D &pos)
 {
+    const auto &floor = *player.current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
-    const auto is_known = grid.is_mark() || grid.is_view();
+    if (grid.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::REMEMBER)) {
+        return grid.is_mark() && is_revealed_wall(floor, pos);
+    }
+
+    if (player.effects()->blindness().is_blind()) {
+        return false;
+    }
+
+    const auto is_visible = (grid.info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT)) != 0;
+    const auto is_glowing = (grid.info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW;
+    return is_visible || (grid.is_view() && (is_glowing || player.see_nocto != 0));
+}
+
+nlohmann::json make_grid_json(const PlayerType &player, const Pos2D &pos)
+{
+    const auto &floor = *player.current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
+    const auto is_known = is_grid_perceivable(player, pos);
     if (!is_known) {
         return {
             { "y", pos.y },
@@ -143,12 +162,14 @@ nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos)
         return item.is_valid() && item.marked.has(OmType::FOUND);
     });
     auto visible_object_tvals = nlohmann::json::array();
-    for (const auto o_idx : grid.o_idx_list) {
-        const auto &item = *floor.o_list[o_idx];
-        if (item.is_valid() && item.marked.has(OmType::FOUND)) {
-            // The object-class glyph is visible even when flavor and charges are
-            // unknown. MANA races use this to prioritize edible devices.
-            visible_object_tvals.push_back(enum2i(item.bi_key.tval()));
+    if (!player.effects()->hallucination().is_hallucinated()) {
+        for (const auto o_idx : grid.o_idx_list) {
+            const auto &item = *floor.o_list[o_idx];
+            if (item.is_valid() && item.marked.has(OmType::FOUND)) {
+                // The object-class glyph is visible even when flavor and charges are
+                // unknown. MANA races use this to prioritize edible devices.
+                visible_object_tvals.push_back(enum2i(item.bi_key.tval()));
+            }
         }
     }
 
@@ -210,32 +231,80 @@ nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos)
     return result;
 }
 
-nlohmann::json make_quests_json()
+nlohmann::json make_disclosed_quests_json()
 {
     auto result = nlohmann::json::array();
     const auto &quests = QuestList::get_instance();
-    for (const auto quest_id : quests.get_sorted_quest_ids()) {
+    const auto &dungeon_records = DungeonRecords::get_instance();
+    auto append_quest = [&result, &quests](QuestId quest_id) {
         const auto &quest = quests.get_quest(quest_id);
-        result.push_back({
+        const auto is_completed = quest.status == QuestStatusType::FINISHED;
+        const auto is_failed = quest.status == QuestStatusType::FAILED || quest.status == QuestStatusType::FAILED_DONE;
+        const auto displayed_name = (is_completed || is_failed) && quest.type == QuestKindType::RANDOM && quest.get_bounty().is_valid()
+                                        ? quest.get_bounty().name.string()
+                                        : quest.name;
+        auto row = nlohmann::json{
             { "id", enum2i(quest_id) },
-            { "name", quest.name },
+            { "name", sys_to_utf8(displayed_name).value_or("<encoding-error>") },
             { "status", enum2i(quest.status) },
             { "type", enum2i(quest.type) },
             { "level", quest.level },
-            { "dungeon_id", enum2i(quest.dungeon) },
-            { "r_idx", enum2i(quest.r_idx) },
-            { "cur_num", quest.cur_num },
-            { "max_num", quest.max_num },
-            { "num_mon", quest.num_mon },
-            { "flags", quest.flags },
-            { "complev", quest.complev },
-            { "comptime", quest.comptime },
             { "fixed", QuestType::is_fixed(quest_id) },
-            { "has_reward", quest.has_reward() },
-            { "reward_artifact_id", quest.get_reward().has_value() ? nlohmann::json(enum2i(*quest.get_reward())) : nlohmann::json(nullptr) },
-            { "reward_baseitem_id", quest.get_reward_bi_id() },
-            { "reward_instant_artifact", quest.is_reward_instant_artifact() },
-        });
+        };
+        if (is_completed || is_failed) {
+            row["complev"] = quest.complev;
+            row["comptime"] = quest.comptime;
+            if (quest.type == QuestKindType::RANDOM && quest.get_bounty().is_valid()) {
+                row["r_idx"] = enum2i(quest.r_idx);
+            }
+        } else if (quest.type == QuestKindType::RANDOM || quest.type == QuestKindType::KILL_LEVEL) {
+            row["r_idx"] = enum2i(quest.r_idx);
+            if (quest.type == QuestKindType::KILL_LEVEL && quest.max_num > 1) {
+                row["cur_num"] = quest.cur_num;
+                row["max_num"] = quest.max_num;
+            }
+        } else if (quest.type == QuestKindType::KILL_NUMBER) {
+            row["cur_num"] = quest.cur_num;
+            row["max_num"] = quest.max_num;
+        } else if (quest.type == QuestKindType::FIND_ARTIFACT && quest.status == QuestStatusType::TAKEN && quest.has_reward()) {
+            row["reward_artifact_id"] = quest.get_reward().has_value() ? nlohmann::json(enum2i(*quest.get_reward())) : nlohmann::json(nullptr);
+            row["reward_baseitem_id"] = quest.get_reward_bi_id();
+        }
+        result.push_back(std::move(row));
+    };
+
+    auto shallowest_random_level = 100;
+    auto disclosed_random_quest_id = QuestId::NONE;
+    for (const auto quest_id : quests.get_sorted_quest_ids()) {
+        const auto &quest = quests.get_quest(quest_id);
+        if (quest_id == QuestId::NONE || (quest.flags & QUEST_FLAG_SILENT)) {
+            continue;
+        }
+
+        const auto is_current = quest.status == QuestStatusType::TAKEN || quest.status == QuestStatusType::COMPLETED || (quest.status == QuestStatusType::STAGE_COMPLETED && quest.type == QuestKindType::TOWER);
+        const auto is_completed = quest.status == QuestStatusType::FINISHED;
+        const auto is_failed = quest.status == QuestStatusType::FAILED || quest.status == QuestStatusType::FAILED_DONE;
+        if (!is_current && !is_completed && !is_failed) {
+            continue;
+        }
+
+        if (is_current && quest.type == QuestKindType::RANDOM) {
+            if (quest.level >= shallowest_random_level) {
+                continue;
+            }
+            shallowest_random_level = quest.level;
+            if (dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() < quest.level || quest.max_num > 1) {
+                continue;
+            }
+            disclosed_random_quest_id = quest_id;
+            continue;
+        }
+
+        append_quest(quest_id);
+    }
+
+    if (disclosed_random_quest_id != QuestId::NONE) {
+        append_quest(disclosed_random_quest_id);
     }
 
     return result;
@@ -272,7 +341,6 @@ nlohmann::json make_visible_monster_json(short m_idx, const MonsterEntity &monst
         return {
             { "index", m_idx },
             { "hallucinated", true },
-            { "friendly", monster.is_friendly() },
             { "pet", monster.is_pet() },
         };
     }
@@ -355,12 +423,11 @@ nlohmann::json make_nearby_grids_json(const PlayerType &player)
     // neighbour as a frontier.
     for (int y = 0; y < floor.height; ++y) {
         for (int x = 0; x < floor.width; ++x) {
-            const auto &grid = floor.get_grid({ y, x });
-            if (!grid.is_mark() && !grid.is_view()) {
+            if (!is_grid_perceivable(player, { y, x })) {
                 continue;
             }
 
-            grids.push_back(make_grid_json(floor, { y, x }));
+            grids.push_back(make_grid_json(player, { y, x }));
         }
     }
 
@@ -437,33 +504,56 @@ nlohmann::json make_player_stats_json(const PlayerType &player)
     };
 }
 
+struct PlayerKnownFlags {
+    TrFlags equipment;
+    TrFlags permanent;
+    TrFlags temporary;
+};
+
+PlayerKnownFlags collect_player_known_flags(PlayerType *player_ptr)
+{
+    PlayerKnownFlags result;
+    for (const auto slot : INVEN_WIELDING_SLOTS) {
+        result.equipment.set(player_ptr->inventory[slot]->get_flags_known());
+    }
+    player_flags(player_ptr, result.permanent);
+    tim_player_flags(player_ptr, result.temporary);
+    return result;
+}
+
+bool has_known_player_flag(const PlayerKnownFlags &flags, tr_type flag, tr_type greater_flag = TR_FLAG_MAX)
+{
+    const auto has = [&flags](tr_type candidate) {
+        return flags.equipment.has(candidate) || flags.permanent.has(candidate) || flags.temporary.has(candidate);
+    };
+    return has(flag) || (greater_flag != TR_FLAG_MAX && has(greater_flag));
+}
+
 nlohmann::json make_player_abilities_json(PlayerType *player_ptr)
 {
-    // Resistances / ESP / free action the character actually has, aggregated from
-    // race, class, mutations and every worn item — exactly what the 'C'haracter
-    // screen shows, so this reveals nothing hidden. The bot gates its dive depth on
-    // these (the depth-requirement table lives in the bot's AGENTS.md). Each query
-    // returns a bit mask; non-zero means the ability is present.
+    // Aggregate only identified equipment flags plus intrinsic and temporary
+    // flags. A known immunity upgrades its resistance on the character screen.
+    const auto flags = collect_player_known_flags(player_ptr);
     return {
-        { "resist_fire", has_resist_fire(player_ptr) != 0 },
-        { "resist_cold", has_resist_cold(player_ptr) != 0 },
-        { "resist_elec", has_resist_elec(player_ptr) != 0 },
-        { "resist_acid", has_resist_acid(player_ptr) != 0 },
-        { "resist_pois", has_resist_pois(player_ptr) != 0 },
-        { "resist_conf", has_resist_conf(player_ptr) != 0 },
-        { "resist_chaos", has_resist_chaos(player_ptr) != 0 },
-        { "resist_blind", has_resist_blind(player_ptr) != 0 },
-        { "resist_fear", has_resist_fear(player_ptr) != 0 },
-        { "resist_neth", has_resist_neth(player_ptr) != 0 },
-        { "resist_nexus", has_resist_nexus(player_ptr) != 0 },
-        { "resist_sound", has_resist_sound(player_ptr) != 0 },
-        { "resist_shard", has_resist_shard(player_ptr) != 0 },
-        { "resist_disen", has_resist_disen(player_ptr) != 0 },
-        { "resist_lite", has_resist_lite(player_ptr) != 0 },
-        { "resist_dark", has_resist_dark(player_ptr) != 0 },
-        { "telepathy", has_esp_telepathy(player_ptr) != 0 },
-        { "free_action", has_free_act(player_ptr) != 0 },
-        { "see_invisible", has_see_inv(player_ptr) != 0 },
+        { "resist_fire", has_known_player_flag(flags, TR_RES_FIRE, TR_IM_FIRE) },
+        { "resist_cold", has_known_player_flag(flags, TR_RES_COLD, TR_IM_COLD) },
+        { "resist_elec", has_known_player_flag(flags, TR_RES_ELEC, TR_IM_ELEC) },
+        { "resist_acid", has_known_player_flag(flags, TR_RES_ACID, TR_IM_ACID) },
+        { "resist_pois", has_known_player_flag(flags, TR_RES_POIS) },
+        { "resist_conf", has_known_player_flag(flags, TR_RES_CONF) },
+        { "resist_chaos", has_known_player_flag(flags, TR_RES_CHAOS) },
+        { "resist_blind", has_known_player_flag(flags, TR_RES_BLIND) },
+        { "resist_fear", has_known_player_flag(flags, TR_RES_FEAR) },
+        { "resist_neth", has_known_player_flag(flags, TR_RES_NETHER) },
+        { "resist_nexus", has_known_player_flag(flags, TR_RES_NEXUS) },
+        { "resist_sound", has_known_player_flag(flags, TR_RES_SOUND) },
+        { "resist_shard", has_known_player_flag(flags, TR_RES_SHARDS) },
+        { "resist_disen", has_known_player_flag(flags, TR_RES_DISEN) },
+        { "resist_lite", has_known_player_flag(flags, TR_RES_LITE, TR_IM_LITE) },
+        { "resist_dark", has_known_player_flag(flags, TR_RES_DARK, TR_IM_DARK) },
+        { "telepathy", has_known_player_flag(flags, TR_TELEPATHY) },
+        { "free_action", has_known_player_flag(flags, TR_FREE_ACT) },
+        { "see_invisible", has_known_player_flag(flags, TR_SEE_INVIS) },
     };
 }
 
@@ -526,7 +616,7 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
         // sees it, so exposing it is fair-play. The bot uses it as durable,
         // savefile-persistent memory (e.g. tagging a confirmed HEAVY_CURSE
         // item so a restart does not re-attempt normal remove-curse).
-        result["inscription"] = item.is_inscribed() ? *item.inscription : "";
+        result["inscription"] = item.is_inscribed() ? sys_to_utf8(*item.inscription).value_or("<encoding-error>") : "";
         result["to_h"] = item.to_h;
         result["to_d"] = item.to_d;
         result["to_a"] = item.to_a;
@@ -567,7 +657,10 @@ nlohmann::json make_look_json(PlayerType *player_ptr)
     for (std::size_t index = 0; index < positions.size(); ++index) {
         const auto &pos = positions[index];
         const auto &grid = floor.get_grid(pos);
-        const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+        const auto terrain_redacted = !grid.is_mark() && !player_can_see_bold(player_ptr, pos.y, pos.x);
+        const auto &terrain = terrain_redacted
+                                  ? TerrainList::get_instance().get_terrain(TerrainTag::NONE)
+                                  : grid.get_terrain(TerrainKind::MIMIC);
         auto monster_json = nlohmann::json(nullptr);
         auto carried_items = nlohmann::json::array();
         // This look record mirrors what the look command itself reports:
@@ -604,8 +697,9 @@ nlohmann::json make_look_json(PlayerType *player_ptr)
             { "distance", Grid::calc_distance(player.get_position(), pos) },
             { "is_player_position", pos == player.get_position() },
             { "terrain", {
-                             { "terrain_id", grid.get_terrain_id(TerrainKind::MIMIC) },
+                             { "terrain_id", terrain.idx },
                              { "name", sys_to_utf8(terrain.name).value_or("<encoding-error>") },
+                             { "redacted", terrain_redacted },
                          } },
             { "monster", std::move(monster_json) },
             { "items", std::move(items) },
@@ -867,7 +961,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                                }
                                return ids;
                            }() },
-                          { "quests", make_quests_json() },
+                          { "quests", make_disclosed_quests_json() },
                       } },
         { "nearby_grids", make_nearby_grids_json(player) },
         { "visible_monsters", make_visible_monsters_json(player) },
@@ -881,32 +975,147 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
 nlohmann::json make_flag_table_json(PlayerType *player_ptr)
 {
     static constexpr tr_type flags[] = {
-        TR_RES_ACID, TR_RES_ELEC, TR_RES_FIRE, TR_RES_COLD, TR_RES_POIS, TR_RES_LITE, TR_RES_DARK, TR_RES_SHARDS,
-        TR_RES_BLIND, TR_RES_CONF, TR_RES_SOUND, TR_RES_NETHER, TR_RES_NEXUS, TR_RES_CHAOS, TR_RES_DISEN, TR_RES_TIME,
-        TR_RES_WATER, TR_RES_FEAR, TR_RES_CURSE, TR_SPEED, TR_FREE_ACT, TR_SEE_INVIS, TR_HOLD_EXP, TR_WARNING,
-        TR_SLOW_DIGEST, TR_REGEN, TR_LEVITATION, TR_REFLECT, TR_SUST_STR, TR_SUST_INT, TR_SUST_WIS, TR_SUST_DEX,
-        TR_SUST_CON, TR_SUST_CHR, TR_IM_ACID, TR_IM_ELEC, TR_IM_FIRE, TR_IM_COLD, TR_IM_DARK, TR_IM_LITE,
-        TR_VUL_ACID, TR_VUL_ELEC, TR_VUL_FIRE, TR_VUL_COLD, TR_VUL_LITE, TR_VUL_CURSE, TR_SLAY_EVIL, TR_KILL_EVIL,
-        TR_SLAY_GOOD, TR_KILL_GOOD, TR_SLAY_HUMAN, TR_KILL_HUMAN, TR_SLAY_ANIMAL, TR_KILL_ANIMAL, TR_SLAY_DRAGON,
-        TR_KILL_DRAGON, TR_SLAY_ORC, TR_KILL_ORC, TR_SLAY_TROLL, TR_KILL_TROLL, TR_SLAY_GIANT, TR_KILL_GIANT,
-        TR_SLAY_DEMON, TR_KILL_DEMON, TR_SLAY_UNDEAD, TR_KILL_UNDEAD, TR_BRAND_ACID, TR_BRAND_ELEC, TR_BRAND_FIRE,
-        TR_BRAND_COLD, TR_BRAND_POIS, TR_BRAND_MAGIC, TR_VORPAL, TR_VAMPIRIC, TR_CHAOTIC, TR_FORCE_WEAPON,
-        TR_IMPACT, TR_EARTHQUAKE, TR_BLESSED, TR_ESP_ANIMAL, TR_ESP_UNDEAD, TR_ESP_DEMON, TR_ESP_ORC, TR_ESP_TROLL,
-        TR_ESP_GIANT, TR_ESP_DRAGON, TR_ESP_HUMAN, TR_ESP_EVIL, TR_ESP_GOOD, TR_ESP_NONLIVING, TR_ESP_UNIQUE,
-        TR_TELEPATHY, TR_THROW, TR_BLOWS, TR_XTRA_SHOTS, TR_MAGIC_MASTERY, TR_DEC_MANA, TR_EASY_SPELL, TR_INFRA,
-        TR_STEALTH, TR_SEARCH, TR_TUNNEL, TR_ACTIVATE, TR_RIDING, TR_LITE_1, TR_AGGRAVATE, TR_TY_CURSE,
-        TR_ADD_L_CURSE, TR_ADD_H_CURSE, TR_PERSISTENT_CURSE, TR_DRAIN_EXP, TR_DRAIN_HP, TR_DRAIN_MANA, TR_FAST_DIGEST,
-        TR_SLOW_REGEN, TR_COWARDICE, TR_LOW_MELEE, TR_LOW_AC, TR_HARD_SPELL, TR_NO_TELE, TR_NO_MAGIC, TR_BERS_RAGE,
-        TR_SH_FIRE, TR_SH_ELEC, TR_SH_COLD, TR_SELF_FIRE, TR_SELF_ELEC, TR_SELF_COLD, TR_INVULN_ARROW, TR_SUPPORTIVE,
+        TR_RES_ACID,
+        TR_RES_ELEC,
+        TR_RES_FIRE,
+        TR_RES_COLD,
+        TR_RES_POIS,
+        TR_RES_LITE,
+        TR_RES_DARK,
+        TR_RES_SHARDS,
+        TR_RES_BLIND,
+        TR_RES_CONF,
+        TR_RES_SOUND,
+        TR_RES_NETHER,
+        TR_RES_NEXUS,
+        TR_RES_CHAOS,
+        TR_RES_DISEN,
+        TR_RES_TIME,
+        TR_RES_WATER,
+        TR_RES_FEAR,
+        TR_RES_CURSE,
+        TR_SPEED,
+        TR_FREE_ACT,
+        TR_SEE_INVIS,
+        TR_HOLD_EXP,
+        TR_WARNING,
+        TR_SLOW_DIGEST,
+        TR_REGEN,
+        TR_LEVITATION,
+        TR_REFLECT,
+        TR_SUST_STR,
+        TR_SUST_INT,
+        TR_SUST_WIS,
+        TR_SUST_DEX,
+        TR_SUST_CON,
+        TR_SUST_CHR,
+        TR_IM_ACID,
+        TR_IM_ELEC,
+        TR_IM_FIRE,
+        TR_IM_COLD,
+        TR_IM_DARK,
+        TR_IM_LITE,
+        TR_VUL_ACID,
+        TR_VUL_ELEC,
+        TR_VUL_FIRE,
+        TR_VUL_COLD,
+        TR_VUL_LITE,
+        TR_VUL_CURSE,
+        TR_SLAY_EVIL,
+        TR_KILL_EVIL,
+        TR_SLAY_GOOD,
+        TR_KILL_GOOD,
+        TR_SLAY_HUMAN,
+        TR_KILL_HUMAN,
+        TR_SLAY_ANIMAL,
+        TR_KILL_ANIMAL,
+        TR_SLAY_DRAGON,
+        TR_KILL_DRAGON,
+        TR_SLAY_ORC,
+        TR_KILL_ORC,
+        TR_SLAY_TROLL,
+        TR_KILL_TROLL,
+        TR_SLAY_GIANT,
+        TR_KILL_GIANT,
+        TR_SLAY_DEMON,
+        TR_KILL_DEMON,
+        TR_SLAY_UNDEAD,
+        TR_KILL_UNDEAD,
+        TR_BRAND_ACID,
+        TR_BRAND_ELEC,
+        TR_BRAND_FIRE,
+        TR_BRAND_COLD,
+        TR_BRAND_POIS,
+        TR_BRAND_MAGIC,
+        TR_VORPAL,
+        TR_VAMPIRIC,
+        TR_CHAOTIC,
+        TR_FORCE_WEAPON,
+        TR_IMPACT,
+        TR_EARTHQUAKE,
+        TR_BLESSED,
+        TR_ESP_ANIMAL,
+        TR_ESP_UNDEAD,
+        TR_ESP_DEMON,
+        TR_ESP_ORC,
+        TR_ESP_TROLL,
+        TR_ESP_GIANT,
+        TR_ESP_DRAGON,
+        TR_ESP_HUMAN,
+        TR_ESP_EVIL,
+        TR_ESP_GOOD,
+        TR_ESP_NONLIVING,
+        TR_ESP_UNIQUE,
+        TR_TELEPATHY,
+        TR_THROW,
+        TR_BLOWS,
+        TR_XTRA_SHOTS,
+        TR_MAGIC_MASTERY,
+        TR_DEC_MANA,
+        TR_EASY_SPELL,
+        TR_INFRA,
+        TR_STEALTH,
+        TR_SEARCH,
+        TR_TUNNEL,
+        TR_ACTIVATE,
+        TR_RIDING,
+        TR_LITE_1,
+        TR_LITE_2,
+        TR_LITE_3,
+        TR_LITE_M1,
+        TR_LITE_M2,
+        TR_LITE_M3,
+        TR_AGGRAVATE,
+        TR_TY_CURSE,
+        TR_ADD_L_CURSE,
+        TR_ADD_H_CURSE,
+        TR_PERSISTENT_CURSE,
+        TR_DRAIN_EXP,
+        TR_DRAIN_HP,
+        TR_DRAIN_MANA,
+        TR_FAST_DIGEST,
+        TR_SLOW_REGEN,
+        TR_COWARDICE,
+        TR_LOW_MELEE,
+        TR_LOW_AC,
+        TR_HARD_SPELL,
+        TR_NO_TELE,
+        TR_NO_MAGIC,
+        TR_BERS_RAGE,
+        TR_SH_FIRE,
+        TR_SH_ELEC,
+        TR_SH_COLD,
+        TR_SELF_FIRE,
+        TR_SELF_ELEC,
+        TR_SELF_COLD,
+        TR_INVULN_ARROW,
+        TR_SUPPORTIVE,
         TR_DOWN_SAVING,
     };
-    TrFlags permanent;
-    TrFlags temporary;
+    const auto known_flags = collect_player_known_flags(player_ptr);
     TrFlags immunity;
     TrFlags temporary_immunity;
     TrFlags vulnerability;
-    player_flags(player_ptr, permanent);
-    tim_player_flags(player_ptr, temporary);
     player_immunity(player_ptr, immunity);
     tim_player_immunity(player_ptr, temporary_immunity);
     player_vulnerability_flags(player_ptr, vulnerability);
@@ -923,14 +1132,21 @@ nlohmann::json make_flag_table_json(PlayerType *player_ptr)
         rows.push_back({
             { "flag_id", enum2i(flag) },
             { "equipment", std::move(equipment) },
-            { "player", permanent.has(flag) },
-            { "temporary", temporary.has(flag) },
+            { "player", known_flags.permanent.has(flag) },
+            { "temporary", known_flags.temporary.has(flag) || (flag == TR_LITE_1 && player_ptr->tim_emission > 0) },
             { "immunity", immunity.has(flag) },
             { "temporary_immunity", temporary_immunity.has(flag) },
             { "vulnerability", vulnerability.has(flag) },
         });
     }
     return rows;
+}
+
+nlohmann::json disclosed_stat_maximum(const PlayerType &player, int stat_id)
+{
+    return ((player.knowledge & KNOW_STAT) || player.stat_max[stat_id] == player.stat_max_max[stat_id])
+               ? nlohmann::json(player.stat_max_max[stat_id])
+               : nlohmann::json(nullptr);
 }
 
 nlohmann::json make_character_json(PlayerType *player_ptr)
@@ -948,7 +1164,7 @@ nlohmann::json make_character_json(PlayerType *player_ptr)
         stat_details.push_back({
             { "stat_id", i },
             { "top", player.stat_top[i] },
-            { "maximum", player.stat_max_max[i] },
+            { "maximum", disclosed_stat_maximum(player, i) },
             { "at_maximum", player.stat_max[i] == player.stat_max_max[i] },
         });
     }
@@ -971,25 +1187,40 @@ nlohmann::json make_character_json(PlayerType *player_ptr)
     }
     return {
         { "skills", {
-                        { "thn", player.skill_thn }, { "thb", player.skill_thb }, { "sav", player.skill_sav },
-                        { "dev", player.skill_dev }, { "stl", player.skill_stl }, { "dis", player.skill_dis },
-                        { "srh", player.skill_srh }, { "fos", player.skill_fos }, { "dig", player.skill_dig },
+                        { "thn", player.skill_thn },
+                        { "thb", player.skill_thb },
+                        { "sav", player.skill_sav },
+                        { "dev", player.skill_dev },
+                        { "stl", player.skill_stl },
+                        { "dis", player.skill_dis },
+                        { "srh", player.skill_srh },
+                        { "fos", player.skill_fos },
+                        { "dig", player.skill_dig },
                     } },
         { "ranged", {
-                         { "to_h_b", player.to_h_b }, { "shots", shots }, { "shot_frac", shot_frac },
-                         { "shooting_multiplier", shooting_multiplier }, { "see_infra", player.see_infra },
-                     } },
-        { "melee", {
-                        { "expected_damage_x100", { damage[0], damage[1] } },
-                        { "expected_damage_per_round_x100", { player.num_blow[0] * damage[0], player.num_blow[1] * damage[1] } },
-                        { "bare_hand", !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND) },
-                        { "two_handed", has_two_handed_weapons(player_ptr) },
-                        { "monk_stance", enum2i(PlayerClass(player_ptr).get_monk_stance()) },
+                        { "to_h_b", player.to_h_b },
+                        { "shots", shots },
+                        { "shot_frac", shot_frac },
+                        { "shooting_multiplier", shooting_multiplier },
+                        { "see_infra", player.see_infra },
                     } },
+        { "melee", {
+                       { "expected_damage_x100", { damage[0], damage[1] } },
+                       { "expected_damage_per_round_x100", { player.num_blow[0] * damage[0], player.num_blow[1] * damage[1] } },
+                       { "bare_hand", !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND) },
+                       { "two_handed", has_two_handed_weapons(player_ptr) },
+                       { "monk_stance", enum2i(PlayerClass(player_ptr).get_monk_stance()) },
+                   } },
         { "stats", std::move(stat_details) },
-        { "age", player.age }, { "height", player.ht }, { "weight", player.wt }, { "social_class", player.sc },
-        { "alignment", player.alignment }, { "realms", std::move(realm_json) }, { "chaos_patron", player.chaos_patron },
-        { "mutations", std::move(mutations) }, { "characteristics", make_flag_table_json(player_ptr) },
+        { "age", player.age },
+        { "height", player.ht },
+        { "weight", player.wt },
+        { "social_class", player.sc },
+        { "alignment", player.alignment },
+        { "realms", std::move(realm_json) },
+        { "chaos_patron", player.chaos_patron },
+        { "mutations", std::move(mutations) },
+        { "characteristics", make_flag_table_json(player_ptr) },
     };
 }
 
@@ -1011,9 +1242,25 @@ nlohmann::json make_artifacts_knowledge_json(PlayerType *player_ptr, bool identi
 nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory category)
 {
     static constexpr const char *slugs[] = {
-        "artifacts_known", "artifacts_identified", "objects_known", "uniques_alive", "uniques_dead", "bounty", "home",
-        "equip_resistances", "features", "self_info", "mutations", "weapon_exp", "spell_exp", "skill_exp", "virtues",
-        "dungeons", "quests", "pets", "autopick",
+        "artifacts_known",
+        "artifacts_identified",
+        "objects_known",
+        "uniques_alive",
+        "uniques_dead",
+        "bounty",
+        "home",
+        "equip_resistances",
+        "features",
+        "self_info",
+        "mutations",
+        "weapon_exp",
+        "spell_exp",
+        "skill_exp",
+        "virtues",
+        "dungeons",
+        "quests",
+        "pets",
+        "autopick",
     };
     static constexpr const char keys[] = { '1', '2', '3', '4', '5', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k' };
     static_assert(sizeof(slugs) / sizeof(slugs[0]) == enum2i(BotKnowledgeCategory::MAX));
@@ -1055,8 +1302,8 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
     case BotKnowledgeCategory::BOUNTY: {
         const auto &world = AngbandWorld::get_instance();
         result["today"] = world.knows_daily_bounty
-            ? nlohmann::json{ { "id", enum2i(world.today_mon) }, { "name", sys_to_utf8(world.get_today_bounty().name.string()).value_or("<encoding-error>") } }
-            : nlohmann::json(nullptr);
+                              ? nlohmann::json{ { "id", enum2i(world.today_mon) }, { "name", sys_to_utf8(world.get_today_bounty().name.string()).value_or("<encoding-error>") } }
+                              : nlohmann::json(nullptr);
         for (const auto &[id, achieved] : world.bounties) {
             if (!achieved) {
                 rows.push_back({ { "id", enum2i(id) }, { "name", sys_to_utf8(MonraceList::get_instance().get_monrace(id).name.string()).value_or("<encoding-error>") } });
@@ -1075,8 +1322,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         result["items"] = std::move(rows);
         break;
     }
-    case BotKnowledgeCategory::EQUIP_RESISTANCES:
-    {
+    case BotKnowledgeCategory::EQUIP_RESISTANCES: {
         const auto add_item = [&](const ItemEntity &item, std::string_view source, int slot) {
             if (!item.is_valid() || !item.is_fully_known() || !item.is_equipment()) {
                 return;
@@ -1110,15 +1356,15 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
     case BotKnowledgeCategory::SELF_INFO:
         result["life_rating"] = (player_ptr->knowledge & KNOW_HPRATE) ? nlohmann::json(player_ptr->calc_life_rating()) : nlohmann::json(nullptr);
         for (auto i = 0; i < A_MAX; ++i) {
-            rows.push_back({ { "stat_id", i }, { "maximum", ((player_ptr->knowledge & KNOW_STAT) || player_ptr->stat_max[i] == player_ptr->stat_max_max[i])
-                                                                  ? nlohmann::json(player_ptr->stat_max_max[i])
-                                                                  : nlohmann::json(nullptr) } });
+            rows.push_back({ { "stat_id", i }, { "maximum", disclosed_stat_maximum(*player_ptr, i) } });
         }
         result["stat_limits"] = std::move(rows);
         break;
     case BotKnowledgeCategory::MUTATIONS:
         for (auto i = 0; i < enum2i(PlayerMutationType::MAX); ++i) {
-            if (player_ptr->muta.has(i2enum<PlayerMutationType>(i))) rows.push_back(i);
+            if (player_ptr->muta.has(i2enum<PlayerMutationType>(i))) {
+                rows.push_back(i);
+            }
         }
         result["mutation_ids"] = std::move(rows);
         break;
@@ -1126,13 +1372,14 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         for (const auto &baseitem : BaseitemList::get_instance()) {
             const auto tval = baseitem.bi_key.tval();
             const auto sval = baseitem.bi_key.sval();
-            const auto displayed_tval = tval == ItemKindType::SWORD || tval == ItemKindType::POLEARM || tval == ItemKindType::HAFTED
-                || tval == ItemKindType::DIGGING || tval == ItemKindType::BOW;
+            const auto displayed_tval = tval == ItemKindType::SWORD || tval == ItemKindType::POLEARM || tval == ItemKindType::HAFTED || tval == ItemKindType::DIGGING || tval == ItemKindType::BOW;
             const auto excluded_bow = tval == ItemKindType::BOW && sval && (*sval == SV_CRIMSON || *sval == SV_HARP);
-            if (displayed_tval && !excluded_bow && sval && player_ptr->weapon_exp.contains(tval)) {
+            const auto exp_it = player_ptr->weapon_exp.find(tval);
+            const auto max_it = player_ptr->weapon_exp_max.find(tval);
+            if (displayed_tval && !excluded_bow && sval && exp_it != player_ptr->weapon_exp.end() && max_it != player_ptr->weapon_exp_max.end()) {
                 rows.push_back({ { "tval", enum2i(tval) }, { "sval", *sval }, { "name", sys_to_utf8(baseitem.stripped_name()).value_or("<encoding-error>") },
-                    { "exp", player_ptr->weapon_exp[tval][*sval] }, { "max", player_ptr->weapon_exp_max[tval][*sval] },
-                    { "rank", enum2i(PlayerSkill::weapon_skill_rank(player_ptr->weapon_exp[tval][*sval])) } });
+                    { "exp", exp_it->second[*sval] }, { "max", max_it->second[*sval] },
+                    { "rank", enum2i(PlayerSkill::weapon_skill_rank(exp_it->second[*sval])) } });
             }
         }
         result["weapons"] = std::move(rows);
@@ -1146,25 +1393,15 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         break;
     case BotKnowledgeCategory::VIRTUES:
         for (auto i = 0; i < 8; ++i) {
-            rows.push_back({ { "id", enum2i(player_ptr->vir_types[i]) }, { "name", sys_to_utf8(virtue_names.at(player_ptr->vir_types[i])).value_or("<encoding-error>") },
+            const auto name_it = virtue_names.find(player_ptr->vir_types[i]);
+            const auto name = name_it != virtue_names.end() ? sys_to_utf8(name_it->second).value_or("<encoding-error>") : _("不明", "Oops. No info");
+            rows.push_back({ { "id", enum2i(player_ptr->vir_types[i]) }, { "name", name },
                 { "value", player_ptr->virtues[i] } });
         }
         result["virtues"] = std::move(rows);
         break;
     case BotKnowledgeCategory::QUESTS:
-        for (const auto &[id, quest] : QuestList::get_instance()) {
-            auto displayed = quest.status == QuestStatusType::TAKEN || quest.status == QuestStatusType::COMPLETED
-                || quest.status == QuestStatusType::FINISHED || quest.status == QuestStatusType::FAILED
-                || quest.status == QuestStatusType::FAILED_DONE;
-            displayed |= quest.status == QuestStatusType::STAGE_COMPLETED && quest.type == QuestKindType::TOWER;
-            if (id == QuestId::NONE || !displayed || (quest.flags & QUEST_FLAG_SILENT)) {
-                continue;
-            }
-            rows.push_back({ { "id", enum2i(id) }, { "name", sys_to_utf8(quest.name).value_or("<encoding-error>") },
-                { "status", enum2i(quest.status) }, { "type", enum2i(quest.type) }, { "level", quest.level },
-                { "cur_num", quest.cur_num }, { "max_num", quest.max_num }, { "complev", quest.complev }, { "comptime", quest.comptime } });
-        }
-        result["quests"] = std::move(rows);
+        result["quests"] = make_disclosed_quests_json();
         break;
     case BotKnowledgeCategory::PETS:
         for (auto i = 1; i < player_ptr->current_floor_ptr->m_max; ++i) {
@@ -1182,8 +1419,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         }
         result["rules"] = std::move(rows);
         break;
-    case BotKnowledgeCategory::SPELL_EXP:
-    {
+    case BotKnowledgeCategory::SPELL_EXP: {
         PlayerRealm realms(player_ptr);
         auto offset = 0;
         for (const auto &realm : { realms.realm1(), realms.realm2() }) {
@@ -1197,9 +1433,12 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
                     continue;
                 }
                 const auto exp = player_ptr->spell_exp[offset + spell_id];
+                const auto is_hissatsu = realm.equals(RealmType::HISSATSU);
                 rows.push_back({ { "realm_id", enum2i(realm.to_enum()) }, { "spell_id", spell_id },
                     { "name", sys_to_utf8(realm.get_spell_name(spell_id)).value_or("<encoding-error>") },
-                    { "exp", exp }, { "rank", enum2i(PlayerSkill::spell_skill_rank(exp)) } });
+                    { "exp", is_hissatsu ? nlohmann::json(nullptr) : nlohmann::json(exp) },
+                    { "rank", is_hissatsu ? nlohmann::json(nullptr) : nlohmann::json(enum2i(PlayerSkill::spell_skill_rank(exp))) },
+                    { "masked", is_hissatsu } });
             }
             offset += 32;
         }
