@@ -30,3 +30,4 @@ void output_bot_json_snapshot(PlayerType *player_ptr);
 void output_bot_json_store_snapshot(PlayerType *player_ptr, StoreSaleType store_num);
 void output_bot_json_character_snapshot(PlayerType *player_ptr);
 void output_bot_json_knowledge_snapshot(PlayerType *player_ptr, BotKnowledgeCategory category);
+void output_bot_json_look_snapshot(PlayerType *player_ptr);

@@ -7,6 +7,7 @@
 #include "combat/shoot.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/geometry.h"
 #include "game-option/runtime-arguments.h"
 #include "inventory/inventory-slot-types.h"
 #include "locale/character-encoding.h"
@@ -61,10 +62,13 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "target/target-preparation.h"
+#include "target/target-types.h"
 #include "timed-effect/timed-effects.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include "view/status-first-page.h"
+#include "window/main-window-util.h"
 #include "world/world.h"
 #include <algorithm>
 #include <fstream>
@@ -257,6 +261,37 @@ const char *monster_health_band(const MonsterEntity &monster)
     return "almost_dead";
 }
 
+nlohmann::json make_visible_monster_json(MONSTER_IDX m_idx, const MonsterEntity &monster, bool is_hallucinated)
+{
+    // While hallucinating, the player sees SOMETHING at the tile but cannot
+    // tell what it is or how hurt it is (the map shows a random symbol).
+    // Emit the position-bearing index and friend/foe only; redact identity,
+    // health, and status so the bot defends against an unknown threat rather
+    // than reading true stats it could not perceive.
+    if (is_hallucinated) {
+        return {
+            { "index", m_idx },
+            { "hallucinated", true },
+            { "friendly", monster.is_friendly() },
+            { "pet", monster.is_pet() },
+        };
+    }
+
+    const auto &monrace = monster.get_apparent_monrace();
+    return {
+        { "index", m_idx },
+        { "race_id", enum2i(monrace.idx) },
+        { "name", sys_to_utf8(monrace.name.string()).value_or("<encoding-error>") },
+        { "health", monster_health_band(monster) },
+        { "asleep", monster.is_asleep() },
+        { "stunned", monster.is_stunned() },
+        { "confused", monster.is_confused() },
+        { "fearful", monster.is_fearful() },
+        { "friendly", monster.is_friendly() },
+        { "pet", monster.is_pet() },
+    };
+}
+
 nlohmann::json make_visible_monsters_json(const PlayerType &player)
 {
     auto monsters = nlohmann::json::array();
@@ -268,34 +303,7 @@ nlohmann::json make_visible_monsters_json(const PlayerType &player)
             continue;
         }
 
-        // While hallucinating, the player sees SOMETHING at the tile but cannot
-        // tell what it is or how hurt it is (the map shows a random symbol).
-        // Emit the position-bearing index and friend/foe only; redact identity,
-        // health, and status so the bot defends against an unknown threat rather
-        // than reading true stats it could not perceive.
-        if (is_hallucinated) {
-            monsters.push_back({
-                { "index", m_idx },
-                { "hallucinated", true },
-                { "friendly", monster.is_friendly() },
-                { "pet", monster.is_pet() },
-            });
-            continue;
-        }
-
-        const auto &monrace = monster.get_apparent_monrace();
-        monsters.push_back({
-            { "index", m_idx },
-            { "race_id", enum2i(monrace.idx) },
-            { "name", sys_to_utf8(monrace.name.string()).value_or("<encoding-error>") },
-            { "health", monster_health_band(monster) },
-            { "asleep", monster.is_asleep() },
-            { "stunned", monster.is_stunned() },
-            { "confused", monster.is_confused() },
-            { "fearful", monster.is_fearful() },
-            { "friendly", monster.is_friendly() },
-            { "pet", monster.is_pet() },
-        });
+        monsters.push_back(make_visible_monster_json(m_idx, monster, is_hallucinated));
     }
 
     return monsters;
@@ -513,6 +521,74 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
     }
 
     return result;
+}
+
+nlohmann::json make_look_json(PlayerType *player_ptr)
+{
+    const auto &player = *player_ptr;
+    const auto &floor = *player.current_floor_ptr;
+    const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
+    const auto positions = target_set_prepare(player_ptr, TARGET_LOOK);
+    auto grids = nlohmann::json::array();
+    grids.get_ref<nlohmann::json::array_t &>().reserve(positions.size());
+    for (std::size_t index = 0; index < positions.size(); ++index) {
+        const auto &pos = positions[index];
+        const auto &grid = floor.get_grid(pos);
+        const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+        auto monster_json = nlohmann::json(nullptr);
+        auto carried_items = nlohmann::json::array();
+        // This look record mirrors what the look command itself reports:
+        // target_set_accept() uses ml alone, so telepathy/ESP-visible monsters
+        // are included as fair-play information the player can read on screen.
+        // The always-on visible_monsters field intentionally remains narrower,
+        // requiring direct sight; do not unify these two gates.
+        if (grid.has_monster()) {
+            const auto &monster = floor.m_list[grid.m_idx];
+            if (monster.is_valid() && monster.ml) {
+                monster_json = make_visible_monster_json(grid.m_idx, monster, is_hallucinated);
+                for (const auto o_idx : monster.hold_o_idx_list) {
+                    const auto &item = *floor.o_list[o_idx];
+                    if (item.is_valid()) {
+                        carried_items.push_back(make_item_json(player_ptr, item));
+                    }
+                }
+            }
+        }
+
+        auto items = nlohmann::json::array();
+        for (const auto o_idx : grid.o_idx_list) {
+            const auto &item = *floor.o_list[o_idx];
+            if (item.is_valid() && item.marked.has(OmType::FOUND)) {
+                items.push_back(make_item_json(player_ptr, item));
+            }
+        }
+
+        grids.push_back({
+            { "index", index },
+            { "y", pos.y },
+            { "x", pos.x },
+            { "distance", Grid::calc_distance(player.get_position(), pos) },
+            { "is_player_position", pos == player.get_position() },
+            { "terrain", {
+                             { "terrain_id", grid.get_terrain_id(TerrainKind::MIMIC) },
+                             { "name", sys_to_utf8(terrain.name).value_or("<encoding-error>") },
+                         } },
+            { "monster", std::move(monster_json) },
+            { "items", std::move(items) },
+            { "carried_items", std::move(carried_items) },
+        });
+    }
+
+    return {
+        { "hallucinated", is_hallucinated },
+        { "panel", {
+                       { "row_min", panel_row_min },
+                       { "row_max", panel_row_max },
+                       { "col_min", panel_col_min },
+                       { "col_max", panel_col_max },
+                   } },
+        { "grids", std::move(grids) },
+    };
 }
 
 nlohmann::json make_inventory_json(PlayerType *player_ptr)
@@ -1193,5 +1269,16 @@ void output_bot_json_knowledge_snapshot(PlayerType *player_ptr, BotKnowledgeCate
     auto snapshot = make_snapshot(player_ptr);
     snapshot["type"] = "knowledge";
     snapshot["knowledge"] = make_knowledge_json(player_ptr, category);
+    write_snapshot(snapshot);
+}
+
+void output_bot_json_look_snapshot(PlayerType *player_ptr)
+{
+    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
+        return;
+    }
+    auto snapshot = make_snapshot(player_ptr);
+    snapshot["type"] = "look";
+    snapshot["look"] = make_look_json(player_ptr);
     write_snapshot(snapshot);
 }
