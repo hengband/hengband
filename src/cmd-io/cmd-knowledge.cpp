@@ -1,4 +1,5 @@
 #include "cmd-io/cmd-knowledge.h"
+#include "bot/bot-json-output.h"
 #include "cmd-visual/cmd-draw.h"
 #include "game-option/birth-options.h"
 #include "io/input-key-acceptor.h"
@@ -76,18 +77,23 @@ void do_cmd_knowledge(PlayerType *player_ptr)
             p = 1 - p;
             break;
         case '1': /* Artifacts */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::ARTIFACTS_KNOWN);
             do_cmd_knowledge_artifacts(player_ptr, ArtifactKnowledgeMode::KNOWN);
             break;
         case '2': /* Artifacts */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::ARTIFACTS_IDENTIFIED);
             do_cmd_knowledge_artifacts(player_ptr, ArtifactKnowledgeMode::IDENTIFIED);
             break;
         case '3': /* Objects */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::OBJECTS_KNOWN);
             do_cmd_knowledge_objects(player_ptr, &need_redraw, false, -1);
             break;
         case '4': /* Uniques */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::UNIQUES_ALIVE);
             do_cmd_knowledge_uniques(player_ptr, true);
             break;
         case '5': /* Uniques */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::UNIQUES_DEAD);
             do_cmd_knowledge_uniques(player_ptr, false);
             break;
         case '6': /* Monsters */
@@ -98,50 +104,64 @@ void do_cmd_knowledge(PlayerType *player_ptr)
             break;
         case '8': /* wanted */
             if (!vanilla_town) {
+                output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::BOUNTY);
                 do_cmd_knowledge_bounty(player_ptr->name);
             }
             break;
         case '9': /* Home */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::HOME);
             do_cmd_knowledge_home(player_ptr);
             break;
         case '0': /* Resist list */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::EQUIP_RESISTANCES);
             do_cmd_knowledge_inventory(player_ptr);
             break;
         /* Next page */
         case 'a': /* Feature list */
         {
             IDX lighting_level = F_LIT_STANDARD;
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::FEATURES);
             do_cmd_knowledge_features(&need_redraw, false, -1, &lighting_level);
             break;
         }
         case 'b': /* Max stat */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::SELF_INFO);
             do_cmd_knowledge_stat(player_ptr);
             break;
         case 'c': /* Mutations */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::MUTATIONS);
             do_cmd_knowledge_mutations(player_ptr);
             break;
         case 'd': /* weapon-exp */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::WEAPON_EXP);
             do_cmd_knowledge_weapon_exp(player_ptr);
             break;
         case 'e': /* spell-exp */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::SPELL_EXP);
             do_cmd_knowledge_spell_exp(player_ptr);
             break;
         case 'f': /* skill-exp */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::SKILL_EXP);
             do_cmd_knowledge_skill_exp(player_ptr);
             break;
         case 'g': /* Virtues */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::VIRTUES);
             do_cmd_knowledge_virtues(player_ptr);
             break;
         case 'h': /* Dungeon */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::DUNGEONS);
             do_cmd_knowledge_dungeon(player_ptr);
             break;
         case 'i': /* Quests */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::QUESTS);
             do_cmd_knowledge_quests(player_ptr);
             break;
         case 'j': /* Pets */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::PETS);
             do_cmd_knowledge_pets(player_ptr);
             break;
         case 'k': /* Autopick */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::AUTOPICK);
             do_cmd_knowledge_autopick(player_ptr);
             break;
         default: /* Unknown option */

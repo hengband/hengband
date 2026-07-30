@@ -51,4 +51,7 @@
 #define ENTRY_EXP_TO_ADV_ANDR 44
 
 class PlayerType;
+class ItemEntity;
+void calc_player_shot_params(PlayerType *player_ptr, ItemEntity *o_ptr, int *shots, int *shot_frac);
+void calc_player_two_hands(PlayerType *player_ptr, int *damage, int *to_h);
 void display_player_various(PlayerType *player_ptr);
