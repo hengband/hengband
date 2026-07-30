@@ -125,7 +125,7 @@ nlohmann::json make_grid_json(const FloorType &floor, const Pos2D &pos)
         };
     }
 
-    MONSTER_IDX visible_monster_index = 0;
+    short visible_monster_index = 0;
     // Keep this in lockstep with make_visible_monsters_json(): ESP-only monsters
     // are deliberately excluded because the bot interface exposes direct sight.
     // A hallucinating player still SEES a monster at its real tile (the map draws
@@ -261,7 +261,7 @@ const char *monster_health_band(const MonsterEntity &monster)
     return "almost_dead";
 }
 
-nlohmann::json make_visible_monster_json(MONSTER_IDX m_idx, const MonsterEntity &monster, bool is_hallucinated)
+nlohmann::json make_visible_monster_json(short m_idx, const MonsterEntity &monster, bool is_hallucinated)
 {
     // While hallucinating, the player sees SOMETHING at the tile but cannot
     // tell what it is or how hurt it is (the map shows a random symbol).
@@ -297,7 +297,7 @@ nlohmann::json make_visible_monsters_json(const PlayerType &player)
     auto monsters = nlohmann::json::array();
     const auto &floor = *player.current_floor_ptr;
     const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
-    for (MONSTER_IDX m_idx = 1; m_idx < floor.m_max; ++m_idx) {
+    for (short m_idx = 1; m_idx < floor.m_max; ++m_idx) {
         const auto &monster = floor.m_list[m_idx];
         // The always-on visible list is deliberately direct-sight-only. ESP and
         // detection perceptions belong in detected_monsters, while look follows
@@ -317,7 +317,7 @@ nlohmann::json make_detected_monsters_json(const PlayerType &player)
     auto monsters = nlohmann::json::array();
     const auto &floor = *player.current_floor_ptr;
     const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
-    for (MONSTER_IDX m_idx = 1; m_idx < floor.m_max; ++m_idx) {
+    for (short m_idx = 1; m_idx < floor.m_max; ++m_idx) {
         const auto &monster = floor.m_list[m_idx];
         // This list is deliberately the ml-but-not-direct-sight partition. The
         // sight-only visible list and the look command's ml-only record have
@@ -353,8 +353,8 @@ nlohmann::json make_nearby_grids_json(const PlayerType &player)
     // and in the dungeon this lets it navigate to any already-explored feature.
     // Unknown tiles are omitted; the client treats an absent but in-bounds
     // neighbour as a frontier.
-    for (POSITION y = 0; y < floor.height; ++y) {
-        for (POSITION x = 0; x < floor.width; ++x) {
+    for (int y = 0; y < floor.height; ++y) {
+        for (int x = 0; x < floor.width; ++x) {
             const auto &grid = floor.get_grid({ y, x });
             if (!grid.is_mark() && !grid.is_view()) {
                 continue;
@@ -443,7 +443,7 @@ nlohmann::json make_player_abilities_json(PlayerType *player_ptr)
     // race, class, mutations and every worn item — exactly what the 'C'haracter
     // screen shows, so this reveals nothing hidden. The bot gates its dive depth on
     // these (the depth-requirement table lives in the bot's AGENTS.md). Each query
-    // returns BIT_FLAGS; non-zero means the ability is present.
+    // returns a bit mask; non-zero means the ability is present.
     return {
         { "resist_fire", has_resist_fire(player_ptr) != 0 },
         { "resist_cold", has_resist_cold(player_ptr) != 0 },
