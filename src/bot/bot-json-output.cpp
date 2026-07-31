@@ -235,7 +235,6 @@ nlohmann::json make_disclosed_quests_json()
 {
     auto result = nlohmann::json::array();
     const auto &quests = QuestList::get_instance();
-    const auto &dungeon_records = DungeonRecords::get_instance();
     auto append_quest = [&result, &quests](QuestId quest_id) {
         const auto &quest = quests.get_quest(quest_id);
         const auto is_completed = quest.status == QuestStatusType::FINISHED;
@@ -273,8 +272,7 @@ nlohmann::json make_disclosed_quests_json()
         result.push_back(std::move(row));
     };
 
-    auto shallowest_random_level = 100;
-    auto disclosed_random_quest_id = QuestId::NONE;
+    const auto disclosed_random_quest_id = quests.find_shallowest_random_quest_id();
     for (const auto quest_id : quests.get_sorted_quest_ids()) {
         const auto &quest = quests.get_quest(quest_id);
         if (quest_id == QuestId::NONE || (quest.flags & QUEST_FLAG_SILENT)) {
@@ -288,23 +286,16 @@ nlohmann::json make_disclosed_quests_json()
             continue;
         }
 
+        // 遂行中のランダムクエストは画面と同じく最も浅い1件だけを開示する
         if (is_current && quest.type == QuestKindType::RANDOM) {
-            if (quest.level >= shallowest_random_level) {
-                continue;
-            }
-            shallowest_random_level = quest.level;
-            if (dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() < quest.level || quest.max_num > 1) {
-                continue;
-            }
-            disclosed_random_quest_id = quest_id;
             continue;
         }
 
         append_quest(quest_id);
     }
 
-    if (disclosed_random_quest_id != QuestId::NONE) {
-        append_quest(disclosed_random_quest_id);
+    if (disclosed_random_quest_id) {
+        append_quest(*disclosed_random_quest_id);
     }
 
     return result;

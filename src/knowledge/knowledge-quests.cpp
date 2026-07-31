@@ -14,10 +14,8 @@
 #include "io-dump/dump-util.h"
 #include "locale/english.h"
 #include "system/artifact/artifact-definition.h"
-#include "system/dungeon/dungeon-record.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
-#include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
@@ -50,11 +48,10 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
 {
     const auto &quests = QuestList::get_instance();
     std::string rand_tmp_str;
-    int rand_level = 100;
     int total = 0;
 
     fprintf(fff, _("《遂行中のクエスト》\n", "< Current Quest >\n"));
-    const auto &dungeon_records = DungeonRecords::get_instance();
+    const auto disclosed_random_quest_id = quests.find_shallowest_random_quest_id();
     for (const auto &[quest_id, quest] : quests) {
         if (quest_id == QuestId::NONE) {
             continue;
@@ -137,20 +134,13 @@ static void do_cmd_knowledge_quests_current(PlayerType *player_ptr, FILE *fff)
             continue;
         }
 
-        if (quest.level >= rand_level) {
-            continue;
-        }
-        rand_level = quest.level;
-        if (dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() < rand_level) {
+        if (quest_id != disclosed_random_quest_id) {
             continue;
         }
 
         const auto &monrace = quest.get_bounty();
-        if (quest.max_num <= 1) {
-            constexpr auto mes = _("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n");
-            rand_tmp_str = format(mes, quest.name.data(), (int)quest.level, monrace.name.data());
-            continue;
-        }
+        constexpr auto mes = _("  %s (%d 階) - %sを倒す。\n", "  %s (Dungeon level: %d)\n  Kill %s.\n");
+        rand_tmp_str = format(mes, quest.name.data(), (int)quest.level, monrace.name.data());
     }
 
     if (!rand_tmp_str.empty()) {
