@@ -64,7 +64,9 @@ void CommandLine::handle(void)
     LPWSTR *argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
     if (argv) {
         for (int i = 1; i < argc; i++) {
-            fwprintf(stdout, L"argv[%d] : %s\n", i, argv[i]);
+            // 引数ダンプは診断用。--bot-json-output=- は標準出力をJSONLの排他的な
+            // 出力先として使うため、標準エラーへ出す
+            fwprintf(stderr, L"argv[%d] : %s\n", i, argv[i]);
             if (wcscmp(argv[i], L"-o") == 0) {
                 arg_force_original = true;
                 continue;
