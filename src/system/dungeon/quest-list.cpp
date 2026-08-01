@@ -3,8 +3,10 @@
 #include "info-reader/quest-reader.h"
 #include "io/files-util.h"
 #include "system/angband-exceptions.h"
+#include "system/dungeon/dungeon-record.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
+#include "system/enums/dungeon/dungeon-id.h"
 #include "system/monrace/monrace-definition.h"
 #include "util/angband-files.h"
 #include "util/enum-converter.h"
@@ -192,6 +194,38 @@ std::vector<QuestId> QuestList::get_sorted_quest_ids() const
     std::transform(++this->quests.begin(), this->quests.end(), std::back_inserter(quest_ids), [](const auto &x) { return x.first; });
     std::stable_sort(quest_ids.begin(), quest_ids.end(), [this](auto x, auto y) { return this->order_completed(x, y); });
     return quest_ids;
+}
+
+/*!
+ * @brief 遂行中のランダムクエストのうち、情報を開示できる最も浅い階層のものを返す
+ * @return 開示対象のクエストID。該当するものが無ければ nullopt
+ * @details 遂行中のランダムクエストを浅い順に絞り込むが、アングバンドの到達階層に届いていない
+ * ものと複数体討伐のものは開示しない。「遂行中のクエスト」画面の表示規則そのもの。
+ */
+tl::optional<QuestId> QuestList::find_shallowest_random_quest_id() const
+{
+    const auto &dungeon_records = DungeonRecords::get_instance();
+    tl::optional<QuestId> quest_id_shallowest;
+    auto level_shallowest = 100;
+    for (const auto &[quest_id, quest] : this->quests) {
+        if ((quest_id == QuestId::NONE) || (quest.type != QuestKindType::RANDOM)) {
+            continue;
+        }
+
+        const auto is_current = (quest.status == QuestStatusType::TAKEN) || (quest.status == QuestStatusType::COMPLETED);
+        if (!is_current || (quest.flags & QUEST_FLAG_SILENT) || (quest.level >= level_shallowest)) {
+            continue;
+        }
+
+        level_shallowest = quest.level;
+        if ((dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() < quest.level) || (quest.max_num > 1)) {
+            continue;
+        }
+
+        quest_id_shallowest = quest_id;
+    }
+
+    return quest_id_shallowest;
 }
 
 void QuestList::set_defeated_monster(QuestId id, short numbers)

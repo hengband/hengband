@@ -89,7 +89,7 @@ DisplaySymbol image_random()
  * 周り全てが壁に囲まれている壁についてはオプション状態による。
  * 1か所でも空きがあるか、壁ではない地形、金を含む地形、永久岩は表示。
  */
-static bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
+bool is_revealed_wall(const FloorType &floor, const Pos2D &pos)
 {
     const auto &grid = floor.get_grid(pos);
     if (view_hidden_walls) {

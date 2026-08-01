@@ -440,3 +440,8 @@ m4/lt~obsolete.m4
 # can automatically generate from config.status script
 # (which is called by configure script))
 Makefile
+
+# Bot JSON-output runtime artifacts written to the repo root when running the bot
+# (the BOT_PLAY savefile and the --bot-json-output snapshot logs).
+/BOT_PLAY
+/bot-state*.jsonl

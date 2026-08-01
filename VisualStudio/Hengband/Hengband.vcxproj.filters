@@ -1610,6 +1610,9 @@
     <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\bot\bot-json-output.cpp">
+      <Filter>bot</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-blue-mage.cpp">
       <Filter>mind</Filter>
     </ClCompile>
@@ -4472,6 +4475,9 @@
     <ClInclude Include="..\..\src\blue-magic\learnt-power-getter.h">
       <Filter>blue-magic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\bot\bot-json-output.h">
+      <Filter>bot</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\blue-magic\blue-magic-caster.h">
       <Filter>blue-magic</Filter>
     </ClInclude>
@@ -5888,6 +5894,9 @@
     </Filter>
     <Filter Include="blue-magic">
       <UniqueIdentifier>{6b429e6d-e548-430e-9413-8bc2e0bda1ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bot">
+      <UniqueIdentifier>{c28ed48c-6e2c-4c12-93cf-e3e54a1171c6}</UniqueIdentifier>
     </Filter>
     <Filter Include="target">
       <UniqueIdentifier>{1789a1b0-5c89-4dfc-a4ba-1c3b711705b5}</UniqueIdentifier>

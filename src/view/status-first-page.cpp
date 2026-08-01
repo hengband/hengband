@@ -37,7 +37,7 @@
  * @param shots 射撃回数
  * @param shot_frac 射撃速度
  */
-static void calc_shot_params(PlayerType *player_ptr, ItemEntity *o_ptr, int *shots, int *shot_frac)
+void calc_player_shot_params(PlayerType *player_ptr, ItemEntity *o_ptr, int *shots, int *shot_frac)
 {
     if (!o_ptr->is_valid()) {
         return;
@@ -212,7 +212,7 @@ static std::pair<std::string, TERM_COLOR> likert(int x, int y)
  * @param damage 直接攻撃のダメージ
  * @param to_h 命中補正
  */
-static void calc_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
+void calc_player_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
 {
     ItemEntity *o_ptr;
     o_ptr = player_ptr->inventory[INVEN_BOW].get();
@@ -359,10 +359,10 @@ void display_player_various(PlayerType *player_ptr)
     int xthb = player_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);
     int shots = 0;
     int shot_frac = 0;
-    calc_shot_params(player_ptr, o_ptr, &shots, &shot_frac);
+    calc_player_shot_params(player_ptr, o_ptr, &shots, &shot_frac);
 
     int damage[2];
     int to_h[2];
-    calc_two_hands(player_ptr, damage, to_h);
+    calc_player_two_hands(player_ptr, damage, to_h);
     display_first_page(player_ptr, xthb, damage, shots, shot_frac);
 }
