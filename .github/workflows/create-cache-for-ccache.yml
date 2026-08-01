@@ -8,6 +8,9 @@ on:
   # 手動トリガーを許可
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   clang15_libcpp_without_pch_japanese:
     name: Japanese version with clang 15 -stdlib=libc++ (without using pre-compiled headers)

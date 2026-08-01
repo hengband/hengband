@@ -5,6 +5,9 @@ on:
   # 手動トリガーを許可
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: windows-2025-vs2026
@@ -13,6 +16,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           submodules: true
+          persist-credentials: false
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v3

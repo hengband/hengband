@@ -12,10 +12,13 @@ jobs:
   publish-release-page:
     name: Publish Release Page
     runs-on: windows-2025-vs2026
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v7
         with:
           submodules: true
+          persist-credentials: false
 
       - name: Extract version from configure.ac
         id: get_version

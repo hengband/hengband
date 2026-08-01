@@ -6,6 +6,9 @@ on:
   # 手動トリガーを許可
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   create_spoilers:
     name: Create auto generate spoiler files
@@ -14,6 +17,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           submodules: true
+          persist-credentials: false
 
       - name: Install required packages
         run: |
@@ -43,6 +47,7 @@ jobs:
         with:
           name: spoiler-files
           path: ~/.angband/Hengband/*.txt
+          overwrite: true
 
 
   publish:
@@ -55,6 +60,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: ${{ env.GITHUB_PAGES_REPOSITORY }}
+          persist-credentials: false
 
       - name: Download spoilers
         uses: actions/download-artifact@v8
