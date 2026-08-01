@@ -13,7 +13,7 @@ jobs:
     name: Publish Release Page
     runs-on: windows-2025-vs2026
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           submodules: true
 
@@ -24,10 +24,10 @@ jobs:
           echo "version=$version" >> $Env:GITHUB_OUTPUT
 
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v3
 
       - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1
+        uses: NuGet/setup-nuget@v4
 
       - name: Restore Nuget Packages
         run: |
@@ -38,7 +38,7 @@ jobs:
           .\Build-Windows-Release-Package.ps1 -Version ${{ steps.get_version.outputs.version }}
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: Hengband-*.zip
           fail_on_unmatched_files: true

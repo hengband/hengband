@@ -11,7 +11,7 @@ jobs:
     name: Create auto generate spoiler files
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           submodules: true
 
@@ -39,7 +39,7 @@ jobs:
         run: nkf -w --in-place ~/.angband/Hengband/*.txt
 
       - name: Upload spoilers
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: spoiler-files
           path: ~/.angband/Hengband/*.txt
@@ -52,12 +52,12 @@ jobs:
     env:
       GITHUB_PAGES_REPOSITORY: hengband/spoiler
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
           repository: ${{ env.GITHUB_PAGES_REPOSITORY }}
 
       - name: Download spoilers
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: spoiler-files
           path: spoilers
@@ -66,7 +66,7 @@ jobs:
         run: cp -v spoilers/*.txt docs/
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           deploy_key: ${{ secrets.SPOILER_REPOSITORY_DEPLOY_KEY }}
           publish_dir: ./docs

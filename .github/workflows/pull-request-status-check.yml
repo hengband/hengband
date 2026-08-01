@@ -12,21 +12,21 @@ jobs:
     name: Check the BOM of the source files
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - run: sh ./.github/scripts/check-bom.sh
 
   check_newline:
     name: Check the newline of files
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - run: sh ./.github/scripts/check-newline.sh
 
   check_format:
     name: Check the format of the source files
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Check the format of the cpp source and header files
         run: sh ./.github/scripts/check-cpp-format.sh
       - name: Check the format of the json/jsonc files
@@ -36,7 +36,7 @@ jobs:
     name: Check include directive style ("" vs <>)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: python3 .github/scripts/check-include-style.py
 
   build_test_clang15_libcpp_without_pch:
@@ -89,10 +89,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.14'
 
