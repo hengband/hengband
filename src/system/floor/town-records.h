@@ -32,6 +32,7 @@ public:
     bool has_visited(TownId town_id) const;
     void set_visited(TownId town_id);
     void initialize();
+    size_t size() const;
 
     void set_ids(const EnumClassFlagGroup<TownId> &loaded_data); //!< for load only.
     EnumClassFlagGroup<TownId> get_ids() const; //!< for save only.

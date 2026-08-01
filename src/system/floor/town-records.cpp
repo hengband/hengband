@@ -37,6 +37,11 @@ void TownRecords::initialize()
     this->visited_ids.set(TownId::OUTPOST);
 }
 
+size_t TownRecords::size() const
+{
+    return enum2i(TownId::MAX);
+}
+
 void TownRecords::set_ids(const EnumClassFlagGroup<TownId> &loaded_data)
 {
     this->visited_ids = loaded_data;

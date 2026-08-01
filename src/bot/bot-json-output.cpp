@@ -72,6 +72,7 @@
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <algorithm>
+#include <array>
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
@@ -266,7 +267,7 @@ nlohmann::json make_disclosed_quests_json()
             row["cur_num"] = quest.cur_num;
             row["max_num"] = quest.max_num;
         } else if (quest.type == QuestKindType::FIND_ARTIFACT && quest.status == QuestStatusType::TAKEN && quest.has_reward()) {
-            row["reward_artifact_id"] = quest.get_reward().has_value() ? nlohmann::json(enum2i(*quest.get_reward())) : nlohmann::json(nullptr);
+            row["reward_artifact_id"] = quest.get_reward() ? nlohmann::json(enum2i(*quest.get_reward())) : nlohmann::json(nullptr);
             row["reward_baseitem_id"] = quest.get_reward_bi_id();
         }
         result.push_back(std::move(row));
@@ -412,14 +413,12 @@ nlohmann::json make_nearby_grids_json(const PlayerType &player)
     // and in the dungeon this lets it navigate to any already-explored feature.
     // Unknown tiles are omitted; the client treats an absent but in-bounds
     // neighbour as a frontier.
-    for (int y = 0; y < floor.height; ++y) {
-        for (int x = 0; x < floor.width; ++x) {
-            if (!is_grid_perceivable(player, { y, x })) {
-                continue;
-            }
-
-            grids.push_back(make_grid_json(player, { y, x }));
+    for (const auto &pos : floor.get_area()) {
+        if (!is_grid_perceivable(player, pos)) {
+            continue;
         }
+
+        grids.push_back(make_grid_json(player, pos));
     }
 
     return grids;
@@ -427,8 +426,8 @@ nlohmann::json make_nearby_grids_json(const PlayerType &player)
 
 nlohmann::json make_recent_messages_json()
 {
-    static auto previous_message_count = int32_t{ 0 };
-    static auto previous_latest_message = std::string{};
+    static auto previous_message_count = 0;
+    static std::string previous_latest_message = "";
     static auto initialized = false;
 
     auto messages = nlohmann::json::array();
@@ -441,12 +440,12 @@ nlohmann::json make_recent_messages_json()
         return messages;
     }
 
-    auto recent_message_count = std::max<int32_t>(0, current_message_count - previous_message_count);
+    auto recent_message_count = std::max(0, current_message_count - previous_message_count);
     if ((recent_message_count == 0) && (latest_message != previous_latest_message)) {
-        recent_message_count = std::min<int32_t>(1, current_message_count);
+        recent_message_count = std::min(1, current_message_count);
     }
 
-    recent_message_count = std::min<int32_t>(recent_message_count, BOT_JSON_MAX_MESSAGES);
+    recent_message_count = std::min(recent_message_count, BOT_JSON_MAX_MESSAGES);
     for (auto age = recent_message_count; age-- > 0;) {
         messages.push_back(sys_to_utf8(*message_str(age)).value_or("<encoding-error>"));
     }
@@ -456,17 +455,17 @@ nlohmann::json make_recent_messages_json()
     return messages;
 }
 
-nlohmann::json make_player_status_json(const PlayerType &player)
+nlohmann::json make_player_status_json(const TimedEffects &effects)
 {
     return {
-        { "blind", player.effects()->blindness().is_blind() },
-        { "confused", player.effects()->confusion().is_confused() },
-        { "afraid", player.effects()->fear().is_fearful() },
-        { "poisoned", player.effects()->poison().is_poisoned() },
-        { "stunned", player.effects()->stun().is_stunned() },
-        { "cut", player.effects()->cut().is_cut() },
-        { "paralyzed", player.effects()->paralysis().is_paralyzed() },
-        { "hallucinated", player.effects()->hallucination().is_hallucinated() },
+        { "blind", effects.blindness().is_blind() },
+        { "confused", effects.confusion().is_confused() },
+        { "afraid", effects.fear().is_fearful() },
+        { "poisoned", effects.poison().is_poisoned() },
+        { "stunned", effects.stun().is_stunned() },
+        { "cut", effects.cut().is_cut() },
+        { "paralyzed", effects.paralysis().is_paralyzed() },
+        { "hallucinated", effects.hallucination().is_hallucinated() },
     };
 }
 
@@ -714,12 +713,12 @@ nlohmann::json make_inventory_json(PlayerType *player_ptr)
 {
     auto items = nlohmann::json::array();
     for (const auto i_idx : INVEN_PACK_SLOTS) {
-        const auto &item_ptr = player_ptr->inventory[i_idx];
-        if (!item_ptr || !item_ptr->is_valid()) {
+        const auto &item = player_ptr->inventory[i_idx];
+        if (!item || !item->is_valid()) {
             continue;
         }
 
-        auto entry = make_item_json(player_ptr, *item_ptr);
+        auto entry = make_item_json(player_ptr, *item);
         entry["slot"] = std::string(1, static_cast<char>('a' + static_cast<int>(i_idx)));
         items.push_back(std::move(entry));
     }
@@ -763,12 +762,12 @@ nlohmann::json make_equipment_json(PlayerType *player_ptr)
 {
     auto items = nlohmann::json::array();
     for (const auto i_idx : INVEN_WIELDING_SLOTS) {
-        const auto &item_ptr = player_ptr->inventory[i_idx];
-        if (!item_ptr || !item_ptr->is_valid()) {
+        const auto &item = player_ptr->inventory[i_idx];
+        if (!item || !item->is_valid()) {
             continue;
         }
 
-        auto entry = make_item_json(player_ptr, *item_ptr);
+        auto entry = make_item_json(player_ptr, *item);
         entry["slot"] = equipment_slot_label(i_idx);
         items.push_back(std::move(entry));
     }
@@ -892,7 +891,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                                        { "main_hand_to_d", player.dis_to_d[0] },
                                        { "sub_hand_to_d", player.dis_to_d[1] },
                                    } },
-                        { "status", make_player_status_json(player) },
+                        { "status", make_player_status_json(*player.effects()) },
                         { "stats", make_player_stats_json(player) },
                         { "abilities", make_player_abilities_json(player_ptr) },
                     } },
@@ -944,10 +943,9 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                           { "visited_town_ids", [] {
                                std::vector<int> ids;
                                const auto &records = TownRecords::get_instance();
-                               const auto towns_size = TownList::get_instance().size();
-                               for (size_t i = 1; i < towns_size; i++) {
-                                   if (records.has_visited(i2enum<TownId>(i - 1))) {
-                                       ids.push_back(static_cast<int>(i) - 1);
+                               for (size_t i = 0; i < records.size(); i++) {
+                                   if (records.has_visited(i2enum<TownId>(i))) {
+                                       ids.push_back(static_cast<int>(i));
                                    }
                                }
                                return ids;
@@ -1143,9 +1141,9 @@ nlohmann::json disclosed_stat_maximum(const PlayerType &player, int stat_id)
 nlohmann::json make_character_json(PlayerType *player_ptr)
 {
     auto &player = *player_ptr;
-    int damage[2]{};
-    int to_h[2]{};
-    calc_player_two_hands(player_ptr, damage, to_h);
+    std::array<int, 2> damage{};
+    std::array<int, 2> to_h{};
+    calc_player_two_hands(player_ptr, damage.data(), to_h.data());
     int shots = 0;
     int shot_frac = 0;
     const auto &bow = *player.inventory[INVEN_BOW];
