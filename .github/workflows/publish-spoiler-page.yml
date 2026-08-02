@@ -12,7 +12,7 @@ permissions:
 jobs:
   create_spoilers:
     name: Create auto generate spoiler files
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -53,7 +53,7 @@ jobs:
   publish:
     name: Publish GitHub Pages of spoilers
     needs: create_spoilers
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       GITHUB_PAGES_REPOSITORY: hengband/spoiler
     steps:
