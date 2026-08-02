@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "id": 7,
+  "name": {
+    "ja": "塔",
+    "en": "The Tower 3",
+  },
+  "definition": {
+    "type": "TOWER",
+    "level": 40,
+    "flags": ["SILENT", "PRESET", "TOWER"],
+  },
+  "legend": {
+    "@": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 40,
+    },
+    "#": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 884,
+    },
+    "d": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 561,
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+    },
+    "D": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 618,
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+    },
+    ">": {
+      "terrain": "QUEST_DOWN",
+      "caveInfo": ["ROOM"],
+    },
+  },
+  "map": [
+    "XXXXXXXXX",
+    "XD.#...@X",
+    "X.......X",
+    "X.#...d.X",
+    "X@...d.@X",
+    "X...d...X",
+    "X..d....X",
+    "X@..@..>X",
+    "XXXXXXXXX",
+  ],
+  "startVariants": [
+    {
+      "leavingQuest": 6,
+      "y": 7,
+      "x": 7,
+    },
+  ],
+}

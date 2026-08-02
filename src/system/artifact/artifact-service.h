@@ -1,7 +1,7 @@
 #pragma once
 
+#include <memory>
 #include <tl/optional.hpp>
-#include <utility>
 
 enum class FixedArtifactId : short;
 class ArtifactDefinition;

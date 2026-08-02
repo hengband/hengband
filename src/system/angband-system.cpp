@@ -67,12 +67,12 @@ void AngbandSystem::set_seed_town(const uint32_t seed)
     this->seed_town = seed;
 }
 
-Xoshiro128StarStar &AngbandSystem::get_rng()
+xso::rng32 &AngbandSystem::get_rng()
 {
     return this->rng;
 }
 
-void AngbandSystem::set_rng(const Xoshiro128StarStar &rng_)
+void AngbandSystem::set_rng(const xso::rng32 &rng_)
 {
     this->rng = rng_;
 }

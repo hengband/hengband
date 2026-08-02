@@ -2,8 +2,8 @@
 #include "artifact/random-art-effects.h"
 #include "load/old/item-flag-types-savefile50.h"
 #include "save/save-util.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-record.h"
+#include "system/baseitem/baseitem-records.h"
 #include "system/item/item-entity.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
@@ -167,7 +167,7 @@ static void write_item_info(const ItemEntity &item, const BIT_FLAGS flags)
     }
 
     if (any_bits(flags, SaveDataItemFlagType::IDENT)) {
-        wr_FlagGroup(item.get_special_flags(), wr_byte);
+        wr_FlagGroup(item.get_identification_flags(), wr_byte);
     }
 
     if (any_bits(flags, SaveDataItemFlagType::MARKED)) {
@@ -275,12 +275,12 @@ void wr_item(const ItemEntity &item)
 void wr_perception(short bi_id)
 {
     byte tmp8u = 0;
-    const auto &baseitem = BaseitemList::get_instance().get_baseitem(bi_id);
-    if (baseitem.aware) {
+    const auto &baseitem_record = BaseitemRecords::get_instance().get_record(bi_id);
+    if (baseitem_record.is_aware()) {
         tmp8u |= 0x01;
     }
 
-    if (baseitem.tried) {
+    if (baseitem_record.is_tried()) {
         tmp8u |= 0x02;
     }
 

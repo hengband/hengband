@@ -21,7 +21,6 @@
 #include "object/object-info.h"
 #include "object/object-kind-hook.h"
 #include "perception/object-perception.h"
-#include "range/v3/range/conversion.hpp"
 #include "system/artifact/artifact-definition.h"
 #include "system/baseitem/baseitem-allocation.h"
 #include "system/floor/floor-info.h"
@@ -38,6 +37,7 @@
 #include "world/world.h"
 #include <range/v3/algorithm.hpp>
 #include <range/v3/functional.hpp>
+#include <range/v3/range/conversion.hpp>
 #include <range/v3/view.hpp>
 
 /*!

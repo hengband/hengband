@@ -3,6 +3,7 @@
 #include "save/save-util.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-records.h"
 #include "util/bit-flags-calculator.h"
 
 /*!
@@ -12,7 +13,8 @@
 void wr_lore(MonraceId monrace_id)
 {
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
-    wr_s16b(static_cast<short>(monrace.r_sights));
+    const auto &monrace_records = MonraceRecords::get_instance();
+    wr_s16b(monrace_records.get_seen_count(monrace_id));
     wr_s16b(static_cast<short>(monrace.r_deaths));
     wr_s16b(static_cast<short>(monrace.r_pkills));
     wr_s16b(static_cast<short>(monrace.r_akills));

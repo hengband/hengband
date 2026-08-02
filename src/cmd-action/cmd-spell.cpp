@@ -487,7 +487,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
 #ifdef JP
             msg_format("その%sを%sことはできません。", spell_category.data(), prompt_verb.data());
 #else
-            msg_format("You may not %s that %s.", prompt.data(), spell_category.data());
+            msg_format("You may not %s that %s.", prompt_verb.data(), spell_category.data());
 #endif
 
             continue;

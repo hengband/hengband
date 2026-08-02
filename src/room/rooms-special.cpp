@@ -116,7 +116,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
         /* Walls around the potion */
         for (const auto &d : Direction::directions_4()) {
             place_inner_perm_glass(player_ptr, floor.get_grid(*center + d.vec() * 2));
-            floor.get_grid(*center + d.vec()).info |= CAVE_ICKY;
+            floor.get_grid(*center + d.vec()).info |= CAVE_NO_TELEPORT_DEST;
         }
 
         /* Glass door */
@@ -129,7 +129,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
 
         /* Place a potion */
         place_object(player_ptr, *center, AM_NO_FIXED_ART, kind_is_potion);
-        floor.get_grid(*center).info |= CAVE_ICKY;
+        floor.get_grid(*center).info |= CAVE_NO_TELEPORT_DEST;
     } break;
 
     case 2: /* 1 lite breather + random object */
@@ -164,7 +164,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
 
         /* Place an object */
         place_object(player_ptr, *center, AM_NO_FIXED_ART);
-        floor.get_grid(*center).info |= CAVE_ICKY;
+        floor.get_grid(*center).info |= CAVE_NO_TELEPORT_DEST;
     } break;
 
     case 3: /* 4 shards breathers + 2 potions */
@@ -206,7 +206,7 @@ bool build_type15(PlayerType *player_ptr, DungeonData *dd_ptr)
 
         for (auto y = center->y - 2; y <= center->y + 2; y++) {
             for (auto x = center->x - 2; x <= center->x + 2; x++) {
-                floor.get_grid({ y, x }).info |= CAVE_ICKY;
+                floor.get_grid({ y, x }).info |= CAVE_NO_TELEPORT_DEST;
             }
         }
     } break;

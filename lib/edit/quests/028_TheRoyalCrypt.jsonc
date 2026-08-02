@@ -1,0 +1,246 @@
+{
+  "version": 1,
+  "id": 28,
+  "name": {
+    "ja": "王家の墓",
+    "en": "The Royal Crypt",
+  },
+  "definition": {
+    "type": "KILL_LEVEL",
+    "level": 70,
+    "maxNum": 5,
+    "monster": 776,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "不思議な力が王家の墓地に入り込み、王様の高貴な先祖たちの墓を汚して",
+          "います。先祖の遺体は魔法で操られ、その魂は悪の奴隷となってしまいました。",
+          "あなたは墓地に行き死体を操っているアーチリッチどもを見つけ出さなくては",
+          "なりません。奴らさえ倒せば、残りは我々の衛兵が片付けてくれるでしょう。",
+        ],
+        "en": [
+          "A mysterious force has entered the royal crypt and is",
+          "desecrating the graves of the king's noble ancestors.  Their",
+          "bodily remains have been magicly animated and their spirits",
+          "enslaved and forcibly turned to evil.  You must enter the",
+          "crypt and seek out the Archliches.  Once they have been",
+          "eliminated, my guards should be able to take care of the",
+          "rest.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "なんとお礼すればよいのでしょう！喜ばしいことです。",
+          "伝説の英雄が今この時この街を歩んでいるのです。ところで私のところの",
+          "財産管理人が、墓地にあった幾つかの先祖伝来の家宝が行方不明になったと",
+          "教えてくれました。私は見て見ぬふりをしますから、これでおあいこという",
+          "ことでいかがでしょう。",
+        ],
+        "en": [
+          "How can I ever thank you? Let the people rejoice - a hero",
+          "of legend walks this day in Outpost. My treasurer tells me",
+          "a number of rather valuable heirlooms seem to be missing",
+          "from the crypt - how about I turn a blind eye and we call",
+          "it quits?",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "私の信頼を裏切ってくれましたね。もう今となっては王の祖先",
+          "の魂を鎮めることは誰にも出来ません！",
+        ],
+        "en": [
+          "I trusted you and you have failed me. Heaven knows how",
+          "we will appease the spirits of the king's ancestors now!",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    ",": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "W": {
+      "terrain": "DEEP_WATER",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "+": {
+      "terrain": "LOCKED_DOOR_7",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "'": {
+      "terrain": "BROKEN_DOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "^": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "trap": {
+        "random": true,
+      },
+    },
+    "#": {
+      "terrain": "GRANITE",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "~": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 395,
+    },
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 124,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 385,
+    },
+    "c": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 522,
+    },
+    "d": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 554,
+    },
+    "e": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 520,
+    },
+    "f": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 577,
+    },
+    "g": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 607,
+    },
+    "h": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 1176,
+    },
+    "i": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 612,
+    },
+    "j": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 623,
+    },
+    "k": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 658,
+    },
+    "l": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 1181,
+    },
+    "m": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 667,
+    },
+    "n": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 690,
+    },
+    "o": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 694,
+    },
+    "p": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 742,
+    },
+    "q": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 749,
+    },
+    "r": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 750,
+    },
+    "s": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 774,
+    },
+    "t": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 776,
+    },
+    "u": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 798,
+    },
+    "<": {
+      "terrain": "UP_STAIR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "Xf,,X,XbXaaaaaX,#,,,,,X,+,,,,,,#,,#u#,,+,,,,,,,,,,,,,,,,,,,,,,,,+,,,,,X",
+    "X,,,X,XbXaaaaaX,X,,s,,X,XXXXXXXX,,###,,XXXXXXXXXXXXXXXXXXXXXXXXXX,###,X",
+    "XXXX',#bX#aaaXX,XX,,,XX,X##,,,,XX,,,,,XX^^^^^^^^^^^^^^^^^^XX#X#X#,#u#,X",
+    "X,,,,,XbbXXaXX,,,XX,XX,,,XX,,t,,XX,,,XX^XXXXXXXXXXXXXXXXX^X#X#X#X,###,X",
+    "XXXXX,X#bbX,X,,,,,X,X,,,,,X,,,,,,XXXXX^^Xt#p#p#o#o#l#l#k#^#XXXXXX,,,,,X",
+    "X,X,XX,XXXX,X,,t,,X,X,,s,,X,,t,,XXqXrXX^XXXXXXXXXXXXXXXXX^XXXqXrXX,,,,X",
+    "X,,,,XX,,,,,X,,,,,X,#,,,,,X,,,,XX.....XX^^^^^^^^^^^^^^^^^^XX.....XXX+XX",
+    "X,,,,,XXXXX,XXXXXXXXXXXXXXXXXXXX.......XXXXXXXXXXXXXXXXXXXX.......Xj,jX",
+    "X,,,,,+,,,,,X###################.......##########<#########.......XX,XX",
+    "X,,,,,XXXXX#X#XXXXXXXXXXXXXXXXXX.......XXXXXXXXXXXXXXXXXXXX.......Xj,jX",
+    "X,,,,XX,,,X,X,+,,,,,X,,,,,+,,,,XX.....XXWWWWWWWWWWWWWWWWWWXX.....XXX+XX",
+    "X,X,XX,dd,X,X,X,XXX,X,X#X,X,XXX,XXrXqXXWXXXXXXXXXXXXXXXXXXWXXrXqXX,,,,X",
+    "XXXXX,ggd,X,X,X,Xm#,X,Xm#,X,Xm#X,XXXXXWXX,,X,X,X,X,X,X,X,XXWXXXXX,####X",
+    "X~,,+,igd,,,X,X,X#X,X,XXX,X,XnmX,+,,,+WX,t,'^s^'^n^'^n^',,#W+,,,+,#oooX",
+    "XX,XX,ggd,X,X,X,,,,,+,,,,,X,XXXX,XXXXXWXX,,X,X,X,X,X,X,X,XXWXXXXX,####X",
+    "X~,,XX,dd,XXX#XXXXXXXXXXXXX,,,,,XX,,,XXWXXXXXXXXXXXXXXXXXXW#X,,,XX,,,,X",
+    "XXX,,XX,,,XeXeXeXeXeX^^^^^XXX+XXX,#+#,XXWWWWWWWWWWWWWWWWWWXX,#+#,XXXXXX",
+    "Xb##,,XXXXX+X+X+X+X+X^,,,^Xn+,+nX,#s#,XXXXXXXXXXXXXXXXXXXXX,,#s#,,X^^^X",
+    "Xbb#X,,,,,,,,,,,,,,,X^,,,^XXX,XXX,###,+^^^^^^^^^^^^^^^^^^^+,,###,,#^~^X",
+    "XbbbX~X~X~X~X~X~X~X~X^^^^^#n+,+nX,,,,,XcXcXcXcXcXcXcXcXcXcX,,,,,,~X^^^X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 9,
+    "x": 3,
+  },
+}

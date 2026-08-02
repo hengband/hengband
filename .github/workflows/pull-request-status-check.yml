@@ -7,30 +7,48 @@ on:
   # 手動トリガーを許可
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   check_bom:
     name: Check the BOM of the source files
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - run: sh ./.github/scripts/check-bom.sh
 
   check_newline:
     name: Check the newline of files
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - run: sh ./.github/scripts/check-newline.sh
 
   check_format:
     name: Check the format of the source files
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Check the format of the cpp source and header files
         run: sh ./.github/scripts/check-cpp-format.sh
       - name: Check the format of the json/jsonc files
         run: sh ./.github/scripts/check-json-format.sh
+
+  check_include_style:
+    name: Check include directive style ("" vs <>)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - run: python3 .github/scripts/check-include-style.py
 
   build_test_clang15_libcpp_without_pch:
     name: Build Japanese version with clang 15 -stdlib=libc++ (without using pre-compiled headers)
@@ -82,10 +100,12 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Repository checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.14'
 

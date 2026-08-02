@@ -7,6 +7,7 @@
 #include "system/angband-system.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-service.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "term/z-form.h"
@@ -136,15 +137,18 @@ SpoilerOutputResultType spoil_obj_desc()
     ofs << format("%-37s%8s%7s%5s %40s%9s\n", "Description", "Dam/AC", "Wgt", "Lev", "Chance", "Cost");
     ofs << format("%-37s%8s%7s%5s %40s%9s\n", "-------------------------------------", "------", "---", "---", "----------------", "----");
 
+    const auto &baseitems = BaseitemList::get_instance();
     for (const auto &[tval_list, name] : group_item_list) {
         std::vector<short> whats;
         for (auto tval : tval_list) {
-            for (const auto &baseitem : BaseitemList::get_instance()) {
+            for (short bi_id : baseitems.collect_valid_bi_ids()) {
+                const auto &baseitem = baseitems.get_baseitem(bi_id);
                 if ((baseitem.bi_key.tval() == tval) && baseitem.gen_flags.has_not(ItemGenerationTraitType::INSTA_ART)) {
-                    whats.push_back(baseitem.idx);
+                    whats.push_back(bi_id);
                 }
             }
         }
+
         if (whats.empty()) {
             continue;
         }

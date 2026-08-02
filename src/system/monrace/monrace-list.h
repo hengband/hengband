@@ -7,16 +7,16 @@
 #pragma once
 
 #include "util/abstract-map-wrapper.h"
-#include <functional>
 #include <map>
 #include <memory>
 #include <set>
 #include <string>
 #include <tl/optional.hpp>
+#include <utility>
 #include <vector>
 
 enum class MonraceId : short;
-
+class LocalizedString;
 class MonraceDefinition;
 class MonraceList : public util::AbstractMapWrapper<MonraceId, std::shared_ptr<MonraceDefinition>> {
 public:
@@ -38,9 +38,6 @@ public:
     std::shared_ptr<MonraceDefinition> get_monrace_shared(MonraceId monrace_id);
     std::shared_ptr<const MonraceDefinition> get_monrace_shared(MonraceId monrace_id) const;
     const std::vector<MonraceId> &get_valid_monrace_ids() const;
-    std::vector<MonraceId> search(std::function<bool(const MonraceDefinition &)> filter, bool is_known_only = false) const;
-    std::vector<MonraceId> search_by_name(std::string_view name, bool is_known_only = false) const;
-    std::vector<MonraceId> search_by_symbol(char symbol, bool is_known_only) const;
     bool is_angel(MonraceId monrace_id) const;
     bool can_unify_separate(MonraceId monrace_id) const;
     void kill_unified_unique(MonraceId monrace_id);
@@ -57,6 +54,9 @@ public:
     const MonraceDefinition &pick_monrace_at_random() const;
     int calc_defeat_count() const;
     MonraceId select_figurine(int max_level) const;
+    const LocalizedString &get_name(MonraceId monrace_id) const;
+    const std::vector<std::pair<MonraceId, LocalizedString>> &get_normal_monster_names() const;
+    const std::vector<std::pair<MonraceId, LocalizedString>> &get_unique_monster_names() const;
 
     void reset_current_numbers();
     void reset_all_visuals();

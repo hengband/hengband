@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QuestPreferences.schema.jsonc",
+  "title": "QuestPreferences",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "legend"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "legend": {
+      "type": "object",
+      "description": "Shared base legend (X/./%/D/< ...). Loaded into the global letter[] table before each quest's own legend overlays it. Uses the same grid definition as a quest legend.",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/gridDefinition"
+      }
+    }
+  },
+  "$defs": {
+    "gridDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "terrain": {
+          "type": "string",
+          "description": "TerrainTag name (e.g. FLOOR, PERMANENT), or \"*\" for a random feature."
+        },
+        "caveInfo": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["MARK", "GLOW", "NO_TELEPORT_DEST", "ROOM", "LITE"]
+          }
+        },
+        "monster": {
+          "$ref": "#/$defs/monsterSpec"
+        },
+        "object": {
+          "$ref": "#/$defs/objectSpec"
+        },
+        "ego": {
+          "$ref": "#/$defs/egoSpec"
+        },
+        "artifact": {
+          "$ref": "#/$defs/artifactSpec"
+        },
+        "trap": {
+          "$ref": "#/$defs/trapSpec"
+        },
+        "special": {
+          "type": "integer"
+        }
+      }
+    },
+    "monsterSpec": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "description": "MonraceId."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["random"],
+          "properties": {
+            "random": {
+              "const": true
+            },
+            "oodLevel": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Out-of-depth level boost (legacy *N)."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["cloneOf"],
+          "properties": {
+            "cloneOf": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Place a clone of this MonraceId (legacy cN)."
+            }
+          }
+        }
+      ]
+    },
+    "objectSpec": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "description": "BaseitemId."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["random"],
+          "properties": {
+            "random": {
+              "const": true
+            },
+            "oodLevel": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Out-of-depth object level boost (legacy *N)."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["questReward"],
+          "properties": {
+            "questReward": {
+              "const": true,
+              "description": "Drop this quest's reward item (legacy !)."
+            }
+          }
+        }
+      ]
+    },
+    "egoSpec": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "description": "EgoType id."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["random"],
+          "properties": {
+            "random": {
+              "const": true
+            },
+            "id": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      ]
+    },
+    "artifactSpec": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "description": "FixedArtifactId."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["random"],
+          "properties": {
+            "random": {
+              "const": true
+            },
+            "id": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["questReward"],
+          "properties": {
+            "questReward": {
+              "const": true,
+              "description": "Use this quest's reward artifact (legacy !)."
+            }
+          }
+        }
+      ]
+    },
+    "trapSpec": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "TerrainTag name of the trap."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["random"],
+          "properties": {
+            "random": {
+              "const": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}

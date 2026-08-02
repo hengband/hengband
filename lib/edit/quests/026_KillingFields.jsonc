@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "id": 26,
+  "name": {
+    "ja": "激戦場",
+    "en": "Killing Fields",
+  },
+  "definition": {
+    "type": "KILL_LEVEL",
+    "level": 50,
+    "maxNum": 1,
+    "monster": 723,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "謎の軍隊が街の東境に現れました。その軍勢はきりがないほどです。",
+          "我々が数において優ることは望めないので、撤退させるためには",
+          "敵軍の将を討つしかありません。あなたに与えられた任務は、",
+          "彼らの本拠地に侵入し、角が生えている指令官を見つけて倒し、",
+          "無事に脱出することです。トラップには気をつけて下さい！",
+        ],
+        "en": [
+          "A mysterious army has appeared near the eastern border.",
+          "Their troops seem endless. There is not a hope a we can",
+          "defeat them by numbers, we have to take out their general",
+          "to make them retreat. Your mission is to infiltrate their",
+          "headquarters, find the horned general and then get out of",
+          "there alive. Beware of traps!",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "東からの侵略軍は撤退しました！お礼として、あなたの命を救うであろう",
+          "貴重なアイテムを差し上げます。",
+        ],
+        "en": [
+          "The invasion from the east has been thwarted! As a reward,",
+          "we will give you valuable item which may yet save your life.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "我々は出来るなら避けようと願っていた全面戦争に突入してしまいました。",
+          "あなたは任務に失敗し、上官を失望させ、国の期待を裏切ったのです。",
+          "あなたの名誉は地に落ちてしまいました。",
+        ],
+        "en": [
+          "We have now been driven into a full war which we wished to",
+          "avoid. You have failed your duty, your superiors and your",
+          "country. You have lost your honour.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "1": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 242,
+    },
+    "2": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "object": 420,
+    },
+    "W": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 693,
+    },
+    "w": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 693,
+    },
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 221,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 333,
+    },
+    "c": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 567,
+    },
+    "!": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 889,
+    },
+    "M": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 723,
+    },
+    "m": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+      "monster": 641,
+    },
+    "^": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "trap": {
+        "random": true,
+      },
+    },
+    "T": {
+      "terrain": "TREE",
+    },
+    "s": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM", "NO_TELEPORT_DEST"],
+    },
+    "#": {
+      "terrain": "GRANITE",
+      "caveInfo": ["ROOM"],
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XTTTTTTT.TTTT..X^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^X",
+    "XTT.TT.TT.T..T.XWW.............^XXXXX^...................^XXXXX^...^X",
+    "XT.T........T..XXXXXXXXXX.!....^XwwwX^^^^^^^^^^^^^^^^^^^^^XwwwX^...^X",
+    "XTT.......TXXXXX...............^XwwsXXXXXXXXXXXXXXXXXXXXXXXswwX^...^X",
+    "XT.T.......X...X....X.X.X.XXXXXXXXXsssssssssssssssssssssssssXXX^...^X",
+    "XTTT....XXXX.XcX....X.X.X.......^^XXsssssssXXXsssssssssssssXX^^^.!.^X",
+    "XT...W..X.cb.XbX....X.X.XbbXbbXb..^XssssssXXMXXsssssssmsssXX^^.....^X",
+    "XT.TT...X.XXXX.X....X.X.XXXXXXX...^XssmssXX1s1XXssssssssssX^^WWW..XXX",
+    "XTTT....X...WX.X....X.X...........^XssssssXXsXXsssssssssssXXXXXXXXX^X",
+    "XT<....WXXXX.X^X^...X.XXXXXXXXXXb.^XsssssssssXXssssmssssss#c^^^^^^^^X",
+    "XT.........X^XX^^...X.cbb......Xb!^XsssssXXss2XXssssssssssXXXXXXXXX^X",
+    "XTTaT......XX^XX^...Xccbb......X.^^XssmsssXXsXXsssssssssssX^^.WW...^X",
+    "XTTTTT.XXXXX..WX^...Xbbbb......X^^XXsssssssXXXssssssssmsssXX^^^.c^.^X",
+    "XTTTT..X......WX....Xbbb.......XXXXssssssssssssssssssssssssXXX^....^X",
+    "XTTT...X.!....WXXXXXXXXX.......^XwwsXXXXXXXXXXXXXXXXXXXXXXswwX^.^..^X",
+    "XTTTTT.X..b...WXa......!.b.....^XwwwX^^^^^^^^^^^^^^^^^^^^XwwwX^..^.^X",
+    "XTTTTTTX..XXXXXXa...........^..^XXXXX^!.W.W.W.W....W.W.W^XXXXX^....^X",
+    "XTTT...XcX.....Xa..^..^........^^^^^^^....^......^....c.^^^^^^^.^..^X",
+    "XT.....XXX.XXX.Xa....^.....^...................^...^...............^X",
+    "XT.......X.....Xa........^.....^...b.......^...^.....^....^..^..a..^X",
+    "XT.......X.....Xa.....^......^......^..^....b..........^.c.......a.^X",
+    "XTT..........TaXa...c......^......^..............^.........^...a.a.^X",
+    "XTT.T.T.TTaTTTTXa............c...........^....................a.aa.^X",
+    "XTTTTTTTTTTTTTTX^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^X",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 10,
+    "x": 3,
+  },
+}

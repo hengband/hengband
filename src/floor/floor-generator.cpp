@@ -10,8 +10,8 @@
  */
 
 #include "floor/floor-generator.h"
-#include "dungeon/quest.h"
 #include "floor/cave-generator.h"
+#include "floor/fixed-map-generator.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h" //!< @todo precalc_cur_num_of_pet() が依存している、違和感.
 #include "floor/floor-util.h"
@@ -27,6 +27,9 @@
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-fixed-map.h"
+#include "system/dungeon/quest-list.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -271,8 +274,13 @@ static void generate_fixed_floor(PlayerType *player_ptr)
         place_bold(player_ptr, pos.y, pos.x, GB_SOLID_PERM);
     }
 
-    const auto &quests = QuestList::get_instance();
-    floor.base_level = quests.get_quest(floor.quest_number).level;
+    auto &quest = QuestList::get_instance().get_quest(floor.quest_number);
+    const auto fixed_map = QuestFixedMapList::get_instance().find(floor.quest_number);
+    if (fixed_map) {
+        apply_quest_metadata(*fixed_map, quest);
+    }
+
+    floor.base_level = quest.level;
     floor.dun_level = floor.base_level;
     floor.object_level = floor.base_level;
     floor.monster_level = floor.base_level;
@@ -282,7 +290,9 @@ static void generate_fixed_floor(PlayerType *player_ptr)
 
     get_mon_num_prep_enum(player_ptr, floor.get_monrace_hook());
     init_flags = INIT_CREATE_DUNGEON;
-    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID);
+    if (fixed_map && fixed_map->has_map()) {
+        generate_quest_floor_from_json(player_ptr, quest, *fixed_map);
+    }
 }
 
 /*!
@@ -505,7 +515,7 @@ void generate_floor(PlayerType *player_ptr)
         // 狂戦士でのプレイに支障をきたしうるので再生成する。
         // 地上、荒野マップ、クエストでは連結性判定は行わない。
         // TODO: 本来はダンジョン生成アルゴリズム自身で連結性を保証するのが理想ではある。
-        const auto check_conn = why && floor.is_underground() && !floor.is_in_quest();
+        const auto check_conn = !why && floor.is_underground() && !floor.is_in_quest();
         if (check_conn && !floor_is_connected(floor, is_permanent_blocker)) {
             // 一定回数試しても連結にならないなら諦める。
             if (num >= 1000) {

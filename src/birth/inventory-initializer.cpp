@@ -24,8 +24,9 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-service.h"
 #include "system/item/item-entity.h"
+#include <range/v3/view.hpp>
 #include <tuple>
 
 /*!
@@ -33,7 +34,7 @@
  */
 void wield_all(PlayerType *player_ptr)
 {
-    for (INVENTORY_IDX i_idx = INVEN_PACK - 1; i_idx >= 0; i_idx--) {
+    for (const auto i_idx : INVEN_PACK_SLOTS | ranges::views::reverse) {
         const auto &item = *player_ptr->inventory[i_idx];
         if (!item.is_valid()) {
             continue;
@@ -260,5 +261,5 @@ void player_outfit(PlayerType *player_ptr)
         add_outfit(player_ptr, item);
     }
 
-    BaseitemList::get_instance().mark_common_items_as_aware();
+    BaseitemService::mark_common_items_as_aware();
 }

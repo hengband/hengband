@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "id": 21,
+  "name": {
+    "ja": "破滅のクエスト２",
+    "en": "Doom Quest 2",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 55,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "魔界に通じる穴が、この街のはずれに現れました。",
+          "アングウィルで報告されたものよりもさらに危険なもののようです。",
+          "この街の騎士団で一番強い五人の騎士が中を探索しましたが、一人しか",
+          "帰ってきませんでした。彼はひどい火傷を負い、意味不明な言葉を",
+          "わめいていました。我々にはもうこの危機に対処する術がありません。",
+          "あなたなら、なんとか出来ますか？",
+        ],
+        "en": [
+          "A strange hole in reality has opened up on the edge of our",
+          "town, near the dungeon entrance, and appears to be even more ",
+          "dangerous than the hole reported in Angwil.  Five of our ",
+          "strongest knights ventured within -- only one returned, ",
+          "scorched by fire and babbling incoherently.  We have not the ",
+          "resources to deal with this threat.  Do you?",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "神よ喜び給え！彼は生きて帰ってきました。最後の悪魔が倒れた時、",
+          "邪悪なオーラがこの街を去り、息苦しさがなくなりました。",
+          "我々の命を救って下さったことに心から感謝しています。",
+          "そして我々の武器庫からお礼として強力なアイテムを差し上げます。",
+          "これからの冒険のお役に立つことを願っています。",
+        ],
+        "en": [
+          "Gods be praised, you have returned alive!  When the last",
+          "demon fell, we felt an evil aura depart from this town,",
+          "letting all breathe easier again.  Please accept our ",
+          "sincerest thanks for saving our lives -- and a powerful",
+          "gift from our armory.  May you find it useful in your ",
+          "questing.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": ["既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！"],
+        "en": ["I've sent out someone else to do the job.  Now leave me alone!"],
+      },
+    },
+  ],
+  "legend": {
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 128,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 296,
+    },
+    "c": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 273,
+    },
+    "d": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 357,
+    },
+    "e": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 555,
+    },
+    "f": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 1244,
+    },
+    "g": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 1181,
+    },
+    "h": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 723,
+    },
+    "i": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 731,
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XTTTTTTT..f..a..b..c..d..e..d..c..b..a..b..c..d..e..d..c..b..a%.XXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX.XXXXX",
+    "Xb...b.b..b.X.......XX..X......X........X......X..........D.....XXXXX",
+    "X%XXXXX..c.cX.......XaXX%..b...D........X......X..b.......D.....XXXXX",
+    "XaaaaaX.....X.......X.XXX..c...X........X...d..X..........D.....XXXXX",
+    "XXXXXaX.....X.......X.XXX......X...T....D......X.b.c......X%%%%%XXXXX",
+    "X...XaX.b.TcX.......XXcXX......X........X......X.......c..XeeeeeXXXXX",
+    "X<..%aX.....X........XXcXXXDXXXXXXXXXXXXXXDXXXXX..........XabcdeXXXXX",
+    "X...XaX.....X..XXXXXDXXcX......XTT...c.cX......X...b......X%%%%%XXXXX",
+    "XXXXXaX.ccb.X..XeXX.XXXbX......X...T.dbaX...e..X.......c..X.....XXXXX",
+    "XaaaaaX.....X..XX..XX.X.X......X.T.c.cbaX......X.a........Xf...fXXXXX",
+    "XXXXXXXXXDXXX..X.XXX.X.XX.bbb..X..d.caaaX......X....a..b..X.....XXXXX",
+    "XTXX.......XX..X.Xb.XXXXXXXXDXXXXXXXXXXXDXXXDXXX....g.....X.....XXXXX",
+    "XdXX......XX...X.XX.XXXXX......X........X......X.a.c......XT.f.TXXXXX",
+    "XDXX.....XX....XX.X.X.XXX......X..aaa...X......X....a.c...X%%%%%XXXXX",
+    "X.......XX.....X.XX..X.XX......X...aaa..X......X.........XX.....XXXXX",
+    "X......XXTT....XX.XcdX.XX......D....ccc.D...T..X..b...b..XX.....XXXXX",
+    "X.....XXXXXXDXXXX..XX.XXX..T...X........X......XX......d.XXg...gXXXXX",
+    "X....XXXXXXDXDXXeXX..XXXXXXXXXXXXXXXXXXXXXXXXXX%XX..a...XX......XXXXX",
+    "X...XXXXXXXXDXXXXXXXXXXXXXXT..................XXfX...c..XXT....TXXXXX",
+    "X..XXf..........e....T...eX.c.................XDXX......XX%%%%%%XXXXX",
+    "X.XXXXX...................X....................XXXXX..a.XX%%%%%%XXiXX",
+    "X.XX......................Xg..T................XXXXX....XX......XX.XX",
+    "X.XX.....d................Xe...................XXXXX.b..XX......XX.XX",
+    "X.XX......................X....................XXXXX...XX........%XXX",
+    "XdXX..........d..........TX.c..................XXXX...XXTT........XXX",
+    "Xd%%................e.....XT....................D....XXTTT..h...TTTXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 8,
+    "x": 1,
+  },
+}

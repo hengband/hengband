@@ -130,7 +130,7 @@ of Soul
 N:16:BIAS_ROGUE
 'Thiefbane'
 'Quylthulg Smasher'
-'Cat's Clow'
+'Cat's Claw'
 'Shinobi'
 'Speed King'
 'Quicker'
@@ -200,7 +200,7 @@ of Marksmanship
 N:*:Default
 'Weapon Alpha'
 'Werebane'
-'Dragon Clow'
+'Dragon Claw'
 'Kraken'
 'Blue Steele'
 'Fury'

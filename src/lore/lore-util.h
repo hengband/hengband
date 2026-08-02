@@ -34,6 +34,7 @@ enum monster_lore_mode {
 };
 
 class MonraceDefinition;
+class MonraceRecord;
 struct lore_msg {
     lore_msg(std::string_view msg, byte color = TERM_WHITE);
     std::string msg;
@@ -68,7 +69,8 @@ struct lore_type {
     RaceBlowMethodType method;
 
     bool nightmare;
-    std::shared_ptr<MonraceDefinition> monrace;
+    std::shared_ptr<const MonraceDefinition> monrace;
+    std::shared_ptr<const MonraceRecord> record;
     byte speed;
     ITEM_NUMBER drop_gold;
     ITEM_NUMBER drop_item;

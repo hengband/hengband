@@ -4,7 +4,6 @@
  */
 
 #include "main/info-initializer.h"
-#include "external-lib/include-json.h"
 #include "floor/wild.h"
 #include "info-reader/artifact-reader.h"
 #include "info-reader/baseitem-reader.h"
@@ -18,10 +17,12 @@
 #include "info-reader/message-reader.h"
 #include "info-reader/race-reader.h"
 #include "info-reader/skill-reader.h"
+#include "info-reader/spell-reader.h"
 #include "info-reader/terrain-reader.h"
 #include "info-reader/vault-reader.h"
 #include "io/files-util.h"
 #include "io/uid-checker.h"
+#include "locale/character-encoding.h"
 #include "main/init-error-messages-table.h"
 #include "object-enchant/object-ego.h"
 #include "player-info/class-info.h"
@@ -35,6 +36,7 @@
 #include "system/baseitem/baseitem-list.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/floor/town-list.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -48,6 +50,7 @@
 #include <fmt/format.h>
 #include <fstream>
 #include <functional>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
 #include <sys/stat.h>
@@ -57,26 +60,23 @@
 
 namespace {
 
-/// @note clang-formatによるconceptの整形が安定していないので抑制しておく
-// clang-format off
 template <typename T>
 concept HasShrinkToFit = requires(T t) {
     t.shrink_to_fit();
 };
-// clang-format on
 
 /*!
  * @brief 各種設定データをlib/edit/のテキストから読み込み
  * Initialize the "*_info" array
  * @param filename ファイル名(拡張子txt)
  * @param head 処理に用いるヘッダ構造体
- * @param info データ保管先の構造体ポインタ
+ * @param definition_list データ保管先の構造体ポインタ
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-template <typename InfoType>
-void init_info(std::string_view filename, DefinitionHashDataType dhdt, InfoType &info, Parser parser, std::function<void()> retouch = nullptr)
+template <typename DefinitionList>
+void init_info(std::string_view filename, DefinitionHashDataType dhdt, DefinitionList &definition_list, Parser parser, std::function<void()> retouch = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     auto ifs = std::ifstream(path);
@@ -98,8 +98,8 @@ void init_info(std::string_view filename, DefinitionHashDataType dhdt, InfoType 
         quit(fmt::format(_("'{}'ファイルにエラー", "Error in '{}' file."), filename));
     }
 
-    if constexpr (HasShrinkToFit<InfoType>) {
-        info.shrink_to_fit();
+    if constexpr (HasShrinkToFit<DefinitionList>) {
+        definition_list.shrink_to_fit();
     }
 
     if (retouch) {
@@ -112,13 +112,13 @@ void init_info(std::string_view filename, DefinitionHashDataType dhdt, InfoType 
  * Load data from lib/edit/.jsonc
  * @param filename ファイル名(拡張子jsonc)
  * @param head 処理に用いるヘッダ構造体
- * @param info データ保管先の構造体ポインタ
+ * @param definition_list データ保管先の構造体ポインタ
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-template <typename InfoType>
-void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, InfoType &info, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr)
+template <typename DefinitionList>
+void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     std::ifstream ifs(path);
@@ -145,13 +145,24 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
     sha256.update(json_object.dump());
     DefinitionHashData::get_instance().set_digest(dhdt, sha256.digest());
 
-    if constexpr (HasShrinkToFit<InfoType>) {
-        info.shrink_to_fit();
+    if constexpr (HasShrinkToFit<DefinitionList>) {
+        definition_list.shrink_to_fit();
     }
 
     if (retouch) {
         retouch();
     }
+}
+
+/*!
+ * @brief Readerクラスを用いてlib/edit/.jsoncを読み込む
+ * @details init_jsonのjson_parserに「JSON要素からReaderを構築してread()する」定型ラムダを与える処理を共通化したもの。
+ */
+template <typename Reader, typename DefinitionList>
+void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr)
+{
+    auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
+    init_json(filename, keyname, dhdt, definition_list, parser, retouch);
 }
 }
 
@@ -161,7 +172,7 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
 void init_artifacts_info()
 {
     auto &artifacts = ArtifactList::get_instance();
-    init_json("ArtifactDefinitions.jsonc", "artifacts", DefinitionHashDataType::ARTIFACTS, ArtifactList::get_instance(), parse_artifacts_info);
+    init_json_reader<ArtifactReader>("ArtifactDefinitions.jsonc", "artifacts", DefinitionHashDataType::ARTIFACTS, artifacts);
     ArtifactRecords::get_instance().initialize(artifacts.size());
 }
 
@@ -170,7 +181,7 @@ void init_artifacts_info()
  */
 void init_baseitems_info()
 {
-    init_json("BaseitemDefinitions.jsonc", "baseitems", DefinitionHashDataType::BASEITEMS, BaseitemList::get_instance(), parse_baseitems_info);
+    init_json_reader<BaseitemReader>("BaseitemDefinitions.jsonc", "baseitems", DefinitionHashDataType::BASEITEMS, BaseitemList::get_instance());
 }
 
 /*!
@@ -179,7 +190,7 @@ void init_baseitems_info()
 void init_class_magics_info()
 {
     class_magics_info.assign(PLAYER_CLASS_TYPE_MAX, {});
-    init_json("ClassMagicDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_MAGICS, class_magics_info, parse_class_magics_info);
+    init_json_reader<MagicReader>("ClassMagicDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_MAGICS, class_magics_info);
 }
 
 /*!
@@ -197,7 +208,7 @@ void init_class_skills_info()
 void init_dungeons_info()
 {
     auto &dungeons = DungeonList::get_instance();
-    init_json("DungeonDefinitions.jsonc", "dungeons", DefinitionHashDataType::DUNGEONS, dungeons, parse_dungeons_info, [&dungeons] { dungeons.retouch(); });
+    init_json_reader<DungeonReader>("DungeonDefinitions.jsonc", "dungeons", DefinitionHashDataType::DUNGEONS, dungeons, [&dungeons] { dungeons.retouch(); });
 }
 
 /*!
@@ -214,7 +225,7 @@ void init_egos_info()
 void init_terrains_info()
 {
     auto &terrains = TerrainList::get_instance();
-    init_json("TerrainDefinitions.jsonc", "terrains", DefinitionHashDataType::TERRAINS, terrains, parse_terrains_json_info, [&terrains] { terrains.retouch(); });
+    init_json_reader<TerrainReader>("TerrainDefinitions.jsonc", "terrains", DefinitionHashDataType::TERRAINS, terrains, [&terrains] { terrains.retouch(); });
 }
 
 /*!
@@ -231,7 +242,7 @@ void init_feat_variables()
  */
 void init_monrace_definitions()
 {
-    init_json("MonraceDefinitions.jsonc", "monsters", DefinitionHashDataType::MONRACES, MonraceList::get_instance(), parse_monraces_info);
+    init_json_reader<RaceReader>("MonraceDefinitions.jsonc", "monsters", DefinitionHashDataType::MONRACES, MonraceList::get_instance());
 }
 
 /*!
@@ -239,7 +250,7 @@ void init_monrace_definitions()
  */
 void init_monster_message_definitions()
 {
-    init_json("MonsterMessages.jsonc", "groups", DefinitionHashDataType::MONSTER_MESSAGES, MonraceMessageList::get_instance(), parse_monster_messages_info);
+    init_json_reader<MessageReader>("MonsterMessages.jsonc", "groups", DefinitionHashDataType::MONSTER_MESSAGES, MonraceMessageList::get_instance());
 }
 
 /*!
@@ -250,7 +261,7 @@ void init_spell_info()
     auto &spell_info_list = SpellInfoList::get_instance();
     spell_info_list.initialize();
     auto parser = [&spell_info_list](nlohmann::json &spell_data) {
-        return spell_info_list.parse(spell_data);
+        return SpellReader(spell_data, spell_info_list).read();
     };
     init_json("SpellDefinitions.jsonc", "realms", DefinitionHashDataType::SPELLS, spell_info_list, parser);
 }
@@ -268,7 +279,9 @@ void init_vaults_info()
 
 static bool read_wilderness_definition(std::ifstream &ifs)
 {
+    auto &towns = TownList::get_instance();
     auto &wilderness = WildernessGrids::get_instance();
+    auto is_wilderness_size_initialized = false;
     std::string line;
     while (!ifs.eof()) {
         if (!std::getline(ifs, line)) {
@@ -280,21 +293,31 @@ static bool read_wilderness_definition(std::ifstream &ifs)
         }
 
         const auto &splits = str_split(line, ':');
-        if ((splits.size() != 3) || (splits[0] != "M")) {
+        if ((splits.size() == 8) && (splits[0] == "W") && (splits[1] == _("J", "E"))) {
+            const auto town_num = std::stoi(splits[5]);
+            const auto town_name = utf8_to_local(splits[7]);
+            towns.get_town(town_num).init_name(town_name);
             continue;
         }
 
-        if (splits[1] == "WX") {
-            wilderness.initialize_width(std::stoi(splits[2]));
-        } else if (splits[1] == "WY") {
-            wilderness.initialize_height(std::stoi(splits[2]));
-        } else {
-            return false;
+        if ((splits.size() == 3) && (splits[0] == "M")) {
+            if (splits[1] == "WX") {
+                wilderness.initialize_width(std::stoi(splits[2]));
+            } else if (splits[1] == "WY") {
+                wilderness.initialize_height(std::stoi(splits[2]));
+            } else {
+                return false;
+            }
+
+            if (wilderness.is_height_initialized() && wilderness.is_width_initialized()) {
+                wilderness.initialize_grids();
+                wilderness.set_ambushes(false);
+                is_wilderness_size_initialized = true;
+                continue;
+            }
         }
 
-        if (wilderness.is_height_initialized() && wilderness.is_width_initialized()) {
-            wilderness.initialize_grids();
-            wilderness.set_ambushes(false);
+        if (towns.is_all_initialized() && is_wilderness_size_initialized) {
             return true;
         }
     }

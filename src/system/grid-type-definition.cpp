@@ -95,9 +95,9 @@ bool Grid::is_solid() const
     return any_bits(this->info, CAVE_SOLID);
 }
 
-bool Grid::is_icky() const
+bool Grid::is_no_teleport_dest() const
 {
-    return any_bits(this->info, CAVE_ICKY);
+    return any_bits(this->info, CAVE_NO_TELEPORT_DEST);
 }
 
 bool Grid::is_lite() const

@@ -1,7 +1,8 @@
-#include "external-lib/include-json.h"
-#include "locale/japanese.h"
+#include "net/report-error.h"
+#include "locale/character-encoding.h"
 #include "net/http-client.h"
 #include "system/angband-system.h"
+#include <nlohmann/json.hpp>
 #include <sstream>
 #include <string_view>
 

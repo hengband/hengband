@@ -1,4 +1,5 @@
 #include "cmd-io/cmd-floor.h"
+#include "bot/bot-json-output.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -47,6 +48,7 @@ void do_cmd_look(PlayerType *player_ptr)
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
     handle_stuff(player_ptr);
+    output_bot_json_look_snapshot(player_ptr);
     if (target_set(player_ptr, TARGET_LOOK).is_okay()) {
         msg_print(_("ターゲット決定。", "Target Selected."));
     }

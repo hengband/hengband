@@ -14,7 +14,6 @@
 
 #include "main/angband-initializer.h"
 #include "autopick/autopick-menu-data-table.h"
-#include "dungeon/quest.h"
 #include "floor/wild.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
@@ -22,17 +21,23 @@
 #include "main/game-data-initializer.h"
 #include "main/info-initializer.h"
 #include "market/building-initializer.h"
+#include "rumor/rumor-service.h"
 #include "system/angband-system.h"
-#include "system/dungeon/dungeon-definition.h"
-#include "system/monrace/monrace-definition.h"
+#include "system/baseitem/baseitem-service.h"
+#include "system/dungeon/quest-list.h"
+#include "system/floor/town-list.h"
+#include "system/monrace/monrace-list.h"
+#include "system/monrace/monrace-records.h"
 #include "system/services/baseitem-monrace-service.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
-#include "time.h"
 #include "util/angband-files.h"
+#include "view/display-messages.h"
 #include "world/world.h"
+#include <string_view>
+#include <time.h>
 
 /*!
  * @brief 各データファイルを読み取るためのパスを取得する.
@@ -63,7 +68,7 @@ void init_file_paths(const std::filesystem::path &libpath)
  * @brief 画面左下にシステムメッセージを表示する / Take notes on line 23
  * @param str 初期化中のコンテンツ文字列
  */
-static void init_note_term(concptr str)
+static void init_note_term(std::string_view str)
 {
     term_erase(0, 23);
     term_putstr(20, 23, -1, TERM_WHITE, str);
@@ -74,7 +79,7 @@ static void init_note_term(concptr str)
  * @brief ゲーム画面無しの時の初期化メッセージ出力
  * @param str 初期化中のコンテンツ文字列
  */
-static void init_note_no_term(concptr str)
+static void init_note_no_term(std::string_view str)
 {
     /* Don't show initialization message when there is no game terminal. */
     (void)str;
@@ -168,7 +173,7 @@ void init_angband(PlayerType *player_ptr, bool no_term)
         put_title();
     }
 
-    void (*init_note)(concptr) = (no_term ? init_note_no_term : init_note_term);
+    void (*init_note)(std::string_view) = (no_term ? init_note_no_term : init_note_term);
 
     init_note(_("[データの初期化中... (地形)]", "[Initializing arrays... (features)]"));
     try {
@@ -180,6 +185,8 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     init_note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
     init_baseitems_info();
+    BaseitemService::initialize_baseitem_configs();
+    BaseitemService::initialize_baseitem_records();
 
     init_note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
     init_artifacts_info();
@@ -189,6 +196,8 @@ void init_angband(PlayerType *player_ptr, bool no_term)
 
     init_note(_("[データの初期化中... (モンスター)]", "[Initializing arrays... (monsters)]"));
     init_monrace_definitions();
+    const auto monraces_size = MonraceList::get_instance().size();
+    MonraceRecords::get_instance().initialize(monraces_size);
     const auto error = BaseitemMonraceService::check_specific_drop_gold_flags_duplication();
     if (error) {
         quit(*error);
@@ -209,20 +218,36 @@ void init_angband(PlayerType *player_ptr, bool no_term)
     init_note(_("[データの初期化中... (熟練度)]", "[Initializing arrays... (skill)]"));
     init_class_skills_info();
 
+    init_note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
+    TownList::get_instance().initialize();
+
     init_note(_("[配列を初期化しています... (荒野)]", "[Initializing arrays... (wilderness)]"));
     init_wilderness();
-
-    init_note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
-    init_towns();
 
     init_note(_("[配列を初期化しています... (建物)]", "[Initializing arrays... (buildings)]"));
     init_buildings();
 
     init_note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
-    QuestList::get_instance().initialize();
+    try {
+        QuestList::get_instance().initialize();
+    } catch (const std::exception &e) {
+        std::stringstream ss;
+        ss << _("ファイル読み込みエラー: ", "File loading error: ") << e.what();
+        msg_print(ss.str());
+        msg_erase();
+        quit(_("クエスト初期化エラー", "Error of quests initializing"));
+    }
 
     init_note(_("[データの初期化中... (宝物庫)]", "[Initializing arrays... (vaults)]"));
     init_vaults_info();
+
+    init_note(_("[データの初期化中... (噂)]", "[Initializing arrays... (rumors)]"));
+    try {
+        RumorService::initialize();
+        RumorService::retouch();
+    } catch (const std::exception &e) {
+        quit(fmt::format(_("噂の初期化に失敗: {}", "Error of rumors initializing: {}"), e.what()));
+    }
 
     init_note(_("[データの初期化中... (その他)]", "[Initializing arrays... (other)]"));
     init_other(player_ptr);

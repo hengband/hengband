@@ -140,7 +140,7 @@ static void recursive_river(FloorType &floor, const Pos2D &pos_start, const Pos2
                     }
 
                     /* Hack -- don't teleport here */
-                    grid.info |= CAVE_ICKY;
+                    grid.info |= CAVE_NO_TELEPORT_DEST;
                 }
             }
 
@@ -308,8 +308,8 @@ void build_streamer(PlayerType *player_ptr, FEAT_IDX feat, int chance)
                     if (item.is_fixed_artifact()) {
                         item.set_fixed_artifact_generated(false);
                         if (cheat_peek) {
-                            const auto item_name = describe_flavor(player_ptr, item, (OD_NAME_ONLY | OD_STORE));
-                            msg_format(_("伝説のアイテム (%s) はストリーマーにより削除された。", "Artifact (%s) was deleted by streamer."), item_name.data());
+                            const auto fixed_artifact_name = item.get_fixed_artifact_name();
+                            msg_print(_("伝説のアイテム ({}) はストリーマーにより削除された。", "Artifact ({}) was deleted by streamer."), fixed_artifact_name);
                         }
                     } else if (cheat_peek && item.is_random_artifact()) {
                         msg_print(_("ランダム・アーティファクトの1つはストリーマーにより削除された。", "One of the random artifacts was deleted by streamer."));
@@ -380,7 +380,7 @@ void place_trees(PlayerType *player_ptr, const Pos2D &pos)
             }
 
             auto &grid = floor.get_grid(pos_neighbor);
-            if (any_bits(grid.info, CAVE_ICKY) || !grid.o_idx_list.empty()) {
+            if (any_bits(grid.info, CAVE_NO_TELEPORT_DEST) || !grid.o_idx_list.empty()) {
                 continue;
             }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
+#include <string>
 
 extern bool arg_music;
 extern int arg_music_volume_table_index;
@@ -11,3 +12,5 @@ extern bool arg_monochrome;
 extern bool arg_force_original;
 extern bool arg_force_roguelike;
 extern bool arg_bigtile;
+extern bool arg_bot_json_output;
+extern std::string arg_bot_json_output_path;

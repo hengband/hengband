@@ -34,7 +34,6 @@
 #include "player/race-info-table.h"
 #include "store/store-owners.h"
 #include "store/store.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/floor/wilderness-grid.h"
 #include "system/player-type-definition.h"
@@ -113,7 +112,7 @@ void player_birth(PlayerType *player_ptr)
     }
 
     write_birth_diary(player_ptr);
-    for (size_t i = 1; i < towns_info.size(); i++) {
+    for (size_t i = 1; i < TownList::get_instance().size(); i++) {
         for (auto sst : STORE_SALE_TYPE_LIST) {
             store_init(i, sst);
         }

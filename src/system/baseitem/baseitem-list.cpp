@@ -5,23 +5,21 @@
  */
 
 #include "system/baseitem/baseitem-list.h"
-#include "object/tval-types.h"
-#include "sv-definition/sv-potion-types.h"
-#include "sv-definition/sv-staff-types.h"
 #include "system/angband-exceptions.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-key.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
-#include "util/string-processor.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <numeric>
+#include <range/v3/view.hpp>
 #include <set>
 #include <span>
 
 namespace {
-constexpr auto INVALID_BI_ID_FORMAT = "Invalid Baseitem ID is specified! %d";
-constexpr auto INVALID_BASEITEM_KEY = "Invalid Baseitem Key is specified! Type: %d, Subtype: %d";
+constexpr auto INVALID_BI_ID_FORMAT = "Invalid Baseitem ID is specified! {}";
+constexpr auto INVALID_BASEITEM_KEY = "Invalid Baseitem Key is specified! Type: {}, Subtype: {}";
 }
 
 BaseitemList BaseitemList::instance{};
@@ -33,28 +31,47 @@ BaseitemList &BaseitemList::get_instance()
     return instance;
 }
 
-BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id)
+bool BaseitemList::is_valid(short bi_id) const
 {
-    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
-        THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
+    if ((bi_id <= 0) || (bi_id >= static_cast<short>(this->size()))) {
+        return false;
     }
 
+    return this->baseitems.at(bi_id).is_valid();
+}
+
+BaseitemDefinition &BaseitemList::get_baseitem(short bi_id)
+{
+    this->validate(bi_id);
     return this->baseitems[bi_id];
 }
 
-const BaseitemDefinition &BaseitemList::get_baseitem(const short bi_id) const
+const BaseitemDefinition &BaseitemList::get_baseitem(short bi_id) const
 {
-    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->baseitems.size()))) {
-        THROW_EXCEPTION(std::logic_error, format(INVALID_BI_ID_FORMAT, bi_id));
-    }
-
-    return this->baseitems[bi_id];
+    this->validate(bi_id);
+    return this->baseitems.at(bi_id);
 }
 
 const BaseitemDefinition &BaseitemList::pick_one_at_random() const
 {
     const auto candidates = std::span(this->baseitems).subspan(1); // 0番はダミーアイテム
     return rand_choice(candidates);
+}
+
+const std::vector<short> &BaseitemList::collect_valid_bi_ids() const
+{
+    static std::vector<short> bi_ids;
+    if (!bi_ids.empty()) {
+        return bi_ids;
+    }
+
+    for (const auto &[bi_id, baseitem] : *this | ranges::views::enumerate) {
+        if (baseitem.is_valid()) {
+            bi_ids.push_back(static_cast<short>(bi_id));
+        }
+    }
+
+    return bi_ids;
 }
 
 /*!
@@ -74,7 +91,7 @@ short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
     const auto it = cache.find(bi_key.tval());
     if (it == cache.end()) {
         constexpr auto fmt = "Specified ItemKindType has no subtype! %d";
-        THROW_EXCEPTION(std::runtime_error, format(fmt, enum2i(bi_key.tval())));
+        THROW_EXCEPTION(std::logic_error, format(fmt, enum2i(bi_key.tval())));
     }
 
     const auto &svals = it->second;
@@ -87,49 +104,11 @@ const BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_ke
     return this->baseitems[bi_id];
 }
 
-void BaseitemList::reset_all_visuals()
+void BaseitemList::validate(short bi_id) const
 {
-    for (auto &baseitem : this->baseitems) {
-        baseitem.reset_visual();
+    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->size()))) {
+        THROW_EXCEPTION(std::logic_error, fmt::format(INVALID_BI_ID_FORMAT, bi_id));
     }
-}
-
-/*!
- * @brief ベースアイテムの鑑定済みフラグをリセットする
- * @details 不具合対策で0からリセットする(セーブは0から)
- */
-void BaseitemList::reset_identification_flags()
-{
-    for (auto &baseitem : this->baseitems) {
-        baseitem.mark_trial(false);
-        baseitem.mark_awareness(false);
-    }
-}
-
-/*!
- * @brief 未鑑定アイテム種別の内、ゲーム開始時から鑑定済とするアイテムの鑑定済フラグをONにする
- * @todo 食料用の杖は該当種族 (ゴーレム/骸骨/ゾンビ/幽霊)では鑑定済だが、本来はこのメソッドで鑑定済にすべき.
- */
-void BaseitemList::mark_common_items_as_aware()
-{
-    std::vector<BaseitemKey> bi_keys;
-    bi_keys.emplace_back(ItemKindType::POTION, SV_POTION_WATER);
-    bi_keys.emplace_back(ItemKindType::STAFF, SV_STAFF_NOTHING);
-    for (const auto &bi_key : bi_keys) {
-        this->lookup_baseitem(bi_key).mark_awareness(true);
-    }
-}
-
-void BaseitemList::shuffle_flavors()
-{
-    this->shuffle_flavors(ItemKindType::RING);
-    this->shuffle_flavors(ItemKindType::AMULET);
-    this->shuffle_flavors(ItemKindType::STAFF);
-    this->shuffle_flavors(ItemKindType::WAND);
-    this->shuffle_flavors(ItemKindType::ROD);
-    this->shuffle_flavors(ItemKindType::FOOD);
-    this->shuffle_flavors(ItemKindType::POTION);
-    this->shuffle_flavors(ItemKindType::SCROLL);
 }
 
 /*!
@@ -143,7 +122,7 @@ short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
     static const auto &cache = this->create_baseitem_keys_cache();
     const auto it = cache.find(bi_key);
     if (it == cache.end()) {
-        THROW_EXCEPTION(std::runtime_error, format(INVALID_BASEITEM_KEY, enum2i(bi_key.tval()), *bi_key.sval()));
+        THROW_EXCEPTION(std::runtime_error, fmt::format(INVALID_BASEITEM_KEY, enum2i(bi_key.tval()), *bi_key.sval()));
     }
 
     return it->second;
@@ -156,11 +135,9 @@ short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
 const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_keys_cache() const
 {
     static std::map<BaseitemKey, short> cache;
-    for (const auto &baseitem : this->baseitems) {
-        if (baseitem.is_valid()) {
-            const auto &bi_key = baseitem.bi_key;
-            cache[bi_key] = baseitem.idx;
-        }
+    for (short bi_id : this->collect_valid_bi_ids()) {
+        const auto &bi_key = this->baseitems.at(bi_id).bi_key;
+        cache[bi_key] = bi_id;
     }
 
     return cache;
@@ -173,12 +150,10 @@ const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_keys_cache() c
 const std::map<ItemKindType, std::vector<int>> &BaseitemList::create_baseitem_subtypes_cache() const
 {
     static std::map<ItemKindType, std::vector<int>> cache;
-    for (const auto &baseitem : this->baseitems) {
-        if (baseitem.is_valid()) {
-            const auto &bi_key = baseitem.bi_key;
-            const auto tval = bi_key.tval();
-            cache[tval].push_back(*bi_key.sval());
-        }
+    for (short bi_id : this->collect_valid_bi_ids()) {
+        const auto &bi_key = this->baseitems.at(bi_id).bi_key;
+        const auto tval = bi_key.tval();
+        cache[tval].push_back(*bi_key.sval());
     }
 
     return cache;
@@ -188,31 +163,4 @@ BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
 {
     const auto bi_id = this->lookup_baseitem_id(bi_key);
     return this->baseitems[bi_id];
-}
-
-/*!
- * @brief ベースアイテムの未確定名を共通tval間でシャッフルする
- * @param tval シャッフルしたいtval
- * @details 巻物、各種魔道具などに利用される。
- */
-void BaseitemList::shuffle_flavors(ItemKindType tval)
-{
-    std::vector<std::reference_wrapper<short>> flavors;
-    for (auto &baseitem : this->baseitems) {
-        if (baseitem.bi_key.tval() != tval) {
-            continue;
-        }
-
-        if (baseitem.flavor == 0) {
-            continue;
-        }
-
-        if (baseitem.flags.has(TR_FIXED_FLAVOR)) {
-            continue;
-        }
-
-        flavors.push_back(baseitem.flavor);
-    }
-
-    rand_shuffle(flavors.begin(), flavors.end());
 }

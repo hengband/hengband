@@ -4,7 +4,7 @@
  */
 
 #include "main-win/main-win-cfg-reader.h"
-#include "locale/japanese.h"
+#include "locale/character-encoding.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-tokenizer.h"
 #include "main/sound-definitions-table.h"

@@ -9,3 +9,5 @@ bool arg_monochrome; /* Command arg -- Request monochrome mode */
 bool arg_force_original; /* Command arg -- Request original keyset */
 bool arg_force_roguelike; /* Command arg -- Request roguelike keyset */
 bool arg_bigtile = false; /* Command arg -- Request big tile mode */
+bool arg_bot_json_output = false; /* Command arg -- Output bot-readable JSON snapshots */
+std::string arg_bot_json_output_path = "bot-state.jsonl";

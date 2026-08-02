@@ -29,8 +29,9 @@
 #include "store/store.h"
 #include "system/angband-system.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/inner-game-data.h"
 #include "system/item/item-entity.h"
@@ -49,6 +50,7 @@
 #include "world/world.h"
 #include <fmt/format.h>
 #include <numeric>
+#include <range/v3/algorithm.hpp>
 #include <range/v3/view.hpp>
 #include <string>
 
@@ -198,12 +200,16 @@ static void dump_aux_options(FILE *fff)
 
     if (ironman_smallest_floor) {
         fmt::print(fff, _("\n (鉄人)最小フロア:   ON", "\n Ironman Smallest Floor:  ON"));
-    } else if (always_small_floor) {
-        fmt::print(fff, _("\n 常に小さめフロア:   ON", "\n Always Small Floor:      ON"));
-    } else if (allow_smallest_floor) {
-        fmt::print(fff, _("\n 最小フロア許可  :   ON", "\n Possible Small Floor:    ON"));
+        fmt::print(fff, _("\n 常に小さめフロア:   IGNORED", "\n Always Small Floor:      IGNORED"));
+        fmt::print(fff, _("\n 常に大きめフロア:   IGNORED", "\n Always Large Floor:      IGNORED"));
+        fmt::print(fff, _("\n 最小フロア許可  :   IGNORED", "\n Possible Smallest Floor: IGNORED"));
+        fmt::print(fff, _("\n 最大フロア許可  :   IGNORED", "\n Possible Largest Floor:  IGNORED"));
     } else {
-        fmt::print(fff, _("\n 小さいフロア:       OFF", "\n Small Floor:             OFF"));
+        const auto always_large_floor_is_effective = always_large_floor && !always_small_floor;
+        fmt::print(fff, _("\n 常に小さめフロア:   {}", "\n Always Small Floor:      {}"), always_small_floor ? "ON" : "OFF");
+        fmt::print(fff, _("\n 常に大きめフロア:   {}", "\n Always Large Floor:      {}"), always_small_floor ? "IGNORED" : (always_large_floor ? "ON" : "OFF"));
+        fmt::print(fff, _("\n 最小フロア許可  :   {}", "\n Possible Smallest Floor: {}"), always_large_floor_is_effective ? "IGNORED" : (allow_smallest_floor ? "ON" : "OFF"));
+        fmt::print(fff, _("\n 最大フロア許可  :   {}", "\n Possible Largest Floor:  {}"), always_small_floor ? "IGNORED" : (allow_largest_floor ? "ON" : "OFF"));
     }
 
     if (vanilla_town) {
@@ -345,16 +351,26 @@ static void dump_aux_monsters(FILE *fff)
     fmt::println(fff, "You have defeated {} {} including {} unique monster{} in total.", norm_total, norm_total == 1 ? "enemy" : "enemies", uniq_total, (uniq_total == 1 ? "" : "s"));
 #endif
 
-    std::stable_sort(monrace_ids.begin(), monrace_ids.end(), [&monraces](auto x, auto y) { return monraces.order(x, y); });
-    fmt::println(fff, _("\n《上位{}体のユニーク・モンスター》", "\n< Unique monsters top {} >"), std::min(uniq_total, 10));
-    for (auto it = monrace_ids.rbegin(); it != monrace_ids.rend() && std::distance(monrace_ids.rbegin(), it) < 10; it++) {
-        const auto &monrace = monraces.get_monrace(*it);
+    ranges::stable_sort(monrace_ids, [&monraces](auto x, auto y) { return monraces.order(x, y); });
+    ranges::reverse(monrace_ids);
+
+    const auto id_to_monrace = [&monraces](auto id) -> const MonraceDefinition & { return monraces.get_monrace(id); };
+    const auto top_display_num = std::min(uniq_total, 10);
+    const auto top_monraces = monrace_ids | ranges::views::take(top_display_num) | ranges::views::transform(id_to_monrace);
+    const auto max_defeat_time = ranges::max(top_monraces | ranges::views::transform(&MonraceDefinition::defeat_time));
+    const auto max_hour_digits = count_digits(max_defeat_time / (60 * 60));
+
+    fmt::println(fff, _("\n《上位{}体のユニーク・モンスター》", "\n< Unique monsters top {} >"), top_display_num);
+    for (const auto &monrace : top_monraces) {
         const auto defeat_level = monrace.defeat_level;
         const auto defeat_time = monrace.defeat_time;
         std::string defeat_info;
         if ((defeat_level > 0) && (defeat_time > 0)) {
-            constexpr auto fmt = _(" - レベル%2d - %d:%02d:%02d", " - level %2d - %d:%02d:%02d");
-            defeat_info = format(fmt, defeat_level, defeat_time / (60 * 60), (defeat_time / 60) % 60, defeat_time % 60);
+            const auto defeat_hour = defeat_time / (60 * 60);
+            const auto defeat_minute = (defeat_time / 60) % 60;
+            const auto defeat_second = defeat_time % 60;
+            constexpr auto fmt = _(" - レベル{:2} - {:>{}}:{:02}:{:02}", " - level {:2} - {:>{}}:{:02}:{:02}");
+            defeat_info = fmt::format(fmt, defeat_level, defeat_hour, max_hour_digits, defeat_minute, defeat_second);
         }
 
         const auto names = str_separate(monrace.name, 40);
@@ -480,28 +496,28 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
 {
     if (player_ptr->equip_cnt) {
         fmt::println(fff, _("  [キャラクタの装備]\n", "  [Character Equipment]\n"));
-        for (int i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-            auto item_name = describe_flavor(player_ptr, *player_ptr->inventory[i], 0);
-            auto is_two_handed = ((i == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr));
-            is_two_handed |= ((i == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr));
+        for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+            auto item_name = describe_flavor(player_ptr, *player_ptr->inventory[i_idx], 0);
+            auto is_two_handed = ((i_idx == INVEN_MAIN_HAND) && can_attack_with_sub_hand(player_ptr));
+            is_two_handed |= ((i_idx == INVEN_SUB_HAND) && can_attack_with_main_hand(player_ptr));
             if (is_two_handed && has_two_handed_weapons(player_ptr)) {
                 item_name = _("(武器を両手持ち)", "(wielding with two-hands)");
             }
 
-            fmt::println(fff, "{}) {}", index_to_label(i), item_name);
+            fmt::println(fff, "{}) {}", index_to_label(i_idx), item_name);
         }
 
         fmt::println(fff, "\n");
     }
 
     fmt::println(fff, _("  [キャラクタの持ち物]\n", "  [Character Inventory]\n"));
-    for (auto i = 0; i < INVEN_PACK; i++) {
-        if (!player_ptr->inventory[i]->is_valid()) {
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
+        if (!player_ptr->inventory[i_idx]->is_valid()) {
             break;
         }
 
-        const auto item_name = describe_flavor(player_ptr, *player_ptr->inventory[i], 0);
-        fmt::println(fff, "{}) {}", index_to_label(i), item_name);
+        const auto item_name = describe_flavor(player_ptr, *player_ptr->inventory[i_idx], 0);
+        fmt::println(fff, "{}) {}", index_to_label(i_idx), item_name);
     }
 
     fmt::println(fff, "\n");
@@ -513,7 +529,8 @@ static void dump_aux_equipment_inventory(PlayerType *player_ptr, FILE *fff)
  */
 static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
 {
-    const auto &home = towns_info[1].get_store(StoreSaleType::HOME);
+    const auto &outpost = TownList::get_instance().get_town(1);
+    const auto &home = outpost.get_store(StoreSaleType::HOME);
     if (home.stock_num) {
         fmt::println(fff, _("  [我が家のアイテム]", "  [Home Inventory]"));
         auto page = 1;
@@ -529,7 +546,7 @@ static void dump_aux_home_museum(PlayerType *player_ptr, FILE *fff)
         fmt::println(fff, "\n");
     }
 
-    const auto &museum = towns_info[1].get_store(StoreSaleType::MUSEUM);
+    const auto &museum = outpost.get_store(StoreSaleType::MUSEUM);
     if (museum.stock_num == 0) {
         return;
     }

@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "id": 31,
+  "name": {
+    "ja": "柳じじい",
+    "en": "Old Man Willow Quest",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 22,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "『柳じじい』の行動は最近度が過ぎます！彼は森の一部を支配し、",
+          "人間に敵対するようし向けました。柳じじいの森に行って全ての",
+          "怪物を殺して下さい。充分な報酬を差し上げます。",
+          "クエストは街の東の平地にあります。",
+        ],
+        "en": [
+          "Old Man Willow has gone too far!  He has turned a small section",
+          "of the forest against all men.  Kill everything you find in Old ",
+          "Man Willow's section of the forest.  You will be well rewarded ",
+          "for completing this quest.  The quest is in a clearing east of",
+          "the town.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": ["ありがとうございます！外にお礼が置いてあります。"],
+        "en": ["Thank you!  Your reward is waiting outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": ["このクエストはあなたの手におえなかったようですね。他のを試して下さい。"],
+        "en": ["The quest was more than you could handle.  Try another one.   "],
+      },
+    },
+  ],
+  "legend": {
+    "r": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 205,
+    },
+    "M": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 206,
+    },
+    "H": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 329,
+    },
+    "f": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 339,
+    },
+    "Y": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 343,
+    },
+    " ": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+    },
+    "T": {
+      "terrain": "TREE",
+      "caveInfo": ["MARK"],
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XTTTTTTTTTTTTTTTT             X",
+    "XT         Y  TTT TTHTTTTTTTT X",
+    "XT H    H     TTTY        r T X",
+    "XT            TTTTTTTTTTTTT T X",
+    "XT     M    H TTT       r T T X",
+    "XT  H    H    TTT TTTTTTT T T X",
+    "XT            TTT     r T T T X",
+    "XT Y    Y  Y  HTTTTTTTT T T T X",
+    "XT    Y               T T T T X",
+    "XTTTTTTTTTTTTTTTTTTTT T T T T X",
+    "XTTTTTTTTTTTTTTTTTTTT   T   T X",
+    "XTTTTTTTTTTTTTTTTTTTTTTTTTTTT X",
+    "Xr                          f X",
+    "XrTTTTTTTTTTTTTTTTTTTTTTTTTTTTX",
+    "Xr                       f    X",
+    "XTTHTTTTTTTTTTTTTTTTTTTTTTTTT X",
+    "X                             X",
+    "X<TTTTTTTTTTTTTTTTTTTTTTTTTTTTX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 18,
+    "x": 1,
+  },
+}

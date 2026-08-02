@@ -25,9 +25,10 @@
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/town-info.h"
 #include "system/floor/town-list.h"
 #include "system/floor/town-records.h"
 #include "system/floor/wilderness-grid.h"
@@ -277,14 +278,16 @@ bool tele_town(PlayerType *player_ptr)
     clear_bldg(4, 10);
 
     auto num = 0;
-    const int towns_size = towns_info.size();
+    const auto &world = AngbandWorld::get_instance();
+    const auto &towns = TownList::get_instance();
+    const auto towns_size = towns.size();
     const auto &town_records = TownRecords::get_instance();
-    for (auto i = 1; i < towns_size; i++) {
-        if ((i == VALID_TOWNS) || (i == SECRET_TOWN) || (i == player_ptr->town_num) || !town_records.has_visited(i2enum<TownId>(i - 1))) {
+    for (size_t i = 1; i < towns_size; i++) {
+        if ((i == VALID_TOWNS) || (i == SECRET_TOWN) || (i == world.get_town_index()) || !town_records.has_visited(i2enum<TownId>(i - 1))) {
             continue;
         }
 
-        const auto buf = format("%c) %-20s", I2A(i - 1), towns_info[i].name.data());
+        const auto buf = format("%c) %-20s", I2A(i - 1), towns.get_town(i).get_name().data());
         prt(buf, 5 + i, 5);
         num++;
     }
@@ -306,12 +309,12 @@ bool tele_town(PlayerType *player_ptr)
             return false;
         }
 
-        if ((key < 'a') || (key > ('a' + towns_size - 2))) {
+        if ((key < 'a') || (key > static_cast<char>('a' + towns_size - 2))) {
             continue;
         }
 
-        const auto town_num = key - 'a' + 1;
-        if ((town_num == player_ptr->town_num) || (town_num == VALID_TOWNS) || (town_num == SECRET_TOWN) || !town_records.has_visited(i2enum<TownId>(key - 'a'))) {
+        const size_t town_num = key - 'a' + 1;
+        if ((town_num == world.get_town_index()) || (town_num == VALID_TOWNS) || (town_num == SECRET_TOWN) || !town_records.has_visited(i2enum<TownId>(key - 'a'))) {
             continue;
         }
 

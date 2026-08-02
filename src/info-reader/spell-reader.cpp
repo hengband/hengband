@@ -4,22 +4,48 @@
 #include "info-reader/parse-error-types.h"
 #include "system/spell-info-list.h"
 #include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
+
+SpellReader::SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_info_list)
+    : realm_data(realm_data)
+    , spell_info_list(spell_info_list)
+{
+}
+
+/*!
+ * @brief 呪文情報(SpellDefinitions)のパース関数
+ * @return エラーコード
+ */
+int SpellReader::read() const
+{
+    error_idx++; //!< @note 呪文領域は数値IDを持たないため、エラー表示用に要素の順序を用いる
+
+    RealmType realm_id;
+    if (auto err = this->set_realm(realm_id)) {
+        msg_format(_("領域名読込失敗。ID: '%d'。", "Failed to load realm name. ID: '%d'."), error_idx);
+        return err;
+    }
+
+    if (auto err = this->set_book_data(realm_id)) {
+        msg_format(_("呪文詳細読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);
+        return err;
+    }
+
+    return PARSE_ERROR_NONE;
+}
 
 /*!
  * @brief JSON Objectから呪文領域IDを取得する
- * @param spell_data 情報の格納されたJSON Object
  * @param realm 呪文領域
  * @return エラーコード
  */
-static errr set_realm(const nlohmann::json &spell_data, RealmType &realm)
+int SpellReader::set_realm(RealmType &realm) const
 {
-    if (spell_data.is_null()) {
+    if (this->realm_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto &realmname_obj = spell_data["name"];
+    const auto &realmname_obj = get_json_value(this->realm_data, "name");
     if (!realmname_obj.is_string()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
@@ -35,91 +61,66 @@ static errr set_realm(const nlohmann::json &spell_data, RealmType &realm)
 /*!
  * @brief JSON Objectから各呪文の詳細を取得する
  * @param spell_data 情報の格納されたJSON Object
- * @param realm_spell_list 呪文情報を格納するvector
+ * @param realm 領域ID
  * @return エラーコード
  */
-static errr set_spell_data(const nlohmann::json &spell_data, std::vector<SpellInfo> &realm_spell_list)
+int SpellReader::set_spell_data(const nlohmann::json &spell_data, RealmType realm) const
 {
     if (spell_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
     int spell_id;
-    if (auto err = info_set_integer(spell_data["spell_id"], spell_id, true, Range(0, 31))) {
+    if (auto err = info_set_integer(get_json_value(spell_data, "spell_id"), spell_id, true, Range(0, 31))) {
         msg_format(_("呪文ID読込失敗。ID: '%d'。", "Failed to load spell ID. ID: '%d'."), error_idx);
         return err;
     }
     auto info = SpellInfo();
     info.idx = static_cast<short>(spell_id);
 
-    const auto &tag_obj = spell_data["spell_tag"];
+    const auto &tag_obj = get_json_value(spell_data, "spell_tag");
     if (!tag_obj.is_string()) {
         msg_format(_("呪文タグ読込失敗。ID: '%d'。", "Failed to load spell tag. ID: '%d'."), error_idx);
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
     info.tag = tag_obj.get<std::string>();
 
-    if (auto err = info_set_string(spell_data["name"], info.name, true)) {
+    if (auto err = info_set_string(get_json_value(spell_data, "name"), info.name, true)) {
         msg_format(_("呪文名読込失敗。ID: '%d'。", "Failed to load spell name. ID: '%d'."), error_idx);
         return err;
     }
-    if (auto err = info_set_string(spell_data["description"], info.description, true)) {
+    if (auto err = info_set_string(get_json_value(spell_data, "description"), info.description, true)) {
         msg_format(_("呪文説明読込失敗。ID: '%d'。", "Failed to load spell description. ID: '%d'."), error_idx);
         return err;
     }
-    realm_spell_list[spell_id] = std::move(info);
+    this->spell_info_list.set_spell_info(realm, spell_id, std::move(info));
 
     return PARSE_ERROR_NONE;
 }
 
 /*!
  * @brief JSON Objectから各呪文の詳細を呪文書単位で取得する
- * @param spell_data 情報の格納されたJSON Object
- * @param realm_spell_list 呪文情報を格納するvector
+ * @param realm 領域ID
  * @return エラーコード
  */
-static errr set_book_data(const nlohmann::json &spell_data, std::vector<SpellInfo> &realm_spell_list)
+int SpellReader::set_book_data(RealmType realm) const
 {
-    auto &book_obj = spell_data["books"];
+    const auto &book_obj = get_json_value(this->realm_data, "books");
     if (book_obj.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (auto &element : book_obj.items()) {
-        auto &book = element.value();
-        auto &spells_obj = book["spells"];
+    for (const auto &book : book_obj) {
+        const auto &spells_obj = get_json_value(book, "spells");
         if (spells_obj.is_null()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        for (auto &spell_element : spells_obj.items()) {
-            auto &spell = spell_element.value();
-            set_spell_data(spell, realm_spell_list);
+        for (const auto &spell : spells_obj) {
+            if (auto err = this->set_spell_data(spell, realm)) {
+                return err;
+            }
         }
     }
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief 職業魔法情報(ClassMagicDefinitions)のパース関数
- * @param buf テキスト列
- * @param spell_list パースした結果を格納する領域
- * @return エラーコード
- */
-errr parse_spell_info(nlohmann::json &spell_data, std::vector<std::vector<SpellInfo>> &spell_list)
-{
-    RealmType realm_id;
-    if (auto err = set_realm(spell_data, realm_id)) {
-        msg_format(_("領域名読込失敗。ID: '%d'。", "Failed to load realm name. ID: '%d'."), error_idx);
-        return err;
-    }
-
-    auto &realm_spell_list = spell_list[enum2i(realm_id)];
-
-    if (auto err = set_book_data(spell_data, realm_spell_list)) {
-        msg_format(_("呪文詳細読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);
-        return err;
-    }
-
     return PARSE_ERROR_NONE;
 }

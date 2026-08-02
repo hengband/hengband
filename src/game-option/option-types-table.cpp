@@ -11,9 +11,9 @@
 #include "game-option/special-options.h"
 #include "game-option/text-display-options.h"
 #include "locale/language-switcher.h"
+#include "util/enum-converter.h"
 #include "util/flag-group.h"
 #include <stdexcept>
-#include <util/enum-converter.h>
 #include <utility>
 
 GameOption::GameOption(bool *value, bool norm, GameOptionType type, std::string &&text, std::string &&description, const tl::optional<GameOptionPage> &page)
@@ -190,10 +190,15 @@ const std::vector<GameOption> option_info = validate_option_info({
 
     { &expand_list, true, GameOptionType::EXPAND_LIST, "expand_list", _("「一覧」コマンドを拡張する", "Expand the power of the list commands"), GameOptionPage::GAMEPLAY },
 
-    { &allow_smallest_floor, true, GameOptionType::ALLOW_SMALLEST_FLOOR, "allow_smallest_floor", _("非常に小さいフロアの生成を可能にする", "Allow unusually smallest floor"), GameOptionPage::GAMEPLAY },
+    { &allow_smallest_floor, true, GameOptionType::ALLOW_SMALLEST_FLOOR, "allow_smallest_floor", _("非常に小さいフロアの生成を可能にする", "Allow extremely small floor"), GameOptionPage::GAMEPLAY },
+
+    { &allow_largest_floor, true, GameOptionType::ALLOW_LARGEST_FLOOR, "allow_largest_floor", _("非常に大きいフロアの生成を可能にする", "Allow extremely large floor"), GameOptionPage::GAMEPLAY },
 
     { &always_small_floor, false, GameOptionType::ALWAYS_SMALL_FLOOR, "always_small_floor",
-        _("常に小さいフロアを生成する", "Always create unusually small dungeon floor"), GameOptionPage::GAMEPLAY },
+        _("常に小さめのフロアを生成する", "Always generate small dungeon floor"), GameOptionPage::GAMEPLAY },
+
+    { &always_large_floor, false, GameOptionType::ALWAYS_LARGE_FLOOR, "always_large_floor",
+        _("常に大きめのフロアを生成する", "Always generate large dungeon floor"), GameOptionPage::GAMEPLAY },
 
     { &allow_arena_floor, true, GameOptionType::ALLOW_ARENA_FLOOR, "allow_arena_floor", _("空っぽの「アリーナ」フロアの生成を可能にする", "Allow empty 'arena' floor"), GameOptionPage::GAMEPLAY },
 
@@ -265,7 +270,7 @@ const std::vector<GameOption> option_info = validate_option_info({
     { &ironman_shops, false, GameOptionType::IRONMAN_SHOPS, "ironman_shops", _("(鉄人用)店を使用しない(*)", "Stores are permanently closed (*)"), GameOptionPage::BIRTH },
 
     { &ironman_smallest_floor, false, GameOptionType::IRONMAN_SMALLEST_FLOOR, "ironman_smallest_floor",
-        _("(鉄人用)常に非常に小さいフロアを生成(*)", "Always create unusually small dungeon floor (*)"), GameOptionPage::BIRTH },
+        _("(鉄人用)常に非常に小さいフロアを生成(*)", "Always generate the smallest dungeon floor (*)"), GameOptionPage::BIRTH },
 
     { &ironman_downward, false, GameOptionType::IRONMAN_DOWNWARD, "ironman_downward", _("(鉄人用)帰還と上り階段なし(*)", "Disable recall and use of up stairs (*)"), GameOptionPage::BIRTH },
 

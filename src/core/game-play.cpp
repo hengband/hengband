@@ -25,7 +25,6 @@
 #include "core/visuals-reseter.h"
 #include "core/window-redrawer.h"
 #include "dungeon/dungeon-processor.h"
-#include "dungeon/quest.h"
 #include "floor/floor-changer.h"
 #include "floor/floor-leaver.h"
 #include "floor/floor-mode-changer.h"
@@ -44,7 +43,6 @@
 #include "io/screen-util.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
-#include "item-info/flavor-initializer.h"
 #include "load/load.h"
 #include "main/sound-of-music.h"
 #include "market/arena-entry.h"
@@ -73,6 +71,8 @@
 #include "sv-definition/sv-weapon-types.h"
 #include "system/angband-system.h"
 #include "system/angband-version.h"
+#include "system/baseitem/baseitem-service.h"
+#include "system/dungeon/quest-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/wilderness-grid.h"
@@ -91,6 +91,7 @@
 #include "view/display-player.h"
 #include "window/main-window-util.h"
 #include "wizard/wizard-special-process.h"
+#include "world/town-info-service.h"
 #include "world/world.h"
 
 static void restore_windows(PlayerType *player_ptr)
@@ -237,6 +238,7 @@ static void reset_world_info(PlayerType *player_ptr)
     player_ptr->now_damaged = false;
     now_message = 0;
     record_item_name.clear();
+    TownInfoService::overwrite_town_name();
 }
 
 static void generate_wilderness(PlayerType *player_ptr)
@@ -279,7 +281,7 @@ static void generate_world(PlayerType *player_ptr, bool new_game)
     panel_row_min = floor.height;
     panel_col_min = floor.width;
 
-    initialize_items_flavor();
+    BaseitemService::initialize_items_flavor();
     prt(_("お待ち下さい...", "Please wait..."), 0, 0);
     term_fresh();
     generate_wilderness(player_ptr);

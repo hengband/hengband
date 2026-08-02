@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "id": 43,
+  "name": {
+    "ja": "ランダム クエスト",
+    "en": "Random Quest",
+  },
+  "definition": {
+    "type": "RANDOM",
+    "level": 12,
+    "dungeon": 1,
+  },
+}

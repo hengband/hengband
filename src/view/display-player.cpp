@@ -29,6 +29,8 @@
 #include "player/player-status-table.h"
 #include "player/player-status.h"
 #include "system/baseitem/baseitem-definition.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
@@ -44,6 +46,7 @@
 #include "world/world.h"
 #include <sstream>
 #include <string>
+#include <tl/optional.hpp>
 
 /*!
  * @brief
@@ -191,12 +194,6 @@ static tl::optional<std::string> search_death_cause(PlayerType *player_ptr)
 
     if (floor.is_in_quest() && QuestType::is_fixed(floor.quest_number)) {
         const auto &quests = QuestList::get_instance();
-
-        /* Get the quest text */
-        /* Bewere that INIT_ASSIGN resets the cur_num. */
-        init_flags = INIT_NAME_ONLY;
-        parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
-
         const auto &quest = quests.get_quest(floor.quest_number);
         constexpr auto killed_quest = _("…あなたは、クエスト「%s」で%sに殺された。", "...You were killed by %s in the quest '%s'.");
 #ifdef JP
@@ -227,11 +224,7 @@ static tl::optional<std::string> decide_death_in_quest(PlayerType *player_ptr)
         return tl::nullopt;
     }
 
-    quest_text_lines.clear();
-
     const auto &quests = QuestList::get_instance();
-    init_flags = INIT_NAME_ONLY;
-    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
     return format(_("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quests.get_quest(floor.quest_number).name.data());
 }
 
@@ -330,15 +323,15 @@ tl::optional<int> display_player(PlayerType *player_ptr, const int tmp_mode)
  */
 void display_player_equippy(PlayerType *player_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
-    const auto max_i = (mode & DP_WP) ? INVEN_BOW + 1 : INVEN_TOTAL;
-    for (int i = INVEN_MAIN_HAND; i < max_i; i++) {
-        const auto &item = *player_ptr->inventory[i];
+    const auto range = (mode & DP_WP) ? INVEN_WEAPON_SLOTS : INVEN_WIELDING_SLOTS;
+    for (const auto i_idx : range) {
+        const auto &item = *player_ptr->inventory[i_idx];
         auto symbol = item.get_symbol();
         if (!equippy_chars || !item.is_valid()) {
             symbol.color = TERM_DARK;
             symbol.character = ' ';
         }
 
-        term_putch(x + i - INVEN_MAIN_HAND, y, symbol);
+        term_putch(x + i_idx - INVEN_MAIN_HAND, y, symbol);
     }
 }

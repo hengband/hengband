@@ -138,7 +138,7 @@ static bool bldg_process_command(PlayerType *player_ptr, const building_type &bl
     case BACT_REST:
     case BACT_RUMORS:
     case BACT_FOOD:
-        if (inn_comm(player_ptr, building_action)) {
+        if (inn_comm(player_ptr, building_action, building_cost)) {
             player_ptr->au -= building_cost;
         }
 

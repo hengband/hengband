@@ -12,6 +12,7 @@
 #include "term/z-rand.h"
 #include "util/enum-converter.h"
 #include "util/enum-range.h"
+#include <fmt/format.h>
 
 bool DungeonRecord::has_entered() const
 {
@@ -62,21 +63,25 @@ DungeonRecords &DungeonRecords::get_instance()
 
 DungeonRecord &DungeonRecords::get_record(DungeonId dungeon_id)
 {
-    return *this->records.at(dungeon_id);
+    this->validate_dungeon_id(dungeon_id);
+    return *this->records[dungeon_id];
 }
 
 const DungeonRecord &DungeonRecords::get_record(DungeonId dungeon_id) const
 {
+    this->validate_dungeon_id(dungeon_id);
     return *this->records.at(dungeon_id);
 }
 
 std::shared_ptr<DungeonRecord> DungeonRecords::get_record_shared(DungeonId dungeon_id)
 {
-    return this->records.at(dungeon_id);
+    this->validate_dungeon_id(dungeon_id);
+    return this->records[dungeon_id];
 }
 
 std::shared_ptr<const DungeonRecord> DungeonRecords::get_record_shared(DungeonId dungeon_id) const
 {
+    this->validate_dungeon_id(dungeon_id);
     return this->records.at(dungeon_id);
 }
 
@@ -97,4 +102,11 @@ std::vector<DungeonId> DungeonRecords::collect_entered_dungeon_ids() const
     }
 
     return ids;
+}
+
+void DungeonRecords::validate_dungeon_id(DungeonId dungeon_id) const
+{
+    if ((dungeon_id < DungeonId::WILDERNESS) || (dungeon_id >= DungeonId::MAX)) {
+        THROW_EXCEPTION(std::out_of_range, fmt::format("Invalid Dungeon ID: {}", enum2i(dungeon_id)));
+    }
 }

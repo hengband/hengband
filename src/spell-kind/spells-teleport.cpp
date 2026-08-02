@@ -58,7 +58,7 @@ bool teleport_swap(PlayerType *player_ptr, const Direction &dir)
         return false;
     }
 
-    if ((grid.is_icky()) || (Grid::calc_distance(pos, player_ptr->get_position()) > player_ptr->lev * 3 / 2 + 10)) {
+    if ((grid.is_no_teleport_dest()) || (Grid::calc_distance(pos, player_ptr->get_position()) > player_ptr->lev * 3 / 2 + 10)) {
         msg_print(_("失敗した。", "Failed to swap."));
         return false;
     }
@@ -146,7 +146,7 @@ bool teleport_away(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION dis, tele
                 continue;
             }
             if (!floor.is_in_quest() && !floor.inside_arena) {
-                if (floor.get_grid(m_pos).is_icky()) {
+                if (floor.get_grid(m_pos).is_no_teleport_dest()) {
                     continue;
                 }
             }
@@ -533,11 +533,8 @@ void teleport_away_followable(PlayerType *player_ptr, MONSTER_IDX m_idx)
     if (player_ptr->muta.has(PlayerMutationType::VTELEPORT) || PlayerClass(player_ptr).equals(PlayerClassType::IMITATOR)) {
         follow = true;
     } else {
-        ItemEntity *o_ptr;
-        INVENTORY_IDX i;
-
-        for (i = INVEN_MAIN_HAND; i < INVEN_TOTAL; i++) {
-            o_ptr = player_ptr->inventory[i].get();
+        for (const auto i_idx : INVEN_WIELDING_SLOTS) {
+            const auto *o_ptr = player_ptr->inventory[i_idx].get();
             if (o_ptr->is_valid() && !o_ptr->is_cursed() && o_ptr->get_flags().has(TR_TELEPORT)) {
                 follow = true;
                 break;

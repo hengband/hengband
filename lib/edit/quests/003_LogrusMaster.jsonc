@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "id": 3,
+  "name": {
+    "ja": "ログルス使い",
+    "en": "Logrus Master",
+  },
+  "definition": {
+    "type": "KILL_LEVEL",
+    "level": 25,
+    "maxNum": 1,
+    "monster": 498,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "最近、街の家の一軒を怪しいよそ者が買い取りました。それ以来",
+          "怪しげな事件が頻繁に起こるようになりました。",
+          "動物は死に、人々は病気になり、この街では悪いことばかり起こっています。",
+          "どうやらカオスの力をもてあそんでいる人間がいるようです。私はこの原因が",
+          "街の北西の家に住んでいるよそ者だという証拠を持っています。",
+          "どうかあのログルス使いを追い出して下さい。",
+        ],
+        "en": [
+          "One of the houses in town was recently sold to an foreign",
+          "mystic.  Now more and more alarming things happen like the",
+          "sudden plague of evil in the severs, animals dying, people",
+          "getting sick, and a general run of bad luck for our town.",
+          "It is like someone is playing around with powers of chaos.",
+          "I have evidence that the origin of everything is the stranger",
+          "living in the house in the north-west corner of town.",
+          "I need you to take this logrus adept out.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "また我々を窮地から救って下さい有難うございます。",
+          "どうか外にあるお礼を受けとって下さい。",
+        ],
+        "en": [
+          "You saved us from deep trouble again, please accept the",
+          "gift that awaits you outside.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": [
+          "あなたをかいかぶっていたようですな。しかし私の友人である司書の",
+          "アスティヌスから聞いた話では、あのログルス使いは街を去ったようです。",
+          "彼が二度と戻ってこないことを願いましょう。",
+        ],
+        "en": [
+          "It seems like I've overestimated your power.  But at least",
+          "my friend Astinus, the Librarian says that the Logrus Master",
+          "has left the town.  Let's hope that he never comes back.",
+        ],
+      },
+    },
+  ],
+  "legend": {
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 498,
+    },
+    "O": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "object": {
+        "random": true,
+        "oodLevel": 10,
+      },
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXX",
+    "X........O.O..X",
+    "X.........a...X",
+    "X........O.O..X",
+    "X....XXXXXXXXXX",
+    "X.............X",
+    "X.............X",
+    "X.............X",
+    "X<............X",
+    "XXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 8,
+    "x": 2,
+  },
+}

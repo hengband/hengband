@@ -46,6 +46,16 @@ def build_validation_pairs(edit_dir: Path, schema_map: dict[str, Path], loaded_s
 
         pairs.append((data_file, schema_file, loaded_schemas[schema_file]))
 
+    # Per-quest files live one directory down and all share the single "Quest" schema.
+    quests_dir = edit_dir / "quests"
+    if quests_dir.is_dir():
+        quest_schema_file = schema_map.get("Quest")
+        if not quest_schema_file:
+            raise RuntimeError("Missing schema: Quest.schema.json (required for lib/edit/quests/*.jsonc)")
+
+        for data_file in sorted(quests_dir.glob("*.jsonc")):
+            pairs.append((data_file, quest_schema_file, loaded_schemas[quest_schema_file]))
+
     if missing:
         raise RuntimeError(f"Missing schemas for: {', '.join(missing)}")
 

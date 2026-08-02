@@ -9,6 +9,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-service.h"
 #include "system/system-variables.h"
 #include <array>
 
@@ -86,7 +87,8 @@ void BaseitemAllocationTable::initialize()
 
     this->entries = std::vector<BaseitemAllocationEntry>(allocation_size);
     std::array<short, MAX_DEPTH> aux{};
-    for (const auto &baseitem : baseitems) {
+    for (short bi_id : baseitems.collect_valid_bi_ids()) {
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
         for (const auto &[level, chance] : baseitem.alloc_tables) {
             if (chance == 0) {
                 continue;
@@ -96,7 +98,7 @@ void BaseitemAllocationTable::initialize()
             const short p = 100 / chance;
             const auto y = (x > 0) ? num[x - 1] : 0;
             const auto z = y + aux[x];
-            this->entries[z] = BaseitemAllocationEntry(baseitem.idx, x, p, p);
+            this->entries[z] = BaseitemAllocationEntry(bi_id, x, p, p);
             aux[x]++;
         }
     }

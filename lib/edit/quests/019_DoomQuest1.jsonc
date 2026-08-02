@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "id": 19,
+  "name": {
+    "ja": "破滅のクエスト１",
+    "en": "Doom Quest 1",
+  },
+  "definition": {
+    "type": "KILL_ALL",
+    "level": 15,
+    "flags": ["PRESET", "ONCE"],
+  },
+  "descriptions": [
+    {
+      "when": {
+        "statusAtMost": "COMPLETED",
+      },
+      "text": {
+        "ja": [
+          "冒険者様、あなたの力をお貸し下さい。この街の北西に",
+          "穴が口を開け、その中で奇妙な悪魔どもがうごめいています。",
+          "住民の一人がそうと知らずに入り込み、命からがら逃げ帰って",
+          "来ました！どうか悪魔を打ち倒し、これまで通り平和な街にして下さい。",
+          "さもなければ我々は確実に破滅することになるでしょう。",
+        ],
+        "en": [
+          "We need your help, adventurer.  A hole has opened up to the",
+          "northwest of our town, and strange demons lurk within.  One",
+          "of our townspeople investigated it unwittingly and barely ",
+          "escaped with his life!  Please destroy these demons and ",
+          "ensure the continued safety of our town, else we are surely",
+          "doomed.",
+        ],
+      },
+    },
+    {
+      "when": {
+        "status": "REWARDED",
+      },
+      "text": {
+        "ja": [
+          "悪魔どもを退治して下さって有難うございます！",
+          "ささやかなお礼を外に用意しておきました。",
+        ],
+        "en": ["Thank you for killing the demons! A small reward", "awaits you outside."],
+      },
+    },
+    {
+      "when": {
+        "status": "FAILED",
+      },
+      "text": {
+        "ja": ["既に他の者に仕事を任せてあります。しばらく私を一人にさせてください！"],
+        "en": ["I've sent out someone else to do the job.  Now leave me alone!"],
+      },
+    },
+  ],
+  "legend": {
+    "a": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 128,
+    },
+    "b": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 296,
+    },
+    "c": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 273,
+    },
+    "d": {
+      "terrain": "FLOOR",
+      "caveInfo": ["ROOM"],
+      "monster": 357,
+    },
+    ";": {
+      "terrain": "RUBBLE",
+      "caveInfo": ["ROOM"],
+    },
+  },
+  "map": [
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XT....c..aaaa...XT...aX.......DcD...ca...;X.TTX",
+    "XT..aaa.XXXXXX..X.bcb.D..b.b..DcD..b...XXXcc.TX",
+    "X.b.....Xb......X..b..X..a....DcD....XXXX.c..TX",
+    "XXXXX...X.T...b.X.....X.b..TT.DcD.aXXXXX....d.X",
+    "XT..D...X......XXXXXDXX.b..TT.DcD.aXXXXX....d.X",
+    "XTb.Xaa.X...b.XX......X..a....DcD...TXXXX.c..TX",
+    "XXXXX...X..XXXX.c.....X..b.b..DcD..b...XXXcc.TX",
+    "X<..D..aX...b........TX.......DcD...ca...;X.TTX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ],
+  "start": {
+    "y": 8,
+    "x": 1,
+  },
+}

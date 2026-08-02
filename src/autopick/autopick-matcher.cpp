@@ -346,13 +346,15 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
         return false;
     }
 
-    if (entry.name[0] == '^') {
-        if (!item_name.starts_with(std::string_view(entry.name).substr(1))) {
-            return false;
-        }
-    } else {
-        if (!str_find(std::string(item_name), entry.name)) {
-            return false;
+    if (!entry.name.empty()) {
+        if (entry.name[0] == '^') {
+            if (!item_name.starts_with(std::string_view(entry.name).substr(1))) {
+                return false;
+            }
+        } else {
+            if (!str_find(std::string(item_name), entry.name)) {
+                return false;
+            }
         }
     }
 
@@ -360,13 +362,13 @@ bool is_autopick_match(PlayerType *player_ptr, const ItemEntity *o_ptr, const au
         return true;
     }
 
-    for (int j = 0; j < INVEN_PACK; j++) {
+    for (const auto i_idx : INVEN_PACK_SLOTS) {
         /*
          * 'Collecting' means the item must be absorbed
          * into an inventory slot.
          * But an item can not be absorbed into itself!
          */
-        if ((player_ptr->inventory[j].get() != o_ptr) && player_ptr->inventory[j]->is_similar(*o_ptr)) {
+        if ((player_ptr->inventory[i_idx].get() != o_ptr) && player_ptr->inventory[i_idx]->is_similar(*o_ptr)) {
             return true;
         }
     }

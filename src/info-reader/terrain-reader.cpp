@@ -7,7 +7,6 @@
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "util/dice.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <algorithm>
 #include <cstdint>
@@ -16,10 +15,141 @@
 #include <string_view>
 #include <unordered_map>
 
+TerrainReader::TerrainReader(const nlohmann::json &terrain_data)
+    : terrain_data(terrain_data)
+{
+}
+
+/*!
+ * @brief 地形定義(TerrainDefinitions)のパース関数
+ * @param element 地形情報の格納されたJSON Object
+ * @return エラーコード
+ */
+int TerrainReader::read() const
+{
+    const auto &element = this->terrain_data;
+    if (element.is_null() || !element.is_object()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    int id = 0;
+    if (auto err = info_set_integer(get_json_value(element, "id"), id, true, Range(0, 9999))) {
+        return err;
+    }
+
+    const auto &key_obj = get_json_value(element, "key");
+    if (!key_obj.is_string()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+    const auto key = key_obj.get<std::string>();
+    if (key.empty()) {
+        return PARSE_ERROR_GENERIC;
+    }
+
+    auto &terrains = TerrainList::get_instance();
+    if (id >= static_cast<int>(terrains.size())) {
+        terrains.resize(id + 1);
+    }
+
+    error_idx = id;
+
+    const auto s = static_cast<short>(id);
+    auto &terrain = terrains.get_terrain(s);
+
+    terrain.idx = s;
+    terrain.tag = key;
+
+    const auto tag_it = terrain_tags.find(key);
+    if (tag_it != terrain_tags.end()) {
+        terrain.tag_enum = tag_it->second;
+    }
+
+    terrain.mimic = s;
+    terrain.destroyed = s;
+    terrain.gold_drop = Dice{};
+    terrain.generation_changes.clear();
+    for (auto j = 0; j < MAX_FEAT_STATES; j++) {
+        terrain.state[j].action = TerrainCharacteristics::MAX;
+        terrain.state[j].result_tag.clear();
+    }
+
+    if (auto err = info_set_string(get_json_value(element, "name"), terrain.name, true)) {
+        return err;
+    }
+
+    if (auto err = this->set_terrain_symbol(terrain)) {
+        return err;
+    }
+
+    const auto &mimic_obj = get_json_value(element, "mimic");
+    if (!mimic_obj.is_null()) {
+        if (!mimic_obj.is_string()) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+        terrain.mimic_tag = mimic_obj.get<std::string>();
+    }
+
+    const auto &prio_obj = get_json_value(element, "map_priority");
+    if (!prio_obj.is_null()) {
+        if (auto err = info_set_integer(prio_obj, terrain.priority, true, Range(-9999, 9999))) {
+            return err;
+        }
+    }
+
+    const auto &flags_obj = get_json_value(element, "flags");
+    if (flags_obj.is_null() || !flags_obj.is_array()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+
+    for (const auto &f_obj : flags_obj) {
+        if (!f_obj.is_string()) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+
+        const auto f = f_obj.get<std::string>();
+        if (f.empty()) {
+            continue;
+        }
+
+        if (!this->grab_one_feat_flag(terrain, f)) {
+            return PARSE_ERROR_INVALID_FLAG;
+        }
+    }
+    if (auto err = this->set_terrain_door(terrain)) {
+        return err;
+    }
+    if (auto err = this->set_terrain_tunnel(terrain)) {
+        return err;
+    }
+    if (auto err = this->set_terrain_trap(terrain)) {
+        return err;
+    }
+    if (auto err = this->set_terrain_pattern(terrain)) {
+        return err;
+    }
+    if (auto err = this->set_terrain_store(terrain)) {
+        return err;
+    }
+    if (auto err = this->set_terrain_building(terrain)) {
+        return err;
+    }
+    if (auto err = this->set_terrain_conversion(terrain)) {
+        return err;
+    }
+    if (auto err = this->set_terrain_generation(terrain)) {
+        return err;
+    }
+    if (auto err = this->set_terrain_interactions(terrain)) {
+        return err;
+    }
+
+    return PARSE_ERROR_NONE;
+}
+
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る
  */
-static bool grab_one_feat_flag(TerrainType &terrain, std::string_view what)
+bool TerrainReader::grab_one_feat_flag(TerrainType &terrain, std::string_view what) const
 {
     if (EnumClassFlagGroup<TerrainCharacteristics>::grab_one_flag(terrain.flags, f_info_flags, what)) {
         return true;
@@ -44,15 +174,16 @@ static std::optional<TerrainCharacteristics> parse_terrain_action(std::string_vi
 /*!
  * @brief JSON Objectから地形シンボルをセットする
  */
-static errr set_terrain_symbol(const nlohmann::json &symbol_obj, TerrainType &terrain)
+int TerrainReader::set_terrain_symbol(TerrainType &terrain) const
 {
+    const auto &symbol_obj = get_json_value(this->terrain_data, "symbol");
     if (symbol_obj.is_null() || !symbol_obj.is_object()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto &ch_obj = symbol_obj["character"];
-    const auto &color_obj = symbol_obj["color"];
-    const auto &lit_obj = symbol_obj["lit"];
+    const auto &ch_obj = get_json_value(symbol_obj, "character");
+    const auto &color_obj = get_json_value(symbol_obj, "color");
+    const auto &lit_obj = get_json_value(symbol_obj, "lit");
 
     if (!ch_obj.is_string() || !color_obj.is_string() || !lit_obj.is_boolean()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -91,8 +222,9 @@ static errr set_terrain_symbol(const nlohmann::json &symbol_obj, TerrainType &te
     return PARSE_ERROR_NONE;
 }
 
-static errr set_terrain_conversion(const nlohmann::json &convert_obj, TerrainType &terrain)
+int TerrainReader::set_terrain_conversion(TerrainType &terrain) const
 {
+    const auto &convert_obj = get_json_value(this->terrain_data, "convert");
     if (convert_obj.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -100,7 +232,7 @@ static errr set_terrain_conversion(const nlohmann::json &convert_obj, TerrainTyp
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto &type_obj = convert_obj["type"];
+    const auto &type_obj = get_json_value(convert_obj, "type");
     if (!type_obj.is_string()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
@@ -121,7 +253,7 @@ static errr set_terrain_conversion(const nlohmann::json &convert_obj, TerrainTyp
 
     auto stream_index = -1;
     if (it->second == TerrainConversionType::STREAM) {
-        if (auto err = info_set_integer(convert_obj["stream_index"], stream_index, true, Range(0, 254))) {
+        if (auto err = info_set_integer(get_json_value(convert_obj, "stream_index"), stream_index, true, Range(0, 254))) {
             return err;
         }
     }
@@ -130,8 +262,9 @@ static errr set_terrain_conversion(const nlohmann::json &convert_obj, TerrainTyp
     return terrain.init_conversion_type(it->second, stream_index) ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_VALUE;
 }
 
-static errr set_terrain_generation(const nlohmann::json &generation_obj, TerrainType &terrain)
+int TerrainReader::set_terrain_generation(TerrainType &terrain) const
 {
+    const auto &generation_obj = get_json_value(this->terrain_data, "generation");
     if (generation_obj.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -139,7 +272,7 @@ static errr set_terrain_generation(const nlohmann::json &generation_obj, Terrain
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto &changes_obj = generation_obj["changes"];
+    const auto &changes_obj = get_json_value(generation_obj, "changes");
     if (!changes_obj.is_array()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
@@ -150,7 +283,7 @@ static errr set_terrain_generation(const nlohmann::json &generation_obj, Terrain
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        const auto &terrain_obj = change_obj["terrain"];
+        const auto &terrain_obj = get_json_value(change_obj, "terrain");
         if (!terrain_obj.is_string()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
@@ -161,7 +294,7 @@ static errr set_terrain_generation(const nlohmann::json &generation_obj, Terrain
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        if (auto err = info_set_integer(change_obj["probability"], change.probability, true, Range(1, 100))) {
+        if (auto err = info_set_integer(get_json_value(change_obj, "probability"), change.probability, true, Range(1, 100))) {
             return err;
         }
 
@@ -188,8 +321,9 @@ static errr set_terrain_power(const nlohmann::json &power_obj, uint8_t &power, b
     return info_set_integer(power_obj, power, is_required, Range(0, 255));
 }
 
-static errr set_terrain_trap(const nlohmann::json &trap_obj, TerrainType &terrain)
+int TerrainReader::set_terrain_trap(TerrainType &terrain) const
 {
+    const auto &trap_obj = get_json_value(this->terrain_data, "trap");
     if (trap_obj.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -197,11 +331,11 @@ static errr set_terrain_trap(const nlohmann::json &trap_obj, TerrainType &terrai
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto &type_obj = trap_obj["type"];
+    const auto &type_obj = get_json_value(trap_obj, "type");
     if (!type_obj.is_string()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
-    if (auto err = set_terrain_power(trap_obj["power"], terrain.trap_power, true)) {
+    if (auto err = set_terrain_power(get_json_value(trap_obj, "power"), terrain.trap_power, true)) {
         return err;
     }
 
@@ -240,12 +374,12 @@ static errr set_terrain_trap(const nlohmann::json &trap_obj, TerrainType &terrai
 
 /*!
  * @brief 扉定義を地形情報へ反映する
- * @param door_obj 扉定義を表すJSONオブジェクト
  * @param terrain 設定先の地形情報
  * @return パース結果
  */
-static errr set_terrain_door(const nlohmann::json &door_obj, TerrainType &terrain)
+int TerrainReader::set_terrain_door(TerrainType &terrain) const
 {
+    const auto &door_obj = get_json_value(this->terrain_data, "door");
     if (door_obj.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -254,17 +388,17 @@ static errr set_terrain_door(const nlohmann::json &door_obj, TerrainType &terrai
     }
 
     terrain.flags.set(TerrainCharacteristics::DOOR);
-    return set_terrain_power(door_obj["power"], terrain.door_power, true);
+    return set_terrain_power(get_json_value(door_obj, "power"), terrain.door_power, true);
 }
 
 /*!
  * @brief 掘削定義を地形情報へ反映する
- * @param tunnel_obj 掘削定義を表すJSONオブジェクト
  * @param terrain 設定先の地形情報
  * @return パース結果
  */
-static errr set_terrain_tunnel(const nlohmann::json &tunnel_obj, TerrainType &terrain)
+int TerrainReader::set_terrain_tunnel(TerrainType &terrain) const
 {
+    const auto &tunnel_obj = get_json_value(this->terrain_data, "tunnel");
     if (tunnel_obj.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -273,11 +407,12 @@ static errr set_terrain_tunnel(const nlohmann::json &tunnel_obj, TerrainType &te
     }
 
     terrain.flags.set(TerrainCharacteristics::TUNNEL);
-    return set_terrain_power(tunnel_obj["power"], terrain.tunnel_power, true);
+    return set_terrain_power(get_json_value(tunnel_obj, "power"), terrain.tunnel_power, true);
 }
 
-static errr set_terrain_pattern(const nlohmann::json &pattern_obj, TerrainType &terrain)
+int TerrainReader::set_terrain_pattern(TerrainType &terrain) const
 {
+    const auto &pattern_obj = get_json_value(this->terrain_data, "pattern");
     if (pattern_obj.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -285,7 +420,7 @@ static errr set_terrain_pattern(const nlohmann::json &pattern_obj, TerrainType &
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto &type_obj = pattern_obj["type"];
+    const auto &type_obj = get_json_value(pattern_obj, "type");
     if (!type_obj.is_string()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
@@ -311,8 +446,9 @@ static errr set_terrain_pattern(const nlohmann::json &pattern_obj, TerrainType &
     return terrain.init_pattern_tile_type(it->second) ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_VALUE;
 }
 
-static errr set_terrain_store(const nlohmann::json &store_obj, TerrainType &terrain)
+int TerrainReader::set_terrain_store(TerrainType &terrain) const
 {
+    const auto &store_obj = get_json_value(this->terrain_data, "store");
     if (store_obj.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -320,7 +456,7 @@ static errr set_terrain_store(const nlohmann::json &store_obj, TerrainType &terr
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto &type_obj = store_obj["type"];
+    const auto &type_obj = get_json_value(store_obj, "type");
     if (!type_obj.is_string()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
@@ -347,8 +483,9 @@ static errr set_terrain_store(const nlohmann::json &store_obj, TerrainType &terr
     return terrain.init_store_sale_type(it->second) ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_VALUE;
 }
 
-static errr set_terrain_building(const nlohmann::json &building_obj, TerrainType &terrain)
+int TerrainReader::set_terrain_building(TerrainType &terrain) const
 {
+    const auto &building_obj = get_json_value(this->terrain_data, "building");
     if (building_obj.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -356,7 +493,7 @@ static errr set_terrain_building(const nlohmann::json &building_obj, TerrainType
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto &type_obj = building_obj["type"];
+    const auto &type_obj = get_json_value(building_obj, "type");
     if (!type_obj.is_string()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
@@ -407,12 +544,12 @@ static errr set_terrain_building(const nlohmann::json &building_obj, TerrainType
 
 /*!
  * @brief 地形変化定義を地形情報へ反映する
- * @param interactions_obj 地形変化定義を表すJSONオブジェクト
  * @param terrain 設定先の地形情報
  * @return パース結果
  */
-static errr set_terrain_interactions(const nlohmann::json &interactions_obj, TerrainType &terrain)
+int TerrainReader::set_terrain_interactions(TerrainType &terrain) const
 {
+    const auto &interactions_obj = get_json_value(this->terrain_data, "interactions");
     if (interactions_obj.is_null()) {
         return PARSE_ERROR_NONE;
     }
@@ -466,131 +603,6 @@ static errr set_terrain_interactions(const nlohmann::json &interactions_obj, Ter
             return PARSE_ERROR_INVALID_FLAG;
         }
         terrain.state[idx_state].result_tag = result_tag;
-    }
-
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief 地形定義(TerrainDefinitions)のパース関数
- * @param element 地形情報の格納されたJSON Object
- * @return エラーコード
- */
-int parse_terrains_json_info(nlohmann::json &element)
-{
-    if (element.is_null() || !element.is_object()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    int id = 0;
-    if (auto err = info_set_integer(element["id"], id, true, Range(0, 9999))) {
-        return err;
-    }
-
-    const auto &key_obj = element["key"];
-    if (!key_obj.is_string()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-    const auto key = key_obj.get<std::string>();
-    if (key.empty()) {
-        return PARSE_ERROR_GENERIC;
-    }
-
-    auto &terrains = TerrainList::get_instance();
-    if (id >= static_cast<int>(terrains.size())) {
-        terrains.resize(id + 1);
-    }
-
-    error_idx = id;
-
-    const auto s = static_cast<short>(id);
-    auto &terrain = terrains.get_terrain(s);
-
-    terrain.idx = s;
-    terrain.tag = key;
-
-    const auto tag_it = terrain_tags.find(key);
-    if (tag_it != terrain_tags.end()) {
-        terrain.tag_enum = tag_it->second;
-    }
-
-    terrain.mimic = s;
-    terrain.destroyed = s;
-    terrain.gold_drop = Dice{};
-    terrain.generation_changes.clear();
-    for (auto j = 0; j < MAX_FEAT_STATES; j++) {
-        terrain.state[j].action = TerrainCharacteristics::MAX;
-        terrain.state[j].result_tag.clear();
-    }
-
-    if (auto err = info_set_string(element["name"], terrain.name, true)) {
-        return err;
-    }
-
-    if (auto err = set_terrain_symbol(element["symbol"], terrain)) {
-        return err;
-    }
-
-    const auto &mimic_obj = element["mimic"];
-    if (!mimic_obj.is_null()) {
-        if (!mimic_obj.is_string()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-        terrain.mimic_tag = mimic_obj.get<std::string>();
-    }
-
-    const auto &prio_obj = element["map_priority"];
-    if (!prio_obj.is_null()) {
-        if (auto err = info_set_integer(prio_obj, terrain.priority, true, Range(-9999, 9999))) {
-            return err;
-        }
-    }
-
-    const auto &flags_obj = element["flags"];
-    if (flags_obj.is_null() || !flags_obj.is_array()) {
-        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-    }
-
-    for (const auto &f_obj : flags_obj) {
-        if (!f_obj.is_string()) {
-            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
-        }
-
-        const auto f = f_obj.get<std::string>();
-        if (f.empty()) {
-            continue;
-        }
-
-        if (!grab_one_feat_flag(terrain, f)) {
-            return PARSE_ERROR_INVALID_FLAG;
-        }
-    }
-    if (auto err = set_terrain_door(element["door"], terrain)) {
-        return err;
-    }
-    if (auto err = set_terrain_tunnel(element["tunnel"], terrain)) {
-        return err;
-    }
-    if (auto err = set_terrain_trap(element["trap"], terrain)) {
-        return err;
-    }
-    if (auto err = set_terrain_pattern(element["pattern"], terrain)) {
-        return err;
-    }
-    if (auto err = set_terrain_store(element["store"], terrain)) {
-        return err;
-    }
-    if (auto err = set_terrain_building(element["building"], terrain)) {
-        return err;
-    }
-    if (auto err = set_terrain_conversion(element["convert"], terrain)) {
-        return err;
-    }
-    if (auto err = set_terrain_generation(element["generation"], terrain)) {
-        return err;
-    }
-    if (auto err = set_terrain_interactions(element["interactions"], terrain)) {
-        return err;
     }
 
     return PARSE_ERROR_NONE;

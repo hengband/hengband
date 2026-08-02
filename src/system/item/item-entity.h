@@ -32,6 +32,7 @@ enum class SmithEffectType : short;
 class ActivationType;
 class ArtifactDefinition;
 class BaseitemDefinition;
+class BaseitemRecord;
 class DisplaySymbol;
 class EgoItemDefinition;
 class MonraceDefinition;
@@ -155,7 +156,8 @@ public:
     bool has_bias() const;
     bool is_bounty() const;
     bool is_target_of(QuestId quest_id) const;
-    BaseitemDefinition &get_baseitem() const;
+    const BaseitemDefinition &get_baseitem() const;
+    BaseitemRecord &get_baseitem_record() const;
     EgoItemDefinition &get_ego() const;
     const ArtifactDefinition &get_fixed_artifact() const;
     const tl::optional<short> &get_fixed_artifact_floor_id() const;
@@ -177,6 +179,7 @@ public:
     int get_lite_radius() const;
     Pos2D get_position() const;
     bool has_knowledge(ItemKindType tval) const;
+    std::string get_fixed_artifact_name() const;
 
     void mark_as_known();
     void mark_as_tried() const;
@@ -192,7 +195,7 @@ public:
     bool has_identification_flag(IdentificationFlag flag) const;
     bool has_not_identification_flag(IdentificationFlag flag) const;
     bool any_identification_flag() const;
-    const EnumClassFlagGroup<IdentificationFlag> &get_special_flags() const; //!< セーブとデバッグ専用.
+    const EnumClassFlagGroup<IdentificationFlag> &get_identification_flags() const; //!< セーブとデバッグ専用.
     void load_identification_flags(const EnumClassFlagGroup<IdentificationFlag> &flags); //!< ロード専用.
 
 private:

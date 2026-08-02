@@ -4,7 +4,6 @@
  */
 
 #include "main-win/main-win-music.h"
-#include "dungeon/quest.h"
 #include "main-win/main-win-cfg-reader.h"
 #include "main-win/main-win-define.h"
 #include "main-win/main-win-mci.h"
@@ -16,7 +15,8 @@
 #include "main/sound-of-music.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
-#include "system/floor/town-info.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
 #include "system/floor/town-list.h"
 #include "system/monrace/monrace-list.h"
 #include "term/z-term.h"
@@ -99,7 +99,7 @@ static tl::optional<std::string> quest_key_at(int index)
  */
 static tl::optional<std::string> town_key_at(int index)
 {
-    if (index >= static_cast<int>(towns_info.size())) {
+    if (index >= static_cast<int>(TownList::get_instance().size())) {
         return tl::nullopt;
     }
 
@@ -135,15 +135,13 @@ void load_music_prefs()
     GetPrivateProfileStringA("Device", "type", "MPEGVideo", device_type, size, reader.get_cfg_path().string().data());
     mci_device_type = to_wchar(device_type).wc_str();
 
-    // clang-format off
     music_cfg_data = reader.read_sections({
         { "Basic", TERM_XTRA_MUSIC_BASIC, basic_key_at },
         { "Dungeon", TERM_XTRA_MUSIC_DUNGEON, dungeon_key_at },
         { "Quest", TERM_XTRA_MUSIC_QUEST, quest_key_at },
         { "Town", TERM_XTRA_MUSIC_TOWN, town_key_at },
-        { "Monster", TERM_XTRA_MUSIC_MONSTER, monster_key_at, &has_monster_music }
-        });
-    // clang-format on
+        { "Monster", TERM_XTRA_MUSIC_MONSTER, monster_key_at, &has_monster_music },
+    });
 
     if (!has_monster_music) {
         int type = TERM_XTRA_MUSIC_BASIC;

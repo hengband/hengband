@@ -1,6 +1,5 @@
 #include "load/load-zangband.h"
 #include "avatar/avatar.h"
-#include "dungeon/quest.h"
 #include "floor/dungeon-feeling.h"
 #include "game-option/option-flags.h"
 #include "info-reader/fixed-map-parser.h"
@@ -21,6 +20,7 @@
 #include "spell/spells-status.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/dungeon-record.h"
+#include "system/dungeon/quest-definition.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/floor/floor-info.h"
 #include "system/floor/town-records.h"
@@ -208,9 +208,7 @@ void set_zangband_quest(PlayerType *player_ptr, QuestType *const q_ptr, const Qu
         return;
     }
 
-    init_flags = INIT_ASSIGN;
-    player_ptr->current_floor_ptr->quest_number = loading_quest_index;
-    parse_fixed_map(player_ptr, QUEST_DEFINITION_LIST, 0, 0, 0, 0);
+    assign_json_quest_metadata(loading_quest_index);
     player_ptr->current_floor_ptr->quest_number = old_inside_quest;
 }
 

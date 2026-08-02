@@ -3,16 +3,29 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/race-info-tokens-table.h"
-#include "locale/japanese.h"
-#include "player-ability/player-ability-types.h"
-#include "system/monrace/monrace-definition.h"
-#include "system/monrace/monrace-list.h"
+#include "locale/character-encoding.h"
 #include "system/monrace/monrace-message.h"
-#include "term/gameterm.h"
-#include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <string>
+
+MessageReader::MessageReader(const nlohmann::json &message_data)
+    : message_data(message_data)
+{
+}
+
+/*!
+ * @brief モンスターメッセージ情報(JSON Object)のパース関数
+ * @return エラーコード
+ */
+int MessageReader::read() const
+{
+    if (auto err = this->set_mon_message()) {
+        msg_format(_("モンスターメッセージ読込失敗。", "Failed to load monster message."));
+        return err;
+    }
+
+    return PARSE_ERROR_NONE;
+}
 
 /*!
  * @brief JSON Objectからid群をセットする
@@ -26,12 +39,12 @@ static errr set_id_list(const nlohmann::json &id_list_data, std::vector<int> &id
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (auto &id_data : id_list_data.items()) {
-        if (!id_data.value().is_number()) {
+    for (const auto &id_data : id_list_data) {
+        if (!id_data.is_number()) {
             return PARSE_ERROR_INVALID_FLAG;
         }
         int id;
-        if (auto err = info_set_integer(id_data.value(), id, true, Range(1, 9999))) {
+        if (auto err = info_set_integer(id_data, id, true, Range(1, 9999))) {
             return err;
         }
         id_list.push_back(id);
@@ -41,16 +54,16 @@ static errr set_id_list(const nlohmann::json &id_list_data, std::vector<int> &id
 
 /*!
  * @brief JSON Objectからモンスターのメッセージをセットする
- * @param message_data メッセージ情報の格納されたJSON Object
  * @return エラーコード
  */
-static errr set_mon_message(const nlohmann::json &group_data)
+int MessageReader::set_mon_message() const
 {
+    const auto &group_data = this->message_data;
     const auto message_iter = group_data.find("message");
     if (message_iter == group_data.end() || !message_iter->is_array()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
-    const auto &message_data = message_iter.value();
+    const auto &message_array = message_iter.value();
     auto id_list = std::vector<int>();
 
     const auto id_list_iter = group_data.find("id_list");
@@ -62,23 +75,24 @@ static errr set_mon_message(const nlohmann::json &group_data)
             return id_err;
         }
     } else {
-        if (!group_data["name"].is_string()) {
+        const auto &name_obj = get_json_value(group_data, "name");
+        if (!name_obj.is_string()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
 
-        const auto group_name = group_data["name"].get<std::string>();
+        const auto group_name = name_obj.get<std::string>();
         if (group_name != "DEFAULT") {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
     }
 
-    if (!message_data.is_array()) {
+    if (!message_array.is_array()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    for (const auto &message : message_data.items()) {
-        const auto action_iter = message.value().find("action");
-        if (action_iter == message.value().end() || !action_iter->is_string()) {
+    for (const auto &message : message_array) {
+        const auto action_iter = message.find("action");
+        if (action_iter == message.end() || !action_iter->is_string()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
         const auto &action_data = action_iter.value();
@@ -87,8 +101,8 @@ static errr set_mon_message(const nlohmann::json &group_data)
             return PARSE_ERROR_INVALID_FLAG;
         }
 
-        const auto chance_iter = message.value().find("chance");
-        if (chance_iter == message.value().end() || !chance_iter->is_number()) {
+        const auto chance_iter = message.find("chance");
+        if (chance_iter == message.end() || !chance_iter->is_number()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
         const auto &chance_data = chance_iter.value();
@@ -98,16 +112,16 @@ static errr set_mon_message(const nlohmann::json &group_data)
         }
 
         bool use_name = true;
-        const auto use_name_iter = message.value().find("use_name");
-        if (use_name_iter != message.value().end()) {
+        const auto use_name_iter = message.find("use_name");
+        if (use_name_iter != message.end()) {
             const auto &use_name_data = use_name_iter.value();
             if (auto err = info_set_bool(use_name_data, use_name, false)) {
                 return err;
             }
         }
 
-        const auto language_iter = message.value().find("message");
-        if (language_iter == message.value().end() || !language_iter->is_object()) {
+        const auto language_iter = message.find("message");
+        if (language_iter == message.end() || !language_iter->is_object()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
         }
         const auto &language_list = language_iter.value();
@@ -132,21 +146,21 @@ static errr set_mon_message(const nlohmann::json &group_data)
         const auto &message_list = en_list.value();
 #endif
 
-        for (const auto &message_str : message_list.items()) {
-            if (message_str.value().is_null()) {
+        for (const auto &message_str : message_list) {
+            if (message_str.is_null()) {
                 return PARSE_ERROR_TOO_FEW_ARGUMENTS;
             }
-            if (!message_str.value().is_string()) {
+            if (!message_str.is_string()) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
 #ifdef JP
-            auto str_test = utf8_to_sys(message_str.value().get<std::string>());
+            auto str_test = utf8_to_sys(message_str.get<std::string>());
             if (!str_test) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
             auto str = std::move(*str_test);
 #else
-            auto str = message_str.value().get<std::string>();
+            auto str = message_str.get<std::string>();
 #endif
             if (has_id_list) {
                 for (auto id : id_list) {
@@ -157,23 +171,5 @@ static errr set_mon_message(const nlohmann::json &group_data)
             }
         }
     }
-    return PARSE_ERROR_NONE;
-}
-
-/*!
- * @brief モンスターメッセージ情報(JSON Object)のパース関数
- * @param mon_data モンスターメッセージの格納されたJSON Object
- * @param head ヘッダ構造体
- * @return エラーコード
- */
-int parse_monster_messages_info(nlohmann::json &message_data)
-{
-    errr err;
-    err = set_mon_message(message_data);
-    if (err) {
-        msg_format(_("モンスターメッセージ読込失敗。", "Failed to load monster message."));
-        return err;
-    }
-
     return PARSE_ERROR_NONE;
 }

@@ -3,8 +3,8 @@
 #include "load/angband-version-comparer.h"
 #include "load/load-util.h"
 #include "system/artifact/artifact-record.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
+#include "system/baseitem/baseitem-record.h"
+#include "system/baseitem/baseitem-records.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 
@@ -14,13 +14,13 @@
 void ItemLoaderBase::load_item()
 {
     auto loading_max_k_idx = rd_u16b();
-    BaseitemDefinition dummy;
-    auto &baseitems = BaseitemList::get_instance();
+    BaseitemRecord dummy;
+    auto &baseitem_records = BaseitemRecords::get_instance();
     for (uint16_t i = 0; i < loading_max_k_idx; i++) {
-        auto &baseitem = i < baseitems.size() ? baseitems.get_baseitem(i) : dummy;
+        auto &baseitem_record = i < baseitem_records.size() ? baseitem_records.get_record(i) : dummy;
         const auto tmp8u = rd_byte();
-        baseitem.aware = any_bits(tmp8u, 0x01);
-        baseitem.tried = any_bits(tmp8u, 0x02);
+        baseitem_record.mark_awareness(any_bits(tmp8u, 0x01));
+        baseitem_record.mark_trial(any_bits(tmp8u, 0x02));
     }
 
     load_note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
@@ -28,8 +28,10 @@ void ItemLoaderBase::load_item()
 
 /*!
  * @brief 固定アーティファクトの出現情報をロードする.
+ *
+ * セーブファイルバージョン26未満専用.
  */
-void ItemLoaderBase::load_artifact()
+void ItemLoaderBase::load_artifact_older_than_26()
 {
     auto &records = ArtifactRecords::get_instance();
     auto loading_max_a_idx = rd_u16b();
@@ -44,5 +46,5 @@ void ItemLoaderBase::load_artifact()
         }
     }
 
-    load_note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
+    load_note(_("伝説のアイテム(旧版)をロードしました", "Loaded Artifacts (old versions)"));
 }
