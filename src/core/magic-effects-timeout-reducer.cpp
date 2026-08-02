@@ -185,8 +185,8 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_shield(player_ptr, player_ptr->shield - 1, true);
     }
 
-    if (player_ptr->tsubureru) {
-        (void)set_leveling(player_ptr, player_ptr->tsubureru - 1, true);
+    if (effects->wide_spread().is_wide_spreaded()) {
+        (void)set_leveling(player_ptr, effects->wide_spread().current() - 1, true);
     }
 
     if (player_ptr->magicdef) {

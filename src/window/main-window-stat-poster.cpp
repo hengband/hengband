@@ -524,7 +524,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_MAGICDEFENSE);
     }
 
-    if (player_ptr->tsubureru) {
+    if (effects->wide_spread().is_wide_spreaded()) {
         ADD_BAR_FLAG(BAR_EXPAND);
     }
 

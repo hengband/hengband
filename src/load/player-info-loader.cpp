@@ -407,6 +407,7 @@ static void rd_tsuyoshi(PlayerType *player_ptr)
 
 static void set_timed_effects(PlayerType *player_ptr)
 {
+    const auto effects = player_ptr->effects();
     player_ptr->tim_esp = rd_s16b();
     player_ptr->wraith_form = rd_s16b();
     player_ptr->resist_magic = rd_s16b();
@@ -416,7 +417,7 @@ static void set_timed_effects(PlayerType *player_ptr)
     player_ptr->tim_levitation = rd_s16b();
     player_ptr->tim_sh_touki = rd_s16b();
     player_ptr->lightspeed = rd_s16b();
-    player_ptr->tsubureru = rd_s16b();
+    effects->wide_spread().set(rd_s16b());
     if (h_older_than(0, 4, 7)) {
         player_ptr->magicdef = 0;
     } else {

@@ -705,6 +705,7 @@
     <ClCompile Include="..\..\src\timed-effect\player-poison.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-protection.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-stun.cpp" />
+    <ClCompile Include="..\..\src\timed-effect\player-wide-spread.cpp" />
     <ClCompile Include="..\..\src\timed-effect\timed-effects.cpp" />
     <ClCompile Include="..\..\src\tracking\baseitem-tracker.cpp" />
     <ClCompile Include="..\..\src\tracking\health-bar-tracker.cpp" />
@@ -1564,6 +1565,7 @@
     <ClInclude Include="..\..\src\timed-effect\player-poison.h" />
     <ClInclude Include="..\..\src\timed-effect\player-protection.h" />
     <ClInclude Include="..\..\src\timed-effect\player-stun.h" />
+    <ClInclude Include="..\..\src\timed-effect\player-wide-spread.h" />
     <ClInclude Include="..\..\src\timed-effect\timed-effects.h" />
     <ClInclude Include="..\..\src\tracking\baseitem-tracker.h" />
     <ClInclude Include="..\..\src\tracking\health-bar-tracker.h" />

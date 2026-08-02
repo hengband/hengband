@@ -115,7 +115,6 @@ public:
     TIME_EFFECT tim_levitation{};
     TIME_EFFECT tim_sh_touki{};
     TIME_EFFECT lightspeed{};
-    TIME_EFFECT tsubureru{};
     TIME_EFFECT magicdef{};
     TIME_EFFECT tim_res_nether{}; /* Timed -- Nether resistance */
     TIME_EFFECT tim_res_lite{}; /* Timed -- Lite resistance */
