@@ -1137,7 +1137,7 @@ static ACTION_SKILL_POWER calc_saving_throw(PlayerType *player_ptr)
         pow = 90 + player_ptr->lev;
     }
 
-    if (player_ptr->tsubureru) {
+    if (player_ptr->effects()->expand().is_active()) {
         pow = 10;
     }
 
@@ -1632,6 +1632,8 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
         return 0;
     }
 
+    const auto effects = player_ptr->effects();
+
     ac += ((int)(adj_dex_ta[player_ptr->stat_index[A_DEX]]) - 128);
 
     switch (player_ptr->mimic_form) {
@@ -1782,7 +1784,7 @@ static ARMOUR_CLASS calc_to_ac(PlayerType *player_ptr, bool is_real_value)
 
     if (player_ptr->ult_res || (pc.samurai_stance_is(SamuraiStanceType::MUSOU))) {
         ac += 100;
-    } else if (player_ptr->tsubureru || player_ptr->shield || player_ptr->magicdef) {
+    } else if (effects->expand().is_active() || player_ptr->shield || player_ptr->magicdef) {
         ac += 50;
     }
 

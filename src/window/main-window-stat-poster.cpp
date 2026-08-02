@@ -531,7 +531,7 @@ StatusBarFlags collect_status_bar_flags(PlayerType *player_ptr)
         bar_flags.set(BAR_MAGICDEFENSE);
     }
 
-    if (player_ptr->tsubureru) {
+    if (effects->expand().is_active()) {
         bar_flags.set(BAR_EXPAND);
     }
 
