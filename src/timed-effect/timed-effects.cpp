@@ -115,3 +115,13 @@ const PlayerProtection &TimedEffects::protection() const
 {
     return this->player_protection;
 }
+
+PlayerExpand &TimedEffects::expand()
+{
+    return this->player_expand;
+}
+
+const PlayerExpand &TimedEffects::expand() const
+{
+    return this->player_expand;
+}

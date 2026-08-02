@@ -65,7 +65,7 @@ void reset_tim_flags(PlayerType *player_ptr)
     player_ptr->magicdef = 0;
     player_ptr->resist_magic = 0;
     player_ptr->tsuyoshi = 0;
-    player_ptr->tsubureru = 0;
+    effects->expand().reset();
     player_ptr->tim_pass_wall = 0;
     player_ptr->tim_res_nether = 0;
     player_ptr->tim_res_lite = 0;
