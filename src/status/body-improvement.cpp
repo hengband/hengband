@@ -90,9 +90,10 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
     }
 
     auto &dur = DeferredUpdateRequests::get_instance();
+    const auto &effects = player_ptr->effects();
     if (v) {
-        if (player_ptr->invuln && !do_dec) {
-            if (player_ptr->invuln > v) {
+        if (effects->invulnerability().is_active() && !do_dec) {
+            if (effects->invulnerability().current() > v) {
                 return false;
             }
         } else if (!is_invuln(player_ptr)) {
@@ -105,7 +106,7 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
             dur.request_monster_update_and_map_redrawing();
         }
     } else {
-        if (player_ptr->invuln && !music_singing(player_ptr, MUSIC_INVULN)) {
+        if (effects->invulnerability().is_active() && !music_singing(player_ptr, MUSIC_INVULN)) {
             msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
             sound(SoundKind::BUFF_EXPIRE);
             notice = true;
@@ -114,7 +115,7 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
         }
     }
 
-    player_ptr->invuln = v;
+    effects->invulnerability().set(v);
     dur.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 
     if (!notice) {
