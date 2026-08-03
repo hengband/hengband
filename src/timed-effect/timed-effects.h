@@ -13,6 +13,7 @@ using PlayerPoison = TimedEffect<struct TagPlayerPoison>;
 using PlayerAcceleration = TimedEffect<struct TagPlayerAcceleration>;
 using PlayerDeceleration = TimedEffect<struct TagPlayerDeceleration>;
 using PlayerProtection = TimedEffect<struct TagPlayerProtection>;
+using PlayerInvulnerability = TimedEffect<struct TagPlayerInvulnerability>;
 
 class TimedEffects {
 public:
@@ -45,6 +46,8 @@ public:
     const PlayerPoison &poison() const;
     PlayerProtection &protection();
     const PlayerProtection &protection() const;
+    PlayerInvulnerability &invulnerability();
+    const PlayerInvulnerability &invulnerability() const;
 
 private:
     PlayerBlindness player_blindness{};
@@ -58,4 +61,5 @@ private:
     PlayerDeceleration player_deceleration{};
     PlayerPoison player_poison{};
     PlayerProtection player_protection{};
+    PlayerInvulnerability player_invulnerability{};
 };

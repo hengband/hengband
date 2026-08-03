@@ -53,6 +53,8 @@ bool QuaffEffects::influence(const ItemEntity &item)
         return false;
     }
 
+    const auto &effects = this->player_ptr->effects();
+
     switch (*item.bi_key.sval()) {
     case SV_POTION_WATER:
         msg_print(_("口の中がさっぱりした。", "That was refreshing."));
@@ -180,7 +182,7 @@ bool QuaffEffects::influence(const ItemEntity &item)
     case SV_POTION_CURING:
         return true_healing(this->player_ptr, 50);
     case SV_POTION_INVULNERABILITY:
-        (void)set_invuln(this->player_ptr, this->player_ptr->invuln + randint1(4) + 4, false);
+        (void)set_invuln(this->player_ptr, effects->invulnerability().current() + randint1(4) + 4, false);
         return true;
     case SV_POTION_NEW_LIFE:
         return this->new_life();
