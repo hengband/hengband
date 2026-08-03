@@ -115,3 +115,13 @@ const PlayerProtection &TimedEffects::protection() const
 {
     return this->player_protection;
 }
+
+PlayerInvulnerability &TimedEffects::invulnerability()
+{
+    return this->player_invulnerability;
+}
+
+const PlayerInvulnerability &TimedEffects::invulnerability() const
+{
+    return this->player_invulnerability;
+}

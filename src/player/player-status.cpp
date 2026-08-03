@@ -3109,7 +3109,7 @@ bool is_fast(PlayerType *player_ptr)
 
 bool is_invuln(PlayerType *player_ptr)
 {
-    return player_ptr->invuln || music_singing(player_ptr, MUSIC_INVULN);
+    return player_ptr->effects()->invulnerability().is_invulnerable() || music_singing(player_ptr, MUSIC_INVULN);
 }
 
 bool is_hero(PlayerType *player_ptr)

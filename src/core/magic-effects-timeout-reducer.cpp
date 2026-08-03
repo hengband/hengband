@@ -161,8 +161,8 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         BodyImprovement(player_ptr).mod_protection(-1, true);
     }
 
-    if (player_ptr->invuln) {
-        (void)set_invuln(player_ptr, player_ptr->invuln - 1, true);
+    if (effects->invulnerability().is_invulnerable()) {
+        (void)set_invuln(player_ptr, effects->invulnerability().current() - 1, true);
     }
 
     if (player_ptr->wraith_form) {

@@ -42,8 +42,8 @@ void reset_tim_flags(PlayerType *player_ptr)
     effects->cut().reset();
     effects->stun().reset();
     effects->protection().reset();
+    effects->invulnerability().reset();
 
-    player_ptr->invuln = 0; /* Timed -- Invulnerable */
     player_ptr->ult_res = 0;
     player_ptr->hero = 0; /* Timed -- Heroism */
     player_ptr->berserk = 0; /* Timed -- Super Heroism */

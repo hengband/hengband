@@ -97,13 +97,14 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
+    const auto &effects = player_ptr->effects();
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::OVERHEAD,
         SubWindowRedrawingFlag::DUNGEON,
     };
     if (v) {
-        if (player_ptr->invuln && !do_dec) {
-            if (player_ptr->invuln > v) {
+        if (effects->invulnerability().is_invulnerable() && !do_dec) {
+            if (effects->invulnerability().current() > v) {
                 return false;
             }
         } else if (!is_invuln(player_ptr)) {
@@ -118,7 +119,7 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
             rfu.set_flags(flags_swrf);
         }
     } else {
-        if (player_ptr->invuln && !music_singing(player_ptr, MUSIC_INVULN)) {
+        if (effects->invulnerability().is_invulnerable() && !music_singing(player_ptr, MUSIC_INVULN)) {
             msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
             sound(SoundKind::BUFF_EXPIRE);
             notice = true;
@@ -129,7 +130,7 @@ bool set_invuln(PlayerType *player_ptr, short v, bool do_dec)
         }
     }
 
-    player_ptr->invuln = v;
+    effects->invulnerability().set(v);
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
 
     if (!notice) {
