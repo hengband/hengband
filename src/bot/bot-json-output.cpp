@@ -511,12 +511,31 @@ PlayerKnownFlags collect_player_known_flags(PlayerType *player_ptr)
     return result;
 }
 
-bool has_known_player_flag(const PlayerKnownFlags &flags, tr_type flag, tr_type greater_flag = TR_FLAG_MAX)
+/*!
+ * @brief 1つの能力について、供給源ごとの有無を出力する
+ * @details 装備・恒久（種族/職業/変異/性格）・一時（時限効果と構え）は別々に判定する。
+ * まとめて1つの真偽値にすると「装備で得ている耐性」と「もうすぐ切れる一時耐性」が
+ * 区別できず、一時耐性が切れた瞬間に無防備になる装備選択を防げないため。
+ * キャラクター画面も同じ3系統を別の列として表示しているので、フェアプレイ上の
+ * 開示範囲は変わらない。
+ *
+ * permanent は「このスナップショット時点の種族・職業・変異・性格から出ている」という
+ * 意味であって、失効しない保証ではない。変身（tim_mimic）中は player_flags() が変身先の
+ * 種族を参照するため、悪魔変身の火耐性のような時限の能力も permanent に載る。
+ * キャラクター画面も同じく種族欄が変身先の名前に変わるだけなので表示との乖離はないが、
+ * スナップショットは変身状態そのものを出していないので、消費側は permanent を
+ * 「切れない」と読んではならない。
+ */
+nlohmann::json make_ability_sources_json(const PlayerKnownFlags &flags, tr_type flag, tr_type greater_flag = TR_FLAG_MAX)
 {
-    const auto has = [&flags](tr_type candidate) {
-        return flags.equipment.has(candidate) || flags.permanent.has(candidate) || flags.temporary.has(candidate);
+    const auto has = [flag, greater_flag](const TrFlags &source) {
+        return source.has(flag) || ((greater_flag != TR_FLAG_MAX) && source.has(greater_flag));
     };
-    return has(flag) || (greater_flag != TR_FLAG_MAX && has(greater_flag));
+    return {
+        { "equipment", has(flags.equipment) },
+        { "permanent", has(flags.permanent) },
+        { "temporary", has(flags.temporary) },
+    };
 }
 
 nlohmann::json make_player_abilities_json(PlayerType *player_ptr)
@@ -524,26 +543,29 @@ nlohmann::json make_player_abilities_json(PlayerType *player_ptr)
     // Aggregate only identified equipment flags plus intrinsic and temporary
     // flags. A known immunity upgrades its resistance on the character screen.
     const auto flags = collect_player_known_flags(player_ptr);
+    const auto sources = [&flags](tr_type flag, tr_type greater_flag = TR_FLAG_MAX) {
+        return make_ability_sources_json(flags, flag, greater_flag);
+    };
     return {
-        { "resist_fire", has_known_player_flag(flags, TR_RES_FIRE, TR_IM_FIRE) },
-        { "resist_cold", has_known_player_flag(flags, TR_RES_COLD, TR_IM_COLD) },
-        { "resist_elec", has_known_player_flag(flags, TR_RES_ELEC, TR_IM_ELEC) },
-        { "resist_acid", has_known_player_flag(flags, TR_RES_ACID, TR_IM_ACID) },
-        { "resist_pois", has_known_player_flag(flags, TR_RES_POIS) },
-        { "resist_conf", has_known_player_flag(flags, TR_RES_CONF) },
-        { "resist_chaos", has_known_player_flag(flags, TR_RES_CHAOS) },
-        { "resist_blind", has_known_player_flag(flags, TR_RES_BLIND) },
-        { "resist_fear", has_known_player_flag(flags, TR_RES_FEAR) },
-        { "resist_neth", has_known_player_flag(flags, TR_RES_NETHER) },
-        { "resist_nexus", has_known_player_flag(flags, TR_RES_NEXUS) },
-        { "resist_sound", has_known_player_flag(flags, TR_RES_SOUND) },
-        { "resist_shard", has_known_player_flag(flags, TR_RES_SHARDS) },
-        { "resist_disen", has_known_player_flag(flags, TR_RES_DISEN) },
-        { "resist_lite", has_known_player_flag(flags, TR_RES_LITE, TR_IM_LITE) },
-        { "resist_dark", has_known_player_flag(flags, TR_RES_DARK, TR_IM_DARK) },
-        { "telepathy", has_known_player_flag(flags, TR_TELEPATHY) },
-        { "free_action", has_known_player_flag(flags, TR_FREE_ACT) },
-        { "see_invisible", has_known_player_flag(flags, TR_SEE_INVIS) },
+        { "resist_fire", sources(TR_RES_FIRE, TR_IM_FIRE) },
+        { "resist_cold", sources(TR_RES_COLD, TR_IM_COLD) },
+        { "resist_elec", sources(TR_RES_ELEC, TR_IM_ELEC) },
+        { "resist_acid", sources(TR_RES_ACID, TR_IM_ACID) },
+        { "resist_pois", sources(TR_RES_POIS) },
+        { "resist_conf", sources(TR_RES_CONF) },
+        { "resist_chaos", sources(TR_RES_CHAOS) },
+        { "resist_blind", sources(TR_RES_BLIND) },
+        { "resist_fear", sources(TR_RES_FEAR) },
+        { "resist_neth", sources(TR_RES_NETHER) },
+        { "resist_nexus", sources(TR_RES_NEXUS) },
+        { "resist_sound", sources(TR_RES_SOUND) },
+        { "resist_shard", sources(TR_RES_SHARDS) },
+        { "resist_disen", sources(TR_RES_DISEN) },
+        { "resist_lite", sources(TR_RES_LITE, TR_IM_LITE) },
+        { "resist_dark", sources(TR_RES_DARK, TR_IM_DARK) },
+        { "telepathy", sources(TR_TELEPATHY) },
+        { "free_action", sources(TR_FREE_ACT) },
+        { "see_invisible", sources(TR_SEE_INVIS) },
     };
 }
 
