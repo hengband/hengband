@@ -10,6 +10,7 @@
 #include "game-option/runtime-arguments.h"
 #include "inventory/inventory-slot-types.h"
 #include "locale/character-encoding.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
@@ -18,6 +19,7 @@
 #include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player-info/race-info.h"
+#include "player-info/race-types.h"
 #include "player/digestion-processor.h"
 #include "player/permanent-resistances.h"
 #include "player/player-realm.h"
@@ -538,11 +540,10 @@ nlohmann::json make_ability_sources_json(const PlayerKnownFlags &flags, tr_type 
     };
 }
 
-nlohmann::json make_player_abilities_json(PlayerType *player_ptr)
+nlohmann::json make_player_abilities_json(const PlayerKnownFlags &flags)
 {
     // Aggregate only identified equipment flags plus intrinsic and temporary
     // flags. A known immunity upgrades its resistance on the character screen.
-    const auto flags = collect_player_known_flags(player_ptr);
     const auto sources = [&flags](tr_type flag, tr_type greater_flag = TR_FLAG_MAX) {
         return make_ability_sources_json(flags, flag, greater_flag);
     };
@@ -566,6 +567,76 @@ nlohmann::json make_player_abilities_json(PlayerType *player_ptr)
         { "telepathy", sources(TR_TELEPATHY) },
         { "free_action", sources(TR_FREE_ACT) },
         { "see_invisible", sources(TR_SEE_INVIS) },
+    };
+}
+
+/*!
+ * @brief 免疫（ダメージ0）を供給源ごとに出力する
+ * @details 耐性とは軽減率が別物（耐性は 1/3、免疫は 0）で、abilities では免疫を耐性に
+ * 畳み込んでしまうため、どの属性を無傷で受けられるかを別に出す。装備の免疫はキャラクター
+ * 画面の免疫欄、一時的な元素免疫はステータスバー（BAR_IMMFIRE 等）でプレイヤーも常時
+ * 確認できる。
+ */
+nlohmann::json make_player_immunities_json(PlayerType *player_ptr, const PlayerKnownFlags &flags)
+{
+    const auto sources = [&flags](tr_type flag) {
+        return nlohmann::json{
+            { "equipment", flags.equipment.has(flag) },
+            { "permanent", flags.permanent.has(flag) },
+            { "temporary", flags.temporary.has(flag) },
+        };
+    };
+    // 地獄だけは TR_IM_* が存在しない。スペクターの地獄無効は effect_player_nether() に
+    // 種族判定として直書きされている（被害0のうえ 1/4 を回復する）ので種族から直接出す。
+    auto nether = nlohmann::json{
+        { "equipment", false },
+        { "permanent", PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE) },
+        { "temporary", false },
+    };
+    return {
+        { "fire", sources(TR_IM_FIRE) },
+        { "cold", sources(TR_IM_COLD) },
+        { "elec", sources(TR_IM_ELEC) },
+        { "acid", sources(TR_IM_ACID) },
+        { "lite", sources(TR_IM_LITE) },
+        { "dark", sources(TR_IM_DARK) },
+        { "nether", std::move(nether) },
+    };
+}
+
+/*!
+ * @brief 弱点（被ダメージ増加）を供給源ごとに出力する
+ * @details 出力の基準はキャラクター画面の表示であって、ダメージ計算式そのものではない。
+ * 酸・電撃・火炎・冷気は calc_*_damage_rate() が has_vuln_*() の要因ビットを1つずつ見て
+ * 変異由来なら ×2、それ以外は ×4/3 を積算するので、供給源はほぼそのまま倍率に対応する。
+ * 閃光だけは calc_lite_damage_rate() が種族の TR_VUL_LITE しか見ておらず、装備由来の
+ * TR_VUL_LITE はキャラクター画面には "v" として出るのにダメージには乗らない。
+ * lite.equipment はその表示に合わせてあるので、消費側は倍率と同一視してはならない。
+ */
+nlohmann::json make_player_vulnerabilities_json(PlayerType *player_ptr, const PlayerKnownFlags &flags)
+{
+    // 変異「元素に弱い」は player_flags() が拾わない（has_vuln_*() が FLAG_CAUSE_MUTATION
+    // として別に立てている）ため、恒久側へ明示的に足す。
+    const auto has_element_mutation = player_ptr->muta.has(PlayerMutationType::VULN_ELEM);
+    const auto sources = [&flags, has_element_mutation](tr_type flag, bool elemental) {
+        return nlohmann::json{
+            { "equipment", flags.equipment.has(flag) },
+            { "permanent", flags.permanent.has(flag) || (elemental && has_element_mutation) },
+            { "temporary", flags.temporary.has(flag) },
+        };
+    };
+    return {
+        { "acid", sources(TR_VUL_ACID, true) },
+        { "elec", sources(TR_VUL_ELEC, true) },
+        { "fire", sources(TR_VUL_FIRE, true) },
+        { "cold", sources(TR_VUL_COLD, true) },
+        { "lite", sources(TR_VUL_LITE, false) },
+        // has_vuln_curse() は TR_VUL_CURSE に加えて装備の CurseTraitType::VUL_CURSE も
+        // 弱点の要因に数えるが、ここでは意図的に拾わない。キャラクター画面の装備欄
+        // (process_inventory_characteristic()) は get_flags_known() しか見ておらず、
+        // 呪い特性由来の呪力弱点はプレイヤーにはどこにも表示されないので、拾えば
+        // プレイヤーが見られない情報を出すことになる。
+        { "curse", sources(TR_VUL_CURSE, false) },
     };
 }
 
@@ -858,6 +929,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
     const auto &world = AngbandWorld::get_instance();
     const auto &dungeons = DungeonList::get_instance();
     const auto &dungeon_records = DungeonRecords::get_instance();
+    const auto known_flags = collect_player_known_flags(player_ptr);
     auto entered_dungeon_ids = nlohmann::json::array();
     auto dungeon_recall_depths = nlohmann::json::object();
     auto conquered_dungeon_ids = nlohmann::json::array();
@@ -915,7 +987,9 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                                    } },
                         { "status", make_player_status_json(*player.effects()) },
                         { "stats", make_player_stats_json(player) },
-                        { "abilities", make_player_abilities_json(player_ptr) },
+                        { "abilities", make_player_abilities_json(known_flags) },
+                        { "immunities", make_player_immunities_json(player_ptr, known_flags) },
+                        { "vulnerabilities", make_player_vulnerabilities_json(player_ptr, known_flags) },
                     } },
         { "floor", {
                        { "dungeon_id", enum2i(floor.dungeon_id) },
