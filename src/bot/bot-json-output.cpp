@@ -916,8 +916,17 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
         }
     }
 
+    // Paging facts the player already reads off the screen: the listing shows
+    // one page of `page_size` slots starting at `page_top`, and the store's
+    // own prompt tells the player whether more pages follow.  Emitting them
+    // spares the bot from inferring the page count -- a full page (letters
+    // running a..Z) is NOT evidence that the stock ends there, which is
+    // exactly the inference that went wrong without these fields.
     return {
         { "store_type", enum2i(store_num) },
+        { "stock_num", st_ptr != nullptr ? st_ptr->stock_num : 0 },
+        { "page_top", store_top },
+        { "page_size", store_bottom },
         { "items", items },
     };
 }
