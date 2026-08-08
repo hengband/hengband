@@ -922,7 +922,14 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
     };
 }
 
-nlohmann::json make_snapshot(PlayerType *player_ptr)
+/*!
+ * @brief スナップショット本体を組み立てる
+ * @param include_map nearby_grids を含めるか
+ * @details nearby_grids はフロア全域を走査して1万件規模の配列を作る処理で、
+ * スナップショット1件のバイト数の99%超を占める。地図を出さない呼び出し
+ * （店内スナップショット）では作ってから消すのではなく最初から作らない。
+ */
+nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true)
 {
     const auto &player = *player_ptr;
     const auto &floor = *player.current_floor_ptr;
@@ -947,7 +954,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
             conquered_dungeon_ids.push_back(enum2i(dungeon_id));
         }
     }
-    return {
+    auto snapshot = nlohmann::json{
         { "type", "player_turn" },
         { "turn", world.game_turn },
         { "player", {
@@ -1048,13 +1055,17 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                            }() },
                           { "quests", make_disclosed_quests_json() },
                       } },
-        { "nearby_grids", make_nearby_grids_json(player) },
         { "visible_monsters", make_visible_monsters_json(player) },
         { "detected_monsters", make_detected_monsters_json(player) },
         { "messages", make_recent_messages_json() },
         { "inventory", make_inventory_json(player_ptr) },
         { "equipment", make_equipment_json(player_ptr) },
     };
+    if (include_map) {
+        snapshot["nearby_grids"] = make_nearby_grids_json(player);
+    }
+
+    return snapshot;
 }
 
 nlohmann::json make_flag_table_json(PlayerType *player_ptr)
@@ -1601,9 +1612,18 @@ void output_bot_json_store_snapshot(PlayerType *player_ptr, StoreSaleType store_
         return;
     }
 
-    // Same base snapshot (player gold, inventory, equipment, town map) plus the
-    // store's stock, so the bot can decide what to buy while at the store prompt.
-    auto snapshot = make_snapshot(player_ptr);
+    // Same base snapshot (player gold, inventory, equipment) plus the store's
+    // stock, so the bot can decide what to buy while at the store prompt.
+    //
+    // The map is deliberately omitted here.  At the store prompt the player
+    // cannot move and the floor cannot change, so nearby_grids would repeat
+    // the surface snapshot's map verbatim -- yet it is over 99% of a snapshot's
+    // bytes (measured: 5.09 MB per record, 10,419 grid entries).  A store
+    // session emits one snapshot per processed key (see cmd-store.cpp), so
+    // paging through the home inventory used to write hundreds of megabytes.
+    // This reveals nothing new to the bot; it only stops re-sending what the
+    // preceding surface snapshot already carried.
+    auto snapshot = make_snapshot(player_ptr, false);
     snapshot["type"] = "store";
     snapshot["store"] = make_store_json(player_ptr, store_num);
     write_snapshot(snapshot);
