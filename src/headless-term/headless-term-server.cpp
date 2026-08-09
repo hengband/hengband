@@ -55,6 +55,14 @@ constexpr int ADDRESS_REUSE_OPTION = SO_REUSEADDR;
 #endif
 
 /*!
+ * @brief 受信バッファに溜め込むリクエスト1行の上限バイト数
+ * @details
+ * 改行を送らずにデータを送り続けるクライアントによって、
+ * 受信バッファが際限なく伸びてゲームがメモリを食い潰すことを防ぐ。
+ */
+constexpr size_t MAX_REQUEST_BYTES = 16 * 1024 * 1024;
+
+/*!
  * @brief ソケットの待機期限
  * @details nulloptは無制限に待つことを表す。
  */
@@ -269,7 +277,7 @@ bool HeadlessTermServer::listen_on_loopback()
     }
 
     int reuse = 1;
-    (void)::setsockopt(native_socket(socket), SOL_SOCKET, ADDRESS_REUSE_OPTION, reinterpret_cast<const char *>(&reuse), sizeof(reuse));
+    (void)::setsockopt(native_socket(socket), SOL_SOCKET, ADDRESS_REUSE_OPTION, reinterpret_cast<const char *>(&reuse), static_cast<socket_length_t>(sizeof(reuse)));
 
     sockaddr_in address{};
     address.sin_family = AF_INET;
@@ -344,6 +352,7 @@ bool HeadlessTermServer::ensure_client(int timeout_seconds)
  * 受信済みの部分を受信バッファに残したままnulloptを返す。続きは次回の呼び出しで読み込む。
  * リクエストがTCPのセグメントに分割されて届いてもブロックしないため、
  * ノンブロッキングのイベント処理から呼べる。
+ * 改行が現れないまま1行がMAX_REQUEST_BYTESを超えた場合はクライアントを切断する。
  */
 tl::optional<std::string> HeadlessTermServer::receive_line(bool wait)
 {
@@ -357,6 +366,12 @@ tl::optional<std::string> HeadlessTermServer::receive_line(bool wait)
             }
 
             return line;
+        }
+
+        if (this->receive_buffer.size() > MAX_REQUEST_BYTES) {
+            plog("the request line is too long");
+            this->close_client();
+            return tl::nullopt;
         }
 
         if (this->client_socket == INVALID_SOCKET_HANDLE) {

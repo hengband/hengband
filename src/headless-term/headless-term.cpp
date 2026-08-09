@@ -35,12 +35,16 @@
 #include <array>
 #include <cstdio>
 #include <fmt/format.h>
+#include <iterator>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <range/v3/view.hpp>
 #include <string>
 #include <string_view>
+#include <tl/expected.hpp>
 #include <tl/optional.hpp>
+#include <type_traits>
+#include <utility>
 
 namespace {
 
@@ -49,6 +53,7 @@ constexpr auto HEADLESS_TERM_ACCEPT_TIMEOUT_SECONDS = 30; //!< 最初のクラ�
 constexpr auto HEADLESS_TERM_KEY_QUEUE_SIZE = 1024; //!< 1回のリクエストで長いキー列を注入できるようにするためのキュー長
 constexpr auto HEADLESS_TERM_KEYS_BUFFER_SIZE = 1024; //!< text_to_ascii()に渡す変換先バッファの大きさ
 constexpr auto HEADLESS_TERM_DEFAULT_MESSAGE_COUNT = 20; //!< messagesリクエストの既定取得件数
+constexpr auto HEADLESS_TERM_KEYS_BUFFER_FILLER = '\xff'; //!< text_to_ascii()が書いた終端を見分けるための番兵
 
 std::array<term_type, MAX_TERM_DATA> headless_terms;
 int headless_term_count = 0;
@@ -139,6 +144,42 @@ nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json body = 
 }
 
 /*!
+ * @brief リクエストから指定した型の値を取り出す
+ * @param request リクエストのJSONオブジェクト
+ * @param key 取り出す値のキー
+ * @param default_value キーが存在しない場合に返す既定値
+ * @return 取り出した値。値の型が期待する型と異なる場合はnullopt
+ * @details
+ * nlohmann::json::value()は型が異なると例外を投げる。これをそのまま送出すると
+ * serve_pending_request()がidを持たないエラーレスポンスに変換してしまい、
+ * クライアントがレスポンスをリクエストと対応付けられなくなるため、ここで型を検証する。
+ */
+template <typename T>
+tl::optional<T> find_request_value(const nlohmann::json &request, const char *key, T default_value)
+{
+    const auto it = request.find(key);
+    if ((it == request.end()) || it->is_null()) {
+        return default_value;
+    }
+
+    const auto is_expected_type = [&it] {
+        if constexpr (std::is_same_v<T, bool>) {
+            return it->is_boolean();
+        } else if constexpr (std::is_integral_v<T>) {
+            return it->is_number_integer();
+        } else {
+            return it->is_string();
+        }
+    }();
+
+    if (!is_expected_type) {
+        return tl::nullopt;
+    }
+
+    return it->template get<T>();
+}
+
+/*!
  * @brief infoリクエストに対する端末情報とビルド情報を生成する
  * @return レスポンスのJSONオブジェクト
  */
@@ -184,34 +225,82 @@ nlohmann::json make_messages_response(int count)
 }
 
 /*!
+ * @brief キー列のマクロ表記を解釈する
+ * @param keys 解釈するキー列 (「\e」「^X」等のマクロ表記を使用できる)
+ * @return 解釈した結果のバイト列。解釈できない場合はエラーの内容
+ * @details
+ * text_to_ascii()は書き込んだ長さを返さずNUL終端の文字列を書くだけであるため、
+ * 変換前にバッファを番兵で埋めておき、末尾側に残った番兵の直前を終端とみなす。
+ * こうすると「^@」等が生成する埋め込みのNULを終端と区別して検出できる。
+ */
+tl::expected<std::string, std::string> decode_keys(const std::string &keys)
+{
+    std::array<char, HEADLESS_TERM_KEYS_BUFFER_SIZE> buffer;
+    buffer.fill(HEADLESS_TERM_KEYS_BUFFER_FILLER);
+    text_to_ascii(buffer.data(), keys, buffer.size());
+
+    const auto terminator = std::find_if(buffer.rbegin(), buffer.rend(), [](char ch) { return ch != HEADLESS_TERM_KEYS_BUFFER_FILLER; });
+    std::string decoded(buffer.data(), std::distance(terminator, buffer.rend()) - 1);
+
+    // text_to_ascii()は変換先が尽きると無言で打ち切るため、出力が上限に達していれば
+    // 切り詰められたものとして扱う。一部だけ注入された状態で成功を返すと、
+    // キー列の再生結果が黙って食い違ってしまう
+    if (decoded.size() + 1 >= buffer.size()) {
+        return tl::make_unexpected("the key sequence is too long");
+    }
+
+    // term_key_push()はNULを積めないため、黙って取りこぼすのではなくエラーとする
+    if (decoded.find('\0') != std::string::npos) {
+        return tl::make_unexpected("the key sequence contains a NUL character");
+    }
+
+    return decoded;
+}
+
+/*!
+ * @brief 現在の端末のキューにあと何個キーを積めるか数える
+ * @return 積めるキーの数
+ * @details
+ * term_key_push()は空きが無くなっても積むことを拒否せず、循環キューを一周して
+ * 先に積んだキーを壊すため、積む前に空きを確かめる必要がある。
+ */
+int count_key_queue_room()
+{
+    const auto size = game_term->key_size;
+    if (size == 0) {
+        return 0;
+    }
+
+    const auto pending = (game_term->key_head + size - game_term->key_tail) % size;
+    return size - 1 - pending;
+}
+
+/*!
  * @brief キー列を解釈して現在の端末のキューへ注入する
  * @param keys 注入するキー列 (「\e」「^X」等のマクロ表記を使用できる)
- * @return 実際にキューへ積んだキーの数。変換が切り詰められた場合はnullopt
+ * @return キューへ積んだキーの数。積めなかった場合はエラーの内容
  * @details
  * term_key_push()はキューの先頭へ挿入するため、正しい順序で消費させるには
  * 末尾から逆順に積む必要がある (main-gcu.cppのterm_string_push()と同じ理由)。
+ * 逆順に積む都合上、途中で空きが尽きると失われるのはキー列の先頭側になる。
+ * 意味の異なる操作を実行させないよう、全て積めない場合は1つも積まない。
  */
-tl::optional<int> push_keys(const std::string &keys)
+tl::expected<int, std::string> push_keys(const std::string &keys)
 {
-    std::array<char, HEADLESS_TERM_KEYS_BUFFER_SIZE> buffer{};
-    text_to_ascii(buffer.data(), keys, buffer.size());
-    const std::string decoded(buffer.data());
-
-    // text_to_ascii()は戻り値を持たず変換先が尽きると無言で打ち切るため、
-    // 出力が上限に達していれば切り詰められたものとして扱う。
-    // 一部だけ注入された状態で成功を返すと、キー列の再生結果が黙って食い違ってしまう
-    if (decoded.size() + 1 >= buffer.size()) {
-        return tl::nullopt;
+    const auto decoded = decode_keys(keys);
+    if (!decoded) {
+        return tl::make_unexpected(decoded.error());
     }
 
-    auto pushed = 0;
-    for (const auto key : decoded | ranges::views::reverse) {
-        if (term_key_push(static_cast<unsigned char>(key)) >= 0) {
-            pushed++;
-        }
+    if (std::cmp_greater(decoded->size(), count_key_queue_room())) {
+        return tl::make_unexpected("the key queue does not have enough room");
     }
 
-    return pushed;
+    for (const auto key : *decoded | ranges::views::reverse) {
+        (void)term_key_push(static_cast<unsigned char>(key));
+    }
+
+    return static_cast<int>(decoded->size());
 }
 
 /*!
@@ -222,13 +311,22 @@ tl::optional<int> push_keys(const std::string &keys)
  */
 nlohmann::json handle_screen_request(const nlohmann::json &id, const nlohmann::json &request)
 {
-    const auto index = request.value("term", 0);
-    if ((index < 0) || (index >= headless_term_count)) {
+    const auto index = find_request_value(request, "term", 0);
+    if (!index) {
+        return make_error_response(id, "\"term\" must be an integer");
+    }
+
+    if ((*index < 0) || (*index >= headless_term_count)) {
         return make_error_response(id, "the term index is out of range");
     }
 
-    auto response = make_ok_response(id, make_headless_term_screen_json(headless_terms[index], request.value("attrs", true)));
-    response["term"] = index;
+    const auto with_attrs = find_request_value(request, "attrs", true);
+    if (!with_attrs) {
+        return make_error_response(id, "\"attrs\" must be a boolean");
+    }
+
+    auto response = make_ok_response(id, make_headless_term_screen_json(headless_terms[*index], *with_attrs));
+    response["term"] = *index;
     return response;
 }
 
@@ -260,42 +358,55 @@ nlohmann::json dispatch_request(const nlohmann::json &request)
     }
 
     const auto id = request.value("id", nlohmann::json());
-    const auto op = request.value("op", std::string());
-    if (op == "info") {
+    const auto op = find_request_value(request, "op", std::string());
+    if (!op) {
+        return make_error_response(id, "\"op\" must be a string");
+    }
+
+    if (*op == "info") {
         return make_ok_response(id, make_info_response());
     }
 
-    if (op == "screen") {
+    if (*op == "screen") {
         return handle_screen_request(id, request);
     }
 
-    if (op == "keys") {
-        const auto keys = request.value("keys", std::string());
-        if (keys.empty()) {
+    if (*op == "keys") {
+        const auto keys = find_request_value(request, "keys", std::string());
+        if (!keys) {
+            return make_error_response(id, "\"keys\" must be a string");
+        }
+
+        if (keys->empty()) {
             return make_error_response(id, "\"keys\" must be a non-empty string");
         }
 
-        const auto pushed = push_keys(keys);
+        const auto pushed = push_keys(*keys);
         if (!pushed) {
-            return make_error_response(id, "the key sequence is too long");
+            return make_error_response(id, pushed.error());
         }
 
         return make_ok_response(id, { { "pushed", *pushed } });
     }
 
-    if (op == "state") {
+    if (*op == "state") {
         return handle_state_request(id);
     }
 
-    if (op == "messages") {
-        return make_ok_response(id, { { "messages", make_messages_response(request.value("count", HEADLESS_TERM_DEFAULT_MESSAGE_COUNT)) } });
+    if (*op == "messages") {
+        const auto count = find_request_value(request, "count", HEADLESS_TERM_DEFAULT_MESSAGE_COUNT);
+        if (!count) {
+            return make_error_response(id, "\"count\" must be an integer");
+        }
+
+        return make_ok_response(id, { { "messages", make_messages_response(*count) } });
     }
 
-    if (op == "quit") {
+    if (*op == "quit") {
         return make_ok_response(id, { { "quitting", true } });
     }
 
-    return make_error_response(id, "unknown op: " + op);
+    return make_error_response(id, "unknown op: " + *op);
 }
 
 /*!

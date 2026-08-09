@@ -20,6 +20,7 @@ import sys
 DEFAULT_HOST = "127.0.0.1"
 DEFAULT_PORT = 9000
 DEFAULT_TIMEOUT = 30.0
+MAX_RESPONSE_BYTES = 16 * 1024 * 1024
 
 
 class HeadlessTermError(Exception):
@@ -44,6 +45,8 @@ def send_request(host, port, timeout, payload):
                 chunk = connection.recv(65536)
                 if not chunk:
                     raise HeadlessTermError("接続が切断されました (レスポンス未受信)")
+                if len(buffer) + len(chunk) > MAX_RESPONSE_BYTES:
+                    raise HeadlessTermError("レスポンスが大きすぎます")
                 buffer.extend(chunk)
     except OSError as error:
         raise HeadlessTermError(f"{host}:{port} との通信に失敗しました: {error}") from error
@@ -187,13 +190,17 @@ def command_replay(args):
     ファイルの各行が1回分のキー列となる。「#」で始まる行と空行は無視する。
     --fixed-seed と組み合わせると、同じファイルから同じ結果を再現できる。
     """
-    with open(args.keyfile, encoding="utf-8") as keyfile:
-        for line in keyfile:
-            sequence = line.rstrip("\n")
-            if not sequence or sequence.startswith("#"):
-                continue
+    try:
+        with open(args.keyfile, encoding="utf-8") as keyfile:
+            sequences = [line.rstrip("\n") for line in keyfile]
+    except UnicodeError as error:
+        raise HeadlessTermError(f"{args.keyfile} をUTF-8として読めません: {error}") from error
 
-            request(args, {"op": "keys", "keys": sequence})
+    for sequence in sequences:
+        if not sequence or sequence.startswith("#"):
+            continue
+
+        request(args, {"op": "keys", "keys": sequence})
 
     print(render_screen(request_screen(args)))
     return 0
