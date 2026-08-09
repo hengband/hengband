@@ -578,18 +578,7 @@ std::set<int> str_find_all_multibyte_chars([[maybe_unused]] std::string_view str
  */
 tl::optional<int> str_to_int(std::string_view str, int base)
 {
-    if (str.empty()) {
-        return tl::nullopt;
-    }
-
-    const auto begin = str.data();
-    const auto end = str.data() + str.size();
-    int value;
-    if (const auto [ptr, ec] = std::from_chars(begin, end, value, base); ec == std::errc() && ptr == end) {
-        return value;
-    }
-
-    return tl::nullopt;
+    return str_to_num<int>(str, base);
 }
 
 /*!
