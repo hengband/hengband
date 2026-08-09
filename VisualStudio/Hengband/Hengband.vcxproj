@@ -843,6 +843,9 @@
     <ClCompile Include="..\..\src\inventory\pack-overflow.cpp" />
     <ClCompile Include="..\..\src\io\input-key-processor.cpp" />
     <ClCompile Include="..\..\src\core\game-closer.cpp" />
+    <ClCompile Include="..\..\src\headless-term\headless-term.cpp" />
+    <ClCompile Include="..\..\src\headless-term\headless-term-screen.cpp" />
+    <ClCompile Include="..\..\src\headless-term\headless-term-server.cpp" />
     <ClCompile Include="..\..\src\hpmp\hp-mp-processor.cpp" />
     <ClCompile Include="..\..\src\hpmp\hp-mp-regenerator.cpp" />
     <ClCompile Include="..\..\src\core\magic-effects-timeout-reducer.cpp" />
@@ -1772,6 +1775,9 @@
     <ClInclude Include="..\..\src\inventory\pack-overflow.h" />
     <ClInclude Include="..\..\src\io\input-key-processor.h" />
     <ClInclude Include="..\..\src\core\game-closer.h" />
+    <ClInclude Include="..\..\src\headless-term\headless-term.h" />
+    <ClInclude Include="..\..\src\headless-term\headless-term-screen.h" />
+    <ClInclude Include="..\..\src\headless-term\headless-term-server.h" />
     <ClInclude Include="..\..\src\hpmp\hp-mp-processor.h" />
     <ClInclude Include="..\..\src\hpmp\hp-mp-regenerator.h" />
     <ClInclude Include="..\..\src\core\magic-effects-timeout-reducer.h" />

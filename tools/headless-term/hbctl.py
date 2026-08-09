@@ -1,0 +1,263 @@
+#!/usr/bin/env python3
+"""変愚蛮怒のヘッドレス端末 (-mheadless) を操作するクライアント。
+
+ゲーム側は 127.0.0.1 の指定ポートで待ち受け、1行1JSONのリクエストに
+1行1JSONのレスポンスを返す。本ツールは1コマンドにつき1回接続し、
+1件のリクエストを送って結果を表示する。
+
+使用例:
+    src/hengband -mheadless --headless-port=9000 -uHeadlessTest &
+    python3 tools/headless-term/hbctl.py screen
+    python3 tools/headless-term/hbctl.py keys 'jjj'
+"""
+
+import argparse
+import json
+import socket
+import sys
+
+DEFAULT_HOST = "127.0.0.1"
+DEFAULT_PORT = 9000
+DEFAULT_TIMEOUT = 30.0
+
+
+class HeadlessTermError(Exception):
+    """ヘッドレス端末との通信で発生したエラー。"""
+
+
+def send_request(host, port, timeout, payload):
+    """リクエストを1件送信してレスポンスを受け取る。
+
+    :param host: 接続先ホスト
+    :param port: 接続先ポート
+    :param timeout: 通信のタイムアウト秒数
+    :param payload: 送信するリクエストの辞書
+    :return: レスポンスの辞書
+    """
+    try:
+        with socket.create_connection((host, port), timeout=timeout) as connection:
+            connection.settimeout(timeout)
+            connection.sendall((json.dumps(payload) + "\n").encode("utf-8"))
+            buffer = bytearray()
+            while b"\n" not in buffer:
+                chunk = connection.recv(65536)
+                if not chunk:
+                    raise HeadlessTermError("接続が切断されました (レスポンス未受信)")
+                buffer.extend(chunk)
+    except OSError as error:
+        raise HeadlessTermError(f"{host}:{port} との通信に失敗しました: {error}") from error
+
+    line = bytes(buffer).split(b"\n", 1)[0]
+    try:
+        return json.loads(line.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise HeadlessTermError(f"レスポンスを解釈できません: {error}") from error
+
+
+def check_response(response):
+    """レスポンスが成功を示しているか確認する。
+
+    :param response: レスポンスの辞書
+    :return: 引数のレスポンス
+    """
+    if not response.get("ok", False):
+        raise HeadlessTermError(f"サーバがエラーを返しました: {response.get('error', response)}")
+
+    return response
+
+
+def render_screen(response):
+    """画面のレスポンスを枠付きのテキストに整形する。
+
+    :param response: screenリクエストのレスポンス
+    :return: 表示用の文字列
+    """
+    width = response["width"]
+    lines = response["lines"]
+    cursor = response.get("cursor", {})
+    border = "+" + "-" * width + "+"
+    rendered = [border]
+    for y, line in enumerate(lines):
+        rendered.append(f"|{line}|{y:3d}")
+
+    rendered.append(border)
+    rendered.append(
+        "term={term} size={width}x{height} cursor=({x},{y}) visible={visible}".format(
+            term=response.get("term", 0),
+            width=width,
+            height=response["height"],
+            x=cursor.get("x", 0),
+            y=cursor.get("y", 0),
+            visible=cursor.get("visible", False),
+        )
+    )
+    return "\n".join(rendered)
+
+
+def request(args, payload):
+    """リクエストを送信し、成功したレスポンスを返す。
+
+    :param args: コマンドライン引数
+    :param payload: 送信するリクエストの辞書
+    :return: レスポンスの辞書
+    """
+    return check_response(send_request(args.host, args.port, args.timeout, payload))
+
+
+def request_screen(args, with_attrs=False):
+    """画面を取得する。
+
+    :param args: コマンドライン引数
+    :param with_attrs: 色属性を含めるか否か
+    :return: screenリクエストのレスポンス
+    """
+    return request(args, {"op": "screen", "term": args.term, "attrs": with_attrs})
+
+
+def print_json(obj):
+    """JSONを人間が読める形に整形して表示する。
+
+    :param obj: 表示する辞書
+    """
+    print(json.dumps(obj, ensure_ascii=False, indent=2))
+
+
+def command_info(args):
+    """接続先の端末情報とビルド情報を表示する。"""
+    print_json(request(args, {"op": "info"}))
+    return 0
+
+
+def command_screen(args):
+    """現在の画面を表示する。"""
+    response = request_screen(args, with_attrs=args.attrs)
+    if args.json:
+        print_json(response)
+    else:
+        print(render_screen(response))
+
+    return 0
+
+
+def command_keys(args):
+    """キー列を送信し、処理後の画面を表示する。
+
+    キーの注入とその結果の観測は別のリクエストになる。2件目のscreenが
+    返る時点でゲームは再びキー入力待ちに戻っているため、
+    描画が確定した画面が得られる。
+    """
+    request(args, {"op": "keys", "keys": args.keys})
+    if args.quiet:
+        return 0
+
+    print(render_screen(request_screen(args)))
+    return 0
+
+
+def command_state(args):
+    """ゲームの内部状態をJSONで表示する。"""
+    print_json(request(args, {"op": "state"}))
+    return 0
+
+
+def command_messages(args):
+    """直近のメッセージ履歴を古い順に表示する。"""
+    response = request(args, {"op": "messages", "count": args.count})
+    for message in response["messages"]:
+        print(message)
+
+    return 0
+
+
+def command_raw(args):
+    """任意のJSONリクエストを送信して結果をそのまま表示する。"""
+    try:
+        payload = json.loads(args.payload)
+    except json.JSONDecodeError as error:
+        raise HeadlessTermError(f"リクエストのJSONを解釈できません: {error}") from error
+
+    print_json(send_request(args.host, args.port, args.timeout, payload))
+    return 0
+
+
+def command_replay(args):
+    """キー列を記述したファイルを順に投入し、最終画面を表示する。
+
+    ファイルの各行が1回分のキー列となる。「#」で始まる行と空行は無視する。
+    --fixed-seed と組み合わせると、同じファイルから同じ結果を再現できる。
+    """
+    with open(args.keyfile, encoding="utf-8") as keyfile:
+        for line in keyfile:
+            sequence = line.rstrip("\n")
+            if not sequence or sequence.startswith("#"):
+                continue
+
+            request(args, {"op": "keys", "keys": sequence})
+
+    print(render_screen(request_screen(args)))
+    return 0
+
+
+def command_quit(args):
+    """ゲームを終了させる。"""
+    request(args, {"op": "quit"})
+    return 0
+
+
+def build_parser():
+    """コマンドライン引数のパーサを構築する。
+
+    :return: 構築したパーサ
+    """
+    parser = argparse.ArgumentParser(description="変愚蛮怒のヘッドレス端末を操作する")
+    parser.add_argument("--host", default=DEFAULT_HOST, help=f"接続先ホスト (既定: {DEFAULT_HOST})")
+    parser.add_argument("--port", type=int, default=DEFAULT_PORT, help=f"接続先ポート (既定: {DEFAULT_PORT})")
+    parser.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT, help=f"通信のタイムアウト秒数 (既定: {DEFAULT_TIMEOUT})")
+    parser.add_argument("--term", type=int, default=0, help="対象の端末の添字 (既定: 0)")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    subparsers.add_parser("info", help="端末情報とビルド情報を表示する").set_defaults(func=command_info)
+
+    screen_parser = subparsers.add_parser("screen", help="現在の画面を表示する")
+    screen_parser.add_argument("--json", action="store_true", help="整形せずJSONのまま表示する")
+    screen_parser.add_argument("--attrs", action="store_true", help="色属性を含める")
+    screen_parser.set_defaults(func=command_screen)
+
+    keys_parser = subparsers.add_parser("keys", help="キー列を送信する")
+    keys_parser.add_argument("keys", help=r"送信するキー列 (「\e」「^X」等のマクロ表記が使える)")
+    keys_parser.add_argument("--quiet", action="store_true", help="送信後の画面を表示しない")
+    keys_parser.set_defaults(func=command_keys)
+
+    subparsers.add_parser("state", help="ゲームの内部状態を表示する").set_defaults(func=command_state)
+
+    messages_parser = subparsers.add_parser("messages", help="メッセージ履歴を表示する")
+    messages_parser.add_argument("count", type=int, nargs="?", default=20, help="取得する件数 (既定: 20)")
+    messages_parser.set_defaults(func=command_messages)
+
+    raw_parser = subparsers.add_parser("raw", help="任意のJSONリクエストを送信する")
+    raw_parser.add_argument("payload", help="送信するJSON")
+    raw_parser.set_defaults(func=command_raw)
+
+    replay_parser = subparsers.add_parser("replay", help="キー列ファイルを投入して最終画面を表示する")
+    replay_parser.add_argument("keyfile", help="1行1キー列のファイル")
+    replay_parser.set_defaults(func=command_replay)
+
+    subparsers.add_parser("quit", help="ゲームを終了させる").set_defaults(func=command_quit)
+    return parser
+
+
+def main():
+    """コマンドラインから起動された時のエントリポイント。
+
+    :return: プロセスの終了コード
+    """
+    args = build_parser().parse_args()
+    try:
+        return args.func(args)
+    except (HeadlessTermError, OSError) as error:
+        print(f"hbctl: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

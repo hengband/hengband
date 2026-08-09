@@ -1490,6 +1490,17 @@ void write_snapshot(const nlohmann::json &snapshot)
 }
 }
 
+/*!
+ * @brief ゲームの内部状態のスナップショットをJSONで生成する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return スナップショットのJSONオブジェクト
+ * @details --bot-json-outputの有無に関わらず生成する。ヘッドレス端末から利用する。
+ */
+nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr)
+{
+    return make_snapshot(player_ptr);
+}
+
 void output_bot_json_snapshot(PlayerType *player_ptr)
 {
     if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {

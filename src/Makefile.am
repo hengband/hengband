@@ -590,6 +590,10 @@ hengband_SOURCES = \
 	grid/object-placer.cpp grid/object-placer.h \
 	grid/trap.cpp grid/trap.h \
 	\
+	headless-term/headless-term.cpp headless-term/headless-term.h \
+	headless-term/headless-term-screen.cpp headless-term/headless-term-screen.h \
+	headless-term/headless-term-server.cpp headless-term/headless-term-server.h \
+	\
 	hpmp/hp-mp-processor.cpp hpmp/hp-mp-processor.h \
 	hpmp/hp-mp-regenerator.cpp hpmp/hp-mp-regenerator.h \
 	\

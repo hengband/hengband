@@ -10,6 +10,7 @@
 #include "core/game-play.h"
 #include "core/scores.h"
 #include "game-option/runtime-arguments.h"
+#include "headless-term/headless-term.h"
 #include "io/files-util.h"
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
@@ -184,6 +185,17 @@ static void display_usage(const char *program)
     puts("           Output auto generated spoilers and exit");
     puts("  --bot-json-output[=path]");
     puts("           Output bot-readable JSON Lines snapshots before player input");
+    puts("  --fixed-seed=<seed>");
+    puts("           Fix the initial random seed to make a playthrough reproducible");
+    puts("");
+
+    puts("  -mheadless");
+    puts("           To use the headless terminal, which has no real display and");
+    puts("           no real input device");
+    puts("  --headless-port=<port>");
+    puts("           Listen on 127.0.0.1:<port> for the headless terminal (required)");
+    puts("  --headless-term-count=<num>");
+    puts("           Number of terminals the headless frontend creates (default 1)");
     puts("");
 
 #ifdef USE_X11
@@ -222,20 +234,14 @@ static void display_usage(const char *program)
  */
 static bool parse_long_opt(const char *opt)
 {
-    static constexpr std::string_view bot_json_output = "bot-json-output";
     const std::string_view option(opt + 2);
-    if (option == bot_json_output) {
-        arg_bot_json_output = true;
+    switch (parse_runtime_argument(option)) {
+    case RuntimeArgumentResult::HANDLED:
         return false;
-    }
-
-    if (option.starts_with(bot_json_output) && option[bot_json_output.size()] == '=') {
-        arg_bot_json_output = true;
-        const auto path = option.substr(bot_json_output.size() + 1);
-        if (!path.empty()) {
-            arg_bot_json_output_path = path;
-        }
-        return false;
+    case RuntimeArgumentResult::INVALID:
+        return true;
+    case RuntimeArgumentResult::NOT_HANDLED:
+        break;
     }
 
     if (option != "output-spoilers") {
@@ -410,6 +416,17 @@ int main(int argc, char *argv[])
 
     process_player_name(p_ptr, true);
     quit_aux = quit_hook;
+
+    // 実描画・実入力デバイスを持たないため、-m の指定が無い時に暗黙で選ばれてはならない。
+    // 明示的に指定された以上、初期化に失敗した時に他のモジュールへ切り替えるのも誤りなので即座に終了する
+    if (mstr == "headless") {
+        if (0 != init_headless_term()) {
+            quit("Unable to prepare the headless terminal!");
+        }
+
+        ANGBAND_SYS = "headless";
+        done = true;
+    }
 
 #ifdef USE_X11
     if (!done && (mstr.empty() || (mstr == "x11"))) {

@@ -175,7 +175,7 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
     }
 
     if (init_random_seed) {
-        Rand_state_init();
+        Rand_state_init(arg_fixed_seed);
     }
 }
 

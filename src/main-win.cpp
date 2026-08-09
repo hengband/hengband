@@ -92,6 +92,7 @@
 #include "core/visuals-reseter.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
+#include "headless-term/headless-term.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/record-play-movie.h"
@@ -126,6 +127,7 @@
 #include "world/world.h"
 #include <algorithm>
 #include <commdlg.h>
+#include <cstdio>
 #include <cstdlib>
 #include <direct.h>
 #include <locale>
@@ -2752,6 +2754,72 @@ static void register_wndclass()
 }
 
 /*!
+ * @brief ヘッドレス実行のために標準エラー出力を確保する
+ * @details
+ * Windowsアプリケーションは既定でコンソールを持たないため、
+ * 診断メッセージを観測できるようコンソールを割り当てて標準エラー出力を接続する。
+ * 親プロセスのコンソールがあればそちらを優先して使う。
+ */
+static void attach_headless_console()
+{
+    if (!::AttachConsole(ATTACH_PARENT_PROCESS)) {
+        ::AllocConsole();
+    }
+
+    FILE *stream = nullptr;
+    freopen_s(&stream, "CONOUT$", "w", stderr);
+}
+
+/*!
+ * @brief 端末の準備が済んだ後に共通して行うゲームの初期化
+ * @param shows_file_menu_prompt [ファイル]メニューの操作を促すメッセージを表示するか否か
+ * @details
+ * ウィンドウ版とヘッドレス版で共通の手順。TermCenteredOffsetSetterの寿命に
+ * 依存するため、メッセージ表示までを1つの関数にまとめている。
+ */
+static void prepare_game_start(bool shows_file_menu_prompt)
+{
+    signals_init();
+    term_activate(term_screen);
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
+
+    init_angband(p_ptr, false);
+    initialized = true;
+
+    check_for_save_file(command_line.get_savefile_option());
+    if (shows_file_menu_prompt) {
+        prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
+        term_fresh();
+    }
+}
+
+/*!
+ * @brief ヘッドレス端末でゲームを実行する
+ * @return 正常に開始した場合0、端末の初期化に失敗した場合1
+ * @details
+ * ウィンドウもメッセージループも作らず、クライアントが接続した時点で
+ * 直ちにゲームを開始する。plog/quit/coreの出力先はinit_headless_term()が
+ * 標準エラー出力へ差し替えるため、ここでは設定しない。
+ */
+static int run_headless_game()
+{
+    attach_headless_console();
+    init_stuff();
+
+    // Windows専用のマクロトリガやキーパッドマクロを定義するpref-win.prf/user-win.prfを読ませないための上書き。
+    // これによりキー列を再生した時の初期状態がUnix版と一致する
+    ANGBAND_SYS = "headless";
+    if (init_headless_term() != 0) {
+        return 1;
+    }
+
+    prepare_game_start(false);
+    play_game(p_ptr, savefile.empty(), false);
+    quit("");
+    return 0;
+}
+
+/*!
  * @brief ゲームのメインルーチン
  */
 static int WINAPI game_main(_In_ HINSTANCE hInst)
@@ -2766,6 +2834,10 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
     }
 
     command_line.handle();
+    if (arg_headless_port) {
+        return run_headless_game();
+    }
+
     register_wndclass();
 
     // before term_data initialize
@@ -2799,18 +2871,7 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
     quit_aux = hook_quit;
     core_aux = hook_quit;
 
-    signals_init();
-    term_activate(term_screen);
-    {
-        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
-
-        init_angband(p_ptr, false);
-        initialized = true;
-
-        check_for_save_file(command_line.get_savefile_option());
-        prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
-        term_fresh();
-    }
+    prepare_game_start(true);
 
     change_sound_mode(arg_sound);
     use_music = arg_music;
