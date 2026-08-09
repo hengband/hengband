@@ -50,9 +50,20 @@
  * RNG algorithm was fully rewritten. Upper comment is OLD.
  */
 
-void Rand_state_init(void)
+/*!
+ * @brief 乱数生成器の状態を初期化する
+ * @param seed 初期シード。指定しない場合は実行毎に異なる乱数で初期化する
+ * @details シードを指定すると同じ乱数列を再現できる (バグ再現・修正確認用)
+ */
+void Rand_state_init(tl::optional<uint32_t> seed)
 {
-    AngbandSystem::get_instance().get_rng().seed();
+    auto &rng = AngbandSystem::get_instance().get_rng();
+    if (seed) {
+        rng.seed(*seed);
+        return;
+    }
+
+    rng.seed();
 }
 
 int rand_range(int a, int b)

@@ -13,8 +13,10 @@
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/h-basic.h"
+#include <cstdint>
 #include <initializer_list>
 #include <iterator>
+#include <tl/optional.hpp>
 #include <type_traits>
 #include <utility>
 
@@ -113,7 +115,7 @@ bool one_in_(T n)
     return randint0(static_cast<int>(n)) == 0;
 }
 
-void Rand_state_init();
+void Rand_state_init(tl::optional<uint32_t> seed = tl::nullopt);
 int16_t randnor(int mean, int stand);
 int32_t div_round(int32_t n, int32_t d);
 int32_t Rand_external(int32_t m);
