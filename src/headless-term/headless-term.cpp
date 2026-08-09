@@ -38,6 +38,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
+#include <tl/optional.hpp>
 
 namespace {
 
@@ -183,16 +184,24 @@ nlohmann::json make_messages_response(int count)
 /*!
  * @brief キー列を解釈して現在の端末のキューへ注入する
  * @param keys 注入するキー列 (「\e」「^X」等のマクロ表記を使用できる)
- * @return 実際にキューへ積んだキーの数
+ * @return 実際にキューへ積んだキーの数。変換が切り詰められた場合はnullopt
  * @details
  * term_key_push()はキューの先頭へ挿入するため、正しい順序で消費させるには
  * 末尾から逆順に積む必要がある (main-gcu.cppのterm_string_push()と同じ理由)。
  */
-int push_keys(const std::string &keys)
+tl::optional<int> push_keys(const std::string &keys)
 {
     std::array<char, HEADLESS_TERM_KEYS_BUFFER_SIZE> buffer{};
     text_to_ascii(buffer.data(), keys, buffer.size());
     const std::string decoded(buffer.data());
+
+    // text_to_ascii()は戻り値を持たず変換先が尽きると無言で打ち切るため、
+    // 出力が上限に達していれば切り詰められたものとして扱う。
+    // 一部だけ注入された状態で成功を返すと、キー列の再生結果が黙って食い違ってしまう
+    if (decoded.size() + 1 >= buffer.size()) {
+        return tl::nullopt;
+    }
+
     auto pushed = 0;
     for (auto it = decoded.rbegin(); it != decoded.rend(); ++it) {
         if (term_key_push(static_cast<unsigned char>(*it)) >= 0) {
@@ -264,7 +273,12 @@ nlohmann::json dispatch_request(const nlohmann::json &request)
             return make_error_response(id, "\"keys\" must be a non-empty string");
         }
 
-        return make_ok_response(id, { { "pushed", push_keys(keys) } });
+        const auto pushed = push_keys(keys);
+        if (!pushed) {
+            return make_error_response(id, "the key sequence is too long");
+        }
+
+        return make_ok_response(id, { { "pushed", *pushed } });
     }
 
     if (op == "state") {

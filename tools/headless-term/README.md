@@ -51,11 +51,18 @@ python3 tools/headless-term/hbctl.py raw '{"op":"info"}'
 python3 tools/headless-term/hbctl.py quit            # ゲームを終了
 ```
 
-`--port` で接続先ポートを変更できます（既定 9000）。
+`--host` `--port` `--timeout` `--term` は全サブコマンド共通のオプションのため、**サブコマンドより前**に
+指定します（`hbctl.py screen --port 9001` のようにサブコマンドの後ろに置くとエラーになります）。
+
+```sh
+python3 tools/headless-term/hbctl.py --port 9001 screen
+```
 
 ### キー列の記法
 
 `keys` に渡す文字列は `text_to_ascii()` で解釈されるため、`.prf` ファイルと同じマクロ表記が使えます。
+1 回のリクエストで送れるキー列は、変換後の長さが 1022 バイトまでです。これを超えるとエラーになるため、
+長いキー列は複数回に分けて送るか `replay` を使ってください。
 
 | 記法   | 意味             |
 | ------ | ---------------- |

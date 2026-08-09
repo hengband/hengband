@@ -13,6 +13,7 @@
 
 import argparse
 import json
+import math
 import socket
 import sys
 
@@ -204,6 +205,32 @@ def command_quit(args):
     return 0
 
 
+def port_number(value):
+    """--port の値を検証する。
+
+    :param value: コマンドラインで指定された文字列
+    :return: 検証したポート番号
+    """
+    port = int(value)
+    if not 1 <= port <= 65535:
+        raise argparse.ArgumentTypeError("ポート番号は1〜65535で指定してください")
+
+    return port
+
+
+def positive_timeout(value):
+    """--timeout の値を検証する。
+
+    :param value: コマンドラインで指定された文字列
+    :return: 検証したタイムアウト秒数
+    """
+    timeout = float(value)
+    if not math.isfinite(timeout) or timeout <= 0:
+        raise argparse.ArgumentTypeError("タイムアウトは0より大きい有限の秒数で指定してください")
+
+    return timeout
+
+
 def build_parser():
     """コマンドライン引数のパーサを構築する。
 
@@ -211,8 +238,8 @@ def build_parser():
     """
     parser = argparse.ArgumentParser(description="変愚蛮怒のヘッドレス端末を操作する")
     parser.add_argument("--host", default=DEFAULT_HOST, help=f"接続先ホスト (既定: {DEFAULT_HOST})")
-    parser.add_argument("--port", type=int, default=DEFAULT_PORT, help=f"接続先ポート (既定: {DEFAULT_PORT})")
-    parser.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT, help=f"通信のタイムアウト秒数 (既定: {DEFAULT_TIMEOUT})")
+    parser.add_argument("--port", type=port_number, default=DEFAULT_PORT, help=f"接続先ポート (既定: {DEFAULT_PORT})")
+    parser.add_argument("--timeout", type=positive_timeout, default=DEFAULT_TIMEOUT, help=f"通信のタイムアウト秒数 (既定: {DEFAULT_TIMEOUT})")
     parser.add_argument("--term", type=int, default=0, help="対象の端末の添字 (既定: 0)")
     subparsers = parser.add_subparsers(dest="command", required=True)
 

@@ -25,8 +25,6 @@
 
 namespace {
 
-constexpr intptr_t INVALID_SOCKET_HANDLE = -1;
-
 /*!
  * @brief send()に渡すフラグ
  * @details
@@ -65,10 +63,25 @@ using SocketWaitDeadline = tl::optional<std::chrono::steady_clock::time_point>;
 #ifdef WINDOWS
 using socket_length_t = int;
 using transfer_size_t = int;
+using native_socket_t = SOCKET;
 #else
 using socket_length_t = socklen_t;
 using transfer_size_t = size_t;
+using native_socket_t = int;
 #endif
+
+/*!
+ * @brief ソケットハンドルをプラットフォームのソケットAPIが要求する型へ変換する
+ * @param socket 対象のソケットハンドル
+ * @return ソケットAPIへ渡せる型に変換したハンドル
+ * @details
+ * WindowsのSOCKETはUINT_PTRであり、intへ変換するとWin64でハンドル値を切り詰める可能性がある。
+ * 保持に使うintptr_tとAPIが要求する型の変換をここに集約する。
+ */
+native_socket_t native_socket(intptr_t socket)
+{
+    return static_cast<native_socket_t>(socket);
+}
 
 /*!
  * @brief ソケットを閉じる
@@ -81,9 +94,9 @@ void close_socket_handle(intptr_t socket)
     }
 
 #ifdef WINDOWS
-    ::closesocket(static_cast<SOCKET>(socket));
+    ::closesocket(native_socket(socket));
 #else
-    ::close(static_cast<int>(socket));
+    ::close(native_socket(socket));
 #endif
 }
 
@@ -146,7 +159,7 @@ void suppress_sigpipe([[maybe_unused]] intptr_t socket)
 {
 #if !defined(WINDOWS) && defined(SO_NOSIGPIPE)
     int enable = 1;
-    (void)::setsockopt(static_cast<int>(socket), SOL_SOCKET, SO_NOSIGPIPE, &enable, sizeof(enable));
+    (void)::setsockopt(native_socket(socket), SOL_SOCKET, SO_NOSIGPIPE, &enable, sizeof(enable));
 #endif
 }
 
@@ -179,12 +192,11 @@ bool wait_for_readable(intptr_t socket, const SocketWaitDeadline &deadline)
     while (true) {
         fd_set readable;
         FD_ZERO(&readable);
+        FD_SET(native_socket(socket), &readable);
 #ifdef WINDOWS
-        FD_SET(static_cast<SOCKET>(socket), &readable);
         const auto nfds = 0;
 #else
-        FD_SET(static_cast<int>(socket), &readable);
-        const auto nfds = static_cast<int>(socket) + 1;
+        const auto nfds = native_socket(socket) + 1;
 #endif
         // 期限を過ぎていればtimeoutは0のままとし、即時判定として1度だけselect()を呼ぶ
         timeval timeout{};
@@ -221,7 +233,7 @@ HeadlessTermServer::HeadlessTermServer(int port)
 {
 #ifdef WINDOWS
     WSADATA wsa_data{};
-    ::WSAStartup(MAKEWORD(2, 2), &wsa_data);
+    this->is_socket_library_ready = ::WSAStartup(MAKEWORD(2, 2), &wsa_data) == 0;
 #endif
 }
 
@@ -233,7 +245,9 @@ HeadlessTermServer::~HeadlessTermServer()
     this->close_client();
     this->close_listener();
 #ifdef WINDOWS
-    ::WSACleanup();
+    if (this->is_socket_library_ready) {
+        ::WSACleanup();
+    }
 #endif
 }
 
@@ -243,6 +257,11 @@ HeadlessTermServer::~HeadlessTermServer()
  */
 bool HeadlessTermServer::listen_on_loopback()
 {
+    if (!this->is_socket_library_ready) {
+        plog("failed to initialize the socket library");
+        return false;
+    }
+
     const auto socket = static_cast<intptr_t>(::socket(AF_INET, SOCK_STREAM, 0));
     if (socket == INVALID_SOCKET_HANDLE) {
         plog("failed to create a listening socket");
@@ -250,19 +269,19 @@ bool HeadlessTermServer::listen_on_loopback()
     }
 
     int reuse = 1;
-    (void)::setsockopt(static_cast<int>(socket), SOL_SOCKET, ADDRESS_REUSE_OPTION, reinterpret_cast<const char *>(&reuse), sizeof(reuse));
+    (void)::setsockopt(native_socket(socket), SOL_SOCKET, ADDRESS_REUSE_OPTION, reinterpret_cast<const char *>(&reuse), sizeof(reuse));
 
     sockaddr_in address{};
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = ::htonl(INADDR_LOOPBACK);
     address.sin_port = ::htons(static_cast<uint16_t>(this->port));
-    if (::bind(static_cast<int>(socket), reinterpret_cast<const sockaddr *>(&address), static_cast<socket_length_t>(sizeof(address))) != 0) {
+    if (::bind(native_socket(socket), reinterpret_cast<const sockaddr *>(&address), static_cast<socket_length_t>(sizeof(address))) != 0) {
         plog("failed to bind the listening socket");
         close_socket_handle(socket);
         return false;
     }
 
-    if (::listen(static_cast<int>(socket), 1) != 0) {
+    if (::listen(native_socket(socket), 1) != 0) {
         plog("failed to listen on the socket");
         close_socket_handle(socket);
         return false;
@@ -301,7 +320,7 @@ bool HeadlessTermServer::ensure_client(int timeout_seconds)
             return false;
         }
 
-        const auto accepted = static_cast<intptr_t>(::accept(static_cast<int>(this->listen_socket), nullptr, nullptr));
+        const auto accepted = static_cast<intptr_t>(::accept(native_socket(this->listen_socket), nullptr, nullptr));
         if (accepted != INVALID_SOCKET_HANDLE) {
             suppress_sigpipe(accepted);
             this->client_socket = accepted;
@@ -349,7 +368,7 @@ tl::optional<std::string> HeadlessTermServer::receive_line(bool wait)
         }
 
         char buffer[4096];
-        const auto received = ::recv(static_cast<int>(this->client_socket), buffer, static_cast<transfer_size_t>(sizeof(buffer)), 0);
+        const auto received = ::recv(native_socket(this->client_socket), buffer, static_cast<transfer_size_t>(sizeof(buffer)), 0);
         if (received < 0) {
             if (is_socket_call_interrupted()) {
                 continue;
@@ -383,7 +402,7 @@ bool HeadlessTermServer::send_line(std::string payload)
     payload.push_back('\n');
     size_t sent_total = 0;
     while (sent_total < payload.size()) {
-        const auto sent = ::send(static_cast<int>(this->client_socket), payload.data() + sent_total,
+        const auto sent = ::send(native_socket(this->client_socket), payload.data() + sent_total,
             static_cast<transfer_size_t>(payload.size() - sent_total), SEND_FLAGS);
         if (sent <= 0) {
             if ((sent < 0) && is_socket_call_interrupted()) {

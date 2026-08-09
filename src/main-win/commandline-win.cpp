@@ -31,7 +31,7 @@ std::string savefile_option;
  */
 bool parse_runtime_option(const WCHAR *option)
 {
-    const auto converted = to_multibyte(option);
+    auto converted = to_multibyte(option);
     if (converted.c_str() == nullptr) {
         return false;
     }
