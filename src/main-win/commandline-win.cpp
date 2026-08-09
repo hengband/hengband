@@ -6,9 +6,9 @@
 #include "main-win/commandline-win.h"
 #include "game-option/runtime-arguments.h"
 #include "main-win/main-win-utils.h"
-#include "term/z-form.h"
 #include "term/z-util.h"
 
+#include <fmt/format.h>
 #include <iostream>
 #include <string>
 #include <string_view>
@@ -45,7 +45,7 @@ bool parse_runtime_option(const WCHAR *option)
     case RuntimeArgumentResult::HANDLED:
         return true;
     case RuntimeArgumentResult::INVALID:
-        quit_fmt("Invalid value in '%s'", converted.c_str());
+        quit(fmt::format("Invalid value in '{}'", narrow_option));
         return true;
     case RuntimeArgumentResult::NOT_HANDLED:
         return false;

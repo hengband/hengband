@@ -34,8 +34,10 @@
 #include <algorithm>
 #include <array>
 #include <cstdio>
+#include <fmt/format.h>
 #include <memory>
 #include <nlohmann/json.hpp>
+#include <range/v3/view.hpp>
 #include <string>
 #include <string_view>
 #include <tl/optional.hpp>
@@ -94,7 +96,7 @@ void headless_term_plog(std::string_view str)
         return;
     }
 
-    std::fprintf(stderr, "headless-term: %.*s\n", static_cast<int>(str.size()), str.data());
+    fmt::println(stderr, "headless-term: {}", str);
     std::fflush(stderr);
 }
 
@@ -203,8 +205,8 @@ tl::optional<int> push_keys(const std::string &keys)
     }
 
     auto pushed = 0;
-    for (auto it = decoded.rbegin(); it != decoded.rend(); ++it) {
-        if (term_key_push(static_cast<unsigned char>(*it)) >= 0) {
+    for (const auto key : decoded | ranges::views::reverse) {
+        if (term_key_push(static_cast<unsigned char>(key)) >= 0) {
             pushed++;
         }
     }
