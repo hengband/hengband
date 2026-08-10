@@ -36,7 +36,7 @@ public:
 
     bool listen_on_loopback();
     bool ensure_client(int timeout_seconds = -1);
-    tl::optional<std::string> receive_line(bool wait = true);
+    tl::optional<std::string> receive_line();
     bool send_line(std::string line);
 
 private:

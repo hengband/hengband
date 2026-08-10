@@ -28,6 +28,10 @@ std::string savefile_option;
  * @details
  * オプションの綴りと値の解釈をUnix版と共有するため、ワイド文字列をマルチバイトへ変換して
  * parse_runtime_argument()に委譲する。値が不正な場合はその旨を通知して終了する。
+ *
+ * 本関数はコンソールもquit_aux/plog_auxも用意されていない起動直後に呼ばれるため、
+ * 終了する前に自前でコンソールを確保する。これを怠るとquit()のメッセージが出力先を失い、
+ * 何も表示されないまま終了してしまう。
  */
 bool parse_runtime_option(const WCHAR *option)
 {
@@ -45,6 +49,7 @@ bool parse_runtime_option(const WCHAR *option)
     case RuntimeArgumentResult::HANDLED:
         return true;
     case RuntimeArgumentResult::INVALID:
+        attach_headless_console();
         quit(fmt::format("Invalid value in '{}'", narrow_option));
         return true;
     case RuntimeArgumentResult::NOT_HANDLED:

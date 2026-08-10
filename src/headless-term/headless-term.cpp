@@ -169,7 +169,7 @@ nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json body = 
  * @return 取り出した値。値の型が期待する型と異なる場合はnullopt
  * @details
  * nlohmann::json::value()は型が異なると例外を投げる。これをそのまま送出すると
- * serve_pending_request()がidを持たないエラーレスポンスに変換してしまい、
+ * serve_request()がidを持たないエラーレスポンスに変換してしまい、
  * クライアントがレスポンスをリクエストと対応付けられなくなるため、ここで型を検証する。
  */
 template <typename T>
@@ -243,6 +243,64 @@ nlohmann::json make_messages_response(int count)
 }
 
 /*!
+ * @brief キー列のマクロ表記をtext_to_ascii()へ渡して安全か検証する
+ * @param keys 検証するキー列
+ * @return 渡してはならない場合はその理由。問題が無い場合はnullopt
+ * @details
+ * text_to_ascii()はstring_viewの長さではなくNUL終端を頼りに走査するため、
+ * 「\x」のように末尾でエスケープの引数が足りていないと文字列の外まで読み進めてしまう。
+ * 同じ歩幅で先に走査し、そのような入力を変換前に弾く。
+ */
+tl::optional<std::string> find_invalid_key_notation(std::string_view keys)
+{
+    // text_to_ascii()はNULを終端とみなして走査を打ち切るため、
+    // そのまま渡すとキー列が黙って切り詰められる
+    if (keys.find('\0') != std::string_view::npos) {
+        return "the key sequence contains a NUL character";
+    }
+
+    const std::string incomplete_escape = "the key sequence ends with an incomplete escape";
+    for (size_t i = 0; i < keys.length();) {
+        const auto ch = keys[i];
+        if (ch == '^') {
+            // 「^X」はXを1文字消費する
+            if (i + 1 >= keys.length()) {
+                return incomplete_escape;
+            }
+
+            i += 2;
+            continue;
+        }
+
+        if (ch != '\\') {
+            i++;
+            continue;
+        }
+
+        if (i + 1 >= keys.length()) {
+            return incomplete_escape;
+        }
+
+        // 「\[～]」はマクロトリガ表記だが、ヘッドレス端末はpref-*.prfを読まずマクロトリガを
+        // 定義しないため常に無意味であり、変換先の残量を見ずに書き込むため受け付けない
+        if (keys[i + 1] == '[') {
+            return "the macro trigger notation is not supported";
+        }
+
+        // 「\xNN」「\0NN」～「\3NN」は続く2文字を消費する
+        const auto has_two_digits = (keys[i + 1] == 'x') || ((keys[i + 1] >= '0') && (keys[i + 1] <= '3'));
+        const auto consumed = has_two_digits ? 4 : 2;
+        if (i + consumed > keys.length()) {
+            return incomplete_escape;
+        }
+
+        i += consumed;
+    }
+
+    return tl::nullopt;
+}
+
+/*!
  * @brief キー列のマクロ表記を解釈する
  * @param keys 解釈するキー列 (「\e」「^X」等のマクロ表記を使用できる)
  * @return 解釈した結果のバイト列。解釈できない場合はエラーの内容
@@ -253,6 +311,10 @@ nlohmann::json make_messages_response(int count)
  */
 tl::expected<std::string, std::string> decode_keys(const std::string &keys)
 {
+    if (const auto invalid = find_invalid_key_notation(keys); invalid) {
+        return tl::make_unexpected(*invalid);
+    }
+
     std::array<char, HEADLESS_TERM_KEYS_BUFFER_SIZE> buffer;
     buffer.fill(HEADLESS_TERM_KEYS_BUFFER_FILLER);
     text_to_ascii(buffer.data(), keys, buffer.size());
@@ -429,17 +491,16 @@ RequestResult dispatch_request(const nlohmann::json &request)
 
 /*!
  * @brief 接続済みのクライアントからリクエストを1件受信して処理する
- * @param wait リクエストが1行分揃うまで待機するか否か
  * @details
- * リクエストが揃わなかった場合と送信に失敗した場合は何もせずに戻る。
- * 接続が切れていれば呼び出し側のループが次のクライアントの接続を待ち直す。
+ * リクエストが1行分揃うまで待機する。クライアントが切断された場合と
+ * 送信に失敗した場合は何もせずに戻り、呼び出し側のループが次のクライアントの接続を待ち直す。
  * 不正なJSONや内部状態の構築失敗でゲームを巻き込んで落とさないよう、
  * 例外は全てここで捕捉してエラーレスポンスに変換する。
  * 終了するか否かはレスポンスの内容ではなくRequestResultのフラグで判断する。
  */
-void serve_pending_request(bool wait)
+void serve_request()
 {
-    const auto line = headless_term_server->receive_line(wait);
+    const auto line = headless_term_server->receive_line();
     if (!line) {
         return;
     }
@@ -481,8 +542,8 @@ errr headless_term_process_events(bool wait)
     }
 
     if (!wait) {
-        // 接続待ちでも受信待ちでもブロックしてはならないため、既に届いているものだけを処理する
-        serve_pending_request(false);
+        // 描画が確定していない画面を観測させないため、入力待ち以外ではリクエストを処理しない。
+        // ここで処理しなくても、次の入力待ちで必ず処理される
         return 0;
     }
 
@@ -492,7 +553,7 @@ errr headless_term_process_events(bool wait)
             return 0;
         }
 
-        serve_pending_request(true);
+        serve_request();
     }
 
     return 0;

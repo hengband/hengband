@@ -111,6 +111,7 @@
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
 #include "save/save.h"
+#include "system/angband-version.h"
 #include "system/angband.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
@@ -118,6 +119,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-util.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -2754,26 +2756,6 @@ static void register_wndclass()
 }
 
 /*!
- * @brief ヘッドレス実行のために標準エラー出力を確保する
- * @details
- * Windowsアプリケーションは既定でコンソールを持たないため、
- * 診断メッセージを観測できるようコンソールを割り当てて標準エラー出力を接続する。
- * 親プロセスのコンソールがあればそちらを優先して使う。
- */
-static void attach_headless_console()
-{
-    if (!::AttachConsole(ATTACH_PARENT_PROCESS)) {
-        ::AllocConsole();
-    }
-
-    FILE *stream = nullptr;
-    if (freopen_s(&stream, "CONOUT$", "w", stderr) != 0) {
-        // 標準エラー出力が使えず診断メッセージが全て失われるため、デバッガから観測できる経路へ通知する
-        ::OutputDebugStringA("hengband: failed to attach stderr for headless mode\n");
-    }
-}
-
-/*!
  * @brief 端末の準備が済んだ後に共通して行うゲームの初期化
  * @param shows_file_menu_prompt [ファイル]メニューの操作を促すメッセージを表示するか否か
  * @details
@@ -2829,6 +2811,9 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
 {
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;
+    // コマンドライン引数の解釈中に出力し得る診断メッセージに名前を付けるため、
+    // plog()/quit()を呼び得る処理より先に設定する
+    program_name = VARIANT_NAME;
     command_line.handle();
     // ヘッドレス実行は待ち受けポートで排他されるため、多重起動チェックの対象外とする。
     // これを行うと、異なるポートを指定しても2つ目以降のプロセスを起動できない

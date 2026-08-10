@@ -35,11 +35,15 @@ std::string make_line_text(const term_win &win, int y, int width)
 }
 
 /*!
- * @brief 画面バッファの1行分の色属性を16進文字列に変換する
+ * @brief 画面バッファの1行分の属性を16進文字列に変換する
  * @param win 対象の画面バッファ
  * @param y 行番号
  * @param width 桁数
  * @return 1セルあたり16進2桁を並べた文字列
+ * @details
+ * 日本語版では全角文字のセルの属性に色以外のビット(z-term.cppのAF_KANJI1: 0x10 / AF_KANJI2: 0x20)が
+ * 乗るが、全角文字の1バイト目と2バイト目をクライアント側で判別できるよう、意図的にマスクせず生値を返す。
+ * 色だけが必要な場合はクライアント側で0x0fとの論理積を取る。
  */
 std::string make_line_attrs(const term_win &win, int y, int width)
 {
@@ -74,9 +78,10 @@ std::string to_json_utf8(std::string_view str)
  * @return 画面内容を表すJSONオブジェクト
  * @details
  * lines[y] は1行分のセルを連結してUTF-8へ変換した文字列、
- * attrs[y] は1セルあたり16進2桁で色属性を並べた文字列である。
+ * attrs[y] は1セルあたり16進2桁で属性を並べた文字列である。
  * 日本語版では全角1文字が2セルを占めるため、lines[y]の文字数と
  * attrs[y]の長さ(セル数×2)は一致しない。attrs側の添字がセル座標(x)に対応する。
+ * 全角文字のセルの属性には色以外のビットも乗る (make_line_attrs()の説明を参照)。
  */
 nlohmann::json make_headless_term_screen_json(const term_type &t, bool with_attrs)
 {

@@ -8,6 +8,7 @@
 #include "locale/language-switcher.h"
 #include "main-win/main-win-define.h"
 #include "system/angband-version.h"
+#include <cstdio>
 #include <string>
 
 /*!
@@ -26,6 +27,27 @@ bool is_already_running(void)
     mbstowcs(wtext, VARIANT_NAME.data(), max_mutex_length - 1);
     [[maybe_unused]] HANDLE hMutex = CreateMutexW(NULL, TRUE, wtext);
     return GetLastError() == ERROR_ALREADY_EXISTS;
+}
+
+/*!
+ * @brief (Windows固有)ヘッドレス実行のために標準エラー出力を確保する
+ * @details
+ * Windowsアプリケーションは既定でコンソールを持たないため、
+ * 診断メッセージを観測できるようコンソールを割り当てて標準エラー出力を接続する。
+ * 親プロセスのコンソールがあればそちらを優先して使う。
+ * 既に接続済みの場合に呼んでも問題は無い。
+ */
+void attach_headless_console()
+{
+    if (!::AttachConsole(ATTACH_PARENT_PROCESS)) {
+        ::AllocConsole();
+    }
+
+    FILE *stream = nullptr;
+    if (freopen_s(&stream, "CONOUT$", "w", stderr) != 0) {
+        // 標準エラー出力が使えず診断メッセージが全て失われるため、デバッガから観測できる経路へ通知する
+        ::OutputDebugStringA("hengband: failed to attach stderr for headless mode\n");
+    }
 }
 
 /*!

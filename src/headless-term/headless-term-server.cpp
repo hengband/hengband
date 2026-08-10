@@ -380,16 +380,13 @@ bool HeadlessTermServer::ensure_client(int timeout_seconds)
 
 /*!
  * @brief リクエストを1行受信する
- * @param wait 1行分が揃うまで待機するか否か
- * @return 受信した行。クライアントが切断された場合と、待機しない指定で1行分が未着の場合はnullopt
+ * @return 受信した行。クライアントが切断された場合はnullopt
  * @details
- * 待機しない場合、読み込めるだけ読み込んでも1行に満たなければ、
- * 受信済みの部分を受信バッファに残したままnulloptを返す。続きは次回の呼び出しで読み込む。
- * リクエストがTCPのセグメントに分割されて届いてもブロックしないため、
- * ノンブロッキングのイベント処理から呼べる。
+ * リクエストがTCPのセグメントに分割されて届く場合と、1回の受信に複数行が含まれる場合の
+ * どちらにも対応するため、受信した内容は行が揃うまで受信バッファに残す。
  * 改行が現れないまま1行がMAX_REQUEST_BYTESを超えた場合はクライアントを切断する。
  */
-tl::optional<std::string> HeadlessTermServer::receive_line(bool wait)
+tl::optional<std::string> HeadlessTermServer::receive_line()
 {
     while (true) {
         const auto separator = this->receive_buffer.find('\n');
@@ -410,10 +407,6 @@ tl::optional<std::string> HeadlessTermServer::receive_line(bool wait)
         }
 
         if (this->client_socket == INVALID_SOCKET_HANDLE) {
-            return tl::nullopt;
-        }
-
-        if (!wait && !wait_for_readable(this->client_socket, make_deadline(0))) {
             return tl::nullopt;
         }
 
