@@ -471,7 +471,12 @@ int main(int argc, char *argv[])
     {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
         init_angband(p_ptr, false);
-        pause_line(MAIN_TERM_MIN_ROWS - 1);
+
+        // ヘッドレス実行では初期画面を見る相手が居らず、ここで待つとキー列が1キー分ずれて
+        // 同じ手順を再生したWindows版と結果が食い違う
+        if (mstr != "headless") {
+            pause_line(MAIN_TERM_MIN_ROWS - 1);
+        }
     }
 
     play_game(p_ptr, new_game, browsing_movie);

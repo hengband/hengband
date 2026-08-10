@@ -2814,18 +2814,17 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
     // コマンドライン引数の解釈中に出力し得る診断メッセージに名前を付けるため、
     // plog()/quit()を呼び得る処理より先に設定する
     program_name = VARIANT_NAME;
-    command_line.handle();
-    // ヘッドレス実行は待ち受けポートで排他されるため、多重起動チェックの対象外とする。
-    // これを行うと、異なるポートを指定しても2つ目以降のプロセスを起動できない
-    if (arg_headless_port) {
-        return run_headless_game();
-    }
-
     if (is_already_running()) {
         constexpr auto mes = _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running.");
         constexpr auto caption = _(L"エラー！", L"Error");
         MessageBoxW(NULL, mes, caption, MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
         return 0;
+    }
+
+    // handle()は--output-spoilersの処理でinit_angband()まで走らせ得るため、多重起動チェックの後に呼ぶ
+    command_line.handle();
+    if (arg_headless_port) {
+        return run_headless_game();
     }
 
     register_wndclass();

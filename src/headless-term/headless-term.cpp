@@ -106,12 +106,13 @@ void headless_term_plog(std::string_view str)
 }
 
 /*!
- * @brief ゲーム終了時にメッセージを出力してソケットを閉じる
- * @param str 終了理由のメッセージ
+ * @brief ゲーム終了時にソケットを閉じる
+ * @details
+ * 終了理由のメッセージはquit()/core()が自らplog()へ渡すため、ここでは出力しない。
+ * plog_auxもheadless_term_plog()であり、出力すると標準エラー出力へ二重に表示される。
  */
-void headless_term_quit(std::string_view str)
+void headless_term_quit(std::string_view)
 {
-    headless_term_plog(str);
     headless_term_server.reset();
 }
 
@@ -492,8 +493,8 @@ RequestResult dispatch_request(const nlohmann::json &request)
 /*!
  * @brief 接続済みのクライアントからリクエストを1件受信して処理する
  * @details
- * リクエストが1行分揃うまで待機する。クライアントが切断された場合と
- * 送信に失敗した場合は何もせずに戻り、呼び出し側のループが次のクライアントの接続を待ち直す。
+ * リクエストが1行分揃うまで待機する。クライアントが切断された場合と受信が期限切れになった場合は
+ * 何もせずに戻り、呼び出し側のループが次のクライアントの接続を待ち直す。
  * 不正なJSONや内部状態の構築失敗でゲームを巻き込んで落とさないよう、
  * 例外は全てここで捕捉してエラーレスポンスに変換する。
  * 終了するか否かはレスポンスの内容ではなくRequestResultのフラグで判断する。
@@ -512,8 +513,12 @@ void serve_request()
         result = make_error_response(nullptr, e.what());
     }
 
-    const auto is_sent = headless_term_server->send_line(result.response.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace));
-    if (is_sent && result.is_quit_requested) {
+    // 送信に失敗した場合はサーバ側がクライアントを切断済みで、呼び出し側のループが次の接続を待ち直す
+    (void)headless_term_server->send_line(result.response.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace));
+
+    // レスポンスが届いたか否かに関わらず終了する。送信の失敗で終了要求を握り潰すと、
+    // クライアントが去った後もプロセスが次の接続を待ち続けて残る
+    if (result.is_quit_requested) {
         quit("");
     }
 }

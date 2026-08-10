@@ -63,10 +63,27 @@ constexpr int ADDRESS_REUSE_OPTION = SO_REUSEADDR;
 constexpr size_t MAX_REQUEST_BYTES = 16 * 1024 * 1024;
 
 /*!
+ * @brief 接続済みのクライアントとの1回のやり取りを待つ秒数
+ * @details
+ * 同時に接続できるクライアントは1つで、リクエストの処理中は待ち受けソケットを監視しないため、
+ * 接続したまま何も送らないクライアントが居ると待ち受けが塞がったままになる。
+ * 期限を設けて切断することで、次のクライアントを受け付けられる状態へ自力で復帰する。
+ */
+constexpr int CLIENT_IO_TIMEOUT_SECONDS = 30;
+
+/*!
  * @brief ソケットの待機期限
  * @details nulloptは無制限に待つことを表す。
  */
 using SocketWaitDeadline = tl::optional<std::chrono::steady_clock::time_point>;
+
+/*!
+ * @brief ソケットの待機方向
+ */
+enum class SocketWaitMode {
+    READ, //!< 読み込み可能になるまで待つ
+    WRITE, //!< 書き込み可能になるまで待つ
+};
 
 #ifdef WINDOWS
 using socket_length_t = int;
@@ -213,21 +230,24 @@ bool is_deadline_expired(const SocketWaitDeadline &deadline)
 }
 
 /*!
- * @brief ソケットが読み込み可能になるまで待つ
+ * @brief ソケットが読み書き可能になるまで待つ
  * @param socket 対象のソケットハンドル
  * @param deadline 待機の期限。nulloptを指定すると無制限に待つ
- * @return 読み込み可能になった場合TRUE、タイムアウトまたはエラーの場合FALSE
+ * @param mode 待機する方向 (読み込みまたは書き込み)
+ * @return 可能になった場合TRUE、タイムアウトまたはエラーの場合FALSE
  * @details
  * 割り込みで中断された場合は待ち直すが、その際にタイムアウトが延びないよう、
  * 呼び出し側が一度だけ求めた期限までの残り時間をselect()へ渡す。
  */
-bool wait_for_readable(intptr_t socket, const SocketWaitDeadline &deadline)
+bool wait_for_socket(intptr_t socket, const SocketWaitDeadline &deadline, SocketWaitMode mode)
 {
     auto is_first_wait = true;
     while (true) {
-        fd_set readable;
-        FD_ZERO(&readable);
-        FD_SET(native_socket(socket), &readable);
+        fd_set target;
+        FD_ZERO(&target);
+        FD_SET(native_socket(socket), &target);
+        auto *readable = (mode == SocketWaitMode::READ) ? &target : nullptr;
+        auto *writable = (mode == SocketWaitMode::WRITE) ? &target : nullptr;
 #ifdef WINDOWS
         const auto nfds = 0;
 #else
@@ -248,13 +268,24 @@ bool wait_for_readable(intptr_t socket, const SocketWaitDeadline &deadline)
         }
 
         is_first_wait = false;
-        const auto result = ::select(nfds, &readable, nullptr, nullptr, deadline ? &timeout : nullptr);
+        const auto result = ::select(nfds, readable, writable, nullptr, deadline ? &timeout : nullptr);
         if ((result < 0) && is_socket_call_interrupted()) {
             continue;
         }
 
         return result > 0;
     }
+}
+
+/*!
+ * @brief クライアントとのやり取りが中断された理由を表す文言を得る
+ * @param deadline 待機に用いた期限
+ * @return 期限切れの場合はタイムアウトを表す文言、それ以外は待機自体の失敗を表す文言
+ * @details wait_for_socket()がFALSEを返した理由を診断メッセージで区別するためのもの。
+ */
+const char *describe_wait_failure(const SocketWaitDeadline &deadline)
+{
+    return is_deadline_expired(deadline) ? "timed out" : "failed while";
 }
 
 }
@@ -349,7 +380,7 @@ bool HeadlessTermServer::ensure_client(int timeout_seconds)
 
     const auto deadline = make_deadline(timeout_seconds);
     while (true) {
-        const auto is_readable = wait_for_readable(this->listen_socket, deadline);
+        const auto is_readable = wait_for_socket(this->listen_socket, deadline, SocketWaitMode::READ);
         if (is_readable) {
             const auto accepted = static_cast<intptr_t>(::accept(native_socket(this->listen_socket), nullptr, nullptr));
             if (accepted != INVALID_SOCKET_HANDLE) {
@@ -385,9 +416,13 @@ bool HeadlessTermServer::ensure_client(int timeout_seconds)
  * リクエストがTCPのセグメントに分割されて届く場合と、1回の受信に複数行が含まれる場合の
  * どちらにも対応するため、受信した内容は行が揃うまで受信バッファに残す。
  * 改行が現れないまま1行がMAX_REQUEST_BYTESを超えた場合はクライアントを切断する。
+ *
+ * 期限は行の組み立て全体に掛ける。受信のたびに求め直すと、改行を送らないまま
+ * 少しずつデータを送り続けるクライアントが期限を際限なく延ばせてしまう。
  */
 tl::optional<std::string> HeadlessTermServer::receive_line()
 {
+    const auto deadline = make_deadline(CLIENT_IO_TIMEOUT_SECONDS);
     while (true) {
         const auto separator = this->receive_buffer.find('\n');
         if (separator != std::string::npos) {
@@ -407,6 +442,12 @@ tl::optional<std::string> HeadlessTermServer::receive_line()
         }
 
         if (this->client_socket == INVALID_SOCKET_HANDLE) {
+            return tl::nullopt;
+        }
+
+        if (!wait_for_socket(this->client_socket, deadline, SocketWaitMode::READ)) {
+            plog(fmt::format("{} waiting for a request from the client", describe_wait_failure(deadline)));
+            this->close_client();
             return tl::nullopt;
         }
 
@@ -434,7 +475,10 @@ tl::optional<std::string> HeadlessTermServer::receive_line()
  * @brief レスポンスを1行送信する
  * @param payload 送信する行 (改行は本関数が付加する)
  * @return 送信に成功した場合TRUE
- * @details レスポンスは内部状態のスナップショットで大きくなり得るため、値渡しで受けてコピーを避ける。
+ * @details
+ * レスポンスは内部状態のスナップショットで大きくなり得るため、値渡しで受けてコピーを避ける。
+ * 受信と同様、レスポンスを読まないクライアントで待ち受けが塞がらないよう、
+ * 送信全体に期限を設ける。
  */
 bool HeadlessTermServer::send_line(std::string payload)
 {
@@ -442,9 +486,16 @@ bool HeadlessTermServer::send_line(std::string payload)
         return false;
     }
 
+    const auto deadline = make_deadline(CLIENT_IO_TIMEOUT_SECONDS);
     payload.push_back('\n');
     size_t sent_total = 0;
     while (sent_total < payload.size()) {
+        if (!wait_for_socket(this->client_socket, deadline, SocketWaitMode::WRITE)) {
+            plog(fmt::format("{} waiting to send a response to the client", describe_wait_failure(deadline)));
+            this->close_client();
+            return false;
+        }
+
         const auto sent = ::send(native_socket(this->client_socket), payload.data() + sent_total,
             static_cast<transfer_size_t>(payload.size() - sent_total), SEND_FLAGS);
         if (sent <= 0) {
