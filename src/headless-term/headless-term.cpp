@@ -116,6 +116,24 @@ void headless_term_quit(std::string_view str)
 }
 
 /*!
+ * @brief リクエストの処理結果
+ * @details
+ * 終了要求をレスポンスのキーで表すと、make_ok_response()がボディを展開する都合上、
+ * ボディ側に同名のキーが現れた時に意図せず終了してしまう。
+ * レスポンスとは別のフラグで持つことで、両者の取り違えを型で防ぐ。
+ */
+struct RequestResult {
+    RequestResult(nlohmann::json response, bool is_quit_requested = false)
+        : response(std::move(response))
+        , is_quit_requested(is_quit_requested)
+    {
+    }
+
+    nlohmann::json response; //!< クライアントへ返すレスポンス
+    bool is_quit_requested; //!< ゲームの終了を要求されたか否か
+};
+
+/*!
  * @brief エラーを表すレスポンスを生成する
  * @param id リクエストのid (無い場合はnull)
  * @param message エラーの内容
@@ -349,9 +367,9 @@ nlohmann::json handle_state_request(const nlohmann::json &id)
 /*!
  * @brief リクエストのJSONオブジェクトを解釈して処理する
  * @param request リクエストのJSONオブジェクト
- * @return レスポンスのJSONオブジェクト
+ * @return リクエストの処理結果
  */
-nlohmann::json dispatch_request(const nlohmann::json &request)
+RequestResult dispatch_request(const nlohmann::json &request)
 {
     if (!request.is_object()) {
         return make_error_response(nullptr, "the request must be a JSON object");
@@ -403,7 +421,7 @@ nlohmann::json dispatch_request(const nlohmann::json &request)
     }
 
     if (*op == "quit") {
-        return make_ok_response(id, { { "quitting", true } });
+        return RequestResult(make_ok_response(id, { { "quitting", true } }), true);
     }
 
     return make_error_response(id, "unknown op: " + *op);
@@ -417,6 +435,7 @@ nlohmann::json dispatch_request(const nlohmann::json &request)
  * 接続が切れていれば呼び出し側のループが次のクライアントの接続を待ち直す。
  * 不正なJSONや内部状態の構築失敗でゲームを巻き込んで落とさないよう、
  * 例外は全てここで捕捉してエラーレスポンスに変換する。
+ * 終了するか否かはレスポンスの内容ではなくRequestResultのフラグで判断する。
  */
 void serve_pending_request(bool wait)
 {
@@ -425,15 +444,15 @@ void serve_pending_request(bool wait)
         return;
     }
 
-    nlohmann::json response;
+    RequestResult result{ nlohmann::json() };
     try {
-        response = dispatch_request(nlohmann::json::parse(*line));
+        result = dispatch_request(nlohmann::json::parse(*line));
     } catch (const std::exception &e) {
-        response = make_error_response(nullptr, e.what());
+        result = make_error_response(nullptr, e.what());
     }
 
-    const auto is_sent = headless_term_server->send_line(response.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace));
-    if (is_sent && response.value("quitting", false)) {
+    const auto is_sent = headless_term_server->send_line(result.response.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace));
+    if (is_sent && result.is_quit_requested) {
         quit("");
     }
 }

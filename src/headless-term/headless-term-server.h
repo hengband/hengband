@@ -45,6 +45,7 @@ private:
 
     int port;
     bool is_socket_library_ready = true; //!< ソケットライブラリの初期化に成功したか否か (Windows以外は常にTRUE)
+    int socket_library_error = 0; //!< ソケットライブラリの初期化が返したエラー番号 (Windows以外は常に0)
     intptr_t listen_socket = INVALID_SOCKET_HANDLE;
     intptr_t client_socket = INVALID_SOCKET_HANDLE;
     std::string receive_buffer;

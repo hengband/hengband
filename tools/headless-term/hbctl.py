@@ -61,9 +61,12 @@ def send_request(host, port, timeout, payload):
 def check_response(response):
     """レスポンスが成功を示しているか確認する。
 
-    :param response: レスポンスの辞書
+    :param response: レスポンスとして受け取ったJSONの値
     :return: 引数のレスポンス
     """
+    if not isinstance(response, dict):
+        raise HeadlessTermError("サーバのレスポンスはJSONオブジェクトである必要があります")
+
     if not response.get("ok", False):
         raise HeadlessTermError(f"サーバがエラーを返しました: {response.get('error', response)}")
 

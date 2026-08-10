@@ -4,7 +4,6 @@
  */
 
 #include "headless-term/headless-term-server.h"
-#include "term/z-form.h"
 #include "term/z-util.h"
 
 #ifdef WINDOWS
@@ -22,6 +21,7 @@
 #endif
 
 #include <chrono>
+#include <fmt/format.h>
 
 namespace {
 
@@ -105,6 +105,23 @@ void close_socket_handle(intptr_t socket)
     ::closesocket(native_socket(socket));
 #else
     ::close(native_socket(socket));
+#endif
+}
+
+/*!
+ * @brief 直前のソケット操作のエラー番号を得る
+ * @return エラー番号 (WindowsはWinsockのエラーコード、それ以外はerrno)
+ * @details
+ * ヘッドレス運用では標準エラー出力だけが失敗原因の手掛かりとなるため、
+ * 「ポートが使用中」と「権限が不足」のように区別すべき失敗を診断メッセージで見分けられるようにする。
+ * 失敗したAPIの直後、他のソケットAPIを呼ぶ前に取得すること。
+ */
+int last_socket_error()
+{
+#ifdef WINDOWS
+    return ::WSAGetLastError();
+#else
+    return errno;
 #endif
 }
 
@@ -241,7 +258,9 @@ HeadlessTermServer::HeadlessTermServer(int port)
 {
 #ifdef WINDOWS
     WSADATA wsa_data{};
-    this->is_socket_library_ready = ::WSAStartup(MAKEWORD(2, 2), &wsa_data) == 0;
+    // WSAStartup()は失敗の理由を戻り値で返し、WSAGetLastError()には設定しない
+    this->socket_library_error = ::WSAStartup(MAKEWORD(2, 2), &wsa_data);
+    this->is_socket_library_ready = this->socket_library_error == 0;
 #endif
 }
 
@@ -266,13 +285,13 @@ HeadlessTermServer::~HeadlessTermServer()
 bool HeadlessTermServer::listen_on_loopback()
 {
     if (!this->is_socket_library_ready) {
-        plog("failed to initialize the socket library");
+        plog(fmt::format("failed to initialize the socket library (error {})", this->socket_library_error));
         return false;
     }
 
     const auto socket = static_cast<intptr_t>(::socket(AF_INET, SOCK_STREAM, 0));
     if (socket == INVALID_SOCKET_HANDLE) {
-        plog("failed to create a listening socket");
+        plog(fmt::format("failed to create a listening socket (error {})", last_socket_error()));
         return false;
     }
 
@@ -284,19 +303,19 @@ bool HeadlessTermServer::listen_on_loopback()
     address.sin_addr.s_addr = ::htonl(INADDR_LOOPBACK);
     address.sin_port = ::htons(static_cast<uint16_t>(this->port));
     if (::bind(native_socket(socket), reinterpret_cast<const sockaddr *>(&address), static_cast<socket_length_t>(sizeof(address))) != 0) {
-        plog("failed to bind the listening socket");
+        plog(fmt::format("failed to bind the listening socket (error {})", last_socket_error()));
         close_socket_handle(socket);
         return false;
     }
 
     if (::listen(native_socket(socket), 1) != 0) {
-        plog("failed to listen on the socket");
+        plog(fmt::format("failed to listen on the socket (error {})", last_socket_error()));
         close_socket_handle(socket);
         return false;
     }
 
     this->listen_socket = socket;
-    plog_fmt("listening on 127.0.0.1:%d", this->port);
+    plog(fmt::format("listening on 127.0.0.1:{}", this->port));
     return true;
 }
 
@@ -336,8 +355,9 @@ bool HeadlessTermServer::ensure_client(int timeout_seconds)
         }
 
         // 一時的な失敗であれば、期限を延ばさずに次の接続要求を待ち直す
+        const auto error_number = last_socket_error();
         if (!is_accept_failure_retryable()) {
-            plog("failed to accept a client connection");
+            plog(fmt::format("failed to accept a client connection (error {})", error_number));
             return false;
         }
     }
