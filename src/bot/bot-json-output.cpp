@@ -124,11 +124,50 @@ bool is_grid_perceivable(const PlayerType &player, const Pos2D &pos)
     return is_visible || (grid.is_view() && (is_glowing || player.see_nocto != 0));
 }
 
+// is_grid_perceivable() is a faithful mirror of display-map.cpp's map_info(),
+// which decides what the player currently sees drawn on screen (display
+// parity). For ordinary (non-REMEMBER) floor tiles, that gate depends on
+// CAVE_MARK, which is only persisted when the "view_torch_grids" option is
+// on -- off by default. travel-execution.cpp's travel_flow_aux(), which
+// drives the native travel command, instead gates on CAVE_KNOWN, a
+// permanent memory flag set unconditionally in note_spot() once a tile is
+// first perceived, independent of any display option. With the default
+// options, a torch-lit corridor floor tile that is CAVE_KNOWN but never
+// gets CAVE_MARK'd (view_torch_grids is off) is included in nearby_grids
+// while lit, then vanishes from it the instant the player's light moves
+// on -- even though the tile remains one the native travel command (and a
+// human player, via the same travel command) can path through. This
+// predicate closes that gap for bot consumers without touching
+// is_grid_perceivable() itself, so display-parity behaviour (and every
+// existing consumer of "known" as display state) is unchanged.
+//
+// REMEMBER terrain (walls, doors, stairs, stores, rubble -- everything
+// that isn't ordinary floor/dirt/grass/glass-floor/invisible-trap) is
+// deliberately excluded from the CAVE_KNOWN fallback: map_area() (Magic
+// Mapping) sets CAVE_KNOWN unconditionally for every tile in range,
+// including undiscovered bedrock, and is_revealed_wall() elsewhere in this
+// file relies on is_grid_perceivable()'s REMEMBER branch to keep
+// undiscovered secret walls hidden from bot consumers. Falling through to
+// raw CAVE_KNOWN for REMEMBER terrain would leak both of those.
+bool is_grid_known_to_bot(const PlayerType &player, const Pos2D &pos)
+{
+    if (is_grid_perceivable(player, pos)) {
+        return true;
+    }
+
+    const auto &grid = player.current_floor_ptr->get_grid(pos);
+    if (grid.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::REMEMBER)) {
+        return false;
+    }
+
+    return (grid.info & CAVE_KNOWN) != 0;
+}
+
 nlohmann::json make_grid_json(const PlayerType &player, const Pos2D &pos)
 {
     const auto &floor = *player.current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
-    const auto is_known = is_grid_perceivable(player, pos);
+    const auto is_known = is_grid_known_to_bot(player, pos);
     if (!is_known) {
         return {
             { "y", pos.y },
@@ -412,9 +451,12 @@ nlohmann::json make_nearby_grids_json(const PlayerType &player)
     // (so the bot can see the dungeon entrance immediately, like the player),
     // and in the dungeon this lets it navigate to any already-explored feature.
     // Unknown tiles are omitted; the client treats an absent but in-bounds
-    // neighbour as a frontier.
+    // neighbour as a frontier. "Known" here means either currently drawn on
+    // screen (is_grid_perceivable()) or, for ordinary floor terrain, simply
+    // remembered by the game via CAVE_KNOWN even without a display mark --
+    // see is_grid_known_to_bot() above.
     for (const auto &pos : floor.get_area()) {
-        if (!is_grid_perceivable(player, pos)) {
+        if (!is_grid_known_to_bot(player, pos)) {
             continue;
         }
 
