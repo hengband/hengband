@@ -155,9 +155,11 @@ bool is_grid_perceivable(const PlayerType &player, const Pos2D &pos)
 // floor is generated, and that placeholder carries no REMEMBER flag (its
 // flags list is empty), so it isn't caught by the check above. wiz_lite()
 // (Clairvoyance) and map_area() (Magic Mapping) both set CAVE_KNOWN
-// unconditionally across the whole floor via note_spot(), so without this
-// check any ungenerated grid still holding that placeholder id after
-// either spell would leak through as known:true.
+// directly (grid.info |= CAVE_KNOWN) for every tile in range, unconditionally
+// and without going through note_spot() -- which itself bails out early on
+// blindness/visibility/lighting -- so without this check any ungenerated
+// grid still holding that placeholder id after either spell would leak
+// through as known:true.
 bool is_grid_known_to_bot(const PlayerType &player, const Pos2D &pos)
 {
     if (is_grid_perceivable(player, pos)) {
