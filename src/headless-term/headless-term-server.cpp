@@ -203,6 +203,16 @@ SocketWaitDeadline make_deadline(int timeout_seconds)
 }
 
 /*!
+ * @brief 待機の期限を過ぎているか調べる
+ * @param deadline 待機の期限。nulloptを指定すると期限なしとみなす
+ * @return 期限を過ぎている場合TRUE。期限なしの場合は常にFALSE
+ */
+bool is_deadline_expired(const SocketWaitDeadline &deadline)
+{
+    return deadline && (*deadline <= std::chrono::steady_clock::now());
+}
+
+/*!
  * @brief ソケットが読み込み可能になるまで待つ
  * @param socket 対象のソケットハンドル
  * @param deadline 待機の期限。nulloptを指定すると無制限に待つ
@@ -339,7 +349,24 @@ bool HeadlessTermServer::ensure_client(int timeout_seconds)
 
     const auto deadline = make_deadline(timeout_seconds);
     while (true) {
-        if (!wait_for_readable(this->listen_socket, deadline)) {
+        const auto is_readable = wait_for_readable(this->listen_socket, deadline);
+        if (is_readable) {
+            const auto accepted = static_cast<intptr_t>(::accept(native_socket(this->listen_socket), nullptr, nullptr));
+            if (accepted != INVALID_SOCKET_HANDLE) {
+                suppress_sigpipe(accepted);
+                this->client_socket = accepted;
+                return true;
+            }
+
+            const auto error_number = last_socket_error();
+            if (!is_accept_failure_retryable()) {
+                plog(fmt::format("failed to accept a client connection (error {})", error_number));
+                return false;
+            }
+        }
+
+        // 待機が終了した場合と、一時的な失敗が続いたまま期限を過ぎた場合は接続を諦める
+        if (!is_readable || is_deadline_expired(deadline)) {
             if (deadline) {
                 plog("timed out waiting for a client connection");
             }
@@ -347,19 +374,7 @@ bool HeadlessTermServer::ensure_client(int timeout_seconds)
             return false;
         }
 
-        const auto accepted = static_cast<intptr_t>(::accept(native_socket(this->listen_socket), nullptr, nullptr));
-        if (accepted != INVALID_SOCKET_HANDLE) {
-            suppress_sigpipe(accepted);
-            this->client_socket = accepted;
-            return true;
-        }
-
         // 一時的な失敗であれば、期限を延ばさずに次の接続要求を待ち直す
-        const auto error_number = last_socket_error();
-        if (!is_accept_failure_retryable()) {
-            plog(fmt::format("failed to accept a client connection (error {})", error_number));
-            return false;
-        }
     }
 }
 
