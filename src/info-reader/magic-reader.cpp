@@ -7,6 +7,7 @@
 #include "system/spell-info-list.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <nlohmann/json.hpp>
 
 namespace {
 /*!

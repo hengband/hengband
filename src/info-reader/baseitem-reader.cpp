@@ -20,6 +20,7 @@
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <limits>
+#include <nlohmann/json.hpp>
 
 BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data)
     : baseitem_data(baseitem_data)

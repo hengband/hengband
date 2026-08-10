@@ -21,6 +21,7 @@
 #include "view/display-messages.h"
 #include <exception>
 #include <memory>
+#include <nlohmann/json.hpp>
 #include <span>
 
 DungeonReader::DungeonReader(const nlohmann::json &dungeon_data)

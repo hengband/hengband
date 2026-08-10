@@ -6,6 +6,7 @@
 #include "locale/character-encoding.h"
 #include "system/monrace/monrace-message.h"
 #include "view/display-messages.h"
+#include <nlohmann/json.hpp>
 #include <string>
 
 MessageReader::MessageReader(const nlohmann::json &message_data)
