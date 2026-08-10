@@ -149,6 +149,15 @@ bool is_grid_perceivable(const PlayerType &player, const Pos2D &pos)
 // file relies on is_grid_perceivable()'s REMEMBER branch to keep
 // undiscovered secret walls hidden from bot consumers. Falling through to
 // raw CAVE_KNOWN for REMEMBER terrain would leak both of those.
+//
+// The placeholder "NONE" terrain is excluded too, for the same reason as
+// REMEMBER terrain: clear_cave() zero-fills every grid's feat before a
+// floor is generated, and that placeholder carries no REMEMBER flag (its
+// flags list is empty), so it isn't caught by the check above. wiz_lite()
+// (Clairvoyance) and map_area() (Magic Mapping) both set CAVE_KNOWN
+// unconditionally across the whole floor via note_spot(), so without this
+// check any ungenerated grid still holding that placeholder id after
+// either spell would leak through as known:true.
 bool is_grid_known_to_bot(const PlayerType &player, const Pos2D &pos)
 {
     if (is_grid_perceivable(player, pos)) {
@@ -156,18 +165,29 @@ bool is_grid_known_to_bot(const PlayerType &player, const Pos2D &pos)
     }
 
     const auto &grid = player.current_floor_ptr->get_grid(pos);
-    if (grid.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::REMEMBER)) {
+    const auto &terrains = TerrainList::get_instance();
+    const auto terrain_id = grid.get_terrain_id(TerrainKind::MIMIC);
+    if (terrain_id == terrains.get_terrain_id(TerrainTag::NONE)) {
+        return false;
+    }
+
+    if (terrains.get_terrain(terrain_id).flags.has(TerrainCharacteristics::REMEMBER)) {
         return false;
     }
 
     return (grid.info & CAVE_KNOWN) != 0;
 }
 
-nlohmann::json make_grid_json(const PlayerType &player, const Pos2D &pos)
+// is_known is passed in rather than recomputed here because the sole
+// caller, make_nearby_grids_json(), already evaluates
+// is_grid_known_to_bot() once per grid to decide whether to include it at
+// all -- calling it again in here would re-walk the same REMEMBER/
+// CAVE_KNOWN checks (and, transitively, is_grid_perceivable()) a second
+// time per grid, for up to MAX_HGT * MAX_WID grids every snapshot.
+nlohmann::json make_grid_json(const PlayerType &player, const Pos2D &pos, bool is_known)
 {
     const auto &floor = *player.current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
-    const auto is_known = is_grid_known_to_bot(player, pos);
     if (!is_known) {
         return {
             { "y", pos.y },
@@ -456,11 +476,12 @@ nlohmann::json make_nearby_grids_json(const PlayerType &player)
     // remembered by the game via CAVE_KNOWN even without a display mark --
     // see is_grid_known_to_bot() above.
     for (const auto &pos : floor.get_area()) {
-        if (!is_grid_known_to_bot(player, pos)) {
+        const auto is_known = is_grid_known_to_bot(player, pos);
+        if (!is_known) {
             continue;
         }
 
-        grids.push_back(make_grid_json(player, pos));
+        grids.push_back(make_grid_json(player, pos, is_known));
     }
 
     return grids;
