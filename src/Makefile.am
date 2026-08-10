@@ -194,6 +194,7 @@ hengband_SOURCES = \
 	effect/effect-characteristics.h \
 	\
 	external-lib/include/nlohmann/json.hpp \
+	external-lib/include/nlohmann/json_fwd.hpp \
 	external-lib/include/simpleini/SimpleIni.h \
 	external-lib/include/std/detail/associated_types.hpp \
 	external-lib/include/std/iterator \
