@@ -891,9 +891,8 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
         // The store accepts the item letter RELATIVE to the currently visible
         // page: pressing 'a' selects stock[store_top]. Only items on the
         // current page (store_top .. store_top+store_bottom) are selectable,
-        // so emit page-relative letters and skip off-page items (the bot does
-        // not page, so it only ever sees page 1, but this stays correct if it
-        // ever does). Mirrors display_entry()'s labelling.
+        // so emit page-relative letters and skip off-page items. Mirrors
+        // display_entry()'s labelling.
         const auto page_pos = i - store_top;
         if (page_pos < 0 || page_pos >= store_bottom) {
             continue;
@@ -931,10 +930,9 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
 
     // Paging facts the player already reads off the screen: the listing shows
     // one page of `page_size` slots starting at `page_top`, and the store's
-    // own prompt tells the player whether more pages follow.  Emitting them
-    // spares the bot from inferring the page count -- a full page (letters
-    // running a..Z) is NOT evidence that the stock ends there, which is
-    // exactly the inference that went wrong without these fields.
+    // own prompt tells the player whether more pages follow.  Without them the
+    // page count can only be guessed, and a full page (letters running a..Z)
+    // is NOT evidence that the stock ends there.
     return {
         { "store_type", enum2i(store_num) },
         { "stock_num", st_ptr->stock_num },
@@ -1054,9 +1052,8 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true)
                           // level (> 0): set either by physically entering it, or
                           // by hearing its rumor at the inn, which calls
                           // set_max_level(mindepth) and tells the player "You can
-                          // recall to Angband." has_entered() alone missed the
-                          // rumor-unlock case, so the bot never noticed the unlock
-                          // and looped reading rumors. This is player-visible state,
+                          // recall to Angband." has_entered() alone does not cover
+                          // the rumor-unlock case. This is player-visible state,
                           // not hidden information.
                           { "angband_recall_unlocked", dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() > 0 },
                           // Towns the player knows the way to: marked visited by
@@ -1642,7 +1639,7 @@ void output_bot_json_store_snapshot(PlayerType *player_ptr, StoreSaleType store_
     // the surface snapshot's map verbatim -- yet it is over 99% of a snapshot's
     // bytes (measured: 5.09 MB per record, 10,419 grid entries).  A store
     // session emits one snapshot per processed key (see cmd-store.cpp), so
-    // paging through the home inventory used to write hundreds of megabytes.
+    // paging through a large inventory multiplies that cost by the key count.
     // This reveals nothing new to the bot; it only stops re-sending what the
     // preceding surface snapshot already carried.
     auto snapshot = make_snapshot(player_ptr, false);
