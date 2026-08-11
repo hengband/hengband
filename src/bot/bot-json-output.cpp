@@ -876,52 +876,57 @@ nlohmann::json make_equipment_json(PlayerType *player_ptr)
     return items;
 }
 
+/*!
+ * @brief 店の在庫とページング状況を出力する
+ * @details 呼び出し口は do_cmd_store() のコマンドループ1箇所だけで、そこに到達する時点で
+ * st_ptr は &store に、store_bottom は MIN_STOCK + xtra_stock に設定済みである。
+ * st_ptr だけを null ガードしても store_top / store_bottom は初期値 0 のまま出てしまい、
+ * ページ数を割り算する消費側をゼロ除算させるだけなので、3つとも同じ前提に揃えて扱う。
+ */
 nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
 {
     auto items = nlohmann::json::array();
     const auto is_personal_storage = store_num == StoreSaleType::HOME || store_num == StoreSaleType::MUSEUM;
-    if (st_ptr != nullptr) {
-        for (auto i = 0; i < st_ptr->stock_num; ++i) {
-            // The store accepts the item letter RELATIVE to the currently visible
-            // page: pressing 'a' selects stock[store_top]. Only items on the
-            // current page (store_top .. store_top+store_bottom) are selectable,
-            // so emit page-relative letters and skip off-page items (the bot does
-            // not page, so it only ever sees page 1, but this stays correct if it
-            // ever does). Mirrors display_entry()'s labelling.
-            const auto page_pos = i - store_top;
-            if (page_pos < 0 || page_pos >= store_bottom) {
-                continue;
-            }
-            const auto &item = *st_ptr->stock[i];
-            const auto letter = (page_pos < 26)
-                                    ? std::string(1, static_cast<char>('a' + page_pos))
-                                    : std::string(1, static_cast<char>('A' + (page_pos - 26)));
-            if (is_personal_storage) {
-                auto entry = make_item_json(player_ptr, item);
-                entry["letter"] = letter;
-                items.push_back(std::move(entry));
-                continue;
-            }
-
-            const auto price = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
-            items.push_back({
-                { "letter", letter },
-                { "name", sys_to_utf8(describe_flavor(player_ptr, item, OD_STORE | OD_OMIT_PREFIX)).value_or("<encoding-error>") },
-                { "count", item.number },
-                { "tval", enum2i(item.bi_key.tval()) },
-                { "sval", item.bi_key.sval().value_or(-1) },
-                { "aware", true },
-                { "known", true },
-                { "fully_known", true },
-                { "price", price },
-                // Shop stock is fully identified and its listing already shows
-                // charges/fuel to the player, so exposing pval reveals nothing
-                // hidden. Without it a MANA race can never evaluate charge food
-                // (every shelf wand/staff read as 0 charges).
-                { "pval", item.pval },
-                { "charges", item.pval },
-            });
+    for (auto i = 0; i < st_ptr->stock_num; ++i) {
+        // The store accepts the item letter RELATIVE to the currently visible
+        // page: pressing 'a' selects stock[store_top]. Only items on the
+        // current page (store_top .. store_top+store_bottom) are selectable,
+        // so emit page-relative letters and skip off-page items (the bot does
+        // not page, so it only ever sees page 1, but this stays correct if it
+        // ever does). Mirrors display_entry()'s labelling.
+        const auto page_pos = i - store_top;
+        if (page_pos < 0 || page_pos >= store_bottom) {
+            continue;
         }
+        const auto &item = *st_ptr->stock[i];
+        const auto letter = (page_pos < 26)
+                                ? std::string(1, static_cast<char>('a' + page_pos))
+                                : std::string(1, static_cast<char>('A' + (page_pos - 26)));
+        if (is_personal_storage) {
+            auto entry = make_item_json(player_ptr, item);
+            entry["letter"] = letter;
+            items.push_back(std::move(entry));
+            continue;
+        }
+
+        const auto price = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
+        items.push_back({
+            { "letter", letter },
+            { "name", sys_to_utf8(describe_flavor(player_ptr, item, OD_STORE | OD_OMIT_PREFIX)).value_or("<encoding-error>") },
+            { "count", item.number },
+            { "tval", enum2i(item.bi_key.tval()) },
+            { "sval", item.bi_key.sval().value_or(-1) },
+            { "aware", true },
+            { "known", true },
+            { "fully_known", true },
+            { "price", price },
+            // Shop stock is fully identified and its listing already shows
+            // charges/fuel to the player, so exposing pval reveals nothing
+            // hidden. Without it a MANA race can never evaluate charge food
+            // (every shelf wand/staff read as 0 charges).
+            { "pval", item.pval },
+            { "charges", item.pval },
+        });
     }
 
     // Paging facts the player already reads off the screen: the listing shows
@@ -932,7 +937,7 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
     // exactly the inference that went wrong without these fields.
     return {
         { "store_type", enum2i(store_num) },
-        { "stock_num", st_ptr != nullptr ? st_ptr->stock_num : 0 },
+        { "stock_num", st_ptr->stock_num },
         { "page_top", store_top },
         { "page_size", store_bottom },
         { "items", items },
