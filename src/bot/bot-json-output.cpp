@@ -10,6 +10,7 @@
 #include "game-option/runtime-arguments.h"
 #include "inventory/inventory-slot-types.h"
 #include "locale/character-encoding.h"
+#include "mutation/mutation-flag-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/tr-types.h"
 #include "object/tval-types.h"
@@ -18,6 +19,7 @@
 #include "player-base/player-race.h"
 #include "player-info/equipment-info.h"
 #include "player-info/race-info.h"
+#include "player-info/race-types.h"
 #include "player/digestion-processor.h"
 #include "player/permanent-resistances.h"
 #include "player/player-realm.h"
@@ -511,39 +513,138 @@ PlayerKnownFlags collect_player_known_flags(PlayerType *player_ptr)
     return result;
 }
 
-bool has_known_player_flag(const PlayerKnownFlags &flags, tr_type flag, tr_type greater_flag = TR_FLAG_MAX)
+/*!
+ * @brief 1つの能力について、供給源ごとの有無を出力する
+ * @details 装備・恒久（種族/職業/変異/性格）・一時（時限効果と構え）は別々に判定する。
+ * まとめて1つの真偽値にすると「装備で得ている耐性」と「もうすぐ切れる一時耐性」が
+ * 区別できず、一時耐性が切れた瞬間に無防備になる装備選択を防げないため。
+ * キャラクター画面も同じ3系統を別の列として表示しているので、フェアプレイ上の
+ * 開示範囲は変わらない。
+ *
+ * permanent は「このスナップショット時点の種族・職業・変異・性格から出ている」という
+ * 意味であって、失効しない保証ではない。変身（tim_mimic）中は player_flags() が変身先の
+ * 種族を参照するため、悪魔変身の火耐性のような時限の能力も permanent に載る。
+ * キャラクター画面も同じく種族欄が変身先の名前に変わるだけなので表示との乖離はないが、
+ * スナップショットは変身状態そのものを出していないので、消費側は permanent を
+ * 「切れない」と読んではならない。
+ */
+nlohmann::json make_ability_sources_json(const PlayerKnownFlags &flags, tr_type flag, tr_type greater_flag = TR_FLAG_MAX)
 {
-    const auto has = [&flags](tr_type candidate) {
-        return flags.equipment.has(candidate) || flags.permanent.has(candidate) || flags.temporary.has(candidate);
+    const auto has = [flag, greater_flag](const TrFlags &source) {
+        return source.has(flag) || ((greater_flag != TR_FLAG_MAX) && source.has(greater_flag));
     };
-    return has(flag) || (greater_flag != TR_FLAG_MAX && has(greater_flag));
+    return {
+        { "equipment", has(flags.equipment) },
+        { "permanent", has(flags.permanent) },
+        { "temporary", has(flags.temporary) },
+    };
 }
 
-nlohmann::json make_player_abilities_json(PlayerType *player_ptr)
+/*!
+ * @brief 能力の有無を供給源ごとに出力する
+ * @details 出力キーは ability_sources であって abilities ではない。#5498 の abilities は
+ * 1能力 1真偽値だったので、同じキーのまま値をオブジェクトに変えると、供給源が全て false
+ * でも空でないオブジェクトは Python でも JavaScript でも真と評価され、消費側は例外も出さずに
+ * 「全能力あり」と誤読する。キーを分けておけば、旧来の消費側は KeyError / undefined で
+ * 即座に破綻する。
+ */
+nlohmann::json make_player_ability_sources_json(const PlayerKnownFlags &flags)
 {
     // Aggregate only identified equipment flags plus intrinsic and temporary
     // flags. A known immunity upgrades its resistance on the character screen.
-    const auto flags = collect_player_known_flags(player_ptr);
+    const auto sources = [&flags](tr_type flag, tr_type greater_flag = TR_FLAG_MAX) {
+        return make_ability_sources_json(flags, flag, greater_flag);
+    };
     return {
-        { "resist_fire", has_known_player_flag(flags, TR_RES_FIRE, TR_IM_FIRE) },
-        { "resist_cold", has_known_player_flag(flags, TR_RES_COLD, TR_IM_COLD) },
-        { "resist_elec", has_known_player_flag(flags, TR_RES_ELEC, TR_IM_ELEC) },
-        { "resist_acid", has_known_player_flag(flags, TR_RES_ACID, TR_IM_ACID) },
-        { "resist_pois", has_known_player_flag(flags, TR_RES_POIS) },
-        { "resist_conf", has_known_player_flag(flags, TR_RES_CONF) },
-        { "resist_chaos", has_known_player_flag(flags, TR_RES_CHAOS) },
-        { "resist_blind", has_known_player_flag(flags, TR_RES_BLIND) },
-        { "resist_fear", has_known_player_flag(flags, TR_RES_FEAR) },
-        { "resist_neth", has_known_player_flag(flags, TR_RES_NETHER) },
-        { "resist_nexus", has_known_player_flag(flags, TR_RES_NEXUS) },
-        { "resist_sound", has_known_player_flag(flags, TR_RES_SOUND) },
-        { "resist_shard", has_known_player_flag(flags, TR_RES_SHARDS) },
-        { "resist_disen", has_known_player_flag(flags, TR_RES_DISEN) },
-        { "resist_lite", has_known_player_flag(flags, TR_RES_LITE, TR_IM_LITE) },
-        { "resist_dark", has_known_player_flag(flags, TR_RES_DARK, TR_IM_DARK) },
-        { "telepathy", has_known_player_flag(flags, TR_TELEPATHY) },
-        { "free_action", has_known_player_flag(flags, TR_FREE_ACT) },
-        { "see_invisible", has_known_player_flag(flags, TR_SEE_INVIS) },
+        { "resist_fire", sources(TR_RES_FIRE, TR_IM_FIRE) },
+        { "resist_cold", sources(TR_RES_COLD, TR_IM_COLD) },
+        { "resist_elec", sources(TR_RES_ELEC, TR_IM_ELEC) },
+        { "resist_acid", sources(TR_RES_ACID, TR_IM_ACID) },
+        { "resist_pois", sources(TR_RES_POIS) },
+        { "resist_conf", sources(TR_RES_CONF) },
+        { "resist_chaos", sources(TR_RES_CHAOS) },
+        { "resist_blind", sources(TR_RES_BLIND) },
+        { "resist_fear", sources(TR_RES_FEAR) },
+        { "resist_neth", sources(TR_RES_NETHER) },
+        { "resist_nexus", sources(TR_RES_NEXUS) },
+        { "resist_sound", sources(TR_RES_SOUND) },
+        { "resist_shard", sources(TR_RES_SHARDS) },
+        { "resist_disen", sources(TR_RES_DISEN) },
+        { "resist_lite", sources(TR_RES_LITE, TR_IM_LITE) },
+        { "resist_dark", sources(TR_RES_DARK, TR_IM_DARK) },
+        { "telepathy", sources(TR_TELEPATHY) },
+        { "free_action", sources(TR_FREE_ACT) },
+        { "see_invisible", sources(TR_SEE_INVIS) },
+    };
+}
+
+/*!
+ * @brief 免疫（ダメージ0）を供給源ごとに出力する
+ * @details 耐性とは軽減率が別物（耐性は 1/3、免疫は 0）で、ability_sources では免疫を耐性に
+ * 畳み込んでしまうため、どの属性を無傷で受けられるかを別に出す。装備の免疫はキャラクター
+ * 画面の免疫欄、一時的な元素免疫はステータスバー（BAR_IMMFIRE 等）でプレイヤーも常時
+ * 確認できる。
+ */
+nlohmann::json make_player_immunities_json(PlayerType *player_ptr, const PlayerKnownFlags &flags)
+{
+    const auto sources = [&flags](tr_type flag) {
+        return nlohmann::json{
+            { "equipment", flags.equipment.has(flag) },
+            { "permanent", flags.permanent.has(flag) },
+            { "temporary", flags.temporary.has(flag) },
+        };
+    };
+    // 地獄だけは TR_IM_* が存在しない。スペクターの地獄無効は effect_player_nether() に
+    // 種族判定として直書きされている（被害0のうえ 1/4 を回復する）ので種族から直接出す。
+    auto nether = nlohmann::json{
+        { "equipment", false },
+        { "permanent", PlayerRace(player_ptr).equals(PlayerRaceType::SPECTRE) },
+        { "temporary", false },
+    };
+    return {
+        { "fire", sources(TR_IM_FIRE) },
+        { "cold", sources(TR_IM_COLD) },
+        { "elec", sources(TR_IM_ELEC) },
+        { "acid", sources(TR_IM_ACID) },
+        { "lite", sources(TR_IM_LITE) },
+        { "dark", sources(TR_IM_DARK) },
+        { "nether", std::move(nether) },
+    };
+}
+
+/*!
+ * @brief 弱点（被ダメージ増加）を供給源ごとに出力する
+ * @details 出力の基準はキャラクター画面の表示であって、ダメージ計算式そのものではない。
+ * 酸・電撃・火炎・冷気は calc_*_damage_rate() が has_vuln_*() の要因ビットを1つずつ見て
+ * 変異由来なら ×2、それ以外は ×4/3 を積算するので、供給源はほぼそのまま倍率に対応する。
+ * 閃光だけは calc_lite_damage_rate() が種族の TR_VUL_LITE しか見ておらず、装備由来の
+ * TR_VUL_LITE はキャラクター画面には "v" として出るのにダメージには乗らない。
+ * lite.equipment はその表示に合わせてあるので、消費側は倍率と同一視してはならない。
+ */
+nlohmann::json make_player_vulnerabilities_json(PlayerType *player_ptr, const PlayerKnownFlags &flags)
+{
+    // 変異「元素に弱い」は player_flags() が拾わない（has_vuln_*() が FLAG_CAUSE_MUTATION
+    // として別に立てている）ため、恒久側へ明示的に足す。
+    const auto has_element_mutation = player_ptr->muta.has(PlayerMutationType::VULN_ELEM);
+    const auto sources = [&flags, has_element_mutation](tr_type flag, bool elemental) {
+        return nlohmann::json{
+            { "equipment", flags.equipment.has(flag) },
+            { "permanent", flags.permanent.has(flag) || (elemental && has_element_mutation) },
+            { "temporary", flags.temporary.has(flag) },
+        };
+    };
+    return {
+        { "acid", sources(TR_VUL_ACID, true) },
+        { "elec", sources(TR_VUL_ELEC, true) },
+        { "fire", sources(TR_VUL_FIRE, true) },
+        { "cold", sources(TR_VUL_COLD, true) },
+        { "lite", sources(TR_VUL_LITE, false) },
+        // has_vuln_curse() は TR_VUL_CURSE に加えて装備の CurseTraitType::VUL_CURSE も
+        // 弱点の要因に数えるが、ここでは意図的に拾わない。キャラクター画面の装備欄
+        // (process_inventory_characteristic()) は get_flags_known() しか見ておらず、
+        // 呪い特性由来の呪力弱点はプレイヤーにはどこにも表示されないので、拾えば
+        // プレイヤーが見られない情報を出すことになる。
+        { "curse", sources(TR_VUL_CURSE, false) },
     };
 }
 
@@ -775,67 +876,87 @@ nlohmann::json make_equipment_json(PlayerType *player_ptr)
     return items;
 }
 
+/*!
+ * @brief 店の在庫とページング状況を出力する
+ * @details 呼び出し口は do_cmd_store() のコマンドループ1箇所だけで、そこに到達する時点で
+ * st_ptr は &store に、store_bottom は MIN_STOCK + xtra_stock に設定済みである。
+ * st_ptr だけを null ガードしても store_top / store_bottom は初期値 0 のまま出てしまい、
+ * ページ数を割り算する消費側をゼロ除算させるだけなので、3つとも同じ前提に揃えて扱う。
+ */
 nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
 {
     auto items = nlohmann::json::array();
     const auto is_personal_storage = store_num == StoreSaleType::HOME || store_num == StoreSaleType::MUSEUM;
-    if (st_ptr != nullptr) {
-        for (auto i = 0; i < st_ptr->stock_num; ++i) {
-            // The store accepts the item letter RELATIVE to the currently visible
-            // page: pressing 'a' selects stock[store_top]. Only items on the
-            // current page (store_top .. store_top+store_bottom) are selectable,
-            // so emit page-relative letters and skip off-page items (the bot does
-            // not page, so it only ever sees page 1, but this stays correct if it
-            // ever does). Mirrors display_entry()'s labelling.
-            const auto page_pos = i - store_top;
-            if (page_pos < 0 || page_pos >= store_bottom) {
-                continue;
-            }
-            const auto &item = *st_ptr->stock[i];
-            const auto letter = (page_pos < 26)
-                                    ? std::string(1, static_cast<char>('a' + page_pos))
-                                    : std::string(1, static_cast<char>('A' + (page_pos - 26)));
-            if (is_personal_storage) {
-                auto entry = make_item_json(player_ptr, item);
-                entry["letter"] = letter;
-                items.push_back(std::move(entry));
-                continue;
-            }
-
-            const auto price = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
-            items.push_back({
-                { "letter", letter },
-                { "name", sys_to_utf8(describe_flavor(player_ptr, item, OD_STORE | OD_OMIT_PREFIX)).value_or("<encoding-error>") },
-                { "count", item.number },
-                { "tval", enum2i(item.bi_key.tval()) },
-                { "sval", item.bi_key.sval().value_or(-1) },
-                { "aware", true },
-                { "known", true },
-                { "fully_known", true },
-                { "price", price },
-                // Shop stock is fully identified and its listing already shows
-                // charges/fuel to the player, so exposing pval reveals nothing
-                // hidden. Without it a MANA race can never evaluate charge food
-                // (every shelf wand/staff read as 0 charges).
-                { "pval", item.pval },
-                { "charges", item.pval },
-            });
+    for (auto i = 0; i < st_ptr->stock_num; ++i) {
+        // The store accepts the item letter RELATIVE to the currently visible
+        // page: pressing 'a' selects stock[store_top]. Only items on the
+        // current page (store_top .. store_top+store_bottom) are selectable,
+        // so emit page-relative letters and skip off-page items. Mirrors
+        // display_entry()'s labelling.
+        const auto page_pos = i - store_top;
+        if (page_pos < 0 || page_pos >= store_bottom) {
+            continue;
         }
+        const auto &item = *st_ptr->stock[i];
+        const auto letter = (page_pos < 26)
+                                ? std::string(1, static_cast<char>('a' + page_pos))
+                                : std::string(1, static_cast<char>('A' + (page_pos - 26)));
+        if (is_personal_storage) {
+            auto entry = make_item_json(player_ptr, item);
+            entry["letter"] = letter;
+            items.push_back(std::move(entry));
+            continue;
+        }
+
+        const auto price = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
+        items.push_back({
+            { "letter", letter },
+            { "name", sys_to_utf8(describe_flavor(player_ptr, item, OD_STORE | OD_OMIT_PREFIX)).value_or("<encoding-error>") },
+            { "count", item.number },
+            { "tval", enum2i(item.bi_key.tval()) },
+            { "sval", item.bi_key.sval().value_or(-1) },
+            { "aware", true },
+            { "known", true },
+            { "fully_known", true },
+            { "price", price },
+            // Shop stock is fully identified and its listing already shows
+            // charges/fuel to the player, so exposing pval reveals nothing
+            // hidden. Without it a MANA race can never evaluate charge food
+            // (every shelf wand/staff read as 0 charges).
+            { "pval", item.pval },
+            { "charges", item.pval },
+        });
     }
 
+    // Paging facts the player already reads off the screen: the listing shows
+    // one page of `page_size` slots starting at `page_top`, and the store's
+    // own prompt tells the player whether more pages follow.  Without them the
+    // page count can only be guessed, and a full page (letters running a..Z)
+    // is NOT evidence that the stock ends there.
     return {
         { "store_type", enum2i(store_num) },
+        { "stock_num", st_ptr->stock_num },
+        { "page_top", store_top },
+        { "page_size", store_bottom },
         { "items", items },
     };
 }
 
-nlohmann::json make_snapshot(PlayerType *player_ptr)
+/*!
+ * @brief スナップショット本体を組み立てる
+ * @param include_map nearby_grids を含めるか
+ * @details nearby_grids はフロア全域を走査して1万件規模の配列を作る処理で、
+ * スナップショット1件のバイト数の99%超を占める。地図を出さない呼び出し
+ * （店内スナップショット）では作ってから消すのではなく最初から作らない。
+ */
+nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true)
 {
     const auto &player = *player_ptr;
     const auto &floor = *player.current_floor_ptr;
     const auto &world = AngbandWorld::get_instance();
     const auto &dungeons = DungeonList::get_instance();
     const auto &dungeon_records = DungeonRecords::get_instance();
+    const auto known_flags = collect_player_known_flags(player_ptr);
     auto entered_dungeon_ids = nlohmann::json::array();
     auto dungeon_recall_depths = nlohmann::json::object();
     auto conquered_dungeon_ids = nlohmann::json::array();
@@ -853,7 +974,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
             conquered_dungeon_ids.push_back(enum2i(dungeon_id));
         }
     }
-    return {
+    auto snapshot = nlohmann::json{
         { "type", "player_turn" },
         { "turn", world.game_turn },
         { "player", {
@@ -893,7 +1014,9 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                                    } },
                         { "status", make_player_status_json(*player.effects()) },
                         { "stats", make_player_stats_json(player) },
-                        { "abilities", make_player_abilities_json(player_ptr) },
+                        { "ability_sources", make_player_ability_sources_json(known_flags) },
+                        { "immunities", make_player_immunities_json(player_ptr, known_flags) },
+                        { "vulnerabilities", make_player_vulnerabilities_json(player_ptr, known_flags) },
                     } },
         { "floor", {
                        { "dungeon_id", enum2i(floor.dungeon_id) },
@@ -929,9 +1052,8 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                           // level (> 0): set either by physically entering it, or
                           // by hearing its rumor at the inn, which calls
                           // set_max_level(mindepth) and tells the player "You can
-                          // recall to Angband." has_entered() alone missed the
-                          // rumor-unlock case, so the bot never noticed the unlock
-                          // and looped reading rumors. This is player-visible state,
+                          // recall to Angband." has_entered() alone does not cover
+                          // the rumor-unlock case. This is player-visible state,
                           // not hidden information.
                           { "angband_recall_unlocked", dungeon_records.get_record(DungeonId::ANGBAND).get_max_level() > 0 },
                           // Towns the player knows the way to: marked visited by
@@ -952,13 +1074,17 @@ nlohmann::json make_snapshot(PlayerType *player_ptr)
                            }() },
                           { "quests", make_disclosed_quests_json() },
                       } },
-        { "nearby_grids", make_nearby_grids_json(player) },
         { "visible_monsters", make_visible_monsters_json(player) },
         { "detected_monsters", make_detected_monsters_json(player) },
         { "messages", make_recent_messages_json() },
         { "inventory", make_inventory_json(player_ptr) },
         { "equipment", make_equipment_json(player_ptr) },
     };
+    if (include_map) {
+        snapshot["nearby_grids"] = make_nearby_grids_json(player);
+    }
+
+    return snapshot;
 }
 
 nlohmann::json make_flag_table_json(PlayerType *player_ptr)
@@ -1505,9 +1631,18 @@ void output_bot_json_store_snapshot(PlayerType *player_ptr, StoreSaleType store_
         return;
     }
 
-    // Same base snapshot (player gold, inventory, equipment, town map) plus the
-    // store's stock, so the bot can decide what to buy while at the store prompt.
-    auto snapshot = make_snapshot(player_ptr);
+    // Same base snapshot (player gold, inventory, equipment) plus the store's
+    // stock, so the bot can decide what to buy while at the store prompt.
+    //
+    // The map is deliberately omitted here.  At the store prompt the player
+    // cannot move and the floor cannot change, so nearby_grids would repeat
+    // the surface snapshot's map verbatim -- yet it is over 99% of a snapshot's
+    // bytes (measured: 5.09 MB per record, 10,419 grid entries).  A store
+    // session emits one snapshot per processed key (see cmd-store.cpp), so
+    // paging through a large inventory multiplies that cost by the key count.
+    // This reveals nothing new to the bot; it only stops re-sending what the
+    // preceding surface snapshot already carried.
+    auto snapshot = make_snapshot(player_ptr, false);
     snapshot["type"] = "store";
     snapshot["store"] = make_store_json(player_ptr, store_num);
     write_snapshot(snapshot);
