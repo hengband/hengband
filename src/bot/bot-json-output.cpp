@@ -540,7 +540,15 @@ nlohmann::json make_ability_sources_json(const PlayerKnownFlags &flags, tr_type 
     };
 }
 
-nlohmann::json make_player_abilities_json(const PlayerKnownFlags &flags)
+/*!
+ * @brief 能力の有無を供給源ごとに出力する
+ * @details 出力キーは ability_sources であって abilities ではない。#5498 の abilities は
+ * 1能力 1真偽値だったので、同じキーのまま値をオブジェクトに変えると、供給源が全て false
+ * でも空でないオブジェクトは Python でも JavaScript でも真と評価され、消費側は例外も出さずに
+ * 「全能力あり」と誤読する。キーを分けておけば、旧来の消費側は KeyError / undefined で
+ * 即座に破綻する。
+ */
+nlohmann::json make_player_ability_sources_json(const PlayerKnownFlags &flags)
 {
     // Aggregate only identified equipment flags plus intrinsic and temporary
     // flags. A known immunity upgrades its resistance on the character screen.
@@ -572,7 +580,7 @@ nlohmann::json make_player_abilities_json(const PlayerKnownFlags &flags)
 
 /*!
  * @brief 免疫（ダメージ0）を供給源ごとに出力する
- * @details 耐性とは軽減率が別物（耐性は 1/3、免疫は 0）で、abilities では免疫を耐性に
+ * @details 耐性とは軽減率が別物（耐性は 1/3、免疫は 0）で、ability_sources では免疫を耐性に
  * 畳み込んでしまうため、どの属性を無傷で受けられるかを別に出す。装備の免疫はキャラクター
  * 画面の免疫欄、一時的な元素免疫はステータスバー（BAR_IMMFIRE 等）でプレイヤーも常時
  * 確認できる。
@@ -1003,7 +1011,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true)
                                    } },
                         { "status", make_player_status_json(*player.effects()) },
                         { "stats", make_player_stats_json(player) },
-                        { "abilities", make_player_abilities_json(known_flags) },
+                        { "ability_sources", make_player_ability_sources_json(known_flags) },
                         { "immunities", make_player_immunities_json(player_ptr, known_flags) },
                         { "vulnerabilities", make_player_vulnerabilities_json(player_ptr, known_flags) },
                     } },
