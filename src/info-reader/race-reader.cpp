@@ -13,6 +13,7 @@
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <nlohmann/json.hpp>
 #include <string>
 
 RaceReader::RaceReader(const nlohmann::json &monrace_data)

@@ -4,7 +4,7 @@
  * @brief 1つの固定クエスト JSONC を QuestType(メタデータ) と QuestFixedMap(レイアウト) に読み込む
  */
 
-#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
 
 enum parse_error_type : int;
 class QuestType;

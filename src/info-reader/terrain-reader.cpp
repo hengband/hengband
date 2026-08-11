@@ -10,6 +10,7 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <cstdint>
+#include <nlohmann/json.hpp>
 #include <optional>
 #include <string>
 #include <string_view>
