@@ -7,6 +7,8 @@
 
 ゲームの画面は普段通り表示されるため、手元での操作と併用できる。
 
+組み込み型の型注釈 (dict[str, Any] 等) を実行時に評価するため、Python 3.9 以降が必要。
+
 使用例:
     src/hengband -mgcu --control-port=9000 -uBotTest &
     python3 tools/bot/hbctl.py screen
