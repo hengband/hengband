@@ -110,6 +110,7 @@
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
 #include "save/save.h"
+#include "system/angband-version.h"
 #include "system/angband.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
@@ -117,6 +118,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-util.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -2758,6 +2760,9 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
 {
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;
+    // コマンドライン引数の解釈中に出力し得る診断メッセージに名前を付けるため、
+    // plog()/quit()を呼び得る処理より先に設定する
+    program_name = VARIANT_NAME;
     if (is_already_running()) {
         constexpr auto mes = _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running.");
         constexpr auto caption = _(L"エラー！", L"Error");
