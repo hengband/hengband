@@ -219,6 +219,8 @@ nlohmann::json make_messages_response(int count)
  * text_to_ascii()はstring_viewの長さではなくNUL終端を頼りに走査するため、
  * 「\x」のように末尾でエスケープの引数が足りていないと文字列の外まで読み進めてしまう。
  * 同じ歩幅で先に走査し、そのような入力を変換前に弾く。
+ * 以下の歩幅はio/macro-configurations-store.cppのtext_to_ascii()の分岐と対になっている。
+ * 向こうを変更する場合はこちらも併せて見直すこと。
  */
 tl::optional<std::string> find_invalid_key_notation(std::string_view keys)
 {
@@ -273,8 +275,9 @@ tl::optional<std::string> find_invalid_key_notation(std::string_view keys)
  * @param keys 解釈するキー列 (「\e」「^X」等のマクロ表記を使用できる)
  * @return 解釈した結果のバイト列。解釈できない場合はエラーの内容
  * @details
- * text_to_ascii()は書き込んだ長さを返さずNUL終端の文字列を書くだけであるため、
- * 変換前にバッファを番兵で埋めておき、末尾側に残った番兵の直前を終端とみなす。
+ * text_to_ascii() (io/macro-configurations-store.cpp) は書き込んだ長さを返さず
+ * NUL終端の文字列を書くだけであるため、変換前にバッファを番兵で埋めておき、
+ * 末尾側に残った番兵の直前を終端とみなす。
  * こうすると「^@」等が生成する埋め込みのNULを終端と区別して検出できる。
  */
 tl::expected<std::string, std::string> decode_keys(const std::string &keys)
@@ -288,6 +291,12 @@ tl::expected<std::string, std::string> decode_keys(const std::string &keys)
     text_to_ascii(buffer.data(), keys, buffer.size());
 
     const auto terminator = std::find_if(buffer.rbegin(), buffer.rend(), [](char ch) { return ch != BOT_CONTROL_KEYS_BUFFER_FILLER; });
+    if (terminator == buffer.rend()) {
+        // 番兵が1つも上書きされていない場合。text_to_ascii()は必ず終端NULを書くため
+        // 現在の実装では起こらないが、長さが負値になる経路を残さないよう弾いておく
+        return tl::make_unexpected("failed to decode the key sequence");
+    }
+
     std::string decoded(buffer.data(), std::distance(terminator, buffer.rend()) - 1);
 
     // text_to_ascii()は変換先が尽きると無言で打ち切るため、出力が上限に達していれば

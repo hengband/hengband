@@ -236,6 +236,15 @@ bool is_deadline_expired(const SocketWaitDeadline &deadline)
  */
 bool wait_for_socket(intptr_t socket, const SocketWaitDeadline &deadline, SocketWaitMode mode)
 {
+#ifndef WINDOWS
+    // FD_SET()はFD_SETSIZE以上のディスクリプタに対して未定義動作となる。
+    // Windowsのfd_setは値の配列であるためこの制限は無い
+    if (native_socket(socket) >= FD_SETSIZE) {
+        report_bot_message("the socket descriptor is too large to wait for");
+        return false;
+    }
+#endif
+
     auto is_first_wait = true;
     while (true) {
         fd_set target;
@@ -285,7 +294,8 @@ const char *describe_wait_failure(const SocketWaitDeadline &deadline)
 
 /*!
  * @brief 制御サーバのTCPソケットを構築する
- * @param port 待ち受けるポート番号
+ * @param port 待ち受けるポート番号 (1〜65535であること)
+ * @details 値域はコマンドライン引数を解釈するparse_runtime_argument()で検証済みである。
  */
 BotSocketServer::BotSocketServer(int port)
     : port(port)
@@ -335,6 +345,7 @@ bool BotSocketServer::listen_on_loopback()
     sockaddr_in address{};
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = ::htonl(INADDR_LOOPBACK);
+    // portが1〜65535に収まることはコンストラクタの事前条件
     address.sin_port = ::htons(static_cast<uint16_t>(this->port));
     if (::bind(native_socket(socket), reinterpret_cast<const sockaddr *>(&address), static_cast<socket_length_t>(sizeof(address))) != 0) {
         report_bot_message(fmt::format("failed to bind the listening socket (error {})", last_socket_error()));
@@ -342,7 +353,9 @@ bool BotSocketServer::listen_on_loopback()
         return false;
     }
 
-    if (::listen(native_socket(socket), 1) != 0) {
+    // 同時に相手をするクライアントは1つだが、1コマンドごとに接続と切断を繰り返す使い方のため、
+    // 処理中に届いた接続要求が弾かれないよう保留キューは深く取っておく
+    if (::listen(native_socket(socket), SOMAXCONN) != 0) {
         report_bot_message(fmt::format("failed to listen on the socket (error {})", last_socket_error()));
         close_socket_handle(socket);
         return false;
