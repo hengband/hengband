@@ -13,13 +13,14 @@
 /*!
  * @brief 文字列を数値に変換する
  * @param str 変換する文字列
- * @param base 基数（省略した場合のデフォルト値は10）
- * @return 変換した数値。文字列全体が数値として解釈できない場合はtl::nullopt
+ * @param base 基数（2〜36。省略した場合のデフォルト値は10）
+ * @return 変換した数値。文字列全体が数値として解釈できない場合や基数が範囲外の場合はtl::nullopt
  */
 template <typename T>
 tl::optional<T> str_to_num(std::string_view str, int base = 10)
 {
-    if (str.empty()) {
+    // std::from_charsは2〜36以外の基数を渡すと未定義動作となる
+    if (str.empty() || (base < 2) || (base > 36)) {
         return tl::nullopt;
     }
 
