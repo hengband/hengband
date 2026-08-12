@@ -33,6 +33,9 @@
 //! The current "term"
 term_type *game_term = nullptr;
 
+//! キー入力待ちの間に繰り返し呼ばれるフック (詳細はz-term.hを参照)
+void (*term_inkey_wait_hook)() = nullptr;
+
 /*** Local routines ***/
 
 /*!
@@ -1792,6 +1795,22 @@ errr term_key_push(int k)
 }
 
 /*!
+ * @brief 保留中のイベントを1件だけ取り出す
+ * @return 取り出した場合0、保留中のイベントが無い場合または取り出せない場合は非0
+ * @details
+ * term_xtra()は戻り値を捨てるため、イベントを取り切ったか否かを判定できない。
+ * ポーリングによる入力待ちでは打ち切る条件が要るため、ここだけフックを直接呼ぶ。
+ */
+static errr take_pending_event()
+{
+    if (!game_term->xtra_hook) {
+        return 1;
+    }
+
+    return (*game_term->xtra_hook)(TERM_XTRA_EVENT, false);
+}
+
+/*!
  * @brief Check for a pending keypress on the key queue.
  * @param wait Wait for a keypress.
  * @param take Remove the keypress.
@@ -1807,7 +1826,22 @@ char term_inkey(bool wait, bool take)
 
     if (wait) {
         while (game_term->key_head == game_term->key_tail) {
-            term_xtra(TERM_XTRA_EVENT, true);
+            if (term_inkey_wait_hook == nullptr) {
+                term_xtra(TERM_XTRA_EVENT, true);
+                continue;
+            }
+
+            // フックに仕事をさせるため、フロントエンドをブロックさせずに
+            // 保留中のイベントを取り切ってから制御を渡す
+            while ((game_term->key_head == game_term->key_tail) && (take_pending_event() == 0)) {
+                ;
+            }
+
+            if (game_term->key_head != game_term->key_tail) {
+                break;
+            }
+
+            (*term_inkey_wait_hook)();
         }
     } else if (game_term->key_head == game_term->key_tail) {
         term_xtra(TERM_XTRA_EVENT, false);

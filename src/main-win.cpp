@@ -836,6 +836,10 @@ static errr term_xtra_win_react(PlayerType *player_ptr)
 
 /*!
  * @brief Process at least one event
+ * @details
+ * 待たない場合、保留中のメッセージが無ければ非0を返す。
+ * 呼び出し側がメッセージを取り切ったことを判定できるようにするためのもので、
+ * main-gcu.cpp・main-x11.cpp・main-cap.cppのTERM_XTRA_EVENTと同じ約束である。
  */
 static errr term_xtra_win_event(int v)
 {
@@ -845,13 +849,16 @@ static errr term_xtra_win_event(int v)
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-    } else {
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
+
+        return 0;
     }
 
+    if (!PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+        return 1;
+    }
+
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
     return 0;
 }
 

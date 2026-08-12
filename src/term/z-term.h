@@ -191,6 +191,18 @@ private:
 /**** Available Variables ****/
 extern term_type *game_term;
 
+/*!
+ * @brief キー入力待ちの間に繰り返し呼ばれるフック
+ * @details
+ * 設定されている場合、term_inkey()はフロントエンドに入力待ちをブロックさせず、
+ * 保留中のイベントの取り出しと本フックの呼び出しを交互に行う。
+ * ゲームがキー入力を待っている間だけ別の仕事をさせたい場合に用いる。
+ * 未設定 (nullptr) の場合はフロントエンドが従来通りブロックして入力を待つ。
+ *
+ * 本フックは待ち続けるのではなく、短時間で戻ってくること。
+ */
+extern void (*term_inkey_wait_hook)();
+
 class DisplaySymbol;
 class DisplaySymbolPair;
 void term_user();
