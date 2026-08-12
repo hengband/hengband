@@ -148,7 +148,10 @@ tl::optional<T> find_request_value(const nlohmann::json &request, const char *ke
  * @brief 有効な端末か調べる
  * @param index angband_terms上の添字
  * @return 有効な端末である場合TRUE
- * @details 生成されていない副端末の添字を指定された場合に弾くためのもの。
+ * @details
+ * 生成されていない副端末の添字を指定された場合に弾くためのもの。
+ * 画面バッファ(term_type::scr)はterm_init()で確保されterm_nuke()で解放されるため、
+ * 生成前・破棄後の端末を読ませないようバッファの有無も併せて見る。
  */
 bool is_valid_term_index(int index)
 {
@@ -156,7 +159,8 @@ bool is_valid_term_index(int index)
         return false;
     }
 
-    return angband_terms[index] != nullptr;
+    const auto *t = angband_terms[index];
+    return (t != nullptr) && (t->scr != nullptr);
 }
 
 /*!
@@ -165,16 +169,18 @@ bool is_valid_term_index(int index)
  * @details
  * 端末の数と大きさはフロントエンドが決めるため、クライアントは画面を読む前に
  * ここで得た大きさを見ること。80x24とは限らない。
+ * 列挙する端末はscreenリクエストと同じ判定で選び、ここに挙げた端末を
+ * screenが拒む食い違いが起きないようにする。
  */
 nlohmann::json make_info_response()
 {
     auto terms = nlohmann::json::array();
     for (auto i = 0; std::cmp_less(i, angband_terms.size()); i++) {
-        const auto *t = angband_terms[i];
-        if (t == nullptr) {
+        if (!is_valid_term_index(i)) {
             continue;
         }
 
+        const auto *t = angband_terms[i];
         terms.push_back({
             { "index", i },
             { "width", static_cast<int>(t->wid) },

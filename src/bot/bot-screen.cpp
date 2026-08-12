@@ -73,7 +73,7 @@ std::string to_json_utf8(std::string_view str)
 
 /*!
  * @brief 端末の画面バッファをJSONオブジェクトに変換する
- * @param t 対象の端末
+ * @param t 対象の端末 (画面バッファを持つ、すなわちterm_init()済みでterm_nuke()前であること)
  * @param with_attrs 色属性を含めるか否か
  * @return 画面内容を表すJSONオブジェクト
  * @details
