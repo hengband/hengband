@@ -1610,7 +1610,19 @@
     <ClCompile Include="..\..\src\blue-magic\learnt-power-getter.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\bot\bot-control-server.cpp">
+      <Filter>bot</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\bot\bot-json-output.cpp">
+      <Filter>bot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bot\bot-report.cpp">
+      <Filter>bot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bot\bot-screen.cpp">
+      <Filter>bot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\bot\bot-socket-server.cpp">
       <Filter>bot</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-blue-mage.cpp">
@@ -4475,7 +4487,19 @@
     <ClInclude Include="..\..\src\blue-magic\learnt-power-getter.h">
       <Filter>blue-magic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\bot\bot-control-server.h">
+      <Filter>bot</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\bot\bot-json-output.h">
+      <Filter>bot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\bot\bot-report.h">
+      <Filter>bot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\bot\bot-screen.h">
+      <Filter>bot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\bot\bot-socket-server.h">
       <Filter>bot</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\blue-magic\blue-magic-caster.h">

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nlohmann/json.hpp>
+
 class PlayerType;
 enum class StoreSaleType;
 
@@ -26,6 +28,7 @@ enum class BotKnowledgeCategory {
     MAX,
 };
 
+nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr);
 void output_bot_json_snapshot(PlayerType *player_ptr);
 void output_bot_json_store_snapshot(PlayerType *player_ptr, StoreSaleType store_num);
 void output_bot_json_character_snapshot(PlayerType *player_ptr);

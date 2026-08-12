@@ -81,6 +81,7 @@
 
 #ifdef WINDOWS
 
+#include "bot/bot-control-server.h"
 #include "cmd-io/cmd-save.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/game-play.h"
@@ -2603,6 +2604,7 @@ static void hook_quit(std::string_view str)
         MessageBoxW(data[0].w, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
     }
 
+    shutdown_bot_control_server();
     save_prefs();
     for (int i = MAX_TERM_DATA - 1; i >= 0; --i) {
         term_force_font(&data[i]);
@@ -2829,6 +2831,11 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
     if (use_music) {
         init_music();
     }
+
+    // 端末が揃った後、最初のキー入力待ちより前に待ち受けを始める。
+    // 次のループは自前のメッセージループでキー入力待ちではないため、
+    // クライアントへの応答が始まるのはゲームが開始した後になる
+    init_bot_control_server();
 
     // ユーザーがゲーム開始を選択するまで待つループ
     MSG msg;

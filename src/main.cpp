@@ -6,6 +6,7 @@
  * are included in all such copies.
  */
 
+#include "bot/bot-control-server.h"
 #include "core/asking-player.h"
 #include "core/game-play.h"
 #include "core/scores.h"
@@ -56,6 +57,8 @@ static void quit_hook(std::string_view s)
 {
     /* Unused */
     (void)s;
+
+    shutdown_bot_control_server();
 
     /* Scan windows */
     for (auto it = angband_terms.rbegin(); it != angband_terms.rend(); ++it) {
@@ -448,6 +451,10 @@ int main(int argc, char *argv[])
     }
 
     signals_init();
+
+    // 端末が揃った後、最初のキー入力待ちより前に待ち受けを始める。
+    // これにより起動直後の画面もクライアントから操作できる
+    init_bot_control_server();
 
     {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
