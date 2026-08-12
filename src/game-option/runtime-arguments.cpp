@@ -37,7 +37,7 @@ tl::optional<std::string_view> extract_option_value(std::string_view option, std
  * @brief 数値を値に取るオプションを解釈する
  * @param option 先頭の「--」を除いたコマンドライン引数
  * @param name オプション名
- * @param setter 解釈した数値を設定に反映する関数
+ * @param target 解釈した数値の格納先
  * @param min 許容する最小値
  * @param max 許容する最大値
  * @return 解釈結果
@@ -45,8 +45,8 @@ tl::optional<std::string_view> extract_option_value(std::string_view option, std
  * 有効範囲外の値を黙って切り詰めると、指定した値と実際の挙動が食い違って原因が分からなくなるため、
  * 範囲外は不正な値として扱う。
  */
-template <typename T, typename Setter>
-RuntimeArgumentResult parse_number_option(std::string_view option, std::string_view name, Setter setter,
+template <typename T>
+RuntimeArgumentResult parse_number_option(std::string_view option, std::string_view name, tl::optional<T> &target,
     T min = std::numeric_limits<T>::min(), T max = std::numeric_limits<T>::max())
 {
     const auto value = extract_option_value(option, name);
@@ -59,7 +59,7 @@ RuntimeArgumentResult parse_number_option(std::string_view option, std::string_v
         return RuntimeArgumentResult::INVALID;
     }
 
-    setter(*number);
+    target = *number;
     return RuntimeArgumentResult::HANDLED;
 }
 
@@ -88,11 +88,9 @@ RuntimeArgumentResult parse_runtime_argument(std::string_view option)
         return RuntimeArgumentResult::HANDLED;
     }
 
-    if (const auto result = parse_number_option<int>(
-            option, "control-port", [](int port) { arg_control_port = port; }, 1, 65535);
-        result != RuntimeArgumentResult::NOT_HANDLED) {
+    if (const auto result = parse_number_option(option, "control-port", arg_control_port, 1, 65535); result != RuntimeArgumentResult::NOT_HANDLED) {
         return result;
     }
 
-    return parse_number_option<uint32_t>(option, "fixed-seed", [](uint32_t seed) { arg_fixed_seed = seed; });
+    return parse_number_option(option, "fixed-seed", arg_fixed_seed);
 }

@@ -8,9 +8,10 @@
  */
 
 #include "bot/bot-screen.h"
-#include "locale/character-encoding.h"
+#include "bot/bot-json-output.h"
 #include "term/z-term.h"
 #include "util/string-processor.h"
+#include <nlohmann/json.hpp>
 
 namespace {
 
@@ -58,17 +59,6 @@ std::string make_line_attrs(const term_win &win, int y, int width)
     return attrs;
 }
 
-}
-
-/*!
- * @brief ゲーム内部の文字コードの文字列をJSONに載せられるUTF-8文字列へ変換する
- * @param str 変換する文字列
- * @return UTF-8に変換した文字列。変換に失敗した場合は代替文字列
- * @details 変換の失敗でリクエスト全体を落とさないよう、bot-json-output.cppと同じ代替文字列を返す。
- */
-std::string to_json_utf8(std::string_view str)
-{
-    return sys_to_utf8(str).value_or("<encoding-error>");
 }
 
 /*!

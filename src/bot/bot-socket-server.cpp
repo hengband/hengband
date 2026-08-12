@@ -72,11 +72,6 @@ constexpr size_t MAX_REQUEST_BYTES = 16 * 1024 * 1024;
 constexpr int CLIENT_IO_TIMEOUT_SECONDS = 30;
 
 /*!
- * @brief ソケットの待機期限
- */
-using SocketWaitDeadline = std::chrono::steady_clock::time_point;
-
-/*!
  * @brief ソケットの待機方向
  */
 enum class SocketWaitMode {
@@ -205,16 +200,6 @@ void suppress_sigpipe([[maybe_unused]] intptr_t socket)
 }
 
 /*!
- * @brief タイムアウトの長さから待機の期限を求める
- * @param timeout 待機する長さ
- * @return 待機の期限
- */
-SocketWaitDeadline make_deadline(std::chrono::milliseconds timeout)
-{
-    return std::chrono::steady_clock::now() + timeout;
-}
-
-/*!
  * @brief 待機の期限を過ぎているか調べる
  * @param deadline 待機の期限
  * @return 期限を過ぎている場合TRUE
@@ -290,6 +275,16 @@ const char *describe_wait_failure(const SocketWaitDeadline &deadline)
     return is_deadline_expired(deadline) ? "timed out" : "failed while";
 }
 
+}
+
+/*!
+ * @brief タイムアウトの長さから待機の期限を求める
+ * @param timeout 待機する長さ
+ * @return 待機の期限
+ */
+SocketWaitDeadline make_deadline(std::chrono::milliseconds timeout)
+{
+    return std::chrono::steady_clock::now() + timeout;
 }
 
 /*!
@@ -377,14 +372,14 @@ bool BotSocketServer::has_client() const
 
 /*!
  * @brief クライアントの接続を期限まで待つ
- * @param timeout 待機する長さ
+ * @param deadline 待機の期限
  * @return クライアントと接続している場合TRUE
  * @details
  * クライアントは1コマンドごとに接続と切断を繰り返すため、
  * 切断されても待ち受けを続けて次の接続を受け付ける。
  * 期限内に接続が無いことは異常ではないため、その旨は通知しない。
  */
-bool BotSocketServer::accept_client(std::chrono::milliseconds timeout)
+bool BotSocketServer::accept_client(const SocketWaitDeadline &deadline)
 {
     if (this->has_client()) {
         return true;
@@ -394,43 +389,41 @@ bool BotSocketServer::accept_client(std::chrono::milliseconds timeout)
         return false;
     }
 
-    const auto deadline = make_deadline(timeout);
     while (true) {
-        const auto is_readable = wait_for_socket(this->listen_socket, deadline, SocketWaitMode::READ);
-        if (is_readable) {
-            const auto accepted = static_cast<intptr_t>(::accept(native_socket(this->listen_socket), nullptr, nullptr));
-            if (accepted != INVALID_SOCKET_HANDLE) {
-                suppress_sigpipe(accepted);
-                this->client_socket = accepted;
-                return true;
-            }
-
-            const auto error_number = last_socket_error();
-            if (!is_accept_failure_retryable()) {
-                report_bot_message(fmt::format("failed to accept a client connection (error {})", error_number));
-                return false;
-            }
+        if (!wait_for_socket(this->listen_socket, deadline, SocketWaitMode::READ)) {
+            return false;
         }
 
-        // 待機が終了した場合と、一時的な失敗が続いたまま期限を過ぎた場合は接続を諦める
-        if (!is_readable || is_deadline_expired(deadline)) {
+        const auto accepted = static_cast<intptr_t>(::accept(native_socket(this->listen_socket), nullptr, nullptr));
+        if (accepted != INVALID_SOCKET_HANDLE) {
+            suppress_sigpipe(accepted);
+            this->client_socket = accepted;
+            return true;
+        }
+
+        const auto error_number = last_socket_error();
+        if (!is_accept_failure_retryable()) {
+            report_bot_message(fmt::format("failed to accept a client connection (error {})", error_number));
             return false;
         }
 
         // 一時的な失敗であれば、期限を延ばさずに次の接続要求を待ち直す
+        if (is_deadline_expired(deadline)) {
+            return false;
+        }
     }
 }
 
 /*!
  * @brief 接続済みのクライアントからデータが届くのを期限まで待つ
- * @param timeout 待機する長さ
+ * @param deadline 待機の期限
  * @return 読み込み可能になった場合TRUE
  * @details
  * 期限内に何も届かないことは異常ではないため、その旨は通知しない。
  * リクエストが届いていない時にreceive_line()がゲームの進行を止めるのを防ぐためのもので、
  * 本関数がTRUEを返してからreceive_line()を呼ぶこと。
  */
-bool BotSocketServer::wait_readable(std::chrono::milliseconds timeout)
+bool BotSocketServer::wait_readable(const SocketWaitDeadline &deadline)
 {
     if (!this->has_client()) {
         return false;
@@ -441,7 +434,7 @@ bool BotSocketServer::wait_readable(std::chrono::milliseconds timeout)
         return true;
     }
 
-    return wait_for_socket(this->client_socket, make_deadline(timeout), SocketWaitMode::READ);
+    return wait_for_socket(this->client_socket, deadline, SocketWaitMode::READ);
 }
 
 /*!

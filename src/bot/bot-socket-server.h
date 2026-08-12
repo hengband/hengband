@@ -19,6 +19,13 @@
 constexpr intptr_t INVALID_SOCKET_HANDLE = -1;
 
 /*!
+ * @brief ソケットの待機期限
+ */
+using SocketWaitDeadline = std::chrono::steady_clock::time_point;
+
+SocketWaitDeadline make_deadline(std::chrono::milliseconds timeout);
+
+/*!
  * @brief ループバックアドレスで待ち受け、行単位でJSONをやり取りするサーバ
  * @details
  * 同時に接続できるクライアントは1つだけだが、切断された場合は次の接続を受け付ける。
@@ -27,6 +34,8 @@ constexpr intptr_t INVALID_SOCKET_HANDLE = -1;
  * 格納できるようintptr_tで保持する。
  *
  * ゲームの進行を止めないよう、接続と受信の待機には呼び出し側が期限を与える。
+ * 接続と受信を続けて行う場合に待機の長さが合算されないよう、期限は長さではなく
+ * 時刻で受け取り、呼び出し側が一度求めたものを使い回せるようにしている。
  */
 class BotSocketServer {
 public:
@@ -39,8 +48,8 @@ public:
 
     bool listen_on_loopback();
     bool has_client() const;
-    bool accept_client(std::chrono::milliseconds timeout);
-    bool wait_readable(std::chrono::milliseconds timeout);
+    bool accept_client(const SocketWaitDeadline &deadline);
+    bool wait_readable(const SocketWaitDeadline &deadline);
     tl::optional<std::string> receive_line();
     bool send_line(std::string line);
 

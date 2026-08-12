@@ -28,8 +28,6 @@
 #include "term/gameterm.h"
 #include "term/z-term.h"
 #include "term/z-util.h"
-#include "util/string-processor.h"
-#include "view/display-messages.h"
 #include "world/world.h"
 #include <algorithm>
 #include <array>
@@ -37,7 +35,6 @@
 #include <iterator>
 #include <memory>
 #include <nlohmann/json.hpp>
-#include <range/v3/view.hpp>
 #include <string>
 #include <string_view>
 #include <tl/expected.hpp>
@@ -202,22 +199,6 @@ nlohmann::json make_info_response()
 }
 
 /*!
- * @brief 直近のメッセージ履歴を新しい順ではなく古い順に並べて生成する
- * @param count 取得する件数
- * @return メッセージ文字列のJSON配列
- */
-nlohmann::json make_messages_response(int count)
-{
-    auto messages = nlohmann::json::array();
-    const auto available = static_cast<int>(message_num());
-    for (auto age = std::clamp(count, 0, available); age-- > 0;) {
-        messages.push_back(to_json_utf8(*message_str(age)));
-    }
-
-    return messages;
-}
-
-/*!
  * @brief キー列のマクロ表記をtext_to_ascii()へ渡して安全か検証する
  * @param keys 検証するキー列
  * @return 渡してはならない場合はその理由。問題が無い場合はnullopt
@@ -236,7 +217,7 @@ tl::optional<std::string> find_invalid_key_notation(std::string_view keys)
         return "the key sequence contains a NUL character";
     }
 
-    const std::string incomplete_escape = "the key sequence ends with an incomplete escape";
+    constexpr auto incomplete_escape = "the key sequence ends with an incomplete escape";
     for (size_t i = 0; i < keys.length();) {
         const auto ch = keys[i];
         if (ch == '^') {
@@ -321,33 +302,9 @@ tl::expected<std::string, std::string> decode_keys(const std::string &keys)
 }
 
 /*!
- * @brief 現在の端末のキューにあと何個キーを積めるか数える
- * @return 積めるキーの数
- * @details
- * term_key_push()は空きが無くなっても積むことを拒否せず、循環キューを一周して
- * 先に積んだキーを壊すため、積む前に空きを確かめる必要がある。
- * キューの大きさはフロントエンドが決めるため、一度に積める量もそれに従う。
- */
-int count_key_queue_room()
-{
-    const auto size = game_term->key_size;
-    if (size == 0) {
-        return 0;
-    }
-
-    const auto pending = (game_term->key_head + size - game_term->key_tail) % size;
-    return size - 1 - pending;
-}
-
-/*!
  * @brief キー列を解釈して現在の端末のキューへ注入する
  * @param keys 注入するキー列 (「\e」「^X」等のマクロ表記を使用できる)
  * @return キューへ積んだキーの数。積めなかった場合はエラーの内容
- * @details
- * term_key_push()はキューの先頭へ挿入するため、正しい順序で消費させるには
- * 末尾から逆順に積む必要がある (main-gcu.cppのterm_string_push()と同じ理由)。
- * 逆順に積む都合上、途中で空きが尽きると失われるのはキー列の先頭側になる。
- * 意味の異なる操作を実行させないよう、全て積めない場合は1つも積まない。
  */
 tl::expected<int, std::string> push_keys(const std::string &keys)
 {
@@ -356,12 +313,8 @@ tl::expected<int, std::string> push_keys(const std::string &keys)
         return tl::make_unexpected(decoded.error());
     }
 
-    if (std::cmp_greater(decoded->size(), count_key_queue_room())) {
+    if (term_keys_push(*decoded) != 0) {
         return tl::make_unexpected("the key queue does not have enough room");
-    }
-
-    for (const auto key : *decoded | ranges::views::reverse) {
-        (void)term_key_push(static_cast<unsigned char>(key));
     }
 
     return static_cast<int>(decoded->size());
@@ -463,7 +416,7 @@ RequestResult dispatch_request(const nlohmann::json &request)
             return make_error_response(id, "\"count\" must be an integer");
         }
 
-        return make_ok_response(id, { { "messages", make_messages_response(*count) } });
+        return make_ok_response(id, { { "messages", make_message_history_json(*count) } });
     }
 
     if (*op == "quit") {
@@ -521,11 +474,13 @@ void serve_pending_requests()
         return;
     }
 
-    if (!bot_control_server->has_client() && !bot_control_server->accept_client(BOT_CONTROL_POLL_INTERVAL)) {
+    // 接続と受信で期限を共有し、1回の入力待ちで止まる時間がBOT_CONTROL_POLL_INTERVALを超えないようにする
+    const auto deadline = make_deadline(BOT_CONTROL_POLL_INTERVAL);
+    if (!bot_control_server->accept_client(deadline)) {
         return;
     }
 
-    if (!bot_control_server->wait_readable(BOT_CONTROL_POLL_INTERVAL)) {
+    if (!bot_control_server->wait_readable(deadline)) {
         return;
     }
 

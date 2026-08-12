@@ -36,10 +36,6 @@ void prepare_bot_report()
  */
 void report_bot_message(std::string_view message)
 {
-    if (message.empty()) {
-        return;
-    }
-
     fmt::println(stderr, "bot-control: {}", message);
     std::fflush(stderr);
 }

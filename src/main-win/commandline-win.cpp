@@ -53,7 +53,7 @@ bool parse_runtime_option(const WCHAR *option)
         quit(fmt::format("Invalid value in '{}'", narrow_option));
         return true;
     case RuntimeArgumentResult::NOT_HANDLED:
-        return false;
+        break;
     }
 
     return false;
@@ -61,13 +61,13 @@ bool parse_runtime_option(const WCHAR *option)
 }
 
 /*!
- * @brief コンソールを作成する
+ * @brief デバッグ用のコンソールを作成する
  * @details
- * 標準出力のみ対応。
+ * attach_console()が繋ぐ標準エラー出力に加えて、標準出力もコンソールへ繋ぐ。
  */
 static void create_console(void)
 {
-    ::AllocConsole();
+    attach_console();
     FILE *stream = nullptr;
     freopen_s(&stream, "CONOUT$", "w+", stdout);
     std::cout << "Hengband debug console" << std::endl;
