@@ -70,10 +70,10 @@ def send_request(host: str, port: int, timeout: float, payload: dict[str, Any]) 
 
 
 def check_response(response: Any) -> dict[str, Any]:
-    """レスポンスが成功を示しているか確認する。
+    """レスポンスが成功を示しているか確認し、その結果を取り出す。
 
     :param response: レスポンスとして受け取ったJSONの値
-    :return: 引数のレスポンス
+    :return: レスポンスの result
     """
     if not isinstance(response, dict):
         raise BotControlError(
@@ -85,13 +85,17 @@ def check_response(response: Any) -> dict[str, Any]:
             f"サーバがエラーを返しました: {response.get('error', response)}"
         )
 
-    return response
+    result = response.get("result")
+    if not isinstance(result, dict):
+        raise BotControlError("サーバのレスポンスに result がありません")
+
+    return result
 
 
 def render_screen(response: dict[str, Any]) -> str:
     """画面のレスポンスを枠付きのテキストに整形する。
 
-    :param response: screenリクエストのレスポンス
+    :param response: screenリクエストの result
     :return: 表示用の文字列
     """
     width = response["width"]
@@ -117,11 +121,11 @@ def render_screen(response: dict[str, Any]) -> str:
 
 
 def request(args: argparse.Namespace, payload: dict[str, Any]) -> dict[str, Any]:
-    """リクエストを送信し、成功したレスポンスを返す。
+    """リクエストを送信し、成功したレスポンスの result を返す。
 
     :param args: コマンドライン引数
     :param payload: 送信するリクエストの辞書
-    :return: レスポンスの辞書
+    :return: レスポンスの result
     """
     return check_response(send_request(args.host, args.port, args.timeout, payload))
 
@@ -133,7 +137,7 @@ def request_screen(
 
     :param args: コマンドライン引数
     :param with_attrs: 色属性を含めるか否か
-    :return: screenリクエストのレスポンス
+    :return: screenリクエストの result
     """
     return request(args, {"op": "screen", "term": args.term, "attrs": with_attrs})
 

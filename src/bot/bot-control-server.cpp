@@ -73,9 +73,8 @@ std::unique_ptr<BotSocketServer> bot_control_server;
 /*!
  * @brief リクエストの処理結果
  * @details
- * 終了要求をレスポンスのキーで表すと、make_ok_response()がボディを展開する都合上、
- * ボディ側に同名のキーが現れた時に意図せず終了してしまう。
- * レスポンスとは別のフラグで持つことで、両者の取り違えを型で防ぐ。
+ * 終了要求をレスポンスのキーで表すと、リクエストの結果として同名のキーが現れた時に
+ * 意図せず終了してしまう。レスポンスとは別のフラグで持つことで、両者の取り違えを型で防ぐ。
  */
 struct RequestResult {
     RequestResult(nlohmann::json response, bool is_quit_requested = false)
@@ -106,14 +105,19 @@ nlohmann::json make_error_response(const nlohmann::json &id, std::string_view me
 /*!
  * @brief 成功を表すレスポンスを生成する
  * @param id リクエストのid (無い場合はnull)
- * @param body レスポンスの中身
+ * @param result リクエストの結果
  * @return レスポンスのJSONオブジェクト
+ * @details
+ * 結果はプロトコルのキー(id・ok)と同じ階層へ展開せず、resultの下へ入れ子にする。
+ * 展開すると、将来の結果にidやokと同名のキーが生えた時に値が黙って捨てられる。
  */
-nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json body = nlohmann::json::object())
+nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json result = nlohmann::json::object())
 {
-    body["id"] = id;
-    body["ok"] = true;
-    return body;
+    return {
+        { "id", id },
+        { "ok", true },
+        { "result", std::move(result) },
+    };
 }
 
 /*!
@@ -353,9 +357,9 @@ nlohmann::json handle_screen_request(const nlohmann::json &id, const nlohmann::j
         return make_error_response(id, "\"attrs\" must be a boolean");
     }
 
-    auto response = make_ok_response(id, make_bot_screen_json(*angband_terms[*index], *with_attrs));
-    response["term"] = *index;
-    return response;
+    auto screen = make_bot_screen_json(*angband_terms[*index], *with_attrs);
+    screen["term"] = *index;
+    return make_ok_response(id, std::move(screen));
 }
 
 /*!
