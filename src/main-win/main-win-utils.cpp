@@ -36,11 +36,21 @@ bool is_already_running(void)
  * 診断メッセージを観測できるようコンソールを割り当てて標準エラー出力を接続する。
  * 親プロセスのコンソールがあればそちらを優先して使う。
  * 既に接続済みの場合に呼んでも問題は無い。
+ *
+ * ただし「Hengband.exe --control-port=9000 2>err.log」のように標準エラー出力の
+ * 行き先が明示的に指定されている場合、コンソールで置き換えると診断がログに残らなくなる。
+ * 自動化からログを取る運用を妨げないよう、既に有効なハンドルがあればそちらを尊重する。
+ * コンソールの確保自体は、create_console()が標準出力をCONOUT$へ繋ぐ前提となっているため常に行う。
  */
 void attach_console()
 {
     if (!::AttachConsole(ATTACH_PARENT_PROCESS)) {
         ::AllocConsole();
+    }
+
+    const auto handle = ::GetStdHandle(STD_ERROR_HANDLE);
+    if ((handle != nullptr) && (handle != INVALID_HANDLE_VALUE)) {
+        return;
     }
 
     FILE *stream = nullptr;
