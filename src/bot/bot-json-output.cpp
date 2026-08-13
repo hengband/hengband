@@ -941,13 +941,28 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
 }
 
 /*!
+ * @brief スナップショットのmessagesに何を載せるか
+ * @details
+ * make_recent_messages_json()はJSONL出力の連続したスナップショット間の差分を返すため、
+ * 呼ぶたびにstaticな差分状態を進める。制御サーバのstateがこれを呼ぶと、
+ * --bot-json-outputと併用した際にstate側が差分を消費し、JSONL側からメッセージが失われる。
+ * 差分を進めてよいのは連続した記録を書くJSONL出力だけなので、出力先ごとに選べるようにする。
+ */
+enum class BotSnapshotMessages {
+    RECENT_DIFF, //!< 前回のスナップショットからの新着 (JSONL出力用)
+    HISTORY, //!< 直近の履歴 (制御サーバ用。差分状態を進めない)
+};
+
+/*!
  * @brief スナップショット本体を組み立てる
  * @param include_map nearby_grids を含めるか
+ * @param messages_source messages に載せるメッセージの選び方
  * @details nearby_grids はフロア全域を走査して1万件規模の配列を作る処理で、
  * スナップショット1件のバイト数の99%超を占める。地図を出さない呼び出し
  * （店内スナップショット）では作ってから消すのではなく最初から作らない。
  */
-nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true)
+nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
+    BotSnapshotMessages messages_source = BotSnapshotMessages::RECENT_DIFF)
 {
     const auto &player = *player_ptr;
     const auto &floor = *player.current_floor_ptr;
@@ -1074,7 +1089,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true)
                       } },
         { "visible_monsters", make_visible_monsters_json(player) },
         { "detected_monsters", make_detected_monsters_json(player) },
-        { "messages", make_recent_messages_json() },
+        { "messages", (messages_source == BotSnapshotMessages::HISTORY) ? make_message_history_json(BOT_JSON_MAX_MESSAGES) : make_recent_messages_json() },
         { "inventory", make_inventory_json(player_ptr) },
         { "equipment", make_equipment_json(player_ptr) },
     };
@@ -1645,11 +1660,14 @@ nlohmann::json make_message_history_json(int count)
  * @param player_ptr プレイヤーへの参照ポインタ
  * @pre player_ptrとplayer_ptr->current_floor_ptrがnullptrでないことを呼び出し側が保証すること
  * @return スナップショットのJSONオブジェクト
- * @details --bot-json-outputの有無に関わらず生成する。制御サーバから利用する。
+ * @details
+ * --bot-json-outputの有無に関わらず生成する。制御サーバから利用する。
+ * messagesは差分ではなく履歴を載せる。リクエストの度に差分を進めると、
+ * --bot-json-outputと併用した際にJSONL側からメッセージが失われるためである。
  */
 nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr)
 {
-    return make_snapshot(player_ptr);
+    return make_snapshot(player_ptr, true, BotSnapshotMessages::HISTORY);
 }
 
 void output_bot_json_snapshot(PlayerType *player_ptr)
