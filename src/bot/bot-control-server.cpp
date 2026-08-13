@@ -413,6 +413,8 @@ RequestResult dispatch_request(const nlohmann::json &request)
     }
 
     if (*op == "keys") {
+        // screenと異なりtermを取らないのは、キーを消費するのが常に現在の端末(game_term)であるため。
+        // 副端末のキューへ積んでもゲームには届かない
         const auto keys = find_request_value(request, "keys", std::string());
         if (!keys) {
             return make_error_response(id, "\"keys\" must be a string");
@@ -444,6 +446,9 @@ RequestResult dispatch_request(const nlohmann::json &request)
     }
 
     if (*op == "quit") {
+        // quit()はセーブせずにプロセスを終えるため、進行中のゲームを残したい場合は
+        // クライアントが「セーブして終了」のキー(^X)とその確認のESCをkeysで送ること
+        // (詳細はtools/bot/README.mdを参照)
         return RequestResult(make_ok_response(id, { { "quitting", true } }), true);
     }
 
