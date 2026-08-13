@@ -180,7 +180,7 @@ def command_keys(args: argparse.Namespace) -> int:
 
 def command_state(args: argparse.Namespace) -> int:
     """ゲームの内部状態をJSONで表示する。"""
-    print_json(request(args, {"op": "state"}))
+    print_json(request(args, {"op": "state", "map": not args.no_map}))
     return 0
 
 
@@ -308,9 +308,13 @@ def build_parser() -> argparse.ArgumentParser:
     )
     keys_parser.set_defaults(func=command_keys)
 
-    subparsers.add_parser("state", help="ゲームの内部状態を表示する").set_defaults(
-        func=command_state
+    state_parser = subparsers.add_parser("state", help="ゲームの内部状態を表示する")
+    state_parser.add_argument(
+        "--no-map",
+        action="store_true",
+        help="nearby_grids を省く (応答の99%%超を占めるため大幅に軽くなる)",
     )
+    state_parser.set_defaults(func=command_state)
 
     messages_parser = subparsers.add_parser("messages", help="メッセージ履歴を表示する")
     messages_parser.add_argument(

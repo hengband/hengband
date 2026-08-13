@@ -350,17 +350,26 @@ nlohmann::json handle_screen_request(const nlohmann::json &id, const nlohmann::j
 /*!
  * @brief stateリクエストを処理する
  * @param id リクエストのid
+ * @param request リクエストのJSONオブジェクト
  * @return レスポンスのJSONオブジェクト
- * @details キャラクターが生成される前は内部状態を構築できないためエラーを返す。
+ * @details
+ * キャラクターが生成される前は内部状態を構築できないためエラーを返す。
+ * nearby_gridsはフロア全域を走査して1万件規模の配列を作り、スナップショット1件の
+ * バイト数の99%超を占めるため、地図が要らないクライアントが省けるようにする。
  */
-nlohmann::json handle_state_request(const nlohmann::json &id)
+nlohmann::json handle_state_request(const nlohmann::json &id, const nlohmann::json &request)
 {
     const auto is_ready = AngbandWorld::get_instance().character_generated && (p_ptr != nullptr) && (p_ptr->current_floor_ptr != nullptr);
     if (!is_ready) {
         return make_error_response(id, "the game state is not ready yet");
     }
 
-    return make_ok_response(id, make_bot_json_snapshot(p_ptr));
+    const auto include_map = find_request_value(request, "map", true);
+    if (!include_map) {
+        return make_error_response(id, "\"map\" must be a boolean");
+    }
+
+    return make_ok_response(id, make_bot_json_snapshot(p_ptr, *include_map));
 }
 
 /*!
@@ -407,7 +416,7 @@ RequestResult dispatch_request(const nlohmann::json &request)
     }
 
     if (*op == "state") {
-        return handle_state_request(id);
+        return handle_state_request(id, request);
     }
 
     if (*op == "messages") {

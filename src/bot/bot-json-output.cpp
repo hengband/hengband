@@ -1658,6 +1658,7 @@ nlohmann::json make_message_history_json(int count)
 /*!
  * @brief ゲームの内部状態のスナップショットをJSONで生成する
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param include_map nearby_gridsを含めるか
  * @pre player_ptrとplayer_ptr->current_floor_ptrがnullptrでないことを呼び出し側が保証すること
  * @return スナップショットのJSONオブジェクト
  * @details
@@ -1665,9 +1666,9 @@ nlohmann::json make_message_history_json(int count)
  * messagesは差分ではなく履歴を載せる。リクエストの度に差分を進めると、
  * --bot-json-outputと併用した際にJSONL側からメッセージが失われるためである。
  */
-nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr)
+nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map)
 {
-    return make_snapshot(player_ptr, true, BotSnapshotMessages::HISTORY);
+    return make_snapshot(player_ptr, include_map, BotSnapshotMessages::HISTORY);
 }
 
 void output_bot_json_snapshot(PlayerType *player_ptr)
