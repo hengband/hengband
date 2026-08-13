@@ -14,6 +14,7 @@
 #endif
 #else
 #include <cerrno>
+#include <fcntl.h>
 #include <netinet/in.h>
 #include <sys/select.h>
 #include <sys/socket.h>
@@ -68,6 +69,9 @@ constexpr size_t MAX_REQUEST_BYTES = 16 * 1024 * 1024;
  * 同時に接続できるクライアントは1つで、リクエストの処理中は待ち受けソケットを監視しないため、
  * 接続したまま何も送らないクライアントが居ると待ち受けが塞がったままになる。
  * 期限を設けて切断することで、次のクライアントを受け付けられる状態へ自力で復帰する。
+ *
+ * この期限は「1回の呼び出しで待つ長さ」ではなく「やり取りが1件も完了しないまま経過してよい長さ」である。
+ * ゲームの進行を止めないための短い期限は呼び出し側が別に与える。
  */
 constexpr int CLIENT_IO_TIMEOUT_SECONDS = 30;
 
@@ -147,6 +151,54 @@ bool is_socket_call_interrupted()
     return false;
 #else
     return errno == EINTR;
+#endif
+}
+
+/*!
+ * @brief 直前のソケット操作が「今は処理できない」ことを表しているか調べる
+ * @return 非ブロッキングのために処理されなかった場合TRUE
+ * @details 失敗ではないため、期限内であれば待ち直し、期限を過ぎていれば次の呼び出しへ持ち越す。
+ */
+bool is_socket_operation_pending()
+{
+#ifdef WINDOWS
+    return ::WSAGetLastError() == WSAEWOULDBLOCK;
+#else
+    if (errno == EAGAIN) {
+        return true;
+    }
+
+#if defined(EWOULDBLOCK) && (EWOULDBLOCK != EAGAIN)
+    return errno == EWOULDBLOCK;
+#else
+    return false;
+#endif
+#endif
+}
+
+/*!
+ * @brief ソケットを非ブロッキングに設定する
+ * @param socket 対象のソケットハンドル
+ * @return 成功した場合TRUE
+ * @details
+ * 制御サーバはゲームの進行を止めないため、ソケットの操作が呼び出し側の与えた期限を超えて
+ * 待つことがあってはならない。select()が可能と答えても実際に処理できる量はそれ以下であり得るため、
+ * 期限を守るにはソケット自体を非ブロッキングにしておく必要がある。
+ * また、select()の後にaccept()を呼ぶまでの間に接続要求が取り消されると、
+ * ブロッキングな待ち受けソケットのaccept()は期限を持たないまま停止してしまう。
+ */
+bool set_socket_nonblocking(intptr_t socket)
+{
+#ifdef WINDOWS
+    u_long mode = 1;
+    return ::ioctlsocket(native_socket(socket), FIONBIO, &mode) == 0;
+#else
+    const auto flags = ::fcntl(native_socket(socket), F_GETFL, 0);
+    if (flags < 0) {
+        return false;
+    }
+
+    return ::fcntl(native_socket(socket), F_SETFL, flags | O_NONBLOCK) == 0;
 #endif
 }
 
@@ -264,17 +316,6 @@ bool wait_for_socket(intptr_t socket, const SocketWaitDeadline &deadline, Socket
     }
 }
 
-/*!
- * @brief クライアントとのやり取りが中断された理由を表す文言を得る
- * @param deadline 待機に用いた期限
- * @return 期限切れの場合はタイムアウトを表す文言、それ以外は待機自体の失敗を表す文言
- * @details wait_for_socket()がFALSEを返した理由を診断メッセージで区別するためのもの。
- */
-const char *describe_wait_failure(const SocketWaitDeadline &deadline)
-{
-    return is_deadline_expired(deadline) ? "timed out" : "failed while";
-}
-
 }
 
 /*!
@@ -334,6 +375,12 @@ bool BotSocketServer::listen_on_loopback()
         return false;
     }
 
+    if (!set_socket_nonblocking(socket)) {
+        report_bot_message(fmt::format("failed to make the listening socket non-blocking (error {})", last_socket_error()));
+        close_socket_handle(socket);
+        return false;
+    }
+
     int reuse = 1;
     (void)::setsockopt(native_socket(socket), SOL_SOCKET, ADDRESS_REUSE_OPTION, reinterpret_cast<const char *>(&reuse), static_cast<socket_length_t>(sizeof(reuse)));
 
@@ -381,6 +428,7 @@ bool BotSocketServer::has_client() const
  */
 bool BotSocketServer::accept_client(const SocketWaitDeadline &deadline)
 {
+    this->drop_idle_client();
     if (this->has_client()) {
         return true;
     }
@@ -396,8 +444,20 @@ bool BotSocketServer::accept_client(const SocketWaitDeadline &deadline)
 
         const auto accepted = static_cast<intptr_t>(::accept(native_socket(this->listen_socket), nullptr, nullptr));
         if (accepted != INVALID_SOCKET_HANDLE) {
+            if (!set_socket_nonblocking(accepted)) {
+                // 期限を守れないクライアントを相手にするとゲームが止まるため、諦めて次の接続を待つ
+                report_bot_message(fmt::format("failed to make the client socket non-blocking (error {})", last_socket_error()));
+                close_socket_handle(accepted);
+                if (is_deadline_expired(deadline)) {
+                    return false;
+                }
+
+                continue;
+            }
+
             suppress_sigpipe(accepted);
             this->client_socket = accepted;
+            this->extend_client_deadline();
             return true;
         }
 
@@ -439,18 +499,16 @@ bool BotSocketServer::wait_readable(const SocketWaitDeadline &deadline)
 
 /*!
  * @brief リクエストを1行受信する
- * @return 受信した行。クライアントが切断された場合はnullopt
+ * @param deadline 待機の期限
+ * @return 受信した行。1行が揃っていない場合とクライアントが切断された場合はnullopt
  * @details
  * リクエストがTCPのセグメントに分割されて届く場合と、1回の受信に複数行が含まれる場合の
  * どちらにも対応するため、受信した内容は行が揃うまで受信バッファに残す。
+ * 期限内に1行が揃わなかった場合も受信バッファは保たれるため、次の呼び出しで続きを組み立てられる。
  * 改行が現れないまま1行がMAX_REQUEST_BYTESを超えた場合はクライアントを切断する。
- *
- * 期限は行の組み立て全体に掛ける。受信のたびに求め直すと、改行を送らないまま
- * 少しずつデータを送り続けるクライアントが期限を際限なく延ばせてしまう。
  */
-tl::optional<std::string> BotSocketServer::receive_line()
+tl::optional<std::string> BotSocketServer::receive_line(const SocketWaitDeadline &deadline)
 {
-    const auto deadline = make_deadline(std::chrono::seconds(CLIENT_IO_TIMEOUT_SECONDS));
     while (true) {
         const auto separator = this->receive_buffer.find('\n');
         if (separator != std::string::npos) {
@@ -460,6 +518,7 @@ tl::optional<std::string> BotSocketServer::receive_line()
                 line.pop_back();
             }
 
+            this->extend_client_deadline();
             return line;
         }
 
@@ -473,9 +532,8 @@ tl::optional<std::string> BotSocketServer::receive_line()
             return tl::nullopt;
         }
 
+        // 期限を過ぎたら受信バッファを保ったまま戻り、次の呼び出しで続きを受け取る
         if (!wait_for_socket(this->client_socket, deadline, SocketWaitMode::READ)) {
-            report_bot_message(fmt::format("{} waiting for a request from the client", describe_wait_failure(deadline)));
-            this->close_client();
             return tl::nullopt;
         }
 
@@ -484,6 +542,11 @@ tl::optional<std::string> BotSocketServer::receive_line()
         if (received < 0) {
             if (is_socket_call_interrupted()) {
                 continue;
+            }
+
+            // select()が読み込み可能と答えても実際には読めないことがある
+            if (is_socket_operation_pending()) {
+                return tl::nullopt;
             }
 
             this->close_client();
@@ -502,53 +565,131 @@ tl::optional<std::string> BotSocketServer::receive_line()
 /*!
  * @brief レスポンスを1行送信する
  * @param payload 送信する行 (改行は本関数が付加する)
- * @return 送信に成功した場合TRUE
+ * @param deadline 待機の期限
+ * @return 期限内に送り切った場合TRUE
  * @details
- * レスポンスは内部状態のスナップショットで大きくなり得るため、値渡しで受けてコピーを避ける。
- * 受信と同様、レスポンスを読まないクライアントで待ち受けが塞がらないよう、
- * 送信全体に期限を設ける。
+ * レスポンスは内部状態のスナップショットで数MBに達し得るため、値渡しで受けてコピーを避ける。
+ * 期限内に送り切れなかった分は送信バッファへ残り、flush_response()が続きを送る。
  */
-bool BotSocketServer::send_line(std::string payload)
+bool BotSocketServer::send_line(std::string payload, const SocketWaitDeadline &deadline)
 {
     if (this->client_socket == INVALID_SOCKET_HANDLE) {
         return false;
     }
 
-    const auto deadline = make_deadline(std::chrono::seconds(CLIENT_IO_TIMEOUT_SECONDS));
     payload.push_back('\n');
-    size_t sent_total = 0;
-    while (sent_total < payload.size()) {
+    this->send_buffer = std::move(payload);
+    this->send_offset = 0;
+    return this->flush_response(deadline);
+}
+
+/*!
+ * @brief 送り切れていないレスポンスの続きを送る
+ * @param deadline 待機の期限
+ * @return 送るべきものが残っていない場合TRUE
+ * @details
+ * ゲームがキー入力待ちに入るたびに呼ばれ、期限まで送っては呼び出し側へ戻ることを繰り返す。
+ * レスポンスを読まないクライアントが居ても、1回の入力待ちで止まる時間は期限までに収まる。
+ */
+bool BotSocketServer::flush_response(const SocketWaitDeadline &deadline)
+{
+    this->drop_idle_client();
+    if (this->send_offset >= this->send_buffer.size()) {
+        return true;
+    }
+
+    if (this->client_socket == INVALID_SOCKET_HANDLE) {
+        this->send_buffer.clear();
+        this->send_offset = 0;
+        return true;
+    }
+
+    while (this->send_offset < this->send_buffer.size()) {
+        // 期限を過ぎたら残量を保ったまま戻り、次の呼び出しで続きを送る
         if (!wait_for_socket(this->client_socket, deadline, SocketWaitMode::WRITE)) {
-            report_bot_message(fmt::format("{} waiting to send a response to the client", describe_wait_failure(deadline)));
-            this->close_client();
             return false;
         }
 
-        const auto sent = ::send(native_socket(this->client_socket), payload.data() + sent_total,
-            static_cast<transfer_size_t>(payload.size() - sent_total), SEND_FLAGS);
-        if (sent <= 0) {
-            if ((sent < 0) && is_socket_call_interrupted()) {
+        const auto sent = ::send(native_socket(this->client_socket), this->send_buffer.data() + this->send_offset,
+            static_cast<transfer_size_t>(this->send_buffer.size() - this->send_offset), SEND_FLAGS);
+        if (sent < 0) {
+            if (is_socket_call_interrupted()) {
                 continue;
             }
 
+            // 送信バッファが埋まっている場合。相手が読み進めるのを次の呼び出しで待ち直す
+            if (is_socket_operation_pending()) {
+                return false;
+            }
+
             this->close_client();
-            return false;
+            return true;
         }
 
-        sent_total += static_cast<size_t>(sent);
+        this->send_offset += static_cast<size_t>(sent);
     }
 
+    this->send_buffer.clear();
+    this->send_offset = 0;
+    this->extend_client_deadline();
     return true;
 }
 
 /*!
- * @brief クライアントとの接続を閉じて受信バッファを破棄する
+ * @brief 送り切れていないレスポンスを、クライアントの期限まで掛けて送り切る
+ * @details
+ * ゲームを終了する直前に呼ぶためのもの。ここで待ってもゲームの進行は妨げられない一方、
+ * 送らずに終了するとクライアントが終了要求の成否を知れなくなる。
+ */
+void BotSocketServer::flush_response_until_timeout()
+{
+    const auto deadline = make_deadline(std::chrono::seconds(CLIENT_IO_TIMEOUT_SECONDS));
+    while (!this->flush_response(deadline)) {
+        if (is_deadline_expired(deadline)) {
+            report_bot_message("timed out sending the final response to the client");
+            return;
+        }
+    }
+}
+
+/*!
+ * @brief やり取りが1件も完了しないまま期限を過ぎたクライアントを切断する
+ * @details
+ * 接続したまま何も送らないクライアントや、レスポンスを読まないクライアントで
+ * 待ち受けが塞がったままになるのを防ぐ。
+ */
+void BotSocketServer::drop_idle_client()
+{
+    if (!this->has_client() || !is_deadline_expired(this->client_deadline)) {
+        return;
+    }
+
+    report_bot_message("timed out exchanging data with the client");
+    this->close_client();
+}
+
+/*!
+ * @brief クライアントとのやり取りを打ち切る期限を延ばす
+ * @details
+ * 延ばすのは1行を受け切った時とレスポンスを送り切った時だけである。
+ * 受信や送信が進むたびに延ばすと、改行を送らないまま少しずつデータを送り続けるクライアントや、
+ * レスポンスを少しずつしか読まないクライアントが期限を際限なく延ばせてしまう。
+ */
+void BotSocketServer::extend_client_deadline()
+{
+    this->client_deadline = make_deadline(std::chrono::seconds(CLIENT_IO_TIMEOUT_SECONDS));
+}
+
+/*!
+ * @brief クライアントとの接続を閉じて送受信バッファを破棄する
  */
 void BotSocketServer::close_client()
 {
     close_socket_handle(this->client_socket);
     this->client_socket = INVALID_SOCKET_HANDLE;
     this->receive_buffer.clear();
+    this->send_buffer.clear();
+    this->send_offset = 0;
 }
 
 /*!

@@ -33,9 +33,14 @@ SocketWaitDeadline make_deadline(std::chrono::milliseconds timeout);
  * ソケットハンドルはWindowsのSOCKETとUNIXのファイルディスクリプタの双方を
  * 格納できるようintptr_tで保持する。
  *
- * ゲームの進行を止めないよう、接続と受信の待機には呼び出し側が期限を与える。
- * 接続と受信を続けて行う場合に待機の長さが合算されないよう、期限は長さではなく
+ * ゲームの進行を止めないよう、全てのソケットを非ブロッキングにした上で、
+ * 接続・受信・送信の待機には呼び出し側が期限を与える。
+ * 続けて行う場合に待機の長さが合算されないよう、期限は長さではなく
  * 時刻で受け取り、呼び出し側が一度求めたものを使い回せるようにしている。
+ *
+ * 1回の期限内に処理し切れなかったリクエストの受信とレスポンスの送信は、
+ * 途中の状態を保持して次の呼び出しで再開する。これにより、相手が読まないレスポンスや
+ * 改行を送らないリクエストがあってもゲームが止まらない。
  */
 class BotSocketServer {
 public:
@@ -50,12 +55,16 @@ public:
     bool has_client() const;
     bool accept_client(const SocketWaitDeadline &deadline);
     bool wait_readable(const SocketWaitDeadline &deadline);
-    tl::optional<std::string> receive_line();
-    bool send_line(std::string line);
+    tl::optional<std::string> receive_line(const SocketWaitDeadline &deadline);
+    bool send_line(std::string line, const SocketWaitDeadline &deadline);
+    bool flush_response(const SocketWaitDeadline &deadline);
+    void flush_response_until_timeout();
 
 private:
     void close_client();
     void close_listener();
+    void drop_idle_client();
+    void extend_client_deadline();
 
     int port;
     bool is_socket_library_ready = true; //!< ソケットライブラリの初期化に成功したか否か (Windows以外は常にTRUE)
@@ -63,4 +72,7 @@ private:
     intptr_t listen_socket = INVALID_SOCKET_HANDLE;
     intptr_t client_socket = INVALID_SOCKET_HANDLE;
     std::string receive_buffer;
+    std::string send_buffer; //!< 送り切れていないレスポンス
+    size_t send_offset = 0; //!< send_bufferのうち送信済みのバイト数
+    SocketWaitDeadline client_deadline{}; //!< クライアントとのやり取りを打ち切る期限
 };

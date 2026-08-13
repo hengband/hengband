@@ -428,16 +428,17 @@ RequestResult dispatch_request(const nlohmann::json &request)
 
 /*!
  * @brief 接続済みのクライアントからリクエストを1件受信して処理する
+ * @param deadline 受信と送信の待機に用いる期限
  * @details
- * クライアントが切断された場合と受信が期限切れになった場合は何もせずに戻り、
- * 次の入力待ちで次のクライアントの接続を待ち直す。
+ * クライアントが切断された場合と、期限内に1行が揃わなかった場合は何もせずに戻る。
+ * 受信の途中経過はサーバが保持しているため、続きは次の入力待ちで組み立てられる。
  * 不正なJSONや内部状態の構築失敗でゲームを巻き込んで落とさないよう、
  * 例外は全てここで捕捉してエラーレスポンスに変換する。
  * 終了するか否かはレスポンスの内容ではなくRequestResultのフラグで判断する。
  */
-void serve_request()
+void serve_request(const SocketWaitDeadline &deadline)
 {
-    const auto line = bot_control_server->receive_line();
+    const auto line = bot_control_server->receive_line(deadline);
     if (!line) {
         return;
     }
@@ -449,12 +450,13 @@ void serve_request()
         result = make_error_response(nullptr, e.what());
     }
 
-    // 送信に失敗した場合はサーバ側がクライアントを切断済みで、次の入力待ちが接続を待ち直す
-    (void)bot_control_server->send_line(result.response.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace));
+    // 期限内に送り切れなかった分はサーバが保持し、次の入力待ちで続きを送る
+    (void)bot_control_server->send_line(result.response.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace), deadline);
 
     // レスポンスが届いたか否かに関わらず終了する。送信の失敗で終了要求を握り潰すと、
     // クライアントが去った後もプロセスが残る
     if (result.is_quit_requested) {
+        bot_control_server->flush_response_until_timeout();
         quit("");
     }
 }
@@ -462,9 +464,11 @@ void serve_request()
 /*!
  * @brief キー入力待ちの間に呼ばれ、届いているリクエストを処理する
  * @details
- * ゲームの進行を止めないよう、接続も受信も短い期限で打ち切って必ず戻る。
+ * ゲームの進行を止めないよう、接続・受信・送信の全てを短い期限で打ち切って必ず戻る。
  * 何も届いていなければ何もしない。呼び出し側のterm_inkey()が
  * フロントエンドのイベント処理と本関数を交互に繰り返す。
+ * 期限内に処理し切れなかった受信と送信はサーバが途中の状態を保持しており、
+ * 次の呼び出しで続きから再開する。
  */
 void serve_pending_requests()
 {
@@ -474,8 +478,14 @@ void serve_pending_requests()
         return;
     }
 
-    // 接続と受信で期限を共有し、1回の入力待ちで止まる時間がBOT_CONTROL_POLL_INTERVALを超えないようにする
+    // 接続・受信・送信で期限を共有し、1回の入力待ちで止まる時間がBOT_CONTROL_POLL_INTERVALを超えないようにする
     const auto deadline = make_deadline(BOT_CONTROL_POLL_INTERVAL);
+
+    // 送り切れていないレスポンスがあれば、次のリクエストを受ける前に送り切る
+    if (!bot_control_server->flush_response(deadline)) {
+        return;
+    }
+
     if (!bot_control_server->accept_client(deadline)) {
         return;
     }
@@ -484,7 +494,7 @@ void serve_pending_requests()
         return;
     }
 
-    serve_request();
+    serve_request(deadline);
 }
 
 }
