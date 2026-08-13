@@ -45,7 +45,18 @@
 namespace {
 
 constexpr auto BOT_CONTROL_PROTOCOL_VERSION = 1; //!< プロトコルの版。互換性を壊す変更で更新する
-constexpr auto BOT_CONTROL_KEYS_BUFFER_SIZE = 1024; //!< text_to_ascii()に渡す変換先バッファの大きさ
+constexpr auto BOT_CONTROL_MAX_KEYS = 1023; //!< 1リクエストで注入できるキーの最大数
+
+/*!
+ * @brief text_to_ascii()に渡す変換先バッファの大きさ
+ * @details
+ * text_to_ascii()は変換先をbufsize-1バイトで打ち切ってから終端NULを書き、
+ * decode_keys()は出力がbufsize-1に達したものを切り詰められたものとして弾く。
+ * そのため受け付けたい最大長より2バイト大きく取らないと、
+ * 最大長ちょうどのキー列が入力を全て消費できていても弾かれてしまう。
+ * キーキューの大きさが最も大きいx11のメイン端末 (1023) を1リクエストで使い切れるようにする。
+ */
+constexpr auto BOT_CONTROL_KEYS_BUFFER_SIZE = BOT_CONTROL_MAX_KEYS + 2;
 constexpr auto BOT_CONTROL_DEFAULT_MESSAGE_COUNT = 20; //!< messagesリクエストの既定取得件数
 constexpr auto BOT_CONTROL_KEYS_BUFFER_FILLER = '\xff'; //!< text_to_ascii()が書いた終端を見分けるための番兵
 
