@@ -11,6 +11,7 @@
 #include "core/game-play.h"
 #include "core/scores.h"
 #include "game-option/runtime-arguments.h"
+#include "headless-term/headless-term.h"
 #include "io/files-util.h"
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
@@ -191,6 +192,11 @@ static void display_usage(const char *program)
     puts("           Listen on 127.0.0.1:<port> to be controlled by an external program");
     puts("  --fixed-seed=<seed>");
     puts("           Fix the initial random seed to make a playthrough reproducible");
+    puts("  --headless");
+    puts("           Use the terminal which has no real display and no real input");
+    puts("           device (requires --control-port)");
+    puts("  --headless-term-count=<num>");
+    puts("           Number of terminals the headless frontend creates (default 1)");
     puts("");
 
 #ifdef USE_X11
@@ -411,6 +417,16 @@ int main(int argc, char *argv[])
 
     process_player_name(p_ptr, true);
     quit_aux = quit_hook;
+
+    // 実描画・実入力デバイスを持たないため、-m の指定が無い時に暗黙で選ばれてはならない。
+    // 明示的に指定された以上、初期化に失敗した時に他のモジュールへ切り替えるのも誤りなので即座に終了する
+    if (arg_headless) {
+        if (0 != init_headless_term()) {
+            quit("Unable to prepare the headless terminal!");
+        }
+
+        done = true;
+    }
 
 #ifdef USE_X11
     if (!done && (mstr.empty() || (mstr == "x11"))) {

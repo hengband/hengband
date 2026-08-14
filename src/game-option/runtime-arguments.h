@@ -28,5 +28,7 @@ extern bool arg_bot_json_output;
 extern std::string arg_bot_json_output_path;
 extern tl::optional<int> arg_control_port; //!< 制御サーバが待ち受けるTCPポート番号 (未指定なら制御サーバを起動しない)
 extern tl::optional<uint32_t> arg_fixed_seed; //!< 乱数の初期シード (未指定なら従来通り実行毎にランダム)
+extern bool arg_headless; //!< 実描画・実入力デバイスを持たない端末を使用するか否か
+extern tl::optional<int> arg_headless_term_count; //!< ヘッドレス端末で生成する端末の数 (未指定なら1)
 
 RuntimeArgumentResult parse_runtime_argument(std::string_view option);

@@ -45,7 +45,6 @@
 namespace {
 
 constexpr auto BOT_CONTROL_PROTOCOL_VERSION = 1; //!< プロトコルの版。互換性を壊す変更で更新する
-constexpr auto BOT_CONTROL_MAX_KEYS = 1023; //!< 1リクエストで注入できるキーの最大数
 
 /*!
  * @brief text_to_ascii()に渡す変換先バッファの大きさ
