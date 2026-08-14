@@ -67,6 +67,17 @@ constexpr auto BOT_CONTROL_KEYS_BUFFER_FILLER = '\xff'; //!< text_to_ascii()が�
  */
 constexpr auto BOT_CONTROL_POLL_INTERVAL = std::chrono::milliseconds(15);
 
+/*!
+ * @brief イベントを持たない端末で1回の入力待ちにソケットを監視する長さ
+ * @details
+ * 取り出すべきフロントエンドのイベントが無い端末 (term_type::never_events) では、
+ * 短い間隔で起き直す必要が無い。期限は待つ長さの上限でしかなく、
+ * 接続やデータが届けばselect()は即座に返るため、長く取っても応答は遅くならない。
+ * 一方、無制限に待つと接続したまま黙り込んだクライアントを打ち切れなくなる
+ * (BotSocketServerのdrop_idle_client()) ため、有限に留める。
+ */
+constexpr auto BOT_CONTROL_IDLE_POLL_INTERVAL = std::chrono::seconds(1);
+
 std::unique_ptr<BotSocketServer> bot_control_server;
 
 /*!
@@ -506,8 +517,9 @@ void serve_pending_requests()
         return;
     }
 
-    // 接続・受信・送信で期限を共有し、1回の入力待ちで止まる時間がBOT_CONTROL_POLL_INTERVALを超えないようにする
-    const auto deadline = make_deadline(BOT_CONTROL_POLL_INTERVAL);
+    // 接続・受信・送信で期限を共有し、1回の入力待ちで止まる時間が監視の長さを超えないようにする。
+    // 待たせている端末がイベントを持たないなら、取り出すために起き直す必要が無いので長く待つ
+    const auto deadline = make_deadline(game_term->never_events ? BOT_CONTROL_IDLE_POLL_INTERVAL : BOT_CONTROL_POLL_INTERVAL);
 
     // 送り切れていないレスポンスがあれば、次のリクエストを受ける前に送り切る
     if (!bot_control_server->flush_response(deadline)) {
