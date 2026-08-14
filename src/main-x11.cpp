@@ -2338,7 +2338,7 @@ static void game_term_nuke_x11(term_type *)
 static tl::optional<int> getenv_int(const std::string &key)
 {
     if (const auto val = getenv(key.data())) {
-        return str_to_int(val);
+        return str_to_num<int>(val);
     }
 
     return tl::nullopt;
@@ -2372,16 +2372,16 @@ static window_setting get_window_setting(int window_no)
     if (const auto str = get_config("WINDOW")) {
         const auto vals = str_split(str, ',', true);
         if (vals.size() >= 2) {
-            ws.cols = str_to_int(vals[0]).and_then(allow_positive).value_or(TERM_DEFAULT_COLS);
-            ws.rows = str_to_int(vals[1]).and_then(allow_positive).value_or(TERM_DEFAULT_ROWS);
+            ws.cols = str_to_num<int>(vals[0]).and_then(allow_positive).value_or(TERM_DEFAULT_COLS);
+            ws.rows = str_to_num<int>(vals[1]).and_then(allow_positive).value_or(TERM_DEFAULT_ROWS);
         }
         if (vals.size() >= 4) {
-            ws.x_pos = str_to_int(vals[2]).value_or(-1);
-            ws.y_pos = str_to_int(vals[3]).value_or(-1);
+            ws.x_pos = str_to_num<int>(vals[2]).value_or(-1);
+            ws.y_pos = str_to_num<int>(vals[3]).value_or(-1);
         }
         if (vals.size() >= 6) {
-            ws.x_inner_border = str_to_int(vals[4]).and_then(allow_positive).value_or(1);
-            ws.y_inner_border = str_to_int(vals[5]).and_then(allow_positive).value_or(1);
+            ws.x_inner_border = str_to_num<int>(vals[4]).and_then(allow_positive).value_or(1);
+            ws.y_inner_border = str_to_num<int>(vals[5]).and_then(allow_positive).value_or(1);
         }
     }
 

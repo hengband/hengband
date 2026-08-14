@@ -570,29 +570,6 @@ std::set<int> str_find_all_multibyte_chars([[maybe_unused]] std::string_view str
 }
 
 /*!
- * @brief 文字列を指定した基数の数値として整数に変換する
- *
- * @param str 変換する文字列
- * @param base 基数（省略した場合のデフォルト値は10）
- * @return 変換した整数値。変換に失敗した場合はtl::nullopt。
- */
-tl::optional<int> str_to_int(std::string_view str, int base)
-{
-    if (str.empty()) {
-        return tl::nullopt;
-    }
-
-    const auto begin = str.data();
-    const auto end = str.data() + str.size();
-    int value;
-    if (const auto [ptr, ec] = std::from_chars(begin, end, value, base); ec == std::errc() && ptr == end) {
-        return value;
-    }
-
-    return tl::nullopt;
-}
-
-/*!
  * @brief 文字列から指定した文字以降の部分文字列を抽出する
  * @param str 抽出対象の文字列
  * @param find 検索する文字

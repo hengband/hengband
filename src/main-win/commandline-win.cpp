@@ -8,7 +8,9 @@
 #include "main-win/main-win-utils.h"
 #include "term/z-util.h"
 
+#include <fmt/format.h>
 #include <iostream>
+#include <string>
 #include <string_view>
 #include <windows.h>
 
@@ -19,26 +21,39 @@ namespace {
 // セーブファイル名
 std::string savefile_option;
 
-bool parse_bot_json_output_option(std::wstring_view option)
+/*!
+ * @brief プラットフォームに依存しない長いコマンドライン引数を解釈する
+ * @param option コマンドライン引数
+ * @return 実行時オプションとして解釈した場合TRUE
+ * @details
+ * オプションの綴りと値の解釈をUnix版と共有するため、ワイド文字列をマルチバイトへ変換して
+ * parse_runtime_argument()に委譲する。値が不正な場合はその旨を通知して終了する。
+ *
+ * 本関数はコンソールもquit_aux/plog_auxも用意されていない起動直後に呼ばれるため、
+ * 終了する前に自前でコンソールを確保する。これを怠るとquit()のメッセージが出力先を失い、
+ * 何も表示されないまま終了してしまう。
+ */
+bool parse_runtime_option(const WCHAR *option)
 {
-    static constexpr std::wstring_view name = L"--bot-json-output";
-    if (option == name) {
-        arg_bot_json_output = true;
-        return true;
+    auto converted = to_multibyte(option);
+    if (converted.c_str() == nullptr) {
+        return false;
     }
 
-    if ((option.size() > name.size()) && option.starts_with(name) && (option[name.size()] == L'=')) {
-        arg_bot_json_output = true;
-        const auto path = std::wstring(option.substr(name.size() + 1));
-        if (path.empty()) {
-            return true;
-        }
+    const std::string_view narrow_option(converted.c_str());
+    if (!narrow_option.starts_with("--")) {
+        return false;
+    }
 
-        auto converted_path = to_multibyte(path.c_str());
-        if (converted_path.c_str() != nullptr) {
-            arg_bot_json_output_path = converted_path.c_str();
-        }
+    switch (parse_runtime_argument(narrow_option.substr(2))) {
+    case RuntimeArgumentResult::HANDLED:
         return true;
+    case RuntimeArgumentResult::INVALID:
+        attach_console();
+        quit(fmt::format("Invalid value in '{}'", narrow_option));
+        return true;
+    case RuntimeArgumentResult::NOT_HANDLED:
+        break;
     }
 
     return false;
@@ -46,13 +61,13 @@ bool parse_bot_json_output_option(std::wstring_view option)
 }
 
 /*!
- * @brief コンソールを作成する
+ * @brief デバッグ用のコンソールを作成する
  * @details
- * 標準出力のみ対応。
+ * attach_console()が繋ぐ標準エラー出力に加えて、標準出力もコンソールへ繋ぐ。
  */
 static void create_console(void)
 {
-    ::AllocConsole();
+    attach_console();
     FILE *stream = nullptr;
     freopen_s(&stream, "CONOUT$", "w+", stdout);
     std::cout << "Hengband debug console" << std::endl;
@@ -79,7 +94,7 @@ void CommandLine::handle(void)
             } else if (wcscmp(argv[i], L"--output-spoilers") == 0) {
                 create_debug_spoiler();
                 continue;
-            } else if (parse_bot_json_output_option(argv[i])) {
+            } else if (parse_runtime_option(argv[i])) {
                 continue;
             } else {
                 if (argv[i][0] != L'-') {

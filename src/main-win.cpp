@@ -81,6 +81,7 @@
 
 #ifdef WINDOWS
 
+#include "bot/bot-control-server.h"
 #include "cmd-io/cmd-save.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/game-play.h"
@@ -110,6 +111,7 @@
 #include "main/angband-initializer.h"
 #include "main/sound-of-music.h"
 #include "save/save.h"
+#include "system/angband-version.h"
 #include "system/angband.h"
 #include "system/floor/floor-info.h"
 #include "system/player-type-definition.h"
@@ -117,6 +119,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-util.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -834,6 +837,10 @@ static errr term_xtra_win_react(PlayerType *player_ptr)
 
 /*!
  * @brief Process at least one event
+ * @details
+ * 待たない場合、保留中のメッセージが無ければ非0を返す。
+ * 呼び出し側がメッセージを取り切ったことを判定できるようにするためのもので、
+ * main-gcu.cpp・main-x11.cpp・main-cap.cppのTERM_XTRA_EVENTと同じ約束である。
  */
 static errr term_xtra_win_event(int v)
 {
@@ -843,13 +850,16 @@ static errr term_xtra_win_event(int v)
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
-    } else {
-        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
+
+        return 0;
     }
 
+    if (!PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+        return 1;
+    }
+
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
     return 0;
 }
 
@@ -2594,6 +2604,7 @@ static void hook_quit(std::string_view str)
         MessageBoxW(data[0].w, to_wchar(str).wc_str(), _(L"エラー！", L"Error"), MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
     }
 
+    shutdown_bot_control_server();
     save_prefs();
     for (int i = MAX_TERM_DATA - 1; i >= 0; --i) {
         term_force_font(&data[i]);
@@ -2758,6 +2769,9 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
 {
     setlocale(LC_ALL, "ja_JP");
     hInstance = hInst;
+    // コマンドライン引数の解釈中に出力し得る診断メッセージに名前を付けるため、
+    // plog()/quit()を呼び得る処理より先に設定する
+    program_name = VARIANT_NAME;
     if (is_already_running()) {
         constexpr auto mes = _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running.");
         constexpr auto caption = _(L"エラー！", L"Error");
@@ -2817,6 +2831,11 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
     if (use_music) {
         init_music();
     }
+
+    // 端末が揃った後、最初のキー入力待ちより前に待ち受けを始める。
+    // 次のループは自前のメッセージループでキー入力待ちではないため、
+    // クライアントへの応答が始まるのはゲームが開始した後になる
+    init_bot_control_server();
 
     // ユーザーがゲーム開始を選択するまで待つループ
     MSG msg;

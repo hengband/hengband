@@ -33,6 +33,9 @@
 //! The current "term"
 term_type *game_term = nullptr;
 
+//! キー入力待ちの間に繰り返し呼ばれるフック (詳細はz-term.hを参照)
+void (*term_inkey_wait_hook)() = nullptr;
+
 /*** Local routines ***/
 
 /*!
@@ -1792,6 +1795,64 @@ errr term_key_push(int k)
 }
 
 /*!
+ * @brief キューにあと何個キーを積めるか数える
+ * @return 積めるキーの数
+ * @details
+ * term_key_push()は空きが無くなっても積むことを拒否せず、循環キューを一周して
+ * 先に積んだキーを壊すため、まとめて積む場合は事前に空きを確かめる必要がある。
+ * キューの大きさはフロントエンドが決めるため、一度に積める量もそれに従う。
+ */
+int term_key_queue_room()
+{
+    const auto size = game_term->key_size;
+    if (size == 0) {
+        return 0;
+    }
+
+    const auto pending = (game_term->key_head + size - game_term->key_tail) % size;
+    return size - 1 - pending;
+}
+
+/*!
+ * @brief キー列をキューへまとめて積む
+ * @param keys 積むキー列
+ * @return 全て積めた場合0、空きが足りず1つも積まなかった場合は非0
+ * @details
+ * term_key_push()はキューの先頭へ挿入するため、正しい順序で消費させるには
+ * 末尾から逆順に積む必要がある。逆順に積む都合上、途中で空きが尽きると
+ * 失われるのはキー列の先頭側になる。意味の異なる操作を実行させないよう、
+ * 全て積めない場合は1つも積まない。
+ */
+errr term_keys_push(std::string_view keys)
+{
+    if (std::cmp_greater(keys.size(), term_key_queue_room())) {
+        return 1;
+    }
+
+    for (auto it = keys.rbegin(); it != keys.rend(); ++it) {
+        (void)term_key_push(static_cast<unsigned char>(*it));
+    }
+
+    return 0;
+}
+
+/*!
+ * @brief 保留中のイベントを1件だけ取り出す
+ * @return 取り出した場合0、保留中のイベントが無い場合または取り出せない場合は非0
+ * @details
+ * term_xtra()は戻り値を捨てるため、イベントを取り切ったか否かを判定できない。
+ * ポーリングによる入力待ちでは打ち切る条件が要るため、ここだけフックを直接呼ぶ。
+ */
+static errr take_pending_event()
+{
+    if (!game_term->xtra_hook) {
+        return 1;
+    }
+
+    return (*game_term->xtra_hook)(TERM_XTRA_EVENT, false);
+}
+
+/*!
  * @brief Check for a pending keypress on the key queue.
  * @param wait Wait for a keypress.
  * @param take Remove the keypress.
@@ -1807,7 +1868,21 @@ char term_inkey(bool wait, bool take)
 
     if (wait) {
         while (game_term->key_head == game_term->key_tail) {
-            term_xtra(TERM_XTRA_EVENT, true);
+            if (term_inkey_wait_hook == nullptr) {
+                term_xtra(TERM_XTRA_EVENT, true);
+                continue;
+            }
+
+            // フックに仕事をさせるため、フロントエンドをブロックさせずに
+            // 保留中のイベントを取り切ってから制御を渡す
+            while ((game_term->key_head == game_term->key_tail) && (take_pending_event() == 0)) {
+                ;
+            }
+
+            // キーが届いていれば外側のループが抜ける。無駄に待たせないようフックは呼ばない
+            if (game_term->key_head == game_term->key_tail) {
+                (*term_inkey_wait_hook)();
+            }
         }
     } else if (game_term->key_head == game_term->key_tail) {
         term_xtra(TERM_XTRA_EVENT, false);

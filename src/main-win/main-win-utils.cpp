@@ -8,6 +8,7 @@
 #include "locale/language-switcher.h"
 #include "main-win/main-win-define.h"
 #include "system/angband-version.h"
+#include <cstdio>
 #include <string>
 
 /*!
@@ -26,6 +27,43 @@ bool is_already_running(void)
     mbstowcs(wtext, VARIANT_NAME.data(), max_mutex_length - 1);
     [[maybe_unused]] HANDLE hMutex = CreateMutexW(NULL, TRUE, wtext);
     return GetLastError() == ERROR_ALREADY_EXISTS;
+}
+
+/*!
+ * @brief (Windows固有)標準エラー出力を確保する
+ * @details
+ * Windowsアプリケーションは既定でコンソールを持たないため、
+ * 診断メッセージを観測できるようコンソールを割り当てて標準エラー出力を接続する。
+ * 親プロセスのコンソールがあればそちらを優先して使う。
+ * 既に接続済みの場合に呼んでも問題は無い。
+ *
+ * ただし「Hengband.exe --control-port=9000 2>err.log」のように標準エラー出力の
+ * 行き先が明示的に指定されている場合、コンソールで置き換えると診断がログに残らなくなる。
+ * 自動化からログを取る運用を妨げないよう、既に有効なハンドルがあればそちらを尊重する。
+ * この判定はAttachConsole()/AllocConsole()より前に行う必要がある。
+ * これらのAPIはコンソールを持たないプロセスに対して標準ハンドル自体を新規に有効化してしまうため、
+ * 呼び出し後に判定すると常に「既に接続済み」と誤認し、CRTのstderr用FILE*が
+ * CONOUT$へ束縛されないままになる(Win32の標準ハンドルとCRTのFILE*束縛は別物)。
+ * コンソールの確保自体は、create_console()が標準出力をCONOUT$へ繋ぐ前提となっているため常に行う。
+ */
+void attach_console()
+{
+    const auto handle = ::GetStdHandle(STD_ERROR_HANDLE);
+    const auto has_redirected_stderr = (handle != nullptr) && (handle != INVALID_HANDLE_VALUE);
+
+    if (!::AttachConsole(ATTACH_PARENT_PROCESS)) {
+        ::AllocConsole();
+    }
+
+    if (has_redirected_stderr) {
+        return;
+    }
+
+    FILE *stream = nullptr;
+    if (freopen_s(&stream, "CONOUT$", "w", stderr) != 0) {
+        // 標準エラー出力が使えず診断メッセージが全て失われるため、デバッガから観測できる経路へ通知する
+        ::OutputDebugStringA("hengband: failed to attach stderr\n");
+    }
 }
 
 /*!

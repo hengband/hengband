@@ -174,8 +174,10 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
         process_player_name(player_ptr);
     }
 
-    if (init_random_seed) {
-        Rand_state_init();
+    // 既存のセーブデータから新規ゲームを始める場合、乱数生成器の状態はセーブデータのものが
+    // 読み込まれている。固定シードを指定した時はこれを上書きしないと再現性が得られない
+    if (init_random_seed || (new_game && arg_fixed_seed)) {
+        Rand_state_init(arg_fixed_seed);
     }
 }
 

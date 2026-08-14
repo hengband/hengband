@@ -247,7 +247,7 @@ nlohmann::json make_disclosed_quests_json()
                                         : quest.name;
         auto row = nlohmann::json{
             { "id", enum2i(quest_id) },
-            { "name", sys_to_utf8(displayed_name).value_or("<encoding-error>") },
+            { "name", to_json_utf8(displayed_name) },
             { "status", enum2i(quest.status) },
             { "type", enum2i(quest.type) },
             { "level", quest.level },
@@ -343,7 +343,7 @@ nlohmann::json make_visible_monster_json(short m_idx, const MonsterEntity &monst
     return {
         { "index", m_idx },
         { "race_id", enum2i(monrace.idx) },
-        { "name", sys_to_utf8(monrace.name.string()).value_or("<encoding-error>") },
+        { "name", to_json_utf8(monrace.name.string()) },
         { "health", monster_health_band(monster) },
         { "asleep", monster.is_asleep() },
         { "stunned", monster.is_stunned() },
@@ -448,9 +448,7 @@ nlohmann::json make_recent_messages_json()
     }
 
     recent_message_count = std::min(recent_message_count, BOT_JSON_MAX_MESSAGES);
-    for (auto age = recent_message_count; age-- > 0;) {
-        messages.push_back(sys_to_utf8(*message_str(age)).value_or("<encoding-error>"));
-    }
+    messages = make_message_history_json(recent_message_count);
 
     previous_message_count = current_message_count;
     previous_latest_message = latest_message;
@@ -672,7 +670,7 @@ const char *food_state(const PlayerType &player)
 nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
 {
     auto result = nlohmann::json{
-        { "name", sys_to_utf8(describe_flavor(player_ptr, item, OD_OMIT_PREFIX)).value_or("<encoding-error>") },
+        { "name", to_json_utf8(describe_flavor(player_ptr, item, OD_OMIT_PREFIX)) },
         { "count", item.number },
         { "tval", enum2i(item.bi_key.tval()) },
         { "aware", item.is_aware() },
@@ -707,7 +705,7 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
         // sees it, so exposing it is fair-play. The bot uses it as durable,
         // savefile-persistent memory (e.g. tagging a confirmed HEAVY_CURSE
         // item so a restart does not re-attempt normal remove-curse).
-        result["inscription"] = item.is_inscribed() ? sys_to_utf8(*item.inscription).value_or("<encoding-error>") : "";
+        result["inscription"] = item.is_inscribed() ? to_json_utf8(*item.inscription) : "";
         result["to_h"] = item.to_h;
         result["to_d"] = item.to_d;
         result["to_a"] = item.to_a;
@@ -789,7 +787,7 @@ nlohmann::json make_look_json(PlayerType *player_ptr)
             { "is_player_position", pos == player.get_position() },
             { "terrain", {
                              { "terrain_id", terrain.idx },
-                             { "name", sys_to_utf8(terrain.name).value_or("<encoding-error>") },
+                             { "name", to_json_utf8(terrain.name) },
                              { "redacted", terrain_redacted },
                          } },
             { "monster", std::move(monster_json) },
@@ -911,7 +909,7 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
         const auto price = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
         items.push_back({
             { "letter", letter },
-            { "name", sys_to_utf8(describe_flavor(player_ptr, item, OD_STORE | OD_OMIT_PREFIX)).value_or("<encoding-error>") },
+            { "name", to_json_utf8(describe_flavor(player_ptr, item, OD_STORE | OD_OMIT_PREFIX)) },
             { "count", item.number },
             { "tval", enum2i(item.bi_key.tval()) },
             { "sval", item.bi_key.sval().value_or(-1) },
@@ -943,13 +941,28 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
 }
 
 /*!
+ * @brief スナップショットのmessagesに何を載せるか
+ * @details
+ * make_recent_messages_json()はJSONL出力の連続したスナップショット間の差分を返すため、
+ * 呼ぶたびにstaticな差分状態を進める。制御サーバのstateがこれを呼ぶと、
+ * --bot-json-outputと併用した際にstate側が差分を消費し、JSONL側からメッセージが失われる。
+ * 差分を進めてよいのは連続した記録を書くJSONL出力だけなので、出力先ごとに選べるようにする。
+ */
+enum class BotSnapshotMessages {
+    RECENT_DIFF, //!< 前回のスナップショットからの新着 (JSONL出力用)
+    HISTORY, //!< 直近の履歴 (制御サーバ用。差分状態を進めない)
+};
+
+/*!
  * @brief スナップショット本体を組み立てる
  * @param include_map nearby_grids を含めるか
+ * @param messages_source messages に載せるメッセージの選び方
  * @details nearby_grids はフロア全域を走査して1万件規模の配列を作る処理で、
  * スナップショット1件のバイト数の99%超を占める。地図を出さない呼び出し
  * （店内スナップショット）では作ってから消すのではなく最初から作らない。
  */
-nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true)
+nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
+    BotSnapshotMessages messages_source = BotSnapshotMessages::RECENT_DIFF)
 {
     const auto &player = *player_ptr;
     const auto &floor = *player.current_floor_ptr;
@@ -1076,7 +1089,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true)
                       } },
         { "visible_monsters", make_visible_monsters_json(player) },
         { "detected_monsters", make_detected_monsters_json(player) },
-        { "messages", make_recent_messages_json() },
+        { "messages", (messages_source == BotSnapshotMessages::HISTORY) ? make_message_history_json(BOT_JSON_MAX_MESSAGES) : make_recent_messages_json() },
         { "inventory", make_inventory_json(player_ptr) },
         { "equipment", make_equipment_json(player_ptr) },
     };
@@ -1293,7 +1306,7 @@ nlohmann::json make_character_json(PlayerType *player_ptr)
     auto realm_json = nlohmann::json::array();
     for (const auto &realm : { realms.realm1(), realms.realm2() }) {
         if (realm.is_available()) {
-            realm_json.push_back({ { "id", enum2i(realm.to_enum()) }, { "name", sys_to_utf8(realm.get_name().string()).value_or("<encoding-error>") } });
+            realm_json.push_back({ { "id", enum2i(realm.to_enum()) }, { "name", to_json_utf8(realm.get_name().string()) } });
         }
     }
     auto shooting_multiplier = 0;
@@ -1397,7 +1410,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
                 continue;
             }
             rows.push_back({ { "id", id }, { "tval", enum2i(baseitem.bi_key.tval()) }, { "sval", baseitem.bi_key.sval().value_or(-1) },
-                { "name", sys_to_utf8(baseitem.stripped_name()).value_or("<encoding-error>") } });
+                { "name", to_json_utf8(baseitem.stripped_name()) } });
         }
         result["objects"] = std::move(rows);
         break;
@@ -1409,7 +1422,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
             if (!records.has_been_seen(id) || !monrace->is_valid() || !monrace->should_display(alive)) {
                 continue;
             }
-            rows.push_back({ { "id", enum2i(id) }, { "name", sys_to_utf8(monrace->name.string()).value_or("<encoding-error>") }, { "level", monrace->level } });
+            rows.push_back({ { "id", enum2i(id) }, { "name", to_json_utf8(monrace->name.string()) }, { "level", monrace->level } });
         }
         result["uniques"] = std::move(rows);
         break;
@@ -1417,11 +1430,11 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
     case BotKnowledgeCategory::BOUNTY: {
         const auto &world = AngbandWorld::get_instance();
         result["today"] = world.knows_daily_bounty
-                              ? nlohmann::json{ { "id", enum2i(world.today_mon) }, { "name", sys_to_utf8(world.get_today_bounty().name.string()).value_or("<encoding-error>") } }
+                              ? nlohmann::json{ { "id", enum2i(world.today_mon) }, { "name", to_json_utf8(world.get_today_bounty().name.string()) } }
                               : nlohmann::json(nullptr);
         for (const auto &[id, achieved] : world.bounties) {
             if (!achieved) {
-                rows.push_back({ { "id", enum2i(id) }, { "name", sys_to_utf8(MonraceList::get_instance().get_monrace(id).name.string()).value_or("<encoding-error>") } });
+                rows.push_back({ { "id", enum2i(id) }, { "name", to_json_utf8(MonraceList::get_instance().get_monrace(id).name.string()) } });
             }
         }
         result["wanted"] = std::move(rows);
@@ -1463,7 +1476,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
     case BotKnowledgeCategory::FEATURES:
         for (const auto &terrain : TerrainList::get_instance()) {
             if (!terrain.name.empty() && terrain.mimic == terrain.idx) {
-                rows.push_back({ { "id", terrain.idx }, { "name", sys_to_utf8(terrain.name).value_or("<encoding-error>") } });
+                rows.push_back({ { "id", terrain.idx }, { "name", to_json_utf8(terrain.name) } });
             }
         }
         result["features"] = std::move(rows);
@@ -1492,7 +1505,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
             const auto exp_it = player_ptr->weapon_exp.find(tval);
             const auto max_it = player_ptr->weapon_exp_max.find(tval);
             if (displayed_tval && !excluded_bow && sval && exp_it != player_ptr->weapon_exp.end() && max_it != player_ptr->weapon_exp_max.end()) {
-                rows.push_back({ { "tval", enum2i(tval) }, { "sval", *sval }, { "name", sys_to_utf8(baseitem.stripped_name()).value_or("<encoding-error>") },
+                rows.push_back({ { "tval", enum2i(tval) }, { "sval", *sval }, { "name", to_json_utf8(baseitem.stripped_name()) },
                     { "exp", exp_it->second[*sval] }, { "max", max_it->second[*sval] },
                     { "rank", enum2i(PlayerSkill::weapon_skill_rank(exp_it->second[*sval])) } });
             }
@@ -1501,7 +1514,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         break;
     case BotKnowledgeCategory::SKILL_EXP:
         for (const auto skill : PLAYER_SKILL_KIND_TYPE_RANGE) {
-            rows.push_back({ { "id", enum2i(skill) }, { "name", sys_to_utf8(PlayerSkill::skill_name(skill)).value_or("<encoding-error>") },
+            rows.push_back({ { "id", enum2i(skill) }, { "name", to_json_utf8(PlayerSkill::skill_name(skill)) },
                 { "exp", player_ptr->skill_exp[skill] } });
         }
         result["skills"] = std::move(rows);
@@ -1509,7 +1522,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
     case BotKnowledgeCategory::VIRTUES:
         for (auto i = 0; i < 8; ++i) {
             const auto name_it = virtue_names.find(player_ptr->vir_types[i]);
-            const auto name = name_it != virtue_names.end() ? sys_to_utf8(name_it->second).value_or("<encoding-error>") : _("不明", "Oops. No info");
+            const auto name = to_json_utf8(name_it != virtue_names.end() ? name_it->second : _("不明", "Oops. No info"));
             rows.push_back({ { "id", enum2i(player_ptr->vir_types[i]) }, { "name", name },
                 { "value", player_ptr->virtues[i] } });
         }
@@ -1523,14 +1536,14 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
             const auto &monster = player_ptr->current_floor_ptr->m_list[i];
             if (monster.is_valid() && monster.is_pet()) {
                 rows.push_back({ { "index", i }, { "race_id", enum2i(monster.get_monrace_id()) },
-                    { "name", sys_to_utf8(monster.get_monrace().name.string()).value_or("<encoding-error>") } });
+                    { "name", to_json_utf8(monster.get_monrace().name.string()) } });
             }
         }
         result["pets"] = std::move(rows);
         break;
     case BotKnowledgeCategory::AUTOPICK:
         for (const auto &entry : autopick_list) {
-            rows.push_back({ { "rule", sys_to_utf8(autopick_line_from_entry(entry)).value_or("<encoding-error>") } });
+            rows.push_back({ { "rule", to_json_utf8(autopick_line_from_entry(entry)) } });
         }
         result["rules"] = std::move(rows);
         break;
@@ -1550,7 +1563,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
                 const auto exp = player_ptr->spell_exp[offset + spell_id];
                 const auto is_hissatsu = realm.equals(RealmType::HISSATSU);
                 rows.push_back({ { "realm_id", enum2i(realm.to_enum()) }, { "spell_id", spell_id },
-                    { "name", sys_to_utf8(realm.get_spell_name(spell_id)).value_or("<encoding-error>") },
+                    { "name", to_json_utf8(realm.get_spell_name(spell_id)) },
                     { "exp", is_hissatsu ? nlohmann::json(nullptr) : nlohmann::json(exp) },
                     { "rank", is_hissatsu ? nlohmann::json(nullptr) : nlohmann::json(enum2i(PlayerSkill::spell_skill_rank(exp))) },
                     { "masked", is_hissatsu } });
@@ -1564,7 +1577,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         for (const auto &[dungeon_id, dungeon] : DungeonList::get_instance()) {
             const auto &record = DungeonRecords::get_instance().get_record(dungeon_id);
             if (record.has_entered()) {
-                rows.push_back({ { "id", enum2i(dungeon_id) }, { "name", sys_to_utf8(dungeon->name).value_or("<encoding-error>") },
+                rows.push_back({ { "id", enum2i(dungeon_id) }, { "name", to_json_utf8(dungeon->name) },
                     { "max_level", record.get_max_level() }, { "conquered", dungeon->is_conquered() } });
             }
         }
@@ -1614,6 +1627,48 @@ void write_snapshot(const nlohmann::json &snapshot)
     ofs << serialized << '\n';
     ofs.flush();
 }
+}
+
+/*!
+ * @brief ゲーム内部の文字コードの文字列をJSONに載せられるUTF-8文字列へ変換する
+ * @param str 変換する文字列
+ * @return UTF-8に変換した文字列。変換に失敗した場合は代替文字列
+ * @details 変換の失敗でスナップショットやリクエスト全体を落とさないよう、代替文字列で穴埋めする。
+ */
+std::string to_json_utf8(std::string_view str)
+{
+    return sys_to_utf8(str).value_or("<encoding-error>");
+}
+
+/*!
+ * @brief メッセージ履歴を新しい順ではなく古い順に並べて生成する
+ * @param count 取得する件数 (履歴の件数を超える分と負値は切り詰める)
+ * @return メッセージ文字列のJSON配列
+ */
+nlohmann::json make_message_history_json(int count)
+{
+    auto messages = nlohmann::json::array();
+    for (auto age = std::clamp<int>(count, 0, message_num()); age-- > 0;) {
+        messages.push_back(to_json_utf8(*message_str(age)));
+    }
+
+    return messages;
+}
+
+/*!
+ * @brief ゲームの内部状態のスナップショットをJSONで生成する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param include_map nearby_gridsを含めるか
+ * @pre player_ptrとplayer_ptr->current_floor_ptrがnullptrでないことを呼び出し側が保証すること
+ * @return スナップショットのJSONオブジェクト
+ * @details
+ * --bot-json-outputの有無に関わらず生成する。制御サーバから利用する。
+ * messagesは差分ではなく履歴を載せる。リクエストの度に差分を進めると、
+ * --bot-json-outputと併用した際にJSONL側からメッセージが失われるためである。
+ */
+nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map)
+{
+    return make_snapshot(player_ptr, include_map, BotSnapshotMessages::HISTORY);
 }
 
 void output_bot_json_snapshot(PlayerType *player_ptr)

@@ -157,7 +157,10 @@ private:
  * with the second parameter depending on the "action" itself.  Many
  * of the actions shown below are optional on at least one platform.
  *
- * The "TERM_XTRA_EVENT" action uses "v" to "wait" for an event
+ * The "TERM_XTRA_EVENT" action uses "v" to "wait" for an event.
+ * When "v" is false, it must return zero if it processed a pending event,
+ * and non-zero if no event was pending; callers repeat the call until it
+ * returns non-zero in order to drain the queue.
  * The "TERM_XTRA_SHAPE" action uses "v" to "show" the cursor
  * The "TERM_XTRA_FROSH" action uses "v" for the index of the row
  * The "TERM_XTRA_SOUND" action uses "v" for the index of a sound
@@ -191,6 +194,18 @@ private:
 /**** Available Variables ****/
 extern term_type *game_term;
 
+/*!
+ * @brief キー入力待ちの間に繰り返し呼ばれるフック
+ * @details
+ * 設定されている場合、term_inkey()はフロントエンドに入力待ちをブロックさせず、
+ * 保留中のイベントの取り出しと本フックの呼び出しを交互に行う。
+ * ゲームがキー入力を待っている間だけ別の仕事をさせたい場合に用いる。
+ * 未設定 (nullptr) の場合はフロントエンドが従来通りブロックして入力を待つ。
+ *
+ * 本フックは待ち続けるのではなく、短時間で戻ってくること。
+ */
+extern void (*term_inkey_wait_hook)();
+
 class DisplaySymbol;
 class DisplaySymbolPair;
 void term_user();
@@ -221,6 +236,8 @@ DisplaySymbol term_what(int x, int y, const DisplaySymbol &ds);
 
 void term_flush();
 errr term_key_push(int k);
+int term_key_queue_room();
+errr term_keys_push(std::string_view keys);
 char term_inkey(bool wait, bool take);
 
 void term_save();

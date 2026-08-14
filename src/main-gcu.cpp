@@ -157,6 +157,7 @@
  * XXX XXX XXX Consider the use of "savetty()" and "resetty()".
  */
 
+#include "bot/bot-control-server.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
 #include "io/exit-panic.h"
@@ -1245,6 +1246,12 @@ static void hook_quit(std::string_view str)
 {
     /* Unused */
     (void)str;
+
+    /*
+     * init_gcu()がquit_auxを上書きするためmain.cppのquit_hook()は呼ばれない。
+     * 制御サーバの停止はこちらで行う必要がある
+     */
+    shutdown_bot_control_server();
 
     /* Exit curses */
     curses::endwin();
