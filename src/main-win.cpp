@@ -2803,7 +2803,7 @@ static bool is_headless_launch_requested()
     }
 
     const auto found = std::any_of(argv + 1, argv + argc, [](LPWSTR arg) {
-        return std::wstring_view(arg).starts_with(L"--headless");
+        return std::wstring_view(arg) == L"--headless";
     });
     ::LocalFree(argv);
     return found;
