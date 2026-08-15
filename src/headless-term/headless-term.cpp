@@ -41,6 +41,9 @@ constexpr auto HEADLESS_TERM_KEY_QUEUE_SIZE = BOT_CONTROL_MAX_KEYS + 1;
 
 std::array<term_type, MAX_TERM_DATA> headless_terms;
 
+//! init_headless_term()がquit_auxを上書きする前に設定されていた終了処理
+void (*prev_quit_aux)(std::string_view) = nullptr;
+
 /*!
  * @brief 拡張機能の要求を処理する
  * @param n 要求の種類
@@ -94,14 +97,23 @@ void headless_term_plog(std::string_view str)
 }
 
 /*!
- * @brief ゲーム終了時に制御サーバを停止する
+ * @brief ゲーム終了時に制御サーバを停止し、上書き前の終了処理へ委譲する
+ * @param str 終了理由のメッセージ
  * @details
  * 終了理由のメッセージはquit()/core()が自らplog()へ渡すため、ここでは出力しない。
  * plog_auxもheadless_term_plog()であり、出力すると標準エラー出力へ二重に表示される。
+ *
+ * 端末の破棄などプラットフォーム側が用意した後始末を飛ばさないよう、上書き前のフックへ委譲する。
+ * Unixではmain.cppのquit_hook()がterm_nuke()を呼ぶ。term_nuke()はWindowsでは定義されない
+ * (z-term.cppの#ifndef WINDOWS) ため、ここから直接呼ぶことはできない。
  */
-void headless_term_quit(std::string_view)
+void headless_term_quit(std::string_view str)
 {
     shutdown_bot_control_server();
+
+    if (prev_quit_aux != nullptr) {
+        prev_quit_aux(str);
+    }
 }
 
 /*!
@@ -152,6 +164,7 @@ errr init_headless_term()
     // ゲームの診断メッセージも標準エラー出力へ出す。制御サーバの診断は
     // report_bot_message() が同じ出力先へ別の接頭辞で出す
     plog_aux = headless_term_plog;
+    prev_quit_aux = quit_aux;
     quit_aux = headless_term_quit;
     core_aux = headless_term_quit;
 

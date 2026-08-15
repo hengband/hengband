@@ -194,7 +194,7 @@ static void display_usage(const char *program)
     puts("           Fix the initial random seed to make a playthrough reproducible");
     puts("  --headless");
     puts("           Use the terminal which has no real display and no real input");
-    puts("           device (requires --control-port)");
+    puts("           device (requires --control-port, conflicts with -s and -m)");
     puts("  --headless-term-count=<num>");
     puts("           Number of terminals the headless frontend creates (default 1)");
     puts("");
@@ -415,6 +415,20 @@ int main(int argc, char *argv[])
         argv[1] = nullptr;
     }
 
+    // 実描画・実入力デバイスを持たない端末とは両立しないオプションを弾く。
+    // -m<sys> はヘッドレス端末が選ばれる時点で参照される機会が無く、-s<num> の display_scores() は
+    // 制御サーバの起動前に quit() する。どちらも無言で無視・終了すると、クライアントからは
+    // 接続拒否としか見えないため、使い方の誤りとして標準エラー出力へ理由を出して終了する
+    if (arg_headless) {
+        if (!mstr.empty()) {
+            quit("The --headless option cannot be used with the -m option.");
+        }
+
+        if (show_score > 0) {
+            quit("The --headless option cannot be used with the -s option.");
+        }
+    }
+
     process_player_name(p_ptr, true);
     quit_aux = quit_hook;
 
@@ -475,7 +489,12 @@ int main(int argc, char *argv[])
     {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
         init_angband(p_ptr, false);
-        pause_line(MAIN_TERM_MIN_ROWS - 1);
+
+        // ヘッドレスではキーを押す相手が居らず、Windows版のヘッドレス起動 (run_headless_game())
+        // にもこの待ちが無い。省くことで、同じキー列がプラットフォームを問わず同じ結果になる
+        if (!arg_headless) {
+            pause_line(MAIN_TERM_MIN_ROWS - 1);
+        }
     }
 
     play_game(p_ptr, new_game, browsing_movie);
