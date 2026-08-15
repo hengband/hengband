@@ -1504,7 +1504,8 @@ hengband_test_LDADD = libhengband.a
 TESTS = $(check_PROGRAMS)
 
 EXTRA_DIST = \
-	gcc-wrap
+	gcc-wrap \
+	test/README.md
 
 DEFAULT_INCLUDES = \
 	-I. -I$(srcdir) -isystem $(srcdir)/external-lib/include
