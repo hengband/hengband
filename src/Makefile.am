@@ -2,9 +2,24 @@
 
 AUTOMAKE_OPTIONS = foreign subdir-objects nostdinc
 
+## ゲーム本体のソースは main.cpp を除いて全て libhengband.a にまとめる。
+## こうすることで、ユニットテスト (check_PROGRAMS) からもゲーム本体のコードを
+## 再コンパイルすることなくリンクして利用できる。
+##
+## 注意: 静的ライブラリからは、未定義シンボルの解決に必要なオブジェクトのみが
+## 取り込まれる。静的初期化子による自己登録だけを目的とする翻訳単位を追加しても
+## リンクされず、警告も出ないまま無視される (その場合は --whole-archive を検討する)。
+noinst_LIBRARIES = libhengband.a
+
+## thin archive が使える環境では crT になる (configure で判定)
+ARFLAGS = @ARFLAGS@
+
 bin_PROGRAMS = hengband
 
-hengband_SOURCES = \
+hengband_SOURCES = main.cpp
+hengband_LDADD = libhengband.a
+
+libhengband_a_SOURCES = \
 	action/action-limited.cpp action/action-limited.h \
 	action/activation-execution.cpp action/activation-execution.h \
 	action/movement-execution.cpp action/movement-execution.h \
@@ -730,7 +745,7 @@ hengband_SOURCES = \
 	lore/magic-types-setter.cpp lore/magic-types-setter.h \
 	lore/monster-lore.cpp lore/monster-lore.h \
 	\
-	main.cpp main-x11.cpp main-gcu.cpp \
+	main-x11.cpp main-gcu.cpp \
 	\
 	main/angband-initializer.cpp main/angband-initializer.h \
 	main/game-data-initializer.cpp main/game-data-initializer.h \
@@ -1453,7 +1468,7 @@ hengband_SOURCES = \
 	world/world-movement-processor.cpp world/world-movement-processor.h \
 	world/world-turn-processor.cpp world/world-turn-processor.h
 
-EXTRA_hengband_SOURCES = \
+EXTRA_libhengband_a_SOURCES = \
 	angband.ico angband.rc ang_eng.rc ang_jp.rc maid-x11.cpp main-win.cpp \
 	main-win/commandline-win.cpp main-win/commandline-win.h \
 	main-win/graphics-win.cpp main-win/graphics-win.h \
@@ -1516,8 +1531,12 @@ stdafx.h.gch: stdafx.h stdafx.cpp Makefile
 		$(PCH_CHECKSUMMER) $@ > "$@".sum ; \
 	fi
 
-$(hengband_SOURCES:.cpp=.$(OBJEXT)): stdafx.h.gch
-$(hengband_SOURCES:.cc=.$(OBJEXT)): stdafx.h.gch
+## $(SOURCES) は automake が全ターゲットの _SOURCES を合成して定義する変数。
+## これを使うことで、ターゲットが増えても PCH の依存関係が自動的に追従する。
+## ヘッダやリソースファイルも含まれているため、filter でソースのみに絞る
+## (絞らないと stdafx.h: stdafx.h.gch のような循環依存が生成される)。
+$(patsubst %.cpp,%.$(OBJEXT),$(filter %.cpp,$(SOURCES))): stdafx.h.gch
+$(patsubst %.cc,%.$(OBJEXT),$(filter %.cc,$(SOURCES))): stdafx.h.gch
 endif
 
 install-exec-hook:

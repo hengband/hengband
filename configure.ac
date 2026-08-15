@@ -46,6 +46,42 @@ AC_SUBST(DEFAULT_VAR_PATH)
 dnl Checks for programs.
 AC_LANG(C++)
 AC_PROG_CXX
+dnl ARFLAGS が指定されている場合は、その値をそのまま使う。
+dnl AM_PROG_AR は ARFLAGS が空の場合に既定値を設定する (automake 1.17 以降) ため、
+dnl ユーザーが指定したかどうかは AM_PROG_AR を実行する前に調べておく。
+AC_ARG_VAR([ARFLAGS],
+  [archiver flags (default: crT if thin archives are supported, otherwise cru)])
+arflags_given=${ARFLAGS+yes}
+
+dnl ゲーム本体のソースをまとめた静的ライブラリ libhengband.a の生成に必要
+AM_PROG_AR
+AC_PROG_RANLIB
+
+dnl libhengband.a は全オブジェクトを含むため 1GB 近くになる。
+dnl thin archive (ar の T フラグ) が使えるなら、オブジェクトの実体をコピーせず
+dnl パスのみを格納するようにして、ビルド時間とディスク使用量を削減する。
+dnl GNU ar と llvm-ar のみ対応。T フラグを別の意味に解釈する ar (BSD/cctools では
+dnl メンバ名の切り詰め) があるため、コマンドの成否ではなく、生成されたアーカイブの
+dnl 先頭が thin archive のマジック "!<thin>" になっているかで判定する。
+if test "x$arflags_given" != xyes; then
+  AC_MSG_CHECKING([whether $AR supports thin archives])
+  ar_thin_archive=no
+  echo 'int hengband_ar_test;' > conftest_ar.cpp
+  if $CXX -c conftest_ar.cpp -o conftest_ar.$OBJEXT >/dev/null 2>&1 &&
+     $AR crT conftest_ar.a conftest_ar.$OBJEXT >/dev/null 2>&1 &&
+     test -s conftest_ar.a; then
+    case `dd if=conftest_ar.a bs=1 count=7 2>/dev/null` in
+    ["!<thin>"]) ar_thin_archive=yes ;;
+    esac
+  fi
+  rm -f conftest_ar.cpp conftest_ar.$OBJEXT conftest_ar.a
+  AC_MSG_RESULT([$ar_thin_archive])
+  if test "$ar_thin_archive" = yes; then
+    ARFLAGS="crT"
+  else
+    ARFLAGS="cru"
+  fi
+fi
 saved_CXXFLAGS="$CXXFLAGS"
 CXXFLAGS=$(echo "$CXXFLAGS" | sed 's/-Werror[[^ ]]*//g')
 AX_CXX_COMPILE_STDCXX(20, [noext], [mandatory])
