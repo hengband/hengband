@@ -93,6 +93,7 @@
 #include "core/visuals-reseter.h"
 #include "game-option/runtime-arguments.h"
 #include "game-option/special-options.h"
+#include "headless-term/headless-term.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/record-play-movie.h"
@@ -2763,6 +2764,81 @@ static void register_wndclass()
 }
 
 /*!
+ * @brief 端末の準備が済んだ後に共通して行うゲームの初期化
+ * @param shows_file_menu_prompt [ファイル]メニューの操作を促すメッセージを表示するか否か
+ * @details
+ * ウィンドウ版とヘッドレス版で共通の手順。TermCenteredOffsetSetterの寿命に
+ * 依存するため、メッセージ表示までを1つの関数にまとめている。
+ */
+static void prepare_game_start(bool shows_file_menu_prompt)
+{
+    signals_init();
+    term_activate(term_screen);
+    TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
+
+    init_angband(p_ptr, false);
+    initialized = true;
+
+    check_for_save_file(command_line.get_savefile_option());
+    if (shows_file_menu_prompt) {
+        prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
+        term_fresh();
+    }
+}
+
+/*!
+ * @brief コマンドライン全体を軽く走査し、--headless の指定があるかどうかだけを調べる
+ * @details
+ * is_already_running()のチェックはcommand_line.handle()（ひいてはarg_headlessの確定）より
+ * 前にあるため、多重起動時の応答（ダイアログを出すかどうか）を分岐するには、フルの
+ * オプション解釈を待たずに--headlessの有無だけを知る必要がある。値の妥当性検証は行わず、
+ * 通常どおりcommand_line.handle()内のparse_runtime_option()に委ねる。
+ */
+static bool is_headless_launch_requested()
+{
+    int argc = 0;
+    LPWSTR *argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+    if (argv == nullptr) {
+        return false;
+    }
+
+    const auto found = std::any_of(argv + 1, argv + argc, [](LPWSTR arg) {
+        return std::wstring_view(arg) == L"--headless";
+    });
+    ::LocalFree(argv);
+    return found;
+}
+
+/*!
+ * @brief ヘッドレス端末でゲームを実行する
+ * @return 正常に開始した場合0、端末の初期化に失敗した場合1
+ * @details
+ * ウィンドウもメッセージループも作らず、直ちにゲームを開始する。
+ * plog/quit/coreの出力先はinit_headless_term()が標準エラー出力へ差し替えるため、
+ * ここでは設定しない。
+ *
+ * ウィンドウ版と異なり[ファイル]メニューを経由しないため、開始するゲームは
+ * コマンドラインで渡されたセーブファイルの有無で決まる。
+ */
+static int run_headless_game()
+{
+    // init_headless_term()が差し替えるplog()の出力先を確保する
+    attach_console();
+    init_stuff();
+
+    // init_stuff()が設定したANGBAND_SYSはinit_headless_term()が上書きする
+    if (init_headless_term() != 0) {
+        return 1;
+    }
+
+    init_bot_control_server();
+    prepare_game_start(false);
+    play_game(p_ptr, savefile.empty(), false);
+    quit("");
+    return 0;
+}
+
+/*!
  * @brief ゲームのメインルーチン
  */
 static int WINAPI game_main(_In_ HINSTANCE hInst)
@@ -2773,13 +2849,25 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
     // plog()/quit()を呼び得る処理より先に設定する
     program_name = VARIANT_NAME;
     if (is_already_running()) {
+        if (is_headless_launch_requested()) {
+            // モーダルダイアログは非対話環境で応答不能のままハングするため、
+            // ヘッドレス起動時は標準エラー出力への通知と非ゼロ終了で応答する
+            attach_console();
+            quit("Hengband is already running.");
+        }
+
         constexpr auto mes = _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running.");
         constexpr auto caption = _(L"エラー！", L"Error");
         MessageBoxW(NULL, mes, caption, MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
         return 0;
     }
 
+    // handle()は--output-spoilersの処理でinit_angband()まで走らせ得るため、多重起動チェックの後に呼ぶ
     command_line.handle();
+    if (arg_headless) {
+        return run_headless_game();
+    }
+
     register_wndclass();
 
     // before term_data initialize
@@ -2813,18 +2901,7 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
     quit_aux = hook_quit;
     core_aux = hook_quit;
 
-    signals_init();
-    term_activate(term_screen);
-    {
-        TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
-
-        init_angband(p_ptr, false);
-        initialized = true;
-
-        check_for_save_file(command_line.get_savefile_option());
-        prt(_("[ファイル] メニューの [新規] または [開く] を選択してください。", "[Choose 'New' or 'Open' from the 'File' menu]"), 23, _(8, 17));
-        term_fresh();
-    }
+    prepare_game_start(true);
 
     change_sound_mode(arg_sound);
     use_music = arg_music;

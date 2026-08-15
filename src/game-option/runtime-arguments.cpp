@@ -1,4 +1,5 @@
 #include "game-option/runtime-arguments.h"
+#include "term/gameterm.h"
 #include "util/string-processor.h"
 #include <limits>
 
@@ -15,6 +16,8 @@ bool arg_bot_json_output = false; /* Command arg -- Output bot-readable JSON sna
 std::string arg_bot_json_output_path = "bot-state.jsonl";
 tl::optional<int> arg_control_port; /* Command arg -- Listen port of the game control server */
 tl::optional<uint32_t> arg_fixed_seed; /* Command arg -- Fixed initial seed of the RNG */
+bool arg_headless = false; /* Command arg -- Use the terminal which has no real display */
+tl::optional<int> arg_headless_term_count; /* Command arg -- Number of terminals the headless frontend creates */
 
 namespace {
 
@@ -73,6 +76,11 @@ RuntimeArgumentResult parse_number_option(std::string_view option, std::string_v
  */
 RuntimeArgumentResult parse_runtime_argument(std::string_view option)
 {
+    if (option == "headless") {
+        arg_headless = true;
+        return RuntimeArgumentResult::HANDLED;
+    }
+
     static constexpr std::string_view bot_json_output = "bot-json-output";
     if (option == bot_json_output) {
         arg_bot_json_output = true;
@@ -92,5 +100,9 @@ RuntimeArgumentResult parse_runtime_argument(std::string_view option)
         return result;
     }
 
-    return parse_number_option(option, "fixed-seed", arg_fixed_seed);
+    if (const auto result = parse_number_option(option, "fixed-seed", arg_fixed_seed); result != RuntimeArgumentResult::NOT_HANDLED) {
+        return result;
+    }
+
+    return parse_number_option(option, "headless-term-count", arg_headless_term_count, 1, MAX_TERM_DATA);
 }

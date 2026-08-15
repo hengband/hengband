@@ -62,6 +62,7 @@ struct term_type {
     bool never_bored{}; //!< Flag "never_bored" Never call the "TERM_XTRA_BORED" action
     bool never_frosh{}; //!< Flag "never_frosh" Never call the "TERM_XTRA_FROSH" action
     bool never_fresh{}; //!< Flag "never_fresh" Never redraw the Term
+    bool never_events{}; //!< Flag "never_events" This "term" never produces input events by itself
 
     byte attr_blank{}; //!< Value "attr_blank" Use this "attr" value for "blank" grids
     char char_blank{}; //!< Value "char_blank" Use this "char" value for "blank" grids
