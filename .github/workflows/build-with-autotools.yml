@@ -80,3 +80,14 @@ jobs:
       - name: Build
         if: ${{ !inputs.distcheck }}
         run: make -j$(nproc) >/dev/null
+
+      # distcheck は make check を内部で実行するため、ここでは実行しない
+      - name: Run unit tests
+        if: ${{ !inputs.distcheck }}
+        run: make -j$(nproc) check VERBOSE=1
+
+      # distcheck は出力を捨てているため、失敗したテストの内容はログに残らない。
+      # 失敗時にテストの出力を残す
+      - name: Show the test log on failure
+        if: ${{ failure() }}
+        run: find . -name test-suite.log -exec sh -c 'echo "==== {} ===="; cat {}' \;
