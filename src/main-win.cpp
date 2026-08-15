@@ -2787,6 +2787,29 @@ static void prepare_game_start(bool shows_file_menu_prompt)
 }
 
 /*!
+ * @brief コマンドライン全体を軽く走査し、--headless の指定があるかどうかだけを調べる
+ * @details
+ * is_already_running()のチェックはcommand_line.handle()（ひいてはarg_headlessの確定）より
+ * 前にあるため、多重起動時の応答（ダイアログを出すかどうか）を分岐するには、フルの
+ * オプション解釈を待たずに--headlessの有無だけを知る必要がある。値の妥当性検証は行わず、
+ * 通常どおりcommand_line.handle()内のparse_runtime_option()に委ねる。
+ */
+static bool is_headless_launch_requested()
+{
+    int argc = 0;
+    LPWSTR *argv = ::CommandLineToArgvW(::GetCommandLineW(), &argc);
+    if (argv == nullptr) {
+        return false;
+    }
+
+    const auto found = std::any_of(argv + 1, argv + argc, [](LPWSTR arg) {
+        return std::wstring_view(arg).starts_with(L"--headless");
+    });
+    ::LocalFree(argv);
+    return found;
+}
+
+/*!
  * @brief ヘッドレス端末でゲームを実行する
  * @return 正常に開始した場合0、端末の初期化に失敗した場合1
  * @details
@@ -2826,6 +2849,13 @@ static int WINAPI game_main(_In_ HINSTANCE hInst)
     // plog()/quit()を呼び得る処理より先に設定する
     program_name = VARIANT_NAME;
     if (is_already_running()) {
+        if (is_headless_launch_requested()) {
+            // モーダルダイアログは非対話環境で応答不能のままハングするため、
+            // ヘッドレス起動時は標準エラー出力への通知と非ゼロ終了で応答する
+            attach_console();
+            quit("Hengband is already running.");
+        }
+
         constexpr auto mes = _(L"変愚蛮怒はすでに起動しています。", L"Hengband is already running.");
         constexpr auto caption = _(L"エラー！", L"Error");
         MessageBoxW(NULL, mes, caption, MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
