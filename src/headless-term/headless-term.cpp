@@ -157,7 +157,7 @@ void term_data_init_headless(int index)
 errr init_headless_term()
 {
     if (!arg_control_port) {
-        plog("The headless terminal requires the --control-port=<port> option.");
+        headless_term_plog("The headless terminal requires the --control-port=<port> option.");
         return -1;
     }
 
