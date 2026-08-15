@@ -1486,10 +1486,22 @@ EXTRA_libhengband_a_SOURCES = \
 	main-win/main-win-utils.cpp main-win/main-win-utils.h \
 	main-win/stack-trace-win.cpp \
 	main-win/wav-reader.cpp main-win/wav-reader.h \
-	test/test-sha256.cpp \
-	test/test-probability-table.cpp \
 	wall.bmp \
 	stdafx.cpp stdafx.h
+
+## ユニットテスト
+## make check でビルドと実行が行われる。テストの追加方法は test/README.md を参照。
+check_PROGRAMS = hengband-test
+
+hengband_test_SOURCES = \
+	test/test-main.cpp \
+	\
+	test/util/test-probability-table.cpp \
+	test/util/test-sha256.cpp
+
+hengband_test_LDADD = libhengband.a
+
+TESTS = $(check_PROGRAMS)
 
 EXTRA_DIST = \
 	gcc-wrap
