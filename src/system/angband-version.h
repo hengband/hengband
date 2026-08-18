@@ -54,17 +54,16 @@ enum class VersionExpression {
     FULL,
 };
 
+/*!
+ * @brief バージョン番号
+ * @details
+ * OpenBSD等のsys/types.hはmajor()/minor()を関数形式マクロとして定義しており、
+ * ソース中に "major(" や "minor(" というトークン列があるとそこで展開されてしまう。
+ * コンストラクタを持たない集成体とすることでその形の記述を避けているので、
+ * メンバ初期化子リスト等でmajor/minorを関数呼び出しの形で書かないこと。
+ */
 class AngbandVersion {
 public:
-    AngbandVersion() = default;
-    AngbandVersion(uint8_t major, uint8_t minor, uint8_t patch, uint8_t extra)
-        : major(major)
-        , minor(minor)
-        , patch(patch)
-        , extra(extra)
-    {
-    }
-
     uint8_t major = 0; //!< 変愚蛮怒バージョン(メジャー番号)
     uint8_t minor = 0; //!< 変愚蛮怒バージョン(マイナー番号)
     uint8_t patch = 0; //!< 変愚蛮怒バージョン(パッチ番号)

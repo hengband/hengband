@@ -386,9 +386,12 @@ bool BotSocketServer::listen_on_loopback()
 
     sockaddr_in address{};
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = ::htonl(INADDR_LOOPBACK);
+    // htonl()/htons()はmacOSやOpenBSDでは関数ではなく関数形式マクロとして定義されている。
+    // プリプロセッサは直前の"::"を無視して展開するため、他のソケットAPIと同様に"::"を付けると
+    // 展開結果が"::"の直後に来てコンパイルできない。ここだけは意図的に修飾なしで呼ぶこと。
+    address.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     // portが1〜65535に収まることはコンストラクタの事前条件
-    address.sin_port = ::htons(static_cast<uint16_t>(this->port));
+    address.sin_port = htons(static_cast<uint16_t>(this->port));
     if (::bind(native_socket(socket), reinterpret_cast<const sockaddr *>(&address), static_cast<socket_length_t>(sizeof(address))) != 0) {
         report_bot_message(fmt::format("failed to bind the listening socket (error {})", last_socket_error()));
         close_socket_handle(socket);
