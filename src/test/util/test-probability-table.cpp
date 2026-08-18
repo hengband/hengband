@@ -29,9 +29,6 @@ namespace {
 //! テスト結果を決定的にするために使用する乱数シード
 constexpr uint32_t TEST_RNG_SEED = 12345;
 
-//! 計算上の確率と実際に抽選された確率の差の許容値
-constexpr auto ALLOWABLE_ERROR = 0.003;
-
 //! 確率テーブルに登録する (ID, prob) の並び
 using TestList = std::vector<std::tuple<int, int>>;
 
@@ -74,7 +71,16 @@ void simulate(const ProbabilityTable<int> &table, const TestList &test_list, int
         // IDが実際に抽選された確率
         const auto item_rate = static_cast<double>(count) / lottery_count;
 
-        CHECK(std::abs(item_rate - calc_rate) < ALLOWABLE_ERROR);
+        // 抽選結果は二項分布に従うため、実際に抽選された確率のばらつきの大きさは
+        // その標準偏差 sqrt(p(1-p)/n) となる。許容値をこれに基づく値にすることで、
+        // 選ばれる確率が小さい項目でも重み付けの誤りを検出できる。
+        // (固定値だと、項目数が多く1項目あたりの確率が許容値を下回るテーブルでは
+        //  重みを無視した抽選でも判定が素通りしてしまう)
+        // 係数6は正常であればまず超えない水準、末尾の項は抽選回数が整数値しか
+        // 取らないことによる端数の補正。
+        const auto allowable_error = 6.0 * std::sqrt(calc_rate * (1.0 - calc_rate) / lottery_count) + 0.5 / lottery_count;
+
+        CHECK(std::abs(item_rate - calc_rate) <= allowable_error);
     }
 }
 
