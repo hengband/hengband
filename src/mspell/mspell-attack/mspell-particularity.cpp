@@ -20,12 +20,12 @@
 #include "mspell/mspell-util.h"
 #include "system/player-type-definition.h"
 
-MSpellAttackOther::MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType)> fire)
+MSpellAttackOther::MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType, const std::shared_ptr<AbstractAttribute> &)> fire)
     : AbstractMSpellAttack(player_ptr, m_idx, ability, data, target_type, fire)
 {
 }
 
-MSpellAttackOther::MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType)> fire)
+MSpellAttackOther::MSpellAttackOther(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, MonsterAbilityType ability, MSpellData data, int target_type, std::function<ProjectResult(POSITION, POSITION, int, AttributeType, const std::shared_ptr<AbstractAttribute> &)> fire)
     : AbstractMSpellAttack(player_ptr, m_idx, t_idx, ability, data, target_type, fire)
 {
 }
@@ -48,7 +48,7 @@ MonsterSpellResult spell_RF4_ROCKET(PlayerType *player_ptr, POSITION y, POSITION
                                      _("%s^が%sにロケットを発射した。", "%s^ fires a rocket at %s.") },
         AttributeType::ROCKET, DRS_SHARD);
     return MSpellAttackOther(player_ptr, m_idx, t_idx, MonsterAbilityType::ROCKET, data, target_type,
-        [=](auto y, auto x, int dam, auto attribute) { return rocket(player_ptr, y, x, m_idx, attribute, dam, 2, target_type); })
+        [=](auto y, auto x, int dam, auto attribute, auto attribute_ptr) { return rocket(player_ptr, y, x, m_idx, attribute, dam, 2, target_type, attribute_ptr); })
         .shoot(y, x);
 }
 
@@ -90,7 +90,7 @@ static auto project_hand_doom(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITIO
 MonsterSpellResult spell_RF6_HAND_DOOM(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     return MSpellAttackOther(player_ptr, m_idx, t_idx, MonsterAbilityType::HAND_DOOM, { message_hand_doom, AttributeType::MAX }, target_type,
-        [=](auto y, auto x, int, AttributeType) { return project_hand_doom(player_ptr, m_idx, y, x, target_type); })
+        [=](auto y, auto x, int, AttributeType, auto) { return project_hand_doom(player_ptr, m_idx, y, x, target_type); })
         .shoot(y, x);
 }
 
@@ -111,6 +111,6 @@ MonsterSpellResult spell_RF6_PSY_SPEAR(PlayerType *player_ptr, POSITION y, POSIT
         AttributeType::PSY_SPEAR);
 
     return MSpellAttackOther(player_ptr, m_idx, t_idx, MonsterAbilityType::PSY_SPEAR, data, target_type,
-        [=](auto y, auto x, int dam, auto attribute) { return beam(player_ptr, m_idx, y, x, attribute, dam, target_type); })
+        [=](auto y, auto x, int dam, auto attribute, auto attribute_ptr) { return beam(player_ptr, m_idx, y, x, attribute, dam, target_type, attribute_ptr); })
         .shoot(y, x);
 }

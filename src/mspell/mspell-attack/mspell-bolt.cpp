@@ -91,16 +91,16 @@ const std::unordered_map<MonsterAbilityType, MSpellData> bolt_list = {
 
 MSpellBolt::MSpellBolt(PlayerType *player_ptr, MONSTER_IDX m_idx, MonsterAbilityType ability, int target_type)
     : AbstractMSpellAttack(player_ptr, m_idx, ability, get_mspell_data(bolt_list, ability), target_type,
-          [=](auto y, auto x, int dam, auto attribute) {
-              return bolt(player_ptr, m_idx, y, x, attribute, dam, target_type);
+          [=](auto y, auto x, int dam, auto attribute, auto attribute_ptr) {
+              return bolt(player_ptr, m_idx, y, x, attribute, dam, target_type, attribute_ptr);
           })
 {
 }
 
 MSpellBolt::MSpellBolt(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, MonsterAbilityType ability, int target_type)
     : AbstractMSpellAttack(player_ptr, m_idx, t_idx, ability, get_mspell_data(bolt_list, ability), target_type,
-          [=](auto y, auto x, int dam, auto attribute) {
-              return bolt(player_ptr, m_idx, y, x, attribute, dam, target_type);
+          [=](auto y, auto x, int dam, auto attribute, auto attribute_ptr) {
+              return bolt(player_ptr, m_idx, y, x, attribute, dam, target_type, attribute_ptr);
           })
 {
 }

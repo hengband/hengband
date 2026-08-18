@@ -3,6 +3,7 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "effect/attribute-types.h"
+#include "effect/attribute/abstract-attribute.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "game-option/birth-options.h"
@@ -42,7 +43,7 @@
  * this is done in two passes. -- JDL
  * </pre>
  */
-bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam)
+bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam, std::shared_ptr<AbstractAttribute> attribute)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
@@ -70,7 +71,7 @@ bool project_all_los(PlayerType *player_ptr, AttributeType typ, int dam)
 
         monster.mflag.reset(MonsterTemporaryFlagType::LOS);
         const auto m_pos = monster.get_position();
-        if (project(player_ptr, 0, 0, m_pos.y, m_pos.x, dam, typ, flg).notice) {
+        if (project(player_ptr, 0, 0, m_pos.y, m_pos.x, dam, typ, flg, attribute).notice) {
             obvious = true;
         }
     }

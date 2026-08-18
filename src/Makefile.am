@@ -197,6 +197,10 @@ hengband_SOURCES = \
 	effect/effect-processor.cpp effect/effect-processor.h \
 	effect/effect-characteristics.h \
 	\
+	effect/attribute/abstract-attribute.cpp effect/attribute/abstract-attribute.h \
+	effect/attribute/attribute-factory.cpp effect/attribute/attribute-factory.h \
+	effect/attribute/fire-attribute.cpp effect/attribute/fire-attribute.h \
+	\
 	external-lib/include/nlohmann/json.hpp \
 	external-lib/include/nlohmann/json_fwd.hpp \
 	external-lib/include/simpleini/SimpleIni.h \

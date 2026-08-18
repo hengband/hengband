@@ -1,4 +1,5 @@
 #include "spell-kind/spells-launcher.h"
+#include "effect/attribute/abstract-attribute.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h"
 #include "floor/geometry.h"
@@ -11,10 +12,11 @@
 /*!
  * @brief ボール系スペルの発動 / Cast a ball spell
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param typ 効果属性
+ * @param typ 効果属性(後々下記の属性クラスに置き換えていく)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @param rad 半径
+ * @param attribute 効果属性のクラス
  * @return 作用が実際にあった場合TRUEを返す
  * @details
  * <pre>
@@ -23,7 +25,7 @@
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad, tl::optional<CapturedMonsterType *> cap_mon_ptr)
+bool fire_ball(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad, std::shared_ptr<AbstractAttribute> attribute, tl::optional<CapturedMonsterType *> cap_mon_ptr)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     if (typ == AttributeType::CHARM_LIVING) {
@@ -35,16 +37,17 @@ bool fire_ball(PlayerType *player_ptr, AttributeType typ, const Direction &dir, 
         flg &= ~(PROJECT_STOP);
     }
 
-    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg, cap_mon_ptr).notice;
+    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg, attribute, cap_mon_ptr).notice;
 }
 
 /*!
  * @brief ブレス系スペルの発動 / Cast a breath spell
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param typ 効果属性
+ * @param typ 効果属性(後々下記の属性クラスに置き換えていく)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @param rad 半径
+ * @param attribute 効果属性のクラス
  * @return 作用が実際にあった場合TRUEを返す
  * @details
  * <pre>
@@ -53,7 +56,7 @@ bool fire_ball(PlayerType *player_ptr, AttributeType typ, const Direction &dir, 
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_breath(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad)
+bool fire_breath(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad, std::shared_ptr<AbstractAttribute> attribute)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_BREATH;
 
@@ -62,7 +65,7 @@ bool fire_breath(PlayerType *player_ptr, AttributeType typ, const Direction &dir
         reset_bits(flg, PROJECT_STOP);
     }
 
-    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg).notice;
+    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg, attribute).notice;
 }
 
 /*!
@@ -80,21 +83,22 @@ bool fire_breath(PlayerType *player_ptr, AttributeType typ, const Direction &dir
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_rocket(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad)
+bool fire_rocket(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad, std::shared_ptr<AbstractAttribute> attribute)
 {
     const auto [ty, tx] = dir.get_target_position(player_ptr->get_position(), 99);
 
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg).notice;
+    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg, attribute).notice;
 }
 
 /*!
  * @brief ボール(ハイド)系スペルの発動 / Cast a ball spell
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param typ 効果属性
+ * @param typ 効果属性(後々下記の属性クラスに置き換えていく)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @param rad 半径
+ * @param attribute 効果属性のクラス
  * @return 作用が実際にあった場合TRUEを返す
  * @details
  * <pre>
@@ -103,7 +107,7 @@ bool fire_rocket(PlayerType *player_ptr, AttributeType typ, const Direction &dir
  * Affect grids, objects, and monsters
  * </pre>
  */
-bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad)
+bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, POSITION rad, std::shared_ptr<AbstractAttribute> attribute)
 {
     const auto [ty, tx] = dir.get_target_position(player_ptr->get_position(), 99);
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
@@ -111,18 +115,19 @@ bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, const Direction &
         flg &= ~(PROJECT_STOP);
     }
 
-    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg).notice;
+    return project(player_ptr, 0, rad, ty, tx, dam, typ, flg, attribute).notice;
 }
 
 /*!
  * @brief メテオ系スペルの発動 / Cast a meteor spell
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param src_idx スぺル詠唱者のモンスターID(0=プレイヤー)
- * @param typ 効果属性
+ * @param typ 効果属性(後々下記の属性クラスに置き換えていく)
  * @param dam 威力
  * @param rad 半径
  * @param y 中心点Y座標
  * @param x 中心点X座標
+ * @param attribute 効果属性のクラス
  * @return 作用が実際にあった場合TRUEを返す
  * @details
  * <pre>
@@ -133,10 +138,10 @@ bool fire_ball_hide(PlayerType *player_ptr, AttributeType typ, const Direction &
  * Option to hurt the player.
  * </pre>
  */
-bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX src_idx, AttributeType typ, POSITION y, POSITION x, int dam, POSITION rad)
+bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX src_idx, AttributeType typ, POSITION y, POSITION x, int dam, POSITION rad, std::shared_ptr<AbstractAttribute> attribute)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-    return project(player_ptr, src_idx, rad, y, x, dam, typ, flg).notice;
+    return project(player_ptr, src_idx, rad, y, x, dam, typ, flg, attribute).notice;
 }
 
 /*!
@@ -149,7 +154,7 @@ bool fire_meteor(PlayerType *player_ptr, MONSTER_IDX src_idx, AttributeType typ,
  * @param dev 回数分散
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool fire_blast(PlayerType *player_ptr, AttributeType typ, const Direction &dir, const Dice &dice, int num, int dev)
+bool fire_blast(PlayerType *player_ptr, AttributeType typ, const Direction &dir, const Dice &dice, int num, int dev, std::shared_ptr<AbstractAttribute> attribute)
 {
     POSITION y, x;
     POSITION ly, lx;
@@ -177,7 +182,7 @@ bool fire_blast(PlayerType *player_ptr, AttributeType typ, const Direction &dir,
         }
 
         /* Analyze the "dir" and the "target". */
-        const auto proj_res = project(player_ptr, 0, 0, y, x, dice.roll(), typ, flg);
+        const auto proj_res = project(player_ptr, 0, 0, y, x, dice.roll(), typ, flg, attribute);
         if (!proj_res.notice) {
             result = false;
         }
@@ -189,9 +194,10 @@ bool fire_blast(PlayerType *player_ptr, AttributeType typ, const Direction &dir,
 /*!
  * @brief ボルト系スペルの発動 / Cast a bolt spell.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param typ 効果属性
+ * @param typ 効果属性(後々下記の属性クラスに置き換えていく)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
+ * @param attribute 効果属性のクラス
  * @return 作用が実際にあった場合TRUEを返す
  * @details
  * <pre>
@@ -199,21 +205,22 @@ bool fire_blast(PlayerType *player_ptr, AttributeType typ, const Direction &dir,
  * Affect monsters and grids (not objects).
  * </pre>
  */
-bool fire_bolt(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam)
+bool fire_bolt(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, std::shared_ptr<AbstractAttribute> attribute)
 {
     BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_GRID;
     if (typ != AttributeType::MONSTER_SHOOT) {
         flg |= PROJECT_REFLECTABLE;
     }
-    return project_hook(player_ptr, typ, dir, dam, flg);
+    return project_hook(player_ptr, typ, dir, dam, flg, attribute);
 }
 
 /*!
  * @brief ビーム系スペルの発動 / Cast a beam spell.
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param typ 効果属性
+ * @param typ 効果属性(後々下記の属性クラスに置き換えていく)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
+ * @param attribute 効果属性のクラス
  * @return 作用が実際にあった場合TRUEを返す
  * @details
  * <pre>
@@ -221,19 +228,20 @@ bool fire_bolt(PlayerType *player_ptr, AttributeType typ, const Direction &dir, 
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_beam(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam)
+bool fire_beam(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, std::shared_ptr<AbstractAttribute> attribute)
 {
     BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_GRID | PROJECT_ITEM;
-    return project_hook(player_ptr, typ, dir, dam, flg);
+    return project_hook(player_ptr, typ, dir, dam, flg, attribute);
 }
 
 /*!
  * @brief 確率に応じたボルト系/ビーム系スペルの発動 / Cast a bolt spell, or rarely, a beam spell.
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param prob ビーム化する確率(%)
- * @param typ 効果属性
+ * @param typ 効果属性(後々下記の属性クラスに置き換えていく)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
+ * @param attribute 効果属性のクラス
  * @return 作用が実際にあった場合TRUEを返す
  * @details
  * <pre>
@@ -241,27 +249,28 @@ bool fire_beam(PlayerType *player_ptr, AttributeType typ, const Direction &dir, 
  * Affect monsters, grids and objects.
  * </pre>
  */
-bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType typ, const Direction &dir, int dam)
+bool fire_bolt_or_beam(PlayerType *player_ptr, PERCENTAGE prob, AttributeType typ, const Direction &dir, int dam, std::shared_ptr<AbstractAttribute> attribute)
 {
     if (evaluate_percent(prob)) {
-        return (fire_beam(player_ptr, typ, dir, dam));
+        return (fire_beam(player_ptr, typ, dir, dam, attribute));
     }
 
-    return (fire_bolt(player_ptr, typ, dir, dam));
+    return (fire_bolt(player_ptr, typ, dir, dam, attribute));
 }
 
 /*!
  * @brief 指定方向に飛び道具を飛ばす (フラグ任意指定) / Apply a "project()" in a direction (or at the target)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param typ 効果属性
+ * @param typ 効果属性(後々下記の属性クラスに置き換えていく)
  * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
  * @param dam 威力
  * @param flg フラグ
+ * @param attribute 効果属性のクラス
  * @return 作用が実際にあった場合TRUEを返す
  */
-bool project_hook(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, BIT_FLAGS flg)
+bool project_hook(PlayerType *player_ptr, AttributeType typ, const Direction &dir, int dam, BIT_FLAGS flg, std::shared_ptr<AbstractAttribute> attribute)
 {
     flg |= (PROJECT_THRU);
     const auto pos = dir.get_target_position(player_ptr->get_position());
-    return project(player_ptr, 0, 0, pos.y, pos.x, dam, typ, flg).notice;
+    return project(player_ptr, 0, 0, pos.y, pos.x, dam, typ, flg, attribute).notice;
 }

@@ -160,12 +160,13 @@ bool clean_shot(PlayerType *player_ptr, POSITION y1, POSITION x1, POSITION y2, P
  * @param m_idx モンスターのID
  * @param y 目標のY座標
  * @param x 目標のX座標
- * @param typ 効果属性ID
+ * @param typ 効果属性ID(後々下記の属性クラスに置き換えていく)
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
+ * @param attribute 効果属性のクラス
  */
-ProjectResult bolt(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, AttributeType typ, int dam_hp, int target_type)
+ProjectResult bolt(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, AttributeType typ, int dam_hp, int target_type, std::shared_ptr<AbstractAttribute> attribute)
 {
     BIT_FLAGS flg = 0;
     switch (target_type) {
@@ -181,7 +182,7 @@ ProjectResult bolt(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITI
         flg |= PROJECT_REFLECTABLE;
     }
 
-    return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
+    return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg, attribute);
 }
 
 /*!
@@ -190,12 +191,13 @@ ProjectResult bolt(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITI
  * @param m_idx モンスターのID
  * @param y 目標のY座標
  * @param x 目標のX座標
- * @param typ 効果属性ID
+ * @param typ 効果属性ID(後々下記の属性クラスに置き換えていく)
  * @param dam_hp 威力
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
+ * @param attribute 効果属性のクラス
  */
-ProjectResult beam(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, AttributeType typ, int dam_hp, int target_type)
+ProjectResult beam(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, AttributeType typ, int dam_hp, int target_type, std::shared_ptr<AbstractAttribute> attribute)
 {
     BIT_FLAGS flg = 0;
     switch (target_type) {
@@ -207,17 +209,17 @@ ProjectResult beam(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITI
         break;
     }
 
-    return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
+    return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg, attribute);
 }
 
-ProjectResult ball(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
+ProjectResult ball(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type, std::shared_ptr<AbstractAttribute> attribute)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
     if (target_type == MONSTER_TO_PLAYER) {
         flg |= PROJECT_PLAYER;
     }
 
-    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
+    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg, attribute);
 }
 
 /*!
@@ -227,13 +229,14 @@ ProjectResult ball(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
  * @param m_idx モンスターのID
- * @param typ 効果属性ID
+ * @param typ 効果属性ID(後々下記の属性クラスに置き換えていく)
  * @param dam_hp 威力
  * @param rad 半径
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
+ * @param attribute 効果属性のクラス
  */
-ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
+ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type, std::shared_ptr<AbstractAttribute> attribute)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
     const auto &monrace = monster.get_monrace();
@@ -246,27 +249,27 @@ ProjectResult breath(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX
         rad = monrace.misc_flags.has(MonsterMiscType::POWERFUL) ? 3 : 2;
     }
 
-    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
+    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg, attribute);
 }
 
-ProjectResult pointed(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, int target_type)
+ProjectResult pointed(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, int target_type, std::shared_ptr<AbstractAttribute> attribute)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE | PROJECT_AIMED;
     if (target_type == MONSTER_TO_PLAYER) {
         flg |= PROJECT_PLAYER;
     }
 
-    return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg);
+    return project(player_ptr, m_idx, 0, y, x, dam_hp, typ, flg, attribute);
 }
 
-ProjectResult rocket(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type)
+ProjectResult rocket(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, AttributeType typ, int dam_hp, POSITION rad, int target_type, std::shared_ptr<AbstractAttribute> attribute)
 {
     BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_STOP;
     if (target_type == MONSTER_TO_PLAYER) {
         flg |= PROJECT_PLAYER;
     }
 
-    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg);
+    return project(player_ptr, m_idx, rad, y, x, dam_hp, typ, flg, attribute);
 }
 
 /*!

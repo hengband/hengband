@@ -1,4 +1,6 @@
 #include "effect/effect-feature.h"
+#include "effect/attribute/abstract-attribute.h"
+#include "effect/attribute/attribute-factory.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-processor.h" // 暫定、後で消す.
 #include "floor/geometry.h"
@@ -32,7 +34,8 @@
  * @param y 目標Y座標 / Target y location (or location to travel "towards")
  * @param x 目標X座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
- * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param typ 効果属性(後々下記のクラスに置き換えていく) / Type of damage to apply to monsters (and objects) (later to be replaced by the following class)
+ * @param attribute 効果属性のクラス / Class of the effect attribute
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  * @details
  * <pre>
@@ -50,7 +53,7 @@
  * Perhaps we should affect doors?
  * </pre>
  */
-bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ)
+bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POSITION y, POSITION x, int dam, AttributeType typ, const std::shared_ptr<AbstractAttribute> &attribute_ptr)
 {
     const Pos2D pos(y, x);
     auto &floor = *player_ptr->current_floor_ptr;
@@ -60,8 +63,16 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
     auto obvious = false;
     auto known = grid.has_los();
 
+    const auto &real_attribute = attribute_ptr ? attribute_ptr : AttributeFactory::create_attribute(typ);
+
     src_idx = is_monster(src_idx) ? src_idx : 0;
     dam = (dam + r) / (r + 1);
+
+    if (real_attribute) {
+        obvious = real_attribute->affect_feature(player_ptr, src_idx, terrain, grid, Pos2D(y, x), dam, known);
+        lite_spot(player_ptr, pos);
+        return obvious;
+    }
 
     if (terrain.flags.has(TerrainCharacteristics::TREE)) {
         concptr message;
@@ -81,7 +92,6 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         case AttributeType::ICE:
             message = _("凍り、砕け散った", "was frozen and smashed.");
             break;
-        case AttributeType::FIRE:
         case AttributeType::ELEC:
         case AttributeType::PLASMA:
             message = _("燃えた", "burns up!");
@@ -89,7 +99,6 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
         case AttributeType::METEOR:
         case AttributeType::CHAOS:
         case AttributeType::MANA:
-        case AttributeType::SEEKER:
         case AttributeType::SUPER_RAY:
         case AttributeType::SHARDS:
         case AttributeType::ROCKET:
@@ -144,12 +153,10 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
     case AttributeType::ELEC:
     case AttributeType::COLD:
     case AttributeType::ICE:
-    case AttributeType::FIRE:
     case AttributeType::PLASMA:
     case AttributeType::METEOR:
     case AttributeType::CHAOS:
     case AttributeType::MANA:
-    case AttributeType::SEEKER:
     case AttributeType::SUPER_RAY: {
         break;
     }
