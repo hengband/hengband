@@ -173,21 +173,41 @@ void setup() { ... }
 
 ### テストは決定的にする
 
-`make check` は何度実行しても同じ結果になる必要があります。乱数を使う場合は
-`Rand_state_init(シード値)` でゲームの乱数生成器のシードを固定してください（次の節も参照）。
+`make check` は何度実行しても同じ結果になる必要があります。
 
 実行のたびに異なる乱数で確率的な検証を行うと、ごくまれに失敗する不安定なテストになり、
 CI が信用されなくなります。
+
+乱数を使う場合は `test/scoped-rng.h` の `test::scoped_rng()` でシードを固定してください。
+戻り値を変数で受けている間だけシードが固定され、スコープを抜けると乱数生成器の状態が元に戻ります。
+
+```cpp
+#include "test/scoped-rng.h"
+
+TEST_CASE("dice roll stays within its range")
+{
+    const auto restore_rng = test::scoped_rng(); // シードを指定するなら test::scoped_rng(999)
+
+    CHECK(randint1(6) <= 6);
+}
+```
+
+**戻り値は必ず変数で受けてください。** 受け損ねるとその場で復元されてシードの固定が効きません。
+
+`[[nodiscard]]` を付けてあるので、受け損ねた場合はコンパイラが警告を出します。
+CI と Visual Studio のビルドは警告をエラーとして扱う設定（`-Werror` /
+`TreatWarningAsError`）なので、そこではビルドが失敗します。
+手元のビルドで警告のままにしている場合は見落とさないよう注意してください。
 
 ### グローバルな状態を変えたら元に戻す
 
 `AngbandSystem` のようなシングルトンを書き換えるテストは、他のテストに影響します。
 ゲーム本体と同じく `util::make_finalizer()` を使って、スコープを抜けるときに元へ戻してください。
+前節の `test::scoped_rng()` も、この仕組みで乱数生成器の状態を復元しています。
 
 ```cpp
 auto &system = AngbandSystem::get_instance();
-const auto restore_rng = util::make_finalizer([&system, rng_backup = system.get_rng()]() { system.set_rng(rng_backup); });
-Rand_state_init(TEST_RNG_SEED);
+const auto restore_hoge = util::make_finalizer([&system, backup = system.get_hoge()]() { system.set_hoge(backup); });
 ```
 
 そのうえで、**必要な前提は各テストケースの中で自分で設定してください。**

@@ -8,23 +8,17 @@
 
 #include "timed-effect/player-stun.h"
 
-#include "system/angband-system.h"
 #include "term/term-color-types.h"
-#include "term/z-rand.h"
+#include "test/scoped-rng.h"
 #include "util/enum-converter.h"
-#include "util/finalizer.h"
 
 #include <doctest/doctest.h>
 
 #include <algorithm>
-#include <cstdint>
 #include <limits>
 #include <stdexcept>
 
 namespace {
-
-//! テスト結果を決定的にするために使用する乱数シード
-constexpr uint32_t TEST_RNG_SEED = 12345;
 
 //! 乱数を用いる蓄積値の検証で行う試行回数
 constexpr auto ACCUMULATION_TRIAL_COUNT = 30;
@@ -149,9 +143,7 @@ TEST_CASE("PlayerStun::get_accumulation_rank returns the rank for the boundary d
 
 TEST_CASE("PlayerStun::get_accumulation returns a value within the range of the rank")
 {
-    auto &system = AngbandSystem::get_instance();
-    const auto restore_rng = util::make_finalizer([&system, rng_backup = system.get_rng()]() { system.set_rng(rng_backup); });
-    Rand_state_init(TEST_RNG_SEED);
+    const auto restore_rng = test::scoped_rng();
 
     CHECK(PlayerStun::get_accumulation(0) == 0);
 

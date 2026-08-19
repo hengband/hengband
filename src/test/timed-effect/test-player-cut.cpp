@@ -8,22 +8,16 @@
 
 #include "timed-effect/player-cut.h"
 
-#include "system/angband-system.h"
 #include "term/term-color-types.h"
-#include "term/z-rand.h"
+#include "test/scoped-rng.h"
 #include "util/enum-converter.h"
-#include "util/finalizer.h"
 
 #include <doctest/doctest.h>
 
-#include <cstdint>
 #include <limits>
 #include <stdexcept>
 
 namespace {
-
-//! テスト結果を決定的にするために使用する乱数シード
-constexpr uint32_t TEST_RNG_SEED = 12345;
 
 //! 乱数を用いる蓄積値の検証で行う試行回数
 constexpr auto ACCUMULATION_TRIAL_COUNT = 50;
@@ -88,9 +82,7 @@ TEST_CASE("PlayerCut::get_accumulation gives no cut for a weak hit")
 
 TEST_CASE("PlayerCut::get_accumulation returns a value within the range of the rank")
 {
-    auto &system = AngbandSystem::get_instance();
-    const auto restore_rng = util::make_finalizer([&system, rng_backup = system.get_rng()]() { system.set_rng(rng_backup); });
-    Rand_state_init(TEST_RNG_SEED);
+    const auto restore_rng = test::scoped_rng();
 
     // damage >= total かつ damage >= 40 かつ damage > 45 なので、蓄積ランクは乱数によらず必ず7以上
     CHECK(PlayerCut::get_accumulation(46, 46) == 500);

@@ -7,15 +7,12 @@
 
 #include "util/probability-table.h"
 
-#include "system/angband-system.h"
-#include "term/z-rand.h"
-#include "util/finalizer.h"
+#include "test/scoped-rng.h"
 
 #include <doctest/doctest.h>
 
 #include <algorithm>
 #include <cmath>
-#include <cstdint>
 #include <iterator>
 #include <map>
 #include <numeric>
@@ -25,9 +22,6 @@
 #include <vector>
 
 namespace {
-
-//! テスト結果を決定的にするために使用する乱数シード
-constexpr uint32_t TEST_RNG_SEED = 12345;
 
 //! 確率テーブルに登録する (ID, prob) の並び
 using TestList = std::vector<std::tuple<int, int>>;
@@ -127,11 +121,8 @@ void test_table(TestList test_list, int lottery_count)
 
 TEST_CASE("ProbabilityTable lottery matches the entried probabilities")
 {
-    // 乱数生成器を固定シードにして抽選結果を決定的にする。
-    // 他のテストに影響しないよう、テストケースを抜けるときに元の状態へ戻す。
-    auto &system = AngbandSystem::get_instance();
-    const auto restore_rng = util::make_finalizer([&system, rng_backup = system.get_rng()]() { system.set_rng(rng_backup); });
-    Rand_state_init(TEST_RNG_SEED);
+    // 乱数生成器を固定シードにして抽選結果を決定的にする
+    const auto restore_rng = test::scoped_rng();
 
     SUBCASE("single item")
     {
@@ -161,7 +152,7 @@ TEST_CASE("ProbabilityTable lottery matches the entried probabilities")
 
     SUBCASE("1000 items which have random probs")
     {
-        std::mt19937 mt(TEST_RNG_SEED);
+        std::mt19937 mt(test::DEFAULT_RNG_SEED);
         std::uniform_int_distribution<> dist(1, 100);
 
         TestList test_list;
