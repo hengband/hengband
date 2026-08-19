@@ -50,6 +50,15 @@ jobs:
           persist-credentials: false
       - run: python3 .github/scripts/check-include-style.py
 
+  check_test_registration:
+    name: Check the registration of the unit test sources
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - run: sh ./.github/scripts/check-test-registration.sh
+
   build_test_clang15_libcpp_without_pch:
     name: Build Japanese version with clang 15 -stdlib=libc++ (without using pre-compiled headers)
     uses: ./.github/workflows/build-with-autotools.yml
