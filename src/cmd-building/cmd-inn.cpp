@@ -48,7 +48,7 @@ static bool buy_food(PlayerType *player_ptr)
 static bool is_healthy_stay(PlayerType *player_ptr)
 {
     const auto effects = player_ptr->effects();
-    if (!effects->poison().is_poisoned() && !effects->cut().is_cut()) {
+    if (!effects->poison().is_active() && !effects->cut().is_active()) {
         return true;
     }
 

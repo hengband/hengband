@@ -98,7 +98,7 @@ static void spell_damcalc(PlayerType *player_ptr, const MonsterEntity &monster, 
         break;
 
     case AttributeType::MONSTER_SHOOT:
-        if (!player_ptr->effects()->blindness().is_blind() && (has_invuln_arrow(player_ptr))) {
+        if (!player_ptr->effects()->blindness().is_active() && (has_invuln_arrow(player_ptr))) {
             dam = 0;
             ignore_wraith_form = true;
         }

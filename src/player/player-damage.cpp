@@ -413,9 +413,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             }
         } else {
             const auto effects = player_ptr->effects();
-            const auto is_hallucinated = effects->hallucination().is_hallucinated();
+            const auto is_hallucinated = effects->hallucination().is_active();
             auto paralysis_state = "";
-            if (effects->paralysis().is_paralyzed()) {
+            if (effects->paralysis().is_active()) {
                 paralysis_state = player_ptr->free_act ? _("彫像状態で", " while being the statue") : _("麻痺状態で", " while paralyzed");
             }
 
@@ -572,7 +572,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
         sound(SoundKind::WARN);
         if (record_danger && (old_chp > hp_warning_threshold)) {
-            if (player_ptr->effects()->hallucination().is_hallucinated() && damage_type == DAMAGE_ATTACK) {
+            if (player_ptr->effects()->hallucination().is_active() && damage_type == DAMAGE_ATTACK) {
                 hit_from = _("何か", "something");
             }
 

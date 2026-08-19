@@ -152,7 +152,7 @@ bool fetch_monster(PlayerType *player_ptr)
     }
 
     if (monster.ml) {
-        if (!player_ptr->effects()->hallucination().is_hallucinated()) {
+        if (!player_ptr->effects()->hallucination().is_active()) {
             LoreTracker::get_instance().set_trackee(monster.ap_r_idx);
         }
 

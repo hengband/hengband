@@ -165,7 +165,7 @@ static std::string replace_monster_name_undefined(std::string_view name)
 static tl::optional<std::string> get_fake_monster_name(const PlayerType &player, const MonsterEntity &monster, const std::string &name, const BIT_FLAGS mode)
 {
     const auto &monrace = monster.get_apparent_monrace();
-    const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
+    const auto is_hallucinated = player.effects()->hallucination().is_active();
     if (monrace.kind_flags.has_not(MonsterKindType::UNIQUE) || (is_hallucinated && none_bits(mode, MD_IGNORE_HALLU))) {
         return tl::nullopt;
     }
@@ -244,7 +244,7 @@ std::string monster_desc(PlayerType *player_ptr, const MonsterEntity &monster, B
         return *pronoun_self;
     }
 
-    const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
+    const auto is_hallucinated = player_ptr->effects()->hallucination().is_active();
     const auto name = get_describing_monster_name(monster, is_hallucinated, mode);
     std::stringstream ss;
     if (monster.is_pet() && !monster.is_original_ap()) {

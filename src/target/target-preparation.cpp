@@ -39,7 +39,7 @@ bool target_able(PlayerType *player_ptr, MONSTER_IDX m_idx)
         return false;
     }
 
-    if (player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (player_ptr->effects()->hallucination().is_active()) {
         return false;
     }
 
@@ -73,7 +73,7 @@ static bool target_set_accept(PlayerType *player_ptr, const Pos2D &pos)
         return true;
     }
 
-    if (player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (player_ptr->effects()->hallucination().is_active()) {
         return false;
     }
 
@@ -174,7 +174,7 @@ void target_sensing_monsters_prepare(PlayerType *player_ptr, std::vector<MONSTER
     monster_list.clear();
 
     // 幻覚時は正常に感知できない
-    if (player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (player_ptr->effects()->hallucination().is_active()) {
         return;
     }
 

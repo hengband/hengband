@@ -483,7 +483,7 @@ void ObjectThrowEntity::display_attack_racial_power()
 
     msg_format(_("%sが%sに命中した。", "The %s hits %s."), this->o_name.data(), this->hit_monster->m_name.data());
 
-    if (!this->player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (!this->player_ptr->effects()->hallucination().is_active()) {
         LoreTracker::get_instance().set_trackee(this->hit_monster->m_ptr->ap_r_idx);
     }
 
@@ -553,7 +553,7 @@ void ObjectThrowEntity::process_boomerang_throw()
 
 void ObjectThrowEntity::display_boomerang_throw()
 {
-    const auto is_blind = this->player_ptr->effects()->blindness().is_blind();
+    const auto is_blind = this->player_ptr->effects()->blindness().is_active();
     if ((this->back_chance > 37) && !is_blind && (this->i_idx >= 0)) {
         msg_format(_("%sが手元に返ってきた。", "%s comes back to you."), this->o2_name.data());
         this->come_back = true;

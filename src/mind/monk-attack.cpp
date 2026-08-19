@@ -113,8 +113,8 @@ static int select_blow(PlayerType *player_ptr, player_attack_type *pa_ptr, int m
         } while ((min_level > player_ptr->lev) || (randint1(player_ptr->lev) < pa_ptr->ma_ptr->chance));
 
         const auto effects = player_ptr->effects();
-        const auto is_stunned = effects->stun().is_stunned();
-        const auto is_confused = effects->confusion().is_confused();
+        const auto is_stunned = effects->stun().is_active();
+        const auto is_confused = effects->confusion().is_active();
         if ((pa_ptr->ma_ptr->min_level <= old_ptr->min_level) || is_stunned || is_confused) {
             pa_ptr->ma_ptr = old_ptr;
             continue;

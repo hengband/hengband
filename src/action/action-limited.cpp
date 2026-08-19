@@ -46,7 +46,7 @@ bool cmd_limit_cast(PlayerType *player_ptr)
 
 bool cmd_limit_confused(PlayerType *player_ptr)
 {
-    if (player_ptr->effects()->confusion().is_confused()) {
+    if (player_ptr->effects()->confusion().is_active()) {
         msg_print(_("混乱していてできない！", "You are too confused!"));
         return true;
     }
@@ -56,7 +56,7 @@ bool cmd_limit_confused(PlayerType *player_ptr)
 
 bool cmd_limit_image(PlayerType *player_ptr)
 {
-    if (player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (player_ptr->effects()->hallucination().is_active()) {
         msg_print(_("幻覚が見えて集中できない！", "Your hallucinations prevent you from concentrating!"));
         return true;
     }
@@ -66,7 +66,7 @@ bool cmd_limit_image(PlayerType *player_ptr)
 
 bool cmd_limit_stun(PlayerType *player_ptr)
 {
-    if (player_ptr->effects()->stun().is_stunned()) {
+    if (player_ptr->effects()->stun().is_active()) {
         msg_print(_("頭が朦朧としていて集中できない！", "You are too stunned!"));
         return true;
     }
@@ -87,7 +87,7 @@ bool cmd_limit_arena(PlayerType *player_ptr)
 
 bool cmd_limit_blind(PlayerType *player_ptr)
 {
-    if (player_ptr->effects()->blindness().is_blind()) {
+    if (player_ptr->effects()->blindness().is_active()) {
         msg_print(_("目が見えない。", "You can't see anything."));
         return true;
     }

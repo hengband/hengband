@@ -1,6 +1,8 @@
 #pragma once
 
 #include "term/term-color-types.h"
+#include "timed-effect/timed-effect.h"
+
 #include <string>
 #include <tuple>
 
@@ -15,7 +17,7 @@ enum class PlayerCutRank {
     MORTAL = 7,
 };
 
-class PlayerCut {
+class PlayerCut : public TimedEffect<struct TagPlayerCut> {
 public:
     PlayerCut() = default;
     ~PlayerCut() = default;
@@ -25,19 +27,13 @@ public:
     PlayerCut &operator=(PlayerCut &&) = delete;
 
     static PlayerCutRank get_rank(short value);
-    static std::string get_cut_mes(PlayerCutRank stun_rank);
+    static std::string get_cut_mes(PlayerCutRank cut_rank);
     static short get_accumulation(int total, int damage);
 
-    short current() const;
     PlayerCutRank get_rank() const;
-    bool is_cut() const;
     std::tuple<term_color_type, std::string> get_expr() const;
     int get_damage() const;
-    void set(short value);
-    void reset();
 
 private:
-    short cut = 0;
-
     static int get_accumulation_rank(int total, int damage);
 };

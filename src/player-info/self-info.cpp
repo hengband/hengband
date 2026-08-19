@@ -35,31 +35,31 @@
 
 static void set_bad_status_info(const TimedEffects &effects, self_info_type *self_ptr)
 {
-    if (effects.blindness().is_blind()) {
+    if (effects.blindness().is_active()) {
         self_ptr->info_list.emplace_back(_("あなたは目が見えない。", "You cannot see."));
     }
 
-    if (effects.confusion().is_confused()) {
+    if (effects.confusion().is_active()) {
         self_ptr->info_list.emplace_back(_("あなたは混乱している。", "You are confused."));
     }
 
-    if (effects.fear().is_fearful()) {
+    if (effects.fear().is_active()) {
         self_ptr->info_list.emplace_back(_("あなたは恐怖に侵されている。", "You are terrified."));
     }
 
-    if (effects.cut().is_cut()) {
+    if (effects.cut().is_active()) {
         self_ptr->info_list.emplace_back(_("あなたは出血している。", "You are bleeding."));
     }
 
-    if (effects.stun().is_stunned()) {
+    if (effects.stun().is_active()) {
         self_ptr->info_list.emplace_back(_("あなたはもうろうとしている。", "You are stunned."));
     }
 
-    if (effects.poison().is_poisoned()) {
+    if (effects.poison().is_active()) {
         self_ptr->info_list.emplace_back(_("あなたは毒に侵されている。", "You are poisoned."));
     }
 
-    if (effects.hallucination().is_hallucinated()) {
+    if (effects.hallucination().is_active()) {
         self_ptr->info_list.emplace_back(_("あなたは幻覚を見ている。", "You are hallucinating."));
     }
 }
@@ -315,31 +315,31 @@ void report_magics(PlayerType *player_ptr)
     std::vector<std::pair<int, std::string>> info;
     const auto effects = player_ptr->effects();
     const auto &blindness = effects->blindness();
-    if (blindness.is_blind()) {
+    if (blindness.is_active()) {
         info.emplace_back(report_magics_aux(blindness.current()),
             _("あなたは目が見えない", "You cannot see"));
     }
 
     const auto &confusion = effects->confusion();
-    if (confusion.is_confused()) {
+    if (confusion.is_active()) {
         info.emplace_back(report_magics_aux(confusion.current()),
             _("あなたは混乱している", "You are confused"));
     }
 
     const auto &fear = effects->fear();
-    if (fear.is_fearful()) {
+    if (fear.is_active()) {
         info.emplace_back(report_magics_aux(fear.current()),
             _("あなたは恐怖に侵されている", "You are terrified"));
     }
 
     const auto &player_poison = effects->poison();
-    if (player_poison.is_poisoned()) {
+    if (player_poison.is_active()) {
         info.emplace_back(report_magics_aux(player_poison.current()),
             _("あなたは毒に侵されている", "You are poisoned"));
     }
 
     const auto &hallucination = effects->hallucination();
-    if (hallucination.is_hallucinated()) {
+    if (hallucination.is_active()) {
         info.emplace_back(report_magics_aux(hallucination.current()),
             _("あなたは幻覚を見ている", "You are hallucinating"));
     }
@@ -360,7 +360,7 @@ void report_magics(PlayerType *player_ptr)
     }
 
     const auto &protection = effects->protection();
-    if (protection.is_protected()) {
+    if (protection.is_active()) {
         info.emplace_back(report_magics_aux(protection.current()),
             _("あなたは邪悪なる存在から守られている", "You are protected from evil"));
     }

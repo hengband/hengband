@@ -188,7 +188,7 @@ static int calc_temporary_speed(PlayerType *player_ptr)
             tmp_speed += 10;
         }
 
-        if (player_ptr->effects()->deceleration().is_slow()) {
+        if (player_ptr->effects()->deceleration().is_active()) {
             tmp_speed -= 10;
         }
 

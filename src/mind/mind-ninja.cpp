@@ -71,10 +71,10 @@ bool kawarimi(PlayerType *player_ptr, bool success)
     }
 
     const auto effects = player_ptr->effects();
-    const auto is_confused = effects->confusion().is_confused();
-    const auto is_blind = effects->blindness().is_blind();
-    const auto is_hallucinated = effects->hallucination().is_hallucinated();
-    const auto is_paralyzed = effects->paralysis().is_paralyzed();
+    const auto is_confused = effects->confusion().is_active();
+    const auto is_blind = effects->blindness().is_active();
+    const auto is_hallucinated = effects->hallucination().is_active();
+    const auto is_paralyzed = effects->paralysis().is_active();
     if (is_confused || is_blind || is_paralyzed || is_hallucinated) {
         return false;
     }

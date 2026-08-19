@@ -179,7 +179,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             }
         }
 
-        if (player_ptr->effects()->blindness().is_blind() || !grid.has_los()) {
+        if (player_ptr->effects()->blindness().is_active() || !grid.has_los()) {
             break;
         }
 
@@ -198,7 +198,7 @@ bool affect_feature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION r, POS
             cave_alter_feat(player_ptr, y, x, TerrainCharacteristics::TUNNEL);
         }
 
-        if (player_ptr->effects()->blindness().is_blind() || !grid.has_los()) {
+        if (player_ptr->effects()->blindness().is_active() || !grid.has_los()) {
             break;
         }
 

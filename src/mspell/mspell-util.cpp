@@ -109,7 +109,7 @@ bool monspell_message_base(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
 bool monspell_message(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_blind &msgs, int target_type)
 {
     mspell_cast_msg mcm(msgs.blind, msgs.blind, msgs.to_player, msgs.to_mons);
-    const auto is_blind = player_ptr->effects()->blindness().is_blind();
+    const auto is_blind = player_ptr->effects()->blindness().is_active();
     return monspell_message_base(player_ptr, m_idx, t_idx, mcm, is_blind, target_type);
 }
 
@@ -124,6 +124,6 @@ bool monspell_message(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
 void simple_monspell_message(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, const mspell_cast_msg_simple &msgs, int target_type)
 {
     mspell_cast_msg mcm(msgs.to_player, msgs.to_mons, msgs.to_player, msgs.to_mons);
-    const auto is_blind = player_ptr->effects()->blindness().is_blind();
+    const auto is_blind = player_ptr->effects()->blindness().is_active();
     monspell_message_base(player_ptr, m_idx, t_idx, mcm, is_blind, target_type);
 }

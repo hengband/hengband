@@ -31,11 +31,11 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
 
     BadStatusSetter bss(player_ptr);
     const auto effects = player_ptr->effects();
-    if (effects->hallucination().is_hallucinated()) {
+    if (effects->hallucination().is_active()) {
         (void)bss.mod_hallucination(-1);
     }
 
-    if (effects->blindness().is_blind()) {
+    if (effects->blindness().is_active()) {
         (void)bss.mod_blindness(-1);
     }
 
@@ -137,27 +137,27 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_pass_wall(player_ptr, player_ptr->tim_pass_wall - 1, true);
     }
 
-    if (effects->paralysis().is_paralyzed()) {
+    if (effects->paralysis().is_active()) {
         (void)bss.mod_paralysis(-1);
     }
 
-    if (player_ptr->effects()->confusion().is_confused()) {
+    if (player_ptr->effects()->confusion().is_active()) {
         (void)bss.mod_confusion(-1);
     }
 
-    if (effects->fear().is_fearful()) {
+    if (effects->fear().is_active()) {
         (void)bss.mod_fear(-1);
     }
 
-    if (effects->acceleration().is_fast()) {
+    if (effects->acceleration().is_active()) {
         (void)mod_acceleration(player_ptr, -1, true);
     }
 
-    if (effects->deceleration().is_slow()) {
+    if (effects->deceleration().is_active()) {
         (void)bss.mod_deceleration(-1, true);
     }
 
-    if (effects->protection().is_protected()) {
+    if (effects->protection().is_active()) {
         BodyImprovement(player_ptr).mod_protection(-1, true);
     }
 
@@ -233,18 +233,18 @@ void reduce_magic_effects_timeout(PlayerType *player_ptr)
         (void)set_ultimate_res(player_ptr, player_ptr->ult_res - 1, true);
     }
 
-    if (effects->poison().is_poisoned()) {
+    if (effects->poison().is_active()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
         (void)bss.mod_poison(-adjust);
     }
 
-    if (effects->stun().is_stunned()) {
+    if (effects->stun().is_active()) {
         int adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
         (void)bss.mod_stun(-adjust);
     }
 
     auto &player_cut = effects->cut();
-    if (player_cut.is_cut()) {
+    if (player_cut.is_active()) {
         short adjust = adj_con_fix[player_ptr->stat_index[A_CON]] + 1;
         if (player_cut.get_rank() == PlayerCutRank::MORTAL) {
             adjust = 0;

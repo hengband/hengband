@@ -57,11 +57,11 @@ bool exe_open(PlayerType *player_ptr, POSITION y, POSITION x)
 
     int i = player_ptr->skill_dis;
     const auto effects = player_ptr->effects();
-    if (effects->blindness().is_blind() || no_lite(player_ptr)) {
+    if (effects->blindness().is_active() || no_lite(player_ptr)) {
         i = i / 10;
     }
 
-    if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
+    if (effects->confusion().is_active() || effects->hallucination().is_active()) {
         i = i / 10;
     }
 
@@ -158,11 +158,11 @@ bool easy_open_door(PlayerType *player_ptr, const Pos2D &pos)
     } else if (terrain.door_power) {
         auto power_disarm = player_ptr->skill_dis;
         const auto effects = player_ptr->effects();
-        if (effects->blindness().is_blind() || no_lite(player_ptr)) {
+        if (effects->blindness().is_active() || no_lite(player_ptr)) {
             power_disarm = power_disarm / 10;
         }
 
-        if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
+        if (effects->confusion().is_active() || effects->hallucination().is_active()) {
             power_disarm = power_disarm / 10;
         }
 
@@ -213,11 +213,11 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     int i = player_ptr->skill_dis;
     const auto effects = player_ptr->effects();
-    if (effects->blindness().is_blind() || no_lite(player_ptr)) {
+    if (effects->blindness().is_active() || no_lite(player_ptr)) {
         i = i / 10;
     }
 
-    if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
+    if (effects->confusion().is_active() || effects->hallucination().is_active()) {
         i = i / 10;
     }
 
@@ -278,11 +278,11 @@ bool exe_disarm(PlayerType *player_ptr, POSITION y, POSITION x, const Direction 
     int i = player_ptr->skill_dis;
     PlayerEnergy(player_ptr).set_player_turn_energy(100);
     auto effects = player_ptr->effects();
-    if (effects->blindness().is_blind() || no_lite(player_ptr)) {
+    if (effects->blindness().is_active() || no_lite(player_ptr)) {
         i = i / 10;
     }
 
-    if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
+    if (effects->confusion().is_active() || effects->hallucination().is_active()) {
         i = i / 10;
     }
 

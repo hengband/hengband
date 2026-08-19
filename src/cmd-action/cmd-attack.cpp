@@ -179,7 +179,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
 
     const auto m_name = monster_desc(player_ptr, monster, 0);
     const auto effects = player_ptr->effects();
-    const auto is_hallucinated = effects->hallucination().is_hallucinated();
+    const auto is_hallucinated = effects->hallucination().is_active();
     if (monster.ml) {
         if (!is_hallucinated) {
             LoreTracker::get_instance().set_trackee(monster.ap_r_idx);
@@ -188,8 +188,8 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         health_track(player_ptr, grid.m_idx);
     }
 
-    const auto is_confused = effects->confusion().is_confused();
-    const auto is_stunned = effects->stun().is_stunned();
+    const auto is_confused = effects->confusion().is_active();
+    const auto is_stunned = effects->stun().is_active();
     if (monrace.is_female() && !(is_stunned || is_confused || is_hallucinated || !monster.ml)) {
         if (player_ptr->is_wielding(FixedArtifactId::ZANTETSU)) {
             sound(SoundKind::ATTACK_FAILED);
@@ -224,7 +224,7 @@ bool do_cmd_attack(PlayerType *player_ptr, POSITION y, POSITION x, combat_option
         }
     }
 
-    if (effects->fear().is_fearful()) {
+    if (effects->fear().is_active()) {
         if (monster.ml) {
             sound(SoundKind::ATTACK_FAILED);
             msg_format(_("恐くて%sを攻撃できない！", "You are too fearful to attack %s!"), m_name.data());
