@@ -1488,6 +1488,9 @@ check_PROGRAMS = hengband-test
 hengband_test_SOURCES = \
 	test/test-main.cpp \
 	\
+	test/timed-effect/test-player-cut.cpp \
+	test/timed-effect/test-player-stun.cpp \
+	test/timed-effect/test-timed-effect.cpp \
 	test/util/test-probability-table.cpp \
 	test/util/test-sha256.cpp
 
