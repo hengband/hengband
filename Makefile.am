@@ -4,6 +4,8 @@ AUTOMAKE_OPTIONS = foreign
 
 visual_studio_files = \
 	VisualStudio/Hengband.sln \
+	VisualStudio/Hengband/Hengband.Common.props \
+	VisualStudio/Hengband/Hengband.Configuration.props \
 	VisualStudio/Hengband/Hengband.vcxproj \
 	VisualStudio/Hengband/Hengband.vcxproj.filters \
 	VisualStudio/Hengband/packages.config
