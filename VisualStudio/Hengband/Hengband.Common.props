@@ -43,6 +43,7 @@
 
       <IntrinsicFunctions Condition="'$(HengbandDebugBuild)'!='true'">true</IntrinsicFunctions>
       <FunctionLevelLinking Condition="'$(HengbandDebugBuild)'!='true'">true</FunctionLevelLinking>
+      <Optimization Condition="'$(HengbandDebugBuild)'!='true'">MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -55,6 +56,7 @@
       <ShowProgress Condition="'$(HengbandDebugBuild)'=='true'">LinkVerbose</ShowProgress>
       <OptimizeReferences Condition="'$(HengbandDebugBuild)'!='true'">true</OptimizeReferences>
       <EnableCOMDATFolding Condition="'$(HengbandDebugBuild)'!='true'">true</EnableCOMDATFolding>
+      <LinkTimeCodeGeneration Condition="'$(HengbandDebugBuild)'!='true'">UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <ResourceCompile Condition="'$(HengbandJapanese)'=='true'">
       <Culture>0x0411</Culture>

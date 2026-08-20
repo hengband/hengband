@@ -43,20 +43,6 @@
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">../../\</OutDir>
   </PropertyGroup>
-  <!--
-    以下の2つは元の Hengband.vcxproj で Release/English-Release 間に存在した非対称性。
-    挙動不変のため、その揺れをそのまま個別の残余設定として残す。
-  -->
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Link>
-      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">
-    <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\action\action-limited.cpp" />
     <ClCompile Include="..\..\src\action\activation-execution.cpp" />
