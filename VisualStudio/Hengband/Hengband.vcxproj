@@ -38,10 +38,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">..\..\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../../\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">../../\</OutDir>
+    <OutDir>..\..\</OutDir>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\action\action-limited.cpp" />
@@ -462,10 +459,7 @@
     <ClCompile Include="..\..\src\status\experience.cpp" />
     <ClCompile Include="..\..\src\status\temporary-resistance.cpp" />
     <ClCompile Include="..\..\src\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\src\store\home.cpp" />
     <ClCompile Include="..\..\src\store\museum.cpp" />

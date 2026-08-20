@@ -8,8 +8,7 @@
     <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization Condition="'$(HengbandDebugBuild)'!='true'">true</WholeProgramOptimization>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration">
     <UseDebugLibraries Condition="'$(HengbandDebugBuild)'=='true'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(HengbandDebugBuild)'!='true'">false</UseDebugLibraries>
   </PropertyGroup>
 </Project>
