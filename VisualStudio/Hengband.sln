@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
 VisualStudioVersion = 18.5.11716.220 stable
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hengband", "Hengband\Hengband.vcxproj", "{C00503B6-18FF-42F1-BAC0-6C94EDE62CB2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hengband", "Hengband\Hengband.vcxproj", "{32D43DED-9745-48F3-892D-231695D201A6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HengbandCore", "Hengband\HengbandCore.vcxproj", "{C00503B6-18FF-42F1-BAC0-6C94EDE62CB2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82CF9010-9443-4FFF-ADF0-0D3E81C732CC}"
 	ProjectSection(SolutionItems) = preProject
@@ -26,6 +28,14 @@ Global
 		{C00503B6-18FF-42F1-BAC0-6C94EDE62CB2}.English-Release|Win32.Build.0 = English-Release|Win32
 		{C00503B6-18FF-42F1-BAC0-6C94EDE62CB2}.Release|Win32.ActiveCfg = Release|Win32
 		{C00503B6-18FF-42F1-BAC0-6C94EDE62CB2}.Release|Win32.Build.0 = Release|Win32
+		{32D43DED-9745-48F3-892D-231695D201A6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{32D43DED-9745-48F3-892D-231695D201A6}.Debug|Win32.Build.0 = Debug|Win32
+		{32D43DED-9745-48F3-892D-231695D201A6}.English-Debug|Win32.ActiveCfg = English-Debug|Win32
+		{32D43DED-9745-48F3-892D-231695D201A6}.English-Debug|Win32.Build.0 = English-Debug|Win32
+		{32D43DED-9745-48F3-892D-231695D201A6}.English-Release|Win32.ActiveCfg = English-Release|Win32
+		{32D43DED-9745-48F3-892D-231695D201A6}.English-Release|Win32.Build.0 = English-Release|Win32
+		{32D43DED-9745-48F3-892D-231695D201A6}.Release|Win32.ActiveCfg = Release|Win32
+		{32D43DED-9745-48F3-892D-231695D201A6}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
