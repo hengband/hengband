@@ -7,7 +7,8 @@ visual_studio_files = \
 	VisualStudio/Hengband/Hengband.Common.props \
 	VisualStudio/Hengband/Hengband.Configuration.props \
 	VisualStudio/Hengband/Hengband.vcxproj \
-	VisualStudio/Hengband/Hengband.vcxproj.filters \
+	VisualStudio/Hengband/HengbandCore.vcxproj \
+	VisualStudio/Hengband/HengbandCore.vcxproj.filters \
 	VisualStudio/Hengband/packages.config
 
 visual_studio_libcurl_files = \
