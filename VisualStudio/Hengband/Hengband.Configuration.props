@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <HengbandDebugBuild Condition="$(Configuration.EndsWith('Debug'))">true</HengbandDebugBuild>
+    <HengbandJapanese Condition="!$(Configuration.StartsWith('English'))">true</HengbandJapanese>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization Condition="'$(HengbandDebugBuild)'!='true'">true</WholeProgramOptimization>
+    <UseDebugLibraries Condition="'$(HengbandDebugBuild)'=='true'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(HengbandDebugBuild)'!='true'">false</UseDebugLibraries>
+  </PropertyGroup>
+</Project>
