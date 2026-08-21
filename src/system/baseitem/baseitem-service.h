@@ -2,6 +2,11 @@
 
 #include <vector>
 
+enum class BaseitemCollectionMode {
+    CHECK_CHANCE, //!< グループに該当アイテムが1つでもあるかを調べ、最初の1件で打ち切る
+    VISUAL_ONLY, //!< 鑑定状態と出現率を無視して収集する
+};
+
 enum class ItemKindType : short;
 class BaseitemConfig;
 class BaseitemRecord;

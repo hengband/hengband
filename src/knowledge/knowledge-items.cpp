@@ -96,14 +96,14 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr, ArtifactKnowledgeMode mo
 
 /*!
  * @brief ベースアイテムの出現率チェック処理
- * @param mode グループ化モード (0x02 表示専用)
+ * @param mode グループ化モード
  * @param baseitem ベースアイテムへの参照
  * @param baseitem_record ベースアイテム記録への参照
  * @return collect_objects() の処理を続行するか否か
  */
-static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemDefinition &baseitem, const BaseitemRecord &record)
+static bool check_baseitem_chance(const EnumClassFlagGroup<BaseitemCollectionMode> &mode, const BaseitemDefinition &baseitem, const BaseitemRecord &record)
 {
-    if (mode & 0x02) {
+    if (mode.has(BaseitemCollectionMode::VISUAL_ONLY)) {
         return true;
     }
 
@@ -120,13 +120,10 @@ static bool check_baseitem_chance(const BIT_FLAGS8 mode, const BaseitemDefinitio
 }
 
 /*
- * Build a list of object indexes in the given group. Return the number
- * of objects in the group.
- *
- * mode & 0x01 : check for non-empty group
- * mode & 0x02 : visual operation only
+ * Build a list of baseitem indexes in the given group.
+ * Return the number of baseitems in the group.
  */
-static std::vector<short> collect_objects(int grp_cur, BIT_FLAGS8 mode)
+static std::vector<short> collect_objects(int grp_cur, const EnumClassFlagGroup<BaseitemCollectionMode> &mode)
 {
     std::vector<short> bi_ids;
     const auto group_tval = ITEM_KINDS_GROUP[grp_cur];
@@ -152,7 +149,7 @@ static std::vector<short> collect_objects(int grp_cur, BIT_FLAGS8 mode)
             continue;
         }
 
-        if (mode & 0x01) {
+        if (mode.has(BaseitemCollectionMode::CHECK_CHANCE)) {
             break;
         }
     }
@@ -231,8 +228,6 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     bool visual_list = false;
     TERM_COLOR attr_top = 0;
     byte char_left = 0;
-    byte mode;
-
     const auto &[wid, hgt] = term_get_size();
     auto browser_rows = hgt - 8;
     auto &baseitem_configs = BaseitemConfigs::get_instance();
@@ -243,10 +238,14 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     const int max_length = max_element->length();
     const auto width = wid - (max_length + 3);
     if (bi_id < 0) {
-        mode = visual_only ? 0x03 : 0x01;
+        EnumClassFlagGroup<BaseitemCollectionMode> bcm = { BaseitemCollectionMode::CHECK_CHANCE };
+        if (visual_only) {
+            bcm.set(BaseitemCollectionMode::VISUAL_ONLY);
+        }
+
         const auto size = static_cast<short>(ITEM_KIND_NAMES_GROUP.size());
         for (short i = 0; i < size; i++) {
-            bi_ids = collect_objects(i, mode);
+            bi_ids = collect_objects(i, bcm);
             if (!bi_ids.empty()) {
                 grp_idx.push_back(i);
             }
@@ -261,7 +260,11 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         flavor_config.set_symbol({ color, character });
     }
 
-    mode = visual_only ? 0x02 : 0x00;
+    EnumClassFlagGroup<BaseitemCollectionMode> bcm{};
+    if (visual_only) {
+        bcm.set(BaseitemCollectionMode::VISUAL_ONLY);
+    }
+
     short previous_bi_id = bi_id < 0 ? -1 : bi_id;
     short old_grp_cur = -1;
     short grp_cur = 0;
@@ -325,7 +328,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_group_list(max_length, browser_rows, grp_idx, tmp_texts, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                bi_ids = collect_objects(grp_idx[grp_cur], mode);
+                bi_ids = collect_objects(grp_idx[grp_cur], bcm);
                 current_bi_id = 0;
                 top_bi_id = 0;
             }
