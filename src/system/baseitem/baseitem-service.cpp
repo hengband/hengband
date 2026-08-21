@@ -1,4 +1,5 @@
 #include "system/baseitem/baseitem-service.h"
+#include "knowledge/item-group-table.h"
 #include "object/tval-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-staff-types.h"
@@ -10,8 +11,11 @@
 #include "system/baseitem/baseitem-records.h"
 #include "term/z-rand.h"
 #include "util/finalizer.h"
+#include "util/flag-group.h"
 #include "view/display-symbol.h"
+#include "world/world.h"
 #include <functional>
+#include <numeric>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/view.hpp>
 
@@ -141,6 +145,51 @@ BaseitemConfig &BaseitemService::get_flavor_config(short bi_id)
 }
 
 /*!
+ * @brief 指定グループに属するベースアイテムIDを収集する
+ * @details
+ * ITEM_KINDS_GROUP[grp_cur] と一致する tval のベースアイテムを集める.
+ * グループが生命の書の場合は、生命の書そのものではなく呪文書全般を対象にする.
+ * BaseitemCollectionMode::CHECK_CHANCE が立っている場合は、最初の1件を見つけた時点で打ち切る.
+ * 該当が無ければ空の vector を返す.
+ * @param grp_cur ITEM_KINDS_GROUP の添字
+ * @param mode 収集モード
+ * @return ベースアイテムIDの一覧
+ */
+std::vector<short> BaseitemService::collect_baseitem_ids(int grp_cur, const EnumClassFlagGroup<BaseitemCollectionMode> &mode)
+{
+    std::vector<short> bi_ids;
+    const auto group_tval = ITEM_KINDS_GROUP[grp_cur];
+    const auto &baseitems = BaseitemList::get_instance();
+    const auto &baseitem_records = BaseitemRecords::get_instance();
+    for (auto bi_id : baseitems.collect_valid_bi_ids()) {
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
+        const auto &baseitem_record = baseitem_records.get_record(bi_id);
+        if (!check_chance(mode, baseitem, baseitem_record)) {
+            continue;
+        }
+
+        const auto tval = baseitem.bi_key.tval();
+        if (group_tval == ItemKindType::LIFE_BOOK) {
+            if (baseitem.bi_key.is_spell_book()) {
+                bi_ids.push_back(bi_id);
+            } else {
+                continue;
+            }
+        } else if (tval == group_tval) {
+            bi_ids.push_back(bi_id);
+        } else {
+            continue;
+        }
+
+        if (mode.has(BaseitemCollectionMode::CHECK_CHANCE)) {
+            break;
+        }
+    }
+
+    return bi_ids;
+}
+
+/*!
  * @brief ベースアイテムの未確定名を共通tval間でシャッフルする
  * @param tval シャッフルしたいtval
  * @details 巻物、各種魔道具などに利用される。
@@ -175,4 +224,33 @@ void BaseitemService::shuffle_flavors(ItemKindType tval)
     for (const auto &[bi_id, flavor_value] : ranges::views::zip(target_bi_ids, flavor_values)) {
         baseitem_records.get_record(bi_id).set_appearance_id(flavor_value);
     }
+}
+
+/*!
+ * @brief ベースアイテムを収集対象に含めるかを判定する
+ * @details
+ * modeにVISUAL_ONLY が含まれるなら常に対象とする.
+ * 通常時は、ウィザードモードを除き、未鑑定名が見えていて鑑定済であることと、
+ * 出現率の合計が1以上であることを要求する.
+ * @param mode 収集モード
+ * @param baseitem ベースアイテム定義
+ * @param record ベースアイテム記録
+ * @return 収集対象か否か
+ */
+bool BaseitemService::check_chance(const EnumClassFlagGroup<BaseitemCollectionMode> &mode, const BaseitemDefinition &baseitem, const BaseitemRecord &record)
+{
+    if (mode.has(BaseitemCollectionMode::VISUAL_ONLY)) {
+        return true;
+    }
+
+    if (!AngbandWorld::get_instance().wizard && (!record.is_apparent() || !record.is_aware())) {
+        return false;
+    }
+
+    const auto &alloc_tables = baseitem.alloc_tables;
+    const auto sum_chances = std::accumulate(alloc_tables.begin(), alloc_tables.end(), 0, [](int sum, const auto &table) {
+        return sum + table.chance;
+    });
+
+    return sum_chances > 0;
 }

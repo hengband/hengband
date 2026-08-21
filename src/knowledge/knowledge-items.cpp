@@ -37,7 +37,6 @@
 #include <algorithm>
 #include <fmt/format.h>
 #include <memory>
-#include <numeric>
 #include <string>
 #include <vector>
 
@@ -92,69 +91,6 @@ void do_cmd_knowledge_artifacts(PlayerType *player_ptr, ArtifactKnowledgeMode mo
     }
 
     FileDisplayer(player_ptr->name).display(true, temp_file.get_path().string(), 0, 0, title);
-}
-
-/*!
- * @brief ベースアイテムの出現率チェック処理
- * @param mode グループ化モード
- * @param baseitem ベースアイテムへの参照
- * @param baseitem_record ベースアイテム記録への参照
- * @return collect_objects() の処理を続行するか否か
- */
-static bool check_baseitem_chance(const EnumClassFlagGroup<BaseitemCollectionMode> &mode, const BaseitemDefinition &baseitem, const BaseitemRecord &record)
-{
-    if (mode.has(BaseitemCollectionMode::VISUAL_ONLY)) {
-        return true;
-    }
-
-    if (!AngbandWorld::get_instance().wizard && (!record.is_apparent() || !record.is_aware())) {
-        return false;
-    }
-
-    const auto &alloc_tables = baseitem.alloc_tables;
-    const auto sum_chances = std::accumulate(alloc_tables.begin(), alloc_tables.end(), 0, [](int sum, const auto &table) {
-        return sum + table.chance;
-    });
-
-    return sum_chances > 0;
-}
-
-/*
- * Build a list of baseitem indexes in the given group.
- * Return the number of baseitems in the group.
- */
-static std::vector<short> collect_objects(int grp_cur, const EnumClassFlagGroup<BaseitemCollectionMode> &mode)
-{
-    std::vector<short> bi_ids;
-    const auto group_tval = ITEM_KINDS_GROUP[grp_cur];
-    const auto &baseitems = BaseitemList::get_instance();
-    const auto &baseitem_records = BaseitemRecords::get_instance();
-    for (auto bi_id : baseitems.collect_valid_bi_ids()) {
-        const auto &baseitem = baseitems.get_baseitem(bi_id);
-        const auto &baseitem_record = baseitem_records.get_record(bi_id);
-        if (!check_baseitem_chance(mode, baseitem, baseitem_record)) {
-            continue;
-        }
-
-        const auto tval = baseitem.bi_key.tval();
-        if (group_tval == ItemKindType::LIFE_BOOK) {
-            if (baseitem.bi_key.is_spell_book()) {
-                bi_ids.push_back(bi_id);
-            } else {
-                continue;
-            }
-        } else if (tval == group_tval) {
-            bi_ids.push_back(bi_id);
-        } else {
-            continue;
-        }
-
-        if (mode.has(BaseitemCollectionMode::CHECK_CHANCE)) {
-            break;
-        }
-    }
-
-    return bi_ids;
 }
 
 /*
@@ -238,14 +174,14 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
     const int max_length = max_element->length();
     const auto width = wid - (max_length + 3);
     if (bi_id < 0) {
-        EnumClassFlagGroup<BaseitemCollectionMode> bcm = { BaseitemCollectionMode::CHECK_CHANCE };
+        EnumClassFlagGroup<BaseitemCollectionMode> bcm{ BaseitemCollectionMode::CHECK_CHANCE };
         if (visual_only) {
             bcm.set(BaseitemCollectionMode::VISUAL_ONLY);
         }
 
         const auto size = static_cast<short>(ITEM_KIND_NAMES_GROUP.size());
         for (short i = 0; i < size; i++) {
-            bi_ids = collect_objects(i, bcm);
+            bi_ids = BaseitemService::collect_baseitem_ids(i, bcm);
             if (!bi_ids.empty()) {
                 grp_idx.push_back(i);
             }
@@ -328,7 +264,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             display_group_list(max_length, browser_rows, grp_idx, tmp_texts, grp_cur, grp_top);
             if (old_grp_cur != grp_cur) {
                 old_grp_cur = grp_cur;
-                bi_ids = collect_objects(grp_idx[grp_cur], bcm);
+                bi_ids = BaseitemService::collect_baseitem_ids(grp_idx[grp_cur], bcm);
                 current_bi_id = 0;
                 top_bi_id = 0;
             }
