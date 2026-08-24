@@ -205,6 +205,10 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
     case MonraceId::HUNGRY_OLD_MAN:
         count += summon_POLYGON(player_ptr, y, x, m_idx);
         break;
+    case MonraceId::PERORODZILLA: {
+        count += summon_PEROROMINION(player_ptr, m_idx, y, x);
+        break;
+    }
     default:
         count += summon_Kin(player_ptr, y, x, rlev, m_idx);
         break;
