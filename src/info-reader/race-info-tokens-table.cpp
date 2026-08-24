@@ -423,6 +423,7 @@ const std::unordered_map<std::string_view, MonsterMessageType> r_info_message_fl
     { "MESSAGE_BREATH_SOUND", MonsterMessageType::MESSAGE_BREATH_SOUND },
     { "MESSAGE_BREATH_SHARDS", MonsterMessageType::MESSAGE_BREATH_SHARDS },
     { "MESSAGE_BREATH_FORCE", MonsterMessageType::MESSAGE_BREATH_FORCE },
+    { "MESSAGE_BREATH_LITE", MonsterMessageType::MESSAGE_BREATH_LITE },
     { "MESSAGE_DETECT_UNIQUE", MonsterMessageType::MESSAGE_DETECT_UNIQUE },
 };
 

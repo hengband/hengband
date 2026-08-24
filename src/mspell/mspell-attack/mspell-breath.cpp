@@ -31,16 +31,18 @@
  */
 static tl::optional<std::string> spell_RF4_BREATH_special_message(const MonraceDefinition &monrace, const AttributeType GF_TYPE, std::string_view m_name)
 {
-    if (GF_TYPE == AttributeType::SOUND) {
+    switch (GF_TYPE) {
+    case AttributeType::SOUND:
         return monrace.get_message(m_name, MonsterMessageType::MESSAGE_BREATH_SOUND);
-    }
-    if (GF_TYPE == AttributeType::SHARDS) {
+    case AttributeType::SHARDS:
         return monrace.get_message(m_name, MonsterMessageType::MESSAGE_BREATH_SHARDS);
-    }
-    if (GF_TYPE == AttributeType::FORCE) {
+    case AttributeType::FORCE:
         return monrace.get_message(m_name, MonsterMessageType::MESSAGE_BREATH_FORCE);
+    case AttributeType::LITE:
+        return monrace.get_message(m_name, MonsterMessageType::MESSAGE_BREATH_LITE);
+    default:
+        return tl::nullopt;
     }
-    return tl::nullopt;
 }
 
 static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, std::string_view type_s, AttributeType GF_TYPE)
