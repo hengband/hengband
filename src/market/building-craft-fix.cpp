@@ -26,6 +26,7 @@
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <tl/optional.hpp>
 #include <utility>
 #include <vector>
 
@@ -85,7 +86,14 @@ static void give_one_ability_of_object(ItemEntity *to_ptr, ItemEntity *from_ptr)
     }
 }
 
-static std::pair<short, std::shared_ptr<ItemEntity>> select_repairing_broken_weapon(PlayerType *player_ptr, const int row)
+/*!
+ * @brief 修復対象の折れた武器を選択する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param row 案内メッセージを表示する行
+ * @return 修復可能な武器を選択したならばその武器とインベントリ内の位置のペア、
+ * 選択しなかった場合や修復できない武器を選択した場合は tl::nullopt
+ */
+static tl::optional<std::pair<std::shared_ptr<ItemEntity>, short>> select_repairing_broken_weapon(PlayerType *player_ptr, const int row)
 {
     prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);
     prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row + 1, 2);
@@ -93,20 +101,20 @@ static std::pair<short, std::shared_ptr<ItemEntity>> select_repairing_broken_wea
     constexpr auto s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
     const auto &[item, i_idx] = choose_item(player_ptr, q, s, (USE_INVEN | USE_EQUIP), FuncItemTester(&ItemEntity::is_broken_weapon));
     if (!item) {
-        return { i_idx, nullptr };
+        return tl::nullopt;
     }
 
     if (!item->is_ego() && !item->is_fixed_or_random_artifact()) {
-        msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
-        return { i_idx, item };
+        msg_print(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
+        return tl::nullopt;
     }
 
     if (item->number > 1) {
-        msg_format(_("一度に複数を修復することはできません！", "They are too many to repair at once!"));
-        return { i_idx, item };
+        msg_print(_("一度に複数を修復することはできません！", "They are too many to repair at once!"));
+        return tl::nullopt;
     }
 
-    return { i_idx, item };
+    return std::make_pair(item, i_idx);
 }
 
 static void display_reparing_weapon(PlayerType *player_ptr, const ItemEntity &item, const int row)
@@ -136,10 +144,12 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
 {
     clear_bldg(0, 22);
     auto row = 7;
-    const auto &[item_idx_broken, item_broken] = select_repairing_broken_weapon(player_ptr, row);
-    if (!item_broken) {
+    const auto selection = select_repairing_broken_weapon(player_ptr, row);
+    if (!selection) {
         return 0;
     }
+
+    const auto &[item_broken, item_idx_broken] = *selection;
 
     display_reparing_weapon(player_ptr, *item_broken, row);
     constexpr auto q = _("材料となる武器は？", "Which weapon for material? ");
