@@ -2500,7 +2500,7 @@ static int16_t calc_to_damage_misc(PlayerType *player_ptr)
 
     for (const auto i_idx : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i_idx].get();
-        if (!o_ptr->is_valid()) {
+        if (!is_non_weapon_bonus_slot(player_ptr, i_idx)) {
             continue;
         }
 
@@ -2530,7 +2530,7 @@ static int16_t calc_to_hit_misc(PlayerType *player_ptr)
 
     for (const auto i_idx : INVEN_WIELDING_SLOTS) {
         o_ptr = player_ptr->inventory[i_idx].get();
-        if (!o_ptr->is_valid()) {
+        if (!is_non_weapon_bonus_slot(player_ptr, i_idx)) {
             continue;
         }
 
