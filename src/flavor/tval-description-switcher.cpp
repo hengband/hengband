@@ -17,10 +17,36 @@
 #include "system/monrace/monrace-definition.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
+#include "util/string-processor.h"
+#include <array>
 #ifdef JP
 #else
 #include "player-info/class-info.h"
 #endif
+
+/*!
+ * @brief 表示テンプレートからモンスター種族名のプレースホルダを取り除く
+ * @param basename モンスター種族名を含む表示テンプレート
+ * @return 種族名のプレースホルダを取り除いた表示テンプレート
+ * @details 人形・像・死体類の表示テンプレートは種族名に係る助詞・前置詞を含んでいる
+ * (日本語版「#の人形」、英語版「& Magical Figurine~ of #」など)。'#' だけを取り除くと
+ * 「の人形」「Magical Figurine of 」のような不自然な名前になるため、併せて取り除く.
+ */
+static std::string omit_monrace_placeholder(std::string_view basename)
+{
+#ifdef JP
+    static constexpr std::array<std::string_view, 2> patterns = { { "#の", "#" } };
+#else
+    static constexpr std::array<std::string_view, 3> patterns = { { " of #", "# ", "#" } };
+#endif
+
+    std::string result(basename);
+    for (const auto &pattern : patterns) {
+        result = str_replace(result, pattern, "");
+    }
+
+    return result;
+}
 
 static std::pair<std::string, std::string> describe_monster_ball(const ItemEntity &item, const describe_option_type &opt)
 {
@@ -47,9 +73,17 @@ static std::pair<std::string, std::string> describe_monster_ball(const ItemEntit
     return { basename, monrace_name };
 }
 
-static std::pair<std::string, std::string> describe_statue(const ItemEntity &item)
+/*!
+ * @brief 人形・像の名前を記述する
+ * @details OD_OMIT_MONRACE 指定時は種族名を省いた記述を返す.
+ */
+static std::pair<std::string, std::string> describe_statue(const ItemEntity &item, const describe_option_type &opt)
 {
     const auto &basename = item.get_baseitem().name;
+    if (any_bits(opt.mode, OD_OMIT_MONRACE)) {
+        return { omit_monrace_placeholder(basename), "" };
+    }
+
     const auto &monrace = item.get_monrace();
 #ifdef JP
     const auto &monrace_name = monrace.name.string();
@@ -64,8 +98,18 @@ static std::pair<std::string, std::string> describe_statue(const ItemEntity &ite
     return { basename, monrace_name };
 }
 
-static std::pair<std::string, std::string> describe_corpse(const ItemEntity &item)
+/*!
+ * @brief 死体・骨の名前を記述する
+ * @details OD_OMIT_MONRACE 指定時は種族名を省いた記述を返す.
+ */
+static std::pair<std::string, std::string> describe_corpse(const ItemEntity &item, const describe_option_type &opt)
 {
+    if (any_bits(opt.mode, OD_OMIT_MONRACE)) {
+        // 種族が未設定ならユニークかどうかも判らないので非ユニーク側の書式を使う
+        constexpr std::string_view basename = _("#%", "& # %");
+        return { omit_monrace_placeholder(basename), "" };
+    }
+
     const auto &monrace = item.get_monrace();
 #ifdef JP
     const auto basename = "#%";
@@ -375,9 +419,9 @@ std::pair<std::string, std::string> switch_tval_description(const ItemEntity &it
         return describe_monster_ball(item, opt);
     case ItemKindType::FIGURINE:
     case ItemKindType::STATUE:
-        return describe_statue(item);
+        return describe_statue(item, opt);
     case ItemKindType::MONSTER_REMAINS:
-        return describe_corpse(item);
+        return describe_corpse(item, opt);
     case ItemKindType::SHOT:
     case ItemKindType::BOLT:
     case ItemKindType::ARROW:
