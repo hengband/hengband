@@ -490,6 +490,12 @@
     <ClCompile Include="..\..\src\timed-effect\player-deceleration.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-fear.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-hallucination.cpp" />
+    <ClCompile Include="..\..\src\timed-effect\player-invulnerability.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\src\timed-effect\player-paralysis.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-poison.cpp" />
     <ClCompile Include="..\..\src\timed-effect\player-protection.cpp" />
@@ -1357,6 +1363,16 @@
     <ClInclude Include="..\..\src\timed-effect\player-deceleration.h" />
     <ClInclude Include="..\..\src\timed-effect\player-fear.h" />
     <ClInclude Include="..\..\src\timed-effect\player-hallucination.h" />
+    <ClInclude Include="..\..\src\timed-effect\player-invulnerability.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='English-Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">
+      </ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="..\..\src\timed-effect\player-paralysis.h" />
     <ClInclude Include="..\..\src\timed-effect\player-poison.h" />
     <ClInclude Include="..\..\src\timed-effect\player-protection.h" />

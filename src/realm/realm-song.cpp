@@ -874,7 +874,7 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
         }
 
         if (stop) {
-            if (!player_ptr->invuln) {
+            if (!player_ptr->effects()->invulnerability().is_invulnerable()) {
                 msg_print(_("無敵ではなくなった。", "The invulnerability wears off."));
                 sound(SoundKind::BUFF_EXPIRE);
                 auto &rfu = RedrawingFlagsUpdater::get_instance();

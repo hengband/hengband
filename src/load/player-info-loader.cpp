@@ -388,7 +388,7 @@ static void rd_status(PlayerType *player_ptr)
     effects->poison().set(rd_s16b());
     effects->hallucination().set(rd_s16b());
     effects->protection().set(rd_s16b());
-    player_ptr->invuln = rd_s16b();
+    effects->invulnerability().set(rd_s16b());
     if (h_older_than(0, 0, 0)) {
         player_ptr->ult_res = 0;
     } else {

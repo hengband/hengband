@@ -370,8 +370,8 @@ void report_magics(PlayerType *player_ptr)
             _("あなたは神秘のシールドで守られている", "You are protected by a mystic shield"));
     }
 
-    if (player_ptr->invuln) {
-        info.emplace_back(report_magics_aux(player_ptr->invuln),
+    if (effects->invulnerability().is_invulnerable()) {
+        info.emplace_back(report_magics_aux(effects->invulnerability().current()),
             _("あなたは無敵だ", "You are invulnerable"));
     }
 
