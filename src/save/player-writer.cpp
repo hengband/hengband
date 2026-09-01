@@ -209,7 +209,7 @@ void wr_player(PlayerType *player_ptr)
     wr_s16b(player_ptr->tim_levitation);
     wr_s16b(player_ptr->tim_sh_touki);
     wr_s16b(player_ptr->lightspeed);
-    wr_s16b(player_ptr->tsubureru);
+    wr_s16b(effects->wide_spread().current());
     wr_s16b(player_ptr->magicdef);
     wr_s16b(player_ptr->tim_res_nether);
     wr_s16b(player_ptr->tim_res_lite);

@@ -7,6 +7,7 @@
 #include "main/sound-of-music.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
+#include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
 /*!
@@ -25,24 +26,25 @@ bool set_leveling(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
         return false;
     }
 
+    const auto effects = player_ptr->effects();
     if (v) {
-        if (player_ptr->tsubureru && !do_dec) {
-            if (player_ptr->tsubureru > v) {
+        if (effects->wide_spread().is_wide_spreaded() && !do_dec) {
+            if (effects->wide_spread().current() > v) {
                 return false;
             }
-        } else if (!player_ptr->tsubureru) {
+        } else if (!effects->wide_spread().is_wide_spreaded()) {
             msg_print(_("横に伸びた。", "Your body expands horizontally."));
             notice = true;
         }
     } else {
-        if (player_ptr->tsubureru) {
+        if (effects->wide_spread().is_wide_spreaded()) {
             msg_print(_("もう横に伸びていない。", "Your body returns to normal."));
             sound(SoundKind::BUFF_EXPIRE);
             notice = true;
         }
     }
 
-    player_ptr->tsubureru = v;
+    effects->wide_spread().set(v);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::TIMED_EFFECT);
     if (!notice) {

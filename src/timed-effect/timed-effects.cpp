@@ -115,3 +115,13 @@ const PlayerProtection &TimedEffects::protection() const
 {
     return this->player_protection;
 }
+
+PlayerWideSpread &TimedEffects::wide_spread()
+{
+    return this->player_wide_spread;
+}
+
+const PlayerWideSpread &TimedEffects::wide_spread() const
+{
+    return this->player_wide_spread;
+}

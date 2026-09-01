@@ -11,6 +11,7 @@
 #include "timed-effect/player-poison.h"
 #include "timed-effect/player-protection.h"
 #include "timed-effect/player-stun.h"
+#include "timed-effect/player-wide-spread.h"
 
 class TimedEffects {
 public:
@@ -43,6 +44,8 @@ public:
     const PlayerPoison &poison() const;
     PlayerProtection &protection();
     const PlayerProtection &protection() const;
+    PlayerWideSpread &wide_spread();
+    const PlayerWideSpread &wide_spread() const;
 
 private:
     PlayerBlindness player_blindness{};
@@ -56,4 +59,5 @@ private:
     PlayerDeceleration player_deceleration{};
     PlayerPoison player_poison{};
     PlayerProtection player_protection{};
+    PlayerWideSpread player_wide_spread{};
 };

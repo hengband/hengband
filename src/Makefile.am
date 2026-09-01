@@ -1388,6 +1388,7 @@ libhengband_a_SOURCES = \
 	timed-effect/player-poison.cpp timed-effect/player-poison.h \
 	timed-effect/player-protection.cpp timed-effect/player-protection.h \
 	timed-effect/player-stun.cpp timed-effect/player-stun.h \
+	timed-effect/player-wide-spread.cpp timed-effect/player-wide-spread.h \
 	timed-effect/timed-effects.cpp timed-effect/timed-effects.h \
 	\
 	tracking/baseitem-tracker.cpp tracking/baseitem-tracker.h \
