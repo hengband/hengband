@@ -415,6 +415,7 @@ void MonsterAttackPlayer::process_monster_attack_evasion()
     case RaceBlowMethodType::CRUSH:
     case RaceBlowMethodType::ENGULF:
     case RaceBlowMethodType::CHARGE:
+    case RaceBlowMethodType::DASH:
         this->describe_attack_evasion();
         this->gain_armor_exp();
         this->damage = 0;

@@ -172,6 +172,11 @@ void describe_melee_method(PlayerType *player_ptr, mam_type *mam_ptr)
         mam_ptr->touched = false;
         break;
     }
+    case RaceBlowMethodType::DASH: {
+        mam_ptr->act = _("%sに体当りした。", "dashes %s.");
+        mam_ptr->touched = true;
+        break;
+    }
 
     case RaceBlowMethodType::NONE:
     case RaceBlowMethodType::MAX:
