@@ -364,7 +364,7 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
     auto &grid = floor.get_grid(pos);
 
     /* Blind players see nothing */
-    if (player_ptr->effects()->blindness().is_blind()) {
+    if (player_ptr->effects()->blindness().is_active()) {
         return;
     }
 

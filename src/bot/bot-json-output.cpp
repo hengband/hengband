@@ -117,7 +117,7 @@ bool is_grid_perceivable(const PlayerType &player, const Pos2D &pos)
         return grid.is_mark() && is_revealed_wall(floor, pos);
     }
 
-    if (player.effects()->blindness().is_blind()) {
+    if (player.effects()->blindness().is_active()) {
         return false;
     }
 
@@ -165,7 +165,7 @@ nlohmann::json make_grid_json(const PlayerType &player, const Pos2D &pos)
         return item.is_valid() && item.marked.has(OmType::FOUND);
     });
     auto visible_object_tvals = nlohmann::json::array();
-    if (!player.effects()->hallucination().is_hallucinated()) {
+    if (!player.effects()->hallucination().is_active()) {
         for (const auto o_idx : grid.o_idx_list) {
             const auto &item = *floor.o_list[o_idx];
             if (item.is_valid() && item.marked.has(OmType::FOUND)) {
@@ -358,7 +358,7 @@ nlohmann::json make_visible_monsters_json(const PlayerType &player)
 {
     auto monsters = nlohmann::json::array();
     const auto &floor = *player.current_floor_ptr;
-    const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
+    const auto is_hallucinated = player.effects()->hallucination().is_active();
     for (short m_idx = 1; m_idx < floor.m_max; ++m_idx) {
         const auto &monster = floor.m_list[m_idx];
         // The always-on visible list is deliberately direct-sight-only. ESP and
@@ -378,7 +378,7 @@ nlohmann::json make_detected_monsters_json(const PlayerType &player)
 {
     auto monsters = nlohmann::json::array();
     const auto &floor = *player.current_floor_ptr;
-    const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
+    const auto is_hallucinated = player.effects()->hallucination().is_active();
     for (short m_idx = 1; m_idx < floor.m_max; ++m_idx) {
         const auto &monster = floor.m_list[m_idx];
         // This list is deliberately the ml-but-not-direct-sight partition. The
@@ -458,14 +458,14 @@ nlohmann::json make_recent_messages_json()
 nlohmann::json make_player_status_json(const TimedEffects &effects)
 {
     return {
-        { "blind", effects.blindness().is_blind() },
-        { "confused", effects.confusion().is_confused() },
-        { "afraid", effects.fear().is_fearful() },
-        { "poisoned", effects.poison().is_poisoned() },
-        { "stunned", effects.stun().is_stunned() },
-        { "cut", effects.cut().is_cut() },
-        { "paralyzed", effects.paralysis().is_paralyzed() },
-        { "hallucinated", effects.hallucination().is_hallucinated() },
+        { "blind", effects.blindness().is_active() },
+        { "confused", effects.confusion().is_active() },
+        { "afraid", effects.fear().is_active() },
+        { "poisoned", effects.poison().is_active() },
+        { "stunned", effects.stun().is_active() },
+        { "cut", effects.cut().is_active() },
+        { "paralyzed", effects.paralysis().is_active() },
+        { "hallucinated", effects.hallucination().is_active() },
     };
 }
 
@@ -739,7 +739,7 @@ nlohmann::json make_look_json(PlayerType *player_ptr)
 {
     const auto &player = *player_ptr;
     const auto &floor = *player.current_floor_ptr;
-    const auto is_hallucinated = player.effects()->hallucination().is_hallucinated();
+    const auto is_hallucinated = player.effects()->hallucination().is_active();
     const auto positions = target_set_prepare(player_ptr, TARGET_LOOK);
     auto grids = nlohmann::json::array();
     grids.get_ref<nlohmann::json::array_t &>().reserve(positions.size());

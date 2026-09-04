@@ -1,16 +1,18 @@
 #pragma once
 
-#include "timed-effect/player-acceleration.h"
-#include "timed-effect/player-blindness.h"
-#include "timed-effect/player-confusion.h"
 #include "timed-effect/player-cut.h"
-#include "timed-effect/player-deceleration.h"
-#include "timed-effect/player-fear.h"
-#include "timed-effect/player-hallucination.h"
-#include "timed-effect/player-paralysis.h"
-#include "timed-effect/player-poison.h"
-#include "timed-effect/player-protection.h"
 #include "timed-effect/player-stun.h"
+#include "timed-effect/timed-effect.h"
+
+using PlayerBlindness = TimedEffect<struct TagPlayerBlindness>;
+using PlayerConfusion = TimedEffect<struct TagPlayerConfusion>;
+using PlayerFear = TimedEffect<struct TagPlayerFear>;
+using PlayerHallucination = TimedEffect<struct TagPlayerHallucination>;
+using PlayerParalysis = TimedEffect<struct TagPlayerParalysis>;
+using PlayerPoison = TimedEffect<struct TagPlayerPoison>;
+using PlayerAcceleration = TimedEffect<struct TagPlayerAcceleration>;
+using PlayerDeceleration = TimedEffect<struct TagPlayerDeceleration>;
+using PlayerProtection = TimedEffect<struct TagPlayerProtection>;
 
 class TimedEffects {
 public:

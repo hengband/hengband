@@ -241,7 +241,7 @@ static bool update_weird_telepathy(PlayerType *player_ptr, um_type *um_ptr, MONS
 
     um_ptr->flag = true;
     monster.mflag.set(MonsterTemporaryFlagType::ESP);
-    if (monster.is_original_ap() && !player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (monster.is_original_ap() && !player_ptr->effects()->hallucination().is_active()) {
         monrace.r_misc_flags.set(MonsterMiscType::WEIRD_MIND);
         update_smart_stupid_flags(monrace);
     }
@@ -253,7 +253,7 @@ static void update_telepathy_sight(PlayerType *player_ptr, um_type *um_ptr, MONS
 {
     auto &monster = *um_ptr->m_ptr;
     auto &monrace = monster.get_monrace();
-    const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
+    const auto is_hallucinated = player_ptr->effects()->hallucination().is_active();
     if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::MUSOU)) {
         um_ptr->flag = true;
         um_ptr->m_ptr->mflag.set(MonsterTemporaryFlagType::ESP);
@@ -291,7 +291,7 @@ static void update_specific_race_telepathy(PlayerType *player_ptr, um_type *um_p
 {
     auto &monster = *um_ptr->m_ptr;
     auto &monrace = monster.get_monrace();
-    const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
+    const auto is_hallucinated = player_ptr->effects()->hallucination().is_active();
     if ((player_ptr->esp_animal) && monrace.kind_flags.has(MonsterKindType::ANIMAL)) {
         um_ptr->flag = true;
         monster.mflag.set(MonsterTemporaryFlagType::ESP);
@@ -447,7 +447,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
         update_specific_race_telepathy(player_ptr, um_ptr);
     }
 
-    if (!player_ptr->current_floor_ptr->has_los_at({ um_ptr->fy, um_ptr->fx }) || player_ptr->effects()->blindness().is_blind()) {
+    if (!player_ptr->current_floor_ptr->has_los_at({ um_ptr->fy, um_ptr->fx }) || player_ptr->effects()->blindness().is_active()) {
         return;
     }
 
@@ -459,7 +459,7 @@ static void decide_sight_invisible_monster(PlayerType *player_ptr, um_type *um_p
 
     bool do_cold_blood = check_cold_blood(player_ptr, um_ptr, distance);
     bool do_invisible = check_invisible(player_ptr, um_ptr);
-    if (!um_ptr->flag || !monster.is_original_ap() || player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (!um_ptr->flag || !monster.is_original_ap() || player_ptr->effects()->hallucination().is_active()) {
         return;
     }
 
@@ -495,7 +495,7 @@ static void update_invisible_monster(PlayerType *player_ptr, um_type *um_ptr, MO
         RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::UHEALTH);
     }
 
-    if (!player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (!player_ptr->effects()->hallucination().is_active()) {
         if (monster.ap_r_idx == MonraceId::KAGE) {
             MonraceRecords::get_instance().increment_seen_count(MonraceId::KAGE);
         } else if (monster.is_original_ap()) {

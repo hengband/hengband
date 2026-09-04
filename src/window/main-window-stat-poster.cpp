@@ -74,7 +74,7 @@ void print_stat(PlayerType *player_ptr, int stat)
 void print_cut(PlayerType *player_ptr)
 {
     const auto &player_cut = player_ptr->effects()->cut();
-    if (!player_cut.is_cut()) {
+    if (!player_cut.is_active()) {
         put_str("            ", ROW_CUT, COL_CUT);
         return;
     }
@@ -90,7 +90,7 @@ void print_cut(PlayerType *player_ptr)
 void print_stun(PlayerType *player_ptr)
 {
     const auto &player_stun = player_ptr->effects()->stun();
-    if (!player_stun.is_stunned()) {
+    if (!player_stun.is_active()) {
         put_str("            ", ROW_STUN, COL_STUN);
         return;
     }
@@ -256,7 +256,7 @@ void print_speed(PlayerType *player_ptr)
     bool is_player_fast = is_fast(player_ptr);
     std::string buf;
     TERM_COLOR attr = TERM_WHITE;
-    const auto is_slow = player_ptr->effects()->deceleration().is_slow();
+    const auto is_slow = player_ptr->effects()->deceleration().is_active();
     if (speed > 0) {
         if (player_ptr->riding) {
             const auto &monster = floor.m_list[player_ptr->riding];
@@ -446,23 +446,23 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_TSUYOSHI);
     }
 
-    if (effects->hallucination().is_hallucinated()) {
+    if (effects->hallucination().is_active()) {
         ADD_BAR_FLAG(BAR_HALLUCINATION);
     }
 
-    if (player_ptr->effects()->blindness().is_blind()) {
+    if (player_ptr->effects()->blindness().is_active()) {
         ADD_BAR_FLAG(BAR_BLINDNESS);
     }
 
-    if (effects->paralysis().is_paralyzed()) {
+    if (effects->paralysis().is_active()) {
         ADD_BAR_FLAG(BAR_PARALYZE);
     }
 
-    if (effects->confusion().is_confused()) {
+    if (effects->confusion().is_active()) {
         ADD_BAR_FLAG(BAR_CONFUSE);
     }
 
-    if (effects->poison().is_poisoned()) {
+    if (effects->poison().is_active()) {
         ADD_BAR_FLAG(BAR_POISONED);
     }
 
@@ -488,7 +488,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_INFRAVISION);
     }
 
-    if (effects->protection().is_protected()) {
+    if (effects->protection().is_active()) {
         ADD_BAR_FLAG(BAR_PROTEVIL);
     }
 
@@ -581,7 +581,7 @@ void print_status(PlayerType *player_ptr)
         ADD_BAR_FLAG(BAR_ALTER);
     }
 
-    if (effects->fear().is_fearful()) {
+    if (effects->fear().is_active()) {
         ADD_BAR_FLAG(BAR_AFRAID);
     }
 

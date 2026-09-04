@@ -92,7 +92,7 @@ int mon_damage_mod(PlayerType *player_ptr, const MonsterEntity &monster, int dam
     }
 
     if (is_psy_spear) {
-        if (!player_ptr->effects()->blindness().is_blind() && is_seen(player_ptr, monster)) {
+        if (!player_ptr->effects()->blindness().is_active() && is_seen(player_ptr, monster)) {
             msg_print(_("バリアを切り裂いた！", "The barrier is penetrated!"));
         }
 
@@ -422,7 +422,7 @@ void monster_gain_exp(PlayerType *player_ptr, MONSTER_IDX m_idx, MonraceId monra
 
     monster.exp = 0;
     if (monster.is_pet() || monster.ml) {
-        const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
+        const auto is_hallucinated = player_ptr->effects()->hallucination().is_active();
         if (!ignore_unview || player_can_see_bold(player_ptr, monster.fy, monster.fx)) {
             if (is_hallucinated) {
                 const auto ids = MonraceService::search([](const auto &monrace) { return monrace.kind_flags.has_not(MonsterKindType::UNIQUE); });

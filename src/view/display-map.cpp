@@ -139,7 +139,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     const auto &terrains = TerrainList::get_instance();
     const auto &world = AngbandWorld::get_instance();
     const auto is_wild_mode = world.is_wild_mode();
-    const auto is_blind = player_ptr->effects()->blindness().is_blind();
+    const auto is_blind = player_ptr->effects()->blindness().is_active();
     const auto has_nocto = player_ptr->see_nocto != 0;
     const auto is_darkened = !has_nocto && grid.is_darkened();
     const auto tag_unsafe = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? TerrainTag::UNDETECTED : TerrainTag::NONE;
@@ -217,7 +217,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     DisplaySymbolPair symbol_pair(symbol_config, symbol_config);
-    const auto is_hallucinated = player_ptr->effects()->hallucination().is_hallucinated();
+    const auto is_hallucinated = player_ptr->effects()->hallucination().is_active();
     if (is_hallucinated && one_in_(256)) {
         symbol_pair.symbol_foreground = image_random();
     }

@@ -49,7 +49,7 @@
 static void decide_chance_fail(PlayerType *player_ptr, ae_type *ae_ptr)
 {
     ae_ptr->chance = player_ptr->skill_dev;
-    if (player_ptr->effects()->confusion().is_confused()) {
+    if (player_ptr->effects()->confusion().is_active()) {
         ae_ptr->chance = ae_ptr->chance / 2;
     }
 

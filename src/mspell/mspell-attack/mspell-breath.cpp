@@ -58,7 +58,7 @@ static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
     if (message) {
         msg_print(*message);
     } else {
-        if (player_ptr->effects()->blindness().is_blind()) {
+        if (player_ptr->effects()->blindness().is_active()) {
             if (mon_to_player || (mon_to_mon && known && see_either)) {
                 msg_format(_("%s^が何かのブレスを吐いた。", "%s^ breathes."), m_name.data());
             }

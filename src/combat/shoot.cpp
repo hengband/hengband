@@ -751,7 +751,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         msg_format(_("%sが%sに命中した。", "The %s hits %s."), item_name.data(), m_name.data());
 
                         if (monster.ml) {
-                            if (!player_ptr->effects()->hallucination().is_hallucinated()) {
+                            if (!player_ptr->effects()->hallucination().is_active()) {
                                 tracker.set_trackee(monster.ap_r_idx);
                             }
 

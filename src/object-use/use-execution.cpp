@@ -62,7 +62,7 @@ void ObjectUseEntity::execute()
     }
 
     auto chance = this->player_ptr->skill_dev;
-    if (this->player_ptr->effects()->confusion().is_confused()) {
+    if (this->player_ptr->effects()->confusion().is_active()) {
         chance = chance / 2;
     }
 

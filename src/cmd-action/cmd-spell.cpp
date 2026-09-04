@@ -913,7 +913,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         return false;
     }
 
-    if (player_ptr->effects()->blindness().is_blind() || no_lite(player_ptr)) {
+    if (player_ptr->effects()->blindness().is_active() || no_lite(player_ptr)) {
         if (pc.equals(PlayerClassType::FORCETRAINER)) {
             confirm_use_force(player_ptr, false);
         } else {

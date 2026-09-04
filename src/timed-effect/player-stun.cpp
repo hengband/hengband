@@ -2,15 +2,6 @@
 #include "system/angband-exceptions.h"
 #include "system/angband.h"
 
-enum class PlayerStunRank {
-    NONE = 0,
-    SLIGHT = 1,
-    NORMAL = 2,
-    HARD = 3,
-    UNCONSCIOUS = 4,
-    KNOCKED = 5,
-};
-
 PlayerStunRank PlayerStun::get_rank(short value)
 {
     if (value > 200) {
@@ -129,14 +120,9 @@ int PlayerStun::get_accumulation_rank(int total, int damage)
     return 1;
 }
 
-short PlayerStun::current() const
-{
-    return this->stun;
-}
-
 PlayerStunRank PlayerStun::get_rank() const
 {
-    return this->get_rank(this->stun);
+    return this->get_rank(this->current());
 }
 
 /*!
@@ -220,15 +206,6 @@ short PlayerStun::get_damage_penalty() const
 }
 
 /*!
- * @brief プレイヤーが朦朧しているかを返す
- * @return 朦朧状態ならばtrue、頭がハッキリしているならばfalse
- */
-bool PlayerStun::is_stunned() const
-{
-    return this->get_rank() > PlayerStunRank::NONE;
-}
-
-/*!
  * @brief プレイヤーが朦朧で行動不能かを返す
  * @return 昏倒状態ならばtrue、それ以外ならばfalse
  */
@@ -255,14 +232,4 @@ std::tuple<term_color_type, std::string_view> PlayerStun::get_expr() const
     default:
         THROW_EXCEPTION(std::logic_error, "Invalid StunRank is specified!");
     }
-}
-
-void PlayerStun::set(short value)
-{
-    this->stun = value;
-}
-
-void PlayerStun::reset()
-{
-    this->set(0);
 }

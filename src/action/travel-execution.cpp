@@ -131,7 +131,7 @@ Direction decide_travel_step_dir(PlayerType *player_ptr, const Direction &prev_d
     }
 
     const auto &blindness = player_ptr->effects()->blindness();
-    if (blindness.is_blind() || no_lite(player_ptr)) {
+    if (blindness.is_active() || no_lite(player_ptr)) {
         msg_print(_("目が見えない！", "You cannot see!"));
         return Direction::none();
     }

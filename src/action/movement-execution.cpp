@@ -152,9 +152,9 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
     if (grid.has_monster() && (monster.ml || p_can_enter || p_can_kill_walls)) {
         const auto &monrace = monster.get_monrace();
         const auto effects = player_ptr->effects();
-        const auto is_stunned = effects->stun().is_stunned();
-        auto can_cast = !effects->confusion().is_confused();
-        const auto is_hallucinated = effects->hallucination().is_hallucinated();
+        const auto is_stunned = effects->stun().is_active();
+        auto can_cast = !effects->confusion().is_active();
+        const auto is_hallucinated = effects->hallucination().is_active();
         can_cast &= !is_hallucinated;
         can_cast &= monster.ml;
         can_cast &= !is_stunned;
@@ -268,9 +268,9 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
             }
         } else {
             const auto effects = player_ptr->effects();
-            const auto is_confused = effects->confusion().is_confused();
-            const auto is_stunned = effects->stun().is_stunned();
-            const auto is_hallucinated = effects->hallucination().is_hallucinated();
+            const auto is_confused = effects->confusion().is_active();
+            const auto is_stunned = effects->stun().is_active();
+            const auto is_hallucinated = effects->hallucination().is_active();
             if (boundary_floor(grid, terrain, terrain_mimic)) {
                 msg_print(_("それ以上先には進めない。", "You cannot go any more."));
                 if (!(is_confused || is_stunned || is_hallucinated)) {
@@ -300,9 +300,9 @@ void exe_movement(PlayerType *player_ptr, const Direction &dir, bool do_pickup, 
 
     if (can_move && !pattern_seq(player_ptr, pos)) {
         const auto effects = player_ptr->effects();
-        const auto is_confused = effects->confusion().is_confused();
-        const auto is_stunned = effects->stun().is_stunned();
-        const auto is_hallucinated = effects->hallucination().is_hallucinated();
+        const auto is_confused = effects->confusion().is_active();
+        const auto is_stunned = effects->stun().is_active();
+        const auto is_hallucinated = effects->hallucination().is_active();
         if (!(is_confused || is_stunned || is_hallucinated)) {
             energy.reset_player_turn();
         }

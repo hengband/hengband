@@ -190,7 +190,7 @@ int16_t PlayerSpeed::time_effect_bonus()
         bonus += 10;
     }
 
-    if (this->player_ptr->effects()->deceleration().is_slow()) {
+    if (this->player_ptr->effects()->deceleration().is_active()) {
         bonus -= 10;
     }
 

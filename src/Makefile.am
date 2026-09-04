@@ -1377,17 +1377,9 @@ libhengband_a_SOURCES = \
 	term/z-form.cpp term/z-form.h term/z-rand.cpp term/z-rand.h \
 	term/z-term.cpp term/z-term.h term/z-util.cpp term/z-util.h \
 	\
-	timed-effect/player-acceleration.cpp timed-effect/player-acceleration.h \
-	timed-effect/player-blindness.cpp timed-effect/player-blindness.h \
-	timed-effect/player-confusion.cpp timed-effect/player-confusion.h \
 	timed-effect/player-cut.cpp timed-effect/player-cut.h \
-	timed-effect/player-deceleration.cpp timed-effect/player-deceleration.h \
-	timed-effect/player-fear.cpp timed-effect/player-fear.h \
-	timed-effect/player-hallucination.cpp timed-effect/player-hallucination.h \
-	timed-effect/player-paralysis.cpp timed-effect/player-paralysis.h \
-	timed-effect/player-poison.cpp timed-effect/player-poison.h \
-	timed-effect/player-protection.cpp timed-effect/player-protection.h \
 	timed-effect/player-stun.cpp timed-effect/player-stun.h \
+	timed-effect/timed-effect.h \
 	timed-effect/timed-effects.cpp timed-effect/timed-effects.h \
 	\
 	tracking/baseitem-tracker.cpp tracking/baseitem-tracker.h \
@@ -1495,7 +1487,11 @@ check_PROGRAMS = hengband-test
 
 hengband_test_SOURCES = \
 	test/test-main.cpp \
+	test/scoped-rng.h \
 	\
+	test/timed-effect/test-player-cut.cpp \
+	test/timed-effect/test-player-stun.cpp \
+	test/timed-effect/test-timed-effect.cpp \
 	test/util/test-probability-table.cpp \
 	test/util/test-sha256.cpp
 

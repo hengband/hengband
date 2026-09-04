@@ -81,7 +81,7 @@ static bool process_bolt_reflection(PlayerType *player_ptr, EffectPlayerType *ep
     sound(SoundKind::REFLECT);
 
     std::string mes;
-    if (player_ptr->effects()->blindness().is_blind()) {
+    if (player_ptr->effects()->blindness().is_active()) {
         mes = _("何かが跳ね返った！", "Something bounces!");
     } else if (PlayerClass(player_ptr).samurai_stance_is(SamuraiStanceType::FUUJIN)) {
         mes = _("風の如く武器を振るって弾き返した！", "The attack bounces!");

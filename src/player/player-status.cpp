@@ -3107,7 +3107,7 @@ void stop_mouth(PlayerType *player_ptr)
 
 bool is_fast(PlayerType *player_ptr)
 {
-    return player_ptr->effects()->acceleration().is_fast() || music_singing(player_ptr, MUSIC_SPEED) || music_singing(player_ptr, MUSIC_SHERO);
+    return player_ptr->effects()->acceleration().is_active() || music_singing(player_ptr, MUSIC_SPEED) || music_singing(player_ptr, MUSIC_SHERO);
 }
 
 bool is_invuln(PlayerType *player_ptr)

@@ -198,7 +198,7 @@ void MonsterDamageProcessor::increase_kill_numbers()
     auto &monrace = monster.get_real_monrace();
     monrace.increment_akills();
 
-    const auto is_hallucinated = this->player_ptr->effects()->hallucination().is_hallucinated();
+    const auto is_hallucinated = this->player_ptr->effects()->hallucination().is_active();
     if (((monster.ml == 0) || is_hallucinated) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }

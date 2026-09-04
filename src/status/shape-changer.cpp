@@ -33,7 +33,7 @@ void do_poly_wounds(PlayerType *player_ptr)
     auto change = static_cast<TIME_EFFECT>(Dice::roll(player_ptr->lev, 5));
     auto nasty_effect = one_in_(5);
     const auto &player_cut = player_ptr->effects()->cut();
-    if (!player_cut.is_cut() && (hit_p == 0) && !nasty_effect) {
+    if (!player_cut.is_active() && (hit_p == 0) && !nasty_effect) {
         return;
     }
 
