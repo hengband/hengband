@@ -393,3 +393,14 @@ MONSTER_NUMBER summon_POLYGON(PlayerType *player_ptr, POSITION y, POSITION x, MO
 
     return count;
 }
+
+int summon_PEROROMINION(PlayerType *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x)
+{
+    /* PERORODZILLAがPEROROMINIONを1～2体召喚 */
+    int num = randint1(2);
+    int count = 0;
+    for (int k = 0; k < num; k++) {
+        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::PEROROMINION, PM_NONE) ? 1 : 0;
+    }
+    return count;
+}
