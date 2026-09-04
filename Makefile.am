@@ -9,6 +9,8 @@ visual_studio_files = \
 	VisualStudio/Hengband/Hengband.vcxproj \
 	VisualStudio/Hengband/HengbandCore.vcxproj \
 	VisualStudio/Hengband/HengbandCore.vcxproj.filters \
+	VisualStudio/Hengband/HengbandTest.vcxproj \
+	VisualStudio/Hengband/HengbandTest.vcxproj.filters \
 	VisualStudio/Hengband/packages.config
 
 visual_studio_libcurl_files = \

@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hengband", "Hengband\Hengba
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HengbandCore", "Hengband\HengbandCore.vcxproj", "{C00503B6-18FF-42F1-BAC0-6C94EDE62CB2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HengbandTest", "Hengband\HengbandTest.vcxproj", "{B19D3F7B-EED0-407D-97A8-0AAC5BB88BD5}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{82CF9010-9443-4FFF-ADF0-0D3E81C732CC}"
 	ProjectSection(SolutionItems) = preProject
 		..\.clang-format = ..\.clang-format
@@ -36,6 +38,14 @@ Global
 		{32D43DED-9745-48F3-892D-231695D201A6}.English-Release|Win32.Build.0 = English-Release|Win32
 		{32D43DED-9745-48F3-892D-231695D201A6}.Release|Win32.ActiveCfg = Release|Win32
 		{32D43DED-9745-48F3-892D-231695D201A6}.Release|Win32.Build.0 = Release|Win32
+		{B19D3F7B-EED0-407D-97A8-0AAC5BB88BD5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B19D3F7B-EED0-407D-97A8-0AAC5BB88BD5}.Debug|Win32.Build.0 = Debug|Win32
+		{B19D3F7B-EED0-407D-97A8-0AAC5BB88BD5}.English-Debug|Win32.ActiveCfg = English-Debug|Win32
+		{B19D3F7B-EED0-407D-97A8-0AAC5BB88BD5}.English-Debug|Win32.Build.0 = English-Debug|Win32
+		{B19D3F7B-EED0-407D-97A8-0AAC5BB88BD5}.English-Release|Win32.ActiveCfg = English-Release|Win32
+		{B19D3F7B-EED0-407D-97A8-0AAC5BB88BD5}.English-Release|Win32.Build.0 = English-Release|Win32
+		{B19D3F7B-EED0-407D-97A8-0AAC5BB88BD5}.Release|Win32.ActiveCfg = Release|Win32
+		{B19D3F7B-EED0-407D-97A8-0AAC5BB88BD5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
