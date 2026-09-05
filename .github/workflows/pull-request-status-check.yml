@@ -51,7 +51,7 @@ jobs:
       - run: python3 .github/scripts/check-include-style.py
 
   check_test_registration:
-    name: Check the registration of the unit test sources
+    name: Check the registration of the unit test sources (Makefile.am / HengbandTest.vcxproj)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
@@ -101,7 +101,7 @@ jobs:
       use-ccache: true
 
   build_test_with_msvc:
-    name: Build test with MSVC
+    name: Build and test with MSVC
     uses: ./.github/workflows/build-test-with-msvc.yml
 
   json-schema-validation:

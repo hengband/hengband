@@ -1,4 +1,4 @@
-name: Build test with MSVC
+name: Build and test with MSVC
 on:
   workflow_call:
 
@@ -31,3 +31,9 @@ jobs:
       - name: Run build test
         run: |
           MSBuild -warnAsError .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=Debug
+
+      # 上のビルドで HengbandTest プロジェクトも生成される。
+      # doctest はテストが失敗すると非ゼロの終了コードを返す
+      - name: Run unit tests
+        run: |
+          .\VisualStudio\Hengband\Debug\hengband-test.exe

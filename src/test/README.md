@@ -1,6 +1,7 @@
 # ユニットテスト
 
-変愚蛮怒のユニットテストは [doctest](https://github.com/doctest/doctest) で記述し、`make check` で実行します。
+変愚蛮怒のユニットテストは [doctest](https://github.com/doctest/doctest) で記述します。
+autotools（Unix 系）では `make check`、Windows では Visual Studio の `HengbandTest` プロジェクトで実行します。
 
 ## どちらのテスト手段を使うか
 
@@ -8,7 +9,7 @@
 
 | 層             | 手段                                               | 向いている対象                                                                |
 | -------------- | -------------------------------------------------- | ----------------------------------------------------------------------------- |
-| ユニットテスト | doctest / `make check`（このドキュメント）         | 純粋関数、値クラス、計算ロジック（`util/`、`system/` の型、ダメージ計算など） |
+| ユニットテスト | doctest / `make check`・Visual Studio（このドキュメント） | 純粋関数、値クラス、計算ロジック（`util/`、`system/` の型、ダメージ計算など） |
 | シナリオテスト | `--headless --control-port` + `tools/bot/hbctl.py` | ゲームループ、コマンド処理、画面表示、グローバル状態をまたぐ挙動              |
 
 判断の基準は **「対象を呼び出すために `PlayerType` やフロア、ターミナル (`term`) を用意する必要があるか」** です。
@@ -19,6 +20,8 @@
 ---
 
 ## 実行方法
+
+### autotools（Unix 系）
 
 ```sh
 cd src
@@ -38,6 +41,30 @@ make check VERBOSE=1          # 失敗時にテストの出力をその場で表
 ```
 
 テストが失敗すると `make check` は非ゼロで終了し、`src/test-suite.log` に出力が残ります。
+
+### Visual Studio（Windows）
+
+`VisualStudio/Hengband.sln` の `HengbandTest` プロジェクトがテスト実行ファイルを生成します。
+ソリューションをビルドすればゲーム本体と一緒にビルドされます。
+
+コマンドラインからビルドする場合は次のとおりです。
+
+```pwsh
+MSBuild .\VisualStudio\Hengband.sln /p:Configuration=Debug
+.\VisualStudio\Hengband\Debug\hengband-test.exe
+```
+
+出力先は構成ごとに分かれます（`Debug` / `English-Debug` / `Release` / `English-Release`）。
+
+```pwsh
+.\VisualStudio\Hengband\<構成>\hengband-test.exe
+```
+
+Visual Studio の IDE から実行する場合は、`HengbandTest` を右クリックして
+「スタートアップ プロジェクトに設定」してから開始してください
+（既定のスタートアッププロジェクトはゲーム本体の `Hengband` です）。
+
+`--list-test-cases` などの doctest のオプションは autotools 版と共通です。
 
 ## テストの追加手順
 
@@ -68,10 +95,13 @@ make check VERBOSE=1          # 失敗時にテストの出力をその場で表
    }
    ```
 
-3. **`src/Makefile.am` の `hengband_test_SOURCES` に 1 行追加する**
+3. **2 つのビルド定義の両方に登録する**
 
-   **自動収集はされません。** 登録を忘れたテストはビルドも実行もされないので、必ず追加してください
-   （CI の `check_test_registration` が登録漏れを検出します）。
+   **どちらも自動収集はされません。** 登録を忘れたテストはビルドも実行もされないので、
+   必ず両方に追加してください（CI の `check_test_registration` が**両方**の追加忘れを検出します。
+   コメントアウトによる無効化も検出しますが、vcxproj の `<ExcludedFromBuild>` は検出できません）。
+
+   `src/Makefile.am` の `hengband_test_SOURCES`:
 
    ```make
    hengband_test_SOURCES = \
@@ -82,9 +112,25 @@ make check VERBOSE=1          # 失敗時にテストの出力をその場で表
        ...
    ```
 
-4. **`make check` で確認する**
+   `VisualStudio/Hengband/HengbandTest.vcxproj` の `<ClCompile>`:
 
-   `Makefile.am` を変更したので、`make` が自動的に `configure` を回し直します。
+   ```xml
+   <ItemGroup>
+     <ClCompile Include="..\..\src\test\test-main.cpp" />
+     <ClCompile Include="..\..\src\test\util\test-probability-table.cpp" />
+     <ClCompile Include="..\..\src\test\util\test-sha256.cpp" />
+     ...
+   </ItemGroup>
+   ```
+
+   Visual Studio 上での表示を整えるため、`HengbandTest.vcxproj.filters` にも
+   同じファイルを追加しておくとよいです（こちらは登録しなくてもビルド・実行はできます）。
+
+4. **ビルドして確認する**
+
+   autotools では `make check` を実行します（`Makefile.am` を変更したので、`make` が
+   自動的に `configure` を回し直します）。Windows では Visual Studio でソリューションを
+   ビルドし、`hengband-test.exe` を実行します。
 
 ## doctest の書き方
 
@@ -152,6 +198,8 @@ for (const auto &test : TEST_VECTORS) {
 
 日本語版のビルドでは `gcc-wrap` がソース中の文字列リテラルを UTF-8 から EUC-JP に変換します。
 テストケース名に日本語を使うと、UTF-8 の端末でテスト結果が文字化けします。
+MSVC の日本語版構成も同様に、文字列リテラルを Shift_JIS に変換 (`/execution-charset:shift-jis`)
+するため文字化けします。
 
 **コメントはこれまでどおり日本語で構いません。** 制約を受けるのは実行時に出力される文字列（テストケース名、
 `CAPTURE` する文字列など）だけです。
@@ -215,9 +263,28 @@ const auto restore_hoge = util::make_finalizer([&system, backup = system.get_hog
 
 ## リンクについて
 
-テストは、ゲーム本体のソースを `main.cpp` を除いてすべてまとめた `libhengband.a` にリンクされます。
+テストは、ゲーム本体のソースをエントリポイントだけ除いてすべてまとめた静的ライブラリに
+リンクされます。autotools では `libhengband.a`（`main.cpp` 以外）、MSVC では
+`HengbandCore.lib`（`main-win.cpp` 以外）です。
 **テスト対象の `.cpp` を個別に指定する必要はありません。** ゲーム内のどの関数・クラスでも、
 ヘッダを `#include` すればテストから呼び出せます。
+
+ただし、静的ライブラリからは**未定義シンボルの解決に必要なオブジェクトしか取り込まれません。**
+静的初期化子による自己登録だけを目的とする翻訳単位を追加しても、リンクされず、警告も出ないまま
+無視されます。autotools には `--whole-archive` という逃げ道がありますが、**MSVC で
+`/WHOLEARCHIVE` は使えません。** GUI 専用のオブジェクト（`main-win.cpp` にしか定義のない
+シンボルを参照する `main-win/commandline-win.cpp` など）まで引き込んでリンクエラーになります。
+
+## doctest の警告について
+
+MSVC のビルドは `/Wall`（`EnableAllWarnings`）と `TreatWarningAsError` を使っていますが、
+doctest 由来の警告を個別に抑止する指定は必要ありません。
+
+doctest は `src/external-lib/include/` にあり、`check_include_style` が同ディレクトリの
+ヘッダを `<>` で include するよう強制しています。そのため
+`Hengband.Common.props` の `TreatAngleIncludeAsExternal` と
+`ExternalWarningLevel=TurnOffAllWarnings` が必ず効きます
+（`/external:templates-` を指定していないので、テンプレートの実体化も対象です）。
 
 ## テストしにくいコードをどう確かめるか
 
@@ -244,5 +311,12 @@ doctest によるユニットテストのみです）。
 
 ## 制限
 
-**ユニットテストは autotools ビルド（Unix 系）専用です。** MSVC の
-`VisualStudio/Hengband.sln` にはテスト用のプロジェクトが無く、Windows 上ではテストをビルド・実行できません。
+- **`PlayerType` やフロア、`term` を必要とするコードはユニットテストにできません。**
+  冒頭の判断基準のとおり、シナリオテストで確かめてください。
+- **シナリオテストを自動実行する仕組みはありません。** `make check` と MSVC の CI が
+  対象とするのは doctest によるユニットテストのみです。
+- **MSVC の CI がテストを実行するのは Debug 構成だけです。** 手元では 4 構成すべてで
+  ビルド・実行できます。Release 系は警告の除外リストが Debug と異なる（`4711;4738` が加わる）
+  ため、Release でだけ壊れる変更は CI をすり抜けます。
+  `Build-Windows-Release-Package.ps1` はソリューション全体をリビルドするので、
+  リリースパッケージの作成もテストプロジェクトのビルドが通ることに依存します。

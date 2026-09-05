@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="English-Debug|Win32">
+      <Configuration>English-Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="English-Release|Win32">
+      <Configuration>English-Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B19D3F7B-EED0-407D-97A8-0AAC5BB88BD5}</ProjectGuid>
+    <RootNamespace>HengbandTest</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="Hengband.Configuration.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Hengband.Common.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>$(Configuration)\</OutDir>
+    <TargetName>hengband-test</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <!-- doctest が生成する main() を持つコンソールアプリのため、
+           Hengband.Common.props の SubSystem=Windows を上書きする -->
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <!--
+      プリコンパイルヘッダ。HengbandCore とは IntDir が異なり pch を共有できないため、
+      テストプロジェクト側でも stdafx.cpp から生成する。
+      stdafx.cpp はシンボルを定義しないので HengbandCore.lib 内の同名オブジェクトとは衝突しない。
+    -->
+    <ClCompile Include="..\..\src\stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\test-main.cpp" />
+    <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp" />
+    <ClCompile Include="..\..\src\test\timed-effect\test-player-stun.cpp" />
+    <ClCompile Include="..\..\src\test\timed-effect\test-timed-effect.cpp" />
+    <ClCompile Include="..\..\src\test\util\test-probability-table.cpp" />
+    <ClCompile Include="..\..\src\test\util\test-sha256.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\stdafx.h" />
+    <ClInclude Include="..\..\src\test\scoped-rng.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="HengbandCore.vcxproj">
+      <Project>{C00503B6-18FF-42F1-BAC0-6C94EDE62CB2}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
