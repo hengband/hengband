@@ -55,6 +55,16 @@ enum class LargeFlag {
 };
 using LargeFlagGroup = EnumClassFlagGroup<LargeFlag>;
 
+//! セーブファイルのバイト数が1バイトに収まらないフラグ集合。
+//! 2057フラグは258バイト (0x0102) になり、バイト数の上位バイトが非0になる。
+//! 実際のフラグ集合は最大でも164個 (21バイト) だが、書き込み側が16ビットで
+//! 出力していることを確かめるために用意する
+enum class HugeFlag {
+    FIRST = 0,
+    MAX = 2057,
+};
+using HugeFlagGroup = EnumClassFlagGroup<HugeFlag>;
+
 //! セーブファイルの代わりにバイト列へ読み書きするための入れ物
 class ByteBuffer {
 public:
@@ -503,6 +513,29 @@ TEST_CASE("FlagGroup survives a round trip through the save file format")
         CHECK(restored == original);
         CHECK(buffer.read_position == buffer.bytes.size());
     }
+}
+
+TEST_CASE("FlagGroup writes the size header as a little endian value")
+{
+    // バイト数が1バイトに収まらない場合、上位バイトも出力する必要がある。
+    // uint8_t に切り詰める回帰が入ると、258バイトが2バイトとして書かれてしまう
+    constexpr size_t expected_bytes = 0x0102;
+
+    const HugeFlagGroup flags = { HugeFlag::FIRST };
+
+    ByteBuffer buffer;
+    wr_FlagGroup(flags, buffer.writer());
+
+    REQUIRE(buffer.bytes.size() == 2 + expected_bytes);
+    CHECK(buffer.bytes[0] == 0x02);
+    CHECK(buffer.bytes[1] == 0x01);
+
+    // 書いたものをそのまま読み戻せること
+    HugeFlagGroup restored;
+    rd_FlagGroup(restored, buffer.reader());
+
+    CHECK(restored == flags);
+    CHECK(buffer.read_position == buffer.bytes.size());
 }
 
 TEST_CASE("FlagGroup reads the size header as a little endian value")
