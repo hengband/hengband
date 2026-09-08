@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="info-reader">
+      <UniqueIdentifier>{5a5d0f27-6c1e-4c8b-9f34-2b7d8e1a6c40}</UniqueIdentifier>
+    </Filter>
     <Filter Include="timed-effect">
       <UniqueIdentifier>{713ac6ea-8881-48d4-beac-cf75e9e6b037}</UniqueIdentifier>
     </Filter>
@@ -11,6 +14,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\stdafx.cpp" />
     <ClCompile Include="..\..\src\test\test-main.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp">
       <Filter>timed-effect</Filter>
     </ClCompile>
