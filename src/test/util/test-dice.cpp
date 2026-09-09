@@ -192,6 +192,8 @@ TEST_CASE("Dice::roll stays within the range of the possible sums")
 {
     const auto restore_rng = test::scoped_rng();
 
+    // is_valid() が真になるダイスに限った契約。非正値のダイスは
+    // 出目が maxroll() を超えることがある (後続のテストで固定している)
     for (const auto &dice : { Dice(1, 1), Dice(1, 6), Dice(3, 5), Dice(10, 100) }) {
         CAPTURE(dice.to_string());
 
@@ -248,4 +250,23 @@ TEST_CASE("Dice::roll sums the pips of the dice one by one")
     }
 
     CHECK(has_non_multiple);
+}
+
+TEST_CASE("Dice::roll does not reject a dice which is not valid")
+{
+    const auto restore_rng = test::scoped_rng();
+
+    // parse は "0d0" や "-1d6" を通すため (Dice::parse のテストを参照)、
+    // 振れないダイスが実際に roll() まで届く。振っても例外にはならない
+
+    // ダイス数が0以下なら合計を足し込むループが回らず0
+    CHECK(Dice(0, 0).roll() == 0);
+    CHECK(Dice(0, 6).roll() == 0);
+    CHECK(Dice(-1, 6).roll() == 0);
+
+    // 面数0は randint1(0) が 1 を返す (term/z-rand.h の randnum1) ため、
+    // 出目の合計はダイス数と等しくなる。maxroll() は 0 なので、
+    // このダイスに限り出目が maxroll() を超える
+    CHECK(Dice(6, 0).roll() == 6);
+    CHECK(Dice(6, 0).maxroll() == 0);
 }
