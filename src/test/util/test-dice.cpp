@@ -161,8 +161,10 @@ TEST_CASE("Dice::floored_expected_value multiplies before truncating")
     CHECK(Dice(1, 2).floored_expected_value_multiplied_by(2) == 3);
     CHECK(Dice::floored_expected_value(1, 2, 2) == 3);
 
-    // 倍率1は floored_expected_value() と同じ
-    CHECK(Dice(1, 2).floored_expected_value_multiplied_by(1) == Dice(1, 2).floored_expected_value());
+    // 倍率1は倍率を指定しない場合と同じ。ただし互いを比べると両辺が同じ静的関数へ
+    // 委譲するため、式を壊しても一緒に動いて必ず成立する。リテラルで固定する
+    CHECK(Dice(1, 2).floored_expected_value_multiplied_by(1) == 1);
+    CHECK(Dice(3, 5).floored_expected_value_multiplied_by(1) == 9);
 
     CHECK(Dice(3, 5).floored_expected_value_multiplied_by(10) == 90);
 }
