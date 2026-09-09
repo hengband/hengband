@@ -229,3 +229,23 @@ TEST_CASE("Dice::roll of a single sided dice always returns the number of the di
     CHECK(Dice(5, 1).roll() == 5);
     CHECK(Dice::roll(5, 1) == 5);
 }
+
+TEST_CASE("Dice::roll sums the pips of the dice one by one")
+{
+    const auto restore_rng = test::scoped_rng();
+
+    // 3d5 は「1個の出目を3倍したもの」ではなく「3個の独立した出目の和」。
+    // 前者だと出目は必ず3の倍数 (3, 6, 9, 12, 15) になり、
+    // 合計の範囲は 3〜15 のままなので範囲を見るテストでは区別できない
+    const Dice dice(3, 5);
+
+    auto has_non_multiple = false;
+    for (auto i = 0; i < 1000; i++) {
+        if (dice.roll() % 3 != 0) {
+            has_non_multiple = true;
+            break;
+        }
+    }
+
+    CHECK(has_non_multiple);
+}
