@@ -60,6 +60,7 @@
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-stun.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-timed-effect.cpp" />
+    <ClCompile Include="..\..\src\test\util\test-flag-group.cpp" />
     <ClCompile Include="..\..\src\test\util\test-probability-table.cpp" />
     <ClCompile Include="..\..\src\test\util\test-sha256.cpp" />
   </ItemGroup>
