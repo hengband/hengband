@@ -241,14 +241,69 @@ TEST_CASE("FlagGroup clears all the flags")
 TEST_CASE("FlagGroup modifies itself when the modifier is called on an lvalue")
 {
     // 左辺値版は自身への参照を返すので、戻り値を経由した変更も同じオブジェクトに効く
-    SmallFlagGroup flags;
+    SUBCASE("chained set")
+    {
+        SmallFlagGroup flags;
 
-    auto &returned = flags.set(SmallFlag::ZERO);
-    returned.set(SmallFlag::ONE);
+        auto &returned = flags.set(SmallFlag::ZERO);
+        returned.set(SmallFlag::ONE);
 
-    CHECK(flags.has(SmallFlag::ZERO));
-    CHECK(flags.has(SmallFlag::ONE));
-    CHECK(&returned == &flags);
+        CHECK(flags.has(SmallFlag::ZERO));
+        CHECK(flags.has(SmallFlag::ONE));
+        CHECK(&returned == &flags);
+    }
+
+    // 右辺値版と同じく、フラグ1つを指定する版・FlagGroupを指定する版・
+    // イテレータ版はそれぞれ別の関数本体を持つため、個別に確かめる
+    SUBCASE("clear")
+    {
+        SmallFlagGroup flags = { SmallFlag::ZERO, SmallFlag::ONE };
+
+        auto &returned = flags.clear();
+
+        CHECK(flags.none());
+        CHECK(&returned == &flags);
+    }
+
+    SUBCASE("reset by a flag")
+    {
+        SmallFlagGroup flags = { SmallFlag::ZERO, SmallFlag::ONE };
+
+        auto &returned = flags.reset(SmallFlag::ZERO);
+
+        CHECK(flags == SmallFlagGroup({ SmallFlag::ONE }));
+        CHECK(&returned == &flags);
+    }
+
+    SUBCASE("set and reset by another group")
+    {
+        const SmallFlagGroup others = { SmallFlag::ONE, SmallFlag::TWO };
+
+        SmallFlagGroup set_flags;
+        auto &set_returned = set_flags.set(others);
+        CHECK(set_flags == others);
+        CHECK(&set_returned == &set_flags);
+
+        SmallFlagGroup reset_flags = { SmallFlag::ZERO, SmallFlag::ONE };
+        auto &reset_returned = reset_flags.reset(others);
+        CHECK(reset_flags == SmallFlagGroup({ SmallFlag::ZERO }));
+        CHECK(&reset_returned == &reset_flags);
+    }
+
+    SUBCASE("set and reset by iterators")
+    {
+        const std::vector<SmallFlag> list = { SmallFlag::ONE, SmallFlag::TWO };
+
+        SmallFlagGroup set_flags;
+        auto &set_returned = set_flags.set(list.begin(), list.end());
+        CHECK(set_flags == SmallFlagGroup({ SmallFlag::ONE, SmallFlag::TWO }));
+        CHECK(&set_returned == &set_flags);
+
+        SmallFlagGroup reset_flags = { SmallFlag::ZERO, SmallFlag::ONE };
+        auto &reset_returned = reset_flags.reset(list.begin(), list.end());
+        CHECK(reset_flags == SmallFlagGroup({ SmallFlag::ZERO }));
+        CHECK(&reset_returned == &reset_flags);
+    }
 }
 
 TEST_CASE("FlagGroup returns the modified value when the modifier is called on an rvalue")
