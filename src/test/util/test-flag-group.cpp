@@ -567,7 +567,7 @@ TEST_CASE("FlagGroup writes the number of the bytes of the flags before the flag
     wr_FlagGroup(small, small_buffer.writer());
 
     // 先頭2バイトがバイト数 (下位バイトが先)、続いてフラグのバイト列
-    CHECK(small_buffer.bytes.size() == 2 + 1);
+    REQUIRE(small_buffer.bytes.size() == 2 + 1);
     CHECK(small_buffer.bytes[0] == 1);
     CHECK(small_buffer.bytes[1] == 0);
 
@@ -576,7 +576,7 @@ TEST_CASE("FlagGroup writes the number of the bytes of the flags before the flag
     wr_FlagGroup(large, large_buffer.writer());
 
     // 100フラグは13バイト
-    CHECK(large_buffer.bytes.size() == 2 + 13);
+    REQUIRE(large_buffer.bytes.size() == 2 + 13);
     CHECK(large_buffer.bytes[0] == 13);
     CHECK(large_buffer.bytes[1] == 0);
 }
