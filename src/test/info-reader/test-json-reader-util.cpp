@@ -28,6 +28,11 @@
 #include <cstdint>
 #include <string>
 
+#if defined(JP) && defined(EUC)
+// _LIBICONV_VERSION (GNU libiconv の判定に使う) を参照するため
+#include <iconv.h>
+#endif
+
 namespace {
 
 //! info_set_integer がenum型を扱えることを確かめるためのenum
@@ -313,14 +318,15 @@ TEST_CASE("info_set_string converts the UTF-8 string into the system encoding")
 }
 #endif
 
-#if defined(JP) && defined(EUC)
+#if defined(JP) && defined(EUC) && (defined(__GLIBC__) || defined(_LIBICONV_VERSION))
 TEST_CASE("info_set_string cannot convert a character missing from EUC-JP")
 {
     // U+1F600 (GRINNING FACE)。EUC-JPに対応する文字がないため変換に失敗する。
     // Windows版(Shift_JIS)は MultiByteToWideChar/WideCharToMultiByte をエラー指定なしで
     // 呼ぶので置換文字になって成功してしまう。そのためEUC版限定のテストとする。
-    // なお変換不能文字でiconvがエラーを返すのは glibc/GNU libiconv での挙動で、
-    // musl のiconvは '*' に置換して成功扱いにする
+    // さらに、変換不能文字でiconvがエラーを返すのは glibc/GNU libiconv での挙動で、
+    // musl のiconvは '*' に置換して成功扱いにする。そのため glibc (__GLIBC__) か
+    // GNU libiconv (_LIBICONV_VERSION) のときに限定し、musl 系ではこのテストごと除外する
     nlohmann::json json;
     json["ja"] = "\xf0\x9f\x98\x80";
 
