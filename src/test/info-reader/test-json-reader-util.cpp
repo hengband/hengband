@@ -25,6 +25,7 @@
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
 
+#include <cstdint>
 #include <string>
 
 namespace {
@@ -253,6 +254,28 @@ TEST_CASE("info_set_integer checks the value range")
         const auto valid_result = info_set_integer(nlohmann::json(10), kind, true, Range(0, 10));
         CHECK(valid_result == PARSE_ERROR_NONE);
         CHECK(kind == TestKind::LAST);
+    }
+
+    SUBCASE("value which does not fit in the destination type")
+    {
+        // 範囲外の値が格納先の型で表現できない場合も範囲チェックで弾く。
+        // 格納先の型へ変換してから範囲を見ると、uint8_t への 300 は 44 に切り詰められて
+        // Range(0, 255) を通ってしまう (terrain の "power" がこの形で読まれている)。
+        // 番兵値は切り詰め後の値 (44, 255) と重ならないものにする
+        constexpr uint8_t uint8_sentinel = 123;
+        auto uint8_data = uint8_sentinel;
+
+        const auto above_result = info_set_integer(nlohmann::json(300), uint8_data, true, Range(0, 255));
+        CHECK(above_result == PARSE_ERROR_INVALID_FLAG);
+        CHECK(uint8_data == uint8_sentinel);
+
+        const auto below_result = info_set_integer(nlohmann::json(-1), uint8_data, true, Range(0, 255));
+        CHECK(below_result == PARSE_ERROR_INVALID_FLAG);
+        CHECK(uint8_data == uint8_sentinel);
+
+        const auto valid_result = info_set_integer(nlohmann::json(255), uint8_data, true, Range(0, 255));
+        CHECK(valid_result == PARSE_ERROR_NONE);
+        CHECK(uint8_data == 255);
     }
 }
 
