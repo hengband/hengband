@@ -56,7 +56,9 @@ MONSTER_NUMBER summon_EDGE(PlayerType *player_ptr, POSITION y, POSITION x, int r
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::EDGE, PM_NONE) ? 1 : 0;
+        if (summon_named_creature(player_ptr, m_idx, y, x, MonraceId::EDGE, PM_NONE)) {
+            count++;
+        }
     }
 
     return count;
@@ -113,7 +115,9 @@ MONSTER_NUMBER summon_LOCKE_CLONE(PlayerType *player_ptr, POSITION y, POSITION x
     int count = 0;
     int num = randint1(3);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::LOCKE_CLONE, PM_NONE) ? 1 : 0;
+        if (summon_named_creature(player_ptr, m_idx, y, x, MonraceId::LOCKE_CLONE, PM_NONE)) {
+            count++;
+        }
     }
 
     return count;
@@ -160,7 +164,9 @@ MONSTER_NUMBER summon_DEMON_SLAYER(PlayerType *player_ptr, POSITION y, POSITION 
 
     auto count = 0;
     for (auto k = 0; k < MAX_NAZGUL_NUM; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::DEMON_SLAYER_MEMBER, PM_NONE) ? 1 : 0;
+        if (summon_named_creature(player_ptr, m_idx, y, x, MonraceId::DEMON_SLAYER_MEMBER, PM_NONE)) {
+            count++;
+        }
     }
 
     if (count == 0) {
@@ -274,7 +280,9 @@ MONSTER_NUMBER summon_EYE_PHORN(PlayerType *player_ptr, POSITION y, POSITION x, 
     int count = 0;
     int num = 2 + randint1(1 + rlev / 20);
     for (int k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::EYE_PHORN, PM_NONE) ? 1 : 0;
+        if (summon_named_creature(player_ptr, m_idx, y, x, MonraceId::EYE_PHORN, PM_NONE)) {
+            count++;
+        }
     }
 
     return count;
@@ -318,14 +326,13 @@ MONSTER_NUMBER summon_YENDER_WIZARD(PlayerType *player_ptr, POSITION y, POSITION
         return 0;
     }
 
-    auto count = summon_named_creature(player_ptr, m_idx, y, x, MonraceId::YENDOR_WIZARD_2, PM_NONE) ? 1 : 0;
-    if (count == 0) {
+    if (!summon_named_creature(player_ptr, m_idx, y, x, MonraceId::YENDOR_WIZARD_2, PM_NONE)) {
         msg_print(_("どこからか声が聞こえる…「三重苦は負わぬ。。。」", "Heard a voice from somewhere... 'I will deny the triple suffering...'"));
         return 0;
     }
 
     msg_print(_("二重苦だ。。。", "THIS is double suffering..."));
-    return count;
+    return 1;
 }
 
 MONSTER_NUMBER summon_PLASMA(PlayerType *player_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
@@ -333,7 +340,9 @@ MONSTER_NUMBER summon_PLASMA(PlayerType *player_ptr, POSITION y, POSITION x, int
     auto count = 0;
     auto num = 2 + randint1(1 + rlev / 20);
     for (auto k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::PLASMA_VORTEX, PM_NONE) ? 1 : 0;
+        if (summon_named_creature(player_ptr, m_idx, y, x, MonraceId::PLASMA_VORTEX, PM_NONE)) {
+            count++;
+        }
     }
 
     msg_print(_("プーラーズーマーッ！！", "P--la--s--ma--!!"));
@@ -378,7 +387,9 @@ MONSTER_NUMBER summon_LAFFEY_II(PlayerType *player_ptr, const Pos2D &position, M
         }
     }
     for (auto k = 0; k < real_num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, position.y, position.x, MonraceId::BUNBUN_STRIKERS, PM_NONE) ? 1 : 0;
+        if (summon_named_creature(player_ptr, m_idx, position.y, position.x, MonraceId::BUNBUN_STRIKERS, PM_NONE)) {
+            count++;
+        }
     }
     return count;
 }
@@ -388,7 +399,9 @@ MONSTER_NUMBER summon_POLYGON(PlayerType *player_ptr, POSITION y, POSITION x, MO
     auto count = 0;
     auto num = 2 + randint1(3);
     for (auto k = 0; k < num; k++) {
-        count += summon_named_creature(player_ptr, m_idx, y, x, MonraceId::POLYGON_SPIN, PM_NONE) ? 1 : 0;
+        if (summon_named_creature(player_ptr, m_idx, y, x, MonraceId::POLYGON_SPIN, PM_NONE)) {
+            count++;
+        }
     }
 
     return count;
