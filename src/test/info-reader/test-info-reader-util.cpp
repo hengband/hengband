@@ -108,13 +108,15 @@ TEST_CASE("info_set_value converts the string into a number")
         CHECK(value == 255);
     }
 
-    SUBCASE("value is converted into the type of the destination")
+    SUBCASE("value which fits is converted into the type of the destination")
     {
+        // 定義ファイル中の値は std::stoi で int として読んでから格納先の型へ変換される。
+        // 格納先の型に収まらない値 (uint8_t への 300 など) は static_cast で黙って折り返されるが、
+        // それは実装側の課題であり、現状を仕様として固定しないためここでは扱わない
         short short_value = 0;
         info_set_value(short_value, "30000");
         CHECK(short_value == 30000);
 
-        // 定義ファイル中の値は std::stoi で int として読んでから格納先の型へ変換される
         char char_value = 0;
         info_set_value(char_value, "65");
         CHECK(char_value == 'A');
