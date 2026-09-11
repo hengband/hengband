@@ -42,11 +42,14 @@ errr info_set_integer(const nlohmann::json &json, T &data, bool is_required, tl:
         return PARSE_ERROR_INVALID_TYPE;
     }
 
-    const auto value = json.get<T>();
-    if (range && (value < static_cast<T>(range->first) || value > static_cast<T>(range->second))) {
+    // 範囲チェックは格納先の型へ変換する前に行う。変換してから比べると、
+    // 格納先の型で表現できない値が切り詰められて範囲内に収まり、チェックをすり抜ける
+    // (例: uint8_t への 300 は 44 になり Range(0, 255) を通ってしまう)
+    const auto value = json.get<nlohmann::json::number_integer_t>();
+    if (range && (value < range->first || value > range->second)) {
         return PARSE_ERROR_INVALID_FLAG;
     }
 
-    data = value;
+    data = static_cast<T>(value);
     return PARSE_ERROR_NONE;
 }

@@ -57,6 +57,8 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\src\test\test-main.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-stun.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-timed-effect.cpp" />
