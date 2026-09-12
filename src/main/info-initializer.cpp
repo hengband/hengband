@@ -199,7 +199,20 @@ void init_class_magics_info()
 void init_class_skills_info()
 {
     class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
-    init_info("ClassSkillDefinitions.txt", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parse_class_skills_info);
+    auto parser = [](nlohmann::json &element) {
+        SkillReader reader(element);
+        const auto err = reader.read();
+        if (err != PARSE_ERROR_NONE) {
+            const auto &diagnostic = reader.error().value();
+            quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の{}: {}", "ClassSkillDefinitions.jsonc: class {} at {}: {}"), diagnostic.class_id, diagnostic.path, diagnostic.reason));
+        }
+        return err;
+    };
+    init_json("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parser, [] {
+        if (error_idx != PLAYER_CLASS_TYPE_MAX - 1) {
+            quit(fmt::format(_("ClassSkillDefinitions.jsonc: 職業{}の$.classes: 職業レコードが不足しています", "ClassSkillDefinitions.jsonc: class {} at $.classes: missing class records"), error_idx + 1));
+        }
+    });
 }
 
 /*!

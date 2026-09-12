@@ -33,6 +33,7 @@ schema_files = \
 	schema/ArtifactDefinitions.schema.json \
 	schema/BaseitemDefinitions.schema.json \
 	schema/ClassMagicDefinitions.schema.json \
+	schema/ClassSkillDefinitions.schema.json \
 	schema/DungeonDefinitions.schema.json \
 	schema/MonraceDefinitions.schema.json \
 	schema/MonsterMessages.schema.json \
@@ -42,6 +43,7 @@ schema_files = \
 	schema/TerrainDefinitions.schema.json
 
 EXTRA_DIST = \
+	lib/edit/ClassSkillDefinitions.md \
 	autopick.txt \
 	autopick_eng.txt \
 	bootstrap \
@@ -52,6 +54,7 @@ EXTRA_DIST = \
 	hengband.spec \
 	tools/bot/hbctl.py \
 	tools/bot/README.md \
+	tools/verify-class-skill-migration.py \
 	$(visual_studio_files) \
 	$(visual_studio_libcurl_files) \
 	$(schema_files)
