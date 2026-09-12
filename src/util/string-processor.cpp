@@ -170,49 +170,6 @@ char *rtrim(char *p)
     return p;
 }
 
-/*!
- * @brief 文字列の後方から一致するかどうか比較する
- * @param s1 比較元文字列ポインタ
- * @param s2 比較先文字列ポインタ
- * @param len 比較する長さ
- * @return 等しい場合は0、p1が大きい場合は-1、p2が大きい場合は1
- * @details
- * strncmpの後方から比較する版
- */
-int strrncmp(const char *s1, const char *s2, int len)
-{
-    int i;
-    int l1 = strlen(s1);
-    int l2 = strlen(s2);
-
-    for (i = 1; i <= len; i++) {
-        int p1 = l1 - i;
-        int p2 = l2 - i;
-
-        if (l1 != l2) {
-            if (p1 < 0) {
-                return -1;
-            }
-            if (p2 < 0) {
-                return 1;
-            }
-        } else {
-            if (p1 < 0) {
-                return 0;
-            }
-        }
-
-        if (s1[p1] < s2[p2]) {
-            return -1;
-        }
-        if (s1[p1] > s2[p2]) {
-            return -1;
-        }
-    }
-
-    return 0;
-}
-
 /*
  * @brief マルチバイト文字のダメ文字('\')を考慮しつつ文字列比較を行う
  * @param src 比較元の文字列
