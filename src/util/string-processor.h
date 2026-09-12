@@ -1,8 +1,12 @@
+/*!
+ * @file string-processor.h
+ * @brief 文字列処理の汎用ユーティリティの宣言
+ */
+
 #pragma once
 
 #include <charconv>
 #include <cstdint>
-#include <map>
 #include <set>
 #include <string>
 #include <string_view>
@@ -15,6 +19,10 @@
  * @param str 変換する文字列
  * @param base 基数（2〜36。省略した場合のデフォルト値は10）
  * @return 変換した数値。文字列全体が数値として解釈できない場合や基数が範囲外の場合はtl::nullopt
+ * @details
+ * T には整数型を指定すること。
+ * 文字列の一部だけが数値として解釈できる場合や、変換結果が T に収まらない場合も
+ * tl::nullopt を返す。先頭の空白の読み飛ばしや基数の接頭辞("0x"など)の解釈は行わない。
  */
 template <typename T>
 tl::optional<T> str_to_num(std::string_view str, int base = 10)
