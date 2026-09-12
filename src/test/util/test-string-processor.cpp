@@ -628,6 +628,14 @@ TEST_CASE("string-processor accepts a two byte character which lacks its trailin
 
     CHECK(str_erase(str, "x") == str);
     CHECK(str_substr(std::string_view(str), 2).empty());
+    CHECK(str_replace(str, "x", "y") == str);
+    CHECK(str_split(str, ':').size() == 1);
+    CHECK_FALSE(str_find(str, "x"));
+
+    // 終端を越えて読まずに、見つからないと答えて終わる
+    CHECK(angband_strchr(str.data(), 'x') == nullptr);
+    CHECK(angband_strstr(str.data(), "x") == nullptr);
+    CHECK(angband_strchr(str.data(), 'a') == str.data());
 
     const std::set<int> expected = { 1 };
     CHECK(str_find_all_multibyte_chars(str) == expected);

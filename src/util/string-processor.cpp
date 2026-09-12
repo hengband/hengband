@@ -189,14 +189,17 @@ char *angband_strstr(const char *haystack, std::string_view needle)
  */
 char *angband_strchr(const char *ptr, char ch)
 {
-    for (; *ptr != '\0'; ptr++) {
-        if (*ptr == ch) {
-            return const_cast<char *>(ptr);
+    // ポインタを進める形だと、末尾が2バイト文字の前半バイトだけのときに
+    // 後半バイトの読み飛ばしで終端を跨いでしまうため、添字で走査する
+    const std::string_view sv(ptr);
+    for (size_t i = 0; i < sv.length(); ++i) {
+        if (sv[i] == ch) {
+            return const_cast<char *>(ptr) + i;
         }
 
 #ifdef JP
-        if (iskanji(*ptr)) {
-            ptr++;
+        if (iskanji(sv[i])) {
+            ++i;
         }
 #endif
     }
