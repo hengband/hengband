@@ -50,6 +50,9 @@
     <ClCompile Include="..\..\src\test\util\test-sha256.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-string-processor.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
