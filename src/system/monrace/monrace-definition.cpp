@@ -10,7 +10,6 @@
 #include "system/monrace/monrace-message.h"
 #include "system/system-variables.h"
 #include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "world/world.h"
 #include <algorithm>
 #ifdef JP
@@ -580,7 +579,7 @@ bool MonraceDefinition::is_catchable_for_fishing() const
 {
     auto is_catchable = this->feature_flags.has(MonsterFeatureType::AQUATIC);
     is_catchable &= this->kind_flags.has_not(MonsterKindType::UNIQUE);
-    is_catchable &= str_find("Jjlw", &this->symbol_definition.character);
+    is_catchable &= this->symbol_char_is_any_of("Jjlw");
     return is_catchable;
 }
 
