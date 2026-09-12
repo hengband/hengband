@@ -1,0 +1,209 @@
+/*!
+ * @brief 職業技能JSON Readerの境界値・原子性テスト
+ */
+#include "info-reader/info-reader-util.h"
+#include "info-reader/parse-error-types.h"
+#include "info-reader/skill-reader.h"
+#include "object/tval-types.h"
+#include "player/player-skill.h"
+#include "util/finalizer.h"
+#include <doctest/doctest.h>
+#include <nlohmann/json.hpp>
+
+namespace {
+nlohmann::json make_class()
+{
+    nlohmann::json data = { { "id", 0 }, { "weapons", nlohmann::json::object() }, { "skills", nlohmann::json::object() } };
+    for (const auto *name : { "BOW", "DIGGING", "HAFTED", "POLEARM", "SWORD" }) {
+        data["weapons"][name] = { { "start_ranks", std::vector<int>(64, 0) }, { "max_ranks", std::vector<int>(64, 4) } };
+    }
+    for (const auto *name : { "MARTIAL_ARTS", "TWO_WEAPON", "RIDING", "SHIELD" }) {
+        data["skills"][name] = { { "start_exp", 0 }, { "max_exp", 8000 } };
+    }
+    return data;
+}
+
+auto preserve_skills()
+{
+    return util::make_finalizer([saved = class_skills_info, index = error_idx] {
+        class_skills_info = saved;
+        error_idx = index;
+    });
+}
+}
+
+TEST_CASE("SkillReader converts all weapon ranks and preserves raw skill experience")
+{
+    const auto restore = preserve_skills();
+    class_skills_info.assign(29, {});
+    error_idx = -1;
+    auto data = make_class();
+    for (int rank = 0; rank < 5; ++rank) {
+        data["weapons"]["BOW"]["start_ranks"][rank] = rank;
+        data["weapons"]["BOW"]["max_ranks"][rank] = rank;
+    }
+    data["skills"]["RIDING"] = { { "start_exp", 500 }, { "max_exp", 5000 } };
+    const auto err = SkillReader(data).read();
+    REQUIRE(err == PARSE_ERROR_NONE);
+    CHECK(error_idx == 0);
+    constexpr int expected[] = { 0, 4000, 6000, 7000, 8000 };
+    for (size_t rank = 0; rank < 5; ++rank) {
+        CHECK(class_skills_info[0].w_start.at(ItemKindType::BOW)[rank] == expected[rank]);
+        CHECK(class_skills_info[0].w_max.at(ItemKindType::BOW)[rank] == expected[rank]);
+    }
+    for (const auto tval : { ItemKindType::BOW, ItemKindType::DIGGING, ItemKindType::HAFTED, ItemKindType::POLEARM, ItemKindType::SWORD }) {
+        CHECK(class_skills_info[0].w_start.at(tval)[63] == 0);
+        CHECK(class_skills_info[0].w_max.at(tval)[63] == 8000);
+    }
+    CHECK(class_skills_info[0].s_start.at(PlayerSkillKindType::RIDING) == 500);
+    CHECK(class_skills_info[0].s_max.at(PlayerSkillKindType::RIDING) == 5000);
+}
+
+TEST_CASE("SkillReader rejects malformed records without modifying the destination")
+{
+    const auto restore = preserve_skills();
+    class_skills_info.assign(29, {});
+    class_skills_info[0].s_start[PlayerSkillKindType::SHIELD] = 123;
+    error_idx = -1;
+    auto data = make_class();
+    SUBCASE("non object")
+    {
+        data = nlohmann::json::array();
+    }
+    SUBCASE("missing id")
+    {
+        data.erase("id");
+    }
+    SUBCASE("negative id")
+    {
+        data["id"] = -1;
+    }
+    SUBCASE("id beyond table")
+    {
+        data["id"] = 29;
+    }
+    SUBCASE("string id")
+    {
+        data["id"] = "0";
+    }
+    SUBCASE("huge unsigned id")
+    {
+        data["id"] = UINT64_MAX;
+    }
+    SUBCASE("fractional id")
+    {
+        data["id"] = 0.5;
+    }
+    SUBCASE("missing weapon")
+    {
+        data["weapons"].erase("SWORD");
+    }
+    SUBCASE("unknown weapon")
+    {
+        data["weapons"]["UNKNOWN"] = data["weapons"]["BOW"];
+    }
+    SUBCASE("missing rank field")
+    {
+        data["weapons"]["BOW"].erase("start_ranks");
+    }
+    SUBCASE("short rank array")
+    {
+        data["weapons"]["BOW"]["start_ranks"].erase(63);
+    }
+    SUBCASE("long rank array")
+    {
+        data["weapons"]["BOW"]["max_ranks"].push_back(4);
+    }
+    SUBCASE("non array ranks")
+    {
+        data["weapons"]["BOW"]["start_ranks"] = 0;
+    }
+    SUBCASE("negative rank")
+    {
+        data["weapons"]["BOW"]["start_ranks"][0] = -1;
+    }
+    SUBCASE("rank above master")
+    {
+        data["weapons"]["BOW"]["max_ranks"][63] = 5;
+    }
+    SUBCASE("null rank")
+    {
+        data["weapons"]["BOW"]["start_ranks"][0] = nullptr;
+    }
+    SUBCASE("boolean rank")
+    {
+        data["weapons"]["BOW"]["start_ranks"][0] = false;
+    }
+    SUBCASE("fractional rank")
+    {
+        data["weapons"]["BOW"]["start_ranks"][0] = 1.5;
+    }
+    SUBCASE("start rank above maximum")
+    {
+        data["weapons"]["SWORD"]["start_ranks"][63] = 4;
+        data["weapons"]["SWORD"]["max_ranks"][63] = 3;
+    }
+    SUBCASE("missing skill")
+    {
+        data["skills"].erase("SHIELD");
+    }
+    SUBCASE("unknown skill")
+    {
+        data["skills"]["OTHER"] = data["skills"]["SHIELD"];
+    }
+    SUBCASE("missing experience")
+    {
+        data["skills"]["SHIELD"].erase("max_exp");
+    }
+    SUBCASE("negative experience")
+    {
+        data["skills"]["SHIELD"]["start_exp"] = -1;
+    }
+    SUBCASE("excess experience")
+    {
+        data["skills"]["SHIELD"]["max_exp"] = 8001;
+    }
+    SUBCASE("fractional experience")
+    {
+        data["skills"]["SHIELD"]["start_exp"] = 0.5;
+    }
+    SUBCASE("start experience above maximum")
+    {
+        data["skills"]["SHIELD"] = { { "start_exp", 500 }, { "max_exp", 499 } };
+    }
+    const auto err = SkillReader(data).read();
+    CHECK(err != PARSE_ERROR_NONE);
+    CHECK(error_idx == -1);
+    CHECK(class_skills_info[0].w_start.empty());
+    CHECK(class_skills_info[0].w_max.empty());
+    CHECK(class_skills_info[0].s_start.size() == 1);
+    CHECK(class_skills_info[0].s_start.at(PlayerSkillKindType::SHIELD) == 123);
+    CHECK(class_skills_info[0].s_max.empty());
+}
+
+TEST_CASE("SkillReader rejects duplicate and missing class ids and can be reused after reset")
+{
+    const auto restore = preserve_skills();
+    class_skills_info.assign(29, {});
+    error_idx = -1;
+    auto data = make_class();
+    auto err = SkillReader(data).read();
+    REQUIRE(err == PARSE_ERROR_NONE);
+    err = SkillReader(data).read();
+    CHECK(err == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    data["id"] = 2;
+    err = SkillReader(data).read();
+    CHECK(err == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+    CHECK(error_idx == 0);
+    for (int id = 1; id < 29; ++id) {
+        data["id"] = id;
+        err = SkillReader(data).read();
+        CHECK(err == PARSE_ERROR_NONE);
+    }
+    CHECK(error_idx == 28);
+    class_skills_info.assign(29, {});
+    error_idx = -1;
+    data["id"] = 0;
+    err = SkillReader(data).read();
+    CHECK(err == PARSE_ERROR_NONE);
+}

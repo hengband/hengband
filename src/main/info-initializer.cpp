@@ -199,7 +199,11 @@ void init_class_magics_info()
 void init_class_skills_info()
 {
     class_skills_info.assign(PLAYER_CLASS_TYPE_MAX, {});
-    init_info("ClassSkillDefinitions.txt", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, parse_class_skills_info);
+    init_json_reader<SkillReader>("ClassSkillDefinitions.jsonc", "classes", DefinitionHashDataType::CLASS_SKILLS, class_skills_info, [] {
+        if (error_idx != PLAYER_CLASS_TYPE_MAX - 1) {
+            quit("ClassSkillDefinitions.jsonc: missing class records");
+        }
+    });
 }
 
 /*!
