@@ -4,6 +4,7 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/skill-reader.h"
+#include "locale/language-switcher.h"
 #include "object/tval-types.h"
 #include "player/player-skill.h"
 #include "util/finalizer.h"
@@ -226,91 +227,91 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
     {
         data["skills"]["SHIELD"].erase("max_exp");
         path = "$.skills.SHIELD.max_exp";
-        reason = "missing required field";
+        reason = _("必須項目がありません", "missing required field");
     }
     SUBCASE("unknown field")
     {
         data["weapons"]["SWORD"]["typo"] = 1;
         path = "$.weapons.SWORD.typo";
-        reason = "unknown field";
+        reason = _("未知の項目です", "unknown field");
     }
     SUBCASE("wrong object type")
     {
         data["skills"] = nlohmann::json::array();
         path = "$.skills";
-        reason = "expected an object";
+        reason = _("オブジェクトが必要です", "expected an object");
     }
     SUBCASE("wrong integer type")
     {
         data["weapons"]["SWORD"]["start_ranks"][63] = "4";
         path = "$.weapons.SWORD.start_ranks[63]";
-        reason = "expected an integer";
+        reason = _("整数が必要です", "expected an integer");
     }
     SUBCASE("out of range rank")
     {
         data["weapons"]["SWORD"]["max_ranks"][63] = 5;
         path = "$.weapons.SWORD.max_ranks[63]";
-        reason = "expected an integer in [0, 4]";
+        reason = _("0以上4以下の整数が必要です", "expected an integer in [0, 4]");
     }
     SUBCASE("invalid array type")
     {
         data["weapons"]["SWORD"]["max_ranks"] = 4;
         path = "$.weapons.SWORD.max_ranks";
-        reason = "expected an array";
+        reason = _("配列が必要です", "expected an array");
     }
     SUBCASE("wrong array length")
     {
         data["weapons"]["SWORD"]["start_ranks"].erase(63);
         path = "$.weapons.SWORD.start_ranks";
-        reason = "expected 64 entries, got 63";
+        reason = _("要素数は64個が必要ですが、63個あります", "expected 64 entries, got 63");
     }
     SUBCASE("rank above maximum")
     {
         data["weapons"]["SWORD"]["start_ranks"][63] = 4;
         data["weapons"]["SWORD"]["max_ranks"][63] = 3;
         path = "$.weapons.SWORD.start_ranks[63]";
-        reason = "start rank 4 exceeds maximum 3";
+        reason = _("初期ランク4が上限3を超えています", "start rank 4 exceeds maximum 3");
     }
     SUBCASE("experience above maximum")
     {
         data["skills"]["SHIELD"]["start_exp"] = 7000;
         data["skills"]["SHIELD"]["max_exp"] = 6000;
         path = "$.skills.SHIELD.start_exp";
-        reason = "start experience 7000 exceeds maximum 6000";
+        reason = _("初期経験値7000が上限6000を超えています", "start experience 7000 exceeds maximum 6000");
     }
     SUBCASE("out of range experience")
     {
         data["skills"]["SHIELD"]["max_exp"] = 8001;
         path = "$.skills.SHIELD.max_exp";
-        reason = "expected an integer in [0, 8000]";
+        reason = _("0以上8000以下の整数が必要です", "expected an integer in [0, 8000]");
     }
     SUBCASE("missing id")
     {
         data.erase("id");
         class_id = "<unknown>";
         path = "$.id";
-        reason = "missing required field";
+        reason = _("必須項目がありません", "missing required field");
     }
     SUBCASE("invalid id")
     {
         data["id"] = 29;
         class_id = "29";
         path = "$.id";
-        reason = "expected an integer in [0, 28]";
+        reason = _("0以上28以下の整数が必要です", "expected an integer in [0, 28]");
     }
     SUBCASE("duplicate class")
     {
         data["id"] = 6;
         class_id = "6";
         path = "$.id";
-        reason = "expected class id 7 (duplicate or missing class)";
+        reason = _("職業ID 7が必要です（職業の重複または欠落）", "expected class id 7 (duplicate or missing class)");
     }
     SUBCASE("non object record")
     {
         data = nullptr;
         class_id = "<unknown>";
         path = "$";
-        reason = "expected an object";
+        reason = _("オブジェクトが必要です", "expected an object");
     }
     SkillReader reader(data);
     const auto err = reader.read();

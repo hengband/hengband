@@ -1,6 +1,7 @@
 #include "info-reader/skill-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
+#include "locale/language-switcher.h"
 #include "object/tval-types.h"
 #include "player/player-skill.h"
 #include "util/enum-converter.h"
@@ -33,16 +34,16 @@ int SkillReader::fail(int code, std::string_view path, std::string_view reason)
 int SkillReader::check_keys(const nlohmann::json &data, std::string_view path, std::initializer_list<std::string_view> keys)
 {
     if (!data.is_object()) {
-        return this->fail(PARSE_ERROR_INVALID_TYPE, path, "expected an object");
+        return this->fail(PARSE_ERROR_INVALID_TYPE, path, _("オブジェクトが必要です", "expected an object"));
     }
     for (const auto key : keys) {
         if (!data.contains(key)) {
-            return this->fail(PARSE_ERROR_TOO_FEW_ARGUMENTS, fmt::format("{}.{}", path, key), "missing required field");
+            return this->fail(PARSE_ERROR_TOO_FEW_ARGUMENTS, fmt::format("{}.{}", path, key), _("必須項目がありません", "missing required field"));
         }
     }
     for (const auto &key : data.items()) {
         if (std::find(keys.begin(), keys.end(), key.key()) == keys.end()) {
-            return this->fail(PARSE_ERROR_UNDEFINED_DIRECTIVE, fmt::format("{}.{}", path, key.key()), "unknown field");
+            return this->fail(PARSE_ERROR_UNDEFINED_DIRECTIVE, fmt::format("{}.{}", path, key.key()), _("未知の項目です", "unknown field"));
         }
     }
     return PARSE_ERROR_NONE;
@@ -51,7 +52,7 @@ int SkillReader::check_keys(const nlohmann::json &data, std::string_view path, s
 int SkillReader::read_integer(const nlohmann::json &data, int &value, int maximum, std::string_view path)
 {
     if (const auto err = info_set_integer(data, value, true, Range(0, maximum))) {
-        const auto reason = data.is_number_integer() ? fmt::format("expected an integer in [0, {}]", maximum) : "expected an integer";
+        const auto reason = data.is_number_integer() ? fmt::format(_("0以上{}以下の整数が必要です", "expected an integer in [0, {}]"), maximum) : _("整数が必要です", "expected an integer");
         return this->fail(err, path, reason);
     }
     return PARSE_ERROR_NONE;
@@ -71,7 +72,7 @@ int SkillReader::read()
     }
     // 職業IDは0から連続。重複と途中の欠落を拒否する。
     if (id != error_idx + 1) {
-        return this->fail(PARSE_ERROR_NON_SEQUENTIAL_RECORDS, "$.id", fmt::format("expected class id {} (duplicate or missing class)", error_idx + 1));
+        return this->fail(PARSE_ERROR_NON_SEQUENTIAL_RECORDS, "$.id", fmt::format(_("職業ID {}が必要です（職業の重複または欠落）", "expected class id {} (duplicate or missing class)"), error_idx + 1));
     }
 
     skill_table skills{};
@@ -107,10 +108,10 @@ int SkillReader::read_weapons(skill_table &skills)
             const auto &ranks = weapon[field];
             const auto field_path = fmt::format("{}.{}", path, field);
             if (!ranks.is_array()) {
-                return this->fail(PARSE_ERROR_INVALID_TYPE, field_path, "expected an array");
+                return this->fail(PARSE_ERROR_INVALID_TYPE, field_path, _("配列が必要です", "expected an array"));
             }
             if (ranks.size() != starts.size()) {
-                return this->fail(PARSE_ERROR_OUT_OF_BOUNDS, field_path, fmt::format("expected {} entries, got {}", starts.size(), ranks.size()));
+                return this->fail(PARSE_ERROR_OUT_OF_BOUNDS, field_path, fmt::format(_("要素数は{}個が必要ですが、{}個あります", "expected {} entries, got {}"), starts.size(), ranks.size()));
             }
         }
         for (size_t sval = 0; sval < starts.size(); ++sval) {
@@ -123,7 +124,7 @@ int SkillReader::read_weapons(skill_table &skills)
                 return err;
             }
             if (start > maximum) {
-                return this->fail(PARSE_ERROR_INVALID_VALUE, start_path, fmt::format("start rank {} exceeds maximum {}", start, maximum));
+                return this->fail(PARSE_ERROR_INVALID_VALUE, start_path, fmt::format(_("初期ランク{}が上限{}を超えています", "start rank {} exceeds maximum {}"), start, maximum));
             }
             starts[sval] = PlayerSkill::weapon_exp_at(i2enum<PlayerSkillRank>(start));
             maxima[sval] = PlayerSkill::weapon_exp_at(i2enum<PlayerSkillRank>(maximum));
@@ -153,7 +154,7 @@ int SkillReader::read_skills(skill_table &skills)
             return err;
         }
         if (start > maximum) {
-            return this->fail(PARSE_ERROR_INVALID_VALUE, fmt::format("{}.start_exp", path), fmt::format("start experience {} exceeds maximum {}", start, maximum));
+            return this->fail(PARSE_ERROR_INVALID_VALUE, fmt::format("{}.start_exp", path), fmt::format(_("初期経験値{}が上限{}を超えています", "start experience {} exceeds maximum {}"), start, maximum));
         }
         const auto kind = i2enum<PlayerSkillKindType>(i);
         skills.s_start[kind] = static_cast<SUB_EXP>(start);

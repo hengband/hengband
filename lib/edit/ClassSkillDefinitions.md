@@ -5,6 +5,7 @@
 
 - `weapons`: `BOW` / `DIGGING` / `HAFTED` / `POLEARM` / `SWORD`。
   各 `start_ranks` / `max_ranks` は添字がsvalに対応する64要素の配列です。
+  各要素のコメントにsval番号と旧定義の名前を記載しています。値を変更するときは対象のコメントを確認してください。
   存在しないアイテムのsvalも含め、既存の技能テーブル全体を保持します。
   0〜4は `UNSKILLED` / `BEGINNER` / `SKILLED` / `EXPERT` / `MASTER` を表し、
   Readerで経験値0 / 4000 / 6000 / 7000 / 8000に変換します。
@@ -16,7 +17,8 @@ JSON Schemaは型・範囲・必須項目を検証し、Readerはそれに加え
 職業レコードは全項目の検証が成功してから技能テーブルへ反映します。
 
 Readerはエラーコードに加えて職業ID・項目パス・原因を `error()` から返します。
-画面への出力は初期化側で行い、例えば次の形式で停止理由を表示します。
+画面への出力は初期化側で行い、日本語版・英語版それぞれの言語で停止理由を表示します。
+項目パスと職業IDは共通です。英語版では例えば次の形式になります。
 
 ```text
 ClassSkillDefinitions.jsonc: class 7 at $.weapons.SWORD.start_ranks[63]: start rank 4 exceeds maximum 3

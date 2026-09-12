@@ -43,6 +43,7 @@ schema_files = \
 	schema/TerrainDefinitions.schema.json
 
 EXTRA_DIST = \
+	lib/edit/ClassSkillDefinitions.md \
 	autopick.txt \
 	autopick_eng.txt \
 	bootstrap \
