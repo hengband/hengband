@@ -33,6 +33,7 @@ schema_files = \
 	schema/ArtifactDefinitions.schema.json \
 	schema/BaseitemDefinitions.schema.json \
 	schema/ClassMagicDefinitions.schema.json \
+	schema/ClassSkillDefinitions.schema.json \
 	schema/DungeonDefinitions.schema.json \
 	schema/MonraceDefinitions.schema.json \
 	schema/MonsterMessages.schema.json \
