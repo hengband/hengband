@@ -54,6 +54,7 @@ EXTRA_DIST = \
 	hengband.spec \
 	tools/bot/hbctl.py \
 	tools/bot/README.md \
+	tools/verify-class-skill-migration.py \
 	$(visual_studio_files) \
 	$(visual_studio_libcurl_files) \
 	$(schema_files)

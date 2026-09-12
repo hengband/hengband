@@ -26,11 +26,14 @@ ClassSkillDefinitions.jsonc: class 7 at $.weapons.SWORD.start_ranks[63]: start r
 
 診断情報は `read()` ごとにリセットされ、正常終了時は空になります。
 
-旧形式との全件比較（`pyjson5` が必要）:
+旧形式との全件比較（`pyjson5` と、指定した旧コミットを含むGitチェックアウトが必要）:
 
 ```sh
 python3 tools/verify-class-skill-migration.py --legacy-ref a82db63253
 ```
+
+配布アーカイブにも比較スクリプトは含まれますが、Git履歴は含まれません。
+上のコマンドはリポジトリのルートで実行してください。
 
 この移行では職業IDと技能値は変更せず、セーブ形式も変更しません。
 定義ファイルのハッシュは、従来のテキスト行からJSON正規化後の値へ計算対象が変わるため変化します。
