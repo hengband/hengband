@@ -19,7 +19,8 @@
 #include <algorithm>
 #include <array>
 #include <range/v3/range/conversion.hpp>
-#include <range/v3/view.hpp>
+#include <range/v3/view/drop_while.hpp>
+#include <range/v3/view/reverse.hpp>
 #include <utility>
 
 namespace {
@@ -27,6 +28,54 @@ constexpr std::array<char, 16> hex_symbol_table = { { '0', '1', '2', '3', '4', '
 
 constexpr auto trim_front = ranges::views::drop_while([](char c) { return c == ' ' || c == '\t'; });
 constexpr auto trim_back = ranges::views::reverse | trim_front | ranges::views::reverse;
+
+/*!
+ * @brief 位置 i から始まる文字のバイト数を返す
+ * @param sv 対象の文字列
+ * @param i 文字の開始位置(バイト)。sv の範囲内であること
+ * @return 2バイト文字の前半バイトなら2、そうでなければ1
+ * @details
+ * 文字列の末尾が2バイト文字の前半バイトだけで終わっている場合も2を返す。
+ * 戻り値を足した位置が文字列の長さを超えうるため、添字を進める用途では
+ * ループの継続条件で範囲を確かめること。
+ */
+size_t char_byte_length([[maybe_unused]] std::string_view sv, [[maybe_unused]] size_t i)
+{
+#ifdef JP
+    return iskanji(sv[i]) ? 2 : 1;
+#else
+    return 1;
+#endif
+}
+
+/*!
+ * @brief 1バイト文字だけに変換関数を適用した文字列を作る
+ * @param str 変換元の文字列
+ * @param convert 1バイト文字に適用する変換関数
+ * @return 変換後の文字列
+ * @details
+ * 2バイト文字は変換せずそのまま通す。後半バイトを欠いている場合も同じ。
+ */
+template <typename F>
+std::string convert_each_char(std::string_view str, F convert)
+{
+    std::string result;
+    result.reserve(str.length());
+
+    for (size_t i = 0; i < str.length();) {
+        const auto char_length = char_byte_length(str, i);
+        if (char_length > 1) {
+            result.append(str.substr(i, char_length));
+            i += char_length;
+            continue;
+        }
+
+        result.push_back(static_cast<char>(convert(static_cast<unsigned char>(str[i]))));
+        ++i;
+    }
+
+    return result;
+}
 
 /*!
  * @brief 2バイト文字を分断しないように部分文字列の範囲を補正する
@@ -45,30 +94,23 @@ std::pair<size_t, size_t> adjust_substr_pos(std::string_view sv, size_t pos, siz
     const auto end = n == std::string_view::npos ? sv.length() : std::min(pos + n, sv.length());
 
 #ifdef JP
-    size_t seek_pos = 0;
-    while (seek_pos < start) {
-        if (iskanji(sv[seek_pos])) {
-            ++seek_pos;
-        }
-        ++seek_pos;
+    // 開始位置が2バイト文字の後半バイトを指す場合は、次の文字の先頭まで進める
+    size_t mb_pos = 0;
+    while (mb_pos < start) {
+        mb_pos = std::min(mb_pos + char_byte_length(sv, mb_pos), sv.length());
     }
 
-    // 文字列の末尾が2バイト文字の前半バイトだけの場合、seek_pos が文字列長を超えうる
-    seek_pos = std::min(seek_pos, sv.length());
-    const auto mb_pos = seek_pos;
-
-    while (seek_pos < end) {
-        if (iskanji(sv[seek_pos])) {
-            if (seek_pos == end - 1) {
-                break;
-            }
-            ++seek_pos;
+    // 2バイト文字は後半バイトまで範囲に収まる場合だけ含める
+    auto mb_end = mb_pos;
+    while (mb_end < end) {
+        const auto char_length = char_byte_length(sv, mb_end);
+        if (mb_end + char_length > end) {
+            break;
         }
-        ++seek_pos;
+        mb_end += char_length;
     }
-    const auto mb_n = seek_pos - mb_pos;
 
-    return { mb_pos, mb_n };
+    return { mb_pos, mb_end - mb_pos };
 #else
     return { start, end - start };
 #endif
@@ -95,28 +137,11 @@ size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize)
         return src.length();
     }
 
-    // NUL終端の分を除いた、実際にコピーできるバイト数
-    const auto capacity = bufsize - 1;
-    size_t len = 0;
-
-    while ((len < src.length()) && (len < capacity)) {
-#ifdef JP
-        if (iskanji(src[len])) {
-            // 2バイト文字は後半バイトまで収まる場合だけコピーし、途中で分断しない
-            if ((len + 2 > capacity) || (len + 1 >= src.length())) {
-                break;
-            }
-            buf[len] = src[len];
-            buf[len + 1] = src[len + 1];
-            len += 2;
-            continue;
-        }
-#endif
-        buf[len] = src[len];
-        ++len;
-    }
-
+    // NUL終端の分を除いた範囲に収まるよう、2バイト文字を分断しない位置で切り詰める
+    const auto len = adjust_substr_pos(src, 0, bufsize - 1).second;
+    src.copy(buf, len);
     buf[len] = '\0';
+
     return src.length();
 }
 
@@ -155,24 +180,16 @@ size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
  */
 char *angband_strstr(const char *haystack, std::string_view needle)
 {
-    std::string_view haystack_view(haystack);
-    auto l1 = haystack_view.length();
-    auto l2 = needle.length();
-    if (l1 < l2) {
+    const std::string_view haystack_view(haystack);
+    if (haystack_view.length() < needle.length()) {
         return nullptr;
     }
 
-    for (size_t i = 0; i <= l1 - l2; i++) {
-        const auto part = haystack_view.substr(i);
-        if (part.starts_with(needle)) {
+    const auto last_pos = haystack_view.length() - needle.length();
+    for (size_t i = 0; i <= last_pos; i += char_byte_length(haystack_view, i)) {
+        if (haystack_view.substr(i).starts_with(needle)) {
             return const_cast<char *>(haystack) + i;
         }
-
-#ifdef JP
-        if (iskanji(*(haystack + i))) {
-            i++;
-        }
-#endif
     }
 
     return nullptr;
@@ -189,19 +206,11 @@ char *angband_strstr(const char *haystack, std::string_view needle)
  */
 char *angband_strchr(const char *ptr, char ch)
 {
-    // ポインタを進める形だと、末尾が2バイト文字の前半バイトだけのときに
-    // 後半バイトの読み飛ばしで終端を跨いでしまうため、添字で走査する
     const std::string_view sv(ptr);
-    for (size_t i = 0; i < sv.length(); ++i) {
+    for (size_t i = 0; i < sv.length(); i += char_byte_length(sv, i)) {
         if (sv[i] == ch) {
             return const_cast<char *>(ptr) + i;
         }
-
-#ifdef JP
-        if (iskanji(sv[i])) {
-            ++i;
-        }
-#endif
     }
 
     return nullptr;
@@ -283,7 +292,7 @@ std::string str_trim(std::string_view str)
  * @param str 操作の対象とする文字列
  * @return std::string strの右端の空白を削除した文字列
  * @details
- * 2バイト文字の後半バイトが 0x20 や 0x09 になる文字コードは無いため、2バイト文字を壊すことはない。
+ * 2バイト文字の扱いは str_trim() と同じ。
  */
 std::string str_rtrim(std::string_view str)
 {
@@ -300,7 +309,7 @@ std::string str_rtrim(std::string_view str)
  * @param str 操作の対象とする文字列
  * @return std::string strの左端の空白を削除した文字列
  * @details
- * 2バイト文字の後半バイトが 0x20 や 0x09 になる文字コードは無いため、2バイト文字を壊すことはない。
+ * 2バイト文字の扱いは str_trim() と同じ。
  */
 std::string str_ltrim(std::string_view str)
 {
@@ -333,23 +342,21 @@ std::vector<std::string> str_split(std::string_view str, char delim, bool trim, 
         result.reserve(num);
     }
 
-    auto make_str = [trim](std::string_view sv) { return trim ? str_trim(sv) : std::string(sv); };
+    const auto make_str = [trim](std::string_view sv) { return trim ? str_trim(sv) : std::string(sv); };
 
     while (true) {
-        bool found = false;
-        for (size_t i = 0; i < str.size(); ++i) {
-            if (str[i] == delim) {
-                result.push_back(make_str(str.substr(0, i)));
-                str.remove_prefix(i + 1);
-                found = true;
-                break;
+        auto found = false;
+        for (size_t i = 0; i < str.length(); i += char_byte_length(str, i)) {
+            if (str[i] != delim) {
+                continue;
             }
-#ifdef JP
-            if (iskanji(str[i])) {
-                ++i;
-            }
-#endif
+
+            result.push_back(make_str(str.substr(0, i)));
+            str.remove_prefix(i + 1);
+            found = true;
+            break;
         }
+
         if (!found) {
             result.push_back(make_str(str));
             return result;
@@ -407,17 +414,13 @@ std::vector<std::string> str_separate(std::string_view str, size_t len)
  */
 std::string str_erase(std::string str, std::string_view erase_chars)
 {
-    for (auto it = str.begin(); it != str.end();) {
-        if (erase_chars.find(*it) != std::string_view::npos) {
-            it = str.erase(it);
+    for (size_t i = 0; i < str.length();) {
+        if (erase_chars.find(str[i]) != std::string_view::npos) {
+            str.erase(i, 1);
             continue;
         }
-#ifdef JP
-        if (iskanji(*it) && (it + 1 != str.end())) {
-            ++it;
-        }
-#endif
-        ++it;
+
+        i += char_byte_length(str, i);
     }
 
     return str;
@@ -441,8 +444,11 @@ std::string str_replace(std::string_view str, std::string_view old_str, std::str
         return std::string(str);
     }
 
+    // 文字境界は置き換え前の文字列から決める。置き換えで2バイト文字が崩れた場合も、
+    // 残った後半バイトを新たな文字の先頭と見なして誤って置き換えることがない
     const auto mb_char_indexes = str_find_all_multibyte_chars(str);
     std::string result;
+    result.reserve(str.length());
 
     for (size_t start_pos = 0;;) {
         const auto found_pos = str.find(old_str, start_pos);
@@ -508,14 +514,10 @@ std::string str_substr(std::string &&str, size_t pos, size_t n)
 
 /*!
  * @brief 2バイト文字を考慮して部分文字列を取得する (const char * 版)
- * @param str NUL終端された文字列
- * @param pos 部分文字列の開始位置(バイト)
- * @param n 部分文字列の長さ(バイト)
- * @return 部分文字列
  * @details
  * const char * は std::string_view にも std::string にも同じだけの変換で到達できるため、
  * このオーバーロードが無いと std::string_view 版と std::string && 版の解決が曖昧になる。
- * それを解消するために用意している。
+ * それを解消するために用意している。引数と戻り値の意味は std::string_view 版と同じ。
  */
 std::string str_substr(const char *str, size_t pos, size_t n)
 {
@@ -532,24 +534,7 @@ std::string str_substr(const char *str, size_t pos, size_t n)
  */
 std::string str_toupper(std::string_view str)
 {
-    std::string uc_str;
-    uc_str.reserve(str.size());
-    for (size_t i = 0; i < str.length(); ++i) {
-        const auto ch = str[i];
-#ifdef JP
-        // 2バイト文字は変換せずそのまま通す。後半バイトを欠いている場合も同じ
-        if (iskanji(ch)) {
-            uc_str.push_back(ch);
-            if (i + 1 < str.length()) {
-                uc_str.push_back(str[++i]);
-            }
-            continue;
-        }
-#endif
-        uc_str.push_back(static_cast<char>(toupper(static_cast<unsigned char>(ch))));
-    }
-
-    return uc_str;
+    return convert_each_char(str, toupper);
 }
 
 /*!
@@ -562,24 +547,7 @@ std::string str_toupper(std::string_view str)
  */
 std::string str_tolower(std::string_view str)
 {
-    std::string lc_str;
-    lc_str.reserve(str.size());
-    for (size_t i = 0; i < str.length(); ++i) {
-        const auto ch = str[i];
-#ifdef JP
-        // 2バイト文字は変換せずそのまま通す。後半バイトを欠いている場合も同じ
-        if (iskanji(ch)) {
-            lc_str.push_back(ch);
-            if (i + 1 < str.length()) {
-                lc_str.push_back(str[++i]);
-            }
-            continue;
-        }
-#endif
-        lc_str.push_back(static_cast<char>(tolower(static_cast<unsigned char>(ch))));
-    }
-
-    return lc_str;
+    return convert_each_char(str, tolower);
 }
 
 /*!
@@ -627,11 +595,13 @@ std::set<int> str_find_all_multibyte_chars([[maybe_unused]] std::string_view str
 {
 #ifdef JP
     std::set<int> mb_chars;
-    for (auto i = 0; std::cmp_less(i, str.length()); ++i) {
-        if (iskanji(str[i])) {
-            mb_chars.insert(mb_chars.end(), i);
-            ++i;
+    for (size_t i = 0; i < str.length();) {
+        const auto char_length = char_byte_length(str, i);
+        if (char_length > 1) {
+            mb_chars.insert(mb_chars.end(), static_cast<int>(i));
         }
+
+        i += char_length;
     }
 
     return mb_chars;

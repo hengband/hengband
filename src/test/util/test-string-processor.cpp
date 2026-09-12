@@ -46,14 +46,12 @@ std::string cat(const Args &...args)
     return result;
 }
 
-#ifdef JP
-#ifdef SJIS
+#if defined(JP) && defined(SJIS)
 constexpr std::string_view KANJI_KAN = "\x8a\xbf"; //!< 漢
 constexpr std::string_view KANJI_JI = "\x8e\x9a"; //!< 字
-#else
+#elif defined(JP)
 constexpr std::string_view KANJI_KAN = "\xb4\xc1"; //!< 漢
 constexpr std::string_view KANJI_JI = "\xbb\xfa"; //!< 字
-#endif
 #endif
 
 #if defined(JP) && defined(SJIS)
@@ -125,25 +123,27 @@ TEST_CASE("angband_strcpy truncates the string to fit the buffer")
     CHECK(std::string_view(buf) == "abc");
 }
 
-TEST_CASE("angband_strcpy terminates the buffer even with an empty source")
+TEST_CASE("angband_strcpy does not write beyond the buffer size")
 {
-    char buf[4] = "xyz";
-    CHECK(angband_strcpy(buf, "", sizeof(buf)) == 0);
-    CHECK(std::string_view(buf).empty());
-}
+    char buf[4] = "xyz"; // 各SUBCASEごとに作り直される
 
-TEST_CASE("angband_strcpy writes nothing when the buffer size is one")
-{
-    char buf[4] = "xyz";
-    CHECK(angband_strcpy(buf, "abc", 1) == 3);
-    CHECK(std::string_view(buf).empty());
-}
+    SUBCASE("an empty source only terminates the buffer")
+    {
+        CHECK(angband_strcpy(buf, "", sizeof(buf)) == 0);
+        CHECK(std::string_view(buf).empty());
+    }
 
-TEST_CASE("angband_strcpy writes nothing when the buffer size is zero")
-{
-    char buf[4] = "xyz";
-    CHECK(angband_strcpy(buf, "abc", 0) == 3);
-    CHECK(std::string_view(buf) == "xyz");
+    SUBCASE("a buffer size of one writes only the terminator")
+    {
+        CHECK(angband_strcpy(buf, "abc", 1) == 3);
+        CHECK(std::string_view(buf).empty());
+    }
+
+    SUBCASE("a buffer size of zero writes nothing")
+    {
+        CHECK(angband_strcpy(buf, "abc", 0) == 3);
+        CHECK(std::string_view(buf) == "xyz");
+    }
 }
 
 TEST_CASE("angband_strcpy looks only at the range of the given view")
@@ -169,16 +169,15 @@ TEST_CASE("angband_strcat truncates the appended string")
     CHECK(std::string_view(buf) == "abcd");
 }
 
-TEST_CASE("angband_strcat leaves the buffer untouched when it is already full")
+TEST_CASE("angband_strcat leaves the buffer untouched when it cannot append")
 {
     char buf[4] = "abc";
+
+    // バッファが既に一杯の場合
     CHECK(angband_strcat(buf, "def", sizeof(buf)) == 6);
     CHECK(std::string_view(buf) == "abc");
-}
 
-TEST_CASE("angband_strcat writes nothing when the buffer size is zero")
-{
-    char buf[4] = "abc";
+    // バッファサイズが0の場合
     CHECK(angband_strcat(buf, "def", 0) == 6);
     CHECK(std::string_view(buf) == "abc");
 }
