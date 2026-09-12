@@ -406,21 +406,25 @@ std::vector<std::string> str_separate(std::string_view str, size_t len)
  * 削除した文字列を std::string 型のオブジェクトとして返す。
  *
  * @param str 操作の対象とする文字列
- * @param erase_chars 削除する文字を指定する文字列
+ * @param erase_chars 削除する文字を指定する文字列。1バイト文字の集合として扱う
  * @return std::string 指定した文字をすべて削除した文字列
  * @details
- * 2バイト文字の後半バイトは削除の対象にしない。erase_chars にダメ文字と重なる文字を
- * 指定しても2バイト文字を壊すことはない。
+ * str 中の2バイト文字は前半バイト・後半バイトのどちらも削除の対象にしない。
+ * erase_chars にダメ文字と重なる文字や2バイト文字を指定しても、2バイト文字を壊すことはない。
+ * 裏を返せば、erase_chars に2バイト文字を指定しても、その文字は削除されない。
  */
 std::string str_erase(std::string str, std::string_view erase_chars)
 {
     for (size_t i = 0; i < str.length();) {
-        if (erase_chars.find(str[i]) != std::string_view::npos) {
+        const auto char_length = char_byte_length(str, i);
+
+        // 2バイト文字は、前半バイトが erase_chars のバイト列と一致しても削除しない
+        if ((char_length == 1) && (erase_chars.find(str[i]) != std::string_view::npos)) {
             str.erase(i, 1);
             continue;
         }
 
-        i += char_byte_length(str, i);
+        i += char_length;
     }
 
     return str;

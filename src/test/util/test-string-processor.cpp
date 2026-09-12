@@ -715,6 +715,18 @@ TEST_CASE("str_toupper and str_tolower leave a two byte character as it is")
     CHECK(str_toupper(cat(KANJI_KAN, "abc")) == cat(KANJI_KAN, "ABC"));
 }
 
+TEST_CASE("str_erase does not erase a two byte character")
+{
+    // erase_chars は1バイト文字の集合として扱うため、2バイト文字は削除されない
+    const auto str = cat(KANJI_KAN, "a");
+
+    const auto kept = str_erase(str, KANJI_KAN);
+    CHECK(kept == str);
+
+    const auto ascii_erased = str_erase(str, "a");
+    CHECK(ascii_erased == KANJI_KAN);
+}
+
 TEST_CASE("str_upcase_first leaves a leading two byte character as it is")
 {
     const auto str = cat(KANJI_KAN, "abc");
@@ -826,6 +838,10 @@ TEST_CASE("str_erase does not break a two byte character")
 
     const auto kana_kept = str_erase(cat(DAME_KANA_A, "A"), "A");
     CHECK(kana_kept == DAME_KANA_A);
+
+    // 「ソ」の前半バイトは「ア」の前半バイトと同じ 0x83 だが、前半バイトだけを削除しない
+    const auto lead_kept = str_erase(cat(DAME_KANA_A, "b"), DAME_SO);
+    CHECK(lead_kept == cat(DAME_KANA_A, "b"));
 }
 
 TEST_CASE("str_substr does not split a two byte character whose trailing byte is ASCII")
