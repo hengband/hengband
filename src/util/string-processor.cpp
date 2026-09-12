@@ -23,51 +23,33 @@ constexpr auto trim_back = ranges::views::reverse | trim_front | ranges::views::
  */
 size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize)
 {
-#ifdef JP
-    char *d = buf;
-    const char *s = src.data();
+    if (bufsize == 0) {
+        return src.length();
+    }
+
+    // NUL終端の分を除いた、実際にコピーできるバイト数
+    const auto capacity = bufsize - 1;
     size_t len = 0;
 
-    if (bufsize > 0) {
-        /* reserve for NUL termination */
-        bufsize--;
-
-        /* Copy as many bytes as will fit */
-        while (*s && (len < bufsize)) {
-            if (iskanji(*s)) {
-                if (len + 1 >= bufsize || !*(s + 1)) {
-                    break;
-                }
-                *d++ = *s++;
-                *d++ = *s++;
-                len += 2;
-            } else {
-                *d++ = *s++;
-                len++;
+    while ((len < src.length()) && (len < capacity)) {
+#ifdef JP
+        if (iskanji(src[len])) {
+            // 2バイト文字は後半バイトまで収まる場合だけコピーし、途中で分断しない
+            if ((len + 2 > capacity) || (len + 1 >= src.length())) {
+                break;
             }
+            buf[len] = src[len];
+            buf[len + 1] = src[len + 1];
+            len += 2;
+            continue;
         }
-        *d = '\0';
+#endif
+        buf[len] = src[len];
+        ++len;
     }
 
-    while (*s++) {
-        len++;
-    }
-    return len;
-
-#else
-    auto len = src.length();
-    if (bufsize == 0) {
-        return len;
-    }
-
-    if (len >= bufsize) {
-        len = bufsize - 1;
-    }
-
-    (void)src.copy(buf, len);
     buf[len] = '\0';
     return src.length();
-#endif
 }
 
 /*
@@ -83,12 +65,14 @@ size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize)
  */
 size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
 {
-    size_t dlen = strlen(buf);
-    if (dlen < bufsize - 1) {
-        return dlen + angband_strcpy(buf + dlen, src, bufsize - dlen);
-    } else {
+    const auto dlen = strlen(buf);
+
+    // bufsize - 1 は bufsize が 0 のとき桁溢れするため、加算の形で比較する
+    if (dlen + 1 >= bufsize) {
         return dlen + src.length();
     }
+
+    return dlen + angband_strcpy(buf + dlen, src, bufsize - dlen);
 }
 
 /*
@@ -163,10 +147,10 @@ char *ltrim(char *p)
  */
 char *rtrim(char *p)
 {
-    int i = strlen(p) - 1;
-    while (p[i] == ' ') {
-        p[i--] = '\0';
+    for (auto i = strlen(p); (i > 0) && (p[i - 1] == ' '); --i) {
+        p[i - 1] = '\0';
     }
+
     return p;
 }
 
@@ -284,8 +268,14 @@ std::vector<std::string> str_separate(std::string_view str, size_t len)
     std::vector<std::string> result;
 
     while (!str.empty()) {
-        result.push_back(str_substr(str, 0, len));
-        str.remove_prefix(result.back().size());
+        auto separated = str_substr(str, 0, len);
+        if (separated.empty()) {
+            // len が小さすぎて1文字も取り出せない。これ以上分割できないので打ち切る
+            break;
+        }
+
+        str.remove_prefix(separated.size());
+        result.push_back(std::move(separated));
     }
 
     return result;
@@ -309,7 +299,7 @@ std::string str_erase(std::string str, std::string_view erase_chars)
             continue;
         }
 #ifdef JP
-        if (iskanji(*it)) {
+        if (iskanji(*it) && (it + 1 != str.end())) {
             ++it;
         }
 #endif
@@ -362,13 +352,16 @@ static std::pair<size_t, size_t> adjust_substr_pos(std::string_view sv, size_t p
     const auto end = n == std::string_view::npos ? sv.length() : std::min(pos + n, sv.length());
 
 #ifdef JP
-    auto seek_pos = 0U;
+    size_t seek_pos = 0;
     while (seek_pos < start) {
         if (iskanji(sv[seek_pos])) {
             ++seek_pos;
         }
         ++seek_pos;
     }
+
+    // 文字列の末尾が2バイト文字の前半バイトだけの場合、seek_pos が文字列長を超えうる
+    seek_pos = std::min(seek_pos, sv.length());
     const auto mb_pos = seek_pos;
 
     while (seek_pos < end) {
@@ -445,13 +438,16 @@ std::string str_toupper(std::string_view str)
     for (size_t i = 0; i < str.length(); ++i) {
         const auto ch = str[i];
 #ifdef JP
+        // 2バイト文字は変換せずそのまま通す。後半バイトを欠いている場合も同じ
         if (iskanji(ch)) {
             uc_str.push_back(ch);
-            uc_str.push_back(str[++i]);
+            if (i + 1 < str.length()) {
+                uc_str.push_back(str[++i]);
+            }
             continue;
         }
 #endif
-        uc_str.push_back(static_cast<char>(toupper(ch)));
+        uc_str.push_back(static_cast<char>(toupper(static_cast<unsigned char>(ch))));
     }
 
     return uc_str;
@@ -469,13 +465,16 @@ std::string str_tolower(std::string_view str)
     for (size_t i = 0; i < str.length(); ++i) {
         const auto ch = str[i];
 #ifdef JP
+        // 2バイト文字は変換せずそのまま通す。後半バイトを欠いている場合も同じ
         if (iskanji(ch)) {
             lc_str.push_back(ch);
-            lc_str.push_back(str[++i]);
+            if (i + 1 < str.length()) {
+                lc_str.push_back(str[++i]);
+            }
             continue;
         }
 #endif
-        lc_str.push_back(static_cast<char>(tolower(ch)));
+        lc_str.push_back(static_cast<char>(tolower(static_cast<unsigned char>(ch))));
     }
 
     return lc_str;
@@ -496,6 +495,13 @@ std::string str_upcase_first(std::string_view str)
     std::string result_str(str);
 
     const auto first_char = static_cast<unsigned char>(result_str[0]);
+#ifdef JP
+    // 2バイト文字の前半バイトをロケール依存の変換にかけない
+    if (iskanji(first_char)) {
+        return result_str;
+    }
+#endif
+
     if (isalpha(first_char)) {
         result_str[0] = static_cast<char>(toupper(first_char));
     }
