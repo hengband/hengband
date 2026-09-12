@@ -9,8 +9,8 @@
 #include <utility>
 
 namespace {
-constexpr std::array weapon_names = { "BOW", "DIGGING", "HAFTED", "POLEARM", "SWORD" };
-constexpr std::array skill_names = { "MARTIAL_ARTS", "TWO_WEAPON", "RIDING", "SHIELD" };
+constexpr auto weapon_names = std::to_array({ "BOW", "DIGGING", "HAFTED", "POLEARM", "SWORD" });
+constexpr auto skill_names = std::to_array({ "MARTIAL_ARTS", "TWO_WEAPON", "RIDING", "SHIELD" });
 
 bool has_keys(const nlohmann::json &data, std::initializer_list<std::string_view> keys)
 {

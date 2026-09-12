@@ -8,6 +8,10 @@ class SkillReader {
 public:
     explicit SkillReader(const nlohmann::json &class_data);
     SkillReader(nlohmann::json &&) = delete;
+    SkillReader(const SkillReader &) = delete;
+    SkillReader(SkillReader &&) = delete;
+    SkillReader &operator=(const SkillReader &) = delete;
+    SkillReader &operator=(SkillReader &&) = delete;
 
     int read() const;
 
