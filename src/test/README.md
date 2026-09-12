@@ -318,5 +318,5 @@ doctest によるユニットテストのみです）。
 - **MSVC の CI がテストを実行するのは Debug 構成だけです。** 手元では 4 構成すべてで
   ビルド・実行できます。Release 系は警告の除外リストが Debug と異なる（`4711;4738` が加わる）
   ため、Release でだけ壊れる変更は CI をすり抜けます。
-  `Build-Windows-Release-Package.ps1` はソリューション全体をリビルドするので、
+  `tools/release/Build-Windows-Release-Package.ps1` はソリューション全体をリビルドするので、
   リリースパッケージの作成もテストプロジェクトのビルドが通ることに依存します。
