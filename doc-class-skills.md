@@ -15,6 +15,15 @@
 JSON Schemaは型・範囲・必須項目を検証し、Readerはそれに加えてID順序と初期値≦上限を検証します。
 職業レコードは全項目の検証が成功してから技能テーブルへ反映します。
 
+Readerはエラーコードに加えて職業ID・項目パス・原因を `error()` から返します。
+画面への出力は初期化側で行い、例えば次の形式で停止理由を表示します。
+
+```text
+ClassSkillDefinitions.jsonc: class 7 at $.weapons.SWORD.start_ranks[63]: start rank 4 exceeds maximum 3
+```
+
+診断情報は `read()` ごとにリセットされ、正常終了時は空になります。
+
 旧形式との全件比較（`pyjson5` が必要）:
 
 ```sh

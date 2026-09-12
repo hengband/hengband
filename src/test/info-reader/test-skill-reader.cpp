@@ -171,8 +171,12 @@ TEST_CASE("SkillReader rejects malformed records without modifying the destinati
     {
         data["skills"]["SHIELD"] = { { "start_exp", 500 }, { "max_exp", 499 } };
     }
-    const auto err = SkillReader(data).read();
+    SkillReader reader(data);
+    const auto err = reader.read();
     CHECK(err != PARSE_ERROR_NONE);
+    REQUIRE(reader.error().has_value());
+    CHECK_FALSE(reader.error()->path.empty());
+    CHECK_FALSE(reader.error()->reason.empty());
     CHECK(error_idx == -1);
     CHECK(class_skills_info[0].w_start.empty());
     CHECK(class_skills_info[0].w_max.empty());
@@ -206,4 +210,139 @@ TEST_CASE("SkillReader rejects duplicate and missing class ids and can be reused
     data["id"] = 0;
     err = SkillReader(data).read();
     CHECK(err == PARSE_ERROR_NONE);
+}
+
+TEST_CASE("SkillReader diagnostics identify the class field and cause")
+{
+    const auto restore = preserve_skills();
+    class_skills_info.assign(29, {});
+    error_idx = 6;
+    auto data = make_class();
+    data["id"] = 7;
+    std::string path;
+    std::string reason;
+    std::string class_id = "7";
+    SUBCASE("missing field")
+    {
+        data["skills"]["SHIELD"].erase("max_exp");
+        path = "$.skills.SHIELD.max_exp";
+        reason = "missing required field";
+    }
+    SUBCASE("unknown field")
+    {
+        data["weapons"]["SWORD"]["typo"] = 1;
+        path = "$.weapons.SWORD.typo";
+        reason = "unknown field";
+    }
+    SUBCASE("wrong object type")
+    {
+        data["skills"] = nlohmann::json::array();
+        path = "$.skills";
+        reason = "expected an object";
+    }
+    SUBCASE("wrong integer type")
+    {
+        data["weapons"]["SWORD"]["start_ranks"][63] = "4";
+        path = "$.weapons.SWORD.start_ranks[63]";
+        reason = "expected an integer";
+    }
+    SUBCASE("out of range rank")
+    {
+        data["weapons"]["SWORD"]["max_ranks"][63] = 5;
+        path = "$.weapons.SWORD.max_ranks[63]";
+        reason = "expected an integer in [0, 4]";
+    }
+    SUBCASE("invalid array type")
+    {
+        data["weapons"]["SWORD"]["max_ranks"] = 4;
+        path = "$.weapons.SWORD.max_ranks";
+        reason = "expected an array";
+    }
+    SUBCASE("wrong array length")
+    {
+        data["weapons"]["SWORD"]["start_ranks"].erase(63);
+        path = "$.weapons.SWORD.start_ranks";
+        reason = "expected 64 entries, got 63";
+    }
+    SUBCASE("rank above maximum")
+    {
+        data["weapons"]["SWORD"]["start_ranks"][63] = 4;
+        data["weapons"]["SWORD"]["max_ranks"][63] = 3;
+        path = "$.weapons.SWORD.start_ranks[63]";
+        reason = "start rank 4 exceeds maximum 3";
+    }
+    SUBCASE("experience above maximum")
+    {
+        data["skills"]["SHIELD"]["start_exp"] = 7000;
+        data["skills"]["SHIELD"]["max_exp"] = 6000;
+        path = "$.skills.SHIELD.start_exp";
+        reason = "start experience 7000 exceeds maximum 6000";
+    }
+    SUBCASE("out of range experience")
+    {
+        data["skills"]["SHIELD"]["max_exp"] = 8001;
+        path = "$.skills.SHIELD.max_exp";
+        reason = "expected an integer in [0, 8000]";
+    }
+    SUBCASE("missing id")
+    {
+        data.erase("id");
+        class_id = "<unknown>";
+        path = "$.id";
+        reason = "missing required field";
+    }
+    SUBCASE("invalid id")
+    {
+        data["id"] = 29;
+        class_id = "29";
+        path = "$.id";
+        reason = "expected an integer in [0, 28]";
+    }
+    SUBCASE("duplicate class")
+    {
+        data["id"] = 6;
+        class_id = "6";
+        path = "$.id";
+        reason = "expected class id 7 (duplicate or missing class)";
+    }
+    SUBCASE("non object record")
+    {
+        data = nullptr;
+        class_id = "<unknown>";
+        path = "$";
+        reason = "expected an object";
+    }
+    SkillReader reader(data);
+    const auto err = reader.read();
+    CHECK(err != PARSE_ERROR_NONE);
+    REQUIRE(reader.error().has_value());
+    CHECK(reader.error()->class_id == class_id);
+    CHECK(reader.error()->path == path);
+    CHECK(reader.error()->reason == reason);
+    CHECK(error_idx == 6);
+    CHECK(class_skills_info[7].w_start.empty());
+}
+
+TEST_CASE("SkillReader clears stale diagnostics before another read")
+{
+    const auto restore = preserve_skills();
+    class_skills_info.assign(29, {});
+    error_idx = -1;
+    auto data = make_class();
+    SkillReader reader(data);
+    CHECK_FALSE(reader.error().has_value());
+    data["skills"]["RIDING"]["max_exp"] = 8001;
+    auto err = reader.read();
+    REQUIRE(err != PARSE_ERROR_NONE);
+    REQUIRE(reader.error().has_value());
+    CHECK(reader.error()->path == "$.skills.RIDING.max_exp");
+    data["skills"]["RIDING"]["max_exp"] = 8000;
+    err = reader.read();
+    CHECK(err == PARSE_ERROR_NONE);
+    CHECK_FALSE(reader.error().has_value());
+    // 再度失敗した際も前回の技能エラーを残さない。
+    err = reader.read();
+    REQUIRE(err != PARSE_ERROR_NONE);
+    REQUIRE(reader.error().has_value());
+    CHECK(reader.error()->path == "$.id");
 }
