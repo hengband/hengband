@@ -99,6 +99,15 @@ static void decide_summon_kin_caster(
         return;
     }
 
+    if (monster.r_idx == MonraceId::PERORODZILLA) {
+        mspell_cast_msg_blind msg(_("%s^が何かを吐き出す音がした。", "You hear %s^ vomit something."),
+            _("%s^が小さなペロロを吐き出した！", "%s^ vomit minion Peroros!"),
+            _("%s^が小さなペロロを吐き出した！", "%s^ vomit minion Peroros!"));
+
+        monspell_message(player_ptr, m_idx, t_idx, msg, target_type);
+        return;
+    }
+
     summon_disturb(player_ptr, target_type, known, see_either);
 
     if (player_ptr->effects()->blindness().is_active()) {
@@ -205,6 +214,10 @@ MonsterSpellResult spell_RF6_S_KIN(PlayerType *player_ptr, POSITION y, POSITION 
     case MonraceId::HUNGRY_OLD_MAN:
         count += summon_POLYGON(player_ptr, y, x, m_idx);
         break;
+    case MonraceId::PERORODZILLA: {
+        count += summon_PEROROMINION(player_ptr, m_idx, y, x);
+        break;
+    }
     default:
         count += summon_Kin(player_ptr, y, x, rlev, m_idx);
         break;
