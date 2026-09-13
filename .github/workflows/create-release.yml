@@ -40,7 +40,7 @@ jobs:
 
       - name: Build Windows Release Package
         run: |
-          .\Build-Windows-Release-Package.ps1 -Version ${{ steps.get_version.outputs.version }}
+          .\tools\release\Build-Windows-Release-Package.ps1 -Version ${{ steps.get_version.outputs.version }}
 
       - name: Upload release package
         uses: actions/upload-artifact@v7
