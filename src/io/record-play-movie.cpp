@@ -22,22 +22,24 @@
 
 #ifdef WINDOWS
 #include <windows.h>
-#define WAIT 100
+#undef max
+#undef min
+constexpr DWORD WAIT = 100;
 #else
 #include "system/h-basic.h"
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
-#define WAIT 100 * 1000 /* ブラウズ側のウエイト(us単位) */
+constexpr auto WAIT = 100 * 1000; /* ブラウズ側のウエイト(us単位) */
 #endif
 
-#define RINGBUF_SIZE 1024 * 1024
-#define FRESH_QUEUE_SIZE 4096
-#define DEFAULT_DELAY 50
-#define RECVBUF_SIZE 1024
+constexpr auto RINGBUF_SIZE = 1024 * 1024;
+constexpr auto FRESH_QUEUE_SIZE = 4096;
+constexpr auto RECVBUF_SIZE = 1024;
+
 /* 「n」、「t」、および「w」コマンドでは、長さが「signed char」に配置されるときに負の値を回避するために、これよりも長い長さを使用しないでください。 */
-static constexpr auto SPLIT_MAX = 127;
-static constexpr auto SPLIT_SIZE = SPLIT_MAX + 1;
+constexpr auto SPLIT_MAX = 127;
+constexpr auto SPLIT_SIZE = SPLIT_MAX + 1;
 
 static long epoch_time; /* バッファ開始時刻 */
 static int browse_delay; /* 表示するまでの時間(100ms単位)(この間にラグを吸収する) */
@@ -105,66 +107,65 @@ static long get_current_time(void)
 #endif
 }
 
+static void ring_append(std::string_view src)
+{
+    if (src.empty()) {
+        return;
+    }
+
+    const auto room = static_cast<size_t>(RINGBUF_SIZE - ring.wptr);
+    const auto first = std::min(src.size(), room);
+    std::copy_n(src.begin(), first, ring.buf.begin() + ring.wptr);
+
+    if (first == src.size()) {
+        ring.wptr += static_cast<int>(first);
+        if (ring.wptr == RINGBUF_SIZE) {
+            ring.wptr = 0;
+        }
+        return;
+    }
+
+    const auto rest = src.size() - first;
+    std::copy_n(src.begin() + first, rest, ring.buf.begin());
+    ring.wptr = static_cast<int>(rest);
+}
+
+static void ring_append_nul()
+{
+    ring.buf[ring.wptr] = '\0';
+    ring.wptr = (ring.wptr + 1) % RINGBUF_SIZE;
+}
+
 /*!
  * @brief リングバッファにヘッダとペイロードを追加する
  * @param header ヘッダ
  * @param payload ペイロード (オプション)
- * @return エラーコード
+ * @return ペイロード追加の成否
  */
-static errr insert_ringbuf(std::string_view header, std::string_view payload = "")
+static bool insert_ringbuf(std::string_view header, std::string_view payload = {})
 {
     if (movie_mode) {
-        fd_write(movie_fd, header.data(), header.length());
-        if (!payload.empty()) {
-            fd_write(movie_fd, payload.data(), payload.length());
+        if (fd_write(movie_fd, header.data(), header.length()) != 0) {
+            return false;
         }
-        fd_write(movie_fd, "", 1);
-        return 0;
-    }
 
-    /* バッファをオーバー */
-    auto all_length = header.length() + payload.length();
-    if (ring.inlen + all_length + 1 >= RINGBUF_SIZE) {
-        return -1;
-    }
-
-    /* バッファの終端までに収まる */
-    if (ring.wptr + all_length + 1 < RINGBUF_SIZE) {
-        std::copy_n(header.begin(), header.length(), ring.buf.begin() + ring.wptr);
-        if (!payload.empty()) {
-            std::copy_n(payload.begin(), payload.length(), ring.buf.begin() + ring.wptr + header.length());
+        if (!payload.empty() && (fd_write(movie_fd, payload.data(), payload.length()) != 0)) {
+            return false;
         }
-        ring.buf[ring.wptr + all_length] = '\0';
-        ring.wptr += all_length + 1;
-    }
-    /* バッファの終端までに収まらない(ピッタリ収まる場合も含む) */
-    else {
-        int head = RINGBUF_SIZE - ring.wptr; /* 前半 */
-        int tail = all_length - head; /* 後半 */
 
-        if ((int)header.length() <= head) {
-            std::copy_n(header.begin(), header.length(), ring.buf.begin() + ring.wptr);
-            head -= header.length();
-            if (head > 0) {
-                std::copy_n(payload.begin(), head, ring.buf.begin() + ring.wptr + header.length());
-            }
-            std::copy_n(payload.data() + head, tail, ring.buf.begin());
-        } else {
-            std::copy_n(header.begin(), head, ring.buf.begin() + ring.wptr);
-            int part = header.length() - head;
-            std::copy_n(header.data() + head, part, ring.buf.begin());
-            if (tail > part) {
-                std::copy_n(payload.begin(), tail - part, ring.buf.begin() + part);
-            }
-        }
-        ring.buf[tail] = '\0';
-        ring.wptr = tail + 1;
+        return fd_write(movie_fd, "", 1) == 0;
     }
 
-    ring.inlen += all_length + 1;
+    const auto all_length = header.size() + payload.size();
+    if (ring.inlen + static_cast<int>(all_length) + 1 >= RINGBUF_SIZE) {
+        return false;
+    }
 
-    /* Success */
-    return 0;
+    ring_append(header);
+    ring_append(payload);
+    ring_append_nul();
+    ring.inlen += static_cast<int>(all_length) + 1;
+    return true;
 }
 
 /* strが同じ文字の繰り返しかどうか調べる */
@@ -440,7 +441,7 @@ static int handle_movie_timestamp_data(int timestamp)
     return 0;
 }
 
-static int read_movie_file(void)
+static bool read_movie_file()
 {
     static char recv_buf[RECVBUF_SIZE];
     static int remain_bytes = 0;
@@ -450,7 +451,7 @@ static int read_movie_file(void)
     recv_bytes = read(movie_fd, recv_buf + remain_bytes, RECVBUF_SIZE - remain_bytes);
 
     if (recv_bytes <= 0) {
-        return -1;
+        return false;
     }
 
     /* 前回残ったデータ量に今回読んだデータ量を追加 */
@@ -462,12 +463,12 @@ static int read_movie_file(void)
             /* 'd'で始まるデータ(タイムスタンプ)の場合は
                描画キューに保存する処理を呼ぶ */
             if ((recv_buf[start] == 'd') && (handle_movie_timestamp_data(atoi(recv_buf + start + 1)) < 0)) {
-                return -1;
+                return false;
             }
 
             /* 受信データを保存 */
-            if (insert_ringbuf(std::string_view(recv_buf + start, i - start)) < 0) {
-                return -1;
+            if (!insert_ringbuf(std::string_view(recv_buf + start, i - start))) {
+                return false;
             }
 
             start = i + 1;
@@ -482,7 +483,7 @@ static int read_movie_file(void)
         }
     }
 
-    return 0;
+    return true;
 }
 
 #ifndef WINDOWS
@@ -678,7 +679,7 @@ void browse_movie(void)
     term_fresh();
     term_xtra(TERM_XTRA_REACT, 0);
 
-    while (read_movie_file() == 0) {
+    while (read_movie_file()) {
         while (fresh_queue.next != fresh_queue.tail) {
             if (!flush_ringbuf_client()) {
                 term_xtra(TERM_XTRA_FLUSH, 0);
