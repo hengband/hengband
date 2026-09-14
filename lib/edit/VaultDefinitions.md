@@ -16,6 +16,9 @@ Leading and trailing spaces in each layout string are significant. Do not trim
 them. Escape quotes and backslashes using JSON syntax. The reader concatenates
 rows without newlines. It checks dimensions, IDs, types and fields before storing
 the record; errors identify the vault ID and JSON field path.
+The root must be an object containing a nonempty `vaults` array. The CI validation
+tool also checks ID ordering/uniqueness and layout dimensions after JSON Schema
+validation, so these cross-field errors are rejected before running the game.
 
 Map symbols retain their existing meanings in `src/room/rooms-vault.cpp`: `%`
 marks the outer wall, `#` granite, `$` glass, `X` permanent rock, `Y` permanent

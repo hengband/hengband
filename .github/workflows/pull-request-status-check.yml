@@ -126,6 +126,9 @@ jobs:
       - name: Execution JSONC schema validation
         run: python .github/scripts/validate_json.py
 
+      - name: Test JSONC validation
+        run: python -m unittest discover -s .github/scripts -p 'test_validate_json.py'
+
       - name: Result summary
         if: always()
         run: echo "Hengband JSON validation completed."

@@ -13,6 +13,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/info-reader-util.h"
+#include "info-reader/json-reader-util.h"
 #include "info-reader/magic-reader.h"
 #include "info-reader/message-reader.h"
 #include "info-reader/race-reader.h"
@@ -118,7 +119,7 @@ void init_info(std::string_view filename, DefinitionHashDataType dhdt, Definitio
  * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename DefinitionList>
-void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr)
+void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
     std::ifstream ifs(path);
@@ -130,6 +131,13 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
     std::istreambuf_iterator<char> ifs_iter(ifs);
     std::istreambuf_iterator<char> ifs_end;
     auto json_object = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true, true);
+
+    if (const auto err = info_validate_json_array(json_object, keyname, allow_empty); err != PARSE_ERROR_NONE) {
+        if (err == PARSE_ERROR_INVALID_VALUE) {
+            quit(fmt::format(_("{}: $.{}: 空配列は許可されません", "{}: $.{}: empty array is not allowed"), filename, keyname));
+        }
+        quit(fmt::format(_("{}: ルートオブジェクトに配列 '{}' が必要です", "{}: expected a root object containing array '{}'"), filename, keyname));
+    }
 
     error_idx = -1;
 
@@ -296,7 +304,7 @@ void init_vaults_info()
         }
         return err;
     };
-    init_json("VaultDefinitions.jsonc", "vaults", DefinitionHashDataType::VAULTS, vaults_info, parser);
+    init_json("VaultDefinitions.jsonc", "vaults", DefinitionHashDataType::VAULTS, vaults_info, parser, nullptr, false);
 }
 
 static bool read_wilderness_definition(std::ifstream &ifs)

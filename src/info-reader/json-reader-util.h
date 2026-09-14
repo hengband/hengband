@@ -19,6 +19,7 @@ errr info_set_string(const nlohmann::json &json, std::string &data, bool is_requ
 errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required);
 errr info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required);
 const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_view key);
+errr info_validate_json_array(const nlohmann::json &root, std::string_view key, bool allow_empty = true);
 
 /*!
  * @brief JSON Objectから整数値もしくはenum値を取得する

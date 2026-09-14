@@ -28,6 +28,43 @@
 #include <cstdint>
 #include <string>
 
+TEST_CASE("JSON definition roots require an object containing the named array")
+{
+    const std::vector<nlohmann::json> invalid_roots = {
+        nullptr,
+        true,
+        1,
+        "vaults",
+        nlohmann::json::array(),
+        nlohmann::json::object(),
+        { { "other", nlohmann::json::array() } },
+        { { "vaults", nullptr } },
+        { { "vaults", 1 } },
+        { { "vaults", "bad" } },
+        { { "vaults", nlohmann::json::object() } },
+    };
+    for (const auto &root : invalid_roots) {
+        const auto saved = root;
+        const auto result = info_validate_json_array(root, "vaults");
+        CHECK(result != PARSE_ERROR_NONE);
+        CHECK(root == saved);
+    }
+}
+
+TEST_CASE("Empty definition arrays are rejected only when requested")
+{
+    const nlohmann::json empty = { { "vaults", nlohmann::json::array() } };
+    const auto default_result = info_validate_json_array(empty, "vaults");
+    const auto vault_result = info_validate_json_array(empty, "vaults", false);
+    CHECK(default_result == PARSE_ERROR_NONE);
+    CHECK(vault_result == PARSE_ERROR_INVALID_VALUE);
+    const nlohmann::json nonempty = { { "vaults", { { { "id", 0 } } } } };
+    const auto valid_result = info_validate_json_array(nonempty, "vaults", false);
+    CHECK(valid_result == PARSE_ERROR_NONE);
+    const auto missing_result = info_validate_json_array(nonempty, "missing", false);
+    CHECK(missing_result == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+}
+
 #if defined(JP) && defined(EUC)
 // _LIBICONV_VERSION (GNU libiconv の判定に使う) を参照するため
 #include <iconv.h>

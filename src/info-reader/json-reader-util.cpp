@@ -3,6 +3,31 @@
 #include "locale/character-encoding.h"
 #include "util/dice.h"
 
+/*!
+ * @brief 定義ファイルのルートとレコード配列を、入力を変更せず検証する。
+ * @param root JSON文書のルート
+ * @param key 必須のレコード配列キー
+ * @param allow_empty 空配列を許容するか（Vaultではfalse）
+ * @return エラーコード
+ */
+errr info_validate_json_array(const nlohmann::json &root, std::string_view key, bool allow_empty)
+{
+    if (!root.is_object()) {
+        return PARSE_ERROR_INVALID_TYPE;
+    }
+    const auto records = root.find(key);
+    if (records == root.end()) {
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+    }
+    if (!records->is_array()) {
+        return PARSE_ERROR_INVALID_TYPE;
+    }
+    if (!allow_empty && records->empty()) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+    return PARSE_ERROR_NONE;
+}
+
 const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_view key)
 {
     static const nlohmann::json null_json;
