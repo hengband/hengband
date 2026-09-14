@@ -40,10 +40,12 @@ schema_files = \
 	schema/Quest.schema.json \
 	schema/QuestPreferences.schema.json \
 	schema/SpellDefinitions.schema.json \
-	schema/TerrainDefinitions.schema.json
+	schema/TerrainDefinitions.schema.json \
+	schema/VaultDefinitions.schema.json
 
 EXTRA_DIST = \
 	lib/edit/ClassSkillDefinitions.md \
+	lib/edit/VaultDefinitions.md \
 	autopick.txt \
 	autopick_eng.txt \
 	bootstrap \
@@ -56,6 +58,7 @@ EXTRA_DIST = \
 	tools/bot/README.md \
 	tools/release/Build-Windows-Release-Package.ps1 \
 	tools/verify-class-skill-migration.py \
+	tools/verify-vault-migration.py \
 	$(visual_studio_files) \
 	$(visual_studio_libcurl_files) \
 	$(schema_files)

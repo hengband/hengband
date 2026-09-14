@@ -287,7 +287,16 @@ void init_spell_info()
  */
 void init_vaults_info()
 {
-    init_info("VaultDefinitions.txt", DefinitionHashDataType::VAULTS, vaults_info, parse_vaults_info);
+    auto parser = [](nlohmann::json &element) {
+        VaultReader reader(element);
+        const auto err = reader.read();
+        if (err != PARSE_ERROR_NONE) {
+            const auto &diagnostic = reader.error().value();
+            quit(fmt::format(_("VaultDefinitions.jsonc: Vault{}の{}: {}", "VaultDefinitions.jsonc: vault {} at {}: {}"), diagnostic.id, diagnostic.path, diagnostic.reason));
+        }
+        return err;
+    };
+    init_json("VaultDefinitions.jsonc", "vaults", DefinitionHashDataType::VAULTS, vaults_info, parser);
 }
 
 static bool read_wilderness_definition(std::ifstream &ifs)
