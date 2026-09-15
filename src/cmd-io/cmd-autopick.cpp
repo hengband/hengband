@@ -103,10 +103,18 @@ static int analyze_move_key(text_body_type *tb, uint32_t skey)
     return com_id;
 }
 
+/*!
+ * @brief コマンドを処理する前にカーソル列とマーク列を行の範囲内に収める
+ * @details キーワードの切り替え等はマークを残したまま行を短くするため、マーク中はマーク列も補正する。
+ * マークを外した後の my / mx は存在しない行を指していることがあるため触らない。
+ */
 void text_body_type::adjust_cursor_column()
 {
     this->cx = std::max(this->cx, this->rec_cx);
     this->cx = std::min<int>(this->lines_list[this->cy]->length(), this->cx);
+    if (this->mark) {
+        this->mx = std::min<int>(this->lines_list[this->my]->length(), this->mx);
+    }
 }
 
 void text_body_type::update_cursor_column_record(int com_id)
