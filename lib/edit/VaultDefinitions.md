@@ -26,18 +26,10 @@ glass, `+` secret doors, `-` secret glass doors, `'` curtains, `^` traps, `*`
 treasure or traps, and `&`, `@`, `9`, `8`, `,` monster/treasure placements.
 Terrain symbols and unmarked floor cells are unchanged by this migration.
 
-## Migration verification
-
-Run `python tools/verify-vault-migration.py --legacy-ref <pre-migration-commit>`
-with `pyjson5` installed. This compares every ID, name, type, rating, dimension
-and concatenated layout byte, in order. The optional `--write` regenerates the
-JSONC mechanically from that legacy revision and formats it using the repository's
-Prettier configuration before replacing the file. This option additionally needs
-Node.js and Prettier (on PATH, or available to `npx --no-install prettier`);
-for example, install it with `npm install --global prettier`. Output uses LF on
-every platform. If formatting fails, the existing file is left untouched.
 Prettier may put short layout arrays on a single line; the strings still represent
 individual map rows and no leading/trailing spaces inside them are removed.
+
+## Migration notes
 
 Legacy ID 114 (`Lesser Vault (Interlock)`) declared height 17 and width 12, but
 visually used 12 rows of 17 characters. The old reader concatenated these rows
