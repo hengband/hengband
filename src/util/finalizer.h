@@ -1,7 +1,6 @@
 #pragma once
 
 #include <concepts>
-#include <functional>
 #include <type_traits>
 #include <utility>
 
@@ -22,27 +21,26 @@ namespace util {
  *
  * @param func 実行する関数
  */
-template <std::invocable Func>
-class Finalizer {
+template <typename Func>
+    requires std::is_object_v<Func> && std::invocable<Func &>
+class [[nodiscard]] Finalizer {
 public:
-    explicit Finalizer(const Func &func) noexcept
-        : func_{ func }
-    {
-    }
-    explicit Finalizer(Func &&func) noexcept
-        : func_{ std::move(func) }
+    template <typename F>
+        requires std::constructible_from<Func, F>
+    explicit Finalizer(F &&func) noexcept(std::is_nothrow_constructible_v<Func, F>)
+        : func_(std::forward<F>(func))
     {
     }
 
     ~Finalizer() noexcept
     {
-        std::invoke(func_);
+        func_();
     }
 
     Finalizer(const Finalizer &) = delete;
-    void operator=(const Finalizer &) = delete;
+    Finalizer &operator=(const Finalizer &) = delete;
     Finalizer(Finalizer &&) = delete;
-    void operator=(Finalizer &&) = delete;
+    Finalizer &operator=(Finalizer &&) = delete;
 
 private:
     Func func_;
@@ -53,7 +51,8 @@ private:
  * @param func Finalizerオブジェクトのコンストラクタに渡す関数
  */
 template <typename Func>
-[[nodiscard]] auto make_finalizer(Func &&func) noexcept
+    requires std::invocable<std::decay_t<Func> &> && std::constructible_from<std::decay_t<Func>, Func>
+[[nodiscard]] auto make_finalizer(Func &&func) noexcept(std::is_nothrow_constructible_v<Finalizer<std::decay_t<Func>>, Func>)
 {
     return Finalizer<std::decay_t<Func>>{ std::forward<Func>(func) };
 }
