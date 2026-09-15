@@ -40,10 +40,12 @@ schema_files = \
 	schema/Quest.schema.json \
 	schema/QuestPreferences.schema.json \
 	schema/SpellDefinitions.schema.json \
-	schema/TerrainDefinitions.schema.json
+	schema/TerrainDefinitions.schema.json \
+	schema/VaultDefinitions.schema.json
 
 EXTRA_DIST = \
 	lib/edit/ClassSkillDefinitions.md \
+	lib/edit/VaultDefinitions.md \
 	autopick.txt \
 	autopick_eng.txt \
 	bootstrap \
