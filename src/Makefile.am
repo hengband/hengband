@@ -1489,6 +1489,7 @@ hengband_test_SOURCES = \
 	test/test-main.cpp \
 	test/scoped-rng.h \
 	\
+	test/autopick/test-autopick-editor-util.cpp \
 	test/info-reader/test-info-reader-util.cpp \
 	test/info-reader/test-json-reader-util.cpp \
 	test/info-reader/test-skill-reader.cpp \
