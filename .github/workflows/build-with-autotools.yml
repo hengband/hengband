@@ -34,11 +34,33 @@ jobs:
           submodules: true
           persist-credentials: false
 
+      - name: Reject unknown runners
+        shell: bash
+        run: |
+          case "${{ inputs.runner }}" in
+            ubuntu-26.04|macos-26) ;;
+            *)
+              echo "Unsupported runner: ${{ inputs.runner }}" >&2
+              exit 1
+              ;;
+          esac
+
+      - id: os
+        name: Detect runner OS family
+        shell: bash
+        run: |
+          case "${RUNNER_OS}" in
+            Linux) echo "family=linux" >> "$GITHUB_OUTPUT" ;;
+            macOS) echo "family=macos" >> "$GITHUB_OUTPUT" ;;
+            *) echo "Unsupported RUNNER_OS=${RUNNER_OS}" >&2; exit 1 ;;
+          esac
+
       - id: calculate-cache-key
         name: Calculate cache key for ccache
+        shell: bash
         run: |
-          key=$(echo "${{ inputs.cxx }} ${{ inputs.cxx-flags }} ${{ inputs.configure-opts }}" | sha256sum | cut -d' ' -f1)
-          echo "key=$key" >> $GITHUB_OUTPUT
+          key=$(printf '%s' "${{ inputs.runner }} ${{ inputs.cxx }} ${{ inputs.cxx-flags }} ${{ inputs.configure-opts }}" | shasum -a 256 | awk '{print $1}')
+          echo "key=$key" >> "$GITHUB_OUTPUT"
 
       - if: ${{ inputs.use-ccache }}
         uses: hendrikmuhs/ccache-action@v1.2.23
@@ -46,48 +68,96 @@ jobs:
           key: ${{ steps.calculate-cache-key.outputs.key }}
           max-size: "200M"
 
-      - name: Configuring ccache to use precompiled headers
+      - name: Configuring ccache to intercept the compiler
         if: ${{ inputs.use-ccache }}
+        shell: bash
         run: |
-          ln -s /usr/bin/ccache /usr/local/bin/${{ inputs.cxx }}
-          /usr/bin/ccache --set-config=sloppiness=pch_defines,time_macros,include_file_mtime,include_file_ctime
-          /usr/bin/ccache --set-config=pch_external_checksum=true
-          /usr/bin/ccache -p
+          CCACHE_BIN="$(command -v ccache)"
+          WRAP_DIR="${HOME}/.local/bin"
+          mkdir -p "${WRAP_DIR}"
+          ln -sfn "${CCACHE_BIN}" "${WRAP_DIR}/${{ inputs.cxx }}"
+          echo "${WRAP_DIR}" >> "$GITHUB_PATH"
+          "${CCACHE_BIN}" --set-config=sloppiness=pch_defines,time_macros,include_file_mtime,include_file_ctime
+          "${CCACHE_BIN}" --set-config=pch_external_checksum=true
+          "${CCACHE_BIN}" -p
 
-      - name: Install required packages
+      - name: Install required packages (Ubuntu)
+        if: ${{ steps.os.outputs.family == 'linux' }}
+        shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install \
-            libncursesw5-dev \
+          sudo apt-get install -y \
+            autoconf \
+            automake \
+            pkg-config \
+            libncurses-dev \
             libcurl4-openssl-dev \
             nkf \
-            libc++-15-dev \
-            libc++abi-15-dev \
+            g++-16 \
+            libc++-21-dev \
+            libc++abi-21-dev
+
+      - name: Install required packages (macOS)
+        if: ${{ steps.os.outputs.family == 'macos' }}
+        shell: bash
+        run: |
+          brew update
+          brew install autoconf automake pkg-config nkf ncurses curl
+          echo "PKG_CONFIG_PATH=$(brew --prefix ncurses)/lib/pkgconfig:$(brew --prefix curl)/lib/pkgconfig:${PKG_CONFIG_PATH:-}" >> "$GITHUB_ENV"
+          echo "LDFLAGS=-L$(brew --prefix ncurses)/lib -L$(brew --prefix curl)/lib ${LDFLAGS:-}" >> "$GITHUB_ENV"
+          echo "CPPFLAGS=-I$(brew --prefix ncurses)/include -I$(brew --prefix curl)/include ${CPPFLAGS:-}" >> "$GITHUB_ENV"
+
+      - name: Show compiler version
+        shell: bash
+        run: |
+          "${{ inputs.cxx }}" --version
 
       - name: Generate configure
+        shell: bash
         run: ./bootstrap
 
       - name: Configure
+        shell: bash
         run: ./configure ${{ inputs.configure-opts }}
         env:
           CXX: ${{ inputs.cxx }}
           CXXFLAGS: ${{ inputs.cxx-flags }}
 
+      - name: Decide make job count
+        id: jobs
+        shell: bash
+        run: |
+          if jobs=$(getconf _NPROCESSORS_ONLN 2>/dev/null); then
+            :
+          elif jobs=$(sysctl -n hw.ncpu 2>/dev/null); then
+            :
+          else
+            jobs=2
+          fi
+          if [ "${RUNNER_OS}" = "macOS" ] && [ "${jobs}" -gt 4 ]; then
+            jobs=4
+          fi
+          echo "n=${jobs}" >> "$GITHUB_OUTPUT"
+
       - name: Build with distcheck
         if: ${{ inputs.distcheck }}
-        run: make DISTCHECK_CONFIGURE_FLAGS="CXX=\"${{ inputs.cxx }}\" CXXFLAGS=\"${{ inputs.cxx-flags }}\" ${{ inputs.configure-opts }}" -j$(nproc) distcheck >/dev/null
+        shell: bash
+        run: make DISTCHECK_CONFIGURE_FLAGS="CXX=\"${{ inputs.cxx }}\" CXXFLAGS=\"${{ inputs.cxx-flags }}\" ${{ inputs.configure-opts }}" -j${{ steps.jobs.outputs.n }} distcheck >/dev/null
 
       - name: Build
         if: ${{ !inputs.distcheck }}
-        run: make -j$(nproc) >/dev/null
+        shell: bash
+        run: make -j${{ steps.jobs.outputs.n }} >/dev/null
 
       # distcheck は make check を内部で実行するため、ここでは実行しない
       - name: Run unit tests
         if: ${{ !inputs.distcheck }}
-        run: make -j$(nproc) check VERBOSE=1
+        shell: bash
+        run: make -j${{ steps.jobs.outputs.n }} check VERBOSE=1
 
       # distcheck は出力を捨てているため、失敗したテストの内容はログに残らない。
       # 失敗時にテストの出力を残す
       - name: Show the test log on failure
         if: ${{ failure() }}
+        shell: bash
         run: find . -name test-suite.log -exec sh -c 'echo "==== {} ===="; cat {}' \;

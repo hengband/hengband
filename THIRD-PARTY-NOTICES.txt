@@ -278,7 +278,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
 
-doctest 2.4.12 - MIT
+doctest 2.5.0 - MIT
 https://github.com/doctest/doctest
 
 The MIT License (MIT)
