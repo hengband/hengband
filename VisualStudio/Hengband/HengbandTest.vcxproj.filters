@@ -41,6 +41,9 @@
     <ClCompile Include="..\..\src\test\util\test-dice.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-finalizer.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\util\test-flag-group.cpp">
       <Filter>util</Filter>
     </ClCompile>
