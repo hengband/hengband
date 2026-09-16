@@ -188,6 +188,8 @@ static void display_usage(const char *program)
     puts("           Output auto generated spoilers and exit");
     puts("  --bot-json-output[=path]");
     puts("           Output bot-readable JSON Lines snapshots before player input");
+    puts("  --bot-json-timing");
+    puts("           Enable emitter timing log beside the JSONL file (default: off; not for stdout)");
     puts("  --control-port=<port>");
     puts("           Listen on 127.0.0.1:<port> to be controlled by an external program");
     puts("  --fixed-seed=<seed>");

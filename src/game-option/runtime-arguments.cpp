@@ -13,6 +13,7 @@ bool arg_force_original; /* Command arg -- Request original keyset */
 bool arg_force_roguelike; /* Command arg -- Request roguelike keyset */
 bool arg_bigtile = false; /* Command arg -- Request big tile mode */
 bool arg_bot_json_output = false; /* Command arg -- Output bot-readable JSON snapshots */
+bool arg_bot_json_timing = false;
 std::string arg_bot_json_output_path = "bot-state.jsonl";
 tl::optional<int> arg_control_port; /* Command arg -- Listen port of the game control server */
 tl::optional<uint32_t> arg_fixed_seed; /* Command arg -- Fixed initial seed of the RNG */
@@ -76,6 +77,11 @@ RuntimeArgumentResult parse_number_option(std::string_view option, std::string_v
  */
 RuntimeArgumentResult parse_runtime_argument(std::string_view option)
 {
+    if (option == "bot-json-timing") {
+        arg_bot_json_timing = true;
+        return RuntimeArgumentResult::HANDLED;
+    }
+
     if (option == "headless") {
         arg_headless = true;
         return RuntimeArgumentResult::HANDLED;

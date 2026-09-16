@@ -7,7 +7,10 @@
 #include "combat/shoot.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
+#include "floor/dungeon-feeling.h"
+#include "game-option/map-screen-options.h"
 #include "game-option/runtime-arguments.h"
+#include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
 #include "locale/character-encoding.h"
 #include "mutation/mutation-flag-types.h"
@@ -75,9 +78,17 @@
 #include "world/world.h"
 #include <algorithm>
 #include <array>
+#include <chrono>
+#include <cstdint>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
+#include <string_view>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
 namespace {
 constexpr std::streamoff BOT_JSON_OUTPUT_MAX_BYTES = 256LL * 1024 * 1024;
@@ -107,131 +118,6 @@ const char *pseudo_feeling_name(item_feel_type feeling)
     default:
         return "none";
     }
-}
-
-bool is_grid_perceivable(const PlayerType &player, const Pos2D &pos)
-{
-    const auto &floor = *player.current_floor_ptr;
-    const auto &grid = floor.get_grid(pos);
-    if (grid.get_terrain(TerrainKind::MIMIC).flags.has(TerrainCharacteristics::REMEMBER)) {
-        return grid.is_mark() && is_revealed_wall(floor, pos);
-    }
-
-    if (player.effects()->blindness().is_active()) {
-        return false;
-    }
-
-    const auto is_visible = (grid.info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT)) != 0;
-    const auto is_glowing = (grid.info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW;
-    return is_visible || (grid.is_view() && (is_glowing || player.see_nocto != 0));
-}
-
-nlohmann::json make_grid_json(const PlayerType &player, const Pos2D &pos)
-{
-    const auto &floor = *player.current_floor_ptr;
-    const auto &grid = floor.get_grid(pos);
-    const auto is_known = is_grid_perceivable(player, pos);
-    if (!is_known) {
-        return {
-            { "y", pos.y },
-            { "x", pos.x },
-            { "known", false },
-            { "flags", {
-                           { "mark", false },
-                           { "cave_known", false },
-                           { "lite", false },
-                           { "view", false },
-                           { "room", false },
-                           { "unsafe", false },
-                       } },
-        };
-    }
-
-    short visible_monster_index = 0;
-    // Keep this in lockstep with make_visible_monsters_json(): ESP-only monsters
-    // are deliberately excluded because the bot interface exposes direct sight.
-    // A hallucinating player still SEES a monster at its real tile (the map draws
-    // a random symbol there), so the position is emitted regardless — only the
-    // monster's identity is redacted, over in make_visible_monsters_json().
-    if (grid.is_view() && grid.has_monster()) {
-        const auto &monster = floor.m_list[grid.m_idx];
-        if (monster.is_valid() && monster.ml) {
-            visible_monster_index = grid.m_idx;
-        }
-    }
-
-    const auto visible_object_count = std::count_if(grid.o_idx_list.begin(), grid.o_idx_list.end(), [&floor](auto o_idx) {
-        const auto &item = *floor.o_list[o_idx];
-        return item.is_valid() && item.marked.has(OmType::FOUND);
-    });
-    auto visible_object_tvals = nlohmann::json::array();
-    if (!player.effects()->hallucination().is_active()) {
-        for (const auto o_idx : grid.o_idx_list) {
-            const auto &item = *floor.o_list[o_idx];
-            if (item.is_valid() && item.marked.has(OmType::FOUND)) {
-                // The object-class glyph is visible even when flavor and charges are
-                // unknown. MANA races use this to prioritize edible devices.
-                visible_object_tvals.push_back(enum2i(item.bi_key.tval()));
-            }
-        }
-    }
-
-    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
-    const auto has_terrain = [&terrain](TerrainCharacteristics flag) { return terrain.flags.has(flag); };
-    const auto is_store = has_terrain(TerrainCharacteristics::STORE);
-    auto result = nlohmann::json{
-        { "y", pos.y },
-        { "x", pos.x },
-        { "known", true },
-        { "terrain_id", grid.get_terrain_id(TerrainKind::MIMIC) },
-        { "monster_index", visible_monster_index },
-        { "object_count", visible_object_count },
-        { "object_tvals", std::move(visible_object_tvals) },
-        { "flags", {
-                       { "mark", grid.is_mark() },
-                       { "cave_known", (grid.info & CAVE_KNOWN) != 0 },
-                       { "lite", grid.is_lite() },
-                       { "view", grid.is_view() },
-                       { "room", grid.is_room() },
-                       { "unsafe", (grid.info & CAVE_UNSAFE) != 0 },
-                   } },
-        { "terrain", {
-                         { "floor", has_terrain(TerrainCharacteristics::FLOOR) },
-                         { "wall", has_terrain(TerrainCharacteristics::WALL) },
-                         { "move", has_terrain(TerrainCharacteristics::MOVE) },
-                         { "los", has_terrain(TerrainCharacteristics::LOS) },
-                         { "door", has_terrain(TerrainCharacteristics::DOOR) },
-                         { "trap", has_terrain(TerrainCharacteristics::TRAP) },
-                         { "stairs", has_terrain(TerrainCharacteristics::STAIRS) },
-                         { "up_stairs", has_terrain(TerrainCharacteristics::UP_STAIRS) },
-                         { "down_stairs", has_terrain(TerrainCharacteristics::DOWN_STAIRS) },
-                         { "entrance", has_terrain(TerrainCharacteristics::ENTRANCE) },
-                         { "quest_enter", has_terrain(TerrainCharacteristics::QUEST_ENTER) },
-                         { "quest_exit", has_terrain(TerrainCharacteristics::QUEST_EXIT) },
-                         { "store", is_store },
-                         { "can_dig", has_terrain(TerrainCharacteristics::CAN_DIG) },
-                         { "tunnel", has_terrain(TerrainCharacteristics::TUNNEL) },
-                         { "permanent", has_terrain(TerrainCharacteristics::PERMANENT) },
-                         { "has_gold", has_terrain(TerrainCharacteristics::HAS_GOLD) },
-                         { "building", has_terrain(TerrainCharacteristics::BLDG) },
-                     } },
-    };
-    // A store entrance: expose which store it is so the bot can walk to the
-    // General Store (0) to shop. Emitted only on store tiles to avoid bloat.
-    if (is_store) {
-        result["store_number"] = enum2i(terrain.store_sale_type);
-    }
-    if (has_terrain(TerrainCharacteristics::ENTRANCE)) {
-        result["entrance_dungeon_id"] = grid.special;
-    }
-    if (has_terrain(TerrainCharacteristics::QUEST_ENTER) || has_terrain(TerrainCharacteristics::QUEST_EXIT)) {
-        result["quest_id"] = grid.special;
-    }
-    if (has_terrain(TerrainCharacteristics::BLDG)) {
-        result["building_type"] = enum2i(terrain.building_type);
-        result["building_special"] = grid.special;
-    }
-    return result;
 }
 
 nlohmann::json make_disclosed_quests_json()
@@ -368,7 +254,13 @@ nlohmann::json make_visible_monsters_json(const PlayerType &player)
             continue;
         }
 
-        monsters.push_back(make_visible_monster_json(m_idx, monster, is_hallucinated));
+        auto monster_json = make_visible_monster_json(m_idx, monster, is_hallucinated);
+        // A monster can be perceived without knowing its terrain (infravision,
+        // detection), and state(map=false) has no map sidecar to supply position.
+        const auto &pos = monster.get_position();
+        monster_json["y"] = pos.y;
+        monster_json["x"] = pos.x;
+        monsters.push_back(std::move(monster_json));
     }
 
     return monsters;
@@ -404,26 +296,202 @@ nlohmann::json make_detected_monsters_json(const PlayerType &player)
     return monsters;
 }
 
-nlohmann::json make_nearby_grids_json(const PlayerType &player)
+using GridSignature = std::array<std::int64_t, 4>;
+
+struct GridSignatureHash {
+    std::size_t operator()(const GridSignature &signature) const noexcept
+    {
+        auto hash = std::size_t{ 0 };
+        for (const auto value : signature) {
+            hash ^= std::hash<std::int64_t>{}(value) + 0x9e3779b9U + (hash << 6) + (hash >> 2);
+        }
+        return hash;
+    }
+};
+
+GridSignature make_grid_signature(const Grid &source_grid)
+{
+    // Wire bit positions are append-only; keep tools/bot/README.md in sync.
+    const auto &terrain = source_grid.get_terrain(TerrainKind::MIMIC);
+    const auto has_terrain = [&terrain](TerrainCharacteristics flag) { return terrain.flags.has(flag); };
+    constexpr std::array<TerrainCharacteristics, 18> terrain_flags{ {
+        TerrainCharacteristics::BLDG,
+        TerrainCharacteristics::CAN_DIG,
+        TerrainCharacteristics::DOOR,
+        TerrainCharacteristics::DOWN_STAIRS,
+        TerrainCharacteristics::ENTRANCE,
+        TerrainCharacteristics::FLOOR,
+        TerrainCharacteristics::HAS_GOLD,
+        TerrainCharacteristics::LOS,
+        TerrainCharacteristics::MOVE,
+        TerrainCharacteristics::PERMANENT,
+        TerrainCharacteristics::QUEST_ENTER,
+        TerrainCharacteristics::QUEST_EXIT,
+        TerrainCharacteristics::STAIRS,
+        TerrainCharacteristics::STORE,
+        TerrainCharacteristics::TRAP,
+        TerrainCharacteristics::TUNNEL,
+        TerrainCharacteristics::UP_STAIRS,
+        TerrainCharacteristics::WALL,
+    } };
+    // Retain the tuple slot, but never expose raw internal grid state. Even a
+    // remembered tile can have unobserved lighting/room/knowledge changes.
+    constexpr auto flag_bits = std::int64_t{ 0 };
+    auto terrain_bits = std::int64_t{ 0 };
+    for (std::size_t i = 0; i < terrain_flags.size(); ++i) {
+        terrain_bits |= static_cast<std::int64_t>(has_terrain(terrain_flags[i])) << i;
+    }
+    return { { source_grid.get_terrain_id(TerrainKind::MIMIC), flag_bits, terrain_bits, 1 } };
+}
+
+nlohmann::json make_unsafe_rows_json(const FloorType &floor)
+{
+    if (!floor.is_underground() || !view_unsafe_grids) {
+        return nullptr;
+    }
+
+    constexpr std::string_view hex_digits = "0123456789abcdef";
+    auto rows = nlohmann::json::array();
+    for (auto y = 0; y < floor.height; ++y) {
+        std::string row;
+        for (auto x = 0; x < floor.width; x += 4) {
+            auto bits = 0U;
+            for (auto bit = 0; bit < 4 && x + bit < floor.width; ++bit) {
+                if ((floor.get_grid({ y, x + bit }).info & CAVE_UNSAFE) != 0) {
+                    bits |= 1U << bit;
+                }
+            }
+            row.push_back(hex_digits[bits]);
+        }
+        rows.push_back(std::move(row));
+    }
+    return rows;
+}
+
+nlohmann::json make_grid_map_json(const PlayerType &player)
 {
     const auto &floor = *player.current_floor_ptr;
-    auto grids = nlohmann::json::array();
-    grids.get_ref<nlohmann::json::array_t &>().reserve(static_cast<std::size_t>(floor.height) * floor.width);
+    auto palette = nlohmann::json::array();
+    auto runs = nlohmann::json::array();
+    auto cells = nlohmann::json::array();
+    auto found_items = nlohmann::json::array();
+    auto unsafe_rows = make_unsafe_rows_json(floor);
+    std::unordered_map<GridSignature, std::size_t, GridSignatureHash> palette_indices;
+
+    auto previous_y = -1;
+    auto previous_x = -2;
+    std::size_t previous_palette_index = 0;
+    auto has_previous_run = false;
+    const auto is_hallucinated = player.effects()->hallucination().is_active();
     // Emit the player's entire memorised map (marked tiles) plus the current
     // view — not just a small window. The town is fully known from the start
     // (so the bot can see the dungeon entrance immediately, like the player),
     // and in the dungeon this lets it navigate to any already-explored feature.
-    // Unknown tiles are omitted; the client treats an absent but in-bounds
-    // neighbour as a frontier.
+    // An omitted tile supplies no new terrain observation. Clients retain
+    // their own observation history rather than treating omission as deletion.
     for (const auto &pos : floor.get_area()) {
-        if (!is_grid_perceivable(player, pos)) {
+        const auto &source_grid = floor.get_grid(pos);
+        const auto is_known = is_map_terrain_visible(player, pos);
+        auto found_item_count = 0;
+        auto found_item_tvals = nlohmann::json::array();
+        auto visible_object_count = 0;
+        auto visible_object_tvals = nlohmann::json::array();
+        for (const auto o_idx : source_grid.o_idx_list) {
+            const auto &item = *floor.o_list[o_idx];
+            if (!item.is_valid() || item.marked.has_not(OmType::FOUND)) {
+                continue;
+            }
+
+            if (is_known) {
+                ++visible_object_count;
+                if (!is_hallucinated) {
+                    visible_object_tvals.push_back(enum2i(item.bi_key.tval()));
+                }
+            }
+            if (item.number > 0 && item.bi_key.tval() != ItemKindType::GOLD) {
+                ++found_item_count;
+                // Hide the real class during hallucination without changing the
+                // count/row-length contract. NONE is an unknown-class placeholder.
+                const auto tval = is_hallucinated ? ItemKindType::NONE : item.bi_key.tval();
+                found_item_tvals.push_back(enum2i(tval));
+            }
+        }
+        if (found_item_count != 0) {
+            auto found_item_row = nlohmann::json::array({ pos.y, pos.x, found_item_count });
+            for (auto &tval : found_item_tvals) {
+                found_item_row.push_back(std::move(tval));
+            }
+            found_items.push_back(std::move(found_item_row));
+        }
+
+        if (!is_known) {
             continue;
         }
 
-        grids.push_back(make_grid_json(player, pos));
+        const auto &terrain = source_grid.get_terrain(TerrainKind::MIMIC);
+        const auto has_terrain = [&terrain](TerrainCharacteristics flag) { return terrain.flags.has(flag); };
+        const auto signature = make_grid_signature(source_grid);
+        const auto next_palette_index = palette_indices.size();
+        const auto [palette_it, inserted] = palette_indices.emplace(signature, next_palette_index);
+        if (inserted) {
+            palette.push_back(signature);
+        }
+        const auto palette_index = palette_it->second;
+
+        if (has_previous_run && pos.y == previous_y && pos.x == previous_x + 1 && palette_index == previous_palette_index) {
+            runs.back()[2] = runs.back()[2].get<int>() + 1;
+        } else {
+            runs.push_back({ pos.y, pos.x, 1, palette_index });
+            has_previous_run = true;
+        }
+        previous_y = pos.y;
+        previous_x = pos.x;
+        previous_palette_index = palette_index;
+
+        short visible_monster_index = 0;
+        if (source_grid.is_view() && source_grid.has_monster()) {
+            const auto &monster = floor.m_list[source_grid.m_idx];
+            if (monster.is_valid() && monster.ml) {
+                visible_monster_index = source_grid.m_idx;
+            }
+        }
+        auto cell = nlohmann::json{ { "y", pos.y }, { "x", pos.x } };
+        if (visible_monster_index != 0) {
+            cell["m"] = visible_monster_index;
+        }
+        if (visible_object_count != 0) {
+            cell["o"] = visible_object_count;
+            cell["t"] = std::move(visible_object_tvals);
+        }
+        // Sparse terrain metadata is kept in the same sidecar. These short keys
+        // preserve the old record exactly without polluting the common palette.
+        if (has_terrain(TerrainCharacteristics::STORE)) {
+            cell["s"] = enum2i(terrain.store_sale_type);
+        }
+        if (has_terrain(TerrainCharacteristics::ENTRANCE)) {
+            cell["e"] = source_grid.special;
+        }
+        if (has_terrain(TerrainCharacteristics::QUEST_ENTER) || has_terrain(TerrainCharacteristics::QUEST_EXIT)) {
+            cell["q"] = source_grid.special;
+        }
+        if (has_terrain(TerrainCharacteristics::BLDG)) {
+            cell["b"] = enum2i(terrain.building_type);
+            cell["p"] = source_grid.special;
+        }
+        if (cell.size() > 2) {
+            cells.push_back(std::move(cell));
+        }
     }
 
-    return grids;
+    return {
+        { "w", floor.width },
+        { "h", floor.height },
+        { "palette", std::move(palette) },
+        { "runs", std::move(runs) },
+        { "cells", std::move(cells) },
+        { "found_items", std::move(found_items) },
+        { "unsafe_rows", std::move(unsafe_rows) },
+    };
 }
 
 nlohmann::json make_recent_messages_json()
@@ -667,32 +735,38 @@ const char *food_state(const PlayerType &player)
     return "gorged";
 }
 
-nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
+nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item, bool store_identified = false)
 {
+    // Commercial stock is fully identified by Store::carry(), independently of
+    // the player's flavor awareness. Home/museum items must use normal knowledge.
+    const auto aware = store_identified || item.is_aware();
+    const auto known = store_identified || item.is_known();
     auto result = nlohmann::json{
         { "name", to_json_utf8(describe_flavor(player_ptr, item, OD_OMIT_PREFIX)) },
         { "count", item.number },
         { "tval", enum2i(item.bi_key.tval()) },
-        { "aware", item.is_aware() },
-        { "known", item.is_known() },
-        { "fully_known", item.is_fully_known() },
+        { "aware", aware },
+        { "known", known },
+        { "fully_known", store_identified || item.is_fully_known() },
         { "is_equipment", item.is_equipment() },
         { "weight", item.weight },
         // This matches the player's bounty knowledge: daily targets only count
         // after they have been learned, while the fixed wanted list is public.
         { "is_bounty", item.is_bounty() },
+        // Player-authored text is visible even on unidentified items.
+        { "inscription", item.is_inscribed() ? to_json_utf8(*item.inscription) : "" },
     };
 
     // Match what the normal item description reveals. An unaware flavor does
     // not reveal its base kind, and an unidentified instance does not reveal
     // charges, pval-derived values, or remaining fuel.
-    if (item.is_aware()) {
+    if (aware) {
         result["sval"] = item.bi_key.sval().value_or(-1);
     }
     if (item.has_identification_flag(IdentificationFlag::SENSE)) {
         result["pseudo_feeling"] = pseudo_feeling_name(static_cast<item_feel_type>(item.feeling));
     }
-    if (item.is_known()) {
+    if (known) {
         result["charges"] = item.pval;
         result["pval"] = item.pval;
         result["fuel"] = item.fuel;
@@ -701,11 +775,6 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
         result["is_artifact"] = item.is_fixed_or_random_artifact();
         result["is_cursed"] = item.is_cursed();
         result["is_broken"] = item.is_broken();
-        // Player-authored inscription (the {...} tag). The player sets and
-        // sees it, so exposing it is fair-play. The bot uses it as durable,
-        // savefile-persistent memory (e.g. tagging a confirmed HEAVY_CURSE
-        // item so a restart does not re-attempt normal remove-curse).
-        result["inscription"] = item.is_inscribed() ? to_json_utf8(*item.inscription) : "";
         result["to_h"] = item.to_h;
         result["to_d"] = item.to_d;
         result["to_a"] = item.to_a;
@@ -715,7 +784,7 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item)
             { "sides", item.damage_dice.sides },
         };
         auto known_flags = nlohmann::json::array();
-        const auto flags = item.get_flags_known();
+        const auto flags = store_identified ? item.get_flags() : item.get_flags_known();
         for (auto i = 0; i < static_cast<int>(TR_FLAG_MAX); ++i) {
             if (flags.has(static_cast<tr_type>(i))) {
                 known_flags.push_back(i);
@@ -907,23 +976,11 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
         }
 
         const auto price = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
-        items.push_back({
-            { "letter", letter },
-            { "name", to_json_utf8(describe_flavor(player_ptr, item, OD_STORE | OD_OMIT_PREFIX)) },
-            { "count", item.number },
-            { "tval", enum2i(item.bi_key.tval()) },
-            { "sval", item.bi_key.sval().value_or(-1) },
-            { "aware", true },
-            { "known", true },
-            { "fully_known", true },
-            { "price", price },
-            // Shop stock is fully identified and its listing already shows
-            // charges/fuel to the player, so exposing pval reveals nothing
-            // hidden. Without it a MANA race can never evaluate charge food
-            // (every shelf wand/staff read as 0 charges).
-            { "pval", item.pval },
-            { "charges", item.pval },
-        });
+        auto entry = make_item_json(player_ptr, item, true);
+        entry["letter"] = letter;
+        entry["name"] = to_json_utf8(describe_flavor(player_ptr, item, OD_STORE | OD_OMIT_PREFIX));
+        entry["price"] = price;
+        items.push_back(std::move(entry));
     }
 
     // Paging facts the player already reads off the screen: the listing shows
@@ -955,10 +1012,10 @@ enum class BotSnapshotMessages {
 
 /*!
  * @brief スナップショット本体を組み立てる
- * @param include_map nearby_grids を含めるか
+ * @param include_map grid_map を含めるか
  * @param messages_source messages に載せるメッセージの選び方
- * @details nearby_grids はフロア全域を走査して1万件規模の配列を作る処理で、
- * スナップショット1件のバイト数の99%超を占める。地図を出さない呼び出し
+ * @details grid_map はフロア全域を走査して作る処理で、
+ * 出力量は既知の地形に依存する。地図を出さない呼び出し
  * （店内スナップショット）では作ってから消すのではなく最初から作らない。
  */
 nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
@@ -989,10 +1046,13 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
     }
     auto snapshot = nlohmann::json{
         { "type", "player_turn" },
+        { "protocol_version", BOT_JSON_PROTOCOL_VERSION },
         { "turn", world.game_turn },
         { "player", {
                         { "y", player.y },
                         { "x", player.x },
+                        { "can_see_own_grid", !no_lite(player_ptr) },
+                        { "light_radius", player.cur_lite },
                         { "level", player.lev },
                         { "hp", player.chp },
                         { "max_hp", player.mhp },
@@ -1034,6 +1094,9 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
         { "floor", {
                        { "dungeon_id", enum2i(floor.dungeon_id) },
                        { "level", floor.dun_level },
+                       // The grade is player-visible: it selects the depth-display
+                       // color, and Ctrl-F reports the distinct grade message.
+                       { "feeling", DungeonFeeling::get_instance().get_feeling() },
                        { "width", floor.width },
                        { "height", floor.height },
                        { "inside_arena", floor.inside_arena },
@@ -1094,7 +1157,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
         { "equipment", make_equipment_json(player_ptr) },
     };
     if (include_map) {
-        snapshot["nearby_grids"] = make_nearby_grids_json(player);
+        snapshot["grid_map"] = make_grid_map_json(player);
     }
 
     return snapshot;
@@ -1589,9 +1652,67 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
     return result;
 }
 
-void write_snapshot(const nlohmann::json &snapshot)
+using BotJsonClock = std::chrono::steady_clock;
+
+constexpr std::streamoff BOT_TIMING_MAX_BYTES = 10LL * 1024 * 1024;
+constexpr std::size_t BOT_TIMING_BACKUPS = 3;
+
+void validate_timing_path(const std::filesystem::path &path, const std::filesystem::path &json_path)
 {
+    // Inspect the entry itself: exists() would miss dangling symlinks and an
+    // ofstream would follow them when creating/truncating the target.
+    std::error_code error;
+    const auto status = std::filesystem::symlink_status(path, error);
+    if (status.type() == std::filesystem::file_type::not_found) {
+        return;
+    }
+    if (error) {
+        throw std::filesystem::filesystem_error("inspect timing path", path, error);
+    }
+    if (!std::filesystem::is_regular_file(status)) {
+        throw std::runtime_error("timing path is not a regular non-symlink file");
+    }
+    if (std::filesystem::equivalent(path, json_path)) {
+        throw std::runtime_error("timing path aliases JSON output");
+    }
+    if (std::filesystem::hard_link_count(path) > 1) {
+        throw std::runtime_error("timing path has multiple hard links");
+    }
+}
+
+void rotate_timing_log(const std::filesystem::path &path, const std::filesystem::path &json_path)
+{
+    std::array<std::filesystem::path, BOT_TIMING_BACKUPS + 1> paths;
+    paths[0] = path;
+    for (std::size_t i = 1; i < paths.size(); ++i) {
+        paths[i] = path;
+        paths[i] += "." + std::to_string(i);
+    }
+
+    // Check every destination before removing/renaming anything. The user may
+    // have chosen a backup name (or an alias of it) for the live JSON stream.
+    for (const auto &candidate : paths) {
+        validate_timing_path(candidate, json_path);
+    }
+
+    std::filesystem::remove(paths.back());
+    for (std::size_t i = BOT_TIMING_BACKUPS; i > 0; --i) {
+        if (std::filesystem::exists(paths[i - 1])) {
+            std::filesystem::rename(paths[i - 1], paths[i]);
+        }
+    }
+}
+
+std::int64_t elapsed_microseconds(BotJsonClock::time_point start)
+{
+    return std::chrono::duration_cast<std::chrono::microseconds>(BotJsonClock::now() - start).count();
+}
+
+void write_snapshot(const nlohmann::json &snapshot, std::int64_t build_us)
+{
+    const auto dump_started = BotJsonClock::now();
     const auto serialized = snapshot.dump(-1, ' ', false, nlohmann::json::error_handler_t::replace);
+    const auto dump_us = elapsed_microseconds(dump_started);
     if (arg_bot_json_output_path == "-") {
         std::cout << serialized << '\n';
         std::cout.flush();
@@ -1600,12 +1721,36 @@ void write_snapshot(const nlohmann::json &snapshot)
 
     static std::ofstream ofs;
     static std::string opened_path;
-    if (!ofs.is_open() || opened_path != arg_bot_json_output_path) {
+    static unsigned int output_open_attempts = 0;
+    static bool output_disabled = false;
+    static std::ofstream timing_ofs;
+    static std::filesystem::path timing_path;
+    static unsigned int timing_open_attempts = 0;
+    static bool timing_disabled = false;
+    if (!output_disabled && (!ofs.is_open() || opened_path != arg_bot_json_output_path)) {
         ofs.close();
+        ofs.clear();
+        timing_ofs.close();
+        timing_ofs.clear();
         opened_path = arg_bot_json_output_path;
+        if (arg_bot_json_timing && !timing_disabled) {
+            try {
+                timing_path = std::filesystem::absolute(std::filesystem::path(opened_path));
+                timing_path += ".timing.log";
+            } catch (const std::filesystem::filesystem_error &error) {
+                std::cerr << "BOT JSON timing disabled: " << error.what() << '\n';
+                timing_disabled = true;
+            }
+        }
         // Truncate at session start so the log does not grow without bound
         // across runs (full-map snapshots are large); the client tails it live.
         ofs.open(opened_path, std::ios::out | std::ios::trunc);
+        if (ofs) {
+            output_open_attempts = 0;
+        } else if (++output_open_attempts >= 2) {
+            std::cerr << "BOT JSON output disabled after two consecutive failed opens: " << opened_path << '\n';
+            output_disabled = true;
+        }
     }
 
     if (!ofs) {
@@ -1620,12 +1765,74 @@ void write_snapshot(const nlohmann::json &snapshot)
         ofs.clear();
         ofs.open(opened_path, std::ios::out | std::ios::trunc);
         if (!ofs) {
+            if (++output_open_attempts >= 2) {
+                std::cerr << "BOT JSON output disabled after two consecutive failed opens: " << opened_path << '\n';
+                output_disabled = true;
+            }
             return;
         }
+        output_open_attempts = 0;
     }
 
+    const auto write_started = BotJsonClock::now();
     ofs << serialized << '\n';
     ofs.flush();
+    const auto write_us = elapsed_microseconds(write_started);
+
+    if (!arg_bot_json_timing || timing_disabled) {
+        return;
+    }
+
+    if (!timing_disabled && !timing_ofs.is_open()) {
+        // The JSON stream is already open, so equivalent() also detects case
+        // aliases on Windows and existing hard/symbolic links to the same file.
+        try {
+            validate_timing_path(timing_path, opened_path);
+        } catch (const std::exception &error) {
+            std::cerr << "BOT JSON timing disabled: " << error.what() << '\n';
+            timing_disabled = true;
+        }
+        if (!timing_disabled) {
+            timing_ofs.open(timing_path, std::ios::out | std::ios::trunc);
+            if (timing_ofs) {
+                timing_open_attempts = 0;
+            } else if (++timing_open_attempts >= 2) {
+                std::cerr << "BOT JSON timing disabled after two failed opens: " << timing_path << '\n';
+                timing_disabled = true;
+            }
+        }
+    }
+    if (!timing_disabled && timing_ofs.is_open() && timing_ofs) {
+        if (timing_ofs.tellp() >= BOT_TIMING_MAX_BYTES) {
+            timing_ofs.close();
+            try {
+                if (!timing_ofs) {
+                    throw std::runtime_error("failed to close timing log");
+                }
+                rotate_timing_log(timing_path, opened_path);
+                validate_timing_path(timing_path, opened_path);
+                timing_ofs.open(timing_path, std::ios::out | std::ios::trunc);
+                if (!timing_ofs) {
+                    throw std::runtime_error("failed to reopen timing log");
+                }
+            } catch (const std::exception &error) {
+                std::cerr << "BOT JSON timing disabled: " << error.what() << '\n';
+                timing_disabled = true;
+                return;
+            }
+        }
+        const auto snapshot_type = snapshot.contains("type") ? snapshot.at("type").get<std::string>() : "player_turn";
+        const auto snapshot_turn = snapshot.contains("turn") ? snapshot.at("turn") : nlohmann::json(0);
+        timing_ofs << "type=" << snapshot_type << " turn=" << snapshot_turn
+                   << " build_us=" << build_us << " dump_us=" << dump_us << " write_us=" << write_us
+                   << " bytes=" << serialized.size() << '\n';
+        timing_ofs.flush();
+        if (!timing_ofs) {
+            std::cerr << "BOT JSON timing disabled: failed to write timing log\n";
+            timing_disabled = true;
+            timing_ofs.close();
+        }
+    }
 }
 }
 
@@ -1658,7 +1865,7 @@ nlohmann::json make_message_history_json(int count)
 /*!
  * @brief ゲームの内部状態のスナップショットをJSONで生成する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param include_map nearby_gridsを含めるか
+ * @param include_map grid_mapを含めるか
  * @pre player_ptrとplayer_ptr->current_floor_ptrがnullptrでないことを呼び出し側が保証すること
  * @return スナップショットのJSONオブジェクト
  * @details
@@ -1677,7 +1884,9 @@ void output_bot_json_snapshot(PlayerType *player_ptr)
         return;
     }
 
-    write_snapshot(make_snapshot(player_ptr));
+    const auto build_started = BotJsonClock::now();
+    auto snapshot = make_snapshot(player_ptr);
+    write_snapshot(snapshot, elapsed_microseconds(build_started));
 }
 
 void output_bot_json_store_snapshot(PlayerType *player_ptr, StoreSaleType store_num)
@@ -1690,17 +1899,17 @@ void output_bot_json_store_snapshot(PlayerType *player_ptr, StoreSaleType store_
     // stock, so the bot can decide what to buy while at the store prompt.
     //
     // The map is deliberately omitted here.  At the store prompt the player
-    // cannot move and the floor cannot change, so nearby_grids would repeat
-    // the surface snapshot's map verbatim -- yet it is over 99% of a snapshot's
-    // bytes (measured: 5.09 MB per record, 10,419 grid entries).  A store
+    // cannot move and the floor cannot change, so grid_map would repeat the
+    // surface snapshot's map verbatim. A store
     // session emits one snapshot per processed key (see cmd-store.cpp), so
     // paging through a large inventory multiplies that cost by the key count.
     // This reveals nothing new to the bot; it only stops re-sending what the
     // preceding surface snapshot already carried.
+    const auto build_started = BotJsonClock::now();
     auto snapshot = make_snapshot(player_ptr, false);
     snapshot["type"] = "store";
     snapshot["store"] = make_store_json(player_ptr, store_num);
-    write_snapshot(snapshot);
+    write_snapshot(snapshot, elapsed_microseconds(build_started));
 }
 
 void output_bot_json_character_snapshot(PlayerType *player_ptr)
@@ -1708,10 +1917,11 @@ void output_bot_json_character_snapshot(PlayerType *player_ptr)
     if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
         return;
     }
+    const auto build_started = BotJsonClock::now();
     auto snapshot = make_snapshot(player_ptr);
     snapshot["type"] = "character";
     snapshot["character"] = make_character_json(player_ptr);
-    write_snapshot(snapshot);
+    write_snapshot(snapshot, elapsed_microseconds(build_started));
 }
 
 void output_bot_json_knowledge_snapshot(PlayerType *player_ptr, BotKnowledgeCategory category)
@@ -1719,10 +1929,11 @@ void output_bot_json_knowledge_snapshot(PlayerType *player_ptr, BotKnowledgeCate
     if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
         return;
     }
+    const auto build_started = BotJsonClock::now();
     auto snapshot = make_snapshot(player_ptr);
     snapshot["type"] = "knowledge";
     snapshot["knowledge"] = make_knowledge_json(player_ptr, category);
-    write_snapshot(snapshot);
+    write_snapshot(snapshot, elapsed_microseconds(build_started));
 }
 
 void output_bot_json_look_snapshot(PlayerType *player_ptr)
@@ -1730,8 +1941,9 @@ void output_bot_json_look_snapshot(PlayerType *player_ptr)
     if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
         return;
     }
+    const auto build_started = BotJsonClock::now();
     auto snapshot = make_snapshot(player_ptr);
     snapshot["type"] = "look";
     snapshot["look"] = make_look_json(player_ptr);
-    write_snapshot(snapshot);
+    write_snapshot(snapshot, elapsed_microseconds(build_started));
 }

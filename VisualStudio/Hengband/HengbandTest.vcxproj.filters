@@ -4,6 +4,9 @@
     <Filter Include="autopick">
       <UniqueIdentifier>{6fc1c33a-bcb9-4de8-ac91-81321f97c33c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="game-option">
+      <UniqueIdentifier>{ce56653b-fbe2-4e12-af06-489721a95644}</UniqueIdentifier>
+    </Filter>
     <Filter Include="info-reader">
       <UniqueIdentifier>{5a5d0f27-6c1e-4c8b-9f34-2b7d8e1a6c40}</UniqueIdentifier>
     </Filter>
@@ -20,8 +23,12 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\stdafx.cpp" />
     <ClCompile Include="..\..\src\test\test-main.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp">
       <Filter>autopick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp">
+      <Filter>game-option</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp">
       <Filter>info-reader</Filter>

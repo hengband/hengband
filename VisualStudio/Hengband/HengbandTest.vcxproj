@@ -57,7 +57,9 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\src\test\test-main.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp" />
+    <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-skill-reader.cpp" />
