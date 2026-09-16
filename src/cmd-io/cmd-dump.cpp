@@ -131,17 +131,19 @@ void do_cmd_colors(PlayerType *player_ptr)
             break;
         }
         case '3': {
+            // 色番号は見本の描画属性にもそのまま使うため、テキストの色として有効な範囲に留める。
+            // 16以上は属性の上位ビットが全角文字やタイルのフラグと重なり、画面バッファの範囲外を読み書きする
+            constexpr byte num_colors = std::size(color_names);
             static byte a = 0;
             prt(_("コマンド: カラーの設定を変更します", "Command: Modify colors"), 8, 0);
             while (true) {
-                concptr name;
                 clear_from(10);
-                for (byte i = 0; i < 16; i++) {
+                for (byte i = 0; i < num_colors; i++) {
                     term_putstr(i * 4, 20, -1, a, "###");
                     term_putstr(i * 4, 22, -1, i, format("%3d", i));
                 }
 
-                name = ((a < 16) ? color_names[a] : _("未定義", "undefined"));
+                const auto name = color_names[a];
                 term_putstr(5, 10, -1, TERM_WHITE, format(_("カラー = %d, 名前 = %s", "Color = %d, Name = %s"), a, name));
                 term_putstr(5, 12, -1, TERM_WHITE,
                     format("K = 0x%02x / R,G,B = 0x%02x,0x%02x,0x%02x", angband_color_table[a][0], angband_color_table[a][1], angband_color_table[a][2],
@@ -172,10 +174,10 @@ void do_cmd_colors(PlayerType *player_ptr)
                     angband_color_table[a][0] = (byte)(angband_color_table[a][0] - 1);
                     break;
                 case 'n':
-                    a++;
+                    a = static_cast<byte>((a + 1) % num_colors);
                     break;
                 case 'N':
-                    a--;
+                    a = static_cast<byte>((a + num_colors - 1) % num_colors);
                     break;
                 case 'r':
                     angband_color_table[a][1] = (byte)(angband_color_table[a][1] + 1);
