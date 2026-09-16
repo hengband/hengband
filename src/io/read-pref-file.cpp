@@ -240,7 +240,7 @@ bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_v
     const auto header_mark_str = format(auto_dump_header, mark.data());
     remove_auto_dump(path, mark);
     *fpp = angband_fopen(path, FileOpenMode::APPEND);
-    if (!fpp) {
+    if (!*fpp) {
         const auto &path_str = path.string();
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), path_str.data());
         msg_erase();
