@@ -116,23 +116,47 @@ static void show_file_aux_line(std::string_view str, int cy, std::string_view sh
 }
 
 /*!
- * @brief ファイル内容をコンソールに出力する
+ * @brief ファイルを開けなかった旨のメッセージを作る
+ * @param name_with_tag ファイル名の文字列 (「#タグ」が付いていれば取り除いて表示する)
+ * @return メッセージ
+ */
+static std::string make_open_error_message(std::string_view name_with_tag)
+{
+    const auto name = str_split(name_with_tag, '#')[0];
+    return format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
+}
+
+/*!
+ * @brief ファイル内容をコンソールに出力する (ファイルが見つからない場合は例外を送出する)
+ * @details 引数の意味は try_display() と同じ。
+ * ユーザーが入力した名前のように見つからないことがあり得る場合は try_display() を使う。
+ */
+void FileDisplayer::display(bool show_version, std::string_view name_with_tag, int initial_line, uint32_t mode, std::string_view what)
+{
+    if (this->try_display(show_version, name_with_tag, initial_line, mode, what)) {
+        return;
+    }
+
+    THROW_EXCEPTION(std::runtime_error, make_open_error_message(name_with_tag));
+}
+
+/*!
+ * @brief ファイル内容をコンソールに出力する (ファイルが見つからない場合は何もしない)
  * Recursive file perusal.
- * @param player_ptr プレイヤーへの参照ポインタ
  * @param show_version TRUEならばコンソール上にゲームのバージョンを表示する
- * @param name ファイル名の文字列
- * @param what 内容キャプションの文字列
- * @param line 表示の現在行
+ * @param name_with_tag ファイル名の文字列 (「#タグ」を付けるとその位置から表示する)
+ * @param initial_line 表示の開始行
  * @param mode オプション
+ * @param what 内容キャプションの文字列
+ * @return ファイルを表示した場合はtrue、ファイルが見つからなかった場合はfalse
  * @details
  * <pre>
  * Process various special text in the input file, including
  * the "menu" structures used by the "help file" system.
- * Return FALSE on 'q' to exit from a deep, otherwise TRUE.
  * </pre>
  * @todo 表示とそれ以外を分割する
  */
-void FileDisplayer::display(bool show_version, std::string_view name_with_tag, int initial_line, uint32_t mode, std::string_view what)
+bool FileDisplayer::try_display(bool show_version, std::string_view name_with_tag, int initial_line, uint32_t mode, std::string_view what)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, tl::nullopt);
 
@@ -175,9 +199,8 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
         fff = angband_fopen(path_reopen, FileOpenMode::READ);
     }
 
-    const auto open_error_mes = format(_("'%s'をオープンできません。", "Cannot open '%s'."), name.data());
     if (!fff) {
-        THROW_EXCEPTION(std::runtime_error, open_error_mes);
+        return false;
     }
 
     const auto caption_str = caption.str();
@@ -247,7 +270,7 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
             angband_fclose(fff);
             fff = angband_fopen(path_reopen, FileOpenMode::READ);
             if (!fff) {
-                THROW_EXCEPTION(std::runtime_error, open_error_mes);
+                THROW_EXCEPTION(std::runtime_error, make_open_error_message(name));
             }
 
             next = 0;
@@ -398,14 +421,26 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
             break;
         case '%': {
             prt(_("ファイル・ネーム: ", "Goto File: "), hgt - 1, 0);
-            const auto ask_result = askfor(80, _("jhelp.hlp", "help.hlp"));
-            if (!ask_result) {
-                break;
-            }
+            std::string initial_file(_("jhelp.hlp", "help.hlp"));
+            while (true) {
+                const auto ask_result = askfor(80, initial_file);
+                if (!ask_result) {
+                    break;
+                }
 
-            this->display(true, *ask_result, 0, mode);
-            if (this->is_terminated) {
-                skey = 'q';
+                // 入力された名前のファイルが無いのは誤りではないので、例外にせず知らせて入力し直させる
+                if (this->try_display(true, *ask_result, 0, mode)) {
+                    if (this->is_terminated) {
+                        skey = 'q';
+                    }
+
+                    break;
+                }
+
+                // 入力欄は見出しの直後から始まるため、見出しにファイル名を含めると名前が長いほど入力欄が狭くなる。
+                // 名前は入力欄の初期値として残るので、見出しは最初の入力の見出し以下の長さの決まった文言にする
+                prt(_("見つかりません: ", "Not found: "), hgt - 1, 0);
+                initial_file = *ask_result;
             }
 
             break;
@@ -519,4 +554,5 @@ void FileDisplayer::display(bool show_version, std::string_view name_with_tag, i
 
     angband_fclose(fff);
     this->is_terminated = skey == 'q';
+    return true;
 }
