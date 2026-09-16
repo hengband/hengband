@@ -9,6 +9,7 @@
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include <algorithm>
+#include <bitset>
 #include <cctype>
 #include <cstdint>
 #include <utility>
@@ -74,6 +75,16 @@ bool starts_with_case_insensitive(std::string_view str, std::string_view prefix)
 }
 
 /*!
+ * @brief マクロトリガー表記で扱う修飾キーの数を返す
+ * @return 修飾キーの文字と名前の両方が定義されている数
+ * @details マクロテンプレートが定義されている (macro_modifier_chr も定義されている) 前提で呼ぶこと。
+ */
+size_t count_modifiers()
+{
+    return std::min(macro_modifier_chr->length(), macro_modifier_names.size());
+}
+
+/*!
  * @brief 大文字小文字を区別せずに、2つの文字列が等しいかを調べる
  * @param a 比べる文字列
  * @param b 比べる文字列
@@ -102,27 +113,23 @@ size_t trigger_text_to_ascii(std::string &result, std::string_view sv, size_t po
     }
 
     const auto &modifier_chars = *macro_modifier_chr;
-    const auto num_modifiers = std::min(modifier_chars.length(), macro_modifier_names.size());
-    std::vector<bool> mod_status(num_modifiers);
+    const auto num_modifiers = count_modifiers();
+    const auto modifier_names_begin = macro_modifier_names.begin();
+    const auto modifier_names_end = modifier_names_begin + num_modifiers;
+    std::bitset<MAX_MACRO_MOD> mod_status;
     auto shift_status = ShiftStatus::OFF;
     auto cur = pos + 1;
     while (true) {
+        // 空の名前は常に一致して先へ進まないため、判定しない
         const auto rest = sv.substr(cur);
-        size_t m = 0;
-        for (; m < num_modifiers; m++) {
-            // 空の名前は常に一致して先へ進まないため、判定しない
-            const auto &name = macro_modifier_names[m];
-            if (!name.empty() && starts_with_case_insensitive(rest, name)) {
-                break;
-            }
-        }
-
-        if (m == num_modifiers) {
+        const auto it = std::find_if(modifier_names_begin, modifier_names_end, [rest](const auto &name) { return !name.empty() && starts_with_case_insensitive(rest, name); });
+        if (it == modifier_names_end) {
             break;
         }
 
-        cur += macro_modifier_names[m].length();
-        mod_status[m] = true;
+        const auto m = static_cast<size_t>(it - modifier_names_begin);
+        cur += it->length();
+        mod_status.set(m);
         if (modifier_chars[m] == 'S') {
             shift_status = ShiftStatus::ON;
         }
@@ -155,7 +162,7 @@ size_t trigger_text_to_ascii(std::string &result, std::string_view sv, size_t po
         switch (ch) {
         case '&':
             for (size_t j = 0; j < num_modifiers; j++) {
-                if (mod_status[j]) {
+                if (mod_status.test(j)) {
                     result.push_back(modifier_chars[j]);
                 }
             }
@@ -187,7 +194,7 @@ tl::optional<std::pair<std::string, size_t>> trigger_ascii_to_text(std::string_v
     }
 
     const auto &modifier_chars = *macro_modifier_chr;
-    const auto num_modifiers = std::min(modifier_chars.length(), macro_modifier_names.size());
+    const auto num_modifiers = count_modifiers();
     std::string text("\\[");
     std::string_view key_code;
     auto cur = pos;
@@ -294,24 +301,19 @@ tl::optional<size_t> escape_text_to_ascii(std::string &result, std::string_view 
     case '[':
         return trigger_text_to_ascii(result, sv, pos + 1);
     case 'x':
-        // 「\xNN」は続く2文字を16進数として読む
-        if (pos + 3 >= sv.length()) {
-            return tl::nullopt;
-        }
-
-        result.push_back(static_cast<char>(16 * dehex(sv[pos + 2]) + dehex(sv[pos + 3])));
-        return pos + 4;
     case '0':
     case '1':
     case '2':
-    case '3':
-        // 「\0NN」～「\3NN」は続く2文字と合わせて8進数として読む
+    case '3': {
+        // 「\xNN」は続く2文字を16進数として、「\0NN」～「\3NN」は続く2文字と合わせて8進数として読む
         if (pos + 3 >= sv.length()) {
             return tl::nullopt;
         }
 
-        result.push_back(static_cast<char>(64 * D2I(ch) + 8 * deoct(sv[pos + 2]) + deoct(sv[pos + 3])));
+        const auto value = (ch == 'x') ? 16 * dehex(sv[pos + 2]) + dehex(sv[pos + 3]) : 64 * D2I(ch) + 8 * deoct(sv[pos + 2]) + deoct(sv[pos + 3]);
+        result.push_back(static_cast<char>(value));
         return pos + 4;
+    }
     case '\\':
         result.push_back('\\');
         break;
@@ -341,6 +343,37 @@ tl::optional<size_t> escape_text_to_ascii(std::string &result, std::string_view 
     }
 
     return pos + 2;
+}
+
+/*!
+ * @brief 変換元のキーコード列の指定位置から、1つのキーコードまたはマクロトリガーを表記に変換する
+ * @param sv 変換元のキーコード列
+ * @param pos 変換する位置
+ * @return 変換した表記と、変換元のキーコード列で続きを読む位置の組
+ */
+std::pair<std::string, size_t> key_to_text(std::string_view sv, size_t pos)
+{
+    const auto ch = static_cast<uint8_t>(sv[pos]);
+    if (ch == 31) {
+        if (auto trigger = trigger_ascii_to_text(sv, pos + 1); trigger) {
+            return std::move(*trigger);
+        }
+    }
+
+    return { char_to_text(ch), pos + 1 };
+}
+
+/*!
+ * @brief 変換結果をバッファへ書き込む
+ * @param buf 書き込み先のバッファ
+ * @param result 変換結果
+ * @param bufsize buf の大きさ (1以上)。最大 bufsize - 1 バイトに切り詰め、必ずNUL終端する
+ */
+void write_result(char *buf, std::string_view result, size_t bufsize)
+{
+    const auto length = std::min(result.length(), bufsize - 1);
+    std::copy_n(result.data(), length, buf);
+    buf[length] = '\0';
 }
 }
 
@@ -387,9 +420,7 @@ void text_to_ascii(char *buf, std::string_view sv, size_t bufsize)
         pos++;
     }
 
-    const auto length = std::min(result.length(), bufsize - 1);
-    std::copy_n(result.data(), length, buf);
-    buf[length] = '\0';
+    write_result(buf, result, bufsize);
 }
 
 /*!
@@ -410,16 +441,7 @@ void ascii_to_text(char *buf, std::string_view sv, size_t bufsize)
     sv = sv.substr(0, sv.find('\0'));
     std::string result;
     for (size_t pos = 0; pos < sv.length();) {
-        const auto ch = static_cast<uint8_t>(sv[pos]);
-        std::string text;
-        auto next = pos + 1;
-        if (const auto trigger = (ch == 31) ? trigger_ascii_to_text(sv, pos + 1) : tl::nullopt; trigger) {
-            text = trigger->first;
-            next = trigger->second;
-        } else {
-            text = char_to_text(ch);
-        }
-
+        const auto [text, next] = key_to_text(sv, pos);
         if (result.length() + text.length() > bufsize - 1) {
             break;
         }
@@ -428,6 +450,5 @@ void ascii_to_text(char *buf, std::string_view sv, size_t bufsize)
         pos = next;
     }
 
-    std::copy(result.begin(), result.end(), buf);
-    buf[result.length()] = '\0';
+    write_result(buf, result, bufsize);
 }

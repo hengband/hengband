@@ -7,115 +7,93 @@
  */
 
 #include "io/macro-configurations-store.h"
+#include "util/finalizer.h"
 
 #include <doctest/doctest.h>
 
-#include <map>
 #include <string>
 #include <string_view>
 #include <vector>
 
 namespace {
 
-/*!
- * @brief マクロトリガーの定義を差し替え、スコープを抜けるときに元へ戻す
- */
-class ScopedMacroTriggers {
-public:
-    enum class Kind {
-        NONE, //!< マクロテンプレートを持たない (GCU 版などの状態)
-        X11_LIKE, //!< X11 版の pref ファイルと同じ形式のテンプレートとトリガーを持つ
-    };
-
-    /*!
-     * @brief 現在の定義を退避し、指定した種類の定義に差し替える
-     * @param kind 差し替える定義の種類
-     * @details
-     * X11_LIKE では T:&_#:NSOM:control-:shift-:alt-:mod2- 相当のテンプレートと、以下のトリガーを定義する。
-     * - F1: 通常時 FFBE、Shift 時 SFFBE (Shift の有無でキーコードが変わることを確かめるため、X11 版とは変えている)
-     * - Short: FF1 (Escape のキーコードの先頭部分と一致する)
-     * - Escape: FF1B
-     */
-    explicit ScopedMacroTriggers(Kind kind)
-        : template_backup(macro_template)
-        , modifier_chr_backup(macro_modifier_chr)
-        , modifier_names_backup(macro_modifier_names)
-        , trigger_names_backup(macro_trigger_names)
-        , keycodes_backup(macro_trigger_keycodes)
-        , max_backup(max_macrotrigger)
-    {
-        if (kind == Kind::NONE) {
-            macro_template.reset();
-            macro_modifier_chr.reset();
-            max_macrotrigger = 0;
-            return;
-        }
-
-        macro_template = "&_#";
-        macro_modifier_chr = "NSOM";
-        macro_modifier_names.at(0) = "control-";
-        macro_modifier_names.at(1) = "shift-";
-        macro_modifier_names.at(2) = "alt-";
-        macro_modifier_names.at(3) = "mod2-";
-        set_trigger(0, "F1", "FFBE", "SFFBE");
-        set_trigger(1, "Short", "FF1", "FF1");
-        set_trigger(2, "Escape", "FF1B", "FF1B");
-        max_macrotrigger = 3;
-    }
-
-    ~ScopedMacroTriggers()
-    {
-        macro_template = this->template_backup;
-        macro_modifier_chr = this->modifier_chr_backup;
-        macro_modifier_names = this->modifier_names_backup;
-        macro_trigger_names = this->trigger_names_backup;
-        macro_trigger_keycodes = this->keycodes_backup;
-        max_macrotrigger = this->max_backup;
-    }
-
-    ScopedMacroTriggers(const ScopedMacroTriggers &) = delete;
-    ScopedMacroTriggers &operator=(const ScopedMacroTriggers &) = delete;
-
-private:
-    tl::optional<std::string> template_backup;
-    tl::optional<std::string> modifier_chr_backup;
-    std::vector<std::string> modifier_names_backup;
-    std::vector<std::string> trigger_names_backup;
-    std::map<ShiftStatus, std::vector<std::string>> keycodes_backup;
-    size_t max_backup;
-
-    static void set_trigger(size_t index, std::string_view name, std::string_view keycode, std::string_view shift_keycode)
-    {
-        macro_trigger_names.at(index) = name;
-        macro_trigger_keycodes.at(ShiftStatus::OFF).at(index) = keycode;
-        macro_trigger_keycodes.at(ShiftStatus::ON).at(index) = shift_keycode;
-    }
+enum class MacroTriggers {
+    NONE, //!< マクロテンプレートを持たない (GCU 版などの状態)
+    X11_LIKE, //!< X11 版の pref ファイルと同じ形式のテンプレートとトリガーを持つ
 };
 
 /*!
- * @brief text_to_ascii() の結果を文字列で受け取る
- * @param text 変換元の文字列
- * @param bufsize 変換先バッファの大きさ
- * @return 変換結果 (NUL終端までの文字列)
+ * @brief マクロトリガーの定義を差し替える
+ * @param kind 差し替える定義の種類
+ * @return スコープを抜けるときに元の定義へ戻すファイナライザ
+ * @details
+ * X11_LIKE では T:&_#:NSOM:control-:shift-:alt-:mod2- 相当のテンプレートと、以下のトリガーを定義する。
+ * - F1: 通常時 FFBE、Shift 時 SFFBE (Shift の有無でキーコードが変わることを確かめるため、X11 版とは変えている)
+ * - Short: FF1 (Escape のキーコードの先頭部分と一致する)
+ * - Escape: FF1B
+ *
+ * 戻り値は必ず変数で受けること。受けないとその場で元に戻ってしまう。
  */
-std::string to_ascii(std::string_view text, size_t bufsize = 1024)
+[[nodiscard]] auto scoped_macro_triggers(MacroTriggers kind)
 {
-    std::vector<char> buf(bufsize, 'X');
-    text_to_ascii(buf.data(), text, bufsize);
-    return std::string(buf.data());
+    auto restore = [template_backup = macro_template, modifier_chr_backup = macro_modifier_chr, modifier_names_backup = macro_modifier_names,
+                       trigger_names_backup = macro_trigger_names, keycodes_backup = macro_trigger_keycodes, max_backup = max_macrotrigger] {
+        macro_template = template_backup;
+        macro_modifier_chr = modifier_chr_backup;
+        macro_modifier_names = modifier_names_backup;
+        macro_trigger_names = trigger_names_backup;
+        macro_trigger_keycodes = keycodes_backup;
+        max_macrotrigger = max_backup;
+    };
+
+    if (kind == MacroTriggers::NONE) {
+        macro_template.reset();
+        macro_modifier_chr.reset();
+        max_macrotrigger = 0;
+        return util::make_finalizer(std::move(restore));
+    }
+
+    const auto set_trigger = [](size_t index, std::string_view name, std::string_view keycode, std::string_view shift_keycode) {
+        macro_trigger_names.at(index) = name;
+        macro_trigger_keycodes.at(ShiftStatus::OFF).at(index) = keycode;
+        macro_trigger_keycodes.at(ShiftStatus::ON).at(index) = shift_keycode;
+    };
+
+    macro_template = "&_#";
+    macro_modifier_chr = "NSOM";
+    macro_modifier_names.at(0) = "control-";
+    macro_modifier_names.at(1) = "shift-";
+    macro_modifier_names.at(2) = "alt-";
+    macro_modifier_names.at(3) = "mod2-";
+    set_trigger(0, "F1", "FFBE", "SFFBE");
+    set_trigger(1, "Short", "FF1", "FF1");
+    set_trigger(2, "Escape", "FF1B", "FF1B");
+    max_macrotrigger = 3;
+    return util::make_finalizer(std::move(restore));
 }
 
 /*!
- * @brief ascii_to_text() の結果を文字列で受け取る
- * @param keys 変換元のキーコード列
+ * @brief 変換関数の結果を文字列で受け取る
+ * @param convert 変換関数 (text_to_ascii または ascii_to_text)
+ * @param source 変換元の文字列
  * @param bufsize 変換先バッファの大きさ
  * @return 変換結果 (NUL終端までの文字列)
  */
-std::string to_text(std::string_view keys, size_t bufsize = 1024)
+std::string convert_to_string(void (*convert)(char *, std::string_view, size_t), std::string_view source, size_t bufsize)
 {
     std::vector<char> buf(bufsize, 'X');
-    ascii_to_text(buf.data(), keys, bufsize);
+    convert(buf.data(), source, bufsize);
     return std::string(buf.data());
+}
+
+std::string to_ascii(std::string_view text, size_t bufsize = 1024)
+{
+    return convert_to_string(text_to_ascii, text, bufsize);
+}
+
+std::string to_text(std::string_view keys, size_t bufsize = 1024)
+{
+    return convert_to_string(ascii_to_text, keys, bufsize);
 }
 
 /*!
@@ -135,7 +113,7 @@ std::string_view head(const std::string &backing, size_t length)
 
 TEST_CASE("text_to_ascii converts key notations")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::NONE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::NONE);
 
     CHECK(to_ascii("abc") == "abc");
     CHECK(to_ascii("a^Ab") == "a\001b");
@@ -148,13 +126,13 @@ TEST_CASE("text_to_ascii converts key notations")
 
 TEST_CASE("text_to_ascii drops an incomplete notation at the end of the string")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::NONE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::NONE);
 
     // 表記の続きに当たる文字をビューの外に置き、範囲外を読むと結果が変わるようにする
     for (const auto *text : { "abc^A", "abc\\e", "abc\\x41", "abc\\101" }) {
+        CAPTURE(text);
         const std::string backing(text);
         for (auto length = 3U; length < backing.length(); length++) {
-            CAPTURE(text);
             CAPTURE(length);
             CHECK(to_ascii(head(backing, length)) == "abc");
         }
@@ -163,7 +141,7 @@ TEST_CASE("text_to_ascii drops an incomplete notation at the end of the string")
 
 TEST_CASE("text_to_ascii stops at a NUL character")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::NONE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::NONE);
 
     const std::string text("ab\0cd", 5);
     CHECK(to_ascii(text) == "ab");
@@ -171,7 +149,7 @@ TEST_CASE("text_to_ascii stops at a NUL character")
 
 TEST_CASE("text_to_ascii truncates the result to fit the buffer")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::NONE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::NONE);
 
     CHECK(to_ascii("abcdef", 4) == "abc");
     CHECK(to_ascii("abcdef", 1) == "");
@@ -184,7 +162,7 @@ TEST_CASE("text_to_ascii truncates the result to fit the buffer")
 
 TEST_CASE("text_to_ascii converts macro trigger notations")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::X11_LIKE);
 
     CHECK(to_ascii("\\[F1]") == "\x1f_FFBE\r");
     CHECK(to_ascii("\\[shift-F1]") == "\x1fS_SFFBE\r");
@@ -198,7 +176,7 @@ TEST_CASE("text_to_ascii converts macro trigger notations")
 
 TEST_CASE("text_to_ascii does not read beyond an incomplete macro trigger notation")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::X11_LIKE);
 
     // 「]」が無い場合は「\[」だけを読み飛ばし、残りは通常の文字として扱う
     const std::string backing("\\[shift-F1]");
@@ -210,7 +188,7 @@ TEST_CASE("text_to_ascii does not read beyond an incomplete macro trigger notati
 
 TEST_CASE("text_to_ascii ignores empty modifier names")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::X11_LIKE);
 
     // 空の修飾キー名は常に一致するため、判定に含めると先へ進まなくなる
     macro_modifier_names.at(1) = "";
@@ -219,14 +197,14 @@ TEST_CASE("text_to_ascii ignores empty modifier names")
 
 TEST_CASE("text_to_ascii skips a macro trigger notation without a template")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::NONE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::NONE);
 
     CHECK(to_ascii("\\[shift-F1]") == "shift-F1]");
 }
 
 TEST_CASE("ascii_to_text converts key codes to notations")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::NONE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::NONE);
 
     CHECK(to_text("abc") == "abc");
     CHECK(to_text("\x1b \b\t\n\r") == "\\e\\s\\b\\t\\n\\r");
@@ -236,7 +214,7 @@ TEST_CASE("ascii_to_text converts key codes to notations")
 
 TEST_CASE("ascii_to_text round-trips with text_to_ascii")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::X11_LIKE);
 
     for (const auto *text : { "abc", "\\e\\s^A\\^\\\\\\xFF", "\\[F1]", "\\[shift-F1]", "x\\[control-shift-Escape]y" }) {
         CAPTURE(text);
@@ -246,7 +224,7 @@ TEST_CASE("ascii_to_text round-trips with text_to_ascii")
 
 TEST_CASE("ascii_to_text converts macro triggers")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::X11_LIKE);
 
     CHECK(to_text("\x1fS_SFFBE\r") == "\\[shift-F1]");
 
@@ -260,7 +238,7 @@ TEST_CASE("ascii_to_text converts macro triggers")
 
 TEST_CASE("ascii_to_text does not overflow with a long key code")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::X11_LIKE);
 
     const std::string long_code(200, 'A');
     CHECK(to_text("\x1f_" + long_code + "\r") == "^__" + long_code + "\\r");
@@ -269,7 +247,7 @@ TEST_CASE("ascii_to_text does not overflow with a long key code")
 
 TEST_CASE("ascii_to_text does not read beyond the string view")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::X11_LIKE);
 
     // 「\r」をビューの外に置き、範囲外を読むとトリガーとして変換されてしまうようにする
     const std::string backing("\x1f_FFBE\r");
@@ -278,7 +256,7 @@ TEST_CASE("ascii_to_text does not read beyond the string view")
 
 TEST_CASE("ascii_to_text truncates without splitting a notation")
 {
-    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+    const auto triggers = scoped_macro_triggers(MacroTriggers::X11_LIKE);
 
     CHECK(to_text("\x1b\x1b\x1b", 5) == "\\e\\e");
     CHECK(to_text("\x1b\x1b\x1b", 4) == "\\e");
