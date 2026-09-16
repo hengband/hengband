@@ -190,10 +190,17 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 
 /*!
  * @brief Add an empty line at the last of the file
+ * @param tb エディタの状態
+ * @return 空行を追加した場合true、最終行が既に空の場合と最大行数に達している場合はfalse
+ * @details 行バッファは使用中の行の直後に nullptr の番兵があることを前提に走査されるため、
+ * insert_return_code() と同じく最大行数を超えて行を増やしてはならない。
  */
 bool add_empty_line(text_body_type *tb)
 {
-    int num_lines = count_line(tb);
+    const auto num_lines = count_line(tb);
+    if (is_greater_autopick_max_line(num_lines)) {
+        return false;
+    }
 
     if (tb->lines_list[num_lines - 1]->empty()) {
         return false;
