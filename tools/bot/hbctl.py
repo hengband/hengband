@@ -316,7 +316,7 @@ def build_parser() -> argparse.ArgumentParser:
     state_parser.add_argument(
         "--no-map",
         action="store_true",
-        help="nearby_grids を省く (応答の99%%超を占めるため大幅に軽くなる)",
+        help="grid_map を省く (地図の生成・転送を省略して応答を軽くする)",
     )
     state_parser.set_defaults(func=command_state)
 

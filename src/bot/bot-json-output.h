@@ -7,6 +7,8 @@
 class PlayerType;
 enum class StoreSaleType;
 
+inline constexpr auto BOT_JSON_PROTOCOL_VERSION = 2; //!< JSONスナップショットの互換性を壊す変更で更新する
+
 enum class BotKnowledgeCategory {
     ARTIFACTS_KNOWN,
     ARTIFACTS_IDENTIFIED,

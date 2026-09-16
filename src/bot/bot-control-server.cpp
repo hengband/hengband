@@ -44,8 +44,6 @@
 
 namespace {
 
-constexpr auto BOT_CONTROL_PROTOCOL_VERSION = 1; //!< プロトコルの版。互換性を壊す変更で更新する
-
 /*!
  * @brief text_to_ascii()に渡す変換先バッファの大きさ
  * @details
@@ -211,7 +209,7 @@ nlohmann::json make_info_response()
     }
 
     return {
-        { "protocol_version", BOT_CONTROL_PROTOCOL_VERSION },
+        { "protocol_version", BOT_JSON_PROTOCOL_VERSION },
         { "system", std::string(ANGBAND_SYS) },
         { "version", to_json_utf8(AngbandSystem::get_instance().build_version_expression(VersionExpression::FULL)) },
 #ifdef JP
@@ -379,8 +377,8 @@ nlohmann::json handle_screen_request(const nlohmann::json &id, const nlohmann::j
  * @return レスポンスのJSONオブジェクト
  * @details
  * キャラクターが生成される前は内部状態を構築できないためエラーを返す。
- * nearby_gridsはフロア全域を走査して1万件規模の配列を作り、スナップショット1件の
- * バイト数の99%超を占めるため、地図が要らないクライアントが省けるようにする。
+ * grid_mapはフロア全域を走査して生成し、出力量は既知の地形に依存する。
+ * 地図が要らないクライアントは生成・転送を省略できる。
  */
 nlohmann::json handle_state_request(const nlohmann::json &id, const nlohmann::json &request)
 {
