@@ -106,6 +106,19 @@ std::string to_ascii(std::string_view text, size_t bufsize = 1024)
 }
 
 /*!
+ * @brief ascii_to_text() の結果を文字列で受け取る
+ * @param keys 変換元のキーコード列
+ * @param bufsize 変換先バッファの大きさ
+ * @return 変換結果 (NUL終端までの文字列)
+ */
+std::string to_text(std::string_view keys, size_t bufsize = 1024)
+{
+    std::vector<char> buf(bufsize, 'X');
+    ascii_to_text(buf.data(), keys, bufsize);
+    return std::string(buf.data());
+}
+
+/*!
  * @brief 後ろに別の文字が続く領域の一部を切り出す
  * @param backing 切り出し元の文字列
  * @param length 切り出す長さ
@@ -209,4 +222,72 @@ TEST_CASE("text_to_ascii skips a macro trigger notation without a template")
     const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::NONE);
 
     CHECK(to_ascii("\\[shift-F1]") == "shift-F1]");
+}
+
+TEST_CASE("ascii_to_text converts key codes to notations")
+{
+    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::NONE);
+
+    CHECK(to_text("abc") == "abc");
+    CHECK(to_text("\x1b \b\t\n\r") == "\\e\\s\\b\\t\\n\\r");
+    CHECK(to_text("^\\") == "\\^\\\\");
+    CHECK(to_text("\001\x1f\x7f\xff") == "^A^_\\x7F\\xFF");
+}
+
+TEST_CASE("ascii_to_text round-trips with text_to_ascii")
+{
+    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+
+    for (const auto *text : { "abc", "\\e\\s^A\\^\\\\\\xFF", "\\[F1]", "\\[shift-F1]", "x\\[control-shift-Escape]y" }) {
+        CAPTURE(text);
+        CHECK(to_text(to_ascii(text)) == text);
+    }
+}
+
+TEST_CASE("ascii_to_text converts macro triggers")
+{
+    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+
+    CHECK(to_text("\x1fS_SFFBE\r") == "\\[shift-F1]");
+
+    // キーコードは完全一致で照合する (FF1B は、その先頭部分の FF1 を持つ Short ではなく Escape)
+    CHECK(to_text("\x1f_FF1B\r") == "\\[Escape]");
+
+    // 定義されていないキーコードや、テンプレートに合わない並びはトリガーとして扱わない
+    CHECK(to_text("\x1f_FF\r") == "^__FF\\r");
+    CHECK(to_text("\x1fX") == "^_X");
+}
+
+TEST_CASE("ascii_to_text does not overflow with a long key code")
+{
+    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+
+    const std::string long_code(200, 'A');
+    CHECK(to_text("\x1f_" + long_code + "\r") == "^__" + long_code + "\\r");
+    CHECK(to_text("\x1f_" + long_code) == "^__" + long_code);
+}
+
+TEST_CASE("ascii_to_text does not read beyond the string view")
+{
+    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+
+    // 「\r」をビューの外に置き、範囲外を読むとトリガーとして変換されてしまうようにする
+    const std::string backing("\x1f_FFBE\r");
+    CHECK(to_text(head(backing, backing.length() - 1)) == "^__FFBE");
+}
+
+TEST_CASE("ascii_to_text truncates without splitting a notation")
+{
+    const ScopedMacroTriggers triggers(ScopedMacroTriggers::Kind::X11_LIKE);
+
+    CHECK(to_text("\x1b\x1b\x1b", 5) == "\\e\\e");
+    CHECK(to_text("\x1b\x1b\x1b", 4) == "\\e");
+    CHECK(to_text("\xff", 4) == "");
+    CHECK(to_text("a\x1fS_SFFBE\r", 12) == "a");
+    CHECK(to_text("a\x1fS_SFFBE\r", 13) == "a\\[shift-F1]");
+
+    // バッファの大きさが0の場合は何も書き込まない
+    char untouched = 'X';
+    ascii_to_text(&untouched, "abc", 0);
+    CHECK(untouched == 'X');
 }

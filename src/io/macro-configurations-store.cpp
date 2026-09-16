@@ -73,18 +73,15 @@ bool starts_with_case_insensitive(std::string_view str, std::string_view prefix)
     return std::equal(prefix.begin(), prefix.end(), str.begin(), [&to_upper](char a, char b) { return to_upper(a) == to_upper(b); });
 }
 
+/*!
+ * @brief 大文字小文字を区別せずに、2つの文字列が等しいかを調べる
+ * @param a 比べる文字列
+ * @param b 比べる文字列
+ * @return 等しいならtrue
+ */
 bool streq_case_insensitive(std::string_view a, std::string_view b)
 {
-    const auto length = std::min(a.length(), b.length());
-    for (size_t i = 0; i < length; i++) {
-        const auto a_up = std::toupper(a.at(i));
-        const auto b_up = std::toupper(b.at(i));
-        if (a_up != b_up) {
-            return false;
-        }
-    }
-
-    return true;
+    return (a.length() == b.length()) && starts_with_case_insensitive(a, b);
 }
 
 /*!
@@ -177,76 +174,106 @@ size_t trigger_text_to_ascii(std::string &result, std::string_view sv, size_t po
     return cur + macro_trigger_names[trigger].length() + 1;
 }
 
-bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
+/*!
+ * @brief キーコード列中のマクロトリガーを表記「\[修飾キー名…トリガー名]」に変換する
+ * @param sv 変換元のキーコード列
+ * @param pos 変換元のキーコード列中の、マクロトリガーの開始を表す 0x1F の次の位置
+ * @return 変換した表記と、変換元のキーコード列で続きを読む位置の組。マクロトリガーとして解釈できない場合はnullopt
+ */
+tl::optional<std::pair<std::string, size_t>> trigger_ascii_to_text(std::string_view sv, size_t pos)
 {
-    char *s = *bufptr;
-    concptr str = *strptr;
-    char key_code[100]{};
     if (!macro_template) {
-        return false;
+        return tl::nullopt;
     }
 
-    *s++ = '\\';
-    *s++ = '[';
-
-    concptr tmp;
-    for (auto i = 0; (*macro_template)[i] != '\0'; i++) {
-        const auto ch = (*macro_template)[i];
+    const auto &modifier_chars = *macro_modifier_chr;
+    const auto num_modifiers = std::min(modifier_chars.length(), macro_modifier_names.size());
+    std::string text("\\[");
+    std::string_view key_code;
+    auto cur = pos;
+    for (const auto ch : *macro_template) {
         switch (ch) {
         case '&':
-            while ((tmp = angband_strchr(macro_modifier_chr->data(), *str)) != 0) {
-                const auto j = tmp - macro_modifier_chr->data();
-                tmp = macro_modifier_names[j].data();
-                while (*tmp) {
-                    *s++ = *tmp++;
+            while (cur < sv.length()) {
+                const auto modifier = modifier_chars.find(sv[cur]);
+                if ((modifier == std::string::npos) || (modifier >= num_modifiers)) {
+                    break;
                 }
-                str++;
+
+                text.append(macro_modifier_names[modifier]);
+                cur++;
             }
 
             break;
         case '#': {
-            int j;
-            for (j = 0; *str && *str != '\r'; j++) {
-                key_code[j] = *str++;
-            }
-            key_code[j] = '\0';
+            const auto end = std::min(sv.find('\r', cur), sv.length());
+            key_code = sv.substr(cur, end - cur);
+            cur = end;
             break;
         }
         default:
-            if (ch != *str) {
-                return false;
+            if ((cur >= sv.length()) || (sv[cur] != ch)) {
+                return tl::nullopt;
             }
-            str++;
-        }
-    }
 
-    if (*str++ != '\r') {
-        return false;
-    }
-
-    size_t i = 0;
-    for (; i < max_macrotrigger; i++) {
-        auto is_string_same = streq_case_insensitive(key_code, macro_trigger_keycodes.at(ShiftStatus::OFF).at(i));
-        is_string_same |= streq_case_insensitive(key_code, macro_trigger_keycodes.at(ShiftStatus::ON).at(i));
-        if (is_string_same) {
+            cur++;
             break;
         }
     }
 
-    if (i == max_macrotrigger) {
-        return false;
+    if ((cur >= sv.length()) || (sv[cur] != '\r')) {
+        return tl::nullopt;
     }
 
-    tmp = macro_trigger_names[i].data();
-    while (*tmp) {
-        *s++ = *tmp++;
+    for (size_t trigger = 0; trigger < max_macrotrigger; trigger++) {
+        const auto matches_off = streq_case_insensitive(key_code, macro_trigger_keycodes.at(ShiftStatus::OFF).at(trigger));
+        const auto matches_on = streq_case_insensitive(key_code, macro_trigger_keycodes.at(ShiftStatus::ON).at(trigger));
+        if (matches_off || matches_on) {
+            text.append(macro_trigger_names[trigger]).push_back(']');
+            return std::make_pair(std::move(text), cur + 1);
+        }
     }
 
-    *s++ = ']';
+    return tl::nullopt;
+}
 
-    *bufptr = s;
-    *strptr = str;
-    return true;
+/*!
+ * @brief キーコード1バイトを表記に変換する
+ * @param ch 変換するキーコード
+ * @return 表記
+ */
+std::string char_to_text(uint8_t ch)
+{
+    switch (ch) {
+    case ESCAPE:
+        return "\\e";
+    case ' ':
+        return "\\s";
+    case '\b':
+        return "\\b";
+    case '\t':
+        return "\\t";
+    case '\n':
+        return "\\n";
+    case '\r':
+        return "\\r";
+    case '^':
+        return "\\^";
+    case '\\':
+        return "\\\\";
+    default:
+        break;
+    }
+
+    if (ch < 32) {
+        return { '^', static_cast<char>(ch + 64) };
+    }
+
+    if (ch < 127) {
+        return std::string(1, static_cast<char>(ch));
+    }
+
+    return { '\\', 'x', hexify_upper(ch), hexify_lower(ch) };
 }
 
 /*!
@@ -365,65 +392,42 @@ void text_to_ascii(char *buf, std::string_view sv, size_t bufsize)
     buf[length] = '\0';
 }
 
-/*
- * Hack -- convert a string into a printable form
+/*!
+ * @brief キーコード列をマクロ表記の文字列に変換する
+ * @param buf 変換結果を書き込むバッファ
+ * @param sv 変換元のキーコード列
+ * @param bufsize buf の大きさ。変換結果は最大 bufsize - 1 バイトに切り詰め、必ずNUL終端する
+ * @details
+ * 変換元のキーコード列は、長さの範囲内かつ最初のNULまでを変換する。
+ * 1つのキーコードやマクロトリガーの表記が途中で切れないよう、収まらない表記の手前で切り詰める。
  */
 void ascii_to_text(char *buf, std::string_view sv, size_t bufsize)
 {
-    char *s = buf;
-    auto buffer_end = s + bufsize;
-    auto str = sv.data();
-    constexpr auto step_size = 4;
-    while (*str && (s + step_size < buffer_end)) {
-        uint8_t i = *str++;
-        if (i == 31) {
-            if (!trigger_ascii_to_text(&s, &str)) {
-                *s++ = '^';
-                *s++ = '_';
-            }
-        } else {
-            if (i == ESCAPE) {
-                *s++ = '\\';
-                *s++ = 'e';
-            } else if (i == ' ') {
-                *s++ = '\\';
-                *s++ = 's';
-            } else if (i == '\b') {
-                *s++ = '\\';
-                *s++ = 'b';
-            } else if (i == '\t') {
-                *s++ = '\\';
-                *s++ = 't';
-            } else if (i == '\n') {
-                *s++ = '\\';
-                *s++ = 'n';
-            } else if (i == '\r') {
-                *s++ = '\\';
-                *s++ = 'r';
-            } else if (i == '^') {
-                *s++ = '\\';
-                *s++ = '^';
-            } else if (i == '\\') {
-                *s++ = '\\';
-                *s++ = '\\';
-            } else if (i < 32) {
-                *s++ = '^';
-                *s++ = i + 64;
-            } else if (i < 127) {
-                *s++ = i;
-            } else if (i < 64) {
-                *s++ = '\\';
-                *s++ = '0';
-                *s++ = octify(i / 8);
-                *s++ = octify(i % 8);
-            } else {
-                *s++ = '\\';
-                *s++ = 'x';
-                *s++ = hexify_upper(i);
-                *s++ = hexify_lower(i);
-            }
-        }
+    if (bufsize == 0) {
+        return;
     }
 
-    *s = '\0';
+    sv = sv.substr(0, sv.find('\0'));
+    std::string result;
+    for (size_t pos = 0; pos < sv.length();) {
+        const auto ch = static_cast<uint8_t>(sv[pos]);
+        std::string text;
+        auto next = pos + 1;
+        if (const auto trigger = (ch == 31) ? trigger_ascii_to_text(sv, pos + 1) : tl::nullopt; trigger) {
+            text = trigger->first;
+            next = trigger->second;
+        } else {
+            text = char_to_text(ch);
+        }
+
+        if (result.length() + text.length() > bufsize - 1) {
+            break;
+        }
+
+        result.append(text);
+        pos = next;
+    }
+
+    std::copy(result.begin(), result.end(), buf);
+    buf[result.length()] = '\0';
 }
