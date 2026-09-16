@@ -8,6 +8,7 @@
 #include "system/angband.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
+#include <algorithm>
 #include <cctype>
 #include <cstdint>
 #include <utility>
@@ -56,6 +57,22 @@ char dehex(char c)
     return '\0';
 }
 
+/*!
+ * @brief 大文字小文字を区別せずに、文字列が指定した文字列で始まるかを調べる
+ * @param str 調べる文字列
+ * @param prefix 先頭にあるか調べる文字列
+ * @return str が prefix で始まるならtrue
+ */
+bool starts_with_case_insensitive(std::string_view str, std::string_view prefix)
+{
+    if (str.length() < prefix.length()) {
+        return false;
+    }
+
+    const auto to_upper = [](char c) { return std::toupper(static_cast<unsigned char>(c)); };
+    return std::equal(prefix.begin(), prefix.end(), str.begin(), [&to_upper](char a, char b) { return to_upper(a) == to_upper(b); });
+}
+
 bool streq_case_insensitive(std::string_view a, std::string_view b)
 {
     const auto length = std::min(a.length(), b.length());
@@ -70,94 +87,94 @@ bool streq_case_insensitive(std::string_view a, std::string_view b)
     return true;
 }
 
-void trigger_text_to_ascii(char **bufptr, concptr *strptr)
+/*!
+ * @brief マクロトリガー表記「\[修飾キー名…トリガー名]」をキーコード列に変換して追加する
+ * @param result 変換結果を追加する文字列
+ * @param sv 変換元の文字列
+ * @param pos 変換元の文字列中の「[」の位置
+ * @return 変換元の文字列で続きを読む位置
+ * @details
+ * マクロテンプレート (pref ファイルの T: 行) が定義されていない場合は何も追加せず、「[」の次から読ませる。
+ * トリガー名が見つからない場合は「]」まで読み飛ばし、テンプレートを使わない最小限のキーコード列を追加する。
+ * 「]」も無い場合は何も追加せず、「[」の次から読ませる。
+ */
+size_t trigger_text_to_ascii(std::string &result, std::string_view sv, size_t pos)
 {
-    char *s = *bufptr;
-    concptr str = *strptr;
-    bool mod_status[MAX_MACRO_MOD]{};
-
     if (!macro_template) {
-        return;
+        return pos + 1;
     }
 
-    for (auto i = 0; (*macro_modifier_chr)[i] != '\0'; i++) {
-        mod_status[i] = false;
-    }
-    str++;
-
-    /* Examine modifier keys */
-    auto shiftstatus = ShiftStatus::OFF;
+    const auto &modifier_chars = *macro_modifier_chr;
+    const auto num_modifiers = std::min(modifier_chars.length(), macro_modifier_names.size());
+    std::vector<bool> mod_status(num_modifiers);
+    auto shift_status = ShiftStatus::OFF;
+    auto cur = pos + 1;
     while (true) {
-        auto i = 0;
-        size_t len = 0;
-        for (; (*macro_modifier_chr)[i] != '\0'; i++) {
-            len = macro_modifier_names[i].length();
-            if (streq_case_insensitive(str, macro_modifier_names[i])) {
+        const auto rest = sv.substr(cur);
+        size_t m = 0;
+        for (; m < num_modifiers; m++) {
+            // 空の名前は常に一致して先へ進まないため、判定しない
+            const auto &name = macro_modifier_names[m];
+            if (!name.empty() && starts_with_case_insensitive(rest, name)) {
                 break;
             }
         }
 
-        if ((*macro_modifier_chr)[i] == '\0') {
+        if (m == num_modifiers) {
             break;
         }
-        str += len;
-        mod_status[i] = true;
-        if ('S' == (*macro_modifier_chr)[i]) {
-            shiftstatus = ShiftStatus::ON;
+
+        cur += macro_modifier_names[m].length();
+        mod_status[m] = true;
+        if (modifier_chars[m] == 'S') {
+            shift_status = ShiftStatus::ON;
         }
     }
 
-    size_t len = 0;
-    size_t i = 0;
-    for (; i < max_macrotrigger; i++) {
-        len = macro_trigger_names[i].length();
-        if (streq_case_insensitive(str, macro_trigger_names[i]) && str[len] == ']') {
+    const auto rest = sv.substr(cur);
+    size_t trigger = 0;
+    for (; trigger < max_macrotrigger; trigger++) {
+        const auto &name = macro_trigger_names[trigger];
+        if (starts_with_case_insensitive(rest, name) && (rest.length() > name.length()) && (rest[name.length()] == ']')) {
             break;
         }
     }
 
-    if (i == max_macrotrigger) {
-        str = angband_strchr(str, ']');
-        if (str) {
-            *s++ = (char)31;
-            *s++ = '\r';
-            *bufptr = s;
-            *strptr = str; /* where **strptr == ']' */
+    if (trigger == max_macrotrigger) {
+        // 2バイト文字の後半バイトを「]」と誤認しないよう、angband_strchr() で探す
+        const std::string rest_str(rest);
+        const auto *close = angband_strchr(rest_str.data(), ']');
+        if (close == nullptr) {
+            return pos + 1;
         }
 
-        return;
+        result.push_back(static_cast<char>(31));
+        result.push_back('\r');
+        return cur + (close - rest_str.data()) + 1;
     }
 
-    const auto &key_code = macro_trigger_keycodes.at(shiftstatus).at(i);
-    str += len;
-
-    *s++ = (char)31;
-    for (i = 0; (*macro_template)[i]; i++) {
-        const auto ch = (*macro_template)[i];
+    result.push_back(static_cast<char>(31));
+    for (const auto ch : *macro_template) {
         switch (ch) {
         case '&':
-            for (auto j = 0; (*macro_modifier_chr)[j] != '\0'; j++) {
+            for (size_t j = 0; j < num_modifiers; j++) {
                 if (mod_status[j]) {
-                    *s++ = (*macro_modifier_chr)[j];
+                    result.push_back(modifier_chars[j]);
                 }
             }
 
             break;
         case '#':
-            strcpy(s, key_code.data());
-            s += key_code.length();
+            result.append(macro_trigger_keycodes.at(shift_status).at(trigger));
             break;
         default:
-            *s++ = ch;
+            result.push_back(ch);
             break;
         }
     }
 
-    *s++ = '\r';
-
-    *bufptr = s;
-    *strptr = str; /* where **strptr == ']' */
-    return;
+    result.push_back('\r');
+    return cur + macro_trigger_names[trigger].length() + 1;
 }
 
 bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
@@ -231,90 +248,121 @@ bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
     *strptr = str;
     return true;
 }
+
+/*!
+ * @brief エスケープ表記 (「\」で始まる表記) をキーコードに変換して追加する
+ * @param result 変換結果を追加する文字列
+ * @param sv 変換元の文字列
+ * @param pos 変換元の文字列中の「\」の位置
+ * @return 変換元の文字列で続きを読む位置。表記に必要な文字が足りない場合はnullopt
+ */
+tl::optional<size_t> escape_text_to_ascii(std::string &result, std::string_view sv, size_t pos)
+{
+    if (pos + 1 >= sv.length()) {
+        return tl::nullopt;
+    }
+
+    const auto ch = sv[pos + 1];
+    switch (ch) {
+    case '[':
+        return trigger_text_to_ascii(result, sv, pos + 1);
+    case 'x':
+        // 「\xNN」は続く2文字を16進数として読む
+        if (pos + 3 >= sv.length()) {
+            return tl::nullopt;
+        }
+
+        result.push_back(static_cast<char>(16 * dehex(sv[pos + 2]) + dehex(sv[pos + 3])));
+        return pos + 4;
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+        // 「\0NN」～「\3NN」は続く2文字と合わせて8進数として読む
+        if (pos + 3 >= sv.length()) {
+            return tl::nullopt;
+        }
+
+        result.push_back(static_cast<char>(64 * D2I(ch) + 8 * deoct(sv[pos + 2]) + deoct(sv[pos + 3])));
+        return pos + 4;
+    case '\\':
+        result.push_back('\\');
+        break;
+    case '^':
+        result.push_back('^');
+        break;
+    case 's':
+        result.push_back(' ');
+        break;
+    case 'e':
+        result.push_back(ESCAPE);
+        break;
+    case 'b':
+        result.push_back('\b');
+        break;
+    case 'n':
+        result.push_back('\n');
+        break;
+    case 'r':
+        result.push_back('\r');
+        break;
+    case 't':
+        result.push_back('\t');
+        break;
+    default:
+        break;
+    }
+
+    return pos + 2;
+}
 }
 
-/*
- * Hack -- convert a printable string into real ascii
- *
- * I have no clue if this function correctly handles, for example,
- * parsing "\xFF" into a (signed) char.  Whoever thought of making
- * the "sign" of a "char" undefined is a complete moron.  Oh well.
+/*!
+ * @brief マクロ表記の文字列をキーコード列に変換する
+ * @param buf 変換結果を書き込むバッファ
+ * @param sv 変換元の文字列 (「^X」「\e」「\[shift-F1]」等のマクロ表記を使用できる)
+ * @param bufsize buf の大きさ。変換結果は最大 bufsize - 1 バイトに切り詰め、必ずNUL終端する
+ * @details
+ * 変換元の文字列は、長さの範囲内かつ最初のNULまでを変換する。
+ * 「^」「\x」等の表記が文字列の末尾で途切れている場合、その表記は捨ててそこで変換を終える。
  */
 void text_to_ascii(char *buf, std::string_view sv, size_t bufsize)
 {
-    char *s = buf;
-    auto buffer_end = s + bufsize;
-    auto str = sv.data();
-    constexpr auto step_size = 1;
-    while (*str && (s + step_size < buffer_end)) {
-        if (*str == '\\') {
-            str++;
-            if (!(*str)) {
-                break;
-            }
-
-            switch (*str) {
-            case '[':
-                trigger_text_to_ascii(&s, &str);
-                break;
-            case 'x':
-                *s = 16 * dehex(*++str);
-                *s++ += dehex(*++str);
-                break;
-            case '\\':
-                *s++ = '\\';
-                break;
-            case '^':
-                *s++ = '^';
-                break;
-            case 's':
-                *s++ = ' ';
-                break;
-            case 'e':
-                *s++ = ESCAPE;
-                break;
-            case 'b':
-                *s++ = '\b';
-                break;
-            case 'n':
-                *s++ = '\n';
-                break;
-            case 'r':
-                *s++ = '\r';
-                break;
-            case 't':
-                *s++ = '\t';
-                break;
-            case '0':
-                *s = 8 * deoct(*++str);
-                *s++ += deoct(*++str);
-                break;
-            case '1':
-                *s = 64 + 8 * deoct(*++str);
-                *s++ += deoct(*++str);
-                break;
-            case '2':
-                *s = 64 * 2 + 8 * deoct(*++str);
-                *s++ += deoct(*++str);
-                break;
-            case '3':
-                *s = 64 * 3 + 8 * deoct(*++str);
-                *s++ += deoct(*++str);
-                break;
-            default:
-                break;
-            }
-
-            str++;
-        } else if (*str == '^') {
-            str++;
-            *s++ = (*str++ & 037);
-        } else {
-            *s++ = *str++;
-        }
+    if (bufsize == 0) {
+        return;
     }
 
-    *s = '\0';
+    sv = sv.substr(0, sv.find('\0'));
+    std::string result;
+    for (size_t pos = 0; (pos < sv.length()) && (result.length() < bufsize - 1);) {
+        const auto ch = sv[pos];
+        if (ch == '\\') {
+            const auto next = escape_text_to_ascii(result, sv, pos);
+            if (!next) {
+                break;
+            }
+
+            pos = *next;
+            continue;
+        }
+
+        if (ch == '^') {
+            if (pos + 1 >= sv.length()) {
+                break;
+            }
+
+            result.push_back(sv[pos + 1] & 037);
+            pos += 2;
+            continue;
+        }
+
+        result.push_back(ch);
+        pos++;
+    }
+
+    const auto length = std::min(result.length(), bufsize - 1);
+    std::copy_n(result.data(), length, buf);
+    buf[length] = '\0';
 }
 
 /*
