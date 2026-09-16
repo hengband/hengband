@@ -32,6 +32,7 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
     FILE *tmp_fff = nullptr;
     char tmp_file[FILE_NAME_SIZE];
     if (!open_temporary_file(&tmp_fff, tmp_file)) {
+        angband_fclose(orig_fff);
         return;
     }
 
@@ -77,14 +78,18 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
     angband_fclose(tmp_fff);
 
     if (changed) {
+        // 元のファイルは WRITE で開いた時点で切り詰められるため、一時ファイルを開けた場合だけ開く。
+        // 読み取り専用のファイル等で開けなかった場合は書き戻さない (元のファイルは変更されない)
         tmp_fff = angband_fopen(tmp_file, FileOpenMode::READ);
-        orig_fff = angband_fopen(orig_file, FileOpenMode::WRITE);
-        while (true) {
-            const auto buf = angband_fgets(tmp_fff);
-            if (!buf) {
-                break;
+        orig_fff = tmp_fff ? angband_fopen(orig_file, FileOpenMode::WRITE) : nullptr;
+        if (orig_fff) {
+            while (true) {
+                const auto buf = angband_fgets(tmp_fff);
+                if (!buf) {
+                    break;
+                }
+                fprintf(orig_fff, "%s\n", buf->data());
             }
-            fprintf(orig_fff, "%s\n", buf->data());
         }
 
         angband_fclose(orig_fff);
