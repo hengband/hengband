@@ -21,27 +21,30 @@
 /*!
  * @brief マクロ情報をprefファイルに保存する
  * @param filename ファイル名
+ * @return 書き出せた場合はtrue、ファイルを開けなかった場合はfalse
  */
-static void macro_dump(FILE **fpp, std::string_view filename)
+static bool macro_dump(std::string_view filename)
 {
+    FILE *auto_dump_stream;
     constexpr auto mark = "Macro Dump";
     const auto path = path_build(ANGBAND_DIR_USER, filename);
-    if (!open_auto_dump(fpp, path, mark)) {
-        return;
+    if (!open_auto_dump(&auto_dump_stream, path, mark)) {
+        return false;
     }
 
-    auto_dump_printf(*fpp, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
+    auto_dump_printf(auto_dump_stream, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
 
     for (auto i = 0; i < active_macros; i++) {
         char buf[1024]{};
         ascii_to_text(buf, macro_actions[i], sizeof(buf));
-        auto_dump_printf(*fpp, "A:%s\n", buf);
+        auto_dump_printf(auto_dump_stream, "A:%s\n", buf);
         ascii_to_text(buf, macro_patterns[i], sizeof(buf));
-        auto_dump_printf(*fpp, "P:%s\n", buf);
-        auto_dump_printf(*fpp, "\n");
+        auto_dump_printf(auto_dump_stream, "P:%s\n", buf);
+        auto_dump_printf(auto_dump_stream, "\n");
     }
 
-    close_auto_dump(fpp, mark);
+    close_auto_dump(&auto_dump_stream, mark);
+    return true;
 }
 
 /*!
@@ -99,9 +102,9 @@ static void do_cmd_macro_aux_keymap(char *buf)
 /*!
  * @brief キーマップをprefファイルにダンプする
  * @param filename ファイルネーム
- * @return エラーコード
+ * @return 書き出せた場合はtrue、ファイルを開けなかった場合はfalse
  */
-static errr keymap_dump(std::string_view filename)
+static bool keymap_dump(std::string_view filename)
 {
     FILE *auto_dump_stream;
     char key[1024];
@@ -109,7 +112,7 @@ static errr keymap_dump(std::string_view filename)
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     constexpr auto mark = "Keymap Dump";
     if (!open_auto_dump(&auto_dump_stream, path, mark)) {
-        return -1;
+        return false;
     }
 
     auto_dump_printf(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
@@ -128,7 +131,7 @@ static errr keymap_dump(std::string_view filename)
     }
 
     close_auto_dump(&auto_dump_stream, mark);
-    return 0;
+    return true;
 }
 
 /*!
@@ -145,7 +148,6 @@ void do_cmd_macros(PlayerType *player_ptr)
 {
     char buf[1024];
     static char macro_buf[1024];
-    FILE *auto_dump_stream;
     const auto mode = rogue_like_commands ? KeymapMode::ROGUE : KeymapMode::ORIGINAL;
     screen_save();
     term_clear();
@@ -204,8 +206,11 @@ void do_cmd_macros(PlayerType *player_ptr)
                 break;
             }
 
-            macro_dump(&auto_dump_stream, *ask_result);
-            msg_print(_("マクロを追加しました。", "Appended macros."));
+            // 書き出せなかった場合は open_auto_dump() がその旨を表示するので、成功したときだけ知らせる
+            if (macro_dump(*ask_result)) {
+                msg_print(_("マクロを追加しました。", "Appended macros."));
+            }
+
             break;
         }
         case '3': {
@@ -266,8 +271,11 @@ void do_cmd_macros(PlayerType *player_ptr)
                 break;
             }
 
-            (void)keymap_dump(*ask_result);
-            msg_print(_("キー配置を追加しました。", "Appended keymaps."));
+            // 書き出せなかった場合は open_auto_dump() がその旨を表示するので、成功したときだけ知らせる
+            if (keymap_dump(*ask_result)) {
+                msg_print(_("キー配置を追加しました。", "Appended keymaps."));
+            }
+
             break;
         }
         case '7': {
