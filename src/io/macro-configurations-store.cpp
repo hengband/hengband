@@ -186,6 +186,9 @@ size_t trigger_text_to_ascii(std::string &result, std::string_view sv, size_t po
  * @param sv 変換元のキーコード列
  * @param pos 変換元のキーコード列中の、マクロトリガーの開始を表す 0x1F の次の位置
  * @return 変換した表記と、変換元のキーコード列で続きを読む位置の組。マクロトリガーとして解釈できない場合はnullopt
+ * @details
+ * キーコードは、修飾キーに Shift (S) が含まれるかどうかに応じた表 (macro_trigger_keycodes の OFF / ON) だけと照合する。
+ * trigger_text_to_ascii() も同じ規則で表を選ぶため、変換した表記をキーコード列に戻すと元のキーコード列になる。
  */
 tl::optional<std::pair<std::string, size_t>> trigger_ascii_to_text(std::string_view sv, size_t pos)
 {
@@ -197,6 +200,7 @@ tl::optional<std::pair<std::string, size_t>> trigger_ascii_to_text(std::string_v
     const auto num_modifiers = count_modifiers();
     std::string text("\\[");
     std::string_view key_code;
+    auto shift_status = ShiftStatus::OFF;
     auto cur = pos;
     for (const auto ch : *macro_template) {
         switch (ch) {
@@ -208,6 +212,10 @@ tl::optional<std::pair<std::string, size_t>> trigger_ascii_to_text(std::string_v
                 }
 
                 text.append(macro_modifier_names[modifier]);
+                if (modifier_chars[modifier] == 'S') {
+                    shift_status = ShiftStatus::ON;
+                }
+
                 cur++;
             }
 
@@ -232,10 +240,9 @@ tl::optional<std::pair<std::string, size_t>> trigger_ascii_to_text(std::string_v
         return tl::nullopt;
     }
 
+    const auto &keycodes = macro_trigger_keycodes.at(shift_status);
     for (size_t trigger = 0; trigger < max_macrotrigger; trigger++) {
-        const auto matches_off = streq_case_insensitive(key_code, macro_trigger_keycodes.at(ShiftStatus::OFF).at(trigger));
-        const auto matches_on = streq_case_insensitive(key_code, macro_trigger_keycodes.at(ShiftStatus::ON).at(trigger));
-        if (matches_off || matches_on) {
+        if (streq_case_insensitive(key_code, keycodes.at(trigger))) {
             text.append(macro_trigger_names[trigger]).push_back(']');
             return std::make_pair(std::move(text), cur + 1);
         }

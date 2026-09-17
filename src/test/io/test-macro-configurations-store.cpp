@@ -231,6 +231,10 @@ TEST_CASE("ascii_to_text converts macro triggers")
     // キーコードは完全一致で照合する (FF1B は、その先頭部分の FF1 を持つ Short ではなく Escape)
     CHECK(to_text("\x1f_FF1B\r") == "\\[Escape]");
 
+    // キーコードは Shift の有無に応じた表だけと照合する (SFFBE は F1 の Shift 時のキーコードなので、S が無ければ一致しない)
+    CHECK(to_text("\x1f_SFFBE\r") == "^__SFFBE\\r");
+    CHECK(to_text("\x1fS_FFBE\r") == "^_S_FFBE\\r");
+
     // 定義されていないキーコードや、テンプレートに合わない並びはトリガーとして扱わない
     CHECK(to_text("\x1f_FF\r") == "^__FF\\r");
     CHECK(to_text("\x1fX") == "^_X");
@@ -268,4 +272,27 @@ TEST_CASE("ascii_to_text truncates without splitting a notation")
     char untouched = 'X';
     ascii_to_text(&untouched, "abc", 0);
     CHECK(untouched == 'X');
+}
+
+TEST_CASE("ascii_to_text round-trips key codes whose shift variant differs")
+{
+    const auto triggers = scoped_macro_triggers(MacroTriggers::X11_LIKE);
+
+    // pref-x11.prf の T:1:31:21 と T:!:31:21 に相当する、Shift でキーコードが変わる定義
+    macro_trigger_names.at(3) = "1";
+    macro_trigger_keycodes.at(ShiftStatus::OFF).at(3) = "31";
+    macro_trigger_keycodes.at(ShiftStatus::ON).at(3) = "21";
+    macro_trigger_names.at(4) = "!";
+    macro_trigger_keycodes.at(ShiftStatus::OFF).at(4) = "31";
+    macro_trigger_keycodes.at(ShiftStatus::ON).at(4) = "21";
+    max_macrotrigger = 5;
+
+    // Shift の有無とキーコードの組み合わせによらず、表記を経由しても元のキーコード列に戻る
+    for (const auto *keys : { "\x1f_31\r", "\x1f_21\r", "\x1fS_31\r", "\x1fS_21\r", "\x1fSO_21\r" }) {
+        CAPTURE(keys);
+        CHECK(to_ascii(to_text(keys)) == keys);
+    }
+
+    CHECK(to_text("\x1fS_21\r") == "\\[shift-1]");
+    CHECK(to_text("\x1f_31\r") == "\\[1]");
 }
