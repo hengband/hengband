@@ -4,10 +4,6 @@
  * ダイスの生成・文字列との相互変換・出目の計算を検証する。
  * ダメージ計算の土台であり、定義ファイルの読込 (info_set_dice) も
  * Dice::parse に依存しているため、境界値と異常系を重点的に確かめる。
- *
- * @details Dice を返す関数の呼び出しを `== 期待値` と組み合わせて CHECK に直接書くと、
- * MSVCが評価順序に関する警告 (C4866) を出す。この警告はエラーとして扱われるため、
- * 呼び出しの結果は一旦変数で受けてから比較する。
  */
 
 #include "util/dice.h"
@@ -61,15 +57,11 @@ TEST_CASE("Dice compares equal only when both the number and the sides match")
 
 TEST_CASE("Dice::parse builds a dice from the NdM notation")
 {
-    const auto parsed = Dice::parse("3d5");
-    CHECK(parsed == Dice(3, 5));
-
-    const auto minimum = Dice::parse("1d1");
-    CHECK(minimum == Dice(1, 1));
+    CHECK(Dice::parse("3d5") == Dice(3, 5));
+    CHECK(Dice::parse("1d1") == Dice(1, 1));
 
     // 複数桁
-    const auto multi_digits = Dice::parse("10d100");
-    CHECK(multi_digits == Dice(10, 100));
+    CHECK(Dice::parse("10d100") == Dice(10, 100));
 }
 
 TEST_CASE("Dice::parse rejects a malformed string")
@@ -122,8 +114,7 @@ TEST_CASE("Dice survives a round trip through its string notation")
     for (const auto &dice : { Dice(1, 1), Dice(3, 5), Dice(10, 100) }) {
         CAPTURE(dice.to_string());
 
-        const auto restored = Dice::parse(dice.to_string());
-        CHECK(restored == dice);
+        CHECK(Dice::parse(dice.to_string()) == dice);
     }
 }
 

@@ -391,16 +391,9 @@ TEST_CASE("FlagGroup tells whether it has all/any/none of the given flags")
     {
         const std::vector<SmallFlag> subset = { SmallFlag::ZERO, SmallFlag::TWO };
 
-        // イテレータ版は内部で一時的なFlagGroupを構築するため、
-        // CHECK に直接書くとMSVCが評価順序の警告 (C4866) を出す
-        const auto has_all = flags.has_all_of(subset.begin(), subset.end());
-        CHECK(has_all);
-
-        const auto has_any = flags.has_any_of(subset.begin(), subset.end());
-        CHECK(has_any);
-
-        const auto has_none = flags.has_none_of(subset.begin(), subset.end());
-        CHECK_FALSE(has_none);
+        CHECK(flags.has_all_of(subset.begin(), subset.end()));
+        CHECK(flags.has_any_of(subset.begin(), subset.end()));
+        CHECK_FALSE(flags.has_none_of(subset.begin(), subset.end()));
     }
 
     SUBCASE("an empty group is contained by anything")
