@@ -278,13 +278,24 @@ const auto restore_hoge = util::make_finalizer([&system, backup = system.get_hog
 ## doctest の警告について
 
 MSVC のビルドは `/Wall`（`EnableAllWarnings`）と `TreatWarningAsError` を使っていますが、
-doctest 由来の警告を個別に抑止する指定は必要ありません。
+doctest のヘッダの中で出る警告を個別に抑止する指定は必要ありません。
 
 doctest は `src/external-lib/include/` にあり、`check_include_style` が同ディレクトリの
 ヘッダを `<>` で include するよう強制しています。そのため
 `Hengband.Common.props` の `TreatAngleIncludeAsExternal` と
 `ExternalWarningLevel=TurnOffAllWarnings` が必ず効きます
 （`/external:templates-` を指定していないので、テンプレートの実体化も対象です）。
+
+例外は、テストファイル側で展開されるアサーションマクロが出す評価順序の警告 **C4866** です。
+`CHECK(式)` は `ExpressionDecomposer(...) << 式` に展開されるため、式に暗黙の型変換を伴う引数
+（文字列リテラルを `std::string_view` の引数へ渡すものなど）があると、MSVC が
+オーバーロードされた `<<` の左→右の評価順序を保証できないとして C4866 を出します。
+展開先はテストファイルなので、`ExternalWarningLevel` では抑止できません。
+
+左辺の `ExpressionDecomposer` の構築には副作用がなく、評価順序はテストの結果に影響しないため、
+`HengbandTest.vcxproj` の `DisableSpecificWarnings` で **テストプロジェクトに限って** C4866 を
+無効化しています（ゲーム本体では無効化していません）。
+**検証したい式は、結果を一旦変数で受けずに `CHECK` / `REQUIRE` へ直接書いて構いません。**
 
 ## テストしにくいコードをどう確かめるか
 

@@ -16,11 +16,6 @@
  * 日本語版のビルドはソースの文字列リテラルを変換する (autotoolsは gcc-wrap が nkf で
  * EUC-JPへ、MSVCは /execution-charset:shift-jis でShift_JISへ) が、英語版では変換されない。
  * ソースに日本語をそのまま書くと、ビルド構成によってバイト列が変わってしまう。
- *
- * @details 引数に暗黙の型変換を伴う関数呼び出し (文字列リテラルを std::string_view や
- * std::string を取る引数へ渡すものなど) を CHECK に直接書くと、MSVCが評価順序に関する
- * 警告 (C4866) を出す。この警告はエラーとして扱われるため、呼び出しの結果は一旦変数で
- * 受けてから比較する。
  */
 
 #include "util/string-processor.h"
@@ -75,26 +70,16 @@ constexpr std::string_view DAME_SPACE = "\x81\x40"; //!< 全角スペース (後
 
 TEST_CASE("str_to_num converts a decimal string")
 {
-    const auto positive = str_to_num<int>("123");
-    CHECK(positive == 123);
-
-    const auto negative = str_to_num<int>("-123");
-    CHECK(negative == -123);
-
-    const auto zero = str_to_num<int>("0");
-    CHECK(zero == 0);
+    CHECK(str_to_num<int>("123") == 123);
+    CHECK(str_to_num<int>("-123") == -123);
+    CHECK(str_to_num<int>("0") == 0);
 }
 
 TEST_CASE("str_to_num converts a string in the specified base")
 {
-    const auto hexadecimal = str_to_num<int>("ff", 16);
-    CHECK(hexadecimal == 255);
-
-    const auto binary = str_to_num<int>("1010", 2);
-    CHECK(binary == 10);
-
-    const auto base36 = str_to_num<int>("z", 36);
-    CHECK(base36 == 35);
+    CHECK(str_to_num<int>("ff", 16) == 255);
+    CHECK(str_to_num<int>("1010", 2) == 10);
+    CHECK(str_to_num<int>("z", 36) == 35);
 }
 
 TEST_CASE("str_to_num rejects a string which is not entirely a number")
@@ -102,40 +87,29 @@ TEST_CASE("str_to_num rejects a string which is not entirely a number")
     // 先頭の空白や + 、基数の接頭辞は解釈しない
     for (const auto *const text : { "", "12a", "12 ", " 12", "+12" }) {
         CAPTURE(text);
-        const auto value = str_to_num<int>(text);
-        CHECK_FALSE(value.has_value());
+        CHECK_FALSE(str_to_num<int>(text).has_value());
     }
 
-    const auto prefixed = str_to_num<int>("0x10", 16);
-    CHECK_FALSE(prefixed.has_value());
+    CHECK_FALSE(str_to_num<int>("0x10", 16).has_value());
 }
 
 TEST_CASE("str_to_num rejects a base out of range")
 {
-    const auto too_small = str_to_num<int>("1", 1);
-    CHECK_FALSE(too_small.has_value());
-
-    const auto too_large = str_to_num<int>("1", 37);
-    CHECK_FALSE(too_large.has_value());
+    CHECK_FALSE(str_to_num<int>("1", 1).has_value());
+    CHECK_FALSE(str_to_num<int>("1", 37).has_value());
 }
 
 TEST_CASE("str_to_num rejects a value which does not fit in the type")
 {
-    const auto max = str_to_num<uint8_t>("255");
-    CHECK(max == 255);
-
-    const auto overflow = str_to_num<uint8_t>("256");
-    CHECK_FALSE(overflow.has_value());
-
-    const auto negative = str_to_num<uint8_t>("-1");
-    CHECK_FALSE(negative.has_value());
+    CHECK(str_to_num<uint8_t>("255") == 255);
+    CHECK_FALSE(str_to_num<uint8_t>("256").has_value());
+    CHECK_FALSE(str_to_num<uint8_t>("-1").has_value());
 }
 
 TEST_CASE("angband_strcpy copies the whole string when it fits")
 {
     char buf[16] = {};
-    const auto length = angband_strcpy(buf, "abc", sizeof(buf));
-    CHECK(length == 3);
+    CHECK(angband_strcpy(buf, "abc", sizeof(buf)) == 3);
     CHECK(std::string_view(buf) == "abc");
 }
 
@@ -144,8 +118,7 @@ TEST_CASE("angband_strcpy truncates the string to fit the buffer")
     char buf[4] = {};
 
     // 戻り値は切り詰める前のバイト数なので、bufsize と比べて切り詰めの有無が分かる
-    const auto length = angband_strcpy(buf, "abcdef", sizeof(buf));
-    CHECK(length == 6);
+    CHECK(angband_strcpy(buf, "abcdef", sizeof(buf)) == 6);
     CHECK(std::string_view(buf) == "abc");
 }
 
@@ -155,22 +128,19 @@ TEST_CASE("angband_strcpy does not write beyond the buffer size")
 
     SUBCASE("an empty source only terminates the buffer")
     {
-        const auto length = angband_strcpy(buf, "", sizeof(buf));
-        CHECK(length == 0);
+        CHECK(angband_strcpy(buf, "", sizeof(buf)) == 0);
         CHECK(std::string_view(buf).empty());
     }
 
     SUBCASE("a buffer size of one writes only the terminator")
     {
-        const auto length = angband_strcpy(buf, "abc", 1);
-        CHECK(length == 3);
+        CHECK(angband_strcpy(buf, "abc", 1) == 3);
         CHECK(std::string_view(buf).empty());
     }
 
     SUBCASE("a buffer size of zero writes nothing")
     {
-        const auto length = angband_strcpy(buf, "abc", 0);
-        CHECK(length == 3);
+        CHECK(angband_strcpy(buf, "abc", 0) == 3);
         CHECK(std::string_view(buf) == "xyz");
     }
 }
@@ -180,24 +150,21 @@ TEST_CASE("angband_strcpy looks only at the range of the given view")
     // NUL終端されていない部分ビューを渡しても、ビューの範囲を越えて読まない
     constexpr std::string_view src = "abcdef";
     char buf[16] = {};
-    const auto length = angband_strcpy(buf, src.substr(0, 3), sizeof(buf));
-    CHECK(length == 3);
+    CHECK(angband_strcpy(buf, src.substr(0, 3), sizeof(buf)) == 3);
     CHECK(std::string_view(buf) == "abc");
 }
 
 TEST_CASE("angband_strcat appends to the existing string")
 {
     char buf[16] = "abc";
-    const auto length = angband_strcat(buf, "def", sizeof(buf));
-    CHECK(length == 6);
+    CHECK(angband_strcat(buf, "def", sizeof(buf)) == 6);
     CHECK(std::string_view(buf) == "abcdef");
 }
 
 TEST_CASE("angband_strcat truncates the appended string")
 {
     char buf[5] = "abc";
-    const auto length = angband_strcat(buf, "def", sizeof(buf));
-    CHECK(length == 6);
+    CHECK(angband_strcat(buf, "def", sizeof(buf)) == 6);
     CHECK(std::string_view(buf) == "abcd");
 }
 
@@ -206,13 +173,11 @@ TEST_CASE("angband_strcat leaves the buffer untouched when it cannot append")
     char buf[4] = "abc";
 
     // バッファが既に一杯の場合
-    const auto full_length = angband_strcat(buf, "def", sizeof(buf));
-    CHECK(full_length == 6);
+    CHECK(angband_strcat(buf, "def", sizeof(buf)) == 6);
     CHECK(std::string_view(buf) == "abc");
 
     // バッファサイズが0の場合
-    const auto zero_length = angband_strcat(buf, "def", 0);
-    CHECK(zero_length == 6);
+    CHECK(angband_strcat(buf, "def", 0) == 6);
     CHECK(std::string_view(buf) == "abc");
 }
 
@@ -220,37 +185,27 @@ TEST_CASE("angband_strstr finds the first occurrence of the needle")
 {
     constexpr const char *haystack = "abcabc";
 
-    const auto *at_head = angband_strstr(haystack, "abc");
-    CHECK(at_head == haystack);
-
-    const auto *at_middle = angband_strstr(haystack, "bc");
-    CHECK(at_middle == haystack + 1);
-
-    const auto *at_tail = angband_strstr(haystack, "c");
-    CHECK(at_tail == haystack + 2);
+    CHECK(angband_strstr(haystack, "abc") == haystack);
+    CHECK(angband_strstr(haystack, "bc") == haystack + 1);
+    CHECK(angband_strstr(haystack, "c") == haystack + 2);
 }
 
 TEST_CASE("angband_strstr returns nullptr when the needle is not found")
 {
     constexpr const char *haystack = "abc";
 
-    const auto *absent = angband_strstr(haystack, "d");
-    CHECK(absent == nullptr);
+    CHECK(angband_strstr(haystack, "d") == nullptr);
 
     // needle の方が長い場合
-    const auto *too_long = angband_strstr(haystack, "abcd");
-    CHECK(too_long == nullptr);
-
-    const auto *in_empty = angband_strstr("", "a");
-    CHECK(in_empty == nullptr);
+    CHECK(angband_strstr(haystack, "abcd") == nullptr);
+    CHECK(angband_strstr("", "a") == nullptr);
 }
 
 TEST_CASE("angband_strstr returns the head of the haystack for an empty needle")
 {
     constexpr const char *haystack = "abc";
 
-    const auto *found = angband_strstr(haystack, "");
-    CHECK(found == haystack);
+    CHECK(angband_strstr(haystack, "") == haystack);
 }
 
 TEST_CASE("angband_strchr finds the first occurrence of the character")
@@ -315,61 +270,40 @@ TEST_CASE("str_find tells whether the string contains the substring")
     // 空文字列はどの文字列にも含まれる
     for (const auto *const find : { "cde", "abcdef", "" }) {
         CAPTURE(find);
-        const auto found = str_find("abcdef", find);
-        CHECK(found);
+        CHECK(str_find("abcdef", find));
     }
 
-    const auto absent = str_find("abcdef", "cdf");
-    CHECK_FALSE(absent);
-
-    const auto in_empty = str_find("", "a");
-    CHECK_FALSE(in_empty);
+    CHECK_FALSE(str_find("abcdef", "cdf"));
+    CHECK_FALSE(str_find("", "a"));
 }
 
 TEST_CASE("str_trim removes the spaces and tabs at both ends")
 {
-    const auto trimmed = str_trim(" \t abc \t ");
-    CHECK(trimmed == "abc");
-
-    const auto unchanged = str_trim("abc");
-    CHECK(unchanged == "abc");
+    CHECK(str_trim(" \t abc \t ") == "abc");
+    CHECK(str_trim("abc") == "abc");
 
     // 内側の空白は残る
-    const auto inner_kept = str_trim(" a b ");
-    CHECK(inner_kept == "a b");
+    CHECK(str_trim(" a b ") == "a b");
 }
 
 TEST_CASE("str_trim returns an empty string when the whole string is blank")
 {
-    const auto blank = str_trim(" \t ");
-    CHECK(blank.empty());
-
-    const auto empty = str_trim("");
-    CHECK(empty.empty());
+    CHECK(str_trim(" \t ").empty());
+    CHECK(str_trim("").empty());
 }
 
 TEST_CASE("str_rtrim removes the spaces and tabs at the right end only")
 {
-    const auto trimmed = str_rtrim(" \t abc \t ");
-    CHECK(trimmed == " \t abc");
-
-    const auto blank = str_rtrim(" \t ");
-    CHECK(blank.empty());
-
-    const auto empty = str_rtrim("");
-    CHECK(empty.empty());
+    CHECK(str_rtrim(" \t abc \t ") == " \t abc");
+    CHECK(str_rtrim(" \t ").empty());
+    CHECK(str_rtrim("").empty());
 }
 
 TEST_CASE("str_ltrim removes the spaces and tabs at the left end only")
 {
-    const auto trimmed = str_ltrim(" \t abc \t ");
-    CHECK(trimmed == "abc \t ");
-
-    const auto blank = str_ltrim(" \t ");
-    CHECK(blank.empty());
-
-    const auto empty = str_ltrim("");
-    CHECK(empty.empty());
+    CHECK(str_ltrim(" \t abc \t ") == "abc \t ");
+    CHECK(str_ltrim(" \t ").empty());
+    CHECK(str_ltrim("").empty());
 }
 
 TEST_CASE("str_split splits the string at the delimiter")
@@ -449,57 +383,37 @@ TEST_CASE("str_separate gives up when it cannot take even one byte")
 
 TEST_CASE("str_erase removes every specified character")
 {
-    const auto one_char = str_erase("abcabc", "a");
-    CHECK(one_char == "bcbc");
-
-    const auto two_chars = str_erase("abcabc", "ac");
-    CHECK(two_chars == "bb");
-
-    const auto all_chars = str_erase("abc", "abc");
-    CHECK(all_chars.empty());
+    CHECK(str_erase("abcabc", "a") == "bcbc");
+    CHECK(str_erase("abcabc", "ac") == "bb");
+    CHECK(str_erase("abc", "abc").empty());
 }
 
 TEST_CASE("str_erase leaves the string as it is when nothing matches")
 {
-    const auto no_match = str_erase("abc", "xyz");
-    CHECK(no_match == "abc");
-
-    const auto no_chars = str_erase("abc", "");
-    CHECK(no_chars == "abc");
-
-    const auto empty = str_erase("", "abc");
-    CHECK(empty.empty());
+    CHECK(str_erase("abc", "xyz") == "abc");
+    CHECK(str_erase("abc", "") == "abc");
+    CHECK(str_erase("", "abc").empty());
 }
 
 TEST_CASE("str_replace replaces every occurrence")
 {
-    const auto twice = str_replace("abcabc", "a", "X");
-    CHECK(twice == "XbcXbc");
-
-    const auto whole = str_replace("abc", "abc", "X");
-    CHECK(whole == "X");
-
-    const auto removed = str_replace("abc", "b", "");
-    CHECK(removed == "ac");
+    CHECK(str_replace("abcabc", "a", "X") == "XbcXbc");
+    CHECK(str_replace("abc", "abc", "X") == "X");
+    CHECK(str_replace("abc", "b", "") == "ac");
 }
 
 TEST_CASE("str_replace prefers the earlier match when the matches overlap")
 {
-    const auto replaced = str_replace("aaa", "aa", "X");
-    CHECK(replaced == "Xa");
+    CHECK(str_replace("aaa", "aa", "X") == "Xa");
 }
 
 TEST_CASE("str_replace leaves the string as it is when nothing matches")
 {
-    const auto no_match = str_replace("abc", "x", "y");
-    CHECK(no_match == "abc");
-
-    const auto in_empty = str_replace("", "x", "y");
-    CHECK(in_empty.empty());
+    CHECK(str_replace("abc", "x", "y") == "abc");
+    CHECK(str_replace("", "x", "y").empty());
 
     // 置き換え元が空文字列なら何もしない
-    const auto empty_old = str_replace("abc", "", "X");
-    CHECK(empty_old == "abc");
+    CHECK(str_replace("abc", "", "X") == "abc");
 }
 
 TEST_CASE("str_substr takes the substring at the given position")
@@ -528,41 +442,27 @@ TEST_CASE("str_substr accepts a rvalue string and a pointer to a string")
 
 TEST_CASE("str_toupper converts the alphabets to upper case")
 {
-    const auto converted = str_toupper("abcXYZ 123!");
-    CHECK(converted == "ABCXYZ 123!");
-
-    const auto empty = str_toupper("");
-    CHECK(empty.empty());
+    CHECK(str_toupper("abcXYZ 123!") == "ABCXYZ 123!");
+    CHECK(str_toupper("").empty());
 }
 
 TEST_CASE("str_tolower converts the alphabets to lower case")
 {
-    const auto converted = str_tolower("abcXYZ 123!");
-    CHECK(converted == "abcxyz 123!");
-
-    const auto empty = str_tolower("");
-    CHECK(empty.empty());
+    CHECK(str_tolower("abcXYZ 123!") == "abcxyz 123!");
+    CHECK(str_tolower("").empty());
 }
 
 TEST_CASE("str_upcase_first converts only the first character")
 {
-    const auto converted = str_upcase_first("abc def");
-    CHECK(converted == "Abc def");
-
-    const auto already_upper = str_upcase_first("Abc");
-    CHECK(already_upper == "Abc");
+    CHECK(str_upcase_first("abc def") == "Abc def");
+    CHECK(str_upcase_first("Abc") == "Abc");
 }
 
 TEST_CASE("str_upcase_first leaves a string which does not start with an alphabet")
 {
-    const auto digit = str_upcase_first("1abc");
-    CHECK(digit == "1abc");
-
-    const auto space = str_upcase_first(" abc");
-    CHECK(space == " abc");
-
-    const auto empty = str_upcase_first("");
-    CHECK(empty.empty());
+    CHECK(str_upcase_first("1abc") == "1abc");
+    CHECK(str_upcase_first(" abc") == " abc");
+    CHECK(str_upcase_first("").empty());
 }
 
 TEST_CASE("extract_suffix extracts the substring from the found character")
@@ -575,11 +475,8 @@ TEST_CASE("extract_suffix extracts the substring from the found character")
     REQUIRE(at_head.has_value());
     CHECK(*at_head == "@abc");
 
-    const auto absent = extract_suffix("abc", '@');
-    CHECK_FALSE(absent.has_value());
-
-    const auto in_empty = extract_suffix("", '@');
-    CHECK_FALSE(in_empty.has_value());
+    CHECK_FALSE(extract_suffix("abc", '@').has_value());
+    CHECK_FALSE(extract_suffix("", '@').has_value());
 }
 
 TEST_CASE("extract_suffix extracts the substring from the found string")
@@ -588,8 +485,7 @@ TEST_CASE("extract_suffix extracts the substring from the found string")
     REQUIRE(found.has_value());
     CHECK(*found == "cdef");
 
-    const auto absent = extract_suffix("abcdef", "xy");
-    CHECK_FALSE(absent.has_value());
+    CHECK_FALSE(extract_suffix("abcdef", "xy").has_value());
 
     // 空文字列は先頭で見つかる
     const auto empty_needle = extract_suffix("abc", "");
@@ -720,11 +616,8 @@ TEST_CASE("str_erase does not erase a two byte character")
     // erase_chars は1バイト文字の集合として扱うため、2バイト文字は削除されない
     const auto str = cat(KANJI_KAN, "a");
 
-    const auto kept = str_erase(str, KANJI_KAN);
-    CHECK(kept == str);
-
-    const auto ascii_erased = str_erase(str, "a");
-    CHECK(ascii_erased == KANJI_KAN);
+    CHECK(str_erase(str, KANJI_KAN) == str);
+    CHECK(str_erase(str, "a") == KANJI_KAN);
 }
 
 TEST_CASE("str_upcase_first leaves a leading two byte character as it is")
@@ -737,9 +630,7 @@ TEST_CASE("str_find_all_multibyte_chars returns the index of each leading byte")
 {
     const std::set<int> expected = { 1, 4 };
     CHECK(str_find_all_multibyte_chars(cat("a", KANJI_KAN, "b", KANJI_JI)) == expected);
-
-    const auto ascii_only = str_find_all_multibyte_chars("abc");
-    CHECK(ascii_only.empty());
+    CHECK(str_find_all_multibyte_chars("abc").empty());
 }
 
 TEST_CASE("string-processor accepts a two byte character which lacks its trailing byte")
@@ -751,25 +642,15 @@ TEST_CASE("string-processor accepts a two byte character which lacks its trailin
     CHECK(str_toupper(str) == cat("A", KANJI_KAN.substr(0, 1)));
     CHECK(str_tolower(str) == str);
 
-    const auto erased = str_erase(str, "x");
-    CHECK(erased == str);
-
-    const auto replaced = str_replace(str, "x", "y");
-    CHECK(replaced == str);
-
-    const auto found = str_find(str, "x");
-    CHECK_FALSE(found);
-
+    CHECK(str_erase(str, "x") == str);
+    CHECK(str_replace(str, "x", "y") == str);
+    CHECK_FALSE(str_find(str, "x"));
     CHECK(str_substr(std::string_view(str), 2).empty());
     CHECK(str_split(str, ':').size() == 1);
 
     // 終端を越えて読まずに、見つからないと答えて終わる
-    const auto *absent_char = angband_strchr(str.data(), 'x');
-    CHECK(absent_char == nullptr);
-
-    const auto *absent_str = angband_strstr(str.data(), "x");
-    CHECK(absent_str == nullptr);
-
+    CHECK(angband_strchr(str.data(), 'x') == nullptr);
+    CHECK(angband_strstr(str.data(), "x") == nullptr);
     CHECK(angband_strchr(str.data(), 'a') == str.data());
 
     const std::set<int> expected = { 1 };
@@ -795,19 +676,15 @@ TEST_CASE("angband_strstr does not match from the trailing byte of a two byte ch
 {
     // 単純なバイト列としては "\\a" が一致するが、2バイト文字の途中なのでマッチしない
     const auto str = cat(DAME_SO, "a");
-    const auto *found = angband_strstr(str.data(), "\\a");
-    CHECK(found == nullptr);
+    CHECK(angband_strstr(str.data(), "\\a") == nullptr);
 }
 
 TEST_CASE("str_find does not match from the trailing byte of a two byte character")
 {
     const auto str = cat(DAME_SO, "a");
 
-    const auto across_char = str_find(str, "\\a");
-    CHECK_FALSE(across_char);
-
-    const auto ascii_only = str_find(str, "a");
-    CHECK(ascii_only);
+    CHECK_FALSE(str_find(str, "\\a"));
+    CHECK(str_find(str, "a"));
 }
 
 TEST_CASE("str_split does not split at the trailing byte of a two byte character")
@@ -822,26 +699,20 @@ TEST_CASE("str_split does not split at the trailing byte of a two byte character
 TEST_CASE("str_replace does not replace the trailing byte of a two byte character")
 {
     const auto str = cat("a", DAME_SO, "b");
-    const auto kept = str_replace(str, "\\", "X");
-    CHECK(kept == str);
+    CHECK(str_replace(str, "\\", "X") == str);
 
     // 2バイト文字の一部でない '\' は置き換えられる
-    const auto replaced = str_replace(cat("\\", DAME_SO), "\\", "X");
-    CHECK(replaced == cat("X", DAME_SO));
+    CHECK(str_replace(cat("\\", DAME_SO), "\\", "X") == cat("X", DAME_SO));
 }
 
 TEST_CASE("str_erase does not break a two byte character")
 {
     const auto str = cat("a", DAME_SO, "b");
-    const auto kept = str_erase(str, "\\");
-    CHECK(kept == str);
-
-    const auto kana_kept = str_erase(cat(DAME_KANA_A, "A"), "A");
-    CHECK(kana_kept == DAME_KANA_A);
+    CHECK(str_erase(str, "\\") == str);
+    CHECK(str_erase(cat(DAME_KANA_A, "A"), "A") == DAME_KANA_A);
 
     // 「ソ」の前半バイトは「ア」の前半バイトと同じ 0x83 だが、前半バイトだけを削除しない
-    const auto lead_kept = str_erase(cat(DAME_KANA_A, "b"), DAME_SO);
-    CHECK(lead_kept == cat(DAME_KANA_A, "b"));
+    CHECK(str_erase(cat(DAME_KANA_A, "b"), DAME_SO) == cat(DAME_KANA_A, "b"));
 }
 
 TEST_CASE("str_substr does not split a two byte character whose trailing byte is ASCII")

@@ -41,6 +41,12 @@
     <TargetName>hengband-test</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup>
+    <ClCompile>
+      <!-- doctest の CHECK 等は ExpressionDecomposer << 式 に展開されるため、式に暗黙の型変換を伴う
+           引数があると MSVC が評価順序の警告 (C4866) を出す。左辺の構築には副作用がなく
+           評価順序が結果に影響しないため、テストプロジェクトに限って無効化する -->
+      <DisableSpecificWarnings>4866;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
     <Link>
       <!-- doctest が生成する main() を持つコンソールアプリのため、
            Hengband.Common.props の SubSystem=Windows を上書きする -->
