@@ -262,19 +262,22 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
 
             std::vector<std::string> tmp_texts = ITEM_KIND_NAMES_GROUP;
             display_group_list(max_length, browser_rows, grp_idx, tmp_texts, grp_cur, grp_top);
-            if (old_grp_cur != grp_cur) {
+            if (!grp_idx.empty() && (old_grp_cur != grp_cur)) {
                 old_grp_cur = grp_cur;
                 bi_ids = BaseitemService::collect_baseitem_ids(grp_idx[grp_cur], bcm);
                 current_bi_id = 0;
                 top_bi_id = 0;
             }
 
-            while (current_bi_id < top_bi_id) {
-                top_bi_id = std::max<short>(0, top_bi_id - browser_rows / 2);
-            }
+            if (!bi_ids.empty()) {
+                while (current_bi_id < top_bi_id) {
+                    top_bi_id = std::max<short>(0, top_bi_id - browser_rows / 2);
+                }
 
-            while (current_bi_id >= top_bi_id + browser_rows) {
-                top_bi_id = std::min<short>(static_cast<short>(bi_ids.size()) - browser_rows, top_bi_id + browser_rows / 2);
+                while (current_bi_id >= top_bi_id + browser_rows) {
+                    const auto max_top = std::max<short>(0, static_cast<short>(bi_ids.size()) - browser_rows);
+                    top_bi_id = std::min<short>(max_top, top_bi_id + browser_rows / 2);
+                }
             }
         }
 
@@ -296,12 +299,29 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
             hgt - 1, 0);
 #endif
 
-        const auto bi_id_cursor = bi_ids[current_bi_id];
-        if (!visual_only) {
-            if (!bi_ids.empty()) {
-                tracker.set_trackee(bi_id_cursor);
+        if (bi_ids.empty()) {
+            if (!column) {
+                term_gotoxy(0, 6 + (grp_cur - grp_top));
             }
 
+            const auto ch = inkey();
+            switch (ch) {
+            case ESCAPE: {
+                flag = true;
+                break;
+            }
+            default: {
+                browser_cursor(ch, &column, &grp_cur, std::ssize(grp_idx), &current_bi_id, 0);
+                break;
+            }
+            }
+
+            continue;
+        }
+
+        const auto bi_id_cursor = bi_ids[current_bi_id];
+        if (!visual_only) {
+            tracker.set_trackee(bi_id_cursor);
             if (previous_bi_id != bi_id_cursor) {
                 handle_stuff(player_ptr);
                 previous_bi_id = bi_id_cursor;
@@ -343,8 +363,8 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
 
         case 'R':
         case 'r': {
-            if (!visual_list && !visual_only && (grp_idx.size() > 0)) {
-                desc_obj_fake(player_ptr, bi_ids[current_bi_id]);
+            if (!visual_list && !visual_only) {
+                desc_obj_fake(player_ptr, bi_id_cursor);
                 redraw = true;
             }
 
