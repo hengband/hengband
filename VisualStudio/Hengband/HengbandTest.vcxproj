@@ -70,6 +70,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-skill-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp" />
+    <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp" />
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-stun.cpp" />

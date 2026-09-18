@@ -10,6 +10,9 @@
     <Filter Include="info-reader">
       <UniqueIdentifier>{5a5d0f27-6c1e-4c8b-9f34-2b7d8e1a6c40}</UniqueIdentifier>
     </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{1bffe338-7a9b-482c-b4ea-71f5f4815fff}</UniqueIdentifier>
+    </Filter>
     <Filter Include="load">
       <UniqueIdentifier>{3c217089-cb3c-4a88-9b0a-e642a6bf402d}</UniqueIdentifier>
     </Filter>
@@ -41,6 +44,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp">
       <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp">
+      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp">
       <Filter>load</Filter>
