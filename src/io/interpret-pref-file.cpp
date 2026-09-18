@@ -425,6 +425,13 @@ static bool interpret_z_token(std::string_view line)
  */
 static bool decide_template_modifier(size_t num_tokens, const std::vector<std::string> &tokens)
 {
+    // 修飾キーの数とトークン数が合わない行は、既存の定義を消さずに失敗とする
+    // (空のテンプレートは全ての定義を消す指定なので、トークン数を問わない)
+    const auto zz_length = std::min(MAX_MACRO_MOD, tokens[1].length());
+    if (!tokens[0].empty() && (2 + zz_length != num_tokens)) {
+        return false;
+    }
+
     if (macro_template) {
         // 修飾キーの文字列は全体を保持するが、名前は MAX_MACRO_MOD 個までしか持たない
         const size_t macro_modifier_length = macro_modifier_chr ? std::min(macro_modifier_chr->length(), macro_modifier_names.size()) : 0;
@@ -445,12 +452,6 @@ static bool decide_template_modifier(size_t num_tokens, const std::vector<std::s
 
     if (tokens[0].empty()) {
         return true;
-    }
-
-    auto zz_length = tokens[1].length();
-    zz_length = std::min(MAX_MACRO_MOD, zz_length);
-    if (2 + zz_length != num_tokens) {
-        return false;
     }
 
     macro_template = tokens[0];

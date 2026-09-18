@@ -173,3 +173,36 @@ TEST_CASE("interpret_pref_file replaces a macro template with more modifier char
     CHECK(macro_modifier_names.at(1) == "shift-");
     CHECK(macro_modifier_names.at(11).empty());
 }
+
+TEST_CASE("interpret_pref_file keeps the macro template when a redefinition is invalid")
+{
+    const auto restore = scoped_macro_triggers();
+
+    REQUIRE(interpret("T:&_#:NS:control-:shift-") == 0);
+    REQUIRE(interpret("T:F1:FFBE") == 0);
+
+    // 修飾キーは2つなのに名前が3つあるので、トークン数が合わない
+    CHECK(interpret("T:new:NS:a:b:c") != 0);
+    CHECK(macro_template == "&_#");
+    CHECK(macro_modifier_chr == "NS");
+    CHECK(macro_modifier_names.at(0) == "control-");
+    CHECK(macro_modifier_names.at(1) == "shift-");
+    CHECK(max_macrotrigger == 1);
+    CHECK(macro_trigger_names.at(0) == "F1");
+    CHECK(macro_trigger_keycodes.at(ShiftStatus::OFF).at(0) == "FFBE");
+}
+
+TEST_CASE("interpret_pref_file clears the macro template with an empty template")
+{
+    const auto restore = scoped_macro_triggers();
+
+    REQUIRE(interpret("T:&_#:NS:control-:shift-") == 0);
+    REQUIRE(interpret("T:F1:FFBE") == 0);
+
+    CHECK(interpret("T::::") == 0);
+    CHECK_FALSE(macro_template);
+    CHECK_FALSE(macro_modifier_chr);
+    CHECK(macro_modifier_names.at(0).empty());
+    CHECK(max_macrotrigger == 0);
+    CHECK(macro_trigger_names.at(0).empty());
+}
