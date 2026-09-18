@@ -8,6 +8,7 @@
  */
 
 #include "io/interpret-pref-file.h"
+#include "io/macro-configurations-store.h"
 #include "term/gameterm.h"
 #include "util/finalizer.h"
 #include "view/display-symbol.h"
@@ -38,6 +39,24 @@ namespace {
         std::memcpy(angband_color_table, color_table_backup.data(), sizeof(angband_color_table));
         std::memcpy(tval_to_attr, tval_to_attr_backup.data(), sizeof(tval_to_attr));
         ds_bolt = ds_bolt_backup;
+    });
+}
+
+/*!
+ * @brief pref の行で書き換わるマクロトリガーの定義を退避する
+ * @return スコープを抜けるときに元の定義へ戻すファイナライザ
+ * @details 戻り値は必ず変数で受けること。受けないとその場で元に戻ってしまう。
+ */
+[[nodiscard]] auto scoped_macro_triggers()
+{
+    return util::make_finalizer([template_backup = macro_template, modifier_chr_backup = macro_modifier_chr, modifier_names_backup = macro_modifier_names,
+                                    trigger_names_backup = macro_trigger_names, keycodes_backup = macro_trigger_keycodes, max_backup = max_macrotrigger] {
+        macro_template = template_backup;
+        macro_modifier_chr = modifier_chr_backup;
+        macro_modifier_names = modifier_names_backup;
+        macro_trigger_names = trigger_names_backup;
+        macro_trigger_keycodes = keycodes_backup;
+        max_macrotrigger = max_backup;
     });
 }
 
@@ -138,4 +157,19 @@ TEST_CASE("interpret_pref_file rejects values that are not numbers without throw
     CHECK(interpret("S:0:x/65") != 0);
     CHECK(interpret("E:1:x") != 0);
     CHECK(interpret("C:x:a") != 0);
+}
+
+TEST_CASE("interpret_pref_file replaces a macro template with more modifier characters than names")
+{
+    const auto restore = scoped_macro_triggers();
+
+    // 修飾キーの文字列は 14 文字あるが、名前は MAX_MACRO_MOD (12) 個までしか持てない
+    CHECK(interpret("T:&_#:ABCDEFGHIJKLMN:a:b:c:d:e:f:g:h:i:j:k:l") == 0);
+    CHECK(macro_modifier_chr->length() == 14);
+
+    // テンプレートを定義し直すときに、名前の配列の範囲外を消さない
+    CHECK(interpret("T:&_#:NS:control-:shift-") == 0);
+    CHECK(macro_modifier_names.at(0) == "control-");
+    CHECK(macro_modifier_names.at(1) == "shift-");
+    CHECK(macro_modifier_names.at(11).empty());
 }

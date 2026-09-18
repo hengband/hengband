@@ -426,7 +426,8 @@ static bool interpret_z_token(std::string_view line)
 static bool decide_template_modifier(size_t num_tokens, const std::vector<std::string> &tokens)
 {
     if (macro_template) {
-        const size_t macro_modifier_length = macro_modifier_chr ? macro_modifier_chr->length() : 0;
+        // 修飾キーの文字列は全体を保持するが、名前は MAX_MACRO_MOD 個までしか持たない
+        const size_t macro_modifier_length = macro_modifier_chr ? std::min(macro_modifier_chr->length(), macro_modifier_names.size()) : 0;
         macro_template.reset();
         macro_modifier_chr.reset();
         for (size_t i = 0; i < macro_modifier_length; i++) {
