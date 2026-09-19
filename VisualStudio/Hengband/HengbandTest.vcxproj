@@ -72,6 +72,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp" />
     <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp" />
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp" />
+    <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-player-stun.cpp" />
     <ClCompile Include="..\..\src\test\timed-effect\test-timed-effect.cpp" />

@@ -1756,6 +1756,9 @@
     <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-roll-table.cpp">
+      <Filter>mutation</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\mutation\mutation-util.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
@@ -4616,6 +4619,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\gain-mutation-switcher.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-roll-table.h">
       <Filter>mutation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-util.h">

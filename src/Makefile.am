@@ -933,6 +933,7 @@ libhengband_a_SOURCES = \
 	mutation/mutation-util.cpp mutation/mutation-util.h \
 	mutation/mutation-flag-types.h \
 	mutation/mutation-processor.cpp mutation/mutation-processor.h \
+	mutation/mutation-roll-table.cpp mutation/mutation-roll-table.h \
 	mutation/mutation-techniques.cpp mutation/mutation-techniques.h \
 	\
 	net/curl-easy-session.cpp net/curl-easy-session.h \
@@ -1497,6 +1498,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-vault-reader.cpp \
 	test/io/test-macro-configurations-store.cpp \
 	test/load/test-angband-version-comparer.cpp \
+	test/mutation/test-mutation-roll-table.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \
 	test/timed-effect/test-timed-effect.cpp \
