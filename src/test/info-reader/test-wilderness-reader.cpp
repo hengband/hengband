@@ -5,13 +5,15 @@
 #include <nlohmann/json.hpp>
 
 namespace {
+const std::string TOWN_NAME_JA_UTF8 = "\xe7\x94\xba";
+
 nlohmann::json make_definition()
 {
     return {
         { "version", 1 },
         { "width", 3 },
         { "height", 3 },
-        { "towns", { { { "id", 1 }, { "name", { { "ja", "町" }, { "en", "Town" } } } } } },
+        { "towns", { { { "id", 1 }, { "name", { { "ja", TOWN_NAME_JA_UTF8 }, { "en", "Town" } } } } } },
         { "maps", {
                       { "normal", {
                                       { "letters", {
