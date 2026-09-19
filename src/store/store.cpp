@@ -41,7 +41,6 @@
 int store_top = 0;
 int store_bottom = 0;
 int xtra_stock = 0;
-const owner_type *ot_ptr = nullptr;
 size_t old_town_num = 0;
 size_t inner_town_num = 0;
 
@@ -301,7 +300,6 @@ void store_shuffle(StoreSaleType store_num)
         }
     }
 
-    ot_ptr = &owners.at(store_num)[st_ptr->owner];
     st_ptr->insult_cur = 0;
     st_ptr->store_open = 0;
     st_ptr->good_buy = 0;
@@ -339,7 +337,7 @@ static void store_create(PlayerType *player_ptr, short fix_k_idx, StoreSaleType 
 
     const auto &world = AngbandWorld::get_instance();
     const int bm_boost = 25 + store_level(store_num) / 4;
-    const auto &owner = owners.at(store_num)[st_ptr->owner];
+    const auto &owner = st_ptr->get_owner();
     for (int tries = 0; tries < 4; tries++) {
         short bi_id;
         DEPTH level;
@@ -421,7 +419,6 @@ void store_maintenance(PlayerType *player_ptr, int town_num, StoreSaleType store
 
     const auto &world = AngbandWorld::get_instance();
     st_ptr = &TownList::get_instance().get_town(town_num).get_store(store_num);
-    ot_ptr = &owners.at(store_num)[st_ptr->owner];
     st_ptr->insult_cur = 0;
     if (store_num == StoreSaleType::BLACK) {
         for (INVENTORY_IDX j = st_ptr->stock_num - 1; j >= 0; j--) {
@@ -524,7 +521,6 @@ void store_init(size_t town_num, StoreSaleType store_num)
         }
     }
 
-    ot_ptr = &owners.at(store_num)[st_ptr->owner];
     st_ptr->store_open = 0;
     st_ptr->insult_cur = 0;
     st_ptr->good_buy = 0;

@@ -11,8 +11,8 @@
 /*!
  * @brief 店舗価格を決定する. 無料にはならない /
  * Determine the price of an item (qty one) in a store.
- * @param o_ptr 店舗に並べるオブジェクト構造体の参照ポインタ
- * @param greed 店主の強欲度
+ * @param price アイテムの基本価格
+ * @param store 価格を決める店舗
  * @param flip TRUEならば店主にとっての買取価格、FALSEなら売出価格を計算
  * @return アイテムの店舗価格
  * @details
@@ -30,13 +30,16 @@
  * "greed" value is always something (?).
  * </pre>
  */
-int price_item(PlayerType *player_ptr, int price, int greed, bool flip, StoreSaleType store_num)
+int price_item(PlayerType *player_ptr, int price, const Store &store, bool flip)
 {
     if (price <= 0) {
         return 0L;
     }
 
-    int factor = rgold_adj[enum2i(ot_ptr->owner_race)][enum2i(player_ptr->prace)];
+    const auto &owner = store.get_owner();
+    const int greed = owner.inflate;
+    const auto store_num = store.get_sale_type();
+    int factor = rgold_adj[enum2i(owner.owner_race)][enum2i(player_ptr->prace)];
     factor += adj_chr_gold[player_ptr->stat_index[A_CHR]];
     int adjust;
     if (flip) {
