@@ -4,6 +4,9 @@
     <Filter Include="autopick">
       <UniqueIdentifier>{6fc1c33a-bcb9-4de8-ac91-81321f97c33c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cmd-io">
+      <UniqueIdentifier>{050a79fd-58ab-48f3-a881-f83ff7a488b7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="game-option">
       <UniqueIdentifier>{ce56653b-fbe2-4e12-af06-489721a95644}</UniqueIdentifier>
     </Filter>
@@ -29,6 +32,9 @@
     <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp">
       <Filter>autopick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp">
+      <Filter>cmd-io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp">
       <Filter>game-option</Filter>
