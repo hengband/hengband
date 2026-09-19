@@ -13,11 +13,9 @@
 #define STORE_SHUFFLE 21 /* 1/Chance (per day) of an owner changing */
 #define STORE_TICKS 1000 /* Number of ticks between turnovers */
 
-struct owner_type;
 extern int store_top;
 extern int store_bottom;
 extern int xtra_stock;
-extern const owner_type *ot_ptr;
 extern size_t old_town_num;
 extern size_t inner_town_num;
 
