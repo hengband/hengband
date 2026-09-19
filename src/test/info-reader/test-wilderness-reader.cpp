@@ -43,11 +43,8 @@ TEST_CASE("WildernessReader loads maps and localized levels")
     REQUIRE(definition.towns.size() == 1);
     REQUIRE(definition.normal.letters.size() == 2);
     CHECK(definition.normal.letters[1].terrain == WildernessTerrain::TOWN);
-#ifdef JP
-    CHECK(definition.normal.letters[1].level == 30);
-#else
-    CHECK(definition.normal.letters[1].level == 20);
-#endif
+    const auto expected_level = definition.towns[0].name == "Town" ? 20 : 30;
+    CHECK(definition.normal.letters[1].level == expected_level);
     CHECK(definition.normal.letters[1].town == 1);
     CHECK(definition.normal.starting_position == Pos2D(1, 1));
 }
