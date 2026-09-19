@@ -1497,6 +1497,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-vault-reader.cpp \
 	test/io/test-macro-configurations-store.cpp \
 	test/load/test-angband-version-comparer.cpp \
+	test/store/test-store-util.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \
 	test/timed-effect/test-timed-effect.cpp \

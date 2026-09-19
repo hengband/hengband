@@ -33,7 +33,6 @@
 #include "player/temporary-resistances.h"
 #include "spell/technic-info-table.h"
 #include "store/pricing.h"
-#include "store/store-owners.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "sv-definition/sv-bow-types.h"
@@ -975,7 +974,7 @@ nlohmann::json make_store_json(PlayerType *player_ptr, StoreSaleType store_num)
             continue;
         }
 
-        const auto price = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
+        const auto price = price_item(player_ptr, item.calc_price(), *st_ptr, false);
         auto entry = make_item_json(player_ptr, item, true);
         entry["letter"] = letter;
         entry["name"] = to_json_utf8(describe_flavor(player_ptr, item, OD_STORE | OD_OMIT_PREFIX));

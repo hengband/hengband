@@ -43,9 +43,9 @@
  * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
-static tl::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
+static tl::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), ot_ptr->inflate, false, store_num);
+    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), *st_ptr, false);
 
     price_ask *= o_ptr->number;
     const auto s = fmt::format(_("買値 ${} で買いますか？", "Do you buy for ${}? "), price_ask);
@@ -131,9 +131,10 @@ static void shuffle_store(StoreSaleType store_num)
     msg_print(_("店主は引退した。", "The shopkeeper retires."));
     store_shuffle(store_num);
     prt("", 3, 0);
-    put_str(format("%s (%s)", ot_ptr->owner_name, race_info[enum2i(ot_ptr->owner_race)].title.data()), 3, 10);
+    const auto &owner = st_ptr->get_owner();
+    put_str(format("%s (%s)", owner.owner_name, race_info[enum2i(owner.owner_race)].title.data()), 3, 10);
     const auto &terrains = TerrainList::get_instance();
-    prt(format("%s (%d)", terrains.get_terrain(cur_store_feat).name.data(), ot_ptr->max_cost), 3, 50);
+    prt(format("%s (%d)", terrains.get_terrain(cur_store_feat).name.data(), owner.max_cost), 3, 50);
 }
 
 static void switch_store_stock(PlayerType *player_ptr, const int i, const COMMAND_CODE item, StoreSaleType store_num)
@@ -206,7 +207,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    const auto best = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
+    const auto best = price_item(player_ptr, item.calc_price(), *st_ptr, false);
     if (item_store.number > 1) {
         if (store_num != StoreSaleType::HOME) {
             msg_format(_("一つにつき $%dです。", "That costs %d gold per item."), best);
@@ -245,7 +246,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     msg_erase();
 
     const auto &world = AngbandWorld::get_instance();
-    auto res = prompt_to_buy(player_ptr, &item, store_num);
+    auto res = prompt_to_buy(player_ptr, &item);
     if (st_ptr->store_open >= world.game_turn) {
         return;
     }

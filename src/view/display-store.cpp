@@ -81,7 +81,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
         put_str(format("%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(60, 61));
     }
 
-    const auto price = price_item(player_ptr, item.calc_price(), ot_ptr->inflate, false, store_num);
+    const auto price = price_item(player_ptr, item.calc_price(), *st_ptr, false);
     put_str(format("%9d  ", price), i + 6, 68);
 }
 
@@ -157,11 +157,11 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     const auto &store_name = TerrainList::get_instance().get_terrain(cur_store_feat).name;
-    const auto owner_name = ot_ptr->owner_name;
-    const auto race_name = race_info[enum2i(ot_ptr->owner_race)].title.data();
-    put_str(format("%s (%s)", owner_name, race_name), 3, 10);
+    const auto &owner = st_ptr->get_owner();
+    const auto race_name = race_info[enum2i(owner.owner_race)].title.data();
+    put_str(format("%s (%s)", owner.owner_name, race_name), 3, 10);
 
-    prt(format("%s (%d)", store_name.data(), ot_ptr->max_cost), 3, 50);
+    prt(format("%s (%d)", store_name.data(), owner.max_cost), 3, 50);
 
     put_str(_("商品の一覧", "Item Description"), 5, 5);
     if (show_weights) {
