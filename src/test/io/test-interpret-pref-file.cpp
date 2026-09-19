@@ -103,9 +103,10 @@ TEST_CASE("interpret_pref_file does not partially update a color on an invalid v
 {
     const auto restore = scoped_display_tables();
 
-    std::fill(std::begin(angband_color_table[0]), std::end(angband_color_table[0]), 7);
+    constexpr byte original = 7;
+    std::fill(std::begin(angband_color_table[0]), std::end(angband_color_table[0]), original);
     CHECK(interpret("V:0:1:2:x:4") != 0);
-    CHECK(std::all_of(std::begin(angband_color_table[0]), std::end(angband_color_table[0]), [](byte value) { return value == 7; }));
+    CHECK(std::all_of(std::begin(angband_color_table[0]), std::end(angband_color_table[0]), [](byte value) { return value == original; }));
 }
 
 TEST_CASE("interpret_pref_file sets a special symbol within the table")
