@@ -312,10 +312,11 @@ static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair 
         game_term->x2[y] = x;
     }
 
+    // 行頭には左隣が無いので、変更範囲を広げない (x1 が負になり、後の描画で範囲外を読むのを防ぐ)
 #ifdef JP
-    if (((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2) || (scrn->a[y][x] & AF_KANJI2))
+    if ((x > 0) && (((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2) || (scrn->a[y][x] & AF_KANJI2)))
 #else
-    if ((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2)
+    if ((x > 0) && ((scrn->a[y][x] & AF_BIGTILE2) == AF_BIGTILE2))
 #endif
         if ((x - 1) < game_term->x1[y]) {
             game_term->x1[y]--;
@@ -434,9 +435,9 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::s
     /*
      * 全角文字の右半分から文字を表示する場合、
      * 重なった文字の左部分を消去。
-     * 表示開始位置が左端でないと仮定。
+     * 行頭には左隣が無いので何もしない。
      */
-    if ((scr_aa[x] & AF_KANJI2) && (scr_aa[x] & AF_BIGTILE2) != AF_BIGTILE2) {
+    if ((x > 0) && (scr_aa[x] & AF_KANJI2) && (scr_aa[x] & AF_BIGTILE2) != AF_BIGTILE2) {
         scr_cc[x - 1] = ' ';
         scr_aa[x - 1] &= AF_KANJIC;
         x1 = x2 = x - 1;
@@ -1526,10 +1527,12 @@ void term_erase(int x, int y, tl::optional<int> n_opt)
     /*
      * 全角文字の右半分から文字を表示する場合、
      * 重なった文字の左部分を消去。
+     * 行頭には左隣が無いので何もしない。
      */
-    if (n > 0 && (((scr_aa[x] & AF_KANJI2) && !(scr_aa[x] & AF_TILE1)) || (scr_aa[x] & AF_BIGTILE2) == AF_BIGTILE2))
+    if (n > 0 && x > 0 && (((scr_aa[x] & AF_KANJI2) && !(scr_aa[x] & AF_TILE1)) || (scr_aa[x] & AF_BIGTILE2) == AF_BIGTILE2))
 #else
-    if (n > 0 && (scr_aa[x] & AF_BIGTILE2) == AF_BIGTILE2)
+    /* 大きなタイルの右半分から消去する場合は左半分も消去する。行頭には左隣が無いので何もしない */
+    if (n > 0 && x > 0 && (scr_aa[x] & AF_BIGTILE2) == AF_BIGTILE2)
 #endif
     {
         x--;
