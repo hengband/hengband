@@ -339,10 +339,7 @@
     <ClCompile Include="..\..\src\mspell\mspell-selector.cpp" />
     <ClCompile Include="..\..\src\mspell\smart-mspell-util.cpp" />
     <ClCompile Include="..\..\src\mspell\specified-summon.cpp" />
-    <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.cpp" />
     <ClCompile Include="..\..\src\mutation\mutation-roll-table.cpp" />
-    <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.cpp" />
-    <ClCompile Include="..\..\src\mutation\mutation-util.cpp" />
     <ClCompile Include="..\..\src\mutation\mutation-investor-remover.cpp" />
     <ClCompile Include="..\..\src\object-activation\activation-bolt-ball.cpp" />
     <ClCompile Include="..\..\src\object-activation\activation-breath.cpp" />
@@ -1173,10 +1170,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-selector.h" />
     <ClInclude Include="..\..\src\mspell\smart-mspell-util.h" />
     <ClInclude Include="..\..\src\mspell\specified-summon.h" />
-    <ClInclude Include="..\..\src\mutation\gain-mutation-switcher.h" />
     <ClInclude Include="..\..\src\mutation\mutation-roll-table.h" />
-    <ClInclude Include="..\..\src\mutation\lose-mutation-switcher.h" />
-    <ClInclude Include="..\..\src\mutation\mutation-util.h" />
     <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h" />
     <ClInclude Include="..\..\src\object-activation\activation-bolt-ball.h" />
     <ClInclude Include="..\..\src\object-activation\activation-breath.h" />
