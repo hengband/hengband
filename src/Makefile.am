@@ -1492,6 +1492,7 @@ hengband_test_SOURCES = \
 	test/autopick/test-autopick-editor-util.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
 	test/game-option/test-runtime-arguments.cpp \
+	test/info-reader/test-ego-reader.cpp \
 	test/info-reader/test-info-reader-util.cpp \
 	test/info-reader/test-json-reader-util.cpp \
 	test/info-reader/test-skill-reader.cpp \

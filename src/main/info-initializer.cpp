@@ -237,7 +237,7 @@ void init_dungeons_info()
  */
 void init_egos_info()
 {
-    init_info("EgoDefinitions.txt", DefinitionHashDataType::EGOS, egos_info, parse_egos_info);
+    init_json_reader<EgoReader>("EgoDefinitions.jsonc", "egos", DefinitionHashDataType::EGOS, egos_info);
 }
 
 /*!

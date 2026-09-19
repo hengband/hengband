@@ -1,3 +1,4 @@
+import re
 import sys
 from pathlib import Path
 import pyjson5
@@ -87,6 +88,55 @@ def validate_vault_semantics(data: dict) -> None:
                 raise ValidationError("row byte length must equal width", path=row_path)
 
 
+CPP_TOKEN_PATTERN = re.compile(r'^\s*\{\s*"([A-Z][A-Z0-9_]*)"\s*,', re.MULTILINE)
+
+
+def load_cpp_tokens(path: Path) -> set[str]:
+    tokens = set(CPP_TOKEN_PATTERN.findall(path.read_text(encoding="utf-8")))
+    if not tokens:
+        raise ValueError(f"No definition tokens found in {path}")
+    return tokens
+
+
+def validate_ego_semantics(data: dict, schema_path: Path) -> None:
+    """Check unique IDs and strict integer types expected by EgoReader."""
+    repository_root = schema_path.resolve().parent.parent
+    valid_flags = load_cpp_tokens(repository_root / "src/info-reader/baseitem-tokens-table.cpp")
+    valid_activations = load_cpp_tokens(repository_root / "src/object-enchant/activation-info-table.cpp")
+    ids = set()
+    integer_fields = ("id", "slot", "rating", "level", "rarity", "cost")
+    for index, ego in enumerate(data["egos"]):
+        path = ["egos", index]
+        for field in integer_fields:
+            if type(ego[field]) is not int:
+                raise ValidationError("expected an integer JSON value", path=path + [field])
+        if ego["id"] in ids:
+            raise ValidationError("IDs must be unique", path=path + ["id"])
+        ids.add(ego["id"])
+        if "activation" in ego and ego["activation"] not in valid_activations:
+            raise ValidationError("unknown activation token", path=path + ["activation"])
+        for flag_index, flag in enumerate(ego.get("flags", [])):
+            if flag not in valid_flags:
+                raise ValidationError("unknown ego flag token", path=path + ["flags", flag_index])
+        for group in ("base_bonuses", "maximum_bonuses"):
+            for field, value in ego.get(group, {}).items():
+                if type(value) is not int:
+                    raise ValidationError("expected an integer JSON value", path=path + [group, field])
+        for extra_index, extra in enumerate(ego.get("extra_flags", [])):
+            for flag_index, flag in enumerate(extra["flags"]):
+                if flag not in valid_flags:
+                    raise ValidationError(
+                        "unknown ego flag token",
+                        path=path + ["extra_flags", extra_index, "flags", flag_index],
+                    )
+            for field in ("numerator", "denominator"):
+                if type(extra[field]) is not int:
+                    raise ValidationError(
+                        "expected an integer JSON value",
+                        path=path + ["extra_flags", extra_index, field],
+                    )
+
+
 def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
@@ -94,6 +144,8 @@ def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
         validate(instance=data, schema=schema)
         if schema_path.name == "VaultDefinitions.schema.json":
             validate_vault_semantics(data)
+        elif schema_path.name == "EgoDefinitions.schema.json":
+            validate_ego_semantics(data, schema_path)
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
         msg = [f"Failed: {data_path.name}", f"Reason: {e.message}"]
