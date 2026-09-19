@@ -114,6 +114,7 @@ void init_info(std::string_view filename, DefinitionHashDataType dhdt, Definitio
  * @param filename ファイル名(拡張子jsonc)
  * @param head 処理に用いるヘッダ構造体
  * @param definition_list データ保管先の構造体ポインタ
+ * @param allow_empty 定義配列が空であることを許可するか
  * @note
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
@@ -167,10 +168,10 @@ void init_json(std::string_view filename, std::string_view keyname, DefinitionHa
  * @details init_jsonのjson_parserに「JSON要素からReaderを構築してread()する」定型ラムダを与える処理を共通化したもの。
  */
 template <typename Reader, typename DefinitionList>
-void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr)
+void init_json_reader(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<void()> retouch = nullptr, bool allow_empty = true)
 {
     auto parser = [](nlohmann::json &element) { return Reader(element).read(); };
-    init_json(filename, keyname, dhdt, definition_list, parser, retouch);
+    init_json(filename, keyname, dhdt, definition_list, parser, retouch, allow_empty);
 }
 }
 
@@ -237,7 +238,7 @@ void init_dungeons_info()
  */
 void init_egos_info()
 {
-    init_json_reader<EgoReader>("EgoDefinitions.jsonc", "egos", DefinitionHashDataType::EGOS, egos_info);
+    init_json_reader<EgoReader>("EgoDefinitions.jsonc", "egos", DefinitionHashDataType::EGOS, egos_info, nullptr, false);
 }
 
 /*!
