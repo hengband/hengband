@@ -194,5 +194,72 @@ class EgoValidationTest(unittest.TestCase):
                 self.assertFalse(ok)
 
 
+class WildernessValidationTest(unittest.TestCase):
+    def setUp(self):
+        self.schema_path = Path(__file__).resolve().parents[2] / "schema/WildernessDefinition.schema.json"
+        self.schema = load_jsonc(self.schema_path)
+        self.data = {
+            "version": 1,
+            "width": 3,
+            "height": 3,
+            "towns": [{"id": 1, "name": {"ja": "街", "en": "Town"}}],
+            "maps": {
+                "normal": {
+                    "letters": [
+                        {"symbol": "#", "terrain": 0},
+                        {"symbol": "1", "terrain": 1, "level": {"ja": 30, "en": 20}, "town": 1},
+                    ],
+                    "layout": ["###", "#1#", "###"],
+                    "starting_position": {"x": 1, "y": 1},
+                },
+                "compact": {
+                    "letters": [{"symbol": "#", "terrain": 0}],
+                    "layout": ["###", "###", "###"],
+                    "starting_position": {"x": 1, "y": 1},
+                },
+            },
+        }
+
+    def validate(self, data):
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / "WildernessDefinition.jsonc"
+            target.write_text(json.dumps(data), encoding="utf-8")
+            return validate_one((target, self.schema_path, self.schema))
+
+    def test_valid_localized_level_and_compact_map(self):
+        ok, message = self.validate(self.data)
+        self.assertTrue(ok, message)
+
+    def test_duplicate_town_ids_and_symbols(self):
+        duplicate_town = copy.deepcopy(self.data)
+        duplicate_town["towns"].append(copy.deepcopy(duplicate_town["towns"][0]))
+        self.assertFalse(self.validate(duplicate_town)[0])
+
+        duplicate_symbol = copy.deepcopy(self.data)
+        duplicate_symbol["maps"]["normal"]["letters"].append({"symbol": "#", "terrain": 0})
+        self.assertFalse(self.validate(duplicate_symbol)[0])
+
+    def test_normal_dimensions_and_defined_symbols(self):
+        short_row = copy.deepcopy(self.data)
+        short_row["maps"]["normal"]["layout"][1] = "##"
+        self.assertFalse(self.validate(short_row)[0])
+
+        undefined_symbol = copy.deepcopy(self.data)
+        undefined_symbol["maps"]["normal"]["layout"][1] = "#.#"
+        self.assertFalse(self.validate(undefined_symbol)[0])
+
+    def test_starting_position_is_inside_layout(self):
+        outside = copy.deepcopy(self.data)
+        outside["maps"]["compact"]["starting_position"] = {"x": 3, "y": 1}
+        self.assertFalse(self.validate(outside)[0])
+
+    def test_integer_representation_matches_reader(self):
+        for field in ("width", "height"):
+            with self.subTest(field=field):
+                data = copy.deepcopy(self.data)
+                data[field] = float(data[field])
+                self.assertFalse(self.validate(data)[0])
+
+
 if __name__ == "__main__":
     unittest.main()
