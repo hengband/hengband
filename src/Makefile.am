@@ -926,13 +926,11 @@ libhengband_a_SOURCES = \
 	mspell/mspell-attack/mspell-curse.cpp mspell/mspell-attack/mspell-curse.h \
 	mspell/mspell-attack/mspell-particularity.cpp mspell/mspell-attack/mspell-particularity.h \
 	\
-	mutation/gain-mutation-switcher.cpp mutation/gain-mutation-switcher.h \
-	mutation/lose-mutation-switcher.cpp mutation/lose-mutation-switcher.h \
 	mutation/mutation-calculator.cpp mutation/mutation-calculator.h \
 	mutation/mutation-investor-remover.cpp mutation/mutation-investor-remover.h \
-	mutation/mutation-util.cpp mutation/mutation-util.h \
 	mutation/mutation-flag-types.h \
 	mutation/mutation-processor.cpp mutation/mutation-processor.h \
+	mutation/mutation-roll-table.cpp mutation/mutation-roll-table.h \
 	mutation/mutation-techniques.cpp mutation/mutation-techniques.h \
 	\
 	net/curl-easy-session.cpp net/curl-easy-session.h \
@@ -1497,6 +1495,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-vault-reader.cpp \
 	test/io/test-macro-configurations-store.cpp \
 	test/load/test-angband-version-comparer.cpp \
+	test/mutation/test-mutation-roll-table.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \
 	test/timed-effect/test-timed-effect.cpp \

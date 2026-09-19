@@ -16,6 +16,9 @@
     <Filter Include="load">
       <UniqueIdentifier>{3c217089-cb3c-4a88-9b0a-e642a6bf402d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mutation">
+      <UniqueIdentifier>{e71c27bf-0eb8-4347-a040-6bc021a1c19b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="timed-effect">
       <UniqueIdentifier>{713ac6ea-8881-48d4-beac-cf75e9e6b037}</UniqueIdentifier>
     </Filter>
@@ -50,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp">
       <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp">
+      <Filter>mutation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp">
       <Filter>timed-effect</Filter>

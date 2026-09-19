@@ -1753,13 +1753,7 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-mind.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation\gain-mutation-switcher.cpp">
-      <Filter>mutation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mutation\mutation-util.cpp">
-      <Filter>mutation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mutation\lose-mutation-switcher.cpp">
+    <ClCompile Include="..\..\src\mutation\mutation-roll-table.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mutation\mutation-investor-remover.cpp">
@@ -4615,13 +4609,7 @@
     <ClInclude Include="..\..\src\mind\mind-numbers.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mutation\gain-mutation-switcher.h">
-      <Filter>mutation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mutation\mutation-util.h">
-      <Filter>mutation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mutation\lose-mutation-switcher.h">
+    <ClInclude Include="..\..\src\mutation\mutation-roll-table.h">
       <Filter>mutation</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation-investor-remover.h">
