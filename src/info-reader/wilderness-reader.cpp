@@ -11,6 +11,7 @@
 #include "system/gamevalue.h"
 #include "util/angband-files.h"
 #include "util/enum-converter.h"
+#include <algorithm>
 #include <array>
 #include <fstream>
 #include <iterator>
@@ -130,7 +131,20 @@ int WildernessReader::read(WildernessDefinition &definition) const
         }
     }
 
-    return this->read_map(get_json_value(maps, "compact"), definition.width, definition.height, definition.compact);
+    if (const auto err = this->read_map(get_json_value(maps, "compact"), definition.width, definition.height, definition.compact)) {
+        return err;
+    }
+
+    const auto has_undefined_town = [&town_ids](const WildernessMapDefinition &map) {
+        return std::any_of(map.letters.begin(), map.letters.end(), [&town_ids](const auto &letter) {
+            return letter.town != 0 && !town_ids.contains(letter.town);
+        });
+    };
+    if (has_undefined_town(definition.normal) || has_undefined_town(definition.compact)) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+
+    return PARSE_ERROR_NONE;
 }
 
 int WildernessReader::read_map(const nlohmann::json &map_data, int width, int height, WildernessMapDefinition &map) const

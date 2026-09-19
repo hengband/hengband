@@ -239,6 +239,15 @@ class WildernessValidationTest(unittest.TestCase):
         duplicate_symbol["maps"]["normal"]["letters"].append({"symbol": "#", "terrain": 0})
         self.assertFalse(self.validate(duplicate_symbol)[0])
 
+    def test_undefined_town_references(self):
+        for map_name in ("normal", "compact"):
+            with self.subTest(map_name=map_name):
+                data = copy.deepcopy(self.data)
+                data["maps"][map_name]["letters"][0]["town"] = 2
+                ok, message = self.validate(data)
+                self.assertFalse(ok)
+                self.assertIn("undefined town ID", message)
+
     def test_normal_dimensions_and_defined_symbols(self):
         short_row = copy.deepcopy(self.data)
         short_row["maps"]["normal"]["layout"][1] = "##"

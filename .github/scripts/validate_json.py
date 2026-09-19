@@ -164,6 +164,8 @@ def validate_wilderness_semantics(data: dict) -> None:
                 levels = letter["level"].values() if isinstance(letter["level"], dict) else (letter["level"],)
                 if any(type(level) is not int for level in levels):
                     raise ValidationError("expected an integer JSON value", path=map_path + ["letters", index, "level"])
+            if letter.get("town", 0) != 0 and letter["town"] not in town_ids:
+                raise ValidationError("letter references an undefined town ID", path=map_path + ["letters", index, "town"])
             symbol = letter["symbol"]
             if any(ord(c) < 0x20 or ord(c) > 0x7e for c in symbol):
                 raise ValidationError("symbol must be printable ASCII", path=map_path + ["letters", index, "symbol"])
