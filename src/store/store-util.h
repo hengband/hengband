@@ -32,7 +32,6 @@ public:
     int store_open{}; //!< Closed until this turn
     int last_visit{}; //!< Last visited on this turn
     std::vector<short> regular{}; //!< Table -- Legal regular item kinds
-    std::vector<short> table{}; //!< Table -- Legal item kinds
     short stock_num{}; //!< Stock -- Number of entries
     short stock_size{}; //!< @todo vectorのサイズを取れば良くなったので後ほど削除する.
     std::vector<std::unique_ptr<ItemEntity>> stock{}; //!< Stock -- Actual stock items

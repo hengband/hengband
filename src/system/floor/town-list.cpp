@@ -113,11 +113,6 @@ void TownList::initialize()
                 const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
                 store.regular.push_back(bi_id);
             }
-
-            for (const auto &bi_key : store_sale_table.at(sst)) {
-                const auto bi_id = baseitems.lookup_baseitem_id(bi_key);
-                store.table.push_back(bi_id);
-            }
         }
     }
 }
