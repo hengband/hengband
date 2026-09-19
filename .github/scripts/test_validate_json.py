@@ -76,5 +76,123 @@ class VaultValidationTest(unittest.TestCase):
             self.assertTrue(ok, message)
 
 
+class EgoValidationTest(unittest.TestCase):
+    def setUp(self):
+        self.schema_path = Path(__file__).resolve().parents[2] / "schema/EgoDefinitions.schema.json"
+        self.schema = load_jsonc(self.schema_path)
+        self.record = {
+            "id": 4,
+            "name": {"ja": "試験の", "en": "of Testing"},
+            "slot": 31,
+            "rating": 10,
+            "level": 0,
+            "rarity": 20,
+            "cost": 1000,
+            "maximum_bonuses": {"to_hit": 1, "to_damage": 2, "to_ac": 3, "pval": 4},
+            "flags": ["STR"],
+            "extra_flags": [{"numerator": 1, "denominator": 3, "flags": ["RES_FIRE"]}],
+        }
+
+    def validate(self, data):
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / "EgoDefinitions.jsonc"
+            target.write_text(json.dumps(data), encoding="utf-8")
+            return validate_one((target, self.schema_path, self.schema))
+
+    def test_valid_sparse_ids(self):
+        second = {**self.record, "id": 8}
+        ok, message = self.validate({"version": 1, "egos": [self.record, second]})
+        self.assertTrue(ok, message)
+
+    def test_duplicate_ids(self):
+        records = [self.record, {**self.record}]
+        ok, message = self.validate({"version": 1, "egos": records})
+        self.assertFalse(ok)
+        self.assertIn("unique", message)
+
+    def test_descending_ids_are_supported(self):
+        records = [{**self.record, "id": ego_id} for ego_id in (8, 4)]
+        ok, message = self.validate({"version": 1, "egos": records})
+        self.assertTrue(ok, message)
+
+    def test_integer_representation_matches_reader(self):
+        for field in ("id", "slot", "rating", "level", "rarity", "cost"):
+            with self.subTest(field=field):
+                record = copy.deepcopy(self.record)
+                record[field] = float(record[field])
+                ok, message = self.validate({"version": 1, "egos": [record]})
+                self.assertFalse(ok)
+                self.assertIn("integer JSON value", message)
+
+    def test_rarity_matches_byte_storage(self):
+        record = {**self.record, "rarity": 255}
+        ok, message = self.validate({"version": 1, "egos": [record]})
+        self.assertTrue(ok, message)
+        record["rarity"] = 256
+        ok, message = self.validate({"version": 1, "egos": [record]})
+        self.assertFalse(ok)
+
+    def test_level_matches_depth_storage(self):
+        record = {**self.record, "level": 32768}
+        ok, message = self.validate({"version": 1, "egos": [record]})
+        self.assertTrue(ok, message)
+        record["level"] = 2147483648
+        ok, message = self.validate({"version": 1, "egos": [record]})
+        self.assertFalse(ok)
+
+    def test_known_runtime_tokens_are_accepted_by_ci(self):
+        record = copy.deepcopy(self.record)
+        record["activation"] = "SUNLIGHT"
+        record["flags"] = ["RES_FIRE", "CURSED"]
+        record["extra_flags"][0]["flags"] = ["RES_COLD", "HEAVY_CURSE"]
+        ok, message = self.validate({"version": 1, "egos": [record]})
+        self.assertTrue(ok, message)
+
+    def test_duplicate_flags_are_rejected_by_ci(self):
+        for path in (("flags",), ("extra_flags", 0, "flags")):
+            with self.subTest(path=path):
+                record = copy.deepcopy(self.record)
+                target = record
+                for part in path[:-1]:
+                    target = target[part]
+                target[path[-1]] = ["RES_FIRE", "RES_FIRE"]
+                ok, message = self.validate({"version": 1, "egos": [record]})
+                self.assertFalse(ok)
+                self.assertIn("non-unique", message)
+
+    def test_unknown_runtime_tokens_are_rejected_by_ci(self):
+        for path, value in (
+            (("activation",), "UNKNOWN"),
+            (("flags", 0), "UNKNOWN"),
+            (("extra_flags", 0, "flags", 0), "UNKNOWN"),
+        ):
+            with self.subTest(path=path):
+                record = copy.deepcopy(self.record)
+                target = record
+                for part in path[:-1]:
+                    target = target[part]
+                target[path[-1]] = value
+                ok, message = self.validate({"version": 1, "egos": [record]})
+                self.assertFalse(ok)
+                self.assertIn("unknown", message)
+
+    def test_nested_integer_representation_matches_reader(self):
+        for path in (
+            ("base_bonuses", "to_hit"),
+            ("maximum_bonuses", "pval"),
+            ("extra_flags", 0, "numerator"),
+            ("extra_flags", 0, "denominator"),
+        ):
+            with self.subTest(path=path):
+                record = copy.deepcopy(self.record)
+                record.setdefault("base_bonuses", {"to_hit": 1, "to_damage": 2, "to_ac": 3})
+                target = record
+                for part in path[:-1]:
+                    target = target[part]
+                target[path[-1]] = float(target[path[-1]])
+                ok, message = self.validate({"version": 1, "egos": [record]})
+                self.assertFalse(ok)
+
+
 if __name__ == "__main__":
     unittest.main()
