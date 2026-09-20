@@ -48,5 +48,3 @@ public:
 private:
     StoreSaleType sale_type; //!< 店舗の種類
 };
-
-extern Store *st_ptr;

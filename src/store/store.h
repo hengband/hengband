@@ -27,7 +27,7 @@ int16_t store_get_stock_max(StoreSaleType sst, bool powerup = true);
 void store_shuffle(StoreSaleType which);
 void store_maintenance(PlayerType *player_ptr, Store &store, int chance);
 void store_init(size_t town_num, StoreSaleType store_num);
-void store_examine(PlayerType *player_ptr, StoreSaleType store_num);
+void store_examine(PlayerType *player_ptr, const Store &store);
 int store_check_num(const ItemEntity *o_ptr, const Store &store);
 int store_level(StoreSaleType store_num);
 tl::optional<short> input_stock(std::string_view fmt, int min, int max, StoreSaleType store_num);

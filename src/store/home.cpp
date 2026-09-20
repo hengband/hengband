@@ -16,6 +16,8 @@
 /*!
  * @brief 我が家にオブジェクトを加える /
  * Add the item "o_ptr" to the inventory of the "Home"
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store アイテムを加える店舗 (我が家または博物館)
  * @param o_ptr 加えたいオブジェクトの構造体参照ポインタ
  * @return 収めた先のID
  * @details
@@ -26,8 +28,9 @@
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
  */
-int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
+int home_carry(PlayerType *player_ptr, Store &store, ItemEntity *o_ptr)
 {
+    const auto store_num = store.get_sale_type();
     bool old_stack_force_notes = stack_force_notes;
     bool old_stack_force_costs = stack_force_costs;
     if (store_num != StoreSaleType::HOME) {
@@ -35,8 +38,8 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
         stack_force_costs = false;
     }
 
-    for (int slot = 0; slot < st_ptr->stock_num; slot++) {
-        auto &item_store = *st_ptr->stock[slot];
+    for (int slot = 0; slot < store.stock_num; slot++) {
+        auto &item_store = *store.stock[slot];
         if (item_store.is_similar(*o_ptr)) {
             item_store.absorb(*o_ptr);
             if (store_num != StoreSaleType::HOME) {
@@ -59,27 +62,27 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
      *           我が家が 20 ページまで使える
      */
     if ((store_num != StoreSaleType::HOME) || powerup_home) {
-        if (st_ptr->stock_num >= st_ptr->stock_size) {
+        if (store.stock_num >= store.stock_size) {
             return -1;
         }
     } else {
-        if (st_ptr->stock_num >= ((st_ptr->stock_size) / 10)) {
+        if (store.stock_num >= ((store.stock_size) / 10)) {
             return -1;
         }
     }
 
-    const auto first = st_ptr->stock.begin();
-    const auto last = st_ptr->stock.begin() + st_ptr->stock_num;
+    const auto first = store.stock.begin();
+    const auto last = store.stock.begin() + store.stock_num;
     const auto slot_it = std::find_if(first, last,
         [&](const auto &item) { return object_sort_comp(player_ptr, *o_ptr, *item); });
     const int slot = std::distance(first, slot_it);
 
     std::rotate(first + slot, last, last + 1);
 
-    st_ptr->stock_num++;
-    *st_ptr->stock[slot] = o_ptr->clone();
+    store.stock_num++;
+    *store.stock[slot] = o_ptr->clone();
     chg_virtue(player_ptr, Virtue::SACRIFICE, -1);
-    (void)combine_and_reorder_home(player_ptr, store_num);
+    (void)combine_and_reorder_home(player_ptr, store);
     return slot;
 }
 
@@ -153,16 +156,17 @@ static bool exe_reorder_store_item(PlayerType *player_ptr, Store &store)
 }
 
 /*!
- * @brief 現在の町の指定された店舗のアイテムを整理する /
+ * @brief 指定された店舗のアイテムを整理する /
  * Combine and reorder items in store.
- * @param store_num 店舗ID
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store 整理する店舗
  * @return 実際に整理が行われたならばTRUEを返す。
  */
-bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_num)
+bool combine_and_reorder_home(PlayerType *player_ptr, Store &store)
 {
+    const auto store_num = store.get_sale_type();
     auto old_stack_force_notes = stack_force_notes;
     auto old_stack_force_costs = stack_force_costs;
-    auto &store = TownList::get_instance().get_town(TownId::OUTPOST).get_store(store_num);
     auto flag = false;
     if (store_num != StoreSaleType::HOME) {
         stack_force_notes = false;
@@ -191,4 +195,17 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
     }
 
     return flag;
+}
+
+/*!
+ * @brief 我が家または博物館のアイテムを整理する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store_num 店舗の種類 (我が家または博物館)
+ * @return 実際に整理が行われたならばTRUEを返す。
+ * @details 我が家と博物館は全ての町で内容を共有するため、辺境の地の店舗を対象とする。
+ */
+bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_num)
+{
+    auto &store = TownList::get_instance().get_town(TownId::OUTPOST).get_store(store_num);
+    return combine_and_reorder_home(player_ptr, store);
 }

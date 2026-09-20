@@ -110,17 +110,16 @@ void do_cmd_store(PlayerType *player_ptr)
     command_new = 0;
     get_com_no_macros = true;
     cur_store_feat = grid.feat;
-    st_ptr = &store;
     store_top = 0;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
-    display_store(player_ptr, store_num);
+    display_store(player_ptr, store);
     leave_store = false;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     while (!leave_store) {
         prt("", 1, 0);
         clear_from(20 + xtra_stock);
         prt(_(" ESC) 建物から出る", " ESC) Exit from Building."), 21 + xtra_stock, 0);
-        if (st_ptr->stock_num > store_bottom) {
+        if (store.stock_num > store_bottom) {
             prt(_(" -)前ページ", " -) Previous page"), 22 + xtra_stock, 0);
             prt(_(" スペース) 次ページ", " SPACE) Next page"), 23 + xtra_stock, 0);
         }
@@ -147,9 +146,9 @@ void do_cmd_store(PlayerType *player_ptr)
         }
 
         prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
-        output_bot_json_store_snapshot(player_ptr, store_num);
+        output_bot_json_store_snapshot(player_ptr, store);
         InputKeyRequestor(player_ptr, true).request_command();
-        store_process_command(player_ptr, store_num);
+        store_process_command(player_ptr, store);
 
         const auto should_redraw_store_inventory = rfu.has(StatusRecalculatingFlag::BONUS);
         world.character_icky_depth = 1;
@@ -175,19 +174,19 @@ void do_cmd_store(PlayerType *player_ptr)
                 msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
                 vary_item(player_ptr, i_idx, -255);
                 handle_stuff(player_ptr);
-                const auto item_pos = home_carry(player_ptr, &item, store_num);
+                const auto item_pos = home_carry(player_ptr, store, &item);
                 if (item_pos >= 0) {
                     store_top = (item_pos / store_bottom) * store_bottom;
-                    display_store_inventory(player_ptr, store_num);
+                    display_store_inventory(player_ptr, store);
                 }
             }
         }
 
         if (should_redraw_store_inventory) {
-            display_store_inventory(player_ptr, store_num);
+            display_store_inventory(player_ptr, store);
         }
 
-        if (st_ptr->store_open >= world.game_turn) {
+        if (store.store_open >= world.game_turn) {
             leave_store = true;
         }
     }
