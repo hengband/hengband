@@ -22,6 +22,9 @@
     <Filter Include="mutation">
       <UniqueIdentifier>{e71c27bf-0eb8-4347-a040-6bc021a1c19b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="store">
+      <UniqueIdentifier>{2f858fe4-6c1a-425e-8310-085e4dcf1f4c}</UniqueIdentifier>
+    </Filter>
     <Filter Include="timed-effect">
       <UniqueIdentifier>{713ac6ea-8881-48d4-beac-cf75e9e6b037}</UniqueIdentifier>
     </Filter>
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp">
       <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\store\test-store-util.cpp">
+      <Filter>store</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp">
       <Filter>timed-effect</Filter>

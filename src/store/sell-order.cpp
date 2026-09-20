@@ -41,11 +41,11 @@
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @return 売るなら(true,売値)、売らないなら(false,0)のタプル
  */
-static tl::optional<int> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
+static tl::optional<int> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_ptr)
 {
-    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), ot_ptr->inflate, true, store_num);
+    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), *st_ptr, true);
 
-    price_ask = std::min(price_ask, ot_ptr->max_cost);
+    price_ask = std::min(price_ask, st_ptr->get_owner().max_cost);
     price_ask *= o_ptr->number;
     const auto s = fmt::format(_("売値 ${} で売りますか？", "Do you sell for ${}? "), price_ask);
     if (input_check_strict(player_ptr, s, UserCheck::DEFAULT_Y)) {
@@ -125,7 +125,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), item_name.data(), index_to_label(i_idx));
         msg_erase();
 
-        auto res = prompt_to_sell(player_ptr, &selling_item, store_num);
+        auto res = prompt_to_sell(player_ptr, &selling_item);
         placed = res.has_value();
         if (placed) {
             const auto price = *res;
