@@ -3,7 +3,6 @@
 #include "artifact/fixed-art-types.h"
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
-#include "floor/wild.h"
 #include "grid/object-placer.h"
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
@@ -275,17 +274,6 @@ parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtw
         parse_qtw_D(player_ptr, qtwg_ptr, s);
         (*qtwg_ptr->y)++;
         return PARSE_ERROR_NONE;
-    }
-
-    if (qtwg_ptr->buf[0] == 'W') {
-        const Pos2D pos_initial(*qtwg_ptr->y, *qtwg_ptr->x);
-        const auto pos = parse_line_wilderness(qtwg_ptr->buf, qtwg_ptr->xmin, qtwg_ptr->xmax, pos_initial);
-        if (pos) {
-            *qtwg_ptr->y = pos->y;
-            *qtwg_ptr->x = pos->x;
-        }
-
-        return pos.error_or(PARSE_ERROR_NONE);
     }
 
     if (parse_qtw_P(player_ptr, qtwg_ptr)) {

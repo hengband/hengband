@@ -137,6 +137,62 @@ def validate_ego_semantics(data: dict, schema_path: Path) -> None:
                     )
 
 
+def validate_wilderness_semantics(data: dict) -> None:
+    """Check cross-field constraints used by WildernessReader."""
+    for field in ("version", "width", "height"):
+        if type(data[field]) is not int:
+            raise ValidationError("expected an integer JSON value", path=[field])
+
+    town_ids = set()
+    for index, town in enumerate(data["towns"]):
+        if type(town["id"]) is not int:
+            raise ValidationError("expected an integer JSON value", path=["towns", index, "id"])
+        if town["id"] in town_ids:
+            raise ValidationError("town IDs must be unique", path=["towns", index, "id"])
+        town_ids.add(town["id"])
+
+    width = data["width"]
+    height = data["height"]
+    for map_name, wilderness_map in data["maps"].items():
+        map_path = ["maps", map_name]
+        symbols = set()
+        for index, letter in enumerate(wilderness_map["letters"]):
+            for field in ("terrain", "town", "road"):
+                if field in letter and type(letter[field]) is not int:
+                    raise ValidationError("expected an integer JSON value", path=map_path + ["letters", index, field])
+            if "level" in letter:
+                levels = letter["level"].values() if isinstance(letter["level"], dict) else (letter["level"],)
+                if any(type(level) is not int for level in levels):
+                    raise ValidationError("expected an integer JSON value", path=map_path + ["letters", index, "level"])
+            if letter.get("town", 0) != 0 and letter["town"] not in town_ids:
+                raise ValidationError("letter references an undefined town ID", path=map_path + ["letters", index, "town"])
+            symbol = letter["symbol"]
+            if any(ord(c) < 0x20 or ord(c) > 0x7e for c in symbol):
+                raise ValidationError("symbol must be printable ASCII", path=map_path + ["letters", index, "symbol"])
+            if symbol in symbols:
+                raise ValidationError("symbols must be unique within a map", path=map_path + ["letters", index, "symbol"])
+            symbols.add(symbol)
+
+        layout = wilderness_map["layout"]
+        if len(layout) > height:
+            raise ValidationError("row count must not exceed height", path=map_path + ["layout"])
+        if map_name == "normal" and len(layout) != height:
+            raise ValidationError("normal row count must equal height", path=map_path + ["layout"])
+        for row_index, row in enumerate(layout):
+            if len(row) > width or (map_name == "normal" and len(row) != width):
+                raise ValidationError("normal row width must equal width" if map_name == "normal" else "row width must not exceed width", path=map_path + ["layout", row_index])
+            for column, symbol in enumerate(row):
+                if symbol not in symbols:
+                    raise ValidationError("layout contains an undefined symbol", path=map_path + ["layout", row_index, column])
+
+        position = wilderness_map["starting_position"]
+        for field in ("x", "y"):
+            if type(position[field]) is not int:
+                raise ValidationError("expected an integer JSON value", path=map_path + ["starting_position", field])
+        if position["y"] >= len(layout) or position["x"] >= len(layout[position["y"]]):
+            raise ValidationError("starting position must be within the map layout", path=map_path + ["starting_position"])
+
+
 def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
@@ -146,6 +202,8 @@ def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
             validate_vault_semantics(data)
         elif schema_path.name == "EgoDefinitions.schema.json":
             validate_ego_semantics(data, schema_path)
+        elif schema_path.name == "WildernessDefinition.schema.json":
+            validate_wilderness_semantics(data)
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
         msg = [f"Failed: {data_path.name}", f"Reason: {e.message}"]

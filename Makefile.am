@@ -42,7 +42,8 @@ schema_files = \
 	schema/QuestPreferences.schema.json \
 	schema/SpellDefinitions.schema.json \
 	schema/TerrainDefinitions.schema.json \
-	schema/VaultDefinitions.schema.json
+	schema/VaultDefinitions.schema.json \
+	schema/WildernessDefinition.schema.json
 
 EXTRA_DIST = \
 	lib/edit/ClassSkillDefinitions.md \
