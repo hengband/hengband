@@ -3,10 +3,11 @@
   <PropertyGroup>
     <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(HengbandDebugBuild)'!='true'">false</LinkIncremental>
+    <ExternalIncludePath>..\..\src\external-lib\include;libcurl\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\src;..\..\src\external-lib\include;libcurl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ConformanceMode>true</ConformanceMode>
       <CompileAs>CompileAsCpp</CompileAs>
@@ -21,8 +22,8 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <CompileAsManaged>false</CompileAsManaged>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
-      <TreatAngleBracketIncludesAsExternal>true</TreatAngleBracketIncludesAsExternal>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
 
       <!-- JP;SJIS;WORLD_SCORE は日本語版のみ、WIN_DEBUG はデバッグ構成のみ -->
       <PreprocessorDefinitions Condition="'$(HengbandDebugBuild)'=='true' and '$(HengbandJapanese)'=='true'">WINDOWS;_CRT_SECURE_NO_WARNINGS;WIN32;HAVE_STDINT_H;JP;SJIS;WORLD_SCORE;WIN_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
