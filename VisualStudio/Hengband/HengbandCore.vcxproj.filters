@@ -5683,9 +5683,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="floor">
       <UniqueIdentifier>{c7e2056b-fda5-410a-8d23-03ba3f11c051}</UniqueIdentifier>
     </Filter>
