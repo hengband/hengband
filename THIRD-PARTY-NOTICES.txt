@@ -328,3 +328,31 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ---------------------------------------------------------
+
+tl::optional 1.1.0 - CC0 1.0
+https://github.com/TartanLlama/optional
+
+Written in 2017 by Sy Brand (tartanllama@gmail.com, @TartanLlama)
+
+To the extent possible under law, Sy Brand has waived all copyright and
+related or neighboring rights to the optional library.
+This work is published from: United Kingdom.
+
+A copy of the CC0 1.0 Universal Public Domain Dedication can be found at
+https://creativecommons.org/publicdomain/zero/1.0/
+
+---------------------------------------------------------
+
+tl::expected 1.3.1 - CC0 1.0
+https://github.com/TartanLlama/expected
+
+Written in 2017 by Sy Brand (tartanllama@gmail.com, @TartanLlama)
+
+To the extent possible under law, Sy Brand has waived all copyright and
+related or neighboring rights to the expected library.
+This work is published from: United Kingdom.
+
+A copy of the CC0 1.0 Universal Public Domain Dedication can be found at
+https://creativecommons.org/publicdomain/zero/1.0/
+
+---------------------------------------------------------
