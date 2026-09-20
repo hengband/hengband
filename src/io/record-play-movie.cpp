@@ -25,11 +25,13 @@
 #undef max
 #undef min
 constexpr DWORD WAIT = 100;
+#define FD_SYS_READ(fd, buf, n) _read((fd), (buf), (n))
 #else
 #include "system/h-basic.h"
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
+#define FD_SYS_READ(fd, buf, n) read((fd), (buf), (n))
 constexpr auto WAIT = 100 * 1000; /* ブラウズ側のウエイト(us単位) */
 #endif
 
@@ -448,7 +450,7 @@ static bool read_movie_file()
     int recv_bytes;
     int i, start;
 
-    recv_bytes = read(movie_fd, recv_buf + remain_bytes, RECVBUF_SIZE - remain_bytes);
+    recv_bytes = FD_SYS_READ(movie_fd, recv_buf + remain_bytes, RECVBUF_SIZE - remain_bytes);
 
     if (recv_bytes <= 0) {
         return false;
