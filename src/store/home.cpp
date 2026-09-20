@@ -7,6 +7,7 @@
 #include "object/tval-types.h"
 #include "store/store-util.h"
 #include "system/floor/town-list.h"
+#include "system/floor/town-records.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/object-sort.h"
@@ -82,25 +83,27 @@ int home_carry(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_nu
     return slot;
 }
 
-static bool exe_combine_store_items(ItemEntity &item1, ItemEntity &item2, const int max_num, const int i)
+static bool exe_combine_store_items(Store &store, ItemEntity &item2, const int max_num, const int i)
 {
+    auto &item1 = *store.stock[i];
     if (item1.number + item2.number > max_num) {
         return false;
     }
 
     item2.absorb(item1);
-    const auto begin = st_ptr->stock.begin();
-    std::rotate(begin + i, begin + i + 1, begin + st_ptr->stock_num);
+    const auto begin = store.stock.begin();
+    std::rotate(begin + i, begin + i + 1, begin + store.stock_num);
 
-    st_ptr->stock_num--;
-    st_ptr->stock[st_ptr->stock_num]->wipe();
+    store.stock_num--;
+    store.stock[store.stock_num]->wipe();
     return true;
 }
 
-static bool sweep_reorder_store_item(ItemEntity &item, const int i)
+static bool sweep_reorder_store_item(Store &store, const int i)
 {
+    auto &item = *store.stock[i];
     for (auto j = 0; j < i; j++) {
-        auto &item_store = *st_ptr->stock[j];
+        auto &item_store = *store.stock[j];
         if (!item_store.is_valid()) {
             continue;
         }
@@ -110,7 +113,7 @@ static bool sweep_reorder_store_item(ItemEntity &item, const int i)
             continue;
         }
 
-        if (exe_combine_store_items(item, item_store, max_num, i)) {
+        if (exe_combine_store_items(store, item_store, max_num, i)) {
             return true;
         }
 
@@ -132,14 +135,14 @@ static bool sweep_reorder_store_item(ItemEntity &item, const int i)
     return false;
 }
 
-static bool exe_reorder_store_item(PlayerType *player_ptr)
+static bool exe_reorder_store_item(PlayerType *player_ptr, Store &store)
 {
     const auto comp = [player_ptr](const auto &item1, const auto &item2) {
         return object_sort_comp(player_ptr, *item1, *item2);
     };
 
-    const auto first = st_ptr->stock.begin();
-    const auto last = st_ptr->stock.begin() + st_ptr->stock_num;
+    const auto first = store.stock.begin();
+    const auto last = store.stock.begin() + store.stock_num;
 
     if (std::is_sorted(first, last, comp)) {
         return false;
@@ -159,8 +162,7 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
 {
     auto old_stack_force_notes = stack_force_notes;
     auto old_stack_force_costs = stack_force_costs;
-    auto *old_st_ptr = st_ptr;
-    st_ptr = &TownList::get_instance().get_town(1).get_store(store_num);
+    auto &store = TownList::get_instance().get_town(TownId::OUTPOST).get_store(store_num);
     auto flag = false;
     if (store_num != StoreSaleType::HOME) {
         stack_force_notes = false;
@@ -170,21 +172,19 @@ bool combine_and_reorder_home(PlayerType *player_ptr, const StoreSaleType store_
     auto combined = true;
     while (combined) {
         combined = false;
-        for (auto i = st_ptr->stock_num - 1; i > 0; i--) {
-            auto &item = *st_ptr->stock[i];
-            if (!item.is_valid()) {
+        for (auto i = store.stock_num - 1; i > 0; i--) {
+            if (!store.stock[i]->is_valid()) {
                 continue;
             }
 
-            combined |= sweep_reorder_store_item(item, i);
+            combined |= sweep_reorder_store_item(store, i);
         }
 
         flag |= combined;
     }
 
-    flag |= exe_reorder_store_item(player_ptr);
+    flag |= exe_reorder_store_item(player_ptr, store);
 
-    st_ptr = old_st_ptr;
     if (store_num != StoreSaleType::HOME) {
         stack_force_notes = old_stack_force_notes;
         stack_force_costs = old_stack_force_costs;

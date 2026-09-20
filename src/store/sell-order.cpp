@@ -114,7 +114,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         selling_item.feeling = FEEL_NONE;
     }
 
-    if (!store_check_num(&selling_item, store_num)) {
+    if (!store_check_num(&selling_item, *st_ptr)) {
         msg_print(s_full);
         return;
     }
@@ -184,7 +184,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         }
     } else if (store_num == StoreSaleType::MUSEUM) {
         const auto museum_item_name = describe_flavor(player_ptr, selling_item, OD_NAME_ONLY);
-        if (-1 == store_check_num(&selling_item, store_num)) {
+        if (-1 == store_check_num(&selling_item, *st_ptr)) {
             msg_print(_("それと同じ品物は既に博物館にあるようです。", "The Museum already has one of those items."));
         } else {
             msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take back items which have been donated to the Museum!!"));
