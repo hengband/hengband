@@ -41,7 +41,7 @@
  */
 static void autopick_delayed_alter_aux(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 {
-    const auto &item = ref_item(player_ptr, i_idx);
+    const auto item = ref_item(player_ptr, i_idx);
     if (!item->is_valid() || item->marked.has_not(OmType::AUTODESTROY)) {
         return;
     }
