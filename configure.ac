@@ -127,6 +127,18 @@ AC_ARG_ENABLE([pch],
 enable_pch=no, enable_pch=yes)
 AM_CONDITIONAL([PCH], [test x$enable_pch = xyes])
 
+dnl assert.h / TL_ASSERT の有効・無効。
+dnl 既定は有効。出荷相当で消すときは --disable-assert。
+dnl AC_HEADER_ASSERT は autoconf.h に NDEBUG を書くだけなので、
+dnl stdafx.h が <tl/expected.hpp> を autoconf.h より先に読む経路でも
+dnl 効くよう、無効時はコマンドラインにも -DNDEBUG を足す。
+AC_HEADER_ASSERT
+AS_IF([test "x$ac_enable_assert" = xno],
+  [case " $CPPFLAGS $CXXFLAGS " in
+   *" -DNDEBUG "*) ;;
+   *) CPPFLAGS="$CPPFLAGS -DNDEBUG" ;;
+   esac])
+
 dnl Checks for libraries.
 dnl Replace `main' with a function in -lncurses:
 AC_CHECK_LIB(ncursesw, initscr, [

@@ -96,7 +96,7 @@ jobs:
       runner: ubuntu-26.04
       cxx: g++-16
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch --disable-japanese"
+      configure-opts: "--disable-pch --disable-japanese --disable-assert"
       distcheck: true
       use-ccache: true
 
