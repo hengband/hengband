@@ -141,7 +141,7 @@ static void switch_store_stock(PlayerType *player_ptr, const int i, const COMMAN
 {
     if (st_ptr->stock_num == 0) {
         shuffle_store(store_num);
-        store_maintenance(player_ptr, AngbandWorld::get_instance().get_town_index(), store_num, 10);
+        store_maintenance(player_ptr, *st_ptr, 10);
 
         store_top = 0;
         display_store_inventory(player_ptr, store_num);

@@ -98,7 +98,7 @@ void do_cmd_store(PlayerType *player_ptr)
     }
 
     if (maintain_num > 0) {
-        store_maintenance(player_ptr, world.get_town_index(), store_num, maintain_num);
+        store_maintenance(player_ptr, store, maintain_num);
         store.last_visit = world.game_turn;
     }
 
@@ -165,7 +165,7 @@ void do_cmd_store(PlayerType *player_ptr)
                 }
 
                 leave_store = true;
-            } else if (!store_check_num(&item_inventory, store_num)) {
+            } else if (!store_check_num(&item_inventory, store)) {
                 msg_print(_("ザックからアイテムがあふれそうなので、あわてて家から出た...", "Your pack is so full that you flee your home..."));
                 leave_store = true;
             } else {
