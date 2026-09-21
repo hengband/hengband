@@ -44,6 +44,7 @@ bool leave_store = false;
  * @brief 店舗処理コマンド選択のメインルーチン /
  * Process a command in a store
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store コマンドの対象となる店舗
  * @note
  * <pre>
  * Note that we must allow the use of a few "special" commands
@@ -52,8 +53,9 @@ bool leave_store = false;
  * but not in the stores, to prevent chaos.
  * </pre>
  */
-void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
+void store_process_command(PlayerType *player_ptr, Store &store)
 {
+    const auto store_num = store.get_sale_type();
     repeat_check();
     if (rogue_like_commands && (command_cmd == 'l')) {
         command_cmd = 'x';
@@ -68,12 +70,12 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
     case '-': {
         /* 日本語版追加 */
         /* 1 ページ戻るコマンド: 我が家のページ数が多いので重宝するはず By BUG */
-        if (st_ptr->stock_num <= store_bottom) {
+        if (store.stock_num <= store_bottom) {
             msg_print(_("これで全部です。", "Entire inventory is shown."));
         } else {
             store_top -= store_bottom;
             if (store_top < 0) {
-                store_top = ((st_ptr->stock_num - 1) / store_bottom) * store_bottom;
+                store_top = ((store.stock_num - 1) / store_bottom) * store_bottom;
             }
 
             if ((store_num == StoreSaleType::HOME) && !powerup_home) {
@@ -82,13 +84,13 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
                 }
             }
 
-            display_store_inventory(player_ptr, store_num);
+            display_store_inventory(player_ptr, store);
         }
 
         break;
     }
     case ' ': {
-        if (st_ptr->stock_num <= store_bottom) {
+        if (store.stock_num <= store_bottom) {
             msg_print(_("これで全部です。", "Entire inventory is shown."));
         } else {
             store_top += store_bottom;
@@ -98,30 +100,30 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
              * 我が家では 2 ページまでしか表示しない
              */
             auto inven_max = store_get_stock_max(store_num, powerup_home);
-            if (store_top >= st_ptr->stock_num || store_top >= inven_max) {
+            if (store_top >= store.stock_num || store_top >= inven_max) {
                 store_top = 0;
             }
 
-            display_store_inventory(player_ptr, store_num);
+            display_store_inventory(player_ptr, store);
         }
 
         break;
     }
     case KTRL('R'): {
         do_cmd_redraw(player_ptr);
-        display_store(player_ptr, store_num);
+        display_store(player_ptr, store);
         break;
     }
     case 'g': {
-        store_purchase(player_ptr, store_num);
+        store_purchase(player_ptr, store);
         break;
     }
     case 'd': {
-        store_sell(player_ptr, store_num);
+        store_sell(player_ptr, store);
         break;
     }
     case 'x': {
-        store_examine(player_ptr, store_num);
+        store_examine(player_ptr, store);
         break;
     }
     case '\r': {
@@ -193,7 +195,7 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
         world.set_town_index(old_town_num);
         do_cmd_player_status(player_ptr);
         world.set_town_index(inner_town_num);
-        display_store(player_ptr, store_num);
+        display_store(player_ptr, store);
         break;
     }
     case '!':
@@ -227,7 +229,7 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
         do_cmd_options(player_ptr);
         (void)combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
         do_cmd_redraw(player_ptr);
-        display_store(player_ptr, store_num);
+        display_store(player_ptr, store);
         break;
     }
     case ':': {
@@ -268,7 +270,7 @@ void store_process_command(PlayerType *player_ptr, StoreSaleType store_num)
     }
     default: {
         if ((store_num == StoreSaleType::MUSEUM) && (command_cmd == 'r')) {
-            museum_remove_object(player_ptr);
+            museum_remove_object(player_ptr, store);
         } else {
             msg_print(_("そのコマンドは店の中では使えません。", "That command does not work in stores."));
         }

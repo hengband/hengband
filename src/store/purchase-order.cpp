@@ -38,14 +38,13 @@
  * @brief プレイヤーが購入する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store 購入元の店舗
  * @param o_ptr オブジェクトの構造体参照ポインタ
- * @param price 最終価格を返す参照ポインタ
- * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
- * Return TRUE if purchase is NOT successful
+ * @return プレイヤーが購入するなら購入価格、購入しないならnullopt
  */
-static tl::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, ItemEntity *o_ptr)
+static tl::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, const Store &store, ItemEntity *o_ptr)
 {
-    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), *st_ptr, false);
+    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), store, false);
 
     price_ask *= o_ptr->number;
     const auto s = fmt::format(_("買値 ${} で買いますか？", "Do you buy for ${}? "), price_ask);
@@ -82,11 +81,12 @@ static tl::optional<short> show_store_select_item(const int i, StoreSaleType sto
 /*!
  * @brief 家のアイテムを取得する
  * @param player_ptr プレイヤー情報の参照ポインタ
+ * @param store 我が家の店舗
  * @param item_home 取得元オブジェクト
  * @param item_inventory 取得先オブジェクト(指定数量分)
  * @param i_idx 取得先インベントリ番号
  */
-static void take_item_from_home(PlayerType *player_ptr, ItemEntity &item_home, ItemEntity &item_inventory, short i_idx)
+static void take_item_from_home(PlayerType *player_ptr, Store &store, ItemEntity &item_home, ItemEntity &item_inventory, short i_idx)
 {
     const auto amt = item_inventory.number;
     distribute_charges(&item_home, &item_inventory, amt);
@@ -96,32 +96,32 @@ static void take_item_from_home(PlayerType *player_ptr, ItemEntity &item_home, I
     handle_stuff(player_ptr);
     msg_format(_("%s(%c)を取った。", "You have %s (%c)."), item_name.data(), index_to_label(item_new));
 
-    const auto stock_num = st_ptr->stock_num;
-    st_ptr->increase_item(i_idx, -amt);
-    st_ptr->optimize_item(i_idx);
+    const auto stock_num = store.stock_num;
+    store.increase_item(i_idx, -amt);
+    store.optimize_item(i_idx);
 
-    const auto combined_or_reordered = combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
-    if (stock_num == st_ptr->stock_num) {
+    const auto combined_or_reordered = combine_and_reorder_home(player_ptr, store);
+    if (stock_num == store.stock_num) {
         if (combined_or_reordered) {
-            display_store_inventory(player_ptr, StoreSaleType::HOME);
+            display_store_inventory(player_ptr, store);
             return;
         }
 
-        display_entry(player_ptr, i_idx, StoreSaleType::HOME);
+        display_entry(player_ptr, store, i_idx);
         return;
     }
 
-    if (st_ptr->stock_num == 0) {
+    if (store.stock_num == 0) {
         store_top = 0;
-    } else if (store_top >= st_ptr->stock_num) {
+    } else if (store_top >= store.stock_num) {
         store_top -= store_bottom;
     }
 
-    display_store_inventory(player_ptr, StoreSaleType::HOME);
+    display_store_inventory(player_ptr, store);
     chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
 }
 
-static void shuffle_store(StoreSaleType store_num)
+static void shuffle_store(Store &store)
 {
     if (!one_in_(STORE_SHUFFLE)) {
         msg_print(_("店主は新たな在庫を取り出した。", "The shopkeeper brings out some new stock."));
@@ -129,50 +129,52 @@ static void shuffle_store(StoreSaleType store_num)
     }
 
     msg_print(_("店主は引退した。", "The shopkeeper retires."));
-    store_shuffle(store_num);
+    store_shuffle(store.get_sale_type());
     prt("", 3, 0);
-    const auto &owner = st_ptr->get_owner();
+    const auto &owner = store.get_owner();
     put_str(format("%s (%s)", owner.owner_name, race_info[enum2i(owner.owner_race)].title.data()), 3, 10);
     const auto &terrains = TerrainList::get_instance();
     prt(format("%s (%d)", terrains.get_terrain(cur_store_feat).name.data(), owner.max_cost), 3, 50);
 }
 
-static void switch_store_stock(PlayerType *player_ptr, const int i, const COMMAND_CODE item, StoreSaleType store_num)
+static void switch_store_stock(PlayerType *player_ptr, Store &store, const int i, const COMMAND_CODE item)
 {
-    if (st_ptr->stock_num == 0) {
-        shuffle_store(store_num);
-        store_maintenance(player_ptr, *st_ptr, 10);
+    if (store.stock_num == 0) {
+        shuffle_store(store);
+        store_maintenance(player_ptr, store, 10);
 
         store_top = 0;
-        display_store_inventory(player_ptr, store_num);
+        display_store_inventory(player_ptr, store);
         return;
     }
 
-    if (st_ptr->stock_num != i) {
-        if (store_top >= st_ptr->stock_num) {
+    if (store.stock_num != i) {
+        if (store_top >= store.stock_num) {
             store_top -= store_bottom;
         }
 
-        display_store_inventory(player_ptr, store_num);
+        display_store_inventory(player_ptr, store);
         return;
     }
 
-    display_entry(player_ptr, item, store_num);
+    display_entry(player_ptr, store, item);
 }
 
 /*!
  * @brief 店からの購入処理のメインルーチン /
  * Buy an item from a store 			-RAK-
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store 購入元の店舗
  */
-void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
+void store_purchase(PlayerType *player_ptr, Store &store)
 {
+    const auto store_num = store.get_sale_type();
     if (store_num == StoreSaleType::MUSEUM) {
         msg_print(_("博物館から取り出すことはできません。", "Items cannot be taken out of the Museum."));
         return;
     }
 
-    if (st_ptr->stock_num <= 0) {
+    if (store.stock_num <= 0) {
         if (store_num == StoreSaleType::HOME) {
             msg_print(_("我が家には何も置いてありません。", "Your home is empty."));
         } else {
@@ -181,7 +183,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    int i = (st_ptr->stock_num - store_top);
+    int i = (store.stock_num - store_top);
     if (i > store_bottom) {
         i = store_bottom;
     }
@@ -192,7 +194,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     const short item_num = *item_num_opt + store_top;
-    auto &item_store = *st_ptr->stock[item_num];
+    auto &item_store = *store.stock[item_num];
     auto amt = 1;
     auto item = item_store.clone();
 
@@ -207,7 +209,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    const auto best = price_item(player_ptr, item.calc_price(), *st_ptr, false);
+    const auto best = price_item(player_ptr, item.calc_price(), store, false);
     if (item_store.number > 1) {
         if (store_num != StoreSaleType::HOME) {
             msg_format(_("一つにつき $%dです。", "That costs %d gold per item."), best);
@@ -233,7 +235,7 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     if (store_num == StoreSaleType::HOME) {
-        take_item_from_home(player_ptr, item_store, item, item_num);
+        take_item_from_home(player_ptr, store, item_store, item, item_num);
         return;
     }
 
@@ -246,8 +248,8 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
     msg_erase();
 
     const auto &world = AngbandWorld::get_instance();
-    auto res = prompt_to_buy(player_ptr, &item);
-    if (st_ptr->store_open >= world.game_turn) {
+    auto res = prompt_to_buy(player_ptr, store, &item);
+    if (store.store_open >= world.game_turn) {
         return;
     }
     if (!res) {
@@ -304,8 +306,8 @@ void store_purchase(PlayerType *player_ptr, StoreSaleType store_num)
         item_store.pval -= item.pval;
     }
 
-    i = st_ptr->stock_num;
-    st_ptr->increase_item(item_num, -amt);
-    st_ptr->optimize_item(item_num);
-    switch_store_stock(player_ptr, i, item_num, store_num);
+    i = store.stock_num;
+    store.increase_item(item_num, -amt);
+    store.optimize_item(item_num);
+    switch_store_stock(player_ptr, store, i, item_num);
 }

@@ -216,10 +216,13 @@ tl::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe_
 /*!
  * @brief 店のアイテムを調べるコマンドのメインルーチン /
  * Examine an item in a store			   -JDL-
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store 調べる店舗
  */
-void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
+void store_examine(PlayerType *player_ptr, const Store &store)
 {
-    if (st_ptr->stock_num <= 0) {
+    const auto store_num = store.get_sale_type();
+    if (store.stock_num <= 0) {
         if (store_num == StoreSaleType::HOME) {
             msg_print(_("我が家には何も置いてありません。", "Your home is empty."));
         } else if (store_num == StoreSaleType::MUSEUM) {
@@ -230,7 +233,7 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
         return;
     }
 
-    int i = (st_ptr->stock_num - store_top);
+    int i = (store.stock_num - store_top);
     if (i > store_bottom) {
         i = store_bottom;
     }
@@ -242,7 +245,7 @@ void store_examine(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     const auto item_num = *item_num_opt + store_top;
-    auto &item = *st_ptr->stock[item_num];
+    const auto &item = *store.stock[item_num];
     if (!item.is_fully_known()) {
         msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
         return;

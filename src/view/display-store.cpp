@@ -30,11 +30,12 @@ void store_prt_gold(int num_golds)
  * @brief 店の商品リストを再表示する /
  * Re-displays a single store entry
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param pos 表示行
+ * @param store 表示する店舗
+ * @param pos 表示する在庫の番号
  */
-void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
+void display_entry(PlayerType *player_ptr, const Store &store, int pos)
 {
-    const auto &item = *st_ptr->stock[pos];
+    const auto &item = *store.stock[pos];
     int i = (pos % store_bottom);
 
     /* Label it, clear the line --(-- */
@@ -52,6 +53,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
 
     /* Describe an item in the home */
     int maxwid = 75;
+    const auto store_num = store.get_sale_type();
     if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
         if (show_weights) {
             maxwid -= 10;
@@ -81,7 +83,7 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
         put_str(format("%3d.%1d", _(lb_to_kg_integer(wgt), wgt / 10), _(lb_to_kg_fraction(wgt), wgt % 10)), i + 6, _(60, 61));
     }
 
-    const auto price = price_item(player_ptr, item.calc_price(), *st_ptr, false);
+    const auto price = price_item(player_ptr, item.calc_price(), store, false);
     put_str(format("%9d  ", price), i + 6, 68);
 }
 
@@ -89,18 +91,20 @@ void display_entry(PlayerType *player_ptr, int pos, StoreSaleType store_num)
  * @brief 店の商品リストを表示する /
  * Displays a store's inventory -RAK-
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store 表示する店舗
  * @details
  * All prices are listed as "per individual object".  -BEN-
  */
-void display_store_inventory(PlayerType *player_ptr, StoreSaleType store_num)
+void display_store_inventory(PlayerType *player_ptr, const Store &store)
 {
+    const auto store_num = store.get_sale_type();
     int k;
     for (k = 0; k < store_bottom; k++) {
-        if (store_top + k >= st_ptr->stock_num) {
+        if (store_top + k >= store.stock_num) {
             break;
         }
 
-        display_entry(player_ptr, store_top + k, store_num);
+        display_entry(player_ptr, store, store_top + k);
     }
 
     for (int i = k; i < store_bottom + 1; i++) {
@@ -108,18 +112,18 @@ void display_store_inventory(PlayerType *player_ptr, StoreSaleType store_num)
     }
 
     put_str(_("          ", "        "), 5, _(20, 22));
-    if (st_ptr->stock_num > store_bottom) {
+    if (store.stock_num > store_bottom) {
         prt(_("-続く-", "-more-"), k + 6, 3);
         put_str(format(_("(%dページ)  ", "(Page %d)  "), store_top / store_bottom + 1), 5, _(20, 22));
     }
 
     if (store_num == StoreSaleType::HOME || store_num == StoreSaleType::MUSEUM) {
-        k = st_ptr->stock_size;
+        k = store.stock_size;
         if (store_num == StoreSaleType::HOME && !powerup_home) {
             k /= 10;
         }
 
-        put_str(format(_("アイテム数:  %4d/%4d", "Objects:  %4d/%4d"), st_ptr->stock_num, k), 19 + xtra_stock, _(27, 30));
+        put_str(format(_("アイテム数:  %4d/%4d", "Objects:  %4d/%4d"), store.stock_num, k), 19 + xtra_stock, _(27, 30));
     }
 }
 
@@ -127,10 +131,12 @@ void display_store_inventory(PlayerType *player_ptr, StoreSaleType store_num)
  * @brief 店舗情報全体を表示するメインルーチン /
  * Displays store (after clearing screen)		-RAK-
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store 表示する店舗
  * @details
  */
-void display_store(PlayerType *player_ptr, StoreSaleType store_num)
+void display_store(PlayerType *player_ptr, const Store &store)
 {
+    const auto store_num = store.get_sale_type();
     term_clear();
     if (store_num == StoreSaleType::HOME) {
         put_str(_("我が家", "Your Home"), 3, 31);
@@ -140,7 +146,7 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
         }
 
         store_prt_gold(player_ptr->au);
-        display_store_inventory(player_ptr, store_num);
+        display_store_inventory(player_ptr, store);
         return;
     }
 
@@ -152,12 +158,12 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
         }
 
         store_prt_gold(player_ptr->au);
-        display_store_inventory(player_ptr, store_num);
+        display_store_inventory(player_ptr, store);
         return;
     }
 
     const auto &store_name = TerrainList::get_instance().get_terrain(cur_store_feat).name;
-    const auto &owner = st_ptr->get_owner();
+    const auto &owner = store.get_owner();
     const auto race_name = race_info[enum2i(owner.owner_race)].title.data();
     put_str(format("%s (%s)", owner.owner_name, race_name), 3, 10);
 
@@ -170,5 +176,5 @@ void display_store(PlayerType *player_ptr, StoreSaleType store_num)
 
     put_str(_(" 価格", "Price"), 5, 72);
     store_prt_gold(player_ptr->au);
-    display_store_inventory(player_ptr, store_num);
+    display_store_inventory(player_ptr, store);
 }

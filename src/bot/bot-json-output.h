@@ -5,7 +5,7 @@
 #include <string_view>
 
 class PlayerType;
-enum class StoreSaleType;
+class Store;
 
 inline constexpr auto BOT_JSON_PROTOCOL_VERSION = 2; //!< JSONスナップショットの互換性を壊す変更で更新する
 
@@ -36,7 +36,7 @@ std::string to_json_utf8(std::string_view str);
 nlohmann::json make_message_history_json(int count);
 nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map = true);
 void output_bot_json_snapshot(PlayerType *player_ptr);
-void output_bot_json_store_snapshot(PlayerType *player_ptr, StoreSaleType store_num);
+void output_bot_json_store_snapshot(PlayerType *player_ptr, const Store &store);
 void output_bot_json_character_snapshot(PlayerType *player_ptr);
 void output_bot_json_knowledge_snapshot(PlayerType *player_ptr, BotKnowledgeCategory category);
 void output_bot_json_look_snapshot(PlayerType *player_ptr);
