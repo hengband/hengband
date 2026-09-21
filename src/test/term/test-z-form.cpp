@@ -13,6 +13,13 @@
  * EUC-JPへ、MSVCは /execution-charset:shift-jis でShift_JISへ) が、英語版では変換されない。
  * ソースに日本語をそのまま書くと、ビルド構成によってバイト列が変わってしまう。
  *
+ * %s の幅と精度はバイト単位で数える。snprintf を fmt::sprintf に置き換えると、文字列をUTF-8として
+ * 扱うようになり結果が変わる。幅はUTF-8として求めた表示幅で数えるようになる。精度は const char * を
+ * 渡す限りバイト単位のままだが、std::string などを渡すとコードポイント単位で数えるようになる。
+ * これを検出できるよう、UTF-8としても正しいバイト列になる2バイト文字の並び (UTF8_LOOKALIKE) を
+ * 使ったテストを用意している。通常の漢字のバイト列の多くはUTF-8としては不正で、fmt は不正な
+ * バイトを1バイトずつ数えるため、バイト単位と結果が変わらず検出できない。
+ *
  * format() は内部で1024バイトのバッファに書き込み、溢れたらバッファを広げて最初から
  * やり直す。1023バイト以上を出力するテストは、このやり直しの経路を通る。
  */
@@ -88,6 +95,17 @@ constexpr std::string_view DAME_SO = "\x83\x5c"; //!< ソ (後半バイトが 0x
 constexpr std::string_view DAME_KANA_A = "\x83\x41"; //!< ア (後半バイトが 0x41、ASCIIの 'A')
 constexpr std::string_view DAME_KANA_DI = "\x83\x61"; //!< ヂ (後半バイトが 0x61、ASCIIの 'a')
 constexpr std::string_view DAME_KANA_TA = "\x83\x5e"; //!< タ (後半バイトが 0x5e、ASCIIの '^')
+#endif
+
+// UTF-8としても正しいバイト列になる2バイト文字の並び。バイト数とコードポイント数が異なる
+#if defined(JP) && defined(SJIS)
+constexpr std::string_view UTF8_LOOKALIKE = "\xe0\xa0\x81\xe3\x82\x81"; //!< 燿√ａ (UTF-8では U+0801 U+3081 の2コードポイント)
+constexpr std::string_view UTF8_LOOKALIKE_1ST = "\xe0\xa0"; //!< 燿
+constexpr std::string_view UTF8_LOOKALIKE_2ND = "\x81\xe3"; //!< √
+#elif defined(JP)
+constexpr std::string_view UTF8_LOOKALIKE = "\xc2\xa3\xcd\xbf"; //!< 贈与 (UTF-8では U+00A3 U+037F の2コードポイント)
+constexpr std::string_view UTF8_LOOKALIKE_1ST = "\xc2\xa3"; //!< 贈
+constexpr std::string_view UTF8_LOOKALIKE_2ND = "\xcd\xbf"; //!< 与
 #endif
 
 }
@@ -342,6 +360,19 @@ TEST_CASE("format counts width and precision of %s in bytes for multibyte charac
     CHECK(format("%-6s|", kanji.data()) == cat(kanji, "  |"));
     CHECK(format("%.4s|", kanji.data()) == cat(kanji, "|"));
     CHECK(format("%.2s|", kanji.data()) == cat(KANJI_KAN, "|"));
+}
+
+TEST_CASE("format counts width and precision of %s in bytes even for a byte sequence valid as UTF-8")
+{
+    const auto *str = UTF8_LOOKALIKE.data();
+    const auto padding = std::string(8 - UTF8_LOOKALIKE.size(), ' ');
+    CHECK(format("%8s|", str) == cat(padding, UTF8_LOOKALIKE, "|"));
+    CHECK(format("%-8s|", str) == cat(UTF8_LOOKALIKE, padding, "|"));
+    CHECK(format("%.2s|", str) == cat(UTF8_LOOKALIKE_1ST, "|"));
+    CHECK(format("%.3s|", str) == cat(UTF8_LOOKALIKE_1ST, " |"));
+    CHECK(format("%.4s|", str) == cat(UTF8_LOOKALIKE_1ST, UTF8_LOOKALIKE_2ND, "|"));
+    CHECK(format("%.*s|", 3, str) == cat(UTF8_LOOKALIKE_1ST, " |"));
+    CHECK(format("%s^", str) == UTF8_LOOKALIKE);
 }
 
 TEST_CASE("format replaces a multibyte character split by the precision of %s with a space")
