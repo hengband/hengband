@@ -359,7 +359,7 @@ terrain_bits:
 
 #### Python クライアントが対応すべきこと
 
-1. `protocol_version` が `3` のスナップショットを受け付ける（`2` は拒否）。
+1. `protocol_version` が `3` のスナップショットを受け付ける（`2` は拒否）。削除したキーを `get(key, 0)` のように既定値付きで読んでいると、例外にならず `0` として誤読する（燃料0の松明・技能0等）ので、既定値を外して欠落を検出すること。
 2. `inventory[]` / `equipment[]` / `store.items[]` / `knowledge` の品の `timeout` を読む箇所を `charging`（真偽）と `charging_count`（ロッドの本数）へ置き換える。
 3. 同じく `fuel` を読む箇所（松明・ランタンの残量判定、燃料0の松明の除外）を `light_turns` へ置き換える。長寿命のエゴは2倍の値になり、寿命を表記しない光源（アーティファクト等）はキー自体が無い。
 4. `player.skills.*` を読む箇所を `player.skill_ratings.<key>.rating`（数値が要る判定は `value`。ただし `show_actual_value` 無効時は無い）へ置き換える。`two_weapon` / `shield` の熟練は `~f` の `knowledge.skills[]` から得る（数値は `show_actual_value` 有効時のみ）。
@@ -367,7 +367,7 @@ terrain_bits:
 6. `character.skills.*` を `character.skill_ratings.*` へ、`character.alignment` を `alignment_label` / `alignment_value` へ置き換える。
 7. 所持品等の `weapon_proficiency` が常にある前提をやめ、`weapon_proficiency_rank` を使う。
 8. `knowledge` の `weapon_exp` / `skill_exp` / `spell_exp` の `exp` / `max`、`virtues[].value` が欠ける・`null` になる場合に対応する。
-9. `grid_map.palette` の2番目の値を不透明な署名の一部として扱っている場合はそのままでよい。`0` 固定を前提にしている箇所があれば照明状態として扱う。
+9. `grid_map.palette` の2番目の値を `CAVE_*` のビット列（`mark` / `cave_known` / `lite` / `view` …）として解読している箇所をやめ、照明状態（`0` / `1` / `2`）として読む。版2までは常に `0` だったので解読結果は全て偽だったが、版3のまま解読すると照らされた床が `mark`、暗い地形が `cave_known` と誤読される。
 10. JSONLの `messages` が1スナップショットで33件以上になり得る。
 11. 新しい `type`（`spell_list` / `power_list` / `lore`）と `knowledge` の分類（`monsters` / `kill_count`）を、未対応なら無視できるようにする（`player_turn` と取り違えない）。
 
