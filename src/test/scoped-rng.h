@@ -21,7 +21,7 @@ constexpr uint32_t DEFAULT_RNG_SEED = 12345;
  */
 [[nodiscard]] inline auto scoped_rng(uint32_t seed = DEFAULT_RNG_SEED)
 {
-    auto rng_backup = AngbandSystem::get_instance().get_rng();
+    xso::rng32 rng_backup = AngbandSystem::get_instance().get_rng();
     Rand_state_init(seed);
     return util::make_finalizer([rng_backup] { AngbandSystem::get_instance().set_rng(rng_backup); });
 }

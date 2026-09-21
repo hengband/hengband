@@ -102,7 +102,7 @@ public:
 
     private:
         //! 現在イテレータが指している列挙値の基底型における整数値
-        std::underlying_type_t<EnumType> index;
+        std::underlying_type_t<EnumType> index{};
     };
 
     using value_type = EnumType;
@@ -165,8 +165,8 @@ public:
     }
 
 private:
-    EnumType begin_val;
-    EnumType end_val;
+    EnumType begin_val{};
+    EnumType end_val{};
 };
 
 /*!
@@ -249,7 +249,7 @@ public:
     }
 
 private:
-    EnumRange<EnumType> range;
+    EnumRange<EnumType> range{ EnumType{}, EnumType{} };
 };
 
 namespace ranges {
