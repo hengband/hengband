@@ -47,9 +47,6 @@ size_t inner_town_num = 0;
 /* We store the current "store feat" here so everyone can access it */
 short cur_store_feat;
 
-/* Enable "increments" */
-bool allow_inc = false;
-
 /*!
  * @brief 店舗の最大スロット数を返す
  * @param store_idx 店舗ID

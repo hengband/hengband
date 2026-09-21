@@ -37,14 +37,12 @@
 #include "window/display-sub-windows.h"
 #include "world/world.h"
 
-/* Set this to leave the store */
-bool leave_store = false;
-
 /*!
  * @brief 店舗処理コマンド選択のメインルーチン /
  * Process a command in a store
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param store コマンドの対象となる店舗
+ * @return 店から出るならtrue
  * @note
  * <pre>
  * Note that we must allow the use of a few "special" commands
@@ -53,7 +51,7 @@ bool leave_store = false;
  * but not in the stores, to prevent chaos.
  * </pre>
  */
-void store_process_command(PlayerType *player_ptr, Store &store)
+bool store_process_command(PlayerType *player_ptr, Store &store)
 {
     const auto store_num = store.get_sale_type();
     repeat_check();
@@ -64,8 +62,7 @@ void store_process_command(PlayerType *player_ptr, Store &store)
     auto &world = AngbandWorld::get_instance();
     switch (command_cmd) {
     case ESCAPE: {
-        leave_store = true;
-        break;
+        return true;
     }
     case '-': {
         /* 日本語版追加 */
@@ -278,4 +275,6 @@ void store_process_command(PlayerType *player_ptr, Store &store)
         break;
     }
     }
+
+    return false;
 }

@@ -20,7 +20,6 @@ extern size_t old_town_num;
 extern size_t inner_town_num;
 
 extern short cur_store_feat;
-extern bool allow_inc;
 
 class PlayerType;
 int16_t store_get_stock_max(StoreSaleType sst, bool powerup = true);

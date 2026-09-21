@@ -113,9 +113,9 @@ void do_cmd_store(PlayerType *player_ptr)
     store_top = 0;
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
     display_store(player_ptr, store);
-    leave_store = false;
+    auto should_leave = false;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    while (!leave_store) {
+    while (!should_leave) {
         prt("", 1, 0);
         clear_from(20 + xtra_stock);
         prt(_(" ESC) 建物から出る", " ESC) Exit from Building."), 21 + xtra_stock, 0);
@@ -148,7 +148,7 @@ void do_cmd_store(PlayerType *player_ptr)
         prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
         output_bot_json_store_snapshot(player_ptr, store);
         InputKeyRequestor(player_ptr, true).request_command();
-        store_process_command(player_ptr, store);
+        should_leave = store_process_command(player_ptr, store);
 
         const auto should_redraw_store_inventory = rfu.has(StatusRecalculatingFlag::BONUS);
         world.character_icky_depth = 1;
@@ -163,10 +163,10 @@ void do_cmd_store(PlayerType *player_ptr)
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて店から出た...", "Your pack is so full that you flee the store..."));
                 }
 
-                leave_store = true;
+                should_leave = true;
             } else if (!store_check_num(&item_inventory, store)) {
                 msg_print(_("ザックからアイテムがあふれそうなので、あわてて家から出た...", "Your pack is so full that you flee your home..."));
-                leave_store = true;
+                should_leave = true;
             } else {
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
                 auto item = item_inventory.clone();
@@ -187,7 +187,7 @@ void do_cmd_store(PlayerType *player_ptr)
         }
 
         if (store.store_open >= world.game_turn) {
-            leave_store = true;
+            should_leave = true;
         }
     }
 
