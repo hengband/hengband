@@ -17,6 +17,7 @@ extern bool msg_flag;
 extern COMMAND_CODE now_message;
 
 int32_t message_num();
+uint64_t message_sequence();
 std::shared_ptr<const std::string> message_str(int age);
 void message_add(std::string_view msg);
 void msg_erase();

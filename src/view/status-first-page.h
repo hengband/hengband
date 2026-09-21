@@ -50,8 +50,43 @@
 #define ENTRY_EXP_ANDR 43
 #define ENTRY_EXP_TO_ADV_ANDR 44
 
+#include "system/h-type.h"
+#include <string>
+#include <utility>
+#include <vector>
+
+/*!
+ * @brief キャラクター画面の技能評価1行分の元値
+ */
+struct SkillRatingSource {
+    int entry; //!< 表示項目ID (ENTRY_SKILL_*)
+    int value; //!< 評価する値 (表示オプション show_actual_value が有効なら数値も表示される)
+    int divisor; //!< 評価の基準比
+};
+
+constexpr auto SKILL_RATING_MAX = 9;
+
+/*!
+ * @brief キャラクター画面の技能評価の段階
+ */
+enum class SkillRating {
+    VERY_BAD,
+    BAD,
+    POOR,
+    FAIR,
+    GOOD,
+    VERY_GOOD,
+    EXCELLENT,
+    SUPERB,
+    HEROIC,
+    LEGENDARY,
+};
+
 class PlayerType;
 class ItemEntity;
+std::pair<SkillRating, int> classify_skill_rating(int x, int y);
+std::pair<std::string, TERM_COLOR> describe_skill_rating(int x, int y);
+std::vector<SkillRatingSource> calc_skill_rating_sources(PlayerType *player_ptr);
 void calc_player_shot_params(PlayerType *player_ptr, ItemEntity *o_ptr, int *shots, int *shot_frac);
 void calc_player_two_hands(PlayerType *player_ptr, int *damage, int *to_h);
 void display_player_various(PlayerType *player_ptr);

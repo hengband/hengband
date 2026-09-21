@@ -17,10 +17,15 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
     auto &terrains = TerrainList::get_instance();
     auto &world = AngbandWorld::get_instance();
     const auto old_size = terrains.size();
-    const auto restore = util::make_finalizer([&terrains, &world, old_size, wild = world.is_wild_mode(), hidden = view_hidden_walls] {
+    const auto restore = util::make_finalizer([&terrains, &world, old_size, wild = world.is_wild_mode(), hidden = view_hidden_walls,
+                                                  special = view_special_lite, yellow = view_yellow_lite, bright = view_bright_lite, granite = view_granite_lite] {
         terrains.resize(old_size);
         world.set_wild_mode(wild);
         view_hidden_walls = hidden;
+        view_special_lite = special;
+        view_yellow_lite = yellow;
+        view_bright_lite = bright;
+        view_granite_lite = granite;
     });
     terrains.resize(old_size + 2);
     const auto floor_id = static_cast<short>(old_size);
@@ -105,5 +110,31 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
             floor.get_grid(neighbor).feat = wall_id;
         }
         CHECK_FALSE(is_map_terrain_visible(player, pos));
+    }
+    SUBCASE("Terrain lighting follows the map's lit / torch-lit / dark variants")
+    {
+        view_special_lite = true;
+        view_yellow_lite = true;
+        view_bright_lite = true;
+        view_granite_lite = true;
+        grid.info = CAVE_MARK | CAVE_VIEW | CAVE_GLOW;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
+        grid.info |= CAVE_LITE;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_LITE);
+        view_yellow_lite = false;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
+        view_yellow_lite = true;
+        grid.info = CAVE_MARK | CAVE_GLOW;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
+        view_bright_lite = false;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
+        view_special_lite = false;
+        grid.info = CAVE_MARK;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
+        view_special_lite = true;
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_DARK);
+        grid.info = 0;
+        CHECK_FALSE(is_map_terrain_visible(player, pos));
+        CHECK(decide_map_terrain_lighting(player, pos) == F_LIT_STANDARD);
     }
 }

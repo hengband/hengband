@@ -30,19 +30,6 @@
 #include "world/world.h"
 
 /*!
- * @brief 32ビット変数配列の指定位置のビットフラグを1にする。
- * @param FLG フラグ位置(ビット)
- */
-#define ADD_BAR_FLAG(FLG) (bar_flags[FLG / 32] |= (1UL << (FLG % 32)))
-
-/*!
- * @brief 32ビット変数配列の指定位置のビットフラグが1かどうかを返す。
- * @param FLG フラグ位置(ビット)
- * @return 1ならば0以外を返す
- */
-#define IS_BAR_FLAG(FLG) (bar_flags[FLG / 32] & (1UL << (FLG % 32)))
-
-/*!
  * @brief プレイヤー能力値を描画する / Print character stat in given row, column
  * @param stat 描画するステータスのID
  */
@@ -147,6 +134,17 @@ void print_hunger(PlayerType *player_ptr)
  */
 void print_state(PlayerType *player_ptr)
 {
+    const auto &[text, attr] = describe_player_state(player_ptr);
+    c_put_str(attr, text, ROW_STATE, COL_STATE);
+}
+
+/*!
+ * @brief 行動状態欄に表示する文字列と色を求める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 表示文字列 (5桁に整形済み) と表示色
+ */
+std::pair<std::string, TERM_COLOR> describe_player_state(PlayerType *player_ptr)
+{
     TERM_COLOR attr = TERM_WHITE;
     std::string text;
     if (command_rep) {
@@ -156,8 +154,7 @@ void print_state(PlayerType *player_ptr)
             text = format("  %2d", command_rep);
         }
 
-        c_put_str(attr, format("%5.5s", text.data()), ROW_STATE, COL_STATE);
-        return;
+        return { format("%5.5s", text.data()), attr };
     }
 
     switch (player_ptr->action) {
@@ -238,7 +235,7 @@ void print_state(PlayerType *player_ptr)
     }
     }
 
-    c_put_str(attr, format("%5.5s", text.data()), ROW_STATE, COL_STATE);
+    return { format("%5.5s", text.data()), attr };
 }
 
 /*!
@@ -250,7 +247,17 @@ void print_speed(PlayerType *player_ptr)
     const auto &[wid, hgt] = term_get_size();
     auto col_speed = wid + COL_SPEED;
     auto row_speed = hgt + ROW_SPEED;
+    const auto &[buf, attr] = describe_player_speed(player_ptr);
+    c_put_str(attr, format("%-9s", buf.data()), row_speed, col_speed);
+}
 
+/*!
+ * @brief 速度欄に表示する文字列と色を求める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 表示文字列 (整形前) と表示色
+ */
+std::pair<std::string, TERM_COLOR> describe_player_speed(PlayerType *player_ptr)
+{
     const auto speed = player_ptr->pspeed - STANDARD_SPEED;
     const auto &floor = *player_ptr->current_floor_ptr;
     bool is_player_fast = is_fast(player_ptr);
@@ -298,7 +305,7 @@ void print_speed(PlayerType *player_ptr)
         buf = _("乗馬中", "Riding");
     }
 
-    c_put_str(attr, format("%-9s", buf.data()), row_speed, col_speed);
+    return { buf, attr };
 }
 
 /*!
@@ -345,9 +352,9 @@ void print_imitation(PlayerType *player_ptr)
 /*!
  * @brief 画面下部に表示すべき呪術の呪文をリストアップする
  * @param player_ptr プレイヤーへの参照ポインタ
- * @bar_flags 表示可否を決めるためのフラグ群
+ * @param bar_flags 表示可否を決めるためのフラグ群
  */
-static void add_hex_status_flags(PlayerType *player_ptr, BIT_FLAGS *bar_flags)
+static void add_hex_status_flags(PlayerType *player_ptr, StatusBarFlags &bar_flags)
 {
     if (!PlayerRealm(player_ptr).is_realm_hex()) {
         return;
@@ -355,80 +362,337 @@ static void add_hex_status_flags(PlayerType *player_ptr, BIT_FLAGS *bar_flags)
 
     SpellHex spell_hex(player_ptr);
     if (spell_hex.is_spelling_specific(HEX_BLESS)) {
-        ADD_BAR_FLAG(BAR_BLESSED);
+        bar_flags.set(BAR_BLESSED);
     }
 
     if (spell_hex.is_spelling_specific(HEX_DEMON_AURA)) {
-        ADD_BAR_FLAG(BAR_SHFIRE);
-        ADD_BAR_FLAG(BAR_REGENERATION);
+        bar_flags.set(BAR_SHFIRE);
+        bar_flags.set(BAR_REGENERATION);
     }
 
     if (spell_hex.is_spelling_specific(HEX_XTRA_MIGHT)) {
-        ADD_BAR_FLAG(BAR_MIGHT);
+        bar_flags.set(BAR_MIGHT);
     }
 
     if (spell_hex.is_spelling_specific(HEX_DETECT_EVIL)) {
-        ADD_BAR_FLAG(BAR_ESP_EVIL);
+        bar_flags.set(BAR_ESP_EVIL);
     }
 
     if (spell_hex.is_spelling_specific(HEX_ICE_ARMOR)) {
-        ADD_BAR_FLAG(BAR_SHCOLD);
+        bar_flags.set(BAR_SHCOLD);
     }
 
     if (spell_hex.is_spelling_specific(HEX_RUNESWORD)) {
-        ADD_BAR_FLAG(BAR_RUNESWORD);
+        bar_flags.set(BAR_RUNESWORD);
     }
 
     if (spell_hex.is_spelling_specific(HEX_BUILDING)) {
-        ADD_BAR_FLAG(BAR_BUILD);
+        bar_flags.set(BAR_BUILD);
     }
 
     if (spell_hex.is_spelling_specific(HEX_ANTI_TELE)) {
-        ADD_BAR_FLAG(BAR_ANTITELE);
+        bar_flags.set(BAR_ANTITELE);
     }
 
     if (spell_hex.is_spelling_specific(HEX_SHOCK_CLOAK)) {
-        ADD_BAR_FLAG(BAR_SHELEC);
+        bar_flags.set(BAR_SHELEC);
     }
 
     if (spell_hex.is_spelling_specific(HEX_SHADOW_CLOAK)) {
-        ADD_BAR_FLAG(BAR_SHSHADOW);
+        bar_flags.set(BAR_SHSHADOW);
     }
 
     if (spell_hex.is_spelling_specific(HEX_CONFUSION)) {
-        ADD_BAR_FLAG(BAR_ATTKCONF);
+        bar_flags.set(BAR_ATTKCONF);
     }
 
     if (spell_hex.is_spelling_specific(HEX_EYE_FOR_EYE)) {
-        ADD_BAR_FLAG(BAR_EYEEYE);
+        bar_flags.set(BAR_EYEEYE);
     }
 
     if (spell_hex.is_spelling_specific(HEX_ANTI_MULTI)) {
-        ADD_BAR_FLAG(BAR_ANTIMULTI);
+        bar_flags.set(BAR_ANTIMULTI);
     }
 
     if (spell_hex.is_spelling_specific(HEX_VAMP_BLADE)) {
-        ADD_BAR_FLAG(BAR_VAMPILIC);
+        bar_flags.set(BAR_VAMPILIC);
     }
 
     if (spell_hex.is_spelling_specific(HEX_ANTI_MAGIC)) {
-        ADD_BAR_FLAG(BAR_ANTIMAGIC);
+        bar_flags.set(BAR_ANTIMAGIC);
     }
 
     if (spell_hex.is_spelling_specific(HEX_CURE_LIGHT) || spell_hex.is_spelling_specific(HEX_CURE_SERIOUS) || spell_hex.is_spelling_specific(HEX_CURE_CRITICAL)) {
-        ADD_BAR_FLAG(BAR_CURE);
+        bar_flags.set(BAR_CURE);
     }
 
     if (spell_hex.get_revenge_turn() > 0) {
         auto revenge_type = spell_hex.get_revenge_type();
         if (revenge_type == SpellHexRevengeType::PATIENCE) {
-            ADD_BAR_FLAG(BAR_PATIENCE);
+            bar_flags.set(BAR_PATIENCE);
         }
 
         if (revenge_type == SpellHexRevengeType::REVENGE) {
-            ADD_BAR_FLAG(BAR_REVENGE);
+            bar_flags.set(BAR_REVENGE);
         }
     }
+}
+
+/*!
+ * @brief 下部の状態表示に出す項目を集める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 表示する項目のフラグ群 (添字は bar_definition_type)
+ * @details 画面の状態表示とボット向けJSON出力が同じ判定を共有するために分けてある。
+ */
+StatusBarFlags collect_status_bar_flags(PlayerType *player_ptr)
+{
+    StatusBarFlags bar_flags;
+    auto effects = player_ptr->effects();
+    if (player_ptr->tsuyoshi) {
+        bar_flags.set(BAR_TSUYOSHI);
+    }
+
+    if (effects->hallucination().is_active()) {
+        bar_flags.set(BAR_HALLUCINATION);
+    }
+
+    if (player_ptr->effects()->blindness().is_active()) {
+        bar_flags.set(BAR_BLINDNESS);
+    }
+
+    if (effects->paralysis().is_active()) {
+        bar_flags.set(BAR_PARALYZE);
+    }
+
+    if (effects->confusion().is_active()) {
+        bar_flags.set(BAR_CONFUSE);
+    }
+
+    if (effects->poison().is_active()) {
+        bar_flags.set(BAR_POISONED);
+    }
+
+    if (player_ptr->tim_invis) {
+        bar_flags.set(BAR_SENSEUNSEEN);
+    }
+
+    auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
+    if (sniper_data && (sniper_data->concent >= CONCENT_RADAR_THRESHOLD)) {
+        bar_flags.set(BAR_SENSEUNSEEN);
+        bar_flags.set(BAR_NIGHTSIGHT);
+    }
+
+    if (is_time_limit_esp(player_ptr)) {
+        bar_flags.set(BAR_TELEPATHY);
+    }
+
+    if (player_ptr->tim_regen) {
+        bar_flags.set(BAR_REGENERATION);
+    }
+
+    if (player_ptr->tim_infra) {
+        bar_flags.set(BAR_INFRAVISION);
+    }
+
+    if (effects->protection().is_active()) {
+        bar_flags.set(BAR_PROTEVIL);
+    }
+
+    if (is_invuln(player_ptr)) {
+        bar_flags.set(BAR_INVULN);
+    }
+
+    if (player_ptr->wraith_form) {
+        bar_flags.set(BAR_WRAITH);
+    }
+
+    if (player_ptr->tim_pass_wall) {
+        bar_flags.set(BAR_PASSWALL);
+    }
+
+    if (player_ptr->tim_reflect) {
+        bar_flags.set(BAR_REFLECTION);
+    }
+
+    if (is_hero(player_ptr)) {
+        bar_flags.set(BAR_HEROISM);
+    }
+
+    if (is_shero(player_ptr)) {
+        bar_flags.set(BAR_BERSERK);
+    }
+
+    if (is_blessed(player_ptr)) {
+        bar_flags.set(BAR_BLESSED);
+    }
+
+    if (player_ptr->magicdef) {
+        bar_flags.set(BAR_MAGICDEFENSE);
+    }
+
+    if (player_ptr->tsubureru) {
+        bar_flags.set(BAR_EXPAND);
+    }
+
+    if (player_ptr->shield) {
+        bar_flags.set(BAR_STONESKIN);
+    }
+
+    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
+    if (ninja_data && ninja_data->kawarimi) {
+        bar_flags.set(BAR_KAWARIMI);
+    }
+
+    if (player_ptr->special_defense & DEFENSE_ACID) {
+        bar_flags.set(BAR_IMMACID);
+    }
+
+    if (is_oppose_acid(player_ptr)) {
+        bar_flags.set(BAR_RESACID);
+    }
+
+    if (player_ptr->special_defense & DEFENSE_ELEC) {
+        bar_flags.set(BAR_IMMELEC);
+    }
+
+    if (is_oppose_elec(player_ptr)) {
+        bar_flags.set(BAR_RESELEC);
+    }
+
+    if (player_ptr->special_defense & DEFENSE_FIRE) {
+        bar_flags.set(BAR_IMMFIRE);
+    }
+
+    if (is_oppose_fire(player_ptr)) {
+        bar_flags.set(BAR_RESFIRE);
+    }
+
+    if (player_ptr->special_defense & DEFENSE_COLD) {
+        bar_flags.set(BAR_IMMCOLD);
+    }
+
+    if (is_oppose_cold(player_ptr)) {
+        bar_flags.set(BAR_RESCOLD);
+    }
+
+    if (is_oppose_pois(player_ptr)) {
+        bar_flags.set(BAR_RESPOIS);
+    }
+
+    if (player_ptr->word_recall) {
+        bar_flags.set(BAR_RECALL);
+    }
+
+    if (player_ptr->alter_reality) {
+        bar_flags.set(BAR_ALTER);
+    }
+
+    if (effects->fear().is_active()) {
+        bar_flags.set(BAR_AFRAID);
+    }
+
+    if (player_ptr->tim_res_time) {
+        bar_flags.set(BAR_RESTIME);
+    }
+
+    if (player_ptr->multishadow) {
+        bar_flags.set(BAR_MULTISHADOW);
+    }
+
+    if (player_ptr->special_attack & ATTACK_CONFUSE) {
+        bar_flags.set(BAR_ATTKCONF);
+    }
+
+    if (player_ptr->resist_magic) {
+        bar_flags.set(BAR_REGMAGIC);
+    }
+
+    if (player_ptr->ult_res) {
+        bar_flags.set(BAR_ULTIMATE);
+    }
+
+    if (player_ptr->tim_levitation) {
+        bar_flags.set(BAR_LEVITATE);
+    }
+
+    if (player_ptr->tim_res_nether) {
+        bar_flags.set(BAR_RESNETH);
+    }
+
+    if (player_ptr->dustrobe) {
+        bar_flags.set(BAR_DUSTROBE);
+    }
+
+    if (player_ptr->special_attack & ATTACK_FIRE) {
+        bar_flags.set(BAR_ATTKFIRE);
+    }
+
+    if (player_ptr->special_attack & ATTACK_COLD) {
+        bar_flags.set(BAR_ATTKCOLD);
+    }
+
+    if (player_ptr->special_attack & ATTACK_ELEC) {
+        bar_flags.set(BAR_ATTKELEC);
+    }
+
+    if (player_ptr->special_attack & ATTACK_ACID) {
+        bar_flags.set(BAR_ATTKACID);
+    }
+
+    if (player_ptr->special_attack & ATTACK_POIS) {
+        bar_flags.set(BAR_ATTKPOIS);
+    }
+
+    if (ninja_data && ninja_data->s_stealth) {
+        bar_flags.set(BAR_SUPERSTEALTH);
+    }
+
+    if (player_ptr->tim_sh_fire) {
+        bar_flags.set(BAR_SHFIRE);
+    }
+
+    if (is_time_limit_stealth(player_ptr)) {
+        bar_flags.set(BAR_STEALTH);
+    }
+
+    if (player_ptr->tim_sh_touki) {
+        bar_flags.set(BAR_TOUKI);
+    }
+
+    if (player_ptr->tim_sh_holy) {
+        bar_flags.set(BAR_SHHOLY);
+    }
+
+    if (player_ptr->tim_eyeeye) {
+        bar_flags.set(BAR_EYEEYE);
+    }
+
+    if (player_ptr->tim_res_lite) {
+        bar_flags.set(BAR_RESLITE);
+    }
+
+    if (player_ptr->tim_res_dark) {
+        bar_flags.set(BAR_RESDARK);
+    }
+
+    if (player_ptr->tim_res_fear) {
+        bar_flags.set(BAR_RESFEAR);
+    }
+
+    if (player_ptr->tim_emission) {
+        bar_flags.set(BAR_EMISSION);
+    }
+
+    if (player_ptr->tim_exorcism) {
+        bar_flags.set(BAR_EXORCISM);
+    }
+
+    if (player_ptr->tim_imm_dark) {
+        bar_flags.set(BAR_IMMDARK);
+    }
+
+    add_hex_status_flags(player_ptr, bar_flags);
+    return bar_flags;
 }
 
 /*!
@@ -440,255 +704,10 @@ void print_status(PlayerType *player_ptr)
     const auto row_statbar = hgt + ROW_STATBAR;
     const auto max_col_statbar = wid + MAX_COL_STATBAR;
     term_erase(0, row_statbar, max_col_statbar);
-    BIT_FLAGS bar_flags[3]{};
-    auto effects = player_ptr->effects();
-    if (player_ptr->tsuyoshi) {
-        ADD_BAR_FLAG(BAR_TSUYOSHI);
-    }
-
-    if (effects->hallucination().is_active()) {
-        ADD_BAR_FLAG(BAR_HALLUCINATION);
-    }
-
-    if (player_ptr->effects()->blindness().is_active()) {
-        ADD_BAR_FLAG(BAR_BLINDNESS);
-    }
-
-    if (effects->paralysis().is_active()) {
-        ADD_BAR_FLAG(BAR_PARALYZE);
-    }
-
-    if (effects->confusion().is_active()) {
-        ADD_BAR_FLAG(BAR_CONFUSE);
-    }
-
-    if (effects->poison().is_active()) {
-        ADD_BAR_FLAG(BAR_POISONED);
-    }
-
-    if (player_ptr->tim_invis) {
-        ADD_BAR_FLAG(BAR_SENSEUNSEEN);
-    }
-
-    auto sniper_data = PlayerClass(player_ptr).get_specific_data<SniperData>();
-    if (sniper_data && (sniper_data->concent >= CONCENT_RADAR_THRESHOLD)) {
-        ADD_BAR_FLAG(BAR_SENSEUNSEEN);
-        ADD_BAR_FLAG(BAR_NIGHTSIGHT);
-    }
-
-    if (is_time_limit_esp(player_ptr)) {
-        ADD_BAR_FLAG(BAR_TELEPATHY);
-    }
-
-    if (player_ptr->tim_regen) {
-        ADD_BAR_FLAG(BAR_REGENERATION);
-    }
-
-    if (player_ptr->tim_infra) {
-        ADD_BAR_FLAG(BAR_INFRAVISION);
-    }
-
-    if (effects->protection().is_active()) {
-        ADD_BAR_FLAG(BAR_PROTEVIL);
-    }
-
-    if (is_invuln(player_ptr)) {
-        ADD_BAR_FLAG(BAR_INVULN);
-    }
-
-    if (player_ptr->wraith_form) {
-        ADD_BAR_FLAG(BAR_WRAITH);
-    }
-
-    if (player_ptr->tim_pass_wall) {
-        ADD_BAR_FLAG(BAR_PASSWALL);
-    }
-
-    if (player_ptr->tim_reflect) {
-        ADD_BAR_FLAG(BAR_REFLECTION);
-    }
-
-    if (is_hero(player_ptr)) {
-        ADD_BAR_FLAG(BAR_HEROISM);
-    }
-
-    if (is_shero(player_ptr)) {
-        ADD_BAR_FLAG(BAR_BERSERK);
-    }
-
-    if (is_blessed(player_ptr)) {
-        ADD_BAR_FLAG(BAR_BLESSED);
-    }
-
-    if (player_ptr->magicdef) {
-        ADD_BAR_FLAG(BAR_MAGICDEFENSE);
-    }
-
-    if (player_ptr->tsubureru) {
-        ADD_BAR_FLAG(BAR_EXPAND);
-    }
-
-    if (player_ptr->shield) {
-        ADD_BAR_FLAG(BAR_STONESKIN);
-    }
-
-    auto ninja_data = PlayerClass(player_ptr).get_specific_data<ninja_data_type>();
-    if (ninja_data && ninja_data->kawarimi) {
-        ADD_BAR_FLAG(BAR_KAWARIMI);
-    }
-
-    if (player_ptr->special_defense & DEFENSE_ACID) {
-        ADD_BAR_FLAG(BAR_IMMACID);
-    }
-
-    if (is_oppose_acid(player_ptr)) {
-        ADD_BAR_FLAG(BAR_RESACID);
-    }
-
-    if (player_ptr->special_defense & DEFENSE_ELEC) {
-        ADD_BAR_FLAG(BAR_IMMELEC);
-    }
-
-    if (is_oppose_elec(player_ptr)) {
-        ADD_BAR_FLAG(BAR_RESELEC);
-    }
-
-    if (player_ptr->special_defense & DEFENSE_FIRE) {
-        ADD_BAR_FLAG(BAR_IMMFIRE);
-    }
-
-    if (is_oppose_fire(player_ptr)) {
-        ADD_BAR_FLAG(BAR_RESFIRE);
-    }
-
-    if (player_ptr->special_defense & DEFENSE_COLD) {
-        ADD_BAR_FLAG(BAR_IMMCOLD);
-    }
-
-    if (is_oppose_cold(player_ptr)) {
-        ADD_BAR_FLAG(BAR_RESCOLD);
-    }
-
-    if (is_oppose_pois(player_ptr)) {
-        ADD_BAR_FLAG(BAR_RESPOIS);
-    }
-
-    if (player_ptr->word_recall) {
-        ADD_BAR_FLAG(BAR_RECALL);
-    }
-
-    if (player_ptr->alter_reality) {
-        ADD_BAR_FLAG(BAR_ALTER);
-    }
-
-    if (effects->fear().is_active()) {
-        ADD_BAR_FLAG(BAR_AFRAID);
-    }
-
-    if (player_ptr->tim_res_time) {
-        ADD_BAR_FLAG(BAR_RESTIME);
-    }
-
-    if (player_ptr->multishadow) {
-        ADD_BAR_FLAG(BAR_MULTISHADOW);
-    }
-
-    if (player_ptr->special_attack & ATTACK_CONFUSE) {
-        ADD_BAR_FLAG(BAR_ATTKCONF);
-    }
-
-    if (player_ptr->resist_magic) {
-        ADD_BAR_FLAG(BAR_REGMAGIC);
-    }
-
-    if (player_ptr->ult_res) {
-        ADD_BAR_FLAG(BAR_ULTIMATE);
-    }
-
-    if (player_ptr->tim_levitation) {
-        ADD_BAR_FLAG(BAR_LEVITATE);
-    }
-
-    if (player_ptr->tim_res_nether) {
-        ADD_BAR_FLAG(BAR_RESNETH);
-    }
-
-    if (player_ptr->dustrobe) {
-        ADD_BAR_FLAG(BAR_DUSTROBE);
-    }
-
-    if (player_ptr->special_attack & ATTACK_FIRE) {
-        ADD_BAR_FLAG(BAR_ATTKFIRE);
-    }
-
-    if (player_ptr->special_attack & ATTACK_COLD) {
-        ADD_BAR_FLAG(BAR_ATTKCOLD);
-    }
-
-    if (player_ptr->special_attack & ATTACK_ELEC) {
-        ADD_BAR_FLAG(BAR_ATTKELEC);
-    }
-
-    if (player_ptr->special_attack & ATTACK_ACID) {
-        ADD_BAR_FLAG(BAR_ATTKACID);
-    }
-
-    if (player_ptr->special_attack & ATTACK_POIS) {
-        ADD_BAR_FLAG(BAR_ATTKPOIS);
-    }
-
-    if (ninja_data && ninja_data->s_stealth) {
-        ADD_BAR_FLAG(BAR_SUPERSTEALTH);
-    }
-
-    if (player_ptr->tim_sh_fire) {
-        ADD_BAR_FLAG(BAR_SHFIRE);
-    }
-
-    if (is_time_limit_stealth(player_ptr)) {
-        ADD_BAR_FLAG(BAR_STEALTH);
-    }
-
-    if (player_ptr->tim_sh_touki) {
-        ADD_BAR_FLAG(BAR_TOUKI);
-    }
-
-    if (player_ptr->tim_sh_holy) {
-        ADD_BAR_FLAG(BAR_SHHOLY);
-    }
-
-    if (player_ptr->tim_eyeeye) {
-        ADD_BAR_FLAG(BAR_EYEEYE);
-    }
-
-    if (player_ptr->tim_res_lite) {
-        ADD_BAR_FLAG(BAR_RESLITE);
-    }
-
-    if (player_ptr->tim_res_dark) {
-        ADD_BAR_FLAG(BAR_RESDARK);
-    }
-
-    if (player_ptr->tim_res_fear) {
-        ADD_BAR_FLAG(BAR_RESFEAR);
-    }
-
-    if (player_ptr->tim_emission) {
-        ADD_BAR_FLAG(BAR_EMISSION);
-    }
-
-    if (player_ptr->tim_exorcism) {
-        ADD_BAR_FLAG(BAR_EXORCISM);
-    }
-
-    if (player_ptr->tim_imm_dark) {
-        ADD_BAR_FLAG(BAR_IMMDARK);
-    }
-
-    add_hex_status_flags(player_ptr, bar_flags);
+    const auto bar_flags = collect_status_bar_flags(player_ptr);
     TERM_LEN col = 0, num = 0;
     for (int i = 0; stat_bars[i].sstr; i++) {
-        if (IS_BAR_FLAG(i)) {
+        if (bar_flags.test(i)) {
             col += strlen(stat_bars[i].lstr) + 1;
             num++;
         }
@@ -700,7 +719,7 @@ void print_status(PlayerType *player_ptr)
         col = 0;
 
         for (int i = 0; stat_bars[i].sstr; i++) {
-            if (IS_BAR_FLAG(i)) {
+            if (bar_flags.test(i)) {
                 col += strlen(stat_bars[i].sstr);
             }
         }
@@ -713,7 +732,7 @@ void print_status(PlayerType *player_ptr)
 
     col = (max_col_statbar - col) / 2;
     for (int i = 0; stat_bars[i].sstr; i++) {
-        if (!IS_BAR_FLAG(i)) {
+        if (!bar_flags.test(i)) {
             continue;
         }
 
