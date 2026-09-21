@@ -11,6 +11,12 @@ permissions:
 jobs:
   build:
     runs-on: windows-2025-vs2026
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration:
+          - Debug
+          - English-Release
 
     steps:
       - uses: actions/checkout@v7
@@ -30,10 +36,10 @@ jobs:
 
       - name: Run build test
         run: |
-          MSBuild -warnAsError .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=Debug
+          MSBuild -warnAsError .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=${{ matrix.configuration }} /p:Platform=Win32
 
       # 上のビルドで HengbandTest プロジェクトも生成される。
       # doctest はテストが失敗すると非ゼロの終了コードを返す
       - name: Run unit tests
         run: |
-          .\VisualStudio\Hengband\Debug\hengband-test.exe
+          .\VisualStudio\Hengband\${{ matrix.configuration }}\hengband-test.exe
