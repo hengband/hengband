@@ -1502,6 +1502,7 @@ hengband_test_SOURCES = \
 	test/load/test-angband-version-comparer.cpp \
 	test/mutation/test-mutation-roll-table.cpp \
 	test/store/test-store-util.cpp \
+	test/term/test-z-form.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \
 	test/timed-effect/test-timed-effect.cpp \
