@@ -198,15 +198,16 @@ python3 tools/bot/hbctl.py quit            # ゲームを終了
 `keys` には `\e`（ESC）、`^X`（Ctrl+X）、`\xNN` といったマクロ表記を使えます。
 マクロトリガ表記 `\[～]` は受け付けません。
 
-プロトコル版は `2` です。版 `1` の `nearby_grids` 配列は、版 `2` では
+プロトコル版は `3` です。版 `1` の `nearby_grids` 配列は、版 `2` で
 `grid_map`（`palette` / `runs` / `cells` による圧縮地図）へ置き換わりました。
+版 `3` の変更点は[版3での変更](#版3での変更)を参照してください。
 `info` と各スナップショット（JSONLを含む）の `protocol_version` は共通です。
 クライアントはこれを確認し、対応していない版は拒否してください。
 
 `state` の `grid_map`（プレイヤーが記憶している地図）はフロア全域を走査します。
 地図が要らない場合は `map` に `false` を指定してください（`hbctl.py state --no-map`）。
 
-### 圧縮地図と情報の範囲（版2）
+### 圧縮地図と情報の範囲（版2・版3）
 
 地図は通常の地図描画で取得できる地形の観測です。トラベル処理が参照する内部地形や、過去の観測の自動補完ではありません。
 描画とJSONは地形の表示判定を共有し、モンスターの暗闇・暗視・盲目・記憶表示を同じ条件で扱います。
@@ -231,12 +232,17 @@ python3 tools/bot/hbctl.py quit            # ゲームを終了
   地形が未知でも検知済みの品は含み、金貨・未発見品・個数0の品は除外します。
   `stack_count` は品の総個数ではなくスタック数、行長は `3 + stack_count` です。
   幻覚中は数と行長を維持し、tvalを `0`（種別不明）に置き換えます。
+- `found_item_names`（版3）: `found_items` と同じ順・同じ品の `[y, x, name, ...]`。
+  名前は注視コマンドが表示する名前（未鑑定品は見た目の名前）で、幻覚中は `null` です。
 - `unsafe_rows`: 地下かつ罠未調査表示（`view_unsafe_grids`）が有効な場合に高さと同数の16進文字列、それ以外は `null`。
   各行は `ceil(w / 4)` 桁で、x座標は `row[x / 4]` の下位から `x % 4` ビットに対応します。
   端数の上位ビットは0。これは罠そのものではなく `CAVE_UNSAFE`（罠未調査）です。
 
-`flag_bits` は予約値 `0` です。内部の `CAVE_MARK` / `CAVE_KNOWN` / `CAVE_ROOM` / 照明フラグ等は出力しません。
-画面で識別できない内部状態を、表示済み地形に付随させて公開することを防ぎます。
+`flag_bits` は版3から、地図がその地形をどの照明状態の記号で描いているかを表します
+（`0`=通常、`1`=光源に照らされている、`2`=暗い）。判定は地図描画と同じ関数で行い、
+オプション `view_special_lite` / `view_yellow_lite` / `view_bright_lite` / `view_granite_lite` に従います
+（オプションが無効なら常に `0`）。版2までは予約値 `0` でした。
+内部の `CAVE_MARK` / `CAVE_KNOWN` / `CAVE_ROOM` / 照明フラグ等そのものは出力しません。
 `terrain_bits` は表示対象のMIMIC地形定義から得られる静的特性です。ビット番号は以下の順序で0から割り当てます。
 
 ```text
@@ -255,6 +261,115 @@ terrain_bits:
 `player.can_see_own_grid` と `light_radius` は視認性と光源半径、`floor.feeling` は公開済みの階の雰囲気です。
 
 `keys` に `term` はありません。キーを消費するのは常に現在の端末のため、副端末を指定する意味がないからです。
+
+### 版3での変更
+
+版3は「人間が画面で認識できる情報を過不足なく出す」ための改訂です。画面に出ていない値（逆方向の漏れ）は、
+画面の表示と同じ形へ置き換えました。表示オプション `show_actual_value`（数値表示）が有効な場合だけ出る
+数値は、その時点のオプションの値に従って出力します（無効なら出力しない、または `null`）。
+
+**例外（ユーザー決定）**: `turn`（ゲームターン）は画面に出ませんが、ボットが判断の区切りとログの突き合わせだけに
+使うため、フェアプレイ規則の例外として残します。人間が見られる日付・時刻は `clock` に出します。
+
+#### 追加したキー
+
+常時（`player_turn` ほか全スナップショット）:
+
+| キー | 内容（出所となる画面） |
+| --- | --- |
+| `clock` | `{day, hour, minute}`。画面右下の日付・時刻。`day` は画面が `***` を出す1000日目以降 `null` |
+| `health_bar` | 画面左の体力ゲージ（追跡中のモンスター）。追跡なしは `null`。見えない・幻覚中・死亡時は `{known: false}` だけ。見えていれば `{known: true, index, length(1-10), color, conditions[]}`。`conditions` は `invulnerable` / `fast` / `slow` / `afraid` / `confused` / `asleep` / `stunned` のうち表示中のもの |
+| `riding_health_bar` | 騎乗中のモンスターの体力ゲージ。形は `health_bar` と同じで `conditions` なし |
+| `floor.dungeon_name` | 画面右下の地名（町・荒野・ダンジョン・クエスト） |
+| `player.max_exp` / `player.exp_drained` | 最大経験値と、経験値減少表示（`x経験`・黄色）の有無 |
+| `player.max_level` / `player.level_drained` | 最高到達レベルと、レベル減少表示（`xレベル`・黄色）の有無 |
+| `player.exp_to_advance` | 次のレベルに必要な経験値（キャラクター画面の値、最高レベルでは `null`） |
+| `player.title` / `player.race_title` / `player.mimic_form` | 称号（ウィザード・勝利者を含む）、種族欄の名前（変身中は変身先）、変身の種類（0=なし） |
+| `player.speed_display` | 速度欄 `{value, text, color, riding}`。色は一時的な加速（黄）・減速（紫）・騎乗中のモンスターの加減速等 |
+| `player.action` | 行動状態欄 `{text, color, kind, repeat_count?, rest?}`。`kind` は `repeat` / `none` / `search` / `rest` / `learn` / `fish` / `monk_stance` / `samurai_stance` / `sing` / `hayagake` / `spell`。`rest` は残りターン数・`full_healing`・`until_done` |
+| `player.study` | 「学習」「まね」表示。`null` または `{kind: "study"\|"imitation", new}` |
+| `player.status_bar` | 画面下部の状態表示の全項目 `[{id, key, label}]`（表示順）。一時耐性・免疫・テレパシー・透明視・士気高揚・狂戦士化・祝福・対邪悪結界・無敵・幽体化・影分身・魔法の鎧・石肌・究極の耐性・魔法防御・壁抜け・反射・浮遊・急回復・赤外線視力・隠密・オーラ・魔法剣・つよし・変わり身・現実変容・呪術の効果等 |
+| `player.status.cut_rank` / `cut_rank_name` | 負傷の段階（`graze`〜`mortal_wound`） |
+| `player.status.stun_rank` / `stun_rank_name` | 朦朧の段階（`slight`〜`knocked_out`） |
+| `player.stats.<stat>.top` | キャラクター画面の「合計」（減少していない場合の値） |
+| `player.stats.<stat>.at_racial_max` | 能力値名の横の `!`（種族上限に到達） |
+| `player.ability_sources.resist_time` / `resist_water` / `resist_curse` | 時間逆転・水・呪力の耐性の供給源 |
+| `player.skill_ratings` | キャラクター画面の技能評価（下記） |
+| `visible_monsters[]` / `detected_monsters[]` / `look.grids[].monster` の `level` | モンスターのレベル（その種族を倒したことがある場合だけ。未撃破・影は `null`） |
+| 同上の `fast` / `slow` / `invulnerable` | 加速・減速・無敵（体力ゲージの状態欄と同じ判定） |
+| `grid_map.found_item_names` | 前述 |
+| 所持品・装備・店の品の `charging` / `charging_count` / `light_turns` | 下記「変更・削除」 |
+| 所持品等の `weapon_proficiency_rank` | 武器の熟練度の段階（`~d` の一覧の表示） |
+
+`player.skill_ratings` は `fighting` / `shooting` / `saving_throw` / `stealth` / `perception` / `searching` /
+`disarming` / `magic_device` / `digging` の各キーに `{text, color, rating, legendary_level?, value?}` を持ちます。
+`rating` は `very_bad` / `bad` / `poor` / `fair` / `good` / `very_good` / `excellent` / `superb` / `heroic` / `legendary`、
+`value` は `show_actual_value` が有効な場合だけ画面に出る数値（画面の計算と同じく武器・弓の命中修正込み）です。
+
+`look`（注視コマンド）: モンスターに `clone`（クローン表記）、`kills_to_level`（レベルアップまでに倒す数の表示。`**` / `??` / 3桁）、
+`description`（`レベル N, 損傷具合, 態度, clone` の表示文字列）を追加しました。
+
+`store`（店）: 店では `owner_name` / `owner_race` / `store_name` / `max_cost`（買取上限）、自宅・博物館では `capacity`（`アイテム数: n/容量` の容量）を追加しました。
+
+`character`（`C` コマンド）: `skill_ratings`、`name`、`sex`、`race_title`、`class_title`、`personality_title`、`history`（生い立ち4行）、
+`displayed_melee`（手ごとの `{hand, label, to_h, to_d}`。画面の表示値）、`displayed_shooting`（`{to_h, to_d}`）、`base_ac` / `ac_bonus`（`[基本AC, +修正]`）、
+`speed`（`{base, temporary, lightspeed, riding}`）、`exp`（`{current, max, to_advance}`。アンドロイドの `max` は `null`）、`day` / `hour` / `minute`、
+`play_time`（実プレイ時間の表示文字列）、`stat_modifiers`（能力修正欄。能力値ごとに装備部位ごとの `{slot, symbol, color}` と本人の列 `player`）、
+`curse_marks`（特性画面の呪い欄。部位ごとに `+` / `*` / `.`）、`alignment_label` / `alignment_value` を追加しました。
+
+`knowledge`（`~` コマンド）:
+
+- 新しい分類 `monsters`（メニューキー `6`）: 見たことのある種族の一覧 `monsters[]`（`{id, name, kills}`、ユニークは `{id, name, dead}`）。
+- 新しい分類 `kill_count`（メニューキー `7`）: `total` と `kills[]`（ユニークは `{id, name, unique: true, defeat_level?, defeat_time?}`、それ以外は `{id, name, unique: false, kills}`）。
+- `uniques_dead` の各行に `defeat_level` / `defeat_time`（撃破時のレベルと実時間）を追加しました。
+- `weapon_exp` / `skill_exp` / `spell_exp` の各行に `at_max`（一覧の `!`）を追加しました。
+- `virtues` に `alignment_label` / `alignment_value` と、各行の `text`（画面の文）を追加しました。
+
+新しいスナップショットの種類（いずれも地図なし）:
+
+| `type` | 出力する時点と内容 |
+| --- | --- |
+| `spell_list` | 魔法書の呪文一覧を表示したとき（閲覧・詠唱）。`spell_list: {realm_id, spells[]}`。各行は `{spell_id, status, name, level, mana, fail?, proficiency?, proficiency_mark?, info?}`。`status` は `available` / `untried` / `unknown` / `forgotten` / `illegible`。必殺剣は画面に熟練度・失敗率・効果を出さないので `fail` 以降が無い |
+| `power_list` | 特殊能力の一覧を表示したとき。`power_list: {kind, page, browse_mode, powers[]}`。`kind` は `racial`（種族・職業・突然変異のパワー）または `mind`（超能力・練気術・狂戦士・鏡使い・忍術）。各行は `{letter, page, name, level, cost, fail, info}`。`cost` は画面の MP / HP 欄の値 |
+| `lore` | モンスターの思い出を表示したとき（注視の `r`、`/`、`~6`、ギルド）。`lore: {race_id, name, text}`。`text` は画面に書かれる思い出の全文 |
+
+#### 変更したキー
+
+| キー | 変更内容 |
+| --- | --- |
+| `grid_map.palette[][1]`（`flag_bits`） | 予約値 `0` → 地形記号の照明状態（`0` 通常 / `1` 光源に照らされている / `2` 暗い） |
+| `messages`（JSONL） | 新着が32件を超えても切り捨てない。新着の数え方を履歴の件数から追加行の累計に変更（履歴が上限に達しても取りこぼさない） |
+| 所持品等の `weapon_proficiency` | `show_actual_value` が有効な場合だけ出力（常時の値は `weapon_proficiency_rank`） |
+| `knowledge` の `weapon_exp[].exp` / `max` | `show_actual_value` が有効な場合だけ出力 |
+| `knowledge` の `skill_exp[].exp` | `show_actual_value` が有効な場合だけ出力し、画面と同じく上限で切り詰める。`max` と `rank` を追加 |
+| `knowledge` の `spell_exp[].exp` | `show_actual_value` が有効な場合だけ出力。`max`（達人の値）を追加。`masked` は画面と同じく第1領域の必殺剣だけ |
+| `knowledge` の `virtues[].value` | `show_actual_value` が無効なら `null` |
+| `knowledge` の `uniques_alive` / `uniques_dead` | チートオプション `cheat_know` が有効なら未見の種族も含める（画面と同じ） |
+
+#### 削除したキー
+
+| キー | 理由と代わり |
+| --- | --- |
+| 所持品等の `timeout` | 残りターン数は表示されない。`charging`（`(充填中)` の有無）と、ロッドでは `charging_count`（`(N本 充填中)` の本数、1本なら1） |
+| 所持品等の `fuel` | 生の燃料は表示されない。`light_turns`（`(Nターンの寿命)` の値。長寿命のエゴは2倍。アーティファクト等の寿命を表記しない光源には無い） |
+| `player.skills`（`melee` / `shooting` / `saving` / `device` / `stealth` / `two_weapon` / `shield`） | 生の技能値は表示されない。`player.skill_ratings`。二刀流・盾の熟練は `~f`（`knowledge` の `skill_exp`） |
+| `player.stats.<stat>.cur` | 生の能力値は表示されず、表示値から一意に復元もできない（負の修正で18/xxが丸められ、3で下げ止まる）。表示されるのは `use`・`top`・`max` |
+| `character.skills`（`thn` / `thb` / `sav` / `dev` / `stl` / `dis` / `srh` / `fos` / `dig`） | `character.skill_ratings` |
+| `character.alignment` | 画面は属性名と、`show_actual_value` が有効な場合だけ数値を出す。`alignment_label` / `alignment_value` |
+
+#### Python クライアントが対応すべきこと
+
+1. `protocol_version` が `3` のスナップショットを受け付ける（`2` は拒否）。
+2. `inventory[]` / `equipment[]` / `store.items[]` / `knowledge` の品の `timeout` を読む箇所を `charging`（真偽）と `charging_count`（ロッドの本数）へ置き換える。
+3. 同じく `fuel` を読む箇所（松明・ランタンの残量判定、燃料0の松明の除外）を `light_turns` へ置き換える。長寿命のエゴは2倍の値になり、寿命を表記しない光源（アーティファクト等）はキー自体が無い。
+4. `player.skills.*` を読む箇所を `player.skill_ratings.<key>.rating`（数値が要る判定は `value`。ただし `show_actual_value` 無効時は無い）へ置き換える。`two_weapon` / `shield` の熟練は `~f` の `knowledge.skills[]` から得る（数値は `show_actual_value` 有効時のみ）。
+5. `player.stats.<stat>.cur` を読む箇所を `use` / `top` / `max` / `drained` へ置き換える。
+6. `character.skills.*` を `character.skill_ratings.*` へ、`character.alignment` を `alignment_label` / `alignment_value` へ置き換える。
+7. 所持品等の `weapon_proficiency` が常にある前提をやめ、`weapon_proficiency_rank` を使う。
+8. `knowledge` の `weapon_exp` / `skill_exp` / `spell_exp` の `exp` / `max`、`virtues[].value` が欠ける・`null` になる場合に対応する。
+9. `grid_map.palette` の2番目の値を不透明な署名の一部として扱っている場合はそのままでよい。`0` 固定を前提にしている箇所があれば照明状態として扱う。
+10. JSONLの `messages` が1スナップショットで33件以上になり得る。
+11. 新しい `type`（`spell_list` / `power_list` / `lore`）と `knowledge` の分類（`monsters` / `kill_count`）を、未対応なら無視できるようにする（`player_turn` と取り違えない）。
 
 ### quit はセーブしません
 

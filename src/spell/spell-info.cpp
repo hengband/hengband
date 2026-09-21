@@ -1,4 +1,5 @@
 #include "spell/spell-info.h"
+#include "bot/bot-json-output.h"
 #include "io/input-key-requester.h"
 #include "player-base/player-class.h"
 #include "player-info/class-info.h"
@@ -18,9 +19,11 @@
 #include "term/z-form.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
+#include "util/enum-converter.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <vector>
 
 /*!
  * @brief 呪文の消費MPを返す /
@@ -251,6 +254,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
     int i;
     char ryakuji[5];
     bool max = false;
+    std::vector<BotSpellListRow> bot_rows;
     for (i = 0; i < num; i++) {
         const auto spell_id = spell_ids[i];
         const auto &spell = PlayerRealm::get_spell_info(use_realm, spell_id);
@@ -295,49 +299,70 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
             out_val = format("  %c) ", I2A(i));
         }
 
+        BotSpellListRow bot_row{};
+        bot_row.spell_id = spell_id;
         if (spell.slevel >= 99) {
             out_val.append(format("%-30s", _("(判読不能)", "(illegible)")));
             c_prt(TERM_L_DARK, out_val, y + i + 1, x);
+            bot_row.status = "illegible";
+            bot_rows.push_back(std::move(bot_row));
             continue;
         }
 
         const auto info = exe_spell(player_ptr, use_realm, spell_id, SpellProcessType::INFO);
         concptr comment = info->data();
         byte line_attr = TERM_WHITE;
+        bot_row.status = "available";
         PlayerSpellStatus pss(player_ptr);
         const auto realm_status = pr.realm1().equals(use_realm) ? pss.realm1() : pss.realm2();
         if (pc.is_every_magic()) {
             if (spell.slevel > player_ptr->max_plv) {
                 comment = _("未知", "unknown");
                 line_attr = TERM_L_BLUE;
+                bot_row.status = "unknown";
             } else if (spell.slevel > player_ptr->lev) {
                 comment = _("忘却", "forgotten");
                 line_attr = TERM_YELLOW;
+                bot_row.status = "forgotten";
             }
         } else if (!pr.realm1().equals(use_realm) && !pr.realm2().equals(use_realm)) {
             comment = _("未知", "unknown");
             line_attr = TERM_L_BLUE;
+            bot_row.status = "unknown";
         } else if (realm_status.is_forgotten(spell_id)) {
             comment = _("忘却", "forgotten");
             line_attr = TERM_YELLOW;
+            bot_row.status = "forgotten";
         } else if (!realm_status.is_learned(spell_id)) {
             comment = _("未知", "unknown");
             line_attr = TERM_L_BLUE;
+            bot_row.status = "unknown";
         } else if (!realm_status.is_worked(spell_id)) {
             comment = _("未経験", "untried");
             line_attr = TERM_L_GREEN;
+            bot_row.status = "untried";
         }
 
         const auto &spell_name = PlayerRealm::get_spell_name(use_realm, spell_id);
+        bot_row.name = spell_name;
+        bot_row.level = spell.slevel;
+        bot_row.mana = need_mana;
         if (use_realm == RealmType::HISSATSU) {
             out_val.append(format("%-25s %2d %4d", spell_name.data(), spell.slevel, need_mana));
         } else {
+            const auto chance = spell_chance(player_ptr, spell_id, use_realm);
             out_val.append(format("%-25s%c%-4s %2d %4d %3d%% %s", spell_name.data(), (max ? '!' : ' '), ryakuji, spell.slevel,
-                need_mana, spell_chance(player_ptr, spell_id, use_realm), comment));
+                need_mana, chance, comment));
+            bot_row.fail = chance;
+            bot_row.proficiency = ryakuji;
+            bot_row.proficiency_mark = max;
+            bot_row.info = comment;
         }
 
         c_prt(line_attr, out_val, y + i + 1, x);
+        bot_rows.push_back(std::move(bot_row));
     }
 
     prt("", y + i + 1, x);
+    output_bot_json_spell_list_snapshot(player_ptr, enum2i(use_realm), bot_rows);
 }

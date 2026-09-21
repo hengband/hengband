@@ -8,11 +8,18 @@
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/dungeon-feeling.h"
+#include "floor/floor-util.h"
+#include "game-option/birth-options.h"
+#include "game-option/cheat-options.h"
 #include "game-option/map-screen-options.h"
 #include "game-option/runtime-arguments.h"
+#include "game-option/text-display-options.h"
 #include "grid/grid.h"
 #include "inventory/inventory-slot-types.h"
+#include "io/input-key-requester.h"
 #include "locale/character-encoding.h"
+#include "lore/lore-util.h"
+#include "lore/monster-lore.h"
 #include "mutation/mutation-flag-types.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/tr-types.h"
@@ -20,19 +27,27 @@
 #include "player-ability/player-ability-types.h"
 #include "player-base/player-class.h"
 #include "player-base/player-race.h"
+#include "player-info/alignment.h"
+#include "player-info/class-info.h"
 #include "player-info/equipment-info.h"
+#include "player-info/mane-data-type.h"
 #include "player-info/race-info.h"
 #include "player-info/race-types.h"
+#include "player/attack-defense-types.h"
 #include "player/digestion-processor.h"
 #include "player/permanent-resistances.h"
+#include "player/player-personality.h"
 #include "player/player-realm.h"
+#include "player/player-sex.h"
 #include "player/player-skill.h"
 #include "player/player-status-flags.h"
 #include "player/player-status-table.h"
+#include "player/race-info-table.h"
 #include "player/race-resistances.h"
 #include "player/temporary-resistances.h"
 #include "spell/technic-info-table.h"
 #include "store/pricing.h"
+#include "store/store-owners.h"
 #include "store/store-screen.h"
 #include "store/store-util.h"
 #include "sv-definition/sv-bow-types.h"
@@ -57,6 +72,7 @@
 #include "system/floor/town-list.h"
 #include "system/floor/town-records.h"
 #include "system/grid-type-definition.h"
+#include "system/inner-game-data.h"
 #include "system/item/identification-flags.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
@@ -66,13 +82,23 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "target/target-describer.h"
 #include "target/target-preparation.h"
 #include "target/target-types.h"
+#include "term/term-color-types.h"
+#include "timed-effect/player-cut.h"
+#include "timed-effect/player-stun.h"
 #include "timed-effect/timed-effects.h"
+#include "tracking/health-bar-tracker.h"
 #include "util/enum-converter.h"
+#include "view/display-characteristic.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
+#include "view/display-player-middle.h"
+#include "view/display-player-stat-info.h"
 #include "view/status-first-page.h"
+#include "window/main-window-left-frame.h"
+#include "window/main-window-stat-poster.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <algorithm>
@@ -92,6 +118,144 @@
 namespace {
 constexpr std::streamoff BOT_JSON_OUTPUT_MAX_BYTES = 256LL * 1024 * 1024;
 constexpr int BOT_JSON_MAX_MESSAGES = 32;
+
+/*!
+ * @brief 画面の表示色をJSONに載せる名前に変換する
+ * @param color 表示色 (TERM_*)
+ * @return 色名
+ */
+const char *term_color_name(TERM_COLOR color)
+{
+    static constexpr std::array<const char *, 16> names{ {
+        "dark",
+        "white",
+        "slate",
+        "orange",
+        "red",
+        "green",
+        "blue",
+        "umber",
+        "light_dark",
+        "light_white",
+        "violet",
+        "yellow",
+        "light_red",
+        "light_green",
+        "light_blue",
+        "light_umber",
+    } };
+    return color < names.size() ? names[color] : "unknown";
+}
+
+/*!
+ * @brief 画面下部の状態表示の各項目に付けるキー
+ * @details 添字は bar_definition_type と一致させる。項目を足したら末尾に追加すること。
+ */
+constexpr std::array<const char *, BAR_IMMDARK + 1> STATUS_BAR_KEYS{ {
+    "tsuyoshi",
+    "hallucination",
+    "blindness",
+    "paralyzed",
+    "confused",
+    "poisoned",
+    "afraid",
+    "levitation",
+    "reflection",
+    "pass_wall",
+    "wraith_form",
+    "protection_from_evil",
+    "kawarimi",
+    "magic_armour",
+    "expand",
+    "stone_skin",
+    "multishadow",
+    "resist_magic",
+    "ultimate_resistance",
+    "invulnerability",
+    "immune_acid",
+    "resist_acid",
+    "immune_elec",
+    "resist_elec",
+    "immune_fire",
+    "resist_fire",
+    "immune_cold",
+    "resist_cold",
+    "resist_pois",
+    "resist_nether",
+    "resist_time",
+    "dust_robe",
+    "aura_fire",
+    "aura_force",
+    "aura_holy",
+    "eye_for_eye",
+    "blessed",
+    "heroism",
+    "berserk",
+    "brand_fire",
+    "brand_cold",
+    "brand_elec",
+    "brand_acid",
+    "brand_pois",
+    "confusing_touch",
+    "see_invisible",
+    "telepathy",
+    "regeneration",
+    "infravision",
+    "stealth",
+    "super_stealth",
+    "recall",
+    "alter_reality",
+    "aura_cold",
+    "aura_elec",
+    "aura_shadow",
+    "extra_might",
+    "build_up",
+    "anti_multiply",
+    "anti_teleport",
+    "anti_magic",
+    "patience",
+    "revenge",
+    "rune_sword",
+    "vampiric",
+    "cure",
+    "esp_evil",
+    "nightsight",
+    "resist_lite",
+    "resist_dark",
+    "resist_fear",
+    "emission",
+    "exorcism",
+    "immune_dark",
+} };
+static_assert(STATUS_BAR_KEYS.size() + 1 == MAX_STAT_BARS, "STATUS_BAR_KEYS must cover every status bar entry");
+static_assert(STATUS_BAR_KEYS.back() != nullptr, "STATUS_BAR_KEYS must name every status bar entry");
+
+/*!
+ * @brief 画面下部の状態表示に出ている項目を、表示順 (bar_definition_type 順) に並べる
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 項目の配列。各要素は id (bar_definition_type)・key・label (長い表記) を持つ
+ * @details 表示の可否は print_status() と同じ collect_status_bar_flags() で判定する。
+ * 端末の幅が足りない場合、画面では右端の項目が切れることがあるが、JSONには全項目を載せる
+ * (端末を広げれば表示される項目であり、表示の可否そのものは幅に依存しないため)。
+ */
+nlohmann::json make_status_bar_json(PlayerType *player_ptr)
+{
+    const auto flags = collect_status_bar_flags(player_ptr);
+    auto entries = nlohmann::json::array();
+    for (std::size_t i = 0; i < STATUS_BAR_KEYS.size(); ++i) {
+        if (!flags.test(i)) {
+            continue;
+        }
+
+        entries.push_back({
+            { "id", i },
+            { "key", STATUS_BAR_KEYS[i] },
+            { "label", to_json_utf8(stat_bars[i].lstr) },
+        });
+    }
+
+    return entries;
+}
 
 const char *pseudo_feeling_name(item_feel_type feeling)
 {
@@ -225,18 +389,82 @@ nlohmann::json make_visible_monster_json(short m_idx, const MonsterEntity &monst
     }
 
     const auto &monrace = monster.get_apparent_monrace();
+    // The level is printed (look command, monster list sub-window) only once the
+    // race has been killed, and never for a kage; otherwise "Level ???" / "??".
+    const auto level_known = (monrace.r_tkills > 0) && monster.mflag2.has_not(MonsterConstantFlagType::KAGE);
     return {
         { "index", m_idx },
         { "race_id", enum2i(monrace.idx) },
         { "name", to_json_utf8(monrace.name.string()) },
+        { "level", level_known ? nlohmann::json(monrace.level) : nlohmann::json(nullptr) },
         { "health", monster_health_band(monster) },
         { "asleep", monster.is_asleep() },
         { "stunned", monster.is_stunned() },
         { "confused", monster.is_confused() },
         { "fearful", monster.is_fearful() },
+        // 加速・減速・無敵は、体力ゲージで追跡しているモンスターの状態欄と同じ表示の対象
+        { "fast", monster.is_accelerated() },
+        { "slow", monster.is_decelerated() },
+        { "invulnerable", monster.is_invulnerable() },
         { "friendly", monster.is_friendly() },
         { "pet", monster.is_pet() },
     };
+}
+
+/*!
+ * @brief 画面左の体力ゲージ (追跡中のモンスター、または騎乗中のモンスター) を出力する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param riding trueなら騎乗中のモンスターのゲージ、falseなら追跡中のモンスターのゲージ
+ * @return ゲージを表示していないならnull
+ * @details print_health() の描画と同じ条件で出力する。見えていない・幻覚中・死亡したモンスターは
+ * 画面では "[----------]" だけが描かれ、どのモンスターかも分からないので index も出さない。
+ * 状態欄 (conditions) は追跡中のゲージにだけ描かれる。画面では端末の高さに応じて行が切れる
+ * ことがあるが、全項目を載せる。
+ */
+nlohmann::json make_health_bar_json(PlayerType *player_ptr, bool riding)
+{
+    short m_idx = 0;
+    if (riding) {
+        m_idx = player_ptr->riding;
+    } else if (const auto &tracker = HealthBarTracker::get_instance(); tracker.is_tracking()) {
+        m_idx = tracker.get_trackee();
+    }
+
+    if (m_idx <= 0) {
+        return nullptr;
+    }
+
+    const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
+    if (!monster.ml || player_ptr->effects()->hallucination().is_active() || monster.is_dead()) {
+        return { { "known", false } };
+    }
+
+    const auto &[color, length] = monster.get_hp_bar_data();
+    auto result = nlohmann::json{
+        { "known", true },
+        { "index", m_idx },
+        { "length", length },
+        { "color", term_color_name(color) },
+    };
+    if (riding) {
+        return result;
+    }
+
+    auto conditions = nlohmann::json::array();
+    const auto add_condition = [&conditions](bool active, const char *key) {
+        if (active) {
+            conditions.push_back(key);
+        }
+    };
+    add_condition(monster.is_invulnerable(), "invulnerable");
+    add_condition(monster.is_accelerated(), "fast");
+    add_condition(monster.is_decelerated(), "slow");
+    add_condition(monster.is_fearful(), "afraid");
+    add_condition(monster.is_confused(), "confused");
+    add_condition(monster.is_asleep(), "asleep");
+    add_condition(monster.is_stunned(), "stunned");
+    result["conditions"] = std::move(conditions);
+    return result;
 }
 
 nlohmann::json make_visible_monsters_json(const PlayerType &player)
@@ -308,7 +536,7 @@ struct GridSignatureHash {
     }
 };
 
-GridSignature make_grid_signature(const Grid &source_grid)
+GridSignature make_grid_signature(const PlayerType &player, const Pos2D &pos, const Grid &source_grid)
 {
     // Wire bit positions are append-only; keep tools/bot/README.md in sync.
     const auto &terrain = source_grid.get_terrain(TerrainKind::MIMIC);
@@ -333,9 +561,12 @@ GridSignature make_grid_signature(const Grid &source_grid)
         TerrainCharacteristics::UP_STAIRS,
         TerrainCharacteristics::WALL,
     } };
-    // Retain the tuple slot, but never expose raw internal grid state. Even a
-    // remembered tile can have unobserved lighting/room/knowledge changes.
-    constexpr auto flag_bits = std::int64_t{ 0 };
+    // Protocol 3: the slot carries the lighting variant the map draws the
+    // terrain with (F_LIT_STANDARD=0 / F_LIT_LITE=1 / F_LIT_DARK=2), decided by
+    // the same function as map_info(). That is exactly what the player reads
+    // off the tile colour (torch-lit, lit room in view, remembered/dark), and
+    // never raw CAVE_* bits.
+    const auto flag_bits = static_cast<std::int64_t>(decide_map_terrain_lighting(player, pos));
     auto terrain_bits = std::int64_t{ 0 };
     for (std::size_t i = 0; i < terrain_flags.size(); ++i) {
         terrain_bits |= static_cast<std::int64_t>(has_terrain(terrain_flags[i])) << i;
@@ -367,13 +598,15 @@ nlohmann::json make_unsafe_rows_json(const FloorType &floor)
     return rows;
 }
 
-nlohmann::json make_grid_map_json(const PlayerType &player)
+nlohmann::json make_grid_map_json(PlayerType *player_ptr)
 {
+    const auto &player = *player_ptr;
     const auto &floor = *player.current_floor_ptr;
     auto palette = nlohmann::json::array();
     auto runs = nlohmann::json::array();
     auto cells = nlohmann::json::array();
     auto found_items = nlohmann::json::array();
+    auto found_item_names = nlohmann::json::array();
     auto unsafe_rows = make_unsafe_rows_json(floor);
     std::unordered_map<GridSignature, std::size_t, GridSignatureHash> palette_indices;
 
@@ -393,6 +626,7 @@ nlohmann::json make_grid_map_json(const PlayerType &player)
         const auto is_known = is_map_terrain_visible(player, pos);
         auto found_item_count = 0;
         auto found_item_tvals = nlohmann::json::array();
+        auto found_item_name_list = nlohmann::json::array();
         auto visible_object_count = 0;
         auto visible_object_tvals = nlohmann::json::array();
         for (const auto o_idx : source_grid.o_idx_list) {
@@ -413,6 +647,11 @@ nlohmann::json make_grid_map_json(const PlayerType &player)
                 // count/row-length contract. NONE is an unknown-class placeholder.
                 const auto tval = is_hallucinated ? ItemKindType::NONE : item.bi_key.tval();
                 found_item_tvals.push_back(enum2i(tval));
+                // The name the look command prints for the stack. describe_flavor()
+                // honours flavor awareness and identification, so an unknown item
+                // reads as its flavor, never its real kind. While hallucinating
+                // the look command cannot name items either.
+                found_item_name_list.push_back(is_hallucinated ? nlohmann::json(nullptr) : nlohmann::json(to_json_utf8(describe_flavor(player_ptr, item, 0))));
             }
         }
         if (found_item_count != 0) {
@@ -421,6 +660,11 @@ nlohmann::json make_grid_map_json(const PlayerType &player)
                 found_item_row.push_back(std::move(tval));
             }
             found_items.push_back(std::move(found_item_row));
+            auto found_item_name_row = nlohmann::json::array({ pos.y, pos.x });
+            for (auto &name : found_item_name_list) {
+                found_item_name_row.push_back(std::move(name));
+            }
+            found_item_names.push_back(std::move(found_item_name_row));
         }
 
         if (!is_known) {
@@ -429,7 +673,7 @@ nlohmann::json make_grid_map_json(const PlayerType &player)
 
         const auto &terrain = source_grid.get_terrain(TerrainKind::MIMIC);
         const auto has_terrain = [&terrain](TerrainCharacteristics flag) { return terrain.flags.has(flag); };
-        const auto signature = make_grid_signature(source_grid);
+        const auto signature = make_grid_signature(player, pos, source_grid);
         const auto next_palette_index = palette_indices.size();
         const auto [palette_it, inserted] = palette_indices.emplace(signature, next_palette_index);
         if (inserted) {
@@ -489,48 +733,101 @@ nlohmann::json make_grid_map_json(const PlayerType &player)
         { "runs", std::move(runs) },
         { "cells", std::move(cells) },
         { "found_items", std::move(found_items) },
+        { "found_item_names", std::move(found_item_names) },
         { "unsafe_rows", std::move(unsafe_rows) },
     };
 }
 
+/*!
+ * @brief 前回のJSONL出力から新しく履歴に加わったメッセージを古い順に返す
+ * @details 新着の数は履歴の件数ではなく message_sequence() の差で数える。履歴の件数は上限に
+ * 達すると増えなくなり、差で数えると新着を取りこぼすため。件数に上限は設けない
+ * (プレイヤーはメッセージ履歴 (Ctrl-P) で全件を読めるので、取りこぼせば見えている情報が欠ける)。
+ * 新しい行が無く最新行の文字列だけが変わった場合は、同じメッセージの繰り返し (<xN>) なので最新行を返す。
+ */
 nlohmann::json make_recent_messages_json()
 {
-    static auto previous_message_count = 0;
+    static std::uint64_t previous_sequence = 0;
     static std::string previous_latest_message = "";
     static auto initialized = false;
 
     auto messages = nlohmann::json::array();
+    const auto current_sequence = message_sequence();
     const auto current_message_count = message_num();
     const auto latest_message = current_message_count > 0 ? *message_str(0) : std::string{};
     if (!initialized) {
         initialized = true;
-        previous_message_count = current_message_count;
+        previous_sequence = current_sequence;
         previous_latest_message = latest_message;
         return messages;
     }
 
-    auto recent_message_count = std::max(0, current_message_count - previous_message_count);
+    const auto new_lines = current_sequence - previous_sequence;
+    auto recent_message_count = static_cast<int>(std::min<std::uint64_t>(new_lines, static_cast<std::uint64_t>(current_message_count)));
     if ((recent_message_count == 0) && (latest_message != previous_latest_message)) {
         recent_message_count = std::min(1, current_message_count);
     }
 
-    recent_message_count = std::min(recent_message_count, BOT_JSON_MAX_MESSAGES);
     messages = make_message_history_json(recent_message_count);
-
-    previous_message_count = current_message_count;
+    previous_sequence = current_sequence;
     previous_latest_message = latest_message;
     return messages;
 }
 
+const char *cut_rank_name(PlayerCutRank rank)
+{
+    switch (rank) {
+    case PlayerCutRank::GRAZING:
+        return "graze";
+    case PlayerCutRank::LIGHT:
+        return "light";
+    case PlayerCutRank::BAD:
+        return "bad";
+    case PlayerCutRank::NASTY:
+        return "nasty";
+    case PlayerCutRank::SEVERE:
+        return "severe";
+    case PlayerCutRank::DEEP:
+        return "deep_gash";
+    case PlayerCutRank::MORTAL:
+        return "mortal_wound";
+    default:
+        return "none";
+    }
+}
+
+const char *stun_rank_name(PlayerStunRank rank)
+{
+    switch (rank) {
+    case PlayerStunRank::SLIGHT:
+        return "slight";
+    case PlayerStunRank::NORMAL:
+        return "stun";
+    case PlayerStunRank::HARD:
+        return "heavy";
+    case PlayerStunRank::UNCONSCIOUS:
+        return "unconscious";
+    case PlayerStunRank::KNOCKED:
+        return "knocked_out";
+    default:
+        return "none";
+    }
+}
+
 nlohmann::json make_player_status_json(const TimedEffects &effects)
 {
+    // 負傷と朦朧は画面左下に段階名 (かすり傷〜致命傷、やや朦朧〜昏倒) で表示されるので段階まで出す
     return {
         { "blind", effects.blindness().is_active() },
         { "confused", effects.confusion().is_active() },
         { "afraid", effects.fear().is_active() },
         { "poisoned", effects.poison().is_active() },
         { "stunned", effects.stun().is_active() },
+        { "stun_rank", enum2i(effects.stun().get_rank()) },
+        { "stun_rank_name", stun_rank_name(effects.stun().get_rank()) },
         { "cut", effects.cut().is_active() },
+        { "cut_rank", enum2i(effects.cut().get_rank()) },
+        { "cut_rank_name", cut_rank_name(effects.cut().get_rank()) },
         { "paralyzed", effects.paralysis().is_active() },
         { "hallucinated", effects.hallucination().is_active() },
     };
@@ -538,17 +835,21 @@ nlohmann::json make_player_status_json(const TimedEffects &effects)
 
 nlohmann::json make_player_stats_json(const PlayerType &player)
 {
-    // Current vs maximal natural value per ability. The character sheet shows both
-    // (a drained stat renders reduced / recoloured), so this reveals nothing the
-    // player cannot already read on screen. drained = cur < max tells the bot which
-    // stat to restore.
+    // Only values the screens print. use = the value on the main screen, top =
+    // the undrained total the character sheet prints next to a drained stat,
+    // max = the character sheet's "Base" column. drained is the reduced stat
+    // name / yellow colour, at_racial_max the '!' mark next to the stat name.
+    // The raw natural value (stat_cur) is never printed and is not derivable
+    // from these (a negative modifier collapses 18/xx values and floors at 3),
+    // so protocol 3 no longer emits it.
     auto stat = [&player](int index) {
         return nlohmann::json{
-            { "cur", player.stat_cur[index] },
             { "max", player.stat_max[index] },
+            { "top", player.stat_top[index] },
             { "use", player.stat_use[index] },
             { "index", player.stat_index[index] },
             { "drained", player.stat_cur[index] < player.stat_max[index] },
+            { "at_racial_max", player.stat_max[index] == player.stat_max_max[index] },
         };
     };
     return {
@@ -637,6 +938,9 @@ nlohmann::json make_player_ability_sources_json(const PlayerKnownFlags &flags)
         { "resist_disen", sources(TR_RES_DISEN) },
         { "resist_lite", sources(TR_RES_LITE, TR_IM_LITE) },
         { "resist_dark", sources(TR_RES_DARK, TR_IM_DARK) },
+        { "resist_time", sources(TR_RES_TIME) },
+        { "resist_water", sources(TR_RES_WATER) },
+        { "resist_curse", sources(TR_RES_CURSE) },
         { "telepathy", sources(TR_TELEPATHY) },
         { "free_action", sources(TR_FREE_ACT) },
         { "see_invisible", sources(TR_SEE_INVIS) },
@@ -768,8 +1072,18 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item, bo
     if (known) {
         result["charges"] = item.pval;
         result["pval"] = item.pval;
-        result["fuel"] = item.fuel;
-        result["timeout"] = item.timeout;
+        // Protocol 3: the exact recharge timeout and raw fuel are not printed.
+        // The description shows "(charging)" / "(N charging)" and, for
+        // non-artifact light sources, "(with N turns of light)" (x2 for the
+        // long-life ego); emit exactly those.
+        const auto charging_count = calc_displayed_charging_count(item);
+        result["charging"] = charging_count > 0;
+        if (item.bi_key.tval() == ItemKindType::ROD) {
+            result["charging_count"] = charging_count;
+        }
+        if (const auto light_turns = calc_displayed_lamp_turns(item)) {
+            result["light_turns"] = *light_turns;
+        }
         result["is_ego"] = item.is_ego();
         result["is_artifact"] = item.is_fixed_or_random_artifact();
         result["is_cursed"] = item.is_cursed();
@@ -795,7 +1109,13 @@ nlohmann::json make_item_json(PlayerType *player_ptr, const ItemEntity &item, bo
             const auto sval = item.bi_key.sval();
             const auto exp_it = player_ptr->weapon_exp.find(tval);
             if (sval && exp_it != player_ptr->weapon_exp.end()) {
-                result["weapon_proficiency"] = exp_it->second[*sval];
+                // Protocol 3: the weapon proficiency list (~d) prints the rank,
+                // and the number only while show_actual_value is on.
+                const auto exp = exp_it->second[*sval];
+                result["weapon_proficiency_rank"] = enum2i(PlayerSkill::weapon_skill_rank(exp));
+                if (show_actual_value) {
+                    result["weapon_proficiency"] = exp;
+                }
             }
         }
     }
@@ -830,6 +1150,13 @@ nlohmann::json make_look_json(PlayerType *player_ptr)
             const auto &monster = floor.m_list[grid.m_idx];
             if (monster.is_valid() && monster.ml) {
                 monster_json = make_visible_monster_json(grid.m_idx, monster, is_hallucinated);
+                if (!is_hallucinated) {
+                    // The rest of the look line: "[kills to level up] name (Level N,
+                    // damage, attitude, clone)". "level" is already in the monster record.
+                    monster_json["clone"] = monster.mflag2.has(MonsterConstantFlagType::CLONED);
+                    monster_json["kills_to_level"] = evaluate_monster_exp(player_ptr, monster);
+                    monster_json["description"] = to_json_utf8(monster.build_looking_description(true));
+                }
                 for (const auto o_idx : monster.hold_o_idx_list) {
                     const auto &item = *floor.o_list[o_idx];
                     if (item.is_valid()) {
@@ -984,13 +1311,214 @@ nlohmann::json make_store_json(PlayerType *player_ptr, const StoreScreen &screen
     // own prompt tells the player whether more pages follow.  Without them the
     // page count can only be guessed, and a full page (letters running a..Z)
     // is NOT evidence that the stock ends there.
-    return {
+    auto result = nlohmann::json{
         { "store_type", enum2i(store_num) },
         { "stock_num", store.stock_num },
         { "page_top", page_top },
         { "page_size", screen.get_page_size() },
         { "items", items },
     };
+
+    // Header lines of display_store(): a shop shows "owner (race)" and
+    // "shop name (purse limit)"; the home and the museum show "Objects: n/capacity".
+    if (is_personal_storage) {
+        auto capacity = store.stock_size;
+        if (store_num == StoreSaleType::HOME && !powerup_home) {
+            capacity /= 10;
+        }
+        result["capacity"] = capacity;
+    } else {
+        const auto &owner = store.get_owner();
+        result["owner_name"] = to_json_utf8(owner.owner_name);
+        result["owner_race"] = to_json_utf8(race_info[enum2i(owner.owner_race)].title.string());
+        result["store_name"] = to_json_utf8(TerrainList::get_instance().get_terrain(cur_store_feat).name);
+        result["max_cost"] = owner.max_cost;
+    }
+
+    return result;
+}
+
+/*!
+ * @brief キャラクター画面1ページ目の技能評価を出力する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 技能ごとの評価。画面の文字列 (text)・色・評価段階 (rating) を持ち、
+ * 表示オプション show_actual_value が有効な場合だけ画面に出る数値 (value) を持つ
+ */
+nlohmann::json make_skill_ratings_json(PlayerType *player_ptr)
+{
+    static constexpr std::array<const char *, SKILL_RATING_MAX> keys{ {
+        "fighting",
+        "shooting",
+        "saving_throw",
+        "stealth",
+        "perception",
+        "searching",
+        "disarming",
+        "magic_device",
+        "digging",
+    } };
+    static constexpr std::array<const char *, 10> ratings{ {
+        "very_bad",
+        "bad",
+        "poor",
+        "fair",
+        "good",
+        "very_good",
+        "excellent",
+        "superb",
+        "heroic",
+        "legendary",
+    } };
+    auto result = nlohmann::json::object();
+    const auto sources = calc_skill_rating_sources(player_ptr);
+    for (std::size_t i = 0; i < std::min(sources.size(), keys.size()); ++i) {
+        const auto &source = sources[i];
+        const auto &[text, color] = describe_skill_rating(source.value, source.divisor);
+        const auto [rating, legendary_level] = classify_skill_rating(source.value, source.divisor);
+        auto row = nlohmann::json{
+            { "text", to_json_utf8(text) },
+            { "color", term_color_name(color) },
+            { "rating", ratings[enum2i(rating)] },
+        };
+        if (rating == SkillRating::LEGENDARY) {
+            row["legendary_level"] = legendary_level;
+        }
+        if (show_actual_value) {
+            row["value"] = source.value;
+        }
+        result[keys[i]] = std::move(row);
+    }
+
+    return result;
+}
+
+/*!
+ * @brief 画面右下の日付と時刻を出力する
+ * @return 日目・時・分。日目は画面が "***" と表示する1000日目以降はnull
+ */
+nlohmann::json make_clock_json()
+{
+    const auto &[day, hour, min] = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
+    return {
+        { "day", day < 1000 ? nlohmann::json(day) : nlohmann::json(nullptr) },
+        { "hour", hour },
+        { "minute", min },
+    };
+}
+
+const char *player_action_name(int action)
+{
+    switch (action) {
+    case ACTION_SEARCH:
+        return "search";
+    case ACTION_REST:
+        return "rest";
+    case ACTION_LEARN:
+        return "learn";
+    case ACTION_FISH:
+        return "fish";
+    case ACTION_MONK_STANCE:
+        return "monk_stance";
+    case ACTION_SAMURAI_STANCE:
+        return "samurai_stance";
+    case ACTION_SING:
+        return "sing";
+    case ACTION_HAYAGAKE:
+        return "hayagake";
+    case ACTION_SPELL:
+        return "spell";
+    default:
+        return "none";
+    }
+}
+
+/*!
+ * @brief 画面左下の行動状態欄を出力する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details print_state() と同じく、繰り返し回数があればそれだけが表示されるので、
+ * その場合は kind を "repeat" にして持続行動は出さない。
+ */
+nlohmann::json make_action_state_json(PlayerType *player_ptr)
+{
+    const auto &[text, color] = describe_player_state(player_ptr);
+    auto result = nlohmann::json{
+        { "text", to_json_utf8(text) },
+        { "color", term_color_name(color) },
+    };
+    if (command_rep) {
+        result["kind"] = "repeat";
+        result["repeat_count"] = command_rep;
+        return result;
+    }
+
+    result["kind"] = player_action_name(player_ptr->action);
+    if (player_ptr->action == ACTION_REST) {
+        if (player_ptr->resting > 0) {
+            result["rest"] = player_ptr->resting;
+        } else if (player_ptr->resting == COMMAND_ARG_REST_FULL_HEALING) {
+            result["rest"] = "full_healing";
+        } else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE) {
+            result["rest"] = "until_done";
+        }
+    }
+
+    return result;
+}
+
+/*!
+ * @brief 画面右下の速度欄を出力する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 色は一時的な加速・減速や騎乗中のモンスターの加減速を表すので、画面と同じ色名を出す。
+ */
+nlohmann::json make_speed_display_json(PlayerType *player_ptr)
+{
+    const auto &[text, color] = describe_player_speed(player_ptr);
+    return {
+        { "value", player_ptr->pspeed - STANDARD_SPEED },
+        { "text", to_json_utf8(text) },
+        { "color", term_color_name(color) },
+        { "riding", player_ptr->riding != 0 },
+    };
+}
+
+/*!
+ * @brief 画面右下の「学習」「まね」表示を出力する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details 同じ位置に print_study() の後で print_imitation() が描くので、ものまね師では
+ * ものまねの表示が優先される (print_frame_extra() の描画順)。
+ */
+nlohmann::json make_study_indicator_json(PlayerType *player_ptr)
+{
+    PlayerClass pc(player_ptr);
+    if (pc.equals(PlayerClassType::IMITATOR)) {
+        const auto mane_data = pc.get_specific_data<mane_data_type>();
+        if (mane_data->mane_list.empty()) {
+            return nullptr;
+        }
+
+        return { { "kind", "imitation" }, { "new", mane_data->new_mane } };
+    }
+
+    if (player_ptr->new_spells) {
+        return { { "kind", "study" }, { "new", false } };
+    }
+
+    return nullptr;
+}
+
+/*!
+ * @brief 次のレベルに必要な経験値 (キャラクター画面の表示) を返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 必要経験値。最高レベルでは画面が "*****" と表示するのでnull
+ */
+nlohmann::json calc_exp_to_advance(PlayerType *player_ptr)
+{
+    if (player_ptr->lev >= PY_MAX_LEVEL) {
+        return nullptr;
+    }
+
+    const auto &table = PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID) ? player_exp_a : player_exp;
+    return table[player_ptr->lev - 1] * player_ptr->expfact / 100;
 }
 
 /*!
@@ -1043,7 +1571,12 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
     auto snapshot = nlohmann::json{
         { "type", "player_turn" },
         { "protocol_version", BOT_JSON_PROTOCOL_VERSION },
+        // Documented exception to the fair-play rule (user decision 2026-09-22,
+        // "例外として残す"): the exact game turn is not printed anywhere, but the
+        // bot uses it only for decision boundaries and log alignment. The
+        // human-visible day and clock are in "clock".
         { "turn", world.game_turn },
+        { "clock", make_clock_json() },
         { "player", {
                         { "y", player.y },
                         { "x", player.x },
@@ -1055,24 +1588,34 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
                         { "mp", player.csp },
                         { "max_mp", player.msp },
                         { "exp", player.exp },
+                        // The main screen marks drained experience ("x経験" / yellow)
+                        // and a drained level ("xレベル" / yellow); the character sheet
+                        // prints the maximum experience and the next-level threshold.
+                        { "max_exp", player.max_exp },
+                        { "exp_drained", player.exp < player.max_exp },
+                        { "max_level", player.max_plv },
+                        { "level_drained", player.lev < player.max_plv },
+                        { "exp_to_advance", calc_exp_to_advance(player_ptr) },
+                        { "title", to_json_utf8(get_player_title(player_ptr)) },
+                        { "race_title", to_json_utf8(get_displayed_race_title(player_ptr)) },
+                        { "mimic_form", enum2i(player.mimic_form) },
                         { "gold", player.au },
                         { "food_state", food_state(player) },
                         { "speed", player.pspeed },
+                        { "speed_display", make_speed_display_json(player_ptr) },
+                        { "action", make_action_state_json(player_ptr) },
+                        { "study", make_study_indicator_json(player_ptr) },
+                        { "status_bar", make_status_bar_json(player_ptr) },
                         { "recalling", player.word_recall != 0 },
                         { "food_type", enum2i(PlayerRace(player_ptr).food()) },
                         { "class_id", enum2i(player.pclass) },
                         { "race_id", enum2i(player.prace) },
                         { "personality_id", enum2i(player.ppersonality) },
                         { "ac", player.dis_ac + player.dis_to_a },
-                        { "skills", {
-                                        { "melee", player.skill_thn },
-                                        { "shooting", player.skill_thb },
-                                        { "saving", player.skill_sav },
-                                        { "device", player.skill_dev },
-                                        { "stealth", player.skill_stl },
-                                        { "two_weapon", player.skill_exp.at(PlayerSkillKindType::TWO_WEAPON) },
-                                        { "shield", player.skill_exp.at(PlayerSkillKindType::SHIELD) },
-                                    } },
+                        // Protocol 3: the raw skill numbers are replaced by the ratings the
+                        // character sheet prints (numbers only under show_actual_value).
+                        // The two-weapon / shield proficiencies moved to knowledge "skill_exp".
+                        { "skill_ratings", make_skill_ratings_json(player_ptr) },
                         { "melee", {
                                        { "main_hand_blows", player.num_blow[0] },
                                        { "sub_hand_blows", player.num_blow[1] },
@@ -1089,6 +1632,8 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
                     } },
         { "floor", {
                        { "dungeon_id", enum2i(floor.dungeon_id) },
+                       // The map name printed at the bottom right (town, wilderness, dungeon or quest).
+                       { "dungeon_name", to_json_utf8(map_name(player_ptr)) },
                        { "level", floor.dun_level },
                        // The grade is player-visible: it selects the depth-display
                        // color, and Ctrl-F reports the distinct grade message.
@@ -1146,6 +1691,8 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
                            }() },
                           { "quests", make_disclosed_quests_json() },
                       } },
+        { "health_bar", make_health_bar_json(player_ptr, false) },
+        { "riding_health_bar", make_health_bar_json(player_ptr, true) },
         { "visible_monsters", make_visible_monsters_json(player) },
         { "detected_monsters", make_detected_monsters_json(player) },
         { "messages", (messages_source == BotSnapshotMessages::HISTORY) ? make_message_history_json(BOT_JSON_MAX_MESSAGES) : make_recent_messages_json() },
@@ -1153,7 +1700,7 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
         { "equipment", make_equipment_json(player_ptr) },
     };
     if (include_map) {
-        snapshot["grid_map"] = make_grid_map_json(player);
+        snapshot["grid_map"] = make_grid_map_json(player_ptr);
     }
 
     return snapshot;
@@ -1372,18 +1919,88 @@ nlohmann::json make_character_json(PlayerType *player_ptr)
     if (bow.is_valid()) {
         shooting_multiplier = (bow.get_arrow_magnification() + (player.xtra_might ? 1 : 0)) * (100 + static_cast<int>(adj_str_td[player.stat_index[A_STR]]) - 128);
     }
+    // Melee lines of the character sheet: one line per attacking hand, labelled
+    // bare-handed / two-handed / right / left as display_player_middle() does.
+    auto displayed_melee = nlohmann::json::array();
+    const auto bare_hand = !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND);
+    for (auto hand = 0; hand < 2; ++hand) {
+        const auto can_attack = (hand == 0) ? can_attack_with_main_hand(player_ptr) : can_attack_with_sub_hand(player_ptr);
+        if (!can_attack) {
+            continue;
+        }
+
+        const auto [hand_to_h, hand_to_d] = calc_displayed_melee_bonus(player_ptr, hand);
+        const char *label = (hand == 0) ? (left_hander ? "left_hand" : "right_hand") : (left_hander ? "right_hand" : "left_hand");
+        if (bare_hand) {
+            label = "bare_hand";
+        } else if (has_two_handed_weapons(player_ptr)) {
+            label = "two_hands";
+        }
+        displayed_melee.push_back({ { "hand", hand }, { "label", label }, { "to_h", hand_to_h }, { "to_d", hand_to_d } });
+    }
+    const auto [bow_to_h, bow_to_d] = calc_displayed_bow_bonus(player_ptr);
+    const auto [base_speed, temporary_speed] = calc_displayed_speed(player_ptr);
+
+    // Stat modifier grid (character sheet page "abcdefghijkl@"): one symbol per
+    // equipment slot and the '@' column, exactly as display_player_stat_info() draws.
+    auto stat_modifiers = nlohmann::json::array();
+    for (auto stat = 0; stat < A_MAX; ++stat) {
+        auto slots = nlohmann::json::array();
+        for (const auto slot : INVEN_WIELDING_SLOTS) {
+            const auto symbol = get_equipment_stat_symbol(*player.inventory[slot], stat);
+            slots.push_back({ { "slot", equipment_slot_label(slot) }, { "symbol", std::string(1, symbol.character) }, { "color", term_color_name(symbol.color) } });
+        }
+        const auto intrinsic = get_intrinsic_stat_symbol(player_ptr, stat);
+        stat_modifiers.push_back({
+            { "stat_id", stat },
+            { "equipment", std::move(slots) },
+            { "player", { { "symbol", std::string(1, intrinsic.character) }, { "color", term_color_name(intrinsic.color) } } },
+        });
+    }
+
+    // Curse row of the characteristics page: '+' cursed, '*' permanently cursed, '.' none/unknown.
+    auto curse_marks = nlohmann::json::array();
+    for (const auto slot : INVEN_WIELDING_SLOTS) {
+        curse_marks.push_back({ { "slot", equipment_slot_label(slot) }, { "mark", std::string(1, get_equipment_curse_mark(*player.inventory[slot])) } });
+    }
+
+    auto history = nlohmann::json::array();
+    for (const auto &line : player.history) {
+        history.push_back(to_json_utf8(line));
+    }
+
+    const auto &[day, hour, minute] = AngbandWorld::get_instance().extract_date_time(InnerGameData::get_instance().get_start_race());
+    PlayerAlignment alignment(player_ptr);
     return {
-        { "skills", {
-                        { "thn", player.skill_thn },
-                        { "thb", player.skill_thb },
-                        { "sav", player.skill_sav },
-                        { "dev", player.skill_dev },
-                        { "stl", player.skill_stl },
-                        { "dis", player.skill_dis },
-                        { "srh", player.skill_srh },
-                        { "fos", player.skill_fos },
-                        { "dig", player.skill_dig },
-                    } },
+        // Protocol 3: the skill ratings as printed (numbers only under show_actual_value).
+        { "skill_ratings", make_skill_ratings_json(player_ptr) },
+        { "name", to_json_utf8(player.name) },
+        { "sex", to_json_utf8(sp_ptr->title) },
+        { "race_title", to_json_utf8(get_displayed_race_title(player_ptr)) },
+        { "class_title", to_json_utf8(cp_ptr->title) },
+        { "personality_title", to_json_utf8(ap_ptr->title) },
+        { "history", std::move(history) },
+        { "displayed_melee", std::move(displayed_melee) },
+        { "displayed_shooting", { { "to_h", bow_to_h }, { "to_d", bow_to_d } } },
+        { "base_ac", player.dis_ac },
+        { "ac_bonus", player.dis_to_a },
+        { "speed", {
+                       { "base", base_speed - temporary_speed },
+                       { "temporary", temporary_speed },
+                       { "lightspeed", player.lightspeed != 0 },
+                       { "riding", player.riding != 0 },
+                   } },
+        { "exp", {
+                     { "current", player.exp },
+                     { "max", PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID) ? nlohmann::json(nullptr) : nlohmann::json(player.max_exp) },
+                     { "to_advance", calc_exp_to_advance(player_ptr) },
+                 } },
+        { "day", day < MAX_DAYS ? nlohmann::json(day) : nlohmann::json(nullptr) },
+        { "hour", hour },
+        { "minute", minute },
+        { "play_time", to_json_utf8(AngbandWorld::get_instance().format_real_playtime()) },
+        { "stat_modifiers", std::move(stat_modifiers) },
+        { "curse_marks", std::move(curse_marks) },
         { "ranged", {
                         { "to_h_b", player.to_h_b },
                         { "shots", shots },
@@ -1403,7 +2020,10 @@ nlohmann::json make_character_json(PlayerType *player_ptr)
         { "height", player.ht },
         { "weight", player.wt },
         { "social_class", player.sc },
-        { "alignment", player.alignment },
+        // Protocol 3: the sheet prints the alignment label, with the number only
+        // under show_actual_value.
+        { "alignment_label", to_json_utf8(alignment.get_alignment_description()) },
+        { "alignment_value", show_actual_value ? nlohmann::json(player.alignment) : nlohmann::json(nullptr) },
         { "realms", std::move(realm_json) },
         { "chaos_patron", player.chaos_patron },
         { "mutations", std::move(mutations) },
@@ -1448,8 +2068,10 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         "quests",
         "pets",
         "autopick",
+        "monsters",
+        "kill_count",
     };
-    static constexpr const char keys[] = { '1', '2', '3', '4', '5', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k' };
+    static constexpr const char keys[] = { '1', '2', '3', '4', '5', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', '6', '7' };
     static_assert(sizeof(slugs) / sizeof(slugs[0]) == enum2i(BotKnowledgeCategory::MAX));
     static_assert(sizeof(keys) / sizeof(keys[0]) == enum2i(BotKnowledgeCategory::MAX));
     const auto index = enum2i(category);
@@ -1478,10 +2100,16 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         const auto alive = category == BotKnowledgeCategory::UNIQUES_ALIVE;
         const auto &records = MonraceRecords::get_instance();
         for (const auto &[id, monrace] : MonraceList::get_instance()) {
-            if (!records.has_been_seen(id) || !monrace->is_valid() || !monrace->should_display(alive)) {
+            if ((!cheat_know && !records.has_been_seen(id)) || !monrace->is_valid() || !monrace->should_display(alive)) {
                 continue;
             }
-            rows.push_back({ { "id", enum2i(id) }, { "name", to_json_utf8(monrace->name.string()) }, { "level", monrace->level } });
+            auto row = nlohmann::json{ { "id", enum2i(id) }, { "name", to_json_utf8(monrace->name.string()) }, { "level", monrace->level } };
+            // The dead list prints "- level NN - h:mm:ss" (the player's level and play time at the kill).
+            if (!alive && monrace->defeat_level && monrace->defeat_time) {
+                row["defeat_level"] = monrace->defeat_level;
+                row["defeat_time"] = monrace->defeat_time;
+            }
+            rows.push_back(std::move(row));
         }
         result["uniques"] = std::move(rows);
         break;
@@ -1564,26 +2192,49 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
             const auto exp_it = player_ptr->weapon_exp.find(tval);
             const auto max_it = player_ptr->weapon_exp_max.find(tval);
             if (displayed_tval && !excluded_bow && sval && exp_it != player_ptr->weapon_exp.end() && max_it != player_ptr->weapon_exp_max.end()) {
-                rows.push_back({ { "tval", enum2i(tval) }, { "sval", *sval }, { "name", to_json_utf8(baseitem.stripped_name()) },
-                    { "exp", exp_it->second[*sval] }, { "max", max_it->second[*sval] },
-                    { "rank", enum2i(PlayerSkill::weapon_skill_rank(exp_it->second[*sval])) } });
+                // The list prints the rank and a '!' once the class maximum is
+                // reached; "exp/max" only under show_actual_value.
+                const auto exp = exp_it->second[*sval];
+                const auto max = max_it->second[*sval];
+                auto row = nlohmann::json{ { "tval", enum2i(tval) }, { "sval", *sval }, { "name", to_json_utf8(baseitem.stripped_name()) },
+                    { "at_max", exp >= max }, { "rank", enum2i(PlayerSkill::weapon_skill_rank(exp)) } };
+                if (show_actual_value) {
+                    row["exp"] = exp;
+                    row["max"] = max;
+                }
+                rows.push_back(std::move(row));
             }
         }
         result["weapons"] = std::move(rows);
         break;
     case BotKnowledgeCategory::SKILL_EXP:
         for (const auto skill : PLAYER_SKILL_KIND_TYPE_RANGE) {
-            rows.push_back({ { "id", enum2i(skill) }, { "name", to_json_utf8(PlayerSkill::skill_name(skill)) },
-                { "exp", player_ptr->skill_exp[skill] } });
+            // Same as do_cmd_knowledge_skill_exp(): rank, '!' at the class
+            // maximum, and "exp/max" (exp capped at max) only under show_actual_value.
+            const auto exp = player_ptr->skill_exp[skill];
+            const auto max = class_skills_info[enum2i(player_ptr->pclass)].s_max[skill];
+            const auto rank = (skill == PlayerSkillKindType::RIDING) ? PlayerSkill::riding_skill_rank(exp) : PlayerSkill::weapon_skill_rank(exp);
+            auto row = nlohmann::json{ { "id", enum2i(skill) }, { "name", to_json_utf8(PlayerSkill::skill_name(skill)) },
+                { "at_max", exp >= max }, { "rank", enum2i(rank) } };
+            if (show_actual_value) {
+                row["exp"] = std::min(exp, max);
+                row["max"] = max;
+            }
+            rows.push_back(std::move(row));
         }
         result["skills"] = std::move(rows);
         break;
     case BotKnowledgeCategory::VIRTUES:
+        // The page prints the alignment line and one sentence per virtue
+        // ("You are virtuous in Honour."); numbers only under show_actual_value.
+        result["alignment_label"] = to_json_utf8(PlayerAlignment(player_ptr).get_alignment_description());
+        result["alignment_value"] = show_actual_value ? nlohmann::json(player_ptr->alignment) : nlohmann::json(nullptr);
         for (auto i = 0; i < 8; ++i) {
             const auto name_it = virtue_names.find(player_ptr->vir_types[i]);
             const auto name = to_json_utf8(name_it != virtue_names.end() ? name_it->second : _("不明", "Oops. No info"));
             rows.push_back({ { "id", enum2i(player_ptr->vir_types[i]) }, { "name", name },
-                { "value", player_ptr->virtues[i] } });
+                { "text", to_json_utf8(describe_virtue(player_ptr, i)) },
+                { "value", show_actual_value ? nlohmann::json(player_ptr->virtues[i]) : nlohmann::json(nullptr) } });
         }
         result["virtues"] = std::move(rows);
         break;
@@ -1620,12 +2271,23 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
                     continue;
                 }
                 const auto exp = player_ptr->spell_exp[offset + spell_id];
-                const auto is_hissatsu = realm.equals(RealmType::HISSATSU);
-                rows.push_back({ { "realm_id", enum2i(realm.to_enum()) }, { "spell_id", spell_id },
+                // Only the first realm's list masks the hissatsu rank ("[--]"), as
+                // do_cmd_knowledge_spell_exp() does. The '!' mark is MASTER for the
+                // first realm and EXPERT for the second; "exp/max" only under
+                // show_actual_value.
+                const auto is_hissatsu = (offset == 0) && realm.equals(RealmType::HISSATSU);
+                const auto rank = PlayerSkill::spell_skill_rank(exp);
+                const auto mark_rank = (offset == 0) ? PlayerSkillRank::MASTER : PlayerSkillRank::EXPERT;
+                auto row = nlohmann::json{ { "realm_id", enum2i(realm.to_enum()) }, { "spell_id", spell_id },
                     { "name", to_json_utf8(realm.get_spell_name(spell_id)) },
-                    { "exp", is_hissatsu ? nlohmann::json(nullptr) : nlohmann::json(exp) },
-                    { "rank", is_hissatsu ? nlohmann::json(nullptr) : nlohmann::json(enum2i(PlayerSkill::spell_skill_rank(exp))) },
-                    { "masked", is_hissatsu } });
+                    { "rank", is_hissatsu ? nlohmann::json(nullptr) : nlohmann::json(enum2i(rank)) },
+                    { "at_max", !is_hissatsu && (rank >= mark_rank) },
+                    { "masked", is_hissatsu } };
+                if (show_actual_value && !is_hissatsu) {
+                    row["exp"] = exp;
+                    row["max"] = PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER);
+                }
+                rows.push_back(std::move(row));
             }
             offset += 32;
         }
@@ -1642,6 +2304,53 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
         }
         result["dungeons"] = std::move(rows);
         break;
+    case BotKnowledgeCategory::MONSTERS: {
+        // The monster knowledge browser (~6) lists every race the player has
+        // seen (all, with cheat_know) with the kill count, or alive/dead for
+        // uniques. The recall text of a race is emitted as a "lore" snapshot
+        // when the player opens it.
+        const auto &records = MonraceRecords::get_instance();
+        for (const auto &[id, monrace] : MonraceList::get_instance()) {
+            if (!monrace->is_valid() || (!cheat_know && !records.has_been_seen(id))) {
+                continue;
+            }
+            auto row = nlohmann::json{ { "id", enum2i(id) }, { "name", to_json_utf8(monrace->name.string()) } };
+            if (monrace->kind_flags.has(MonsterKindType::UNIQUE)) {
+                row["dead"] = monrace->is_dead_unique();
+            } else {
+                row["kills"] = monrace->r_pkills;
+            }
+            rows.push_back(std::move(row));
+        }
+        result["monsters"] = std::move(rows);
+        break;
+    }
+    case BotKnowledgeCategory::KILL_COUNT: {
+        // Same content as do_cmd_knowledge_kill_count().
+        const auto &monraces = MonraceList::get_instance();
+        result["total"] = monraces.calc_defeat_count();
+        for (const auto monrace_id : monraces.get_valid_monrace_ids()) {
+            const auto &monrace = monraces.get_monrace(monrace_id);
+            if (monrace.kind_flags.has(MonsterKindType::UNIQUE)) {
+                if (!monrace.is_dead_unique()) {
+                    continue;
+                }
+                auto row = nlohmann::json{ { "id", enum2i(monrace_id) }, { "name", to_json_utf8(monrace.name.string()) }, { "unique", true } };
+                if (monrace.defeat_level && monrace.defeat_time) {
+                    row["defeat_level"] = monrace.defeat_level;
+                    row["defeat_time"] = monrace.defeat_time;
+                }
+                rows.push_back(std::move(row));
+                continue;
+            }
+            if (monrace.r_pkills <= 0) {
+                continue;
+            }
+            rows.push_back({ { "id", enum2i(monrace_id) }, { "name", to_json_utf8(monrace.name.string()) }, { "unique", false }, { "kills", monrace.r_pkills } });
+        }
+        result["kills"] = std::move(rows);
+        break;
+    }
     case BotKnowledgeCategory::MAX:
         break;
     }
@@ -1941,5 +2650,117 @@ void output_bot_json_look_snapshot(PlayerType *player_ptr)
     auto snapshot = make_snapshot(player_ptr);
     snapshot["type"] = "look";
     snapshot["look"] = make_look_json(player_ptr);
+    write_snapshot(snapshot, elapsed_microseconds(build_started));
+}
+
+/*!
+ * @brief 呪文一覧 (魔法書の閲覧・詠唱メニュー) を表示したときのスナップショットを出力する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param realm_id 表示している領域
+ * @param rows print_spells() が画面に書いた各行
+ */
+void output_bot_json_spell_list_snapshot(PlayerType *player_ptr, int realm_id, const std::vector<BotSpellListRow> &rows)
+{
+    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
+        return;
+    }
+    const auto build_started = BotJsonClock::now();
+    auto spells = nlohmann::json::array();
+    for (const auto &row : rows) {
+        auto spell = nlohmann::json{ { "spell_id", row.spell_id }, { "status", row.status } };
+        if (row.status != "illegible") {
+            spell["name"] = to_json_utf8(row.name);
+            spell["level"] = row.level;
+            spell["mana"] = row.mana;
+        }
+        if (row.fail) {
+            spell["fail"] = *row.fail;
+            spell["proficiency"] = to_json_utf8(row.proficiency);
+            spell["proficiency_mark"] = row.proficiency_mark;
+            spell["info"] = to_json_utf8(row.info);
+        }
+        spells.push_back(std::move(spell));
+    }
+
+    auto snapshot = make_snapshot(player_ptr, false);
+    snapshot["type"] = "spell_list";
+    snapshot["spell_list"] = { { "realm_id", realm_id }, { "spells", std::move(spells) } };
+    write_snapshot(snapshot, elapsed_microseconds(build_started));
+}
+
+/*!
+ * @brief 特殊能力の一覧を表示したときのスナップショットを出力する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param kind 一覧の種類 ("racial": 種族・職業・突然変異のパワー、"mind": 超能力・練気術・剣術等)
+ * @param rows 一覧の全行 (ページ送りで見られる行を含む)
+ * @param page 表示中のページ
+ * @param browse_mode 閲覧モードか
+ */
+void output_bot_json_power_list_snapshot(PlayerType *player_ptr, std::string_view kind, const std::vector<BotPowerListRow> &rows, int page, bool browse_mode)
+{
+    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
+        return;
+    }
+    const auto build_started = BotJsonClock::now();
+    auto powers = nlohmann::json::array();
+    for (const auto &row : rows) {
+        powers.push_back({
+            { "letter", std::string(1, row.letter) },
+            { "page", row.page },
+            { "name", to_json_utf8(row.name) },
+            { "level", row.level },
+            { "cost", row.cost },
+            { "fail", row.fail },
+            { "info", to_json_utf8(row.info) },
+        });
+    }
+
+    auto snapshot = make_snapshot(player_ptr, false);
+    snapshot["type"] = "power_list";
+    snapshot["power_list"] = { { "kind", kind }, { "page", page }, { "browse_mode", browse_mode }, { "powers", std::move(powers) } };
+    write_snapshot(snapshot, elapsed_microseconds(build_started));
+}
+
+namespace {
+std::string *lore_capture_buffer = nullptr;
+
+void capture_lore_text(TERM_COLOR, std::string_view str)
+{
+    if (lore_capture_buffer != nullptr) {
+        lore_capture_buffer->append(str);
+    }
+}
+}
+
+/*!
+ * @brief モンスターの思い出を表示したときのスナップショットを出力する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monrace_id 表示するモンスターの種族ID
+ * @param lore_mode 表示モード (monster_lore_mode)
+ * @details 画面と同じ process_monster_lore() の出力を、描画先だけ差し替えて文字列として取り出す。
+ * 思い出の文章は乱数や状態変更を伴わないので、画面の描画の前に一度余分に組み立てても結果は変わらない。
+ */
+void output_bot_json_lore_snapshot(PlayerType *player_ptr, MonraceId monrace_id, int lore_mode)
+{
+    if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
+        return;
+    }
+    const auto build_started = BotJsonClock::now();
+    std::string text;
+    const auto previous_hook = hook_c_roff;
+    lore_capture_buffer = &text;
+    hook_c_roff = capture_lore_text;
+    process_monster_lore(player_ptr, monrace_id, static_cast<monster_lore_mode>(lore_mode));
+    hook_c_roff = previous_hook;
+    lore_capture_buffer = nullptr;
+
+    const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
+    auto snapshot = make_snapshot(player_ptr, false);
+    snapshot["type"] = "lore";
+    snapshot["lore"] = {
+        { "race_id", enum2i(monrace_id) },
+        { "name", to_json_utf8(monrace.name.string()) },
+        { "text", to_json_utf8(text) },
+    };
     write_snapshot(snapshot, elapsed_microseconds(build_started));
 }

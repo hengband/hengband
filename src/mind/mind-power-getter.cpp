@@ -1,4 +1,5 @@
 #include "mind/mind-power-getter.h"
+#include "bot/bot-json-output.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
@@ -255,6 +256,7 @@ void MindPowerGetter::display_each_mind_chance()
 {
     const auto has_weapon_main = has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND);
     const auto has_weapon_sub = has_melee_weapon(this->player_ptr, INVEN_SUB_HAND);
+    std::vector<BotPowerListRow> bot_rows;
     for (this->index = 0; this->index < std::ssize(mind_ptr->info); this->index++) {
         this->spell = &mind_ptr->info[this->index];
         if (this->spell->min_lev > this->player_ptr->lev) {
@@ -277,7 +279,10 @@ void MindPowerGetter::display_each_mind_chance()
         psi_desc.append(format("%-30s%2d %4d%s %3d%%%s", this->spell->name, this->spell->min_lev, mana_cost,
             (((this->use_mind == MindKindType::MINDCRAFTER) && (this->index == 13)) ? _("～", "~ ") : "  "), chance, comment.data()));
         prt(psi_desc, y + this->index + 1, x);
+        bot_rows.push_back({ I2A(this->index), 0, this->spell->name, this->spell->min_lev, mana_cost, chance, comment });
     }
+
+    output_bot_json_power_list_snapshot(this->player_ptr, "mind", bot_rows, 0, false);
 }
 
 void MindPowerGetter::calculate_mind_chance(bool has_weapon_main, bool has_weapon_sub)
