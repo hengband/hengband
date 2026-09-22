@@ -971,7 +971,7 @@ nlohmann::json make_store_json(PlayerType *player_ptr, const StoreScreen &screen
             continue;
         }
 
-        const auto price = price_item(player_ptr, item.calc_price(), store, false);
+        const auto price = price_item(player_ptr, item.calc_price(), store, StoreTradeType::PLAYER_BUYS);
         auto entry = make_item_json(player_ptr, item, true);
         entry["letter"] = letter;
         entry["name"] = to_json_utf8(describe_flavor(player_ptr, item, OD_STORE | OD_OMIT_PREFIX));
