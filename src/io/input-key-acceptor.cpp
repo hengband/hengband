@@ -9,6 +9,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
+#include "term/screen-processor.h"
 #include "world/world.h"
 
 bool inkey_base; /* See the "inkey()" function */
@@ -32,7 +33,7 @@ constexpr char RECORD_SEPARATOR = 30;
 constexpr char UNIT_SEPARATOR = 31;
 
 //! Save macro trigger string for use in inkey_special()
-char inkey_macro_trigger_string[1024];
+char inkey_macro_trigger_string[MAX_MACRO_TRIGGER_LENGTH + 1];
 
 //! Meaning inside a "macro action", do not match any macros until Record Separator is found.
 bool parse_macro = false;
@@ -133,7 +134,7 @@ static char inkey_aux()
         }
 
         if (ch = term_inkey(false, true); ch != '\0') {
-            if (p >= sizeof(inkey_macro_trigger_string) - 1) {
+            if (p >= MAX_MACRO_TRIGGER_LENGTH) {
                 break;
             }
 
@@ -289,6 +290,34 @@ char inkey(bool do_all_term_refresh)
     term_set_cursor(v != 0);
     inkey_base = inkey_xtra = inkey_flag = inkey_scan = false;
     return ch;
+}
+
+/*!
+ * @brief マクロのトリガーとなるキー列を入力させる
+ * @return 入力されたキー列 (最大 MAX_MACRO_TRIGGER_LENGTH バイト)
+ * @details
+ * 1文字目はキーが押されるまで待ち、以降はキーが途切れるまで読み続ける。
+ * 端末への貼り付けやキーリピートでキーが途切れずに届くと上限を超えるため、
+ * 上限を超えた分は読み捨てる。残すと次の入力やコマンドとして解釈されてしまう。
+ * マクロの照合で読み取るトリガーも同じ長さまでしか扱わないため、これより長いトリガーは照合されない。
+ * 前後の flush() は、入力前に溜まったキーや読み切れなかったキーを混ぜないために必要。
+ */
+std::string inkey_macro_trigger()
+{
+    flush();
+    inkey_base = true;
+    std::string trigger;
+    for (auto ch = inkey(); ch != '\0'; ch = inkey()) {
+        if (trigger.length() < MAX_MACRO_TRIGGER_LENGTH) {
+            trigger.push_back(ch);
+        }
+
+        inkey_base = true;
+        inkey_scan = true;
+    }
+
+    flush();
+    return trigger;
 }
 
 /*

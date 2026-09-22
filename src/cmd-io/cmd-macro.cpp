@@ -48,34 +48,16 @@ static bool macro_dump(std::string_view filename)
 }
 
 /*!
- * @brief マクロのトリガーキーを取得する /
- * Hack -- ask for a "trigger" (see below)
- * @param buf キー表記を保管するバッファ
- * @details
- * <pre>
- * Note the complex use of the "inkey()" function from "util.c".
- *
- * Note that both "flush()" calls are extremely important.
- * </pre>
+ * @brief マクロのトリガーキーを入力させ、キー表記をターミナルに表示する
+ * @return 入力されたトリガーキー
  */
-static void do_cmd_macro_aux(char *buf)
+static std::string do_cmd_macro_aux()
 {
-    flush();
-    inkey_base = true;
-    char i = inkey();
-    int n = 0;
-    while (i) {
-        buf[n++] = i;
-        inkey_base = true;
-        inkey_scan = true;
-        i = inkey();
-    }
-
-    buf[n] = '\0';
-    flush();
+    const auto trigger = inkey_macro_trigger();
     char tmp[1024];
-    ascii_to_text(tmp, buf, sizeof(tmp));
+    ascii_to_text(tmp, trigger, sizeof(tmp));
     term_addstr(-1, TERM_WHITE, tmp);
+    return trigger;
 }
 
 /*!
@@ -217,8 +199,8 @@ void do_cmd_macros(PlayerType *player_ptr)
             prt(_("コマンド: マクロの確認", "Command: Query a macro"), 16, 0);
             prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
-            do_cmd_macro_aux(buf);
-            const auto k = macro_find_exact(buf);
+            const auto trigger = do_cmd_macro_aux();
+            const auto k = macro_find_exact(trigger.data());
             if (k < 0) {
                 msg_print(_("そのキーにはマクロは定義されていません。", "Found no macro."));
                 break;
@@ -236,7 +218,7 @@ void do_cmd_macros(PlayerType *player_ptr)
         case '4': {
             prt(_("コマンド: マクロの作成", "Command: Create a macro"), 16, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
-            do_cmd_macro_aux(buf);
+            const auto trigger = do_cmd_macro_aux();
             c_prt(TERM_L_RED,
                 _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
                     "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."),
@@ -252,17 +234,18 @@ void do_cmd_macros(PlayerType *player_ptr)
             }
 
             text_to_ascii(macro_buf, *ask_result, sizeof(macro_buf));
-            macro_add(buf, macro_buf);
+            macro_add(trigger.data(), macro_buf);
             msg_print(_("マクロを追加しました。", "Added a macro."));
             break;
         }
-        case '5':
+        case '5': {
             prt(_("コマンド: マクロの削除", "Command: Remove a macro"), 16, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
-            do_cmd_macro_aux(buf);
-            macro_add(buf, buf);
+            const auto trigger = do_cmd_macro_aux();
+            macro_add(trigger.data(), trigger.data());
             msg_print(_("マクロを削除しました。", "Removed a macro."));
             break;
+        }
         case '6': {
             prt(_("コマンド: キー配置をファイルに追加する", "Command: Append keymaps to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
