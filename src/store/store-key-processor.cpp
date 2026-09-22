@@ -37,14 +37,12 @@
 #include "window/display-sub-windows.h"
 #include "world/world.h"
 
-/* Set this to leave the store */
-bool leave_store = false;
-
 /*!
  * @brief 店舗処理コマンド選択のメインルーチン /
  * Process a command in a store
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param store コマンドの対象となる店舗
+ * @return 店から出るならtrue
  * @note
  * <pre>
  * Note that we must allow the use of a few "special" commands
@@ -53,7 +51,7 @@ bool leave_store = false;
  * but not in the stores, to prevent chaos.
  * </pre>
  */
-void store_process_command(PlayerType *player_ptr, Store &store)
+bool store_process_command(PlayerType *player_ptr, Store &store)
 {
     const auto store_num = store.get_sale_type();
     repeat_check();
@@ -64,8 +62,7 @@ void store_process_command(PlayerType *player_ptr, Store &store)
     auto &world = AngbandWorld::get_instance();
     switch (command_cmd) {
     case ESCAPE: {
-        leave_store = true;
-        break;
+        return true;
     }
     case '-': {
         /* 日本語版追加 */
@@ -87,7 +84,7 @@ void store_process_command(PlayerType *player_ptr, Store &store)
             display_store_inventory(player_ptr, store);
         }
 
-        break;
+        return false;
     }
     case ' ': {
         if (store.stock_num <= store_bottom) {
@@ -107,55 +104,55 @@ void store_process_command(PlayerType *player_ptr, Store &store)
             display_store_inventory(player_ptr, store);
         }
 
-        break;
+        return false;
     }
     case KTRL('R'): {
         do_cmd_redraw(player_ptr);
         display_store(player_ptr, store);
-        break;
+        return false;
     }
     case 'g': {
         store_purchase(player_ptr, store);
-        break;
+        return false;
     }
     case 'd': {
         store_sell(player_ptr, store);
-        break;
+        return false;
     }
     case 'x': {
         store_examine(player_ptr, store);
-        break;
+        return false;
     }
     case '\r': {
-        break;
+        return false;
     }
     case 'w': {
         do_cmd_wield(player_ptr);
-        break;
+        return false;
     }
     case 't': {
         do_cmd_takeoff(player_ptr);
-        break;
+        return false;
     }
     case 'k': {
         do_cmd_destroy(player_ptr);
-        break;
+        return false;
     }
     case 'e': {
         do_cmd_equip(player_ptr);
-        break;
+        return false;
     }
     case 'i': {
         do_cmd_inven(player_ptr);
-        break;
+        return false;
     }
     case 'I': {
         do_cmd_observe(player_ptr);
-        break;
+        return false;
     }
     case KTRL('I'): {
         toggle_inventory_equipment();
-        break;
+        return false;
     }
     case 'b': {
         PlayerClass pc(player_ptr);
@@ -173,100 +170,100 @@ void store_process_command(PlayerType *player_ptr, Store &store)
             do_cmd_browse(player_ptr);
         }
 
-        break;
+        return false;
     }
     case '{': {
         do_cmd_inscribe(player_ptr);
-        break;
+        return false;
     }
     case '}': {
         do_cmd_uninscribe(player_ptr);
-        break;
+        return false;
     }
     case '?': {
         do_cmd_help(player_ptr);
-        break;
+        return false;
     }
     case '/': {
         do_cmd_query_symbol(player_ptr);
-        break;
+        return false;
     }
     case 'C': {
         world.set_town_index(old_town_num);
         do_cmd_player_status(player_ptr);
         world.set_town_index(inner_town_num);
         display_store(player_ptr, store);
-        break;
+        return false;
     }
     case '!':
         term_user();
-        break;
+        return false;
     case '"': {
         world.set_town_index(old_town_num);
         do_cmd_pref(player_ptr);
         world.set_town_index(inner_town_num);
-        break;
+        return false;
     }
     case '@': {
         world.set_town_index(old_town_num);
         do_cmd_macros(player_ptr);
         world.set_town_index(inner_town_num);
-        break;
+        return false;
     }
     case '%': {
         world.set_town_index(old_town_num);
         do_cmd_visuals(player_ptr);
         world.set_town_index(inner_town_num);
-        break;
+        return false;
     }
     case '&': {
         world.set_town_index(old_town_num);
         do_cmd_colors(player_ptr);
         world.set_town_index(inner_town_num);
-        break;
+        return false;
     }
     case '=': {
         do_cmd_options(player_ptr);
         (void)combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
         do_cmd_redraw(player_ptr);
         display_store(player_ptr, store);
-        break;
+        return false;
     }
     case ':': {
         do_cmd_note();
-        break;
+        return false;
     }
     case 'V': {
         do_cmd_version();
-        break;
+        return false;
     }
     case KTRL('F'): {
         do_cmd_feeling(player_ptr);
-        break;
+        return false;
     }
     case KTRL('O'): {
         do_cmd_message_one();
-        break;
+        return false;
     }
     case KTRL('P'): {
         do_cmd_messages(0);
-        break;
+        return false;
     }
     case '|': {
         do_cmd_diary(player_ptr);
-        break;
+        return false;
     }
     case '~': {
         do_cmd_knowledge(player_ptr);
-        break;
+        return false;
     }
     case '(': {
         do_cmd_load_screen();
-        break;
+        return false;
     }
     case ')': {
         do_cmd_save_screen(player_ptr);
-        break;
+        return false;
     }
     default: {
         if ((store_num == StoreSaleType::MUSEUM) && (command_cmd == 'r')) {
@@ -275,7 +272,7 @@ void store_process_command(PlayerType *player_ptr, Store &store)
             msg_print(_("そのコマンドは店の中では使えません。", "That command does not work in stores."));
         }
 
-        break;
+        return false;
     }
     }
 }
