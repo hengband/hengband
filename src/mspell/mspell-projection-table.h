@@ -5,6 +5,8 @@
 
 enum class AttributeType;
 enum class MonsterAbilityType;
+class Direction;
+class PlayerType;
 
 /*!
  * @brief プレイヤーが使うモンスター魔法の放ち方
@@ -27,3 +29,4 @@ struct MspellProjection {
 };
 
 tl::optional<const MspellProjection &> find_mspell_projection(MonsterAbilityType ability);
+void fire_mspell_projection(PlayerType *player_ptr, const MspellProjection &projection, const Direction &dir, int damage, int breath_radius);

@@ -7,6 +7,8 @@
 #include "effect/attribute-types.h"
 #include "locale/language-switcher.h"
 #include "monster-race/race-ability-flags.h"
+#include "spell-kind/spells-launcher.h"
+#include "view/display-messages.h"
 #include <unordered_map>
 
 namespace {
@@ -80,4 +82,28 @@ tl::optional<const MspellProjection &> find_mspell_projection(MonsterAbilityType
     }
 
     return it->second;
+}
+
+/*!
+ * @brief モンスター魔法のブレス・ボール・ボルトを、メッセージを出してから放つ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param projection 放つ魔法の定義
+ * @param dir 放つ方向
+ * @param damage 威力
+ * @param breath_radius ブレスの半径 (職業によって求め方が違うので、呼び出し側で決める)
+ */
+void fire_mspell_projection(PlayerType *player_ptr, const MspellProjection &projection, const Direction &dir, int damage, int breath_radius)
+{
+    msg_print(projection.message);
+    switch (projection.type) {
+    case MspellProjectionType::BREATH:
+        fire_breath(player_ptr, projection.attribute, dir, damage, breath_radius);
+        return;
+    case MspellProjectionType::BALL:
+        fire_ball(player_ptr, projection.attribute, dir, damage, projection.radius);
+        return;
+    case MspellProjectionType::BOLT:
+        fire_bolt(player_ptr, projection.attribute, dir, damage);
+        return;
+    }
 }
