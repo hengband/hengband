@@ -12,9 +12,8 @@
 #include "view/display-messages.h"
 #include <vector>
 #ifdef WIN32
+#define NOMINMAX
 #include <windows.h>
-#undef min
-#undef max
 #else
 #include "util/finalizer.h"
 #include <algorithm>

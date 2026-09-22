@@ -1,12 +1,12 @@
-#include "util/stack-trace.h"
-
 #include "util/finalizer.h"
+#include "util/stack-trace.h"
 #include <iomanip>
 #include <sstream>
 #include <string_view>
+#define NOMINMAX
 #include <windows.h>
 
-// DbgHelp.h は windows.h より後にインクルードする必要がある
+// DbgHelp.h は windows.h より後にインクルードする必要がある.
 #include <DbgHelp.h>
 
 namespace util {

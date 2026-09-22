@@ -6,6 +6,7 @@
 
 #include "system/h-type.h"
 #include <filesystem>
+#define NOMINMAX
 #include <windows.h>
 
 /*
