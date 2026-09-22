@@ -1210,6 +1210,9 @@
     <ClCompile Include="..\..\src\mspell\monster-power-table.cpp">
       <Filter>mspell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-projection-table.cpp">
+      <Filter>mspell</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\view\status-bars-table.cpp">
       <Filter>view</Filter>
     </ClCompile>
@@ -4028,6 +4031,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\monster-power-table.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-projection-table.h">
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\view\status-bars-table.h">

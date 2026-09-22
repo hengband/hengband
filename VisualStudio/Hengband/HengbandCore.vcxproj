@@ -501,6 +501,7 @@
     <ClCompile Include="..\..\src\window\main-window-stat-poster.cpp" />
     <ClCompile Include="..\..\src\window\main-window-util.cpp" />
     <ClCompile Include="..\..\src\mspell\monster-power-table.cpp" />
+    <ClCompile Include="..\..\src\mspell\mspell-projection-table.cpp" />
     <ClCompile Include="..\..\src\system\monrace\monrace-allocation.cpp" />
     <ClCompile Include="..\..\src\term\screen-processor.cpp" />
     <ClCompile Include="..\..\src\util\buffer-shaper.cpp" />
@@ -1218,6 +1219,7 @@
     <ClInclude Include="..\..\src\racial\racial-kutar.h" />
     <ClInclude Include="..\..\src\mind\stances-table.h" />
     <ClInclude Include="..\..\src\mspell\monster-power-table.h" />
+    <ClInclude Include="..\..\src\mspell\mspell-projection-table.h" />
     <ClInclude Include="..\..\src\mspell\mspell-dispel.h" />
     <ClInclude Include="..\..\src\mspell\mspell-checker.h" />
     <ClInclude Include="..\..\src\mspell\mspell-judgement.h" />
