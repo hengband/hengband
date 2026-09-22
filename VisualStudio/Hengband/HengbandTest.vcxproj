@@ -77,6 +77,7 @@
     <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp" />
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp" />
     <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp" />
+    <ClCompile Include="..\..\src\test\store\test-pricing.cpp" />
     <ClCompile Include="..\..\src\test\store\test-store-screen.cpp" />
     <ClCompile Include="..\..\src\test\store\test-store-util.cpp" />
     <ClCompile Include="..\..\src\test\term\test-z-form.cpp" />
