@@ -174,12 +174,7 @@ static errr path_temp(char *buf, int max)
         return -1;
     }
 
-#if !defined(_WIN32) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
     angband_strcpy(buf, s, max);
-#else
-    angband_strcpy(buf, format(".%s", s), max);
-#endif
-
     return 0;
 }
 #endif
