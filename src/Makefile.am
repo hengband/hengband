@@ -1268,6 +1268,7 @@ libhengband_a_SOURCES = \
 	store/sell-order.cpp store/sell-order.h \
 	store/service-checker.cpp store/service-checker.h \
 	store/store-key-processor.cpp store/store-key-processor.h \
+	store/store-screen.cpp store/store-screen.h \
 	store/store-util.cpp store/store-util.h \
 	store/store-owners.cpp store/store-owners.h \
 	store/store-owner-comments.cpp store/store-owner-comments.h \
@@ -1501,6 +1502,7 @@ hengband_test_SOURCES = \
 	test/io/test-macro-configurations-store.cpp \
 	test/load/test-angband-version-comparer.cpp \
 	test/mutation/test-mutation-roll-table.cpp \
+	test/store/test-store-screen.cpp \
 	test/store/test-store-util.cpp \
 	test/term/test-z-form.cpp \
 	test/timed-effect/test-player-cut.cpp \

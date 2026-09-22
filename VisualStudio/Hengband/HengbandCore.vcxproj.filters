@@ -607,6 +607,9 @@
     <ClCompile Include="..\..\src\store\store-owners.cpp">
       <Filter>store</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\store\store-screen.cpp">
+      <Filter>store</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\store\store-util.cpp">
       <Filter>store</Filter>
     </ClCompile>
@@ -3257,6 +3260,9 @@
       <Filter>store</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\store\store-owners.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\store-screen.h">
       <Filter>store</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\store\rumor.h">

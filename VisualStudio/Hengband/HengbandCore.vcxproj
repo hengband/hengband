@@ -755,6 +755,7 @@
     <ClCompile Include="..\..\src\store\say-comments.cpp" />
     <ClCompile Include="..\..\src\store\store-owner-comments.cpp" />
     <ClCompile Include="..\..\src\store\store-owners.cpp" />
+    <ClCompile Include="..\..\src\store\store-screen.cpp" />
     <ClCompile Include="..\..\src\store\store-util.cpp" />
     <ClCompile Include="..\..\src\monster-floor\monster-dist-offsets.cpp" />
     <ClCompile Include="..\..\src\monster\monster-processor.cpp" />
@@ -1788,6 +1789,7 @@
     <ClInclude Include="..\..\src\store\say-comments.h" />
     <ClInclude Include="..\..\src\store\store-owner-comments.h" />
     <ClInclude Include="..\..\src\store\store-owners.h" />
+    <ClInclude Include="..\..\src\store\store-screen.h" />
     <ClInclude Include="..\..\src\store\store-util.h" />
     <ClInclude Include="..\..\src\monster-floor\monster-dist-offsets.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-attack-processor.h" />

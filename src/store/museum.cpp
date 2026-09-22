@@ -2,6 +2,7 @@
 #include "core/asking-player.h"
 #include "flavor/flavor-describer.h"
 #include "store/home.h"
+#include "store/store-screen.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/item/item-entity.h"
@@ -12,27 +13,23 @@
  * @brief 博物館のアイテムを除去するコマンドのメインルーチン /
  * Remove an item from museum (Originally from TOband)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param store 博物館の店舗
+ * @param screen 博物館の画面
  */
-void museum_remove_object(PlayerType *player_ptr, Store &store)
+void museum_remove_object(PlayerType *player_ptr, StoreScreen &screen)
 {
+    auto &store = screen.get_store();
     if (store.stock_num <= 0) {
         msg_print(_("博物館には何も置いてありません。", "The Museum is empty."));
         return;
     }
 
-    int i = store.stock_num - store_top;
-    if (i > store_bottom) {
-        i = store_bottom;
-    }
-
     constexpr auto mes = _("どのアイテムの展示をやめさせますか？", "Which item do you want to order to remove? ");
-    auto item_num_opt = input_stock(mes, 0, i - 1, StoreSaleType::MUSEUM);
+    auto item_num_opt = input_stock(mes, 0, screen.get_page_item_count() - 1, StoreSaleType::MUSEUM);
     if (!item_num_opt) {
         return;
     }
 
-    const short item_num = *item_num_opt + store_top;
+    const short item_num = *item_num_opt + screen.get_page_top();
     const auto &item = *store.stock[item_num];
     const auto item_name = describe_flavor(player_ptr, item, 0);
     msg_print(_("展示をやめさせたアイテムは二度と見ることはできません！", "Once removed from the Museum, an item will be gone forever!"));
@@ -44,11 +41,6 @@ void museum_remove_object(PlayerType *player_ptr, Store &store)
     store.increase_item(item_num, -item.number);
     store.optimize_item(item_num);
     (void)combine_and_reorder_home(player_ptr, store);
-    if (store.stock_num == 0) {
-        store_top = 0;
-    } else if (store_top >= store.stock_num) {
-        store_top -= store_bottom;
-    }
-
-    display_store_inventory(player_ptr, store);
+    screen.adjust_page_after_removal();
+    display_store_inventory(player_ptr, screen);
 }

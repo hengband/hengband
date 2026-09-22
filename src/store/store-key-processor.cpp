@@ -16,7 +16,6 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-visual/cmd-draw.h"
 #include "cmd-visual/cmd-visuals.h"
-#include "game-option/birth-options.h"
 #include "game-option/input-options.h"
 #include "io/command-repeater.h"
 #include "io/input-key-requester.h"
@@ -28,6 +27,7 @@
 #include "store/museum.h"
 #include "store/purchase-order.h"
 #include "store/sell-order.h"
+#include "store/store-screen.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/player-type-definition.h"
@@ -41,7 +41,7 @@
  * @brief 店舗処理コマンド選択のメインルーチン /
  * Process a command in a store
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param store コマンドの対象となる店舗
+ * @param screen コマンドの対象となる店舗の画面
  * @return 店から出るならtrue
  * @note
  * <pre>
@@ -51,9 +51,9 @@
  * but not in the stores, to prevent chaos.
  * </pre>
  */
-bool store_process_command(PlayerType *player_ptr, Store &store)
+bool store_process_command(PlayerType *player_ptr, StoreScreen &screen)
 {
-    const auto store_num = store.get_sale_type();
+    const auto store_num = screen.get_store().get_sale_type();
     repeat_check();
     if (rogue_like_commands && (command_cmd == 'l')) {
         command_cmd = 'x';
@@ -67,60 +67,40 @@ bool store_process_command(PlayerType *player_ptr, Store &store)
     case '-': {
         /* 日本語版追加 */
         /* 1 ページ戻るコマンド: 我が家のページ数が多いので重宝するはず By BUG */
-        if (store.stock_num <= store_bottom) {
+        if (!screen.has_multiple_pages()) {
             msg_print(_("これで全部です。", "Entire inventory is shown."));
         } else {
-            store_top -= store_bottom;
-            if (store_top < 0) {
-                store_top = ((store.stock_num - 1) / store_bottom) * store_bottom;
-            }
-
-            if ((store_num == StoreSaleType::HOME) && !powerup_home) {
-                if (store_top >= store_bottom) {
-                    store_top = store_bottom;
-                }
-            }
-
-            display_store_inventory(player_ptr, store);
+            screen.turn_page_backward();
+            display_store_inventory(player_ptr, screen);
         }
 
         return false;
     }
     case ' ': {
-        if (store.stock_num <= store_bottom) {
+        if (!screen.has_multiple_pages()) {
             msg_print(_("これで全部です。", "Entire inventory is shown."));
         } else {
-            store_top += store_bottom;
-
-            /*
-             * 隠しオプション(powerup_home)がセットされていないときは
-             * 我が家では 2 ページまでしか表示しない
-             */
-            auto inven_max = store_get_stock_max(store_num, powerup_home);
-            if (store_top >= store.stock_num || store_top >= inven_max) {
-                store_top = 0;
-            }
-
-            display_store_inventory(player_ptr, store);
+            screen.turn_page_forward();
+            display_store_inventory(player_ptr, screen);
         }
 
         return false;
     }
     case KTRL('R'): {
         do_cmd_redraw(player_ptr);
-        display_store(player_ptr, store);
+        display_store(player_ptr, screen);
         return false;
     }
     case 'g': {
-        store_purchase(player_ptr, store);
+        store_purchase(player_ptr, screen);
         return false;
     }
     case 'd': {
-        store_sell(player_ptr, store);
+        store_sell(player_ptr, screen);
         return false;
     }
     case 'x': {
-        store_examine(player_ptr, store);
+        store_examine(player_ptr, screen);
         return false;
     }
     case '\r': {
@@ -192,7 +172,7 @@ bool store_process_command(PlayerType *player_ptr, Store &store)
         world.set_town_index(old_town_num);
         do_cmd_player_status(player_ptr);
         world.set_town_index(inner_town_num);
-        display_store(player_ptr, store);
+        display_store(player_ptr, screen);
         return false;
     }
     case '!':
@@ -226,7 +206,7 @@ bool store_process_command(PlayerType *player_ptr, Store &store)
         do_cmd_options(player_ptr);
         (void)combine_and_reorder_home(player_ptr, StoreSaleType::HOME);
         do_cmd_redraw(player_ptr);
-        display_store(player_ptr, store);
+        display_store(player_ptr, screen);
         return false;
     }
     case ':': {
@@ -267,7 +247,7 @@ bool store_process_command(PlayerType *player_ptr, Store &store)
     }
     default: {
         if ((store_num == StoreSaleType::MUSEUM) && (command_cmd == 'r')) {
-            museum_remove_object(player_ptr, store);
+            museum_remove_object(player_ptr, screen);
         } else {
             msg_print(_("そのコマンドは店の中では使えません。", "That command does not work in stores."));
         }

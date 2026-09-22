@@ -22,6 +22,7 @@
 #include "store/black-market.h"
 #include "store/service-checker.h"
 #include "store/store-owners.h"
+#include "store/store-screen.h"
 #include "store/store-util.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-scroll-types.h"
@@ -38,14 +39,8 @@
 #include "world/world.h"
 #include <tl/optional.hpp>
 
-int store_top = 0;
-int store_bottom = 0;
-int xtra_stock = 0;
 size_t old_town_num = 0;
 size_t inner_town_num = 0;
-
-/* We store the current "store feat" here so everyone can access it */
-short cur_store_feat;
 
 /*!
  * @brief 店舗の最大スロット数を返す
@@ -214,10 +209,11 @@ tl::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe_
  * @brief 店のアイテムを調べるコマンドのメインルーチン /
  * Examine an item in a store			   -JDL-
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param store 調べる店舗
+ * @param screen 調べる店舗の画面
  */
-void store_examine(PlayerType *player_ptr, const Store &store)
+void store_examine(PlayerType *player_ptr, const StoreScreen &screen)
 {
+    const auto &store = screen.get_store();
     const auto store_num = store.get_sale_type();
     if (store.stock_num <= 0) {
         if (store_num == StoreSaleType::HOME) {
@@ -230,18 +226,13 @@ void store_examine(PlayerType *player_ptr, const Store &store)
         return;
     }
 
-    int i = (store.stock_num - store_top);
-    if (i > store_bottom) {
-        i = store_bottom;
-    }
-
     constexpr auto mes = _("どれを調べますか？", "Which item do you want to examine? ");
-    auto item_num_opt = input_stock(mes, 0, i - 1, store_num);
+    auto item_num_opt = input_stock(mes, 0, screen.get_page_item_count() - 1, store_num);
     if (!item_num_opt) {
         return;
     }
 
-    const auto item_num = *item_num_opt + store_top;
+    const auto item_num = *item_num_opt + screen.get_page_top();
     const auto &item = *store.stock[item_num];
     if (!item.is_fully_known()) {
         msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));

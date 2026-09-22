@@ -33,8 +33,8 @@
 #include "player/temporary-resistances.h"
 #include "spell/technic-info-table.h"
 #include "store/pricing.h"
+#include "store/store-screen.h"
 #include "store/store-util.h"
-#include "store/store.h"
 #include "sv-definition/sv-bow-types.h"
 #include "system/artifact/artifact-definition.h"
 #include "system/artifact/artifact-list.h"
@@ -944,28 +944,23 @@ nlohmann::json make_equipment_json(PlayerType *player_ptr)
 
 /*!
  * @brief 店の在庫とページング状況を出力する
- * @details 呼び出し口は do_cmd_store() のコマンドループ1箇所だけで、そこに到達する時点で
- * store_top / store_bottom は設定済みである。未設定のまま出力すると、ページ数を割り算する
- * 消費側をゼロ除算させてしまう。
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param store 出力する店舗
+ * @param screen 出力する店舗の画面
  */
-nlohmann::json make_store_json(PlayerType *player_ptr, const Store &store)
+nlohmann::json make_store_json(PlayerType *player_ptr, const StoreScreen &screen)
 {
+    const auto &store = screen.get_store();
     const auto store_num = store.get_sale_type();
     auto items = nlohmann::json::array();
     const auto is_personal_storage = store_num == StoreSaleType::HOME || store_num == StoreSaleType::MUSEUM;
-    for (auto i = 0; i < store.stock_num; ++i) {
+    const auto page_top = screen.get_page_top();
+    const auto page_item_count = screen.get_page_item_count();
+    for (auto page_pos = 0; page_pos < page_item_count; ++page_pos) {
         // The store accepts the item letter RELATIVE to the currently visible
-        // page: pressing 'a' selects stock[store_top]. Only items on the
-        // current page (store_top .. store_top+store_bottom) are selectable,
-        // so emit page-relative letters and skip off-page items. Mirrors
-        // display_entry()'s labelling.
-        const auto page_pos = i - store_top;
-        if (page_pos < 0 || page_pos >= store_bottom) {
-            continue;
-        }
-        const auto &item = *store.stock[i];
+        // page: pressing 'a' selects stock[page_top]. Only items on the
+        // current page are selectable, so emit page-relative letters for the
+        // current page only. Mirrors display_entry()'s labelling.
+        const auto &item = *store.stock[page_top + page_pos];
         const auto letter = (page_pos < 26)
                                 ? std::string(1, static_cast<char>('a' + page_pos))
                                 : std::string(1, static_cast<char>('A' + (page_pos - 26)));
@@ -992,8 +987,8 @@ nlohmann::json make_store_json(PlayerType *player_ptr, const Store &store)
     return {
         { "store_type", enum2i(store_num) },
         { "stock_num", store.stock_num },
-        { "page_top", store_top },
-        { "page_size", store_bottom },
+        { "page_top", page_top },
+        { "page_size", screen.get_page_size() },
         { "items", items },
     };
 }
@@ -1890,7 +1885,7 @@ void output_bot_json_snapshot(PlayerType *player_ptr)
     write_snapshot(snapshot, elapsed_microseconds(build_started));
 }
 
-void output_bot_json_store_snapshot(PlayerType *player_ptr, const Store &store)
+void output_bot_json_store_snapshot(PlayerType *player_ptr, const StoreScreen &screen)
 {
     if (!arg_bot_json_output || player_ptr == nullptr || player_ptr->current_floor_ptr == nullptr) {
         return;
@@ -1909,7 +1904,7 @@ void output_bot_json_store_snapshot(PlayerType *player_ptr, const Store &store)
     const auto build_started = BotJsonClock::now();
     auto snapshot = make_snapshot(player_ptr, false);
     snapshot["type"] = "store";
-    snapshot["store"] = make_store_json(player_ptr, store);
+    snapshot["store"] = make_store_json(player_ptr, screen);
     write_snapshot(snapshot, elapsed_microseconds(build_started));
 }
 
