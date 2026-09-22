@@ -81,8 +81,9 @@ void user_name(char *buf, int id)
 {
     struct passwd *pw;
     if ((pw = getpwuid(id))) {
-        (void)strcpy(buf, pw->pw_name);
-        buf[16] = '\0';
+        // ユーザー名は16バイトまでに切り詰める (NUL終端の分を含めて17バイト)
+        constexpr auto name_bufsize = 17;
+        angband_strcpy(buf, pw->pw_name, name_bufsize);
 
 #ifdef JP
         if (!iskanji(buf[0]))
