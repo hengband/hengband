@@ -304,7 +304,7 @@ void WorldTurnProcessor::shuffle_shopkeeper()
             msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), terrain.name.data());
         }
 
-        store_shuffle(store_sale_type);
+        store_shuffle(AngbandWorld::get_instance().get_town_index(), store_sale_type);
         break;
     }
 }

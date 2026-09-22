@@ -125,7 +125,7 @@ static void shuffle_store(const StoreScreen &screen)
     }
 
     msg_print(_("店主は引退した。", "The shopkeeper retires."));
-    store_shuffle(store.get_sale_type());
+    store_shuffle(screen.get_town_index(), store.get_sale_type());
     prt("", 3, 0);
     const auto &owner = store.get_owner();
     put_str(format("%s (%s)", owner.owner_name, race_info[enum2i(owner.owner_race)].title.data()), 3, 10);
@@ -137,7 +137,7 @@ static void switch_store_stock(PlayerType *player_ptr, StoreScreen &screen, cons
     auto &store = screen.get_store();
     if (store.stock_num == 0) {
         shuffle_store(screen);
-        store_maintenance(player_ptr, store, 10);
+        store_maintenance(player_ptr, screen.get_town_index(), store, 10);
 
         screen.reset_page();
         display_store_inventory(player_ptr, screen);

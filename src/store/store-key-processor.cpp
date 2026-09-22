@@ -35,7 +35,6 @@
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "window/display-sub-windows.h"
-#include "world/world.h"
 
 /*!
  * @brief 店舗処理コマンド選択のメインルーチン /
@@ -59,7 +58,6 @@ bool store_process_command(PlayerType *player_ptr, StoreScreen &screen)
         command_cmd = 'x';
     }
 
-    auto &world = AngbandWorld::get_instance();
     switch (command_cmd) {
     case ESCAPE: {
         return true;
@@ -169,9 +167,7 @@ bool store_process_command(PlayerType *player_ptr, StoreScreen &screen)
         return false;
     }
     case 'C': {
-        world.set_town_index(old_town_num);
         do_cmd_player_status(player_ptr);
-        world.set_town_index(inner_town_num);
         display_store(player_ptr, screen);
         return false;
     }
@@ -179,27 +175,19 @@ bool store_process_command(PlayerType *player_ptr, StoreScreen &screen)
         term_user();
         return false;
     case '"': {
-        world.set_town_index(old_town_num);
         do_cmd_pref(player_ptr);
-        world.set_town_index(inner_town_num);
         return false;
     }
     case '@': {
-        world.set_town_index(old_town_num);
         do_cmd_macros(player_ptr);
-        world.set_town_index(inner_town_num);
         return false;
     }
     case '%': {
-        world.set_town_index(old_town_num);
         do_cmd_visuals(player_ptr);
-        world.set_town_index(inner_town_num);
         return false;
     }
     case '&': {
-        world.set_town_index(old_town_num);
         do_cmd_colors(player_ptr);
-        world.set_town_index(inner_town_num);
         return false;
     }
     case '=': {
