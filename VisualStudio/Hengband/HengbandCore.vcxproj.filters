@@ -1645,14 +1645,8 @@
     <ClCompile Include="..\..\src\blue-magic\blue-magic-util.cpp">
       <Filter>blue-magic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-breath.cpp">
-      <Filter>blue-magic</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspell\specified-summon.cpp">
       <Filter>mspell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\blue-magic\blue-magic-ball-bolt.cpp">
-      <Filter>blue-magic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\blue-magic\blue-magic-spirit-curse.cpp">
       <Filter>blue-magic</Filter>
@@ -4498,14 +4492,8 @@
     <ClInclude Include="..\..\src\blue-magic\blue-magic-util.h">
       <Filter>blue-magic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\blue-magic\blue-magic-breath.h">
-      <Filter>blue-magic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mspell\specified-summon.h">
       <Filter>mspell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\blue-magic\blue-magic-ball-bolt.h">
-      <Filter>blue-magic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\blue-magic\blue-magic-spirit-curse.h">
       <Filter>blue-magic</Filter>
