@@ -24,6 +24,7 @@
 #include "store/say-comments.h"
 #include "store/service-checker.h"
 #include "store/store-owners.h"
+#include "store/store-screen.h"
 #include "store/store.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -58,10 +59,11 @@ static tl::optional<int> prompt_to_sell(PlayerType *player_ptr, const Store &sto
  * @brief 店からの売却処理のメインルーチン /
  * Sell an item to the store (or home)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param store 売却先の店舗
+ * @param screen 売却先の店舗の画面
  */
-void store_sell(PlayerType *player_ptr, Store &store)
+void store_sell(PlayerType *player_ptr, StoreScreen &screen)
 {
+    auto &store = screen.get_store();
     const auto store_num = store.get_sale_type();
     concptr q; //!< @note プロンプトメッセージ
     concptr s_none; //!< @note 売る/置くものがない場合のメッセージ
@@ -143,7 +145,7 @@ void store_sell(PlayerType *player_ptr, Store &store)
             }
 
             player_ptr->au += price;
-            store_prt_gold(player_ptr->au);
+            store_prt_gold(screen, player_ptr->au);
             const auto dummy = selling_item.calc_price() * selling_item.number;
 
             identify_item(player_ptr, item.get());
@@ -178,8 +180,8 @@ void store_sell(PlayerType *player_ptr, Store &store)
             inven_item_optimize(player_ptr, i_idx);
             const auto item_pos = store.carry(sold_item);
             if (item_pos) {
-                store_top = (*item_pos / store_bottom) * store_bottom;
-                display_store_inventory(player_ptr, store);
+                screen.show_page_containing(*item_pos);
+                display_store_inventory(player_ptr, screen);
             }
         }
     } else if (store_num == StoreSaleType::MUSEUM) {
@@ -205,8 +207,8 @@ void store_sell(PlayerType *player_ptr, Store &store)
 
         int item_pos = home_carry(player_ptr, store, &selling_item);
         if (item_pos >= 0) {
-            store_top = (item_pos / store_bottom) * store_bottom;
-            display_store_inventory(player_ptr, store);
+            screen.show_page_containing(item_pos);
+            display_store_inventory(player_ptr, screen);
         }
     } else {
         distribute_charges(item.get(), &selling_item, amt);
@@ -216,8 +218,8 @@ void store_sell(PlayerType *player_ptr, Store &store)
         vary_item(player_ptr, i_idx, -amt);
         int item_pos = home_carry(player_ptr, store, &selling_item);
         if (item_pos >= 0) {
-            store_top = (item_pos / store_bottom) * store_bottom;
-            display_store_inventory(player_ptr, store);
+            screen.show_page_containing(item_pos);
+            display_store_inventory(player_ptr, screen);
         }
     }
 

@@ -20,10 +20,9 @@
 #include "store/pricing.h"
 #include "store/say-comments.h"
 #include "store/store-owners.h"
+#include "store/store-screen.h"
 #include "store/store.h"
 #include "system/player-type-definition.h"
-#include "system/terrain/terrain-definition.h"
-#include "system/terrain/terrain-list.h"
 #include "term/screen-processor.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
@@ -81,13 +80,14 @@ static tl::optional<short> show_store_select_item(const int i, StoreSaleType sto
 /*!
  * @brief 家のアイテムを取得する
  * @param player_ptr プレイヤー情報の参照ポインタ
- * @param store 我が家の店舗
+ * @param screen 我が家の画面
  * @param item_home 取得元オブジェクト
  * @param item_inventory 取得先オブジェクト(指定数量分)
  * @param i_idx 取得先インベントリ番号
  */
-static void take_item_from_home(PlayerType *player_ptr, Store &store, ItemEntity &item_home, ItemEntity &item_inventory, short i_idx)
+static void take_item_from_home(PlayerType *player_ptr, StoreScreen &screen, ItemEntity &item_home, ItemEntity &item_inventory, short i_idx)
 {
+    auto &store = screen.get_store();
     const auto amt = item_inventory.number;
     distribute_charges(&item_home, &item_inventory, amt);
 
@@ -103,26 +103,22 @@ static void take_item_from_home(PlayerType *player_ptr, Store &store, ItemEntity
     const auto combined_or_reordered = combine_and_reorder_home(player_ptr, store);
     if (stock_num == store.stock_num) {
         if (combined_or_reordered) {
-            display_store_inventory(player_ptr, store);
+            display_store_inventory(player_ptr, screen);
             return;
         }
 
-        display_entry(player_ptr, store, i_idx);
+        display_entry(player_ptr, screen, i_idx);
         return;
     }
 
-    if (store.stock_num == 0) {
-        store_top = 0;
-    } else if (store_top >= store.stock_num) {
-        store_top -= store_bottom;
-    }
-
-    display_store_inventory(player_ptr, store);
+    screen.adjust_page_after_removal();
+    display_store_inventory(player_ptr, screen);
     chg_virtue(player_ptr, Virtue::SACRIFICE, 1);
 }
 
-static void shuffle_store(Store &store)
+static void shuffle_store(const StoreScreen &screen)
 {
+    const auto &store = screen.get_store();
     if (!one_in_(STORE_SHUFFLE)) {
         msg_print(_("店主は新たな在庫を取り出した。", "The shopkeeper brings out some new stock."));
         return;
@@ -133,41 +129,39 @@ static void shuffle_store(Store &store)
     prt("", 3, 0);
     const auto &owner = store.get_owner();
     put_str(format("%s (%s)", owner.owner_name, race_info[enum2i(owner.owner_race)].title.data()), 3, 10);
-    const auto &terrains = TerrainList::get_instance();
-    prt(format("%s (%d)", terrains.get_terrain(cur_store_feat).name.data(), owner.max_cost), 3, 50);
+    prt(format("%s (%d)", screen.get_name().data(), owner.max_cost), 3, 50);
 }
 
-static void switch_store_stock(PlayerType *player_ptr, Store &store, const int i, const COMMAND_CODE item)
+static void switch_store_stock(PlayerType *player_ptr, StoreScreen &screen, const int i, const COMMAND_CODE item)
 {
+    auto &store = screen.get_store();
     if (store.stock_num == 0) {
-        shuffle_store(store);
+        shuffle_store(screen);
         store_maintenance(player_ptr, store, 10);
 
-        store_top = 0;
-        display_store_inventory(player_ptr, store);
+        screen.reset_page();
+        display_store_inventory(player_ptr, screen);
         return;
     }
 
     if (store.stock_num != i) {
-        if (store_top >= store.stock_num) {
-            store_top -= store_bottom;
-        }
-
-        display_store_inventory(player_ptr, store);
+        screen.adjust_page_after_removal();
+        display_store_inventory(player_ptr, screen);
         return;
     }
 
-    display_entry(player_ptr, store, item);
+    display_entry(player_ptr, screen, item);
 }
 
 /*!
  * @brief 店からの購入処理のメインルーチン /
  * Buy an item from a store 			-RAK-
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param store 購入元の店舗
+ * @param screen 購入元の店舗の画面
  */
-void store_purchase(PlayerType *player_ptr, Store &store)
+void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
 {
+    auto &store = screen.get_store();
     const auto store_num = store.get_sale_type();
     if (store_num == StoreSaleType::MUSEUM) {
         msg_print(_("博物館から取り出すことはできません。", "Items cannot be taken out of the Museum."));
@@ -183,17 +177,12 @@ void store_purchase(PlayerType *player_ptr, Store &store)
         return;
     }
 
-    int i = (store.stock_num - store_top);
-    if (i > store_bottom) {
-        i = store_bottom;
-    }
-
-    auto item_num_opt = show_store_select_item(i, store_num);
+    auto item_num_opt = show_store_select_item(screen.get_page_item_count(), store_num);
     if (!item_num_opt) {
         return;
     }
 
-    const short item_num = *item_num_opt + store_top;
+    const short item_num = *item_num_opt + screen.get_page_top();
     auto &item_store = *store.stock[item_num];
     auto amt = 1;
     auto item = item_store.clone();
@@ -235,13 +224,13 @@ void store_purchase(PlayerType *player_ptr, Store &store)
     }
 
     if (store_num == StoreSaleType::HOME) {
-        take_item_from_home(player_ptr, store, item_store, item, item_num);
+        take_item_from_home(player_ptr, screen, item_store, item, item_num);
         return;
     }
 
     COMMAND_CODE item_new;
     const auto purchased_item_name = describe_flavor(player_ptr, item, 0);
-    const auto item_index = item_num % store_bottom;
+    const auto item_index = *item_num_opt;
     const auto item_index_char = (item_index > 25) ? toupper(I2A(item_index - 26)) : I2A(item_index);
 
     msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), purchased_item_name.data(), item_index_char);
@@ -273,7 +262,7 @@ void store_purchase(PlayerType *player_ptr, Store &store)
 
     sound(SoundKind::BUY);
     player_ptr->au -= price;
-    store_prt_gold(player_ptr->au);
+    store_prt_gold(screen, player_ptr->au);
     object_aware(player_ptr, item);
 
     msg_print(_("{}を ${}で購入しました。", "You bought {} for {} gold."), purchased_item_name, price);
@@ -306,8 +295,8 @@ void store_purchase(PlayerType *player_ptr, Store &store)
         item_store.pval -= item.pval;
     }
 
-    i = store.stock_num;
+    const auto stock_num = store.stock_num;
     store.increase_item(item_num, -amt);
     store.optimize_item(item_num);
-    switch_store_stock(player_ptr, store, i, item_num);
+    switch_store_stock(player_ptr, screen, stock_num, item_num);
 }

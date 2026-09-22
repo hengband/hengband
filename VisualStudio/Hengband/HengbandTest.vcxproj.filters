@@ -78,6 +78,9 @@
     <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp">
       <Filter>mutation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\store\test-store-screen.cpp">
+      <Filter>store</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\store\test-store-util.cpp">
       <Filter>store</Filter>
     </ClCompile>

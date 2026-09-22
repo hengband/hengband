@@ -15,6 +15,7 @@
 #include "player-status/player-energy.h"
 #include "store/home.h"
 #include "store/store-key-processor.h"
+#include "store/store-screen.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -31,8 +32,6 @@
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "world/world.h"
-
-#define MIN_STOCK 12
 
 /*!
  * @brief 店舗処理全体のメインルーチン /
@@ -55,10 +54,6 @@ void do_cmd_store(PlayerType *player_ptr)
         return;
     }
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, tl::nullopt);
-    const auto &[wid, hgt] = term_get_size();
-    xtra_stock = std::min(14 + 26, ((hgt > MAIN_TERM_MIN_ROWS) ? (hgt - MAIN_TERM_MIN_ROWS) : 0));
-    store_bottom = MIN_STOCK + xtra_stock;
-
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(player_ptr->get_position());
     if (!grid.has(TerrainCharacteristics::STORE)) {
@@ -109,46 +104,45 @@ void do_cmd_store(PlayerType *player_ptr)
     command_rep = 0;
     command_new = 0;
     get_com_no_macros = true;
-    cur_store_feat = grid.feat;
-    store_top = 0;
+    StoreScreen screen(store, grid.feat, term_get_size().second);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
-    display_store(player_ptr, store);
+    display_store(player_ptr, screen);
     auto should_leave = false;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     while (!should_leave) {
         prt("", 1, 0);
-        clear_from(20 + xtra_stock);
-        prt(_(" ESC) 建物から出る", " ESC) Exit from Building."), 21 + xtra_stock, 0);
-        if (store.stock_num > store_bottom) {
-            prt(_(" -)前ページ", " -) Previous page"), 22 + xtra_stock, 0);
-            prt(_(" スペース) 次ページ", " SPACE) Next page"), 23 + xtra_stock, 0);
+        clear_from(screen.get_command_row(0));
+        prt(_(" ESC) 建物から出る", " ESC) Exit from Building."), screen.get_command_row(1), 0);
+        if (screen.has_multiple_pages()) {
+            prt(_(" -)前ページ", " -) Previous page"), screen.get_command_row(2), 0);
+            prt(_(" スペース) 次ページ", " SPACE) Next page"), screen.get_command_row(3), 0);
         }
 
         if (store_num == StoreSaleType::HOME) {
-            prt(_("g) アイテムを取る", "g) Get an item."), 21 + xtra_stock, 27);
-            prt(_("d) アイテムを置く", "d) Drop an item."), 22 + xtra_stock, 27);
-            prt(_("x) 家のアイテムを調べる", "x) eXamine an item in the home."), 23 + xtra_stock, 27);
+            prt(_("g) アイテムを取る", "g) Get an item."), screen.get_command_row(1), 27);
+            prt(_("d) アイテムを置く", "d) Drop an item."), screen.get_command_row(2), 27);
+            prt(_("x) 家のアイテムを調べる", "x) eXamine an item in the home."), screen.get_command_row(3), 27);
         } else if (store_num == StoreSaleType::MUSEUM) {
-            prt(_("d) アイテムを置く", "d) Drop an item."), 21 + xtra_stock, 27);
-            prt(_("r) アイテムの展示をやめる", "r) order to Remove an item."), 22 + xtra_stock, 27);
-            prt(_("x) 博物館のアイテムを調べる", "x) eXamine an item in the museum."), 23 + xtra_stock, 27);
+            prt(_("d) アイテムを置く", "d) Drop an item."), screen.get_command_row(1), 27);
+            prt(_("r) アイテムの展示をやめる", "r) order to Remove an item."), screen.get_command_row(2), 27);
+            prt(_("x) 博物館のアイテムを調べる", "x) eXamine an item in the museum."), screen.get_command_row(3), 27);
         } else {
-            prt(_("p) 商品を買う", "p) Purchase an item."), 21 + xtra_stock, 30);
-            prt(_("s) アイテムを売る", "s) Sell an item."), 22 + xtra_stock, 30);
-            prt(_("x) 商品を調べる", "x) eXamine an item in the shop"), 23 + xtra_stock, 30);
+            prt(_("p) 商品を買う", "p) Purchase an item."), screen.get_command_row(1), 30);
+            prt(_("s) アイテムを売る", "s) Sell an item."), screen.get_command_row(2), 30);
+            prt(_("x) 商品を調べる", "x) eXamine an item in the shop"), screen.get_command_row(3), 30);
         }
 
-        prt(_("i/e) 持ち物/装備の一覧", "i/e) Inventry/Equipment list"), 21 + xtra_stock, 56);
+        prt(_("i/e) 持ち物/装備の一覧", "i/e) Inventry/Equipment list"), screen.get_command_row(1), 56);
         if (rogue_like_commands) {
-            prt(_("w/T) 装備する/はずす", "w/T) Wear/Take off equipment"), 22 + xtra_stock, 56);
+            prt(_("w/T) 装備する/はずす", "w/T) Wear/Take off equipment"), screen.get_command_row(2), 56);
         } else {
-            prt(_("w/t) 装備する/はずす", "w/t) Wear/Take off equipment"), 22 + xtra_stock, 56);
+            prt(_("w/t) 装備する/はずす", "w/t) Wear/Take off equipment"), screen.get_command_row(2), 56);
         }
 
-        prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
-        output_bot_json_store_snapshot(player_ptr, store);
+        prt(_("コマンド:", "You may: "), screen.get_command_row(0), 0);
+        output_bot_json_store_snapshot(player_ptr, screen);
         InputKeyRequestor(player_ptr, true).request_command();
-        should_leave = store_process_command(player_ptr, store);
+        should_leave = store_process_command(player_ptr, screen);
 
         const auto should_redraw_store_inventory = rfu.has(StatusRecalculatingFlag::BONUS);
         world.character_icky_depth = 1;
@@ -176,14 +170,14 @@ void do_cmd_store(PlayerType *player_ptr)
                 handle_stuff(player_ptr);
                 const auto item_pos = home_carry(player_ptr, store, &item);
                 if (item_pos >= 0) {
-                    store_top = (item_pos / store_bottom) * store_bottom;
-                    display_store_inventory(player_ptr, store);
+                    screen.show_page_containing(item_pos);
+                    display_store_inventory(player_ptr, screen);
                 }
             }
         }
 
         if (should_redraw_store_inventory) {
-            display_store_inventory(player_ptr, store);
+            display_store_inventory(player_ptr, screen);
         }
 
         if (store.store_open >= world.game_turn) {
