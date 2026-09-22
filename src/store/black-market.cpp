@@ -6,11 +6,11 @@
 
 /*!
  * @brief ブラックマーケット用の無価値品の排除判定
- * @param player_ptr プレイヤーへの参照ポインタ
+ * @param town_num 町のID
  * @param item 判定したいアイテムへの参照
  * @return ブラックマーケットにとって無価値な品ならばTRUEを返す
  */
-bool black_market_crap(int town_num, const ItemEntity &item)
+bool black_market_crap(size_t town_num, const ItemEntity &item)
 {
     if (item.is_ego()) {
         return false;

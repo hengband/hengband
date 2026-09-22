@@ -1,7 +1,7 @@
 /*!
  * @brief 店舗の画面 (StoreScreen) のテスト
  *
- * 端末の高さから決まるページの大きさと行の位置、ページ送り・ページ戻し、
+ * 対象の店舗と町、端末の高さから決まるページの大きさと行の位置、ページ送り・ページ戻し、
  * 在庫の増減に合わせたページの調整を検証する。
  */
 
@@ -18,35 +18,43 @@ namespace {
 constexpr auto DEFAULT_HEIGHT = MAIN_TERM_MIN_ROWS; //!< ページの大きさが最小 (12) になる端末の高さ
 }
 
+TEST_CASE("StoreScreen keeps the store and the town it belongs to")
+{
+    Store store(StoreSaleType::GENERAL);
+    const StoreScreen screen(store, 3, 0, DEFAULT_HEIGHT);
+    CHECK(&screen.get_store() == &store);
+    CHECK(screen.get_town_index() == 3);
+}
+
 TEST_CASE("StoreScreen derives page size and rows from the terminal height")
 {
     Store store(StoreSaleType::GENERAL);
 
-    const StoreScreen low(store, 0, DEFAULT_HEIGHT - 1);
+    const StoreScreen low(store, 1, 0, DEFAULT_HEIGHT - 1);
     CHECK(low.get_page_size() == 12);
     CHECK(low.get_status_row() == 19);
     CHECK(low.get_command_row(0) == 20);
 
-    const StoreScreen normal(store, 0, DEFAULT_HEIGHT);
+    const StoreScreen normal(store, 1, 0, DEFAULT_HEIGHT);
     CHECK(normal.get_page_size() == 12);
     CHECK(normal.get_status_row() == 19);
     CHECK(normal.get_command_row(3) == 23);
 
-    const StoreScreen tall(store, 0, DEFAULT_HEIGHT + 6);
+    const StoreScreen tall(store, 1, 0, DEFAULT_HEIGHT + 6);
     CHECK(tall.get_page_size() == 18);
     CHECK(tall.get_status_row() == 25);
     CHECK(tall.get_command_row(1) == 27);
 
-    const StoreScreen highest(store, 0, DEFAULT_HEIGHT + 40);
+    const StoreScreen highest(store, 1, 0, DEFAULT_HEIGHT + 40);
     CHECK(highest.get_page_size() == 52);
-    const StoreScreen too_high(store, 0, DEFAULT_HEIGHT + 100);
+    const StoreScreen too_high(store, 1, 0, DEFAULT_HEIGHT + 100);
     CHECK(too_high.get_page_size() == 52);
 }
 
 TEST_CASE("StoreScreen starts on the first page and counts the items on it")
 {
     Store store(StoreSaleType::GENERAL);
-    StoreScreen screen(store, 0, DEFAULT_HEIGHT);
+    StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
     CHECK(screen.get_page_top() == 0);
 
     store.stock_num = 0;
@@ -70,7 +78,7 @@ TEST_CASE("StoreScreen::turn_page_forward wraps to the first page")
     SUBCASE("at the end of the stock")
     {
         Store store(StoreSaleType::GENERAL);
-        StoreScreen screen(store, 0, DEFAULT_HEIGHT);
+        StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 30;
         screen.turn_page_forward();
         CHECK(screen.get_page_top() == 12);
@@ -85,7 +93,7 @@ TEST_CASE("StoreScreen::turn_page_forward wraps to the first page")
     SUBCASE("at the second page of a home without powerup_home")
     {
         Store store(StoreSaleType::HOME);
-        StoreScreen screen(store, 0, DEFAULT_HEIGHT);
+        StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 30;
         screen.turn_page_forward();
         CHECK(screen.get_page_top() == 12);
@@ -102,7 +110,7 @@ TEST_CASE("StoreScreen::turn_page_backward wraps to the last page")
     SUBCASE("in a store")
     {
         Store store(StoreSaleType::GENERAL);
-        StoreScreen screen(store, 0, DEFAULT_HEIGHT);
+        StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 30;
         screen.turn_page_backward();
         CHECK(screen.get_page_top() == 24);
@@ -115,7 +123,7 @@ TEST_CASE("StoreScreen::turn_page_backward wraps to the last page")
     SUBCASE("in a home without powerup_home, which shows only two pages")
     {
         Store store(StoreSaleType::HOME);
-        StoreScreen screen(store, 0, DEFAULT_HEIGHT);
+        StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 30;
         screen.turn_page_backward();
         CHECK(screen.get_page_top() == 12);
@@ -125,7 +133,7 @@ TEST_CASE("StoreScreen::turn_page_backward wraps to the last page")
     {
         powerup_home = true;
         Store store(StoreSaleType::HOME);
-        StoreScreen screen(store, 0, DEFAULT_HEIGHT);
+        StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 30;
         screen.turn_page_backward();
         CHECK(screen.get_page_top() == 24);
@@ -134,7 +142,7 @@ TEST_CASE("StoreScreen::turn_page_backward wraps to the last page")
     SUBCASE("when the stock ends at a page boundary")
     {
         Store store(StoreSaleType::GENERAL);
-        StoreScreen screen(store, 0, DEFAULT_HEIGHT);
+        StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
         store.stock_num = 24;
         screen.turn_page_backward();
         CHECK(screen.get_page_top() == 12);
@@ -144,7 +152,7 @@ TEST_CASE("StoreScreen::turn_page_backward wraps to the last page")
 TEST_CASE("StoreScreen::show_page_containing shows the page of the item")
 {
     Store store(StoreSaleType::GENERAL);
-    StoreScreen screen(store, 0, DEFAULT_HEIGHT);
+    StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
     store.stock_num = 30;
 
     for (const auto &[pos, page_top] : { std::pair{ 0, 0 }, { 11, 0 }, { 12, 12 }, { 29, 24 } }) {
@@ -157,7 +165,7 @@ TEST_CASE("StoreScreen::show_page_containing shows the page of the item")
 TEST_CASE("StoreScreen::adjust_page_after_removal goes back when the page becomes empty")
 {
     Store store(StoreSaleType::GENERAL);
-    StoreScreen screen(store, 0, DEFAULT_HEIGHT);
+    StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT);
 
     SUBCASE("the page still has items")
     {
@@ -187,7 +195,7 @@ TEST_CASE("StoreScreen::adjust_page_after_removal goes back when the page become
 TEST_CASE("StoreScreen::get_page_position matches the row index on every page")
 {
     Store store(StoreSaleType::GENERAL);
-    StoreScreen screen(store, 0, DEFAULT_HEIGHT + 3);
+    StoreScreen screen(store, 1, 0, DEFAULT_HEIGHT + 3);
     store.stock_num = 40;
 
     for (auto page = 0; page < 3; ++page) {

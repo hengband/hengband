@@ -15,11 +15,13 @@ constexpr auto MAX_EXTRA_ROWS = 14 + 26; //!< 端末が高いときに増やせ�
 /*!
  * @brief 店舗の画面を作る
  * @param store 対象の店舗
+ * @param town_index 店舗がある町のID
  * @param terrain_id 入店した地形のID (店名の表示に使う)
  * @param terminal_height メインの端末の高さ
  */
-StoreScreen::StoreScreen(Store &store, short terrain_id, int terminal_height)
+StoreScreen::StoreScreen(Store &store, size_t town_index, short terrain_id, int terminal_height)
     : store(store)
+    , town_index(town_index)
     , terrain_id(terrain_id)
     , extra_rows(std::clamp(terminal_height - MAIN_TERM_MIN_ROWS, 0, MAX_EXTRA_ROWS))
 {
@@ -33,6 +35,14 @@ Store &StoreScreen::get_store()
 const Store &StoreScreen::get_store() const
 {
     return this->store;
+}
+
+/*!
+ * @brief 店舗がある町のIDを返す
+ */
+size_t StoreScreen::get_town_index() const
+{
+    return this->town_index;
 }
 
 /*!

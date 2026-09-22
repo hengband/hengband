@@ -199,7 +199,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             } while ((sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM));
 
             msg_print(_("店の主人が丘に向かって走っている！", "You see one of the shopkeepers running for the hills!"));
-            store_shuffle(sst);
+            store_shuffle(AngbandWorld::get_instance().get_town_index(), sst);
         }
         msg_erase();
     }
