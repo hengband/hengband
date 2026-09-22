@@ -338,7 +338,11 @@ std::string vformat(const char *fmt, va_list vp)
 {
     std::vector<char> format_buf(1024);
     while (true) {
-        const auto len = vstrnfmt(format_buf.data(), format_buf.size(), fmt, vp);
+        // バッファが足りなければ引数を最初から読み直すので、vpを消費しないようにコピーを渡す
+        va_list vp_copy;
+        va_copy(vp_copy, vp);
+        const auto len = vstrnfmt(format_buf.data(), format_buf.size(), fmt, vp_copy);
+        va_end(vp_copy);
         if (len < format_buf.size() - 1) {
             return std::string(format_buf.data(), len);
         }
