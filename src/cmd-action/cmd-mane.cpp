@@ -596,15 +596,15 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         fire_ball(player_ptr, AttributeType::DARK, dir, damage, 4);
         break;
     case MonsterAbilityType::BA_VOID:
-        msg_print(_("虚無の嵐の呪文を念じた。", "You cast a void ball."));
+        msg_print(_("虚無の嵐の呪文を念じた。", "You invoke a void storm."));
         fire_ball(player_ptr, AttributeType::VOID_MAGIC, dir, damage, 4);
         break;
     case MonsterAbilityType::BA_ABYSS:
-        msg_print(_("深淵の嵐の呪文を念じた。", "You cast a abyss ball."));
+        msg_print(_("深淵の嵐の呪文を念じた。", "You invoke a abyss storm."));
         fire_ball(player_ptr, AttributeType::ABYSS, dir, damage, 4);
         break;
     case MonsterAbilityType::BA_METEOR:
-        msg_print(_("メテオスウォームの呪文を念じた。", "You cast a meteor swarm."));
+        msg_print(_("メテオスウォームの呪文を念じた。", "You invoke a meteor swarm."));
         fire_ball(player_ptr, AttributeType::METEOR, dir, damage, 4);
         break;
     case MonsterAbilityType::DRAIN_MANA:
@@ -669,11 +669,11 @@ static bool use_mane(PlayerType *player_ptr, MonsterAbilityType spell)
         fire_bolt(player_ptr, AttributeType::ICE, dir, damage);
         break;
     case MonsterAbilityType::BO_VOID:
-        msg_print(_("虚無の矢の呪文を唱えた。", "You cast a void bolt."));
+        msg_print(_("ヴォイド・ボルトの呪文を唱えた。", "You cast a void bolt."));
         fire_bolt(player_ptr, AttributeType::VOID_MAGIC, dir, damage);
         break;
     case MonsterAbilityType::BO_ABYSS:
-        msg_print(_("深淵の矢の呪文を唱えた。", "You cast a abyss bolt."));
+        msg_print(_("アビス・ボルトの呪文を唱えた。", "You cast a abyss bolt."));
         fire_bolt(player_ptr, AttributeType::ABYSS, dir, damage);
         break;
     case MonsterAbilityType::BO_METEOR:
