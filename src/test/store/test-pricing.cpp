@@ -3,6 +3,7 @@
  *
  * 店主の強欲さと補正の和 (markup) から店舗価格を計算する calc_store_price() について、
  * 売出価格と買取価格の補正の範囲、丸め、安い品物の扱い、闇市の倍率を検証する。
+ * 闇市の倍率の表 (get_black_market_multiplier()) が、レベルごとの漸化式と一致することも検証する。
  */
 
 #include "store/pricing.h"
@@ -58,5 +59,19 @@ TEST_CASE("calc_store_price in the black market")
     {
         CHECK(calc_store_price(1000, NEUTRAL_MARKUP, 1, PURCHASE) == 2200);
         CHECK(calc_store_price(1000, NEUTRAL_MARKUP, 2, PURCHASE) == 2222);
+    }
+}
+
+TEST_CASE("get_black_market_multiplier grows by 1 percent per level up to the limit")
+{
+    // レベル1以下は2倍 (20000)。レベルが1上がるごとに1.01倍して切り捨て、500以上では変わらない
+    uint64_t expected = 20000;
+    for (auto level = 0; level <= 1000; ++level) {
+        CAPTURE(level);
+        if ((level >= 2) && (level <= 500)) {
+            expected = expected * 101 / 100;
+        }
+
+        CHECK(get_black_market_multiplier(level) == expected);
     }
 }

@@ -8,6 +8,43 @@
 #include "system/player-type-definition.h"
 #include "util/enum-converter.h"
 #include <algorithm>
+#include <array>
+
+namespace {
+constexpr auto BLACK_MARKET_LEVEL_LIMIT = 500; //!< 闇市の倍率が上がり続けるレベルの上限
+
+/*!
+ * @brief 闇市の倍率の表を作る
+ * @return レベルごとの倍率 (10000 で等倍)。添字はレベル - 1
+ * @details レベル1で2倍とし、レベルが1上がるごとに1.01倍して切り捨てる。
+ */
+constexpr std::array<uint64_t, BLACK_MARKET_LEVEL_LIMIT> make_black_market_multipliers()
+{
+    std::array<uint64_t, BLACK_MARKET_LEVEL_LIMIT> multipliers{};
+    uint64_t multiplier = 20000;
+    for (auto &m : multipliers) {
+        m = multiplier;
+        multiplier = multiplier * 101 / 100;
+    }
+
+    return multipliers;
+}
+
+constexpr auto BLACK_MARKET_MULTIPLIERS = make_black_market_multipliers();
+static_assert(BLACK_MARKET_MULTIPLIERS[0] == 20000);
+static_assert(BLACK_MARKET_MULTIPLIERS[1] == 20200);
+}
+
+/*!
+ * @brief 闇市で売る品物の価格の倍率を返す
+ * @param level 闇市のレベル
+ * @return 倍率 (10000 で等倍)。レベル1以下で2倍になり、BLACK_MARKET_LEVEL_LIMIT 以上では変わらない
+ */
+uint64_t get_black_market_multiplier(int level)
+{
+    const auto index = std::clamp(level, 1, BLACK_MARKET_LEVEL_LIMIT) - 1;
+    return BLACK_MARKET_MULTIPLIERS[index];
+}
 
 /*!
  * @brief 店舗価格を計算する
@@ -39,13 +76,7 @@ int calc_store_price(int price, int markup, tl::optional<int> black_market_level
         const auto adjust = std::max(100 + (markup - 300), 100);
         uint64_t p = price;
         if (black_market_level) {
-            const auto level = *black_market_level;
-            auto mult = 20000UL;
-            const auto BM_LIMIT = 500;
-            for (int i = 1; i < std::min(level, BM_LIMIT); i++) {
-                mult = mult * 101 / 100;
-            }
-            p = p * mult / 10000UL;
+            p = p * get_black_market_multiplier(*black_market_level) / 10000UL;
         }
         p = (p * adjust + 50) / 100;
         price = static_cast<int>(std::min<uint64_t>(p, INT32_MAX));
