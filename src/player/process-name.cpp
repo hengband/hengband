@@ -78,7 +78,7 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
             player_ptr->base_name[k++] = '_';
             i += strlen(PATH_SEP);
         }
-#if defined(WINDOWS)
+#ifdef _WIN32
         else if (angband_strchr("\"*,/:;<>?\\|", c))
             player_ptr->base_name[k++] = '_';
 #endif

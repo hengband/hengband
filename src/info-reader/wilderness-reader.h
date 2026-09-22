@@ -9,28 +9,28 @@
 #include <vector>
 
 struct WildernessTownDefinition {
-    int id;
+    int id = 0;
     std::string name;
     std::optional<std::string> alias;
 };
 
 struct WildernessLetterDefinition {
-    char symbol;
+    char symbol = '\0';
     WildernessTerrain terrain;
-    int level;
-    short town;
-    int road;
+    int level = 0;
+    short town = 0;
+    int road = 0;
 };
 
 struct WildernessMapDefinition {
     std::vector<WildernessLetterDefinition> letters;
     std::vector<std::string> layout;
-    Pos2D starting_position;
+    Pos2D starting_position = { 0, 0 };
 };
 
 struct WildernessDefinition {
-    int width;
-    int height;
+    int width = 0;
+    int height = 0;
     std::vector<WildernessTownDefinition> towns;
     WildernessMapDefinition normal;
     WildernessMapDefinition compact;

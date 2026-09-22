@@ -7,11 +7,11 @@
 #include "game-option/runtime-arguments.h"
 #include "main-win/main-win-utils.h"
 #include "term/z-util.h"
-
 #include <fmt/format.h>
 #include <iostream>
 #include <string>
 #include <string_view>
+#define NOMINMAX
 #include <windows.h>
 
 // interface object

@@ -1939,9 +1939,6 @@
     <ClInclude Include="..\..\src\term\z-term.h" />
     <ClInclude Include="..\..\src\term\z-util.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

@@ -254,6 +254,6 @@ void term_init(term_type *t, int w, int h, int k);
 void term_putstr_v(int x, int y_initial, size_t n, uint8_t color, std::string_view sv);
 #endif
 
-#ifndef WINDOWS
+#ifndef _WIN32
 errr term_nuke(term_type *t);
 #endif

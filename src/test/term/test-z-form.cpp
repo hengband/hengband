@@ -120,6 +120,16 @@ TEST_CASE("format outputs a string without conversion specifications as is")
     CHECK(format("hello, world") == "hello, world");
 }
 
+TEST_CASE("format formats characters")
+{
+    CHECK(format("%c", 'A') == "A");
+    CHECK(format("[%c%c]", 'x', 'y') == "[xy]");
+    CHECK(format("%5c|", 'x') == "    x|");
+    CHECK(format("%-5c|", 'x') == "x    |");
+    CHECK(format("%c", '\0').size() == 1);
+    CHECK(format("%5c", '\0').size() == 5);
+}
+
 TEST_CASE("format outputs a percent sign for %%")
 {
     CHECK(format("%%") == "%");
@@ -224,6 +234,7 @@ TEST_CASE("format takes width and precision from arguments for *")
     CHECK(format("%*d|", -5, 42) == "42   |");
     CHECK(format("%.*s", 3, "abcdef") == "abc");
     CHECK(format("%*.*f", 8, 2, 3.14159) == "    3.14");
+    CHECK(format("%.*f", -1, 1.5) == "1.500000");
 }
 
 TEST_CASE("format stores the length output so far for %n")
@@ -246,12 +257,32 @@ TEST_CASE("format stores the length output so far for %n")
     }
 }
 
-TEST_CASE("format formats pointers in the same way as snprintf")
+TEST_CASE("format formats pointers with the address value of the argument")
 {
     auto value = 0;
-    char expected[64]{};
-    std::snprintf(expected, sizeof(expected), "%p", static_cast<void *>(&value));
-    CHECK(format("%p", static_cast<void *>(&value)) == expected);
+    auto *ptr = static_cast<void *>(&value);
+    const auto got = format("%p", ptr);
+    auto normalized = [](std::string s) {
+        if (s.size() >= 2 && s[0] == '0' && (s[1] == 'x' || s[1] == 'X')) {
+            s.erase(0, 2);
+        }
+
+        for (auto &ch : s) {
+            ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+        }
+
+        const auto first = s.find_first_not_of('0');
+        if (first == std::string::npos) {
+            return std::string("0");
+        }
+
+        return s.substr(first);
+    };
+
+    char snprintf_buf[64]{};
+    std::snprintf(snprintf_buf, sizeof(snprintf_buf), "%p", ptr);
+
+    CHECK(normalized(got) == normalized(snprintf_buf));
 }
 
 TEST_CASE("format combines multiple conversion specifications")
@@ -332,10 +363,10 @@ TEST_CASE("format outputs a string around the initial buffer size correctly")
     }
 }
 
-TEST_CASE("format truncates the result of a single conversion to 1023 bytes")
+TEST_CASE("format outputs a long string from a single conversion after growing the buffer")
 {
     const std::string long_str(2000, 'a');
-    CHECK(format("%s", long_str.data()) == std::string(1023, 'a'));
+    CHECK(format("%s", long_str.data()) == long_str);
 }
 
 #ifdef JP
@@ -417,11 +448,11 @@ TEST_CASE("format outputs a multibyte character across the initial buffer size c
     }
 }
 
-TEST_CASE("format replaces a split multibyte character at the end of a truncated conversion with a space")
+TEST_CASE("format outputs a long multibyte string from a single conversion after growing the buffer")
 {
     const auto long_kanji = repeat(KANJI_KAN, 600);
-    CHECK(format("%s", long_kanji.data()) == cat(repeat(KANJI_KAN, 511), " "));
-    CHECK(format("%s", cat("a", long_kanji).data()) == cat("a", repeat(KANJI_KAN, 511)));
+    CHECK(format("%s", long_kanji.data()) == long_kanji);
+    CHECK(format("%s", cat("a", long_kanji).data()) == cat("a", long_kanji));
 }
 
 #endif

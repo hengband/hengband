@@ -2153,7 +2153,7 @@ void term_putstr_v(int x, int y_initial, size_t n, uint8_t color, std::string_vi
 }
 #endif
 
-#ifndef WINDOWS
+#ifndef _WIN32
 errr term_nuke(term_type *t)
 {
     if (t->active_flag) {

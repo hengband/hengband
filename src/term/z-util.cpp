@@ -124,12 +124,12 @@ void core(std::string_view str)
         plog(str);
     }
 
-#if defined(_MSC_VER)
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable : 6011)
 #endif
     *crash = *crash;
-#if defined(_MSC_VER)
+#ifdef _WIN32
 #pragma warning(pop)
 #endif
     quit("core() failed");

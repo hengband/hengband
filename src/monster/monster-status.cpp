@@ -25,7 +25,7 @@
 #include "tracking/health-bar-tracker.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
-#if JP
+#ifdef JP
 #else
 #include "monster/monster-description-types.h"
 #endif

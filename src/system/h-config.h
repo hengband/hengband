@@ -17,10 +17,6 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
 
 // clang-format off
 
-#if defined(WIN32) && !defined(WINDOWS)
-#define WINDOWS
-#endif
-
 /*
  * @details
  * WindowsはShift-JIS (ひらがなや漢字が全て2バイト/文字)で定義されていることとする.
@@ -34,7 +30,7 @@ constexpr auto MAINTAINER = "echizen@users.sourceforge.jp";
 #define iseuckanji(x) (((unsigned char)(x) >= 0xa1 && (unsigned char)(x) <= 0xfe) || (unsigned char)(x) == 0x8e)
 #endif
 #undef PATH_SEP
-#ifdef WINDOWS
+#ifdef _WIN32
   #define PATH_SEP "\\"
   #ifdef JP
     #define iskanji(x) ((0x81 <= (unsigned char)(x) && (unsigned char)(x) <= 0x9f) || (0xe0 <= (unsigned char)(x) && (unsigned char)(x) <= 0xfc))

@@ -81,7 +81,9 @@
 
 #include "term/z-form.h"
 #include "term/z-util.h"
+#include <fmt/printf.h>
 #include <span>
+#include <string_view>
 #include <vector>
 
 namespace {
@@ -138,28 +140,27 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
         auto do_long_long = false;
         auto do_long_double = false;
         auto do_capitalize = false;
+        auto left_align = false;
+        auto seen_dot = false;
+        auto width = 0;
+        auto precision = -1;
 
-        /* Format sequence */
         std::string aux;
         aux.reserve(128);
         aux.push_back('%');
 
-        /* Build the format sequence string */
         while (true) {
-            /* Error -- format sequence is not terminated */
             if (*s == '\0') {
                 buf[0] = '\0';
                 return 0;
             }
 
-            /* Error -- format sequence may be too long */
             if (aux.length() > 100) {
                 buf[0] = '\0';
                 return 0;
             }
 
             if (isalpha(*s)) {
-                /* handle "long" or "long long" request */
                 if (*s == 'l') {
                     aux.push_back(*s++);
                     if (*s == 'l') {
@@ -168,105 +169,123 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
                     } else {
                         do_long = true;
                     }
-                }
-
-                /* handle "long double" request */
-                else if (*s == 'L') {
+                } else if (*s == 'L') {
                     aux.push_back(*s++);
                     do_long_double = true;
-                }
-
-                /* Handle normal end of format sequence */
-                else {
+                } else {
                     aux.push_back(*s++);
                     break;
                 }
-            } else {
-                /* Handle 'star' (for "variable length" argument) */
-                if (*s == '*') {
-                    auto arg = va_arg(vp, int);
-                    aux.append(std::to_string(arg));
-                    s++;
-                }
-
-                /* Collect "normal" characters (digits, "-", "+", ".", etc) */
-                else {
-                    aux.push_back(*s++);
-                }
-            }
-        }
-
-        /* Resulting string */
-        char tmp[1024]{};
-
-        /* Process the "format" char */
-        switch (aux.back()) {
-        /* Simple Character -- standard format */
-        case 'c': {
-            auto arg = va_arg(vp, int);
-            snprintf(tmp, sizeof(tmp), "%c", arg);
-            break;
-        }
-
-        /* Signed Integers -- standard format */
-        case 'd':
-        case 'i':
-            if (do_long) {
-                auto arg = va_arg(vp, long);
-                snprintf(tmp, sizeof(tmp), aux.data(), arg);
-            } else if (do_long_long) {
-                auto arg = va_arg(vp, long long);
-                snprintf(tmp, sizeof(tmp), aux.data(), arg);
-            } else {
+            } else if (*s == '*') {
                 auto arg = va_arg(vp, int);
-                snprintf(tmp, sizeof(tmp), aux.data(), arg);
+                if (seen_dot) {
+                    if (arg < 0) {
+                        precision = -1;
+                        aux.pop_back();
+                    } else {
+                        precision = arg;
+                        aux.append(std::to_string(arg));
+                    }
+                } else if (arg < 0) {
+                    if (!left_align) {
+                        aux.insert(1, 1, '-');
+                    }
+
+                    left_align = true;
+                    width = -arg;
+                    aux.append(std::to_string(width));
+                } else {
+                    width = arg;
+                    aux.append(std::to_string(arg));
+                }
+
+                ++s;
+            } else {
+                const auto ch = *s;
+                if (ch == '-') {
+                    left_align = true;
+                } else if (ch == '.') {
+                    seen_dot = true;
+                    precision = 0;
+                } else if (isdigit(static_cast<unsigned char>(ch))) {
+                    const auto digit = ch - '0';
+                    if (seen_dot) {
+                        precision = precision * 10 + digit;
+                    } else {
+                        width = width * 10 + digit;
+                    }
+                }
+
+                aux.push_back(*s++);
+            }
+        }
+
+        std::string tmp;
+        switch (aux.back()) {
+        case 'c': {
+            const auto arg = va_arg(vp, int);
+            tmp = fmt::sprintf(std::string_view(aux), arg);
+            break;
+        }
+        case 'd':
+        case 'i': {
+            if (do_long) {
+                const auto arg = va_arg(vp, long);
+                tmp = fmt::sprintf(std::string_view(aux), arg);
+                break;
             }
 
-            break;
+            if (do_long_long) {
+                const auto arg = va_arg(vp, long long);
+                tmp = fmt::sprintf(std::string_view(aux), arg);
+                break;
+            }
 
-        /* Unsigned Integers -- various formats */
+            const auto arg = va_arg(vp, int);
+            tmp = fmt::sprintf(std::string_view(aux), arg);
+            break;
+        }
         case 'u':
         case 'o':
         case 'x':
-        case 'X':
+        case 'X': {
             if (do_long) {
-                auto arg = va_arg(vp, unsigned long);
-                snprintf(tmp, sizeof(tmp), aux.data(), arg);
-            } else if (do_long_long) {
-                auto arg = va_arg(vp, unsigned long long);
-                snprintf(tmp, sizeof(tmp), aux.data(), arg);
-            } else {
-                auto arg = va_arg(vp, unsigned int);
-                snprintf(tmp, sizeof(tmp), aux.data(), arg);
+                const auto arg = va_arg(vp, unsigned long);
+                tmp = fmt::sprintf(std::string_view(aux), arg);
+                break;
             }
 
-            break;
+            if (do_long_long) {
+                const auto arg = va_arg(vp, unsigned long long);
+                tmp = fmt::sprintf(std::string_view(aux), arg);
+                break;
+            }
 
-        /* Floating Point -- various formats */
+            const auto arg = va_arg(vp, unsigned int);
+            tmp = fmt::sprintf(std::string_view(aux), arg);
+            break;
+        }
         case 'f':
         case 'F':
         case 'e':
         case 'E':
         case 'g':
-        case 'G':
+        case 'G': {
             if (do_long_double) {
-                auto arg = va_arg(vp, long double);
-                snprintf(tmp, sizeof(tmp), aux.data(), arg);
-            } else {
-                auto arg = va_arg(vp, double);
-                snprintf(tmp, sizeof(tmp), aux.data(), arg);
+                const auto arg = va_arg(vp, long double);
+                tmp = fmt::sprintf(std::string_view(aux), arg);
+                break;
             }
 
-            break;
-
-        /* Pointer -- implementation varies */
-        case 'p': {
-            auto arg = va_arg(vp, void *);
-            snprintf(tmp, sizeof(tmp), aux.data(), arg);
+            const auto arg = va_arg(vp, double);
+            tmp = fmt::sprintf(std::string_view(aux), arg);
             break;
         }
-
-        /* String */
+        case 'p': {
+            const auto arg = va_arg(vp, void *);
+            tmp = fmt::sprintf(std::string_view(aux), arg);
+            break;
+        }
         case 's': {
             if (*s == '^') {
                 do_capitalize = true;
@@ -278,17 +297,32 @@ uint32_t vstrnfmt(char *buf, uint32_t max, const char *fmt, va_list vp)
                 arg = "";
             }
 
-            snprintf(tmp, sizeof(tmp), aux.data(), arg);
+            std::string_view sv(arg);
+            if (precision >= 0) {
+                sv = sv.substr(0, static_cast<size_t>(precision));
+            }
+
+            tmp.assign(sv);
+            if (sv.length() >= static_cast<size_t>(width)) {
+                break;
+            }
+
+            const auto pad = static_cast<size_t>(width) - sv.length();
+            if (left_align) {
+                tmp.append(pad, ' ');
+            } else {
+                tmp.insert(tmp.begin(), pad, ' ');
+            }
+
             break;
         }
-        default: {
-            /* Error -- illegal format char */
+        default:
             buf[0] = '\0';
             return 0;
         }
-        }
 
-        const auto formatted_str = std::span(tmp).first(strlen(tmp));
+        /* strlen だと %c の NUL で切れる。録画の TERM_DARK(0) を壊すので size() を使う */
+        const auto formatted_str = std::span(tmp.data(), tmp.size());
 #ifdef JP
         for (auto ch : formatted_str) {
             if (iskanji(ch)) {

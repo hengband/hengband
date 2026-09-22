@@ -6,12 +6,10 @@
 #include "bot/bot-socket-server.h"
 #include "bot/bot-report.h"
 
-#ifdef WINDOWS
+#ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#ifdef _MSC_VER
 #pragma comment(lib, "ws2_32.lib")
-#endif
 #else
 #include <cerrno>
 #include <fcntl.h>
@@ -34,7 +32,7 @@ namespace {
  * これを抑止しないと送信エラーとして扱う機会が無いままゲームが落ちる。
  * WindowsのWinsockはシグナルを発生させず、MSG_NOSIGNALも定義していない。
  */
-#if defined(WINDOWS) || !defined(MSG_NOSIGNAL)
+#if defined(_WIN32) || !defined(MSG_NOSIGNAL)
 constexpr int SEND_FLAGS = 0;
 #else
 constexpr int SEND_FLAGS = MSG_NOSIGNAL;
@@ -49,7 +47,7 @@ constexpr int SEND_FLAGS = MSG_NOSIGNAL;
  * 同じポートで複数のインスタンスが起動して接続先が不定になる。
  * これを防ぐ、UNIXのSO_REUSEADDRと等価な指定がSO_EXCLUSIVEADDRUSEである。
  */
-#ifdef WINDOWS
+#ifdef _WIN32
 constexpr int ADDRESS_REUSE_OPTION = SO_EXCLUSIVEADDRUSE;
 #else
 constexpr int ADDRESS_REUSE_OPTION = SO_REUSEADDR;
@@ -83,7 +81,7 @@ enum class SocketWaitMode {
     WRITE, //!< 書き込み可能になるまで待つ
 };
 
-#ifdef WINDOWS
+#ifdef _WIN32
 using socket_length_t = int;
 using transfer_size_t = int;
 using native_socket_t = SOCKET;
@@ -116,7 +114,7 @@ void close_socket_handle(intptr_t socket)
         return;
     }
 
-#ifdef WINDOWS
+#ifdef _WIN32
     ::closesocket(native_socket(socket));
 #else
     ::close(native_socket(socket));
@@ -133,7 +131,7 @@ void close_socket_handle(intptr_t socket)
  */
 int last_socket_error()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
     return ::WSAGetLastError();
 #else
     return errno;
@@ -147,7 +145,7 @@ int last_socket_error()
  */
 bool is_socket_call_interrupted()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
     return false;
 #else
     return errno == EINTR;
@@ -161,7 +159,7 @@ bool is_socket_call_interrupted()
  */
 bool is_socket_operation_pending()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
     return ::WSAGetLastError() == WSAEWOULDBLOCK;
 #else
     if (errno == EAGAIN) {
@@ -189,7 +187,7 @@ bool is_socket_operation_pending()
  */
 bool set_socket_nonblocking(intptr_t socket)
 {
-#ifdef WINDOWS
+#ifdef _WIN32
     u_long mode = 1;
     return ::ioctlsocket(native_socket(socket), FIONBIO, &mode) == 0;
 #else
@@ -211,7 +209,7 @@ bool set_socket_nonblocking(intptr_t socket)
  */
 bool is_accept_failure_retryable()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
     switch (::WSAGetLastError()) {
     case WSAEINTR:
     case WSAECONNRESET:
@@ -245,7 +243,7 @@ bool is_accept_failure_retryable()
  */
 void suppress_sigpipe([[maybe_unused]] intptr_t socket)
 {
-#if !defined(WINDOWS) && defined(SO_NOSIGPIPE)
+#if !defined(_WIN32) && defined(SO_NOSIGPIPE)
     int enable = 1;
     (void)::setsockopt(native_socket(socket), SOL_SOCKET, SO_NOSIGPIPE, &enable, sizeof(enable));
 #endif
@@ -273,7 +271,7 @@ bool is_deadline_expired(const SocketWaitDeadline &deadline)
  */
 bool wait_for_socket(intptr_t socket, const SocketWaitDeadline &deadline, SocketWaitMode mode)
 {
-#ifndef WINDOWS
+#ifndef _WIN32
     // FD_SET()はFD_SETSIZE以上のディスクリプタに対して未定義動作となる。
     // Windowsのfd_setは値の配列であるためこの制限は無い
     if (native_socket(socket) >= FD_SETSIZE) {
@@ -289,7 +287,7 @@ bool wait_for_socket(intptr_t socket, const SocketWaitDeadline &deadline, Socket
         FD_SET(native_socket(socket), &target);
         auto *readable = (mode == SocketWaitMode::READ) ? &target : nullptr;
         auto *writable = (mode == SocketWaitMode::WRITE) ? &target : nullptr;
-#ifdef WINDOWS
+#ifdef _WIN32
         const auto nfds = 0;
 #else
         const auto nfds = native_socket(socket) + 1;
@@ -336,7 +334,7 @@ SocketWaitDeadline make_deadline(std::chrono::milliseconds timeout)
 BotSocketServer::BotSocketServer(int port)
     : port(port)
 {
-#ifdef WINDOWS
+#ifdef _WIN32
     WSADATA wsa_data{};
     // WSAStartup()は失敗の理由を戻り値で返し、WSAGetLastError()には設定しない
     this->socket_library_error = ::WSAStartup(MAKEWORD(2, 2), &wsa_data);
@@ -351,7 +349,7 @@ BotSocketServer::~BotSocketServer()
 {
     this->close_client();
     this->close_listener();
-#ifdef WINDOWS
+#ifdef _WIN32
     if (this->is_socket_library_ready) {
         ::WSACleanup();
     }

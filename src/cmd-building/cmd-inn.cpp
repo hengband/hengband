@@ -150,7 +150,7 @@ static void display_stay_result(PlayerType *player_ptr, int prev_hour)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     if ((prev_hour >= 6) && (prev_hour < 18)) {
-#if JP
+#ifdef JP
         msg_format("あなたはリフレッシュして目覚め、%sを迎えた。", is_player_undead(player_ptr) ? "夜" : "夕方");
 #else
         msg_format("You awake refreshed for the %s.", is_player_undead(player_ptr) ? "evening" : "twilight");

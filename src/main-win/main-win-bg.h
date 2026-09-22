@@ -2,6 +2,7 @@
 
 #include "main-win/main-win-define.h"
 #include <filesystem>
+#define NOMINMAX
 #include <windows.h>
 
 /*!

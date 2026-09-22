@@ -6,7 +6,7 @@
 
 #if !defined(DISABLE_NET)
 
-#ifdef WINDOWS
+#ifdef _WIN32
 #define CURL_STATICLIB
 #endif
 #include <curl/curl.h>

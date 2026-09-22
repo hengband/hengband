@@ -11,6 +11,7 @@
 #include "term/z-term.h"
 #include "util/angband-files.h"
 #include <span>
+#define NOMINMAX
 #include <windows.h>
 
 // 1つの項目に設定可能な最大ファイル数

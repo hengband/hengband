@@ -9,6 +9,7 @@
 #include <string_view>
 #include <tl/optional.hpp>
 #include <vector>
+#define NOMINMAX
 #include <windows.h>
 
 /*!

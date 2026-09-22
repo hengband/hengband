@@ -11,10 +11,9 @@
 #include "system/angband.h"
 #include "view/display-messages.h"
 #include <vector>
-#ifdef WIN32
+#ifdef _WIN32
+#define NOMINMAX
 #include <windows.h>
-#undef min
-#undef max
 #else
 #include "util/finalizer.h"
 #include <algorithm>
@@ -423,7 +422,7 @@ static bool utf8_to_sys(std::string_view str, char *sys_str_buffer, size_t sys_s
     /* length() + 1 を渡して文字列終端('\0')を含めて変換する */
     return utf8_to_euc(utf8_str.data(), utf8_str.length() + 1, sys_str_buffer, sys_str_buflen) >= 0;
 
-#elif defined(SJIS) && defined(WINDOWS)
+#elif defined(SJIS) && defined(_WIN32)
 
     int input_len = utf8_str.length() + 1; /* include termination character */
 
@@ -459,7 +458,7 @@ tl::optional<std::string> sys_to_utf8(std::string_view str)
     const auto len = euc_to_utf8(str.data(), str.length(), utf8str.data(), utf8str.size());
 
     return (len >= 0) ? tl::make_optional(std::move(utf8str.erase(len))) : tl::nullopt;
-#elif defined(SJIS) && defined(WINDOWS)
+#elif defined(SJIS) && defined(_WIN32)
     /* SJIS(CP932) -> UTF-16 */
     std::vector<WCHAR> utf16buf(str.length());
     const auto utf16_len = MultiByteToWideChar(932, 0, str.data(), str.size(), utf16buf.data(), utf16buf.size());
@@ -543,7 +542,7 @@ std::string utf8_to_local(std::string_view str_utf8)
     }
 
 #ifdef JP
-#ifdef WIN32
+#ifdef _WIN32
     // UTF-8 -> UTF-16 (wide string)
     auto utf8_length = static_cast<int>(str_utf8.length());
     const auto wide_length = MultiByteToWideChar(CP_UTF8, 0, str_utf8.data(), utf8_length, NULL, 0);

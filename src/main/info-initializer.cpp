@@ -52,7 +52,7 @@
 #include <string>
 #include <string_view>
 #include <sys/stat.h>
-#ifndef WINDOWS
+#ifndef _WIN32
 #include <sys/types.h>
 #endif
 
