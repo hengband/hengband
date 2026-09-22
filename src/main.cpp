@@ -48,7 +48,6 @@
  * all the others use this file for their "main()" function.
  */
 
-#ifndef WINDOWS
 /*
  * A hook for "quit()".
  *
@@ -503,5 +502,3 @@ int main(int argc, char *argv[])
     quit("");
     return 0;
 }
-
-#endif

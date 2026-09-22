@@ -203,7 +203,7 @@ std::string make_screen_dump(PlayerType *player_ptr)
             case '\'':
                 cc = "&#39;";
                 break;
-#ifdef WINDOWS
+#ifdef _WIN32
             case 0x1f:
                 ds.character = '.';
                 break;

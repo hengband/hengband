@@ -2,7 +2,7 @@
 #include "locale/character-encoding.h"
 #include "system/angband-exceptions.h"
 #include "util/string-processor.h"
-#ifdef WINDOWS
+#ifdef _WIN32
 #include "main-win/main-win-utils.h"
 #define FD_SYS_OPEN(path, oflag, pmode) _open((path), (oflag), (pmode))
 #define FD_SYS_READ(fd, buf, n) _read((fd), (buf), (n))
@@ -174,7 +174,7 @@ static errr path_temp(char *buf, int max)
         return -1;
     }
 
-#if !defined(WIN32) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
+#if !defined(_WIN32) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
     angband_strcpy(buf, s, max);
 #else
     angband_strcpy(buf, format(".%s", s), max);
@@ -205,7 +205,7 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
 
     constexpr auto max_path_length = 1024;
     auto parsed_path = path_parse(path);
-#ifdef WINDOWS
+#ifdef _WIN32
     // システムロケールがUTF-8の場合、appendによるUTF-16への変換時に
     // Shift-JISをUTF-8とみなしてしまい変換に失敗するので、自前でUTF-16に変換してからappendする
     const std::filesystem::path path_ret = parsed_path.append(path_from_sjis(file).native());

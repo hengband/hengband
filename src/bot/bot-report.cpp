@@ -13,7 +13,7 @@
 #include <cstdio>
 #include <fmt/format.h>
 
-#ifdef WINDOWS
+#ifdef _WIN32
 #include "main-win/main-win-utils.h"
 #endif
 
@@ -25,7 +25,7 @@
  */
 void prepare_bot_report()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
     attach_console();
 #endif
 }

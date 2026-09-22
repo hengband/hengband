@@ -20,10 +20,9 @@
 #include <sstream>
 #include <vector>
 
-#ifdef WINDOWS
+#ifdef _WIN32
+#define NOMINMAX
 #include <windows.h>
-#undef max
-#undef min
 constexpr DWORD WAIT = 100;
 #define FD_SYS_READ(fd, buf, n) _read((fd), (buf), (n))
 #else
@@ -99,7 +98,7 @@ static void init_buffer(void)
 /* 現在の時間を100ms単位で取得する */
 static long get_current_time(void)
 {
-#ifdef WINDOWS
+#ifdef _WIN32
     return timeGetTime() / 100;
 #else
     struct timeval tv;
@@ -488,7 +487,7 @@ static bool read_movie_file()
     return true;
 }
 
-#ifndef WINDOWS
+#ifndef _WIN32
 /* Win版の床の中点と壁の豆腐をピリオドとシャープにする。*/
 static void win2unix(int col, char *buf)
 {
@@ -596,7 +595,7 @@ static bool flush_ringbuf_client()
         } else {
             mesg = &buf[5];
         }
-#ifndef WINDOWS
+#ifndef _WIN32
         win2unix(col, mesg);
 #endif
 
@@ -687,7 +686,7 @@ void browse_movie(void)
                 term_xtra(TERM_XTRA_FLUSH, 0);
 
                 /* ソケットにデータが来ているかどうか調べる */
-#ifdef WINDOWS
+#ifdef _WIN32
                 Sleep(WAIT);
 #else
                 usleep(WAIT);
@@ -697,7 +696,7 @@ void browse_movie(void)
     }
 }
 
-#ifndef WINDOWS
+#ifndef _WIN32
 void prepare_browse_movie_with_path_build(std::string_view filename)
 {
     const auto &path = path_build(ANGBAND_DIR_USER, filename);

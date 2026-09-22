@@ -1628,7 +1628,7 @@ FMT_CONSTEXPR void parse_format_string(basic_string_view<Char> fmt,
   auto begin = fmt.data(), end = begin + fmt.size();
   auto p = begin;
   while (p != end) {
-#ifdef WINDOWS
+#ifdef _WIN32
     if (is_sjis_multibyte_char(*p)) {
       p += 2;
       continue;

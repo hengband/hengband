@@ -23,7 +23,7 @@
  * This file helps Angband work with Windows computers.
  *
  * To use this file, use an appropriate "Makefile" or "Project File",
- * make sure that "WINDOWS" and/or "WIN32" are defined somewhere, and
+ * make sure that "_WIN32" are defined somewhere, and
  * make sure to obtain various extra files as described below.
  *
  * The official compilation uses the CodeWarrior Pro compiler, which
@@ -78,8 +78,6 @@
  * and Chris R. Martin (crm7479@tam2000.tamu.edu).
  * </p>
  */
-
-#ifdef WINDOWS
 
 #include "bot/bot-control-server.h"
 #include "cmd-io/cmd-save.h"
@@ -2959,5 +2957,3 @@ int WINAPI WinMain(
     }
 #endif
 }
-
-#endif /* WINDOWS */

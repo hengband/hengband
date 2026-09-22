@@ -105,7 +105,7 @@ void headless_term_plog(std::string_view str)
  *
  * 端末の破棄などプラットフォーム側が用意した後始末を飛ばさないよう、上書き前のフックへ委譲する。
  * Unixではmain.cppのquit_hook()がterm_nuke()を呼ぶ。term_nuke()はWindowsでは定義されない
- * (z-term.cppの#ifndef WINDOWS) ため、ここから直接呼ぶことはできない。
+ * (z-term.cppの#ifndef _WIN32) ため、ここから直接呼ぶことはできない。
  */
 void headless_term_quit(std::string_view str)
 {

@@ -100,7 +100,7 @@ static void screen_dump_one_line(int wid, int y, FILE *fff)
         case '>':
             cc = "&gt;";
             break;
-#ifdef WINDOWS
+#ifdef _WIN32
         case 0x1f:
             ds.character = '.';
             break;

@@ -198,7 +198,7 @@ void display_scores(int from, int to, int note, high_score *score)
     }
 }
 
-#ifndef WINDOWS
+#ifndef _WIN32
 /*!
  * @brief スコア表示処理メインルーチン / Display the scores in a given range and quit.
  * @param from 順位先頭
