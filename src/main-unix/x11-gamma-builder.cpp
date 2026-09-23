@@ -49,10 +49,9 @@
  */
 
 #include "main-unix/x11-gamma-builder.h"
-#include "system/angband.h"
 
 /* Table of gamma values */
-byte gamma_table[256];
+uint8_t gamma_table[256];
 
 /* Table of ln(x/256) * 256 for x going from 0 -> 255 */
 static int16_t gamma_helper[256] = {
