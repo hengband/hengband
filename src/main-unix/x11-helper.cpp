@@ -1,4 +1,10 @@
-/* File: maid-x11.c */
+/*
+ * @file x11-helper.cpp
+ * @brief X11に関するヘルパー関数群
+ * @date 不明
+ * @author 不明
+ * @todo ヘルパー関数と呼ぶにはごちゃごちゃしすぎているが、整理は将来の課題とする.
+ */
 
 /*
  * Copyright (c) 1997 Ben Harrison, and others
@@ -8,9 +14,13 @@
  * are included in all such copies.
  */
 
+#include "system/angband.h"
+
 #ifdef USE_X11
 
 #include "main-unix/x11-gamma-builder.h"
+#include "main-unix/x11-helper.h"
+#include <X11/Xutil.h>
 #include <math.h>
 
 /*
@@ -49,14 +59,6 @@
 
 #endif /* IsModifierKey */
 
-/*
- * Checks if the keysym is a special key or a normal key
- * Assume that XK_MISCELLANY keysyms are special
- *
- * Also appears in "main-x11.c".
- */
-#define IsSpecialKey(keysym) ((unsigned)(keysym) >= 0xFF00)
-
 static bool gamma_table_ready = true;
 static int gamma_val = 0;
 
@@ -64,9 +66,9 @@ static int gamma_val = 0;
  * Hack -- Convert an RGB value to an X11 Pixel, or die.
  */
 #ifdef USE_XFT
-static XftColor create_pixel(Display *dpy, byte red, byte green, byte blue)
+XftColor create_pixel(Display *dpy, uint8_t red, uint8_t green, uint8_t blue)
 #else
-static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
+unsigned long create_pixel(Display *dpy, uint8_t red, uint8_t green, uint8_t blue)
 #endif
 {
     Colormap cmap = DefaultColormapOfScreen(DefaultScreenOfDisplay(dpy));
@@ -194,7 +196,7 @@ static void rd_u32b(FILE *fff, uint32_t *ip)
  * Assumes that the bitmap has a size such that no padding is needed in
  * various places.  Currently only handles bitmaps with 3 to 256 colors.
  */
-static XImage *ReadBMP(Display *dpy, char *Name)
+XImage *ReadBMP(Display *dpy, char *Name)
 {
     Visual *visual = DefaultVisual(dpy, DefaultScreen(dpy));
 
@@ -348,7 +350,7 @@ static int redShift, greenShift, blueShift;
 /*
  * Use smooth rescaling?
  */
-static bool smoothRescaling = true;
+bool smoothRescaling = true;
 
 /*
  * GetScaledRow reads a scan from the given XImage, scales it smoothly
@@ -685,7 +687,7 @@ static XImage *ResizeImageSmooth(Display *dpy, XImage *Im, int ix, int iy, int o
 /*
  * Resize an image.
  */
-static XImage *ResizeImage(Display *dpy, XImage *Im, int ix, int iy, int ox, int oy)
+XImage *ResizeImage(Display *dpy, XImage *Im, int ix, int iy, int ox, int oy)
 {
     Visual *visual = DefaultVisual(dpy, DefaultScreen(dpy));
 
