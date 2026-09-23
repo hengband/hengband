@@ -92,7 +92,7 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
-        monrace_target.aura_flags.set(MonsterAuraType::FIRE);
+        monrace_target.r_aura_flags.set(MonsterAuraType::FIRE);
     }
 
     const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
@@ -119,7 +119,7 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (monster.ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
-        monrace_target.aura_flags.set(MonsterAuraType::COLD);
+        monrace_target.r_aura_flags.set(MonsterAuraType::COLD);
     }
 
     const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
@@ -146,7 +146,7 @@ static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (monster.ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
-        monrace_target.aura_flags.set(MonsterAuraType::ELEC);
+        monrace_target.r_aura_flags.set(MonsterAuraType::ELEC);
     }
 
     const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));

@@ -82,7 +82,7 @@ static void attack_stun(PlayerType *player_ptr, player_attack_type *pa_ptr, bool
     auto &monrace = *pa_ptr->monrace;
     if (monrace.resistance_flags.has(MonsterResistanceType::NO_STUN)) {
         if (is_original_ap_and_seen(player_ptr, *pa_ptr->m_ptr)) {
-            monrace.resistance_flags.set(MonsterResistanceType::NO_STUN);
+            monrace.r_resistance_flags.set(MonsterResistanceType::NO_STUN);
         }
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else if (can_resist && evaluate_percent(monrace.level)) {
@@ -106,7 +106,7 @@ static void attack_scare(PlayerType *player_ptr, player_attack_type *pa_ptr, boo
     auto &monrace = *pa_ptr->monrace;
     if (monrace.resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
         if (is_original_ap_and_seen(player_ptr, *pa_ptr->m_ptr)) {
-            monrace.resistance_flags.set(MonsterResistanceType::NO_FEAR);
+            monrace.r_resistance_flags.set(MonsterResistanceType::NO_FEAR);
         }
         msg_format(_("%s^には効果がなかった。", "%s^ is unaffected."), pa_ptr->m_name);
     } else if (can_resist && evaluate_percent(monrace.level)) {

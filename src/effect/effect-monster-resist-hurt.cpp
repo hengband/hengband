@@ -408,7 +408,7 @@ ProcessResult effect_monster_confusion(PlayerType *player_ptr, EffectMonster *em
     em_ptr->dam *= 3;
     em_ptr->dam /= randint1(6) + 6;
     if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
-        em_ptr->monrace->resistance_flags.set(MonsterResistanceType::NO_CONF);
+        em_ptr->monrace->r_resistance_flags.set(MonsterResistanceType::NO_CONF);
     }
 
     return ProcessResult::PROCESS_CONTINUE;
