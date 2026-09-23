@@ -155,10 +155,10 @@ static int monspell_damage_base(
         dam = std::min(hp / 6, 150);
         break;
     case MonsterAbilityType::BR_VOID:
-        dam = ((hp / 3) > 250 ? 250 : (hp / 6));
+        dam = std::min(hp / 6, 250);
         break;
     case MonsterAbilityType::BR_ABYSS:
-        dam = ((hp / 3) > 250 ? 250 : (hp / 6));
+        dam = std::min(hp / 6, 250);
         break;
     case MonsterAbilityType::BA_ACID:
         if (powerful) {
