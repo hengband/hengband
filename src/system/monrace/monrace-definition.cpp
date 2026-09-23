@@ -761,6 +761,7 @@ tl::optional<std::string> MonraceDefinition::probe_lore()
     this->r_cast_spell = MAX_UCHAR;
     n |= count_lore_mflag_group(this->resistance_flags, this->r_resistance_flags) > 0;
     n |= count_lore_mflag_group(this->ability_flags, this->r_ability_flags) > 0;
+    n |= count_lore_mflag_group(this->aura_flags, this->r_aura_flags) > 0;
     n |= count_lore_mflag_group(this->behavior_flags, this->r_behavior_flags) > 0;
     n |= count_lore_mflag_group(this->drop_flags, this->r_drop_flags) > 0;
     n |= count_lore_mflag_group(this->feature_flags, this->r_feature_flags) > 0;
@@ -769,6 +770,7 @@ tl::optional<std::string> MonraceDefinition::probe_lore()
 
     this->r_resistance_flags = this->resistance_flags;
     this->r_ability_flags = this->ability_flags;
+    this->r_aura_flags = this->aura_flags;
     this->r_behavior_flags = this->behavior_flags;
     this->r_drop_flags = this->drop_flags;
     this->r_feature_flags = this->feature_flags;
