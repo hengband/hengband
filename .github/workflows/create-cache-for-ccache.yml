@@ -13,37 +13,47 @@ permissions:
 
 jobs:
   clang_libcpp_without_pch_japanese:
-    name: Japanese version with clang 21 -stdlib=libc++ (without using pre-compiled headers)
+    name: Japanese version with clang 21 -stdlib=libc++ (without using pre-compiled headers, with XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
       cxx: clang++-21
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -stdlib=libc++"
-      configure-opts: "--disable-pch"
+      configure-opts: "--disable-pch --enable-xft"
       use-ccache: true
 
-  clang_without_pch:
-    name: Japanese version with clang 21 (without using pre-compiled headers)
+  clang_without_pch_japanese:
+    name: Japanese version with clang 21 (without using pre-compiled headers, with XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
       cxx: clang++-21
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch"
+      configure-opts: "--disable-pch --enable-xft"
+      use-ccache: true
+
+  clang_with_pch_english:
+    name: English version with clang 21 (with using pre-compiled headers, without XFT)
+    uses: ./.github/workflows/build-with-autotools.yml
+    with:
+      runner: ubuntu-26.04
+      cxx: clang++-21
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
+      configure-opts: "--disable-japanese --disable-assert"
       use-ccache: true
 
   gcc_japanese:
-    name: Japanese version with gcc 16
+    name: Japanese version with gcc 16 (with XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
       cxx: g++-16
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch"
+      configure-opts: "--disable-pch --enable-xft"
       use-ccache: true
 
   gcc_english:
-    name: English version with gcc 16
+    name: English version with gcc 16 (without XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
@@ -54,22 +64,22 @@ jobs:
       use-ccache: true
 
   apple_clang_japanese:
-    name: Japanese version with Apple Clang 21
+    name: Japanese version with Apple Clang 21 (without X11)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: macos-26
       cxx: clang++
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch"
+      configure-opts: "--disable-pch --without-x"
       use-ccache: true
 
   apple_clang_english:
-    name: English version with Apple Clang 21
+    name: English version with Apple Clang 21 (without X11)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: macos-26
       cxx: clang++
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch --disable-japanese"
+      configure-opts: "--disable-pch --disable-japanese --without-x"
       distcheck: true
       use-ccache: true
