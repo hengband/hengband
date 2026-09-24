@@ -25,6 +25,9 @@
     <Filter Include="store">
       <UniqueIdentifier>{2f858fe4-6c1a-425e-8310-085e4dcf1f4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{c0fc151d-cfac-4d51-9420-fc3298e34e90}</UniqueIdentifier>
+    </Filter>
     <Filter Include="term">
       <UniqueIdentifier>{b6d3f0a2-4e8c-4b71-9a5d-3c2e7f1d8a94}</UniqueIdentifier>
     </Filter>
@@ -86,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\store\test-store-util.cpp">
       <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp">
+      <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\term\test-z-form.cpp">
       <Filter>term</Filter>

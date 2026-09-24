@@ -291,7 +291,7 @@ ProcessResult effect_monster_domination(PlayerType *player_ptr, EffectMonster *e
     const auto is_no_confusion = em_ptr->monrace->resistance_flags.has(MonsterResistanceType::NO_CONF);
     if (is_unique || is_questor || is_no_confusion || (em_ptr->monrace->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)) {
         if ((em_ptr->monrace->resistance_flags.has(MonsterResistanceType::NO_CONF)) && is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
-            em_ptr->monrace->resistance_flags.set(MonsterResistanceType::NO_CONF);
+            em_ptr->monrace->r_resistance_flags.set(MonsterResistanceType::NO_CONF);
         }
 
         em_ptr->do_conf = 0;

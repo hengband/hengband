@@ -1505,6 +1505,7 @@ hengband_test_SOURCES = \
 	test/store/test-pricing.cpp \
 	test/store/test-store-screen.cpp \
 	test/store/test-store-util.cpp \
+	test/system/monrace/test-monrace-definition.cpp \
 	test/term/test-z-form.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \
