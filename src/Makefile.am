@@ -1405,6 +1405,7 @@ libhengband_a_SOURCES = \
 	util/sha256.cpp util/sha256.h \
 	util/stack-trace.h \
 	util/string-processor.cpp util/string-processor.h \
+	util/type-concepts.h \
 	\
 	view/display-birth.cpp view/display-birth.h \
 	view/display-characteristic.cpp view/display-characteristic.h \
