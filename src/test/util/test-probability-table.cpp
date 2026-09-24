@@ -12,6 +12,7 @@
 #include <doctest/doctest.h>
 
 #include <algorithm>
+#include <climits>
 #include <cmath>
 #include <iterator>
 #include <map>
@@ -184,4 +185,13 @@ TEST_CASE("ProbabilityTable throws an exception when it is empty")
     const ProbabilityTable<int> table;
 
     CHECK_THROWS_AS(table.pick_one_at_random(), std::runtime_error);
+}
+
+TEST_CASE("ProbabilityTable throws an exception when the total prob overflows int")
+{
+    ProbabilityTable<int> table;
+    table.entry_item(1, INT_MAX);
+    table.entry_item(2, 1);
+
+    CHECK_THROWS_AS(table.pick_one_at_random(), std::overflow_error);
 }
