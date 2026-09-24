@@ -296,6 +296,16 @@ class TownPreferencesValidationTest(unittest.TestCase):
                 self.assertFalse(ok)
                 self.assertIn("integer JSON value", message)
 
+    def test_terrain_tags_match_runtime_definitions(self):
+        for terrain, valid in (("ENTRANCE", True), ("*", True), ("NOT_A_TERRAIN", False)):
+            with self.subTest(terrain=terrain):
+                data = {"version": 1, "legend": {">": {"terrain": terrain, "caveInfo": ["MARK"]}}}
+                ok, message = self.validate(data)
+                self.assertEqual(ok, valid, message)
+                if not valid:
+                    self.assertIn("unknown terrain tag", message)
+                    self.assertIn("['legend', '>', 'terrain']", message)
+
 
 if __name__ == "__main__":
     unittest.main()
