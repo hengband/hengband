@@ -1032,7 +1032,7 @@ static bool is_elemental_genocide_effective(const MonraceDefinition &monrace, At
         }
         break;
     case AttributeType::DARK:
-        if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_DARK) || monrace.r_resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
+        if (monrace.resistance_flags.has(MonsterResistanceType::RESIST_DARK) || monrace.resistance_flags.has(MonsterResistanceType::HURT_LITE)) {
             return false;
         }
         break;
