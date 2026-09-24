@@ -11,6 +11,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "util/bit-flags-calculator.h"
+#include <algorithm>
 
 /*!
  * @brief モンスターの使う呪文の威力を決定する /
@@ -77,7 +78,7 @@ static int monspell_damage_base(
     case MonsterAbilityType::DISPEL:
         return -1;
     case MonsterAbilityType::ROCKET:
-        dam = (hp / 4) > 800 ? 800 : (hp / 4);
+        dam = std::min(hp / 4, 800);
         break;
     case MonsterAbilityType::SHOOT:
         dice = shoot_dice;
@@ -94,49 +95,49 @@ static int monspell_damage_base(
     case MonsterAbilityType::BR_ELEC:
     case MonsterAbilityType::BR_FIRE:
     case MonsterAbilityType::BR_COLD:
-        dam = ((hp / 3) > 1600 ? 1600 : (hp / 3));
+        dam = std::min(hp / 3, 1600);
         break;
     case MonsterAbilityType::BR_POIS:
-        dam = ((hp / 3) > 800 ? 800 : (hp / 3));
+        dam = std::min(hp / 3, 800);
         break;
     case MonsterAbilityType::BR_NETH:
-        dam = ((hp / 6) > 550 ? 550 : (hp / 6));
+        dam = std::min(hp / 6, 550);
         break;
     case MonsterAbilityType::BR_LITE:
     case MonsterAbilityType::BR_DARK:
-        dam = ((hp / 6) > 400 ? 400 : (hp / 6));
+        dam = std::min(hp / 6, 400);
         break;
     case MonsterAbilityType::BR_CONF:
     case MonsterAbilityType::BR_SOUN:
-        dam = ((hp / 6) > 450 ? 450 : (hp / 6));
+        dam = std::min(hp / 6, 450);
         break;
     case MonsterAbilityType::BR_CHAO:
-        dam = ((hp / 6) > 600 ? 600 : (hp / 6));
+        dam = std::min(hp / 6, 600);
         break;
     case MonsterAbilityType::BR_DISE:
-        dam = ((hp / 6) > 500 ? 500 : (hp / 6));
+        dam = std::min(hp / 6, 500);
         break;
     case MonsterAbilityType::BR_NEXU:
-        dam = ((hp / 3) > 250 ? 250 : (hp / 3));
+        dam = std::min(hp / 3, 250);
         break;
     case MonsterAbilityType::BR_TIME:
-        dam = ((hp / 3) > 150 ? 150 : (hp / 3));
+        dam = std::min(hp / 3, 150);
         break;
     case MonsterAbilityType::BR_INER:
     case MonsterAbilityType::BR_GRAV:
-        dam = ((hp / 6) > 200 ? 200 : (hp / 6));
+        dam = std::min(hp / 6, 200);
         break;
     case MonsterAbilityType::BR_SHAR:
-        dam = ((hp / 6) > 500 ? 500 : (hp / 6));
+        dam = std::min(hp / 6, 500);
         break;
     case MonsterAbilityType::BR_PLAS:
-        dam = ((hp / 6) > 150 ? 150 : (hp / 6));
+        dam = std::min(hp / 6, 150);
         break;
     case MonsterAbilityType::BR_FORC:
-        dam = ((hp / 6) > 200 ? 200 : (hp / 6));
+        dam = std::min(hp / 6, 200);
         break;
     case MonsterAbilityType::BR_MANA:
-        dam = ((hp / 3) > 250 ? 250 : (hp / 3));
+        dam = std::min(hp / 3, 250);
         break;
     case MonsterAbilityType::BA_NUKE:
         mult = powerful ? 2 : 1;
@@ -144,20 +145,20 @@ static int monspell_damage_base(
         dice = Dice(10, 6);
         break;
     case MonsterAbilityType::BR_NUKE:
-        dam = ((hp / 3) > 800 ? 800 : (hp / 3));
+        dam = std::min(hp / 3, 800);
         break;
     case MonsterAbilityType::BA_CHAO:
         dam = (powerful ? (rlev * 3) : (rlev * 2));
         dice = Dice(10, 10);
         break;
     case MonsterAbilityType::BR_DISI:
-        dam = ((hp / 6) > 150 ? 150 : (hp / 6));
+        dam = std::min(hp / 6, 150);
         break;
     case MonsterAbilityType::BR_VOID:
-        dam = ((hp / 3) > 250 ? 250 : (hp / 6));
+        dam = std::min(hp / 6, 250);
         break;
     case MonsterAbilityType::BR_ABYSS:
-        dam = ((hp / 3) > 250 ? 250 : (hp / 6));
+        dam = std::min(hp / 6, 250);
         break;
     case MonsterAbilityType::BA_ACID:
         if (powerful) {
