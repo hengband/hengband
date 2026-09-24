@@ -5,6 +5,7 @@
 #include <string>
 #include <string_view>
 #include <tl/optional.hpp>
+#include <xoshiro.h>
 
 extern std::filesystem::path savefile; //!< セーブファイルのフルパス
 extern std::filesystem::path savefile_base; //!< セーブファイル名
@@ -28,6 +29,7 @@ typedef void (*update_playtime_pf)();
 
 void file_character(PlayerType *player_ptr, std::string_view filename);
 tl::optional<std::string> get_random_line(concptr file_name, int entry);
+tl::optional<std::string> get_random_line(xso::rng32 &rng, concptr file_name, int entry);
 void read_dead_file();
 
 #ifdef JP

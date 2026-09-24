@@ -2,6 +2,7 @@
 
 #include "util/flag-group.h"
 #include <vector>
+#include <xoshiro.h>
 
 enum class BaseitemCollectionMode {
     CHECK_CHANCE, //!< グループに該当アイテムが1つでもあるかを調べ、最初の1件で打ち切る
@@ -22,6 +23,7 @@ public:
     static void initialize_baseitem_configs();
     static void reset_all_visuals();
     static const BaseitemConfig &pick_one_at_random();
+    static const BaseitemConfig &pick_one_at_random(xso::rng32 &rng);
     static const DisplaySymbol &get_dummy_symbol();
     static void shuffle_flavors();
     static void mark_common_items_as_aware();

@@ -364,9 +364,10 @@ bool MonraceList::order_level_unique(MonraceId id1, MonraceId id2) const
 /*!
  * @brief (MonraceId::PLAYERを除く)実在するすべてのモンスター種族IDから等確率で1つ選択する
  *
+ * @param rng 乱数生成器
  * @return 選択したモンスター種族ID
  */
-MonraceId MonraceList::pick_id_at_random() const
+MonraceId MonraceList::pick_id_at_random(xso::rng32 &rng) const
 {
     static ProbabilityTable<MonraceId> table;
     if (table.empty()) {
@@ -377,12 +378,27 @@ MonraceId MonraceList::pick_id_at_random() const
         }
     }
 
-    return table.pick_one_at_random();
+    return table.pick_one_at_random(rng);
+}
+
+/*!
+ * @brief ゲームの乱数生成器で、(MonraceId::PLAYERを除く)実在するすべてのモンスター種族IDから等確率で1つ選択する
+ *
+ * @return 選択したモンスター種族ID
+ */
+MonraceId MonraceList::pick_id_at_random() const
+{
+    return this->pick_id_at_random(get_game_rng());
+}
+
+const MonraceDefinition &MonraceList::pick_monrace_at_random(xso::rng32 &rng) const
+{
+    return *this->monraces.at(this->pick_id_at_random(rng));
 }
 
 const MonraceDefinition &MonraceList::pick_monrace_at_random() const
 {
-    return *this->monraces.at(this->pick_id_at_random());
+    return this->pick_monrace_at_random(get_game_rng());
 }
 
 int MonraceList::calc_defeat_count() const
