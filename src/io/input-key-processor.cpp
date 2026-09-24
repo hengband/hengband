@@ -90,6 +90,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
+#include "term/z-rand.h"
 #include "util/int-char-converter.h"
 #include "view/display-messages.h"
 #include "window/display-sub-windows.h"
@@ -691,9 +692,11 @@ void process_command(PlayerType *player_ptr)
         if (flush_failure) {
             flush();
         }
-        if (one_in_(2)) {
+        // ゲームの時間が経過しない操作なので、ゲームの乱数生成器は使わない
+        auto &rng = get_external_rng();
+        if (one_in_(rng, 2)) {
             sound(SoundKind::ILLEGAL);
-            const auto error_mes = get_random_line(_("error_j.txt", "error.txt"), 0);
+            const auto error_mes = get_random_line(rng, _("error_j.txt", "error.txt"), 0);
             if (error_mes) {
                 msg_print(*error_mes);
             }
