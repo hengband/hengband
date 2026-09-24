@@ -1331,7 +1331,7 @@ nlohmann::json make_store_json(PlayerType *player_ptr, const StoreScreen &screen
         const auto &owner = store.get_owner();
         result["owner_name"] = to_json_utf8(owner.owner_name);
         result["owner_race"] = to_json_utf8(race_info[enum2i(owner.owner_race)].title.string());
-        result["store_name"] = to_json_utf8(TerrainList::get_instance().get_terrain(cur_store_feat).name);
+        result["store_name"] = to_json_utf8(screen.get_name());
         result["max_cost"] = owner.max_cost;
     }
 
