@@ -1,4 +1,7 @@
-/* File: z-rand.c */
+/*!
+ * @file z-rand.cpp
+ * @brief ゲームで使用する乱数ユーティリティの実装
+ */
 
 /*
  * Copyright (c) 1997 Ben Harrison, and others
@@ -8,47 +11,71 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-/* Purpose: a simple random number generator -BEN- */
-
 #include "term/z-rand.h"
 #include "system/angband-system.h"
 #include <algorithm>
-#include <cmath>
+#include <concepts>
+#include <cstdint>
+#include <cstdlib>
 #include <limits>
-#include <random>
 #include <tl/optional.hpp>
 
-/*
- * Angband 2.7.9 introduced a new (optimized) random number generator,
- * based loosely on the old "random.c" from Berkeley but with some major
- * optimizations and algorithm changes.  See below for more details.
- *
- * Code by myself (benh@phial.com) and Randy (randy@stat.tamu.edu).
- *
- * This code provides (1) a "decent" RNG, based on the "BSD-degree-63-RNG"
- * used in Angband 2.7.8, but rather optimized, and (2) a "simple" RNG,
- * based on the simple "LCRNG" currently used in Angband, but "corrected"
- * to give slightly better values.  Both of these are available in two
- * flavors, first, the simple "mod" flavor, which is fast, but slightly
- * biased at high values, and second, the simple "div" flavor, which is
- * less fast (and potentially non-terminating) but which is not biased
- * and is much less subject to low-bit-non-randomness problems.
- *
- * You can select your favorite flavor by proper definition of the
- * "randint0()" macro in the "defines.h" file.
- *
- * Note that, in Angband 2.8.0, the "state" table will be saved in the
- * savefile, so a special "initialization" phase will be necessary.
- *
- * Note the use of the "simple" RNG, first you activate it via
- * "Rand_quick = TRUE" and "Rand_value = seed" and then it is used
- * automatically used instead of the "complex" RNG, and when you are
- * done, you de-activate it via "Rand_quick = FALSE" or choose a new
- * seed via "Rand_value = seed".
- *
- *
- * RNG algorithm was fully rewritten. Upper comment is OLD.
+namespace {
+/*!
+ * @brief 0以上range未満の一様乱数を返す
+ * @param rng 乱数生成器
+ * @param range 値域の幅 (1以上)
+ * @return 乱数値
+ * @details Lemire の nearly-divisionless 法 (D. Lemire, "Fast Random Integer Generation in an Interval", 2019) による。
+ * 乱数生成器の出力と range の64bit積の上位32bitを結果とし、下位32bitが閾値 2^32 mod range 未満の場合は
+ * 引き直すことで偏りをなくしている。大半の場合は乗算1回で済み、剰余の計算も稀にしか行わない。
  */
+uint32_t uniform_below(xso::rng32 &rng, uint32_t range)
+{
+    auto product = static_cast<uint64_t>(rng()) * range;
+    auto low = static_cast<uint32_t>(product);
+    if (low < range) {
+        const auto threshold = (0u - range) % range;
+        while (low < threshold) {
+            product = static_cast<uint64_t>(rng()) * range;
+            low = static_cast<uint32_t>(product);
+        }
+    }
+
+    return static_cast<uint32_t>(product >> 32);
+}
+
+/*!
+ * @brief a以上b以下の一様乱数を返す
+ * @param rng 乱数生成器
+ * @param a 最小値
+ * @param b 最大値
+ * @return 乱数値
+ * @details a >= b の場合は乱数を消費せず a を返す。
+ */
+int uniform_int(xso::rng32 &rng, int a, int b)
+{
+    if (a >= b) {
+        return a;
+    }
+
+    const auto width = static_cast<uint32_t>(static_cast<int64_t>(b) - a);
+    const auto offset = (width == std::numeric_limits<uint32_t>::max()) ? rng() : uniform_below(rng, width + 1);
+    return static_cast<int>(static_cast<int64_t>(a) + offset);
+}
+
+/*!
+ * @brief 値を型 T の範囲に収める
+ * @tparam T 変換先の整数型
+ * @param value 値
+ * @return T の範囲に収めた値
+ */
+template <std::integral T>
+T clamp_to(int64_t value)
+{
+    return static_cast<T>(std::clamp<int64_t>(value, std::numeric_limits<T>::min(), std::numeric_limits<T>::max()));
+}
+}
 
 /*!
  * @brief 乱数生成器の状態を初期化する
@@ -66,66 +93,79 @@ void Rand_state_init(tl::optional<uint32_t> seed)
     rng.seed();
 }
 
+/*!
+ * @brief a以上b以下の一様乱数を返す
+ * @param a 最小値
+ * @param b 最大値
+ * @return 乱数値
+ * @details a >= b の場合は乱数を消費せず a を返す。
+ * rand_range(0, n - 1) は randint0(n) と同じ値を返す。
+ */
 int rand_range(int a, int b)
 {
-    if (a >= b) {
-        return a;
-    }
-    std::uniform_int_distribution<> d(a, b);
-    return rand_dist(d);
+    return uniform_int(AngbandSystem::get_instance().get_rng(), a, b);
 }
 
-/*
- * Generate a random integer number of NORMAL distribution
+/*!
+ * @brief 正規分布に従う整数の乱数を返す
+ * @param mean 平均
+ * @param stand 標準偏差
+ * @return 乱数値 (int16_t の範囲に収めた値)
+ * @details 16bitの一様乱数12個の和から平均を引いた値が、近似的に標準偏差 2^16 の正規分布に従うこと
+ * (Irwin–Hall 分布) を利用して、整数演算のみで生成する。そのため結果は平均±6σの範囲で打ち切られる。
+ * 端数は0から遠い方へ丸める。stand <= 0 の場合は乱数を消費せず mean を返す。
  */
 int16_t randnor(int mean, int stand)
 {
     if (stand <= 0) {
-        return static_cast<int16_t>(mean);
+        return clamp_to<int16_t>(mean);
     }
-    std::normal_distribution<> d(mean, stand);
-    auto result = std::round(rand_dist(d));
-    return static_cast<int16_t>(result);
+
+    auto &rng = AngbandSystem::get_instance().get_rng();
+    int64_t sum = 0;
+    for (auto i = 0; i < 6; ++i) {
+        const auto value = rng();
+        sum += (value >> 16) + (value & 0xFFFF);
+    }
+
+    constexpr int64_t sum_mean = 6 * 0xFFFF; // 12 * 65535 / 2
+    const auto offset = static_cast<int64_t>(stand) * (sum - sum_mean);
+    const auto abs_scaled = (std::abs(offset) + 0x8000) >> 16;
+    return clamp_to<int16_t>(static_cast<int64_t>(mean) + (offset < 0 ? -abs_scaled : abs_scaled));
 }
 
-/*
- * Given a numerator and a denominator, supply a properly rounded result,
- * using the RNG to smooth out remainders.  -LM-
+/*!
+ * @brief 除算の端数を乱数で丸めた商を返す
+ * @param n 被除数
+ * @param d 除数
+ * @return 商
+ * @details 端数 |n mod d| / |d| の確率で商の絶対値を1増やすことで、期待値が n / d に一致するようにする。
+ * d == 0 の場合は n を返す。
  */
 int32_t div_round(int32_t n, int32_t d)
 {
-    int32_t tmp;
-
-    /* Refuse to divide by zero */
-    if (!d) {
+    if (d == 0) {
         return n;
     }
 
-    /* Division */
-    tmp = n / d;
-
-    /* Rounding */
-    if ((std::abs(n) % std::abs(d)) > randint0(std::abs(d))) {
-        /* Increase the absolute value */
-        if (n * d > 0L) {
-            tmp += 1L;
-        } else {
-            tmp -= 1L;
-        }
+    const auto n64 = static_cast<int64_t>(n);
+    const auto d64 = static_cast<int64_t>(d);
+    const auto abs_d = std::abs(d64);
+    const auto remainder = std::abs(n64) % abs_d;
+    auto quotient = n64 / d64;
+    if (remainder > rand_range(0, static_cast<int>(abs_d - 1))) {
+        quotient += ((n < 0) == (d < 0)) ? 1 : -1;
     }
 
-    /* Return */
-    return tmp;
+    return clamp_to<int32_t>(quotient);
 }
 
-/*
- * Extract a "random" number from 0 to m-1, using the RNG.
- *
- * This function should be used when generating random numbers in
- * "external" program parts like the main-*.c files.  It preserves
- * the current RNG state to prevent influences on game-play.
- *
- * Could also use rand() from <stdlib.h> directly.
+/*!
+ * @brief ゲームの乱数生成器を使わずに0以上m未満の一様乱数を返す
+ * @param m 値域の幅
+ * @return 乱数値 (m <= 0 の場合は0)
+ * @details BGMの選択などゲームの進行に影響しない場面で使う。
+ * ゲームの乱数生成器の状態を変えないため、固定シードでのゲームの再現性に影響しない。
  */
 int32_t Rand_external(int32_t m)
 {
@@ -134,7 +174,5 @@ int32_t Rand_external(int32_t m)
     }
 
     static xso::rng32 urbg_external;
-
-    std::uniform_int_distribution<> d(0, m - 1);
-    return d(urbg_external);
+    return uniform_int(urbg_external, 0, m - 1);
 }
