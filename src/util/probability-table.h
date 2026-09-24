@@ -111,9 +111,10 @@ public:
      * 確率テーブルになにも登録されていない場合、std::runtime_error例外を送出する。
      * すべての項目の確率の合計が int の最大値を超える場合、std::overflow_error例外を送出する。
      *
+     * @param rng 乱数生成器
      * @return int 選択された項目のID
      */
-    IdType pick_one_at_random() const
+    IdType pick_one_at_random(xso::rng32 &rng) const
     {
         if (empty()) {
             THROW_EXCEPTION(std::runtime_error, "There is no entry in the probability table.");
@@ -134,10 +135,22 @@ public:
             cumulative_probs_ = std::move(cumulative_probs);
         }
 
-        const auto value = rand_range(0, cumulative_probs_.back() - 1);
+        const auto value = rand_range(rng, 0, cumulative_probs_.back() - 1);
         const auto it = std::upper_bound(cumulative_probs_.begin(), cumulative_probs_.end(), value);
         const auto index = std::distance(cumulative_probs_.begin(), it);
         return std::get<0>(item_list_[index]);
+    }
+
+    /**
+     * @brief 確率テーブルから項目をランダムに1つ選択する
+     *
+     * ゲームの乱数生成器を使う以外は pick_one_at_random(xso::rng32 &) と同じ。
+     *
+     * @return int 選択された項目のID
+     */
+    IdType pick_one_at_random() const
+    {
+        return this->pick_one_at_random(get_game_rng());
     }
 
     /**

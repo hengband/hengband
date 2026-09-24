@@ -46,25 +46,6 @@ uint32_t uniform_below(xso::rng32 &rng, uint32_t range)
 }
 
 /*!
- * @brief a以上b以下の一様乱数を返す
- * @param rng 乱数生成器
- * @param a 最小値
- * @param b 最大値
- * @return 乱数値
- * @details a >= b の場合は乱数を消費せず a を返す。
- */
-int uniform_int(xso::rng32 &rng, int a, int b)
-{
-    if (a >= b) {
-        return a;
-    }
-
-    const auto width = static_cast<uint32_t>(static_cast<int64_t>(b) - a);
-    const auto offset = (width == std::numeric_limits<uint32_t>::max()) ? rng() : uniform_below(rng, width + 1);
-    return static_cast<int>(static_cast<int64_t>(a) + offset);
-}
-
-/*!
  * @brief 値を型 T の範囲に収める
  * @tparam T 変換先の整数型
  * @param value 値
@@ -84,7 +65,7 @@ T clamp_to(int64_t value)
  */
 void Rand_state_init(tl::optional<uint32_t> seed)
 {
-    auto &rng = AngbandSystem::get_instance().get_rng();
+    auto &rng = get_game_rng();
     if (seed) {
         rng.seed(*seed);
         return;
@@ -94,16 +75,57 @@ void Rand_state_init(tl::optional<uint32_t> seed)
 }
 
 /*!
- * @brief a以上b以下の一様乱数を返す
+ * @brief ゲームの乱数生成器を返す
+ * @return ゲームの乱数生成器 (AngbandSystem::get_rng())
+ * @details 乱数生成器を引数に取らない乱数関数はこれを使う。
+ */
+xso::rng32 &get_game_rng()
+{
+    return AngbandSystem::get_instance().get_rng();
+}
+
+/*!
+ * @brief ゲームの進行に影響しない乱数生成器を返す
+ * @return ゲームの乱数生成器とは独立した乱数生成器
+ * @details 描画やBGMの選択など、呼び出される回数が環境によって変わる処理で使う。
+ * 実行毎に異なるシードで初期化され、セーブファイルにも記録されない。
+ */
+xso::rng32 &get_external_rng()
+{
+    static xso::rng32 rng_external;
+    return rng_external;
+}
+
+/*!
+ * @brief 指定した乱数生成器で a以上b以下の一様乱数を返す
+ * @param rng 乱数生成器
  * @param a 最小値
  * @param b 最大値
  * @return 乱数値
  * @details a >= b の場合は乱数を消費せず a を返す。
+ */
+int rand_range(xso::rng32 &rng, int a, int b)
+{
+    if (a >= b) {
+        return a;
+    }
+
+    const auto width = static_cast<uint32_t>(static_cast<int64_t>(b) - a);
+    const auto offset = (width == std::numeric_limits<uint32_t>::max()) ? rng() : uniform_below(rng, width + 1);
+    return static_cast<int>(static_cast<int64_t>(a) + offset);
+}
+
+/*!
+ * @brief a以上b以下の一様乱数を返す
+ * @param a 最小値
+ * @param b 最大値
+ * @return 乱数値
+ * @details ゲームの乱数生成器を使う以外は rand_range(xso::rng32 &, int, int) と同じ。
  * rand_range(0, n - 1) は randint0(n) と同じ値を返す。
  */
 int rand_range(int a, int b)
 {
-    return uniform_int(AngbandSystem::get_instance().get_rng(), a, b);
+    return rand_range(get_game_rng(), a, b);
 }
 
 /*!
@@ -121,7 +143,7 @@ int16_t randnor(int mean, int stand)
         return clamp_to<int16_t>(mean);
     }
 
-    auto &rng = AngbandSystem::get_instance().get_rng();
+    auto &rng = get_game_rng();
     int64_t sum = 0;
     for (auto i = 0; i < 6; ++i) {
         const auto value = rng();
@@ -164,15 +186,10 @@ int32_t div_round(int32_t n, int32_t d)
  * @brief ゲームの乱数生成器を使わずに0以上m未満の一様乱数を返す
  * @param m 値域の幅
  * @return 乱数値 (m <= 0 の場合は0)
- * @details BGMの選択などゲームの進行に影響しない場面で使う。
+ * @details get_external_rng() を使う。BGMの選択などゲームの進行に影響しない場面で使う。
  * ゲームの乱数生成器の状態を変えないため、固定シードでのゲームの再現性に影響しない。
  */
 int32_t Rand_external(int32_t m)
 {
-    if (m <= 0) {
-        return 0;
-    }
-
-    static xso::rng32 urbg_external;
-    return uniform_int(urbg_external, 0, m - 1);
+    return rand_range(get_external_rng(), 0, m - 1);
 }
