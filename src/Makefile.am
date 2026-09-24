@@ -1510,6 +1510,7 @@ hengband_test_SOURCES = \
 	test/store/test-store-util.cpp \
 	test/system/monrace/test-monrace-definition.cpp \
 	test/term/test-z-form.cpp \
+	test/term/test-z-rand.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \
 	test/timed-effect/test-timed-effect.cpp \
