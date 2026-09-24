@@ -22,7 +22,6 @@ public:
     static void initialize_baseitem_records();
     static void initialize_baseitem_configs();
     static void reset_all_visuals();
-    static const BaseitemConfig &pick_one_at_random();
     static const BaseitemConfig &pick_one_at_random(xso::rng32 &rng);
     static const DisplaySymbol &get_dummy_symbol();
     static void shuffle_flavors();

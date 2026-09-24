@@ -48,11 +48,6 @@ void BaseitemService::reset_all_visuals()
     });
 }
 
-const BaseitemConfig &BaseitemService::pick_one_at_random()
-{
-    return pick_one_at_random(get_game_rng());
-}
-
 const BaseitemConfig &BaseitemService::pick_one_at_random(xso::rng32 &rng)
 {
     const auto &baseitems = BaseitemList::get_instance();

@@ -518,8 +518,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         term_clear();
 
         /* 桜散る */
+        auto &rng = get_external_rng();
         for (auto i = 0; i < 40; i++) {
-            term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
+            term_putstr(randint0(rng, w / 2) * 2, randint0(rng, h), 2, TERM_VIOLET, "υ");
         }
 
         auto str = death_message.data();
