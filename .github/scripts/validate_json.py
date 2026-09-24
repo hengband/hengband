@@ -193,6 +193,15 @@ def validate_wilderness_semantics(data: dict) -> None:
             raise ValidationError("starting position must be within the map layout", path=map_path + ["starting_position"])
 
 
+def validate_town_preferences_semantics(data: dict) -> None:
+    """Match the JSON integer representation required by the town map reader."""
+    if type(data["version"]) is not int:
+        raise ValidationError("expected an integer JSON value", path=["version"])
+    for symbol, cell in data["legend"].items():
+        if "special" in cell and type(cell["special"]) is not int:
+            raise ValidationError("expected an integer JSON value", path=["legend", symbol, "special"])
+
+
 def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
@@ -204,6 +213,8 @@ def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
             validate_ego_semantics(data, schema_path)
         elif schema_path.name == "WildernessDefinition.schema.json":
             validate_wilderness_semantics(data)
+        elif schema_path.name == "TownPreferences.schema.json":
+            validate_town_preferences_semantics(data)
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
         msg = [f"Failed: {data_path.name}", f"Reason: {e.message}"]

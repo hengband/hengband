@@ -2,9 +2,6 @@
 
 # Includes the town definitions
 
-# Preferences for the town features
-%:TownPreferences.txt
-
 # 辺境の地
 ?:[AND [EQU $TOWN 1] [EQU $WILDERNESS LITE] ]
 %:towns/01_Outpost_Lite.txt

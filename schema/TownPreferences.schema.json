@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "TownPreferences.schema.json",
+  "title": "Shared town map legend",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "legend"],
+  "properties": {
+    "version": { "const": 1 },
+    "legend": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[!-~]$" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["terrain", "caveInfo"],
+        "properties": {
+          "terrain": { "type": "string", "minLength": 1 },
+          "caveInfo": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "enum": ["MARK", "GLOW", "NO_TELEPORT_DEST", "ROOM", "LITE"] }
+          },
+          "special": { "type": "integer", "minimum": -32768, "maximum": 32767 }
+        }
+      }
+    }
+  }
+}
