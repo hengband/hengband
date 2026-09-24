@@ -1,11 +1,9 @@
 /*!
  * @file blue-magic-caster.cpp
- * @brief 青魔法のその他系統の呪文定義と詠唱時分岐処理
+ * @brief 青魔法の詠唱時分岐処理と、ブレス・ボール・ボルトなど系統別のファイルを持たない呪文の定義
  */
 
 #include "blue-magic/blue-magic-caster.h"
-#include "blue-magic/blue-magic-ball-bolt.h"
-#include "blue-magic/blue-magic-breath.h"
 #include "blue-magic/blue-magic-spirit-curse.h"
 #include "blue-magic/blue-magic-status.h"
 #include "blue-magic/blue-magic-summon.h"
@@ -18,6 +16,7 @@
 #include "monster/monster-info.h"
 #include "monster/monster-status.h"
 #include "mspell/mspell-damage-calculator.h"
+#include "mspell/mspell-projection-table.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"
@@ -189,8 +188,31 @@ static bool cast_blue_make_trap(PlayerType *player_ptr)
     return true;
 }
 
+/*!
+ * @brief 青魔法のブレス・ボール・ボルトを放つ
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param bmc_ptr 青魔法の詠唱情報
+ * @param projection 放つ魔法の定義
+ * @return 放ったらtrue、方向の選択をキャンセルしたらfalse
+ */
+static bool cast_blue_magic_projection(PlayerType *player_ptr, bmc_type *bmc_ptr, const MspellProjection &projection)
+{
+    const auto dir = get_aim_dir(player_ptr);
+    if (!dir) {
+        return false;
+    }
+
+    const auto damage = monspell_bluemage_damage(player_ptr, bmc_ptr->spell, bmc_ptr->plev, DAM_ROLL);
+    fire_mspell_projection(player_ptr, projection, dir, damage, (bmc_ptr->plev > 40 ? 3 : 2));
+    return true;
+}
+
 static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr)
 {
+    if (const auto projection = find_mspell_projection(bmc_ptr->spell)) {
+        return cast_blue_magic_projection(player_ptr, bmc_ptr, *projection);
+    }
+
     switch (bmc_ptr->spell) {
     case MonsterAbilityType::SHRIEK:
         msg_print(_("かん高い金切り声をあげた。", "You make a high pitched shriek."));
@@ -207,47 +229,6 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr)
         return cast_blue_rocket(player_ptr, bmc_ptr);
     case MonsterAbilityType::SHOOT:
         return cast_blue_shoot(player_ptr, bmc_ptr);
-    case MonsterAbilityType::BR_ACID:
-    case MonsterAbilityType::BR_ELEC:
-    case MonsterAbilityType::BR_FIRE:
-    case MonsterAbilityType::BR_COLD:
-    case MonsterAbilityType::BR_POIS:
-    case MonsterAbilityType::BR_NETH:
-    case MonsterAbilityType::BR_LITE:
-    case MonsterAbilityType::BR_DARK:
-    case MonsterAbilityType::BR_CONF:
-    case MonsterAbilityType::BR_SOUN:
-    case MonsterAbilityType::BR_CHAO:
-    case MonsterAbilityType::BR_DISE:
-    case MonsterAbilityType::BR_NEXU:
-    case MonsterAbilityType::BR_TIME:
-    case MonsterAbilityType::BR_INER:
-    case MonsterAbilityType::BR_GRAV:
-    case MonsterAbilityType::BR_SHAR:
-    case MonsterAbilityType::BR_PLAS:
-    case MonsterAbilityType::BR_FORC:
-    case MonsterAbilityType::BR_MANA:
-    case MonsterAbilityType::BR_NUKE:
-    case MonsterAbilityType::BR_DISI:
-    case MonsterAbilityType::BR_VOID:
-    case MonsterAbilityType::BR_ABYSS:
-        return cast_blue_magic_breath(player_ptr, bmc_ptr);
-    case MonsterAbilityType::BA_ACID:
-    case MonsterAbilityType::BA_ELEC:
-    case MonsterAbilityType::BA_FIRE:
-    case MonsterAbilityType::BA_COLD:
-    case MonsterAbilityType::BA_POIS:
-    case MonsterAbilityType::BA_NUKE:
-    case MonsterAbilityType::BA_NETH:
-    case MonsterAbilityType::BA_CHAO:
-    case MonsterAbilityType::BA_WATE:
-    case MonsterAbilityType::BA_LITE:
-    case MonsterAbilityType::BA_DARK:
-    case MonsterAbilityType::BA_MANA:
-    case MonsterAbilityType::BA_VOID:
-    case MonsterAbilityType::BA_ABYSS:
-    case MonsterAbilityType::BA_METEOR:
-        return cast_blue_magic_ball(player_ptr, bmc_ptr);
     case MonsterAbilityType::DRAIN_MANA:
     case MonsterAbilityType::MIND_BLAST:
     case MonsterAbilityType::BRAIN_SMASH:
@@ -256,21 +237,6 @@ static bool switch_cast_blue_magic(PlayerType *player_ptr, bmc_type *bmc_ptr)
     case MonsterAbilityType::CAUSE_3:
     case MonsterAbilityType::CAUSE_4:
         return cast_blue_magic_spirit_curse(player_ptr, bmc_ptr);
-    case MonsterAbilityType::BO_ACID:
-    case MonsterAbilityType::BO_ELEC:
-    case MonsterAbilityType::BO_FIRE:
-    case MonsterAbilityType::BO_COLD:
-    case MonsterAbilityType::BO_NETH:
-    case MonsterAbilityType::BO_WATE:
-    case MonsterAbilityType::BO_MANA:
-    case MonsterAbilityType::BO_PLAS:
-    case MonsterAbilityType::BO_ICEE:
-    case MonsterAbilityType::BO_ABYSS:
-    case MonsterAbilityType::BO_VOID:
-    case MonsterAbilityType::BO_METEOR:
-    case MonsterAbilityType::BO_LITE:
-    case MonsterAbilityType::MISSILE:
-        return cast_blue_magic_bolt(player_ptr, bmc_ptr);
     case MonsterAbilityType::SCARE:
         return cast_blue_scare(player_ptr, bmc_ptr);
     case MonsterAbilityType::BLIND:
