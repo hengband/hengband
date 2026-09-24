@@ -18,6 +18,67 @@
 #endif
 
 /*!
+ * @brief プレイヤー名からファイル名に使う基本名を作る
+ * @param name プレイヤー名
+ * @return 基本名。PlayerType::base_name に収まる長さまでで、空になる場合は "PLAYER"
+ * @details
+ * 区切り文字 (PATH_SEP) は '_' に置き換え、印字できない文字は除く。
+ * 区切り文字の直後の1文字も除かれるが、基本名はセーブファイルや設定ファイルの名前に使われるため、
+ * 既存のファイルとの対応が変わらないようこの挙動は残している。
+ */
+std::string make_player_base_name(std::string_view name)
+{
+    constexpr auto max_length = sizeof(PlayerType::base_name) - 1;
+    constexpr std::string_view path_sep(PATH_SEP);
+    std::string base_name;
+    for (size_t i = 0; i < name.length(); i++) {
+        const auto c = static_cast<unsigned char>(name[i]);
+#ifdef JP
+        if (iskanji(c)) {
+            if (i + 1 >= name.length()) {
+                break;
+            }
+
+            base_name.append(name.substr(i, 2));
+            i++;
+            continue;
+        }
+#endif
+
+#if defined(JP) && defined(SJIS)
+        if (iskana(c)) {
+            base_name.push_back(name[i]);
+            continue;
+        }
+#endif
+
+        if (name.substr(i).starts_with(path_sep)) {
+            base_name.push_back('_');
+            // ループの i++ と合わせて、区切り文字の直後の1文字も読み飛ばす (従来の挙動)
+            i += path_sep.length();
+            continue;
+        }
+
+#ifdef _WIN32
+        if (angband_strchr("\"*,/:;<>?\\|", name[i])) {
+            base_name.push_back('_');
+            continue;
+        }
+#endif
+
+        if (isprint(c)) {
+            base_name.push_back(name[i]);
+        }
+    }
+
+    if (base_name.empty()) {
+        return "PLAYER";
+    }
+
+    return str_substr(std::move(base_name), 0, max_length);
+}
+
+/*!
  * @brief プレイヤーの名前をチェックして修正する
  * Process the player name.
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -34,63 +95,21 @@ void process_player_name(PlayerType *player_ptr, bool is_new_savefile)
         strcpy(old_player_base, player_ptr->base_name);
     }
 
-    for (int i = 0; player_ptr->name[i]; i++) {
+    const std::string_view name(player_ptr->name);
+    for (size_t i = 0; i < name.length(); i++) {
 #ifdef JP
-        if (iskanji(player_ptr->name[i])) {
+        if (iskanji(name[i])) {
             i++;
             continue;
         }
-
-        if (iscntrl((unsigned char)player_ptr->name[i]))
-#else
-        if (iscntrl(player_ptr->name[i]))
 #endif
-        {
+
+        if (iscntrl(static_cast<unsigned char>(name[i]))) {
             quit_fmt(_("'%s' という名前は不正なコントロールコードを含んでいます。", "The name '%s' contains control chars!"), player_ptr->name);
         }
     }
 
-    int k = 0;
-    for (int i = 0; player_ptr->name[i]; i++) {
-#ifdef JP
-        unsigned char c = player_ptr->name[i];
-#else
-        char c = player_ptr->name[i];
-#endif
-
-#ifdef JP
-        if (iskanji(c)) {
-            if (k + 2 >= (int)sizeof(player_ptr->base_name) || !player_ptr->name[i + 1]) {
-                break;
-            }
-
-            player_ptr->base_name[k++] = c;
-            i++;
-            player_ptr->base_name[k++] = player_ptr->name[i];
-        }
-#ifdef SJIS
-        else if (iskana(c))
-            player_ptr->base_name[k++] = c;
-#endif
-        else
-#endif
-            if (!strncmp(PATH_SEP, player_ptr->name + i, strlen(PATH_SEP))) {
-            player_ptr->base_name[k++] = '_';
-            i += strlen(PATH_SEP);
-        }
-#ifdef _WIN32
-        else if (angband_strchr("\"*,/:;<>?\\|", c))
-            player_ptr->base_name[k++] = '_';
-#endif
-        else if (isprint(c)) {
-            player_ptr->base_name[k++] = c;
-        }
-    }
-
-    player_ptr->base_name[k] = '\0';
-    if (!player_ptr->base_name[0]) {
-        strcpy(player_ptr->base_name, "PLAYER");
-    }
+    angband_strcpy(player_ptr->base_name, make_player_base_name(name), sizeof(player_ptr->base_name));
 
     auto is_modified = false;
     if (is_new_savefile && (savefile.empty() || !keep_savefile)) {

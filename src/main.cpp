@@ -362,7 +362,7 @@ int main(int argc, char *argv[])
                 break;
             }
 
-            strcpy(p_ptr->name, &argv[i][2]);
+            angband_strcpy(p_ptr->name, &argv[i][2], sizeof(p_ptr->name));
             break;
         case 'm':
             if (!argv[i][2]) {
