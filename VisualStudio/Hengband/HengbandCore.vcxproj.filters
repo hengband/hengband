@@ -5426,6 +5426,9 @@
     <ClInclude Include="..\..\src\util\stack-trace.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\util\type-concepts.h">
+      <Filter>util</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\net\report-error.h">
       <Filter>net</Filter>
     </ClInclude>

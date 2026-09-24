@@ -1405,6 +1405,7 @@ libhengband_a_SOURCES = \
 	util/sha256.cpp util/sha256.h \
 	util/stack-trace.h \
 	util/string-processor.cpp util/string-processor.h \
+	util/type-concepts.h \
 	\
 	view/display-birth.cpp view/display-birth.h \
 	view/display-characteristic.cpp view/display-characteristic.h \
@@ -1509,6 +1510,7 @@ hengband_test_SOURCES = \
 	test/store/test-store-util.cpp \
 	test/system/monrace/test-monrace-definition.cpp \
 	test/term/test-z-form.cpp \
+	test/term/test-z-rand.cpp \
 	test/timed-effect/test-player-cut.cpp \
 	test/timed-effect/test-player-stun.cpp \
 	test/timed-effect/test-timed-effect.cpp \
