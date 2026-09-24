@@ -761,11 +761,12 @@ libhengband_a_SOURCES = \
 	\
 	main-unix/stack-trace-unix.cpp \
 	main-unix/unix-user-ids.cpp main-unix/unix-user-ids.h \
-	main-unix/x11-gamma-builder.cpp main-unix/x11-gamma-builder.h \
-	main-unix/x11-type-string.cpp main-unix/x11-type-string.h \
 	main-unix/unix-music.cpp main-unix/unix-music.h \
 	main-unix/unix-sound.cpp main-unix/unix-sound.h \
 	main-unix/unix-cfg-reader.cpp main-unix/unix-cfg-reader.h \
+	main-unix/x11-gamma-builder.cpp main-unix/x11-gamma-builder.h \
+	main-unix/x11-helper.cpp main-unix/x11-helper.h \
+	main-unix/x11-type-string.cpp main-unix/x11-type-string.h \
 	\
 	market/arena.cpp market/arena.h \
 	market/arena-entry.cpp market/arena-entry.h \
@@ -1461,7 +1462,7 @@ libhengband_a_SOURCES = \
 	world/world-turn-processor.cpp world/world-turn-processor.h
 
 EXTRA_libhengband_a_SOURCES = \
-	angband.ico angband.rc ang_eng.rc ang_jp.rc maid-x11.cpp main-win.cpp \
+	angband.ico angband.rc ang_eng.rc ang_jp.rc main-win.cpp \
 	main-win/commandline-win.cpp main-win/commandline-win.h \
 	main-win/graphics-win.cpp main-win/graphics-win.h \
 	main-win/main-win-bg.cpp main-win/main-win-bg.h \

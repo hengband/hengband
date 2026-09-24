@@ -4,7 +4,7 @@
  * @brief X11環境ガンマ値の調整処理ヘッダ
  */
 
-#include "system/angband.h"
+#include <cstdint>
 
-extern byte gamma_table[256];
+extern uint8_t gamma_table[256];
 void build_gamma_table(int gamma);

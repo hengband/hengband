@@ -149,7 +149,7 @@
 /*
  * Include some helpful X11 code.
  */
-#include "maid-x11.cpp"
+#include "main-unix/x11-helper.h"
 
 /*
  * Notes on Colors:

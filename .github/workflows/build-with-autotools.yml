@@ -92,6 +92,9 @@ jobs:
             pkg-config \
             libncurses-dev \
             libcurl4-openssl-dev \
+            libx11-dev \
+            libxext-dev \
+            libxft-dev \
             nkf \
             g++-16 \
             libc++-21-dev \
@@ -122,6 +125,55 @@ jobs:
         env:
           CXX: ${{ inputs.cxx }}
           CXXFLAGS: ${{ inputs.cxx-flags }}
+
+      - name: Verify frontend feature macros
+        shell: bash
+        run: |
+          set -euo pipefail
+          AUTOCONF_H="src/autoconf.h"
+          if [ ! -f "${AUTOCONF_H}" ]; then
+            echo "${AUTOCONF_H} was not generated" >&2
+            exit 1
+          fi
+
+          has_macro() {
+            grep -q "^#define $1 1" "${AUTOCONF_H}"
+          }
+
+          echo "==== ${AUTOCONF_H} (X11/XFT) ===="
+          grep -E 'USE_X11|USE_XFT' "${AUTOCONF_H}" || true
+
+          case "${{ steps.os.outputs.family }}" in
+            linux)
+              if ! has_macro USE_X11; then
+                echo "USE_X11 must be enabled on Linux" >&2
+                tail -n 80 config.log || true
+                exit 1
+              fi
+              if echo " ${{ inputs.configure-opts }} " | grep -q -- ' --enable-xft '; then
+                if ! has_macro USE_XFT; then
+                  echo "USE_XFT must be enabled when --enable-xft is given" >&2
+                  tail -n 80 config.log || true
+                  exit 1
+                fi
+              else
+                if has_macro USE_XFT; then
+                  echo "USE_XFT must stay disabled unless --enable-xft is given" >&2
+                  exit 1
+                fi
+              fi
+              ;;
+            macos)
+              if has_macro USE_X11; then
+                echo "USE_X11 must stay disabled on macOS (pass --without-x)" >&2
+                exit 1
+              fi
+              if has_macro USE_XFT; then
+                echo "USE_XFT must stay disabled on macOS" >&2
+                exit 1
+              fi
+              ;;
+          esac
 
       - name: Decide make job count
         id: jobs
