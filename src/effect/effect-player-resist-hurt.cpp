@@ -668,6 +668,7 @@ void effect_player_abyss(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
                                      : _("深淵があなたを誘い込んでいる！", "You are falling into the abyss!");
     msg_print(effect_mes);
     ep_ptr->dam = ep_ptr->dam * calc_abyss_damage_rate(player_ptr, CALC_RAND) / 100;
+    ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
     BadStatusSetter bss(player_ptr);
     if (check_multishadow(player_ptr)) {
         return;
@@ -693,5 +694,4 @@ void effect_player_abyss(PlayerType *player_ptr, EffectPlayerType *ep_ptr)
     if (!has_resist_fear(player_ptr)) {
         (void)bss.mod_fear(randnum1<short>(10));
     }
-    ep_ptr->get_damage = take_hit(player_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer);
 }
