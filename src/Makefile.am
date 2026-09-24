@@ -1502,6 +1502,7 @@ hengband_test_SOURCES = \
 	test/io/test-macro-configurations-store.cpp \
 	test/load/test-angband-version-comparer.cpp \
 	test/mutation/test-mutation-roll-table.cpp \
+	test/store/test-pricing.cpp \
 	test/store/test-store-screen.cpp \
 	test/store/test-store-util.cpp \
 	test/term/test-z-form.cpp \
