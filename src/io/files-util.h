@@ -31,9 +31,5 @@ void file_character(PlayerType *player_ptr, std::string_view filename);
 tl::optional<std::string> get_random_line(concptr file_name, int entry);
 tl::optional<std::string> get_random_line(xso::rng32 &rng, concptr file_name, int entry);
 void read_dead_file();
-
-#ifdef JP
-tl::optional<std::string> get_random_line_ja_only(concptr file_name, int entry, int count);
-#endif
 errr counts_write(PlayerType *player_ptr, int where, uint32_t count);
 uint32_t counts_read(PlayerType *player_ptr, int where);
