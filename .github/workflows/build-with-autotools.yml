@@ -29,9 +29,10 @@ jobs:
   build:
     runs-on: ${{ inputs.runner }}
     steps:
+      # サブモジュール (lib/xtra と Visual Studio 用の libcurl) はビルドに不要で、make dist のときだけ必要になる
       - uses: actions/checkout@v7
         with:
-          submodules: true
+          submodules: ${{ inputs.distcheck }}
           persist-credentials: false
 
       - name: Reject unknown runners
