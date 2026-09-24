@@ -79,23 +79,9 @@ bool insert_macro_line(text_body_type *tb)
     if (!can_insert_line(tb, 2)) {
         return false;
     }
-    int i, n = 0;
-    flush();
-    inkey_base = true;
-    i = inkey();
-    char buf[1024]{};
-    while (i) {
-        buf[n++] = (char)i;
-        inkey_base = true;
-        inkey_scan = true;
-        i = inkey();
-    }
-
-    buf[n] = '\0';
-    flush();
-
+    const auto trigger = inkey_macro_trigger();
     char tmp[1024];
-    ascii_to_text(tmp, buf, sizeof(tmp));
+    ascii_to_text(tmp, trigger, sizeof(tmp));
     if (!tmp[0]) {
         return false;
     }
@@ -104,7 +90,7 @@ bool insert_macro_line(text_body_type *tb)
     insert_return_code(tb);
     tb->lines_list[tb->cy] = std::make_unique<std::string>(format("P:%s", tmp));
 
-    i = macro_find_exact(buf);
+    const auto i = macro_find_exact(trigger.data());
     if (i == -1) {
         tmp[0] = '\0';
     } else {
