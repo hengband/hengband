@@ -6,6 +6,9 @@
  * 早期 return 経路でも同じ変換が必要なことを検証する。
  *
  * 2バイト文字のテストデータは必ず16進エスケープで書くこと。
+ *
+ * また、Unix 版の path_parse() がパスの先頭の「~」を展開できない場合に、
+ * 例外を投げず開けないパスとして扱うことを検証する。
  */
 
 #include "util/angband-files.h"
@@ -65,4 +68,32 @@ TEST_CASE("path_build converts a Shift_JIS path when the directory argument is e
     CHECK(built.wstring() == L"\u65e5\u672c.prf");
 }
 
+#endif
+
+#ifndef _WIN32
+namespace {
+//! 存在しないはずのユーザー名で始まるパス
+constexpr auto PATH_OF_NO_SUCH_USER = "~hengband-test-no-such-user/file.txt";
+}
+
+TEST_CASE("path_parse returns an empty path for a user that does not exist")
+{
+    CHECK(path_parse(PATH_OF_NO_SUCH_USER).empty());
+}
+
+TEST_CASE("path_parse returns an empty path for a user name that is too long")
+{
+    const auto path = "~" + std::string(200, 'a') + "/file.txt";
+    CHECK(path_parse(path).empty());
+}
+
+TEST_CASE("path_parse returns a path without a leading tilde as is")
+{
+    CHECK(path_parse("lib/help/help.hlp") == std::filesystem::path("lib/help/help.hlp"));
+}
+
+TEST_CASE("angband_fopen fails without throwing for a user that does not exist")
+{
+    CHECK(angband_fopen(PATH_OF_NO_SUCH_USER, FileOpenMode::READ) == nullptr);
+}
 #endif
