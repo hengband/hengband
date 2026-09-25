@@ -107,14 +107,7 @@ static std::string mane_info(PlayerType *player_ptr, MonsterAbilityType power, i
 {
     PLAYER_LEVEL plev = player_ptr->lev;
 
-    using Mat = MonsterAbilityType;
-    const auto flags =
-        (RF_ABILITY_BALL_MASK |
-            RF_ABILITY_BOLT_MASK |
-            RF_ABILITY_BEAM_MASK)
-            .set(
-                { Mat::MIND_BLAST, Mat::BRAIN_SMASH, Mat::CAUSE_1, Mat::CAUSE_2, Mat::CAUSE_3, Mat::CAUSE_4 });
-    if (flags.has(power)) {
+    if (RF_ABILITY_DAMAGE_MASK.has(power)) {
         return format(" %s%d", KWD_DAM, (int)dam);
     }
     switch (power) {

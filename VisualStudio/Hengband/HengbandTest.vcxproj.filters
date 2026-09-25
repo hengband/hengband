@@ -22,6 +22,9 @@
     <Filter Include="locale">
       <UniqueIdentifier>{76b459ee-5ecd-44a7-b71a-ed5acafc02f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="monster-race">
+      <UniqueIdentifier>{eb4b30d0-a9aa-492e-b43c-12d323e03a83}</UniqueIdentifier>
+    </Filter>
     <Filter Include="mspell">
       <UniqueIdentifier>{f4dbdb43-4dbe-4518-b1ac-3429da4d19b8}</UniqueIdentifier>
     </Filter>
@@ -95,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp">
       <Filter>locale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp">
+      <Filter>monster-race</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp">
       <Filter>mspell</Filter>
