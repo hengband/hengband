@@ -94,17 +94,10 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             if (len < tb->cx) {
                 tb->cx = len;
             }
-#ifdef JP
-            for (auto i = 0; (*tb->lines_list[tb->cy])[i] != '\0'; i++) {
-                if (iskanji((*tb->lines_list[tb->cy])[i])) {
-                    i++;
-                    if (i == tb->cx) {
-                        tb->cx--;
-                        break;
-                    }
-                }
+
+            if (is_second_byte_of_kanji(*tb->lines_list[tb->cy], tb->cx)) {
+                tb->cx--;
             }
-#endif
         } else if (tb->cy > 0) {
             tb->cy--;
             tb->cx = tb->lines_list[tb->cy]->length();
