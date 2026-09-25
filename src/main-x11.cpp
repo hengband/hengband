@@ -2309,9 +2309,11 @@ static void game_term_nuke_x11(term_type *)
                 XFreeFontSet(Metadpy->dpy, ifnt->fontset_info);
             }
         }
+#ifdef USE_XIM
         if (iwin && iwin->xic) {
             XDestroyIC(iwin->xic);
         }
+#endif
 #ifdef USE_XFT
         if (iwin && iwin->draw) {
             XftDrawDestroy(iwin->draw);
@@ -2328,10 +2330,12 @@ static void game_term_nuke_x11(term_type *)
         unix_sound::finalize_sound();
     }
 
+#ifdef USE_XIM
     if (Metadpy->xim) {
         XCloseIM(Metadpy->xim);
     }
     XUnregisterIMInstantiateCallback(Metadpy->dpy, NULL, NULL, NULL, IMInstantiateCallback, NULL);
+#endif
     XCloseDisplay(Metadpy->dpy);
 }
 
