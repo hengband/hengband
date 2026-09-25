@@ -60,6 +60,22 @@ constexpr std::string_view KANJI_JI = "\xbb\xfa"; //!< 字
 #endif
 
 #ifdef JP
+/*!
+ * @brief 文字列を指定した回数だけ繰り返した文字列を作る
+ * @param str 繰り返す文字列
+ * @param count 繰り返す回数
+ * @return 繰り返した文字列
+ */
+std::string repeat(std::string_view str, int count)
+{
+    std::string result;
+    for (auto i = 0; i < count; ++i) {
+        result.append(str);
+    }
+
+    return result;
+}
+
 //! 行末に2バイト文字の1バイト目だけが残った行
 const std::string LINE_WITH_LONE_LEAD_BYTE = std::string("ab") + std::string(KANJI_KAN.substr(0, 1));
 #endif
@@ -160,6 +176,29 @@ TEST_CASE("EC_LEFT moves back one double-byte character at a time")
     CHECK(tb.cx == 2);
     do_editor_command(nullptr, &tb, EC_LEFT);
     CHECK(tb.cx == 0);
+}
+
+TEST_CASE("insert_single_letter does not split a double-byte character pushed past the line limit")
+{
+    // 行の上限 (MAX_LINELEN - 1 バイト) ちょうどの行の先頭に1文字入れると、末尾の「漢」は丸ごと押し出される
+    const auto line = "a" + repeat(KANJI_KAN, (MAX_LINELEN - 2) / 2);
+    REQUIRE(line.length() == MAX_LINELEN - 1);
+    auto tb = make_text_body_with_line(line, 0);
+
+    insert_single_letter(&tb, 'x');
+    CHECK(*tb.lines_list[0] == "xa" + repeat(KANJI_KAN, (MAX_LINELEN - 2) / 2 - 1));
+}
+
+TEST_CASE("EC_PASTE does not split a double-byte character pushed past the line limit")
+{
+    const auto line = "a" + repeat(KANJI_KAN, (MAX_LINELEN - 4) / 2);
+    REQUIRE(line.length() == MAX_LINELEN - 3);
+    auto tb = make_text_body_with_line(line, 0);
+    tb.yank = { "xyz" };
+
+    do_editor_command(nullptr, &tb, EC_PASTE);
+    CHECK(*tb.lines_list[0] == "xyza" + repeat(KANJI_KAN, (MAX_LINELEN - 4) / 2 - 1));
+    CHECK(tb.cx == 3);
 }
 
 TEST_CASE("EC_LEFT moves back one byte over a lone lead byte at the end of a line")

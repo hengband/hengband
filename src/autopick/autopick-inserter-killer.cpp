@@ -11,6 +11,7 @@
 #include "main/sound-of-music.h"
 #include "term/screen-processor.h"
 #include "util/enum-converter.h"
+#include "util/string-processor.h"
 #include <algorithm>
 #include <fmt/format.h>
 
@@ -142,11 +143,9 @@ bool insert_keymap_line(text_body_type *tb)
  */
 void insert_single_letter(text_body_type *tb, int key)
 {
-    int i;
-    std::string buf;
-    for (i = 0; ((*tb->lines_list[tb->cy])[i] != '\0') && (i < tb->cx); i++) {
-        buf.push_back((*tb->lines_list[tb->cy])[i]);
-    }
+    const auto &line = *tb->lines_list[tb->cy];
+    const auto head_len = std::min<size_t>(tb->cx, line.length());
+    auto buf = line.substr(0, head_len);
 
 #ifdef JP
     if (iskanji(key)) {
@@ -168,11 +167,9 @@ void insert_single_letter(text_body_type *tb, int key)
         tb->cx++;
     }
 
-    for (; ((*tb->lines_list[tb->cy])[i] != '\0') && (buf.size() + 1 < MAX_LINELEN); i++) {
-        buf.push_back((*tb->lines_list[tb->cy])[i]);
-    }
-
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(std::move(buf));
+    // 行の上限を超える分は、2バイト文字を分断しないように切り詰める
+    buf.append(line, head_len);
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(str_substr(std::move(buf), 0, MAX_LINELEN - 1));
     const int len = tb->lines_list[tb->cy]->length();
     if (len < tb->cx) {
         tb->cx = len;

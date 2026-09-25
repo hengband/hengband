@@ -267,8 +267,8 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
 
         for (auto i = 0U; i < tb->yank.size(); ++i) {
             const std::string_view line(*tb->lines_list[tb->cy]);
-            std::string buf(line.substr(0, tb->cx));
-            buf.append(tb->yank[i], 0, MAX_LINELEN - buf.length() - 1);
+            // 行の上限を超える分は、2バイト文字を分断しないように切り詰める
+            auto buf = str_substr(std::string(line.substr(0, tb->cx)) + tb->yank[i], 0, MAX_LINELEN - 1);
 
             const auto is_last_line = i + 1 == tb->yank.size();
             if (!is_last_line || tb->yank_eol) {
@@ -284,9 +284,8 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
 
             const auto rest = line.substr(tb->cx);
             tb->cx = buf.length();
-            buf.append(rest, 0, MAX_LINELEN - buf.length() - 1);
-
-            tb->lines_list[tb->cy] = std::make_unique<std::string>(std::move(buf));
+            buf.append(rest);
+            tb->lines_list[tb->cy] = std::make_unique<std::string>(str_substr(std::move(buf), 0, MAX_LINELEN - 1));
             break;
         }
 
