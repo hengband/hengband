@@ -31,6 +31,6 @@ constexpr short MAX_FLOOR_MONSTERS = 1024; /*!< 1フロアに存在可能な最�
  */
 constexpr auto MAX_REPRODUCTION = 100;
 
-constexpr auto TOWN_DEFINITION_LIST = "TownDefinitionList.txt";
+constexpr auto TOWN_DEFINITION_LIST = "TownDefinitionList.jsonc";
 constexpr auto TOWN_PREFERENCES = "TownPreferences.jsonc";
 constexpr auto WILDERNESS_DEFINITION = "WildernessDefinition.jsonc";

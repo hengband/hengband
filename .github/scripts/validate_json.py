@@ -209,6 +209,20 @@ def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
             raise ValidationError("expected an integer JSON value", path=["legend", symbol, "special"])
 
 
+def validate_town_definition_list_semantics(data: dict, schema_path: Path) -> None:
+    """Check town map references against the distributed text map files."""
+    if type(data["version"]) is not int:
+        raise ValidationError("expected an integer JSON value", path=["version"])
+
+    edit_dir = schema_path.resolve().parent.parent / "lib/edit"
+    for town, entry in data["towns"].items():
+        maps = entry.items() if isinstance(entry, dict) else ((None, entry),)
+        for mode, map_file in maps:
+            if not (edit_dir / map_file).is_file():
+                path = ["towns", town] + ([mode] if mode else [])
+                raise ValidationError("town map file does not exist", path=path)
+
+
 def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
@@ -222,6 +236,8 @@ def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
             validate_wilderness_semantics(data)
         elif schema_path.name == "TownPreferences.schema.json":
             validate_town_preferences_semantics(data, schema_path)
+        elif schema_path.name == "TownDefinitionList.schema.json":
+            validate_town_definition_list_semantics(data, schema_path)
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
         msg = [f"Failed: {data_path.name}", f"Reason: {e.message}"]

@@ -307,5 +307,58 @@ class TownPreferencesValidationTest(unittest.TestCase):
                     self.assertIn("['legend', '>', 'terrain']", message)
 
 
+class TownDefinitionListValidationTest(unittest.TestCase):
+    def setUp(self):
+        self.schema_path = Path(__file__).resolve().parents[2] / "schema/TownDefinitionList.schema.json"
+        self.schema = load_jsonc(self.schema_path)
+        self.data = {
+            "version": 1,
+            "towns": {
+                "1": {
+                    "lite": "towns/01_Outpost_Lite.txt",
+                    "normal": "towns/01_Outpost_Full.txt",
+                    "none": "towns/01_Outpost_OnlyAngband.txt",
+                },
+                "2": "towns/02_Telmora.txt",
+            },
+        }
+
+    def validate(self, data):
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / "TownDefinitionList.jsonc"
+            target.write_text(json.dumps(data), encoding="utf-8")
+            return validate_one((target, self.schema_path, self.schema))
+
+    def test_valid_map_variants(self):
+        ok, message = self.validate(self.data)
+        self.assertTrue(ok, message)
+
+    def test_missing_or_unknown_map_file(self):
+        for town, mode in (("1", "lite"), ("2", None)):
+            with self.subTest(town=town, mode=mode):
+                invalid = copy.deepcopy(self.data)
+                if mode:
+                    invalid["towns"][town][mode] = "towns/Missing.txt"
+                else:
+                    invalid["towns"][town] = "towns/Missing.txt"
+                ok, message = self.validate(invalid)
+                self.assertFalse(ok)
+                self.assertIn("town map file does not exist", message)
+
+    def test_invalid_map_mode_and_path(self):
+        for replacement in ({"normal": "towns/01_Outpost_Full.txt"}, "../outside.txt"):
+            with self.subTest(replacement=replacement):
+                invalid = copy.deepcopy(self.data)
+                invalid["towns"]["1"] = replacement
+                self.assertFalse(self.validate(invalid)[0])
+
+    def test_reader_integer_version(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["version"] = 1.0
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok)
+        self.assertIn("integer JSON value", message)
+
+
 if __name__ == "__main__":
     unittest.main()
