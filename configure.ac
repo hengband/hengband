@@ -17,6 +17,9 @@ esac])
 AC_SUBST(GAMEGROUP)
 AM_CONDITIONAL(SET_GID, test "$GAMEGROUP" != "")
 
+dnl lib/xtra (サブモジュール) がチェックアウトされているか
+AM_CONDITIONAL([HAVE_XTRA], [test -f "$srcdir/lib/xtra/graf/8x8.bmp"])
+
 dnl generate the installation path for the ./lib/ folder
 if test "$GAMEGROUP" != ""; then
   MY_EXPAND_DIR(game_libpath, "$datarootdir/games/$PACKAGE/lib/")
@@ -299,6 +302,5 @@ AC_CONFIG_FILES(Makefile src/Makefile lib/Makefile lib/apex/Makefile \
 	lib/edit/Makefile lib/edit/quests/Makefile lib/edit/towns/Makefile \
 	lib/file/Makefile lib/file/books/Makefile lib/help/Makefile \
 	lib/info/Makefile lib/pref/Makefile lib/save/Makefile \
-	lib/script/Makefile lib/user/Makefile lib/xtra/Makefile \
-	lib/xtra/graf/Makefile lib/xtra/music/Makefile lib/xtra/sound/Makefile)
+	lib/script/Makefile lib/user/Makefile)
 AC_OUTPUT()
