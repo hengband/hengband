@@ -64,7 +64,7 @@ std::pair<bool, std::shared_ptr<ItemEntity>> switch_activation(PlayerType *playe
     case RandomArtActType::BA_COLD_2:
         return { activate_ball_cold_2(player_ptr), nullptr };
     case RandomArtActType::BA_COLD_3:
-        return { activate_ball_cold_2(player_ptr), nullptr };
+        return { activate_ball_cold_3(player_ptr), nullptr };
     case RandomArtActType::BA_FIRE_1:
         return { activate_ball_fire_1(player_ptr), nullptr };
     case RandomArtActType::BA_FIRE_2:
