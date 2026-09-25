@@ -14,7 +14,6 @@
 
 #include "term/z-rand.h"
 
-#include "system/angband-system.h"
 #include "test/scoped-rng.h"
 #include "util/enum-range.h"
 #include "util/probability-table.h"
@@ -30,6 +29,7 @@
 #include <numeric>
 #include <span>
 #include <stdexcept>
+#include <tuple>
 #include <vector>
 
 namespace {
@@ -52,13 +52,14 @@ auto generate(int count, Func func)
 }
 
 /*!
- * @brief ゲームの乱数生成器の現在の状態を取得する
+ * @brief 乱数生成器の現在の状態を取得する
+ * @param rng 乱数生成器 (省略時はゲームの乱数生成器)
  * @return 乱数生成器の状態
  */
-auto get_rng_state()
+auto get_rng_state(const xso::rng32 &rng = get_game_rng())
 {
     std::array<uint32_t, xso::rng32::word_count()> state{};
-    AngbandSystem::get_instance().get_rng().get_state(state.begin());
+    rng.get_state(state.begin());
     return state;
 }
 
@@ -335,6 +336,33 @@ TEST_CASE("div_round rounds the quotient randomly")
     }
 
     CHECK(std::abs(static_cast<double>(sum) / count - 0.25) <= 6.0 * std::sqrt(0.25 * 0.75 / count));
+}
+
+TEST_CASE("Functions taking an RNG consume only the given RNG")
+{
+    const auto restore_rng = test::scoped_rng();
+
+    const auto game_rng_state = get_rng_state();
+    xso::rng32 rng(test::DEFAULT_RNG_SEED);
+    const auto rng_state = get_rng_state(rng);
+    const std::vector<int> values{ 3, 1, 4 };
+    ProbabilityTable<int> table;
+    table.entry_item(0, 1);
+    table.entry_item(1, 1);
+
+    std::ignore = rand_range(rng, 1, 6);
+    std::ignore = randint0(rng, 10);
+    std::ignore = randint1(rng, 10);
+    std::ignore = randnum0<int>(rng, 10);
+    std::ignore = randnum1<int>(rng, 10);
+    std::ignore = one_in_(rng, 3);
+    std::ignore = evaluate_percent(rng, 50);
+    std::ignore = rand_choice(rng, values);
+    std::ignore = rand_choice(rng, { 1, 2 });
+    std::ignore = table.pick_one_at_random(rng);
+
+    CHECK(get_rng_state() == game_rng_state);
+    CHECK(get_rng_state(rng) != rng_state);
 }
 
 TEST_CASE("Rand_external does not consume the game RNG")

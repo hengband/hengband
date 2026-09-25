@@ -14,6 +14,7 @@
 #include <tl/optional.hpp>
 #include <utility>
 #include <vector>
+#include <xoshiro.h>
 
 enum class MonraceId : short;
 class LocalizedString;
@@ -51,7 +52,9 @@ public:
     bool order_level(MonraceId id1, MonraceId id2) const;
     bool order_level_unique(MonraceId id1, MonraceId id2) const;
     MonraceId pick_id_at_random() const;
+    MonraceId pick_id_at_random(xso::rng32 &rng) const;
     const MonraceDefinition &pick_monrace_at_random() const;
+    const MonraceDefinition &pick_monrace_at_random(xso::rng32 &rng) const;
     int calc_defeat_count() const;
     MonraceId select_figurine(int max_level) const;
     const LocalizedString &get_name(MonraceId monrace_id) const;

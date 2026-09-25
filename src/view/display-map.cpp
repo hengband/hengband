@@ -17,6 +17,7 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "term/z-rand.h"
 #include "timed-effect/timed-effects.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-symbol.h"
@@ -37,15 +38,17 @@ const std::string image_monsters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
 /*!
  * @brief オブジェクトの表示を幻覚状態に差し替える
  * @return 差し替えたシンボルと色
+ * @details 描画の回数は環境によって変わるため、ゲームの乱数生成器は使わない (以下同様)
  */
 DisplaySymbol image_object()
 {
+    auto &rng = get_external_rng();
     if (use_graphics) {
-        return BaseitemService::pick_one_at_random().get_symbol();
+        return BaseitemService::pick_one_at_random(rng).get_symbol();
     }
 
-    const auto color = randnum1<uint8_t>(15);
-    const auto character = rand_choice(image_objects);
+    const auto color = randnum1<uint8_t>(rng, 15);
+    const auto character = rand_choice(rng, image_objects);
     return { color, character }; //!< @details 乱数引数の評価順を固定する.
 }
 
@@ -55,14 +58,15 @@ DisplaySymbol image_object()
  */
 DisplaySymbol image_monster()
 {
+    auto &rng = get_external_rng();
     if (use_graphics) {
         const auto &monraces = MonraceList::get_instance();
-        const auto &monrace = monraces.pick_monrace_at_random();
+        const auto &monrace = monraces.pick_monrace_at_random(rng);
         return monrace.symbol_config;
     }
 
-    const auto color = randnum1<uint8_t>(15);
-    const auto character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
+    const auto color = randnum1<uint8_t>(rng, 15);
+    const auto character = one_in_(rng, 25) ? rand_choice(rng, image_objects) : rand_choice(rng, image_monsters);
     return { color, character };
 }
 
@@ -72,7 +76,7 @@ DisplaySymbol image_monster()
  */
 DisplaySymbol image_random()
 {
-    if (evaluate_percent(75)) {
+    if (evaluate_percent(get_external_rng(), 75)) {
         return image_monster();
     } else {
         return image_object();
@@ -224,7 +228,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
 
     DisplaySymbolPair symbol_pair(symbol_config, symbol_config);
     const auto is_hallucinated = player_ptr->effects()->hallucination().is_active();
-    if (is_hallucinated && one_in_(256)) {
+    if (is_hallucinated && one_in_(get_external_rng(), 256)) {
         symbol_pair.symbol_foreground = image_random();
     }
 
@@ -295,7 +299,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
         /* Do nothing */
     } else if (monrace_ap.visual_flags.has(MonsterVisualType::MULTI_COLOR) && !use_graphics) {
         if (monrace_ap.visual_flags.has(MonsterVisualType::ANY_COLOR)) {
-            symbol_pair.symbol_foreground.color = randnum1<uint8_t>(15);
+            symbol_pair.symbol_foreground.color = randnum1<uint8_t>(get_external_rng(), 15);
         } else {
             constexpr static auto colors = {
                 TERM_RED,
@@ -307,7 +311,7 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
                 TERM_GREEN,
             };
 
-            symbol_pair.symbol_foreground.color = rand_choice(colors);
+            symbol_pair.symbol_foreground.color = rand_choice(get_external_rng(), colors);
         }
     } else if (monrace_ap.visual_flags.has(MonsterVisualType::RANDOM_COLOR) && !use_graphics) {
         symbol_pair.symbol_foreground.color = grid.m_idx % 15 + 1;
@@ -321,12 +325,13 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     }
 
     if (monrace_ap.visual_flags.has(MonsterVisualType::SHAPECHANGER)) {
+        auto &rng = get_external_rng();
         if (use_graphics) {
             const auto &monraces = MonraceList::get_instance();
-            const auto &monrace = monraces.pick_monrace_at_random();
+            const auto &monrace = monraces.pick_monrace_at_random(rng);
             symbol_pair.symbol_foreground = monrace.symbol_config;
         } else {
-            symbol_pair.symbol_foreground.character = one_in_(25) ? rand_choice(image_objects) : rand_choice(image_monsters);
+            symbol_pair.symbol_foreground.character = one_in_(rng, 25) ? rand_choice(rng, image_objects) : rand_choice(rng, image_monsters);
         }
 
         symbol_pair.symbol_foreground = set_term_color(player_ptr, pos, symbol_pair.symbol_foreground);

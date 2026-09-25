@@ -102,12 +102,24 @@ void file_character(PlayerType *player_ptr, std::string_view filename)
 }
 
 /*!
- * @brief ファイルからランダムに行を一つ取得する
+ * @brief ゲームの乱数生成器で、ファイルからランダムに行を一つ取得する
  * @param file_name ファイル名
  * @param entry 特定条件時のN:タグヘッダID
  * @return ファイルから取得した行 (但しファイルがなかったり異常値ならばnullopt)
  */
 tl::optional<std::string> get_random_line(concptr file_name, int entry)
+{
+    return get_random_line(get_game_rng(), file_name, entry);
+}
+
+/*!
+ * @brief 指定した乱数生成器で、ファイルからランダムに行を一つ取得する
+ * @param rng 乱数生成器
+ * @param file_name ファイル名
+ * @param entry 特定条件時のN:タグヘッダID
+ * @return ファイルから取得した行 (但しファイルがなかったり異常値ならばnullopt)
+ */
+tl::optional<std::string> get_random_line(xso::rng32 &rng, concptr file_name, int entry)
 {
     const auto path = path_build(ANGBAND_DIR_FILE, file_name);
     auto *fp = angband_fopen(path, FileOpenMode::READ);
@@ -178,7 +190,7 @@ tl::optional<std::string> get_random_line(concptr file_name, int entry)
             break;
         }
 
-        if (one_in_(counter + 1)) {
+        if (one_in_(rng, counter + 1)) {
             line = std::move(buf);
         }
 
@@ -188,38 +200,6 @@ tl::optional<std::string> get_random_line(concptr file_name, int entry)
     angband_fclose(fp);
     return line;
 }
-
-#ifdef JP
-/*!
- * @brief ファイルからランダムに行を一つ取得する(日本語文字列のみ)
- * @param file_name ファイル名
- * @param entry 特定条件時のN:タグヘッダID
- * @param count 試行回数
- * @return ファイルから取得した行 (但しファイルがなかったり異常値ならばnullopt)
- * @details
- */
-tl::optional<std::string> get_random_line_ja_only(concptr file_name, int entry, int count)
-{
-    tl::optional<std::string> line;
-    for (auto i = 0; i < count; i++) {
-        line = get_random_line(file_name, entry);
-        if (!line) {
-            return tl::nullopt;
-        }
-
-        auto is_kanji = false;
-        for (const auto c : *line) {
-            is_kanji |= iskanji(c);
-        }
-
-        if (is_kanji) {
-            return line;
-        }
-    }
-
-    return line;
-}
-#endif
 
 /*!
  * @brief ファイル位置をシーク /
