@@ -12,6 +12,7 @@ extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BIG_BALL_MASK;
 extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BREATH_MASK;
 extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_BALL_MASK;
 extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ATTACK_MASK;
+extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_DAMAGE_MASK;
 extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_INDIRECT_MASK;
 extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_NOMAGIC_MASK;
 extern const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ATTACK_SPELLS_MASK;
