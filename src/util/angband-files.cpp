@@ -100,16 +100,19 @@ void user_name(char *buf, int id)
 
 #endif /* SET_UID */
 
+/*!
+ * @brief 先頭の「~」をホームディレクトリに展開したパスを返す
+ * @param path 展開するパス
+ * @return 展開したパス。「~」で始まらなければそのまま返す。
+ * 展開できない場合 (ユーザーが見つからない、ユーザー名が長すぎる) は空のパスを返す
+ * @details
+ * 「~user/」はユーザー user のホームディレクトリに、「~/」は現在のユーザーのホームディレクトリに置き換える。
+ * プレイヤーが入力したファイル名がそのまま渡ってくるため、展開できないことを例外にせず、
+ * 開けないファイルとして扱えるよう空のパスを返す。
+ */
 std::filesystem::path path_parse(const std::filesystem::path &path)
 #ifdef SET_UID
 {
-    /*
-     * Extract a "parsed" path from an initial filename
-     * Normally, we simply copy the filename into the buffer
-     * But leading tilde symbols must be handled in a special way
-     * Replace "~user/" by the home directory of the user named "user"
-     * Replace "~/" by the home directory of the current user
-     */
     const auto file = path.string();
     if (file.empty() || (file[0] != '~')) {
         return file;
@@ -120,7 +123,7 @@ std::filesystem::path path_parse(const std::filesystem::path &path)
     constexpr auto user_size = 128;
     char user[user_size]{};
     if ((s != nullptr) && (s >= u + user_size)) {
-        THROW_EXCEPTION(std::runtime_error, "User name is too long!");
+        return {};
     }
 
     if (s != nullptr) {
@@ -144,7 +147,7 @@ std::filesystem::path path_parse(const std::filesystem::path &path)
     }
 
     if (pw == nullptr) {
-        THROW_EXCEPTION(std::runtime_error, "Failed to get User ID!");
+        return {};
     }
 
     if (s == nullptr) {
@@ -201,6 +204,11 @@ std::filesystem::path path_build(const std::filesystem::path &path, std::string_
 
     constexpr auto max_path_length = 1024;
     auto parsed_path = path_parse(path);
+    if (parsed_path.empty()) {
+        // 基点のディレクトリを展開できない場合は、ファイル名だけの相対パスにせず開けないパスとして扱う
+        return {};
+    }
+
 #ifdef _WIN32
     // システムロケールがUTF-8の場合、appendによるUTF-16への変換時に
     // Shift-JISをUTF-8とみなしてしまい変換に失敗するので、自前でUTF-16に変換してからappendする
@@ -255,6 +263,10 @@ static std::string make_file_mode(const FileOpenMode mode, const bool is_binary)
 FILE *angband_fopen(const std::filesystem::path &path, const FileOpenMode mode, const bool is_binary)
 {
     const auto &parsed_path = path_parse(path);
+    if (parsed_path.empty()) {
+        return nullptr;
+    }
+
     const auto &open_mode = make_file_mode(mode, is_binary);
     return fopen(parsed_path.string().data(), open_mode.data());
 }

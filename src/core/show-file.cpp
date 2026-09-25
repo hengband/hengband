@@ -500,9 +500,11 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
             }
 
             if ((key > -1) && hook[key][0]) {
-                /* Recurse on that file */
-                this->display(true, hook[key], 0, mode);
-                if (this->is_terminated) {
+                // リンク先が無いのはヘルプの誤りだが、異常終了はさせずに知らせて元のファイルの表示を続ける
+                if (!this->try_display(true, hook[key], 0, mode)) {
+                    prt(make_open_error_message(hook[key]), hgt - 1, 0);
+                    (void)inkey();
+                } else if (this->is_terminated) {
                     skey = 'q';
                 }
             }
