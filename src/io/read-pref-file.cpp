@@ -232,11 +232,16 @@ void auto_dump_printf(FILE *auto_dump_stream, const char *fmt, ...)
 bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_view mark)
 {
     const auto header_mark_str = fmt::format(auto_dump_header, mark);
-    remove_auto_dump(path, mark);
+    const auto error_message = remove_auto_dump(path, mark);
+    if (error_message) {
+        msg_print(_("自動ダンプを削除できませんでした: {}", "Failed to remove auto dump: {}"), *error_message);
+        msg_erase();
+        return false;
+    }
+
     *fpp = angband_fopen(path, FileOpenMode::APPEND);
     if (!*fpp) {
-        const auto &path_str = path.string();
-        msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), path_str.data());
+        msg_print(_("{} を開くことができませんでした。", "Failed to open {}."), path.string());
         msg_erase();
         return false;
     }
