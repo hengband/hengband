@@ -41,6 +41,7 @@ schema_files = \
 	schema/QuestPreferences.schema.json \
 	schema/SpellDefinitions.schema.json \
 	schema/TerrainDefinitions.schema.json \
+	schema/TownPreferences.schema.json \
 	schema/VaultDefinitions.schema.json \
 	schema/WildernessDefinition.schema.json
 

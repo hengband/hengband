@@ -270,5 +270,42 @@ class WildernessValidationTest(unittest.TestCase):
                 self.assertFalse(self.validate(data)[0])
 
 
+class TownPreferencesValidationTest(unittest.TestCase):
+    def setUp(self):
+        self.schema_path = Path(__file__).resolve().parents[2] / "schema/TownPreferences.schema.json"
+        self.schema = load_jsonc(self.schema_path)
+
+    def validate(self, data):
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / "TownPreferences.jsonc"
+            target.write_text(json.dumps(data), encoding="utf-8")
+            return validate_one((target, self.schema_path, self.schema))
+
+    def test_reader_integer_types(self):
+        data = {"version": 1, "legend": {">": {"terrain": "ENTRANCE", "caveInfo": ["MARK"], "special": 2}}}
+        self.assertTrue(self.validate(data)[0])
+
+        for field, value in (("version", 1.0), ("special", 2.0)):
+            with self.subTest(field=field):
+                invalid = copy.deepcopy(data)
+                if field == "version":
+                    invalid["version"] = value
+                else:
+                    invalid["legend"][">"]["special"] = value
+                ok, message = self.validate(invalid)
+                self.assertFalse(ok)
+                self.assertIn("integer JSON value", message)
+
+    def test_terrain_tags_match_runtime_definitions(self):
+        for terrain, valid in (("ENTRANCE", True), ("*", True), ("NOT_A_TERRAIN", False)):
+            with self.subTest(terrain=terrain):
+                data = {"version": 1, "legend": {">": {"terrain": terrain, "caveInfo": ["MARK"]}}}
+                ok, message = self.validate(data)
+                self.assertEqual(ok, valid, message)
+                if not valid:
+                    self.assertIn("unknown terrain tag", message)
+                    self.assertIn("['legend', '>', 'terrain']", message)
+
+
 if __name__ == "__main__":
     unittest.main()

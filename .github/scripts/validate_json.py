@@ -193,6 +193,22 @@ def validate_wilderness_semantics(data: dict) -> None:
             raise ValidationError("starting position must be within the map layout", path=map_path + ["starting_position"])
 
 
+def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
+    """Check town legend values against the terrain definitions and reader types."""
+    repository_root = schema_path.resolve().parent.parent
+    terrain_data = load_jsonc(repository_root / "lib/edit/TerrainDefinitions.jsonc")
+    valid_terrain_tags = {terrain["key"] for terrain in terrain_data["terrains"]}
+
+    if type(data["version"]) is not int:
+        raise ValidationError("expected an integer JSON value", path=["version"])
+    for symbol, cell in data["legend"].items():
+        terrain_tag = cell["terrain"]
+        if terrain_tag != "*" and terrain_tag not in valid_terrain_tags:
+            raise ValidationError("unknown terrain tag", path=["legend", symbol, "terrain"])
+        if "special" in cell and type(cell["special"]) is not int:
+            raise ValidationError("expected an integer JSON value", path=["legend", symbol, "special"])
+
+
 def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
@@ -204,6 +220,8 @@ def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
             validate_ego_semantics(data, schema_path)
         elif schema_path.name == "WildernessDefinition.schema.json":
             validate_wilderness_semantics(data)
+        elif schema_path.name == "TownPreferences.schema.json":
+            validate_town_preferences_semantics(data, schema_path)
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
         msg = [f"Failed: {data_path.name}", f"Reason: {e.message}"]
