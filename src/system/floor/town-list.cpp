@@ -16,7 +16,7 @@ namespace {
  * @brief ユニークな町の数を数える
  * @return ユニークな町の数
  * @details 町定義ファイル名の先頭2文字は番号であることを利用してカウントする.
- * 辺境の地を表すファイルは(01_*.txt) は3つあるのでユニークではない. また町番号は1から始まるので最後に加算する.
+ * 辺境の地を表すファイルは(01_*.jsonc) は3つあるのでユニークではない. また町番号は1から始まるので最後に加算する.
  */
 int count_town_numbers()
 {
@@ -24,7 +24,7 @@ int count_town_numbers()
     std::set<std::string> unique_towns;
     for (const auto &entry : std::filesystem::directory_iterator(path)) {
         const auto &filename = entry.path().filename().string();
-        if (!filename.ends_with(".txt")) {
+        if (!filename.ends_with(".jsonc")) {
             continue;
         }
 

@@ -81,6 +81,9 @@
     <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\io\test-tokenizer.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp">
       <Filter>load</Filter>
     </ClCompile>

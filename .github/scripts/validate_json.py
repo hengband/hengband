@@ -57,6 +57,16 @@ def build_validation_pairs(edit_dir: Path, schema_map: dict[str, Path], loaded_s
         for data_file in sorted(quests_dir.glob("*.jsonc")):
             pairs.append((data_file, quest_schema_file, loaded_schemas[quest_schema_file]))
 
+    # Town maps share one schema and live one directory down.
+    towns_dir = edit_dir / "towns"
+    if towns_dir.is_dir():
+        town_map_schema_file = schema_map.get("TownMap")
+        if not town_map_schema_file:
+            raise RuntimeError("Missing schema: TownMap.schema.json (required for lib/edit/towns/*.jsonc)")
+
+        for data_file in sorted(towns_dir.glob("*.jsonc")):
+            pairs.append((data_file, town_map_schema_file, loaded_schemas[town_map_schema_file]))
+
     if missing:
         raise RuntimeError(f"Missing schemas for: {', '.join(missing)}")
 
@@ -210,7 +220,7 @@ def validate_town_preferences_semantics(data: dict, schema_path: Path) -> None:
 
 
 def validate_town_definition_list_semantics(data: dict, schema_path: Path) -> None:
-    """Check town map references against the distributed text map files."""
+    """Check town map references against the distributed map files."""
     if type(data["version"]) is not int:
         raise ValidationError("expected an integer JSON value", path=["version"])
 
@@ -221,6 +231,114 @@ def validate_town_definition_list_semantics(data: dict, schema_path: Path) -> No
             if not (edit_dir / map_file).is_file():
                 path = ["towns", town] + ([mode] if mode else [])
                 raise ValidationError("town map file does not exist", path=path)
+
+
+def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
+    """Check town map dimensions and starting coordinates used by the map reader."""
+    # Keep these limits in sync with MAX_HGT / MAX_WID in
+    # src/floor/floor-base-definitions.h. Town maps are loaded with those bounds.
+    max_height = 66
+    max_width = 198
+    if type(data["version"]) is not int:
+        raise ValidationError("expected an integer JSON value", path=["version"])
+    if data["version"] != 2:
+        raise ValidationError("expected version 2", path=["version"])
+
+    repository_root = schema_path.resolve().parent.parent
+    terrain_data = load_jsonc(repository_root / "lib/edit/TerrainDefinitions.jsonc")
+    valid_terrain_tags = {terrain["key"] for terrain in terrain_data["terrains"]}
+    feature_tokens = {
+        "monster": r"(?:-?[0-9]+|\*[0-9]*|c[0-9]+)",
+        "object": r"(?:-?[0-9]+|\*[0-9]*|!)",
+        "ego": r"(?:-?[0-9]+|\*[0-9]*)",
+        "artifact": r"(?:-?[0-9]+|\*[0-9]*|!)",
+    }
+    for rule_index, rule in enumerate(data["featureRules"]):
+        definition = rule["definition"]
+        for field in ("terrain", "monster", "object", "ego", "artifact", "trap"):
+            if any(not (" " <= character <= "~") for character in definition[field]):
+                raise ValidationError("feature field must contain printable ASCII characters", path=["featureRules", rule_index, "definition", field])
+            if any(delimiter in definition[field] for delimiter in (":", "/", "\\", "\r", "\n")):
+                raise ValidationError("feature field contains a legacy delimiter or line break", path=["featureRules", rule_index, "definition", field])
+        for field in ("caveInfo", "special"):
+            if type(definition[field]) is not int:
+                raise ValidationError("expected an integer JSON value", path=["featureRules", rule_index, "definition", field])
+        for field in ("terrain", "trap"):
+            terrain_tag = definition[field]
+            if terrain_tag != "*" and terrain_tag not in valid_terrain_tags:
+                raise ValidationError("unknown terrain tag", path=["featureRules", rule_index, "definition", field])
+        for field, pattern in feature_tokens.items():
+            token = definition[field]
+            if re.fullmatch(pattern, token) is None:
+                raise ValidationError("invalid fixed-map token", path=["featureRules", rule_index, "definition", field])
+            number = token.removeprefix("*").removeprefix("c")
+            if re.fullmatch(r"-?[0-9]+", number):
+                integer = int(number)
+                if field in ("monster", "object", "artifact"):
+                    if token.startswith("c"):
+                        minimum, maximum = 0, 32767
+                    elif token.startswith("*"):
+                        minimum, maximum = 0, 32767
+                    elif field == "monster":
+                        minimum, maximum = -32767, 32767
+                    else:
+                        minimum, maximum = -32768, 32767
+                else:
+                    minimum, maximum = -2147483648, 2147483647
+                if integer < minimum or integer > maximum:
+                    raise ValidationError("fixed-map token exceeds the reader's integer range", path=["featureRules", rule_index, "definition", field])
+
+    for rule_index, rule in enumerate(data["buildingRules"]):
+        if type(rule["index"]) is not int:
+            raise ValidationError("expected an integer JSON value", path=["buildingRules", rule_index, "index"])
+        fields = rule["fields"]
+        for field_index, value in enumerate(fields):
+            if ":" in value or "/" in value or "\\" in value or "\r" in value or "\n" in value:
+                raise ValidationError("building fields must not contain legacy delimiters or line breaks", path=["buildingRules", rule_index, "fields", field_index])
+        if rule["command"] == "N" and len(fields) != 3:
+            raise ValidationError("building name command requires three fields", path=["buildingRules", rule_index, "fields"])
+        if rule["command"] == "A":
+            if len(fields) != 7 or any(re.fullmatch(r"-?[0-9]+", fields[index]) is None for index in (0, 2, 3, 5, 6)):
+                raise ValidationError("building action command requires seven valid fields", path=["buildingRules", rule_index, "fields"])
+            for field_index in (0, 2, 3, 5, 6):
+                if not -2147483648 <= int(fields[field_index]) <= 2147483647:
+                    raise ValidationError("building field exceeds the reader's integer range", path=["buildingRules", rule_index, "fields", field_index])
+            if not 0 <= int(fields[0]) < 8:
+                raise ValidationError("building action index is outside the reader's range", path=["buildingRules", rule_index, "fields", 0])
+        if rule["command"] in ("C", "M", "R") and not fields:
+            raise ValidationError("building membership command requires at least one field", path=["buildingRules", rule_index, "fields"])
+        if rule["command"] in ("C", "M", "R") and any(re.fullmatch(r"-?[0-9]+", value) is None for value in fields):
+            raise ValidationError("building membership fields must be integers", path=["buildingRules", rule_index, "fields"])
+        if rule["command"] in ("C", "M", "R"):
+            max_fields = {"C": 29, "M": 10, "R": 38}[rule["command"]]
+            if len(fields) > max_fields:
+                raise ValidationError("too many fields for building membership command", path=["buildingRules", rule_index, "fields"])
+            for field_index, value in enumerate(fields):
+                if not -2147483648 <= int(value) <= 2147483647:
+                    raise ValidationError("building field exceeds the reader's integer range", path=["buildingRules", rule_index, "fields", field_index])
+
+    map_dimensions = []
+    require_conditions = len(data["mapVariants"]) > 1
+    for map_index, variant in enumerate(data["mapVariants"]):
+        if require_conditions and "when" not in variant:
+            raise ValidationError("every map variant requires when when multiple variants are defined", path=["mapVariants", map_index])
+        rows = variant["rows"]
+        if len(rows) > max_height:
+            raise ValidationError("map height exceeds the reader's maximum", path=["mapVariants", map_index, "rows"])
+        width = len(rows[0])
+        if width > max_width:
+            raise ValidationError("map width exceeds the reader's maximum", path=["mapVariants", map_index, "rows", 0])
+        for row_index, row in enumerate(rows):
+            if len(row) != width:
+                raise ValidationError("map rows must have equal widths", path=["mapVariants", map_index, "rows", row_index])
+        map_dimensions.append((len(rows), width))
+
+    for start_index, position in enumerate(data["startingPositions"]):
+        for field in ("y", "x"):
+            if type(position[field]) is not int:
+                raise ValidationError("expected an integer JSON value", path=["startingPositions", start_index, field])
+        if map_dimensions and not all(position["y"] < height and position["x"] < width for height, width in map_dimensions):
+            raise ValidationError("starting position must be within every map variant", path=["startingPositions", start_index])
 
 
 def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
@@ -238,6 +356,8 @@ def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
             validate_town_preferences_semantics(data, schema_path)
         elif schema_path.name == "TownDefinitionList.schema.json":
             validate_town_definition_list_semantics(data, schema_path)
+        elif schema_path.name == "TownMap.schema.json":
+            validate_town_map_semantics(data, schema_path)
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
         msg = [f"Failed: {data_path.name}", f"Reason: {e.message}"]
