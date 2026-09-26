@@ -76,6 +76,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp" />
     <ClCompile Include="..\..\src\test\io\test-interpret-pref-file.cpp" />
     <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp" />
+    <ClCompile Include="..\..\src\test\io\test-tokenizer.cpp" />
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp" />
     <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp" />
     <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp" />

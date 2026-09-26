@@ -315,11 +315,11 @@ class TownDefinitionListValidationTest(unittest.TestCase):
             "version": 1,
             "towns": {
                 "1": {
-                    "lite": "towns/01_Outpost_Lite.txt",
-                    "normal": "towns/01_Outpost_Full.txt",
-                    "none": "towns/01_Outpost_OnlyAngband.txt",
+                    "lite": "towns/01_Outpost_Lite.jsonc",
+                    "normal": "towns/01_Outpost_Full.jsonc",
+                    "none": "towns/01_Outpost_OnlyAngband.jsonc",
                 },
-                "2": "towns/02_Telmora.txt",
+                "2": "towns/02_Telmora.jsonc",
             },
         }
 
@@ -338,9 +338,9 @@ class TownDefinitionListValidationTest(unittest.TestCase):
             with self.subTest(town=town, mode=mode):
                 invalid = copy.deepcopy(self.data)
                 if mode:
-                    invalid["towns"][town][mode] = "towns/Missing.txt"
+                    invalid["towns"][town][mode] = "towns/Missing.jsonc"
                 else:
-                    invalid["towns"][town] = "towns/Missing.txt"
+                    invalid["towns"][town] = "towns/Missing.jsonc"
                 ok, message = self.validate(invalid)
                 self.assertFalse(ok)
                 self.assertIn("town map file does not exist", message)
@@ -358,6 +358,217 @@ class TownDefinitionListValidationTest(unittest.TestCase):
         ok, message = self.validate(invalid)
         self.assertFalse(ok)
         self.assertIn("integer JSON value", message)
+
+
+class TownMapValidationTest(unittest.TestCase):
+    def setUp(self):
+        self.schema_path = Path(__file__).resolve().parents[2] / "schema/TownMap.schema.json"
+        self.schema = load_jsonc(self.schema_path)
+        self.data = {
+            "version": 2,
+            "featureRules": [
+                {
+                    "when": "[EQU $QUEST1 1]",
+                    "symbol": "#",
+                    "definition": {
+                        "terrain": "PERMANENT",
+                        "caveInfo": 3,
+                        "monster": "0",
+                        "object": "0",
+                        "ego": "0",
+                        "artifact": "0",
+                        "trap": "NONE",
+                        "special": 0,
+                    },
+                }
+            ],
+            "mapVariants": [{"rows": ["###", "#.#", "###"]}],
+            "buildingRules": [{"index": 0, "locale": "en", "command": "N", "fields": ["Store", "Owner", "Human"]}],
+            "startingPositions": [{"y": 1, "x": 1}],
+        }
+
+    def validate(self, data):
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / "TestTown.jsonc"
+            target.write_text(json.dumps(data), encoding="utf-8")
+            return validate_one((target, self.schema_path, self.schema))
+
+    def test_valid_map_and_start(self):
+        ok, message = self.validate(self.data)
+        self.assertTrue(ok, message)
+
+    def test_start_must_be_inside_layout(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["startingPositions"][0] = {"y": 3, "x": 1}
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok)
+        self.assertIn("starting position must be within every map variant", message)
+
+    def test_rows_must_have_equal_widths(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["mapVariants"][0]["rows"][1] = "##"
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok)
+        self.assertIn("map rows must have equal widths", message)
+
+    def test_map_must_fit_runtime_height_limit(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["mapVariants"][0]["rows"] = ["###"] * 67
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok)
+        self.assertIn("map height exceeds the reader's maximum", message)
+
+    def test_map_must_fit_runtime_width_limit(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["mapVariants"][0]["rows"] = ["#" * 199]
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok)
+        self.assertIn("map width exceeds the reader's maximum", message)
+
+    def test_invalid_building_command_is_rejected(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["buildingRules"][0]["command"] = "UNKNOWN"
+        self.assertFalse(self.validate(invalid)[0])
+
+    def test_colon_in_feature_symbol_is_rejected(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["featureRules"][0]["symbol"] = ":"
+        self.assertFalse(self.validate(invalid)[0])
+
+    def test_tokenizer_delimiters_in_feature_symbol_are_rejected(self):
+        for symbol in ("/", "\\"):
+            with self.subTest(symbol=symbol):
+                invalid = copy.deepcopy(self.data)
+                invalid["featureRules"][0]["symbol"] = symbol
+                self.assertFalse(self.validate(invalid)[0])
+
+    def test_colon_in_building_field_is_rejected(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["buildingRules"][0]["fields"][0] = "Store: Annex"
+        self.assertFalse(self.validate(invalid)[0])
+
+    def test_slash_in_building_field_is_rejected(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["buildingRules"][0]["fields"][0] = "Buy/Sell"
+        self.assertFalse(self.validate(invalid)[0])
+
+    def test_backslash_in_building_field_is_rejected(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["buildingRules"][0]["fields"][0] = "Action\\"
+        self.assertFalse(self.validate(invalid)[0])
+
+    def test_too_many_building_membership_fields_are_rejected(self):
+        for command, maximum in (("C", 29), ("M", 10), ("R", 38)):
+            with self.subTest(command=command):
+                invalid = copy.deepcopy(self.data)
+                invalid["buildingRules"][0].update(command=command, fields=["0"] * (maximum + 1))
+                ok, message = self.validate(invalid)
+                self.assertFalse(ok)
+                self.assertIn("too many fields", message)
+
+    def test_empty_building_membership_fields_are_rejected(self):
+        for command in ("C", "M", "R"):
+            with self.subTest(command=command):
+                invalid = copy.deepcopy(self.data)
+                invalid["buildingRules"][0].update(command=command, fields=[])
+                ok, message = self.validate(invalid)
+                self.assertFalse(ok)
+                self.assertIn("requires at least one field", message)
+
+    def test_building_action_index_is_rejected_outside_reader_range(self):
+        for index in ("-1", "8"):
+            with self.subTest(index=index):
+                invalid = copy.deepcopy(self.data)
+                invalid["buildingRules"][0].update(command="A", fields=[index, "Action", "0", "0", "a", "0", "0"])
+                self.assertFalse(self.validate(invalid)[0])
+
+    def test_colon_in_feature_token_is_rejected(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["featureRules"][0]["definition"]["monster"] = "1:2"
+        self.assertFalse(self.validate(invalid)[0])
+
+    def test_tokenizer_delimiters_in_feature_fields_are_rejected(self):
+        for field in ("terrain", "monster", "object", "ego", "artifact", "trap"):
+            for delimiter in ("/", "\\"):
+                with self.subTest(field=field, delimiter=delimiter):
+                    invalid = copy.deepcopy(self.data)
+                    invalid["featureRules"][0]["definition"][field] += delimiter
+                    self.assertFalse(self.validate(invalid)[0])
+
+    def test_start_must_fit_every_map_variant(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["mapVariants"][0]["when"] = "[EQU $QUEST1 0]"
+        invalid["mapVariants"].append({"when": "[EQU $QUEST1 1]", "rows": ["##", "##"]})
+        invalid["startingPositions"][0] = {"y": 1, "x": 2}
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok)
+        self.assertIn("within every map variant", message)
+
+    def test_multiple_map_variants_require_conditions(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["mapVariants"].append({"when": "[EQU $QUEST1 1]", "rows": ["###", "#.#", "###"]})
+        ok, message = self.validate(invalid)
+        self.assertFalse(ok)
+        self.assertIn("every map variant requires when", message)
+
+    def test_integer_representation_matches_reader(self):
+        cases = {
+            "version": lambda data: data.update(version=2.0),
+            "starting position y": lambda data: data["startingPositions"][0].update(y=1.0),
+            "starting position x": lambda data: data["startingPositions"][0].update(x=1.0),
+            "caveInfo": lambda data: data["featureRules"][0]["definition"].update(caveInfo=3.0),
+            "special": lambda data: data["featureRules"][0]["definition"].update(special=0.0),
+            "building index": lambda data: data["buildingRules"][0].update(index=0.0),
+        }
+        for field, set_float_value in cases.items():
+            with self.subTest(field=field):
+                invalid = copy.deepcopy(self.data)
+                set_float_value(invalid)
+                ok, message = self.validate(invalid)
+                self.assertFalse(ok)
+                self.assertIn("integer JSON value", message)
+
+    def test_building_numeric_fields_fit_reader_integer_range(self):
+        cases = (
+            ("A", ["0", "Action", "0", "0", "a", "0", "0"], 2),
+            ("C", ["0"], 0),
+        )
+        for command, fields, field_index in cases:
+            with self.subTest(command=command):
+                invalid = copy.deepcopy(self.data)
+                invalid["buildingRules"][0].update(command=command, fields=fields)
+                invalid["buildingRules"][0]["fields"][field_index] = "2147483648"
+                ok, message = self.validate(invalid)
+                self.assertFalse(ok)
+                self.assertIn("building field exceeds the reader's integer range", message)
+
+    def test_numeric_tokens_require_ascii_digits(self):
+        invalid = copy.deepcopy(self.data)
+        invalid["featureRules"][0]["definition"]["monster"] = "١"
+        self.assertFalse(self.validate(invalid)[0])
+
+    def test_feature_tokens_match_reader_grammar_and_storage_ranges(self):
+        cases = (
+            ("monster", "invalid"),
+            ("monster", "*x"),
+            ("monster", "cX"),
+            ("monster", "32768"),
+            ("monster", "-32768"),
+            ("monster", "*32768"),
+            ("monster", "c32768"),
+            ("monster", "c-0"),
+            ("object", "32768"),
+            ("object", "*32768"),
+            ("artifact", "32768"),
+            ("artifact", "*32768"),
+            ("ego", "2147483648"),
+            ("artifact", "2147483648"),
+        )
+        for field, token in cases:
+            with self.subTest(field=field, token=token):
+                invalid = copy.deepcopy(self.data)
+                invalid["featureRules"][0]["definition"][field] = token
+                self.assertFalse(self.validate(invalid)[0])
 
 
 if __name__ == "__main__":

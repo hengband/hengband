@@ -29,6 +29,6 @@
     }
   },
   "$defs": {
-    "mapFile": { "type": "string", "pattern": "^towns/[A-Za-z0-9_]+\\.txt$" }
+    "mapFile": { "type": "string", "pattern": "^towns/[A-Za-z0-9_]+\\.jsonc$" }
   }
 }

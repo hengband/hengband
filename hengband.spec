@@ -143,7 +143,7 @@ exit 0
 %{_datadir}/games/%{name}/lib/edit/*.txt
 %{_datadir}/games/%{name}/lib/edit/*.jsonc
 %{_datadir}/games/%{name}/lib/edit/quests/*.jsonc
-%{_datadir}/games/%{name}/lib/edit/towns/*.txt
+%{_datadir}/games/%{name}/lib/edit/towns/*.jsonc
 %{_datadir}/games/%{name}/lib/file/*.txt
 %{_datadir}/games/%{name}/lib/file/books/*.txt
 %{_datadir}/games/%{name}/lib/help/*.hlp

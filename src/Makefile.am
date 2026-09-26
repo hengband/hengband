@@ -1501,6 +1501,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-vault-reader.cpp \
 	test/io/test-interpret-pref-file.cpp \
 	test/io/test-macro-configurations-store.cpp \
+	test/io/test-tokenizer.cpp \
 	test/load/test-angband-version-comparer.cpp \
 	test/mspell/test-mspell-projection-table.cpp \
 	test/mutation/test-mutation-roll-table.cpp \

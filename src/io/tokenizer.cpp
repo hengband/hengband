@@ -1,4 +1,5 @@
 #include "io/tokenizer.h"
+#include "system/h-basic.h"
 
 /*!
  * @brief 各種データテキストをトークン単位に分解する
@@ -26,6 +27,19 @@ std::vector<std::string> tokenize(std::string_view buf, size_t num)
             if (c == '\\') {
                 token_end++;
             }
+#ifdef JP
+#ifdef _WIN32
+            else if (iskanji(c)) {
+                token_end++;
+            }
+#else
+            else if (static_cast<unsigned char>(c) == 0x8f) {
+                token_end += 2;
+            } else if (iskanji(c)) {
+                token_end++;
+            }
+#endif
+#endif
         }
 
         tokens.emplace_back(remaining.substr(0, token_end));

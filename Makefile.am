@@ -42,6 +42,7 @@ schema_files = \
 	schema/SpellDefinitions.schema.json \
 	schema/TerrainDefinitions.schema.json \
 	schema/TownDefinitionList.schema.json \
+	schema/TownMap.schema.json \
 	schema/TownPreferences.schema.json \
 	schema/VaultDefinitions.schema.json \
 	schema/WildernessDefinition.schema.json
