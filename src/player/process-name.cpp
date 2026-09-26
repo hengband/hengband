@@ -79,6 +79,21 @@ std::string make_player_base_name(std::string_view name)
 }
 
 /*!
+ * @brief 条件式の $PLAYER で使うプレイヤー名を作る
+ * @param name プレイヤー名
+ * @return 空白と「[」「]」を「_」に置き換えた名前 (例: "[ Temp ]" なら "__Temp__")
+ * @details
+ * これらの文字は条件式の区切りに使われるため置き換える。
+ * 2バイト文字の後半バイトは置き換えない (Shift_JIS では後半バイトが「[」「]」と同じ値になる文字がある)。
+ */
+std::string make_player_name_for_expression(std::string_view name)
+{
+    auto result = str_replace(name, " ", "_");
+    result = str_replace(result, "[", "_");
+    return str_replace(result, "]", "_");
+}
+
+/*!
  * @brief プレイヤーの名前をチェックして修正する
  * Process the player name.
  * @param player_ptr プレイヤーへの参照ポインタ

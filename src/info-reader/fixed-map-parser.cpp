@@ -20,6 +20,7 @@
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
+#include "player/process-name.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/dungeon/quest-definition.h"
@@ -301,21 +302,7 @@ static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp,
     } else if (streq(b + 1, "REALM2")) {
         v = PlayerRealm(player_ptr).realm2().get_name().en_string();
     } else if (streq(b + 1, "PLAYER")) {
-        char tmp_player_name[32]{};
-        char *pn, *tpn;
-        for (pn = player_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++) {
-#ifdef JP
-            if (iskanji(*pn)) {
-                *(tpn++) = *(pn++);
-                *tpn = *pn;
-                continue;
-            }
-#endif
-            *tpn = angband_strchr(" []", *pn) ? '_' : *pn;
-        }
-
-        *tpn = '\0';
-        v = tmp_player_name;
+        v = make_player_name_for_expression(player_ptr->name);
     } else if (streq(b + 1, "TOWN")) {
         v = std::to_string(AngbandWorld::get_instance().get_town_index());
     } else if (streq(b + 1, "LEVEL")) {

@@ -3,6 +3,7 @@
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
+#include "player/process-name.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
 #include "term/z-form.h"
@@ -167,21 +168,7 @@ std::string process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
     } else if (streq(b + 1, "CLASS")) {
         v = cp_ptr->title.en_string();
     } else if (streq(b + 1, "PLAYER")) {
-        static char tmp_player_name[32];
-        char *pn, *tpn;
-        for (pn = player_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++) {
-#ifdef JP
-            if (iskanji(*pn)) {
-                *(tpn++) = *(pn++);
-                *tpn = *pn;
-                continue;
-            }
-#endif
-            *tpn = angband_strchr(" []", *pn) ? '_' : *pn;
-        }
-
-        *tpn = '\0';
-        v = tmp_player_name;
+        v = make_player_name_for_expression(player_ptr->name);
     } else if (streq(b + 1, "REALM1")) {
         v = PlayerRealm(player_ptr).realm1().get_name().en_string();
     } else if (streq(b + 1, "REALM2")) {
