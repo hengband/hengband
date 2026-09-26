@@ -171,6 +171,8 @@ void euc2sjis(char *str)
  * @brief strを環境に合った文字コードに変換し、変換前の文字コードを返す。strの長さに制限はない。
  * @param str 変換する文字列のポインタ
  * @return 変換前の文字コード
+ *         ASCII のみの文字列や壊れた文字列など、文字コードを判定できなかった場合は UNKNOWN
+ *         (ASCII は判定に使わないので US_ASCII を返すことはない)
  */
 CharacterEncoding codeconv(char *str)
 {
@@ -179,9 +181,8 @@ CharacterEncoding codeconv(char *str)
         /* First byte */
         const auto c1 = static_cast<unsigned char>(str[i]);
 
-        /* ASCII? */
+        /* ASCII は判定に影響しないので読み飛ばす */
         if (!(c1 & 0x80)) {
-            encoding = CharacterEncoding::US_ASCII;
             continue;
         }
 
@@ -195,13 +196,13 @@ CharacterEncoding codeconv(char *str)
 
         if (is_euc_jp) {
             /* Only EUC is allowed */
-            if (encoding == CharacterEncoding::UNKNOWN || encoding == CharacterEncoding::US_ASCII || encoding == CharacterEncoding::EUC_JP) {
+            if (encoding == CharacterEncoding::UNKNOWN || encoding == CharacterEncoding::EUC_JP) {
                 encoding = CharacterEncoding::EUC_JP;
                 continue;
             }
         } else if (is_cp932) {
             /* Only SJIS is allowed */
-            if (encoding == CharacterEncoding::UNKNOWN || encoding == CharacterEncoding::US_ASCII || encoding == CharacterEncoding::SHIFT_JIS) {
+            if (encoding == CharacterEncoding::UNKNOWN || encoding == CharacterEncoding::SHIFT_JIS) {
                 encoding = CharacterEncoding::SHIFT_JIS;
                 continue;
             }
