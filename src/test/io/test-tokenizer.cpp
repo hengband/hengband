@@ -43,3 +43,26 @@ TEST_CASE("tokenize continues to split legacy field delimiters")
     CHECK(tokens[1] == "two");
     CHECK(tokens[2] == "three");
 }
+
+TEST_CASE("tokenize preserves delimiters after incomplete multibyte characters")
+{
+#if defined(JP) && defined(_WIN32)
+    const std::vector<std::string> prefixes{ "\x83" };
+#elif defined(JP)
+    const std::vector<std::string> prefixes{ "\x8f", "\x8f\xa1", "\xa1", "\x8e" };
+#else
+    const std::vector<std::string> prefixes{ "\xe3", "\xe3\x81" };
+#endif
+    for (const auto &prefix : prefixes) {
+        for (const auto delimiter : { ':', '/' }) {
+            const auto tokens = tokenize(prefix + delimiter + "tail", 2);
+            REQUIRE(tokens.size() == 2);
+            CHECK(tokens[0] == prefix);
+            CHECK(tokens[1] == "tail");
+        }
+
+        const auto tokens = tokenize(prefix, 2);
+        REQUIRE(tokens.size() == 1);
+        CHECK(tokens[0] == prefix);
+    }
+}

@@ -1,6 +1,36 @@
 #include "io/tokenizer.h"
 #include "system/h-basic.h"
 
+#ifdef JP
+namespace {
+/*!
+ * @brief 有効なローカル文字コードの文字長を返す。不正・不完全な並びは1バイトとして扱う。
+ */
+size_t multibyte_character_length(std::string_view text)
+{
+    if (text.size() < 2) {
+        return 1;
+    }
+
+    const auto lead = static_cast<unsigned char>(text[0]);
+    const auto trail = static_cast<unsigned char>(text[1]);
+#ifdef _WIN32
+    const auto valid_trail = (trail >= 0x40 && trail <= 0x7e) || (trail >= 0x80 && trail <= 0xfc);
+    return iskanji(lead) && valid_trail ? 2 : 1;
+#else
+    const auto valid_trail = trail >= 0xa1 && trail <= 0xfe;
+    if (lead == 0x8f) {
+        return text.size() >= 3 && valid_trail && static_cast<unsigned char>(text[2]) >= 0xa1 && static_cast<unsigned char>(text[2]) <= 0xfe ? 3 : 1;
+    }
+    if (lead == 0x8e) {
+        return trail >= 0xa1 && trail <= 0xdf ? 2 : 1;
+    }
+    return lead >= 0xa1 && lead <= 0xfe && valid_trail ? 2 : 1;
+#endif
+}
+}
+#endif
+
 /*!
  * @brief 各種データテキストをトークン単位に分解する
  * @param buf データテキスト
@@ -28,17 +58,9 @@ std::vector<std::string> tokenize(std::string_view buf, size_t num)
                 token_end++;
             }
 #ifdef JP
-#ifdef _WIN32
-            else if (iskanji(c)) {
-                token_end++;
+            else {
+                token_end += multibyte_character_length(remaining.substr(token_end)) - 1;
             }
-#else
-            else if (static_cast<unsigned char>(c) == 0x8f) {
-                token_end += 2;
-            } else if (iskanji(c)) {
-                token_end++;
-            }
-#endif
 #endif
         }
 
