@@ -266,6 +266,7 @@
     <ClCompile Include="..\..\src\info-reader\ego-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\wilderness-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\quest-reader.cpp" />
+    <ClCompile Include="..\..\src\info-reader\town-map-reader.cpp" />
     <ClCompile Include="..\..\src\info-reader\feature-info-tokens-table.cpp" />
     <ClCompile Include="..\..\src\info-reader\general-parser.cpp" />
     <ClCompile Include="..\..\src\info-reader\info-reader-util.cpp" />
@@ -1087,6 +1088,7 @@
     <ClInclude Include="..\..\src\info-reader\ego-reader.h" />
     <ClInclude Include="..\..\src\info-reader\wilderness-reader.h" />
     <ClInclude Include="..\..\src\info-reader\quest-reader.h" />
+    <ClInclude Include="..\..\src\info-reader\town-map-reader.h" />
     <ClInclude Include="..\..\src\info-reader\feature-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\general-parser.h" />
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h" />
