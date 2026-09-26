@@ -7,6 +7,7 @@
 #include "autopick/autopick-drawer.h"
 #include "autopick/autopick-describer.h"
 #include "autopick/autopick-dirty-flags.h"
+#include "autopick/autopick-editor-util.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-util.h"
 #include "io/pref-file-expressor.h"
@@ -71,26 +72,14 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
      */
     tb->hgt -= 2 + DESCRIPT_HGT;
 
-#ifdef JP
-    /* Don't let cursor at second byte of kanji */
-    for (int i = 0; (*tb->lines_list[tb->cy])[i]; i++) {
-        if (iskanji((*tb->lines_list[tb->cy])[i])) {
-            i++;
-            if (i == tb->cx) {
-                /*
-                 * Move to a correct position in the
-                 * left or right
-                 */
-                if (i & 1) {
-                    tb->cx--;
-                } else {
-                    tb->cx++;
-                }
-                break;
-            }
+    // カーソルを2バイト文字の2バイト目に置かないよう、左右どちらかの文字の境界へ動かす
+    if (is_second_byte_of_kanji(*tb->lines_list[tb->cy], tb->cx)) {
+        if (tb->cx & 1) {
+            tb->cx--;
+        } else {
+            tb->cx++;
         }
     }
-#endif
     if (tb->cy < tb->upper || tb->upper + tb->hgt <= tb->cy) {
         tb->upper = tb->cy - (tb->hgt) / 2;
     }
@@ -158,7 +147,8 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
                 leftcol = 1;
                 break;
             }
-            if (iskanji(msg.front())) {
+            // 行末に1バイト目だけが残っている場合は1バイトの文字として扱う
+            if (iskanji(msg.front()) && (msg.length() > 1)) {
                 msg.remove_prefix(1);
                 j++;
             }

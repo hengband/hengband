@@ -127,7 +127,7 @@ tl::optional<std::string> get_random_line(xso::rng32 &rng, concptr file_name, in
         return tl::nullopt;
     }
 
-    int test;
+    auto test = 0;
     auto line_num = 0;
     const auto monrace_id = i2enum<MonraceId>(entry);
     const auto &monrace = MonraceList::get_instance().get_monrace(monrace_id);
@@ -156,7 +156,7 @@ tl::optional<std::string> get_random_line(xso::rng32 &rng, concptr file_name, in
             if (monrace.is_female()) {
                 break;
             }
-        } else if (sscanf(&(buf[2]), "%d", &test) != EOF) {
+        } else if (sscanf(&(buf[2]), "%d", &test) == 1) {
             if (test == entry) {
                 break;
             }
