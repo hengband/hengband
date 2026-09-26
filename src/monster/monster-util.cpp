@@ -84,16 +84,7 @@ static bool restrict_monster_to_dungeon(const DungeonDefinition &dungeon, int fl
             return true;
         }
 
-        static const EnumClassFlagGroup<MonsterAbilityType> rf_ability_masks(RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK);
-        static const EnumClassFlagGroup<MonsterAbilityType> abilities = {
-            MonsterAbilityType::CAUSE_1,
-            MonsterAbilityType::CAUSE_2,
-            MonsterAbilityType::CAUSE_3,
-            MonsterAbilityType::CAUSE_4,
-            MonsterAbilityType::MIND_BLAST,
-            MonsterAbilityType::BRAIN_SMASH,
-        };
-        if (monrace.ability_flags.has_none_of(rf_ability_masks) && monrace.ability_flags.has_none_of(abilities)) {
+        if (monrace.ability_flags.has_none_of(RF_ABILITY_DAMAGE_MASK)) {
             return false;
         }
     }
