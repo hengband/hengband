@@ -1564,12 +1564,24 @@ endif
 CXXCOMPILE = $(strip $(CXXCOMPILE_WRAPPER) $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(PCH_INCLUDES))
 
 if PCH
+## clang は既定で取り込んだヘッダの mtime を PCH に埋め込むため、チェックアウトし直すたびに
+## PCH の中身が変わる。PCH のチェックサムは ccache のハッシュに含まれる (pch_external_checksum) ので、
+## これでは全オブジェクトがキャッシュミスになる。-fno-pch-timestamp で mtime を埋め込まないようにする。
+if COMPILER_IS_CLANG
+PCH_CREATE_FLAGS = -Xclang -fno-pch-timestamp
+endif
+
+## 上のとおり clang は PCH が取り込むヘッダの変更を検出しなくなり、gcc は元々検出しない。
+## そのため PCH の生成時に依存ファイル (-MD) を出力し、取り込むヘッダ (同梱ライブラリなど) が
+## 変わったときに PCH を作り直す。-MP はヘッダが削除されたときに make が失敗しないようにする。
 stdafx.h.gch: stdafx.h stdafx.cpp Makefile
-	$(CXX) -x c++-header $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(srcdir)/stdafx.cpp -o $@
+	$(CXX) -x c++-header $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(PCH_CREATE_FLAGS) -MD -MP -MF $@.d $(srcdir)/stdafx.cpp -o $@
 	if test none != "$(PCH_CHECKSUMMER)" ; then \
 		rm -f "$@".sum ; \
 		$(PCH_CHECKSUMMER) $@ > "$@".sum ; \
 	fi
+
+-include stdafx.h.gch.d
 
 ## $(SOURCES) は automake が全ターゲットの _SOURCES を合成して定義する変数。
 ## これを使うことで、ターゲットが増えても PCH の依存関係が自動的に追従する。
@@ -1586,5 +1598,5 @@ if SET_GID
 endif
 
 clean-local:
-	-rm stdafx.h.gch stdafx.h.gch.sum
+	-rm stdafx.h.gch stdafx.h.gch.sum stdafx.h.gch.d
 	-rm -rf ../build
