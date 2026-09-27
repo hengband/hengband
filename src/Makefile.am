@@ -1505,6 +1505,7 @@ hengband_test_SOURCES = \
 	test/io/test-macro-configurations-store.cpp \
 	test/io/test-tokenizer.cpp \
 	test/load/test-angband-version-comparer.cpp \
+	test/locale/test-character-encoding.cpp \
 	test/mspell/test-mspell-projection-table.cpp \
 	test/mutation/test-mutation-roll-table.cpp \
 	test/player/test-process-name.cpp \
