@@ -406,3 +406,25 @@ MONSTER_NUMBER summon_POLYGON(PlayerType *player_ptr, POSITION y, POSITION x, MO
 
     return count;
 }
+
+/**
+ * @brief ペロロジラによるペロロミニオン召喚の処理
+ * @details PEROROMINIONを2～3体召喚
+ *
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param y 対象の地点のy座標
+ * @param x 対象の地点のx座標
+ * @param m_idx 呪文を唱えるモンスターID
+ * @return 召喚したモンスターの数を返す。
+ */
+MONSTER_NUMBER summon_PEROROMINION(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+{
+    int num = 1 + randint1(2);
+    int count = 0;
+    for (int k = 0; k < num; k++) {
+        if (summon_named_creature(player_ptr, m_idx, y, x, MonraceId::PEROROMINION, PM_NONE)) {
+            count++;
+        }
+    }
+    return count;
+}
