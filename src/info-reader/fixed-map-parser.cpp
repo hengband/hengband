@@ -24,7 +24,6 @@
 #include "player/process-name.h"
 #include "system/angband-exceptions.h"
 #include "system/angband-system.h"
-#include "system/building-type-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/dungeon/quest-list.h"
