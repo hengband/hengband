@@ -8,6 +8,7 @@
 
 #include <string>
 #include <string_view>
+#include <utility>
 
 #ifdef JP
 
@@ -176,5 +177,57 @@ TEST_CASE("codeconv returns UNKNOWN for empty string")
     std::string str;
     CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
 }
+
+#ifdef EUC
+
+namespace {
+
+using namespace std::string_view_literals;
+
+constexpr std::string_view FULLWIDTH_TILDE_UTF8 = "\xef\xbd\x9e"; //!< ～ (U+FF5E)
+constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_UTF8 = "\xef\xbc\x8d"; //!< － (U+FF0D)
+
+}
+
+TEST_CASE("utf8_to_euc converts fullwidth tilde and hyphen-minus to wave dash and minus sign")
+{
+    auto utf8 = cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8);
+    char euc[16]{};
+    REQUIRE(utf8_to_euc(utf8.data(), utf8.length() + 1, euc, sizeof(euc)) >= 0);
+    CHECK(std::string_view(euc) == "\xa1\xc1\xa1\xdd");
+}
+
+TEST_CASE("utf8_to_euc converts fullwidth tilde after an embedded NUL within the given length")
+{
+    // 途中に '\0' があっても、渡した長さの範囲はすべて置き換えてから変換する
+    auto utf8 = cat("a\0"sv, FULLWIDTH_TILDE_UTF8);
+    char euc[16]{};
+    REQUIRE(utf8_to_euc(utf8.data(), utf8.length() + 1, euc, sizeof(euc)) == 5);
+    CHECK(std::string_view(euc, 4) == "a\0\xa1\xc1"sv);
+}
+
+TEST_CASE("utf8_to_euc does not read beyond the terminator of a truncated UTF-8 character")
+{
+    constexpr std::pair<std::string_view, std::string_view> truncated_chars[] = {
+        { "E3", "\xe3"sv },
+        { "E3 81", "\xe3\x81"sv },
+        { "F0 9F", "\xf0\x9f"sv },
+        { "F0 9F 98", "\xf0\x9f\x98"sv },
+    };
+
+    for (const auto &[label, truncated] : truncated_chars) {
+        CAPTURE(label);
+
+        // 終端の後ろに全角チルダを置き、終端を越えて読むとそれが置き換えられることで検出する。
+        // どの位置から読み進めても全角チルダの先頭に当たるよう、3つ続けて置く
+        const auto original = cat(truncated, "\0"sv, FULLWIDTH_TILDE_UTF8, FULLWIDTH_TILDE_UTF8, FULLWIDTH_TILDE_UTF8);
+        auto buf = original;
+        char euc[16]{};
+        utf8_to_euc(buf.data(), truncated.length() + 1, euc, sizeof(euc));
+        CHECK(buf == original);
+    }
+}
+
+#endif
 
 #endif

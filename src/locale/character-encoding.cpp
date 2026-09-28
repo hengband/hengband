@@ -325,34 +325,24 @@ const std::vector<EncodingConverter> encoding_characters = {
  * 文字をLinux/UNIX環境のものに置き換えてから変換を行う。
  *
  * @param str コードポイントの置き換えを行う文字列へのポインタ
+ * @param len 置き換えを行う範囲の長さ (バイト数)。途中に '\0' があっても、この長さまで置き換える
  */
-static void ms_to_jis_unicode(char *str)
+static void ms_to_jis_unicode(char *str, size_t len)
 {
-    for (auto *p = (unsigned char *)str; *p; p++) {
-        auto subseq_num = 0;
-        if (0x00 < *p && *p <= 0x7f) {
-            continue;
-        }
-
-        if ((*p & 0xe0) == 0xc0) {
-            subseq_num = 1;
-        }
-
-        if ((*p & 0xf0) == 0xe0) {
+    const std::string_view view(str, len);
+    for (size_t i = 0; i < view.length();) {
+        // UTF-8 として不正なバイトや途中で切れた文字は 1 バイトずつ進め、終端を越えて読まないようにする
+        const auto byte_length = std::max(utf8_next_char_byte_length(view.substr(i)), 1);
+        if (byte_length == ENCODING_LENGTH) {
+            auto *p = reinterpret_cast<unsigned char *>(str + i);
             for (const auto &converter : encoding_characters) {
                 if (converter.equals(p)) {
                     converter.replace(p);
                 }
             }
-
-            subseq_num = 2;
         }
 
-        if ((*p & 0xf8) == 0xf0) {
-            subseq_num = 3;
-        }
-
-        p += subseq_num;
+        i += byte_length;
     }
 }
 
@@ -375,7 +365,7 @@ int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_b
         cd = iconv_open("EUC-JP", "UTF-8");
     }
 
-    ms_to_jis_unicode(utf8_str);
+    ms_to_jis_unicode(utf8_str, utf8_str_len);
 
     size_t inlen_left = utf8_str_len;
     size_t outlen_left = euc_buf_len;
