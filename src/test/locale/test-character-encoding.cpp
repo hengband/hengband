@@ -9,6 +9,7 @@
 #include <string>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 #ifdef JP
 
@@ -226,6 +227,31 @@ TEST_CASE("utf8_to_euc does not read beyond the terminator of a truncated UTF-8 
         utf8_to_euc(buf.data(), truncated.length() + 1, euc, sizeof(euc));
         CHECK(buf == original);
     }
+}
+
+TEST_CASE("utf8_to_sys replaces JIS X 0212 characters with question marks")
+{
+    // é (UTF-8 で2バイト) は EUC-JP では JIS X 0212 の3バイト (8F AB B1) になり、正しく表示できないので '?' に置き換える
+    CHECK(utf8_to_sys("caf\xc3\xa9"sv) == "caf?"sv);
+    CHECK(utf8_to_sys("\xc3\xa9\xc3\xa9\xc3\xa9"sv) == "???"sv);
+    CHECK(utf8_to_sys("\xe6\x97\xa5\xe6\x9c\xac\xc3\xa9"sv) == cat(NIHON_EUC, "?"));
+}
+
+TEST_CASE("utf8_to_euc returns the length after replacing JIS X 0212 characters")
+{
+    auto utf8 = cat("a\xc3\xa9"sv, "b");
+    char euc[16]{};
+    CHECK(utf8_to_euc(utf8.data(), utf8.length() + 1, euc, sizeof(euc)) == 4);
+    CHECK(std::string_view(euc) == "a?b");
+}
+
+TEST_CASE("utf8_to_euc converts JIS X 0212 characters into a buffer as long as the input")
+{
+    // '?' に置き換えた後の長さで足りれば、置き換える前の3バイトが入らない大きさのバッファでも変換できる
+    auto utf8 = cat("\xc3\xa9\xc3\xa9\xc3\xa9"sv);
+    std::vector<char> euc(utf8.length() + 1);
+    CHECK(utf8_to_euc(utf8.data(), utf8.length() + 1, euc.data(), euc.size()) == 4);
+    CHECK(std::string_view(euc.data()) == "???");
 }
 
 #endif

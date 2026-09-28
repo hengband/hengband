@@ -351,6 +351,9 @@ static void ms_to_jis_unicode(char *str, size_t len)
 #ifdef EUC
 /*!
  * @brief 文字列の文字コードをUTF-8からEUC-JPに変換する
+ * @details 変愚蛮怒は全角文字を2バイト固定として扱うため、EUC-JP で3バイトになる JIS X 0212 の文字
+ *          (8F xx xx、é など) を正しく表示できない。そうした文字は '?' に置き換える
+ *          (Windows 版でも CP932 に無い文字は '?' などに置き換わる)。
  * @param utf8_str 変換元の文字列へのポインタ
  * @param utf8_str_len 変換元の文字列の長さ(文字数ではなくバイト数)
  * @param euc_buf 変換した文字列を格納するバッファへのポインタ
@@ -367,16 +370,34 @@ int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_b
 
     ms_to_jis_unicode(utf8_str, utf8_str_len);
 
+    // JIS X 0212 の文字は UTF-8 の2バイトが EUC-JP の3バイトになるので、'?' に置き換える前の変換結果は一時バッファで受ける
+    std::vector<char> converted(utf8_str_len * 2);
     size_t inlen_left = utf8_str_len;
-    size_t outlen_left = euc_buf_len;
+    size_t outlen_left = converted.size();
     char *in = utf8_str;
-    char *out = euc_buf;
+    char *out = converted.data();
 
     if (iconv(cd, &in, &inlen_left, &out, &outlen_left) == (size_t)-1) {
         return -1;
     }
 
-    return euc_buf_len - outlen_left;
+    // EUC-JP の2バイト目以降は A1 以上なので、0x8F は JIS X 0212 の文字の先頭にしか現れない
+    const auto converted_len = converted.size() - outlen_left;
+    size_t euc_len = 0;
+    for (size_t i = 0; i < converted_len; euc_len++) {
+        if (euc_len >= euc_buf_len) {
+            return -1;
+        }
+
+        if (static_cast<unsigned char>(converted[i]) == 0x8f) {
+            euc_buf[euc_len] = '?';
+            i += 3;
+        } else {
+            euc_buf[euc_len] = converted[i++];
+        }
+    }
+
+    return euc_len;
 }
 
 /*!
@@ -491,7 +512,8 @@ tl::optional<std::string> sys_to_utf8(std::string_view str)
  */
 tl::optional<std::string> utf8_to_sys(std::string_view str)
 {
-    // UTF-8 -> SJIS or EUC でバイト長が増えることはないので、終端文字分を含めて元の文字列と同じ長さを確保しておけばよい
+    // UTF-8 -> SJIS or EUC でバイト長が増えることはない (EUC-JP で3バイトになる JIS X 0212 の文字は '?' に置き換わる) ので、
+    // 終端文字分を含めて元の文字列と同じ長さを確保しておけばよい
     std::vector<char> sys_str_buf(str.length() + 1);
 
     if (!utf8_to_sys(str, sys_str_buf.data(), sys_str_buf.size())) {
@@ -505,7 +527,7 @@ tl::optional<std::string> utf8_to_sys(std::string_view str)
  * @brief 受け取った文字列の文字コードを推定し、システムの文字コードへ変換する
  * @param strbuf 変換する文字列を格納したバッファへのポインタ。
  *               バッファは変換した文字列で上書きされる。
- *               UTF-8からSJISもしくはEUCへの変換を想定しているのでバッファの長さが足りなくなることはない。
+ *               変換した文字列がバッファに収まらない場合は変換せず、警告を表示する。
  * @param buflen バッファの長さ。
  * @return 変換後の文字列の長さ（終端文字は含まない）
  */
