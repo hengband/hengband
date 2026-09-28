@@ -197,6 +197,15 @@ TEST_CASE("utf8_to_euc converts fullwidth tilde and hyphen-minus to wave dash an
     CHECK(std::string_view(euc) == "\xa1\xc1\xa1\xdd");
 }
 
+TEST_CASE("utf8_to_euc converts fullwidth tilde after an embedded NUL within the given length")
+{
+    // 途中に '\0' があっても、渡した長さの範囲はすべて置き換えてから変換する
+    auto utf8 = cat("a\0"sv, FULLWIDTH_TILDE_UTF8);
+    char euc[16]{};
+    REQUIRE(utf8_to_euc(utf8.data(), utf8.length() + 1, euc, sizeof(euc)) == 5);
+    CHECK(std::string_view(euc, 4) == "a\0\xa1\xc1"sv);
+}
+
 TEST_CASE("utf8_to_euc does not read beyond the terminator of a truncated UTF-8 character")
 {
     constexpr std::pair<std::string_view, std::string_view> truncated_chars[] = {
