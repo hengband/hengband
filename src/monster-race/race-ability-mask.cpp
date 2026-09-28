@@ -87,6 +87,16 @@ const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_ATTACK_MASK =
     MonsterAbilityType::DARKNESS, MonsterAbilityType::TRAPS, MonsterAbilityType::FORGET,
 });
 
+/*
+ * "damage" spells that deal damage directly
+ * Including "bolt", "beam", "ball", "breath", mind attacks and "cause wounds" spells
+ */
+const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_DAMAGE_MASK =
+    (RF_ABILITY_BOLT_MASK | RF_ABILITY_BEAM_MASK | RF_ABILITY_BALL_MASK).set({
+    MonsterAbilityType::MIND_BLAST, MonsterAbilityType::BRAIN_SMASH,
+    MonsterAbilityType::CAUSE_1, MonsterAbilityType::CAUSE_2, MonsterAbilityType::CAUSE_3, MonsterAbilityType::CAUSE_4,
+});
+
 /* "indirect" spells Including "summon" spells */
 const EnumClassFlagGroup<MonsterAbilityType> RF_ABILITY_INDIRECT_MASK =
     EnumClassFlagGroup<MonsterAbilityType>(RF_ABILITY_SUMMON_MASK).set({
