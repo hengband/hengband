@@ -328,31 +328,21 @@ const std::vector<EncodingConverter> encoding_characters = {
  */
 static void ms_to_jis_unicode(char *str)
 {
-    for (auto *p = (unsigned char *)str; *p; p++) {
-        auto subseq_num = 0;
-        if (0x00 < *p && *p <= 0x7f) {
-            continue;
-        }
-
-        if ((*p & 0xe0) == 0xc0) {
-            subseq_num = 1;
-        }
-
-        if ((*p & 0xf0) == 0xe0) {
+    // 置き換えで長さは変わらないので、書き換えた後もこの長さのまま使える
+    const std::string_view view(str);
+    for (size_t i = 0; i < view.length();) {
+        // UTF-8 として不正なバイトや途中で切れた文字は 1 バイトずつ進め、終端を越えて読まないようにする
+        const auto byte_length = std::max(utf8_next_char_byte_length(view.substr(i)), 1);
+        if (byte_length == ENCODING_LENGTH) {
+            auto *p = reinterpret_cast<unsigned char *>(str + i);
             for (const auto &converter : encoding_characters) {
                 if (converter.equals(p)) {
                     converter.replace(p);
                 }
             }
-
-            subseq_num = 2;
         }
 
-        if ((*p & 0xf8) == 0xf0) {
-            subseq_num = 3;
-        }
-
-        p += subseq_num;
+        i += byte_length;
     }
 }
 
