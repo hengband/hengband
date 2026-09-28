@@ -15,7 +15,6 @@
 #define NOMINMAX
 #include <windows.h>
 #else
-#include "util/finalizer.h"
 #include <algorithm>
 #include <iconv.h>
 #include <initializer_list>
@@ -557,74 +556,20 @@ size_t guess_convert_to_system_encoding(char *strbuf, int buflen)
 
 /*!
  * @brief UTF-8文字列をローカルエンコーディング（Shift-JIS/EUC-JP）に変換する
+ * @details utf8_to_sys() と同じ変換を行い、変換に失敗した場合は例外を投げる。
  * @param str_utf8 変換元のUTF-8文字列
  * @return ローカルエンコーディングに変換した文字列
+ * @exception std::runtime_error 変換に失敗した場合
  */
 std::string utf8_to_local(std::string_view str_utf8)
 {
-    if (str_utf8.empty()) {
-        return "";
-    }
-
 #ifdef JP
-#ifdef _WIN32
-    // UTF-8 -> UTF-16 (wide string)
-    auto utf8_length = static_cast<int>(str_utf8.length());
-    const auto wide_length = MultiByteToWideChar(CP_UTF8, 0, str_utf8.data(), utf8_length, NULL, 0);
-    if (wide_length == 0) {
-        THROW_EXCEPTION(std::runtime_error, "Failed to convert UTF-8 to wide string");
+    auto str_sys = utf8_to_sys(str_utf8);
+    if (!str_sys) {
+        THROW_EXCEPTION(std::runtime_error, "Failed to convert UTF-8 to system encoding");
     }
 
-    std::wstring wide_str(wide_length, L'\0');
-    MultiByteToWideChar(CP_UTF8, 0, str_utf8.data(), utf8_length, wide_str.data(), wide_length);
-
-    // UTF-16 -> Shift-JIS (CP932)
-    const auto sjis_length = WideCharToMultiByte(932, 0, wide_str.data(), wide_length, NULL, 0, NULL, NULL);
-    if (sjis_length == 0) {
-        THROW_EXCEPTION(std::runtime_error, "Failed to convert UTF-16 to Shift-JIS");
-    }
-
-    std::string str_sjis(sjis_length, '\0');
-    WideCharToMultiByte(932, 0, wide_str.data(), wide_length, str_sjis.data(), sjis_length, NULL, NULL);
-    return str_sjis;
-#else
-    // Unix-like systems implementation for UTF-8 to local encoding conversion
-    const auto cd = iconv_open("EUC-JP", "UTF-8");
-    const auto finalizer = util::make_finalizer([&cd] {
-        if (cd != reinterpret_cast<iconv_t>(-1)) {
-            iconv_close(cd);
-        }
-    });
-    if (cd == reinterpret_cast<iconv_t>(-1)) {
-        THROW_EXCEPTION(std::runtime_error, "iconv_open failed: cannot open UTF-8 to EUC-JP converter");
-    }
-
-    auto *in_buf = const_cast<char *>(str_utf8.data());
-    const auto in_length = str_utf8.length();
-    auto in_bytes = in_length;
-
-    std::string str_eucjp;
-    str_eucjp.resize(str_utf8.length() * 2 + 4); //!< 変換途中の一時領域も含め、予め十分なサイズを確保しておく.
-    auto *out_buf = str_eucjp.data();
-    const auto out_length = str_eucjp.size();
-    auto out_bytes = out_length;
-
-    const auto iconv_result = iconv(cd, &in_buf, &in_bytes, &out_buf, &out_bytes);
-    if (iconv_result == static_cast<size_t>(-1)) {
-        if (errno == EILSEQ) {
-            THROW_EXCEPTION(std::runtime_error, "iconv: invalid sequence (EUC-JPに変換できない文字)");
-        } else if (errno == E2BIG) {
-            THROW_EXCEPTION(std::runtime_error, "iconv: output buffer too small");
-        } else {
-            THROW_EXCEPTION(std::runtime_error, "iconv conversion failed");
-        }
-    }
-
-    // 実際に使った長さに調整する.
-    str_eucjp.resize(str_eucjp.size() - out_bytes);
-    str_eucjp.shrink_to_fit();
-    return str_eucjp;
-#endif
+    return std::move(*str_sys);
 #else
     return std::string(str_utf8);
 #endif
