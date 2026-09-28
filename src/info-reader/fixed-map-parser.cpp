@@ -14,6 +14,7 @@
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
+#include "info-reader/town-definition-list-reader.h"
 #include "info-reader/town-map-reader.h"
 #include "io/files-util.h"
 #include "locale/character-encoding.h"
@@ -119,35 +120,8 @@ static parse_error_type load_town_definition_file(std::string &map_file)
 
     try {
         const auto data = nlohmann::json::parse(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>(), nullptr, true, true, true);
-        if (!data.is_object() || !data.contains("version") || !data["version"].is_number_integer() || data["version"] != 1 ||
-            !data.contains("towns") || !data["towns"].is_object() || data["towns"].empty()) {
-            return PARSE_ERROR_INVALID_TYPE;
-        }
-
-        const auto &towns = data["towns"];
-        const auto town = towns.find(std::to_string(AngbandWorld::get_instance().get_town_index()));
-        if (town == towns.end()) {
-            return PARSE_ERROR_NONE;
-        }
-
-        const nlohmann::json *selected = &*town;
-        if (selected->is_object()) {
-            const auto *mode = vanilla_town ? "none" : (lite_town ? "lite" : "normal");
-            const auto file = selected->find(mode);
-            if (file == selected->end()) {
-                return PARSE_ERROR_INVALID_TYPE;
-            }
-            selected = &*file;
-        }
-
-        if (!selected->is_string()) {
-            return PARSE_ERROR_INVALID_TYPE;
-        }
-        map_file = selected->get<std::string>();
-        if (!map_file.starts_with("towns/") || !map_file.ends_with(".jsonc") || map_file.find("..") != std::string::npos || map_file.find('\\') != std::string::npos) {
-            return PARSE_ERROR_INVALID_VALUE;
-        }
-        return PARSE_ERROR_NONE;
+        const auto mode = vanilla_town ? TownMapMode::NONE : (lite_town ? TownMapMode::LITE : TownMapMode::NORMAL);
+        return TownDefinitionListReader(data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file);
     } catch (const nlohmann::json::exception &) {
         return PARSE_ERROR_INVALID_VALUE;
     }
