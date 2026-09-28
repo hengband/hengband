@@ -1499,8 +1499,8 @@ hengband_test_SOURCES = \
 	test/info-reader/test-info-reader-util.cpp \
 	test/info-reader/test-json-reader-util.cpp \
 	test/info-reader/test-skill-reader.cpp \
-	test/info-reader/test-vault-reader.cpp \
 	test/info-reader/test-town-map-reader.cpp \
+	test/info-reader/test-vault-reader.cpp \
 	test/io/test-interpret-pref-file.cpp \
 	test/io/test-macro-configurations-store.cpp \
 	test/io/test-tokenizer.cpp \
