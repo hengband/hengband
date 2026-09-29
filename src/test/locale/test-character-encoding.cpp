@@ -6,6 +6,7 @@
 
 #include <doctest/doctest.h>
 
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -27,6 +28,8 @@ std::string cat(const Args &...args)
     return result;
 }
 
+using namespace std::string_view_literals;
+
 constexpr std::string_view NIHON_EUC = "\xc6\xfc\xcb\xdc"; //!< 日本 (EUC-JP)
 constexpr std::string_view NIHON_SJIS = "\x93\xfa\x96\x7b"; //!< 日本 (Shift_JIS)
 
@@ -43,18 +46,25 @@ constexpr std::string_view KANJI_YOU_SJIS = "\xe0\xfc"; //!< 珱 (Shift_JIS、EU
 constexpr std::string_view KANJI_SEN2_EUC = "\xf0\xa1"; //!< 陝 (EUC-JP、1バイト目が F0 以上なので EUC-JP に限られる)
 constexpr std::string_view KANJI_SEN2_SJIS = "\xe8\x9f"; //!< 陝 (Shift_JIS)
 
+constexpr std::string_view FULLWIDTH_TILDE_UTF8 = "\xef\xbd\x9e"; //!< ～ (U+FF5E)
+constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_UTF8 = "\xef\xbc\x8d"; //!< － (U+FF0D)
+
 #ifdef EUC
 constexpr auto NIHON_SYS = NIHON_EUC;
 constexpr auto KANJI_SEN_SYS = KANJI_SEN_EUC;
 constexpr auto KANJI_SHAKU_SYS = KANJI_SHAKU_EUC;
 constexpr auto KANJI_YOU_SYS = KANJI_YOU_EUC;
 constexpr auto KANJI_SEN2_SYS = KANJI_SEN2_EUC;
+constexpr std::string_view FULLWIDTH_TILDE_SYS = "\xa1\xc1"; //!< ～ (EUC-JP では波ダッシュに置き換える)
+constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_SYS = "\xa1\xdd"; //!< － (EUC-JP ではマイナス記号に置き換える)
 #else
 constexpr auto NIHON_SYS = NIHON_SJIS;
 constexpr auto KANJI_SEN_SYS = KANJI_SEN_SJIS;
 constexpr auto KANJI_SHAKU_SYS = KANJI_SHAKU_SJIS;
 constexpr auto KANJI_YOU_SYS = KANJI_YOU_SJIS;
 constexpr auto KANJI_SEN2_SYS = KANJI_SEN2_SJIS;
+constexpr std::string_view FULLWIDTH_TILDE_SYS = "\x81\x60"; //!< ～ (CP932)
+constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_SYS = "\x81\x7c"; //!< － (CP932)
 #endif
 
 }
@@ -179,23 +189,26 @@ TEST_CASE("codeconv returns UNKNOWN for empty string")
     CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
 }
 
-#ifdef EUC
-
-namespace {
-
-using namespace std::string_view_literals;
-
-constexpr std::string_view FULLWIDTH_TILDE_UTF8 = "\xef\xbd\x9e"; //!< ～ (U+FF5E)
-constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_UTF8 = "\xef\xbc\x8d"; //!< － (U+FF0D)
-
+TEST_CASE("utf8_to_local converts fullwidth tilde and hyphen-minus")
+{
+    CHECK(utf8_to_local(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
 }
+
+TEST_CASE("utf8_to_sys and utf8_to_local reject a string with an embedded NUL")
+{
+    // 途中の '\0' より後ろが黙って欠けないよう、不正な入力として変換しない
+    CHECK_FALSE(utf8_to_sys("a\0b"sv).has_value());
+    CHECK_THROWS_AS(utf8_to_local("a\0b"sv), std::runtime_error);
+}
+
+#ifdef EUC
 
 TEST_CASE("utf8_to_euc converts fullwidth tilde and hyphen-minus to wave dash and minus sign")
 {
     auto utf8 = cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8);
     char euc[16]{};
     REQUIRE(utf8_to_euc(utf8.data(), utf8.length() + 1, euc, sizeof(euc)) >= 0);
-    CHECK(std::string_view(euc) == "\xa1\xc1\xa1\xdd");
+    CHECK(std::string_view(euc) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
 }
 
 TEST_CASE("utf8_to_euc converts fullwidth tilde after an embedded NUL within the given length")
@@ -252,6 +265,16 @@ TEST_CASE("utf8_to_euc converts JIS X 0212 characters into a buffer as long as t
     std::vector<char> euc(utf8.length() + 1);
     CHECK(utf8_to_euc(utf8.data(), utf8.length() + 1, euc.data(), euc.size()) == 4);
     CHECK(std::string_view(euc.data()) == "???");
+}
+
+TEST_CASE("utf8_to_local replaces JIS X 0212 characters with question marks")
+{
+    CHECK(utf8_to_local("caf\xc3\xa9"sv) == "caf?"sv);
+}
+
+TEST_CASE("utf8_to_local throws on invalid UTF-8")
+{
+    CHECK_THROWS_AS(utf8_to_local("\xff"sv), std::runtime_error);
 }
 
 #endif
