@@ -639,6 +639,7 @@ libhengband_a_SOURCES = \
 	info-reader/terrain-reader.cpp info-reader/terrain-reader.h \
 	info-reader/town-definition-list-reader.cpp info-reader/town-definition-list-reader.h \
 	info-reader/town-map-reader.cpp info-reader/town-map-reader.h \
+	info-reader/town-preferences-reader.cpp info-reader/town-preferences-reader.h \
 	info-reader/vault-reader.cpp info-reader/vault-reader.h \
 	\
 	inventory/floor-item-getter.cpp inventory/floor-item-getter.h \
@@ -1502,6 +1503,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-skill-reader.cpp \
 	test/info-reader/test-town-definition-list-reader.cpp \
 	test/info-reader/test-town-map-reader.cpp \
+	test/info-reader/test-town-preferences-reader.cpp \
 	test/info-reader/test-vault-reader.cpp \
 	test/io/test-interpret-pref-file.cpp \
 	test/io/test-macro-configurations-store.cpp \

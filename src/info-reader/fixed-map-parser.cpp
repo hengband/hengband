@@ -16,6 +16,7 @@
 #include "info-reader/quest-reader.h"
 #include "info-reader/town-definition-list-reader.h"
 #include "info-reader/town-map-reader.h"
+#include "info-reader/town-preferences-reader.h"
 #include "io/files-util.h"
 #include "locale/character-encoding.h"
 #include "main/init-error-messages-table.h"
@@ -35,32 +36,12 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <cstdint>
 #include <fstream>
 #include <iterator>
-#include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
-#include <utility>
-#include <vector>
 
 static concptr variant = "ZANGBAND";
-
-static bool is_valid_town_special(const nlohmann::json &value)
-{
-    if (!value.is_number_integer()) {
-        return false;
-    }
-
-    constexpr auto minimum = std::numeric_limits<int16_t>::min();
-    constexpr auto maximum = std::numeric_limits<int16_t>::max();
-    if (value.is_number_unsigned()) {
-        return value.get<uint64_t>() <= static_cast<uint64_t>(maximum);
-    }
-
-    const auto special = value.get<int64_t>();
-    return special >= minimum && special <= maximum;
-}
 
 static parse_error_type load_town_preferences()
 {
@@ -75,31 +56,9 @@ static parse_error_type load_town_preferences()
 
     try {
         const auto data = nlohmann::json::parse(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>(), nullptr, true, true, true);
-        if (!data.is_object() || !data.contains("version") || !data["version"].is_number_integer() || data["version"] != 1 ||
-            !data.contains("legend") || !data["legend"].is_object() || data["legend"].empty()) {
-            return PARSE_ERROR_INVALID_TYPE;
-        }
-
-        std::vector<std::pair<unsigned char, dungeon_grid>> legend;
-        for (const auto &[symbol, cell_data] : data["legend"].items()) {
-            if (symbol.size() != 1 || symbol.front() < '!' || symbol.front() > '~' || !cell_data.is_object() ||
-                !cell_data.contains("terrain") || !cell_data["terrain"].is_string() || !cell_data.contains("caveInfo") || !cell_data["caveInfo"].is_array()) {
-                return PARSE_ERROR_INVALID_TYPE;
-            }
-            for (const auto &flag : cell_data["caveInfo"]) {
-                if (!flag.is_string()) {
-                    return PARSE_ERROR_INVALID_TYPE;
-                }
-            }
-            if (cell_data.contains("special") && !is_valid_town_special(cell_data["special"])) {
-                return PARSE_ERROR_INVALID_VALUE;
-            }
-
-            QuestLegendCell cell;
-            if (const auto err = parse_quest_legend_cell(cell_data, cell); err != PARSE_ERROR_NONE) {
-                return err;
-            }
-            legend.emplace_back(static_cast<unsigned char>(symbol.front()), cell.grid);
+        TownPreferencesLegend legend;
+        if (const auto err = TownPreferencesReader(data).read(legend, parse_quest_legend_cell); err != PARSE_ERROR_NONE) {
+            return err;
         }
 
         for (const auto &[symbol, grid] : legend) {
