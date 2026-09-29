@@ -48,6 +48,7 @@ constexpr std::string_view KANJI_SEN2_SJIS = "\xe8\x9f"; //!< 陝 (Shift_JIS)
 
 constexpr std::string_view FULLWIDTH_TILDE_UTF8 = "\xef\xbd\x9e"; //!< ～ (U+FF5E)
 constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_UTF8 = "\xef\xbc\x8d"; //!< － (U+FF0D)
+constexpr std::string_view HALFWIDTH_KATAKANA_UTF8 = "\xef\xbd\xb1\xef\xbd\xb2\xef\xbd\xb3"; //!< ｱｲｳ (UTF-8 では1文字3バイト)
 
 #ifdef EUC
 constexpr auto NIHON_SYS = NIHON_EUC;
@@ -57,6 +58,7 @@ constexpr auto KANJI_YOU_SYS = KANJI_YOU_EUC;
 constexpr auto KANJI_SEN2_SYS = KANJI_SEN2_EUC;
 constexpr std::string_view FULLWIDTH_TILDE_SYS = "\xa1\xc1"; //!< ～ (EUC-JP では波ダッシュに置き換える)
 constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_SYS = "\xa1\xdd"; //!< － (EUC-JP ではマイナス記号に置き換える)
+constexpr std::string_view HALFWIDTH_KATAKANA_SYS = "\x8e\xb1\x8e\xb2\x8e\xb3"; //!< ｱｲｳ (EUC-JP)
 #else
 constexpr auto NIHON_SYS = NIHON_SJIS;
 constexpr auto KANJI_SEN_SYS = KANJI_SEN_SJIS;
@@ -65,6 +67,7 @@ constexpr auto KANJI_YOU_SYS = KANJI_YOU_SJIS;
 constexpr auto KANJI_SEN2_SYS = KANJI_SEN2_SJIS;
 constexpr std::string_view FULLWIDTH_TILDE_SYS = "\x81\x60"; //!< ～ (CP932)
 constexpr std::string_view FULLWIDTH_HYPHEN_MINUS_SYS = "\x81\x7c"; //!< － (CP932)
+constexpr std::string_view HALFWIDTH_KATAKANA_SYS = "\xb1\xb2\xb3"; //!< ｱｲｳ (CP932 では1文字1バイト)
 #endif
 
 }
@@ -192,6 +195,16 @@ TEST_CASE("codeconv returns UNKNOWN for empty string")
 TEST_CASE("utf8_to_local converts fullwidth tilde and hyphen-minus")
 {
     CHECK(utf8_to_local(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
+}
+
+TEST_CASE("sys_to_utf8 converts half-width katakana")
+{
+    CHECK(sys_to_utf8(HALFWIDTH_KATAKANA_SYS) == HALFWIDTH_KATAKANA_UTF8);
+}
+
+TEST_CASE("sys_to_utf8 converts an empty string to an empty string")
+{
+    CHECK(sys_to_utf8(""sv) == ""sv);
 }
 
 TEST_CASE("utf8_to_sys and utf8_to_local reject a string with an embedded NUL")
