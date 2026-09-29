@@ -81,6 +81,14 @@ TEST_CASE("VaultReader rejects invalid records atomically with field diagnostics
         data["name"] = value;
         check_invalid(data, "$.name");
     }
+#ifdef JP
+    {
+        // 日本語版では名前をシステムの文字コードに変換するので、変換できない名前 (途中に '\0' を含むなど) も不正とする
+        auto data = original;
+        data["name"] = std::string("Test\0vault", 10);
+        check_invalid(data, "$.name");
+    }
+#endif
     for (const auto &value : std::vector<nlohmann::json>{ nullptr, "abcd", nlohmann::json::array(), { "only" } }) {
         auto data = original;
         data["layout"] = value;
