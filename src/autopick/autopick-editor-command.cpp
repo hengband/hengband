@@ -95,7 +95,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
                 tb->cx = len;
             }
 
-            if (is_second_byte_of_kanji(*tb->lines_list[tb->cy], tb->cx)) {
+            if (tb->is_cursor_on_second_byte_of_kanji()) {
                 tb->cx--;
             }
         } else if (tb->cy > 0) {
@@ -412,8 +412,7 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, int 
             break;
         }
 
-        const auto mb_chars = str_find_all_multibyte_chars(*tb->lines_list[tb->cy]);
-        const auto delete_bytes = mb_chars.contains(tb->cx - 2) ? 2 : 1;
+        const auto delete_bytes = is_second_byte_of_kanji(*tb->lines_list[tb->cy], tb->cx - 1) ? 2 : 1;
         tb->cx -= delete_bytes;
         tb->lines_list[tb->cy]->erase(tb->cx, delete_bytes);
         tb->dirty_line = tb->cy;

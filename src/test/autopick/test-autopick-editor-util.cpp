@@ -148,6 +148,16 @@ TEST_CASE("is_second_byte_of_kanji does not treat the end of a line after a lone
     CHECK_FALSE(is_second_byte_of_kanji(LINE_WITH_LONE_LEAD_BYTE, 3));
 }
 
+TEST_CASE("is_cursor_on_second_byte_of_kanji checks the cursor position on the cursor line")
+{
+    const auto line = std::string(KANJI_KAN) + "a";
+
+    CHECK_FALSE(make_text_body_with_line(line, 0).is_cursor_on_second_byte_of_kanji());
+    CHECK(make_text_body_with_line(line, 1).is_cursor_on_second_byte_of_kanji());
+    CHECK_FALSE(make_text_body_with_line(line, 2).is_cursor_on_second_byte_of_kanji());
+    CHECK_FALSE(make_text_body_with_line(line, 10).is_cursor_on_second_byte_of_kanji());
+}
+
 TEST_CASE("insert_return_code does not split a double-byte character")
 {
     auto tb = make_text_body_with_line(std::string(KANJI_KAN) + std::string(KANJI_JI), 1);

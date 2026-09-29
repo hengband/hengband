@@ -47,6 +47,7 @@ struct text_body_type {
 
     void adjust_cursor_column();
     void update_cursor_column_record(int com_id);
+    bool is_cursor_on_second_byte_of_kanji() const;
 
     int cx;
     int cy;

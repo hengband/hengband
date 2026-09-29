@@ -7,7 +7,6 @@
 #include "autopick/autopick-drawer.h"
 #include "autopick/autopick-describer.h"
 #include "autopick/autopick-dirty-flags.h"
-#include "autopick/autopick-editor-util.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-util.h"
 #include "io/pref-file-expressor.h"
@@ -73,7 +72,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
     tb->hgt -= 2 + DESCRIPT_HGT;
 
     // カーソルを2バイト文字の2バイト目に置かないよう、左右どちらかの文字の境界へ動かす
-    if (is_second_byte_of_kanji(*tb->lines_list[tb->cy], tb->cx)) {
+    if (tb->is_cursor_on_second_byte_of_kanji()) {
         if (tb->cx & 1) {
             tb->cx--;
         } else {
