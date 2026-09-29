@@ -73,9 +73,6 @@ static void quit_hook(std::string_view s)
     }
 }
 
-/*
- * Set the stack size and overlay buffer (see main-286.c")
- */
 #ifdef PRIVATE_USER_PATH
 
 /*
