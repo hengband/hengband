@@ -194,6 +194,13 @@ TEST_CASE("utf8_to_local converts fullwidth tilde and hyphen-minus")
     CHECK(utf8_to_local(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
 }
 
+TEST_CASE("utf8_to_sys and utf8_to_local reject a string with an embedded NUL")
+{
+    // 途中の '\0' より後ろが黙って欠けないよう、不正な入力として変換しない
+    CHECK_FALSE(utf8_to_sys("a\0b"sv).has_value());
+    CHECK_THROWS_AS(utf8_to_local("a\0b"sv), std::runtime_error);
+}
+
 #ifdef EUC
 
 TEST_CASE("utf8_to_euc converts fullwidth tilde and hyphen-minus to wave dash and minus sign")

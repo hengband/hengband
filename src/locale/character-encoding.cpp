@@ -507,10 +507,15 @@ tl::optional<std::string> sys_to_utf8(std::string_view str)
  *
  * @param str UTF-8の文字列
  * @return システムの文字コードに変換した文字列
- *         変換に失敗した場合はtl::nullopt
+ *         変換に失敗した場合や、途中に '\0' を含む場合はtl::nullopt
  */
 tl::optional<std::string> utf8_to_sys(std::string_view str)
 {
+    // 変換結果は '\0' 終端の文字列として取り出すので、途中に '\0' があると後ろが黙って欠けてしまう。不正な入力として変換しない
+    if (str.find('\0') != std::string_view::npos) {
+        return tl::nullopt;
+    }
+
     // UTF-8 -> SJIS or EUC でバイト長が増えることはない (EUC-JP で3バイトになる JIS X 0212 の文字は '?' に置き換わる) ので、
     // 終端文字分を含めて元の文字列と同じ長さを確保しておけばよい
     std::vector<char> sys_str_buf(str.length() + 1);
