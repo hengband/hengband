@@ -31,6 +31,18 @@ nlohmann::json make_definition()
                   } },
     };
 }
+
+WildernessDefinition make_existing_definition()
+{
+    WildernessDefinition definition;
+    definition.width = 99;
+    definition.height = 88;
+    definition.towns.push_back({ 77, "Previous town", "Previous alias" });
+    definition.normal.letters.push_back({ '?', WildernessTerrain::EDGE, 5, 0, 0 });
+    definition.normal.layout.push_back("previous normal map");
+    definition.compact.layout.push_back("previous compact map");
+    return definition;
+}
 }
 
 TEST_CASE("WildernessReader loads maps and localized levels")
@@ -89,4 +101,43 @@ TEST_CASE("WildernessReader validates layout dimensions and symbols")
     data["maps"]["compact"]["starting_position"]["x"] = 3;
     definition = {};
     CHECK(WildernessReader(data).read(definition) != PARSE_ERROR_NONE);
+}
+
+TEST_CASE("WildernessReader keeps previous output on a late parse error")
+{
+    auto data = make_definition();
+    data["maps"]["compact"]["starting_position"]["x"] = 3;
+    auto definition = make_existing_definition();
+
+    CHECK(WildernessReader(data).read(definition) != PARSE_ERROR_NONE);
+    CHECK(definition.width == 99);
+    CHECK(definition.height == 88);
+    REQUIRE(definition.towns.size() == 1);
+    CHECK(definition.towns[0].id == 77);
+    CHECK(definition.towns[0].name == "Previous town");
+    CHECK(definition.towns[0].alias == "Previous alias");
+    REQUIRE(definition.normal.letters.size() == 1);
+    CHECK(definition.normal.letters[0].symbol == '?');
+    REQUIRE(definition.normal.layout.size() == 1);
+    CHECK(definition.normal.layout[0] == "previous normal map");
+    REQUIRE(definition.compact.layout.size() == 1);
+    CHECK(definition.compact.layout[0] == "previous compact map");
+}
+
+TEST_CASE("WildernessReader replaces previous output on success")
+{
+    const auto data = make_definition();
+    auto definition = make_existing_definition();
+
+    REQUIRE(WildernessReader(data).read(definition) == PARSE_ERROR_NONE);
+    CHECK(definition.width == 3);
+    CHECK(definition.height == 3);
+    REQUIRE(definition.towns.size() == 1);
+    CHECK(definition.towns[0].id == 1);
+    REQUIRE(definition.normal.letters.size() == 2);
+    REQUIRE(definition.normal.layout.size() == 3);
+    CHECK(definition.normal.layout[0] == "###");
+    CHECK(definition.normal.layout[1] == "#1#");
+    REQUIRE(definition.compact.layout.size() == 3);
+    CHECK(definition.compact.layout[0] == "###");
 }
