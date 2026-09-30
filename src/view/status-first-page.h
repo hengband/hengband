@@ -51,6 +51,7 @@
 #define ENTRY_EXP_TO_ADV_ANDR 44
 
 #include "system/h-type.h"
+#include <array>
 #include <string>
 #include <utility>
 #include <vector>
@@ -84,6 +85,13 @@ enum class SkillRating {
 
 class PlayerType;
 class ItemEntity;
+struct DisplayedMeleeStatistics {
+    std::array<int, 3> blows; //!< 主手・副手・突然変異の表示攻撃回数
+    std::array<int, 2> damage_per_round; //!< 画面に表示するラウンド平均ダメージの整数値
+    bool damage_nil; //!< 平均ダメージ欄が nil! になる
+};
+std::array<int, 3> calc_displayed_melee_blows(PlayerType *player_ptr);
+DisplayedMeleeStatistics calc_displayed_melee_statistics(PlayerType *player_ptr, const int *damage);
 std::pair<SkillRating, int> classify_skill_rating(int x, int y);
 std::pair<std::string, TERM_COLOR> describe_skill_rating(int x, int y);
 std::vector<SkillRatingSource> calc_skill_rating_sources(PlayerType *player_ptr);

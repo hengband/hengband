@@ -238,8 +238,9 @@ python3 tools/bot/hbctl.py quit            # ゲームを終了
   各行は `ceil(w / 4)` 桁で、x座標は `row[x / 4]` の下位から `x % 4` ビットに対応します。
   端数の上位ビットは0。これは罠そのものではなく `CAVE_UNSAFE`（罠未調査）です。
 
-`flag_bits` は版3から、地図がその地形をどの照明状態の記号で描いているかを表します
-（`0`=通常、`1`=光源に照らされている、`2`=暗い）。判定は地図描画と同じ関数で行い、
+`flag_bits` は版3から、地図がその地形をどの照明記号で描いているかを表します
+（`0`=通常記号、`1`=照明記号、`2`=暗所記号）。同じ設定済みの色と文字になる区分は最小の番号に統合するため、
+これは実際の光源や暗闇の状態ではありません。例えば3区分とも同じ見た目のドアは常に `0` です。判定は地図描画と同じ条件で行い、
 オプション `view_special_lite` / `view_yellow_lite` / `view_bright_lite` / `view_granite_lite` に従います
 （オプションが無効なら常に `0`）。版2までは予約値 `0` でした。
 内部の `CAVE_MARK` / `CAVE_KNOWN` / `CAVE_ROOM` / 照明フラグ等そのものは出力しません。
@@ -313,7 +314,7 @@ terrain_bits:
 
 `character`（`C` コマンド）: `skill_ratings`、`name`、`sex`、`race_title`、`class_title`、`personality_title`、`history`（生い立ち4行）、
 `displayed_melee`（手ごとの `{hand, label, to_h, to_d}`。画面の表示値）、`displayed_shooting`（`{to_h, to_d}`）、`base_ac` / `ac_bonus`（`[基本AC, +修正]`）、
-`speed`（`{base, temporary, lightspeed, riding}`）、`exp`（`{current, max, to_advance}`。アンドロイドの `max` は `null`）、`day` / `hour` / `minute`、
+`speed`（`{base, temporary, lightspeed, riding}`。画面が「光速化 (+99)」だけを表示する間は `base:null`。乗馬時は `lightspeed:false`）、`exp`（`{current, max, to_advance}`。アンドロイドの `max` は `null`）、`day` / `hour` / `minute`、
 `play_time`（実プレイ時間の表示文字列）、`stat_modifiers`（能力修正欄。能力値ごとに装備部位ごとの `{slot, symbol, color}` と本人の列 `player`）、
 `curse_marks`（特性画面の呪い欄。部位ごとに `+` / `*` / `.`）、`alignment_label` / `alignment_value` を追加しました。
 
@@ -329,7 +330,7 @@ terrain_bits:
 
 | `type` | 出力する時点と内容 |
 | --- | --- |
-| `spell_list` | 魔法書の呪文一覧を表示したとき（閲覧・詠唱）。`spell_list: {realm_id, spells[]}`。各行は `{spell_id, status, name, level, mana, fail?, proficiency?, proficiency_mark?, info?}`。`status` は `available` / `untried` / `unknown` / `forgotten` / `illegible`。必殺剣は画面に熟練度・失敗率・効果を出さないので `fail` 以降が無い |
+| `spell_list` | 操作メニューで魔法書の呪文一覧を表示したとき（閲覧・詠唱・学習）。サブウィンドウの再描画では出力しない。`spell_list: {realm_id, spells[]}`。各行は `{spell_id, status, name, level, mana, fail?, proficiency?, proficiency_mark?, info?}`。`status` は `available` / `untried` / `unknown` / `forgotten` / `illegible`。必殺剣は画面に熟練度・失敗率・効果を出さないので `fail` 以降が無い |
 | `power_list` | 特殊能力の一覧を表示したとき。`power_list: {kind, page, browse_mode, powers[]}`。`kind` は `racial`（種族・職業・突然変異のパワー）または `mind`（超能力・練気術・狂戦士・鏡使い・忍術）。各行は `{letter, page, name, level, cost, fail, info}`。`cost` は画面の MP / HP 欄の値 |
 | `lore` | モンスターの思い出を表示したとき（注視の `r`、`/`、`~6`、ギルド）。`lore: {race_id, name, text}`。`text` は画面に書かれる思い出の全文 |
 
@@ -337,12 +338,17 @@ terrain_bits:
 
 | キー | 変更内容 |
 | --- | --- |
-| `grid_map.palette[][1]`（`flag_bits`） | 予約値 `0` → 地形記号の照明状態（`0` 通常 / `1` 光源に照らされている / `2` 暗い） |
+| `grid_map.palette[][1]`（`flag_bits`） | 予約値 `0` → 地形の照明記号番号（`0` 通常記号 / `1` 照明記号 / `2` 暗所記号）。同じ見た目の区分は統合し、実際の照明状態は表さない。単色表示では文字だけで比較 |
 | `messages`（JSONL） | 新着が32件を超えても切り捨てない。新着の数え方を履歴の件数から追加行の累計に変更（履歴が上限に達しても取りこぼさない） |
 | 所持品等の `weapon_proficiency` | `show_actual_value` が有効な場合だけ出力（常時の値は `weapon_proficiency_rank`） |
 | `knowledge` の `weapon_exp[].exp` / `max` | `show_actual_value` が有効な場合だけ出力 |
 | `knowledge` の `skill_exp[].exp` | `show_actual_value` が有効な場合だけ出力し、画面と同じく上限で切り詰める。`max` と `rank` を追加 |
 | `knowledge` の `spell_exp[].exp` | `show_actual_value` が有効な場合だけ出力。`max`（達人の値）を追加。`masked` は画面と同じく第1領域の必殺剣だけ |
+| `knowledge` の `weapon_exp` / `skill_exp` / `spell_exp` | `cheat_xtra` が有効な場合は、一覧末尾の生の経験値を別の `debug_exp` に出力。通常の `exp` の上限処理や必殺剣のマスクとは独立 |
+| `player.melee.main_hand_to_h` / `sub_hand_to_h` / `main_hand_to_d` / `sub_hand_to_d` | 内部補正からキャラクター画面に出る最終補正へ変更。攻撃できない手は `null` |
+| `character.ranged.to_h_b` | 内部の射撃補正から、`displayed_shooting.to_h` と同じ画面の最終補正へ変更 |
+| `player.melee.*_hand_blows` | 攻撃できない手は `0`。画面の追加攻撃回数を `mutation_blows` に出力 |
+| `character.melee.expected_damage_x100` / `expected_damage_per_round_x100` | 削除。画面と同じラウンド平均ダメージの整数2個を `expected_damage_per_round` に出力（`nil!` 表示なら `null`）。`damage_nil` と攻撃回数3個の `blows` を追加 |
 | `knowledge` の `virtues[].value` | `show_actual_value` が無効なら `null` |
 | `knowledge` の `uniques_alive` / `uniques_dead` | チートオプション `cheat_know` が有効なら未見の種族も含める（画面と同じ） |
 
@@ -367,9 +373,10 @@ terrain_bits:
 6. `character.skills.*` を `character.skill_ratings.*` へ、`character.alignment` を `alignment_label` / `alignment_value` へ置き換える。
 7. 所持品等の `weapon_proficiency` が常にある前提をやめ、`weapon_proficiency_rank` を使う。
 8. `knowledge` の `weapon_exp` / `skill_exp` / `spell_exp` の `exp` / `max`、`virtues[].value` が欠ける・`null` になる場合に対応する。
-9. `grid_map.palette` の2番目の値を `CAVE_*` のビット列（`mark` / `cave_known` / `lite` / `view` …）として解読している箇所をやめ、照明状態（`0` / `1` / `2`）として読む。版2までは常に `0` だったので解読結果は全て偽だったが、版3のまま解読すると照らされた床が `mark`、暗い地形が `cave_known` と誤読される。
+9. `grid_map.palette` の2番目の値を `CAVE_*` のビット列（`mark` / `cave_known` / `lite` / `view` …）として解読している箇所をやめ、表示上の照明記号番号（`0` / `1` / `2`）として読む。同じ見た目の区分は統合されるので実際の照明状態は復元できない。版2までは常に `0` だったので解読結果は全て偽だったが、版3のまま解読すると照明記号が `mark`、暗所記号が `cave_known` と誤読される。
 10. JSONLの `messages` が1スナップショットで33件以上になり得る。
 11. 新しい `type`（`spell_list` / `power_list` / `lore`）と `knowledge` の分類（`monsters` / `kill_count`）を、未対応なら無視できるようにする（`player_turn` と取り違えない）。
+12. `player.melee` の命中・ダメージ修正と `character.ranged.to_h_b` は画面の最終値なので、武器修正や技能修正を再加算しない。攻撃できない手の `null` と、光速化中の `character.speed.base:null` を扱う。打撃回数は攻撃できない手が `0`。平均ダメージの旧 `*_x100` キーを廃止し、整数の `expected_damage_per_round` を読む（`damage_nil:true` なら `null`）。`blows` の3番目は突然変異の攻撃回数。
 
 ### quit はセーブしません
 

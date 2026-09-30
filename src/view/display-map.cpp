@@ -223,16 +223,27 @@ static int decide_visible_terrain_lighting(const PlayerType &player, const Pos2D
  * @brief 通常の地図描画で地形をどの照明状態の記号で描くかを返す
  * @param player プレイヤー情報
  * @param pos 階の中の座標
+ * @param monochrome 通常マップの最終描画で色を上書きする場合の色
  * @return 地形記号の照明状態 (F_LIT_STANDARD / F_LIT_LITE / F_LIT_DARK)。地形を表示しない座標は F_LIT_STANDARD
- * @details 地図描画とボット向けJSON出力が同じ判定を共有するために分けてある。
+ * @details 同じ色と文字を描く照明状態は最小の添字に統合し、表示で区別できない内部状態を公開しない。
  */
-int decide_map_terrain_lighting(const PlayerType &player, const Pos2D &pos)
+int decide_map_terrain_lighting(const PlayerType &player, const Pos2D &pos, tl::optional<uint8_t> monochrome)
 {
-    if (!is_map_terrain_visible(player, pos)) {
+    if (!is_map_terrain_visible(player, pos) || monochrome == TERM_DARK) {
         return F_LIT_STANDARD;
     }
 
-    return decide_visible_terrain_lighting(player, pos);
+    const auto lighting = decide_visible_terrain_lighting(player, pos);
+    const auto &symbols = player.current_floor_ptr->get_grid(pos).get_terrain(TerrainKind::MIMIC).symbol_configs;
+    const auto &displayed = symbols.at(lighting);
+    for (auto candidate = F_LIT_STANDARD; candidate < lighting; ++candidate) {
+        const auto &other = symbols.at(candidate);
+        if (other.character == displayed.character && (monochrome || other.color == displayed.color)) {
+            return candidate;
+        }
+    }
+
+    return lighting;
 }
 
 /*!

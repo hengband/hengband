@@ -536,7 +536,7 @@ struct GridSignatureHash {
     }
 };
 
-GridSignature make_grid_signature(const PlayerType &player, const Pos2D &pos, const Grid &source_grid)
+GridSignature make_grid_signature(PlayerType *player_ptr, const Pos2D &pos, const Grid &source_grid)
 {
     // Wire bit positions are append-only; keep tools/bot/README.md in sync.
     const auto &terrain = source_grid.get_terrain(TerrainKind::MIMIC);
@@ -561,12 +561,10 @@ GridSignature make_grid_signature(const PlayerType &player, const Pos2D &pos, co
         TerrainCharacteristics::UP_STAIRS,
         TerrainCharacteristics::WALL,
     } };
-    // Protocol 3: the slot carries the lighting variant the map draws the
-    // terrain with (F_LIT_STANDARD=0 / F_LIT_LITE=1 / F_LIT_DARK=2), decided by
-    // the same function as map_info(). That is exactly what the player reads
-    // off the tile colour (torch-lit, lit room in view, remembered/dark), and
-    // never raw CAVE_* bits.
-    const auto flag_bits = static_cast<std::int64_t>(decide_map_terrain_lighting(player, pos));
+    // Protocol 3 exposes only distinguishable lighting symbols. Variants that
+    // draw the same configured colour and character share a canonical index,
+    // so the selection cannot reveal otherwise invisible CAVE_* state.
+    const auto flag_bits = static_cast<std::int64_t>(decide_map_terrain_lighting(*player_ptr, pos, get_monochrome_display_color(player_ptr)));
     auto terrain_bits = std::int64_t{ 0 };
     for (std::size_t i = 0; i < terrain_flags.size(); ++i) {
         terrain_bits |= static_cast<std::int64_t>(has_terrain(terrain_flags[i])) << i;
@@ -673,7 +671,7 @@ nlohmann::json make_grid_map_json(PlayerType *player_ptr)
 
         const auto &terrain = source_grid.get_terrain(TerrainKind::MIMIC);
         const auto has_terrain = [&terrain](TerrainCharacteristics flag) { return terrain.flags.has(flag); };
-        const auto signature = make_grid_signature(player, pos, source_grid);
+        const auto signature = make_grid_signature(player_ptr, pos, source_grid);
         const auto next_palette_index = palette_indices.size();
         const auto [palette_it, inserted] = palette_indices.emplace(signature, next_palette_index);
         if (inserted) {
@@ -1568,6 +1566,9 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
             conquered_dungeon_ids.push_back(enum2i(dungeon_id));
         }
     }
+    const auto [main_to_h, main_to_d] = calc_displayed_melee_bonus(player_ptr, 0);
+    const auto [sub_to_h, sub_to_d] = calc_displayed_melee_bonus(player_ptr, 1);
+    const auto displayed_blows = calc_displayed_melee_blows(player_ptr);
     auto snapshot = nlohmann::json{
         { "type", "player_turn" },
         { "protocol_version", BOT_JSON_PROTOCOL_VERSION },
@@ -1616,13 +1617,16 @@ nlohmann::json make_snapshot(PlayerType *player_ptr, bool include_map = true,
                         // character sheet prints (numbers only under show_actual_value).
                         // The two-weapon / shield proficiencies moved to knowledge "skill_exp".
                         { "skill_ratings", make_skill_ratings_json(player_ptr) },
+                        // Hit/damage bonuses are the displayed totals, not the
+                        // internal components that could reveal raw skill values.
                         { "melee", {
-                                       { "main_hand_blows", player.num_blow[0] },
-                                       { "sub_hand_blows", player.num_blow[1] },
-                                       { "main_hand_to_h", player.dis_to_h[0] },
-                                       { "sub_hand_to_h", player.dis_to_h[1] },
-                                       { "main_hand_to_d", player.dis_to_d[0] },
-                                       { "sub_hand_to_d", player.dis_to_d[1] },
+                                       { "main_hand_blows", displayed_blows[0] },
+                                       { "sub_hand_blows", displayed_blows[1] },
+                                       { "mutation_blows", displayed_blows[2] },
+                                       { "main_hand_to_h", can_attack_with_main_hand(player_ptr) ? nlohmann::json(main_to_h) : nlohmann::json(nullptr) },
+                                       { "sub_hand_to_h", can_attack_with_sub_hand(player_ptr) ? nlohmann::json(sub_to_h) : nlohmann::json(nullptr) },
+                                       { "main_hand_to_d", can_attack_with_main_hand(player_ptr) ? nlohmann::json(main_to_d) : nlohmann::json(nullptr) },
+                                       { "sub_hand_to_d", can_attack_with_sub_hand(player_ptr) ? nlohmann::json(sub_to_d) : nlohmann::json(nullptr) },
                                    } },
                         { "status", make_player_status_json(*player.effects()) },
                         { "stats", make_player_stats_json(player) },
@@ -1889,6 +1893,7 @@ nlohmann::json make_character_json(PlayerType *player_ptr)
     std::array<int, 2> damage{};
     std::array<int, 2> to_h{};
     calc_player_two_hands(player_ptr, damage.data(), to_h.data());
+    const auto melee = calc_displayed_melee_statistics(player_ptr, damage.data());
     int shots = 0;
     int shot_frac = 0;
     const auto &bow = *player.inventory[INVEN_BOW];
@@ -1984,12 +1989,7 @@ nlohmann::json make_character_json(PlayerType *player_ptr)
         { "displayed_shooting", { { "to_h", bow_to_h }, { "to_d", bow_to_d } } },
         { "base_ac", player.dis_ac },
         { "ac_bonus", player.dis_to_a },
-        { "speed", {
-                       { "base", base_speed - temporary_speed },
-                       { "temporary", temporary_speed },
-                       { "lightspeed", player.lightspeed != 0 },
-                       { "riding", player.riding != 0 },
-                   } },
+        { "speed", make_bot_character_speed_json(base_speed, temporary_speed, player.lightspeed != 0, player.riding != 0) },
         { "exp", {
                      { "current", player.exp },
                      { "max", PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID) ? nlohmann::json(nullptr) : nlohmann::json(player.max_exp) },
@@ -2002,15 +2002,16 @@ nlohmann::json make_character_json(PlayerType *player_ptr)
         { "stat_modifiers", std::move(stat_modifiers) },
         { "curse_marks", std::move(curse_marks) },
         { "ranged", {
-                        { "to_h_b", player.to_h_b },
+                        { "to_h_b", bow_to_h },
                         { "shots", shots },
                         { "shot_frac", shot_frac },
                         { "shooting_multiplier", shooting_multiplier },
                         { "see_infra", player.see_infra },
                     } },
         { "melee", {
-                       { "expected_damage_x100", { damage[0], damage[1] } },
-                       { "expected_damage_per_round_x100", { player.num_blow[0] * damage[0], player.num_blow[1] * damage[1] } },
+                       { "blows", melee.blows },
+                       { "expected_damage_per_round", melee.damage_nil ? nlohmann::json(nullptr) : nlohmann::json(melee.damage_per_round) },
+                       { "damage_nil", melee.damage_nil },
                        { "bare_hand", !has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND) },
                        { "two_handed", has_two_handed_weapons(player_ptr) },
                        { "monk_stance", enum2i(PlayerClass(player_ptr).get_monk_stance()) },
@@ -2198,10 +2199,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
                 const auto max = max_it->second[*sval];
                 auto row = nlohmann::json{ { "tval", enum2i(tval) }, { "sval", *sval }, { "name", to_json_utf8(baseitem.stripped_name()) },
                     { "at_max", exp >= max }, { "rank", enum2i(PlayerSkill::weapon_skill_rank(exp)) } };
-                if (show_actual_value) {
-                    row["exp"] = exp;
-                    row["max"] = max;
-                }
+                row.update(make_bot_proficiency_values_json(exp, max, show_actual_value, cheat_xtra));
                 rows.push_back(std::move(row));
             }
         }
@@ -2216,10 +2214,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
             const auto rank = (skill == PlayerSkillKindType::RIDING) ? PlayerSkill::riding_skill_rank(exp) : PlayerSkill::weapon_skill_rank(exp);
             auto row = nlohmann::json{ { "id", enum2i(skill) }, { "name", to_json_utf8(PlayerSkill::skill_name(skill)) },
                 { "at_max", exp >= max }, { "rank", enum2i(rank) } };
-            if (show_actual_value) {
-                row["exp"] = std::min(exp, max);
-                row["max"] = max;
-            }
+            row.update(make_bot_proficiency_values_json(exp, max, show_actual_value, cheat_xtra, true));
             rows.push_back(std::move(row));
         }
         result["skills"] = std::move(rows);
@@ -2283,10 +2278,7 @@ nlohmann::json make_knowledge_json(PlayerType *player_ptr, BotKnowledgeCategory 
                     { "rank", is_hissatsu ? nlohmann::json(nullptr) : nlohmann::json(enum2i(rank)) },
                     { "at_max", !is_hissatsu && (rank >= mark_rank) },
                     { "masked", is_hissatsu } };
-                if (show_actual_value && !is_hissatsu) {
-                    row["exp"] = exp;
-                    row["max"] = PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER);
-                }
+                row.update(make_bot_proficiency_values_json(exp, PlayerSkill::spell_exp_at(PlayerSkillRank::MASTER), show_actual_value && !is_hissatsu, cheat_xtra));
                 rows.push_back(std::move(row));
             }
             offset += 32;
@@ -2565,6 +2557,39 @@ nlohmann::json make_message_history_json(int count)
     }
 
     return messages;
+}
+
+/*!
+ * @brief 熟練度一覧の数値表示とデバッグ表示を別々に反映する
+ * @details 技能の通常表示は職業上限で切り詰めるが、cheat_xtra の末尾表示は生の値を使う。
+ * 必殺剣の通常表示がマスクされていても、デバッグ表示の可否は独立している。
+ */
+nlohmann::json make_bot_proficiency_values_json(int exp, int max, bool show_values, bool show_debug, bool cap_exp)
+{
+    auto result = nlohmann::json::object();
+    if (show_values) {
+        result["exp"] = cap_exp ? std::min(exp, max) : exp;
+        result["max"] = max;
+    }
+    if (show_debug) {
+        result["debug_exp"] = exp;
+    }
+    return result;
+}
+
+/*!
+ * @brief キャラクター画面の速度欄で表示される成分を出力する
+ * @details 光速化の表示は基礎速度を含まないためnullとし、乗馬時はプレイヤーの光速化を表示しない。
+ */
+nlohmann::json make_bot_character_speed_json(int total, int temporary, bool lightspeed, bool riding)
+{
+    const auto displayed_lightspeed = lightspeed && !riding;
+    return {
+        { "base", displayed_lightspeed ? nlohmann::json(nullptr) : nlohmann::json(total - temporary) },
+        { "temporary", temporary },
+        { "lightspeed", displayed_lightspeed },
+        { "riding", riding },
+    };
 }
 
 /*!

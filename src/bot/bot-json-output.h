@@ -74,6 +74,8 @@ struct BotPowerListRow {
 
 std::string to_json_utf8(std::string_view str);
 nlohmann::json make_message_history_json(int count);
+nlohmann::json make_bot_proficiency_values_json(int exp, int max, bool show_values, bool show_debug, bool cap_exp = false);
+nlohmann::json make_bot_character_speed_json(int total, int temporary, bool lightspeed, bool riding);
 nlohmann::json make_bot_json_snapshot(PlayerType *player_ptr, bool include_map = true);
 void output_bot_json_snapshot(PlayerType *player_ptr);
 void output_bot_json_store_snapshot(PlayerType *player_ptr, const StoreScreen &screen);

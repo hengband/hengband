@@ -238,7 +238,7 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
         put_str(format(_("Lv   %s   失率 効果", "Lv   %s   Fail Info"),
                     ((this->use_mind == MindKindType::BERSERKER) || (this->use_mind == MindKindType::NINJUTSU)) ? "HP" : "MP"),
             y, x + 35);
-        display_each_mind_chance();
+        display_each_mind_chance(only_browse);
         prt("", y + this->index + 1, x);
         return true;
     }
@@ -252,7 +252,7 @@ bool MindPowerGetter::display_minds_chance(const bool only_browse)
     return true;
 }
 
-void MindPowerGetter::display_each_mind_chance()
+void MindPowerGetter::display_each_mind_chance(bool only_browse)
 {
     const auto has_weapon_main = has_melee_weapon(this->player_ptr, INVEN_MAIN_HAND);
     const auto has_weapon_sub = has_melee_weapon(this->player_ptr, INVEN_SUB_HAND);
@@ -282,7 +282,7 @@ void MindPowerGetter::display_each_mind_chance()
         bot_rows.push_back({ I2A(this->index), 0, this->spell->name, this->spell->min_lev, mana_cost, chance, comment });
     }
 
-    output_bot_json_power_list_snapshot(this->player_ptr, "mind", bot_rows, 0, false);
+    output_bot_json_power_list_snapshot(this->player_ptr, "mind", bot_rows, 0, only_browse);
 }
 
 void MindPowerGetter::calculate_mind_chance(bool has_weapon_main, bool has_weapon_sub)

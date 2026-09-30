@@ -222,8 +222,9 @@ PERCENTAGE spell_chance(PlayerType *player_ptr, SPELL_IDX spell_id, RealmType us
  * @param y 表示メッセージ左上Y座標
  * @param x 表示メッセージ左上X座標
  * @param use_realm 魔法領域ID
+ * @param is_command_list 操作メニューの一覧ならtrue。サブウィンドウの再描画はスナップショットを出さない。
  */
-void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL_IDX *spell_ids, int num, TERM_LEN y, TERM_LEN x, RealmType use_realm)
+void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL_IDX *spell_ids, int num, TERM_LEN y, TERM_LEN x, RealmType use_realm, bool is_command_list)
 {
     if ((!PlayerRealm::is_magic(use_realm) && !PlayerRealm::is_technic(use_realm)) && AngbandWorld::get_instance().wizard) {
         msg_print(_("警告！ print_spell が領域なしに呼ばれた", "Warning! print_spells called with null realm"));
@@ -364,5 +365,7 @@ void print_spells(PlayerType *player_ptr, SPELL_IDX target_spell_id, const SPELL
     }
 
     prt("", y + i + 1, x);
-    output_bot_json_spell_list_snapshot(player_ptr, enum2i(use_realm), bot_rows);
+    if (is_command_list) {
+        output_bot_json_spell_list_snapshot(player_ptr, enum2i(use_realm), bot_rows);
+    }
 }

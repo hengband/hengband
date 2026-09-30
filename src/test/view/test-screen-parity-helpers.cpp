@@ -5,8 +5,10 @@
  * いずれもJSON出力が画面と同じ値を出すために画面側から切り出した関数である。
  */
 
+#include "bot/bot-json-output.h"
 #include "flavor/flavor-describer.h"
 #include "game-option/text-display-options.h"
+#include "mutation/mutation-flag-types.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "util/finalizer.h"
@@ -14,6 +16,7 @@
 #include "view/status-first-page.h"
 #include "window/main-window-stat-poster.h"
 #include <doctest/doctest.h>
+#include <nlohmann/json.hpp>
 
 TEST_CASE("Skill ratings are classified exactly as the character sheet prints them")
 {
@@ -73,4 +76,60 @@ TEST_CASE("Non-rod items show a single '(charging)' without the remaining turns"
     item.timeout = 123;
     CHECK(calc_displayed_charging_count(item) == 1);
     CHECK_FALSE(calc_displayed_lamp_turns(item).has_value());
+}
+
+TEST_CASE("Bot proficiency numbers follow independent normal and debug visibility")
+{
+    CHECK(make_bot_proficiency_values_json(1234, 1000, false, false).empty());
+    const auto debug_only = make_bot_proficiency_values_json(1234, 1000, false, true);
+    CHECK(debug_only.at("debug_exp") == 1234);
+    CHECK_FALSE(debug_only.contains("exp"));
+    CHECK_FALSE(debug_only.contains("max"));
+    const auto normal = make_bot_proficiency_values_json(1234, 1000, true, false);
+    CHECK(normal.at("exp") == 1234);
+    CHECK(normal.at("max") == 1000);
+    CHECK_FALSE(normal.contains("debug_exp"));
+    const auto capped = make_bot_proficiency_values_json(1234, 1000, true, true, true);
+    CHECK(capped.at("exp") == 1000);
+    CHECK(capped.at("debug_exp") == 1234);
+    const auto masked = make_bot_proficiency_values_json(1234, 1000, false, true, true);
+    CHECK_FALSE(masked.contains("exp"));
+    CHECK(masked.at("debug_exp") == 1234);
+}
+
+TEST_CASE("Bot character speed hides a base value during lightspeed and ignores it while riding")
+{
+    const auto normal = make_bot_character_speed_json(25, 10, false, false);
+    CHECK(normal.at("base") == 15);
+    CHECK(normal.at("temporary") == 10);
+    CHECK_FALSE(normal.at("lightspeed").get<bool>());
+    const auto lightspeed = make_bot_character_speed_json(99, 99, true, false);
+    CHECK(lightspeed.at("base").is_null());
+    CHECK(lightspeed.at("temporary") == 99);
+    CHECK(lightspeed.at("lightspeed").get<bool>());
+    const auto riding = make_bot_character_speed_json(25, 10, true, true);
+    CHECK(riding.at("base") == 15);
+    CHECK_FALSE(riding.at("lightspeed").get<bool>());
+    CHECK(riding.at("riding").get<bool>());
+}
+
+TEST_CASE("Displayed melee rounds hide inactive hands and discard fractional damage")
+{
+    PlayerType player;
+    player.num_blow[0] = 3;
+    player.num_blow[1] = 1;
+    const int damage[2] = { 125, 734 };
+    const auto melee = calc_displayed_melee_statistics(&player, damage);
+    CHECK(melee.blows[0] == 3);
+    CHECK(melee.blows[1] == 0);
+    CHECK(melee.blows[2] == 0);
+    CHECK(melee.damage_per_round[0] == 3);
+    CHECK(melee.damage_per_round[1] == 0);
+    CHECK_FALSE(melee.damage_nil);
+    for (const auto mutation : { PlayerMutationType::HORNS, PlayerMutationType::SCOR_TAIL, PlayerMutationType::BEAK, PlayerMutationType::TRUNK, PlayerMutationType::TENTACLES }) {
+        player.muta.set(mutation);
+    }
+    CHECK(calc_displayed_melee_blows(&player)[2] == 5);
+    const int zero_damage[2] = { 0, 0 };
+    CHECK(calc_displayed_melee_statistics(&player, zero_damage).damage_nil);
 }

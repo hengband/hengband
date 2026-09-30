@@ -308,13 +308,10 @@ std::vector<SkillRatingSource> calc_skill_rating_sources(PlayerType *player_ptr)
 }
 
 /*!
- * @brief キャラ基本情報及び技能値をメインウィンドウに表示する
+ * @brief キャラクター画面の主手・副手・突然変異の攻撃回数を求める
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param damage 打撃修正
- * @param shots 射撃回数
- * @param shot_frac 射撃速度
  */
-static void display_first_page(PlayerType *player_ptr, int *damage, int shots, int shot_frac)
+std::array<int, 3> calc_displayed_melee_blows(PlayerType *player_ptr)
 {
     int muta_att = 0;
     if (player_ptr->muta.has(PlayerMutationType::HORNS)) {
@@ -333,8 +330,25 @@ static void display_first_page(PlayerType *player_ptr, int *damage, int shots, i
         muta_att++;
     }
 
-    int blows1 = can_attack_with_main_hand(player_ptr) ? player_ptr->num_blow[0] : 0;
-    int blows2 = can_attack_with_sub_hand(player_ptr) ? player_ptr->num_blow[1] : 0;
+    return std::array<int, 3>{ { can_attack_with_main_hand(player_ptr) ? player_ptr->num_blow[0] : 0,
+        can_attack_with_sub_hand(player_ptr) ? player_ptr->num_blow[1] : 0, muta_att } };
+}
+
+/*!
+ * @brief 画面とJSONで共有する打撃回数・整数のラウンド平均ダメージを求める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param damage calc_player_two_hands() が返す100倍精度のダメージ
+ */
+DisplayedMeleeStatistics calc_displayed_melee_statistics(PlayerType *player_ptr, const int *damage)
+{
+    const auto blows = calc_displayed_melee_blows(player_ptr);
+    return { blows, std::array<int, 2>{ { blows[0] * damage[0] / 100, blows[1] * damage[1] / 100 } }, (damage[0] + damage[1]) == 0 };
+}
+
+static void display_first_page(PlayerType *player_ptr, int *damage, int shots, int shot_frac)
+{
+    const auto melee = calc_displayed_melee_statistics(player_ptr, damage);
+    const auto [blows1, blows2, muta_att] = melee.blows;
     for (const auto &source : calc_skill_rating_sources(player_ptr)) {
         const auto &[desc, color] = describe_skill_rating(source.value, source.divisor);
         display_player_one_line(source.entry, desc, color);
@@ -349,10 +363,10 @@ static void display_first_page(PlayerType *player_ptr, int *damage, int shots, i
     display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
 
     std::string desc;
-    if ((damage[0] + damage[1]) == 0) {
+    if (melee.damage_nil) {
         desc = "nil!";
     } else {
-        desc = format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
+        desc = format("%d+%d", melee.damage_per_round[0], melee.damage_per_round[1]);
     }
 
     display_player_one_line(ENTRY_AVG_DMG, desc, TERM_L_BLUE);

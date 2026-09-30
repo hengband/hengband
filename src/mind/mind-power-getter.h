@@ -37,7 +37,7 @@ private:
     bool decide_mind_choice(std::string_view prompt, const bool only_browse);
     bool interpret_mind_key_input(const bool only_browse);
     bool display_minds_chance(const bool only_browse);
-    void display_each_mind_chance();
+    void display_each_mind_chance(bool only_browse);
     void calculate_mind_chance(bool has_weapon_main, bool has_weapon_sub);
     void calculate_ki_chance(bool has_weapon_main, bool has_weapon_sub);
     void add_ki_chance();
