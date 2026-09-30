@@ -491,13 +491,20 @@ void set_virtue(PlayerType *player_ptr, Virtue virtue_id, int amount)
  */
 std::string describe_virtue(PlayerType *player_ptr, int v_nr)
 {
-    int tester = player_ptr->virtues[v_nr];
-    const auto &vir_name = virtue_names.at(player_ptr->vir_types[v_nr]);
+    const auto vir_type = player_ptr->vir_types[v_nr];
+    if ((vir_type <= Virtue::NONE) || (vir_type >= Virtue::MAX)) {
+        return format(_("おっと。%sの情報なし。", "Oops. No info about %s."), "");
+    }
+
+    const auto name_it = virtue_names.find(vir_type);
+    if (name_it == virtue_names.end()) {
+        return format(_("おっと。%sの情報なし。", "Oops. No info about %s."), "");
+    }
+
+    const auto &vir_name = name_it->second;
+    const auto tester = player_ptr->virtues[v_nr];
     const auto vir_val_str = format(" (%d)", tester);
     const auto vir_val = show_actual_value ? vir_val_str.data() : "";
-    if ((player_ptr->vir_types[v_nr] == Virtue::NONE) || (player_ptr->vir_types[v_nr] >= Virtue::MAX)) {
-        return format(_("おっと。%sの情報なし。", "Oops. No info about %s."), vir_name.data());
-    }
 
     if (tester < -100) {
         return format(_("[%s]の対極%s", "You are the polar opposite of %s.%s"), vir_name.data(), vir_val);

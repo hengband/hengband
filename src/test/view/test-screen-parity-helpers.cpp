@@ -5,6 +5,7 @@
  * いずれもJSON出力が画面と同じ値を出すために画面側から切り出した関数である。
  */
 
+#include "avatar/avatar.h"
 #include "bot/bot-json-output.h"
 #include "flavor/flavor-describer.h"
 #include "game-option/text-display-options.h"
@@ -53,6 +54,38 @@ TEST_CASE("Skill rating text carries the number only while show_actual_value is 
     const auto [shown_text, shown_color] = describe_skill_rating(60, 12);
     CHECK(shown_text == std::string(" 60-") + _("良い", "Good"));
     CHECK(shown_color == TERM_YELLOW);
+}
+
+TEST_CASE("Invalid virtue types use the no-information text without throwing")
+{
+    const auto restore = util::make_finalizer([saved = show_actual_value] { show_actual_value = saved; });
+    PlayerType player;
+    player.virtues[0] = 25;
+    for (const auto show_value : { false, true }) {
+        show_actual_value = show_value;
+        for (const auto type : { Virtue::NONE, static_cast<Virtue>(-1), Virtue::MAX, static_cast<Virtue>(static_cast<int>(Virtue::MAX) + 1) }) {
+            player.vir_types[0] = type;
+            CHECK(describe_virtue(&player, 0) == _("おっと。の情報なし。", "Oops. No info about ."));
+        }
+    }
+}
+
+TEST_CASE("Registered virtue descriptions retain their name and optional numeric value")
+{
+    const auto restore = util::make_finalizer([saved = show_actual_value] { show_actual_value = saved; });
+    PlayerType player;
+    player.virtues[0] = 25;
+    for (const auto &[type, name] : virtue_names) {
+        if (type == Virtue::NONE) {
+            continue;
+        }
+        player.vir_types[0] = type;
+        const auto expected = _("[" + name + "]の中徳者", "You are virtuous in " + name + ".");
+        show_actual_value = false;
+        CHECK(describe_virtue(&player, 0) == expected);
+        show_actual_value = true;
+        CHECK(describe_virtue(&player, 0) == expected + " (25)");
+    }
 }
 
 TEST_CASE("Status bar flags follow the timed effects the status bar draws")
