@@ -9,7 +9,6 @@
 #include <array>
 #include <fmt/format.h>
 #include <limits>
-#include <stdexcept>
 #include <utility>
 
 VaultReader::VaultReader(const nlohmann::json &data)
@@ -68,7 +67,7 @@ int VaultReader::read()
     }
     try {
         vault.name = utf8_to_local(this->data["name"].get_ref<const std::string &>());
-    } catch (const std::runtime_error &) {
+    } catch (const EncodingConversionError &) {
         return this->fail(PARSE_ERROR_INVALID_VALUE, "$.name", _("システムの文字コードに変換できません", "cannot be converted to the system encoding"));
     }
     int type;

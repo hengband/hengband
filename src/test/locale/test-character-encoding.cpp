@@ -6,7 +6,6 @@
 
 #include <doctest/doctest.h>
 
-#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -211,7 +210,7 @@ TEST_CASE("utf8_to_sys and utf8_to_local reject a string with an embedded NUL")
 {
     // 途中の '\0' より後ろが黙って欠けないよう、不正な入力として変換しない
     CHECK_FALSE(utf8_to_sys("a\0b"sv).has_value());
-    CHECK_THROWS_AS(utf8_to_local("a\0b"sv), std::runtime_error);
+    CHECK_THROWS_AS(utf8_to_local("a\0b"sv), EncodingConversionError);
 }
 
 #ifdef EUC
@@ -287,7 +286,7 @@ TEST_CASE("utf8_to_local replaces JIS X 0212 characters with question marks")
 
 TEST_CASE("utf8_to_local throws on invalid UTF-8")
 {
-    CHECK_THROWS_AS(utf8_to_local("\xff"sv), std::runtime_error);
+    CHECK_THROWS_AS(utf8_to_local("\xff"sv), EncodingConversionError);
 }
 
 #endif
