@@ -32,12 +32,12 @@
 #include "world/world.h"
 
 /*!
- * @brief プレイヤーの打撃能力修正を表示する
+ * @brief キャラクター画面に表示する打撃の命中・ダメージ修正を求める
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param hand 武器の装備部位ID
- * @param hand_entry 項目ID
+ * @param hand 武器の手 (0: 利き手、1: 反対の手)
+ * @return 表示する命中修正とダメージ修正
  */
-static void display_player_melee_bonus(PlayerType *player_ptr, int hand, int hand_entry)
+std::pair<int, int> calc_displayed_melee_bonus(PlayerType *player_ptr, int hand)
 {
     HIT_PROB show_tohit = player_ptr->dis_to_h[hand];
     int show_todam = player_ptr->dis_to_d[hand];
@@ -51,8 +51,19 @@ static void display_player_melee_bonus(PlayerType *player_ptr, int hand, int han
     }
 
     show_tohit += player_ptr->skill_thn / BTH_PLUS_ADJ;
+    return { static_cast<int>(show_tohit), show_todam };
+}
 
-    const auto buf = format("(%+d,%+d)", (int)show_tohit, (int)show_todam);
+/*!
+ * @brief プレイヤーの打撃能力修正を表示する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param hand 武器の装備部位ID
+ * @param hand_entry 項目ID
+ */
+static void display_player_melee_bonus(PlayerType *player_ptr, int hand, int hand_entry)
+{
+    const auto [show_tohit, show_todam] = calc_displayed_melee_bonus(player_ptr, hand);
+    const auto buf = format("(%+d,%+d)", show_tohit, show_todam);
     if (!has_melee_weapon(player_ptr, INVEN_MAIN_HAND) && !has_melee_weapon(player_ptr, INVEN_SUB_HAND)) {
         display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
     } else if (has_two_handed_weapons(player_ptr)) {
@@ -96,6 +107,17 @@ static void display_sub_hand(PlayerType *player_ptr)
  */
 static void display_bow_hit_damage(PlayerType *player_ptr)
 {
+    const auto [show_tohit, show_todam] = calc_displayed_bow_bonus(player_ptr);
+    display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
+}
+
+/*!
+ * @brief キャラクター画面に表示する射撃の命中・ダメージ修正を求める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 表示する命中修正とダメージ修正
+ */
+std::pair<int, int> calc_displayed_bow_bonus(PlayerType *player_ptr)
+{
     const auto &item = *player_ptr->inventory[INVEN_BOW];
     auto show_tohit = player_ptr->dis_to_h_b;
     auto show_todam = 0;
@@ -122,7 +144,7 @@ static void display_bow_hit_damage(PlayerType *player_ptr)
     }
 
     show_tohit += player_ptr->skill_thb / BTH_PLUS_ADJ;
-    display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
+    return { show_tohit, show_todam };
 }
 
 /*!
@@ -207,6 +229,21 @@ static int calc_temporary_speed(PlayerType *player_ptr)
     }
 
     return tmp_speed;
+}
+
+/*!
+ * @brief キャラクター画面に表示する速度を求める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 表示上の速度 (探索中の補正込み) と一時的な速度変化量
+ */
+std::pair<int, int> calc_displayed_speed(PlayerType *player_ptr)
+{
+    int base_speed = player_ptr->pspeed - STANDARD_SPEED;
+    if (player_ptr->action == ACTION_SEARCH) {
+        base_speed += 10;
+    }
+
+    return { base_speed, calc_temporary_speed(player_ptr) };
 }
 
 /*!
@@ -322,13 +359,8 @@ void display_player_middle(PlayerType *player_ptr)
     display_shoot_magnification(player_ptr);
     display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", player_ptr->dis_ac, player_ptr->dis_to_a), TERM_L_BLUE);
 
-    int base_speed = player_ptr->pspeed - STANDARD_SPEED;
-    if (player_ptr->action == ACTION_SEARCH) {
-        base_speed += 10;
-    }
-
+    const auto [base_speed, tmp_speed] = calc_displayed_speed(player_ptr);
     TERM_COLOR attr = decide_speed_color(player_ptr, base_speed);
-    int tmp_speed = calc_temporary_speed(player_ptr);
     display_player_speed(player_ptr, attr, base_speed, tmp_speed);
     display_player_exp(player_ptr);
     display_player_one_line(ENTRY_GOLD, format("%d", player_ptr->au), TERM_L_GREEN);

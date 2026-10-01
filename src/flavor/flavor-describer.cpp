@@ -334,20 +334,44 @@ static std::string describe_charges_staff_wand(const ItemEntity &item)
     return format(" (%s%d%s)", staff_num.data(), item.pval, charge_str);
 }
 
-static std::string describe_charges_rod(const ItemEntity &item)
+/*!
+ * @brief アイテム表記の「充填中」表示を返す
+ * @param item アイテム
+ * @return 表記が「充填中」を含まないなら0、含むなら充填中と表示される本数 (本数を表記しない場合は1)
+ * @details 鑑定済みの場合の表記と同じ判定。残りターン数そのものはプレイヤーには表示されない。
+ */
+int calc_displayed_charging_count(const ItemEntity &item)
 {
+    if (item.bi_key.tval() != ItemKindType::ROD) {
+        return item.timeout ? 1 : 0;
+    }
+
     if (item.timeout <= 0) {
-        return "";
+        return 0;
     }
 
     if (item.number <= 1) {
-        return _("(充填中)", " (charging)");
+        return 1;
     }
 
     const auto timeout_per_one = item.get_baseitem_pval();
     auto num_of_charging = (item.timeout + (timeout_per_one - 1)) / timeout_per_one;
     if (num_of_charging > item.number) {
         num_of_charging = item.number;
+    }
+
+    return num_of_charging;
+}
+
+static std::string describe_charges_rod(const ItemEntity &item)
+{
+    const auto num_of_charging = calc_displayed_charging_count(item);
+    if (num_of_charging == 0) {
+        return "";
+    }
+
+    if (item.number <= 1) {
+        return _("(充填中)", " (charging)");
     }
 
     return format(" (%d%s)", num_of_charging, _("本 充填中", " charging"));
@@ -394,17 +418,33 @@ static std::string describe_pval(const ItemEntity &item)
     return format(" (%+d%s)", item.pval, pval_type.data());
 }
 
-static std::string describe_lamp_life(const ItemEntity &item)
+/*!
+ * @brief アイテム表記に出る光源の寿命ターン数を返す
+ * @param item アイテム
+ * @return 表記される寿命ターン数。寿命を表記しないアイテムならnullopt
+ * @details 鑑定済みの場合の表記と同じ判定。
+ */
+tl::optional<int> calc_displayed_lamp_turns(const ItemEntity &item)
 {
     const auto &bi_key = item.bi_key;
     if ((bi_key.tval() != ItemKindType::LITE) || (item.is_fixed_artifact() || (bi_key.sval() == SV_LITE_FEANOR))) {
-        return "";
+        return tl::nullopt;
     }
 
     const auto fuel_magnification = item.ego_idx == EgoType::LITE_LONG ? 2 : 1;
+    return fuel_magnification * item.fuel;
+}
+
+static std::string describe_lamp_life(const ItemEntity &item)
+{
+    const auto turns = calc_displayed_lamp_turns(item);
+    if (!turns) {
+        return "";
+    }
+
     std::stringstream ss;
     ss << _("(", " (with ")
-       << fuel_magnification * item.fuel
+       << *turns
        << _("ターンの寿命)", " turns of light)");
 
     return ss.str();

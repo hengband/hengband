@@ -438,7 +438,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
                 menu_line -= num;
             }
             /* Display a list of spells */
-            print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm);
+            print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm, true);
             if (should_redraw_cursor) {
                 continue;
             }
@@ -451,7 +451,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
                     screen_save();
 
                     /* Display a list of spells */
-                    print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm);
+                    print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm, true);
                 }
 
                 /* Hide the list */
@@ -642,7 +642,7 @@ void do_cmd_browse(PlayerType *player_ptr)
             }
 
             /* Display a list of spells */
-            print_spells(player_ptr, 0, spells.data(), spells.size(), 1, 15, use_realm);
+            print_spells(player_ptr, 0, spells.data(), spells.size(), 1, 15, use_realm, true);
 
             /* Notify that there's nothing to see, and wait. */
             if (use_realm == RealmType::HISSATSU) {

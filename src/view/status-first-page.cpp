@@ -142,22 +142,15 @@ static bool calc_weapon_one_hand(ItemEntity *o_ptr, int hand, int *damage, int *
 }
 
 /*!
- * @brief 技能ランクの表示基準を定める
- * Returns a "rating" of x depending on y
+ * @brief 技能値を評価段階に分類する
  * @param x 技能値
  * @param y 技能値に対するランク基準比
- * @return スキル レベルのテキスト説明とその説明のカラー インデックスのペア
+ * @return 評価段階と、伝説的の場合に表示する段位 (伝説的以外は0)
  */
-static std::pair<std::string, TERM_COLOR> likert(int x, int y)
+std::pair<SkillRating, int> classify_skill_rating(int x, int y)
 {
-    std::string desc;
-
-    if (show_actual_value) {
-        desc = format("%3d-", x);
-    }
-
     if (x < 0) {
-        return make_pair(desc.append(_("最低", "Very Bad")), TERM_L_DARK);
+        return { SkillRating::VERY_BAD, 0 };
     }
 
     if (y <= 0) {
@@ -166,43 +159,75 @@ static std::pair<std::string, TERM_COLOR> likert(int x, int y)
 
     switch ((x / y)) {
     case 0:
-    case 1: {
-        return make_pair(desc.append(_("悪い", "Bad")), TERM_RED);
-    }
-    case 2: {
-        return make_pair(desc.append(_("劣る", "Poor")), TERM_L_RED);
-    }
+    case 1:
+        return { SkillRating::BAD, 0 };
+    case 2:
+        return { SkillRating::POOR, 0 };
     case 3:
-    case 4: {
-        return make_pair(desc.append(_("普通", "Fair")), TERM_ORANGE);
-    }
-    case 5: {
-        return make_pair(desc.append(_("良い", "Good")), TERM_YELLOW);
-    }
-    case 6: {
-        return make_pair(desc.append(_("大変良い", "Very Good")), TERM_YELLOW);
-    }
+    case 4:
+        return { SkillRating::FAIR, 0 };
+    case 5:
+        return { SkillRating::GOOD, 0 };
+    case 6:
+        return { SkillRating::VERY_GOOD, 0 };
     case 7:
-    case 8: {
-        return make_pair(desc.append(_("卓越", "Excellent")), TERM_L_GREEN);
-    }
+    case 8:
+        return { SkillRating::EXCELLENT, 0 };
     case 9:
     case 10:
     case 11:
     case 12:
-    case 13: {
-        return make_pair(desc.append(_("超越", "Superb")), TERM_GREEN);
-    }
+    case 13:
+        return { SkillRating::SUPERB, 0 };
     case 14:
     case 15:
     case 16:
-    case 17: {
+    case 17:
+        return { SkillRating::HEROIC, 0 };
+    default:
+        return { SkillRating::LEGENDARY, (((x / y) - 17) * 5) / 2 };
+    }
+}
+
+/*!
+ * @brief 技能ランクの表示基準を定める
+ * Returns a "rating" of x depending on y
+ * @param x 技能値
+ * @param y 技能値に対するランク基準比
+ * @return スキル レベルのテキスト説明とその説明のカラー インデックスのペア
+ */
+std::pair<std::string, TERM_COLOR> describe_skill_rating(int x, int y)
+{
+    std::string desc;
+
+    if (show_actual_value) {
+        desc = format("%3d-", x);
+    }
+
+    const auto [rating, legendary_level] = classify_skill_rating(x, y);
+    switch (rating) {
+    case SkillRating::VERY_BAD:
+        return make_pair(desc.append(_("最低", "Very Bad")), TERM_L_DARK);
+    case SkillRating::BAD:
+        return make_pair(desc.append(_("悪い", "Bad")), TERM_RED);
+    case SkillRating::POOR:
+        return make_pair(desc.append(_("劣る", "Poor")), TERM_L_RED);
+    case SkillRating::FAIR:
+        return make_pair(desc.append(_("普通", "Fair")), TERM_ORANGE);
+    case SkillRating::GOOD:
+        return make_pair(desc.append(_("良い", "Good")), TERM_YELLOW);
+    case SkillRating::VERY_GOOD:
+        return make_pair(desc.append(_("大変良い", "Very Good")), TERM_YELLOW);
+    case SkillRating::EXCELLENT:
+        return make_pair(desc.append(_("卓越", "Excellent")), TERM_L_GREEN);
+    case SkillRating::SUPERB:
+        return make_pair(desc.append(_("超越", "Superb")), TERM_GREEN);
+    case SkillRating::HEROIC:
         return make_pair(desc.append(_("英雄的", "Heroic")), TERM_BLUE);
-    }
-    default: {
-        desc.append(format(_("伝説的[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2)));
+    case SkillRating::LEGENDARY:
+    default:
+        desc.append(format(_("伝説的[%d]", "Legendary[%d]"), legendary_level));
         return make_pair(desc, TERM_VIOLET);
-    }
     }
 }
 
@@ -258,18 +283,36 @@ void calc_player_two_hands(PlayerType *player_ptr, int *damage, int *to_h)
 }
 
 /*!
- * @brief キャラ基本情報及び技能値をメインウィンドウに表示する
+ * @brief キャラクター画面1ページ目の技能評価に使う値と基準比を求める
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param xthb 武器等を含めた最終命中率
- * @param damage 打撃修正
- * @param shots 射撃回数
- * @param shot_frac 射撃速度
- * @param display_player_one_line 1行表示用のコールバック関数
+ * @return 表示順の技能評価の元値
+ * @details 画面表示とボット向けJSON出力が同じ値を使うために分けてある。
  */
-static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, int shots, int shot_frac)
+std::vector<SkillRatingSource> calc_skill_rating_sources(PlayerType *player_ptr)
 {
-    int xthn = player_ptr->skill_thn + (player_ptr->to_h_m * BTH_PLUS_ADJ);
+    const auto &bow = *player_ptr->inventory[INVEN_BOW];
+    const int xthb = player_ptr->skill_thb + ((player_ptr->to_h_b + bow.to_h) * BTH_PLUS_ADJ);
+    const int xthn = player_ptr->skill_thn + (player_ptr->to_h_m * BTH_PLUS_ADJ);
+    const int xstl = player_ptr->skill_stl;
+    return {
+        { ENTRY_SKILL_FIGHT, xthn, 12 },
+        { ENTRY_SKILL_SHOOT, xthb, 12 },
+        { ENTRY_SKILL_SAVING, player_ptr->skill_sav, 7 },
+        { ENTRY_SKILL_STEALTH, (xstl > 0) ? xstl : -1, 1 },
+        { ENTRY_SKILL_PERCEP, player_ptr->skill_fos, 6 },
+        { ENTRY_SKILL_SEARCH, player_ptr->skill_srh, 6 },
+        { ENTRY_SKILL_DISARM, player_ptr->skill_dis, 8 },
+        { ENTRY_SKILL_DEVICE, player_ptr->skill_dev, 6 },
+        { ENTRY_SKILL_DIG, player_ptr->skill_dig, 4 },
+    };
+}
 
+/*!
+ * @brief キャラクター画面の主手・副手・突然変異の攻撃回数を求める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
+std::array<int, 3> calc_displayed_melee_blows(PlayerType *player_ptr)
+{
     int muta_att = 0;
     if (player_ptr->muta.has(PlayerMutationType::HORNS)) {
         muta_att++;
@@ -287,42 +330,29 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
         muta_att++;
     }
 
-    int blows1 = can_attack_with_main_hand(player_ptr) ? player_ptr->num_blow[0] : 0;
-    int blows2 = can_attack_with_sub_hand(player_ptr) ? player_ptr->num_blow[1] : 0;
-    int xdis = player_ptr->skill_dis;
-    int xdev = player_ptr->skill_dev;
-    int xsav = player_ptr->skill_sav;
-    int xstl = player_ptr->skill_stl;
-    int xsrh = player_ptr->skill_srh;
-    int xfos = player_ptr->skill_fos;
-    int xdig = player_ptr->skill_dig;
+    return std::array<int, 3>{ { can_attack_with_main_hand(player_ptr) ? player_ptr->num_blow[0] : 0,
+        can_attack_with_sub_hand(player_ptr) ? player_ptr->num_blow[1] : 0, muta_att } };
+}
 
-    auto sd = likert(xthn, 12);
-    display_player_one_line(ENTRY_SKILL_FIGHT, sd.first, sd.second);
+/*!
+ * @brief 画面とJSONで共有する打撃回数・整数のラウンド平均ダメージを求める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param damage calc_player_two_hands() が返す100倍精度のダメージ
+ */
+DisplayedMeleeStatistics calc_displayed_melee_statistics(PlayerType *player_ptr, const int *damage)
+{
+    const auto blows = calc_displayed_melee_blows(player_ptr);
+    return { blows, std::array<int, 2>{ { blows[0] * damage[0] / 100, blows[1] * damage[1] / 100 } }, (damage[0] + damage[1]) == 0 };
+}
 
-    sd = likert(xthb, 12);
-    display_player_one_line(ENTRY_SKILL_SHOOT, sd.first, sd.second);
-
-    sd = likert(xsav, 7);
-    display_player_one_line(ENTRY_SKILL_SAVING, sd.first, sd.second);
-
-    sd = likert((xstl > 0) ? xstl : -1, 1);
-    display_player_one_line(ENTRY_SKILL_STEALTH, sd.first, sd.second);
-
-    sd = likert(xfos, 6);
-    display_player_one_line(ENTRY_SKILL_PERCEP, sd.first, sd.second);
-
-    sd = likert(xsrh, 6);
-    display_player_one_line(ENTRY_SKILL_SEARCH, sd.first, sd.second);
-
-    sd = likert(xdis, 8);
-    display_player_one_line(ENTRY_SKILL_DISARM, sd.first, sd.second);
-
-    sd = likert(xdev, 6);
-    display_player_one_line(ENTRY_SKILL_DEVICE, sd.first, sd.second);
-
-    sd = likert(xdig, 4);
-    display_player_one_line(ENTRY_SKILL_DIG, sd.first, sd.second);
+static void display_first_page(PlayerType *player_ptr, int *damage, int shots, int shot_frac)
+{
+    const auto melee = calc_displayed_melee_statistics(player_ptr, damage);
+    const auto [blows1, blows2, muta_att] = melee.blows;
+    for (const auto &source : calc_skill_rating_sources(player_ptr)) {
+        const auto &[desc, color] = describe_skill_rating(source.value, source.divisor);
+        display_player_one_line(source.entry, desc, color);
+    }
 
     if (!muta_att) {
         display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
@@ -333,10 +363,10 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
     display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
 
     std::string desc;
-    if ((damage[0] + damage[1]) == 0) {
+    if (melee.damage_nil) {
         desc = "nil!";
     } else {
-        desc = format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
+        desc = format("%d+%d", melee.damage_per_round[0], melee.damage_per_round[1]);
     }
 
     display_player_one_line(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
@@ -353,16 +383,12 @@ static void display_first_page(PlayerType *player_ptr, int xthb, int *damage, in
  */
 void display_player_various(PlayerType *player_ptr)
 {
-    ItemEntity *o_ptr;
-    o_ptr = player_ptr->inventory[INVEN_BOW].get();
-    int tmp = player_ptr->to_h_b + o_ptr->to_h;
-    int xthb = player_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);
     int shots = 0;
     int shot_frac = 0;
-    calc_player_shot_params(player_ptr, o_ptr, &shots, &shot_frac);
+    calc_player_shot_params(player_ptr, player_ptr->inventory[INVEN_BOW].get(), &shots, &shot_frac);
 
     int damage[2];
     int to_h[2];
     calc_player_two_hands(player_ptr, damage, to_h);
-    display_first_page(player_ptr, xthb, damage, shots, shot_frac);
+    display_first_page(player_ptr, damage, shots, shot_frac);
 }

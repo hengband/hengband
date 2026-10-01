@@ -94,6 +94,31 @@ static std::array<tr_type, 6> lite_flags = {
 };
 
 /*!
+ * @brief 特性画面の呪い欄に表示する装備品1つ分の記号を求める
+ * @param item 装備品
+ * @return '*' (永遠の呪い)、'+' (呪い)、'.' (呪いなし・未判明)
+ */
+char get_equipment_curse_mark(const ItemEntity &item)
+{
+    const auto is_known = item.is_known();
+    const auto is_sensed = is_known || item.has_identification_flag(IdentificationFlag::SENSE);
+    const auto flags = item.get_flags_known();
+    if ((flags.has(TR_ADD_L_CURSE) || flags.has(TR_ADD_H_CURSE)) && is_known) {
+        return '+';
+    }
+
+    if (item.curse_flags.has(CurseTraitType::PERMA_CURSE) && is_known) {
+        return '*';
+    }
+
+    if (item.curse_flags.has_any_of({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE }) && is_sensed) {
+        return '+';
+    }
+
+    return '.';
+}
+
+/*!
  * @brief 装備品の呪い状況文字列を作成する
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param flag 判定する特性フラグ
@@ -106,36 +131,13 @@ static void process_cursed_equipment_characteristics(PlayerType *player_ptr, uin
 {
     const auto range = (mode & DP_WP) ? INVEN_WEAPON_SLOTS : INVEN_WIELDING_SLOTS;
     for (const auto i_idx : range) {
-        auto *o_ptr = player_ptr->inventory[i_idx].get();
-        auto is_known = o_ptr->is_known();
-        auto is_sensed = is_known || o_ptr->has_identification_flag(IdentificationFlag::SENSE);
-        auto flags = o_ptr->get_flags_known();
-
-        if (flags.has(TR_ADD_L_CURSE) || flags.has(TR_ADD_H_CURSE)) {
-            if (is_known) {
-                char_stat.syms.emplace_back("+");
-                char_stat.has_res = true;
-                continue;
-            }
+        const auto mark = get_equipment_curse_mark(*player_ptr->inventory[i_idx]);
+        char_stat.syms.emplace_back(1, mark);
+        if (mark == '*') {
+            char_stat.has_imm = true;
+        } else if (mark == '+') {
+            char_stat.has_res = true;
         }
-
-        if (o_ptr->curse_flags.has(CurseTraitType::PERMA_CURSE)) {
-            if (is_known) {
-                char_stat.syms.emplace_back("*");
-                char_stat.has_imm = true;
-                continue;
-            }
-        }
-
-        if (o_ptr->curse_flags.has_any_of({ CurseTraitType::CURSED, CurseTraitType::HEAVY_CURSE, CurseTraitType::PERMA_CURSE })) {
-            if (is_sensed) {
-                char_stat.syms.emplace_back("+");
-                char_stat.has_res = true;
-                continue;
-            }
-        }
-
-        char_stat.syms.emplace_back(".");
     }
 
     char_stat.syms.emplace_back(".");

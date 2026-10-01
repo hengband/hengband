@@ -153,6 +153,100 @@ bool is_map_terrain_visible(const PlayerType &player, const Pos2D &pos)
 }
 
 /*!
+ * @brief 表示すると判定済みの地形を、どの照明状態の記号で描くかを決める
+ * @param player プレイヤー情報
+ * @param pos 階の中の座標
+ * @return 地形記号の照明状態 (F_LIT_STANDARD / F_LIT_LITE / F_LIT_DARK)
+ */
+static int decide_visible_terrain_lighting(const PlayerType &player, const Pos2D &pos)
+{
+    const auto &floor = *player.current_floor_ptr;
+    const auto &grid = floor.get_grid(pos);
+    const auto &world = AngbandWorld::get_instance();
+    const auto is_wild_mode = world.is_wild_mode();
+    const auto is_blind = player.effects()->blindness().is_active();
+    const auto has_nocto = player.see_nocto != 0;
+    const auto is_darkened = !has_nocto && grid.is_darkened();
+    const auto &terrain = grid.get_terrain(TerrainKind::MIMIC);
+    if (terrain.flags.has_not(TerrainCharacteristics::REMEMBER)) {
+        if (is_wild_mode) {
+            if (view_special_lite && !world.is_daytime()) {
+                return F_LIT_DARK;
+            }
+        } else if (view_special_lite) {
+            if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
+                if (view_yellow_lite) {
+                    return F_LIT_LITE;
+                }
+            } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
+                return F_LIT_DARK;
+            } else if (!(grid.info & CAVE_VIEW)) {
+                if (view_bright_lite) {
+                    return F_LIT_DARK;
+                }
+            }
+        }
+
+        return F_LIT_STANDARD;
+    }
+
+    if (is_wild_mode) {
+        if (view_granite_lite && (is_blind || !world.is_daytime())) {
+            return F_LIT_DARK;
+        }
+    } else if (is_darkened && !is_blind) {
+        if (view_granite_lite && view_bright_lite) {
+            return F_LIT_DARK;
+        }
+    } else if (view_granite_lite) {
+        if (is_blind) {
+            return F_LIT_DARK;
+        } else if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
+            if (view_yellow_lite) {
+                return F_LIT_LITE;
+            }
+        } else if (view_bright_lite) {
+            if (!(grid.info & CAVE_VIEW)) {
+                return F_LIT_DARK;
+            } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
+                return F_LIT_DARK;
+            } else if (terrain.flags.has_not(TerrainCharacteristics::LOS) && !floor.is_illuminated_at(player.get_position(), pos)) {
+                return F_LIT_DARK;
+            }
+        }
+    }
+
+    return F_LIT_STANDARD;
+}
+
+/*!
+ * @brief 通常の地図描画で地形をどの照明状態の記号で描くかを返す
+ * @param player プレイヤー情報
+ * @param pos 階の中の座標
+ * @param monochrome 通常マップの最終描画で色を上書きする場合の色
+ * @return 地形記号の照明状態 (F_LIT_STANDARD / F_LIT_LITE / F_LIT_DARK)。地形を表示しない座標は F_LIT_STANDARD
+ * @details 同じ色と文字を描く照明状態は最小の添字に統合し、表示で区別できない内部状態を公開しない。
+ */
+int decide_map_terrain_lighting(const PlayerType &player, const Pos2D &pos, tl::optional<uint8_t> monochrome)
+{
+    if (!is_map_terrain_visible(player, pos) || monochrome == TERM_DARK) {
+        return F_LIT_STANDARD;
+    }
+
+    const auto lighting = decide_visible_terrain_lighting(player, pos);
+    const auto &symbols = player.current_floor_ptr->get_grid(pos).get_terrain(TerrainKind::MIMIC).symbol_configs;
+    const auto &displayed = symbols.at(lighting);
+    for (auto candidate = F_LIT_STANDARD; candidate < lighting; ++candidate) {
+        const auto &other = symbols.at(candidate);
+        if (other.character == displayed.character && (monochrome || other.color == displayed.color)) {
+            return candidate;
+        }
+    }
+
+    return lighting;
+}
+
+/*!
  * @brief 指定した座標の地形・物体・モンスターの表示属性を取得する
  * @param player_ptr プレイヤー情報への参照ポインタ
  * @param pos 階の中の座標
@@ -163,63 +257,14 @@ DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos)
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(pos);
     const auto &terrains = TerrainList::get_instance();
-    const auto &world = AngbandWorld::get_instance();
-    const auto is_wild_mode = world.is_wild_mode();
-    const auto is_blind = player_ptr->effects()->blindness().is_active();
-    const auto has_nocto = player_ptr->see_nocto != 0;
-    const auto is_darkened = !has_nocto && grid.is_darkened();
     const auto tag_unsafe = (view_unsafe_grids && (grid.info & CAVE_UNSAFE)) ? TerrainTag::UNDETECTED : TerrainTag::NONE;
     const auto *terrain_mimic_ptr = &grid.get_terrain(TerrainKind::MIMIC);
     DisplaySymbol symbol_config;
     if (!is_map_terrain_visible(*player_ptr, pos)) {
         terrain_mimic_ptr = &terrains.get_terrain(tag_unsafe);
         symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_STANDARD);
-    } else if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::REMEMBER)) {
-        symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_STANDARD);
-        if (is_wild_mode) {
-            if (view_special_lite && !world.is_daytime()) {
-                symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
-            }
-        } else if (view_special_lite) {
-            if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
-                if (view_yellow_lite) {
-                    symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_LITE);
-                }
-            } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
-                symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
-            } else if (!(grid.info & CAVE_VIEW)) {
-                if (view_bright_lite) {
-                    symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
-                }
-            }
-        }
     } else {
-        symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_STANDARD);
-        if (is_wild_mode) {
-            if (view_granite_lite && (is_blind || !world.is_daytime())) {
-                symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
-            }
-        } else if (is_darkened && !is_blind) {
-            if (view_granite_lite && view_bright_lite) {
-                symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
-            }
-        } else if (view_granite_lite) {
-            if (is_blind) {
-                symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
-            } else if (grid.info & (CAVE_LITE | CAVE_MNLT)) {
-                if (view_yellow_lite) {
-                    symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_LITE);
-                }
-            } else if (view_bright_lite) {
-                if (!(grid.info & CAVE_VIEW)) {
-                    symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
-                } else if ((grid.info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW) {
-                    symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
-                } else if (terrain_mimic_ptr->flags.has_not(TerrainCharacteristics::LOS) && !floor.is_illuminated_at(player_ptr->get_position(), pos)) {
-                    symbol_config = terrain_mimic_ptr->symbol_configs.at(F_LIT_DARK);
-                }
-            }
-        }
+        symbol_config = terrain_mimic_ptr->symbol_configs.at(decide_visible_terrain_lighting(*player_ptr, pos));
     }
 
     if (feat_priority == -1) {
