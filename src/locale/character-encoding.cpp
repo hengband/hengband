@@ -482,21 +482,31 @@ tl::optional<std::string> sys_to_utf8(std::string_view str)
 
     return (len >= 0) ? tl::make_optional(std::move(utf8str.erase(len))) : tl::nullopt;
 #elif defined(SJIS) && defined(_WIN32)
-    /* SJIS(CP932) -> UTF-16 */
-    std::vector<WCHAR> utf16buf(str.length());
-    const auto utf16_len = MultiByteToWideChar(932, 0, str.data(), str.size(), utf16buf.data(), utf16buf.size());
+    // 長さ 0 を渡すと MultiByteToWideChar() が失敗するので、空文字列はそのまま返す
+    if (str.empty()) {
+        return tl::make_optional<std::string>();
+    }
+
+    // CP932 の半角カナは UTF-8 で3バイトになるなど、変換後の長さは一定の倍率に収まらないので、必要な長さを問い合わせてから変換する
+    // SJIS(CP932) -> UTF-16
+    const auto sjis_len = static_cast<int>(str.length());
+    const auto utf16_len = MultiByteToWideChar(932, 0, str.data(), sjis_len, nullptr, 0);
     if (utf16_len == 0) {
         return tl::nullopt;
     }
 
-    /* UTF-16 -> UTF-8 */
-    std::vector<char> utf8buf(str.length() * 2 + 1);
-    const auto utf8_len = WideCharToMultiByte(CP_UTF8, 0, utf16buf.data(), utf16_len, utf8buf.data(), utf8buf.size(), nullptr, nullptr);
+    std::wstring utf16_str(utf16_len, L'\0');
+    MultiByteToWideChar(932, 0, str.data(), sjis_len, utf16_str.data(), utf16_len);
+
+    // UTF-16 -> UTF-8
+    const auto utf8_len = WideCharToMultiByte(CP_UTF8, 0, utf16_str.data(), utf16_len, nullptr, 0, nullptr, nullptr);
     if (utf8_len == 0) {
         return tl::nullopt;
     }
 
-    return tl::make_optional<std::string>(utf8buf.data(), utf8_len);
+    std::string utf8_str(utf8_len, '\0');
+    WideCharToMultiByte(CP_UTF8, 0, utf16_str.data(), utf16_len, utf8_str.data(), utf8_len, nullptr, nullptr);
+    return tl::make_optional(std::move(utf8_str));
 #else
     return tl::nullopt;
 #endif
