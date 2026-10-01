@@ -13,6 +13,7 @@
 #include "game-option/birth-options.h"
 #include "game-option/map-screen-options.h"
 #include "info-reader/fixed-map-parser.h"
+#include "info-reader/parse-error-types.h"
 #include "info-reader/wilderness-reader.h"
 #include "market/building-initializer.h"
 #include "monster-floor/monster-generator.h"
@@ -42,6 +43,7 @@
 #include "system/player-type-definition.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "term/z-util.h"
 #include "util/bit-flags-calculator.h"
 #include "util/finalizer.h"
 #include "view/display-messages.h"
@@ -285,7 +287,10 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
             init_flags = INIT_CREATE_DUNGEON;
         }
 
-        parse_fixed_map(player_ptr, TOWN_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID);
+        if (parse_fixed_map(player_ptr, TOWN_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID) != PARSE_ERROR_NONE) {
+            quit(_("町の定義の読み込みに失敗しました", "Failed to load the town definition"));
+        }
+
         if (!is_corner && !is_border) {
             TownRecords::get_instance().set_visited(i2enum<TownId>(world.get_town_index() - 1));
         }
