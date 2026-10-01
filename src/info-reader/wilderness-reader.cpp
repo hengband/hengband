@@ -72,14 +72,15 @@ int WildernessReader::read(WildernessDefinition &definition) const
         return PARSE_ERROR_INVALID_TYPE;
     }
 
+    WildernessDefinition parsed;
     int version;
     if (const auto err = info_set_integer(get_json_value(this->data, "version"), version, true, Range(1, 1))) {
         return err;
     }
-    if (const auto err = info_set_integer(get_json_value(this->data, "width"), definition.width, true, Range(2, 32767))) {
+    if (const auto err = info_set_integer(get_json_value(this->data, "width"), parsed.width, true, Range(2, 32767))) {
         return err;
     }
-    if (const auto err = info_set_integer(get_json_value(this->data, "height"), definition.height, true, Range(2, 32767))) {
+    if (const auto err = info_set_integer(get_json_value(this->data, "height"), parsed.height, true, Range(2, 32767))) {
         return err;
     }
 
@@ -112,26 +113,26 @@ int WildernessReader::read(WildernessDefinition &definition) const
             }
             town.alias = std::move(alias);
         }
-        definition.towns.push_back(std::move(town));
+        parsed.towns.push_back(std::move(town));
     }
 
     const auto &maps = get_json_value(this->data, "maps");
     if (!maps.is_object()) {
         return maps.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE;
     }
-    if (const auto err = this->read_map(get_json_value(maps, "normal"), definition.width, definition.height, definition.normal)) {
+    if (const auto err = this->read_map(get_json_value(maps, "normal"), parsed.width, parsed.height, parsed.normal)) {
         return err;
     }
-    if (definition.normal.layout.size() != static_cast<size_t>(definition.height)) {
+    if (parsed.normal.layout.size() != static_cast<size_t>(parsed.height)) {
         return PARSE_ERROR_INVALID_VALUE;
     }
-    for (const auto &row : definition.normal.layout) {
-        if (row.size() != static_cast<size_t>(definition.width)) {
+    for (const auto &row : parsed.normal.layout) {
+        if (row.size() != static_cast<size_t>(parsed.width)) {
             return PARSE_ERROR_INVALID_VALUE;
         }
     }
 
-    if (const auto err = this->read_map(get_json_value(maps, "compact"), definition.width, definition.height, definition.compact)) {
+    if (const auto err = this->read_map(get_json_value(maps, "compact"), parsed.width, parsed.height, parsed.compact)) {
         return err;
     }
 
@@ -140,10 +141,11 @@ int WildernessReader::read(WildernessDefinition &definition) const
             return letter.town != 0 && !town_ids.contains(letter.town);
         });
     };
-    if (has_undefined_town(definition.normal) || has_undefined_town(definition.compact)) {
+    if (has_undefined_town(parsed.normal) || has_undefined_town(parsed.compact)) {
         return PARSE_ERROR_INVALID_VALUE;
     }
 
+    definition = std::move(parsed);
     return PARSE_ERROR_NONE;
 }
 
