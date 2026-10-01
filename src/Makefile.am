@@ -1510,6 +1510,7 @@ hengband_test_SOURCES = \
 	test/io/test-tokenizer.cpp \
 	test/load/test-angband-version-comparer.cpp \
 	test/locale/test-character-encoding.cpp \
+	test/main/test-init-error-messages-table.cpp \
 	test/monster-race/test-race-ability-mask.cpp \
 	test/mspell/test-mspell-projection-table.cpp \
 	test/mutation/test-mutation-roll-table.cpp \

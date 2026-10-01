@@ -22,6 +22,9 @@
     <Filter Include="locale">
       <UniqueIdentifier>{76b459ee-5ecd-44a7-b71a-ed5acafc02f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{3e3bfbaf-32fc-46d7-a1fc-51c277aaa757}</UniqueIdentifier>
+    </Filter>
     <Filter Include="monster-race">
       <UniqueIdentifier>{eb4b30d0-a9aa-492e-b43c-12d323e03a83}</UniqueIdentifier>
     </Filter>
@@ -105,6 +108,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp">
       <Filter>locale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\main\test-init-error-messages-table.cpp">
+      <Filter>main</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp">
       <Filter>monster-race</Filter>
