@@ -10,12 +10,12 @@
 #include "system/angband-exceptions.h"
 #include "system/angband.h"
 #include "view/display-messages.h"
+#include <algorithm>
 #include <vector>
 #ifdef _WIN32
 #define NOMINMAX
 #include <windows.h>
 #else
-#include <algorithm>
 #include <array>
 #include <iconv.h>
 #include <utility>
@@ -306,16 +306,13 @@ constexpr std::array<std::pair<std::string_view, std::string_view>, 2> MS_TO_JIS
  * Linux/UNIX環境(EUC-JP)ではUTF-8→EUC-JPの変換を行う前に該当するコードポイントの
  * 文字をLinux/UNIX環境のものに置き換えてから変換を行う。
  *
- * @param str コードポイントの置き換えを行う文字列へのポインタ
- * @param len 置き換えを行う範囲の長さ (バイト数)。途中に '\0' があっても、この長さまで置き換える
+ * @param str コードポイントの置き換えを行う文字列。途中に '\0' があっても、文字列の長さまで置き換える
  */
-static void ms_to_jis_unicode(char *str, size_t len)
+static void ms_to_jis_unicode(std::string &str)
 {
-    // 置き換えで長さは変わらないので、書き換えた後もこの範囲のまま検索を続けられる
-    const std::string_view view(str, len);
     for (const auto &[from, to] : MS_TO_JIS_CHARACTERS) {
-        for (auto pos = view.find(from); pos != std::string_view::npos; pos = view.find(from, pos + from.length())) {
-            std::copy(to.begin(), to.end(), str + pos);
+        for (auto pos = str.find(from); pos != std::string::npos; pos = str.find(from, pos + from.length())) {
+            str.replace(pos, from.length(), to);
         }
     }
 }
@@ -332,20 +329,21 @@ static void ms_to_jis_unicode(char *str, size_t len)
  * @return 変換に成功した場合変換後の文字列の長さを返す
  *         変換に失敗した場合-1を返す
  */
-int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len)
+int utf8_to_euc(const char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len)
 {
     static const auto cd = iconv_open("EUC-JP", "UTF-8");
     if (cd == reinterpret_cast<iconv_t>(-1)) {
         return -1;
     }
 
-    ms_to_jis_unicode(utf8_str, utf8_str_len);
+    std::string utf8(utf8_str, utf8_str_len);
+    ms_to_jis_unicode(utf8);
 
     // JIS X 0212 の文字は UTF-8 の2バイトが EUC-JP の3バイトになるので、'?' に置き換える前の変換結果は一時バッファで受ける
     std::vector<char> converted(utf8_str_len * 2);
     size_t inlen_left = utf8_str_len;
     size_t outlen_left = converted.size();
-    char *in = utf8_str;
+    char *in = utf8.data();
     char *out = converted.data();
 
     if (iconv(cd, &in, &inlen_left, &out, &outlen_left) == (size_t)-1) {
