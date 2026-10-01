@@ -98,6 +98,8 @@ bool is_utf8_str(std::string_view str)
 
 /*!
  * @brief 文字コードをSJISからEUCに変換する / Convert SJIS string to EUC string
+ * @details 上位ビットの立ったバイトはすべて2バイト文字の1バイト目として扱い、JIS X 0208 の文字だけを変換できる。
+ *          半角カナ (1バイトの A1-DF) と、1バイト目が F0 以上の文字 (ユーザー定義文字・IBM 拡張文字) は正しく変換できない。
  * @param str 変換する文字列のポインタ
  */
 void sjis2euc(char *str)
@@ -133,6 +135,8 @@ void sjis2euc(char *str)
 
 /*!
  * @brief 文字コードをEUCからSJISに変換する / Convert EUC string to SJIS string
+ * @details 上位ビットの立ったバイトはすべて2バイト文字の1バイト目として扱い、JIS X 0208 の文字だけを変換できる。
+ *          半角カナ (8E xx) と JIS X 0212 の文字 (8F xx xx) は正しく変換できない。
  * @param str 変換する文字列のポインタ
  */
 void euc2sjis(char *str)
