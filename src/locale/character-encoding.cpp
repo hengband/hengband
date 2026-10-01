@@ -16,8 +16,9 @@
 #include <windows.h>
 #else
 #include <algorithm>
+#include <array>
 #include <iconv.h>
-#include <initializer_list>
+#include <utility>
 #endif
 #endif
 
@@ -282,35 +283,17 @@ static bool is_ascii_str(const char *str)
 
 #if defined(EUC)
 
-// UTF-8 の文字列長は必ずしも3バイトとは限らないが、変愚蛮怒の仕様範囲では3固定.
-constexpr auto ENCODING_LENGTH = 3;
-class EncodingConverter {
-public:
-    EncodingConverter(const std::initializer_list<unsigned char> from, const std::initializer_list<unsigned char> to)
-        : from(from)
-        , to(to)
-    {
-    }
-
-    bool equals(const unsigned char *p) const
-    {
-        return std::equal(from.begin(), from.end(), p);
-    }
-
-    void replace(unsigned char *p) const
-    {
-        std::copy_n(to.begin(), ENCODING_LENGTH, p);
-    }
-
-private:
-    std::vector<unsigned char> from;
-    std::vector<unsigned char> to;
-};
-
-const std::vector<EncodingConverter> encoding_characters = {
-    { { 0xef, 0xbd, 0x9e }, { 0xe3, 0x80, 0x9c } }, /* FULLWIDTH TILDE -> WAVE DASH (全角チルダ → 波ダッシュ) */
-    { { 0xef, 0xbc, 0x8d }, { 0xe2, 0x88, 0x92 } }, /* FULLWIDTH HYPHEN-MINUS -> MINUS SIGN (全角ハイフン → マイナス記号) */
-};
+namespace {
+/*!
+ * @brief UTF-8 から EUC-JP に変換する前に置き換える文字 (置き換え前, 置き換え後) の UTF-8 のバイト列
+ * @details 置き換え前の文字はどちらも継続バイトにならない 0xEF で始まり、置き換え後のバイト列に 0xEF は無い。
+ * そのため、文字の途中から誤って一致したり、置き換えた結果がまた一致したりすることはない。
+ */
+constexpr std::array<std::pair<std::string_view, std::string_view>, 2> MS_TO_JIS_CHARACTERS = { {
+    { "\xef\xbd\x9e", "\xe3\x80\x9c" }, /* FULLWIDTH TILDE -> WAVE DASH (全角チルダ → 波ダッシュ) */
+    { "\xef\xbc\x8d", "\xe2\x88\x92" }, /* FULLWIDTH HYPHEN-MINUS -> MINUS SIGN (全角ハイフン → マイナス記号) */
+} };
+}
 
 /*!
  * @brief 受け取ったUTF-8文字列を調べ、特定のコードポイントの文字の置き換えを行う
@@ -328,20 +311,12 @@ const std::vector<EncodingConverter> encoding_characters = {
  */
 static void ms_to_jis_unicode(char *str, size_t len)
 {
+    // 置き換えで長さは変わらないので、書き換えた後もこの範囲のまま検索を続けられる
     const std::string_view view(str, len);
-    for (size_t i = 0; i < view.length();) {
-        // UTF-8 として不正なバイトや途中で切れた文字は 1 バイトずつ進め、終端を越えて読まないようにする
-        const auto byte_length = std::max(utf8_next_char_byte_length(view.substr(i)), 1);
-        if (byte_length == ENCODING_LENGTH) {
-            auto *p = reinterpret_cast<unsigned char *>(str + i);
-            for (const auto &converter : encoding_characters) {
-                if (converter.equals(p)) {
-                    converter.replace(p);
-                }
-            }
+    for (const auto &[from, to] : MS_TO_JIS_CHARACTERS) {
+        for (auto pos = view.find(from); pos != std::string_view::npos; pos = view.find(from, pos + from.length())) {
+            std::copy(to.begin(), to.end(), str + pos);
         }
-
-        i += byte_length;
     }
 }
 
