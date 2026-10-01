@@ -232,7 +232,7 @@ TEST_CASE("utf8_to_euc converts fullwidth tilde after an embedded NUL within the
     CHECK(std::string_view(euc, 4) == "a\0\xa1\xc1"sv);
 }
 
-TEST_CASE("utf8_to_euc does not read beyond the terminator of a truncated UTF-8 character")
+TEST_CASE("utf8_to_euc rejects a truncated UTF-8 character")
 {
     constexpr std::pair<std::string_view, std::string_view> truncated_chars[] = {
         { "E3", "\xe3"sv },
@@ -244,13 +244,10 @@ TEST_CASE("utf8_to_euc does not read beyond the terminator of a truncated UTF-8 
     for (const auto &[label, truncated] : truncated_chars) {
         CAPTURE(label);
 
-        // 終端の後ろに全角チルダを置き、終端を越えて読むとそれが置き換えられることで検出する。
-        // どの位置から読み進めても全角チルダの先頭に当たるよう、3つ続けて置く
-        const auto original = cat(truncated, "\0"sv, FULLWIDTH_TILDE_UTF8, FULLWIDTH_TILDE_UTF8, FULLWIDTH_TILDE_UTF8);
-        auto buf = original;
+        // 文字の途中で終端が来た文字列は、黙って捨てずに変換の失敗とする
+        const auto utf8 = cat(truncated, "\0"sv);
         char euc[16]{};
-        utf8_to_euc(buf.data(), truncated.length() + 1, euc, sizeof(euc));
-        CHECK(buf == original);
+        CHECK(utf8_to_euc(utf8.data(), utf8.length(), euc, sizeof(euc)) == -1);
     }
 }
 
