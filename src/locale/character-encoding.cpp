@@ -281,7 +281,7 @@ static bool is_ascii_str(const char *str)
     return true;
 }
 
-#if defined(EUC)
+#ifdef EUC
 
 namespace {
 /*!
@@ -320,9 +320,6 @@ static void ms_to_jis_unicode(char *str, size_t len)
     }
 }
 
-#endif
-
-#ifdef EUC
 /*!
  * @brief 文字列の文字コードをUTF-8からEUC-JPに変換する
  * @details 変愚蛮怒は全角文字を2バイト固定として扱うため、EUC-JP で3バイトになる JIS X 0212 の文字
