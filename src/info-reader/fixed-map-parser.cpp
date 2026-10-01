@@ -24,7 +24,6 @@
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
 #include "player/process-name.h"
-#include "system/angband-exceptions.h"
 #include "system/angband-system.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
@@ -374,9 +373,9 @@ static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp,
 }
 
 /*!
- * @brief 固定マップ (クエスト＆街＆広域マップ)をq_info、t_info、w_infoから読み込んでパースする
+ * @brief 町の定義 (TownDefinitionList.jsonc) から、現在の町の固定マップを読み込んでパースする
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param name ファイル名
+ * @param name 読み込む定義の名前。TOWN_DEFINITION_LIST 以外はエラー (PARSE_ERROR_GENERIC) を返す
  * @param ymin 詳細不明
  * @param xmin 詳細不明
  * @param ymax 詳細不明
@@ -412,54 +411,6 @@ parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, 
         return err;
     }
 
-    const auto path = path_build(ANGBAND_DIR_EDIT, name);
-    std::ifstream ifs(path);
-    if (!ifs) {
-        return PARSE_ERROR_GENERIC;
-    }
-
-    auto num = 0;
-    parse_error_type err = PARSE_ERROR_NONE;
-    bool bypass = false;
-    auto x = xmin;
-    auto y = ymin;
-    qtwg_type tmp_qg;
-    qtwg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, ymin, xmin, ymax, xmax, &y, &x);
-    std::string line;
-    while (std::getline(ifs, line)) {
-        num++;
-        line = utf8_to_local(line);
-        if (line.empty() || (std::isspace(static_cast<unsigned char>(line.front())) != 0) || line.starts_with('#')) {
-            continue;
-        }
-
-        if (line.starts_with("?:")) {
-            char f;
-            auto *s = line.data() + 2;
-            auto v = parse_fixed_map_expression(player_ptr, &s, &f);
-            bypass = v == "0";
-            continue;
-        }
-
-        if (bypass) {
-            continue;
-        }
-
-        qg_ptr->buf = line.data();
-        err = generate_fixed_map_floor(player_ptr, qg_ptr, parse_fixed_map);
-        if (err != PARSE_ERROR_NONE) {
-            const auto oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-            msg_print("Error {} ({}) at line {} of '{}'.", enum2i(err), oops, num, name);
-            msg_print(_("'{}'を解析中。", "Parsing '{}'."), line);
-            msg_erase();
-            break;
-        }
-    }
-
-    if (ifs.bad() || (ifs.fail() && !ifs.eof())) {
-        constexpr auto fmt = _("ファイルの読み込みに失敗しました ({})", "Failed to read file ({})");
-        THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string()));
-    }
-
-    return err;
+    // 固定マップの定義ファイルはすべて JSONC に移行し、読み込むのは町の定義だけになった
+    return PARSE_ERROR_GENERIC;
 }
