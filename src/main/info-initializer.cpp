@@ -11,7 +11,6 @@
 #include "info-reader/dungeon-reader.h"
 #include "info-reader/ego-reader.h"
 #include "info-reader/fixed-map-parser.h"
-#include "info-reader/general-parser.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/magic-reader.h"
@@ -24,7 +23,6 @@
 #include "info-reader/wilderness-reader.h"
 #include "io/files-util.h"
 #include "io/uid-checker.h"
-#include "main/init-error-messages-table.h"
 #include "object-enchant/object-ego.h"
 #include "player-info/class-info.h"
 #include "player/player-skill.h"
@@ -62,48 +60,6 @@ template <typename T>
 concept HasShrinkToFit = requires(T t) {
     t.shrink_to_fit();
 };
-
-/*!
- * @brief 各種設定データをlib/edit/のテキストから読み込み
- * Initialize the "*_info" array
- * @param filename ファイル名(拡張子txt)
- * @param head 処理に用いるヘッダ構造体
- * @param definition_list データ保管先の構造体ポインタ
- * @note
- * Note that we let each entry have a unique "name" and "text" string,
- * even if the string happens to be empty (everyone has a unique '\0').
- */
-template <typename DefinitionList>
-void init_info(std::string_view filename, DefinitionHashDataType dhdt, DefinitionList &definition_list, Parser parser, std::function<void()> retouch = nullptr)
-{
-    const auto path = path_build(ANGBAND_DIR_EDIT, filename);
-    auto ifs = std::ifstream(path);
-    if (!ifs) {
-        quit(fmt::format(_("'{}'ファイルをオープンできません。", "Cannot open '{}' file."), filename));
-    }
-
-    const auto &[error_code, error_line, line] = init_info_txt(ifs, dhdt, parser);
-    if (error_code != PARSE_ERROR_NONE) {
-        const auto oops = (((error_code > 0) && (error_code < PARSE_ERROR_MAX)) ? err_str[error_code] : _("未知の", "unknown"));
-#ifdef JP
-        msg_print("'{}'ファイルの {} 行目にエラー。", filename, error_line);
-#else
-        msg_print("Error {} at line {} of '{}'.", error_code, error_line, filename);
-#endif
-        msg_print(_("レコード {} は '{}' エラーがあります。", "Record {} contains a '{}' error."), error_idx, oops);
-        msg_print(_("構文 '{}'。", "Parsing '{}'."), line);
-        msg_erase();
-        quit(fmt::format(_("'{}'ファイルにエラー", "Error in '{}' file."), filename));
-    }
-
-    if constexpr (HasShrinkToFit<DefinitionList>) {
-        definition_list.shrink_to_fit();
-    }
-
-    if (retouch) {
-        retouch();
-    }
-}
 
 /*!
  * @brief 各種設定データをlib/edit/.jsoncから読み込み

@@ -359,8 +359,12 @@ int QuestReader::set_descriptions() const
         }
 
         const auto &text = get_json_value(description, "text");
-        read_string_lines(get_json_value(text, "ja"), block.lines_ja, true);
-        read_string_lines(get_json_value(text, "en"), block.lines_en, true);
+        try {
+            read_string_lines(get_json_value(text, "ja"), block.lines_ja, true);
+            read_string_lines(get_json_value(text, "en"), block.lines_en, true);
+        } catch (const EncodingConversionError &) {
+            return PARSE_ERROR_INVALID_VALUE;
+        }
 
         this->fixed_map.descriptions.push_back(std::move(block));
     }

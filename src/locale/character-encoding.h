@@ -2,6 +2,7 @@
 
 #include "system/h-basic.h"
 #include <cstdint>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <tl/optional.hpp>
@@ -11,6 +12,16 @@ enum class CharacterEncoding : uint8_t {
     US_ASCII = 1,
     EUC_JP = 2,
     SHIFT_JIS = 3,
+};
+
+/*!
+ * @brief 文字コードの変換に失敗したことを表す例外
+ * @details ファイルの読み込みの I/O エラー (std::runtime_error) などと区別し、読み込みエラーとして扱うために使う
+ */
+class EncodingConversionError : public std::runtime_error {
+public:
+    EncodingConversionError() = delete;
+    using std::runtime_error::runtime_error;
 };
 
 int utf8_next_char_byte_length(std::string_view str);
