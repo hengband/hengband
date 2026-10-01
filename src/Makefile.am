@@ -1500,6 +1500,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-wilderness-reader.cpp \
 	test/info-reader/test-info-reader-util.cpp \
 	test/info-reader/test-json-reader-util.cpp \
+	test/info-reader/test-quest-reader.cpp \
 	test/info-reader/test-skill-reader.cpp \
 	test/info-reader/test-town-definition-list-reader.cpp \
 	test/info-reader/test-town-map-reader.cpp \
