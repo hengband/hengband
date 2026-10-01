@@ -334,9 +334,9 @@ static void ms_to_jis_unicode(char *str, size_t len)
  */
 int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len)
 {
-    static iconv_t cd = nullptr;
-    if (!cd) {
-        cd = iconv_open("EUC-JP", "UTF-8");
+    static const auto cd = iconv_open("EUC-JP", "UTF-8");
+    if (cd == reinterpret_cast<iconv_t>(-1)) {
+        return -1;
     }
 
     ms_to_jis_unicode(utf8_str, utf8_str_len);
@@ -382,9 +382,9 @@ int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_b
  */
 int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t utf8_buf_len)
 {
-    static iconv_t cd = nullptr;
-    if (!cd) {
-        cd = iconv_open("UTF-8", "EUC-JP");
+    static const auto cd = iconv_open("UTF-8", "EUC-JP");
+    if (cd == reinterpret_cast<iconv_t>(-1)) {
+        return -1;
     }
 
     size_t inlen_left = euc_str_len;
