@@ -34,7 +34,7 @@ public:
     void emplace_tags();
 
 private:
-    friend class QuestReaderTerrainStateGuard;
+    friend class TerrainListTestAccess;
 
     TerrainList();
 

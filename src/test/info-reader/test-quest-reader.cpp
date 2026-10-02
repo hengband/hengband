@@ -13,37 +13,38 @@
 #include <doctest/doctest.h>
 #include <map>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
 
-// The quest legend initializes both terrain and trap from TerrainTag::NONE.
-// Keep the singleton's tag map and terrain entries unchanged for other tests.
-class QuestReaderTerrainStateGuard {
+// Temporarily change a terrain tag while preserving the singleton's other tags.
+class TerrainListTestAccess {
 public:
-    QuestReaderTerrainStateGuard()
+    TerrainListTestAccess(TerrainTag tag, short terrain_id)
         : terrains(TerrainList::get_instance())
-        , previous_size(terrains.size())
         , previous_tags(terrains.tags)
     {
         auto test_tags = previous_tags;
-        test_tags[TerrainTag::NONE] = static_cast<short>(previous_size);
-        terrains.resize(previous_size + 1);
+        test_tags[tag] = terrain_id;
         terrains.tags.swap(test_tags);
     }
 
-    QuestReaderTerrainStateGuard(const QuestReaderTerrainStateGuard &) = delete;
-    QuestReaderTerrainStateGuard &operator=(const QuestReaderTerrainStateGuard &) = delete;
+    TerrainListTestAccess(const TerrainListTestAccess &) = delete;
+    TerrainListTestAccess &operator=(const TerrainListTestAccess &) = delete;
 
-    ~QuestReaderTerrainStateGuard()
+    ~TerrainListTestAccess()
     {
         terrains.tags.swap(previous_tags);
-        terrains.resize(previous_size);
+    }
+
+    static std::map<TerrainTag, short> current_tags()
+    {
+        return TerrainList::get_instance().tags;
     }
 
 private:
     TerrainList &terrains;
-    size_t previous_size;
     std::map<TerrainTag, short> previous_tags;
 };
 
@@ -217,7 +218,8 @@ TEST_CASE("QuestReader rejects non-string flags without changing previous output
 
 TEST_CASE("QuestReader copies valid caveInfo flags into legend grids")
 {
-    QuestReaderTerrainStateGuard terrain_state;
+    // Legend parsing stores terrain IDs without dereferencing terrain entries.
+    TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
     auto data = make_quest_with_description("A lit room");
     data["legend"] = {
         { ".", { { "caveInfo", { "GLOW", "ROOM" } } } },
@@ -234,6 +236,28 @@ TEST_CASE("QuestReader copies valid caveInfo flags into legend grids")
     CHECK(fixed_map.legend.at('#').grid.cave_info == CAVE_MARK);
     CHECK(fixed_map.legend.count('?') == 0);
     CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ { ".#" } });
+}
+
+TEST_CASE("TerrainList test tag access restores tags and terrain size after scope and exception")
+{
+    auto &terrains = TerrainList::get_instance();
+    const auto original_tags = TerrainListTestAccess::current_tags();
+    const auto original_size = terrains.size();
+    {
+        TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+        CHECK(terrains.get_terrain_id(TerrainTag::NONE) == 0);
+        CHECK(terrains.size() == original_size);
+    }
+    CHECK(TerrainListTestAccess::current_tags() == original_tags);
+    CHECK(terrains.size() == original_size);
+
+    const auto throw_with_tag = [] {
+        TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+        throw std::runtime_error("test exception");
+    };
+    CHECK_THROWS_AS(throw_with_tag(), std::runtime_error);
+    CHECK(TerrainListTestAccess::current_tags() == original_tags);
+    CHECK(terrains.size() == original_size);
 }
 
 TEST_CASE("QuestReader replaces output on success without duplicating collections or resetting quest progress")
