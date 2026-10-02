@@ -6,6 +6,8 @@
 
 #include "system/baseitem/baseitem-definition.h"
 #include "util/string-processor.h"
+#include <string>
+#include <string_view>
 
 BaseitemDefinition::BaseitemDefinition()
     : bi_key(ItemKindType::NONE)
@@ -31,10 +33,15 @@ bool BaseitemDefinition::is_valid() const
  */
 std::string BaseitemDefinition::stripped_name() const
 {
-    const auto tokens = str_split(this->name, ' ');
-    std::stringstream ss;
-    for (const auto &token : tokens) {
-        if (token == "" || token == "~" || token == "&" || token == "#") {
+    // 名前の先頭の "& " は冠詞を付ける位置の印なので取り除く (describe_named_item() と同じ規則)。途中の "&" は名前の一部なので残す
+    std::string_view name_without_article = this->name;
+    if (name_without_article.starts_with("& ")) {
+        name_without_article.remove_prefix(2);
+    }
+
+    std::string stripped;
+    for (const auto &token : str_split(name_without_article, ' ')) {
+        if (token == "" || token == "~" || token == "#") {
             continue;
         }
 
@@ -51,11 +58,15 @@ std::string BaseitemDefinition::stripped_name() const
             endpos--;
         }
 
-        ss << token.substr(offset, endpos - offset);
+        if (!stripped.empty()) {
+            stripped.push_back(' ');
+        }
+
+        stripped.append(token, offset, endpos - offset);
     }
 
-    ss << " ";
-    return ss.str();
+    stripped.push_back(' ');
+    return stripped;
 }
 
 bool BaseitemDefinition::order_cost(const BaseitemDefinition &other) const

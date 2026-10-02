@@ -30,6 +30,17 @@ TEST_CASE("BaseitemDefinition::stripped_name removes both leading and trailing t
     CHECK(baseitem.stripped_name() == "Potion ");
 }
 
+TEST_CASE("BaseitemDefinition::stripped_name keeps spaces between words")
+{
+    BaseitemDefinition baseitem;
+
+    baseitem.name = "& Ration~ of Food";
+    CHECK(baseitem.stripped_name() == "Ration of Food ");
+
+    baseitem.name = "[Conjurings & Tricks]";
+    CHECK(baseitem.stripped_name() == "[Conjurings & Tricks] ");
+}
+
 #ifdef JP
 TEST_CASE("BaseitemDefinition::stripped_name removes a hash following a multibyte character")
 {
