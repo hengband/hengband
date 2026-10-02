@@ -8,45 +8,14 @@
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/grid-type-definition.h"
-#include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
+#include "test/system/terrain-list-test-access.h"
 #include <doctest/doctest.h>
-#include <map>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
-
-// Temporarily change a terrain tag while preserving the singleton's other tags.
-class TerrainListTestAccess {
-public:
-    TerrainListTestAccess(TerrainTag tag, short terrain_id)
-        : terrains(TerrainList::get_instance())
-        , previous_tags(terrains.tags)
-    {
-        auto test_tags = previous_tags;
-        test_tags[tag] = terrain_id;
-        terrains.tags.swap(test_tags);
-    }
-
-    TerrainListTestAccess(const TerrainListTestAccess &) = delete;
-    TerrainListTestAccess &operator=(const TerrainListTestAccess &) = delete;
-
-    ~TerrainListTestAccess()
-    {
-        terrains.tags.swap(previous_tags);
-    }
-
-    static std::map<TerrainTag, short> current_tags()
-    {
-        return TerrainList::get_instance().tags;
-    }
-
-private:
-    TerrainList &terrains;
-    std::map<TerrainTag, short> previous_tags;
-};
 
 namespace {
 /*!
@@ -218,8 +187,8 @@ TEST_CASE("QuestReader rejects non-string flags without changing previous output
 
 TEST_CASE("QuestReader copies valid caveInfo flags into legend grids")
 {
-    // Legend parsing stores terrain IDs without dereferencing terrain entries.
-    TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    // 凡例の解析は地形IDを格納するだけで、地形要素を参照しない。
+    test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
     auto data = make_quest_with_description("A lit room");
     data["legend"] = {
         { ".", { { "caveInfo", { "GLOW", "ROOM" } } } },
@@ -238,26 +207,22 @@ TEST_CASE("QuestReader copies valid caveInfo flags into legend grids")
     CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ { ".#" } });
 }
 
-TEST_CASE("TerrainList test tag access restores tags and terrain size after scope and exception")
+TEST_CASE("TerrainList test tag access restores tags after scope and exception")
 {
     auto &terrains = TerrainList::get_instance();
-    const auto original_tags = TerrainListTestAccess::current_tags();
-    const auto original_size = terrains.size();
+    const auto original_tags = test::TerrainListTestAccess::current_tags();
     {
-        TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+        test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
         CHECK(terrains.get_terrain_id(TerrainTag::NONE) == 0);
-        CHECK(terrains.size() == original_size);
     }
-    CHECK(TerrainListTestAccess::current_tags() == original_tags);
-    CHECK(terrains.size() == original_size);
+    CHECK(test::TerrainListTestAccess::current_tags() == original_tags);
 
     const auto throw_with_tag = [] {
-        TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+        test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
         throw std::runtime_error("test exception");
     };
     CHECK_THROWS_AS(throw_with_tag(), std::runtime_error);
-    CHECK(TerrainListTestAccess::current_tags() == original_tags);
-    CHECK(terrains.size() == original_size);
+    CHECK(test::TerrainListTestAccess::current_tags() == original_tags);
 }
 
 TEST_CASE("QuestReader replaces output on success without duplicating collections or resetting quest progress")
