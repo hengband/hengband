@@ -191,9 +191,9 @@ TEST_CASE("codeconv returns UNKNOWN for empty string")
     CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
 }
 
-TEST_CASE("utf8_to_local converts fullwidth tilde and hyphen-minus")
+TEST_CASE("utf8_to_sys converts fullwidth tilde and hyphen-minus")
 {
-    CHECK(utf8_to_local(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
+    CHECK(utf8_to_sys(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
 }
 
 TEST_CASE("sys_to_utf8 converts half-width katakana")
@@ -206,11 +206,10 @@ TEST_CASE("sys_to_utf8 converts an empty string to an empty string")
     CHECK(sys_to_utf8(""sv) == ""sv);
 }
 
-TEST_CASE("utf8_to_sys and utf8_to_local reject a string with an embedded NUL")
+TEST_CASE("utf8_to_sys rejects a string with an embedded NUL")
 {
     // 途中の '\0' より後ろが黙って欠けないよう、不正な入力として変換しない
     CHECK_FALSE(utf8_to_sys("a\0b"sv).has_value());
-    CHECK_THROWS_AS(utf8_to_local("a\0b"sv), EncodingConversionError);
 }
 
 #ifdef EUC
@@ -276,14 +275,9 @@ TEST_CASE("utf8_to_euc converts JIS X 0212 characters into a buffer as long as t
     CHECK(std::string_view(euc.data()) == "???");
 }
 
-TEST_CASE("utf8_to_local replaces JIS X 0212 characters with question marks")
+TEST_CASE("utf8_to_sys rejects invalid UTF-8")
 {
-    CHECK(utf8_to_local("caf\xc3\xa9"sv) == "caf?"sv);
-}
-
-TEST_CASE("utf8_to_local throws on invalid UTF-8")
-{
-    CHECK_THROWS_AS(utf8_to_local("\xff"sv), EncodingConversionError);
+    CHECK_FALSE(utf8_to_sys("\xff"sv).has_value());
 }
 
 #endif

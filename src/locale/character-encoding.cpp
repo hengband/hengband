@@ -7,7 +7,6 @@
 #include <range/v3/algorithm.hpp>
 
 #ifdef JP
-#include "system/angband-exceptions.h"
 #include "system/angband.h"
 #include "view/display-messages.h"
 #include <algorithm>
@@ -542,24 +541,3 @@ size_t guess_convert_to_system_encoding(char *strbuf, int buflen)
 }
 
 #endif /* JP */
-
-/*!
- * @brief UTF-8文字列をローカルエンコーディング（Shift-JIS/EUC-JP）に変換する
- * @details utf8_to_sys() と同じ変換を行い、変換に失敗した場合は例外を投げる。
- * @param str_utf8 変換元のUTF-8文字列
- * @return ローカルエンコーディングに変換した文字列
- * @exception EncodingConversionError 変換に失敗した場合
- */
-std::string utf8_to_local(std::string_view str_utf8)
-{
-#ifdef JP
-    auto str_sys = utf8_to_sys(str_utf8);
-    if (!str_sys) {
-        THROW_EXCEPTION(EncodingConversionError, "Failed to convert UTF-8 to system encoding");
-    }
-
-    return std::move(*str_sys);
-#else
-    return std::string(str_utf8);
-#endif
-}
