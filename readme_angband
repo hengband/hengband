@@ -144,6 +144,10 @@ renamed, and a final newline is added for compatibility.  Actually,
 only the "player name" from these files is actually used.
 
 
+[Hengband note: The following lib/data and lib/edit descriptions document
+Angband 2.8.1. Current Hengband reads the JSONC definitions in lib/edit
+directly; it does not generate or load the *_info.raw caches described here.]
+
 === Directory "lib/data" ===
 
 The "lib/data" directory contains various special binary data files.
