@@ -1,5 +1,6 @@
 #include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-dirty-flags.h"
+#include "autopick/autopick-editor-util.h"
 #include "autopick/autopick-util.h"
 #include "cmd-io/macro-util.h"
 #include "game-option/input-options.h"
@@ -10,6 +11,8 @@
 #include "main/sound-of-music.h"
 #include "term/screen-processor.h"
 #include "util/enum-converter.h"
+#include "util/string-processor.h"
+#include <algorithm>
 #include <fmt/format.h>
 
 /*!
@@ -53,19 +56,15 @@ bool insert_return_code(text_body_type *tb)
         std::swap(tb->states[num_lines + 1], tb->states[num_lines]);
     }
 
-    std::string buf;
-    int i;
-    for (i = 0; ((*tb->lines_list[tb->cy])[i] != '\0') && (i < tb->cx); i++) {
-#ifdef JP
-        if (iskanji((*tb->lines_list[tb->cy])[i])) {
-            buf.push_back((*tb->lines_list[tb->cy])[i++]);
-        }
-#endif
-        buf.push_back((*tb->lines_list[tb->cy])[i]);
+    // 2バイト文字の途中では分けず、その文字の後ろで分ける
+    auto &line = *tb->lines_list[tb->cy];
+    auto split_pos = std::min(tb->cx, static_cast<int>(line.length()));
+    if (is_second_byte_of_kanji(line, split_pos)) {
+        split_pos++;
     }
 
-    tb->lines_list[tb->cy + 1] = std::make_unique<std::string>(tb->lines_list[tb->cy]->substr(i));
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(std::move(buf));
+    tb->lines_list[tb->cy + 1] = std::make_unique<std::string>(line.substr(split_pos));
+    line.erase(split_pos);
     tb->dirty_flags |= DIRTY_EXPRESSION;
     tb->changed = true;
     return true;
@@ -144,11 +143,9 @@ bool insert_keymap_line(text_body_type *tb)
  */
 void insert_single_letter(text_body_type *tb, int key)
 {
-    int i;
-    std::string buf;
-    for (i = 0; ((*tb->lines_list[tb->cy])[i] != '\0') && (i < tb->cx); i++) {
-        buf.push_back((*tb->lines_list[tb->cy])[i]);
-    }
+    const auto &line = *tb->lines_list[tb->cy];
+    const auto head_len = std::min<size_t>(tb->cx, line.length());
+    auto buf = line.substr(0, head_len);
 
 #ifdef JP
     if (iskanji(key)) {
@@ -170,11 +167,9 @@ void insert_single_letter(text_body_type *tb, int key)
         tb->cx++;
     }
 
-    for (; ((*tb->lines_list[tb->cy])[i] != '\0') && (buf.size() + 1 < MAX_LINELEN); i++) {
-        buf.push_back((*tb->lines_list[tb->cy])[i]);
-    }
-
-    tb->lines_list[tb->cy] = std::make_unique<std::string>(std::move(buf));
+    // 行の上限を超える分は、2バイト文字を分断しないように切り詰める
+    buf.append(line, head_len);
+    tb->lines_list[tb->cy] = std::make_unique<std::string>(str_substr(std::move(buf), 0, MAX_LINELEN - 1));
     const int len = tb->lines_list[tb->cy]->length();
     if (len < tb->cx) {
         tb->cx = len;

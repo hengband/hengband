@@ -125,6 +125,15 @@ void text_body_type::update_cursor_column_record(int com_id)
     this->rec_cx = should_record ? std::max(this->cx, this->rec_cx) : 0;
 }
 
+/*!
+ * @brief カーソルが2バイト文字の2バイト目にあるかどうかを判定する
+ * @return カーソルのある行で、カーソルの位置が2バイト文字の2バイト目であれば true
+ */
+bool text_body_type::is_cursor_on_second_byte_of_kanji() const
+{
+    return is_second_byte_of_kanji(*this->lines_list[this->cy], this->cx);
+}
+
 /*
  * In-game editor of Object Auto-picker/Destoryer
  * @param player_ptr プレイヤーへの参照ポインタ
