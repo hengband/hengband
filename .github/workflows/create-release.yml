@@ -31,13 +31,6 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v3
 
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v4
-
-      - name: Restore Nuget Packages
-        run: |
-          NuGet restore .\VisualStudio\Hengband.sln
-
       - name: Build Windows Release Package
         run: |
           .\tools\release\Build-Windows-Release-Package.ps1 -Version ${{ steps.get_version.outputs.version }}
