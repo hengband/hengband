@@ -110,11 +110,17 @@ int SpellReader::set_book_data(RealmType realm) const
     if (book_obj.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
+    if (!book_obj.is_array()) {
+        return PARSE_ERROR_INVALID_TYPE;
+    }
 
     for (const auto &book : book_obj) {
         const auto &spells_obj = get_json_value(book, "spells");
         if (spells_obj.is_null()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+        if (!spells_obj.is_array()) {
+            return PARSE_ERROR_INVALID_TYPE;
         }
 
         for (const auto &spell : spells_obj) {
