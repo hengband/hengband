@@ -147,6 +147,13 @@ int MessageReader::set_mon_message() const
         const auto &message_list = en_list.value();
 #endif
 
+        if (message_list.is_null()) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+        if (!message_list.is_array()) {
+            return PARSE_ERROR_INVALID_TYPE;
+        }
+
         for (const auto &message_str : message_list) {
             if (message_str.is_null()) {
                 return PARSE_ERROR_TOO_FEW_ARGUMENTS;
