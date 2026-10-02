@@ -15,6 +15,7 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 
 TerrainReader::TerrainReader(const nlohmann::json &terrain_data)
     : terrain_data(terrain_data)
@@ -48,14 +49,12 @@ int TerrainReader::read() const
     }
 
     auto &terrains = TerrainList::get_instance();
-    if (id >= static_cast<int>(terrains.size())) {
-        terrains.resize(id + 1);
-    }
-
     error_idx = id;
 
     const auto s = static_cast<short>(id);
-    auto &terrain = terrains.get_terrain(s);
+    // Preserve fields that are not supplied by the JSON when reloading a terrain.
+    // A failed parse must leave both the existing entry and the list size intact.
+    auto terrain = id < static_cast<int>(terrains.size()) ? terrains.get_terrain(s) : TerrainType{};
 
     terrain.idx = s;
     terrain.tag = key;
@@ -143,6 +142,11 @@ int TerrainReader::read() const
     if (auto err = this->set_terrain_interactions(terrain)) {
         return err;
     }
+
+    if (id >= static_cast<int>(terrains.size())) {
+        terrains.resize(id + 1);
+    }
+    terrains.get_terrain(s) = std::move(terrain);
 
     return PARSE_ERROR_NONE;
 }

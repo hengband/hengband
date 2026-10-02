@@ -72,3 +72,41 @@ TEST_CASE("TerrainReader reads a valid terrain and replaces generation changes o
     CHECK(terrain.generation_changes[0].result_tag == "FLOOR");
     CHECK(terrain.generation_changes[0].probability == 100);
 }
+
+TEST_CASE("TerrainReader leaves an existing terrain unchanged after a late parse error")
+{
+    TerrainStateGuard guard;
+    auto data = make_terrain();
+    REQUIRE(TerrainReader(data).read() == PARSE_ERROR_NONE);
+    const auto before = TerrainList::get_instance().get_terrain(0);
+    const auto size_before = TerrainList::get_instance().size();
+
+    data["key"] = "FLOOR";
+    data["name"]["ja"] = "replacement";
+    data["name"]["en"] = "replacement";
+    data["map_priority"] = 19;
+    data["generation"]["changes"] = { { { "terrain", "WALL" }, { "probability", 90 } } };
+    data["interactions"] = { { "DESTROYED", 42 } };
+    CHECK(TerrainReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+
+    const auto &after = TerrainList::get_instance().get_terrain(0);
+    CHECK(TerrainList::get_instance().size() == size_before);
+    CHECK(after.tag == before.tag);
+    CHECK(after.name == before.name);
+    CHECK(after.priority == before.priority);
+    CHECK(after.flags == before.flags);
+    REQUIRE(after.generation_changes.size() == before.generation_changes.size());
+    CHECK(after.generation_changes[0].result_tag == before.generation_changes[0].result_tag);
+    CHECK(after.generation_changes[0].probability == before.generation_changes[0].probability);
+}
+
+TEST_CASE("TerrainReader does not grow the terrain list after a failed new entry")
+{
+    TerrainStateGuard guard;
+    auto data = make_terrain();
+    const auto size_before = TerrainList::get_instance().size();
+    data["id"] = size_before + 1;
+    data["interactions"] = { { "DESTROYED", 42 } };
+    CHECK(TerrainReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(TerrainList::get_instance().size() == size_before);
+}
