@@ -6,11 +6,46 @@
 #include "info-reader/quest-reader.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "system/grid-type-definition.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
+#include <map>
 #include <string>
 #include <utility>
 #include <vector>
+
+// The quest legend initializes both terrain and trap from TerrainTag::NONE.
+// Keep the singleton's tag map and terrain entries unchanged for other tests.
+class QuestReaderTerrainStateGuard {
+public:
+    QuestReaderTerrainStateGuard()
+        : terrains(TerrainList::get_instance())
+        , previous_size(terrains.size())
+        , previous_tags(terrains.tags)
+    {
+        auto test_tags = previous_tags;
+        test_tags[TerrainTag::NONE] = static_cast<short>(previous_size);
+        terrains.resize(previous_size + 1);
+        terrains.tags.swap(test_tags);
+    }
+
+    QuestReaderTerrainStateGuard(const QuestReaderTerrainStateGuard &) = delete;
+    QuestReaderTerrainStateGuard &operator=(const QuestReaderTerrainStateGuard &) = delete;
+
+    ~QuestReaderTerrainStateGuard()
+    {
+        terrains.tags.swap(previous_tags);
+        terrains.resize(previous_size);
+    }
+
+private:
+    TerrainList &terrains;
+    size_t previous_size;
+    std::map<TerrainTag, short> previous_tags;
+};
 
 namespace {
 /*!
@@ -178,6 +213,27 @@ TEST_CASE("QuestReader rejects non-string flags without changing previous output
     set_existing_output(quest, fixed_map);
     CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_TYPE);
     check_existing_output(quest, fixed_map);
+}
+
+TEST_CASE("QuestReader copies valid caveInfo flags into legend grids")
+{
+    QuestReaderTerrainStateGuard terrain_state;
+    auto data = make_quest_with_description("A lit room");
+    data["legend"] = {
+        { ".", { { "caveInfo", { "GLOW", "ROOM" } } } },
+        { "#", { { "caveInfo", { "MARK" } } } },
+    };
+    data["map"] = { ".#" };
+
+    QuestType quest;
+    QuestFixedMap fixed_map;
+    set_existing_output(quest, fixed_map);
+    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(fixed_map.legend.size() == 2);
+    CHECK(fixed_map.legend.at('.').grid.cave_info == (CAVE_GLOW | CAVE_ROOM));
+    CHECK(fixed_map.legend.at('#').grid.cave_info == CAVE_MARK);
+    CHECK(fixed_map.legend.count('?') == 0);
+    CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ { ".#" } });
 }
 
 TEST_CASE("QuestReader replaces output on success without duplicating collections or resetting quest progress")
