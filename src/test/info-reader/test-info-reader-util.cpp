@@ -2,8 +2,7 @@
  * @brief 定義ファイル読込の共通ユーティリティのテスト
  *
  * 定義ファイル中の文字列を定数へ変換する info_get_const / info_grab_one_const、
- * 数値文字列を格納する info_set_value、英語版のフレーバーテキストを連結する
- * append_english_text を検証する。
+ * 数値文字列を格納する info_set_value を検証する。
  * JSON から値を取り出す info_set_* 群は test-json-reader-util.cpp で扱う。
  *
  * 同じヘッダで宣言されている grab_one_activation_flag は対象外とした。
@@ -139,58 +138,3 @@ TEST_CASE("info_set_value throws an exception for a string which is not a number
     CHECK_THROWS_AS(info_set_value(value, "99999999999999999999"), std::out_of_range);
     CHECK(value == 0);
 }
-
-#ifndef JP
-TEST_CASE("append_english_text joins the texts with a space")
-{
-    std::string text;
-
-    SUBCASE("the first text is appended as it is")
-    {
-        append_english_text(text, "The first sentence");
-        CHECK(text == "The first sentence");
-    }
-
-    SUBCASE("a single space is put between the texts")
-    {
-        append_english_text(text, "The first line");
-        append_english_text(text, "the second line");
-        CHECK(text == "The first line the second line");
-    }
-
-    SUBCASE("two spaces are put after the end of a sentence")
-    {
-        for (const auto *const eos : { "It ends here.", "It ends here!", "It ends here?" }) {
-            CAPTURE(eos);
-            std::string sentences;
-            append_english_text(sentences, eos);
-            append_english_text(sentences, "The next sentence");
-            CHECK(sentences == std::string(eos) + "  The next sentence");
-        }
-    }
-
-    SUBCASE("both ends of the appended text are trimmed")
-    {
-        append_english_text(text, "  The first line \t");
-        append_english_text(text, "\t the second line  ");
-        CHECK(text == "The first line the second line");
-    }
-}
-
-TEST_CASE("append_english_text ignores an empty text")
-{
-    std::string text;
-
-    // 空文字列や空白のみの行を連結しても、末尾に空白が残ってはいけない
-    append_english_text(text, "");
-    CHECK(text.empty());
-
-    append_english_text(text, "   \t ");
-    CHECK(text.empty());
-
-    append_english_text(text, "The first line");
-    append_english_text(text, "");
-    append_english_text(text, "   ");
-    CHECK(text == "The first line");
-}
-#endif
