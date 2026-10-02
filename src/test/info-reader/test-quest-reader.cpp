@@ -161,14 +161,22 @@ TEST_CASE("QuestReader preserves previous output on parse errors at every stage"
     check_existing_output(quest, fixed_map);
 }
 
-TEST_CASE("QuestReader preserves previous output when a JSON type conversion throws")
+TEST_CASE("QuestReader rejects non-string flags without changing previous output")
 {
     auto data = make_quest_with_description("New description");
-    data["definition"]["flags"] = { "SILENT", 1 };
+    SUBCASE("Definition flag")
+    {
+        data["definition"]["flags"] = { "SILENT", 1 };
+    }
+    SUBCASE("Legend caveInfo flag")
+    {
+        data["definition"]["flags"] = { "SILENT" };
+        data["legend"] = { { ".", { { "caveInfo", { "GLOW", 1 } } } } };
+    }
     QuestType quest;
     QuestFixedMap fixed_map;
     set_existing_output(quest, fixed_map);
-    CHECK_THROWS_AS(QuestReader(data, quest, fixed_map).read(), nlohmann::json::type_error);
+    CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_TYPE);
     check_existing_output(quest, fixed_map);
 }
 
