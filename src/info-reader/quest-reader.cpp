@@ -90,6 +90,24 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
         return PARSE_ERROR_INVALID_TYPE;
     }
 
+    BIT_FLAGS cave_flags = 0;
+    const auto &cave_info = get_json_value(cell_data, "caveInfo");
+    if (!cave_info.is_null()) {
+        if (!cave_info.is_array()) {
+            return PARSE_ERROR_INVALID_TYPE;
+        }
+        for (const auto &flag : cave_info) {
+            if (!flag.is_string()) {
+                return PARSE_ERROR_INVALID_TYPE;
+            }
+            const auto it = CAVE_FLAG_TOKENS.find(flag.get<std::string>());
+            if (it == CAVE_FLAG_TOKENS.end()) {
+                return PARSE_ERROR_INVALID_FLAG;
+            }
+            cave_flags |= it->second;
+        }
+    }
+
     auto &grid = out.grid;
     grid.set_terrain_id(TerrainTag::NONE);
     grid.monster = 0;
@@ -97,7 +115,7 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
     grid.ego = EgoType::NONE;
     grid.artifact = FixedArtifactId::NONE;
     grid.set_trap_id(TerrainTag::NONE);
-    grid.cave_info = 0;
+    grid.cave_info = cave_flags;
     grid.special = 0;
     grid.random = RANDOM_NONE;
     out.object_is_quest_reward = false;
@@ -116,20 +134,6 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
             } catch (const std::exception &) {
                 return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
             }
-        }
-    }
-
-    const auto &cave_info = get_json_value(cell_data, "caveInfo");
-    if (!cave_info.is_null()) {
-        if (!cave_info.is_array()) {
-            return PARSE_ERROR_INVALID_TYPE;
-        }
-        for (const auto &flag : cave_info) {
-            const auto it = CAVE_FLAG_TOKENS.find(flag.get<std::string>());
-            if (it == CAVE_FLAG_TOKENS.end()) {
-                return PARSE_ERROR_INVALID_FLAG;
-            }
-            grid.cave_info |= it->second;
         }
     }
 
@@ -291,6 +295,9 @@ int QuestReader::set_definition(QuestFixedMap &parsed) const
             return PARSE_ERROR_INVALID_TYPE;
         }
         for (const auto &flag : flags) {
+            if (!flag.is_string()) {
+                return PARSE_ERROR_INVALID_TYPE;
+            }
             const auto it = QUEST_FLAG_TOKENS.find(flag.get<std::string>());
             if (it == QUEST_FLAG_TOKENS.end()) {
                 return PARSE_ERROR_INVALID_FLAG;
