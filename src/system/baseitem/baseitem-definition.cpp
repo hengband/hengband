@@ -40,17 +40,14 @@ std::string BaseitemDefinition::stripped_name() const
 
         auto offset = 0;
         auto endpos = token.size();
-        auto is_kanji = false;
         if (token[0] == '~' || token[0] == '#') {
             offset++;
         }
-#ifdef JP
-        if (token.size() > 2) {
-            is_kanji = iskanji(token[endpos - 2]);
-        }
 
-#endif
-        if (!is_kanji && (token[endpos - 1] == '~' || token[endpos - 1] == '#')) {
+        // 末尾のバイトが2バイト文字の後半なら、'~' や '#' と同じ値でも取り除かない。
+        // 後半バイトは先頭バイトと同じ範囲の値もとるため、2バイト文字の位置は先頭から数えて求める
+        const auto ends_with_trail_byte = str_find_all_multibyte_chars(token).contains(static_cast<int>(endpos) - 2);
+        if (!ends_with_trail_byte && (token[endpos - 1] == '~' || token[endpos - 1] == '#')) {
             endpos--;
         }
 
