@@ -6,8 +6,13 @@
 #include "info-reader/quest-reader.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "system/grid-type-definition.h"
+#include "system/terrain/terrain-list.h"
+#include "test/system/terrain-list-test-access.h"
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
@@ -178,6 +183,46 @@ TEST_CASE("QuestReader rejects non-string flags without changing previous output
     set_existing_output(quest, fixed_map);
     CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_TYPE);
     check_existing_output(quest, fixed_map);
+}
+
+TEST_CASE("QuestReader copies valid caveInfo flags into legend grids")
+{
+    // 凡例の解析は地形IDを格納するだけで、地形要素を参照しない。
+    test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    auto data = make_quest_with_description("A lit room");
+    data["legend"] = {
+        { ".", { { "caveInfo", { "GLOW", "ROOM" } } } },
+        { "#", { { "caveInfo", { "MARK" } } } },
+    };
+    data["map"] = { ".#" };
+
+    QuestType quest;
+    QuestFixedMap fixed_map;
+    set_existing_output(quest, fixed_map);
+    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(fixed_map.legend.size() == 2);
+    CHECK(fixed_map.legend.at('.').grid.cave_info == (CAVE_GLOW | CAVE_ROOM));
+    CHECK(fixed_map.legend.at('#').grid.cave_info == CAVE_MARK);
+    CHECK(fixed_map.legend.count('?') == 0);
+    CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ { ".#" } });
+}
+
+TEST_CASE("TerrainList test tag access restores tags after scope and exception")
+{
+    auto &terrains = TerrainList::get_instance();
+    const auto original_tags = test::TerrainListTestAccess::current_tags();
+    {
+        test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+        CHECK(terrains.get_terrain_id(TerrainTag::NONE) == 0);
+    }
+    CHECK(test::TerrainListTestAccess::current_tags() == original_tags);
+
+    const auto throw_with_tag = [] {
+        test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+        throw std::runtime_error("test exception");
+    };
+    CHECK_THROWS_AS(throw_with_tag(), std::runtime_error);
+    CHECK(test::TerrainListTestAccess::current_tags() == original_tags);
 }
 
 TEST_CASE("QuestReader replaces output on success without duplicating collections or resetting quest progress")

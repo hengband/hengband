@@ -14,6 +14,10 @@
 
 enum class TerrainTag;
 class TerrainType;
+namespace test {
+class TerrainListTestAccess;
+}
+
 class TerrainList : public util::AbstractVectorWrapper<TerrainType> {
 public:
     TerrainList(const TerrainList &) = delete;
@@ -34,6 +38,8 @@ public:
     void emplace_tags();
 
 private:
+    friend class test::TerrainListTestAccess;
+
     TerrainList();
 
     static TerrainList instance;

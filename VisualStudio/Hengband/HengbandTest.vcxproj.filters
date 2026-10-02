@@ -185,5 +185,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
+    <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
   </ItemGroup>
 </Project>
