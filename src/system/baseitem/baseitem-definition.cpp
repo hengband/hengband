@@ -51,7 +51,7 @@ std::string BaseitemDefinition::stripped_name() const
             endpos--;
         }
 
-        ss << token.substr(offset, endpos);
+        ss << token.substr(offset, endpos - offset);
     }
 
     ss << " ";

@@ -19,6 +19,17 @@ TEST_CASE("BaseitemDefinition::stripped_name removes trailing tilde and hash")
     CHECK(baseitem.stripped_name() == "Statue ");
 }
 
+TEST_CASE("BaseitemDefinition::stripped_name removes both leading and trailing tilde and hash")
+{
+    BaseitemDefinition baseitem;
+
+    baseitem.name = "#Statue#";
+    CHECK(baseitem.stripped_name() == "Statue ");
+
+    baseitem.name = "~Potion~";
+    CHECK(baseitem.stripped_name() == "Potion ");
+}
+
 #ifdef JP
 TEST_CASE("BaseitemDefinition::stripped_name removes a hash following a multibyte character")
 {
