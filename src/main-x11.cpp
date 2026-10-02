@@ -1142,13 +1142,14 @@ static void react_keypress(XKeyEvent *xev)
 #ifdef USE_XIM
     if (!valid_keysym) { /* XIMからの入力時のみ false になる */
 #ifdef JP
-        char euc_buf[sizeof(buf)];
-        /* strlen + 1 を渡して文字列終端('\0')を含めて変換する */
-        if (utf8_to_euc(buf, strlen(buf) + 1, euc_buf, sizeof(euc_buf)) < 0) {
+        const auto euc = utf8_to_euc(buf);
+        if (!euc) {
             return;
         }
+        send_keys(euc->data());
+#else
+        send_keys(buf);
 #endif
-        send_keys(_(euc_buf, buf));
         return;
     }
 #endif

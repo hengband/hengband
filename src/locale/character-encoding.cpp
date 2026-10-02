@@ -325,51 +325,50 @@ static void ms_to_jis_unicode(std::string &str)
  * @details 変愚蛮怒は全角文字を2バイト固定として扱うため、EUC-JP で3バイトになる JIS X 0212 の文字
  *          (8F xx xx、é など) を正しく表示できない。そうした文字は '?' に置き換える
  *          (Windows 版でも CP932 に無い文字は '?' などに置き換わる)。
- * @param utf8_str 変換元の文字列へのポインタ
- * @param utf8_str_len 変換元の文字列の長さ(文字数ではなくバイト数)
- * @param euc_buf 変換した文字列を格納するバッファへのポインタ
- * @param euc_buf_len 変換した文字列を格納するバッファのサイズ
- * @return 変換に成功した場合変換後の文字列の長さを返す
- *         変換に失敗した場合-1を返す
+ * @param utf8_str 変換元の文字列
+ * @return EUC-JPに変換した文字列。変換に失敗した場合はtl::nullopt
  */
-int utf8_to_euc(const char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len)
+tl::optional<std::string> utf8_to_euc(std::string_view utf8_str)
 {
+    // 空文字列では一時バッファの data() が nullptr になり、iconv() に渡せないので、そのまま返す
+    if (utf8_str.empty()) {
+        return std::string();
+    }
+
     static const auto cd = iconv_open("EUC-JP", "UTF-8");
     if (cd == reinterpret_cast<iconv_t>(-1)) {
-        return -1;
+        return tl::nullopt;
     }
 
-    std::string utf8(utf8_str, utf8_str_len);
+    std::string utf8(utf8_str);
     ms_to_jis_unicode(utf8);
 
-    // JIS X 0212 の文字は UTF-8 の2バイトが EUC-JP の3バイトになるので、'?' に置き換える前の変換結果は一時バッファで受ける
-    std::vector<char> converted(utf8_str_len * 2);
-    size_t inlen_left = utf8_str_len;
-    size_t outlen_left = converted.size();
+    // JIS X 0212 の文字は UTF-8 の2バイトが EUC-JP の3バイトになるので、'?' に置き換える前の変換結果が収まるよう2倍確保する
+    std::string euc(utf8.length() * 2, '\0');
+    size_t inlen_left = utf8.length();
+    size_t outlen_left = euc.length();
     char *in = utf8.data();
-    char *out = converted.data();
+    char *out = euc.data();
 
     if (iconv(cd, &in, &inlen_left, &out, &outlen_left) == (size_t)-1) {
-        return -1;
+        return tl::nullopt;
     }
 
+    // JIS X 0212 の文字 (3バイト) を '?' に置き換えながら、その場で前に詰める (書き込み位置は読み込み位置を追い越さない)。
     // EUC-JP の2バイト目以降は A1 以上なので、0x8F は JIS X 0212 の文字の先頭にしか現れない
-    const auto converted_len = converted.size() - outlen_left;
+    const auto converted_len = euc.length() - outlen_left;
     size_t euc_len = 0;
     for (size_t i = 0; i < converted_len; euc_len++) {
-        if (euc_len >= euc_buf_len) {
-            return -1;
-        }
-
-        if (static_cast<unsigned char>(converted[i]) == 0x8f) {
-            euc_buf[euc_len] = '?';
+        if (static_cast<unsigned char>(euc[i]) == 0x8f) {
+            euc[euc_len] = '?';
             i += 3;
         } else {
-            euc_buf[euc_len] = converted[i++];
+            euc[euc_len] = euc[i++];
         }
     }
 
-    return euc_len;
+    euc.resize(euc_len);
+    return euc;
 }
 
 /*!
@@ -402,8 +401,9 @@ int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t 
 }
 #endif
 
+#if defined(SJIS) && defined(_WIN32)
 /*!
- * @brief 文字コードがUTF-8の文字列をシステムの文字コードに変換する (内部バッファ版)
+ * @brief 文字コードがUTF-8の文字列をシステムの文字コードに変換する (Windows 版の内部バッファ版)
  * @param str 変換するUTF-8の文字列
  * @param sys_str_buffer 変換したシステムの文字コードの文字列を格納するバッファへのポインタ
  * @param sys_str_buflen 変換したシステムの文字コードの文字列を格納するバッファの長さ
@@ -412,14 +412,6 @@ int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t 
 static bool utf8_to_sys(std::string_view str, char *sys_str_buffer, size_t sys_str_buflen)
 {
     std::string utf8_str(str);
-
-#if defined(EUC)
-
-    /* length() + 1 を渡して文字列終端('\0')を含めて変換する */
-    return utf8_to_euc(utf8_str.data(), utf8_str.length() + 1, sys_str_buffer, sys_str_buflen) >= 0;
-
-#elif defined(SJIS) && defined(_WIN32)
-
     int input_len = utf8_str.length() + 1; /* include termination character */
 
     std::vector<WCHAR> utf16buf(input_len);
@@ -435,11 +427,8 @@ static bool utf8_to_sys(std::string_view str, char *sys_str_buffer, size_t sys_s
     }
 
     return true;
-
-#else
-    return false;
-#endif
 }
+#endif
 
 /*!
  * @brief システムの文字コードからUTF-8に変換する
@@ -494,20 +483,25 @@ tl::optional<std::string> sys_to_utf8(std::string_view str)
  */
 tl::optional<std::string> utf8_to_sys(std::string_view str)
 {
-    // 変換結果は '\0' 終端の文字列として取り出すので、途中に '\0' があると後ろが黙って欠けてしまう。不正な入力として変換しない
+    // Windows 版は変換結果を '\0' 終端の文字列として取り出すので、途中に '\0' があると後ろが黙って欠けてしまう。
+    // EUC-JP 版と挙動を揃えるため、どちらの版でも不正な入力として変換しない
     if (str.find('\0') != std::string_view::npos) {
         return tl::nullopt;
     }
 
-    // UTF-8 -> SJIS or EUC でバイト長が増えることはない (EUC-JP で3バイトになる JIS X 0212 の文字は '?' に置き換わる) ので、
-    // 終端文字分を含めて元の文字列と同じ長さを確保しておけばよい
+#if defined(EUC)
+    return utf8_to_euc(str);
+#elif defined(SJIS) && defined(_WIN32)
+    // UTF-8 -> SJIS でバイト長が増えることはないので、終端文字分を含めて元の文字列と同じ長さを確保しておけばよい
     std::vector<char> sys_str_buf(str.length() + 1);
-
     if (!utf8_to_sys(str, sys_str_buf.data(), sys_str_buf.size())) {
         return tl::nullopt;
     }
 
     return tl::make_optional<std::string>(sys_str_buf.data());
+#else
+    return tl::nullopt;
+#endif
 }
 
 /*!

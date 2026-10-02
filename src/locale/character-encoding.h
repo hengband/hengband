@@ -27,7 +27,7 @@ tl::optional<std::string> utf8_to_sys(std::string_view utf8_str);
 size_t guess_convert_to_system_encoding(char *strbuf, int buflen);
 
 #ifdef EUC
-int utf8_to_euc(const char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len);
+tl::optional<std::string> utf8_to_euc(std::string_view utf8_str);
 int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t utf8_buf_len);
 #endif
 
