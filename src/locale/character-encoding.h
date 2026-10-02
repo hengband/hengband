@@ -50,4 +50,9 @@ inline tl::optional<std::string> sys_to_utf8(std::string_view str)
     return tl::make_optional<std::string>(str);
 }
 
+inline tl::optional<std::string> utf8_to_sys(std::string_view utf8_str)
+{
+    return tl::make_optional<std::string>(utf8_str);
+}
+
 #endif

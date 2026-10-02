@@ -288,4 +288,11 @@ TEST_CASE("utf8_to_local throws on invalid UTF-8")
 
 #endif
 
+#else
+
+TEST_CASE("utf8_to_sys returns the input as is in the English version")
+{
+    CHECK(utf8_to_sys(std::string_view("abc")) == std::string_view("abc"));
+}
+
 #endif
