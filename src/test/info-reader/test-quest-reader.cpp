@@ -11,8 +11,8 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include <doctest/doctest.h>
-#include <nlohmann/json.hpp>
 #include <map>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <utility>
 #include <vector>
