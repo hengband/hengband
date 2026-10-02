@@ -19,6 +19,9 @@
 enum class MonraceId : short;
 class LocalizedString;
 class MonraceDefinition;
+namespace test {
+class MonraceListTestAccess;
+}
 class MonraceList : public util::AbstractMapWrapper<MonraceId, std::shared_ptr<MonraceDefinition>> {
 public:
     MonraceList(MonraceList &&) = delete;
@@ -67,6 +70,8 @@ public:
     void kill_unique_monster(MonraceId monrace_id);
 
 private:
+    friend class test::MonraceListTestAccess;
+
     MonraceList() = default;
 
     static MonraceList instance;
