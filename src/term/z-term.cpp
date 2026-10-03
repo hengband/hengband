@@ -451,14 +451,15 @@ static void term_queue_chars(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, std::s
         /* check */
         if (!(a & AF_TILE1) && iskanji(*s)) {
             char nc1 = *s++;
-            char nc2 = *s;
 
-            byte na1 = (a | AF_KANJI1);
-            byte na2 = (a | AF_KANJI2);
-
-            if ((--n == 0) || !nc2) {
+            // 後半バイトを描く余地が無いか、文字列が前半バイトで終わっている (view の終端か NUL) なら、前半バイトだけでは描かずに終える
+            if ((--n == 0) || (s == sv.end()) || (*s == '\0')) {
                 break;
             }
+
+            char nc2 = *s;
+            byte na1 = (a | AF_KANJI1);
+            byte na2 = (a | AF_KANJI2);
 
             if (scr_aa[x++] == na1 && scr_aa[x] == na2 && scr_cc[x - 1] == nc1 && scr_cc[x] == nc2 && (scr_taa[x - 1] == 0) && (scr_taa[x] == 0) && (scr_tcc[x - 1] == 0) && (scr_tcc[x] == 0)) {
                 continue;
