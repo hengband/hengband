@@ -6,6 +6,8 @@
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <nlohmann/json.hpp>
+#include <utility>
+#include <vector>
 
 SpellReader::SpellReader(const nlohmann::json &realm_data, SpellInfoList &spell_info_list)
     : realm_data(realm_data)
@@ -27,9 +29,14 @@ int SpellReader::read() const
         return err;
     }
 
-    if (auto err = this->set_book_data(realm_id)) {
+    std::vector<SpellInfo> spells;
+    if (auto err = this->set_book_data(spells)) {
         msg_format(_("呪文詳細読込失敗。ID: '%d'。", "Failed to load spell data. ID: '%d'."), error_idx);
         return err;
+    }
+
+    for (auto &info : spells) {
+        this->spell_info_list.set_spell_info(realm_id, info.idx, std::move(info));
     }
 
     return PARSE_ERROR_NONE;
@@ -62,10 +69,10 @@ int SpellReader::set_realm(RealmType &realm) const
 /*!
  * @brief JSON Objectから各呪文の詳細を取得する
  * @param spell_data 情報の格納されたJSON Object
- * @param realm 領域ID
+ * @param spells 解析結果の一時保存先
  * @return エラーコード
  */
-int SpellReader::set_spell_data(const nlohmann::json &spell_data, RealmType realm) const
+int SpellReader::set_spell_data(const nlohmann::json &spell_data, std::vector<SpellInfo> &spells) const
 {
     if (spell_data.is_null()) {
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
@@ -94,17 +101,17 @@ int SpellReader::set_spell_data(const nlohmann::json &spell_data, RealmType real
         msg_format(_("呪文説明読込失敗。ID: '%d'。", "Failed to load spell description. ID: '%d'."), error_idx);
         return err;
     }
-    this->spell_info_list.set_spell_info(realm, spell_id, std::move(info));
+    spells.push_back(std::move(info));
 
     return PARSE_ERROR_NONE;
 }
 
 /*!
  * @brief JSON Objectから各呪文の詳細を呪文書単位で取得する
- * @param realm 領域ID
+ * @param spells 解析結果の一時保存先
  * @return エラーコード
  */
-int SpellReader::set_book_data(RealmType realm) const
+int SpellReader::set_book_data(std::vector<SpellInfo> &spells) const
 {
     const auto &book_obj = get_json_value(this->realm_data, "books");
     if (book_obj.is_null()) {
@@ -124,7 +131,7 @@ int SpellReader::set_book_data(RealmType realm) const
         }
 
         for (const auto &spell : spells_obj) {
-            if (auto err = this->set_spell_data(spell, realm)) {
+            if (auto err = this->set_spell_data(spell, spells)) {
                 return err;
             }
         }
