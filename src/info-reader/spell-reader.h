@@ -1,8 +1,10 @@
 #pragma once
 
 #include <nlohmann/json_fwd.hpp>
+#include <vector>
 
 enum class RealmType;
+class SpellInfo;
 class SpellInfoList;
 
 class SpellReader {
@@ -18,8 +20,8 @@ public:
 
 private:
     int set_realm(RealmType &realm) const;
-    int set_spell_data(const nlohmann::json &spell_data, RealmType realm) const;
-    int set_book_data(RealmType realm) const;
+    int set_spell_data(const nlohmann::json &spell_data, std::vector<SpellInfo> &spells) const;
+    int set_book_data(std::vector<SpellInfo> &spells) const;
 
     const nlohmann::json &realm_data;
     SpellInfoList &spell_info_list;
