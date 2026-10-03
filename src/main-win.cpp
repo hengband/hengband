@@ -1,82 +1,68 @@
 /*!
  * @file main-win.cpp
- * @brief Windows版固有実装(メインエントリポイント含む)
- * @date 2018/03/16
+ * @brief Windows版の固有実装。メインエントリポイントを含む。
+ * @date 2026/10/02
  * @author Hengband Team
+ *
  * @details
  *
- * <h3>概要</h3>
- * Windows98かその前後の頃を起点としたAPI実装。
- * 各種のゲームエンジンは無論、
- * DirectXといった昨今描画に標準的となったライブラリも用いていない。
- * タイルの描画処理などについては、現在動作の詳細を検証中。
+ * 【全体の概要】
+ * このファイルは、変愚蛮怒およびそのフォークを Windows 環境で動作させるための Windows 固有部分を実装する。
+ * 32ビット Windows API を基盤とする。
+ * ゲームエンジンや DirectX のような、現在では一般的となっている描画ライブラリは使用していない。
+ * タイルの描画処理など、一部の実装については現在も動作の詳細を調査中である。
  *
- * <h3>フォーク元の概要</h3>
- * <p>
+ * 【ライセンス条項】
+ * Moria/Angband使用許諾
  * Copyright (c) 1997 Ben Harrison, Skirmantas Kligys, and others
  *
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.
- * </p>
- * <p>
- * This file helps Angband work with Windows computers.
+ * are included in all such copies.  Other copyrights may also apply.
  *
- * To use this file, use an appropriate "Makefile" or "Project File",
- * make sure that "_WIN32" are defined somewhere, and
- * make sure to obtain various extra files as described below.
+ * このソフトウェアは教育や研究のためならば、そして利益を目的としないのならば複写および配布してよい。
+ * ただし、配布する全てのコピーにこの著作権表記と使用許諾文章が記載されていなければならない。
+ * この表記に加えて別の著作権も適用する事ができる。
  *
- * The official compilation uses the CodeWarrior Pro compiler, which
- * includes a special project file and precompilable header file.
- * </p>
+ * 【コンパイル】
+ * このファイルで変愚蛮怒およびそのフォークをコンパイルするには、MSVCを利用する必要がある。
+ * GCC・Clang・Borland 系コンパイラなどでは、Windows API の一部が正しく解釈されない可能性がある (未検証)。
+ * 公式のコンパイル環境は、本記事執筆時点で GitHub Runners の仮想環境 Windows Server 2025 / Visual Studio 2026 (18.10) である。
+ * この環境には専用のプロジェクトファイル (Hengband.sln) と、プリコンパイル済ヘッダ (stdafx.h) を含む。
+ * GitHub Runners は時間と共にバージョンアップされ、また仮想環境定義 (GitHub Actions) もソースコードとは別に保守される。
+ * このため、最新のビルド環境は最新の Pull Request マージ記録を確認すること。
+ * GitHub リポジトリ：https://github.com/hengband/hengband/
  *
- * <p>
- * The "lib/user/pref-win.prf" file contains keymaps, macro definitions,
- * and/or color redefinitions.
- * </p>
+ * 【設定ファイル】
+ * "lib/pref/pref-win.prf" には、マクロトリガー (特殊キー) の表記定義 (T:)、マクロの動作 (A:)、そのマクロを呼び出すキー入力パターン (P:) が含まれる。
+ * "lib/pref/font-win.prf" には、wall.bmp を使用する際の色と文字の対応関係が定義されている。
+ * "lib/pref/graf-win.prf" には、"lib/xtra/graf" で定義されるタイルグラフィックを使用する際の属性値と文字の対応関係が定義されている。
  *
- * <p>
- * The "lib/user/font-win.prf" contains attr/char mappings for wall.bmp.
- * </p>
+ * 【既知の実装上の注意】
+ * term_xtra_win_clear() は、現在のウィンドウを低レベルで直接クリアし、必要に応じて境界線なども再描画するようにした方が、処理効率を改善できる可能性がある。
+ * ウィンドウの「タイルサイズ」を選択する方法についても、より単純な実装が必要と考えられる。
  *
- * <p>
- * The "lib/user/graf-win.prf" contains attr/char mappings for use with the
- * special bitmap files in "lib/xtra/graf", which are activated by a menu
- * item.
- * </p>
+ * 各種の警告メッセージは、メインウィンドウ data[0].w が存在することを前提としている。
+ * 初期化後の plog / quit は MessageBoxW() のオーナーに data[0].w を渡している。
+ * ウィンドウ生成前は、plog_aux / quit_aux がオーナー NULL の MessageBoxW() を使う。
+ * 既に起動している場合のエラーも MessageBoxW(NULL, ...) である。
+ * NULL は所有ウィンドウを指定しないことを意味し、すべてのウィンドウより前面に表示されることは保証しない。
+ * data[0].w の存在確認と、警告を前面に出すこととは、別の条件として扱う必要がある。
  *
- * <p>
- * Compiling this file, and using the resulting executable, requires
- * several extra files not distributed with the standard Angband code.
- * All of these extra files can be found in the "ext-win" archive.
- * </p>
+ * メインウィンドウをユーザーが非表示にできるようにしてはいけない。
+ * メインウィンドウを隠すと、メニューバーも表示されなくなるためである。
  *
- * <p>
- * The "term_xtra_win_clear()" function should probably do a low-level
- * clear of the current window, and redraw the borders and other things,
- * if only for efficiency.
- * </p>
- *
- * <p>
- * A simpler method is needed for selecting the "tile size" for windows.
- * </p>
- *
- * <p>
- * The various "warning" messages assume the existance of the "screen.w"
- * window, I think, and only a few calls actually check for its existance,
- * this may be okay since "nullptr" means "on top of all windows". (?)  The
- * user must never be allowed to "hide" the main window, or the "menubar"
- * will disappear.
- * </p>
- *
- * <p>
- * Initial framework (and most code) by Ben Harrison (benh@phial.com).
- *
- * Original code by Skirmantas Kligys (kligys@scf.usc.edu).
- *
- * Additional code by Ross E Becker (beckerr@cis.ohio-state.edu),
- * and Chris R. Martin (crm7479@tam2000.tamu.edu).
- * </p>
+ * 【フォーク元の開発者】
+ * 原著作者 (Moria; written in VMS Pascal)：(The late) Robert Alan Koeneke, 1983
+ * Unix版への移植 (UMoria; written in C)：James E. Wilson, 1987
+ * Angband：Alex Cutler, Andy Astrand, 1990
+ * PC Angband：Charles Teague, 1993
+ * Zangband：Topi Ylinen, Robert Ruehlmann, Paul Sexton, Heino Vander Sanden, and others, 1994
+ * Angband Windows版：
+ * Ben Harrison (benh@phial.com),
+ * Skirmantas Kligys (kligys@scf.usc.edu),
+ * Ross E. Becker (beckerr@cis.ohio-state.edu),
+ * Chris R. Martin (crm7479@tam2000.tamu.edu), and others, 1997
  */
 
 #include "bot/bot-control-server.h"

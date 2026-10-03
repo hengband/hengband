@@ -27,13 +27,6 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v3
 
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v4
-
-      - name: Restore Nuget Packages
-        run: |
-          NuGet restore .\VisualStudio\Hengband.sln
-
       - name: Run build test
         run: |
           MSBuild -warnAsError .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=${{ matrix.configuration }} /p:Platform=Win32
