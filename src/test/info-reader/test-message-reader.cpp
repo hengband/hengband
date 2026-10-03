@@ -1,6 +1,6 @@
 #include "info-reader/message-reader.h"
 #include "info-reader/parse-error-types.h"
-#include "util/finalizer.h"
+#include "test/scoped-restore.h"
 #include "world/world.h"
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
@@ -8,9 +8,7 @@
 TEST_CASE("MessageReader requires arrays for localized message lists")
 {
     auto &world = AngbandWorld::get_instance();
-    const auto restore = util::make_finalizer([timewalk = world.timewalk_m_idx, &world] {
-        world.timewalk_m_idx = timewalk;
-    });
+    const auto restore = test::scoped_restore(world.timewalk_m_idx);
     world.timewalk_m_idx = 1; // Suppress error messages without an initialized terminal.
 
     nlohmann::json data = {

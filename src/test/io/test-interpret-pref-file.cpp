@@ -10,6 +10,7 @@
 #include "io/interpret-pref-file.h"
 #include "io/macro-configurations-store.h"
 #include "term/gameterm.h"
+#include "test/scoped-restore.h"
 #include "util/finalizer.h"
 #include "view/display-symbol.h"
 
@@ -49,15 +50,7 @@ namespace {
  */
 [[nodiscard]] auto scoped_macro_triggers()
 {
-    return util::make_finalizer([template_backup = macro_template, modifier_chr_backup = macro_modifier_chr, modifier_names_backup = macro_modifier_names,
-                                    trigger_names_backup = macro_trigger_names, keycodes_backup = macro_trigger_keycodes, max_backup = max_macrotrigger] {
-        macro_template = template_backup;
-        macro_modifier_chr = modifier_chr_backup;
-        macro_modifier_names = modifier_names_backup;
-        macro_trigger_names = trigger_names_backup;
-        macro_trigger_keycodes = keycodes_backup;
-        max_macrotrigger = max_backup;
-    });
+    return test::scoped_restore(macro_template, macro_modifier_chr, macro_modifier_names, macro_trigger_names, macro_trigger_keycodes, max_macrotrigger);
 }
 
 /*!

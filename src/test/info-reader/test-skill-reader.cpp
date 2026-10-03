@@ -7,7 +7,7 @@
 #include "locale/language-switcher.h"
 #include "object/tval-types.h"
 #include "player/player-skill.h"
-#include "util/finalizer.h"
+#include "test/scoped-restore.h"
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
 
@@ -23,19 +23,11 @@ nlohmann::json make_class()
     }
     return data;
 }
-
-auto preserve_skills()
-{
-    return util::make_finalizer([saved = class_skills_info, index = error_idx] {
-        class_skills_info = saved;
-        error_idx = index;
-    });
-}
 }
 
 TEST_CASE("SkillReader converts all weapon ranks and preserves raw skill experience")
 {
-    const auto restore = preserve_skills();
+    const auto restore = test::scoped_restore(class_skills_info, error_idx);
     class_skills_info.assign(29, {});
     error_idx = -1;
     auto data = make_class();
@@ -62,7 +54,7 @@ TEST_CASE("SkillReader converts all weapon ranks and preserves raw skill experie
 
 TEST_CASE("SkillReader rejects malformed records without modifying the destination")
 {
-    const auto restore = preserve_skills();
+    const auto restore = test::scoped_restore(class_skills_info, error_idx);
     class_skills_info.assign(29, {});
     class_skills_info[0].s_start[PlayerSkillKindType::SHIELD] = 123;
     error_idx = -1;
@@ -188,7 +180,7 @@ TEST_CASE("SkillReader rejects malformed records without modifying the destinati
 
 TEST_CASE("SkillReader rejects duplicate and missing class ids and can be reused after reset")
 {
-    const auto restore = preserve_skills();
+    const auto restore = test::scoped_restore(class_skills_info, error_idx);
     class_skills_info.assign(29, {});
     error_idx = -1;
     auto data = make_class();
@@ -215,7 +207,7 @@ TEST_CASE("SkillReader rejects duplicate and missing class ids and can be reused
 
 TEST_CASE("SkillReader diagnostics identify the class field and cause")
 {
-    const auto restore = preserve_skills();
+    const auto restore = test::scoped_restore(class_skills_info, error_idx);
     class_skills_info.assign(29, {});
     error_idx = 6;
     auto data = make_class();
@@ -326,7 +318,7 @@ TEST_CASE("SkillReader diagnostics identify the class field and cause")
 
 TEST_CASE("SkillReader clears stale diagnostics before another read")
 {
-    const auto restore = preserve_skills();
+    const auto restore = test::scoped_restore(class_skills_info, error_idx);
     class_skills_info.assign(29, {});
     error_idx = -1;
     auto data = make_class();

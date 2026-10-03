@@ -289,6 +289,24 @@ auto &system = AngbandSystem::get_instance();
 const auto restore_hoge = util::make_finalizer([&system, backup = system.get_hoge()]() { system.set_hoge(backup); });
 ```
 
+変数を書き換えるだけなら、`test/scoped-restore.h` の `test::scoped_restore()` に変数を並べて渡せば、
+まとめて退避して元へ戻せます。`test::scoped_rng()` と同じく、戻り値は必ず変数で受けてください。
+
+```cpp
+#include "test/scoped-restore.h"
+
+TEST_CASE("VaultReader keeps the existing vaults on a parse error")
+{
+    const auto restore = test::scoped_restore(vaults_info, error_idx);
+    vaults_info.clear();
+    error_idx = -1;
+    ...
+}
+```
+
+配列のようにコピー代入できないものや、関数を呼んで戻すもの（`initialize()` など）は、
+`util::make_finalizer()` を直接使ってください。
+
 そのうえで、**必要な前提は各テストケースの中で自分で設定してください。**
 テストの実行順序や `--test-case=` での絞り込み実行に依存しないようにするためです。
 

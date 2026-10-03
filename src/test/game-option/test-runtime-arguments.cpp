@@ -1,14 +1,10 @@
 #include "game-option/runtime-arguments.h"
-#include "util/finalizer.h"
+#include "test/scoped-restore.h"
 #include <doctest/doctest.h>
 
 TEST_CASE("Bot JSON timing is an explicit independent switch")
 {
-    const auto restore = util::make_finalizer([timing = arg_bot_json_timing, output = arg_bot_json_output, path = arg_bot_json_output_path] {
-        arg_bot_json_timing = timing;
-        arg_bot_json_output = output;
-        arg_bot_json_output_path = path;
-    });
+    const auto restore = test::scoped_restore(arg_bot_json_timing, arg_bot_json_output, arg_bot_json_output_path);
     arg_bot_json_timing = false;
     arg_bot_json_output = false;
 

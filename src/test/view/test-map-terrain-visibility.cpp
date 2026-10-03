@@ -7,6 +7,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "term/term-color-types.h"
+#include "test/scoped-restore.h"
 #include "timed-effect/timed-effects.h"
 #include "util/finalizer.h"
 #include "view/display-map.h"
@@ -18,15 +19,10 @@ TEST_CASE("Map terrain observations do not disclose stale knowledge or darkness"
     auto &terrains = TerrainList::get_instance();
     auto &world = AngbandWorld::get_instance();
     const auto old_size = terrains.size();
-    const auto restore = util::make_finalizer([&terrains, &world, old_size, wild = world.is_wild_mode(), hidden = view_hidden_walls,
-                                                  special = view_special_lite, yellow = view_yellow_lite, bright = view_bright_lite, granite = view_granite_lite] {
+    const auto restore_options = test::scoped_restore(view_hidden_walls, view_special_lite, view_yellow_lite, view_bright_lite, view_granite_lite);
+    const auto restore = util::make_finalizer([&terrains, &world, old_size, wild = world.is_wild_mode()] {
         terrains.resize(old_size);
         world.set_wild_mode(wild);
-        view_hidden_walls = hidden;
-        view_special_lite = special;
-        view_yellow_lite = yellow;
-        view_bright_lite = bright;
-        view_granite_lite = granite;
     });
     terrains.resize(old_size + 2);
     const auto floor_id = static_cast<short>(old_size);
