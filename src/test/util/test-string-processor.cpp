@@ -12,15 +12,13 @@
  * EUC-JPでは後半バイトがASCIIの範囲と重ならないため、Linux/macOSのビルドでは再現できない。
  * ダメ文字のテストはMSVCのCI (Debug構成は JP + SJIS) で実行される。
  *
- * 2バイト文字のテストデータは必ず16進エスケープで書くこと。
- * 日本語版のビルドはソースの文字列リテラルを変換する (autotoolsは gcc-wrap が nkf で
- * EUC-JPへ、MSVCは /execution-charset:shift-jis でShift_JISへ) が、英語版では変換されない。
- * ソースに日本語をそのまま書くと、ビルド構成によってバイト列が変わってしまう。
+ * 2バイト文字のテストデータは test/string-helpers.h の定数を使う。
  */
 
 #include "util/string-processor.h"
 
 #include "system/h-basic.h"
+#include "test/string-helpers.h"
 
 #include <doctest/doctest.h>
 
@@ -30,39 +28,7 @@
 #include <string_view>
 #include <vector>
 
-namespace {
-
-/*!
- * @brief テストデータの文字列を連結する
- *
- * 16進エスケープは後続の文字まで貪欲に取り込むため ("\x83\x5c" の直後に "A" を
- * 隣接させると "\x5cA" と解釈される)、リテラルの隣接連結を使わずにこの関数で連結する。
- */
-template <typename... Args>
-std::string cat(const Args &...args)
-{
-    std::string result;
-    (result.append(args), ...);
-    return result;
-}
-
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view KANJI_KAN = "\x8a\xbf"; //!< 漢
-constexpr std::string_view KANJI_JI = "\x8e\x9a"; //!< 字
-#elif defined(JP)
-constexpr std::string_view KANJI_KAN = "\xb4\xc1"; //!< 漢
-constexpr std::string_view KANJI_JI = "\xbb\xfa"; //!< 字
-#endif
-
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view DAME_SO = "\x83\x5c"; //!< ソ (後半バイトが 0x5c、ASCIIの '\')
-constexpr std::string_view DAME_HYOU = "\x95\x5c"; //!< 表 (後半バイトが 0x5c、ASCIIの '\')
-constexpr std::string_view DAME_KANA_A = "\x83\x41"; //!< ア (後半バイトが 0x41、ASCIIの 'A')
-constexpr std::string_view DAME_CHOON = "\x81\x5b"; //!< ー (後半バイトが 0x5b、ASCIIの '[')
-constexpr std::string_view DAME_SPACE = "\x81\x40"; //!< 全角スペース (後半バイトが 0x40、ASCIIの '@')
-#endif
-
-}
+using namespace test;
 
 //
 // 文字コードに依存しないテスト

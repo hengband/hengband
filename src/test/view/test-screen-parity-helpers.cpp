@@ -12,7 +12,7 @@
 #include "mutation/mutation-flag-types.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
-#include "util/finalizer.h"
+#include "test/scoped-restore.h"
 #include "view/status-bars-table.h"
 #include "view/status-first-page.h"
 #include "window/main-window-stat-poster.h"
@@ -44,7 +44,7 @@ TEST_CASE("Skill ratings are classified exactly as the character sheet prints th
 
 TEST_CASE("Skill rating text carries the number only while show_actual_value is on")
 {
-    const auto restore = util::make_finalizer([saved = show_actual_value] { show_actual_value = saved; });
+    const auto restore = test::scoped_restore(show_actual_value);
     show_actual_value = false;
     const auto [hidden_text, hidden_color] = describe_skill_rating(60, 12);
     CHECK(hidden_text == _("良い", "Good"));
@@ -58,7 +58,7 @@ TEST_CASE("Skill rating text carries the number only while show_actual_value is 
 
 TEST_CASE("Invalid virtue types use the no-information text without throwing")
 {
-    const auto restore = util::make_finalizer([saved = show_actual_value] { show_actual_value = saved; });
+    const auto restore = test::scoped_restore(show_actual_value);
     PlayerType player;
     player.virtues[0] = 25;
     for (const auto show_value : { false, true }) {
@@ -72,7 +72,7 @@ TEST_CASE("Invalid virtue types use the no-information text without throwing")
 
 TEST_CASE("Registered virtue descriptions retain their name and optional numeric value")
 {
-    const auto restore = util::make_finalizer([saved = show_actual_value] { show_actual_value = saved; });
+    const auto restore = test::scoped_restore(show_actual_value);
     PlayerType player;
     player.virtues[0] = 25;
     for (const auto &[type, name] : virtue_names) {

@@ -4,27 +4,19 @@
 
 #include "locale/character-encoding.h"
 
+#include "test/string-helpers.h"
+
 #include <doctest/doctest.h>
 
 #include <string>
 #include <string_view>
 #include <utility>
 
+using namespace test;
+
 #ifdef JP
 
 namespace {
-
-/*
- * 日本語版のビルドでは文字列リテラルの文字コードが変換されるため、2バイト文字はエスケープで書く。
- * 16進エスケープは後続の英数字まで取り込んでしまうため、ASCII は別の文字列として cat() で連結する。
- */
-template <typename... Args>
-std::string cat(const Args &...args)
-{
-    std::string result;
-    (result.append(args), ...);
-    return result;
-}
 
 using namespace std::string_view_literals;
 

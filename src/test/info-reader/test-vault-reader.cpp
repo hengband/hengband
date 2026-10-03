@@ -2,7 +2,7 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/vault-reader.h"
 #include "room/rooms-vault.h"
-#include "util/finalizer.h"
+#include "test/scoped-restore.h"
 #include <doctest/doctest.h>
 #include <limits>
 #include <nlohmann/json.hpp>
@@ -12,19 +12,11 @@ nlohmann::json make_vault()
 {
     return { { "id", 0 }, { "name", "Test vault" }, { "type", 7 }, { "rating", 5 }, { "height", 2 }, { "width", 4 }, { "layout", { " %: ", "\\\"# " } } };
 }
-
-auto preserve_vaults()
-{
-    return util::make_finalizer([saved = vaults_info, index = error_idx] {
-        vaults_info = saved;
-        error_idx = index;
-    });
-}
 }
 
 TEST_CASE("VaultReader preserves metadata and every layout byte")
 {
-    const auto restore = preserve_vaults();
+    const auto restore = test::scoped_restore(vaults_info, error_idx);
     vaults_info.clear();
     error_idx = -1;
     auto data = make_vault();
@@ -46,7 +38,7 @@ TEST_CASE("VaultReader preserves metadata and every layout byte")
 
 TEST_CASE("VaultReader rejects invalid records atomically with field diagnostics")
 {
-    const auto restore = preserve_vaults();
+    const auto restore = test::scoped_restore(vaults_info, error_idx);
     vaults_info.assign(1, {});
     vaults_info[0].name = "unchanged";
     vaults_info[0].text = "sentinel";
@@ -113,7 +105,7 @@ TEST_CASE("VaultReader rejects invalid records atomically with field diagnostics
 
 TEST_CASE("VaultReader rejects duplicate and descending IDs and permits retry")
 {
-    const auto restore = preserve_vaults();
+    const auto restore = test::scoped_restore(vaults_info, error_idx);
     vaults_info.clear();
     error_idx = -1;
     auto data = make_vault();

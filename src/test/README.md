@@ -204,6 +204,37 @@ MSVC の日本語版構成も同様に、文字列リテラルを Shift_JIS に�
 **コメントはこれまでどおり日本語で構いません。** 制約を受けるのは実行時に出力される文字列（テストケース名、
 `CAPTURE` する文字列など）だけです。
 
+### 2バイト文字のテストデータは16進エスケープで書く
+
+同じ理由で、2バイト文字をソースにそのまま書くと、ビルド構成によってバイト列が変わってしまいます。
+2バイト文字のテストデータは16進エスケープで書き、`SJIS` の定義で Shift_JIS と EUC-JP を切り替えてください。
+
+よく使う文字と文字列の操作は `test/string-helpers.h` にまとめてあります。新しく定義する前に確かめてください。
+
+| 名前 | 内容 |
+| --- | --- |
+| `test::cat()` | 文字列を連結する（16進エスケープの後に文字を続けるときはリテラルを隣接させずにこれを使う） |
+| `test::repeat()` | 文字列を指定回数繰り返す |
+| `test::KANJI_KAN` など | 2バイト文字（日本語版のみ） |
+| `test::DAME_SO` など | ダメ文字（Shift_JIS で後半バイトが ASCII と同じ値になる2バイト文字。Windows の日本語版のみ） |
+| `test::UTF8_LOOKALIKE` | UTF-8 としても正しいバイト列になる2バイト文字の並び（日本語版のみ） |
+
+```cpp
+#include "test/string-helpers.h"
+
+using namespace test;
+
+#ifdef JP
+TEST_CASE("make_player_base_name truncates a long name")
+{
+    CHECK(make_player_base_name(repeat(KANJI_KAN, 16)) == repeat(KANJI_KAN, 15));
+}
+#endif
+```
+
+1 つのテストファイルでしか使わない文字は、そのファイルの無名名前空間に定義して構いません。
+2 つ以上のファイルで使うようになったら、`test/string-helpers.h` へ移してください。
+
 ### ファイルスコープの定義は無名名前空間に入れる
 
 すべてのテストは `hengband-test` という 1 つの実行ファイルにリンクされます。
@@ -257,6 +288,28 @@ CI と Visual Studio のビルドは警告をエラーとして扱う設定（`-
 auto &system = AngbandSystem::get_instance();
 const auto restore_hoge = util::make_finalizer([&system, backup = system.get_hoge()]() { system.set_hoge(backup); });
 ```
+
+変数を書き換えるだけなら、`test/scoped-restore.h` の `test::scoped_restore()` に変数を並べて渡せば、
+まとめて退避して元へ戻せます。`test::scoped_rng()` と同じく、戻り値は必ず変数で受けてください。
+
+```cpp
+#include "test/scoped-restore.h"
+
+TEST_CASE("VaultReader keeps the existing vaults on a parse error")
+{
+    const auto restore = test::scoped_restore(vaults_info, error_idx);
+    vaults_info.clear();
+    error_idx = -1;
+    ...
+}
+```
+
+配列のようにコピー代入できないものや、関数を呼んで戻すもの（`initialize()` など）は、
+`util::make_finalizer()` を直接使ってください。
+
+データの読み込み処理（`info-reader/`）のテストでは、`test/info-reader/scoped-reader-state.h` の
+`test::ScopedReaderState` を使ってください。エラーの位置（`error_idx`）を設定し、端末が無くてもメッセージを
+出さないようにして、スコープを抜けるときに元へ戻します。
 
 そのうえで、**必要な前提は各テストケースの中で自分で設定してください。**
 テストの実行順序や `--test-case=` での絞り込み実行に依存しないようにするためです。

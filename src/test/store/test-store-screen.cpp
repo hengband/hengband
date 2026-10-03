@@ -10,7 +10,7 @@
 #include "game-option/birth-options.h"
 #include "store/store-util.h"
 #include "term/gameterm.h"
-#include "util/finalizer.h"
+#include "test/scoped-restore.h"
 
 #include <doctest/doctest.h>
 
@@ -72,7 +72,7 @@ TEST_CASE("StoreScreen starts on the first page and counts the items on it")
 
 TEST_CASE("StoreScreen::turn_page_forward wraps to the first page")
 {
-    const auto restore = util::make_finalizer([old = powerup_home] { powerup_home = old; });
+    const auto restore = test::scoped_restore(powerup_home);
     powerup_home = false;
 
     SUBCASE("at the end of the stock")
@@ -104,7 +104,7 @@ TEST_CASE("StoreScreen::turn_page_forward wraps to the first page")
 
 TEST_CASE("StoreScreen::turn_page_backward wraps to the last page")
 {
-    const auto restore = util::make_finalizer([old = powerup_home] { powerup_home = old; });
+    const auto restore = test::scoped_restore(powerup_home);
     powerup_home = false;
 
     SUBCASE("in a store")

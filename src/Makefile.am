@@ -1491,7 +1491,10 @@ check_PROGRAMS = hengband-test
 
 hengband_test_SOURCES = \
 	test/test-main.cpp \
+	test/scoped-restore.h \
 	test/scoped-rng.h \
+	test/string-helpers.h \
+	test/info-reader/scoped-reader-state.h \
 	test/system/artifact-list-test-access.h \
 	test/system/terrain-list-test-access.h \
 	\
