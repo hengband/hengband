@@ -439,32 +439,6 @@ tl::optional<std::string> convert_code_page(std::string_view str, UINT from_code
 }
 }
 
-/*!
- * @brief 文字コードがUTF-8の文字列をシステムの文字コードに変換する (Windows 版の内部バッファ版)
- * @param str 変換するUTF-8の文字列
- * @param sys_str_buffer 変換したシステムの文字コードの文字列を格納するバッファへのポインタ
- * @param sys_str_buflen 変換したシステムの文字コードの文字列を格納するバッファの長さ
- * @return 変換に成功した場合TRUE、失敗した場合FALSEを返す
- */
-static bool utf8_to_sys(std::string_view str, char *sys_str_buffer, size_t sys_str_buflen)
-{
-    std::string utf8_str(str);
-    int input_len = utf8_str.length() + 1; /* include termination character */
-
-    std::vector<WCHAR> utf16buf(input_len);
-
-    /* UTF-8 -> UTF-16 */
-    if (MultiByteToWideChar(CP_UTF8, 0, utf8_str.data(), input_len, utf16buf.data(), input_len) == 0) {
-        return false;
-    }
-
-    /* UTF-8 -> SJIS(CP932) */
-    if (WideCharToMultiByte(932, 0, utf16buf.data(), -1, sys_str_buffer, sys_str_buflen, nullptr, nullptr) == 0) {
-        return false;
-    }
-
-    return true;
-}
 #endif
 
 /*!
@@ -496,8 +470,8 @@ tl::optional<std::string> sys_to_utf8(std::string_view str)
  */
 tl::optional<std::string> utf8_to_sys(std::string_view str)
 {
-    // Windows 版は変換結果を '\0' 終端の文字列として取り出すので、途中に '\0' があると後ろが黙って欠けてしまう。
-    // EUC-JP 版と挙動を揃えるため、どちらの版でも不正な入力として変換しない
+    // 変換した文字列の多くは '\0' 終端の文字列として表示などに使われ、途中に '\0' があると後ろが黙って欠けてしまう。
+    // 途中に '\0' を含むのは壊れたデータなので、不正な入力として変換しない
     if (str.find('\0') != std::string_view::npos) {
         return tl::nullopt;
     }
@@ -505,13 +479,7 @@ tl::optional<std::string> utf8_to_sys(std::string_view str)
 #if defined(EUC)
     return utf8_to_euc(str);
 #elif defined(SJIS) && defined(_WIN32)
-    // UTF-8 -> SJIS でバイト長が増えることはないので、終端文字分を含めて元の文字列と同じ長さを確保しておけばよい
-    std::vector<char> sys_str_buf(str.length() + 1);
-    if (!utf8_to_sys(str, sys_str_buf.data(), sys_str_buf.size())) {
-        return tl::nullopt;
-    }
-
-    return tl::make_optional<std::string>(sys_str_buf.data());
+    return convert_code_page(str, CP_UTF8, 932);
 #else
     return tl::nullopt;
 #endif
