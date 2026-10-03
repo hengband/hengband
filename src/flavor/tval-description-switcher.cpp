@@ -247,12 +247,26 @@ static std::pair<std::string, std::string> describe_food(const ItemEntity &item,
     }
 }
 
+#ifndef JP
+/*!
+ * @brief 職業が生命の魔法書を使うか否かを返す
+ * @return 生命の魔法書を使うなら true
+ * @details 英語版の魔法書の名前は、生命の魔法書を使う職業なら "Book of ..." の形、それ以外は "... Spellbook" の形で表す。
+ * 職業を決める前 (コマンドラインからのスポイラー出力など) は mp_ptr が設定されていないため、
+ * 生命の魔法書を使わない職業と同じく扱う。
+ */
+static bool class_uses_life_book()
+{
+    return (mp_ptr != nullptr) && (mp_ptr->spell_book == ItemKindType::LIFE_BOOK);
+}
+#endif
+
 static std::pair<std::string, std::string> describe_book_life()
 {
 #ifdef JP
     return { "生命の魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Life Magic %", "" };
     } else {
         return { "& Life Spellbook~ %", "" };
@@ -265,7 +279,7 @@ static std::pair<std::string, std::string> describe_book_sorcery()
 #ifdef JP
     return { "仙術の魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Sorcery %", "" };
     } else {
         return { "& Sorcery Spellbook~ %", "" };
@@ -278,7 +292,7 @@ static std::pair<std::string, std::string> describe_book_nature()
 #ifdef JP
     return { "自然の魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Nature Magic %", "" };
     } else {
         return { "& Nature Spellbook~ %", "" };
@@ -291,7 +305,7 @@ static std::pair<std::string, std::string> describe_book_chaos()
 #ifdef JP
     return { "カオスの魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Chaos Magic %", "" };
     } else {
         return { "& Chaos Spellbook~ %", "" };
@@ -304,7 +318,7 @@ static std::pair<std::string, std::string> describe_book_death()
 #ifdef JP
     return { "暗黒の魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Death Magic %", "" };
     } else {
         return { "& Death Spellbook~ %", "" };
@@ -317,7 +331,7 @@ static std::pair<std::string, std::string> describe_book_trump()
 #ifdef JP
     return { "トランプの魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Trump Magic %", "" };
     } else {
         return { "& Trump Spellbook~ %", "" };
@@ -330,7 +344,7 @@ static std::pair<std::string, std::string> describe_book_arcane()
 #ifdef JP
     return { "秘術の魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Arcane Magic %", "" };
     } else {
         return { "& Arcane Spellbook~ %", "" };
@@ -343,7 +357,7 @@ static std::pair<std::string, std::string> describe_book_craft()
 #ifdef JP
     return { "匠の魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Craft Magic %", "" };
     } else {
         return { "& Craft Spellbook~ %", "" };
@@ -356,7 +370,7 @@ static std::pair<std::string, std::string> describe_book_demon()
 #ifdef JP
     return { "悪魔の魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Daemon Magic %", "" };
     } else {
         return { "& Daemon Spellbook~ %", "" };
@@ -369,7 +383,7 @@ static std::pair<std::string, std::string> describe_book_crusade()
 #ifdef JP
     return { "破邪の魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Crusade Magic %", "" };
     } else {
         return { "& Crusade Spellbook~ %", "" };
@@ -382,7 +396,7 @@ static std::pair<std::string, std::string> describe_book_hex()
 #ifdef JP
     return { "呪術の魔法書%", "" };
 #else
-    if (mp_ptr->spell_book == ItemKindType::LIFE_BOOK) {
+    if (class_uses_life_book()) {
         return { "& Book~ of Hex Magic %", "" };
     } else {
         return { "& Hex Spellbook~ %", "" };
