@@ -210,20 +210,15 @@ static std::string describe_unique_name_after_body_ja(const ItemEntity &item, co
 
 static std::string describe_vowel(const ItemEntity &item, std::string_view basename, std::string_view modstr)
 {
-    bool vowel;
-    switch (basename[0]) {
-    case '#':
-        vowel = is_a_vowel(modstr[0]);
-        break;
-    case '%':
-        vowel = is_a_vowel(item.get_baseitem().name[0]);
-        break;
-    default:
-        vowel = is_a_vowel(basename[0]);
-        break;
+    // 名前の先頭が置き換えられる場合は、置き換える文字列の先頭で決める
+    std::string_view head = basename;
+    if (basename.starts_with('#')) {
+        head = modstr;
+    } else if (basename.starts_with('%')) {
+        head = item.get_baseitem().name;
     }
 
-    return (vowel) ? "an " : "a ";
+    return (!head.empty() && is_a_vowel(head.front())) ? "an " : "a ";
 }
 
 static std::string describe_prefix_en(const ItemEntity &item)
@@ -400,17 +395,18 @@ std::string describe_named_item(PlayerType *player_ptr, const ItemEntity &item, 
         basename = std::move(name);
     }
     std::string_view basename_sv = basename;
+    const auto has_article = basename_sv.starts_with('&');
+    if (has_article) {
+        basename_sv.remove_prefix(std::min<size_t>(basename_sv.length(), 2));
+    }
+
     std::stringstream ss;
 
 #ifdef JP
-    if (basename_sv[0] == '&') {
-        basename_sv.remove_prefix(2);
-    }
     ss << describe_item_count_ja(item, opt)
        << describe_artifact_mark_ja(item, opt);
 #else
-    if (basename_sv[0] == '&') {
-        basename_sv.remove_prefix(2);
+    if (has_article) {
         ss << describe_item_count_or_article_en(item, opt, basename_sv, modstr);
     } else {
         ss << describe_item_count_or_definite_article_en(item, opt);
