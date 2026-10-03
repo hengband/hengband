@@ -175,6 +175,9 @@
     <ClCompile Include="..\..\src\test\timed-effect\test-timed-effect.cpp">
       <Filter>timed-effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-buffer-shaper.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\util\test-dice.cpp">
       <Filter>util</Filter>
     </ClCompile>
