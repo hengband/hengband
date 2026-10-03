@@ -232,12 +232,12 @@ static void display_usage(const char *program)
 }
 
 /*
- * @brief 2文字以上のコマンドライン引数 (オプション)を実行する
+ * @brief 2文字以上のコマンドライン引数 (オプション)を解析する
  * @param opt コマンドライン引数
+ * @param output_spoilers スポイラー出力モードが指定されたら true にする
  * @return Usageを表示する必要があるか否か
- * @details v3.0.0 Alpha21時点では、スポイラー出力モードの判定及び実行を行う
  */
-static bool parse_long_opt(const char *opt)
+static bool parse_long_opt(const char *opt, bool &output_spoilers)
 {
     const std::string_view option(opt + 2);
     switch (parse_runtime_argument(option)) {
@@ -253,7 +253,16 @@ static bool parse_long_opt(const char *opt)
         return true;
     }
 
-    init_stuff();
+    output_spoilers = true;
+    return false;
+}
+
+/*
+ * @brief すべてのスポイラーを出力して終了する
+ * @details -d で指定されたディレクトリを反映するため、すべてのコマンドライン引数を読み終えてから呼ぶ
+ */
+static void output_spoilers_and_quit()
+{
     init_angband(p_ptr, true);
     switch (output_all_spoilers()) {
     case SpoilerOutputResultType::SUCCESSFUL:
@@ -269,8 +278,6 @@ static bool parse_long_opt(const char *opt)
     default:
         break;
     }
-
-    return false;
 }
 
 /*
@@ -318,6 +325,7 @@ int main(int argc, char *argv[])
 #endif /* SET_UID */
 
     auto browsing_movie = false;
+    auto output_spoilers = false;
     for (auto i = 1; args && (i < argc); i++) {
         if (argv[i][0] != '-') {
             display_usage(argv[0]);
@@ -398,7 +406,7 @@ int main(int argc, char *argv[])
                 argv = argv + i;
                 args = false;
             } else {
-                is_usage_needed = parse_long_opt(argv[i]);
+                is_usage_needed = parse_long_opt(argv[i], output_spoilers);
             }
 
             break;
@@ -426,6 +434,10 @@ int main(int argc, char *argv[])
         quit_fmt("Unable to locate the user directory '%s'. Please specify it with the -du option.", ANGBAND_DIR_USER.string().data());
     }
 #endif
+
+    if (output_spoilers) {
+        output_spoilers_and_quit();
+    }
 
     // 実描画・実入力デバイスを持たない端末とは両立しないオプションを弾く。
     // -m<sys> はヘッドレス端末が選ばれる時点で参照される機会が無く、-s<num> の display_scores() は
