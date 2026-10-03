@@ -11,6 +11,7 @@
 #include "util/enum-converter.h"
 #include "world/world.h"
 #include <doctest/doctest.h>
+#include <limits>
 #include <map>
 #include <memory>
 #include <nlohmann/json.hpp>
@@ -89,6 +90,45 @@ TEST_CASE("Activation readers reject unknown and out-of-range strings as invalid
         error_idx = -1;
         CHECK(EgoReader(data).read() == PARSE_ERROR_INVALID_FLAG);
         CHECK(egos_info.empty());
+    }
+}
+
+TEST_CASE("Activation readers reject numeric IDs before narrowing")
+{
+    const int max = enum2i(RandomArtActType::MAX);
+    for (const auto id : { max, max + 1, 9999, 32767, 32768, 65536, 65536 + enum2i(RandomArtActType::BA_FIRE_4), 70000, std::numeric_limits<int>::max() }) {
+        CAPTURE(id);
+        ActivationStateGuard guard;
+        const auto token = std::to_string(id);
+        CHECK(grab_one_activation_flag(token) == RandomArtActType::NONE);
+        auto data = make_item();
+        data["activate"] = token;
+        data["activation"] = token;
+        CHECK(BaseitemReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        error_idx = -1;
+        CHECK(ArtifactReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        error_idx = -1;
+        CHECK(EgoReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(egos_info.empty());
+    }
+}
+
+TEST_CASE("Activation readers accept numeric ID boundaries")
+{
+    for (const auto expected : { RandomArtActType::SUNLIGHT, RandomArtActType::CRIMSON }) {
+        CAPTURE(expected);
+        ActivationStateGuard guard;
+        const auto token = std::to_string(enum2i(expected));
+        CHECK(grab_one_activation_flag(token) == expected);
+        auto data = make_item();
+        data["activate"] = token;
+        data["activation"] = token;
+        REQUIRE(BaseitemReader(data).read() == PARSE_ERROR_NONE);
+        const auto &baseitem = BaseitemList::get_instance().get_baseitem(1);
+        CHECK(baseitem.act_idx == expected);
+        CHECK(baseitem.flags.has(TR_ACTIVATE));
+        REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+        CHECK(egos_info.at(i2enum<EgoType>(1)).act_idx == expected);
     }
 }
 
