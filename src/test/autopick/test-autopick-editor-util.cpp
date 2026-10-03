@@ -178,13 +178,13 @@ TEST_CASE("insert_return_code splits a line ending with a lone lead byte at its 
     CHECK(tb.lines_list[1]->empty());
 }
 
-TEST_CASE("EC_LEFT moves back one double-byte character at a time")
+TEST_CASE("EditorCommandId::LEFT moves back one double-byte character at a time")
 {
     auto tb = make_text_body_with_line(std::string(KANJI_KAN) + std::string(KANJI_JI), 4);
 
-    do_editor_command(nullptr, &tb, EC_LEFT);
+    do_editor_command(nullptr, &tb, EditorCommandId::LEFT);
     CHECK(tb.cx == 2);
-    do_editor_command(nullptr, &tb, EC_LEFT);
+    do_editor_command(nullptr, &tb, EditorCommandId::LEFT);
     CHECK(tb.cx == 0);
 }
 
@@ -199,23 +199,23 @@ TEST_CASE("insert_single_letter does not split a double-byte character pushed pa
     CHECK(*tb.lines_list[0] == "xa" + repeat(KANJI_KAN, (MAX_LINELEN - 2) / 2 - 1));
 }
 
-TEST_CASE("EC_PASTE does not split a double-byte character pushed past the line limit")
+TEST_CASE("EditorCommandId::PASTE does not split a double-byte character pushed past the line limit")
 {
     const auto line = "a" + repeat(KANJI_KAN, (MAX_LINELEN - 4) / 2);
     REQUIRE(line.length() == MAX_LINELEN - 3);
     auto tb = make_text_body_with_line(line, 0);
     tb.yank = { "xyz" };
 
-    do_editor_command(nullptr, &tb, EC_PASTE);
+    do_editor_command(nullptr, &tb, EditorCommandId::PASTE);
     CHECK(*tb.lines_list[0] == "xyza" + repeat(KANJI_KAN, (MAX_LINELEN - 4) / 2 - 1));
     CHECK(tb.cx == 3);
 }
 
-TEST_CASE("EC_LEFT moves back one byte over a lone lead byte at the end of a line")
+TEST_CASE("EditorCommandId::LEFT moves back one byte over a lone lead byte at the end of a line")
 {
     auto tb = make_text_body_with_line(LINE_WITH_LONE_LEAD_BYTE, 3);
 
-    do_editor_command(nullptr, &tb, EC_LEFT);
+    do_editor_command(nullptr, &tb, EditorCommandId::LEFT);
     CHECK(tb.cx == 2);
 }
 #endif

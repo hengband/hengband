@@ -1,5 +1,6 @@
 #pragma once
 
+#include "autopick/autopick-commands-table.h"
 #include "util/abstract-vector-wrapper.h"
 #include <string_view>
 #include <tl/optional.hpp>
@@ -7,7 +8,7 @@
 
 struct CommandMenuDatum {
 public:
-    CommandMenuDatum(std::string_view name, tl::optional<size_t> level, tl::optional<char> key, tl::optional<int> com_id)
+    CommandMenuDatum(std::string_view name, tl::optional<size_t> level, tl::optional<char> key, tl::optional<EditorCommandId> com_id)
         : name(name)
         , depth(level)
         , key(key)
@@ -18,7 +19,7 @@ public:
     std::string_view name;
     tl::optional<size_t> depth; //!< メニュー階層.
     tl::optional<char> key;
-    tl::optional<int> com_id;
+    tl::optional<EditorCommandId> com_id;
 };
 
 class CommandMenuData : public util::AbstractVectorWrapper<CommandMenuDatum> {
@@ -32,7 +33,7 @@ public:
 
     void initialize();
     const CommandMenuDatum &get_datum(size_t num) const;
-    int get_com_id(char key) const;
+    EditorCommandId get_com_id(char key) const;
 
 private:
     CommandMenuData() = default;

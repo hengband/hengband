@@ -68,9 +68,8 @@ static uint8_t redraw_edit_command_menu(bool redraw, size_t menu_depth, size_t s
  * @brief Display the menu, and get a command
  * @param menu_depth エディタのメニュー階層
  */
-int do_command_menu(size_t menu_depth, size_t start)
+EditorCommandId do_command_menu(size_t menu_depth, size_t start)
 {
-    /* Ignore lower level sub menus */
     const auto &menu_data = CommandMenuData::get_instance();
     size_t max_length = 0;
     std::vector<int> menu_ids;
@@ -89,7 +88,7 @@ int do_command_menu(size_t menu_depth, size_t start)
             max_length = length;
         }
 
-        menu_ids.push_back(i);
+        menu_ids.push_back(static_cast<int>(i));
     }
 
     constexpr char num_alphabets = 26;
@@ -114,14 +113,12 @@ int do_command_menu(size_t menu_depth, size_t start)
         prt(format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
         const auto key = inkey();
         if (key == ESCAPE) {
-            return 0;
+            return EditorCommandId::NONE;
         }
 
-        int com_id;
-        const auto is_alphabet = (key >= 'a') && (key <= 'z');
-        if (!is_alphabet) {
-            com_id = CommandMenuData::get_instance().get_com_id(key);
-            if (com_id) {
+        if ((key < 'a') || (key > 'z')) {
+            const auto com_id = CommandMenuData::get_instance().get_com_id(key);
+            if (com_id > EditorCommandId::NONE) {
                 return com_id;
             }
 
@@ -138,18 +135,14 @@ int do_command_menu(size_t menu_depth, size_t start)
             continue;
         }
 
-        com_id = menu_data.get_datum(menu_id).com_id.value_or(-1);
-        if (com_id > 0) {
-            return com_id;
+        const auto &com_id_opt = menu_data.get_datum(static_cast<size_t>(menu_id)).com_id;
+        if (com_id_opt) {
+            return *com_id_opt;
         }
 
-        if (com_id != -1) {
-            continue;
-        }
-
-        com_id = do_command_menu(menu_depth + 1, menu_id + 1);
-        if (com_id > 0) {
-            return com_id;
+        const auto nested_com_id = do_command_menu(menu_depth + 1, static_cast<size_t>(menu_id) + 1);
+        if (nested_com_id != EditorCommandId::NONE) {
+            return nested_com_id;
         }
 
         redraw = true;
