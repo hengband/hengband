@@ -2138,7 +2138,7 @@ void term_putstr_v(int x, int y_initial, size_t n, uint8_t color, std::string_vi
 
             i++;
             y++;
-            if (sv[i] == '\0') {
+            if ((i >= sv.length()) || (sv[i] == '\0')) {
                 break;
             }
 
