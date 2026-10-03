@@ -139,7 +139,7 @@ static tl::optional<std::string> describe_random_artifact_name_after_body_ja(con
 
     // "'foobar'" の foobar の部分を取り出し『foobar』と表記する
     // (英語版のセーブファイルのランダムアーティファクトを考慮)
-    return format("『%s』", name_sv.substr(1, name_sv.length() - 2).data());
+    return fmt::format("『{}』", name_sv.substr(1, name_sv.length() - 2));
 }
 
 static std::string describe_fake_artifact_name_after_body_ja(const ItemEntity &item)
