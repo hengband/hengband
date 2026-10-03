@@ -1,3 +1,4 @@
+#include "artifact/fixed-art-types.h"
 #include "artifact/random-art-effects.h"
 #include "info-reader/artifact-reader.h"
 #include "info-reader/baseitem-reader.h"
@@ -7,8 +8,11 @@
 #include "object-enchant/activation-info-table.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
+#include "system/artifact/artifact-definition.h"
+#include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "test/system/artifact-list-test-access.h"
 #include "util/enum-converter.h"
 #include "world/world.h"
 #include <array>
@@ -64,6 +68,9 @@ public:
         error_idx = -1;
     }
 
+    ActivationStateGuard(const ActivationStateGuard &) = delete;
+    ActivationStateGuard &operator=(const ActivationStateGuard &) = delete;
+
     ~ActivationStateGuard()
     {
         auto &baseitems = BaseitemList::get_instance();
@@ -84,6 +91,7 @@ private:
     std::map<EgoType, EgoItemDefinition> saved_egos;
     int saved_index;
     short saved_timewalk;
+    test::ArtifactListTestAccess artifacts;
 };
 }
 
@@ -162,6 +170,12 @@ TEST_CASE("Activation readers accept every registered activation")
             const auto &baseitem = BaseitemList::get_instance().get_baseitem(1);
             CHECK(baseitem.act_idx == activation.index);
             CHECK(baseitem.flags.has(TR_ACTIVATE));
+            error_idx = -1;
+            REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+            const auto &artifact = ArtifactList::get_instance().get_artifact(i2enum<FixedArtifactId>(1));
+            CHECK(artifact.act_idx == activation.index);
+            CHECK(artifact.flags.has(TR_ACTIVATE));
+            error_idx = -1;
             REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
             CHECK(egos_info.at(i2enum<EgoType>(1)).act_idx == activation.index);
         }
@@ -241,11 +255,35 @@ TEST_CASE("Activation readers preserve missing activation and non-string errors"
         data["activation"] = value;
         const auto expected = value.is_null() ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_TYPE;
         CHECK(BaseitemReader(data).read() == expected);
-        // Artifact success inserts into its singleton; only exercise rejection here.
-        if (!value.is_null()) {
-            error_idx = -1;
-            CHECK(ArtifactReader(data).read() == expected);
-        }
+        error_idx = -1;
+        CHECK(ArtifactReader(data).read() == expected);
         CHECK(EgoReader(data).read() == expected);
     }
+}
+
+TEST_CASE("Activation reader guard restores existing artifact definitions")
+{
+    test::ArtifactListTestAccess outer_guard;
+    auto &artifacts = ArtifactList::get_instance();
+    const auto id = i2enum<FixedArtifactId>(42);
+    ArtifactDefinition original;
+    original.name = "Existing";
+    original.act_idx = RandomArtActType::CRIMSON;
+    original.flags.set(TR_ACTIVATE);
+    artifacts.emplace(id, std::move(original));
+    const auto *previous = std::addressof(artifacts.get_artifact(id));
+    {
+        ActivationStateGuard guard;
+        CHECK(artifacts.empty());
+        auto data = make_item();
+        data["activate"] = "BA_FIRE_4";
+        REQUIRE(ArtifactReader(data).read() == PARSE_ERROR_NONE);
+        CHECK(artifacts.size() == 1);
+    }
+    REQUIRE(artifacts.size() == 1);
+    const auto &restored = artifacts.get_artifact(id);
+    CHECK(std::addressof(restored) == previous);
+    CHECK(restored.name == "Existing");
+    CHECK(restored.act_idx == RandomArtActType::CRIMSON);
+    CHECK(restored.flags.has(TR_ACTIVATE));
 }
