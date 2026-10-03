@@ -8,10 +8,7 @@
  * - 2バイト文字の扱いの検証 (#ifdef JP。EUC-JPでもShift_JISでも成立する)
  * - ダメ文字の検証 (#if defined(JP) && defined(SJIS)。Windows版でのみ実行する)
  *
- * 2バイト文字のテストデータは必ず16進エスケープで書くこと。
- * 日本語版のビルドはソースの文字列リテラルを変換する (autotoolsは gcc-wrap が nkf で
- * EUC-JPへ、MSVCは /execution-charset:shift-jis でShift_JISへ) が、英語版では変換されない。
- * ソースに日本語をそのまま書くと、ビルド構成によってバイト列が変わってしまう。
+ * 2バイト文字のテストデータは test/string-helpers.h の定数を使う。
  *
  * %s の幅と精度はバイト単位で数える。snprintf を fmt::sprintf に置き換えると、文字列をUTF-8として
  * 扱うようになり結果が変わる。幅はUTF-8として求めた表示幅で数えるようになる。精度は const char * を
@@ -26,6 +23,8 @@
 
 #include "term/z-form.h"
 
+#include "test/string-helpers.h"
+
 #include <doctest/doctest.h>
 
 #include <climits>
@@ -34,6 +33,8 @@
 #include <limits>
 #include <string>
 #include <string_view>
+
+using namespace test;
 
 namespace {
 
@@ -52,61 +53,6 @@ std::string format_unchecked(const char *fmt, ...)
     va_end(vp);
     return res;
 }
-
-/*!
- * @brief テストデータの文字列を連結する
- *
- * 16進エスケープは後続の文字まで貪欲に取り込むため ("\x83\x5c" の直後に "A" を
- * 隣接させると "\x5cA" と解釈される)、リテラルの隣接連結を使わずにこの関数で連結する。
- */
-template <typename... Args>
-std::string cat(const Args &...args)
-{
-    std::string result;
-    (result.append(args), ...);
-    return result;
-}
-
-#ifdef JP
-/*!
- * @brief 文字列を指定回数繰り返す
- */
-std::string repeat(std::string_view str, int count)
-{
-    std::string result;
-    for (auto i = 0; i < count; ++i) {
-        result.append(str);
-    }
-
-    return result;
-}
-#endif
-
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view KANJI_KAN = "\x8a\xbf"; //!< 漢
-constexpr std::string_view KANJI_JI = "\x8e\x9a"; //!< 字
-#elif defined(JP)
-constexpr std::string_view KANJI_KAN = "\xb4\xc1"; //!< 漢
-constexpr std::string_view KANJI_JI = "\xbb\xfa"; //!< 字
-#endif
-
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view DAME_SO = "\x83\x5c"; //!< ソ (後半バイトが 0x5c、ASCIIの '\')
-constexpr std::string_view DAME_KANA_A = "\x83\x41"; //!< ア (後半バイトが 0x41、ASCIIの 'A')
-constexpr std::string_view DAME_KANA_DI = "\x83\x61"; //!< ヂ (後半バイトが 0x61、ASCIIの 'a')
-constexpr std::string_view DAME_KANA_TA = "\x83\x5e"; //!< タ (後半バイトが 0x5e、ASCIIの '^')
-#endif
-
-// UTF-8としても正しいバイト列になる2バイト文字の並び。バイト数とコードポイント数が異なる
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view UTF8_LOOKALIKE = "\xe0\xa0\x81\xe3\x82\x81"; //!< 燿√ａ (UTF-8では U+0801 U+3081 の2コードポイント)
-constexpr std::string_view UTF8_LOOKALIKE_1ST = "\xe0\xa0"; //!< 燿
-constexpr std::string_view UTF8_LOOKALIKE_2ND = "\x81\xe3"; //!< √
-#elif defined(JP)
-constexpr std::string_view UTF8_LOOKALIKE = "\xc2\xa3\xcd\xbf"; //!< 贈与 (UTF-8では U+00A3 U+037F の2コードポイント)
-constexpr std::string_view UTF8_LOOKALIKE_1ST = "\xc2\xa3"; //!< 贈
-constexpr std::string_view UTF8_LOOKALIKE_2ND = "\xcd\xbf"; //!< 与
-#endif
 
 }
 

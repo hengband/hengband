@@ -4,50 +4,23 @@
 
 #include "util/buffer-shaper.h"
 
+#include "test/string-helpers.h"
+
 #include <doctest/doctest.h>
 
 #include <string>
 #include <string_view>
 #include <vector>
 
+using namespace test;
+
 namespace {
 
 using Lines = std::vector<std::string>;
 
-/*!
- * @brief テストデータの文字列を連結する
- */
-template <typename... Args>
-std::string cat(const Args &...args)
-{
-    std::string result;
-    (result.append(args), ...);
-    return result;
-}
-
-#ifdef JP
-/*!
- * @brief 文字列を指定回数繰り返す
- */
-std::string repeat(std::string_view str, int count)
-{
-    std::string result;
-    for (auto i = 0; i < count; ++i) {
-        result.append(str);
-    }
-
-    return result;
-}
-#endif
-
-/*
- * 日本語版のビルドでは文字列リテラルの文字コードが変換されるため、2バイト文字はエスケープで書く。
- */
 #if defined(JP) && defined(SJIS)
-constexpr std::string_view KANJI_KAN = "\x8a\xbf"; //!< 漢
 constexpr std::string_view KUTEN = "\x81\x42"; //!< 。
 #elif defined(JP)
-constexpr std::string_view KANJI_KAN = "\xb4\xc1"; //!< 漢
 constexpr std::string_view KUTEN = "\xa1\xa3"; //!< 。
 #endif
 

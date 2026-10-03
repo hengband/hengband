@@ -5,12 +5,13 @@
  * 渡す前に CP932 → UTF-16 へ変換する。相対パスだけでなく、'\\' 始まりの
  * 早期 return 経路でも同じ変換が必要なことを検証する。
  *
- * 2バイト文字のテストデータは必ず16進エスケープで書くこと。
+ * 2バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
  *
  * また、Unix 版の path_parse() がパスの先頭の「~」を展開できない場合に、
  * 例外を投げず開けないパスとして扱うことを検証する。
  */
 
+#include "test/string-helpers.h"
 #include "util/angband-files.h"
 #include <doctest/doctest.h>
 #include <filesystem>
@@ -18,20 +19,11 @@
 #include <string_view>
 
 #if defined(_WIN32) && defined(JP) && defined(SJIS)
-namespace {
-template <typename... Args>
-std::string cat(const Args &...args)
-{
-    std::string result;
-    (result.append(args), ...);
-    return result;
-}
+using namespace test;
 
+namespace {
 constexpr std::string_view KANJI_NI = "\x93\xfa"; //!< 日
 constexpr std::string_view KANJI_HON = "\x96\x7b"; //!< 本
-constexpr std::string_view DAME_SO = "\x83\x5c"; //!< ソ (後半バイトが 0x5c)
-constexpr std::string_view UTF8_LOOKALIKE = "\xe0\xa0\x81\xe3\x82\x81"; //!< 燿√ａ
-
 }
 
 TEST_CASE("path_build appends a Shift_JIS file name as UTF-16 on Windows")

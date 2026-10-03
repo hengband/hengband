@@ -8,46 +8,20 @@
  * 名前の範囲外を読まないことを確かめる。
  *
  * 区切り文字 (PATH_SEP) は Unix 版と Windows 版で異なるため、テストデータでも PATH_SEP を使う。
- * 2バイト文字のテストデータは、src/test/util/test-string-processor.cpp と同じく16進エスケープで書く。
+ * 2バイト文字のテストデータは src/test/string-helpers.h の定数を使う。
  */
 
 #include "player/process-name.h"
 
 #include "system/h-basic.h"
+#include "test/string-helpers.h"
 
 #include <doctest/doctest.h>
 
 #include <string>
 #include <string_view>
 
-namespace {
-
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view KANJI_KAN = "\x8a\xbf"; //!< 漢
-constexpr std::string_view DAME_CHOON = "\x81\x5b"; //!< ー (後半バイトが 0x5b、ASCIIの '[')
-#elif defined(JP)
-constexpr std::string_view KANJI_KAN = "\xb4\xc1"; //!< 漢
-#endif
-
-#ifdef JP
-/*!
- * @brief 文字列を指定した回数だけ繰り返した文字列を作る
- * @param str 繰り返す文字列
- * @param count 繰り返す回数
- * @return 繰り返した文字列
- */
-std::string repeat(std::string_view str, int count)
-{
-    std::string result;
-    for (auto i = 0; i < count; ++i) {
-        result.append(str);
-    }
-
-    return result;
-}
-#endif
-
-}
+using namespace test;
 
 TEST_CASE("make_player_base_name keeps a printable name")
 {
@@ -57,7 +31,7 @@ TEST_CASE("make_player_base_name keeps a printable name")
 TEST_CASE("make_player_base_name drops non-printable characters")
 {
     // 16進エスケープが後続の文字を取り込まないよう、制御文字の後ろは別の文字列として連結する
-    CHECK(make_player_base_name(std::string("Fro\x01") + "do") == "Frodo");
+    CHECK(make_player_base_name(cat("Fro\x01", "do")) == "Frodo");
 }
 
 TEST_CASE("make_player_base_name falls back to PLAYER for an empty result")
@@ -96,7 +70,7 @@ TEST_CASE("make_player_base_name does not split a double-byte character at the l
 
 TEST_CASE("make_player_base_name drops a lone lead byte at the end")
 {
-    const auto name = std::string("ab") + std::string(KANJI_KAN.substr(0, 1));
+    const auto name = cat("ab", KANJI_KAN.substr(0, 1));
     CHECK(make_player_base_name(name) == "ab");
 }
 #endif
@@ -114,16 +88,16 @@ TEST_CASE("make_player_name_for_expression keeps other characters")
 #ifdef JP
 TEST_CASE("make_player_name_for_expression keeps a double-byte character")
 {
-    const auto name = std::string(KANJI_KAN) + " a";
-    CHECK(make_player_name_for_expression(name) == std::string(KANJI_KAN) + "_a");
+    const auto name = cat(KANJI_KAN, " a");
+    CHECK(make_player_name_for_expression(name) == cat(KANJI_KAN, "_a"));
 }
 
 TEST_CASE("make_player_name_for_expression keeps a lone lead byte at the end")
 {
     // 名前の範囲の外に文字を置いておき、末尾の1バイト目の後ろを読まないことを確かめる
-    const auto buffer = std::string("a ") + std::string(KANJI_KAN.substr(0, 1)) + "XYZ";
+    const auto buffer = cat("a ", KANJI_KAN.substr(0, 1), "XYZ");
     const std::string_view name(buffer.data(), 3);
-    CHECK(make_player_name_for_expression(name) == std::string("a_") + std::string(KANJI_KAN.substr(0, 1)));
+    CHECK(make_player_name_for_expression(name) == cat("a_", KANJI_KAN.substr(0, 1)));
 }
 #endif
 

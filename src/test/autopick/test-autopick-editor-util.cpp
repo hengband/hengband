@@ -9,12 +9,15 @@
 #include "autopick/autopick-editor-command.h"
 #include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-util.h"
+#include "test/string-helpers.h"
 
 #include <doctest/doctest.h>
 
 #include <memory>
 #include <string>
 #include <string_view>
+
+using namespace test;
 
 namespace {
 
@@ -51,33 +54,9 @@ text_body_type make_text_body_with_line(std::string_view line, int cx)
     return tb;
 }
 
-#if defined(JP) && defined(SJIS)
-constexpr std::string_view KANJI_KAN = "\x8a\xbf"; //!< 漢
-constexpr std::string_view KANJI_JI = "\x8e\x9a"; //!< 字
-#elif defined(JP)
-constexpr std::string_view KANJI_KAN = "\xb4\xc1"; //!< 漢
-constexpr std::string_view KANJI_JI = "\xbb\xfa"; //!< 字
-#endif
-
 #ifdef JP
-/*!
- * @brief 文字列を指定した回数だけ繰り返した文字列を作る
- * @param str 繰り返す文字列
- * @param count 繰り返す回数
- * @return 繰り返した文字列
- */
-std::string repeat(std::string_view str, int count)
-{
-    std::string result;
-    for (auto i = 0; i < count; ++i) {
-        result.append(str);
-    }
-
-    return result;
-}
-
 //! 行末に2バイト文字の1バイト目だけが残った行
-const std::string LINE_WITH_LONE_LEAD_BYTE = std::string("ab") + std::string(KANJI_KAN.substr(0, 1));
+const std::string LINE_WITH_LONE_LEAD_BYTE = cat("ab", KANJI_KAN.substr(0, 1));
 #endif
 
 }
@@ -136,7 +115,7 @@ TEST_CASE("insert_return_code splits the line at the cursor")
 #ifdef JP
 TEST_CASE("is_second_byte_of_kanji detects the second byte of a double-byte character")
 {
-    const auto line = std::string(KANJI_KAN) + "a";
+    const auto line = cat(KANJI_KAN, "a");
 
     CHECK_FALSE(is_second_byte_of_kanji(line, 0));
     CHECK(is_second_byte_of_kanji(line, 1));
@@ -150,7 +129,7 @@ TEST_CASE("is_second_byte_of_kanji does not treat the end of a line after a lone
 
 TEST_CASE("is_cursor_on_second_byte_of_kanji checks the cursor position on the cursor line")
 {
-    const auto line = std::string(KANJI_KAN) + "a";
+    const auto line = cat(KANJI_KAN, "a");
 
     CHECK_FALSE(make_text_body_with_line(line, 0).is_cursor_on_second_byte_of_kanji());
     CHECK(make_text_body_with_line(line, 1).is_cursor_on_second_byte_of_kanji());
@@ -160,7 +139,7 @@ TEST_CASE("is_cursor_on_second_byte_of_kanji checks the cursor position on the c
 
 TEST_CASE("insert_return_code does not split a double-byte character")
 {
-    auto tb = make_text_body_with_line(std::string(KANJI_KAN) + std::string(KANJI_JI), 1);
+    auto tb = make_text_body_with_line(cat(KANJI_KAN, KANJI_JI), 1);
 
     REQUIRE(insert_return_code(&tb));
     CHECK(*tb.lines_list[0] == KANJI_KAN);
@@ -180,7 +159,7 @@ TEST_CASE("insert_return_code splits a line ending with a lone lead byte at its 
 
 TEST_CASE("EditorCommandId::LEFT moves back one double-byte character at a time")
 {
-    auto tb = make_text_body_with_line(std::string(KANJI_KAN) + std::string(KANJI_JI), 4);
+    auto tb = make_text_body_with_line(cat(KANJI_KAN, KANJI_JI), 4);
 
     do_editor_command(nullptr, &tb, EditorCommandId::LEFT);
     CHECK(tb.cx == 2);

@@ -203,6 +203,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
+    <ClInclude Include="..\..\src\test\string-helpers.h" />
     <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
   </ItemGroup>
