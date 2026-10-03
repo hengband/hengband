@@ -70,6 +70,7 @@
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
     <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp" />
