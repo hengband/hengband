@@ -94,6 +94,9 @@
     <ClCompile Include="..\..\src\test\info-reader\test-quest-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-race-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-skill-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>

@@ -1503,6 +1503,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-json-reader-util.cpp \
 	test/info-reader/test-message-reader.cpp \
 	test/info-reader/test-quest-reader.cpp \
+	test/info-reader/test-race-reader.cpp \
 	test/info-reader/test-skill-reader.cpp \
 	test/info-reader/test-spell-reader.cpp \
 	test/info-reader/test-terrain-reader.cpp \
