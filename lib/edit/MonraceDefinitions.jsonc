@@ -68594,12 +68594,12 @@
       "exp": 800,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "10d4",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "10d4",
         },
@@ -68755,7 +68755,7 @@
           "damage_dice": "11d4",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "11d4",
         },
@@ -68806,7 +68806,7 @@
       "exp": 7777,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "14d10",
         },
@@ -68864,7 +68864,7 @@
       "exp": 1000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SUPERHURT",
           "damage_dice": "10d4",
         },
@@ -68919,12 +68919,12 @@
       "exp": 1100,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SUPERHURT",
           "damage_dice": "10d4",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SUPERHURT",
           "damage_dice": "10d4",
         },
@@ -69323,7 +69323,7 @@
           "damage_dice": "5d2",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "5d2",
         },
@@ -69368,7 +69368,7 @@
           "damage_dice": "7d3",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "7d3",
         },
@@ -70038,12 +70038,12 @@
       "exp": 2000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "5d10",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "5d10",
         },
@@ -70094,7 +70094,7 @@
       "exp": 2000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "5d10",
         },
@@ -70190,7 +70190,7 @@
       "exp": 40,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "4d4",
         },
@@ -70279,7 +70279,7 @@
       "exp": 50,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "6d6",
         },
@@ -70323,7 +70323,7 @@
       "exp": 100,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "7d7",
         },
@@ -70386,7 +70386,7 @@
       "exp": 200,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "8d8",
         },
@@ -70449,7 +70449,7 @@
       "exp": 400,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "9d9",
         },
@@ -70511,12 +70511,12 @@
       "exp": 125,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "6d6",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "6d6",
         },
@@ -70566,12 +70566,12 @@
       "exp": 250,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "7d7",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "7d7",
         },
@@ -70639,12 +70639,12 @@
       "exp": 500,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "8d8",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "8d8",
         },
@@ -70712,12 +70712,12 @@
       "exp": 1000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "9d9",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "9d9",
         },
@@ -70785,7 +70785,7 @@
       "exp": 250,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "8d8",
         },
@@ -71008,22 +71008,22 @@
       "exp": 2500,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SHATTER",
           "damage_dice": "10d7",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SHATTER",
           "damage_dice": "10d7",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SHATTER",
           "damage_dice": "10d7",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SHATTER",
           "damage_dice": "10d7",
         },
@@ -71386,7 +71386,7 @@
       "exp": 6,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "3d1",
         },
@@ -74400,12 +74400,12 @@
       "sex": "MALE",
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "LOSE_INT",
           "damage_dice": "10d11",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "LOSE_WIS",
           "damage_dice": "10d11",
         },
@@ -74592,7 +74592,7 @@
           "damage_dice": "4d6",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "4d6",
         },
@@ -74654,7 +74654,7 @@
           "damage_dice": "7d6",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "7d6",
         },
@@ -74715,7 +74715,7 @@
           "damage_dice": "8d8",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "8d9",
         },
@@ -74778,7 +74778,7 @@
           "damage_dice": "12d11",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "8d11",
         },
@@ -75730,7 +75730,7 @@
           "damage_dice": "4d10",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "4d10",
         },
@@ -75837,7 +75837,7 @@
           "damage_dice": "12d11",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "FIRE",
           "damage_dice": "30d2",
         },
@@ -75984,7 +75984,7 @@
       "sex": "MALE",
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "1d13",
         },
@@ -76768,7 +76768,7 @@
           "damage_dice": "3d3",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "PARALYZE",
           "damage_dice": "3d4",
         },
@@ -76822,7 +76822,7 @@
           "damage_dice": "3d10",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SUPERHURT",
           "damage_dice": "3d12",
         },
@@ -77205,7 +77205,7 @@
       "exp": 15000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SUPERHURT",
           "damage_dice": "6d12",
         },
@@ -77721,12 +77721,12 @@
       "exp": 350,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SHATTER",
           "damage_dice": "6d6",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "TERRIFY",
           "damage_dice": "6d6",
         },
@@ -77761,12 +77761,12 @@
       "exp": 7000,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "SHATTER",
           "damage_dice": "7d12",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "TERRIFY",
           "damage_dice": "7d12",
         },
@@ -78146,12 +78146,12 @@
           "damage_dice": "4d8",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "6d10",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "6d10",
         },
@@ -79089,7 +79089,7 @@
           "effect": "CONFUSE",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "6d6",
         },
@@ -80338,7 +80338,7 @@
       "exp": 12,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "3d6",
         },
@@ -81561,12 +81561,12 @@
           "damage_dice": "1d20",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "ELEC",
           "damage_dice": "3d33",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "ELEC",
           "damage_dice": "3d33",
         },
@@ -81618,7 +81618,7 @@
       "exp": 500,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "1d10",
         },
@@ -81948,17 +81948,17 @@
       "exp": 600,
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "3d6",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "3d6",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "3d6",
         },
@@ -83288,7 +83288,7 @@
           "damage_dice": "10d10",
         },
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "HURT",
           "damage_dice": "8d13",
         },
@@ -83357,7 +83357,7 @@
       "sex": "MALE",
       "blows": [
         {
-          "method": "CRUSH",
+          "method": "DASH",
           "effect": "CHAOS",
           "damage_dice": "12d6",
         },
