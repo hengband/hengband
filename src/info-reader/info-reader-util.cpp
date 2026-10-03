@@ -22,7 +22,7 @@ RandomArtActType grab_one_activation_flag(std::string_view what)
     }
 
     auto j = std::stoi(what.data());
-    if (j > 0) {
+    if ((j > 0) && (j < enum2i(RandomArtActType::MAX))) {
         return i2enum<RandomArtActType>(j);
     }
 

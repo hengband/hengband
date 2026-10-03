@@ -21,6 +21,7 @@
 #include "view/display-messages.h"
 #include <limits>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 
 BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data)
     : baseitem_data(baseitem_data)
@@ -300,7 +301,14 @@ int BaseitemReader::set_baseitem_activate(BaseitemDefinition &baseitem) const
         return PARSE_ERROR_INVALID_TYPE;
     }
 
-    auto activation = grab_one_activation_flag(act_data.get<std::string>());
+    RandomArtActType activation;
+    try {
+        activation = grab_one_activation_flag(act_data.get<std::string>());
+    } catch (const std::invalid_argument &) {
+        return PARSE_ERROR_INVALID_FLAG;
+    } catch (const std::out_of_range &) {
+        return PARSE_ERROR_INVALID_FLAG;
+    }
     if (activation <= RandomArtActType::NONE) {
         return PARSE_ERROR_INVALID_FLAG;
     }
