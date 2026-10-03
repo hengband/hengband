@@ -330,10 +330,10 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
 static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const describe_option_type &opt, std::string_view basename, std::string_view modstr)
 {
 #ifndef JP
-    auto pluralize = [&opt, &item](auto &ss, auto it) {
+    // preceding は '~' より前の部分。'~' が先頭にある場合は空になる
+    auto pluralize = [&opt, &item](auto &ss, std::string_view preceding) {
         if (none_bits(opt.mode, OD_NO_PLURAL) && (item.number != 1)) {
-            char k = *std::next(it, -1);
-            if ((k == 's') || (k == 'h')) {
+            if (preceding.ends_with('s') || preceding.ends_with('h')) {
                 ss << 'e';
             }
             ss << 's';
@@ -355,7 +355,7 @@ static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const 
 #else
             for (auto ib = baseitem.name.begin(), ib_end = baseitem.name.end(); ib != ib_end; ++ib) {
                 if (*ib == '~') {
-                    pluralize(ss, ib);
+                    pluralize(ss, std::string_view(baseitem.name.begin(), ib));
                 } else {
                     ss << *ib;
                 }
@@ -366,7 +366,7 @@ static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const 
 
 #ifndef JP
         case '~':
-            pluralize(ss, it);
+            pluralize(ss, std::string_view(basename.begin(), it));
             break;
 #endif
 
