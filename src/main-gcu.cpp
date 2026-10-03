@@ -721,13 +721,14 @@ static errr game_term_xtra_gcu_event(int v)
 
         *bp = '\0';
 #ifdef JP
-        char eucbuf[sizeof(buf)];
-        /* strlen + 1 を渡して文字列終端('\0')を含めて変換する */
-        if (utf8_to_euc(buf, strlen(buf) + 1, eucbuf, sizeof(eucbuf)) < 0) {
+        auto euc = utf8_to_euc(buf);
+        if (!euc) {
             return -1;
         }
+        term_string_push(euc->data());
+#else
+        term_string_push(buf);
 #endif
-        term_string_push(_(eucbuf, buf));
     }
 
     /* Do not wait */
@@ -802,13 +803,14 @@ static errr game_term_xtra_gcu_event(int v)
 
         bp[0] = '\0';
 #ifdef JP
-        char eucbuf[sizeof(buf)];
-        /* strlen + 1 を渡して文字列終端('\0')を含めて変換する */
-        if (utf8_to_euc(buf, strlen(buf) + 1, eucbuf, sizeof(eucbuf)) < 0) {
+        auto euc = utf8_to_euc(buf);
+        if (!euc) {
             return -1;
         }
+        term_string_push(euc->data());
+#else
+        term_string_push(buf);
 #endif
-        term_string_push(_(eucbuf, buf));
     }
 
     /* Do not wait */

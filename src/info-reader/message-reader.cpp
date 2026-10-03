@@ -161,15 +161,11 @@ int MessageReader::set_mon_message() const
             if (!message_str.is_string()) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
-#ifdef JP
             auto str_test = utf8_to_sys(message_str.get<std::string>());
             if (!str_test) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
             auto str = std::move(*str_test);
-#else
-            auto str = message_str.get<std::string>();
-#endif
             if (has_id_list) {
                 for (auto id : id_list) {
                     MonraceMessageList::get_instance().emplace(id, action->second, chance, use_name, str);

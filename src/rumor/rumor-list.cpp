@@ -161,8 +161,16 @@ void RumorList::read_rumors(const std::filesystem::path &path)
 
     auto &rumors = this->rumor_definitions.at(RumorRarity::LOW).at(RumorType::GOSSIP);
     std::string line;
+    auto line_num = 0;
     while (std::getline(ifs, line)) {
-        line = utf8_to_local(line);
+        line_num++;
+        auto line_sys = utf8_to_sys(line);
+        if (!line_sys) {
+            constexpr auto fmt = _("噂定義ファイルの {} 行目をシステムの文字コードに変換できません: {}", "Failed to convert line {} of the file of rumor definitions to the system encoding: {}");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, line_num, path.string()));
+        }
+
+        line = std::move(*line_sys);
         if (line.empty() || line.starts_with('#')) {
             continue;
         }

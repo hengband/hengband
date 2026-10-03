@@ -9,7 +9,6 @@
 #include <string>
 #include <string_view>
 #include <utility>
-#include <vector>
 
 #ifdef JP
 
@@ -191,9 +190,9 @@ TEST_CASE("codeconv returns UNKNOWN for empty string")
     CHECK(codeconv(str.data()) == CharacterEncoding::UNKNOWN);
 }
 
-TEST_CASE("utf8_to_local converts fullwidth tilde and hyphen-minus")
+TEST_CASE("utf8_to_sys converts fullwidth tilde and hyphen-minus")
 {
-    CHECK(utf8_to_local(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
+    CHECK(utf8_to_sys(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
 }
 
 TEST_CASE("sys_to_utf8 converts half-width katakana")
@@ -206,30 +205,29 @@ TEST_CASE("sys_to_utf8 converts an empty string to an empty string")
     CHECK(sys_to_utf8(""sv) == ""sv);
 }
 
-TEST_CASE("utf8_to_sys and utf8_to_local reject a string with an embedded NUL")
+TEST_CASE("utf8_to_sys rejects a string with an embedded NUL")
 {
     // 途中の '\0' より後ろが黙って欠けないよう、不正な入力として変換しない
     CHECK_FALSE(utf8_to_sys("a\0b"sv).has_value());
-    CHECK_THROWS_AS(utf8_to_local("a\0b"sv), EncodingConversionError);
 }
 
 #ifdef EUC
 
 TEST_CASE("utf8_to_euc converts fullwidth tilde and hyphen-minus to wave dash and minus sign")
 {
-    auto utf8 = cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8);
-    char euc[16]{};
-    REQUIRE(utf8_to_euc(utf8.data(), utf8.length() + 1, euc, sizeof(euc)) >= 0);
-    CHECK(std::string_view(euc) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
+    CHECK(utf8_to_euc(cat(FULLWIDTH_TILDE_UTF8, FULLWIDTH_HYPHEN_MINUS_UTF8)) == cat(FULLWIDTH_TILDE_SYS, FULLWIDTH_HYPHEN_MINUS_SYS));
 }
 
-TEST_CASE("utf8_to_euc converts fullwidth tilde after an embedded NUL within the given length")
+TEST_CASE("utf8_to_euc converts fullwidth tilde after an embedded NUL")
 {
-    // 途中に '\0' があっても、渡した長さの範囲はすべて置き換えてから変換する
-    auto utf8 = cat("a\0"sv, FULLWIDTH_TILDE_UTF8);
-    char euc[16]{};
-    REQUIRE(utf8_to_euc(utf8.data(), utf8.length() + 1, euc, sizeof(euc)) == 5);
-    CHECK(std::string_view(euc, 4) == "a\0\xa1\xc1"sv);
+    // 途中に '\0' があっても、文字列の長さの範囲はすべて置き換えてから変換する
+    CHECK(utf8_to_euc(cat("a\0"sv, FULLWIDTH_TILDE_UTF8)) == "a\0\xa1\xc1"sv);
+}
+
+TEST_CASE("utf8_to_euc and utf8_to_sys convert an empty string to an empty string")
+{
+    CHECK(utf8_to_euc(""sv) == ""sv);
+    CHECK(utf8_to_sys(""sv) == ""sv);
 }
 
 TEST_CASE("utf8_to_euc rejects a truncated UTF-8 character")
@@ -244,10 +242,9 @@ TEST_CASE("utf8_to_euc rejects a truncated UTF-8 character")
     for (const auto &[label, truncated] : truncated_chars) {
         CAPTURE(label);
 
-        // 文字の途中で終端が来た文字列は、黙って捨てずに変換の失敗とする
-        const auto utf8 = cat(truncated, "\0"sv);
-        char euc[16]{};
-        CHECK(utf8_to_euc(utf8.data(), utf8.length(), euc, sizeof(euc)) == -1);
+        // 文字の途中で終わる文字列は、黙って捨てずに変換の失敗とする
+        CHECK_FALSE(utf8_to_euc(truncated).has_value());
+        CHECK_FALSE(utf8_to_euc(cat(truncated, "\0"sv)).has_value());
     }
 }
 
@@ -259,33 +256,23 @@ TEST_CASE("utf8_to_sys replaces JIS X 0212 characters with question marks")
     CHECK(utf8_to_sys("\xe6\x97\xa5\xe6\x9c\xac\xc3\xa9"sv) == cat(NIHON_EUC, "?"));
 }
 
-TEST_CASE("utf8_to_euc returns the length after replacing JIS X 0212 characters")
+TEST_CASE("utf8_to_euc replaces JIS X 0212 characters with question marks")
 {
-    auto utf8 = cat("a\xc3\xa9"sv, "b");
-    char euc[16]{};
-    CHECK(utf8_to_euc(utf8.data(), utf8.length() + 1, euc, sizeof(euc)) == 4);
-    CHECK(std::string_view(euc) == "a?b");
+    CHECK(utf8_to_euc(cat("a\xc3\xa9"sv, "b")) == "a?b"sv);
 }
 
-TEST_CASE("utf8_to_euc converts JIS X 0212 characters into a buffer as long as the input")
+TEST_CASE("utf8_to_sys rejects invalid UTF-8")
 {
-    // '?' に置き換えた後の長さで足りれば、置き換える前の3バイトが入らない大きさのバッファでも変換できる
-    auto utf8 = cat("\xc3\xa9\xc3\xa9\xc3\xa9"sv);
-    std::vector<char> euc(utf8.length() + 1);
-    CHECK(utf8_to_euc(utf8.data(), utf8.length() + 1, euc.data(), euc.size()) == 4);
-    CHECK(std::string_view(euc.data()) == "???");
-}
-
-TEST_CASE("utf8_to_local replaces JIS X 0212 characters with question marks")
-{
-    CHECK(utf8_to_local("caf\xc3\xa9"sv) == "caf?"sv);
-}
-
-TEST_CASE("utf8_to_local throws on invalid UTF-8")
-{
-    CHECK_THROWS_AS(utf8_to_local("\xff"sv), EncodingConversionError);
+    CHECK_FALSE(utf8_to_sys("\xff"sv).has_value());
 }
 
 #endif
+
+#else
+
+TEST_CASE("utf8_to_sys returns the input as is in the English version")
+{
+    CHECK(utf8_to_sys(std::string_view("abc")) == std::string_view("abc"));
+}
 
 #endif

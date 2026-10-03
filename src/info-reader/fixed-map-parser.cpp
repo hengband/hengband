@@ -139,12 +139,11 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
             for (const auto &field : building.fields) {
                 line += ":" + field;
             }
-            try {
-                line = utf8_to_local(line);
-            } catch (const EncodingConversionError &) {
+            auto line_sys = utf8_to_sys(line);
+            if (!line_sys) {
                 return PARSE_ERROR_INVALID_VALUE;
             }
-            qg_ptr->buf = line.data();
+            qg_ptr->buf = line_sys->data();
             if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr, parse_fixed_map); err != PARSE_ERROR_NONE) {
                 return err;
             }

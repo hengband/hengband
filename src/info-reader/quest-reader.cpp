@@ -58,10 +58,9 @@ const std::unordered_map<std::string_view, BIT_FLAGS> CAVE_FLAG_TOKENS = {
 
 /*!
  * @brief JSONの文字列配列を std::vector<std::string> に取り込む (null/欠落は空)
- * @param localize true の場合、各行を UTF-8 から内部エンコーディングへ変換する (説明文用)。
- * マップ行のようなASCIIの記号列は変換不要なので false を指定する。
+ * @details マップ行のようなASCIIの記号列は文字コードの変換が不要なので、そのまま取り込む
  */
-void read_string_lines(const nlohmann::json &array_data, std::vector<std::string> &out, bool localize)
+void read_string_lines(const nlohmann::json &array_data, std::vector<std::string> &out)
 {
     if (!array_data.is_array()) {
         return;
@@ -69,10 +68,34 @@ void read_string_lines(const nlohmann::json &array_data, std::vector<std::string
 
     for (const auto &line : array_data) {
         if (line.is_string()) {
-            auto value = line.get<std::string>();
-            out.push_back(localize ? utf8_to_local(value) : std::move(value));
+            out.push_back(line.get<std::string>());
         }
     }
+}
+
+/*!
+ * @brief JSONの文字列配列を、各行を UTF-8 からシステムの文字コードへ変換して取り込む (説明文用、null/欠落は空)
+ * @return 変換できない行があった場合は false
+ */
+bool read_localized_lines(const nlohmann::json &array_data, std::vector<std::string> &out)
+{
+    if (!array_data.is_array()) {
+        return true;
+    }
+
+    for (const auto &line : array_data) {
+        if (!line.is_string()) {
+            continue;
+        }
+
+        auto line_sys = utf8_to_sys(line.get_ref<const std::string &>());
+        if (!line_sys) {
+            return false;
+        }
+        out.push_back(std::move(*line_sys));
+    }
+
+    return true;
 }
 
 /*!
@@ -371,10 +394,7 @@ int QuestReader::set_descriptions(QuestFixedMap &parsed) const
         }
 
         const auto &text = get_json_value(description, "text");
-        try {
-            read_string_lines(get_json_value(text, "ja"), block.lines_ja, true);
-            read_string_lines(get_json_value(text, "en"), block.lines_en, true);
-        } catch (const EncodingConversionError &) {
+        if (!read_localized_lines(get_json_value(text, "ja"), block.lines_ja) || !read_localized_lines(get_json_value(text, "en"), block.lines_en)) {
             return PARSE_ERROR_INVALID_VALUE;
         }
 
@@ -417,7 +437,7 @@ int QuestReader::set_maps(QuestFixedMap &parsed) const
             return PARSE_ERROR_INVALID_TYPE;
         }
         std::vector<std::string> rows;
-        read_string_lines(map, rows, false);
+        read_string_lines(map, rows);
         parsed.maps.push_back(std::move(rows));
         return PARSE_ERROR_NONE;
     }
@@ -432,7 +452,7 @@ int QuestReader::set_maps(QuestFixedMap &parsed) const
                 return PARSE_ERROR_INVALID_TYPE;
             }
             std::vector<std::string> rows;
-            read_string_lines(variant, rows, false);
+            read_string_lines(variant, rows);
             parsed.maps.push_back(std::move(rows));
         }
     }
