@@ -67,9 +67,13 @@ TEST_CASE("MessageReader preserves existing messages after a late parse error")
     messages.emplace(4, MonsterMessageType::SPEAK_ALL, 1, false, "original");
     messages.emplace_default(MonsterMessageType::SPEAK_ALL, 1, false, "default");
     const auto valid = make_message("SPEAK_ALL", nlohmann::json::array({ "new" }));
-    auto invalid = make_message("SPEAK_BATTLE", nlohmann::json::array({ "staged", 7 }));
+    auto invalid = make_message("SPEAK_BATTLE", nlohmann::json::array({ "staged", "valid" }));
     int expected = PARSE_ERROR_INVALID_FLAG;
-    SUBCASE("invalid second localized string") {}
+    SUBCASE("invalid second localized string")
+    {
+        invalid["message"]["ja"][1] = 7;
+        invalid["message"]["en"][1] = 7;
+    }
     SUBCASE("unknown later action")
     {
         invalid["action"] = "UNKNOWN";
