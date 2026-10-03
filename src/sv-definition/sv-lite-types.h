@@ -12,4 +12,6 @@ enum sv_lite_type {
     SV_LITE_LORE = 7,
     SV_LITE_PALANTIR = 8,
     SV_LITE_FLY_STONE = 9,
+    SV_LITE_ORB = 10,
+    SV_LITE_LIGHTER = 11,
 };

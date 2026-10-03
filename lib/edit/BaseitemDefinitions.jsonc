@@ -22112,5 +22112,30 @@
       ],
       "flags": ["RES_ELEC", "IGNORE_ELEC"],
     },
+    {
+      "id": 684,
+      "name": {
+        "ja": "ライター",
+        "en": "& Lighter~",
+      },
+      "symbol": {
+        "character": "~",
+        "color": "Light Gray",
+      },
+      "itemkind": {
+        "type_value": 39,
+        "subtype_value": 11,
+      },
+      "parameter_value": 0,
+      "level": 30,
+      "weight": 10,
+      "cost": 50000,
+      "base_ac": 0,
+      "base_dice": "1d1",
+      "hit_bonus": 0,
+      "damage_bonus": 0,
+      "ac_bonus": 0,
+      "flags": ["INSTA_ART"],
+    },
   ],
 }

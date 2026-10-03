@@ -274,7 +274,8 @@
                             "CREATE_AMMO",
                             "DISPEL_MAGIC",
                             "WHISTLE",
-                            "CAPTURE_MONSTER"
+                            "CAPTURE_MONSTER",
+                            "DARKNESS"
                         ]
                     },
                     "flags": {

@@ -287,6 +287,8 @@ std::pair<bool, std::shared_ptr<ItemEntity>> switch_activation(PlayerType *playe
         return { activate_resistance_pois(player_ptr, name), nullptr };
     case RandomArtActType::LIGHT:
         return { activate_light(player_ptr, name), nullptr };
+    case RandomArtActType::DARKNESS:
+        return { activate_darkness(player_ptr, name), nullptr };
     case RandomArtActType::MAP_LIGHT:
         return { activate_map_light(player_ptr), nullptr };
     case RandomArtActType::DETECT_ALL:
