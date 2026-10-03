@@ -402,6 +402,43 @@ int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t 
 #endif
 
 #if defined(SJIS) && defined(_WIN32)
+namespace {
+/*!
+ * @brief 文字列のコードページを、UTF-16 を経由して変換する (Windows 版)
+ * @details 半角カナが CP932 の1バイトから UTF-8 の3バイトになるなど、変換後の長さは一定の倍率に収まらないので、
+ *          MultiByteToWideChar() と WideCharToMultiByte() に必要な長さを問い合わせてから変換する
+ * @param str 変換元の文字列
+ * @param from_code_page 変換元のコードページ (CP_UTF8、932 など)
+ * @param to_code_page 変換先のコードページ
+ * @return 変換した文字列。変換に失敗した場合はtl::nullopt
+ */
+tl::optional<std::string> convert_code_page(std::string_view str, UINT from_code_page, UINT to_code_page)
+{
+    // 長さ 0 を渡すと MultiByteToWideChar() が失敗するので、空文字列はそのまま返す
+    if (str.empty()) {
+        return tl::make_optional<std::string>();
+    }
+
+    const auto str_len = static_cast<int>(str.length());
+    const auto utf16_len = MultiByteToWideChar(from_code_page, 0, str.data(), str_len, nullptr, 0);
+    if (utf16_len == 0) {
+        return tl::nullopt;
+    }
+
+    std::wstring utf16_str(utf16_len, L'\0');
+    MultiByteToWideChar(from_code_page, 0, str.data(), str_len, utf16_str.data(), utf16_len);
+
+    const auto converted_len = WideCharToMultiByte(to_code_page, 0, utf16_str.data(), utf16_len, nullptr, 0, nullptr, nullptr);
+    if (converted_len == 0) {
+        return tl::nullopt;
+    }
+
+    std::string converted(converted_len, '\0');
+    WideCharToMultiByte(to_code_page, 0, utf16_str.data(), utf16_len, converted.data(), converted_len, nullptr, nullptr);
+    return tl::make_optional(std::move(converted));
+}
+}
+
 /*!
  * @brief 文字コードがUTF-8の文字列をシステムの文字コードに変換する (Windows 版の内部バッファ版)
  * @param str 変換するUTF-8の文字列
@@ -444,31 +481,7 @@ tl::optional<std::string> sys_to_utf8(std::string_view str)
 
     return (len >= 0) ? tl::make_optional(std::move(utf8str.erase(len))) : tl::nullopt;
 #elif defined(SJIS) && defined(_WIN32)
-    // 長さ 0 を渡すと MultiByteToWideChar() が失敗するので、空文字列はそのまま返す
-    if (str.empty()) {
-        return tl::make_optional<std::string>();
-    }
-
-    // CP932 の半角カナは UTF-8 で3バイトになるなど、変換後の長さは一定の倍率に収まらないので、必要な長さを問い合わせてから変換する
-    // SJIS(CP932) -> UTF-16
-    const auto sjis_len = static_cast<int>(str.length());
-    const auto utf16_len = MultiByteToWideChar(932, 0, str.data(), sjis_len, nullptr, 0);
-    if (utf16_len == 0) {
-        return tl::nullopt;
-    }
-
-    std::wstring utf16_str(utf16_len, L'\0');
-    MultiByteToWideChar(932, 0, str.data(), sjis_len, utf16_str.data(), utf16_len);
-
-    // UTF-16 -> UTF-8
-    const auto utf8_len = WideCharToMultiByte(CP_UTF8, 0, utf16_str.data(), utf16_len, nullptr, 0, nullptr, nullptr);
-    if (utf8_len == 0) {
-        return tl::nullopt;
-    }
-
-    std::string utf8_str(utf8_len, '\0');
-    WideCharToMultiByte(CP_UTF8, 0, utf16_str.data(), utf16_len, utf8_str.data(), utf8_len, nullptr, nullptr);
-    return tl::make_optional(std::move(utf8_str));
+    return convert_code_page(str, 932, CP_UTF8);
 #else
     return tl::nullopt;
 #endif
