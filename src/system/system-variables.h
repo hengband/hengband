@@ -16,9 +16,6 @@ constexpr auto MAX_BUNBUN_NUM = 2;
 // #define PY_MAX_GOLD 999999999L /*!< プレイヤー所持金の最大値 / Maximum gold */
 
 enum init_flags_type {
-    INIT_NAME_ONLY = 0x01,
-    INIT_SHOW_TEXT = 0x02,
-    INIT_ASSIGN = 0x04,
     INIT_CREATE_DUNGEON = 0x08,
     INIT_ONLY_FEATURES = 0x10,
     INIT_ONLY_BUILDINGS = 0x20,

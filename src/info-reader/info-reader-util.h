@@ -10,17 +10,10 @@
 #include <unordered_map>
 #include <utility>
 
-/*
- * Size of memory reserved for initialization of some arrays
- */
 extern int error_idx; //!< エラーが発生したinfo ID
 
 enum class RandomArtActType : short;
 RandomArtActType grab_one_activation_flag(std::string_view what);
-
-#ifndef JP
-void append_english_text(std::string &text, std::string_view add);
-#endif
 
 /*!
  * @brief 型Keyをキーとして持つような連想配列型のコンセプト

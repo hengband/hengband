@@ -65,12 +65,12 @@ concept HasShrinkToFit = requires(T t) {
  * @brief 各種設定データをlib/edit/.jsoncから読み込み
  * Load data from lib/edit/.jsonc
  * @param filename ファイル名(拡張子jsonc)
- * @param head 処理に用いるヘッダ構造体
- * @param definition_list データ保管先の構造体ポインタ
+ * @param keyname 定義配列を格納するルートオブジェクトのキー
+ * @param dhdt 定義データのハッシュ保存先を識別する種別
+ * @param definition_list 読み込み後に容量を調整する定義コンテナ
+ * @param json_parser 各定義要素を解析して格納する関数
+ * @param retouch 読み込み後に実行する追加処理 (省略可)
  * @param allow_empty 定義配列が空であることを許可するか
- * @note
- * Note that we let each entry have a unique "name" and "text" string,
- * even if the string happens to be empty (everyone has a unique '\0').
  */
 template <typename DefinitionList>
 void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true)
