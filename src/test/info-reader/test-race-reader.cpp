@@ -3,7 +3,7 @@
 #include "info-reader/race-reader.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
-#include "world/world.h"
+#include "test/info-reader/scoped-reader-state.h"
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -13,12 +13,9 @@ class MonraceListTestAccess {
 public:
     MonraceListTestAccess()
         : monraces(MonraceList::get_instance())
-        , saved_error_idx(error_idx)
-        , saved_timewalk_m_idx(AngbandWorld::get_instance().timewalk_m_idx)
+        , reader_state(0)
     {
         monraces.monraces.swap(saved_monraces);
-        error_idx = 0;
-        AngbandWorld::get_instance().timewalk_m_idx = 1; // Suppress diagnostics without an initialized terminal.
     }
 
     MonraceListTestAccess(const MonraceListTestAccess &) = delete;
@@ -27,15 +24,12 @@ public:
     ~MonraceListTestAccess()
     {
         monraces.monraces.swap(saved_monraces);
-        error_idx = saved_error_idx;
-        AngbandWorld::get_instance().timewalk_m_idx = saved_timewalk_m_idx;
     }
 
 private:
     MonraceList &monraces;
     MonraceList::Container saved_monraces;
-    int saved_error_idx;
-    MONSTER_IDX saved_timewalk_m_idx;
+    ScopedReaderState reader_state;
 };
 }
 

@@ -307,6 +307,10 @@ TEST_CASE("VaultReader keeps the existing vaults on a parse error")
 配列のようにコピー代入できないものや、関数を呼んで戻すもの（`initialize()` など）は、
 `util::make_finalizer()` を直接使ってください。
 
+データの読み込み処理（`info-reader/`）のテストでは、`test/info-reader/scoped-reader-state.h` の
+`test::ScopedReaderState` を使ってください。エラーの位置（`error_idx`）を設定し、端末が無くてもメッセージを
+出さないようにして、スコープを抜けるときに元へ戻します。
+
 そのうえで、**必要な前提は各テストケースの中で自分で設定してください。**
 テストの実行順序や `--test-case=` での絞り込み実行に依存しないようにするためです。
 

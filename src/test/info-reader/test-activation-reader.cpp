@@ -12,9 +12,9 @@
 #include "system/artifact/artifact-list.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
+#include "test/info-reader/scoped-reader-state.h"
 #include "test/system/artifact-list-test-access.h"
 #include "util/enum-converter.h"
-#include "world/world.h"
 #include <array>
 #include <doctest/doctest.h>
 #include <limits>
@@ -55,8 +55,6 @@ nlohmann::json make_item()
 class ActivationStateGuard {
 public:
     ActivationStateGuard()
-        : saved_index(error_idx)
-        , saved_timewalk(AngbandWorld::get_instance().timewalk_m_idx)
     {
         auto &baseitems = BaseitemList::get_instance();
         for (auto &baseitem : baseitems) {
@@ -64,8 +62,6 @@ public:
         }
         baseitems.resize(0);
         this->saved_egos.swap(egos_info);
-        AngbandWorld::get_instance().timewalk_m_idx = 1; // Suppress terminal messages.
-        error_idx = -1;
     }
 
     ActivationStateGuard(const ActivationStateGuard &) = delete;
@@ -82,15 +78,12 @@ public:
             ++target;
         }
         egos_info.swap(this->saved_egos);
-        error_idx = this->saved_index;
-        AngbandWorld::get_instance().timewalk_m_idx = this->saved_timewalk;
     }
 
 private:
     std::vector<BaseitemDefinition> saved_baseitems;
     std::map<EgoType, EgoItemDefinition> saved_egos;
-    int saved_index;
-    short saved_timewalk;
+    test::ScopedReaderState reader_state;
     test::ArtifactListTestAccess artifacts;
 };
 }

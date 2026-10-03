@@ -2,19 +2,17 @@
 #include "info-reader/magic-reader.h"
 #include "info-reader/parse-error-types.h"
 #include "player-info/class-info.h"
+#include "test/info-reader/scoped-reader-state.h"
 #include "test/scoped-restore.h"
-#include "world/world.h"
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
 #include <utility>
 
 TEST_CASE("MagicReader preserves an existing class on a later parse error")
 {
-    auto &world = AngbandWorld::get_instance();
-    const auto restore = test::scoped_restore(class_magics_info, error_idx, world.timewalk_m_idx);
+    const test::ScopedReaderState reader_state;
+    const auto restore = test::scoped_restore(class_magics_info);
     class_magics_info.assign(1, {});
-    error_idx = -1;
-    world.timewalk_m_idx = 1; // Suppress error messages without an initialized terminal.
 
     nlohmann::json data = {
         { "name", "WARRIOR" },

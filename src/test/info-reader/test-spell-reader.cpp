@@ -2,10 +2,9 @@
 #include "info-reader/parse-error-types.h"
 #include "info-reader/spell-reader.h"
 #include "system/spell-info-list.h"
-#include "test/scoped-restore.h"
+#include "test/info-reader/scoped-reader-state.h"
 #include "util/enum-converter.h"
 #include "util/finalizer.h"
-#include "world/world.h"
 #include <doctest/doctest.h>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -14,13 +13,10 @@
 
 TEST_CASE("SpellReader requires arrays for books and spells")
 {
-    auto &world = AngbandWorld::get_instance();
-    const auto restore = test::scoped_restore(error_idx, world.timewalk_m_idx);
+    const test::ScopedReaderState reader_state;
     auto &spells = SpellInfoList::get_instance();
     nlohmann::json data = { { "name", "LIFE" }, { "books", nlohmann::json::array() } };
 
-    error_idx = -1;
-    world.timewalk_m_idx = 1; // Suppress error messages without an initialized terminal.
     CHECK(SpellReader(data, spells).read() == PARSE_ERROR_NONE);
 
     data["books"] = nlohmann::json::array({ { { "spells", nlohmann::json::array() } } });
@@ -48,13 +44,10 @@ nlohmann::json make_spell(int id, const std::string &tag)
 
 TEST_CASE("SpellReader commits all books only after the whole realm succeeds")
 {
-    auto &world = AngbandWorld::get_instance();
     auto &spells = SpellInfoList::get_instance();
-    const auto restore = test::scoped_restore(error_idx, world.timewalk_m_idx);
+    const test::ScopedReaderState reader_state;
     const auto reset_spells = util::make_finalizer([&spells] { spells.initialize(); });
     spells.initialize();
-    error_idx = -1;
-    world.timewalk_m_idx = 1;
 
     nlohmann::json data = {
         { "name", "LIFE" },
