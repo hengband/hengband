@@ -240,6 +240,65 @@ TEST_CASE("TownMapReader validates building commands and numeric fields")
     }
 }
 
+TEST_CASE("TownMapReader preserves JSON integer error categories and output on failure")
+{
+    struct Field {
+        const char *section;
+        const char *name;
+        parse_error_type range_error;
+    };
+    const auto original = make_town_map();
+    TownMapDefinition definition;
+    REQUIRE(TownMapReader(original).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    for (const auto &field : {
+             Field{ "featureRules", "caveInfo", PARSE_ERROR_INVALID_TYPE },
+             Field{ "featureRules", "special", PARSE_ERROR_INVALID_TYPE },
+             Field{ "buildingRules", "index", PARSE_ERROR_INVALID_VALUE },
+             Field{ "startingPositions", "x", PARSE_ERROR_INVALID_VALUE },
+             Field{ "startingPositions", "y", PARSE_ERROR_INVALID_VALUE },
+         }) {
+        CAPTURE(std::string(field.section));
+        CAPTURE(std::string(field.name));
+        for (const auto &value : {
+                 nlohmann::json(nullptr),
+                 nlohmann::json(false),
+                 nlohmann::json(1.0),
+                 nlohmann::json("1"),
+                 nlohmann::json::array(),
+                 nlohmann::json::object(),
+                 nlohmann::json(std::numeric_limits<int64_t>::min()),
+                 nlohmann::json(std::numeric_limits<int64_t>::max()),
+                 nlohmann::json(std::numeric_limits<uint64_t>::max()),
+             }) {
+            CAPTURE(value);
+            auto data = original;
+            data["featureRules"][0]["symbol"] = ".";
+            data["buildingRules"][0]["fields"][0] = "Changed";
+            data["mapVariants"][0]["rows"][0] = "...";
+            data["startingPositions"][0]["x"] = 2;
+            auto &record = data[field.section][0];
+            auto &fields = std::string_view(field.section) == "featureRules" ? record["definition"] : record;
+            fields[field.name] = value;
+            const auto expected = value.is_number_integer() ? field.range_error : PARSE_ERROR_INVALID_TYPE;
+            for (const bool missing : { false, true }) {
+                CAPTURE(missing);
+                if (missing) {
+                    fields.erase(field.name);
+                }
+                CHECK(TownMapReader(data).read(definition, 3, 3) == (missing ? PARSE_ERROR_INVALID_TYPE : expected));
+                REQUIRE(definition.features.size() == 1);
+                REQUIRE(definition.buildings.size() == 1);
+                REQUIRE(definition.maps.size() == 1);
+                REQUIRE(definition.starts.size() == 1);
+                CHECK(definition.features[0].symbol == '#');
+                CHECK(definition.buildings[0].fields[0] == "Building");
+                CHECK(definition.maps[0].rows[0] == "###");
+                CHECK(definition.starts[0].x == 1);
+            }
+        }
+    }
+}
+
 TEST_CASE("TownMapReader rejects legacy delimiters in building text")
 {
     for (const auto *text : { "A:B", "A/B", "A\\B", "A\nB", "A\rB" }) {

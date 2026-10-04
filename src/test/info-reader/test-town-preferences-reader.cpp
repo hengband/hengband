@@ -127,7 +127,9 @@ TEST_CASE("TownPreferencesReader validates cell shape and cave flags")
 
 TEST_CASE("TownPreferencesReader validates special within signed 16-bit range")
 {
-    for (const auto &special : { nlohmann::json(nullptr), nlohmann::json("1"), nlohmann::json(1.0), nlohmann::json(-32769), nlohmann::json(32768), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
+    for (const auto &special : { nlohmann::json(nullptr), nlohmann::json("1"), nlohmann::json(1.0), nlohmann::json(false), nlohmann::json::array(), nlohmann::json::object(),
+             nlohmann::json(-32769), nlohmann::json(32768), nlohmann::json(std::numeric_limits<int64_t>::min()), nlohmann::json(std::numeric_limits<int64_t>::max()), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
+        CAPTURE(special);
         auto data = make_town_preferences();
         data["legend"]["b"]["special"] = special;
         check_rejected(data, PARSE_ERROR_INVALID_VALUE);
@@ -137,6 +139,25 @@ TEST_CASE("TownPreferencesReader validates special within signed 16-bit range")
         data["legend"]["b"]["special"] = special;
         TownPreferencesLegend legend;
         CHECK(TownPreferencesReader(data).read(legend, parse_test_cell) == PARSE_ERROR_NONE);
+        REQUIRE(legend.size() == 2);
+        CHECK(legend[1].second.special == special);
+    }
+}
+
+TEST_CASE("TownPreferencesReader preserves unsigned special boundaries after JSON parsing")
+{
+    for (const int special : { 0, 32767, 32768 }) {
+        CAPTURE(special);
+        auto input = make_town_preferences();
+        input["legend"]["b"]["special"] = special;
+        const auto data = nlohmann::json::parse(input.dump());
+        REQUIRE(data["legend"]["b"]["special"].is_number_unsigned());
+        if (special == 32768) {
+            check_rejected(data, PARSE_ERROR_INVALID_VALUE);
+            continue;
+        }
+        TownPreferencesLegend legend;
+        REQUIRE(TownPreferencesReader(data).read(legend, parse_test_cell) == PARSE_ERROR_NONE);
         REQUIRE(legend.size() == 2);
         CHECK(legend[1].second.special == special);
     }

@@ -1,27 +1,10 @@
 #include "info-reader/town-preferences-reader.h"
+#include "info-reader/json-reader-util.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include <cstdint>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <utility>
-
-namespace {
-bool is_valid_town_special(const nlohmann::json &value)
-{
-    if (!value.is_number_integer()) {
-        return false;
-    }
-
-    constexpr auto minimum = std::numeric_limits<int16_t>::min();
-    constexpr auto maximum = std::numeric_limits<int16_t>::max();
-    if (value.is_number_unsigned()) {
-        return value.get<uint64_t>() <= static_cast<uint64_t>(maximum);
-    }
-
-    const auto special = value.get<int64_t>();
-    return special >= minimum && special <= maximum;
-}
-}
 
 TownPreferencesReader::TownPreferencesReader(const nlohmann::json &data)
     : data(data)
@@ -46,7 +29,9 @@ parse_error_type TownPreferencesReader::read(TownPreferencesLegend &legend, Town
                 return PARSE_ERROR_INVALID_TYPE;
             }
         }
-        if (cell_data.contains("special") && !is_valid_town_special(cell_data["special"])) {
+        int special = 0;
+        if (cell_data.contains("special") &&
+            info_set_integer(cell_data["special"], special, true, Range(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max())) != PARSE_ERROR_NONE) {
             return PARSE_ERROR_INVALID_VALUE;
         }
 
