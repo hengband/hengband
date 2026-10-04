@@ -1,7 +1,10 @@
 #include "wizard/spoiler-util.h"
 #include "system/item/item-entity.h"
 #include <algorithm>
+#include <fmt/format.h>
 #include <fstream>
+#include <string>
+#include <tl/optional.hpp>
 
 const char item_separator = ',';
 const char list_separator = _(',', ';');
@@ -73,54 +76,43 @@ void spoiler_underline(std::string_view str, std::ofstream &ofs)
  */
 void spoil_out(std::string_view sv, bool flush_buffer)
 {
-    concptr r;
-    static char roff_buf[256]{};
-    static char roff_waiting_buf[256]{};
+    static std::string line; //!< 書き出し待ちの行
+    static auto break_pos = std::string::npos; //!< 行の中で折り返せる位置
+    static tl::optional<std::string> waiting_line; //!< 後ろに空白しか続かないため、書き出しを保留している行
 
 #ifdef JP
     bool iskanji_flag = false;
 #endif
 
-    static char *roff_p = roff_buf;
-    static char *roff_s = nullptr;
-    static bool waiting_output = false;
     if (flush_buffer) {
-        if (waiting_output) {
-            fputs(roff_waiting_buf, spoiler_file);
-            waiting_output = false;
+        if (waiting_line) {
+            fmt::print(spoiler_file, "{}", *waiting_line);
+            waiting_line.reset();
         }
 
-        if (roff_p != roff_buf) {
-            roff_p--;
-        }
-        while (*roff_p == ' ' && roff_p != roff_buf) {
-            roff_p--;
-        }
-
-        if (roff_p == roff_buf) {
-            fprintf(spoiler_file, "\n");
+        // 行が空か、空白だけなら空の行として扱う
+        const auto last_pos = line.find_last_not_of(' ');
+        if (last_pos == std::string::npos) {
+            fmt::print(spoiler_file, "\n");
         } else {
-            *(roff_p + 1) = '\0';
-            fprintf(spoiler_file, "%s\n\n", roff_buf);
+            fmt::print(spoiler_file, "{}\n\n", std::string_view(line).substr(0, last_pos + 1));
         }
 
-        roff_p = roff_buf;
-        roff_s = nullptr;
-        roff_buf[0] = '\0';
+        line.clear();
+        break_pos = std::string::npos;
         return;
     }
 
-    const auto *const end = sv.data() + sv.length();
-    for (auto str = sv.data(); str != end; ++str) {
+    for (size_t i = 0; i < sv.length(); ++i) {
+        char ch = sv[i];
 #ifdef JP
-        char cbak;
-        bool k_flag = iskanji((unsigned char)(*str));
+        const auto k_flag = iskanji(static_cast<unsigned char>(ch));
 #endif
-        char ch = *str;
         bool wrap = (ch == '\n');
+        bool defer = false; //!< 折り返した行の後ろに空白しか続かず、書き出しを保留するか
 
 #ifdef JP
-        if (!isprint((unsigned char)ch) && !k_flag && !iskanji_flag) {
+        if (!isprint(static_cast<unsigned char>(ch)) && !k_flag && !iskanji_flag) {
             ch = ' ';
         }
 
@@ -131,26 +123,26 @@ void spoil_out(std::string_view sv, bool flush_buffer)
         }
 #endif
 
-        if (waiting_output) {
-            fputs(roff_waiting_buf, spoiler_file);
+        if (waiting_line) {
+            fmt::print(spoiler_file, "{}", *waiting_line);
             if (!wrap) {
-                fputc('\n', spoiler_file);
+                fmt::print(spoiler_file, "\n");
             }
 
-            waiting_output = false;
+            waiting_line.reset();
         }
 
         if (!wrap) {
 #ifdef JP
-            if (roff_p >= roff_buf + (iskanji_flag ? 74 : 75)) {
+            if (line.length() >= (iskanji_flag ? 74U : 75U)) {
                 wrap = true;
-            } else if ((ch == ' ') && (roff_p >= roff_buf + (iskanji_flag ? 72 : 73))) {
+            } else if ((ch == ' ') && (line.length() >= (iskanji_flag ? 72U : 73U))) {
                 wrap = true;
             }
 #else
-            if (roff_p >= roff_buf + 75) {
+            if (line.length() >= 75U) {
                 wrap = true;
-            } else if ((ch == ' ') && (roff_p >= roff_buf + 73)) {
+            } else if ((ch == ' ') && (line.length() >= 73U)) {
                 wrap = true;
             }
 #endif
@@ -159,90 +151,75 @@ void spoil_out(std::string_view sv, bool flush_buffer)
 #ifdef JP
                 bool k_flag_local;
                 bool iskanji_flag_local = false;
-                concptr tail = std::min(str + (iskanji_flag ? 2 : 1), end);
+                auto tail = std::min(i + (iskanji_flag ? 2 : 1), sv.length());
 #else
-                concptr tail = str + 1;
+                auto tail = i + 1;
 #endif
 
-                for (; tail != end; tail++) {
-                    if (*tail == ' ') {
+                for (; tail < sv.length(); tail++) {
+                    if (sv[tail] == ' ') {
                         continue;
                     }
 
 #ifdef JP
-                    k_flag_local = iskanji((unsigned char)(*tail));
-                    if (isprint((unsigned char)*tail) || k_flag_local || iskanji_flag_local) {
+                    k_flag_local = iskanji(static_cast<unsigned char>(sv[tail]));
+                    if (isprint(static_cast<unsigned char>(sv[tail])) || k_flag_local || iskanji_flag_local) {
                         break;
                     }
 
                     iskanji_flag_local = k_flag_local && !iskanji_flag_local;
 #else
-                    if (isprint(*tail)) {
+                    if (isprint(sv[tail])) {
                         break;
                     }
 #endif
                 }
 
-                if (tail == end) {
-                    waiting_output = true;
-                }
+                defer = (tail >= sv.length());
             }
         }
 
         if (wrap) {
-            *roff_p = '\0';
-            r = roff_p;
-#ifdef JP
-            cbak = ' ';
-#endif
-            if (roff_s && (ch != ' ')) {
-#ifdef JP
-                cbak = *roff_s;
-#endif
-                *roff_s = '\0';
-                r = roff_s + 1;
+            // 折り返せる位置があれば、その位置で切って後ろを次の行へ送る (今の文字が空白なら行全体を書き出す)。
+            // 折り返せる位置の文字は、空白なら捨て、空白でなければ (「(」や2バイト文字の前半バイト) 次の行の先頭に置く
+            std::string next_line;
+            if ((break_pos != std::string::npos) && (ch != ' ')) {
+                next_line = line.substr(break_pos + ((line[break_pos] == ' ') ? 1 : 0));
+                line.erase(break_pos);
             }
 
-            if (!waiting_output) {
-                fprintf(spoiler_file, "%s\n", roff_buf);
+            if (!defer) {
+                fmt::print(spoiler_file, "{}\n", line);
             } else {
-                strcpy(roff_waiting_buf, roff_buf);
+                waiting_line = std::move(line);
             }
 
-            roff_s = nullptr;
-            roff_p = roff_buf;
-#ifdef JP
-            if (cbak != ' ') {
-                *roff_p++ = cbak;
-            }
-#endif
-            while (*r) {
-                *roff_p++ = *r++;
-            }
+            break_pos = std::string::npos;
+            line = std::move(next_line);
         }
 
-        if ((roff_p <= roff_buf) && (ch == ' ')) {
+        if (line.empty() && (ch == ' ')) {
             continue;
         }
 
 #ifdef JP
         if (!k_flag) {
             if ((ch == ' ') || (ch == '(')) {
-                roff_s = roff_p;
+                break_pos = line.length();
             }
         } else {
-            const std::string_view rest(str, end);
+            const auto rest = sv.substr(i);
             if (iskanji_flag && !rest.starts_with("。") && !rest.starts_with("、") && !rest.starts_with("ィ") && !rest.starts_with("ー")) {
-                roff_s = roff_p;
+                break_pos = line.length();
             }
         }
 #else
         if (ch == ' ') {
-            roff_s = roff_p;
+            break_pos = line.length();
         }
 #endif
 
-        *roff_p++ = ch;
+        line.push_back(ch);
     }
 }
 

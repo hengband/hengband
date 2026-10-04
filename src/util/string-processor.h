@@ -44,11 +44,13 @@ tl::optional<T> str_to_num(std::string_view str, int base = 10)
 
 size_t angband_strcpy(char *buf, std::string_view src, size_t bufsize);
 size_t angband_strcat(char *buf, std::string_view src, size_t bufsize);
+size_t str_find_position(std::string_view haystack, std::string_view needle);
+size_t str_find_position(std::string_view str, char ch);
 char *angband_strstr(const char *haystack, std::string_view needle);
 char *angband_strchr(const char *ptr, char ch);
 char *ltrim(char *p);
 char *rtrim(char *p);
-bool str_find(const std::string &src, std::string_view find);
+bool str_find(std::string_view src, std::string_view find);
 std::string str_trim(std::string_view str);
 std::string str_rtrim(std::string_view str);
 std::string str_ltrim(std::string_view str);

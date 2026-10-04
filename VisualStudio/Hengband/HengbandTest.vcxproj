@@ -67,6 +67,7 @@
     <ClCompile Include="..\..\src\test\object\test-object-info.cpp" />
     <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
     <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />
+    <ClCompile Include="..\..\src\test\wizard\test-spoiler-util.cpp" />
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp" />
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp" />

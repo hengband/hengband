@@ -189,6 +189,39 @@ TEST_CASE("angband_strchr cannot find the terminating NUL")
     CHECK(angband_strchr("abc", '\0') == nullptr);
 }
 
+TEST_CASE("str_find_position finds the position of the first occurrence of the needle")
+{
+    CHECK(str_find_position("abcabc", "bc") == 1);
+    CHECK(str_find_position("abcabc", "d") == std::string_view::npos);
+    CHECK(str_find_position("abc", "abcd") == std::string_view::npos);
+    CHECK(str_find_position("abc", "") == 0);
+}
+
+TEST_CASE("str_find_position finds the position of the first occurrence of the character")
+{
+    CHECK(str_find_position("abcabc", 'c') == 2);
+    CHECK(str_find_position("abcabc", 'd') == std::string_view::npos);
+    CHECK(str_find_position("", 'a') == std::string_view::npos);
+}
+
+TEST_CASE("str_find_position does not search past the end of the view")
+{
+    // 「abc」の先頭2文字だけを対象にするので、「c」は見つからない
+    constexpr std::string_view haystack = "abc";
+    CHECK(str_find_position(haystack.substr(0, 2), "c") == std::string_view::npos);
+    CHECK(str_find_position(haystack.substr(0, 2), 'c') == std::string_view::npos);
+}
+
+#ifdef JP
+TEST_CASE("str_find_position does not match the trailing byte of a 2-byte character")
+{
+    const auto trail_byte = KANJI_KAN.substr(1, 1);
+    CHECK(str_find_position(KANJI_KAN, trail_byte) == std::string_view::npos);
+    CHECK(str_find_position(KANJI_KAN, trail_byte[0]) == std::string_view::npos);
+    CHECK(str_find_position(cat("a", KANJI_KAN, "b"), "b") == 3);
+}
+#endif
+
 TEST_CASE("ltrim skips the leading spaces")
 {
     char buf[] = "  abc ";

@@ -1554,7 +1554,8 @@ hengband_test_SOURCES = \
 	test/util/test-sha256.cpp \
 	test/util/test-string-processor.cpp \
 	test/view/test-map-terrain-visibility.cpp \
-	test/view/test-screen-parity-helpers.cpp
+	test/view/test-screen-parity-helpers.cpp \
+	test/wizard/test-spoiler-util.cpp
 
 hengband_test_LDADD = libhengband.a
 
