@@ -9605,5 +9605,27 @@
         "ja": "「よくやった！ 私は無理ではないかと恐れていたのだ！「ダイアナの長弓を持って戻ってきたな！「私は今，かのケンタウロスが別の大蠍を選ぶことを恐れている．それはいつかなされるだろう，しかし，その前にお前がビーナスのためにイェンダーの魔除けを取り戻すことができれば，我々は永遠に安泰だ．「ダイアナの長弓を持って行くがいい．魔除けを探す冒険の助けとなるだろう．」(勇者オリオン，JNethack)",
       },
     },
+    {
+      "id": 271,
+      "name": {
+        "ja": "火消しライター",
+        "en": "Deluminator",
+      },
+      "base_item": {
+        "type_value": 39,
+        "subtype_value": 11,
+      },
+      "parameter_value": 3,
+      "level": 30,
+      "rarity": 30,
+      "weight": 10,
+      "cost": 50000,
+      "activate": "DARKNESS",
+      "flags": ["STEALTH", "LITE_M1", "DARK_SOURCE", "INSTA_ART", "FULL_NAME"],
+      "flavor": {
+        "ja": "一番近くの街灯が、ポッと小さな音を立てて消えました。ダンブルドアがもう一度カチッと鳴らすと、次の街灯が揺らめいて闇の中に消えて行きました。（ハリー・ポッターと賢者の石　第1章）",
+        "en": "The nearest street lamp went out with a little pop. He clicked it again -- the next lamp flickered into darkness. (Harry Potter and the Philosopher's Stone, Chapter 1)",
+      },
+    },
   ],
 }

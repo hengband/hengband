@@ -107,6 +107,7 @@ const std::vector<ActivationType> activation_info = {
     { "RESIST_ELEC", RandomArtActType::RESIST_ELEC, 20, 2000, 40, 40, _("電撃への耐性(期間 20+d20)", "resist elec (dur 20+d20)") },
     { "RESIST_POIS", RandomArtActType::RESIST_POIS, 20, 2000, 40, 40, _("毒への耐性(期間 20+d20)", "resist poison (dur 20+d20)") },
     { "LIGHT", RandomArtActType::LIGHT, 10, 150, 10, 10, _("イルミネーション", "light area (dam 2d15)") },
+    { "DARKNESS", RandomArtActType::DARKNESS, 10, 150, 10, 10, _("暗黒生成", "darkness area") },
 
     { "MAP_LIGHT", RandomArtActType::MAP_LIGHT, 30, 500, 50, 50, _("魔法の地図と光", "light (dam 2d15) & map area") },
     { "DETECT_ALL", RandomArtActType::DETECT_ALL, 30, 1000, 55, 55, _("全感知", "detection") },

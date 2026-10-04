@@ -144,7 +144,8 @@ enum class RandomArtActType : short {
     HERO_BLESS = 142,
     CREATE_AMMO = 143,
     DISPEL_MAGIC = 144,
-    /* 145 - 243 unused */
+    DARKNESS = 145,
+    /* 146 - 243 unused */
     WHISTLE = 244,
     CAPTURE_MONSTER = 245,
     FALLING_STAR = 246,

@@ -32,7 +32,7 @@ constexpr auto unused_activation_ranges = std::array{
     std::pair{ 61, 64 },
     std::pair{ 78, 79 },
     std::pair{ 90, 90 },
-    std::pair{ 145, 243 },
+    std::pair{ 146, 243 },
 };
 
 nlohmann::json make_item()

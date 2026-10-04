@@ -385,6 +385,19 @@ bool activate_light(PlayerType *player_ptr, std::string_view name)
     return true;
 }
 
+/*!
+ * @brief 発動：暗黒生成
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param name 発動アイテム名
+ * @return 常にTRUE
+ */
+bool activate_darkness(PlayerType *player_ptr, std::string_view name)
+{
+    msg_format(_("%sが光を吸い込んだ...", "The %s absorbs light..."), name.data());
+    (void)unlite_area(player_ptr, Dice::roll(2, 15), 3);
+    return true;
+}
+
 bool activate_recall(PlayerType *player_ptr)
 {
     msg_print(_("やわらかな白色に輝いている...", "It glows soft white..."));
