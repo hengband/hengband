@@ -130,7 +130,7 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
 
     auto &acceleration = player_ptr->effects()->acceleration();
     if (v) {
-        if (acceleration.is_fast() && !do_dec) {
+        if (acceleration.is_active() && !do_dec) {
             if (acceleration.current() > v) {
                 return false;
             }
@@ -141,7 +141,7 @@ bool set_acceleration(PlayerType *player_ptr, TIME_EFFECT v, bool do_dec)
             chg_virtue(player_ptr, Virtue::DILIGENCE, 1);
         }
     } else {
-        if (acceleration.is_fast() && !player_ptr->lightspeed) {
+        if (acceleration.is_active() && !player_ptr->lightspeed) {
             auto is_singing = music_singing(player_ptr, MUSIC_SPEED);
             is_singing |= music_singing(player_ptr, MUSIC_SHERO);
             if (!is_singing) {

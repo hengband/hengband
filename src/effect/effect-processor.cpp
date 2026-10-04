@@ -120,7 +120,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
     Pos2D pos_path = pos_source;
     auto visual = false;
     auto see_s_msg = true;
-    const auto is_blind = player_ptr->effects()->blindness().is_blind();
+    const auto is_blind = player_ptr->effects()->blindness().is_active();
     for (const auto &pos : path_g) {
         if (flag & PROJECT_DISI) {
             if (floor.can_block_disintegration_at(pos) && (rad > 0)) {
@@ -383,7 +383,7 @@ ProjectResult project(PlayerType *player_ptr, const MONSTER_IDX src_idx, POSITIO
             if (grid.has_monster()) {
                 auto &monster = floor.m_list[grid.m_idx];
                 if (monster.ml) {
-                    if (!player_ptr->effects()->hallucination().is_hallucinated()) {
+                    if (!player_ptr->effects()->hallucination().is_active()) {
                         tracker.set_trackee(monster.ap_r_idx);
                     }
 

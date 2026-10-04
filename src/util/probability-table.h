@@ -3,12 +3,14 @@
 #include "system/angband-exceptions.h"
 #include "term/z-rand.h"
 #include <algorithm>
+#include <cstdint>
 #include <exception>
+#include <iterator>
+#include <limits>
 #include <numeric>
-#include <random>
 #include <stdexcept>
-#include <tl/optional.hpp>
 #include <tuple>
+#include <utility>
 #include <vector>
 
 /**
@@ -33,7 +35,7 @@ public:
      */
     void clear()
     {
-        dist_.reset();
+        cumulative_probs_.clear();
         item_list_.clear();
     }
 
@@ -53,7 +55,7 @@ public:
     {
         if (prob > 0) {
             item_list_.emplace_back(id, prob);
-            dist_.reset();
+            cumulative_probs_.clear();
         }
     }
 
@@ -107,23 +109,48 @@ public:
      * となる。
      * 抽選は独立試行で行われ、選択された項目がテーブルから取り除かれる事はない。
      * 確率テーブルになにも登録されていない場合、std::runtime_error例外を送出する。
+     * すべての項目の確率の合計が int の最大値を超える場合、std::overflow_error例外を送出する。
      *
+     * @param rng 乱数生成器
      * @return int 選択された項目のID
      */
-    IdType pick_one_at_random() const
+    IdType pick_one_at_random(xso::rng32 &rng) const
     {
         if (empty()) {
             THROW_EXCEPTION(std::runtime_error, "There is no entry in the probability table.");
         }
 
-        if (!dist_) {
-            std::vector<int> probs(item_list_.size());
-            std::transform(item_list_.begin(), item_list_.end(), probs.begin(), [](const auto &item) { return std::get<1>(item); });
-            dist_ = std::discrete_distribution<>(probs.begin(), probs.end());
+        if (cumulative_probs_.empty()) {
+            std::vector<int> cumulative_probs;
+            int64_t total = 0;
+            for (const auto &[_, prob] : item_list_) {
+                total += prob;
+                if (total > std::numeric_limits<int>::max()) {
+                    THROW_EXCEPTION(std::overflow_error, "The total probability of the probability table is too large.");
+                }
+
+                cumulative_probs.push_back(static_cast<int>(total));
+            }
+
+            cumulative_probs_ = std::move(cumulative_probs);
         }
 
-        const auto choice = rand_dist(*dist_);
-        return std::get<0>(item_list_[choice]);
+        const auto value = rand_range(rng, 0, cumulative_probs_.back() - 1);
+        const auto it = std::upper_bound(cumulative_probs_.begin(), cumulative_probs_.end(), value);
+        const auto index = std::distance(cumulative_probs_.begin(), it);
+        return std::get<0>(item_list_[index]);
+    }
+
+    /**
+     * @brief 確率テーブルから項目をランダムに1つ選択する
+     *
+     * ゲームの乱数生成器を使う以外は pick_one_at_random(xso::rng32 &) と同じ。
+     *
+     * @return int 選択された項目のID
+     */
+    IdType pick_one_at_random() const
+    {
+        return this->pick_one_at_random(get_game_rng());
     }
 
     /**
@@ -148,5 +175,6 @@ private:
     /** 項目のIDと確率のセットを格納する配列 */
     std::vector<std::tuple<IdType, int>> item_list_;
 
-    mutable tl::optional<std::discrete_distribution<>> dist_;
+    /** 項目の確率の累積和 (抽選用のキャッシュ、空ならば未計算) */
+    mutable std::vector<int> cumulative_probs_;
 };

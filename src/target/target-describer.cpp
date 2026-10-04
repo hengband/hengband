@@ -104,10 +104,13 @@ void GridExamination::set_terrain_id(TerrainTag tag)
 
 bool show_gold_on_floor = false;
 
-/*
- * Evaluate number of kill needed to gain level
+/*!
+ * @brief 注視コマンドに表示する「レベルアップまでに倒す必要のある数」を求める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param monster 対象のモンスター
+ * @return 表示文字列 ("**" / "??" / 3桁の数)
  */
-static std::string evaluate_monster_exp(PlayerType *player_ptr, const MonsterEntity &monster)
+std::string evaluate_monster_exp(PlayerType *player_ptr, const MonsterEntity &monster)
 {
     const auto &monrace = monster.get_apparent_monrace();
     if ((player_ptr->lev >= PY_MAX_LEVEL) || PlayerRace(player_ptr).equals(PlayerRaceType::ANDROID)) {
@@ -170,7 +173,7 @@ static void describe_target(PlayerType *player_ptr, GridExamination *ge_ptr)
 
 static ProcessResult describe_hallucinated_target(PlayerType *player_ptr, GridExamination *ge_ptr)
 {
-    if (!player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (!player_ptr->effects()->hallucination().is_active()) {
         return ProcessResult::PROCESS_CONTINUE;
     }
 

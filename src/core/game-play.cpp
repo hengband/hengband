@@ -35,6 +35,8 @@
 #include "game-option/play-record-options.h"
 #include "game-option/runtime-arguments.h"
 #include "info-reader/fixed-map-parser.h"
+#include "info-reader/parse-error-types.h"
+#include "info-reader/wilderness-reader.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
 #include "io/input-key-processor.h"
@@ -75,7 +77,6 @@
 #include "system/dungeon/quest-definition.h"
 #include "system/enums/monrace/monrace-id.h"
 #include "system/floor/floor-info.h"
-#include "system/floor/wilderness-grid.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
@@ -137,8 +138,7 @@ static void send_waiting_record(PlayerType *player_ptr)
     highscore_fd = fd_open(path, O_RDWR);
 
     /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
-    const auto &area = WildernessGrids::get_instance().get_area();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
+    apply_wilderness_definition();
     bool success = send_world_score(player_ptr, true);
     if (!success && !input_check_strict(player_ptr, _("スコア登録を諦めますか？", "Do you give up score registration? "), UserCheck::NO_HISTORY)) {
         prt(_("引き続き待機します。", "standing by for future registration..."), 0, 0);
@@ -174,8 +174,10 @@ static void init_random_seed(PlayerType *player_ptr, bool new_game)
         process_player_name(player_ptr);
     }
 
-    if (init_random_seed) {
-        Rand_state_init();
+    // 既存のセーブデータから新規ゲームを始める場合、乱数生成器の状態はセーブデータのものが
+    // 読み込まれている。固定シードを指定した時はこれを上書きしないと再現性が得られない
+    if (init_random_seed || (new_game && arg_fixed_seed)) {
+        Rand_state_init(arg_fixed_seed);
     }
 }
 
@@ -243,10 +245,11 @@ static void reset_world_info(PlayerType *player_ptr)
 
 static void generate_wilderness(PlayerType *player_ptr)
 {
-    const auto &area = WildernessGrids::get_instance().get_area();
-    parse_fixed_map(player_ptr, WILDERNESS_DEFINITION, 0, 0, area.height(), area.width());
+    apply_wilderness_definition();
     init_flags = INIT_ONLY_BUILDINGS;
-    parse_fixed_map(player_ptr, TOWN_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID);
+    if (parse_fixed_map(player_ptr, TOWN_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID) != PARSE_ERROR_NONE) {
+        quit(_("町の定義の読み込みに失敗しました", "Failed to load the town definition"));
+    }
     select_floor_music(player_ptr);
 }
 

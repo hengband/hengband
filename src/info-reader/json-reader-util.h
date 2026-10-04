@@ -2,6 +2,7 @@
 
 #include "info-reader/parse-error-types.h"
 #include "system/angband.h"
+#include "util/type-concepts.h"
 #include <concepts>
 #include <nlohmann/json.hpp>
 #include <string_view>
@@ -12,13 +13,11 @@ class Dice;
 
 using Range = std::pair<int, int>;
 
-template <typename T>
-concept IntegralOrEnum = std::integral<T> || std::is_enum_v<T>;
-
 errr info_set_string(const nlohmann::json &json, std::string &data, bool is_required);
 errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required);
 errr info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required);
 const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_view key);
+errr info_validate_json_array(const nlohmann::json &root, std::string_view key, bool allow_empty = true);
 
 /*!
  * @brief JSON Objectから整数値もしくはenum値を取得する
@@ -42,11 +41,24 @@ errr info_set_integer(const nlohmann::json &json, T &data, bool is_required, tl:
         return PARSE_ERROR_INVALID_TYPE;
     }
 
-    const auto value = json.get<T>();
-    if (range && (value < static_cast<T>(range->first) || value > static_cast<T>(range->second))) {
+    // 範囲チェックは格納先の型へ変換する前に行う。変換してから比べると、
+    // 格納先の型で表現できない値が切り詰められて範囲内に収まり、チェックをすり抜ける
+    // (例: uint8_t への 300 は 44 になり Range(0, 255) を通ってしまう)
+    if (json.is_number_unsigned()) {
+        const auto value = json.get<nlohmann::json::number_unsigned_t>();
+        if (range && (std::cmp_less(value, range->first) || std::cmp_greater(value, range->second))) {
+            return PARSE_ERROR_INVALID_FLAG;
+        }
+
+        data = static_cast<T>(value);
+        return PARSE_ERROR_NONE;
+    }
+
+    const auto value = json.get<nlohmann::json::number_integer_t>();
+    if (range && (value < range->first || value > range->second)) {
         return PARSE_ERROR_INVALID_FLAG;
     }
 
-    data = value;
+    data = static_cast<T>(value);
     return PARSE_ERROR_NONE;
 }

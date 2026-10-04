@@ -7,6 +7,7 @@
 #include "autopick/autopick-drawer.h"
 #include "autopick/autopick-describer.h"
 #include "autopick/autopick-dirty-flags.h"
+#include "autopick/autopick-editor-util.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-util.h"
 #include "io/pref-file-expressor.h"
@@ -14,6 +15,8 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "view/display-util.h"
+#include <algorithm>
+#include <string_view>
 #include <tuple>
 
 constexpr auto DESCRIPT_HGT = 3;
@@ -71,26 +74,14 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
      */
     tb->hgt -= 2 + DESCRIPT_HGT;
 
-#ifdef JP
-    /* Don't let cursor at second byte of kanji */
-    for (int i = 0; (*tb->lines_list[tb->cy])[i]; i++) {
-        if (iskanji((*tb->lines_list[tb->cy])[i])) {
-            i++;
-            if (i == tb->cx) {
-                /*
-                 * Move to a correct position in the
-                 * left or right
-                 */
-                if (i & 1) {
-                    tb->cx--;
-                } else {
-                    tb->cx++;
-                }
-                break;
-            }
+    // カーソルを2バイト文字の2バイト目に置かないよう、左右どちらかの文字の境界へ動かす
+    if (tb->is_cursor_on_second_byte_of_kanji()) {
+        if (tb->cx & 1) {
+            tb->cx--;
+        } else {
+            tb->cx++;
         }
     }
-#endif
     if (tb->cy < tb->upper || tb->upper + tb->hgt <= tb->cy) {
         tb->upper = tb->cy - (tb->hgt) / 2;
     }
@@ -158,7 +149,8 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
                 leftcol = 1;
                 break;
             }
-            if (iskanji(msg.front())) {
+            // 行末に1バイト目だけが残っている場合は1バイトの文字として扱う
+            if (iskanji(msg.front()) && (msg.length() > 1)) {
                 msg.remove_prefix(1);
                 j++;
             }
@@ -181,23 +173,25 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         } else if (by1 != by2) {
             term_putstr(leftcol, i + 1, tb->wid - 1, TERM_YELLOW, msg);
         } else {
-            const auto x0 = leftcol + tb->left;
-            const int len = tb->lines_list[tb->cy]->length();
-            const auto bx1 = std::min(tb->mx, tb->cx);
-            auto bx2 = std::max(tb->mx, tb->cx);
-
-            if (bx2 > len) {
-                bx2 = len;
+            /*
+             * 選択範囲の前・選択範囲・選択範囲の後に分けて描く。選択範囲は表示を始める位置 x0 より左を除き、
+             * 端が全角文字の途中にあれば (行頭に '!' などを足した場合など)、文字を割らないようにその文字を含める。
+             */
+            const std::string_view line(*tb->lines_list[y]);
+            const auto x0 = line.length() - msg.length();
+            auto bx1 = std::max<size_t>(std::min(tb->mx, tb->cx), x0);
+            if (is_second_byte_of_kanji(line, static_cast<int>(bx1))) {
+                bx1--;
+            }
+            auto bx2 = std::clamp<size_t>(std::max(tb->mx, tb->cx), bx1, line.length());
+            if (is_second_byte_of_kanji(line, static_cast<int>(bx2))) {
+                bx2++;
             }
 
             term_gotoxy(leftcol, i + 1);
-            if (x0 < bx1) {
-                term_addstr(bx1 - x0, color, msg);
-            }
-            if (x0 < bx2) {
-                term_addstr(bx2 - bx1, TERM_YELLOW, msg.substr(bx1 - x0));
-            }
-            term_addstr(-1, color, msg.substr(bx2 - x0));
+            term_addstr(-1, color, line.substr(x0, bx1 - x0));
+            term_addstr(-1, TERM_YELLOW, line.substr(bx1, bx2 - bx1));
+            term_addstr(-1, color, line.substr(bx2));
         }
     }
 

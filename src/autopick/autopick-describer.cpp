@@ -22,7 +22,7 @@ struct autopick_describer {
     std::string body_str;
 };
 
-#if JP
+#ifdef JP
 static std::string describe_autopick_jp(const autopick_type &entry, autopick_describer &describer)
 {
     std::vector<std::string> before_strings;

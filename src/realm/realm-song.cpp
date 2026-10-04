@@ -568,7 +568,7 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
         }
 
         if (stop) {
-            if (!player_ptr->effects()->acceleration().is_fast()) {
+            if (!player_ptr->effects()->acceleration().is_active()) {
                 msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
                 sound(SoundKind::BUFF_EXPIRE);
             }
@@ -773,7 +773,7 @@ tl::optional<std::string> do_music_spell(PlayerType *player_ptr, SPELL_IDX spell
                 RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::HP);
             }
 
-            if (!player_ptr->effects()->acceleration().is_fast()) {
+            if (!player_ptr->effects()->acceleration().is_active()) {
                 msg_print(_("動きの素早さがなくなったようだ。", "You feel yourself slow down."));
                 if (!sound_played) {
                     sound(SoundKind::BUFF_EXPIRE);

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "system/angband.h"
-#include "timed-effect/player-confusion.h"
 #include <memory>
 
 /*!

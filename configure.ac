@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(hengband, 3.0.2.4-Beta)
+AC_INIT(hengband, 3.0.2.5-Beta)
 
 AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_HEADERS(src/autoconf.h)
@@ -16,6 +16,9 @@ AC_ARG_WITH(setgid,
 esac])
 AC_SUBST(GAMEGROUP)
 AM_CONDITIONAL(SET_GID, test "$GAMEGROUP" != "")
+
+dnl lib/xtra (サブモジュール) がチェックアウトされているか
+AM_CONDITIONAL([HAVE_XTRA], [test -f "$srcdir/lib/xtra/graf/8x8.bmp"])
 
 dnl generate the installation path for the ./lib/ folder
 if test "$GAMEGROUP" != ""; then
@@ -46,6 +49,42 @@ AC_SUBST(DEFAULT_VAR_PATH)
 dnl Checks for programs.
 AC_LANG(C++)
 AC_PROG_CXX
+dnl ARFLAGS が指定されている場合は、その値をそのまま使う。
+dnl AM_PROG_AR は ARFLAGS が空の場合に既定値を設定する (automake 1.17 以降) ため、
+dnl ユーザーが指定したかどうかは AM_PROG_AR を実行する前に調べておく。
+AC_ARG_VAR([ARFLAGS],
+  [archiver flags (default: crT if thin archives are supported, otherwise cru)])
+arflags_given=${ARFLAGS+yes}
+
+dnl ゲーム本体のソースをまとめた静的ライブラリ libhengband.a の生成に必要
+AM_PROG_AR
+AC_PROG_RANLIB
+
+dnl libhengband.a は全オブジェクトを含むため 1GB 近くになる。
+dnl thin archive (ar の T フラグ) が使えるなら、オブジェクトの実体をコピーせず
+dnl パスのみを格納するようにして、ビルド時間とディスク使用量を削減する。
+dnl GNU ar と llvm-ar のみ対応。T フラグを別の意味に解釈する ar (BSD/cctools では
+dnl メンバ名の切り詰め) があるため、コマンドの成否ではなく、生成されたアーカイブの
+dnl 先頭が thin archive のマジック "!<thin>" になっているかで判定する。
+if test "x$arflags_given" != xyes; then
+  AC_MSG_CHECKING([whether $AR supports thin archives])
+  ar_thin_archive=no
+  echo 'int hengband_ar_test;' > conftest_ar.cpp
+  if $CXX -c conftest_ar.cpp -o conftest_ar.$OBJEXT >/dev/null 2>&1 &&
+     $AR crT conftest_ar.a conftest_ar.$OBJEXT >/dev/null 2>&1 &&
+     test -s conftest_ar.a; then
+    case `dd if=conftest_ar.a bs=1 count=7 2>/dev/null` in
+    ["!<thin>"]) ar_thin_archive=yes ;;
+    esac
+  fi
+  rm -f conftest_ar.cpp conftest_ar.$OBJEXT conftest_ar.a
+  AC_MSG_RESULT([$ar_thin_archive])
+  if test "$ar_thin_archive" = yes; then
+    ARFLAGS="crT"
+  else
+    ARFLAGS="cru"
+  fi
+fi
 saved_CXXFLAGS="$CXXFLAGS"
 CXXFLAGS=$(echo "$CXXFLAGS" | sed 's/-Werror[[^ ]]*//g')
 AX_CXX_COMPILE_STDCXX(20, [noext], [mandatory])
@@ -90,6 +129,18 @@ AC_ARG_ENABLE([pch],
 [  --disable-pch           disable use of precompiled headers],
 enable_pch=no, enable_pch=yes)
 AM_CONDITIONAL([PCH], [test x$enable_pch = xyes])
+
+dnl assert.h / TL_ASSERT の有効・無効。
+dnl 既定は有効。出荷相当で消すときは --disable-assert。
+dnl AC_HEADER_ASSERT は autoconf.h に NDEBUG を書くだけなので、
+dnl stdafx.h が <tl/expected.hpp> を autoconf.h より先に読む経路でも
+dnl 効くよう、無効時はコマンドラインにも -DNDEBUG を足す。
+AC_HEADER_ASSERT
+AS_IF([test "x$ac_enable_assert" = xno],
+  [case " $CPPFLAGS $CXXFLAGS " in
+   *" -DNDEBUG "*) ;;
+   *) CPPFLAGS="$CPPFLAGS -DNDEBUG" ;;
+   esac])
 
 dnl Checks for libraries.
 dnl Replace `main' with a function in -lncurses:
@@ -251,6 +302,5 @@ AC_CONFIG_FILES(Makefile src/Makefile lib/Makefile lib/apex/Makefile \
 	lib/edit/Makefile lib/edit/quests/Makefile lib/edit/towns/Makefile \
 	lib/file/Makefile lib/file/books/Makefile lib/help/Makefile \
 	lib/info/Makefile lib/pref/Makefile lib/save/Makefile \
-	lib/script/Makefile lib/user/Makefile lib/xtra/Makefile \
-	lib/xtra/graf/Makefile lib/xtra/music/Makefile lib/xtra/sound/Makefile)
+	lib/script/Makefile lib/user/Makefile)
 AC_OUTPUT()

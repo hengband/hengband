@@ -35,21 +35,41 @@ struct condition_layout_info {
  */
 void print_title(PlayerType *player_ptr)
 {
-    std::string p;
+    print_field(get_player_title(player_ptr), ROW_TITLE, COL_TITLE);
+}
+
+/*!
+ * @brief 画面左の称号欄に表示する文字列を返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 称号 (ウィザード・勝利者の表示を含む)
+ */
+std::string get_player_title(PlayerType *player_ptr)
+{
     const auto &world = AngbandWorld::get_instance();
     if (world.wizard) {
-        p = _("[ウィザード]", "[=-WIZARD-=]");
-    } else if (world.total_winner) {
-        if (world.is_player_true_winner()) {
-            p = _("*真・勝利者*", "*TRUEWINNER*");
-        } else {
-            p = _("***勝利者***", "***WINNER***");
-        }
-    } else {
-        p = player_titles.at(player_ptr->pclass).at((player_ptr->lev - 1) / 5);
+        return _("[ウィザード]", "[=-WIZARD-=]");
     }
 
-    print_field(p, ROW_TITLE, COL_TITLE);
+    if (world.total_winner) {
+        if (world.is_player_true_winner()) {
+            return _("*真・勝利者*", "*TRUEWINNER*");
+        }
+
+        return _("***勝利者***", "***WINNER***");
+    }
+
+    return player_titles.at(player_ptr->pclass).at((player_ptr->lev - 1) / 5);
+}
+
+/*!
+ * @brief 画面左の種族欄に表示する種族名を返す (変身中は変身先の名前)
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return 種族名 (画面では先頭12桁だけが表示される)
+ */
+std::string get_displayed_race_title(PlayerType *player_ptr)
+{
+    const auto &title = player_ptr->mimic_form == MimicKindType::NONE ? rp_ptr->title : mimic_info.at(player_ptr->mimic_form).title;
+    return title.string();
 }
 
 /*!
@@ -232,10 +252,7 @@ void print_depth(PlayerType *player_ptr)
  */
 void print_frame_basic(PlayerType *player_ptr)
 {
-    const auto &title = player_ptr->mimic_form == MimicKindType::NONE
-                            ? rp_ptr->title
-                            : mimic_info.at(player_ptr->mimic_form).title;
-    print_field(str_substr(title, 0, 12), ROW_RACE, COL_RACE);
+    print_field(str_substr(get_displayed_race_title(player_ptr), 0, 12), ROW_RACE, COL_RACE);
     print_title(player_ptr);
     print_level(player_ptr);
     print_exp(player_ptr);
@@ -372,7 +389,7 @@ void print_health(PlayerType *player_ptr, bool riding)
 
     const auto &monster = player_ptr->current_floor_ptr->m_list[*monster_idx];
 
-    if ((!monster.ml) || (player_ptr->effects()->hallucination().is_hallucinated()) || monster.is_dead()) {
+    if ((!monster.ml) || (player_ptr->effects()->hallucination().is_active()) || monster.is_dead()) {
         term_putstr(col, row, max_width, TERM_WHITE, "[----------]");
         return;
     }

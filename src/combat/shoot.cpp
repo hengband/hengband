@@ -459,7 +459,6 @@ static MULTIPLY calc_shot_damage_with_slay(
 void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SPELL_IDX snipe_type)
 {
     POSITION y, x, prev_y, prev_x;
-    ItemEntity *o_ptr;
 
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_SHOOT);
@@ -467,13 +466,11 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     auto hit_body = false;
     auto stick_to = false;
 
-    /* Access the item (if in the pack) */
+    // 連射の1射目の効果で矢弾が削除されても参照できるよう、shared_ptrで保持する。
     auto &floor = *player_ptr->current_floor_ptr;
-    if (i_idx >= 0) {
-        o_ptr = player_ptr->inventory[i_idx].get();
-    } else {
-        o_ptr = floor.o_list[0 - i_idx].get();
-    }
+    const auto is_inventory = i_idx >= 0;
+    const auto ammo = ref_item(player_ptr, i_idx);
+    auto *o_ptr = ammo.get();
 
     /* Sniper - Cannot shot a single arrow twice */
     if ((snipe_type == SP_DOUBLE) && (o_ptr->number < 2)) {
@@ -584,6 +581,14 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     /* Sniper - Repeat shooting when double shots */
     auto &tracker = LoreTracker::get_instance();
     for (auto i = 0; i < ((snipe_type == SP_DOUBLE) ? 2 : 1); i++) {
+        // 1射目の効果でアイテムの削除や並べ替えが起きると番号が変わるため、同じ実体を探し直す。
+        const auto current_i_idx = find_current_i_idx(player_ptr, is_inventory, ammo);
+        if (!current_i_idx) {
+            break;
+        }
+
+        i_idx = *current_i_idx;
+
         /* Start at the player */
         y = player_ptr->y;
         x = player_ptr->x;
@@ -751,7 +756,7 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
                         msg_format(_("%sが%sに命中した。", "The %s hits %s."), item_name.data(), m_name.data());
 
                         if (monster.ml) {
-                            if (!player_ptr->effects()->hallucination().is_hallucinated()) {
+                            if (!player_ptr->effects()->hallucination().is_active()) {
                                 tracker.set_trackee(monster.ap_r_idx);
                             }
 
@@ -1002,7 +1007,7 @@ bool test_hit_fire(PlayerType *player_ptr, int chance, const MonsterEntity &mons
     if (randint0(chance) < (ac * 3 / 4)) {
         if (monster.r_idx == MonraceId::GOEMON && !monster.is_asleep()) {
             const auto m_name = monster_desc(player_ptr, monster, 0);
-            msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name.data(), item_name.data());
+            msg_print(_("{}は{}を斬り捨てた！", "{} cuts down {}!"), m_name, item_name);
         }
         return false;
     }

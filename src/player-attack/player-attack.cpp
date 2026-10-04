@@ -375,7 +375,7 @@ static void apply_damage_bonus(PlayerType *player_ptr, player_attack_type *pa_pt
         pa_ptr->attack_damage = 0;
     }
 
-    auto is_cut = player_ptr->effects()->cut().is_cut();
+    auto is_cut = player_ptr->effects()->cut().is_active();
     if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !is_cut) {
         pa_ptr->attack_damage /= 2;
     }

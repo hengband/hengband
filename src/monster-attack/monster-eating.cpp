@@ -29,7 +29,7 @@
 
 void process_eat_gold(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
 {
-    const auto is_paralyzed = player_ptr->effects()->paralysis().is_paralyzed();
+    const auto is_paralyzed = player_ptr->effects()->paralysis().is_active();
     if (!is_paralyzed && evaluate_percent((adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
         msg_print(_("しかし素早く財布を守った！", "You quickly protect your money pouch!"));
         if (randint0(3)) {
@@ -87,7 +87,7 @@ bool check_eat_item(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         return false;
     }
 
-    const auto is_paralyzed = player_ptr->effects()->paralysis().is_paralyzed();
+    const auto is_paralyzed = player_ptr->effects()->paralysis().is_active();
     if (!is_paralyzed && evaluate_percent((adj_dex_safe[player_ptr->stat_index[A_DEX]] + player_ptr->lev))) {
         msg_print(_("しかしあわててザックを取り返した！", "You grab hold of your backpack!"));
         monap_ptr->blinked = true;
@@ -196,7 +196,7 @@ void process_eat_lite(PlayerType *player_ptr, MonsterAttackPlayer *monap_ptr)
         monap_ptr->o_ptr->fuel = 1;
     }
 
-    if (!player_ptr->effects()->blindness().is_blind()) {
+    if (!player_ptr->effects()->blindness().is_active()) {
         msg_print(_("明かりが暗くなってしまった。", "Your light dims."));
         monap_ptr->obvious = true;
     }

@@ -102,16 +102,16 @@ tl::optional<MONSTER_IDX> summon_specific(PlayerType *player_ptr, POSITION y1, P
 tl::optional<MONSTER_IDX> summon_named_creature(PlayerType *player_ptr, MONSTER_IDX src_idx, POSITION oy, POSITION ox, MonraceId r_idx, BIT_FLAGS mode)
 {
     if (!MonraceList::is_valid(r_idx) || (r_idx >= static_cast<MonraceId>(MonraceList::get_instance().size()))) {
-        return false;
+        return tl::nullopt;
     }
 
     if (player_ptr->current_floor_ptr->inside_arena) {
-        return false;
+        return tl::nullopt;
     }
 
     const auto pos = mon_scatter(player_ptr, r_idx, { oy, ox }, 2);
     if (!pos) {
-        return false;
+        return tl::nullopt;
     }
 
     const auto summon_who = is_monster(src_idx) ? tl::make_optional(src_idx) : tl::nullopt;

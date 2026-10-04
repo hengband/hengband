@@ -41,12 +41,14 @@ struct autopick_type {
 /*
  * Data struct for text editor
  */
+enum class EditorCommandId;
 class ItemEntity;
 struct text_body_type {
     text_body_type(int cx, int cy); //!< @details 画面表示はX→Yの順番であることが多いので一応揃える.
 
     void adjust_cursor_column();
-    void update_cursor_column_record(int com_id);
+    void update_cursor_column_record(EditorCommandId com_id);
+    bool is_cursor_on_second_byte_of_kanji() const;
 
     int cx;
     int cy;
@@ -77,7 +79,7 @@ struct text_body_type {
     uint16_t dirty_flags = 0;
     int dirty_line = -1;
     int filename_mode = 0;
-    int old_com_id = 0;
+    EditorCommandId old_com_id{};
 
     bool changed = false;
 };

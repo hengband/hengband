@@ -109,7 +109,7 @@ void prt(std::string_view sv, TERM_LEN row, TERM_LEN col)
     c_prt(TERM_WHITE, sv, row, col);
 }
 
-static std::vector<DisplaySymbol> c_roff_wrap(int x, int y, int w, const char *s)
+static std::vector<DisplaySymbol> c_roff_wrap(int x, int y, int w, std::string_view ch)
 {
     if (x >= w) {
         return {};
@@ -118,10 +118,10 @@ static std::vector<DisplaySymbol> c_roff_wrap(int x, int y, int w, const char *s
     std::vector<DisplaySymbol> wrap_chars;
     auto wrap_col = w;
 
-    if (_(iskanji(*s), false)) {
+    if (ch.length() == 2) {
         /* 現在が全角文字の場合 */
         /* 行頭が行頭禁則文字になるときは、その１つ前の語で改行 */
-        if (is_kinsoku({ s, 2 })) {
+        if (is_kinsoku(ch)) {
             DisplaySymbol ds;
             ds = term_what(x - 2, y, ds);
             wrap_chars.push_back(ds);
@@ -175,7 +175,8 @@ void c_roff(TERM_COLOR a, std::string_view str)
     }
 
     for (auto s = str.begin(); s != str.end(); ++s) {
-        const auto is_kanji = _(iskanji(*s), false);
+        // 文字列が全角文字の前半バイトで終わっている場合は、後半バイトが無いので全角文字として扱わない
+        const auto is_kanji = _(iskanji(*s) && (std::next(s) != str.end()), false);
 
         if (*s == '\n') {
             if (y + 1 < hgt) {
@@ -188,7 +189,7 @@ void c_roff(TERM_COLOR a, std::string_view str)
         const auto ch = (is_kanji || isprint(*s)) ? *s : ' ';
 
         if ((x >= ((is_kanji) ? wid - 2 : wid - 1)) && (ch != ' ')) {
-            const auto wrap_chars = c_roff_wrap(x, y, wid, &*s);
+            const auto wrap_chars = c_roff_wrap(x, y, wid, std::string_view(s, std::next(s, is_kanji ? 2 : 1)));
 
             y++;
             if (y == hgt) {

@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "classes"],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "classes": {
+      "type": "array",
+      "minItems": 29,
+      "maxItems": 29,
+      "items": {
+        "$ref": "#/definitions/class"
+      }
+    }
+  },
+  "definitions": {
+    "weapon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_ranks", "max_ranks"],
+      "properties": {
+        "start_ranks": {
+          "type": "array",
+          "minItems": 64,
+          "maxItems": 64,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4
+          }
+        },
+        "max_ranks": {
+          "type": "array",
+          "minItems": 64,
+          "maxItems": 64,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4
+          }
+        }
+      }
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_exp", "max_exp"],
+      "properties": {
+        "start_exp": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8000
+        },
+        "max_exp": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8000
+        }
+      }
+    },
+    "class": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "weapons", "skills"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 28
+        },
+        "weapons": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["BOW", "DIGGING", "HAFTED", "POLEARM", "SWORD"],
+          "properties": {
+            "BOW": {
+              "$ref": "#/definitions/weapon"
+            },
+            "DIGGING": {
+              "$ref": "#/definitions/weapon"
+            },
+            "HAFTED": {
+              "$ref": "#/definitions/weapon"
+            },
+            "POLEARM": {
+              "$ref": "#/definitions/weapon"
+            },
+            "SWORD": {
+              "$ref": "#/definitions/weapon"
+            }
+          }
+        },
+        "skills": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["MARTIAL_ARTS", "TWO_WEAPON", "RIDING", "SHIELD"],
+          "properties": {
+            "MARTIAL_ARTS": {
+              "$ref": "#/definitions/skill"
+            },
+            "TWO_WEAPON": {
+              "$ref": "#/definitions/skill"
+            },
+            "RIDING": {
+              "$ref": "#/definitions/skill"
+            },
+            "SHIELD": {
+              "$ref": "#/definitions/skill"
+            }
+          }
+        }
+      }
+    }
+  }
+}

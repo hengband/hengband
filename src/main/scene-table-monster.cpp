@@ -16,10 +16,10 @@
 #include <memory>
 
 struct scene_monster_info {
-    MONSTER_IDX m_idx;
+    MONSTER_IDX m_idx = 0;
     std::shared_ptr<const MonraceDefinition> apparent_monrace;
-    GAME_TURN last_seen; //!< 最後に対象モンスター見たゲームターン
-    uint32_t mute_until; //!< この時間に到達するまでモンスターBGMは設定しない
+    GAME_TURN last_seen = 0; //!< 最後に対象モンスター見たゲームターン
+    uint32_t mute_until = 0; //!< この時間に到達するまでモンスターBGMは設定しない
 };
 
 scene_monster_info scene_target_monster;

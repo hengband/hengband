@@ -1601,7 +1601,7 @@ std::string ItemEntity::build_activation_description(const ActivationType &act) 
     case RandomArtActType::ELEC_BALL_AND_RESISTANCE:
         return _("サンダー・ボール (100) と電撃への耐性", "ball of elec (100) and resist elec");
     case RandomArtActType::POIS_BALL_AND_RESISTANCE:
-        return _("ポイズン・ボール (100) と毒への耐性", "ball of poison (100) and resist elec");
+        return _("ポイズン・ボール (100) と毒への耐性", "ball of poison (100) and resist poison");
     case RandomArtActType::RESIST_ACID:
         return _("一時的な酸への耐性", "temporary resist acid");
     case RandomArtActType::RESIST_FIRE:
@@ -1611,7 +1611,7 @@ std::string ItemEntity::build_activation_description(const ActivationType &act) 
     case RandomArtActType::RESIST_ELEC:
         return _("一時的な電撃への耐性", "temporary resist elec");
     case RandomArtActType::RESIST_POIS:
-        return _("一時的な毒への耐性", "temporary resist elec");
+        return _("一時的な毒への耐性", "temporary resist poison");
     default:
         return act.desc;
     }

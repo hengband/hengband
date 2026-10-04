@@ -496,12 +496,10 @@ void drop_ammo_near(PlayerType *player_ptr, ItemEntity &drop_item, const Pos2D &
 
 /*!
  * @brief 床上の魔道具の残り残量メッセージを表示する
- * @param floo_ptr 現在フロアへの参照ポインタ
- * @param i_idx メッセージの対象にしたいアイテム所持スロット
+ * @param item 残量を表示したい床上のアイテム
  */
-void floor_item_charges(const FloorType &floor, INVENTORY_IDX i_idx)
+void floor_item_charges(const ItemEntity &item)
 {
-    const auto &item = *floor.o_list[i_idx];
     if (!item.is_wand_staff() || !item.is_known()) {
         return;
     }

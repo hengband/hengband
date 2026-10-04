@@ -4,6 +4,8 @@
  * @file random-art-effects.h
  * @brief ランダムアーティファクトの発動ID定義
  * @details Random Artifact Activation Type
+ * 数値IDはセーブデータに保存されるため、既存の値を変更しない。
+ * 欠番を含むので、MAXは件数ではなく上限。利用可能なIDはactivation_infoの登録で判定する。
  */
 enum class RandomArtActType : short {
     NONE = 0,
@@ -62,7 +64,7 @@ enum class RandomArtActType : short {
     MASS_GENO = 58,
     SCARE_AREA = 59,
     AGGRAVATE = 60,
-    /* 59 - 64 unused */
+    /* 61 - 64 unused */
     CHARM_ANIMAL = 65,
     CHARM_UNDEAD = 66,
     CHARM_OTHER = 67,
@@ -87,6 +89,7 @@ enum class RandomArtActType : short {
     CURE_1000 = 87,
     CURING = 88,
     CURE_MANA_FULL = 89,
+    /* 90 unused */
     ESP = 91,
     BERSERK = 92,
     PROT_EVIL = 93,
@@ -141,7 +144,8 @@ enum class RandomArtActType : short {
     HERO_BLESS = 142,
     CREATE_AMMO = 143,
     DISPEL_MAGIC = 144,
-    /* 143 - 243 unused */
+    DARKNESS = 145,
+    /* 146 - 243 unused */
     WHISTLE = 244,
     CAPTURE_MONSTER = 245,
     FALLING_STAR = 246,

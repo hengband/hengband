@@ -55,7 +55,7 @@ static void exe_ring_of_power(PlayerType *player_ptr, const Direction &dir)
 
 bool activate_ring_of_power(PlayerType *player_ptr, std::string_view name)
 {
-    msg_format(_("%sは漆黒に輝いた...", "The %s glows intensely black..."), name.data());
+    msg_print(_("{}は漆黒に輝いた...", "The {} glows intensely black..."), name);
     const auto dir = get_aim_dir(player_ptr);
     if (!dir) {
         return false;

@@ -170,17 +170,17 @@ static void process_stats(PlayerType *player_ptr, int row, int stat_col)
  * @brief pval付きの装備に依るステータス補正を表示する
  * @param c 補正後の表示記号
  * @param a 表示色
- * @param o_ptr 装備品への参照ポインタ
- * @param stat 能力値番号
+ * @param item 装備品
+ * @param tr_flag 維持の特性フラグ
  * @param flags 装備品に立っているフラグ
  */
-static DisplaySymbol compensate_stat_by_weapon(uint8_t color, ItemEntity *o_ptr, tr_type tr_flag, const TrFlags &flags)
+static DisplaySymbol compensate_stat_by_weapon(uint8_t color, const ItemEntity &item, tr_type tr_flag, const TrFlags &flags)
 {
     DisplaySymbol symbol(color, '*');
-    if (o_ptr->pval > 0) {
+    if (item.pval > 0) {
         symbol.color = TERM_L_GREEN;
-        if (o_ptr->pval < 10) {
-            symbol.character = '0' + o_ptr->pval;
+        if (item.pval < 10) {
+            symbol.character = '0' + item.pval;
         }
     }
 
@@ -188,10 +188,10 @@ static DisplaySymbol compensate_stat_by_weapon(uint8_t color, ItemEntity *o_ptr,
         symbol.color = TERM_GREEN;
     }
 
-    if (o_ptr->pval < 0) {
+    if (item.pval < 0) {
         symbol.color = TERM_RED;
-        if (o_ptr->pval > -10) {
-            symbol.character = '0' - o_ptr->pval;
+        if (item.pval > -10) {
+            symbol.character = '0' - item.pval;
         }
     }
 
@@ -208,22 +208,31 @@ static DisplaySymbol compensate_stat_by_weapon(uint8_t color, ItemEntity *o_ptr,
 static void display_equipments_compensation(PlayerType *player_ptr, int row, int *col)
 {
     for (const auto i_idx : INVEN_WIELDING_SLOTS) {
-        ItemEntity *o_ptr;
-        o_ptr = player_ptr->inventory[i_idx].get();
-        auto flags = o_ptr->get_flags_known();
         for (int stat = 0; stat < A_MAX; stat++) {
-            DisplaySymbol symbol(TERM_SLATE, '.');
-            if (flags.has(TR_STATUS_LIST[stat])) {
-                symbol = compensate_stat_by_weapon(symbol.color, o_ptr, TR_SUST_STATUS_LIST[stat], flags);
-            } else if (flags.has(TR_SUST_STATUS_LIST[stat])) {
-                symbol = { TERM_GREEN, 's' };
-            }
-
-            term_putch(*col, row + stat + 1, symbol);
+            term_putch(*col, row + stat + 1, get_equipment_stat_symbol(*player_ptr->inventory[i_idx], stat));
         }
 
         (*col)++;
     }
+}
+
+/*!
+ * @brief 能力修正欄に表示する装備品1つ分の記号を求める
+ * @param item 装備品
+ * @param stat 能力値番号
+ * @return 表示記号
+ */
+DisplaySymbol get_equipment_stat_symbol(const ItemEntity &item, int stat)
+{
+    const auto flags = item.get_flags_known();
+    DisplaySymbol symbol(TERM_SLATE, '.');
+    if (flags.has(TR_STATUS_LIST[stat])) {
+        symbol = compensate_stat_by_weapon(symbol.color, item, TR_SUST_STATUS_LIST[stat], flags);
+    } else if (flags.has(TR_SUST_STATUS_LIST[stat])) {
+        symbol = { TERM_GREEN, 's' };
+    }
+
+    return symbol;
 }
 
 /*!
@@ -354,17 +363,27 @@ static DisplaySymbol change_display_by_mutation(PlayerType *player_ptr, int stat
  */
 static void display_mutation_compensation(PlayerType *player_ptr, int row, int col)
 {
+    for (int stat = 0; stat < A_MAX; stat++) {
+        term_putch(col, row + stat + 1, get_intrinsic_stat_symbol(player_ptr, stat));
+    }
+}
+
+/*!
+ * @brief 能力修正欄の本人 ('@') の列に表示する記号を求める
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param stat 能力値番号
+ * @return 表示記号
+ */
+DisplaySymbol get_intrinsic_stat_symbol(PlayerType *player_ptr, int stat)
+{
     TrFlags flags;
     player_flags(player_ptr, flags);
-
-    for (int stat = 0; stat < A_MAX; stat++) {
-        auto symbol = change_display_by_mutation(player_ptr, stat, { TERM_SLATE, '.' });
-        if (flags.has(TR_SUST_STATUS_LIST[stat])) {
-            symbol = { TERM_GREEN, 's' };
-        }
-
-        term_putch(col, row + stat + 1, symbol);
+    auto symbol = change_display_by_mutation(player_ptr, stat, { TERM_SLATE, '.' });
+    if (flags.has(TR_SUST_STATUS_LIST[stat])) {
+        symbol = { TERM_GREEN, 's' };
     }
+
+    return symbol;
 }
 
 /*!

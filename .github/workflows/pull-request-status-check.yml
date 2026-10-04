@@ -50,49 +50,89 @@ jobs:
           persist-credentials: false
       - run: python3 .github/scripts/check-include-style.py
 
-  build_test_clang15_libcpp_without_pch:
-    name: Build Japanese version with clang 15 -stdlib=libc++ (without using pre-compiled headers)
+  check_test_registration:
+    name: Check the registration of the unit test sources (Makefile.am / HengbandTest.vcxproj)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - run: sh ./.github/scripts/check-test-registration.sh
+
+  build_test_clang_libcpp_without_pch:
+    name: Build Japanese version with clang 21 -stdlib=libc++ (without using pre-compiled headers, with XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      runner: ubuntu-22.04
-      cxx: clang++-15
+      runner: ubuntu-26.04
+      cxx: clang++-21
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -stdlib=libc++"
-      configure-opts: "--disable-pch"
+      configure-opts: "--disable-pch --enable-xft"
       use-ccache: true
 
-  build_test_clang14_without_pch:
-    name: Build Japanese version with clang 14 (without using pre-compiled headers)
+  build_test_clang_without_pch:
+    name: Build Japanese version with clang 21 (without using pre-compiled headers, with XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      runner: ubuntu-22.04
-      cxx: clang++-14
+      runner: ubuntu-26.04
+      cxx: clang++-21
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch"
+      configure-opts: "--disable-pch --enable-xft"
       use-ccache: true
 
-  build_test_japanese:
-    name: Build Japanese version with gcc
+  build_test_clang_with_pch_english:
+    name: Build English version with clang 21 (with using pre-compiled headers, without XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      runner: ubuntu-24.04
-      cxx: g++-14
+      runner: ubuntu-26.04
+      cxx: clang++-21
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch"
+      configure-opts: "--disable-japanese --disable-assert"
       use-ccache: true
 
-  build_test_english:
-    name: Build English version with gcc
+  build_test_gcc_japanese:
+    name: Build Japanese version with gcc 16 (with XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
-      runner: ubuntu-24.04
-      cxx: g++-14
+      runner: ubuntu-26.04
+      cxx: g++-16
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch --disable-japanese"
+      configure-opts: "--disable-pch --enable-xft"
+      use-ccache: true
+
+  build_test_gcc_english:
+    name: Build English version with gcc 16 (without XFT)
+    uses: ./.github/workflows/build-with-autotools.yml
+    with:
+      runner: ubuntu-26.04
+      cxx: g++-16
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
+      configure-opts: "--disable-pch --disable-japanese --disable-assert"
+      distcheck: true
+      use-ccache: true
+
+  build_test_apple_clang_japanese:
+    name: Build Japanese version with Apple Clang 21 (without X11)
+    uses: ./.github/workflows/build-with-autotools.yml
+    with:
+      runner: macos-26
+      cxx: clang++
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
+      configure-opts: "--disable-pch --without-x"
+      use-ccache: true
+
+  build_test_apple_clang_english:
+    name: Build English version with Apple Clang 21 (without X11)
+    uses: ./.github/workflows/build-with-autotools.yml
+    with:
+      runner: macos-26
+      cxx: clang++
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
+      configure-opts: "--disable-pch --disable-japanese --without-x"
       distcheck: true
       use-ccache: true
 
   build_test_with_msvc:
-    name: Build test with MSVC
+    name: Build and test with MSVC
     uses: ./.github/workflows/build-test-with-msvc.yml
 
   json-schema-validation:
@@ -116,6 +156,9 @@ jobs:
 
       - name: Execution JSONC schema validation
         run: python .github/scripts/validate_json.py
+
+      - name: Test JSONC validation
+        run: python -m unittest discover -s .github/scripts -p 'test_validate_json.py'
 
       - name: Result summary
         if: always()

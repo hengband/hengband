@@ -62,7 +62,7 @@ void ObjectUseEntity::execute()
     }
 
     auto chance = this->player_ptr->skill_dev;
-    if (this->player_ptr->effects()->confusion().is_confused()) {
+    if (this->player_ptr->effects()->confusion().is_active()) {
         chance = chance / 2;
     }
 
@@ -141,13 +141,11 @@ void ObjectUseEntity::execute()
         item->number--;
         this->i_idx = store_item_to_inventory(this->player_ptr, &used_item);
         msg_print(_("杖をまとめなおした。", "You unstack your staff."));
+        inven_item_charges(*this->player_ptr->inventory[this->i_idx]);
+        return;
     }
 
-    if (this->i_idx >= 0) {
-        inven_item_charges(*this->player_ptr->inventory[this->i_idx]);
-    } else {
-        floor_item_charges(*this->player_ptr->current_floor_ptr, 0 - this->i_idx);
-    }
+    describe_item_charges(this->player_ptr, this->i_idx >= 0, item);
 }
 
 bool ObjectUseEntity::check_can_use()

@@ -7,12 +7,12 @@ enum class MonsterAbilityType;
 
 /* Imitator */
 struct monster_power {
-    short level;
-    int smana;
-    int fail;
-    int manedam;
-    int manefail;
-    int use_stat;
+    short level = 0;
+    int smana = 0;
+    int fail = 0;
+    int manedam = 0;
+    int manefail = 0;
+    int use_stat = 0;
     std::string_view name;
 };
 

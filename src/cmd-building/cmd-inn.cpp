@@ -48,7 +48,7 @@ static bool buy_food(PlayerType *player_ptr)
 static bool is_healthy_stay(PlayerType *player_ptr)
 {
     const auto effects = player_ptr->effects();
-    if (!effects->poison().is_poisoned() && !effects->cut().is_cut()) {
+    if (!effects->poison().is_active() && !effects->cut().is_active()) {
         return true;
     }
 
@@ -150,7 +150,7 @@ static void display_stay_result(PlayerType *player_ptr, int prev_hour)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     if ((prev_hour >= 6) && (prev_hour < 18)) {
-#if JP
+#ifdef JP
         msg_format("あなたはリフレッシュして目覚め、%sを迎えた。", is_player_undead(player_ptr) ? "夜" : "夕方");
 #else
         msg_format("You awake refreshed for the %s.", is_player_undead(player_ptr) ? "evening" : "twilight");

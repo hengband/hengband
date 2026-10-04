@@ -6,6 +6,9 @@
 enum class FixedArtifactId : short;
 class ArtifactDefinition;
 class ItemEntity;
+namespace test {
+class ArtifactListTestAccess;
+}
 class ArtifactList : public util::AbstractMapWrapper<FixedArtifactId, ArtifactDefinition> {
 public:
     ArtifactList(const ArtifactList &) = delete;
@@ -22,6 +25,8 @@ public:
     std::string get_full_name(const FixedArtifactId fa_id) const;
 
 private:
+    friend class test::ArtifactListTestAccess;
+
     ArtifactList() = default;
     static ArtifactList instance;
     static ArtifactDefinition dummy;

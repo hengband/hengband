@@ -8,6 +8,7 @@
 #include "monster-floor/monster-summon.h"
 #include "monster-floor/place-monster-types.h"
 #include "object-enchant/item-apply-magic.h"
+#include "object/object-info.h"
 #include "player-info/class-info.h"
 #include "player/player-damage.h"
 #include "player/player-status-flags.h"
@@ -37,17 +38,18 @@ Chest::Chest(PlayerType *player_ptr)
  * @brief 箱からアイテムを引き出す
  * @param scatter TRUEならばトラップによるアイテムの拡散処理
  * @param pos 箱の座標
- * @param item_idx フロア内アイテムID
+ * @param chest 箱のアイテム
  */
-void Chest::open(bool scatter, const Pos2D &pos, short item_idx)
+void Chest::open(bool scatter, const Pos2D &pos, std::shared_ptr<ItemEntity> chest)
 {
     BIT_FLAGS mode = AM_GOOD | AM_FORBID_CHEST;
     auto &floor = *this->player_ptr->current_floor_ptr;
-    auto &item = *floor.o_list[item_idx];
-    if (!item.is_valid()) {
+    if (!find_item_index(floor.o_list, chest)) {
         msg_print(_("箱は既に壊れてしまっている…", "The chest was broken and you couldn't open it..."));
         return;
     }
+
+    auto &item = *chest;
 
     /* Small chests often hold "gold" */
     const auto sval = *item.bi_key.sval();
@@ -109,12 +111,14 @@ void Chest::open(bool scatter, const Pos2D &pos, short item_idx)
 /*!
  * @brief 箱のトラップ処理
  * @param pos 箱の座標
- * @param x 箱の存在するマスのX座標
- * @param item_idx 箱のオブジェクトID
+ * @param chest 箱のアイテム
+ * @details 罠の効果で箱自身が壊れて削除されることがあるため、箱は番号ではなくshared_ptrで保持する。
  */
-void Chest::fire_trap(const Pos2D &pos, short item_idx)
+void Chest::fire_trap(const Pos2D &pos, std::shared_ptr<ItemEntity> chest)
 {
-    auto *o_ptr = this->player_ptr->current_floor_ptr->o_list[item_idx].get();
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto exists = [&floor, &chest] { return find_item_index(floor.o_list, chest).has_value(); };
+    auto *o_ptr = chest.get();
 
     int mon_level = o_ptr->chest_level;
 
@@ -226,7 +230,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
     }
 
     /* Dispel player. */
-    if ((trap.has(ChestTrapType::RUNES_OF_EVIL)) && o_ptr->is_valid()) {
+    if ((trap.has(ChestTrapType::RUNES_OF_EVIL)) && exists()) {
         msg_print(_("恐ろしい声が響いた:  「暗闇が汝をつつまん！」", "Hideous voices bid:  'Let the darkness have thee!'"));
         for (auto count = 4 + randint0(3); count > 0; count--) {
             if (randint1(100 + o_ptr->pval * 2) <= this->player_ptr->skill_sav) {
@@ -280,7 +284,7 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
     }
 
     /* Explode */
-    if ((trap.has(ChestTrapType::EXPLODE)) && o_ptr->is_valid()) {
+    if ((trap.has(ChestTrapType::EXPLODE)) && exists()) {
         msg_print(_("突然、箱が爆発した！", "There is a sudden explosion!"));
         msg_print(_("箱の中の物はすべて粉々に砕け散った！", "Everything inside the chest is destroyed!"));
         o_ptr->pval = 0;
@@ -288,9 +292,8 @@ void Chest::fire_trap(const Pos2D &pos, short item_idx)
         take_hit(this->player_ptr, DAMAGE_ATTACK, Dice::roll(5, 8), _("爆発する箱", "an exploding chest"));
     }
     /* Scatter contents. */
-    if ((trap.has(ChestTrapType::SCATTER)) && o_ptr->is_valid()) {
+    if ((trap.has(ChestTrapType::SCATTER)) && exists()) {
         msg_print(_("宝箱の中身はダンジョンじゅうに散乱した！", "The contents of the chest scatter all over the dungeon!"));
-        this->open(true, pos, item_idx);
-        o_ptr->pval = 0;
+        this->open(true, pos, chest);
     }
 }

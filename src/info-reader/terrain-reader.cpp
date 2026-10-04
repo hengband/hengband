@@ -10,10 +10,12 @@
 #include "view/display-messages.h"
 #include <algorithm>
 #include <cstdint>
+#include <nlohmann/json.hpp>
 #include <optional>
 #include <string>
 #include <string_view>
 #include <unordered_map>
+#include <utility>
 
 TerrainReader::TerrainReader(const nlohmann::json &terrain_data)
     : terrain_data(terrain_data)
@@ -47,14 +49,12 @@ int TerrainReader::read() const
     }
 
     auto &terrains = TerrainList::get_instance();
-    if (id >= static_cast<int>(terrains.size())) {
-        terrains.resize(id + 1);
-    }
-
     error_idx = id;
 
     const auto s = static_cast<short>(id);
-    auto &terrain = terrains.get_terrain(s);
+    // Preserve fields that are not supplied by the JSON when reloading a terrain.
+    // A failed parse must leave both the existing entry and the list size intact.
+    auto terrain = id < static_cast<int>(terrains.size()) ? terrains.get_terrain(s) : TerrainType{};
 
     terrain.idx = s;
     terrain.tag = key;
@@ -143,6 +143,11 @@ int TerrainReader::read() const
         return err;
     }
 
+    if (id >= static_cast<int>(terrains.size())) {
+        terrains.resize(id + 1);
+    }
+    terrains.get_terrain(s) = std::move(terrain);
+
     return PARSE_ERROR_NONE;
 }
 
@@ -155,7 +160,7 @@ bool TerrainReader::grab_one_feat_flag(TerrainType &terrain, std::string_view wh
         return true;
     }
 
-    msg_format(_("未知の地形フラグ '%s'。", "Unknown feature flag '%s'."), what.data());
+    msg_print(_("未知の地形フラグ '{}'。", "Unknown feature flag '{}'."), what);
     return false;
 }
 
@@ -192,6 +197,9 @@ int TerrainReader::set_terrain_symbol(TerrainType &terrain) const
     const auto ch_str = ch_obj.get<std::string>();
     if (ch_str.empty()) {
         return PARSE_ERROR_GENERIC;
+    }
+    if (ch_str.size() != 1) {
+        return PARSE_ERROR_INVALID_VALUE;
     }
 
     const auto color_name = color_obj.get<std::string>();

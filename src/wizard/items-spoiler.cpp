@@ -98,7 +98,9 @@ static std::string describe_weight(const ItemEntity &item)
  * @brief obj-desc.txt出力用にベースアイテムIDからItemEntityオブジェクトを生成する
  * @param bi_id ベースアイテムID
  * @return obj-desc.txt出力用に使用するItemEntityオブジェクト
- * @details 人形・像・死体類はpvalが0だと異常アイテム扱いで例外が飛ぶためダミー値を入れておく.
+ * @details 人形・像・死体類はpvalにモンスター種族IDが入る。スポイラーには種族名込みの名前と
+ * 価格の双方を出力するため、pvalが0のままだと名前の記述と価格計算
+ * (ItemEntity::calc_figurine_value()) の両方で例外が飛ぶ。ダミー値を入れておく.
  */
 static ItemEntity prepare_item_for_obj_desc(short bi_id)
 {

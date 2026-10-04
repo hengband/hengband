@@ -6,14 +6,17 @@
  * are included in all such copies.
  */
 
+#include "bot/bot-control-server.h"
 #include "core/asking-player.h"
 #include "core/game-play.h"
 #include "core/scores.h"
 #include "game-option/runtime-arguments.h"
+#include "headless-term/headless-term.h"
 #include "io/files-util.h"
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
+#include "locale/character-encoding.h"
 #include "main-unix/unix-user-ids.h"
 #include "main/angband-initializer.h"
 #include "player/process-name.h"
@@ -46,7 +49,6 @@
  * all the others use this file for their "main()" function.
  */
 
-#ifndef WINDOWS
 /*
  * A hook for "quit()".
  *
@@ -56,6 +58,8 @@ static void quit_hook(std::string_view s)
 {
     /* Unused */
     (void)s;
+
+    shutdown_bot_control_server();
 
     /* Scan windows */
     for (auto it = angband_terms.rbegin(); it != angband_terms.rend(); ++it) {
@@ -70,9 +74,6 @@ static void quit_hook(std::string_view s)
     }
 }
 
-/*
- * Set the stack size and overlay buffer (see main-286.c")
- */
 #ifdef PRIVATE_USER_PATH
 
 /*
@@ -83,7 +84,13 @@ static void quit_hook(std::string_view s)
  */
 static void create_user_dir(void)
 {
+    // ホームディレクトリを決められない場合 (passwd に登録の無い UID で起動した場合など) は何も作らない。
+    // 空のパスのまま進めると、カレントディレクトリに作ってしまう
     const auto &dirpath = path_parse(PRIVATE_USER_PATH);
+    if (dirpath.empty()) {
+        return;
+    }
+
     const auto &dir_str = dirpath.string();
     mkdir(dir_str.data(), 0700);
 
@@ -184,6 +191,17 @@ static void display_usage(const char *program)
     puts("           Output auto generated spoilers and exit");
     puts("  --bot-json-output[=path]");
     puts("           Output bot-readable JSON Lines snapshots before player input");
+    puts("  --bot-json-timing");
+    puts("           Enable emitter timing log beside the JSONL file (default: off; not for stdout)");
+    puts("  --control-port=<port>");
+    puts("           Listen on 127.0.0.1:<port> to be controlled by an external program");
+    puts("  --fixed-seed=<seed>");
+    puts("           Fix the initial random seed to make a playthrough reproducible");
+    puts("  --headless");
+    puts("           Use the terminal which has no real display and no real input");
+    puts("           device (requires --control-port, conflicts with -s and -m)");
+    puts("  --headless-term-count=<num>");
+    puts("           Number of terminals the headless frontend creates (default 1)");
     puts("");
 
 #ifdef USE_X11
@@ -215,34 +233,37 @@ static void display_usage(const char *program)
 }
 
 /*
- * @brief 2文字以上のコマンドライン引数 (オプション)を実行する
+ * @brief 2文字以上のコマンドライン引数 (オプション)を解析する
  * @param opt コマンドライン引数
+ * @param output_spoilers スポイラー出力モードが指定されたら true にする
  * @return Usageを表示する必要があるか否か
- * @details v3.0.0 Alpha21時点では、スポイラー出力モードの判定及び実行を行う
  */
-static bool parse_long_opt(const char *opt)
+static bool parse_long_opt(const char *opt, bool &output_spoilers)
 {
-    static constexpr std::string_view bot_json_output = "bot-json-output";
     const std::string_view option(opt + 2);
-    if (option == bot_json_output) {
-        arg_bot_json_output = true;
+    switch (parse_runtime_argument(option)) {
+    case RuntimeArgumentResult::HANDLED:
         return false;
-    }
-
-    if (option.starts_with(bot_json_output) && option[bot_json_output.size()] == '=') {
-        arg_bot_json_output = true;
-        const auto path = option.substr(bot_json_output.size() + 1);
-        if (!path.empty()) {
-            arg_bot_json_output_path = path;
-        }
-        return false;
+    case RuntimeArgumentResult::INVALID:
+        return true;
+    case RuntimeArgumentResult::NOT_HANDLED:
+        break;
     }
 
     if (option != "output-spoilers") {
         return true;
     }
 
-    init_stuff();
+    output_spoilers = true;
+    return false;
+}
+
+/*
+ * @brief すべてのスポイラーを出力して終了する
+ * @details -d で指定されたディレクトリを反映するため、すべてのコマンドライン引数を読み終えてから呼ぶ
+ */
+static void output_spoilers_and_quit()
+{
     init_angband(p_ptr, true);
     switch (output_all_spoilers()) {
     case SpoilerOutputResultType::SUCCESSFUL:
@@ -258,8 +279,6 @@ static bool parse_long_opt(const char *opt)
     default:
         break;
     }
-
-    return false;
 }
 
 /*
@@ -307,6 +326,7 @@ int main(int argc, char *argv[])
 #endif /* SET_UID */
 
     auto browsing_movie = false;
+    auto output_spoilers = false;
     for (auto i = 1; args && (i < argc); i++) {
         if (argv[i][0] != '-') {
             display_usage(argv[0]);
@@ -354,7 +374,9 @@ int main(int argc, char *argv[])
                 break;
             }
 
-            strcpy(p_ptr->name, &argv[i][2]);
+            // Unix 版のフロントエンドは端末の入出力を UTF-8 として扱うので、引数も UTF-8 とみなしてシステムの文字コードに変換してから切り詰める。
+            // UTF-8 として不正なバイト列は変換できないので、これまでどおりそのまま使う
+            angband_strcpy(p_ptr->name, utf8_to_sys(&argv[i][2]).value_or(&argv[i][2]), sizeof(p_ptr->name));
             break;
         case 'm':
             if (!argv[i][2]) {
@@ -387,7 +409,7 @@ int main(int argc, char *argv[])
                 argv = argv + i;
                 args = false;
             } else {
-                is_usage_needed = parse_long_opt(argv[i]);
+                is_usage_needed = parse_long_opt(argv[i], output_spoilers);
             }
 
             break;
@@ -408,8 +430,44 @@ int main(int argc, char *argv[])
         argv[1] = nullptr;
     }
 
+#ifdef PRIVATE_USER_PATH
+    // ユーザーディレクトリを -du で指定せず、既定の場所 (~/.angband) のホームディレクトリも決められない場合は、
+    // 設定やダンプの読み書きがすべて失敗するため、指定を促して終了する
+    if (path_parse(ANGBAND_DIR_USER).empty()) {
+        quit_fmt("Unable to locate the user directory '%s'. Please specify it with the -du option.", ANGBAND_DIR_USER.string().data());
+    }
+#endif
+
+    if (output_spoilers) {
+        output_spoilers_and_quit();
+    }
+
+    // 実描画・実入力デバイスを持たない端末とは両立しないオプションを弾く。
+    // -m<sys> はヘッドレス端末が選ばれる時点で参照される機会が無く、-s<num> の display_scores() は
+    // 制御サーバの起動前に quit() する。どちらも無言で無視・終了すると、クライアントからは
+    // 接続拒否としか見えないため、使い方の誤りとして標準エラー出力へ理由を出して終了する
+    if (arg_headless) {
+        if (!mstr.empty()) {
+            quit("The --headless option cannot be used with the -m option.");
+        }
+
+        if (show_score > 0) {
+            quit("The --headless option cannot be used with the -s option.");
+        }
+    }
+
     process_player_name(p_ptr, true);
     quit_aux = quit_hook;
+
+    // 実描画・実入力デバイスを持たないため、-m の指定が無い時に暗黙で選ばれてはならない。
+    // 明示的に指定された以上、初期化に失敗した時に他のモジュールへ切り替えるのも誤りなので即座に終了する
+    if (arg_headless) {
+        if (0 != init_headless_term()) {
+            quit("Unable to prepare the headless terminal!");
+        }
+
+        done = true;
+    }
 
 #ifdef USE_X11
     if (!done && (mstr.empty() || (mstr == "x11"))) {
@@ -451,15 +509,22 @@ int main(int argc, char *argv[])
 
     signals_init();
 
+    // 端末が揃った後、最初のキー入力待ちより前に待ち受けを始める。
+    // これにより起動直後の画面もクライアントから操作できる
+    init_bot_control_server();
+
     {
         TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS);
         init_angband(p_ptr, false);
-        pause_line(MAIN_TERM_MIN_ROWS - 1);
+
+        // ヘッドレスではキーを押す相手が居らず、Windows版のヘッドレス起動 (run_headless_game())
+        // にもこの待ちが無い。省くことで、同じキー列がプラットフォームを問わず同じ結果になる
+        if (!arg_headless) {
+            pause_line(MAIN_TERM_MIN_ROWS - 1);
+        }
     }
 
     play_game(p_ptr, new_game, browsing_movie);
     quit("");
     return 0;
 }
-
-#endif

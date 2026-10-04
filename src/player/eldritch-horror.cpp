@@ -34,11 +34,11 @@
 
 static bool process_mod_hallucination(PlayerType *player_ptr, std::string_view m_name, const MonraceDefinition &monrace)
 {
-    if (!player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (!player_ptr->effects()->hallucination().is_active()) {
         return false;
     }
 
-    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), rand_choice(funny_desc).data(), m_name.data());
+    msg_print(_("{}{}の顔を見てしまった！", "You behold the {} visage of {}!"), rand_choice(funny_desc), m_name);
     if (one_in_(3)) {
         msg_print(rand_choice(funny_comments));
         BadStatusSetter(player_ptr).mod_hallucination(randnum1<short>(monrace.level));

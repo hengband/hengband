@@ -65,7 +65,7 @@ void ObjectZapRodEntity::execute(INVENTORY_IDX i_idx)
 
     const auto item_level = item->get_baseitem_level();
     auto chance = this->player_ptr->skill_dev;
-    if (this->player_ptr->effects()->confusion().is_confused()) {
+    if (this->player_ptr->effects()->confusion().is_active()) {
         chance = chance / 2;
     }
 

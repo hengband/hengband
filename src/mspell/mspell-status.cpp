@@ -66,7 +66,7 @@ void spell_badstatus_message_to_player(PlayerType *player_ptr, MONSTER_IDX m_idx
     const auto m_name = monster_name(player_ptr, m_idx);
 
     disturb(player_ptr, true, true);
-    if (player_ptr->effects()->blindness().is_blind()) {
+    if (player_ptr->effects()->blindness().is_active()) {
         msg_format(msgs.blind, m_name.data());
     } else {
         msg_format(msgs.not_blind, m_name.data());
@@ -174,7 +174,7 @@ MonsterSpellResult spell_RF5_DRAIN_MANA(PlayerType *player_ptr, POSITION y, POSI
 MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->effects()->blindness().is_blind() && monster.ml);
+    bool seen = (!player_ptr->effects()->blindness().is_active() && monster.ml);
     const auto m_name = monster_name(player_ptr, m_idx);
     const auto t_name = monster_name(player_ptr, t_idx);
 
@@ -212,7 +212,7 @@ MonsterSpellResult spell_RF5_MIND_BLAST(PlayerType *player_ptr, POSITION y, POSI
 MonsterSpellResult spell_RF5_BRAIN_SMASH(PlayerType *player_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->effects()->blindness().is_blind() && monster.ml);
+    bool seen = (!player_ptr->effects()->blindness().is_active() && monster.ml);
     const auto m_name = monster_name(player_ptr, m_idx);
     const auto t_name = monster_name(player_ptr, t_idx);
 
@@ -493,7 +493,7 @@ MonsterSpellResult spell_RF6_HASTE(PlayerType *player_ptr, MONSTER_IDX m_idx, MO
         _("%s^が自分の体に念を送った。", format("%%s^ concentrates on %s body.", m_poss.data())),
         _("%s^が自分の体に念を送った。", format("%%s^ concentrates on %s body.", m_poss.data())));
 
-    monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->effects()->blindness().is_blind(), target_type);
+    monspell_message_base(player_ptr, m_idx, t_idx, msg, player_ptr->effects()->blindness().is_active(), target_type);
 
     if (set_monster_fast(*player_ptr->current_floor_ptr, m_idx, monster.get_remaining_acceleration() + 100)) {
         if (target_type == MONSTER_TO_PLAYER || (target_type == MONSTER_TO_MONSTER && see_m)) {
@@ -586,7 +586,7 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
     DEPTH rlev = monster_level_idx(floor, m_idx);
-    const auto is_blind = player_ptr->effects()->blindness().is_blind();
+    const auto is_blind = player_ptr->effects()->blindness().is_active();
     const auto seen = (!is_blind && monster.ml);
     const auto m_poss = monster_desc(player_ptr, monster, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
@@ -645,7 +645,7 @@ MonsterSpellResult spell_RF6_HEAL(PlayerType *player_ptr, MONSTER_IDX m_idx, MON
 MonsterSpellResult spell_RF6_INVULNER(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type)
 {
     const auto &monster = player_ptr->current_floor_ptr->m_list[m_idx];
-    bool seen = (!player_ptr->effects()->blindness().is_blind() && monster.ml);
+    bool seen = (!player_ptr->effects()->blindness().is_active() && monster.ml);
     mspell_cast_msg msg(_("%s^が何かを力強くつぶやいた。", "%s^ mumbles powerfully."),
         _("%s^が何かを力強くつぶやいた。", "%s^ mumbles powerfully."), _("%sは無傷の球の呪文を唱えた。", "%s^ casts a Globe of Invulnerability."),
         _("%sは無傷の球の呪文を唱えた。", "%s^ casts a Globe of Invulnerability."));

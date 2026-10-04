@@ -226,7 +226,7 @@ TrFlags PlayerClass::stance_tr_flags() const
 
     switch (this->get_samurai_stance()) {
     case SamuraiStanceType::FUUJIN:
-        if (!this->player_ptr->effects()->blindness().is_blind()) {
+        if (!this->player_ptr->effects()->blindness().is_active()) {
             flags.set(TR_REFLECT);
         }
         break;

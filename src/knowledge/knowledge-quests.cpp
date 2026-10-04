@@ -187,7 +187,7 @@ static bool do_cmd_knowledge_quests_aux(PlayerType *, FILE *fff, QuestId q_idx)
         return true;
     }
 
-    const auto mes = _("  %-35s (%3d階)            - レベル%2d - %s\n", "  %-35s (Dungeon level: %3d) - level %2d - %s\n");
+    constexpr auto mes = _("  %-35s (%3d階)            - レベル%2d - %s\n", "  %-35s (Dungeon level: %3d) - level %2d - %s\n");
     fprintf(fff, mes, name.front().data(), (int)quest.level, quest.complev, playtime_str.data());
     fputs_name_remain(name);
     return true;

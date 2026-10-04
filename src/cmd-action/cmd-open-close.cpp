@@ -54,11 +54,11 @@ static bool exe_open_chest(PlayerType *player_ptr, const Pos2D &pos, OBJECT_IDX 
         flag = false;
         int i = player_ptr->skill_dis;
         const auto effects = player_ptr->effects();
-        if (effects->blindness().is_blind() || no_lite(player_ptr)) {
+        if (effects->blindness().is_active() || no_lite(player_ptr)) {
             i = i / 10;
         }
 
-        if (effects->confusion().is_confused() || effects->hallucination().is_hallucinated()) {
+        if (effects->confusion().is_active() || effects->hallucination().is_active()) {
             i = i / 10;
         }
 
@@ -82,9 +82,11 @@ static bool exe_open_chest(PlayerType *player_ptr, const Pos2D &pos, OBJECT_IDX 
     }
 
     if (flag) {
+        // 罠の効果で箱が削除されると番号が変わるため、箱の実体を保持して渡す。
+        const auto chest_item = player_ptr->current_floor_ptr->o_list[o_idx];
         Chest chest(player_ptr);
-        chest.fire_trap(pos, o_idx);
-        chest.open(false, pos, o_idx);
+        chest.fire_trap(pos, chest_item);
+        chest.open(false, pos, chest_item);
     }
 
     return more;

@@ -3,6 +3,7 @@
 #include <array>
 #include <filesystem>
 #include <tl/optional.hpp>
+#define NOMINMAX
 #include <windows.h>
 
 class CfgData;

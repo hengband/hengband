@@ -10,13 +10,8 @@
 
 #pragma once
 
-#include "util/point-2d.h"
-#include <tl/expected.hpp>
-
-enum parse_error_type : int;
 class PlayerType;
 void wilderness_gen(PlayerType *player_ptr);
 void wilderness_gen_small(PlayerType *player_ptr);
 void init_wilderness_terrains();
-tl::expected<Pos2D, parse_error_type> parse_line_wilderness(char *line, int xmin, int xmax, const Pos2D &pos_parsing);
 bool change_wild_mode(PlayerType *player_ptr, bool encount);

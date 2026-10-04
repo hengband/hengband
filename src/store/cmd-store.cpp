@@ -15,7 +15,7 @@
 #include "player-status/player-energy.h"
 #include "store/home.h"
 #include "store/store-key-processor.h"
-#include "store/store-owners.h"
+#include "store/store-screen.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/dungeon/dungeon-definition.h"
@@ -33,7 +33,26 @@
 #include "view/display-store.h"
 #include "world/world.h"
 
-#define MIN_STOCK 12
+/*!
+ * @brief 入った店舗がある町のIDを決める
+ * @param floor 現在のフロア
+ * @param store_num 店舗の種類
+ * @return 町のID
+ * @details 我が家と博物館は全ての町で内容を共有するため、辺境の地の店舗を使う。
+ * ダンジョン内の店舗は、ダンジョン用の町 (VALID_TOWNS) の店舗を使う。
+ */
+static size_t decide_store_town_index(const FloorType &floor, StoreSaleType store_num)
+{
+    if (floor.is_underground()) {
+        return VALID_TOWNS;
+    }
+
+    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
+        return 1;
+    }
+
+    return AngbandWorld::get_instance().get_town_index();
+}
 
 /*!
  * @brief 店舗処理全体のメインルーチン /
@@ -56,10 +75,6 @@ void do_cmd_store(PlayerType *player_ptr)
         return;
     }
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, tl::nullopt);
-    const auto &[wid, hgt] = term_get_size();
-    xtra_stock = std::min(14 + 26, ((hgt > MAIN_TERM_MIN_ROWS) ? (hgt - MAIN_TERM_MIN_ROWS) : 0));
-    store_bottom = MIN_STOCK + xtra_stock;
-
     auto &floor = *player_ptr->current_floor_ptr;
     const auto &grid = floor.get_grid(player_ptr->get_position());
     if (!grid.has(TerrainCharacteristics::STORE)) {
@@ -67,29 +82,11 @@ void do_cmd_store(PlayerType *player_ptr)
         return;
     }
 
-    // TODO:
-    //   施設の種類により、一時的に現在地 (player_ptr->town_num) を違う値に偽装して処理している。
-    //   我が家および博物館は全ての町で内容を共有するため、現在地を辺境の地 (1) にしている。
-    //   ダンジョン内の店の場合、現在地を NO_TOWN にしている。
-    //   inner_town_num は、施設内で C コマンドなどを使ったときにそのままでは現在地の偽装がバレる
-    //   ため、それを糊塗するためのグローバル変数。
-    //   この辺はリファクタしたい。
     const auto store_num = grid.get_terrain().store_sale_type;
-    old_town_num = world.get_town_index();
-    if ((store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM)) {
-        world.set_town_index(1);
-    }
-
-    if (floor.is_underground()) {
-        world.set_town_index(VALID_TOWNS);
-    }
-
-    inner_town_num = world.get_town_index();
-    auto &town = world.get_town();
-    auto &store = town.get_store(store_num);
+    const auto town_index = decide_store_town_index(floor, store_num);
+    auto &store = TownList::get_instance().get_town(town_index).get_store(store_num);
     if ((store.store_open >= world.game_turn) || ironman_shops) {
         msg_print(_("ドアに鍵がかかっている。", "The doors are locked."));
-        world.set_town_index(old_town_num);
         return;
     }
 
@@ -99,7 +96,7 @@ void do_cmd_store(PlayerType *player_ptr)
     }
 
     if (maintain_num > 0) {
-        store_maintenance(player_ptr, world.get_town_index(), store_num, maintain_num);
+        store_maintenance(player_ptr, town_index, store, maintain_num);
         store.last_visit = world.game_turn;
     }
 
@@ -110,48 +107,45 @@ void do_cmd_store(PlayerType *player_ptr)
     command_rep = 0;
     command_new = 0;
     get_com_no_macros = true;
-    cur_store_feat = grid.feat;
-    st_ptr = &store;
-    ot_ptr = &owners.at(store_num)[st_ptr->owner];
-    store_top = 0;
+    StoreScreen screen(store, town_index, grid.feat, term_get_size().second);
     play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
-    display_store(player_ptr, store_num);
-    leave_store = false;
+    display_store(player_ptr, screen);
+    auto should_leave = false;
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    while (!leave_store) {
+    while (!should_leave) {
         prt("", 1, 0);
-        clear_from(20 + xtra_stock);
-        prt(_(" ESC) 建物から出る", " ESC) Exit from Building."), 21 + xtra_stock, 0);
-        if (st_ptr->stock_num > store_bottom) {
-            prt(_(" -)前ページ", " -) Previous page"), 22 + xtra_stock, 0);
-            prt(_(" スペース) 次ページ", " SPACE) Next page"), 23 + xtra_stock, 0);
+        clear_from(screen.get_command_row(0));
+        prt(_(" ESC) 建物から出る", " ESC) Exit from Building."), screen.get_command_row(1), 0);
+        if (screen.has_multiple_pages()) {
+            prt(_(" -)前ページ", " -) Previous page"), screen.get_command_row(2), 0);
+            prt(_(" スペース) 次ページ", " SPACE) Next page"), screen.get_command_row(3), 0);
         }
 
         if (store_num == StoreSaleType::HOME) {
-            prt(_("g) アイテムを取る", "g) Get an item."), 21 + xtra_stock, 27);
-            prt(_("d) アイテムを置く", "d) Drop an item."), 22 + xtra_stock, 27);
-            prt(_("x) 家のアイテムを調べる", "x) eXamine an item in the home."), 23 + xtra_stock, 27);
+            prt(_("g) アイテムを取る", "g) Get an item."), screen.get_command_row(1), 27);
+            prt(_("d) アイテムを置く", "d) Drop an item."), screen.get_command_row(2), 27);
+            prt(_("x) 家のアイテムを調べる", "x) eXamine an item in the home."), screen.get_command_row(3), 27);
         } else if (store_num == StoreSaleType::MUSEUM) {
-            prt(_("d) アイテムを置く", "d) Drop an item."), 21 + xtra_stock, 27);
-            prt(_("r) アイテムの展示をやめる", "r) order to Remove an item."), 22 + xtra_stock, 27);
-            prt(_("x) 博物館のアイテムを調べる", "x) eXamine an item in the museum."), 23 + xtra_stock, 27);
+            prt(_("d) アイテムを置く", "d) Drop an item."), screen.get_command_row(1), 27);
+            prt(_("r) アイテムの展示をやめる", "r) order to Remove an item."), screen.get_command_row(2), 27);
+            prt(_("x) 博物館のアイテムを調べる", "x) eXamine an item in the museum."), screen.get_command_row(3), 27);
         } else {
-            prt(_("p) 商品を買う", "p) Purchase an item."), 21 + xtra_stock, 30);
-            prt(_("s) アイテムを売る", "s) Sell an item."), 22 + xtra_stock, 30);
-            prt(_("x) 商品を調べる", "x) eXamine an item in the shop"), 23 + xtra_stock, 30);
+            prt(_("p) 商品を買う", "p) Purchase an item."), screen.get_command_row(1), 30);
+            prt(_("s) アイテムを売る", "s) Sell an item."), screen.get_command_row(2), 30);
+            prt(_("x) 商品を調べる", "x) eXamine an item in the shop"), screen.get_command_row(3), 30);
         }
 
-        prt(_("i/e) 持ち物/装備の一覧", "i/e) Inventry/Equipment list"), 21 + xtra_stock, 56);
+        prt(_("i/e) 持ち物/装備の一覧", "i/e) Inventry/Equipment list"), screen.get_command_row(1), 56);
         if (rogue_like_commands) {
-            prt(_("w/T) 装備する/はずす", "w/T) Wear/Take off equipment"), 22 + xtra_stock, 56);
+            prt(_("w/T) 装備する/はずす", "w/T) Wear/Take off equipment"), screen.get_command_row(2), 56);
         } else {
-            prt(_("w/t) 装備する/はずす", "w/t) Wear/Take off equipment"), 22 + xtra_stock, 56);
+            prt(_("w/t) 装備する/はずす", "w/t) Wear/Take off equipment"), screen.get_command_row(2), 56);
         }
 
-        prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
-        output_bot_json_store_snapshot(player_ptr, store_num);
+        prt(_("コマンド:", "You may: "), screen.get_command_row(0), 0);
+        output_bot_json_store_snapshot(player_ptr, screen);
         InputKeyRequestor(player_ptr, true).request_command();
-        store_process_command(player_ptr, store_num);
+        should_leave = store_process_command(player_ptr, screen);
 
         const auto should_redraw_store_inventory = rfu.has(StatusRecalculatingFlag::BONUS);
         world.character_icky_depth = 1;
@@ -166,10 +160,10 @@ void do_cmd_store(PlayerType *player_ptr)
                     msg_print(_("ザックからアイテムがあふれそうなので、あわてて店から出た...", "Your pack is so full that you flee the store..."));
                 }
 
-                leave_store = true;
-            } else if (!store_check_num(&item_inventory, store_num)) {
+                should_leave = true;
+            } else if (!store_check_num(&item_inventory, store)) {
                 msg_print(_("ザックからアイテムがあふれそうなので、あわてて家から出た...", "Your pack is so full that you flee your home..."));
-                leave_store = true;
+                should_leave = true;
             } else {
                 msg_print(_("ザックからアイテムがあふれてしまった！", "Your pack overflows!"));
                 auto item = item_inventory.clone();
@@ -177,25 +171,22 @@ void do_cmd_store(PlayerType *player_ptr)
                 msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
                 vary_item(player_ptr, i_idx, -255);
                 handle_stuff(player_ptr);
-                const auto item_pos = home_carry(player_ptr, &item, store_num);
+                const auto item_pos = home_carry(player_ptr, store, &item);
                 if (item_pos >= 0) {
-                    store_top = (item_pos / store_bottom) * store_bottom;
-                    display_store_inventory(player_ptr, store_num);
+                    screen.show_page_containing(item_pos);
+                    display_store_inventory(player_ptr, screen);
                 }
             }
         }
 
         if (should_redraw_store_inventory) {
-            display_store_inventory(player_ptr, store_num);
+            display_store_inventory(player_ptr, screen);
         }
 
-        if (st_ptr->store_open >= world.game_turn) {
-            leave_store = true;
+        if (store.store_open >= world.game_turn) {
+            should_leave = true;
         }
     }
-
-    // 現在地の偽装を解除。
-    world.set_town_index(old_town_num);
 
     select_floor_music(player_ptr);
     PlayerEnergy(player_ptr).set_player_turn_energy(100);

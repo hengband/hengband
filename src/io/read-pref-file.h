@@ -4,8 +4,8 @@
 #include <filesystem>
 #include <string_view>
 
-extern char auto_dump_header[];
-extern char auto_dump_footer[];
+constexpr std::string_view auto_dump_header = "# vvvvvvv== {} ==vvvvvvv";
+constexpr std::string_view auto_dump_footer = "# ^^^^^^^== {} ==^^^^^^^";
 
 class PlayerType;
 errr process_pref_file(PlayerType *player_ptr, std::string_view name, bool only_user_dir = false);

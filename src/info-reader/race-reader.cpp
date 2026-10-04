@@ -13,7 +13,10 @@
 #include "util/enum-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
+#include <charconv>
+#include <nlohmann/json.hpp>
 #include <string>
+#include <system_error>
 
 RaceReader::RaceReader(const nlohmann::json &monrace_data)
     : monrace_data(monrace_data)
@@ -221,7 +224,7 @@ bool RaceReader::grab_one_basic_flag(MonraceDefinition &monrace, std::string_vie
         return true;
     }
 
-    msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
+    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
     return false;
 }
 
@@ -238,7 +241,7 @@ bool RaceReader::grab_one_spell_flag(MonraceDefinition &monrace, std::string_vie
         return true;
     }
 
-    msg_format(_("未知のモンスター・フラグ '%s'。", "Unknown monster flag '%s'."), what.data());
+    msg_print(_("未知のモンスター・フラグ '{}'。", "Unknown monster flag '{}'."), what);
     return false;
 }
 
@@ -522,19 +525,21 @@ int RaceReader::set_mon_skills(MonraceDefinition &monrace) const
     }
 
     const auto &prob_token = str_split(prob.get<std::string>(), '_', false, 2);
-    if (prob_token.size() == 3 && prob_token[1] == "IN") {
-        if (prob_token[0] != "1") {
-            return PARSE_ERROR_GENERIC;
-        }
-        byte denominator;
-        info_set_value(denominator, prob_token[2]);
-        monrace.freq_spell = 100 / denominator;
+    if (prob_token.size() != 3 || prob_token[0] != "1" || prob_token[1] != "IN") {
+        return PARSE_ERROR_GENERIC;
     }
+    const auto &denominator_token = prob_token[2];
+    int denominator;
+    const auto [end, ec] = std::from_chars(denominator_token.data(), denominator_token.data() + denominator_token.size(), denominator);
+    if (ec != std::errc{} || end != denominator_token.data() + denominator_token.size() || denominator_token.front() == '0' || denominator < 1 || denominator > 100) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+    monrace.freq_spell = 100 / denominator;
 
     const auto &shoot_dice = skill_data.find("shoot");
     const auto shoot = (shoot_dice != skill_data.end());
     if (shoot) {
-        if (auto ret = info_set_dice(shoot_dice->get<std::string>(), monrace.shoot_damage_dice, true)) {
+        if (auto ret = info_set_dice(*shoot_dice, monrace.shoot_damage_dice, true)) {
             return ret;
         }
         monrace.ability_flags.set(MonsterAbilityType::SHOOT);
@@ -549,6 +554,9 @@ int RaceReader::set_mon_skills(MonraceDefinition &monrace) const
     }
 
     for (auto &skill : skill_list->items()) {
+        if (!skill.value().is_string()) {
+            return PARSE_ERROR_INVALID_TYPE;
+        }
         if (!this->grab_one_spell_flag(monrace, skill.value().get<std::string>())) {
             return PARSE_ERROR_INVALID_FLAG;
         }
@@ -615,6 +623,9 @@ int RaceReader::set_mon_message(MonraceDefinition &monrace) const
         const auto &action_str = get_json_value(message, "action");
         if (action_str.is_null()) {
             return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+        if (!action_str.is_string()) {
+            return PARSE_ERROR_INVALID_TYPE;
         }
         const auto action = r_info_message_flags.find(action_str.get<std::string>());
         if (action == r_info_message_flags.end()) {

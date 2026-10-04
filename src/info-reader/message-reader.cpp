@@ -6,7 +6,10 @@
 #include "locale/character-encoding.h"
 #include "system/monrace/monrace-message.h"
 #include "view/display-messages.h"
+#include <nlohmann/json.hpp>
 #include <string>
+#include <utility>
+#include <vector>
 
 MessageReader::MessageReader(const nlohmann::json &message_data)
     : message_data(message_data)
@@ -65,9 +68,27 @@ int MessageReader::set_mon_message() const
     }
     const auto &message_array = message_iter.value();
     auto id_list = std::vector<int>();
+    struct PendingMessage {
+        MonsterMessageType action;
+        int chance;
+        bool use_name;
+        std::string text;
+    };
+    std::vector<PendingMessage> pending_messages;
 
     const auto id_list_iter = group_data.find("id_list");
     const auto has_id_list = (id_list_iter != group_data.end());
+    const auto publish = [&] {
+        for (const auto &message : pending_messages) {
+            if (has_id_list) {
+                for (const auto id : id_list) {
+                    MonraceMessageList::get_instance().emplace(id, message.action, message.chance, message.use_name, message.text);
+                }
+            } else {
+                MonraceMessageList::get_instance().emplace_default(message.action, message.chance, message.use_name, message.text);
+            }
+        }
+    };
 
     if (has_id_list) {
         errr id_err = set_id_list(id_list_iter.value(), id_list);
@@ -133,6 +154,7 @@ int MessageReader::set_mon_message() const
             if (en_list == language_list.end()) {
                 return PARSE_ERROR_TOO_FEW_ARGUMENTS;
             }
+            publish();
             return PARSE_ERROR_NONE;
         }
         const auto &message_list = ja_list.value();
@@ -141,10 +163,18 @@ int MessageReader::set_mon_message() const
             if (ja_list == language_list.end()) {
                 return PARSE_ERROR_TOO_FEW_ARGUMENTS;
             }
+            publish();
             return PARSE_ERROR_NONE;
         }
         const auto &message_list = en_list.value();
 #endif
+
+        if (message_list.is_null()) {
+            return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+        }
+        if (!message_list.is_array()) {
+            return PARSE_ERROR_INVALID_TYPE;
+        }
 
         for (const auto &message_str : message_list) {
             if (message_str.is_null()) {
@@ -153,23 +183,13 @@ int MessageReader::set_mon_message() const
             if (!message_str.is_string()) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
-#ifdef JP
             auto str_test = utf8_to_sys(message_str.get<std::string>());
             if (!str_test) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
-            auto str = std::move(*str_test);
-#else
-            auto str = message_str.get<std::string>();
-#endif
-            if (has_id_list) {
-                for (auto id : id_list) {
-                    MonraceMessageList::get_instance().emplace(id, action->second, chance, use_name, str);
-                }
-            } else {
-                MonraceMessageList::get_instance().emplace_default(action->second, chance, use_name, str);
-            }
+            pending_messages.push_back({ action->second, chance, use_name, std::move(*str_test) });
         }
     }
+    publish();
     return PARSE_ERROR_NONE;
 }

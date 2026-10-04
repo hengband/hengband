@@ -695,7 +695,7 @@ BIT_FLAGS has_no_ac(PlayerType *player_ptr)
 
 BIT_FLAGS has_invuln_arrow(PlayerType *player_ptr)
 {
-    if (player_ptr->effects()->blindness().is_blind()) {
+    if (player_ptr->effects()->blindness().is_active()) {
         return 0;
     }
 

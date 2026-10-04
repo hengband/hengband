@@ -293,7 +293,7 @@ void unlite_room(PlayerType *player_ptr, const Pos2D &pos_start)
  */
 bool starlight(PlayerType *player_ptr, bool magic)
 {
-    if (!player_ptr->effects()->blindness().is_blind() && !magic) {
+    if (!player_ptr->effects()->blindness().is_active() && !magic) {
         msg_print(_("杖の先が明るく輝いた...", "The end of the staff glows brightly..."));
     }
 
@@ -334,7 +334,7 @@ bool lite_area(PlayerType *player_ptr, int dam, int rad)
         return false;
     }
 
-    if (!player_ptr->effects()->blindness().is_blind()) {
+    if (!player_ptr->effects()->blindness().is_active()) {
         msg_print(_("白い光が辺りを覆った。", "You are surrounded by a white light."));
     }
 
@@ -355,7 +355,7 @@ bool lite_area(PlayerType *player_ptr, int dam, int rad)
  */
 bool unlite_area(PlayerType *player_ptr, int dam, int rad)
 {
-    if (!player_ptr->effects()->blindness().is_blind()) {
+    if (!player_ptr->effects()->blindness().is_active()) {
         msg_print(_("暗闇が辺りを覆った。", "Darkness surrounds you."));
     }
 

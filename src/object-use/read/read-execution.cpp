@@ -20,6 +20,7 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-realm/spells-song.h"
 #include "status/experience.h"
+#include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -83,7 +84,12 @@ void ObjectReadEntity::execute(bool known)
     }
 
     sound(SoundKind::SCROLL);
-    vary_item(this->player_ptr, this->i_idx, -1);
+
+    // 効果中のアイテム削除や並べ替えでインデックスが変わるため、同じ実体を探し直す。
+    const auto current_i_idx = find_current_i_idx(this->player_ptr, this->i_idx >= 0, item);
+    if (current_i_idx) {
+        vary_item(this->player_ptr, *current_i_idx, -1);
+    }
 }
 
 bool ObjectReadEntity::can_read() const

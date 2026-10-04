@@ -33,40 +33,40 @@ text_body_type::text_body_type(int cx, int cy)
 /*
  * Check special key code and get a movement command id
  */
-static int analyze_move_key(text_body_type *tb, uint32_t skey)
+static EditorCommandId analyze_move_key(text_body_type *tb, uint32_t skey)
 {
-    int com_id;
+    EditorCommandId com_id;
     if (!(skey & SKEY_MASK)) {
-        return 0;
+        return EditorCommandId::NONE;
     }
 
     switch (skey & ~SKEY_MOD_MASK) {
     case SKEY_DOWN:
-        com_id = EC_DOWN;
+        com_id = EditorCommandId::DOWN;
         break;
     case SKEY_LEFT:
-        com_id = EC_LEFT;
+        com_id = EditorCommandId::LEFT;
         break;
     case SKEY_RIGHT:
-        com_id = EC_RIGHT;
+        com_id = EditorCommandId::RIGHT;
         break;
     case SKEY_UP:
-        com_id = EC_UP;
+        com_id = EditorCommandId::UP;
         break;
     case SKEY_PGUP:
-        com_id = EC_PGUP;
+        com_id = EditorCommandId::PGUP;
         break;
     case SKEY_PGDOWN:
-        com_id = EC_PGDOWN;
+        com_id = EditorCommandId::PGDOWN;
         break;
     case SKEY_HOME:
-        com_id = any_bits(skey, SKEY_MOD_CONTROL) ? EC_TOP : EC_BOL;
+        com_id = any_bits(skey, SKEY_MOD_CONTROL) ? EditorCommandId::TOP : EditorCommandId::BOL;
         break;
     case SKEY_END:
-        com_id = any_bits(skey, SKEY_MOD_CONTROL) ? EC_BOTTOM : EC_EOL;
+        com_id = any_bits(skey, SKEY_MOD_CONTROL) ? EditorCommandId::BOTTOM : EditorCommandId::EOL;
         break;
     default:
-        return 0;
+        return EditorCommandId::NONE;
     }
 
     if (!(skey & SKEY_MOD_SHIFT)) {
@@ -94,7 +94,7 @@ static int analyze_move_key(text_body_type *tb, uint32_t skey)
         tb->mx = len;
     }
 
-    if (com_id == EC_UP || com_id == EC_DOWN) {
+    if (com_id == EditorCommandId::UP || com_id == EditorCommandId::DOWN) {
         tb->dirty_flags |= DIRTY_ALL;
     } else {
         tb->dirty_line = tb->cy;
@@ -103,18 +103,34 @@ static int analyze_move_key(text_body_type *tb, uint32_t skey)
     return com_id;
 }
 
+/*!
+ * @brief コマンドを処理する前にカーソル列とマーク列を行の範囲内に収める
+ * @details キーワードの切り替え等はマークを残したまま行を短くするため、マーク中はマーク列も補正する。
+ * マークを外した後の my / mx は存在しない行を指していることがあるため触らない。
+ */
 void text_body_type::adjust_cursor_column()
 {
     this->cx = std::max(this->cx, this->rec_cx);
     this->cx = std::min<int>(this->lines_list[this->cy]->length(), this->cx);
+    if (this->mark) {
+        this->mx = std::min<int>(this->lines_list[this->my]->length(), this->mx);
+    }
 }
 
-void text_body_type::update_cursor_column_record(int com_id)
+void text_body_type::update_cursor_column_record(EditorCommandId com_id)
 {
-    static const std::set record_cursor_column_commands = { EC_UP, EC_DOWN, EC_PGUP, EC_PGDOWN, EC_TOP, EC_BOTTOM };
-
+    static const std::set<EditorCommandId> record_cursor_column_commands = { EditorCommandId::UP, EditorCommandId::DOWN, EditorCommandId::PGUP, EditorCommandId::PGDOWN, EditorCommandId::TOP, EditorCommandId::BOTTOM };
     const auto should_record = record_cursor_column_commands.contains(com_id);
     this->rec_cx = should_record ? std::max(this->cx, this->rec_cx) : 0;
+}
+
+/*!
+ * @brief カーソルが2バイト文字の2バイト目にあるかどうかを判定する
+ * @return カーソルのある行で、カーソルの位置が2バイト文字の2バイト目であれば true
+ */
+bool text_body_type::is_cursor_on_second_byte_of_kanji() const
+{
+    return is_second_byte_of_kanji(*this->lines_list[this->cy], this->cx);
 }
 
 /*
@@ -167,7 +183,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
 
     screen_save();
     while (quit == APE_QUIT) {
-        int com_id = 0;
+        auto com_id = EditorCommandId::NONE;
         tb->adjust_cursor_column();
         draw_text_editor(player_ptr, tb);
         prt(_("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)",
@@ -206,7 +222,7 @@ void do_cmd_edit_autopick(PlayerType *player_ptr)
             com_id = CommandMenuData::get_instance().get_com_id((char)key);
         }
 
-        if (com_id) {
+        if (com_id > EditorCommandId::NONE) {
             quit = do_editor_command(player_ptr, tb, com_id);
         }
 

@@ -82,8 +82,11 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
-    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK) && is_original_ap_and_seen(player_ptr, *mam_ptr->m_ptr)) {
-        monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_FIRE_MASK);
+    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_FIRE_MASK)) {
+        if (is_original_ap_and_seen(player_ptr, *mam_ptr->m_ptr)) {
+            monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_FIRE_MASK);
+        }
+
         return;
     }
 
@@ -92,7 +95,7 @@ static void aura_fire_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
-        monrace_target.aura_flags.set(MonsterAuraType::FIRE);
+        monrace_target.r_aura_flags.set(MonsterAuraType::FIRE);
     }
 
     const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
@@ -109,8 +112,11 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
-    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK) && is_original_ap_and_seen(player_ptr, monster)) {
-        monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_COLD_MASK);
+    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_COLD_MASK)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
+            monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_COLD_MASK);
+        }
+
         return;
     }
 
@@ -119,7 +125,7 @@ static void aura_cold_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (monster.ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
-        monrace_target.aura_flags.set(MonsterAuraType::COLD);
+        monrace_target.r_aura_flags.set(MonsterAuraType::COLD);
     }
 
     const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));
@@ -136,8 +142,11 @@ static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
         return;
     }
 
-    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK) && is_original_ap_and_seen(player_ptr, monster)) {
-        monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_ELEC_MASK);
+    if (monrace.resistance_flags.has_any_of(RFR_EFF_IM_ELEC_MASK)) {
+        if (is_original_ap_and_seen(player_ptr, monster)) {
+            monrace.r_resistance_flags.set(monrace.resistance_flags & RFR_EFF_IM_ELEC_MASK);
+        }
+
         return;
     }
 
@@ -146,7 +155,7 @@ static void aura_elec_by_melee(PlayerType *player_ptr, mam_type *mam_ptr)
     }
 
     if (monster.ml && is_original_ap_and_seen(player_ptr, *mam_ptr->t_ptr)) {
-        monrace_target.aura_flags.set(MonsterAuraType::ELEC);
+        monrace_target.r_aura_flags.set(MonsterAuraType::ELEC);
     }
 
     const auto dam = Dice::roll(1 + ((monrace_target.level) / 26), 1 + ((monrace_target.level) / 17));

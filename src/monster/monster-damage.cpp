@@ -37,6 +37,7 @@
 #include "timed-effect/timed-effects.h"
 #include "tracking/health-bar-tracker.h"
 #include "tracking/lore-tracker.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <string>
@@ -198,7 +199,7 @@ void MonsterDamageProcessor::increase_kill_numbers()
     auto &monrace = monster.get_real_monrace();
     monrace.increment_akills();
 
-    const auto is_hallucinated = this->player_ptr->effects()->hallucination().is_hallucinated();
+    const auto is_hallucinated = this->player_ptr->effects()->hallucination().is_active();
     if (((monster.ml == 0) || is_hallucinated) && monrace.kind_flags.has_not(MonsterKindType::UNIQUE)) {
         return;
     }
@@ -227,7 +228,7 @@ void MonsterDamageProcessor::death_amberites(std::string_view m_name)
     auto curses = 1 + randint1(3);
     auto stop_ty = false;
     auto count = 0;
-    msg_format(_("%s^は恐ろしい血の呪いをあなたにかけた！", "%s^ puts a terrible blood curse on you!"), m_name.data());
+    msg_print(_("{}は恐ろしい血の呪いをあなたにかけた！", "{} puts a terrible blood curse on you!"), str_upcase_first(m_name));
     curse_equipment(this->player_ptr, 100, 50);
     do {
         stop_ty = activate_ty_curse(this->player_ptr, stop_ty, &count);
@@ -259,14 +260,16 @@ void MonsterDamageProcessor::show_kill_message(std::string_view note, std::strin
     const auto &floor = *this->player_ptr->current_floor_ptr;
     const auto &monster = floor.m_list[this->m_idx];
     if (!note.empty()) {
-        msg_format("%s^%s", m_name.data(), note.data());
+        msg_print("{}{}", str_upcase_first(m_name), note);
         return;
     }
 
     if (!monster.ml) {
-        auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを殺した。", "Because it's time, you have killed %s.")
-                                                : _("%sを殺した。", "You have killed %s.");
-        msg_format(mes, m_name.data());
+        if (is_echizen(this->player_ptr)) {
+            msg_print(_("せっかくだから{}を殺した。", "Because it's time, you have killed {}."), m_name);
+        } else {
+            msg_print(_("{}を殺した。", "You have killed {}."), m_name);
+        }
         return;
     }
 
@@ -278,9 +281,11 @@ void MonsterDamageProcessor::show_kill_message(std::string_view note, std::strin
             return;
         }
 
-        auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを葬り去った。", "Because it's time, you have slain %s.")
-                                                : _("%sを葬り去った。", "You have slain %s.");
-        msg_format(mes, m_name.data());
+        if (is_echizen(this->player_ptr)) {
+            msg_print(_("せっかくだから{}を葬り去った。", "Because it's time, you have slain {}."), m_name);
+        } else {
+            msg_print(_("{}を葬り去った。", "You have slain {}."), m_name);
+        }
         return;
     }
 
@@ -289,15 +294,17 @@ void MonsterDamageProcessor::show_kill_message(std::string_view note, std::strin
         return;
     }
 
-    auto mes = is_echizen(this->player_ptr) ? _("せっかくだから%sを倒した。", "Because it's time, you have destroyed %s.")
-                                            : _("%sを倒した。", "You have destroyed %s.");
-    msg_format(mes, m_name.data());
+    if (is_echizen(this->player_ptr)) {
+        msg_print(_("せっかくだから{}を倒した。", "Because it's time, you have destroyed {}."), m_name);
+    } else {
+        msg_print(_("{}を倒した。", "You have destroyed {}."), m_name);
+    }
 }
 
 void MonsterDamageProcessor::show_explosion_message(std::string_view died_mes, std::string_view m_name)
 {
     std::stringstream ss;
-    ss << _(m_name, format("%s^", m_name.data()));
+    ss << _(m_name, str_upcase_first(m_name));
     ss << died_mes;
     msg_print(ss.str());
     return;
@@ -317,7 +324,7 @@ void MonsterDamageProcessor::show_bounty_message(std::string_view m_name)
     }
 
     if (monrace.is_bounty(true)) {
-        msg_format(_("%sの首には賞金がかかっている。", "There is a price on %s's head."), m_name.data());
+        msg_print(_("{}の首には賞金がかかっている。", "There is a price on {}'s head."), m_name);
     }
 }
 

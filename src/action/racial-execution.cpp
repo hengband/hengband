@@ -46,7 +46,7 @@ bool exe_racial_power(PlayerType *player_ptr, const int32_t command)
  */
 PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
 {
-    if ((player_ptr->lev < rpi_ptr->min_level) || player_ptr->effects()->confusion().is_confused()) {
+    if ((player_ptr->lev < rpi_ptr->min_level) || player_ptr->effects()->confusion().is_active()) {
         return 0;
     }
 
@@ -56,7 +56,7 @@ PERCENTAGE racial_chance(PlayerType *player_ptr, rpi_type *rpi_ptr)
     }
 
     const auto &player_stun = player_ptr->effects()->stun();
-    if (player_stun.is_stunned()) {
+    if (player_stun.is_active()) {
         difficulty += player_stun.current();
     } else if (player_ptr->lev > rpi_ptr->min_level) {
         PERCENTAGE lev_adj = (PERCENTAGE)((player_ptr->lev - rpi_ptr->min_level) / 3);
@@ -102,7 +102,7 @@ static void adjust_racial_power_difficulty(PlayerType *player_ptr, rpi_type *rpi
     }
 
     const auto &player_stun = player_ptr->effects()->stun();
-    if (player_stun.is_stunned()) {
+    if (player_stun.is_active()) {
         *difficulty += player_stun.current();
     } else if (player_ptr->lev > rpi_ptr->min_level) {
         int lev_adj = ((player_ptr->lev - rpi_ptr->min_level) / 3);

@@ -151,7 +151,7 @@ bool binding_field(PlayerType *player_ptr, int dam)
             }
 
             if (floor.has_los_at(pos) && projectable(floor, p_pos, pos)) {
-                if (!(player_ptr->effects()->blindness().is_blind()) && panel_contains(pos)) {
+                if (!(player_ptr->effects()->blindness().is_active()) && panel_contains(pos)) {
                     print_bolt_pict(player_ptr, pos, pos, AttributeType::MANA);
                     move_cursor_relative(y, x);
                     term_fresh();

@@ -97,9 +97,11 @@ void do_cmd_knowledge(PlayerType *player_ptr)
             do_cmd_knowledge_uniques(player_ptr, false);
             break;
         case '6': /* Monsters */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::MONSTERS);
             do_cmd_knowledge_monsters(player_ptr, &need_redraw, false);
             break;
         case '7': /* Kill count  */
+            output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::KILL_COUNT);
             do_cmd_knowledge_kill_count(player_ptr);
             break;
         case '8': /* wanted */

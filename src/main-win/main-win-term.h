@@ -7,6 +7,7 @@
 #include "system/h-type.h"
 #include "term/z-term.h"
 #include <string>
+#define NOMINMAX
 #include <windows.h>
 
 /*!

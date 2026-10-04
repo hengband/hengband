@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "towns": {
+    "1": {
+      "lite": "towns/01_Outpost_Lite.jsonc",
+      "normal": "towns/01_Outpost_Full.jsonc",
+      "none": "towns/01_Outpost_OnlyAngband.jsonc",
+    },
+    "2": "towns/02_Telmora.jsonc",
+    "3": "towns/03_Morivant.jsonc",
+    "4": "towns/04_Angwil.jsonc",
+    "5": "towns/05_Zul.jsonc",
+    "6": "towns/06_Rlyeh_Obsoleted.jsonc",
+  },
+}

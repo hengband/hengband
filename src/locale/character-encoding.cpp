@@ -7,19 +7,17 @@
 #include <range/v3/algorithm.hpp>
 
 #ifdef JP
-#include "system/angband-exceptions.h"
 #include "system/angband.h"
 #include "view/display-messages.h"
-#include <vector>
-#ifdef WIN32
-#include <windows.h>
-#undef min
-#undef max
-#else
-#include "util/finalizer.h"
 #include <algorithm>
+#include <vector>
+#ifdef _WIN32
+#define NOMINMAX
+#include <windows.h>
+#else
+#include <array>
 #include <iconv.h>
-#include <initializer_list>
+#include <utility>
 #endif
 #endif
 
@@ -99,6 +97,8 @@ bool is_utf8_str(std::string_view str)
 
 /*!
  * @brief 文字コードをSJISからEUCに変換する / Convert SJIS string to EUC string
+ * @details 上位ビットの立ったバイトはすべて2バイト文字の1バイト目として扱い、JIS X 0208 の文字だけを変換できる。
+ *          半角カナ (1バイトの A1-DF) と、1バイト目が F0 以上の文字 (ユーザー定義文字・IBM 拡張文字) は正しく変換できない。
  * @param str 変換する文字列のポインタ
  */
 void sjis2euc(char *str)
@@ -134,6 +134,8 @@ void sjis2euc(char *str)
 
 /*!
  * @brief 文字コードをEUCからSJISに変換する / Convert EUC string to SJIS string
+ * @details 上位ビットの立ったバイトはすべて2バイト文字の1バイト目として扱い、JIS X 0208 の文字だけを変換できる。
+ *          半角カナ (8E xx) と JIS X 0212 の文字 (8F xx xx) は正しく変換できない。
  * @param str 変換する文字列のポインタ
  */
 void euc2sjis(char *str)
@@ -172,6 +174,9 @@ void euc2sjis(char *str)
  * @brief strを環境に合った文字コードに変換し、変換前の文字コードを返す。strの長さに制限はない。
  * @param str 変換する文字列のポインタ
  * @return 変換前の文字コード
+ *         ASCII と EUC-JP/Shift_JIS のどちらとも解釈できる文字のみの文字列や、壊れた文字列など、
+ *         文字コードを判定できなかった場合は UNKNOWN
+ *         (ASCII は判定に使わないので US_ASCII を返すことはない)
  */
 CharacterEncoding codeconv(char *str)
 {
@@ -180,9 +185,8 @@ CharacterEncoding codeconv(char *str)
         /* First byte */
         const auto c1 = static_cast<unsigned char>(str[i]);
 
-        /* ASCII? */
+        /* ASCII は判定に影響しないので読み飛ばす */
         if (!(c1 & 0x80)) {
-            encoding = CharacterEncoding::US_ASCII;
             continue;
         }
 
@@ -190,19 +194,30 @@ CharacterEncoding codeconv(char *str)
         i++;
         const auto c2 = static_cast<unsigned char>(str[i]);
 
-        const auto is_euc_jp = ((0xa1 <= c1 && c1 <= 0xdf) || (0xfd <= c1 && c1 <= 0xfe)) && (0xa1 <= c2 && c2 <= 0xfe);
-        auto is_cp932 = (0x81 <= c1 && c1 <= 0x9f) && ((0x40 <= c2 && c2 <= 0x7e) || (0x80 <= c2 && c2 <= 0xfc));
-        is_cp932 |= (0xe0 <= c1 && c1 <= 0xfc) && (0x40 <= c2 && c2 <= 0x7e);
+        /*
+         * Shift_JIS の1バイト目 F0-FC (ユーザー定義文字・IBM 拡張文字) は sjis2euc() で
+         * EUC-JP に変換できない (1バイト目が 0x00 や制御文字になる) ため、Shift_JIS とはみなさない。
+         * EUC-JP の1バイト目 F5-FE には JIS X 0208 の文字が無いため、EUC-JP ともみなさない。
+         * これで、髙 (FB FC) などの IBM 拡張文字を EUC-JP と誤判定しなくなる。
+         */
+        const auto in_range = [](unsigned char c, unsigned char lo, unsigned char hi) { return (lo <= c) && (c <= hi); };
+        const auto is_euc_jp = in_range(c1, 0xa1, 0xf4) && in_range(c2, 0xa1, 0xfe);
+        const auto is_cp932 = (in_range(c1, 0x81, 0x9f) || in_range(c1, 0xe0, 0xef)) && (in_range(c2, 0x40, 0x7e) || in_range(c2, 0x80, 0xfc));
+
+        /* どちらとも解釈できる文字 (1バイト目 E0-EF、2バイト目 A1-FC の第2水準漢字など) は判定に使わない */
+        if (is_euc_jp && is_cp932) {
+            continue;
+        }
 
         if (is_euc_jp) {
             /* Only EUC is allowed */
-            if (encoding == CharacterEncoding::UNKNOWN || encoding == CharacterEncoding::US_ASCII || encoding == CharacterEncoding::EUC_JP) {
+            if (encoding == CharacterEncoding::UNKNOWN || encoding == CharacterEncoding::EUC_JP) {
                 encoding = CharacterEncoding::EUC_JP;
                 continue;
             }
         } else if (is_cp932) {
             /* Only SJIS is allowed */
-            if (encoding == CharacterEncoding::UNKNOWN || encoding == CharacterEncoding::US_ASCII || encoding == CharacterEncoding::SHIFT_JIS) {
+            if (encoding == CharacterEncoding::UNKNOWN || encoding == CharacterEncoding::SHIFT_JIS) {
                 encoding = CharacterEncoding::SHIFT_JIS;
                 continue;
             }
@@ -269,37 +284,19 @@ static bool is_ascii_str(const char *str)
     return true;
 }
 
-#if defined(EUC)
+#ifdef EUC
 
-// UTF-8 の文字列長は必ずしも3バイトとは限らないが、変愚蛮怒の仕様範囲では3固定.
-constexpr auto ENCODING_LENGTH = 3;
-class EncodingConverter {
-public:
-    EncodingConverter(const std::initializer_list<unsigned char> from, const std::initializer_list<unsigned char> to)
-        : from(from)
-        , to(to)
-    {
-    }
-
-    bool equals(const unsigned char *p) const
-    {
-        return std::equal(from.begin(), from.end(), p);
-    }
-
-    void replace(unsigned char *p) const
-    {
-        std::copy_n(to.begin(), ENCODING_LENGTH, p);
-    }
-
-private:
-    std::vector<unsigned char> from;
-    std::vector<unsigned char> to;
-};
-
-const std::vector<EncodingConverter> encoding_characters = {
-    { { 0xef, 0xbd, 0x9e }, { 0xe3, 0x80, 0x9c } }, /* FULLWIDTH TILDE -> WAVE DASH (全角チルダ → 波ダッシュ) */
-    { { 0xef, 0xbc, 0x8d }, { 0xe2, 0x88, 0x92 } }, /* FULLWIDTH HYPHEN-MINUS -> MINUS SIGN (全角ハイフン → マイナス記号) */
-};
+namespace {
+/*!
+ * @brief UTF-8 から EUC-JP に変換する前に置き換える文字 (置き換え前, 置き換え後) の UTF-8 のバイト列
+ * @details 置き換え前の文字はどちらも継続バイトにならない 0xEF で始まり、置き換え後のバイト列に 0xEF は無い。
+ * そのため、文字の途中から誤って一致したり、置き換えた結果がまた一致したりすることはない。
+ */
+constexpr std::array<std::pair<std::string_view, std::string_view>, 2> MS_TO_JIS_CHARACTERS = { {
+    { "\xef\xbd\x9e", "\xe3\x80\x9c" }, /* FULLWIDTH TILDE -> WAVE DASH (全角チルダ → 波ダッシュ) */
+    { "\xef\xbc\x8d", "\xe2\x88\x92" }, /* FULLWIDTH HYPHEN-MINUS -> MINUS SIGN (全角ハイフン → マイナス記号) */
+} };
+}
 
 /*!
  * @brief 受け取ったUTF-8文字列を調べ、特定のコードポイントの文字の置き換えを行う
@@ -312,69 +309,66 @@ const std::vector<EncodingConverter> encoding_characters = {
  * Linux/UNIX環境(EUC-JP)ではUTF-8→EUC-JPの変換を行う前に該当するコードポイントの
  * 文字をLinux/UNIX環境のものに置き換えてから変換を行う。
  *
- * @param str コードポイントの置き換えを行う文字列へのポインタ
+ * @param str コードポイントの置き換えを行う文字列。途中に '\0' があっても、文字列の長さまで置き換える
  */
-static void ms_to_jis_unicode(char *str)
+static void ms_to_jis_unicode(std::string &str)
 {
-    for (auto *p = (unsigned char *)str; *p; p++) {
-        auto subseq_num = 0;
-        if (0x00 < *p && *p <= 0x7f) {
-            continue;
+    for (const auto &[from, to] : MS_TO_JIS_CHARACTERS) {
+        for (auto pos = str.find(from); pos != std::string::npos; pos = str.find(from, pos + from.length())) {
+            str.replace(pos, from.length(), to);
         }
-
-        if ((*p & 0xe0) == 0xc0) {
-            subseq_num = 1;
-        }
-
-        if ((*p & 0xf0) == 0xe0) {
-            for (const auto &converter : encoding_characters) {
-                if (converter.equals(p)) {
-                    converter.replace(p);
-                }
-            }
-
-            subseq_num = 2;
-        }
-
-        if ((*p & 0xf8) == 0xf0) {
-            subseq_num = 3;
-        }
-
-        p += subseq_num;
     }
 }
 
-#endif
-
-#ifdef EUC
 /*!
  * @brief 文字列の文字コードをUTF-8からEUC-JPに変換する
- * @param utf8_str 変換元の文字列へのポインタ
- * @param utf8_str_len 変換元の文字列の長さ(文字数ではなくバイト数)
- * @param euc_buf 変換した文字列を格納するバッファへのポインタ
- * @param euc_buf_len 変換した文字列を格納するバッファのサイズ
- * @return 変換に成功した場合変換後の文字列の長さを返す
- *         変換に失敗した場合-1を返す
+ * @details 変愚蛮怒は全角文字を2バイト固定として扱うため、EUC-JP で3バイトになる JIS X 0212 の文字
+ *          (8F xx xx、é など) を正しく表示できない。そうした文字は '?' に置き換える
+ *          (Windows 版でも CP932 に無い文字は '?' などに置き換わる)。
+ * @param utf8_str 変換元の文字列
+ * @return EUC-JPに変換した文字列。変換に失敗した場合はtl::nullopt
  */
-int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len)
+tl::optional<std::string> utf8_to_euc(std::string_view utf8_str)
 {
-    static iconv_t cd = nullptr;
-    if (!cd) {
-        cd = iconv_open("EUC-JP", "UTF-8");
+    // 空文字列では一時バッファの data() が nullptr になり、iconv() に渡せないので、そのまま返す
+    if (utf8_str.empty()) {
+        return std::string();
     }
 
-    ms_to_jis_unicode(utf8_str);
+    static const auto cd = iconv_open("EUC-JP", "UTF-8");
+    if (cd == reinterpret_cast<iconv_t>(-1)) {
+        return tl::nullopt;
+    }
 
-    size_t inlen_left = utf8_str_len;
-    size_t outlen_left = euc_buf_len;
-    char *in = utf8_str;
-    char *out = euc_buf;
+    std::string utf8(utf8_str);
+    ms_to_jis_unicode(utf8);
+
+    // JIS X 0212 の文字は UTF-8 の2バイトが EUC-JP の3バイトになるので、'?' に置き換える前の変換結果が収まるよう2倍確保する
+    std::string euc(utf8.length() * 2, '\0');
+    size_t inlen_left = utf8.length();
+    size_t outlen_left = euc.length();
+    char *in = utf8.data();
+    char *out = euc.data();
 
     if (iconv(cd, &in, &inlen_left, &out, &outlen_left) == (size_t)-1) {
-        return -1;
+        return tl::nullopt;
     }
 
-    return euc_buf_len - outlen_left;
+    // JIS X 0212 の文字 (3バイト) を '?' に置き換えながら、その場で前に詰める (書き込み位置は読み込み位置を追い越さない)。
+    // EUC-JP の2バイト目以降は A1 以上なので、0x8F は JIS X 0212 の文字の先頭にしか現れない
+    const auto converted_len = euc.length() - outlen_left;
+    size_t euc_len = 0;
+    for (size_t i = 0; i < converted_len; euc_len++) {
+        if (static_cast<unsigned char>(euc[i]) == 0x8f) {
+            euc[euc_len] = '?';
+            i += 3;
+        } else {
+            euc[euc_len] = euc[i++];
+        }
+    }
+
+    euc.resize(euc_len);
+    return euc;
 }
 
 /*!
@@ -388,9 +382,9 @@ int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_b
  */
 int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t utf8_buf_len)
 {
-    static iconv_t cd = nullptr;
-    if (!cd) {
-        cd = iconv_open("UTF-8", "EUC-JP");
+    static const auto cd = iconv_open("UTF-8", "EUC-JP");
+    if (cd == reinterpret_cast<iconv_t>(-1)) {
+        return -1;
     }
 
     size_t inlen_left = euc_str_len;
@@ -407,44 +401,45 @@ int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t 
 }
 #endif
 
+#if defined(SJIS) && defined(_WIN32)
+namespace {
 /*!
- * @brief 文字コードがUTF-8の文字列をシステムの文字コードに変換する (内部バッファ版)
- * @param str 変換するUTF-8の文字列
- * @param sys_str_buffer 変換したシステムの文字コードの文字列を格納するバッファへのポインタ
- * @param sys_str_buflen 変換したシステムの文字コードの文字列を格納するバッファの長さ
- * @return 変換に成功した場合TRUE、失敗した場合FALSEを返す
+ * @brief 文字列のコードページを、UTF-16 を経由して変換する (Windows 版)
+ * @details 半角カナが CP932 の1バイトから UTF-8 の3バイトになるなど、変換後の長さは一定の倍率に収まらないので、
+ *          MultiByteToWideChar() と WideCharToMultiByte() に必要な長さを問い合わせてから変換する
+ * @param str 変換元の文字列
+ * @param from_code_page 変換元のコードページ (CP_UTF8、932 など)
+ * @param to_code_page 変換先のコードページ
+ * @return 変換した文字列。変換に失敗した場合はtl::nullopt
  */
-static bool utf8_to_sys(std::string_view str, char *sys_str_buffer, size_t sys_str_buflen)
+tl::optional<std::string> convert_code_page(std::string_view str, UINT from_code_page, UINT to_code_page)
 {
-    std::string utf8_str(str);
-
-#if defined(EUC)
-
-    /* length() + 1 を渡して文字列終端('\0')を含めて変換する */
-    return utf8_to_euc(utf8_str.data(), utf8_str.length() + 1, sys_str_buffer, sys_str_buflen) >= 0;
-
-#elif defined(SJIS) && defined(WINDOWS)
-
-    int input_len = utf8_str.length() + 1; /* include termination character */
-
-    std::vector<WCHAR> utf16buf(input_len);
-
-    /* UTF-8 -> UTF-16 */
-    if (MultiByteToWideChar(CP_UTF8, 0, utf8_str.data(), input_len, utf16buf.data(), input_len) == 0) {
-        return false;
+    // 長さ 0 を渡すと MultiByteToWideChar() が失敗するので、空文字列はそのまま返す
+    if (str.empty()) {
+        return tl::make_optional<std::string>();
     }
 
-    /* UTF-8 -> SJIS(CP932) */
-    if (WideCharToMultiByte(932, 0, utf16buf.data(), -1, sys_str_buffer, sys_str_buflen, nullptr, nullptr) == 0) {
-        return false;
+    const auto str_len = static_cast<int>(str.length());
+    const auto utf16_len = MultiByteToWideChar(from_code_page, 0, str.data(), str_len, nullptr, 0);
+    if (utf16_len == 0) {
+        return tl::nullopt;
     }
 
-    return true;
+    std::wstring utf16_str(utf16_len, L'\0');
+    MultiByteToWideChar(from_code_page, 0, str.data(), str_len, utf16_str.data(), utf16_len);
 
-#else
-    return false;
-#endif
+    const auto converted_len = WideCharToMultiByte(to_code_page, 0, utf16_str.data(), utf16_len, nullptr, 0, nullptr, nullptr);
+    if (converted_len == 0) {
+        return tl::nullopt;
+    }
+
+    std::string converted(converted_len, '\0');
+    WideCharToMultiByte(to_code_page, 0, utf16_str.data(), utf16_len, converted.data(), converted_len, nullptr, nullptr);
+    return tl::make_optional(std::move(converted));
 }
+}
+
+#endif
 
 /*!
  * @brief システムの文字コードからUTF-8に変換する
@@ -459,22 +454,8 @@ tl::optional<std::string> sys_to_utf8(std::string_view str)
     const auto len = euc_to_utf8(str.data(), str.length(), utf8str.data(), utf8str.size());
 
     return (len >= 0) ? tl::make_optional(std::move(utf8str.erase(len))) : tl::nullopt;
-#elif defined(SJIS) && defined(WINDOWS)
-    /* SJIS(CP932) -> UTF-16 */
-    std::vector<WCHAR> utf16buf(str.length());
-    const auto utf16_len = MultiByteToWideChar(932, 0, str.data(), str.size(), utf16buf.data(), utf16buf.size());
-    if (utf16_len == 0) {
-        return tl::nullopt;
-    }
-
-    /* UTF-16 -> UTF-8 */
-    std::vector<char> utf8buf(str.length() * 2 + 1);
-    const auto utf8_len = WideCharToMultiByte(CP_UTF8, 0, utf16buf.data(), utf16_len, utf8buf.data(), utf8buf.size(), nullptr, nullptr);
-    if (utf8_len == 0) {
-        return tl::nullopt;
-    }
-
-    return tl::make_optional<std::string>(utf8buf.data(), utf8_len);
+#elif defined(SJIS) && defined(_WIN32)
+    return convert_code_page(str, 932, CP_UTF8);
 #else
     return tl::nullopt;
 #endif
@@ -485,25 +466,30 @@ tl::optional<std::string> sys_to_utf8(std::string_view str)
  *
  * @param str UTF-8の文字列
  * @return システムの文字コードに変換した文字列
- *         変換に失敗した場合はtl::nullopt
+ *         変換に失敗した場合や、途中に '\0' を含む場合はtl::nullopt
  */
 tl::optional<std::string> utf8_to_sys(std::string_view str)
 {
-    // UTF-8 -> SJIS or EUC でバイト長が増えることはないので、終端文字分を含めて元の文字列と同じ長さを確保しておけばよい
-    std::vector<char> sys_str_buf(str.length() + 1);
-
-    if (!utf8_to_sys(str, sys_str_buf.data(), sys_str_buf.size())) {
+    // 変換した文字列の多くは '\0' 終端の文字列として表示などに使われ、途中に '\0' があると後ろが黙って欠けてしまう。
+    // 途中に '\0' を含むのは壊れたデータなので、不正な入力として変換しない
+    if (str.find('\0') != std::string_view::npos) {
         return tl::nullopt;
     }
 
-    return tl::make_optional<std::string>(sys_str_buf.data());
+#if defined(EUC)
+    return utf8_to_euc(str);
+#elif defined(SJIS) && defined(_WIN32)
+    return convert_code_page(str, CP_UTF8, 932);
+#else
+    return tl::nullopt;
+#endif
 }
 
 /*!
  * @brief 受け取った文字列の文字コードを推定し、システムの文字コードへ変換する
  * @param strbuf 変換する文字列を格納したバッファへのポインタ。
  *               バッファは変換した文字列で上書きされる。
- *               UTF-8からSJISもしくはEUCへの変換を想定しているのでバッファの長さが足りなくなることはない。
+ *               変換した文字列がバッファに収まらない場合は変換せず、警告を表示する。
  * @param buflen バッファの長さ。
  * @return 変換後の文字列の長さ（終端文字は含まない）
  */
@@ -530,78 +516,3 @@ size_t guess_convert_to_system_encoding(char *strbuf, int buflen)
 }
 
 #endif /* JP */
-
-/*!
- * @brief UTF-8文字列をローカルエンコーディング（Shift-JIS/EUC-JP）に変換する
- * @param str_utf8 変換元のUTF-8文字列
- * @return ローカルエンコーディングに変換した文字列
- */
-std::string utf8_to_local(std::string_view str_utf8)
-{
-    if (str_utf8.empty()) {
-        return "";
-    }
-
-#ifdef JP
-#ifdef WIN32
-    // UTF-8 -> UTF-16 (wide string)
-    auto utf8_length = static_cast<int>(str_utf8.length());
-    const auto wide_length = MultiByteToWideChar(CP_UTF8, 0, str_utf8.data(), utf8_length, NULL, 0);
-    if (wide_length == 0) {
-        THROW_EXCEPTION(std::runtime_error, "Failed to convert UTF-8 to wide string");
-    }
-
-    std::wstring wide_str(wide_length, L'\0');
-    MultiByteToWideChar(CP_UTF8, 0, str_utf8.data(), utf8_length, wide_str.data(), wide_length);
-
-    // UTF-16 -> Shift-JIS (CP932)
-    const auto sjis_length = WideCharToMultiByte(932, 0, wide_str.data(), wide_length, NULL, 0, NULL, NULL);
-    if (sjis_length == 0) {
-        THROW_EXCEPTION(std::runtime_error, "Failed to convert UTF-16 to Shift-JIS");
-    }
-
-    std::string str_sjis(sjis_length, '\0');
-    WideCharToMultiByte(932, 0, wide_str.data(), wide_length, str_sjis.data(), sjis_length, NULL, NULL);
-    return str_sjis;
-#else
-    // Unix-like systems implementation for UTF-8 to local encoding conversion
-    const auto cd = iconv_open("EUC-JP", "UTF-8");
-    const auto finalizer = util::make_finalizer([&cd] {
-        if (cd != reinterpret_cast<iconv_t>(-1)) {
-            iconv_close(cd);
-        }
-    });
-    if (cd == reinterpret_cast<iconv_t>(-1)) {
-        THROW_EXCEPTION(std::runtime_error, "iconv_open failed: cannot open UTF-8 to EUC-JP converter");
-    }
-
-    auto *in_buf = const_cast<char *>(str_utf8.data());
-    const auto in_length = str_utf8.length();
-    auto in_bytes = in_length;
-
-    std::string str_eucjp;
-    str_eucjp.resize(str_utf8.length() * 2 + 4); //!< 変換途中の一時領域も含め、予め十分なサイズを確保しておく.
-    auto *out_buf = str_eucjp.data();
-    const auto out_length = str_eucjp.size();
-    auto out_bytes = out_length;
-
-    const auto iconv_result = iconv(cd, &in_buf, &in_bytes, &out_buf, &out_bytes);
-    if (iconv_result == static_cast<size_t>(-1)) {
-        if (errno == EILSEQ) {
-            THROW_EXCEPTION(std::runtime_error, "iconv: invalid sequence (EUC-JPに変換できない文字)");
-        } else if (errno == E2BIG) {
-            THROW_EXCEPTION(std::runtime_error, "iconv: output buffer too small");
-        } else {
-            THROW_EXCEPTION(std::runtime_error, "iconv conversion failed");
-        }
-    }
-
-    // 実際に使った長さに調整する.
-    str_eucjp.resize(str_eucjp.size() - out_bytes);
-    str_eucjp.shrink_to_fit();
-    return str_eucjp;
-#endif
-#else
-    return std::string(str_utf8);
-#endif
-}

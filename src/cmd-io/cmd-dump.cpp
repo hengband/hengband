@@ -34,6 +34,7 @@
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "term/z-rand.h"
 #include "timed-effect/timed-effects.h"
 #include "util/angband-files.h"
 #include "util/int-char-converter.h"
@@ -131,17 +132,19 @@ void do_cmd_colors(PlayerType *player_ptr)
             break;
         }
         case '3': {
+            // 色番号は見本の描画属性にもそのまま使うため、テキストの色として有効な範囲に留める。
+            // 16以上は属性の上位ビットが全角文字やタイルのフラグと重なり、画面バッファの範囲外を読み書きする
+            constexpr byte num_colors = std::size(color_names);
             static byte a = 0;
             prt(_("コマンド: カラーの設定を変更します", "Command: Modify colors"), 8, 0);
             while (true) {
-                concptr name;
                 clear_from(10);
-                for (byte i = 0; i < 16; i++) {
+                for (byte i = 0; i < num_colors; i++) {
                     term_putstr(i * 4, 20, -1, a, "###");
                     term_putstr(i * 4, 22, -1, i, format("%3d", i));
                 }
 
-                name = ((a < 16) ? color_names[a] : _("未定義", "undefined"));
+                const auto name = color_names[a];
                 term_putstr(5, 10, -1, TERM_WHITE, format(_("カラー = %d, 名前 = %s", "Color = %d, Name = %s"), a, name));
                 term_putstr(5, 12, -1, TERM_WHITE,
                     format("K = 0x%02x / R,G,B = 0x%02x,0x%02x,0x%02x", angband_color_table[a][0], angband_color_table[a][1], angband_color_table[a][2],
@@ -172,10 +175,10 @@ void do_cmd_colors(PlayerType *player_ptr)
                     angband_color_table[a][0] = (byte)(angband_color_table[a][0] - 1);
                     break;
                 case 'n':
-                    a++;
+                    a = static_cast<byte>((a + 1) % num_colors);
                     break;
                 case 'N':
-                    a--;
+                    a = static_cast<byte>((a + num_colors - 1) % num_colors);
                     break;
                 case 'r':
                     angband_color_table[a][1] = (byte)(angband_color_table[a][1] + 1);
@@ -280,8 +283,10 @@ void do_cmd_time(PlayerType *player_ptr)
     std::string day_buf = (day < MAX_DAYS) ? std::to_string(day) : "*****";
     constexpr auto mes = _("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s.");
     msg_format(mes, day_buf.data(), (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
+    // ゲームの時間が経過しない操作なので、ゲームの乱数生成器は使わない
+    auto &rng = get_external_rng();
     std::filesystem::path path;
-    if (!randint0(10) || player_ptr->effects()->hallucination().is_hallucinated()) {
+    if (!randint0(rng, 10) || player_ptr->effects()->hallucination().is_active()) {
         path = path_build(ANGBAND_DIR_FILE, _("timefun_j.txt", "timefun.txt"));
     } else {
         path = path_build(ANGBAND_DIR_FILE, _("timenorm_j.txt", "timenorm.txt"));
@@ -327,7 +332,7 @@ void do_cmd_time(PlayerType *player_ptr)
 
         if (buf[0] == 'D') {
             num++;
-            if (!randint0(num)) {
+            if (!randint0(rng, num)) {
                 desc = buf + 2;
             }
 

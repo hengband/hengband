@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "egos"],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "egos": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/ego"
+      }
+    }
+  },
+  "definitions": {
+    "localized_name": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ja", "en"],
+      "properties": {
+        "ja": {
+          "type": "string",
+          "minLength": 1
+        },
+        "en": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "bonuses": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["to_hit", "to_damage", "to_ac"],
+      "properties": {
+        "to_hit": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767
+        },
+        "to_damage": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767
+        },
+        "to_ac": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767
+        }
+      }
+    },
+    "maximum_bonuses": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["to_hit", "to_damage", "to_ac", "pval"],
+      "properties": {
+        "to_hit": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767
+        },
+        "to_damage": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767
+        },
+        "to_ac": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767
+        },
+        "pval": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767
+        }
+      }
+    },
+    "flag": {
+      "type": "string",
+      "description": "The vocabulary is checked against the C++ token tables by validate_json.py.",
+      "pattern": "^[A-Z][A-Z0-9_]*$"
+    },
+    "extra_flags": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["numerator", "denominator", "flags"],
+      "properties": {
+        "numerator": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32767
+        },
+        "denominator": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32767
+        },
+        "flags": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/flag"
+          }
+        }
+      }
+    },
+    "ego": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "slot", "rating", "level", "rarity", "cost"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 32767
+        },
+        "name": {
+          "$ref": "#/definitions/localized_name"
+        },
+        "slot": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        "rating": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "rarity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        "cost": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "base_bonuses": {
+          "$ref": "#/definitions/bonuses"
+        },
+        "maximum_bonuses": {
+          "$ref": "#/definitions/maximum_bonuses"
+        },
+        "activation": {
+          "type": "string",
+          "description": "The vocabulary is checked against activation_info by validate_json.py.",
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        },
+        "flags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/definitions/flag"
+          }
+        },
+        "extra_flags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/extra_flags"
+          }
+        }
+      }
+    }
+  }
+}

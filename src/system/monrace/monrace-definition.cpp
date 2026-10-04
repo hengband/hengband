@@ -10,7 +10,6 @@
 #include "system/monrace/monrace-message.h"
 #include "system/system-variables.h"
 #include "util/enum-converter.h"
-#include "util/string-processor.h"
 #include "world/world.h"
 #include <algorithm>
 #ifdef JP
@@ -351,8 +350,8 @@ int MonraceDefinition::calc_capture_value() const
 std::string MonraceDefinition::build_eldritch_horror_message(std::string_view description) const
 {
     const auto &horror_message = this->decide_horror_message();
-    constexpr auto fmt = _("%s%sの顔を見てしまった！", "You behold the %s visage of %s!");
-    return format(fmt, horror_message.data(), description.data());
+    constexpr auto fmt = _("{}{}の顔を見てしまった！", "You behold the {} visage of {}!");
+    return fmt::format(fmt, horror_message, description);
 }
 
 bool MonraceDefinition::has_reinforce() const
@@ -580,7 +579,7 @@ bool MonraceDefinition::is_catchable_for_fishing() const
 {
     auto is_catchable = this->feature_flags.has(MonsterFeatureType::AQUATIC);
     is_catchable &= this->kind_flags.has_not(MonsterKindType::UNIQUE);
-    is_catchable &= str_find("Jjlw", &this->symbol_definition.character);
+    is_catchable &= this->symbol_char_is_any_of("Jjlw");
     return is_catchable;
 }
 
@@ -762,6 +761,7 @@ tl::optional<std::string> MonraceDefinition::probe_lore()
     this->r_cast_spell = MAX_UCHAR;
     n |= count_lore_mflag_group(this->resistance_flags, this->r_resistance_flags) > 0;
     n |= count_lore_mflag_group(this->ability_flags, this->r_ability_flags) > 0;
+    n |= count_lore_mflag_group(this->aura_flags, this->r_aura_flags) > 0;
     n |= count_lore_mflag_group(this->behavior_flags, this->r_behavior_flags) > 0;
     n |= count_lore_mflag_group(this->drop_flags, this->r_drop_flags) > 0;
     n |= count_lore_mflag_group(this->feature_flags, this->r_feature_flags) > 0;
@@ -770,6 +770,7 @@ tl::optional<std::string> MonraceDefinition::probe_lore()
 
     this->r_resistance_flags = this->resistance_flags;
     this->r_ability_flags = this->ability_flags;
+    this->r_aura_flags = this->aura_flags;
     this->r_behavior_flags = this->behavior_flags;
     this->r_drop_flags = this->drop_flags;
     this->r_feature_flags = this->feature_flags;

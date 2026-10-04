@@ -88,7 +88,7 @@ public:
 class Target::Impl {
 public:
     Impl() = default;
-    PlayerType *player_ptr;
+    PlayerType *player_ptr = nullptr;
     std::variant<std::monostate, TargetGrid, TargetMonster> target;
 };
 

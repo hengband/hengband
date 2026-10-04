@@ -247,7 +247,7 @@ ProcessResult effect_monster_old_sleep(PlayerType *player_ptr, EffectMonster *em
     if (has_resistance) {
         if (em_ptr->monrace->resistance_flags.has(MonsterResistanceType::NO_SLEEP)) {
             if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
-                em_ptr->monrace->resistance_flags.set(MonsterResistanceType::NO_SLEEP);
+                em_ptr->monrace->r_resistance_flags.set(MonsterResistanceType::NO_SLEEP);
             }
         }
 
@@ -280,7 +280,7 @@ ProcessResult effect_monster_old_conf(PlayerType *player_ptr, EffectMonster *em_
     if (has_resistance) {
         if (em_ptr->monrace->resistance_flags.has(MonsterResistanceType::NO_CONF)) {
             if (is_original_ap_and_seen(player_ptr, *em_ptr->m_ptr)) {
-                em_ptr->monrace->resistance_flags.set(MonsterResistanceType::NO_CONF);
+                em_ptr->monrace->r_resistance_flags.set(MonsterResistanceType::NO_CONF);
             }
         }
 

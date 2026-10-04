@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="autopick">
+      <UniqueIdentifier>{6fc1c33a-bcb9-4de8-ac91-81321f97c33c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cmd-io">
+      <UniqueIdentifier>{050a79fd-58ab-48f3-a881-f83ff7a488b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="flavor">
+      <UniqueIdentifier>{740c8771-89d8-44fe-bd2c-adcff9c2cfea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game-option">
+      <UniqueIdentifier>{ce56653b-fbe2-4e12-af06-489721a95644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="info-reader">
+      <UniqueIdentifier>{5a5d0f27-6c1e-4c8b-9f34-2b7d8e1a6c40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{1bffe338-7a9b-482c-b4ea-71f5f4815fff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="load">
+      <UniqueIdentifier>{3c217089-cb3c-4a88-9b0a-e642a6bf402d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="locale">
+      <UniqueIdentifier>{76b459ee-5ecd-44a7-b71a-ed5acafc02f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{3e3bfbaf-32fc-46d7-a1fc-51c277aaa757}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="monster-race">
+      <UniqueIdentifier>{eb4b30d0-a9aa-492e-b43c-12d323e03a83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mspell">
+      <UniqueIdentifier>{f4dbdb43-4dbe-4518-b1ac-3429da4d19b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mutation">
+      <UniqueIdentifier>{e71c27bf-0eb8-4347-a040-6bc021a1c19b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player">
+      <UniqueIdentifier>{9d3e0b2a-7c41-4f58-b6ad-2e1c5f80a4d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="store">
+      <UniqueIdentifier>{2f858fe4-6c1a-425e-8310-085e4dcf1f4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{c0fc151d-cfac-4d51-9420-fc3298e34e90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="term">
+      <UniqueIdentifier>{b6d3f0a2-4e8c-4b71-9a5d-3c2e7f1d8a94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="timed-effect">
+      <UniqueIdentifier>{713ac6ea-8881-48d4-beac-cf75e9e6b037}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{88a7a349-31ae-4d18-a09a-c749dff85ef9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\stdafx.cpp" />
+    <ClCompile Include="..\..\src\test\test-main.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />
+    <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp">
+      <Filter>autopick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp">
+      <Filter>flavor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp">
+      <Filter>game-option</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-town-map-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-town-preferences-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-message-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-magic-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-quest-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-race-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-skill-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-spell-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-terrain-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\io\test-interpret-pref-file.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\io\test-pref-file-expressor.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\io\test-tokenizer.cpp">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp">
+      <Filter>load</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp">
+      <Filter>locale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\main\test-init-error-messages-table.cpp">
+      <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp">
+      <Filter>monster-race</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\player\test-process-name.cpp">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\store\test-pricing.cpp">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\store\test-store-screen.cpp">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\store\test-store-util.cpp">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-definition.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\term\test-z-form.cpp">
+      <Filter>term</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\term\test-z-rand.cpp">
+      <Filter>term</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\timed-effect\test-player-cut.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\timed-effect\test-player-stun.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\timed-effect\test-timed-effect.cpp">
+      <Filter>timed-effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-buffer-shaper.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-dice.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-finalizer.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-flag-group.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-probability-table.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-sha256.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-string-processor.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-angband-files.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\stdafx.h" />
+    <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h" />
+    <ClInclude Include="..\..\src\test\scoped-restore.h" />
+    <ClInclude Include="..\..\src\test\scoped-rng.h" />
+    <ClInclude Include="..\..\src\test\string-helpers.h" />
+    <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
+  </ItemGroup>
+</Project>

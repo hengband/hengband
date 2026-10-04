@@ -81,7 +81,7 @@ static bool exe_monster_attack_to_monster(PlayerType *player_ptr, MONSTER_IDX m_
         return false;
     }
 
-    if ((monrace.behavior_flags.has_not(MonsterBehaviorType::KILL_BODY)) && is_original_ap_and_seen(player_ptr, monster)) {
+    if (monrace.behavior_flags.has(MonsterBehaviorType::KILL_BODY) && is_original_ap_and_seen(player_ptr, monster)) {
         monrace.r_behavior_flags.set(MonsterBehaviorType::KILL_BODY);
     }
 

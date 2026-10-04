@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "TownMap.schema.json",
+  "title": "Town map definition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "featureRules", "mapVariants", "buildingRules", "startingPositions"],
+  "properties": {
+    "version": { "const": 2 },
+    "notes": { "$ref": "#/$defs/commentLines" },
+    "featureRules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/featureRule" }
+    },
+    "mapVariants": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/mapVariant" }
+    },
+    "buildingRules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/buildingRule" }
+    },
+    "startingPositions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/startPosition" }
+    }
+  },
+  "$defs": {
+    "commentLines": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "featureRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["symbol", "definition"],
+      "description": "Ordered terrain rule. Later matching rules override earlier rules for the same symbol.",
+      "properties": {
+        "when": { "type": "string", "minLength": 1 },
+        "comments": { "$ref": "#/$defs/commentLines" },
+        "symbol": { "type": "string", "pattern": "^(?![:/\\\\])[ -~]$" },
+        "definition": { "$ref": "#/$defs/featureDefinition" }
+      }
+    },
+    "featureDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "terrain",
+        "caveInfo",
+        "monster",
+        "object",
+        "ego",
+        "artifact",
+        "trap",
+        "special"
+      ],
+      "properties": {
+        "terrain": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[ -~]*$",
+          "description": "Terrain tag, or * for a random feature."
+        },
+        "caveInfo": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Cave flags bitmask used by the fixed-map reader."
+        },
+        "monster": {
+          "type": "string",
+          "pattern": "^[ -~]*$",
+          "description": "Legacy monster token: an id, *N for random, or cN for a clone."
+        },
+        "object": {
+          "type": "string",
+          "pattern": "^[ -~]*$",
+          "description": "Legacy object token: an id, *N for random, or ! for a quest reward."
+        },
+        "ego": {
+          "type": "string",
+          "pattern": "^[ -~]*$",
+          "description": "Legacy ego token: an id or *N for random."
+        },
+        "artifact": {
+          "type": "string",
+          "pattern": "^[ -~]*$",
+          "description": "Legacy artifact token: an id, *N for random, or ! for a quest reward."
+        },
+        "trap": {
+          "type": "string",
+          "pattern": "^[ -~]*$",
+          "description": "Terrain tag used as a trap, or * for a random trap."
+        },
+        "special": { "type": "integer", "minimum": -32768, "maximum": 32767 }
+      }
+    },
+    "buildingRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "locale", "command", "fields"],
+      "properties": {
+        "when": { "type": "string", "minLength": 1 },
+        "comments": { "$ref": "#/$defs/commentLines" },
+        "index": { "type": "integer", "minimum": 0, "maximum": 31 },
+        "locale": { "enum": ["en", "ja"] },
+        "command": { "enum": ["A", "C", "M", "N", "R", "Z"] },
+        "fields": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[^:/\\x5c\\r\\n]*$" },
+          "description": "Arguments in the selected building command's legacy order."
+        }
+      }
+    },
+    "mapVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rows"],
+      "properties": {
+        "when": { "type": "string", "minLength": 1 },
+        "comments": { "$ref": "#/$defs/commentLines" },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^[ -~]+$" }
+        }
+      }
+    },
+    "startPosition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["y", "x"],
+      "properties": {
+        "when": { "type": "string", "minLength": 1 },
+        "comments": { "$ref": "#/$defs/commentLines" },
+        "y": { "type": "integer", "minimum": 0 },
+        "x": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

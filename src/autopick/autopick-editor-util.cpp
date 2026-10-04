@@ -4,7 +4,9 @@
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
+#include "util/string-processor.h"
 #include <cstdlib>
+#include <utility>
 
 /*!
  * @brief Delete or insert string
@@ -190,10 +192,17 @@ void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 
 /*!
  * @brief Add an empty line at the last of the file
+ * @param tb エディタの状態
+ * @return 空行を追加した場合true、最終行が既に空の場合と最大行数に達している場合はfalse
+ * @details 行バッファは使用中の行の直後に nullptr の番兵があることを前提に走査されるため、
+ * insert_return_code() と同じく最大行数を超えて行を増やしてはならない。
  */
 bool add_empty_line(text_body_type *tb)
 {
-    int num_lines = count_line(tb);
+    const auto num_lines = count_line(tb);
+    if (is_greater_autopick_max_line(num_lines)) {
+        return false;
+    }
 
     if (tb->lines_list[num_lines - 1]->empty()) {
         return false;
@@ -264,4 +273,22 @@ void copy_text_to_yank(text_body_type *tb)
 
     tb->mark = 0;
     tb->dirty_flags |= DIRTY_ALL;
+}
+
+/*!
+ * @brief 行の指定の位置が2バイト文字の2バイト目かどうかを判定する
+ * @param line 行
+ * @param pos 位置 (バイト)
+ * @return pos の直前から2バイト文字が始まり、pos がその2バイト目であれば true
+ * @details
+ * 行末に2バイト文字の1バイト目だけが残っている場合、その直後 (行の長さの位置) は2バイト目とみなさない。
+ * 英語版では常に false を返す。
+ */
+bool is_second_byte_of_kanji(std::string_view line, int pos)
+{
+    if ((pos <= 0) || std::cmp_greater_equal(pos, line.length())) {
+        return false;
+    }
+
+    return str_find_all_multibyte_chars(line).contains(pos - 1);
 }

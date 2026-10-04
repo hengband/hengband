@@ -33,9 +33,6 @@
 #define PREF_TYPE_AUTOPICK 1
 #define PREF_TYPE_HISTPREF 2
 
-char auto_dump_header[] = "# vvvvvvv== %s ==vvvvvvv";
-char auto_dump_footer[] = "# ^^^^^^^== %s ==^^^^^^^";
-
 // Mark strings for auto dump
 
 // Variables for auto dump
@@ -237,10 +234,10 @@ void auto_dump_printf(FILE *auto_dump_stream, const char *fmt, ...)
  */
 bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_view mark)
 {
-    const auto header_mark_str = format(auto_dump_header, mark.data());
+    const auto header_mark_str = fmt::format(auto_dump_header, mark);
     remove_auto_dump(path, mark);
     *fpp = angband_fopen(path, FileOpenMode::APPEND);
-    if (!fpp) {
+    if (!*fpp) {
         const auto &path_str = path.string();
         msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), path_str.data());
         msg_erase();
@@ -262,7 +259,7 @@ bool open_auto_dump(FILE **fpp, const std::filesystem::path &path, std::string_v
  */
 void close_auto_dump(FILE **fpp, std::string_view mark)
 {
-    const auto footer_mark_str = format(auto_dump_footer, mark.data());
+    const auto footer_mark_str = fmt::format(auto_dump_footer, mark);
     auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n", "# *Warning!*  The lines below are an automatic dump.\n"));
     auto_dump_printf(
         *fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", "# Don't edit them; changes will be deleted and replaced automatically.\n"));

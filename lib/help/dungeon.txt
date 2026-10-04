@@ -135,7 +135,7 @@ first has taken effect, the second cancels the first and your character
 will not be teleported.
 
 A more complete description of Hengband objects is found elsewhere in
-the documentation (see object.txt [c]).
+the documentation (see objects.txt [c]).
 
 
 ***** <Mining>
@@ -362,4 +362,4 @@ Updated    : Hengband 3.0.0Alpha15, English translation backwardsEric
 
 ***** Begin Hyperlinks
 ***** [b] command.txt
-***** [c] object.txt
+***** [c] objects.txt

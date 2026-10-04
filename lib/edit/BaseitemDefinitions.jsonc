@@ -1,7 +1,7 @@
 {
   "version": 1,
   "baseitems": [
-    //# File: k_info.txt
+    //# File: BaseitemDefinitions.jsonc (converted from k_info.txt)
     //#JZ# Zangband 日本語訳: 板倉
     //#JZ# 「#J0#」で始まるコメントは日本語板 Angband のしとしんさんによる
     //#JZ# もので、「#JZ#」で始まるコメントは日本語版 Zangband で新たに
@@ -30,11 +30,10 @@
     //#J0# われている場合が多いのですが、identify の効果はアイテムの正確な名称や効
     //#J0# 果を明らかにするものですので、「鑑定」の方が雰囲気が近いと考えてそうし
     //#J0# ました。他のローグライクと異なってしまっていることは気になりますが。
-    //# This file is used to initialize the "lib/raw/k_info.raw" file, which is
-    //# used to initialize the "object kind" information for the Angband game.
+    //# Current Hengband reads the baseitems array in this JSONC file directly.
+    //# No k_info.raw cache needs to be generated or deleted.
     //# Do not modify this file unless you know exactly what you are doing,
     //# unless you wish to risk possible system crashes and broken savefiles.
-    //# After modifying this file, delete the "lib/raw/k_info.raw" file.
     //# Available slots (?):
     //#   29, 29, 90, 177, 178, 179, 182, 183, 195, 196, 205,
     //#   268, 270, 293, 299, 350, 351, 399, 413, 414, 423-479
@@ -43,7 +42,7 @@
     //# is violet, so all six violet objects can be made "multi-hued", though
     //# this would be a heinous hack.  XXX XXX
     //# Note that object zero is used for the "stack" picture (unused).
-    //# === Understanding k_info.txt ===
+    //# === Historical k_info.txt format (before conversion to JSONC) ===
     //# N: serial number : & object name~
     //# G: symbol : color
     //# I: tval : sval : parameter_value
@@ -22112,6 +22111,31 @@
         },
       ],
       "flags": ["RES_ELEC", "IGNORE_ELEC"],
+    },
+    {
+      "id": 684,
+      "name": {
+        "ja": "ライター",
+        "en": "& Lighter~",
+      },
+      "symbol": {
+        "character": "~",
+        "color": "Light Gray",
+      },
+      "itemkind": {
+        "type_value": 39,
+        "subtype_value": 11,
+      },
+      "parameter_value": 0,
+      "level": 30,
+      "weight": 10,
+      "cost": 50000,
+      "base_ac": 0,
+      "base_dice": "1d1",
+      "hit_bonus": 0,
+      "damage_bonus": 0,
+      "ac_bonus": 0,
+      "flags": ["INSTA_ART"],
     },
   ],
 }

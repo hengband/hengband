@@ -1,0 +1,5 @@
+**/*.sln -text
+**/*.vcxproj -text
+**/*.vcxproj.filters -text
+**/*.props -text
+**/packages.config -text

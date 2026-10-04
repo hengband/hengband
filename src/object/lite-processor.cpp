@@ -51,7 +51,7 @@ void notice_lite_change(PlayerType *player_ptr, ItemEntity *o_ptr)
         rfu.set_flag(SubWindowRedrawingFlag::EQUIPMENT);
     }
 
-    if (player_ptr->effects()->blindness().is_blind()) {
+    if (player_ptr->effects()->blindness().is_active()) {
         if (o_ptr->fuel == 0) {
             o_ptr->fuel++;
         }

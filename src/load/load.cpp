@@ -442,7 +442,7 @@ bool load_savedata(PlayerType *player_ptr, bool *new_game)
     }
 
     const auto &savefile_str = savefile.string();
-#ifndef WINDOWS
+#ifndef _WIN32
     if (access(savefile_str.data(), 0) < 0) {
         msg_print(_("セーブファイルがありません。", "Savefile does not exist."));
         msg_erase();

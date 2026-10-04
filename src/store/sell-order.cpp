@@ -24,28 +24,28 @@
 #include "store/say-comments.h"
 #include "store/service-checker.h"
 #include "store/store-owners.h"
+#include "store/store-screen.h"
 #include "store/store.h"
-#include "system/floor/town-list.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
 #include "view/display-store.h"
 #include "view/object-describer.h"
-#include "world/world.h"
 #include <fmt/format.h>
 #include <tl/optional.hpp>
 
 /*!
  * @brief プレイヤーが売却する時の確認プロンプト / Prompt to sell for the price
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param store 売却先の店舗
  * @param o_ptr オブジェクトの構造体参照ポインタ
- * @return 売るなら(true,売値)、売らないなら(false,0)のタプル
+ * @return プレイヤーが売却するなら売値、売却しないならnullopt
  */
-static tl::optional<int> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_ptr, StoreSaleType store_num)
+static tl::optional<int> prompt_to_sell(PlayerType *player_ptr, const Store &store, ItemEntity *o_ptr)
 {
-    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), ot_ptr->inflate, true, store_num);
+    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), store, StoreTradeType::PLAYER_SELLS);
 
-    price_ask = std::min(price_ask, ot_ptr->max_cost);
+    price_ask = std::min(price_ask, store.get_owner().max_cost);
     price_ask *= o_ptr->number;
     const auto s = fmt::format(_("売値 ${} で売りますか？", "Do you sell for ${}? "), price_ask);
     if (input_check_strict(player_ptr, s, UserCheck::DEFAULT_Y)) {
@@ -59,9 +59,12 @@ static tl::optional<int> prompt_to_sell(PlayerType *player_ptr, ItemEntity *o_pt
  * @brief 店からの売却処理のメインルーチン /
  * Sell an item to the store (or home)
  * @param player_ptr プレイヤーへの参照ポインタ
+ * @param screen 売却先の店舗の画面
  */
-void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
+void store_sell(PlayerType *player_ptr, StoreScreen &screen)
 {
+    auto &store = screen.get_store();
+    const auto store_num = store.get_sale_type();
     concptr q; //!< @note プロンプトメッセージ
     concptr s_none; //!< @note 売る/置くものがない場合のメッセージ
     concptr s_full; //!< @note もう置けない場合のメッセージ
@@ -114,7 +117,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         selling_item.feeling = FEEL_NONE;
     }
 
-    if (!store_check_num(&selling_item, store_num)) {
+    if (!store_check_num(&selling_item, store)) {
         msg_print(s_full);
         return;
     }
@@ -125,7 +128,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         msg_format(_("%s(%c)を売却する。", "Selling %s (%c)."), item_name.data(), index_to_label(i_idx));
         msg_erase();
 
-        auto res = prompt_to_sell(player_ptr, &selling_item, store_num);
+        auto res = prompt_to_sell(player_ptr, store, &selling_item);
         placed = res.has_value();
         if (placed) {
             const auto price = *res;
@@ -142,7 +145,7 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             }
 
             player_ptr->au += price;
-            store_prt_gold(player_ptr->au);
+            store_prt_gold(screen, player_ptr->au);
             const auto dummy = selling_item.calc_price() * selling_item.number;
 
             identify_item(player_ptr, item.get());
@@ -175,16 +178,15 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
             }
 
             inven_item_optimize(player_ptr, i_idx);
-            auto &store = AngbandWorld::get_instance().get_town().get_store(store_num);
             const auto item_pos = store.carry(sold_item);
             if (item_pos) {
-                store_top = (*item_pos / store_bottom) * store_bottom;
-                display_store_inventory(player_ptr, store_num);
+                screen.show_page_containing(*item_pos);
+                display_store_inventory(player_ptr, screen);
             }
         }
     } else if (store_num == StoreSaleType::MUSEUM) {
         const auto museum_item_name = describe_flavor(player_ptr, selling_item, OD_NAME_ONLY);
-        if (-1 == store_check_num(&selling_item, store_num)) {
+        if (-1 == store_check_num(&selling_item, store)) {
             msg_print(_("それと同じ品物は既に博物館にあるようです。", "The Museum already has one of those items."));
         } else {
             msg_print(_("博物館に寄贈したものは取り出すことができません！！", "You cannot take back items which have been donated to the Museum!!"));
@@ -203,10 +205,10 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
 
         vary_item(player_ptr, i_idx, -amt);
 
-        int item_pos = home_carry(player_ptr, &selling_item, store_num);
+        int item_pos = home_carry(player_ptr, store, &selling_item);
         if (item_pos >= 0) {
-            store_top = (item_pos / store_bottom) * store_bottom;
-            display_store_inventory(player_ptr, store_num);
+            screen.show_page_containing(item_pos);
+            display_store_inventory(player_ptr, screen);
         }
     } else {
         distribute_charges(item.get(), &selling_item, amt);
@@ -214,10 +216,10 @@ void store_sell(PlayerType *player_ptr, StoreSaleType store_num)
         msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), item_name.data(), index_to_label(i_idx));
         placed = true;
         vary_item(player_ptr, i_idx, -amt);
-        int item_pos = home_carry(player_ptr, &selling_item, store_num);
+        int item_pos = home_carry(player_ptr, store, &selling_item);
         if (item_pos >= 0) {
-            store_top = (item_pos / store_bottom) * store_bottom;
-            display_store_inventory(player_ptr, store_num);
+            screen.show_page_containing(item_pos);
+            display_store_inventory(player_ptr, screen);
         }
     }
 

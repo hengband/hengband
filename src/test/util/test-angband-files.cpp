@@ -1,0 +1,113 @@
+/*!
+ * @brief path_build() のテスト
+ *
+ * Windows 日本語版ではファイル名が Shift_JIS のため、std::filesystem::path へ
+ * 渡す前に CP932 → UTF-16 へ変換する。相対パスだけでなく、'\\' 始まりの
+ * 早期 return 経路でも同じ変換が必要なことを検証する。
+ *
+ * 2バイト文字のテストデータは16進エスケープで書く (src/test/README.md を参照)。
+ *
+ * また、Unix 版の path_parse() がパスの先頭の「~」を展開できない場合に、
+ * 例外を投げず開けないパスとして扱うことを検証する。
+ *
+ * angband_fgets() は、先頭が '\0' の行を読んでも読み取りのバッファの範囲外を読まないことを検証する。
+ */
+
+#include "test/string-helpers.h"
+#include "util/angband-files.h"
+#include "util/finalizer.h"
+#include <cstdio>
+#include <doctest/doctest.h>
+#include <filesystem>
+#include <string>
+#include <string_view>
+
+#if defined(_WIN32) && defined(JP) && defined(SJIS)
+using namespace test;
+
+namespace {
+constexpr std::string_view KANJI_NI = "\x93\xfa"; //!< 日
+constexpr std::string_view KANJI_HON = "\x96\x7b"; //!< 本
+}
+
+TEST_CASE("path_build appends a Shift_JIS file name as UTF-16 on Windows")
+{
+    const auto file = cat(KANJI_NI, KANJI_HON);
+    const auto built = path_build(std::filesystem::path(L"pref"), file);
+    CHECK(built.filename().wstring() == L"\u65e5\u672c");
+}
+
+TEST_CASE("path_build converts a root-relative Shift_JIS path on the early-return path")
+{
+    const auto file = cat("\\", KANJI_NI, KANJI_HON, "\\file.prf");
+    const auto built = path_build(std::filesystem::path(L"ignored"), file);
+    CHECK(built.wstring() == L"\\\u65e5\u672c\\file.prf");
+}
+
+TEST_CASE("path_build converts a Shift_JIS path whose second byte is 0x5c")
+{
+    const auto file = cat(DAME_SO, ".prf");
+    const auto built = path_build(std::filesystem::path(L"pref"), file);
+    CHECK(built.filename().wstring() == L"\u30bd.prf");
+}
+
+TEST_CASE("path_build converts a Shift_JIS path that is also valid UTF-8")
+{
+    const auto built = path_build(std::filesystem::path(L"pref"), std::string(UTF8_LOOKALIKE));
+    CHECK(built.filename().wstring() == L"\u71ff\u221a\uff41");
+}
+
+TEST_CASE("path_build converts a Shift_JIS path when the directory argument is empty")
+{
+    const auto file = cat(KANJI_NI, KANJI_HON, ".prf");
+    const auto built = path_build({}, file);
+    CHECK(built.wstring() == L"\u65e5\u672c.prf");
+}
+
+#endif
+
+#ifndef _WIN32
+namespace {
+//! 存在しないはずのユーザー名で始まるパス
+constexpr auto PATH_OF_NO_SUCH_USER = "~hengband-test-no-such-user/file.txt";
+}
+
+TEST_CASE("path_parse returns an empty path for a user that does not exist")
+{
+    CHECK(path_parse(PATH_OF_NO_SUCH_USER).empty());
+}
+
+TEST_CASE("path_parse returns an empty path for a user name that is too long")
+{
+    const auto path = "~" + std::string(200, 'a') + "/file.txt";
+    CHECK(path_parse(path).empty());
+}
+
+TEST_CASE("path_parse returns a path without a leading tilde as is")
+{
+    CHECK(path_parse("lib/help/help.hlp") == std::filesystem::path("lib/help/help.hlp"));
+}
+
+TEST_CASE("angband_fopen fails without throwing for a user that does not exist")
+{
+    CHECK(angband_fopen(PATH_OF_NO_SUCH_USER, FileOpenMode::READ) == nullptr);
+}
+#endif
+
+TEST_CASE("angband_fgets does not read before the buffer for a line starting with NUL")
+{
+    using namespace std::literals;
+
+    auto *fp = std::tmpfile();
+    REQUIRE(fp != nullptr);
+    const auto close_file = util::make_finalizer([fp] { std::fclose(fp); });
+
+    // 先頭が '\0' の行は改行の判定に使えないので、次の行と続けて読む (以前からの挙動)
+    constexpr auto content = "\0abc\nxyz\n"sv;
+    REQUIRE(std::fwrite(content.data(), 1, content.size(), fp) == content.size());
+    std::rewind(fp);
+
+    const auto line = angband_fgets(fp);
+    REQUIRE(line);
+    CHECK(*line == "xyz");
+}

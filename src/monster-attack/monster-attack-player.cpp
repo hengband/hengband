@@ -66,7 +66,7 @@ MonsterAttackPlayer::MonsterAttackPlayer(PlayerType *player_ptr, short m_idx)
     , m_ptr(&player_ptr->current_floor_ptr->m_list[m_idx])
     , method(RaceBlowMethodType::NONE)
     , effect(RaceBlowEffectType::NONE)
-    , do_silly_attack(one_in_(2) && player_ptr->effects()->hallucination().is_hallucinated())
+    , do_silly_attack(one_in_(2) && player_ptr->effects()->hallucination().is_active())
     , player_ptr(player_ptr)
 {
 }
@@ -259,7 +259,7 @@ bool MonsterAttackPlayer::process_monster_attack_hit()
 bool MonsterAttackPlayer::effect_protecion_from_evil()
 {
     auto &monrace = this->m_ptr->get_monrace();
-    auto is_protected = this->player_ptr->effects()->protection().is_protected();
+    auto is_protected = this->player_ptr->effects()->protection().is_active();
     is_protected &= monrace.kind_flags.has(MonsterKindType::EVIL);
     is_protected &= this->player_ptr->lev >= this->rlev;
     is_protected &= (randint0(100) + this->player_ptr->lev) > 50;

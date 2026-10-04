@@ -15,7 +15,6 @@ enum class CharacterEncoding : uint8_t {
 
 int utf8_next_char_byte_length(std::string_view str);
 bool is_utf8_str(std::string_view str);
-std::string utf8_to_local(std::string_view str_utf8);
 
 #ifdef JP
 
@@ -28,7 +27,7 @@ tl::optional<std::string> utf8_to_sys(std::string_view utf8_str);
 size_t guess_convert_to_system_encoding(char *strbuf, int buflen);
 
 #ifdef EUC
-int utf8_to_euc(char *utf8_str, size_t utf8_str_len, char *euc_buf, size_t euc_buf_len);
+tl::optional<std::string> utf8_to_euc(std::string_view utf8_str);
 int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t utf8_buf_len);
 #endif
 
@@ -37,6 +36,11 @@ int euc_to_utf8(const char *euc_str, size_t euc_str_len, char *utf8_buf, size_t 
 inline tl::optional<std::string> sys_to_utf8(std::string_view str)
 {
     return tl::make_optional<std::string>(str);
+}
+
+inline tl::optional<std::string> utf8_to_sys(std::string_view utf8_str)
+{
+    return tl::make_optional<std::string>(utf8_str);
 }
 
 #endif

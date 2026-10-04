@@ -28,6 +28,10 @@
 #include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
+#include <algorithm>
+#include <array>
+#include <iterator>
+#include <stdexcept>
 
 tl::optional<std::string> histpref_buf;
 
@@ -59,7 +63,7 @@ static bool interpret_r_token(std::string_view buf)
     const auto n1 = static_cast<uint8_t>(std::stoi(tokens[1], nullptr, 0));
     const auto n2 = static_cast<char>(std::stoi(tokens[2], nullptr, 0));
     auto &monraces = MonraceList::get_instance();
-    if (i >= std::ssize(monraces)) {
+    if ((i < 0) || (i >= std::ssize(monraces))) {
         return false;
     }
 
@@ -88,16 +92,18 @@ static bool interpret_k_token(std::string_view buf)
         return false;
     }
 
-    const auto i = static_cast<short>(std::stoi(tokens[0], nullptr, 0));
+    const auto i = std::stoi(tokens[0], nullptr, 0);
     const auto color = static_cast<uint8_t>(std::stoi(tokens[1], nullptr, 0));
     const auto character = static_cast<char>(std::stoi(tokens[2], nullptr, 0));
     auto &baseitem_configs = BaseitemConfigs::get_instance();
-    if (i >= static_cast<int>(baseitem_configs.size())) {
+
+    // short へ変換する前に確かめる (範囲外の ID は get_config() が例外を送出し、short への切り詰めで範囲内に見える値もある)
+    if ((i < 0) || (i >= static_cast<int>(baseitem_configs.size()))) {
         return false;
     }
 
     /* Allow TERM_DARK text */
-    auto &baseitem_config = baseitem_configs.get_config(i);
+    auto &baseitem_config = baseitem_configs.get_config(static_cast<short>(i));
     if ((color > 0) || (((character & 0x80) == 0) && (character != '\0'))) {
         baseitem_config.update_color(color);
     }
@@ -114,23 +120,36 @@ static bool interpret_k_token(std::string_view buf)
  * @param i 地形種別
  * @param num トークン数
  * @param tokens トークン内容
+ * @details
+ * 途中のトークンの変換に失敗したときに一部の設定だけが書き換わらないよう、
+ * 先に全てのトークンを変換してから書き込む。変換に失敗した場合は std::stoi() の例外がそのまま伝わる。
  */
 static void decide_feature_type(int i, int num, const std::vector<std::string> &tokens)
 {
+    const auto num_symbols = (num == F_LIT_MAX * 2 + 1) ? F_LIT_MAX : 1;
+    std::array<DisplaySymbol, F_LIT_MAX> symbols{};
+    for (auto j = 0; j < num_symbols; j++) {
+        const auto color = static_cast<uint8_t>(std::stoi(tokens[j * 2 + 1], nullptr, 0));
+        const auto character = static_cast<char>(std::stoi(tokens[j * 2 + 2], nullptr, 0));
+        symbols[j] = DisplaySymbol(color, character);
+    }
+
     auto &terrain = TerrainList::get_instance().get_terrain(static_cast<short>(i));
-    const auto color_token = static_cast<uint8_t>(std::stoi(tokens[1], nullptr, 0));
-    const auto character_token = static_cast<char>(std::stoi(tokens[2], nullptr, 0));
-    const auto has_character_token = character_token != '\0';
+    const auto update_symbol = [&terrain](int lighting, const DisplaySymbol &symbol) {
+        auto &symbol_config = terrain.symbol_configs[lighting];
+        const auto has_character = symbol.character != '\0';
 
-    /* Allow TERM_DARK text */
-    if ((color_token > 0) || (!(character_token & 0x80) && has_character_token)) {
-        terrain.symbol_configs[F_LIT_STANDARD].color = color_token;
-    }
+        /* Allow TERM_DARK text */
+        if ((symbol.color != 0) || (!(symbol.character & 0x80) && has_character)) {
+            symbol_config.color = symbol.color;
+        }
 
-    if (has_character_token) {
-        terrain.symbol_configs[F_LIT_STANDARD].character = character_token;
-    }
+        if (has_character) {
+            symbol_config.character = symbol.character;
+        }
+    };
 
+    update_symbol(F_LIT_STANDARD, symbols[0]);
     switch (num) {
     case 3: {
         /* No lighting support */
@@ -147,19 +166,7 @@ static void decide_feature_type(int i, int num, const std::vector<std::string> &
     case F_LIT_MAX * 2 + 1:
         /* Use desired lighting */
         for (auto j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++) {
-            const auto color = static_cast<uint8_t>(std::stoi(tokens[j * 2 + 1], nullptr, 0));
-            const auto character = static_cast<char>(std::stoi(tokens[j * 2 + 2], nullptr, 0));
-            const auto has_character = character != '\0';
-            auto &symbol = terrain.symbol_configs[j];
-
-            /* Allow TERM_DARK text */
-            if ((color != 0) || (!(character & 0x80) && has_character)) {
-                symbol.color = color;
-            }
-
-            if (has_character) {
-                symbol.character = character;
-            }
+            update_symbol(j, symbols[j]);
         }
 
         return;
@@ -190,7 +197,7 @@ static bool interpret_f_token(std::string_view buf)
     }
 
     const auto i = std::stoi(tokens[0], nullptr, 0);
-    if (i >= static_cast<int>(TerrainList::get_instance().size())) {
+    if ((i < 0) || (i >= static_cast<int>(TerrainList::get_instance().size()))) {
         return false;
     }
 
@@ -213,6 +220,10 @@ static bool interpret_s_token(std::string_view buf)
     const auto num = std::stoi(tokens[0], nullptr, 0);
     const auto color = static_cast<uint8_t>(std::stoi(tokens[1], nullptr, 0));
     const auto character = static_cast<char>(std::stoi(tokens[2], nullptr, 0));
+    if ((num < 0) || (num >= std::ssize(ds_bolt))) {
+        return false;
+    }
+
     ds_bolt[num] = DisplaySymbol(color, character);
     return true;
 }
@@ -259,8 +270,14 @@ static bool interpret_e_token(std::string_view buf)
         return false;
     }
 
-    const auto num = std::stoi(tokens[0], nullptr, 0) % 128;
+    // 128 以上の番号は従来どおり 128 で割った余りを使う。負の番号は余りも負になり配列の範囲外を指すので弾く
+    const auto tval = std::stoi(tokens[0], nullptr, 0);
     const auto color = static_cast<uint8_t>(std::stoi(tokens[1], nullptr, 0));
+    if (tval < 0) {
+        return false;
+    }
+
+    const auto num = tval % std::ssize(tval_to_attr);
     if (color > 0) {
         tval_to_attr[num] = color;
     }
@@ -320,10 +337,17 @@ static bool interpret_v_token(std::string_view buf)
     }
 
     const auto num = std::stoi(tokens[0], nullptr, 0);
-    angband_color_table[num][0] = static_cast<uint8_t>(std::stoi(tokens[1], nullptr, 0));
-    angband_color_table[num][1] = static_cast<uint8_t>(std::stoi(tokens[2], nullptr, 0));
-    angband_color_table[num][2] = static_cast<uint8_t>(std::stoi(tokens[3], nullptr, 0));
-    angband_color_table[num][3] = static_cast<uint8_t>(std::stoi(tokens[4], nullptr, 0));
+    if ((num < 0) || (num >= std::ssize(angband_color_table))) {
+        return false;
+    }
+
+    // 途中のトークンの変換に失敗したときに一部の値だけが書き換わらないよう、先に全て変換する
+    std::array<uint8_t, std::size(angband_color_table[0])> values{};
+    for (size_t j = 0; j < values.size(); j++) {
+        values[j] = static_cast<uint8_t>(std::stoi(tokens[j + 1], nullptr, 0));
+    }
+
+    std::copy(values.begin(), values.end(), std::begin(angband_color_table[num]));
     return true;
 }
 
@@ -401,8 +425,16 @@ static bool interpret_z_token(std::string_view line)
  */
 static bool decide_template_modifier(size_t num_tokens, const std::vector<std::string> &tokens)
 {
+    // 修飾キーの数とトークン数が合わない行は、既存の定義を消さずに失敗とする
+    // (空のテンプレートは全ての定義を消す指定なので、トークン数を問わない)
+    const auto zz_length = std::min(MAX_MACRO_MOD, tokens[1].length());
+    if (!tokens[0].empty() && (2 + zz_length != num_tokens)) {
+        return false;
+    }
+
     if (macro_template) {
-        const size_t macro_modifier_length = macro_modifier_chr ? macro_modifier_chr->length() : 0;
+        // 修飾キーの文字列は全体を保持するが、名前は MAX_MACRO_MOD 個までしか持たない
+        const size_t macro_modifier_length = macro_modifier_chr ? std::min(macro_modifier_chr->length(), macro_modifier_names.size()) : 0;
         macro_template.reset();
         macro_modifier_chr.reset();
         for (size_t i = 0; i < macro_modifier_length; i++) {
@@ -420,12 +452,6 @@ static bool decide_template_modifier(size_t num_tokens, const std::vector<std::s
 
     if (tokens[0].empty()) {
         return true;
-    }
-
-    auto zz_length = tokens[1].length();
-    zz_length = std::min(MAX_MACRO_MOD, zz_length);
-    if (2 + zz_length != num_tokens) {
-        return false;
     }
 
     macro_template = tokens[0];
@@ -500,33 +526,14 @@ static bool interpret_t_token(std::string_view buf)
 }
 
 /*!
- * @brief 設定ファイルの各行から各種テキスト情報を取得する
+ * @brief 設定ファイルの1行を、先頭の文字に応じて解釈する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param buf データテキストの参照ポインタ
- * @return 解釈に成功したか否か
- * @details
- * <pre>
- * Each "action" line has an "action symbol" in the first column,
- * followed by a colon, followed by some command specific info,
- * usually in the form of "tokens" separated by colons or slashes.
- * Blank lines, lines starting with white space, and lines starting
- * with pound signs ("#") are ignored (as comments).
- * Note the use of "tokenize()" to allow the use of both colons and
- * slashes as delimeters, while still allowing final tokens which
- * may contain any characters including "delimiters".
- * Note the use of "strtol()" to allow all "integers" to be encoded
- * in decimal, hexidecimal, or octal form.
- * Note that "monster zero" is used for the "player" attr/char, "object
- * zero" will be used for the "stack" attr/char, and "feature zero" is
- * used for the "nothing" attr/char.
- * </pre>
+ * @param buf データテキスト (2文字目が「:」であること)
+ * @return 解釈に成功したら0、失敗したら0以外
+ * @details 数値の変換に失敗した場合などは例外が伝わる。呼び出し元の interpret_pref_file() で捕捉する。
  */
-int interpret_pref_file(PlayerType *player_ptr, std::string_view buf)
+static int interpret_pref_line(PlayerType *player_ptr, std::string_view buf)
 {
-    if (buf[1] != ':') {
-        return 1;
-    }
-
     switch (buf[0]) {
     case 'H':
         /* Process "H:<history>" */
@@ -563,6 +570,48 @@ int interpret_pref_file(PlayerType *player_ptr, std::string_view buf)
     case 'T':
         return interpret_t_token(buf) ? 0 : 1;
     default:
+        return 1;
+    }
+}
+
+/*!
+ * @brief 設定ファイルの各行から各種テキスト情報を取得する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param buf データテキストの参照ポインタ
+ * @return 解釈に成功したか否か
+ * @details
+ * <pre>
+ * Each "action" line has an "action symbol" in the first column,
+ * followed by a colon, followed by some command specific info,
+ * usually in the form of "tokens" separated by colons or slashes.
+ * Blank lines, lines starting with white space, and lines starting
+ * with pound signs ("#") are ignored (as comments).
+ * Note the use of "tokenize()" to allow the use of both colons and
+ * slashes as delimeters, while still allowing final tokens which
+ * may contain any characters including "delimiters".
+ * Note the use of "strtol()" to allow all "integers" to be encoded
+ * in decimal, hexidecimal, or octal form.
+ * Note that "monster zero" is used for the "player" attr/char, "object
+ * zero" will be used for the "stack" attr/char, and "feature zero" is
+ * used for the "nothing" attr/char.
+ * </pre>
+ *
+ * 数値として解釈できないトークンや存在しない ID を指定した行は、例外を送出せず解釈の失敗として扱う。
+ * ゲーム内の「"」コマンドでユーザーが入力した行もそのまま渡されるためである。
+ */
+int interpret_pref_file(PlayerType *player_ptr, std::string_view buf)
+{
+    if ((buf.length() < 2) || (buf[1] != ':')) {
+        return 1;
+    }
+
+    // std::stoi() の変換失敗 (invalid_argument / out_of_range) と、
+    // 存在しない ID を .at() で参照したとき (out_of_range) は解釈の失敗として扱う
+    try {
+        return interpret_pref_line(player_ptr, buf);
+    } catch (const std::invalid_argument &) {
+        return 1;
+    } catch (const std::out_of_range &) {
         return 1;
     }
 }

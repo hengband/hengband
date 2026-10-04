@@ -48,10 +48,10 @@ void BodyImprovement::set_protection(short v, bool is_decrease)
     }
 
     auto &protection = this->player_ptr->effects()->protection();
-    const auto is_protected = protection.is_protected();
+    const auto is_protected = protection.is_active();
     if (v) {
         if (is_protected && !is_decrease) {
-            if (protection.is_larger_than(v)) {
+            if (protection.current() > v) {
                 return;
             }
         } else if (!is_protected) {

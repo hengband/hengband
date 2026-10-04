@@ -79,19 +79,6 @@ static void load_quest_details(PlayerType *player_ptr, QuestId loading_quest_id)
     quests.set_flags(loading_quest_id, rd_byte());
 }
 
-static bool is_missing_id_ver_16(const QuestId q_idx)
-{
-    auto is_missing_id = (enum2i(q_idx) == 0);
-    is_missing_id |= (enum2i(q_idx) == 13);
-    is_missing_id |= (enum2i(q_idx) == 17);
-    is_missing_id |= (enum2i(q_idx) >= 35 && enum2i(q_idx) <= 39);
-    is_missing_id |= (enum2i(q_idx) >= 88 && enum2i(q_idx) <= 100);
-
-    auto is_deleted_random_quest = (enum2i(q_idx) >= 50 || enum2i(q_idx) <= 88);
-
-    return is_missing_id || is_deleted_random_quest;
-}
-
 static bool is_loadable_quest(const QuestId q_idx, const byte max_rquests_load)
 {
     const auto &quests = QuestList::get_instance();
@@ -99,15 +86,9 @@ static bool is_loadable_quest(const QuestId q_idx, const byte max_rquests_load)
         return true;
     }
 
-    bool is_missing_id;
-
-    if (loading_savefile_version_is_older_than(17)) {
-        is_missing_id = is_missing_id_ver_16(q_idx);
-    } else {
-        is_missing_id = false;
-    }
-
-    if (!is_missing_id) {
+    // バージョン17以降のセーブデータに今は存在しないクエスト番号があれば、サポート対象外とする。
+    // 16以前は欠番や削除されたランダムクエストの番号が含まれるため、読み捨てる
+    if (!loading_savefile_version_is_older_than(17)) {
         const std::string msg(_("削除されたクエストのあるセーブデータはサポート対象外です。",
             "The save data with deleted quests is unsupported."));
         throw SaveDataNotSupportedException(msg);

@@ -1,32 +1,79 @@
 #include "mutation/mutation-investor-remover.h"
 #include "avatar/avatar.h"
 #include "core/stuff-handler.h"
-#include "mutation/gain-mutation-switcher.h"
-#include "mutation/lose-mutation-switcher.h"
 #include "mutation/mutation-calculator.h" //!< @todo calc_mutant_regenerate_mod() が相互依存している、後で消す.
 #include "mutation/mutation-flag-types.h"
-#include "mutation/mutation-util.h"
+#include "mutation/mutation-roll-table.h"
+#include "player-base/player-class.h"
 #include "player-base/player-race.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
+#include <string_view>
+
+namespace {
+//! 狂戦士は抽選値がこの値より大きい突然変異だけを得る
+constexpr int BERSERKER_ROLL_OFFSET = 74;
+
+//! 突然変異をランダムに選ぶときの試行回数
+constexpr int MUTATION_SELECTION_ATTEMPTS = 20;
+
+struct glm_type {
+    explicit glm_type(MUTATION_IDX roll)
+        : choose_mut(roll)
+    {
+    }
+
+    PlayerMutationType muta_which = PlayerMutationType::MAX;
+    std::string_view muta_desc;
+    bool muta_chosen = false;
+    MUTATION_IDX choose_mut;
+};
+}
+
+/*!
+ * @brief 獲得する突然変異を抽選する
+ * @param choose_mut 抽選値。0ならばランダムに決める
+ * @return 抽選した突然変異。抽選値に対応する突然変異が無いか、プレイヤーが得られない突然変異ならnullopt
+ */
+static tl::optional<const MutationRollEntry &> select_gain_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
+{
+    const PlayerClass pc(player_ptr);
+    const auto roll = [&] {
+        if (choose_mut) {
+            return choose_mut;
+        }
+
+        return pc.equals(PlayerClassType::BERSERKER) ? BERSERKER_ROLL_OFFSET + randint1(MUTATION_ROLL_MAX - BERSERKER_ROLL_OFFSET) : randint1(MUTATION_ROLL_MAX);
+    }();
+
+    const auto entry = find_mutation_by_roll(roll);
+    if (!entry) {
+        return tl::nullopt;
+    }
+
+    if ((entry->type == PlayerMutationType::CHAOS_GIFT) && pc.equals(PlayerClassType::CHAOS_WARRIOR)) {
+        return tl::nullopt;
+    }
+
+    if ((entry->type == PlayerMutationType::BAD_LUCK) && (player_ptr->ppersonality == PERSONALITY_LUCKY)) {
+        return tl::nullopt;
+    }
+
+    return entry;
+}
 
 static void sweep_gain_mutation(PlayerType *player_ptr, glm_type *gm_ptr)
 {
-    int attempts_left = 20;
-    if (gm_ptr->choose_mut) {
-        attempts_left = 1;
-    }
-
-    while (attempts_left--) {
-        switch_gain_mutation(player_ptr, gm_ptr);
-        if (gm_ptr->muta_which != PlayerMutationType::MAX && player_ptr->muta.has_not(gm_ptr->muta_which)) {
+    const auto attempts = gm_ptr->choose_mut ? 1 : MUTATION_SELECTION_ATTEMPTS;
+    for (auto i = 0; i < attempts; i++) {
+        const auto entry = select_gain_mutation(player_ptr, gm_ptr->choose_mut);
+        if (entry && player_ptr->muta.has_not(entry->type)) {
+            gm_ptr->muta_which = entry->type;
+            gm_ptr->muta_desc = entry->gain_message;
             gm_ptr->muta_chosen = true;
-        }
-
-        if (gm_ptr->muta_chosen) {
-            break;
+            return;
         }
     }
 }
@@ -210,24 +257,21 @@ static void neutralize_other_status(PlayerType *player_ptr, glm_type *gm_ptr)
  */
 bool gain_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
 {
-    glm_type tmp_gm;
-    glm_type *gm_ptr = initialize_glm_type(&tmp_gm, choose_mut);
-    sweep_gain_mutation(player_ptr, gm_ptr);
-    if (!gm_ptr->muta_chosen) {
+    glm_type gm(choose_mut);
+    sweep_gain_mutation(player_ptr, &gm);
+    if (!gm.muta_chosen) {
         msg_print(_("普通になった気がする。", "You feel normal."));
         return false;
     }
 
     chg_virtue(player_ptr, Virtue::CHANCE, 1);
-    race_dependent_mutation(player_ptr, gm_ptr);
+    race_dependent_mutation(player_ptr, &gm);
     msg_print(_("突然変異した！", "You mutate!"));
-    msg_print(gm_ptr->muta_desc);
-    if (gm_ptr->muta_which != PlayerMutationType::MAX) {
-        player_ptr->muta.set(gm_ptr->muta_which);
-    }
+    msg_print(gm.muta_desc);
+    player_ptr->muta.set(gm.muta_which);
 
-    neutralize_base_status(player_ptr, gm_ptr);
-    neutralize_other_status(player_ptr, gm_ptr);
+    neutralize_base_status(player_ptr, &gm);
+    neutralize_other_status(player_ptr, &gm);
 
     player_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(player_ptr);
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
@@ -235,23 +279,36 @@ bool gain_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
     return true;
 }
 
-static void sweep_lose_mutation(PlayerType *player_ptr, glm_type *glm_ptr)
+/*!
+ * @brief 失う突然変異を抽選する
+ * @param choose_mut 抽選値。0ならばランダムに決める
+ * @return 抽選した突然変異。抽選値に対応する突然変異が無いか、プレイヤーが失わない突然変異ならnullopt
+ */
+static tl::optional<const MutationRollEntry &> select_lose_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
 {
-    int attempts_left = 20;
-    if (glm_ptr->choose_mut) {
-        attempts_left = 1;
+    const auto roll = choose_mut ? choose_mut : randint1(MUTATION_ROLL_MAX);
+    const auto entry = find_mutation_by_roll(roll);
+    if (!entry) {
+        return tl::nullopt;
     }
 
-    while (attempts_left--) {
-        switch_lose_mutation(player_ptr, glm_ptr);
-        if (glm_ptr->muta_which != PlayerMutationType::MAX) {
-            if (player_ptr->muta.has(glm_ptr->muta_which)) {
-                glm_ptr->muta_chosen = true;
-            }
-        }
+    if ((entry->type == PlayerMutationType::GOOD_LUCK) && (player_ptr->ppersonality == PERSONALITY_LUCKY)) {
+        return tl::nullopt;
+    }
 
-        if (glm_ptr->muta_chosen) {
-            break;
+    return entry;
+}
+
+static void sweep_lose_mutation(PlayerType *player_ptr, glm_type *glm_ptr)
+{
+    const auto attempts = glm_ptr->choose_mut ? 1 : MUTATION_SELECTION_ATTEMPTS;
+    for (auto i = 0; i < attempts; i++) {
+        const auto entry = select_lose_mutation(player_ptr, glm_ptr->choose_mut);
+        if (entry && player_ptr->muta.has(entry->type)) {
+            glm_ptr->muta_which = entry->type;
+            glm_ptr->muta_desc = entry->lose_message;
+            glm_ptr->muta_chosen = true;
+            return;
         }
     }
 }
@@ -262,17 +319,14 @@ static void sweep_lose_mutation(PlayerType *player_ptr, glm_type *glm_ptr)
  */
 bool lose_mutation(PlayerType *player_ptr, MUTATION_IDX choose_mut)
 {
-    glm_type tmp_glm;
-    glm_type *glm_ptr = initialize_glm_type(&tmp_glm, choose_mut);
-    sweep_lose_mutation(player_ptr, glm_ptr);
-    if (!glm_ptr->muta_chosen) {
+    glm_type glm(choose_mut);
+    sweep_lose_mutation(player_ptr, &glm);
+    if (!glm.muta_chosen) {
         return false;
     }
 
-    msg_print(glm_ptr->muta_desc);
-    if (glm_ptr->muta_which != PlayerMutationType::MAX) {
-        player_ptr->muta.reset(glm_ptr->muta_which);
-    }
+    msg_print(glm.muta_desc);
+    player_ptr->muta.reset(glm.muta_which);
 
     RedrawingFlagsUpdater::get_instance().set_flag(StatusRecalculatingFlag::BONUS);
     handle_stuff(player_ptr);

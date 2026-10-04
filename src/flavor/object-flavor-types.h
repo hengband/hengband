@@ -10,5 +10,6 @@ enum object_description_type {
     OD_NO_FLAVOR = 0x00000040, /* Allow to hidden flavor */
     OD_FORCE_FLAVOR = 0x00000080, /* Get un-shuffled flavor name */
     OD_BASE_NAME = 0x00000100, /* Use kind name without artifact, ego, or smithing details */
+    OD_OMIT_MONRACE = 0x00000200, /* Omit monrace name (the item is a baseitem template and its monrace is unset) */
     OD_DEBUG = 0x10000000, /* Print for DEBUG */
 };

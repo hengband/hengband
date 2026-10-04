@@ -47,7 +47,7 @@
 bool player_can_see_bold(PlayerType *player_ptr, POSITION y, POSITION x)
 {
     /* Blind players see nothing */
-    if (player_ptr->effects()->blindness().is_blind()) {
+    if (player_ptr->effects()->blindness().is_active()) {
         return false;
     }
 

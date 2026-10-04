@@ -1,10 +1,11 @@
 #pragma once
 /*!
  * @file quest-reader.h
- * @brief 1つの固定クエスト JSONC を QuestType(メタデータ) と QuestFixedMap(レイアウト) に読み込む
+ * @brief 固定クエスト JSONC の名前を QuestType に、静的メタデータとレイアウトを QuestFixedMap に読み込む
  */
 
-#include <nlohmann/json.hpp>
+#include <nlohmann/json_fwd.hpp>
+#include <string>
 
 enum parse_error_type : int;
 class QuestType;
@@ -16,8 +17,8 @@ struct QuestDescriptionBlock;
  * @brief 固定クエスト JSONC 読み込みクラス
  *
  * 既存の *Reader 群と同じ規約: メンバは const 参照、キーアクセスは get_json_value 経由。
- * メタデータ(type/level/flags/reward/name 等)を QuestType へ、地形レイアウト
- * (legend/map/descriptions/start)を QuestFixedMap へ書き込む。
+ * 名前を QuestType へ、静的メタデータと地形レイアウトを QuestFixedMap へ書き込む。
+ * QuestType の進行状態や報酬の確定は変更しない。
  */
 class QuestReader {
 public:
@@ -28,15 +29,16 @@ public:
     QuestReader &operator=(const QuestReader &) = delete;
     QuestReader &operator=(QuestReader &&) = delete;
 
+    /*! @brief 全件成功時のみ名前と固定マップを置き換える。失敗・例外時は既存の出力を保持する。 */
     int read() const;
 
 private:
-    int set_name() const;
-    int set_definition() const;
-    int set_descriptions() const;
-    int set_legend() const;
-    int set_maps() const;
-    int set_starts() const;
+    int set_name(std::string &name) const;
+    int set_definition(QuestFixedMap &parsed) const;
+    int set_descriptions(QuestFixedMap &parsed) const;
+    int set_legend(QuestFixedMap &parsed) const;
+    int set_maps(QuestFixedMap &parsed) const;
+    int set_starts(QuestFixedMap &parsed) const;
 
     const nlohmann::json &quest_data;
     QuestType &quest;

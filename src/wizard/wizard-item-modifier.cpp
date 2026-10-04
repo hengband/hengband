@@ -35,7 +35,9 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "term/z-form.h"
+#include "term/z-rand.h"
 #include "util/bit-flags-calculator.h"
+#include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "util/string-processor.h"
 #include "view/display-messages.h"
@@ -47,6 +49,7 @@
 #include <sstream>
 #include <string>
 #include <tuple>
+#include <utility>
 #include <vector>
 
 constexpr auto BASEITEM_MAX_DEPTH = 110; /*!< アイテムの階層毎生成率を表示する最大階 */
@@ -498,6 +501,10 @@ static void wiz_statistics(PlayerType *player_ptr, ItemEntity *o_ptr)
         auto worse = 0;
         auto other = 0;
         auto count = 0;
+
+        // 統計のための生成がゲームの乱数を消費しないよう、生成中はゲームの進行に影響しない乱数生成器と入れ替える
+        std::swap(get_game_rng(), get_external_rng());
+        const auto restore_rng = util::make_finalizer([] { std::swap(get_game_rng(), get_external_rng()); });
         for (; count <= rolls; count++) {
             if ((count < 100) || (count % 100 == 0)) {
                 inkey_scan = true;
@@ -1001,12 +1008,14 @@ WishResultType do_cmd_wishing(PlayerType *player_ptr, int prob, bool allow_art, 
     if (exam_base) {
         auto max_len = 0;
         const auto &baseitems = BaseitemList::get_instance();
+        // ベースアイテムの照合用なので、モンスター種族が未設定の人形・像・死体類は種族名を省いて記述する
+        constexpr auto mode = OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE | OD_OMIT_MONRACE;
         for (short bi_id : baseitems.collect_valid_bi_ids()) {
             ItemEntity item(bi_id);
 #ifdef JP
-            const auto item_name = describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+            const auto item_name = describe_flavor(player_ptr, item, mode);
 #else
-            const auto item_name = str_tolower(describe_flavor(player_ptr, item, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE)));
+            const auto item_name = str_tolower(describe_flavor(player_ptr, item, mode));
 #endif
             if (cheat_xtra) {
                 msg_format("Matching object No.%d %s", bi_id, item_name.data());

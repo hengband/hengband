@@ -88,7 +88,7 @@ Direction get_aim_dir(PlayerType *player_ptr, bool enable_repeat)
     }
 
     command_dir = dir;
-    if (player_ptr->effects()->confusion().is_confused()) {
+    if (player_ptr->effects()->confusion().is_active()) {
         dir = rand_choice(Direction::directions_8());
     }
 
@@ -132,7 +132,7 @@ Direction get_direction(PlayerType *player_ptr)
     const auto finalizer = util::make_finalizer([] {
         repeat_push(static_cast<short>(command_dir.dir()));
     });
-    const auto is_confused = player_ptr->effects()->confusion().is_confused();
+    const auto is_confused = player_ptr->effects()->confusion().is_active();
     if (is_confused && evaluate_percent(75)) {
         dir = rand_choice(Direction::directions_8());
     }
@@ -197,7 +197,7 @@ Direction get_rep_dir(PlayerType *player_ptr, bool under)
     }
 
     command_dir = dir;
-    auto is_confused = player_ptr->effects()->confusion().is_confused();
+    auto is_confused = player_ptr->effects()->confusion().is_active();
     if (is_confused) {
         if (evaluate_percent(75)) {
             dir = rand_choice(Direction::directions_8());

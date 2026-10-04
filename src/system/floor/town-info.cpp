@@ -37,5 +37,5 @@ const Store &TownInfo::get_store(StoreSaleType sst) const
 
 Store &TownInfo::emplace(StoreSaleType sst)
 {
-    return this->stores.emplace(std::piecewise_construct, std::make_tuple(sst), std::make_tuple()).first->second;
+    return this->stores.emplace(std::piecewise_construct, std::make_tuple(sst), std::make_tuple(sst)).first->second;
 }

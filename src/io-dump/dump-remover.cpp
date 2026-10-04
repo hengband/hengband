@@ -1,8 +1,8 @@
 #include "io-dump/dump-remover.h"
 #include "io-dump/dump-util.h"
 #include "io/read-pref-file.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
+#include <fmt/format.h>
 
 /*!
  * @brief prefファイルを選択して処理する /
@@ -19,8 +19,8 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
     int line_num = 0;
     long header_location = 0;
 
-    const auto header_mark_str = format(auto_dump_header, auto_dump_mark.data());
-    const auto footer_mark_str = format(auto_dump_footer, auto_dump_mark.data());
+    const auto header_mark_str = fmt::format(auto_dump_header, auto_dump_mark);
+    const auto footer_mark_str = fmt::format(auto_dump_footer, auto_dump_mark);
     size_t mark_len = footer_mark_str.length();
 
     FILE *orig_fff;
@@ -32,6 +32,7 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
     FILE *tmp_fff = nullptr;
     char tmp_file[FILE_NAME_SIZE];
     if (!open_temporary_file(&tmp_fff, tmp_file)) {
+        angband_fclose(orig_fff);
         return;
     }
 
@@ -77,14 +78,18 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
     angband_fclose(tmp_fff);
 
     if (changed) {
+        // 元のファイルは WRITE で開いた時点で切り詰められるため、一時ファイルを開けた場合だけ開く。
+        // 読み取り専用のファイル等で開けなかった場合は書き戻さない (元のファイルは変更されない)
         tmp_fff = angband_fopen(tmp_file, FileOpenMode::READ);
-        orig_fff = angband_fopen(orig_file, FileOpenMode::WRITE);
-        while (true) {
-            const auto buf = angband_fgets(tmp_fff);
-            if (!buf) {
-                break;
+        orig_fff = tmp_fff ? angband_fopen(orig_file, FileOpenMode::WRITE) : nullptr;
+        if (orig_fff) {
+            while (true) {
+                const auto buf = angband_fgets(tmp_fff);
+                if (!buf) {
+                    break;
+                }
+                fprintf(orig_fff, "%s\n", buf->data());
             }
-            fprintf(orig_fff, "%s\n", buf->data());
         }
 
         angband_fclose(orig_fff);

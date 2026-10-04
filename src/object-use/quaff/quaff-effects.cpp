@@ -374,7 +374,7 @@ bool QuaffEffects::death()
  */
 bool QuaffEffects::speed()
 {
-    if (this->player_ptr->effects()->acceleration().is_fast()) {
+    if (this->player_ptr->effects()->acceleration().is_active()) {
         (void)mod_acceleration(this->player_ptr, 5, false);
         return false;
     }

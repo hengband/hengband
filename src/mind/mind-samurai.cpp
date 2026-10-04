@@ -264,7 +264,7 @@ static void hissatsu_lightning_eagle(PlayerType *player_ptr, samurai_slaying_typ
 static void hissatsu_bloody_maelstroem(PlayerType *player_ptr, samurai_slaying_type *samurai_slaying_ptr)
 {
     const auto &player_cut = player_ptr->effects()->cut();
-    if ((samurai_slaying_ptr->mode == HISSATSU_SEKIRYUKA) && player_cut.is_cut() && samurai_slaying_ptr->m_ptr->has_living_flag()) {
+    if ((samurai_slaying_ptr->mode == HISSATSU_SEKIRYUKA) && player_cut.is_active() && samurai_slaying_ptr->m_ptr->has_living_flag()) {
         auto tmp = std::min<short>(100, std::max<short>(10, player_cut.current() / 10));
         if (samurai_slaying_ptr->mult < tmp) {
             samurai_slaying_ptr->mult = tmp;
@@ -368,12 +368,12 @@ bool choose_samurai_stance(PlayerType *player_ptr)
     }
 
     const auto effects = player_ptr->effects();
-    if (effects->stun().is_stunned()) {
+    if (effects->stun().is_active()) {
         msg_print(_("意識がはっきりとしない。", "You are not clear-headed"));
         return false;
     }
 
-    if (effects->fear().is_fearful()) {
+    if (effects->fear().is_active()) {
         msg_print(_("体が震えて構えられない！", "You are trembling with fear!"));
         return false;
     }

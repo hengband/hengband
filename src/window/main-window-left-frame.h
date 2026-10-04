@@ -1,7 +1,11 @@
 #pragma once
 
+#include <string>
+
 class PlayerType;
 void print_title(PlayerType *player_ptr);
+std::string get_player_title(PlayerType *player_ptr);
+std::string get_displayed_race_title(PlayerType *player_ptr);
 void print_level(PlayerType *player_ptr);
 void print_exp(PlayerType *player_ptr);
 void print_ac(PlayerType *player_ptr);

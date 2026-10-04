@@ -73,34 +73,38 @@ void UniqueList::sweep()
 static void display_uniques(UniqueList *unique_list_ptr, FILE *fff)
 {
     if (unique_list_ptr->num_uniques_surface) {
-        concptr surface_desc = unique_list_ptr->is_alive ? _("     地上  生存: %3d体\n", "      Surface  alive: %3d\n")
-                                                         : _("     地上  撃破: %3d体\n", "      Surface  dead: %3d\n");
-        fprintf(fff, surface_desc, unique_list_ptr->num_uniques_surface);
+        const auto surface_desc = unique_list_ptr->is_alive
+                                      ? _("     地上  生存: {:3}体\n", "      Surface  alive: {:3}\n")
+                                      : _("     地上  撃破: {:3}体\n", "      Surface  dead: {:3}\n");
+        fmt::print(fff, fmt::runtime(surface_desc), unique_list_ptr->num_uniques_surface);
         unique_list_ptr->num_uniques_total += unique_list_ptr->num_uniques_surface;
     }
 
     for (IDX i = 0; i <= unique_list_ptr->max_lev; i++) {
-        concptr dungeon_desc = unique_list_ptr->is_alive ? _("%3d-%3d階  生存: %3d体\n", "Level %3d-%3d  alive: %3d\n")
-                                                         : _("%3d-%3d階  撃破: %3d体\n", "Level %3d-%3d  dead: %3d\n");
-        fprintf(fff, dungeon_desc, 1 + i * 10, 10 + i * 10, unique_list_ptr->num_uniques[i]);
+        const auto dungeon_desc = unique_list_ptr->is_alive
+                                      ? _("{:3}-{:3}階  生存: {:3}体\n", "Level {:3}-{:3}  alive: {:3}\n")
+                                      : _("{:3}-{:3}階  撃破: {:3}体\n", "Level {:3}-{:3}  dead: {:3}\n");
+        fmt::print(fff, fmt::runtime(dungeon_desc), 1 + i * 10, 10 + i * 10, unique_list_ptr->num_uniques[i]);
         unique_list_ptr->num_uniques_total += unique_list_ptr->num_uniques[i];
     }
 
     if (unique_list_ptr->num_uniques_over100) {
-        concptr deep_desc = unique_list_ptr->is_alive ? _("101-   階  生存: %3d体\n", "Level 101-     alive: %3d\n")
-                                                      : _("101-   階  撃破: %3d体\n", "Level 101-     dead: %3d\n");
-        fprintf(fff, deep_desc, unique_list_ptr->num_uniques_over100);
+        const auto deep_desc = unique_list_ptr->is_alive
+                                   ? _("101-   階  生存: {:3}体\n", "Level 101-     alive: {:3}\n")
+                                   : _("101-   階  撃破: {:3}体\n", "Level 101-     dead: {:3}\n");
+        fmt::print(fff, fmt::runtime(deep_desc), unique_list_ptr->num_uniques_over100);
         unique_list_ptr->num_uniques_total += unique_list_ptr->num_uniques_over100;
     }
 
     if (unique_list_ptr->num_uniques_total) {
-        fputs(_("---------  -----------\n", "-------------  ----------\n"), fff);
-        concptr total_desc = unique_list_ptr->is_alive ? _("     合計  生存: %3d体\n\n", "        Total  alive: %3d\n\n")
-                                                       : _("     合計  撃破: %3d体\n\n", "        Total  dead: %3d\n\n");
-        fprintf(fff, total_desc, unique_list_ptr->num_uniques_total);
+        fmt::print(fff, "{}", _("---------  -----------\n", "-------------  ----------\n"));
+        const auto total_desc = unique_list_ptr->is_alive
+                                    ? _("     合計  生存: {:3}体\n\n", "        Total  alive: {:3}\n\n")
+                                    : _("     合計  撃破: {:3}体\n\n", "        Total  dead: {:3}\n\n");
+        fmt::print(fff, fmt::runtime(total_desc), unique_list_ptr->num_uniques_total);
     } else {
-        concptr no_unique_desc = unique_list_ptr->is_alive ? _("現在は既知の生存ユニークはいません。\n", "No known uniques alive.\n")
-                                                           : _("現在は既知の撃破ユニークはいません。\n", "No known uniques dead.\n");
+        const auto no_unique_desc = unique_list_ptr->is_alive ? _("現在は既知の生存ユニークはいません。\n", "No known uniques alive.\n")
+                                                              : _("現在は既知の撃破ユニークはいません。\n", "No known uniques dead.\n");
         fputs(no_unique_desc, fff);
     }
 

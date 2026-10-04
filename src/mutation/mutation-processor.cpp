@@ -170,14 +170,14 @@ void process_world_aux_mutation(PlayerType *player_ptr)
         disturb(player_ptr, false, true);
         if (one_in_(2)) {
             msg_print(_("精力的でなくなった気がする。", "You feel less energetic."));
-            if (player_ptr->effects()->acceleration().is_fast()) {
+            if (player_ptr->effects()->acceleration().is_active()) {
                 set_acceleration(player_ptr, 0, true);
             } else {
                 (void)bss.set_deceleration(randint1(30) + 10, false);
             }
         } else {
             msg_print(_("精力的になった気がする。", "You feel more energetic."));
-            if (player_ptr->effects()->deceleration().is_slow()) {
+            if (player_ptr->effects()->deceleration().is_active()) {
                 (void)bss.set_deceleration(0, true);
             } else {
                 set_acceleration(player_ptr, randint1(30) + 10, false);
@@ -199,7 +199,7 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             } while ((sst == StoreSaleType::HOME) || (sst == StoreSaleType::MUSEUM));
 
             msg_print(_("店の主人が丘に向かって走っている！", "You see one of the shopkeepers running for the hills!"));
-            store_shuffle(sst);
+            store_shuffle(AngbandWorld::get_instance().get_town_index(), sst);
         }
         msg_erase();
     }

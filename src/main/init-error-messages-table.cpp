@@ -20,4 +20,7 @@ concptr err_str[PARSE_ERROR_MAX] = {
     _("座標範囲外", "coordinates out of bounds"),
     _("引数不足", "too few arguments"),
     _("未定義地形タグ", "undefined terrain tag"),
+    _("不正なpval値", "invalid pval"),
+    _("不正な値", "invalid value"),
+    _("不正な型", "invalid type"),
 };

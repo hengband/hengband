@@ -17,6 +17,8 @@
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "util/int-char-converter.h"
+#include <algorithm>
+#include <iterator>
 
 /*!
  * @brief オブジェクト選択時の選択アルファベットラベルを返す /
@@ -135,4 +137,48 @@ std::shared_ptr<ItemEntity> ref_item(PlayerType *player_ptr, short i_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     return i_idx >= 0 ? player_ptr->inventory[i_idx] : floor.o_list[0 - i_idx];
+}
+
+/*!
+ * @brief 保持しているアイテムへの参照から、現在の配列上の位置を取得する
+ * @details アイテム削除や並べ替えで変わるインデックスではなく、実体の同一性で探す。
+ * @return 配列内のインデックス。アイテムが空または既に削除された場合はnullopt。
+ */
+tl::optional<short> find_item_index(std::span<const std::shared_ptr<ItemEntity>> items, const std::shared_ptr<ItemEntity> &item)
+{
+    if (!item) {
+        return tl::nullopt;
+    }
+
+    const auto it = std::find(items.begin(), items.end(), item);
+    if (it == items.end()) {
+        return tl::nullopt;
+    }
+
+    return static_cast<short>(std::distance(items.begin(), it));
+}
+
+/*!
+ * @brief 保持しているアイテムの、現在の所持品IDを取得する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param is_inventory 所持品から探すならtrue、床上から探すならfalse
+ * @param item 探すアイテム
+ * @return 所持品ID (床上のアイテムは負の値)。アイテムが空または既に削除された場合はnullopt。
+ * @details 効果の前に選んだ所持品IDは、効果によるアイテムの削除や並べ替えで変わるため、実体から探し直す。
+ * 所持品から削除されたアイテムは、消去された状態で所持品の末尾に移されるだけで配列には残るため、
+ * 消去されているかどうかも確かめる。
+ */
+tl::optional<short> find_current_i_idx(PlayerType *player_ptr, bool is_inventory, const std::shared_ptr<ItemEntity> &item)
+{
+    if (!item || !item->is_valid()) {
+        return tl::nullopt;
+    }
+
+    const auto &items = is_inventory ? player_ptr->inventory : player_ptr->current_floor_ptr->o_list;
+    const auto idx = find_item_index(items, item);
+    if (!idx) {
+        return tl::nullopt;
+    }
+
+    return is_inventory ? *idx : static_cast<short>(-*idx);
 }

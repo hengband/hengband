@@ -67,6 +67,7 @@
 #include "util/bit-flags-calculator.h"
 #include "util/dice.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "view/display-util.h"
 #include <string_view>
@@ -382,13 +383,13 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
     handle_stuff(player_ptr);
 
     const auto spell_category = spell_category_name(mp_ptr->spell_book);
-    constexpr auto fmt = _("(%s^:%c-%c, '*'で一覧, ESCで中断) どの%sを%s^ますか? ", "(%s^s %c-%c, *=List, ESC=exit) %s^ which %s? ");
+    constexpr auto fmt = _("({0}:{1}-{2}, '*'で一覧, ESCで中断) どの{3}を{4}ますか? ", "({0}s {1}-{2}, *=List, ESC=exit) {4} which {3}? ");
 #ifdef JP
     const auto verb = conjugate_jverb(prompt_verb, JVerbConjugationType::AND);
-    const auto prompt = format(fmt, spell_category.data(), I2A(0), I2A(num - 1), spell_category.data(), verb.data());
 #else
-    const auto prompt = format(fmt, spell_category.data(), I2A(0), I2A(num - 1), prompt_verb.data(), spell_category.data());
+    const auto verb = prompt_verb;
 #endif
+    const auto prompt = fmt::format(fmt, str_upcase_first(spell_category), I2A(0), I2A(num - 1), spell_category, str_upcase_first(verb));
 
     auto choice = (always_show_list || use_menu) ? ESCAPE : '\1';
     while (!flag) {
@@ -438,7 +439,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
                 menu_line -= num;
             }
             /* Display a list of spells */
-            print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm);
+            print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm, true);
             if (should_redraw_cursor) {
                 continue;
             }
@@ -451,7 +452,7 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
                     screen_save();
 
                     /* Display a list of spells */
-                    print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm);
+                    print_spells(player_ptr, menu_line, spells, num, 1, 15, use_realm, true);
                 }
 
                 /* Hide the list */
@@ -485,9 +486,9 @@ static int get_spell(PlayerType *player_ptr, SPELL_IDX *sn, std::string_view pro
         if (!spell_okay(player_ptr, spell, learned, false, use_realm)) {
             bell();
 #ifdef JP
-            msg_format("その%sを%sことはできません。", spell_category.data(), prompt_verb.data());
+            msg_print("その{}を{}ことはできません。", spell_category, prompt_verb);
 #else
-            msg_format("You may not %s that %s.", prompt_verb.data(), spell_category.data());
+            msg_print("You may not {} that {}.", prompt_verb, spell_category);
 #endif
 
             continue;
@@ -642,7 +643,7 @@ void do_cmd_browse(PlayerType *player_ptr)
             }
 
             /* Display a list of spells */
-            print_spells(player_ptr, 0, spells.data(), spells.size(), 1, 15, use_realm);
+            print_spells(player_ptr, 0, spells.data(), spells.size(), 1, 15, use_realm, true);
 
             /* Notify that there's nothing to see, and wait. */
             if (use_realm == RealmType::HISSATSU) {
@@ -913,7 +914,7 @@ bool do_cmd_cast(PlayerType *player_ptr)
         return false;
     }
 
-    if (player_ptr->effects()->blindness().is_blind() || no_lite(player_ptr)) {
+    if (player_ptr->effects()->blindness().is_active() || no_lite(player_ptr)) {
         if (pc.equals(PlayerClassType::FORCETRAINER)) {
             confirm_use_force(player_ptr, false);
         } else {

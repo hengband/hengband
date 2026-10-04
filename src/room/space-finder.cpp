@@ -107,10 +107,10 @@ static void check_room_boundary(PlayerType *player_ptr, const Pos2D &pos1, const
 
 /*!
  * @brief find_space()の予備処理として部屋の生成が可能かを判定する
- * @param blocks_high 範囲の高さ
- * @param blocks_wide 範囲の幅
- * @param block_y 範囲の上端
- * @param block_x 範囲の左端
+ * @param dd_ptr ダンジョン生成中の情報
+ * @param max_block_size 範囲の大きさ (ブロック単位)
+ * @param block 範囲の左上端 (ブロック単位)
+ * @return 部屋を生成できる範囲ならばtrue
  */
 static bool find_space_aux(DungeonData *dd_ptr, const Pos2D &max_block_size, const Pos2D &block)
 {
@@ -123,20 +123,13 @@ static bool find_space_aux(DungeonData *dd_ptr, const Pos2D &max_block_size, con
             return false;
         }
     } else {
-        if (block.x + (max_block_size.x / 2) <= dd_ptr->col_rooms / 2) {
-            if (((block.x % 3) == 2) && ((max_block_size.x % 3) == 2)) {
-                return false;
-            }
-            if ((block.x % 3) == 1) {
-                return false;
-            }
-        } else {
-            if (((block.x % 3) == 2) && ((max_block_size.x % 3) == 2)) {
-                return false;
-            }
-            if ((block.x % 3) == 1) {
-                return false;
-            }
+        // 幅が3の倍数でない大きい部屋は、位置を3で割って1余るところには置かない。
+        // 幅と位置がどちらも3で割って2余るところにも置かない (ダンジョンの左右どちらの半分でも同じ)
+        if (((block.x % 3) == 2) && ((max_block_size.x % 3) == 2)) {
+            return false;
+        }
+        if ((block.x % 3) == 1) {
+            return false;
         }
     }
 

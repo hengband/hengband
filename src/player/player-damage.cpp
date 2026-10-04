@@ -413,9 +413,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
             }
         } else {
             const auto effects = player_ptr->effects();
-            const auto is_hallucinated = effects->hallucination().is_hallucinated();
+            const auto is_hallucinated = effects->hallucination().is_active();
             auto paralysis_state = "";
-            if (effects->paralysis().is_paralyzed()) {
+            if (effects->paralysis().is_active()) {
                 paralysis_state = player_ptr->free_act ? _("彫像状態で", " while being the statue") : _("麻痺状態で", " while paralyzed");
             }
 
@@ -518,8 +518,9 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
         term_clear();
 
         /* 桜散る */
+        auto &rng = get_external_rng();
         for (auto i = 0; i < 40; i++) {
-            term_putstr(randint0(w / 2) * 2, randint0(h), 2, TERM_VIOLET, "υ");
+            term_putstr(randint0(rng, w / 2) * 2, randint0(rng, h), 2, TERM_VIOLET, "υ");
         }
 
         auto str = death_message.data();
@@ -572,7 +573,7 @@ int take_hit(PlayerType *player_ptr, int damage_type, int damage, std::string_vi
 
         sound(SoundKind::WARN);
         if (record_danger && (old_chp > hp_warning_threshold)) {
-            if (player_ptr->effects()->hallucination().is_hallucinated() && damage_type == DAMAGE_ATTACK) {
+            if (player_ptr->effects()->hallucination().is_active() && damage_type == DAMAGE_ATTACK) {
                 hit_from = _("何か", "something");
             }
 

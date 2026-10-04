@@ -201,4 +201,6 @@ enum class MonraceId : short {
     BUNBUN_STRIKERS = 1357,
     POLYGON_SPIN = 1386,
     HUNGRY_OLD_MAN = 1387,
+    PERORODZILLA = 1417,
+    PEROROMINION = 1418,
 };

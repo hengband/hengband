@@ -66,7 +66,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
     }
 
     auto chance = this->player_ptr->skill_dev;
-    if (this->player_ptr->effects()->confusion().is_confused()) {
+    if (this->player_ptr->effects()->confusion().is_active()) {
         chance = chance / 2;
     }
 
@@ -133,12 +133,8 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
     rfu.set_flags(flags_swrf);
     rfu.set_flags(flags_srf);
     item->pval--;
-    if (i_idx >= 0) {
-        inven_item_charges(*this->player_ptr->inventory[i_idx]);
-        return;
-    }
 
-    floor_item_charges(*this->player_ptr->current_floor_ptr, 0 - i_idx);
+    describe_item_charges(this->player_ptr, i_idx >= 0, item);
 }
 
 bool ObjectZapWandEntity::check_can_zap() const

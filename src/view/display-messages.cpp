@@ -30,6 +30,9 @@ namespace {
 /*! 表示するメッセージの先頭位置 */
 static int msg_head_pos = 0;
 
+/*! 起動してから履歴に追加したメッセージ行の累計 (繰り返しによる回数の加算は含まない) */
+static uint64_t message_sequence_count = 0;
+
 using msg_sp = std::shared_ptr<const std::string>;
 using msg_wp = std::weak_ptr<const std::string>;
 
@@ -94,6 +97,17 @@ int32_t message_num(void)
 }
 
 /*!
+ * @brief 起動してから履歴に追加したメッセージ行の累計を返す
+ * @return 累計の行数
+ * @details 履歴の件数は上限 (MESSAGE_MAX) に達すると増えなくなるので、新着の数え上げにはこちらを使う。
+ * 同じメッセージの繰り返しは既存の行の回数表示 (<xN>) を増やすだけなので数えない。
+ */
+uint64_t message_sequence()
+{
+    return message_sequence_count;
+}
+
+/*!
  * @brief 過去のゲームメッセージを返す。 / Recall the "text" of a saved message
  * @param age メッセージの世代
  * @return メッセージの文字列ポインタ
@@ -141,6 +155,7 @@ void message_add(std::string_view msg)
 
     // メッセージ履歴に追加
     message_history.emplace_front(make_message(std::string(msg)));
+    message_sequence_count++;
 
     while (message_history.size() > MESSAGE_MAX) {
         message_history.pop_back();
@@ -287,7 +302,7 @@ void msg_print(std::string_view msg)
 
     std::string msg_includes_turn;
     if (cheat_turn) {
-        msg = msg_includes_turn = format("T:%d - %s", world.game_turn, msg.data());
+        msg = msg_includes_turn = fmt::format("T:{} - {}", world.game_turn, msg);
     }
 
     const auto &[wid, hgt] = term_get_size();
@@ -309,12 +324,12 @@ void msg_print(std::string_view msg)
 
     while (std::ssize(msg) > split_width) {
         auto split = split_length(msg, split_width);
-        term_putstr(0, 0, split, TERM_WHITE, msg.data());
+        term_putstr(0, 0, split, TERM_WHITE, msg);
         msg_flush(p_ptr, split + 1);
         msg.remove_prefix(split);
     }
 
-    term_putstr(msg_head_pos, 0, msg.size(), TERM_WHITE, msg.data());
+    term_putstr(msg_head_pos, 0, msg.size(), TERM_WHITE, msg);
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
     window_stuff(p_ptr);
 

@@ -8,6 +8,7 @@
 #include "action/action-limited.h"
 #include "action/mutation-execution.h"
 #include "action/racial-execution.h"
+#include "bot/bot-json-output.h"
 #include "core/asking-player.h"
 #include "core/window-redrawer.h"
 #include "game-option/text-display-options.h"
@@ -97,6 +98,15 @@ static void racial_power_display_list(PlayerType *player_ptr, rc_type *rc_ptr)
     if (use_menu) {
         racial_power_display_cursor(rc_ptr);
     }
+
+    // ページ送りで見られる全行を、表示と同じ値で出力する
+    std::vector<BotPowerListRow> bot_rows;
+    for (auto ctr = 0; ctr < rc_ptr->power_count(); ctr++) {
+        const auto &rpi = rc_ptr->power_desc[ctr];
+        const auto letter = (ctr < 26) ? I2A(ctr) : static_cast<char>('0' + ctr - 26);
+        bot_rows.push_back({ letter, ctr / RC_PAGE_SIZE, rpi.racial_name, rpi.min_level, rpi.cost, 100 - racial_chance(player_ptr, &rc_ptr->power_desc[ctr]), rpi.info });
+    }
+    output_bot_json_power_list_snapshot(player_ptr, "racial", bot_rows, rc_ptr->page, rc_ptr->browse_mode);
 }
 
 /*!

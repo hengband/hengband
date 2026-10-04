@@ -70,7 +70,7 @@ std::string pickpref_filename(std::string_view player_base_name, int filename_mo
         return format("%s.prf", namebase);
 
     case PT_WITH_PNAME:
-        return format("%s-%s.prf", namebase, player_base_name.data());
+        return fmt::format("{}-{}.prf", namebase, player_base_name);
 
     default: {
         const auto msg = format("The value of argument 'filename_mode' is invalid: %d", filename_mode);

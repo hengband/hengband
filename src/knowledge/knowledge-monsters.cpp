@@ -419,7 +419,7 @@ void do_cmd_knowledge_monsters(PlayerType *player_ptr, bool *need_redraw, bool v
 
         case 'R':
         case 'r': {
-            if (!visual_list && !visual_only && MonraceList::is_valid(monrace_ids[mon_cur])) {
+            if (!visual_list && !visual_only && !monrace_ids.empty() && MonraceList::is_valid(monrace_ids[mon_cur])) {
                 screen_roff(player_ptr, monrace_ids[mon_cur], MONSTER_LORE_NORMAL);
                 (void)inkey();
                 redraw = true;

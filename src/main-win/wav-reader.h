@@ -4,10 +4,12 @@
  * @brief Windows版固有実装(WAVファイル読込)ヘッダ
  */
 
-#include <windows.h>
-
 #include <filesystem>
 #include <memory>
+#define NOMINMAX
+#include <windows.h>
+
+// mmsyste.h は windows.h より後にインクルードする必要がある.
 #include <mmsystem.h>
 
 /*!

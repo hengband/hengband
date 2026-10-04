@@ -397,7 +397,7 @@ static void cut_off_the_upstair(PlayerType *player_ptr)
         return;
     }
 
-    const auto is_blind = player_ptr->effects()->blindness().is_blind();
+    const auto is_blind = player_ptr->effects()->blindness().is_active();
     const auto mes = is_blind
                          ? _("ゴトゴトと何か音がした。", "You hear some noises.")
                          : _("突然階段が塞がれてしまった！", "Suddenly the stairs is blocked!");

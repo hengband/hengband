@@ -39,6 +39,7 @@ bool activate_exploding_rune(PlayerType *player_ptr);
 bool activate_protection_rune(PlayerType *player_ptr);
 bool activate_protection_elbereth(PlayerType *player_ptr);
 bool activate_light(PlayerType *player_ptr, std::string_view name);
+bool activate_darkness(PlayerType *player_ptr, std::string_view name);
 bool activate_recall(PlayerType *player_ptr);
 bool activate_tree_creation(PlayerType *player_ptr, const ItemEntity &item, std::string_view name);
 bool activate_animate_dead(PlayerType *player_ptr, const ItemEntity &item);

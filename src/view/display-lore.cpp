@@ -5,6 +5,7 @@
  */
 
 #include "view/display-lore.h"
+#include "bot/bot-json-output.h"
 #include "game-option/cheat-options.h"
 #include "game-option/text-display-options.h"
 #include "locale/english.h"
@@ -71,6 +72,7 @@ void roff_top(MonraceId monrace_id)
  */
 void screen_roff(PlayerType *player_ptr, MonraceId r_idx, monster_lore_mode mode)
 {
+    output_bot_json_lore_snapshot(player_ptr, r_idx, mode);
     msg_erase();
     term_erase(0, 1);
     hook_c_roff = c_roff;

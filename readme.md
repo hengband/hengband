@@ -250,6 +250,8 @@ Windows/Macではメニューから、Linuxでは起動オプションでグラ�
 
 * **GitHubリポジトリ:** [https://github.com/hengband/hengband](https://github.com/hengband/hengband)
 * **Issue Tracker:** [https://github.com/hengband/hengband/issues](https://github.com/hengband/hengband/issues)
+* **ユニットテスト:** [src/test/README.md](src/test/README.md) — テストの実行方法と追加手順
+* **ゲーム制御サーバ:** [tools/bot/README.md](tools/bot/README.md) — 外部プログラムからゲームを操作・観測する
 
 ## 📚 その他の情報
 

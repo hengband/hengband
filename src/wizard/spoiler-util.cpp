@@ -1,5 +1,6 @@
 #include "wizard/spoiler-util.h"
 #include "system/item/item-entity.h"
+#include <algorithm>
 #include <fstream>
 
 const char item_separator = ',';
@@ -58,7 +59,7 @@ void spoiler_blanklines(int n, std::ofstream &ofs)
  */
 void spoiler_underline(std::string_view str, std::ofstream &ofs)
 {
-    ofs << str.data() << '\n';
+    ofs << str << '\n';
     spoiler_out_n_chars(str.length(), '-', ofs);
     ofs << '\n';
 }
@@ -109,7 +110,8 @@ void spoil_out(std::string_view sv, bool flush_buffer)
         return;
     }
 
-    for (auto str = sv.data(); *str != '\0'; ++str) {
+    const auto *const end = sv.data() + sv.length();
+    for (auto str = sv.data(); str != end; ++str) {
 #ifdef JP
         char cbak;
         bool k_flag = iskanji((unsigned char)(*str));
@@ -157,12 +159,12 @@ void spoil_out(std::string_view sv, bool flush_buffer)
 #ifdef JP
                 bool k_flag_local;
                 bool iskanji_flag_local = false;
-                concptr tail = str + (iskanji_flag ? 2 : 1);
+                concptr tail = std::min(str + (iskanji_flag ? 2 : 1), end);
 #else
                 concptr tail = str + 1;
 #endif
 
-                for (; *tail; tail++) {
+                for (; tail != end; tail++) {
                     if (*tail == ' ') {
                         continue;
                     }
@@ -181,7 +183,7 @@ void spoil_out(std::string_view sv, bool flush_buffer)
 #endif
                 }
 
-                if (!*tail) {
+                if (tail == end) {
                     waiting_output = true;
                 }
             }
@@ -229,7 +231,8 @@ void spoil_out(std::string_view sv, bool flush_buffer)
                 roff_s = roff_p;
             }
         } else {
-            if (iskanji_flag && strncmp(str, "。", 2) != 0 && strncmp(str, "、", 2) != 0 && strncmp(str, "ィ", 2) != 0 && strncmp(str, "ー", 2) != 0) {
+            const std::string_view rest(str, end);
+            if (iskanji_flag && !rest.starts_with("。") && !rest.starts_with("、") && !rest.starts_with("ィ") && !rest.starts_with("ー")) {
                 roff_s = roff_p;
             }
         }

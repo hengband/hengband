@@ -1,14 +1,14 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
 angband_files = \
-	01_Outpost_Full.txt \
-	01_Outpost_Lite.txt \
-	01_Outpost_OnlyAngband.txt \
-	02_Telmora.txt \
-	03_Morivant.txt \
-	04_Angwil.txt \
-	05_Zul.txt \
-	06_Rlyeh_Obsoleted.txt
+	01_Outpost_Full.jsonc \
+	01_Outpost_Lite.jsonc \
+	01_Outpost_OnlyAngband.jsonc \
+	02_Telmora.jsonc \
+	03_Morivant.jsonc \
+	04_Angwil.jsonc \
+	05_Zul.jsonc \
+	06_Rlyeh_Obsoleted.jsonc
 
 EXTRA_DIST = \
 	$(angband_files)

@@ -1,4 +1,4 @@
-%define version 3.0.2.3
+%define version 3.0.2.4
 %define release 1
 
 Summary: hengband %{version}
@@ -143,7 +143,7 @@ exit 0
 %{_datadir}/games/%{name}/lib/edit/*.txt
 %{_datadir}/games/%{name}/lib/edit/*.jsonc
 %{_datadir}/games/%{name}/lib/edit/quests/*.jsonc
-%{_datadir}/games/%{name}/lib/edit/towns/*.txt
+%{_datadir}/games/%{name}/lib/edit/towns/*.jsonc
 %{_datadir}/games/%{name}/lib/file/*.txt
 %{_datadir}/games/%{name}/lib/file/books/*.txt
 %{_datadir}/games/%{name}/lib/help/*.hlp
@@ -154,6 +154,9 @@ exit 0
 %license lib/help/jlicense.txt THIRD-PARTY-NOTICES.txt
 
 %changelog
+* Sun Aug 2 2026 whitehara <white@vx-xv.com>
+- hengband RPM 3.0.2.4(Beta)
+
 * Tue May 26 2026 whitehara <white@vx-xv.com>
 - hengband RPM 3.0.2.3(Beta)
 

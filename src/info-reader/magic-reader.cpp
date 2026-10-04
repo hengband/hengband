@@ -7,6 +7,8 @@
 #include "system/spell-info-list.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <nlohmann/json.hpp>
+#include <utility>
 
 namespace {
 /*!
@@ -93,7 +95,8 @@ int MagicReader::read() const
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
     error_idx = class_id;
-    player_magic &magics_info = class_magics_info[class_id];
+    // Keep the previous class definition intact until the entire record is valid.
+    player_magic magics_info = class_magics_info[class_id];
 
     if (auto err = this->set_spell_type(magics_info)) {
         msg_format(_("呪文タイプ読込失敗。ID: '%d'。", "Failed to load spell type. ID: '%d'."), error_idx);
@@ -128,6 +131,7 @@ int MagicReader::read() const
         return err;
     }
 
+    class_magics_info[class_id] = std::move(magics_info);
     return PARSE_ERROR_NONE;
 }
 

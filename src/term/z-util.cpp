@@ -13,6 +13,8 @@
 #include "term/z-util.h"
 #include <cstdio>
 #include <cstdlib>
+#include <fmt/format.h>
+#include <string>
 
 std::string_view program_name = "";
 
@@ -63,8 +65,8 @@ void plog(std::string_view str)
         return;
     }
 
-    /* Just do a labeled fprintf to stderr */
-    (void)(fprintf(stderr, "%s: %s\n", program_name.empty() ? "???" : program_name.data(), str.data()));
+    /* Just do a labeled print to stderr */
+    fmt::print(stderr, "{}: {}\n", program_name.empty() ? "???" : program_name, str);
 }
 
 /*
@@ -92,7 +94,7 @@ void quit(std::string_view str)
 
     /* Extract a "special error code" */
     if ((str[0] == '-') || (str[0] == '+')) {
-        std::exit(std::atoi(str.data()));
+        std::exit(std::atoi(std::string(str).data()));
     }
 
     /* Send the string to plog() */
@@ -124,12 +126,12 @@ void core(std::string_view str)
         plog(str);
     }
 
-#if defined(_MSC_VER)
+#ifdef _WIN32
 #pragma warning(push)
 #pragma warning(disable : 6011)
 #endif
     *crash = *crash;
-#if defined(_MSC_VER)
+#ifdef _WIN32
 #pragma warning(pop)
 #endif
     quit("core() failed");

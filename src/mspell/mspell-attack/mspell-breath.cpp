@@ -20,6 +20,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -31,16 +32,18 @@
  */
 static tl::optional<std::string> spell_RF4_BREATH_special_message(const MonraceDefinition &monrace, const AttributeType GF_TYPE, std::string_view m_name)
 {
-    if (GF_TYPE == AttributeType::SOUND) {
+    switch (GF_TYPE) {
+    case AttributeType::SOUND:
         return monrace.get_message(m_name, MonsterMessageType::MESSAGE_BREATH_SOUND);
-    }
-    if (GF_TYPE == AttributeType::SHARDS) {
+    case AttributeType::SHARDS:
         return monrace.get_message(m_name, MonsterMessageType::MESSAGE_BREATH_SHARDS);
-    }
-    if (GF_TYPE == AttributeType::FORCE) {
+    case AttributeType::FORCE:
         return monrace.get_message(m_name, MonsterMessageType::MESSAGE_BREATH_FORCE);
+    case AttributeType::LITE:
+        return monrace.get_message(m_name, MonsterMessageType::MESSAGE_BREATH_LITE);
+    default:
+        return tl::nullopt;
     }
-    return tl::nullopt;
 }
 
 static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int target_type, std::string_view type_s, AttributeType GF_TYPE)
@@ -58,15 +61,15 @@ static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
     if (message) {
         msg_print(*message);
     } else {
-        if (player_ptr->effects()->blindness().is_blind()) {
+        if (player_ptr->effects()->blindness().is_active()) {
             if (mon_to_player || (mon_to_mon && known && see_either)) {
                 msg_format(_("%s^が何かのブレスを吐いた。", "%s^ breathes."), m_name.data());
             }
         } else {
             if (mon_to_player) {
-                msg_format(_("%s^が%s^のブレスを吐いた。", "%s^ breathes %s^."), m_name.data(), type_s.data());
+                msg_print(_("{}が{}のブレスを吐いた。", "{} breathes {}."), str_upcase_first(m_name), str_upcase_first(type_s));
             } else if (mon_to_mon && known && see_either) {
-                _(msg_format("%s^が%s^に%s^のブレスを吐いた。", m_name.data(), t_name.data(), type_s.data()), msg_format("%s^ breathes %s^ at %s^.", m_name.data(), type_s.data(), t_name.data()));
+                msg_print(_("{0}が{1}に{2}のブレスを吐いた。", "{0} breathes {2} at {1}."), str_upcase_first(m_name), str_upcase_first(t_name), str_upcase_first(type_s));
             }
         }
     }

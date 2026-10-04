@@ -7,6 +7,10 @@
 #include <tl/optional.hpp>
 #include <vector>
 
+namespace test {
+class MonraceMessageListTestAccess;
+}
+
 class MonsterMessage {
 public:
     MonsterMessage(int chance, bool use_name, std::string_view message);
@@ -26,6 +30,7 @@ public:
 
 private:
     std::vector<MonsterMessage> messages;
+    friend class test::MonraceMessageListTestAccess;
 };
 
 class MonraceMessage {
@@ -36,6 +41,7 @@ public:
 
 private:
     std::map<MonsterMessageType, MonsterMessageList> messages;
+    friend class test::MonraceMessageListTestAccess;
 };
 
 class MonraceMessageList {
@@ -53,6 +59,7 @@ public:
 
 private:
     MonraceMessageList() = default;
+    friend class test::MonraceMessageListTestAccess;
     static MonraceMessageList instance;
     tl::optional<const MonsterMessage &> get_message_obj(const int monrace_id, const MonsterMessageType message_type) const;
 

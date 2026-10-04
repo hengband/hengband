@@ -113,7 +113,7 @@ bool pattern_effect(PlayerType *player_ptr)
         return false;
     }
 
-    const auto is_cut = player_ptr->effects()->cut().is_cut();
+    const auto is_cut = player_ptr->effects()->cut().is_active();
     if ((PlayerRace(player_ptr).equals(PlayerRaceType::AMBERITE)) && is_cut && one_in_(10)) {
         wreck_the_pattern(player_ptr);
     }
@@ -185,9 +185,9 @@ bool pattern_seq(PlayerType *player_ptr, const Pos2D &pos)
     auto pattern_type_new = is_pattern_tile_new ? terrain_new.pattern_tile_type : PatternTileType::NOT_PATTERN;
     if (pattern_type_new == PatternTileType::START) {
         const auto effects = player_ptr->effects();
-        const auto is_stunned = effects->stun().is_stunned();
-        const auto is_confused = effects->confusion().is_confused();
-        const auto is_hallucinated = effects->hallucination().is_hallucinated();
+        const auto is_stunned = effects->stun().is_active();
+        const auto is_confused = effects->confusion().is_active();
+        const auto is_hallucinated = effects->hallucination().is_active();
         if (is_pattern_tile_cur || is_confused || is_stunned || is_hallucinated) {
             return true;
         }

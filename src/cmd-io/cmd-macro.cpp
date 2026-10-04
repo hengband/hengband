@@ -21,58 +21,43 @@
 /*!
  * @brief マクロ情報をprefファイルに保存する
  * @param filename ファイル名
+ * @return 書き出せた場合はtrue、ファイルを開けなかった場合はfalse
  */
-static void macro_dump(FILE **fpp, std::string_view filename)
+static bool macro_dump(std::string_view filename)
 {
+    FILE *auto_dump_stream;
     constexpr auto mark = "Macro Dump";
     const auto path = path_build(ANGBAND_DIR_USER, filename);
-    if (!open_auto_dump(fpp, path, mark)) {
-        return;
+    if (!open_auto_dump(&auto_dump_stream, path, mark)) {
+        return false;
     }
 
-    auto_dump_printf(*fpp, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
+    auto_dump_printf(auto_dump_stream, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
 
     for (auto i = 0; i < active_macros; i++) {
         char buf[1024]{};
         ascii_to_text(buf, macro_actions[i], sizeof(buf));
-        auto_dump_printf(*fpp, "A:%s\n", buf);
+        auto_dump_printf(auto_dump_stream, "A:%s\n", buf);
         ascii_to_text(buf, macro_patterns[i], sizeof(buf));
-        auto_dump_printf(*fpp, "P:%s\n", buf);
-        auto_dump_printf(*fpp, "\n");
+        auto_dump_printf(auto_dump_stream, "P:%s\n", buf);
+        auto_dump_printf(auto_dump_stream, "\n");
     }
 
-    close_auto_dump(fpp, mark);
+    close_auto_dump(&auto_dump_stream, mark);
+    return true;
 }
 
 /*!
- * @brief マクロのトリガーキーを取得する /
- * Hack -- ask for a "trigger" (see below)
- * @param buf キー表記を保管するバッファ
- * @details
- * <pre>
- * Note the complex use of the "inkey()" function from "util.c".
- *
- * Note that both "flush()" calls are extremely important.
- * </pre>
+ * @brief マクロのトリガーキーを入力させ、キー表記をターミナルに表示する
+ * @return 入力されたトリガーキー
  */
-static void do_cmd_macro_aux(char *buf)
+static std::string do_cmd_macro_aux()
 {
-    flush();
-    inkey_base = true;
-    char i = inkey();
-    int n = 0;
-    while (i) {
-        buf[n++] = i;
-        inkey_base = true;
-        inkey_scan = true;
-        i = inkey();
-    }
-
-    buf[n] = '\0';
-    flush();
+    const auto trigger = inkey_macro_trigger();
     char tmp[1024];
-    ascii_to_text(tmp, buf, sizeof(tmp));
+    ascii_to_text(tmp, trigger, sizeof(tmp));
     term_addstr(-1, TERM_WHITE, tmp);
+    return trigger;
 }
 
 /*!
@@ -99,9 +84,9 @@ static void do_cmd_macro_aux_keymap(char *buf)
 /*!
  * @brief キーマップをprefファイルにダンプする
  * @param filename ファイルネーム
- * @return エラーコード
+ * @return 書き出せた場合はtrue、ファイルを開けなかった場合はfalse
  */
-static errr keymap_dump(std::string_view filename)
+static bool keymap_dump(std::string_view filename)
 {
     FILE *auto_dump_stream;
     char key[1024];
@@ -109,7 +94,7 @@ static errr keymap_dump(std::string_view filename)
     const auto path = path_build(ANGBAND_DIR_USER, filename);
     constexpr auto mark = "Keymap Dump";
     if (!open_auto_dump(&auto_dump_stream, path, mark)) {
-        return -1;
+        return false;
     }
 
     auto_dump_printf(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
@@ -128,7 +113,7 @@ static errr keymap_dump(std::string_view filename)
     }
 
     close_auto_dump(&auto_dump_stream, mark);
-    return 0;
+    return true;
 }
 
 /*!
@@ -145,7 +130,6 @@ void do_cmd_macros(PlayerType *player_ptr)
 {
     char buf[1024];
     static char macro_buf[1024];
-    FILE *auto_dump_stream;
     const auto mode = rogue_like_commands ? KeymapMode::ROGUE : KeymapMode::ORIGINAL;
     screen_save();
     term_clear();
@@ -204,16 +188,19 @@ void do_cmd_macros(PlayerType *player_ptr)
                 break;
             }
 
-            macro_dump(&auto_dump_stream, *ask_result);
-            msg_print(_("マクロを追加しました。", "Appended macros."));
+            // 書き出せなかった場合は open_auto_dump() がその旨を表示するので、成功したときだけ知らせる
+            if (macro_dump(*ask_result)) {
+                msg_print(_("マクロを追加しました。", "Appended macros."));
+            }
+
             break;
         }
         case '3': {
             prt(_("コマンド: マクロの確認", "Command: Query a macro"), 16, 0);
             prt(_("マクロ行動が(もしあれば)下に表示されます:", "Current action (if any) shown below:"), 20, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
-            do_cmd_macro_aux(buf);
-            const auto k = macro_find_exact(buf);
+            const auto trigger = do_cmd_macro_aux();
+            const auto k = macro_find_exact(trigger.data());
             if (k < 0) {
                 msg_print(_("そのキーにはマクロは定義されていません。", "Found no macro."));
                 break;
@@ -231,7 +218,7 @@ void do_cmd_macros(PlayerType *player_ptr)
         case '4': {
             prt(_("コマンド: マクロの作成", "Command: Create a macro"), 16, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
-            do_cmd_macro_aux(buf);
+            const auto trigger = do_cmd_macro_aux();
             c_prt(TERM_L_RED,
                 _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
                     "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."),
@@ -247,17 +234,18 @@ void do_cmd_macros(PlayerType *player_ptr)
             }
 
             text_to_ascii(macro_buf, *ask_result, sizeof(macro_buf));
-            macro_add(buf, macro_buf);
+            macro_add(trigger.data(), macro_buf);
             msg_print(_("マクロを追加しました。", "Added a macro."));
             break;
         }
-        case '5':
+        case '5': {
             prt(_("コマンド: マクロの削除", "Command: Remove a macro"), 16, 0);
             prt(_("トリガーキー: ", "Trigger: "), 18, 0);
-            do_cmd_macro_aux(buf);
-            macro_add(buf, buf);
+            const auto trigger = do_cmd_macro_aux();
+            macro_add(trigger.data(), trigger.data());
             msg_print(_("マクロを削除しました。", "Removed a macro."));
             break;
+        }
         case '6': {
             prt(_("コマンド: キー配置をファイルに追加する", "Command: Append keymaps to a file"), 16, 0);
             prt(_("ファイル: ", "File: "), 18, 0);
@@ -266,8 +254,11 @@ void do_cmd_macros(PlayerType *player_ptr)
                 break;
             }
 
-            (void)keymap_dump(*ask_result);
-            msg_print(_("キー配置を追加しました。", "Appended keymaps."));
+            // 書き出せなかった場合は open_auto_dump() がその旨を表示するので、成功したときだけ知らせる
+            if (keymap_dump(*ask_result)) {
+                msg_print(_("キー配置を追加しました。", "Appended keymaps."));
+            }
+
             break;
         }
         case '7': {

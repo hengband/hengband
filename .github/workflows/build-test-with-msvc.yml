@@ -1,4 +1,4 @@
-name: Build test with MSVC
+name: Build and test with MSVC
 on:
   workflow_call:
 
@@ -11,6 +11,12 @@ permissions:
 jobs:
   build:
     runs-on: windows-2025-vs2026
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration:
+          - Debug
+          - English-Release
 
     steps:
       - uses: actions/checkout@v7
@@ -21,13 +27,12 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v3
 
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v4
-
-      - name: Restore Nuget Packages
-        run: |
-          NuGet restore .\VisualStudio\Hengband.sln
-
       - name: Run build test
         run: |
-          MSBuild -warnAsError .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=Debug
+          MSBuild -warnAsError .\VisualStudio\Hengband.sln /t:Rebuild /p:Configuration=${{ matrix.configuration }} /p:Platform=Win32
+
+      # 上のビルドで HengbandTest プロジェクトも生成される。
+      # doctest はテストが失敗すると非ゼロの終了コードを返す
+      - name: Run unit tests
+        run: |
+          .\VisualStudio\Hengband\${{ matrix.configuration }}\hengband-test.exe

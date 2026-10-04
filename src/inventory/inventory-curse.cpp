@@ -163,7 +163,7 @@ static void choise_cursed_item(CurseTraitType flag, ItemEntity *o_ptr, int *choi
  */
 ItemEntity *choose_cursed_obj_name(PlayerType *player_ptr, CurseTraitType flag)
 {
-    int choices[INVEN_TOTAL - INVEN_MAIN_HAND];
+    int choices[INVEN_TOTAL - INVEN_MAIN_HAND]{};
     int number = 0;
     if (player_ptr->cursed.has_not(flag)) {
         return nullptr;

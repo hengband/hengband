@@ -8,6 +8,7 @@
 #include "locale/language-switcher.h"
 #include "main-win/main-win-define.h"
 #include "system/angband-version.h"
+#include <cstdio>
 #include <string>
 
 /*!
@@ -16,16 +17,52 @@
  * 特定の名前のミューテックスオブジェクトの所有権取得を試みる。
  * 取得できない場合は他に変愚蛮怒のプロセスが起動しているとみなす。
  * 取得したミューテックスのハンドルは明示的な解放は行わず、プロセス終了時にOSが解放する。
- * バリアント名の先頭から63文字が一致していたらそれらを同時起動できない (が、そのようなことは起きない想定)。
  * @return 起動済の変愚蛮怒プロセス有無
  */
 bool is_already_running(void)
 {
-    constexpr auto max_mutex_length = 64;
-    wchar_t wtext[max_mutex_length]{};
-    mbstowcs(wtext, VARIANT_NAME.data(), max_mutex_length - 1);
-    [[maybe_unused]] HANDLE hMutex = CreateMutexW(NULL, TRUE, wtext);
+    [[maybe_unused]] HANDLE hMutex = CreateMutexW(NULL, TRUE, to_wchar(VARIANT_NAME).wc_str());
     return GetLastError() == ERROR_ALREADY_EXISTS;
+}
+
+/*!
+ * @brief (Windows固有)標準エラー出力を確保する
+ * @details
+ * Windowsアプリケーションは既定でコンソールを持たないため、
+ * 診断メッセージを観測できるようコンソールを割り当てて標準エラー出力を接続する。
+ * 親プロセスのコンソールがあればそちらを優先して使う。
+ * 既に接続済みの場合に呼んでも問題は無い。
+ *
+ * ただし「Hengband.exe --control-port=9000 2>err.log」のように標準エラー出力の
+ * 行き先が明示的に指定されている場合、コンソールで置き換えると診断がログに残らなくなるだけでなく、
+ * タスクスケジューラ等コンソールを持たない親から起動した際に不要なコンソールウィンドウが
+ * 生成されてしまう。自動化からログを取る運用を妨げないよう、既に有効なハンドルがあれば
+ * AttachConsole()/AllocConsole()自体を呼ばずに抜ける。
+ * この判定はAttachConsole()/AllocConsole()より前に行う必要がある。
+ * これらのAPIはコンソールを持たないプロセスに対して標準ハンドル自体を新規に有効化してしまうため、
+ * 呼び出し後に判定すると常に「既に接続済み」と誤認してしまう。
+ *
+ * この早期returnにより、--debug-console指定時に標準エラー出力が既にリダイレクトされていると
+ * create_console()が期待するコンソールが確保されず、標準出力がCONOUT$へ繋がらない場合がある。
+ * --debug-consoleは対話デバッグ用途で通常はリダイレクトと併用しないため許容している。
+ */
+void attach_console()
+{
+    const auto handle = ::GetStdHandle(STD_ERROR_HANDLE);
+    const auto has_redirected_stderr = (handle != nullptr) && (handle != INVALID_HANDLE_VALUE);
+    if (has_redirected_stderr) {
+        return;
+    }
+
+    if (!::AttachConsole(ATTACH_PARENT_PROCESS)) {
+        ::AllocConsole();
+    }
+
+    FILE *stream = nullptr;
+    if (freopen_s(&stream, "CONOUT$", "w", stderr) != 0) {
+        // 標準エラー出力が使えず診断メッセージが全て失われるため、デバッガから観測できる経路へ通知する
+        ::OutputDebugStringA("hengband: failed to attach stderr\n");
+    }
 }
 
 /*!

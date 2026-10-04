@@ -4,9 +4,13 @@ AUTOMAKE_OPTIONS = foreign
 
 visual_studio_files = \
 	VisualStudio/Hengband.sln \
+	VisualStudio/Hengband/Hengband.Common.props \
+	VisualStudio/Hengband/Hengband.Configuration.props \
 	VisualStudio/Hengband/Hengband.vcxproj \
-	VisualStudio/Hengband/Hengband.vcxproj.filters \
-	VisualStudio/Hengband/packages.config
+	VisualStudio/Hengband/HengbandCore.vcxproj \
+	VisualStudio/Hengband/HengbandCore.vcxproj.filters \
+	VisualStudio/Hengband/HengbandTest.vcxproj \
+	VisualStudio/Hengband/HengbandTest.vcxproj.filters
 
 visual_studio_libcurl_files = \
 	VisualStudio/Hengband/libcurl/include/curl/curl.h \
@@ -28,15 +32,24 @@ schema_files = \
 	schema/ArtifactDefinitions.schema.json \
 	schema/BaseitemDefinitions.schema.json \
 	schema/ClassMagicDefinitions.schema.json \
+	schema/ClassSkillDefinitions.schema.json \
 	schema/DungeonDefinitions.schema.json \
+	schema/EgoDefinitions.schema.json \
 	schema/MonraceDefinitions.schema.json \
 	schema/MonsterMessages.schema.json \
 	schema/Quest.schema.json \
 	schema/QuestPreferences.schema.json \
 	schema/SpellDefinitions.schema.json \
-	schema/TerrainDefinitions.schema.json
+	schema/TerrainDefinitions.schema.json \
+	schema/TownDefinitionList.schema.json \
+	schema/TownMap.schema.json \
+	schema/TownPreferences.schema.json \
+	schema/VaultDefinitions.schema.json \
+	schema/WildernessDefinition.schema.json
 
 EXTRA_DIST = \
+	lib/edit/ClassSkillDefinitions.md \
+	lib/edit/VaultDefinitions.md \
 	autopick.txt \
 	autopick_eng.txt \
 	bootstrap \
@@ -45,6 +58,10 @@ EXTRA_DIST = \
 	readme-eng.md \
 	THIRD-PARTY-NOTICES.txt \
 	hengband.spec \
+	tools/bot/hbctl.py \
+	tools/bot/README.md \
+	tools/release/Build-Windows-Release-Package.ps1 \
+	tools/verify-class-skill-migration.py \
 	$(visual_studio_files) \
 	$(visual_studio_libcurl_files) \
 	$(schema_files)

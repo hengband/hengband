@@ -64,7 +64,7 @@ std::pair<bool, std::shared_ptr<ItemEntity>> switch_activation(PlayerType *playe
     case RandomArtActType::BA_COLD_2:
         return { activate_ball_cold_2(player_ptr), nullptr };
     case RandomArtActType::BA_COLD_3:
-        return { activate_ball_cold_2(player_ptr), nullptr };
+        return { activate_ball_cold_3(player_ptr), nullptr };
     case RandomArtActType::BA_FIRE_1:
         return { activate_ball_fire_1(player_ptr), nullptr };
     case RandomArtActType::BA_FIRE_2:
@@ -221,11 +221,11 @@ std::pair<bool, std::shared_ptr<ItemEntity>> switch_activation(PlayerType *playe
         (void)cure_critical_wounds(player_ptr, 1000);
         return { true, nullptr };
     case RandomArtActType::CURING:
-        msg_format(_("%sの優しさに癒される...", "the %s cures you affectionately ..."), name.data());
+        msg_print(_("{}の優しさに癒される...", "the {} cures you affectionately ..."), name);
         true_healing(player_ptr, 0);
         return { true, nullptr };
     case RandomArtActType::CURE_MANA_FULL:
-        msg_format(_("%sが青白く光った．．．", "The %s glows palely..."), name.data());
+        msg_print(_("{}が青白く光った．．．", "The {} glows palely..."), name);
         restore_mana(player_ptr, true);
         return { true, nullptr };
     case RandomArtActType::ESP:
@@ -235,7 +235,7 @@ std::pair<bool, std::shared_ptr<ItemEntity>> switch_activation(PlayerType *playe
         (void)berserk(player_ptr, randint1(25) + 25);
         return { true, nullptr };
     case RandomArtActType::PROT_EVIL:
-        msg_format(_("%sから鋭い音が流れ出た...", "The %s lets out a shrill wail..."), name.data());
+        msg_print(_("{}から鋭い音が流れ出た...", "The {} lets out a shrill wail..."), name);
         BodyImprovement(player_ptr).set_protection(randint1(25) + player_ptr->lev * 3);
         return { true, nullptr };
     case RandomArtActType::RESIST_ALL:
@@ -287,6 +287,8 @@ std::pair<bool, std::shared_ptr<ItemEntity>> switch_activation(PlayerType *playe
         return { activate_resistance_pois(player_ptr, name), nullptr };
     case RandomArtActType::LIGHT:
         return { activate_light(player_ptr, name), nullptr };
+    case RandomArtActType::DARKNESS:
+        return { activate_darkness(player_ptr, name), nullptr };
     case RandomArtActType::MAP_LIGHT:
         return { activate_map_light(player_ptr), nullptr };
     case RandomArtActType::DETECT_ALL:
@@ -331,7 +333,7 @@ std::pair<bool, std::shared_ptr<ItemEntity>> switch_activation(PlayerType *playe
     case RandomArtActType::DISP_CURSE_XTRA:
         return { activate_dispel_curse(player_ptr, name), nullptr };
     case RandomArtActType::BRAND_FIRE_BOLTS:
-        msg_format(_("%sが深紅に輝いた...", "Your %s glows deep red..."), name.data());
+        msg_print(_("{}が深紅に輝いた...", "Your {} glows deep red..."), name);
         brand_bolts(player_ptr);
         return { true, nullptr };
     case RandomArtActType::RECHARGE_XTRA:
@@ -363,7 +365,7 @@ std::pair<bool, std::shared_ptr<ItemEntity>> switch_activation(PlayerType *playe
     case RandomArtActType::TELEPORT_LEVEL:
         return { activate_teleport_level(player_ptr), nullptr };
     case RandomArtActType::STRAIN_HASTE:
-        msg_format(_("%sはあなたの体力を奪った...", "The %s drains your vitality..."), name.data());
+        msg_print(_("{}はあなたの体力を奪った...", "The {} drains your vitality..."), name);
         take_hit(player_ptr, DAMAGE_LOSELIFE, Dice::roll(3, 8), _("加速した疲労", "the strain of haste"));
         (void)mod_acceleration(player_ptr, 25 + randint1(25), false);
         return { true, nullptr };
