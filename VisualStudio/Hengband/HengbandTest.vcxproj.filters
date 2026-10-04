@@ -73,6 +73,9 @@
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>

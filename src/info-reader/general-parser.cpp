@@ -184,16 +184,16 @@ parse_error_type parse_line_feature(const FloorType &floor, std::string_view buf
  */
 parse_error_type parse_line_building(std::string_view buf)
 {
-#ifdef JP
-    if (buf[2] == '$') {
-        return PARSE_ERROR_NONE;
-    }
     auto s = buf.substr(2);
-#else
-    if (buf[2] != '$') {
+#ifdef JP
+    if (s.starts_with('$')) {
         return PARSE_ERROR_NONE;
     }
-    auto s = buf.substr(3);
+#else
+    if (!s.starts_with('$')) {
+        return PARSE_ERROR_NONE;
+    }
+    s.remove_prefix(1);
 #endif
     const auto index = std::stoi(std::string(s));
     const auto colon_pos = s.find(':');
@@ -204,9 +204,12 @@ parse_error_type parse_line_building(std::string_view buf)
     if (s.empty()) {
         return PARSE_ERROR_GENERIC;
     }
+
+    // 指示子の後の「:」より後ろ。指示子だけで終わっている場合は空にする
+    const auto args = s.substr(std::min<size_t>(s.length(), 2));
     switch (s[0]) {
     case 'N': {
-        const auto tokens = tokenize(s.substr(2), 3);
+        const auto tokens = tokenize(args, 3);
         if (tokens.size() == 3) {
             auto &building = buildings[index];
             angband_strcpy(building.name, tokens[0], sizeof(building.name));
@@ -218,7 +221,7 @@ parse_error_type parse_line_building(std::string_view buf)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
     case 'A': {
-        const auto tokens = tokenize(s.substr(2), 7);
+        const auto tokens = tokenize(args, 7);
         if (tokens.size() >= 7) {
             const auto action_index = std::stoi(tokens[0]);
             auto &building = buildings[index];
@@ -234,7 +237,7 @@ parse_error_type parse_line_building(std::string_view buf)
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
     case 'C': {
-        const auto tokens = tokenize(s.substr(2), PLAYER_CLASS_TYPE_MAX);
+        const auto tokens = tokenize(args, PLAYER_CLASS_TYPE_MAX);
         for (size_t i = 0; i < PLAYER_CLASS_TYPE_MAX; i++) {
             buildings[index].member_class[i] = (i < tokens.size()) ? std::stoi(tokens[i]) : 1;
         }
@@ -242,7 +245,7 @@ parse_error_type parse_line_building(std::string_view buf)
         break;
     }
     case 'R': {
-        const auto tokens = tokenize(s.substr(2), MAX_RACES);
+        const auto tokens = tokenize(args, MAX_RACES);
         for (size_t i = 0; i < MAX_RACES; i++) {
             buildings[index].member_race[i] = (i < tokens.size()) ? std::stoi(tokens[i]) : 1;
         }
@@ -250,7 +253,7 @@ parse_error_type parse_line_building(std::string_view buf)
         break;
     }
     case 'M': {
-        const auto tokens = tokenize(s.substr(2), MAX_MAGIC);
+        const auto tokens = tokenize(args, MAX_MAGIC);
         for (size_t i = 0; i < MAX_MAGIC; i++) {
             buildings[index].member_realm[i + 1] = ((i < tokens.size()) ? static_cast<int16_t>(std::stoi(tokens[i])) : 1);
         }

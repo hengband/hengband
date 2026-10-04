@@ -1503,6 +1503,7 @@ hengband_test_SOURCES = \
 	test/game-option/test-runtime-arguments.cpp \
 	test/info-reader/test-activation-reader.cpp \
 	test/info-reader/test-ego-reader.cpp \
+	test/info-reader/test-general-parser.cpp \
 	test/info-reader/test-wilderness-reader.cpp \
 	test/info-reader/test-info-reader-util.cpp \
 	test/info-reader/test-json-reader-util.cpp \

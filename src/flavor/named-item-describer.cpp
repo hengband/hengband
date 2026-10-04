@@ -139,7 +139,7 @@ static tl::optional<std::string> describe_random_artifact_name_after_body_ja(con
 
     // "'foobar'" の foobar の部分を取り出し『foobar』と表記する
     // (英語版のセーブファイルのランダムアーティファクトを考慮)
-    return format("『%s』", name_sv.substr(1, name_sv.length() - 2).data());
+    return fmt::format("『{}』", name_sv.substr(1, name_sv.length() - 2));
 }
 
 static std::string describe_fake_artifact_name_after_body_ja(const ItemEntity &item)
@@ -210,20 +210,15 @@ static std::string describe_unique_name_after_body_ja(const ItemEntity &item, co
 
 static std::string describe_vowel(const ItemEntity &item, std::string_view basename, std::string_view modstr)
 {
-    bool vowel;
-    switch (basename[0]) {
-    case '#':
-        vowel = is_a_vowel(modstr[0]);
-        break;
-    case '%':
-        vowel = is_a_vowel(item.get_baseitem().name[0]);
-        break;
-    default:
-        vowel = is_a_vowel(basename[0]);
-        break;
+    // 名前の先頭が置き換えられる場合は、置き換える文字列の先頭で決める
+    std::string_view head = basename;
+    if (basename.starts_with('#')) {
+        head = modstr;
+    } else if (basename.starts_with('%')) {
+        head = item.get_baseitem().name;
     }
 
-    return (vowel) ? "an " : "a ";
+    return (!head.empty() && is_a_vowel(head.front())) ? "an " : "a ";
 }
 
 static std::string describe_prefix_en(const ItemEntity &item)
@@ -330,10 +325,10 @@ static std::string describe_unique_name_after_body_en(const ItemEntity &item, co
 static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const describe_option_type &opt, std::string_view basename, std::string_view modstr)
 {
 #ifndef JP
-    auto pluralize = [&opt, &item](auto &ss, auto it) {
+    // preceding は '~' より前の部分。'~' が先頭にある場合は空になる
+    auto pluralize = [&opt, &item](auto &ss, std::string_view preceding) {
         if (none_bits(opt.mode, OD_NO_PLURAL) && (item.number != 1)) {
-            char k = *std::next(it, -1);
-            if ((k == 's') || (k == 'h')) {
+            if (preceding.ends_with('s') || preceding.ends_with('h')) {
                 ss << 'e';
             }
             ss << 's';
@@ -355,7 +350,7 @@ static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const 
 #else
             for (auto ib = baseitem.name.begin(), ib_end = baseitem.name.end(); ib != ib_end; ++ib) {
                 if (*ib == '~') {
-                    pluralize(ss, ib);
+                    pluralize(ss, std::string_view(baseitem.name.begin(), ib));
                 } else {
                     ss << *ib;
                 }
@@ -366,14 +361,15 @@ static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const 
 
 #ifndef JP
         case '~':
-            pluralize(ss, it);
+            pluralize(ss, std::string_view(basename.begin(), it));
             break;
 #endif
 
         default:
             ss << *it;
 #ifdef JP
-            if (iskanji(*it)) {
+            // 文字列が全角文字の前半バイトで終わっている場合は、後半バイトが無いので全角文字として扱わない
+            if (iskanji(*it) && (std::next(it) != it_end)) {
                 ++it;
                 ss << *it;
             }
@@ -399,17 +395,18 @@ std::string describe_named_item(PlayerType *player_ptr, const ItemEntity &item, 
         basename = std::move(name);
     }
     std::string_view basename_sv = basename;
+    const auto has_article = basename_sv.starts_with('&');
+    if (has_article) {
+        basename_sv.remove_prefix(std::min<size_t>(basename_sv.length(), 2));
+    }
+
     std::stringstream ss;
 
 #ifdef JP
-    if (basename_sv[0] == '&') {
-        basename_sv.remove_prefix(2);
-    }
     ss << describe_item_count_ja(item, opt)
        << describe_artifact_mark_ja(item, opt);
 #else
-    if (basename_sv[0] == '&') {
-        basename_sv.remove_prefix(2);
+    if (has_article) {
         ss << describe_item_count_or_article_en(item, opt, basename_sv, modstr);
     } else {
         ss << describe_item_count_or_definite_article_en(item, opt);
