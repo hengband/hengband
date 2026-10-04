@@ -14,6 +14,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <fmt/format.h>
+#include <string>
 
 std::string_view program_name = "";
 
@@ -93,7 +94,7 @@ void quit(std::string_view str)
 
     /* Extract a "special error code" */
     if ((str[0] == '-') || (str[0] == '+')) {
-        std::exit(std::atoi(str.data()));
+        std::exit(std::atoi(std::string(str).data()));
     }
 
     /* Send the string to plog() */

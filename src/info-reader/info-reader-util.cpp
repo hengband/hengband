@@ -3,6 +3,7 @@
 #include "object-enchant/activation-info-table.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
+#include <string>
 
 /* Help give useful error messages */
 int error_idx; /*!< データ読み込み/初期化時に汎用的にエラーコードを保存するグローバル変数 */
@@ -22,7 +23,7 @@ RandomArtActType grab_one_activation_flag(std::string_view what)
         }
     }
 
-    const auto j = std::stoi(what.data());
+    const auto j = std::stoi(std::string(what));
     if ((j > 0) && (j < enum2i(RandomArtActType::MAX))) {
         for (const auto &activation : activation_info) {
             if (j == enum2i(activation.index)) {
