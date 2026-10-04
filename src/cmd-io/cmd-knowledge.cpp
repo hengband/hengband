@@ -90,11 +90,17 @@ void do_cmd_knowledge(PlayerType *player_ptr)
             break;
         case '4': /* Uniques */
             output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::UNIQUES_ALIVE);
-            do_cmd_knowledge_uniques(player_ptr, true);
+            if (const auto error_message = do_cmd_knowledge_uniques(player_ptr, true); error_message) {
+                msg_print(*error_message);
+            }
+
             break;
         case '5': /* Uniques */
             output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::UNIQUES_DEAD);
-            do_cmd_knowledge_uniques(player_ptr, false);
+            if (const auto error_message = do_cmd_knowledge_uniques(player_ptr, false); error_message) {
+                msg_print(*error_message);
+            }
+
             break;
         case '6': /* Monsters */
             output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::MONSTERS);
@@ -164,7 +170,10 @@ void do_cmd_knowledge(PlayerType *player_ptr)
             break;
         case 'k': /* Autopick */
             output_bot_json_knowledge_snapshot(player_ptr, BotKnowledgeCategory::AUTOPICK);
-            do_cmd_knowledge_autopick(player_ptr);
+            if (const auto error_message = do_cmd_knowledge_autopick(player_ptr); error_message) {
+                msg_print(*error_message);
+            }
+
             break;
         default: /* Unknown option */
             bell();

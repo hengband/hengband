@@ -1,8 +1,13 @@
 #include "io-dump/dump-remover.h"
 #include "io-dump/dump-util.h"
 #include "io/read-pref-file.h"
+#include "io/temp-file.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
+#include <cstdio>
+#include <fmt/format.h>
+#include <fstream>
+#include <vector>
 
 /*!
  * @brief prefファイルを選択して処理する /
@@ -11,90 +16,110 @@
  * Remove old lines automatically generated before.
  * @param orig_file 消去を行うファイル名
  * @param auto_dump_mark 出力するヘッダマーク
+ * @return エラー文字列。成功時はtl::nullopt
  */
-void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view auto_dump_mark)
+tl::optional<std::string> remove_auto_dump(const std::filesystem::path &orig_file, std::string_view auto_dump_mark)
 {
-    bool between_mark = false;
-    bool changed = false;
-    int line_num = 0;
-    long header_location = 0;
-
     const auto header_mark_str = format(auto_dump_header, auto_dump_mark.data());
     const auto footer_mark_str = format(auto_dump_footer, auto_dump_mark.data());
-    size_t mark_len = footer_mark_str.length();
-
-    FILE *orig_fff;
-    orig_fff = angband_fopen(orig_file, FileOpenMode::READ);
-    if (!orig_fff) {
-        return;
+    const auto mark_len = footer_mark_str.length();
+    std::ifstream ifs(orig_file);
+    if (!ifs) {
+        // 初回オープンだとファイルがあるとは限らないので、エラーにはしない.
+        return tl::nullopt;
     }
 
-    FILE *tmp_fff = nullptr;
-    char tmp_file[FILE_NAME_SIZE];
-    if (!open_temporary_file(&tmp_fff, tmp_file)) {
-        angband_fclose(orig_fff);
-        return;
+    std::vector<std::string> lines;
+    std::string line_ifs;
+    while (std::getline(ifs, line_ifs)) {
+        lines.push_back(line_ifs);
     }
 
-    while (true) {
-        const auto buf = angband_fgets(orig_fff);
-        if (!buf) {
-            if (between_mark) {
-                fseek(orig_fff, header_location, SEEK_SET);
-                between_mark = false;
-                continue;
-            } else {
-                break;
-            }
-        }
+    if (ifs.bad() || (ifs.fail() && !ifs.eof())) {
+        constexpr auto fmt = _("ファイルの読み込みに失敗しました: {}", "Failed to read file: {}");
+        return fmt::format(fmt, orig_file.string());
+    }
 
+    ifs.close();
+    std::vector<std::string> output_lines;
+    output_lines.reserve(lines.size());
+
+    auto between_mark = false;
+    auto changed = false;
+    auto line_num = 0;
+    size_t header_location = 0;
+    size_t i = 0;
+    while (i < lines.size()) {
+        const auto &line = lines[i];
         if (!between_mark) {
-            if (!strcmp(buf->data(), header_mark_str.data())) {
-                header_location = ftell(orig_fff);
+            if (line == header_mark_str) {
+                header_location = i + 1;
                 line_num = 0;
                 between_mark = true;
                 changed = true;
             } else {
-                fprintf(tmp_fff, "%s\n", buf->data());
+                output_lines.push_back(line);
             }
 
+            ++i;
             continue;
         }
 
-        if (!strncmp(buf->data(), footer_mark_str.data(), mark_len)) {
-            int tmp;
-            if (!sscanf(buf->data() + mark_len, " (%d)", &tmp) || tmp != line_num) {
-                fseek(orig_fff, header_location, SEEK_SET);
+        if (line.compare(0, mark_len, footer_mark_str) == 0) {
+            int parsed = 0;
+            const auto parsed_ok = std::sscanf(line.data() + mark_len, " (%d)", &parsed) == 1;
+            if (!parsed_ok || parsed != line_num) {
+                i = header_location;
+            } else {
+                ++i;
             }
 
             between_mark = false;
             continue;
         }
 
-        line_num++;
+        ++line_num;
+        ++i;
     }
 
-    angband_fclose(orig_fff);
-    angband_fclose(tmp_fff);
-
-    if (changed) {
-        // 元のファイルは WRITE で開いた時点で切り詰められるため、一時ファイルを開けた場合だけ開く。
-        // 読み取り専用のファイル等で開けなかった場合は書き戻さない (元のファイルは変更されない)
-        tmp_fff = angband_fopen(tmp_file, FileOpenMode::READ);
-        orig_fff = tmp_fff ? angband_fopen(orig_file, FileOpenMode::WRITE) : nullptr;
-        if (orig_fff) {
-            while (true) {
-                const auto buf = angband_fgets(tmp_fff);
-                if (!buf) {
-                    break;
-                }
-                fprintf(orig_fff, "%s\n", buf->data());
-            }
-        }
-
-        angband_fclose(orig_fff);
-        angband_fclose(tmp_fff);
+    if (between_mark) {
+        output_lines.insert(output_lines.end(), lines.begin() + static_cast<std::ptrdiff_t>(header_location), lines.end());
     }
 
-    fd_kill(tmp_file);
+    if (!changed) {
+        return tl::nullopt;
+    }
+
+    TempFile tf;
+    if (const auto &error_message = tf.get_error_message(); error_message) {
+        return *error_message;
+    }
+
+    tf.write_lines(output_lines);
+    if (const auto &error_message = tf.get_error_message(); error_message) {
+        return *error_message;
+    }
+
+    const auto tmp_lines = tf.read_all();
+    if (const auto &error_message = tf.get_error_message(); error_message) {
+        return *error_message;
+    }
+
+    std::ofstream ofs(orig_file, std::ios::trunc);
+    if (!ofs) {
+        constexpr auto fmt = _("ファイルの書き込みに失敗しました: {}", "Failed to write file: {}");
+        return fmt::format(fmt, orig_file.string());
+    }
+
+    for (const auto &out_line : tmp_lines) {
+        ofs << out_line << '\n';
+    }
+
+    ofs.flush();
+    if (!ofs) {
+        constexpr auto fmt = _("ファイルの書き込みに失敗しました: {}", "Failed to write file: {}");
+        return fmt::format(fmt, orig_file.string());
+    }
+
+    return tl::nullopt;
 }
