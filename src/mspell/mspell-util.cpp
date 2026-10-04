@@ -9,14 +9,14 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-messages.h"
 
-mspell_cast_msg_blind::mspell_cast_msg_blind(concptr blind, concptr to_player, concptr to_mons)
+mspell_cast_msg_blind::mspell_cast_msg_blind(std::string_view blind, std::string_view to_player, std::string_view to_mons)
     : blind(blind)
     , to_player(to_player)
     , to_mons(to_mons)
 {
 }
 
-mspell_cast_msg_simple::mspell_cast_msg_simple(concptr to_player, concptr to_mons)
+mspell_cast_msg_simple::mspell_cast_msg_simple(std::string_view to_player, std::string_view to_mons)
     : to_player(to_player)
     , to_mons(to_mons)
 {

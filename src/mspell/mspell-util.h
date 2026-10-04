@@ -1,6 +1,8 @@
 #pragma once
 
 #include "system/angband.h"
+#include <string>
+#include <string_view>
 
 /* Spell Type flag */
 #define MONSTER_TO_PLAYER 0x01
@@ -31,18 +33,18 @@ struct mspell_cast_msg {
 };
 
 struct mspell_cast_msg_blind {
-    mspell_cast_msg_blind(concptr blind, concptr to_player, concptr to_mons);
+    mspell_cast_msg_blind(std::string_view blind, std::string_view to_player, std::string_view to_mons);
     mspell_cast_msg_blind() = default;
-    concptr blind; /*!< 盲目時*/
-    concptr to_player; /*!< 対プレイヤーかつ非盲目時*/
-    concptr to_mons; /*!< 対モンスター*/
+    std::string_view blind; /*!< 盲目時*/
+    std::string_view to_player; /*!< 対プレイヤーかつ非盲目時*/
+    std::string_view to_mons; /*!< 対モンスター*/
 };
 
 struct mspell_cast_msg_simple {
-    mspell_cast_msg_simple(concptr to_player, concptr to_mons);
+    mspell_cast_msg_simple(std::string_view to_player, std::string_view to_mons);
     mspell_cast_msg_simple() = default;
-    concptr to_player; /*!< プレイヤー対象*/
-    concptr to_mons; /*!< モンスター対象*/
+    std::string_view to_player; /*!< プレイヤー対象*/
+    std::string_view to_mons; /*!< モンスター対象*/
 };
 
 bool see_monster(PlayerType *player_ptr, MONSTER_IDX m_idx);
