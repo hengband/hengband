@@ -160,7 +160,7 @@ bool TerrainReader::grab_one_feat_flag(TerrainType &terrain, std::string_view wh
         return true;
     }
 
-    msg_format(_("未知の地形フラグ '%s'。", "Unknown feature flag '%s'."), what.data());
+    msg_print(_("未知の地形フラグ '{}'。", "Unknown feature flag '{}'."), what);
     return false;
 }
 
