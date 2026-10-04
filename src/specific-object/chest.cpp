@@ -295,6 +295,5 @@ void Chest::fire_trap(const Pos2D &pos, std::shared_ptr<ItemEntity> chest)
     if ((trap.has(ChestTrapType::SCATTER)) && exists()) {
         msg_print(_("宝箱の中身はダンジョンじゅうに散乱した！", "The contents of the chest scatter all over the dungeon!"));
         this->open(true, pos, chest);
-        o_ptr->pval = 0;
     }
 }
