@@ -51,15 +51,22 @@ int BaseitemReader::read() const
         return PARSE_ERROR_INVALID_TYPE;
     }
 
+    const auto validate_id = [](const auto id) -> int {
+        if (std::cmp_less_equal(id, error_idx)) {
+            msg_print(_("ベースアイテムIDが非連番です。ID: '{}'、直前ID: '{}'。", "Baseitem ID is not sequential. ID: '{}', previous ID: '{}'."), id, error_idx);
+            return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+        }
+        if (std::cmp_less(id, 0) || std::cmp_greater(id, std::numeric_limits<short>::max())) {
+            msg_print(_("ベースアイテムIDが範囲外です。ID: '{}'。", "Baseitem ID is out of bounds. ID: '{}'."), id);
+            return PARSE_ERROR_OUT_OF_BOUNDS;
+        }
+        return PARSE_ERROR_NONE;
+    };
+    const auto id_error = id_data.is_number_unsigned() ? validate_id(id_data.get<nlohmann::json::number_unsigned_t>()) : validate_id(id_data.get<nlohmann::json::number_integer_t>());
+    if (id_error != PARSE_ERROR_NONE) {
+        return id_error;
+    }
     const auto item_id = id_data.get<int>();
-    if (item_id <= error_idx) {
-        msg_print(_("ベースアイテムIDが非連番です。ID: '{}'、直前ID: '{}'。", "Baseitem ID is not sequential. ID: '{}', previous ID: '{}'."), item_id, error_idx);
-        return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
-    }
-    if (item_id > std::numeric_limits<short>::max()) {
-        msg_print(_("ベースアイテムIDが範囲外です。ID: '{}'。", "Baseitem ID is out of bounds. ID: '{}'."), item_id);
-        return PARSE_ERROR_OUT_OF_BOUNDS;
-    }
 
     auto &baseitems = BaseitemList::get_instance();
     error_idx = item_id;
