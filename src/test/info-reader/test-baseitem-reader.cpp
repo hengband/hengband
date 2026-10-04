@@ -8,6 +8,7 @@
 #include "test/info-reader/scoped-reader-state.h"
 #include "util/dice.h"
 #include <doctest/doctest.h>
+#include <limits>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <utility>
@@ -173,4 +174,128 @@ TEST_CASE("BaseitemReader publishes complete records and preserves omitted optio
     CHECK(updated.alloc_tables[0].chance == 5);
     CHECK(error_idx == 3);
     CHECK(BaseitemReader(data).read() == PARSE_ERROR_NON_SEQUENTIAL_RECORDS);
+}
+
+TEST_CASE("BaseitemReader validates full-width integer IDs before narrowing or publishing")
+{
+    BaseitemStateGuard guard;
+    auto &items = BaseitemList::get_instance();
+    const auto original = make_baseitem();
+    REQUIRE(BaseitemReader(original).read() == PARSE_ERROR_NONE);
+    const auto *existing = std::addressof(items.get_baseitem(1));
+    const auto invalid_ids = std::vector<nlohmann::json>{
+        32768,
+        65537,
+        std::numeric_limits<int>::max(),
+        std::numeric_limits<nlohmann::json::number_integer_t>::max(),
+        nlohmann::json::number_integer_t{ 4294967297LL },
+        nlohmann::json::number_integer_t{ -4294967295LL },
+        std::numeric_limits<nlohmann::json::number_integer_t>::min(),
+        -1,
+        nlohmann::json::number_unsigned_t{ 32768 },
+        nlohmann::json::number_unsigned_t{ 4294967297ULL },
+        std::numeric_limits<nlohmann::json::number_unsigned_t>::max(),
+    };
+    for (const auto &id : invalid_ids) {
+        CAPTURE(id);
+        auto data = make_baseitem();
+        data["id"] = id;
+        data["cost"] = 91;
+        error_idx = -1;
+        const auto is_negative = !id.is_number_unsigned() && id.get<nlohmann::json::number_integer_t>() < 0;
+        const auto expected = is_negative ? PARSE_ERROR_NON_SEQUENTIAL_RECORDS : PARSE_ERROR_OUT_OF_BOUNDS;
+        CHECK(BaseitemReader(data).read() == expected);
+        REQUIRE(items.size() == 2);
+        CHECK(std::addressof(items.get_baseitem(1)) == existing);
+        CHECK(existing->name == "Test");
+        CHECK(existing->cost == 4);
+        CHECK(error_idx == -1);
+    }
+}
+
+TEST_CASE("BaseitemReader preserves missing and wrong-type ID errors without publishing")
+{
+    BaseitemStateGuard guard;
+    auto &items = BaseitemList::get_instance();
+    for (const auto &id : { nlohmann::json(), nlohmann::json("1"), nlohmann::json(1.0), nlohmann::json(true), nlohmann::json::array(), nlohmann::json::object() }) {
+        CAPTURE(id);
+        auto data = make_baseitem();
+        data["id"] = id;
+        const auto expected = id.is_null() ? PARSE_ERROR_TOO_FEW_ARGUMENTS : PARSE_ERROR_INVALID_TYPE;
+        CHECK(BaseitemReader(data).read() == expected);
+        CHECK(items.empty());
+        CHECK(error_idx == -1);
+    }
+    auto data = make_baseitem();
+    data.erase("id");
+    CHECK(BaseitemReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    CHECK(items.empty());
+    CHECK(error_idx == -1);
+}
+
+TEST_CASE("BaseitemReader accepts signed and unsigned zero IDs")
+{
+    for (const auto &id : { nlohmann::json(0), nlohmann::json(nlohmann::json::number_unsigned_t{ 0 }) }) {
+        CAPTURE(id);
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        data["id"] = id;
+        REQUIRE(BaseitemReader(data).read() == PARSE_ERROR_NONE);
+        auto &items = BaseitemList::get_instance();
+        REQUIRE(items.size() == 1);
+        CHECK(items.get_baseitem(0).name == "Test");
+        CHECK(error_idx == 0);
+    }
+}
+
+TEST_CASE("BaseitemReader preserves the short ID upper bound independently of the schema cap")
+{
+    const auto ids = std::vector<nlohmann::json>{
+        9999,
+        10000,
+        32767,
+        nlohmann::json::number_unsigned_t{ 32767 },
+    };
+    for (const auto &id : ids) {
+        CAPTURE(id);
+        BaseitemStateGuard guard;
+        auto data = make_baseitem();
+        data["id"] = id;
+        // Prove the ID passed validation without allocating 32768 definitions.
+        data["name"] = 42;
+        CHECK(BaseitemReader(data).read() == PARSE_ERROR_INVALID_TYPE);
+        CHECK(error_idx == id.get<int>());
+        CHECK(BaseitemList::get_instance().empty());
+    }
+}
+
+TEST_CASE("BaseitemReader preserves ordering precedence and rejects negative indices")
+{
+    BaseitemStateGuard guard;
+    auto data = make_baseitem();
+    auto expected = PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
+    auto previous = 1;
+    SUBCASE("duplicate")
+    {
+        data["id"] = 1;
+    }
+    SUBCASE("descending unsigned zero")
+    {
+        data["id"] = nlohmann::json::number_unsigned_t{ 0 };
+    }
+    SUBCASE("out-of-range ID below the previous ID still fails ordering first")
+    {
+        data["id"] = nlohmann::json::number_unsigned_t{ 32768 };
+        previous = 40000;
+    }
+    SUBCASE("negative ID above an abnormal negative previous ID cannot index the list")
+    {
+        data["id"] = -1;
+        previous = -100;
+        expected = PARSE_ERROR_OUT_OF_BOUNDS;
+    }
+    error_idx = previous;
+    CHECK(BaseitemReader(data).read() == expected);
+    CHECK(error_idx == previous);
+    CHECK(BaseitemList::get_instance().empty());
 }
