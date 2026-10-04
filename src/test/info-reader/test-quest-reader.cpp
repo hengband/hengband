@@ -2,8 +2,10 @@
  * @brief 固定クエスト JSONC 読み込みのテスト
  */
 
+#include "artifact/fixed-art-types.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
+#include "info-reader/random-grid-effect-types.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/enums/terrain/terrain-tag.h"
@@ -11,6 +13,7 @@
 #include "system/terrain/terrain-list.h"
 #include "test/system/terrain-list-test-access.h"
 #include <doctest/doctest.h>
+#include <limits>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
@@ -29,6 +32,16 @@ nlohmann::json make_quest_with_description(const std::string &line)
         { "definition", { { "type", "KILL_ALL" }, { "level", 5 } } },
         { "descriptions", { { { "text", { { "ja", { line } }, { "en", { line } } } } } } },
     };
+}
+
+nlohmann::json make_legend_integer_cell(const std::string &path, const nlohmann::json &value)
+{
+    auto cell = nlohmann::json::object();
+    cell[nlohmann::json::json_pointer(path)] = value;
+    if (path.ends_with("/oodLevel") || path.ends_with("/id")) {
+        cell[path.substr(1, path.find('/', 1) - 1)]["random"] = true;
+    }
+    return cell;
 }
 
 /*!
@@ -223,6 +236,170 @@ TEST_CASE("TerrainList test tag access restores tags after scope and exception")
     };
     CHECK_THROWS_AS(throw_with_tag(), std::runtime_error);
     CHECK(test::TerrainListTestAccess::current_tags() == original_tags);
+}
+
+TEST_CASE("Quest legend integers retain representable signed and unsigned boundaries")
+{
+    test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    const std::vector<std::string> paths = {
+        "/monster",
+        "/monster/cloneOf",
+        "/monster/oodLevel",
+        "/object",
+        "/object/oodLevel",
+        "/ego",
+        "/ego/id",
+        "/artifact",
+        "/artifact/id",
+        "/special",
+    };
+    for (const auto &path : paths) {
+        const auto is_ego = path.starts_with("/ego");
+        const auto is_monster_id = path == "/monster" || path == "/monster/cloneOf";
+        const auto maximum = is_ego ? std::numeric_limits<int>::max() : std::numeric_limits<int16_t>::max();
+        const auto minimum = is_ego ? std::numeric_limits<int>::min() : is_monster_id ? -maximum
+                                                                                      : std::numeric_limits<int16_t>::min();
+        const std::vector<nlohmann::json> values = { minimum, 0, static_cast<uint64_t>(maximum) };
+        for (const auto &value : values) {
+            CAPTURE(path);
+            CAPTURE(value);
+            const auto cell_data = make_legend_integer_cell(path, value);
+            QuestLegendCell cell;
+            REQUIRE(parse_quest_legend_cell(cell_data, cell) == PARSE_ERROR_NONE);
+            const auto expected_random = path.ends_with("/oodLevel") ? (path.starts_with("/monster") ? RANDOM_MONSTER : RANDOM_OBJECT)
+                                         : path.ends_with("/id")     ? (is_ego ? RANDOM_EGO : RANDOM_ARTIFACT)
+                                                                     : RANDOM_NONE;
+            CHECK(cell.grid.random == expected_random);
+            const auto expected = value.get<int>();
+            if (path.starts_with("/monster")) {
+                CHECK(cell.grid.monster == (path == "/monster/cloneOf" ? -expected : expected));
+            } else if (path.starts_with("/object")) {
+                CHECK(cell.grid.object == expected);
+            } else if (is_ego) {
+                CHECK(static_cast<int>(cell.grid.ego) == expected);
+            } else if (path.starts_with("/artifact")) {
+                CHECK(static_cast<int>(cell.grid.artifact) == expected);
+            } else {
+                CHECK(cell.grid.special == expected);
+            }
+        }
+    }
+}
+
+TEST_CASE("QuestReader rejects legend integer overflow without publishing output")
+{
+    test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    const std::vector<std::string> paths = {
+        "/monster",
+        "/monster/cloneOf",
+        "/monster/oodLevel",
+        "/object",
+        "/object/oodLevel",
+        "/ego",
+        "/ego/id",
+        "/artifact",
+        "/artifact/id",
+        "/special",
+    };
+    for (const auto &path : paths) {
+        const auto is_ego = path.starts_with("/ego");
+        const auto is_monster_id = path == "/monster" || path == "/monster/cloneOf";
+        const int64_t maximum = is_ego ? std::numeric_limits<int>::max() : std::numeric_limits<int16_t>::max();
+        const int64_t minimum = is_ego ? std::numeric_limits<int>::min() : is_monster_id ? -maximum
+                                                                                         : std::numeric_limits<int16_t>::min();
+        std::vector<nlohmann::json> values = {
+            minimum - 1,
+            maximum + 1,
+            static_cast<uint64_t>(maximum + 1),
+            std::numeric_limits<int64_t>::min(),
+            std::numeric_limits<int64_t>::max(),
+            std::numeric_limits<uint64_t>::max(),
+            uint64_t{ 4294967297 },
+        };
+        if (!is_ego) {
+            values.emplace_back(std::numeric_limits<int>::min());
+        }
+        for (const auto &value : values) {
+            CAPTURE(path);
+            CAPTURE(value);
+            auto data = make_quest_with_description("New description");
+            data["legend"] = { { ".", make_legend_integer_cell(path, value) } };
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            set_existing_output(quest, fixed_map);
+            CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_FLAG);
+            check_existing_output(quest, fixed_map);
+        }
+    }
+}
+
+TEST_CASE("Quest legend preserves optional non-integer defaults and reward markers")
+{
+    test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    const std::vector<std::string> paths = {
+        "/monster",
+        "/monster/cloneOf",
+        "/monster/oodLevel",
+        "/object",
+        "/object/oodLevel",
+        "/ego",
+        "/ego/id",
+        "/artifact",
+        "/artifact/id",
+    };
+    for (const auto &path : paths) {
+        const std::vector<nlohmann::json> values = { nullptr, "ignored", 1.5, true };
+        for (const auto &value : values) {
+            CAPTURE(path);
+            CAPTURE(value);
+            const auto data = make_legend_integer_cell(path, value);
+            QuestLegendCell cell;
+            REQUIRE(parse_quest_legend_cell(data, cell) == PARSE_ERROR_NONE);
+            CHECK(cell.grid.monster == 0);
+            CHECK(cell.grid.object == 0);
+            CHECK(cell.grid.ego == EgoType::NONE);
+            CHECK(cell.grid.artifact == FixedArtifactId::NONE);
+        }
+    }
+    const nlohmann::json rewards = {
+        { "object", { { "questReward", true } } },
+        { "artifact", { { "questReward", true } } },
+    };
+    QuestLegendCell cell;
+    REQUIRE(parse_quest_legend_cell(rewards, cell) == PARSE_ERROR_NONE);
+    CHECK(cell.object_is_quest_reward);
+    CHECK(cell.artifact_is_quest_reward);
+}
+
+TEST_CASE("Quest legend random forms preserve precedence over clone and reward markers")
+{
+    test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    const nlohmann::json data = {
+        { "monster", { { "random", true }, { "oodLevel", 7 }, { "cloneOf", std::numeric_limits<uint64_t>::max() } } },
+        { "object", { { "random", true }, { "oodLevel", 8 }, { "questReward", true } } },
+        { "ego", { { "random", true }, { "id", 9 } } },
+        { "artifact", { { "random", true }, { "id", 10 }, { "questReward", true } } },
+    };
+    QuestLegendCell cell;
+    REQUIRE(parse_quest_legend_cell(data, cell) == PARSE_ERROR_NONE);
+    CHECK(cell.grid.random == (RANDOM_MONSTER | RANDOM_OBJECT | RANDOM_EGO | RANDOM_ARTIFACT));
+    CHECK(cell.grid.monster == 7);
+    CHECK(cell.grid.object == 8);
+    CHECK(static_cast<int>(cell.grid.ego) == 9);
+    CHECK(static_cast<int>(cell.grid.artifact) == 10);
+    CHECK_FALSE(cell.object_is_quest_reward);
+    CHECK_FALSE(cell.artifact_is_quest_reward);
+}
+
+TEST_CASE("Quest legend special retains optional and invalid-type behavior")
+{
+    test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    const nlohmann::json null_special = { { "special", nullptr } };
+    QuestLegendCell cell;
+    REQUIRE(parse_quest_legend_cell(null_special, cell) == PARSE_ERROR_NONE);
+    CHECK(cell.grid.special == 0);
+    const nlohmann::json invalid_special = { { "special", "invalid" } };
+    CHECK(parse_quest_legend_cell(invalid_special, cell) == PARSE_ERROR_INVALID_TYPE);
 }
 
 TEST_CASE("QuestReader replaces output on success without duplicating collections or resetting quest progress")
