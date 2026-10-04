@@ -13,6 +13,7 @@
 #include "term/z-util.h"
 #include <cstdio>
 #include <cstdlib>
+#include <fmt/format.h>
 
 std::string_view program_name = "";
 
@@ -63,8 +64,8 @@ void plog(std::string_view str)
         return;
     }
 
-    /* Just do a labeled fprintf to stderr */
-    (void)(fprintf(stderr, "%s: %s\n", program_name.empty() ? "???" : program_name.data(), str.data()));
+    /* Just do a labeled print to stderr */
+    fmt::print(stderr, "{}: {}\n", program_name.empty() ? "???" : program_name, str);
 }
 
 /*

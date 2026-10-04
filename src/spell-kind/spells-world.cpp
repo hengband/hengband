@@ -391,7 +391,7 @@ static tl::optional<DungeonId> choose_dungeon(std::string_view note, int row, in
         prt(_("      選べるダンジョンがない。", "      No dungeon is available."), row, col);
     }
 
-    prt(format(_("どのダンジョン%sしますか:", "Which dungeon do you %s?: "), note.data()), 0, 0);
+    prt(fmt::format(_("どのダンジョン{}しますか:", "Which dungeon do you {}?: "), note), 0, 0);
     const auto ids = dungeon_records.collect_entered_dungeon_ids();
     while (true) {
         const auto key = inkey();

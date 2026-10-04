@@ -129,7 +129,7 @@ static void shuffle_store(const StoreScreen &screen)
     prt("", 3, 0);
     const auto &owner = store.get_owner();
     put_str(format("%s (%s)", owner.owner_name, race_info[enum2i(owner.owner_race)].title.data()), 3, 10);
-    prt(format("%s (%d)", screen.get_name().data(), owner.max_cost), 3, 50);
+    prt(fmt::format("{} ({})", screen.get_name(), owner.max_cost), 3, 50);
 }
 
 static void switch_store_stock(PlayerType *player_ptr, StoreScreen &screen, const int i, const COMMAND_CODE item)

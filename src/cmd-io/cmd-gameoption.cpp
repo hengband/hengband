@@ -99,7 +99,7 @@ static void do_cmd_options_autosave(PlayerType *player_ptr, std::string_view inf
     constexpr auto n = 2;
     term_clear();
     while (true) {
-        prt(format(_("%s ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "%s (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info.data()), 0, 0);
+        prt(fmt::format(_("{} ( リターンで次へ, y/n でセット, F で頻度を入力, ESC で決定 ) ", "{} (RET to advance, y/n to set, 'F' for frequency, ESC to accept) "), info), 0, 0);
         for (auto i = 0; i < n; i++) {
             byte a = TERM_WHITE;
             if (i == k) {
@@ -328,7 +328,7 @@ static void do_cmd_options_cheat(const FloorType &floor, std::string_view player
     auto k = 0U;
     const auto n = cheat_info.size();
     while (true) {
-        prt(format(_("%s ( リターンで次へ, y/n でセット, ESC で決定 )", "%s (RET to advance, y/n to set, ESC to accept) "), info.data()), 0, 0);
+        prt(fmt::format(_("{} ( リターンで次へ, y/n でセット, ESC で決定 )", "{} (RET to advance, y/n to set, ESC to accept) "), info), 0, 0);
 
 #ifdef JP
         /* 詐欺オプションをうっかりいじってしまう人がいるようなので注意 */
@@ -663,8 +663,8 @@ void do_cmd_options_aux(PlayerType *player_ptr, GameOptionPage page, std::string
 
     term_clear();
     while (true) {
-        constexpr auto command = _("%s (リターン:次, %sESC:終了, ?:ヘルプ) ", "%s (RET:next, %s, ?:help) ");
-        prt(format(command, info.data(), browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
+        constexpr auto command = _("{} (リターン:次, {}ESC:終了, ?:ヘルプ) ", "{} (RET:next, {}, ?:help) ");
+        prt(fmt::format(command, info, browse_only ? _("", "ESC:exit") : _("y/n:変更, ", "y/n:change, ESC:accept")), 0, 0);
         if (page == GameOptionPage::AUTODESTROY) {
             constexpr auto mes = _("以下のオプションは、簡易自動破壊を使用するときのみ有効", "Following options will protect items from easy auto-destroyer.");
             c_prt(TERM_YELLOW, mes, 6, _(6, 3));

@@ -79,7 +79,7 @@ short TerrainList::get_terrain_id(std::string_view tag) const
             return terrain.tag == tag;
         });
     if (it == this->terrains.end()) {
-        THROW_EXCEPTION(std::runtime_error, format(_("未定義のタグ '%s'。", "%s is undefined."), tag.data()));
+        THROW_EXCEPTION(std::runtime_error, fmt::format(_("未定義のタグ '{}'。", "{} is undefined."), tag));
     }
 
     return static_cast<short>(std::distance(this->terrains.begin(), it));

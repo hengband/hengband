@@ -1,8 +1,8 @@
 #include "io-dump/dump-remover.h"
 #include "io-dump/dump-util.h"
 #include "io/read-pref-file.h"
-#include "term/z-form.h"
 #include "util/angband-files.h"
+#include <fmt/format.h>
 
 /*!
  * @brief prefファイルを選択して処理する /
@@ -19,8 +19,8 @@ void remove_auto_dump(const std::filesystem::path &orig_file, std::string_view a
     int line_num = 0;
     long header_location = 0;
 
-    const auto header_mark_str = format(auto_dump_header, auto_dump_mark.data());
-    const auto footer_mark_str = format(auto_dump_footer, auto_dump_mark.data());
+    const auto header_mark_str = fmt::format(auto_dump_header, auto_dump_mark);
+    const auto footer_mark_str = fmt::format(auto_dump_footer, auto_dump_mark);
     size_t mark_len = footer_mark_str.length();
 
     FILE *orig_fff;

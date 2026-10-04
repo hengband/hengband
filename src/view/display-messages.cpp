@@ -302,7 +302,7 @@ void msg_print(std::string_view msg)
 
     std::string msg_includes_turn;
     if (cheat_turn) {
-        msg = msg_includes_turn = format("T:%d - %s", world.game_turn, msg.data());
+        msg = msg_includes_turn = fmt::format("T:{} - {}", world.game_turn, msg);
     }
 
     const auto &[wid, hgt] = term_get_size();

@@ -13,11 +13,11 @@
 #include "target/target-checker.h"
 #include "target/target-setter.h"
 #include "target/target-types.h"
-#include "term/z-form.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <fmt/format.h>
 
 /*!
  * @brief ターゲットを設定するコマンドのメインルーチン
@@ -69,10 +69,10 @@ void do_cmd_locate(PlayerType *player_ptr)
     const auto &[wid, hgt] = get_screen_size();
     POSITION y2 = y1 = panel_row_min;
     POSITION x2 = x1 = panel_col_min;
-    constexpr auto fmt = _("マップ位置 [%d(%02d),%d(%02d)] (プレイヤーの%s)  方向?", "Map sector [%d(%02d),%d(%02d)], which is%s your sector.  Direction?");
+    constexpr auto fmt = _("マップ位置 [{}({:02}),{}({:02})] (プレイヤーの{})  方向?", "Map sector [{}({:02}),{}({:02})], which is{} your sector.  Direction?");
     while (true) {
         const auto &dirstring = dirstrings[(y2 < y1) ? 0 : ((y2 > y1) ? 2 : 1)][(x2 < x1) ? 0 : ((x2 > x1) ? 2 : 1)];
-        const auto prompt = format(fmt, y2 / (hgt / 2), y2 % (hgt / 2), x2 / (wid / 2), x2 % (wid / 2), dirstring.data());
+        const auto prompt = fmt::format(fmt, y2 / (hgt / 2), y2 % (hgt / 2), x2 / (wid / 2), x2 % (wid / 2), dirstring);
         auto dir = Direction::none();
         while (!dir) {
             const auto command = input_command(prompt);
