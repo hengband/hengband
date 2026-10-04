@@ -20,6 +20,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "timed-effect/timed-effects.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -66,9 +67,9 @@ static void message_breath(PlayerType *player_ptr, MONSTER_IDX m_idx, MONSTER_ID
             }
         } else {
             if (mon_to_player) {
-                msg_format(_("%s^が%s^のブレスを吐いた。", "%s^ breathes %s^."), m_name.data(), type_s.data());
+                msg_print(_("{}が{}のブレスを吐いた。", "{} breathes {}."), str_upcase_first(m_name), str_upcase_first(type_s));
             } else if (mon_to_mon && known && see_either) {
-                _(msg_format("%s^が%s^に%s^のブレスを吐いた。", m_name.data(), t_name.data(), type_s.data()), msg_format("%s^ breathes %s^ at %s^.", m_name.data(), type_s.data(), t_name.data()));
+                msg_print(_("{0}が{1}に{2}のブレスを吐いた。", "{0} breathes {2} at {1}."), str_upcase_first(m_name), str_upcase_first(t_name), str_upcase_first(type_s));
             }
         }
     }
