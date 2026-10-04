@@ -1503,6 +1503,7 @@ hengband_test_SOURCES = \
 	test/flavor/test-flavor-util.cpp \
 	test/game-option/test-runtime-arguments.cpp \
 	test/info-reader/test-activation-reader.cpp \
+	test/info-reader/test-artifact-reader.cpp \
 	test/info-reader/test-baseitem-reader.cpp \
 	test/info-reader/test-ego-reader.cpp \
 	test/info-reader/test-general-parser.cpp \

@@ -72,6 +72,7 @@
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp" />
     <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-artifact-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp" />
