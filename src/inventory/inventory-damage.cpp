@@ -13,6 +13,7 @@
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "view/display-messages.h"
+#include <vector>
 
 /*!
  * @brief 手持ちのアイテムを指定確率で破損させる /
@@ -31,6 +32,8 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
     if (check_multishadow(player_ptr) || player_ptr->current_floor_ptr->inside_arena) {
         return;
     }
+
+    std::vector<short> smashed_potions;
 
     /* Scan through the slots backwards */
     for (const auto i_idx : INVEN_PACK_SLOTS) {
@@ -83,9 +86,8 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
         }
 #endif
 
-        /* Potions smash open */
         if (item.is_potion()) {
-            (void)potion_smash_effect(player_ptr, 0, player_ptr->y, player_ptr->x, item.bi_id);
+            smashed_potions.push_back(item.bi_id);
         }
 
         /* Reduce the charges of rods/wands */
@@ -94,5 +96,11 @@ void inventory_damage(PlayerType *player_ptr, const ObjectBreaker &breaker, int 
         /* Destroy "amt" items */
         inven_item_increase(player_ptr, i_idx, -amt);
         inven_item_optimize(player_ptr, i_idx);
+    }
+
+    // 薬の効果の最中に所持品の結合やモンスターの爆発による再入が起きると所持品の番号がずれるため、
+    // 割れた薬の効果は所持品を減らし終えてから起こす。
+    for (const auto bi_id : smashed_potions) {
+        (void)potion_smash_effect(player_ptr, 0, player_ptr->y, player_ptr->x, bi_id);
     }
 }
