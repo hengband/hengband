@@ -10,7 +10,7 @@
  * また、Unix 版の path_parse() がパスの先頭の「~」を展開できない場合に、
  * 例外を投げず開けないパスとして扱うことを検証する。
  *
- * angband_fgets() は、先頭が '\0' の行を読んでも読み取りのバッファの範囲外を読まないことを検証する。
+ * angband_fgets() は、'\0' を含む行をその '\0' で切った1行として返すことを検証する。
  */
 
 #include "test/string-helpers.h"
@@ -21,6 +21,7 @@
 #include <filesystem>
 #include <string>
 #include <string_view>
+#include <vector>
 
 #if defined(_WIN32) && defined(JP) && defined(SJIS)
 using namespace test;
@@ -94,20 +95,53 @@ TEST_CASE("angband_fopen fails without throwing for a user that does not exist")
 }
 #endif
 
-TEST_CASE("angband_fgets does not read before the buffer for a line starting with NUL")
-{
-    using namespace std::literals;
+using namespace std::literals;
 
+namespace {
+/*!
+ * @brief 内容を一時ファイルに書き、angband_fgets() でファイルの終端まで読んだ行を返す
+ * @param content ファイルの内容
+ * @return 読んだ行の並び
+ */
+std::vector<std::string> read_all_lines(std::string_view content)
+{
     auto *fp = std::tmpfile();
     REQUIRE(fp != nullptr);
     const auto close_file = util::make_finalizer([fp] { std::fclose(fp); });
-
-    // 先頭が '\0' の行は改行の判定に使えないので、次の行と続けて読む (以前からの挙動)
-    constexpr auto content = "\0abc\nxyz\n"sv;
     REQUIRE(std::fwrite(content.data(), 1, content.size(), fp) == content.size());
     std::rewind(fp);
 
-    const auto line = angband_fgets(fp);
-    REQUIRE(line);
-    CHECK(*line == "xyz");
+    std::vector<std::string> lines;
+    for (auto line = angband_fgets(fp); line; line = angband_fgets(fp)) {
+        lines.push_back(std::move(*line));
+    }
+
+    return lines;
+}
+}
+
+TEST_CASE("angband_fgets returns an empty line for a line starting with NUL")
+{
+    CHECK(read_all_lines("\0abc\nxyz\n"sv) == std::vector<std::string>{ "", "xyz" });
+
+    // 改行の無い最後の行でも、読み取った行として空の行を返す
+    CHECK(read_all_lines("\0abc"sv) == std::vector<std::string>{ "" });
+}
+
+TEST_CASE("angband_fgets returns an empty line for a long line starting with NUL")
+{
+    // 読み取りのバッファの大きさに関わらず、行全体を1行として扱う
+    std::string content(1, '\0');
+    content.append(1023, 'f').append("\nxyz\n");
+    CHECK(read_all_lines(content) == std::vector<std::string>{ "", "xyz" });
+}
+
+TEST_CASE("angband_fgets cuts a line at NUL without joining it with the next line")
+{
+    CHECK(read_all_lines("ab\0cd\nxyz\n"sv) == std::vector<std::string>{ "ab", "xyz" });
+}
+
+TEST_CASE("angband_fgets keeps empty lines and the last line without a newline")
+{
+    CHECK(read_all_lines("abc\n\nxyz") == std::vector<std::string>{ "abc", "", "xyz" });
 }
