@@ -20,6 +20,7 @@
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <exception>
+#include <limits>
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <span>
@@ -248,18 +249,28 @@ static tl::optional<ProbabilityTable<short>> parse_terrain_probability(const nlo
 
     const auto &terrains = TerrainList::get_instance();
     ProbabilityTable<short> prob_table;
+    int total_probability = 0;
     for (const auto &tile_obj : tiles_obj) {
         if (!tile_obj.is_object() || !get_json_value(tile_obj, "type").is_string() || !get_json_value(tile_obj, "rate").is_number_integer()) {
             return tl::nullopt;
         }
 
+        int prob = 0;
+        if (info_set_integer(get_json_value(tile_obj, "rate"), prob, true, Range(0, 32767)) || prob > std::numeric_limits<int>::max() - total_probability) {
+            return tl::nullopt;
+        }
+        total_probability += prob;
+
         try {
             const auto terrain_id = terrains.get_terrain_id(get_json_value(tile_obj, "type").get<std::string>());
-            const auto prob = get_json_value(tile_obj, "rate").get<short>();
             prob_table.entry_item(terrain_id, prob);
         } catch (const std::exception &) {
             return tl::nullopt;
         }
+    }
+
+    if (prob_table.empty()) {
+        return tl::nullopt;
     }
 
     return prob_table;

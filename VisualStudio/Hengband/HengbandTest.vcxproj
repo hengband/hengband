@@ -73,6 +73,7 @@
     <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-general-parser.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-wilderness-reader.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="..\..\src\test\string-helpers.h" />
     <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\dungeon-list-test-access.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="HengbandCore.vcxproj">
