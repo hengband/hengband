@@ -170,6 +170,50 @@ size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
 }
 
 /*!
+ * @brief 2バイト文字を考慮しつつ文字列を検索し、見つかった位置を返す
+ * @param haystack 検索対象の文字列
+ * @param needle 検索する文字列
+ * @return 最初に見つかった位置。見つからなければ std::string_view::npos
+ * @details
+ * 2バイト文字の後半バイトから始まる位置にはマッチしない。
+ * needle が空文字列の場合は 0 を返す。
+ */
+size_t str_find_position(std::string_view haystack, std::string_view needle)
+{
+    if (haystack.length() < needle.length()) {
+        return std::string_view::npos;
+    }
+
+    const auto last_pos = haystack.length() - needle.length();
+    for (size_t i = 0; i <= last_pos; i += char_byte_length(haystack, i)) {
+        if (haystack.substr(i).starts_with(needle)) {
+            return i;
+        }
+    }
+
+    return std::string_view::npos;
+}
+
+/*!
+ * @brief 2バイト文字を考慮しつつ文字を検索し、見つかった位置を返す
+ * @param str 検索対象の文字列
+ * @param ch 検索する文字
+ * @return 最初に見つかった位置。見つからなければ std::string_view::npos
+ * @details
+ * 2バイト文字の後半バイトにはマッチしない。
+ */
+size_t str_find_position(std::string_view str, char ch)
+{
+    for (size_t i = 0; i < str.length(); i += char_byte_length(str, i)) {
+        if (str[i] == ch) {
+            return i;
+        }
+    }
+
+    return std::string_view::npos;
+}
+
+/*!
  * @brief 2バイト文字を考慮しつつ文字列を検索する (ANSIのstrstr相当)
  * @param haystack 検索対象のNUL終端された文字列
  * @param needle 検索する文字列
@@ -180,19 +224,8 @@ size_t angband_strcat(char *buf, std::string_view src, size_t bufsize)
  */
 char *angband_strstr(const char *haystack, std::string_view needle)
 {
-    const std::string_view haystack_view(haystack);
-    if (haystack_view.length() < needle.length()) {
-        return nullptr;
-    }
-
-    const auto last_pos = haystack_view.length() - needle.length();
-    for (size_t i = 0; i <= last_pos; i += char_byte_length(haystack_view, i)) {
-        if (haystack_view.substr(i).starts_with(needle)) {
-            return const_cast<char *>(haystack) + i;
-        }
-    }
-
-    return nullptr;
+    const auto pos = str_find_position(haystack, needle);
+    return (pos == std::string_view::npos) ? nullptr : const_cast<char *>(haystack) + pos;
 }
 
 /*!
@@ -206,14 +239,8 @@ char *angband_strstr(const char *haystack, std::string_view needle)
  */
 char *angband_strchr(const char *ptr, char ch)
 {
-    const std::string_view sv(ptr);
-    for (size_t i = 0; i < sv.length(); i += char_byte_length(sv, i)) {
-        if (sv[i] == ch) {
-            return const_cast<char *>(ptr) + i;
-        }
-    }
-
-    return nullptr;
+    const auto pos = str_find_position(ptr, ch);
+    return (pos == std::string_view::npos) ? nullptr : const_cast<char *>(ptr) + pos;
 }
 
 /*!
@@ -257,12 +284,12 @@ char *rtrim(char *p)
  * @return src に find が含まれるならtrue
  * @details
  * 2バイト文字の後半バイトから始まる位置にはマッチしない。
- * find には正しい長さを持つ文字列を渡すこと。NUL終端されていない char の配列や
+ * src・find には正しい長さを持つ文字列を渡すこと。NUL終端されていない char の配列や
  * char 単体のアドレスを渡すと、std::string_view への変換で範囲外を読む。
  */
-bool str_find(const std::string &src, std::string_view find)
+bool str_find(std::string_view src, std::string_view find)
 {
-    return angband_strstr(src.data(), find) != nullptr;
+    return str_find_position(src, find) != std::string_view::npos;
 }
 
 /*!
@@ -345,22 +372,14 @@ std::vector<std::string> str_split(std::string_view str, char delim, bool trim, 
     const auto make_str = [trim](std::string_view sv) { return trim ? str_trim(sv) : std::string(sv); };
 
     while (true) {
-        auto found = false;
-        for (size_t i = 0; i < str.length(); i += char_byte_length(str, i)) {
-            if (str[i] != delim) {
-                continue;
-            }
-
-            result.push_back(make_str(str.substr(0, i)));
-            str.remove_prefix(i + 1);
-            found = true;
-            break;
-        }
-
-        if (!found) {
+        const auto pos = str_find_position(str, delim);
+        if (pos == std::string_view::npos) {
             result.push_back(make_str(str));
             return result;
         }
+
+        result.push_back(make_str(str.substr(0, pos)));
+        str.remove_prefix(pos + 1);
     }
 }
 
