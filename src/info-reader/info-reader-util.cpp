@@ -31,6 +31,6 @@ RandomArtActType grab_one_activation_flag(std::string_view what)
         }
     }
 
-    msg_format(_("未知の発動・フラグ '%s'。", "Unknown activation flag '%s'."), what.data());
+    msg_print(_("未知の発動・フラグ '{}'。", "Unknown activation flag '{}'."), what);
     return RandomArtActType::NONE;
 }

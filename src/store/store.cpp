@@ -166,9 +166,9 @@ tl::optional<short> input_stock(std::string_view fmt, int min, int max, [[maybe_
     const auto hi = (max > 25) ? toupper(I2A(max - 26)) : I2A(max);
 #ifdef JP
     const auto title = (store_num == StoreSaleType::HOME) || (store_num == StoreSaleType::MUSEUM) ? "アイテム" : "商品";
-    const auto prompt = format("(%s:%c-%c, ESCで中断) %s", title, lo, hi, fmt.data());
+    const auto prompt = fmt::format("({}:{:c}-{:c}, ESCで中断) {}", title, lo, hi, fmt);
 #else
-    const auto prompt = format("(Items %c-%c, ESC to exit) %s", lo, hi, fmt.data());
+    const auto prompt = fmt::format("(Items {:c}-{:c}, ESC to exit) {}", lo, hi, fmt);
 #endif
 
     tl::optional<char> command;

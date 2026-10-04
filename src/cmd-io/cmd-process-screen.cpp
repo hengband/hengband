@@ -286,7 +286,7 @@ static bool check_screen_text_can_open(FILE *fff, const std::string_view filenam
         return true;
     }
 
-    msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename.data());
+    msg_print(_("ファイル {} を開けませんでした。", "Failed to open file {}."), filename);
     msg_erase();
     return false;
 }

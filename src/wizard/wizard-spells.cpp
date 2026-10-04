@@ -45,6 +45,7 @@
 #include "util/enum-converter.h"
 #include "util/flag-group.h"
 #include "util/int-char-converter.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "wizard/wizard-messages.h"
 #include <string_view>
@@ -366,7 +367,7 @@ void wiz_kill_target(PlayerType *player_ptr, int initial_dam, AttributeType effe
             const auto &gf_description = gf_descriptions[i];
             auto name = std::string_view(gf_description.name).substr(3); // 先頭の"GF_"を取り除く
             auto num = enum2i(gf_description.num);
-            put_str(format("%03d:%-.10s^", num, name.data()), 1 + i / 5, 1 + (i % 5) * 16);
+            put_str(fmt::format("{:03}:{}", num, str_upcase_first(name.substr(0, 10))), 1 + i / 5, 1 + (i % 5) * 16);
         }
 
         const auto input_effect_id = input_numerics("EffectID", 1, max - 1, idx);
