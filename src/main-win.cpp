@@ -83,6 +83,7 @@
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/write-diary.h"
+#include "locale/character-encoding.h"
 #include "main-win/commandline-win.h"
 #include "main-win/graphics-win.h"
 #include "main-win/main-win-bg.h"
@@ -2325,18 +2326,20 @@ static LRESULT PASCAL angband_window_procedure(HWND hWnd, UINT uMsg, WPARAM wPar
         for (auto i = 0; (i < dy) && (global_lock != NULL); i++) {
 #ifdef JP
             const auto &scr = data[0].t.scr->c;
+            const auto *row = scr[oy + i].data();
 
             std::vector<char> s(dx + 1);
-            strncpy(s.data(), &scr[oy + i][ox], dx);
+            strncpy(s.data(), &row[ox], dx);
 
+            // 全角文字の後半バイトは前半バイトと同じ値を取り得るため、行頭から文字の区切りをたどって判定する
             if (ox > 0) {
-                if (iskanji(scr[oy + i][ox - 1])) {
+                if (iskanji2(row, ox - 1)) {
                     s[0] = ' ';
                 }
             }
 
             if (ox + dx < data[0].cols) {
-                if (iskanji(scr[oy + i][ox + dx - 1])) {
+                if (iskanji2(row, ox + dx - 1)) {
                     s[dx - 1] = ' ';
                 }
             }
