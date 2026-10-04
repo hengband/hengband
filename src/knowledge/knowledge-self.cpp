@@ -76,7 +76,7 @@ static void dump_yourself(PlayerType *player_ptr, FILE *fff)
     fprintf(fff, "\n");
     fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info.at(player_ptr->pclass).title.data());
     auto short_pclass = enum2i(player_ptr->pclass);
-    dump_explanation(class_explanations[short_pclass].data(), fff);
+    dump_explanation(class_explanations[short_pclass], fff);
 
     fprintf(fff, "\n");
     fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), personality_info[player_ptr->ppersonality].title.data());

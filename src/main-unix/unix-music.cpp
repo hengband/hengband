@@ -262,7 +262,7 @@ bool play_music(int type, int val)
     char *const argv[] = { argv_music_player_buf.data(), argv_path_music_buf.data(), nullptr };
     // explicitly pass environment
     char **envp = environ;
-    auto ret = posix_spawnp(&music_player_pid, music_player.data(), nullptr, nullptr, argv, envp);
+    auto ret = posix_spawnp(&music_player_pid, argv_music_player_buf.data(), nullptr, nullptr, argv, envp);
     if (ret != 0) { // failed to spawn process
         music_player_pid = 0;
         return false;
