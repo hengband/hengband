@@ -527,7 +527,7 @@ bool FileDisplayer::try_display(bool show_version, std::string_view name_with_ta
                 break;
             }
 
-            fprintf(ffp, "%s: %s\n", this->player_name.data(), !what.empty() ? what.data() : caption_str.data());
+            fmt::print(ffp, "{}: {}\n", this->player_name, !what.empty() ? what : caption_str);
             while (true) {
                 const auto line_str = angband_fgets(fff);
                 if (!line_str) {

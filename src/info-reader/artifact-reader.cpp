@@ -126,7 +126,7 @@ bool ArtifactReader::grab_one_artifact_flag(ArtifactDefinition &artifact, std::s
         return true;
     }
 
-    msg_format(_("未知の伝説のアイテム・フラグ '%s'。", "Unknown artifact flag '%s'."), what.data());
+    msg_print(_("未知の伝説のアイテム・フラグ '{}'。", "Unknown artifact flag '{}'."), what);
     return false;
 }
 

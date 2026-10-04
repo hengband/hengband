@@ -170,7 +170,7 @@ void display_store(PlayerType *player_ptr, const StoreScreen &screen)
     const auto race_name = race_info[enum2i(owner.owner_race)].title.data();
     put_str(format("%s (%s)", owner.owner_name, race_name), 3, 10);
 
-    prt(format("%s (%d)", screen.get_name().data(), owner.max_cost), 3, 50);
+    prt(fmt::format("{} ({})", screen.get_name(), owner.max_cost), 3, 50);
 
     put_str(_("商品の一覧", "Item Description"), 5, 5);
     if (show_weights) {

@@ -26,6 +26,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <string_view>
 
@@ -134,7 +135,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
         if (turn_flags_ptr->do_take && monrace.behavior_flags.has(MonsterBehaviorType::STUPID)) {
             turn_flags_ptr->did_take_item = true;
             if (monster.ml && player_can_see_bold(player_ptr, ny, nx)) {
-                msg_format(_("%s^は%sを拾おうとしたが、だめだった。", "%s^ tries to pick up %s, but fails."), m_name.data(), o_name.data());
+                msg_print(_("{}は{}を拾おうとしたが、だめだった。", "{} tries to pick up {}, but fails."), str_upcase_first(m_name), o_name);
             }
         }
 
@@ -144,7 +145,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
     if (turn_flags_ptr->do_take) {
         turn_flags_ptr->did_take_item = true;
         if (player_can_see_bold(player_ptr, ny, nx)) {
-            msg_format(_("%s^が%sを拾った。", "%s^ picks up %s."), m_name.data(), o_name.data());
+            msg_print(_("{}が{}を拾った。", "{} picks up {}."), str_upcase_first(m_name), o_name);
         }
 
         excise_object_idx(*player_ptr->current_floor_ptr, this_o_idx);
@@ -163,7 +164,7 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
 
     turn_flags_ptr->did_kill_item = true;
     if (floor.has_los_at({ ny, nx })) {
-        msg_format(_("%s^が%sを破壊した。", "%s^ destroys %s."), m_name.data(), o_name.data());
+        msg_print(_("{}が{}を破壊した。", "{} destroys {}."), str_upcase_first(m_name), o_name);
     }
 
     delete_object_idx(player_ptr, this_o_idx);
