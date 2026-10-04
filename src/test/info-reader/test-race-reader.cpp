@@ -3,37 +3,12 @@
 #include "info-reader/race-reader.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
-#include "test/info-reader/scoped-reader-state.h"
+#include "test/system/monrace-list-test-access.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
-
-namespace test {
-class MonraceListTestAccess {
-public:
-    MonraceListTestAccess()
-        : monraces(MonraceList::get_instance())
-        , reader_state(0)
-    {
-        monraces.monraces.swap(saved_monraces);
-    }
-
-    MonraceListTestAccess(const MonraceListTestAccess &) = delete;
-    MonraceListTestAccess &operator=(const MonraceListTestAccess &) = delete;
-
-    ~MonraceListTestAccess()
-    {
-        monraces.monraces.swap(saved_monraces);
-    }
-
-private:
-    MonraceList &monraces;
-    MonraceList::Container saved_monraces;
-    ScopedReaderState reader_state;
-};
-}
 
 namespace {
 nlohmann::json make_monrace()
