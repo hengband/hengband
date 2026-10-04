@@ -9,10 +9,14 @@
  *
  * また、Unix 版の path_parse() がパスの先頭の「~」を展開できない場合に、
  * 例外を投げず開けないパスとして扱うことを検証する。
+ *
+ * angband_fgets() は、先頭が '\0' の行を読んでも読み取りのバッファの範囲外を読まないことを検証する。
  */
 
 #include "test/string-helpers.h"
 #include "util/angband-files.h"
+#include "util/finalizer.h"
+#include <cstdio>
 #include <doctest/doctest.h>
 #include <filesystem>
 #include <string>
@@ -89,3 +93,21 @@ TEST_CASE("angband_fopen fails without throwing for a user that does not exist")
     CHECK(angband_fopen(PATH_OF_NO_SUCH_USER, FileOpenMode::READ) == nullptr);
 }
 #endif
+
+TEST_CASE("angband_fgets does not read before the buffer for a line starting with NUL")
+{
+    using namespace std::literals;
+
+    auto *fp = std::tmpfile();
+    REQUIRE(fp != nullptr);
+    const auto close_file = util::make_finalizer([fp] { std::fclose(fp); });
+
+    // 先頭が '\0' の行は改行の判定に使えないので、次の行と続けて読む (以前からの挙動)
+    constexpr auto content = "\0abc\nxyz\n"sv;
+    REQUIRE(std::fwrite(content.data(), 1, content.size(), fp) == content.size());
+    std::rewind(fp);
+
+    const auto line = angband_fgets(fp);
+    REQUIRE(line);
+    CHECK(*line == "xyz");
+}

@@ -321,7 +321,8 @@ static tl::optional<std::string> read_line(FILE *fp)
         std::string_view sv(buf);
 
         line_buf.append(sv.begin(), sv.end());
-        if (sv.back() == '\n') {
+        // 読み取った行の先頭が '\0' だと sv は空になる
+        if (!sv.empty() && (sv.back() == '\n')) {
             break;
         }
     }
