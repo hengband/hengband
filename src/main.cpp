@@ -16,6 +16,7 @@
 #include "io/record-play-movie.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
+#include "locale/character-encoding.h"
 #include "main-unix/unix-user-ids.h"
 #include "main/angband-initializer.h"
 #include "player/process-name.h"
@@ -373,7 +374,9 @@ int main(int argc, char *argv[])
                 break;
             }
 
-            angband_strcpy(p_ptr->name, &argv[i][2], sizeof(p_ptr->name));
+            // Unix 版のフロントエンドは端末の入出力を UTF-8 として扱うので、引数も UTF-8 とみなしてシステムの文字コードに変換してから切り詰める。
+            // UTF-8 として不正なバイト列は変換できないので、これまでどおりそのまま使う
+            angband_strcpy(p_ptr->name, utf8_to_sys(&argv[i][2]).value_or(&argv[i][2]), sizeof(p_ptr->name));
             break;
         case 'm':
             if (!argv[i][2]) {
