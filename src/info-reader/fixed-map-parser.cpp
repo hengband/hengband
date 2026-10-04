@@ -29,6 +29,7 @@
 #include "system/floor/floor-info.h"
 #include "system/gamevalue.h"
 #include "system/player-type-definition.h"
+#include "term/z-util.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -253,11 +254,11 @@ static void report_load_error(parse_error_type err, std::string_view filename)
 }
 
 /*!
- * @brief 町の定義 (TownDefinitionList.jsonc) から、現在の町の固定マップを読み込んでフロア全体に生成する
+ * @brief 町の定義から現在の町の固定マップを読み込んで生成し、エラーコードを返す (load_town_map() の本体)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return エラーコード
+ * @return エラーコード。失敗した場合はエラーを表示済み
  */
-parse_error_type load_town_map(PlayerType *player_ptr)
+static parse_error_type generate_town_map(PlayerType *player_ptr)
 {
     if (const auto err = load_town_preferences(); err != PARSE_ERROR_NONE) {
         report_load_error(err, TOWN_PREFERENCES);
@@ -277,4 +278,16 @@ parse_error_type load_town_map(PlayerType *player_ptr)
         report_load_error(err, map_file);
     }
     return err;
+}
+
+/*!
+ * @brief 町の定義 (TownDefinitionList.jsonc) から現在の町の固定マップを読み込んでフロア全体に生成し、失敗したら終了する
+ * @details 町を生成できないとゲームを続けられないので、読み込みに失敗した場合は、他のデータの読み込みと同じく終了する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
+void load_town_map(PlayerType *player_ptr)
+{
+    if (generate_town_map(player_ptr) != PARSE_ERROR_NONE) {
+        quit(_("町の定義の読み込みに失敗しました", "Failed to load the town definition"));
+    }
 }
