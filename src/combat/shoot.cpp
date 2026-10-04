@@ -459,7 +459,6 @@ static MULTIPLY calc_shot_damage_with_slay(
 void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SPELL_IDX snipe_type)
 {
     POSITION y, x, prev_y, prev_x;
-    ItemEntity *o_ptr;
 
     AttributeFlags attribute_flags{};
     attribute_flags.set(AttributeType::PLAYER_SHOOT);
@@ -467,13 +466,11 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     auto hit_body = false;
     auto stick_to = false;
 
-    /* Access the item (if in the pack) */
+    // 連射の1射目の効果で矢弾が削除されても参照できるよう、shared_ptrで保持する。
     auto &floor = *player_ptr->current_floor_ptr;
-    if (i_idx >= 0) {
-        o_ptr = player_ptr->inventory[i_idx].get();
-    } else {
-        o_ptr = floor.o_list[0 - i_idx].get();
-    }
+    const auto is_inventory = i_idx >= 0;
+    const auto ammo = ref_item(player_ptr, i_idx);
+    auto *o_ptr = ammo.get();
 
     /* Sniper - Cannot shot a single arrow twice */
     if ((snipe_type == SP_DOUBLE) && (o_ptr->number < 2)) {
@@ -584,6 +581,14 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     /* Sniper - Repeat shooting when double shots */
     auto &tracker = LoreTracker::get_instance();
     for (auto i = 0; i < ((snipe_type == SP_DOUBLE) ? 2 : 1); i++) {
+        // 1射目の効果でアイテムの削除や並べ替えが起きると番号が変わるため、同じ実体を探し直す。
+        const auto current_i_idx = find_current_i_idx(player_ptr, is_inventory, ammo);
+        if (!current_i_idx) {
+            break;
+        }
+
+        i_idx = *current_i_idx;
+
         /* Start at the player */
         y = player_ptr->y;
         x = player_ptr->x;

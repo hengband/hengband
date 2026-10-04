@@ -192,11 +192,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
         msg_format(_("杖をまとめなおした。", "You unstack your staff."));
     }
 
-    if (i_idx >= 0) {
-        inven_item_charges(*player_ptr->inventory[i_idx]);
-    } else {
-        floor_item_charges(*player_ptr->current_floor_ptr, 0 - i_idx);
-    }
+    describe_item_charges(player_ptr, i_idx >= 0, ref_item(player_ptr, i_idx));
 
     static constexpr auto flags = {
         SubWindowRedrawingFlag::INVENTORY,
