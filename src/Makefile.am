@@ -1527,6 +1527,7 @@ hengband_test_SOURCES = \
 	test/monster-race/test-race-ability-mask.cpp \
 	test/mspell/test-mspell-projection-table.cpp \
 	test/mutation/test-mutation-roll-table.cpp \
+	test/object/test-object-info.cpp \
 	test/player/test-process-name.cpp \
 	test/store/test-pricing.cpp \
 	test/store/test-store-screen.cpp \

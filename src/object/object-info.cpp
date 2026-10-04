@@ -17,6 +17,8 @@
 #include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "util/int-char-converter.h"
+#include <algorithm>
+#include <iterator>
 
 /*!
  * @brief オブジェクト選択時の選択アルファベットラベルを返す /
@@ -135,4 +137,23 @@ std::shared_ptr<ItemEntity> ref_item(PlayerType *player_ptr, short i_idx)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     return i_idx >= 0 ? player_ptr->inventory[i_idx] : floor.o_list[0 - i_idx];
+}
+
+/*!
+ * @brief 保持しているアイテムへの参照から、現在の配列上の位置を取得する
+ * @details アイテム削除や並べ替えで変わるインデックスではなく、実体の同一性で探す。
+ * @return 配列内のインデックス。アイテムが空または既に削除された場合はnullopt。
+ */
+tl::optional<short> find_item_index(std::span<const std::shared_ptr<ItemEntity>> items, const std::shared_ptr<ItemEntity> &item)
+{
+    if (!item) {
+        return tl::nullopt;
+    }
+
+    const auto it = std::find(items.begin(), items.end(), item);
+    if (it == items.end()) {
+        return tl::nullopt;
+    }
+
+    return static_cast<short>(std::distance(items.begin(), it));
 }
