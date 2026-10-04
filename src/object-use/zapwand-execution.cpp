@@ -134,18 +134,7 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
     rfu.set_flags(flags_srf);
     item->pval--;
 
-    // 効果でアイテムが削除されていることがあるため、同じ実体がまだ存在するか確かめる。
-    const auto is_inventory = i_idx >= 0;
-    if (!find_current_i_idx(this->player_ptr, is_inventory, item)) {
-        return;
-    }
-
-    if (is_inventory) {
-        inven_item_charges(*item);
-        return;
-    }
-
-    floor_item_charges(*item);
+    describe_item_charges(this->player_ptr, i_idx >= 0, item);
 }
 
 bool ObjectZapWandEntity::check_can_zap() const

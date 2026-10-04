@@ -40,7 +40,6 @@
 #include "status/experience.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-other-types.h"
-#include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
@@ -193,11 +192,7 @@ static bool exe_eat_charge_of_magic_device(PlayerType *player_ptr, ItemEntity *o
         msg_format(_("杖をまとめなおした。", "You unstack your staff."));
     }
 
-    if (i_idx >= 0) {
-        inven_item_charges(*player_ptr->inventory[i_idx]);
-    } else {
-        floor_item_charges(*player_ptr->current_floor_ptr->o_list[0 - i_idx]);
-    }
+    describe_item_charges(player_ptr, i_idx >= 0, ref_item(player_ptr, i_idx));
 
     static constexpr auto flags = {
         SubWindowRedrawingFlag::INVENTORY,
