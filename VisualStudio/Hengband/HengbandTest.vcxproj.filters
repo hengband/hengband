@@ -79,6 +79,9 @@
     <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -223,5 +226,6 @@
     <ClInclude Include="..\..\src\test\string-helpers.h" />
     <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\dungeon-list-test-access.h" />
   </ItemGroup>
 </Project>

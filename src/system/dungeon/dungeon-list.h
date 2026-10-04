@@ -12,6 +12,9 @@
 
 enum class DungeonId;
 class DungeonDefinition;
+namespace test {
+class DungeonListTestAccess;
+}
 class DungeonList : public util::AbstractMapWrapper<DungeonId, std::shared_ptr<DungeonDefinition>> {
 public:
     DungeonList(DungeonList &&) = delete;
@@ -27,6 +30,8 @@ public:
     void retouch();
 
 private:
+    friend class test::DungeonListTestAccess;
+
     DungeonList() = default;
 
     static DungeonList instance;
