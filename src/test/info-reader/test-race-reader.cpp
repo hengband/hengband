@@ -4,7 +4,9 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include <cstdint>
 #include <doctest/doctest.h>
+#include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
 
@@ -56,6 +58,101 @@ MonraceDefinition &test_monrace()
 {
     return MonraceList::get_instance().get_monrace(static_cast<MonraceId>(0));
 }
+}
+
+TEST_CASE("RaceReader accepts schema boundary IDs")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    for (const auto id : { 0, 9999 }) {
+        CAPTURE(id);
+        data["id"] = id;
+        REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+        CHECK(MonraceList::get_instance().get_monrace(static_cast<MonraceId>(id)).idx == static_cast<MonraceId>(id));
+        CHECK(error_idx == id);
+    }
+}
+
+TEST_CASE("RaceReader rejects out-of-range IDs before conversion or registration")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    for (const auto &id : {
+             nlohmann::json(-1), nlohmann::json(10000), nlohmann::json(65536),
+             nlohmann::json(int64_t{ 1 } << 32), nlohmann::json((int64_t{ 1 } << 32) + 1),
+             nlohmann::json(std::numeric_limits<int64_t>::min()), nlohmann::json(std::numeric_limits<uint64_t>::max()) }) {
+        CAPTURE(id);
+        data["id"] = id;
+        CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_FLAG);
+        CHECK(MonraceList::get_instance().empty());
+        CHECK(error_idx == 0);
+    }
+}
+
+TEST_CASE("RaceReader preserves ID type and missing-value errors")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    data.erase("id");
+    CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    for (const auto &id : { nlohmann::json(), nlohmann::json(true), nlohmann::json("1"), nlohmann::json(1.0), nlohmann::json::array(), nlohmann::json::object() }) {
+        data["id"] = id;
+        CHECK(RaceReader(data).read() == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+        CHECK(MonraceList::get_instance().empty());
+    }
+}
+
+TEST_CASE("RaceReader accepts single-byte symbol characters")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    for (const auto *character : { "p", " ", "\\" }) {
+        CAPTURE(character);
+        data["symbol"]["character"] = character;
+        REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+        CHECK(test_monrace().symbol_definition.character == character[0]);
+    }
+}
+
+TEST_CASE("RaceReader rejects empty and multibyte symbol characters")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    data["symbol"]["character"] = "";
+    CHECK(RaceReader(data).read() == PARSE_ERROR_GENERIC);
+    for (const auto *character : { "pp", "\xc3\xa9", "\xf0\x9f\x8c\xb2" }) {
+        CAPTURE(character);
+        data["symbol"]["character"] = character;
+        CHECK(RaceReader(data).read() == PARSE_ERROR_INVALID_VALUE);
+    }
+}
+
+TEST_CASE("RaceReader accepts exactly the supported number of blows")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    data["blows"] = nlohmann::json::array();
+    for (int i = 0; i < MAX_NUM_BLOWS; ++i) {
+        data["blows"].push_back({ { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", std::to_string(i + 1) + "d6" } });
+    }
+    REQUIRE(RaceReader(data).read() == PARSE_ERROR_NONE);
+    for (int i = 0; i < MAX_NUM_BLOWS; ++i) {
+        CHECK(test_monrace().blows[i].damage_dice == Dice(i + 1, 6));
+    }
+}
+
+TEST_CASE("RaceReader rejects excess blows before accessing beyond their storage")
+{
+    test::MonraceListTestAccess guard;
+    auto data = make_monrace();
+    for (const auto count : { MAX_NUM_BLOWS + 1, MAX_NUM_BLOWS + 2, MAX_NUM_BLOWS + 3 }) {
+        CAPTURE(count);
+        data["blows"] = nlohmann::json::array();
+        for (int i = 0; i < count; ++i) {
+            data["blows"].push_back({ { "method", "HIT" }, { "effect", "HURT" }, { "damage_dice", "1d6" } });
+        }
+        CHECK(RaceReader(data).read() == PARSE_ERROR_GENERIC);
+    }
 }
 
 TEST_CASE("RaceReader accepts every schema-valid skill probability")
