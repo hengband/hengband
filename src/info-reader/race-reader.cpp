@@ -38,7 +38,10 @@ int RaceReader::read() const
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto monrace_id_int = id_obj.get<int>();
+    int monrace_id_int;
+    if (const auto err = info_set_integer(id_obj, monrace_id_int, true, Range(0, 9999))) {
+        return err;
+    }
     if (monrace_id_int < error_idx) {
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
@@ -307,7 +310,15 @@ int RaceReader::set_mon_symbol(MonraceDefinition &monrace) const
         return PARSE_ERROR_GENERIC;
     }
 
-    monrace.symbol_definition = { color->second, character_obj.get<std::string>().front() };
+    const auto character = character_obj.get<std::string>();
+    if (character.empty()) {
+        return PARSE_ERROR_GENERIC;
+    }
+    if (character.size() != 1) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+
+    monrace.symbol_definition = { color->second, character.front() };
     return PARSE_ERROR_NONE;
 }
 
@@ -449,7 +460,7 @@ int RaceReader::set_mon_blows(MonraceDefinition &monrace) const
     }
 
     for (auto blow_num = 0; const auto &blow : blow_data) {
-        if (blow_num > 5) {
+        if (blow_num >= MAX_NUM_BLOWS) {
             return PARSE_ERROR_GENERIC;
         }
 
