@@ -15,6 +15,7 @@
 #include "player-status/player-energy.h"
 #include "status/experience.h"
 #include "sv-definition/sv-wand-types.h"
+#include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -133,12 +134,22 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
     rfu.set_flags(flags_swrf);
     rfu.set_flags(flags_srf);
     item->pval--;
-    if (i_idx >= 0) {
-        inven_item_charges(*this->player_ptr->inventory[i_idx]);
+
+    // 効果中のアイテム削除や並べ替えでインデックスが変わるため、同じ実体を探し直す。
+    const auto is_inventory = i_idx >= 0;
+    const auto &floor = *this->player_ptr->current_floor_ptr;
+    const auto &items = is_inventory ? this->player_ptr->inventory : floor.o_list;
+    const auto current_idx = find_item_index(items, item);
+    if (!current_idx) {
         return;
     }
 
-    floor_item_charges(*this->player_ptr->current_floor_ptr, 0 - i_idx);
+    if (is_inventory) {
+        inven_item_charges(*item);
+        return;
+    }
+
+    floor_item_charges(floor, *current_idx);
 }
 
 bool ObjectZapWandEntity::check_can_zap() const
