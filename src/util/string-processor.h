@@ -65,6 +65,8 @@ std::string str_toupper(std::string_view str);
 std::string str_tolower(std::string_view str);
 std::string str_upcase_first(std::string_view str);
 std::set<int> str_find_all_multibyte_chars(std::string_view str);
+bool is_multibyte_char_at(std::string_view sv, size_t pos = 0);
+bool is_multibyte_char_at(const char *s);
 tl::optional<std::string_view> extract_suffix(std::string_view str, char find);
 tl::optional<std::string_view> extract_suffix(std::string_view str, std::string_view find);
 int count_digits(int value, int base = 10);

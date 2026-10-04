@@ -38,6 +38,8 @@ constexpr auto trim_back = ranges::views::reverse | trim_front | ranges::views::
  * 文字列の末尾が2バイト文字の前半バイトだけで終わっている場合も2を返す。
  * 戻り値を足した位置が文字列の長さを超えうるため、添字を進める用途では
  * ループの継続条件で範囲を確かめること。
+ * 前半バイトだけで終わる場合に false を返す is_multibyte_char_at() とは意図して扱いを変えている。
+ * str_substr() が前半バイトだけの末尾を部分文字列に含めないことなどは、この仕様を前提にしている。
  */
 size_t char_byte_length([[maybe_unused]] std::string_view sv, [[maybe_unused]] size_t i)
 {
@@ -630,6 +632,38 @@ std::set<int> str_find_all_multibyte_chars([[maybe_unused]] std::string_view str
     return mb_chars;
 #else
     return {};
+#endif
+}
+
+/*!
+ * @brief 文字列の指定した位置から、後半バイトまでそろった2バイト文字が始まるかを返す
+ * @param sv 文字列
+ * @param pos 位置(バイト)
+ * @return pos が2バイト文字の前半バイトを指し、その後ろに後半バイトがあれば true (英語版では常に false)
+ * @details
+ * 2バイト文字の後半バイトは前半バイトと同じ範囲の値もとるため、pos は文字の先頭を指していること。
+ */
+bool is_multibyte_char_at([[maybe_unused]] std::string_view sv, [[maybe_unused]] size_t pos)
+{
+#ifdef JP
+    // pos + 1 は pos が大きいと桁あふれするので、残りの長さで確かめる
+    return (pos < sv.length()) && (sv.length() - pos >= 2) && iskanji(sv[pos]);
+#else
+    return false;
+#endif
+}
+
+/*!
+ * @brief NUL 終端の文字列の先頭が、後半バイトまでそろった2バイト文字かを返す
+ * @param s NUL 終端の文字列
+ * @return s が2バイト文字の前半バイトを指し、その後ろに後半バイトがあれば true (英語版では常に false)
+ */
+bool is_multibyte_char_at([[maybe_unused]] const char *s)
+{
+#ifdef JP
+    return iskanji(s[0]) && (s[1] != '\0');
+#else
+    return false;
 #endif
 }
 
