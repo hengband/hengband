@@ -70,6 +70,9 @@
     <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp">
+      <Filter>info-reader</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>

@@ -20,8 +20,10 @@
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
 #include <limits>
+#include <memory>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
+#include <utility>
 
 BaseitemReader::BaseitemReader(const nlohmann::json &baseitem_data)
     : baseitem_data(baseitem_data)
@@ -61,11 +63,8 @@ int BaseitemReader::read() const
 
     auto &baseitems = BaseitemList::get_instance();
     error_idx = item_id;
-    if (item_id >= static_cast<int>(baseitems.size())) {
-        baseitems.resize(item_id + 1);
-    }
     const short short_id = static_cast<short>(item_id);
-    auto &baseitem = baseitems.get_baseitem(short_id);
+    auto baseitem = item_id < static_cast<int>(baseitems.size()) ? baseitems.get_baseitem(short_id).clone_without_required_fields() : BaseitemDefinition{};
     if (auto err = info_set_string(get_json_value(this->baseitem_data, "name"), baseitem.name, true)) {
         msg_print(_("アイテムの名称読込失敗。ID: '{}'。", "Failed to load item name. ID: '{}'."), error_idx);
         return err;
@@ -135,6 +134,12 @@ int BaseitemReader::read() const
         return err;
     }
 
+    if (item_id >= static_cast<int>(baseitems.size())) {
+        baseitems.resize(item_id + 1);
+    }
+    auto &target = baseitems.get_baseitem(short_id);
+    std::destroy_at(std::addressof(target));
+    std::construct_at(std::addressof(target), std::move(baseitem));
     return PARSE_ERROR_NONE;
 }
 
