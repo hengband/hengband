@@ -43,7 +43,7 @@ public:
 private:
     tl::optional<int> pick_nearest_interest_target(const Pos2D &pos, const Direction &dir);
     std::string describe_projectablity() const;
-    char examine_target_grid(std::string_view info, tl::optional<target_type> append_mode = tl::nullopt) const;
+    char examine_target_grid(const std::string &info, tl::optional<target_type> append_mode = tl::nullopt) const;
     void change_interest_index(int amount);
     Direction switch_target_input();
     tl::optional<int> check_panel_changed(const Direction &dir);
@@ -214,7 +214,7 @@ std::string TargetSetter::describe_projectablity() const
     return info.append(cheatinfo);
 }
 
-char TargetSetter::examine_target_grid(std::string_view info, tl::optional<target_type> append_mode) const
+char TargetSetter::examine_target_grid(const std::string &info, tl::optional<target_type> append_mode) const
 {
     const auto target_mode = append_mode ? i2enum<target_type>(this->mode | *append_mode) : this->mode;
     while (true) {

@@ -324,12 +324,12 @@ void msg_print(std::string_view msg)
 
     while (std::ssize(msg) > split_width) {
         auto split = split_length(msg, split_width);
-        term_putstr(0, 0, split, TERM_WHITE, msg.data());
+        term_putstr(0, 0, split, TERM_WHITE, msg);
         msg_flush(p_ptr, split + 1);
         msg.remove_prefix(split);
     }
 
-    term_putstr(msg_head_pos, 0, msg.size(), TERM_WHITE, msg.data());
+    term_putstr(msg_head_pos, 0, msg.size(), TERM_WHITE, msg);
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::MESSAGE);
     window_stuff(p_ptr);
 

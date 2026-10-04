@@ -26,6 +26,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 
 /*!
@@ -37,7 +38,7 @@
  * @param spell_name 抹殺効果を起こした魔法の名前
  * @return 効力があった場合TRUEを返す
  */
-bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, concptr spell_name)
+bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool player_cast, int dam_side, std::string_view spell_name)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     auto &monster = floor.m_list[m_idx];
@@ -97,7 +98,7 @@ bool genocide_aux(PlayerType *player_ptr, MONSTER_IDX m_idx, int power, bool pla
     }
 
     if (player_cast) {
-        take_hit(player_ptr, DAMAGE_GENO, randint1(dam_side), format(_("%s^の呪文を唱えた疲労", "the strain of casting %s^"), spell_name));
+        take_hit(player_ptr, DAMAGE_GENO, randint1(dam_side), fmt::format(_("{}の呪文を唱えた疲労", "the strain of casting {}"), str_upcase_first(spell_name)));
     }
 
     move_cursor_relative(player_ptr->y, player_ptr->x);
