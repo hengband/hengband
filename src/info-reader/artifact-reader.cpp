@@ -31,7 +31,10 @@ int ArtifactReader::read() const
         return PARSE_ERROR_TOO_FEW_ARGUMENTS;
     }
 
-    const auto int_id = get_json_value(this->art_data, "id").get<int>();
+    int int_id;
+    if (auto err = info_set_integer(get_json_value(this->art_data, "id"), int_id, true, Range(0, 9999))) {
+        return err;
+    }
     if (int_id <= error_idx) {
         return PARSE_ERROR_NON_SEQUENTIAL_RECORDS;
     }
