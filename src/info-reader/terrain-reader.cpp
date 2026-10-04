@@ -198,6 +198,9 @@ int TerrainReader::set_terrain_symbol(TerrainType &terrain) const
     if (ch_str.empty()) {
         return PARSE_ERROR_GENERIC;
     }
+    if (ch_str.size() != 1) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
 
     const auto color_name = color_obj.get<std::string>();
     const auto it = color_list.find(color_name);
