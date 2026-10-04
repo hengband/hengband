@@ -90,6 +90,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp" />
     <ClCompile Include="..\..\src\test\io\test-interpret-pref-file.cpp" />
     <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp" />
+    <ClCompile Include="..\..\src\test\io\test-pref-file-expressor.cpp" />
     <ClCompile Include="..\..\src\test\io\test-tokenizer.cpp" />
     <ClCompile Include="..\..\src\test\load\test-angband-version-comparer.cpp" />
     <ClCompile Include="..\..\src\test\locale\test-character-encoding.cpp" />

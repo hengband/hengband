@@ -148,26 +148,12 @@ static std::string describe_fake_artifact_name_after_body_ja(const ItemEntity &i
         return "";
     }
 
-    auto str = item.inscription->data();
-    while (*str) {
-        if (iskanji(*str)) {
-            str += 2;
-            continue;
-        }
-
-        if (*str == '#') {
-            break;
-        }
-
-        str++;
-    }
-
-    if (*str == '\0') {
+    const auto *str = angband_strchr(item.inscription->data(), '#');
+    if (str == nullptr) {
         return "";
     }
 
-    auto str_aux = angband_strchr(item.inscription->data(), '#');
-    return format("『%s』", str_aux + 1);
+    return format("『%s』", str + 1);
 }
 
 /*!

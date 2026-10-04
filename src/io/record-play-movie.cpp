@@ -500,7 +500,8 @@ static void win2unix(int col, char *buf)
 
     while (*buf) {
 #ifdef JP
-        if (iskanji(*buf)) {
+        // 文字列が全角文字の前半バイトで終わっている場合は、後半バイトが無いので全角文字として扱わない
+        if (iskanji(*buf) && (buf[1] != '\0')) {
             buf += 2;
             continue;
         }
