@@ -1499,6 +1499,8 @@ hengband_test_SOURCES = \
 	test/system/artifact-list-test-access.h \
 	test/system/dungeon-list-test-access.h \
 	test/system/terrain-list-test-access.h \
+	test/system/monrace-list-test-access.h \
+	test/system/quest-list-test-access.h \
 	\
 	test/autopick/test-autopick-editor-util.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
@@ -1542,6 +1544,7 @@ hengband_test_SOURCES = \
 	test/store/test-store-util.cpp \
 	test/system/baseitem/test-baseitem-definition.cpp \
 	test/system/monrace/test-monrace-definition.cpp \
+	test/system/test-quest-list.cpp \
 	test/term/test-z-form.cpp \
 	test/term/test-z-rand.cpp \
 	test/timed-effect/test-player-cut.cpp \

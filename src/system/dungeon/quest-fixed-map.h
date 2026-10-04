@@ -20,6 +20,9 @@ class QuestType;
 enum class QuestId : short;
 enum class QuestStatusType : short;
 enum class QuestKindType : short;
+namespace test {
+class QuestListTestAccess;
+}
 
 /*!
  * @brief クエストの静的メタデータ (旧 Q:Q)。QuestType::reset() で消えないよう別に保持し、
@@ -110,6 +113,7 @@ public:
     const std::map<char, QuestLegendCell> &get_base_legend() const;
 
 private:
+    friend class test::QuestListTestAccess;
     QuestFixedMapList() = default;
     static QuestFixedMapList instance;
     std::map<QuestId, QuestFixedMap> maps;
