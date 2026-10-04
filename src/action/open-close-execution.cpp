@@ -247,7 +247,7 @@ bool exe_disarm_chest(PlayerType *player_ptr, POSITION y, POSITION x, OBJECT_IDX
     } else {
         msg_print(_("トラップを作動させてしまった！", "You set off a trap!"));
         sound(SoundKind::FAIL);
-        Chest(player_ptr).fire_trap(pos, o_idx);
+        Chest(player_ptr).fire_trap(pos, player_ptr->current_floor_ptr->o_list[o_idx]);
     }
 
     return more;
