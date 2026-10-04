@@ -241,6 +241,18 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
 }
 
 /*!
+ * @brief 町の固定マップの読み込みエラーを表示する
+ * @param err エラーコード
+ * @param filename 読み込んでいたファイルの名前
+ */
+static void report_load_error(parse_error_type err, std::string_view filename)
+{
+    const auto oops = ((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown";
+    msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, filename);
+    msg_erase();
+}
+
+/*!
  * @brief 町の定義 (TownDefinitionList.jsonc) から、現在の町の固定マップを読み込んでフロア全体に生成する
  * @param player_ptr プレイヤーへの参照ポインタ
  * @return エラーコード
@@ -248,17 +260,13 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
 parse_error_type load_town_map(PlayerType *player_ptr)
 {
     if (const auto err = load_town_preferences(); err != PARSE_ERROR_NONE) {
-        const auto oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-        msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, TOWN_PREFERENCES);
-        msg_erase();
+        report_load_error(err, TOWN_PREFERENCES);
         return err;
     }
 
     std::string map_file;
     if (const auto err = load_town_definition_file(map_file); err != PARSE_ERROR_NONE) {
-        const auto oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-        msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, TOWN_DEFINITION_LIST);
-        msg_erase();
+        report_load_error(err, TOWN_DEFINITION_LIST);
         return err;
     }
     if (map_file.empty()) {
@@ -266,9 +274,7 @@ parse_error_type load_town_map(PlayerType *player_ptr)
     }
     const auto err = parse_town_map_jsonc(player_ptr, map_file);
     if (err != PARSE_ERROR_NONE) {
-        const auto oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-        msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, map_file);
-        msg_erase();
+        report_load_error(err, map_file);
     }
     return err;
 }
