@@ -74,12 +74,12 @@ int MessageReader::set_mon_message() const
         bool use_name;
         std::string text;
     };
-    std::vector<PendingMessage> pending;
+    std::vector<PendingMessage> pending_messages;
 
     const auto id_list_iter = group_data.find("id_list");
     const auto has_id_list = (id_list_iter != group_data.end());
     const auto publish = [&] {
-        for (const auto &message : pending) {
+        for (const auto &message : pending_messages) {
             if (has_id_list) {
                 for (const auto id : id_list) {
                     MonraceMessageList::get_instance().emplace(id, message.action, message.chance, message.use_name, message.text);
@@ -187,7 +187,7 @@ int MessageReader::set_mon_message() const
             if (!str_test) {
                 return PARSE_ERROR_INVALID_FLAG;
             }
-            pending.push_back({ action->second, chance, use_name, std::move(*str_test) });
+            pending_messages.push_back({ action->second, chance, use_name, std::move(*str_test) });
         }
     }
     publish();
