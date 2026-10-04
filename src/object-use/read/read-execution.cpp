@@ -86,11 +86,9 @@ void ObjectReadEntity::execute(bool known)
     sound(SoundKind::SCROLL);
 
     // 効果中のアイテム削除や並べ替えでインデックスが変わるため、同じ実体を探し直す。
-    const auto is_inventory = this->i_idx >= 0;
-    const auto &items = is_inventory ? this->player_ptr->inventory : this->player_ptr->current_floor_ptr->o_list;
-    const auto current_idx = find_item_index(items, item);
-    if (current_idx) {
-        vary_item(this->player_ptr, is_inventory ? *current_idx : -*current_idx, -1);
+    const auto current_i_idx = find_current_i_idx(this->player_ptr, this->i_idx >= 0, item);
+    if (current_i_idx) {
+        vary_item(this->player_ptr, *current_i_idx, -1);
     }
 }
 

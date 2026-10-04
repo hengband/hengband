@@ -582,13 +582,12 @@ void exe_fire(PlayerType *player_ptr, INVENTORY_IDX i_idx, ItemEntity *j_ptr, SP
     auto &tracker = LoreTracker::get_instance();
     for (auto i = 0; i < ((snipe_type == SP_DOUBLE) ? 2 : 1); i++) {
         // 1射目の効果でアイテムの削除や並べ替えが起きると番号が変わるため、同じ実体を探し直す。
-        const auto &items = is_inventory ? player_ptr->inventory : floor.o_list;
-        const auto current_idx = find_item_index(items, ammo);
-        if (!current_idx || !o_ptr->is_valid()) {
+        const auto current_i_idx = find_current_i_idx(player_ptr, is_inventory, ammo);
+        if (!current_i_idx) {
             break;
         }
 
-        i_idx = is_inventory ? *current_idx : -*current_idx;
+        i_idx = *current_i_idx;
 
         /* Start at the player */
         y = player_ptr->y;

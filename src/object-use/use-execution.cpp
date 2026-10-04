@@ -19,7 +19,6 @@
 #include "player-base/player-class.h"
 #include "player-status/player-energy.h"
 #include "status/experience.h"
-#include "system/floor/floor-info.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
@@ -146,12 +145,9 @@ void ObjectUseEntity::execute()
         return;
     }
 
-    // 効果中のアイテム削除や並べ替えでインデックスが変わるため、同じ実体を探し直す。
+    // 効果でアイテムが削除されていることがあるため、同じ実体がまだ存在するか確かめる。
     const auto is_inventory = this->i_idx >= 0;
-    const auto &floor = *this->player_ptr->current_floor_ptr;
-    const auto &items = is_inventory ? this->player_ptr->inventory : floor.o_list;
-    const auto current_idx = find_item_index(items, item);
-    if (!current_idx) {
+    if (!find_current_i_idx(this->player_ptr, is_inventory, item)) {
         return;
     }
 
@@ -160,7 +156,7 @@ void ObjectUseEntity::execute()
         return;
     }
 
-    floor_item_charges(floor, *current_idx);
+    floor_item_charges(*item);
 }
 
 bool ObjectUseEntity::check_can_use()
