@@ -232,7 +232,8 @@ std::string get_inscription(const ItemEntity &item)
                 break;
             }
 #ifdef JP
-            if (iskanji(sv.front())) {
+            // 銘が全角文字の前半バイトで終わっている場合は、後半バイトが無いので全角文字として扱わない
+            if (iskanji(sv.front()) && (sv.length() > 1)) {
                 ss << sv.front();
                 sv.remove_prefix(1);
             }
