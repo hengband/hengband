@@ -64,24 +64,7 @@ int BaseitemReader::read() const
     auto &baseitems = BaseitemList::get_instance();
     error_idx = item_id;
     const short short_id = static_cast<short>(item_id);
-    BaseitemDefinition baseitem;
-    if (item_id < static_cast<int>(baseitems.size())) {
-        // Preserve omitted optional fields when reading an existing slot.
-        const auto &previous = baseitems.get_baseitem(short_id);
-        baseitem.flavor_name = previous.flavor_name;
-        baseitem.text = previous.text;
-        baseitem.pval = previous.pval;
-        baseitem.ac = previous.ac;
-        baseitem.damage_dice = previous.damage_dice;
-        baseitem.to_h = previous.to_h;
-        baseitem.to_d = previous.to_d;
-        baseitem.to_a = previous.to_a;
-        baseitem.alloc_tables = previous.alloc_tables;
-        baseitem.act_idx = previous.act_idx;
-        baseitem.flags = previous.flags;
-        baseitem.gen_flags = previous.gen_flags;
-        baseitem.easy_know = previous.easy_know;
-    }
+    auto baseitem = item_id < static_cast<int>(baseitems.size()) ? baseitems.get_baseitem(short_id).clone_without_required_fields() : BaseitemDefinition{};
     if (auto err = info_set_string(get_json_value(this->baseitem_data, "name"), baseitem.name, true)) {
         msg_print(_("アイテムの名称読込失敗。ID: '{}'。", "Failed to load item name. ID: '{}'."), error_idx);
         return err;

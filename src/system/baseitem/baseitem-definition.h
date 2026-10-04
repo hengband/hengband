@@ -56,6 +56,7 @@ public:
     bool easy_know{}; /*!< ベースアイテムが初期からベース名を判断可能かどうか / This object is always known (if aware) */
     RandomArtActType act_idx{}; /*!< 発動能力のID /  Activative ability index */
 
+    BaseitemDefinition clone_without_required_fields() const;
     bool is_valid() const;
     std::string stripped_name() const;
     bool order_cost(const BaseitemDefinition &other) const;

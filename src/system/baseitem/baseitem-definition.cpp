@@ -16,6 +16,30 @@ BaseitemDefinition::BaseitemDefinition()
 }
 
 /*!
+ * @brief 再読込時に省略可能な項目を保持したベースアイテム定義を複製する
+ * @details 必須項目のname・symbol・bi_key・level・weight・costは初期値のままにする。
+ * @return 必須項目を除いて複製した定義
+ */
+BaseitemDefinition BaseitemDefinition::clone_without_required_fields() const
+{
+    BaseitemDefinition cloned;
+    cloned.flavor_name = this->flavor_name;
+    cloned.text = this->text;
+    cloned.pval = this->pval;
+    cloned.ac = this->ac;
+    cloned.damage_dice = this->damage_dice;
+    cloned.to_h = this->to_h;
+    cloned.to_d = this->to_d;
+    cloned.to_a = this->to_a;
+    cloned.alloc_tables = this->alloc_tables;
+    cloned.act_idx = this->act_idx;
+    cloned.flags = this->flags;
+    cloned.gen_flags = this->gen_flags;
+    cloned.easy_know = this->easy_know;
+    return cloned;
+}
+
+/*!
  * @brief 正常なベースアイテムかを判定する
  * @return 正常なベースアイテムか否か
  * @details ID 0は「異常アイテム」という名前の文字通り異常アイテムであり、個別に弾く
