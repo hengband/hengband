@@ -55,12 +55,18 @@
     <Filter Include="util">
       <UniqueIdentifier>{88a7a349-31ae-4d18-a09a-c749dff85ef9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="wizard">
+      <UniqueIdentifier>{61ff756d-6483-4529-9a1a-b27930a91886}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\stdafx.cpp" />
     <ClCompile Include="..\..\src\test\test-main.cpp" />
     <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
     <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />
+    <ClCompile Include="..\..\src\test\wizard\test-spoiler-util.cpp">
+      <Filter>wizard</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\autopick\test-autopick-editor-util.cpp">
       <Filter>autopick</Filter>
     </ClCompile>

@@ -90,14 +90,18 @@ void spoil_out(std::string_view sv, bool flush_buffer)
             waiting_output = false;
         }
 
-        if (roff_p != roff_buf) {
+        // 行バッファが空か、空白だけなら空の行として扱う
+        auto is_blank = (roff_p == roff_buf);
+        if (!is_blank) {
             roff_p--;
-        }
-        while (*roff_p == ' ' && roff_p != roff_buf) {
-            roff_p--;
+            while (*roff_p == ' ' && roff_p != roff_buf) {
+                roff_p--;
+            }
+
+            is_blank = (*roff_p == ' ');
         }
 
-        if (roff_p == roff_buf) {
+        if (is_blank) {
             fprintf(spoiler_file, "\n");
         } else {
             *(roff_p + 1) = '\0';
