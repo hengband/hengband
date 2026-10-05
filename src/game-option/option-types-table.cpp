@@ -138,6 +138,8 @@ const std::vector<GameOption> option_info = validate_option_info({
 
     { &fresh_message, false, GameOptionType::FRESH_MESSAGE, "fresh_message", _("メッセージの後に画面を再描画する", "Flush output after every message"), GameOptionPage::MAPSCREEN },
 
+    { &defer_map_subwindows, true, GameOptionType::DEFER_MAP_SUBWINDOWS, "defer_map_subwindows", _("サブウィンドウの地図を1ターンに1回だけ再描画する", "Redraw map subwindows at most once per turn"), GameOptionPage::MAPSCREEN },
+
     { &hilite_player, false, GameOptionType::HILITE_PLAYER, "hilite_player", _("プレイヤーにカーソルを合わせる", "Highlight the player with the cursor"), GameOptionPage::MAPSCREEN },
 
     { &display_path, true, GameOptionType::DISPLAY_PATH, "display_path", _("魔法や矢の軌跡を表示する", "Display actual path before shooting"), GameOptionPage::MAPSCREEN },

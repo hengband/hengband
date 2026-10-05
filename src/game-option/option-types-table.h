@@ -170,7 +170,8 @@ enum class GameOptionType : int {
     LEAVE_CHEST = 231,
     DESTROY_FEELING = 232,
     DESTROY_IDENTIFY = 233,
-    // 234-255
+    DEFER_MAP_SUBWINDOWS = 234,
+    // 235-255
 
     MAX = 256,
 };
