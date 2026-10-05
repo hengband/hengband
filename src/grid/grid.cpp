@@ -447,7 +447,11 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
         auto symbol_pair = map_info(player_ptr, pos);
         symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 
-        term_queue_bigchar(panel_col_of(pos.x), pos.y - panel_row_prt, symbol_pair);
+        // 表示が変わらなければ、地図のサブウィンドウを描き直す必要も無い
+        if (!term_queue_bigchar(panel_col_of(pos.x), pos.y - panel_row_prt, symbol_pair)) {
+            return;
+        }
+
         static constexpr auto flags = {
             SubWindowRedrawingFlag::OVERHEAD,
             SubWindowRedrawingFlag::DUNGEON,

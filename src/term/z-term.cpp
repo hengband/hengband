@@ -261,14 +261,15 @@ static errr term_pict_hack(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, 
 /*!
  * Mentally draw an attr/char at a given location
  * Assumes given location and values are valid.
+ * @return 画面の内容が変わったならtrue
  */
-static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair)
+static bool term_queue_char_aux(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair)
 {
     if ((x < 0) || (x >= game_term->wid)) {
-        return;
+        return false;
     }
     if ((y < 0) || (y >= game_term->hgt)) {
-        return;
+        return false;
     }
 
     const auto &scrn = game_term->scr;
@@ -286,7 +287,7 @@ static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair 
     should_ignore &= *scr_taa == symbol_background.color;
     should_ignore &= *scr_tcc == symbol_background.character;
     if (should_ignore) {
-        return;
+        return false;
     }
 
     /* Save the "literal" information */
@@ -321,6 +322,8 @@ static void term_queue_char_aux(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair 
         if ((x - 1) < game_term->x1[y]) {
             game_term->x1[y]--;
         }
+
+    return true;
 }
 
 void term_queue_char(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair)
@@ -333,8 +336,9 @@ void term_queue_char(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pai
  * If use_bigtile is FALSE, simply call term_queue_char().
  * Otherwise, mentally draw a pair of attr/char at a given location.
  * Assumes given location and values are valid.
+ * @return 画面の内容が変わったならtrue
  */
-void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair_initial)
+bool term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_pair_initial)
 {
 #ifdef JP
     /*
@@ -356,8 +360,7 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_
 
     /* If non bigtile mode, call orginal function */
     if (!use_bigtile) {
-        term_queue_char_aux(ch_x, ch_y, symbol_pair_initial);
-        return;
+        return term_queue_char_aux(ch_x, ch_y, symbol_pair_initial);
     }
 
     /* A tile becomes a Bigtile */
@@ -398,8 +401,9 @@ void term_queue_bigchar(TERM_LEN x, TERM_LEN y, const DisplaySymbolPair &symbol_
     }
 
     /* Display pair of attr/char */
-    term_queue_char_aux(ch_x, ch_y, symbol_pair);
-    term_queue_char_aux(ch_x + 1, ch_y, { { color, character }, {} });
+    const auto is_changed_left = term_queue_char_aux(ch_x, ch_y, symbol_pair);
+    const auto is_changed_right = term_queue_char_aux(ch_x + 1, ch_y, { { color, character }, {} });
+    return is_changed_left || is_changed_right;
 }
 
 /*!

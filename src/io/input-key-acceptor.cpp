@@ -54,6 +54,7 @@ static void all_term_fresh()
 
     RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
     handle_stuff(p_ptr);
+    window_stuff_including_deferred(p_ptr);
 
     term_activate(angband_terms[0]);
     term_gotoxy(x, y);
@@ -230,6 +231,11 @@ char inkey(bool do_all_term_refresh)
                 if (do_all_term_refresh) {
                     all_term_fresh();
                 } else {
+                    // -more- や確認などで入力を待つ前にも、残っているサブウィンドウの再描画の要求を処理して最新にする
+                    if (world.character_dungeon) {
+                        window_stuff_including_deferred(p_ptr);
+                    }
+
                     term_fresh();
                 }
 

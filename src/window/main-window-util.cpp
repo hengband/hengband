@@ -12,6 +12,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -100,6 +101,13 @@ void print_map(PlayerType *player_ptr)
             term_queue_bigchar(panel_col_of(x), y - panel_row_prt, symbol_pair);
         }
     }
+
+    // 各マスは lite_spot() を通らないので、ここで地図のサブウィンドウの再描画を要求する
+    static constexpr auto flags = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
 
     lite_spot(player_ptr, player_ptr->get_position());
     term_set_cursor(v != 0);
