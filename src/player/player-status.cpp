@@ -2585,6 +2585,8 @@ int calc_weight_limit(PlayerType *player_ptr)
 
 /*!
  * @brief フラグに応じて所持品の自動破壊・結合・並べ替えを行う
+ * @details 所持品のスロット番号が変わるため、アイテムの番号を保持している処理の途中では呼ばない。
+ * 通常は handle_stuff_with_inventory_arrangement() を通じて呼ぶ。
  */
 void update_inventory_arrangement(PlayerType *player_ptr)
 {
@@ -2608,6 +2610,7 @@ void update_inventory_arrangement(PlayerType *player_ptr)
 /*!
  * @brief update のフラグに応じた更新をまとめて行う / Handle "update"
  * @details 更新処理の対象はプレイヤーの能力修正/光源寿命/HP/MP/魔法の学習状態、他多数の外界の状態判定。
+ * 所持品の自動破壊・結合・並べ替えは行わない (update_inventory_arrangement() で行う)。
  */
 void update_creature(PlayerType *player_ptr)
 {
@@ -2617,8 +2620,6 @@ void update_creature(PlayerType *player_ptr)
     }
 
     auto &floor = *player_ptr->current_floor_ptr;
-    update_inventory_arrangement(player_ptr);
-
     if (rfu.has(StatusRecalculatingFlag::BONUS)) {
         rfu.reset_flag(StatusRecalculatingFlag::BONUS);
         PlayerAlignment(player_ptr).update_alignment();

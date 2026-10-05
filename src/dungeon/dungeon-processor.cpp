@@ -145,7 +145,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         StatusRecalculatingFlag::REORDER,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
-    handle_stuff(player_ptr);
+    handle_stuff_with_inventory_arrangement(player_ptr);
     term_fresh();
 
     auto no_feeling_quest = (quest_id == QuestId::OBERON);
@@ -222,7 +222,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
 
         process_player(player_ptr);
         process_upkeep_with_speed(player_ptr);
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after) {
@@ -234,7 +234,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         }
 
         process_monsters(player_ptr);
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after) {
@@ -246,7 +246,7 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
         }
 
         WorldTurnProcessor(player_ptr).process_world();
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
 
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_after) {

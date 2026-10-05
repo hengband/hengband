@@ -225,7 +225,7 @@ bool switch_class_racial_execution(PlayerType *player_ptr, const int32_t command
         }
 
         if (!player_ptr->effects()->paralysis().is_active() && !cmd_limit_cast(player_ptr)) {
-            handle_stuff(player_ptr);
+            handle_stuff_with_inventory_arrangement(player_ptr);
             command_dir = Direction::none();
             (void)do_cmd_cast(player_ptr);
         }

@@ -227,7 +227,7 @@ tl::optional<short> get_item_floor(PlayerType *player_ptr, std::string_view pmt,
     }
 
     msg_erase();
-    handle_stuff(player_ptr);
+    handle_stuff_with_inventory_arrangement(player_ptr);
     test_inventory_floor(player_ptr, &fis, item_tester);
     fis.done = false;
     fis.item = false;

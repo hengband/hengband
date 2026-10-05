@@ -372,7 +372,7 @@ static void process_game_turn(PlayerType *player_ptr)
     while (true) {
         process_dungeon(player_ptr, load_game);
         world.character_xtra = true;
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
         world.character_xtra = false;
         Target::clear_last_target();
         health_track(player_ptr, 0);

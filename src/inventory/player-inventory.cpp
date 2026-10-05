@@ -267,7 +267,7 @@ void carry(PlayerType *player_ptr, bool pickup)
     rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
     rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
-    handle_stuff(player_ptr);
+    handle_stuff_with_inventory_arrangement(player_ptr);
     const auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     autopick_pickup_items(player_ptr, grid);
 
