@@ -2,21 +2,12 @@
 #include "monster/monster-util.h"
 #include "room/door-definition.h"
 #include "system/angband-system.h"
-#include "system/enums/grid-flow.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/bit-flags-calculator.h"
 #include "util/enum-converter.h"
 #include "world/world.h"
-
-Grid::Grid()
-{
-    for (const auto gf : GRID_FLOW_RANGE) {
-        this->costs[gf] = 0;
-        this->dists[gf] = 0;
-    }
-}
 
 /*!
  * @brief 2点間の距離をニュートン・ラプソン法で算出する / Distance between two points via Newton-Raphson technique
@@ -188,16 +179,6 @@ bool Grid::has_monster() const
     return is_monster(this->m_idx);
 }
 
-uint8_t Grid::get_cost(GridFlow gf) const
-{
-    return this->costs.at(gf);
-}
-
-uint8_t Grid::get_distance(GridFlow gf) const
-{
-    return this->dists.at(gf);
-}
-
 bool Grid::has(TerrainCharacteristics tc) const
 {
     return this->get_terrain().has(tc);
@@ -257,20 +238,6 @@ bool Grid::can_generate_monster() const
     auto is_empty_grid = this->is_empty();
     is_empty_grid &= AngbandWorld::get_instance().character_dungeon || !this->has(TerrainCharacteristics::TREE);
     return is_empty_grid;
-}
-
-void Grid::reset_costs()
-{
-    for (const auto gf : GRID_FLOW_RANGE) {
-        this->costs[gf] = 0;
-    }
-}
-
-void Grid::reset_dists()
-{
-    for (const auto gf : GRID_FLOW_RANGE) {
-        this->dists[gf] = 0;
-    }
 }
 
 bool Grid::has_los() const

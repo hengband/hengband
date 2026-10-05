@@ -39,10 +39,12 @@
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "timed-effect/timed-effects.h"
+#include "util/enum-converter.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <algorithm>
 #include <queue>
 
 bool GridTemplate::matches(const Grid &grid) const
@@ -660,55 +662,54 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
  * Oh, and outside of the "torch radius", only "lite" grids need to be scanned.
  */
 
-/*
- * Hack - speed up the update_flow algorithm by only doing
- * it everytime the player moves out of LOS of the last
- * "way-point".
+/*!
+ * @brief 前回 update_flow() で探索したときのプレイヤーの位置
+ * @details 走行中にこの位置が見えている間は探索を省く。また、前回の探索で値を書いた範囲を消すのにも使う。
  */
-static POSITION flow_x = 0;
-static POSITION flow_y = 0;
+static Pos2D flow_center(0, 0);
 
-/*
- * Hack -- fill in the "cost" field of every grid that the player
- * can "reach" with the number of steps needed to reach that grid.
- * This also yields the "distance" of the player from every grid.
- *
- * In addition, mark the "when" of the grids that can reach
- * the player with the incremented value of "flow_n".
- *
- * Hack -- use the "seen" array as a "circular queue".
- *
- * We do not need a priority queue because the cost from grid
- * to grid is always "one" and we process them in order.
+/*!
+ * @brief モンスターがプレイヤーを追跡するための経路情報を更新する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details プレイヤーの位置から幅優先探索を行い、到達できるグリッドに、移動の種類 (GridFlow) ごとの
+ * コスト (閉じた扉は余分にかかる) と距離を記録する。探索は monster_flow_depth マスで打ち切る。
  */
 void update_flow(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
 
     /* The last way-point is on the map */
-    const Pos2D flow(flow_y, flow_x);
-    if (player_ptr->running && floor.contains(flow, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
+    if (player_ptr->running && floor.contains(flow_center, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         /* The way point is in sight - do not update.  (Speedup) */
-        if (floor.get_grid(flow).info & CAVE_VIEW) {
+        if (floor.get_grid(flow_center).info & CAVE_VIEW) {
             return;
         }
     }
 
-    /* Erase all of the current flow information */
-    for (const auto &pos : floor.get_area()) {
-        auto &grid = floor.get_grid(pos);
-        grid.reset_costs();
-        grid.reset_dists();
+    // 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る).
+    constexpr auto monster_flow_depth = 32;
+
+    // 前回の探索で値を書いたのは、前回の中心から monster_flow_depth マス以内のグリッドだけなので、そこだけを消す。
+    // フロアの生成・読み込み時と forget_flow() では、フロア全体を消している。
+    const auto y_min = std::max(flow_center.y - monster_flow_depth, 0);
+    const auto y_max = std::min(flow_center.y + monster_flow_depth, floor.height - 1);
+    const auto x_min = std::max(flow_center.x - monster_flow_depth, 0);
+    const auto x_max = std::min(flow_center.x + monster_flow_depth, floor.width - 1);
+    for (auto y = y_min; y <= y_max; y++) {
+        for (auto x = x_min; x <= x_max; x++) {
+            auto &grid = floor.get_grid({ y, x });
+            grid.reset_costs();
+            grid.reset_dists();
+        }
     }
 
-    /* Save player position */
-    flow_y = player_ptr->y;
-    flow_x = player_ptr->x;
+    const auto p_pos = player_ptr->get_position();
+    flow_center = p_pos;
 
     for (const auto gf : GRID_FLOW_RANGE) {
         // 幅優先探索用のキュー。
         std::queue<Pos2D> que;
-        que.emplace(player_ptr->y, player_ptr->x);
+        que.push(p_pos);
 
         /* Now process the queue */
         while (!que.empty()) {
@@ -717,40 +718,50 @@ void update_flow(PlayerType *player_ptr)
             const auto &grid = floor.get_grid(pos);
 
             /* Add the "children" */
+            const uint8_t base_cost = grid.get_cost(gf) + 1;
+            const uint8_t n = grid.get_distance(gf) + 1;
             for (const auto &d : Direction::directions_8()) {
-                uint8_t m = grid.costs.at(gf) + 1;
-                const uint8_t n = grid.dists.at(gf) + 1;
                 const auto pos_neighbor = pos + d.vec();
 
                 /* Ignore player's grid */
-                if (player_ptr->is_located_at(pos_neighbor)) {
+                if (pos_neighbor == p_pos) {
                     continue;
-                }
-
-                if (floor.has_closed_door_at(pos_neighbor)) {
-                    m += 3;
                 }
 
                 /* Ignore "pre-stamped" entries */
                 auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                auto &cost_neighbor = grid_neighbor.costs.at(gf);
-                auto &dist_neighbor = grid_neighbor.dists.at(gf);
-                if ((dist_neighbor != 0) && (dist_neighbor <= n) && (cost_neighbor <= m)) {
+                auto &cost_neighbor = grid_neighbor.costs[enum2i(gf)];
+                auto &dist_neighbor = grid_neighbor.dists[enum2i(gf)];
+                const auto is_pre_stamped = [&](uint8_t cost) { return (dist_neighbor != 0) && (dist_neighbor <= n) && (cost_neighbor <= cost); };
+
+                // 閉じた扉はコストを増やすだけなので、扉を考慮する前に記録済みなら考慮した後も記録済みである。
+                // 地形を引く前に除外しておく。
+                if (is_pre_stamped(base_cost)) {
                     continue;
+                }
+
+                const auto &terrain_neighbor = grid_neighbor.get_terrain();
+                const auto is_closed_door = terrain_neighbor.is_closed_door();
+                auto m = base_cost;
+                if (is_closed_door) {
+                    m += 3;
+                    if (is_pre_stamped(m)) {
+                        continue;
+                    }
                 }
 
                 /* Ignore "walls", "holes" and "rubble" */
                 auto can_move = false;
                 switch (gf) {
                 case GridFlow::CAN_FLY:
-                    can_move = grid_neighbor.has(TerrainCharacteristics::MOVE) || grid_neighbor.has(TerrainCharacteristics::CAN_FLY);
+                    can_move = terrain_neighbor.has(TerrainCharacteristics::MOVE) || terrain_neighbor.has(TerrainCharacteristics::CAN_FLY);
                     break;
                 default:
-                    can_move = grid_neighbor.has(TerrainCharacteristics::MOVE);
+                    can_move = terrain_neighbor.has(TerrainCharacteristics::MOVE);
                     break;
                 }
 
-                if (!can_move && !floor.has_closed_door_at(pos_neighbor)) {
+                if (!can_move && !is_closed_door) {
                     continue;
                 }
 
@@ -762,8 +773,6 @@ void update_flow(PlayerType *player_ptr)
                     dist_neighbor = n;
                 }
 
-                // 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る).
-                constexpr auto monster_flow_depth = 32;
                 if (n == monster_flow_depth) {
                     continue;
                 }
