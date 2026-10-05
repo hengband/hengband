@@ -11,6 +11,7 @@
 #include "system/grid-type-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/enum-converter.h"
+#include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
@@ -18,6 +19,11 @@
 #include <utility>
 
 namespace {
+constexpr Range LEGEND_SHORT_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
+// 負のモンスターIDは生成時にshortのまま符号反転されるので、最小値は許可しない。
+constexpr Range LEGEND_MONSTER_RANGE(-std::numeric_limits<MONSTER_IDX>::max(), std::numeric_limits<MONSTER_IDX>::max());
+constexpr Range LEGEND_EGO_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+
 const std::unordered_map<std::string_view, QuestKindType> QUEST_KIND_TOKENS = {
     { "NONE", QuestKindType::NONE },
     { "KILL_LEVEL", QuestKindType::KILL_LEVEL },
@@ -162,26 +168,44 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
 
     const auto &monster = get_json_value(cell_data, "monster");
     if (monster.is_number_integer()) {
-        grid.monster = static_cast<MONSTER_IDX>(monster.get<int>());
+        if (const auto err = info_set_integer(monster, grid.monster, true, LEGEND_MONSTER_RANGE); err != PARSE_ERROR_NONE) {
+            return i2enum<parse_error_type>(err);
+        }
     } else if (monster.is_object()) {
         if (json_is_true(get_json_value(monster, "random"))) {
             grid.random |= RANDOM_MONSTER;
-            grid.monster = static_cast<MONSTER_IDX>(get_json_value(monster, "oodLevel").is_number_integer() ? get_json_value(monster, "oodLevel").get<int>() : 0);
+            const auto &level = get_json_value(monster, "oodLevel");
+            if (level.is_number_integer()) {
+                if (const auto err = info_set_integer(level, grid.monster, true, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
+                    return i2enum<parse_error_type>(err);
+                }
+            }
         } else {
             const auto &clone = get_json_value(monster, "cloneOf");
             if (clone.is_number_integer()) {
-                grid.monster = static_cast<MONSTER_IDX>(-clone.get<int>());
+                int clone_id = 0;
+                if (const auto err = info_set_integer(clone, clone_id, true, LEGEND_MONSTER_RANGE); err != PARSE_ERROR_NONE) {
+                    return i2enum<parse_error_type>(err);
+                }
+                grid.monster = static_cast<MONSTER_IDX>(-clone_id);
             }
         }
     }
 
     const auto &object = get_json_value(cell_data, "object");
     if (object.is_number_integer()) {
-        grid.object = static_cast<OBJECT_IDX>(object.get<int>());
+        if (const auto err = info_set_integer(object, grid.object, true, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
+            return i2enum<parse_error_type>(err);
+        }
     } else if (object.is_object()) {
         if (json_is_true(get_json_value(object, "random"))) {
             grid.random |= RANDOM_OBJECT;
-            grid.object = static_cast<OBJECT_IDX>(get_json_value(object, "oodLevel").is_number_integer() ? get_json_value(object, "oodLevel").get<int>() : 0);
+            const auto &level = get_json_value(object, "oodLevel");
+            if (level.is_number_integer()) {
+                if (const auto err = info_set_integer(level, grid.object, true, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
+                    return i2enum<parse_error_type>(err);
+                }
+            }
         } else if (json_is_true(get_json_value(object, "questReward"))) {
             out.object_is_quest_reward = true;
         }
@@ -189,24 +213,32 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
 
     const auto &ego = get_json_value(cell_data, "ego");
     if (ego.is_number_integer()) {
-        grid.ego = i2enum<EgoType>(ego.get<int>());
+        if (const auto err = info_set_integer(ego, grid.ego, true, LEGEND_EGO_RANGE); err != PARSE_ERROR_NONE) {
+            return i2enum<parse_error_type>(err);
+        }
     } else if (ego.is_object() && json_is_true(get_json_value(ego, "random"))) {
         grid.random |= RANDOM_EGO;
         const auto &id = get_json_value(ego, "id");
         if (id.is_number_integer()) {
-            grid.ego = i2enum<EgoType>(id.get<int>());
+            if (const auto err = info_set_integer(id, grid.ego, true, LEGEND_EGO_RANGE); err != PARSE_ERROR_NONE) {
+                return i2enum<parse_error_type>(err);
+            }
         }
     }
 
     const auto &artifact = get_json_value(cell_data, "artifact");
     if (artifact.is_number_integer()) {
-        grid.artifact = i2enum<FixedArtifactId>(artifact.get<int>());
+        if (const auto err = info_set_integer(artifact, grid.artifact, true, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
+            return i2enum<parse_error_type>(err);
+        }
     } else if (artifact.is_object()) {
         if (json_is_true(get_json_value(artifact, "random"))) {
             grid.random |= RANDOM_ARTIFACT;
             const auto &id = get_json_value(artifact, "id");
             if (id.is_number_integer()) {
-                grid.artifact = i2enum<FixedArtifactId>(id.get<int>());
+                if (const auto err = info_set_integer(id, grid.artifact, true, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
+                    return i2enum<parse_error_type>(err);
+                }
             }
         } else if (json_is_true(get_json_value(artifact, "questReward"))) {
             out.artifact_is_quest_reward = true;
@@ -224,7 +256,7 @@ parse_error_type parse_quest_legend_cell(const nlohmann::json &cell_data, QuestL
         grid.random |= RANDOM_TRAP;
     }
 
-    if (const auto err = info_set_integer(get_json_value(cell_data, "special"), grid.special, false); err != PARSE_ERROR_NONE) {
+    if (const auto err = info_set_integer(get_json_value(cell_data, "special"), grid.special, false, LEGEND_SHORT_RANGE); err != PARSE_ERROR_NONE) {
         return i2enum<parse_error_type>(err);
     }
 
