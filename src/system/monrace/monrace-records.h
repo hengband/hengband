@@ -11,6 +11,9 @@
 #include <vector>
 
 class MonraceRecord;
+namespace test {
+class MonraceRecordsTestAccess;
+}
 class MonraceRecords {
 public:
     MonraceRecords(MonraceRecords &&) = delete;
@@ -29,6 +32,7 @@ public:
     void set_seen_count(MonraceId monrace_id, short count); //!< ロード用.
 
 private:
+    friend class test::MonraceRecordsTestAccess;
     MonraceRecords() = default;
 
     static MonraceRecords instance;

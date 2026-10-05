@@ -131,6 +131,9 @@
     <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\dungeon-list-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\monrace-list-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\monrace-message-list-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\monrace-records-test-access.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="HengbandCore.vcxproj">
