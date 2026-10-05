@@ -202,11 +202,7 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
         }
         if (selected_map != nullptr) {
             for (const auto &row : selected_map->rows) {
-                auto line = "D:" + row;
-                qg_ptr->buf = line.data();
-                if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr); err != PARSE_ERROR_NONE) {
-                    return err;
-                }
+                apply_fixed_map_row(player_ptr, qg_ptr, row);
             }
         }
         for (const auto &start : definition.starts) {
@@ -216,11 +212,7 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
             if (selected_map == nullptr) {
                 return PARSE_ERROR_INVALID_VALUE;
             }
-            auto line = "P:" + std::to_string(start.y) + ":" + std::to_string(start.x);
-            qg_ptr->buf = line.data();
-            if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr); err != PARSE_ERROR_NONE) {
-                return err;
-            }
+            apply_fixed_map_start(player_ptr, qg_ptr, start.y, start.x);
         }
         return PARSE_ERROR_NONE;
     } catch (const nlohmann::json::exception &) {

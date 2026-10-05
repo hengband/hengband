@@ -7,6 +7,9 @@
     <Filter Include="cmd-io">
       <UniqueIdentifier>{050a79fd-58ab-48f3-a881-f83ff7a488b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="floor">
+      <UniqueIdentifier>{b7056edf-72e4-40d6-8463-4d0699a4a6a5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="flavor">
       <UniqueIdentifier>{740c8771-89d8-44fe-bd2c-adcff9c2cfea}</UniqueIdentifier>
     </Filter>
@@ -103,6 +106,9 @@
     <ClCompile Include="..\..\src\test\info-reader\test-town-definition-list-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp">
+      <Filter>floor</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\info-reader\test-town-map-reader.cpp">
       <Filter>info-reader</Filter>
     </ClCompile>
@@ -190,6 +196,9 @@
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\system\test-quest-list.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\term\test-z-form.cpp">
       <Filter>term</Filter>
     </ClCompile>
@@ -238,6 +247,7 @@
     <ClInclude Include="..\..\src\test\string-helpers.h" />
     <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\quest-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\dungeon-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\monrace-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\monrace-message-list-test-access.h" />

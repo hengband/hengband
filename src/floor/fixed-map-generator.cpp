@@ -79,16 +79,16 @@ static void generate_artifact(PlayerType *player_ptr, qtwg_type *qtwg_ptr, const
     drop_here(*player_ptr->current_floor_ptr, std::move(item), *qtwg_ptr->y, *qtwg_ptr->x);
 }
 
-static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
+static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
 {
     *qtwg_ptr->x = qtwg_ptr->xmin;
     auto &floor = *player_ptr->current_floor_ptr;
-    int len = strlen(s);
+    const auto len = row.substr(0, row.find('\0')).size();
     auto &monraces = MonraceList::get_instance();
     const auto &dungeon = floor.get_dungeon_definition();
-    for (auto i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, s++, i++) {
+    for (size_t i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, i++) {
         auto &grid = floor.grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
-        int idx = s[0];
+        int idx = row[i];
         const auto item_index = letter[idx].object;
         auto monster_index = letter[idx].monster;
         const auto random = letter[idx].random;
@@ -178,21 +178,18 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, char *s)
     }
 }
 
-static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
+void apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
 {
-    if (qtwg_ptr->buf[0] != 'P') {
-        return false;
+    if (init_flags & INIT_ONLY_BUILDINGS) {
+        return;
     }
 
-    if ((init_flags & INIT_CREATE_DUNGEON) == 0) {
-        return true;
-    }
+    parse_qtw_D(player_ptr, qtwg_ptr, row);
+    (*qtwg_ptr->y)++;
+}
 
-    const auto tokens = tokenize(qtwg_ptr->buf + 2, 2);
-    if (tokens.size() != 2) {
-        return true;
-    }
-
+static void apply_fixed_map_size(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
+{
     int panels_y = (*qtwg_ptr->y / SCREEN_HGT);
     if (*qtwg_ptr->y % SCREEN_HGT) {
         panels_y++;
@@ -208,17 +205,53 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
     floor.width = panels_x * SCREEN_WID;
     panel_row_min = floor.height;
     panel_col_min = floor.width;
+}
+
+template <typename Y, typename X>
+static void apply_fixed_map_position(PlayerType *player_ptr, Y start_y, X start_x)
+{
+    auto &floor = *player_ptr->current_floor_ptr;
     if (floor.is_in_quest()) {
-        Pos2D p_pos(std::stoi(tokens[0]), std::stoi(tokens[1]));
+        Pos2D p_pos(start_y(), start_x());
         player_ptr->set_position(p_pos);
         delete_monster(player_ptr, player_ptr->get_position());
-        return true;
+        return;
     }
 
     if (!player_ptr->oldpx && !player_ptr->oldpy) {
-        player_ptr->oldpy = std::stoi(tokens[0]);
-        player_ptr->oldpx = std::stoi(tokens[1]);
+        player_ptr->oldpy = start_y();
+        player_ptr->oldpx = start_x();
     }
+}
+
+void apply_fixed_map_start(PlayerType *player_ptr, qtwg_type *qtwg_ptr, int start_y, int start_x)
+{
+    if ((init_flags & INIT_CREATE_DUNGEON) == 0) {
+        return;
+    }
+
+    apply_fixed_map_size(player_ptr, qtwg_ptr);
+    apply_fixed_map_position(player_ptr, [start_y] { return start_y; }, [start_x] { return start_x; });
+}
+
+static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
+{
+    if (qtwg_ptr->buf[0] != 'P') {
+        return false;
+    }
+
+    if ((init_flags & INIT_CREATE_DUNGEON) == 0) {
+        return true;
+    }
+
+    const auto tokens = tokenize(qtwg_ptr->buf + 2, 2);
+    if (tokens.size() != 2) {
+        return true;
+    }
+
+    apply_fixed_map_size(player_ptr, qtwg_ptr);
+    // 座標は使用時に解釈し、旧形式の例外発生順と位置更新順を維持する.
+    apply_fixed_map_position(player_ptr, [&tokens] { return std::stoi(tokens[0]); }, [&tokens] { return std::stoi(tokens[1]); });
 
     return true;
 }
@@ -241,13 +274,7 @@ parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtw
     }
 
     if (qtwg_ptr->buf[0] == 'D') {
-        char *s = qtwg_ptr->buf + 2;
-        if (init_flags & INIT_ONLY_BUILDINGS) {
-            return PARSE_ERROR_NONE;
-        }
-
-        parse_qtw_D(player_ptr, qtwg_ptr, s);
-        (*qtwg_ptr->y)++;
+        apply_fixed_map_row(player_ptr, qtwg_ptr, qtwg_ptr->buf + 2);
         return PARSE_ERROR_NONE;
     }
 

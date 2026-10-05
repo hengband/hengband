@@ -21,6 +21,7 @@ class LocalizedString;
 class MonraceDefinition;
 namespace test {
 class MonraceListTestAccess;
+class FixedMapMonraceTestAccess;
 }
 class MonraceList : public util::AbstractMapWrapper<MonraceId, std::shared_ptr<MonraceDefinition>> {
 public:
@@ -71,6 +72,7 @@ public:
 
 private:
     friend class test::MonraceListTestAccess;
+    friend class test::FixedMapMonraceTestAccess;
 
     MonraceList() = default;
 
