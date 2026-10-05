@@ -15,6 +15,7 @@
 #include "term/gameterm.h"
 #include "term/z-form.h"
 #include "util/angband-files.h"
+#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include <algorithm>
 #include <sstream>
@@ -499,13 +500,10 @@ static void win2unix(int col, char *buf)
     }
 
     while (*buf) {
-#ifdef JP
-        // 文字列が全角文字の前半バイトで終わっている場合は、後半バイトが無いので全角文字として扱わない
-        if (iskanji(*buf) && (buf[1] != '\0')) {
+        if (is_multibyte_char_at(buf)) {
             buf += 2;
             continue;
         }
-#endif
         if (*buf == 127) {
             *buf = wall;
         } else if (*buf == 31) {

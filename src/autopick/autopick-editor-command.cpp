@@ -122,11 +122,9 @@ ape_quittance do_editor_command(PlayerType *player_ptr, text_body_type *tb, Edit
         break;
     case EditorCommandId::RIGHT: {
         const int len = tb->lines_list[tb->cy]->length();
-#ifdef JP
-        if ((tb->cx + 1 < len) && iskanji((*tb->lines_list[tb->cy])[tb->cx])) {
+        if (is_multibyte_char_at(*tb->lines_list[tb->cy], tb->cx)) {
             tb->cx++;
         }
-#endif
         tb->cx++;
 
         if (len < tb->cx) {
