@@ -253,6 +253,7 @@ void process_player(PlayerType *player_ptr)
 
         update_monsters(player_ptr, false);
         handle_stuff(player_ptr);
+        window_stuff_including_deferred(player_ptr);
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_before) {
             term_fresh_force();

@@ -4,6 +4,7 @@
 #include <string_view>
 
 class MonraceDefinition;
+class MonraceMessage;
 
 class RaceReader {
 public:
@@ -30,7 +31,7 @@ private:
     int set_mon_flags(MonraceDefinition &monrace) const;
     int set_mon_skills(MonraceDefinition &monrace) const;
     int set_mon_final_summons(MonraceDefinition &monrace) const;
-    int set_mon_message(MonraceDefinition &monrace) const;
+    int set_mon_message(MonraceMessage &messages) const;
 
     const nlohmann::json &monrace_data;
 };

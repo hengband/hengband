@@ -1498,13 +1498,16 @@ hengband_test_SOURCES = \
 	test/info-reader/scoped-reader-state.h \
 	test/system/artifact-list-test-access.h \
 	test/system/dungeon-list-test-access.h \
-	test/system/terrain-list-test-access.h \
 	test/system/monrace-list-test-access.h \
+	test/system/monrace-message-list-test-access.h \
+	test/system/monrace-records-test-access.h \
+	test/system/terrain-list-test-access.h \
 	test/system/quest-list-test-access.h \
 	\
 	test/autopick/test-autopick-editor-util.cpp \
 	test/cmd-io/test-cmd-autopick.cpp \
 	test/flavor/test-flavor-util.cpp \
+	test/floor/test-fixed-map-generator.cpp \
 	test/game-option/test-runtime-arguments.cpp \
 	test/info-reader/test-activation-reader.cpp \
 	test/info-reader/test-artifact-reader.cpp \

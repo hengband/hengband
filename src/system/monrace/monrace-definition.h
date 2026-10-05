@@ -86,10 +86,8 @@ enum class GridFlow : int;
 class MonraceDefinition {
 public:
     MonraceDefinition();
-    MonraceDefinition(const MonraceDefinition &) = delete;
     MonraceDefinition &operator=(const MonraceDefinition &) = delete;
     MonraceDefinition(MonraceDefinition &&) = default;
-    MonraceDefinition &operator=(MonraceDefinition &&) = delete;
 
     MonraceId idx{};
     LocalizedString name{}; //!< モンスターの名称
@@ -245,6 +243,11 @@ public:
     const std::vector<MonsterSummon> &get_final_summons() const;
 
 private:
+    // Only the reader may stage and publish a value while retaining the shared object's identity.
+    friend class RaceReader;
+    MonraceDefinition(const MonraceDefinition &) = default;
+    MonraceDefinition &operator=(MonraceDefinition &&) = default;
+
     std::vector<DropArtifact> drop_artifacts; //!< 特定アーティファクトドロップリスト
     std::vector<Reinforce> reinforces; //!< 指定護衛リスト
     std::vector<MonsterSummon> final_summons; //!< 死亡召喚リスト

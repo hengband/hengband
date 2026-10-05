@@ -11,7 +11,6 @@ extern EnumClassFlagGroup<AutopickMethod> display_autopick;
 class DisplaySymbolPair;
 class FloorType;
 class PlayerType;
-bool is_revealed_wall(const FloorType &floor, const Pos2D &pos);
 bool is_map_terrain_visible(const PlayerType &player, const Pos2D &pos);
 int decide_map_terrain_lighting(const PlayerType &player, const Pos2D &pos, tl::optional<uint8_t> monochrome = tl::nullopt);
 DisplaySymbolPair map_info(PlayerType *player_ptr, const Pos2D &pos);

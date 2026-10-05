@@ -17,6 +17,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <system_error>
+#include <utility>
 
 RaceReader::RaceReader(const nlohmann::json &monrace_data)
     : monrace_data(monrace_data)
@@ -49,7 +50,7 @@ int RaceReader::read() const
     error_idx = monrace_id_int;
     const auto monrace_id = i2enum<MonraceId>(monrace_id_int);
     auto &monraces = MonraceList::get_instance();
-    auto &monrace = monraces.emplace(monrace_id);
+    auto monrace = monraces.contains(monrace_id) ? MonraceDefinition(monraces.get_monrace(monrace_id)) : MonraceDefinition();
     monrace.idx = monrace_id;
 
     errr err;
@@ -158,12 +159,23 @@ int RaceReader::read() const
         msg_format(_("モンスター説明文読込失敗。ID: '%d'。", "Failed to load monster flavor text. ID: '%d'."), error_idx);
         return err;
     }
-    err = this->set_mon_message(monrace);
+    auto &message_list = MonraceMessageList::get_instance();
+    const auto message_it = message_list.messages.find(monrace_id_int);
+    auto messages = message_it != message_list.messages.end() ? message_it->second : MonraceMessage();
+    err = this->set_mon_message(messages);
     if (err) {
         msg_format(_("モンスターメッセージ読込失敗。ID: '%d'。", "Failed to load monster message. ID: '%d'."), error_idx);
         return err;
     }
 
+    // Parse failures do not publish either definition fields or partial message groups.
+    // Allocation failures are not parse errors and are not covered by this guarantee.
+    const auto &message_data = get_json_value(this->monrace_data, "message");
+    if (!message_data.is_null() && !message_data.empty()) {
+        message_list.messages.insert_or_assign(monrace_id_int, std::move(messages));
+    }
+    auto &published = monraces.contains(monrace_id) ? monraces.get_monrace(monrace_id) : monraces.emplace(monrace_id);
+    published = std::move(monrace);
     return PARSE_ERROR_NONE;
 }
 
@@ -617,10 +629,10 @@ int RaceReader::set_mon_final_summons(MonraceDefinition &monrace) const
 
 /*!
  * @brief JSON Objectからモンスターのメッセージをセットする
- * @param monrace 保管先のモンスター種族構造体
+ * @param messages 保管先の未公開メッセージ群
  * @return エラーコード
  */
-int RaceReader::set_mon_message(MonraceDefinition &monrace) const
+int RaceReader::set_mon_message(MonraceMessage &messages) const
 {
     const auto &message_data = get_json_value(this->monrace_data, "message");
     if (message_data.is_null()) {
@@ -662,7 +674,7 @@ int RaceReader::set_mon_message(MonraceDefinition &monrace) const
             return err;
         }
 
-        MonraceMessageList::get_instance().emplace((int)monrace.idx, action->second, chance, use_name, str);
+        messages.emplace(action->second, chance, use_name, str);
     }
     return PARSE_ERROR_NONE;
 }

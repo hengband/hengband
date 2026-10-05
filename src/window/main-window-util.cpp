@@ -12,6 +12,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -91,14 +92,22 @@ void print_map(PlayerType *player_ptr)
         term_erase(COL_MAP, y, wid);
     }
 
+    const auto monochrome_color = get_monochrome_display_color(player_ptr);
     for (auto y = ymin; y <= ymax; y++) {
         for (auto x = xmin; x <= xmax; x++) {
             auto symbol_pair = map_info(player_ptr, { y, x });
-            symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
+            symbol_pair.symbol_foreground.color = monochrome_color.value_or(symbol_pair.symbol_foreground.color);
 
             term_queue_bigchar(panel_col_of(x), y - panel_row_prt, symbol_pair);
         }
     }
+
+    // 各マスは lite_spot() を通らないので、ここで地図のサブウィンドウの再描画を要求する
+    static constexpr auto flags = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
 
     lite_spot(player_ptr, player_ptr->get_position());
     term_set_cursor(v != 0);
@@ -248,11 +257,12 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
         mc[y][0] = mc[y][x] = '|';
     }
 
+    const auto monochrome_color = get_monochrome_display_color(player_ptr);
     for (y = 0; y < hgt + 2; ++y) {
         term_gotoxy(COL_MAP, y);
         for (x = 0; x < wid + 2; ++x) {
             DisplaySymbol symbol_foreground(ma[y][x], mc[y][x]);
-            symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_foreground.color);
+            symbol_foreground.color = monochrome_color.value_or(symbol_foreground.color);
 
             term_add_bigch(symbol_foreground);
         }
