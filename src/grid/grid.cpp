@@ -39,6 +39,7 @@
 #include "system/terrain/terrain-list.h"
 #include "term/gameterm.h"
 #include "timed-effect/timed-effects.h"
+#include "util/enum-converter.h"
 #include "view/display-map.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
@@ -718,8 +719,8 @@ void update_flow(PlayerType *player_ptr)
 
             /* Add the "children" */
             for (const auto &d : Direction::directions_8()) {
-                uint8_t m = grid.costs.at(gf) + 1;
-                const uint8_t n = grid.dists.at(gf) + 1;
+                uint8_t m = grid.get_cost(gf) + 1;
+                const uint8_t n = grid.get_distance(gf) + 1;
                 const auto pos_neighbor = pos + d.vec();
 
                 /* Ignore player's grid */
@@ -733,8 +734,8 @@ void update_flow(PlayerType *player_ptr)
 
                 /* Ignore "pre-stamped" entries */
                 auto &grid_neighbor = floor.get_grid(pos_neighbor);
-                auto &cost_neighbor = grid_neighbor.costs.at(gf);
-                auto &dist_neighbor = grid_neighbor.dists.at(gf);
+                auto &cost_neighbor = grid_neighbor.costs[enum2i(gf)];
+                auto &dist_neighbor = grid_neighbor.dists[enum2i(gf)];
                 if ((dist_neighbor != 0) && (dist_neighbor <= n) && (cost_neighbor <= m)) {
                     continue;
                 }

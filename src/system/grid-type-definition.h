@@ -2,9 +2,11 @@
 
 #include "object/object-index-list.h"
 #include "system/angband.h"
+#include "system/enums/grid-flow.h"
 #include "system/enums/terrain/terrain-kind.h"
+#include "util/enum-converter.h"
 #include "util/point-2d.h"
-#include <map>
+#include <array>
 
 /*
  * 特殊なマス状態フラグ / Special grid flags
@@ -41,13 +43,11 @@
 
 // clang-format on
 
-enum class GridFlow : int;
 enum class TerrainCharacteristics;
 enum class TerrainTag;
 class TerrainType;
 class Grid {
 public:
-    Grid();
     BIT_FLAGS info{}; /* Hack -- grid flags */
 
     FEAT_IDX feat{}; /* Hack -- feature type */
@@ -63,9 +63,9 @@ public:
 
     FEAT_IDX mimic{}; /* Feature to mimic */
 
-    std::map<GridFlow, uint8_t> costs; //!< Cost of flowing
-    std::map<GridFlow, uint8_t> dists; //!< Distance from player
-    byte when{}; /* Hack -- when cost was computed */
+    std::array<uint8_t, enum2i(GridFlow::MAX)> costs{}; //!< Cost of flowing
+    std::array<uint8_t, enum2i(GridFlow::MAX)> dists{}; //!< Distance from player
+    byte when{}; //!< プレイヤーの匂いが付いた時刻 (モンスターの追跡用)
 
     static int calc_distance(const Pos2D &pos1, const Pos2D &pos2);
 
@@ -91,8 +91,16 @@ public:
     bool is_hidden_door() const;
     bool is_acceptable_target() const;
     bool has_monster() const;
-    uint8_t get_cost(GridFlow gf) const;
-    uint8_t get_distance(GridFlow gf) const;
+    uint8_t get_cost(GridFlow gf) const
+    {
+        return this->costs[enum2i(gf)];
+    }
+
+    uint8_t get_distance(GridFlow gf) const
+    {
+        return this->dists[enum2i(gf)];
+    }
+
     bool has(TerrainCharacteristics tc) const;
     bool is_symbol(const int ch) const;
     bool is_darkened() const;
@@ -102,8 +110,16 @@ public:
     bool has_special_terrain() const;
     bool can_block_disintegration() const;
     bool can_generate_monster() const;
-    void reset_costs();
-    void reset_dists();
+    void reset_costs()
+    {
+        this->costs.fill(0);
+    }
+
+    void reset_dists()
+    {
+        this->dists.fill(0);
+    }
+
     bool has_los() const;
     bool has_los_terrain(TerrainKind tk = TerrainKind::NORMAL) const;
     TerrainType &get_terrain(TerrainKind tk = TerrainKind::NORMAL);
