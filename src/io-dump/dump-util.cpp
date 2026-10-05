@@ -11,12 +11,6 @@
 
 DisplaySymbolsClipboard DisplaySymbolsClipboard::instance{};
 
-DisplaySymbolsClipboard::DisplaySymbolsClipboard()
-    : symbol()
-    , symbols(DEFAULT_SYMBOLS)
-{
-}
-
 DisplaySymbolsClipboard &DisplaySymbolsClipboard::get_instance()
 {
     return instance;
@@ -24,10 +18,10 @@ DisplaySymbolsClipboard &DisplaySymbolsClipboard::get_instance()
 
 void DisplaySymbolsClipboard::reset_symbols()
 {
-    this->symbols = DEFAULT_SYMBOLS;
+    this->symbols = {};
 }
 
-void DisplaySymbolsClipboard::set_symbol(const std::map<int, DisplaySymbol> &symbol_configs)
+void DisplaySymbolsClipboard::set_symbol(const TerrainSymbols &symbol_configs)
 {
     this->symbols = symbol_configs;
 }
