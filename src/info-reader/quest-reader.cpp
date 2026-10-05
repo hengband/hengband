@@ -24,6 +24,9 @@ constexpr Range LEGEND_SHORT_RANGE(std::numeric_limits<int16_t>::min(), std::num
 // 負のモンスターIDは生成時にshortのまま符号反転されるので、最小値は許可しない。
 constexpr Range LEGEND_MONSTER_RANGE(-std::numeric_limits<MONSTER_IDX>::max(), std::numeric_limits<MONSTER_IDX>::max());
 constexpr Range LEGEND_EGO_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+constexpr Range QUEST_INTEGER_RANGE(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
+// メタデータはintで保持するが、対象モンスターと報酬は実行時にshort基底のIDへ変換される。
+constexpr Range QUEST_ID_RANGE(std::numeric_limits<int16_t>::min(), std::numeric_limits<int16_t>::max());
 
 const std::unordered_map<std::string_view, QuestKindType> QUEST_KIND_TOKENS = {
     { "NONE", QuestKindType::NONE },
@@ -335,19 +338,19 @@ int QuestReader::set_definition(QuestFixedMap &parsed) const
     }
     meta.type = enum2i(kind_it->second);
 
-    if (const auto err = info_set_integer(get_json_value(definition, "level"), meta.level, true); err != PARSE_ERROR_NONE) {
+    if (const auto err = info_set_integer(get_json_value(definition, "level"), meta.level, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
         return err;
     }
-    if (const auto err = info_set_integer(get_json_value(definition, "numMon"), meta.num_mon, false); err != PARSE_ERROR_NONE) {
+    if (const auto err = info_set_integer(get_json_value(definition, "numMon"), meta.num_mon, false, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
         return err;
     }
-    if (const auto err = info_set_integer(get_json_value(definition, "maxNum"), meta.max_num, false); err != PARSE_ERROR_NONE) {
+    if (const auto err = info_set_integer(get_json_value(definition, "maxNum"), meta.max_num, false, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
         return err;
     }
-    if (const auto err = info_set_integer(get_json_value(definition, "dungeon"), meta.dungeon, false); err != PARSE_ERROR_NONE) {
+    if (const auto err = info_set_integer(get_json_value(definition, "dungeon"), meta.dungeon, false, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
         return err;
     }
-    if (const auto err = info_set_integer(get_json_value(definition, "monster"), meta.r_idx, false); err != PARSE_ERROR_NONE) {
+    if (const auto err = info_set_integer(get_json_value(definition, "monster"), meta.r_idx, false, QUEST_ID_RANGE); err != PARSE_ERROR_NONE) {
         return err;
     }
 
@@ -372,7 +375,9 @@ int QuestReader::set_definition(QuestFixedMap &parsed) const
     if (!reward.is_null()) {
         const auto &artifact = get_json_value(reward, "artifact");
         if (artifact.is_number_integer()) {
-            meta.reward_artifact = artifact.get<int>();
+            if (const auto err = info_set_integer(artifact, meta.reward_artifact, true, QUEST_ID_RANGE); err != PARSE_ERROR_NONE) {
+                return err;
+            }
         }
 
         const auto &artifacts = get_json_value(reward, "artifacts");
@@ -382,7 +387,11 @@ int QuestReader::set_definition(QuestFixedMap &parsed) const
             }
             for (const auto &candidate : artifacts) {
                 if (candidate.is_number_integer()) {
-                    parsed.reward_artifact_candidates.push_back(candidate.get<int>());
+                    int candidate_id = 0;
+                    if (const auto err = info_set_integer(candidate, candidate_id, true, QUEST_ID_RANGE); err != PARSE_ERROR_NONE) {
+                        return err;
+                    }
+                    parsed.reward_artifact_candidates.push_back(candidate_id);
                 }
             }
         }
@@ -508,10 +517,10 @@ int QuestReader::set_starts(QuestFixedMap &parsed) const
     const auto &start = get_json_value(this->quest_data, "start");
     if (!start.is_null()) {
         QuestStartPosition position;
-        if (const auto err = info_set_integer(get_json_value(start, "y"), position.y, true); err != PARSE_ERROR_NONE) {
+        if (const auto err = info_set_integer(get_json_value(start, "y"), position.y, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
             return err;
         }
-        if (const auto err = info_set_integer(get_json_value(start, "x"), position.x, true); err != PARSE_ERROR_NONE) {
+        if (const auto err = info_set_integer(get_json_value(start, "x"), position.x, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
             return err;
         }
         parsed.starts.push_back(position);
@@ -527,12 +536,16 @@ int QuestReader::set_starts(QuestFixedMap &parsed) const
             QuestStartPosition position;
             const auto &leaving_quest = get_json_value(variant, "leavingQuest");
             if (leaving_quest.is_number_integer()) {
-                position.leaving_quest = leaving_quest.get<int>();
+                int leaving_id = 0;
+                if (const auto err = info_set_integer(leaving_quest, leaving_id, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
+                    return err;
+                }
+                position.leaving_quest = leaving_id;
             }
-            if (const auto err = info_set_integer(get_json_value(variant, "y"), position.y, true); err != PARSE_ERROR_NONE) {
+            if (const auto err = info_set_integer(get_json_value(variant, "y"), position.y, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
                 return err;
             }
-            if (const auto err = info_set_integer(get_json_value(variant, "x"), position.x, true); err != PARSE_ERROR_NONE) {
+            if (const auto err = info_set_integer(get_json_value(variant, "x"), position.x, true, QUEST_INTEGER_RANGE); err != PARSE_ERROR_NONE) {
                 return err;
             }
             parsed.starts.push_back(position);

@@ -2,6 +2,7 @@
 
 #include "util/abstract-map-wrapper.h"
 #include <cstdint>
+#include <filesystem>
 #include <tl/optional.hpp>
 #include <vector>
 
@@ -10,6 +11,9 @@ enum class MonraceId : short;
 enum class QuestId : short;
 enum class QuestKindType : short;
 class QuestType;
+namespace test {
+class QuestListTestAccess;
+}
 class QuestList final : public util::AbstractMapWrapper<QuestId, QuestType> {
 public:
     QuestList(const QuestList &) = delete;
@@ -36,12 +40,14 @@ public:
     bool is_bounty_valid(QuestId id) const;
 
 private:
+    friend class test::QuestListTestAccess;
     static QuestList instance;
     std::map<QuestId, QuestType> quests;
     QuestList() = default;
 
     void load_base_legend(); //!< lib/edit/QuestPreferences.jsonc の共通ベース凡例を読み込む
     void load_json_quests(); //!< lib/edit/quests/*.jsonc を読み込みメタデータとレイアウトを構築する
+    void load_json_quests(const std::filesystem::path &quests_dir);
 
     std::map<QuestId, QuestType> &get_inner_container() override
     {

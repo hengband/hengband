@@ -1,4 +1,5 @@
 #include "system/dungeon/quest-list.h"
+#include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
 #include "io/files-util.h"
@@ -18,6 +19,7 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 QuestList QuestList::instance{};
@@ -104,7 +106,11 @@ void QuestList::load_base_legend()
  */
 void QuestList::load_json_quests()
 {
-    const auto quests_dir = path_build(ANGBAND_DIR_EDIT, "quests");
+    this->load_json_quests(path_build(ANGBAND_DIR_EDIT, "quests"));
+}
+
+void QuestList::load_json_quests(const std::filesystem::path &quests_dir)
+{
     std::error_code ec;
     if (!std::filesystem::is_directory(quests_dir, ec)) {
         constexpr auto fmt = _("クエストデータのディレクトリが見つかりません ({})", "Quest data directory not found ({})");
@@ -148,7 +154,11 @@ void QuestList::load_json_quests()
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string()));
         }
 
-        const auto quest_id = i2enum<QuestId>(id_it->get<int>());
+        QuestId quest_id{};
+        if (info_set_integer(*id_it, quest_id, true, Range(1, MAX_RANDOM_QUEST)) != PARSE_ERROR_NONE) {
+            constexpr auto fmt = _("クエストIDが範囲外です ({}): id {}", "Quest id is out of range ({}): id {}");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), id_it->dump()));
+        }
         // スキーマはファイル横断の一意性を表現できないため、重複 id はここで検出する
         // (見逃すと2つ目のファイルが既存エントリへ追記され、偽のマップバリアント化等の破損を起こす)。
         if (this->quests.contains(quest_id)) {
@@ -156,14 +166,18 @@ void QuestList::load_json_quests()
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), id_it->get<int>()));
         }
 
-        auto &quest = this->quests[quest_id];
-        auto &fixed_map = fixed_maps.emplace(quest_id);
+        QuestType quest;
+        QuestFixedMap fixed_map;
         if (const auto err = QuestReader(quest_data, quest, fixed_map).read(); err != PARSE_ERROR_NONE) {
             constexpr auto fmt = _("クエストファイルにエラーがあります ({}): コード {}", "Error in quest file ({}): code {}");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), static_cast<int>(err)));
         }
 
         apply_quest_metadata(fixed_map, quest);
+        // ファイル全体の解析とメタデータ適用に成功してから公開する。先行ファイルは
+        // 保持するが、確保失敗時まで含めた2つのストアの原子的更新は保証しない。
+        this->quests.emplace(quest_id, std::move(quest));
+        fixed_maps.emplace(quest_id) = std::move(fixed_map);
     }
 }
 
