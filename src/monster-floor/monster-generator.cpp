@@ -402,24 +402,19 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
     }
 
     const auto p_pos = player_ptr->get_position();
-    auto try_count = 4000;
-    while (try_count > 0) {
+    for (auto try_count = 4000; try_count > 0; try_count--) {
         const auto pos = Pos2D(randint1(floor.height - 4), randint1(floor.width - 4)) + Pos2DVec(2, 2);
         if (!floor.can_generate_monster_at(pos) || (p_pos == pos)) {
-            try_count++;
             continue;
         }
 
         if (!monster_can_cross_terrain(player_ptr, floor.get_grid(pos).feat, monrace, 0)) {
-            try_count++;
             continue;
         }
 
         if (place_specific_monster(player_ptr, pos.y, pos.x, dungeon.final_guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) {
             return true;
         }
-
-        try_count--;
     }
 
     return false;
