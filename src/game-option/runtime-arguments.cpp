@@ -19,6 +19,7 @@ tl::optional<int> arg_control_port; /* Command arg -- Listen port of the game co
 tl::optional<uint32_t> arg_fixed_seed; /* Command arg -- Fixed initial seed of the RNG */
 bool arg_headless = false; /* Command arg -- Use the terminal which has no real display */
 tl::optional<int> arg_headless_term_count; /* Command arg -- Number of terminals the headless frontend creates */
+std::array<tl::optional<TermSize>, MAX_TERM_DATA> arg_headless_term_sizes; /* Command arg -- Size of each terminal the headless frontend creates */
 
 namespace {
 
@@ -67,6 +68,50 @@ RuntimeArgumentResult parse_number_option(std::string_view option, std::string_v
     return RuntimeArgumentResult::HANDLED;
 }
 
+/*!
+ * @brief ヘッドレス端末の大きさを指定するオプションを解釈する
+ * @param option 先頭の「--」を除いたコマンドライン引数
+ * @return 解釈結果
+ * @details
+ * 値は「端末の添字:列数x行数」の形式 (例: 1:60x20) で、端末ごとに繰り返し指定する。
+ * 同じ端末を繰り返し指定した場合は後の指定を使う。
+ * 添字が作る端末の数に収まっているかは、端末の数のオプションとの順序に依らないよう
+ * 端末を作る時点 (init_headless_term()) で確かめる。
+ */
+RuntimeArgumentResult parse_headless_term_size_option(std::string_view option)
+{
+    const auto value = extract_option_value(option, "headless-term-size");
+    if (!value) {
+        return RuntimeArgumentResult::NOT_HANDLED;
+    }
+
+    const auto colon_pos = value->find(':');
+    if (colon_pos == std::string_view::npos) {
+        return RuntimeArgumentResult::INVALID;
+    }
+
+    const auto size = value->substr(colon_pos + 1);
+    const auto x_pos = size.find('x');
+    if (x_pos == std::string_view::npos) {
+        return RuntimeArgumentResult::INVALID;
+    }
+
+    const auto index = str_to_num<int>(value->substr(0, colon_pos));
+    const auto cols = str_to_num<int>(size.substr(0, x_pos));
+    const auto rows = str_to_num<int>(size.substr(x_pos + 1));
+    if (!index || (*index < 0) || (*index >= MAX_TERM_DATA) || !cols || !rows) {
+        return RuntimeArgumentResult::INVALID;
+    }
+
+    const TermSize term_size{ *cols, *rows };
+    if (!is_valid_term_size(*index, term_size)) {
+        return RuntimeArgumentResult::INVALID;
+    }
+
+    arg_headless_term_sizes[*index] = term_size;
+    return RuntimeArgumentResult::HANDLED;
+}
+
 }
 
 /*!
@@ -110,5 +155,9 @@ RuntimeArgumentResult parse_runtime_argument(std::string_view option)
         return result;
     }
 
-    return parse_number_option(option, "headless-term-count", arg_headless_term_count, 1, MAX_TERM_DATA);
+    if (const auto result = parse_number_option(option, "headless-term-count", arg_headless_term_count, 1, MAX_TERM_DATA); result != RuntimeArgumentResult::NOT_HANDLED) {
+        return result;
+    }
+
+    return parse_headless_term_size_option(option);
 }

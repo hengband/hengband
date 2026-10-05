@@ -120,9 +120,10 @@ void headless_term_quit(std::string_view str)
  * @brief ヘッドレス端末を1つ初期化してangband_termsへ登録する
  * @param index angband_terms上の添字
  * @details
- * 画面サイズは最小構成の80x24で固定する。この値はMAIN_TERM_MIN_COLS/ROWSと等しく、
- * TermCenteredOffsetSetterによる中央寄せのオフセットが常に0になるため、
- * 要求バッファの座標がそのままゲーム側の描画座標と一致する。
+ * 画面サイズは--headless-term-sizeで指定された大きさ、指定が無ければ80x24とする。
+ * 主端末を80x24より大きくすると、TermCenteredOffsetSetterによる中央寄せのオフセットが付く。
+ * これは実際のフロントエンドで大きなウィンドウを使う場合と同じ挙動であり、
+ * 制御サーバは要求バッファをそのまま読み出すため、画面の読み取りには影響しない。
  *
  * 描画フックは登録しない。term_init()が何もしないフックを用意するため、
  * 描画するものが無い端末では上書きする必要が無い。
@@ -130,7 +131,8 @@ void headless_term_quit(std::string_view str)
 void term_data_init_headless(int index)
 {
     auto *t = &headless_terms[index];
-    term_init(t, TERM_DEFAULT_COLS, TERM_DEFAULT_ROWS, HEADLESS_TERM_KEY_QUEUE_SIZE);
+    const auto size = arg_headless_term_sizes[index].value_or(TermSize{ TERM_DEFAULT_COLS, TERM_DEFAULT_ROWS });
+    term_init(t, size.cols, size.rows, HEADLESS_TERM_KEY_QUEUE_SIZE);
 
     t->soft_cursor = true;
     t->never_bored = true;
@@ -161,6 +163,17 @@ errr init_headless_term()
         return -1;
     }
 
+    // 大きさを指定した端末が、作る端末の範囲に収まっているかを確かめる。
+    // 範囲外の指定を黙って無視すると、指定した大きさの端末が無い理由が分からなくなる。
+    // 端末の数と大きさは別々のオプションのため、引数の順序に依らず全て解釈した後のここで確かめる
+    const auto term_count = arg_headless_term_count.value_or(1);
+    for (auto i = term_count; i < MAX_TERM_DATA; i++) {
+        if (arg_headless_term_sizes[i]) {
+            headless_term_plog(fmt::format("The --headless-term-size option specifies the terminal {}, but only {} terminal(s) are created.", i, term_count));
+            return -1;
+        }
+    }
+
     // ゲームの診断メッセージも標準エラー出力へ出す。制御サーバの診断は
     // report_bot_message() が同じ出力先へ別の接頭辞で出す
     plog_aux = headless_term_plog;
@@ -174,7 +187,7 @@ errr init_headless_term()
 
     // 有効範囲はコマンドライン引数の解釈時に保証されている
     // メイン端末を最後に有効化するため、添字の大きい方から初期化する
-    for (auto i = arg_headless_term_count.value_or(1); i-- > 0;) {
+    for (auto i = term_count; i-- > 0;) {
         term_data_init_headless(i);
     }
 
