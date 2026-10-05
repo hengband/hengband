@@ -49,6 +49,63 @@ AC_SUBST(DEFAULT_VAR_PATH)
 dnl Checks for programs.
 AC_LANG(C++)
 AC_PROG_CXX
+
+dnl Detect macOS host
+AC_CANONICAL_HOST
+is_macos=no
+case "${host_os}" in
+  darwin*) is_macos=yes ;;
+esac
+
+AC_MSG_CHECKING([whether the compiler is Clang])
+AC_COMPILE_IFELSE(
+  [AC_LANG_SOURCE([[
+    #ifdef __clang__
+    int main() { return 0; }
+    #else
+    #error "Not Clang"
+    #endif
+  ]])],
+  [AC_MSG_RESULT([yes]); is_clang=yes],
+  [AC_MSG_RESULT([no]); is_clang=no]
+)
+AM_CONDITIONAL([COMPILER_IS_CLANG], [test "x$is_clang" = "xyes"])
+
+dnl LTO (リンク時の最適化) を使うか。ゲームは速くなるが、1 ファイルを変えたときの
+dnl 再ビルドが大幅に遅くなるので、既定では使わない。
+AC_ARG_ENABLE([lto],
+  [AS_HELP_STRING([--enable-lto], [enable link time optimization (faster game, much slower rebuilds)])],
+  [], [enable_lto=no])
+if test "x$enable_lto" = xyes; then
+  dnl GCC は最適化を並列に行う -flto=auto、clang はコード生成を並列に行う ThinLTO を使う。
+  dnl LTO のオブジェクトを静的ライブラリにまとめるには、それを扱える ar / ranlib が要る。
+  dnl LTO_AR / LTO_RANLIB に探しておき、AR / RANLIB が指定されていなければ、AM_PROG_AR と
+  dnl AC_PROG_RANLIB の後でそれに置き換える。見つからなければ通常の ar / ranlib を使う
+  dnl (GCC は LTO のプラグインを通して扱え、macOS の ar も扱える)。
+  if test "x$is_clang" = xyes; then
+    lto_flags="-flto=thin"
+    dnl llvm-ar は版番号付きの名前 (llvm-ar-18 など) でしか PATH に無いことがあるので、
+    dnl clang 自身が知っている場所 (/usr/lib/llvm-18/bin など) も探す。
+    lto_tool_path=$PATH
+    lto_llvm_ar=`$CXX -print-prog-name=llvm-ar 2>/dev/null`
+    AS_IF([test -x "$lto_llvm_ar"], [lto_tool_path=`dirname "$lto_llvm_ar"`$PATH_SEPARATOR$PATH])
+    AC_PATH_TOOL([LTO_AR], [llvm-ar], [], [$lto_tool_path])
+    AC_PATH_TOOL([LTO_RANLIB], [llvm-ranlib], [], [$lto_tool_path])
+  else
+    lto_flags="-flto=auto"
+    AC_CHECK_TOOL([LTO_AR], [gcc-ar])
+    AC_CHECK_TOOL([LTO_RANLIB], [gcc-ranlib])
+  fi
+  lto_ar_given=${AR:+yes}
+  lto_ranlib_given=${RANLIB:+yes}
+  dnl GNU ar は /usr/lib/bfd-plugins にある LLVMgold を通して LTO のオブジェクトを読むが、
+  dnl 複数の版が入っていると clang より古い版が使われ、読めないオブジェクトが索引から漏れて
+  dnl リンクできなくなる (小さな試験では再現しない)。macOS の ar は扱える。
+  AS_IF([test "x$is_clang" = xyes && test "x$lto_ar_given" != xyes && test -z "$LTO_AR" && test "x$is_macos" != xyes],
+    [AC_MSG_ERROR([llvm-ar is required to build with --enable-lto using Clang. Install llvm-ar, or specify AR=llvm-ar RANLIB=llvm-ranlib.])])
+  CXXFLAGS="$CXXFLAGS $lto_flags"
+  LDFLAGS="$LDFLAGS $lto_flags"
+fi
 dnl ARFLAGS が指定されている場合は、その値をそのまま使う。
 dnl AM_PROG_AR は ARFLAGS が空の場合に既定値を設定する (automake 1.17 以降) ため、
 dnl ユーザーが指定したかどうかは AM_PROG_AR を実行する前に調べておく。
@@ -59,6 +116,13 @@ arflags_given=${ARFLAGS+yes}
 dnl ゲーム本体のソースをまとめた静的ライブラリ libhengband.a の生成に必要
 AM_PROG_AR
 AC_PROG_RANLIB
+
+dnl AM_PROG_AR と AC_PROG_RANLIB は、前もって AR / RANLIB を設定しておいても configure -C の
+dnl キャッシュの値を優先するので、LTO 用の ar / ranlib にはここで置き換える。
+if test "x$enable_lto" = xyes; then
+  AS_IF([test "x$lto_ar_given" != xyes && test -n "$LTO_AR"], [AR=$LTO_AR])
+  AS_IF([test "x$lto_ranlib_given" != xyes && test -n "$LTO_RANLIB"], [RANLIB=$LTO_RANLIB])
+fi
 
 dnl libhengband.a は全オブジェクトを含むため 1GB 近くになる。
 dnl thin archive (ar の T フラグ) が使えるなら、オブジェクトの実体をコピーせず
@@ -85,32 +149,30 @@ if test "x$arflags_given" != xyes; then
     ARFLAGS="cru"
   fi
 fi
+
+if test "x$enable_lto" = xyes; then
+  AC_MSG_CHECKING([whether LTO objects can be archived and linked])
+  echo 'int hengband_lto_test() { return 0; }' > conftest_lto.cpp
+  echo 'int hengband_lto_test(); int main() { return hengband_lto_test(); }' > conftest_lto_main.cpp
+  if $CXX $CPPFLAGS $CXXFLAGS -c conftest_lto.cpp -o conftest_lto.$OBJEXT >&AS_MESSAGE_LOG_FD 2>&1 &&
+     $AR $ARFLAGS conftest_lto.a conftest_lto.$OBJEXT >&AS_MESSAGE_LOG_FD 2>&1 &&
+     $RANLIB conftest_lto.a >&AS_MESSAGE_LOG_FD 2>&1 &&
+     $CXX $CPPFLAGS $CXXFLAGS $LDFLAGS conftest_lto_main.cpp conftest_lto.a $LIBS -o conftest_lto$EXEEXT >&AS_MESSAGE_LOG_FD 2>&1; then
+    lto_works=yes
+  else
+    lto_works=no
+  fi
+  rm -f conftest_lto.cpp conftest_lto_main.cpp conftest_lto.$OBJEXT conftest_lto.a conftest_lto$EXEEXT
+  AC_MSG_RESULT([$lto_works ($lto_flags, AR=$AR, RANLIB=$RANLIB)])
+  if test "$lto_works" != yes; then
+    AC_MSG_ERROR([cannot build with --enable-lto. Specify an archiver that supports LTO objects (e.g. AR=gcc-ar RANLIB=gcc-ranlib for GCC, AR=llvm-ar RANLIB=llvm-ranlib for Clang), or a linker that supports LTO (e.g. LDFLAGS=-fuse-ld=lld), or build without --enable-lto.])
+  fi
+fi
 saved_CXXFLAGS="$CXXFLAGS"
 CXXFLAGS=$(echo "$CXXFLAGS" | sed 's/-Werror[[^ ]]*//g')
 AX_CXX_COMPILE_STDCXX(20, [noext], [mandatory])
 CXXFLAGS="$saved_CXXFLAGS"
 PKG_PROG_PKG_CONFIG
-
-dnl Detect macOS host
-AC_CANONICAL_HOST
-is_macos=no
-case "${host_os}" in
-  darwin*) is_macos=yes ;;
-esac
-
-AC_MSG_CHECKING([whether the compiler is Clang])
-AC_COMPILE_IFELSE(
-  [AC_LANG_SOURCE([[
-    #ifdef __clang__
-    int main() { return 0; }
-    #else
-    #error "Not Clang"
-    #endif
-  ]])],
-  [AC_MSG_RESULT([yes]); is_clang=yes],
-  [AC_MSG_RESULT([no]); is_clang=no]
-)
-AM_CONDITIONAL([COMPILER_IS_CLANG], [test "x$is_clang" = "xyes"])
 
 AC_ARG_ENABLE(japanese,
 [  --disable-japanese      build english version], use_japanese=no, [AC_DEFINE(JP, 1, [Enable Japanese]) AC_DEFINE(EUC, 1, [Use Extended Unix Code])])
