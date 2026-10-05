@@ -109,23 +109,16 @@ bool is_revealed_wall(const FloorType &floor, const Grid &grid, const TerrainTyp
         return true;
     }
 
-    if (floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE) && terrain.flags.has(TerrainCharacteristics::PERMANENT)) {
+    if (terrain.flags.has(TerrainCharacteristics::PERMANENT) && floor.contains(pos, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         return true;
     }
 
+    // 周りに壁でないマス (フロアの外は壁とみなす) が 1 つでもあれば表示する。
     const auto dirs = Direction::directions_8();
-    const auto num_of_walls = std::count_if(dirs.begin(), dirs.end(),
-        [&floor, &pos](const auto &d) {
-            const auto pos_neighbor = pos + d.vec();
-            if (!floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
-                return true;
-            }
-
-            const auto &terrain_neighbor = floor.get_grid(pos_neighbor).get_terrain();
-            return terrain_neighbor.flags.has(TerrainCharacteristics::WALL);
-        });
-
-    return num_of_walls != std::ssize(dirs);
+    return std::any_of(dirs.begin(), dirs.end(), [&floor, &pos](const auto &d) {
+        const auto pos_neighbor = pos + d.vec();
+        return floor.contains(pos_neighbor, FloorBoundary::OUTER_WALL_EXCLUSIVE) && floor.get_grid(pos_neighbor).get_terrain().flags.has_not(TerrainCharacteristics::WALL);
+    });
 }
 
 /*!
