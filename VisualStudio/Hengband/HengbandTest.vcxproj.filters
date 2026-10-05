@@ -196,6 +196,9 @@
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\system\test-quest-list.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\term\test-z-form.cpp">
       <Filter>term</Filter>
     </ClCompile>
@@ -244,6 +247,7 @@
     <ClInclude Include="..\..\src\test\string-helpers.h" />
     <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\quest-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\dungeon-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\monrace-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\monrace-message-list-test-access.h" />
