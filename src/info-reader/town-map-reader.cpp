@@ -1,4 +1,5 @@
 #include "info-reader/town-map-reader.h"
+#include "info-reader/json-reader-util.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
@@ -48,15 +49,8 @@ bool is_feature_token(std::string_view field, std::string_view token)
 
 bool is_json_integer_in_range(const nlohmann::json &value, int minimum, int maximum)
 {
-    if (!value.is_number_integer()) {
-        return false;
-    }
-    if (value.is_number_unsigned()) {
-        const auto integer = value.get<uint64_t>();
-        return integer <= static_cast<uint64_t>(maximum) && (minimum <= 0 || integer >= static_cast<uint64_t>(minimum));
-    }
-    const auto integer = value.get<int64_t>();
-    return integer >= minimum && integer <= maximum;
+    int parsed = 0;
+    return info_set_integer(value, parsed, true, Range(minimum, maximum)) == PARSE_ERROR_NONE;
 }
 
 parse_error_type read_condition(const nlohmann::json &data, std::optional<std::string> &condition)
