@@ -123,7 +123,7 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
                         ":" + feature.monster + ":" + feature.object + ":" + feature.ego + ":" + feature.artifact +
                         ":" + feature.trap + ":" + std::to_string(feature.special);
             qg_ptr->buf = line.data();
-            if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr, parse_fixed_map); err != PARSE_ERROR_NONE) {
+            if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr); err != PARSE_ERROR_NONE) {
                 return err;
             }
         }
@@ -144,7 +144,7 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
                 return PARSE_ERROR_INVALID_VALUE;
             }
             qg_ptr->buf = line_sys->data();
-            if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr, parse_fixed_map); err != PARSE_ERROR_NONE) {
+            if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr); err != PARSE_ERROR_NONE) {
                 return err;
             }
         }
@@ -165,7 +165,7 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
             for (const auto &row : selected_map->rows) {
                 auto line = "D:" + row;
                 qg_ptr->buf = line.data();
-                if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr, parse_fixed_map); err != PARSE_ERROR_NONE) {
+                if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr); err != PARSE_ERROR_NONE) {
                     return err;
                 }
             }
@@ -179,7 +179,7 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
             }
             auto line = "P:" + std::to_string(start.y) + ":" + std::to_string(start.x);
             qg_ptr->buf = line.data();
-            if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr, parse_fixed_map); err != PARSE_ERROR_NONE) {
+            if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr); err != PARSE_ERROR_NONE) {
                 return err;
             }
         }

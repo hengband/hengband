@@ -4,7 +4,6 @@
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
 #include "grid/object-placer.h"
-#include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
@@ -225,20 +224,12 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
 }
 
 /*!
- * @brief 固定マップ (クエスト＆街＆広域マップ)をフロアに生成する
- * Parse a sub-file of the "extra info"
+ * @brief 町 JSONC から生成された F/B/D/P 行をフロアへ適用する
  * @param player_ptr プレイヤーへの参照ポインタ
- * @param buf 文字列
- * @param ymin 詳細不明
- * @param xmin 詳細不明
- * @param ymax 詳細不明
- * @param xmax 詳細不明
- * @param y 詳細不明
- * @param x 詳細不明
+ * @param qtwg_ptr 処理行と配置範囲・現在位置
  * @return エラーコード
- * @todo クエスト情報のみを読み込む手段と実際にフロアデータまで読み込む処理は分離したい
  */
-parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
+parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
 {
     if (!qtwg_ptr->buf[0]) {
         return PARSE_ERROR_NONE;
@@ -254,10 +245,6 @@ parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtw
 
     if (qtwg_ptr->buf[1] != ':') {
         return PARSE_ERROR_GENERIC;
-    }
-
-    if (qtwg_ptr->buf[0] == '%') {
-        return (*parse_fixed_map)(player_ptr, qtwg_ptr->buf + 2, qtwg_ptr->ymin, qtwg_ptr->xmin, qtwg_ptr->ymax, qtwg_ptr->xmax);
     }
 
     /* Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid */
@@ -282,11 +269,6 @@ parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtw
 
     if (qtwg_ptr->buf[0] == 'B') {
         return parse_line_building(qtwg_ptr->buf);
-    }
-
-    // 荒野の広さを表すタグ。初期化時に読み込むのでそれ以降は無視する.
-    if (qtwg_ptr->buf[0] == 'M') {
-        return PARSE_ERROR_NONE;
     }
 
     return PARSE_ERROR_GENERIC;

@@ -3,6 +3,7 @@
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
 #include "system/building-type-definition.h"
+#include "test/info-reader/scoped-reader-state.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
@@ -92,6 +93,41 @@ TEST_CASE("TownMapReader retains ordered definitions, conditions and UTF-8 text"
     CHECK(definition.maps[0].rows == std::vector<std::string>{ "###", "#.#", "###" });
     CHECK(definition.maps[0].condition == "[EQU $TOWN 1]");
     REQUIRE(definition.starts.size() == 2);
+    CHECK(definition.starts[0].y == 1);
+    CHECK(definition.starts[0].x == 1);
+    CHECK(definition.starts[0].condition == "[EQU $TOWN 1]");
+}
+
+TEST_CASE("TownMapReader keeps percent and M as map payload and realm membership commands")
+{
+    const test::ScopedReaderState reader_state;
+    auto data = make_town_map();
+    data["featureRules"][0]["symbol"] = "%";
+    data["featureRules"].push_back(data["featureRules"][0]);
+    data["featureRules"][1]["symbol"] = "M";
+    data["mapVariants"][0]["rows"] = { "%M%", "M%M", "%M%" };
+    data["buildingRules"][0]["command"] = "M";
+    auto realms = std::vector<std::string>(MAX_MAGIC, "0");
+    realms.back() = "1";
+    data["buildingRules"][0]["fields"] = realms;
+    for (const auto *field : { "featureRules", "buildingRules", "mapVariants", "startingPositions" }) {
+        data[field][0]["when"] = "[EQU $TOWN 1]";
+    }
+
+    TownMapDefinition definition;
+    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(definition.features.size() == 2);
+    CHECK(definition.features[0].symbol == '%');
+    CHECK(definition.features[1].symbol == 'M');
+    CHECK(definition.features[0].condition == "[EQU $TOWN 1]");
+    REQUIRE(definition.buildings.size() == 1);
+    CHECK(definition.buildings[0].command == 'M');
+    CHECK(definition.buildings[0].fields == realms);
+    CHECK(definition.buildings[0].condition == "[EQU $TOWN 1]");
+    REQUIRE(definition.maps.size() == 1);
+    CHECK(definition.maps[0].rows == std::vector<std::string>{ "%M%", "M%M", "%M%" });
+    CHECK(definition.maps[0].condition == "[EQU $TOWN 1]");
+    REQUIRE(definition.starts.size() == 1);
     CHECK(definition.starts[0].y == 1);
     CHECK(definition.starts[0].x == 1);
     CHECK(definition.starts[0].condition == "[EQU $TOWN 1]");
