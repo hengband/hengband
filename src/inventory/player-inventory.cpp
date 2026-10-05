@@ -23,6 +23,7 @@
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "player/player-move.h"
+#include "player/player-status.h"
 #include "spell-kind/spells-perception.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
@@ -148,6 +149,9 @@ static void py_pickup_multiple_items(PlayerType *player_ptr, bool pickup)
             break;
         }
         process_player_pickup_item(player_ptr, -i_idx);
+
+        // 拾ったときの鑑定で自動破壊の印が付いたアイテムを、次を選ぶ前に壊してザックの空きを作る。
+        update_inventory_arrangement(player_ptr);
     }
 }
 
@@ -267,9 +271,13 @@ void carry(PlayerType *player_ptr, bool pickup)
     rfu.set_flag(StatusRecalculatingFlag::MONSTER_STATUSES);
     rfu.set_flag(MainWindowRedrawingFlag::MAP);
     rfu.set_flag(SubWindowRedrawingFlag::OVERHEAD);
-    handle_stuff_with_inventory_arrangement(player_ptr);
+    handle_stuff(player_ptr);
     const auto &grid = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x];
     autopick_pickup_items(player_ptr, grid);
+
+    // 自動拾いや拾ったときの鑑定で自動破壊の印が付いたアイテムを、拾う候補を数える前に壊す。
+    // carry() は移動のコマンドからだけ呼ばれ、所持品の番号を持たない。
+    update_inventory_arrangement(player_ptr);
 
     if (!grid.o_idx_list.empty()) {
         disturb(player_ptr, false, false);
@@ -293,5 +301,9 @@ void carry(PlayerType *player_ptr, bool pickup)
         }
 
         py_pickup_single_item(player_ptr, this_o_idx, pickup);
+
+        // 拾ったときの鑑定で自動破壊の印が付いたアイテムを、次を調べる前に壊してザックの空きを作る。
+        // 床のアイテムの印はループの前に処理済みなので、ここで床の一覧の要素が消えることはない。
+        update_inventory_arrangement(player_ptr);
     }
 }
