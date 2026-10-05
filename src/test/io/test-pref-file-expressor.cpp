@@ -7,6 +7,7 @@
 
 #include "io/pref-file-expressor.h"
 
+#include "system/h-basic.h"
 #include "test/string-helpers.h"
 
 #include <doctest/doctest.h>
@@ -24,15 +25,12 @@ namespace {
  * @param expr 条件式
  * @return 解析の結果
  * @details 文字列の終端を越えて読むと AddressSanitizer で検出できるよう、
- * 条件式と終端の NUL だけが入る大きさのバッファに置いてから解析する。
+ * 条件式だけが入る大きさの (終端の NUL の無い) バッファに置いてから解析する。
  */
 std::string parse(std::string_view expr)
 {
-    std::vector<char> buf(expr.begin(), expr.end());
-    buf.push_back('\0');
-    auto *s = buf.data();
-    char f;
-    return process_pref_file_expr(nullptr, &s, &f);
+    const std::vector<char> buf(expr.begin(), expr.end());
+    return process_pref_file_expr(nullptr, std::string_view(buf.data(), buf.size()));
 }
 
 }

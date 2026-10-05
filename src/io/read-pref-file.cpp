@@ -82,10 +82,7 @@ static errr process_pref_file_aux(PlayerType *player_ptr, const std::filesystem:
 
         /* Process "?:<expr>" */
         if (line_str->starts_with("?:")) {
-            char f;
-            char *s = line_str->data() + 2;
-            auto v = process_pref_file_expr(player_ptr, &s, &f);
-            bypass = v == "0";
+            bypass = process_pref_file_expr(player_ptr, std::string_view(*line_str).substr(2)) == "0";
             continue;
         }
 
