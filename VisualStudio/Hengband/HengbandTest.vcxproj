@@ -92,6 +92,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-spell-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-terrain-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-vault-reader.cpp" />
+    <ClCompile Include="..\..\src\test\io\test-condition-expression.cpp" />
     <ClCompile Include="..\..\src\test\io\test-interpret-pref-file.cpp" />
     <ClCompile Include="..\..\src\test\io\test-macro-configurations-store.cpp" />
     <ClCompile Include="..\..\src\test\io\test-pref-file-expressor.cpp" />

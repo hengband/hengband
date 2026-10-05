@@ -289,6 +289,7 @@
     <ClCompile Include="..\..\src\inventory\inventory-util.cpp" />
     <ClCompile Include="..\..\src\io-dump\random-art-info-dumper.cpp" />
     <ClCompile Include="..\..\src\io\command-repeater.cpp" />
+    <ClCompile Include="..\..\src\io\condition-expression.cpp" />
     <ClCompile Include="..\..\src\io\cursor.cpp" />
     <ClCompile Include="..\..\src\io\input-key-acceptor.cpp" />
     <ClCompile Include="..\..\src\io\input-key-requester.cpp" />
@@ -1116,6 +1117,7 @@
     <ClInclude Include="..\..\src\inventory\inventory-util.h" />
     <ClInclude Include="..\..\src\io-dump\random-art-info-dumper.h" />
     <ClInclude Include="..\..\src\io\command-repeater.h" />
+    <ClInclude Include="..\..\src\io\condition-expression.h" />
     <ClInclude Include="..\..\src\io\cursor.h" />
     <ClInclude Include="..\..\src\io\input-key-acceptor.h" />
     <ClInclude Include="..\..\src\io\input-key-requester.h" />
