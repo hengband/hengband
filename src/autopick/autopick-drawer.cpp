@@ -14,6 +14,7 @@
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
+#include "util/string-processor.h"
 #include "view/display-util.h"
 #include <algorithm>
 #include <string_view>
@@ -149,8 +150,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
                 leftcol = 1;
                 break;
             }
-            // 行末に1バイト目だけが残っている場合は1バイトの文字として扱う
-            if (iskanji(msg.front()) && (msg.length() > 1)) {
+            if (is_multibyte_char_at(msg)) {
                 msg.remove_prefix(1);
                 j++;
             }

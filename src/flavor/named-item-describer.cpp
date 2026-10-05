@@ -353,13 +353,10 @@ static std::string describe_body(const ItemEntity &item, [[maybe_unused]] const 
 
         default:
             ss << *it;
-#ifdef JP
-            // 文字列が全角文字の前半バイトで終わっている場合は、後半バイトが無いので全角文字として扱わない
-            if (iskanji(*it) && (std::next(it) != it_end)) {
+            if (is_multibyte_char_at(std::string_view(it, it_end))) {
                 ++it;
                 ss << *it;
             }
-#endif
             break;
         }
     }

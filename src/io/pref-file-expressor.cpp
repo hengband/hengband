@@ -129,8 +129,7 @@ std::string process_pref_file_expr(PlayerType *player_ptr, char **sp, char *fp)
     /* Accept all printables except spaces and brackets */
 #ifdef JP
     while (iskanji(*s) || (isprint(*s) && !angband_strchr(" []", *s))) {
-        // 文字列が全角文字の前半バイトで終わっている場合は、後半バイトが無いので1バイトだけ進める
-        if (iskanji(*s) && (s[1] != '\0')) {
+        if (is_multibyte_char_at(s)) {
             s++;
         }
         s++;

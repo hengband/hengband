@@ -231,13 +231,10 @@ std::string get_inscription(const ItemEntity &item)
             if (ss.tellp() > MAX_INSCRIPTION - 1) {
                 break;
             }
-#ifdef JP
-            // 銘が全角文字の前半バイトで終わっている場合は、後半バイトが無いので全角文字として扱わない
-            if (iskanji(sv.front()) && (sv.length() > 1)) {
+            if (is_multibyte_char_at(sv)) {
                 ss << sv.front();
                 sv.remove_prefix(1);
             }
-#endif
             ss << sv.front();
         }
 
