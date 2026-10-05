@@ -2584,17 +2584,11 @@ int calc_weight_limit(PlayerType *player_ptr)
 }
 
 /*!
- * @brief update のフラグに応じた更新をまとめて行う / Handle "update"
- * @details 更新処理の対象はプレイヤーの能力修正/光源寿命/HP/MP/魔法の学習状態、他多数の外界の状態判定。
+ * @brief フラグに応じて所持品の自動破壊・結合・並べ替えを行う
  */
-void update_creature(PlayerType *player_ptr)
+void update_inventory_arrangement(PlayerType *player_ptr)
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (!rfu.any_stats()) {
-        return;
-    }
-
-    auto &floor = *player_ptr->current_floor_ptr;
     if (rfu.has(StatusRecalculatingFlag::AUTO_DESTRUCTION)) {
         rfu.reset_flag(StatusRecalculatingFlag::AUTO_DESTRUCTION);
         autopick_delayed_alter(player_ptr);
@@ -2609,6 +2603,21 @@ void update_creature(PlayerType *player_ptr)
         rfu.reset_flag(StatusRecalculatingFlag::REORDER);
         reorder_pack(player_ptr);
     }
+}
+
+/*!
+ * @brief update のフラグに応じた更新をまとめて行う / Handle "update"
+ * @details 更新処理の対象はプレイヤーの能力修正/光源寿命/HP/MP/魔法の学習状態、他多数の外界の状態判定。
+ */
+void update_creature(PlayerType *player_ptr)
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    if (!rfu.any_stats()) {
+        return;
+    }
+
+    auto &floor = *player_ptr->current_floor_ptr;
+    update_inventory_arrangement(player_ptr);
 
     if (rfu.has(StatusRecalculatingFlag::BONUS)) {
         rfu.reset_flag(StatusRecalculatingFlag::BONUS);
