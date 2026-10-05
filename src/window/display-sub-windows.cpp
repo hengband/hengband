@@ -465,6 +465,7 @@ static void display_dungeon(PlayerType *player_ptr)
 {
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto p_pos = player_ptr->get_position();
+    const auto monochrome_color = get_monochrome_display_color(player_ptr);
     for (auto x = p_pos.x - game_term->wid / 2 + 1; x <= p_pos.x + game_term->wid / 2; x++) {
         for (auto y = p_pos.y - game_term->hgt / 2 + 1; y <= p_pos.y + game_term->hgt / 2; y++) {
             const Pos2D pos(y, x);
@@ -477,7 +478,7 @@ static void display_dungeon(PlayerType *player_ptr)
             }
 
             auto symbol_pair = map_info(player_ptr, pos);
-            symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
+            symbol_pair.symbol_foreground.color = monochrome_color.value_or(symbol_pair.symbol_foreground.color);
             term_queue_char(pos_drawing.x, pos_drawing.y, symbol_pair);
         }
     }

@@ -8,6 +8,7 @@
 #include "info-reader/feature-info-tokens-table.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/terrain/terrain-definition.h"
+#include "util/enum-converter.h"
 #include <algorithm>
 
 TerrainList TerrainList::instance{};
@@ -53,17 +54,29 @@ const TerrainType &TerrainList::get_terrain(short terrain_id) const
 
 TerrainType &TerrainList::get_terrain(TerrainTag tag)
 {
-    return this->terrains.at(this->tags.at(tag));
+    return this->terrains.at(this->get_terrain_id(tag));
 }
 
 const TerrainType &TerrainList::get_terrain(TerrainTag tag) const
 {
-    return this->terrains.at(this->tags.at(tag));
+    return this->terrains.at(this->get_terrain_id(tag));
 }
 
+/*!
+ * @brief 地形タグから地形IDを得る
+ * @param tag 地形タグ
+ * @throw std::out_of_range 地形が対応付けられていないタグが指定された
+ * @return 地形タグに対応するID
+ */
 short TerrainList::get_terrain_id(TerrainTag tag) const
 {
-    return this->tags.at(tag);
+    const auto tag_value = enum2i(tag);
+    const auto index = static_cast<size_t>(tag_value);
+    if ((index >= this->tags.size()) || (this->tags[index] == UNASSIGNED_TERRAIN_ID)) {
+        THROW_EXCEPTION(std::out_of_range, format("Terrain tag %d is not assigned to any terrain.", tag_value));
+    }
+
+    return this->tags[index];
 }
 
 /*!
@@ -110,8 +123,23 @@ void TerrainList::retouch()
 void TerrainList::emplace_tags()
 {
     for (const auto &[tag_str, tag] : terrain_tags) {
-        this->tags.emplace(tag, this->get_terrain_id(tag_str));
+        this->set_terrain_id(tag, this->get_terrain_id(tag_str));
     }
+}
+
+/*!
+ * @brief 地形タグに地形IDを対応付ける
+ * @param tag 地形タグ
+ * @param terrain_id 対応付ける地形ID
+ */
+void TerrainList::set_terrain_id(TerrainTag tag, short terrain_id)
+{
+    const auto index = static_cast<size_t>(enum2i(tag));
+    if (index >= this->tags.size()) {
+        this->tags.resize(index + 1, UNASSIGNED_TERRAIN_ID);
+    }
+
+    this->tags[index] = terrain_id;
 }
 
 /*!

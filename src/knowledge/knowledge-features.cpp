@@ -107,7 +107,7 @@ static void display_feature_list(int col, int row, int per_page, FEAT_IDX *feat_
 void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level)
 {
     TermCenteredOffsetSetter tcos(MAIN_TERM_MIN_COLS, tl::nullopt);
-    std::map<int, DisplaySymbol> symbols;
+    TerrainSymbols symbols{};
     const auto &[wid, hgt] = term_get_size();
     auto &terrains = TerrainList::get_instance();
     std::vector<FEAT_IDX> feat_idx(terrains.size());
@@ -315,10 +315,9 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
                     break;
                 }
 
-                auto &symbols_cb_map = symbols_cb.symbols;
                 for (auto i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) {
                     auto &symbol_config = terrain.symbol_configs.at(i);
-                    auto &symbol = symbols_cb_map.at(i);
+                    auto &symbol = symbols_cb.symbols.at(i);
                     const auto has_character = symbol.has_character();
                     if ((symbol.color != 0) || (!(symbol.character & 0x80) && has_character)) {
                         symbol_config.color = symbol.color;
