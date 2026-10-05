@@ -183,20 +183,7 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
             if (!is_town_map_condition_met(player_ptr, building.condition)) {
                 continue;
             }
-            std::string line = "B:";
-            if (building.english) {
-                line += '$';
-            }
-            line += std::to_string(building.index) + ":" + building.command;
-            for (const auto &field : building.fields) {
-                line += ":" + field;
-            }
-            auto line_sys = utf8_to_sys(line);
-            if (!line_sys) {
-                return PARSE_ERROR_INVALID_VALUE;
-            }
-            qg_ptr->buf = line_sys->data();
-            if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr); err != PARSE_ERROR_NONE) {
+            if (const auto err = apply_town_building_rule(building); err != PARSE_ERROR_NONE) {
                 return err;
             }
         }

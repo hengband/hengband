@@ -1,15 +1,18 @@
 #include "info-reader/town-map-reader.h"
 #include "info-reader/json-reader-util.h"
+#include "locale/character-encoding.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
 #include "system/building-type-definition.h"
+#include "util/string-processor.h"
 #include <algorithm>
 #include <charconv>
 #include <cstdint>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string_view>
+#include <type_traits>
 #include <utility>
 
 namespace {
@@ -69,6 +72,81 @@ parse_error_type read_condition(const nlohmann::json &data, std::optional<std::s
 TownMapReader::TownMapReader(const nlohmann::json &data)
     : data(data)
 {
+}
+
+parse_error_type apply_town_building_rule(const TownMapBuildingRule &rule)
+{
+    auto directive = rule.directive;
+    const auto convert = [](std::string &text) {
+        // 建物のC文字列として表現できず、旧char*経路でも途中で切れていた入力は適用しない。
+        if (text.find('\0') != std::string::npos) {
+            return false;
+        }
+        const auto converted = utf8_to_sys(text);
+        if (!converted) {
+            return false;
+        }
+        text = *converted;
+        return true;
+    };
+    const auto converted = std::visit([&convert](auto &value) {
+        using T = std::decay_t<decltype(value)>;
+        if constexpr (std::is_same_v<T, TownMapBuildingNames>) {
+            return convert(value.name) && convert(value.owner_name) && convert(value.owner_race);
+        } else if constexpr (std::is_same_v<T, TownMapBuildingAction>) {
+            return convert(value.name) && convert(value.letter);
+        } else if constexpr (std::is_same_v<T, TownMapBuildingNoop>) {
+            return std::all_of(value.fields.begin(), value.fields.end(), convert);
+        } else {
+            return true;
+        }
+    },
+        directive);
+    if (!converted) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+#ifdef JP
+    if (rule.english) {
+#else
+    if (!rule.english) {
+#endif
+        return PARSE_ERROR_NONE;
+    }
+    if (rule.index < 0 || rule.index >= MAX_BUILDINGS) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+    auto &building = buildings[rule.index];
+    return std::visit([&building](const auto &value) {
+        using T = std::decay_t<decltype(value)>;
+        if constexpr (std::is_same_v<T, TownMapBuildingNames>) {
+            angband_strcpy(building.name, value.name, sizeof(building.name));
+            angband_strcpy(building.owner_name, value.owner_name, sizeof(building.owner_name));
+            angband_strcpy(building.owner_race, value.owner_race, sizeof(building.owner_race));
+        } else if constexpr (std::is_same_v<T, TownMapBuildingAction>) {
+            if (value.index < 0 || value.index >= 8) {
+                return PARSE_ERROR_INVALID_VALUE;
+            }
+            angband_strcpy(building.act_names[value.index], value.name, sizeof(building.act_names[value.index]));
+            building.member_costs[value.index] = value.member_cost;
+            building.other_costs[value.index] = value.other_cost;
+            building.letters[value.index] = value.letter.empty() ? '\0' : value.letter.front();
+            building.actions[value.index] = static_cast<int16_t>(value.action);
+            building.action_restr[value.index] = static_cast<int16_t>(value.restriction);
+        } else if constexpr (std::is_same_v<T, TownMapBuildingMembership>) {
+            const auto is_realm = value.kind == TownMapBuildingMembershipKind::REALM;
+            auto &members = value.kind == TownMapBuildingMembershipKind::CLASS ? building.member_class : (is_realm ? building.member_realm : building.member_race);
+            const auto count = value.kind == TownMapBuildingMembershipKind::CLASS ? static_cast<size_t>(PLAYER_CLASS_TYPE_MAX) : (is_realm ? static_cast<size_t>(MAX_MAGIC) : static_cast<size_t>(MAX_RACES));
+            const auto offset = is_realm ? 1U : 0U;
+            if (value.values.empty() || value.values.size() > count || members.size() < count + offset) {
+                return PARSE_ERROR_INVALID_VALUE;
+            }
+            for (size_t i = 0; i < count; ++i) {
+                members[i + offset] = i < value.values.size() ? static_cast<int16_t>(value.values[i]) : 1;
+            }
+        }
+        return PARSE_ERROR_NONE;
+    },
+        directive);
 }
 
 parse_error_type TownMapReader::read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings) const
@@ -189,7 +267,7 @@ parse_error_type TownMapReader::read_buildings(TownMapDefinition &definition) co
         }
         building.index = rule["index"].get<int>();
         building.english = locale == "en";
-        building.command = command.front();
+        std::vector<std::string> parsed_fields;
         size_t field_index = 0;
         for (const auto &field : fields) {
             if (!field.is_string()) {
@@ -204,8 +282,28 @@ parse_error_type TownMapReader::read_buildings(TownMapDefinition &definition) co
             if (is_numeric_field && !is_integer_in_range(value, std::numeric_limits<int>::min(), std::numeric_limits<int>::max())) {
                 return PARSE_ERROR_INVALID_VALUE;
             }
-            building.fields.push_back(value);
+            parsed_fields.push_back(value);
             ++field_index;
+        }
+        const auto integer = [&parsed_fields](size_t index) {
+            const auto &text = parsed_fields[index];
+            int value = 0;
+            std::from_chars(text.data(), text.data() + text.size(), value);
+            return value;
+        };
+        if (command == "N") {
+            building.directive = TownMapBuildingNames{ parsed_fields[0], parsed_fields[1], parsed_fields[2] };
+        } else if (command == "A") {
+            building.directive = TownMapBuildingAction{ integer(0), parsed_fields[1], integer(2), integer(3), parsed_fields[4], integer(5), integer(6) };
+        } else if (command == "Z") {
+            building.directive = TownMapBuildingNoop{ std::move(parsed_fields) };
+        } else {
+            TownMapBuildingMembership membership;
+            membership.kind = command == "C" ? TownMapBuildingMembershipKind::CLASS : (command == "R" ? TownMapBuildingMembershipKind::RACE : TownMapBuildingMembershipKind::REALM);
+            for (size_t i = 0; i < parsed_fields.size(); ++i) {
+                membership.values.push_back(integer(i));
+            }
+            building.directive = std::move(membership);
         }
         definition.buildings.push_back(std::move(building));
     }
