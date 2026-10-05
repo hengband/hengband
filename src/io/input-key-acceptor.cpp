@@ -231,8 +231,8 @@ char inkey(bool do_all_term_refresh)
                 if (do_all_term_refresh) {
                     all_term_fresh();
                 } else {
-                    // -more- や確認などで入力を待つ前にも、遅らせている地図のサブウィンドウを最新にする
-                    if (defer_map_subwindows && world.character_dungeon) {
+                    // -more- や確認などで入力を待つ前にも、残っているサブウィンドウの再描画の要求を処理して最新にする
+                    if (world.character_dungeon) {
                         window_stuff_including_deferred(p_ptr);
                     }
 
