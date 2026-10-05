@@ -13,6 +13,7 @@ enum class QuestKindType : short;
 class QuestType;
 namespace test {
 class QuestListTestAccess;
+class QuestFeatureTestAccess;
 }
 class QuestList final : public util::AbstractMapWrapper<QuestId, QuestType> {
 public:
@@ -41,6 +42,8 @@ public:
 
 private:
     friend class test::QuestListTestAccess;
+    friend class test::QuestFeatureTestAccess;
+
     static QuestList instance;
     std::map<QuestId, QuestType> quests;
     QuestList() = default;
