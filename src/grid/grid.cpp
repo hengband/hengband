@@ -718,9 +718,9 @@ void update_flow(PlayerType *player_ptr)
             const auto &grid = floor.get_grid(pos);
 
             /* Add the "children" */
+            const uint8_t base_cost = grid.get_cost(gf) + 1;
+            const uint8_t n = grid.get_distance(gf) + 1;
             for (const auto &d : Direction::directions_8()) {
-                uint8_t m = grid.get_cost(gf) + 1;
-                const uint8_t n = grid.get_distance(gf) + 1;
                 const auto pos_neighbor = pos + d.vec();
 
                 /* Ignore player's grid */
@@ -728,30 +728,40 @@ void update_flow(PlayerType *player_ptr)
                     continue;
                 }
 
-                if (floor.has_closed_door_at(pos_neighbor)) {
-                    m += 3;
-                }
-
                 /* Ignore "pre-stamped" entries */
                 auto &grid_neighbor = floor.get_grid(pos_neighbor);
                 auto &cost_neighbor = grid_neighbor.costs[enum2i(gf)];
                 auto &dist_neighbor = grid_neighbor.dists[enum2i(gf)];
-                if ((dist_neighbor != 0) && (dist_neighbor <= n) && (cost_neighbor <= m)) {
+                const auto is_pre_stamped = [&](uint8_t cost) { return (dist_neighbor != 0) && (dist_neighbor <= n) && (cost_neighbor <= cost); };
+
+                // 閉じた扉はコストを増やすだけなので、扉を考慮する前に記録済みなら考慮した後も記録済みである。
+                // 地形を引く前に除外しておく。
+                if (is_pre_stamped(base_cost)) {
                     continue;
+                }
+
+                const auto &terrain_neighbor = grid_neighbor.get_terrain();
+                const auto is_closed_door = terrain_neighbor.is_closed_door();
+                auto m = base_cost;
+                if (is_closed_door) {
+                    m += 3;
+                    if (is_pre_stamped(m)) {
+                        continue;
+                    }
                 }
 
                 /* Ignore "walls", "holes" and "rubble" */
                 auto can_move = false;
                 switch (gf) {
                 case GridFlow::CAN_FLY:
-                    can_move = grid_neighbor.has(TerrainCharacteristics::MOVE) || grid_neighbor.has(TerrainCharacteristics::CAN_FLY);
+                    can_move = terrain_neighbor.has(TerrainCharacteristics::MOVE) || terrain_neighbor.has(TerrainCharacteristics::CAN_FLY);
                     break;
                 default:
-                    can_move = grid_neighbor.has(TerrainCharacteristics::MOVE);
+                    can_move = terrain_neighbor.has(TerrainCharacteristics::MOVE);
                     break;
                 }
 
-                if (!can_move && !floor.has_closed_door_at(pos_neighbor)) {
+                if (!can_move && !is_closed_door) {
                     continue;
                 }
 
