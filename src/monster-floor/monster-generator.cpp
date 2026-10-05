@@ -426,8 +426,36 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 }
 
 /*!
+ * @brief モンスターを配置する位置をランダムに探す
+ * @param floor フロアへの参照
+ * @param p_pos プレイヤーの位置
+ * @param min_dis プレイヤーから離れるべき最小距離
+ * @param max_dis プレイヤーから離れるべき最大距離
+ * @return 配置できる位置。規定回数の試行で見つからなければ tl::nullopt
+ */
+static tl::optional<Pos2D> decide_monster_allocation_position(const FloorType &floor, const Pos2D &p_pos, int min_dis, int max_dis)
+{
+    for (auto attempts_left = 10000; attempts_left > 0; attempts_left--) {
+        const auto y = randint0(floor.height);
+        const auto x = randint0(floor.width);
+        const Pos2D pos(y, x);
+        const auto can_place = floor.is_underground() ? floor.can_generate_monster_at(pos) : floor.is_empty_at(pos);
+        if (!can_place || (pos == p_pos)) {
+            continue;
+        }
+
+        const auto dist = Grid::calc_distance(pos, p_pos);
+        if ((min_dis < dist) && (dist <= max_dis)) {
+            return pos;
+        }
+    }
+
+    return tl::nullopt;
+}
+
+/*!
  * @brief ダンジョンの初期配置モンスターを生成1回生成する / Attempt to allocate a random monster in the dungeon.
- * @param dis プレイヤーから離れるべき最小距離
+ * @param min_dis プレイヤーから離れるべき最小距離
  * @param mode 生成オプション
  * @param summon_specific 特定モンスター種別を生成するための関数ポインタ
  * @param max_dis プレイヤーから離れるべき最大距離 (デバッグ用)
@@ -439,30 +467,9 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
         return true;
     }
 
-    const auto p_pos = player_ptr->get_position();
-    auto &floor = *player_ptr->current_floor_ptr;
-    Pos2D pos(0, 0);
-    auto attempts_left = 10000;
-    while (attempts_left--) {
-        pos.y = randint0(floor.height);
-        pos.x = randint0(floor.width);
-        if (floor.is_underground()) {
-            if (!floor.can_generate_monster_at(pos) || (p_pos == pos)) {
-                continue;
-            }
-        } else {
-            if (!floor.is_empty_at(pos) || (pos == p_pos)) {
-                continue;
-            }
-        }
-
-        const auto dist = Grid::calc_distance(pos, p_pos);
-        if ((min_dis < dist) && (dist <= max_dis)) {
-            break;
-        }
-    }
-
-    if (!attempts_left) {
+    const auto &floor = *player_ptr->current_floor_ptr;
+    const auto pos = decide_monster_allocation_position(floor, player_ptr->get_position(), min_dis, max_dis);
+    if (!pos) {
         if (cheat_xtra || cheat_hear) {
             msg_print(_("警告！新たなモンスターを配置できません。小さい階ですか？", "Warning! Could not allocate a new monster. Small level?"));
         }
@@ -471,8 +478,8 @@ bool alloc_monster(PlayerType *player_ptr, int min_dis, BIT_FLAGS mode, summon_s
     }
 
     if (randint1(5000) <= floor.dun_level) {
-        return alloc_horde(player_ptr, pos.y, pos.x, summon_specific);
+        return alloc_horde(player_ptr, pos->y, pos->x, summon_specific);
     }
 
-    return place_random_monster(player_ptr, pos.y, pos.x, (mode | PM_ALLOW_GROUP)).has_value();
+    return place_random_monster(player_ptr, pos->y, pos->x, (mode | PM_ALLOW_GROUP)).has_value();
 }
