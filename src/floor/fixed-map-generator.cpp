@@ -231,18 +231,6 @@ static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
  */
 parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
 {
-    if (!qtwg_ptr->buf[0]) {
-        return PARSE_ERROR_NONE;
-    }
-
-    if (iswspace(qtwg_ptr->buf[0])) {
-        return PARSE_ERROR_NONE;
-    }
-
-    if (qtwg_ptr->buf[0] == '#') {
-        return PARSE_ERROR_NONE;
-    }
-
     if (qtwg_ptr->buf[1] != ':') {
         return PARSE_ERROR_GENERIC;
     }

@@ -9,6 +9,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "dungeon/quest.h"
 #include "floor/fixed-map-generator.h"
+#include "floor/floor-base-definitions.h"
 #include "game-option/birth-options.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
@@ -28,6 +29,7 @@
 #include "system/floor/floor-info.h"
 #include "system/gamevalue.h"
 #include "system/player-type-definition.h"
+#include "term/z-util.h"
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
@@ -148,7 +150,7 @@ static bool is_town_map_condition_met(PlayerType *player_ptr, const std::optiona
     return evaluate_condition_expression(*condition, resolve) != "0";
 }
 
-static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name, int ymin, int xmin, int ymax, int xmax)
+static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name)
 {
     std::ifstream ifs(path_build(ANGBAND_DIR_EDIT, name));
     if (!ifs) {
@@ -158,13 +160,13 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
         const auto data = nlohmann::json::parse(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>(), nullptr, true, true, true);
         TownMapDefinition definition;
         const bool only_buildings = (init_flags & INIT_ONLY_BUILDINGS) != 0;
-        if (const auto err = TownMapReader(data).read(definition, ymax - ymin, xmax - xmin, only_buildings); err != PARSE_ERROR_NONE) {
+        if (const auto err = TownMapReader(data).read(definition, MAX_HGT, MAX_WID, only_buildings); err != PARSE_ERROR_NONE) {
             return err;
         }
-        auto y = ymin;
-        auto x = xmin;
+        auto y = 0;
+        auto x = 0;
         qtwg_type qg;
-        auto *qg_ptr = initialize_quest_generator_type(&qg, ymin, xmin, ymax, xmax, &y, &x);
+        auto *qg_ptr = initialize_quest_generator_type(&qg, 0, 0, MAX_HGT, MAX_WID, &y, &x);
         for (const auto &feature : definition.features) {
             if (!is_town_map_condition_met(player_ptr, feature.condition)) {
                 continue;
@@ -240,44 +242,52 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
 }
 
 /*!
- * @brief 町の定義 (TownDefinitionList.jsonc) から、現在の町の固定マップを読み込んでパースする
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param name 読み込む定義の名前。TOWN_DEFINITION_LIST 以外はエラー (PARSE_ERROR_GENERIC) を返す
- * @param ymin 詳細不明
- * @param xmin 詳細不明
- * @param ymax 詳細不明
- * @param xmax 詳細不明
- * @return エラーコード
+ * @brief 町の固定マップの読み込みエラーを表示する
+ * @param err エラーコード
+ * @param filename 読み込んでいたファイルの名前
  */
-parse_error_type parse_fixed_map(PlayerType *player_ptr, std::string_view name, int ymin, int xmin, int ymax, int xmax)
+static void report_load_error(parse_error_type err, std::string_view filename)
 {
-    if (name == TOWN_DEFINITION_LIST) {
-        if (const auto err = load_town_preferences(); err != PARSE_ERROR_NONE) {
-            const auto oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-            msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, TOWN_PREFERENCES);
-            msg_erase();
-            return err;
-        }
+    const auto oops = ((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown";
+    msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, filename);
+    msg_erase();
+}
 
-        std::string map_file;
-        if (const auto err = load_town_definition_file(map_file); err != PARSE_ERROR_NONE) {
-            const auto oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-            msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, TOWN_DEFINITION_LIST);
-            msg_erase();
-            return err;
-        }
-        if (map_file.empty()) {
-            return PARSE_ERROR_NONE;
-        }
-        const auto err = parse_town_map_jsonc(player_ptr, map_file, ymin, xmin, ymax, xmax);
-        if (err != PARSE_ERROR_NONE) {
-            const auto oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-            msg_print("Error {} ({}) loading '{}'.", enum2i(err), oops, map_file);
-            msg_erase();
-        }
+/*!
+ * @brief 町の定義から現在の町の固定マップを読み込んで生成し、エラーコードを返す (load_town_map() の本体)
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @return エラーコード。失敗した場合はエラーを表示済み
+ */
+static parse_error_type generate_town_map(PlayerType *player_ptr)
+{
+    if (const auto err = load_town_preferences(); err != PARSE_ERROR_NONE) {
+        report_load_error(err, TOWN_PREFERENCES);
         return err;
     }
 
-    // 固定マップの定義ファイルはすべて JSONC に移行し、読み込むのは町の定義だけになった
-    return PARSE_ERROR_GENERIC;
+    std::string map_file;
+    if (const auto err = load_town_definition_file(map_file); err != PARSE_ERROR_NONE) {
+        report_load_error(err, TOWN_DEFINITION_LIST);
+        return err;
+    }
+    if (map_file.empty()) {
+        return PARSE_ERROR_NONE;
+    }
+    const auto err = parse_town_map_jsonc(player_ptr, map_file);
+    if (err != PARSE_ERROR_NONE) {
+        report_load_error(err, map_file);
+    }
+    return err;
+}
+
+/*!
+ * @brief 町の定義 (TownDefinitionList.jsonc) から現在の町の固定マップを読み込んでフロア全体に生成し、失敗したら終了する
+ * @details 町を生成できないとゲームを続けられないので、読み込みに失敗した場合は、他のデータの読み込みと同じく終了する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ */
+void load_town_map(PlayerType *player_ptr)
+{
+    if (generate_town_map(player_ptr) != PARSE_ERROR_NONE) {
+        quit(_("町の定義の読み込みに失敗しました", "Failed to load the town definition"));
+    }
 }
