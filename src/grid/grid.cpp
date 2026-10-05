@@ -44,6 +44,7 @@
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
+#include <algorithm>
 #include <queue>
 
 bool GridTemplate::matches(const Grid &grid) const
@@ -661,51 +662,49 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
  * Oh, and outside of the "torch radius", only "lite" grids need to be scanned.
  */
 
-/*
- * Hack - speed up the update_flow algorithm by only doing
- * it everytime the player moves out of LOS of the last
- * "way-point".
+/*!
+ * @brief 前回 update_flow() で探索したときのプレイヤーの位置
+ * @details 走行中にこの位置が見えている間は探索を省く。また、前回の探索で値を書いた範囲を消すのにも使う。
  */
-static POSITION flow_x = 0;
-static POSITION flow_y = 0;
+static Pos2D flow_center(0, 0);
 
-/*
- * Hack -- fill in the "cost" field of every grid that the player
- * can "reach" with the number of steps needed to reach that grid.
- * This also yields the "distance" of the player from every grid.
- *
- * In addition, mark the "when" of the grids that can reach
- * the player with the incremented value of "flow_n".
- *
- * Hack -- use the "seen" array as a "circular queue".
- *
- * We do not need a priority queue because the cost from grid
- * to grid is always "one" and we process them in order.
+/*!
+ * @brief モンスターがプレイヤーを追跡するための経路情報を更新する
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @details プレイヤーの位置から幅優先探索を行い、到達できるグリッドに、移動の種類 (GridFlow) ごとの
+ * コスト (閉じた扉は余分にかかる) と距離を記録する。探索は monster_flow_depth マスで打ち切る。
  */
 void update_flow(PlayerType *player_ptr)
 {
     auto &floor = *player_ptr->current_floor_ptr;
 
     /* The last way-point is on the map */
-    const Pos2D flow(flow_y, flow_x);
-    if (player_ptr->running && floor.contains(flow, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
+    if (player_ptr->running && floor.contains(flow_center, FloorBoundary::OUTER_WALL_EXCLUSIVE)) {
         /* The way point is in sight - do not update.  (Speedup) */
-        if (floor.get_grid(flow).info & CAVE_VIEW) {
+        if (floor.get_grid(flow_center).info & CAVE_VIEW) {
             return;
         }
     }
 
-    /* Erase all of the current flow information */
-    for (const auto &pos : floor.get_area()) {
-        auto &grid = floor.get_grid(pos);
-        grid.reset_costs();
-        grid.reset_dists();
+    // 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る).
+    constexpr auto monster_flow_depth = 32;
+
+    // 前回の探索で値を書いたのは、前回の中心から monster_flow_depth マス以内のグリッドだけなので、そこだけを消す。
+    // フロアの生成・読み込み時と forget_flow() では、フロア全体を消している。
+    const auto y_min = std::max(flow_center.y - monster_flow_depth, 0);
+    const auto y_max = std::min(flow_center.y + monster_flow_depth, floor.height - 1);
+    const auto x_min = std::max(flow_center.x - monster_flow_depth, 0);
+    const auto x_max = std::min(flow_center.x + monster_flow_depth, floor.width - 1);
+    for (auto y = y_min; y <= y_max; y++) {
+        for (auto x = x_min; x <= x_max; x++) {
+            auto &grid = floor.get_grid({ y, x });
+            grid.reset_costs();
+            grid.reset_dists();
+        }
     }
 
-    /* Save player position */
     const auto p_pos = player_ptr->get_position();
-    flow_y = p_pos.y;
-    flow_x = p_pos.x;
+    flow_center = p_pos;
 
     for (const auto gf : GRID_FLOW_RANGE) {
         // 幅優先探索用のキュー。
@@ -774,8 +773,6 @@ void update_flow(PlayerType *player_ptr)
                     dist_neighbor = n;
                 }
 
-                // 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る).
-                constexpr auto monster_flow_depth = 32;
                 if (n == monster_flow_depth) {
                     continue;
                 }
