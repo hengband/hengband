@@ -310,29 +310,26 @@ FILE *angband_fopen_temp(char *buf, int max)
  * @brief ファイルから改行かEOFまでの文字列を読み取り、システムのエンコーディングに変換した結果を返す
  *
  * @param fp ファイルポインタ
- * @return 読み取った文字列。1バイトも読み取らずファイルの終端に達した場合はtl::nullopt
+ * @return 読み取った文字列 (改行は含まない)。1バイトも読み取らずファイルの終端に達した場合はtl::nullopt
+ * @details
+ * 行の途中に '\0' があれば、そこで行を切り、その行の残りは読み捨てる。
+ * '\0' で始まる行は空の行になる (読み飛ばさないので、行の数は変わらない)。
  */
 static tl::optional<std::string> read_line(FILE *fp)
 {
     std::string line_buf;
-
-    char buf[1024];
-    while (fgets(buf, sizeof(buf), fp) != nullptr) {
-        std::string_view sv(buf);
-
-        line_buf.append(sv.begin(), sv.end());
-        // 読み取った行の先頭が '\0' だと sv は空になる
-        if (!sv.empty() && (sv.back() == '\n')) {
-            break;
+    auto has_nul = false;
+    int ch;
+    while (((ch = std::fgetc(fp)) != EOF) && (ch != '\n')) {
+        // '\0' から後ろは、その行の残りとして溜めずに読み捨てる
+        has_nul = has_nul || (ch == '\0');
+        if (!has_nul) {
+            line_buf.push_back(static_cast<char>(ch));
         }
     }
 
-    if (line_buf.empty()) {
+    if ((ch == EOF) && line_buf.empty() && !has_nul) {
         return tl::nullopt;
-    }
-
-    if (line_buf.back() == '\n') {
-        line_buf.pop_back();
     }
 
 #ifdef JP
