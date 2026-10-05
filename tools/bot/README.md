@@ -147,6 +147,11 @@ Hengband.exe --headless --control-port=9000 --fixed-seed=12345
 
   主端末を 80x24 より大きくすると、タイトル画面などの 80x24 で作られた画面は実際のフロントエンドと同じく
   中央に寄せて描かれます。
+
+  起動後は `resize` op（`hbctl.py resize <width> <height>`）で大きさを変えられます。範囲は起動時と同じです。
+  実際のフロントエンドでウィンドウの大きさを変えたときと同じく、地図やサブウィンドウが新しい大きさで
+  描き直されます。`resize` はヘッドレス実行でだけ受け付け、それ以外ではエラーを返します
+  （実際のウィンドウの大きさとゲームが扱う端末の大きさが食い違ってしまうため）。
 - **アニメーションの待ちがありません。** 演出を見せる相手が居ないため、
   ゲームが要求する遅延を無視します。キー列の再生が GUI より速く進みます。
 - **フロントエンド固有の `pref-*.prf` を読みません。** `info` の `system` が `headless` になるため、
@@ -176,6 +181,8 @@ python3 tools/bot/hbctl.py keys 'jjj'      # キーを送り、処理後の画�
 python3 tools/bot/hbctl.py keys '\e' --quiet      # 画面を表示しない
 python3 tools/bot/hbctl.py state           # ゲームの内部状態 (JSON)
 python3 tools/bot/hbctl.py messages 30     # 直近のメッセージ履歴
+python3 tools/bot/hbctl.py resize 120 40   # 端末の大きさを変える (ヘッドレス実行のみ)
+python3 tools/bot/hbctl.py --term 1 resize 60 20  # 副端末の大きさを変える
 python3 tools/bot/hbctl.py replay keys.txt # キー列ファイルを一括投入
 python3 tools/bot/hbctl.py raw '{"op":"info"}'
 python3 tools/bot/hbctl.py quit            # ゲームを終了
@@ -204,6 +211,7 @@ python3 tools/bot/hbctl.py quit            # ゲームを終了
 | `keys`     | `keys`                                | キー列を注入する。積めたキー数を返す       |
 | `state`    | `map` (既定 true)                     | ゲームの内部状態のスナップショット         |
 | `messages` | `count` (既定 20)                     | 直近のメッセージ履歴を古い順に返す         |
+| `resize`   | `term` (既定 0), `width`, `height`    | 端末の大きさを変える（ヘッドレス実行のみ） |
 | `quit`     | —                                     | ゲームを終了する（**セーブしません**）     |
 
 `keys` には `\e`（ESC）、`^X`（Ctrl+X）、`\xNN` といったマクロ表記を使えます。

@@ -28,6 +28,7 @@
 #include <fmt/format.h>
 #include <string>
 #include <string_view>
+#include <tl/expected.hpp>
 
 namespace {
 
@@ -146,6 +147,33 @@ void term_data_init_headless(int index)
     angband_terms[index] = t;
 }
 
+/*!
+ * @brief ヘッドレス端末の大きさを変える
+ * @param index angband_terms上の添字
+ * @param size 新しい大きさ
+ * @return 成功した場合は値なし、失敗した場合は理由
+ * @details
+ * 実際のフロントエンドでウィンドウの大きさを変えた時を模倣する。X11版がウィンドウの
+ * 大きさの変化を受けた時と同じく、対象の端末を有効にしてterm_resize()を呼び、
+ * 元の端末へ戻す。再描画はterm_resize()が呼ぶ端末ごとのresize_hookに任せる。
+ *
+ * 制御サーバがキー入力待ちの間に呼ぶため、X11版がイベントを処理するのと同じ時機になる。
+ * 端末の添字の妥当性は制御サーバが確かめる。
+ */
+tl::expected<void, std::string> resize_headless_term(int index, const TermSize &size)
+{
+    if (!is_valid_term_size(index, size)) {
+        const auto min_size = get_term_min_size(index);
+        return tl::make_unexpected(fmt::format("the size must be between {}x{} and {}x{}", min_size.cols, min_size.rows, TERM_MAX_COLS, TERM_MAX_ROWS));
+    }
+
+    auto *old = game_term;
+    term_activate(&headless_terms[index]);
+    term_resize(size.cols, size.rows);
+    term_activate(old);
+    return {};
+}
+
 }
 
 /*!
@@ -192,5 +220,8 @@ errr init_headless_term()
     }
 
     term_screen = &headless_terms[0];
+
+    // 制御サーバから端末の大きさを変えられるようにする (理由はset_bot_term_resizer()を参照)
+    set_bot_term_resizer(resize_headless_term);
     return 0;
 }
