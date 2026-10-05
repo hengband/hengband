@@ -44,6 +44,70 @@ nlohmann::json make_legend_integer_cell(const std::string &path, const nlohmann:
     return cell;
 }
 
+const std::vector<std::string> QUEST_INTEGER_PATHS = {
+    "/definition/level",
+    "/definition/numMon",
+    "/definition/maxNum",
+    "/definition/dungeon",
+    "/definition/monster",
+    "/definition/reward/artifact",
+    "/definition/reward/artifacts/1",
+    "/start/y",
+    "/start/x",
+    "/startVariants/1/y",
+    "/startVariants/1/x",
+    "/startVariants/1/leavingQuest",
+};
+
+bool is_quest_short_id(const std::string &path)
+{
+    return path == "/definition/monster" || path.starts_with("/definition/reward/");
+}
+
+nlohmann::json make_quest_with_integer(const std::string &path, const nlohmann::json &value)
+{
+    auto data = make_quest_with_description("New description");
+    if (path.starts_with("/definition/reward/artifacts/")) {
+        data["definition"]["reward"]["artifacts"] = { 1, 2 };
+    } else if (path.starts_with("/startVariants/")) {
+        data["startVariants"] = { { { "y", 0 }, { "x", 0 } }, { { "y", 1 }, { "x", 2 } } };
+    } else if (path.starts_with("/start/")) {
+        data["start"] = { { "y", 1 }, { "x", 2 } };
+    }
+    data[nlohmann::json::json_pointer(path)] = value;
+    return data;
+}
+
+int get_quest_integer(const QuestFixedMap &fixed_map, const std::string &path)
+{
+    if (path == "/definition/level") {
+        return fixed_map.metadata.level;
+    }
+    if (path == "/definition/numMon") {
+        return fixed_map.metadata.num_mon;
+    }
+    if (path == "/definition/maxNum") {
+        return fixed_map.metadata.max_num;
+    }
+    if (path == "/definition/dungeon") {
+        return fixed_map.metadata.dungeon;
+    }
+    if (path == "/definition/monster") {
+        return fixed_map.metadata.r_idx;
+    }
+    if (path == "/definition/reward/artifact") {
+        return fixed_map.metadata.reward_artifact;
+    }
+    if (path == "/definition/reward/artifacts/1") {
+        return fixed_map.reward_artifact_candidates.at(1);
+    }
+    const auto &start = fixed_map.starts.at(path.starts_with("/startVariants/") ? 1 : 0);
+    if (path.ends_with("/leavingQuest")) {
+        return start.leaving_quest.value();
+    }
+    return path.ends_with("/y") ? start.y : start.x;
+}
+
 /*!
  * @brief 読み込み失敗時に保持されるべき既存の出力を用意する
  */
@@ -121,6 +185,95 @@ TEST_CASE("QuestReader reads description lines")
     REQUIRE(fixed_map.descriptions.size() == 1);
     CHECK(fixed_map.descriptions[0].lines_ja == std::vector<std::string>{ "Kill them all." });
     CHECK(fixed_map.descriptions[0].lines_en == std::vector<std::string>{ "Kill them all." });
+}
+
+TEST_CASE("QuestReader metadata reward and start integers retain representable boundaries")
+{
+    for (const auto &path : QUEST_INTEGER_PATHS) {
+        const auto minimum = is_quest_short_id(path) ? std::numeric_limits<int16_t>::min() : std::numeric_limits<int>::min();
+        const auto maximum = is_quest_short_id(path) ? std::numeric_limits<int16_t>::max() : std::numeric_limits<int>::max();
+        const std::vector<nlohmann::json> values = { minimum, 0, maximum, static_cast<uint64_t>(maximum) };
+        for (const auto &value : values) {
+            CAPTURE(path);
+            CAPTURE(value);
+            const auto data = make_quest_with_integer(path, value);
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+            CHECK(get_quest_integer(fixed_map, path) == value.get<int>());
+        }
+    }
+}
+
+TEST_CASE("QuestReader rejects metadata reward and start integer overflow without publishing output")
+{
+    for (const auto &path : QUEST_INTEGER_PATHS) {
+        const int64_t minimum = is_quest_short_id(path) ? std::numeric_limits<int16_t>::min() : std::numeric_limits<int>::min();
+        const int64_t maximum = is_quest_short_id(path) ? std::numeric_limits<int16_t>::max() : std::numeric_limits<int>::max();
+        const std::vector<nlohmann::json> values = {
+            minimum - 1,
+            maximum + 1,
+            static_cast<uint64_t>(maximum + 1),
+            std::numeric_limits<int64_t>::min(),
+            std::numeric_limits<int64_t>::max(),
+            nlohmann::json::parse("18446744073709551615"),
+            nlohmann::json::parse("4294967297"),
+        };
+        for (const auto &value : values) {
+            CAPTURE(path);
+            CAPTURE(value);
+            const auto data = make_quest_with_integer(path, value);
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            set_existing_output(quest, fixed_map);
+            CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_FLAG);
+            check_existing_output(quest, fixed_map);
+        }
+    }
+}
+
+TEST_CASE("QuestReader metadata reward and start integers retain null and type behavior")
+{
+    for (const auto &path : QUEST_INTEGER_PATHS) {
+        const auto ignored_non_integer = path.starts_with("/definition/reward/") || path.ends_with("/leavingQuest");
+        const auto required = path == "/definition/level" || (path.starts_with("/start") && !path.ends_with("/leavingQuest"));
+        const std::vector<nlohmann::json> values = { nullptr, "ignored", 1.5, true, nlohmann::json::array(), nlohmann::json::object() };
+        for (const auto &value : values) {
+            CAPTURE(path);
+            CAPTURE(value);
+            const auto data = make_quest_with_integer(path, value);
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            set_existing_output(quest, fixed_map);
+            const auto expected_error = ignored_non_integer || (value.is_null() && !required) ? PARSE_ERROR_NONE
+                                        : value.is_null()                                     ? PARSE_ERROR_TOO_FEW_ARGUMENTS
+                                                                                              : PARSE_ERROR_INVALID_TYPE;
+            REQUIRE(QuestReader(data, quest, fixed_map).read() == expected_error);
+            if (expected_error != PARSE_ERROR_NONE) {
+                check_existing_output(quest, fixed_map);
+            } else if (path.ends_with("/leavingQuest")) {
+                CHECK_FALSE(fixed_map.starts.at(1).leaving_quest);
+            } else if (path == "/definition/reward/artifacts/1") {
+                CHECK(fixed_map.reward_artifact_candidates == std::vector<int>{ 1 });
+            } else {
+                CHECK(get_quest_integer(fixed_map, path) == 0);
+            }
+        }
+    }
+}
+
+TEST_CASE("QuestReader start retains precedence over unused start variants")
+{
+    auto data = make_quest_with_integer("/startVariants/1/leavingQuest", nlohmann::json::parse("18446744073709551615"));
+    data["startVariants"][1]["x"] = nlohmann::json::parse("4294967297");
+    data["start"] = { { "y", 3 }, { "x", 4 } };
+    QuestType quest;
+    QuestFixedMap fixed_map;
+    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    REQUIRE(fixed_map.starts.size() == 1);
+    CHECK(fixed_map.starts[0].y == 3);
+    CHECK(fixed_map.starts[0].x == 4);
+    CHECK_FALSE(fixed_map.starts[0].leaving_quest);
 }
 
 TEST_CASE("QuestReader preserves previous output on parse errors at every stage")
