@@ -700,7 +700,9 @@ static void build_elemental_vault(PlayerType *player_ptr, const Pos2D &center, c
 
     /* make a few rooms in the vault */
     for (auto i = 1; i <= (xsize * ysize) / 50; i++) {
-        build_small_room(player_ptr, center.x + randint0(xsize - 4) - xsize / 2 + 2, center.y + randint0(ysize - 4) - ysize / 2 + 2);
+        const auto x = center.x + randint0(xsize - 4) - xsize / 2 + 2;
+        const auto y = center.y + randint0(ysize - 4) - ysize / 2 + 2;
+        build_small_room(player_ptr, x, y);
     }
 
     /* Fill with monsters and treasure, low difficulty */

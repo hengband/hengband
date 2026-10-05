@@ -340,7 +340,7 @@ static void generate_area(PlayerType *player_ptr, const Pos2D &pos, bool is_bord
     const auto restore_rng = util::make_finalizer([&system, rng_backup = system.get_rng()]() { system.set_rng(rng_backup); });
     xso::rng32 wilderness_rng(wg.get_seed());
     system.set_rng(wilderness_rng);
-    const Pos2D pos_entrance(rand_range(6, floor.height - 6), rand_range(6, floor.width - 6));
+    const Pos2D pos_entrance{ rand_range(6, floor.height - 6), rand_range(6, floor.width - 6) };
     floor.get_grid(pos_entrance).set_terrain_id(TerrainTag::ENTRANCE);
     floor.get_grid(pos_entrance).special = static_cast<short>(entrance);
 }

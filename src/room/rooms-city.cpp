@@ -139,7 +139,7 @@ Pos2DVec UndergroundBuilding::pick_door_direction() const
 
 void UndergroundBuilding::set_area(int height, int width, int max_height, int max_width)
 {
-    const Pos2D center(rand_range(2, height - 3), rand_range(2, width - 3));
+    const Pos2D center{ rand_range(2, height - 3), rand_range(2, width - 3) };
     auto top = center.y - randint1(max_height);
     top = std::max(top, 1);
     auto left = center.x - randint1(max_width);
