@@ -136,11 +136,15 @@ nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json result 
  * @param request リクエストのJSONオブジェクト
  * @param key 取り出す値のキー
  * @param default_value キーが存在しない場合に返す既定値
- * @return 取り出した値。値の型が期待する型と異なる場合はnullopt
+ * @return 取り出した値。値の型が期待する型と異なる場合や、整数がTに収まらない場合はnullopt
  * @details
  * nlohmann::json::value()は型が異なると例外を投げる。これをそのまま送出すると
  * serve_request()がidを持たないエラーレスポンスに変換してしまい、
  * クライアントがレスポンスをリクエストと対応付けられなくなるため、ここで型を検証する。
+ *
+ * 整数はget<T>()で変換すると、Tに収まらない値が黙って切り詰められる。例えば4294967376は
+ * 32ビットのintでは80になり、範囲外の指定が有効な値として受け付けられてしまうため、
+ * 変換する前にTに収まるかを確かめる。
  */
 template <typename T>
 tl::optional<T> find_request_value(const nlohmann::json &request, const char *key, T default_value)
@@ -154,7 +158,12 @@ tl::optional<T> find_request_value(const nlohmann::json &request, const char *ke
         if constexpr (std::is_same_v<T, bool>) {
             return it->is_boolean();
         } else if constexpr (std::is_integral_v<T>) {
-            return it->is_number_integer();
+            if (!it->is_number_integer()) {
+                return false;
+            }
+
+            // 符号無しの整数として保持された値をint64_tで読むと、大きな値が負の値に化けるため分けて読む
+            return it->is_number_unsigned() ? std::in_range<T>(it->template get<uint64_t>()) : std::in_range<T>(it->template get<int64_t>());
         } else {
             return it->is_string();
         }
