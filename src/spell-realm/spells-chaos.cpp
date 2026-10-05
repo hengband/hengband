@@ -191,7 +191,7 @@ void cast_meteor(PlayerType *player_ptr, int dam, POSITION rad)
         Pos2D pos(0, 0);
         int count;
         for (count = 0; count <= 20; count++) {
-            const Pos2DVec vec(randint0(17) - 8, randint0(17) - 8);
+            const Pos2DVec vec{ randint0(17) - 8, randint0(17) - 8 };
             pos = p_pos + vec;
             const auto dx = std::abs(player_ptr->x - pos.x);
             const auto dy = std::abs(player_ptr->y - pos.y);

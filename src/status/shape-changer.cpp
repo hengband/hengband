@@ -136,7 +136,9 @@ void do_poly_self(PlayerType *player_ptr)
             power -= 15;
             while (tmp < A_MAX) {
                 if (one_in_(2)) {
-                    (void)dec_stat(player_ptr, tmp, randint1(6) + 6, one_in_(3));
+                    const auto amount = randint1(6) + 6;
+                    const auto is_permanent = one_in_(3);
+                    (void)dec_stat(player_ptr, tmp, amount, is_permanent);
                     power -= 1;
                 }
                 tmp++;
@@ -171,7 +173,9 @@ void do_poly_self(PlayerType *player_ptr)
         msg_print(_(format("%sの構成が変化した！", pr.equals(PlayerRaceType::ANDROID) ? "機械" : "内臓"), "Your internal organs are rearranged!"));
 
         while (tmp < A_MAX) {
-            (void)dec_stat(player_ptr, tmp, randint1(6) + 6, one_in_(3));
+            const auto amount = randint1(6) + 6;
+            const auto is_permanent = one_in_(3);
+            (void)dec_stat(player_ptr, tmp, amount, is_permanent);
             tmp++;
         }
         if (one_in_(6)) {

@@ -211,13 +211,16 @@ bool ScrollReadExecutor::read()
 
         this->ident = true;
         break;
-    case SV_SCROLL_STAR_ENCHANT_WEAPON:
-        if (!enchant_spell(this->player_ptr, randnum1<short>(3), randint1(3), 0)) {
+    case SV_SCROLL_STAR_ENCHANT_WEAPON: {
+        const auto num_hit = randnum1<short>(3);
+        const auto num_dam = randint1(3);
+        if (!enchant_spell(this->player_ptr, num_hit, num_dam, 0)) {
             used_up = false;
         }
 
         this->ident = true;
         break;
+    }
     case SV_SCROLL_RECHARGING:
         if (!recharge(this->player_ptr, 130)) {
             used_up = false;

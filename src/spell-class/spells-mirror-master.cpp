@@ -220,7 +220,7 @@ Pos2D SpellsMirrorMaster::get_next_mirror_position(const Pos2D &pos_current) con
     }
 
     while (true) {
-        const Pos2D next_mirror(pos_current.y + randint0(5) - 2, pos_current.x + randint0(5) - 2);
+        const Pos2D next_mirror{ pos_current.y + randint0(5) - 2, pos_current.x + randint0(5) - 2 };
         if (next_mirror != pos_current) {
             return next_mirror;
         }
