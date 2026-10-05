@@ -222,10 +222,14 @@ static void build_cave_vault(PlayerType *player_ptr, const Pos2D &center, const 
         const auto grd = 1 << randint0(4);
 
         /* want average of about 16 */
-        const auto roug = randint1(8) * randint1(4);
+        auto roug = randint1(8);
+        roug *= randint1(4);
 
         /* about size/2 */
-        const auto cutoff = randint1(xsize / 4) + randint1(ysize / 4) + randint1(xsize / 4) + randint1(ysize / 4);
+        auto cutoff = randint1(xsize / 4);
+        cutoff += randint1(ysize / 4);
+        cutoff += randint1(xsize / 4);
+        cutoff += randint1(ysize / 4);
 
         /* make it */
         generate_hmap(floor, center.y, center.x, xsize, ysize, grd, roug, cutoff);
@@ -673,7 +677,8 @@ static void build_elemental_vault(PlayerType *player_ptr, const Pos2D &center, c
         const auto grd = 1 << (randint0(3));
 
         /* want average of about 16 */
-        const auto roug = randint1(8) * randint1(4);
+        auto roug = randint1(8);
+        roug *= randint1(4);
 
         /* Make up size of various componants */
         /* Floor */

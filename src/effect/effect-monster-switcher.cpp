@@ -86,7 +86,9 @@ ProcessResult effect_monster_death_ray(PlayerType *player_ptr, EffectMonster *em
     }
 
     bool has_resistance = (em_ptr->monrace->kind_flags.has(MonsterKindType::UNIQUE) && (randint1(888) != 666));
-    has_resistance |= (((em_ptr->monrace->level + randint1(20)) > randint1((em_ptr->caster_lev / 2) + randint1(10))) && randint1(100) != 66);
+    const auto resistance_power = em_ptr->monrace->level + randint1(20);
+    const auto caster_power = randint1((em_ptr->caster_lev / 2) + randint1(10));
+    has_resistance |= ((resistance_power > caster_power) && randint1(100) != 66);
 
     if (has_resistance) {
         em_ptr->note = _("には耐性がある！", " resists!");
@@ -129,8 +131,10 @@ ProcessResult effect_monster_hand_doom(EffectMonster *em_ptr)
         return ProcessResult::PROCESS_CONTINUE;
     }
 
-    if (em_ptr->is_monster() ? ((em_ptr->caster_lev + randint1(em_ptr->dam)) > (em_ptr->monrace->level + 10 + randint1(20)))
-                             : (((em_ptr->caster_lev / 2) + randint1(em_ptr->dam)) > (em_ptr->monrace->level + randint1(200)))) {
+    const auto is_monster = em_ptr->is_monster();
+    const auto caster_power = (is_monster ? em_ptr->caster_lev : em_ptr->caster_lev / 2) + randint1(em_ptr->dam);
+    const auto resistance_power = is_monster ? (em_ptr->monrace->level + 10 + randint1(20)) : (em_ptr->monrace->level + randint1(200));
+    if (caster_power > resistance_power) {
         em_ptr->dam = ((40 + randint1(20)) * em_ptr->m_ptr->hp) / 100;
         if (em_ptr->m_ptr->hp < em_ptr->dam) {
             em_ptr->dam = em_ptr->m_ptr->hp - 1;
