@@ -247,7 +247,7 @@ static void generate_wilderness(PlayerType *player_ptr)
 {
     apply_wilderness_definition();
     init_flags = INIT_ONLY_BUILDINGS;
-    if (parse_fixed_map(player_ptr, TOWN_DEFINITION_LIST, 0, 0, MAX_HGT, MAX_WID) != PARSE_ERROR_NONE) {
+    if (load_town_map(player_ptr) != PARSE_ERROR_NONE) {
         quit(_("町の定義の読み込みに失敗しました", "Failed to load the town definition"));
     }
     select_floor_music(player_ptr);
