@@ -703,13 +703,14 @@ void update_flow(PlayerType *player_ptr)
     }
 
     /* Save player position */
-    flow_y = player_ptr->y;
-    flow_x = player_ptr->x;
+    const auto p_pos = player_ptr->get_position();
+    flow_y = p_pos.y;
+    flow_x = p_pos.x;
 
     for (const auto gf : GRID_FLOW_RANGE) {
         // 幅優先探索用のキュー。
         std::queue<Pos2D> que;
-        que.emplace(player_ptr->y, player_ptr->x);
+        que.push(p_pos);
 
         /* Now process the queue */
         while (!que.empty()) {
@@ -724,7 +725,7 @@ void update_flow(PlayerType *player_ptr)
                 const auto pos_neighbor = pos + d.vec();
 
                 /* Ignore player's grid */
-                if (player_ptr->is_located_at(pos_neighbor)) {
+                if (pos_neighbor == p_pos) {
                     continue;
                 }
 
