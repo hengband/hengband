@@ -10,20 +10,17 @@
 #include "dungeon/quest.h"
 #include "floor/fixed-map-generator.h"
 #include "game-option/birth-options.h"
-#include "game-option/runtime-arguments.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/town-definition-list-reader.h"
 #include "info-reader/town-map-reader.h"
 #include "info-reader/town-preferences-reader.h"
+#include "io/condition-expression.h"
 #include "io/files-util.h"
+#include "io/pref-file-expressor.h"
 #include "locale/character-encoding.h"
 #include "main/init-error-messages-table.h"
-#include "player-info/class-info.h"
-#include "player-info/race-info.h"
-#include "player/player-realm.h"
-#include "player/process-name.h"
 #include "system/angband-system.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
@@ -32,7 +29,6 @@
 #include "system/gamevalue.h"
 #include "system/player-type-definition.h"
 #include "util/angband-files.h"
-#include "util/string-processor.h"
 #include "view/display-messages.h"
 #include "world/world.h"
 #include <fstream>
@@ -85,17 +81,71 @@ static parse_error_type load_town_definition_file(std::string &map_file)
     }
 }
 
-static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp, char *fp);
+/*!
+ * @brief 町のマップの条件式の変数の値を返す
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param name 先頭の「$」を除いた変数名
+ * @return 変数の値。知らない変数なら tl::nullopt
+ */
+static tl::optional<std::string> resolve_town_map_variable(PlayerType *player_ptr, std::string_view name)
+{
+    if (name == "TOWN") {
+        return std::to_string(AngbandWorld::get_instance().get_town_index());
+    }
+    if (name == "LEVEL") {
+        return std::to_string(player_ptr->lev);
+    }
+    if (name == "QUEST_NUMBER") {
+        return std::to_string(enum2i(player_ptr->current_floor_ptr->quest_number));
+    }
+    if (name == "LEAVING_QUEST") {
+        return std::to_string(enum2i(leaving_quest));
+    }
+    // 接頭辞の後ろの番号のクエストを返す
+    const auto get_quest_after = [name](std::string_view prefix) -> const QuestType & {
+        const std::string number(name.substr(prefix.length()));
+        return QuestList::get_instance().get_quest(i2enum<QuestId>(atoi(number.data())));
+    };
+    constexpr std::string_view quest_type_prefix = "QUEST_TYPE";
+    if (name.starts_with(quest_type_prefix)) {
+        return std::to_string(enum2i(get_quest_after(quest_type_prefix).type));
+    }
+    constexpr std::string_view quest_prefix = "QUEST";
+    if (name.starts_with(quest_prefix)) {
+        return std::to_string(enum2i(get_quest_after(quest_prefix).status));
+    }
+    constexpr std::string_view random_prefix = "RANDOM";
+    if (name.starts_with(random_prefix)) {
+        const auto &system = AngbandSystem::get_instance();
+        return std::to_string(static_cast<int>(system.get_seed_town()) % std::stoi(std::string(name.substr(random_prefix.length()))));
+    }
+    if (name == "VARIANT") {
+        return variant;
+    }
+    if (name == "WILDERNESS") {
+        if (vanilla_town) {
+            return "NONE";
+        }
+        if (lite_town) {
+            return "LITE";
+        }
+        return "NORMAL";
+    }
+    if (name == "IRONMAN_DOWNWARD") {
+        return ironman_downward ? "1" : "0";
+    }
+
+    return resolve_common_expression_variable(player_ptr, name);
+}
 
 static bool is_town_map_condition_met(PlayerType *player_ptr, const std::optional<std::string> &condition)
 {
     if (!condition) {
         return true;
     }
-    auto expression = *condition;
-    auto *source = expression.data();
-    char flag;
-    return parse_fixed_map_expression(player_ptr, &source, &flag) != "0";
+
+    const auto resolve = [player_ptr](std::string_view name) { return resolve_town_map_variable(player_ptr, name); };
+    return evaluate_condition_expression(*condition, resolve) != "0";
 }
 
 static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name, int ymin, int xmin, int ymax, int xmax)
@@ -187,192 +237,6 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
     } catch (const nlohmann::json::exception &) {
         return PARSE_ERROR_INVALID_VALUE;
     }
-}
-
-/*!
- * @brief 固定マップ (クエスト＆街＆広域マップ)生成時の分岐処理
- * Helper function for "parse_fixed_map()"
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param sp
- * @param fp
- * @return エラーコード
- */
-static std::string parse_fixed_map_expression(PlayerType *player_ptr, char **sp, char *fp)
-{
-    constexpr char b1 = '[';
-    constexpr char b2 = ']';
-
-    char f = ' ';
-
-    char *s = (*sp);
-
-    while (iswspace(*s)) {
-        s++;
-    }
-
-    char *b = s;
-    std::string v = "?o?o?";
-    if (*s == b1) {
-        std::string t;
-        s++;
-        t = parse_fixed_map_expression(player_ptr, &s, &f);
-        if (t.empty()) {
-            /* Nothing */
-        } else if (t == "IOR") {
-            v = "0";
-            while (*s && (f != b2)) {
-                t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (!t.empty() && t != "0") {
-                    v = "1";
-                }
-            }
-        } else if (t == "AND") {
-            v = "1";
-            while (*s && (f != b2)) {
-                t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (!t.empty() && t == "0") {
-                    v = "0";
-                }
-            }
-        } else if (t == "NOT") {
-            v = "1";
-            while (*s && (f != b2)) {
-                t = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (!t.empty() && t == "1") {
-                    v = "0";
-                }
-            }
-        } else if (t == "EQU") {
-            v = "0";
-            if (*s && (f != b2)) {
-                t = parse_fixed_map_expression(player_ptr, &s, &f);
-            }
-
-            while (*s && (f != b2)) {
-                auto p = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (t == p) {
-                    v = "1";
-                }
-            }
-        } else if (t == "LEQ") {
-            v = "1";
-            if (*s && (f != b2)) {
-                t = parse_fixed_map_expression(player_ptr, &s, &f);
-            }
-
-            while (*s && (f != b2)) {
-                auto p = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (!p.empty() && atoi(t.data()) > atoi(p.data())) {
-                    v = "0";
-                }
-            }
-        } else if (t == "GEQ") {
-            v = "1";
-            if (*s && (f != b2)) {
-                t = parse_fixed_map_expression(player_ptr, &s, &f);
-            }
-
-            while (*s && (f != b2)) {
-                auto p = parse_fixed_map_expression(player_ptr, &s, &f);
-                if (!p.empty() && atoi(t.data()) < atoi(p.data())) {
-                    v = "0";
-                }
-            }
-        } else {
-            while (*s && (f != b2)) {
-                t = parse_fixed_map_expression(player_ptr, &s, &f);
-            }
-        }
-
-        if (f != b2) {
-            v = "?x?x?";
-        }
-        if ((f = *s) != '\0') {
-            *s++ = '\0';
-        }
-
-        (*fp) = f;
-        (*sp) = s;
-        return v;
-    }
-
-#ifdef JP
-    while (iskanji(*s) || (isprint(*s) && !angband_strchr(" []", *s))) {
-        if (is_multibyte_char_at(s)) {
-            s++;
-        }
-        s++;
-    }
-#else
-    while (isprint(*s) && !angband_strchr(" []", *s)) {
-        ++s;
-    }
-#endif
-    if ((f = *s) != '\0') {
-        *s++ = '\0';
-    }
-
-    if (*b != '$') {
-        v = b;
-        (*fp) = f;
-        (*sp) = s;
-        return v;
-    }
-
-    if (streq(b + 1, "SYS")) {
-        v = ANGBAND_SYS;
-    } else if (streq(b + 1, "GRAF")) {
-        v = ANGBAND_GRAF;
-    } else if (streq(b + 1, "MONOCHROME")) {
-        if (arg_monochrome) {
-            v = "ON";
-        } else {
-            v = "OFF";
-        }
-    } else if (streq(b + 1, "RACE")) {
-        v = rp_ptr->title.en_string();
-    } else if (streq(b + 1, "CLASS")) {
-        v = cp_ptr->title.en_string();
-    } else if (streq(b + 1, "REALM1")) {
-        v = PlayerRealm(player_ptr).realm1().get_name().en_string();
-    } else if (streq(b + 1, "REALM2")) {
-        v = PlayerRealm(player_ptr).realm2().get_name().en_string();
-    } else if (streq(b + 1, "PLAYER")) {
-        v = make_player_name_for_expression(player_ptr->name);
-    } else if (streq(b + 1, "TOWN")) {
-        v = std::to_string(AngbandWorld::get_instance().get_town_index());
-    } else if (streq(b + 1, "LEVEL")) {
-        v = std::to_string(player_ptr->lev);
-    } else if (streq(b + 1, "QUEST_NUMBER")) {
-        v = std::to_string(enum2i(player_ptr->current_floor_ptr->quest_number));
-    } else if (streq(b + 1, "LEAVING_QUEST")) {
-        v = std::to_string(enum2i(leaving_quest));
-    } else if (prefix(b + 1, "QUEST_TYPE")) {
-        const auto &quests = QuestList::get_instance();
-        v = std::to_string(enum2i(quests.get_quest(i2enum<QuestId>(atoi(b + 11))).type));
-    } else if (prefix(b + 1, "QUEST")) {
-        const auto &quests = QuestList::get_instance();
-        v = std::to_string(enum2i(quests.get_quest(i2enum<QuestId>(atoi(b + 6))).status));
-    } else if (prefix(b + 1, "RANDOM")) {
-        const auto &system = AngbandSystem::get_instance();
-        v = std::to_string((static_cast<int>(system.get_seed_town()) % std::stoi(b + 7)));
-    } else if (streq(b + 1, "VARIANT")) {
-        v = variant;
-    } else if (streq(b + 1, "WILDERNESS")) {
-        if (vanilla_town) {
-            v = "NONE";
-        } else if (lite_town) {
-            v = "LITE";
-        } else {
-            v = "NORMAL";
-        }
-    } else if (streq(b + 1, "IRONMAN_DOWNWARD")) {
-        v = (ironman_downward ? "1" : "0");
-    }
-
-    (*fp) = f;
-    (*sp) = s;
-    return v;
 }
 
 /*!

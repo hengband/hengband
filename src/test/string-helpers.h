@@ -56,6 +56,7 @@ inline constexpr std::string_view DAME_HYOU = "\x95\x5c"; //!< 表 (後半バイ
 inline constexpr std::string_view DAME_KANA_A = "\x83\x41"; //!< ア (後半バイトが 0x41、ASCIIの 'A')
 inline constexpr std::string_view DAME_KANA_DI = "\x83\x61"; //!< ヂ (後半バイトが 0x61、ASCIIの 'a')
 inline constexpr std::string_view DAME_KANA_TA = "\x83\x5e"; //!< タ (後半バイトが 0x5e、ASCIIの '^')
+inline constexpr std::string_view DAME_KANA_ZO = "\x83\x5d"; //!< ゾ (後半バイトが 0x5d、ASCIIの ']')
 inline constexpr std::string_view DAME_CHOON = "\x81\x5b"; //!< ー (後半バイトが 0x5b、ASCIIの '[')
 inline constexpr std::string_view DAME_SPACE = "\x81\x40"; //!< 全角スペース (後半バイトが 0x40、ASCIIの '@')
 #endif
