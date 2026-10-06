@@ -27,8 +27,12 @@ errr info_validate_json_array(const nlohmann::json &root, std::string_view key, 
  * @param json 整数値が格納されたJSON Object
  * @param data 値を格納する変数への参照
  * @param is_required 必須かどうか。
- * 必須でJSON Objectがnullの場合はエラーを返す。必須でない場合は何もせずに終了する。
- * @param range 取得した値の範囲を指定する。範囲外の値が取得された場合はエラーを返す。
+ * JSON値がnullの場合、必須ならPARSE_ERROR_TOO_FEW_ARGUMENTSを返し、任意なら何もせずに成功する。
+ * null以外の非整数値は、必須かどうかによらずPARSE_ERROR_INVALID_TYPEを返す。
+ * @param range 取得した値の範囲（両端を含む）を指定する。
+ * 格納先の型へ変換する前に検証し、範囲外ならPARSE_ERROR_INVALID_FLAGを返す。
+ * 指定しない場合は格納先の型の表現範囲も検証せず、static_castで変換する。
+ * エラーまたは任意のnullの場合、dataは変更しない。
  * @return エラーコード
  */
 template <IntegralOrEnum T>

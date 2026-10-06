@@ -130,7 +130,7 @@ TEST_CASE("get_json_value returns null for a key whose value is null")
 TEST_CASE("get_json_value returns null for a non-object JSON")
 {
     // 定義ファイル側の記述が誤っていても、キー取得は例外ではなくnullになる
-    for (const auto *const json_str : { "[ 1, 2, 3 ]", R"("string")", "42", "null" }) {
+    for (const auto *const json_str : { "[ 1, 2, 3 ]", R"("string")", "42", "1.5", "true", "null" }) {
         CAPTURE(json_str);
 
         const auto json = nlohmann::json::parse(json_str);
@@ -174,6 +174,16 @@ TEST_CASE("info_set_integer stores the value")
         auto kind = TestKind::NONE;
         CHECK(info_set_integer(nlohmann::json(1), kind, true) == PARSE_ERROR_NONE);
         CHECK(kind == TestKind::FIRST);
+    }
+
+    SUBCASE("no range preserves conversion to the destination type")
+    {
+        // Rangeを省略した場合は、格納先の表現範囲も検証しない。
+        std::uint8_t narrow_data = 123;
+        CHECK(info_set_integer(nlohmann::json(300), narrow_data, true) == PARSE_ERROR_NONE);
+        CHECK(narrow_data == 44);
+        CHECK(info_set_integer(nlohmann::json(-1), narrow_data, false) == PARSE_ERROR_NONE);
+        CHECK(narrow_data == 255);
     }
 }
 
@@ -219,6 +229,16 @@ TEST_CASE("info_set_integer rejects a non-integer JSON")
     {
         // 必須でなくても、書かれている値の型が誤っていれば見逃さない
         CHECK(info_set_integer(nlohmann::json("100"), data, false) == PARSE_ERROR_INVALID_TYPE);
+    }
+
+    SUBCASE("containers are not integers")
+    {
+        for (const auto &json : { nlohmann::json::array(), nlohmann::json::object() }) {
+            for (const auto is_required : { false, true }) {
+                CHECK(info_set_integer(json, data, is_required) == PARSE_ERROR_INVALID_TYPE);
+                CHECK(data == SENTINEL);
+            }
+        }
     }
 
     CHECK(data == SENTINEL);
@@ -337,6 +357,22 @@ TEST_CASE("info_set_integer checks large unsigned JSON range and storage")
     std::uint64_t unsigned_data = 0;
     CHECK(info_set_integer(json, unsigned_data, true) == PARSE_ERROR_NONE);
     CHECK(unsigned_data == largest);
+}
+
+TEST_CASE("info_set_integer compares unsigned JSON values with signed range bounds")
+{
+    for (const auto is_required : { false, true }) {
+        const nlohmann::json zero = std::uint64_t(0);
+        REQUIRE(zero.is_number_unsigned());
+        auto data = SENTINEL;
+
+        CHECK(info_set_integer(zero, data, is_required, Range(-1, 1)) == PARSE_ERROR_NONE);
+        CHECK(data == 0);
+        CHECK(info_set_integer(zero, data, is_required, Range(-3, -1)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(data == 0);
+        CHECK(info_set_integer(zero, data, is_required, Range(1, 3)) == PARSE_ERROR_INVALID_FLAG);
+        CHECK(data == 0);
+    }
 }
 
 TEST_CASE("info_set_string picks the string of the language of the build")
@@ -555,6 +591,12 @@ TEST_CASE("info_set_dice parses the dice string")
         CHECK(info_set_dice(nlohmann::json("10d100"), dice, true) == PARSE_ERROR_NONE);
         CHECK(dice == Dice(10, 100));
     }
+
+    SUBCASE("optional string is parsed as well")
+    {
+        CHECK(info_set_dice(nlohmann::json("3d5"), dice, false) == PARSE_ERROR_NONE);
+        CHECK(dice == Dice(3, 5));
+    }
 }
 
 TEST_CASE("info_set_dice treats a null JSON as an unwritten key")
@@ -574,8 +616,19 @@ TEST_CASE("info_set_dice rejects an invalid dice notation")
 
     SUBCASE("non-string JSON is a type error")
     {
-        CHECK(info_set_dice(nlohmann::json(3), dice, true) == PARSE_ERROR_INVALID_TYPE);
-        CHECK(info_set_dice(nlohmann::json(3), dice, false) == PARSE_ERROR_INVALID_TYPE);
+        const std::vector<nlohmann::json> invalid_values = {
+            3,
+            1.5,
+            true,
+            nlohmann::json::array(),
+            nlohmann::json::object(),
+        };
+        for (const auto &json : invalid_values) {
+            for (const auto is_required : { false, true }) {
+                CHECK(info_set_dice(json, dice, is_required) == PARSE_ERROR_INVALID_TYPE);
+                CHECK(dice == Dice(1, 1));
+            }
+        }
     }
 
     SUBCASE("malformed dice string")
@@ -594,13 +647,15 @@ TEST_CASE("info_set_dice rejects an invalid dice notation")
 
 TEST_CASE("info_set_bool stores the value")
 {
-    auto data = false;
+    for (const auto is_required : { false, true }) {
+        auto data = false;
 
-    CHECK(info_set_bool(nlohmann::json(true), data, true) == PARSE_ERROR_NONE);
-    CHECK(data);
+        CHECK(info_set_bool(nlohmann::json(true), data, is_required) == PARSE_ERROR_NONE);
+        CHECK(data);
 
-    CHECK(info_set_bool(nlohmann::json(false), data, true) == PARSE_ERROR_NONE);
-    CHECK_FALSE(data);
+        CHECK(info_set_bool(nlohmann::json(false), data, is_required) == PARSE_ERROR_NONE);
+        CHECK_FALSE(data);
+    }
 }
 
 TEST_CASE("info_set_bool treats a non-boolean JSON as an unwritten key")
@@ -621,11 +676,20 @@ TEST_CASE("info_set_bool treats a non-boolean JSON as an unwritten key")
     {
         // 他の info_set_* と異なり、型が違っても PARSE_ERROR_INVALID_TYPE ではなく
         // キーが書かれていない場合と同じ扱いになる
-        for (const auto &json : { nlohmann::json("true"), nlohmann::json(1) }) {
+        const std::vector<nlohmann::json> invalid_values = {
+            "true",
+            1,
+            1.5,
+            nlohmann::json::array(),
+            nlohmann::json::object(),
+        };
+        for (const auto &json : invalid_values) {
             CAPTURE(json.type_name());
 
             CHECK(info_set_bool(json, data, true) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+            CHECK(data);
             CHECK(info_set_bool(json, data, false) == PARSE_ERROR_NONE);
+            CHECK(data);
         }
     }
 

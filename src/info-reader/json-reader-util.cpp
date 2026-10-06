@@ -29,6 +29,11 @@ errr info_validate_json_array(const nlohmann::json &root, std::string_view key, 
     return PARSE_ERROR_NONE;
 }
 
+/*!
+ * @brief オブジェクトのキーに対応する値への参照を返す。
+ * オブジェクトでない入力やキー欠落は、例外ではなくstaticなnull値への参照を返す。
+ * キーが存在する場合は入力内の値への参照なので、その寿命を超えて保持してはいけない。
+ */
 const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_view key)
 {
     static const nlohmann::json null_json;
@@ -45,6 +50,9 @@ const nlohmann::json &get_json_value(const nlohmann::json &json, std::string_vie
  *
  * 引数で与えられたJSON Objectから日本語版の場合は"ja"、英語版の場合は"en"のキーで文字列を取得し、
  * data に格納する。キーが存在しない場合は is_required が真の場合はエラーを返し、偽の場合は何もせずに終了する。
+ * nullでない非オブジェクトや選択言語の非文字列値は、必須かどうかによらずPARSE_ERROR_INVALID_TYPEを返す。
+ * 選択されない言語の値は検証しない。日本語版は既存の文字コード変換に従い、変換失敗ならPARSE_ERROR_INVALID_FLAGを返す。
+ * エラーまたは任意の欠落の場合、dataは変更しない。
  *
  * @param json 文字列の格納されたJSON Object
  * @param data 文字列を格納する変数への参照
@@ -89,7 +97,10 @@ errr info_set_string(const nlohmann::json &json, std::string &data, bool is_requ
  * @param json ダイスの値が格納されたJSON Object
  * @param dice ダイスの値を格納する変数への参照
  * @param is_required 必須かどうか
- * 必須でJSON Objectがnullや文字列でない場合はエラーを返す。必須でない場合は何もせずに終了する。
+ * JSON値がnullの場合、必須ならPARSE_ERROR_TOO_FEW_ARGUMENTSを返し、任意なら何もせずに成功する。
+ * null以外の非文字列値は、必須かどうかによらずPARSE_ERROR_INVALID_TYPEを返す。
+ * Dice::parseがruntime_errorを投げる文字列はPARSE_ERROR_TOO_FEW_ARGUMENTSを返す。
+ * エラーまたは任意のnullの場合、diceは変更しない。
  * @return エラーコード
  */
 errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required)
@@ -114,7 +125,9 @@ errr info_set_dice(const nlohmann::json &json, Dice &dice, bool is_required)
  * @param json bool値が格納されたJSON Object
  * @param bool_value bool値を格納する変数への参照
  * @param is_required 必須かどうか
- * 必須でJSON Objectがnullやbool場合はエラーを返す。必須でない場合は何もせずに終了する。
+ * nullおよび非bool値は、必須ならPARSE_ERROR_TOO_FEW_ARGUMENTSを返し、任意なら何もせずに成功する。
+ * 型不一致でもPARSE_ERROR_INVALID_TYPEにはしない、他のinfo_set_*とは異なる契約を持つ。
+ * bool値が入力された場合のみbool_valueを変更する。
  * @return エラーコード
  */
 errr info_set_bool(const nlohmann::json &json, bool &bool_value, bool is_required)
