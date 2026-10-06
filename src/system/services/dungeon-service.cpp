@@ -77,7 +77,7 @@ tl::optional<std::string> DungeonService::check_first_entrance(DungeonId dungeon
     return DungeonList::get_instance().get_dungeon(dungeon_id).build_entrance_message();
 }
 
-std::vector<std::string> DungeonService::build_known_dungeons(DungeonMessageFormat dmf)
+std::vector<std::string> DungeonService::build_known_dungeons(DungeonMessageFormat dmf, tl::optional<bool> visited)
 {
     const auto fmt = get_dungeon_format(dmf);
     const auto &dungeons = DungeonList::get_instance();
@@ -87,11 +87,14 @@ std::vector<std::string> DungeonService::build_known_dungeons(DungeonMessageForm
         if (!record->has_entered()) {
             continue;
         }
+        if (visited && record->has_visited() != *visited) {
+            continue;
+        }
 
         const auto max_level = record->get_max_level();
         const auto &dungeon = dungeons.get_dungeon(dungeon_id);
         const auto is_dungeon_conquered = dungeon.is_conquered();
-        const auto is_conquered = is_dungeon_conquered || (max_level == dungeon.maxdepth);
+        const auto is_conquered = (dmf != DungeonMessageFormat::DUMP || record->has_visited()) && (is_dungeon_conquered || (max_level == dungeon.maxdepth));
         std::string known_dungeon;
         switch (dmf) {
         case DungeonMessageFormat::DUMP:

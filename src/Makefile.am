@@ -1548,6 +1548,7 @@ hengband_test_SOURCES = \
 	test/system/baseitem/test-baseitem-definition.cpp \
 	test/system/monrace/test-monrace-definition.cpp \
 	test/system/test-quest-list.cpp \
+	test/system/test-dungeon-record.cpp \
 	test/term/test-z-form.cpp \
 	test/term/test-z-rand.cpp \
 	test/timed-effect/test-player-cut.cpp \

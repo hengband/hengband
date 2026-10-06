@@ -179,8 +179,12 @@ static void dump_aux_last_message(PlayerType *player_ptr, FILE *fff)
  */
 static void dump_aux_recall(FILE *fff)
 {
-    fmt::println(fff, _("\n  [帰還場所]\n", "\n  [Recall Depth]\n"));
-    for (const auto &known_dungeon : DungeonService::build_known_dungeons(DungeonMessageFormat::DUMP)) {
+    fmt::println(fff, _("\n  [帰還場所 (訪問済み)]\n", "\n  [Recall Depth (Visited)]\n"));
+    for (const auto &known_dungeon : DungeonService::build_known_dungeons(DungeonMessageFormat::DUMP, true)) {
+        fmt::print(fff, "{}", known_dungeon);
+    }
+    fmt::println(fff, _("\n  [帰還場所 (解放済み・未訪問)]\n", "\n  [Recall Depth (Unlocked Only)]\n"));
+    for (const auto &known_dungeon : DungeonService::build_known_dungeons(DungeonMessageFormat::DUMP, false)) {
         fmt::print(fff, "{}", known_dungeon);
     }
 }

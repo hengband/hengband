@@ -27,5 +27,5 @@ public:
     static int decide_gradiator_level();
     static int find_max_level();
     static tl::optional<std::string> check_first_entrance(DungeonId dungeon_id);
-    static std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf);
+    static std::vector<std::string> build_known_dungeons(DungeonMessageFormat dmf, tl::optional<bool> visited = tl::nullopt);
 };

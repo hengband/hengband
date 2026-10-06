@@ -24,6 +24,16 @@ int DungeonRecord::get_max_level() const
     return this->max_level.value_or(0);
 }
 
+bool DungeonRecord::has_visited() const
+{
+    return this->visited;
+}
+
+void DungeonRecord::mark_visited()
+{
+    this->visited = true;
+}
+
 int DungeonRecord::get_max_max_level() const
 {
     return this->max_max_level.value_or(0);
@@ -43,6 +53,7 @@ void DungeonRecord::set_max_level(int level)
 
 void DungeonRecord::reset()
 {
+    this->visited = false;
     this->max_level = tl::nullopt;
     this->max_max_level = tl::nullopt;
 }
