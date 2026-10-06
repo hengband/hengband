@@ -368,11 +368,8 @@ tl::optional<MONSTER_IDX> place_monster_one(PlayerType *player_ptr, POSITION y, 
         (void)set_monster_fast(floor, grid.m_idx, 100);
     }
 
-    if (!ironman_nightmare) {
-        monster.energy_need = ENERGY_NEED() - randnum0<short>(100);
-    } else {
-        monster.energy_need = ENERGY_NEED() - randnum0<short>(100) * 2;
-    }
+    monster.energy_need = ENERGY_NEED();
+    monster.energy_need -= randnum0<short>(100) * (ironman_nightmare ? 2 : 1);
 
     if (!ironman_nightmare) {
         monster.mflag.set(MonsterTemporaryFlagType::PREVENT_MAGIC);

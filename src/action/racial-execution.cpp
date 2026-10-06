@@ -152,7 +152,9 @@ racial_level_check_result check_racial_level(PlayerType *player_ptr, rpi_type *r
 
     adjust_racial_power_difficulty(player_ptr, rpi_ptr, &difficulty);
     energy.set_player_turn_energy(100);
-    if (randint1(player_ptr->stat_cur[use_stat]) >= ((difficulty / 2) + randint1(difficulty / 2))) {
+    const auto stat_roll = randint1(player_ptr->stat_cur[use_stat]);
+    const auto difficulty_roll = (difficulty / 2) + randint1(difficulty / 2);
+    if (stat_roll >= difficulty_roll) {
         return RACIAL_SUCCESS;
     }
 

@@ -25,7 +25,8 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
     const auto is_curtain = dungeon.flags.has(DungeonFeatureType::CURTAIN) && one_in_(dungeon.flags.has(DungeonFeatureType::NO_CAVE) ? 48 : 512);
 
     /* Pick a room size */
-    auto height = randint1(4) + randint1(3) + 1;
+    auto height = randint1(4);
+    height += randint1(3) + 1;
     auto width = randint1(11) + randint1(11) + 1;
 
     auto center = find_space(player_ptr, dd_ptr, height + 2, width + 2);

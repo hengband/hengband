@@ -319,7 +319,9 @@ void process_world_aux_mutation(PlayerType *player_ptr)
             disturb(player_ptr, false, true);
             msg_print(_("自分が衰弱していくのが分かる！", "You can feel yourself wasting away!"));
             msg_erase();
-            (void)dec_stat(player_ptr, which_stat, randint1(6) + 6, one_in_(3));
+            const auto amount = randint1(6) + 6;
+            const auto is_permanent = one_in_(3);
+            (void)dec_stat(player_ptr, which_stat, amount, is_permanent);
         }
     }
 

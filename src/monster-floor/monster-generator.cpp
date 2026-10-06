@@ -403,7 +403,7 @@ bool alloc_guardian(PlayerType *player_ptr, bool def_val)
 
     const auto p_pos = player_ptr->get_position();
     for (auto try_count = 4000; try_count > 0; try_count--) {
-        const auto pos = Pos2D(randint1(floor.height - 4), randint1(floor.width - 4)) + Pos2DVec(2, 2);
+        const auto pos = Pos2D{ randint1(floor.height - 4), randint1(floor.width - 4) } + Pos2DVec(2, 2);
         if (!floor.can_generate_monster_at(pos) || (p_pos == pos)) {
             continue;
         }

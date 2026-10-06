@@ -339,7 +339,9 @@ tl::optional<std::string> do_craft_spell(PlayerType *player_ptr, SPELL_IDX spell
 
     case 27: {
         if (cast) {
-            if (!enchant_spell(player_ptr, randint0(4) + 1, randint0(4) + 1, 0)) {
+            const auto num_hit = randnum1<short>(4);
+            const auto num_dam = randint1(4);
+            if (!enchant_spell(player_ptr, num_hit, num_dam, 0)) {
                 return tl::nullopt;
             }
         }
