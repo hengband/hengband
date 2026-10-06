@@ -31,6 +31,7 @@
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
 #include "view/display-map.h"
+#include "view/display-messages.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 
@@ -74,6 +75,15 @@ void resize_map()
         MainWindowRedrawingFlag::EQUIPPY,
     };
     rfu.set_flags(flags_mwrf);
+
+    // -続く- の待ちの最中に描き直すと、メッセージの消去から -続く- がもう一度表示されて
+    // 入力待ちが入れ子になる。フラグだけを立てておき、-続く- が明けた後の handle_stuff() で描き直す。
+    // それまでは今の内容 (-続く- を含む) を新しい大きさの画面に反映しておく
+    if (is_waiting_for_more()) {
+        term_fresh();
+        return;
+    }
+
     handle_stuff(p_ptr);
     term_redraw();
 

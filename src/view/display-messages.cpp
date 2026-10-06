@@ -13,6 +13,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/gameterm.h"
 #include "term/term-color-types.h"
+#include "util/finalizer.h"
 #include "util/int-char-converter.h"
 #include "world/world.h"
 #include <deque>
@@ -29,6 +30,9 @@ namespace {
 
 /*! 表示するメッセージの先頭位置 */
 static int msg_head_pos = 0;
+
+/*! -続く- を表示してキー入力を待っている最中か否か */
+static bool waiting_for_more = false;
 
 /*! 起動してから履歴に追加したメッセージ行の累計 (繰り返しによる回数の加算は含まない) */
 static uint64_t message_sequence_count = 0;
@@ -199,6 +203,8 @@ static void msg_flush(PlayerType *player_ptr, int x)
     player_ptr->now_damaged = false;
     if (!player_ptr->playing || show_more) {
         term_putstr(x, 0, -1, a, _("-続く-", "-more-"));
+        waiting_for_more = true;
+        const auto finalizer = util::make_finalizer([] { waiting_for_more = false; });
         while (true) {
             int cmd = inkey();
             if (cmd == ESCAPE) {
@@ -357,6 +363,19 @@ void msg_erase()
         msg_flag = false;
         msg_head_pos = 0;
     }
+}
+
+/*!
+ * @brief -続く- を表示してキー入力を待っている最中か否かを返す
+ * @return 待っている最中ならtrue
+ * @details
+ * 待っている間に端末の大きさが変わると、リサイズフックが再描画のために呼ぶ
+ * handle_stuff() から msg_erase() を経て -続く- がもう一度表示され、入力待ちが
+ * 入れ子になる。フックはこれを見て、再描画を -続く- が明けた後に延期する。
+ */
+bool is_waiting_for_more()
+{
+    return waiting_for_more;
 }
 
 void msg_format(const char *fmt, ...)
