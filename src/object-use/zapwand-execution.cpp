@@ -104,13 +104,6 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
 
     sound(SoundKind::ZAP);
     auto ident = wand_effect(this->player_ptr, *sval, dir, false, false);
-    using Srf = StatusRecalculatingFlag;
-    EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
-    if (rfu.has(Srf::AUTO_DESTRUCTION)) {
-        flags_srf.set(Srf::AUTO_DESTRUCTION);
-    }
-
-    rfu.reset_flags(flags_srf);
     if (!item->is_aware()) {
         chg_virtue(this->player_ptr, Virtue::PATIENCE, -1);
         chg_virtue(this->player_ptr, Virtue::CHANCE, 1);
@@ -131,6 +124,10 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         SubWindowRedrawingFlag::FOUND_ITEMS,
     };
     rfu.set_flags(flags_swrf);
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
+    };
     rfu.set_flags(flags_srf);
     item->pval--;
 

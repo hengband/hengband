@@ -228,21 +228,6 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
     const auto &bi_key = item->bi_key;
     const auto ident = exe_eat_food_type_object(player_ptr, bi_key);
 
-    /*
-     * Store what may have to be updated for the inventory (including
-     * autodestroy if set by something else).  Then turn off those flags
-     * so that updates triggered by calling gain_exp() or set_food() below
-     * do not rearrange the inventory before the food item is destroyed in
-     * the pack.
-     */
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRecalculatingFlag;
-    EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
-    if (rfu.has(Srf::AUTO_DESTRUCTION)) {
-        flags_srf.set(Srf::AUTO_DESTRUCTION);
-    }
-
-    rfu.reset_flags(flags_srf);
     if (!(item->is_aware())) {
         chg_virtue(player_ptr, Virtue::KNOWLEDGE, -1);
         chg_virtue(player_ptr, Virtue::PATIENCE, -1);
@@ -261,6 +246,12 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         gain_exp(player_ptr, (level + (player_ptr->lev >> 1)) / player_ptr->lev);
     }
 
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
+    };
+    rfu.set_flags(flags_srf);
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
@@ -270,7 +261,6 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
 
     /* Undeads drain recharge of magic device */
     if (exe_eat_charge_of_magic_device(player_ptr, item.get(), i_idx)) {
-        rfu.set_flags(flags_srf);
         return;
     }
 
@@ -282,8 +272,6 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
             const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
             msg_format(_("%sは燃え上り灰になった。精力を吸収した気がする。", "%s^ is burnt to ashes.  You absorb its vitality!"), item_name.data());
             (void)set_food(player_ptr, PY_FOOD_MAX - 1);
-
-            rfu.set_flags(flags_srf);
             vary_item(player_ptr, i_idx, -1);
             return;
         }
@@ -324,7 +312,6 @@ void exe_eat_food(PlayerType *player_ptr, INVENTORY_IDX i_idx)
         }
     }
 
-    rfu.set_flags(flags_srf);
     vary_item(player_ptr, i_idx, -1);
 }
 
