@@ -12,6 +12,7 @@
 #include "system/grid-type-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "util/enum-converter.h"
+#include <algorithm>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -70,6 +71,7 @@ const std::unordered_map<std::string_view, BIT_FLAGS> CAVE_FLAG_TOKENS = {
  * @brief JSONの文字列配列をフロアに収まるマップ行として取り込む
  * @details マップ行のようなASCIIの記号列は文字コードの変換が不要なので、そのまま取り込む
  * @return 行数または行のバイト数がフロアの上限を超える場合は PARSE_ERROR_OUT_OF_BOUNDS
+ * @return 印字可能なASCII以外のセルがある場合は PARSE_ERROR_INVALID_VALUE
  */
 int read_map_rows(const nlohmann::json &array_data, std::vector<std::string> &out)
 {
@@ -82,6 +84,9 @@ int read_map_rows(const nlohmann::json &array_data, std::vector<std::string> &ou
         // セル配置は1バイトずつ進む。幅の切り捨てと高さの配列外アクセスを読み込み時に防ぐ。
         if (out.size() >= MAX_HGT || row.size() > MAX_WID) {
             return PARSE_ERROR_OUT_OF_BOUNDS;
+        }
+        if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
+            return PARSE_ERROR_INVALID_VALUE;
         }
         out.push_back(row);
     }
@@ -465,6 +470,9 @@ int QuestReader::set_legend(QuestFixedMap &parsed) const
     for (const auto &[symbol, cell_data] : legend.items()) {
         if (symbol.size() != 1) {
             return PARSE_ERROR_GENERIC;
+        }
+        if (!is_fixed_map_symbol(static_cast<unsigned char>(symbol.front()))) {
+            return PARSE_ERROR_INVALID_VALUE;
         }
 
         QuestLegendCell cell;

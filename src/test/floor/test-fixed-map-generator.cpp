@@ -409,7 +409,7 @@ TEST_CASE("QuestFixedMap JSON fixture restores base legend seed leaving quest le
 TEST_CASE("FixedMapPD row uses origin clips columns and advances empty rows")
 {
     FixedMapFixture fixture;
-    apply_fixed_map_row(&fixture.player, &fixture.generator, "ABAA");
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, "ABAA") == PARSE_ERROR_NONE);
     CHECK(fixture.y == 4);
     CHECK(fixture.x == 7);
     CHECK(fixture.floor.grid_array[3][3].feat == 0);
@@ -419,10 +419,10 @@ TEST_CASE("FixedMapPD row uses origin clips columns and advances empty rows")
     CHECK(fixture.floor.grid_array[3][7].feat == 0);
     CHECK(fixture.floor.grid_array[3][4].info == (CAVE_GLOW | CAVE_ROOM));
     CHECK(fixture.floor.grid_array[3][4].special == 7);
-    apply_fixed_map_row(&fixture.player, &fixture.generator, "");
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, "") == PARSE_ERROR_NONE);
     CHECK(fixture.y == 5);
     CHECK(fixture.x == 4);
-    apply_fixed_map_row(&fixture.player, &fixture.generator, "B");
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, "B") == PARSE_ERROR_NONE);
     CHECK(fixture.y == 6);
     CHECK(fixture.x == 5);
     CHECK(fixture.floor.grid_array[5][4].feat == 2);
@@ -433,7 +433,7 @@ TEST_CASE("FixedMapPD only buildings leaves row and cursors untouched")
     FixedMapFixture fixture;
     init_flags = INIT_ONLY_BUILDINGS;
     fixture.x = 6;
-    apply_fixed_map_row(&fixture.player, &fixture.generator, "AB");
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, "AB") == PARSE_ERROR_NONE);
     CHECK(fixture.y == 3);
     CHECK(fixture.x == 6);
     CHECK(fixture.floor.grid_array[3][4].feat == 0);
@@ -451,7 +451,7 @@ TEST_CASE("FixedMapPD only features preserves non terrain grid state")
     grid.special = 11;
     grid.mimic = 2;
     letter['A'].trap = 2;
-    apply_fixed_map_row(&fixture.player, &fixture.generator, "A");
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, "A") == PARSE_ERROR_NONE);
     CHECK(grid.feat == 1);
     CHECK(grid.info == CAVE_MARK);
     CHECK(grid.special == 11);
@@ -464,7 +464,7 @@ TEST_CASE("FixedMapPD direct and legacy rows apply identical trap grids")
 {
     FixedMapFixture fixture;
     letter['A'].trap = 2;
-    apply_fixed_map_row(&fixture.player, &fixture.generator, "A");
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, "A") == PARSE_ERROR_NONE);
     fixture.legacy("D:A");
     const auto &direct = fixture.floor.grid_array[3][4];
     const auto &legacy = fixture.floor.grid_array[4][4];
@@ -480,13 +480,13 @@ TEST_CASE("FixedMapPD row handles full border empty width and bounded view")
 {
     FixedMapFixture fixture(MAX_HGT - 1, MAX_WID - 1, MAX_HGT, MAX_WID);
     const std::string row = "AB";
-    apply_fixed_map_row(&fixture.player, &fixture.generator, std::string_view(row.data(), 1));
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, std::string_view(row.data(), 1)) == PARSE_ERROR_NONE);
     CHECK(fixture.floor.grid_array[MAX_HGT - 1][MAX_WID - 1].feat == 1);
     CHECK(fixture.y == MAX_HGT);
     CHECK(fixture.x == MAX_WID);
     fixture.y = 0;
     fixture.generator.xmin = MAX_WID;
-    apply_fixed_map_row(&fixture.player, &fixture.generator, "A");
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, "A") == PARSE_ERROR_NONE);
     CHECK(fixture.y == 1);
     CHECK(fixture.x == MAX_WID);
 }
@@ -495,7 +495,7 @@ TEST_CASE("FixedMapPD row preserves legacy embedded null termination")
 {
     FixedMapFixture fixture;
     const std::string row("A\0B", 3);
-    apply_fixed_map_row(&fixture.player, &fixture.generator, row);
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, row) == PARSE_ERROR_NONE);
     CHECK(fixture.x == 5);
     CHECK(fixture.floor.grid_array[3][4].feat == 1);
     CHECK(fixture.floor.grid_array[3][5].feat == 0);
@@ -503,6 +503,84 @@ TEST_CASE("FixedMapPD row preserves legacy embedded null termination")
     CHECK(fixture.x == 5);
     CHECK(fixture.floor.grid_array[4][4].feat == 1);
     CHECK(fixture.floor.grid_array[4][5].feat == 0);
+}
+
+TEST_CASE("FixedMapPD rejects unsafe row bytes before modifying grids or cursors")
+{
+    for (const auto byte : { 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
+        CAPTURE(byte);
+        FixedMapFixture fixture;
+        fixture.x = 6;
+        auto &grid = fixture.floor.grid_array[3][4];
+        grid.feat = 2;
+        grid.info = CAVE_MARK;
+        grid.special = 19;
+        const auto row = "A" + std::string(1, static_cast<char>(byte));
+        CHECK(apply_fixed_map_row(&fixture.player, &fixture.generator, row) == PARSE_ERROR_INVALID_VALUE);
+        auto line = "D:" + row;
+        fixture.generator.buf = line.data();
+        CHECK(generate_fixed_map_floor(&fixture.player, &fixture.generator) == PARSE_ERROR_INVALID_VALUE);
+        CHECK(fixture.y == 3);
+        CHECK(fixture.x == 6);
+        CHECK(grid.feat == 2);
+        CHECK(grid.info == CAVE_MARK);
+        CHECK(grid.special == 19);
+        init_flags = INIT_ONLY_BUILDINGS;
+        CHECK(apply_fixed_map_row(&fixture.player, &fixture.generator, row) == PARSE_ERROR_NONE);
+        CHECK(fixture.y == 3);
+        CHECK(fixture.x == 6);
+    }
+}
+
+TEST_CASE("FixedMapPD ignores bytes after null and accepts printable ASCII boundaries")
+{
+    FixedMapFixture fixture;
+    const std::string row("A\0\xff", 3);
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, row) == PARSE_ERROR_NONE);
+    CHECK(fixture.y == 4);
+    CHECK(fixture.x == 5);
+    CHECK(fixture.floor.grid_array[3][4].feat == 1);
+    CHECK(fixture.floor.grid_array[3][5].feat == 0);
+    letter[' '] = letter['A'];
+    letter['~'] = letter['B'];
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, " ~") == PARSE_ERROR_NONE);
+    CHECK(fixture.floor.grid_array[4][4].feat == 1);
+    CHECK(fixture.floor.grid_array[4][5].feat == 2);
+    REQUIRE(apply_fixed_map_row(&fixture.player, &fixture.generator, std::string_view(row).substr(1)) == PARSE_ERROR_NONE);
+    CHECK(fixture.y == 6);
+    CHECK(fixture.x == 4);
+}
+
+TEST_CASE("QuestFixedMap rejects unsafe typed symbols before writing any output")
+{
+    for (const auto byte : { 0x00, 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
+        for (const auto *source : { "base", "legend", "map" }) {
+            CAPTURE(byte);
+            CAPTURE(source);
+            if (byte == 0 && std::string_view(source) == "map") {
+                continue; // The direct application API retains NUL termination.
+            }
+            FixedMapFixture fixture;
+            const auto restore = scoped_quest_layout_state();
+            QuestType quest;
+            QuestFixedMap map;
+            map.legend['A'].grid.feature = 2;
+            map.maps = { { "A" } };
+            const auto symbol = static_cast<char>(byte);
+            if (std::string_view(source) == "base") {
+                QuestFixedMapList::get_instance().set_base_legend({ { symbol, {} } });
+            } else if (std::string_view(source) == "legend") {
+                map.legend[symbol] = {};
+            } else {
+                map.maps.push_back({ "A" + std::string(1, symbol) });
+            }
+            CHECK(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_INVALID_VALUE);
+            CHECK(letter['A'].feature == 1);
+            CHECK(fixture.floor.grid_array[0][0].feat == 0);
+            CHECK(fixture.floor.height == 0);
+            CHECK(fixture.player.oldpy == 0);
+        }
+    }
 }
 
 TEST_CASE("FixedMapPD legacy malformed start updates dimensions before conversion")

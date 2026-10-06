@@ -32,6 +32,7 @@
 #include "system/monster-entity.h"
 #include "system/player-type-definition.h"
 #include "window/main-window-util.h"
+#include <algorithm>
 
 qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
@@ -88,7 +89,7 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string
     const auto &dungeon = floor.get_dungeon_definition();
     for (size_t i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, i++) {
         auto &grid = floor.grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
-        int idx = row[i];
+        const auto idx = static_cast<unsigned char>(row[i]);
         const auto item_index = letter[idx].object;
         auto monster_index = letter[idx].monster;
         const auto random = letter[idx].random;
@@ -178,14 +179,19 @@ static void parse_qtw_D(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string
     }
 }
 
-void apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
+parse_error_type apply_fixed_map_row(PlayerType *player_ptr, qtwg_type *qtwg_ptr, std::string_view row)
 {
     if (init_flags & INIT_ONLY_BUILDINGS) {
-        return;
+        return PARSE_ERROR_NONE;
     }
 
+    row = row.substr(0, row.find('\0'));
+    if (!std::all_of(row.begin(), row.end(), is_fixed_map_symbol)) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
     parse_qtw_D(player_ptr, qtwg_ptr, row);
     (*qtwg_ptr->y)++;
+    return PARSE_ERROR_NONE;
 }
 
 static void apply_fixed_map_size(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
@@ -274,8 +280,7 @@ parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtw
     }
 
     if (qtwg_ptr->buf[0] == 'D') {
-        apply_fixed_map_row(player_ptr, qtwg_ptr, qtwg_ptr->buf + 2);
-        return PARSE_ERROR_NONE;
+        return apply_fixed_map_row(player_ptr, qtwg_ptr, qtwg_ptr->buf + 2);
     }
 
     if (parse_qtw_P(player_ptr, qtwg_ptr)) {
@@ -317,8 +322,27 @@ static const QuestStartPosition *select_quest_start(const QuestFixedMap &fixed_m
 
 parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestType &quest, const QuestFixedMap &fixed_map)
 {
+    // 型付きレイアウトを直接渡す場合も、凡例やセルの書き込み前に記号を検証する。
+    const auto &base_legend = QuestFixedMapList::get_instance().get_base_legend();
+    const auto valid_legend = [](const auto &legend) {
+        return std::all_of(legend.begin(), legend.end(), [](const auto &entry) {
+            return is_fixed_map_symbol(static_cast<unsigned char>(entry.first));
+        });
+    };
+    if (!valid_legend(base_legend) || !valid_legend(fixed_map.legend)) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+    for (const auto &rows : fixed_map.maps) {
+        for (const auto &row : rows) {
+            const auto prefix = std::string_view(row).substr(0, row.find('\0'));
+            if (!std::all_of(prefix.begin(), prefix.end(), is_fixed_map_symbol)) {
+                return PARSE_ERROR_INVALID_VALUE;
+            }
+        }
+    }
+
     // 1. 共通ベース凡例 (X/./%/D/< など) を letter[] へ適用 (旧 QuestPreferences.txt、起動時に読込済み)
-    for (const auto &[symbol, cell] : QuestFixedMapList::get_instance().get_base_legend()) {
+    for (const auto &[symbol, cell] : base_legend) {
         letter[static_cast<uint8_t>(symbol)] = cell.grid;
     }
 

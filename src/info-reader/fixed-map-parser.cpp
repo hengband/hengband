@@ -197,7 +197,9 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
         }
         if (selected_map != nullptr) {
             for (const auto &row : selected_map->rows) {
-                apply_fixed_map_row(player_ptr, qg_ptr, row);
+                if (const auto err = apply_fixed_map_row(player_ptr, qg_ptr, row); err != PARSE_ERROR_NONE) {
+                    return err;
+                }
             }
         }
         for (const auto &start : definition.starts) {

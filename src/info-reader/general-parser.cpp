@@ -54,8 +54,12 @@ parse_error_type parse_line_feature(const FloorType &floor, std::string_view buf
         return PARSE_ERROR_GENERIC;
     }
 
+    if (tokens.front().size() != 1 || !is_fixed_map_symbol(static_cast<unsigned char>(tokens.front().front()))) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+
     const auto &terrains = TerrainList::get_instance();
-    const int index = tokens.at(0).at(0);
+    const auto index = static_cast<unsigned char>(tokens.front().front());
     auto &one_letter = letter[index];
     one_letter.set_terrain_id(TerrainTag::NONE);
     one_letter.monster = 0;
