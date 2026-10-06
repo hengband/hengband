@@ -17,12 +17,15 @@ class DungeonRecord {
 public:
     DungeonRecord() = default;
     bool has_entered() const;
+    bool has_visited() const;
+    void mark_visited();
     int get_max_level() const;
     int get_max_max_level() const;
     void set_max_level(int level);
     void reset();
 
 private:
+    bool visited = false;
     tl::optional<int> max_max_level; //!< @details 将来の拡張. 帰還時に浅いフロアを指定しても維持する.
     tl::optional<int> max_level; //!< @details 帰還時に浅いフロアを指定すると書き換わる.
 };
