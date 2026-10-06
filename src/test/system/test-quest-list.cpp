@@ -1,13 +1,18 @@
+#include "io/files-util.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-misc-flags.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/dungeon/quest-list.h"
+#include "system/enums/terrain/terrain-tag.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/monrace/monrace-list.h"
+#include "test/scoped-restore.h"
 #include "test/system/monrace-list-test-access.h"
 #include "test/system/quest-list-test-access.h"
+#include "test/system/terrain-list-test-access.h"
 #include "test/temporary-json-files.h"
+#include "util/finalizer.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
@@ -33,6 +38,61 @@ void check_unpublished(QuestId id)
     CHECK(QuestList::get_instance().empty());
     CHECK_FALSE(QuestFixedMapList::get_instance().find(id));
 }
+}
+
+TEST_CASE("QuestList base legend rejects unsafe symbol bytes without publication")
+{
+    test::QuestListTestAccess quests;
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+    QuestFiles files;
+    const auto restore_path = test::scoped_restore(ANGBAND_DIR_EDIT);
+    auto &maps = QuestFixedMapList::get_instance();
+    const auto original = maps.get_base_legend();
+    const auto restore_legend = util::make_finalizer([original] {
+        QuestFixedMapList::get_instance().set_base_legend(original);
+    });
+    ANGBAND_DIR_EDIT = files.directory;
+    QuestLegendCell existing;
+    existing.grid.special = 73;
+    maps.set_base_legend({ { '?', existing } });
+    for (const auto byte : { 0x00, 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
+        CAPTURE(byte);
+        if (byte < 0x80) {
+            files.write("QuestPreferences.jsonc", { { "legend", { { "!", nlohmann::json::object() }, { std::string(1, static_cast<char>(byte)), nlohmann::json::object() } } } });
+        } else {
+            // Isolated high bytes cannot be represented in valid UTF-8 JSON strings.
+            files.write_raw("QuestPreferences.jsonc", "{\"legend\":{\"!\":{},\"" + std::string(1, static_cast<char>(byte)) + "\":{}}}");
+        }
+        CHECK_THROWS_AS(quests.load_base_legend(), std::runtime_error);
+        REQUIRE(maps.get_base_legend().size() == 1);
+        CHECK(maps.get_base_legend().at('?').grid.special == 73);
+    }
+    for (const auto *symbol : { "", "AB" }) {
+        CAPTURE(symbol);
+        files.write("QuestPreferences.jsonc", { { "legend", { { symbol, nlohmann::json::object() } } } });
+        CHECK_THROWS_AS(quests.load_base_legend(), std::runtime_error);
+        REQUIRE(maps.get_base_legend().size() == 1);
+        CHECK(maps.get_base_legend().at('?').grid.special == 73);
+    }
+}
+
+TEST_CASE("QuestList base legend accepts printable ASCII boundaries")
+{
+    test::QuestListTestAccess quests;
+    const test::TerrainListTestAccess none_tag(TerrainTag::NONE, 0);
+    QuestFiles files;
+    const auto restore_path = test::scoped_restore(ANGBAND_DIR_EDIT);
+    auto &maps = QuestFixedMapList::get_instance();
+    const auto original = maps.get_base_legend();
+    const auto restore_legend = util::make_finalizer([original] {
+        QuestFixedMapList::get_instance().set_base_legend(original);
+    });
+    ANGBAND_DIR_EDIT = files.directory;
+    files.write("QuestPreferences.jsonc", { { "legend", { { " ", { { "special", 17 } } }, { "~", { { "special", 29 } } } } } });
+    REQUIRE_NOTHROW(quests.load_base_legend());
+    REQUIRE(maps.get_base_legend().size() == 2);
+    CHECK(maps.get_base_legend().at(' ').grid.special == 17);
+    CHECK(maps.get_base_legend().at('~').grid.special == 29);
 }
 
 TEST_CASE("QuestList validates raw IDs before conversion or publication")

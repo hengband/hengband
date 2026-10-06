@@ -31,6 +31,11 @@ public:
         quests.load_json_quests(directory);
     }
 
+    void load_base_legend()
+    {
+        quests.load_base_legend();
+    }
+
 private:
     QuestList &quests;
     QuestFixedMapList &fixed_maps;
