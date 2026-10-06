@@ -62,13 +62,6 @@ void ObjectReadEntity::execute(bool known)
     auto executor = ReadExecutorFactory::create(player_ptr, item.get(), known);
     auto used_up = executor->read();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRecalculatingFlag;
-    EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
-    if (rfu.has(Srf::AUTO_DESTRUCTION)) {
-        flags_srf.set(Srf::AUTO_DESTRUCTION);
-    }
-
-    rfu.reset_flags(flags_srf);
     this->change_virtue_as_read(*item);
     item->mark_as_tried();
     this->gain_exp_from_item_use(item.get(), executor->is_identified());
@@ -78,6 +71,10 @@ void ObjectReadEntity::execute(bool known)
         SubWindowRedrawingFlag::PLAYER,
     };
     rfu.set_flags(flags_swrf);
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
+    };
     rfu.set_flags(flags_srf);
     if (!used_up) {
         return;
@@ -85,7 +82,7 @@ void ObjectReadEntity::execute(bool known)
 
     sound(SoundKind::SCROLL);
 
-    // 効果中のアイテム削除や並べ替えでインデックスが変わるため、同じ実体を探し直す。
+    // 効果中のアイテム削除でインデックスが変わるため、同じ実体を探し直す。
     const auto current_i_idx = find_current_i_idx(this->player_ptr, this->i_idx >= 0, item);
     if (current_i_idx) {
         vary_item(this->player_ptr, *current_i_idx, -1);

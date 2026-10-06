@@ -107,13 +107,6 @@ void ObjectUseEntity::execute()
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    using Srf = StatusRecalculatingFlag;
-    EnumClassFlagGroup<Srf> flags_srf = { Srf::COMBINATION, Srf::REORDER };
-    if (rfu.has(Srf::AUTO_DESTRUCTION)) {
-        flags_srf.set(Srf::AUTO_DESTRUCTION);
-    }
-
-    rfu.reset_flags(flags_srf);
     item->mark_as_tried();
     if (ident && !item->is_aware()) {
         object_aware(this->player_ptr, *item);
@@ -128,6 +121,10 @@ void ObjectUseEntity::execute()
         SubWindowRedrawingFlag::FOUND_ITEMS,
     };
     rfu.set_flags(flags_swrf);
+    static constexpr auto flags_srf = {
+        StatusRecalculatingFlag::COMBINATION,
+        StatusRecalculatingFlag::REORDER,
+    };
     rfu.set_flags(flags_srf);
     if (!use_charge) {
         return;
