@@ -350,16 +350,13 @@ parse_error_type generate_quest_floor_from_json(PlayerType *player_ptr, QuestTyp
     qtwg_type qg;
     initialize_quest_generator_type(&qg, 0, 0, MAX_HGT, MAX_WID, &y, &x);
     for (const auto &row : rows) {
-        std::string buffer(row);
-        parse_qtw_D(player_ptr, &qg, buffer.data());
+        parse_qtw_D(player_ptr, &qg, row);
         (*qg.y)++;
     }
 
-    // 5. 開始位置とフロアサイズ (parse_qtw_P を "P:y:x" で再利用)
+    // 5. 開始位置とフロアサイズを型付きの値から適用する
     if (const auto *start = select_quest_start(fixed_map); start != nullptr) {
-        std::string p_line = "P:" + std::to_string(start->y) + ":" + std::to_string(start->x);
-        qg.buf = p_line.data();
-        parse_qtw_P(player_ptr, &qg);
+        apply_fixed_map_start(player_ptr, &qg, start->y, start->x);
     }
 
     return PARSE_ERROR_NONE;
