@@ -186,11 +186,8 @@ void do_cmd_uninscribe(PlayerType *player_ptr)
     msg_print(_("銘を消した。", "Inscription removed."));
     item->inscription.reset();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::BONUS,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    rfu.set_flag(InventoryArrangementFlag::COMBINATION);
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
@@ -224,11 +221,8 @@ void do_cmd_inscribe(PlayerType *player_ptr)
 
     item->inscription.emplace(*input_inscription);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::BONUS,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    rfu.set_flag(InventoryArrangementFlag::COMBINATION);
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,

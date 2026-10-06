@@ -106,11 +106,11 @@ static void display_essence(PlayerType *player_ptr)
 static void set_smith_redrawing_flags()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags);
+    rfu.set_flags(flags_iaf);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
 }
 

@@ -139,15 +139,19 @@ void process_dungeon(PlayerType *player_ptr, bool load_game)
     msg_erase();
 
     redraw_character_xtra(player_ptr);
-    auto flags_srf = {
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::HP,
         StatusRecalculatingFlag::MP,
         StatusRecalculatingFlag::SPELLS,
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
     };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags_srf);
+    rfu.set_flags(flags_srf);
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
+    };
+    rfu.set_flags(flags_iaf);
     handle_stuff_with_inventory_arrangement(player_ptr);
     term_fresh();
 

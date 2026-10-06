@@ -38,6 +38,11 @@ bool RedrawingFlagsUpdater::has(StatusRecalculatingFlag flag) const
     return this->status_flags.has(flag);
 }
 
+bool RedrawingFlagsUpdater::has(InventoryArrangementFlag flag) const
+{
+    return this->inventory_arrangement_flags.has(flag);
+}
+
 bool RedrawingFlagsUpdater::has_any_of(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags) const
 {
     return this->main_window_flags.has_any_of(flags);
@@ -51,6 +56,11 @@ bool RedrawingFlagsUpdater::has_any_of(const EnumClassFlagGroup<SubWindowRedrawi
 bool RedrawingFlagsUpdater::has_any_of(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags) const
 {
     return this->status_flags.has_any_of(flags);
+}
+
+bool RedrawingFlagsUpdater::has_any_of(const EnumClassFlagGroup<InventoryArrangementFlag> &flags) const
+{
+    return this->inventory_arrangement_flags.has_any_of(flags);
 }
 
 void RedrawingFlagsUpdater::set_flag(MainWindowRedrawingFlag flag)
@@ -68,6 +78,11 @@ void RedrawingFlagsUpdater::set_flag(StatusRecalculatingFlag flag)
     this->status_flags.set(flag);
 }
 
+void RedrawingFlagsUpdater::set_flag(InventoryArrangementFlag flag)
+{
+    this->inventory_arrangement_flags.set(flag);
+}
+
 void RedrawingFlagsUpdater::set_flags(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags)
 {
     this->main_window_flags.set(flags);
@@ -81,6 +96,11 @@ void RedrawingFlagsUpdater::set_flags(const EnumClassFlagGroup<SubWindowRedrawin
 void RedrawingFlagsUpdater::set_flags(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags)
 {
     this->status_flags.set(flags);
+}
+
+void RedrawingFlagsUpdater::set_flags(const EnumClassFlagGroup<InventoryArrangementFlag> &flags)
+{
+    this->inventory_arrangement_flags.set(flags);
 }
 
 void RedrawingFlagsUpdater::reset_flag(MainWindowRedrawingFlag flag)
@@ -98,6 +118,11 @@ void RedrawingFlagsUpdater::reset_flag(StatusRecalculatingFlag flag)
     this->status_flags.reset(flag);
 }
 
+void RedrawingFlagsUpdater::reset_flag(InventoryArrangementFlag flag)
+{
+    this->inventory_arrangement_flags.reset(flag);
+}
+
 void RedrawingFlagsUpdater::reset_flags(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags)
 {
     this->main_window_flags.reset(flags);
@@ -111,6 +136,11 @@ void RedrawingFlagsUpdater::reset_flags(const EnumClassFlagGroup<SubWindowRedraw
 void RedrawingFlagsUpdater::reset_flags(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags)
 {
     this->status_flags.reset(flags);
+}
+
+void RedrawingFlagsUpdater::reset_flags(const EnumClassFlagGroup<InventoryArrangementFlag> &flags)
+{
+    this->inventory_arrangement_flags.reset(flags);
 }
 
 void RedrawingFlagsUpdater::fill_up_sub_flags()

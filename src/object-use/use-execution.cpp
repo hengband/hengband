@@ -89,11 +89,11 @@ void ObjectUseEntity::execute()
         msg_print(_("この杖にはもう魔力が残っていない。", "The staff has no charges left."));
         item->set_identification_flag(IdentificationFlag::EMPTY);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        static constexpr auto flags = {
-            StatusRecalculatingFlag::COMBINATION,
-            StatusRecalculatingFlag::REORDER,
+        static constexpr auto flags_iaf = {
+            InventoryArrangementFlag::COMBINATION,
+            InventoryArrangementFlag::REORDER,
         };
-        rfu.set_flags(flags);
+        rfu.set_flags(flags_iaf);
         rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
         return;
     }
@@ -121,11 +121,11 @@ void ObjectUseEntity::execute()
         SubWindowRedrawingFlag::FOUND_ITEMS,
     };
     rfu.set_flags(flags_swrf);
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_srf);
+    rfu.set_flags(flags_iaf);
     if (!use_charge) {
         return;
     }

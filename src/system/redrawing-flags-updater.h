@@ -56,9 +56,6 @@ enum class StatusRecalculatingFlag {
     HP,
     MP,
     SPELLS, /*!< 魔法学習数 */
-    COMBINATION, /*!< アイテム処理フラグ: アイテムの結合を要する */
-    REORDER, /*!< アイテム処理フラグ: アイテムの並び替えを要する */
-    AUTO_DESTRUCTION, /*!< アイテム処理フラグ: アイテムの自動破壊を要する */
     UN_VIEW, /*!< 地形の視界外化 */
     UN_LITE, /*!< 明暗範囲の視界外化 */
     VIEW, /*!< 視界 */
@@ -68,6 +65,17 @@ enum class StatusRecalculatingFlag {
     MONSTER_STATUSES, /*!< モンスターのステータス */
     DISTANCE, /*!< プレイヤーとモンスターの距離 */
     FLOW, /*!< プレイヤーから各マスへの到達距離 */
+    MAX,
+};
+
+/*!
+ * @brief 所持品の整理を要することを示すフラグ
+ * @details 所持品のスロット番号が変わるため、コマンドの区切りでだけ処理する (update_inventory_arrangement() を参照)。
+ */
+enum class InventoryArrangementFlag {
+    AUTO_DESTRUCTION, /*!< アイテムの自動破壊を要する */
+    COMBINATION, /*!< アイテムの結合を要する */
+    REORDER, /*!< アイテムの並べ替えを要する */
     MAX,
 };
 
@@ -88,26 +96,32 @@ public:
     bool has(MainWindowRedrawingFlag flag) const;
     bool has(SubWindowRedrawingFlag flag) const;
     bool has(StatusRecalculatingFlag flag) const;
+    bool has(InventoryArrangementFlag flag) const;
 
     bool has_any_of(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags) const;
     bool has_any_of(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags) const;
     bool has_any_of(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags) const;
+    bool has_any_of(const EnumClassFlagGroup<InventoryArrangementFlag> &flags) const;
 
     void set_flag(MainWindowRedrawingFlag flag);
     void set_flag(SubWindowRedrawingFlag flag);
     void set_flag(StatusRecalculatingFlag flag);
+    void set_flag(InventoryArrangementFlag flag);
 
     void set_flags(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags);
     void set_flags(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
     void set_flags(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags);
+    void set_flags(const EnumClassFlagGroup<InventoryArrangementFlag> &flags);
 
     void reset_flag(MainWindowRedrawingFlag flag);
     void reset_flag(SubWindowRedrawingFlag flag);
     void reset_flag(StatusRecalculatingFlag flag);
+    void reset_flag(InventoryArrangementFlag flag);
 
     void reset_flags(const EnumClassFlagGroup<MainWindowRedrawingFlag> &flags);
     void reset_flags(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
     void reset_flags(const EnumClassFlagGroup<StatusRecalculatingFlag> &flags);
+    void reset_flags(const EnumClassFlagGroup<InventoryArrangementFlag> &flags);
 
     void fill_up_sub_flags();
     EnumClassFlagGroup<SubWindowRedrawingFlag> get_sub_intersection(const EnumClassFlagGroup<SubWindowRedrawingFlag> &flags);
@@ -120,4 +134,5 @@ private:
     EnumClassFlagGroup<MainWindowRedrawingFlag> main_window_flags{};
     EnumClassFlagGroup<SubWindowRedrawingFlag> sub_window_flags{};
     EnumClassFlagGroup<StatusRecalculatingFlag> status_flags{};
+    EnumClassFlagGroup<InventoryArrangementFlag> inventory_arrangement_flags{};
 };

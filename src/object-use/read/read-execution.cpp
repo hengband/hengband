@@ -71,11 +71,11 @@ void ObjectReadEntity::execute(bool known)
         SubWindowRedrawingFlag::PLAYER,
     };
     rfu.set_flags(flags_swrf);
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_srf);
+    rfu.set_flags(flags_iaf);
     if (!used_up) {
         return;
     }

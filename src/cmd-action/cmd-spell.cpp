@@ -690,11 +690,9 @@ static void change_realm2(PlayerType *player_ptr, PlayerRealm &pr, RealmType nex
     player_ptr->old_realm |= 1U << (enum2i(pr.realm2().to_enum()) - 1);
     pr.set(pr.realm1().to_enum(), next_realm);
 
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::REORDER,
-        StatusRecalculatingFlag::SPELLS,
-    };
-    RedrawingFlagsUpdater::get_instance().set_flags(flags);
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    rfu.set_flag(StatusRecalculatingFlag::SPELLS);
+    rfu.set_flag(InventoryArrangementFlag::REORDER);
     handle_stuff(player_ptr);
 
     /* Load an autopick preference file */

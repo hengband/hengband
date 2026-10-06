@@ -2591,18 +2591,18 @@ int calc_weight_limit(PlayerType *player_ptr)
 void update_inventory_arrangement(PlayerType *player_ptr)
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (rfu.has(StatusRecalculatingFlag::AUTO_DESTRUCTION)) {
-        rfu.reset_flag(StatusRecalculatingFlag::AUTO_DESTRUCTION);
+    if (rfu.has(InventoryArrangementFlag::AUTO_DESTRUCTION)) {
+        rfu.reset_flag(InventoryArrangementFlag::AUTO_DESTRUCTION);
         autopick_delayed_alter(player_ptr);
     }
 
-    if (rfu.has(StatusRecalculatingFlag::COMBINATION)) {
-        rfu.reset_flag(StatusRecalculatingFlag::COMBINATION);
+    if (rfu.has(InventoryArrangementFlag::COMBINATION)) {
+        rfu.reset_flag(InventoryArrangementFlag::COMBINATION);
         combine_pack(player_ptr);
     }
 
-    if (rfu.has(StatusRecalculatingFlag::REORDER)) {
-        rfu.reset_flag(StatusRecalculatingFlag::REORDER);
+    if (rfu.has(InventoryArrangementFlag::REORDER)) {
+        rfu.reset_flag(InventoryArrangementFlag::REORDER);
         reorder_pack(player_ptr);
     }
 }
