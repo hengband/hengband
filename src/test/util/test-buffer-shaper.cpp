@@ -63,7 +63,21 @@ TEST_CASE("shape_buffer splits a long word in the middle if the last space is in
     CHECK(shape_buffer("aaaa bbbbbbbbbb", 10) == Lines{ "aaaa bbbb", "bbbbbb" });
 }
 
+TEST_CASE("shape_buffer puts at least one character in each line even if no character fits in the width")
+{
+    CHECK(shape_buffer("abc", 1) == Lines{ "a", "b", "c" });
+    CHECK(shape_buffer("abc", 0) == Lines{ "a", "b", "c" });
+    CHECK(shape_buffer("a\nb", 1) == Lines{ "a", "b" });
+}
+
 #ifdef JP
+TEST_CASE("shape_buffer puts at least one multibyte character in each line even if it does not fit in the width")
+{
+    CHECK(shape_buffer(repeat(KANJI_KAN, 2), 2) == Lines{ std::string(KANJI_KAN), std::string(KANJI_KAN) });
+    CHECK(shape_buffer(repeat(KANJI_KAN, 2), 1) == Lines{ std::string(KANJI_KAN), std::string(KANJI_KAN) });
+    CHECK(shape_buffer(cat("a", KANJI_KAN), 2) == Lines{ "a", std::string(KANJI_KAN) });
+}
+
 TEST_CASE("shape_buffer splits multibyte characters so that each line fits in the width")
 {
     CHECK(shape_buffer(repeat(KANJI_KAN, 6), 10) == Lines{ repeat(KANJI_KAN, 4), repeat(KANJI_KAN, 2) });
