@@ -17,6 +17,7 @@
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
 #include "util/bit-flags-calculator.h"
+#include "util/finalizer.h"
 #include "view/display-messages.h"
 #include "view/display-player.h"
 #include "window/display-sub-windows.h"
@@ -68,6 +69,12 @@ static void print_dungeon(PlayerType *player_ptr)
  */
 void redraw_stuff(PlayerType *player_ptr)
 {
+    // msg_erase() の入力待ち中にもリサイズから呼ばれる。外側の描画が最新の要求を処理する。
+    static bool redrawing = false;
+    if (redrawing) {
+        return;
+    }
+
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     if (!rfu.any_main()) {
         return;
@@ -82,9 +89,13 @@ void redraw_stuff(PlayerType *player_ptr)
         return;
     }
 
+    redrawing = true;
+    const auto finish_redrawing = util::make_finalizer([&] { redrawing = false; });
+
     if (rfu.has(MainWindowRedrawingFlag::WIPE)) {
-        rfu.reset_flag(MainWindowRedrawingFlag::WIPE);
         msg_erase();
+        // 待ち中のリサイズが追加した WIPE も、直後の消去と再描画で処理される。
+        rfu.reset_flag(MainWindowRedrawingFlag::WIPE);
         term_clear();
     }
 

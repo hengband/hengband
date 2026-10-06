@@ -1568,6 +1568,18 @@ hengband_test_SOURCES = \
 
 hengband_test_LDADD = libhengband.a
 
+## 端末と入力待ちを使う共通描画の回帰プローブ。通常のユニットテストとは別に明示実行する。
+main-window-wipe-probe$(EXEEXT): $(top_srcdir)/tools/tests/main-window-wipe-probe.cpp libhengband.a
+	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) $(LDFLAGS) -o $@ $(top_srcdir)/tools/tests/main-window-wipe-probe.cpp libhengband.a $(LIBS)
+
+.PHONY: check-main-window-wipe
+check-main-window-wipe: main-window-wipe-probe$(EXEEXT)
+	./main-window-wipe-probe$(EXEEXT) plain
+	./main-window-wipe-probe$(EXEEXT) deferred
+	./main-window-wipe-probe$(EXEEXT) reenter
+
+CLEANFILES = main-window-wipe-probe$(EXEEXT)
+
 TESTS = $(check_PROGRAMS)
 
 EXTRA_DIST = \
