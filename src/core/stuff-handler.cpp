@@ -1,5 +1,6 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "inventory/inventory-object.h"
 #include "player/player-status.h"
 #include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
