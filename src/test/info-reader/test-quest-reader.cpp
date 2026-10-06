@@ -3,6 +3,7 @@
  */
 
 #include "artifact/fixed-art-types.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/random-grid-effect-types.h"
@@ -616,6 +617,85 @@ TEST_CASE("QuestReader replaces output on success without duplicating collection
     CHECK(fixed_map.descriptions.empty());
     CHECK(fixed_map.starts.empty());
     CHECK(fixed_map.reward_artifact_candidates.empty());
+}
+
+TEST_CASE("QuestReader rejects map extent overflow without publishing output")
+{
+    auto data = make_quest_with_description("New description");
+    std::vector<std::string> rows;
+    SUBCASE("Too many rows")
+    {
+        rows.assign(MAX_HGT + 1, ".");
+    }
+    SUBCASE("Too wide row")
+    {
+        rows = { ".", std::string(MAX_WID + 1, '.') };
+    }
+    SUBCASE("UTF-8 width is counted in bytes rather than code points")
+    {
+        std::string row;
+        for (int i = 0; i <= MAX_WID / 2; ++i) {
+            row += "\xc3\xa9";
+        }
+        REQUIRE(row.size() == MAX_WID + 2);
+        rows = { std::move(row) };
+    }
+    for (const auto use_variants : { false, true }) {
+        CAPTURE(use_variants);
+        if (use_variants) {
+            data.erase("map");
+            data["mapVariants"] = { std::vector<std::string>{ "." }, rows };
+        } else {
+            data["map"] = rows;
+        }
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        set_existing_output(quest, fixed_map);
+        CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_OUT_OF_BOUNDS);
+        check_existing_output(quest, fixed_map);
+    }
+}
+
+TEST_CASE("QuestReader accepts map extents at the floor boundary")
+{
+    const std::vector<std::string> rows(MAX_HGT, std::string(MAX_WID, '.'));
+    for (const auto use_variants : { false, true }) {
+        CAPTURE(use_variants);
+        auto data = make_quest_with_description("Description");
+        if (use_variants) {
+            data["mapVariants"] = { std::vector<std::string>{ "." }, rows };
+        } else {
+            data["map"] = rows;
+        }
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+        REQUIRE(fixed_map.maps.size() == (use_variants ? 2 : 1));
+        CHECK(fixed_map.maps.back() == rows);
+    }
+}
+
+TEST_CASE("QuestReader preserves empty ragged and skipped map row behavior")
+{
+    auto data = make_quest_with_description("Description");
+    const std::vector<std::string> ragged_rows = { "", "...", "." };
+    data["mapVariants"] = { nlohmann::json::array(), { "", nullptr, "...", 7, "." } };
+    QuestType quest;
+    QuestFixedMap fixed_map;
+    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ {}, ragged_rows });
+
+    // map が存在すれば mapVariants は読まない。空の map も従来どおり保持する。
+    data["map"] = nlohmann::json::array();
+    data["mapVariants"] = { { std::string(MAX_WID + 1, '.') } };
+    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ {} });
+
+    // 非文字列行は配置されないため、行数の上限に含めない。
+    data["map"] = std::vector<std::string>(MAX_HGT, ".");
+    data["map"].push_back(nullptr);
+    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    CHECK(fixed_map.maps[0].size() == MAX_HGT);
 }
 
 #ifdef JP

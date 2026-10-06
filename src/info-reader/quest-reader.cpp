@@ -1,5 +1,6 @@
 #include "info-reader/quest-reader.h"
 #include "artifact/fixed-art-types.h"
+#include "floor/floor-base-definitions.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
@@ -66,20 +67,26 @@ const std::unordered_map<std::string_view, BIT_FLAGS> CAVE_FLAG_TOKENS = {
 };
 
 /*!
- * @brief JSONの文字列配列を std::vector<std::string> に取り込む (null/欠落は空)
+ * @brief JSONの文字列配列をフロアに収まるマップ行として取り込む
  * @details マップ行のようなASCIIの記号列は文字コードの変換が不要なので、そのまま取り込む
+ * @return 行数または行のバイト数がフロアの上限を超える場合は PARSE_ERROR_OUT_OF_BOUNDS
  */
-void read_string_lines(const nlohmann::json &array_data, std::vector<std::string> &out)
+int read_map_rows(const nlohmann::json &array_data, std::vector<std::string> &out)
 {
-    if (!array_data.is_array()) {
-        return;
+    for (const auto &line : array_data) {
+        if (!line.is_string()) {
+            continue;
+        }
+
+        const auto &row = line.get_ref<const std::string &>();
+        // セル配置は1バイトずつ進む。幅の切り捨てと高さの配列外アクセスを読み込み時に防ぐ。
+        if (out.size() >= MAX_HGT || row.size() > MAX_WID) {
+            return PARSE_ERROR_OUT_OF_BOUNDS;
+        }
+        out.push_back(row);
     }
 
-    for (const auto &line : array_data) {
-        if (line.is_string()) {
-            out.push_back(line.get<std::string>());
-        }
-    }
+    return PARSE_ERROR_NONE;
 }
 
 /*!
@@ -478,7 +485,9 @@ int QuestReader::set_maps(QuestFixedMap &parsed) const
             return PARSE_ERROR_INVALID_TYPE;
         }
         std::vector<std::string> rows;
-        read_string_lines(map, rows);
+        if (const auto err = read_map_rows(map, rows); err != PARSE_ERROR_NONE) {
+            return err;
+        }
         parsed.maps.push_back(std::move(rows));
         return PARSE_ERROR_NONE;
     }
@@ -493,7 +502,9 @@ int QuestReader::set_maps(QuestFixedMap &parsed) const
                 return PARSE_ERROR_INVALID_TYPE;
             }
             std::vector<std::string> rows;
-            read_string_lines(variant, rows);
+            if (const auto err = read_map_rows(variant, rows); err != PARSE_ERROR_NONE) {
+                return err;
+            }
             parsed.maps.push_back(std::move(rows));
         }
     }
