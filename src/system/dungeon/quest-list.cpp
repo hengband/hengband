@@ -1,5 +1,6 @@
 #include "system/dungeon/quest-list.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/jsonc-document-loader.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
 #include "io/files-util.h"
@@ -14,8 +15,6 @@
 #include <algorithm>
 #include <filesystem>
 #include <fmt/format.h>
-#include <fstream>
-#include <iterator>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
@@ -53,17 +52,15 @@ void QuestList::initialize()
 void QuestList::load_base_legend()
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, "QuestPreferences.jsonc");
-    std::ifstream ifs(path);
-    if (!ifs) {
+    JsoncDocumentLoader loader(path);
+    if (!loader.is_open()) {
         constexpr auto fmt = _("ベース凡例ファイルをオープンできません ({})", "Cannot open base legend file ({})");
         THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string()));
     }
 
     nlohmann::json data;
     try {
-        std::istreambuf_iterator<char> ifs_iter(ifs);
-        std::istreambuf_iterator<char> ifs_end;
-        data = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true, true);
+        data = loader.parse();
     } catch (const std::exception &e) {
         constexpr auto fmt = _("ベース凡例ファイルの解析に失敗しました ({}): {}", "Failed to parse base legend file ({}): {}");
         THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), e.what()));
@@ -132,17 +129,15 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir)
 
     auto &fixed_maps = QuestFixedMapList::get_instance();
     for (const auto &file : files) {
-        std::ifstream ifs(file);
-        if (!ifs) {
+        JsoncDocumentLoader loader(file);
+        if (!loader.is_open()) {
             constexpr auto fmt = _("クエストファイルをオープンできません ({})", "Cannot open quest file ({})");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string()));
         }
 
         nlohmann::json quest_data;
         try {
-            std::istreambuf_iterator<char> ifs_iter(ifs);
-            std::istreambuf_iterator<char> ifs_end;
-            quest_data = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true, true);
+            quest_data = loader.parse();
         } catch (const std::exception &e) {
             constexpr auto fmt = _("クエストファイルの解析に失敗しました ({}): {}", "Failed to parse quest file ({}): {}");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), e.what()));

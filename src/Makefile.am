@@ -627,6 +627,7 @@ libhengband_a_SOURCES = \
 	info-reader/general-parser.cpp info-reader/general-parser.h \
 	info-reader/info-reader-util.cpp info-reader/info-reader-util.h \
 	info-reader/json-reader-util.cpp info-reader/json-reader-util.h \
+	info-reader/jsonc-document-loader.cpp info-reader/jsonc-document-loader.h \
 	info-reader/magic-reader.cpp info-reader/magic-reader.h \
 	info-reader/message-reader.cpp info-reader/message-reader.h \
 	info-reader/parse-error-types.h \
@@ -1518,6 +1519,7 @@ hengband_test_SOURCES = \
 	test/info-reader/test-wilderness-reader.cpp \
 	test/info-reader/test-info-reader-util.cpp \
 	test/info-reader/test-json-reader-util.cpp \
+	test/info-reader/test-jsonc-document-loader.cpp \
 	test/info-reader/test-magic-reader.cpp \
 	test/info-reader/test-message-reader.cpp \
 	test/info-reader/test-quest-reader.cpp \
