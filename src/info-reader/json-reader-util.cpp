@@ -1,6 +1,7 @@
 #include "info-reader/json-reader-util.h"
 #include "info-reader/info-reader-util.h"
 #include "locale/character-encoding.h"
+#include "locale/language-switcher.h"
 #include "util/dice.h"
 
 /*!
@@ -62,28 +63,22 @@ errr info_set_string(const nlohmann::json &json, std::string &data, bool is_requ
         return PARSE_ERROR_INVALID_TYPE;
     }
 
-#ifdef JP
-    const auto &ja_str = json.find("ja");
-    if (ja_str == json.end()) {
+    const auto str = json.find(_("ja", "en"));
+    if (str == json.end()) {
         return unexist_result;
     }
-    if (!ja_str->is_string()) {
+    if (!str->is_string()) {
         return PARSE_ERROR_INVALID_TYPE;
     }
-    auto ja_str_sys = utf8_to_sys(ja_str->get<std::string>());
-    if (!ja_str_sys) {
+
+#ifdef JP
+    auto str_sys = utf8_to_sys(str->get<std::string>());
+    if (!str_sys) {
         return PARSE_ERROR_INVALID_FLAG;
     }
-    data = std::move(*ja_str_sys);
+    data = std::move(*str_sys);
 #else
-    const auto &en_str = json.find("en");
-    if (en_str == json.end()) {
-        return unexist_result;
-    }
-    if (!en_str->is_string()) {
-        return PARSE_ERROR_INVALID_TYPE;
-    }
-    data = en_str->get<std::string>();
+    data = str->get<std::string>();
 #endif
 
     return PARSE_ERROR_NONE;
