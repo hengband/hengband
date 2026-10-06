@@ -1,4 +1,6 @@
+#include "info-reader/general-parser.h"
 #include "info-reader/town-map-reader.h"
+#include "locale/character-encoding.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
@@ -13,6 +15,49 @@
 #include <utility>
 
 namespace {
+class ScopedTownBuildings {
+public:
+    ScopedTownBuildings()
+        : saved(buildings)
+    {
+        for (auto &building : buildings) {
+            building = {};
+            building.member_class.assign(PLAYER_CLASS_TYPE_MAX, -7);
+            building.member_race.assign(MAX_RACES, -7);
+            building.member_realm.assign(MAX_MAGIC + 1, -7);
+        }
+    }
+
+    ~ScopedTownBuildings()
+    {
+        buildings = std::move(this->saved);
+    }
+
+    ScopedTownBuildings(const ScopedTownBuildings &) = delete;
+    ScopedTownBuildings &operator=(const ScopedTownBuildings &) = delete;
+
+private:
+    std::array<building_type, MAX_BUILDINGS> saved;
+};
+
+void check_building(const building_type &actual, const building_type &expected)
+{
+    CHECK(std::string(actual.name) == expected.name);
+    CHECK(std::string(actual.owner_name) == expected.owner_name);
+    CHECK(std::string(actual.owner_race) == expected.owner_race);
+    for (size_t i = 0; i < 8; ++i) {
+        CHECK(std::string(actual.act_names[i]) == expected.act_names[i]);
+        CHECK(actual.member_costs[i] == expected.member_costs[i]);
+        CHECK(actual.other_costs[i] == expected.other_costs[i]);
+        CHECK(actual.letters[i] == expected.letters[i]);
+        CHECK(actual.actions[i] == expected.actions[i]);
+        CHECK(actual.action_restr[i] == expected.action_restr[i]);
+    }
+    CHECK(actual.member_class == expected.member_class);
+    CHECK(actual.member_race == expected.member_race);
+    CHECK(actual.member_realm == expected.member_realm);
+}
+
 std::string hex_bytes(std::string_view value)
 {
     if (value.empty()) {
@@ -86,8 +131,8 @@ TEST_CASE("TownMapReader retains ordered definitions, conditions and UTF-8 text"
     CHECK(definition.buildings[0].index == 1);
     CHECK_FALSE(definition.buildings[0].english);
     CHECK(definition.buildings[1].english);
-    CHECK(definition.buildings[0].command == 'N');
-    CHECK(definition.buildings[0].fields[0] == utf8_name);
+    REQUIRE(std::holds_alternative<TownMapBuildingNames>(definition.buildings[0].directive));
+    CHECK(std::get<TownMapBuildingNames>(definition.buildings[0].directive).name == utf8_name);
     CHECK(definition.buildings[0].condition == "[EQU $TOWN 1]");
     REQUIRE(definition.maps.size() == 2);
     CHECK(definition.maps[0].rows == std::vector<std::string>{ "###", "#.#", "###" });
@@ -121,8 +166,11 @@ TEST_CASE("TownMapReader keeps percent and M as map payload and realm membership
     CHECK(definition.features[1].symbol == 'M');
     CHECK(definition.features[0].condition == "[EQU $TOWN 1]");
     REQUIRE(definition.buildings.size() == 1);
-    CHECK(definition.buildings[0].command == 'M');
-    CHECK(definition.buildings[0].fields == realms);
+    const auto &membership = std::get<TownMapBuildingMembership>(definition.buildings[0].directive);
+    CHECK(membership.kind == TownMapBuildingMembershipKind::REALM);
+    REQUIRE(membership.values.size() == MAX_MAGIC);
+    CHECK(membership.values.front() == 0);
+    CHECK(membership.values.back() == 1);
     CHECK(definition.buildings[0].condition == "[EQU $TOWN 1]");
     REQUIRE(definition.maps.size() == 1);
     CHECK(definition.maps[0].rows == std::vector<std::string>{ "%M%", "M%M", "%M%" });
@@ -327,7 +375,7 @@ TEST_CASE("TownMapReader preserves JSON integer error categories and output on f
                 REQUIRE(definition.maps.size() == 1);
                 REQUIRE(definition.starts.size() == 1);
                 CHECK(definition.features[0].symbol == '#');
-                CHECK(definition.buildings[0].fields[0] == "Building");
+                CHECK(std::get<TownMapBuildingNames>(definition.buildings[0].directive).name == "Building");
                 CHECK(definition.maps[0].rows[0] == "###");
                 CHECK(definition.starts[0].x == 1);
             }
@@ -473,7 +521,7 @@ TEST_CASE("TownMapReader leaves all output intact on failure at every validation
         REQUIRE(definition.maps.size() == 1);
         REQUIRE(definition.starts.size() == 1);
         CHECK(definition.features[0].symbol == '#');
-        CHECK(definition.buildings[0].fields[0] == "Building");
+        CHECK(std::get<TownMapBuildingNames>(definition.buildings[0].directive).name == "Building");
         CHECK(definition.maps[0].rows[0] == "###");
         CHECK(definition.starts[0].x == 1);
     }
@@ -499,7 +547,7 @@ TEST_CASE("TownMapReader building-only reread preserves output on failure and re
         REQUIRE(definition.maps.size() == 1);
         REQUIRE(definition.starts.size() == 1);
         CHECK(definition.features[0].symbol == '#');
-        CHECK(definition.buildings[0].fields[0] == "Building");
+        CHECK(std::get<TownMapBuildingNames>(definition.buildings[0].directive).name == "Building");
         CHECK(definition.maps[0].rows[0] == "###");
         CHECK(definition.starts[0].x == 1);
     }
@@ -507,7 +555,7 @@ TEST_CASE("TownMapReader building-only reread preserves output on failure and re
     REQUIRE(definition.features.size() == 1);
     REQUIRE(definition.buildings.size() == 1);
     CHECK(definition.features[0].symbol == '.');
-    CHECK(definition.buildings[0].fields[0] == "Changed");
+    CHECK(std::get<TownMapBuildingNames>(definition.buildings[0].directive).name == "Changed");
     CHECK(definition.maps.empty());
     CHECK(definition.starts.empty());
 }
@@ -638,7 +686,7 @@ TEST_CASE("TownMapReader preserves output on root errors and value errors at eve
         REQUIRE(definition.maps.size() == 1);
         REQUIRE(definition.starts.size() == 1);
         CHECK(definition.features[0].symbol == '#');
-        CHECK(definition.buildings[0].fields[0] == "Building");
+        CHECK(std::get<TownMapBuildingNames>(definition.buildings[0].directive).name == "Building");
         CHECK(definition.maps[0].rows[0] == "###");
         CHECK(definition.starts[0].x == 1);
     }
@@ -655,4 +703,162 @@ TEST_CASE("TownMapReader rejects nonprintable terrain and trap tokens")
             CHECK(read_town(data) == PARSE_ERROR_INVALID_VALUE);
         }
     }
+}
+
+TEST_CASE("TownMapReader typed building application matches legacy N A C R M Z in both locales")
+{
+    const ScopedTownBuildings state;
+    const auto initial = buildings[1];
+    for (const auto *locale : { "en", "ja" }) {
+        CAPTURE(std::string(locale));
+        for (const auto &[command, fields] : {
+                 std::pair{ "N", std::vector<std::string>{ "Building name that is longer than nineteen bytes", "Owner", "Race" } },
+                 std::pair{ "N", std::vector<std::string>{ "", "", "" } },
+                 std::pair{ "N", std::vector<std::string>{ "\xE7\x94\xBA\xE3\x81\xAE\xE5\xBB\xBA\xE7\x89\xA9", "Owner", "Race" } },
+                 std::pair{ "N", std::vector<std::string>{ "\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA\xE7\x94\xBA", "Owner", "Race" } },
+                 std::pair{ "A", std::vector<std::string>{ "7", "Action name that is longer than twenty nine bytes", "2147483647", "-2147483648", "abc", "65535", "-32769" } },
+                 std::pair{ "A", std::vector<std::string>{ "0", "", "0", "0", "", "0", "0" } },
+                 std::pair{ "C", std::vector<std::string>{ "2", "0" } },
+                 std::pair{ "R", std::vector<std::string>{ "0", "65535" } },
+                 std::pair{ "M", std::vector<std::string>{ "3", "-1" } },
+                 std::pair{ "Z", std::vector<std::string>{ "Ignored", "\xE7\x94\xBA" } },
+                 std::pair{ "Z", std::vector<std::string>{} },
+             }) {
+            CAPTURE(std::string(command));
+            auto data = make_town_map();
+            data["buildingRules"][0]["locale"] = locale;
+            data["buildingRules"][0]["command"] = command;
+            data["buildingRules"][0]["fields"] = fields;
+            TownMapDefinition definition;
+            REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+            REQUIRE(definition.buildings.size() == 1);
+            std::string line = std::string(locale) == "en" ? "B:$1:" : "B:1:";
+            line += command;
+            for (const auto &field : fields) {
+                line += ":" + field;
+            }
+            const auto encoded = utf8_to_sys(line);
+            REQUIRE(encoded.has_value());
+            buildings[1] = initial;
+            REQUIRE(parse_line_building(*encoded) == PARSE_ERROR_NONE);
+            const auto expected = buildings[1];
+            buildings[1] = initial;
+            REQUIRE(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_NONE);
+            check_building(buildings[1], expected);
+            check_building(buildings[2], initial);
+        }
+    }
+}
+
+TEST_CASE("TownMapReader typed building memberships default omitted entries and preserve realm zero")
+{
+    const ScopedTownBuildings state;
+    for (const auto *command : { "C", "R", "M" }) {
+        CAPTURE(std::string(command));
+        auto data = make_town_map();
+        data["buildingRules"][0]["locale"] = _("ja", "en");
+        data["buildingRules"][0]["command"] = command;
+        data["buildingRules"][0]["fields"] = { "2" };
+        TownMapDefinition definition;
+        REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+        REQUIRE(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_NONE);
+        const auto is_realm = std::string_view(command) == "M";
+        const auto &members = std::string_view(command) == "C" ? buildings[1].member_class : (is_realm ? buildings[1].member_realm : buildings[1].member_race);
+        const auto offset = is_realm ? 1U : 0U;
+        CHECK(members[offset] == 2);
+        for (size_t i = offset + 1; i < members.size(); ++i) {
+            CHECK(members[i] == 1);
+        }
+        CHECK(buildings[1].member_realm[0] == -7);
+    }
+}
+
+TEST_CASE("TownMapReader typed building application validates conversion before locale filtering")
+{
+    const ScopedTownBuildings state;
+    const auto initial = buildings[1];
+    for (const auto *locale : { "en", "ja" }) {
+        for (const auto *command : { "N", "A", "Z" }) {
+            auto data = make_town_map();
+            auto &rule = data["buildingRules"][0];
+            rule["locale"] = locale;
+            rule["command"] = command;
+            const std::string invalid_utf8 = "\xff";
+            if (std::string_view(command) == "N") {
+                rule["fields"] = { "Name", "Owner", invalid_utf8 };
+            } else if (std::string_view(command) == "A") {
+                rule["fields"] = { "0", "Action", "0", "0", invalid_utf8, "0", "0" };
+            } else {
+                rule["fields"] = { invalid_utf8 };
+            }
+            TownMapDefinition definition;
+            REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+            const auto expected = utf8_to_sys(invalid_utf8) ? PARSE_ERROR_NONE : PARSE_ERROR_INVALID_VALUE;
+            CHECK(apply_town_building_rule(definition.buildings[0]) == expected);
+            // 英語版は文字コード変換が恒等変換のため、対象言語のN/Aは適用される。
+            if (expected != PARSE_ERROR_NONE || std::string_view(locale) != _("ja", "en") || std::string_view(command) == "Z") {
+                check_building(buildings[1], initial);
+            }
+            buildings[1] = initial;
+        }
+    }
+}
+
+TEST_CASE("TownMapReader typed building failures leave the target unchanged")
+{
+    const ScopedTownBuildings state;
+    const auto initial = buildings[1];
+    auto data = make_town_map();
+    data["buildingRules"][0]["locale"] = _("ja", "en");
+    TownMapDefinition definition;
+    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    auto rule = definition.buildings[0];
+    rule.index = MAX_BUILDINGS;
+    CHECK(apply_town_building_rule(rule) == PARSE_ERROR_INVALID_VALUE);
+    rule.index = 1;
+    rule.directive = TownMapBuildingAction{ 8, "Name", 1, 2, "a", 3, 4 };
+    CHECK(apply_town_building_rule(rule) == PARSE_ERROR_INVALID_VALUE);
+    rule.directive = TownMapBuildingMembership{ TownMapBuildingMembershipKind::CLASS, {} };
+    CHECK(apply_town_building_rule(rule) == PARSE_ERROR_INVALID_VALUE);
+    check_building(buildings[1], initial);
+    data["buildingRules"].push_back(data["buildingRules"][0]);
+    data["buildingRules"][1]["command"] = "A";
+    data["buildingRules"][1]["fields"] = { "0", "Action", "0", "0", "a", "overflow", "0" };
+    CHECK(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_INVALID_VALUE);
+    REQUIRE(definition.buildings.size() == 1);
+    CHECK(std::get<TownMapBuildingNames>(definition.buildings[0].directive).name == "Building");
+    check_building(buildings[1], initial);
+}
+
+TEST_CASE("TownMapReader typed building application rejects embedded NUL before any writes")
+{
+    const ScopedTownBuildings state;
+    const auto initial = buildings[1];
+    const std::string embedded_nul("Name\0suffix", 11);
+    for (const auto *locale : { "en", "ja" }) {
+        for (const auto *command : { "N", "A", "Z" }) {
+            auto data = make_town_map();
+            auto &rule = data["buildingRules"][0];
+            rule["locale"] = locale;
+            rule["command"] = command;
+            if (std::string_view(command) == "N") {
+                rule["fields"] = { embedded_nul, "Owner", "Race" };
+            } else if (std::string_view(command) == "A") {
+                rule["fields"] = { "0", embedded_nul, "0", "0", "a", "0", "0" };
+            } else {
+                rule["fields"] = { embedded_nul };
+            }
+            TownMapDefinition definition;
+            // 区切り文字の検証とは別に、適用側でC文字列にできない文字を拒否する。
+            REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+            CHECK(apply_town_building_rule(definition.buildings[0]) == PARSE_ERROR_INVALID_VALUE);
+            check_building(buildings[1], initial);
+        }
+    }
+#ifndef JP
+    // 旧dispatcherのchar*から作られるviewはNULの位置で切れ、Nの残り2引数を失う。
+    const auto legacy_line = std::string("B:$1:N:") + embedded_nul + ":Owner:Race";
+    CHECK(parse_line_building(std::string_view(legacy_line.c_str())) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
+    check_building(buildings[1], initial);
+#endif
 }

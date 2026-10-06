@@ -4,6 +4,7 @@
 #include <nlohmann/json_fwd.hpp>
 #include <optional>
 #include <string>
+#include <variant>
 #include <vector>
 
 struct TownMapFeatureRule {
@@ -19,13 +20,47 @@ struct TownMapFeatureRule {
     std::optional<std::string> condition;
 };
 
+struct TownMapBuildingNames {
+    std::string name;
+    std::string owner_name;
+    std::string owner_race;
+};
+
+struct TownMapBuildingAction {
+    int index = 0;
+    std::string name;
+    int member_cost = 0;
+    int other_cost = 0;
+    std::string letter;
+    int action = 0;
+    int restriction = 0;
+};
+
+enum class TownMapBuildingMembershipKind { CLASS,
+    RACE,
+    REALM };
+
+struct TownMapBuildingMembership {
+    TownMapBuildingMembershipKind kind = TownMapBuildingMembershipKind::CLASS;
+    std::vector<int> values;
+};
+
+struct TownMapBuildingNoop {
+    // Zの引数も従来どおり文字コード変換を検証するが、建物へは適用しない。
+    std::vector<std::string> fields;
+};
+
 struct TownMapBuildingRule {
     int index = 0;
     bool english = false;
-    char command = '\0';
-    std::vector<std::string> fields;
+    std::variant<TownMapBuildingNames, TownMapBuildingAction, TownMapBuildingMembership, TownMapBuildingNoop> directive;
     std::optional<std::string> condition;
 };
+
+/*!
+ * @brief 検証済みの建物指示を文字コード変換し、対象言語の建物へ直接適用する。
+ */
+parse_error_type apply_town_building_rule(const TownMapBuildingRule &rule);
 
 struct TownMapVariant {
     std::vector<std::string> rows;
