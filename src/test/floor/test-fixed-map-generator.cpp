@@ -1,11 +1,15 @@
+#include "dungeon/quest.h"
 #include "floor/fixed-map-generator.h"
 #include "game-option/birth-options.h"
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
+#include "system/angband-system.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-fixed-map.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/enums/terrain/terrain-tag.h"
 #include "system/floor/floor-info.h"
@@ -34,6 +38,7 @@
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace test {
@@ -208,6 +213,224 @@ void write_application_town(const TownFiles &files, const nlohmann::json &town)
     files.write("TownDefinitionList.jsonc", { { "version", 1 }, { "towns", { { std::to_string(AngbandWorld::get_instance().get_town_index()), "towns/fixture.jsonc" } } } });
     files.write("towns/fixture.jsonc", town);
 }
+
+[[nodiscard]] auto scoped_quest_layout_state()
+{
+    auto &maps = QuestFixedMapList::get_instance();
+    auto &system = AngbandSystem::get_instance();
+    auto legend = maps.get_base_legend();
+    const auto seed = system.get_seed_town();
+    const auto previous_leaving = leaving_quest;
+    maps.set_base_legend({});
+    system.set_seed_town(0);
+    leaving_quest = QuestId::NONE;
+    return util::make_finalizer([legend = std::move(legend), seed, previous_leaving] {
+        QuestFixedMapList::get_instance().set_base_legend(legend);
+        AngbandSystem::get_instance().set_seed_town(seed);
+        leaving_quest = previous_leaving;
+    });
+}
+}
+
+TEST_CASE("QuestFixedMap JSON rows preserve origin empty rows null termination and final row width")
+{
+    FixedMapFixture fixture;
+    const auto restore = scoped_quest_layout_state();
+    QuestType quest;
+    QuestFixedMap map;
+    map.maps = { { "AB", "", std::string("A\0B", 3), "B" } };
+    map.starts = { { tl::nullopt, 2, 0 } };
+    fixture.floor.quest_number = QuestId::THIEF;
+    fixture.player.oldpy = 9;
+    fixture.player.oldpx = 10;
+    init_flags = INIT_CREATE_DUNGEON;
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+    CHECK(fixture.floor.grid_array[0][0].feat == 1);
+    CHECK(fixture.floor.grid_array[0][1].feat == 2);
+    CHECK(fixture.floor.grid_array[1][0].feat == 0);
+    CHECK(fixture.floor.grid_array[2][0].feat == 1);
+    CHECK(fixture.floor.grid_array[2][1].feat == 0);
+    CHECK(fixture.floor.grid_array[3][0].feat == 2);
+    CHECK(fixture.floor.grid_array[3][1].feat == 0);
+    CHECK(fixture.floor.grid_array[0][0].info == (CAVE_GLOW | CAVE_ROOM));
+    CHECK(fixture.floor.grid_array[0][0].special == 7);
+    CHECK(fixture.player.get_position() == Pos2D(2, 0));
+    CHECK(fixture.player.oldpy == 9);
+    CHECK(fixture.player.oldpx == 10);
+    CHECK(fixture.floor.height == SCREEN_HGT);
+    CHECK(fixture.floor.width == SCREEN_WID);
+    CHECK(panel_row_min == SCREEN_HGT);
+    CHECK(panel_col_min == SCREEN_WID);
+    CHECK(map.maps[0][2] == std::string("A\0B", 3));
+
+    map.maps = { { std::string(SCREEN_WID + 1, 'A'), "" } };
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+    CHECK(fixture.floor.height == SCREEN_HGT);
+    CHECK(fixture.floor.width == 0);
+}
+
+TEST_CASE("QuestFixedMap JSON retains quest specific initialization flag behavior")
+{
+    FixedMapFixture fixture;
+    const auto restore = scoped_quest_layout_state();
+    QuestType quest;
+    QuestFixedMap map;
+    map.maps = { { "A" } };
+    map.starts = { { tl::nullopt, 2, 3 } };
+    fixture.floor.height = 9;
+    fixture.floor.width = 10;
+    auto &grid = fixture.floor.grid_array[0][0];
+    SUBCASE("without create flag rows apply but dimensions and start do not")
+    {
+        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+        CHECK(grid.feat == 1);
+        CHECK(grid.info == (CAVE_GLOW | CAVE_ROOM));
+        CHECK(grid.special == 7);
+        CHECK(fixture.floor.height == 9);
+        CHECK(fixture.floor.width == 10);
+        CHECK(fixture.player.oldpy == 0);
+        CHECK(fixture.player.oldpx == 0);
+    }
+    SUBCASE("only buildings does not skip quest rows unlike town rows")
+    {
+        init_flags = static_cast<init_flags_type>(INIT_ONLY_BUILDINGS | INIT_CREATE_DUNGEON);
+        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+        CHECK(grid.feat == 1);
+        CHECK(grid.info == (CAVE_GLOW | CAVE_ROOM));
+        CHECK(grid.special == 7);
+        CHECK(fixture.floor.height == SCREEN_HGT);
+        CHECK(fixture.floor.width == SCREEN_WID);
+        CHECK(fixture.player.oldpy == 2);
+        CHECK(fixture.player.oldpx == 3);
+    }
+    SUBCASE("only features retains non terrain state while applying start")
+    {
+        init_flags = static_cast<init_flags_type>(INIT_ONLY_FEATURES | INIT_CREATE_DUNGEON);
+        grid.info = CAVE_MARK;
+        grid.special = 11;
+        grid.mimic = 2;
+        letter['A'].trap = 2;
+        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+        CHECK(grid.feat == 1);
+        CHECK(grid.info == CAVE_MARK);
+        CHECK(grid.special == 11);
+        CHECK(grid.mimic == 2);
+        CHECK(fixture.player.oldpy == 2);
+        CHECK(fixture.player.oldpx == 3);
+    }
+}
+
+TEST_CASE("QuestFixedMap JSON variants use town seed modulo count without changing seed")
+{
+    FixedMapFixture fixture;
+    const auto restore = scoped_quest_layout_state();
+    QuestType quest;
+    QuestFixedMap map;
+    map.maps = { { "A" }, { "B" }, { "AB" } };
+    auto &system = AngbandSystem::get_instance();
+    for (const auto seed : { 0U, 4U, 5U, 6U }) {
+        system.set_seed_town(seed);
+        fixture.floor.grid_array[0][1].feat = 0;
+        REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+        CHECK(fixture.floor.grid_array[0][0].feat == (seed % 3 == 1 ? 2 : 1));
+        CHECK(fixture.floor.grid_array[0][1].feat == (seed % 3 == 2 ? 2 : 0));
+        CHECK(system.get_seed_town() == seed);
+    }
+}
+
+TEST_CASE("QuestFixedMap JSON start selection keeps first match last fallback and absent match behavior")
+{
+    FixedMapFixture fixture;
+    const auto restore = scoped_quest_layout_state();
+    QuestType quest;
+    QuestFixedMap map;
+    map.maps = { { "AB" } };
+    map.starts = { { tl::nullopt, 1, 2 }, { 7, 3, 4 }, { tl::nullopt, 5, 6 }, { 7, 8, 9 } };
+    fixture.floor.quest_number = QuestId::THIEF;
+    init_flags = INIT_CREATE_DUNGEON;
+    leaving_quest = static_cast<QuestId>(7);
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+    CHECK(fixture.player.get_position() == Pos2D(3, 4));
+    leaving_quest = static_cast<QuestId>(8);
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+    CHECK(fixture.player.get_position() == Pos2D(5, 6));
+    map.starts = { { 7, 3, 4 } };
+    fixture.floor.height = 9;
+    fixture.floor.width = 10;
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+    CHECK(fixture.floor.grid_array[0][0].feat == 1);
+    CHECK(fixture.player.get_position() == Pos2D(5, 6));
+    CHECK(fixture.floor.height == 9);
+    CHECK(fixture.floor.width == 10);
+    map.starts.clear();
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+    CHECK(fixture.player.get_position() == Pos2D(5, 6));
+    CHECK(fixture.floor.height == 9);
+}
+
+TEST_CASE("QuestFixedMap JSON no map applies legend overrides but not selected start")
+{
+    FixedMapFixture fixture;
+    const auto restore = scoped_quest_layout_state();
+    QuestType quest;
+    QuestLegendCell base;
+    base.grid.feature = 2;
+    base.grid.special = 13;
+    QuestFixedMapList::get_instance().set_base_legend({ { 'A', base }, { 'C', base } });
+    QuestFixedMap map;
+    map.legend['A'].grid.feature = 1;
+    map.legend['A'].grid.special = 17;
+    map.starts = { { tl::nullopt, 2, 3 } };
+    init_flags = INIT_CREATE_DUNGEON;
+    fixture.floor.height = 9;
+    fixture.floor.width = 10;
+    REQUIRE(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_NONE);
+    CHECK(letter['A'].feature == 1);
+    CHECK(letter['A'].special == 17);
+    CHECK(letter['C'].feature == 2);
+    CHECK(letter['C'].special == 13);
+    CHECK(fixture.floor.grid_array[0][0].feat == 0);
+    CHECK(fixture.floor.height == 9);
+    CHECK(fixture.floor.width == 10);
+    CHECK(fixture.player.oldpy == 0);
+    CHECK(fixture.player.oldpx == 0);
+}
+
+TEST_CASE("QuestFixedMap JSON fixture restores base legend seed leaving quest letters flags and panels")
+{
+    FixedMapFixture outer;
+    const auto outer_restore = scoped_quest_layout_state();
+    QuestLegendCell original;
+    original.grid.feature = 2;
+    original.grid.special = 19;
+    QuestFixedMapList::get_instance().set_base_legend({ { 'C', original } });
+    AngbandSystem::get_instance().set_seed_town(47);
+    leaving_quest = QuestId::SEWER;
+    init_flags = INIT_ONLY_FEATURES;
+    panel_row_min = 17;
+    panel_col_min = 18;
+    {
+        FixedMapFixture inner;
+        const auto inner_restore = scoped_quest_layout_state();
+        QuestType quest;
+        QuestFixedMap map;
+        map.legend['A'].grid.feature = 2;
+        map.maps = { { "A" } };
+        map.starts = { { tl::nullopt, 1, 2 } };
+        init_flags = INIT_CREATE_DUNGEON;
+        REQUIRE(generate_quest_floor_from_json(&inner.player, quest, map) == PARSE_ERROR_NONE);
+        CHECK(letter['A'].feature == 2);
+    }
+    const auto &legend = QuestFixedMapList::get_instance().get_base_legend();
+    REQUIRE(legend.size() == 1);
+    CHECK(legend.at('C').grid.feature == 2);
+    CHECK(legend.at('C').grid.special == 19);
+    CHECK(AngbandSystem::get_instance().get_seed_town() == 47);
+    CHECK(leaving_quest == QuestId::SEWER);
+    CHECK(letter['A'].feature == 1);
+    CHECK(init_flags == INIT_ONLY_FEATURES);
+    CHECK(panel_row_min == 17);
+    CHECK(panel_col_min == 18);
 }
 
 TEST_CASE("FixedMapPD row uses origin clips columns and advances empty rows")
