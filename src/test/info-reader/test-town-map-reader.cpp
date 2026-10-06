@@ -1072,9 +1072,10 @@ TEST_CASE("TownMapReader typed and legacy features retain printable ASCII bounda
         TownMapFeatureRule feature;
         feature.symbol = symbol;
         feature.terrain = "TOWN_FEATURE_TEST_FLOOR";
-        feature.trap = "NONE";
+        feature.trap = "TOWN_FEATURE_TEST_TRAP";
         REQUIRE(apply_town_map_feature(floor, feature) == PARSE_ERROR_NONE);
         CHECK(letter[static_cast<unsigned char>(symbol)].feature == state.floor_id());
+        CHECK(letter[static_cast<unsigned char>(symbol)].trap == state.trap_id());
         letter[static_cast<unsigned char>(symbol)].feature = 0;
         REQUIRE(parse_line_feature(floor, "F:" + std::string(1, symbol) + ":TOWN_FEATURE_TEST_FLOOR") == PARSE_ERROR_NONE);
         CHECK(letter[static_cast<unsigned char>(symbol)].feature == state.floor_id());
