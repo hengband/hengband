@@ -95,6 +95,9 @@ enum class MonraceId : short;
 class ArtifactDefinition;
 class BaseitemKey;
 class MonraceDefinition;
+namespace test {
+class QuestFeatureTestAccess;
+}
 class QuestType {
 public:
     QuestType() = default;
@@ -131,5 +134,7 @@ public:
     const MonraceDefinition &get_bounty() const;
 
 private:
+    friend class test::QuestFeatureTestAccess;
+
     tl::optional<FixedArtifactId> reward_fa_id{}; /*!< クエスト対象のアイテムID / object index */
 };

@@ -1,10 +1,18 @@
 #include "info-reader/town-map-reader.h"
+#include "artifact/fixed-art-types.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/random-grid-effect-types.h"
 #include "locale/character-encoding.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "system/floor/floor-info.h"
+#include "system/system-variables.h"
+#include "system/terrain/terrain-list.h"
 #include "util/string-processor.h"
 #include <algorithm>
 #include <charconv>
@@ -54,6 +62,42 @@ bool is_json_integer_in_range(const nlohmann::json &value, int minimum, int maxi
 {
     int parsed = 0;
     return info_set_integer(value, parsed, true, Range(minimum, maximum)) == PARSE_ERROR_NONE;
+}
+
+// Numeric token grammar and bounds have already been checked by is_feature_token.
+int feature_token_value(std::string_view token)
+{
+    if (token.starts_with('*') || token.starts_with('c')) {
+        token.remove_prefix(1);
+    }
+    int value = 0;
+    if (!token.empty()) {
+        std::from_chars(token.data(), token.data() + token.size(), value);
+    }
+    return value;
+}
+
+void read_feature_tokens(const nlohmann::json &fields, QuestLegendCell &cell)
+{
+    auto &grid = cell.grid;
+    const auto &monster = fields["monster"].get_ref<const std::string &>();
+    const auto &object = fields["object"].get_ref<const std::string &>();
+    const auto &ego = fields["ego"].get_ref<const std::string &>();
+    const auto &artifact = fields["artifact"].get_ref<const std::string &>();
+    grid.monster = static_cast<MONSTER_IDX>(feature_token_value(monster) * (monster.starts_with('c') ? -1 : 1));
+    cell.object_is_quest_reward = object == "!";
+    cell.artifact_is_quest_reward = artifact == "!";
+    grid.object = cell.object_is_quest_reward ? 0 : static_cast<OBJECT_IDX>(feature_token_value(object));
+    grid.ego = i2enum<EgoType>(feature_token_value(ego));
+    grid.artifact = cell.artifact_is_quest_reward ? FixedArtifactId{} : i2enum<FixedArtifactId>(feature_token_value(artifact));
+    grid.cave_info = fields["caveInfo"].get<BIT_FLAGS>();
+    grid.special = fields["special"].get<int16_t>();
+    for (const auto &[token, flag] : { std::pair{ monster, RANDOM_MONSTER }, std::pair{ object, RANDOM_OBJECT },
+             std::pair{ ego, RANDOM_EGO }, std::pair{ artifact, RANDOM_ARTIFACT } }) {
+        if (token.starts_with('*')) {
+            grid.random |= flag;
+        }
+    }
 }
 
 parse_error_type read_condition(const nlohmann::json &data, std::optional<std::string> &condition)
@@ -149,6 +193,44 @@ parse_error_type apply_town_building_rule(const TownMapBuildingRule &rule)
         directive);
 }
 
+parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFeatureRule &feature)
+{
+    if (init_flags & INIT_ONLY_BUILDINGS) {
+        return PARSE_ERROR_NONE;
+    }
+
+    auto grid = feature.cell.grid;
+    grid.set_terrain_id(TerrainTag::NONE);
+    grid.set_trap_id(TerrainTag::NONE);
+    const auto &terrains = TerrainList::get_instance();
+    try {
+        if (feature.terrain == "*") {
+            grid.random |= RANDOM_FEATURE;
+        } else {
+            grid.feature = terrains.get_terrain_id(feature.terrain);
+        }
+        if (feature.trap == "*") {
+            grid.random |= RANDOM_TRAP;
+        } else {
+            grid.trap = terrains.get_terrain_id(feature.trap);
+        }
+    } catch (const std::exception &) {
+        return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
+    }
+
+    if (floor.is_in_quest() && (feature.cell.object_is_quest_reward || feature.cell.artifact_is_quest_reward)) {
+        const auto &quest = QuestList::get_instance().get_quest(floor.quest_number);
+        if (feature.cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
+            grid.object = quest.get_reward_bi_id();
+        }
+        if (feature.cell.artifact_is_quest_reward) {
+            grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
+        }
+    }
+    letter[static_cast<unsigned char>(feature.symbol)] = grid;
+    return PARSE_ERROR_NONE;
+}
+
 parse_error_type TownMapReader::read(TownMapDefinition &definition, int maximum_height, int maximum_width, bool only_buildings) const
 {
     if (!this->data.is_object() || !this->data.contains("version") || !this->data["version"].is_number_integer() || this->data["version"] != 2) {
@@ -216,13 +298,8 @@ parse_error_type TownMapReader::read_features(TownMapDefinition &definition) con
             return PARSE_ERROR_INVALID_TYPE;
         }
         feature.terrain = fields["terrain"].get<std::string>();
-        feature.cave_info = fields["caveInfo"].get<int>();
-        feature.monster = fields["monster"].get<std::string>();
-        feature.object = fields["object"].get<std::string>();
-        feature.ego = fields["ego"].get<std::string>();
-        feature.artifact = fields["artifact"].get<std::string>();
         feature.trap = fields["trap"].get<std::string>();
-        feature.special = fields["special"].get<int>();
+        read_feature_tokens(fields, feature.cell);
         definition.features.push_back(std::move(feature));
     }
     return PARSE_ERROR_NONE;

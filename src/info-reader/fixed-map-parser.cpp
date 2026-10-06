@@ -171,11 +171,7 @@ static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string
             if (!is_town_map_condition_met(player_ptr, feature.condition)) {
                 continue;
             }
-            auto line = "F:" + std::string(1, feature.symbol) + ":" + feature.terrain + ":" + std::to_string(feature.cave_info) +
-                        ":" + feature.monster + ":" + feature.object + ":" + feature.ego + ":" + feature.artifact +
-                        ":" + feature.trap + ":" + std::to_string(feature.special);
-            qg_ptr->buf = line.data();
-            if (const auto err = generate_fixed_map_floor(player_ptr, qg_ptr); err != PARSE_ERROR_NONE) {
+            if (const auto err = apply_town_map_feature(*player_ptr->current_floor_ptr, feature); err != PARSE_ERROR_NONE) {
                 return err;
             }
         }

@@ -1,18 +1,63 @@
+#include "artifact/fixed-art-types.h"
 #include "info-reader/general-parser.h"
+#include "info-reader/random-grid-effect-types.h"
 #include "info-reader/town-map-reader.h"
 #include "locale/character-encoding.h"
+#include "object-enchant/trg-types.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
 #include "system/building-type-definition.h"
+#include "system/dungeon/quest-definition.h"
+#include "system/dungeon/quest-list.h"
+#include "system/enums/terrain/terrain-tag.h"
+#include "system/floor/floor-info.h"
+#include "system/grid-type-definition.h"
+#include "system/monster-entity.h"
+#include "system/system-variables.h"
+#include "system/terrain/terrain-definition.h"
+#include "system/terrain/terrain-list.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/system/artifact-list-test-access.h"
+#include "test/system/terrain-list-test-access.h"
+#include <algorithm>
+#include <array>
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <limits>
+#include <map>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
 #include <utility>
+
+namespace test {
+class QuestFeatureTestAccess {
+public:
+    QuestFeatureTestAccess()
+    {
+        QuestList::get_instance().quests.swap(previous_quests);
+        QuestList::get_instance().quests.try_emplace(QuestId::THIEF);
+    }
+
+    ~QuestFeatureTestAccess()
+    {
+        QuestList::get_instance().quests.swap(previous_quests);
+    }
+
+    QuestFeatureTestAccess(const QuestFeatureTestAccess &) = delete;
+    QuestFeatureTestAccess &operator=(const QuestFeatureTestAccess &) = delete;
+
+    // 読込テストではアーティファクト予約を行わず、既に確定した報酬だけを用意する。
+    static void set_resolved_reward(FixedArtifactId id)
+    {
+        QuestList::get_instance().get_quest(QuestId::THIEF).reward_fa_id = id;
+    }
+
+private:
+    std::map<QuestId, QuestType> previous_quests;
+};
+}
 
 namespace {
 class ScopedTownBuildings {
@@ -56,6 +101,61 @@ void check_building(const building_type &actual, const building_type &expected)
     CHECK(actual.member_class == expected.member_class);
     CHECK(actual.member_race == expected.member_race);
     CHECK(actual.member_realm == expected.member_realm);
+}
+
+class TownFeatureStateGuard {
+public:
+    TownFeatureStateGuard()
+        : saved_init_flags(init_flags)
+        , terrain_count(TerrainList::get_instance().size())
+        , none_tag(TerrainTag::NONE, 0)
+    {
+        std::copy(std::begin(letter), std::end(letter), saved_letters.begin());
+        init_flags = static_cast<init_flags_type>(0);
+        auto &terrains = TerrainList::get_instance();
+        terrains.resize(terrain_count + 2);
+        terrains.get_terrain(static_cast<short>(terrain_count)).tag = "TOWN_FEATURE_TEST_FLOOR";
+        terrains.get_terrain(static_cast<short>(terrain_count + 1)).tag = "TOWN_FEATURE_TEST_TRAP";
+    }
+
+    ~TownFeatureStateGuard()
+    {
+        std::copy(saved_letters.begin(), saved_letters.end(), std::begin(letter));
+        init_flags = saved_init_flags;
+        TerrainList::get_instance().resize(terrain_count);
+    }
+
+    TownFeatureStateGuard(const TownFeatureStateGuard &) = delete;
+    TownFeatureStateGuard &operator=(const TownFeatureStateGuard &) = delete;
+
+    short floor_id() const
+    {
+        return static_cast<short>(terrain_count);
+    }
+    short trap_id() const
+    {
+        return static_cast<short>(terrain_count + 1);
+    }
+
+private:
+    init_flags_type saved_init_flags;
+    size_t terrain_count;
+    std::array<dungeon_grid, 255> saved_letters;
+    test::TerrainListTestAccess none_tag;
+    test::ScopedReaderState reader_state;
+};
+
+void check_same_grid(const dungeon_grid &actual, const dungeon_grid &expected)
+{
+    CHECK(actual.feature == expected.feature);
+    CHECK(actual.monster == expected.monster);
+    CHECK(actual.object == expected.object);
+    CHECK(actual.ego == expected.ego);
+    CHECK(actual.artifact == expected.artifact);
+    CHECK(actual.trap == expected.trap);
+    CHECK(actual.cave_info == expected.cave_info);
+    CHECK(actual.special == expected.special);
+    CHECK(actual.random == expected.random);
 }
 
 std::string hex_bytes(std::string_view value)
@@ -118,13 +218,13 @@ TEST_CASE("TownMapReader retains ordered definitions, conditions and UTF-8 text"
     REQUIRE(definition.features.size() == 2);
     CHECK(definition.features[0].symbol == '#');
     CHECK(definition.features[0].terrain == "WALL");
-    CHECK(definition.features[0].monster == "0");
-    CHECK(definition.features[0].object == "0");
-    CHECK(definition.features[0].ego == "0");
-    CHECK(definition.features[0].artifact == "0");
+    CHECK(definition.features[0].cell.grid.monster == 0);
+    CHECK(definition.features[0].cell.grid.object == 0);
+    CHECK(enum2i(definition.features[0].cell.grid.ego) == 0);
+    CHECK(enum2i(definition.features[0].cell.grid.artifact) == 0);
     CHECK(definition.features[0].trap == "NONE");
-    CHECK(definition.features[0].cave_info == 0);
-    CHECK(definition.features[0].special == 0);
+    CHECK(definition.features[0].cell.grid.cave_info == 0);
+    CHECK(definition.features[0].cell.grid.special == 0);
     CHECK(definition.features[0].condition == "[EQU $TOWN 1]");
     CHECK_FALSE(definition.features[1].condition.has_value());
     REQUIRE(definition.buildings.size() == 2);
@@ -462,8 +562,8 @@ TEST_CASE("TownMapReader accepts unsigned integers produced by JSON parsing")
     REQUIRE(data["startingPositions"][0]["y"].is_number_unsigned());
     TownMapDefinition definition;
     REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
-    CHECK(definition.features[0].cave_info == std::numeric_limits<int>::max());
-    CHECK(definition.features[0].special == 32767);
+    CHECK(definition.features[0].cell.grid.cave_info == std::numeric_limits<int>::max());
+    CHECK(definition.features[0].cell.grid.special == 32767);
     CHECK(definition.buildings[0].index == MAX_BUILDINGS - 1);
     CHECK(definition.starts[0].x == 2);
     CHECK(definition.starts[0].y == 2);
@@ -475,8 +575,8 @@ TEST_CASE("TownMapReader accepts unsigned integers produced by JSON parsing")
     input["startingPositions"][0]["y"] = 0;
     data = nlohmann::json::parse(input.dump());
     REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
-    CHECK(definition.features[0].cave_info == 0);
-    CHECK(definition.features[0].special == 0);
+    CHECK(definition.features[0].cell.grid.cave_info == 0);
+    CHECK(definition.features[0].cell.grid.special == 0);
     CHECK(definition.buildings[0].index == 0);
     CHECK(definition.starts[0].x == 0);
     CHECK(definition.starts[0].y == 0);
@@ -861,4 +961,120 @@ TEST_CASE("TownMapReader typed building application rejects embedded NUL before 
     CHECK(parse_line_building(std::string_view(legacy_line.c_str())) == PARSE_ERROR_TOO_FEW_ARGUMENTS);
     check_building(buildings[1], initial);
 #endif
+}
+
+TEST_CASE("TownMapReader applies typed feature tokens with legacy F semantics")
+{
+    TownFeatureStateGuard state;
+    FloorType floor;
+    floor.quest_number = QuestId::NONE;
+    for (const auto *token : { "0", "-1", "*", "*32767", "32767" }) {
+        auto data = make_town_map();
+        auto &fields = data["featureRules"][0]["definition"];
+        fields["terrain"] = "TOWN_FEATURE_TEST_FLOOR";
+        fields["trap"] = "TOWN_FEATURE_TEST_TRAP";
+        fields["caveInfo"] = std::numeric_limits<int>::max();
+        fields["special"] = -32768;
+        for (const auto *field : { "monster", "object", "ego", "artifact" }) {
+            fields[field] = token;
+        }
+        TownMapDefinition definition;
+        REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+        const auto legacy = std::string("F:#:TOWN_FEATURE_TEST_FLOOR:2147483647:") + token + ":" + token + ":" + token + ":" + token + ":TOWN_FEATURE_TEST_TRAP:-32768";
+        REQUIRE(parse_line_feature(floor, legacy) == PARSE_ERROR_NONE);
+        const auto expected = letter['#'];
+        letter['#'] = {};
+        REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+        check_same_grid(letter['#'], expected);
+        CHECK(letter['#'].feature == state.floor_id());
+        CHECK(letter['#'].trap == state.trap_id());
+    }
+}
+
+TEST_CASE("TownMapReader applies random terrain trap clones and reward placeholders")
+{
+    TownFeatureStateGuard state;
+    FloorType floor;
+    floor.quest_number = QuestId::NONE;
+    auto data = make_town_map();
+    auto &fields = data["featureRules"][0]["definition"];
+    fields["terrain"] = "*";
+    fields["trap"] = "*";
+    fields["monster"] = "c32767";
+    fields["object"] = "!";
+    fields["artifact"] = "!";
+    fields["ego"] = "-2147483648";
+    fields["special"] = 32767;
+    TownMapDefinition definition;
+    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(parse_line_feature(floor, "F:#:*:0:c32767:!:-2147483648:!:*:32767") == PARSE_ERROR_NONE);
+    const auto expected = letter['#'];
+    letter['#'] = {};
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    check_same_grid(letter['#'], expected);
+    CHECK(letter['#'].monster == -32767);
+    CHECK(letter['#'].random == (RANDOM_FEATURE | RANDOM_TRAP));
+    CHECK(definition.features.front().cell.object_is_quest_reward);
+    CHECK(definition.features.front().cell.artifact_is_quest_reward);
+}
+
+TEST_CASE("TownMapReader defers terrain resolution and publishes feature only on success")
+{
+    TownFeatureStateGuard state;
+    FloorType floor;
+    floor.quest_number = QuestId::NONE;
+    for (const auto *field : { "terrain", "trap" }) {
+        auto data = make_town_map();
+        data["featureRules"][0]["definition"]["terrain"] = "TOWN_FEATURE_TEST_FLOOR";
+        data["featureRules"][0]["definition"]["trap"] = "TOWN_FEATURE_TEST_TRAP";
+        data["featureRules"][0]["definition"][field] = "TOWN_FEATURE_TEST_UNDEFINED";
+        data["featureRules"][0]["when"] = "0";
+        TownMapDefinition definition;
+        REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+        CHECK(definition.features.front().condition == "0");
+        letter['#'].feature = 123;
+        letter['#'].monster = 456;
+        letter['#'].random = RANDOM_EGO;
+        const auto original = letter['#'];
+        CHECK(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_UNDEFINED_TERRAIN_TAG);
+        check_same_grid(letter['#'], original);
+        init_flags = INIT_ONLY_BUILDINGS;
+        CHECK(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+        check_same_grid(letter['#'], original);
+        init_flags = static_cast<init_flags_type>(0);
+    }
+}
+
+TEST_CASE("TownMapReader resolves quest rewards at feature application time")
+{
+    TownFeatureStateGuard state;
+    const test::QuestFeatureTestAccess quest_state;
+    const test::ArtifactListTestAccess artifact_state;
+    ArtifactDefinition artifact;
+    artifact.gen_flags.set(ItemGenerationTraitType::INSTA_ART);
+    ArtifactList::get_instance().emplace(FixedArtifactId::GALADRIEL_PHIAL, std::move(artifact));
+    FloorType floor;
+    floor.quest_number = QuestId::THIEF;
+    auto data = make_town_map();
+    auto &fields = data["featureRules"][0]["definition"];
+    fields["terrain"] = "TOWN_FEATURE_TEST_FLOOR";
+    fields["trap"] = "TOWN_FEATURE_TEST_TRAP";
+    fields["object"] = "!";
+    fields["artifact"] = "!";
+    TownMapDefinition definition;
+    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    CHECK(letter['#'].object == 0);
+    CHECK(letter['#'].artifact == FixedArtifactId::NONE);
+    test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
+    REQUIRE(parse_line_feature(floor, "F:#:TOWN_FEATURE_TEST_FLOOR:0:0:!:0:!:TOWN_FEATURE_TEST_TRAP:0") == PARSE_ERROR_NONE);
+    const auto expected = letter['#'];
+    letter['#'] = {};
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    check_same_grid(letter['#'], expected);
+    CHECK(letter['#'].object == 0); // Instant artifacts do not generate a base item.
+    CHECK(letter['#'].artifact == FixedArtifactId::GALADRIEL_PHIAL);
+    floor.quest_number = QuestId::NONE;
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    CHECK(letter['#'].artifact == FixedArtifactId::NONE);
 }
