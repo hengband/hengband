@@ -384,7 +384,7 @@ void do_cmd_building(PlayerType *player_ptr)
         }
 
         const auto should_leave = is_valid_command ? bldg_process_command(player_ptr, bldg, i) : false;
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
         if (should_leave) {
             break;
         }

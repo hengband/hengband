@@ -17,6 +17,7 @@ int calc_inventory_weight(PlayerType *player_ptr);
 
 short calc_num_fire(PlayerType *player_ptr, const ItemEntity *o_ptr);
 int calc_weight_limit(PlayerType *player_ptr);
+void update_inventory_arrangement(PlayerType *player_ptr);
 void update_creature(PlayerType *player_ptr);
 bool player_has_no_spellbooks(PlayerType *player_ptr);
 

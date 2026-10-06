@@ -252,7 +252,7 @@ void process_player(PlayerType *player_ptr)
         player_ptr->now_damaged = false;
 
         update_monsters(player_ptr, false);
-        handle_stuff(player_ptr);
+        handle_stuff_with_inventory_arrangement(player_ptr);
         window_stuff_including_deferred(player_ptr);
         move_cursor_relative(player_ptr->y, player_ptr->x);
         if (fresh_before) {

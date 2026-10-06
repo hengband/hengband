@@ -146,7 +146,7 @@ static void kingly(PlayerType *player_ptr)
  */
 void close_game(PlayerType *player_ptr)
 {
-    handle_stuff(player_ptr);
+    handle_stuff_with_inventory_arrangement(player_ptr);
     msg_erase();
     flush();
     signals_ignore_tstp();
