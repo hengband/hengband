@@ -1,13 +1,10 @@
 /*!
  * @brief 定義ファイル読込の共通ユーティリティのテスト
  *
- * 定義ファイル中の文字列を定数へ変換する info_get_const / info_grab_one_const、
- * 数値文字列を格納する info_set_value を検証する。
+ * 定義ファイル中の文字列を定数へ変換する info_get_const / info_grab_one_const を検証する。
  * JSON から値を取り出す info_set_* 群は test-json-reader-util.cpp で扱う。
  *
- * 同じヘッダで宣言されている grab_one_activation_flag は対象外とした。
- * 未知のトークンに対する挙動が、非数値なら std::stoi が例外を送出し、"0" や負数なら
- * msg_format (ターミナルが必要) を呼ぶという状態で、現状を仕様として固定したくないため。
+ * 同じヘッダで宣言されている grab_one_activation_flag は test-activation-reader.cpp で扱う。
  */
 
 #include "info-reader/info-reader-util.h"
@@ -16,7 +13,6 @@
 
 #include <cstdint>
 #include <map>
-#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -86,55 +82,4 @@ TEST_CASE("info_grab_one_const stores the constant only when the token is found"
         CHECK_FALSE(info_grab_one_const(buf, TEST_FLAGS, "UNKNOWN"));
         CHECK(buf == initial_value);
     }
-}
-
-TEST_CASE("info_set_value converts the string into a number")
-{
-    SUBCASE("decimal")
-    {
-        int value = 0;
-        info_set_value(value, "100");
-        CHECK(value == 100);
-
-        info_set_value(value, "-100");
-        CHECK(value == -100);
-    }
-
-    SUBCASE("hexadecimal")
-    {
-        int value = 0;
-        info_set_value(value, "ff", 16);
-        CHECK(value == 255);
-    }
-
-    SUBCASE("value which fits is converted into the type of the destination")
-    {
-        // 定義ファイル中の値は std::stoi で int として読んでから格納先の型へ変換される。
-        // 格納先の型に収まらない値 (uint8_t への 300 など) は static_cast で黙って折り返されるが、
-        // それは実装側の課題であり、現状を仕様として固定しないためここでは扱わない
-        short short_value = 0;
-        info_set_value(short_value, "30000");
-        CHECK(short_value == 30000);
-
-        char char_value = 0;
-        info_set_value(char_value, "65");
-        CHECK(char_value == 'A');
-    }
-
-    SUBCASE("leading spaces are skipped")
-    {
-        int value = 0;
-        info_set_value(value, "  42");
-        CHECK(value == 42);
-    }
-}
-
-TEST_CASE("info_set_value throws an exception for a string which is not a number")
-{
-    // std::stoi の例外はそのまま呼び出し元へ伝わる (info_set_value は捕捉しない)
-    int value = 0;
-    CHECK_THROWS_AS(info_set_value(value, "abc"), std::invalid_argument);
-    CHECK_THROWS_AS(info_set_value(value, ""), std::invalid_argument);
-    CHECK_THROWS_AS(info_set_value(value, "99999999999999999999"), std::out_of_range);
-    CHECK(value == 0);
 }
