@@ -1,5 +1,7 @@
 #pragma once
 
+#include "system/angband.h"
+#include "util/bit-flags-calculator.h"
 #include <concepts>
 #include <cstdint>
 #include <string_view>
