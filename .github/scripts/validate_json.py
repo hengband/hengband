@@ -1,10 +1,14 @@
 import re
 import sys
 from pathlib import Path
+from urllib.parse import urljoin
 import pyjson5
 from pyjson5 import Json5Exception
 from jsonschema import validate, ValidationError, SchemaError
 from jsonschema.validators import validator_for
+from referencing import Registry, Resource
+from referencing.exceptions import Unresolvable
+from referencing.jsonschema import specification_with
 
 
 def load_jsonc(file_path: Path) -> dict:
@@ -16,9 +20,11 @@ def load_all_schemas(schema_dir: Path) -> tuple[dict[Path, dict], dict[str, Path
     schema_map: dict[str, Path] = {}
     loaded: dict[Path, dict] = {}
     errors: list[str] = []
-    for s in schema_dir.glob("*.schema.json"):
-        base_name = s.stem.removesuffix(".schema")
-        schema_map[base_name] = s
+    for s in sorted(schema_dir.rglob("*.schema.json")):
+        # Nested schemas provide shared definitions, not lib/edit data types.
+        if s.parent == schema_dir:
+            base_name = s.stem.removesuffix(".schema")
+            schema_map[base_name] = s
         try:
             schema_obj = load_jsonc(s)
             validator_for(schema_obj).check_schema(schema_obj)
@@ -32,6 +38,22 @@ def load_all_schemas(schema_dir: Path) -> tuple[dict[Path, dict], dict[str, Path
     error_messages = ["Error: Failed to load schemas:"]
     error_messages.extend([f"- {err}" for err in errors])
     raise RuntimeError("\n".join(error_messages))
+
+
+def build_schema_registry(loaded_schemas: dict[Path, dict]) -> Registry:
+    """Register local schemas only; unresolved references must never use HTTP."""
+    resources = []
+    for path, schema in loaded_schemas.items():
+        uri = path.resolve().as_uri()
+        # Existing schemas have relative IDs (some end in .jsonc). Give each
+        # resource an absolute base while retaining those IDs as local aliases.
+        absolute_schema = schema if isinstance(schema, bool) else {**schema, "$id": urljoin(uri, schema.get("$id", uri))}
+        specification = specification_with(validator_for(schema).META_SCHEMA["$id"])
+        resource = Resource.from_contents(absolute_schema, default_specification=specification)
+        resources.append((uri, resource))
+        if not isinstance(absolute_schema, bool):
+            resources.append((absolute_schema["$id"], resource))
+    return Registry().with_resources(resources)
 
 
 def build_validation_pairs(edit_dir: Path, schema_map: dict[str, Path], loaded_schemas: dict[Path, dict]) -> list[tuple[Path, Path, dict]]:
@@ -341,11 +363,16 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             raise ValidationError("starting position must be within every map variant", path=["startingPositions", start_index])
 
 
-def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
+def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
         data = load_jsonc(data_path)
-        validate(instance=data, schema=schema)
+        if registry is None:
+            loaded_schemas = load_all_schemas(schema_path.parent)[0] if schema_path.is_file() else {}
+            registry = build_schema_registry(loaded_schemas)
+        schema_uri = schema_path.resolve().as_uri()
+        absolute_schema = schema if isinstance(schema, bool) else {**schema, "$id": urljoin(schema_uri, schema.get("$id", schema_uri))}
+        validate(instance=data, schema=absolute_schema, registry=registry)
         if schema_path.name == "VaultDefinitions.schema.json":
             validate_vault_semantics(data)
         elif schema_path.name == "EgoDefinitions.schema.json":
@@ -367,7 +394,9 @@ def validate_one(pair: tuple[Path, Path, dict]) -> tuple[bool, str]:
         return False, "\n".join(msg)
     except SchemaError as e:
         return False, f"Schema Error in {schema_path.name}: {e.message}"
-    except (IOError, ValueError, Json5Exception) as e:
+    except Unresolvable as e:
+        return False, f"Schema Reference Error in {schema_path.name}: {e}"
+    except (IOError, ValueError, RuntimeError, Json5Exception) as e:
         return False, f"Error: {data_path.name} - {e}"
 
 
@@ -382,12 +411,13 @@ def main():
     print(f"Hengband JSONC validation started! Loading schemas...")
 
     loaded_schemas, schema_map = load_all_schemas(schema_dir)
+    registry = build_schema_registry(loaded_schemas)
     pairs = build_validation_pairs(edit_dir, schema_map, loaded_schemas)
     print(f"Validation target: {len(pairs)} files")
 
     success = 0
     for p in pairs:
-        ok, message = validate_one(p)
+        ok, message = validate_one(p, registry)
         print(message, file=sys.stdout if ok else sys.stderr)
         if ok:
             success += 1

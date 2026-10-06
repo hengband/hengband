@@ -4,8 +4,136 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
-from validate_json import load_jsonc, validate_one
+from validate_json import build_schema_registry, build_validation_pairs, load_all_schemas, load_jsonc, validate_one
+
+
+class QuestGridValidationTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.schema_dir = Path(__file__).resolve().parents[2] / "schema"
+        cls.loaded, cls.schema_map = load_all_schemas(cls.schema_dir)
+        cls.registry = build_schema_registry(cls.loaded)
+
+    def validate(self, cell, schema_name, registry=None, schema=None):
+        schema_path = self.schema_map[schema_name]
+        data = {"version": 1, "legend": {"#": cell}}
+        if schema_name == "Quest":
+            data.update(id=1, name={"ja": "試験", "en": "Test"}, definition={"type": "KILL_ALL", "level": 1})
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / "Test.jsonc"
+            target.write_text(json.dumps(data), encoding="utf-8")
+            return validate_one((target, schema_path, schema if schema is not None else self.loaded[schema_path]),
+                                registry if registry is not None else self.registry)
+
+    def test_shared_schema_is_not_a_data_schema(self):
+        shared_path = self.schema_dir / "common/QuestGrid.schema.json"
+        self.assertIn(shared_path, self.loaded)
+        self.assertNotIn("QuestGrid", self.schema_map)
+        with tempfile.TemporaryDirectory() as folder:
+            edit_dir = Path(folder)
+            (edit_dir / "QuestGrid.jsonc").write_text("{}", encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "Missing schemas for: QuestGrid.jsonc"):
+                build_validation_pairs(edit_dir, self.schema_map, self.loaded)
+
+    def test_shared_schema_is_in_source_distribution(self):
+        makefile = (self.schema_dir.parent / "Makefile.am").read_text(encoding="utf-8")
+        schema_files = makefile.split("schema_files =", 1)[1].split("\n\n", 1)[0]
+        extra_dist = makefile.split("EXTRA_DIST =", 1)[1].split("\n\n", 1)[0]
+        self.assertIn("\tschema/common/QuestGrid.schema.json \\", schema_files)
+        self.assertIn("$(schema_files)", extra_dist)
+
+    def test_shared_grid_contract(self):
+        cases = (
+            ({}, True),
+            ({"terrain": "*", "caveInfo": ["GLOW", "MARK"], "special": -1}, True),
+            ({"monster": 1, "object": 1, "ego": 1, "artifact": 1, "trap": "TRAP"}, True),
+            ({"monster": {"random": True, "oodLevel": 0}, "object": {"random": True, "oodLevel": 0},
+              "ego": {"random": True, "id": 1}, "artifact": {"random": True, "id": 1}, "trap": {"random": True}}, True),
+            ({"monster": {"cloneOf": 1}, "object": {"questReward": True}, "artifact": {"questReward": True}}, True),
+            ({"terrain": 1}, False),
+            ({"caveInfo": ["GLOW", "GLOW"]}, False),
+            ({"caveInfo": ["UNKNOWN"]}, False),
+            ({"special": "1"}, False),
+            ({"unknown": 1}, False),
+        )
+        invalid_specs = (0, -1, False, "1", {}, {"random": False}, {"random": True, "unknown": 1})
+        for field in ("monster", "object", "ego", "artifact"):
+            cases += tuple(({field: value}, False) for value in invalid_specs)
+        cases += (({"trap": {}}, False), ({"trap": {"random": False}}, False),
+                  ({"monster": {"random": True, "oodLevel": -1}}, False),
+                  ({"object": {"random": True, "oodLevel": -1}}, False),
+                  ({"monster": {"cloneOf": 0}}, False),
+                  ({"ego": {"random": True, "id": 0}}, False),
+                  ({"artifact": {"random": True, "id": 0}}, False))
+        for schema_name in ("Quest", "QuestPreferences"):
+            # Recreate the former inlined graph and compare acceptance as well
+            # as explicit boundaries. Internal refs must keep the shared base.
+            inlined_schema = copy.deepcopy(self.loaded[self.schema_map[schema_name]])
+            shared_defs = self.loaded[self.schema_dir / "common/QuestGrid.schema.json"]["$defs"]
+            inlined_schema.setdefault("$defs", {}).update(shared_defs)
+            inlined_schema["properties"]["legend"]["additionalProperties"]["$ref"] = "#/$defs/gridDefinition"
+            for cell, valid in cases:
+                with self.subTest(schema=schema_name, cell=cell):
+                    ok, message = self.validate(cell, schema_name)
+                    self.assertEqual(ok, valid, message)
+                    old_ok, old_message = self.validate(cell, schema_name, schema=inlined_schema)
+                    self.assertEqual(old_ok, ok, old_message)
+
+    def test_validate_one_loads_local_registry_when_not_supplied(self):
+        schema_path = self.schema_map["QuestPreferences"]
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / "QuestPreferences.jsonc"
+            target.write_text('{"version": 1, "legend": {"#": {"monster": {"cloneOf": 1}}}}', encoding="utf-8")
+            ok, message = validate_one((target, schema_path, self.loaded[schema_path]))
+            self.assertTrue(ok, message)
+
+    def test_missing_resource_and_broken_pointer_fail_closed(self):
+        shared_path = self.schema_dir / "common/QuestGrid.schema.json"
+        registry = build_schema_registry({path: schema for path, schema in self.loaded.items() if path != shared_path})
+        for schema_name in ("Quest", "QuestPreferences"):
+            with self.subTest(schema=schema_name, error="missing resource"):
+                ok, message = self.validate({}, schema_name, registry=registry)
+                self.assertFalse(ok)
+                self.assertIn("Schema Reference Error", message)
+            schema = copy.deepcopy(self.loaded[self.schema_map[schema_name]])
+            schema["properties"]["legend"]["additionalProperties"]["$ref"] = "common/QuestGrid.schema.json#/$defs/missing"
+            with self.subTest(schema=schema_name, error="broken pointer"):
+                ok, message = self.validate({}, schema_name, schema=schema)
+                self.assertFalse(ok)
+                self.assertIn("Schema Reference Error", message)
+
+    def test_remote_reference_is_not_retrieved(self):
+        schema = copy.deepcopy(self.loaded[self.schema_map["QuestPreferences"]])
+        schema["properties"]["legend"]["additionalProperties"]["$ref"] = "https://example.invalid/grid.json"
+        with patch("urllib.request.urlopen", side_effect=AssertionError("HTTP retrieval is forbidden")) as request:
+            ok, message = self.validate({}, "QuestPreferences", schema=schema)
+        self.assertFalse(ok)
+        self.assertIn("Schema Reference Error", message)
+        request.assert_not_called()
+
+    def test_malformed_shared_schema_fails_loading(self):
+        with tempfile.TemporaryDirectory() as folder:
+            schema_dir = Path(folder)
+            (schema_dir / "common").mkdir()
+            (schema_dir / "common/Broken.schema.json").write_text('{"type": 1}', encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "Error loading schema Broken.schema.json"):
+                load_all_schemas(schema_dir)
+
+    def test_boolean_schemas_keep_their_validation_contract(self):
+        with tempfile.TemporaryDirectory() as folder:
+            schema_dir = Path(folder)
+            target = schema_dir / "Data.jsonc"
+            target.write_text("{}", encoding="utf-8")
+            for accepted in (True, False):
+                with self.subTest(schema=accepted):
+                    schema_path = schema_dir / "Data.schema.json"
+                    schema_path.write_text(json.dumps(accepted), encoding="utf-8")
+                    loaded, _ = load_all_schemas(schema_dir)
+                    registry = build_schema_registry(loaded)
+                    ok, message = validate_one((target, schema_path, loaded[schema_path]), registry)
+                    self.assertEqual(ok, accepted, message)
 
 
 class VaultValidationTest(unittest.TestCase):
