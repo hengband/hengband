@@ -685,7 +685,8 @@ static void build_elemental_vault(PlayerType *player_ptr, const Pos2D &center, c
         const auto c3 = 2 * xsize / 3;
 
         /* Deep water/lava */
-        const auto c1 = randint0(c3 / 2) + randint0(c3 / 2) - 5;
+        auto c1 = randint0(c3 / 2) - 5;
+        c1 += randint0(c3 / 2);
 
         /* Shallow boundary */
         const auto c2 = (c1 + c3) / 2;

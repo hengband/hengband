@@ -41,6 +41,7 @@
 #include "system/redrawing-flags-updater.h"
 #include "term/screen-processor.h"
 #include "util/bit-flags-calculator.h"
+#include "util/dice.h"
 #include "util/probability-table.h"
 #include "view/display-messages.h"
 #include <variant>
@@ -219,7 +220,7 @@ bool curse_armor(PlayerType *player_ptr)
     chg_virtue(player_ptr, Virtue::ENCHANT, -5);
     item.fa_id = FixedArtifactId::NONE;
     item.ego_idx = EgoType::BLASTED;
-    item.to_a = 0 - randint1(5) - randint1(5);
+    item.to_a = -Dice::roll(2, 5);
     item.to_h = 0;
     item.to_d = 0;
     item.ac = 0;
@@ -273,8 +274,8 @@ bool curse_weapon_object(PlayerType *player_ptr, bool force, ItemEntity &item)
     chg_virtue(player_ptr, Virtue::ENCHANT, -5);
     item.fa_id = FixedArtifactId::NONE;
     item.ego_idx = EgoType::SHATTERED;
-    item.to_h = 0 - randint1(5) - randint1(5);
-    item.to_d = 0 - randint1(5) - randint1(5);
+    item.to_h = -Dice::roll(2, 5);
+    item.to_d = -Dice::roll(2, 5);
     item.to_a = 0;
     item.ac = 0;
     item.damage_dice = Dice(0, 0);
