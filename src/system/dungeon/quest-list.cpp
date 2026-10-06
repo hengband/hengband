@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <fmt/format.h>
+#include <iterator>
 #include <nlohmann/json.hpp>
 #include <string>
 #include <string_view>
