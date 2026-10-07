@@ -241,6 +241,9 @@
     <ClCompile Include="..\..\src\test\util\test-string-processor.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\util\test-temporary-json-files.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\util\test-angband-files.cpp">
       <Filter>util</Filter>
     </ClCompile>
@@ -251,6 +254,7 @@
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
     <ClInclude Include="..\..\src\test\string-helpers.h" />
+    <ClInclude Include="..\..\src\test\temporary-json-files.h" />
     <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
     <ClInclude Include="..\..\src\test\system\quest-list-test-access.h" />

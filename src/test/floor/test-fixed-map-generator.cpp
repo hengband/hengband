@@ -26,15 +26,14 @@
 #include "test/scoped-restore.h"
 #include "test/system/dungeon-list-test-access.h"
 #include "test/system/terrain-list-test-access.h"
+#include "test/temporary-json-files.h"
 #include "tracking/health-bar-tracker.h"
 #include "window/main-window-util.h"
 #include "world/world.h"
 #include <algorithm>
 #include <array>
-#include <chrono>
 #include <doctest/doctest.h>
 #include <filesystem>
-#include <fstream>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
@@ -156,27 +155,9 @@ public:
     qtwg_type generator{};
 };
 
-class TownFiles {
+class TownFiles : public test::TemporaryJsonFiles {
 public:
-    TownFiles()
-    {
-        const auto stamp = std::chrono::steady_clock::now().time_since_epoch().count();
-        for (auto i = 0; i < 100; ++i) {
-            auto candidate = std::filesystem::temp_directory_path() / ("hengband-town-pd-" + std::to_string(stamp) + "-" + std::to_string(i));
-            if (std::filesystem::create_directory(candidate)) {
-                directory = std::move(candidate);
-                return;
-            }
-        }
-        throw std::runtime_error("Cannot create isolated town test directory");
-    }
-
-    ~TownFiles()
-    {
-        std::error_code error;
-        std::filesystem::remove_all(directory, error);
-    }
-
+    TownFiles() = default;
     TownFiles(const TownFiles &) = delete;
     TownFiles &operator=(const TownFiles &) = delete;
     TownFiles(TownFiles &&) = delete;
@@ -184,16 +165,8 @@ public:
 
     void write(std::string_view name, const nlohmann::json &data) const
     {
-        const auto path = directory / name;
-        std::filesystem::create_directories(path.parent_path());
-        std::ofstream output(path);
-        output.exceptions(std::ios::failbit | std::ios::badbit);
-        output << "// Isolated town application fixture\n"
-               << data.dump() << '\n';
-        output.close();
+        this->write_raw(name, "// Isolated town application fixture\n" + data.dump() + '\n');
     }
-
-    std::filesystem::path directory;
 };
 
 nlohmann::json make_application_town()

@@ -1496,6 +1496,7 @@ hengband_test_SOURCES = \
 	test/scoped-restore.h \
 	test/scoped-rng.h \
 	test/string-helpers.h \
+	test/temporary-json-files.h \
 	test/info-reader/scoped-reader-state.h \
 	test/system/artifact-list-test-access.h \
 	test/system/dungeon-list-test-access.h \
@@ -1564,6 +1565,7 @@ hengband_test_SOURCES = \
 	test/util/test-probability-table.cpp \
 	test/util/test-sha256.cpp \
 	test/util/test-string-processor.cpp \
+	test/util/test-temporary-json-files.cpp \
 	test/view/test-map-terrain-visibility.cpp \
 	test/view/test-screen-parity-helpers.cpp \
 	test/wizard/test-spoiler-util.cpp

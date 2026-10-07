@@ -7,51 +7,16 @@
 #include "system/monrace/monrace-list.h"
 #include "test/system/monrace-list-test-access.h"
 #include "test/system/quest-list-test-access.h"
-#include <chrono>
+#include "test/temporary-json-files.h"
 #include <cstdint>
 #include <doctest/doctest.h>
-#include <filesystem>
-#include <fstream>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
 
 namespace {
-class QuestFiles {
-public:
-    QuestFiles()
-    {
-        const auto stamp = std::chrono::steady_clock::now().time_since_epoch().count();
-        directory = std::filesystem::temp_directory_path() / ("hengband-quest-test-" + std::to_string(stamp));
-        if (!std::filesystem::create_directory(directory)) {
-            throw std::runtime_error("Cannot create quest test directory");
-        }
-    }
-
-    QuestFiles(const QuestFiles &) = delete;
-    QuestFiles &operator=(const QuestFiles &) = delete;
-
-    ~QuestFiles()
-    {
-        std::error_code ec;
-        std::filesystem::remove_all(directory, ec);
-    }
-
-    void write(const std::string &name, const nlohmann::json &data) const
-    {
-        write_raw(name, data.dump());
-    }
-
-    void write_raw(const std::string &name, const std::string &data) const
-    {
-        std::ofstream output(directory / name);
-        output.exceptions(std::ios::failbit | std::ios::badbit);
-        output << data;
-    }
-
-    std::filesystem::path directory;
-};
+using QuestFiles = test::TemporaryJsonFiles;
 
 nlohmann::json make_quest(int id)
 {
