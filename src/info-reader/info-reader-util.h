@@ -3,11 +3,10 @@
 #include "system/angband.h"
 #include "util/bit-flags-calculator.h"
 #include <concepts>
-#include <map>
-#include <string>
+#include <cstdint>
 #include <string_view>
 #include <tl/optional.hpp>
-#include <unordered_map>
+#include <type_traits>
 #include <utility>
 
 extern int error_idx; //!< エラーが発生したinfo ID
@@ -59,15 +58,4 @@ bool info_grab_one_const(uint32_t &buf, const Dict &dict, Key &&what)
         return true;
     }
     return false;
-}
-
-/*!
- * @brief infoパラメータに値をセットする
- * @param パラメータ変数
- * @val 値
- */
-template <typename T>
-void info_set_value(T &arg, const std::string &val, int base = 10)
-{
-    arg = static_cast<T>(std::stoi(val, nullptr, base));
 }
