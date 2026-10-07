@@ -162,7 +162,8 @@ jobs:
         run: python .github/scripts/validate_json.py
 
       - name: Test JSONC validation
-        run: python -m unittest discover -s .github/scripts -p 'test_validate_json.py'
+        run: |
+          python -m unittest discover -s .github/scripts -p 'test_*.py'
 
       - name: Result summary
         if: always()
