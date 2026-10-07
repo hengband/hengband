@@ -135,6 +135,9 @@ class TownDeclarationPolicyTest(unittest.TestCase):
         self.assertEqual((reward["terrain"], reward["object"], reward["artifact"]),
                          ("FLOOR", *expected))
 
+    def assert_full_start_order(self, document):
+        self.assertEqual([(rule["y"], rule["x"]) for rule in document["startingPositions"]], FULL_STARTS)
+
     def test_town_inventory_and_maps(self):
         self.assertEqual({path.stem for path in TOWN_DIR.glob("*.jsonc")}, set(TOWN_NAMES))
         for name, document in self.documents.items():
@@ -288,8 +291,7 @@ class TownDeclarationPolicyTest(unittest.TestCase):
                 self.assertEqual(starts, [expected])
         # Preserve the actual declaration sequence even where the conditions are
         # currently disjoint; runtime applies every matching start in this order.
-        self.assertEqual([(rule["y"], rule["x"]) for rule in self.documents["01_Outpost_Full"]["startingPositions"]],
-                         FULL_STARTS)
+        self.assert_full_start_order(self.documents["01_Outpost_Full"])
 
     def test_locales_have_identical_ordered_non_display_building_fields(self):
         for name, document in self.documents.items():
@@ -337,7 +339,7 @@ class TownDeclarationPolicyTest(unittest.TestCase):
             self.assert_reward(full, "@", values, ("0", "255"))
         full["startingPositions"].reverse()
         with self.assertRaises(AssertionError):
-            self.assertEqual([(rule["y"], rule["x"]) for rule in full["startingPositions"]], FULL_STARTS)
+            self.assert_full_start_order(full)
 
 
 if __name__ == "__main__":
