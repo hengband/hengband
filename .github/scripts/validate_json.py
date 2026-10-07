@@ -363,6 +363,56 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             raise ValidationError("starting position must be within every map variant", path=["startingPositions", start_index])
 
 
+def require_integer(value, path: list) -> None:
+    # JSON Schema accepts 1.0 as an integer; info_set_integer rejects it.
+    if type(value) is not int:
+        raise ValidationError("expected an integer JSON value", path=path)
+
+
+def validate_class_magic_semantics(data: dict) -> None:
+    """Check strict integer types used by MagicReader after schema validation."""
+    for class_index, record in enumerate(data["classes"]):
+        path = ["classes", class_index]
+        for field in ("first_spell_level", "armour_weight_limit"):
+            require_integer(record[field], path + [field])
+        for realm_index, realm in enumerate(record["realms"]):
+            for spell_index, spell in enumerate(realm["spells_info"]):
+                spell_path = path + ["realms", realm_index, "spells_info", spell_index]
+                for field in ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate"):
+                    require_integer(spell[field], spell_path + [field])
+
+
+def validate_class_skill_semantics(data: dict) -> None:
+    """Check SkillReader's strict integers, sequential IDs and start limits."""
+    for class_index, record in enumerate(data["classes"]):
+        path = ["classes", class_index]
+        require_integer(record["id"], path + ["id"])
+        if record["id"] != class_index:
+            raise ValidationError("class IDs must be sequential starting at 0", path=path + ["id"])
+        for name, weapon in record["weapons"].items():
+            weapon_path = path + ["weapons", name]
+            for field in ("start_ranks", "max_ranks"):
+                for rank_index, rank in enumerate(weapon[field]):
+                    require_integer(rank, weapon_path + [field, rank_index])
+            for rank_index, (start, maximum) in enumerate(zip(weapon["start_ranks"], weapon["max_ranks"])):
+                if start > maximum:
+                    raise ValidationError("start rank must not exceed maximum rank", path=weapon_path + ["start_ranks", rank_index])
+        for name, skill in record["skills"].items():
+            skill_path = path + ["skills", name]
+            for field in ("start_exp", "max_exp"):
+                require_integer(skill[field], skill_path + [field])
+            if skill["start_exp"] > skill["max_exp"]:
+                raise ValidationError("start experience must not exceed maximum experience", path=skill_path + ["start_exp"])
+
+
+def validate_spell_semantics(data: dict) -> None:
+    """Check strict spell IDs without rejecting reader-supported replacements."""
+    for realm_index, realm in enumerate(data["realms"]):
+        for book_index, book in enumerate(realm["books"]):
+            for spell_index, spell in enumerate(book["spells"]):
+                require_integer(spell["spell_id"], ["realms", realm_index, "books", book_index, "spells", spell_index, "spell_id"])
+
+
 def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
@@ -385,6 +435,12 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             validate_town_definition_list_semantics(data, schema_path)
         elif schema_path.name == "TownMap.schema.json":
             validate_town_map_semantics(data, schema_path)
+        elif schema_path.name == "ClassMagicDefinitions.schema.json":
+            validate_class_magic_semantics(data)
+        elif schema_path.name == "ClassSkillDefinitions.schema.json":
+            validate_class_skill_semantics(data)
+        elif schema_path.name == "SpellDefinitions.schema.json":
+            validate_spell_semantics(data)
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
         msg = [f"Failed: {data_path.name}", f"Reason: {e.message}"]
