@@ -147,11 +147,11 @@ void building_recharge(PlayerType *player_ptr)
     msg_format("%s^ %s recharged for %d gold.", item_name.data(), ((item->number > 1) ? "were" : "was"), price);
 #endif
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags);
+    rfu.set_flags(flags_iaf);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     player_ptr->au -= price;
 }
@@ -265,11 +265,11 @@ void building_recharge_all(PlayerType *player_ptr)
     msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
     msg_erase();
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags);
+    rfu.set_flags(flags_iaf);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     player_ptr->au -= total_cost;
 }

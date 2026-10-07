@@ -1,4 +1,5 @@
 #include "inventory/inventory-object.h"
+#include "autopick/autopick.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
@@ -59,9 +60,9 @@ void inven_item_increase(PlayerType *player_ptr, INVENTORY_IDX i_idx, ITEM_NUMBE
     static constexpr auto flags_srf = {
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::MP,
-        StatusRecalculatingFlag::COMBINATION,
     };
     rfu.set_flags(flags_srf);
+    rfu.set_flag(InventoryArrangementFlag::COMBINATION);
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
@@ -260,6 +261,30 @@ void reorder_pack(PlayerType *player_ptr)
 }
 
 /*!
+ * @brief フラグに応じて所持品の自動破壊・結合・並べ替えを行う
+ * @details 所持品のスロット番号が変わるため、アイテムの番号を保持している処理の途中では呼ばない。
+ * 通常は handle_stuff_with_inventory_arrangement() を通じて呼ぶ。
+ */
+void update_inventory_arrangement(PlayerType *player_ptr)
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    if (rfu.has(InventoryArrangementFlag::AUTO_DESTRUCTION)) {
+        rfu.reset_flag(InventoryArrangementFlag::AUTO_DESTRUCTION);
+        autopick_delayed_alter(player_ptr);
+    }
+
+    if (rfu.has(InventoryArrangementFlag::COMBINATION)) {
+        rfu.reset_flag(InventoryArrangementFlag::COMBINATION);
+        combine_pack(player_ptr);
+    }
+
+    if (rfu.has(InventoryArrangementFlag::REORDER)) {
+        rfu.reset_flag(InventoryArrangementFlag::REORDER);
+        reorder_pack(player_ptr);
+    }
+}
+
+/*!
  * @brief オブジェクトをプレイヤーが拾って所持スロットに納めるメインルーチン
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param o_ptr 拾うオブジェクトの構造体参照ポインタ
@@ -320,12 +345,12 @@ int16_t store_item_to_inventory(PlayerType *player_ptr, ItemEntity *o_ptr)
     j_ptr->marked.clear().set(OmType::TOUCHED);
 
     player_ptr->inven_cnt++;
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_srf);
+    rfu.set_flags(flags_iaf);
     rfu.set_flags(flags_swrf);
     return i;
 }

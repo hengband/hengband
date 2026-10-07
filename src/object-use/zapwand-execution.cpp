@@ -93,11 +93,11 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
 
         msg_print(_("この魔法棒にはもう魔力が残っていない。", "The wand has no charges left."));
         item->set_identification_flag(IdentificationFlag::EMPTY);
-        static constexpr auto flags = {
-            StatusRecalculatingFlag::COMBINATION,
-            StatusRecalculatingFlag::REORDER,
+        static constexpr auto flags_iaf = {
+            InventoryArrangementFlag::COMBINATION,
+            InventoryArrangementFlag::REORDER,
         };
-        rfu.set_flags(flags);
+        rfu.set_flags(flags_iaf);
         rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
         return;
     }
@@ -124,11 +124,11 @@ void ObjectZapWandEntity::execute(INVENTORY_IDX i_idx)
         SubWindowRedrawingFlag::FOUND_ITEMS,
     };
     rfu.set_flags(flags_swrf);
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_srf);
+    rfu.set_flags(flags_iaf);
     item->pval--;
 
     describe_item_charges(this->player_ptr, i_idx >= 0, item);

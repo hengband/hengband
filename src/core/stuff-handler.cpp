@@ -1,5 +1,6 @@
 #include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
+#include "inventory/inventory-object.h"
 #include "player/player-status.h"
 #include "system/floor/floor-info.h"
 #include "system/monster-entity.h"
@@ -58,11 +59,11 @@ void health_track(PlayerType *player_ptr, short m_idx)
 bool update_player()
 {
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_srf);
+    rfu.set_flags(flags_iaf);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     return true;
 }
@@ -75,11 +76,11 @@ bool redraw_player(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     rfu.set_flag(MainWindowRedrawingFlag::MP);
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_srf);
+    rfu.set_flags(flags_iaf);
     rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
     return true;
 }

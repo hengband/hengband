@@ -1,7 +1,6 @@
 #include "player/player-status.h"
 #include "artifact/fixed-art-types.h"
 #include "autopick/autopick-reader-writer.h"
-#include "autopick/autopick.h"
 #include "avatar/avatar.h"
 #include "cmd-action/cmd-pet.h"
 #include "cmd-action/cmd-spell.h"
@@ -18,7 +17,6 @@
 #include "floor/floor-util.h"
 #include "game-option/birth-options.h"
 #include "grid/grid.h"
-#include "inventory/inventory-object.h"
 #include "inventory/inventory-slot-types.h"
 #include "io/input-key-acceptor.h"
 #include "io/write-diary.h"
@@ -2581,30 +2579,6 @@ int calc_weight_limit(PlayerType *player_ptr)
     }
 
     return i;
-}
-
-/*!
- * @brief フラグに応じて所持品の自動破壊・結合・並べ替えを行う
- * @details 所持品のスロット番号が変わるため、アイテムの番号を保持している処理の途中では呼ばない。
- * 通常は handle_stuff_with_inventory_arrangement() を通じて呼ぶ。
- */
-void update_inventory_arrangement(PlayerType *player_ptr)
-{
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    if (rfu.has(StatusRecalculatingFlag::AUTO_DESTRUCTION)) {
-        rfu.reset_flag(StatusRecalculatingFlag::AUTO_DESTRUCTION);
-        autopick_delayed_alter(player_ptr);
-    }
-
-    if (rfu.has(StatusRecalculatingFlag::COMBINATION)) {
-        rfu.reset_flag(StatusRecalculatingFlag::COMBINATION);
-        combine_pack(player_ptr);
-    }
-
-    if (rfu.has(StatusRecalculatingFlag::REORDER)) {
-        rfu.reset_flag(StatusRecalculatingFlag::REORDER);
-        reorder_pack(player_ptr);
-    }
 }
 
 /*!

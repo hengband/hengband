@@ -284,11 +284,11 @@ void wiz_identify_full_inventory(PlayerType *player_ptr)
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_srf);
+    rfu.set_flags(flags_iaf);
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
@@ -648,12 +648,12 @@ static void wiz_reroll_item(PlayerType *player_ptr, ItemEntity *o_ptr)
 
     *o_ptr = std::move(item);
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
-    rfu.set_flags(flags_srf);
+    rfu.set_flags(flags_iaf);
     static constexpr auto flags_swrf = {
         SubWindowRedrawingFlag::INVENTORY,
         SubWindowRedrawingFlag::EQUIPMENT,
@@ -786,12 +786,12 @@ void wiz_modify_item(PlayerType *player_ptr)
 
         *item = std::move(modified_item);
         auto &rfu = RedrawingFlagsUpdater::get_instance();
-        static constexpr auto flags_srf = {
-            StatusRecalculatingFlag::BONUS,
-            StatusRecalculatingFlag::COMBINATION,
-            StatusRecalculatingFlag::REORDER,
+        rfu.set_flag(StatusRecalculatingFlag::BONUS);
+        static constexpr auto flags_iaf = {
+            InventoryArrangementFlag::COMBINATION,
+            InventoryArrangementFlag::REORDER,
         };
-        rfu.set_flags(flags_srf);
+        rfu.set_flags(flags_iaf);
         static constexpr auto flags_swrf = {
             SubWindowRedrawingFlag::INVENTORY,
             SubWindowRedrawingFlag::EQUIPMENT,

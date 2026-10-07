@@ -45,8 +45,6 @@ void do_cmd_redraw(PlayerType *player_ptr)
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();
     static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
         StatusRecalculatingFlag::TORCH,
         StatusRecalculatingFlag::BONUS,
         StatusRecalculatingFlag::HP,
@@ -60,6 +58,11 @@ void do_cmd_redraw(PlayerType *player_ptr)
         StatusRecalculatingFlag::MONSTER_STATUSES,
     };
     rfu.set_flags(flags_srf);
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
+    };
+    rfu.set_flags(flags_iaf);
     static constexpr auto flags_mwrf = {
         MainWindowRedrawingFlag::WIPE,
         MainWindowRedrawingFlag::BASIC,

@@ -23,7 +23,6 @@
 #include "object/object-info.h"
 #include "object/object-mark-types.h"
 #include "player/player-move.h"
-#include "player/player-status.h"
 #include "spell-kind/spells-perception.h"
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"

@@ -60,12 +60,12 @@ void ObjectQuaffEntity::execute(INVENTORY_IDX i_idx)
         (void)potion_smash_effect(this->player_ptr, 0, this->player_ptr->y, this->player_ptr->x, item.bi_id);
     }
 
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::COMBINATION,
-        StatusRecalculatingFlag::REORDER,
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
     };
     auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flags(flags_srf);
+    rfu.set_flags(flags_iaf);
     this->change_virtue_as_quaff(item);
     item.mark_as_tried();
     if (ident && !item.is_aware()) {

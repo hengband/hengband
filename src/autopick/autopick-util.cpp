@@ -57,11 +57,8 @@ void auto_inscribe_item(ItemEntity *o_ptr, int idx)
         SubWindowRedrawingFlag::EQUIPMENT,
     };
     rfu.set_flags(flags_swrf);
-    static constexpr auto flags_srf = {
-        StatusRecalculatingFlag::BONUS,
-        StatusRecalculatingFlag::COMBINATION,
-    };
-    rfu.set_flags(flags_srf);
+    rfu.set_flag(StatusRecalculatingFlag::BONUS);
+    rfu.set_flag(InventoryArrangementFlag::COMBINATION);
 }
 
 /*!
