@@ -9,6 +9,7 @@
 #include "system/monrace/monrace-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "tracking/lore-tracker.h"
+#include "util/enum-converter.h"
 #include "util/probability-table.h"
 #include <algorithm>
 #include <range/v3/view.hpp>
@@ -101,7 +102,25 @@ bool MonraceList::is_chapel(MonraceId monrace_id)
 
 MonraceDefinition &MonraceList::emplace(MonraceId monrace_id)
 {
-    return *this->monraces.emplace_hint(this->monraces.end(), monrace_id, std::make_shared<MonraceDefinition>())->second;
+    auto &monrace = this->monraces.emplace_hint(this->monraces.end(), monrace_id, std::make_shared<MonraceDefinition>())->second;
+    this->add_to_index(monrace_id, monrace);
+    return *monrace;
+}
+
+/*!
+ * @brief 種族IDから種族定義を索引で引く
+ * @param monrace_id モンスター種族ID
+ * @return 種族定義
+ * @details 索引に無い種族IDは、従来どおり std::map::at() で std::out_of_range を投げる
+ */
+const std::shared_ptr<MonraceDefinition> &MonraceList::find(MonraceId monrace_id) const
+{
+    const auto index = static_cast<size_t>(enum2i(monrace_id));
+    if ((index < this->monraces_by_id.size()) && this->monraces_by_id[index]) {
+        return this->monraces_by_id[index];
+    }
+
+    return this->monraces.at(monrace_id);
 }
 
 /*!
@@ -112,7 +131,7 @@ MonraceDefinition &MonraceList::emplace(MonraceId monrace_id)
  */
 MonraceDefinition &MonraceList::get_monrace(MonraceId monrace_id)
 {
-    return *this->monraces.at(monrace_id);
+    return *this->find(monrace_id);
 }
 
 /*!
@@ -123,17 +142,17 @@ MonraceDefinition &MonraceList::get_monrace(MonraceId monrace_id)
  */
 const MonraceDefinition &MonraceList::get_monrace(MonraceId monrace_id) const
 {
-    return *this->monraces.at(monrace_id);
+    return *this->find(monrace_id);
 }
 
 std::shared_ptr<MonraceDefinition> MonraceList::get_monrace_shared(MonraceId monrace_id)
 {
-    return this->monraces.at(monrace_id);
+    return this->find(monrace_id);
 }
 
 std::shared_ptr<const MonraceDefinition> MonraceList::get_monrace_shared(MonraceId monrace_id) const
 {
-    return this->monraces.at(monrace_id);
+    return this->find(monrace_id);
 }
 
 const std::vector<MonraceId> &MonraceList::get_valid_monrace_ids() const
@@ -287,8 +306,8 @@ MonraceId MonraceList::select_random_separated_unique_of(MonraceId monrace_id) c
 
 bool MonraceList::order(MonraceId id1, MonraceId id2, bool is_detailed) const
 {
-    const auto &monrace1 = this->monraces.at(id1);
-    const auto &monrace2 = this->monraces.at(id2);
+    const auto &monrace1 = this->find(id1);
+    const auto &monrace2 = this->find(id2);
     if (is_detailed) {
         const auto pkills1 = monrace1->r_pkills;
         const auto pkills2 = monrace2->r_pkills;
@@ -393,7 +412,7 @@ MonraceId MonraceList::pick_id_at_random() const
 
 const MonraceDefinition &MonraceList::pick_monrace_at_random(xso::rng32 &rng) const
 {
-    return *this->monraces.at(this->pick_id_at_random(rng));
+    return *this->find(this->pick_id_at_random(rng));
 }
 
 const MonraceDefinition &MonraceList::pick_monrace_at_random() const
@@ -492,6 +511,16 @@ void MonraceList::reset_all_visuals()
     for (auto &[_, monrace] : this->monraces) {
         monrace->symbol_config = monrace->symbol_definition;
     }
+}
+
+void MonraceList::add_to_index(MonraceId monrace_id, const std::shared_ptr<MonraceDefinition> &monrace)
+{
+    const auto index = static_cast<size_t>(enum2i(monrace_id));
+    if (index >= this->monraces_by_id.size()) {
+        this->monraces_by_id.resize(index + 1);
+    }
+
+    this->monraces_by_id[index] = monrace;
 }
 
 tl::optional<std::string> MonraceList::probe_lore(MonraceId monrace_id)

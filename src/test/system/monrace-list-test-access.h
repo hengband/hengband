@@ -11,6 +11,7 @@ public:
         , reader_state(0)
     {
         monraces.monraces.swap(saved_monraces);
+        monraces.monraces_by_id.swap(saved_monraces_by_id);
     }
 
     MonraceListTestAccess(const MonraceListTestAccess &) = delete;
@@ -19,11 +20,13 @@ public:
     ~MonraceListTestAccess()
     {
         monraces.monraces.swap(saved_monraces);
+        monraces.monraces_by_id.swap(saved_monraces_by_id);
     }
 
 private:
     MonraceList &monraces;
     MonraceList::Container saved_monraces;
+    decltype(MonraceList::monraces_by_id) saved_monraces_by_id;
     ScopedReaderState reader_state;
 };
 }

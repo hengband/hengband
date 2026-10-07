@@ -47,11 +47,13 @@ public:
         : monraces(MonraceList::get_instance())
     {
         monraces.monraces.swap(saved_monraces);
+        monraces.monraces_by_id.swap(saved_monraces_by_id);
     }
 
     ~FixedMapMonraceTestAccess()
     {
         monraces.monraces.swap(saved_monraces);
+        monraces.monraces_by_id.swap(saved_monraces_by_id);
     }
 
     FixedMapMonraceTestAccess(const FixedMapMonraceTestAccess &) = delete;
@@ -62,6 +64,7 @@ public:
 private:
     MonraceList &monraces;
     MonraceList::Container saved_monraces;
+    decltype(MonraceList::monraces_by_id) saved_monraces_by_id;
 };
 }
 
