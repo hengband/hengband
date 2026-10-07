@@ -36,6 +36,8 @@ def matches(rule, values):
 
     This is deliberately stricter than evaluate_condition_expression(): require
     one complete boolean expression, reject NUL/trailing text and unknown inputs,
+    require whitespace before nested opening brackets (the game consumes one
+    separator after words/closing brackets, even if that separator is a '['),
     require arguments (two for comparisons), and accept only integer comparison
     operands rather than C++ atoi conversions. Variables must have explicit
     fixture values; this is not a replacement for the game's player resolver.
@@ -45,6 +47,8 @@ def matches(rule, values):
         return True
     if not isinstance(expression, str) or not expression or "\0" in expression:
         raise ValueError("Unexpected condition expression")
+    if re.search(r"\S\[", expression):
+        raise ValueError("Opening bracket must be separated by whitespace")
     tokens = re.findall(r"\[|\]|[^\s\[\]]+", expression)
     position = 0
 
@@ -181,6 +185,10 @@ class TownDeclarationPolicyTest(unittest.TestCase):
                 matches({"when": expression}, state())
         with self.assertRaisesRegex(ValueError, "Unsupported condition operator: UNKNOWN"):
             matches({"when": "[UNKNOWN 1]"}, state())
+        for expression in ("[NOT[EQU a a]]", "[AND [EQU a a][EQU a b]]"):
+            with self.subTest(expression=expression), self.assertRaisesRegex(
+                    ValueError, "Opening bracket must be separated by whitespace"):
+                matches({"when": expression}, state())
 
     def test_outpost_quest1_mode_specific_rewards(self):
         full = self.documents["01_Outpost_Full"]
