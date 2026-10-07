@@ -140,7 +140,6 @@ exit 0
 %{_datadir}/games/%{name}/lib/apex/h_scores.raw
 %{_datadir}/games/%{name}/lib/apex/readme.txt
 %attr(664 root,games) %config(noreplace) %{_datadir}/games/%{name}/lib/apex/scores.raw
-%{_datadir}/games/%{name}/lib/edit/*.txt
 %{_datadir}/games/%{name}/lib/edit/*.jsonc
 %{_datadir}/games/%{name}/lib/edit/quests/*.jsonc
 %{_datadir}/games/%{name}/lib/edit/towns/*.jsonc
