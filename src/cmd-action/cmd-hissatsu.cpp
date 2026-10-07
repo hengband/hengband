@@ -12,6 +12,7 @@
 #include "action/action-limited.h"
 #include "core/asking-player.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
 #include "game-option/text-display-options.h"
@@ -274,7 +275,7 @@ static int get_hissatsu_power(PlayerType *player_ptr, SPELL_IDX *sn)
     }
 
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
-    handle_stuff(player_ptr);
+    window_stuff(player_ptr);
 
     /* Abort if needed */
     if (!flag) {
@@ -313,6 +314,9 @@ void do_cmd_hissatsu(PlayerType *player_ptr)
     }
 
     PlayerClass(player_ptr).break_samurai_stance({ SamuraiStanceType::MUSOU, SamuraiStanceType::IAI, SamuraiStanceType::FUUJIN, SamuraiStanceType::KOUKIJIN });
+
+    // 構えを解いた分の能力値 (攻撃回数など) を、技を選んで攻撃する前に再計算する。
+    handle_stuff(player_ptr);
 
     if (!get_hissatsu_power(player_ptr, &n)) {
         return;

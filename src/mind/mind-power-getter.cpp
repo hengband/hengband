@@ -1,7 +1,6 @@
 #include "mind/mind-power-getter.h"
 #include "bot/bot-json-output.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/text-display-options.h"
 #include "inventory/inventory-slot-types.h"
@@ -81,7 +80,7 @@ bool MindPowerGetter::get_mind_power(SPELL_IDX *sn, bool only_browse)
     }
 
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
-    handle_stuff(this->player_ptr);
+    window_stuff(this->player_ptr);
     if (!this->flag) {
         return false;
     }

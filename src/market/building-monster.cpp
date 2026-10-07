@@ -1,6 +1,6 @@
 #include "market/building-monster.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "game-option/game-play-options.h"
 #include "io/input-key-acceptor.h"
 #include "lore/lore-util.h"
@@ -154,7 +154,7 @@ bool research_mon(PlayerType *player_ptr)
                 }
 
                 tracker.set_trackee(monrace_id);
-                handle_stuff(player_ptr);
+                window_stuff(player_ptr);
                 screen_roff(player_ptr, monrace_id, MONSTER_LORE_RESEARCH);
                 notpicked = false;
                 old_sym = *sym;
