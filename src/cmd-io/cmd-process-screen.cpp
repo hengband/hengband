@@ -7,8 +7,8 @@
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd-visual/cmd-draw.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
+#include "core/window-redrawer.h"
 #include "game-option/special-options.h"
 #include "io/files-util.h"
 #include "io/input-key-acceptor.h"
@@ -362,7 +362,7 @@ static bool update_use_graphics(PlayerType *player_ptr)
         MainWindowRedrawingFlag::EQUIPPY,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
-    handle_stuff(player_ptr);
+    redraw_stuff(player_ptr);
     return false;
 }
 
@@ -402,7 +402,7 @@ void do_cmd_save_screen(PlayerType *player_ptr)
         MainWindowRedrawingFlag::EQUIPPY,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
-    handle_stuff(player_ptr);
+    redraw_stuff(player_ptr);
 }
 
 /*!

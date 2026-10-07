@@ -1,6 +1,5 @@
 #include "io/input-key-acceptor.h"
 #include "cmd-io/macro-util.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "game-option/input-options.h"
 #include "game-option/map-screen-options.h"
@@ -53,7 +52,7 @@ static void all_term_fresh()
     auto [x, y] = term_locate();
 
     RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
-    handle_stuff(p_ptr);
+    redraw_stuff(p_ptr);
     window_stuff_including_deferred(p_ptr);
 
     term_activate(angband_terms[0]);
@@ -187,7 +186,7 @@ static char inkey_aux()
 
 /*
  * @brief キー入力を受け付けるメインルーチン / Get a keypress from the user.
- * @param do_all_term_refresh trueであれば強制的にhandle_stuffと再描画を行う。デフォルト false
+ * @param do_all_term_refresh trueであれば、入力を待つ前にメイン画面とすべてのサブウィンドウを描き直す。デフォルト false
  * return キーを表すコード
  */
 char inkey(bool do_all_term_refresh)
