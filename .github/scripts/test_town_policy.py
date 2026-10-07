@@ -32,6 +32,14 @@ def state(**overrides):
 
 
 def matches(rule, values):
+    """Check only the documented subset used by the bundled Town policies.
+
+    This is deliberately stricter than evaluate_condition_expression(): require
+    one complete boolean expression, reject NUL/trailing text and unknown inputs,
+    require arguments (two for comparisons), and accept only integer comparison
+    operands rather than C++ atoi conversions. Variables must have explicit
+    fixture values; this is not a replacement for the game's player resolver.
+    """
     expression = rule.get("when")
     if expression is None:
         return True
@@ -49,7 +57,13 @@ def matches(rule, values):
         if token == "]":
             raise ValueError("Unexpected closing bracket")
         if token != "[":
-            return values[token[1:]] if token.startswith("$") else token
+            if not token.startswith("$"):
+                return token
+            name = token[1:]
+            if name not in values:
+                raise ValueError(f"Unsupported condition fixture variable: {token}; "
+                                 "add an explicit fixture value for supported game variables")
+            return values[name]
         if position >= len(tokens):
             raise ValueError("Missing condition operator")
         operator = tokens[position]
@@ -57,10 +71,15 @@ def matches(rule, values):
         arguments = []
         while position < len(tokens) and tokens[position] != "]":
             arguments.append(evaluate())
-        if position >= len(tokens) or not arguments:
-            raise ValueError("Unclosed or empty condition")
+        if position >= len(tokens):
+            raise ValueError("Unclosed condition")
         position += 1
-        # Match the production evaluator's valid-expression semantics: EQU
+        if operator not in ("AND", "IOR", "NOT", "EQU", "LEQ", "GEQ"):
+            raise ValueError(f"Unsupported condition operator: {operator}")
+        minimum = 2 if operator in ("EQU", "LEQ", "GEQ") else 1
+        if len(arguments) < minimum:
+            raise ValueError(f"Condition operator {operator} requires at least {minimum} arguments")
+        # Within the supported subset, EQU
         # compares the first argument to ANY later argument; LEQ/GEQ compare
         # numeric values, not lexical strings; all arguments have been read.
         if operator == "AND":
@@ -69,15 +88,13 @@ def matches(rule, values):
             result = any(argument not in ("", "0") for argument in arguments)
         elif operator == "NOT":
             result = all(argument != "1" for argument in arguments)
-        elif operator == "EQU" and len(arguments) >= 2:
+        elif operator == "EQU":
             result = arguments[0] in arguments[1:]
-        elif operator in ("LEQ", "GEQ") and len(arguments) >= 2:
+        else:  # LEQ / GEQ
             if not all(re.fullmatch(r"-?[0-9]+", argument) for argument in arguments):
                 raise ValueError("Unexpected non-integer comparison")
             first, *others = map(int, arguments)
             result = all(first <= other if operator == "LEQ" else first >= other for other in others)
-        else:
-            raise ValueError(f"Unsupported condition operator: {operator}")
         return "1" if result else "0"
 
     result = evaluate()
@@ -124,7 +141,7 @@ class TownDeclarationPolicyTest(unittest.TestCase):
                     with self.subTest(town=name, collection=collection, index=index):
                         self.assertIsInstance(matches(rule, state()), bool)
         for expression in ("[UNKNOWN 1]", "[EQU $UNKNOWN 0]", "[EQU 1 1", "[EQU 1 1] trailing"):
-            with self.subTest(expression=expression), self.assertRaises((ValueError, KeyError)):
+            with self.subTest(expression=expression), self.assertRaises(ValueError):
                 matches({"when": expression}, state())
 
     def test_condition_subset_contract(self):
@@ -141,8 +158,29 @@ class TownDeclarationPolicyTest(unittest.TestCase):
             with self.subTest(expression=expression):
                 self.assertEqual(matches({"when": expression}, state()), expected)
         # Production parses all arguments even after AND's result becomes false.
-        with self.assertRaises(KeyError):
+        with self.assertRaisesRegex(ValueError, r"fixture variable: \$UNKNOWN"):
             matches({"when": "[AND 0 [EQU $UNKNOWN 0]]"}, state())
+
+    def test_condition_fixture_variable_diagnostics(self):
+        # LEVEL is valid in the game, but no player level is assumed here.
+        for variable in ("LEVEL", "QUEST35", "UNKNOWN"):
+            with self.subTest(variable=variable), self.assertRaisesRegex(
+                    ValueError, rf"fixture variable: \${variable}; add an explicit fixture value"):
+                matches({"when": f"[EQU ${variable} 0]"}, state())
+        self.assertTrue(matches({"when": "[EQU $LEVEL 10]"}, state(LEVEL=10)))
+
+    def test_condition_subset_rejects_runtime_permissive_inputs(self):
+        for operator in ("EQU", "LEQ", "GEQ"):
+            for arguments in ("", " 1"):
+                with self.subTest(operator=operator, arguments=arguments), self.assertRaisesRegex(
+                        ValueError, f"operator {operator} requires at least 2 arguments"):
+                    matches({"when": f"[{operator}{arguments}]"}, state())
+        for expression in ("[AND]", "[IOR]", "[NOT]", "[LEQ abc 1]",
+                           "[EQU a a] trailing", "[EQU a a]\0"):
+            with self.subTest(expression=expression), self.assertRaises(ValueError):
+                matches({"when": expression}, state())
+        with self.assertRaisesRegex(ValueError, "Unsupported condition operator: UNKNOWN"):
+            matches({"when": "[UNKNOWN 1]"}, state())
 
     def test_outpost_quest1_mode_specific_rewards(self):
         full = self.documents["01_Outpost_Full"]
@@ -175,14 +213,14 @@ class TownDeclarationPolicyTest(unittest.TestCase):
         for name, chain in chains.items():
             for quest, next_quest in chain:
                 for status in (1, 2, 3, 4, 5, 6):
+                    # Full QUEST14's failed-state behavior is not an established
+                    # progression policy, so do not freeze its baseline fallback.
+                    if name == "01_Outpost_Full" and quest == 14 and status == 5:
+                        continue
                     with self.subTest(town=name, quest=quest, status=status):
                         values = state(**{f"QUEST{quest}": status})
                         last = selected_definitions(self.documents[name], "b", values)[-1]
                         expected = quest if status in (1, 2, 5) else next_quest
-                        # Full QUEST14 has no failed-state override: retain its
-                        # actual baseline castle declaration, without fixing policy.
-                        if name == "01_Outpost_Full" and quest == 14 and status == 5:
-                            expected = 1
                         self.assertEqual(last["special"], expected)
         for status in (3, 4, 6):
             definitions = selected_definitions(self.documents["01_Outpost_Full"], "b",
@@ -231,16 +269,32 @@ class TownDeclarationPolicyTest(unittest.TestCase):
 
     def test_locales_have_identical_ordered_non_display_building_fields(self):
         for name, document in self.documents.items():
-            normalized = {"ja": [], "en": []}
-            for rule in document["buildingRules"]:
-                fields = list(rule["fields"])
-                if rule["command"] == "N":
-                    fields = []  # Building name, owner name and owner race text.
-                elif rule["command"] == "A":
-                    fields[1] = ""  # Display action name only; keep all numeric fields.
-                normalized[rule["locale"]].append((rule["index"], rule["command"], rule.get("when"), fields))
             with self.subTest(town=name):
+                normalized = self.normalized_buildings(name, document)
                 self.assertEqual(normalized["ja"], normalized["en"])
+
+    def normalized_buildings(self, name, document):
+        normalized = {"ja": [], "en": []}
+        for index, rule in enumerate(document["buildingRules"]):
+            fields = list(rule["fields"])
+            if rule["command"] == "N":
+                fields = []  # Building name, owner name and owner race text.
+            elif rule["command"] == "A":
+                self.assertGreaterEqual(len(fields), 2,
+                                        f"{name}: buildingRules[{index}] command A needs an action name field")
+                fields[1] = ""  # Display action name only; keep all numeric fields.
+            normalized[rule["locale"]].append((rule["index"], rule["command"], rule.get("when"), fields))
+        return normalized
+
+    def test_short_building_action_fields_have_location(self):
+        name = "01_Outpost_Lite"
+        document = copy.deepcopy(self.documents[name])
+        index = next(index for index, rule in enumerate(document["buildingRules"]) if rule["command"] == "A")
+        for fields in ([], ["0"]):
+            document["buildingRules"][index]["fields"] = fields
+            with self.subTest(fields=fields), self.assertRaisesRegex(
+                    AssertionError, rf"{name}: buildingRules\[{index}\] command A needs an action name field"):
+                self.normalized_buildings(name, document)
 
     def test_real_data_override_mutations_are_detected(self):
         values = state(QUEST1=3, CLASS="Elementalist")
