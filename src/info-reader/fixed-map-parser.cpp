@@ -12,6 +12,7 @@
 #include "floor/floor-base-definitions.h"
 #include "game-option/birth-options.h"
 #include "info-reader/general-parser.h"
+#include "info-reader/jsonc-document-loader.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/quest-reader.h"
 #include "info-reader/town-definition-list-reader.h"
@@ -33,8 +34,6 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include "world/world.h"
-#include <fstream>
-#include <iterator>
 #include <nlohmann/json.hpp>
 #include <string>
 
@@ -46,13 +45,13 @@ static parse_error_type load_town_preferences()
         return PARSE_ERROR_NONE;
     }
 
-    std::ifstream ifs(path_build(ANGBAND_DIR_EDIT, TOWN_PREFERENCES));
-    if (!ifs) {
+    JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, TOWN_PREFERENCES));
+    if (!loader.is_open()) {
         return PARSE_ERROR_GENERIC;
     }
 
     try {
-        const auto data = nlohmann::json::parse(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>(), nullptr, true, true, true);
+        const auto data = loader.parse();
         TownPreferencesLegend legend;
         if (const auto err = TownPreferencesReader(data).read(legend, parse_quest_legend_cell); err != PARSE_ERROR_NONE) {
             return err;
@@ -69,13 +68,13 @@ static parse_error_type load_town_preferences()
 
 static parse_error_type load_town_definition_file(std::string &map_file)
 {
-    std::ifstream ifs(path_build(ANGBAND_DIR_EDIT, TOWN_DEFINITION_LIST));
-    if (!ifs) {
+    JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, TOWN_DEFINITION_LIST));
+    if (!loader.is_open()) {
         return PARSE_ERROR_GENERIC;
     }
 
     try {
-        const auto data = nlohmann::json::parse(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>(), nullptr, true, true, true);
+        const auto data = loader.parse();
         const auto mode = vanilla_town ? TownMapMode::NONE : (lite_town ? TownMapMode::LITE : TownMapMode::NORMAL);
         return TownDefinitionListReader(data).read(AngbandWorld::get_instance().get_town_index(), mode, map_file);
     } catch (const nlohmann::json::exception &) {
@@ -152,12 +151,12 @@ static bool is_town_map_condition_met(PlayerType *player_ptr, const std::optiona
 
 static parse_error_type parse_town_map_jsonc(PlayerType *player_ptr, std::string_view name)
 {
-    std::ifstream ifs(path_build(ANGBAND_DIR_EDIT, name));
-    if (!ifs) {
+    JsoncDocumentLoader loader(path_build(ANGBAND_DIR_EDIT, name));
+    if (!loader.is_open()) {
         return PARSE_ERROR_GENERIC;
     }
     try {
-        const auto data = nlohmann::json::parse(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>(), nullptr, true, true, true);
+        const auto data = loader.parse();
         TownMapDefinition definition;
         const bool only_buildings = (init_flags & INIT_ONLY_BUILDINGS) != 0;
         if (const auto err = TownMapReader(data).read(definition, MAX_HGT, MAX_WID, only_buildings); err != PARSE_ERROR_NONE) {

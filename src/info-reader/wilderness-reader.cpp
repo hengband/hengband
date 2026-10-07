@@ -2,6 +2,7 @@
 #include "game-option/birth-options.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/jsonc-document-loader.h"
 #include "io/files-util.h"
 #include "system/dungeon/dungeon-definition.h"
 #include "system/dungeon/dungeon-list.h"
@@ -13,8 +14,6 @@
 #include "util/enum-converter.h"
 #include <algorithm>
 #include <array>
-#include <fstream>
-#include <iterator>
 #include <limits>
 #include <nlohmann/json.hpp>
 #include <set>
@@ -40,15 +39,13 @@ int read_localized_integer(const nlohmann::json &value, int &destination, const 
 std::optional<WildernessDefinition> load_wilderness_definition()
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, WILDERNESS_DEFINITION);
-    std::ifstream ifs(path);
-    if (!ifs) {
+    JsoncDocumentLoader loader(path);
+    if (!loader.is_open()) {
         return std::nullopt;
     }
 
     try {
-        std::istreambuf_iterator<char> ifs_iter(ifs);
-        std::istreambuf_iterator<char> ifs_end;
-        const auto json_object = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true, true);
+        const auto json_object = loader.parse();
         WildernessDefinition definition;
         if (WildernessReader(json_object).read(definition) != PARSE_ERROR_NONE) {
             return std::nullopt;

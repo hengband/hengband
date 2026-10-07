@@ -13,6 +13,7 @@
 #include "info-reader/fixed-map-parser.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
+#include "info-reader/jsonc-document-loader.h"
 #include "info-reader/magic-reader.h"
 #include "info-reader/message-reader.h"
 #include "info-reader/race-reader.h"
@@ -44,7 +45,6 @@
 #include "util/angband-files.h"
 #include "view/display-messages.h"
 #include <fmt/format.h>
-#include <fstream>
 #include <functional>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -76,15 +76,12 @@ template <typename DefinitionList>
 void init_json(std::string_view filename, std::string_view keyname, DefinitionHashDataType dhdt, DefinitionList &definition_list, std::function<int(nlohmann::json &)> json_parser, std::function<void()> retouch = nullptr, bool allow_empty = true)
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, filename);
-    std::ifstream ifs(path);
-
-    if (!ifs) {
+    JsoncDocumentLoader loader(path);
+    if (!loader.is_open()) {
         quit(fmt::format(_("'{}'ファイルをオープンできません。", "Cannot open '{}' file."), filename));
     }
 
-    std::istreambuf_iterator<char> ifs_iter(ifs);
-    std::istreambuf_iterator<char> ifs_end;
-    auto json_object = nlohmann::json::parse(ifs_iter, ifs_end, nullptr, true, true, true);
+    auto json_object = loader.parse();
 
     if (const auto err = info_validate_json_array(json_object, keyname, allow_empty); err != PARSE_ERROR_NONE) {
         if (err == PARSE_ERROR_INVALID_VALUE) {
