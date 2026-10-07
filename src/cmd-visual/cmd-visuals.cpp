@@ -330,7 +330,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     tl::optional<short> new_baseitem_id;
                     const auto previous_bi_id = bi_id;
                     while (true) {
-                        new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<short>(baseitems.size()));
+                        new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<int>(baseitems.size()));
                         if (!new_baseitem_id) {
                             bi_id = previous_bi_id;
                             break;

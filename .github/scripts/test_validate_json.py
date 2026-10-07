@@ -136,6 +136,21 @@ class QuestGridValidationTest(unittest.TestCase):
                     self.assertEqual(ok, accepted, message)
 
 
+class BaseitemValidationTest(unittest.TestCase):
+    def test_id_boundary_matches_reader_and_short_storage(self):
+        root = Path(__file__).resolve().parents[2]
+        schema_path = root / "schema/BaseitemDefinitions.schema.json"
+        schema = load_jsonc(schema_path)
+        example = load_jsonc(root / "lib/edit/BaseitemDefinitions.jsonc")["baseitems"][-1]
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / "BaseitemDefinitions.jsonc"
+            for item_id, accepted in ((9999, True), (32767, True), (32768, False)):
+                with self.subTest(item_id=item_id):
+                    target.write_text(json.dumps({"version": 1, "baseitems": [{**example, "id": item_id}]}), encoding="utf-8")
+                    ok, message = validate_one((target, schema_path, schema))
+                    self.assertEqual(ok, accepted, message)
+
+
 class VaultValidationTest(unittest.TestCase):
     def setUp(self):
         self.schema_path = Path(__file__).resolve().parents[2] / "schema/VaultDefinitions.schema.json"
