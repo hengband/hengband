@@ -12,6 +12,7 @@
 #include "system/floor/floor-info.h"
 #include "system/grid-type-definition.h"
 #include "system/player-type-definition.h"
+#include "util/dice.h"
 
 /*!
  * @brief タイプ1の部屋…通常可変長方形の部屋を生成する
@@ -27,7 +28,7 @@ bool build_type1(PlayerType *player_ptr, DungeonData *dd_ptr)
     /* Pick a room size */
     auto height = randint1(4);
     height += randint1(3) + 1;
-    auto width = randint1(11) + randint1(11) + 1;
+    auto width = Dice::roll(2, 11) + 1;
 
     auto center = find_space(player_ptr, dd_ptr, height + 2, width + 2);
     if (!center) {

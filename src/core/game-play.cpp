@@ -327,7 +327,8 @@ static void init_riding_pet(PlayerType *player_ptr, bool new_game)
     monster.max_maxhp = monster.maxhp;
     monster.hp = monrace.hit_dice.floored_expected_value();
     monster.dealt_damage = 0;
-    monster.energy_need = ENERGY_NEED() + ENERGY_NEED();
+    monster.energy_need = ENERGY_NEED();
+    monster.energy_need += ENERGY_NEED();
 }
 
 static void decide_arena_death(PlayerType *player_ptr)

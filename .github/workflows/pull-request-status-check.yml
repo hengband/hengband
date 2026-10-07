@@ -59,6 +59,10 @@ jobs:
           persist-credentials: false
       - run: sh ./.github/scripts/check-test-registration.sh
 
+  check_rng_evaluation_order:
+    name: Check the evaluation order of random number calls
+    uses: ./.github/workflows/check-rng-evaluation-order.yml
+
   build_test_clang_libcpp_without_pch:
     name: Build Japanese version with clang 21 -stdlib=libc++ (without using pre-compiled headers, with XFT)
     uses: ./.github/workflows/build-with-autotools.yml
