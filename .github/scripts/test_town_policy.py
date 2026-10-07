@@ -38,8 +38,12 @@ def matches(rule, values):
     one complete boolean expression, reject NUL/trailing text and unknown inputs,
     require whitespace before nested opening brackets (the game consumes one
     separator after words/closing brackets, even if that separator is a '['),
+    require whitespace or a closing bracket after each closing bracket,
     require arguments (two for comparisons), and accept only integer comparison
-    operands rather than C++ atoi conversions. Variables must have explicit
+    operands rather than C++ atoi conversions.
+    Only printable ASCII and tab/CR/LF whitespace in the bundled expressions
+    are supported; control characters and multibyte parsing are not modeled.
+    Variables must have explicit
     fixture values; this is not a replacement for the game's player resolver.
     """
     expression = rule.get("when")
@@ -47,8 +51,12 @@ def matches(rule, values):
         return True
     if not isinstance(expression, str) or not expression or "\0" in expression:
         raise ValueError("Unexpected condition expression")
+    if not re.fullmatch(r"[\x20-\x7e\t\r\n]+", expression):
+        raise ValueError("Condition requires printable ASCII or tab/CR/LF whitespace")
     if re.search(r"\S\[", expression):
         raise ValueError("Opening bracket must be separated by whitespace")
+    if re.search(r"\][^\s\]]", expression):
+        raise ValueError("Closing bracket must be followed by whitespace or a closing bracket")
     tokens = re.findall(r"\[|\]|[^\s\[\]]+", expression)
     position = 0
 
@@ -188,6 +196,14 @@ class TownDeclarationPolicyTest(unittest.TestCase):
         for expression in ("[NOT[EQU a a]]", "[AND [EQU a a][EQU a b]]"):
             with self.subTest(expression=expression), self.assertRaisesRegex(
                     ValueError, "Opening bracket must be separated by whitespace"):
+                matches({"when": expression}, state())
+        for expression in ("[AND [EQU a a]0]", "[NOT [EQU a b]1]"):
+            with self.subTest(expression=expression), self.assertRaisesRegex(
+                    ValueError, "Closing bracket must be followed by whitespace or a closing bracket"):
+                matches({"when": expression}, state())
+        for expression in ("[EQU a\x01b a\x01c]", "[EQU \u3042 \u3042]"):
+            with self.subTest(expression=expression), self.assertRaisesRegex(
+                    ValueError, "Condition requires printable ASCII"):
                 matches({"when": expression}, state())
 
     def test_outpost_quest1_mode_specific_rewards(self):
