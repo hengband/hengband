@@ -182,6 +182,22 @@ def command_keys(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_resize(args: argparse.Namespace) -> int:
+    """端末の大きさを変え、変更後の画面を表示する。
+
+    大きさを変えられるのはヘッドレス実行 (--headless) の端末だけである。
+    """
+    request(
+        args,
+        {"op": "resize", "term": args.term, "width": args.width, "height": args.height},
+    )
+    if args.quiet:
+        return 0
+
+    print(render_screen(request_screen(args)))
+    return 0
+
+
 def command_state(args: argparse.Namespace) -> int:
     """ゲームの内部状態をJSONで表示する。"""
     print_json(request(args, {"op": "state", "map": not args.no_map}))
@@ -311,6 +327,16 @@ def build_parser() -> argparse.ArgumentParser:
         "--quiet", action="store_true", help="送信後の画面を表示しない"
     )
     keys_parser.set_defaults(func=command_keys)
+
+    resize_parser = subparsers.add_parser(
+        "resize", help="端末の大きさを変える (ヘッドレス実行のみ)"
+    )
+    resize_parser.add_argument("width", type=int, help="新しい列数")
+    resize_parser.add_argument("height", type=int, help="新しい行数")
+    resize_parser.add_argument(
+        "--quiet", action="store_true", help="変更後の画面を表示しない"
+    )
+    resize_parser.set_defaults(func=command_resize)
 
     state_parser = subparsers.add_parser("state", help="ゲームの内部状態を表示する")
     state_parser.add_argument(

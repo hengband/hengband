@@ -78,6 +78,9 @@ constexpr auto BOT_CONTROL_IDLE_POLL_INTERVAL = std::chrono::seconds(1);
 
 std::unique_ptr<BotSocketServer> bot_control_server;
 
+//! フロントエンドが登録した端末の大きさを変える関数 (登録されていなければ大きさを変えられない)
+BotTermResizer bot_term_resizer = nullptr;
+
 /*!
  * @brief リクエストの処理結果
  * @details
@@ -133,11 +136,15 @@ nlohmann::json make_ok_response(const nlohmann::json &id, nlohmann::json result 
  * @param request リクエストのJSONオブジェクト
  * @param key 取り出す値のキー
  * @param default_value キーが存在しない場合に返す既定値
- * @return 取り出した値。値の型が期待する型と異なる場合はnullopt
+ * @return 取り出した値。値の型が期待する型と異なる場合や、整数がTに収まらない場合はnullopt
  * @details
  * nlohmann::json::value()は型が異なると例外を投げる。これをそのまま送出すると
  * serve_request()がidを持たないエラーレスポンスに変換してしまい、
  * クライアントがレスポンスをリクエストと対応付けられなくなるため、ここで型を検証する。
+ *
+ * 整数はget<T>()で変換すると、Tに収まらない値が黙って切り詰められる。例えば4294967376は
+ * 32ビットのintでは80になり、範囲外の指定が有効な値として受け付けられてしまうため、
+ * 変換する前にTに収まるかを確かめる。
  */
 template <typename T>
 tl::optional<T> find_request_value(const nlohmann::json &request, const char *key, T default_value)
@@ -151,7 +158,12 @@ tl::optional<T> find_request_value(const nlohmann::json &request, const char *ke
         if constexpr (std::is_same_v<T, bool>) {
             return it->is_boolean();
         } else if constexpr (std::is_integral_v<T>) {
-            return it->is_number_integer();
+            if (!it->is_number_integer()) {
+                return false;
+            }
+
+            // 符号無しの整数として保持された値をint64_tで読むと、大きな値が負の値に化けるため分けて読む
+            return it->is_number_unsigned() ? std::in_range<T>(it->template get<uint64_t>()) : std::in_range<T>(it->template get<int64_t>());
         } else {
             return it->is_string();
         }
@@ -181,6 +193,25 @@ bool is_valid_term_index(int index)
 
     const auto *t = angband_terms[index];
     return (t != nullptr) && (t->scr != nullptr);
+}
+
+/*!
+ * @brief リクエストから対象の端末の添字を取り出す
+ * @param request リクエストのJSONオブジェクト
+ * @return 有効な端末の添字 (既定は主端末の0)。取り出せない場合はエラーの理由
+ */
+tl::expected<int, std::string> find_term_index(const nlohmann::json &request)
+{
+    const auto index = find_request_value(request, "term", 0);
+    if (!index) {
+        return tl::make_unexpected("\"term\" must be an integer");
+    }
+
+    if (!is_valid_term_index(*index)) {
+        return tl::make_unexpected("the term index is out of range");
+    }
+
+    return *index;
 }
 
 /*!
@@ -352,13 +383,9 @@ tl::expected<int, std::string> push_keys(const std::string &keys)
  */
 nlohmann::json handle_screen_request(const nlohmann::json &id, const nlohmann::json &request)
 {
-    const auto index = find_request_value(request, "term", 0);
+    const auto index = find_term_index(request);
     if (!index) {
-        return make_error_response(id, "\"term\" must be an integer");
-    }
-
-    if (!is_valid_term_index(*index)) {
-        return make_error_response(id, "the term index is out of range");
+        return make_error_response(id, index.error());
     }
 
     const auto with_attrs = find_request_value(request, "attrs", true);
@@ -369,6 +396,40 @@ nlohmann::json handle_screen_request(const nlohmann::json &id, const nlohmann::j
     auto screen = make_bot_screen_json(*angband_terms[*index], *with_attrs);
     screen["term"] = *index;
     return make_ok_response(id, std::move(screen));
+}
+
+/*!
+ * @brief resizeリクエストを処理する
+ * @param id リクエストのid
+ * @param request リクエストのJSONオブジェクト
+ * @return レスポンスのJSONオブジェクト
+ * @details
+ * 大きさを変える手段はフロントエンドが登録する (set_bot_term_resizer())。
+ * 大きさの範囲の判定と、範囲外の場合の理由はフロントエンド側が受け持つ。
+ */
+nlohmann::json handle_resize_request(const nlohmann::json &id, const nlohmann::json &request)
+{
+    if (bot_term_resizer == nullptr) {
+        return make_error_response(id, "resizing a terminal is not supported by this frontend");
+    }
+
+    const auto index = find_term_index(request);
+    if (!index) {
+        return make_error_response(id, index.error());
+    }
+
+    // 大きさに既定値は無い。キーが無い場合は0として扱い、範囲外として理由を返させる
+    const auto width = find_request_value(request, "width", 0);
+    const auto height = find_request_value(request, "height", 0);
+    if (!width || !height) {
+        return make_error_response(id, "\"width\" and \"height\" must be integers");
+    }
+
+    if (const auto resized = bot_term_resizer(*index, { *width, *height }); !resized) {
+        return make_error_response(id, resized.error());
+    }
+
+    return make_ok_response(id, { { "term", *index }, { "width", *width }, { "height", *height } });
 }
 
 /*!
@@ -439,6 +500,10 @@ RequestResult dispatch_request(const nlohmann::json &request)
         }
 
         return make_ok_response(id, { { "pushed", *pushed } });
+    }
+
+    if (*op == "resize") {
+        return handle_resize_request(id, request);
     }
 
     if (*op == "state") {
@@ -536,6 +601,19 @@ void serve_pending_requests()
     serve_request(deadline);
 }
 
+}
+
+/*!
+ * @brief 制御サーバから端末の大きさを変える関数を登録する
+ * @param resizer 端末の大きさを変える関数
+ * @details
+ * 実際のウィンドウを持つフロントエンドでは、ゲームの端末だけ大きさを変えるとウィンドウと
+ * 食い違ってしまう。そのため、ウィンドウの大きさを合わせられるフロントエンドだけが登録する。
+ * 制御サーバの起動とは独立しており、起動の前後どちらで登録してもよい。
+ */
+void set_bot_term_resizer(BotTermResizer resizer)
+{
+    bot_term_resizer = resizer;
 }
 
 /*!

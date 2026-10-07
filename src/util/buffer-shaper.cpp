@@ -17,6 +17,8 @@
  * - 日本語（全角文字）の場合は基本的にどこでも分割するが、分割後の先頭の文字が kinsoku_list
  *   に含まれる場合はその1文字前で分割する。（いわゆる行頭禁則処理）
  * - 終端文字('\\0')の領域を残すため、分割後の文字列の長さは最大 maxlen - 1 バイトになるように分割する。
+ *   但し、1文字も収まらない場合 (maxlen が 1 以下、日本語の全角文字では 2 以下) でも、各行に少なくとも1文字は入れる。
+ *   1文字も入れずに分割すると、文字列を読み進められず空の行を際限なく追加してしまうため。
  *
  * @param sv 分割する文字列
  * @param maxlen 分割する最大長
@@ -39,7 +41,7 @@ std::vector<std::string> shape_buffer(std::string_view sv, size_t maxlen)
             ch = " ";
         }
 
-        if ((line.length() + ch.length() >= maxlen) || is_newline) {
+        if ((!line.empty() && (line.length() + ch.length() >= maxlen)) || is_newline) {
             if ((ch[0] == ' ') || (line.length() >= separate_pos * 2) || (is_kanji[0] && !is_kinsoku(ch))) {
                 sv.remove_prefix(line.length());
             } else {

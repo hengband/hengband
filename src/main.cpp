@@ -202,6 +202,9 @@ static void display_usage(const char *program)
     puts("           device (requires --control-port, conflicts with -s and -m)");
     puts("  --headless-term-count=<num>");
     puts("           Number of terminals the headless frontend creates (default 1)");
+    puts("  --headless-term-size=<index>:<cols>x<rows>");
+    puts("           Size of the terminal <index> the headless frontend creates");
+    puts("           (default 80x24, can be repeated for each terminal)");
     puts("");
 
 #ifdef USE_X11

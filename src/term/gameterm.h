@@ -13,10 +13,25 @@ constexpr auto TERM_DEFAULT_COLS = 80;
 constexpr auto TERM_DEFAULT_ROWS = 24;
 constexpr auto MAIN_TERM_MIN_COLS = TERM_DEFAULT_COLS;
 constexpr auto MAIN_TERM_MIN_ROWS = TERM_DEFAULT_ROWS;
+constexpr auto TERM_MAX_COLS = 255; //!< 端末の列数の上限 (term_type::wid の注記に合わせる)
+constexpr auto TERM_MAX_ROWS = 255; //!< 端末の行数の上限 (term_type::hgt の注記に合わせる)
+
+/*!
+ * @brief 端末の大きさ
+ */
+struct TermSize {
+    int cols; //!< 列数
+    int rows; //!< 行数
+
+    bool operator==(const TermSize &) const = default;
+};
 
 extern const concptr color_names[16];
 extern const concptr window_flag_desc[32];
 extern const concptr ident_info[];
+
+TermSize get_term_min_size(int index);
+bool is_valid_term_size(int index, const TermSize &size);
 
 extern std::array<term_type *, 8> angband_terms;
 #define term_screen (angband_terms[0])

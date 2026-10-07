@@ -13,6 +13,36 @@
  */
 #define PICT(A, C) ((((uint16_t)(A)) << 8) | ((byte)(C)))
 
+/*!
+ * @brief 端末の大きさの下限を返す
+ * @param index angband_terms上の添字
+ * @return 大きさの下限
+ * @details
+ * 主端末はゲームの画面を描画できる最小の大きさ (MAIN_TERM_MIN_COLS/ROWS)、副端末は1x1とする。
+ * X11版がウィンドウの大きさの変化を受けた時の扱いと同じ。Windows版は副端末の下限を
+ * 20x3としているが、これはウィンドウを操作しやすくするためのもので、描画上の制約ではない。
+ */
+TermSize get_term_min_size(int index)
+{
+    if (index == 0) {
+        return { MAIN_TERM_MIN_COLS, MAIN_TERM_MIN_ROWS };
+    }
+
+    return { 1, 1 };
+}
+
+/*!
+ * @brief 端末の大きさとして妥当か否かを判定する
+ * @param index angband_terms上の添字
+ * @param size 端末の大きさ
+ * @return 下限 (get_term_min_size()) 以上、上限 (TERM_MAX_COLS/ROWS) 以下ならtrue
+ */
+bool is_valid_term_size(int index, const TermSize &size)
+{
+    const auto min_size = get_term_min_size(index);
+    return (size.cols >= min_size.cols) && (size.cols <= TERM_MAX_COLS) && (size.rows >= min_size.rows) && (size.rows <= TERM_MAX_ROWS);
+}
+
 /*
  * Standard window names
  */

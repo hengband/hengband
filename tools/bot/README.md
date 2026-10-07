@@ -17,12 +17,13 @@ src/hengband -mgcu --control-port=9000 --fixed-seed=12345 \
     -ds=/tmp/hbsave -uBotTest -n &
 ```
 
-| オプション                    | 意味                                                                  |
-| ----------------------------- | --------------------------------------------------------------------- |
-| `--control-port=<port>`       | 127.0.0.1 の待ち受けポート。指定しない場合は起動しない                |
-| `--fixed-seed=<seed>`         | 乱数の初期シードを固定する。新規キャラクター作成時のみ効く            |
-| `--headless`                  | 画面を持たない端末を使う。`--control-port` が必須                     |
-| `--headless-term-count=<num>` | ヘッドレス実行で生成する端末の数 (既定 1、最大 8)                     |
+| オプション                                   | 意味                                                                      |
+| -------------------------------------------- | ------------------------------------------------------------------------- |
+| `--control-port=<port>`                      | 127.0.0.1 の待ち受けポート。指定しない場合は起動しない                    |
+| `--fixed-seed=<seed>`                        | 乱数の初期シードを固定する。新規キャラクター作成時のみ効く                |
+| `--headless`                                 | 画面を持たない端末を使う。`--control-port` が必須                         |
+| `--headless-term-count=<num>`                | ヘッドレス実行で生成する端末の数 (既定 1、最大 8)                         |
+| `--headless-term-size=<index>:<cols>x<rows>` | ヘッドレス実行で生成する端末の大きさ (既定 80x24、端末ごとに繰り返し指定) |
 
 `--fixed-seed` は制御サーバ専用ではなく、どのフロントエンドでも有効です。
 
@@ -134,8 +135,23 @@ Hengband.exe --headless --control-port=9000 --fixed-seed=12345
 - **クライアントが接続するまで、最初のキー入力待ちで止まります。** ヘッドレス端末は取り出せる
   イベントを持たないため、接続待ちがそのまま入力待ちになります。接続は起動より後で構いません。
   裏返すと、**接続し忘れるとプロセスが残り続けます**。
-- **端末の大きさは 80x24 固定です。** `--headless-term-count` で副端末を増やせます
-  （`screen` の `term` で読めますが、ウィンドウが無いため通常は主端末だけで足ります）。
+- **端末の大きさは既定で 80x24 です。** `--headless-term-count` で副端末を増やせます
+  （`screen` の `term` で読めます）。大きさは `--headless-term-size=<index>:<cols>x<rows>` で
+  端末ごとに指定できます。主端末は 80x24 以上、副端末は 1x1 以上で、どちらも 255x255 までです。
+  作る端末の数を超える添字を指定すると、理由を標準エラー出力へ出して終了します。
+
+  ```sh
+  src/hengband --headless --control-port=9000 --headless-term-count=3 \
+      --headless-term-size=0:120x40 --headless-term-size=2:40x30 ...
+  ```
+
+  主端末を 80x24 より大きくすると、タイトル画面などの 80x24 で作られた画面は実際のフロントエンドと同じく
+  中央に寄せて描かれます。
+
+  起動後は `resize` op（`hbctl.py resize <width> <height>`）で大きさを変えられます。範囲は起動時と同じです。
+  実際のフロントエンドでウィンドウの大きさを変えたときと同じく、地図やサブウィンドウが新しい大きさで
+  描き直されます。`resize` はヘッドレス実行でだけ受け付け、それ以外ではエラーを返します
+  （実際のウィンドウの大きさとゲームが扱う端末の大きさが食い違ってしまうため）。
 - **アニメーションの待ちがありません。** 演出を見せる相手が居ないため、
   ゲームが要求する遅延を無視します。キー列の再生が GUI より速く進みます。
 - **フロントエンド固有の `pref-*.prf` を読みません。** `info` の `system` が `headless` になるため、
@@ -165,6 +181,8 @@ python3 tools/bot/hbctl.py keys 'jjj'      # キーを送り、処理後の画�
 python3 tools/bot/hbctl.py keys '\e' --quiet      # 画面を表示しない
 python3 tools/bot/hbctl.py state           # ゲームの内部状態 (JSON)
 python3 tools/bot/hbctl.py messages 30     # 直近のメッセージ履歴
+python3 tools/bot/hbctl.py resize 120 40   # 端末の大きさを変える (ヘッドレス実行のみ)
+python3 tools/bot/hbctl.py --term 1 resize 60 20  # 副端末の大きさを変える
 python3 tools/bot/hbctl.py replay keys.txt # キー列ファイルを一括投入
 python3 tools/bot/hbctl.py raw '{"op":"info"}'
 python3 tools/bot/hbctl.py quit            # ゲームを終了
@@ -193,6 +211,7 @@ python3 tools/bot/hbctl.py quit            # ゲームを終了
 | `keys`     | `keys`                                | キー列を注入する。積めたキー数を返す       |
 | `state`    | `map` (既定 true)                     | ゲームの内部状態のスナップショット         |
 | `messages` | `count` (既定 20)                     | 直近のメッセージ履歴を古い順に返す         |
+| `resize`   | `term` (既定 0), `width`, `height`    | 端末の大きさを変える（ヘッドレス実行のみ） |
 | `quit`     | —                                     | ゲームを終了する（**セーブしません**）     |
 
 `keys` には `\e`（ESC）、`^X`（Ctrl+X）、`\xNN` といったマクロ表記を使えます。
