@@ -724,7 +724,7 @@ void FloorType::reset_lite_area()
 {
     this->lite_n = 0;
     this->mon_lite_n = 0;
-    this->redraw_n = 0;
+    this->redraw_points.clear();
     this->view_n = 0;
 }
 
@@ -751,13 +751,12 @@ void FloorType::set_redraw_at(const Pos2D &pos)
     }
 
     auto &grid = this->get_grid(pos);
-    if (grid.is_redraw() || (this->redraw_n >= REDRAW_MAX)) {
+    if (grid.is_redraw()) {
         return;
     }
 
     grid.info |= CAVE_REDRAW;
-    this->redraw_y[this->redraw_n] = pos.y;
-    this->redraw_x[this->redraw_n++] = pos.x;
+    this->redraw_points.push_back(pos);
 }
 
 void FloorType::set_view_at(const Pos2D &pos)
@@ -866,15 +865,14 @@ std::vector<Pos2D> FloorType::collect_temp_mon_lite()
 std::vector<Pos2D> FloorType::collect_redraw_points()
 {
     std::vector<Pos2D> points;
-    for (auto i = 0; i < this->redraw_n; i++) {
-        const Pos2D pos(this->redraw_y[i], this->redraw_x[i]);
-        auto &grid = this->get_grid(pos);
-        if (any_bits(grid.info, CAVE_REDRAW)) {
+    points.reserve(this->redraw_points.size());
+    for (const auto &pos : this->redraw_points) {
+        if (this->get_grid(pos).is_redraw()) {
             points.push_back(pos);
         }
     }
 
-    this->redraw_n = 0;
+    this->redraw_points.clear();
     return points;
 }
 
