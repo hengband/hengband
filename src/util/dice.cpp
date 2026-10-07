@@ -107,8 +107,16 @@ Dice Dice::parse(std::string_view dice_str)
     }
 
     try {
-        auto num = std::stoi(tokens[0]);
-        auto sides = std::stoi(tokens[1]);
+        const auto parse_integer = [](const std::string &token) {
+            size_t pos;
+            const auto value = std::stoi(token, &pos);
+            if (token.find_first_not_of(" \t\n\r\f\v", pos) != std::string::npos) {
+                THROW_EXCEPTION(std::runtime_error, "Invalid dice string");
+            }
+            return value;
+        };
+        const auto num = parse_integer(tokens[0]);
+        const auto sides = parse_integer(tokens[1]);
         return Dice(num, sides);
     } catch (const std::exception &) {
         THROW_EXCEPTION(std::runtime_error, "Invalid dice string");

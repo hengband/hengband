@@ -84,6 +84,46 @@ TEST_CASE("Dice::parse rejects a malformed string")
     CHECK_THROWS_AS(Dice::parse("99999999999d6"), std::runtime_error);
 }
 
+TEST_CASE("Dice::parse rejects unconsumed characters in either integer")
+{
+    for (const auto *text : { "3d5junk", "3junkd5", "3d5.7", "3.7d5", "0x3d5", "3d0x5", "3d5 7", "3 7d5", "3d5 junk", "3 junkd5" }) {
+        CAPTURE(text);
+        CHECK_THROWS_AS(Dice::parse(text), std::runtime_error);
+    }
+
+    CHECK_THROWS_AS(Dice::parse(std::string("3d5\0junk", 8)), std::runtime_error);
+    CHECK_THROWS_AS(Dice::parse(std::string("3\0junkd5", 8)), std::runtime_error);
+    CHECK_THROWS_AS(Dice::parse(std::string("3d5\0", 4)), std::runtime_error);
+    CHECK_THROWS_AS(Dice::parse(std::string("3\0d5", 4)), std::runtime_error);
+}
+
+TEST_CASE("Dice::parse preserves signs and ASCII whitespace around integers")
+{
+    CHECK(Dice::parse("+3d+5") == Dice(3, 5));
+    CHECK(Dice::parse("-3d-5") == Dice(-3, -5));
+    for (const auto whitespace : { ' ', '\t', '\n', '\r', '\f', '\v' }) {
+        CAPTURE(static_cast<int>(whitespace));
+        const std::string padding(1, whitespace);
+        CHECK(Dice::parse(padding + "+3" + padding + "d" + padding + "-5" + padding) == Dice(3, -5));
+    }
+}
+
+TEST_CASE("Dice::parse accepts the int boundaries and rejects overflow in either integer")
+{
+    const auto minimum = std::numeric_limits<int>::min();
+    const auto maximum = std::numeric_limits<int>::max();
+    CHECK(Dice::parse(Dice::to_string(minimum, maximum)) == Dice(minimum, maximum));
+    CHECK(Dice::parse(Dice::to_string(maximum, minimum)) == Dice(maximum, minimum));
+
+    const auto positive_overflow = std::to_string(static_cast<long long>(maximum) + 1);
+    const auto negative_overflow = std::to_string(static_cast<long long>(minimum) - 1);
+    for (const auto &overflow : { positive_overflow, negative_overflow }) {
+        CAPTURE(overflow);
+        CHECK_THROWS_AS(Dice::parse(overflow + "d6"), std::runtime_error);
+        CHECK_THROWS_AS(Dice::parse("3d" + overflow), std::runtime_error);
+    }
+}
+
 TEST_CASE("Dice::parse does not check whether the dice is valid")
 {
     // parse が見るのは 'd' で2つに分割でき、前後がそれぞれ整数として読めることまで。
