@@ -63,6 +63,7 @@ EXTRA_DIST = \
 	tools/bot/README.md \
 	tools/release/Build-Windows-Release-Package.ps1 \
 	tools/verify-class-skill-migration.py \
+	tools/tests/main-window-wipe-probe.cpp \
 	$(visual_studio_files) \
 	$(visual_studio_libcurl_files) \
 	$(schema_files)
