@@ -13,6 +13,10 @@
 
 TerrainList TerrainList::instance{};
 
+// 暗黙のデストラクタだと、TerrainType が不完全な型のまま std::vector<TerrainType> のデストラクタを
+// 実体化しようとするコンパイラがあるので、TerrainType が完全な型になるここで定義する
+TerrainList::~TerrainList() = default;
+
 TerrainList::TerrainList()
 {
     this->normal_traps = {
