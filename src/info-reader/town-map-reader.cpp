@@ -231,7 +231,7 @@ parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFea
             grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
         }
     }
-    letter[static_cast<unsigned char>(feature.symbol)] = grid;
+    fixed_map_letter_at(static_cast<unsigned char>(feature.symbol)) = grid;
     return PARSE_ERROR_NONE;
 }
 

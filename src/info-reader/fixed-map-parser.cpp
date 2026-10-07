@@ -58,7 +58,7 @@ static parse_error_type load_town_preferences()
         }
 
         for (const auto &[symbol, grid] : legend) {
-            letter[symbol] = grid;
+            fixed_map_letter_at(symbol) = grid;
         }
         return PARSE_ERROR_NONE;
     } catch (const nlohmann::json::exception &) {

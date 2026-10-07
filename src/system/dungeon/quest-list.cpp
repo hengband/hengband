@@ -83,7 +83,7 @@ void QuestList::load_base_legend()
         }
         if (!is_fixed_map_symbol(static_cast<unsigned char>(symbol.front()))) {
             constexpr auto fmt = _("ベース凡例のキーが印字可能なASCIIではありません ({}): コード {}", "Base legend key is not printable ASCII ({}): code {}");
-            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), static_cast<int>(PARSE_ERROR_INVALID_VALUE)));
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, path.string(), static_cast<int>(static_cast<unsigned char>(symbol.front()))));
         }
 
         QuestLegendCell cell;

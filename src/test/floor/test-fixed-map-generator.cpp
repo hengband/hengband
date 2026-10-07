@@ -551,6 +551,16 @@ TEST_CASE("FixedMapPD ignores bytes after null and accepts printable ASCII bound
     CHECK(fixture.x == 4);
 }
 
+TEST_CASE("FixedMap letter accessor rejects bytes outside printable ASCII")
+{
+    CHECK(&fixed_map_letter_at(' ') == &letter[' ']);
+    CHECK(&fixed_map_letter_at('~') == &letter['~']);
+    for (const auto byte : { 0x00, 0x1f, 0x7f, 0x80, 0xff }) {
+        CAPTURE(byte);
+        CHECK_THROWS_AS(fixed_map_letter_at(static_cast<unsigned char>(byte)), std::out_of_range);
+    }
+}
+
 TEST_CASE("QuestFixedMap rejects unsafe typed symbols before writing any output")
 {
     for (const auto byte : { 0x00, 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
@@ -558,7 +568,7 @@ TEST_CASE("QuestFixedMap rejects unsafe typed symbols before writing any output"
             CAPTURE(byte);
             CAPTURE(source);
             if (byte == 0 && std::string_view(source) == "map") {
-                continue; // The direct application API retains NUL termination.
+                continue; // 直接適用するAPIはNUL終端の互換動作を維持する。
             }
             FixedMapFixture fixture;
             const auto restore = scoped_quest_layout_state();
@@ -572,7 +582,7 @@ TEST_CASE("QuestFixedMap rejects unsafe typed symbols before writing any output"
             } else if (std::string_view(source) == "legend") {
                 map.legend[symbol] = {};
             } else {
-                map.maps.push_back({ "A" + std::string(1, symbol) });
+                map.maps = { { "A" + std::string(1, symbol) } };
             }
             CHECK(generate_quest_floor_from_json(&fixture.player, quest, map) == PARSE_ERROR_INVALID_VALUE);
             CHECK(letter['A'].feature == 1);

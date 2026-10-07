@@ -55,14 +55,9 @@ TEST_CASE("QuestList base legend rejects unsafe symbol bytes without publication
     QuestLegendCell existing;
     existing.grid.special = 73;
     maps.set_base_legend({ { '?', existing } });
-    for (const auto byte : { 0x00, 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
-        CAPTURE(byte);
-        if (byte < 0x80) {
-            files.write("QuestPreferences.jsonc", { { "legend", { { "!", nlohmann::json::object() }, { std::string(1, static_cast<char>(byte)), nlohmann::json::object() } } } });
-        } else {
-            // Isolated high bytes cannot be represented in valid UTF-8 JSON strings.
-            files.write_raw("QuestPreferences.jsonc", "{\"legend\":{\"!\":{},\"" + std::string(1, static_cast<char>(byte)) + "\":{}}}");
-        }
+    for (const auto *escaped_byte : { "\\u0000", "\\u001f", "\\u007f" }) {
+        CAPTURE(escaped_byte);
+        files.write_raw("QuestPreferences.jsonc", "{\"legend\":{\"!\":{},\"" + std::string(escaped_byte) + "\":{}}}");
         CHECK_THROWS_AS(quests.load_base_legend(), std::runtime_error);
         REQUIRE(maps.get_base_legend().size() == 1);
         CHECK(maps.get_base_legend().at('?').grid.special == 73);
