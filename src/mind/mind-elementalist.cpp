@@ -8,7 +8,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-processor.h"
@@ -820,7 +820,7 @@ static bool get_element_power(PlayerType *player_ptr, SPELL_IDX *sn, bool only_b
     }
 
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
-    handle_stuff(player_ptr);
+    window_stuff(player_ptr);
     if (!flag) {
         return false;
     }

@@ -175,7 +175,7 @@ void do_cmd_player_status(PlayerType *player_ptr)
         MainWindowRedrawingFlag::MAP,
     };
     rfu.set_flags(flags_mwrf);
-    handle_stuff(player_ptr);
+    redraw_stuff(player_ptr);
 }
 
 /*!

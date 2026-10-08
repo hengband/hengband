@@ -7,6 +7,7 @@
 #include "knowledge/knowledge-items.h"
 #include "core/show-file.h"
 #include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "game-option/special-options.h"
@@ -323,7 +324,7 @@ void do_cmd_knowledge_objects(PlayerType *player_ptr, bool *need_redraw, bool vi
         if (!visual_only) {
             tracker.set_trackee(bi_id_cursor);
             if (previous_bi_id != bi_id_cursor) {
-                handle_stuff(player_ptr);
+                window_stuff(player_ptr);
                 previous_bi_id = bi_id_cursor;
             }
         }

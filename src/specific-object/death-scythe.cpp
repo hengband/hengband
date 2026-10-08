@@ -7,7 +7,7 @@
 
 #include "specific-object/death-scythe.h"
 #include "combat/attack-criticality.h"
-#include "core/stuff-handler.h"
+#include "core/window-redrawer.h"
 #include "inventory/inventory-slot-types.h"
 #include "main/sound-definitions-table.h"
 #include "main/sound-of-music.h"
@@ -164,5 +164,5 @@ void process_death_scythe_reflection(PlayerType *player_ptr, player_attack_type 
     }
 
     take_hit(player_ptr, DAMAGE_FORCE, pa_ptr->attack_damage, _("死の大鎌", "Death scythe"));
-    handle_stuff(player_ptr);
+    redraw_stuff(player_ptr);
 }

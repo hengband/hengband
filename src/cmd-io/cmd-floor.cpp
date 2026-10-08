@@ -47,7 +47,7 @@ void do_cmd_look(PlayerType *player_ptr)
         SubWindowRedrawingFlag::FLOOR_ITEMS,
     };
     RedrawingFlagsUpdater::get_instance().set_flags(flags);
-    handle_stuff(player_ptr);
+    window_stuff(player_ptr);
     output_bot_json_look_snapshot(player_ptr);
     if (target_set(player_ptr, TARGET_LOOK).is_okay()) {
         msg_print(_("ターゲット決定。", "Target Selected."));

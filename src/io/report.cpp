@@ -7,8 +7,8 @@
 
 #include "io/report.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
 #include "core/visuals-reseter.h"
+#include "core/window-redrawer.h"
 #include "game-option/special-options.h"
 #include "io-dump/character-dump.h"
 #include "io/input-key-acceptor.h"
@@ -167,7 +167,7 @@ std::string make_screen_dump(PlayerType *player_ptr)
             MainWindowRedrawingFlag::EQUIPPY,
         };
         rfu.set_flags(flags);
-        handle_stuff(player_ptr);
+        redraw_stuff(player_ptr);
     }
 
     screen_ss << html_head;
@@ -254,7 +254,7 @@ std::string make_screen_dump(PlayerType *player_ptr)
         MainWindowRedrawingFlag::EQUIPPY,
     };
     rfu.set_flags(flags);
-    handle_stuff(player_ptr);
+    redraw_stuff(player_ptr);
     return ret;
 }
 

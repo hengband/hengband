@@ -14,7 +14,6 @@
 #include "artifact/fixed-art-types.h"
 #include "cmd-action/cmd-spell.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "floor/floor-object.h"
 #include "game-option/disturbance-options.h"
@@ -282,7 +281,7 @@ static int get_mane_power(PlayerType *player_ptr, int *sn, bool baigaesi)
     }
 
     RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::SPELL);
-    handle_stuff(player_ptr);
+    window_stuff(player_ptr);
 
     /* Abort if needed */
     if (!flag) {

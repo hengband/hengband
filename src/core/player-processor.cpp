@@ -294,7 +294,7 @@ void process_player(PlayerType *player_ptr)
         } else if (command_rep) {
             command_rep--;
             rfu.set_flag(MainWindowRedrawingFlag::ACTION);
-            handle_stuff(player_ptr);
+            redraw_stuff(player_ptr);
             msg_flag = false;
             prt("", 0, 0);
             mark_monsters_present(player_ptr);
