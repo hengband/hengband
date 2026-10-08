@@ -144,9 +144,7 @@ int BaseitemReader::read() const
     if (item_id >= static_cast<int>(baseitems.size())) {
         baseitems.resize(item_id + 1);
     }
-    auto &target = baseitems.get_baseitem(short_id);
-    std::destroy_at(std::addressof(target));
-    std::construct_at(std::addressof(target), std::move(baseitem));
+    baseitems.replace_baseitem(short_id, std::move(baseitem));
     return PARSE_ERROR_NONE;
 }
 

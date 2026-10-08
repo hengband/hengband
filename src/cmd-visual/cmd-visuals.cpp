@@ -247,7 +247,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
 
                 switch (c) {
                 case 'n': {
-                    const auto new_monrace_id_opt = input_new_visual_id(ch, num, static_cast<short>(monraces.size()));
+                    const auto new_monrace_id_opt = input_new_visual_id(ch, num, static_cast<int>(monraces.size()));
                     if (!new_monrace_id_opt) {
                         break;
                     }
@@ -330,7 +330,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     tl::optional<short> new_baseitem_id;
                     const auto previous_bi_id = bi_id;
                     while (true) {
-                        new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<short>(baseitems.size()));
+                        new_baseitem_id = input_new_visual_id(ch, bi_id, static_cast<int>(baseitems.size()));
                         if (!new_baseitem_id) {
                             bi_id = previous_bi_id;
                             break;
@@ -416,7 +416,7 @@ void do_cmd_visuals(PlayerType *player_ptr)
                     tl::optional<short> new_terrain_id;
                     const auto previous_terrain_id = terrain_id;
                     while (true) {
-                        new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<short>(TerrainList::get_instance().size()));
+                        new_terrain_id = input_new_visual_id(ch, terrain_id, static_cast<int>(TerrainList::get_instance().size()));
                         if (!new_terrain_id) {
                             terrain_id = previous_terrain_id;
                             break;

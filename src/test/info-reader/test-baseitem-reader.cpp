@@ -6,43 +6,23 @@
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/scoped-vector-wrapper.h"
 #include "util/dice.h"
 #include <doctest/doctest.h>
 #include <limits>
-#include <memory>
 #include <nlohmann/json.hpp>
-#include <utility>
+#include <stdexcept>
 #include <vector>
 
 namespace {
 class BaseitemStateGuard {
 public:
-    BaseitemStateGuard()
-    {
-        auto &items = BaseitemList::get_instance();
-        for (auto &item : items) {
-            saved.push_back(std::move(item));
-        }
-        items.resize(0);
-    }
-
+    BaseitemStateGuard() = default;
     BaseitemStateGuard(const BaseitemStateGuard &) = delete;
     BaseitemStateGuard &operator=(const BaseitemStateGuard &) = delete;
 
-    ~BaseitemStateGuard()
-    {
-        auto &items = BaseitemList::get_instance();
-        items.resize(saved.size());
-        auto target = items.begin();
-        for (auto &item : saved) {
-            std::destroy_at(std::addressof(*target));
-            std::construct_at(std::addressof(*target), std::move(item));
-            ++target;
-        }
-    }
-
 private:
-    std::vector<BaseitemDefinition> saved;
+    test::ScopedVectorWrapper<BaseitemList> items{ BaseitemList::get_instance() };
     test::ScopedReaderState reader_state;
 };
 
@@ -267,6 +247,20 @@ TEST_CASE("BaseitemReader preserves the short ID upper bound independently of th
         CHECK(error_idx == id.get<int>());
         CHECK(BaseitemList::get_instance().empty());
     }
+}
+
+TEST_CASE("BaseitemReader publishes accessible ID 32767 with 32768 entries")
+{
+    BaseitemStateGuard baseitems_guard;
+    const auto data = make_baseitem(32767);
+    REQUIRE(BaseitemReader(data).read() == PARSE_ERROR_NONE);
+
+    auto &baseitems = BaseitemList::get_instance();
+    REQUIRE(baseitems.size() == 32768);
+    CHECK(baseitems.is_valid(32767));
+    CHECK_FALSE(baseitems.is_valid(32766));
+    CHECK(baseitems.get_baseitem(32767).cost == 4);
+    CHECK_THROWS_AS(baseitems.get_baseitem(-1), std::logic_error);
 }
 
 TEST_CASE("BaseitemReader preserves ordering precedence and rejects negative indices")

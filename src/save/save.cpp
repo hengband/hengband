@@ -100,11 +100,7 @@ static bool wr_savefile_new(PlayerType *player_ptr)
         wr_lore(i2enum<MonraceId>(monrace_id));
     }
 
-    tmp16u = static_cast<uint16_t>(BaseitemList::get_instance().size());
-    wr_u16b(tmp16u);
-    for (short bi_id = 0; bi_id < tmp16u; bi_id++) {
-        wr_perception(bi_id);
-    }
+    wr_baseitem_records();
 
     const auto &towns = TownList::get_instance();
     const auto towns_size = static_cast<uint16_t>(towns.size());

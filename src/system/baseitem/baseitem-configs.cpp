@@ -75,7 +75,7 @@ void BaseitemConfigs::set_config(short bi_id, const DisplaySymbol &ds)
 
 void BaseitemConfigs::validate(short bi_id) const
 {
-    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->size()))) {
+    if ((bi_id < 0) || (static_cast<size_t>(bi_id) >= this->size())) {
         THROW_EXCEPTION(std::runtime_error, fmt::format("Invalid Baseitem ID: {}", bi_id));
     }
 }

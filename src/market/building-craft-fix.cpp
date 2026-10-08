@@ -182,7 +182,7 @@ static PRICE repair_broken_weapon_aux(PlayerType *player_ptr, PRICE bcost)
     if (item_broken->bi_key.sval() == SV_BROKEN_DAGGER) {
         auto n = 1;
         bi_id = 0;
-        for (short tmp_bi_id = 0; tmp_bi_id < static_cast<short>(baseitems.size()); tmp_bi_id++) {
+        for (const auto tmp_bi_id : baseitems.collect_valid_bi_ids()) {
             const auto &baseitem = baseitems.get_baseitem(tmp_bi_id);
             if (baseitem.bi_key.tval() != ItemKindType::SWORD) {
                 continue;

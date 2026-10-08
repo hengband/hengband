@@ -10,6 +10,7 @@
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/player-type-definition.h"
 #include "system/services/dungeon-service.h"
+#include "test/save/scoped-save-io.h"
 #include "test/system/dungeon-list-test-access.h"
 #include "util/enum-converter.h"
 #include "util/finalizer.h"
@@ -49,20 +50,9 @@ auto preserve_records()
     });
 }
 
-auto preserve_save_io()
+auto preserve_save_versions()
 {
-    return util::make_finalizer([writer = saving_savefile, reader = loading_savefile,
-                                    write_xor = save_xor_byte, read_xor = load_xor_byte,
-                                    write_v = v_stamp, write_x = x_stamp, read_v = v_check, read_x = x_check,
-                                    version = loading_savefile_version, game_version = AngbandSystem::get_instance().get_version()] {
-        saving_savefile = writer;
-        loading_savefile = reader;
-        save_xor_byte = write_xor;
-        load_xor_byte = read_xor;
-        v_stamp = write_v;
-        x_stamp = write_x;
-        v_check = read_v;
-        x_check = read_x;
+    return util::make_finalizer([version = loading_savefile_version, game_version = AngbandSystem::get_instance().get_version()] {
         loading_savefile_version = version;
         AngbandSystem::get_instance().set_version(game_version);
     });
@@ -119,7 +109,8 @@ TEST_CASE("Dungeon recall save round trip preserves unlocked-only and visited re
     auto *file = std::tmpfile();
     REQUIRE(file != nullptr);
     const auto close_file = util::make_finalizer([file] { std::fclose(file); });
-    const auto restore_io = preserve_save_io();
+    const auto restore_io = test::preserve_save_io();
+    const auto restore_versions = preserve_save_versions();
     auto &records = DungeonRecords::get_instance();
     records.reset_all();
     records.get_record(DungeonId::ANGBAND).set_max_level(20);
@@ -164,7 +155,8 @@ TEST_CASE("Dungeon recall loader accepts legacy depths without consuming visit f
     auto *file = std::tmpfile();
     REQUIRE(file != nullptr);
     const auto close_file = util::make_finalizer([file] { std::fclose(file); });
-    const auto restore_io = preserve_save_io();
+    const auto restore_io = test::preserve_save_io();
+    const auto restore_versions = preserve_save_versions();
     saving_savefile = file;
     save_xor_byte = 0;
     wr_byte(static_cast<uint8_t>(DungeonRecords::get_instance().size()));
@@ -200,7 +192,8 @@ TEST_CASE("Dungeon recall loader clamps depths and consumes unsupported records 
     auto *file = std::tmpfile();
     REQUIRE(file != nullptr);
     const auto close_file = util::make_finalizer([file] { std::fclose(file); });
-    const auto restore_io = preserve_save_io();
+    const auto restore_io = test::preserve_save_io();
+    const auto restore_versions = preserve_save_versions();
     auto &records = DungeonRecords::get_instance();
     records.reset_all();
     records.get_record(DungeonId::ANGBAND).set_max_level(200);

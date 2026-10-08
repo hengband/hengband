@@ -12,10 +12,12 @@
 #include "util/enum-range.h"
 #include <algorithm>
 #include <fmt/format.h>
+#include <memory>
 #include <numeric>
 #include <range/v3/view.hpp>
 #include <set>
 #include <span>
+#include <utility>
 
 namespace {
 constexpr auto INVALID_BI_ID_FORMAT = "Invalid Baseitem ID is specified! {}";
@@ -23,6 +25,8 @@ constexpr auto INVALID_BASEITEM_KEY = "Invalid Baseitem Key is specified! Type: 
 }
 
 BaseitemList BaseitemList::instance{};
+
+BaseitemList::BaseitemList() = default;
 
 BaseitemList::~BaseitemList() = default;
 
@@ -33,7 +37,7 @@ BaseitemList &BaseitemList::get_instance()
 
 bool BaseitemList::is_valid(short bi_id) const
 {
-    if ((bi_id <= 0) || (bi_id >= static_cast<short>(this->size()))) {
+    if ((bi_id <= 0) || (static_cast<size_t>(bi_id) >= this->size())) {
         return false;
     }
 
@@ -58,20 +62,44 @@ const BaseitemDefinition &BaseitemList::pick_one_at_random() const
     return rand_choice(candidates);
 }
 
-const std::vector<short> &BaseitemList::collect_valid_bi_ids() const
+void BaseitemList::resize(size_t new_size)
 {
-    static std::vector<short> bi_ids;
-    if (!bi_ids.empty()) {
-        return bi_ids;
+    this->baseitems.resize(new_size);
+    this->invalidate_caches();
+}
+
+void BaseitemList::replace_baseitem(short bi_id, BaseitemDefinition &&baseitem)
+{
+    this->validate(bi_id);
+    auto &target = this->baseitems[bi_id];
+    std::destroy_at(std::addressof(target));
+    std::construct_at(std::addressof(target), std::move(baseitem));
+    this->invalidate_caches();
+}
+
+std::vector<short> BaseitemList::collect_valid_bi_ids() const
+{
+    if (this->valid_bi_ids_ready) {
+        return this->valid_bi_ids;
     }
 
-    for (const auto &[bi_id, baseitem] : *this | ranges::views::enumerate) {
+    std::vector<short> bi_ids;
+    for (const auto &[bi_id, baseitem] : this->baseitems | ranges::views::enumerate) {
         if (baseitem.is_valid()) {
             bi_ids.push_back(static_cast<short>(bi_id));
         }
     }
 
-    return bi_ids;
+    this->valid_bi_ids = std::move(bi_ids);
+    this->valid_bi_ids_ready = true;
+    return this->valid_bi_ids;
+}
+
+void BaseitemList::invalidate_caches()
+{
+    this->valid_bi_ids_ready = false;
+    this->baseitem_keys_cache_ready = false;
+    this->baseitem_subtypes_cache_ready = false;
 }
 
 /*!
@@ -87,7 +115,7 @@ short BaseitemList::lookup_baseitem_id(const BaseitemKey &bi_key) const
         return exe_lookup(bi_key);
     }
 
-    static const auto &cache = this->create_baseitem_subtypes_cache();
+    const auto &cache = this->create_baseitem_subtypes_cache();
     const auto it = cache.find(bi_key.tval());
     if (it == cache.end()) {
         constexpr auto fmt = "Specified ItemKindType has no subtype! %d";
@@ -106,7 +134,7 @@ const BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_ke
 
 void BaseitemList::validate(short bi_id) const
 {
-    if ((bi_id < 0) || (bi_id >= static_cast<short>(this->size()))) {
+    if ((bi_id < 0) || (static_cast<size_t>(bi_id) >= this->size())) {
         THROW_EXCEPTION(std::logic_error, fmt::format(INVALID_BI_ID_FORMAT, bi_id));
     }
 }
@@ -119,7 +147,7 @@ void BaseitemList::validate(short bi_id) const
  */
 short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
 {
-    static const auto &cache = this->create_baseitem_keys_cache();
+    const auto &cache = this->create_baseitem_keys_cache();
     const auto it = cache.find(bi_key);
     if (it == cache.end()) {
         THROW_EXCEPTION(std::runtime_error, fmt::format(INVALID_BASEITEM_KEY, enum2i(bi_key.tval()), *bi_key.sval()));
@@ -134,13 +162,18 @@ short BaseitemList::exe_lookup(const BaseitemKey &bi_key) const
  */
 const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_keys_cache() const
 {
-    static std::map<BaseitemKey, short> cache;
+    if (this->baseitem_keys_cache_ready) {
+        return this->baseitem_keys_cache;
+    }
+    std::map<BaseitemKey, short> cache;
     for (short bi_id : this->collect_valid_bi_ids()) {
         const auto &bi_key = this->baseitems.at(bi_id).bi_key;
         cache[bi_key] = bi_id;
     }
 
-    return cache;
+    this->baseitem_keys_cache = std::move(cache);
+    this->baseitem_keys_cache_ready = true;
+    return this->baseitem_keys_cache;
 }
 
 /*
@@ -149,14 +182,19 @@ const std::map<BaseitemKey, short> &BaseitemList::create_baseitem_keys_cache() c
  */
 const std::map<ItemKindType, std::vector<int>> &BaseitemList::create_baseitem_subtypes_cache() const
 {
-    static std::map<ItemKindType, std::vector<int>> cache;
+    if (this->baseitem_subtypes_cache_ready) {
+        return this->baseitem_subtypes_cache;
+    }
+    std::map<ItemKindType, std::vector<int>> cache;
     for (short bi_id : this->collect_valid_bi_ids()) {
         const auto &bi_key = this->baseitems.at(bi_id).bi_key;
         const auto tval = bi_key.tval();
         cache[tval].push_back(*bi_key.sval());
     }
 
-    return cache;
+    this->baseitem_subtypes_cache = std::move(cache);
+    this->baseitem_subtypes_cache_ready = true;
+    return this->baseitem_subtypes_cache;
 }
 
 BaseitemDefinition &BaseitemList::lookup_baseitem(const BaseitemKey &bi_key)
