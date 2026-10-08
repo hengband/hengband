@@ -193,6 +193,15 @@
     <ClCompile Include="..\..\src\test\store\test-store-util.cpp">
       <Filter>store</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\save\test-item-writer.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-allocation.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-list.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -251,6 +260,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
     <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h" />
+    <ClInclude Include="..\..\src\test\save\scoped-save-io.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h">
+      <Filter>system</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
     <ClInclude Include="..\..\src\test\string-helpers.h" />

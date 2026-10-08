@@ -68,10 +68,8 @@ void BaseitemAllocationTable::initialize()
     std::array<size_t, MAX_DEPTH> num{};
     size_t allocation_size = 0;
     const auto &baseitems = BaseitemList::get_instance();
-    for (const auto &baseitem : baseitems) {
-        if (!baseitem.is_valid()) {
-            continue;
-        }
+    for (const auto bi_id : baseitems.collect_valid_bi_ids()) {
+        const auto &baseitem = baseitems.get_baseitem(bi_id);
         for (const auto &[level, chance] : baseitem.alloc_tables) {
             if (chance != 0) {
                 allocation_size++;
@@ -90,12 +88,8 @@ void BaseitemAllocationTable::initialize()
 
     this->entries = std::vector<BaseitemAllocationEntry>(allocation_size);
     std::array<size_t, MAX_DEPTH> aux{};
-    for (int index = 0; index < static_cast<int>(baseitems.size()); index++) {
-        const auto bi_id = static_cast<short>(index);
+    for (const auto bi_id : baseitems.collect_valid_bi_ids()) {
         const auto &baseitem = baseitems.get_baseitem(bi_id);
-        if (!baseitem.is_valid()) {
-            continue;
-        }
         for (const auto &[level, chance] : baseitem.alloc_tables) {
             if (chance == 0) {
                 continue;

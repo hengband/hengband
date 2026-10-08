@@ -2,110 +2,23 @@
 #include "info-reader/baseitem-reader.h"
 #include "info-reader/info-reader-util.h"
 #include "info-reader/parse-error-types.h"
-#include "load/load-util.h"
 #include "object-enchant/tr-types.h"
-#include "save/item-writer.h"
-#include "save/save-util.h"
-#include "system/baseitem/baseitem-allocation.h"
 #include "system/baseitem/baseitem-definition.h"
 #include "system/baseitem/baseitem-list.h"
-#include "system/baseitem/baseitem-record.h"
-#include "system/baseitem/baseitem-records.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/scoped-vector-wrapper.h"
 #include "util/dice.h"
-#include "util/finalizer.h"
-#include <algorithm>
-#include <cstdio>
 #include <doctest/doctest.h>
 #include <limits>
-#include <memory>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
-#include <utility>
 #include <vector>
 
 namespace {
 class BaseitemStateGuard {
-public:
-    BaseitemStateGuard()
-    {
-        auto &items = BaseitemList::get_instance();
-        for (auto &item : items) {
-            saved.push_back(std::move(item));
-        }
-        items.resize(0);
-    }
-
-    BaseitemStateGuard(const BaseitemStateGuard &) = delete;
-    BaseitemStateGuard &operator=(const BaseitemStateGuard &) = delete;
-
-    ~BaseitemStateGuard()
-    {
-        auto &items = BaseitemList::get_instance();
-        items.resize(saved.size());
-        auto target = items.begin();
-        for (auto &item : saved) {
-            std::destroy_at(std::addressof(*target));
-            std::construct_at(std::addressof(*target), std::move(item));
-            ++target;
-        }
-    }
-
 private:
-    std::vector<BaseitemDefinition> saved;
+    test::ScopedVectorWrapper<BaseitemList> items{ BaseitemList::get_instance() };
     test::ScopedReaderState reader_state;
-};
-
-class BaseitemRecordsGuard {
-public:
-    BaseitemRecordsGuard()
-    {
-        auto &records = BaseitemRecords::get_instance();
-        for (auto &record : records) {
-            saved.push_back(std::move(record));
-        }
-        records.initialize(0);
-    }
-
-    BaseitemRecordsGuard(const BaseitemRecordsGuard &) = delete;
-    BaseitemRecordsGuard &operator=(const BaseitemRecordsGuard &) = delete;
-
-    ~BaseitemRecordsGuard()
-    {
-        auto &records = BaseitemRecords::get_instance();
-        records.initialize(saved.size());
-        auto target = records.begin();
-        for (auto &record : saved) {
-            std::destroy_at(std::addressof(*target));
-            std::construct_at(std::addressof(*target), std::move(record));
-            ++target;
-        }
-    }
-
-private:
-    std::vector<BaseitemRecord> saved;
-};
-
-class BaseitemAllocationGuard {
-public:
-    BaseitemAllocationGuard()
-    {
-        auto &table = BaseitemAllocationTable::get_instance();
-        saved.assign(table.begin(), table.end());
-    }
-
-    BaseitemAllocationGuard(const BaseitemAllocationGuard &) = delete;
-    BaseitemAllocationGuard &operator=(const BaseitemAllocationGuard &) = delete;
-
-    ~BaseitemAllocationGuard()
-    {
-        auto &table = BaseitemAllocationTable::get_instance();
-        table.resize(saved.size());
-        std::copy(saved.begin(), saved.end(), table.begin());
-    }
-
-private:
-    std::vector<BaseitemAllocationEntry> saved;
 };
 
 nlohmann::json make_baseitem(int id = 1)
@@ -331,11 +244,9 @@ TEST_CASE("BaseitemReader preserves the short ID upper bound independently of th
     }
 }
 
-TEST_CASE("Baseitem ID 32767 remains accessible and saveable with 32768 entries")
+TEST_CASE("BaseitemReader publishes accessible ID 32767 with 32768 entries")
 {
     BaseitemStateGuard baseitems_guard;
-    BaseitemRecordsGuard records_guard;
-    error_idx = -1;
     const auto data = make_baseitem(32767);
     REQUIRE(BaseitemReader(data).read() == PARSE_ERROR_NONE);
 
@@ -345,68 +256,6 @@ TEST_CASE("Baseitem ID 32767 remains accessible and saveable with 32768 entries"
     CHECK_FALSE(baseitems.is_valid(32766));
     CHECK(baseitems.get_baseitem(32767).cost == 4);
     CHECK_THROWS_AS(baseitems.get_baseitem(-1), std::logic_error);
-
-    auto &records = BaseitemRecords::get_instance();
-    records.initialize(baseitems.size());
-    REQUIRE(records.size() == 32768);
-    records.get_record(32767).mark_awareness(true);
-    records.get_record(32767).mark_trial(true);
-    CHECK(records.get_record(32767).is_aware());
-    CHECK_THROWS_AS(records.get_record(-1), std::logic_error);
-
-    auto *file = std::tmpfile();
-    REQUIRE(file != nullptr);
-    const auto close_file = util::make_finalizer([file] { std::fclose(file); });
-    const auto restore_io = util::make_finalizer([writer = saving_savefile, reader = loading_savefile,
-                                                     write_xor = save_xor_byte, read_xor = load_xor_byte,
-                                                     write_v = v_stamp, write_x = x_stamp, read_v = v_check, read_x = x_check] {
-        saving_savefile = writer;
-        loading_savefile = reader;
-        save_xor_byte = write_xor;
-        load_xor_byte = read_xor;
-        v_stamp = write_v;
-        x_stamp = write_x;
-        v_check = read_v;
-        x_check = read_x;
-    });
-    saving_savefile = file;
-    save_xor_byte = 0;
-    v_stamp = x_stamp = 0;
-    wr_baseitem_records();
-    wr_u16b(0x1234);
-
-    std::rewind(file);
-    loading_savefile = file;
-    load_xor_byte = 0;
-    v_check = x_check = 0;
-    CHECK(rd_u16b() == 32768);
-    CHECK(rd_byte() == 0);
-    strip_bytes(32766);
-    CHECK(rd_byte() == 0x03);
-    CHECK(rd_u16b() == 0x1234);
-}
-
-TEST_CASE("Baseitem allocation counts remain in range beyond 32767 entries")
-{
-    BaseitemStateGuard baseitems_guard;
-    BaseitemAllocationGuard allocation_guard;
-    auto &baseitems = BaseitemList::get_instance();
-    baseitems.resize(32768);
-    for (int index = 1; index <= 8192; index++) {
-        auto &baseitem = baseitems.get_baseitem(static_cast<short>(index));
-        baseitem.name = "test";
-        for (int level = 0; level < 4; level++) {
-            baseitem.alloc_tables[level] = { level, 1 };
-        }
-    }
-    auto &last = baseitems.get_baseitem(32767);
-    last.name = "test";
-    last.alloc_tables[0] = { 4, 1 };
-
-    auto &table = BaseitemAllocationTable::get_instance();
-    table.initialize();
-    REQUIRE(table.size() == 32769);
-    CHECK(table.get_entry(32768).index == 32767);
 }
 
 TEST_CASE("BaseitemReader preserves ordering precedence and rejects negative indices")

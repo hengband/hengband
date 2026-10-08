@@ -1494,6 +1494,8 @@ check_PROGRAMS = hengband-test
 hengband_test_SOURCES = \
 	test/test-main.cpp \
 	test/scoped-restore.h \
+	test/save/scoped-save-io.h \
+	test/scoped-vector-wrapper.h \
 	test/scoped-rng.h \
 	test/string-helpers.h \
 	test/temporary-json-files.h \
@@ -1549,6 +1551,9 @@ hengband_test_SOURCES = \
 	test/store/test-store-screen.cpp \
 	test/store/test-store-util.cpp \
 	test/system/baseitem/test-baseitem-definition.cpp \
+	test/save/test-item-writer.cpp \
+	test/system/baseitem/test-baseitem-allocation.cpp \
+	test/system/baseitem/test-baseitem-list.cpp \
 	test/system/monrace/test-monrace-definition.cpp \
 	test/system/test-quest-list.cpp \
 	test/system/test-dungeon-record.cpp \

@@ -2,8 +2,6 @@
 #include "artifact/random-art-effects.h"
 #include "load/old/item-flag-types-savefile50.h"
 #include "save/save-util.h"
-#include "system/baseitem/baseitem-definition.h"
-#include "system/baseitem/baseitem-list.h"
 #include "system/baseitem/baseitem-record.h"
 #include "system/baseitem/baseitem-records.h"
 #include "system/item/item-entity.h"
@@ -291,7 +289,7 @@ void wr_perception(short bi_id)
 
 void wr_baseitem_records()
 {
-    const auto count = static_cast<uint16_t>(BaseitemList::get_instance().size());
+    const auto count = static_cast<uint16_t>(BaseitemRecords::get_instance().size());
     wr_u16b(count);
     for (uint16_t index = 0; index < count; index++) {
         wr_perception(static_cast<short>(index));
