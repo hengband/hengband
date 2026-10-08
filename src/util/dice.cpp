@@ -94,10 +94,13 @@ std::string Dice::to_string(int num, int sides)
  *
  * 引数で与えられたダイスを表す文字列 "XdY" から、
  * Xをダイスの数、Yをダイスの面数とするヒットダイスオブジェクトを生成する。
+ * XとYはintに収まる10進整数で、負号は受理するが、正号や空白は受理しない。
+ * 0や負の値も解析でき、ダイスを振れるかどうかはis_valid()で別に判定する。
  *
  * @param dice_str ダイスを表す文字列
  * @return 生成したダイスオブジェクト
- * @throw std::runtime_error dice_strがダイスを表す文字列として解釈できない場合
+ * @throw std::runtime_error 区切りの'd'が1つでない場合、整数が空またはintの範囲外の場合、
+ * 正号・空白・余分な文字・小数・16進表記・埋め込みNULを含む場合
  */
 Dice Dice::parse(std::string_view dice_str)
 {
@@ -106,13 +109,13 @@ Dice Dice::parse(std::string_view dice_str)
         THROW_EXCEPTION(std::runtime_error, "Invalid dice string");
     }
 
-    try {
-        auto num = std::stoi(tokens[0]);
-        auto sides = std::stoi(tokens[1]);
-        return Dice(num, sides);
-    } catch (const std::exception &) {
+    const auto num = str_to_num<int>(tokens[0]);
+    const auto sides = str_to_num<int>(tokens[1]);
+    if (!num || !sides) {
         THROW_EXCEPTION(std::runtime_error, "Invalid dice string");
     }
+
+    return Dice(*num, *sides);
 }
 
 /*!
