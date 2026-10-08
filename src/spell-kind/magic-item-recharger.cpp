@@ -11,7 +11,6 @@
  */
 
 #include "spell-kind/magic-item-recharger.h"
-#include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -111,7 +110,8 @@ bool recharge(PlayerType *player_ptr, int power)
     }
 
     if (is_recharge_successful) {
-        return update_player();
+        request_inventory_arrangement();
+        return true;
     }
 
     if (item->is_fixed_artifact()) {
@@ -122,7 +122,8 @@ bool recharge(PlayerType *player_ptr, int power)
         } else if (item->is_wand_staff()) {
             item->pval = 0;
         }
-        return update_player();
+        request_inventory_arrangement();
+        return true;
     }
 
     const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -221,5 +222,6 @@ bool recharge(PlayerType *player_ptr, int power)
         THROW_EXCEPTION(std::logic_error, "Invalid fail type!");
     }
 
-    return update_player();
+    request_inventory_arrangement();
+    return true;
 }
