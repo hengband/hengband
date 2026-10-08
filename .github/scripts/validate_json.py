@@ -412,11 +412,19 @@ def load_spell_tags(schema_path: Path, data_path: Path, registry: Registry) -> d
         validate_spell_semantics(spells)
     except ValidationError as e:
         raise ValueError(f"Invalid spell definitions in {spell_path}: {e.message}; Location: {list(e.path)}") from e
-    tags = {}
+    tag_ids = {}
     for realm in spells["realms"]:
-        realm_tags = tags.setdefault(realm["name"], set())
+        realm_tag_ids = tag_ids.setdefault(realm["name"], {})
         for book in realm["books"]:
-            realm_tags.update(spell["spell_tag"] for spell in book["spells"])
+            for spell in book["spells"]:
+                realm_tag_ids[spell["spell_tag"]] = spell["spell_id"]
+    tags = {}
+    for realm, realm_tag_ids in tag_ids.items():
+        ids = set(realm_tag_ids.values())
+        # Undefined slots also have empty tags, and get_spell_id returns the first match.
+        # An empty tag is referenceable only when every lower slot has a definition.
+        tags[realm] = {tag for tag, spell_id in realm_tag_ids.items()
+                       if tag or all(lower_id in ids for lower_id in range(spell_id))}
     return tags
 
 
@@ -468,10 +476,12 @@ def validate_class_skill_semantics(data: dict) -> None:
 
 
 def validate_spell_semantics(data: dict) -> None:
-    """Reject strict integer failures and overwrites that can invalidate tags."""
+    """Reject strict integer failures, overwrites and ambiguous tag lookups."""
     realm_ids = {}
+    realm_tags = {}
     for realm_index, realm in enumerate(data["realms"]):
         ids = realm_ids.setdefault(realm["name"], set())
+        tags = realm_tags.setdefault(realm["name"], set())
         for book_index, book in enumerate(realm["books"]):
             for spell_index, spell in enumerate(book["spells"]):
                 path = ["realms", realm_index, "books", book_index, "spells", spell_index, "spell_id"]
@@ -479,6 +489,10 @@ def validate_spell_semantics(data: dict) -> None:
                 if spell["spell_id"] in ids:
                     raise ValidationError("spell IDs must be unique within each realm", path=path)
                 ids.add(spell["spell_id"])
+                tag_path = path[:-1] + ["spell_tag"]
+                if spell["spell_tag"] in tags:
+                    raise ValidationError("spell tags must be unique within each realm", path=tag_path)
+                tags.add(spell["spell_tag"])
 
 
 def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None) -> tuple[bool, str]:

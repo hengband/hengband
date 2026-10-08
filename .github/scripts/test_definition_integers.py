@@ -267,6 +267,123 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         ok, message = self.validate("SpellDefinitions", document)
         self.assertTrue(ok, message)
 
+    def test_repeated_spell_tag_with_different_ids_is_rejected(self):
+        for tag in ("DUPLICATE_TAG", ""):
+            with self.subTest(tag=tag):
+                document = copy.deepcopy(self.samples["SpellDefinitions"])
+                spells = document["realms"][0]["books"][0]["spells"]
+                spells[0]["spell_tag"] = tag
+                spells.append(copy.deepcopy(spells[0]))
+                spells[-1]["spell_id"] += 1
+                ok, message = self.validate("SpellDefinitions", document)
+                self.assertFalse(ok)
+                self.assertIn("spell tags must be unique within each realm", message)
+                self.assertIn("Location: ['realms', 0, 'books', 0, 'spells', 1, 'spell_tag']", message)
+
+    def test_repeated_spell_tag_across_books_is_rejected(self):
+        document = copy.deepcopy(self.samples["SpellDefinitions"])
+        books = document["realms"][0]["books"]
+        books.append(copy.deepcopy(books[0]))
+        books[-1]["spells"][0]["spell_id"] += 1
+        ok, message = self.validate("SpellDefinitions", document)
+        self.assertFalse(ok)
+        self.assertIn("spell tags must be unique within each realm", message)
+        self.assertIn("Location: ['realms', 0, 'books', 1, 'spells', 0, 'spell_tag']", message)
+
+    def test_repeated_spell_tag_across_same_realm_records_is_rejected(self):
+        document = copy.deepcopy(self.samples["SpellDefinitions"])
+        document["realms"].append(copy.deepcopy(document["realms"][0]))
+        document["realms"][-1]["books"][0]["spells"][0]["spell_id"] += 1
+        ok, message = self.validate("SpellDefinitions", document)
+        self.assertFalse(ok)
+        self.assertIn("spell tags must be unique within each realm", message)
+        self.assertIn("Location: ['realms', 1, 'books', 0, 'spells', 0, 'spell_tag']", message)
+
+    def test_same_spell_tag_with_different_ids_in_different_realms_is_accepted(self):
+        document = copy.deepcopy(self.samples["SpellDefinitions"])
+        document["realms"].append(copy.deepcopy(document["realms"][0]))
+        document["realms"][1]["name"] = "SORCERY"
+        document["realms"][1]["books"][0]["spells"][0]["spell_id"] += 1
+        ok, message = self.validate("SpellDefinitions", document)
+        self.assertTrue(ok, message)
+
+    def test_magic_rejects_ambiguous_spell_tags_before_reference_lookup(self):
+        magic = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+        spells = copy.deepcopy(self.samples["SpellDefinitions"])
+        spells["realms"][0]["name"] = magic["classes"][0]["realms"][0]["name"]
+        records = spells["realms"][0]["books"][0]["spells"]
+        magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] = records[0]["spell_tag"]
+        ok, message = self.validate("ClassMagicDefinitions", magic, spells)
+        self.assertTrue(ok, message)
+        records.append(copy.deepcopy(records[0]))
+        records[-1]["spell_id"] += 1
+        ok, message = self.validate("ClassMagicDefinitions", magic, spells)
+        self.assertFalse(ok)
+        self.assertIn("Invalid spell definitions", message)
+        self.assertIn("spell tags must be unique within each realm", message)
+        self.assertIn("Location: ['realms', 0, 'books', 0, 'spells', 1, 'spell_tag']", message)
+
+    def test_magic_empty_tag_with_undefined_lower_id_is_rejected(self):
+        for spell_id in (1, 31):
+            with self.subTest(spell_id=spell_id):
+                magic = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+                spells = copy.deepcopy(self.samples["SpellDefinitions"])
+                spells["realms"][0]["name"] = magic["classes"][0]["realms"][0]["name"]
+                spell = spells["realms"][0]["books"][0]["spells"][0]
+                spell["spell_id"] = spell_id
+                spell["spell_tag"] = ""
+                magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] = ""
+                ok, message = self.validate("SpellDefinitions", spells)
+                self.assertTrue(ok, message)
+                ok, message = self.validate("ClassMagicDefinitions", magic, spells)
+                self.assertFalse(ok)
+                self.assertIn("unknown spell tag in this realm", message)
+                self.assertIn("Location: ['classes', 0, 'realms', 0, 'spells_info', 0, 'spell_tag']", message)
+
+    def test_magic_empty_tag_without_undefined_lower_ids_is_accepted(self):
+        for spell_id in (0, 2):
+            with self.subTest(spell_id=spell_id):
+                magic = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+                spells = copy.deepcopy(self.samples["SpellDefinitions"])
+                spells["realms"][0]["name"] = magic["classes"][0]["realms"][0]["name"]
+                books = spells["realms"][0]["books"]
+                spell = books[0]["spells"][0]
+                spell["spell_id"] = spell_id
+                spell["spell_tag"] = ""
+                books.append(copy.deepcopy(books[0]))
+                books[-1]["spells"] = []
+                for lower_id in range(spell_id):
+                    lower = copy.deepcopy(spell)
+                    lower["spell_id"] = lower_id
+                    lower["spell_tag"] = f"LOWER_{lower_id}"
+                    books[-1]["spells"].append(lower)
+                magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] = ""
+                ok, message = self.validate("ClassMagicDefinitions", magic, spells)
+                self.assertTrue(ok, message)
+
+    def test_magic_empty_tag_checks_lower_ids_across_same_realm_records(self):
+        magic = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+        spells = copy.deepcopy(self.samples["SpellDefinitions"])
+        spells["realms"][0]["name"] = magic["classes"][0]["realms"][0]["name"]
+        spell = spells["realms"][0]["books"][0]["spells"][0]
+        spell["spell_id"] = 2
+        spell["spell_tag"] = ""
+        spells["realms"].append(copy.deepcopy(spells["realms"][0]))
+        lower_spells = spells["realms"][1]["books"][0]["spells"]
+        lower_spells.clear()
+        for lower_id in range(2):
+            lower = copy.deepcopy(spell)
+            lower["spell_id"] = lower_id
+            lower["spell_tag"] = f"LOWER_{lower_id}"
+            lower_spells.append(lower)
+        magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] = ""
+        ok, message = self.validate("ClassMagicDefinitions", magic, spells)
+        self.assertTrue(ok, message)
+        lower_spells.pop()
+        ok, message = self.validate("ClassMagicDefinitions", magic, spells)
+        self.assertFalse(ok)
+        self.assertIn("unknown spell tag in this realm", message)
+
     def test_magic_rejects_spell_overwrite_before_reference_lookup(self):
         spells = copy.deepcopy(self.documents["SpellDefinitions"])
         records = spells["realms"][0]["books"][0]["spells"]
