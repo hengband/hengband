@@ -80,7 +80,7 @@ TEST_CASE("Dice::parse rejects a malformed string")
     // 空文字列
     CHECK_THROWS_AS(Dice::parse(""), std::runtime_error);
 
-    // intに収まらない値。std::stoi の std::out_of_range も同じく変換される
+    // intに収まらない値もruntime_errorになる
     CHECK_THROWS_AS(Dice::parse("99999999999d6"), std::runtime_error);
 }
 
@@ -97,14 +97,19 @@ TEST_CASE("Dice::parse rejects unconsumed characters in either integer")
     CHECK_THROWS_AS(Dice::parse(std::string("3\0d5", 4)), std::runtime_error);
 }
 
-TEST_CASE("Dice::parse preserves signs and ASCII whitespace around integers")
+TEST_CASE("Dice::parse rejects plus signs and ASCII whitespace around integers")
 {
-    CHECK(Dice::parse("+3d+5") == Dice(3, 5));
-    CHECK(Dice::parse("-3d-5") == Dice(-3, -5));
+    for (const auto *text : { "+3d5", "3d+5", "+3d+5" }) {
+        CAPTURE(text);
+        CHECK_THROWS_AS(Dice::parse(text), std::runtime_error);
+    }
     for (const auto whitespace : { ' ', '\t', '\n', '\r', '\f', '\v' }) {
         CAPTURE(static_cast<int>(whitespace));
         const std::string padding(1, whitespace);
-        CHECK(Dice::parse(padding + "+3" + padding + "d" + padding + "-5" + padding) == Dice(3, -5));
+        CHECK_THROWS_AS(Dice::parse(padding + "3d5"), std::runtime_error);
+        CHECK_THROWS_AS(Dice::parse("3" + padding + "d5"), std::runtime_error);
+        CHECK_THROWS_AS(Dice::parse("3d" + padding + "5"), std::runtime_error);
+        CHECK_THROWS_AS(Dice::parse("3d5" + padding), std::runtime_error);
     }
 }
 
@@ -141,6 +146,12 @@ TEST_CASE("Dice::parse does not check whether the dice is valid")
     const auto negative_num = Dice::parse("-1d6");
     CHECK(negative_num == Dice(-1, 6));
     CHECK_FALSE(negative_num.is_valid());
+
+    const auto negative_sides = Dice::parse("3d-5");
+    CHECK(negative_sides == Dice(3, -5));
+    CHECK_FALSE(negative_sides.is_valid());
+
+    CHECK(Dice::parse("-3d-5") == Dice(-3, -5));
 }
 
 TEST_CASE("Dice::to_string builds the NdM notation")
