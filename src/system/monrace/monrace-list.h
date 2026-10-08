@@ -78,8 +78,12 @@ private:
 
     static MonraceList instance;
     std::map<MonraceId, std::shared_ptr<MonraceDefinition>> monraces;
+    std::vector<std::shared_ptr<MonraceDefinition>> monraces_by_id; //!< 種族IDを添字にした monraces の索引 (無い種族は空). monraces を変えるときは必ず更新する
 
     const static std::map<MonraceId, std::set<MonraceId>> unified_uniques;
+
+    const std::shared_ptr<MonraceDefinition> &find(MonraceId monrace_id) const;
+    void add_to_index(MonraceId monrace_id, const std::shared_ptr<MonraceDefinition> &monrace);
 
     std::map<MonraceId, std::shared_ptr<MonraceDefinition>> &get_inner_container() override
     {
