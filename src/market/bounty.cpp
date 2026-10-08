@@ -2,7 +2,6 @@
 #include "autopick/autopick.h"
 #include "avatar/avatar.h"
 #include "core/asking-player.h"
-#include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "game-option/cheat-options.h"
 #include "inventory/inventory-object.h"
@@ -194,7 +193,6 @@ bool exchange_cash(PlayerType *player_ptr)
             msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), got_item_name.data(), index_to_label(inventory_new));
 
             autopick_alter_item(player_ptr, inventory_new, false);
-            handle_stuff(player_ptr);
             change = true;
         }
     }
