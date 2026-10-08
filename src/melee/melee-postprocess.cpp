@@ -79,7 +79,7 @@ static void prepare_redraw(mam_pp_type *mam_pp_ptr)
  */
 static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
 {
-    if (mam_pp_ptr->m_ptr->is_invulnerable() && randint0(PENETRATE_INVULNERABILITY)) {
+    if (!mam_pp_ptr->m_ptr->is_invulnerable() || one_in_(PENETRATE_INVULNERABILITY)) {
         return false;
     }
 
@@ -161,12 +161,12 @@ static void print_monster_dead_by_monster(PlayerType *player_ptr, mam_pp_type *m
  * @brief ダメージを受けたモンスターのHPが0未満になった際の処理
  * @param player_ptr プレイヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
- * @return 生きていたらTRUE、それ以外 (ユニークは＠以外の攻撃では死なない)はFALSE
+ * @return 死んだらTRUE、生きていたら (ユニークは＠以外の攻撃では死なない) FALSE
  */
 static bool check_monster_hp(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
     const auto &monrace = mam_pp_ptr->m_ptr->get_monrace();
-    if (mam_pp_ptr->m_ptr->hp < 0) {
+    if (mam_pp_ptr->m_ptr->hp >= 0) {
         return false;
     }
 
@@ -211,7 +211,7 @@ static void cancel_fear_by_pain(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 static void make_monster_fear(PlayerType *player_ptr, mam_pp_type *mam_pp_ptr)
 {
     const auto &monrace = mam_pp_ptr->m_ptr->get_monrace();
-    if (mam_pp_ptr->m_ptr->is_fearful() || (monrace.resistance_flags.has_not(MonsterResistanceType::NO_FEAR))) {
+    if (mam_pp_ptr->m_ptr->is_fearful() || monrace.resistance_flags.has(MonsterResistanceType::NO_FEAR)) {
         return;
     }
 
@@ -264,6 +264,7 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
     auto &monster = floor.m_list[m_idx];
     mam_pp_type tmp_mam_pp(player_ptr, m_idx, dam, dead, fear, note, src_idx);
     mam_pp_type *mam_pp_ptr = &tmp_mam_pp;
+    *dead = false;
     prepare_redraw(mam_pp_ptr);
     (void)set_monster_csleep(*player_ptr->current_floor_ptr, m_idx, 0);
 
@@ -275,15 +276,14 @@ void mon_take_hit_mon(PlayerType *player_ptr, MONSTER_IDX m_idx, int dam, bool *
         return;
     }
 
-    monster.hp -= dam;
+    monster.hp -= mam_pp_ptr->dam;
     if (check_monster_hp(player_ptr, mam_pp_ptr)) {
         return;
     }
 
-    *dead = false;
     cancel_fear_by_pain(player_ptr, mam_pp_ptr);
     make_monster_fear(player_ptr, mam_pp_ptr);
-    if ((dam > 0) && !monster.is_pet() && !monster.is_friendly() && (mam_pp_ptr->src_idx != m_idx)) {
+    if ((mam_pp_ptr->dam > 0) && !monster.is_pet() && !monster.is_friendly() && (mam_pp_ptr->src_idx != m_idx)) {
         const auto &monster_src = floor.m_list[src_idx];
         if (monster_src.is_pet() && !player_ptr->is_located_at({ monster.target_y, monster.target_x })) {
             monster.set_target(monster_src.get_position());
