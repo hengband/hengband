@@ -660,6 +660,28 @@ TEST_CASE("TownMapReader building-only reread preserves output on failure and re
     CHECK(definition.starts.empty());
 }
 
+TEST_CASE("TownMapReader rejects non ASCII feature and row bytes without publishing output")
+{
+    for (const auto byte : { 0x00, 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
+        for (const auto feature : { false, true }) {
+            CAPTURE(byte);
+            CAPTURE(feature);
+            auto data = make_town_map();
+            if (feature) {
+                data["featureRules"][0]["symbol"] = std::string(1, static_cast<char>(byte));
+            } else {
+                data["mapVariants"][0]["rows"][0] = std::string(3, static_cast<char>(byte));
+            }
+            TownMapDefinition definition;
+            definition.features.emplace_back().symbol = '?';
+            CHECK(TownMapReader(data).read(definition, 10, 10) == PARSE_ERROR_INVALID_VALUE);
+            REQUIRE(definition.features.size() == 1);
+            CHECK(definition.features.front().symbol == '?');
+            CHECK(definition.maps.empty());
+        }
+    }
+}
+
 TEST_CASE("TownMapReader validates feature symbols and token types")
 {
     for (const auto *symbol : { "", "##", ":", "/", "\\", "\t", "\x1f", "\x7f", "\xE7\x94\xBA" }) {
@@ -988,6 +1010,75 @@ TEST_CASE("TownMapReader applies typed feature tokens with legacy F semantics")
         check_same_grid(letter['#'], expected);
         CHECK(letter['#'].feature == state.floor_id());
         CHECK(letter['#'].trap == state.trap_id());
+    }
+}
+
+TEST_CASE("TownMapReader typed and legacy features reject unsafe bytes before touching letters")
+{
+    const TownFeatureStateGuard state;
+    const FloorType floor;
+    for (const auto byte : { 0x00, 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
+        CAPTURE(byte);
+        TownMapFeatureRule feature;
+        feature.symbol = static_cast<char>(byte);
+        feature.terrain = "TOWN_FEATURE_TEST_FLOOR";
+        feature.trap = "NONE";
+        const std::array<dungeon_grid, 255> original = [] {
+            std::array<dungeon_grid, 255> result;
+            std::copy(std::begin(letter), std::end(letter), result.begin());
+            return result;
+        }();
+        CHECK(apply_town_map_feature(floor, feature) == PARSE_ERROR_INVALID_VALUE);
+        const auto line = "F:" + std::string(1, feature.symbol) + ":TOWN_FEATURE_TEST_FLOOR";
+        CHECK(parse_line_feature(floor, line) == PARSE_ERROR_INVALID_VALUE);
+        for (size_t i = 0; i < original.size(); ++i) {
+            check_same_grid(letter[i], original[i]);
+        }
+        init_flags = INIT_ONLY_BUILDINGS;
+        CHECK(apply_town_map_feature(floor, feature) == PARSE_ERROR_NONE);
+        CHECK(parse_line_feature(floor, line) == PARSE_ERROR_NONE);
+        init_flags = static_cast<init_flags_type>(0);
+    }
+}
+
+TEST_CASE("TownMapReader legacy feature rejects empty and multi character symbols without writes")
+{
+    const TownFeatureStateGuard state;
+    const FloorType floor;
+    for (const auto *symbol : { "", "AB" }) {
+        CAPTURE(symbol);
+        letter['A'].special = 73;
+        letter['B'].special = 91;
+        const auto first = letter['A'];
+        const auto second = letter['B'];
+        const auto line = std::string("F:") + symbol + ":TOWN_FEATURE_TEST_FLOOR";
+        CHECK(parse_line_feature(floor, line) == PARSE_ERROR_INVALID_VALUE);
+        check_same_grid(letter['A'], first);
+        check_same_grid(letter['B'], second);
+        init_flags = INIT_ONLY_BUILDINGS;
+        CHECK(parse_line_feature(floor, line) == PARSE_ERROR_NONE);
+        check_same_grid(letter['A'], first);
+        check_same_grid(letter['B'], second);
+        init_flags = static_cast<init_flags_type>(0);
+    }
+}
+
+TEST_CASE("TownMapReader typed and legacy features retain printable ASCII boundaries")
+{
+    const TownFeatureStateGuard state;
+    const FloorType floor;
+    for (const auto symbol : { ' ', '~' }) {
+        CAPTURE(symbol);
+        TownMapFeatureRule feature;
+        feature.symbol = symbol;
+        feature.terrain = "TOWN_FEATURE_TEST_FLOOR";
+        feature.trap = "TOWN_FEATURE_TEST_TRAP";
+        REQUIRE(apply_town_map_feature(floor, feature) == PARSE_ERROR_NONE);
+        CHECK(letter[static_cast<unsigned char>(symbol)].feature == state.floor_id());
+        CHECK(letter[static_cast<unsigned char>(symbol)].trap == state.trap_id());
+        letter[static_cast<unsigned char>(symbol)].feature = 0;
+        REQUIRE(parse_line_feature(floor, "F:" + std::string(1, symbol) + ":TOWN_FEATURE_TEST_FLOOR") == PARSE_ERROR_NONE);
+        CHECK(letter[static_cast<unsigned char>(symbol)].feature == state.floor_id());
     }
 }
 

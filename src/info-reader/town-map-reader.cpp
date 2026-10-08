@@ -199,6 +199,10 @@ parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFea
         return PARSE_ERROR_NONE;
     }
 
+    if (!is_fixed_map_symbol(static_cast<unsigned char>(feature.symbol))) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+
     auto grid = feature.cell.grid;
     grid.set_terrain_id(TerrainTag::NONE);
     grid.set_trap_id(TerrainTag::NONE);
@@ -227,7 +231,7 @@ parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFea
             grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
         }
     }
-    letter[static_cast<unsigned char>(feature.symbol)] = grid;
+    fixed_map_letter_at(static_cast<unsigned char>(feature.symbol)) = grid;
     return PARSE_ERROR_NONE;
 }
 
@@ -271,7 +275,7 @@ parse_error_type TownMapReader::read_features(TownMapDefinition &definition) con
             return PARSE_ERROR_INVALID_TYPE;
         }
         const auto symbol = rule["symbol"].get<std::string>();
-        if (symbol.size() != 1 || symbol.front() < ' ' || symbol.front() > '~' || symbol.front() == ':' || symbol.front() == '/' || symbol.front() == '\\') {
+        if (symbol.size() != 1 || !is_fixed_map_symbol(static_cast<unsigned char>(symbol.front())) || symbol.front() == ':' || symbol.front() == '/' || symbol.front() == '\\') {
             return PARSE_ERROR_INVALID_VALUE;
         }
         TownMapFeatureRule feature;
@@ -410,7 +414,7 @@ parse_error_type TownMapReader::read_maps(TownMapDefinition &definition, int max
                 return PARSE_ERROR_INVALID_VALUE;
             }
             const auto &text = row.get_ref<const std::string &>();
-            if (std::any_of(text.begin(), text.end(), [](unsigned char cell) { return cell < ' ' || cell > '~'; })) {
+            if (!std::all_of(text.begin(), text.end(), is_fixed_map_symbol)) {
                 return PARSE_ERROR_INVALID_VALUE;
             }
             map.rows.push_back(text);

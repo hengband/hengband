@@ -656,6 +656,60 @@ TEST_CASE("QuestReader rejects map extent overflow without publishing output")
     }
 }
 
+TEST_CASE("QuestReader rejects non ASCII legend symbols without publishing output")
+{
+    for (const auto byte : { 0x00, 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
+        CAPTURE(byte);
+        auto data = make_quest_with_description("Description");
+        data["legend"] = { { std::string(1, static_cast<char>(byte)), nlohmann::json::object() } };
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        set_existing_output(quest, fixed_map);
+        CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_VALUE);
+        check_existing_output(quest, fixed_map);
+    }
+}
+
+TEST_CASE("QuestReader rejects non ASCII map bytes including embedded null without publishing output")
+{
+    for (const auto byte : { 0x00, 0x1f, 0x7f, 0x80, 0xfe, 0xff }) {
+        for (const auto use_variants : { false, true }) {
+            CAPTURE(byte);
+            CAPTURE(use_variants);
+            auto data = make_quest_with_description("Description");
+            const auto row = "." + std::string(1, static_cast<char>(byte)) + ".";
+            if (use_variants) {
+                data["mapVariants"] = { { "." }, { ".", row } };
+            } else {
+                data["map"] = { ".", row };
+            }
+            QuestType quest;
+            QuestFixedMap fixed_map;
+            set_existing_output(quest, fixed_map);
+            CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_VALUE);
+            check_existing_output(quest, fixed_map);
+        }
+    }
+}
+
+TEST_CASE("QuestReader accepts every printable ASCII legend and map symbol")
+{
+    const test::TerrainListTestAccess terrain_tag(TerrainTag::NONE, 0);
+    auto data = make_quest_with_description("Description");
+    std::string row;
+    for (auto byte = 0x20; byte <= 0x7e; ++byte) {
+        const std::string symbol(1, static_cast<char>(byte));
+        data["legend"][symbol] = nlohmann::json::object();
+        row += symbol;
+    }
+    data["map"] = { row };
+    QuestType quest;
+    QuestFixedMap fixed_map;
+    REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
+    CHECK(fixed_map.legend.size() == 95);
+    CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ { row } });
+}
+
 TEST_CASE("QuestReader accepts map extents at the floor boundary")
 {
     const std::vector<std::string> rows(MAX_HGT, std::string(MAX_WID, '.'));

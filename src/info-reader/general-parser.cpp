@@ -21,9 +21,19 @@
 #include "system/terrain/terrain-list.h"
 #include "util/angband-files.h"
 #include "util/string-processor.h"
+#include <stdexcept>
 #include <string>
 
 dungeon_grid letter[255];
+
+dungeon_grid &fixed_map_letter_at(unsigned char symbol)
+{
+    if (!is_fixed_map_symbol(symbol)) {
+        throw std::out_of_range("Invalid fixed map symbol");
+    }
+
+    return letter[symbol];
+}
 
 void dungeon_grid::set_terrain_id(TerrainTag tag)
 {
@@ -54,9 +64,13 @@ parse_error_type parse_line_feature(const FloorType &floor, std::string_view buf
         return PARSE_ERROR_GENERIC;
     }
 
+    if (tokens.front().size() != 1 || !is_fixed_map_symbol(static_cast<unsigned char>(tokens.front().front()))) {
+        return PARSE_ERROR_INVALID_VALUE;
+    }
+
     const auto &terrains = TerrainList::get_instance();
-    const int index = tokens.at(0).at(0);
-    auto &one_letter = letter[index];
+    const auto index = static_cast<unsigned char>(tokens.front().front());
+    auto &one_letter = fixed_map_letter_at(index);
     one_letter.set_terrain_id(TerrainTag::NONE);
     one_letter.monster = 0;
     one_letter.object = 0;

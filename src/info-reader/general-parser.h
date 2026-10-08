@@ -25,6 +25,15 @@ struct dungeon_grid {
 
 extern dungeon_grid letter[255];
 
+/*! @brief マップの1セルは印字可能なASCIIの1バイトで表す。letter[] の添字にも使用できる。 */
+constexpr bool is_fixed_map_symbol(unsigned char symbol)
+{
+    return symbol >= ' ' && symbol <= '~';
+}
+
+/*! @brief 検証済みの固定マップ記号で letter[] を参照する。 */
+dungeon_grid &fixed_map_letter_at(unsigned char symbol);
+
 class FloorType;
 
 parse_error_type parse_line_feature(const FloorType &floor, std::string_view buf);
