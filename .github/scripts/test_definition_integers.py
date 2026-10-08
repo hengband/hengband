@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from validate_json import build_schema_registry, load_all_schemas, load_jsonc, validate_one
+from validate_json import build_schema_registry, load_all_schemas, load_class_ids, load_jsonc, validate_one
 
 
 class DefinitionIntegerValidationTest(unittest.TestCase):
@@ -32,11 +32,13 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
             "SpellDefinitions": spell,
         }
 
-    def validate(self, name, document):
+    def validate(self, name, document, spell_definitions=None):
         schema_path = self.schema_map[name]
         with tempfile.TemporaryDirectory() as folder:
             target = Path(folder) / f"{name}.jsonc"
             target.write_text(json.dumps(document), encoding="utf-8")
+            if spell_definitions is not None:
+                (Path(folder) / "SpellDefinitions.jsonc").write_text(json.dumps(spell_definitions), encoding="utf-8")
             return validate_one((target, schema_path, self.loaded[schema_path]), self.registry)
 
     def check_value(self, name, path, value, accepted, reason=None):
@@ -97,6 +99,67 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
         for index, value in ((0, 1), (1, 0), (1, 2)):
             with self.subTest(index=index, value=value):
                 self.check_value("ClassSkillDefinitions", ["classes", index, "id"], value, False, "sequential starting at 0")
+
+    def test_magic_class_order(self):
+        document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+        document["classes"][0], document["classes"][1] = document["classes"][1], document["classes"][0]
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertFalse(ok)
+        self.assertIn("nondecreasing order", message)
+        self.assertIn("Location: ['classes', 1, 'name']", message)
+
+    def test_magic_repeated_classes_and_gaps_are_accepted(self):
+        document = copy.deepcopy(self.documents["ClassMagicDefinitions"])
+        document["classes"] = [document["classes"][1], document["classes"][1], document["classes"][3]]
+        ok, message = self.validate("ClassMagicDefinitions", document)
+        self.assertTrue(ok, message)
+
+    def test_class_ids_follow_enum_values_and_token_mapping(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / "src/player-info").mkdir(parents=True)
+            (root / "src/info-reader").mkdir(parents=True)
+            (root / "src/player-info/class-types.h").write_text(
+                'enum class PlayerClassType : short { WARRIOR = 4, MAGE, MAX };', encoding="utf-8")
+            (root / "src/info-reader/magic-reader.cpp").write_text(
+                '{ "MAGE", PlayerClassType::MAGE },\n{ "FIGHTER", PlayerClassType::WARRIOR },', encoding="utf-8")
+            self.assertEqual(load_class_ids(root), {"MAGE": 5, "FIGHTER": 4})
+
+    def test_magic_unknown_spell_tag(self):
+        self.check_value("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "spell_tag"],
+                         "NO_SUCH_TAG", False, "unknown spell tag in this realm")
+
+    def test_magic_tag_from_another_realm_is_rejected(self):
+        magic_realm = self.samples["ClassMagicDefinitions"]["classes"][0]["realms"][0]
+        spells = self.documents["SpellDefinitions"]["realms"]
+        own_tags = {spell["spell_tag"] for realm in spells if realm["name"] == magic_realm["name"]
+                    for book in realm["books"] for spell in book["spells"]}
+        foreign_tag = next(spell["spell_tag"] for realm in spells if realm["name"] != magic_realm["name"]
+                           for book in realm["books"] for spell in book["spells"] if spell["spell_tag"] not in own_tags)
+        self.check_value("ClassMagicDefinitions", ["classes", 0, "realms", 0, "spells_info", 0, "spell_tag"],
+                         foreign_tag, False, "unknown spell tag in this realm")
+
+    def test_magic_uses_adjacent_candidate_spell_definitions(self):
+        magic = copy.deepcopy(self.samples["ClassMagicDefinitions"])
+        spells = copy.deepcopy(self.samples["SpellDefinitions"])
+        spells["realms"][0]["name"] = magic["classes"][0]["realms"][0]["name"]
+        spell = spells["realms"][0]["books"][0]["spells"][0]
+        spell["spell_tag"] = "CANDIDATE_ONLY_TAG"
+        magic["classes"][0]["realms"][0]["spells_info"][0]["spell_tag"] = spell["spell_tag"]
+        ok, message = self.validate("ClassMagicDefinitions", magic, spells)
+        self.assertTrue(ok, message)
+        spell["spell_tag"] = "REPLACED_TAG"
+        ok, message = self.validate("ClassMagicDefinitions", magic, spells)
+        self.assertFalse(ok)
+        self.assertIn("unknown spell tag in this realm", message)
+
+    def test_magic_invalid_candidate_spell_definitions(self):
+        for spells in ({"version": 1}, {"version": 1, "realms": [None]}):
+            with self.subTest(spells=spells):
+                ok, message = self.validate("ClassMagicDefinitions", self.samples["ClassMagicDefinitions"], spells)
+                self.assertFalse(ok)
+                self.assertIn("Invalid spell definitions", message)
+                self.assertIn("SpellDefinitions.jsonc", message)
 
     def test_skill_start_rank_exceeds_maximum(self):
         document = copy.deepcopy(self.samples["ClassSkillDefinitions"])
@@ -172,13 +235,47 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
             with self.subTest(name=name):
                 self.check_value(name, ["version"], 1.0, True)
 
-    def test_repeated_spell_id_is_reader_accepted(self):
+    def test_repeated_spell_id_is_rejected(self):
         document = copy.deepcopy(self.samples["SpellDefinitions"])
         spells = document["realms"][0]["books"][0]["spells"]
         spells.append(copy.deepcopy(spells[0]))
         spells[-1]["spell_tag"] = "replacement"
         ok, message = self.validate("SpellDefinitions", document)
+        self.assertFalse(ok)
+        self.assertIn("spell IDs must be unique within each realm", message)
+        self.assertIn("Location: ['realms', 0, 'books', 0, 'spells', 1, 'spell_id']", message)
+
+    def test_repeated_spell_id_across_books_is_rejected(self):
+        document = copy.deepcopy(self.samples["SpellDefinitions"])
+        books = document["realms"][0]["books"]
+        books.append(copy.deepcopy(books[0]))
+        ok, message = self.validate("SpellDefinitions", document)
+        self.assertFalse(ok)
+        self.assertIn("Location: ['realms', 0, 'books', 1, 'spells', 0, 'spell_id']", message)
+
+    def test_repeated_spell_id_across_same_realm_records_is_rejected(self):
+        document = copy.deepcopy(self.samples["SpellDefinitions"])
+        document["realms"].append(copy.deepcopy(document["realms"][0]))
+        ok, message = self.validate("SpellDefinitions", document)
+        self.assertFalse(ok)
+        self.assertIn("Location: ['realms', 1, 'books', 0, 'spells', 0, 'spell_id']", message)
+
+    def test_same_spell_id_in_different_realms_is_accepted(self):
+        document = copy.deepcopy(self.samples["SpellDefinitions"])
+        document["realms"].append(copy.deepcopy(document["realms"][0]))
+        document["realms"][1]["name"] = "SORCERY"
+        ok, message = self.validate("SpellDefinitions", document)
         self.assertTrue(ok, message)
+
+    def test_magic_rejects_spell_overwrite_before_reference_lookup(self):
+        spells = copy.deepcopy(self.documents["SpellDefinitions"])
+        records = spells["realms"][0]["books"][0]["spells"]
+        records.append(copy.deepcopy(records[0]))
+        records[-1]["spell_tag"] = "REPLACEMENT_TAG"
+        ok, message = self.validate("ClassMagicDefinitions", self.samples["ClassMagicDefinitions"], spells)
+        self.assertFalse(ok)
+        self.assertIn("Invalid spell definitions", message)
+        self.assertIn("spell IDs must be unique within each realm", message)
 
     def test_required_and_unknown_field_policy_is_unchanged(self):
         records = (
