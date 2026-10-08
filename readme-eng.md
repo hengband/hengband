@@ -42,6 +42,7 @@ make install
 
  * Replace `x.x.x` with the downloaded version's number.
  * `--disable-japanese` is required to build English version, remove it if you want to build Japanese version.
+ * Add `--enable-lto` to enable link time optimization. The game runs faster (in our measurements, 10-25% fewer instructions in typical play), but building takes longer, and rebuilding after changing a source file becomes much slower. It is recommended when you build the game to play, not while developing. `gcc-ar` and `gcc-ranlib` (GCC) or `llvm-ar` and `llvm-ranlib` (Clang) are used if available. If `configure` reports that LTO cannot be used, specify an archiver that supports LTO with `AR=` and `RANLIB=`.
 
 To run in ASCII mode:
 
