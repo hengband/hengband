@@ -23,6 +23,7 @@ public:
     TerrainList(TerrainList &&) = delete;
     TerrainList operator=(const TerrainList &) = delete;
     TerrainList operator=(TerrainList &&) = delete;
+    ~TerrainList() override;
 
     static TerrainList &get_instance();
     TerrainType &get_terrain(short terrain_id);
