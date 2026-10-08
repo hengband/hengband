@@ -113,6 +113,7 @@ public:
     const std::map<char, QuestLegendCell> &get_base_legend() const;
 
 private:
+    friend class QuestList;
     friend class test::QuestListTestAccess;
     QuestFixedMapList() = default;
     static QuestFixedMapList instance;
