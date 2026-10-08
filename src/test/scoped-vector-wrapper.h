@@ -5,7 +5,7 @@
 
 namespace test {
 
-// Isolate an AbstractVectorWrapper, including elements without move assignment.
+// move代入できない要素も含めて、AbstractVectorWrapperの状態を退避・復元する。
 template <typename Wrapper>
 class ScopedVectorWrapper {
 public:

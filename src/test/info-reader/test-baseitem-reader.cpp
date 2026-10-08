@@ -16,6 +16,11 @@
 
 namespace {
 class BaseitemStateGuard {
+public:
+    BaseitemStateGuard() = default;
+    BaseitemStateGuard(const BaseitemStateGuard &) = delete;
+    BaseitemStateGuard &operator=(const BaseitemStateGuard &) = delete;
+
 private:
     test::ScopedVectorWrapper<BaseitemList> items{ BaseitemList::get_instance() };
     test::ScopedReaderState reader_state;

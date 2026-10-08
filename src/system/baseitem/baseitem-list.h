@@ -30,7 +30,7 @@ public:
     BaseitemDefinition &get_baseitem(short bi_id); // 初期化専用.
     const BaseitemDefinition &get_baseitem(short bi_id) const;
     void resize(size_t new_size);
-    // Publish changes to name/bi_key through this method to invalidate lookups.
+    // name/bi_keyの変更はこのメソッドで公開し、キャッシュを無効化する。
     void replace_baseitem(short bi_id, BaseitemDefinition &&baseitem);
     const BaseitemDefinition &pick_one_at_random() const;
     std::vector<short> collect_valid_bi_ids() const;
