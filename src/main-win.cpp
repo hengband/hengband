@@ -2139,7 +2139,7 @@ static void fit_term_size_to_window(term_data *td, bool recalc_window_size = fal
 
         rebuild_term(td, recalc_window_size);
 
-        if (!is_main_term(td)) {
+        if (!is_main_term(td) && AngbandWorld::get_instance().character_dungeon) {
             RedrawingFlagsUpdater::get_instance().fill_up_sub_flags();
             handle_stuff(p_ptr);
         }
