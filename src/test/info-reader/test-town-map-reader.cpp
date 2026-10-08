@@ -4,9 +4,12 @@
 #include "info-reader/town-map-reader.h"
 #include "locale/character-encoding.h"
 #include "object-enchant/trg-types.h"
+#include "object/tval-types.h"
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
+#include "system/baseitem/baseitem-definition.h"
+#include "system/baseitem/baseitem-list.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
@@ -18,6 +21,7 @@
 #include "system/terrain/terrain-definition.h"
 #include "system/terrain/terrain-list.h"
 #include "test/info-reader/scoped-reader-state.h"
+#include "test/scoped-vector-wrapper.h"
 #include "test/system/artifact-list-test-access.h"
 #include "test/system/terrain-list-test-access.h"
 #include <algorithm>
@@ -27,6 +31,7 @@
 #include <limits>
 #include <map>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -1168,4 +1173,97 @@ TEST_CASE("TownMapReader resolves quest rewards at feature application time")
     floor.quest_number = QuestId::NONE;
     REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
     CHECK(letter['#'].artifact == FixedArtifactId::NONE);
+}
+
+TEST_CASE("TownMapReader resolves ordinary quest rewards through current baseitem definitions")
+{
+    const TownFeatureStateGuard state;
+    const test::QuestFeatureTestAccess quest_state;
+    const test::ArtifactListTestAccess artifact_state;
+    auto &items = BaseitemList::get_instance();
+    const test::ScopedVectorWrapper items_state(items);
+    const BaseitemKey reward_key{ ItemKindType::SWORD, 37 };
+    ArtifactDefinition artifact;
+    artifact.bi_key = reward_key;
+    REQUIRE_FALSE(artifact.is_instant_artifact());
+    ArtifactList::get_instance().emplace(FixedArtifactId::GALADRIEL_PHIAL, std::move(artifact));
+    FloorType floor;
+    floor.quest_number = QuestId::THIEF;
+    auto data = make_town_map();
+    auto &fields = data["featureRules"][0]["definition"];
+    fields["terrain"] = "TOWN_FEATURE_TEST_FLOOR";
+    fields["trap"] = "TOWN_FEATURE_TEST_TRAP";
+    fields["object"] = "!";
+    fields["artifact"] = "!";
+    TownMapDefinition definition;
+    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    CHECK(letter['#'].object == 0);
+    CHECK(letter['#'].artifact == FixedArtifactId::NONE);
+    test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
+
+    items.resize(8);
+    BaseitemDefinition original;
+    original.name = "Town reward original";
+    original.bi_key = reward_key;
+    items.replace_baseitem(7, std::move(original));
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    CHECK(letter['#'].object == 7);
+    CHECK(letter['#'].artifact == FixedArtifactId::GALADRIEL_PHIAL);
+    CHECK(letter['#'].feature == state.floor_id());
+    CHECK(letter['#'].trap == state.trap_id());
+    {
+        // キャッシュ構築済みの定義を退避し、同じ報酬キーを別IDへ解決する。
+        const test::ScopedVectorWrapper temporary_items(items);
+        items.resize(12);
+        BaseitemDefinition replacement;
+        replacement.name = "Town reward replacement";
+        replacement.bi_key = reward_key;
+        items.replace_baseitem(11, std::move(replacement));
+        REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+        CHECK(letter['#'].object == 11);
+        CHECK(letter['#'].artifact == FixedArtifactId::GALADRIEL_PHIAL);
+    }
+    REQUIRE(apply_town_map_feature(floor, definition.features.front()) == PARSE_ERROR_NONE);
+    CHECK(letter['#'].object == 7);
+    CHECK(letter['#'].artifact == FixedArtifactId::GALADRIEL_PHIAL);
+}
+
+TEST_CASE("TownMapReader preserves letters when ordinary reward baseitem lookup fails")
+{
+    const TownFeatureStateGuard state;
+    const test::QuestFeatureTestAccess quest_state;
+    const test::ArtifactListTestAccess artifact_state;
+    auto &items = BaseitemList::get_instance();
+    const test::ScopedVectorWrapper items_state(items);
+    ArtifactDefinition artifact;
+    artifact.bi_key = { ItemKindType::SWORD, 37 };
+    REQUIRE_FALSE(artifact.is_instant_artifact());
+    ArtifactList::get_instance().emplace(FixedArtifactId::GALADRIEL_PHIAL, std::move(artifact));
+    test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
+    FloorType floor;
+    floor.quest_number = QuestId::THIEF;
+    auto data = make_town_map();
+    auto &fields = data["featureRules"][0]["definition"];
+    fields["terrain"] = "TOWN_FEATURE_TEST_FLOOR";
+    fields["trap"] = "TOWN_FEATURE_TEST_TRAP";
+    fields["object"] = "!";
+    fields["artifact"] = "!";
+    TownMapDefinition definition;
+    REQUIRE(TownMapReader(data).read(definition, 3, 3) == PARSE_ERROR_NONE);
+    letter['#'].feature = 123;
+    letter['#'].trap = 45;
+    letter['#'].monster = 67;
+    letter['#'].object = 89;
+    letter['#'].ego = static_cast<EgoType>(12);
+    letter['#'].artifact = FixedArtifactId::GALADRIEL_PHIAL;
+    letter['#'].special = 91;
+    letter['#'].random = RANDOM_EGO;
+    letter['#'].cave_info = CAVE_GLOW;
+    const auto original = letter['#'];
+    const auto neighbour = letter['@'];
+    CHECK_THROWS_AS(apply_town_map_feature(floor, definition.features.front()), std::runtime_error);
+    check_same_grid(letter['#'], original);
+    check_same_grid(letter['@'], neighbour);
+    CHECK(items.empty());
 }
