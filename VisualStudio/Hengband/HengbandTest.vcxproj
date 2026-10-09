@@ -113,6 +113,7 @@
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-allocation.cpp" />
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-list.cpp" />
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-definition.cpp" />
+    <ClCompile Include="..\..\src\test\system\floor\test-floor-info.cpp" />
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp" />
     <ClCompile Include="..\..\src\test\system\test-quest-list.cpp" />
     <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp" />
