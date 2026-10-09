@@ -21,6 +21,12 @@ on:
       use-ccache:
         type: boolean
         required: false
+      # ccache のミスがこの数以上のときだけキャッシュを保存する。既定値は PR 向けで、
+      # ヘッダを変えたときのように多くのファイルを作り直したときだけ保存し、それ以外はベースのブランチのものを使う
+      ccache-save-min-misses:
+        type: number
+        required: false
+        default: 100
 
 permissions:
   contents: read
@@ -60,27 +66,10 @@ jobs:
         name: Calculate cache key for ccache
         shell: bash
         run: |
-          key=$(printf '%s' "${{ inputs.runner }} ${{ inputs.cxx }} ${{ inputs.cxx-flags }} ${{ inputs.configure-opts }}" | shasum -a 256 | awk '{print $1}')
-          echo "key=$key" >> "$GITHUB_OUTPUT"
-
-      - if: ${{ inputs.use-ccache }}
-        uses: hendrikmuhs/ccache-action@v1.2.23
-        with:
-          key: ${{ steps.calculate-cache-key.outputs.key }}
-          max-size: "200M"
-
-      - name: Configuring ccache to intercept the compiler
-        if: ${{ inputs.use-ccache }}
-        shell: bash
-        run: |
-          CCACHE_BIN="$(command -v ccache)"
-          WRAP_DIR="${HOME}/.local/bin"
-          mkdir -p "${WRAP_DIR}"
-          ln -sfn "${CCACHE_BIN}" "${WRAP_DIR}/${{ inputs.cxx }}"
-          echo "${WRAP_DIR}" >> "$GITHUB_PATH"
-          "${CCACHE_BIN}" --set-config=sloppiness=pch_defines,time_macros,include_file_mtime,include_file_ctime
-          "${CCACHE_BIN}" --set-config=pch_external_checksum=true
-          "${CCACHE_BIN}" -p
+          key=$(printf '%s' "${{ inputs.runner }} ${{ inputs.cxx }} ${{ inputs.cxx-flags }} ${{ inputs.configure-opts }} distcheck=${{ inputs.distcheck }}" | shasum -a 256 | awk '{print $1}')
+          # 保存するキーは、この接頭辞に時刻を付けたもの。
+          # キーの書式は .github/scripts/cleanup-ccache-caches.sh が前提にしている
+          echo "prefix=ccache-$key-" >> "$GITHUB_OUTPUT"
 
       - name: Install required packages (Ubuntu)
         if: ${{ steps.os.outputs.family == 'linux' }}
@@ -99,17 +88,51 @@ jobs:
             nkf \
             g++-16 \
             libc++-21-dev \
-            libc++abi-21-dev
+            libc++abi-21-dev \
+            ${{ inputs.use-ccache && 'ccache' || '' }}
 
       - name: Install required packages (macOS)
         if: ${{ steps.os.outputs.family == 'macos' }}
         shell: bash
         run: |
           brew update
-          brew install autoconf automake pkg-config nkf ncurses curl
+          brew install autoconf automake pkg-config nkf ncurses curl ${{ inputs.use-ccache && 'ccache' || '' }}
           echo "PKG_CONFIG_PATH=$(brew --prefix ncurses)/lib/pkgconfig:$(brew --prefix curl)/lib/pkgconfig:${PKG_CONFIG_PATH:-}" >> "$GITHUB_ENV"
           echo "LDFLAGS=-L$(brew --prefix ncurses)/lib -L$(brew --prefix curl)/lib ${LDFLAGS:-}" >> "$GITHUB_ENV"
           echo "CPPFLAGS=-I$(brew --prefix ncurses)/include -I$(brew --prefix curl)/include ${CPPFLAGS:-}" >> "$GITHUB_ENV"
+
+      - name: Restore ccache cache
+        if: ${{ inputs.use-ccache }}
+        uses: actions/cache/restore@v6
+        with:
+          path: ~/.ccache
+          # 保存のキーは接頭辞に時刻を付けたものなので、接頭辞の前方一致で、このブランチ・PR のもの、
+          # 無ければベースのブランチのものから最新のものを読む (key は必須なので同じ接頭辞を渡す)
+          key: ${{ steps.calculate-cache-key.outputs.prefix }}
+          restore-keys: ${{ steps.calculate-cache-key.outputs.prefix }}
+
+      - name: Configuring ccache to intercept the compiler
+        if: ${{ inputs.use-ccache }}
+        shell: bash
+        run: |
+          CCACHE_BIN="$(command -v ccache)"
+          WRAP_DIR="${HOME}/.local/bin"
+          mkdir -p "${WRAP_DIR}"
+          ln -sfn "${CCACHE_BIN}" "${WRAP_DIR}/${{ inputs.cxx }}"
+          echo "${WRAP_DIR}" >> "$GITHUB_PATH"
+          # 作業ツリーの中に置くと、ソースの走査 (失敗時の find など) に巻き込まれるので外に置く。
+          # 設定は $CCACHE_DIR/ccache.conf に書かれ、キャッシュと一緒に保存される
+          export CCACHE_DIR="${HOME}/.ccache"
+          echo "CCACHE_DIR=${CCACHE_DIR}" >> "$GITHUB_ENV"
+          # 保存の前にこのジョブで使わなかったものを捨てるので、保存する大きさは 1 回のビルド分に収まる。
+          # ビルドの途中で ccache が自分で掃除し、使うものまで捨てないよう、上限には余裕を持たせる
+          "${CCACHE_BIN}" --set-config=max_size=400M
+          "${CCACHE_BIN}" --set-config=sloppiness=pch_defines,time_macros,include_file_mtime,include_file_ctime
+          "${CCACHE_BIN}" --set-config=pch_external_checksum=true
+          "${CCACHE_BIN}" -p
+          # 読み込んだキャッシュには前回のジョブの統計が残っているので、0 にしてからビルドする
+          "${CCACHE_BIN}" -z
+          echo "CCACHE_JOB_START=$(date +%s)" >> "$GITHUB_ENV"
 
       - name: Show compiler version
         shell: bash
@@ -193,6 +216,7 @@ jobs:
           echo "n=${jobs}" >> "$GITHUB_OUTPUT"
 
       - name: Build with distcheck
+        id: distcheck
         if: ${{ inputs.distcheck }}
         shell: bash
         run: make DISTCHECK_CONFIGURE_FLAGS="CXX=\"${{ inputs.cxx }}\" CXXFLAGS=\"${{ inputs.cxx-flags }}\" ${{ inputs.configure-opts }}" -j${{ steps.jobs.outputs.n }} distcheck >/dev/null
@@ -202,7 +226,15 @@ jobs:
         shell: bash
         run: make -j${{ steps.jobs.outputs.n }} >/dev/null
 
+      # テストのコンパイルが済んだかどうかで ccache のキャッシュを保存するか決めるので、
+      # テストの実行とは分けてコンパイルする。
       # distcheck は make check を内部で実行するため、ここでは実行しない
+      - name: Build unit tests
+        id: build-tests
+        if: ${{ !inputs.distcheck }}
+        shell: bash
+        run: make -j${{ steps.jobs.outputs.n }} -C src hengband-test >/dev/null
+
       - name: Run unit tests
         if: ${{ !inputs.distcheck }}
         shell: bash
@@ -214,3 +246,39 @@ jobs:
         if: ${{ failure() }}
         shell: bash
         run: find . -name test-suite.log -exec sh -c 'echo "==== {} ===="; cat {}' \;
+
+      # 変化の少ないキャッシュを毎回保存すると、Actions のキャッシュの上限を圧迫するので、ミスが多いときだけ保存する。
+      # 保存の前にこのジョブで使わなかったものを捨てるので、コンパイルが最後まで済んだときに限る
+      # (distcheck はテストの実行と分けられないので、成功したときだけ)
+      - name: Decide whether to save ccache cache
+        id: ccache-save
+        if: ${{ !cancelled() && inputs.use-ccache && (steps.build-tests.outcome == 'success' || steps.distcheck.outcome == 'success') }}
+        continue-on-error: true
+        shell: bash
+        env:
+          MIN_MISSES: ${{ inputs.ccache-save-min-misses }}
+        run: |
+          ccache -s
+          misses=$(ccache --print-stats | awk -F'\t' '$1 == "cache_miss" { print $2 }')
+          echo "ccache misses: ${misses} (saves if >= ${MIN_MISSES})"
+          # 統計の形式が変わって読めなくなったときに、毎回保存してしまわないよう保存しない
+          if ! [[ "${misses}" =~ ^[0-9]+$ ]]; then
+            echo "::warning::Failed to read the number of ccache misses; the cache is not saved"
+            exit 0
+          fi
+          if [ "${misses}" -lt "${MIN_MISSES}" ]; then
+            exit 0
+          fi
+          # このジョブで使わなかったものを捨てる (60 秒は時刻の切り捨ての分の余裕)
+          ccache --evict-older-than "$(( $(date +%s) - CCACHE_JOB_START + 60 ))s"
+          ccache -s
+          echo "save=true" >> "$GITHUB_OUTPUT"
+          echo "key=${{ steps.calculate-cache-key.outputs.prefix }}$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Save ccache cache
+        if: ${{ !cancelled() && steps.ccache-save.outputs.save == 'true' }}
+        continue-on-error: true
+        uses: actions/cache/save@v6
+        with:
+          path: ~/.ccache
+          key: ${{ steps.ccache-save.outputs.key }}

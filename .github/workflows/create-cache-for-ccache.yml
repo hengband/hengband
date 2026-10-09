@@ -11,6 +11,7 @@ on:
 permissions:
   contents: read
 
+# develop のキャッシュは PR の土台になるので、ccache のミスが 1 件でもあれば保存する
 jobs:
   clang_libcpp_without_pch_japanese:
     name: Japanese version with clang 21 -stdlib=libc++ (without using pre-compiled headers, with XFT)
@@ -21,6 +22,7 @@ jobs:
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -stdlib=libc++"
       configure-opts: "--disable-pch --enable-xft"
       use-ccache: true
+      ccache-save-min-misses: 1
 
   clang_without_pch_japanese:
     name: Japanese version with clang 21 (without using pre-compiled headers, with XFT)
@@ -31,6 +33,7 @@ jobs:
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       configure-opts: "--disable-pch --enable-xft"
       use-ccache: true
+      ccache-save-min-misses: 1
 
   clang_with_pch_english:
     name: English version with clang 21 (with using pre-compiled headers, without XFT)
@@ -41,6 +44,7 @@ jobs:
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       configure-opts: "--disable-japanese --disable-assert"
       use-ccache: true
+      ccache-save-min-misses: 1
 
   gcc_japanese:
     name: Japanese version with gcc 16 (with XFT)
@@ -51,6 +55,7 @@ jobs:
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       configure-opts: "--disable-pch --enable-xft"
       use-ccache: true
+      ccache-save-min-misses: 1
 
   gcc_english:
     name: English version with gcc 16 (without XFT)
@@ -62,6 +67,7 @@ jobs:
       configure-opts: "--disable-pch --disable-japanese --disable-assert"
       distcheck: true
       use-ccache: true
+      ccache-save-min-misses: 1
 
   apple_clang_japanese:
     name: Japanese version with Apple Clang 21 (without X11)
@@ -72,6 +78,7 @@ jobs:
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
       configure-opts: "--disable-pch --without-x"
       use-ccache: true
+      ccache-save-min-misses: 1
 
   apple_clang_english:
     name: English version with Apple Clang 21 (without X11)
@@ -83,3 +90,4 @@ jobs:
       configure-opts: "--disable-pch --disable-japanese --without-x"
       distcheck: true
       use-ccache: true
+      ccache-save-min-misses: 1
