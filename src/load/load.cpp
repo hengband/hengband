@@ -55,6 +55,7 @@
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
 #include "system/system-variables.h"
+#include "term/z-util.h"
 #include "util/angband-files.h"
 #include "util/enum-converter.h"
 #include "view/display-messages.h"
@@ -395,7 +396,13 @@ static void reset_save_data(PlayerType *player_ptr, bool *new_game)
     player_ptr->is_dead = false;
 }
 
-static tl::expected<void, std::string> on_read_save_data_not_supported(PlayerType *player_ptr, bool *new_game)
+/*!
+ * @brief 続きをプレイできないセーブデータを読み込んだ時に、最初からやり直すかを尋ねる
+ * @param player_ptr プレイヤーへの参照ポインタ
+ * @param new_game 新しくゲームを始めさせるフラグ
+ * @details やり直さない場合はゲームを終了する
+ */
+static void on_read_save_data_not_supported(PlayerType *player_ptr, bool *new_game)
 {
     auto mes_not_play = _("このセーブデータの続きをプレイすることはできません。", "You can't play the rest of the game from this save data.");
     auto mes_check_restart = _("最初からプレイを始めますか？(モンスターの思い出は引き継がれます)", "Play from the beginning? (Monster recalls will be inherited.) ");
@@ -404,12 +411,13 @@ static tl::expected<void, std::string> on_read_save_data_not_supported(PlayerTyp
     if (!input_check(mes_check_restart)) {
         msg_print(_("ゲームを終了します。", "Exit the game."));
         msg_erase();
-        return tl::unexpected(mes_not_play);
+
+        // 利用者が終了を選んだのでエラーではない
+        quit("");
     }
 
     AngbandSystem::get_instance().set_awaiting_report_score(false);
     reset_save_data(player_ptr, new_game);
-    return {};
 }
 
 /**
@@ -516,7 +524,8 @@ tl::expected<void, std::string> load_savedata(PlayerType *player_ptr, bool *new_
     term_clear();
     const auto ret_rd_savefile = rd_savefile(player_ptr);
     if (ret_rd_savefile > 0) {
-        return on_read_save_data_not_supported(player_ptr, new_game);
+        on_read_save_data_not_supported(player_ptr, new_game);
+        return {};
     }
 
     if (ret_rd_savefile < 0) {
@@ -529,7 +538,8 @@ tl::expected<void, std::string> load_savedata(PlayerType *player_ptr, bool *new_
     }
 
     if (!can_takeover_savefile(player_ptr)) {
-        return on_read_save_data_not_supported(player_ptr, new_game);
+        on_read_save_data_not_supported(player_ptr, new_game);
+        return {};
     }
 
     if (player_ptr->is_dead) {
