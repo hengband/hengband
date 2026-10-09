@@ -20,6 +20,8 @@
 #include "view/display-map.h"
 #include "view/display-symbol.h"
 #include "world/world.h"
+#include <array>
+#include <range/v3/algorithm.hpp>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -113,6 +115,66 @@ void print_map(PlayerType *player_ptr)
     term_set_cursor(v != 0);
 }
 
+namespace {
+/*!
+ * @brief 縮小マップの作業領域に使う、1 次元の配列に詰めた 2 次元の配列
+ */
+template <typename T>
+class FlatArray2D {
+public:
+    FlatArray2D(int height, int width)
+        : width(width)
+        , cells(static_cast<size_t>(height * width))
+    {
+    }
+
+    int index_of(int y, int x) const
+    {
+        return y * this->width + x;
+    }
+
+    T &operator()(int y, int x)
+    {
+        return this->cells[this->index_of(y, x)];
+    }
+
+    const T &operator()(int y, int x) const
+    {
+        return this->cells[this->index_of(y, x)];
+    }
+
+    T &operator[](int index)
+    {
+        return this->cells[index];
+    }
+
+    const T &operator[](int index) const
+    {
+        return this->cells[index];
+    }
+
+private:
+    int width;
+    std::vector<T> cells;
+};
+
+/*!
+ * @brief 縮小マップの 1 マス分の記号と、縮めるときの優先度
+ */
+struct MapCell {
+    DisplaySymbol symbol = { TERM_WHITE, ' ' };
+    byte priority = 0;
+};
+
+/*!
+ * @brief 縮小マップの 1 マス分の、自動拾いの対象になるアイテム
+ */
+struct AutopickCell {
+    int match = -1;
+    const ItemEntity *item = nullptr;
+};
+}
+
 /*!
  * @brief 短縮マップにおける自動拾い対象のアイテムを短縮表記する
  * @param player_ptr プレイヤーへの参照ポインタ
@@ -183,17 +245,9 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     view_special_lite = false;
     view_granite_lite = false;
 
-    using std::vector;
-    vector<vector<TERM_COLOR>> ma(hgt + 2, vector<TERM_COLOR>(wid + 2, TERM_WHITE));
-    vector<vector<char>> mc(hgt + 2, vector<char>(wid + 2, ' '));
-    vector<vector<byte>> mp(hgt + 2, vector<byte>(wid + 2, 0));
-    vector<vector<int>> match_autopick_yx(hgt + 2, vector<int>(wid + 2, -1));
-    vector<vector<const ItemEntity *>> object_autopick_yx(hgt + 2, vector<const ItemEntity *>(wid + 2, nullptr));
-
-    vector<vector<TERM_COLOR>> bigma(floor.height + 2, vector<TERM_COLOR>(floor.width + 2, TERM_WHITE));
-    vector<vector<char>> bigmc(floor.height + 2, vector<char>(floor.width + 2, ' '));
-    vector<vector<byte>> bigmp(floor.height + 2, vector<byte>(floor.width + 2, 0));
-
+    FlatArray2D<MapCell> small_map(hgt + 2, wid + 2);
+    FlatArray2D<AutopickCell> autopicks(hgt + 2, wid + 2);
+    FlatArray2D<MapCell> big_map(floor.height + 2, floor.width + 2);
     for (i = 0; i < floor.width; ++i) {
         for (j = 0; j < floor.height; ++j) {
             x = i / xrat + 1;
@@ -204,43 +258,47 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
             feat_priority = -1;
             const auto symbol_pair = map_info(player_ptr, { j, i });
             tp = (byte)feat_priority;
-            if (match_autopick != -1 && (match_autopick_yx[y][x] == -1 || match_autopick_yx[y][x] > match_autopick)) {
-                match_autopick_yx[y][x] = match_autopick;
-                object_autopick_yx[y][x] = autopick_obj;
+            auto &autopick = autopicks(y, x);
+            if (match_autopick != -1 && (autopick.match == -1 || autopick.match > match_autopick)) {
+                autopick = { match_autopick, autopick_obj };
                 tp = 0x7f;
             }
 
-            bigma[j + 1][i + 1] = symbol_pair.symbol_foreground.color;
-            bigmc[j + 1][i + 1] = symbol_pair.symbol_foreground.character;
-            bigmp[j + 1][i + 1] = tp;
+            big_map(j + 1, i + 1) = { symbol_pair.symbol_foreground, tp };
         }
     }
+
+    std::array<int, 8> neighbor_offsets{};
+    ranges::transform(Direction::directions_8(), neighbor_offsets.begin(), [&big_map](const auto &d) {
+        const auto vec = d.vec();
+        return big_map.index_of(vec.y, vec.x);
+    });
 
     for (j = 0; j < floor.height; ++j) {
         for (i = 0; i < floor.width; ++i) {
             x = i / xrat + 1;
             y = j / yrat + 1;
 
-            DisplaySymbol symbol_foreground(bigma[j + 1][i + 1], bigmc[j + 1][i + 1]);
-            tp = bigmp[j + 1][i + 1];
-            if (mp[y][x] == tp) {
-                int cnt = 0;
-
-                for (const auto &d : Direction::directions_8()) {
-                    const auto vec = d.vec();
-                    if ((symbol_foreground.character == bigmc[j + 1 + vec.y][i + 1 + vec.x]) && (symbol_foreground.color == bigma[j + 1 + vec.y][i + 1 + vec.x])) {
-                        cnt++;
+            const auto index = big_map.index_of(j + 1, i + 1);
+            const auto &symbol_foreground = big_map[index].symbol;
+            tp = big_map[index].priority;
+            auto &cell = small_map(y, x);
+            if (cell.priority == tp) {
+                // 周りの 8 マスのうち同じ記号が 4 つ以下なら優先する。5 つ目が見つかった時点で結論が出る
+                auto cnt = 0;
+                for (const auto offset : neighbor_offsets) {
+                    if ((big_map[index + offset].symbol == symbol_foreground) && (++cnt > 4)) {
+                        break;
                     }
                 }
+
                 if (cnt <= 4) {
                     tp++;
                 }
             }
 
-            if (mp[y][x] < tp) {
-                ma[y][x] = symbol_foreground.color;
-                mc[y][x] = symbol_foreground.character;
-                mp[y][x] = tp;
+            if (cell.priority < tp) {
+                cell = { symbol_foreground, tp };
             }
         }
     }
@@ -248,20 +306,20 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     x = wid + 1;
     y = hgt + 1;
 
-    mc[0][0] = mc[0][x] = mc[y][0] = mc[y][x] = '+';
+    small_map(0, 0).symbol.character = small_map(0, x).symbol.character = small_map(y, 0).symbol.character = small_map(y, x).symbol.character = '+';
     for (x = 1; x <= wid; x++) {
-        mc[0][x] = mc[y][x] = '-';
+        small_map(0, x).symbol.character = small_map(y, x).symbol.character = '-';
     }
 
     for (y = 1; y <= hgt; y++) {
-        mc[y][0] = mc[y][x] = '|';
+        small_map(y, 0).symbol.character = small_map(y, x).symbol.character = '|';
     }
 
     const auto monochrome_color = get_monochrome_display_color(player_ptr);
     for (y = 0; y < hgt + 2; ++y) {
         term_gotoxy(COL_MAP, y);
         for (x = 0; x < wid + 2; ++x) {
-            DisplaySymbol symbol_foreground(ma[y][x], mc[y][x]);
+            auto symbol_foreground = small_map(y, x).symbol;
             symbol_foreground.color = monochrome_color.value_or(symbol_foreground.color);
 
             term_add_bigch(symbol_foreground);
@@ -271,9 +329,10 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     for (y = 1; y < hgt + 1; ++y) {
         match_autopick = -1;
         for (x = 1; x <= wid; x++) {
-            if (match_autopick_yx[y][x] != -1 && (match_autopick > match_autopick_yx[y][x] || match_autopick == -1)) {
-                match_autopick = match_autopick_yx[y][x];
-                autopick_obj = object_autopick_yx[y][x];
+            const auto &autopick = autopicks(y, x);
+            if (autopick.match != -1 && (match_autopick > autopick.match || match_autopick == -1)) {
+                match_autopick = autopick.match;
+                autopick_obj = autopick.item;
             }
         }
 
