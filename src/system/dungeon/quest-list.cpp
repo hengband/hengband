@@ -10,6 +10,7 @@
 #include "system/dungeon/quest-fixed-map.h"
 #include "system/enums/dungeon/dungeon-id.h"
 #include "system/monrace/monrace-definition.h"
+#include "system/monrace/monrace-list.h"
 #include "util/angband-files.h"
 #include "util/enum-converter.h"
 #include <algorithm>
@@ -35,14 +36,21 @@ QuestList &QuestList::get_instance()
  */
 void QuestList::initialize()
 {
+    auto &fixed_maps = QuestFixedMapList::get_instance();
+    auto parsed_quests = this->quests;
+    auto parsed_maps = fixed_maps.maps;
     QuestType none_quest{};
     none_quest.status = QuestStatusType::UNTAKEN;
-    this->quests.emplace(QuestId::NONE, none_quest);
+    parsed_quests.emplace(QuestId::NONE, none_quest);
 
     // 全クエスト共通のベース凡例を先に読み込む (各クエスト legend がこれを letter[] 上で上書きする)
-    this->load_base_legend();
-    // 各クエストのエントリは load_json_quests が JSONC から作成する
-    this->load_json_quests();
+    auto parsed_legend = this->load_base_legend();
+    this->load_json_quests(path_build(ANGBAND_DIR_EDIT, "quests"), parsed_quests, parsed_maps);
+
+    // 通常の入力エラーをすべて検証してから、NONE・凡例を含む全ストアを公開する。
+    // 資源障害まで含む完全な巻き戻しや、プレイ中の再読込は保証しない。
+    this->publish(parsed_quests, parsed_maps);
+    fixed_maps.base_legend.swap(parsed_legend);
 }
 
 /*!
@@ -50,7 +58,7 @@ void QuestList::initialize()
  * @details 旧 QuestPreferences.txt の F: 行に相当。各クエストのフロア生成時、個別 legend を
  * letter[] へ上書きする前のベースとして QuestFixedMapList に保持する。
  */
-void QuestList::load_base_legend()
+std::map<char, QuestLegendCell> QuestList::load_base_legend()
 {
     const auto path = path_build(ANGBAND_DIR_EDIT, "QuestPreferences.jsonc");
     JsoncDocumentLoader loader(path);
@@ -95,7 +103,7 @@ void QuestList::load_base_legend()
         base_legend.insert_or_assign(symbol.front(), cell);
     }
 
-    QuestFixedMapList::get_instance().set_base_legend(std::move(base_legend));
+    return base_legend;
 }
 
 /*!
@@ -106,12 +114,25 @@ void QuestList::load_base_legend()
  * ファイルが欠落している場合は不完全なクエスト表のまま進めず、初期化エラーとして送出する
  * (でないと後続の新規ゲーム生成が get_quest() の std::map::at で分かりにくく落ちる)。
  */
-void QuestList::load_json_quests()
+void QuestList::load_json_quests(const std::filesystem::path &quests_dir)
 {
-    this->load_json_quests(path_build(ANGBAND_DIR_EDIT, "quests"));
+    auto &fixed_maps = QuestFixedMapList::get_instance();
+    auto parsed_quests = this->quests;
+    auto parsed_maps = fixed_maps.maps;
+    this->load_json_quests(quests_dir, parsed_quests, parsed_maps);
+    this->publish(parsed_quests, parsed_maps);
 }
 
-void QuestList::load_json_quests(const std::filesystem::path &quests_dir)
+/*!
+ * @brief 検証済みのクエストと固定マップを、例外を送出せずに一括公開する
+ */
+void QuestList::publish(std::map<QuestId, QuestType> &parsed_quests, std::map<QuestId, QuestFixedMap> &parsed_maps) noexcept
+{
+    this->quests.swap(parsed_quests);
+    QuestFixedMapList::get_instance().maps.swap(parsed_maps);
+}
+
+void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::map<QuestId, QuestType> &parsed_quests, std::map<QuestId, QuestFixedMap> &parsed_maps)
 {
     std::error_code ec;
     if (!std::filesystem::is_directory(quests_dir, ec)) {
@@ -132,7 +153,8 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir)
         THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, quests_dir.string()));
     }
 
-    auto &fixed_maps = QuestFixedMapList::get_instance();
+    std::vector<std::pair<QuestId, std::filesystem::path>> loaded_quests;
+    loaded_quests.reserve(files.size());
     for (const auto &file : files) {
         JsoncDocumentLoader loader(file);
         if (!loader.is_open()) {
@@ -161,7 +183,7 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir)
         }
         // スキーマはファイル横断の一意性を表現できないため、重複 id はここで検出する
         // (見逃すと2つ目のファイルが既存エントリへ追記され、偽のマップバリアント化等の破損を起こす)。
-        if (this->quests.contains(quest_id)) {
+        if (parsed_quests.contains(quest_id)) {
             constexpr auto fmt = _("クエストIDが重複しています ({}): id {}", "Duplicated quest id ({}): id {}");
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), id_it->get<int>()));
         }
@@ -173,11 +195,24 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir)
             THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), static_cast<int>(err)));
         }
 
-        apply_quest_metadata(fixed_map, quest);
-        // ファイル全体の解析とメタデータ適用に成功してから公開する。先行ファイルは
-        // 保持するが、確保失敗時まで含めた2つのストアの原子的更新は保証しない。
-        this->quests.emplace(quest_id, std::move(quest));
-        fixed_maps.emplace(quest_id) = std::move(fixed_map);
+        parsed_quests.emplace(quest_id, std::move(quest));
+        parsed_maps.insert_or_assign(quest_id, std::move(fixed_map));
+        loaded_quests.emplace_back(quest_id, file);
+    }
+
+    // apply_quest_metadata は UNIQUE の QUESTOR フラグも変更する。
+    // 後半の欠落参照で先行モンスターのフラグが残らないよう、先に全件の参照を確認する。
+    auto &monraces = MonraceList::get_instance();
+    for (const auto &[quest_id, file] : loaded_quests) {
+        const auto monster_id = parsed_maps.at(quest_id).metadata.r_idx;
+        if (!monraces.contains(i2enum<MonraceId>(monster_id))) {
+            constexpr auto fmt = _("クエストの対象モンスターが未定義です ({}): monster {}", "Undefined quest target monster ({}): monster {}");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), monster_id));
+        }
+    }
+    for (const auto &loaded_quest : loaded_quests) {
+        const auto quest_id = loaded_quest.first;
+        apply_quest_metadata(parsed_maps.at(quest_id), parsed_quests.at(quest_id));
     }
 }
 
