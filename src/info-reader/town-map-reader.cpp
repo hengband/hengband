@@ -6,6 +6,8 @@
 #include "player-info/class-info.h"
 #include "player-info/race-info.h"
 #include "player/player-realm.h"
+#include "system/artifact/artifact-definition.h"
+#include "system/artifact/artifact-list.h"
 #include "system/building-type-definition.h"
 #include "system/dungeon/quest-definition.h"
 #include "system/dungeon/quest-list.h"
@@ -17,9 +19,9 @@
 #include <algorithm>
 #include <charconv>
 #include <cstdint>
+#include <exception>
 #include <limits>
 #include <nlohmann/json.hpp>
-#include <stdexcept>
 #include <string_view>
 #include <type_traits>
 #include <utility>
@@ -225,20 +227,25 @@ parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFea
 
     try {
         if (floor.is_in_quest() && (feature.cell.object_is_quest_reward || feature.cell.artifact_is_quest_reward)) {
-            const auto &quest = QuestList::get_instance().get_quest(floor.quest_number);
+            const auto &quests = QuestList::get_instance();
+            if (!quests.contains(floor.quest_number)) {
+                return PARSE_ERROR_INVALID_VALUE;
+            }
+            const auto &quest = quests.get_quest(floor.quest_number);
+            const auto reward = quest.get_reward();
+            if (reward && !ArtifactList::get_instance().contains(*reward)) {
+                return PARSE_ERROR_INVALID_VALUE;
+            }
             if (feature.cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
                 grid.object = quest.get_reward_bi_id();
             }
             if (feature.cell.artifact_is_quest_reward) {
-                grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
+                grid.artifact = reward.value_or(FixedArtifactId::NONE);
             }
         }
-    } catch (const std::runtime_error &) {
-        // 報酬のベースアイテムが未定義なら、例外を漏らさず解析エラーとして返す。
-        return PARSE_ERROR_INVALID_FLAG;
-    } catch (const std::out_of_range &) {
-        // クエストや報酬アーティファクトが未定義の場合も、適用前に解析エラーとして返す。
-        return PARSE_ERROR_INVALID_FLAG;
+    } catch (const std::exception &) {
+        // 報酬解決に失敗した場合は、地形テンプレートを変更せず解析エラーとして返す。
+        return PARSE_ERROR_INVALID_VALUE;
     }
     fixed_map_letter_at(static_cast<unsigned char>(feature.symbol)) = grid;
     return PARSE_ERROR_NONE;
