@@ -36,7 +36,6 @@ bool rd_version_info()
     } else if (is_old_ver) {
         strip_bytes(3);
     } else {
-        load_note(_("異常なバージョンが検出されました！", "Invalid version is detected!"));
         return false;
     }
 

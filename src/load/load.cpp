@@ -66,6 +66,10 @@
 #include <vector>
 
 namespace {
+constexpr auto MSG_CANNOT_OPEN = _("セーブファイルを開けません", "Cannot open savefile");
+constexpr auto MSG_CANNOT_READ = _("セーブファイルを読めません", "Cannot read savefile");
+constexpr auto MSG_INVALID_VERSION = _("異常なバージョンが検出されました", "Invalid version is detected");
+
 /*!
  * @brief 既知の固定アーティファクトIDを収集する（V26未満のセーブデータ用）
  */
@@ -266,17 +270,16 @@ static errr verify_savedata()
 
 /*!
  * @brief セーブファイル読み込み処理の実体 / Actually read the savefile
- * @return エラーコード
+ * @return 解析できればエラーコード (0なら成功、それ以外なら続きをプレイできないデータ)、解析できなければその理由
  */
-static errr exe_reading_savefile(PlayerType *player_ptr)
+static tl::expected<errr, std::string> exe_reading_savefile(PlayerType *player_ptr)
 {
     if (!rd_version_info()) {
-        return -1;
+        return tl::unexpected(MSG_INVALID_VERSION);
     }
 
     if (!loading_savefile_version_is_older_than(SAVEFILE_VERSION + 1)) {
-        load_note(_("セーブデータのバージョンが新しすぎる", "Savefile version is too new"));
-        return -1;
+        return tl::unexpected(_("セーブデータのバージョンが新しすぎます", "Savefile version is too new"));
     }
 
     rd_dummy3();
@@ -359,25 +362,25 @@ static errr exe_reading_savefile(PlayerType *player_ptr)
 /*!
  * @brief セーブファイル読み込み処理 (UIDチェック等含む) / Reading the savefile (including UID check)
  * @param player_ptr プレイヤーへの参照ポインタ
- * @return エラーコード
+ * @return 解析できればエラーコード (0なら成功、それ以外なら続きをプレイできないデータ)、解析できなければその理由
  */
-static errr rd_savefile(PlayerType *player_ptr)
+static tl::expected<errr, std::string> rd_savefile(PlayerType *player_ptr)
 {
     safe_setuid_grab();
     loading_savefile = angband_fopen(savefile, FileOpenMode::READ, true);
     safe_setuid_drop();
     if (!loading_savefile) {
-        return -1;
+        return tl::unexpected(MSG_CANNOT_OPEN);
     }
 
     try {
-        auto err = exe_reading_savefile(player_ptr);
+        auto result = exe_reading_savefile(player_ptr);
         if (ferror(loading_savefile)) {
-            err = -1;
+            result = tl::unexpected<std::string>(MSG_CANNOT_READ);
         }
 
         angband_fclose(loading_savefile);
-        return err;
+        return result;
     } catch (SaveDataNotSupportedException const &e) {
         msg_print(e.what());
         angband_fclose(loading_savefile);
@@ -444,7 +447,7 @@ static tl::expected<void, std::string> verify_savefile_header()
 {
     const auto fd = fd_open(savefile, O_RDONLY);
     if (fd < 0) {
-        return tl::unexpected(_("セーブファイルを開けません", "Cannot open savefile"));
+        return tl::unexpected(MSG_CANNOT_OPEN);
     }
 
     // バリアント名長1バイト+バージョン番号4バイト+セーブファイルエンコードキー1バイト == 6バイト.
@@ -454,7 +457,7 @@ static tl::expected<void, std::string> verify_savefile_header()
     const auto read_result = fd_read(fd, tmp_ver, version_length);
     (void)fd_close(fd);
     if (read_result) {
-        return tl::unexpected(_("セーブファイルを読めません", "Cannot read savefile"));
+        return tl::unexpected(MSG_CANNOT_READ);
     }
 
     // v0.0.X～v3.0.0 Alpha51までは、セーブデータの第1バイトがFAKE_MAJOR_VERというZangbandと互換性を取ったバージョン番号フィールドだった.
@@ -476,7 +479,7 @@ static tl::expected<void, std::string> verify_savefile_header()
         return {};
     }
 
-    return tl::unexpected(_("異常なバージョンが検出されました", "Invalid version is detected"));
+    return tl::unexpected(MSG_INVALID_VERSION);
 }
 
 /*!
@@ -484,11 +487,11 @@ static tl::expected<void, std::string> verify_savefile_header()
  * @param what エラーの内容
  * @return エラーメッセージ
  */
-static std::string make_reading_error_message(const char *what)
+static std::string make_reading_error_message(const std::string &what)
 {
     const auto &system = AngbandSystem::get_instance();
     constexpr auto fmt = _("エラー(%s)がバージョン %s 用セーブファイル読み込み中に発生。", "Error (%s) reading %s savefile.");
-    return format(fmt, what, system.build_version_expression(VersionExpression::WITH_EXTRA).data());
+    return format(fmt, what.data(), system.build_version_expression(VersionExpression::WITH_EXTRA).data());
 }
 
 /*!
@@ -522,14 +525,14 @@ tl::expected<void, std::string> load_savedata(PlayerType *player_ptr, bool *new_
     }
 
     term_clear();
-    const auto ret_rd_savefile = rd_savefile(player_ptr);
-    if (ret_rd_savefile > 0) {
-        on_read_save_data_not_supported(player_ptr, new_game);
-        return {};
+    const auto read_result = rd_savefile(player_ptr);
+    if (!read_result) {
+        return tl::unexpected(make_reading_error_message(read_result.error()));
     }
 
-    if (ret_rd_savefile < 0) {
-        return tl::unexpected(make_reading_error_message(_("セーブファイルを解析出来ません", "Cannot parse savefile")));
+    if (*read_result != 0) {
+        on_read_save_data_not_supported(player_ptr, new_game);
+        return {};
     }
 
     auto &world = AngbandWorld::get_instance();
