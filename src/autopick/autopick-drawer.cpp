@@ -11,6 +11,7 @@
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-util.h"
 #include "io/pref-file-expressor.h"
+#include "io/read-pref-file.h"
 #include "system/player-type-definition.h"
 #include "term/screen-processor.h"
 #include "term/term-color-types.h"
@@ -24,17 +25,33 @@ constexpr auto DESCRIPT_HGT = 3;
 constexpr std::string_view EXPRESSION_DIRECTIVE_PREFIX = "?:";
 constexpr std::string_view AUTOREGISTER_DIRECTIVE = "$AUTOREGISTER";
 
-static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
+/*!
+ * @brief 条件式の評価結果と、読込エラーによって無効になる後続行の状態を更新する
+ */
+void update_autopick_expression_states(PlayerType *player_ptr, text_body_type *tb)
 {
-    if ((tb->dirty_flags & DIRTY_EXPRESSION) == 0) {
+    const auto edited_line = tb->dirty_line;
+    const auto include_edited = (edited_line >= 0) && (static_cast<size_t>(edited_line) < tb->lines_list.size()) &&
+                                tb->lines_list[edited_line] && ((tb->states[edited_line] & LSTAT_INCLUDE) || tb->lines_list[edited_line]->starts_with("%:"));
+    if (((tb->dirty_flags & (DIRTY_EXPRESSION | DIRTY_ALL)) == 0) && !include_edited) {
         return;
     }
 
     byte state = 0;
     for (auto y = 0; tb->lines_list[y]; y++) {
         std::string_view s(*tb->lines_list[y]);
-        if (!s.starts_with(EXPRESSION_DIRECTIVE_PREFIX)) {
+        if (!(state & LSTAT_BYPASS) && s.starts_with("%:") &&
+            (check_autopick_file_conditions(player_ptr, s.substr(2)) == PREF_EXPRESSION_ERROR)) {
+            state = LSTAT_BYPASS | LSTAT_EXPRESSION_ERROR;
+        }
+        if ((state & LSTAT_EXPRESSION_ERROR) || !s.starts_with(EXPRESSION_DIRECTIVE_PREFIX)) {
             tb->states[y] = state;
+            if (s.starts_with("%:")) {
+                tb->states[y] |= LSTAT_INCLUDE;
+            }
+            if (s.starts_with(EXPRESSION_DIRECTIVE_PREFIX)) {
+                tb->states[y] |= LSTAT_EXPRESSION;
+            }
             continue;
         }
 
@@ -44,7 +61,10 @@ static void process_dirty_expression(PlayerType *player_ptr, text_body_type *tb)
             state |= LSTAT_AUTOREGISTER;
         }
 
-        if (process_pref_file_expr(player_ptr, s) == "0") {
+        const auto result = process_pref_file_expr_checked(player_ptr, s);
+        if (!result) {
+            state = LSTAT_BYPASS | LSTAT_EXPRESSION_ERROR;
+        } else if (*result == "0") {
             state |= LSTAT_BYPASS;
         } else {
             state &= ~LSTAT_BYPASS;
@@ -114,7 +134,7 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         term_putstr(0, tb->hgt + 1, sepa_length, TERM_WHITE, buf);
     }
 
-    process_dirty_expression(player_ptr, tb);
+    update_autopick_expression_states(player_ptr, tb);
     if (tb->mark) {
         tb->dirty_flags |= DIRTY_ALL;
 
@@ -215,6 +235,8 @@ void draw_text_editor(PlayerType *player_ptr, text_body_type *tb)
         str1 = format(_("無効状態の行だけが見付かりました。(%sを検索中)", "Found only an inactive line. (Searching %s)"), tb->search_str.data());
     } else if (tb->dirty_flags & DIRTY_NO_SEARCH) {
         str1 = _("検索するパターンがありません(^S で検索)。", "No pattern to search. (Press ^S to search.)");
+    } else if (tb->states[tb->cy] & LSTAT_EXPRESSION_ERROR) {
+        str1 = _("条件式エラーのため、この行以降は読み込まれません。", "A condition error prevents loading this and subsequent lines.");
     } else if ((*tb->lines_list[tb->cy])[0] == '#') {
         str1 = _("この行はコメントです。", "This line is a comment.");
     } else if ((*tb->lines_list[tb->cy])[0] && (*tb->lines_list[tb->cy])[1] == ':') {

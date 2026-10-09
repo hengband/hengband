@@ -8,6 +8,8 @@ constexpr std::string_view auto_dump_header = "# vvvvvvv== {} ==vvvvvvv";
 constexpr std::string_view auto_dump_footer = "# ^^^^^^^== {} ==^^^^^^^";
 
 class PlayerType;
+constexpr errr PREF_EXPRESSION_ERROR = 2;
+errr check_autopick_file_conditions(PlayerType *player_ptr, std::string_view name);
 errr process_pref_file(PlayerType *player_ptr, std::string_view name, bool only_user_dir = false);
 errr process_autopick_file(PlayerType *player_ptr, std::string_view name);
 errr process_histpref_file(PlayerType *player_ptr, std::string_view name);
