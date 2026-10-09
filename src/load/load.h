@@ -1,4 +1,7 @@
 #pragma once
 
+#include <string>
+#include <tl/expected.hpp>
+
 class PlayerType;
-bool load_savedata(PlayerType *player_ptr, bool *new_game);
+tl::expected<void, std::string> load_savedata(PlayerType *player_ptr, bool *new_game);
