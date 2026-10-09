@@ -16,8 +16,9 @@
  * @details
  * バージョン0.x.x時代のバージョン情報である場合、サポート対象外
  * (FAKE_VERもH_VERも10台の数字のはず)
+ * @return バージョン情報を解釈できればtrue、異常なバージョンであればfalse
  */
-void rd_version_info(void)
+bool rd_version_info()
 {
     auto tmp_major = rd_byte();
     auto is_old_ver = (10 <= tmp_major) && (tmp_major <= 13);
@@ -35,7 +36,7 @@ void rd_version_info(void)
     } else if (is_old_ver) {
         strip_bytes(3);
     } else {
-        THROW_EXCEPTION(std::runtime_error, _("異常なバージョンが検出されました！", "Invalid version is detected!"));
+        return false;
     }
 
     load_xor_byte = system.savefile_key;
@@ -68,6 +69,7 @@ void rd_version_info(void)
 
     constexpr auto fmt = _("バージョン %s のセーブデータ(SAVE%u形式)をロード中...", "Loading a version %s savefile (SAVE%u format)...");
     load_note(format(fmt, system.build_version_expression(VersionExpression::WITHOUT_EXTRA).data(), loading_savefile_version));
+    return true;
 }
 
 /*!
