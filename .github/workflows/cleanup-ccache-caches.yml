@@ -1,0 +1,47 @@
+name: Cleanup ccache caches
+
+# ccache のキャッシュの古い世代と、閉じた PR などのキャッシュを削除する。
+# フォークからの PR のワークフローには読み取り専用のトークンしか渡されず、PR の中では
+# キャッシュを削除できないため、既定のブランチの権限で動くこのワークフローで行う。
+on:
+  # 既定のブランチのキャッシュが更新されたら、それより古い PR のキャッシュを削除する
+  workflow_run:
+    workflows:
+      - Create Cache for ccache
+    types:
+      - completed
+
+  # PR の実行のほとんどはキャッシュを保存しないので、PR の実行のたびには動かさない。
+  # PR の古い世代や閉じた PR のキャッシュは、1 日 1 回の実行でも削除する
+  schedule:
+    - cron: "0 18 * * *"
+
+  # 手動トリガーを許可
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cleanup-ccache-caches
+
+jobs:
+  cleanup:
+    name: Cleanup ccache caches
+    runs-on: ubuntu-24.04
+    permissions:
+      actions: write
+      contents: read
+      pull-requests: read
+    steps:
+      # スクリプトを読むためだけに checkout する。workflow_run と schedule では既定のブランチのコードが使われ、
+      # PR のコードは実行しない
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/scripts
+
+      - run: bash ./.github/scripts/cleanup-ccache-caches.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
