@@ -55,32 +55,3 @@ void health_track(PlayerType *player_ptr, short m_idx)
 
     HealthBarTracker::get_instance().set_trackee(m_idx);
 }
-
-bool update_player()
-{
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    static constexpr auto flags_iaf = {
-        InventoryArrangementFlag::COMBINATION,
-        InventoryArrangementFlag::REORDER,
-    };
-    rfu.set_flags(flags_iaf);
-    rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
-    return true;
-}
-
-bool redraw_player(PlayerType *player_ptr)
-{
-    if (player_ptr->csp > player_ptr->msp) {
-        player_ptr->csp = player_ptr->msp;
-    }
-
-    auto &rfu = RedrawingFlagsUpdater::get_instance();
-    rfu.set_flag(MainWindowRedrawingFlag::MP);
-    static constexpr auto flags_iaf = {
-        InventoryArrangementFlag::COMBINATION,
-        InventoryArrangementFlag::REORDER,
-    };
-    rfu.set_flags(flags_iaf);
-    rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
-    return true;
-}

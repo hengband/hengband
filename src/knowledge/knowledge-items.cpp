@@ -6,7 +6,6 @@
 
 #include "knowledge/knowledge-items.h"
 #include "core/show-file.h"
-#include "core/stuff-handler.h"
 #include "core/window-redrawer.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
@@ -145,7 +144,6 @@ static void desc_obj_fake(PlayerType *player_ptr, short bi_id)
 {
     ItemEntity item(bi_id);
     item.set_identification_flag(IdentificationFlag::KNOWN);
-    handle_stuff(player_ptr);
     if (screen_object(player_ptr, item, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) {
         return;
     }

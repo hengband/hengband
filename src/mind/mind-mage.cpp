@@ -5,7 +5,6 @@
  */
 
 #include "mind/mind-mage.h"
-#include "core/stuff-handler.h"
 #include "flavor/flavor-describer.h"
 #include "flavor/object-flavor-types.h"
 #include "floor/floor-object.h"
@@ -16,7 +15,21 @@
 #include "player-base/player-class.h"
 #include "system/item/item-entity.h"
 #include "system/player-type-definition.h"
+#include "system/redrawing-flags-updater.h"
 #include "view/display-messages.h"
+
+/*!
+ * @brief 魔力食いの後で、増えた MP を上限に切り詰め、所持品の整理と表示の更新を予約する
+ */
+static void finish_eating_magic(PlayerType *player_ptr)
+{
+    if (player_ptr->csp > player_ptr->msp) {
+        player_ptr->csp = player_ptr->msp;
+    }
+
+    RedrawingFlagsUpdater::get_instance().set_flag(MainWindowRedrawingFlag::MP);
+    request_inventory_arrangement();
+}
 
 /*!
  * @brief 魔力食い処理
@@ -85,7 +98,8 @@ bool eat_magic(PlayerType *player_ptr, int power)
     }
 
     if (is_eating_successful) {
-        return redraw_player(player_ptr);
+        finish_eating_magic(player_ptr);
+        return true;
     }
 
     if (item->is_fixed_artifact()) {
@@ -97,7 +111,9 @@ bool eat_magic(PlayerType *player_ptr, int power)
             item->pval = 0;
         }
 
-        return redraw_player(player_ptr);
+        finish_eating_magic(player_ptr);
+
+        return true;
     }
 
     const auto item_name = describe_flavor(player_ptr, *item, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -191,5 +207,7 @@ bool eat_magic(PlayerType *player_ptr, int power)
         vary_item(player_ptr, i_idx, -999);
     }
 
-    return redraw_player(player_ptr);
+    finish_eating_magic(player_ptr);
+
+    return true;
 }

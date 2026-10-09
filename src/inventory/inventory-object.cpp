@@ -261,6 +261,21 @@ void reorder_pack(PlayerType *player_ptr)
 }
 
 /*!
+ * @brief 所持品が変わったときに、所持品の結合・並べ替えと一覧の描き直しを予約する
+ * @details 結合・並べ替えはコマンドの区切りで update_inventory_arrangement() が行う。
+ */
+void request_inventory_arrangement()
+{
+    auto &rfu = RedrawingFlagsUpdater::get_instance();
+    static constexpr auto flags_iaf = {
+        InventoryArrangementFlag::COMBINATION,
+        InventoryArrangementFlag::REORDER,
+    };
+    rfu.set_flags(flags_iaf);
+    rfu.set_flag(SubWindowRedrawingFlag::INVENTORY);
+}
+
+/*!
  * @brief フラグに応じて所持品の自動破壊・結合・並べ替えを行う
  * @details 所持品のスロット番号が変わるため、アイテムの番号を保持している処理の途中では呼ばない。
  * 通常は handle_stuff_with_inventory_arrangement() を通じて呼ぶ。
