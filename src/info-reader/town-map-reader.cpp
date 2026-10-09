@@ -19,6 +19,7 @@
 #include <cstdint>
 #include <limits>
 #include <nlohmann/json.hpp>
+#include <stdexcept>
 #include <string_view>
 #include <type_traits>
 #include <utility>
@@ -222,14 +223,19 @@ parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFea
         return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
     }
 
-    if (floor.is_in_quest() && (feature.cell.object_is_quest_reward || feature.cell.artifact_is_quest_reward)) {
-        const auto &quest = QuestList::get_instance().get_quest(floor.quest_number);
-        if (feature.cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
-            grid.object = quest.get_reward_bi_id();
+    try {
+        if (floor.is_in_quest() && (feature.cell.object_is_quest_reward || feature.cell.artifact_is_quest_reward)) {
+            const auto &quest = QuestList::get_instance().get_quest(floor.quest_number);
+            if (feature.cell.object_is_quest_reward && quest.has_reward() && !quest.is_reward_instant_artifact()) {
+                grid.object = quest.get_reward_bi_id();
+            }
+            if (feature.cell.artifact_is_quest_reward) {
+                grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
+            }
         }
-        if (feature.cell.artifact_is_quest_reward) {
-            grid.artifact = quest.get_reward().value_or(FixedArtifactId::NONE);
-        }
+    } catch (const std::runtime_error &) {
+        // 報酬のベースアイテムが未定義なら、例外を漏らさず解析エラーとして返す。
+        return PARSE_ERROR_INVALID_FLAG;
     }
     fixed_map_letter_at(static_cast<unsigned char>(feature.symbol)) = grid;
     return PARSE_ERROR_NONE;
