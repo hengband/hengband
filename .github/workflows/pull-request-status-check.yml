@@ -74,13 +74,13 @@ jobs:
       use-ccache: true
 
   build_test_clang_without_pch:
-    name: Build Japanese version with clang 21 (without using pre-compiled headers, with XFT)
+    name: Build Japanese version with clang 21 (without using pre-compiled headers, with XFT, without networking)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
       cxx: clang++-21
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch --enable-xft"
+      configure-opts: "--disable-pch --enable-xft --disable-net"
       use-ccache: true
 
   build_test_clang_with_pch_english:

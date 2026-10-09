@@ -25,13 +25,13 @@ jobs:
       ccache-save-min-misses: 1
 
   clang_without_pch_japanese:
-    name: Japanese version with clang 21 (without using pre-compiled headers, with XFT)
+    name: Japanese version with clang 21 (without using pre-compiled headers, with XFT, without networking)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
       cxx: clang++-21
       cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch --enable-xft"
+      configure-opts: "--disable-pch --enable-xft --disable-net"
       use-ccache: true
       ccache-save-min-misses: 1
 
