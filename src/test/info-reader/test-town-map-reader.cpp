@@ -1207,7 +1207,7 @@ TEST_CASE("TownMapReader applies resolved ordinary quest reward baseitem and art
     CHECK(letter['#'].trap == state.trap_id());
 }
 
-TEST_CASE("TownMapReader returns an error and preserves the feature when ordinary reward baseitem lookup fails")
+TEST_CASE("TownMapReader returns an error and preserves the feature when quest reward reference lookup fails")
 {
     const TownFeatureStateGuard state;
     const test::QuestFeatureTestAccess quest_state;
@@ -1220,6 +1220,20 @@ TEST_CASE("TownMapReader returns an error and preserves the feature when ordinar
     FloorType floor;
     const auto definition = read_reward_town_map(floor, std::move(artifact));
     test::QuestFeatureTestAccess::set_resolved_reward(FixedArtifactId::GALADRIEL_PHIAL);
+
+    SUBCASE("missing reward baseitem") {}
+    SUBCASE("missing quest")
+    {
+        floor.quest_number = QuestId::SEWER;
+        REQUIRE_FALSE(QuestList::get_instance().contains(floor.quest_number));
+    }
+    SUBCASE("missing reward artifact")
+    {
+        constexpr auto undefined_reward = static_cast<FixedArtifactId>(32767);
+        REQUIRE_FALSE(ArtifactList::get_instance().contains(undefined_reward));
+        test::QuestFeatureTestAccess::set_resolved_reward(undefined_reward);
+    }
+
     letter['#'].feature = 123;
     letter['#'].trap = 45;
     letter['#'].monster = 67;

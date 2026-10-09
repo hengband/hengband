@@ -236,6 +236,9 @@ parse_error_type apply_town_map_feature(const FloorType &floor, const TownMapFea
     } catch (const std::runtime_error &) {
         // 報酬のベースアイテムが未定義なら、例外を漏らさず解析エラーとして返す。
         return PARSE_ERROR_INVALID_FLAG;
+    } catch (const std::out_of_range &) {
+        // クエストや報酬アーティファクトが未定義の場合も、適用前に解析エラーとして返す。
+        return PARSE_ERROR_INVALID_FLAG;
     }
     fixed_map_letter_at(static_cast<unsigned char>(feature.symbol)) = grid;
     return PARSE_ERROR_NONE;
