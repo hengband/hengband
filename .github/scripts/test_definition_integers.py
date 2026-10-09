@@ -1,11 +1,11 @@
 """Reader integer and cross-field rules through the JSONC CI entry point."""
 import copy
-import json
 from pathlib import Path
 import tempfile
 import unittest
 
-from validate_json import build_schema_registry, load_all_schemas, load_class_ids, load_jsonc, validate_one
+from json_validation_test_helper import validate_document
+from validate_json import build_schema_registry, load_all_schemas, load_class_ids, load_jsonc
 
 
 class DefinitionIntegerValidationTest(unittest.TestCase):
@@ -34,12 +34,8 @@ class DefinitionIntegerValidationTest(unittest.TestCase):
 
     def validate(self, name, document, spell_definitions=None):
         schema_path = self.schema_map[name]
-        with tempfile.TemporaryDirectory() as folder:
-            target = Path(folder) / f"{name}.jsonc"
-            target.write_text(json.dumps(document), encoding="utf-8")
-            if spell_definitions is not None:
-                (Path(folder) / "SpellDefinitions.jsonc").write_text(json.dumps(spell_definitions), encoding="utf-8")
-            return validate_one((target, schema_path, self.loaded[schema_path]), self.registry)
+        companions = {"SpellDefinitions.jsonc": spell_definitions} if spell_definitions is not None else None
+        return validate_document(document, schema_path, self.loaded[schema_path], self.registry, companions=companions)
 
     def check_value(self, name, path, value, accepted, reason=None):
         document = copy.deepcopy(self.samples[name])

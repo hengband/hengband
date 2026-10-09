@@ -99,6 +99,23 @@
                             }
                         }
                     }
+                },
+                "if": {
+                    "not": {
+                        "required": [
+                            "id_list"
+                        ]
+                    }
+                },
+                "then": {
+                    "properties": {
+                        "name": {
+                            "const": "DEFAULT"
+                        }
+                    },
+                    "required": [
+                        "name"
+                    ]
                 }
             }
         }

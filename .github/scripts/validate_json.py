@@ -495,6 +495,32 @@ def validate_spell_semantics(data: dict) -> None:
                 tags.add(spell["spell_tag"])
 
 
+def validate_monster_message_semantics(data: dict) -> None:
+    for group_index, group in enumerate(data["groups"]):
+        group_path = ["groups", group_index]
+        if "id_list" in group:
+            for id_index, monster_id in enumerate(group["id_list"]):
+                require_integer(monster_id, group_path + ["id_list", id_index])
+        # 実行時の到達可否によらず、全メッセージの入力を検証する。
+        for message_index, message in enumerate(group["message"]):
+            message_path = group_path + ["message", message_index]
+            require_integer(message["chance"], message_path + ["chance"])
+            languages = message["message"]
+            if not languages:
+                raise ValidationError("a message must contain ja or en", path=message_path + ["message"])
+
+        # 読込を終えた言語の後続メッセージが黙って捨てられる定義を拒否する。
+        missing_languages = set()
+        for message_index, message in enumerate(group["message"]):
+            languages = message["message"]
+            for language in ("ja", "en"):
+                if language not in languages:
+                    missing_languages.add(language)
+                elif language in missing_languages:
+                    path = group_path + ["message", message_index, "message", language]
+                    raise ValidationError(f"{language} messages after a missing locale would be discarded", path=path)
+
+
 def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
@@ -515,6 +541,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
             "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),
+            "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data),
         }
         semantic_validator = semantic_validators.get(schema_path.name)
         if semantic_validator is not None:

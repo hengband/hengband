@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+from json_validation_test_helper import validate_document
 from validate_json import build_schema_registry, build_validation_pairs, load_all_schemas, load_jsonc, validate_one
 
 
@@ -21,11 +22,8 @@ class QuestGridValidationTest(unittest.TestCase):
         data = {"version": 1, "legend": {"#": cell}}
         if schema_name == "Quest":
             data.update(id=1, name={"ja": "試験", "en": "Test"}, definition={"type": "KILL_ALL", "level": 1})
-        with tempfile.TemporaryDirectory() as folder:
-            target = Path(folder) / "Test.jsonc"
-            target.write_text(json.dumps(data), encoding="utf-8")
-            return validate_one((target, schema_path, schema if schema is not None else self.loaded[schema_path]),
-                                registry if registry is not None else self.registry)
+        return validate_document(data, schema_path, schema if schema is not None else self.loaded[schema_path],
+                                 registry if registry is not None else self.registry, filename="Test.jsonc")
 
     def test_shared_schema_is_not_a_data_schema(self):
         shared_path = self.schema_dir / "common/QuestGrid.schema.json"
@@ -161,11 +159,8 @@ class VaultValidationTest(unittest.TestCase):
         }
 
     def validate(self, data):
-        """Use a real temporary JSON file, including schema and semantic checks."""
-        with tempfile.TemporaryDirectory() as folder:
-            target = Path(folder) / "VaultDefinitions.jsonc"
-            target.write_text(json.dumps(data), encoding="utf-8")
-            return validate_one((target, self.schema_path, self.schema))
+        """実際の一時JSONファイルでschemaと意味検証を行う。"""
+        return validate_document(data, self.schema_path, self.schema, filename="VaultDefinitions.jsonc")
 
     def test_valid_sparse_ids_and_spaces(self):
         second = {**self.record, "id": 3}
@@ -237,10 +232,7 @@ class EgoValidationTest(unittest.TestCase):
         }
 
     def validate(self, data):
-        with tempfile.TemporaryDirectory() as folder:
-            target = Path(folder) / "EgoDefinitions.jsonc"
-            target.write_text(json.dumps(data), encoding="utf-8")
-            return validate_one((target, self.schema_path, self.schema))
+        return validate_document(data, self.schema_path, self.schema, filename="EgoDefinitions.jsonc")
 
     def test_valid_sparse_ids(self):
         second = {**self.record, "id": 8}
@@ -364,10 +356,7 @@ class WildernessValidationTest(unittest.TestCase):
         }
 
     def validate(self, data):
-        with tempfile.TemporaryDirectory() as folder:
-            target = Path(folder) / "WildernessDefinition.jsonc"
-            target.write_text(json.dumps(data), encoding="utf-8")
-            return validate_one((target, self.schema_path, self.schema))
+        return validate_document(data, self.schema_path, self.schema, filename="WildernessDefinition.jsonc")
 
     def test_valid_localized_level_and_compact_map(self):
         ok, message = self.validate(self.data)
@@ -419,10 +408,7 @@ class TownPreferencesValidationTest(unittest.TestCase):
         self.schema = load_jsonc(self.schema_path)
 
     def validate(self, data):
-        with tempfile.TemporaryDirectory() as folder:
-            target = Path(folder) / "TownPreferences.jsonc"
-            target.write_text(json.dumps(data), encoding="utf-8")
-            return validate_one((target, self.schema_path, self.schema))
+        return validate_document(data, self.schema_path, self.schema, filename="TownPreferences.jsonc")
 
     def test_reader_integer_types(self):
         data = {"version": 1, "legend": {">": {"terrain": "ENTRANCE", "caveInfo": ["MARK"], "special": 2}}}
@@ -467,10 +453,7 @@ class TownDefinitionListValidationTest(unittest.TestCase):
         }
 
     def validate(self, data):
-        with tempfile.TemporaryDirectory() as folder:
-            target = Path(folder) / "TownDefinitionList.jsonc"
-            target.write_text(json.dumps(data), encoding="utf-8")
-            return validate_one((target, self.schema_path, self.schema))
+        return validate_document(data, self.schema_path, self.schema, filename="TownDefinitionList.jsonc")
 
     def test_valid_map_variants(self):
         ok, message = self.validate(self.data)
@@ -531,10 +514,7 @@ class TownMapValidationTest(unittest.TestCase):
         }
 
     def validate(self, data):
-        with tempfile.TemporaryDirectory() as folder:
-            target = Path(folder) / "TestTown.jsonc"
-            target.write_text(json.dumps(data), encoding="utf-8")
-            return validate_one((target, self.schema_path, self.schema))
+        return validate_document(data, self.schema_path, self.schema, filename="TestTown.jsonc")
 
     def test_valid_map_and_start(self):
         ok, message = self.validate(self.data)
