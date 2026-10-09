@@ -21,6 +21,8 @@
 #define LSTAT_BYPASS 0x01
 #define LSTAT_EXPRESSION 0x02
 #define LSTAT_AUTOREGISTER 0x04
+#define LSTAT_EXPRESSION_ERROR 0x08
+#define LSTAT_INCLUDE 0x10
 
 /*!
  * @struct autopick_type

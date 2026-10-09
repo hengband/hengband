@@ -78,5 +78,14 @@ static tl::optional<std::string> resolve_pref_file_variable(PlayerType *player_p
  */
 std::string process_pref_file_expr(PlayerType *player_ptr, std::string_view expr)
 {
-    return evaluate_condition_expression(expr, [player_ptr](std::string_view name) { return resolve_pref_file_variable(player_ptr, name); });
+    return process_pref_file_expr_checked(player_ptr, expr).value_or("0");
+}
+
+/*!
+ * @brief 設定ファイルの条件式を評価し、読込側へエラーを返す
+ * @details 書式とエラー分類は evaluate_condition_expression_checked() を参照
+ */
+tl::expected<std::string, ConditionExpressionError> process_pref_file_expr_checked(PlayerType *player_ptr, std::string_view expr)
+{
+    return evaluate_condition_expression_checked(expr, [player_ptr](std::string_view name) { return resolve_pref_file_variable(player_ptr, name); });
 }

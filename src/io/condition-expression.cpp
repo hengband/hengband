@@ -6,7 +6,6 @@
 #include "system/h-basic.h"
 #include "util/string-processor.h"
 #include <cctype>
-#include <cstdlib>
 #include <cwctype>
 
 namespace {
@@ -43,18 +42,22 @@ public:
     ConditionExpressionEvaluator &operator=(const ConditionExpressionEvaluator &) = delete;
     ConditionExpressionEvaluator &operator=(ConditionExpressionEvaluator &&) = delete;
 
-    std::string evaluate();
+    tl::expected<std::string, ConditionExpressionError> evaluate();
 
 private:
     std::string_view rest; //!< まだ読んでいない部分
     char terminator = '\0'; //!< 直前に読んだ式の区切りの文字。入力の終わりなら '\0'
     const ExpressionVariableResolver &resolve;
+    tl::optional<ConditionExpressionError> error; //!< 最初に検出した評価エラー
 
+    void record_error(ConditionExpressionError cause);
+    std::string evaluate_next();
+    int parse_number(std::string_view arg);
     bool has_next_argument() const;
     void consume_terminator();
     template <typename Predicate>
     bool any_remaining_argument(Predicate pred);
-    std::string evaluate_first_argument(const std::string &op);
+    std::string evaluate_first_argument();
     std::string evaluate_operator();
     std::string evaluate_word();
 };
@@ -85,9 +88,9 @@ void ConditionExpressionEvaluator::consume_terminator()
 /*!
  * @brief 式を1つ評価する
  * @return 評価の結果。括弧で囲まれた式なら "0" か "1"、語ならその語 (変数ならその値)。
- * 知らない演算子や変数なら "?o?o?"、括弧が閉じていなければ "?x?x?"
+ * 評価エラーは別途記録し、最初の式全体の評価後に呼び出し側へ返す
  */
-std::string ConditionExpressionEvaluator::evaluate()
+std::string ConditionExpressionEvaluator::evaluate_next()
 {
     while (!this->rest.empty() && iswspace(this->rest.front())) {
         this->rest.remove_prefix(1);
@@ -102,6 +105,50 @@ std::string ConditionExpressionEvaluator::evaluate()
 }
 
 /*!
+ * @brief 最初の条件式の評価結果か、検出したエラーを返す
+ * @details 内側の式のエラーも NOT や IOR で真に変換せず呼び出し側へ返す
+ */
+tl::expected<std::string, ConditionExpressionError> ConditionExpressionEvaluator::evaluate()
+{
+    auto result = this->evaluate_next();
+    if (this->error) {
+        return tl::unexpected(*this->error);
+    }
+    return result;
+}
+
+void ConditionExpressionEvaluator::record_error(ConditionExpressionError cause)
+{
+    if (!this->error) {
+        this->error = cause;
+    }
+}
+
+/*!
+ * @brief 数値比較の引数全体を int の範囲の10進整数として変換する
+ * @details 空の先頭引数は従来どおり0とする。先頭の「+」1文字は従来の設定との互換性のため許容する
+ */
+int ConditionExpressionEvaluator::parse_number(std::string_view arg)
+{
+    if (arg.empty()) {
+        return 0;
+    }
+
+    if (arg.starts_with('+')) {
+        arg.remove_prefix(1);
+        if (arg.empty() || arg.starts_with('-') || arg.starts_with('+')) {
+            this->record_error(ConditionExpressionError::INVALID_NUMBER);
+            return 0;
+        }
+    }
+    const auto number = str_to_num<int>(arg);
+    if (!number) {
+        this->record_error(ConditionExpressionError::INVALID_NUMBER);
+    }
+    return number.value_or(0);
+}
+
+/*!
  * @brief 括弧で囲まれた式の残りの引数をすべて評価し、条件を満たすものがあったかを返す
  * @param pred 引数の評価の結果を受け取り、条件を満たすかを返す関数
  * @details 条件を満たす引数が見つかっても、閉じ括弧まで読み進めるために残りの引数も評価する
@@ -111,7 +158,7 @@ bool ConditionExpressionEvaluator::any_remaining_argument(Predicate pred)
 {
     auto found = false;
     while (this->has_next_argument()) {
-        if (pred(this->evaluate())) {
+        if (pred(this->evaluate_next())) {
             found = true;
         }
     }
@@ -121,12 +168,11 @@ bool ConditionExpressionEvaluator::any_remaining_argument(Predicate pred)
 
 /*!
  * @brief 括弧で囲まれた式の最初の引数を評価する
- * @param op 演算子
- * @return 最初の引数の評価の結果。引数が無ければ演算子をそのまま返す
+ * @return 最初の引数の評価の結果。引数が無ければ空文字列
  */
-std::string ConditionExpressionEvaluator::evaluate_first_argument(const std::string &op)
+std::string ConditionExpressionEvaluator::evaluate_first_argument()
 {
-    return this->has_next_argument() ? this->evaluate() : op;
+    return this->has_next_argument() ? this->evaluate_next() : "";
 }
 
 /*!
@@ -134,11 +180,11 @@ std::string ConditionExpressionEvaluator::evaluate_first_argument(const std::str
  */
 std::string ConditionExpressionEvaluator::evaluate_operator()
 {
-    const auto op = this->evaluate();
+    const auto op = this->evaluate_next();
     std::string v;
     if (op.empty()) {
         // 演算子が無ければ、引数を読まない
-        v = "?o?o?";
+        this->record_error(ConditionExpressionError::UNKNOWN_OPERATOR);
     } else if (op == "IOR") {
         v = this->any_remaining_argument([](const auto &arg) { return !arg.empty() && (arg != "0"); }) ? "1" : "0";
     } else if (op == "AND") {
@@ -146,23 +192,23 @@ std::string ConditionExpressionEvaluator::evaluate_operator()
     } else if (op == "NOT") {
         v = this->any_remaining_argument([](const auto &arg) { return arg == "1"; }) ? "0" : "1";
     } else if (op == "EQU") {
-        const auto first = this->evaluate_first_argument(op);
+        const auto first = this->evaluate_first_argument();
         v = this->any_remaining_argument([&first](const auto &arg) { return arg == first; }) ? "1" : "0";
     } else if (op == "LEQ") {
-        const auto first = atoi(this->evaluate_first_argument(op).data());
-        v = this->any_remaining_argument([first](const auto &arg) { return !arg.empty() && (first > atoi(arg.data())); }) ? "0" : "1";
+        const auto first = this->parse_number(this->evaluate_first_argument());
+        v = this->any_remaining_argument([this, first](const auto &arg) { return !arg.empty() && (first > this->parse_number(arg)); }) ? "0" : "1";
     } else if (op == "GEQ") {
-        const auto first = atoi(this->evaluate_first_argument(op).data());
-        v = this->any_remaining_argument([first](const auto &arg) { return !arg.empty() && (first < atoi(arg.data())); }) ? "0" : "1";
+        const auto first = this->parse_number(this->evaluate_first_argument());
+        v = this->any_remaining_argument([this, first](const auto &arg) { return !arg.empty() && (first < this->parse_number(arg)); }) ? "0" : "1";
     } else {
+        this->record_error(ConditionExpressionError::UNKNOWN_OPERATOR);
         while (this->has_next_argument()) {
-            this->evaluate();
+            this->evaluate_next();
         }
-        v = "?o?o?";
     }
 
     if (this->terminator != CLOSE_BRACKET) {
-        v = "?x?x?";
+        this->record_error(ConditionExpressionError::MISSING_CLOSING_BRACKET);
     }
 
     this->consume_terminator();
@@ -187,24 +233,41 @@ std::string ConditionExpressionEvaluator::evaluate_word()
         return std::string(word);
     }
 
-    return this->resolve(word.substr(1)).value_or("?o?o?");
+    const auto value = this->resolve(word.substr(1));
+    if (!value) {
+        this->record_error(ConditionExpressionError::UNKNOWN_VARIABLE);
+    }
+    return value.value_or("");
 }
 
 }
 
 /*!
- * @brief 条件式を評価する
+ * @brief 条件式を評価し、評価結果とエラーを区別して返す
  * @param expr 条件式。途中に NUL があれば、そこまでを条件式とする
  * @param resolve 「$」で始まる変数の値を返す関数
- * @return 評価の結果。括弧で囲まれた式なら "0" か "1"、語ならその語 (変数ならその値)。
- * 知らない演算子や変数なら "?o?o?"、括弧が閉じていなければ "?x?x?"。最初の式の後ろは読まない
+ * @return 評価の結果、または最初に検出した ConditionExpressionError。最初の式の後ろは読まない
  * @details
  * 書式は「[演算子 引数...]」か語で、引数にも式を書ける。演算子は次のとおり。
  * - IOR・AND・NOT: 空でない引数が "0" でないものがあるか・"0" のものがないか・"1" のものがないか
  * - EQU: 2番目以降の引数に、最初の引数と等しいものがあるか
  * - LEQ・GEQ: 最初の引数を数値として、空でない2番目以降の引数のすべて以下か・以上か
+ * LEQ・GEQ の数値は int の範囲の10進整数とし、負数と先頭の0を許す。既存設定との互換性のため先頭の「+」1文字も許す。
+ * 空白や末尾の余分な文字は許さない。
+ * 引数が無ければ真、空の先頭引数は0、空の後続引数は比較しない。
+ * 不正な数値・未知の演算子・未知の変数・閉じ括弧不足は、演算子や入れ子の位置によらず式全体のエラーとする。
+ * LEQ/GEQ に渡る未知変数も UNKNOWN_VARIABLE として返し、数値不正と区別する。
+ */
+tl::expected<std::string, ConditionExpressionError> evaluate_condition_expression_checked(std::string_view expr, const ExpressionVariableResolver &resolve)
+{
+    return ConditionExpressionEvaluator(expr.substr(0, expr.find('\0')), resolve).evaluate();
+}
+
+/*!
+ * @brief 条件判定用に評価結果を返す。すべての評価エラーは条件不成立の "0" とする
+ * @details 書式は evaluate_condition_expression_checked() を参照。エラーの通知が必要な呼び出し側は checked 版を使う
  */
 std::string evaluate_condition_expression(std::string_view expr, const ExpressionVariableResolver &resolve)
 {
-    return ConditionExpressionEvaluator(expr.substr(0, expr.find('\0')), resolve).evaluate();
+    return evaluate_condition_expression_checked(expr, resolve).value_or("0");
 }
