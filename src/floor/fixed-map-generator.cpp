@@ -7,7 +7,6 @@
 #include "info-reader/general-parser.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
-#include "io/tokenizer.h"
 #include "monster-floor/monster-generator.h"
 #include "monster-floor/monster-remover.h"
 #include "monster-floor/place-monster-types.h"
@@ -219,20 +218,19 @@ static void apply_fixed_map_size(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
     panel_col_min = floor.width;
 }
 
-template <typename Y, typename X>
-static void apply_fixed_map_position(PlayerType *player_ptr, Y start_y, X start_x)
+static void apply_fixed_map_position(PlayerType *player_ptr, int start_y, int start_x)
 {
     auto &floor = *player_ptr->current_floor_ptr;
     if (floor.is_in_quest()) {
-        Pos2D p_pos(start_y(), start_x());
+        Pos2D p_pos(start_y, start_x);
         player_ptr->set_position(p_pos);
         delete_monster(player_ptr, player_ptr->get_position());
         return;
     }
 
     if (!player_ptr->oldpx && !player_ptr->oldpy) {
-        player_ptr->oldpy = start_y();
-        player_ptr->oldpx = start_x();
+        player_ptr->oldpy = start_y;
+        player_ptr->oldpx = start_x;
     }
 }
 
@@ -243,61 +241,7 @@ void apply_fixed_map_start(PlayerType *player_ptr, qtwg_type *qtwg_ptr, int star
     }
 
     apply_fixed_map_size(player_ptr, qtwg_ptr);
-    apply_fixed_map_position(player_ptr, [start_y] { return start_y; }, [start_x] { return start_x; });
-}
-
-static bool parse_qtw_P(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
-{
-    if (qtwg_ptr->buf[0] != 'P') {
-        return false;
-    }
-
-    if ((init_flags & INIT_CREATE_DUNGEON) == 0) {
-        return true;
-    }
-
-    const auto tokens = tokenize(qtwg_ptr->buf + 2, 2);
-    if (tokens.size() != 2) {
-        return true;
-    }
-
-    apply_fixed_map_size(player_ptr, qtwg_ptr);
-    // 座標は使用時に解釈し、旧形式の例外発生順と位置更新順を維持する.
-    apply_fixed_map_position(player_ptr, [&tokens] { return std::stoi(tokens[0]); }, [&tokens] { return std::stoi(tokens[1]); });
-
-    return true;
-}
-
-/*!
- * @brief 町 JSONC から生成された F/B/D/P 行をフロアへ適用する
- * @param player_ptr プレイヤーへの参照ポインタ
- * @param qtwg_ptr 処理行と配置範囲・現在位置
- * @return エラーコード
- */
-parse_error_type generate_fixed_map_floor(PlayerType *player_ptr, qtwg_type *qtwg_ptr)
-{
-    if (qtwg_ptr->buf[1] != ':') {
-        return PARSE_ERROR_GENERIC;
-    }
-
-    /* Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid */
-    if (qtwg_ptr->buf[0] == 'F') {
-        return parse_line_feature(*player_ptr->current_floor_ptr, qtwg_ptr->buf);
-    }
-
-    if (qtwg_ptr->buf[0] == 'D') {
-        return apply_fixed_map_row(player_ptr, qtwg_ptr, qtwg_ptr->buf + 2);
-    }
-
-    if (parse_qtw_P(player_ptr, qtwg_ptr)) {
-        return PARSE_ERROR_NONE;
-    }
-
-    if (qtwg_ptr->buf[0] == 'B') {
-        return parse_line_building(qtwg_ptr->buf);
-    }
-
-    return PARSE_ERROR_GENERIC;
+    apply_fixed_map_position(player_ptr, start_y, start_x);
 }
 
 /*!
