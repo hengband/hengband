@@ -1179,6 +1179,7 @@
     <ClInclude Include="..\..\src\info-reader\spell-reader.h" />
     <ClInclude Include="..\..\src\info-reader\terrain-reader.h" />
     <ClInclude Include="..\..\src\info-reader\town-definition-list-reader.h" />
+    <ClInclude Include="..\..\src\info-reader\town-map-condition.h" />
     <ClInclude Include="..\..\src\info-reader\town-map-reader.h" />
     <ClInclude Include="..\..\src\info-reader\town-preferences-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />

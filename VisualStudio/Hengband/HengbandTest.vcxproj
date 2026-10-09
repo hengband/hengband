@@ -73,6 +73,7 @@
     <ClCompile Include="..\..\src\test\info-reader\test-baseitem-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-dungeon-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-ego-reader.cpp" />
+    <ClCompile Include="..\..\src\test\info-reader\test-fixed-map-parser.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-info-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-json-reader-util.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-jsonc-document-loader.cpp" />
