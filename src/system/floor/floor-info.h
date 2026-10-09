@@ -136,6 +136,7 @@ public:
     void reset_lite_area();
     void set_lite_at(const Pos2D &pos);
     void set_redraw_at(const Pos2D &pos);
+    void set_note_and_redraw_walls_lit_from_player_side(const Pos2D &p_pos_old, const Pos2D &p_pos_new);
     void set_view_at(const Pos2D &pos);
     void set_view();
     void set_note_and_redraw();

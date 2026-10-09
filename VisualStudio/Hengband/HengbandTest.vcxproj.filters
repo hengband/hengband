@@ -205,6 +205,9 @@
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\system\floor\test-floor-info.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp">
       <Filter>system</Filter>
     </ClCompile>

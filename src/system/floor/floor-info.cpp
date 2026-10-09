@@ -34,6 +34,7 @@
 #include "util/finalizer.h"
 #include "util/point-2d.h"
 #include "world/world.h"
+#include <algorithm>
 #include <array>
 #include <range/v3/algorithm.hpp>
 
@@ -757,6 +758,29 @@ void FloorType::set_redraw_at(const Pos2D &pos)
 
     grid.info |= CAVE_REDRAW;
     this->redraw_points.push_back(pos);
+}
+
+/*!
+ * @brief プレイヤーの移動で明るさが変わり得る、視界内の壁を記憶と再描画の対象にする
+ * @param p_pos_old 移動前のプレイヤーの座標
+ * @param p_pos_new 移動後のプレイヤーの座標
+ * @details 壁などLOSを通さない地形の明るさは、プレイヤーの側の隣のグリッドで決まる (is_illuminated_at())。
+ * プレイヤーの側は縦・横の位置関係の符号だけで決まるので、変わり得るのは移動前と移動後の間 (両端を含む) にある行・列だけ。
+ * 視界から出入りするグリッドは update_view() が扱うので、update_view() より前に呼び、移動前の視界にあるグリッドを対象にする。
+ */
+void FloorType::set_note_and_redraw_walls_lit_from_player_side(const Pos2D &p_pos_old, const Pos2D &p_pos_new)
+{
+    const auto [y_min, y_max] = std::minmax(p_pos_old.y, p_pos_new.y);
+    const auto [x_min, x_max] = std::minmax(p_pos_old.x, p_pos_new.x);
+    for (auto i = 0; i < this->view_n; i++) {
+        const Pos2D pos(this->view_y[i], this->view_x[i]);
+        const auto is_between = ((y_min <= pos.y) && (pos.y <= y_max)) || ((x_min <= pos.x) && (pos.x <= x_max));
+        if (!is_between || this->get_grid(pos).has_los_terrain(TerrainKind::MIMIC)) {
+            continue;
+        }
+
+        this->set_note_and_redraw_at(pos);
+    }
 }
 
 void FloorType::set_view_at(const Pos2D &pos)
