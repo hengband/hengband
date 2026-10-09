@@ -1,3 +1,4 @@
+#include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
 #include "monster-race/race-kind-flags.h"
 #include "monster-race/race-misc-flags.h"
@@ -246,7 +247,7 @@ TEST_CASE("QuestList leaves all records unpublished when a later file fails")
 TEST_CASE("QuestList initialization preserves every store on late input errors")
 {
     for (const auto seeded : { false, true }) {
-        for (const auto *failure : { "syntax", "root", "id", "duplicate", "type", "range", "start", "monster" }) {
+        for (const auto *failure : { "syntax", "root", "id", "duplicate", "type", "range", "start", "start bounds", "start no map", "start variant", "monster" }) {
             CAPTURE(seeded);
             CAPTURE(failure);
             test::QuestListTestAccess quests;
@@ -308,6 +309,13 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
                 bad["definition"]["level"] = int64_t{ 1 } << 32;
             } else if (kind == "start") {
                 bad["start"] = { { "y", 0 } };
+            } else if (kind == "start bounds") {
+                bad["start"] = { { "y", 0 }, { "x", 3 } };
+            } else if (kind == "start no map") {
+                bad.erase("map");
+                bad["start"] = { { "y", 0 }, { "x", 0 } };
+            } else if (kind == "start variant") {
+                bad["startVariants"] = { { { "y", 0 }, { "x", 0 } }, { { "leavingQuest", 49 }, { "y", 0 }, { "x", 3 } } };
             } else if (kind == "monster") {
                 bad["definition"]["monster"] = 123;
             }
@@ -325,6 +333,10 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
                     const std::string diagnostic(error.what());
                     CHECK(diagnostic.find("02.jsonc") != std::string::npos);
                     CHECK(diagnostic.find("monster 123") != std::string::npos);
+                } else if (kind.starts_with("start ")) {
+                    const std::string diagnostic(error.what());
+                    CHECK(diagnostic.find("02.jsonc") != std::string::npos);
+                    CHECK(diagnostic.find(std::to_string(PARSE_ERROR_OUT_OF_BOUNDS)) != std::string::npos);
                 }
             }
             CHECK(list.size() == (seeded ? 2 : 0));
@@ -362,6 +374,78 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
                 CHECK_FALSE(maps.find(QuestId::NONE));
                 CHECK_FALSE(maps.find(QuestId::RANDOM_QUEST10));
             }
+        }
+    }
+}
+
+TEST_CASE("QuestList rejects invalid maps and starts before publishing")
+{
+    const std::vector<nlohmann::json> inputs = {
+        { { "map", { "...", ".", "..." } }, { "start", { { "y", 1 }, { "x", 1 } } } },
+        { { "map", { "..." } }, { "start", { { "y", -1 }, { "x", 0 } } } },
+        { { "map", { "..." } }, { "start", { { "y", 0 }, { "x", -1 } } } },
+        { { "map", { "..." } }, { "start", { { "y", 1 }, { "x", 0 } } } },
+        { { "map", { "..." } }, { "start", { { "y", 0 }, { "x", 3 } } } },
+        { { "map", { "..." } }, { "start", { { "y", std::numeric_limits<int>::max() }, { "x", 0 } } } },
+        { { "map", { "..." } }, { "start", { { "y", 0 }, { "x", std::numeric_limits<int>::max() } } } },
+        { { "map", { "" } }, { "start", { { "y", 0 }, { "x", 0 } } } },
+        { { "map", nlohmann::json::array() }, { "start", { { "y", 0 }, { "x", 0 } } } },
+        { { "start", { { "y", 0 }, { "x", 0 } } } },
+        { { "mapVariants", { { "..." }, { "." } } }, { "start", { { "y", 0 }, { "x", 1 } } } },
+        { { "mapVariants", { { "..." }, nlohmann::json::array() } }, { "start", { { "y", 0 }, { "x", 0 } } } },
+        { { "map", { "..." } }, { "startVariants", { { { "y", 0 }, { "x", 0 } }, { { "leavingQuest", 49 }, { "y", 0 }, { "x", 3 } } } } },
+    };
+    for (const auto &input : inputs) {
+        CAPTURE(input);
+        test::QuestListTestAccess quests;
+        test::MonraceListTestAccess monraces;
+        MonraceList::get_instance().emplace(static_cast<MonraceId>(0));
+        QuestFiles files;
+        auto data = make_quest(1);
+        data.erase("map");
+        data.update(input);
+        files.write("quest.jsonc", data);
+        CHECK_THROWS_AS(quests.load(files.directory), std::runtime_error);
+        check_unpublished(QuestId::THIEF);
+    }
+}
+
+TEST_CASE("QuestList preserves valid rectangular starts and optional start semantics")
+{
+    const std::vector<nlohmann::json> inputs = {
+        { { "map", { "...", "...", "..." } }, { "start", { { "y", 1 }, { "x", 0 } } } },
+        { { "map", { "..." } }, { "start", { { "y", 0 }, { "x", 2 } } } },
+        { { "mapVariants", { { "..." }, { "..." } } }, { "start", { { "y", 0 }, { "x", 0 } } } },
+        { { "map", { "..." } }, { "startVariants", { { { "leavingQuest", 49 }, { "y", 0 }, { "x", 2 } } } } },
+        { { "map", { "..." } }, { "start", { { "y", 0 }, { "x", 2 } } }, { "mapVariants", { nlohmann::json::array() } },
+            { "startVariants", { { { "y", -1 }, { "x", -1 } } } } },
+        { { "map", { "..." } } },
+        nlohmann::json::object(),
+        { { "map", nlohmann::json::array() } },
+    };
+    for (const auto &input : inputs) {
+        CAPTURE(input);
+        test::QuestListTestAccess quests;
+        test::MonraceListTestAccess monraces;
+        MonraceList::get_instance().emplace(static_cast<MonraceId>(0));
+        QuestFiles files;
+        auto data = make_quest(1);
+        data.erase("map");
+        data.update(input);
+        files.write("quest.jsonc", data);
+        REQUIRE_NOTHROW(quests.load(files.directory));
+        const auto map = QuestFixedMapList::get_instance().find(QuestId::THIEF);
+        REQUIRE(map);
+        if (input.contains("start")) {
+            REQUIRE(map->starts.size() == 1);
+            CHECK(map->starts[0].y == input["start"]["y"].get<int>());
+            CHECK(map->starts[0].x == input["start"]["x"].get<int>());
+        } else if (input.contains("startVariants")) {
+            REQUIRE(map->starts.size() == 1);
+            CHECK(map->starts[0].leaving_quest == 49);
+            CHECK(map->starts[0].x == 2);
+        } else {
+            CHECK(map->starts.empty());
         }
     }
 }

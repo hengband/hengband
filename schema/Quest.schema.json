@@ -5,6 +5,15 @@
   "type": "object",
   "additionalProperties": false,
   "required": ["version", "id", "name", "definition"],
+  "dependentSchemas": {
+    "start": {
+      "anyOf": [{ "required": ["map"] }, { "required": ["mapVariants"] }]
+    },
+    "startVariants": {
+      "if": { "properties": { "startVariants": { "minItems": 1 } } },
+      "then": { "anyOf": [{ "required": ["map"] }, { "required": ["mapVariants"] }] }
+    }
+  },
   "properties": {
     "version": {
       "type": "integer",
