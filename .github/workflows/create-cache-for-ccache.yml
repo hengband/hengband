@@ -47,18 +47,19 @@ jobs:
       ccache-save-min-misses: 1
 
   gcc_japanese:
-    name: Japanese version with gcc 16 (with XFT)
+    name: Japanese version with gcc 16 (with using pre-compiled headers, with XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
       cxx: g++-16
-      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra"
-      configure-opts: "--disable-pch --enable-xft"
+      # gcc は使えないプリコンパイル済みヘッダを黙って無視するので、警告 (エラー) にして使われていることを確かめる
+      cxx-flags: "-pipe -O3 -Werror -Wall -Wextra -Winvalid-pch"
+      configure-opts: "--enable-xft"
       use-ccache: true
       ccache-save-min-misses: 1
 
   gcc_english:
-    name: English version with gcc 16 (without XFT)
+    name: English version with gcc 16 (without using pre-compiled headers, without XFT)
     uses: ./.github/workflows/build-with-autotools.yml
     with:
       runner: ubuntu-26.04
