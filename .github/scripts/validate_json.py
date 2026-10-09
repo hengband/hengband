@@ -501,21 +501,24 @@ def validate_monster_message_semantics(data: dict) -> None:
         if "id_list" in group:
             for id_index, monster_id in enumerate(group["id_list"]):
                 require_integer(monster_id, group_path + ["id_list", id_index])
-        elif group.get("name") != "DEFAULT":
-            raise ValidationError("a group without id_list must be named DEFAULT", path=group_path + ["name"])
-
-        # 各言語のMessageReaderは、その言語がない最初のメッセージでグループ全体の読込を終える。
-        # 日本語版か英語版のどちらかが到達するメッセージを検証する。
-        active_languages = {"ja", "en"}
+        # 実行時の到達可否によらず、全メッセージの入力を検証する。
         for message_index, message in enumerate(group["message"]):
-            if not active_languages:
-                break
             message_path = group_path + ["message", message_index]
             require_integer(message["chance"], message_path + ["chance"])
             languages = message["message"]
             if not languages:
                 raise ValidationError("a message must contain ja or en", path=message_path + ["message"])
-            active_languages.intersection_update(languages)
+
+        # 読込を終えた言語の後続メッセージが黙って捨てられる定義を拒否する。
+        missing_languages = set()
+        for message_index, message in enumerate(group["message"]):
+            languages = message["message"]
+            for language in ("ja", "en"):
+                if language not in languages:
+                    missing_languages.add(language)
+                elif language in missing_languages:
+                    path = group_path + ["message", message_index, "message", language]
+                    raise ValidationError(f"{language} messages after a missing locale would be discarded", path=path)
 
 
 def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None) -> tuple[bool, str]:

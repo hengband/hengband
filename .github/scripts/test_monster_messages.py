@@ -1,11 +1,10 @@
 """JSONCのCI検証入口でモンスターメッセージ読込規則を確認する。"""
 import copy
-import json
 from pathlib import Path
-import tempfile
 import unittest
 
-from validate_json import build_schema_registry, load_all_schemas, load_jsonc, validate_one
+from json_validation_test_helper import validate_document
+from validate_json import build_schema_registry, load_all_schemas, load_jsonc
 
 
 class MonsterMessageValidationTest(unittest.TestCase):
@@ -21,10 +20,7 @@ class MonsterMessageValidationTest(unittest.TestCase):
 
     def validate(self, groups):
         document = {"versions": 1, "groups": groups}
-        with tempfile.TemporaryDirectory() as folder:
-            target = Path(folder) / "MonsterMessages.jsonc"
-            target.write_text(json.dumps(document), encoding="utf-8")
-            return validate_one((target, self.schema_path, self.loaded[self.schema_path]), self.registry)
+        return validate_document(document, self.schema_path, self.loaded[self.schema_path], self.registry)
 
     def assert_valid(self, groups):
         ok, diagnostic = self.validate(groups)
@@ -71,7 +67,7 @@ class MonsterMessageValidationTest(unittest.TestCase):
                 group = {"message": []}
                 if name is not None:
                     group["name"] = name
-                self.assert_invalid([group], ["groups", 0, "name"], "must be named DEFAULT")
+                self.assert_invalid([group], ["groups", 0] if name is None else ["groups", 0, "name"])
 
     def test_id_list_takes_precedence_over_name(self):
         for ids in ([], [9999]):
@@ -106,37 +102,53 @@ class MonsterMessageValidationTest(unittest.TestCase):
         self.assert_invalid([{"name": "DEFAULT", "message": [self.message(())]}],
                             ["groups", 0, "message", 0, "message"], "must contain ja or en")
 
-    def test_one_reader_continues_after_other_reader_stops(self):
-        for language in ("ja", "en"):
-            for tail in (self.message(chance=1.0), self.message(())):
-                with self.subTest(language=language, tail=tail):
-                    groups = [{"name": "DEFAULT", "message": [self.message((language,)), tail]}]
-                    field = "chance" if tail["message"] else "message"
-                    self.assert_invalid(groups, ["groups", 0, "message", 1, field])
-
-    def test_chance_is_checked_before_missing_locale_exit(self):
+    def test_all_chances_are_checked_after_missing_locales(self):
         for language, other in (("ja", "en"), ("en", "ja")):
             with self.subTest(language=language):
                 self.assert_invalid([{"name": "DEFAULT", "message": [self.message((language,)),
-                                                                     self.message((other,), chance=1.0)]}],
-                                    ["groups", 0, "message", 1, "chance"], "integer JSON value")
+                                    self.message((other,)), self.message(chance=1.0)]}],
+                                    ["groups", 0, "message", 2, "chance"], "integer JSON value")
 
-    def test_semantic_checks_stop_after_both_readers_exit(self):
-        for first, second in (("ja", "en"), ("en", "ja")):
-            with self.subTest(first=first):
-                self.assert_valid([{"name": "DEFAULT", "message": [self.message((first,)), self.message((second,)),
-                                                                   self.message(chance=1.0), self.message(())]}])
+    def test_empty_locales_are_checked_in_every_message(self):
+        self.assert_invalid([{"name": "DEFAULT", "message": [self.message(("ja",)), self.message(("en",)),
+                                                            self.message(())]}],
+                            ["groups", 0, "message", 2, "message"], "must contain ja or en")
 
-    def test_language_reachability_resets_for_each_group(self):
-        self.assert_invalid([{"name": "DEFAULT", "message": [self.message(("ja",)), self.message(("en",))]},
-                             {"id_list": [1], "message": [self.message(chance=1.0)]}],
-                            ["groups", 1, "message", 0, "chance"], "integer JSON value")
+    def test_locale_cannot_return_after_gap(self):
+        for language, other in (("ja", "en"), ("en", "ja")):
+            for prefix in ([self.message((other,))], [self.message(), self.message((other,))]):
+                with self.subTest(language=language, prefix=prefix):
+                    self.assert_invalid([{"name": "DEFAULT", "message": prefix + [self.message()]}],
+                                        ["groups", 0, "message", len(prefix), "message", language], "would be discarded")
 
-    def test_schema_still_checks_unreachable_messages(self):
+    def test_single_locale_suffix_is_allowed(self):
+        for language in ("ja", "en"):
+            with self.subTest(language=language):
+                self.assert_valid([{"name": "DEFAULT", "message": [self.message(), self.message((language,)),
+                                                                 self.message((language,))]}])
+
+    def test_empty_array_keeps_locale_present(self):
+        first = self.message()
+        first["message"]["en"] = []
+        self.assert_valid([{"name": "DEFAULT", "message": [first, self.message()]}])
+
+    def test_locale_tracking_resets_for_each_group(self):
+        self.assert_valid([{"name": "DEFAULT", "message": [self.message(("ja",))]},
+                           {"id_list": [1], "message": [self.message()]}])
+
+    def test_schema_checks_all_messages(self):
         tail = self.message()
         tail["action"] = "UNKNOWN"
         self.assert_invalid([{"name": "DEFAULT", "message": [self.message(("ja",)), self.message(("en",)), tail]}],
                             ["groups", 0, "message", 2, "action"])
+
+    def test_original_bundled_gaps_are_rejected(self):
+        document = load_jsonc(self.root / "lib/edit/MonsterMessages.jsonc")
+        for group_index, message_index, later_index in ((2, 1, 2), (3, 1, 2), (75, 0, 1)):
+            with self.subTest(group=group_index):
+                group = copy.deepcopy(document["groups"][group_index])
+                del group["message"][message_index]["message"]["en"]
+                self.assert_invalid([group], ["groups", 0, "message", later_index, "message", "en"], "would be discarded")
 
 
 if __name__ == "__main__":
