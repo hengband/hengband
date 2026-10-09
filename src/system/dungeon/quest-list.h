@@ -52,8 +52,11 @@ private:
     QuestList() = default;
 
     std::map<char, QuestLegendCell> load_base_legend(); //!< 共通ベース凡例を公開せずに読み込む
+    // テスト用経路: 既存ストアのコピーへ読み込み、検証後にクエストと固定マップを公開する。
     void load_json_quests(const std::filesystem::path &quests_dir);
+    // 指定された一時ストアに読み込み、検証とメタデータ適用を行う。ストア自体は公開しない。
     void load_json_quests(const std::filesystem::path &quests_dir, std::map<QuestId, QuestType> &parsed_quests, std::map<QuestId, QuestFixedMap> &parsed_maps);
+    void publish(std::map<QuestId, QuestType> &parsed_quests, std::map<QuestId, QuestFixedMap> &parsed_maps) noexcept;
 
     std::map<QuestId, QuestType> &get_inner_container() override
     {

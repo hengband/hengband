@@ -104,9 +104,7 @@ public:
 
     static QuestFixedMapList &get_instance();
 
-    QuestFixedMap &emplace(QuestId id); //!< 空エントリを作成/取得 (ローダが読み込み先として使う)
     tl::optional<QuestFixedMap> find(QuestId id) const; //!< 無ければ nullopt
-    void clear();
 
     //!< 全クエスト共通のベース凡例 (旧 QuestPreferences.txt)。各クエスト legend より前に letter[] へ適用する。
     void set_base_legend(std::map<char, QuestLegendCell> legend);

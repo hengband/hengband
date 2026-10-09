@@ -12,7 +12,6 @@
 #include "test/system/quest-list-test-access.h"
 #include "test/system/terrain-list-test-access.h"
 #include "test/temporary-json-files.h"
-#include "util/finalizer.h"
 #include <cstdint>
 #include <doctest/doctest.h>
 #include <filesystem>
@@ -49,10 +48,6 @@ TEST_CASE("QuestList base legend rejects unsafe symbol bytes without publication
     QuestFiles files;
     const auto restore_path = test::scoped_restore(ANGBAND_DIR_EDIT);
     auto &maps = QuestFixedMapList::get_instance();
-    const auto original = maps.get_base_legend();
-    const auto restore_legend = util::make_finalizer([original] {
-        QuestFixedMapList::get_instance().set_base_legend(original);
-    });
     ANGBAND_DIR_EDIT = files.directory;
     QuestLegendCell existing;
     existing.grid.special = 73;
@@ -80,10 +75,6 @@ TEST_CASE("QuestList base legend accepts printable ASCII boundaries")
     QuestFiles files;
     const auto restore_path = test::scoped_restore(ANGBAND_DIR_EDIT);
     auto &maps = QuestFixedMapList::get_instance();
-    const auto original = maps.get_base_legend();
-    const auto restore_legend = util::make_finalizer([original] {
-        QuestFixedMapList::get_instance().set_base_legend(original);
-    });
     ANGBAND_DIR_EDIT = files.directory;
     files.write("QuestPreferences.jsonc", { { "legend", { { " ", { { "special", 17 } } }, { "~", { { "special", 29 } } } } } });
     REQUIRE_NOTHROW(quests.load_base_legend());
@@ -184,7 +175,7 @@ TEST_CASE("QuestList leaves failed late reader output unpublished")
     CHECK_FALSE(monrace.misc_flags.has(MonsterMiscType::QUESTOR));
 }
 
-TEST_CASE("QuestList leaves failed metadata application unpublished")
+TEST_CASE("QuestList reports missing target monsters without publication")
 {
     test::QuestListTestAccess quests;
     test::MonraceListTestAccess monraces;
@@ -192,7 +183,14 @@ TEST_CASE("QuestList leaves failed metadata application unpublished")
     auto data = make_quest(1);
     data["definition"]["monster"] = 123;
     files.write("quest.jsonc", data);
-    CHECK_THROWS_AS(quests.load(files.directory), std::out_of_range);
+    try {
+        quests.load(files.directory);
+        FAIL("Expected a runtime_error for the missing monster");
+    } catch (const std::runtime_error &error) {
+        const std::string diagnostic(error.what());
+        CHECK(diagnostic.find("quest.jsonc") != std::string::npos);
+        CHECK(diagnostic.find("monster 123") != std::string::npos);
+    }
     check_unpublished(QuestId::THIEF);
     CHECK(MonraceList::get_instance().empty());
 }
@@ -319,7 +317,16 @@ TEST_CASE("QuestList initialization preserves every store on late input errors")
                 files.write("quests/02.jsonc", bad);
             }
 
-            CHECK_THROWS_AS(list.initialize(), std::exception);
+            try {
+                list.initialize();
+                FAIL("Expected a runtime_error for the invalid input");
+            } catch (const std::runtime_error &error) {
+                if (kind == "monster") {
+                    const std::string diagnostic(error.what());
+                    CHECK(diagnostic.find("02.jsonc") != std::string::npos);
+                    CHECK(diagnostic.find("monster 123") != std::string::npos);
+                }
+            }
             CHECK(list.size() == (seeded ? 2 : 0));
             CHECK_FALSE(list.contains(QuestId::THIEF));
             CHECK_FALSE(list.contains(QuestId::SEWER));

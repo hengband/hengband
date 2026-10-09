@@ -49,8 +49,7 @@ void QuestList::initialize()
 
     // 通常の入力エラーをすべて検証してから、NONE・凡例を含む全ストアを公開する。
     // 資源障害まで含む完全な巻き戻しや、プレイ中の再読込は保証しない。
-    this->quests.swap(parsed_quests);
-    fixed_maps.maps.swap(parsed_maps);
+    this->publish(parsed_quests, parsed_maps);
     fixed_maps.base_legend.swap(parsed_legend);
 }
 
@@ -121,8 +120,16 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir)
     auto parsed_quests = this->quests;
     auto parsed_maps = fixed_maps.maps;
     this->load_json_quests(quests_dir, parsed_quests, parsed_maps);
+    this->publish(parsed_quests, parsed_maps);
+}
+
+/*!
+ * @brief 検証済みのクエストと固定マップを、例外を送出せずに一括公開する
+ */
+void QuestList::publish(std::map<QuestId, QuestType> &parsed_quests, std::map<QuestId, QuestFixedMap> &parsed_maps) noexcept
+{
     this->quests.swap(parsed_quests);
-    fixed_maps.maps.swap(parsed_maps);
+    QuestFixedMapList::get_instance().maps.swap(parsed_maps);
 }
 
 void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::map<QuestId, QuestType> &parsed_quests, std::map<QuestId, QuestFixedMap> &parsed_maps)
@@ -146,8 +153,8 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
         THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, quests_dir.string()));
     }
 
-    std::vector<QuestId> loaded_ids;
-    loaded_ids.reserve(files.size());
+    std::vector<std::pair<QuestId, std::filesystem::path>> loaded_quests;
+    loaded_quests.reserve(files.size());
     for (const auto &file : files) {
         JsoncDocumentLoader loader(file);
         if (!loader.is_open()) {
@@ -190,16 +197,21 @@ void QuestList::load_json_quests(const std::filesystem::path &quests_dir, std::m
 
         parsed_quests.emplace(quest_id, std::move(quest));
         parsed_maps.insert_or_assign(quest_id, std::move(fixed_map));
-        loaded_ids.push_back(quest_id);
+        loaded_quests.emplace_back(quest_id, file);
     }
 
     // apply_quest_metadata は UNIQUE の QUESTOR フラグも変更する。
     // 後半の欠落参照で先行モンスターのフラグが残らないよう、先に全件の参照を確認する。
     auto &monraces = MonraceList::get_instance();
-    for (const auto quest_id : loaded_ids) {
-        monraces.get_monrace(i2enum<MonraceId>(parsed_maps.at(quest_id).metadata.r_idx));
+    for (const auto &[quest_id, file] : loaded_quests) {
+        const auto monster_id = parsed_maps.at(quest_id).metadata.r_idx;
+        if (!monraces.contains(i2enum<MonraceId>(monster_id))) {
+            constexpr auto fmt = _("クエストの対象モンスターが未定義です ({}): monster {}", "Undefined quest target monster ({}): monster {}");
+            THROW_EXCEPTION(std::runtime_error, fmt::format(fmt, file.string(), monster_id));
+        }
     }
-    for (const auto quest_id : loaded_ids) {
+    for (const auto &loaded_quest : loaded_quests) {
+        const auto quest_id = loaded_quest.first;
         apply_quest_metadata(parsed_maps.at(quest_id), parsed_quests.at(quest_id));
     }
 }
