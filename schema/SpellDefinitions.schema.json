@@ -42,6 +42,7 @@
                         "description": "呪文書別の呪文情報",
                         "additionalProperties": false,
                         "items": {
+                            "type": "object",
                             "additionalProperties": false,
                             "required": [
                                 "name",
@@ -71,6 +72,7 @@
                                     "type": "array",
                                     "description": "呪文情報を格納する配列",
                                     "items": {
+                                        "type": "object",
                                         "additionalProperties": false,
                                         "required": [
                                             "spell_id",

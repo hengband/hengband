@@ -114,6 +114,7 @@
                         "type": "array",
                         "description": "各領域の呪文情報",
                         "items": {
+                            "type": "object",
                             "description": "各領域の呪文情報",
                             "additionalProperties": false,
                             "required": [
@@ -141,6 +142,7 @@
                                     "type": "array",
                                     "description": "呪文情報",
                                     "items": {
+                                        "type": "object",
                                         "description": "呪文情報",
                                         "additionalProperties": false,
                                         "required": [

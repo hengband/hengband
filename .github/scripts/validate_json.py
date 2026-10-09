@@ -104,9 +104,7 @@ def validate_vault_semantics(data: dict) -> None:
     for index, vault in enumerate(data["vaults"]):
         path = ["vaults", index]
         for field in ("id", "type", "rating", "height", "width"):
-            # JSON Schema accepts 1.0 as an integer; the C++ reader does not.
-            if type(vault[field]) is not int:
-                raise ValidationError("expected an integer JSON value", path=path + [field])
+            require_integer(vault[field], path + [field])
         if vault["id"] <= previous_id:
             raise ValidationError("IDs must be unique and in increasing order", path=path + ["id"])
         previous_id = vault["id"]
@@ -363,6 +361,140 @@ def validate_town_map_semantics(data: dict, schema_path: Path) -> None:
             raise ValidationError("starting position must be within every map variant", path=["startingPositions", start_index])
 
 
+def require_integer(value, path: list) -> None:
+    # JSON Schema accepts 1.0 as an integer; info_set_integer rejects it.
+    if type(value) is not int:
+        raise ValidationError("expected an integer JSON value", path=path)
+
+
+def load_class_ids(repository_root: Path) -> dict[str, int]:
+    """Read MagicReader's tokens and PlayerClassType values, not map order."""
+    enum_path = repository_root / "src/player-info/class-types.h"
+    enum_source = enum_path.read_text(encoding="utf-8")
+    enum_match = re.search(r'enum class PlayerClassType\s*:[^{]+\{([^}]+)\}', enum_source)
+    if not enum_match:
+        raise ValueError(f"PlayerClassType definition not found in {enum_path}")
+    entries = re.sub(r'/\*.*?\*/|//[^\n]*', '', enum_match[1], flags=re.DOTALL)
+    enum_ids = {}
+    next_id = 0
+    for entry in entries.split(','):
+        if not entry.strip():
+            continue
+        match = re.fullmatch(r'\s*([A-Z][A-Z0-9_]*)(?:\s*=\s*(-?\d+))?\s*', entry)
+        if not match:
+            raise ValueError(f"Unsupported PlayerClassType value in {enum_path}: {entry.strip()}")
+        name, explicit_id = match.groups()
+        if explicit_id is not None:
+            next_id = int(explicit_id)
+        enum_ids[name] = next_id
+        next_id += 1
+    reader_path = repository_root / "src/info-reader/magic-reader.cpp"
+    tokens = re.findall(r'\{\s*"([A-Z][A-Z0-9_]*)"\s*,\s*PlayerClassType::([A-Z][A-Z0-9_]*)\s*\}',
+                        reader_path.read_text(encoding="utf-8"))
+    if not tokens or any(name not in enum_ids for _, name in tokens):
+        raise ValueError(f"Invalid class token mapping in {reader_path}")
+    return {token: enum_ids[name] for token, name in tokens}
+
+
+def load_spell_tags(schema_path: Path, data_path: Path, registry: Registry) -> dict[str, set[str]]:
+    """Use adjacent candidate definitions, or the schema repository's bundled data."""
+    repository_root = schema_path.resolve().parent.parent
+    spell_path = data_path.parent / "SpellDefinitions.jsonc"
+    if not spell_path.exists():
+        spell_path = repository_root / "lib/edit/SpellDefinitions.jsonc"
+    spells = load_jsonc(spell_path)
+    spell_schema_path = schema_path.parent / "SpellDefinitions.schema.json"
+    spell_schema = load_jsonc(spell_schema_path)
+    schema_uri = spell_schema_path.resolve().as_uri()
+    absolute_schema = {**spell_schema, "$id": urljoin(schema_uri, spell_schema.get("$id", schema_uri))}
+    try:
+        validate(instance=spells, schema=absolute_schema, registry=registry)
+        validate_spell_semantics(spells)
+    except ValidationError as e:
+        raise ValueError(f"Invalid spell definitions in {spell_path}: {e.message}; Location: {list(e.path)}") from e
+    tag_ids = {}
+    for realm in spells["realms"]:
+        realm_tag_ids = tag_ids.setdefault(realm["name"], {})
+        for book in realm["books"]:
+            for spell in book["spells"]:
+                realm_tag_ids[spell["spell_tag"]] = spell["spell_id"]
+    tags = {}
+    for realm, realm_tag_ids in tag_ids.items():
+        ids = set(realm_tag_ids.values())
+        # Undefined slots also have empty tags, and get_spell_id returns the first match.
+        # An empty tag is referenceable only when every lower slot has a definition.
+        tags[realm] = {tag for tag, spell_id in realm_tag_ids.items()
+                       if tag or all(lower_id in ids for lower_id in range(spell_id))}
+    return tags
+
+
+def validate_class_magic_semantics(data: dict, schema_path: Path, data_path: Path, registry: Registry) -> None:
+    """Check MagicReader's strict integers, class order and realm spell references."""
+    class_ids = load_class_ids(schema_path.resolve().parent.parent)
+    spell_tags = load_spell_tags(schema_path, data_path, registry)
+    previous_id = -1
+    for class_index, record in enumerate(data["classes"]):
+        path = ["classes", class_index]
+        class_id = class_ids.get(record["name"])
+        if class_id is None:
+            raise ValidationError("unknown class token", path=path + ["name"])
+        if class_id < previous_id:
+            raise ValidationError("class IDs must be in nondecreasing order", path=path + ["name"])
+        previous_id = class_id
+        for field in ("first_spell_level", "armour_weight_limit"):
+            require_integer(record[field], path + [field])
+        for realm_index, realm in enumerate(record["realms"]):
+            for spell_index, spell in enumerate(realm["spells_info"]):
+                spell_path = path + ["realms", realm_index, "spells_info", spell_index]
+                if spell["spell_tag"] not in spell_tags.get(realm["name"], set()):
+                    raise ValidationError("unknown spell tag in this realm", path=spell_path + ["spell_tag"])
+                for field in ("learn_level", "mana_cost", "difficulty", "first_cast_exp_rate"):
+                    require_integer(spell[field], spell_path + [field])
+
+
+def validate_class_skill_semantics(data: dict) -> None:
+    """Check SkillReader's strict integers, sequential IDs and start limits."""
+    for class_index, record in enumerate(data["classes"]):
+        path = ["classes", class_index]
+        require_integer(record["id"], path + ["id"])
+        if record["id"] != class_index:
+            raise ValidationError("class IDs must be sequential starting at 0", path=path + ["id"])
+        for name, weapon in record["weapons"].items():
+            weapon_path = path + ["weapons", name]
+            for field in ("start_ranks", "max_ranks"):
+                for rank_index, rank in enumerate(weapon[field]):
+                    require_integer(rank, weapon_path + [field, rank_index])
+            for rank_index, (start, maximum) in enumerate(zip(weapon["start_ranks"], weapon["max_ranks"])):
+                if start > maximum:
+                    raise ValidationError("start rank must not exceed maximum rank", path=weapon_path + ["start_ranks", rank_index])
+        for name, skill in record["skills"].items():
+            skill_path = path + ["skills", name]
+            for field in ("start_exp", "max_exp"):
+                require_integer(skill[field], skill_path + [field])
+            if skill["start_exp"] > skill["max_exp"]:
+                raise ValidationError("start experience must not exceed maximum experience", path=skill_path + ["start_exp"])
+
+
+def validate_spell_semantics(data: dict) -> None:
+    """Reject strict integer failures, overwrites and ambiguous tag lookups."""
+    realm_ids = {}
+    realm_tags = {}
+    for realm_index, realm in enumerate(data["realms"]):
+        ids = realm_ids.setdefault(realm["name"], set())
+        tags = realm_tags.setdefault(realm["name"], set())
+        for book_index, book in enumerate(realm["books"]):
+            for spell_index, spell in enumerate(book["spells"]):
+                path = ["realms", realm_index, "books", book_index, "spells", spell_index, "spell_id"]
+                require_integer(spell["spell_id"], path)
+                if spell["spell_id"] in ids:
+                    raise ValidationError("spell IDs must be unique within each realm", path=path)
+                ids.add(spell["spell_id"])
+                tag_path = path[:-1] + ["spell_tag"]
+                if spell["spell_tag"] in tags:
+                    raise ValidationError("spell tags must be unique within each realm", path=tag_path)
+                tags.add(spell["spell_tag"])
+
+
 def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
@@ -373,18 +505,20 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
         schema_uri = schema_path.resolve().as_uri()
         absolute_schema = schema if isinstance(schema, bool) else {**schema, "$id": urljoin(schema_uri, schema.get("$id", schema_uri))}
         validate(instance=data, schema=absolute_schema, registry=registry)
-        if schema_path.name == "VaultDefinitions.schema.json":
-            validate_vault_semantics(data)
-        elif schema_path.name == "EgoDefinitions.schema.json":
-            validate_ego_semantics(data, schema_path)
-        elif schema_path.name == "WildernessDefinition.schema.json":
-            validate_wilderness_semantics(data)
-        elif schema_path.name == "TownPreferences.schema.json":
-            validate_town_preferences_semantics(data, schema_path)
-        elif schema_path.name == "TownDefinitionList.schema.json":
-            validate_town_definition_list_semantics(data, schema_path)
-        elif schema_path.name == "TownMap.schema.json":
-            validate_town_map_semantics(data, schema_path)
+        semantic_validators = {
+            "VaultDefinitions.schema.json": lambda: validate_vault_semantics(data),
+            "EgoDefinitions.schema.json": lambda: validate_ego_semantics(data, schema_path),
+            "WildernessDefinition.schema.json": lambda: validate_wilderness_semantics(data),
+            "TownPreferences.schema.json": lambda: validate_town_preferences_semantics(data, schema_path),
+            "TownDefinitionList.schema.json": lambda: validate_town_definition_list_semantics(data, schema_path),
+            "TownMap.schema.json": lambda: validate_town_map_semantics(data, schema_path),
+            "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
+            "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
+            "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),
+        }
+        semantic_validator = semantic_validators.get(schema_path.name)
+        if semantic_validator is not None:
+            semantic_validator()
         return True, f"Succeeded: {data_path.name} <= {schema_path.name}"
     except ValidationError as e:
         msg = [f"Failed: {data_path.name}", f"Reason: {e.message}"]
