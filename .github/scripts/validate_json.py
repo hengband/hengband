@@ -495,6 +495,29 @@ def validate_spell_semantics(data: dict) -> None:
                 tags.add(spell["spell_tag"])
 
 
+def validate_monster_message_semantics(data: dict) -> None:
+    for group_index, group in enumerate(data["groups"]):
+        group_path = ["groups", group_index]
+        if "id_list" in group:
+            for id_index, monster_id in enumerate(group["id_list"]):
+                require_integer(monster_id, group_path + ["id_list", id_index])
+        elif group.get("name") != "DEFAULT":
+            raise ValidationError("a group without id_list must be named DEFAULT", path=group_path + ["name"])
+
+        # 各言語のMessageReaderは、その言語がない最初のメッセージでグループ全体の読込を終える。
+        # 日本語版か英語版のどちらかが到達するメッセージを検証する。
+        active_languages = {"ja", "en"}
+        for message_index, message in enumerate(group["message"]):
+            if not active_languages:
+                break
+            message_path = group_path + ["message", message_index]
+            require_integer(message["chance"], message_path + ["chance"])
+            languages = message["message"]
+            if not languages:
+                raise ValidationError("a message must contain ja or en", path=message_path + ["message"])
+            active_languages.intersection_update(languages)
+
+
 def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None) -> tuple[bool, str]:
     data_path, schema_path, schema = pair
     try:
@@ -515,6 +538,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
             "ClassMagicDefinitions.schema.json": lambda: validate_class_magic_semantics(data, schema_path, data_path, registry),
             "ClassSkillDefinitions.schema.json": lambda: validate_class_skill_semantics(data),
             "SpellDefinitions.schema.json": lambda: validate_spell_semantics(data),
+            "MonsterMessages.schema.json": lambda: validate_monster_message_semantics(data),
         }
         semantic_validator = semantic_validators.get(schema_path.name)
         if semantic_validator is not None:
