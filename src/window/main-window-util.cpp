@@ -228,9 +228,6 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
 
     byte tp;
 
-    bool old_view_special_lite = view_special_lite;
-    bool old_view_granite_lite = view_granite_lite;
-
     auto border_width = use_bigtile ? 2 : 1; //!< @note 枠線幅
     auto [wid, hgt] = term_get_size();
     hgt -= 2;
@@ -238,6 +235,16 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     if (use_bigtile) {
         wid = wid / 2 - 1;
     }
+
+    // 枠の内側に 1 マスも描けないほど狭い端末には描かない (2 倍幅のタイルで幅 15〜19 桁のサブウィンドウなど)
+    if ((wid < 1) || (hgt < 1)) {
+        *cy = ROW_MAP;
+        *cx = COL_MAP;
+        return;
+    }
+
+    const auto old_view_special_lite = view_special_lite;
+    const auto old_view_granite_lite = view_granite_lite;
 
     const auto &floor = *player_ptr->current_floor_ptr;
     const auto yrat = (floor.height + hgt - 1) / hgt;
