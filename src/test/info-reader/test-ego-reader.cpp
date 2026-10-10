@@ -163,13 +163,13 @@ TEST_CASE("EgoReader requires unique IDs while preserving legacy ordering")
     CHECK(egos_info.size() == 3);
 }
 
-TEST_CASE("EgoReader accepts levels throughout DEPTH storage")
+TEST_CASE("EgoReader accepts the activation difficulty upper bound")
 {
     EgoStateGuard guard;
     auto data = make_ego();
-    data["level"] = 32768;
+    data["level"] = 128;
     REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
-    CHECK(egos_info.at(i2enum<EgoType>(4)).level == 32768);
+    CHECK(egos_info.at(i2enum<EgoType>(4)).level == 128);
 }
 
 TEST_CASE("EgoReader accepts integer percent endpoints")
@@ -227,4 +227,49 @@ TEST_CASE("EgoReader validates the percent document version")
     root.erase("version");
     CHECK(EgoReader::validate_root(root) != PARSE_ERROR_NONE);
     CHECK(EgoReader::validate_root(nlohmann::json::array()) != PARSE_ERROR_NONE);
+}
+
+TEST_CASE("EgoReader restricts IDs to save format and slots to equipment or ammo")
+{
+    for (const auto id : { 1, 255 }) {
+        for (int slot = 23; slot <= 35; ++slot) {
+            EgoStateGuard guard;
+            auto data = make_ego();
+            data["id"] = id;
+            data["slot"] = slot;
+            REQUIRE(EgoReader(data).read() == PARSE_ERROR_NONE);
+            CHECK(egos_info.at(i2enum<EgoType>(id)).slot == slot);
+        }
+    }
+    for (const auto &[key, value] : std::array{
+             std::pair{ "id", 0 }, std::pair{ "id", 256 }, std::pair{ "id", 32767 },
+             std::pair{ "slot", 22 }, std::pair{ "slot", 36 }, std::pair{ "slot", 0 }, std::pair{ "slot", 255 } }) {
+        EgoStateGuard guard;
+        auto data = make_ego();
+        data[key] = value;
+        CHECK(EgoReader(data).read() != PARSE_ERROR_NONE);
+        CHECK(egos_info.empty());
+        CHECK(error_idx == -1);
+    }
+}
+
+TEST_CASE("EgoReader checks every scalar and signed bonus boundary")
+{
+    const std::array paths{ "/rating", "/level", "/cost", "/rarity", "/base_bonuses/to_hit", "/base_bonuses/to_damage", "/base_bonuses/to_ac",
+        "/maximum_bonuses/to_hit", "/maximum_bonuses/to_damage", "/maximum_bonuses/to_ac", "/maximum_bonuses/pval" };
+    for (const auto *path : paths) {
+        const auto bonus = std::string_view(path).find("bonuses") != std::string_view::npos;
+        const auto low = bonus ? -32768 : 0;
+        const auto high = bonus ? 32767 : std::string_view(path) == "/rarity" ? 255
+                                      : std::string_view(path) == "/cost"     ? std::numeric_limits<PRICE>::max() / 32
+                                      : std::string_view(path) == "/rating"   ? 100
+                                                                              : 128;
+        for (const auto value : { int64_t{ low } - 1, int64_t{ low }, int64_t{ high }, int64_t{ high } + 1 }) {
+            EgoStateGuard guard;
+            auto data = make_ego();
+            data[nlohmann::json::json_pointer(path)] = value;
+            const auto result = EgoReader(data).read();
+            CHECK((result == PARSE_ERROR_NONE) == (value >= low && value <= high));
+        }
+    }
 }

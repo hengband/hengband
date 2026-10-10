@@ -41,7 +41,7 @@ int EgoReader::read() const
     }
 
     int id;
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "id"), id, true, Range(1, 32767))) {
+    if (auto err = info_set_integer(get_json_value(this->ego_data, "id"), id, true, Range(1, std::numeric_limits<byte>::max()))) {
         return err;
     }
     if (egos_info.contains(i2enum<EgoType>(id))) {
@@ -53,19 +53,19 @@ int EgoReader::read() const
     if (auto err = info_set_string(get_json_value(this->ego_data, "name"), ego.name, true)) {
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "slot"), ego.slot, true, Range(0, 255))) {
+    if (auto err = info_set_integer(get_json_value(this->ego_data, "slot"), ego.slot, true, Range(INVEN_AMMO, INVEN_FEET))) {
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "rating"), ego.rating, true, Range(0, std::numeric_limits<int>::max()))) {
+    if (auto err = info_set_integer(get_json_value(this->ego_data, "rating"), ego.rating, true, Range(0, 100))) {
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "level"), ego.level, true, Range(0, std::numeric_limits<DEPTH>::max()))) {
+    if (auto err = info_set_integer(get_json_value(this->ego_data, "level"), ego.level, true, Range(0, 128))) {
         return err;
     }
     if (auto err = info_set_integer(get_json_value(this->ego_data, "rarity"), ego.rarity, true, Range(0, 255))) {
         return err;
     }
-    if (auto err = info_set_integer(get_json_value(this->ego_data, "cost"), ego.cost, true, Range(0, std::numeric_limits<int>::max()))) {
+    if (auto err = info_set_integer(get_json_value(this->ego_data, "cost"), ego.cost, true, Range(0, std::numeric_limits<PRICE>::max() / 32))) {
         return err;
     }
 

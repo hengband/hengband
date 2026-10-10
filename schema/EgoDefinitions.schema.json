@@ -140,25 +140,29 @@
         "id": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 32767
+          "maximum": 255,
+          "description": "エゴID。0はエゴなしとして予約。現行セーブデータが1バイトで保存するため1～255。"
         },
         "name": {
           "$ref": "#/definitions/localized_name"
         },
         "slot": {
           "type": "integer",
-          "minimum": 0,
-          "maximum": 255
+          "minimum": 23,
+          "maximum": 35,
+          "description": "弾薬23、装備部位24～35。副指28も装備部位として有効。"
         },
         "rating": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 2147483647
+          "maximum": 100,
+          "description": "雰囲気とアンドロイド装備経験値への重み。0は悪いエゴの判定にも使用。通常雰囲気の最大比較閾値に対応する100をゲーム上の上限とする。百分率ではない。"
         },
         "level": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 2147483647
+          "maximum": 128,
+          "description": "指輪・アミュレットの発動の基本難易度。生成階の制限ではない。同じ発動難易度計算で使うBaseitem・Artifactのlevelと上限128を揃える。"
         },
         "rarity": {
           "type": "integer",
@@ -169,7 +173,8 @@
         "cost": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 2147483647
+          "maximum": 67108863,
+          "description": "基本価格への非負の固定加算額。入力上限はINT_MAX/32の67108863。0は壊れた無価値のエゴ。基本価格や能力補正の加算後、割引・数量等の計算には広い型を使う。"
         },
         "base_bonuses": {
           "$ref": "#/definitions/bonuses"

@@ -252,10 +252,10 @@ public:
     std::string text; //!< フレーバーテキスト
 
     INVENTORY_IDX slot{}; //!< 装備部位 / Standard slot value
-    PRICE rating{}; //!< レーティングボーナス(雰囲気に影響) / Rating boost
+    PRICE rating{}; //!< 雰囲気とアンドロイド装備経験値への重み（0～100）。0は悪いエゴの判定にも使う。
 
-    DEPTH level{}; //!< 生成レベル
-    RARITY rarity{}; //<! レアリティ
+    DEPTH level{}; //!< 指輪・アミュレット発動の基本難易度（0～128）。生成階の制限ではない。
+    RARITY rarity{}; //!< 0は通常抽選から除外、正値は255/rarityを抽選の重みにする。
 
     HIT_PROB base_to_h{}; //!< ベース命中修正
     int base_to_d{}; //!< べ^スダメージ修正
@@ -267,7 +267,7 @@ public:
 
     PARAMETER_VALUE max_pval{}; //!< 最大pval
 
-    PRICE cost{}; //!< コスト
+    PRICE cost{}; //!< 固定価格加算（0～67108863 = INT_MAX/32）。割引・数量等の計算は広い型で行う。
 
     TrFlags flags{}; //!< 能力/耐性フラグ
     EnumClassFlagGroup<ItemGenerationTraitType> gen_flags; //!< 生成時適用フラグ

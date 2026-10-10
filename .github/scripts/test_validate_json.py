@@ -274,12 +274,12 @@ class EgoValidationTest(unittest.TestCase):
         ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertFalse(ok)
 
-    def test_level_matches_depth_storage(self):
-        """levelは16bitを超えて受理し、DEPTHの上限を超える値は拒否する。"""
-        record = {**self.record, "level": 32768}
+    def test_level_matches_activation_difficulty_domain(self):
+        """levelの発動難易度上限128を受理し、その直外を拒否する。"""
+        record = {**self.record, "level": 128}
         ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertTrue(ok, message)
-        record["level"] = 2147483648
+        record["level"] = 129
         ok, message = self.validate({"version": 2, "egos": [record]})
         self.assertFalse(ok)
 
@@ -368,7 +368,36 @@ class EgoValidationTest(unittest.TestCase):
                 self.assertFalse(self.validate({"version": version, "egos": [self.record]})[0])
         self.assertFalse(self.validate({"egos": [self.record]})[0])
 
+    def test_id_save_format_and_equipment_slot_domains(self):
+        """保存可能なIDと弾薬・装備slotの境界を確認する。"""
+        for field, valid, invalid in (("id", (1, 255), (0, 256, 32767)),
+                                      ("slot", range(23, 36), (0, 22, 36, 255))):
+            for expected, values in ((True, valid), (False, invalid)):
+                for value in values:
+                    with self.subTest(field=field, value=value):
+                        ok, message = self.validate({"version": 2, "egos": [{**self.record, field: value}]})
+                        self.assertEqual(ok, expected, message)
 
+    def test_every_remaining_numeric_domain_boundary(self):
+        """残る全スカラーと7種類の符号付きボーナスの境界・直外を確認する。"""
+        domains = [(field, 0, {"rating": 100, "level": 128, "rarity": 255, "cost": 67108863}[field])
+                   for field in ("rating", "level", "rarity", "cost")]
+        domains += [(group + "." + field, -32768, 32767)
+                    for group, fields in (("base_bonuses", ("to_hit", "to_damage", "to_ac")),
+                                          ("maximum_bonuses", ("to_hit", "to_damage", "to_ac", "pval")))
+                    for field in fields]
+        for field, low, high in domains:
+            for value in (low - 1, low, high, high + 1):
+                with self.subTest(field=field, value=value):
+                    record = copy.deepcopy(self.record)
+                    record["base_bonuses"] = {"to_hit": 0, "to_damage": 0, "to_ac": 0}
+                    target = record
+                    parts = field.split(".")
+                    for part in parts[:-1]:
+                        target = target[part]
+                    target[parts[-1]] = value
+                    ok, message = self.validate({"version": 2, "egos": [record]})
+                    self.assertEqual(ok, low <= value <= high, message)
 
 
 class WildernessValidationTest(unittest.TestCase):
