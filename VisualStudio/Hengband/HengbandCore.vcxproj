@@ -891,6 +891,7 @@
     <ClCompile Include="..\..\src\view\display-self-info.cpp" />
     <ClCompile Include="..\..\src\view\display-store.cpp" />
     <ClCompile Include="..\..\src\view\display-util.cpp" />
+    <ClCompile Include="..\..\src\view\map-info-cache.cpp" />
     <ClCompile Include="..\..\src\view\object-describer.cpp" />
     <ClCompile Include="..\..\src\view\status-bars-table.cpp" />
     <ClCompile Include="..\..\src\view\status-first-page.cpp" />
@@ -1920,6 +1921,7 @@
     <ClInclude Include="..\..\src\view\display-store.h" />
     <ClInclude Include="..\..\src\view\display-symbol.h" />
     <ClInclude Include="..\..\src\view\display-util.h" />
+    <ClInclude Include="..\..\src\view\map-info-cache.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />
     <ClInclude Include="..\..\src\view\status-bars-table.h" />
     <ClInclude Include="..\..\src\view\status-first-page.h" />
