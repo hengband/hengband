@@ -61,13 +61,40 @@
     <Filter Include="wizard">
       <UniqueIdentifier>{61ff756d-6483-4529-9a1a-b27930a91886}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object">
+      <UniqueIdentifier>{893f44ae-aadd-499b-83e0-f8353fbd0e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="save">
+      <UniqueIdentifier>{b7ab78fa-803b-4608-89f7-b8892080ca5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\baseitem">
+      <UniqueIdentifier>{6ce44dc8-8e7a-4f40-97f9-e80e901d684c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\floor">
+      <UniqueIdentifier>{42b18faf-e25d-40b7-b80c-5cc3d1837091}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\monrace">
+      <UniqueIdentifier>{26389b38-dfb3-4ce9-9f29-e4204b51087d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view">
+      <UniqueIdentifier>{e3b30137-314d-4aad-9d46-d7173ceae157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window">
+      <UniqueIdentifier>{1aac5dfe-2577-4a73-8df1-1f73519e82bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\stdafx.cpp" />
     <ClCompile Include="..\..\src\test\test-main.cpp" />
-    <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
-    <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />
-    <ClCompile Include="..\..\src\test\window\test-overview-map-cache.cpp" />
+    <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\window\test-overview-map-cache.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\wizard\test-spoiler-util.cpp">
       <Filter>wizard</Filter>
     </ClCompile>
@@ -195,22 +222,22 @@
       <Filter>store</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\save\test-item-writer.cpp">
-      <Filter>system</Filter>
+      <Filter>save</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-allocation.cpp">
-      <Filter>system</Filter>
+      <Filter>system\baseitem</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-list.cpp">
-      <Filter>system</Filter>
+      <Filter>system\baseitem</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-definition.cpp">
-      <Filter>system</Filter>
+      <Filter>system\baseitem</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\system\floor\test-floor-info.cpp">
-      <Filter>system</Filter>
+      <Filter>system\floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp">
-      <Filter>system</Filter>
+      <Filter>system\monrace</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\system\test-quest-list.cpp">
       <Filter>system</Filter>
@@ -260,26 +287,43 @@
     <ClCompile Include="..\..\src\test\util\test-angband-files.cpp">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\test\object\test-object-info.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdafx.h" />
-    <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h" />
+    <ClInclude Include="..\..\src\test\info-reader\scoped-reader-state.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\test\save\scoped-save-io.h">
-      <Filter>system</Filter>
+      <Filter>save</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h">
-      <Filter>system</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\src\test\scoped-vector-wrapper.h" />
     <ClInclude Include="..\..\src\test\scoped-restore.h" />
     <ClInclude Include="..\..\src\test\scoped-rng.h" />
     <ClInclude Include="..\..\src\test\string-helpers.h" />
     <ClInclude Include="..\..\src\test\temporary-json-files.h" />
-    <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h" />
-    <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h" />
-    <ClInclude Include="..\..\src\test\system\quest-list-test-access.h" />
-    <ClInclude Include="..\..\src\test\system\dungeon-list-test-access.h" />
-    <ClInclude Include="..\..\src\test\system\monrace-list-test-access.h" />
-    <ClInclude Include="..\..\src\test\system\monrace-message-list-test-access.h" />
-    <ClInclude Include="..\..\src\test\system\monrace-records-test-access.h" />
+    <ClInclude Include="..\..\src\test\system\artifact-list-test-access.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\test\system\terrain-list-test-access.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\test\system\quest-list-test-access.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\test\system\dungeon-list-test-access.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\test\system\monrace-list-test-access.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\test\system\monrace-message-list-test-access.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\test\system\monrace-records-test-access.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

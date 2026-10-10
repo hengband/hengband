@@ -2047,9 +2047,6 @@
     <ClCompile Include="..\..\src\io\record-play-movie.cpp">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster-attack\monster-attack-lose.cpp">
-      <Filter>monster-attack</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\system\angband-version.cpp">
       <Filter>system</Filter>
     </ClCompile>
@@ -2607,7 +2604,7 @@
       <Filter>save</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\load\artifact-record-loader.cpp">
-      <Filter>load\item</Filter>
+      <Filter>load</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\locale\character-encoding.cpp">
       <Filter>locale</Filter>
@@ -5685,7 +5682,7 @@
       <Filter>save</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\load\artifact-record-loader.h">
-      <Filter>load\item</Filter>
+      <Filter>load</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\rumor\rumor-definition.h">
       <Filter>rumor</Filter>
@@ -5713,6 +5710,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\baseitem\baseitem-records.h">
       <Filter>system\baseitem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\game-option\keymap-directory-getter.h">
+      <Filter>game-option</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\probability-table.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
