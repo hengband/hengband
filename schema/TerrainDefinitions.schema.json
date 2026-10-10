@@ -15,11 +15,13 @@
         "properties": {
           "id": {
             "type": "integer",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 9999
           },
           "key": {
             "description": "地形の識別子",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "name": {
             "type": "object",
@@ -61,7 +63,9 @@
           },
           "map_priority": {
             "description": "マップ表示優先度",
-            "type": ["integer", "null"]
+            "type": ["integer", "null"],
+            "minimum": -9999,
+            "maximum": 9999
           },
           "flags": {
             "type": "array",
@@ -279,6 +283,14 @@
           "convert": {
             "type": ["object", "null"],
             "required": ["type"],
+            "if": {
+              "properties": {
+                "type": { "const": "STREAM" }
+              }
+            },
+            "then": {
+              "required": ["stream_index"]
+            },
             "properties": {
               "type": {
                 "type": "string",
@@ -286,7 +298,8 @@
               },
               "stream_index": {
                 "type": "integer",
-                "minimum": 0
+                "minimum": 0,
+                "maximum": 254
               }
             },
             "additionalProperties": false

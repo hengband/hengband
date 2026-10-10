@@ -367,6 +367,31 @@ def require_integer(value, path: list) -> None:
         raise ValidationError("expected an integer JSON value", path=path)
 
 
+def validate_terrain_semantics(data: dict) -> None:
+    """TerrainReaderの整数型と地形ごとの生成確率合計を確認する。"""
+    for terrain_index, terrain in enumerate(data["terrains"]):
+        path = ["terrains", terrain_index]
+        require_integer(terrain["id"], path + ["id"])
+        if terrain.get("map_priority") is not None:
+            require_integer(terrain["map_priority"], path + ["map_priority"])
+        for field in ("trap", "door", "tunnel"):
+            if terrain.get(field) is not None:
+                require_integer(terrain[field]["power"], path + [field, "power"])
+        conversion = terrain.get("convert")
+        if conversion is not None and "stream_index" in conversion:
+            require_integer(conversion["stream_index"], path + ["convert", "stream_index"])
+        generation = terrain.get("generation")
+        if generation is None:
+            continue
+        probability_sum = 0
+        for change_index, change in enumerate(generation["changes"]):
+            probability_path = path + ["generation", "changes", change_index, "probability"]
+            require_integer(change["probability"], probability_path)
+            probability_sum += change["probability"]
+            if probability_sum > 100:
+                raise ValidationError("generation probability sum must not exceed 100", path=probability_path)
+
+
 def load_class_ids(repository_root: Path) -> dict[str, int]:
     """Read MagicReader's tokens and PlayerClassType values, not map order."""
     enum_path = repository_root / "src/player-info/class-types.h"
@@ -532,6 +557,7 @@ def validate_one(pair: tuple[Path, Path, dict], registry: Registry | None = None
         absolute_schema = schema if isinstance(schema, bool) else {**schema, "$id": urljoin(schema_uri, schema.get("$id", schema_uri))}
         validate(instance=data, schema=absolute_schema, registry=registry)
         semantic_validators = {
+            "TerrainDefinitions.schema.json": lambda: validate_terrain_semantics(data),
             "VaultDefinitions.schema.json": lambda: validate_vault_semantics(data),
             "EgoDefinitions.schema.json": lambda: validate_ego_semantics(data, schema_path),
             "WildernessDefinition.schema.json": lambda: validate_wilderness_semantics(data),
