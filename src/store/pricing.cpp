@@ -66,32 +66,31 @@ int calc_store_price(int price, int markup, tl::optional<int> black_market_level
     }
 
     const auto player_sells = trade_type == StoreTradeType::PLAYER_SELLS;
+    auto adjusted_price = int64_t{ price };
     if (player_sells) {
-        const auto adjust = std::min(100 + (300 - markup), 100);
+        const auto adjust = std::min<int64_t>(400 - int64_t{ markup }, 100);
         if (black_market_level) {
-            price = price / 2;
+            adjusted_price /= 2;
         }
-
-        price = (price * adjust + 50L) / 100L;
+        adjusted_price = (adjusted_price * adjust + 50) / 100;
     } else {
-        const auto adjust = std::max(100 + (markup - 300), 100);
-        uint64_t p = price;
+        const auto adjust = std::max<int64_t>(int64_t{ markup } - 200, 100);
         if (black_market_level) {
-            p = p * get_black_market_multiplier(*black_market_level) / 10000UL;
+            adjusted_price = adjusted_price * static_cast<int64_t>(get_black_market_multiplier(*black_market_level)) / 10000;
         }
-        p = (p * adjust + 50) / 100;
-        price = static_cast<int>(std::min<uint64_t>(p, INT32_MAX));
+        // 買値の補正は100%以上なので、この時点で上限を超えた値は以後も上限以上になる。
+        // 先に抑えることで、極端なmarkupとの積もint64_tに収める。
+        adjusted_price = std::min<int64_t>(adjusted_price, INT32_MAX);
+        adjusted_price = (adjusted_price * adjust + 50) / 100;
     }
 
-    if (price <= 0) {
+    if (adjusted_price <= 0) {
         return 1;
     }
-
-    if (price >= LOW_PRICE_THRESHOLD) {
-        price += (player_sells ? -1 : 1) * price / 10;
+    if (adjusted_price >= LOW_PRICE_THRESHOLD) {
+        adjusted_price += (player_sells ? -1 : 1) * adjusted_price / 10;
     }
-
-    return price;
+    return clamp_price(adjusted_price);
 }
 
 /*!

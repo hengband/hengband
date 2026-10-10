@@ -41,11 +41,10 @@
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @return プレイヤーが購入するなら購入価格、購入しないならnullopt
  */
-static tl::optional<PRICE> prompt_to_buy(PlayerType *player_ptr, const Store &store, ItemEntity *o_ptr)
+static tl::optional<int64_t> prompt_to_buy(PlayerType *player_ptr, const Store &store, ItemEntity *o_ptr)
 {
-    auto price_ask = price_item(player_ptr, o_ptr->calc_price(), store, StoreTradeType::PLAYER_BUYS);
-
-    price_ask *= o_ptr->number;
+    const auto unit_price = price_item(player_ptr, o_ptr->calc_price(), store, StoreTradeType::PLAYER_BUYS);
+    const auto price_ask = int64_t{ unit_price } * o_ptr->number;
     const auto s = fmt::format(_("買値 ${} で買いますか？", "Do you buy for ${}? "), price_ask);
     if (input_check_strict(player_ptr, s, UserCheck::DEFAULT_Y)) {
         return price_ask;
@@ -245,13 +244,14 @@ void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
         return;
     }
 
-    const auto price = *res;
+    const auto total_price = *res;
 
-    if (player_ptr->au < price) {
+    if (player_ptr->au < total_price) {
         msg_print(_("お金が足りません。", "You do not have enough gold."));
         return;
     }
 
+    const auto price = static_cast<PRICE>(total_price);
     store_owner_says_comment(price, store_num);
     if (store_num == StoreSaleType::BLACK) {
         chg_virtue(player_ptr, Virtue::JUSTICE, -1);

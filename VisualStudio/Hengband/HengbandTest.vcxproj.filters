@@ -61,15 +61,42 @@
     <Filter Include="wizard">
       <UniqueIdentifier>{61ff756d-6483-4529-9a1a-b27930a91886}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object">
+      <UniqueIdentifier>{79631f8c-ab4c-4270-b964-cbcb90fc183e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-activation">
+      <UniqueIdentifier>{b13c1440-895f-4260-bcc6-8e64ea687a81}</UniqueIdentifier>
+    </Filter>
     <Filter Include="object-enchant">
       <UniqueIdentifier>{2ef0e4b3-9f0f-429d-acaa-d7d386513869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="racial">
+      <UniqueIdentifier>{d4591d33-9029-489f-ab26-8b73bef4973c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system\item">
+      <UniqueIdentifier>{41423b85-80f6-47c1-af85-68f55464f4e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\stdafx.cpp" />
     <ClCompile Include="..\..\src\test\test-main.cpp" />
+    <ClCompile Include="..\..\src\test\floor\test-floor-events.cpp">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\object-activation\test-activation-util.cpp">
+      <Filter>object-activation</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\test\object-enchant\test-object-ego.cpp">
       <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\object\test-object-value.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\racial\test-racial-android.cpp">
+      <Filter>racial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\test\system\item\test-item-entity.cpp">
+      <Filter>system\item</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\test\view\test-map-terrain-visibility.cpp" />
     <ClCompile Include="..\..\src\test\view\test-screen-parity-helpers.cpp" />

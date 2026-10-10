@@ -49,17 +49,20 @@
         "to_hit": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         },
         "to_damage": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         },
         "to_ac": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         }
       }
     },
@@ -76,22 +79,26 @@
         "to_hit": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         },
         "to_damage": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         },
         "to_ac": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         },
         "pval": {
           "type": "integer",
           "minimum": -32768,
-          "maximum": 32767
+          "maximum": 32767,
+          "description": "符号付き修正値。負値も有効。合成後はセーブデータの符号付き16ビット範囲へ飽和する。"
         }
       }
     },
