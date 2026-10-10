@@ -161,11 +161,12 @@ static void ego_invest_extra_abilities(ItemEntity *o_ptr, EnumClassFlagGroup<Ite
 static void ego_interpret_extra_abilities(ItemEntity *o_ptr, const EgoItemDefinition &ego, EnumClassFlagGroup<ItemGenerationTraitType> &gen_flags)
 {
     for (const auto &xtra : ego.xtra_flags) {
-        if (xtra.mul == 0 || xtra.dev == 0) {
+        if (xtra.chance == 0) {
             continue;
         }
 
-        if (randint0(xtra.dev) >= xtra.mul) { //! @note mul/devで適用
+        // 0%と100%は抽選用の乱数を消費しない。
+        if (xtra.chance != 100 && !evaluate_percent(xtra.chance)) {
             continue;
         }
 

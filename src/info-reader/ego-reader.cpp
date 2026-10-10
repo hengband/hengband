@@ -4,6 +4,7 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/json-reader-util.h"
 #include "info-reader/parse-error-types.h"
+#include "inventory/inventory-slot-types.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/tr-types.h"
 #include "util/bit-flags-calculator.h"
@@ -17,6 +18,22 @@ EgoReader::EgoReader(const nlohmann::json &ego_data)
 {
 }
 
+/*!
+ * @brief 百分率形式のエゴ定義のversionを、公開前に検証する
+ * @param root JSON文書のルート
+ * @return エラーコード。旧分数形式のversion 1は受理しない。
+ */
+int EgoReader::validate_root(const nlohmann::json &root)
+{
+    int version;
+    return info_set_integer(get_json_value(root, "version"), version, true, Range(FORMAT_VERSION, FORMAT_VERSION));
+}
+
+/*!
+ * @brief エゴ1件の数値・参照を検証し、成功した場合にだけ定義とerror_idxを公開する
+ * @return 成功時はPARSE_ERROR_NONE、失敗時は解析エラーコード
+ * @details 失敗時は既存のegos_infoとerror_idxを保持する。文書のversion検証は呼び出し側が先に行う。
+ */
 int EgoReader::read() const
 {
     if (!this->ego_data.is_object()) {
@@ -143,6 +160,12 @@ int EgoReader::set_flags(EgoItemDefinition &ego) const
     return PARSE_ERROR_NONE;
 }
 
+/*!
+ * @brief 追加能力の整数百分率とフラグを検証し、公開前のエゴへ格納する
+ * @param ego 読み込み途中のエゴ定義
+ * @return 成功時はPARSE_ERROR_NONE、失敗時は解析エラーコード
+ * @details extra_flagsの省略は許可する。旧分数形式・新旧混在、0～100以外の確率を拒否する。
+ */
 int EgoReader::set_extra_flags(EgoItemDefinition &ego) const
 {
     const auto &extras = get_json_value(this->ego_data, "extra_flags");
@@ -154,10 +177,11 @@ int EgoReader::set_extra_flags(EgoItemDefinition &ego) const
             return PARSE_ERROR_INVALID_TYPE;
         }
         ego_generate_type extra;
-        if (auto err = info_set_integer(get_json_value(extra_data, "numerator"), extra.mul, true, Range(1, 32767))) {
-            return err;
+        // 旧分数や混在指定を黙って無視せず、整数百分率へ移行させる。
+        if (extra_data.contains("numerator") || extra_data.contains("denominator")) {
+            return PARSE_ERROR_INVALID_VALUE;
         }
-        if (auto err = info_set_integer(get_json_value(extra_data, "denominator"), extra.dev, true, Range(1, 32767))) {
+        if (auto err = info_set_integer(get_json_value(extra_data, "chance"), extra.chance, true, Range(0, 100))) {
             return err;
         }
         const auto &flags = get_json_value(extra_data, "flags");
