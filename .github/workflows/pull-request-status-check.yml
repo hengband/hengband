@@ -59,6 +59,15 @@ jobs:
           persist-credentials: false
       - run: sh ./.github/scripts/check-test-registration.sh
 
+  check_vcxproj:
+    name: Check the Visual Studio project files (registration with Makefile.am, order and filters)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - run: python3 .github/scripts/check-vcxproj.py
+
   check_rng_evaluation_order:
     name: Check the evaluation order of random number calls
     uses: ./.github/workflows/check-rng-evaluation-order.yml
