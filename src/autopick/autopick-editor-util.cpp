@@ -199,7 +199,7 @@ void add_keyword(AutopickTextBody *tb, BIT_FLAGS flg)
  */
 bool add_empty_line(AutopickTextBody *tb)
 {
-    const auto num_lines = count_line(tb);
+    const auto num_lines = tb->count_line();
     if (is_greater_autopick_max_line(num_lines)) {
         return false;
     }

@@ -35,7 +35,7 @@ void check_expression_line(AutopickTextBody *tb, int y)
  */
 bool can_insert_line(AutopickTextBody *tb, int add_num)
 {
-    const int count = count_line(tb);
+    const int count = tb->count_line();
     return !is_greater_autopick_max_line(count + add_num);
 }
 
@@ -44,7 +44,7 @@ bool can_insert_line(AutopickTextBody *tb, int add_num)
  */
 bool insert_return_code(AutopickTextBody *tb)
 {
-    auto num_lines = count_line(tb);
+    auto num_lines = tb->count_line();
     if (is_greater_autopick_max_line(num_lines)) {
         return false;
     }

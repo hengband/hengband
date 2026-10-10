@@ -9,6 +9,7 @@
 #include "system/player-type-definition.h"
 #include "system/redrawing-flags-updater.h"
 #include "util/bit-flags-calculator.h"
+#include <algorithm>
 
 /*!
  * @brief 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries
@@ -63,13 +64,12 @@ void auto_inscribe_item(ItemEntity *o_ptr, int idx)
 
 /*!
  * @brief 行数をカウントする
- * @param tb text_body_type
  * @return 行数
  */
-int count_line(AutopickTextBody *tb)
+int AutopickTextBody::count_line() const
 {
-    const auto begin = tb->lines_list.begin();
-    const auto it = std::find_if(begin, tb->lines_list.end(), [](const auto &line) {
+    const auto begin = this->lines_list.begin();
+    const auto it = std::find_if(begin, this->lines_list.end(), [](const auto &line) {
         return !line;
     });
     return std::distance(begin, it);

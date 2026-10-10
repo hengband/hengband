@@ -66,7 +66,7 @@ TEST_CASE("add_empty_line appends an empty line below the line limit")
     auto tb = make_text_body(MAX_EDITABLE_LINES - 1);
 
     CHECK(add_empty_line(&tb));
-    CHECK(count_line(&tb) == MAX_EDITABLE_LINES);
+    CHECK(tb.count_line() == MAX_EDITABLE_LINES);
     REQUIRE(tb.lines_list[MAX_EDITABLE_LINES - 1] != nullptr);
     CHECK(tb.lines_list[MAX_EDITABLE_LINES - 1]->empty());
     CHECK((tb.dirty_flags & DIRTY_EXPRESSION) != 0);
@@ -78,7 +78,7 @@ TEST_CASE("add_empty_line does not append a line at the line limit")
     auto tb = make_text_body(MAX_EDITABLE_LINES);
 
     CHECK_FALSE(add_empty_line(&tb));
-    CHECK(count_line(&tb) == MAX_EDITABLE_LINES);
+    CHECK(tb.count_line() == MAX_EDITABLE_LINES);
     CHECK(tb.lines_list[MAX_EDITABLE_LINES] == nullptr);
     CHECK(tb.dirty_flags == 0);
     CHECK_FALSE(tb.changed);
@@ -90,7 +90,7 @@ TEST_CASE("add_empty_line does not append a line when the last line is empty")
     *tb.lines_list[0] = "";
 
     CHECK_FALSE(add_empty_line(&tb));
-    CHECK(count_line(&tb) == 1);
+    CHECK(tb.count_line() == 1);
     CHECK_FALSE(tb.changed);
 }
 

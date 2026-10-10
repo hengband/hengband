@@ -89,6 +89,8 @@ public:
     EditorCommandId old_com_id{};
 
     bool changed = false;
+
+    int count_line() const;
 };
 
 /*
@@ -98,7 +100,6 @@ extern std::vector<autopick_type> autopick_list;
 extern ItemEntity autopick_last_destroyed_object;
 
 void auto_inscribe_item(ItemEntity *o_ptr, int idx);
-int count_line(AutopickTextBody *tb);
 
 /*!
  * @brief 最大行数を超えるかチェックする
