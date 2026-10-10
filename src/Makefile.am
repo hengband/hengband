@@ -1441,6 +1441,7 @@ libhengband_a_SOURCES = \
 	window/main-window-row-column.h \
 	window/main-window-stat-poster.cpp window/main-window-stat-poster.h \
 	window/main-window-util.cpp window/main-window-util.h \
+	window/overview-map-cache.cpp window/overview-map-cache.h \
 	window/main-window-equipments.cpp window/main-window-equipments.h \
 	\
 	wizard/artifact-analyzer.cpp wizard/artifact-analyzer.h \
@@ -1574,6 +1575,7 @@ hengband_test_SOURCES = \
 	test/util/test-temporary-json-files.cpp \
 	test/view/test-map-terrain-visibility.cpp \
 	test/view/test-screen-parity-helpers.cpp \
+	test/window/test-overview-map-cache.cpp \
 	test/wizard/test-spoiler-util.cpp
 
 hengband_test_LDADD = libhengband.a

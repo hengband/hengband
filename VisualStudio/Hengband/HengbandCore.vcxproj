@@ -503,6 +503,7 @@
     <ClCompile Include="..\..\src\window\main-window-left-frame.cpp" />
     <ClCompile Include="..\..\src\window\main-window-stat-poster.cpp" />
     <ClCompile Include="..\..\src\window\main-window-util.cpp" />
+    <ClCompile Include="..\..\src\window\overview-map-cache.cpp" />
     <ClCompile Include="..\..\src\mspell\monster-power-table.cpp" />
     <ClCompile Include="..\..\src\mspell\mspell-projection-table.cpp" />
     <ClCompile Include="..\..\src\system\monrace\monrace-allocation.cpp" />
@@ -1762,6 +1763,7 @@
     <ClInclude Include="..\..\src\window\main-window-row-column.h" />
     <ClInclude Include="..\..\src\window\main-window-stat-poster.h" />
     <ClInclude Include="..\..\src\window\main-window-util.h" />
+    <ClInclude Include="..\..\src\window\overview-map-cache.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />
     <ClInclude Include="..\..\src\view\status-bars-table.h" />
     <ClInclude Include="..\..\src\window\main-window-equipments.h" />

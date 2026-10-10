@@ -19,6 +19,7 @@
 #include "timed-effect/timed-effects.h"
 #include "view/display-map.h"
 #include "view/display-symbol.h"
+#include "window/overview-map-cache.h"
 #include "world/world.h"
 #include <array>
 #include <range/v3/algorithm.hpp>
@@ -73,6 +74,10 @@ void print_field(std::string_view info, TERM_LEN row, TERM_LEN col)
  */
 void print_map(PlayerType *player_ptr)
 {
+    // マップ全体を描き直すような変化は、ダンジョン全体図でも全グリッドを求め直す。
+    // 画面の保存中に残った描き直しの要求は、OverviewMapCache::update() の側で拾う
+    OverviewMapCache::get_instance().mark_all_dirty();
+
     auto [wid, hgt] = term_get_size();
     wid -= COL_MAP + 2;
     hgt -= ROW_MAP + 2;
@@ -165,14 +170,6 @@ struct MapCell {
     DisplaySymbol symbol = { TERM_WHITE, ' ' };
     byte priority = 0;
 };
-
-/*!
- * @brief 縮小マップの 1 マス分の、自動拾いの対象になるアイテム
- */
-struct AutopickCell {
-    int match = -1;
-    const ItemEntity *item = nullptr;
-};
 }
 
 /*!
@@ -253,25 +250,24 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     view_granite_lite = false;
 
     FlatArray2D<MapCell> small_map(hgt + 2, wid + 2);
-    FlatArray2D<AutopickCell> autopicks(hgt + 2, wid + 2);
+    FlatArray2D<tl::optional<OverviewMapAutopick>> autopicks(hgt + 2, wid + 2);
     FlatArray2D<MapCell> big_map(floor.height + 2, floor.width + 2);
+    auto &overview_map_cache = OverviewMapCache::get_instance();
+    overview_map_cache.update(player_ptr);
     for (i = 0; i < floor.width; ++i) {
         for (j = 0; j < floor.height; ++j) {
             x = i / xrat + 1;
             y = j / yrat + 1;
 
-            match_autopick = -1;
-            autopick_obj = nullptr;
-            feat_priority = -1;
-            const auto symbol_pair = map_info(player_ptr, { j, i });
-            tp = (byte)feat_priority;
+            const auto &grid = overview_map_cache.get_grid({ j, i });
+            tp = static_cast<byte>(grid.priority);
             auto &autopick = autopicks(y, x);
-            if (match_autopick != -1 && (autopick.match == -1 || autopick.match > match_autopick)) {
-                autopick = { match_autopick, autopick_obj };
+            if (grid.autopick && (!autopick || (autopick->rule_index > grid.autopick->rule_index))) {
+                autopick = grid.autopick;
                 tp = 0x7f;
             }
 
-            big_map(j + 1, i + 1) = { symbol_pair.symbol_foreground, tp };
+            big_map(j + 1, i + 1) = { grid.symbol, tp };
         }
     }
 
@@ -334,18 +330,17 @@ void display_map(PlayerType *player_ptr, int *cy, int *cx)
     }
 
     for (y = 1; y < hgt + 1; ++y) {
-        match_autopick = -1;
+        tl::optional<OverviewMapAutopick> row_autopick;
         for (x = 1; x <= wid; x++) {
             const auto &autopick = autopicks(y, x);
-            if (autopick.match != -1 && (match_autopick > autopick.match || match_autopick == -1)) {
-                match_autopick = autopick.match;
-                autopick_obj = autopick.item;
+            if (autopick && (!row_autopick || (row_autopick->rule_index > autopick->rule_index))) {
+                row_autopick = autopick;
             }
         }
 
         term_putstr(0, y, 12, 0, "            ");
-        if (match_autopick != -1) {
-            display_shortened_item_name(player_ptr, *autopick_obj, y);
+        if (row_autopick) {
+            display_shortened_item_name(player_ptr, *row_autopick->item, y);
         }
     }
 

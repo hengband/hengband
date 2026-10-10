@@ -43,6 +43,7 @@
 #include "view/display-map.h"
 #include "view/display-messages.h"
 #include "window/main-window-util.h"
+#include "window/overview-map-cache.h"
 #include "world/world.h"
 #include <algorithm>
 #include <queue>
@@ -443,7 +444,12 @@ void note_spot(PlayerType *player_ptr, const Pos2D &pos)
  */
 void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
 {
-    if (panel_contains(pos) && player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+    if (!player_ptr->current_floor_ptr->contains(pos, FloorBoundary::OUTER_WALL_INCLUSIVE)) {
+        return;
+    }
+
+    OverviewMapCache::get_instance().mark_dirty(pos);
+    if (panel_contains(pos)) {
         auto symbol_pair = map_info(player_ptr, pos);
         symbol_pair.symbol_foreground.color = get_monochrome_display_color(player_ptr).value_or(symbol_pair.symbol_foreground.color);
 
@@ -451,13 +457,14 @@ void lite_spot(PlayerType *player_ptr, const Pos2D &pos)
         if (!term_queue_bigchar(panel_col_of(pos.x), pos.y - panel_row_prt, symbol_pair)) {
             return;
         }
-
-        static constexpr auto flags = {
-            SubWindowRedrawingFlag::OVERHEAD,
-            SubWindowRedrawingFlag::DUNGEON,
-        };
-        RedrawingFlagsUpdater::get_instance().set_flags(flags);
     }
+
+    // メイン画面の外のグリッドは表示が変わったか分からないので、地図のサブウィンドウを描き直す
+    static constexpr auto flags = {
+        SubWindowRedrawingFlag::OVERHEAD,
+        SubWindowRedrawingFlag::DUNGEON,
+    };
+    RedrawingFlagsUpdater::get_instance().set_flags(flags);
 }
 
 /*

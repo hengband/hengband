@@ -1531,6 +1531,9 @@
     <ClCompile Include="..\..\src\window\main-window-util.cpp">
       <Filter>window</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\window\overview-map-cache.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\cmd-action\cmd-travel.cpp">
       <Filter>cmd-action</Filter>
     </ClCompile>
@@ -4382,6 +4385,9 @@
       <Filter>window</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\window\main-window-util.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\window\overview-map-cache.h">
       <Filter>window</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-action\cmd-travel.h">
