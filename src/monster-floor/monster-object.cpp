@@ -9,6 +9,7 @@
 #include "flavor/flavor-describer.h"
 #include "floor/floor-object.h"
 #include "floor/geometry.h"
+#include "grid/grid.h"
 #include "monster-race/race-flags-resistance.h"
 #include "monster-race/race-resistance-mask.h"
 #include "monster/monster-describer.h"
@@ -154,6 +155,9 @@ static void monster_pickup_object(PlayerType *player_ptr, turn_flags *turn_flags
         o_ptr->iy = o_ptr->ix = 0;
         o_ptr->held_m_idx = m_idx;
         monster.hold_o_idx_list.add(*player_ptr->current_floor_ptr, this_o_idx);
+
+        // 拾われたアイテムがマップに残らないように描き直す (モンスターが見えていなければ、床などが見える)
+        lite_spot(player_ptr, { ny, nx });
         RedrawingFlagsUpdater::get_instance().set_flag(SubWindowRedrawingFlag::FOUND_ITEMS);
         return;
     }
