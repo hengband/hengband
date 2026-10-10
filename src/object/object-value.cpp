@@ -6,6 +6,19 @@
 #include "system/item/item-entity.h"
 #include "system/monrace/monrace-definition.h"
 #include "system/player-type-definition.h"
+#include <algorithm>
+#include <cstdint>
+#include <limits>
+
+/*!
+ * @brief 広い型で計算した価格・所持金を保存可能な範囲へ抑える
+ * @param value 補正前の金額
+ * @return 0以上PRICEの上限以下の金額
+ */
+PRICE clamp_price(int64_t value)
+{
+    return static_cast<PRICE>(std::clamp<int64_t>(value, 0, std::numeric_limits<PRICE>::max()));
+}
 
 /*!
  * @brief オブジェクトの真の価格を算出する /
@@ -39,8 +52,11 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         return 0;
     }
 
-    auto value = o_ptr->get_baseitem_cost();
+    auto value = int64_t{ o_ptr->get_baseitem_cost() };
     const auto flags = o_ptr->get_flags();
+    const auto to_h = int64_t{ o_ptr->to_h };
+    const auto to_d = int64_t{ o_ptr->to_d };
+    const auto to_a = int64_t{ o_ptr->to_a };
     if (o_ptr->is_fixed_artifact()) {
         const auto &artifact = o_ptr->get_fixed_artifact();
         if (!artifact.cost) {
@@ -49,7 +65,7 @@ PRICE object_value_real(const ItemEntity *o_ptr)
 
         value = artifact.cost;
         value += flag_cost(o_ptr, o_ptr->pval);
-        return value;
+        return clamp_price(value);
     } else if (o_ptr->is_ego()) {
         const auto &ego = o_ptr->get_ego();
         if (!ego.cost) {
@@ -157,11 +173,11 @@ PRICE object_value_real(const ItemEntity *o_ptr)
     }
     case ItemKindType::RING:
     case ItemKindType::AMULET: {
-        if (o_ptr->to_h + o_ptr->to_d + o_ptr->to_a < 0) {
+        if (to_h + to_d + to_a < 0) {
             return 0;
         }
 
-        value += ((o_ptr->to_h + o_ptr->to_d + o_ptr->to_a) * 200L);
+        value += ((to_h + to_d + to_a) * 200L);
         break;
     }
     case ItemKindType::BOOTS:
@@ -173,11 +189,11 @@ PRICE object_value_real(const ItemEntity *o_ptr)
     case ItemKindType::SOFT_ARMOR:
     case ItemKindType::HARD_ARMOR:
     case ItemKindType::DRAG_ARMOR: {
-        if (o_ptr->to_a < 0) {
+        if (to_a < 0) {
             return 0;
         }
 
-        value += (((o_ptr->to_h - baseitem.to_h) + (o_ptr->to_d - baseitem.to_d)) * 200L + (o_ptr->to_a) * 100L);
+        value += (((to_h - baseitem.to_h) + (to_d - baseitem.to_d)) * 200L + (to_a) * 100L);
         break;
     }
     case ItemKindType::BOW:
@@ -185,27 +201,27 @@ PRICE object_value_real(const ItemEntity *o_ptr)
     case ItemKindType::HAFTED:
     case ItemKindType::SWORD:
     case ItemKindType::POLEARM: {
-        if (o_ptr->to_h + o_ptr->to_d < 0) {
+        if (to_h + to_d < 0) {
             return 0;
         }
 
-        value += ((o_ptr->to_h + o_ptr->to_d + o_ptr->to_a) * 100L);
+        value += ((to_h + to_d + to_a) * 100L);
         const auto &dice = o_ptr->damage_dice;
-        value += (dice.num - baseitem.damage_dice.num) * dice.sides * 250L;
-        value += (dice.sides - baseitem.damage_dice.sides) * dice.num * 250L;
+        value += (int64_t{ dice.num } - baseitem.damage_dice.num) * dice.sides * 250L;
+        value += (int64_t{ dice.sides } - baseitem.damage_dice.sides) * dice.num * 250L;
         break;
     }
     case ItemKindType::SHOT:
     case ItemKindType::ARROW:
     case ItemKindType::BOLT: {
-        if (o_ptr->to_h + o_ptr->to_d < 0) {
+        if (to_h + to_d < 0) {
             return 0;
         }
 
-        value += ((o_ptr->to_h + o_ptr->to_d) * 5L);
+        value += ((to_h + to_d) * 5L);
         const auto &dice = o_ptr->damage_dice;
-        value += (dice.num - baseitem.damage_dice.num) * dice.sides * 5L;
-        value += (dice.sides - baseitem.damage_dice.sides) * dice.num * 5L;
+        value += (int64_t{ dice.num } - baseitem.damage_dice.num) * dice.sides * 5L;
+        value += (int64_t{ dice.sides } - baseitem.damage_dice.sides) * dice.num * 5L;
         break;
     }
     case ItemKindType::FIGURINE: {
@@ -247,5 +263,5 @@ PRICE object_value_real(const ItemEntity *o_ptr)
         return 0L;
     }
 
-    return value;
+    return clamp_price(value);
 }

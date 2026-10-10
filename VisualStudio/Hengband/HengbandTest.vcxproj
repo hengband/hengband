@@ -66,6 +66,7 @@
     <ClCompile Include="..\..\src\test\cmd-io\test-cmd-autopick.cpp" />
     <ClCompile Include="..\..\src\test\flavor\test-flavor-util.cpp" />
     <ClCompile Include="..\..\src\test\floor\test-fixed-map-generator.cpp" />
+    <ClCompile Include="..\..\src\test\floor\test-floor-events.cpp" />
     <ClCompile Include="..\..\src\test\game-option\test-runtime-arguments.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-activation-reader.cpp" />
     <ClCompile Include="..\..\src\test\info-reader\test-artifact-reader.cpp" />
@@ -99,9 +100,12 @@
     <ClCompile Include="..\..\src\test\monster-race\test-race-ability-mask.cpp" />
     <ClCompile Include="..\..\src\test\mspell\test-mspell-projection-table.cpp" />
     <ClCompile Include="..\..\src\test\mutation\test-mutation-roll-table.cpp" />
+    <ClCompile Include="..\..\src\test\object-activation\test-activation-util.cpp" />
     <ClCompile Include="..\..\src\test\object-enchant\test-object-ego.cpp" />
     <ClCompile Include="..\..\src\test\object\test-object-info.cpp" />
+    <ClCompile Include="..\..\src\test\object\test-object-value.cpp" />
     <ClCompile Include="..\..\src\test\player\test-process-name.cpp" />
+    <ClCompile Include="..\..\src\test\racial\test-racial-android.cpp" />
     <ClCompile Include="..\..\src\test\save\test-item-writer.cpp" />
     <ClCompile Include="..\..\src\test\store\test-pricing.cpp" />
     <ClCompile Include="..\..\src\test\store\test-store-screen.cpp" />
@@ -110,6 +114,7 @@
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-definition.cpp" />
     <ClCompile Include="..\..\src\test\system\baseitem\test-baseitem-list.cpp" />
     <ClCompile Include="..\..\src\test\system\floor\test-floor-info.cpp" />
+    <ClCompile Include="..\..\src\test\system\item\test-item-entity.cpp" />
     <ClCompile Include="..\..\src\test\system\monrace\test-monrace-definition.cpp" />
     <ClCompile Include="..\..\src\test\system\test-dungeon-record.cpp" />
     <ClCompile Include="..\..\src\test\system\test-quest-list.cpp" />
