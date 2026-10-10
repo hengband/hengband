@@ -68,6 +68,9 @@ bool is_quest_short_id(const std::string &path)
 nlohmann::json make_quest_with_integer(const std::string &path, const nlohmann::json &value)
 {
     auto data = make_quest_with_description("New description");
+    if (path.starts_with("/start")) {
+        data["map"] = { ".....", ".....", ".....", ".....", "....." };
+    }
     if (path.starts_with("/definition/reward/artifacts/")) {
         data["definition"]["reward"]["artifacts"] = { 1, 2 };
     } else if (path.starts_with("/startVariants/")) {
@@ -193,7 +196,9 @@ TEST_CASE("QuestReader metadata reward and start integers retain representable b
     for (const auto &path : QUEST_INTEGER_PATHS) {
         const auto minimum = is_quest_short_id(path) ? std::numeric_limits<int16_t>::min() : std::numeric_limits<int>::min();
         const auto maximum = is_quest_short_id(path) ? std::numeric_limits<int16_t>::max() : std::numeric_limits<int>::max();
-        const std::vector<nlohmann::json> values = { minimum, 0, maximum, static_cast<uint64_t>(maximum) };
+        const std::vector<nlohmann::json> values = path.starts_with("/start") && !path.ends_with("/leavingQuest")
+                                                       ? std::vector<nlohmann::json>{ 0, 4 }
+                                                       : std::vector<nlohmann::json>{ minimum, 0, maximum, static_cast<uint64_t>(maximum) };
         for (const auto &value : values) {
             CAPTURE(path);
             CAPTURE(value);
@@ -729,15 +734,18 @@ TEST_CASE("QuestReader accepts map extents at the floor boundary")
     }
 }
 
-TEST_CASE("QuestReader preserves empty ragged and skipped map row behavior")
+TEST_CASE("QuestReader rejects ragged maps and preserves empty and skipped map rows")
 {
     auto data = make_quest_with_description("Description");
-    const std::vector<std::string> ragged_rows = { "", "...", "." };
-    data["mapVariants"] = { nlohmann::json::array(), { "", nullptr, "...", 7, "." } };
+    data["mapVariants"] = { nlohmann::json::array(), { "...", nullptr, ".", 7 } };
     QuestType quest;
     QuestFixedMap fixed_map;
+    CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_VALUE);
+    CHECK(fixed_map.maps.empty());
+
+    data["mapVariants"] = { nlohmann::json::array(), { "...", nullptr, "...", 7 } };
     REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
-    CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ {}, ragged_rows });
+    CHECK(fixed_map.maps == std::vector<std::vector<std::string>>{ {}, { "...", "..." } });
 
     // map が存在すれば mapVariants は読まない。空の map も従来どおり保持する。
     data["map"] = nlohmann::json::array();
@@ -750,6 +758,39 @@ TEST_CASE("QuestReader preserves empty ragged and skipped map row behavior")
     data["map"].push_back(nullptr);
     REQUIRE(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_NONE);
     CHECK(fixed_map.maps[0].size() == MAX_HGT);
+}
+
+TEST_CASE("QuestReader checks every declared start against every map before publishing")
+{
+    const std::vector<nlohmann::json> invalid = {
+        { { "start", { { "y", 0 }, { "x", 0 } } } },
+        { { "map", { "..." } }, { "start", { { "y", 1 }, { "x", 0 } } } },
+        { { "map", { "..." } }, { "start", { { "y", 0 }, { "x", 3 } } } },
+        { { "mapVariants", { { "..." }, { "." } } }, { "start", { { "y", 0 }, { "x", 1 } } } },
+        { { "map", { "..." } }, { "startVariants", { { { "y", 0 }, { "x", 0 } }, { { "leavingQuest", 49 }, { "y", 0 }, { "x", 3 } } } } },
+    };
+    for (const auto &fields : invalid) {
+        CAPTURE(fields);
+        auto data = make_quest_with_description("Description");
+        data.update(fields);
+        QuestType quest;
+        QuestFixedMap fixed_map;
+        set_existing_output(quest, fixed_map);
+        CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_OUT_OF_BOUNDS);
+        check_existing_output(quest, fixed_map);
+    }
+}
+
+TEST_CASE("QuestReader rejects a long first row with a short final row")
+{
+    auto data = make_quest_with_description("Description");
+    data["map"] = { std::string(70, '.'), "." };
+    data["start"] = { { "y", 0 }, { "x", 68 } };
+    QuestType quest;
+    QuestFixedMap fixed_map;
+    set_existing_output(quest, fixed_map);
+    CHECK(QuestReader(data, quest, fixed_map).read() == PARSE_ERROR_INVALID_VALUE);
+    check_existing_output(quest, fixed_map);
 }
 
 #ifdef JP

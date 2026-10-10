@@ -17,13 +17,26 @@ class QuestGridValidationTest(unittest.TestCase):
         cls.loaded, cls.schema_map = load_all_schemas(cls.schema_dir)
         cls.registry = build_schema_registry(cls.loaded)
 
-    def validate(self, cell, schema_name, registry=None, schema=None):
+    def validate(self, cell, schema_name, registry=None, schema=None, data_updates=None):
         schema_path = self.schema_map[schema_name]
         data = {"version": 1, "legend": {"#": cell}}
         if schema_name == "Quest":
             data.update(id=1, name={"ja": "試験", "en": "Test"}, definition={"type": "KILL_ALL", "level": 1})
+        if data_updates:
+            data.update(data_updates)
         return validate_document(data, schema_path, schema if schema is not None else self.loaded[schema_path],
                                  registry if registry is not None else self.registry, filename="Test.jsonc")
+
+    def test_quest_start_requires_a_map(self):
+        ok, message = self.validate({}, "Quest", data_updates={"startVariants": []})
+        self.assertTrue(ok, message)
+        for field in ("start", "startVariants"):
+            start = {"y": 0, "x": 0}
+            value = start if field == "start" else [start]
+            for maps, expected in (({}, False), ({"map": ["."]}, True), ({"mapVariants": [["."], ["."]]}, True)):
+                with self.subTest(field=field, maps=maps):
+                    ok, message = self.validate({}, "Quest", data_updates={field: value, **maps})
+                    self.assertEqual(ok, expected, message)
 
     def test_shared_schema_is_not_a_data_schema(self):
         shared_path = self.schema_dir / "common/QuestGrid.schema.json"
