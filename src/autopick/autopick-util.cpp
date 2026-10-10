@@ -42,14 +42,14 @@ void autopick_type::remove(int flag)
 /*!
  * @brief Auto inscription
  */
-void auto_inscribe_item(ItemEntity *o_ptr, int idx)
+void auto_inscribe_item(ItemEntity &item, int idx)
 {
     if (idx < 0 || autopick_list[idx].insc.empty()) {
         return;
     }
 
-    if (!o_ptr->is_inscribed()) {
-        o_ptr->inscription = autopick_list[idx].insc;
+    if (!item.is_inscribed()) {
+        item.inscription = autopick_list[idx].insc;
     }
 
     auto &rfu = RedrawingFlagsUpdater::get_instance();

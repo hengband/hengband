@@ -283,7 +283,7 @@ void store_purchase(PlayerType *player_ptr, StoreScreen &screen)
     item.reset_identification_flag(IdentificationFlag::STORE);
 
     const auto idx = find_autopick_list(player_ptr, &item);
-    auto_inscribe_item(&item, idx);
+    auto_inscribe_item(item, idx);
 
     item_new = store_item_to_inventory(player_ptr, &item);
     handle_stuff(player_ptr);
